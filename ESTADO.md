@@ -1,16 +1,9 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:88 AFIRMA ato sem PROVA ao lado -- estao **FECHADOS e NO AR**, e a **O195** -- a cura que destravava o (2) -- tambem. Do (1) fica a ressalva
->
-> O RELATO nao entrou neste ciclo porque uma afirmacao de ato
-> (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
-> seguem valendo -- eles descrevem, nao afirmam ato.
-
-
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 07/10/2026 18:16:31.**
+**Medido em 07/10/2026 18:22:01.**
 
 | | |
 |---|---|
@@ -116,24 +109,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 1 shell command
-
-● Push rodando (o pre-push roda os dois runners). Enquanto ele corre, só leitura — levantando as provas medidas para as três linhas.
-
-  Ran 4 shell commands
-
-● O push caiu rápido no portão do placar (2 dias de defasagem), não na suíte. Antes de curar, vou medir o "NO AR" no worker vivo — é o que
-  a linha PROVA: tem de dizer.
-
-  Ran 1 shell command
-  ⎿  Read docs/AVAIS.md (23 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b3mpxniru.output (30 lines)
-  ⎿  Referenced file ../logs/sombra/relavra10_frota_20261005.py
-  ⎿  Referenced file ponto/services/cartorio.py
-  ⎿  Read ../logs/deploy_o208_20261005.out (23 lines)
-
-● Task "RED e construção do segundo intervalo" completed in background
-
 ● _teto_s_da_jornada presente, minutos_realizados_do_dia ausente, contratos_estruturais 14 — medido no worker vivo, não de memória. Agora a
   cura que o hook nomeia.
 
@@ -142,11 +117,29 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Exatamente as 7 linhas derivadas que o hook nomeou, nada mais. Agora o publicador — vou ler os três achados literais e o entorno de cada
   um.
 
-● Ler o topo e o sítio 88 do RELATO
-  ⎿  $ cd /home/ronald/saas-hasner && echo "=== 250,272 ==="; sed -n '250,272p' app/docs/RELATO.md; echo; echo "=== 840,856 ==="; sed -n
-     '840,856p' app/docs/RELATO.md
+  Ran 6 shell commands
 
-✢ Beboppin'… (7m 42s · ↓ 9.9k tokens · thinking)
+● Agora as três linhas PROVA: com os valores que acabei de medir, mais a linha da O211 no topo. Ancoragem única, de baixo para cima.
+
+  Ran 1 shell command
+
+❯ aval Ronald: a O217 (lavratura nao e ponto fixo) entra na FRENTE da O211: cura na origem com RED das celulas 118980 e 118981, relavra o
+  col146 pela DINHEIRO-EM-COMPETENCIA-ABERTA, e mede a celula de novo por verdes(). Depois O211 -> O214 -> BOs. PAREI so em lei ou !
+
+● Publicador em rc=0. O novo aval registrado — O217 na frente da O211; termino o ato do push (ordem literal anterior, fd6c8c0e pelo hash) e
+  emendo a fila em seguida.
+
+  Ran 1 shell command
+
+● Antes de empurrar, vou testar se o portão lê o DISCO — se ler, o fd6c8c0e sobe sozinho e os docs pegam o commit do próximo marco (L-106),
+  sem emendar o hash que o aval nomeia.
+
+● Conferir árvore e remoto antes do push · 2m 2s
+  ⎿  $ cd /home/ronald/saas-hasner && git push origin main > logs/push_fd6c8c0e_2.out 2>&1; echo "---rc=$?"; tail -25
+     logs/push_fd6c8c0e_2.out (2m 1s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✢ Beboppin'… (13m 12s · ↓ 17.2k tokens)
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 

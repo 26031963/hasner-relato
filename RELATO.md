@@ -1,17 +1,121 @@
 # RELATO — esteira saas-hasner
 
-FILA 1 ANDANDO, sem PAREI. **ORDEM VIVA: item (2), `relavratura 10`** -- o item (1) e a **O195**
-(a cura que o destravava) estao FECHADOS e NO AR; o bloco da O195 esta logo abaixo. Historia do (1):
-**`CELULA-TURNO-FECHA`** -- passos 1-5 FECHADOS com prova; o
-passo 6 esta **PARCIAL** e por isso segue NAO carimbado. A ordem dele de 05/10 09:0x, literal: *"(1) turno
--- apagar a funcao e fechar a celula; (2) relavratura 10 restrita; (3) BOs de tela na ordem do bloco; (4)
-O145. Instrumento so depois disso"*, com a **O204** entrando entre (2) e (3) pelo aval de 09:4x (*"BO de
-producao PROVADO, passa a frente dos 4 BOs de tela"*) e, pelo aval de **11:5x**, com a **O197**
-(`FUTURO-NAO-E-EM-ABERTO`) subindo para **logo depois de (2) e a FRENTE da O204** -- *"sobe para logo
-depois da relavratura 10, a frente da O204"*. A ordem de hoje, entao: (1) turno FECHADO -> (2)
-relavratura 10 -> **O197** -> O204 -> O207 -> **O44 itens 2-8** -> O198/O199/O200 -> O145 ->
-instrumento. A **O44 v2** entrou pelo aval de **12:2x**, literal: *"entra logo atras da O207 e a
-frente dos BOs de tela"*, sem lei nova.
+O211 PAROU NA COPIA, nao em lei: o pouso A de `REGUA-PELA-EMPRESA` esta CONSTRUIDO e VERDE na raia
+`wt-regua` (`raia-regua`, 0 commit a frente do main) -- `core/models.py::AplicacaoConvencao`, migration
+`0017`, o escritor `semear_aplicacao_convencao` e o RED `core/tests/test_aplicacao_convencao.py` com
+**14 testes OK** pela porta canonica (`bin/suite.sh --dir /home/ronald/wt-regua`); `core/regua_cct.py`
+segue IDENTICO ao HEAD, entao **nada de dinheiro se move neste pouso** -- o leitor migra no pouso B
+(DIFF de frota na sombra antes), e a O211 so FECHA la.
+
+lei: **quem julga a LAVRA de uma competencia EXPORTADA, e o CHAMADO que ela faz nascer?** As
+competencias que a relavratura NAO tocou medem, pelo mesmo teste de ponto fixo: **09/2026 (EXPORTADA) 424
+de 17.330 dia-colab = 2,45%, 119 colabs, ata 52.492 contra autoridade 207.815 min (+2.588,72 h)**;
+**08/2026 (EXPORTADA) 756 de 16.894 = 4,47%, 145 colabs, ata 146.934 contra 382.849 min (+3.931,92 h)**.
+Elas so caem relavrando ata de competencia **EXPORTADA**, e o censo da O209 ja provou que relavrar ata
+**nao chega a rubrica -- chega a CHAMADO**.
+A LEI EXISTENTE, grepada antes de perguntar (LEI-AKITA 4), **nao responde**: a **L-092** fala do
+**GRAVADO** (`recalcular_fechamento_mes`), nunca da ATA, e o proprio `LEIS.md:115` a declara *"TEXTO
+SUPERADO EM PARTE"* pela **O TXT E FOTOGRAFIA DO CALCULO** (30/09), que por sua vez diz *"correcao provada
+entra em QUALQUER competencia, a qualquer momento, nenhuma trava"* -- isto e, pelo lado da LAVRA a lei
+vigente **autoriza**. O que nao tem juiz e o resto: `CLAUDE.md:363` (familia FECHAMENTO) escreve, com
+estas palavras, que *"o que 'fechado' quer dizer, **lavra** e reabertura: SEM juiz"*, e `:358-359`
+(familia FERIADO/PRAZO) poe *"competencia fechada"* na mesma lista. Entao a pergunta e so uma: **um
+chamado pode NASCER numa competencia que o Dominio ja pagou?** -- nao ha L-NNN que diga sim nem nao, e nao
+e decisao tecnica (e dinheiro do colaborador na mesa do DP). Nao devolvo turno por isso
+(PAREI-DE-LEI-NAO-DEVOLVE-TURNO): a pergunta fica aqui com os numeros e a esteira **segue a O211**.
+
+## CONFERENCIA DO MARCO O209 — **NAO VIROU. O PLACAR E 14/20** (05/10 ~19:3x, medido no vivo)
+
+Resposta a ordem literal (*"mede agora por verdes() e responde uma de duas"*): **nao virou 15/20**.
+`core/contratos_estruturais.py::linha_do_placar()` chamado no `saas_core` agora devolve
+**`contratos_estruturais: 14/20 verdes`** -- `verdes()=14`, `total()=20` (teto da L-100, com
+`familias_sem_cadastro()=('escala','chamado')`), `declaradas()=17`. A celula
+(`celula/precedencia`, `um juiz por pergunta`) segue **verde=False**, e as outras cinco nao-verdes sao
+`chamado/juiz`, `folha-export/juiz`, `batida/juiz` (teste=None), `escala/juiz` (teste=None) e
+`chamado/escritor` (teste=None).
+
+**O CENSO DELA ESTA EM ZERO, MEDIDO NO VIVO**: `juizes.PENDENTES['celula/precedencia'] == ()`,
+`len(PENDENTES_CELULA) == 0`, `fora_de_autoridade('celula/precedencia') == 0`. Nao e o censo que segura.
+
+**O QUE FALTA, COM NOME E NUMERO: `col146`, 2 dia-colab de 7.859 na competencia 10 (0,025%), +192 min
+(+3,20 h).** Medido por sonda **somente leitura** em prod (`nice -n 19`, 33 s, 564 colabs, **0 sem lavra**,
+dois rodados independentes com o mesmo resultado):
+- **28/09**: ata `minutos_realizados = 0` contra autoridade **541**;
+- **29/09**: ata **894** contra autoridade **545** (894 min = `06:31 -> 21:25`, uma SAIDA pareada com a
+  ENTRADA do plantao seguinte -- o vao entre dois plantoes, nao um turno).
+E a ata desses dois dias foi escrita **pela propria relavratura, 05/10 17:32:12**: as seis batidas da
+janela tem `criado_em` entre 27 e 30/09 e **nenhuma retratada** -- nao houve dado novo depois do ato.
+
+**O NOME CERTO DA SONDA: e TESTE DE PONTO FIXO, nao "ata contra autoridade".** A autoridade
+(`ponto/turnos.py::realizado_do_dia` -> `turnos_do_colab`) pede o papel de cada batida a
+`papel_por_minuto_da_ata` (`ponto/turnos.py:1387`), que **le a ata**. Entao a comparacao mede uma coisa so:
+*a lavratura concorda consigo mesma na releitura*. Corolario que vale registrar: montador == autoridade na
+autopsia e **esperado** (mesma ata de entrada), nao prova de "um juiz".
+
+**O MECANISMO, MEDIDO -- nao lido no codigo.** O arquivo de reversao do proprio apply
+(`app/logs/o209/reversao_frota_20261005_173212.json`, 7.859 celulas) guarda a ata de ANTES:
+- `#118979` (27/09): prev=780 real=780, lampadas `17:30 E / 06:30 S` -- ja certa, **o ato nao a mudou**;
+- `#118980` (28/09): prev=541 **real=541**, lampadas **INVERTIDAS** (`06:30 ·I1 tipo=E tipo_real=S` /
+  `21:30 ·I2 tipo=S tipo_real=E`) -> depois do ato: lampadas **consertadas** (`21:30 E / 06:31 S`) e o
+  numero **541 -> 0**;
+- `#118981` (29/09): prev=894 real=894, lampadas tambem **invertidas** (`06:31 E/S` / `21:25 S/E`) ->
+  depois: lampadas consertadas (`21:25 E / 06:30 S`) e o numero **mantido em 894**.
+Isto e, a relavratura **rodou** nessas celulas e consertou o papel das batidas; os minutos que ela gravou
+sao os da passada que ainda leu o papel VELHO. Dentro do mesmo dicionario de ata, hoje, as **lampadas
+estao certas e os minutos vem do pareamento invertido** -- `#118980` com lampadas de um turno de 541 min
+gravando `0`. **A lavratura nao e ponto fixo**: relavrar de novo escreveria 541 e 545
+(`ponto/portas/celula.py::lavrar_veredito` relavra sempre que `cel.ata != dict(ata)`).
+
+**POR QUE NAO HOUVE DRY**: `ponto/services/cartorio.py:764` calcula `_ata` **dentro** do `if apply_`; o
+proprio arreio declara que *"o DRY desta fatia e a SOMBRA"*.
+
+**A PROVA DE QUE A RELAVRATURA FUNCIONOU ONDE CORREU** e o gradiente, pela mesma sonda, nas tres
+competencias: **10 (relavrada 05/10 17:32) 0,025%** · **09 2,45%** · **08 4,47%** -- a competencia tocada
+esta ~100x mais limpa que as duas intactas. O ato fez o que foi publicado; o que sobrou nao e residuo do
+ato, e um defeito de **realimentacao** da lavratura, que o ato nao prometeu curar.
+
+**NAO CARIMBO A CELULA.** Verde com 2 dia-colab divergentes seria selo falando por efeito que nao houve --
+e listar a 09/08 como o que falta a celula faria dela um contador que **nao pode zerar por construcao**
+(elas dependem da lei da linha `lei:` acima, nao de trabalho meu),
+que e o defeito que `folha/porta_export.py:160-166` recusa com estas palavras: *"contador que nao pode
+zerar por construcao para de ser porta e vira ruido"*. O que muda neste commit e so a **nota** da celula,
+que ainda diz *"a relavratura ainda nao correu"* -- ela correu, e mentira em declaracao nao espera fatia.
+
+**ACHADO LATERAL, contado e nao curado** (vai para o BACKLOG, nao e fatia hoje): a ata com **papel
+contraditorio** (`lampada` com `tipo != tipo_real`) existe em **214 dia-colab / 110 colabs na 10** e
+**425 / 154 na 09** -- por ciclo na 10: 6x1 139, 12x36 68, 5x2 3, personalizado 4, intermitente **0**
+(as do `col146` foram justamente as consertadas pelo ato). **Papel contraditorio NAO prediz divergencia**
+-- 214 contra 2 --, entao ele e sintoma legivel do mesmo pareamento, nunca o contador do defeito.
+
+FILA 1 ANDANDO, sem PAREI. **ORDEM VIVA: o item (3), `O209`, esta FECHADA** -- a ata da FROTA na 10
+foi **aplicada em prod 05/10 17:32-17:34, rc=0** (564 relavrados em 109 s, 92 de 92 casados com a
+sombra, `explicados=0`, comp 09 EXPORTADA intacta por hash), com as 4 condicoes da
+`DINHEIRO-EM-COMPETENCIA-ABERTA` fechadas uma a uma; a prova esta nos dois blocos logo abaixo. Os itens
+(1) **`CELULA-TURNO-FECHA`** e (2) **relavratura 10** (restrita aos 3 colabs, apply em prod 05/10 15:57)
+estao **FECHADOS e NO AR**, e a **O195** -- a cura que destravava o (2) -- tambem. Do (1) fica a ressalva
+de sempre: passos 1-5 FECHADOS com prova, o passo 6 **PARCIAL** e por isso NAO carimbado.
+**PROVA:** medido no worker VIVO em 07/10, nunca de memoria -- `docker exec saas_ui manage.py shell`
+responde `escala.utils.minutos_realizados_do_dia` **ausente** (item 1, a funcao apagada pela L-111),
+`ponto.turnos._teto_s_da_jornada` **presente** (O195) e `core.contratos_estruturais` **14** de 20. Os
+commits sao `8fce4967` (O195), `c8031f6d` (relavratura 10 nos 3 colabs) e `212b25a7` (ata da frota na
+10); o reload das tres cascas esta em `logs/deploy_o208_20261005.out`.
+A ordem dele de 05/10 09:0x, literal: *"(1) turno -- apagar a funcao e fechar a celula; (2) relavratura
+10 restrita; (3) BOs de tela na ordem do bloco; (4) O145. Instrumento so depois disso"*, com a **O204**
+entrando entre (2) e (3) pelo aval de 09:4x (*"BO de producao PROVADO, passa a frente dos 4 BOs de
+tela"*), a **O197** (`FUTURO-NAO-E-EM-ABERTO`) subindo pelo de 11:5x (*"sobe para logo depois da
+relavratura 10, a frente da O204"*) e a **O44 v2** pelo de 12:2x (*"entra logo atras da O207 e a frente
+dos BOs de tela"*), sem lei nova. **Dois avais de hoje a noite entram na frente dos BOs de tela**: a
+**O211** (`REGUA-PELA-EMPRESA`, 16:4x) e, logo depois dela, a **O214** (`HE-DECISAO-EM-ESCALA`, 18:0x --
+*"entra na fila 1 logo depois da O211 e a frente dos BOs de tela"*; a L-097 fica INTACTA, o que muda e
+como a decisao chega ao admin, e a ETAPA 0 dela e um ESMERIL de censo antes de qualquer tela).
+**A ORDEM DE AGORA**: (1) turno FECHADO -> (2) relavratura 10 FECHADA -> (3) **O209 FECHADA** ->
+**O211** -> **O214** -> O197 -> O204 -> O207 -> O44 itens 2-8 -> O198/O199/O200 -> O145 -> instrumento
+(pouso do CERT-AST, depois O205/O206/O212). Fora da fila, sem segurar ninguem: a **O213** (o tipo
+derivado do motivo discorda do tipo da ata em 2 perguntas, achado na saida do apply da O209) e "conta e
+publica", PRE-APROVADO e sem portao; e a **O210** (a deriva da 10) tem portao aberto e numero publicado,
+mas **apply NAO feito** -- ela herdou da O209 a divida de medir por que a ata andou +61.862 min enquanto
+o fechamento dos mesmos 92 colabs anda +4.908.
+
 **UMA PISTA.** O aval de 12:4x abriu uma raia paralela (`wt-bos`, ramo `raia-bos`) com
 **O197 -> O204 -> O200 -> O206** e o aval seguinte, **~4 min depois**, a PAROU: *"a raia paralela dos BOs
 PARA agora, com trilha do ponto em que estava; a principal segue na O195"*. TRILHA MEDIDA: **zero
@@ -20,7 +124,744 @@ arquivo tocado, nenhum pouso, os arquivos de sinal nunca criados -- ela morreu e
 sitios dos quatro BOs. O worktree **fica de pe** (apagar raia e `!` dele) e os quatro BOs voltam a fila
 PRINCIPAL, na ordem do bloco. A principal segue na **O195** sem interrupcao.
 
+## O209 — **O DIFF DE FROTA, PUBLICADO ANTES DO APPLY** (05/10 17:2x, base LIMPA)
+
+Este bloco e a **condicao 1 da `DINHEIRO-EM-COMPETENCIA-ABERTA`**: *"DIFF de frota publicado no RELATO
+ANTES do apply"*. **Publicado = gravado aqui, neste arquivo, antes do ato** -- nao e o push (L-106 poe
+docs no commit do MARCO, e o marco e o apply; L-109 manda a historia morar no RELATO e so nele). A
+ordem e: este texto no disco -> apply -> prova no mesmo bloco -> commit do marco.
+
+Aval que ele cumpre, literal: *"aval Ronald: O209 -- depois do apply dos 3 colabs da relavratura 10,
+relavra a ata da frota na 10 com DIFF publicado antes e reversao em logs; as 23 cobrancas nascem. 09
+exportada intacta."*
+
+### O NUMERO (sombra refeita 17:14, lavra de prod carregada, `diverge=0`)
+
+```
+base: --refazer --dump-agora 17:14:06 · --lavra OK md5=a20f4f99743eb889c200ba9bb569c5b2
+      carimbo dia=20261005 status=REFEITA tipo=completa diverge=0 erros=0
+      dump de prod: 2026-10-05T17:14:10-03:00
+
+ATO 1 (ata, `forcar`, 564 colab com celula na 10, janela 21/09..04/10):  87 s
+  cartorio: julgadas=7527 carimbadas=7859 protestos=732 emitidos=71 nunca_bateu=332 vetados=3
+  A ATA SE MOVEU em 193 dia-colab, em 92 colab(s)   -- dos 11 do censo da O195: so [297]
+  soma do realizado nos dias movidos: 20.012 -> 81.874  (+61.862 min = +1.031 h)
+  DELTA DE CONJUNTO NO BANCO: chamado +14 -0 · pergunta +55 -0 · disputa +7 -0
+  pk dos chamados NASCIDOS: 28833..28846 (os 14, contiguos)
+  09 EXPORTADA: hash=be2b44793055ae9a5b44b98f5572991a INTACTA antes e depois
+  ESPERADO gravado: 92 colab · 193 dia-colab · +61.862 min · 368 linha(s) [EMITE]/[FURO_PARCIAL]
+```
+
+### O PRIMEIRO ESPERADO FOI **DESCARTADO**: ele nasceu de base que a MINHA PROVA sujou
+
+A prova de restauro (que o O209 exige, e que passou: hash `e9e0212c…` **VOLTOU AO PONTO** depois de
+16.883 celulas reescritas) roda um **ensaio** antes de restaurar. O restauro devolve as 11 colunas da
+celula e **retrata** as cobrancas pela porta -- e `retratar` **desdiz, nao apaga**. Entao o ensaio
+deixou no banco `chamado +14 · pergunta +57 · disputa +7` que o hash de celula **nao ve**. O ATO 1
+seguinte rodou por cima disso.
+
+O mecanismo nao e suposicao: `chamados/models.py:409-430`, `ChamadoColaborador.abrir` faz
+`existente = cls.objects.filter(...).first()` e, achando, devolve `(existente, False)` em **qualquer**
+estado -- e se `status_local in ENCERRADOS` chama `_renascer_por_premissa_viva()`, que **escreve**.
+Medido na mesma base e com o mesmo codigo: ensaio `emitidos=72 · +14/+57/+7`; ato1 em cima dele
+`emitidos=7 · +0/+0/+0`, `pk dos NASCIDOS: []`.
+
+**A prova e o ato nao podem dividir base.** Cura: a prova passou a ser portao de **ARQUIVO**
+(`/sombra/o209_prova_de_restauro.ok`, escrito por ela mesma **depois** do assert -- prova que falha nao
+deixa rastro de prova), a base foi refeita e o ESPERADO regerado. O sujo ficou em
+`logs/sombra/o209_esperado_20261005_BASE_SUJA.json`, para a contaminacao ser **medida** e nao discutida.
+
+**E foi medida** (`logs/o209_cmp_esperado.py`, dois eixos separados de proposito):
+
+```
+EIXO ATA    dia-colab: suja=222  limpa=193  nos dois=193 · so na suja=29 · so na limpa=0
+            dia-colab nos DOIS com valor diferente: 0
+            soma_delta: suja=+61862  limpa=+61862   (diferenca +0)
+EIXO EMISSAO  nascidos ch 0->14 · pg 0->55 · dp 0->7
+              emitidos 7->71 · protestos 704->732 · fio_ressuscitadas 0->8
+```
+
+**O veredito**: os **193 que importam sao IDENTICOS, campo por campo, e a soma de minutos nao se move
+nem um minuto.** Os 29 a mais da base suja sao **todos** `real 0 -> 0`, veredito `furo -> cobrado`:
+eles nao moviam dinheiro nenhum -- moviam a palavra, porque a cobranca que o ensaio deixou de pe fazia
+o dia terminar "cobrado". Ou seja, a contaminacao entrou na ata **so pelo veredito**, via o conjunto de
+chamados, e **zero** pelo realizado. Mas 29 em 222 e **13% do ESPERADO** com que o apply em prod ia
+assertar: sem refazer, o ato ia prometer mover 222 e mover 193, e o assert ia acusar o codigo certo.
+Mesma familia do falso-verde dos 40 colabs desta manha -- **base mutada dando verde**.
+
+### OS TRES CONTADORES DE EMISSAO, cada um pelo que a conta FAZ (LEI-AKITA 8)
+
+O aval fala em **23 cobrancas**. Medido na base limpa: **14** chamados nascem. Nao e divergencia de
+juizo -- sao **tres contas diferentes**, e nenhuma e errada:
+
+| numero | de onde sai | o que a conta FAZ |
+|---|---|---|
+| `emitidos=71` | `ponto/services/cartorio.py:839-845` (`_contar_emissao`) | incrementa quando o afunilador devolve **nao-string**: *"dia-colab que passou o funil e terminou com cobranca de pe"* -- **inclui** o caso em que `abrir()` devolveu uma que ja existia. **Nao e** "cobrancas nascidas". |
+| **`+14`** | delta de **CONJUNTO de pk** no banco, antes x depois | linhas que **nasceram**. E este o numero de pessoas novas alcancadas: pks 28833..28846. |
+| `23` do aval | `emitidos` sobre a base do **RUN C**, medido as 15:0x | mesma assinatura, base outra: aquela ja tinha cobranca de pe em parte dos dias. |
+
+**Nao e PAREI** (7b item 5: so para o que muda o DESENHO). O ato e o mesmo, a direcao e a mesma e o
+numero e **menor** que o avalizado -- 14 pessoas novas, nao 23. Fica publicado com nome e com os pks.
+
+### DOIS DEFEITOS NO MEU PROPRIO SCRIPT DE PROD, achados LENDO antes de disparar
+
+1. **Assert VAZIO** (familia SELO ANTI-VACUIDADE). `assert soma_sem_lacuna_obs == soma_sem_lacuna_esp`
+   era **verdadeiro por construcao**: as duas somas so acumulam onde `mov[dia] == esp[dia]` (no ramo
+   `casados` por definicao; no ramo `explicados` porque ele conta so `dia not in por_dia`), entao as
+   parcelas sao identicas termo a termo e o assert **nunca** podia ficar vermelho. Virou **medicao
+   rotulada**, e quem prende a divergencia -- o caminho do PAREI, que para no colab com `mov != esp`
+   sem lacuna que explique -- ficou nomeado como a guarda que sempre foi.
+2. **Pulo em SILENCIO.** Colab do ESPERADO que caisse em `Colaborador.DoesNotExist` ou em `not cels`
+   era saltado por `continue` **sem uma linha**, e o run imprimia "APLICADO". Cura: `pulados` com
+   motivo escrito, `visitados` contado, e um assert que **morde**: todo colab do ESPERADO foi visitado,
+   e os nao-visitados sao primeiro **perguntados ao livro-caixa** (`lacunas()`) -- fato novo pos-dump
+   fica **explicado**, e so o inexplicado para o ato.
+
+### O "ZERO" DO ATO 2 DA RODADA ANTERIOR NAO ERA MEDICAO: ERAM **99 RECUSAS**
+
+`0 colab(s) com campo movido` tinha como causa `ENSAIO DE DINHEIRO SEM A LAVRA DE PROD · Marcador
+esmeril_lavra_de_prod: AUSENTE`. Lendo `bin/sombra.sh`: `lavra_de_prod` e chamada dentro de `bloco()`
+(:285), **nao** dentro de `refazer` -- e eu rodei `--refazer --dump-agora` sem `--bloco`. A cadeia
+passou a ter `--lavra` explicito. **Nuance que fica registrada para nao virar diagnostico errado
+depois**: o md5 que a recusa dizia carregado (`a20f4f99…`) e o **mesmo** que o `--lavra` gravou em
+seguida -- a guarda recusou por **PROCEDENCIA** (marcador ausente), nao por valor. A prosa do erro
+("ela ENVELHECE") descreve o caso geral, nao este.
+
+Com a lavra carregada, o numero real da deriva dos 92 (**medido, NAO aplicado** -- o aval e **ATA SO**):
+
+```
+ATO 2 (recalcular_fechamento --colabs, os 92): mexidos=29 de 572 · VAZOU para fora da lista: NENHUM
+  minutos_realizados   +4.908  (25 colabs)     minutos_abonados    +1.540  (2)
+  minutos_previstos    -1.009  (5)             dias_previstos          -3  (5)
+  horas_noturnas      +29,32   (1)             horas_trabalhadas   +24,76  (3)
+  horas_folga_trabalhada -42,45 (2)            horas_falta          +7,33  (1)
+  DiaPago motor: 45 linhas movidas · 09 EXPORTADA: hash INTACTA
+```
+
+**Este numero e do O209, nao do O210**, e nenhum campo dele vira escrita hoje: o `!` autoriza a ATA.
+**PERGUNTA EM ABERTO, nomeada e nao respondida**: a ata move **+61.862 min** e o fechamento dos mesmos
+92 move **+4.908**. A hipotese obvia -- a ata estava stale e o motor ja contava esses dias, porque o
+motor le **batida**, nao a lavra da celula -- **nao esta medida**, e por isso fica como pergunta do
+**O210**, que mede na foto completa dele. Afirmar a causa aqui seria narrar de memoria.
+
+### AS QUATRO CONDICOES, uma a uma
+
+1. **DIFF publicado ANTES** — este bloco, no disco, antes do ato.
+2. **Reversao em `logs/`** — `/app/logs/o209/` recebe a foto das 11 colunas por colaborador **antes**
+   de cada um ser tocado; a receita de desfazer vai no proprio arquivo e nomeia a **ORDEM** (retratar
+   primeiro pela porta, depois reescrever as 11 colunas **incondicionalmente**; `NUNCA .delete()`). O
+   restauro esta **provado**: na sombra, 16.883 celulas voltaram ao hash de partida, 2.862 delas
+   estavam de fato diferentes.
+3. **09 EXPORTADA intacta** — `hash09()` antes e depois, com `assert`. Na sombra:
+   `be2b44793055ae9a5b44b98f5572991a` nos dois atos.
+4. **PROVA depois** — fica neste mesmo bloco, logo abaixo, com os contadores de prod ao lado dos da
+   sombra.
+
+**SELO DE CONDUTA.** LEI-AKITA: origem=`CelulaDia.ata` lavrada por codigo anterior a
+`CELULA-TURNO-FECHA` e nunca relavrada (so `forcar` alcanca), testemunha=o `julgar_colab` de hoje
+(mesma funcao que prod usa, nada reconstruido), RED=a divergencia medida na sombra (193 dia-colab,
++61.862 min) e os dois defeitos do meu script achados por leitura, quem-mais-le=TELA/espelho/PDF leem
+ata; chamado/pergunta/disputa nascem do sinal dela (14/55/7 na frota); o dinheiro **nao** entra neste
+apply, juizes novos=0.
+
+### A PROVA DEPOIS — **APLICADO EM PROD 17:32:11 → 17:34:04, rc=0** (condicao 4)
+
+**PROVA:** `logs/o209_apply_prod_20261005.out` (75 linhas, a saida inteira do ato) -- **564 colab(s)
+relavrados em 109 s**, **92 de 92** casados com a sombra, `explicados=0`, e a 09 EXPORTADA com
+`hash=be2b44793055ae9a5b44b98f5572991a` **antes e depois** (17.332 linhas, INTACTA).
+
+`logs/o209_apply_prod_20261005.out`, 75 linhas, e a saida inteira do ato. O que ela diz, na ordem
+em que importa:
+
+```
+APLICADO -- 564 colab(s) relavrados em 109 s (1.8 min)
+  casados com a sombra (ata moveu exatamente o esperado): 92 colab(s)
+  explicados pelo livro-caixa (fato novo depois do dump):  0 colab(s)
+  cartorio: julgadas=7527 carimbadas=7859 protestos=732 emitidos=71 nunca_bateu=332 vetados=3
+  COBERTURA DO ESPERADO: 92 de 92 colab(s) previstos foram visitados
+09 EXPORTADA antes:  hash=be2b44793055ae9a5b44b98f5572991a linhas=17332
+09 EXPORTADA depois: hash=be2b44793055ae9a5b44b98f5572991a  INTACTA
+```
+
+Os seis contadores do cartorio sao **identicos** aos da sombra, digito a digito. Nao e coincidencia
+de ordem de grandeza: e a mesma funcao (`julgar_colab`) sobre o mesmo acervo, e por isso o
+**`emitidos=71`** aqui nao contradiz as **23** do aval -- a assinatura e a mesma, a BASE e outra
+(as 23 sairam da RUN C das 15:0x; o `_contar_emissao` de `ponto/services/cartorio.py:839-845`
+incrementa quando o funil devolve nao-string, isto e, *"dia-colab que passou o funil e terminou com
+cobranca de pe"*, **incluindo** o `abrir()` que devolve uma ja existente -- nunca "cobrancas
+nascidas"). Quem conta cobranca NASCIDA e o delta de conjunto no banco, abaixo.
+
+**A EMISSAO, medida como DELTA DE CONJUNTO no banco** (pk antes x pk depois, nao pelo contador em
+processo):
+
+| tabela | delta | pks |
+|---|---:|---|
+| `ChamadoColaborador` | **+14 -0** | 28837..28850 |
+| `DisputaSupervisao` | **+7 -0** | 6399..6405 |
+| `PerguntaDisputa` | **+59 -0** | 40156..40214 |
+
+**Os 14 chamados sao OS MESMOS 14 que a sombra previu.** Conferido por CHAVE, nunca por pk (pk nao
+se compara entre bancos): `(colab, dia-pelo-juiz, modulo)` -- o dia pelo `catalogo/modulos.py::
+data_do_chamado`, nunca `.get('data_turno')` cru. `prod=14 sombra=14`, **`A MULTILISTA E IDENTICA:
+True`**. Composicao: **7** `batida_ausente`, todos com dia DENTRO da janela julgada (col112 09-29,
+col252 10-02, col444 10-03, col866 09-29, col950 09-30/10-01/10-02) e **7**
+`disputa_supervisao_manual` com `dia=None` **pela lei do catalogo** (o modulo nao declara
+`chave_data`; o juiz devolve None de proposito, e eu nao invento dia para ele).
+
+**O +4 de pergunta (59 contra os 55 previstos) esta ATRIBUIDO, nao chamado de ruido.** Tres leituras,
+cada uma mais estreita que a anterior:
+
+1. **por motivo**: `intervalo_saida` 16/15, `intervalo_volta` 17/16, `orfao_14h` 11/10,
+   `saida_sem_entrada` 15/14 -- exatamente **+1 em cada um**, o que ja afasta "um colab a mais".
+2. **por diferenca de conjunto de chaves**: `nos dois = 55`, **SO NA SOMBRA = 0** (nada do previsto
+   deixou de aparecer -- e esta a metade que me prenderia) e **SO EM PROD = 4**.
+3. **por dono**: as 4 sao todas de **2026-10-05, HOJE**, FORA da janela julgada (..10-04) -- col252
+   `orfao_14h` e col723 `intervalo_saida`/`intervalo_volta`/`saida_sem_entrada`. Elas penduram em
+   disputas **#1829 (aberta 17:15:11)**, **#2339 (07:15:09)** e **#1488 (17:30:07)**, as tres
+   ANTERIORES ao meu corte das 17:32:12, com `chamado_destino` **#28712/#28821/#28753**, os tres
+   com pk **ABAIXO** do meu primeiro nascido (28837). Ou seja: e emissao do proprio prod depois do
+   dump, alimentando disputa que ja existia -- o meu ato preencheu o questionario delas. O alcance
+   ao dia 10-05 vem pela **DISPUTA**, que e do COLAB e nao do dia (e o que o meu proprio codigo
+   diz), nunca por julgar dia fora da janela. Corroboracao independente: a sequence de chamado na
+   sombra estava em **28833** na hora do dump e prod havia avancado exatamente **4** (ate 28837),
+   o mesmo numero que o censo de emissao pos-dump tinha contado.
+
+**A SOMA DO REALIZADO: `prod observou +61457 min · a sombra previu +61457 min (em 173 dia-colab)`.**
+E o proprio arreio imprime ao lado que a igualdade e **POR CONSTRUCAO** -- so entra no somatorio o
+dia em que prod == sombra --, entao quem prende divergencia e o PAREI por colab, nunca esta linha.
+E 173 e nao 193 por uma **propriedade do meu proprio instrumento, que eu achei nos numeros**: o
+livro-caixa (`lacunas()`) enxerga as emissoes **do proprio ato** (`criado_em > CORTE`), entao 20
+dia-colab sairam do somatorio por "lacuna" que fui eu mesmo quem criou. Isso so deixa a guarda MAIS
+permissiva -- nunca para por engano --, e aqui nao mudou resultado nenhum: `explicados=0` e
+`casados 92/92` sao afirmacoes mais fortes do que a soma.
+
+**CONDICAO 2, a reversao, no disco do HOST antes de qualquer escrita**:
+`app/logs/o209/reversao_frota_20261005_173212.json`, **6.549.143 B**, em `/dev/vda2` (nao tmpfs) --
+**7859 celulas x 11 colunas**, janela 2026-09-21..2026-10-04, `pk_antes: {chamado: 27445, pergunta:
+32015, disputa: 5353}`, com a receita de desfazer nomeando a ORDEM (retratar pela porta primeiro,
+depois reescrever as 11 colunas incondicionalmente; `NUNCA .delete()`). O resultado em
+`app/logs/o209/resultado_20261005_173404.json` (30.890 B).
+
+#### As duas curas de instrumento deste turno, e o que a segunda pegou
+
+1. **O rotulo do universo convidava a um alarme falso.** O DRY imprimia `7859 ... (na sombra: 16883
+   ...)` -- um fosso de 2x que se le como dano. Nao era: `universo.celulas` do arreio e
+   `len(A_ata)` e o `foto_ata()` filtra `data__range=(INI10, FIM10)` = **30 dias**, enquanto os dois
+   lacos de julgamento usam `INI10..LIM` = **14 dias** (564x30 ≈ 16883 ✓, 564x14 ≈ 7859 ✓). O
+   rotulo passou a imprimir as DUAS janelas e a comparar igual com igual (LEI-AKITA 8: o rotulo diz
+   o que a conta faz).
+2. **O livro-caixa era cego as tres tabelas de EMISSAO** -- e isso era risco de **PAREI FALSO vivo**,
+   nao teorico, porque o meu comparador acabara de provar que o conjunto de chamados move o eixo do
+   veredito sozinho. Curado lendo os nomes de campo reais em `chamados/models.py` (nunca adivinhando)
+   e pelo juiz declarado `data_do_chamado`. **Pagou no primeiro DRY**: acusou
+   `col114 2026-09-24 pergunta#36074 julgado_em=17:25:04` e `col114 2026-09-25 pergunta#36562
+   julgado_em=17:25:04` -- dois fatos pos-dump REAIS que a versao velha devolvia como `[]`.
+   Limite medido e escrito no codigo: **`PerguntaDisputa` nao tem campo de nascimento** (os 23
+   campos do model trazem `respondida_em`, `validada_em`, `julgado_em`, `materializada_em`,
+   `data_conferida_em`, e nenhum `criado_em`/`auto_now_add`), entao ela nao responde "quando nasci"
+   e eu nao invento a resposta: o nascimento dela se alcanca pelo CHAMADO e pela DISPUTA.
+
+Uma terceira ordem de leitura tambem mudou: o `hash09` DEPOIS e o seu `assert` passaram a rodar
+**ANTES** do `assert` de cobertura. O de cobertura PODE ficar vermelho, e se levantasse primeiro a
+prova da L-092 nunca imprimiria -- 564 colabs relavrados sem prova na saida, exatamente na hora em
+que ela mais importa.
+
+#### Os 11 avisos da saida, nomeados (nenhum e silencio)
+
+- **9 `sem_celula: ata nao lavrada, abstendo`**, de **duas** familias. (a) **5** repeticoes de
+  `complementar_marcos_faltantes` em **col373 2026-07-19** pela disputa **#3676** (aberta 25/08,
+  `fechada_em=None`): aquele dia **nao tem CelulaDia nenhuma** -- medido --, e julho esta fora de
+  toda janela deste ato; e acervo anterior, nao efeito meu. (b) **4** em **col950**: tres
+  `criar_questionario` (ch#28847 09-30, ch#28849 10-01, ch#28850 10-02) e um `auto_fecho_disputa`
+  (dp#6405). Aqui o fato e o contrario do que o rotulo sugere: as tres celulas **existem**, tem
+  `ata` e foram julgadas **pelo meu proprio ato** (`julgada_em=2026-10-05 20:32:12.100626+00`,
+  `veredito=furo`), e a **funcao real** `_marcos_faltantes`, chamada agora, devolve
+  `estado=lido` com **4 faltantes** em cada um dos tres dias. Ou seja: a abstencao foi de ORDEM
+  dentro do ato, nao de ata ausente -- e e **comportamento declarado**, nao buraco: o docstring de
+  `chamados/services/disputa_emissao.py::_ata_do_dia` diz literalmente *"o dia se cura na proxima
+  passada depois de lavrado"*. Entao os tres chamados ficam de pe **sem pergunta ate a proxima
+  passada do cartorio**, que agora le `lido`. **A CONFERIR na passada seguinte**, e e o unico fio
+  solto deste ato.
+- **2 `best-effort falhou`** (`registrar_engolido`, portanto NAO silenciosos): `tipo_marco_divergente
+  motivo=intervalo_saida pergunta_id=36573` e `38273`, os dois com `resposta=12:00`,
+  `tipo_pelo_motivo=S` e `causa=marcos_faltantes=S x ata=E`. E um **desacordo entre o tipo derivado
+  do motivo e o tipo da ata** no mesmo marco -- familia chamado, fora deste marco, e vai como item
+  proprio com estes dois numeros.
+
+#### A PERGUNTA QUE FICA ABERTA, nomeada e **nao** respondida
+
+A ata andou **+61.862 min** e o fechamento dos MESMOS 92 colabs anda **+4.908 min** (ATO 2 medido na
+sombra, **nao aplicado** -- o aval e ATA SO). A hipotese obvia -- a ata estava stale e o motor ja
+contava aqueles dias, porque o motor le **batida** e nao a lavra da celula -- **nao foi medida**, e
+afirmar a causa seria narrar de memoria. Ela e divida da **O210**, que mede na foto completa dela.
+
+**O QUE ESTE ATO NAO FEZ**, e esta na ultima linha da saida: `FIM -- ATA SO. Nenhuma linha deste ato
+escreveu FechamentoMensal ou DiaPago (O210 e outro marco).` O aval nomeia a ATA; embarcar o
+fechamento da frota ampliaria o aval (LEI-AKITA 9).
+
+## RELAVRATURA 10 — APLICADA EM PROD NOS 3 COLABS (05/10 15:57, item (2) FECHADO)
+
+`LEI-AKITA: origem=ponto/services/cartorio.py::julgar_colab (a ata, autoridade do realizado), testemunha=CelulaDia.ata + DiaPago(motor) + FechamentoMensal lidos da foto FRESCA, RED=logs/o195_apply_3_prod.py (assert soma == -450 e assert fora == {} pre-escritos ANTES do numero), quem-mais-le=censo de 47 sitios do O195 + os 3 leitores de dinheiro (calendario, porta_export, espelho), juizes novos=0`
+
+**O QUE ENTROU**, pelo **aval 3 item 2** dele, literal: *"relavratura 10: aplica SO o realizado dos
+dia-colab da cura, e a deriva vira fatia propria com o numero dela publicado"*. Escopo:
+**{col174, col235, col382}**, os unicos colabs em que a ata se moveu num dia do CENSO.
+
+**AS QUATRO CONDICOES DA `DINHEIRO-EM-COMPETENCIA-ABERTA`, uma a uma:**
+
+| # | condicao | como fechou |
+|---|---|---|
+| 1 | DIFF de frota publicado **ANTES** | commit `8fce4967` (O195): 12.362 turnos pela porta real `turnos_do_colab`, `so_esq=0 so_dir=0`, 58 trocam de dia, 0 na direcao errada, por DESTINO comp09=47 / comp10=11, `comp10 trab -450` |
+| 2 | arquivo de reversao em `logs/` | `logs/o195_cond2_20261005.json` (215.088 B) + `logs/o195_cond2_restore.py`. **TRES tabelas, escopadas nos 3**: 90 celulas da janela inteira 21/09-20/10 **com `protestos`** (o JSONField que `lavrar_veredito` escreve em `celula.py:542` e que o JSON antigo das 14:15 **nao tinha**, alem de cobrir so 12 das 90), 3 `FechamentoMensal` (24 campos de valor), 170 `DiaPago` (as DUAS versoes), e o lado que UPDATE nao reverte -- o CONJUNTO de pks de chamado e pergunta por colab (`chamado: 128`, `pergunta: 179`), sem filtro de janela de proposito (delta de conjunto nao precisa de criterio de data; filtrar por forma e o jeito de contar errado) |
+| 3 | competencia 09 **INTACTA**, hash antes/depois | **atas:** `37a29deb2a11b39dbc94ec7ef1ba6bc7 -> 37a29deb2a11b39dbc94ec7ef1ba6bc7` (903 linhas, 30 colabs do censo, a MESMA conta de `logs/sombra/o195_smoke_prod_20261005.py`). **fechamento 09 dos 3:** IGUAL (`235:774bef2a…`, `382:ec7faceb…`, `174:b51b4de…`). **VEREDITO: comp 09 INTACTA** |
+| 4 | PROVA depois | este bloco + `logs/o195_apply_3_prod_20261005.out` (71 linhas) + `app/logs/recalculo/recalculo_10-2026_20261005_155707.json` (736 KB, antes x depois dos 572) |
+
+**ATO 1 — A ATA.** `julgadas=42 carimbadas=42 protestos=8 **emitidos=0** nunca_bateu=0 vetados=0`.
+A ata se moveu em **5 dia-colab**, soma **-450 min**, que e o numero **publicado em `8fce4967`** --
+`assert soma == SOMA_PUBLICADA` estava escrito antes de rodar (L-110: todo leitor le o mesmo numero):
+
+```
+col174  2026-09-23      0 -> 148     +148  CENSO
+col174  2026-09-24    148 -> 0       -148  CENSO
+col235  2026-09-30     61 -> 240     +179  CENSO
+col235  2026-10-01    658 -> 418     -240  CENSO
+col382  2026-09-21    792 -> 403     -389  CENSO
+colabs com dia FORA do censo: nenhum | dias do censo que NAO moveram: nenhum
+```
+
+**NASCIDOS NO ATO 1: chamado nenhum, pergunta nenhuma** -- medido como **delta do CONJUNTO de pks** no
+banco, nao pelo `contadores()`. Isso importa porque a sombra roda com as saidas DESLIGADAS, entao o `0`
+dela nao provava o de prod; e importa mais ainda porque **as 23 cobrancas da frota continuam de pe para
+a O209**, que e exatamente onde o `!` dele as autorizou.
+
+**ATO 2 — O GRAVADO.** `recalcular_fechamento --mes 10 --ano 2026 --colabs 174,235,382 --apply`:
+`processados=3`, `fechamentos_mexidos=2 de 572`, `fechamentos_novos=0`. **UM campo de valor** se moveu
+na frota -- `minutos_realizados +580` -- mais o par de DSR **pre-declarado FORA do alvo**:
+
+```
+col235  minutos_realizados   4677 -> 4854
+col382  minutos_realizados   4056 -> 4459
+col382  semanas_dsr_ok        1 -> 2   [FORA, DECLARADO: ponto/management/commands/desvio_o68b.py:29]
+col382  semanas_dsr_perdido   4 -> 3   [FORA, DECLARADO: desvio_o68b.py:29]
+```
+
+Os outros **21 campos** das 572 linhas deram **0,00** (sao **24** campos de valor e **tres** se
+moveram -- `minutos_realizados`, `semanas_dsr_ok`, `semanas_dsr_perdido` --, entao o resto e 21, nao
+22; o numero errado era meu, contado a mao em vez de pela lista) -- a condicao (b) da `AVAL-DE-CRITERIO` medida
+contra o **GRAVADO**, nao motor x motor. O DSR nao e surpresa e a razao ja estava escrita na casa antes
+deste ato: *"DSR: fechar turno muda a contagem semanal de dias trabalhados"* (`desvio_o68b.py:29`,
+que o lista em `FORA_DO_CRITERIO`); escritor unico `ponto/services/fechamento.py:563`. Move porque a
+**segunda 2026-09-21** -- dia da cura -- mudou.
+
+**POR QUE A ATA ANDOU -450 E O GRAVADO ANDOU +580.** Nao sao dois numeros do mesmo fato: sao duas
+autoridades, e o `DiaPago(motor)` de prod **ja estava parcialmente drenado pelo recalculo por evento**.
+Por dia, contra a foto FRESCA:
+
+```
+col174  2026-09-23     0.0 -> 148.0    +148.0  CENSO (cura)
+col174  2026-09-24   148.0 -> 0.0      -148.0  CENSO (cura)
+col235  2026-09-30    61.0 -> 240.0    +179.0  CENSO (cura)
+col235  2026-10-01   420.0 -> 418.0      -2.0  CENSO (cura)      <- a ata caiu 240, o gravado tinha 420
+col382  2026-09-21   420.0 -> 403.0     -17.0  CENSO (cura)      <- a ata caiu 389, o gravado tinha 420
+col382  2026-10-03     0.0 -> 420.0    +420.0  deriva -- O210, desconta
+```
+
+**Nos dias do CENSO: +160.** **Fora do censo: UM dia**, `col382 2026-10-03`, cuja ata **NAO se moveu no
+ATO 1** -- entao e **deriva pura de fechamento**, a O210, e este ato a **drenou**: `+420 min`. Era a
+classificacao pre-escrita: dia fora do censo com ata movida seria **vazamento da O209** e mandaria
+restaurar aquele colab da foto ANTES do ATO 2. Nao houve nenhum.
+
+**O NUMERO DA O210 VOLTA A SER MEDIDO, nao subtraido de cabeca.** Os `174 de 572` e os `+55.507 min`
+sao **historia de IMPACTO** de uma foto de antes deste ato (L-110): col235 e col382 vieram para o
+presente agora, e o `+420` esta drenado. A O210 remede na sua propria foto, antes do seu proprio apply.
+
+**OS 389 MIN DO `col382 09-21` NAO SE PERDERAM, e vale dizer por escrito** porque e o lugar onde um
+leitor desatento concluiria que a frota perdeu hora de quem trabalhou. O turno pertence ao dia
+**09-20**, que e competencia **09**. **A FRASE QUE EU ESCREVI NO MARCO DA O195 ESTAVA IMPRECISA e a
+correcao e minha** (medido em `logs/o195_389min_col382_medido_20261005.md`, lido no banco de prod, nao
+citado): eu dizia *"a ata de prod JA TEM em 09-20 e o TXT exportado JA carrega"*, e as duas metades nao
+sao a mesma coisa. **O MINUTO esta la**: `DiaPago(motor)` de 09-20 tem `minutos_realizados=389` sobre
+`minutos_previstos=420`. **A RUBRICA nao esta em lugar nenhum**: toda rubrica de HORA daquele dia e
+**0,0**, e rubrica de hora e o que vira linha do TXT -- `minutos_realizados` nao e rubrica, e o unico
+leitor dele em `folha/` e a **prontidao** (`folha/export.py:670`). Logo, **como DINHEIRO o turno que
+comeca em 09-20 nao esta no TXT exportado da 09**. Isso NAO reabre nada aqui: quem os REMOVERIA numa
+relavra e o **HEAD** e a cura os MANTEM, e o dono do que falta no TXT da 09 ja existe e e o aval
+**PAUTA-DP-09-RELAVRATURA** de 15:4x, onde este dia e **uma linha**. O que morreu neste ato foi a
+**dupla contagem**: a ata da 10 os tinha tambem em 09-21. E o gravado da 10 nem os tinha -- por isso o
+dia andou **-17**, nao -389.
+
+**`forcar` EM PROD: LEI ANTES DO PATCH, e a prosa estava envelhecida.** `grep` de `cartorio.py` e de
+`julgar_colab` em `LEIS.md`/`CORTES.md`/`DOSSIES.md`: **nenhuma lei restringe a flag** (a L-085 protege
+`ponto/turnos.py::turnos_do_colab`, outro sitio). O docstring dizia *"(SO sombra)"* e era **falso em
+dois sentidos lidos no vivo**: `processar_cartorio.py:29` declara `--forcar` como porta de **producao**
+(*"HX-BORDA-ATA: rejulga mesmo com impressao igual (backfill de ata)"*), e a propria `julgar_colab`
+passa `forcar=True` sozinha na 2a passada do B5.3b, em prod, a cada cron das 06:28. A linha foi
+**corrigida no commit deste marco**, com o censo de campos que a flag move (a uniao das duas
+assinaturas de `ponto/portas/celula.py` -- este arquivo nao tem **UM** `.save(`) e com o que ela **nao**
+protege: a JANELA. Foi por isso que `processar_cartorio --forcar` foi **recusado** como ferramenta: ele
+so aceita `--empresa` e a fila dele e toda `CelulaDia` com `data < hoje`, **sem piso** -- reescreveria a
+**09 EXPORTADA**. A forma certa foi `julgar_colab` direto, com a lista **INTEIRA** da janela e **piso em
+`periodo_apuracao(10, 2026, 21)`**, que mantem a 09 fora **por construcao** (e lista inteira porque
+`_julgar_colab_corpo:432` tira o intervalo de batida de `cels[0].data`/`cels[-1].data`: recorte por dia
+fabrica par fechado com a cauda da vespera).
+
+**DOIS AVAIS NOVOS REGISTRADOS** (PROMPT-NAO-SE-REPETE: linha em `PROMPTS.md`, item em
+`PENDENTES_RONALD.json` por `python3 bin/gerar_avais.py --escrever` -- diff de 12 linhas, sem churn;
+AVAIS caiu de **8** para **6**):
+- **`O209`** (`!`): *"depois do apply dos 3 colabs da relavratura 10, relavra a ata da frota na 10 com
+  DIFF publicado antes e reversao em logs; as 23 cobrancas nascem. 09 exportada intacta"*. Ordem
+  **literal**: DEPOIS dos 3, **nunca embarcada neles** (LEI-AKITA 9 -- embarcar ampliaria o aval da
+  relavratura). Marco PROPRIO, com foto nova da sombra e reversao dos ~89 colabs.
+- **`PAUTA-DP-09-RELAVRATURA`**: *"mede primeiro o numero do DOMINIO (TXT da 09 gerado na sombra x TXT
+  exportado, linha a linha) e me traz a pauta com ESSE numero"*. O numero da GRADE ja medido
+  (291 dia-colab / 94 colabs / +142.778 min) **nao e** o numero da pauta. A porta (retificacao pela
+  `REGEN-EM-EXPORTADA` ou correcao LA) volta **com** o numero.
+
+**ORDEM VIVA depois deste marco:** (2) FECHADA -> **O209** (frota, `!` dado) -> **O197** -> O204 ->
+O207 -> O44 itens 2-8 -> O198/O199/O200 -> O145 -> instrumento.
+
+## O208 — O CONTADOR DO RECALCULO ERA CEGO AO CAMPO DA CURA (05/10, bug no caminho, RED→GREEN)
+
+**Achado DENTRO da medicao do item (2), e por isso vem primeiro** (LEI-AKITA 6: bug provado no meio da
+fatia cura na hora). `ponto/management/commands/recalcular_fechamento.py:36` declarava a sua PROPRIA
+lista de campos -- `RUBRICAS`, **19** -- ao lado do `CAMPOS` canonico de **26** que o proprio
+`ponto/services/fechamento.py:574` importa e **chama de canonico** por escrito. As duas listas **ja
+tinham divergido em CINCO campos**:
+
+```
+minutos_realizados · dias_previstos · semanas_dsr_ok · semanas_dsr_perdido · horas_reflexo_dsr
+```
+
+`minutos_realizados` **e o campo da relavratura**. Entao o rotulo `fechamentos_mexidos=%d de %d`
+(:136) nao contava fechamento mexido: contava *"fechamento cujas 19 rubricas mexeram"* -- exatamente o
+que a LEI-AKITA 8 proibe (*"rotulo diz o que a conta faz; contador == universo"*).
+
+**O PRECO, MEDIDO NA SOMBRA NO MESMO ATO** (`logs/relavra10_diff_20261005.out`):
+
+| ato | o comando IMPRIMIU | a foto de 24 campos ACHOU | fator |
+|---|---|---|---|
+| ATO 2 (11 colabs da cura) | `fechamentos_mexidos=3 de 572` | **6** colabs | 2,0x |
+| RUN C (competencia inteira) | `fechamentos_mexidos=36 de 572` | **174** colabs | 4,8x |
+
+Os tres que o ATO 2 nao viu sao **col44, col235 e col382** -- os tres movem SO campos de fora do
+`RUBRICAS`. A conta fecha pelos dois lados: os 3 que ele VIU (col250, col297, col935) sao exatamente
+os que mexem `minutos_abonados`/`horas_trabalhadas`/`horas_saida_antecipada`/`turnos_abertos`, todos
+dentro dos 19. No RUN C a diferenca e dominada por `minutos_realizados` (**137 colabs, +55.507 min**).
+
+**E FOI O `36 de 572` QUE FOI PARA A MESA DELE**, no pendente `RELAVRATURA-10-PAROU-DIFF-SURPREENDE`
+(AVAIS #7, 05/10 03:32). O universo verdadeiro e **174 de 572**. O numero do aval nao estava so medido
+com o juiz defeituoso (isso a L-110 ja dizia): estava medido com um **contador cego**.
+
+**SEGUNDO CONSUMIDOR, e e o que torna isso mais que cosmetico:**
+`ponto/management/commands/aplicar_janela_he_total.py:145` delega o recalculo a esta porta
+*"e ainda ganha a foto antes/depois que aquele comando grava por conta propria"* (comentario dele
+mesmo, :141-143). A prova da L-092 e a trilha de auditoria daquele ato tambem corriam sobre a foto
+cega. `FOTO_DIR` (`logs/recalculo/*.json`) guarda as duas fotos por colaborador -- e guardava 19
+campos de 24, entao **nem o desfazer tinha o campo da relavratura**.
+
+**A CURA E DE ORIGEM, nao de lista:** `RUBRICAS = tuple(c for c in _CAMPOS_CANONICO if c not in
+('mes', 'ano'))`, importando o `CAMPOS` do mesmo sitio que o `fechamento.py` ja importa (o modulo nao
+tem model no topo -- so `json`/`BaseCommand`/`transaction` --, entao nao ha ciclo). Mesma familia dos
+**LABELS em quatro lugares** (24/09) e do `holerite` fora da regua (04/09): a forma certa existia e o
+leitor principal nao migrou.
+
+**RED EVIDENCIADO, 3 falhas, 0 errors** (`ponto/tests/test_o208_contador_do_recalculo.py`, contra COPIA
+do HEAD por `bin/arvore_do_push.sh HEAD` + `bin/suite.sh --dir`):
+
+```
+FAIL test_MORDE_fechamento_que_move_SO_minutos_realizados
+FAIL test_MORDE_os_cinco_campos_da_divergencia
+FAIL test_rubricas_nao_perde_campo_do_campos_canonico
+     AssertionError: [] != ['minutos_realizados', 'dias_previstos', 'semanas_dsr_ok',
+                            'semanas_dsr_perdido', 'horas_reflexo_dsr']
+Ran 3 tests -- FAILED (failures=3)
+```
+
+Depois da cura, na mesma copia: **3 OK**. Vizinhos do modulo rodados juntos (`test_s4_ninguem_recalcula_para_ler`,
+`test_o80_selo_l092`, `test_k8_tela_abre_na_competencia`, `test_s3_leitor_nao_chama_motor`): **32 OK**.
+`ruff check` nos dois arquivos: `All checks passed`.
+Os dois primeiros selos MORDEM por COMPORTAMENTO (mover um campo sozinho e perguntar a `foto()` do
+comando); o terceiro e ESTRUTURAL e existe para a divergencia nao renascer no dia que um campo novo
+entrar no `CAMPOS` -- e a forma que a casa ja usa para o `LABELS`.
+
+**SELO DE CONDUTA.** LEI-AKITA: origem=`ponto/management/commands/recalcular_fechamento.py::RUBRICAS`
+(segunda lista de campos, apagada -- passa a derivar do `CAMPOS` canonico), testemunha=`CAMPOS` de
+`aplicar_09_corte_b.py`, o mesmo que `ponto/services/fechamento.py:574` ja le,
+RED=`ponto/tests/test_o208_contador_do_recalculo.py` (3 falhas no HEAD, 2 por comportamento + 1
+estrutural), quem-mais-le=censo fechado -- `RUBRICAS` deste modulo nao e importado por ninguem (os
+outros `RUBRICAS` do repo sao de `ponto/calculador/regras.py` e `diff_janela_he.py`, listas de
+dominio diferente); o modulo tem 2 consumidores do COMANDO (`aplicar_janela_he_total.py:145` e
+`config/crons.py:902`) e nenhum dos dois parseia a saida, juizes novos=0.
+
+## ITEM (2) — RELAVRATURA 10: O DIFF MEDIDO, E POR QUE O APPLY AINDA NAO SOBE (05/10)
+
+**A RELAVRATURA SAO DOIS ATOS, e isso foi LIDO na fonte, nao suposto.** O fechamento nao ve a cura da
+O195 enquanto a ATA nao for relavrada: `folha/export.py:221::grade_do_fechamento` **le a celula
+soberana** (`escala/services/leitor_celula.py::grade_da_celula`) e `ponto/services/fechamento.py:533`
+deriva `minutos_realizados`/`minutos_abonados` de `ponto/services/dia_pago.py::por_dia_da_grade` sobre
+ESSA grade. Entao:
+
+- **ATO 1 — a ATA**, pelo cartorio com `--forcar`. E a ata **nao se relavra sozinha**:
+  `ponto/services/cartorio.py::impressao_insumos` **nao hasheia a ata** (:132-133) -- carimba batidas,
+  cobertura, chamados, DNA, veto e teto. Trocar o CODIGO do juiz nao move a impressao, entao **nenhum
+  deploy e nenhum cartorio das 06:28 relavra dia passado**. (Esta e tambem a prova, pelo lado da
+  CAUSA, de a 09 EXPORTADA ter ficado intacta no deploy da O195.)
+- **ATO 2 — o FECHAMENTO**, pela porta que ja existe: `recalcular_fechamento --colabs` (nascida
+  30/09 19:3x justamente para isto: *"com a lista, o apply alcanca so quem o ato alcancou"*).
+- **NAO HA TERCEIRO ATO.** `escala/utils.py:1261/1295/1320` chama `realizado_do_dia`/`turnos_do_colab`
+  e nada ali le `TurnoMaterializado` -- `recompute_turnos` nao entra.
+
+**AS QUATRO FERRAMENTAS QUE EXISTIAM E NAO SERVEM**, cada uma com o motivo em uma linha:
+`aplicar_09_corte_b` para mes=10 (recalcula a competencia INTEIRA e so restaura o `FechamentoMensal`
+dos separados -> `soma(DiaPago) != FechamentoMensal` exatamente neles, e as vizinhas `(7, 8)` sao
+literais); `processar_cartorio --forcar` (so aceita `--empresa`, e a fila dele e TODA celula com
+`data < hoje` -- reescreveria a **09 EXPORTADA**); recortar `cels` nos dias da cura (`_julgar_colab_corpo`
+tira a janela de `cels[0].data`/`cels[-1].data`, e fatia de um dia **fabrica par fechado** com a cauda
+da vespera); `bin/restore_relavratura_10_2026.py` (e de competencia inteira -- nao reverte um ato de 11 ids).
+
+### ATO 1 MEDIDO NA SOMBRA — 11 colabs, 154 celulas, `forcar=True`
+
+```
+cartorio: julgadas=154 carimbadas=154 protestos=24 emitidos=0 nunca_bateu=0
+          furo_parcial=13 vetados=0 perguntas=0
+```
+
+**`emitidos=0` e `perguntas=0`: a relavratura nao alcanca pessoa.** Nenhuma cobranca nasce, nenhuma
+pergunta e feita -- era o risco real do `--forcar` (os dias orfaos de col44/col451/col594/col876/col922
+podiam emitir), e ele **nao se materializou**.
+
+A ata se moveu em **7 dia-colab**, o veredito em **5**, e o realizado dos 11 na 10 foi de
+**42.035 -> 42.131 min (+96 min)**. Os movimentos que importam:
+
+```
+col174  09-23  real    0 ->  148 | discordante -> concorde | protestos ['REALIZADO_ZERO_COM_TURNO',
+                                     'BATIDA_ORFA_FORA_TOLERANCIA'] -> []            [censo]
+col174  09-24  real  148 ->    0 | concorde -> indefinida   | [] -> ['PREVISTO_COM_DIA_INDEFINIDO'] [censo]
+col235  09-30  real   61 ->  240 | furo -> furo                                      [censo]
+col235  10-01  real  658 ->  418 | discordante -> concorde | ['REALIZADO_INFLADO'] -> []  [censo]
+col382  09-21  real  792 ->  403 | discordante -> concorde | ['REALIZADO_INFLADO'] -> []  [censo]
+col297  09-23  real    0 ->   60 | fato_sem_previsao (igual)        [deriva de ata -- O209]
+col297  09-30  real    0 ->  486 | fato_sem_previsao (igual)        [deriva de ata -- O209]
+col451  10-04  real    0 ->    0 | concorde -> fato_sem_previsao    [deriva de ata -- O209]
+```
+
+**OS TRES ULTIMOS NAO SAO DESTA CURA, e a prova e por CONSTRUCAO.** O censo da O195 foi um A/B da
+FUNCAO REAL (`turnos_do_colab`, 541 colabs com turno, 12.362 turnos) e deu **`so_esq=0 so_dir=0`**:
+a cura **nao cria nem destroi um par**. Se o conjunto de turnos de um colab e identico sob os dois
+codigos, a ata que o juiz escreve e identica sob os dois codigos -- entao **a O195 nao pode mover um
+dia que nao esta nas 58 linhas**. Conferido linha a linha: o dia do censo de col297 e `10-02 -> 10-01`
+(e a ata dele moveu em 09-23 e 09-30) e o de col451 e `09-21 -> 09-20` (e a ata dele moveu em 10-04).
+Sao **ata stale** contra o juiz de hoje -- o achado **O209**, logo abaixo, cuja causa ja estava
+nomeada por escrito no proprio commit da O195: *"Zero deles e desta fatia: e 100%
+CELULA-TURNO-FECHA"*.
+
+**CERTIFICACAO do ATO 1 contra o numero que a O195 JA PUBLICOU** (coluna `juiz` de
+`logs/sombra/o195_diff_cura.tsv` -- L-110, *"todo leitor le o mesmo numero"*):
+**23 IGUAIS · 0 DIVERGEM** (307 celulas sem linha publicada, por serem dia fora do censo das 58).
+A ata diz exatamente o que o juiz curado disse quando o DIFF foi publicado.
+
+### ATO 2 MEDIDO — `recalcular_fechamento --colabs` com os 11
+
+```
+ESCOPO: 11 colaborador(es) nomeados -- a deriva de quem nao esta na lista NAO e escrita
+processados=11 · fechamentos_mexidos=3 de 572 (o contador CEGO -- ver O208) · novos=0
+foto de 24 campos: 6 colab(s) com campo movido · VAZOU para fora da lista: NENHUM
+```
+
+| campo | antes | depois | delta | colabs |
+|---|---|---|---|---|
+| `minutos_realizados` | 39.952 | 40.776 | **+824** | 3 |
+| `horas_trabalhadas` | 654,20 | 663,31 | +9,11 | 1 |
+| `horas_folga_trabalhada` | 9,11 | 0,00 | −9,11 | 1 |
+| `horas_saida_antecipada` | 8,36 | 1,55 | −6,81 | 1 |
+| `turnos_abertos` | 11 | 12 | +1 | 1 |
+| `minutos_abonados` | 1.920 | 2.580 | **+660** | 1 |
+| `dias_previstos` | 218 | 220 | +2 | 1 |
+| `semanas_dsr_ok` / `semanas_dsr_perdido` | 17 / 38 | 19 / 36 | +2 / −2 | 2 |
+
+Por colab, contra o criterio escrito ANTES do numero (`DENTRO` = o que se move como consequencia
+direta de um turno trocar de dia; `FORA` = previsto, abono, falta, dobra, semana de DSR, banco):
+
+```
+col44    minutos_realizados +244
+col235   minutos_realizados +177
+col297   horas_folga_trabalhada -9,11  horas_trabalhadas +9,11
+col935   horas_saida_antecipada -6,81  turnos_abertos +1
+col250   dias_previstos +2!  minutos_abonados +660!  semanas_dsr_ok +1!  semanas_dsr_perdido -1!
+col382   minutos_realizados +403  semanas_dsr_ok +1!  semanas_dsr_perdido -1!
+```
+
+Cinco dos 11 nao movem campo nenhum no mes -- e **col174 e o caso que explica por que isso nao e "nada
+aconteceu"**: a ata dele moveu 148 min de 09-24 para 09-23 (os dois dias da cura), e o `DiaPago` dos
+dois dias mudou, mas a SOMA do mes nao. **A verdade do DIA se moveu com o total parado.** Quem le o
+espelho ve a diferenca; quem le so o fechamento, nao.
+
+### A DERIVA, que e fatia PROPRIA pelo Aval 3 item 2
+
+`RUN C` (a competencia inteira, depois do ATO 2, **sem** relavrar a ata dos outros -- entao e o gravado
+velho contra a propria ata, deriva pura e nao cura):
+
+```
+minutos_realizados  527.012 -> 582.519  (+55.507 min = +925,1 h)   137 colabs
+minutos_abonados    106.624 -> 126.824  (+20.200 min = +336,7 h)    24 colabs
+dias_previstos        3.494 ->   3.527  (+33)                       29 colabs
+horas_trabalhadas   9.712,53 -> 9.779,57 (+67,04 h)                  7 colabs
+horas_falta            44,80 ->   76,93 (+32,13 h)                   4 colabs
++ saldo_banco_horas 5 · minutos_previstos 5 · turnos_abertos 3 · intra 2 · folga 2 · inconsist. 2 · incertos 1
+```
+
+**O numero da fatia da deriva e `174 de 572` colabs** (168 a mais que os 6 do ato), nao os `36` do
+pendente. `RUN C` reproduziu o `fechamentos_mexidos=36` de 03:3x **exatamente** -- o que confirma, por
+um terceiro caminho, que aquele numero media DERIVA e nao cura, e que o `36` e o contador cego do O208.
+
+### A 09 EXPORTADA, nos tres atos
+
+```
+antes de tudo       hash=57ec4cf0fbb38d203df25baac92261cb linhas=17332
+depois do ATO 1     hash=57ec4cf0fbb38d203df25baac92261cb  INTACTA
+depois do ATO 2     hash=57ec4cf0fbb38d203df25baac92261cb  INTACTA
+depois do RUN C     hash=57ec4cf0fbb38d203df25baac92261cb  INTACTA
+```
+
+### A LISTA FINAL DO APPLY, pelo criterio do aval: **3 colabs**
+
+O Aval 3 item 2 diz *"aplica SO o realizado dos **dia-colab** da cura"* -- o criterio e por **DIA**,
+nao por campo. Cruzando a ata movida com as 58 linhas do censo, **a ata se moveu em dia DO CENSO em
+tres colabs**, 5 dia-colab:
+
+```
+col174  09-23 (+148) e 09-24 (-148)   linha do censo: 09-24 -> 09-23      net   0
+col235  09-30 (+179) e 10-01 (-240)   linha do censo: 10-01 -> 09-30      net -61
+col382  09-21 (-389)                  linha do censo: 09-21 -> 09-20      net -389
+                                                                    TOTAL  -450 min
+```
+
+**O -450 FECHA COM O NUMERO QUE A O195 PUBLICOU** (`8fce4967`: *"a cura MOVE 34 (comp09 trab +168,
+comp10 trab **-450**)"*) -- terceira certificacao independente do mesmo numero, por um caminho que
+nao e o da medicao original.
+
+E para esses tres, **o `forcar` escreve SO cura**: nenhum dos tres tem ata movida em dia fora do
+censo. Nao ha preco de deriva no ATO 1.
+
+**POR QUE OS OUTROS OITO FICAM FORA**, um a um:
+
+| colab | o que moveu | por que fica fora |
+|---|---|---|
+| col297 | ata em 09-23 e 09-30 | dia do censo dele e `10-02 -> 10-01`; os dois dias sao **O209** |
+| col451 | ata em 10-04 | dia do censo dele e `09-21 -> 09-20`; 10-04 e **O209** |
+| col44 | DiaPago em 10-04 | ata **nao** moveu; 10-04 nao e dia do censo -> deriva de motor |
+| col250 | DiaPago em 09-30 (dia do censo) + 10-02/03/04 | ata **nao** moveu; a linha de 09-30 e `(0,0,0) -> None`, **0 minuto**; o resto e deriva |
+| col935 | DiaPago em 09-26 (dia do censo) | ata **nao** moveu; linha `(0,0,0) -> None`, **0 minuto** |
+| col594 · col876 · col922 | nada | a cura move turno ORFA neles (0 min nos dois dias) |
+
+### O PRECO QUE O ATO 2 CARREGA, e ele e NOMEADO, nao surpresa
+
+**`recalcular_fechamento` recalcula o MES, e isso e lei escrita** desde 26/09 (AVAL-DE-CRITERIO:
+*"Apply por recalculo nunca e cirurgico"*). Entao, mesmo restrito a 3 colabs, o ATO 2 traz a deriva
+do mes **deles** junto. Medido, por colab:
+
+```
+col174   cura  0 min  |  deriva  0        -> nenhum campo de mes se move (os 2 dias se cancelam)
+col235   cura +177    |  deriva  0        -> minutos_realizados +177, 100% cura
+col382   cura  -17    |  deriva +420      -> minutos_realizados +403 = -17 (09-21, teto do previsto)
+                                             + 420 (10-03, dia que a ata NAO moveu = O209/deriva)
+         e semanas_dsr_ok +1 / semanas_dsr_perdido -1
+```
+
+O `semanas_dsr_*` de col382 e campo **FORA do alvo**, e o motivo ja esta escrito na casa --
+`ponto/management/commands/desvio_o68b.py:29`: *"DSR: fechar turno muda a contagem semanal de dias
+trabalhados"*. Nao se re-deriva aqui: o escritor unico e `ponto/services/fechamento.py:563`, a partir
+de `motor_calculo_v2:1839/2659`. Ele se move porque o realizado da **segunda-feira 09-21** mudou, e e
+consequencia direta do dia da cura -- nao deriva.
+
+**O +420 de col382 em 10-03 e o unico minuto de deriva que o ato carrega.** Ele sai da conta da fatia
+da deriva (senao conta duas vezes), e vai publicado aqui por nome. `col174` e o caso que mostra por
+que isso nao e "nada aconteceu": a ata dele moveu 148 min de 09-24 para 09-23 e **a soma do mes nao
+mudou** -- a verdade do DIA se move com o total parado. Quem le o espelho ve; quem le so o
+fechamento, nao.
+
+### O QUE FALTA ANTES DO APPLY -- dois itens, nenhum deles `PAREI`
+
+1. **A CONDICAO 2 SAO TRES TABELAS, escopadas nos 3.** `logs/o195_reversao_20261005.json` ja cobre
+   `CelulaDia`; faltam `FechamentoMensal` e `DiaPago` dos tres ids, e
+   `bin/restore_relavratura_10_2026.py` e de competencia inteira -- nao reverte um ato de 3 ids. O
+   restore ESCOPADO nasce em `logs/` antes do apply, dizendo por escrito que `versao='oraculo'` **nao**
+   e restaurada e **nao tem leitor de dinheiro** (`fechamento.py:668`: quem le e `calendario.py` e
+   `folha/porta_export.py`, e os dois leem `'motor'`).
+2. **Em prod, conferir `emitidos=0` e `perguntas=0` do PROPRIO cartorio antes do ATO 2.** Na sombra
+   deu 0 nos dois, mas a sombra roda com as saidas DESLIGADAS -- o numero dela nao prova o de prod.
+   Na frota o mesmo ato deu `emitidos=23` (O209), entao o contador nao e decorativo.
+
+**O ALCANCE ESTA FECHADO, e nao por recorte.** A pergunta *"a cura alcanca mais que os 11?"* se
+responde pela AUTORIDADE, nao pelo censo: `so_esq=0 so_dir=0` em 12.362 turnos de 541 colabs **e** a
+medicao do envelope, e ela e ZERO. O `forcar` sobre a frota inteira, que eu rodei para fechar isso,
+mediu **outra coisa** -- e virou o O209.
+
+**SELO DE CONDUTA.** LEI-AKITA: origem=`escala/utils.py`->`ponto/turnos.py` (a cura da O195, ja no ar) +
+a ATA que nao se relavra sozinha (`cartorio.py::impressao_insumos` ata-cega), testemunha=`CelulaDia.ata`
+lida por `folha/export.py::grade_do_fechamento` e a coluna `juiz` publicada pela O195,
+RED=nao se aplica (medicao, nada escrito em prod), quem-mais-le=os 2 atos sao as DUAS portas que ja
+existem (`julgar_colab` e `recalcular_fechamento --colabs`); nenhum caminho novo, juizes novos=0.
+
+## O209 — A ATA DA FROTA ESTA STALE CONTRA O JUIZ DE HOJE (achado 05/10 15:0x, fatia PROPRIA)
+
+**O instrumento que eu montei para fechar o alcance da O195 mediu OUTRA COISA, e a outra coisa e
+grande.** ATO 1 com `forcar` sobre **TODO** colab com celula na 10 (564 colabs, 16.883 celulas),
+na sombra, por cima do RUN C:
+
+```
+cartorio: julgadas=7527 carimbadas=7859 protestos=738 emitidos=23 nunca_bateu=332 vetados=3
+A ATA SE MOVEU em 190 dia-colab, em 89 colab(s) -- dos 11 do censo: NENHUM
+soma do realizado nos dias movidos: 17.890 -> 82.057  (+64.167 min = +1.069,5 h)
+ATO 2 (recalcular_fechamento --colabs, os 89): mexidos=17 de 572 · VAZOU: NENHUM
+  minutos_realizados +2.649 (16 colabs) · minutos_previstos -569 (4) · dias_previstos -2 (4)
+  horas_noturnas +29,32 (1) · horas_trabalhadas -17,69 (1) · inconsistencias -2 (1)
+  APLICAVEIS (so DENTRO): 13 · SEPARADOS (previsto/dias_previstos): [107, 146, 317, 879]
+DiaPago motor: 30 linhas movidas · 09 EXPORTADA: hash INTACTA nos dois atos
+```
+
+**A ATRIBUICAO E AIRTIGHT, por DOIS caminhos, e nenhum deles e amostra:**
+- **88 dos 89** estao DENTRO do universo do A/B da O195 (541 colabs, 12.362 turnos) e **nao estao nas
+  58 linhas**. Com `so_esq=0 so_dir=0`, turnos identicos sob os dois codigos => ata identica sob os
+  dois codigos. (A unica excecao aparente, col489, tem linha de censo em **2026-08-31** -- agosto,
+  fora da 10.)
+- **col955** esta FORA do universo do A/B: nao tem turno na janela, entao nao ha o que a O195 mova.
+
+A causa ja estava escrita, por nome, no commit da propria O195: *"Zero deles e desta fatia: e **100%
+CELULA-TURNO-FECHA**, no ar desde 10:20 de hoje"* (`6319b10c`, que matou o segundo juiz de *"quantos
+minutos o dia realizou?"*). A **forma** dos dias confirma: `real 0 -> 420..720` com o veredito
+**INALTERADO** em `fato_sem_previsao`, em dia alternado, mes inteiro, nos 12x36 (col203, col242,
+col245, col325, col165...). Nao e turno trocando de DIA -- e o **realizado** da ata, que o juiz morto
+escrevia como 0.
+
+**POR QUE ISSO E FATIA, e por que e urgente de um jeito diferente:**
+1. **Ninguem relavra.** `impressao_insumos` nao hasheia a ata (`cartorio.py:132-133`), entao nem
+   deploy nem o cartorio das 06:28 alcancam dia passado. **So `--forcar` alcanca.** A ata vai ficar
+   stale indefinidamente.
+2. **O fechamento quase nao sente (`mexidos=17`) e isso e o que engana.** O RUN C ja drenou a deriva,
+   entao o dinheiro ja esta no juiz de hoje. Quem mente e a **ATA** -- e quem le ata e a TELA, o
+   espelho e o PDF. **A testemunha que o colaborador ve esta 1.069 h atras do que a folha calcula.**
+   E a LEI-AKITA 2 pelo avesso: os leitores leem a mesma autoridade, e a autoridade esta velha.
+3. **Relavrar a frota ALCANCA PESSOA: `emitidos=23`.** O ATO 1 dos 11 deu `emitidos=0`; na frota
+   nascem 23 cobrancas. Relavratura de frota **nao e ato tecnico silencioso**, e e por isso que ela
+   nao entra de carona em nenhum outro apply.
+
+**NAO EMBARCA no apply da relavratura 10**: o aval e *"SO o realizado dos dia-colab da cura"*, e estes
+nao sao da cura -- embarcar seria ampliar aval (LEI-AKITA 9). Vai como item proprio no BACKLOG, com o
+numero dele e com os 23 `emitidos` nomeados na frente.
+
+**SELO DE CONDUTA.** LEI-AKITA: origem=a ata de `CelulaDia`, lavrada por codigo anterior a
+CELULA-TURNO-FECHA e nunca relavrada (so `forcar` alcanca), testemunha=`CelulaDia.ata` x o
+`julgar_colab` de hoje, RED=nao se aplica (achado de medicao, nada escrito em prod -- a cura dele e a
+fatia), quem-mais-le=TELA/espelho/PDF leem ata; o dinheiro NAO (o RUN C provou: `mexidos=17` de 89),
+juizes novos=0.
+
 ## O195 — O DIA DO TURNO SE DECIDIA POR 17 SEGUNDOS (05/10, cura MEDIDA, **FECHADA e NO AR**)
+
+**PROVA:** commit `8fce4967`, e o codigo esta no ar MEDIDO em 07/10 -- no worker vivo do `saas_ui`
+`ponto.turnos._teto_s_da_jornada` responde (`hasattr` = True) e a sub-guarda de saida de `_data_do_turno`
+ja carrega a tolerancia; o deploy que recarregou as tres cascas juntas e `logs/deploy_o208_20261005.out`
+(rc=0, tres rotas provadas, `importerror_500=0`).
 
 **O ACHADO, em uma linha**: a guarda de saida de `ponto/turnos.py::_data_do_turno` comparava o INSTANTE
 da batida ao marco `hf` do dia -- **tolerancia ZERO** --, entao `07:50:17` contra `hf 07:50` mandava o
@@ -102,9 +943,12 @@ MOTOR (`dia_pago.py:221`, `p.minutos_trabalhados`), nunca da ata. Fontes distint
 
 ### A BORDA DA COMPETENCIA: NAO HA PAREI, e a cura e quem PRESERVA
 Dos 58, **3** cruzam a borda, os tres de `2026-09-21 (comp10)` para `2026-09-20 (comp09)`: col44, col382,
-col451. **Dois sao orfas e valem 0 min.** So o **col382** e par fechado, **389 min** -- e a ata de prod
-**JA TEM** esses 389 em 09-20, e o TXT exportado da 09 **ja os carrega**. Quem os REMOVERIA numa relavra e
-o **HEAD**; a **CURA os MANTEM**. A L-092 nao e furada aqui: ela e cumprida pela cura.
+col451. **Dois sao orfas e valem 0 min.** So o **col382** e par fechado, **389 min** -- e o `DiaPago`
+de prod **JA TEM** esses 389 em 09-20 como **MINUTO** (`minutos_realizados`), com **toda rubrica de
+hora do dia em 0,0**: como dinheiro o turno **nao esta** no TXT exportado da 09 (medido em
+`logs/o195_389min_col382_medido_20261005.md`; a primeira versao desta linha dizia "o TXT ja os
+carrega", e era imprecisa). Quem os REMOVERIA numa relavra e o **HEAD**; a **CURA os MANTEM**, e o que
+falta no TXT da 09 tem dono: o aval **PAUTA-DP-09-RELAVRATURA**. A L-092 nao e furada aqui: ela e cumprida pela cura.
 
 ### CONDICAO 3: O DEPLOY NAO REENFILEIRA DIA DA 09 (lido na fonte)
 `ponto/services/cartorio.py:550-563` seleciona as batidas do julgamento por **DATA CIVIL do timestamp**,
@@ -165,6 +1009,33 @@ _cabe_na_jornada_da_vespera + CelulaDia.ata, RED=ponto/tests/test_o195_dia_do_tu
 HEAD 6 falhas) + test_o93_dia_da_jornada.py + os 3 selos L-103 invertidos, quem-mais-le=47 sitios de
 producao em 7 apps (parear_turnos 11, turnos_de_batidas 3, turnos_do_colab 33), censo AST em
 logs/o195_censo_leitores_portas.out, juizes novos=0`
+
+### NO AR, EMPURRADO E SMOKADO -- a condicao 4 fechada no ar, nao na sombra
+`bin/deploy.sh --sem-migrate` as **14:2x** (0 migration pendente, carimbo da sombra `dia=20261005
+status=OK tipo=completa diverge=0 erros=0`, prova de casca com 599 rotas nos 2 urlconfs, 3 rotas
+provadas, `importerror_500=0`), e o push pousou as **14:40** (`cc4cec4c..8fce4967`, suite **9638 OK**
+no commit empurrado + control-plane 22 OK).
+**O SMOKE DE PROD PERGUNTA AO JUIZ QUE ESTA ATENDENDO** (`logs/o195_smoke_prod_20261005.out`, leitura
+pura, 1 colab / 4 dias, chamando `turnos_do_colab`/`realizado_do_dia` REAIS):
+```
+2026-09-20  minutos=389   sem_turno=False  turnos: 2026-09-20[00:00:40->07:51:45]
+2026-09-21  minutos=403   sem_turno=False  turnos: 2026-09-21[23:45:58->07:50:28]
+2026-10-01  minutos=None  sem_turno=True   turnos: (nenhum)
+2026-10-02  minutos=418   sem_turno=False  turnos: 2026-10-02[15:02:49->22:58:57]
+```
+O 09-20 **mantem os 389** (o unico par que cruza a borda, e o TXT exportado ja os carrega -- o HEAD os
+REMOVIA), os turnos que cruzam a meia-noite ficam arquivados no dia que COMECARAM, e o 10-01 e o
+`364 -> 0` da cura pousando como **`sem_turno=True`**, nunca zero cravado (L-103).
+**CONDICAO 4 da DINHEIRO-EM-COMPETENCIA-ABERTA: o hash da 09 EXPORTADA refeito depois do deploy voltou
+IDENTICO** (`37a29deb2a11b39dbc94ec7ef1ba6bc7`, 903 linhas, 30 colabs) -- `VEREDITO: competencia 09
+INTACTA`. E agora ha a razao pelo lado da CAUSA, lida na fonte e nao suposta:
+`ponto/services/cartorio.py::impressao_insumos` **nao hasheia a ata** (:132-133) -- ela carimba batidas,
+cobertura, chamados, DNA, veto e teto. Trocar o CODIGO do juiz nao move a impressao, entao **nenhum
+deploy relavra dia passado**: nem a 09, nem a 10. Quem relavra e o `--forcar`, e e esse o ATO 1 do item
+(2) abaixo.
+
+**MARCO FECHADO -- pode compactar** (L-108; `bin/handoff_sessao.sh` rodado, `app/docs/HANDOFF-SESSAO.md`
+46 linhas).
 
 **ESTADO (05/10 10:2x): o item (1) esta FECHADO -- a celula `turno/marcos x um juiz por pergunta` ficou
 VERDE e o placar foi a `contratos 14/20`**
@@ -5923,3 +6794,103 @@ pergunta e qual leitor nao migrou.
 **05/10 13:15 vigia da esteira (ALARME)** -- vigia sem efeito: 8 fatia(s) ativa(s) na fila e nenhum .out escrito ha 30 min -- a esteira esta parada e o vigia nao esta destravando.
 
 **05/10 14:15 vigia da esteira (ALARME)** -- vigia sem efeito: 8 fatia(s) ativa(s) na fila e nenhum .out escrito ha 30 min -- a esteira esta parada e o vigia nao esta destravando.
+
+**05/10 15:20 vigia da esteira (ALARME)** -- vigia sem efeito: 8 fatia(s) ativa(s) na fila e nenhum .out escrito ha 30 min -- a esteira esta parada e o vigia nao esta destravando.
+
+**05/10 16:20 vigia da esteira (ALARME)** -- vigia sem efeito: 8 fatia(s) ativa(s) na fila e nenhum .out escrito ha 30 min -- a esteira esta parada e o vigia nao esta destravando.
+
+**05/10 17:25 vigia da esteira (ALARME)** -- vigia sem efeito: 8 fatia(s) ativa(s) na fila e nenhum .out escrito ha 30 min -- a esteira esta parada e o vigia nao esta destravando.
+
+**05/10 18:25 vigia da esteira (ALARME)** -- vigia sem efeito: 8 fatia(s) ativa(s) na fila e nenhum .out escrito ha 30 min -- a esteira esta parada e o vigia nao esta destravando.
+
+**05/10 19:30 vigia da esteira (ALARME)** -- vigia sem efeito: 8 fatia(s) ativa(s) na fila e nenhum .out escrito ha 30 min -- a esteira esta parada e o vigia nao esta destravando.
+
+**05/10 20:35 vigia da esteira (ALARME)** -- vigia sem efeito: 8 fatia(s) ativa(s) na fila e nenhum .out escrito ha 30 min -- a esteira esta parada e o vigia nao esta destravando.
+
+**05/10 21:40 vigia da esteira (ALARME)** -- vigia sem efeito: 8 fatia(s) ativa(s) na fila e nenhum .out escrito ha 30 min -- a esteira esta parada e o vigia nao esta destravando.
+
+**05/10 22:40 vigia da esteira** -- esteira em espera de janela: 8 fatias prontas, reabre 00:00.
+
+**06/10 00:00 vigia da esteira (ALARME)** -- vigia sem efeito: 8 fatia(s) ativa(s) na fila e nenhum .out escrito ha 30 min -- a esteira esta parada e o vigia nao esta destravando.
+
+**06/10 01:00 vigia da esteira (ALARME)** -- vigia sem efeito: 8 fatia(s) ativa(s) na fila e nenhum .out escrito ha 30 min -- a esteira esta parada e o vigia nao esta destravando.
+
+**06/10 02:05 vigia da esteira (ALARME)** -- vigia sem efeito: 8 fatia(s) ativa(s) na fila e nenhum .out escrito ha 30 min -- a esteira esta parada e o vigia nao esta destravando.
+
+**06/10 03:05 vigia da esteira (ALARME)** -- vigia sem efeito: 8 fatia(s) ativa(s) na fila e nenhum .out escrito ha 30 min -- a esteira esta parada e o vigia nao esta destravando.
+
+**06/10 03:40 vigia da esteira** -- esteira em espera de janela: 8 fatias prontas, reabre 04:45.
+
+**06/10 04:50 vigia da esteira (ALARME)** -- vigia sem efeito: 8 fatia(s) ativa(s) na fila e nenhum .out escrito ha 30 min -- a esteira esta parada e o vigia nao esta destravando.
+
+**06/10 05:55 vigia da esteira (ALARME)** -- vigia sem efeito: 8 fatia(s) ativa(s) na fila e nenhum .out escrito ha 30 min -- a esteira esta parada e o vigia nao esta destravando.
+
+**06/10 06:55 vigia da esteira (ALARME)** -- vigia sem efeito: 8 fatia(s) ativa(s) na fila e nenhum .out escrito ha 30 min -- a esteira esta parada e o vigia nao esta destravando.
+
+**06/10 08:00 vigia da esteira (ALARME)** -- vigia sem efeito: 8 fatia(s) ativa(s) na fila e nenhum .out escrito ha 30 min -- a esteira esta parada e o vigia nao esta destravando.
+
+**06/10 09:00 vigia da esteira (ALARME)** -- vigia sem efeito: 8 fatia(s) ativa(s) na fila e nenhum .out escrito ha 30 min -- a esteira esta parada e o vigia nao esta destravando.
+
+**06/10 10:05 vigia da esteira (ALARME)** -- vigia sem efeito: 8 fatia(s) ativa(s) na fila e nenhum .out escrito ha 30 min -- a esteira esta parada e o vigia nao esta destravando.
+
+**06/10 11:10 vigia da esteira (ALARME)** -- vigia sem efeito: 8 fatia(s) ativa(s) na fila e nenhum .out escrito ha 30 min -- a esteira esta parada e o vigia nao esta destravando.
+
+**06/10 12:10 vigia da esteira (ALARME)** -- vigia sem efeito: 8 fatia(s) ativa(s) na fila e nenhum .out escrito ha 30 min -- a esteira esta parada e o vigia nao esta destravando.
+
+**06/10 13:10 vigia da esteira (ALARME)** -- vigia sem efeito: 8 fatia(s) ativa(s) na fila e nenhum .out escrito ha 30 min -- a esteira esta parada e o vigia nao esta destravando.
+
+**06/10 14:15 vigia da esteira (ALARME)** -- vigia sem efeito: 8 fatia(s) ativa(s) na fila e nenhum .out escrito ha 30 min -- a esteira esta parada e o vigia nao esta destravando.
+
+**06/10 15:20 vigia da esteira (ALARME)** -- vigia sem efeito: 8 fatia(s) ativa(s) na fila e nenhum .out escrito ha 30 min -- a esteira esta parada e o vigia nao esta destravando.
+
+**06/10 16:20 vigia da esteira (ALARME)** -- vigia sem efeito: 8 fatia(s) ativa(s) na fila e nenhum .out escrito ha 30 min -- a esteira esta parada e o vigia nao esta destravando.
+
+**06/10 17:25 vigia da esteira (ALARME)** -- vigia sem efeito: 8 fatia(s) ativa(s) na fila e nenhum .out escrito ha 30 min -- a esteira esta parada e o vigia nao esta destravando.
+
+**06/10 18:25 vigia da esteira (ALARME)** -- vigia sem efeito: 8 fatia(s) ativa(s) na fila e nenhum .out escrito ha 30 min -- a esteira esta parada e o vigia nao esta destravando.
+
+**06/10 19:30 vigia da esteira (ALARME)** -- vigia sem efeito: 8 fatia(s) ativa(s) na fila e nenhum .out escrito ha 30 min -- a esteira esta parada e o vigia nao esta destravando.
+
+**06/10 20:30 vigia da esteira (ALARME)** -- vigia sem efeito: 8 fatia(s) ativa(s) na fila e nenhum .out escrito ha 30 min -- a esteira esta parada e o vigia nao esta destravando.
+
+**06/10 21:30 vigia da esteira (ALARME)** -- vigia sem efeito: 8 fatia(s) ativa(s) na fila e nenhum .out escrito ha 30 min -- a esteira esta parada e o vigia nao esta destravando.
+
+**06/10 22:30 vigia da esteira (ALARME)** -- vigia sem efeito: 8 fatia(s) ativa(s) na fila e nenhum .out escrito ha 30 min -- a esteira esta parada e o vigia nao esta destravando.
+
+**06/10 22:40 vigia da esteira** -- esteira em espera de janela: 8 fatias prontas, reabre 00:00.
+
+**07/10 00:00 vigia da esteira (ALARME)** -- vigia sem efeito: 8 fatia(s) ativa(s) na fila e nenhum .out escrito ha 30 min -- a esteira esta parada e o vigia nao esta destravando.
+
+**07/10 01:05 vigia da esteira (ALARME)** -- vigia sem efeito: 8 fatia(s) ativa(s) na fila e nenhum .out escrito ha 30 min -- a esteira esta parada e o vigia nao esta destravando.
+
+**07/10 02:10 vigia da esteira (ALARME)** -- vigia sem efeito: 8 fatia(s) ativa(s) na fila e nenhum .out escrito ha 30 min -- a esteira esta parada e o vigia nao esta destravando.
+
+**07/10 03:15 vigia da esteira (ALARME)** -- vigia sem efeito: 8 fatia(s) ativa(s) na fila e nenhum .out escrito ha 30 min -- a esteira esta parada e o vigia nao esta destravando.
+
+**07/10 03:40 vigia da esteira** -- esteira em espera de janela: 8 fatias prontas, reabre 04:45.
+
+**07/10 04:50 vigia da esteira (ALARME)** -- vigia sem efeito: 8 fatia(s) ativa(s) na fila e nenhum .out escrito ha 30 min -- a esteira esta parada e o vigia nao esta destravando.
+
+**07/10 05:55 vigia da esteira (ALARME)** -- vigia sem efeito: 8 fatia(s) ativa(s) na fila e nenhum .out escrito ha 30 min -- a esteira esta parada e o vigia nao esta destravando.
+
+**07/10 07:00 vigia da esteira (ALARME)** -- vigia sem efeito: 8 fatia(s) ativa(s) na fila e nenhum .out escrito ha 30 min -- a esteira esta parada e o vigia nao esta destravando.
+
+**07/10 08:05 vigia da esteira (ALARME)** -- vigia sem efeito: 8 fatia(s) ativa(s) na fila e nenhum .out escrito ha 30 min -- a esteira esta parada e o vigia nao esta destravando.
+
+**07/10 09:05 vigia da esteira (ALARME)** -- vigia sem efeito: 8 fatia(s) ativa(s) na fila e nenhum .out escrito ha 30 min -- a esteira esta parada e o vigia nao esta destravando.
+
+**07/10 10:10 vigia da esteira (ALARME)** -- vigia sem efeito: 8 fatia(s) ativa(s) na fila e nenhum .out escrito ha 30 min -- a esteira esta parada e o vigia nao esta destravando.
+
+**07/10 11:15 vigia da esteira (ALARME)** -- vigia sem efeito: 8 fatia(s) ativa(s) na fila e nenhum .out escrito ha 30 min -- a esteira esta parada e o vigia nao esta destravando.
+
+**07/10 12:15 vigia da esteira (ALARME)** -- vigia sem efeito: 8 fatia(s) ativa(s) na fila e nenhum .out escrito ha 30 min -- a esteira esta parada e o vigia nao esta destravando.
+
+**07/10 13:15 vigia da esteira (ALARME)** -- vigia sem efeito: 8 fatia(s) ativa(s) na fila e nenhum .out escrito ha 30 min -- a esteira esta parada e o vigia nao esta destravando.
+
+**07/10 14:20 vigia da esteira (ALARME)** -- vigia sem efeito: 8 fatia(s) ativa(s) na fila e nenhum .out escrito ha 30 min -- a esteira esta parada e o vigia nao esta destravando.
+
+**07/10 15:25 vigia da esteira (ALARME)** -- vigia sem efeito: 8 fatia(s) ativa(s) na fila e nenhum .out escrito ha 30 min -- a esteira esta parada e o vigia nao esta destravando.
+
+**07/10 16:25 vigia da esteira (ALARME)** -- vigia sem efeito: 8 fatia(s) ativa(s) na fila e nenhum .out escrito ha 30 min -- a esteira esta parada e o vigia nao esta destravando.
+
+**07/10 17:30 vigia da esteira (ALARME)** -- vigia sem efeito: 8 fatia(s) ativa(s) na fila e nenhum .out escrito ha 30 min -- a esteira esta parada e o vigia nao esta destravando.

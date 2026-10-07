@@ -6,10 +6,17 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 07/10/2026 18:16:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (413.6 MB). Acoes na janela: **19**.
+**Medido em 07/10/2026 18:22:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (413.6 MB). Acoes na janela: **26**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 18:19:59 | Bash | Empurrar fd6c8c0e pela régua normal | `cd /home/ronald/saas-hasner && git push origin main > logs/push_fd6c8c0e_2.out 2>&1; echo "---rc=$?"; tail -25 logs/push_fd6c8c0e_2.out` |
+| 18:19:55 | Bash | Conferir árvore e remoto antes do push | `cd /home/ronald/saas-hasner && git status --short && echo "--- HEAD/remoto:" && git rev-parse --short HEAD && git rev-parse --short origin/main` |
+| 18:19:38 | Bash | Ver se há selo de commit só de docs | `cd /home/ronald/saas-hasner && grep -rln "so.*docs\\|docs-no-marco\\|DOCS_NO_MARCO\\|L-106" bin/tests/ bin/pre-push.sh 2>/dev/null \| head` |
+| 18:17:40 | Bash | Escrever as linhas PROVA e a linha da O211 no topo | `cd /home/ronald/saas-hasner && python3 - <<'PY' import io p = 'app/docs/RELATO.md' t = io.open(p, encoding='utf-8').read() def depois(ancora, novo): """Insere `novo` na linha seguinte a `ancora`. Ancora UNICA, senao levanta.""" global t n = t.count(ancora) assert n == 1, 'ancora com %s ocorrencia(s): %r' % (n, ancora[:60]) t = t.replace(ancora, ancora + '\n' + novo) # --- :843 O195 --------------- ...` |
+| 18:16:54 | Bash | Ler como o hook varre o topo | `cd /home/ronald/saas-hasner && sed -n '261,300p' bin/hook_stop_fila1.py` |
+| 18:16:50 | Bash | Ver o que o hook lê do topo do RELATO | `cd /home/ronald/saas-hasner && grep -n "RELATO" bin/hook_stop_fila1.py \| head -30` |
+| 18:16:35 | Bash | Reler a lógica do publicador | `cd /home/ronald/saas-hasner && sed -n '1,70p' bin/relato_afirma_com_prova.py` |
 | 18:16:18 | Bash | Ler os sítios 255 e 843 | `cd /home/ronald/saas-hasner && echo "=== 250,272 ==="; sed -n '250,272p' app/docs/RELATO.md; echo; echo "=== 840,856 ==="; sed -n '840,856p' app/docs/RELATO.md` |
 | 18:16:13 | Bash | Ler o topo e o sítio 88 do RELATO | `cd /home/ronald/saas-hasner && echo "=== 1-20 (topo) ==="; sed -n '1,20p' app/docs/RELATO.md; echo; echo "=== 82,96 ==="; sed -n '82,96p' app/docs/RELATO.md` |
 | 18:16:08 | Bash | Rodar o publicador e ver os achados | `cd /home/ronald/saas-hasner && python3 bin/relato_afirma_com_prova.py app/docs/RELATO.md; echo "---rc=$?"` |
