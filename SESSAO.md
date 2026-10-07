@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 07/10/2026 20:50:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (419.2 MB). Acoes na janela: **230**.
+**Medido em 07/10/2026 20:55:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (419.3 MB). Acoes na janela: **235**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 20:53:51 | Bash | Rodar a bateria com os quatro cenarios novos | `cd /home/ronald/saas-hasner && timeout 900 bash bin/suite.sh --dir /home/ronald/wt-lavra --only "ponto.tests.test_bateria_lavratura" 2>&1 \| grep -v "^sem_celula\\|^$" \| tail -60` |
+| 20:53:46 | Bash | Escrever os quatro cenarios restantes | `cd /home/ronald/wt-lavra/app && cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/quatro.py <<'PYEOF' class IsentoNaoAcusaETampoucoFabricaTest(_BaseMarcos): """CENARIO -- ISENTO DE PONTO (Art.62): a lampada se ACENDE por CREDITO, e o credito NAO e batida. A REGRA, com numero (`escala/utils.py::aplicar_isencao_no_dia` e a lei unica; `_marcar_isencao ...` |
+| 20:51:44 | Bash | Ver o kw default do TipoEscala | `cd /home/ronald/wt-lavra/app && sed -n "/def _frota_marcos/,/return c, te, ec/p" ponto/tests/test_bateria_lavratura.py` |
+| 20:51:38 | Bash | Reler a fixture _BaseMarcos | `cd /home/ronald/wt-lavra/app && sed -n "/^class _BaseMarcos/,/^class TurnoCruzaMeiaNoite/p" ponto/tests/test_bateria_lavratura.py \| grep -n "def \\|TipoEscala\\|Colaborador\\|objects.create\\|return \\|isento\\|te_kw" \| head -40` |
+| 20:51:30 | Bash | Campos de intervalo, pausas_do_dia e retorno de julgar_celula | `cd /home/ronald/wt-lavra/app && echo "=== campos de intervalo do TipoEscala ==="; grep -n "hora_inicio\\|hora_fim\\|minutos_jornada = \\|tipo_ciclo = " escala/models.py \| head -12 echo "=== pausas_do_dia ==="; sed -n "/ def pausas_do_dia/,/^ def /p" escala/models.py \| head -30 echo "=== julgar_celula: retorno ==="; sed -n "/^def julgar_celula/,/^def /p" ponto/services/cartorio.py \| head -40` |
 | 20:50:34 | Bash | Ver se a raia do fork ja pousou no main | `cd /home/ronald/saas-hasner && echo "d36ae038 ja no main?"; git merge-base --is-ancestor d36ae038 main && echo "SIM -- ja pousou" \|\| echo "NAO -- raia a frente do main"; git log --oneline main..d36ae038 2>/dev/null \| head` |
 | 20:50:25 | Bash | Estado da raia do fork | `cd /home/ronald/saas-hasner && for w in .claude/worktrees/agent-aa14fd1a6ffa27253 /home/ronald/.claude/worktrees/agent-aa14fd1a6ffa27253; do [ -d "$w" ] && echo "== $w" && git -C "$w" log --oneline -2 && git -C "$w" status --porcelain \| head -4; done; echo "== onde estao as worktrees =="; git worktree list \| head` |
 | 20:50:20 | Bash | Ver conclusao do fork e estado da raia dele | `cd /home/ronald && f=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/aa14fd1a6ffa27253.output; wc -l "$f"; echo "---- tail ----"; tail -18 "$f"; echo "---- git da raia do fork ----"; git -C /home/ronald/.claude/worktrees/agent-aa14fd1a6ffa27253 log --oneline -3 2>&1 \| head; git -C /home/ronald/.claude/worktrees/agent-aa14fd1a6ffa27253 status --porcelain 2> ...` |

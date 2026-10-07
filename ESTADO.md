@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 07/10/2026 20:50:45.**
+**Medido em 07/10/2026 20:55:45.**
 
 | | |
 |---|---|
@@ -113,14 +113,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 1 shell command
-
-● Achei uma contradição medida, e é na mesma pergunta: "a ausência cobre o dia inteiro?" tem DOIS sítios com respostas opostas —
-  cartorio.py:319 (minutos > 0 = parcial, logo 720 = parcial) e ausencias_sem_efeito_na_celula.py:22-28 (0 < minutos < 480 = parcial, logo
-  720 = dia inteiro). Elas discordam exatamente nas ~103 linhas com minutos ∈ {480,528,540,555,660,720}. Consulto antes de decidir se curo
-  dentro da O218 ou registro:
-
-● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
   Ran 1 shell command
@@ -138,13 +130,21 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Provado: 222 dia-colab / 763 lâmpadas / 86 colabs acusando furo sob ausência aprovada que o cadastro não declara parcial. É linha de
   BACKLOG com número, não cura dentro da O218. Volto à bateria — os quatro checks antes de escrever:
 
-  Ver se a raia do fork ja pousou no main
-  ⎿  $ cd /home/ronald/saas-hasner && echo "d36ae038 ja no main?"; git merge-base --is-ancestor d36ae038 main && echo "SIM -- ja pousou" ||
-     echo "NAO -- raia a frente do main"; git log --oneline main..d36ae038 2>/dev/null | head
+  Ran 5 shell commands
 
-· Beboppin'… (2h 41m 56s · ↓ 232.3k tokens · thinking)
+● O fork já pousou no main (d36ae038 é ancestral) — lateral resolvida. Últimos dois dados antes de escrever:
+
+  Ran 3 shell commands
+
+● Agora os quatro cenários, cada um com a REGRA escrita antes da asserção:
+
+● Rodar a bateria com os quatro cenarios novos
+  ⎿  $ cd /home/ronald/saas-hasner && timeout 900 bash bin/suite.sh --dir /home/ronald/wt-lavra --only "ponto.tests.test_bateria_lavratura"
+     2>&1 | grep -v "^sem_celula\|^$" | tail -60
+
+✶ Beboppin'… (2h 46m 56s · ↓ 246.5k tokens · deep in thought)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                   11% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
