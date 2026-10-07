@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 07/10/2026 19:57:31.**
+**Medido em 07/10/2026 20:03:01.**
 
 | | |
 |---|---|
@@ -132,9 +132,9 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Agora a função que nomeia o pad, com os dois sítios migrados:
 
-● Conferir assinatura de turnos_do_colab e o que a isencao mexe
-  ⎿  $ cd /home/ronald/wt-lavra/app && sed -n '1330,1365p' ponto/turnos.py && echo ---- && grep -n "def _marcar_isencao" -A18
-     escala/utils.py | head -30
+● Ler a pre-passagem do intermitente
+  ⎿  $ cd /home/ronald/wt-lavra/app && sed -n '1080,1140p' escala/utils.py | cat -n | awk '{printf "%d\t%s\n", $1+1079, substr($0,
+     index($0,"\t")+1)}'
   ⎿  Read docs/AVAIS.md (23 lines)
   ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b3mpxniru.output (30 lines)
   ⎿  Referenced file ../logs/sombra/relavra10_frota_20261005.py
@@ -142,7 +142,7 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Task "RED e construção do segundo intervalo" completed in background
 
-✢ Beboppin'… (1h 48m 42s · ↓ 145.8k tokens)
+✢ Beboppin'… (1h 54m 12s · ↓ 151.5k tokens · still thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
