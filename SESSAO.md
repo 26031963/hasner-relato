@@ -6,10 +6,19 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 07/10/2026 18:11:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (413.1 MB). Acoes na janela: **10**.
+**Medido em 07/10/2026 18:16:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (413.6 MB). Acoes na janela: **19**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 18:16:18 | Bash | Ler os sítios 255 e 843 | `cd /home/ronald/saas-hasner && echo "=== 250,272 ==="; sed -n '250,272p' app/docs/RELATO.md; echo; echo "=== 840,856 ==="; sed -n '840,856p' app/docs/RELATO.md` |
+| 18:16:13 | Bash | Ler o topo e o sítio 88 do RELATO | `cd /home/ronald/saas-hasner && echo "=== 1-20 (topo) ==="; sed -n '1,20p' app/docs/RELATO.md; echo; echo "=== 82,96 ==="; sed -n '82,96p' app/docs/RELATO.md` |
+| 18:16:08 | Bash | Rodar o publicador e ver os achados | `cd /home/ronald/saas-hasner && python3 bin/relato_afirma_com_prova.py app/docs/RELATO.md; echo "---rc=$?"` |
+| 18:16:01 | Bash | Ver todas as linhas do diff do placar | `cd /home/ronald/saas-hasner && git --no-pager diff -U0 app/docs/TICKETS.md \| grep -E '^(\+\|-)' \| grep -v '^[-+][-+][-+]'` |
+| 18:15:54 | Bash | Conferir que o diff do placar é só derivado | `cd /home/ronald/saas-hasner && git --no-pager diff app/docs/TICKETS.md \| grep -E '^[-+][^-+]'` |
+| 18:15:49 | Bash | Regenerar o placar derivado do TICKETS | `cd /home/ronald/saas-hasner && bash bin/tickets_placar.sh --escrever 2>&1 \| tail -20; echo "---rc=$?"; git --no-pager diff --stat app/docs/TICKETS.md` |
+| 18:11:40 | Bash | Medir no worker vivo o que está no ar | `cd /home/ronald/saas-hasner && docker exec saas_ui python manage.py shell --command " import inspect from ponto import turnos import escala.utils as eu print('worker_ui pid1_start=', open('/proc/1/stat').read().split()[21]) print('turnos.__file__', turnos.__file__) print('tem _teto_s_da_jornada:', hasattr(turnos, '_teto_s_da_jornada')) src = inspect.getsource(turnos._data_do_turno) print('_data_do ...` |
+| 18:11:21 | Bash | Ler o log inteiro do pre-push | `cd /home/ronald/saas-hasner && head -40 logs/push_fd6c8c0e.out && echo "...... tamanho: $(wc -l < logs/push_fd6c8c0e.out) linhas" && grep -nE "OK\|FAILED\|RECUSA\|BLOQUEAD\|ALARME\|parado_citado" logs/push_fd6c8c0e.out \| head -30` |
+| 18:11:09 | Bash | Conferir o push | `cd /home/ronald/saas-hasner && cat logs/push_fd6c8c0e.out 2>/dev/null \| tail -15; echo "--- remoto agora: $(git ls-remote origin main \| cut -c1-8)"` |
 | 18:10:53 | Bash | Ler o bloco da linha 843 | `cd /home/ronald/saas-hasner && awk 'NR>=843 && NR<=860{printf "%d: %s\n", NR, $0}' app/docs/RELATO.md` |
 | 18:10:47 | Bash | Ler o bloco da linha 255 | `cd /home/ronald/saas-hasner && awk 'NR>=250 && NR<=272{printf "%d: %s\n", NR, $0}' app/docs/RELATO.md` |
 | 18:10:35 | Bash | Lançar o push do fd6c8c0e em segundo plano | `cd /home/ronald/saas-hasner && echo "a frente: $(git log --oneline origin/main..HEAD \| wc -l) commit(s)" && git log --oneline origin/main..HEAD \| cat && nohup git push origin main > logs/push_fd6c8c0e.out 2>&1 & echo "push lancado pid=$!; log=logs/push_fd6c8c0e.out"` |
