@@ -6,10 +6,24 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 07/10/2026 18:27:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (413.6 MB). Acoes na janela: **26**.
+**Medido em 07/10/2026 18:32:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (413.8 MB). Acoes na janela: **40**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 18:32:39 | Bash | Ver como o cartório obtém minutos_realizados | `cd /home/ronald/saas-hasner && grep -n "realizado_do_dia\\|minutos_realizados\\|turnos=" app/ponto/services/cartorio.py \| head -40` |
+| 18:32:29 | Bash | Ler a autoridade realizado_do_dia | `cd /home/ronald/saas-hasner && sed -n '485,560p' app/ponto/turnos.py` |
+| 18:32:11 | Bash | Ler os campos da ata na célula | `cd /home/ronald/saas-hasner && sed -n '1600,1660p' app/escala/models.py` |
+| 18:32:04 | Bash | Localizar a autoridade e o escritor da ata | `cd /home/ronald/saas-hasner && grep -rn "def realizado_do_dia" app/ \| head; echo "=== julgar_colab ==="; grep -rn "def julgar_colab" app/ \| head; echo "=== ata model ==="; grep -rn "class AtaDia\\|julgada_em" app/*/models.py \| head` |
+| 18:31:48 | Bash | Ver quem usa --com-a-sombra e se há runner genérico | `cd /home/ronald/saas-hasner && grep -rln "com-a-sombra" bin/ \| head; echo "=== quem roda script generico ==="; grep -rn "sombra/\$\\|SCRIPT\\|/sombra/.*\.py" bin/*.sh \| grep -v "^bin/sombra.sh" \| head` |
+| 18:31:38 | Bash | Ler a porta container() e --com-a-sombra | `cd /home/ronald/saas-hasner && sed -n '126,145p' bin/sombra.sh; echo "=== --com-a-sombra ==="; sed -n '375,384p' bin/sombra.sh` |
+| 18:31:34 | Bash | Ver se o sombra.sh tem porta genérica de comando | `cd /home/ronald/saas-hasner && grep -n "^[A-Za-z_]*(\\|--[a-z-]*)" bin/sombra.sh \| head -40; echo "=== uso ==="; sed -n '1,40p' bin/sombra.sh \| grep -n "comando\\|rodar\\|exec"` |
+| 18:31:20 | Bash | Ler o arreio completo | `cd /home/ronald/saas-hasner && cat bin/r5_idempotencia_frota.sh` |
+| 18:31:11 | Bash | Ler o arreio de idempotência na sombra | `cd /home/ronald/saas-hasner && grep -n "docker run\\|settings.sombra\\|E_SOMBRA\\|network" bin/r5_idempotencia_frota.sh \| head -20` |
+| 18:31:06 | Bash | Localizar o arreio da sombra | `cd /home/ronald/saas-hasner && ls bin/ \| grep -i sombra; echo "=== arreio ==="; grep -rln "settings.sombra\\|config.settings.sombra" bin/*.sh \| head` |
+| 18:30:49 | Bash | Ler o repor_lavra e o cabeçalho da conferência | `cd /home/ronald/saas-hasner && cat logs/sombra/repor_lavra.py; echo "=== conf_10 head ==="; head -30 logs/o209_conf_ata_x_autoridade_10.out` |
+| 18:30:42 | Bash | Localizar o script do medidor | `cd /home/ronald/saas-hasner && ls -la logs/sombra/*.py logs/*.py 2>/dev/null \| tail -20; echo "=== grep do medidor ==="; grep -rln "sem_lavra" --include=*.py . 2>/dev/null \| head` |
+| 18:30:34 | Bash | Achar o medidor que produziu ata vs autoridade | `cd /home/ronald/saas-hasner && grep -rln "autoridade_min\\|dia-colab DIVERGENTES" logs/ bin/ app/ 2>/dev/null \| head` |
+| 18:30:22 | Bash | Ler as duas células que o aval nomeia | `cd /home/ronald/saas-hasner && docker exec saas_ui python manage.py shell --command " from django_tenants.utils import schema_context with schema_context('juliani'): from escala.models import CelulaDia for pk in (118980, 118981): c = CelulaDia.objects.filter(pk=pk).first() if not c: print(pk, 'INEXISTENTE'); continue print('--- celula', pk, 'colab', c.colaborador_id, 'data', c.data) for f in ('ori ...` |
 | 18:19:59 | Bash | Empurrar fd6c8c0e pela régua normal | `cd /home/ronald/saas-hasner && git push origin main > logs/push_fd6c8c0e_2.out 2>&1; echo "---rc=$?"; tail -25 logs/push_fd6c8c0e_2.out` |
 | 18:19:55 | Bash | Conferir árvore e remoto antes do push | `cd /home/ronald/saas-hasner && git status --short && echo "--- HEAD/remoto:" && git rev-parse --short HEAD && git rev-parse --short origin/main` |
 | 18:19:38 | Bash | Ver se há selo de commit só de docs | `cd /home/ronald/saas-hasner && grep -rln "so.*docs\\|docs-no-marco\\|DOCS_NO_MARCO\\|L-106" bin/tests/ bin/pre-push.sh 2>/dev/null \| head` |

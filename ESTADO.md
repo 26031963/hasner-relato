@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 07/10/2026 18:27:31.**
+**Medido em 07/10/2026 18:32:46.**
 
 | | |
 |---|---|
@@ -109,42 +109,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● _teto_s_da_jornada presente, minutos_realizados_do_dia ausente, contratos_estruturais 14 — medido no worker vivo, não de memória. Agora a
-  cura que o hook nomeia.
-
-  Ran 3 shell commands
-
-● Exatamente as 7 linhas derivadas que o hook nomeou, nada mais. Agora o publicador — vou ler os três achados literais e o entorno de cada
-  um.
-
-  Ran 6 shell commands
-
-● Agora as três linhas PROVA: com os valores que acabei de medir, mais a linha da O211 no topo. Ancoragem única, de baixo para cima.
-
-  Ran 1 shell command
-
-❯ aval Ronald: a O217 (lavratura nao e ponto fixo) entra na FRENTE da O211: cura na origem com RED das celulas 118980 e 118981, relavra o
-  col146 pela DINHEIRO-EM-COMPETENCIA-ABERTA, e mede a celula de novo por verdes(). Depois O211 -> O214 -> BOs. PAREI so em lei ou !
-
-● Publicador em rc=0. O novo aval registrado — O217 na frente da O211; termino o ato do push (ordem literal anterior, fd6c8c0e pelo hash) e
-  emendo a fila em seguida.
 
   Ran 1 shell command
 
 ● Antes de empurrar, vou testar se o portão lê o DISCO — se ler, o fd6c8c0e sobe sozinho e os docs pegam o commit do próximo marco (L-106),
   sem emendar o hash que o aval nomeia.
 
-  Conferir árvore e remoto antes do push · 7m 32s
-  ⎿  $ cd /home/ronald/saas-hasner && git push origin main > logs/push_fd6c8c0e_2.out 2>&1; echo "---rc=$?"; tail -25
-     logs/push_fd6c8c0e_2.out (7m 31s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Ran 2 shell commands
 
-✢ Beboppin'… (18m 42s · ↓ 17.2k tokens)
+● Passou do portão do placar — está na suíte, em voo. Enquanto ele roda eu não escrevo na árvore; faço o diagnóstico de origem da O217, que
+  é leitura. As duas células que o aval nomeia são exatamente os 2 dia-colab que faltavam na conferência do marco.
+
+  Ran 4 shell commands
+
+● col146: a ata pôs 894 min no dia 29 e 0 no dia 28; a autoridade diz 541 no 28 e 545 no 29. É a atribuição do turno que cruza a meia-noite
+  — e a lavra não é ponto fixo. Vou medir isso na sombra com o arreio que já existe.
+
+  Ran 6 shell commands
+
+● O arreio genérico não existe (cada medição tem o seu, em arquivo). Enquanto o push roda, sigo na origem — por que a lavra não é ponto
+  fixo nesses dois dias.
+
+  Ran 3 shell commands
+
+● O realizado_do_dia com turnos=None pede fatia de UM dia (turnos_do_colab(colab, data, data)) — a armadilha que a casa já pagou. Preciso
+  saber quem o cartório consulta antes de dizer quem erra.
+
+● Ver como o cartório obtém minutos_realizados
+  ⎿  $ cd /home/ronald/saas-hasner && sed -n '240,275p' app/ponto/services/cartorio.py; echo "=== quem monta 'dia' ==="; grep -n "def
+     classificar_dia\|dias_do_colab\|def _dias\|fatos_do_dia\|classificar_falta" app/ponto/services/cartorio.py | head -20
+
+* Beboppin'… (23m 57s · ↓ 24.9k tokens · thinking)
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
