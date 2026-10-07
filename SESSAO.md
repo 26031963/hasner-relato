@@ -6,10 +6,17 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 07/10/2026 20:08:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (417.3 MB). Acoes na janela: **171**.
+**Medido em 07/10/2026 20:14:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (417.5 MB). Acoes na janela: **178**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 20:12:54 | Bash | Ler o resto da bateria | `cd /home/ronald/wt-lavra/app && sed -n '80,300p' ponto/tests/test_bateria_lavratura.py` |
+| 20:12:43 | Bash | Ler o inicio da bateria | `cd /home/ronald/wt-lavra/app && sed -n '1,80p' ponto/tests/test_bateria_lavratura.py` |
+| 20:12:15 | Bash | Rodar a bateria apos a cura (B) | `cd /home/ronald/saas-hasner && timeout 900 bash bin/suite.sh --dir /home/ronald/wt-lavra --only "ponto.tests.test_bateria_lavratura" 2>&1 \| tail -25` |
+| 20:12:11 | Bash | Ancora do sweep do intermitente pela peneira de 20h | `cd /home/ronald/wt-lavra/app && python3 - <<'PY' p='escala/utils.py' s=open(p,encoding='utf-8').read() velho = """ if _col_interm: for d in sorted(set(janela_datas)): e = esc_do_dia(d) if e is None or e.tipo_escala is None: continue if e.tipo_escala.tipo_ciclo != 'intermitente': continue _do_dia = [k for k in range(len(locs)) if (not consumed[k]) and locs[k][0].date() == d] if not _do_dia: continu ...` |
+| 20:11:23 | Bash | Extrair o dedupe de 10 minutos para um escritor | `cd /home/ronald/wt-lavra/app && python3 - <<'PY' p='escala/utils.py' s=open(p,encoding='utf-8').read() # ---- UM escritor do dedupe de 10 min (a pre-passagem vai precisar dele) velho = """ _DUP = datetime.timedelta(minutes=10) _limpos = [] for _loc in locs: _ts, _tp = _loc[0], _loc[1] _fl = _loc[2] if len(_loc) > 2 else False if _limpos and _limpos[-1][1] == _tp and (_ts - _limpos[-1][0]) < _DUP:  ...` |
+| 20:10:50 | Bash | Ver rows e esc_do_dia | `cd /home/ronald/wt-lavra/app && sed -n '931,958p' escala/utils.py \| cat -n \| awk '{printf "%d\t%s\n", $1+930, substr($0, index($0,"\t")+1)}'` |
+| 20:10:37 | Bash | Assinatura de batidas_apuraveis e consumidores de sem_ancora | `cd /home/ronald/wt-lavra/app && grep -n "def batidas_apuraveis" -A14 ponto/turnos.py; echo "=== quem le sem_ancora ==="; grep -rn "sem_ancora" --include=*.py --include=*.html . \| grep -v "^./escala/utils.py" \| grep -v tests/ \| head -20` |
 | 20:04:21 | Bash | Ver locs e _limpos | `cd /home/ronald/wt-lavra/app && sed -n '955,999p' escala/utils.py \| cat -n \| awk '{printf "%d\t%s\n", $1+954, substr($0, index($0,"\t")+1)}'` |
 | 20:03:30 | Bash | Ver construcao de locs, janela_datas e dias_entrada | `cd /home/ronald/wt-lavra/app && grep -n "janela_datas\\|^ locs\\|locs = \\|dias_entrada\\|_col_interm = \\|_interm_m = \\|def montar_grade_prevista_periodo_por_turno" escala/utils.py \| sed -n '1,40p'; echo ----; sed -n '1000,1060p' escala/utils.py \| cat -n \| awk '{printf "%d\t%s\n", $1+999, substr($0, index($0,"\t")+1)}'` |
 | 20:02:44 | Bash | Ler a pre-passagem do intermitente | `cd /home/ronald/wt-lavra/app && sed -n '1080,1140p' escala/utils.py \| cat -n \| awk '{printf "%d\t%s\n", $1+1079, substr($0, index($0,"\t")+1)}'` |
