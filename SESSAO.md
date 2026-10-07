@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 07/10/2026 19:30:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (415.9 MB). Acoes na janela: **124**.
+**Medido em 07/10/2026 19:35:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (416.3 MB). Acoes na janela: **128**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 19:35:27 | Bash | Procura a raia de agente | `ls -d /home/ronald/saas-hasner/.claude/worktrees/* 2>/dev/null; echo ---; cd /home/ronald/saas-hasner && git worktree list \| tail -8` |
+| 19:35:08 | Bash | Hora no ato e estado das raias | `date '+%d/%m %H:%M'; cd /home/ronald/saas-hasner && git -C /home/ronald/wt-esmeril2 log --oneline -1 2>/dev/null; ls -d /home/ronald/wt-* ~/.claude/worktrees/* 2>/dev/null` |
+| 19:35:03 | Bash | Formato da ultima linha de PROMPTS.md | `cd /home/ronald/saas-hasner/app/docs && tail -4 PROMPTS.md \| cat -A \| sed -e 's/\$$//' \| cut -c1-400` |
+| 19:34:54 | Bash | Cabeca da montagem por turno | `cd /home/ronald/wt-lavra/app && sed -n '931,1010p' escala/utils.py` |
 | 19:30:09 | Bash | Entradas da montagem: locs, consumed, interm_m | `cd /home/ronald/wt-lavra/app && grep -n "def montar_grade_prevista_periodo" escala/utils.py && sed -n '/def montar_grade_prevista_periodo/,/^ col = sorted/p' escala/utils.py \| grep -n "locs\\|consumed\\|_interm_m\\|janela_datas\\|batidas\\|bs\b" \| head -40` |
 | 19:29:36 | Bash | Rodar os cinco REDs da bateria | `cd /home/ronald/wt-lavra/app && python3 - <<'PYEOF' p='ponto/tests/test_bateria_lavratura.py' s=open(p,encoding='utf-8').read() velho = """ def test_MORDE_a_janela_curta_da_o_MESMO_match_da_larga(self): c, cels = self._golden() self._lavrar(c, [cels[28], cels[29]]) for d in (28, 29):""" novo = """ def test_MORDE_a_janela_curta_da_o_MESMO_match_da_larga(self): \"\"\"Pela PORTA DE EVENTO (`julgar_ce ...` |
 | 19:29:15 | Bash | RED 4: o noturno continuo pela porta de evento | `cd /home/ronald/wt-lavra/app && cat >> ponto/tests/test_bateria_lavratura.py <<'PYEOF' class EventoNaoCorrompeAtaCertaTest(_BaseLavratura): """(B) O CONTRA-EXEMPLO que fecha a classe: o noturno CONTINUO, julgado pela porta de EVENTO. LEI-AKITA 5 (adversarial depois do RED): o golden do col146 passa a ter match certo com a janela larga por SORTE -- ele nao tinha plantao de 26 para 27/09, entao a ba ...` |
