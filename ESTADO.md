@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 07/10/2026 19:00:03.**
+**Medido em 07/10/2026 19:05:31.**
 
 | | |
 |---|---|
@@ -33,7 +33,10 @@ edb40127 [O208] o contador do recalculo era cego ao campo da cura: mexidos=36 er
 
 ```
  M app/config/crons_duracao.json
+ M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/LEIS.md
+ M app/docs/PROMPTS.md
  M app/docs/RELATO.md
  M app/docs/TICKETS.md
  M bin/sombra.sh
@@ -110,40 +113,40 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  por competencia, esperado 0, FORA do contrato (L-099: estrutura separada de dado).
-    PRONTO: bateria verde nomeada, RED da O217 evidenciado, col146 com os dois dias certos, placar pela funcao real.
-
-  OBRA 2 -- REGRA-NA-IMPRESSAO
-    FONTE: ponto/services/cartorio.py::impressao_insumos (hoje: batidas, cobertura, chamados, DNA).
-    MUDA: a VERSAO DA REGRA entra como quinto insumo. Mudou a regra -> a impressao muda -> o cartorio rejulga o dia pelo caminho normal.
-  Relavratura de frota por --forcar deixa de ser o caminho.
-    A VERSAO e DECLARADA e COBRADA: selo de host -- commit que toca arquivo de juiz sem subir a versao, ou sem declarar "nao muda numero",
-  = VERMELHO. Versao que depende de alguem lembrar nao serve.
-    SEM EXCECAO DE COMPETENCIA (lei nova). O fechamento e o DiaPago seguem pelo caminho de evento que o R6 ja provou.
-    DOSAGEM e decisao TECNICA sua, pela fila do cartorio que ja existe; proibido GET que escreve. Publica o contador
-  `dias_com_regra_velha` por competencia, esperado 0, com a idade do mais velho.
-    ANTES da primeira virada: DIFF de frota por competencia e por rubrica publicado como IMPACTO, e foto em logs/.
-    RED: (1) mesma batida, versao n e n+1 -> impressoes diferentes; (2) versao igual -> impressao identica a de hoje, frota nao rejulga;
-  (3) dia de competencia exportada com versao velha -> rejulga; (4) commit em arquivo de juiz sem versao -> selo vermelho.
-    PRONTO: os 4 REDs, o DIFF publicado, o contador no ESTADO, e uma mudanca de regra de ensaio na sombra chegando ao gravado SEM comando.
-
-  OBRA 3 -- DIETA-DE-CARGA (paralela, so docs e processo)
-    MEDE ANTES e publica: linhas e bytes de CLAUDE.md, RELATO.md, BACKLOG.md, LEIS.md.
-    FAZ: as historias "nasceu medida" do CLAUDE.md vao para LAPIDES.md com ponteiro e a REGRA fica (L-109 ja manda); RELATO com mais de 3
-  dias vai para o arquivo (L-109 ja manda); tropeco novo vira CENARIO de teste, nao lei nova; sessao nova a cada obra, com handoff, em vez
-  de uma sessao do dia inteiro.
-    PROIBIDO: apagar regra; tocar selo ou teste; resumir aval literal dele.
-    PRONTO: os quatro tamanhos antes e depois, e os 62 selos de host verdes.
-
-  PROIBIDO nas tres: fallback; juiz novo; mexer em motor_calculo_v2; pular DIFF, foto ou prova em ato de frota.
-  LEI-AKITA: origem=ponto/services/cartorio.py (lavra e impressao), testemunha=a ata e a impressao da celula, RED=a bateria e os 4 da obra
   2, quem-mais-le=todo leitor de ata (tela, PDF, cartao) e o fechamento por evento, juizes novos=0
   LINHA HAIKU: (a) contador `dias_com_regra_velha` entra no copiloto; (b) golden: "este dia foi calculado pela regra de hoje?" esperado
   via ferramentas.regra_do_dia(cli); (c) degrau: leitura.
-  ctrl+x ctrl+s to send now
-                                                                                                   ✔ Update installed · Restart to update
+
+● Aval recebido. Ordem nova: BATERIA-DA-LAVRATURA (com a O217) → REGRA-NA-IMPRESSAO → DIETA-DE-CARGA → O211 → O214 → BOs. E a lei nova
+  responde a pergunta de lei que estava no topo do RELATO. Registro primeiro (PROMPT-NAO-SE-REPETE), depois sigo na O217 — que agora é a
+  cura dentro da OBRA 1.
+
+  Antes disso, a checagem que o advisor pediu respondeu: cel_por_data é populado em escala/utils.py:1122 e :1249, e turnos_do_colab só é
+  importado em :1261 — o match não consome turnos, é livre de papel. A cura B é linha reta.
+
+  Searched for 1 pattern, ran 1 shell command
+
+● Aval registrado em docs agora (PROMPT-NAO-SE-REPETE), e a lei nova responde a pergunta que estava no topo do RELATO.
+
+  Searched for 3 patterns, ran 7 shell commands
+
+● Docs owed estão escritos. Agora o RED — e ele vem do arquivo de reversão, não da mão.
+
+● Extrair as duas celulas golden da reversao
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PY'
+     import json, io
+     d = json.load(io.open('app/logs/o209/reversao_frota_20261005_173212.json', encoding='utf-8'))
+     cels = d['celulas']
+     print('campos:', d['campos'])
+     print('celulas tipo:', type(cels).__name__, len(cels))
+     alvo = {}
+     if isinstance(cels, dict…
+
+✢ Beboppin'… (56m 42s · ↓ 63.6k tokens · thinking)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+                                                                                                                    6% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ Press up to edit queued messages
+❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 

@@ -7,7 +7,11 @@ O211 PAROU NA COPIA, nao em lei: o pouso A de `REGUA-PELA-EMPRESA` esta CONSTRUI
 segue IDENTICO ao HEAD, entao **nada de dinheiro se move neste pouso** -- o leitor migra no pouso B
 (DIFF de frota na sombra antes), e a O211 so FECHA la.
 
-lei: **quem julga a LAVRA de uma competencia EXPORTADA, e o CHAMADO que ela faz nascer?** As
+lei **RESPONDIDA 07/10 19:xx** (aval `O-SISTEMA-CALCULA-O-QUE-TEM`, **L-113**): *"o sistema calcula o
+que tem (...) se ja foi para o Dominio e gerou holerite, problema do DP e da empresa"* -- e, com estas
+palavras, **um chamado PODE nascer em competencia paga**. A pergunta abaixo fica como HISTORIA (ela era
+*quem julga a LAVRA de uma competencia EXPORTADA, e o CHAMADO que ela faz nascer?*) e os numeros dela
+seguem valendo como IMPACTO da O218/O219, nunca mais como trava. As
 competencias que a relavratura NAO tocou medem, pelo mesmo teste de ponto fixo: **09/2026 (EXPORTADA) 424
 de 17.330 dia-colab = 2,45%, 119 colabs, ata 52.492 contra autoridade 207.815 min (+2.588,72 h)**;
 **08/2026 (EXPORTADA) 756 de 16.894 = 4,47%, 145 colabs, ata 146.934 contra 382.849 min (+3.931,92 h)**.

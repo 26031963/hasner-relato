@@ -5,7 +5,7 @@ a raspagem usa a lista de nomes do banco como autoridade, nunca regex adivinhada
 `colNNN`/`ecNNN` ficam, porque nao identificam ninguem fora desta casa. Obra FEITA sai desta
 lista — ela e o que esta EM PE._
 
-**215 obras abertas.**
+**218 obras abertas.**
 
 | ID | obra | estado |
 |---|---|---|
@@ -224,3 +224,6 @@ lista — ela e o que esta EM PE._
 | **O215** | PAUTA-DP-09-RELAVRATURA: O NUMERO DO DOMINIO, TXT x TXT | **sem portao** -- e MEDICAO na sombra, n |
 | **O216** | O NUMERO DA L-103 SE REPUBLICA COM O JUIZ CURADO | **sem portao** -- conta e publica, PRE-A |
 | **O217** | A LAVRATURA NAO E PONTO FIXO: relavrar de novo muda o numero | **sem portao** -- medir na sombra e PRE- |
+| **O218** | BATERIA-DA-LAVRATURA | **fila 1, a FRENTE da O211** (ordem lite |
+| **O219** | REGRA-NA-IMPRESSAO | **fila 1, atras da O218**. O `impressao_ |
+| **O220** | DIETA-DE-CARGA | **paralela**, sem portao -- nao toca pro |

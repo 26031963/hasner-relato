@@ -6,10 +6,26 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 07/10/2026 19:00:03.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (414.6 MB). Acoes na janela: **66**.
+**Medido em 07/10/2026 19:05:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (414.9 MB). Acoes na janela: **82**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 19:05:24 | Bash | Extrair as duas celulas golden da reversao | `cd /home/ronald/saas-hasner && python3 - <<'PY' import json, io d = json.load(io.open('app/logs/o209/reversao_frota_20261005_173212.json', encoding='utf-8')) cels = d['celulas'] print('campos:', d['campos']) print('celulas tipo:', type(cels).__name__, len(cels)) alvo = {} if isinstance(cels, dict): for k in ('118980', '118981', 118980, 118981): if k in cels: alvo[str(k)] = cels[k] else: for c in c ...` |
+| 19:05:18 | Bash | Abrir o arquivo de reversao do apply de 05/10 | `cd /home/ronald/saas-hasner && ls -la app/logs/o209/ 2>/dev/null \| head && python3 - <<'PY' import glob, json, io for f in glob.glob('/home/ronald/saas-hasner/app/logs/o209/reversao_frota_*.json'): print('==', f) d = json.load(io.open(f, encoding='utf-8')) print('tipo:', type(d).__name__, 'tamanho:', len(d)) if isinstance(d, dict): print('chaves:', list(d.keys())[:12]) PY` |
+| 19:05:05 | Bash | Registrar L-113 no LEIS.md | `python3 - <<'PY' import io p = 'docs/LEIS.md' t = io.open(p, encoding='utf-8').read() def troca(velho, novo): global t n = t.count(velho) assert n == 1, 'ancora com %d: %r' % (n, velho[:60]) t = t.replace(velho, novo) L113 = ( '\| **L-113** \| **O SISTEMA CALCULA O QUE TEM**: *"o sistema calcula o que tem. Se mudei uma batida e o ' 'calculo exportado mudou, nao e responsabilidade do sistema. Se o  ...` |
+| 19:04:41 | Bash | Ver todas as colunas da L-112 | `sed -n '128p' docs/LEIS.md \| python3 -c "import sys;print(' \|\|\| '.join(sys.stdin.read().split('\|')))" \| cut -c1-2600` |
+| 19:04:22 | Bash | Localizar L-112 e o cabecalho da tabela | `grep -n "L-112" docs/LEIS.md \| cut -c1-600 && echo '=== header tabela ===' && grep -n "^\| ID \\|^\|---" docs/LEIS.md \| head -5` |
+| 19:04:18 | Bash | Ver duas linhas de lei completas para o formato | `grep -n "^\| L-11[12]" docs/LEIS.md \| cut -c1-900` |
+| 19:04:13 | Bash | Ver o cabecalho e o formato de linha do LEIS.md | `sed -n '1,14p' docs/LEIS.md && echo '...' && grep -n "^\| L-112" docs/LEIS.md \| cut -c1-400` |
+| 19:04:08 | Bash | Atualizar O217 e responder a pergunta de lei no RELATO | `python3 - <<'PY' import io def troca(p, velho, novo): t = io.open(p, encoding='utf-8').read() n = t.count(velho) assert n == 1, '%s: ancora com %d ocorrencia(s): %r' % (p, n, velho[:70]) io.open(p, 'w', encoding='utf-8').write(t.replace(velho, novo)) print('%s: ok' % p) # --------------------------------------------- 1. O217: estado pela MEDICAO troca('docs/BACKLOG.md', '\| achado MEDIDO e publica ...` |
+| 19:03:48 | Bash | Escrever as tres obras no BACKLOG | `python3 - <<'PY' import io p = 'docs/BACKLOG.md' t = io.open(p, encoding='utf-8').read() ANC = '## OBRAS PEDIDAS POR PROMPT (fora do registro por sitio)\n\n\| # \| obra \| portao \| onde esta \| pedido em \|\n\|---\|---\|---\|---\|---\|\n' assert t.count(ANC) == 1, 'ancora da tabela OBRAS' O218 = ( '\| O218 \| **BATERIA-DA-LAVRATURA** (aval 07/10 19:xx, **com a O217 dentro**). FONTE: ' '`ponto/ser ...` |
+| 19:03:08 | Bash | Registrar o prompt em PROMPTS.md | `python3 - <<'PY' import io, re def ler(p): return io.open(p, encoding='utf-8').read() def grav(p, t): io.open(p, 'w', encoding='utf-8').write(t) def troca(t, velho, novo, p): n = t.count(velho) assert n == 1, '%s: ancora com %d ocorrencia(s): %r' % (p, n, velho[:70]) return t.replace(velho, novo) # ---------------------------------------------------------------- 1. PROMPTS.md p = 'docs/PROMPTS.md' ...` |
+| 19:02:53 | Bash | Ler o bloco da pergunta de lei no RELATO | `sed -n '9,30p' docs/RELATO.md` |
+| 19:02:30 | Bash | Achar o proximo numero de obra e de lei | `grep -o "^\| O[0-9]\+" docs/BACKLOG.md \| tr -d '\| O' \| sort -n \| tail -3 && echo '--- L max ---' && grep -o "L-[0-9]\{3\}" docs/LEIS.md \| sort -u \| tail -3` |
+| 19:02:20 | Bash | Localizar a linha O217 e o topo do RELATO | `grep -n "O217" docs/BACKLOG.md \| head && echo '--- topo relato ---' && sed -n '1,12p' docs/RELATO.md` |
+| 19:02:19 | Bash | Ver formato de PROMPTS e OBRAS | `tail -14 docs/PROMPTS.md && echo '=== OBRAS ===' && grep -n "^## OBRAS" -A 12 docs/BACKLOG.md \| head -24` |
+| 19:01:20 | Bash | Ler assinatura de turnos_do_colab | `grep -n "def turnos_do_colab" -A 25 ponto/turnos.py` |
+| 19:01:19 | Bash | Ver se o match consome turnos | `grep -n "turnos_do_colab\\|parear_turnos\\|_turnos_do_juiz\\|cel_por_data" escala/utils.py` |
 | 18:55:58 | Bash | Ver se o match das lampadas depende do papel | `sed -n '1255,1300p' escala/utils.py && echo '--- ---' && sed -n '1300,1362p' escala/utils.py` |
 | 18:55:44 | Bash | Ler periodos_do_dia | `grep -n "def periodos_do_dia" -A 60 ponto/juiz_batida.py \| head -90` |
 | 18:55:18 | Bash | Ler o sitio do corte O65 | `sed -n '1360,1420p' ponto/turnos.py` |
