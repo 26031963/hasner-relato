@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 07/10/2026 20:24:31.**
+**Medido em 07/10/2026 20:30:02.**
 
 | | |
 |---|---|
@@ -113,7 +113,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Searched for 1 pattern, ran 33 shell commands
 
 ● Agora a função que nomeia o pad, com os dois sítios migrados:
 
@@ -139,10 +138,11 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Mutante 1 remorde depois da correção (2 falhas, as previstas) e a árvore voltou. Agora os cenários que faltam. Primeiro reler a base da
   bateria:
 
-● Ler o cabecalho da bateria
-  ⎿  $ cd /home/ronald/wt-lavra/app && sed -n '150,431p' ponto/tests/test_bateria_lavratura.py
+  Ver campos de TipoEscala
+  ⎿  $ cd /home/ronald/wt-lavra/app && sed -n '1,120p' escala/models.py | grep -n "CICLO_\|class
+     TipoEscala\|codigo\|descricao\|dias_trabalho\|dias_folga\|hora_inicio\|hora_fim\|intervalo" | head -40
 
-· Beboppin'… (2h 15m 42s · ↓ 188.5k tokens · thinking)
+✻ Beboppin'… (2h 21m 12s · ↓ 194.5k tokens · thinking some more)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

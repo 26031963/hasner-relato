@@ -6,10 +6,22 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 07/10/2026 20:24:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (418.0 MB). Acoes na janela: **188**.
+**Medido em 07/10/2026 20:30:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (418.2 MB). Acoes na janela: **200**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 20:29:28 | Bash | Ver campos de TipoEscala | `cd /home/ronald/wt-lavra/app && sed -n '1,120p' escala/models.py \| grep -n "CICLO_\\|class TipoEscala\\|codigo\\|descricao\\|dias_trabalho\\|dias_folga\\|hora_inicio\\|hora_fim\\|intervalo" \| head -40` |
+| 20:29:19 | Bash | Ver pares de pausa do cadastro | `cd /home/ronald/wt-lavra/app && grep -n "PARES_PAUSA_CADASTRO\\|def pausas_cadastradas" -A 14 escala/models.py \| head -40` |
+| 20:29:15 | Bash | Ver pausas_do_dia | `cd /home/ronald/wt-lavra/app && grep -n "def pausas_do_dia" -A 40 escala/models.py \| head -50` |
+| 20:26:00 | Bash | Ler o montador de DNA | `cd /home/ronald/wt-lavra/app && sed -n '60,120p' ponto/management/commands/gerar_celulas.py` |
+| 20:25:42 | Bash | Quem escreve dna_versao | `cd /home/ronald/wt-lavra/app && grep -rn "'dna_versao'" --include=*.py . \| grep -v tests \| head -10` |
+| 20:25:39 | Bash | Achar montar_dna | `cd /home/ronald/wt-lavra/app && grep -rn "def montar_dna" escala/ \| head && grep -rn "def montar_dna" -A 40 escala/services/*.py escala/*.py 2>/dev/null \| head -50` |
+| 20:25:21 | Bash | Ver PARES_PAUSA_DNA e montar_dna | `cd /home/ronald/wt-lavra/app && grep -n "PARES_PAUSA_DNA" escala/models.py \| head -5 && grep -n "def montar_dna" -A 45 escala/*.py \| head -60` |
+| 20:25:16 | Bash | Ver as chaves de marco do DNA | `cd /home/ronald/wt-lavra/app && grep -n "chaves_do_turno" -A 25 escala/models.py \| head -45 && echo "=== dna_congelado/marcos" && grep -n "def dna_congelado\\|def marcos_do_dia" -A 30 escala/models.py \| grep -n "'hi'\\|'hf'\\|'ii'\\|'if'\\|'ii2'\\|'if2'\\|marcos.*=.*{" \| head -20` |
+| 20:25:06 | Bash | Ler impressao_insumos, isencao, ata_do_dia, julgar_celula | `cd /home/ronald/wt-lavra/app && sed -n '85,180p' ponto/services/cartorio.py && echo "=== 275-335" && sed -n '275,380p' ponto/services/cartorio.py && echo "=== julgar_celula 901-" && sed -n '901,960p' ponto/services/cartorio.py` |
+| 20:24:52 | Bash | Ler o resto do corpo do julgar_colab | `cd /home/ronald/wt-lavra/app && sed -n '620,812p' ponto/services/cartorio.py` |
+| 20:24:49 | Bash | Ler o corpo do julgar_colab | `cd /home/ronald/wt-lavra/app && sed -n '474,620p' ponto/services/cartorio.py` |
+| 20:24:32 | Bash | Mapear cartorio.py | `cd /home/ronald/wt-lavra/app && grep -n "^def \\|^class \\|^ def " ponto/services/cartorio.py \| head -80` |
 | 20:24:23 | Bash | Ler o resto da bateria | `cd /home/ronald/wt-lavra/app && sed -n '150,431p' ponto/tests/test_bateria_lavratura.py` |
 | 20:24:19 | Bash | Ler o cabecalho da bateria | `cd /home/ronald/wt-lavra/app && wc -l ponto/tests/test_bateria_lavratura.py && sed -n '1,150p' ponto/tests/test_bateria_lavratura.py` |
 | 20:19:18 | Bash | Reconferir a mordida do mutante 1 | `SB=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad cp /home/ronald/wt-lavra/app/escala/utils.py $SB/utils.py.ok cd /home/ronald/wt-lavra/app && python3 - <<'PY' p='escala/utils.py'; s=open(p).read() v=" if (_locs_i[_j][0] - _locs_i[_j - 1][0]) > datetime.timedelta(hours=20):\n _anc_ix = _j\n" assert s.count(v)==1 open(p,'w').write(s.replace(v," if Fals ...` |
