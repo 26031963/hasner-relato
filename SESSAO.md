@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 07/10/2026 20:03:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (417.3 MB). Acoes na janela: **169**.
+**Medido em 07/10/2026 20:08:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (417.3 MB). Acoes na janela: **171**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 20:04:21 | Bash | Ver locs e _limpos | `cd /home/ronald/wt-lavra/app && sed -n '955,999p' escala/utils.py \| cat -n \| awk '{printf "%d\t%s\n", $1+954, substr($0, index($0,"\t")+1)}'` |
+| 20:03:30 | Bash | Ver construcao de locs, janela_datas e dias_entrada | `cd /home/ronald/wt-lavra/app && grep -n "janela_datas\\|^ locs\\|locs = \\|dias_entrada\\|_col_interm = \\|_interm_m = \\|def montar_grade_prevista_periodo_por_turno" escala/utils.py \| sed -n '1,40p'; echo ----; sed -n '1000,1060p' escala/utils.py \| cat -n \| awk '{printf "%d\t%s\n", $1+999, substr($0, index($0,"\t")+1)}'` |
 | 20:02:44 | Bash | Ler a pre-passagem do intermitente | `cd /home/ronald/wt-lavra/app && sed -n '1080,1140p' escala/utils.py \| cat -n \| awk '{printf "%d\t%s\n", $1+1079, substr($0, index($0,"\t")+1)}'` |
 | 20:02:22 | Bash | Ruff nos arquivos tocados e censo de selos de query | `cd /home/ronald/saas-hasner && docker run --rm -v /home/ronald/wt-lavra/app:/app -w /app python:3.12-slim sh -c 'pip -q install ruff==0.6.9 2>/dev/null; ruff check escala/utils.py ponto/turnos.py ponto/services/cartorio.py ponto/tests/test_bateria_lavratura.py' 2>&1 \| tail -20; echo "=== selos de query/chokepoint ==="; grep -rln "assertNumQueries\\|teto de quer\\|num_queries" --include=test_*.py  ...` |
 | 20:01:13 | Bash | Rodar a bateria da lavratura na raia | `cd /home/ronald/saas-hasner && timeout 900 bash bin/suite.sh --dir /home/ronald/wt-lavra --only "ponto.tests.test_bateria_lavratura" 2>&1 \| tail -40` |
