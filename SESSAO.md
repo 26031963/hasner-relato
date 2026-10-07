@@ -6,10 +6,19 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 07/10/2026 20:40:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (418.4 MB). Acoes na janela: **211**.
+**Medido em 07/10/2026 20:45:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (418.9 MB). Acoes na janela: **220**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 20:45:22 | Bash | Ver TIPO_CHOICES e campos de Ausencia | `cd /home/ronald/wt-lavra/app && sed -n '617,660p' ponto/models.py; echo "..."; sed -n '700,760p' ponto/models.py \| grep -n "minutos\\|data_fim\\|^ [a-z_]* = models"` |
+| 20:45:16 | Bash | Ler Ausencia e ausencia_cobre | `cd /home/ronald/wt-lavra/app && sed -n '617,700p' ponto/models.py \| grep -n "models\.\\|TIPO\\|STATUS" \| head -40 echo "=== ausencia_cobre ==="; sed -n "/^def ausencia_cobre/,/^def /p" ponto/turnos.py \| head -60` |
+| 20:45:08 | Bash | Ler cobertura, Ausencia, chaves do turno e intervalo2 | `cd /home/ronald/wt-lavra/app && echo "=== cobertura no corpo ==="; grep -n "cob\b\\|cobertura_ausencia_periodo\\|_cobs" ponto/services/cartorio.py \| head -20 echo; echo "=== Ausencia campos ==="; grep -n "class Ausencia" -A 40 ponto/models.py \| grep -n "= models\.\\|class " \| head -30 echo; echo "=== chaves_do_turno / PARES_PAUSA_DNA ==="; grep -n "PARES_PAUSA_DNA\\|def chaves_do_turno" -A 12 e ...` |
+| 20:44:49 | Bash | Ler realizado_dos_turnos | `cd /home/ronald/wt-lavra/app && sed -n "/^def realizado_dos_turnos/,/^def [a-z_]*(/p" ponto/turnos.py \| head -60` |
+| 20:44:42 | Bash | Ler realizado_do_dia | `cd /home/ronald/wt-lavra/app && sed -n "/^def realizado_do_dia/,/^def /p" ponto/turnos.py \| head -70` |
+| 20:44:18 | Bash | Ler lampadas_do_dia | `cd /home/ronald/wt-lavra/app && sed -n '/^def lampadas_do_dia/,/^def ata_do_dia/p' ponto/services/cartorio.py \| sed -n '1,140p'` |
+| 20:44:09 | Bash | Ler o caminho da isencao | `cd /home/ronald/wt-lavra/app && sed -n '105,150p' ponto/services/cartorio.py echo "=== aplicar_isencao_no_dia ==="; sed -n "/^def aplicar_isencao_no_dia/,/^def /p" escala/utils.py echo "=== _marcar_isencao ==="; sed -n "/^def _marcar_isencao/,/^def /p" escala/utils.py` |
+| 20:44:04 | Bash | Ler isencao e dispensa por ausencia no cartorio | `cd /home/ronald/wt-lavra/app && echo "=== _carimbar_isencao + isencao em cartorio ==="; grep -n "isen" ponto/services/cartorio.py \| head -40 echo; echo "=== dispensar_por_ausencia ==="; sed -n "/^def dispensar_por_ausencia/,/^def /p" ponto/services/cartorio.py \| head -50` |
+| 20:43:21 | Bash | Rodar a bateria da lavratura na raia | `cd /home/ronald/saas-hasner && timeout 900 bash bin/suite.sh --dir /home/ronald/wt-lavra --only "ponto.tests.test_bateria_lavratura" 2>&1 \| tail -30` |
 | 20:39:43 | Bash | Reescrever o cenario da orfa pela regra medida | `cd /home/ronald/wt-lavra/app && cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/orfa.py <<'PYEOF' class OrfaNasDuasPontasTest(_BaseMarcos): """CENARIO -- BATIDA ORFA DE ENTRADA E DE SAIDA (as duas pontas do dia). A REGRA, com numero (a resposta de cada linha MEDIDA no sistema em 07/10 20:4x, contra a funcao real, antes de escrever as assercoes):  ...` |
 | 20:38:50 | Bash | Ver o campo protestos | `cd /home/ronald/wt-lavra/app && grep -n "protestos\\|veredito" escala/models.py \| sed -n '1,20p' && grep -n "protestos" ponto/portas/celula.py \| head` |
 | 20:38:46 | Bash | Ver lavrar_veredito | `cd /home/ronald/wt-lavra/app && grep -n "def lavrar_veredito" -A 30 escala/models.py \| head -40` |
