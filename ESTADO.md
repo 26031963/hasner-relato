@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 07:18:01.**
+**Medido em 08/10/2026 07:23:31.**
 
 | | |
 |---|---|
@@ -34,7 +34,10 @@ cf03dbcb o alarme da esteira volta a ser lido PRIMEIRO: a ancora do no_relato pa
 ```
  M app/config/crons_duracao.json
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/PROMPTS.md
  M bin/sombra.sh
+ M bin/vigia_arvore.sh
+?? bin/tests/test_vigia_arvore_delega_no_relato.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -111,36 +114,36 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 1 shell command
+  Ran 2 shell commands
 
-● Selo VERMELHO no HEAD (2 falhas; os dois MORDE verdes nos dois lados). Commit da cura #2 — primeiro a linha de PROVA no RELATO:
-
-  Committed 6eeb129d, ran 3 shell commands
-
-● Cura #2 em 6eeb129d. Agora o instrumento — cura #3, o segundo escritor:
+● Portão guarda só RELATO.md + RELATORIOS-PLANO.md — as 13 são dívida antiga em arquivo não-guardado, anotada como lateral. Cura #3,
+  construída em cópia do HEAD:
 
   Ran 2 shell commands
 
-● O censo abriu: há mais dois escritores em bin/. Antes de curar um, fecho o censo — é literalmente o que a meia-correção proíbe:
-
-  Ran 2 shell commands
-
-● Censo fechado, com números: relato.sh:88 escreve em $TMP/ESTADO.md (outra pergunta), deploy_agendado.sh escreve na sua própria seção
-  pinada (## DEPLOYS AGENDADOS = 1, existe), e só vigia_arvore.sh:160-168 clona a pergunta do alarme com a âncora morta (## PENDENTES DO
-  RONALD = 0). Antes de escolher o juiz do selo, vejo se ele já existe:
+● Smoke verde: a linha caiu em 237, duas abaixo do ## ALARMES DA ESTEIRA (235) — dentro da seção, não no EOF, e o RELATO real intocado. O
+  RELATO= da linha 24 ficou sem leitor — segunda declaração de onde o RELATO mora, sai no mesmo ato (L-111):
 
   Ran 1 shell command
 
-● bin/tests/test_hook_nao_e_copia.sh é exatamente o idioma "clone em bin/" já existente — leio antes de inventar juiz:
+● O selo, no idioma da casa (ALVO nomeado + uma varredura sem allowlist + par que MORDE):
 
   Ran 1 shell command
 
-● O idioma existe: "o X DELEGA; se contiver a Y, é cópia, e cópia diverge" + par que MORDE. Tenho o censo fechado e três juízes candidatos
-  para o selo — chamo o revisor antes de cravar:
+● RED do selo contra o HEAD de pé, numa cópia:
 
-  Advising using Fable 5.1
+  Ran 1 shell command
 
-✢ Cultivating… (1h 9m 25s · ↓ 156.7k tokens)
+● Aplico na árvore e rodo a pasta inteira de selos de host:
+
+● Aplicar a cura 3 e rodar todos os selos de host
+  ⎿  $ cd /home/ronald/saas-hasner
+     S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
+     cp $S/cura3/vigia_arvore.sh bin/vigia_arvore.sh
+     cp $S/cura3/test_vigia_arvore_delega_no_relato.sh bin/tests/test_vigia_arvore_delega_no_relato.sh
+     chmod --reference=bin/tests…
+
+✢ Cultivating… (1h 14m 55s · ↓ 171.4k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
