@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 19:07:39.**
+**Medido em 08/10/2026 19:13:01.**
 
 | | |
 |---|---|
@@ -111,36 +111,36 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● O contrato da casa morde a minha cura — e está certo. Deixe-me ler o que ele aceita:
-
-  Searched for 1 pattern, ran 4 shell commands
-
-● Handlers só da stdlib (RotatingFileHandler/StreamHandler, nenhum () próprio, nenhum filtro) — e esses guardam emit internamente via
-  Handler.handleError. O try/except era medo, não tratamento: cura na origem, sem allowlist.
-
-  Ran 2 shell commands
-
-● A promessa que escrevi no docstring tem de ser verdade: o selo passava só por hora_lida, nunca pela porta que emite a trilha.
-
-  Ran 4 shell commands
-
-● Ruff limpo. Agora o GREEN na cópia, com o contrato que mordeu incluído na rodada:
-
-  Ran 5 shell commands
-
-● 42 testes OK, incluindo o contrato que mordeu. Antes de pousar na árvore viva e deployar:
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-● Os quatro pontos procedem. Primeiro o relógio solto no selo e a conta em uma query:
 
   Ran 1 shell command
 
-❯ aval Ronald: O214-CRON-RECUSA-INSTALAR: o noturno.py de 02:33 esta avalizado junto, e hora derivada; instala. segue a fila; PAREI so em
-  lei ou !
+● 2.685 confirmado pela autoridade, e abre em 1971/596/118 — o número dele. Sobram 390 candidatos sem linha; isso eu meço antes de
+  publicar:
 
-· Wrangling… (5h 42m 0s · ↓ 596.3k tokens)
+  Ran 1 shell command
+
+● Minha sonda leu a chave errada (colab, não colaborador_id) — 3.075 de 3.075 é o sintoma disso, não um achado:
+
+  Ran 2 shell commands
+
+● Prova fechada nos dois lados do corte: as 2.685 gravadas têm 1..15 min (soma 15.577 = 259,6 h, o número dele), e as 390 sem linha têm
+  16..129 min — ficam para o admin. Agora os hashes:
+
+  Ran 2 shell commands
+
+● $C/o214 é uma cópia de árvore antiga, não o repo — nada foi escrito na raiz viva. Agora os hashes, contra o arquivo de ANTES:
+
+  Ran 4 shell commands
+
+● O hash do fechamento da 10/2026 moveu (127d6a83… → d6422334…, mesmas 587 linhas), enquanto a 09 e todas as exportações estão intactas.
+  Isso difere do seu resumo, então vou medir quem moveu e quando antes de escrever qualquer coisa:
+
+● Achar o modelo certo e o que o script le
+  ⎿  $ cd /home/ronald/saas-hasner && grep -rn "class FechamentoMensal" app/*/models.py; echo "--- o que o hash_intactas usa:"; grep -n
+     "Fechamento\|import" /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/hash_intactas.py |
+     head
+
+✢ Wrangling… (5h 47m 22s · ↓ 613.2k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
