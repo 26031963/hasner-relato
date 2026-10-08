@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 07/10/2026 23:59:01.**
+**Medido em 08/10/2026 00:04:31.**
 
 | | |
 |---|---|
@@ -34,6 +34,7 @@ cd37557a [O220] a dieta de carga: a casa inteira se lia em 1,3 MB de prosa, e -2
 ```
  M app/config/crons_duracao.json
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/RELATO.md
  M bin/sombra.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -130,14 +131,14 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-● Juntar o rodape ao commit e repetir o push · 3m 47s
+● Juntar o rodape ao commit e repetir o push · 9m 18s
   ⎿  $ cd /home/ronald/saas-hasner && SCR=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad &&
      git log -1 --pretty=%B > $SCR/msg3.txt && python3 - <<'PY'
      import io
-     f='/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad… (3m 47s · 5 lines)
+     f='/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad… (9m 17s · 5 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Beboppin'… (5h 50m 12s · ↓ 512.4k tokens)
+✢ Beboppin'… (5h 55m 42s · ↓ 512.4k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
