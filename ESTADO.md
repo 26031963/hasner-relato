@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 07/10/2026 22:06:31.**
+**Medido em 07/10/2026 22:11:32.**
 
 | | |
 |---|---|
@@ -116,42 +116,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  Ran 1 shell command
-
-● Base de 22:03, dump de 21:59:53 — agora _instante_do_dump() lê o arquivo que foi de fato usado, e a idade no apply fica abaixo de 1 h.
-  Lanço o DIFF com a árvore da raia:
-
-  Ran 1 shell command
-
-● DIFF em curso. Enquanto corre, curo as duas derivas que o agente reportou e não tocou — a primeira é um contador que mente (LEI-AKITA 8):
+  propriedade fixa da própria O218 não foi medida na frota: lavrar duas vezes == lavrar uma vez. O apply em prod roda o cartório com
+  --forcar sobre 570 colabs, então meço isso na sombra agora. Vejo como o arreio relavra:
 
   Ran 2 shell commands
 
-● 4 vivos contra 3 declarados — a L-113 que eu declarei hoje é a quarta. Corrijo o contador:
+● O arreio chama julgar_colab(... forcar=True) — a função real. Então a prova de idempotência é rodar o mesmo ATO 1 outra vez sobre a base
+  já relavrada: esperado 0 dia-colab movidos. Guardo o pacote bom e lanço:
 
-  Searched for 1 pattern, ran 1 shell command
+  Ran 2 shell commands
 
-● Agora a segunda deriva, e a cura é tirar da célula o número que persegue a própria cauda. Vejo a célula da O220 e o DIFF:
+● Pacote bom guardado (b4762cd4). Lanço a espera e preparo a publicação:
+
+  Ran 4 shell commands
+
+● O selo cobra o id na segunda coluna de uma linha | ... |. Verifico quais ids a minha mensagem de commit cita em colchetes — a memória da
+  casa diz que colchete em prosa conta como citação:
 
   Ran 1 shell command
 
-● DIFF em curso. Curo a célula da O220 — tiro dela a soma que persegue a própria cauda e deixo o delta, que é fato fechado:
+● Só [O218] — uma linha basta. Vejo o andamento da idempotência:
 
-● Corrigir numeros da celula de ESTADO da O220
-  ⎿  $ cd /home/ronald/saas-hasner/app/docs && python3 - <<'PY'
-     import io
-     p='BACKLOG.md'; s=io.open(p,encoding='utf-8').read()
-     velho=("FECHADA 07/10, nao commitada (L-106: docs no commit do MARCO). Carga VIVA -275,8 KB (-21%): "
-     "CLAUDE -5,1 KB em 15 lapides, LEIS -29,0 KB em 77 celulas, RELATO -204,1 K…
+  Ran 1 shell command
 
-✢ Beboppin'… (3h 57m 42s · ↓ 351.6k tokens)
+● Enquanto corre, leio a mensagem de commit para ver o que falta nela:
+
+● Checar idempotencia de novo
+  ⎿  $ cd /home/ronald/saas-hasner && grep -E 'relavrados em|ATA SE MOVEU|DELTA DE CONJUNTO|censo da O218' logs/o218_idempotencia.out
+     2>/dev/null; wc -l < logs/o218_idempotencia.out 2>/dev/null
+
+✢ Beboppin'… (4h 2m 43s · ↓ 366.2k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    5% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
