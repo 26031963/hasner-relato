@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 02:17:31.**
+**Medido em 08/10/2026 02:23:01.**
 
 | | |
 |---|---|
@@ -110,12 +110,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Trabalho real e de família da fila 1 — o esmeril de ausencia/ferias, incluindo o próprio juiz ponto/catalogo/ausencias.py que uma das
-  minhas laterais devidas acusa com dois leitores. Montando a junção em cópia, em cima da árvore que o main vai ser:
-
-  Ran 1 shell command
-
-● Zero conflitos. Agora as provas de não-destrutividade, antes de qualquer commit:
 
   Ran 2 shell commands
 
@@ -128,9 +122,7 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● L-089 (ATESTADO SO TEM EFEITO EM DIA DE TRABALHO, PELA-METADE) aponta justamente para ferias/models.py, que este merge toca. Vendo se ele
   move o estado dessa lei:
 
-  Conferir indice limpo antes do commit
-  ⎿  $ cd /home/ronald/wt-o137j && git status --porcelain | grep -v '^M ' | head -20; echo "=== MERGE_HEAD:"; git rev-parse --short
-     MERGE_HEAD 2>&1; echo "=== staged vs worktree sujo (esperado vazio):"; git diff --name-only | head
+  Committed 0437d80f, ran 18 shell commands
   ⎿  Read docs/AVAIS.md (23 lines)
   ⎿  Referenced file core/contratos_estruturais.py
   ⎿  Referenced file ponto/turnos.py
@@ -139,13 +131,21 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Task "RED e construção do segundo intervalo" completed in background
 
-✢ Beboppin'… (8h 8m 42s · ↓ 698.6k tokens)
+● Background command "Rodar a suite contra a copia do O137" completed (exit code 0)
+
+● Rodar os 8 selos vermelhos na arvore viva como controle · 52s
+  ⎿  $ cd /home/ronald/saas-hasner && for f in test_commit_so_o_declarado test_furo_encadeado_ao_cartorio test_handoff_sessao
+     test_hook_nao_e_copia test_import_tardio_contra_o_ar test_inventario_pessoal_no_commit test_montagem_vem_do_arvore_do_push
+     test_prepush_testa_o_commit; do timeout 180 bash "bin/t… (51s · 5 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✢ Beboppin'… (8h 14m 12s · ↓ 708.5k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
