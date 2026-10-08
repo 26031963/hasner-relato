@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 14:56:01.**
+**Medido em 08/10/2026 15:01:31.**
 
 | | |
 |---|---|
@@ -111,38 +111,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  ⎿  Referenced file config/crons.py
 
-● Achado que derruba a §5: o cartório não aplica o teto quando data != hoje (cartorio.py:600). Então o 19-07 ganha veredito acusatório com
-  o turno ainda aberto — veredito is not None não é fato encerrado.
+● Task "RED e construção do segundo intervalo" completed in background
 
-  Ran 1 shell command
-
-● Construindo na cópia. Primeiro as âncoras exatas.
-
-  Ran 2 shell commands
-
-● O marcador do 3º passo colidiu com um origem de outro modelo — o campo não entrou. Conferindo e corrigindo.
-
-  Ran 2 shell commands
-
-● Agora a porta — extração com a trilha dentro, para que não exista escrita sem trilha.
-
-  Ran 4 shell commands
-
-● Achado que muda o cadastro: a fatia 2 da Gestão de HE já tem um limite desenhado e avalizado — Empresa.limite_decisao_he_min. LEI-AKITA
-  4: a lei existe antes do corte novo.
+● O desenho literal resolve a colisão num sentido que eu não previa. Conferindo o estado da cópia antes de reescrever.
 
   Ran 1 shell command
 
-● Isto muda o cadastro: o ! do limite já está dado (opção (b), 01/10 20:4x) e o campo já tem nome contratado. Lendo o desenho literal.
+● limite_decisao_he_min não existe em código nenhum — só no contrato. E o 0056 que o plano dele reservava já foi gasto pelo marco da O211.
+  Antes de reescrever, os números reais do limite, lendo o LAVRADO (snapshot, zero passada de motor).
 
-● Ler o desenho literal do limite da fatia 2
-  ⎿  $ sed -n '3360,3400p' docs/RELATO.md
+  Searched for 1 pattern, ran 3 shell commands
 
-· Compacting conversation… (1h 30m 22s · ↓ 148.7k tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 59%
+● Números reais, e um fato que reenquadra o item: dias == pendentes nas seis linhas — não existe uma única DecisaoHE em nenhuma das duas
+  competências. A fila nunca foi trabalhada: 8.445 dias esperando um humano.
+
+  ┌──────────────────────┬──────────────────────────────┬────────────────────────────────┬─────────┐
+  │        limite        │ aberta 10/2026 (3.075 pend.) │ anterior 09/2026 (5.370 pend.) │  horas  │
+  ├──────────────────────┼──────────────────────────────┼────────────────────────────────┼─────────┤
+  │ 10 min (o ! dele)    │ 2.406 (78,2%)                │ 4.237 (78,9%)                  │ 543,8 h │
+  ├──────────────────────┼──────────────────────────────┼────────────────────────────────┼─────────┤
+  │ 15 min (meu palpite) │ 2.685 (87,3%)                │ 4.689 (87,3%)                  │ 634,7 h │
+  └──────────────────────┴──────────────────────────────┴────────────────────────────────┴─────────┘
+
+  O 4.689 / 439,1 h que eu carregava era limite 15 sobre a 09. Vou consultar antes de reescrever, porque isto troca o nome do campo em
+  modelo, migration e porta.
+
+● Advising using Fable 5.1
+
+✢ Wrangling… (1h 35m 52s · ↓ 155.7k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    1% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
