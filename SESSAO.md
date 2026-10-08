@@ -6,10 +6,31 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 07/10/2026 23:05:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (424.0 MB). Acoes na janela: **446**.
+**Medido em 07/10/2026 23:10:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (424.2 MB). Acoes na janela: **467**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 23:10:04 | Bash | Medir o ponto fixo da frota na competência 10 em prod | `cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command shell --schema=juliani --command "exec(open('/tmp/o218_pontofixo_frota.py').read())" 2>&1 \| tee logs/o218_pontofixo_frota_10.out \| tail -25` |
+| 23:09:56 | Bash | Copiar a sonda de frota ao container | `cd /home/ronald/saas-hasner && docker cp logs/o218_pontofixo_frota.py saas_core:/tmp/o218_pontofixo_frota.py` |
+| 23:09:49 | Bash | Escrever a sonda de ponto fixo da frota | `cd /home/ronald/saas-hasner && cat > logs/o218_pontofixo_frota.py <<'PY' # -*- coding: utf-8 -*- """TESTE DE PONTO FIXO NA FROTA, em PROD, **SOMENTE LEITURA**. A PERGUNTA, uma so: para cada dia-colab da competencia corrente, o minuto que a ATA gravou e o mesmo que a AUTORIDADE devolve ao reler? Ela e a sonda que o commit `fd6c8c0e` descreve ("2 dia-colab de 7.859") e e o numero que a celula (celul ...` |
+| 23:09:06 | Bash | Ver os campos do namedtuple | `sed -n '403,410p' ponto/turnos.py` |
+| 23:09:00 | Bash | Localizar a definição de RealizadoDoDia | `grep -rn 'RealizadoDoDia' --include=*.py . \| head -8` |
+| 23:08:41 | Bash | Ver o shape de RealizadoDoDia | `grep -n 'class RealizadoDoDia' -A 20 ponto/turnos.py \| head -30` |
+| 23:08:35 | Bash | Ler a assinatura e o retorno de realizado_do_dia | `sed -n '485,520p' ponto/turnos.py` |
+| 23:08:08 | Bash | Achar a função de autoridade do realizado | `cd /home/ronald/saas-hasner && grep -rn 'autoridade' --include=*.py app/ponto/turnos.py app/core/espelho_verdade.py app/ponto/management/commands/e6_oraculo.py 2>/dev/null \| head -20; echo ===; grep -rn 'def realizado_do_dia\\|def autoridade_do' --include=*.py app/ \| head` |
+| 23:07:45 | Bash | Procurar o comando de ponto fixo | `cd /home/ronald/saas-hasner && grep -rn 'ponto.fixo\\|ponto_fixo\\|pontofixo' --include=*.py app/ponto/management/commands/ app/core/ \| head -20` |
+| 23:07:40 | Bash | Localizar a sonda de frota do ponto fixo | `cd /home/ronald/saas-hasner && grep -rln 'sem lavra' logs/*.py logs/sombra/*.py app/ponto/management/commands/*.py app/core/*.py 2>/dev/null` |
+| 23:07:33 | Bash | Listar as sondas .py em logs por data | `cd /home/ronald/saas-hasner && ls -t logs/*.py \| head -20` |
+| 23:07:28 | Bash | Ver o commit da conferência do marco e os logs recentes | `cd /home/ronald/saas-hasner && git show --stat fd6c8c0e \| head -20; echo ===; ls -t logs/ \| head -40` |
+| 23:07:17 | Bash | Ler a saída da medição de ponto fixo e achar o script | `cd /home/ronald/saas-hasner && tail -25 logs/o217_pontofixo.out; echo === ; ls -t logs/*pontofixo* logs/o217* 2>/dev/null` |
+| 23:07:07 | Bash | Localizar a medição de ponto fixo da frota | `cd /home/ronald/saas-hasner && grep -rln '7859\\|7\.859' logs/*.py logs/sombra/*.py app/ponto/management/commands/*.py 2>/dev/null \| head; echo ---; ls -t logs/*ponto_fixo* logs/*pontofixo* 2>/dev/null \| head` |
+| 23:06:52 | Bash | Ler a célula celula/precedencia x um juiz por pergunta | `sed -n '150,185p' core/contratos_estruturais.py` |
+| 23:06:32 | Bash | Rodar a prova de idempotência do col146 em prod | `cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command shell --schema=juliani --command "exec(open('/tmp/o218_prova_col146_RUN.py').read())" 2>&1 \| tee logs/o218_prova_col146.out \| tail -45` |
+| 23:06:17 | Bash | Criar e copiar o arreio da prova | `cd /home/ronald/saas-hasner && cat > logs/o218_prova_col146_RUN.py <<'PY' # -*- coding: utf-8 -*- """ARREIO DA PROVA -- liga a escrita da `o218_prova_col146.py`. O DRY RODOU PRIMEIRO, as 23:06:05 em prod, e confirmou de dentro do banco: celula#118980 col146 2026-09-28 ata.minutos_realizados=541 veredito=concorde via=cartorio celula#118981 col146 2026-09-29 ata.minutos_realizados=545 veredito=conco ...` |
+| 23:06:03 | Bash | DRY da prova: ler a ata das duas células golden | `cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command shell --schema=juliani --command "exec(open('/tmp/o218_prova_col146.py').read())" 2>&1 \| tail -30` |
+| 23:05:59 | Bash | Copiar a sonda para o container | `cd /home/ronald/saas-hasner && docker cp logs/o218_prova_col146.py saas_core:/tmp/o218_prova_col146.py` |
+| 23:05:55 | Bash | Compilar a sonda | `cd /home/ronald/saas-hasner && python3 -m py_compile logs/o218_prova_col146.py && echo COMPILA` |
+| 23:05:51 | Bash | Escrever a sonda de prova do col146 | `mkdir -p /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && cat > /home/ronald/saas-hasner/logs/o218_prova_col146.py <<'PY' # -*- coding: utf-8 -*- """PROVA da O218 em PROD -- clausula PRONTO do aval ("col146 com os dois dias certos") e condicao 4 da DINHEIRO-EM-COMPETENCIA-ABERTA ("resultado com PROVA no RELATO depois"). O QUE ELA PERGUNTA, e nada mai ...` |
 | 23:04:44 | Bash | Ler ata_do_colab | `cd /home/ronald/saas-hasner && grep -n 'def ata_do_colab' -A 25 logs/o209_apply_frota_prod.py` |
 | 23:04:30 | Bash | Ler o cabeçalho do script de apply (imports e constantes) | `cd /home/ronald/saas-hasner && sed -n '1,100p' logs/o209_apply_frota_prod.py` |
 | 23:04:02 | Bash | Somar o pacote separando os dias com lacuna | `cd /home/ronald/saas-hasner && python3 - <<'PY' import json, io PAC = json.loads(io.open('logs/o218_esperado_20261007.json.ok', encoding='utf-8').read()) E = PAC['esperado_por_colab'] LAC = {('82','2026-10-02'),('82','2026-10-04'),('114','2026-10-01'),('114','2026-10-02'), ('303','2026-10-06'),('829','2026-10-01'),('829','2026-10-02'),('829','2026-10-04'), ('868','2026-09-28'),('898','2026-09-30') ...` |
