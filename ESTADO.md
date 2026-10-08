@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 08:26:01.**
+**Medido em 08/10/2026 08:31:31.**
 
 | | |
 |---|---|
@@ -112,23 +112,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-  Ran 5 shell commands
-
-● O sed acertou a linha errada. Reescrevo a sonda inteira:
-
-  Ran 1 shell command
-
-● Background command "Empurrar o marco pela regua" completed (exit code 0)
-
-● O push voltou rc=0. Leio o veredito no remoto, não no tail:
-
-  Ran 1 shell command
-
-● MARCO FECHADO — origin/main = 4d8e37f8, 9968 + 22 testes OK. Trava livre. Pego o próximo da fila 1 no mesmo turno (O211 pouso A) e lanço
-  a suíte contra a cópia:
-
-  Ran 2 shell commands
-
 ● Enquanto a suíte corre, o L-108 do marco que acabou de pousar:
 
   Ran 4 shell commands
@@ -136,13 +119,30 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Quatro dos sete REDs nunca foram escritos como texto — o célula só traz o 1, o 6 e o 7. Derivo os outros das cláusulas literais do aval.
   Monto a cópia do pouso B e leio o idioma de fixture da casa:
 
-● Ler a fixture irma que ja monta colab+EC+praca para regua_para
-  ⎿  $ cd /home/ronald/saas-hasner/app
-     sed -n '1,120p' core/tests/test_regime_por_empresa.py
+  Ran 7 shell commands
 
-✢ Cultivating… (2h 17m 25s · ↓ 288.5k tokens · thinking)
+● A suíte roda contra a cópia do pouso A. Escrevo agora os 7 REDs do pouso B — o caso com a resposta da REGRA antes do código (L-110):
+
+  Ran 2 shell commands
+
+● Escrevo a cura. Primeiro o texto vivo exato do sítio:
+
+  Ran 2 shell commands
+
+● Monto a cura em memória, com âncora única por sítio:
+
+● Aplicar a cura do leitor na copia
+  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
+     cat > $S/patch_b1.py <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     """Pouso B, patch 1: core/regua_cct.py -- o leitor sobe da EMPRESA."""
+     import py_compile, sys, tempfile, os
+     P = os.environ['PB'] + '/app/core/regu…
+
+✢ Compacting conversation… (2h 22m 55s · ↓ 312.6k tokens)
+  ▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 7%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
