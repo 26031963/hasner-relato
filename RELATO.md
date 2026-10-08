@@ -31,6 +31,15 @@ REVERSAO EM UMA LINHA, se o senhor nao quiser: `git revert <este commit>` devolv
   `O211` -- **segundo leitor** de "qual o item em curso". Nao e porta: medido agora, o `PAREI` NAO
   depende dele (`_relato_parou` consulta a lista `_ids_que_nao_andam()`, e `O211` esta entre os **129**
   vivos), entao um `PAREI: ! ... O211` e aceito. Cura = fila de INSTRUMENTO, depois do pouso da O211.
+- **ESTE MARCO NAO PEDE DEPLOY, e o censo e a razao** (DEPLOY JA vale para o que o worker importa). O
+  unico arquivo de produto dos tres commits e `app/core/esteira_vigia.py`. CENSO fechado agora:
+  `grep` de `esteira_vigia` em `app/**/*.py` fora de testes da `core/placar_tickets.py`,
+  `core/integrador_lote.py` e o command `alarme_esteira` -- e **nenhum** `views/urls/middleware/signals`
+  o alcanca, nem em 2o nivel (as 3 mencoes a `placar_tickets`/`integrador_lote` em `gate_cobranca.py`,
+  `placar_estrutural.py` e `registro_baixa.py` sao PROSA, nao import). Os leitores sao scripts de host
+  e `tenant_command`: processo novo a cada chamada, le o DISCO. Entao nao ha worker de gunicorn com a
+  versao velha em memoria -- e sem isso, chamar `bin/deploy.sh` seria reiniciar as tres cascas por
+  nada.
 
 **O ALARME DA ESTEIRA VOLTOU A SER LIDO PRIMEIRO -- e o bug era meu, de ~6 dias atras.**
 `core/esteira_vigia.py::no_relato` promete no proprio docstring que a linha "entra no TOPO do RELATO,
