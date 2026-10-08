@@ -128,6 +128,31 @@ existia e se tornou o caminho UNICO no dia que a ancora saiu de baixo dele.
     1 arquivo / 4 contratos / rc=0 depois, e o membro legitimo manteve os 4 contratos de nome.
   - **PROVA**: `bin/tests/` inteira na arvore com as tres curas -- **64 selos, 0 vermelho**.
 
+- **COMMIT 5 (marco): a CELULA-TURNO-FECHA e CARIMBADA, e a ordem da fila 1 muda no mesmo ato.**
+  O `!` dele de 08/10 responde a pergunta de lei que eu tinha no topo deste RELATO: *"os 4 numeros do
+  passo 6 batem no ar, faltou so o verde das duas celulas cair no mesmo commit"* -- o EFEITO no ar
+  manda, nao a contagem de commits, e a condicao de CAMINHO nao reprova resultado atingido.
+  CONFERIDO NA FONTE antes de carimbar, dentro do `saas_core` (LEI-AKITA 8): `PENDENTES['turno/marcos']`
+  = **0**, `PENDENTES['celula/precedencia']` = **0**, `verde=True` nas **6** celulas das duas familias,
+  `linha_do_placar()` = **contratos_estruturais: 15/20 verdes**, `total()` = **20**; `6319b10c` e
+  `b4372615` provados ANCESTRAIS do HEAD por `git merge-base --is-ancestor`.
+- **a ordem da fila 1 e dele, e o marcador acompanhou**: `ORDEM-VIVA-TOPO` passou de
+  `PLACAR-ESTRUTURAL` para **O211**, com o aval copiado INTEIRO ao lado. Pelo escopo literal
+  (LEI-AKITA 9) a lista dele nao nomeia a O220 nem a O210/O212/O213/O215/O216 -- nao as reinsiro por
+  minha conta.
+  - **ACHADO no ato de mover, e a lei dele JA responde**: `bin/tests/test_hook_nao_cobra_congelado.sh`
+    ficou **VERMELHO** (`o 1o aberto do bloco OBRAS e 'PLACAR-ESTRUTURAL', e o marcador diz 'O211'`),
+    porque ainda exige marcador == 1o aberto da TABELA. E a pergunta que o corte dele de **03/10
+    19:3x** -- a **O158**, ainda nao construida -- manda mudar, literal: *"o marcador ORDEM-VIVA-TOPO
+    passa a ser AUTORIDADE (o selo exige que ele aponte um item que EXISTE e esta aberto)"* e *"o selo
+    DEIXA de exigir que o marcador seja o 1o aberto da tabela"*. Lei ESCRITA, entao nao e PAREI
+    (PAREI-SO-LEI): a O158 vira commit de INSTRUMENTO proprio, que e o ato minimo para a ordem DELE
+    poder pousar. O que eu NAO fiz: retaguear as linhas da tabela para ela concordar com a ordem --
+    isso seria eu decidindo estado de item, que e declaracao dele.
+  - o `lateral de instrumento so no pouso depois da O211` do aval segue valendo: a fila lateral de
+    instrumento (O201, O203, selo do `tabela()`, `bin/dieta_relato.sh`, `bin/ff_pouso.sh`) **nao
+    abre** -- a O158 entra porque BLOQUEIA a ordem dele, nao porque eu abri a fila.
+
 - **o que eu NAO fiz, de proposito**: dedup dentro do `no_relato` -- as 115 copias sao 115 EVENTOS
   reais, os 13 chamadores tem semanticas diferentes, e o acumulo e trabalho da DIETA, que passa a
   dever tambem o envelhecimento de linha de alarme DENTRO da secao pinada, pelo carimbo dela. E nada
