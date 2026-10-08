@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 10:50:45.**
+**Medido em 08/10/2026 10:55:45.**
 
 | | |
 |---|---|
@@ -131,16 +131,16 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Instrumentos todos escritos e compilando. Esperando a suíte fechar (0 FAIL/ERROR até aqui) para então, em sequência: tirar o terceiro
   assert, censo de régua, DIFF da 10 contra o gravado, leitura da 09, docs, selos de host, commit e deploy.
 
-  Esperar a suite liberar a trava e ler o veredito · 1m 55s
+  Esperar a suite liberar a trava e ler o veredito · 6m 55s
   ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
      # espera por ARQUIVO/estado, nunca por pgrep: a trava nomeia o chamador
      until ! bash /home/ronald/saas-hasner/bin/trava_teste.sh --quem | grep -q '^suite:'; do
      sleep 20
      done
-     echo "trava: $(bash /home/r… (1m 54s)
+     echo "trava: $(bash /home/r… (6m 54s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Cultivating… (4h 42m 9s · ↓ 579.3k tokens)
+· Cultivating… (4h 47m 9s · ↓ 579.3k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                     8% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
