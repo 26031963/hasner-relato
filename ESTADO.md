@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 05:30:45.**
+**Medido em 08/10/2026 05:35:45.**
 
 | | |
 |---|---|
@@ -112,38 +112,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Only O221, and it has a line. Checking the prepared L-101 item against the standing rule that an ESTADO only moves in the commit that
-  changes that law's code:
-
-  Ran 2 shell commands
-
-● L-101's row is genuinely lying now, and neither pouso that landed the code/test touched LEIS.md. But the marco doesn't change L-101's
-  code or test, so moving its ESTADO there would break your standing rule. Preparing it and sending it up as a lei question instead:
-
-  Ran 2 shell commands
-
-● Gap work complete and durable; 39 minutes left. Continuing the PLACAR-ESTRUTURAL item read-only — auditing whether R1–R5's numbers are
-  cheaply falsifiable the way R6's were:
+● I counted teste keys myself instead of calling the function — exactly the replication LEI-AKITA 8 forbids. Asking the authority:
 
   Ran 1 shell command
 
-● R1/R2/R5 and R3/R4 are motor-and-sombra numbers — correctly deferred. But R6's sentence carries a second cheap number next to the one I'm
-  curing: "17 declaradas". Measuring it before I land a fix that leaves its neighbour stale:
+● declaradas() = 17 — accurate. My hand count of 16 missed GLOBAL; the law was right about replication and I was the one who replicated. So
+  only the 14/20 is stale. Checking how my cure treats its neighbour:
 
-  Medir verdes e declaradas na fonte
+  Ran 1 shell command
+
+● The cure's CONTRATOS number is a hand-copied literal, dated today. That's the same shape I just refused in item (5). Before landing it,
+  measuring whether the ORIGEM cure — the placar calling the juiz — is actually blocked:
+
+  Ran 1 shell command
+
+● linha_do_placar() works with no Django at all. So the premise behind the hand-copied literal may be wrong. The real question is whether
+  app/ is on sys.path when gerar_estado.py loads the placar by path:
+
+● Ler o linha_do_placar do placar e seus imports por AST
   ⎿  $ cd /home/ronald/saas-hasner
+     echo "=== placar_estrutural.py :360-400 ==="
+     sed -n '360,400p' app/core/placar_estrutural.py
+     echo
+     echo "=== imports reais do modulo (AST, nao texto) ==="
      PYTHONPATH=app python3 - <<'PY'
-     from core import contratos_estruturais as CE
-     M = CE.MATRIZ
-     verdes = sum(1 for c in M.values() if c.get('verde'))
-     declaradas = sum(1 for c in M.values() if c.get('teste'))
-     print(' celulas na MATRIZ :', len(M))
-     print(' verde=True :', verde…
+     import ast,sys
+     src=open('app/core/placar_estrutural.py').read()
+     t=ast.parse(src)
+     fo…
 
-* Compacting conversation… (11h 21m 56s · ↓ 1.1m tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 37%
+✶ Beboppin'… (11h 26m 56s · ↓ 1.1m tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    0% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
