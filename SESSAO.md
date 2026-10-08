@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 07/10/2026 22:17:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (422.4 MB). Acoes na janela: **375**.
+**Medido em 07/10/2026 22:22:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (422.4 MB). Acoes na janela: **376**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 22:18:42 | Bash | Checar terceira passada | `cd /home/ronald/saas-hasner && grep -E 'ATA SE MOVEU\|DELTA DE CONJUNTO\|soma do realizado\|censo da O218' logs/o218_idem3.out 2>/dev/null; tail -2 logs/o218_idem3_lancador.out` |
 | 22:15:53 | Bash | Rodar terceira passada para provar convergencia | `cd /home/ronald/saas-hasner && nohup env SOMBRA_ARVORE=/home/ronald/wt-lavra/app bash bin/sombra.sh --rodar relavra10_frota_20261005.py o218_idem3 > logs/o218_idem3_lancador.out 2>&1 & echo "3a passada lancada pid=$!"` |
 | 22:12:20 | Bash | Ler a decisao do veredito cobrado | `cd /home/ronald/wt-lavra && sed -n '625,655p' app/ponto/services/cartorio.py` |
 | 22:12:15 | Bash | Ver se o veredito cobrado passa pela cura | `cd /home/ronald/wt-lavra && echo "=== 'cobrado' aparece no meu diff?"; git diff fd6c8c0e --unified=0 -- app/ponto/services/cartorio.py app/escala/utils.py app/ponto/turnos.py \| grep -nE '^[+-].*cobrado' \| head -10; echo "(vazio = o veredito cobrado nao passa pelo que eu mudei)"; echo "=== quem decide cobrado"; grep -rn "'cobrado'" app/ponto/services/cartorio.py \| head -6` |
