@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 11:48:01.**
+**Medido em 08/10/2026 11:53:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `4adbbfff O211 pouso A: o CADASTRO da aplicacao de convencao nasce, e nenhum centavo se move` |
+| `HEAD` local | `d6cb81c5 O211 pouso B: a regua de dinheiro sobe da EMPRESA, e a praca so entra por linha declarada` |
 | `origin/main` | `4adbbfff O211 pouso A: o CADASTRO da aplicacao de convencao nasce, e nenhum centavo se move` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -22,22 +22,17 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+d6cb81c5 O211 pouso B: a regua de dinheiro sobe da EMPRESA, e a praca so entra por linha declarada
 4adbbfff O211 pouso A: o CADASTRO da aplicacao de convencao nasce, e nenhum centavo se move
 4d8e37f8 O158: o marcador ORDEM-VIVA-TOPO passa a ser AUTORIDADE, e a pergunta do selo muda em vez da tabela
 2dbd2007 CELULA-TURNO-FECHA CARIMBADA FECHADA, e a ordem da fila 1 passa a ser a dele
 a96a5256 o segundo escritor do RELATO em bin/ cai: o vigia DELEGA o no_relato, e o selo que ficou cego reabre o universo pela lei que ele declara
-58df169a a nota do selo da cura 1 passa a dizer o MOLDE de cada numero -- tres dos meus estavam errados ou sem rotulo
 ```
 
 ## `git status --short`
 
 ```
  M app/config/crons_duracao.json
- M app/docs/BACKLOG.md
- M app/docs/HANDOFF-SESSAO.md
- M app/docs/LEIS.md
- M app/docs/RELATO.md
- M app/docs/TICKETS.md
  M bin/sombra.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -115,38 +110,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/patch_leis.py (113
-     lines)
-  ⎿  Referenced file config/crons.py
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bgt1l604k.output (36 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bpxqmktlu.output (17 lines)
-
-● Task "RED e construção do segundo intervalo" completed in background
-
-● BACKLOG patched. Selos de host que leem o BACKLOG:
-
-  Ran 11 shell commands
-
-● Agora o RELATO com o DIFF publicado ANTES do apply:
-
-  Ran 12 shell commands
-
 ● Prod's gravado moveu entre as duas fotos. Isso contradiz uma afirmação que escrevi — vou medir quem escreve:
 
   Ran 7 shell commands
 
 ● Medido: o gravado se move por evento. Minha afirmação estava errada — vou corrigi-la nos dois sítios antes de qualquer apply:
 
-● Anexar a reversao ao artefato do DIFF e reconferir o selo
-  ⎿  $ cd /home/ronald/saas-hasner
-     cat >> logs/o211b_diff_frota_081125.txt <<'FIM'
-     == REVERSAO (condicao 2 da DINHEIRO-EM-COMPETENCIA-ABERTA), e a ORDEM importa ==
-     arquivo: logs/o211b_foto_reversao_202610_114522.csv (587 linhas, md5 a4ea966cd55dedf903f789b3f6147fb0,
-     tirada 08/10 11:45 de PROD por COPY .…
+  Ran 5 shell commands
 
-✢ Cultivating… (5h 39m 25s · ↓ 648.5k tokens · thinking)
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+
+  Ran 2 shell commands
+
+● Pré-flight do portão antes de qualquer toque na árvore:
+
+  Ran 3 shell commands
+
+● Árvore limpa e portão verde. Copiando os 16 arquivos, commit e deploy sem nada no meio:
+
+  Committed d6cb81c5, ran 2 shell commands
+
+● NO AR. PROVA:
+
+  Ran 2 shell commands
+
+● A 09 intacta e a régua certa em prod. O contador do apply está em 0 porque nenhum dos 70 bateu ainda — vou registrar isso e remedir:
+
+● Running 1 shell command…
+
+· Cultivating… (5h 44m 55s · ↓ 658.0k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                   11% until auto-compact
+                                                                                                                    2% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

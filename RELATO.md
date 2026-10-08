@@ -60,10 +60,15 @@ producao: a **BATIDA** (`ponto/registro_batida.py:136`), a decisao de HE (`ponto
 de celula (`ponto/portas/celula.py:318`) e a validacao de pergunta (`chamados/services/validacao.py:159`).
 Hoje bateram ponto **238 colabs em 333 batidas** -- e e isso que move 254 linhas.
 **O QUE ISSO MUDA NA REVERSAO, e e a parte que eu teria errado:** o gravado volta em DUAS etapas e **nesta
-ordem** -- (1) `git revert <este commit>` + `bin/deploy.sh`, para o LEITOR voltar; (2) so entao a foto de
-`logs/o211b_foto_reversao_202610_114522.csv` (587 linhas, md5 `a4ea966cd55dedf903f789b3f6147fb0`) reescreve
-os pares (colab, campo). Na ordem inversa a reversao nao segura: a primeira batida de cada colab chamaria
-`recalcular_por_evento` e reescreveria o valor pela regua nova. **O que NAO tem cron continua sem cron**: a
+ordem** -- (1) `git revert <este commit>` + `bin/deploy.sh`, para o LEITOR voltar; (2) so entao os valores
+de `logs/o211b_foto_reversao_202610_114522.csv` (587 linhas, md5 `a4ea966cd55dedf903f789b3f6147fb0`) voltam
+**pela PORTA** `ponto/services/fechamento.py::restaurar_fechamento(colaborador_id, mes, ano, campos,
+motivo=...)`, **e so nos campos que o DIFF nomeia** -- nunca por `FechamentoMensal.objects.update()` direto,
+que o selo do chokepoint (`folha.tests.test_chokepoint_folha_gate`, allowlist VAZIA) barra com razao:
+**reverter tambem e gravar**. A foto e a PROVA DO ANTES, nao o mecanismo -- e restaurar a linha INTEIRA
+apagaria o efeito legitimo das batidas posteriores a 11:45 em `horas_trabalhadas` e `minutos_realizados`.
+Na ordem inversa a reversao nao segura: a primeira batida de cada colab chamaria `recalcular_por_evento` e
+reescreveria o valor pela regua nova. **O que NAO tem cron continua sem cron**: a
 relavratura de FROTA segue sendo ato do DP; o que anda sozinho e o colab que bate ponto.
 **ACHADOS REGISTRADOS, NAO CURADOS** (regra de negocio fora do pedido pede o seu `!`), somando aos tres do
 pouso A: (4) **a guarda da L-092 recusa `somente_leitura`** -- para medir a 09 sem gravar eu tive de passar
@@ -77,7 +82,8 @@ RED de teste e era **colisao de `# -*- coding: ascii -*-`** -- arquivo que decla
 nao-ASCII falha no IMPORT, com cara de ERROR de suite e corpo de lapso de autoria. Aconteceu duas vezes
 hoje, e fica aqui para nao gastar uma terceira meia hora.
 **O QUE A MIGRATION 0056 CUSTA NO PORTAO, e sai dito antes de doer:** ela pousa **depois** do dump de hoje
-(04:00), entao o proximo `bin/sombra.sh --conferir` ou `--refazer` puro vai carimbar **`d_mig=1`** -- nao
+(04:00), entao o proximo `bin/sombra.sh --refazer` puro vai carimbar **`d_mig=1`** (o `--conferir` LE o
+carimbo, quem o escreve e o refazer) -- nao
 e dano, e o portao certo dizendo a verdade (o `sombra.sh` **compara** `django_migrations` prod x sombra e
 **nunca migra a sombra**). Qualquer deploy a mais hoje exige **`--refazer --dump-agora`** primeiro, e a
 espera e **pelo ARQUIVO** `logs/crons_em_curso/sombra.sh_-.*`, nunca por `pgrep`.
