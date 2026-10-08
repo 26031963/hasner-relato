@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 11:22:07.**
+**Medido em 08/10/2026 11:27:29.**
 
 | | |
 |---|---|
@@ -111,42 +111,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  Ran 4 shell commands
-
-● Dois fatos a nomear, não a suavizar: col457 mexeu e não troca de régua, e 21 que trocam têm noturno > 0 e ficaram parados. Vou medir os
-  dois.
+● VEREDITO=LIMPO — 0 fora, e a emp3 (clt) com 0 trocas e 0 centavos. Resta UM caso que não posso deixar sem explicação: um 12x36 que troca
+  de régua, tem noturno > 0 e não moveu. Pelo cl.38-d ele deveria mover.
 
   Ran 1 shell command
 
-● col457 moveu horas_noturnas 10.29 → 8.00. O censo tinha universo situacao='ativo' (546), e o fechamento tem 587 — então a hipótese é
-  cobertura do censo, não deriva. Mas hipótese não é medição: pergunto à função real.
+● col373: 12x36 na escala ATIVA, 1,30 h noturna, 4 inconsistências. Meu censo leu o ciclo da escala ativa; o motor lê o tipo_escala de cada
+  DIA. Antes de chamar isso de bug ou de normal, meço o dia.
 
   Ran 1 shell command
 
-● col457 é desligado — e o fechamento da 10 tem exatamente 546 ativos + 41 desligados = 587. O censo pediu só ativos, então ele não era
-  deriva: era colab fora do universo que eu censei. E a função real diz que ele troca de régua (emp2, cct, Londrina). Fecho a lacuna
-  medindo o censo no universo EXATO do DIFF, e no mesmo ato pergunto por que 21 com noturno > 0 ficaram parados.
+● O achado já apareceu antes do erro: ele trocou de escala dentro da janela — 6x1 até 06/10, 12x36 a partir de 07/10. Então "ciclo=12x36" é
+  a escala ativa, não a dos dias. Corrijo a assinatura e fecho a medição.
 
   Ran 3 shell commands
 
-● regua_para devolve a régua da EMPRESA; o CICLO entra depois, em get_motor_cct (linhas 314-324). Então "troca de régua" é o limite certo
-  do DIFF, e quem mexe centavo dentro dele depende do ciclo. Meço o censo no universo exato (587) com o ciclo ao lado.
+● Medido, e responde: a noturna do col373 nasce em dias cujo DNA diz tipo_ciclo: '6x1' (ec#325, até 06/10) e termina às ~22:30 — dentro de
+  22h-05h. A cláusula 38-d só alcança 12x36 e a prorrogação só alcança hora depois das 05h: zero é a resposta certa. O "12x36" do meu censo
+  era o rótulo da escala ATIVA, não o do dia — uma derivação paralela na minha coluna explicativa, que vai nomeada.
 
-● Corrigir o campo e rodar o censo nos dois codigos
-  ⎿  $ cd /home/ronald/saas-hasner
-     S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
-     sed -i 's/colaborador_id__in=universo, ativo=True/colaborador_id__in=universo, ativa=True/' $S/censo_regua2.py
-     grep -n 'ativa=True' $S/censo_regua2.py
-     for par in "antes redB…
+  Fixo os números em arquivo antes de seguir.
 
-✢ Cultivating… (5h 13m 30s · ↓ 601.3k tokens)
+  Ran 1 shell command
+
+● Fixo. Lanço a leitura da 09 em segundo plano (só leitura, pela porta declarada) enquanto consulto o revisor antes da cadeia de apply.
+
+  Ran 2 shell commands
+
+● Advising using Fable 5.1
+
+✢ Cultivating… (5h 18m 52s · ↓ 611.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
