@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 07/10/2026 22:44:31.**
+**Medido em 07/10/2026 22:50:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `cd37557a [O220] a dieta de carga: a casa inteira se lia em 1,3 MB de prosa, e -275.549 B sairam sem que uma regra mudasse` |
+| `HEAD` local | `1b6d5d02 [O218] pouso da raia-lavra: a bateria da lavratura entra no main com o DIFF de frota ja publicado` |
 | `origin/main` | `fd6c8c0e [O209] a conferencia do marco: NAO virou 15/20, e o que falta sao 2 dia-colab de 7.859` |
-| commits a subir (`ahead`) | **1** |
+| commits a subir (`ahead`) | **3** |
 
 ## Fabrica
 
@@ -22,21 +22,19 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+1b6d5d02 [O218] pouso da raia-lavra: a bateria da lavratura entra no main com o DIFF de frota ja publicado
+107e3bb5 [O218] a bateria da lavratura: a passada 1 escrevia lampada nova com minuto velho, e o match do dia dependia de onde a janela comecava
 cd37557a [O220] a dieta de carga: a casa inteira se lia em 1,3 MB de prosa, e -275.549 B sairam sem que uma regra mudasse
 fd6c8c0e [O209] a conferencia do marco: NAO virou 15/20, e o que falta sao 2 dia-colab de 7.859
 212b25a7 [O209] a ata da frota na 10 relavrada em prod: 92 de 92 casados com a sombra e a 09 intacta
-c8031f6d [O195] a relavratura 10 pousa nos 3 colabs: a ata anda -450 como publicado e a 09 nao se move
-edb40127 [O208] o contador do recalculo era cego ao campo da cura: mexidos=36 eram 174
 ```
 
 ## `git status --short`
 
 ```
  M app/config/crons_duracao.json
- M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
  M app/docs/RELATO.md
- M app/docs/TICKETS.md
  M bin/sombra.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -111,42 +109,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  uma suite inteira:
-
-  Ran 3 shell commands
-
-● Bloco ainda nos 69 comandos. Preparo o resto do ato sem tocar nada que ele leia — a célula ESTADO da L-103, que muda no commit do merge:
-
-  Searched for 1 pattern, ran 1 shell command
-
-● A cura é em montar_grade_prevista_periodo_por_turno — o sítio exato que a L-103 protege. Minha mensagem omitiu o sufixo; corrijo antes
-  que o commit saia da raia:
-
-  Amended commit 107e3bb5, ran 1 shell command
-
 ● Preparo a mensagem do merge enquanto o bloco fecha:
 
   Ran 4 shell commands
 
 ● A régua pegou antes do push, que é para isso que ela serve. A O220 precisa de linha própria:
 
-● Adicionar linha do O220 no TICKETS e reconferir
-  ⎿  $ python3 - <<'PY'
-     import io
-     p='docs/TICKETS.md'
-     s=io.open(p,encoding='utf-8').read()
-     anc="|----|--------|-------|--------|--------|------|------|-------------|------|\n"
-     assert s.count(anc)==1
-     linha = (
-     "| O220 | instrumento (contexto) | **A CASA INTEIRA SE LIA EM 1,3 MB DE PROSA** -- DIETA-DE-CAR…
+  Ran 4 shell commands
 
-✢ Beboppin'… (4h 35m 42s · ↓ 401.7k tokens)
+● Bloco 69/69, erro=0, SOMBRA_STATUS=OK contra a árvore da raia. O portão do deploy está pago. Confiro e entro no ato único:
+
+  Ran 1 shell command
+
+● Background command "Esperar o bloco terminar por arquivo" completed (exit code 0)
+
+● Portão pago e remoto parado. Escrevo o patch da L-103 antes de abrir o ato, para que entre merge-commit e deploy não haja nada a pensar:
+
+  Read 1 file
+
+● Ato único — merge, L-103, commit e deploy sem nada no meio (L-107):
+
+  Committed 1b6d5d02
+
+● Deploy OK às 22:48 — 1b6d5d02, três cascas juntas, três rotas provadas, importerror_500=0. Agora o apply em prod. Leio o veículo antes de
+  armá-lo:
+
+● Ver guardas de entrada e reversão
+  ⎿  $ cd /home/ronald/saas-hasner && sed -n '79,130p' logs/o209_apply_frota_prod.py && echo "=== makedirs:" && grep -n 'makedirs\|REV_CAM'
+     logs/o209_apply_frota_prod.py | head
+
+* Beboppin'… (4h 41m 12s · ↓ 407.3k tokens · thinking some more)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    9% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
