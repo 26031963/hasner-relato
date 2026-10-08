@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 01:08:31.**
+**Medido em 08/10/2026 01:14:01.**
 
 | | |
 |---|---|
@@ -33,8 +33,10 @@ b4372615 [O218] o marco da lavratura: a celula do juiz da celula fecha por EFEIT
 
 ```
  M app/config/crons_duracao.json
+ M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
  M app/docs/RELATO.md
+ M app/docs/TICKETS.md
  M bin/sombra.sh
 ?? bin/tests/test_papel_prazo_nao_deriva.sh
 ?? esteira.pausada
@@ -110,11 +112,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  Ran 1 shell command
-
-● Pouso 1 no remoto: 97e9e043..bb0bd0fa, suite 9675 OK (skipped=42) + control-plane 22 OK. Agora a origem do "não carimbar o passo 6":
-
   Searched for 1 pattern, ran 1 shell command
 
 ● Nenhuma dessas linhas é ! dele — são meus próprios registros do estado de então. Antes de carimbar, a medição honesta do que o selo
@@ -137,9 +134,14 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-● Procurar a frase no MESMO commit nas fontes de aval
+  Ver os regexes e o que o hook aponta
+  ⎿  $ cd /home/ronald/saas-hasner && grep -n "_NAO_ANDA\s*=\|_FECHADO\s*=" -A4 bin/hook_stop_fila1.py | head -20; echo "=== o que o hook
+     aponta agora ==="; python3 -c "
+     import sys; sys.path.insert(0,'bin')
+     import importlib.util
+     spec=importlib.util.spec_from_file_location('h','bin/hook_stop_fila1.py'); …
 
-✢ Beboppin'… (6h 59m 42s · ↓ 572.2k tokens · thought for 8s)
+✢ Beboppin'… (7h 5m 12s · ↓ 587.0k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

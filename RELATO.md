@@ -1,14 +1,31 @@
 # RELATO — esteira saas-hasner
 
-A O222 esta **NO AR** (`97e9e043`, deploy 08/10 00:09:48) e o placar, perguntado ao juiz dentro do
-`saas_core`, diz **15/20 verdes**. A esteira esta na **O221**, pouso 1: o PRODUTO da O139 (5 arquivos,
-`juizes_por_varredura` **27 -> 25** remedido na copia pela funcao real, diferenca simetrica tupla-x-funcao
-vazia) juntou ao main **sem um conflito** na copia `wt-o139`, e espera a suite dela.
+A **O221 esta NO AR nos DOIS pousos** (`bb0bd0fa` produto as 00:37:34; o instrumento neste push) e o
+placar, perguntado ao juiz dentro do `saas_core`, diz **15/20 verdes**. A O139 fechou: o papel `prazo`
+(L-101) tem cadastro, o contador `juizes_por_varredura` caiu de **27 para 25** medido pela funcao real, e
+o selo de host que cobra o papel **existe e MORDE**.
 **PROVA:** `linha_do_placar()` dentro do `saas_core` = `contratos_estruturais: 15/20 verdes`;
-`deploy: OK -- migrations em dia, tres cascas reiniciadas juntas, tres rotas provadas` (00:09:48);
 suite da copia `wt-o139` = `Ran 9675 tests in 621.827s` -> `OK (skipped=42)`, rc=0;
-`juizes_por_varredura()` na copia = **25**, no main = **27**, `tupla ^ funcao = []`;
+`juizes_por_varredura()` na copia = **25**, no main (antes) = **27**, `tupla ^ funcao = []`;
+`bin/tests/test_papel_prazo_nao_deriva.sh` = rc **0** na arvore viva e rc **1** com `vigia_de_hora`
+devolvido a `JUIZES_POR_VARREDURA` na copia;
 `janela_auth` de `app/api/views.py` = barrado entre 23:20 e 06:00 (`bin/auth_sitios.txt`).
+
+**A CELULA-TURNO-FECHA NAO FOI CARIMBADA, e a pergunta e de ESCOPO DE AVAL, nao de execucao** (nao devolvo
+turno por ela -- PAREI-DE-LEI-NAO-DEVOLVE-TURNO). Os **seis resultados do passo 6 medem VERDADE agora**, no
+ar, com `bb0bd0fa`: `PENDENTES['celula/precedencia']` = **0**, `PENDENTES['turno/marcos']` = **0**,
+`verde=True` nas **duas** celulas de "um juiz por pergunta", `linha_do_placar()` no container = **15** --
+exatamente o numero que o aval previu. O que NAO fecha e a **condicao de CAMINHO**: o seu corte
+**ESPINHA-ANTES-DA-UI** (`docs/CORTES.md:120`, 03/10 08:13) escreve o PRONTO de cada celula como *"lista de
+excecoes em ZERO, selo de idempotencia da porta, **verde=True no mesmo commit**"*, e o passo 6 pede as
+**duas** no mesmo commit. MEDIDO commit por commit: **turno cumpriu** (`PENDENTES` a 0 **e** `verde=True`
+no mesmo `6319b10c`); **celula nao** -- os pendentes dela zeraram em `fdd6f42c` (O191 passo 5) e o
+`verde=True` so veio em `b4372615` (O218), porque eu a segurei DE PROPOSITO esperando o numero chegar ao
+GRAVADO, e quem a fechou no fim foi o EFEITO MEDIDO do ponto fixo (9.008/9.008), nao a relavratura. Pela
+LEI-AKITA 9 o escopo do aval e literal, entao a celula do marco fica **RESULTADO ATINGIDO, carimbo
+esperando o seu `!`** em vez de eu me dar o verde. Frase pronta: *"! carimba a CELULA-TURNO-FECHA como
+FECHADA -- os 4 numeros do passo 6 batem no ar, e a unica coisa que faltou foi o `verde=True` das duas
+celulas cair no MESMO commit (turno em `6319b10c`, celula em `b4372615`)."*
 
 **A `raia-chamado` (`wt-esmeril2`, `142238fc`) NAO POUSA AGORA, e o motivo e um portao DECLARADO, nao um
 `!` que falte: ela toca `app/api/views.py`, sitio de auth da lista `bin/auth_sitios.txt` (10 declarados),
@@ -44,6 +61,36 @@ estas palavras, que *"o que 'fechado' quer dizer, **lavra** e reabertura: SEM ju
 chamado pode NASCER numa competencia que o Dominio ja pagou?** -- nao ha L-NNN que diga sim nem nao, e nao
 e decisao tecnica (e dinheiro do colaborador na mesa do DP). Nao devolvo turno por isso
 (PAREI-DE-LEI-NAO-DEVOLVE-TURNO): a pergunta fica aqui com os numeros e a esteira **segue a O211**.
+
+## O221 POUSO 2 — **O INSTRUMENTO: O SELO DO PAPEL `prazo` MORDE, E O QUE ELE NAO PROVA ESTA DITO** (08/10 01:1x)
+
+**PROVA:** `bin/tests/test_papel_prazo_nao_deriva.sh` (329 linhas) na arvore VIVA =
+`papel_prazo: 2 cron(s) de papel prazo; juizes_por_varredura=25` / `papel_prazo_nao_deriva: OK`, rc **0**;
+a pasta inteira `bin/tests/` na arvore viva = `pasta_rc=0`; **RED do sentido (2)** forcado na copia
+`wt-o139` -- `vigia_de_hora` devolvido a `JUIZES_POR_VARREDURA` -- deu rc **1** com uma FALHA literal:
+``vigia_de_hora` DELEGA o prazo ao juiz da casa e segue em JUIZES_POR_VARREDURA:
+['app/ponto/services/vigia_de_hora.py:73 marcos_vencidos']``; desfeito, a copia voltou **byte a byte**
+(`cmp -s` = igual) e o selo voltou a rc **0**.
+
+**O QUE ESTE POUSO *NAO* PROVOU, e eu devo a linha porque a mensagem do pouso 1 afirmou mais do que media.**
+A mensagem de `bb0bd0fa` credita ao selo a prova de que `lavrar_previsto_cego` tem papel declarado. **O selo
+nao diz isso** -- a saida dele conta cron de papel `prazo` e o contador da divida, nada mais. **Quem prova e
+a leitura do cadastro pela funcao real:** `PAPEL_DO_CRON['lavrar_previsto_cego'] == 'lavra'` e
+`sem papel declarado == []` sobre os **71 crons nomeados**, medidos depois do pouso. A afirmacao era
+verdadeira; a TESTEMUNHA citada era a errada, e trocar a testemunha e' o que a LEI-AKITA 2 cobra.
+
+O **sentido (1)** do selo (papel `prazo` com derivacao propria = VERMELHO) nao foi forcado contra um cron
+real nesta arvore -- ele responde pelo **caso sintetico interno** do proprio selo, que e o anti-vacuidade:
+dois corpos `rodar` montados no arquivo, um que delega (`marcos_vencidos`) e um que compara
+`agora - x.criado_em > timedelta(days=4)`, com os status ESPERADOS assertados. Se as funcoes de AST
+pararem de achar qualquer coisa, essa assercao fica VERMELHA -- e e por ela que o selo nao passa por
+ausencia de sinal. Dito com esta clareza para que ninguem leia o selo como mais largo do que e': a
+docstring dele ja nomeia o buraco MEDIDO (`varrer_pares_embutidos:245-250` monta par na mao fora do
+`corpo` declarado, e por isso o `detectar_par_relampago` **nao** ocupa o papel hoje).
+
+**POR QUE O INSTRUMENTO VEIO SOZINHO** (L-105): `bin/`, selo de host e portao de push nao pousam junto com
+produto. O pouso 1 levou os 5 `.py`/derivados; este leva 1 arquivo de `bin/tests/` e os docs do marco. Zero
+`.py` servido pelo `saas_ui`/`saas_core` muda neste ato -- o container nao monta `bin/`.
 
 ## O221 POUSO 1 — **O PRODUTO DA O139 NO AR, E O INSTRUMENTO FICOU DE FORA DE PROPOSITO** (08/10 00:37:34)
 
