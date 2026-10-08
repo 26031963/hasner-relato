@@ -1,5 +1,95 @@
 # RELATO — esteira saas-hasner
 
+## O214 ITEM 1 — **O APPLY DA 10, E O HASH QUE NAO E TESTEMUNHA** (08/10 19:0x→19:2x)
+
+**Aval dele de 19:1x, literal:** *"o apply da recusa de ponta pequena da 10 foi rodado por mim no shell em
+08/10 19:07: 2685 dias, 259,6 h, hash do fechamento identico nas 4 empresas, segundo ensaio = 0, reversao em
+logs/ponta_pequena (...). registra a prova no RELATO sem rodar de novo."* **Nao rodei de novo.** O que segue
+e LEITURA do que ficou gravado — e eu perguntei a autoridade, nao ao resumo (LEI-AKITA 8).
+
+### O numero dele confere, e abre
+`DecisaoHE` na janela da 10/2026 (`periodo_apuracao(10, 2026, corte_da_empresa)` — nunca 21 cravado):
+
+```
+emp2 janela 2026-09-21..2026-10-20   origem=sistema 1971   origem=admin 0
+emp3 janela 2026-09-21..2026-10-20   origem=sistema  596   origem=admin 0
+emp4 janela 2026-09-21..2026-10-20   origem=sistema  118   origem=admin 0
+TOTAL origem=sistema na 10/2026 = 2685
+```
+
+**2.685**, exatamente o numero dele, e `origem='admin'` = **0** nas tres — o automatismo nao pisou em
+decisao de gente nenhuma.
+
+### O CORTE SE PROVA NOS DOIS LADOS (e aqui havia um numero para explicar)
+As reversoes listam **3.075 pares** (2279 + 675 + 121), nao 2.685. A diferenca de **390** nao e perda: e o
+proprio limite aparecendo, medido nos dois lados:
+
+```
+COM linha gravada: n=2685   minutos min=1    max=15    soma=15.577 min = 259,6 h
+SEM linha gravada: n= 390   minutos min=16   max=129
+```
+
+Nenhum dia acima de 15 min foi decidido, e nenhum dia de 15 ou menos ficou sem decisao. A reversao guarda os
+**candidatos** (o dia com HE pendente), a decisao e so da **ponta pequena** — e os 390 de 16 a 129 min sao
+justamente os que ficam para o admin. As **259,6 h** sao a soma dos minutos gravados, nao uma conta paralela.
+
+### O HASH: o da 09 e testemunha, o da 10 NAO E — e esta e a correcao ao resumo
+O que o aval da O214 pedia esta **intacto e medido**:
+
+```
+FechamentoMensal 09/2026   607 linhas  4da388d4...e37a3e5   IDENTICO ao de antes
+exp#24 emp3 09/2026  hash=5c503b95f9f9cd35  invalidada_em=None   IDENTICO
+exp#25 emp4 09/2026  hash=84c78cd0871f5f52  invalidada_em=None   IDENTICO
+exp#27 emp2 09/2026  hash=361d0f9685f86d3a  invalidada_em=None   IDENTICO
+(e as 6 exportacoes mais antigas, todas identicas, nenhuma invalidada)
+```
+
+**Mas o `FechamentoMensal` da 10/2026 MUDOU** — `127d6a83...` -> `d6422334...`, com as mesmas 587 linhas. Eu
+ia carimbar `MOVEU — PAREI` com esse numero. **Nao e isso, e o erro era meu de testemunha**: a 10 e a
+competencia ABERTA, e ela e relavrada o dia inteiro. Medido, em hora LOCAL:
+
+```
+linhas da 10/2026 atualizadas HOJE: 358 de 587
+por hora: 01h=1 05h=7 06h=23 07h=24 08h=1 10h=2 11h=4 12h=5 13h=55 14h=9 15h=28 16h=26 17h=45 18h=75 19h=53
+atualizadas ANTES das 19:07 (a hora do apply dele) = 353
+atualizadas 19:07 ou depois                        =   5
+```
+
+**353 das 358 mudaram antes de ele rodar**, espalhadas por **quinze horas diferentes do dia**. O hash de uma
+competencia aberta nao responde *"nada se moveu"*: ele muda por desenho, porque a corrente de cron relavra a
+10 continuamente. A testemunha de que nenhum centavo saiu do lugar e o **gravado da 09** e o **TXT vigente**,
+e os dois estao identicos — que e a condicao LITERAL do aval. Mover a 10 e exatamente o que a
+**DINHEIRO-EM-COMPETENCIA-ABERTA** pre-aprova, com DIFF publicado, reversao em `logs/` e prova depois: os
+tres estao.
+
+Fica a licao, que e de LEITOR e nao de dinheiro: **eu comparei o hash de um universo que tem outro escritor
+andando.** Hash so e testemunha de imobilidade onde ha UM escritor e ele esta parado.
+
+### A 09 SEGUE SEM APPLY, e isso e um numero, nao uma impressao
+Medido na mesma autoridade, janela `periodo_apuracao(9, 2026, corte)`:
+
+```
+emp2 09/2026 janela 2026-08-21..2026-09-20   sistema=0   admin=0
+emp3 09/2026 janela 2026-08-21..2026-09-20   sistema=0   admin=0
+emp4 09/2026 janela 2026-08-21..2026-09-20   sistema=0   admin=0
+```
+
+O seu aval de 19:1x fala **so** da 10, e a 09 esta como estava: **zero** decisao gravada, ensaio pronto e
+publicado (4.692 dias / 26.374 min / **439,6 h**, 681 dias restando para o admin — 540+135+6), hashes de
+antes em `logs/o214/hash_antes_09.txt`. Ela espera **uma linha sua** (o `!`), e esta ao pe deste RELATO: o
+classificador do harness me recusou a execucao duas vezes, com a mensagem de permissao — nao foi lei nem
+duvida minha.
+
+### O CRON DO ITEM 1 ESTA INSTALADO
+Aval dele de 19:0x: *"o noturno.py de 02:33 esta avalizado junto, e hora derivada; instala."* O `check` de
+antes mostrou **quatro** linhas de diferenca e nada mais — as tres caudas
+`encadeado.sh recusar_ponta_pequena lavrar_he_pendente - 900 --apply` nas correntes do cartorio (06:27 emp2,
+06:29 emp3, 06:31 emp4) e o `noturno.py` 02:37 -> 02:33. `bin/crons.sh install` -> **102 linhas**, e o
+`check` depois: `crontab == config/crons.py (102 linhas)`. Reversao:
+`logs/crontab_backup_20261008_190813.txt`.
+
+---
+
 ## O214 ETAPA 0 + ITEM 1 — **A PONTA PEQUENA E RECUSADA PELO SISTEMA, COM TRILHA, E NENHUM CENTAVO SE MOVE** (08/10 14:2x→17:3x)
 
 **O aval dele de 05/10 18:0x, literal:** *"ITEM 1 PONTA PEQUENA: dia com minutos fora do marco <= limite e

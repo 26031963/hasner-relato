@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 19:13:01.**
+**Medido em 08/10/2026 19:18:08.**
 
 | | |
 |---|---|
@@ -34,6 +34,8 @@ f189ce0a O211 achado 3: o cadastro que decide a regua sai da edicao livre do adm
 ```
  M app/config/crons_duracao.json
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/PROMPTS.md
+ M app/docs/RELATO.md
  M bin/sombra.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -114,35 +116,35 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   Ran 1 shell command
 
-● 2.685 confirmado pela autoridade, e abre em 1971/596/118 — o número dele. Sobram 390 candidatos sem linha; isso eu meço antes de
-  publicar:
+● Confirmado: views_core.py:942 só lê o cru e repassa — nenhum parse. E os fromisoformat de 1246/2838 são hora_saida_str, outro domínio.
+  Terceiro parser: zero. Agora registro a sua medição ao lado da minha e o argumento do complemento:
 
   Ran 1 shell command
 
-● Minha sonda leu a chave errada (colab, não colaborador_id) — 3.075 de 3.075 é o sintoma disso, não um achado:
+● Agora as três linhas que a PROMPT-NAO-SE-REPETE exige:
 
-  Ran 2 shell commands
+  Read 1 file, ran 1 shell command
 
-● Prova fechada nos dois lados do corte: as 2.685 gravadas têm 1..15 min (soma 15.577 = 259,6 h, o número dele), e as 390 sem linha têm
-  16..129 min — ficam para o admin. Agora os hashes:
+❯ aval Ronald: a O204 anda em PARALELO, na raia wt-bos (ramo raia-bos), por agente desta sessao; a principal segue na O214 e depois na
+  O146 sem esperar por ela. REGRAS: a raia so toca api/views_core.py, api/views.py e os testes deles; banco de teste proprio; suite pela
+  porta com --dir; pousa sozinha quando verde (merge + deploy num ato, um pouso por vez, nunca durante suite, push ou apply da principal;
+  janela de auth 06:00-23:20). LEITURA JA FEITA: views_core.py:523-541 e o gemeo views.py:531-540 chamam parse_datetime ANTES do ramo de
+  epoch; "1791071932000" vira 1791-07-19 20:00; 0,6% a 1,3% dos epoch-ms caem nisso. CURA: so digitos = epoch primeiro, uma funcao, os
+  dois kernels. Batida.timestamp_dispositivo (ponto/models.py:65) tem zero escritor: a contagem das ja atingidas pode nao ser recuperavel
+  -- se nao for, publicar "nao recuperavel" com o motivo, sem estimar. segue a fila; PAREI so em lei ou !
 
-  Ran 2 shell commands
+● Aval recebido: a O204 passa para a raia wt-bos, por agente, e a principal segue. Duas coisas a conferir antes de entregar — o veredito da
+  rodada em curso e o estado da raia:
 
-● $C/o214 é uma cópia de árvore antiga, não o repo — nada foi escrito na raiz viva. Agora os hashes, contra o arquivo de ANTES:
+● Veredito da rodada e estado da raia
+  ⎿  $ C=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
+     grep -E '^(OK|FAILED)( |$)|^Ran [0-9]+ test' $C/o204/core.out || { echo "core: ainda correndo"; tail -c 200 $C/o204/core.out; }
+     echo; echo "=== raia:"; cd /home/ronald/saas-hasner && git worktree list;…
 
-  Ran 4 shell commands
-
-● O hash do fechamento da 10/2026 moveu (127d6a83… → d6422334…, mesmas 587 linhas), enquanto a 09 e todas as exportações estão intactas.
-  Isso difere do seu resumo, então vou medir quem moveu e quando antes de escrever qualquer coisa:
-
-● Achar o modelo certo e o que o script le
-  ⎿  $ cd /home/ronald/saas-hasner && grep -rn "class FechamentoMensal" app/*/models.py; echo "--- o que o hash_intactas usa:"; grep -n
-     "Fechamento\|import" /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/hash_intactas.py |
-     head
-
-✢ Wrangling… (5h 47m 22s · ↓ 613.2k tokens)
+* Compacting conversation… (5h 52m 29s · ↓ 631.9k tokens)
+  ▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 14%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
