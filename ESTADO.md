@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 06:30:02.**
+**Medido em 08/10/2026 06:35:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `88bbc0c4 [O221] o marco do PLACAR-ESTRUTURAL: o R6 passa a publicar a frase do juiz, e as duas notas que envelheceram dizem o que foi medido` |
-| `origin/main` | `d0625307 [O221] pouso 2, so INSTRUMENTO: o selo do papel `prazo` morde na arvore viva, e a testemunha errada do pouso 1 fica corrigida` |
-| commits a subir (`ahead`) | **18** |
+| `HEAD` local | `32d1d7fd O topo do TICKETS fechado no ato do push (O112)` |
+| `origin/main` | `88bbc0c4 [O221] o marco do PLACAR-ESTRUTURAL: o R6 passa a publicar a frase do juiz, e as duas notas que envelheceram dizem o que foi medido` |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -22,11 +22,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+32d1d7fd O topo do TICKETS fechado no ato do push (O112)
 88bbc0c4 [O221] o marco do PLACAR-ESTRUTURAL: o R6 passa a publicar a frase do juiz, e as duas notas que envelheceram dizem o que foi medido
 9b64ee79 [O167] a uniao dos pousos 4 e 5: a raia do esmeril de ausencia entra na raia de agente, e o conflito e UMA linha de tabela
 e7dcd970 [O167] pouso 5, a juncao da raia de agente: os quatro cadastros ficam so-leitura no admin, e o gate do chamado ganha a trava que a porta do DP ja tinha
 265e7e87 [SEXTO-BANCO] a juncao do ESMERIL de ausencia: o catalogo responde pelo CADASTRO VIVO, e "cobre parte do dia" passa a ter UMA casa
-1f3d616f [O221] os docs do pouso 3, e a correcao de uma resolucao minha: o bullet do placar do chamado era GERADO e eu o resolvi --ours
 ```
 
 ## `git status --short`
@@ -111,42 +111,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  pelos selos de host dentro desta corrida e a poria VERMELHA. O trabalho seguro agora é desenhar a dívida nomeada da L-109 em rascunho.
-  Para isso preciso ver a forma real do RELATO:
+  Ran 1 shell command
+
+● Suite de negócio do push VERDE: Ran 9959 tests in 739.315s / OK (skipped=42); agora roda o control-plane. Aproveito para fazer a medição
+  que o próprio desenho (F5) exige antes de prometer. Primeiro confirmo que o gate não escreve nada quando chamado:
 
   Ran 1 shell command
 
-● O RELATO confirma a não-monotonicidade medida: o último ##  é DEPLOYS AGENDADOS (5997), e antes dele a seção mais velha (04/10 09:2x,
-  linha 5782) vem depois de uma 04/10 00:5x (5401). Corte "primeiro heading velho → EOF" arquivaria o de hoje. Vejo o destino e quem lê o
-  arquivo:
+● O gate só escreve a base quando ela não existe (if conhecidas is None), e ela existe com 70 linhas — então a chamada é leitura. Mesmo
+  assim confiro o mtime antes/depois, porque a base só encolhe:
 
   Ran 1 shell command
 
-● Isso muda o desenho, e é exatamente o tipo de coisa que mata um script de dieta: há 8 headings ##  sem data, e sete não são o último — ##
-  PATCH 1, ## O QUE A TELA JA FAZ (2472-2616) são continuações de uma seção datada acima. Logo "heading = seção datada" é falso. Preciso
-  saber quem escreve em DEPLOYS AGENDADOS:
+● F5 medido, e ele muda a regra — exatamente por isso o desenho exigia medir antes de prometer:
 
   Ran 1 shell command
 
-● Agora tenho os três fatos estruturais que tornam uma dieta ingênua destrutiva, e todos medidos: (1) heading ##  sem data é continuação,
-  não seção; (2) ## DEPLOYS AGENDADOS é seção VIVA, criada e alimentada por bin/deploy_agendado.sh:38; (3) as linhas de hoje (alarme 05:55)
-  estão no fim físico do arquivo, depois das de 04/10. Antes de escrever o desenho, consulto:
+● Background command "O unico push do marco" completed (exit code 0)
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+● Push rc=0 — origin/main 88bbc0c4, o marco está no remoto, e pos_push commitou o derivado em 32d1d7fd (a exceção NOMEADA da L-106). Agora
+  o deploy, que push.sh não faz: os dois .py curados estão no disco mas os workers ainda importam os de antes (BUG 128).
 
-● O advisor pegou um defeito real no meu desenho: a regra "heading datado → próximo datado-ou-pinado" reproduz o risco que eu mesmo apontei
-  — o alarme de hoje (5995) cai dentro do bloco de 04/10 (5782) e viajaria com ele. Dois greps decidem a forma do script, e ambos são
-  leitura:
+  Ran 1 shell command
 
-  Running 1 shell command…
+● Árvore limpa — só os dois sujos esperados (crons_duracao.json, que nunca se commita, e o HANDOFF-SESSAO.md que o hook regenera). O
+  derivado tocou só TICKETS.md. Deploy:
 
-✻ Cultivating… (21m 26s · ↓ 40.2k tokens)
+  Publicar o marco nas tres cascas
+  ⎿  $ cd /home/ronald/saas-hasner && bin/deploy.sh --sem-migrate 2>&1 | tail -30; echo "=== deploy rc=${PIPESTATUS[0]} $(date '+%H:%M:%S')
+     ==="
+
+· Cultivating… (26m 55s · ↓ 55.1k tokens)
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
