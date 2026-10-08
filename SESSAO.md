@@ -6,10 +6,24 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 07/10/2026 21:34:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (420.7 MB). Acoes na janela: **290**.
+**Medido em 07/10/2026 21:39:29.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (421.0 MB). Acoes na janela: **304**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 21:39:24 | Bash | Ruff no selo editado | `cd /home/ronald/saas-hasner && docker run --rm $(bash -c 'source bin/recursos.sh >/dev/null 2>&1; echo $TESTE_DOCKER') -v /home/ronald/wt-lavra/app:/app:ro -w /app saas-hasner-core ruff check ponto/tests/test_realizado_do_dia_autoridade.py 2>&1 \| tail -5` |
+| 21:39:01 | Bash | Inverter a assercao do selo na raia | `cd /home/ronald/wt-lavra/app && SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && cat > $SP/patch_selo.py <<'PY' import io, py_compile CAM = '/home/ronald/wt-lavra/app/ponto/tests/test_realizado_do_dia_autoridade.py' s = io.open(CAM, encoding='utf-8').read() if 'O218, 07/10' in s: print('SKIP-GUARD: ja aplicado'); raise SystemExit(0) # (1) a prosa  ...` |
+| 21:38:27 | Bash | Ver a borda de cima do bloco de comentario | `cd /home/ronald/wt-lavra/app && sed -n '106,112p' ponto/tests/test_realizado_do_dia_autoridade.py` |
+| 21:38:20 | Bash | Contar por AST as chamadas nas duas formas | `cd /home/ronald/saas-hasner && SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && git show HEAD:app/escala/utils.py > $SP/utils_HEAD.py && cat > $SP/conta_call.py <<'PY' import ast, sys for cam, rot in (('/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/utils_HEAD.py', 'HEAD (dois ramos)'), ('/home/ronald ...` |
+| 21:37:05 | Bash | Ler os dois selos de exercicio do ramo de folga | `cd /home/ronald/wt-lavra/app && sed -n '375,400p' escala/tests/test_montador_realizado_pela_autoridade.py` |
+| 21:35:36 | Bash | LEI ANTES DO PATCH: grep do arquivo do selo nas leis | `echo "=== LEIS.md: test_realizado_do_dia_autoridade ===" && grep -n "test_realizado_do_dia_autoridade\\|montador_realizado_pela_autoridade" docs/LEIS.md docs/DOSSIES.md docs/CORTES.md 2>/dev/null \| head -20` |
+| 21:35:11 | Bash | Listar os testes de exercicio do montador | `cd /home/ronald/wt-lavra/app && grep -n 'def test\\|^class' escala/tests/test_montador_realizado_pela_autoridade.py` |
+| 21:35:03 | Bash | Localizar o selo que exercita folga com realizado | `cd /home/ronald/wt-lavra/app && grep -rn "folga_trabalhada_NAO_entra_no_dinheiro" --include='*.py' . \| head && echo "=== folga + minutos_realizados no mesmo teste ===" && grep -rln "minutos_realizados" --include='test_*.py' . \| xargs grep -ln "'folga'" \| head -20` |
+| 21:34:57 | Bash | Procurar teste que exercita o ramo de folga | `cd /home/ronald/wt-lavra/app && grep -rln "realizado_sem_turno\\|'folga'" --include='test_*.py' . \| head -20 && echo "=== bateria: testes ===" && grep -n 'def test' ponto/tests/test_bateria_lavratura.py` |
+| 21:34:49 | Bash | Listar os testes do modulo do selo | `cd /home/ronald/wt-lavra/app && grep -n 'def test\\|^class' ponto/tests/test_realizado_do_dia_autoridade.py && echo "---- grep exercicio folga ----" && grep -rn "minutos_realizados" ponto/tests/test_realizado_do_dia_autoridade.py \| head -40` |
+| 21:34:37 | Bash | Ler o passo do fim que pergunta a autoridade | `cd /home/ronald/wt-lavra/app && sed -n '1425,1545p' escala/utils.py` |
+| 21:34:21 | Bash | Ler o ramo de folga na raia | `cd /home/ronald/wt-lavra/app && sed -n '1325,1400p' escala/utils.py` |
+| 21:34:17 | Bash | Ler o ramo de folga no vivo | `echo "=== HEAD 1255-1335 ===" && sed -n '1255,1335p' escala/utils.py` |
+| 21:34:12 | Bash | Comparar os chamadores de realizado_do_dia na raia e no vivo | `cd /home/ronald/wt-lavra/app && echo "=== RAIA ===" && grep -n 'realizado_do_dia' escala/utils.py && echo "=== HEAD (vivo) ===" && cd /home/ronald/saas-hasner/app && grep -n 'realizado_do_dia' escala/utils.py` |
 | 21:30:00 | Bash | Ler o selo que ficou vermelho | `cd /home/ronald/wt-lavra/app && sed -n '110,160p' ponto/tests/test_realizado_do_dia_autoridade.py` |
 | 21:29:53 | Bash | Localizar a falha da suite | `cd /home/ronald/saas-hasner && grep -nE "^(FAIL\|ERROR):" logs/suite_o218_raia.out \| head; echo "=== bloco ==="; awk '/^={20,}/{f=1} f' logs/suite_o218_raia.out \| sed -n '1,60p'` |
 | 21:29:48 | Bash | Ler o veredito da suite | `cd /home/ronald/saas-hasner && grep -nE "^(OK\|FAILED)" logs/suite_o218_raia.out; echo "=== Ran ==="; grep -nE "^Ran [0-9]+ tests" logs/suite_o218_raia.out; echo "=== rc ==="; tail -3 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bmk6h8el8.output` |
