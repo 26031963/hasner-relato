@@ -10,12 +10,12 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 20:29:09.**
+**Medido em 08/10/2026 20:34:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `d2cf6606 O204: a hora do aparelho tem UM sitio, e o epoch deixa de virar data de 1791` |
-| `origin/main` | `1b485f9c Instrumento: a porta da montagem entrega tmpfs para app/logs e app/media, e a copia do push volta a se apagar` |
+| `HEAD` local | `0d189ca7 O topo do TICKETS fechado no ato do push (O112)` |
+| `origin/main` | `d2cf6606 O204: a hora do aparelho tem UM sitio, e o epoch deixa de virar data de 1791` |
 | commits a subir (`ahead`) | **1** |
 
 ## Fabrica
@@ -29,22 +29,20 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+0d189ca7 O topo do TICKETS fechado no ato do push (O112)
 d2cf6606 O204: a hora do aparelho tem UM sitio, e o epoch deixa de virar data de 1791
 1b485f9c Instrumento: a porta da montagem entrega tmpfs para app/logs e app/media, e a copia do push volta a se apagar
 1c27b268 O214 item 1: a reversao do apply se LE num descartavel, e o push deixa de morrer no rm da copia
 bf83856d O214 item 1: a PROVA do pouso -- deploy, ensaio em prod e o achado da copia parcial
-d4822319 O214 etapa 0 + item 1: a ponta pequena e recusada pelo SISTEMA, com trilha, e nenhum centavo se move
 ```
 
 ## `git status --short`
 
 ```
  M app/config/crons_duracao.json
-M  app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
  M app/docs/PROMPTS.md
  M app/docs/RELATO.md
- M app/docs/TICKETS.md
  M bin/sombra.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -122,44 +120,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 1 shell command
-
-● A pista está presa pela suíte do push (pre-push:1225299 desde 20:14:30), e o censo da O145 roda no mesmo meio físico — então não disputo.
-  O trabalho que não compete é o RED da O145, construído em cópia do HEAD (LEI-AKITA 10). Primeiro o idioma de fixture que já existe para
-  essa cadeia:
 
   Ran 1 shell command
 
-● A assinatura é marcar_pontas_fora(celulas, piso_min=0, saida_ativa=False) — três parâmetros, e o primeiro já são as células. Meu censo
-  chamava marcar_pontas_fora(real, marcos, piso_min=…), que daria TypeError em todo dia e o except imprimiria três e contaria o resto — o
-  zero calado outra vez. Leio as duas assinaturas reais antes de corrigir:
+● Achado provado, e o comentário do próprio script promete o que o código não entrega: bin/pos_push.sh:27-29 diz "SO O TICKETS.md, e por
+  PATH… um passo automatico que commitasse a arvore levaria de carona o que estiver em curso" — e git add <path> seguido de git commit sem
+  pathspec commita o índice inteiro, que é exactamente a carona que ele diz evitar. Com o desenho da O145 também mudado, consulto antes de
+  escrever:
+
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+
+● O ponto 1 é decisivo — se o construtor não carrega delta, meu censo confirma a minha própria hipótese com zero. Confiro na fonte e
+  recupero a cadeia que já produziu o 90+37:
 
   Ran 1 shell command
 
-● Agora o reader está lido por inteiro, e ele muda o desenho da O145. Confiro as chaves do dia que o leitor devolve e corrijo a chamada do
-  censo:
+● O construtor carrega delta e hora_marco (B1 item 2, 29/09) — a cadeia é viável. Mas a autoridade que prod roda é outra:
+  espelho.py::montar_dias. Uso a do sistema, não a minha:
 
   Ran 1 shell command
 
-● Corrijo o censo com o que o código vivo diz — a chamada certa, as órfãs do dia (que vêm '?' quando a ata não gravou a hora), os marcos do
-  dia, e o chamado de batida_ausente, que é a consequência real:
+● montar_dias exige resultado_v2 — o motor inteiro por colaborador. Então o censo se divide: fase 1 só pelo leitor (barata, acha o universo
+  candidato), fase 2 pela autoridade real só sobre os candidatos e sobre o controle positivo. Vejo qual porta de frota já existe:
 
   Ran 1 shell command
 
-● Antes de escrever o RED, torno durável o que a leitura mudou no desenho — e há um achado estrutural novo:
+●
 
-  Running 1 shell command…
-
-✶ Wrangling… (7h 3m 30s · ↓ 784.7k tokens)
+✢ Wrangling… (7h 8m 52s · ↓ 793.7k tokens · thought for 7s)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                   10% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
-  ◯ fork  Inspecting batida_coord in situacional.py                                                              3m 54s · ↓ 169.0k tokens
+  ◯ fork  Grepping gps_accuracy in situacional.py                                                                 9m 16s · ↓ 98.8k tokens
   ⧉  index
 ```
