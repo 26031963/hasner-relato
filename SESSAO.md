@@ -6,10 +6,25 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 08/10/2026 17:47:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (472.3 MB). Acoes na janela: **1276**.
+**Medido em 08/10/2026 17:52:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (472.4 MB). Acoes na janela: **1291**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 17:50:17 | Bash | Conferir que a suite do push esta viva | `docker ps --format '{{.Names}} {{.Status}} {{.Command}}' \| head -10; echo "=== cpu ==="; docker stats --no-stream --format '{{.Name}} {{.CPUPerc}}' 2>/dev/null \| head -8` |
+| 17:50:09 | Bash | Conferir o push | `cd /home/ronald/saas-hasner && tail -4 logs/o214/push_o214.out; git log --oneline origin/main -1` |
+| 17:49:47 | Bash | Ler a declaracao das rubricas | `sed -n '355,395p' ponto/calculador/regras.py` |
+| 17:49:44 | Bash | Ler o sitio do sucessor declarado | `ls ponto/calculador/ && echo "=== o que declara as 13 rubricas ==="; grep -rn 'RUBRICA\\|rubricas' ponto/calculador/*.py \| head -20` |
+| 17:49:30 | Bash | Conferir o push | `cd /home/ronald/saas-hasner && tail -4 logs/o214/push_o214.out; echo "---"; git log --oneline origin/main -1` |
+| 17:49:21 | Bash | Censo dos escritores dos campos de offline da Batida | `for f in timestamp_gap_ms sincronizado_em; do echo "=== escritores de $f (producao) ==="; grep -rn "$f *=" --include=*.py . \| grep -v '/tests/\\|test_\\|/migrations/\\|models.py' \| head -8; done` |
+| 17:49:09 | Bash | Ver os campos de origem da Batida | `sed -n '40,80p' ponto/models.py` |
+| 17:48:56 | Bash | Ler o terceiro sitio, no ping | `echo "=== o leitor do ping (views_core ~933-960) ==="; sed -n '935,975p' api/views_core.py` |
+| 17:48:52 | Bash | Push e censo dos tres sitios da O204 | `cd /home/ronald/saas-hasner && tail -3 logs/o214/push_o214.out; git log --oneline origin/main -1; echo "=== os tres chamadores da O204 ==="; grep -n 'parse_datetime\\|_pdt' app/api/views_core.py app/api/views.py \| head -20` |
+| 17:48:32 | Bash | Procurar o aviso em log de producao | `cd /home/ronald/saas-hasner/logs && grep -rl 'Batida offline sincronizada' . 2>/dev/null \| grep -v vigia_arvore \| head; echo "=== docker logs do core (janela disponivel) ==="; docker logs saas_core 2>&1 \| grep -c 'Batida offline sincronizada'; docker logs saas_core 2>&1 \| head -2 \| cut -c1-120` |
+| 17:48:24 | Bash | Censo do aviso de batida offline nos logs | `cd /home/ronald/saas-hasner/logs && echo "=== onde o aviso de batida offline aparece ==="; grep -rl 'Batida offline sincronizada' . 2>/dev/null \| head; echo "--- contagem total ---"; grep -rh 'Batida offline sincronizada' . 2>/dev/null \| wc -l; echo "--- por dia (ultimos) ---"; grep -rh 'Batida offline sincronizada' . 2>/dev/null \| grep -oE '^[0-9]{4}-[0-9]{2}-[0-9]{2}' \| sort \| uniq -c \| ta ...` |
+| 17:48:14 | Bash | Conferir o push | `cd /home/ronald/saas-hasner && tail -3 logs/o214/push_o214.out; git log --oneline origin/main -1` |
+| 17:47:43 | Bash | Provar o defeito, fora do diretorio contaminado | `cd /home/ronald/saas-hasner && docker exec saas_core sh -c 'mkdir -p /tmp/o204 && ls -la /tmp/re.py' && docker cp /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/o204_prova.py saas_core:/tmp/o204/o204_prova.py >/dev/null && docker exec saas_core python /tmp/o204/o204_prova.py` |
+| 17:47:31 | Bash | Provar o defeito pela funcao real do Django | `cd /home/ronald/saas-hasner && cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/o204_prova.py <<'PY' # A PROVA pela FUNCAO REAL que o sistema chama -- nunca por replica da logica (LEI-AKITA 8). import sys from django.utils.dateparse import parse_datetime print('python', sys.version.split()[0]) for s in ('1791071932000', '1791158355000', '176000000 ...` |
+| 17:47:14 | Bash | Conferir o push e o remoto | `cd /home/ronald/saas-hasner && tail -6 logs/o214/push_o214.out; echo "=== remoto ==="; git log --oneline origin/main -1` |
 | 17:46:47 | Bash | Ver o que recebe o ts_dispositivo cru | `sed -n '440,500p' api/views_core.py` |
 | 17:46:39 | Bash | Onde a hora do aparelho e gravada | `grep -n 'timestamp_dispositivo' api/views_core.py api/views.py ponto/views.py \| head -20` |
 | 17:46:31 | Bash | Censo do que o sistema guarda da hora do aparelho | `echo "=== o campo no modelo ==="; grep -n 'timestamp_dispositivo\\|ts_dispositivo\\|origem_hora\\|hora_dispositivo' ponto/models.py \| head -20; echo "=== no chokepoint ==="; grep -n 'timestamp_dispositivo\\|ts_efetivo\\|data_hora' ponto/registro_batida.py \| head -30; echo "=== quem mais nomeia ==="; grep -rln 'timestamp_dispositivo' --include=*.py . \| grep -v '/tests/\\|test_' \| head` |

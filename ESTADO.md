@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 17:47:01.**
+**Medido em 08/10/2026 17:52:31.**
 
 | | |
 |---|---|
@@ -112,8 +112,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-  Ran 10 shell commands
-
 ❯ aval Ronald: O204 (hora do aparelho lida como data) fura a fila: entra logo depois do item da O214 em curso e antes da O146, por ser bug
   provado de producao que grava hora errada em batida. junto da cura, publicar a contagem de batidas ja gravadas com a hora de chegada no
   lugar da hora do aparelho, so leitura, sem corrigir nenhuma. os demais BOs seguem na posicao de hoje. segue a fila; PAREI so em lei ou
@@ -137,12 +135,14 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-● Ver o que recebe o ts_dispositivo cru
-  ⎿  $ sed -n '440,500p' api/views_core.py
+● Conferir que a suite do push esta viva
+  ⎿  $ docker ps --format '{{.Names}} {{.Status}} {{.Command}}' | head -10; echo "=== cpu ==="; docker stats --no-stream --format
+     '{{.Name}} {{.CPUPerc}}' 2>/dev/null | head -8
 
-✢ Wrangling… (4h 21m 22s · ↓ 440.0k tokens · still thinking)
+✢ Compacting conversation… (4h 26m 52s · ↓ 451.2k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱ 77%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                   12% until auto-compact
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
