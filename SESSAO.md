@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 07/10/2026 21:06:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (419.4 MB). Acoes na janela: **249**.
+**Medido em 07/10/2026 21:12:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (419.9 MB). Acoes na janela: **254**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 21:11:22 | Bash | Registrar o aval no PROMPTS.md | `cat >> PROMPTS.md <<'EOF' \| 07/10 20:0x \| aval (ordem de paralelo) \| DIETA-COMECA-AGORA \| **a O220 DIETA-DE-CARGA comeca AGORA, em paralelo, por AGENTE dentro da mesma sessao, sem esperar a bateria.** Literal: *"mede os seis arquivos, move historia para LAPIDES e RELATO-ARQUIVO, encurta as celulas de ESTADO do LEIS.md mantendo veredito e contagem. Nao toca codigo nem teste. A ordem do resto na ...` |
+| 21:11:03 | Bash | Medir os seis arquivos e ver o rodape do PROMPTS | `wc -lc ../CLAUDE.md ../../CLAUDE.md LEIS.md RELATO.md BACKLOG.md LAPIDES.md RELATO-ARQUIVO.md 2>&1 \| tail -10; echo "=== prompts tail ==="; tail -3 PROMPTS.md` |
+| 21:10:54 | Bash | Ler o item O220 e medir os docs | `cd /home/ronald/saas-hasner/app/docs && awk '/^\\| *O220/,0' BACKLOG.md \| head -40; echo "=== tamanhos ==="; wc -lc LEIS.md RELATO.md BACKLOG.md TICKETS.md LAPIDES.md RELATO-ARQUIVO.md PROMPTS.md CORTES.md DOSSIES.md 2>/dev/null \| sort -k2 -n` |
+| 21:10:34 | Bash | Ver o cabecalho do arreio de relavra na sombra | `cd /home/ronald/saas-hasner && wc -l logs/sombra/relavra10_frota_20261005.py && sed -n '1,60p' logs/sombra/relavra10_frota_20261005.py` |
+| 21:09:36 | Bash | Rodar a suite inteira de labels na raia | `cd /home/ronald/saas-hasner && timeout 1500 bash bin/suite.sh --dir /home/ronald/wt-lavra > /home/ronald/saas-hasner/logs/suite_o218_raia.out 2>&1; echo "rc=$?"; tail -25 /home/ronald/saas-hasner/logs/suite_o218_raia.out` |
 | 21:02:07 | Bash | Rodar os 8 selos na arvore viva para comparar | `cd /home/ronald/saas-hasner && for t in test_commit_so_o_declarado test_furo_encadeado_ao_cartorio test_handoff_sessao test_hook_nao_e_copia test_import_tardio_contra_o_ar test_inventario_pessoal_no_commit test_montagem_vem_do_arvore_do_push test_prepush_testa_o_commit; do timeout 180 bash bin/tests/$t.sh >/dev/null 2>&1; echo "$t rc=$?"; done` |
 | 21:01:06 | Bash | Rodar a pasta de selos de host na raia | `cd /home/ronald/wt-lavra && fail=0; for t in bin/tests/test_*.sh; do out=$(timeout 180 bash "$t" 2>&1); rc=$?; [ $rc -ne 0 ] && { fail=$((fail+1)); echo "VERMELHO rc=$rc $t"; echo "$out" \| tail -6; }; done; echo "=== selos de host: $(ls bin/tests/test_*.sh \| wc -l) rodados, $fail vermelhos ==="` |
 | 21:00:01 | Bash | Rodar os vizinhos estruturais e de query | `cd /home/ronald/saas-hasner && timeout 900 bash bin/suite.sh --dir /home/ronald/wt-lavra --only "ponto.tests.test_contract_juiz_celula ponto.tests.test_contract_juiz_ausencia ponto.tests.test_contract_no_batida_date ponto.tests.test_contract_no_inline_turno_pairing ponto.tests.test_contract_porta_ausencia ponto.tests.test_porta_ausencia_ferias ponto.tests.test_gate_ferias_vira_aviso ponto.tests.te ...` |

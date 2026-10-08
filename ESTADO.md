@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 07/10/2026 21:06:31.**
+**Medido em 07/10/2026 21:12:01.**
 
 | | |
 |---|---|
@@ -113,42 +113,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  ⎿  Referenced file ponto/services/cartorio.py
 
-● Dois defeitos meus, não do sistema: Ausencia.registrado_por é NOT NULL, e meu _regenerar escreveu o DNA à mão — violando o produtor único
-  (P13). A regeneração real passa por montar_dna:
+● Task "RED e construção do segundo intervalo" completed in background
 
-  Ran 5 shell commands
+● Os 8 estão verdes na árvore viva — os oito são artefato de worktree (sem .git/hooks, sem logs/deploy.stamp, sem .claude/settings.json,
+  app/staticfiles/ vazio), não defeito meu. Triagem fechada: zero real. Agora o item (d), a suite inteira na raia:
 
-● Corrijo os dois defeitos do meu teste — registrado_por e, no regenerado, chamar a porta em vez de escrever o DNA à mão (um escritor por
-  estado):
+  Ran 1 shell command
 
-  Ran 2 shell commands
+● Enquanto a suite roda (~9 min), preparo o item (e). O arreio da sombra já existe e a ordem é editá-lo, não forkar — vejo o que ele faz:
 
-● 32/32 verde — os nove cenários do aval estão escritos. Item (c) fechado. Agora o item (d): ruff, selos de host, e os vizinhos que
-  enumeram ponto/tests/ (a armadilha "selo novo verde não prova vizinho"):
+  Ran 1 shell command
 
-  Ran 4 shell commands
+❯ aval Ronald: a DIETA-DE-CARGA comeca AGORA, em paralelo, por agente dentro da mesma sessao, sem esperar a bateria: mede os seis
+  arquivos, move historia para LAPIDES e RELATO-ARQUIVO, encurta as celulas de ESTADO do LEIS.md mantendo veredito e contagem. Nao toca
+  codigo nem teste. A ordem do resto nao muda. PAREI so em lei ou !
 
-● Rodo os vizinhos estruturais e de query antes da suite inteira — e os 66 selos de host:
+● Aval recebido e registrado — O220 começa agora em paralelo, por agente. Leio o item literal antes de despachar:
 
-  Ran 2 shell commands
+  Read 1 file, ran 2 shell commands
 
-● Os 8 vermelhos têm cara de artefato de worktree (staticfiles vazio, hooks e logs/ ausentes). Confiro os mesmos 8 na árvore viva — selo
-  que fica vermelho nos dois lados não é meu:
+● Os seis estão medidos. Registro o prompt e despacho o agente:
 
-● Rodar os 8 selos na arvore viva para comparar
-  ⎿  $ cd /home/ronald/saas-hasner && for t in test_commit_so_o_declarado test_furo_encadeado_ao_cartorio test_handoff_sessao
-     test_hook_nao_e_copia test_import_tardio_contra_o_ar test_inventario_pessoal_no_commit test_montagem_vem_do_arvore_do_push
-     test_prepush_testa_o_commit; do timeout 180 bash bin/te…
+● Registrar o aval no PROMPTS.md
+  ⎿  $ cat >> PROMPTS.md <<'EOF'
+     | 07/10 20:0x | aval (ordem de paralelo) | DIETA-COMECA-AGORA | **a O220 DIETA-DE-CARGA comeca AGORA, em paralelo, por AGENTE dentro
+     da mesma sessao, sem esperar a bateria.** Literal: *"mede os seis arquivos, move historia para LAPIDES e RELATO-ARQUIVO, encurta as
+     celula…
 
-✢ Compacting conversation… (2h 57m 42s · ↓ 256.5k tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱ 90%
+· Beboppin'… (3h 3m 12s · ↓ 262.7k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    0% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
