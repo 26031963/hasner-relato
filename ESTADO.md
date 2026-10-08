@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 06:13:31.**
+**Medido em 08/10/2026 06:19:01.**
 
 | | |
 |---|---|
@@ -33,11 +33,11 @@ e7dcd970 [O167] pouso 5, a juncao da raia de agente: os quatro cadastros ficam s
 
 ```
  M app/config/crons_duracao.json
- M app/core/contratos_estruturais.py
- M app/core/placar_estrutural.py
+M  app/core/contratos_estruturais.py
+M  app/core/placar_estrutural.py
  M app/docs/HANDOFF-SESSAO.md
- M app/docs/RELATO.md
- M app/docs/TICKETS.md
+M  app/docs/RELATO.md
+M  app/docs/TICKETS.md
  M bin/sombra.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -115,38 +115,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  app/docs/RELATO.md. Leio a cabeça dele e a do topo para encaixar sem quebrar o contrato do hook:
 
   Ran 1 shell command
 
-● O topo é rascunho com lacunas <<>> — agora os números existem. Censo das lacunas antes de encaixar:
+● Precedente decisivo: a última dieta foi cd37557a [O220] DIETA-DE-CARGA, ontem 22:31 — ato próprio, obra própria, aval literal dele, zero
+  linha de .py, movendo 2.014 linhas. A dieta não se dobra num marco de código; ela tem forma e a forma é essa. Então: commito o marco e a
+  L-109 fica como UMA linha de dívida nomeada (PAREI-SO-LEI — lei escrita, decisão técnica, registra e segue).
+
+  E a cauda confirma o risco: ## DEPLOYS AGENDADOS é a última seção, com os alarmes apendados antes — um corte "primeiro cabeçalho velho →
+  EOF" arquivaria o de hoje.
 
   Ran 1 shell command
 
-● Só a própria linha de marcador. Confiro se o texto do topo afirma os números que agora medi — SHAs e o smoke:
+● push.sh não deploya — só chama pos_push.sh, que commita o derivado. Então o produto do R6 precisa de bin/deploy.sh depois do push (BUG
+  128: disco ≠ memória). Registro a dívida da L-109 e sigo:
 
   Ran 1 shell command
 
-● Uma afirmação do topo não bate com o medido: a linha 17 dá o pouso 5 como e7dcd970, e ele caiu em 9b64ee79. Confiro o que é e7dcd970
-  antes de corrigir:
+● Agora o placar do topo, que se reescreve depois do patch estar no disco:
+
+  Ran 1 shell command
+
+● Placar segue 15/20 — correto: a cura do R6 move a prosa e a fonte do número, não a contagem de contratos. git add por PATH:
 
   Ran 2 shell commands
 
-● O topo está correto: e7dcd970 é o commit de conteúdo e 9b64ee79 o tip da união — a mesma forma da linha 11. Falta encaixar o que agora é
-  passado medido. Leio os trechos antes de editar:
-
-  Ran 1 shell command
-
-● Quatro encaixes, por âncora única com assert count==1:
-
-  Ran 1 shell command
-
-● Insiro o bloco do que a cadeia de fato fez, com números — a PROVA depois que as leis exigem:
+● A mensagem afirma "o placar NAO muda com a cadeia desta noite" — isso era previsão quando a escrevi, e agora é verificável. Confirmo e
+  carimbo:
 
 ● Running 1 shell command…
 
-✢ Cultivating… (4m 55s · ↓ 13.0k tokens)
-                                                                                                   ✔ Update installed · Restart to update
+✢ Cultivating… (10m 25s · ↓ 26.1k tokens)
+                                                                                                                    6% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

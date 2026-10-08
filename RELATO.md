@@ -1,5 +1,694 @@
 # RELATO — esteira saas-hasner
 
+**OS CINCO POUSOS DA O221, e os dois ultimos nasceram da L-105, nao do `!`.** O `!` de 07/10 19:35
+nomeou DUAS raias (a de agente da O139 e a `raia-chamado`); as outras tres pousam pela **L-105**
+("raia com suite verde POUSA, e o pouso e PRE-APROVADO salvo o que esta na lista NUNCA PRE-APROVADO"),
+e nada nelas e dinheiro, escala, vinculo nem arquivo que prod usa que se apague.
+
+- **pouso 1** (`bb0bd0fa`, 08/10 00:37:34) -- so PRODUTO: o papel `prazo` da O139 entra no main.
+- **pouso 2** (`d0625307`, 08/10 01:1x) -- so INSTRUMENTO: o selo do papel `prazo` morde na arvore viva.
+  INSTRUMENTO NAO POUSA COM PRODUTO (L-105), e foi ele que me custou 1 h em 04/10.
+- **pouso 3** (`52bfc524` + `1f3d616f`, a juncao da `raia-chamado`) -- **caiu as 06:08:15**, pelo cron armado para 06:08
+  (`/etc/cron.d/hasner-deploy-o221-pouso3`), e nao por gosto: ela toca `app/api/views.py`, sitio
+  declarado de `bin/auth_sitios.txt`, e `bin/janela_auth.sh` barra fatia de auth entre 23:20 e 06:00
+  (P0 de 20/09, 82% dos 401 as 00h). Gate temporal = CRON + ARQUIVO, nunca processo do Code.
+- **pouso 4** (`265e7e87`, raia `juncao-o137`) -- o ESMERIL de ausencia (O137 / SEXTO-BANCO).
+  **VERDE**: `Ran 9944 tests in 1314.155s` -> `OK (skipped=42)`, `rc_suite=0`.
+- **pouso 5** (`e7dcd970` + `9b64ee79`, o tip da uniao, raia `juncao-o167`) -- a raia de agente do O167: os quatro cadastros ficam
+  SO-LEITURA no Django admin, o gate `ChamadoColaborador.abrir` ganha a trava que a porta do DP ja
+  tinha (C2) e o reconciliador passa a correr DEPOIS do cartorio (C3).
+
+**A CADEIA FECHOU, e aqui estao os numeros dela -- tres pousos em 56 segundos de parede.**
+`d0625307` -> `1f3d616f` (06:08:04) -> `265e7e87` (06:09:49) -> `9b64ee79` (06:09:49), **todos por
+`merge --ff-only`, nada resolvido na hora**, e **um `bin/deploy.sh` por pouso**: rc=0 nos tres.
+- **ZERO push no meio**, de proposito e por medicao (L-108, um push por MARCO): `bin/tickets_placar.sh
+  --escrever` suja `app/docs/TICKETS.md` sem commitar e `bin/pos_push.sh` COMMITA o derivado -- os dois
+  matariam o fast-forward seguinte. Entao `origin/main` ficou em `d0625307` **de proposito** ate aqui, e
+  a guarda 1 dos pousos 4 e 5 passou a perguntar `HEAD == BASE`, nao `origin/main == HEAD` (corrigida
+  08/10 03:2x, antes de rodar).
+- **as tres cascas provadas em cada um dos tres atos**: `saas_core /health/ -> 200`, `saas_ui
+  /colaboradores/ -> 302`, `mensageria /health/ -> 200`; selo BUG 128 verde (max_requests=0 nas tres +
+  reload agendado no crontab); `importerror_500=0` na hora anterior a cada deploy; prova de casca com
+  **599 rotas importadas em 2 urlconf(s)** e 16 estaticos conferidos.
+- **o veredito da uniao se amarrou a arvore que ele mediu**: `arvore=9b64ee79` no `.out`, a guarda 7 do
+  pouso 5 exigiu que ela fosse ancestral da raia e que o delta `arvore -> raia` estivesse TODO dentro de
+  `app/docs/` -- deu **0 arquivo fora de docs**. `Ran 9959 tests in 1326.187s` -> `OK (skipped=42)`.
+  E por isso `9b64ee79` nao se emenda: emendar reescreve a arvore que a prova nomeia.
+- **nenhum stash foi preciso**: "nenhum arquivo sujo colide com o ff" nos dois pousos a mao. O
+  pre-flight de 04:1x previa a colisao do `app/docs/RELATO.md` SO no pouso 3 -- e foi exatamente onde
+  ela aconteceu e onde o `git stash pop` saiu limpo. Previsao medida, confirmada.
+- **migrations pendentes = 0** nos tres, e a janela de auth respondeu ABERTA no pouso 3 (`janela_auth:
+  auth mudou (app/api/views.py app/colaboradores/services/aparelho.py) e estamos em janela permitida`).
+
+**DIVIDA NOMEADA, L-109, e NAO entra neste commit -- a forma da dieta e ato PROPRIO, e isso se mediu.**
+O RELATO vivo volta a carregar cabecalho de 03/10, 04/10 e 05/10 (seis dias; o `16/09` e citacao
+dentro de um cabecalho de 04/10, nao secao). Eu ia dobrar a dieta neste marco, e o precedente diz que
+nao: a ultima foi `cd37557a` **[O220] DIETA-DE-CARGA**, ontem 07/10 22:31 -- **obra propria, aval
+literal dele** (*"mede os seis arquivos, move historia para LAPIDES e RELATO-ARQUIVO... Nao toca codigo
+nem teste"*), **zero linha de `.py`**, -204,1 KB e 2.014 linhas movidas. Dieta e ato de docs com aval,
+nao carona num commit de codigo.
+E ela QUER SCRIPT, nao mao, por uma medicao: o RELATO **nao e monotonico**. `alarme_esteira` apenda na
+CAUDA de hora em hora e a ULTIMA secao do arquivo e `## DEPLOYS AGENDADOS` -- um corte
+"primeiro cabecalho velho -> EOF" arquivaria o alarme e o deploy de HOJE. O corte tem de ser
+cabecalho-a-cabecalho, com a data de corte como PARAMETRO NOMEADO (hoje: 05/10 entra ou sai? a
+ambiguidade de um dia e, ela mesma, o argumento contra decidir isso em linha).
+Vai para a fila 2 como INSTRUMENTO: `bin/dieta_relato.sh` + selo, no pouso de instrumento, onde a
+L-105 poe instrumento. Nao ha PAREI aqui -- a lei esta escrita, a decisao e tecnica, fica registrada.
+
+**A JUNCAO DO POUSO 5 TEVE UM CONFLITO, e ele foi resolvido guardando OS DOIS LADOS.**
+`app/chamados/models.py::ChamadoColaborador.abrir`: a PORTA do esmeril (C1b, validacao de `urgencia`
+em `defaults`) e a TRAVA da raia (C2, `atomic` + `select_for_update` na linha da pessoa). O C1b fica
+**FORA** do `atomic` de proposito -- e conferencia de ARGUMENTO, levanta antes de haver leitura ou
+trava para desfazer. **PROVA por AST, nao por olho:** `ENCERRADOS`,
+`_renascer_por_premissa_viva`, `transaction.atomic`, `select_for_update` e `urgencia_declarada` todos
+dentro de `abrir` (124 linhas, eram 63), e `PerguntaDisputa.abrir` INTACTO (72 linhas antes e depois)
+-- a juncao nao duplicou metodo. `ruff check` nos 11 arquivos pelo cpuset de teste: `All checks passed!`.
+
+**DOIS ACHADOS DE INSTRUMENTO, medidos nesta madrugada, e os dois sao "ausencia de sinal lida como
+sinal bom".**
+1. **`bin/regua_tickets.sh` nao ve a copia.** Ele faz `cd "$(dirname "$0")/.."` (linha 16), sempre a
+   raiz do repo. Rodado com o cwd dentro de um worktree, `origin/main..HEAD` resolve no MAIN -- range
+   vazio -- e a saida e `OK -- 0 citacao(oes) com linha na tabela`. Eu reportei esse verde como prova
+   no pouso 4. MEDIDO a mao sobre as raias: 9 citacoes em `juncao-o137`, 8 em `juncao-o167`,
+   **sem_linha=0 nas duas**. A conferencia que vale foi essa.
+2. **O placar do topo do TICKETS recusaria o push depois do merge.** `.regua_stamp` mora na RAIZ e
+   **nao existe em worktree**, entao todo `tickets_placar.sh --escrever` rodado de dentro de uma copia
+   escreve o rodape SEM o prefixo `_regua OK (...)`. Medido com os argumentos reais da regua: a arvore
+   viva da `fora=0`, e as DUAS raias dao `fora=1` -- exatamente essa linha. E
+   `bin/tickets_placar.sh --conferir` e a PRIMEIRA coisa que o `regua_tickets` roda, com `exit 2`: o
+   push cairia com o codigo ja no ar. Cura, que entrou nas TRES esteiras: depois do merge,
+   `bin/tickets_placar.sh --escrever` da ARVORE VIVA (que tem o stamp) e `regua_tickets` de novo.
+   E derivado, nao prosa -- excecao nomeada da L-106.
+
+**A ESTEIRA DO POUSO 5 AMARRA O VEREDITO A ARVORE QUE PUSA.** `fatias_agendadas/o221-pouso5/esteira.sh`,
+GUARDA 7: o `.out` da suite carrega `arvore=<sha>` escrito ANTES da suite, e a guarda exige que esse sha
+seja ancestral da raia **e** que o delta ate o tip esteja TODO dentro de `app/docs/`. Sem isso um `.out`
+verde de antes do merge do pouso 4 pousaria uma uniao nunca testada.
+
+**A UNIAO DOS POUSOS 4 E 5 (`9b64ee79`), e por que ela nao era arrumacao.** Os dois pousos sao
+IRMAOS: `265e7e87` (O137) e `e7dcd970` (O167) descendem os dois de `1f3d616f`, o tip da raia-chamado.
+Pousando o 4 primeiro, o main vai a `265e7e87` e o `--ff-only` do 5 **deixa de existir** -- ele nao
+descende dali. Sem a uniao, o pouso 5 so pousaria por merge feito NA ARVORE VIVA com o deploy depois,
+que e a janela da L-107 que custou o lote de cartoes de 30/09. A uniao se fez na COPIA: UM conflito,
+`app/docs/TICKETS.md` (as duas raias abriram a sua linha logo depois do separador), resolvido
+guardando AS DUAS linhas. **ZERO `.py` em comum** entre as raias, medido por intersecao de
+`git diff --name-only` antes de mergear. 42 arquivos, 1922 insercoes sobre `1f3d616f`.
+
+**UM PUSH POR MARCO, E ISSO VIROU CORRECAO DAS TRES ESTEIRAS (08/10 03:2x).** Eu havia posto, nas
+tres, um `bin/tickets_placar.sh --escrever` depois do merge -- cura do achado do `.regua_stamp`. Lendo
+antes de armar: **`tickets_placar.sh` nao tem `git commit`** (quem commita o derivado e
+`bin/pos_push.sh`, chamado so por `bin/push.sh`). Entao o `--escrever` deixa `app/docs/TICKETS.md`
+SUJO na arvore viva -- e os pousos 4 e 5 **mudam esse mesmo arquivo**. O `git merge --ff-only`
+seguinte seria recusado com *"local changes would be overwritten"*, e a guarda de arvore limpa **nao
+veria**, porque ela olha `.py`/`.html`. O mesmo vale para o derivado do `pos_push.sh`: push entre
+pousos move o main e mata o ff do pouso seguinte. A forma e a **L-108** ("PUSH: um por MARCO, nao um
+por commit"): os tres caem por fast-forward SEM push no meio, e so no FIM se roda **um** `--escrever`
+e **um** push -- que de passagem troca tres suites de pre-push (~22 min cada) por uma.
+Consequencia nas guardas: a pergunta deixa de ser `origin/main == HEAD` (que seria FALSA de proposito
+ate o fim) e passa a ser `HEAD == tip do pouso anterior`. O risco que a guarda velha cobria segue
+nomeado e coberto por outra: `bin/deploy.sh` chama `bin/janela_auth.sh origin/main`, e com o main
+atrasado o delta contem o `app/api/views.py` da raia-chamado -- quem responde por isso e a guarda da
+**janela de auth ABERTA**, e e por isso que o marco inteiro corre depois das 06:00.
+
+**O TERCEIRO ACHADO, e e o que teria matado o marco EM SILENCIO: doc sujo mata o fast-forward.**
+`app/core/management/commands/alarme_esteira.py` roda de hora em hora e **apenda no
+`app/docs/RELATO.md`** (duas linhas novas de alarme so entre 02:05 e 03:10 desta madrugada). Entao a
+arvore viva tem esse arquivo SUJO quase sempre -- e o pouso 3 muda o MESMO arquivo, no TOPO.
+`git merge --ff-only` recusa qualquer path localmente modificado que o checkout mudaria
+(*"local changes would be overwritten by merge"*), e a guarda de arvore limpa das esteiras **nao ve**:
+ela olha `.py`/`.html`, nao `.md`. MEDIDO rodando a propria deteccao contra os tres alvos: colide nos
+TRES. A cura entrou nas tres e e **LOSSLESS de proposito** -- nada se descarta e nada volta ao HEAD
+por conta propria (isso e `!` dele): guarda o arquivo inteiro e o diff em `logs/pousos/`, poe no
+STASH, faz o ff, devolve com `git stash pop`; se o pop conflitar, o deploy SEGUE (L-107) e o conteudo
+esta em DOIS lugares. `.py`/`.html` continuam PARANDO o ato na guarda de arvore limpa, que e onde tem
+de parar.
+LATERAL, para o pouso de INSTRUMENTO (L-105, instrumento nao pousa com produto): esta cura mora em
+tres copias dentro de `fatias_agendadas/`, e o defeito e da FORMA DE POUSO da casa, nao destas tres
+fatias. Ela tem de virar UMA porta em `bin/` com selo de host -- a mesma historia dos LABELS em
+quatro lugares e da suite que nao morava em arquivo (O182).
+
+**O SMOKE DE PROD DO POUSO 5 NASCEU VERMELHO, e isso e o que o faz valer.** Ele e SO LEITURA e
+pergunta a MESMA autoridade dos dois selos da raia, nao uma regra propria (TESTEMUNHA LE, NAO
+RECALCULA): `post_save._live_receivers(Batida)` para a ordem, e
+`has_add/change/delete_permission` + o conjunto de campos EDITAVEIS do `ModelAdmin` registrado para o
+admin. Rodado contra o codigo NO AR **antes** do pouso: **VERMELHO, 9 falhas**.
+  PROVA: `logs/pousos/smoke_pouso5_RED_antes.txt` (2040 B, 08/10 03:31) -- `SMOKE_POUSO5=VERMELHO  falhas=9`, medido chamando `post_save._live_receivers(Batida)` e os `ModelAdmin` REGISTRADOS no
+  `saas_core` que atende prod, nao uma replica da regra.
+  - (a) `cartorio=4` e `reconciliador=3` -- o CONSUMIDOR corre ANTES do JUIZ, e e literalmente o que
+    a secao 4a proibe: ele le `celula.veredito` da batida ANTERIOR.
+  - (b) os quatro cadastros com `add=change=delete=True` e **17 / 15 / 17 / 51** campos editaveis.
+O universo nao e vazio (51 campos no Colaborador), entao o verde depois do deploy e sinal, nao
+ausencia de sinal.
+  **RODADO DE NOVO as 06:10:3x, contra o codigo NO AR depois do pouso 5: `SMOKE_POUSO5=VERDE`.**
+  PROVA: `logs/pousos/smoke_pouso5_VERDE_depois.txt` (1038 B, 08/10 06:14) -- `SMOKE_POUSO5=VERDE  (a)
+  ordem dos receivers OK (b) 4/4 cadastros so-leitura, 0 campo editavel`, contra
+  `logs/pousos/smoke_pouso5_RED_antes.txt` (2040 B, 08/10 03:31) = `VERMELHO falhas=9`. Mesmo script,
+  mesma autoridade, dois arquivos no disco.
+  (a) a ordem virou -- `cartorio=3` e `reconciliador=4`: o JUIZ julga ANTES de o CONSUMIDOR ler, na
+  lista de cinco receivers que o `post_save(Batida)` devolve. (b) os quatro cadastros em
+  `add=False change=False delete=False`, **0 campo editavel** nos quatro -- os 17/15/17/51 de 03:31
+  foram a ZERO. O mesmo script, a mesma autoridade, o numero oposto: era o que faltava provar.
+  Script em `logs/pousos/smoke_pouso5_prod.py` (nao no scratchpad, como esta linha dizia as 03:4x).
+
+---
+
+## ADENDO 03:42 -- O VEREDITO DA UNIAO E A CADEIA SIMULADA
+
+**A suite da uniao fechou VERDE**: `Ran 9959 tests in 1326.187s`, `OK (skipped=42)`, `rc_suite=0`,
+zero linha `^ERROR:` ou `^FAIL:`. Lido por TEXTO, nunca por rc de tarefa. O arquivo
+(`suite_uniao_o167_o137.out`) carimba na linha 2 `arvore=9b64ee792631adbb3b0282ed61a945a0f2c974ea`,
+que e a arvore MEDIDA -- e por isso `9b64ee79` nao se emenda mais: a GUARDA 7 do pouso 5 compara o
+carimbo com o HEAD da raia e com o delta fora de `app/docs/`, e um `--amend` orfanaria o numero.
+
+**A cadeia dos tres pousos foi simulada INTEIRA em clone, com os sujos reais** (03:41,
+`logs/pousos/simulacao_cadeia_pousos_20261008.md`): os tres sao fast-forward a partir de `d0625307`
+na ordem, e o unico sujo que colide e `app/docs/RELATO.md` no pouso 3 -- cujo `git stash pop` saiu
+**LIMPO**, auto-merge, zero marcador, stash dropped. Pousos 4 e 5 nao colidem com sujo nenhum.
+Isso nao e garantia: o vigia apenda na CAUDA do RELATO as 04, 05 e 06h e o pouso 3 mexe no TOPO,
+entao o 3-way segue limpo pela mesma razao que foi medida -- mas foi medida as 03:41. Se o pop
+conflitar, o ato NAO se corrompe: o merge e o deploy seguem no mesmo ato (L-107), o conteudo fica em
+DOIS lugares (stash + `logs/pousos/`) e o pouso seguinte PARA na propria guarda, porque o git recusa
+fast-forward com path `UU`. Falha segura, nao falha silenciosa.
+
+---
+
+## PERGUNTA DE LEI (vai no TOPO, com o numero -- e a esteira SEGUE, PAREI-DE-LEI-NAO-DEVOLVE-TURNO)
+
+**A celula `('chamado','um juiz por pergunta')` esta presa a lei sua, nao a codigo.** Medido as
+04:0x contra o estado FINAL dos tres pousos (`9b64ee79`, censo em
+`logs/pousos/censo_jpv_20261008.txt`):
+
+O portao e `core/tests/test_contract_tabuleiro.py:42` -- `assertFalse(cel['verde'] and
+C.JUIZES_POR_VARREDURA)` --, ou seja verde exige a lista **VAZIA**. Ela tem **25 nomes**. E
+**pelo menos 3 desses 25** estao na sua lista *"ESPERAM LEI MINHA, nao tocar"* (aval
+JUIZ-DE-CHAMADO 04/10 00:1x, secao E, *"seis emissores esperam LEI dele e nao se tocam"*):
+`supra_juiz` (O168), `detectar_cluster_espurio` (O169) e `fechar_cobranca_com_lastro` (aval
+ABERTO `LASTRO-MEDE-DUAS-VEZES`). Os outros tres da secao E nao estao enumerados em doc nenhum
+que eu ache por grep.
+
+E o mesmo aval PROIBE a saida facil: *"tirar nome da lista so trocando de dict"*. Entao nao ha
+caminho de execucao que esvazie a lista sem tocar arquivo proibido -- e a celula nao fecha.
+
+**A pergunta, em uma linha:** os tres proibidos saem da lista por RECLASSIFICACAO de papel com o
+corpo PROVADO (sem mudar regra de negocio), ou a celula fica PARCIAL de proposito ate os O168/O169
+e o `!` do lastro?
+
+**O QUE EU SIGO FAZENDO SEM A RESPOSTA, e e por isso que isto nao devolve turno:** dos 25, **13**
+nao mostram sinal de derivacao propria e importam autoridade da casa. Esses se LEEM um por um e,
+quando o corpo confirmar que delegam, migram para `vigia`/`prazo` em commit proprio com a medicao
+na sombra pegando ZERO -- que e a forma que o seu aval manda. A lista **so encolhe**, por desenho:
+a divida cai antes da celula fechar. Nenhum dos 13 esta entre os tres proibidos.
+
+### LATERAL RETRATADA -- o `inicio` derivado do escalonamento de documento NAO e defeito (medido 03:5x)
+
+Eu levantei, lendo `ponto/services/ausencia.py::escalonar_aguardando_documento`, que ele **deriva** o
+comeco da janela em vez de ler um gravado:
+
+```
+inicio = a.prazo_documento - datetime.timedelta(days=PRAZO_DOCUMENTO_DIAS)
+dias   = (hoje - inicio).days
+if dias in ESCALONAR_EM:  _cobrar_documento(a, dias)
+```
+
+e suspeitei da classe "selo que copia valor": prazo gravado com uma constante, menos a constante de
+HOJE, da um comeco fabricado. **Medi e esta errado -- eu estava errado, nao o codigo.** Tres provas:
+
+1. **A constante nunca se moveu.** `git log -S'PRAZO_DOCUMENTO_DIAS = '` da **UM** commit (`d5a2f4fe`,
+   [A4]) e o valor nasceu **7**. `ESCALONAR_EM` igual: um commit, `(0, 2, 7)`.
+2. **Censo de escritores FECHADO: 4 sitios, todos no mesmo modulo, todos com a mesma soma** --
+   `:225` (nascimento), `:384`, `:889` sao `localdate() + timedelta(days=PRAZO_DOCUMENTO_DIAS)`, e
+   `:650` escreve `None`. **Nenhum humano digita o prazo**: zero form, zero template, zero input.
+   A subtracao e o inverso EXATO de todo escritor que existe.
+3. **As duas migrations que reescreveram prazo gravado fazem a mesma soma, de proposito.** A 0059
+   calcula `novo = inicio + PRAZO_DIAS` e **imprime `D0 em %s`**: ela codifica o D0 DENTRO do prazo
+   somando 7, justamente para que o leitor recupere o D0 subtraindo 7. A 0058 idem (`novo_prazo`).
+
+A minha sonda tinha comparado o `inicio` derivado contra `Ausencia.data` e achado **20 de 20 fora**
+(deriva de +1 a +5 dias) -- numero verdadeiro, pergunta errada: o relogio do documento comeca no dia
+em que o documento foi PEDIDO, nunca no dia da ausencia, e e por isso que a 0058 se chama "o relogio
+recomeca". Foi o meu proprio erro de [[criterio-pela-forma-conta-errado]]: perguntei a um campo
+vizinho em vez de perguntar a autoridade.
+
+**Fica so a exposicao, nomeada, sem fatia:** o invariante "todo escritor de `prazo_documento` soma
+`PRAZO_DOCUMENTO_DIAS` a um D0" e verdadeiro **por construcao** e nao esta escrito em nenhum selo. Se
+algum dia um quinto escritor gravar um prazo sem essa soma -- ou a constante mudar sem migration que
+reescreva o gravado --, o `inicio` de `:791` passa a fabricar o degrau. Hoje: 20 na fila viva, 11 ja
+vencidos, 2 cairiam num degrau hoje. **Nao construo selo para isso agora** (nao e fila 1, e a casa ja
+reprovou selo sem caso que morde); fica a linha.
+
+### DIVIDA DO PROPRIO MARCO -- a linha da L-101 no LEIS.md mente sobre os pousos 1 e 2 (medido 04:0x)
+
+`app/docs/LEIS.md:127` ainda diz, em TRES celulas, que o papel `prazo` nao existe -- e ele entrou no
+main hoje de manha, pelas minhas duas maos:
+
+| celula | o que esta escrito HOJE | o vivo |
+|---|---|---|
+| [4] dono | `NENHUM: config/crons.py::PAPEIS tem 7 papeis e nenhum e prazo; os 27 crons de varredura seguem como juiz` | `PAPEIS` tem **8** e um e `prazo` (`config/crons.py:1426`, commit `bb0bd0fa` = pouso 1) |
+| [6] selo | `NENHUM: falta o selo por AST da O139` | `bin/tests/test_papel_prazo_nao_deriva.sh` existe e **passa** (commit `d0625307` = pouso 2) |
+| [7] estado | `SO-NO-PAPEL -- 0 de 2 clausulas no codigo, 0 de 2 com teste que morde` | as 2 clausulas estao no codigo e o selo morde |
+
+Rodei o selo agora: `papel_prazo: 2 cron(s) de papel 'prazo'; juizes_por_varredura=25` -> `OK`.
+
+**NAO corrigi a linha neste turno, e o motivo e lei, nao preguica.** O ESTADO so se muda no commit que
+muda o codigo ou o teste daquela lei -- e esses dois commits ja fecharam. Entao a correcao **anda no
+commit de fechamento deste marco** (L-106: docs do marco entram no commit do marco), com o texto ja
+pronto acima. Conferi antes que ela nao atrapalha a cadeia: **nenhuma das tres juncoes toca
+`app/docs/LEIS.md`** (`git diff --name-only HEAD <ramo> -- app/docs/LEIS.md` = 0 nas tres), entao
+nao ha risco de recusar um `--ff-only`. A celula **[5] PROTEGE continua VAZIA e eu nao a toco**: ela
+esta na sua lista de colunas que nao sao minhas. Ela hoje mereceria `config/crons.py::PRAZO_DELEGA_A`.
+
+### E O QUE DEIXOU A MENTIRA DURAR: o selo do PROTEGE so alcanca 5 das 81 leis
+
+Os dois selos que leem o `LEIS.md` passaram VERDES com a linha 127 mentindo:
+`test_leis_indice: OK -- 81 leis indexadas` e `test_lei_protege_sitio: OK -- 8 sitio(s) protegido(s)
+em 81 leis ... tocados neste push: 0`. Medido na tabela:
+
+- **81** linhas de lei; **76** com a coluna PROTEGE **VAZIA**; **5** preenchidas (que carregam os 8 sitios).
+- **20** linhas com a coluna `selo` em `NENHUM`/vazia.
+- vereditos: `PELA-METADE` 32 · `CONDUTA` 25 · `SEM-PROVA` 14 · `INTEIRA` 6 · `SO-NO-PAPEL` 4.
+
+`test_lei_protege_sitio.sh` cobra a lei **cujo sitio aparece no diff do push**. Lei com PROTEGE vazio
+nao tem sitio, logo **nunca** e cobrada: o guarda alcanca **5 de 81**. E nenhum selo le as celulas
+[4]/[6]/[7] contra o vivo -- ninguem pergunta "esse `NENHUM` ainda e verdade?". E a familia do SELO
+ANTI-VACUIDADE do CLAUDE.md secao 6: passa por **ausencia de sinal**. **Nao construo o selo agora**
+(nao e fila 1, e instrumento, e instrumento nao pousa com produto -- L-105); fica o numero.
+
+### CENSO R6 item 4 -- o criterio do papel, lido na fonte, ja descarta 3 dos 13
+
+Li o bloco declarado (`config/crons.py:1400-1505`) em vez de classificar por conta propria. Dois
+achados que mudam a lista de candidatos que eu tinha:
+
+1. **TRES dos meus 13 "sem derivacao propria" estao EXPLICITAMENTE barrados pelo proprio comentario**:
+   `detectar_ausencias`, `processar_alertas_turno` e `silenciar_chamados_isentos` seguem em `juiz`
+   porque leem CARIMBADORES de prazo futuro (`motor.prazo_de_cobranca`, `motor.PRAZO_ARQUIVO_DIAS`) --
+   *"eles EMITEM, nao cobram prazo"*. Candidatos reais: **10**, nao 13.
+2. **`escalonar_documentos_ausencia` e o candidato mais limpo**, e tem a MESMA forma do `vigia_de_hora`
+   que ja ocupa o papel: o comando e um wrapper de 30 linhas que **nao deriva nada** (so chama
+   `ponto.services.ausencia::escalonar_aguardando_documento`), e a pergunta "venceu?" e UMA linha
+   lendo o GRAVADO (`if hoje > a.prazo_documento`). A regra de prazo mora inteira na funcao de
+   servico -- que e exatamente onde o cadastro `PRAZO_DELEGA_A` manda ela morar (`vigia_de_hora` tem
+   `TETO_MARCO_MIN` dentro da autoridade dele, nao no cron). Linha candidata:
+   `'escalonar_documentos_ausencia': {'corpo': 'escala.management.commands.escalonar_documentos_ausencia::handle',
+   'autoridade': 'ponto.services.ausencia::escalonar_aguardando_documento'}`.
+   **Nao migrei neste turno**: isso edita `config/crons.py` na arvore viva com tres `--ff-only`
+   pendentes em cima dela. Vai no turno seguinte ao marco, em commit proprio, com o selo rodado.
+
+### CORRECAO DO PROPRIO CENSO -- o candidato do item (2) acima NAO passa, e a razao e a TRAVA JUIZ-NOVO
+
+Reli antes de publicar e **retiro a palavra "candidato mais limpo"** que escrevi ha quinze minutos.
+`escalonar_documentos_ausencia` **nao pode ocupar o papel `prazo` por execucao minha**, e a prova e a
+forma das DUAS entradas que ja o ocupam:
+
+- `processar_cartorio`: corpo em `ponto.management.commands.processar_cartorio`, autoridade em
+  **outro modulo** (`ponto.services.cartorio::julgar_colab`);
+- `vigia_de_hora`: corpo em `ponto.services.vigia_de_hora`, autoridade em **outro modulo**
+  (`ponto.services.cartorio::marcos_vencidos`), e `marcos_vencidos` **esta** em `JUIZES_DO_PRAZO`.
+
+Nas duas o ponteiro sai da familia do cron e aponta para o cartorio, que e juiz independente. A minha
+proposta era **wrapper -> o proprio trabalhador dele**: `escalonar_aguardando_documento` e quem MORA
+com as constantes de prazo (`PRAZO_DOCUMENTO_DIAS`, `ESCALONAR_EM`, `:606-607`). Nomea-la "autoridade"
+nao delega nada -- renomeia. E `grep` nos dois registros da casa:
+**`escalonar_aguardando_documento` NAO esta em `core/juizes.py` nem em `JUIZES_DO_PRAZO`.** Registra-la
+seria **juiz nascendo**, que exige `corte Ronald: juiz <nome> nasce` (TRAVA JUIZ-NOVO). Logo isto e
+**PERGUNTA DE LEI, nao fatia** -- e pela PAREI-DE-LEI-NAO-DEVOLVE-TURNO vai ao topo com o numero
+(10 candidatos reais, este e 1) e a esteira segue.
+O selo `test_papel_prazo_nao_deriva.sh` teria passado VERDE nessa migracao, porque ele inspeciona
+**corpo + arquivo do comando** -- e o comando e um wrapper de 30 linhas que de fato nao deriva nada.
+Mesma vacuidade que eu acabei de medir no `LEIS.md`: o selo aprova por **ausencia de sinal**.
+
+**E um achado de brinde, do meu proprio O139:** `julgar_colab` -- autoridade de `processar_cartorio`,
+um dos dois unicos ocupantes do papel -- **nao esta em `JUIZES_DO_PRAZO`**, que se declara *"os juizes
+do prazo da casa: quem responde 'o prazo venceu?'"*. A lista tem 3 chaves
+(`prazo_estourou`, `prazo_dp_dias`, `marcos_vencidos`) e nenhuma e dele. Nada cobra isso: o selo le
+`PRAZO_DELEGA_A`, nunca a pertinencia cruzada. Uma linha, nao uma obra -- fica nomeada.
+
+### E O VEREDITO DA L-101 NAO E MEU PARA DAR
+
+Eu ia escrever `INTEIRA` na celula [7] e **nao escrevo**: quem fez a divida nao se da a nota. Pela
+definicao da propria tabela (`PELA-METADE` = *"alguma clausula nao esta, ou nao esta inteira, no
+codigo"*), a clausula 1 da L-101 e UNIVERSAL -- *"cron que julga a ausencia de um fato ate um prazo
+declara papel `prazo`"* -- e hoje **2 crons** o declaram contra **10 candidatos reais** que seguem em
+`juiz`, mais os 2 destinados que o proprio comentario diz que nao o ocupam. Entao a celula [7] recebe
+o que o selo PROVA, e o veredito segue a definicao:
+`PELA-METADE -- papel criado e selo por AST mordendo (bin/tests/test_papel_prazo_nao_deriva.sh: 2 cron(s)
+de papel prazo, juizes_por_varredura=25); a clausula 1 alcanca 2 de 12 crons que julgam ausencia ate
+prazo. Medido 08/10 em <sha do commit do marco>.`
+
+### GUARDA CONFERIDA NA CADEIA DAS 06:08 -- migration (fechado, 04:0x)
+
+A simulacao da cadeia exercitou **git** (ff + stash), nunca o `bin/deploy.sh`. Faltava uma guarda e
+ela esta fechada: **as tres juncoes tem 0 migration** (`git diff --name-only HEAD <ramo> | grep -c
+'/migrations/'` = 0, 0, 0) e as tres esteiras passam **`--sem-migrate`** (pouso3:128, pouso4:131,
+pouso5:189) -- que e exatamente o que o CLAUDE.md manda quando a fatia nao tocou modelo. Importa
+porque `sombra.sh --conferir` **nao le carimbo**: ele re-pergunta ao vivo (`:253-263`, `psql` em prod
+e na sombra, `d_mig` por `diff`). Se alguma juncao migrasse em prod depois do refazer das 04:17, o
+portao ficaria VERMELHO para os pousos 4 e 5 -- o caso de 03/10 04:0x, que e meu. Com 0 migration,
+`django_migrations` de prod nao se move e o carimbo nao pode virar sob a cadeia.
+
+### R6 item 4 -- A RESPOSTA JA ESTAVA ESCRITA, e ela diz que a celula NAO fecha por execucao (04:1x)
+
+Antes de propor corte eu fui ao `CORTES.md`/`CORTES.json` (LEI-AKITA 4) e a pergunta que eu estava
+montando **ja foi feita e ja foi respondida**. `docs/CORTES.md:99`, no proprio
+`CHAMADO-VARREDURA-NAO-JULGA` (aberto 25/09, RESPONDIDO 03/10 pelo `PAPEL-PRAZO-NASCE`), em texto dele:
+
+> *"Nao e fatia: e a divida de desenho que o proprio 4a declara. **Cada cron sai da lista quando a
+> celula agendar o proprio marco** (evento programado na hora do marco + 30 min, como o `vigia_de_hora`
+> ja anota na sua linha)."*
+
+Entao a lista `JUIZES_POR_VARREDURA` -- e com ela a celula `('chamado','um juiz por pergunta')` --
+esvazia por **DOIS caminhos, e nenhum e relabel**:
+1. o cron cuja pergunta e um **PRAZO** vai para o papel `prazo` (L-101, a 4a opcao);
+2. **todo o resto** sai quando a **CELULA AGENDAR O PROPRIO MARCO** -- varredura vira EVENTO. Isso e
+   **desenho**, declarado pelo proprio CLAUDE.md 4a, e ele escreveu "nao e fatia".
+
+Li tres candidatos inteiros e eles confirmam o caminho 2, nao o 1:
+- **`apurar_furos_diarios`** (21 linhas): wrapper puro, nao deriva nada, chama
+  `escala.services.furos_diarios::apurar` + `chamados.services.adesao::sincronizar_adesao` +
+  `chamados.services.limbo_folgas::agrupar_furos_sob_limbo`. **Nao e consumidor: ele E a autoridade** --
+  o proprio `crons.py` diz, na linha da `lavra`, *"quem decide o que e furo e o apurar_furos_diarios,
+  que ela le"*. Nao sai da lista por delegar: so sai quando o furo nascer de evento.
+- **`fechar_chamados_ausencia`** (43) e **`reavaliar_ausencias_lancadas`** (48): os dois delegam
+  CERTO hoje -- leem `VIVOS` (`chamados.catalogo.motor`), `ABERTAS`
+  (`ponto.services.ausencia`), `reconciliar_por_ausencia`/`universo`
+  (`chamados.services.silencio_ausencia`), e **nao derivam nada**. Eles julgam **pelo FATO** (a
+  Ausencia decidida), **nunca por prazo** -- o docstring do primeiro e explicito: *"Fecha pelo FATO,
+  nunca pelo clique"*. Logo o papel `prazo` **nao os acolhe**; o destino deles e o sinal da celula.
+
+**O que isso muda na minha propria conta**: dos 25 nomes, o papel `prazo` nao e o destino da maioria.
+Ele e o destino dos que cobram PRAZO -- e a lista de candidatos fortes e **dele**, escrita no
+`CORTES.json` quando pediu a O139: `detectar_ausencias`, `vigia_de_hora`,
+`escalonar_documentos_ausencia`, `apurar_furos_diarios`, `detectar_intervalo_ausente`,
+`marcar_foto_ausente_retro`, `disparar_perguntas_competencia`, `fechar_becos_disputa` (8), com um 9o
+sugerido (`processar_alertas_turno`), e a ordem literal *"o numero publicado sera o MEDIDO, nao o que
+couber no 8"*. **Medido, 2 ocuparam e 3 foram barrados com razao escrita** (`detectar_ausencias`,
+`processar_alertas_turno`, `silenciar_chamados_isentos` leem carimbador de prazo FUTURO: emitem, nao
+cobram). Dos restantes da lista dele, `escalonar_documentos_ausencia` e o caso examinado acima: a
+pergunta "venceu?" existe mas e **inline e sem nome** (`hoje > a.prazo_documento`), e as tres chaves de
+`JUIZES_DO_PRAZO` sao todas PREDICADOS nomeados (`prazo_estourou`, `prazo_dp_dias`,
+`marcos_vencidos`). Ocupar o papel honestamente exige **batizar o predicado** -- e isso e juiz novo,
+com a frase do CORTES.md, nao implementacao minha.
+
+**Conclusao que vai ao topo do RELATO, com numero:** a celula `('chamado','um juiz por pergunta')`
+esta parada por **lei dele, em dois degraus** -- (i) 3 dos 25 nomes estao na lista "ESPERAM LEI MINHA,
+nao tocar" e o aval proibiu *"tirar nome da lista so trocando de dict"*; (ii) o caminho que o proprio
+corte declara para os demais e **a celula agendar o proprio marco**, que ele classificou como
+*"divida de desenho, nao fatia"*. **Nao ha o que eu execute aqui sem o corte dele.** O que eu fiz e o
+que cabia: o censo dos 25, o criterio lido na fonte, e os 3 barrados com razao escrita. Pela
+PAREI-DE-LEI-NAO-DEVOLVE-TURNO isso vai ao topo com os numeros e a esteira **segue para o proximo
+item que nao depende dessa lei** -- nao devolvo turno por isto.
+
+### PRE-FLIGHT DA CADEIA, FECHADO (04:1x) -- e por que SO o pouso 3 colide
+
+Duas medicoes minhas pareciam discordar e **nao discordam**; registro a reconciliacao porque a
+diferenca e exatamente o tipo de coisa que morde numa corrida sem ninguem olhando:
+
+- medindo **da HEAD de agora** (`d0625307`), as TRES juncoes tocam `app/docs/RELATO.md` -- que e o
+  unico sujo que colide (os outros tres sujos, `app/config/crons_duracao.json`,
+  `app/docs/HANDOFF-SESSAO.md` e `bin/sombra.sh`, nao sao tocados por nenhuma);
+- medindo **em ORDEM** (a simulacao das 03:4x), os pousos 4 e 5 colidiam com **nada**.
+
+A causa: a cadeia e **ANINHADA**, nao paralela --
+`juncao-chamado` (`1f3d616f`) **esta contida em** `juncao-o137` (`265e7e87`), que **esta contida em**
+`juncao-o167` (`9b64ee79`). E o `git diff juncao-chamado juncao-o137 -- app/docs/RELATO.md` da
+**0 linhas** (idem para o o167). Ou seja: **o pouso 3 leva o RELATO inteiro da cadeia**, e os pousos 4
+e 5 nao tocam esse arquivo. Logo a unica janela de stash/pop da corrida e a do pouso 3 -- a que a
+simulacao exercitou e que devolveu **pop LIMPO**.
+
+O bloco de stash do pouso 3 foi relido linha por linha e **falha SEGURO** nos tres sentidos:
+`.py`/`.html` sao EXCLUIDOS da lista de stash de proposito (`grep -vE '\.py$|\.html$'`), entao um
+`.py` sujo que colidisse faria o `--ff-only` **RECUSAR** em vez de passar; `stash push` que falha
+**PARA antes do merge** (`exit 1`, nada mergeado); e `stash pop` que conflita escreve ATENCAO, deixa o
+conteudo **no stash E em `logs/pousos/`** com selo de hora, e o merge + deploy **SEGUEM** (L-107).
+
+Resto do pre-flight: **disco 249 GB livres (21% usado), inodes 3%** -- o `collectstatic` do deploy e
+os tres merges cabem. Migration: **0 nas tres**, `--sem-migrate` nas tres (ja registrado acima).
+
+---
+
+## PLACAR-ESTRUTURAL — o instrumento do item media o proprio envelhecimento, e nao media
+
+**O defeito esta na ORIGEM, e nao e "um numero errado".** `app/core/placar_estrutural.py` e o placar
+PRINCIPAL do `ESTADO.md` (L-099) e **nao tem UM selo**: nenhum teste le o arquivo, e o unico consumidor
+e `bin/gerar_estado.py:25-62`, que o **publica sem o conferir** (carga standalone no host, sem Django,
+dentro de `except Exception` para "o ESTADO nunca cair por causa do placar"). O proprio `placar()`
+(`:350`) so pergunta `prova_faltando = bool(numero) and not prova` — **ninguem nunca pergunta se o
+numero ainda concorda com a `fonte` que a celula declara**, embora o docstring do arquivo diga que a
+`fonte` existe exatamente para isso: *"Sem fonte, o numero envelhece em silencio, que e o defeito que o
+proprio R4 descobriu (o selo existia e ninguem o rodava)"*.
+
+**MEDIDO: 4 dos 8 numeros do R6 estavam velhos** (remedidos chamando a FUNCAO REAL, LEI-AKITA 8; provas
+em `logs/placar_estrutural/`):
+
+| o que a celula dizia | a autoridade diz | fonte da remedicao |
+|---|---|---|
+| `CONTRATOS: 14/20 verdes` | **15/20** | `core.contratos_estruturais.linha_do_placar()` · `contratos_20261008.txt` |
+| `Faltam **6** atingiveis` | **5** (`total() - verdes()`) | idem, as 5 nomeadas no mesmo arquivo |
+| `os 27 de config.crons` | **25** | `numeros_do_r6_20261008.txt` |
+| `122 escritas fora de porta` | **121** (arvore viva, hoje) | `censo_escritas_20261008.txt` |
+
+O `15/20` ja era verdade desde **`b4372615`** (o marco O218 fechou a celula do juiz da celula) e a
+prosa seguiu em `14/20` por tres dias **sem nada ficar vermelho**. A propria celula confessa a doenca
+tres vezes no texto (*"ESTA LINHA DIZIA 13... 12... 19 e 9"*) — ela sabia que envelhecia e nao tinha
+quem a cobrasse.
+
+**O N/20 era uma SEGUNDA VERDADE confirmada.** Quem publica o numero e **UM SO**:
+`app/core/placar_tickets.py:213`, que o le do juiz e acerta desde sempre (`TICKETS.md:30` =
+`contratos_estruturais | 15/20 verdes | **20/20**`). A prosa do R6 carregava uma copia COMPETINDO —
+a mesma `TOTAL` segunda-verdade que a **L-100** matou neste mesmo arquivo-familia (*"nao ha constante
+TOTAL... foi o que o `# 22` em comentario fez por 20 dias"*).
+
+**A cura, por isso, nao e "corrigir para 15".** O R6 **nao pode derivar `total()` no lugar**, e o
+motivo eu tinha ERRADO ate 05:3x de hoje: eu escrevi "porque o placar carrega sem Django", e **o juiz
+responde sem Django nenhum** — `linha_do_placar()` devolve `15/20` com `DJANGO_SETTINGS_MODULE` vazio.
+O que bloqueia e o **sys.path**: `bin/gerar_estado.py:137` insere so `raiz/bin` e carrega este arquivo
+por CAMINHO, e o arquivo **nao tem UM import** (zero, por AST). Um `from core import
+contratos_estruturais` ali levanta `ModuleNotFoundError`, o `except` de `:46` o engole ("o ESTADO nunca
+cai por causa do placar") e o placar **PRINCIPAL vira `_indisponivel_`: as SEIS linhas somem em
+silencio** para publicar uma. Causa falsa importa porque ela sobrevive ao commit: quem lesse "e por
+causa do Django" tentaria `django.setup()` no renderizador e nao entenderia por que nao resolve.
+PROVA: logs/placar_estrutural/por_que_r6_copia_a_frase_20261008.txt (simulacao exata com
+`env -u PYTHONPATH`, carga por `spec_from_file_location` como o consumidor faz, `sys.path tem app/ =
+False`, `ModuleNotFoundError: No module named 'core'`), e a correcao da mesma causa falsa em
+`logs/pousos/msg_marco_placar.txt`. Entao o ato de PRODUTO faz a celula **carregar a frase do juiz,
+VERBATIM**
+(`contratos_estruturais: 15/20 verdes`, copiada de proposito para o selo poder exigi-la), e o ato de
+INSTRUMENTO seguinte (L-105, pouso proprio) adiciona o selo que cobra a CONTENCAO — depois dele,
+**fechar uma celula deixa a linha VERMELHA** em vez de a deixar envelhecer calada.
+
+**RED -> GREEN, as duas pontas evidenciadas:**
+- RED na arvore viva: `logs/placar_estrutural/red_frase_do_juiz_20261008.txt` -> `SELO=VERMELHO falhas=1`
+- GREEN na copia curada: `SELO=VERDE -- o R6 publica a frase do juiz, verbatim`
+- e o CONSUMIDOR REAL ainda carrega: standalone no host, sem Django, `R6 PARCIAL prova_faltando=False`,
+  contem a frase do juiz = `True`, ainda contem o `14/20` velho = `False`.
+- o selo MORDE por desenho: a pergunta e contencao, nao parse de prosa — `14/20` na prosa = VERMELHO,
+  e o dia que uma celula fechar, VERMELHO de novo.
+
+A cura esta retida em `logs/pousos/placar_estrutural.py.curado_r6` (+ `placar_estrutural_r6.diff`,
+4 edicoes, `py_compile` limpo) e **nao foi escrita na arvore**: um `.py` sujo sob `app/` faz a GUARDA 2
+do encadeado das 06:08 dizer `PAROU`. Ela entra no **commit do marco** (LEI-AKITA 10). O rascunho do
+selo esta em `logs/pousos/test_r6_publica_a_frase_do_juiz.py.rascunho`, fora de `app/` de proposito —
+qualquer suite de pouso o rodaria RED a partir da arvore viva.
+
+**O numero da celula 4 ESPERA, de proposito.** Os tres numeros em conflito se reconciliam pela funcao da
+propria casa: **122** = 25/09 (o que a celula diz, velho), **121** = hoje, arvore viva (o "antes" do
+aval), **21** = o que a juncao da `wt-esmeril2` promete. Escrever `121` agora seria datar um numero que
+**o meu proprio pouso 3 muda em horas**: ele se mede UMA vez depois dos pousos, com o censo pousado e as
+portas pousadas do MESMO commit, e vai nos DOIS sitios no mesmo ato (`placar_estrutural.py:312-313` e
+`contratos_estruturais.py:371`). **Guarda de vacuidade ja escrita**: `na_porta + fora` tem de sair
+~133 ou mais; bem abaixo de 133 sem um `apagar` correspondente significa sitio que **saiu do censo** em
+vez de ter entrado numa porta, e a celula tera de dizer isso. A juncao foi conferida contra essa suspeita
+e o instrumento ficou **mais largo, nao mais frouxo** (`relacoes`/`_colher_relacoes`/`_raiz_relacionada`,
++118 no censo e +314 em `portas.py`, **zero exclusao nova**).
+
+**PERGUNTA DE LEI (NAO e PAREI e NAO devolve turno — sobe com numero):**
+
+**(b) A porta que a regra do ESTADO abre fecha atras do commit, e a linha da L-101 ficou mentindo.**
+A regra permanente e "nao mudar um ESTADO do LEIS.md fora do commit que muda o codigo ou o teste
+daquela lei". No caso da L-101 (O PRAZO E UM PAPEL, NAO UM JUIZ) os dois commits que mudaram o codigo
+E o teste **ja foram empurrados sem tocar o LEIS.md** -- medido: `git show --name-only bb0bd0fa --
+app/docs/LEIS.md` e o mesmo em `d0625307`, **vazio nos dois**. Hoje a linha 127 diz, em tres celulas
+diferentes, o contrario do que a fonte responde: [4] "PAPEIS tem 7 papeis e nenhum e prazo" contra
+`config/crons.py:1426` = **8** papeis **com** `prazo` (e `PRAZO_DELEGA_A` delegando em `:1504`); [6]
+"falta o selo por AST da O139" contra `bin/tests/test_papel_prazo_nao_deriva.sh`, **329** linhas,
+pousado em `d0625307`; [7] "Auditado 05/10 em c8031f6", de antes dos dois pousos.
+**Eu NAO corrigi**, e e por isso que isto e pergunta e nao fatia: o marco do PLACAR-ESTRUTURAL nao
+toca o papel `prazo`, entao corrigir ali seria exatamente o que a regra proibe. O texto medido e as
+tres celulas propostas estao prontos em `logs/pousos/l101_linha_mede_velho.md`, com a coluna PROTEGE
+**vazia** (ela e sua) e com o aviso de que `PELA-METADE` e proposta: o `0 de 2 clausulas` e de 05/10 e
+quem aplicar remede antes, porque trocar numero velho por numero velho nao e cura.
+A pergunta, em uma linha: **quando o commit dono ja passou, quem conserta a linha?** Ou a correcao
+anda sozinha (e a regra ganha a excecao "linha que a fonte desmente se corrige no proximo ato que
+tocar aquela lei"), ou ela espera o proximo ato do papel `prazo` -- e eu sigo pela segunda, que e a
+leitura literal, ate voce dizer o contrario.
+ o **item 4 do R6** (crons-juiz) segue
+bloqueado pela lei dele em `CORTES.md:99` — *"Nao e fatia: e a divida de desenho que o proprio 4a
+declara. Cada cron sai da lista quando a celula agendar o proprio marco."* Pela
+PAREI-DE-LEI-NAO-DEVOLVE-TURNO a esteira segue o proximo item que nao depende dela, e o CENSO
+mediu qual e (`logs/placar_estrutural/censo_juiz_batida_escala_20261008.txt`, secoes 1 a 6, read-only).
+**Nenhuma das duas celulas "NINGUEM COMECOU" fecha num ato** — e eu escrevi o contrario antes de medir:
+  · `batida x um juiz por pergunta`: **1 pergunta ja declarada** (`ponto/juiz_batida.py::periodos_do_dia`)
+    e **2 pendentes, os dois `zona=dinheiro`**, segurados por cortes dele (a E3 pela metade no aval de
+    26/09; a porta `furo_so_intervalo` da E2). VERDE exige PENDENTES=0, entao esta **atras da E3/E2**.
+  · `escala x um juiz por pergunta`: `JUIZES['escala']` = None — a unica das 9 familias sem pergunta
+    declarada —, mas as 4 perguntas ja tem de 1 a 3 respondedores em PRODUCAO. VERDE exige resolver
+    `escala/utils.py::_esc_vigente_do_dia`, que **e o O142**.
+O que esta desbloqueado agora nao e o verde: e o **passo de DECLARACAO** da S-ESCALA, que e exatamente
+o item **(3)** da ordem sequenciada dele em `CORTES.md:120` (*"juiz escala, os 8 pontos,
+`ponto/nucleo.py:12` primeiro"*) — e os itens (1) e (2) dessa ordem fecharam, medido. O PRIMEIRO que ele
+nomeou esta achado e e o achado que redireciona: **`ponto/nucleo.py::escalas_no_periodo` e
+`::te_vigente_em` respondem "quem vige neste dia" por `ativa=True` / "ultima por `data_inicio`",
+ignorando `escala_geradora`, e NAO aparecem em PENDENTES de familia nenhuma**. O alcance e por CAMPO,
+nao por chamador (corrigi o meu proprio numero, secao 5c): `te_vigente_em` tem **1** chamador e
+`dt_fim_previsto_de` **2**, mas o veredito deles vira `TurnoMaterializado.dt_fim_previsto`, lido pelo
+cron `processar_alertas_turno` das */5, por `ponto/selecao_periodo.py:208` e por `ponto/signals.py:80` — nao sao divida
+conhecida, sao juiz nao declarado. (`chamado x juiz` espera a lei dele; `chamado x escritor` e o pouso
+em curso; `folha/export x juiz` esta atras da O219.)
+Lateral medida no caminho: a celula de batida afirma *"nao ha PENDENTES[batida]"* e **`PENDENTES_BATIDA`
+ja = 2** — a nota da propria celula envelheceu do mesmo jeito que os 4 numeros do R6, e no mesmo arquivo
+da nota de `contratos_estruturais.py:371`. As duas entram no commit do MARCO (L-106, sem commit so de docs).
+
+---
+
+### PLACAR-ESTRUTURAL, o resto do vao (05:0x, read-only — nada escrito em `app/`)
+
+**A PROVA DOS SEIS ESTA SA, e isso fecha uma pergunta que o placar nunca faz.** `placar()`
+(`placar_estrutural.py:350`) so computa `prova_faltando = bool(numero) and not prova`: pergunta se a
+STRING esta vazia, nunca se o ARQUIVO existe. Resolvi as **47** citacoes de arquivo das 6 provas contra
+a base que cada prova declara: **33 arquivos de prova, os 33 existem · 14 sao SITIO de codigo citado na
+prosa · 0 nao achados** (R1 3/3 · R2 2/2 · R3 9+5 · R4 10+8 · R5 2/2 · R6 7+1). Censo em
+`logs/placar_estrutural/prova_dos_seis_20261008.txt`. **Nao construo selo para isso**: foi medido SAO, e
+selo sem defeito medido passa por ausencia de sinal. O `14/20` que sobrevive na prova do R6 nao e numero
+velho — e citacao DATADA de 05/10, procedencia, e fica ao lado da nova.
+**Erro meu no caminho, publicado porque o metodo errado e o barato:** a primeira passada contou **31
+provas inexistentes** e estava errada — casou nome por regex e testou na raiz, sem resolver a base (nome
+nu e relativo ao diretorio citado antes; o bloco do R3 cita `logs/r3_cross/` uma vez so;
+`r5_2345.txt (+ _completo.txt)` e idioma de SUFIXO; e 14 "faltas" eram sitio sob `app/`). Criterio pela
+forma inflou 31 para 0.
+
+**O ITEM (7) DO R6 ENVELHECEU ENQUANTO EU O CURAVA, e a cura entrou na copia.** Ele dizia que
+`escala x juiz` *"e o UNICO sem censo"* e que *"esse sim cai na TRAVA JUIZ-NOVO"*. As duas coisas cairam
+no mesmo dia: o censo existe (`censo_juiz_batida_escala_20261008.txt`) e a trava **nao barra** a
+declaracao — MEDIDO pelo grep do proprio selo, ela ve **56** autoridades contra **54** da base e as duas
+a mais tem frase assinada, porque ela cobra frase por FUNCAO, nao por familia. A Q2 se declara por
+`escala_vigente` (frase assinada por ele em 03/10) e a Q3 por `eh_dia_trabalho` (ja na base): **nenhuma
+string nova**. O que fica como PENDENTE sao os que respondem por conta propria, com `ponto/nucleo.py`
+na frente — o PRIMEIRO que ele nomeou. O VERDE da celula nao sai da declaracao: depende do **O142**.
+Certificado na copia: `py_compile` OK, o consumidor real a carrega standalone (`placar()` devolve
+**lista** de 6 — a minha primeira conferencia lia `p['resultados']` e devolvia `None` em silencio, que
+e vacuidade minha, corrigida), `R6 prova_faltando=False`, a frase do juiz presente VERBATIM e a frase
+velha sobrevivendo **1** vez so, dentro de `ESTA LINHA DIZIA "..."` — citacao, nao afirmacao.
+
+---
+
+### O MARCO FICA MECANICO: os tres ensaios do vao (05:0x-05:2x, so leitura e `logs/`)
+
+Nada foi escrito em `app/` em nenhum momento deste vao. GUARDA 2 = **0** o tempo inteiro.
+
+**(1) O selo da prova mordeu o MEU rascunho, e estava certo.** `bin/relato_afirma_com_prova.py` rodado
+contra o topo + o RELATO vivo (5.755 linhas) achou **1** falha, e era minha: a linha do smoke do pouso 5
+afirmava `NO AR` em negrito sem uma linha `PROVA:` ao lado -- o arquivo existia desde 03:31 e eu
+simplesmente nao o citei junto da afirmacao. Citado, o selo fecha.
+  PROVA: `afirma_com_prova: OK (1 arquivo(s), 0 afirmacao sem prova)`, rc=0, com
+  `bin/tests/afirma_sem_prova_base.txt` INTACTO (`git status --porcelain` vazio) -- a lista de divida so
+  encolhe, e eu nao a ampliei para passar. O selo nao foi tocado: ele esta na lista "medido sao, NAO
+  curar".
+
+**(2) O `regua_tickets` me deu um RED FALSO porque eu medi contra a arvore ERRADA -- e o erro e meu.**
+A cadeia traz **10** citacoes (`C1b`, as quatro `C*-PORTA-*`, `CHAMADO-EM-RAIA`, `O137`, `O167`, `O221`,
+`SEXTO-BANCO`). Contra o `app/docs/TICKETS.md` **vivo**, `O137` e `O167` apareciam como FALTA, e eu
+estava a um passo de abrir duas linhas que ja existem. A autoridade de "tem linha na tabela" nao e a
+tabela de agora: e a tabela **no instante do push**, e a cadeia REESCREVE esse arquivo (ele esta entre
+os 14 `app/docs/` que `HEAD..juncao-o167` toca). Medido contra
+`git show juncao-o167:app/docs/TICKETS.md`: **10 de 10 OK**, com as linhas de `O167` (:121) e `O137`
+(:122) trazidas pelas proprias raias.
+  PROVA: `bash bin/regua_tickets.sh` no estado de agora -> `tickets_placar: OK — placar do topo bate
+  com a tabela e com o git.` / `regua_tickets: OK -- 0 citacao(oes) com linha na tabela` (0 porque
+  `ahead=0`: o `d0625307` ja esta em `origin/main`), e a conferencia das 10 contra a tabela pos-cadeia,
+  uma a uma, toda OK.
+  **O QUE SOBRA como requisito real do push**, e e' uma linha de ORDEM, nao de cura: `regua_tickets`
+  chama `tickets_placar.sh --conferir` ANTES da cobranca de linha, e o bloco do topo tem de bater com a
+  tabela **e com o git**. O commit do marco acrescenta um commit depois do bloco que a raia escreveu,
+  entao a ordem do ato e: merges -> edicoes -> `bin/tickets_placar.sh --escrever` -> `git add` por PATH
+  -> commit -> `bash bin/regua_tickets.sh` como ensaio -> so entao o push. (`--conferir` e so leitura:
+  o unico `open(...,'w')` esta sob `PL_MODO == '--escrever'`, e o `git log` dele vai para um `mktemp`.)
+
+**(3) A nota de `('batida','um juiz por pergunta')` virou PATCH pronto, com ancora unica.**
+`logs/pousos/patch_nota_batida.py` (4.448 B) ancora por TEXTO com `assert count==1`, compila o resultado
+antes de gravar e e idempotente por marcador. Ele corrige a metade que envelheceu: a nota afirma
+`NINGUEM COMECOU ... nao ha JUIZES["batida"] nem PENDENTES["batida"]` e as DUAS chaves existem.
+  PROVA: medido chamando a FONTE (`PYTHONPATH=app python3 -c "from core import juizes"`):
+  `JUIZES['batida']` declara **1** pergunta -- *que periodos e que intervalo teve este dia?* ->
+  `ponto/juiz_batida.py::periodos_do_dia` -- e `PENDENTES['batida']` tem **2** itens, os DOIS com
+  `zona='dinheiro'`: *quantas horas este dia vale?* (fica no motor; a migracao e a E3, cortada pela
+  METADE no aval de 26/09) e *o dia em aberto bloqueia a folha?* (adendo dele de 25/09,
+  `folha/export.py::classificar_export`). **Logo a celula nao esta parada por falta de censo: esta atras
+  de CORTE DELE**, que tem outro dono -- e as perguntas que seguem sem autoridade declarada sao as
+  outras cinco (geofence, espuria, par relampago, aparelho, janela offline).
+  CERTIFICADO em COPIA do `git show HEAD:` (nunca na arvore viva): `--check` OK com ancora **unica**
+  (29.309 -> 29.954 B); aplicado; rodado 2x -> `JA APLICADO ... Nada a fazer`; carregado pelo caminho do
+  consumidor real -> `contratos_estruturais: 15/20 verdes`, `verdes=15 total=20` **inalterados**; e a
+  celula e identica ao vivo em **todas** as chaves menos `nota` (`excecoes`, `idempotencia`, `teste`,
+  `verde=False` -- a cura e de NOTA, nao de estado). `'NINGUEM COMECOU'` sobrevive **1** vez, e so
+  dentro da citacao (`esta nota dizia "`).
+  A TRAVA JUIZ-NOVO **nao morde aqui**, e isso se mediu em vez de se supor:
+  `bin/tests/test_juiz_novo_tem_corte.sh:24-28` varre `app/core/juizes.py` e SO ele, entao
+  `'ponto/juiz_batida.py::periodos_do_dia'` entre aspas neste arquivo nao pede corte. Em `juizes.py`
+  pediria -- e e por isso que a nota da S-ESCALA vai **sem aspas e sem `::`**.
+  O `:371` (`122 FORA`) segue INTOCADO, de proposito: ele e o numero pos-pouso, e medi-lo agora seria
+  medir a arvore que a cadeia vai mudar -- o mesmo erro do item (2), uma hora antes.
+
+**(4) A licao do item (2) valia para MAIS TRES artefatos, e eu so a tinha aplicado ao TICKETS.**
+Tudo que eu certifiquei neste vao foi certificado contra a arvore de ANTES da cadeia e vai ser aplicado
+DEPOIS dela. Medido um por um contra `git show juncao-o167:`:
+  - **`app/core/contratos_estruturais.py` E TOCADO pela cadeia** -- `492 insercoes, 5 delecoes`. A ancora
+    do `patch_nota_batida.py` sobrevive: `--check` contra a versao pos-cadeia -> **ancora unica**, compila
+    (76.796 -> 77.441 B). Se nao sobrevivesse, o `assert count==1` recusaria em vez de gravar torto, que
+    e exatamente para isso que ele existe.
+  - **`app/core/placar_estrutural.py` NAO e tocado** -- entao a base do patch do R6 nao se move, e
+    `git apply --check -p1` segue OK depois de eu regerar o diff (**100** linhas).
+  - **O PLACAR NAO MUDA com a cadeia, e isso era o risco real do R6**: a cura do R6 carrega a frase do
+    juiz VERBATIM, entao se a cadeia fechasse uma celula a cura nasceria velha -- o proprio defeito que
+    ela cura. MEDIDO chamando `linha_do_placar()` nas DUAS versoes: vivo `contratos_estruturais: 15/20
+    verdes`, pos-cadeia **`15/20` tambem**; `verdes=15 total=20` nos dois; celulas que ficam verdes com a
+    cadeia = **[]**, celulas que deixam de ser = **[]**. A cura nasce verdadeira.
+  - **O selo do RELATO rodado contra a arvore POS-CADEIA** (a cadeia reescreve `app/docs/RELATO.md`:
+    5.253 -> 5.296 linhas), e do jeito que `bin/relato.sh:72-73` o chama -- os DOIS arquivos, `RELATO.md`
+    e `RELATORIOS-PLANO.md`: `afirma_com_prova: OK (2 arquivo(s), 0 afirmacao sem prova)`, rc=0. A cadeia
+    nao toca o selo nem a sua linha de base. (E o selo gateia o PUBLICAR, nao o push: ele retem o RELATO
+    do ciclo e deixa ESTADO e SESSAO seguirem.)
+
+**(5) O ff-only dos tres pousos COLIDE com `app/docs/RELATO.md`, e a guarda disso ja existe.**
+`git merge --ff-only` recusa qualquer path rastreado SUJO que o checkout mudaria, e a GUARDA 2 conta so
+`.py|.html`. Medido por `comm -12` entre os sujos rastreados e o que cada raia toca: os TRES pousos
+colidem em `app/docs/RELATO.md` (os outros tres sujos -- `HANDOFF-SESSAO.md`, `bin/sombra.sh`,
+`config/crons_duracao.json` -- nao sao tocados por raia nenhuma). **Nao e cura minha**: os tres scripts
+ja tem o bloco que guarda o colidente em `git stash push` com copia e diff carimbados em
+`logs/pousos/`, faz o ff e devolve com `git stash pop` (pouso 3 :85-108, pouso 4 :98-121, pouso 5
+:153-176), e `.py`/`.html` ficam DE FORA de proposito -- se um deles estiver sujo o ato para na guarda de
+arvore limpa, que e onde tem de parar. Conferido nos tres antes do disparo, nao descoberto as 06:08 com
+um `.done` morto.
+
+**(6) O item (5) do R6 deixou de carregar numero, e a raia e quem ensinou a forma.** A nota dizia
+`122 escritas fora de porta em 49 arquivos`; a raia do chamado moveu esse placar de PROSA para um TESTE
+-- `chamados/tests/test_chokepoint_chamado_gate.py`, `ALLOWLIST = ()` vazia e `TETO_POR_ENTIDADE` exato,
+com a propria nota de la avisando "o numero VIVO mora no `TETO_POR_ENTIDADE` abaixo, nao [nesta prosa]".
+Entao o pendente que eu tinha -- "escrever o numero pos-pouso nos DOIS arquivos" -- **estava errado pela
+metade**: o lado do `contratos_estruturais.py` ja foi curado pela raia, e melhor do que eu ia curar
+(numero em prosa -> teto em teste). O que sobrava era o `placar_estrutural.py`, que a cadeia nao toca, e a
+cura certa nao e copiar o numero novo: e NOMEAR a autoridade e nao repetir o valor, que e a mesma
+TESTEMUNHA LE, NAO RECALCULA do R6. O `122` sobrevive **1** vez no arquivo, e so dentro de
+`ESTA LINHA DIZIA "`.
+  PROVA: `TETO_POR_ENTIDADE` no tip da cadeia = `ChamadoColaborador 12 · DisputaSupervisao 4 ·
+  PerguntaDisputa 5`, soma **21** -- que e o `121 -> 21` do aval dele, conferido e nao crido. Patch
+  regerado: `git apply --check -p1` OK; `py_compile` OK; `placar()` devolve **6** resultados com R6
+  `estado='PARCIAL'`, `prova_faltando=False`; a frase do juiz presente verbatim; o gate citado como
+  autoridade do item (5). RED/GREEN refeito depois da edicao: arvore viva ->
+  `SELO=VERMELHO falhas=1` (*"a prosa publica ['14/20 verdes']"*), copia curada -> `SELO=VERDE`.
+  **Com isso o `:371` que eu reservava para "medir depois do pouso" nao existe mais como pendente**:
+  nao ha numero meu para escrever ali.
+
+---
+
 A **O221 esta NO AR nos DOIS pousos** (`bb0bd0fa` produto as 00:37:34; o instrumento neste push) e o
 placar, perguntado ao juiz dentro do `saas_core`, diz **15/20 verdes**. A O139 fechou: o papel `prazo`
 (L-101) tem cadastro, o contador `juizes_por_varredura` caiu de **27 para 25** medido pela funcao real, e
