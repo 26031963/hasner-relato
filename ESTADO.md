@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 04:42:31.**
+**Medido em 08/10/2026 04:48:01.**
 
 | | |
 |---|---|
@@ -112,42 +112,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  its neighbour te_vigente_em (:19) answers Q1 by "última por data_inicio". So his "ponto/nucleo.py:12 primeiro" is exact, and my Q1
+  dismissal was wrong — Q1 does have a competing answerer. Measuring both:
 
   Ran 1 shell command
 
-● Q1 isn't a question at all — the tipo is a field of whichever vínculo Q2 elects (escala/models.py:832, FK), with zero function deciding
-  it. Confirming the two declarations that matter, then writing the census durably:
+● Background command "Esperar o carimbo da sombra de hoje virar, com teto em 05:40" completed (exit code 0)
 
-  Ran 2 shell commands
+● The sombra waiter fired — that preempts everything:
 
-● corte Ronald: juiz escala_vigente nasce already exists — and that function's own docstring says "A JUIZA NAO MORA AQUI". Reading what he
-  actually cut:
+  Read 1 file
 
-  Ran 1 shell command
-
-● Decisive: corte Ronald: juiz escala nasce (CORTES.md:111) and juiz batida nasce (:110) exist since 25/09 and name exactly the question
-  lists in the matriz — so the sessões are already authorized. And CORTES.md:119 says escala_vigente "entram em app/core/juizes.py" by his
-  03/10 order. Verifying whether it ever entered:
+● SOMBRA=OK dia=20261008 tipo=completa diverge=0 erros=0, bloco 69/69 erro=0 — GUARDA 4 passes for all three pousos, the 06:08 chain is
+  safe, no cure needed. ~84 min of gap left. Correcting the census with what ponto/nucleo.py turned out to be:
 
   Ran 1 shell command
 
-● MEASURED, and it redirects the item: of his three signatures of 03/10 (CORTES.md:119), only periodos_do_dia entered the registry.
-  batidas_apuraveis and escala_vigente — both with the corte signed, both explicitly ordered "entram em app/core/juizes.py" — never
-  entered. Writing the census durably:
+● Now §4's framing — his order was sequenced, and items (1) and (2) measurably closed, which makes item (3) due rather than neglected:
 
-  Ran 1 shell command
+● Reescrever seções 1, 5 e acrescentar a seção 6
+  ⎿  $ cd /home/ronald/saas-hasner
+     F=logs/placar_estrutural/censo_juiz_batida_escala_20261008.txt
+     python3 - "$F" <<'PY'
+     import sys
+     f=sys.argv[1]; s=open(f).read()
+     # 1) ajustar o paragrafo da escala na secao 1
+     a = '''MEDIDO: correto -- JUIZES['escala'] = None, PENDENTES['escala'] = 0.
+     JUIZES tem 9 famili…
 
-● Census is durable. Calling the advisor before committing to what this item's next fatia is:
-
-● Advising using Fable 5.1
-
-✢ Beboppin'… (10h 33m 42s · ↓ 1.0m tokens)
+✢ Compacting conversation… (10h 39m 12s · ↓ 1.0m tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 38%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
