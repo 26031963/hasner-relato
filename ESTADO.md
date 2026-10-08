@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 16:32:31.**
+**Medido em 08/10/2026 16:38:01.**
 
 | | |
 |---|---|
@@ -34,6 +34,7 @@ f189ce0a O211 achado 3: o cadastro que decide a regua sai da edicao livre do adm
 ```
  M app/config/crons_duracao.json
  M app/docs/AVAIS.md
+ M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
  M app/docs/PENDENTES_RONALD.json
  M bin/sombra.sh
@@ -113,9 +114,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-  Ran 3 shell commands
 
 ● Agora o RED, antes da cura:
 
@@ -131,8 +129,11 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Background command "Medir o item 1 contra a frota na sombra" completed (exit code 0)
 
-● Ler o escritor da celula de estado
-  ⎿  $ cat -n /home/ronald/saas-hasner/bin/backlog_estado.py
+● Atualizar a celula da GESTAO-HE-FATIA-2 pelo escritor canonico
+  ⎿  $ cd /home/ronald/saas-hasner
+     python3 bin/backlog_estado.py "GESTAO-HE-FATIA-2-LOTE-E-LIMITE" '**registrada**: nao se constroi antes da troca da S5b. O item (3)
+     dela chegou por OUTRO caminho (O214 item 1, 08/10): `Empresa.limite_decisao_he_min` nasceu na migration 0057 com default **15** e
+     efeito r…
   ⎿  Read docs/AVAIS.md (26 lines)
   ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/biv82p8a3.output (11 lines)
   ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/patch_leis.py (113
@@ -142,7 +143,7 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Task "RED e construção do segundo intervalo" completed in background
 
-✢ Wrangling… (3h 6m 52s · ↓ 330.1k tokens · thinking more)
+✢ Wrangling… (3h 12m 22s · ↓ 334.7k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
