@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 14:03:01.**
+**Medido em 08/10/2026 14:08:31.**
 
 | | |
 |---|---|
@@ -136,17 +136,17 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-● Esperar o veredito da suite · 46s
+● Esperar o veredito real da suite · 4m 52s
   ⎿  $ cd /home/ronald/saas-hasner &&
      S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/achado3
-     until grep -qE '^(OK|FAILED)( |$)' $S/suite_cheia.out 2>/dev/null; do :; done
-     echo "=== fim $(date '+%H:%M:%S') ==="
-     grep -E '^Ran [0-9]+ tests' $S/suite_cheia.ou… (46s)
+     until grep -qE '^Ran [0-9]+ tests' $S/suite_cheia.out 2>/dev/null; do :; done
+     sleep_guard=0
+     until grep -qE '^(OK|FAILED)( \(|$)' $S/suite_cheia.out 2>/dev/null; d… (4m 51s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Wrangling… (37m 22s · ↓ 67.7k tokens)
+✢ Wrangling… (42m 52s · ↓ 68.5k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                   12% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
