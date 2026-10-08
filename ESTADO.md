@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 00:41:30.**
+**Medido em 08/10/2026 00:46:51.**
 
 | | |
 |---|---|
@@ -132,12 +132,12 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Agora o ato único — produto na árvore, commit e deploy sem nada no meio (L-107):
 
-● Empurrar o pouso 1 pela regua · 4s
+● Empurrar o pouso 1 pela regua · 5m 26s
   ⎿  $ cd /home/ronald/saas-hasner && git push origin main > logs/o221_p1_push.out 2>&1; echo "rc=$?"; tail -8 logs/o221_p1_push.out; echo
-     "=== remoto:"; git fetch origin -q && git log --oneline -1 origin/main (4s)
+     "=== remoto:"; git fetch origin -q && git log --oneline -1 origin/main (5m 26s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✻ Beboppin'… (6h 32m 41s · ↓ 556.5k tokens)
+✢ Beboppin'… (6h 38m 2s · ↓ 556.5k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
