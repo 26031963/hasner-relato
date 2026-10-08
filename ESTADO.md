@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 07/10/2026 21:28:31.**
+**Medido em 07/10/2026 21:34:01.**
 
 | | |
 |---|---|
@@ -37,6 +37,7 @@ edb40127 [O208] o contador do recalculo era cego ao campo da cura: mexidos=36 er
  M app/docs/HANDOFF-SESSAO.md
  M app/docs/LEIS.md
  M app/docs/PROMPTS.md
+ M app/docs/RELATO-ARQUIVO.md
  M app/docs/RELATO.md
  M app/docs/TICKETS.md
  M bin/sombra.sh
@@ -113,44 +114,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Triagem dos 8 selos vermelhos — fechada, zero real. Os oito ficam verdes na árvore viva: são artefato de worktree (sem .git/hooks, sem
-  logs/deploy.stamp, sem .claude/settings.json, app/staticfiles/ vazio). Nenhum defeito meu.
+● O hook está certo — fila 1 de pé, siga. A suite segue na pista, então avanço o item pelo lado que não toca a raia: o script de apply em
+  prod, que é o passo seguinte ao DIFF.
 
-  O220 DIETA-DE-CARGA — despachada em paralelo, por agente, como o aval manda, com os seis medidos antes: CLAUDE.md 760 linhas/64.474 B ·
-  LEIS.md 256/118.678 · RELATO.md 6.906/596.268 · BACKLOG.md 697/524.396 · RELATO-ARQUIVO.md 27.272/2.177.802 · LAPIDES.md ainda não
-  existe. Os seis são os quatro da linha da O220 mais os dois DESTINOS, para que "mover, nunca apagar" se prove pela soma. Aval registrado
-  no PROMPTS.md. Corrigi ao agente uma premissa que era minha e não medida: eu havia dito "os 62 selos estão verdes na árvore viva" tendo
-  rodado oito — ele agora tira a base dos 62 antes de editar, e só o delta é dele.
+  Ran 1 shell command
 
-  Uma inversão de lei evitada, e ela era minha. Eu ia deployar a cura e medir o DIFF depois, contando com o DEPLOY JÁ. Isso inverte a
-  condição 1 da DINHEIRO-EM-COMPETENCIA-ABERTA: prod recalcula FechamentoMensal por evento a cada batida, então código curado no ar move
-  gravado antes de existir DIFF. Curei na origem, não reordenando: bin/sombra.sh::container() cravava -v $RAIZ/app:/app:ro, e porta que só
-  vê a árvore viva nunca mede a única medição que importa antes de um pouso — a de uma cura que ainda não está no ar. Agora aceita
-  SOMBRA_ARVORE, e settings, banco, proxy morto, cpuset e a guarda E_SOMBRA seguem morando num lugar só.
+● Guardas estruturais, não lembretes. Aponto o script de apply para a obra da vez, sem forkar:
 
-  O arreio da medição passou a dizer qual obra mede (LEI-AKITA 8): o censo deixou de ser os 11 colabs e o .tsv da O195 e virou declarado —
-  col146 em 28 e 29/09, as células 118980 e 118981. Rodá-lo com o rótulo velho seria a conta certa com o nome errado, que é a lápide dos
-  LABELS em quatro lugares.
+  Ran 2 shell commands
 
-  A suite inteira de labels segue correndo na raia (as 32 da bateria já estavam verdes, ruff limpo, e os 123 vizinhos também). Sombra:
-  carimbo de hoje, completa, divergência 0 — base boa para o DIFF. Assim que a suite libera a pista: DIFF de frota na sombra com a árvore
-  da raia → publico → commit da raia → merge+deploy num ato → apply do col146 com reversão e hash09 nos dois lados → e só então a célula,
-  que tem de virar por medição.
+● Preparo o contador do item (g) fora da raia. Primeiro: a medição já existe em algum lugar? Lei existente antes de corte novo:
 
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: CELULA-TURNO-FECHA -- CELULA+TURNO FECHA: a soma propria do realizado sai, e o dia sem par leva a
-  PALAVRA (item 1 dos DOSSIES, aval
+  Ran 1 shell command
 
-✢ Beboppin'… (3h 19m 42s · ↓ 292.7k tokens)
+● Background command "Rodar a suite inteira de labels na raia" completed (exit code 0)
+
+● Suite terminou. Veredito:
+
+  Ran 1 shell command
+
+● 9.673 testes, 1 falha. Acho qual:
+
+  Ran 1 shell command
+
+● Falha real, causada pela minha cura. Leio o selo antes de afirmar:
+
+  Ler o selo que ficou vermelho
+  ⎿  $ cd /home/ronald/wt-lavra/app && sed -n '110,160p' ponto/tests/test_realizado_do_dia_autoridade.py
+
+· Beboppin'… (3h 25m 12s · ↓ 297.9k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                 Stop hook error occurred · ctrl+o to see
+
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Locating insertion point in RELATO-ARQUIVO.md                                               16m 2s · ↓ 159.6k tokens
+  ◯ general-purpose  Appending block to RELATO-ARQUIVO.md                                                       21m 31s · ↓ 168.0k tokens
   ⧉  index
 ```

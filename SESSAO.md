@@ -6,10 +6,17 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 07/10/2026 21:28:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (420.3 MB). Acoes na janela: **283**.
+**Medido em 07/10/2026 21:34:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (420.7 MB). Acoes na janela: **290**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 21:30:00 | Bash | Ler o selo que ficou vermelho | `cd /home/ronald/wt-lavra/app && sed -n '110,160p' ponto/tests/test_realizado_do_dia_autoridade.py` |
+| 21:29:53 | Bash | Localizar a falha da suite | `cd /home/ronald/saas-hasner && grep -nE "^(FAIL\|ERROR):" logs/suite_o218_raia.out \| head; echo "=== bloco ==="; awk '/^={20,}/{f=1} f' logs/suite_o218_raia.out \| sed -n '1,60p'` |
+| 21:29:48 | Bash | Ler o veredito da suite | `cd /home/ronald/saas-hasner && grep -nE "^(OK\|FAILED)" logs/suite_o218_raia.out; echo "=== Ran ==="; grep -nE "^Ran [0-9]+ tests" logs/suite_o218_raia.out; echo "=== rc ==="; tail -3 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bmk6h8el8.output` |
+| 21:29:42 | Bash | Procurar medidor existente de ata x autoridade | `cd /home/ronald/saas-hasner && grep -rln "ata.*autoridade\\|ata_min\\|regra antiga\\|regra_velha" --include=*.py app/core app/ponto/management/commands logs/*.py 2>/dev/null \| head; echo "=== comandos com cara de medidor ==="; ls app/ponto/management/commands/ \| grep -iE "ata\|conform\|divergen\|oraculo"` |
+| 21:29:18 | Bash | Conferir imports antes do uso e a suite | `cd /home/ronald/saas-hasner && grep -n "^import \\|^from \\|localtime" logs/o209_apply_frota_prod.py \| awk -F: '$1<90' \| head -12; echo "=== suite ==="; grep -nE "^(OK\|FAILED\|Ran )" logs/suite_o218_raia.out \| tail -4; echo "bytes=$(wc -c < logs/suite_o218_raia.out)"` |
+| 21:29:10 | Bash | Apontar o apply para a obra da vez | `cd /home/ronald/saas-hasner && python3 - <<'PY' import io p = 'logs/o209_apply_frota_prod.py' s = io.open(p, encoding='utf-8').read() n = 0 velho = """ESP_CAM = '/tmp/o209_esperado_20261005.json' REV_DIR = '/app/logs/o209' """ assert s.count(velho) == 1 s = s.replace(velho, """# O ARREIO DO APPLY SERVE A OBRA DA VEZ (O218, 07/10). Os dois caminhos estavam cravados em `o209` # e na data de 05/10; q ...` |
+| 21:28:47 | Bash | Ler as guardas do script de apply | `cd /home/ronald/saas-hasner && sed -n '60,115p' logs/o209_apply_frota_prod.py` |
 | 21:27:56 | Bash | Conferir a suite | `cd /home/ronald/saas-hasner && grep -nE "^(OK\|FAILED\|Ran \|ERROR:\|=+ ERROR)" logs/suite_o218_raia.out \| tail -6; echo "bytes=$(wc -c < logs/suite_o218_raia.out)"` |
 | 21:27:47 | Bash | Ler o script de apply em prod | `cd /home/ronald/saas-hasner && grep -n "esperado\\|_CAM\\|ESPERADO" logs/o209_apply_frota_prod.py \| head -20; echo "=== head ==="; sed -n '1,28p' logs/o209_apply_frota_prod.py` |
 | 21:27:40 | Bash | Achar o script de apply em prod da O209 | `cd /home/ronald/saas-hasner && ls -la logs/*.py logs/prod/*.py 2>/dev/null \| head -20; echo "=== quem le o esperado ==="; grep -rln "esperado_2026\\|o209_esperado" logs/ --include=*.py --include=*.sh 2>/dev/null \| head` |
