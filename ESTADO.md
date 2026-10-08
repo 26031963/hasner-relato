@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 02:01:01.**
+**Medido em 08/10/2026 02:06:31.**
 
 | | |
 |---|---|
@@ -34,6 +34,7 @@ b4372615 [O218] o marco da lavratura: a celula do juiz da celula fecha por EFEIT
 ```
  M app/config/crons_duracao.json
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/RELATO.md
  M bin/sombra.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -109,38 +110,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  viva depois do pouso — escrever "NO AR" antes do ar seria a testemunha mentindo:
+
+● Cron armado para 08/10 06:08 (/etc/cron.d confere), o listar fica com a cura pronta e nomeada. O portão até as 06:00 é declarado, não é
+  PAREI — então sigo a ORDEM VIVA. O próprio aval estende o ! de pouso à raia de agente que migrou 2 crons-juiz, e L-105 manda pousar raia
+  verde antes de abrir fatia nova:
+
+  Ran 2 shell commands
+
+● A raia é worktree-agent-aa191f4ffa104591b → 00bd05fb "[O139] o papel prazo … e dois crons o ocupam MEDIDOS". Mas o papel prazo já pousou
+  no pouso 1 (bb0bd0fa) e o selo dele no pouso 2. A pergunta honesta é se a raia ainda carrega algo que o main não tem:
 
   Ran 1 shell command
 
-● import os não entrou (a linha é import re, sys, pathlib) — py_compile não pega nome indefinido:
+● Esse diff é enganoso — a raia está 81 commits atrás, então o trabalho novo do main aparece como deleção. A contribuição real é contra a
+  base comum:
 
   Ran 1 shell command
 
-● Agora as duas provas pré-pouso contra a cópia — que é exatamente a árvore que vai entrar por fast-forward:
+● 4 dos 6 arquivos já estão idênticos no main (os pousos 1 e 2 os levaram). Resta o essencial: config/crons.py — os dois crons — e o
+  diagrama gerado. Vendo o que a raia fez e se o main mexeu no mesmo arquivo desde a base:
 
   Ran 1 shell command
 
-● rc=2 — ALARME, e a causa é minha: resolvi --ours um bullet que é gerado. O placar do TICKETS deriva da nota= do contrato, e o merge
-  trouxe a nota remedida da raia (131/12/119) enquanto eu mantive o texto velho do main (134/12/122). Vendo a extensão:
+● O pouso 1 já levou o papel prazo. Então o que resta mesmo é só o delta contra o main de agora:
 
-  Ran 1 shell command
+● Diff direto de crons.py main x raia
+  ⎿  $ cd /home/ronald/saas-hasner && B=worktree-agent-aa191f4ffa104591b && diff <(git show main:app/config/crons.py) <(git show
+     "$B:app/config/crons.py") | head -60; echo "=== tamanho do delta:"; diff <(git show main:app/config/crons.py) <(git show
+     "$B:app/config/crons.py") | grep -c '^[<>]'
 
-● Só 2 linhas (57 e 74), ambas do bloco gerado — a cura é o escritor canônico, não a mão:
-
-  Ran 1 shell command
-
-● regua_tickets rc=0, e de passagem fecha o ponto 5 da revisão por medição: "7 citacoes com linha na tabela". Agora os docs do pouso,
-  contra a cópia:
-
-● Rodar a pasta de selos de host na copia
-  ⎿  $ cd /home/ronald/wt-chamado2 && falhos=0; tot=0; for f in bin/tests/test_*.sh; do tot=$((tot+1)); if ! out=$(bash "$f" 2>&1); then
-     falhos=$((falhos+1)); echo "### VERMELHO: $f"; echo "$out" | tail -6; fi; done; echo "=== selos de host na copia: $tot rodados,
-     $falhos vermelho(s)"
-
-✢ Beboppin'… (7h 52m 12s · ↓ 665.4k tokens · thinking)
+✢ Beboppin'… (7h 57m 42s · ↓ 680.9k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    9% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
