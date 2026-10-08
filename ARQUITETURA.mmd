@@ -174,11 +174,13 @@ flowchart TD
     t_evento["EVENTO<br/>batida, ausencia, chamado -> cartorio julga na hora (signals B5.2)"]
     t_consumidor["CONSUMIDORES<br/>chamado, pergunta, tela, folha: leem a lampada, nunca re-julgam"]
     t_vigia["CRON = VIGIA<br/>20 vigias; contador esperado 0, so alarma"]
-    t_juiz["JUIZ POR VARREDURA (divida)<br/>27 crons ainda julgam: esperado 0"]
+    t_prazo["CRON = PRAZO (L-101)<br/>2 cron(s): a falta nao emite evento, o relogio e o unico sinal dela;<br/>julgam pela funcao do juiz da casa, sem regra propria (PRAZO_DELEGA_A)"]
+    t_juiz["JUIZ POR VARREDURA (divida)<br/>25 crons ainda julgam: esperado 0"]
     t_escala --> t_celula
     t_evento --> t_celula
     t_celula --> t_consumidor
     t_vigia -.->|mede| t_celula
+    t_prazo -.->|le o juiz do prazo, nao deriva| t_celula
     t_juiz ==>|re-julga, a sair| t_consumidor
   end
   j_apurar_furos_diarios["apurar_furos_diarios"] -.-> t_juiz
@@ -196,7 +198,6 @@ flowchart TD
   j_marcar_foto_ausente_retro["marcar_foto_ausente_retro"] -.-> t_juiz
   j_processar_alertas_avancados["processar_alertas_avancados"] -.-> t_juiz
   j_processar_alertas_turno["processar_alertas_turno"] -.-> t_juiz
-  j_processar_cartorio["processar_cartorio"] -.-> t_juiz
   j_reavaliar_ausencias_feriado["reavaliar_ausencias_feriado"] -.-> t_juiz
   j_reavaliar_ausencias_lancadas["reavaliar_ausencias_lancadas"] -.-> t_juiz
   j_reconciliar_chamados["reconciliar_chamados"] -.-> t_juiz
@@ -207,7 +208,8 @@ flowchart TD
   j_silenciar_chamados_isentos["silenciar_chamados_isentos"] -.-> t_juiz
   j_supra_juiz["supra_juiz"] -.-> t_juiz
   j_termometro_regua["termometro_regua"] -.-> t_juiz
-  j_vigia_de_hora["vigia_de_hora"] -.-> t_juiz
+  pz_processar_cartorio["processar_cartorio<br/>ponto.services.cartorio::julgar_colab"] -.-> t_prazo
+  pz_vigia_de_hora["vigia_de_hora<br/>ponto.services.cartorio::marcos_vencidos"] -.-> t_prazo
 
   %% (e) EVENTO — fonte: @receiver em ponto/signals.py, chamados/signals.py, escala/signals.py (AST)
   subgraph EVENTO["evento: o sinal carimba a celula e acorda o juiz do dia (a lampada avisa)"]

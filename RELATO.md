@@ -45,6 +45,38 @@ chamado pode NASCER numa competencia que o Dominio ja pagou?** -- nao ha L-NNN q
 e decisao tecnica (e dinheiro do colaborador na mesa do DP). Nao devolvo turno por isso
 (PAREI-DE-LEI-NAO-DEVOLVE-TURNO): a pergunta fica aqui com os numeros e a esteira **segue a O211**.
 
+## O221 POUSO 1 — **O PRODUTO DA O139 NO AR, E O INSTRUMENTO FICOU DE FORA DE PROPOSITO** (08/10 00:37:34)
+
+**PROVA:** `9b01e4e6`; `juizes_por_varredura()` pela funcao real = **25** na copia mesclada contra **27**
+no main `97e9e043`, `tupla ^ funcao = []`; suite `bin/suite.sh --dir /home/ronald/wt-o139 --parallel 2` =
+`Ran 9675 tests in 621.827s` -> `OK (skipped=42)`, rc=0; `bin/tests/test_papel_prazo_nao_deriva.sh` contra
+a copia mesclada = `papel_prazo: 2 cron(s) de papel prazo; juizes_por_varredura=25`, rc=0;
+`ruff check` nos tres `.py` = `All checks passed!`; `deploy: OK` as 00:37:34, `importerror_500=0`;
+pasta de selos de host na arvore VIVA = `pasta_rc=0`.
+
+A juncao nasceu em COPIA (`wt-o139`, `cherry-pick -n` sobre o HEAD), e deu **zero conflito**: o main andou
+**79 commits** desde a base da raia (`ba82736d`) e tocou os mesmos dois arquivos, mas em regioes que nao se
+cruzam (`config/crons.py` em `:365` e `:1430` contra `:1380-1490` da raia; `ARQUITETURA.mmd` em 8 pontos,
+nenhum deles nos 4 da raia). Produto para a arvore, commit, `deploy.sh` -- nada no meio (L-107).
+**O numero foi REMEDIDO, nao copiado**: a raia publicou 27 -> 25 contra a base DELA, e a base dela nao e o
+main. O cron que o main acrescentou nesses 79 commits (`lavrar_previsto_cego`, 07:33) nao ficou sem papel --
+o selo da raia, exercido contra a copia mesclada, responde pelos dois.
+**Os derivados nao foram mesclados a mao**: `ARQUITETURA.mmd` e `MAPA.md` saem de `gerar_diagrama`, e a raia
+mudou o PROPRIO gerador; rodei o comando real contra a copia e o resultado e bit a bit o da juncao textual
+(`369 linhas; docs/MAPA.md: 60 linhas`, zero arquivo modificado depois).
+**O instrumento ficou fora por L-105**, nao por duvida: `bin/tests/test_papel_prazo_nao_deriva.sh` ja esta
+exercido (rc=0 acima) e pousa no ato seguinte. O preco de 04/10 foi medido -- instrumento no mesmo pacote
+do produto travou o pouso da folha por 1 h.
+
+**LATERAL DEVIDO, uma linha, nao desvio:** `bin/crons.sh check` diz DIVERGE em **uma** linha, e ela nao e
+desta fatia -- `eval/noturno.py` esta **02:33 no codigo e 02:37 no host**, porque o horario dele e
+**DERIVADO** (`crons.py:445`, `inicio_derivado('noturno.py', vizinho='03:20', piso='00:15')`) e a duracao
+medida mora em `config/crons_duracao.json`, que por lei **nunca e commitado**. Entao a derivacao anda sozinha
+e o crontab do host so a acompanha quando alguem roda `install` -- que `crons.py:198` ja registra como
+capaz de **APAGAR** linhas so-do-host. Nao instalei: a cura de origem e quem reinstala depois da derivacao
+andar, e isso e desenho, nao este pouso. O `check --medir` das 04:05 e o `placar_code.sh` ja publicam a
+divergencia com a cura ao lado.
+
 ## O222 — **NO AR, E O PLACAR CONFERIDO PELO JUIZ** (08/10 00:09, marco empurrado 23:5x)
 
 **PROVA:** `linha_do_placar()` chamado DENTRO do `saas_core` (schema juliani) devolve

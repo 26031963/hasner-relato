@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 00:36:01.**
+**Medido em 08/10/2026 00:41:30.**
 
 | | |
 |---|---|
-| `HEAD` local | `97e9e043 [O222] a caracterizacao do veredito: a passada 1 carimba `furo` e abre a cobranca, e so a 2 le a cobranca que ela mesma abriu` |
+| `HEAD` local | `bb0bd0fa [O221] pouso 1, so PRODUTO: o papel `prazo` da O139 entra no main, e o selo dele fica para o ato seguinte` |
 | `origin/main` | `97e9e043 [O222] a caracterizacao do veredito: a passada 1 carimba `furo` e abre a cobranca, e so a 2 le a cobranca que ela mesma abriu` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -22,11 +22,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+bb0bd0fa [O221] pouso 1, so PRODUTO: o papel `prazo` da O139 entra no main, e o selo dele fica para o ato seguinte
 97e9e043 [O222] a caracterizacao do veredito: a passada 1 carimba `furo` e abre a cobranca, e so a 2 le a cobranca que ela mesma abriu
 b4372615 [O218] o marco da lavratura: a celula do juiz da celula fecha por EFEITO MEDIDO, e o placar vai a 15/20
 1b6d5d02 [O218] pouso da raia-lavra: a bateria da lavratura entra no main com o DIFF de frota ja publicado
 107e3bb5 [O218] a bateria da lavratura: a passada 1 escrevia lampada nova com minuto velho, e o match do dia dependia de onde a janela comecava
-cd37557a [O220] a dieta de carga: a casa inteira se lia em 1,3 MB de prosa, e -275.549 B sairam sem que uma regra mudasse
 ```
 
 ## `git status --short`
@@ -34,7 +34,6 @@ cd37557a [O220] a dieta de carga: a casa inteira se lia em 1,3 MB de prosa, e -2
 ```
  M app/config/crons_duracao.json
  M app/docs/HANDOFF-SESSAO.md
- M app/docs/RELATO.md
  M bin/sombra.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -129,16 +128,16 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Suite da cópia VERDE: Ran 9675 tests in 621.827s → OK (skipped=42), rc=0. Pondo a prova no topo e trazendo o produto para a árvore:
 
-  Mover a PROVA para junto da afirmacao
-  ⎿  $ python3 - <<'PY'
-     import re
-     p='docs/RELATO.md'
-     s=open(p).read()
-     prova=('**PROVA:** `linha_do_placar()` dentro do `saas_core` = `contratos_estruturais: 15/20 verdes`;\n'
-     '`deploy: OK -- migrations em dia, tres cascas reiniciadas juntas, tres rotas provadas` (00:09:48);\n'
-     'suite da copia `wt-o139` …
+  Ran 7 shell commands
 
-✢ Beboppin'… (6h 27m 12s · ↓ 543.7k tokens · thinking)
+● Agora o ato único — produto na árvore, commit e deploy sem nada no meio (L-107):
+
+● Empurrar o pouso 1 pela regua · 4s
+  ⎿  $ cd /home/ronald/saas-hasner && git push origin main > logs/o221_p1_push.out 2>&1; echo "rc=$?"; tail -8 logs/o221_p1_push.out; echo
+     "=== remoto:"; git fetch origin -q && git log --oneline -1 origin/main (4s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✻ Beboppin'… (6h 32m 41s · ↓ 556.5k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

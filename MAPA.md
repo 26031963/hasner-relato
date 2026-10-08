@@ -20,7 +20,7 @@ core/tests/test_selo_diagrama_do_codigo.py regenera os dois e compara.
 - chamados/services/fio.py::reapontar_resolvedora -- reapontar fio
 
 ## (d) TABULEIRO (papel de cada cron)
-- config/crons.py::papel, PAPEIS = juiz, vigia, alerta, lavra, agenda, gerador, infra, JUIZES_POR_VARREDURA (divida: esperado 0)
+- config/crons.py::papel, PAPEIS = juiz, vigia, alerta, lavra, agenda, gerador, infra, prazo, JUIZES_POR_VARREDURA (divida: esperado 0)
 
 ## (e) EVENTO (o sinal acorda o juiz do dia)
 - ponto/services/cartorio.py::julgar_celula (juiz UNICO do dia)
