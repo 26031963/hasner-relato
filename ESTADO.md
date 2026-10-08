@@ -3,11 +3,11 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 07:01:31.**
+**Medido em 08/10/2026 07:07:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `78909bdf o alarme da esteira volta a ser lido PRIMEIRO: a ancora do no_relato passa a ser secao pinada propria, e nao um else que cai no EOF` |
+| `HEAD` local | `cf03dbcb o alarme da esteira volta a ser lido PRIMEIRO: a ancora do no_relato passa a ser secao pinada propria, e nao um else que cai no EOF` |
 | `origin/main` | `88bbc0c4 [O221] o marco do PLACAR-ESTRUTURAL: o R6 passa a publicar a frase do juiz, e as duas notas que envelheceram dizem o que foi medido` |
 | commits a subir (`ahead`) | **2** |
 
@@ -22,7 +22,7 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
-78909bdf o alarme da esteira volta a ser lido PRIMEIRO: a ancora do no_relato passa a ser secao pinada propria, e nao um else que cai no EOF
+cf03dbcb o alarme da esteira volta a ser lido PRIMEIRO: a ancora do no_relato passa a ser secao pinada propria, e nao um else que cai no EOF
 32d1d7fd O topo do TICKETS fechado no ato do push (O112)
 88bbc0c4 [O221] o marco do PLACAR-ESTRUTURAL: o R6 passa a publicar a frase do juiz, e as duas notas que envelheceram dizem o que foi medido
 9b64ee79 [O167] a uniao dos pousos 4 e 5: a raia do esmeril de ausencia entra na raia de agente, e o conflito e UMA linha de tabela
@@ -34,7 +34,6 @@ e7dcd970 [O167] pouso 5, a juncao da raia de agente: os quatro cadastros ficam s
 ```
  M app/config/crons_duracao.json
  M app/docs/HANDOFF-SESSAO.md
- M app/docs/RELATO.md
  M bin/sombra.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -112,38 +111,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Enquanto a espera corre, uma coisa que agora tem número e pede leitura: 115 das 126 linhas vivas são UMA frase, repetida de hora em hora
-  desde 02/10 22:35, e a pausa que a causa tem dono legítimo desde 26/09. Vou ler a condição antes de julgar:
-
-  Ran 2 shell commands
-
-● A lei já está escrita neste mesmo arquivo, medida em 27/09: "Alarme que repete um estado ESCOLHIDO e ruido, e ruido acaba desligado --
-  junto com os alarmes que importam." Ela criou _fab_desligado_com_dono, que silencia o trava_a_vazia — e o vigia_sem_efeito da linha 573
-  não migrou para ela. LEI-AKITA 4 em estado puro: a pergunta não é qual a regra, é qual leitor ficou atrás. Mas há algo pior do que ruído
-  na linha 576:
+● Emendado em cf03dbcb. logs/ é gitignored, então o desenho da dieta fica fora do commit — atualizo de todo modo, é o registro da próxima
+  fatia. Agora a cura 2, construída em cópia do HEAD (LEI-AKITA 10). Primeiro a pergunta que decide o tamanho do patch:
+  _fab_desligado_com_dono já está em escopo na linha 573?
 
   Ran 1 shell command
 
-● sem_efeito_seguidas = **1699** — 1699 tiques × 5 min ≈ 5,9 dias, batendo com os 115 alarmes desde 02/10 22:35. O == 2 disparou uma vez e
-  depois o contador só sobe. Falta ver o que ele executou:
+● Uma função só (decidir, 384..588), variável atribuída em 513 — já em escopo na 573. A cura são duas linhas, sem hoisting. Agora o RED, e
+  para isso preciso da forma como decidir já é exercitada:
 
   Ran 1 shell command
 
-● Alívio medido: o único AUTO-REVERT no RELATO vivo é a minha própria linha 12 — nenhum revert recente. Mas o cura_sem_efeito escreve só
-  por linhas.append, nunca por no_relato, então o veredito dele não está no RELATO. Uma busca e paro de escavar:
+● test_vigia_trava_a_com_fabricante_desligado.py é exatamente o selo da lei de 27/09 para o OUTRO leitor. É dele que o meu caso nasce —
+  mesma lei, leitor que faltou:
 
-  Ran 2 shell commands
+  Ran 1 shell command
 
-● O veredito: disparou em 24/09 12:30 e 01/10 16:00, as duas vezes terminando em -> arvore nao esta vermelha. Nenhum revert executou — foi
-  ruído, não dano. O quadro do lateral fechou com número: 115 de 126 linhas vivas (91% do que o vigia escreveu no RELATO) são um alarme
-  falso, e a lei que o corrige está escrita no mesmo arquivo desde 27/09, já obedecida pelo irmão trava_a_vazia. Vou consultar antes de
-  construir:
+● Template exato. Preciso de um agora determinístico — teste que depende do relógio de parede é o que a casa já enumerou em
+  bin/relogio_solto.txt:
 
-● Advising using Fable 5.1
+  Ran 1 shell command
 
-✢ Cultivating… (52m 55s · ↓ 118.0k tokens)
+● Agora construo em cópia do HEAD, com âncora por grep e contagem única:
+
+  Ran 1 shell command
+
+● Agora o RED, contra os dois lados, com quatro casos e o relógio cravado:
+
+● Running 1 shell command…
+
+✢ Cultivating… (58m 25s · ↓ 135.6k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    2% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

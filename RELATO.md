@@ -1,34 +1,58 @@
 # RELATO — esteira saas-hasner
 
-**O ALARME DA ESTEIRA VOLTOU A SER LIDO PRIMEIRO -- e o bug era meu, de ~8 dias atras.**
+**O ALARME DA ESTEIRA VOLTOU A SER LIDO PRIMEIRO -- e o bug era meu, de ~6 dias atras.**
 `core/esteira_vigia.py::no_relato` promete no proprio docstring que a linha "entra no TOPO do RELATO,
 onde se le primeiro". Ela ancorava em `\n## PENDENTES DO RONALD`, e a dieta a mao de `2082e03d`
 ARQUIVOU essa secao: desde entao o `i < 0` caia no `else` e DEPOSITAVA o alarme no FIM do arquivo --
 lido por ultimo, contra o que o docstring diz. Nao e um atalho que eu escrevi hoje: e um atalho que ja
 existia e se tornou o caminho UNICO no dia que a ancora saiu de baixo dele.
-- **o dano, medido**: 126 linhas de alarme vivas no RELATO, **90 delas na cauda** (depois do ultimo
-  titulo datado), 280 ja no `RELATO-ARQUIVO.md`, e **12 copias identicas** de um alarme VIVO
-  ("a esteira esta parada e o vigia nao esta destravando") entre 07/10 18:35 e 08/10 05:55. Nove
-  chamadores escrevem por essa porta -- ZUMBIDO, quarentena, AUTO-REVERT, lote rejeitado.
+- **o dano, medido, e o molde vai COLADO em cada numero** (LEI-AKITA 8: rotulo diz o que a conta faz).
+  Universo = linha de uma linha so no molde `^**DD/MM HH:MM `, que e o que o `no_relato` escreve:
+  **126 vivas** no RELATO (114 delas carregam `(ALARME)`), **300 ja no `RELATO-ARQUIVO.md`** (178 com
+  `(ALARME)`). Das 126 vivas, **90 estavam na CAUDA**, depois do ultimo titulo datado.
+- **as outras 36 contam a historia pior, e nao foram movidas de proposito**: todas as 36 estao
+  ENGOLIDAS pelo bloco `## 04/10 00:5x`, com carimbos de 02/10 22:35 a 04/10 09:05 debaixo de um
+  titulo de 04/10 00:5x. E a prova viva do risco que a dieta tem de tratar: o `else` depositava no EOF
+  e um titulo datado foi anexado DEPOIS delas. Ficam onde apareceram -- os carimbos sao <= a data do
+  bloco, entao a dieta as arquiva corretamente junto com ele.
+- **a repeticao, com o universo nomeado**: 115 das 126 vivas -- **91%** do que o vigia escreveu no
+  RELATO -- sao UMA frase so (`a esteira esta parada e o vigia nao esta destravando`), de hora em hora
+  desde **02/10 22:35** ate 08/10 05:55. (Eu havia escrito "12 copias": isso era so a janela de 07/10
+  18:35 a 08/10 05:55, verdadeira e sem o rotulo que dizia ser janela.) **13** chamadores escrevem por
+  essa porta, nao nove: ZUMBIDO, quarentena, AUTO-REVERT, lote rejeitado, relance, teto religado.
 - **a cura, na origem**: a ancora passa a ser uma secao PINADA propria, `## ALARMES DA ESTEIRA`, com
   tres ramos EXPLICITOS (secao existe / nao existe / nao ha titulo algum) em vez de um `else` que cai
   no EOF. O ramo "nao existe" insere na posicao do primeiro `## `, de modo que **`s[:j]` fica
   byte-identico** -- e e isso que preserva o `PAREI:` dentro das 40 primeiras linhas que o
   `bin/alarme_sessao_ociosa.py:120` le. O nome da secao foi escolhido sem nenhuma palavra de ATO,
   porque `##` torna a linha *forte* para o portao de publicacao.
-- **PROVA:** RED evidenciado contra o codigo do HEAD, de pe: `falhas=6`, inclusive a literal
-  `(iii) MORDE: o alarme ficou na ULTIMA linha -- depositado no EOF`; GREEN na cura, `falhas=0`.
-  Selo na suite: `core/tests/test_no_relato_tem_secao_pinada.py` -- `Ran 5 tests` -> `OK`, rc=0 (via
-  `--only`), `ruff` limpo. As 90 orfas realocadas com conservacao provada: multiset de alarmes
-  **126 -> 126**, as **4.975** linhas que nao sao alarme identicas e na MESMA ordem, e delta de
-  **+23 B** = exatamente `## ALARMES DA ESTEIRA` mais os separadores.
-- **o que FALTA, e nao se carimba sem ela**: a prova de producao e o proximo alarme do vigia (throttle
-  `cada_min=60`, ultimo as 05:55) cair DENTRO da secao. Espero pelo ARQUIVO, nunca por `pgrep`. **Nao
-  ha deploy nesta cura**, e isso foi medido: o vigia e um `systemd --user` TIMER que nasce um `python3`
-  do HOST a cada tique e le o `.py` do disco -- `bin/deploy.sh` nao o alcanca nem precisa.
-- **o que eu NAO fiz, de proposito**: dedup dentro do `no_relato` -- as 12 copias sao 12 EVENTOS reais,
-  e o acumulo e trabalho da DIETA, que vai envelhecer linha de alarme DENTRO da secao pinada pelo
-  carimbo dela. E nada no `LEIS.md`: a coluna PROTEGE (a 6a) esta VAZIA na L-062 e na L-079, entao
+- **PROVA, em producao e pela funcao real.** RED evidenciado contra o codigo do HEAD, de pe:
+  `falhas=6`, inclusive a literal `(iii) MORDE: o alarme ficou na ULTIMA linha -- depositado no EOF`;
+  GREEN na cura, `falhas=0`. Selo na suite: `core/tests/test_no_relato_tem_secao_pinada.py` --
+  `Ran 5 tests` -> `OK`, rc=0; `ruff` limpo. **E o vigia provou sozinho**: o tique das 07:00 escreveu
+  `**08/10 07:00 vigia da esteira (ALARME)**` LOGO ABAIXO do cabecalho da secao -- esperado pelo
+  ARQUIVO, nunca por `pgrep`. (O tique das 06:55 nao escreveu, e isso tambem foi medido: o carimbo
+  `vigia_sem_efeito` era 05:55:44 e o tique chegou 34 s antes dos `cada_min=60`.)
+- **conservacao das 90 realocadas**: multiset de alarmes **126 -> 126**, as **4.975** linhas que nao
+  sao alarme identicas e na MESMA ordem, e delta de **+23 B** = exatamente `## ALARMES DA ESTEIRA`
+  mais os separadores.
+- **DEPLOY: nao e preciso, e agora com o censo fechado.** O vigia e um `systemd --user` TIMER que
+  nasce um `python3` do HOST a cada tique e le o `.py` do disco. Medido: **0 urlconf** importa
+  `esteira_vigia`, `placar_tickets` ou `integrador_lote`, entao nenhum worker de gunicorn guarda o
+  modulo (BUG 128 vale para as tres cascas, nao para ele); os dois importadores do lado do container
+  so o citam em docstring (`config/crons.py:921`, `alarme_esteira.py:1`); e os 3 chamadores de
+  `integrador_lote.py` correm no timer do integrador, tambem do HOST.
+- **O CENSO ACHOU UM SEGUNDO ESCRITOR, e por isso este marco tem tres commits.**
+  `bin/vigia_arvore.sh:160-168` reimplementa o `no_relato` em bash -- clone byte-a-byte da logica
+  quebrada, com o MESMO `i = s.find('\n## PENDENTES DO RONALD')`, o MESMO `else` no EOF e o mesmo
+  comentario prometendo o topo. Curar so o lado Python seria a meia-correcao que o CLAUDE.md proibe
+  nominalmente ("censo de escritores fechado antes"), entao ele passa a CHAMAR a funcao, pelo idioma
+  que `bin/esteira.sh:96` e `bin/fabricante.sh:44` ja usam. Vai em commit PROPRIO: `bin/` e
+  INSTRUMENTO e nao pousa com produto (L-105).
+- **o que eu NAO fiz, de proposito**: dedup dentro do `no_relato` -- as 115 copias sao 115 EVENTOS
+  reais, os 13 chamadores tem semanticas diferentes, e o acumulo e trabalho da DIETA, que passa a
+  dever tambem o envelhecimento de linha de alarme DENTRO da secao pinada, pelo carimbo dela. E nada
+  no `LEIS.md`: a coluna PROTEGE (a 6a) esta VAZIA na L-062 e na L-079, entao
   `test_lei_protege_sitio` nao cobra citacao aqui (`8 sitio(s) protegido(s) em 81 leis, tocados 0`).
   Fica o lateral: a L-079 nomeia `core/esteira_vigia.py::decidir` na coluna *dono*, nao na PROTEGE.
 
