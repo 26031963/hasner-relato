@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 01:29:54.**
+**Medido em 08/10/2026 01:35:01.**
 
 | | |
 |---|---|
@@ -108,11 +108,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● O selo não é quem prova isso — PAPEL_DO_CRON['lavrar_previsto_cego'] == 'lavra' e sem papel declarado == [] são, e isso vai dito no
-  RELATO. Pouso 2, o instrumento:
-
-  Ran 12 shell commands
   ⎿  Read docs/AVAIS.md (23 lines)
   ⎿  Referenced file docs/RELATO.md
   ⎿  Referenced file core/contratos_estruturais.py
@@ -136,8 +131,13 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Task "Empurrar o pouso 2 pela regua do pre-push" still running in background
 
 ● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-✽ Beboppin'… (7h 21m 5s · ↓ 614.6k tokens · thought for 2s)
+● Ler a linha O221 e a C1b por inteiro
+  ⎿  $ sed -n '121p' docs/TICKETS.md | cut -c1-900; echo; echo "=== 130 (so a celula 4 e 7)"; awk -F'|' 'NR==130{print "ESTADO:"$5; print
+     "SELO:"$8}' docs/TICKETS.md | cut -c1-500
+
+* Beboppin'… (7h 26m 12s · ↓ 619.9k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
