@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 12:25:45.**
+**Medido em 08/10/2026 12:30:45.**
 
 | | |
 |---|---|
@@ -111,12 +111,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● MARCO FECHADO — pode compactar. O211 no remoto em 037ae715. Sigo com a O214 etapa 0, que não espera:
-
-  Ran 2 shell commands
-
-● A prova "todos leem o mesmo número" é SQL puro, sem motor — posso medi-la em prod agora:
-
   Ran 1 shell command
 
 ● Preciso provar que esse zero não é vacuidade — somas não-nulas:
@@ -138,11 +132,17 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Reescrevo o censo com o que medi — inclusive o par que já tinha selo:
 
-  Running 1 shell command…
+  Corrigir o censo com as tres autoridades e o selo de AST
+  ⎿  $ cd /home/ronald/saas-hasner
+     S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
+     python3 - <<'PYEOF'
+     import re
+     p = '/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/o214_censo_he.md'
+     t = open(p, encoding='utf-…
 
-· Cultivating… (6h 17m 9s · ↓ 690.5k tokens)
+· Cultivating… (6h 22m 9s · ↓ 693.6k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    3% until auto-compact
+
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

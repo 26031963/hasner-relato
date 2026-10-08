@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 08/10/2026 12:25:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (457.3 MB). Acoes na janela: **1371**.
+**Medido em 08/10/2026 12:30:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (457.3 MB). Acoes na janela: **1372**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 12:27:28 | Bash | Corrigir o censo com as tres autoridades e o selo de AST | `cd /home/ronald/saas-hasner S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad python3 - <<'PYEOF' import re p = '/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/o214_censo_he.md' t = open(p, encoding='utf-8').read() # (1) §A: TRES autoridades, nao duas -- o espelho chama o motor VIVO V = "**CONSEQUENCIA:**  ...` |
 | 12:24:44 | Bash | Checar se semanal_44 tem produtor em producao | `cd /home/ronald/saas-hasner/app echo "=== quem produz 'semanal_44' ===" grep -rn --include='*.py' "semanal_44" . \| grep -vE '/tests/\|motor_calculo_v2.py' \| head echo "=== e 'legais' x 'relogio': quem recebe qual, pela funcao real ===" sed -n '335,350p' core/regua_cct.py` |
 | 12:24:34 | Bash | Quem passa a regua do excedente ao motor | `cd /home/ronald/saas-hasner/app echo '=== quem PASSA regua_excedente ao motor ===' grep -rn --include='*.py' 'regua_excedente' core/ ponto/services/ folha/ \| head echo echo '=== get_motor_cct: os parametros que ele monta ===' grep -n 'regua_excedente\\|prorrogacao_noturna_pos5h\\|hora_reduzida_afastada\\|feriado_em_dobra\\|def get_motor_cct' core/regua_cct.py \| head` |
 | 12:24:27 | Bash | PDF, banco/DSR e a origem do regua_excedente | `cd /home/ronald/saas-hasner/app echo '=== o leitor PDF ===' grep -rln --include='*.py' 'pdf\\|PDF' relatorios/ ponto/ folha/ 2>/dev/null \| grep -vE '/tests/\|/migrations/' \| head echo '--- quem desenha o cartao em PDF ---' grep -rn --include='*.py' 'def .*pdf\\|weasy\\|reportlab\\|xhtml2pdf' relatorios/*.py folha/*.py 2>/dev/null \| head -6 echo echo '=== banco de horas e reflexo DSR: o juiz === ...` |
