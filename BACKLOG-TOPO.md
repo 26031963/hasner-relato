@@ -52,7 +52,7 @@ lista — ela e o que esta EM PE._
 | **O41** | GEOFENCE-VALIDAR-SEM-VOLTA | **FECHADA 25/09** (`ebde81d4`, nome `GEO |
 | **O42** | ESTEIRA-SECA-25-09 + ADENDO | **8 de 10 feitos; 1 e 2 em cura** |
 | **O43** | RASTRO-ADMIN | **livre** |
-| **O44** | ARQUIVO-SIMPLES v2 | **item 1 feito; 2-8 COM POSICAO (aval 05 |
+| **O44** | ARQUIVO-SIMPLES v2 | **portao: RAIA wt-bos, um por vez -- 8o  |
 | **O45** | EM-ABERTO-CARTAO-X-TELA | **REMEDIDO 02/10 06:2x, e o fato e MAIS  |
 | **O46** | EXECUTA-CLAUDE-6 / SINAL-QUE-MENTE | o que afirma |
 | **O47** | AUDITORIA-JSP02: ato de admin sem IP | **na fila BO, dentro do RASTRO-ADMIN (O4 |
@@ -215,7 +215,7 @@ lista — ela e o que esta EM PE._
 | **O204** | HORA-DO-APARELHO-LIDA-COMO-DATA | espera `!` |
 | **O205** | O GATE TEMPORAL REVERTE POR ARQUIVO E NAO OLHA A ARVORE DEPOIS | **fila 2 -- e INSTRUMENTO**, e a L-105 m |
 | **O206** | PAINEL-OFERECE-COBRAR-NAO-REABRIR | espera `!` |
-| **O207** | VINCULO-INICIO-DECLARADO | **registrada, NAO construida.** POSICAO  |
+| **O207** | VINCULO-INICIO-DECLARADO | **portao: RAIA wt-bos, um por vez -- 7o  |
 | **O209** | A ATA DA FROTA ESTA STALE CONTRA O JUIZ DE HOJE | espera `!` |
 | **O210** | A DERIVA DA COMPETENCIA 10: 174 de 572 fechamentos | **portao aberto** -- comp 10 aberta, app |
 | **O211** | REGUA-PELA-EMPRESA | **fila 1, logo ATRAS da O209** (ordem li |
