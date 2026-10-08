@@ -6,10 +6,16 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 07/10/2026 23:21:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (424.4 MB). Acoes na janela: **489**.
+**Medido em 07/10/2026 23:26:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (424.8 MB). Acoes na janela: **495**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 23:26:20 | Bash | Ler o trecho do movimento da 2a passada | `cd /home/ronald/saas-hasner && sed -n '28,50p' logs/o218_idempotencia.out; echo "=== 70,80 ==="; sed -n '70,80p' logs/o218_idempotencia.out` |
+| 23:26:11 | Bash | Localizar a fonte do número 31/14 | `cd /home/ronald/saas-hasner && grep -rn "31 dia-colab\\|em 14 colab\\|furo -> cobrado\\|furo->cobrado" app/core/contratos_estruturais.py logs/o218_*.out 2>/dev/null \| head; echo "=== idempotencia.out resumo ==="; grep -n -i "VEREDITO\\|moveu\\|passada" logs/o218_idempotencia.out \| head -25` |
+| 23:26:03 | Bash | Conferir onde rodou a 3a passada | `cd /home/ronald/saas-hasner && head -20 logs/o218_idem3.out; echo "=== grep veredito/cobrado ==="; grep -n -i "veredito\\|cobrado\\|31 " logs/o218_idem3.out \| head -15` |
+| 23:25:43 | Bash | Conferir linhas de reversão e casamento no apply | `cd /home/ronald/saas-hasner && sed -i 's\|logs/o218_prova_col146.py:117\|logs/o218_prova_col146.py:106\|' app/docs/RELATO.md && grep -n -i "revers\\|celula(s) x\\|colab(s) relavrados\\|casados\\|explicad\\|sem explica" logs/o218_apply_prod_20261007.out \| head -20; echo "=== idem3 tail ==="; tail -12 logs/o218_idem3.out` |
+| 23:25:34 | Bash | Conferir os arquivos de saída citados na seção | `cd /home/ronald/saas-hasner && ls -la logs/o218_* 2>&1 \| head -30; echo "---ls o218 dir---"; ls -la app/logs/o218/ 2>&1 \| tail -10; echo "---assert col146---"; grep -n "assert all" logs/o218_prova_col146.py` |
+| 23:21:11 | Bash | Escrever a seção PROVA no topo do RELATO | `cd /home/ronald/saas-hasner && cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/prova.md <<'MD' ## O218 — **APLICADO EM PROD, E A PROVA DEPOIS** (07/10 22:53→23:1x, **MARCO FECHADO**, placar 15/20) Condicao 4 da `DINHEIRO-EM-COMPETENCIA-ABERTA`, fechando as quatro: o DIFF foi publicado ANTES (secao abaixo), a reversao foi gravada ANTES da escrita, ...` |
 | 23:20:02 | Bash | Ver o fim da seção do DIFF | `cd /home/ronald/saas-hasner && sed -n '95,104p' app/docs/RELATO.md` |
 | 23:19:58 | Bash | Listar as seções do RELATO | `cd /home/ronald/saas-hasner && grep -n '^## ' app/docs/RELATO.md \| head -10` |
 | 23:19:32 | Bash | Rodar os selos do contrato, da célula e da linha Haiku | `cd /home/ronald/saas-hasner && bin/suite.sh --espera 600 --only "core.tests.test_selo_contratos_estruturais ponto.tests.test_contract_juiz_celula core.tests.test_haiku_contratos_estruturais core.tests.test_haiku_contador_ordem" 2>&1 \| tail -8; echo "rc=${PIPESTATUS[0]}"` |

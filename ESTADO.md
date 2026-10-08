@@ -1,9 +1,16 @@
 # ESTADO -- o repo e a sessao agora
 
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:31 AFIRMA ato sem PROVA ao lado -- ## O218 — **APLICADO EM PROD, E A PROVA DEPOIS** (07/10 22:53→23:1x, **MARCO FECHADO**, placar 15/20)
+>
+> O RELATO nao entrou neste ciclo porque uma afirmacao de ato
+> (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
+> seguem valendo -- eles descrevem, nao afirmam ato.
+
+
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 07/10/2026 23:21:01.**
+**Medido em 07/10/2026 23:26:31.**
 
 | | |
 |---|---|
@@ -110,14 +117,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 1 shell command
-
-● Comando composto recusado. Separo em passos individuais:
-
-  Ran 4 shell commands
-
-● DRY impecável: hash da 09 em prod é exatamente o dfd8d145 da sombra, janela bate, idade 0,9 h, e dia-colab do ESPERADO com fato novo
-  depois do dump: 0 de 40 — nenhuma lacuna. Monto o arreio:
 
   Ran 3 shell commands
 
@@ -136,12 +135,20 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-● Listar as seções do RELATO
-  ⎿  $ cd /home/ronald/saas-hasner && sed -n '95,104p' app/docs/RELATO.md
+● Ler o trecho do movimento da 2a passada
+  ⎿  $ cd /home/ronald/saas-hasner && sed -n '28,50p' logs/o218_idempotencia.out; echo "=== 70,80 ==="; sed -n '70,80p'
+     logs/o218_idempotencia.out
+  ⎿  Read docs/AVAIS.md (23 lines)
+  ⎿  Referenced file ponto/turnos.py
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bl19mn3rk.output (15 lines)
+  ⎿  Referenced file ../logs/o209_apply_frota_prod.py
+  ⎿  Referenced file ../logs/sombra/relavra10_frota_20261005.py
 
-· Beboppin'… (5h 12m 12s · ↓ 453.6k tokens)
+● Task "RED e construção do segundo intervalo" completed in background
+
+✢ Beboppin'… (5h 17m 42s · ↓ 458.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    3% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
