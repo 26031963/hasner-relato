@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 06:24:31.**
+**Medido em 08/10/2026 06:30:02.**
 
 | | |
 |---|---|
@@ -111,38 +111,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 2 shell commands
-
-● regua_tickets: OK, rc=0 — o parado_citado_em_commit_posterior=1 é contador informativo, não barra. Agora o único push do marco. A suíte
-  de pre-push leva ~22 min, então vai em segundo plano (uma camada só — background duplo perde o veredito) e nada se escreve sob app/
-  enquanto ela corre:
+  pelos selos de host dentro desta corrida e a poria VERMELHA. O trabalho seguro agora é desenhar a dívida nomeada da L-109 em rascunho.
+  Para isso preciso ver a forma real do RELATO:
 
   Ran 1 shell command
 
-● Push em curso (brvqlphbt), ~22 min. Nada se escreve sob app/ até ele voltar. Uso a espera para certificar o instrumento — o selo que,
-  pela L-105, pousa depois do produto — agora contra a árvore commitada, não contra a cópia curada:
-
-  Ran 2 shell commands
-
-● RESULTADOS em :39 com as chaves que o selo lê. Certifico as quatro asserções contra o arquivo commitado, sem Django e sem o container de
-  teste (a trava está com o pre-push):
+● O RELATO confirma a não-monotonicidade medida: o último ##  é DEPLOYS AGENDADOS (5997), e antes dele a seção mais velha (04/10 09:2x,
+  linha 5782) vem depois de uma 04/10 00:5x (5401). Corte "primeiro heading velho → EOF" arquivaria o de hoje. Vejo o destino e quem lê o
+  arquivo:
 
   Ran 1 shell command
 
-● Quatro asserções verdes contra a árvore commitada, com o caso que MORDE mordendo: SELO=VERDE falhas=0, juiz em 15/20 verdes e
-  declaradas()=17, "122" sobrevivendo uma única vez dentro de ESTA LINHA DIZIA. Gravo a certificação (em logs/, que é ignorado — não mexe
-  na árvore carimbada pelo push):
+● Isso muda o desenho, e é exatamente o tipo de coisa que mata um script de dieta: há 8 headings ##  sem data, e sete não são o último — ##
+  PATCH 1, ## O QUE A TELA JA FAZ (2472-2616) são continuações de uma seção datada acima. Logo "heading = seção datada" é falso. Preciso
+  saber quem escreve em DEPLOYS AGENDADOS:
 
-● Gravar a certificacao do instrumento
-  ⎿  $ cd /home/ronald/saas-hasner
-     cat > logs/pousos/cert_selo_r6_contra_o_commitado.txt <<'EOF'
-     CERTIFICACAO DO INSTRUMENTO -- o selo do R6 contra a arvore COMMITADA (nao contra a copia curada)
-     08/10 06:2x, com o push do marco (88bbc0c4) em curso. Autoridade: as funcoes REAIS, chamadas.
-     POR QUE ESTA ME…
+  Ran 1 shell command
 
-✢ Compacting conversation… (15m 55s · ↓ 33.5k tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱ 89%
-                                                                                                                    0% until auto-compact
+● Agora tenho os três fatos estruturais que tornam uma dieta ingênua destrutiva, e todos medidos: (1) heading ##  sem data é continuação,
+  não seção; (2) ## DEPLOYS AGENDADOS é seção VIVA, criada e alimentada por bin/deploy_agendado.sh:38; (3) as linhas de hoje (alarme 05:55)
+  estão no fim físico do arquivo, depois das de 04/10. Antes de escrever o desenho, consulto:
+
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+
+● O advisor pegou um defeito real no meu desenho: a regra "heading datado → próximo datado-ou-pinado" reproduz o risco que eu mesmo apontei
+  — o alarme de hoje (5995) cai dentro do bloco de 04/10 (5782) e viajaria com ele. Dois greps decidem a forma do script, e ambos são
+  leitura:
+
+  Running 1 shell command…
+
+✻ Cultivating… (21m 26s · ↓ 40.2k tokens)
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
