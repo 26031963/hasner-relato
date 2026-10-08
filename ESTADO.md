@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 07/10/2026 21:12:01.**
+**Medido em 07/10/2026 21:17:31.**
 
 | | |
 |---|---|
@@ -113,36 +113,35 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ⎿  Referenced file ponto/services/cartorio.py
-
-● Task "RED e construção do segundo intervalo" completed in background
-
-● Os 8 estão verdes na árvore viva — os oito são artefato de worktree (sem .git/hooks, sem logs/deploy.stamp, sem .claude/settings.json,
-  app/staticfiles/ vazio), não defeito meu. Triagem fechada: zero real. Agora o item (d), a suite inteira na raia:
+  dispensa forkar instrumento. Vejo se o arreio de medição já faz o ATO 1 que eu preciso:
 
   Ran 1 shell command
 
-● Enquanto a suite roda (~9 min), preparo o item (e). O arreio da sombra já existe e a ordem é editá-lo, não forkar — vejo o que ele faz:
+● O arreio já responde exatamente o que a O218 precisa (relavra a ata de toda a frota na 10, com foto, reversão e hash09). Pego a fórmula
+  do hash da 09 para medir prod com a MESMA conta, não com uma minha:
 
   Ran 1 shell command
 
-❯ aval Ronald: a DIETA-DE-CARGA comeca AGORA, em paralelo, por agente dentro da mesma sessao, sem esperar a bateria: mede os seis
-  arquivos, move historia para LAPIDES e RELATO-ARQUIVO, encurta as celulas de ESTADO do LEIS.md mantendo veredito e contagem. Nao toca
-  codigo nem teste. A ordem do resto nao muda. PAREI so em lei ou !
+● Enquanto a suite corre, leio o que a célula celula/precedencia × um juiz por pergunta exige para ficar verde — ela tem de virar por
+  medição, não por mão:
 
-● Aval recebido e registrado — O220 começa agora em paralelo, por agente. Leio o item literal antes de despachar:
+  Searched for 1 pattern, ran 1 shell command
 
-  Read 1 file, ran 2 shell commands
+● A nota diz, com letra: "verde com os 2 de pé seria selo falando por efeito que não houve" — e o aval já decidiu que a 09/08 vira contador
+  próprio, fora do contrato. O plano fecha. Vejo a suite:
 
-● Os seis estão medidos. Registro o prompt e despacho o agente:
+  Ran 1 shell command
 
-● Registrar o aval no PROMPTS.md
-  ⎿  $ cat >> PROMPTS.md <<'EOF'
-     | 07/10 20:0x | aval (ordem de paralelo) | DIETA-COMECA-AGORA | **a O220 DIETA-DE-CARGA comeca AGORA, em paralelo, por AGENTE dentro
-     da mesma sessao, sem esperar a bateria.** Literal: *"mede os seis arquivos, move historia para LAPIDES e RELATO-ARQUIVO, encurta as
-     celula…
+● Enquanto a suite corre, levanto as leis que PROTEGEM os sítios tocados — o selo test_lei_protege_sitio.sh cobra isso no diff, e a coluna
+  PROTEGE é intocada pela dieta:
 
-· Beboppin'… (3h 3m 12s · ↓ 262.7k tokens)
+  Ran 2 shell commands
+
+● Tenho as citações. Rascunho a mensagem do marco agora (durável, sem colidir com a dieta) e confiro a suite no mesmo ato:
+
+● Running 1 shell command…
+
+✢ Beboppin'… (3h 8m 42s · ↓ 275.3k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -151,6 +150,7 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
   ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
+  ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
+  ◯ general-purpose  Grepping bin/tests for doc readers                                                           5m 1s · ↓ 108.3k tokens
   ⧉  index
 ```

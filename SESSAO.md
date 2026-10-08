@@ -6,10 +6,21 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 07/10/2026 21:12:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (419.9 MB). Acoes na janela: **254**.
+**Medido em 07/10/2026 21:17:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (420.1 MB). Acoes na janela: **265**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 21:15:48 | Bash | Ler as leis que protegem os sitios da cura | `for L in L-025 L-032 L-061 L-073 L-087 L-103; do echo "### $L"; grep -m1 "\*\*$L\*\*" LEIS.md \| cut -c1-430; echo; done` |
+| 21:15:37 | Bash | Levantar leis que protegem os sitios tocados | `cd /home/ronald/saas-hasner/app/docs && for f in "escala/utils.py" "ponto/services/cartorio.py" "ponto/turnos.py"; do echo "### $f"; grep -oE "^\\| (L-[0-9]+)[^\|]*\\|[^\|]*\\|" LEIS.md >/dev/null; awk -F'\|' -v pat="$f" '$0 ~ pat {print " " $2 " :: " substr($0, index($0,pat)-0, 60)}' LEIS.md \| head -8; done` |
+| 21:15:21 | Bash | Conferir veredito da suite | `cd /home/ronald/saas-hasner && grep -nE "^(OK\|FAILED\|Ran )" logs/suite_o218_raia.out 2>/dev/null \| tail; echo "--- bytes: $(wc -c < logs/suite_o218_raia.out)"` |
+| 21:15:09 | Bash | Ler o resto da nota da celula | `sed -n '175,200p' core/contratos_estruturais.py` |
+| 21:14:38 | Bash | Ler a declaracao da celula celula/precedencia | `grep -n "celula/precedencia" -A 12 core/contratos_estruturais.py \| head -40` |
+| 21:14:08 | Bash | Ler a funcao hash09 do arreio | `cd /home/ronald/saas-hasner && sed -n '247,262p' logs/sombra/relavra10_frota_20261005.py` |
+| 21:13:49 | Bash | Mapear o arreio de medicao da relavra | `cd /home/ronald/saas-hasner && grep -n "^def \\|^# ===\\|^## \\|ATO 1\\|ATO 2\\|reversao\\|hash09\\|print('" logs/sombra/relavra10_frota_20261005.py \| head -50` |
+| 21:13:14 | Bash | Ler a porta --rodar e a funcao container | `cd /home/ronald/saas-hasner && sed -n '395,440p' bin/sombra.sh; echo "=== container() ==="; sed -n '125,150p' bin/sombra.sh` |
+| 21:13:08 | Bash | Achar como o arreio da sombra e lancado | `cd /home/ronald/saas-hasner && grep -rn "relavra10_frota" --include=*.sh --include=*.md --include=*.py bin/ logs/*.md 2>/dev/null \| head -20; echo "=== como roda comando na sombra ==="; grep -n "settings.sombra\\|E_SOMBRA\\|docker run" bin/sombra.sh \| head -30` |
+| 21:12:55 | Bash | Ver andamento da suite na raia | `cd /home/ronald/saas-hasner && tail -4 logs/suite_o218_raia.out 2>/dev/null; echo "--- bytes:"; wc -c logs/suite_o218_raia.out 2>/dev/null` |
+| 21:12:29 | Agent | O220 DIETA-DE-CARGA nos docs | `Voce executa a obra **O220 DIETA-DE-CARGA** do projeto em /home/ronald/saas-hasner. Leia /home/ronald/saas-hasner/CLAUDE.md INTEIRO antes da primeira acao (e a lei da casa). A obra e **SO DOCS**: nao toca codigo, nao toca teste, nao toca `bin/`. ## O AVAL LITERAL (Ronald, 07/10 ~20:0x) "a DIETA-DE-CARGA comeca AGORA, em paralelo, por agente dentro da mesma sessao, sem esperar a bateria: mede os se ...` |
 | 21:11:22 | Bash | Registrar o aval no PROMPTS.md | `cat >> PROMPTS.md <<'EOF' \| 07/10 20:0x \| aval (ordem de paralelo) \| DIETA-COMECA-AGORA \| **a O220 DIETA-DE-CARGA comeca AGORA, em paralelo, por AGENTE dentro da mesma sessao, sem esperar a bateria.** Literal: *"mede os seis arquivos, move historia para LAPIDES e RELATO-ARQUIVO, encurta as celulas de ESTADO do LEIS.md mantendo veredito e contagem. Nao toca codigo nem teste. A ordem do resto na ...` |
 | 21:11:03 | Bash | Medir os seis arquivos e ver o rodape do PROMPTS | `wc -lc ../CLAUDE.md ../../CLAUDE.md LEIS.md RELATO.md BACKLOG.md LAPIDES.md RELATO-ARQUIVO.md 2>&1 \| tail -10; echo "=== prompts tail ==="; tail -3 PROMPTS.md` |
 | 21:10:54 | Bash | Ler o item O220 e medir os docs | `cd /home/ronald/saas-hasner/app/docs && awk '/^\\| *O220/,0' BACKLOG.md \| head -40; echo "=== tamanhos ==="; wc -lc LEIS.md RELATO.md BACKLOG.md TICKETS.md LAPIDES.md RELATO-ARQUIVO.md PROMPTS.md CORTES.md DOSSIES.md 2>/dev/null \| sort -k2 -n` |
