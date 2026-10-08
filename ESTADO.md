@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 07/10/2026 22:11:32.**
+**Medido em 07/10/2026 22:17:01.**
 
 | | |
 |---|---|
@@ -116,42 +116,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  propriedade fixa da própria O218 não foi medida na frota: lavrar duas vezes == lavrar uma vez. O apply em prod roda o cartório com
-  --forcar sobre 570 colabs, então meço isso na sombra agora. Vejo como o arreio relavra:
 
-  Ran 2 shell commands
+  Ran 3 shell commands
 
-● O arreio chama julgar_colab(... forcar=True) — a função real. Então a prova de idempotência é rodar o mesmo ATO 1 outra vez sobre a base
-  já relavrada: esperado 0 dia-colab movidos. Guardo o pacote bom e lanço:
-
-  Ran 2 shell commands
-
-● Pacote bom guardado (b4762cd4). Lanço a espera e preparo a publicação:
-
-  Ran 4 shell commands
-
-● O selo cobra o id na segunda coluna de uma linha | ... |. Verifico quais ids a minha mensagem de commit cita em colchetes — a memória da
-  casa diz que colchete em prosa conta como citação:
+● 31 dia-colab se movem na SEGUNDA lavratura — a propriedade fixa que a própria O218 declara (lavrar duas vezes == lavrar uma vez) não vale
+  na frota. O golden fica parado ([]) e nasce 0 chamado, então o minuto é ponto fixo; o que oscila é o veredito. Vejo o quê:
 
   Ran 1 shell command
 
-● Só [O218] — uma linha basta. Vejo o andamento da idempotência:
+● Todas as 31 são a mesma transição: furo -> cobrado, real 0 -> 0, soma +0, e 0 chamados nascidos — logo as cobranças já existiam. Isso tem
+  cara de carimbo-antes-de-emitir (o dia só vira cobrado na passada seguinte à que criou a cobrança), não de oscilação. Duas perguntas: é
+  meu, e converge? Respondo as duas:
 
   Ran 1 shell command
 
-● Enquanto corre, leio a mensagem de commit para ver o que falta nela:
+● Background command "Esperar e ler a prova de idempotencia na frota" completed (exit code 0)
 
-● Checar idempotencia de novo
-  ⎿  $ cd /home/ronald/saas-hasner && grep -E 'relavrados em|ATA SE MOVEU|DELTA DE CONJUNTO|censo da O218' logs/o218_idempotencia.out
-     2>/dev/null; wc -l < logs/o218_idempotencia.out 2>/dev/null
+● O veredito cobrado não passa por nenhuma linha que eu mudei. Leio quem o decide:
 
-✢ Beboppin'… (4h 2m 43s · ↓ 366.2k tokens)
+  Ran 1 shell command
+
+● Achei a causa, e não é minha: cartorio.py:637 decide cobrado quando not cods and vivos — e classificar_dia recebe
+  chamados_vivos=len(vivos). O protesto FURO deixa de existir quando a cobrança passa a existir, e a cobrança nasce na mesma passada que
+  carimbou o furo. Carimba-antes-de-emitir ⇒ ponto fixo em duas passadas. Regra de B5.3c (27/08), zero linhas minhas. Meço a terceira para
+  fechar a afirmação:
+
+  Ran 1 shell command
+
+● Advising using Fable 5.1
+
+✢ Beboppin'… (4h 8m 12s · ↓ 370.4k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    5% until auto-compact
+                                                                                                                    1% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
