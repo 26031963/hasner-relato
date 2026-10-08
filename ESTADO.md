@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 06:02:31.**
+**Medido em 08/10/2026 06:08:01.**
 
 | | |
 |---|---|
@@ -112,40 +112,40 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  Ran 2 shell commands
 
-  Ran 4 shell commands
-
-● Três fatos medidos que mudam a forma da S-ESCALA (a descrição pendente dela estava errada em dois pontos). Registro agora, em logs/ — não
-  é artefato do marco:
+● O censo de ontem já dizia o que eu acabei de "achar" — inclusive :1006, o :774 do template e "JA DECLARADA, em outra familia". Minha
+  premissa errada estava no meu próprio resumo, não no censo. Confiro o que de fato é novo antes de deixar o adendo no disco afirmando
+  descoberta:
 
   Ran 1 shell command
 
-● Adendo gravado — 48 linhas, ASCII puro, logs/ (não é artefato do marco; app/ intocado, GUARDA 2 = 0).
+● O censo já tinha tudo: CORTES.md:119, a assinatura de escala_vigente, o :1006 vs :774, "JA DECLARADA, em outra familia". Meu adendo
+  duplica um registro existente e, pior, apresenta o conteúdo do censo como correção a ele. Encolho para o delta real:
 
-  O que a leitura da lacuna achou — duas premissas da S-ESCALA não se sustentam:
+  Ran 1 shell command
 
-  1. Q3 já tem juiz declarado. core/juizes.py:137, dentro de JUIZES['celula/precedencia']: 'o dia e de trabalho para o vinculo?':
-     'escala/models.py::EscalaColaborador.eh_dia_trabalho' — desde a S2, 13/09. Declará-la outra vez sob uma chave 'escala' nova seria um
-     segundo registro do mesmo veredito, nascido de dentro de uma fatia: o caso exato que criou a TRAVA JUIZ-NOVO (dia_das_batidas, 650 de
-     9.162 batidas em desacordo). A fatia passa a declarar uma pergunta, não duas.
-  2. O nome da Q2 já está assinado, e a trava não segura mais nada. CORTES.md:119 carrega a frase literal corte Ronald: juiz escala_vigente
-     nasce desde 03/10 05:30, e grep -c escala_vigente core/juizes.py = 0 — nome assinado, registro vazio. Mas
-     escala/servico_jornada.py:15 diz de si mesmo, em docstring, que a juíza não mora ali: é escala/alimentacao.py::vinculo_do_dia (:147,
-     pura, CelulaDia.escala_geradora, O69). O censo de ontem já previa a forma (declara o carregador, a nota nomeia a juíza); registrei que
-     a escolha é deliberada e por quê.
+● 48 linhas → 26, ASCII puro. O delta sobrou em duas linhas medidas:
 
-  Mais a armadilha de nome que eu teria caído: há duas eh_dia_trabalho — :774 em TipoEscala (o template, não sabe a fase) e :1006 em
-  EscalaColaborador (a declarada). Citar :774 na nota apontaria o leitor para o template. E JUIZES['batida'] já existe (:925) — a S-ESCALA
-  é quem cria a chave da família, não as duas.
+  - core/juizes.py:925 — JUIZES['batida'] existe (com PENDENTES['batida'] em :935): a S-BATIDA pousou. JUIZES['escala'] não existe, então a
+    S-ESCALA é quem cria a chave da família — não as duas que eu supunha.
+  - grep -c escala_vigente core/juizes.py = 0: nome assinado desde 03/10, registro ainda vazio. A TRAVA JUIZ-NOVO está pré-satisfeita e não
+    segura a fatia.
 
-  Estado: 05:58:17 · .done ausente · cron.d intacto · HEAD == origin/main == d0625307 · GUARDA 2 = 0 · esperador bgt1l604k armado no
-  ARQUIVO. Nada mais a editar antes do sinal — quando ele vier, a ordem está de pé: ler esteira.out + .done, conferir HEAD == 1f3d616f,
-  pouso 4, pouso 5, sem push no meio.
+  O resto do que eu havia escrito às 05:58 o censo já tinha — :1006 vs o :774 do template, :1152 como ramo aritmético, CORTES.md:119, o
+  docstring "A JUIZA NAO MORA AQUI". A premissa errada era do meu resumo da fatia, não do censo; deixei isso escrito no arquivo, porque
+  relatar a mesma medição duas vezes — uma delas como novidade — é como nascem duas verdades, e nesta família a autoridade é o censo.
 
-✻ Cooked for 5m 55s · done 5:58 AM · 2 shells still running
+  Estado: 06:03:56 · .done ausente · cron.d intacto · HEAD == origin/main == d0625307 · GUARDA 2 = 0 · esperador bgt1l604k armado no
+  ARQUIVO, sinal em ~4 min.
+
+  Não há PAREI: a fila não está travada, está esperando o sinal do pouso 3, e o ato seguinte já está ordenado — ler esteira.out + .done,
+  conferir HEAD == 1f3d616f, pouso 4, pouso 5, sem push no meio.
+
+✻ Cooked for 1m 25s · done 6:04 AM · 2 shells still running
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ segue a fila
+❯ segue a fila; PAREI so em lei ou !
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 2 shells · ← for agents · ↓ to manage
 

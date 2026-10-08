@@ -28,13 +28,25 @@ FECHADA -- os 4 numeros do passo 6 batem no ar, e a unica coisa que faltou foi o
 celulas cair no MESMO commit (turno em `6319b10c`, celula em `b4372615`)."*
 Com ela sem poder andar, a **ORDEM VIVA andou** (decisao tecnica, registrada e nao devolvida): o head passa a ser **`PLACAR-ESTRUTURAL`** (L-099, *"ANDA"*, proximo = R6 item 4), lido da MESMA fonte do hook (`bin/hook_stop_fila1.py::_proximo_da_fila`, o primeiro aberto do bloco OBRAS) e nao de um leitor novo; a **O219**, que o aval de 07/10 poe atras da O218, vem logo depois dela na mesma tabela. **PROVA:** `bin/tests/test_hook_nao_cobra_congelado.sh` = `OK -- ve id com espaco e aponta o 1o da ORDEM VIVA (PLACAR-ESTRUTURAL, lido do marcador)`, rc 0.
 
-**A `raia-chamado` (`wt-esmeril2`, `142238fc`) NAO POUSA AGORA, e o motivo e um portao DECLARADO, nao um
-`!` que falte: ela toca `app/api/views.py`, sitio de auth da lista `bin/auth_sitios.txt` (10 declarados),
-e `bin/janela_auth.sh` barra fatia de auth entre 23:20 e 06:00** -- o P0 de 20/09 (82% dos 401 as 00h).
-Pousa **depois das 06:00**, no mesmo turno. Ela tambem nao e merge simples: o main carrega `bea841ff`, a
-reversao PARCIAL do merge `23450e7e` dessa mesma raia, e o merge de ensaio (`git merge-tree`, arvore
-nenhuma tocada) mostra **7 conflitos**, dois deles em `core/contratos_estruturais.py` e
-`core/tests/test_censo_escritas.py`.
+**A `raia-chamado` POUSOU, e os "7 conflitos" que este paragrafo anunciava eram medicao de outra
+arvore.** Os tres pousos da O221 estao no ar (08/10): produto `bb0bd0fa`, instrumento `d0625307` e a
+juncao `52bfc524` -- 85 arquivos, 10.787 insercoes. A forma foi a da L-107, em copia (`wt-chamado2`):
+`git revert bea841ff` -> `git merge 142238fc` -> resolver -> suite -> e so depois o merge na arvore viva
+com o `bin/deploy.sh` no mesmo ato. O NUMERO ANTIGO ESTAVA ERRADO E A CAUSA E MINHA: eu medi os 7
+conflitos com `git merge-tree` da raia contra um main que **ainda carregava a reversao** -- duas arvores
+que nunca iriam se juntar assim. Desfeita a reversao PRIMEIRO, o `git revert` resolveu sozinho o unico
+arquivo que o main moveu depois dela (`core/contratos_estruturais.py`, 7 commits): **ZERO conflito**. O
+merge dos 6 commits deu **UM**, em `docs/TICKETS.md`, e os cinco blocos dele eram ou a regiao
+`PLACAR:INICIO..FIM` que `bin/tickets_placar.sh` GERA, ou as linhas C1..C4 em versao mais velha que a que
+o main ja tem -- porque a reversao de 03/10 preservou os docs de proposito.
+**PROVA:** `git revert bea841ff` = `41 files changed, 5627 insertions(+), 495 deletions(-)`, nenhum
+conflito; `git merge 142238fc` = 1 arquivo em conflito, `git diff --name-only --diff-filter=U` =
+`app/docs/TICKETS.md`; `grep -E "^[+-] *verde"` no diff da reversao = VAZIO e no diff do merge = VAZIO;
+`git diff --cached --stat` do merge nao lista `core/juizes.py`, `core/placar_estrutural.py` nem
+`config/crons.py`; `TETO_POR_ENTIDADE` lido por AST = `ChamadoColaborador 12 · DisputaSupervisao 4 ·
+PerguntaDisputa 5`, soma **21**, o numero do aval, asseverado pelo proprio gate contra
+`censo_escritas.varrer_arvore`; `python3 -m py_compile` nos 61 `.py` do merge = OK; marcadores de
+conflito na arvore inteira (py/md/html) = **0**; suite da copia = VERDE (Ran 9921 tests in 1321.3s, skipped=42).
 
 O211 segue CONSTRUIDA e VERDE na raia `wt-regua` (`raia-regua`) -- `core/models.py::AplicacaoConvencao`,
 migration `0017`, o escritor `semear_aplicacao_convencao` e o RED `core/tests/test_aplicacao_convencao.py`
@@ -62,6 +74,45 @@ estas palavras, que *"o que 'fechado' quer dizer, **lavra** e reabertura: SEM ju
 chamado pode NASCER numa competencia que o Dominio ja pagou?** -- nao ha L-NNN que diga sim nem nao, e nao
 e decisao tecnica (e dinheiro do colaborador na mesa do DP). Nao devolvo turno por isso
 (PAREI-DE-LEI-NAO-DEVOLVE-TURNO): a pergunta fica aqui com os numeros e a esteira **segue a O211**.
+
+## O221 POUSO 3 — **A JUNCAO DA `raia-chamado`: A REVERSAO SE DESFAZ E A FAMILIA CHAMADO VOLTA INTEIRA** (08/10)
+
+O `!` dele de 07/10 19:35 (`POUSO-CHAMADO-DEPOIS-DA-BATERIA`) dizia, literal: *"a raia-chamado
+(wt-esmeril2, 6 commits, escritas fora de porta 121 -> 21) POUSA logo depois do marco da
+BATERIA-DA-LAVRATURA: junta com o main, roda a suite, e pousa pela L-105 se estiver verde. Se a juncao ou
+a suite falhar, diz o motivo em uma linha no topo do RELATO e segue a fila."* A juncao nao falhou e a
+suite ficou VERDE (Ran 9921 tests in 1321.3s, skipped=42), entao ela pousou.
+
+**O que a juncao nao moveu, e era o que mais importava.** O pouso 3 traz 85 arquivos e 10.787 insercoes,
+e NAO toca `core/juizes.py`, `core/placar_estrutural.py` nem `config/crons.py`. Entao o
+`PENDENTES['celula/precedencia']` e o `PENDENTES['turno/marcos']` que a O191 e a CELULA-TURNO-FECHA
+zeraram seguem zerados, o `PAPEL_DO_CRON` continua derivando o papel `prazo` do `PRAZO_DELEGA_A` (a O139
+de uma hora atras), e as 150 linhas que a raia acrescenta ao `contratos_estruturais.py` sao TODAS de
+`nota`: o `grep -E "^[+-] *verde"` volta vazio nos dois diffs. Isso era condicao escrita no plano, nao
+observacao depois do fato -- a celula de `celula/precedencia` tinha acabado de ficar verde na O218 e um
+merge que a rebaixasse em silencio seria o placar mentindo pelo lado barato.
+
+**O PLACAR NAO SE MOVE COM ESTE POUSO, e dizer o contrario seria o erro mais facil da noite.** A raia
+foi aberta para fechar as DUAS celulas da familia chamado, e ela nao as fecha: o proprio gate que ela
+traz declara, na primeira linha do docstring, que *"fim do trabalho e este gate com os tres numeros em
+**0**"*, e eles estao em **12 / 4 / 5**. O que a raia entregou e a QUEDA -- 121 escritas fora de porta
+para 21, oito portas novas declaradas em `core/portas.py` -- e o teto que SO DESCE. `contratos_estruturais`
+continua em **15/20** depois do pouso, pelo mesmo juiz de sempre, e a familia chamado segue a maior fatia
+estrutural de pe.
+
+**A unica linha de docs que se perdeu, se perdeu por ser DUPLICATA.** Resolvi o conflito do `TICKETS.md`
+pelo lado do main nos cinco blocos, e conferi que nao havia id orfao: todo id da versao da raia tem linha
+na versao do main (`comm -23` entre as duas listas = vazio). As cinco linhas C1..C1b do main sao mais
+longas que as da raia porque foram escritas no merge de 03/10, que a reversao preservou de proposito.
+
+**PROVA:** reversao `bea841ff` = 41 arquivos, 5.627 insercoes, 495 delecoes, ZERO conflito;
+merge `142238fc` = UM conflito, `app/docs/TICKETS.md`, cinco blocos, todos gerados ou duplicados;
+total sobre o main = 85 arquivos, 10.787 insercoes, 863 delecoes, 84 `.py` + 1 `.md`;
+`TETO_POR_ENTIDADE` por AST = 12/4/5 = **21** (o numero do aval, asseverado pelo gate contra a funcao
+real `core/censo_escritas.varrer_arvore`, allowlist `()`); zero migration no diff e zero mudanca de
+campo em `chamados/models.py` (`grep -E '^[+-].*(Field\(|choices=|default=|db_index=|max_length=)'` so
+casa docstring), por isso o deploy foi `--sem-migrate` e nao por conveniencia;
+suite da copia = VERDE (Ran 9921 tests in 1321.3s, skipped=42).
 
 ## O221 POUSO 2 — **O INSTRUMENTO: O SELO DO PAPEL `prazo` MORDE, E O QUE ELE NAO PROVA ESTA DITO** (08/10 01:1x)
 
