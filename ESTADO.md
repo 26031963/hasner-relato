@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 07/10/2026 22:55:31.**
+**Medido em 07/10/2026 23:00:45.**
 
 | | |
 |---|---|
@@ -110,10 +110,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-  Read 1 file
-
-● Ato único — merge, L-103, commit e deploy sem nada no meio (L-107):
-
   Committed 1b6d5d02
 
 ● Deploy OK às 22:48 — 1b6d5d02, três cascas juntas, três rotas provadas, importerror_500=0. Agora o apply em prod. Leio o veículo antes de
@@ -132,15 +128,19 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● DRY impecável: hash da 09 em prod é exatamente o dfd8d145 da sombra, janela bate, idade 0,9 h, e dia-colab do ESPERADO com fato novo
   depois do dump: 0 de 40 — nenhuma lacuna. Monto o arreio:
 
-● Aplicar a relavratura da ata na frota em prod · 2m 0s
-  ⎿  $ docker exec saas_core python manage.py tenant_command shell --schema=juliani --command
-     "exec(open('/tmp/o218_apply_frota_prod_RUN.py').read())" 2>&1 | tee /home/ronald/saas-hasner/logs/o218_apply_prod_20261007.out | tail
-     -50 (2m 0s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Ran 3 shell commands
 
-✢ Beboppin'… (4h 46m 42s · ↓ 412.9k tokens)
+● Aplicado: 24 de 24 colabs casados com a sombra, 0 lacunas, emissão idêntica à prevista (+13/+23/+5), comp 09 intacta pelo mesmo hash. Uma
+  linha não bate com o DIFF e eu não declaro prova sem explicá-la — a soma diz +1499 em 24 dia-colab, o DIFF dizia +2851 em 40:
+
+  Achar a construção da soma e do contador de dias
+  ⎿  $ cd /home/ronald/saas-hasner && grep -n 'n_dia_contado\|soma_sem_lacuna_obs\|casados.append\|mov\[' logs/o209_apply_frota_prod.py |
+     head -20
+
+· Compacting conversation… (4h 51m 56s · ↓ 414.6k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱ 94%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    2% until auto-compact
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 07/10/2026 22:55:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (423.4 MB). Acoes na janela: **433**.
+**Medido em 07/10/2026 23:00:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (423.4 MB). Acoes na janela: **434**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 22:55:59 | Bash | Ler como o apply soma o realizado | `cd /home/ronald/saas-hasner && grep -n 'SOMA DO REALIZADO' -A 14 -B 24 logs/o209_apply_frota_prod.py \| sed -n '1,55p'` |
 | 22:53:30 | Bash | Aplicar a relavratura da ata na frota em prod | `docker exec saas_core python manage.py tenant_command shell --schema=juliani --command "exec(open('/tmp/o218_apply_frota_prod_RUN.py').read())" 2>&1 \| tee /home/ronald/saas-hasner/logs/o218_apply_prod_20261007.out \| tail -50` |
 | 22:53:17 | Bash | Aplicar a relavratura da ata na frota em prod | `cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command shell --schema=juliani --command "exec(open('/tmp/o218_apply_frota_prod_RUN.py').read())" > logs/o218_apply_prod_20261007.out 2>&1; echo "rc=$?"; tail -50 logs/o218_apply_prod_20261007.out` |
 | 22:53:04 | Bash | Criar e copiar o arreio do aplicar | `cd /home/ronald/saas-hasner && cat > logs/o218_apply_frota_prod_RUN.py <<'PY' # ARREIO DO APLICAR -- existe para que o apply nao dependa de um `-c` com flag no shell. # O corpo e `logs/o209_apply_frota_prod.py` (o arreio da O209, que desde 07/10 serve a OBRA da vez # por ambiente: `OBRA` default `o218`, `ESP_CAM` default `/tmp/o218_esperado_<hoje>.json`). # Guardas JA conferidas no DRY de 22:52: c ...` |
