@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 08:20:46.**
+**Medido em 08/10/2026 08:26:01.**
 
 | | |
 |---|---|
 | `HEAD` local | `4d8e37f8 O158: o marcador ORDEM-VIVA-TOPO passa a ser AUTORIDADE, e a pergunta do selo muda em vez da tabela` |
-| `origin/main` | `88bbc0c4 [O221] o marco do PLACAR-ESTRUTURAL: o R6 passa a publicar a frase do juiz, e as duas notas que envelheceram dizem o que foi medido` |
-| commits a subir (`ahead`) | **7** |
+| `origin/main` | `4d8e37f8 O158: o marcador ORDEM-VIVA-TOPO passa a ser AUTORIDADE, e a pergunta do selo muda em vez da tabela` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -111,36 +111,36 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 3 shell commands
-  ⎿  Read docs/AVAIS.md (23 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bgt1l604k.output (36 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bpxqmktlu.output (17 lines)
-  ⎿  Referenced file
-     ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/suite_o137.out
-  ⎿  Referenced file config/crons.py
 
-● Task "RED e construção do segundo intervalo" completed in background
+  Ran 5 shell commands
 
-● Task "Empurrar o marco pela regua" still running in background
-
-● Push na trava há ~8 min. Enquanto ele corre, construo o pouso B em cópia. Primeiro a dívida da LEI ANTES DO PATCH para o sítio que vou
-  tocar:
+● O sed acertou a linha errada. Reescrevo a sonda inteira:
 
   Ran 1 shell command
 
-● A dívida está nomeada no próprio LEIS: o pouso B é o leitor que falta às L-006 e L-034. Vou ao resto da lei:
+● Background command "Empurrar o marco pela regua" completed (exit code 0)
+
+● O push voltou rc=0. Leio o veredito no remoto, não no tail:
+
+  Ran 1 shell command
+
+● MARCO FECHADO — origin/main = 4d8e37f8, 9968 + 22 testes OK. Trava livre. Pego o próximo da fila 1 no mesmo turno (O211 pouso A) e lanço
+  a suíte contra a cópia:
 
   Ran 2 shell commands
 
-● O leitor órfão replica a consulta do regua_para — e o pouso B o faria divergir no ato. Censo dos outros leitores antes de desenhar:
+● Enquanto a suíte corre, o L-108 do marco que acabou de pousar:
 
-  Ran 2 shell commands
+  Ran 4 shell commands
 
-● O célula do O211 declara os 7 REDs e já diz que praca_sem_cct_cadastrada sai pela L-111. Antes de escrever o pouso B:
+● Quatro dos sete REDs nunca foram escritos como texto — o célula só traz o 1, o 6 e o 7. Derivo os outros das cláusulas literais do aval.
+  Monto a cópia do pouso B e leio o idioma de fixture da casa:
 
-● Advising using Fable 5.1
+● Ler a fixture irma que ja monta colab+EC+praca para regua_para
+  ⎿  $ cd /home/ronald/saas-hasner/app
+     sed -n '1,120p' core/tests/test_regime_por_empresa.py
 
-✽ Cultivating… (2h 12m 9s · ↓ 275.8k tokens)
+✢ Cultivating… (2h 17m 25s · ↓ 288.5k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
