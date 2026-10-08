@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 00:30:45.**
+**Medido em 08/10/2026 00:36:01.**
 
 | | |
 |---|---|
@@ -109,22 +109,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Task "RED e construção do segundo intervalo" completed in background
-
-● Deploy OK às 00:09:48. Agora a confirmação do placar pela autoridade, não por grep.
-
-  Ran 3 shell commands
-
-● 15/20 confirmado pelo juiz dentro do saas_core — não por grep. Marco no ar.
-
-  Searched for 1 pattern, read 1 file, ran 4 shell commands
-
-● MARCO FECHADO — pode compactar.
-
-  Agora O221. Orientação nas duas raias que o ! cobre:
-
-  Ran 5 shell commands
-
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
@@ -133,12 +117,28 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Os REDs acima são da cópia nua (sem .git/hooks, sem settings.json, staticfiles vazio) — a pasta de host pertence à árvore viva, onde ela
   já deu pasta_rc=0. A montagem entrega o staticfiles da árvore viva, então a suite tem css/js. Rodando a suite contra a cópia:
 
-● Rodar a suite inteira contra a copia mesclada · 6m 14s
-  ⎿  $ cd /home/ronald/saas-hasner && ESTEIRA_QUEM=suite-o139 bash bin/suite.sh --dir /home/ronald/wt-o139 --parallel 2 >
-     logs/o139_suite.out 2>&1; echo "rc=$?"; grep -E '^(OK|FAILED)' logs/o139_suite.out | tail -3; tail -3 logs/o139_suite.out (6m 13s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Searched for 1 pattern, ran 2 shell commands
 
-· Beboppin'… (6h 21m 56s · ↓ 539.4k tokens)
+● Enquanto a suite roda, o que o advisor pediu que ficasse escrito agora — o portão da raia-chamado e o topo:
+
+  Ran 1 shell command
+
+● Background command "Rodar a suite inteira contra a copia mesclada" completed (exit code 0)
+
+  Ran 1 shell command
+
+● Suite da cópia VERDE: Ran 9675 tests in 621.827s → OK (skipped=42), rc=0. Pondo a prova no topo e trazendo o produto para a árvore:
+
+  Mover a PROVA para junto da afirmacao
+  ⎿  $ python3 - <<'PY'
+     import re
+     p='docs/RELATO.md'
+     s=open(p).read()
+     prova=('**PROVA:** `linha_do_placar()` dentro do `saas_core` = `contratos_estruturais: 15/20 verdes`;\n'
+     '`deploy: OK -- migrations em dia, tres cascas reiniciadas juntas, tres rotas provadas` (00:09:48);\n'
+     'suite da copia `wt-o139` …
+
+✢ Beboppin'… (6h 27m 12s · ↓ 543.7k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

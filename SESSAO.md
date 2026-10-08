@@ -6,10 +6,16 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 08/10/2026 00:30:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (426.9 MB). Acoes na janela: **608**.
+**Medido em 08/10/2026 00:36:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (427.0 MB). Acoes na janela: **614**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 00:35:49 | Bash | Mover a PROVA para junto da afirmacao | `python3 - <<'PY' import re p='docs/RELATO.md' s=open(p).read() prova=('**PROVA:** `linha_do_placar()` dentro do `saas_core` = `contratos_estruturais: 15/20 verdes`;\n' '`deploy: OK -- migrations em dia, tres cascas reiniciadas juntas, tres rotas provadas` (00:09:48);\n' 'suite da copia `wt-o139` = `Ran 9675 tests in 621.827s` -> `OK (skipped=42)`, rc=0;\n' '`juizes_por_varredura()` na copia = **25 ...` |
+| 00:35:42 | Bash | Ver como o checador procura a prova | `cd /home/ronald/saas-hasner && grep -n 'PROVA' bin/relato_afirma_com_prova.py \| head -20` |
+| 00:35:36 | Bash | Pôr a linha PROVA no topo do RELATO | `python3 - <<'PY' p='docs/RELATO.md' s=open(p).read() anc='# RELATO — esteira saas-hasner\n\n' assert s.count(anc)==1 prova=('**PROVA:** `linha_do_placar()` dentro do `saas_core` = `contratos_estruturais: 15/20 verdes`;\n' '`deploy: OK -- migrations em dia, tres cascas reiniciadas juntas, tres rotas provadas` (00:09:48);\n' 'suite da copia `wt-o139` = `Ran 9675 tests in 621.827s` -> `OK (skipped=42 ...` |
+| 00:35:25 | Bash | Ler o veredito da suite da copia | `cd /home/ronald/saas-hasner && grep -E '^(OK\|FAILED)' logs/o139_suite.out \| tail -3; echo "--- Ran:"; grep -E '^Ran ' logs/o139_suite.out \| tail -2; tail -4 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b2s9b809a.output` |
+| 00:35:21 | Bash | Atualizar o topo do RELATO com o estado vivo e o portao da raia-chamado | `python3 - <<'PY' p='docs/RELATO.md' s=open(p).read() velho = """O211 PAROU NA COPIA, nao em lei: o pouso A de `REGUA-PELA-EMPRESA` esta CONSTRUIDO e VERDE na raia `wt-regua` (`raia-regua`, 0 commit a frente do main) -- `core/models.py::AplicacaoConvencao`, migration `0017`, o escritor `semear_aplicacao_convencao` e o RED `core/tests/test_aplicacao_convencao.py` com **14 testes OK** pela porta cano ...` |
+| 00:34:39 | Bash | Conferir se a O139 tem linha no TICKETS e no BACKLOG | `grep -n '\| O139 \|' docs/TICKETS.md \| head -3; echo "=== BACKLOG O139:"; grep -n 'O139' docs/BACKLOG.md \| head -5` |
 | 00:24:30 | Bash | Rodar a suite inteira contra a copia mesclada | `cd /home/ronald/saas-hasner && ESTEIRA_QUEM=suite-o139 bash bin/suite.sh --dir /home/ronald/wt-o139 --parallel 2 > logs/o139_suite.out 2>&1; echo "rc=$?"; grep -E '^(OK\|FAILED)' logs/o139_suite.out \| tail -3; tail -3 logs/o139_suite.out` |
 | 00:22:15 | Bash | Rodar a pasta de selos de host contra a copia | `cd /home/ronald/wt-o139 && rc=0; for s in bin/tests/test_*.sh; do if ! out=$(bash "$s" 2>&1); then echo "RED: $s"; echo "$out" \| tail -6; rc=1; fi; done; echo "pasta_rc=$rc"; bash bin/node_check.sh 2>&1 \| tail -2` |
 | 00:22:08 | Bash | Ler o trecho da pasta de selos na regua | `cd /home/ronald/saas-hasner && sed -n '134,160p' bin/regua.sh` |

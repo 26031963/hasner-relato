@@ -1,11 +1,28 @@
 # RELATO — esteira saas-hasner
 
-O211 PAROU NA COPIA, nao em lei: o pouso A de `REGUA-PELA-EMPRESA` esta CONSTRUIDO e VERDE na raia
-`wt-regua` (`raia-regua`, 0 commit a frente do main) -- `core/models.py::AplicacaoConvencao`, migration
-`0017`, o escritor `semear_aplicacao_convencao` e o RED `core/tests/test_aplicacao_convencao.py` com
-**14 testes OK** pela porta canonica (`bin/suite.sh --dir /home/ronald/wt-regua`); `core/regua_cct.py`
-segue IDENTICO ao HEAD, entao **nada de dinheiro se move neste pouso** -- o leitor migra no pouso B
-(DIFF de frota na sombra antes), e a O211 so FECHA la.
+A O222 esta **NO AR** (`97e9e043`, deploy 08/10 00:09:48) e o placar, perguntado ao juiz dentro do
+`saas_core`, diz **15/20 verdes**. A esteira esta na **O221**, pouso 1: o PRODUTO da O139 (5 arquivos,
+`juizes_por_varredura` **27 -> 25** remedido na copia pela funcao real, diferenca simetrica tupla-x-funcao
+vazia) juntou ao main **sem um conflito** na copia `wt-o139`, e espera a suite dela.
+**PROVA:** `linha_do_placar()` dentro do `saas_core` = `contratos_estruturais: 15/20 verdes`;
+`deploy: OK -- migrations em dia, tres cascas reiniciadas juntas, tres rotas provadas` (00:09:48);
+suite da copia `wt-o139` = `Ran 9675 tests in 621.827s` -> `OK (skipped=42)`, rc=0;
+`juizes_por_varredura()` na copia = **25**, no main = **27**, `tupla ^ funcao = []`;
+`janela_auth` de `app/api/views.py` = barrado entre 23:20 e 06:00 (`bin/auth_sitios.txt`).
+
+**A `raia-chamado` (`wt-esmeril2`, `142238fc`) NAO POUSA AGORA, e o motivo e um portao DECLARADO, nao um
+`!` que falte: ela toca `app/api/views.py`, sitio de auth da lista `bin/auth_sitios.txt` (10 declarados),
+e `bin/janela_auth.sh` barra fatia de auth entre 23:20 e 06:00** -- o P0 de 20/09 (82% dos 401 as 00h).
+Pousa **depois das 06:00**, no mesmo turno. Ela tambem nao e merge simples: o main carrega `bea841ff`, a
+reversao PARCIAL do merge `23450e7e` dessa mesma raia, e o merge de ensaio (`git merge-tree`, arvore
+nenhuma tocada) mostra **7 conflitos**, dois deles em `core/contratos_estruturais.py` e
+`core/tests/test_censo_escritas.py`.
+
+O211 segue CONSTRUIDA e VERDE na raia `wt-regua` (`raia-regua`) -- `core/models.py::AplicacaoConvencao`,
+migration `0017`, o escritor `semear_aplicacao_convencao` e o RED `core/tests/test_aplicacao_convencao.py`
+com **14 testes OK** pela porta canonica; `core/regua_cct.py` segue IDENTICO ao HEAD, entao **nada de
+dinheiro se move no pouso A** -- o leitor migra no pouso B (DIFF de frota na sombra antes), e a O211 so
+FECHA la.
 
 lei **RESPONDIDA 07/10 19:xx** (aval `O-SISTEMA-CALCULA-O-QUE-TEM`, **L-113**): *"o sistema calcula o
 que tem (...) se ja foi para o Dominio e gerou holerite, problema do DP e da empresa"* -- e, com estas
