@@ -2,7 +2,7 @@
 
 ## O211 POUSO B — **O APPLY DA 10 EXECUTADO E PROVADO, E O CADASTRO QUE DECIDE A REGUA SAI DA EDICAO LIVRE DO ADMIN** (08/10 13:1x→13:4x)
 
-**O aval dele, literal:** *"O211 pouso B, completar o apply da 10: recalcular o gravado dos 70 colabs da
+**O aval dele de 08/10 12:4x, literal:** *"O211 pouso B, completar o apply da 10: recalcular o gravado dos 70 colabs da
 emp2 que o DIFF das 11:25 nomeia, pela porta, com a foto de reversao das 11:45 e a 09 intacta por hash;
 prova no RELATO. achado (3): Empresa.regime_trabalhista e AplicacaoConvencao saem da edicao livre do
 Django admin (so-leitura, molde O124) ate a tela do O223 existir, com selo, em commit proprio agora.
@@ -169,6 +169,22 @@ de linha — e e a mesma forma da **L-109**, que ja mandou a narrativa para o `L
 
 **E os achados (1), (2) e (4) foram para a fila de instrumento como voce mandou — SO REGISTRADOS**, itens
 `O225`, `O226` e `O227`, que **nao abrem** antes do pouso de instrumento depois da O211.
+
+### 6. A LINHA DO VEREDITO DA SUITE NO CLAUDE.md ESTAVA ERRADA, e ela era MINHA
+
+Achado no caminho, medido as 14:03, e e o caso do *"selo que passa por ausencia de sinal"* na minha propria
+mao. A secao 3 do CLAUDE.md mandava conferir a suite por `grep -E '^(OK|FAILED)( |$)'` — eu segui a linha
+ao pe da letra num laco de espera e **ele deu a suite por TERMINADA com ela ainda correndo**, casando a
+linha de log `OK — nenhuma divergencia em 2026-10-08.` do cron de conferencia. O `( |$)` que a propria
+linha ensinava como cura (ela mesma conta que o `^(OK|FAILED)` pelado ja havia dado um `FAILED` por verde)
+**nao cura nada**: `OK --` e `OK —` tem `OK` seguido de espaco.
+
+**O VIVO ja estava certo, e e ele que manda** (secao 8 do CLAUDE.md): `bin/regua.sh:170-171`,
+`bin/vigia_arvore.sh:89`, `bin/isolamento.sh:34`, `bin/regua_calendario.sh:47` e os quatro moldes usam
+`'^(OK|FAILED)( |\(|$)' ... | tail -1`. São DUAS guardas juntas, e nenhuma delas e o espaco: o `\(` —
+porque o Django so imprime `OK`, `OK (skipped=N)` ou `FAILED (...)` — **e** o `tail -1`, porque o veredito
+e a ULTIMA linha do run e a prosa vem no meio. A linha do CLAUDE.md nao tinha nem um nem outro. Corrigida
+neste commit com os sitios citados; nenhum script mudou, porque nenhum script estava errado.
 
 
 **O211 POUSO B NO AR as 11:52 de 08/10 -- commit de titulo `O211 pouso B: a regua de dinheiro sobe da
