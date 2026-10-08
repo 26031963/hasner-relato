@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 07/10/2026 22:33:31.**
+**Medido em 07/10/2026 22:39:01.**
 
 | | |
 |---|---|
@@ -133,13 +133,13 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Bloco em curso. Espero por arquivo e, no intervalo, rodo a pasta de selos de host — ela responde em segundos e a recusa no push custaria
   uma suite inteira:
 
-● Esperar o bloco terminar por arquivo · 1m 19s
+● Esperar o bloco terminar por arquivo · 6m 49s
   ⎿  $ cd /home/ronald/saas-hasner && n=0; until grep -q 'SOMBRA_BLOCO=' .sombra_stamp && ! grep -q 'SOMBRA_BLOCO=nao_rodou' .sombra_stamp;
      do n=$((n+1)); [ $n -gt 60 ] && echo TIMEOUT && break; sleep 20; done; echo "esperei ${n}x20s -- $(date '+%H:%M:%S')"; grep -E
-     'SOMBRA_BLOCO|SOMBRA_ERROS|SOMBRA_STA… (1m 19s)
+     'SOMBRA_BLOCO|SOMBRA_ERROS|SOMBRA_STA… (6m 49s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Beboppin'… (4h 24m 42s · ↓ 394.0k tokens)
+· Beboppin'… (4h 30m 12s · ↓ 394.0k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
