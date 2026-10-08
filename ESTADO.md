@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 05:57:01.**
+**Medido em 08/10/2026 06:02:31.**
 
 | | |
 |---|---|
@@ -112,42 +112,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  05:44:28 · .done absent · cron.d intact · GUARDA 2 = 0 · HEAD == origin/main == d0625307 · nothing written under app/. Waiter bgt1l604k
-  armed on the file; no further edits to marco artifacts before it fires.
 
-✻ Brewed for 11h 36m 13s · done 5:45 AM · 2 shells still running
+  Ran 4 shell commands
 
-❯ segue a fila; PAREI so em lei ou !
+● Três fatos medidos que mudam a forma da S-ESCALA (a descrição pendente dela estava errada em dois pontos). Registro agora, em logs/ — não
+  é artefato do marco:
 
   Ran 1 shell command
-  ⎿  Read docs/AVAIS.md (23 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bpxqmktlu.output (17 lines)
-  ⎿  Referenced file
-     ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/suite_o137.out
-  ⎿  Referenced file config/crons.py
-  ⎿  Referenced file core/contratos_estruturais.py
 
-● Task "RED e construção do segundo intervalo" completed in background
+● Adendo gravado — 48 linhas, ASCII puro, logs/ (não é artefato do marco; app/ intocado, GUARDA 2 = 0).
 
-● Task "Esperar por ARQUIVO o sinal do pouso 3 das 06:08" still running in background
+  O que a leitura da lacuna achou — duas premissas da S-ESCALA não se sustentam:
 
-● 05:53 — sinal em ~15 min, .done ausente, cron.d intacto, HEAD == origin/main == d0625307, GUARDA 2 = 0. Nada mais a editar nos artefatos
-  do marco. Uso a lacuna só para LER o que a S-ESCALA vai precisar, para que ela nasça mecânica depois do push.
+  1. Q3 já tem juiz declarado. core/juizes.py:137, dentro de JUIZES['celula/precedencia']: 'o dia e de trabalho para o vinculo?':
+     'escala/models.py::EscalaColaborador.eh_dia_trabalho' — desde a S2, 13/09. Declará-la outra vez sob uma chave 'escala' nova seria um
+     segundo registro do mesmo veredito, nascido de dentro de uma fatia: o caso exato que criou a TRAVA JUIZ-NOVO (dia_das_batidas, 650 de
+     9.162 batidas em desacordo). A fatia passa a declarar uma pergunta, não duas.
+  2. O nome da Q2 já está assinado, e a trava não segura mais nada. CORTES.md:119 carrega a frase literal corte Ronald: juiz escala_vigente
+     nasce desde 03/10 05:30, e grep -c escala_vigente core/juizes.py = 0 — nome assinado, registro vazio. Mas
+     escala/servico_jornada.py:15 diz de si mesmo, em docstring, que a juíza não mora ali: é escala/alimentacao.py::vinculo_do_dia (:147,
+     pura, CelulaDia.escala_geradora, O69). O censo de ontem já previa a forma (declara o carregador, a nota nomeia a juíza); registrei que
+     a escolha é deliberada e por quê.
 
-● Ler os dois sitios candidatos a juiz da S-ESCALA
-  ⎿  $ cd /home/ronald/saas-hasner/app
-     echo "=== [1] escala_vigente (Q2) ==="
-     grep -n "def escala_vigente" -A 14 escala/servico_jornada.py | head -30
-     echo
-     echo "=== [2] eh_dia_trabalho (Q3) -- cabeca ==="
-     grep -n "def eh_dia_trabalho" -A 10 escala/models.py | head -20
+  Mais a armadilha de nome que eu teria caído: há duas eh_dia_trabalho — :774 em TipoEscala (o template, não sabe a fase) e :1006 em
+  EscalaColaborador (a declarada). Citar :774 na nota apontaria o leitor para o template. E JUIZES['batida'] já existe (:925) — a S-ESCALA
+  é quem cria a chave da família, não as duas.
 
-· Symbioting… (4m 17s · ↓ 2.0k tokens)
+  Estado: 05:58:17 · .done ausente · cron.d intacto · HEAD == origin/main == d0625307 · GUARDA 2 = 0 · esperador bgt1l604k armado no
+  ARQUIVO. Nada mais a editar antes do sinal — quando ele vier, a ordem está de pé: ler esteira.out + .done, conferir HEAD == 1f3d616f,
+  pouso 4, pouso 5, sem push no meio.
+
+✻ Cooked for 5m 55s · done 5:58 AM · 2 shells still running
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ segue a fila
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
