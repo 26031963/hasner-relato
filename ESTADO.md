@@ -1,9 +1,16 @@
 # ESTADO -- o repo e a sessao agora
 
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:130 AFIRMA ato sem PROVA ao lado -- onde a lei diz que moram. E o estado passou a abrir com `**NO AR`, porque
+>
+> O RELATO nao entrou neste ciclo porque uma afirmacao de ato
+> (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
+> seguem valendo -- eles descrevem, nao afirmam ato.
+
+
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 20:07:31.**
+**Medido em 08/10/2026 20:13:01.**
 
 | | |
 |---|---|
@@ -117,33 +124,33 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   Ran 1 shell command
 
-● Linha 422: a prosa do O160, que é justamente o item do selo "árvore sem conflito" — ele cita os marcadores literalmente. Ancoro o assert
-  no início da linha, como o próprio arvore_sem_conflito faz:
-
-  Ran 2 shell commands
-
-● Índice limpo, o hook lê a O204 como fechada, e a stash@{0} é a minha (a {1} é a pré-existente, não toco). Solto a minha e faço o smoke em
-  prod — só leitura, chamando a função real que acabou de subir:
-
-  Ran 1 shell command
-
-● Sonda errada, não o sistema — a função pede agora por palavra-chave. Corrijo e confiro as duas linhas novas do PROMPTS:
-
-  Ran 1 shell command
-
 ● O smoke em prod prova a cura com a própria evidência do BO: 1791071932000, que dava 1791-07-19, agora devolve 2026-10-03 20:58:52-03:00 —
   exatamente a hora real do caso col218 — é descartada por antigo_demais e escreve a trilha que antes não existia. Agora o RELATO. Lendo a
   forma do topo:
 
-● Ler o topo e a estrutura do RELATO
-  ⎿  $ cd /home/ronald/saas-hasner/app
-     sed -n '1,45p' docs/RELATO.md
-     echo "......"
-     echo "=== total de linhas / datas presentes (DIETA L-109: >3 dias sai) ==="
-     wc -l docs/RELATO.md
-     grep -n '^## ' docs/RELATO.md | head -12
+  Ran 1 shell command
 
-· Wrangling… (6h 41m 52s · ↓ 733.8k tokens · thinking)
+● O RELATO é mais-novo-primeiro. Antes de escrever, pego o número que a pergunta de lei precisa carregar (LEI-AKITA 8: medir na fonte, não
+  estimar):
+
+  Ran 3 shell commands
+
+● O except imprimiu em vez de concluir zero. Vendo o caminho real da célula até a empresa:
+
+  Ran 2 shell commands
+
+● Denominador medido: 10.578 dia de trabalho na 10/2026, 351 TipoEscala, 559 vínculos. Agora escrevo o RELATO — pergunta de lei no topo com
+  o número, e a esteira seguiu:
+
+  Ran 1 shell command
+
+● RELATO escrito. Antes do push, a pasta de selos de host — ela responde em segundos e a recusa custaria uma suite inteira:
+
+  Ran 1 shell command
+
+●
+
+✢ Wrangling… (6h 47m 22s · ↓ 748.1k tokens · thought for 13s)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
