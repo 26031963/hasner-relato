@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 14:45:45.**
+**Medido em 08/10/2026 14:50:45.**
 
 | | |
 |---|---|
@@ -111,18 +111,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ⎿  Read docs/AVAIS.md (23 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/biv82p8a3.output (11 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/patch_leis.py (113
-     lines)
-  ⎿  Referenced file config/crons.py
-
-● Task "RED e construção do segundo intervalo" completed in background
-
-● Background command "Empurrar o marco" completed (exit code 0)
-
-● Push pousou: origin/main = f189ce0a, 0 à frente. Marco fechado — L-108.
-
   Ran 5 shell commands
 
 ● Advising using Fable 5.1
@@ -134,13 +122,25 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Três achados mudam o desenho. O crítico: a porta cita um selo — test_MORDE_nenhum_leitor_NOVO_chama_o_motor.
 
-● Ver o que a tela chama e como o selo varre
-  ⎿  $ cd /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/o214/app
-     echo "=== o que a tela CHAMA de he_pendente_lavrado ==="; grep -n '_\?L\.\(ler\|apurar\|lavrar\)' ponto/views.py relatorios/views.py
-     ponto/services/gestao_he.py
-     echo; echo "=== _varrer + allo…
+  Ran 3 shell commands
 
-· Wrangling… (1h 20m 6s · ↓ 116.8k tokens · thinking)
+● O achado decisivo: a tela lê L.ler() — o snapshot — em todos os 4 sítios. Ninguém chama apurar ao vivo além do lavrador.
+
+  Ran 3 shell commands
+
+● Achado que derruba a §5: o cartório não aplica o teto quando data != hoje (cartorio.py:600). Então o 19-07 ganha veredito acusatório com
+  o turno ainda aberto — veredito is not None não é fato encerrado.
+
+  Ran 1 shell command
+
+● Construindo na cópia. Primeiro as âncoras exatas.
+
+● Ler as ancoras de Empresa e DecisaoHE
+  ⎿  $ cd /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/o214/app
+     echo "=== Empresa.janela_he_* ==="; grep -n 'janela_he_' colaboradores/models.py
+     echo; echo "=== o bloco ==="; sed -n "$(grep -n 'janela_he_ativa' colaboradores/models.py|head -1|cut -d: -f1)…
+
+✶ Wrangling… (1h 25m 6s · ↓ 132.2k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
