@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 07:45:01.**
+**Medido em 08/10/2026 07:50:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `a96a5256 o segundo escritor do RELATO em bin/ cai: o vigia DELEGA o no_relato, e o selo que ficou cego reabre o universo pela lei que ele declara` |
+| `HEAD` local | `2dbd2007 CELULA-TURNO-FECHA CARIMBADA FECHADA, e a ordem da fila 1 passa a ser a dele` |
 | `origin/main` | `88bbc0c4 [O221] o marco do PLACAR-ESTRUTURAL: o R6 passa a publicar a frase do juiz, e as duas notas que envelheceram dizem o que foi medido` |
-| commits a subir (`ahead`) | **5** |
+| commits a subir (`ahead`) | **6** |
 
 ## Fabrica
 
@@ -22,20 +22,18 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+2dbd2007 CELULA-TURNO-FECHA CARIMBADA FECHADA, e a ordem da fila 1 passa a ser a dele
 a96a5256 o segundo escritor do RELATO em bin/ cai: o vigia DELEGA o no_relato, e o selo que ficou cego reabre o universo pela lei que ele declara
 58df169a a nota do selo da cura 1 passa a dizer o MOLDE de cada numero -- tres dos meus estavam errados ou sem rotulo
 6eeb129d o segundo leitor da pausa com dono migra: o "vigia sem efeito" para de chamar de travamento um estado que o Ronald escolheu
 cf03dbcb o alarme da esteira volta a ser lido PRIMEIRO: a ancora do no_relato passa a ser secao pinada propria, e nao um else que cai no EOF
-32d1d7fd O topo do TICKETS fechado no ato do push (O112)
 ```
 
 ## `git status --short`
 
 ```
  M app/config/crons_duracao.json
-M  app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
-M  app/docs/PROMPTS.md
  M bin/sombra.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -113,38 +111,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-❯ aval Ronald: ordem da fila 1 = O211 pouso A e pouso B; depois O214 etapa 0 e O146; depois os BOs na ordem do bloco (O197, O204, O207,
-  O44 itens 2-8, O198, O199, O200, O206, O145); depois O219; depois R6 item 4 e os contratos que faltam. o marcador do BACKLOG acompanha.
-  lateral de instrumento so no pouso de instrumento depois da O211. segue a fila; PAREI so em lei ou !
-
-● Aval novo registrado — a ordem da fila 1 muda e o marcador acompanha no mesmo ato. Vou ler o marcador antes de carimbar:
-
-  Ran 2 shell commands
-
-● Carimbo, marcador e a ordem nova, no mesmo ato:
-
-  Ran 2 shell commands
-
-● O158 já responde isso — o marcador é AUTORIDADE (corte dele 03/10). Conferindo o selo e a existência da O211:
 
   Ran 1 shell command
 
-● O selo cobra a pergunta que o corte dele de 03/10 (O158) já mandou mudar — e a lei está escrita. Vou carimbar primeiro e registrar o
-  prompt novo:
+● Confirmado: o bloco OBRAS é preservado verbatim e o siga: sai de _proximo_da_fila(). Enumerando as linhas antes de mover:
 
-● Registrar o prompt novo e preparar o carimbo
-  ⎿  $ cd /home/ronald/saas-hasner
-     python3 - <<'PY'
-     import io
-     p = 'app/docs/PROMPTS.md'
-     s = io.open(p, encoding='utf-8').read()
-     assert s.endswith('\n')
-     linha = ("| 08/10 07:5x | aval (ordem da fila 1) | ORDEM-FILA-1-O211-PRIMEIRO | "
-     "**a ordem da fila 1 e declarada por ele, e o marcador do BACKLOG acom…
+  Ran 1 shell command
 
-✢ Cultivating… (1h 36m 25s · ↓ 208.8k tokens)
+● Duas tabelas no bloco. Preciso saber em qual mora cada item dele:
+
+  Ran 1 shell command
+
+● A premissa do reorder não fecha: os itens nomeados dele estão todos na tabela 2, e a linha que o hook escolhe é a última da tabela 1 —
+  acima de toda a tabela 2. Levantando o vocabulário do hook antes de reconciliar:
+
+  Ran 1 shell command
+
+● PLACAR-ESTRUTURAL não é a última linha da tabela 1 — há 7 linhas depois dela. Medindo quantas estão abertas, para a evidência ser
+  precisa:
+
+  Ran 1 shell command
+
+● Meu sonda leu a coluna errada — o hook usa outro critério. Lendo a função inteira:
+
+  Ran 2 shell commands
+
+● Agora o quadro é exato: a tabela 1 tem exatamente 1 linha aberta (PLACAR-ESTRUTURAL) e ela precede a tabela 2 inteira. Reconciliando:
+
+● Advising using Fable 5.1
+
+✢ Cultivating… (1h 41m 55s · ↓ 220.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    8% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
