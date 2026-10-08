@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 07/10/2026 21:55:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (421.5 MB). Acoes na janela: **337**.
+**Medido em 07/10/2026 22:01:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (421.9 MB). Acoes na janela: **341**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 22:00:00 | Bash | Localizar saida da suite e conferir refazer | `cd /home/ronald/saas-hasner && ls -la --time-style=+%H:%M logs/suite_o218* logs/o218_refazer_sombra.out 2>&1; echo "--- refazer vivo?"; ls -la --time-style=+%H:%M logs/crons_em_curso/ 2>/dev/null \| tail -5; echo "--- ultimas do refazer"; tail -3 logs/o218_refazer_sombra.out 2>/dev/null` |
+| 21:59:48 | Bash | Refazer sombra com dump de agora e ler veredito da suite | `cd /home/ronald/saas-hasner && nohup bash bin/sombra.sh --refazer --dump-agora > logs/o218_refazer_sombra.out 2>&1 & echo "refazer lancado pid=$!"; echo "--- suite da raia"; grep -E '^(OK\|FAILED\|Ran )' logs/suite_o218_raia2.out 2>/dev/null; wc -l < logs/suite_o218_raia2.out` |
+| 21:58:48 | Bash | Ler carimbo e a funcao do instante do dump | `cd /home/ronald/saas-hasner && echo "=== .sombra_stamp"; cat .sombra_stamp; echo; echo "=== _instante_do_dump no arreio"; grep -n -A14 'def _instante_do_dump' logs/sombra/relavra10_frota_20261005.py; echo "=== qual dump o refazer usa"; grep -n 'juliani_agora\\|backups/juliani\\|DUMP_JUL\\|dump_agora' bin/sombra.sh \| head -20` |
+| 21:58:35 | Bash | Localizar carimbo da sombra e dumps do dia | `cd /home/ronald/saas-hasner && grep -n 'CARIMBO\\|carimbo=\\|SOMBRA_CARIMBO\\|stamp' bin/sombra.sh \| head -20; echo "--- dumps do dia"; ls -la --time-style=+%d/%m\ %H:%M backups/juliani/*.dump 2>/dev/null \| tail -4; echo "--- conferir"; bash bin/sombra.sh --conferir 2>&1 \| tail -8` |
 | 21:51:54 | Bash | Ler as duas celulas do censo dentro da sombra | `cd /home/ronald/saas-hasner && cp logs/o218_col146_prod.py logs/sombra/col146_leitura.py && SOMBRA_ARVORE=/home/ronald/wt-lavra/app bash bin/sombra.sh --rodar col146_leitura.py o218_col146_sombra 2>&1 \| grep -v 'objects imported' \| tail -12` |
 | 21:51:28 | Bash | Data exata do dump e o carimbo da sombra | `cd /home/ronald/saas-hasner && ls -la --time-style=full-iso logs/sombra/dumps/*.dump 2>/dev/null && echo "=== carimbo ===" && cat logs/sombra/.stamp 2>/dev/null \|\| cat logs/sombra/*stamp* 2>/dev/null \| head -20` |
 | 21:50:55 | Bash | Ler as duas celulas do censo em prod | `cd /home/ronald/saas-hasner && cat > logs/o218_col146_prod.py <<'PY' # -*- coding: utf-8 -*- """SO LEITURA. As duas celulas do censo da O218 (col146, 28 e 29/09) em PROD, hoje. A autoridade e chamada, nunca replicada (LEI-AKITA 2/8): `ponto/turnos.py::realizado_do_dia`, com os turnos pedidos UMA vez, que e a forma que a assinatura declara. 1 colab, 2 dias. """ import datetime as _d from django.db  ...` |
