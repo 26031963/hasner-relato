@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 11:43:00.**
+**Medido em 08/10/2026 11:48:01.**
 
 | | |
 |---|---|
@@ -37,6 +37,7 @@ a96a5256 o segundo escritor do RELATO em bin/ cai: o vigia DELEGA o no_relato, e
  M app/docs/HANDOFF-SESSAO.md
  M app/docs/LEIS.md
  M app/docs/RELATO.md
+ M app/docs/TICKETS.md
  M bin/sombra.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -114,13 +115,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  Ran 2 shell commands
-
-● Zero vermelho nos selos de host. BACKLOG:
-
-  Ran 1 shell command
-  ⎿  Read docs/AVAIS.md (23 lines)
   ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/patch_leis.py (113
      lines)
   ⎿  Referenced file config/crons.py
@@ -135,17 +129,24 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Agora o RELATO com o DIFF publicado ANTES do apply:
 
-  Rodar o selo do RELATO e a pasta de selos · 1m 12s
-  ⎿  $ cd /home/ronald/saas-hasner
-     python3 bin/relato_afirma_com_prova.py 2>&1 | tail -15; echo "rc=$?"
-     echo '=== pasta de selos ==='
-     r=0; for s in bin/tests/*.sh; do o=$(bash "$s" 2>&1) || { r=$((r+1)); echo "RED $s"; echo "$o"|tail -12; }; done; echo "rc!=0: $r" (1m
-     12s · 4 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Ran 12 shell commands
 
-✻ Cultivating… (5h 34m 23s · ↓ 635.1k tokens)
+● Prod's gravado moveu entre as duas fotos. Isso contradiz uma afirmação que escrevi — vou medir quem escreve:
+
+  Ran 7 shell commands
+
+● Medido: o gravado se move por evento. Minha afirmação estava errada — vou corrigi-la nos dois sítios antes de qualquer apply:
+
+● Anexar a reversao ao artefato do DIFF e reconferir o selo
+  ⎿  $ cd /home/ronald/saas-hasner
+     cat >> logs/o211b_diff_frota_081125.txt <<'FIM'
+     == REVERSAO (condicao 2 da DINHEIRO-EM-COMPETENCIA-ABERTA), e a ORDEM importa ==
+     arquivo: logs/o211b_foto_reversao_202610_114522.csv (587 linhas, md5 a4ea966cd55dedf903f789b3f6147fb0,
+     tirada 08/10 11:45 de PROD por COPY .…
+
+✢ Cultivating… (5h 39m 25s · ↓ 648.5k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                   11% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

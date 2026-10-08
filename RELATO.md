@@ -43,14 +43,28 @@ linhas, `emp3 5c503b95…` 86, `emp4 84c78cd0…` 9). Leitura x leitura: `emp1`,
 de pagamento e nao pede trava**: e a diferenca entre o que o Dominio JA RECEBEU e o que a conta de hoje
 diria, com os dois numeros na mesa, como a REGEN-EM-EXPORTADA manda. Se entra por correcao LA, por TXT de
 retificacao, ou se fica na 10, e seu e do DP.
-**O DEPLOY E O APPLY -- mas APPLY DE LEITOR, nao de GRAVADO, e a diferenca importa.** No reload todo
-leitor vivo (espelho, PDF, tela, export) passa a responder com a regua da empresa; o
-`ponto_fechamentomensal` de prod **nao se move sozinho**, e isso e MEDIDO e nao suposto:
-`config/crons.py` declara `recalcular_fechamento` em `FORA_DE_PIPELINE` com o motivo escrito -- *"quem
-decide QUANDO uma competencia se recalcula e o DP"* -- e o `pre_fechamento --apply` das 05:10 escreve
-**PAUTA**, nao fechamento (`--apply` help: *"Escreve a pauta do DP"*; zero ocorrencia de
-`FechamentoMensal`, de `recalcular_fechamento_mes` e de `.save(` no arquivo). O gravado anda no **ato do
-DP**, e e para esse ato que a reversao em `logs/` existe.
+**O DEPLOY E O APPLY, E E APPLY DE GRAVADO -- eu havia escrito o contrario nesta mesma linha, e a
+medicao me desmentiu antes do commit.** O que eu afirmei as 11:3x foi *"o `ponto_fechamentomensal` de prod
+nao se move sozinho"*, com base em `config/crons.py` declarando `recalcular_fechamento` em
+`FORA_DE_PIPELINE` -- *"quem decide QUANDO uma competencia se recalcula e o DP"* -- e no
+`pre_fechamento --apply` das 05:10 escrever **PAUTA** e nao fechamento. As duas leituras estao certas e a
+CONCLUSAO estava errada: ela respondia *"ha cron de FROTA?"* e eu a li como *"ha escritor?"*.
+**O QUE DESMENTIU, com numero:** a foto de reversao das 11:45 **nao bateu** com a das 10:18 -- **18 linhas
+de 587 diferentes** em `horas_trabalhadas`, `turnos_abertos`, `minutos_realizados`, `horas_saida_antecipada`
+e `inconsistencias`. Fui ao carimbo em vez de supor: **254 das 587 linhas da 10 foram reescritas HOJE**,
+uma ou duas por minuto (11:05, 11:08, 11:15, 11:16, 11:20, 11:21, 11:28, 11:30, 11:32, 11:33, 11:45,
+11:46:26 a ultima), que e assinatura de EVENTO e nao de lote.
+**O ESCRITOR, nomeado:** `ponto/services/fechamento.py::recalcular_por_evento` -> `recalcular_fechamento_mes`
+com **UM** colaborador e a competencia DAQUELE dia, em `transaction.on_commit`. Quatro chamadores de
+producao: a **BATIDA** (`ponto/registro_batida.py:136`), a decisao de HE (`ponto/portas/he.py:130`), a porta
+de celula (`ponto/portas/celula.py:318`) e a validacao de pergunta (`chamados/services/validacao.py:159`).
+Hoje bateram ponto **238 colabs em 333 batidas** -- e e isso que move 254 linhas.
+**O QUE ISSO MUDA NA REVERSAO, e e a parte que eu teria errado:** o gravado volta em DUAS etapas e **nesta
+ordem** -- (1) `git revert <este commit>` + `bin/deploy.sh`, para o LEITOR voltar; (2) so entao a foto de
+`logs/o211b_foto_reversao_202610_114522.csv` (587 linhas, md5 `a4ea966cd55dedf903f789b3f6147fb0`) reescreve
+os pares (colab, campo). Na ordem inversa a reversao nao segura: a primeira batida de cada colab chamaria
+`recalcular_por_evento` e reescreveria o valor pela regua nova. **O que NAO tem cron continua sem cron**: a
+relavratura de FROTA segue sendo ato do DP; o que anda sozinho e o colab que bate ponto.
 **ACHADOS REGISTRADOS, NAO CURADOS** (regra de negocio fora do pedido pede o seu `!`), somando aos tres do
 pouso A: (4) **a guarda da L-092 recusa `somente_leitura`** -- para medir a 09 sem gravar eu tive de passar
 `permitir_exportada=True` junto, isto e, a porta nao distingue *"ler o que daria"* de *"gravar na
