@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 08:37:01.**
+**Medido em 08/10/2026 08:42:31.**
 
 | | |
 |---|---|
@@ -111,12 +111,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 2 shell commands
-
-● Escrevo a cura. Primeiro o texto vivo exato do sítio:
-
-  Ran 2 shell commands
-
 ● Monto a cura em memória, com âncora única por sítio:
 
   Ran 2 shell commands
@@ -133,16 +127,22 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Falta corrigir a prosa que a lei nova tornou falsa — a testemunha não pode mentir no comentário:
 
-  Corrigir a prosa falsa e conferir o censo
-  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
-     echo "=========== test_prorrogacao_pos5h_por_cadastro.py 120-185"
-     sed -n '120,185p' $S/pousoB/app/ponto/tests/test_prorrogacao_pos5h_por_cadastro.py
-     echo "=========== grep de classes/defs no arquivo"
-     g…
+  Ran 4 shell commands
 
-· Cultivating… (2h 28m 25s · ↓ 316.2k tokens)
+● Agora os dois testes deste arquivo: um troca a testemunha, o outro é o selo "a praça decide" que inverte com controle positivo:
+
+  Ran 8 shell commands
+
+● A trava segue com a suíte do A (sem linha Ran ainda) — e os dois OK do log são prosa, não veredito. Sigo no B. Os três selos de dinheiro
+  que montam CCT pela praça:
+
+● Ler o selo do pouso A a inverter
+  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
+     sed -n '230,300p' $S/pousoB/app/core/tests/test_aplicacao_convencao.py
+
+✢ Cultivating… (2h 33m 55s · ↓ 339.2k tokens · thought for 15s)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                   11% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
