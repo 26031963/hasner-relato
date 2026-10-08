@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 14:50:45.**
+**Medido em 08/10/2026 14:56:01.**
 
 | | |
 |---|---|
@@ -111,22 +111,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 5 shell commands
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-● Quatro leituras antes do primeiro patcher.
-
-  Ran 2 shell commands
-
-● Três achados mudam o desenho. O crítico: a porta cita um selo — test_MORDE_nenhum_leitor_NOVO_chama_o_motor.
-
-  Ran 3 shell commands
-
-● O achado decisivo: a tela lê L.ler() — o snapshot — em todos os 4 sítios. Ninguém chama apurar ao vivo além do lavrador.
-
-  Ran 3 shell commands
 
 ● Achado que derruba a §5: o cartório não aplica o teto quando data != hoje (cartorio.py:600). Então o 19-07 ganha veredito acusatório com
   o turno ainda aberto — veredito is not None não é fato encerrado.
@@ -135,14 +119,30 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Construindo na cópia. Primeiro as âncoras exatas.
 
-● Ler as ancoras de Empresa e DecisaoHE
-  ⎿  $ cd /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/o214/app
-     echo "=== Empresa.janela_he_* ==="; grep -n 'janela_he_' colaboradores/models.py
-     echo; echo "=== o bloco ==="; sed -n "$(grep -n 'janela_he_ativa' colaboradores/models.py|head -1|cut -d: -f1)…
+  Ran 2 shell commands
 
-✶ Wrangling… (1h 25m 6s · ↓ 132.2k tokens)
+● O marcador do 3º passo colidiu com um origem de outro modelo — o campo não entrou. Conferindo e corrigindo.
+
+  Ran 2 shell commands
+
+● Agora a porta — extração com a trilha dentro, para que não exista escrita sem trilha.
+
+  Ran 4 shell commands
+
+● Achado que muda o cadastro: a fatia 2 da Gestão de HE já tem um limite desenhado e avalizado — Empresa.limite_decisao_he_min. LEI-AKITA
+  4: a lei existe antes do corte novo.
+
+  Ran 1 shell command
+
+● Isto muda o cadastro: o ! do limite já está dado (opção (b), 01/10 20:4x) e o campo já tem nome contratado. Lendo o desenho literal.
+
+● Ler o desenho literal do limite da fatia 2
+  ⎿  $ sed -n '3360,3400p' docs/RELATO.md
+
+· Compacting conversation… (1h 30m 22s · ↓ 148.7k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 59%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    1% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
