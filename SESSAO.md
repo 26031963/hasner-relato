@@ -6,10 +6,22 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 07/10/2026 23:00:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (423.4 MB). Acoes na janela: **434**.
+**Medido em 07/10/2026 23:05:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (424.0 MB). Acoes na janela: **446**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 23:04:44 | Bash | Ler ata_do_colab | `cd /home/ronald/saas-hasner && grep -n 'def ata_do_colab' -A 25 logs/o209_apply_frota_prod.py` |
+| 23:04:30 | Bash | Ler o cabeçalho do script de apply (imports e constantes) | `cd /home/ronald/saas-hasner && sed -n '1,100p' logs/o209_apply_frota_prod.py` |
+| 23:04:02 | Bash | Somar o pacote separando os dias com lacuna | `cd /home/ronald/saas-hasner && python3 - <<'PY' import json, io PAC = json.loads(io.open('logs/o218_esperado_20261007.json.ok', encoding='utf-8').read()) E = PAC['esperado_por_colab'] LAC = {('82','2026-10-02'),('82','2026-10-04'),('114','2026-10-01'),('114','2026-10-02'), ('303','2026-10-06'),('829','2026-10-01'),('829','2026-10-02'),('829','2026-10-04'), ('868','2026-09-28'),('898','2026-09-30') ...` |
+| 23:03:54 | Bash | Inspecionar a estrutura do pacote esperado | `cd /home/ronald/saas-hasner && python3 - <<'PY' import json, io PAC = json.loads(io.open('logs/o218_esperado_20261007.json.ok', encoding='utf-8').read()) esp = PAC['esperado'] if 'esperado' in PAC else None print('chaves do pacote:', sorted(PAC.keys())) if esp is None: for k, v in PAC.items(): if isinstance(v, dict) and v and all(isinstance(x, list) for x in list(v.values())[:1]): print('candidato ...` |
+| 23:03:15 | Bash | Rodar o DRY de leitura pura depois do apply e ler as lacunas | `cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command shell --schema=juliani --command "exec(open('/tmp/o218_apply_frota_prod.py').read())" 2>&1 \| tee logs/o218_dry_pos_apply.out \| grep -E 'LACUNA\|dia-colab do ESPERADO\|EXPORTADA antes\|dump de prod\|DRY --'` |
+| 23:02:59 | Bash | Hora atual e presença dos arquivos no container | `date '+%F %T %Z'; cd /home/ronald/saas-hasner && ls -la logs/o218_esperado_20261007.json.ok 2>/dev/null; docker exec saas_core sh -c 'ls -la /tmp/o218_apply_frota_prod.py /tmp/o218_esperado_20261007.json 2>&1'` |
+| 23:01:54 | Bash | Ler o bloco DRY e o cabeçalho do laço | `cd /home/ronald/saas-hasner && sed -n '300,400p' logs/o209_apply_frota_prod.py` |
+| 23:01:49 | Bash | Ver como o DRY difere do apply | `cd /home/ronald/saas-hasner && grep -n 'APLICAR\\|^_w\\|_w =\\|def _w\\|atomic\\|savepoint' logs/o209_apply_frota_prod.py \| head -40` |
+| 23:01:31 | Bash | Ler o resto de lacunas | `cd /home/ronald/saas-hasner && sed -n '183,235p' logs/o209_apply_frota_prod.py` |
+| 23:01:11 | Bash | Ler a definição de lacunas | `cd /home/ronald/saas-hasner && grep -n 'def lacunas' -A 40 logs/o209_apply_frota_prod.py` |
+| 23:01:04 | Read |  | `/home/ronald/saas-hasner/logs/o209_apply_frota_prod.py` |
+| 22:56:10 | Bash | Achar a construção da soma e do contador de dias | `cd /home/ronald/saas-hasner && grep -n 'n_dia_contado\\|soma_sem_lacuna_obs\\|casados.append\\|mov\[' logs/o209_apply_frota_prod.py \| head -20` |
 | 22:55:59 | Bash | Ler como o apply soma o realizado | `cd /home/ronald/saas-hasner && grep -n 'SOMA DO REALIZADO' -A 14 -B 24 logs/o209_apply_frota_prod.py \| sed -n '1,55p'` |
 | 22:53:30 | Bash | Aplicar a relavratura da ata na frota em prod | `docker exec saas_core python manage.py tenant_command shell --schema=juliani --command "exec(open('/tmp/o218_apply_frota_prod_RUN.py').read())" 2>&1 \| tee /home/ronald/saas-hasner/logs/o218_apply_prod_20261007.out \| tail -50` |
 | 22:53:17 | Bash | Aplicar a relavratura da ata na frota em prod | `cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command shell --schema=juliani --command "exec(open('/tmp/o218_apply_frota_prod_RUN.py').read())" > logs/o218_apply_prod_20261007.out 2>&1; echo "rc=$?"; tail -50 logs/o218_apply_prod_20261007.out` |
