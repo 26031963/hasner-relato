@@ -116,6 +116,14 @@ para a enumeracao nao virar allowlist de nome: por AST, `core/admin.py` nao pode
 consulta decide. Que ele nao EDITA e julgado pelo juiz dessa pergunta
 (`test_admin_so_leitura.py::AdminNaoEditaCadastroDaReguaTest`), e nao se re-julga aqui (LEI-AKITA 2).
 
+**NO AR, e provado no PROCESSO DE PROD, nao no disco** (DEPLOY JA): suite cheia na copia
+`Ran 10003 tests` -> `OK (skipped=42)`, 0 FAIL e 0 ERROR; commit `15a401cd`; `bin/deploy.sh --sem-migrate`
+as 14:23 com as tres rotas provadas e `importerror_500=0`. O smoke foi feito por INTROSPECCAO no
+`saas_ui` vivo, porque o que importa nao e o texto do arquivo e o que o registry do admin responde:
+PROVA: `EmpresaAdmin.get_readonly_fields` -> `['regime_trabalhista']`; `AplicacaoConvencaoAdmin` com
+`mro = [AplicacaoConvencaoAdmin, SoLeitura, ModelAdmin]`, **0 campo editavel fora do readonly** e
+`add=False change=False delete=False` -- as DUAS TRANCAS do molde O167 de pe no processo que o cliente usa.
+
 ### 3. ACHADO (6) e a DIVIDA QUE A TRANCA DEIXA — nomeada, nao tapada
 
 - **(6) os outros 14 campos de `Empresa` seguem editaveis no admin**, e a lista saiu do proprio RED:
