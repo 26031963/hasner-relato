@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 07/10/2026 21:17:31.**
+**Medido em 07/10/2026 21:23:01.**
 
 | | |
 |---|---|
@@ -113,8 +113,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  dispensa forkar instrumento. Vejo se o arreio de medição já faz o ATO 1 que eu preciso:
-
   Ran 1 shell command
 
 ● O arreio já responde exatamente o que a O218 precisa (relavra a ata de toda a frota na 10, com foto, reversão e hash09). Pego a fórmula
@@ -139,9 +137,11 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Tenho as citações. Rascunho a mensagem do marco agora (durável, sem colidir com a dieta) e confiro a suite no mesmo ato:
 
-● Running 1 shell command…
+  Ran 1 shell command
 
-✢ Beboppin'… (3h 8m 42s · ↓ 275.3k tokens)
+  Advising using Fable 5.1
+
+✢ Beboppin'… (3h 14m 12s · ↓ 277.6k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -151,6 +151,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Grepping bin/tests for doc readers                                                           5m 1s · ↓ 108.3k tokens
+  ◯ general-purpose  Grepping RELATO refs in test_ui_cal_competencia.py                                         10m 32s · ↓ 135.0k tokens
   ⧉  index
 ```

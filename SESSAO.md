@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 07/10/2026 21:17:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (420.1 MB). Acoes na janela: **265**.
+**Medido em 07/10/2026 21:23:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (420.1 MB). Acoes na janela: **266**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 21:19:13 | Bash | Rascunhar a mensagem do marco e conferir a suite | `cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && mkdir -p $S && cat > $S/msg_o218.txt <<'EOF' [O218] a bateria da lavratura: a passada 1 escrevia lampada nova com minuto velho, e o match do dia dependia de onde a janela comecava LEI-AKITA: origem=escala/utils.py::montar_grade_prevista_periodo (fim da funcao) + o propr ...` |
 | 21:15:48 | Bash | Ler as leis que protegem os sitios da cura | `for L in L-025 L-032 L-061 L-073 L-087 L-103; do echo "### $L"; grep -m1 "\*\*$L\*\*" LEIS.md \| cut -c1-430; echo; done` |
 | 21:15:37 | Bash | Levantar leis que protegem os sitios tocados | `cd /home/ronald/saas-hasner/app/docs && for f in "escala/utils.py" "ponto/services/cartorio.py" "ponto/turnos.py"; do echo "### $f"; grep -oE "^\\| (L-[0-9]+)[^\|]*\\|[^\|]*\\|" LEIS.md >/dev/null; awk -F'\|' -v pat="$f" '$0 ~ pat {print " " $2 " :: " substr($0, index($0,pat)-0, 60)}' LEIS.md \| head -8; done` |
 | 21:15:21 | Bash | Conferir veredito da suite | `cd /home/ronald/saas-hasner && grep -nE "^(OK\|FAILED\|Ran )" logs/suite_o218_raia.out 2>/dev/null \| tail; echo "--- bytes: $(wc -c < logs/suite_o218_raia.out)"` |
