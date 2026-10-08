@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 18:19:31.**
+**Medido em 08/10/2026 18:25:01.**
 
 | | |
 |---|---|
 | `HEAD` local | `1c27b268 O214 item 1: a reversao do apply se LE num descartavel, e o push deixa de morrer no rm da copia` |
-| `origin/main` | `f189ce0a O211 achado 3: o cadastro que decide a regua sai da edicao livre do admin` |
-| commits a subir (`ahead`) | **3** |
+| `origin/main` | `1c27b268 O214 item 1: a reversao do apply se LE num descartavel, e o push deixa de morrer no rm da copia` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -111,15 +111,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ⎿  Referenced file config/crons.py
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/biv82p8a3.output (11 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/patch_leis.py (113
-     lines)
-
-● Task "RED e construção do segundo intervalo" completed in background
-
-● Task "Empurrar o marco O214 (um push por marco)" still running in background
-
 ● Background command "Empurrar o marco O214 (um push por marco)" completed (exit code 0)
 
   Searched for 2 patterns, ran 6 shell commands
@@ -127,9 +118,7 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-● Ler o ping e o destino de ts_efetivo
-  ⎿  $ echo "=== views_core 935-975 (ping)"; sed -n '935,975p' api/views_core.py; echo; echo "=== onde ts_efetivo vai (views_core)"; grep
-     -n "ts_efetivo" api/views_core.py api/views.py
+  Committed 1c27b268, searched for 2 patterns, ran 38 shell commands
   ⎿  Read docs/AVAIS.md (23 lines)
   ⎿  Referenced file ponto/models.py
   ⎿  Referenced file ponto/tests/test_o214_ponta_pequena.py
@@ -140,13 +129,24 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Task "Empurrar o marco O214 (segunda tentativa, com a causa)" still running in background
 
-✢ Wrangling… (4h 53m 52s · ↓ 497.2k tokens · thought for 38s)
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+
+  Ran 1 shell command
+
+● Background command "Empurrar o marco O214 (segunda tentativa, com a causa)" completed (exit code 0)
+
+● Censo de consumidores da montagem
+  ⎿  $ cd /home/ronald/saas-hasner && echo "=== quem chama --montagem"; grep -rn "montagem" bin/*.sh | grep -v "^bin/arvore_do_push.sh" |
+     sed -n '1,40p'
+
+· Wrangling… (4h 59m 22s · ↓ 500.9k tokens · thought for 17s)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
 ❯ ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
