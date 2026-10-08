@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 05:15:31.**
+**Medido em 08/10/2026 05:20:45.**
 
 | | |
 |---|---|
@@ -112,36 +112,36 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Task "Esperar por ARQUIVO o sinal do pouso 3 das 06:08" still running in background
+  Ran 1 shell command
 
-● The RED is real and it's mine — line 97 affirms NO AR with the bullets below it but no PROVA: line. The prova file exists; I just never
-  cited it beside the claim.
+● Now certifying it against a copy from git show HEAD: — never against the live tree:
 
-  Ran 2 shell commands
+  Ran 1 shell command
 
-● Clean: 0 afirmacao sem prova, rc=0, and the base file untouched (it only shrinks). Now the other half of item 4 — the regua_tickets
-  expectation for the marco's commit ids.
+● Patch certified (unique anchor, compiles, idempotent). Step 4 failed only because my isolated dir has no configuracao_efeito — loading
+  the cured file by path against the real core package instead:
 
-  Ran 5 shell commands
+  Ran 1 shell command
 
-● --conferir writes only to a mktemp. Running the real dry-run against the current origin/main..HEAD:
+● 15/20 unchanged, as intended — the cell is a dict, not an object:
 
-  Ran 2 shell commands
+  Ran 1 shell command
 
-● ahead: 0 — so the next push carries the whole chain. And a real hazard: O167 and O137 have no line in TICKETS.md. Let me see whether
-  pousos 4/5 cite them in brackets.
+● Fully certified: unique anchor, compiles, idempotent, 15/20 untouched, and only the nota key differs. Recording the gap work in the topo
+  draft:
 
-  Ran 2 shell commands
+  Ran 1 shell command
 
-● Both pousos are --ff-only — no new commit message; the raia's own commits land. So the citations to check are theirs.
+● Clean after the addition. Saving the lesson from the false RED — it's reusable and not in the repo:
 
-  Running 1 shell command…
-  ⎿  $ cd /home/ronald/saas-hasner
-     grep -nE '^(RAIA|IRMA|ARV)=' fatias_agendadas/o221-pouso4/esteira.sh fatias_agendadas/o221-pouso5/esteira.sh
-     echo "=== e o pouso 3 (branch juncao-chamado) ==="
-     grep -nE '^(RAIA|IRMA|ARV)=' fatias_agendadas/o221-pouso3/esteira.sh 2>/dev/null
+  Salvar a memória da árvore do push
+  ⎿  $ cd /home/ronald/.claude/projects/-home-ronald-saas-hasner/memory
+     cat > citacao-de-commit-se-mede-na-arvore-do-push.md <<'FIM'
+     ---
+     name: citacao-de-commit-se-mede-na-arvore-do-push
+     description: "regua_tickets cobra a tabela do instante do PUSH, nao a viva; a raia que se vai mergear reescreve TICKE…
 
-· Beboppin'… (11h 6m 42s · ↓ 1.1m tokens)
+· Beboppin'… (11h 11m 56s · ↓ 1.1m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
