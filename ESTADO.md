@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 04:53:31.**
+**Medido em 08/10/2026 04:59:01.**
 
 | | |
 |---|---|
@@ -112,15 +112,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 1 shell command
-
-● Background command "Esperar o carimbo da sombra de hoje virar, com teto em 05:40" completed (exit code 0)
-
-● The sombra waiter fired — that preempts everything:
-
-  Read 1 file
-
-● SOMBRA=OK dia=20261008 tipo=completa diverge=0 erros=0, bloco 69/69 erro=0 — GUARDA 4 passes for all three pousos, the 06:08 chain is
   safe, no cure needed. ~84 min of gap left. Correcting the census with what ponto/nucleo.py turned out to be:
 
   Ran 1 shell command
@@ -140,8 +131,17 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Task "Esperar por ARQUIVO o sinal do pouso 3 das 06:08" still running in background
 
 ● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-· Beboppin'… (10h 44m 42s · ↓ 1.0m tokens)
+● Conferir o formato de PAREI que o hook aceita
+  ⎿  $ cd /home/ronald/saas-hasner
+     echo "=== o que o hook aceita como PAREI ==="
+     grep -nE "PAREI|_SO_BANG|lei:|re\.(search|match)" bin/hook_stop_fila1.py | head -20
+     echo
+     echo "=== o RED literal do selo ==="
+     grep -nE "PAREI|block|lei" bin/tests/test_hook_parei_so_lei.sh | head -12
+
+✢ Beboppin'… (10h 50m 12s · ↓ 1.0m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
