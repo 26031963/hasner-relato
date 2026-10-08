@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 02:12:01.**
+**Medido em 08/10/2026 02:17:31.**
 
 | | |
 |---|---|
@@ -110,12 +110,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Censo honesto, e ele não é zero — três raias devem trabalho real ao main: O137 (28 arquivos), O167 (11) e cert-ast (16, instrumento). As
-  outras já pousaram em substância (GEOFENCE 4/4, O139 4/4) ou estão na lista de não-mergear. A L-105 manda pousá-las antes de abrir fatia
-  nova, e ela já pré-aprova pouso de raia verde. Medindo a superfície de conflito do O137 contra a árvore que o main vai ser:
-
-  Ran 1 shell command
-
 ● Trabalho real e de família da fila 1 — o esmeril de ausencia/ferias, incluindo o próprio juiz ponto/catalogo/ausencias.py que uma das
   minhas laterais devidas acusa com dois leitores. Montando a junção em cópia, em cima da árvore que o main vai ser:
 
@@ -134,14 +128,20 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● L-089 (ATESTADO SO TEM EFEITO EM DIA DE TRABALHO, PELA-METADE) aponta justamente para ferias/models.py, que este merge toca. Vendo se ele
   move o estado dessa lei:
 
-● Ver o que o merge faz em ferias
-  ⎿  $ cd /home/ronald/wt-o137j && git diff --cached --stat -- app/ferias/ && echo "=== o que mudou em ferias/models.py:" && git diff
-     --cached -- app/ferias/models.py | grep -E '^[+-]' | grep -vE '^[+-]{3}' | head -30
+  Conferir indice limpo antes do commit
+  ⎿  $ cd /home/ronald/wt-o137j && git status --porcelain | grep -v '^M ' | head -20; echo "=== MERGE_HEAD:"; git rev-parse --short
+     MERGE_HEAD 2>&1; echo "=== staged vs worktree sujo (esperado vazio):"; git diff --name-only | head
+  ⎿  Read docs/AVAIS.md (23 lines)
+  ⎿  Referenced file core/contratos_estruturais.py
+  ⎿  Referenced file ponto/turnos.py
+  ⎿  Referenced file ponto/services/cartorio.py
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bl19mn3rk.output (15 lines)
 
-· Compacting conversation… (8h 3m 12s · ↓ 689.2k tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱ 88%
+● Task "RED e construção do segundo intervalo" completed in background
+
+✢ Beboppin'… (8h 8m 42s · ↓ 698.6k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    0% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
