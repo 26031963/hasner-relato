@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 05:25:45.**
+**Medido em 08/10/2026 05:30:45.**
 
 | | |
 |---|---|
@@ -112,38 +112,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Decisive: the score stays 15/20 post-chain (so the R6 verbatim sentence lands true), and the raia already rewrote the chamado cell to 121
-  → 21. Reading its numbers so I don't write a competing one:
+● Only O221, and it has a line. Checking the prepared L-101 item against the standing rule that an ESTADO only moves in the commit that
+  changes that law's code:
+
+  Ran 2 shell commands
+
+● L-101's row is genuinely lying now, and neither pouso that landed the code/test touched LEIS.md. But the marco doesn't change L-101's
+  code or test, so moving its ESTADO there would break your standing rule. Preparing it and sending it up as a lei question instead:
+
+  Ran 2 shell commands
+
+● Gap work complete and durable; 39 minutes left. Continuing the PLACAR-ESTRUTURAL item read-only — auditing whether R1–R5's numbers are
+  cheaply falsifiable the way R6's were:
 
   Ran 1 shell command
 
-● The raia did it better than a number: that placar moved out of the prose into a test with an empty allowlist. So
-  placar_estrutural.py:312-313 — which the chain does not touch — must point at that authority, not copy a figure:
+● R1/R2/R5 and R3/R4 are motor-and-sombra numbers — correctly deferred. But R6's sentence carries a second cheap number next to the one I'm
+  curing: "17 declaradas". Measuring it before I land a fix that leaves its neighbour stale:
 
-  Ran 2 shell commands
-
-● 12 + 4 + 5 = 21 — matches the aval's "121 → 21". So item (5)'s cure is to name the gate, not carry a number. Editing the cured copy:
-
-  Ran 2 shell commands
-
-● Regenerating the patch and re-certifying it end to end:
-
-  Ran 2 shell commands
-
-● Copy is GREEN and coherent. The live-tree run needs the explicit path (the sonda's default resolves oddly from the repo root):
-
-  Ran 1 shell command
-
-● RED live / GREEN on the copy. Now advisor item 2 — the RELATO selo against the post-chain tree:
-
-  Ver o alvo do selo em relato.sh
+  Medir verdes e declaradas na fonte
   ⎿  $ cd /home/ronald/saas-hasner
-     echo "=== bin/relato.sh: sobre QUAIS arquivos ele roda o selo? ==="
-     grep -nE "relato_afirma|RELATO|\.md" bin/relato.sh | head -20 | sed 's/^/ /'
+     PYTHONPATH=app python3 - <<'PY'
+     from core import contratos_estruturais as CE
+     M = CE.MATRIZ
+     verdes = sum(1 for c in M.values() if c.get('verde'))
+     declaradas = sum(1 for c in M.values() if c.get('teste'))
+     print(' celulas na MATRIZ :', len(M))
+     print(' verde=True :', verde…
 
-· Beboppin'… (11h 16m 56s · ↓ 1.1m tokens)
+* Compacting conversation… (11h 21m 56s · ↓ 1.1m tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 37%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
