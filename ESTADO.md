@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 20:40:01.**
+**Medido em 08/10/2026 20:45:08.**
 
 | | |
 |---|---|
@@ -121,43 +121,43 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-  Ran 2 shell commands
+  Ran 1 shell command
 
-● Agora o censo pode usar a autoridade real com controle positivo. Escrevo-o em duas fases e procuro como a casa roda sonda na sombra:
+● _acusa_cadastro_x_realidade existe e é chamado quando _passou_teto — então a cláusula do teto da L-097 tem leitor, no MOTOR. E isso
+  reposiciona a O145 inteira: o motor pareia por parear_turnos (sem o raio de 90), então a batida longe pode já ser a entrada de um par, já
+  contar do marco e já acusar a lista — enquanto a testemunha (espelho, tela, portão he_pendente) não mostra nada, porque a célula ficou
+  missing. Se for isso, a cura é de leitor e não move dinheiro. A coluna corrigida do censo responde:
 
   Ran 1 shell command
 
-● Há porta única: bin/sombra.sh --rodar <script.py> em logs/sombra/ (O217, 07/10) — não forko docker run meu. Confiro se a porta está
-  commitada e leio o contrato dela:
+● O .out está sendo reescrito pela corrida nova. Espero pelo ARQUIVO, não por pgrep:
+
+● Background command "Rodar o censo corrigido na sombra" completed (exit code 0)
+
+● O censo corrigido terminou:
 
   Ran 1 shell command
 
-● A porta --rodar não está no HEAD — ela é parte das 38 inserções não commitadas de bin/sombra.sh. Usar não é editar, e é a porta única;
-  não forko arreio. Vejo onde o script tem de morar e se a sombra de hoje serve:
+● Números reais agora. E eles mudam o escopo: pela L-099, só dono ESTRUTURA é fatia — logo a O145 são 61 dias, não 100. Mas dentro dos 61
+  há duas populações distintas (dist 91–180 com horas>0 = a O145; dist 600–1100 com horas=0 = borda da meia-noite, outro defeito). Preciso
+  do cruzamento antes de escrever RED:
 
   Ran 1 shell command
 
-● Sombra de hoje OK, completa, diverge=0. Escrevo o censo na porta única, com controle positivo que para o censo se falhar e com o universo
-  da própria autoridade (situacao='ativo', o mesmo de apurar):
+● Enquanto roda, torno o achado durável:
 
-● Escrever o censo na porta da sombra
-  ⎿  $ cat > /home/ronald/saas-hasner/logs/sombra/censo_o145.py <<'PY'
-     # CENSO DA O145 -- A PONTA QUE NAO NASCE. SO LEITURA. Roda pela porta: bin/sombra.sh --rodar
-     #
-     # O DEFEITO, na forma que o CODIGO VIVO diz (lido, nao suposto):
-     # 1. S133 (`escala/utils.py:492`) CONSERVA a batida fora do envelope como…
+● Running 1 shell command…
 
-✢ Compacting conversation… (7h 14m 22s · ↓ 803.5k tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱ 88%
+✽ Wrangling… (7h 19m 29s · ↓ 820.0k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    0% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
-  ◯ fork  Reconciling fora_posto counter design                                                                 14m 46s · ↓ 123.6k tokens
+  ◯ fork  Diagnosing missing .env for suite.sh                                                                  19m 52s · ↓ 146.3k tokens
   ⧉  index
 ```
