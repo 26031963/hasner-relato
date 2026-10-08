@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 07/10/2026 21:39:29.**
+**Medido em 07/10/2026 21:44:51.**
 
 | | |
 |---|---|
@@ -114,44 +114,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Task "O220 DIETA-DE-CARGA nos docs" still running in background
 
-● Diagnóstico: a cura unificou os dois ramos numa única pergunta no fim da função (o laço for _ix in range(dias), utils.py:1480-1487). O
-  selo contava sítios de chamada como proxy de "os dois ramos consultam". Antes de tocar nele, a lei:
+● A montagem tem um escritor único — uso ele, não monto à mão:
 
-  Searched for 1 pattern
+  Ran 6 shell commands
 
-● Lei lida: a L-103 protege exatamente estes ramos (escala/utils.py::montar_grade_prevista_periodo_por_turno, ramos sem_turno de trabalho e
-  de folga), e a cláusula dela (minutos_realizados=0 com realizado_sem_turno=True) sobrevive na passada unificada — linhas 1494-1497.
-  Nenhuma lei fixa a asserção >= 2; a L-111 nomeia o outro teste do módulo.
-
-  E o exercício que mede a intenção já existe e está verde com a cura:
+● 59 OK — o selo invertido, os dois exercícios e a bateria inteira. Agora a suite cheia na raia:
 
   Ran 1 shell command
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-● Mede o RED antes de editar — a contagem por AST nas duas formas:
+● Enquanto roda, registro a inversão na mensagem do marco:
 
   Ran 3 shell commands
 
-● RED medido: a asserção nova é vermelha na forma do HEAD (2 chamadas) e verde na cura (1). Agora ruff e os três módulos:
+● O agente da O220 está nas células de ESTADO do LEIS.md (77 encurtadas, vereditos idênticos antes/depois: 25/32/14/6/4; 39.978 → 10.109
+  bytes). Enquanto a suite roda, confiro a porta do DIFF que vou disparar em seguida — sem tocar na raia:
 
-  Ruff no selo editado
-  ⎿  $ cd /home/ronald/saas-hasner && docker run --rm $(bash -c 'source bin/recursos.sh >/dev/null 2>&1; echo $TESTE_DOCKER') -v
-     /home/ronald/wt-lavra/app:/app:ro -w /app saas-hasner-core ruff check ponto/tests/test_realizado_do_dia_autoridade.py 2>&1 | tail -5
+  Ran 5 shell commands
 
-* Beboppin'… (3h 30m 40s · ↓ 307.7k tokens)
+● O produto não mudou desde a suite anterior (só o arquivo de teste), então o DIFF pode medir em paralelo. Confirmo isso antes:
+
+  Ran 1 shell command
+
+● O produto é byte-idêntico ao que rodou os 9.673 testes (utils 20:19, cartório 19:46, turnos 19:49 — todos antes da suite das 21:29).
+  Confiro que --rodar passa pelo container() que ganhou o SOMBRA_ARVORE:
+
+  Ver se --rodar usa o container() com SOMBRA_ARVORE
+  ⎿  $ cd /home/ronald/saas-hasner && sed -n '418,434p' bin/sombra.sh && echo "=== container() ===" && sed -n '148,168p' bin/sombra.sh
+
+✢ Beboppin'… (3h 36m 2s · ↓ 318.4k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Mapping ESTADO column shapes in BACKLOG.md                                                 26m 59s · ↓ 101.4k tokens
+  ◯ general-purpose  Trimming 44 ESTADO cells in BACKLOG.md                                                     32m 21s · ↓ 131.8k tokens
   ⧉  index
 ```
