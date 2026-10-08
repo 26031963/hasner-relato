@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 18:51:31.**
+**Medido em 08/10/2026 18:57:01.**
 
 | | |
 |---|---|
@@ -111,12 +111,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  500 no caminho da batida:
-
-  Ran 1 shell command
-
-● Background command "Empurrar o pouso do instrumento" completed (exit code 0)
-
 ● Background command "Esperar pelo arquivo de sinal do push" completed (exit code 0)
 
   Ran 1 shell command
@@ -134,19 +128,25 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● O RED está nomeado — 11 vermelhos, inclusive o dedup engolindo uma batida (['09:00'] != ['05:00','23:00']). Agora a cura na mesma cópia:
 
-● Rodar os vizinhos do campo na copia curada · 1m 55s
-  ⎿  $ cd /home/ronald/saas-hasner && C=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad &&
-     DIR=$(cat $C/o204/copia.txt) && ESTEIRA_QUEM=o204-VIZ bin/suite.sh --dir $DIR --espera 900 --only "ponto api chamados" >
-     $C/o204/vizinhos.out 2>&1; echo "rc=$?"; grep … (1m 54s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Searched for 2 patterns, ran 6 shell commands
 
-✢ Wrangling… (5h 25m 52s · ↓ 559.1k tokens)
+● Vizinhos ainda correndo. Escrevo a seção do RELATO enquanto isso:
+
+  Searched for 1 pattern, ran 9 shell commands
+
+● O contra-exemplo medido fecha o caso real do BO: 1791071932000 → 2026-10-03 20:58:52, que é exatamente a hora que o col218 bateu e não
+  foi gravada.
+
+● Achar onde moram os contadores da LINHA HAIKU
+  ⎿  $ ls core/ | head -40; echo "=== HAIKU:"; grep -rln "HAIKU" --include=*.py core/ bin/ 2>/dev/null | head; ls ../bin/ | grep -i haiku
+
+· Wrangling… (5h 31m 22s · ↓ 578.4k tokens · thought for 8s)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    1% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
