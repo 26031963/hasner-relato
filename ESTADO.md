@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 11:27:29.**
+**Medido em 08/10/2026 11:32:30.**
 
 | | |
 |---|---|
@@ -34,6 +34,7 @@ a96a5256 o segundo escritor do RELATO em bin/ cai: o vigia DELEGA o no_relato, e
 ```
  M app/config/crons_duracao.json
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/LEIS.md
  M bin/sombra.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -111,42 +112,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● VEREDITO=LIMPO — 0 fora, e a emp3 (clt) com 0 trocas e 0 centavos. Resta UM caso que não posso deixar sem explicação: um 12x36 que troca
-  de régua, tem noturno > 0 e não moveu. Pelo cl.38-d ele deveria mover.
-
-  Ran 1 shell command
-
-● col373: 12x36 na escala ATIVA, 1,30 h noturna, 4 inconsistências. Meu censo leu o ciclo da escala ativa; o motor lê o tipo_escala de cada
-  DIA. Antes de chamar isso de bug ou de normal, meço o dia.
-
-  Ran 1 shell command
-
-● O achado já apareceu antes do erro: ele trocou de escala dentro da janela — 6x1 até 06/10, 12x36 a partir de 07/10. Então "ciclo=12x36" é
-  a escala ativa, não a dos dias. Corrijo a assinatura e fecho a medição.
-
   Ran 3 shell commands
 
-● Medido, e responde: a noturna do col373 nasce em dias cujo DNA diz tipo_ciclo: '6x1' (ec#325, até 06/10) e termina às ~22:30 — dentro de
-  22h-05h. A cláusula 38-d só alcança 12x36 e a prorrogação só alcança hora depois das 05h: zero é a resposta certa. O "12x36" do meu censo
-  era o rótulo da escala ATIVA, não o do dia — uma derivação paralela na minha coluna explicativa, que vai nomeada.
-
-  Fixo os números em arquivo antes de seguir.
+● A Pauta DP da 09 tem número nos dois lados: 82 colabs, só emp2, só campos de noturno (−2.340,85 h noturnas, −19,25 h HE 100% noturna,
+  −0,24 HE 50% noturna); emp1/emp3/emp4 ZERO. O TXT exportado fica como foto.
 
   Ran 1 shell command
 
-● Fixo. Lanço a leitura da 09 em segundo plano (só leitura, pela porta declarada) enquanto consulto o revisor antes da cadeia de apply.
+● Agora a mensagem de commit, com os números do censo exato.
 
-  Ran 2 shell commands
+  Ran 1 shell command
 
-● Advising using Fable 5.1
+● Sem [F..] de fatia no corpo — só r['fonte'], que não tem a forma de id. Reescrevo o "O QUE SAI" com o medido e preciso o que "deploy é o
+  apply" significa, agora que medi que nenhum cron reescreve o gravado.
 
-✢ Cultivating… (5h 18m 52s · ↓ 611.8k tokens)
+  Ran 1 shell command
+
+● Agora o LEIS vivo, com os selos de host logo atrás.
+
+  Rodar a pasta de selos de host inteira · 1m 13s
+  ⎿  $ cd /home/ronald/saas-hasner
+     echo '=== pasta de selos de host INTEIRA ==='
+     falhou=0
+     for t in bin/tests/test_*.sh; do
+     out=$(bash "$t" 2>&1); rc=$?
+     if [ $rc -ne 0 ]; then falhou=$((falhou+1)); echo "VERMELHO rc=$rc $t"; echo "$out" | tail -8; echo '---'; fi
+     done
+     echo "selos de host com rc!=0: $falho… (1m 13s · 2 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+* Cultivating… (5h 23m 54s · ↓ 624.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    4% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
