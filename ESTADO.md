@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 08:10:45.**
+**Medido em 08/10/2026 08:15:46.**
 
 | | |
 |---|---|
@@ -111,38 +111,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Committed 85e2d722, ran 6 shell commands
+  - este marco não pede deploy, e o censo é a razão: o único arquivo de produto é app/core/esteira_vigia.py, e nenhum
+    views/urls/middleware/signals o alcança nem em 2º nível — os leitores são scripts de host e tenant_command, processo novo que lê o
+    disco.
 
-● Commit durável (85e2d722), 64 selos verdes. Antes do push do marco, consulto o advisor:
+  Push único do marco em curso (6 commits + o derivado do pos_push), trava desde 08:08:58.
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+  Pouso A da O211, já montado em cópia enquanto a suíte corre — e achei duas coisas que você deve saber: a raia-regua já é ancestral do
+  main (o ref está em 212b25a7, de 05/10) e o material do pouso A estava não commitado dentro de wt-regua. Encaixa limpo:
+  app/core/models.py é byte-idêntico entre o main e a base da raia (a4e5e3cb), 0017 segue sendo a próxima migration de core, regua_cct.py é
+  idêntico ao HEAD (nada de dinheiro se move), e os 4 arquivos compilam. Corrigi a prosa envelhecida do escritor: ele dizia "as duas
+  linhas", e são três desde o seu EMP1-E-CCT de 07/10 — emp1, emp2 e emp4 → sind2, sem praça.
 
-  Amended commit 4d8e37f8, ran 7 shell commands
+  Assim que o push der verde: suíte contra a cópia, commit + bin/deploy.sh no mesmo ato (tem migration), semeio das três linhas com trilha,
+  e --listar como prova. O DIFF de frota fica no pouso B, e ele vai cobrar --refazer --dump-agora na sombra, porque migrar depois do dump
+  das 04:00 deixaria o portão vermelho.
 
-● Marco fechado nos commits. Push único, pela régua, sem nada escrito na árvore durante ele:
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: PLACAR-ESTRUTURAL -- O ESTRUTURAL SE SEPARA DO DADO (corte dele 02/10 22:5x, que SUBSTITUI o item 3 da
+  ordem das 21:4x -- o resto d
 
-  Ran 7 shell commands
+  Ran 1 shell command
 
-● O pouso A está não commitado na raia, e a base dela é de 05/10. Preparo o encaixe sobre o main atual, em cópia:
+● O push segue com a trava. Avanço o pouso B em cópia, que não precisa de trava nem toca a árvore. Primeiro o leitor que vai mudar:
 
-  Ran 2 shell commands
-
-● Os models.py são byte-idênticos entre o main e a base da raia (a4e5e3cb) — o pouso A encaixa limpo. Monto a cópia para a suíte enquanto o
-  push ocupa a trava:
-
-● Montar a copia do pouso A sobre o HEAD e conferir o regua_cct
+  Ler o regua_para, o leitor do pouso B
   ⎿  $ cd /home/ronald/saas-hasner
-     S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
-     rm -rf $S/pousoA; mkdir -p $S/pousoA
-     git archive HEAD | tar -x -C $S/pousoA
-     R=/home/ronald/wt-regua
-     cp $R/app/core/models.py $S/pousoA/app/core/models.py
-     cp $R/app/core/migr…
+     sed -n '200,300p' app/core/regua_cct.py
 
-✶ Cultivating… (2h 2m 9s · ↓ 259.7k tokens · thinking)
+✽ Compacting conversation… (2h 7m 9s · ↓ 269.3k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱ 79%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                   11% until auto-compact
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
