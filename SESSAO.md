@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 07/10/2026 23:37:26.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (425.3 MB). Acoes na janela: **536**.
+**Medido em 07/10/2026 23:42:51.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (425.7 MB). Acoes na janela: **538**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 23:42:31 | Bash | Procurar contratos que enumeram a bateria e registros de emp1/horizonte | `cd /home/ronald/saas-hasner && grep -rn "bateria_lavratura" --include=*.py --include=*.sh --include=*.json app bin 2>/dev/null \| grep -v "^app/ponto/tests/test_bateria_lavratura.py" \| head -20; echo "--- PROMPTS/CORTES/LEIS grep emp1+horizonte"; grep -rn "horizonte" app/docs/LEIS.md app/docs/CORTES.md 2>/dev/null \| head; echo "---emp1"; grep -rni "emp1\b" app/docs/BACKLOG.md app/docs/PROMPTS.md ...` |
+| 23:41:27 | Bash | Corrigir assercao e rerodar a bateria | `cd /home/ronald/saas-hasner && python3 - <<'PY' import io p='app/ponto/tests/test_bateria_lavratura.py' s=io.open(p,encoding='utf-8').read() old=""" antes = {d: self._estado(cels[d]) for d in self.DIAS if d != self.FURO} self.assertEqual(set(antes.values()), {('concorde', [], 540)}, antes)""" new=""" antes = {d: self._estado(cels[d]) for d in self.DIAS if d != self.FURO} self.assertEqual(antes, {d ...` |
 | 23:36:45 | Bash | Reescrever a classe e rodar a bateria inteira | `cd /home/ronald/saas-hasner && python3 - <<'PY' import io p='app/ponto/tests/test_bateria_lavratura.py' s=io.open(p,encoding='utf-8').read() marca='\n\nclass VereditoConvergeEmDuasPassadasTest(_BaseMarcos):' i=s.index(marca) s=s[:i] novo = ''' class VereditoConvergeEmDuasPassadasTest(_BaseMarcos): """CARACTERIZACAO DA O222 -- o VEREDITO do dia com furo precisa de DUAS passadas. ESTE TESTE AFIRMA U ...` |
 | 23:35:40 | Bash | Medir partindo de célula sem cobrança | `cd /home/ronald/saas-hasner && python3 - <<'PY' import io p='app/ponto/tests/test_bateria_lavratura.py' s=io.open(p,encoding='utf-8').read() v=''' c, cels = self._monta() for rodada in (1, 2, 3):''' n=''' c, cels = self._monta() from chamados.models import ChamadoColaborador, DisputaSupervisao, PerguntaDisputa print('chamados nascidos do signal da batida:', list(ChamadoColaborador.objects.filter(c ...` |
 | 23:35:13 | Bash | Ler o pré-passo do julgamento | `cd /home/ronald/saas-hasner && sed -n '505,575p' app/ponto/services/cartorio.py` |
