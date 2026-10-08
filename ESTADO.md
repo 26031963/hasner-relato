@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 00:25:45.**
+**Medido em 08/10/2026 00:30:45.**
 
 | | |
 |---|---|
@@ -133,12 +133,12 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Os REDs acima são da cópia nua (sem .git/hooks, sem settings.json, staticfiles vazio) — a pasta de host pertence à árvore viva, onde ela
   já deu pasta_rc=0. A montagem entrega o staticfiles da árvore viva, então a suite tem css/js. Rodando a suite contra a cópia:
 
-  Rodar a suite inteira contra a copia mesclada · 1m 14s
+● Rodar a suite inteira contra a copia mesclada · 6m 14s
   ⎿  $ cd /home/ronald/saas-hasner && ESTEIRA_QUEM=suite-o139 bash bin/suite.sh --dir /home/ronald/wt-o139 --parallel 2 >
-     logs/o139_suite.out 2>&1; echo "rc=$?"; grep -E '^(OK|FAILED)' logs/o139_suite.out | tail -3; tail -3 logs/o139_suite.out (1m 13s)
+     logs/o139_suite.out 2>&1; echo "rc=$?"; grep -E '^(OK|FAILED)' logs/o139_suite.out | tail -3; tail -3 logs/o139_suite.out (6m 13s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Beboppin'… (6h 16m 56s · ↓ 539.4k tokens)
+· Beboppin'… (6h 21m 56s · ↓ 539.4k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
