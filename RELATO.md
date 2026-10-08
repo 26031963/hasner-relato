@@ -1,5 +1,56 @@
 # RELATO — esteira saas-hasner
 
+**O211 POUSO A NO AR em `9bde5c51` -- o CADASTRO da aplicacao de convencao nasce, e nenhum centavo se move.**
+**PROVA:** medida ao vivo as 09:0x de 08/10 contra o schema `juliani`, nao de memoria: `AplicacaoConvencao`
+com **3 ativas / 3 totais** -- `emp1 -> sind2 praca=None`, `emp2 -> sind2 praca=None`,
+`emp4 -> sind2 praca=None`; regimes relidos `emp1='cct'`, `emp2='cct'`, `emp3='clt'`, `emp4='cct'`; trilha
+unica `Empresa.regime_trabalhista[emp1] '(vazio)' -> 'cct'` em `LogConfiguracao`, 08/10 **09:01:05** em
+UTC-3 (o banco guarda `12:01:05+00`); `showmigrations core --schema=juliani` com a
+`0017_aplicacaoconvencao` marcada; `bin/deploy.sh` rc=0 com sombra `dia=20261008 diverge=0 erros=0`, prova
+de casca (16 estaticos, 5 paginas, 599 rotas em 2 urlconfs), tres cascas recarregadas juntas e tres rotas
+provadas.
+REVERSAO EM UMA LINHA, se o senhor nao quiser: `git revert 9bde5c51` tira o modelo, o command e o selo; o
+cadastro ja gravado sai por `AplicacaoConvencao.objects.filter(ativo=True).update(ativo=False)` e o regime
+da emp1 volta a `''` pela mesma porta com trilha. Nenhum numero de folha depende disso hoje.
+- **ZERO CENTAVO SE MOVE, e isso nao e promessa minha: e o ramo do codigo que esta no ar.**
+  `core/regua_cct.py:245` so ramifica em `== 'clt'`; `'cct'` e vazio caem no MESMO caminho da praca. O
+  pouso A e o cadastro NASCENDO; quem passa a LER a tabela e o pouso B, e e la que o DIFF de frota se
+  mede.
+- **TRES linhas, nao duas** -- o seu adendo `EMP1-E-CCT` de 07/10 23:4x. O `--motivo` gravado cita os dois
+  avais de 05/10 (16:4x e o adendo do cadastro 16:5x) mais esse, e o `--usuario` e nominal. A assuncao
+  declarada segue de pe: o sindicato e o `sind2` por ser o UNICO cadastrado -- se a CCT da emp1 for outra,
+  ela nasce como cadastro antes, nunca como literal no codigo.
+- **o unico VERMELHO da suite cheia, e a cura veio da propria mensagem do assert.** `Ran 9982 tests` com
+  `FAILED (failures=1, skipped=42)`: `chamados/tests/test_contract_crons.py::test_todo_command_tem_casa`
+  dizendo `['semear_aplicacao_convencao'] != []` -- command novo sem casa. Declarei em
+  `config/crons.py::FORA_DE_PIPELINE` com o motivo ESCRITO: a tabela e CADASTRO, o escritor de rotina e a
+  TELA (obra posterior), e cron que repassasse isso todo dia seria SEGUNDO escritor do cadastro
+  (LEI-AKITA 7), repondo linha que o DP tirou de proposito. Recorte GREEN depois: `Ran 32 tests` / `OK`.
+- **e e a TERCEIRA vez que esta casa paga o mesmo pedagio**: o vizinho de um arquivo NOVO nao e quem o
+  importa -- e o CONTRATO QUE ENUMERA O DIRETORIO, e ele nao importa nada meu.
+- **o veredito da suite nao se le pelo `grep -E '^(OK|FAILED)'` que este CLAUDE.md ensina.** Naquele
+  `.out` esse grep devolvia `OK:   31` e `OK -- nenhuma divergencia em 2026-10-08`, as duas PROSA de log,
+  e eu quase dei a suite por verde com um vermelho dentro. O veredito e `^(OK|FAILED)( |$)` mais o
+  `Ran N tests`.
+- **TRES achados REGISTRADOS, nao curados** -- regra de negocio fora do pedido pede o seu `!`: (1)
+  `core/templatetags/core_extras.py:34::rotulo_efeito` tem **ZERO** chamadores em template (`grep -rln`
+  nos `*.html` volta vazio) enquanto a taxonomia do `core/configuracao_efeito.py` promete *"a tela TEM de
+  dizer isso"* -- os 7 avisos de hoje sao HTML a mao em `templates/core/config/sindicato_form.html`:
+  promessa sem mecanismo, e por ser classe que muda o DESENHO vai ao topo do PENDENTES, nao a uma cura
+  minha; (2) `core/regua_cct.py:71-98` tem `SEM_EFEITO_NO_CALCULO` e um `rotulo_de_efeito(campo)`
+  PROPRIOS -- segunda verdade pre-existente da MESMA pergunta que o `configuracao_efeito` responde; (3)
+  `('Empresa','regime_trabalhista')` e editavel por `colaboradores/admin.py:7::EmpresaAdmin` (sem
+  `fields`, entao TODO campo entra) e `Empresa` esta FORA de `ENTIDADES_COM_ADMIN` -- campo de
+  configuracao com leitor de producao e SEM declaracao, e a regua da O211 passa a DEPENDER dele.
+- **`empresas_sem_regime` vai de 1 para 0 com este ato**: a emp1 era a unica com regime vazio E colab
+  ativo (3). As emp20, emp21 e emp29 seguem vazias com **zero** ativos -- ficam no contador por cadastro,
+  nao por risco.
+- **o que FALTA, e e o proximo da fila 1**: pouso B. `regua_para` passa a ler a `AplicacaoConvencao` por
+  `_aplicacao_vigente` (mais especifica vence; duas ativas do mesmo nivel = piso legal com o contador
+  acusando), os 7 REDs evidenciados contra o pouso A, a `ReguaIntactaNestePousoTest` **invertida** (ela
+  nao se apaga: a assercao passa a morder a VOLTA), e o DIFF de frota da **10** na sombra contra o
+  GRAVADO publicado ANTES do apply, com reversao em `logs/` e a **09 EXPORTADA intacta por hash**.
+
 **O158 FECHADA -- o marcador `ORDEM-VIVA-TOPO` passa a ser AUTORIDADE, e a sua ordem de hoje pode pousar.**
 REVERSAO EM UMA LINHA, se o senhor nao quiser: `git revert <este commit>` devolve a igualdade
 `marcador == 1o aberto da tabela` e o selo volta a cobrar `PLACAR-ESTRUTURAL`.
