@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 00:04:31.**
+**Medido em 08/10/2026 00:09:40.**
 
 | | |
 |---|---|
 | `HEAD` local | `97e9e043 [O222] a caracterizacao do veredito: a passada 1 carimba `furo` e abre a cobranca, e so a 2 le a cobranca que ela mesma abriu` |
-| `origin/main` | `fd6c8c0e [O209] a conferencia do marco: NAO virou 15/20, e o que falta sao 2 dia-colab de 7.859` |
-| commits a subir (`ahead`) | **5** |
+| `origin/main` | `97e9e043 [O222] a caracterizacao do veredito: a passada 1 carimba `furo` e abre a cobranca, e so a 2 le a cobranca que ela mesma abriu` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -109,38 +109,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bl19mn3rk.output (15 lines)
-  ⎿  Referenced file ../logs/o209_apply_frota_prod.py
-  ⎿  Referenced file ../logs/sombra/relavra10_frota_20261005.py
+  - o pouso da raia-chamado (O221) tem portão declarado, e não é lei nova: ela toca app/api/views.py, sítio de auth declarado em
+    bin/auth_sitios.txt, e bin/janela_auth.sh proíbe 23:20–06:00 — são 00:0x. Então ela espera a janela (depois das 06:00), e não o seu !,
+    que você já deu. Além disso o pouso dela não é merge simples: o main carrega bea841ff, o revert PARCIAL do merge anterior dessa mesma
+    raia, e o próprio commit diz a forma — git revert dele traz os 41 .py de volta, e só então entram os 6 commits novos. Ensaio de merge
+    sem tocar a árvore (git merge-tree): 7 conflitos, e os dois que cruzam o meu trabalho são core/contratos_estruturais.py (a dieta da
+    O220 encurtou a nota que a raia engorda) e core/tests/test_censo_escritas.py.
+  - a outra raia do seu ! (O139, 00bd05fb) pode pousar antes, sem auth no diff — mas ela mistura produto (config/crons.py, diagrama, docs,
+    teste) com instrumento (bin/tests/test_papel_prazo_nao_deriva.sh), e pela L-105 o instrumento vai em pouso próprio. Vou separar em
+    dois.
 
-● Task "RED e construção do segundo intervalo" completed in background
-  ⎿  Read docs/AVAIS.md (23 lines)
-  ⎿  Referenced file ponto/turnos.py
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bl19mn3rk.output (15 lines)
-  ⎿  Referenced file ../logs/o209_apply_frota_prod.py
-  ⎿  Referenced file ../logs/sombra/relavra10_frota_20261005.py
+  Depois do push: deploy.sh --sem-migrate. Passou da meia-noite, então o portão da sombra está cego (carimbo é de 20261007,
+  OK/completa/diverge=0, e o dump de hoje só nasce às 04:00) — vai com --sem-sombra e o motivo gravado na trilha, que é a porta declarada
+  da seção 2, e o commit não tem migration nem caminho de dinheiro.
 
-● Task "RED e construção do segundo intervalo" completed in background
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: CELULA-TURNO-FECHA -- CELULA+TURNO FECHA: a soma propria do realizado sai, e o dia sem par leva a
+  PALAVRA (item 1 dos DOSSIES, aval
 
-❯ aval Ronald: emp1 e CCT
+  Ran 1 shell command
 
-❯ aval Ronald: horizonte padrao de correcao de codigo = competencia aberta + anterior
+● Background command "Juntar o rodape ao commit e repetir o push" completed (exit code 0)
 
-  Committed a159447a, amended commit 81547265, ran 6 shell commands
+● Background command "Esperar pelo ARQUIVO de saida do push" completed (exit code 0)
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+● Publicar o marco pela variavel declarada do deploy · 2s
+  ⎿  $ cd /home/ronald/saas-hasner && DEPLOY_SEM_SOMBRA="ensaio de 07/10 VERDE (completa, diverge=0, erros=0) e o deploy das 22:48 saiu
+     dele; passou da meia-noite e o portao fica cego ate o dump das 04:00 (sombra.sh:203 soma +1 quando o dump nao e do dia). Sobe teste +
+     docs + o flip de verde em core/con…
 
-● Juntar o rodape ao commit e repetir o push · 9m 18s
-  ⎿  $ cd /home/ronald/saas-hasner && SCR=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad &&
-     git log -1 --pretty=%B > $SCR/msg3.txt && python3 - <<'PY'
-     import io
-     f='/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad… (9m 17s · 5 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
-
-✢ Beboppin'… (5h 55m 42s · ↓ 512.4k tokens)
+✻ Beboppin'… (6h 0m 51s · ↓ 524.2k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
