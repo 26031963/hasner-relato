@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 19:34:31.**
+**Medido em 08/10/2026 19:40:02.**
 
 | | |
 |---|---|
@@ -113,37 +113,37 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 1 shell command
 
-● Ordem final registrada. O146 — HE-FIXA-DA-ESCALA-E-CADASTRO: as duas metades já avalizadas (cadastro pelo corte, e o cálculo próprio
-  dentro do motor pelo ! de 03/10 19:3x, com a zona inviolável destravada para este uso). Começo pelo censo no vivo, antes de qualquer
-  linha:
+  SELO: leitor de ponta com derivacao propria = 0; campo novo sem leitor = 0; juizes novos = 0.
 
-  Ran 1 shell command
+  PROIBIDO: fallback; juiz novo; mexer em tolerancia ou no raio para o numero cair; certificar por DIFF contra o motor velho; declarar a
+  extra por codigo ou por script (quem declara e o admin, pela tela); regenerar celula sem a porta.
 
-● permite_hora_extra existe e tem dois leitores — o nag e o rótulo da triagem. Mas a linha 58-59 promete "motor contabiliza a extra
-  normal". Vou conferir se o motor lê, e ler a L-097:
+  DINHEIRO: motor avalizado para esta obra. Apply so pela DINHEIRO-EM-COMPETENCIA-ABERTA (DIFF de frota no RELATO antes, reversao em
+  logs/, exportada intacta com hash, prova depois).
 
-  Ran 1 shell command
+  LEI: a extra nas duas pontas esta cortada (08/10). Pergunta de lei ABERTA, vai ao topo do RELATO sem devolver turno: a extra declarada
+  entra no PREVISTO do dia (quem sai no marco fica devendo) ou e so HE (quem sai no marco nao deve nada)? Os casos c e f estao escritos
+  pela leitura "so HE". A O145 nao depende da resposta.
 
-● Confirmado: o motor não lê o campo, e escala/models.py:58-59 promete que lê. Agora o caminho de nascimento da HE, onde o "nasce
-  autorizada" tem de encaixar:
+  PRONTO: RELATO com os REDs a-j nomeados, o DIFF de frota e o commit; sem eles = INCOMPLETO com a lista do que falta.
 
-  Ran 1 shell command
+  LEI-AKITA: origem=ponto/janela_he.py (limite da janela) + TipoEscala/DNA (cadastro), testemunha=celula (dna) lida por motor e por
+  marcar_pontas_fora, RED=casos a-j, quem-mais-le=espelho, calendario, he_pendente_lavrado, recusar_ponta_pequena, Gestao de HE, juizes
+  novos=0
 
-● A arquitetura está clara: ponto/janela_he.py é o juiz puro e o motor o chama em 1305/1342 dentro do bloco da L-097. Agora a obra irmã e a
-  lei que protege os sítios (LEI-PROTEGE-SITIO é obrigatória antes do patch):
+  LINHA HAIKU: (a) "extra da escala" entra no payload do copiloto com rotulo de admin; (b) golden: "quanto de HE da escala o colab X tem
+  no dia Y"; (c) degrau: leitura.
 
-  Ran 1 shell command
+  segue a fila; PAREI so em lei ou !
 
-● Achado que muda o que eu ia construir: a O146 é fila única com a O145, e a célula dela diz "continuam uma fila so, mas com dois pousos",
-  com a O146 pousando depois. A O145 é bug PROVADO (HE-INVISIVEL). Vou conferir essa leitura antes de escrever o CASO:
+● O dossiê inverte a ordem — O145 primeiro — e o motivo que ele dá é exatamente a leitura que eu havia acabado de fazer. Mas o dossiê me
+  faz ver um perigo no que entreguei à raia: o patch_backlog.py tem o caminho da árvore viva cravado, e a raia commita na dela. Aviso antes
+  de qualquer coisa:
 
-  Advising using Fable 5.1
-
-✢ Wrangling… (6h 8m 52s · ↓ 655.9k tokens)
+✽ Wrangling… (6h 14m 23s · ↓ 665.2k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    4% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -151,6 +151,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
-  ◯ fork  Grepping measured numbers in relato_o204.md                                                            2m 52s · ↓ 162.9k tokens
+❯ ◯ fork  Measuring trava occupancy in suite.sh                                                                   8m 23s · ↓ 90.5k tokens
   ⧉  index
 ```
