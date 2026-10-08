@@ -156,11 +156,11 @@ lista — ela e o que esta EM PE._
 | **O145** | HE-INVISIVEL | espera corte |
 | **O146** | HE-FIXA-DA-ESCALA-E-CADASTRO | espera `!` |
 | **O147** | OS 3 ATRASADOS DA 09 | PAREI |
-| **O148** | FOLGAS DUPLICANDO | ENCAIXE. Medicao, nao cura: publicar ant |
+| **O148** | FOLGAS DUPLICANDO | **FILA 2 (UI), depois dos BOs** -- ordem |
 | **O149** | 3 VINCULOS COM FIM ANTES DO INICIO | ENCAIXE. Mudanca de dado de VINCULO e NU |
 | **O150** | FURO DO HOOK NAO-PARAR | ENCAIXE. Selo de host, sem Django |
 | **O151** | OS 13 CHAMADOS DO `--forcar` DE 02/10 | ENCAIXE. Retratacao pela porta (`chamado |
-| **O152** | BUSCA-DA-CASA | **FILA 2 (UI), atras dos contratos.** Ra |
+| **O152** | BUSCA-DA-CASA | **FILA 2 (UI), depois dos BOs** -- ordem |
 | **O153** | ROTA-PEDE-SESSAO NAO PROVA AUTORIZACAO | ENCAIXE. Nao e furo do selo atual: e a f |
 | **O154** | BUSCA-DE-ESCALA PROCURA O QUE MOSTRA | **fila 2, raia `wt-ui`**, deploy `--sem- |
 | **O155** | SELO DO O25: `espelho_x_fechamento_dias` | fila 1, atras do item em curso. **Nao e  |
