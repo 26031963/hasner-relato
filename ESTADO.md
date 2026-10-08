@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 06:19:01.**
+**Medido em 08/10/2026 06:24:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `9b64ee79 [O167] a uniao dos pousos 4 e 5: a raia do esmeril de ausencia entra na raia de agente, e o conflito e UMA linha de tabela` |
+| `HEAD` local | `88bbc0c4 [O221] o marco do PLACAR-ESTRUTURAL: o R6 passa a publicar a frase do juiz, e as duas notas que envelheceram dizem o que foi medido` |
 | `origin/main` | `d0625307 [O221] pouso 2, so INSTRUMENTO: o selo do papel `prazo` morde na arvore viva, e a testemunha errada do pouso 1 fica corrigida` |
-| commits a subir (`ahead`) | **17** |
+| commits a subir (`ahead`) | **18** |
 
 ## Fabrica
 
@@ -22,22 +22,18 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+88bbc0c4 [O221] o marco do PLACAR-ESTRUTURAL: o R6 passa a publicar a frase do juiz, e as duas notas que envelheceram dizem o que foi medido
 9b64ee79 [O167] a uniao dos pousos 4 e 5: a raia do esmeril de ausencia entra na raia de agente, e o conflito e UMA linha de tabela
 e7dcd970 [O167] pouso 5, a juncao da raia de agente: os quatro cadastros ficam so-leitura no admin, e o gate do chamado ganha a trava que a porta do DP ja tinha
 265e7e87 [SEXTO-BANCO] a juncao do ESMERIL de ausencia: o catalogo responde pelo CADASTRO VIVO, e "cobre parte do dia" passa a ter UMA casa
 1f3d616f [O221] os docs do pouso 3, e a correcao de uma resolucao minha: o bullet do placar do chamado era GERADO e eu o resolvi --ours
-52bfc524 [O221] pouso 3, a juncao da raia-chamado: a reversao de 03/10 se desfaz e os 6 commits da raia entram, com as celulas da matriz intactas
 ```
 
 ## `git status --short`
 
 ```
  M app/config/crons_duracao.json
-M  app/core/contratos_estruturais.py
-M  app/core/placar_estrutural.py
  M app/docs/HANDOFF-SESSAO.md
-M  app/docs/RELATO.md
-M  app/docs/TICKETS.md
  M bin/sombra.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -115,42 +111,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  Ran 2 shell commands
+
+● regua_tickets: OK, rc=0 — o parado_citado_em_commit_posterior=1 é contador informativo, não barra. Agora o único push do marco. A suíte
+  de pre-push leva ~22 min, então vai em segundo plano (uma camada só — background duplo perde o veredito) e nada se escreve sob app/
+  enquanto ela corre:
 
   Ran 1 shell command
 
-● Precedente decisivo: a última dieta foi cd37557a [O220] DIETA-DE-CARGA, ontem 22:31 — ato próprio, obra própria, aval literal dele, zero
-  linha de .py, movendo 2.014 linhas. A dieta não se dobra num marco de código; ela tem forma e a forma é essa. Então: commito o marco e a
-  L-109 fica como UMA linha de dívida nomeada (PAREI-SO-LEI — lei escrita, decisão técnica, registra e segue).
-
-  E a cauda confirma o risco: ## DEPLOYS AGENDADOS é a última seção, com os alarmes apendados antes — um corte "primeiro cabeçalho velho →
-  EOF" arquivaria o de hoje.
-
-  Ran 1 shell command
-
-● push.sh não deploya — só chama pos_push.sh, que commita o derivado. Então o produto do R6 precisa de bin/deploy.sh depois do push (BUG
-  128: disco ≠ memória). Registro a dívida da L-109 e sigo:
-
-  Ran 1 shell command
-
-● Agora o placar do topo, que se reescreve depois do patch estar no disco:
-
-  Ran 1 shell command
-
-● Placar segue 15/20 — correto: a cura do R6 move a prosa e a fonte do número, não a contagem de contratos. git add por PATH:
+● Push em curso (brvqlphbt), ~22 min. Nada se escreve sob app/ até ele voltar. Uso a espera para certificar o instrumento — o selo que,
+  pela L-105, pousa depois do produto — agora contra a árvore commitada, não contra a cópia curada:
 
   Ran 2 shell commands
 
-● A mensagem afirma "o placar NAO muda com a cadeia desta noite" — isso era previsão quando a escrevi, e agora é verificável. Confirmo e
-  carimbo:
+● RESULTADOS em :39 com as chaves que o selo lê. Certifico as quatro asserções contra o arquivo commitado, sem Django e sem o container de
+  teste (a trava está com o pre-push):
 
-● Running 1 shell command…
+  Ran 1 shell command
 
-✢ Cultivating… (10m 25s · ↓ 26.1k tokens)
-                                                                                                                    6% until auto-compact
+● Quatro asserções verdes contra a árvore commitada, com o caso que MORDE mordendo: SELO=VERDE falhas=0, juiz em 15/20 verdes e
+  declaradas()=17, "122" sobrevivendo uma única vez dentro de ESTA LINHA DIZIA. Gravo a certificação (em logs/, que é ignorado — não mexe
+  na árvore carimbada pelo push):
+
+● Gravar a certificacao do instrumento
+  ⎿  $ cd /home/ronald/saas-hasner
+     cat > logs/pousos/cert_selo_r6_contra_o_commitado.txt <<'EOF'
+     CERTIFICACAO DO INSTRUMENTO -- o selo do R6 contra a arvore COMMITADA (nao contra a copia curada)
+     08/10 06:2x, com o push do marco (88bbc0c4) em curso. Autoridade: as funcoes REAIS, chamadas.
+     POR QUE ESTA ME…
+
+✢ Compacting conversation… (15m 55s · ↓ 33.5k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱ 89%
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
