@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 06:56:01.**
+**Medido em 08/10/2026 07:01:31.**
 
 | | |
 |---|---|
@@ -34,6 +34,7 @@ e7dcd970 [O167] pouso 5, a juncao da raia de agente: os quatro cadastros ficam s
 ```
  M app/config/crons_duracao.json
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/RELATO.md
  M bin/sombra.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -111,36 +112,36 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  Agora o que o commit precisa carregar:
-
-  Ran 1 shell command
-
-● O selo LEI-AKITA guarda o CLAUDE.md e o molde, não a minha mensagem — mas a linha de conduta eu escrevo de todo modo. Diff coerente com a
-  prova: RELATO +182/−181 (90 alarmes + 90 linhas em branco + cabeçalho e separador). Agora o topo do RELATO, lendo o formato vivo:
+● Enquanto a espera corre, uma coisa que agora tem número e pede leitura: 115 das 126 linhas vivas são UMA frase, repetida de hora em hora
+  desde 02/10 22:35, e a pausa que a causa tem dono legítimo desde 26/09. Vou ler a condição antes de julgar:
 
   Ran 2 shell commands
 
-● Agora o topo do RELATO — sem reivindicar ato que ainda não tem prova:
+● A lei já está escrita neste mesmo arquivo, medida em 27/09: "Alarme que repete um estado ESCOLHIDO e ruido, e ruido acaba desligado --
+  junto com os alarmes que importam." Ela criou _fab_desligado_com_dono, que silencia o trava_a_vazia — e o vigia_sem_efeito da linha 573
+  não migrou para ela. LEI-AKITA 4 em estado puro: a pergunta não é qual a regra, é qual leitor ficou atrás. Mas há algo pior do que ruído
+  na linha 576:
+
+  Ran 1 shell command
+
+● sem_efeito_seguidas = **1699** — 1699 tiques × 5 min ≈ 5,9 dias, batendo com os 115 alarmes desde 02/10 22:35. O == 2 disparou uma vez e
+  depois o contador só sobe. Falta ver o que ele executou:
+
+  Ran 1 shell command
+
+● Alívio medido: o único AUTO-REVERT no RELATO vivo é a minha própria linha 12 — nenhum revert recente. Mas o cura_sem_efeito escreve só
+  por linhas.append, nunca por no_relato, então o veredito dele não está no RELATO. Uma busca e paro de escavar:
 
   Ran 2 shell commands
 
-● Exatamente os quatro indexados; crons_duracao.json, HANDOFF e bin/sombra.sh ficaram fora como devem. Commit:
+● O veredito: disparou em 24/09 12:30 e 01/10 16:00, as duas vezes terminando em -> arvore nao esta vermelha. Nenhum revert executou — foi
+  ruído, não dano. O quadro do lateral fechou com número: 115 de 126 linhas vivas (91% do que o vigia escreveu no RELATO) são um alarme
+  falso, e a lei que o corrige está escrita no mesmo arquivo desde 27/09, já obedecida pelo irmão trava_a_vazia. Vou consultar antes de
+  construir:
 
-  Committed 78909bdf
+● Advising using Fable 5.1
 
-● 78909bdf. Agora a prova de produção — e eu a espero pelo arquivo, com o relógio lido no ato:
-
-  Ran 1 shell command
-
-● O tique acabou de disparar (06:55:10). Mas antes da prova, uma coisa não fecha: linhas 5990-5994 têm alarme na cauda, e eu afirmei no
-  RELATO que a cauda ficou sem alarme solto. Vou medir em vez de supor:
-
-  Ran 1 shell command
-
-●
-
-✢ Cultivating… (47m 25s · ↓ 101.6k tokens · thought for 21s)
+✢ Cultivating… (52m 55s · ↓ 118.0k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
