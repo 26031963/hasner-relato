@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 08/10/2026 07:50:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (445.8 MB). Acoes na janela: **1303**.
+**Medido em 08/10/2026 07:55:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (445.9 MB). Acoes na janela: **1304**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 07:53:52 | Bash | Construir a cura da O158 em copia | `cd /home/ronald/saas-hasner S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad mkdir -p $S/o158 git show HEAD:bin/tests/test_hook_nao_cobra_congelado.sh > $S/o158/selo_HEAD.sh cp $S/o158/selo_HEAD.sh $S/o158/selo.sh python3 - "$S/o158/selo.sh" <<'PY' import sys p = sys.argv[1] s = open(p, encoding='utf-8').read() velho_inicio = "# e o 1o ABERTO do bloco ...` |
+| 07:52:54 | Bash | Ler o comparador do siga e o selo inteiro | `cd /home/ronald/saas-hasner sed -n '280,300p;325,345p' bin/hook_stop_fila1.py echo "================ o selo ================" cat bin/tests/test_hook_nao_cobra_congelado.sh` |
 | 07:49:38 | Bash | Recontar abertas pela coluna certa do hook | `cd /home/ronald/saas-hasner python3 - <<'PY' import io, importlib.util spec = importlib.util.spec_from_file_location('h','bin/hook_stop_fila1.py') h = importlib.util.module_from_spec(spec); spec.loader.exec_module(h) s = io.open('app/docs/BACKLOG.md', encoding='utf-8').read() i = s.find('<!-- OBRAS:INICIO -->'); j = s.find('<!-- OBRAS:FIM -->') linhas = s[i:j].splitlines() pad = h._linha_de_item_r ...` |
 | 07:49:24 | Bash | Ler _proximo_da_fila inteira | `cd /home/ronald/saas-hasner sed -n '136,180p' bin/hook_stop_fila1.py` |
 | 07:49:13 | Bash | Contar linhas abertas por tabela pelo criterio do proprio hook | `cd /home/ronald/saas-hasner python3 - <<'PY' import io, re, importlib.util spec = importlib.util.spec_from_file_location('h','bin/hook_stop_fila1.py') h = importlib.util.module_from_spec(spec); spec.loader.exec_module(h) s = io.open('app/docs/BACKLOG.md', encoding='utf-8').read() i = s.find('<!-- OBRAS:INICIO -->'); j = s.find('<!-- OBRAS:FIM -->') linhas = s[i:j].splitlines() pad = h._linha_de_it ...` |
@@ -1312,4 +1314,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 19:57:17 | Bash | Conferir assinatura de turnos_do_colab e o que a isencao mexe | `cd /home/ronald/wt-lavra/app && sed -n '1330,1365p' ponto/turnos.py && echo ---- && grep -n "def _marcar_isencao" -A18 escala/utils.py \| head -30` |
 | 19:56:44 | Bash | Ler o inicio do laco de dias | `cd /home/ronald/wt-lavra/app && sed -n '1264,1302p' escala/utils.py \| cat -n \| awk '{printf "%d\t%s\n", $1+1263, substr($0, index($0,"\t")+1)}'` |
 | 19:56:37 | Bash | Ler o ramo trabalho e a cauda da montagem | `cd /home/ronald/wt-lavra/app && sed -n '1300,1420p' escala/utils.py \| cat -n \| awk '{printf "%d\t%s\n", $1+1299, substr($0, index($0,"\t")+1)}'` |
-| 19:51:06 | Bash | Montagem: janela do pad e saida do ramo folga | `cd /home/ronald/wt-lavra/app && python3 - <<'PY' p='escala/utils.py' s=open(p,encoding='utf-8').read() def rep(v,n,c=1): global s assert s.count(v)==c, (s.count(v), v[:70]) s=s.replace(v,n,1) # ---- (a) a janela das celulas passa a ser a do pareador rep(""" from escala.alimentacao import celulas_do_periodo, folgas_do_periodo _ini_al = floor - datetime.timedelta(days=1) _cels_gr = celulas_do_period ...` |
