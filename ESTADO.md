@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 17:36:09.**
+**Medido em 08/10/2026 17:41:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `d4822319 O214 etapa 0 + item 1: a ponta pequena e recusada pelo SISTEMA, com trilha, e nenhum centavo se move` |
+| `HEAD` local | `bf83856d O214 item 1: a PROVA do pouso -- deploy, ensaio em prod e o achado da copia parcial` |
 | `origin/main` | `f189ce0a O211 achado 3: o cadastro que decide a regua sai da edicao livre do admin` |
-| commits a subir (`ahead`) | **1** |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -22,11 +22,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+bf83856d O214 item 1: a PROVA do pouso -- deploy, ensaio em prod e o achado da copia parcial
 d4822319 O214 etapa 0 + item 1: a ponta pequena e recusada pelo SISTEMA, com trilha, e nenhum centavo se move
 f189ce0a O211 achado 3: o cadastro que decide a regua sai da edicao livre do admin
 86993cd2 O topo do TICKETS fechado no ato do push (O112)
 037ae715 O211 pouso B: a regua de dinheiro sobe da EMPRESA, e a praca so entra por linha declarada
-4adbbfff O211 pouso A: o CADASTRO da aplicacao de convencao nasce, e nenhum centavo se move
 ```
 
 ## `git status --short`
@@ -34,7 +34,6 @@ f189ce0a O211 achado 3: o cadastro que decide a regua sai da edicao livre do adm
 ```
  M app/config/crons_duracao.json
  M app/docs/HANDOFF-SESSAO.md
- M app/docs/RELATO.md
  M bin/sombra.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -112,11 +111,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Task "RED e construção do segundo intervalo" completed in background
-
-❯ aval Ronald: tres itens, nenhum para o que esta em curso. (1) O223 (tela da aplicacao de convencao) sobe para logo depois da O146 e
-  antes da O224 e dos BOs; a ordem da fila 1 fica O214, O146, O223, O224, BOs, O219, contratos; o marcador do BACKLOG acompanha. (2)
-  ESMERIL-DO-MARCO vira rotina: durante a espera das suites de cada marco, censo so do que AQUELE marco deixou orfao, com prova de zero
   chamador de producao, apagado no mesmo marco pela L-111; PROIBIDO abrir qualquer outro achado na hora, ele vira linha na fila. (3)
   registrar obra ESMERIL-CELULA-TURNO no bloco dos contratos, depois da O219: uma passada de limpeza do que ficou obsoleto nas familias
   celula e turno, pelo metodo da certidao de obito; e conferir se a raia do ESMERIL familia (2) batida de 30/09 foi mergeada, publicando o
@@ -129,9 +123,7 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
   lugar da hora do aparelho, so leitura, sem corrigir nenhuma. os demais BOs seguem na posicao de hoje. segue a fila; PAREI so em lei ou
   !
 
-● Rodar o modulo do selo O211 na arvore viva
-  ⎿  $ cd /home/ronald/saas-hasner && timeout 600 bin/suite.sh --only core.tests.test_regua_pela_empresa --espera 1 2>&1 | tail -20; echo
-     "rc=${PIPESTATUS[0]}"
+  Committed d4822319, ran 35 shell commands
   ⎿  Read docs/AVAIS.md (23 lines)
   ⎿  Referenced file config/crons.py
   ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/biv82p8a3.output (11 lines)
@@ -141,13 +133,20 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Task "RED e construção do segundo intervalo" completed in background
 
-✢ Wrangling… (4h 10m 30s · ↓ 420.9k tokens)
+● The amend is denied by the harness as a destructive git op (the commit is local only — origin/main..HEAD shows it unpushed, so the
+  rewrite would touch nothing published). I'll land section 8 as the PROVA commit of the same marco rather than stop the push, and flag it.
+
+● Empurrar o marco O214 (um push por marco)
+  ⎿  $ cd /home/ronald/saas-hasner && mkdir -p logs/o214 && (git push origin main > logs/o214/push_o214.out 2>&1; echo "rc=$?" >>
+     logs/o214/push_o214.out)
+
+✢ Wrangling… (4h 15m 52s · ↓ 429.4k tokens · thinking more)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
 ❯ ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
