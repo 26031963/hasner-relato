@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 18:03:07.**
+**Medido em 08/10/2026 18:08:31.**
 
 | | |
 |---|---|
@@ -34,6 +34,8 @@ f189ce0a O211 achado 3: o cadastro que decide a regua sai da edicao livre do adm
 ```
  M app/config/crons_duracao.json
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/RELATO.md
+ M app/ponto/tests/test_o214_ponta_pequena.py
  M bin/sombra.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -111,6 +113,7 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+
   Amended commit bf83856d, searched for 1 pattern, ran 15 shell commands
 
 ● Advising using Fable 5.1
@@ -135,14 +138,13 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-● Rodar o RED do caso da reversao na copia
-  ⎿  $ cd /home/ronald/saas-hasner && C=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad;
-     DIR=$(cat $C/copia_o214b.txt); bash bin/suite.sh --dir "$DIR" --only ponto.tests.test_o214_ponta_pequena --espera 1 > $C/o214b_red.out
-     2>&1; echo "rc=$?"; grep -E '^(OK|…
+● Rodar a pasta de selos de host
+  ⎿  $ cd /home/ronald/saas-hasner && fail=0; ok=0; for s in bin/tests/test_*.sh; do if bash "$s" >/tmp/selo.out 2>&1; then ok=$((ok+1));
+     else fail=$((fail+1)); echo "VERMELHO: $s"; tail -6 /tmp/selo.out; fi; done; echo "selos de host: $ok verde(s), $fail vermelho(s)"
 
-* Wrangling… (4h 37m 28s · ↓ 471.8k tokens)
+· Wrangling… (4h 42m 52s · ↓ 482.9k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    8% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

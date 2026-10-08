@@ -393,6 +393,58 @@ segura e **arvore inteira e `deploy.sh` no mesmo ato**, que e exatamente o que a
 que eu nao li como valendo para copia de fatia. Vira linha na fila (nao se abre achado no meio do marco,
 ESMERIL-DO-MARCO), e a L-107 e a lei que ja responde.
 
+### 9. O PUSH RECUSADO AS 17:55 — **A SUITE PASSOU E O `rm` DA COPIA NAO**, e o arquivo era MEU
+
+`logs/o214/push_o214.out`: `Ran 10029 tests in 736.073s` / `OK (skipped=42)`, control-plane
+`Ran 22 tests in 108.602s` / `OK`, `pre-push: OK — push liberado.` **E depois disso:**
+
+```
+rm: cannot remove '/tmp/prepush-arvore.mMQRkp/app/logs/ponta_pequena/emp1328_092026_20260930_090000.json': Permission denied
+error: failed to push some refs to 'https://github.com/26031963/hasner-ponto.git'
+```
+
+O arquivo tem **423 bytes**, dono **root**, e e a reversao que o `apply` do MEU teste
+(`ponto/tests/test_o214_ponta_pequena.py::ComandoDoSistemaTest`, dez `apply=True`) escreve DE VERDADE em
+`recusar_ponta_pequena.py:49` (`REVERSAO_DIR = '/app/logs/ponta_pequena'`). Dentro do container a suite e
+**root**; o `app/logs` da copia nasce do host (`bin/arvore_do_push.sh:88`), entao o diretorio
+`ponta_pequena/` fica de root e o `rm -rf` do host nao consegue desligar o arquivo de dentro dele.
+**O portao esta certo**: foi ele que impediu a copia orfa numero 93 -- as 92 de 03/10 (2,1 GB, 58.229
+entradas de root) sao desta mesma familia.
+
+**A ORIGEM E O TESTE, NAO O PORTAO** (LEI-AKITA 1). E o RED mostrou os dois defeitos de uma vez, porque
+eram o mesmo: eu escrevia a reversao e **ninguem a lia** -- o comando promete *"ATO SEM REVERSAO NA MAO
+NAO COMECA"* e nenhum selo tocava o arquivo (`grep -n 'reversao'` no teste devolvia **0** linhas; a
+promessa passava por AUSENCIA DE SINAL, a familia dos quatro selos vazios de 01/09). O caso novo LE a
+reversao, e por isso ele acusa onde ela caiu -- `logs/o214/red_reversao.out`:
+
+```
+AssertionError: 0 != 1 : a reversao nao foi escrita no ato do apply: emp1   09/2026 limite 15 min | APLICADO: 1 dia(s) = 9 min (0.1 h) | ...
+        reversao: /app/logs/ponta_pequena/emp1_092026_20260930_090000.json
+```
+
+GREEN depois da cura, na MESMA copia (`logs/o214/green_reversao.out`): `Ran 27 tests in 0.652s` / `OK`.
+E `find <copia> ! -user ronald` devolve **so os tres pontos de tmpfs** (`.hypothesis`, `.mypy_cache`,
+`.ruff_cache`): diretorios VAZIOS de dono root dentro de pai do ronald -- e por isso que o `rm` deles
+sempre funcionou e o do arquivo nao (desligar arquivo pede escrita no DIRETORIO que o contem).
+
+**AS DUAS CURAS, e elas nao conflitam** (CURA-MAIS-RESTRITIVA):
+
+1. **PRODUTO, neste commit** -- o `setUp` da classe cria o descartavel (`tempfile.mkdtemp` +
+   `addCleanup`) e troca nele o `REVERSAO_DIR` do modulo (`mock.patch`, `addCleanup`), mais o caso
+   `test_MORDE_a_reversao_se_escreve_ANTES_do_apply_e_diz_os_pares`, que cobra UM arquivo por corrida que
+   toca alguem, os `pares` daquela corrida, o limite do cadastro, o filtro `origem='sistema'` escrito, e
+   **nenhuma** reversao na corrida sem alvo. O comando de producao nao muda UMA linha: nao nasce flag,
+   nao nasce setting, nao nasce fallback.
+2. **INSTRUMENTO, pouso PROPRIO depois (L-105)** -- `bin/arvore_do_push.sh:66` monta `--tmpfs` para os
+   tres caches e **nao** para `app/logs` nem `app/media`, os dois que ele mesmo cria em `:88` por "a
+   suite escreve neles". Enquanto isso nao pousa, qualquer teste que escreva ARQUIVO (nao log) ali
+   repete o caso -- a cura 1 fecha o meu, nao a classe. Vai com o selo
+   `bin/tests/test_montagem_vem_do_arvore_do_push.sh` no mesmo ato.
+
+A copia orfa das 17:55 foi apagada por container root (eram **20 KB** -- o `rm` do hook ja havia levado o
+resto antes de parar no arquivo): `docker run --rm -v /tmp:/host alpine rm -rf`, e depois
+`ls -d /tmp/prepush-arvore.*` devolve **0 copia**.
+
 ## O211 POUSO B — **O APPLY DA 10 EXECUTADO E PROVADO, E O CADASTRO QUE DECIDE A REGUA SAI DA EDICAO LIVRE DO ADMIN** (08/10 13:1x→13:4x)
 
 **O aval dele de 08/10 12:4x, literal:** *"O211 pouso B, completar o apply da 10: recalcular o gravado dos 70 colabs da
