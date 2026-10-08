@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 12:20:23.**
+**Medido em 08/10/2026 12:25:45.**
 
 | | |
 |---|---|
@@ -111,38 +111,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  Ran 8 shell commands
-
-● Um achado candidato: a docstring do DiaPago proíbe leitor, e há leitor. Vou medir antes de afirmar:
-
-  Ran 1 shell command
-
-● Background command "Push do marco O211 pouso B" completed (exit code 0)
-
-  Ran 1 shell command
-
-● O marco está no remoto. Handoff e o ensaio da sombra que o 0056 passou a dever:
-
-  Ran 1 shell command
-
-● Lanço o ensaio da sombra que o 0056 passou a dever (dump pós-migrate), em fundo:
-
-  Ran 1 shell command
-
 ● MARCO FECHADO — pode compactar. O211 no remoto em 037ae715. Sigo com a O214 etapa 0, que não espera:
 
-  Censo do motor pelo vocabulario proprio
-  ⎿  $ cd /home/ronald/saas-hasner/app
-     echo '=== as properties de HE do ResultadoMes: 186-270 ==='
-     sed -n '186,200p;240,268p' ponto/motor_calculo_v2.py
-     echo
-     echo '=== excedente SEMANAL existe como derivacao propria? ==='
-     grep -nE 'semanal|semana' ponto/motor_calculo_v2.py | grep -iE 'extra|excedent|44|2…
+  Ran 2 shell commands
 
-✶ Cultivating… (6h 11m 47s · ↓ 679.5k tokens · thinking)
+● A prova "todos leem o mesmo número" é SQL puro, sem motor — posso medi-la em prod agora:
+
+  Ran 1 shell command
+
+● Preciso provar que esse zero não é vacuidade — somas não-nulas:
+
+  Ran 3 shell commands
+
+● Escrevo o censo em arquivo antes de publicar:
+
+  Ran 1 shell command
+
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+
+  Ran 1 shell command
+
+● O par já tem selo construído — cito e rodo ele, não refaço:
+
+  Ran 4 shell commands
+
+● Reescrevo o censo com o que medi — inclusive o par que já tinha selo:
+
+  Running 1 shell command…
+
+· Cultivating… (6h 17m 9s · ↓ 690.5k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    3% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
