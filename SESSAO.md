@@ -6,10 +6,23 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 07/10/2026 22:50:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (423.3 MB). Acoes na janela: **420**.
+**Medido em 07/10/2026 22:55:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (423.4 MB). Acoes na janela: **433**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 22:53:30 | Bash | Aplicar a relavratura da ata na frota em prod | `docker exec saas_core python manage.py tenant_command shell --schema=juliani --command "exec(open('/tmp/o218_apply_frota_prod_RUN.py').read())" 2>&1 \| tee /home/ronald/saas-hasner/logs/o218_apply_prod_20261007.out \| tail -50` |
+| 22:53:17 | Bash | Aplicar a relavratura da ata na frota em prod | `cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command shell --schema=juliani --command "exec(open('/tmp/o218_apply_frota_prod_RUN.py').read())" > logs/o218_apply_prod_20261007.out 2>&1; echo "rc=$?"; tail -50 logs/o218_apply_prod_20261007.out` |
+| 22:53:04 | Bash | Criar e copiar o arreio do aplicar | `cd /home/ronald/saas-hasner && cat > logs/o218_apply_frota_prod_RUN.py <<'PY' # ARREIO DO APLICAR -- existe para que o apply nao dependa de um `-c` com flag no shell. # O corpo e `logs/o209_apply_frota_prod.py` (o arreio da O209, que desde 07/10 serve a OBRA da vez # por ambiente: `OBRA` default `o218`, `ESP_CAM` default `/tmp/o218_esperado_<hoje>.json`). # Guardas JA conferidas no DRY de 22:52: c ...` |
+| 22:52:42 | Bash | Rodar o DRY do apply da ata em prod | `docker exec saas_core python manage.py tenant_command shell --schema=juliani --command "exec(open('/tmp/o218_apply_frota_prod.py').read())" 2>&1 \| tail -45` |
+| 22:51:42 | Bash | Conferir md5 dos arquivos no container | `docker exec saas_core md5sum /tmp/o218_esperado_20261007.json /tmp/o218_apply_frota_prod.py` |
+| 22:51:38 | Bash | Copiar o pacote esperado para o container | `cd /home/ronald/saas-hasner && docker cp logs/o218_esperado_20261007.json.ok saas_core:/tmp/o218_esperado_20261007.json` |
+| 22:51:22 | Bash | Copiar o script de apply para o container | `cd /home/ronald/saas-hasner && docker cp logs/o209_apply_frota_prod.py saas_core:/tmp/o218_apply_frota_prod.py` |
+| 22:51:09 | Bash | Rodar o DRY do apply em prod | `cd /home/ronald/saas-hasner && docker cp logs/o209_apply_frota_prod.py saas_core:/tmp/o218_apply_frota_prod.py >/dev/null && docker cp logs/o218_esperado_20261007.json.ok saas_core:/tmp/o218_esperado_20261007.json >/dev/null && echo "copiados; md5 no container:" && docker exec saas_core md5sum /tmp/o218_esperado_20261007.json && docker exec saas_core python manage.py tenant_command shell --schema= ...` |
+| 22:51:01 | Bash | Ler o arreio _RUN.py existente | `cd /home/ronald/saas-hasner && cat logs/o195_apply_3_prod_RUN.py` |
+| 22:50:58 | Bash | Achar o arreio _RUN.py | `cd /home/ronald/saas-hasner && ls logs/*_RUN.py 2>/dev/null; cat logs/o209_apply_frota_prod_RUN.py 2>/dev/null \|\| ls logs/ \| grep -i run \| head` |
+| 22:50:51 | Bash | Ver uso de forcar e APLICAR | `cd /home/ronald/saas-hasner && grep -n 'forcar\\|APLICAR' logs/o209_apply_frota_prod.py \| head -12` |
+| 22:50:39 | Bash | Ver a saída da O209 e as guardas restantes | `cd /home/ronald/saas-hasner && head -20 logs/o209_apply_prod_20261005.out 2>/dev/null; echo "=== como o DRY se declara:"; sed -n '131,150p' logs/o209_apply_frota_prod.py` |
+| 22:50:29 | Bash | Achar a linha de comando usada na O209 | `cd /home/ronald/saas-hasner && grep -rn 'o209_apply_frota_prod' app/docs/*.md logs/*.out 2>/dev/null \| grep -i 'docker\\|exec\\|command\\|APLICAR' \| head -5; echo "==="; grep -rn "APLICAR" app/docs/RELATO-ARQUIVO.md 2>/dev/null \| head -5` |
 | 22:49:00 | Bash | Ver guardas de entrada e reversão | `cd /home/ronald/saas-hasner && sed -n '79,130p' logs/o209_apply_frota_prod.py && echo "=== makedirs:" && grep -n 'makedirs\\|REV_CAM' logs/o209_apply_frota_prod.py \| head` |
 | 22:48:48 | Bash | Ver as variáveis de entrada do arreio | `cd /home/ronald/saas-hasner && grep -n "OBRA\\|ESP_CAM\\|DIA\b\\|os.environ\\|globals().get" logs/o209_apply_frota_prod.py \| head -30` |
 | 22:48:44 | Bash | Ler o cabeçalho do script de apply em prod | `cd /home/ronald/saas-hasner && sed -n '1,60p' logs/o209_apply_frota_prod.py` |

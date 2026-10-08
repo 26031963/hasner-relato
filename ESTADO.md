@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 07/10/2026 22:50:01.**
+**Medido em 07/10/2026 22:55:31.**
 
 | | |
 |---|---|
@@ -109,21 +109,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Preparo a mensagem do merge enquanto o bloco fecha:
-
-  Ran 4 shell commands
-
-● A régua pegou antes do push, que é para isso que ela serve. A O220 precisa de linha própria:
-
-  Ran 4 shell commands
-
-● Bloco 69/69, erro=0, SOMBRA_STATUS=OK contra a árvore da raia. O portão do deploy está pago. Confiro e entro no ato único:
-
-  Ran 1 shell command
-
-● Background command "Esperar o bloco terminar por arquivo" completed (exit code 0)
-
-● Portão pago e remoto parado. Escrevo o patch da L-103 antes de abrir o ato, para que entre merge-commit e deploy não haja nada a pensar:
 
   Read 1 file
 
@@ -134,13 +119,28 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Deploy OK às 22:48 — 1b6d5d02, três cascas juntas, três rotas provadas, importerror_500=0. Agora o apply em prod. Leio o veículo antes de
   armá-lo:
 
-● Ver guardas de entrada e reversão
-  ⎿  $ cd /home/ronald/saas-hasner && sed -n '79,130p' logs/o209_apply_frota_prod.py && echo "=== makedirs:" && grep -n 'makedirs\|REV_CAM'
-     logs/o209_apply_frota_prod.py | head
+  Ran 8 shell commands
 
-* Beboppin'… (4h 41m 12s · ↓ 407.3k tokens · thinking some more)
+● O padrão da casa é um arreio que só liga APLICAR. Rodo o DRY primeiro:
+
+  Ran 1 shell command
+
+● Comando composto recusado. Separo em passos individuais:
+
+  Ran 4 shell commands
+
+● DRY impecável: hash da 09 em prod é exatamente o dfd8d145 da sombra, janela bate, idade 0,9 h, e dia-colab do ESPERADO com fato novo
+  depois do dump: 0 de 40 — nenhuma lacuna. Monto o arreio:
+
+● Aplicar a relavratura da ata na frota em prod · 2m 0s
+  ⎿  $ docker exec saas_core python manage.py tenant_command shell --schema=juliani --command
+     "exec(open('/tmp/o218_apply_frota_prod_RUN.py').read())" 2>&1 | tee /home/ronald/saas-hasner/logs/o218_apply_prod_20261007.out | tail
+     -50 (2m 0s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✢ Beboppin'… (4h 46m 42s · ↓ 412.9k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    9% until auto-compact
+                                                                                                                    2% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
