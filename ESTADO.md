@@ -1,16 +1,9 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:31 AFIRMA ato sem PROVA ao lado -- ## O222 — **NO AR, E O PLACAR CONFERIDO PELO JUIZ** (08/10 00:09, marco empurrado 23:5x)
->
-> O RELATO nao entrou neste ciclo porque uma afirmacao de ato
-> (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
-> seguem valendo -- eles descrevem, nao afirmam ato.
-
-
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 00:15:01.**
+**Medido em 08/10/2026 00:20:31.**
 
 | | |
 |---|---|
@@ -116,15 +109,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  PALAVRA (item 1 dos DOSSIES, aval
-
-  Ran 1 shell command
-
-● Background command "Juntar o rodape ao commit e repetir o push" completed (exit code 0)
-
-● Background command "Esperar pelo ARQUIVO de saida do push" completed (exit code 0)
-
-  Ran 5 shell commands
   ⎿  Read docs/AVAIS.md (23 lines)
   ⎿  Referenced file ponto/turnos.py
   ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bl19mn3rk.output (15 lines)
@@ -139,13 +123,22 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● 15/20 confirmado pelo juiz dentro do saas_core — não por grep. Marco no ar.
 
-● Gravar a prova do deploy no RELATO
-  ⎿  $ cat > /tmp/o222_sec.md <<'MD'
-     ## O222 — **NO AR, E O PLACAR CONFERIDO PELO JUIZ** (08/10 00:09, marco empurrado 23:5x)
-     `origin/main` = `97e9e043`; suite do push **75 OK (skipped=42)** + control-plane **22 OK**; selos de host
-     `pasta_rc=0`. `bin/deploy.sh --sem-migrate` as **00:09:48**: `migrations…
+  Searched for 1 pattern, read 1 file, ran 4 shell commands
 
-✢ Beboppin'… (6h 6m 12s · ↓ 527.1k tokens)
+● MARCO FECHADO — pode compactar.
+
+  Agora O221. Orientação nas duas raias que o ! cobre:
+
+  Ran 5 shell commands
+
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+
+● Montar a copia e aplicar o commit da O139 nela
+  ⎿  $ cd /home/ronald/saas-hasner && git worktree add --detach /home/ronald/wt-o139 origin/main 2>&1 | tail -3 && cd /home/ronald/wt-o139
+     && git cherry-pick -n 00bd05fb 2>&1 | tail -10; echo "--- status:"; git status --short
+
+· Beboppin'… (6h 11m 42s · ↓ 534.0k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

@@ -28,6 +28,30 @@ chamado pode NASCER numa competencia que o Dominio ja pagou?** -- nao ha L-NNN q
 e decisao tecnica (e dinheiro do colaborador na mesa do DP). Nao devolvo turno por isso
 (PAREI-DE-LEI-NAO-DEVOLVE-TURNO): a pergunta fica aqui com os numeros e a esteira **segue a O211**.
 
+## O222 — **NO AR, E O PLACAR CONFERIDO PELO JUIZ** (08/10 00:09, marco empurrado 23:5x)
+
+**PROVA:** `linha_do_placar()` chamado DENTRO do `saas_core` (schema juliani) devolve
+`contratos_estruturais: 15/20 verdes`, `verdes()=15`, `total()=20`; `deploy: OK -- migrations em dia,
+tres cascas reiniciadas juntas, tres rotas provadas` as 00:09:48; `importerror_500=0`;
+`origin/main` = `97e9e043`.
+
+`origin/main` = `97e9e043`; suite do push **75 OK (skipped=42)** + control-plane **22 OK**; selos de host
+`pasta_rc=0`. `bin/deploy.sh --sem-migrate` as **00:09:48**: `migrations pendentes: 0`,
+`janela_auth: OK -- nenhum sitio de auth mudou desde origin/main (10 declarados)`, prova de casca
+`16 estaticos, 5 paginas, 599 rotas em 2 urlconf(s)`, tres rotas provadas (`/health/` 200,
+`/colaboradores/` 302, mensageria 200), selo BUG 128 verde, `importerror_500=0`.
+**O portao da sombra foi aberto pela porta DECLARADA**, nao pulado: `DEPLOY_SEM_SOMBRA` com o motivo na
+trilha -- o carimbo e `dia=20261007 status=OK tipo=completa diverge=0 erros=0`, dele mesmo saiu o deploy
+das 22:48, e passada a meia-noite o portao fica **cego** ate o dump das 04:00 (`sombra.sh:203` soma +1 a
+divergencia quando o dump nao e do DIA). Sem migration, sem caminho de dinheiro, sem sitio de auth.
+As duas tentativas anteriores falharam por **minha** leitura do parser, nao pelo portao: `--sem-sombra`
+so e lido em `$1` (`bin/deploy.sh:64`) e a variavel e `DEPLOY_SEM_SOMBRA` (`:63`), nao `SEM_SOMBRA_MOTIVO`.
+
+**O placar se perguntou ao JUIZ, dentro do `saas_core`**, nunca por grep de arquivo:
+`core.contratos_estruturais.linha_do_placar()` -> `contratos_estruturais: 15/20 verdes`, com
+`verdes()=15` e `total()=20`. E o leitor de prod dizendo o mesmo que o commit, que e a unica forma de
+saber que o flip de `verde` da celula `celula/precedencia` x `um juiz por pergunta` chegou a tela.
+
 ## 07/10 23:4x — **DOIS AVAIS DELE NO MEIO DO TURNO, REGISTRADOS SEM PARAR A FILA** (`EMP1-E-CCT`, `HORIZONTE-PADRAO`)
 
 **PROVA:** cadastro lido no vivo, somente leitura (`colaboradores.models.Empresa` no `saas_core`, schema juliani):

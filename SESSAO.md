@@ -6,10 +6,19 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 08/10/2026 00:15:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (426.7 MB). Acoes na janela: **583**.
+**Medido em 08/10/2026 00:20:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (426.8 MB). Acoes na janela: **592**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 00:20:31 | Bash | Ver o cron que o main acrescentou | `cd /home/ronald/wt-o139 && sed -n '360,380p' app/config/crons.py` |
+| 00:20:25 | Bash | Montar a copia e aplicar o commit da O139 nela | `cd /home/ronald/saas-hasner && git worktree add --detach /home/ronald/wt-o139 origin/main 2>&1 \| tail -3 && cd /home/ronald/wt-o139 && git cherry-pick -n 00bd05fb 2>&1 \| tail -10; echo "--- status:"; git status --short` |
+| 00:18:24 | Bash | Ler os sitios de auth declarados e quem tem a trava | `cd /home/ronald/saas-hasner && cat bin/auth_sitios.txt; echo "=== trava:"; bash bin/trava_teste.sh --quem 2>&1 \| head -3` |
+| 00:17:51 | Bash | Comparar as regioes tocadas nos dois lados | `cd /home/ronald/saas-hasner && mb=ba82736d; echo "=== RAIA tocou em crons.py (linhas):"; git diff -U0 $mb 00bd05fb -- app/config/crons.py \| grep -E '^@@' ; echo "=== MAIN tocou em crons.py (linhas):"; git diff -U0 $mb origin/main -- app/config/crons.py \| grep -E '^@@'; echo "=== ARQUITETURA.mmd raia:"; git diff -U0 $mb 00bd05fb -- app/docs/ARQUITETURA.mmd \| grep -E '^@@'; echo "=== ARQUITETURA. ...` |
+| 00:16:35 | Bash | Ler a mensagem do commit da O139 | `cd /home/ronald/saas-hasner && git log -1 --format='%B' 00bd05fb \| head -40` |
+| 00:16:14 | Bash | Conferir a base e sobreposicao de arquivos | `cd /home/ronald/saas-hasner && mb=$(git merge-base origin/main 00bd05fb); echo "merge-base: $mb"; git log --oneline -1 $mb; echo "=== commits do main a frente da base: $(git rev-list --count $mb..origin/main)"; echo "=== main tocou os mesmos arquivos desde a base?"; git diff --name-only $mb origin/main -- app/config/crons.py app/core/management/commands/gerar_diagrama.py app/docs/ARQUITETURA.mmd a ...` |
+| 00:15:23 | Bash | Estado das raias e do commit da O139 | `cd /home/ronald/saas-hasner && git worktree list; echo "=== O139 raia:"; git log --oneline origin/main..00bd05fb 2>&1 \| head -10; echo "--- arquivos:"; git diff --stat $(git merge-base origin/main 00bd05fb) 00bd05fb 2>&1 \| tail -20` |
+| 00:15:12 | Bash | Pôr a linha PROVA na secao nova | `python3 - <<'PY' p='docs/RELATO.md' s=open(p).read() anc='## O222 — **NO AR, E O PLACAR CONFERIDO PELO JUIZ** (08/10 00:09, marco empurrado 23:5x)\n\n' assert s.count(anc)==1 prova=('**PROVA:** `linha_do_placar()` chamado DENTRO do `saas_core` (schema juliani) devolve\n' '`contratos_estruturais: 15/20 verdes`, `verdes()=15`, `total()=20`; `deploy: OK -- migrations em dia,\n' 'tres cascas reiniciad ...` |
+| 00:15:04 | Bash | Conferir que o RELATO afirma com prova | `cd /home/ronald/saas-hasner && python3 bin/relato_afirma_com_prova.py app/docs/RELATO.md 2>&1 \| tail -3` |
 | 00:15:01 | Bash | Gravar a prova do deploy no RELATO | `cat > /tmp/o222_sec.md <<'MD' ## O222 — **NO AR, E O PLACAR CONFERIDO PELO JUIZ** (08/10 00:09, marco empurrado 23:5x) `origin/main` = `97e9e043`; suite do push **75 OK (skipped=42)** + control-plane **22 OK**; selos de host `pasta_rc=0`. `bin/deploy.sh --sem-migrate` as **00:09:48**: `migrations pendentes: 0`, `janela_auth: OK -- nenhum sitio de auth mudou desde origin/main (10 declarados)`, prov ...` |
 | 00:14:39 | Bash | Listar as secoes do RELATO | `grep -n '^## ' docs/RELATO.md \| head -12` |
 | 00:14:31 | Bash | Ler o topo do RELATO | `head -30 docs/RELATO.md` |
