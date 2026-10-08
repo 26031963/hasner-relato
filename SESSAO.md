@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 08/10/2026 11:53:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (456.3 MB). Acoes na janela: **1378**.
+**Medido em 08/10/2026 11:59:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (456.3 MB). Acoes na janela: **1376**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 11:53:58 | Bash | Carimbar NO AR no RELATO com a prova | `cd /home/ronald/saas-hasner S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad python3 - <<'PYEOF' alvo = 'app/docs/RELATO.md' VELHO = """**O211 POUSO B -- DIFF DE FROTA MEDIDO E PUBLICADO, e o apply e o deploy DESTE commit. Com ele a O211 fecha: a regua de dinheiro sobe da EMPRESA, e a praca so entra por linha DECLARADA.**""" NOVO = """**O211 POUSO B N ...` |
 | 11:52:52 | Bash | Conferir a 09 intacta e o apply acontecendo | `cd /home/ronald/saas-hasner echo '=== 09 EXPORTADA: hashes DEPOIS do deploy ===' docker exec saas_db psql -U saas_user -d saas_hasner -At -F'\|' -c \ "SELECT id,empresa_id,mes,ano,nome_arquivo,hash_sha256,total_linhas, (invalidada_em IS NULL AND substituida_por_id IS NULL) AS vigente FROM juliani.folha_exportacaodominio WHERE mes=9 AND ano=2026 ORDER BY id" > logs/o211b_hash_export_depois_deploy.t ...` |
 | 11:52:35 | Bash | Prova de regua em prod, somente leitura | `cd /home/ronald/saas-hasner S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad cat > $S/prova_regua_prod.py <<'PYEOF' # PROVA de nivel REGUA, em PROD, SOMENTE LEITURA -- nenhum motor, nenhuma escrita. from django.db import connection from core.regua_cct import regua_para from colaboradores.models import Colaborador from ponto.janelas import janela_atual ...` |
 | 11:52:06 | Bash | Publicar o pouso B | `cd /home/ronald/saas-hasner && bin/deploy.sh 2>&1 \| tail -40; echo "deploy rc=${PIPESTATUS[0]}"` |
@@ -1385,6 +1386,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 00:05:46 | ToolSearch |  | `-` |
 | 00:05:35 | Bash | Olhar a saida parcial do push | `cd /home/ronald/saas-hasner && tail -6 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bg2m2jtj3.output 2>/dev/null; echo "--- remoto agora:"; git log --oneline origin/main -1` |
 | 00:05:23 | Bash | Conferir o portao da sombra e o carimbo do ultimo deploy | `cd /home/ronald/saas-hasner && date '+%d/%m %H:%M:%S'; timeout 120 bash bin/sombra.sh --conferir 2>&1 \| tail -12; echo "=== deploy.stamp"; cat logs/deploy.stamp 2>/dev/null \| tail -5` |
-| 23:55:13 | Bash | Juntar o rodape ao commit e repetir o push | `cd /home/ronald/saas-hasner && SCR=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && git log -1 --pretty=%B > $SCR/msg3.txt && python3 - <<'PY' import io f='/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/msg3.txt' s=io.open(f,encoding='utf-8').read() anc='Selos de docs a mao:' assert s.count(anc)==1 add=( ...` |
-| 23:55:01 | Bash | Escrever o rodape do TICKETS pela porta canonica | `cd /home/ronald/saas-hasner && bash bin/tickets_rodape.sh --escrever 2>&1 \| tail -5; git diff --stat app/docs/TICKETS.md; bash bin/regua_tickets.sh 2>&1 \| tail -4` |
-| 23:54:45 | Bash | Push unico do marco, com a suite do pre-push | `cd /home/ronald/saas-hasner && timeout 1500 git push origin main 2>&1 \| tail -25; echo "=== rc acima; agora o remoto:"; git fetch origin 2>&1\|tail -1; git log --oneline origin/main -1; date '+%H:%M:%S'` |

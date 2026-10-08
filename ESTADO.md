@@ -1,9 +1,16 @@
 # ESTADO -- o repo e a sessao agora
 
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:3 AFIRMA ato sem PROVA ao lado -- **O211 POUSO B NO AR em `d6cb81c5`, e com ele a O211 esta FECHADA: a regua de dinheiro sobe da EMPRESA,
+>
+> O RELATO nao entrou neste ciclo porque uma afirmacao de ato
+> (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
+> seguem valendo -- eles descrevem, nao afirmam ato.
+
+
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 11:53:31.**
+**Medido em 08/10/2026 11:59:01.**
 
 | | |
 |---|---|
@@ -33,6 +40,8 @@ a96a5256 o segundo escritor do RELATO em bin/ cai: o vigia DELEGA o no_relato, e
 
 ```
  M app/config/crons_duracao.json
+ M app/docs/HANDOFF-SESSAO.md
+ M app/docs/RELATO.md
  M bin/sombra.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -110,13 +119,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Prod's gravado moveu entre as duas fotos. Isso contradiz uma afirmação que escrevi — vou medir quem escreve:
-
-  Ran 7 shell commands
-
-● Medido: o gravado se move por evento. Minha afirmação estava errada — vou corrigi-la nos dois sítios antes de qualquer apply:
-
-  Ran 5 shell commands
 
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
@@ -137,11 +139,18 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● A 09 intacta e a régua certa em prod. O contador do apply está em 0 porque nenhum dos 70 bateu ainda — vou registrar isso e remedir:
 
-● Running 1 shell command…
+● Carimbar NO AR no RELATO com a prova
+  ⎿  $ cd /home/ronald/saas-hasner
+     S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
+     python3 - <<'PYEOF'
+     alvo = 'app/docs/RELATO.md'
+     VELHO = """**O211 POUSO B -- DIFF DE FROTA MEDIDO E PUBLICADO, e o apply e o deploy DESTE commit. Com ele a O211
+     fecha: a reg…
 
-· Cultivating… (5h 44m 55s · ↓ 658.0k tokens)
+✢ Compacting conversation… (5h 50m 25s · ↓ 659.1k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱ 88%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    2% until auto-compact
+                                                                                                                    1% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
