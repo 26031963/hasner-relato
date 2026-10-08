@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 06:35:31.**
+**Medido em 08/10/2026 06:40:45.**
 
 | | |
 |---|---|
@@ -111,37 +111,37 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 1 shell command
 
-● Suite de negócio do push VERDE: Ran 9959 tests in 739.315s / OK (skipped=42); agora roda o control-plane. Aproveito para fazer a medição
-  que o próprio desenho (F5) exige antes de prometer. Primeiro confirmo que o gate não escreve nada quando chamado:
-
-  Ran 1 shell command
-
-● O gate só escreve a base quando ela não existe (if conhecidas is None), e ela existe com 70 linhas — então a chamada é leitura. Mesmo
-  assim confiro o mtime antes/depois, porque a base só encolhe:
+● Marco provado no ar pela função real, dentro do container: juiz em 15/20 verdes, a frase verbatim no R6, 17 declaradas presente, 122 só
+  dentro de ESTA LINHA DIZIA. Gravo a prova e fecho o marco (L-108):
 
   Ran 1 shell command
 
-● F5 medido, e ele muda a regra — exatamente por isso o desenho exigia medir antes de prometer:
+● MARCO FECHADO — pode compactar. 88bbc0c4 no remoto, no ar e provado pelo juiz real; handoff regenerado (44/60 linhas).
+
+  Agora o bug que apareceu no caminho, e que por lei vem antes de fatia nova (LEI-AKITA 6). A árvore voltou a ser escrevível, então monto a
+  cura em cópia do HEAD com RED primeiro:
 
   Ran 1 shell command
 
-● Background command "O unico push do marco" completed (exit code 0)
-
-● Push rc=0 — origin/main 88bbc0c4, o marco está no remoto, e pos_push commitou o derivado em 32d1d7fd (a exceção NOMEADA da L-106). Agora
-  o deploy, que push.sh não faz: os dois .py curados estão no disco mas os workers ainda importam os de antes (BUG 128).
+● O raio é maior do que eu disse: no_relato tem 9+ chamadores, incluindo AUTO-REVERT, quarentena (ALARME), ZUMBIDO e integrador ("o push do
+  lote foi REJEITADO"). Todos os alarmes mais altos do sistema estão caindo onde se lê por último. Meço o dano antes de desenhar a cura:
 
   Ran 1 shell command
 
-● Árvore limpa — só os dois sujos esperados (crons_duracao.json, que nunca se commita, e o HANDOFF-SESSAO.md que o hook regenera). O
-  derivado tocou só TICKETS.md. Deploy:
+● O dano está medido, e é grande: 126 linhas de alarme no RELATO vivo, 90 na cauda (depois do último heading datado), e 280 já varridas
+  para o ARQUIVO. Pior: elas repetem de hora em hora "a esteira esta parada e o vigia nao esta destravando" desde 07/10 18:35 — um alarme
+  vivo que ninguém leu porque foi depositado onde se lê por último. Gravo antes de desenhar:
 
-  Publicar o marco nas tres cascas
-  ⎿  $ cd /home/ronald/saas-hasner && bin/deploy.sh --sem-migrate 2>&1 | tail -30; echo "=== deploy rc=${PIPESTATUS[0]} $(date '+%H:%M:%S')
-     ==="
+  Ran 2 shell commands
 
-· Cultivating… (26m 55s · ↓ 55.1k tokens)
+● Limpo (as 4 eram ·; o grep -c saiu 0 — o exit 1 é "nenhuma ocorrência"). O desenho e as medições estão duráveis em 204 linhas. A cura
+  toca app/core num caminho de cron com 9 chamadores, então consulto antes de escrever:
+
+● Advising using Fable 5.1
+
+· Cultivating… (32m 9s · ↓ 63.6k tokens)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
