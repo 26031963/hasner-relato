@@ -6,10 +6,27 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 07/10/2026 23:32:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (425.1 MB). Acoes na janela: **519**.
+**Medido em 07/10/2026 23:37:26.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (425.3 MB). Acoes na janela: **536**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 23:36:45 | Bash | Reescrever a classe e rodar a bateria inteira | `cd /home/ronald/saas-hasner && python3 - <<'PY' import io p='app/ponto/tests/test_bateria_lavratura.py' s=io.open(p,encoding='utf-8').read() marca='\n\nclass VereditoConvergeEmDuasPassadasTest(_BaseMarcos):' i=s.index(marca) s=s[:i] novo = ''' class VereditoConvergeEmDuasPassadasTest(_BaseMarcos): """CARACTERIZACAO DA O222 -- o VEREDITO do dia com furo precisa de DUAS passadas. ESTE TESTE AFIRMA U ...` |
+| 23:35:40 | Bash | Medir partindo de célula sem cobrança | `cd /home/ronald/saas-hasner && python3 - <<'PY' import io p='app/ponto/tests/test_bateria_lavratura.py' s=io.open(p,encoding='utf-8').read() v=''' c, cels = self._monta() for rodada in (1, 2, 3):''' n=''' c, cels = self._monta() from chamados.models import ChamadoColaborador, DisputaSupervisao, PerguntaDisputa print('chamados nascidos do signal da batida:', list(ChamadoColaborador.objects.filter(c ...` |
+| 23:35:13 | Bash | Ler o pré-passo do julgamento | `cd /home/ronald/saas-hasner && sed -n '505,575p' app/ponto/services/cartorio.py` |
+| 23:34:44 | Bash | Medir o comportamento real das três passadas | `cd /home/ronald/saas-hasner && python3 - <<'PY' import io p='app/ponto/tests/test_bateria_lavratura.py' s=io.open(p,encoding='utf-8').read() s += ''' class _ZZDebug(VereditoConvergeEmDuasPassadasTest): def test_zz_debug(self): from ponto.services.cartorio import contadores, julgar_colab c, cels = self._monta() for rodada in (1, 2, 3): out = contadores() julgar_colab(c, [cels[d] for d in sorted(cel ...` |
+| 23:34:25 | Bash | Ler o trecho entre a emissão e a lavratura | `cd /home/ronald/saas-hasner && sed -n '760,800p' app/ponto/services/cartorio.py` |
+| 23:34:15 | Bash | Ler a emissão e o enfileiramento do re-julgamento | `cd /home/ronald/saas-hasner && sed -n '695,760p' app/ponto/services/cartorio.py` |
+| 23:34:09 | Bash | Rastrear o re-julgamento interno | `cd /home/ronald/saas-hasner && grep -n "rejulgar\\|carimbadas" app/ponto/services/cartorio.py \| head -20; echo "=== 423-473 ==="; sed -n '440,474p' app/ponto/services/cartorio.py` |
+| 23:33:42 | Bash | Rodar a classe nova | `cd /home/ronald/saas-hasner && timeout 900 bash bin/suite.sh --espera 600 --only "ponto.tests.test_bateria_lavratura.VereditoConvergeEmDuasPassadasTest" 2>&1 \| tail -40` |
+| 23:33:38 | Bash | Escrever a classe de caracterização e rodar ruff | `cd /home/ronald/saas-hasner && cat >> app/ponto/tests/test_bateria_lavratura.py <<'PY' class VereditoConvergeEmDuasPassadasTest(_BaseMarcos): """CARACTERIZACAO DA O222 -- o VEREDITO do dia com furo precisa de DUAS passadas. ESTE TESTE AFIRMA UM DEFEITO, nao uma virtude, e por isso ele NAO SE APAGA quando a O222 curar: a assercao INVERTE (`furo -> cobrado` passa a `cobrado` ja na primeira) e passa  ...` |
+| 23:32:53 | Bash | Ler o mapa de veredito | `cd /home/ronald/saas-hasner && grep -n "_MAPA_VEREDITO" -B2 -A 14 app/escala/models.py \| head -25` |
+| 23:32:50 | Bash | Ler derivar_veredito | `cd /home/ronald/saas-hasner && grep -rn "def derivar_veredito" -A 25 app/ --include=*.py \| head -35` |
+| 23:32:46 | Bash | Ler a porta de lavratura do veredito | `cd /home/ronald/saas-hasner && grep -n "def lavrar_veredito" -A 45 app/ponto/portas/celula.py \| grep -n "furo\\|veredito =\\|codigos" \| head -20` |
+| 23:32:42 | Bash | Ler lavrar_veredito | `cd /home/ronald/saas-hasner && grep -n "def lavrar_veredito" -A 30 app/escala/models.py \| head -40` |
+| 23:32:39 | Bash | Rastrear a gravação do veredito | `cd /home/ronald/saas-hasner && sed -n '790,830p' app/ponto/services/cartorio.py \| grep -n "veredito\\|_vd" ; echo "---"; grep -n "_vd\b" app/ponto/services/cartorio.py` |
+| 23:32:33 | Bash | Localizar os códigos de veredito | `cd /home/ronald/saas-hasner && grep -n "VIVOS\\|def classificar_dia" app/chamados/catalogo/motor.py \| head -5; echo "=== cods possiveis ==="; grep -n "FURO_SEM_COBRANCA\\|'furo'\\|_vd = \\|veredito = " app/ponto/services/cartorio.py \| sed -n '1,20p'` |
+| 23:32:11 | Bash | Ler a base de marcos | `cd /home/ronald/saas-hasner && sed -n '434,500p' app/ponto/tests/test_bateria_lavratura.py` |
+| 23:32:05 | Bash | Ver como o command monta o emissor real | `cd /home/ronald/saas-hasner && sed -n '40,70p' app/ponto/management/commands/processar_cartorio.py; echo "=== _Emissor em cartorio:920-935 ==="; sed -n '905,935p' app/ponto/services/cartorio.py` |
 | 23:32:00 | Bash | Localizar o emissor real do cartório | `cd /home/ronald/saas-hasner && grep -n "emissor" app/ponto/services/cartorio.py \| head -25; echo "=== quem chama julgar_colab com emissor real ==="; grep -rn "julgar_colab(" app --include=*.py \| grep -v tests \| head` |
 | 23:31:49 | Bash | Ler a decisão de veredito no cartório | `cd /home/ronald/saas-hasner && sed -n '600,665p' app/ponto/services/cartorio.py` |
 | 23:31:43 | Bash | Ler a base da bateria | `cd /home/ronald/saas-hasner && sed -n '87,165p' app/ponto/tests/test_bateria_lavratura.py` |
