@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 05:20:45.**
+**Medido em 08/10/2026 05:25:45.**
 
 | | |
 |---|---|
@@ -112,36 +112,36 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 1 shell command
-
-● Now certifying it against a copy from git show HEAD: — never against the live tree:
-
-  Ran 1 shell command
-
-● Patch certified (unique anchor, compiles, idempotent). Step 4 failed only because my isolated dir has no configuracao_efeito — loading
-  the cured file by path against the real core package instead:
+● Decisive: the score stays 15/20 post-chain (so the R6 verbatim sentence lands true), and the raia already rewrote the chamado cell to 121
+  → 21. Reading its numbers so I don't write a competing one:
 
   Ran 1 shell command
 
-● 15/20 unchanged, as intended — the cell is a dict, not an object:
+● The raia did it better than a number: that placar moved out of the prose into a test with an empty allowlist. So
+  placar_estrutural.py:312-313 — which the chain does not touch — must point at that authority, not copy a figure:
+
+  Ran 2 shell commands
+
+● 12 + 4 + 5 = 21 — matches the aval's "121 → 21". So item (5)'s cure is to name the gate, not carry a number. Editing the cured copy:
+
+  Ran 2 shell commands
+
+● Regenerating the patch and re-certifying it end to end:
+
+  Ran 2 shell commands
+
+● Copy is GREEN and coherent. The live-tree run needs the explicit path (the sonda's default resolves oddly from the repo root):
 
   Ran 1 shell command
 
-● Fully certified: unique anchor, compiles, idempotent, 15/20 untouched, and only the nota key differs. Recording the gap work in the topo
-  draft:
+● RED live / GREEN on the copy. Now advisor item 2 — the RELATO selo against the post-chain tree:
 
-  Ran 1 shell command
+  Ver o alvo do selo em relato.sh
+  ⎿  $ cd /home/ronald/saas-hasner
+     echo "=== bin/relato.sh: sobre QUAIS arquivos ele roda o selo? ==="
+     grep -nE "relato_afirma|RELATO|\.md" bin/relato.sh | head -20 | sed 's/^/ /'
 
-● Clean after the addition. Saving the lesson from the false RED — it's reusable and not in the repo:
-
-  Salvar a memória da árvore do push
-  ⎿  $ cd /home/ronald/.claude/projects/-home-ronald-saas-hasner/memory
-     cat > citacao-de-commit-se-mede-na-arvore-do-push.md <<'FIM'
-     ---
-     name: citacao-de-commit-se-mede-na-arvore-do-push
-     description: "regua_tickets cobra a tabela do instante do PUSH, nao a viva; a raia que se vai mergear reescreve TICKE…
-
-· Beboppin'… (11h 11m 56s · ↓ 1.1m tokens)
+· Beboppin'… (11h 16m 56s · ↓ 1.1m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
