@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 07/10/2026 21:01:01.**
+**Medido em 07/10/2026 21:06:31.**
 
 | | |
 |---|---|
@@ -114,12 +114,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-  Ran 3 shell commands
-
-● Agora os quatro cenários, cada um com a REGRA escrita antes da asserção:
-
-  Ran 2 shell commands
-
 ● Dois defeitos meus, não do sistema: Ausencia.registrado_por é NOT NULL, e meu _regenerar escreveu o DNA à mão — violando o produtor único
   (P13). A regeneração real passa por montar_dna:
 
@@ -137,14 +131,20 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Rodo os vizinhos estruturais e de query antes da suite inteira — e os 66 selos de host:
 
-● Rodar os vizinhos estruturais e de query
-  ⎿  $ cd /home/ronald/saas-hasner && timeout 900 bash bin/suite.sh --dir /home/ronald/wt-lavra --only
-     "ponto.tests.test_contract_juiz_celula ponto.tests.test_contract_juiz_ausencia ponto.tests.test_contract_no_batida_date
-     ponto.tests.test_contract_no_inline_turno_pairing ponto.tests.test_contract_porta…
+  Ran 2 shell commands
 
-· Beboppin'… (2h 52m 12s · ↓ 255.3k tokens)
+● Os 8 vermelhos têm cara de artefato de worktree (staticfiles vazio, hooks e logs/ ausentes). Confiro os mesmos 8 na árvore viva — selo
+  que fica vermelho nos dois lados não é meu:
+
+● Rodar os 8 selos na arvore viva para comparar
+  ⎿  $ cd /home/ronald/saas-hasner && for t in test_commit_so_o_declarado test_furo_encadeado_ao_cartorio test_handoff_sessao
+     test_hook_nao_e_copia test_import_tardio_contra_o_ar test_inventario_pessoal_no_commit test_montagem_vem_do_arvore_do_push
+     test_prepush_testa_o_commit; do timeout 180 bash bin/te…
+
+✢ Compacting conversation… (2h 57m 42s · ↓ 256.5k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱ 90%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    2% until auto-compact
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

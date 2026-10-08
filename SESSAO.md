@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 07/10/2026 21:01:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (419.4 MB). Acoes na janela: **247**.
+**Medido em 07/10/2026 21:06:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (419.4 MB). Acoes na janela: **249**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 21:02:07 | Bash | Rodar os 8 selos na arvore viva para comparar | `cd /home/ronald/saas-hasner && for t in test_commit_so_o_declarado test_furo_encadeado_ao_cartorio test_handoff_sessao test_hook_nao_e_copia test_import_tardio_contra_o_ar test_inventario_pessoal_no_commit test_montagem_vem_do_arvore_do_push test_prepush_testa_o_commit; do timeout 180 bash bin/tests/$t.sh >/dev/null 2>&1; echo "$t rc=$?"; done` |
+| 21:01:06 | Bash | Rodar a pasta de selos de host na raia | `cd /home/ronald/wt-lavra && fail=0; for t in bin/tests/test_*.sh; do out=$(timeout 180 bash "$t" 2>&1); rc=$?; [ $rc -ne 0 ] && { fail=$((fail+1)); echo "VERMELHO rc=$rc $t"; echo "$out" \| tail -6; }; done; echo "=== selos de host: $(ls bin/tests/test_*.sh \| wc -l) rodados, $fail vermelhos ==="` |
 | 21:00:01 | Bash | Rodar os vizinhos estruturais e de query | `cd /home/ronald/saas-hasner && timeout 900 bash bin/suite.sh --dir /home/ronald/wt-lavra --only "ponto.tests.test_contract_juiz_celula ponto.tests.test_contract_juiz_ausencia ponto.tests.test_contract_no_batida_date ponto.tests.test_contract_no_inline_turno_pairing ponto.tests.test_contract_porta_ausencia ponto.tests.test_porta_ausencia_ferias ponto.tests.test_gate_ferias_vira_aviso ponto.tests.te ...` |
 | 20:59:51 | Bash | Achar o selo de queries e contar selos de host | `cd /home/ronald/wt-lavra/app && grep -rln "assertNumQueries\\|TETO_QUERIES\\|teto.*quer" --include=test_*.py ponto core escala chamados folha 2>/dev/null \| head; echo "--- selos de host na pasta ---"; ls /home/ronald/wt-lavra/bin/tests/ \| wc -l` |
 | 20:59:42 | Bash | Achar contratos que varrem diretorio | `cd /home/ronald/wt-lavra/app && grep -rln "glob\\|listdir\\|rglob\\|walk(" --include=test_*.py ponto/tests core/tests escala/tests 2>/dev/null \| head -20` |
