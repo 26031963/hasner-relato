@@ -28,6 +28,40 @@ chamado pode NASCER numa competencia que o Dominio ja pagou?** -- nao ha L-NNN q
 e decisao tecnica (e dinheiro do colaborador na mesa do DP). Nao devolvo turno por isso
 (PAREI-DE-LEI-NAO-DEVOLVE-TURNO): a pergunta fica aqui com os numeros e a esteira **segue a O211**.
 
+## 07/10 23:4x — **DOIS AVAIS DELE NO MEIO DO TURNO, REGISTRADOS SEM PARAR A FILA** (`EMP1-E-CCT`, `HORIZONTE-PADRAO`)
+
+**PROVA:** cadastro lido no vivo, somente leitura (`colaboradores.models.Empresa` no `saas_core`, schema juliani):
+`emp1 regime_trabalhista=''` com **7 colabs, 3 ativos** e `FechamentoMensal` **4 na 10 / 3 na 09**; `emp2` e `emp4`
+ja `cct`, `emp3` `clt`; `emp20/21/29` com regime vazio e **0 ativos** (0, 0 e 2 colabs); **um** sindicato cadastrado
+(**sind2**, Vigilantes de Londrina) e **1** `VinculoSindicatoPraca`.
+
+**1. "emp1 e CCT".** Responde a lateral de `emp1 Confiance Force Ltda` que estava devendo linha no PENDENTES, e
+muda a O211 antes de ela nascer: a `AplicacaoConvencao` passa a nascer com **TRES** linhas, nao duas -- emp1, emp2 e
+emp4 -> sind2, sem praca. Hoje a emp1 cai no piso legal pelo ramo `core/regua_cct.py:245` (`regime_trabalhista` vazio
+nao e `clt`, mas tambem nao chega a convencao) e e **uma das que fazem `empresas_sem_regime` nao ser 0**; o resto do
+contador sao as tres empresas de diagnostico, sem ninguem ativo. ASSUNCAO DECLARADA, porque ele nao nomeou
+sindicato e so existe um: a linha e **emp1 -> sind2**; se a CCT da Confiance for outra convencao, ela **nasce como
+cadastro ANTES** (TUDO TEM CADASTRO), nunca como literal no codigo. Teto de impacto, medido e pequeno: **3 ativos e
+4 fechamentos na 10**; a **09 nao se toca** por ser exportada. Nada chega a prod fora do pouso A da O211 -- aqui e
+registro de cadastro a fazer, nao ato.
+
+**2. "horizonte padrao de correcao de codigo = competencia aberta + anterior".** Fecha a ultima pergunta que a
+**L-113** deixou aberta e que o adendo `AVISO-E-ESCOLHA` de 19:5x mandava declarar caso a caso: *"o sistema calcula o
+que tem"* **nao** vira "rejulga tudo para tras por versao". O juiz de "aberta" e de "anterior" **ja existe e nao se
+clona** (LEI-AKITA 4): `ponto/janelas.py::janela_atual` e `janela_anterior`. Hoje, 07/10, o horizonte e **10/2026 +
+09/2026**, e **08/2026 e FOTO**.
+O numero que isso move e um que a O218 ja mediu, e ele muda de dono: `dias com ata de regra antiga` por competencia
+da **10 = 0 de 9.008**, **09 = 424 de 17.330** e **08 = 756 de 16.894** (`logs/o209_conf_ata_3comps.out`). Entao o
+universo do contador `dias_com_regra_velha` esperado 0 e o **HORIZONTE**, nao a competencia aberta sozinha: os **424
+da 09 sao divida da O219**, a sanar pelo caminho da impressao que a propria linha dela declara (`--forcar` deixa de
+ser o caminho), e os **756 da 08 ficam FOTO** -- rejulgam so se a batida do dia for editada, com o rotulo
+"recalculado em <data>". A linha honesta ao lado da PROVA da O218, que diz "09 EXPORTADA INTACTA": ela segue
+verdadeira para o escopo da O218 (ATA SO, competencia 10), e os 424 da 09 nao sao contradicao dela -- sao o item
+seguinte da fila, que e exatamente a O219. **Nada relavrado agora.**
+
+Os dois viraram linha em `app/docs/PROMPTS.md` e adendo na linha da obra (**O211** e **O219**) no mesmo turno, e a
+fila nao parou: nenhum dos dois depende de resposta minha para andar, e nenhum deles e `!`.
+
 ## O218 — **APLICADO EM PROD, E A PROVA DEPOIS** (07/10 22:53→23:1x, **MARCO FECHADO**, placar 15/20)
 
 **PROVA:** GRAVADO em prod, lido do banco depois do ato -- `celula#118980 ata.minutos_realizados=541` e `celula#118981 =545` (col146, 28 e 29/09; eram 0 e 894), as duas `veredito=concorde via=cartorio`, `julgada_em=2026-10-07T22:53:32`; ata x autoridade na frota da 10 = **0 divergente em 9.008 dia-colab** de 570 colabs, soma `2.251.838 = 2.251.838` min (delta +0); 09 exportada `hash=dfd8d145c3d9af35fc768e765fe38461 linhas=17332` **antes e depois**; `contratos_estruturais: 15/20 verdes` pela funcao real.
