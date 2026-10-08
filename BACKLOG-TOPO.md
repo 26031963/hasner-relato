@@ -5,20 +5,21 @@ a raspagem usa a lista de nomes do banco como autoridade, nunca regex adivinhada
 `colNNN`/`ecNNN` ficam, porque nao identificam ninguem fora desta casa. Obra FEITA sai desta
 lista — ela e o que esta EM PE._
 
-**219 obras abertas.**
+**220 obras abertas.**
 
 | ID | obra | estado |
 |---|---|---|
 | **O1** | COERENCIA-PORTAO | **FECHADA 30/09 21:5x -- os quatro itens |
 | **O2** | FILTRO-COERENTE fatia 1 (Gabriel): o filtro do cartao nao aceita data final depois de onte | PAREI |
 | **O3** | Selo de CLASSE "artefato de estado obsoleto lido como sinal bom" — 5 casos em 22/09 (`mate | **FECHADA 30/09 23:0x** -- e a trava era |
-| **O4** | ACESSO-NUNCA-EM-LOTE | espera `!` |
+| **O4** | ACESSO-NUNCA-EM-LOTE | **FECHADA 01/10 01:4x -- os SEIS itens** |
 | **O5** | DECK-30DIAS | **FECHADA 01/10 01:5x -- NO AR** |
 | **O6** | PORTA-RETRATAR-BATIDA | **FECHADA 01/10 02:0x -- a fatia estava  |
 | **O7** | COL857 / ORIGEM-DA-BATIDA | **FECHADA 01/10 02:3x -- as duas medicoe |
 | **O8** | PDF-ROTULO-PARCIAL-E-PENDENTE | **FECHADA 01/10 03:0x no (a) e no PENDEN |
+| **O9** | PDF-E-O-ESPELHO | espera corte |
 | **O10** | TROCA-DE-PLANTAO | espera corte |
-| **O11** | BAIXA-DIFERIDA-TODA-FAMILIA | espera aval |
+| **O11** | BAIXA-DIFERIDA-TODA-FAMILIA | espera corte |
 | **O12** | CHAVE-MORTA-TRAB-FERIADO | **FECHADO 01/10 12:4x -- e o censo de ho |
 | **O13** | ESPELHO-TELA-TAMBEM-DERIVA-DIA | **FECHADA 01/10**: o codigo ja estava cu |
 | **O14** | ESPELHO-APP-DERIVA-DIA | espera aval |
@@ -29,7 +30,7 @@ lista — ela e o que esta EM PE._
 | **O19** | BO-APP-ANDROID-ATESTADO | espera `!` |
 | **O20** | CONTRATO-VARRE-COMENTARIO | **FECHADA 01/10**: `core/censo_fonte.py` |
 | **O21** | ROTULO-DO-DIA-DECIDIDO | **FECHADA 02/10 10:16, no ar** -- o app  |
-| **O22** | AUSENCIA-REVERTER-REJEICAO | espera aval |
+| **O22** | AUSENCIA-REVERTER-REJEICAO | **FECHADA, e estava CONSTRUIDA: conferi  |
 | **O23** | HAIKU-CONTADOR-UNIVERSO | espera `!` |
 | **O24** | FECHAMENTO-UI-PORTAS | **PORTAO: fila (depois do export de 09)* |
 | **O25** | PISO-NAO-SOBE-POR-BATIDA | **FECHADA 02/10 10:35, no ar** (`b817f39 |
@@ -152,7 +153,7 @@ lista — ela e o que esta EM PE._
 | **O142** | `turnos_do_colab` RESPONDE DIFERENTE CONFORME A JANELA, e os 33 dia-colab sao isso | espera corte |
 | **O143** | DIA COM BATIDA REAL E SEM VINCULO QUE O CUBRA E DONO CADASTRO, nao ESTRUTURA | ABERTA. Falta o censo de frota (dia-cola |
 | **O144** | O DIA QUE CONTA PARA OS 15 DA EMPRESA E O DECORRIDO, NAS DUAS TELAS | ABERTA. Falta provar o irmao `absenteism |
-| **O145** | HE-INVISIVEL | espera `!` |
+| **O145** | HE-INVISIVEL | espera corte |
 | **O146** | HE-FIXA-DA-ESCALA-E-CADASTRO | espera `!` |
 | **O147** | OS 3 ATRASADOS DA 09 | PAREI |
 | **O148** | FOLGAS DUPLICANDO | ENCAIXE. Medicao, nao cura: publicar ant |
@@ -183,7 +184,7 @@ lista — ela e o que esta EM PE._
 | **O173** | O SELO DO IMPORT TARDIO TEM A DIRECAO INVERTIDA | **O RED DELE MORREU NO DEPLOY DAS 10:02* |
 | **O174** | CRON E WORKER SAO DOIS SISTEMAS ENTRE UM DEPLOY E OUTRO, e isso nao esta escrito | achado 04/10 01:5x |
 | **O175** | O BACKFILL DO NUCLEO NAO TEM GUARDA DE COMPETENCIA EXPORTADA | espera `!` |
-| **O176** | "O ROTULO ESTA NUM TITULO" NAO RESPONDE "ESTA FATIA SUBIU" | espera corte |
+| **O176** | "O ROTULO ESTA NUM TITULO" NAO RESPONDE "ESTA FATIA SUBIU" | medido 04/10 02:5x, **0 dano hoje**: dos |
 | **O177** | A SEGUNDA PAUSA SOMA DINHEIRO EM DOIS SITIOS QUE A FATIA DEIXOU DE FORA | nascido 04/10 03:1x da entrega da raia.  |
 | **O178** | A ROTA DE "CADASTRO" E "BATIDA" DA L-099 E UM SILENCIO, MEDIDO | espera aval |
 | **O179** | A FORMA INVERSA DO `cadastro_zero`: PREVISTO ALTO E TRABALHADAS ZERO | ABERTA, nao medida ate a causa. Dono ain |
@@ -214,7 +215,7 @@ lista — ela e o que esta EM PE._
 | **O204** | HORA-DO-APARELHO-LIDA-COMO-DATA | espera `!` |
 | **O205** | O GATE TEMPORAL REVERTE POR ARQUIVO E NAO OLHA A ARVORE DEPOIS | **fila 2 -- e INSTRUMENTO**, e a L-105 m |
 | **O206** | PAINEL-OFERECE-COBRAR-NAO-REABRIR | espera `!` |
-| **O207** | VINCULO-INICIO-DECLARADO | espera `!` |
+| **O207** | VINCULO-INICIO-DECLARADO | **registrada, NAO construida.** POSICAO  |
 | **O209** | A ATA DA FROTA ESTA STALE CONTRA O JUIZ DE HOJE | espera `!` |
 | **O210** | A DERIVA DA COMPETENCIA 10: 174 de 572 fechamentos | **portao aberto** -- comp 10 aberta, app |
 | **O211** | REGUA-PELA-EMPRESA | **fila 1, logo ATRAS da O209** (ordem li |

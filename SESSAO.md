@@ -6,10 +6,23 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 07/10/2026 21:44:51.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (421.2 MB). Acoes na janela: **321**.
+**Medido em 07/10/2026 21:50:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (421.4 MB). Acoes na janela: **334**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 21:49:06 | Bash | Medir ata x autoridade na sombra pos-cura | `cd /home/ronald/saas-hasner && SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && cp $SP/o209_conf_ata_x_autoridade.py logs/sombra/conf_ata_x_autoridade.py && python3 -m py_compile logs/sombra/conf_ata_x_autoridade.py && echo OK && SOMBRA_ARVORE=/home/ronald/wt-lavra/app bash bin/sombra.sh --rodar conf_ata_x_autoridade.py o218_conf_pos_cura 2>&1 \|  ...` |
+| 21:48:44 | Bash | Ler a sonda da baseline | `SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && wc -l $SP/o209_conf_ata_x_autoridade.py && sed -n '1,60p' $SP/o209_conf_ata_x_autoridade.py` |
+| 21:48:21 | Bash | Procurar a sonda da baseline em logs e scratchpad | `cd /home/ronald && grep -rln "contra autoridade" saas-hasner/logs /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad 2>/dev/null \| head` |
+| 21:48:15 | Bash | Localizar a sonda da baseline e ver a suite | `cd /home/ronald/saas-hasner && grep -ln "ata .*contra autoridade\\|autoridade_min" logs/sombra/*.py logs/*.py 2>/dev/null; echo "=== suite ==="; grep -cE '^' logs/suite_o218_raia2.out; tail -c 150 logs/suite_o218_raia2.out` |
+| 21:47:28 | Bash | Ler o cabecalho do DIFF | `cd /home/ronald/saas-hasner && sed -n '1,60p' logs/o218_diff_10.out` |
+| 21:47:13 | Bash | Ler o resultado do DIFF e o mtime do dump da sombra | `cd /home/ronald/saas-hasner && ls -la --time-style=+%H:%M:%S logs/sombra/dumps/juliani_agora.dump 2>/dev/null; echo "=== o218_diff_10.out ==="; wc -l logs/o218_diff_10.out 2>/dev/null; tail -45 logs/o218_diff_10.out 2>/dev/null` |
+| 21:46:58 | Bash | De onde sai o instante do dump e qual a idade real | `cd /home/ronald/saas-hasner && grep -n -A12 'def _instante_do_dump' logs/sombra/relavra10_frota_20261005.py && echo "=== dumps ===" && ls -la --time-style=+%Y-%m-%dT%H:%M:%S logs/sombra/*.dump backups/juliani/*.dump 2>/dev/null \| tail -6 && date +%Y-%m-%dT%H:%M:%S` |
+| 21:46:06 | Bash | Chaves que o apply em prod exige do pacote | `cd /home/ronald/saas-hasner && grep -n "PAC\[\\|PAC.get\\|_idade_h\\|ESP_CAM\\|REV_DIR\\|OBRA" logs/o209_apply_frota_prod.py \| head -40` |
+| 21:46:02 | Bash | Ler o pacote ESPERADO inteiro | `cd /home/ronald/saas-hasner && sed -n '560,595p' logs/sombra/relavra10_frota_20261005.py` |
+| 21:45:58 | Bash | Chaves que o arreio da sombra escreve | `cd /home/ronald/saas-hasner && echo "=== o que o ARREIO escreve (o pacote) ===" && grep -n "_CAM\\|'esperado'\\|json.dump\\|'competencia'\\|'janela_julgada'\\|'instante\\|'validade'\\|'obra'\\|'censo_rotulo'" logs/sombra/relavra10_frota_20261005.py \| tail -30` |
+| 21:45:17 | Bash | Provar que o container do DIFF monta a arvore da raia | `docker inspect musing_germain --format '{{range .Mounts}}{{.Source}} -> {{.Destination}}{{"\n"}}{{end}}' 2>/dev/null \| head -8` |
+| 21:45:10 | Bash | Conferir que o DIFF subiu | `cd /home/ronald/saas-hasner && T=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks && tail -25 $T/bsqh1mljs.output 2>/dev/null; echo "--- docker ps ---"; docker ps --format '{{.Names}} {{.Image}} {{.Command}}' \| head -8` |
+| 21:45:01 | Bash | DIFF de frota da O218 na sombra com a arvore da raia | `cd /home/ronald/saas-hasner && SOMBRA_ARVORE=/home/ronald/wt-lavra/app bash bin/sombra.sh --rodar relavra10_frota_20261005.py o218_diff_10 2>&1 \| tail -40` |
 | 21:44:38 | Bash | Ver se --rodar usa o container() com SOMBRA_ARVORE | `cd /home/ronald/saas-hasner && sed -n '418,434p' bin/sombra.sh && echo "=== container() ===" && sed -n '148,168p' bin/sombra.sh` |
 | 21:44:12 | Bash | Comparar mtimes do produto com a suite anterior | `cd /home/ronald/wt-lavra && ls -la --time-style=+%H:%M:%S app/escala/utils.py app/ponto/services/cartorio.py app/ponto/turnos.py app/ponto/tests/test_bateria_lavratura.py app/ponto/tests/test_realizado_do_dia_autoridade.py && echo "=== suite anterior terminou ===" && ls -la --time-style=+%H:%M:%S /home/ronald/saas-hasner/logs/suite_o218_raia.out && date +%H:%M:%S` |
 | 21:43:52 | Bash | Progresso da suite | `cd /home/ronald/saas-hasner && wc -c logs/suite_o218_raia2.out && tail -c 300 logs/suite_o218_raia2.out` |

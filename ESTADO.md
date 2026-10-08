@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 07/10/2026 21:44:51.**
+**Medido em 07/10/2026 21:50:02.**
 
 | | |
 |---|---|
@@ -32,6 +32,7 @@ edb40127 [O208] o contador do recalculo era cego ao campo da cura: mexidos=36 er
 ## `git status --short`
 
 ```
+ M CLAUDE.md
  M app/config/crons_duracao.json
  M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
@@ -41,6 +42,7 @@ edb40127 [O208] o contador do recalculo era cego ao campo da cura: mexidos=36 er
  M app/docs/RELATO.md
  M app/docs/TICKETS.md
  M bin/sombra.sh
+?? app/docs/LAPIDES.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -115,36 +117,36 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-● A montagem tem um escritor único — uso ele, não monto à mão:
+● Background command "DIFF de frota da O218 na sombra com a arvore da raia" completed (exit code 0)
 
-  Ran 6 shell commands
-
-● 59 OK — o selo invertido, os dois exercícios e a bateria inteira. Agora a suite cheia na raia:
+● O DIFF terminou. Leio o veredito:
 
   Ran 1 shell command
 
-● Enquanto roda, registro a inversão na mensagem do marco:
+● Isto precisa ser lido inteiro, não pelo rodapé — o rodapé já diz que a base não estava limpa ("por cima do RUN C") e col146 não aparece
+  em lugar nenhum:
+
+  Ran 1 shell command
+
+● Dois fatos duros no DIFF, e o segundo contradiz a bateria:
+
+  - dos 1 do censo da O218 (col146 em 28 e 29/09): [] — o golden não se moveu
+  - as 36 linhas que se moveram têm o real idêntico (481→481, 443→443): o que mudou foi o veredito, não o minuto
+
+  Antes de concluir qualquer coisa, reuso a sonda que já mediu a baseline em vez de derivar de novo:
 
   Ran 3 shell commands
 
-● O agente da O220 está nas células de ESTADO do LEIS.md (77 encurtadas, vereditos idênticos antes/depois: 25/32/14/6/4; 39.978 → 10.109
-  bytes). Enquanto a suite roda, confiro a porta do DIFF que vou disparar em seguida — sem tocar na raia:
+● A sonda da baseline existe e já tem sombra no assert de banco. Copio para a área da porta e meço o estado pós-cura na sombra:
 
-  Ran 5 shell commands
+● Medir ata x autoridade na sombra pos-cura
+  ⎿  $ cd /home/ronald/saas-hasner && SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad &&
+     cp $SP/o209_conf_ata_x_autoridade.py logs/sombra/conf_ata_x_autoridade.py && python3 -m py_compile
+     logs/sombra/conf_ata_x_autoridade.py && echo OK && SOMBRA_ARVORE=/h…
 
-● O produto não mudou desde a suite anterior (só o arquivo de teste), então o DIFF pode medir em paralelo. Confirmo isso antes:
-
-  Ran 1 shell command
-
-● O produto é byte-idêntico ao que rodou os 9.673 testes (utils 20:19, cartório 19:46, turnos 19:49 — todos antes da suite das 21:29).
-  Confiro que --rodar passa pelo container() que ganhou o SOMBRA_ARVORE:
-
-  Ver se --rodar usa o container() com SOMBRA_ARVORE
-  ⎿  $ cd /home/ronald/saas-hasner && sed -n '418,434p' bin/sombra.sh && echo "=== container() ===" && sed -n '148,168p' bin/sombra.sh
-
-✢ Beboppin'… (3h 36m 2s · ↓ 318.4k tokens)
+✻ Beboppin'… (3h 41m 13s · ↓ 328.8k tokens · still thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    5% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -152,6 +154,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Trimming 44 ESTADO cells in BACKLOG.md                                                     32m 21s · ↓ 131.8k tokens
+  ◯ general-purpose  Writing LAPIDES.md and trimmed CLAUDE.md                                                   37m 33s · ↓ 165.5k tokens
   ⧉  index
 ```
