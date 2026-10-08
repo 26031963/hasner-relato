@@ -1,6 +1,6 @@
 # RELATO — esteira saas-hasner
 
-## O214 ETAPA 0 + ITEM 1 — **A PONTA PEQUENA E RECUSADA PELO SISTEMA, COM TRILHA, E NENHUM CENTAVO SE MOVE** (08/10 14:2x→17:2x)
+## O214 ETAPA 0 + ITEM 1 — **A PONTA PEQUENA E RECUSADA PELO SISTEMA, COM TRILHA, E NENHUM CENTAVO SE MOVE** (08/10 14:2x→17:3x)
 
 **O aval dele de 05/10 18:0x, literal:** *"ITEM 1 PONTA PEQUENA: dia com minutos fora do marco <= limite e
 RECUSADO pelo SISTEMA (`DecisaoHE` estado `nao`, ator `sistema`, com trilha), uma vez por dia, idempotente,
