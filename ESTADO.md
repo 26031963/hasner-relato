@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 07/10/2026 21:50:02.**
+**Medido em 07/10/2026 21:55:31.**
 
 | | |
 |---|---|
@@ -116,21 +116,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● Background command "DIFF de frota da O218 na sombra com a arvore da raia" completed (exit code 0)
-
-● O DIFF terminou. Leio o veredito:
-
-  Ran 1 shell command
-
-● Isto precisa ser lido inteiro, não pelo rodapé — o rodapé já diz que a base não estava limpa ("por cima do RUN C") e col146 não aparece
-  em lugar nenhum:
-
-  Ran 1 shell command
-
-● Dois fatos duros no DIFF, e o segundo contradiz a bateria:
-
-  - dos 1 do censo da O218 (col146 em 28 e 29/09): [] — o golden não se moveu
   - as 36 linhas que se moveram têm o real idêntico (481→481, 443→443): o que mudou foi o veredito, não o minuto
 
   Antes de concluir qualquer coisa, reuso a sonda que já mediu a baseline em vez de derivar de novo:
@@ -139,14 +124,29 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● A sonda da baseline existe e já tem sombra no assert de banco. Copio para a área da porta e meço o estado pós-cura na sombra:
 
-● Medir ata x autoridade na sombra pos-cura
-  ⎿  $ cd /home/ronald/saas-hasner && SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad &&
-     cp $SP/o209_conf_ata_x_autoridade.py logs/sombra/conf_ata_x_autoridade.py && python3 -m py_compile
-     logs/sombra/conf_ata_x_autoridade.py && echo OK && SOMBRA_ARVORE=/h…
+  Ran 1 shell command
 
-✻ Beboppin'… (3h 41m 13s · ↓ 328.8k tokens · still thinking)
+● Post-cura na sombra: 9.008 dia-colab, 0 divergentes, 100% conforme. Isso explica o golden não ter se movido — ele já estava conforme na
+  base. Confiro o que prod diz hoje sobre as duas células do censo (1 colab, leitura pura):
+
+  Ran 1 shell command
+
+● Prod ainda diverge (28/09: ata 0 vs autoridade 541; 29/09: 894 vs 545, julgada_em 05/10 17:32). Mas a sombra disse que o golden não se
+  moveu e que há 0 divergentes — as duas coisas só coexistem se a base da sombra não era a de prod. Checo a base:
+
+  Ran 1 shell command
+
+● O dump de logs/sombra/dumps/ é de 05/10 17:14 — dois dias velho, e é dele que sai o dump_de_prod_em do pacote (o assert 0 <= idade <= 12
+  h do apply teria pegado isso). Leio as mesmas duas células dentro da sombra:
+
+● Ler as duas celulas do censo dentro da sombra
+  ⎿  $ cd /home/ronald/saas-hasner && cp logs/o218_col146_prod.py logs/sombra/col146_leitura.py && SOMBRA_ARVORE=/home/ronald/wt-lavra/app
+     bash bin/sombra.sh --rodar col146_leitura.py o218_col146_sombra 2>&1 | grep -v 'objects imported' | tail -12
+
+✢ Compacting conversation… (3h 46m 42s · ↓ 336.1k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱ 90%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    5% until auto-compact
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -154,6 +154,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Writing LAPIDES.md and trimmed CLAUDE.md                                                   37m 33s · ↓ 165.5k tokens
+  ◯ general-purpose  Trimming O220 estado cell in BACKLOG.md                                                     43m 1s · ↓ 167.9k tokens
   ⧉  index
 ```
