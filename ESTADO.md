@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 19:56:31.**
+**Medido em 08/10/2026 20:02:01.**
 
 | | |
 |---|---|
@@ -115,37 +115,37 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-  Ran 1 shell command
-
-● apurar roda o espelho da empresa inteira (motor, frota) — não sondo isso aqui. Mas o lavrado é a autoridade que a tela de Gestão de HE
-  mostra, e é leitura pura:
-
-  Ran 3 shell commands
-
-● A medição fechou: marcos E 08:00 / S 12:00 · batida 06:30 → ponta 90 'antes' · batida 12:37 → ponta 37 'depois' · soma 127. Só falta ler
-  o lavrado (o ler() devolve tupla):
-
-  Ran 2 shell commands
-
-● Medição fechada na autoridade que a tela lê. Salvo durável antes de seguir:
+● O204 voltou verde e commitada, parada no meu arquivo. Isso é a L-105 (raia verde pousa, pré-aprovado) e o pouso é um ato só com os docs
+  (L-106/L-107). Orientando antes de agir:
 
   Ran 1 shell command
 
-● Achado durável. Antes de escrever o RELATO e decidir o que a O145 passa a ser, consulto — isto contradiz a premissa do dossiê dele:
+● O rótulo da tela não mente — e isso fecha a conferência: linha 231 abre a soma nas duas pontas ({{ s.antes }} min antes da entrada · {{
+  s.depois }} min depois da saída) e as linhas 271-285 listam uma linha por ponta sob a coluna ponta. O "127 min de ponta" era leitura do
+  enunciado, não da testemunha. Nenhuma fila line.
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-● Vou fazer as duas conferências baratas que ele indica — o rótulo da tela e o que o builder faz com a batida não consumida:
+  E o merge é fast-forward puro, então o pouso não precisa de commit meu — a O204 já vem com a sua própria célula (L-106 cumprida pelo
+  commit dela). Conferindo o que o commit toca antes do ato:
 
   Ran 1 shell command
 
-● Agent "Pousar a O204 na raia wt-bos" finished · 24m 6s
+● Tudo confere: só BACKLOG.md colide, zero modelo, nenhum dos cinco arquivos travados, sombra de hoje diverge=0. Levanto o arquivo de ato,
+  guardo meu BACKLOG e faço merge+deploy num ato só (L-107):
 
-✢ Compacting conversation… (6h 30m 52s · ↓ 707.2k tokens)
-  ▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 7%
+  Ran 1 shell command
+
+● Agora o ato: tirar meu BACKLOG do caminho, fast-forward e deploy encadeados, sem nada no meio:
+
+● Running 1 shell command…
+  ⎿  $ cd /home/ronald/saas-hasner
+     git stash push -m "docs da principal em curso (O145/avais) -- pouso O204" -- app/docs/BACKLOG.md \
+     && git merge --ff-only raia-bos \
+     && git log --oneline -1 \
+     && bin/deploy.sh --sem-migrate 2>&1 | tail -30
+
+✢ Wrangling… (6h 36m 22s · ↓ 716.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    2% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
