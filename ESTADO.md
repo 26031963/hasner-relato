@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 07/10/2026 20:55:45.**
+**Medido em 07/10/2026 21:01:01.**
 
 | | |
 |---|---|
@@ -113,38 +113,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-  Ran 1 shell command
-
-● Há lei, e é cadastro: ponto/catalogo/ausencias.py::parciais_vigentes() — "Tipos que o CADASTRO declara como parciais". Então não falta
-  lei: os dois sítios leem minutos em vez dela (LEI-AKITA 4 — "qual leitor não migrou"):
-
-  Ran 1 shell command
-
-● ponto/services/ausencia.py:139 já recusa minutos em tipo não-parcial na ESCRITA — então as 195 linhas são legado que o cadastro hoje
-  proíbe, e a dispensa as pune. Meço o dano provado:
-
-  Ran 1 shell command
-
-● Provado: 222 dia-colab / 763 lâmpadas / 86 colabs acusando furo sob ausência aprovada que o cadastro não declara parcial. É linha de
-  BACKLOG com número, não cura dentro da O218. Volto à bateria — os quatro checks antes de escrever:
-
-  Ran 5 shell commands
-
-● O fork já pousou no main (d36ae038 é ancestral) — lateral resolvida. Últimos dois dados antes de escrever:
 
   Ran 3 shell commands
 
 ● Agora os quatro cenários, cada um com a REGRA escrita antes da asserção:
 
-● Rodar a bateria com os quatro cenarios novos
-  ⎿  $ cd /home/ronald/saas-hasner && timeout 900 bash bin/suite.sh --dir /home/ronald/wt-lavra --only "ponto.tests.test_bateria_lavratura"
-     2>&1 | grep -v "^sem_celula\|^$" | tail -60
+  Ran 2 shell commands
 
-✶ Beboppin'… (2h 46m 56s · ↓ 246.5k tokens · deep in thought)
+● Dois defeitos meus, não do sistema: Ausencia.registrado_por é NOT NULL, e meu _regenerar escreveu o DNA à mão — violando o produtor único
+  (P13). A regeneração real passa por montar_dna:
+
+  Ran 5 shell commands
+
+● Corrijo os dois defeitos do meu teste — registrado_por e, no regenerado, chamar a porta em vez de escrever o DNA à mão (um escritor por
+  estado):
+
+  Ran 2 shell commands
+
+● 32/32 verde — os nove cenários do aval estão escritos. Item (c) fechado. Agora o item (d): ruff, selos de host, e os vizinhos que
+  enumeram ponto/tests/ (a armadilha "selo novo verde não prova vizinho"):
+
+  Ran 4 shell commands
+
+● Rodo os vizinhos estruturais e de query antes da suite inteira — e os 66 selos de host:
+
+● Rodar os vizinhos estruturais e de query
+  ⎿  $ cd /home/ronald/saas-hasner && timeout 900 bash bin/suite.sh --dir /home/ronald/wt-lavra --only
+     "ponto.tests.test_contract_juiz_celula ponto.tests.test_contract_juiz_ausencia ponto.tests.test_contract_no_batida_date
+     ponto.tests.test_contract_no_inline_turno_pairing ponto.tests.test_contract_porta…
+
+· Beboppin'… (2h 52m 12s · ↓ 255.3k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                   11% until auto-compact
+                                                                                                                    2% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
