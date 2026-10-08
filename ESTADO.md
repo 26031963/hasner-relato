@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 06:45:45.**
+**Medido em 08/10/2026 06:50:45.**
 
 | | |
 |---|---|
@@ -36,6 +36,7 @@ e7dcd970 [O167] pouso 5, a juncao da raia de agente: os quatro cadastros ficam s
  M app/core/esteira_vigia.py
  M app/docs/HANDOFF-SESSAO.md
  M app/docs/PROMPTS.md
+ M app/docs/RELATO.md
  M bin/sombra.sh
 ?? app/core/tests/test_no_relato_tem_secao_pinada.py
 ?? esteira.pausada
@@ -114,38 +115,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  app/core/esteira_vigia.py do disco no host. Logo a cura não precisa de deploy (nem bin/deploy.sh o alcança), e a prova é o próximo alarme
-  cair dentro da seção nova.
 
   Ran 1 shell command
 
-● O timer confirma: última corrida 06:40:44, próxima 06:45:00 — processo novo a cada tick, sem restart, e a prova chega em minutos.
-  Registro os dois avais no mesmo turno (sem | nas células, que desloca a tabela):
+● :100 mostra que o label posicional vai por --only; o -- serve a flags. Corrijo:
 
   Ran 1 shell command
 
-● Agora a cura, em cópia do HEAD (LEI-AKITA 10), com RED primeiro. A seção pinada não pode conter palavra de ATOS (## a torna forte no
-  portão), então o nome é ## ALARMES DA ESTEIRA:
+● Selo GREEN: Ran 5 tests / OK, rc=0, pela porta canônica com a trava. E o timer já deve ter disparado desde que a cura foi ao disco — essa
+  é a prova que o advisor pediu:
 
   Ran 1 shell command
 
-● Cura montada (+34/-3, compila). Agora o RED — e ele roda standalone, importando o módulo por caminho, porque o próprio arquivo declara
-  "so stdlib": assim provo RED no código do HEAD sem escrever na árvore antes do commit:
+● O tick de 06:45:44 rodou depois da cura, mas não alarmou: o throttle é cada_min=60 e o último alarme foi 05:55, então o próximo vence
+  ~06:55. Prova pendente, e eu a espero pelo arquivo. Enquanto isso, as 90 órfãs — passo de DADO, com prova de conservação:
 
   Ran 1 shell command
 
-● RED evidenciado no HEAD — 6 falhas, inclusive a literal "(iii) MORDE: o alarme ficou na ULTIMA linha -- depositado no EOF" — e GREEN na
-  cura (0 falhas). Aplico no ato do commit e escrevo o selo que vai para a suite:
+● Conservação provada: 90 órfãs recolhidas, multiset de alarmes 126 → 126, as 4.975 linhas que não são alarme idênticas e na mesma ordem, e
+  delta de +23 B — exatamente ## ALARMES DA ESTEIRA\n\n. Topo (1-154) byte-idêntico, seção em 155. Agora os portões:
 
-  Ran 1 shell command
+● Rodar portoes e ler o selo do PROTEGE
+  ⎿  $ cd /home/ronald/saas-hasner
+     echo "=== PAREI segue nas 40 primeiras? ==="
+     head -40 app/docs/RELATO.md | grep -n 'PAREI' | head -3 || echo "(sem PAREI -- nada parado)"
+     echo
+     echo "=== portao de publicacao ==="
+     python3 bin/relato_afirma_com_prova.py app/docs/RELATO.md app/docs/RELATORIOS-PLANO.md 2>&…
 
-● ruff vive no container, não no host. Rodo o lint e o selo novo, este pela porta canônica com a trava:
-
-  Running 1 shell command…
-
-· Cultivating… (37m 9s · ↓ 79.5k tokens)
+✶ Compacting conversation… (42m 9s · ↓ 86.3k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱ 85%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    6% until auto-compact
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
