@@ -1,5 +1,73 @@
 # RELATO — esteira saas-hasner
 
+**O211 POUSO B -- DIFF DE FROTA MEDIDO E PUBLICADO, e o apply e o deploy DESTE commit. Com ele a O211
+fecha: a regua de dinheiro sobe da EMPRESA, e a praca so entra por linha DECLARADA.**
+**DIFF ANTES DO APPLY, como a DINHEIRO-EM-COMPETENCIA-ABERTA manda** (artefato inteiro em
+`logs/o211b_diff_frota_081125.txt`): medido 08/10 11:25 na SOMBRA (dump de hoje 04:00), competencia **10**,
+`antes`=HEAD e `depois`=a fatia, pela porta unica `bin/simular_folha.sh par o211b` -- UMA trava, `rc=3` que
+e **IMPACTO, nao falha**.
+- **TXT:** `emp2 DIFERENTE` (143 -> 143 linhas, `entraram=0 sairam=0 mudaram=46`, todas por **horas**, 0
+  por motivo e 0 por apto_folha); `emp3 IGUAL`; `emp4 IGUAL`. `TXT=48 RETIDOS=46 DIFF_FOLHA=94`.
+- **GRAVADO** (`ponto_fechamentomensal`, campo a campo, 587 colabs = **546 ativos + 41 desligados**):
+  `emp1` ZERO, `emp3` ZERO, `emp4` ZERO; `emp2` **UM** campo mexido -- `horas_noturnas`, **70 colabs**,
+  soma do delta **-1204.86**.
+- **VEREDITO=LIMPO, e o veredito sao TRES perguntas, nao uma.** (1) SUBCONJUNTO: `universo=587
+  TROCAM_DE_REGUA=248 MEXERAM_CENTAVO=70`, e `MEXERAM_E_NAO_TROCAM_DE_REGUA=0 []` -- ninguem move centavo
+  sem que a regua dele tenha trocado. (2) DISCRIMINANTE por empresa: `emp1 4/2/0 · emp2 445/243/70 ·
+  emp3 117/0/0 · emp4 21/3/0`, todas as trocas `'legal' -> 'Sindicato dos Vigilantes de Londrina'` -- a
+  **emp3 e `clt` e da ZERO troca e ZERO centavo**, que e o discriminante que a lei pede. (3) por que os
+  178 mudos sao mudos: 157 tem `horas_noturnas` ZERO no antes, e os 21 restantes caem fora do alcance das
+  duas clausulas.
+- **AS DUAS CLAUSULAS, nomeadas, porque e o que explica as razoes NAO uniformes:** a `cl.38-d` tira a hora
+  reduzida **so no 12x36** (razao exata 60/52,5 = 1,142857) e a `cl.10` tira a prorrogacao **so depois das
+  05h**. Quem acumula as duas cai ~1,37x; quem acumula uma cai 1,14x; quem nao alcanca nenhuma fica em
+  ZERO **estando com a regua trocada**. Nao e dispersao, sao duas regras com alcance diferente.
+- **os dois casos que exigiram medicao e nao fe.** `col457` apareceu como `mexeu e nao troca de regua` no
+  censo das 11:02 e nao era deriva: era **COBERTURA do censo** -- ele e DESLIGADO e eu havia pedido
+  `situacao='ativo'` (546 de 587). Recenseado no universo EXATO do DIFF, o fora caiu a 0 e os TROCAM
+  subiram de 211 para 248. `col373` troca de regua, tem 1,30 h noturna e nao moveu: a noturna dele nasce
+  em dias cujo **DNA diz `tipo_ciclo='6x1'`** (`ec#325` ate 06/10, `ec#1378` em 12x36 so a partir de
+  07/10) e termina 22:30 -- a 38-d so alcanca 12x36 e a prorrogacao so alcanca hora pos-05h. **ZERO e a
+  resposta certa.**
+- **e um limite do MEU instrumento, nomeado em vez de escondido:** a coluna `ciclo` do censo le
+  `EscalaColaborador.ativa` enquanto o motor le o **DNA do DIA**. E derivacao paralela: ela **explica,
+  nunca julga** -- o veredito usa a assinatura da regua, nao essa coluna. Foi ela que me fez chamar o
+  `col373` de 12x36.
+**PAUTA DP DA 09, com os DOIS numeros** (artefato em `logs/o211b_pauta_dp_09_081130.txt`): medida 08/10
+11:30 na sombra pela porta declarada (`recalcular_fechamento_mes(9, 2026, permitir_exportada=True,
+somente_leitura=True)`), com `ESCRITAS_NA_09_NOS_ULTIMOS_30MIN=0` carimbado nas DUAS rodadas. A 09 e
+**EXPORTADA e nao foi tocada** -- os 3 hashes vigentes estao no artefato, intactos (`emp2 361d0f96…` 210
+linhas, `emp3 5c503b95…` 86, `emp4 84c78cd0…` 9). Leitura x leitura: `emp1`, `emp3` e `emp4` ZERO;
+`emp2` tres campos -- `horas_noturnas` **80 colabs -2340.85**, `horas_extras_100_noturna` **9 colabs
+-19.25**, `horas_extras_50_noturna` **1 colab -0.24**; `COLABS_QUE_MEXERAM_NA_09=82`. **Isto nao e ordem
+de pagamento e nao pede trava**: e a diferenca entre o que o Dominio JA RECEBEU e o que a conta de hoje
+diria, com os dois numeros na mesa, como a REGEN-EM-EXPORTADA manda. Se entra por correcao LA, por TXT de
+retificacao, ou se fica na 10, e seu e do DP.
+**O DEPLOY E O APPLY -- mas APPLY DE LEITOR, nao de GRAVADO, e a diferenca importa.** No reload todo
+leitor vivo (espelho, PDF, tela, export) passa a responder com a regua da empresa; o
+`ponto_fechamentomensal` de prod **nao se move sozinho**, e isso e MEDIDO e nao suposto:
+`config/crons.py` declara `recalcular_fechamento` em `FORA_DE_PIPELINE` com o motivo escrito -- *"quem
+decide QUANDO uma competencia se recalcula e o DP"* -- e o `pre_fechamento --apply` das 05:10 escreve
+**PAUTA**, nao fechamento (`--apply` help: *"Escreve a pauta do DP"*; zero ocorrencia de
+`FechamentoMensal`, de `recalcular_fechamento_mes` e de `.save(` no arquivo). O gravado anda no **ato do
+DP**, e e para esse ato que a reversao em `logs/` existe.
+**ACHADOS REGISTRADOS, NAO CURADOS** (regra de negocio fora do pedido pede o seu `!`), somando aos tres do
+pouso A: (4) **a guarda da L-092 recusa `somente_leitura`** -- para medir a 09 sem gravar eu tive de passar
+`permitir_exportada=True` junto, isto e, a porta nao distingue *"ler o que daria"* de *"gravar na
+exportada"*, e quem so quer LER precisa pedir permissao de ESCRITA; (5) `core.AplicacaoConvencao` nasceu
+com **0 view, 0 rota, 0 template** (censo na arvore, 08/10) -- a unica porta hoje e o admin do Django, que
+e exatamente o que a L-006 recusa, e por isso o **O223** nasce neste commit como item de fila 2 em vez de
+a divida sumir junto do carimbo FECHADA.
+**UM VERMELHO QUE NAO ERA VERMELHO, e o erro era meu:** um `ImportError` no meio da construcao parecia
+RED de teste e era **colisao de `# -*- coding: ascii -*-`** -- arquivo que declara ascii e recebe um byte
+nao-ASCII falha no IMPORT, com cara de ERROR de suite e corpo de lapso de autoria. Aconteceu duas vezes
+hoje, e fica aqui para nao gastar uma terceira meia hora.
+**O QUE A MIGRATION 0056 CUSTA NO PORTAO, e sai dito antes de doer:** ela pousa **depois** do dump de hoje
+(04:00), entao o proximo `bin/sombra.sh --conferir` ou `--refazer` puro vai carimbar **`d_mig=1`** -- nao
+e dano, e o portao certo dizendo a verdade (o `sombra.sh` **compara** `django_migrations` prod x sombra e
+**nunca migra a sombra**). Qualquer deploy a mais hoje exige **`--refazer --dump-agora`** primeiro, e a
+espera e **pelo ARQUIVO** `logs/crons_em_curso/sombra.sh_-.*`, nunca por `pgrep`.
+
 **O211 POUSO A NO AR, e o commit do marco e ESTE -- o CADASTRO da aplicacao de convencao nasce, e nenhum centavo se move.**
 **PROVA:** medida ao vivo as 09:0x de 08/10 contra o schema `juliani`, nao de memoria: `AplicacaoConvencao`
 com **3 ativas / 3 totais** -- `emp1 -> sind2 praca=None`, `emp2 -> sind2 praca=None`,

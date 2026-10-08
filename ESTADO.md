@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 11:37:51.**
+**Medido em 08/10/2026 11:43:00.**
 
 | | |
 |---|---|
@@ -36,6 +36,7 @@ a96a5256 o segundo escritor do RELATO em bin/ cai: o vigia DELEGA o no_relato, e
  M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
  M app/docs/LEIS.md
+ M app/docs/RELATO.md
  M bin/sombra.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -114,8 +115,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-● Agora o LEIS vivo, com os selos de host logo atrás.
-
   Ran 2 shell commands
 
 ● Zero vermelho nos selos de host. BACKLOG:
@@ -132,17 +131,19 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● BACKLOG patched. Selos de host que leem o BACKLOG:
 
-  Rodar a pasta inteira de selos de host · 42s
+  Ran 11 shell commands
+
+● Agora o RELATO com o DIFF publicado ANTES do apply:
+
+  Rodar o selo do RELATO e a pasta de selos · 1m 12s
   ⎿  $ cd /home/ronald/saas-hasner
-     ruins=0
-     for s in bin/tests/*.sh; do
-     out=$(bash "$s" 2>&1); rc=$?
-     if [ $rc -ne 0 ]; then ruins=$((ruins+1)); echo "=== RED $s rc=$rc"; echo "$out" | tail -15; fi
-     done
-     echo "selos de host com rc!=0: $ruins" (42s)
+     python3 bin/relato_afirma_com_prova.py 2>&1 | tail -15; echo "rc=$?"
+     echo '=== pasta de selos ==='
+     r=0; for s in bin/tests/*.sh; do o=$(bash "$s" 2>&1) || { r=$((r+1)); echo "RED $s"; echo "$o"|tail -12; }; done; echo "rc!=0: $r" (1m
+     12s · 4 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Cultivating… (5h 29m 15s · ↓ 625.1k tokens)
+✻ Cultivating… (5h 34m 23s · ↓ 635.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
