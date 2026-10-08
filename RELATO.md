@@ -28,6 +28,115 @@ chamado pode NASCER numa competencia que o Dominio ja pagou?** -- nao ha L-NNN q
 e decisao tecnica (e dinheiro do colaborador na mesa do DP). Nao devolvo turno por isso
 (PAREI-DE-LEI-NAO-DEVOLVE-TURNO): a pergunta fica aqui com os numeros e a esteira **segue a O211**.
 
+## O218 — **APLICADO EM PROD, E A PROVA DEPOIS** (07/10 22:53→23:1x, **MARCO FECHADO**, placar 15/20)
+
+**PROVA:** GRAVADO em prod, lido do banco depois do ato -- `celula#118980 ata.minutos_realizados=541` e `celula#118981 =545` (col146, 28 e 29/09; eram 0 e 894), as duas `veredito=concorde via=cartorio`, `julgada_em=2026-10-07T22:53:32`; ata x autoridade na frota da 10 = **0 divergente em 9.008 dia-colab** de 570 colabs, soma `2.251.838 = 2.251.838` min (delta +0); 09 exportada `hash=dfd8d145c3d9af35fc768e765fe38461 linhas=17332` **antes e depois**; `contratos_estruturais: 15/20 verdes` pela funcao real.
+
+Condicao 4 da `DINHEIRO-EM-COMPETENCIA-ABERTA`, fechando as quatro: o DIFF foi publicado ANTES (secao
+abaixo), a reversao foi gravada ANTES da escrita, a 09 exportada ficou INTACTA pelo hash nos dois
+lados, e aqui esta o resultado medido. Saidas integrais: `logs/o218_apply_prod_20261007.out`,
+`logs/o218_prova_col146.out`, `logs/o218_pontofixo_frota_10.out`, `logs/o218_dry_pos_apply.out`.
+
+**O ATO.** `570 colab(s) relavrados em 123 s`, ATA SO -- nenhuma linha escreveu `FechamentoMensal` nem
+`DiaPago`. `casados com a sombra (ata moveu exatamente o esperado): 24 colab(s)`,
+`explicados pelo livro-caixa (fato novo depois do dump): 0` e `COBERTURA DO ESPERADO: 24 de 24
+colab(s) previstos foram visitados`. Nenhuma linha de `PAREI` por colab -- que e o que o script
+levanta quando um colab move fora do previsto --, entao nada precisou ser desfeito. A
+emissao saiu IDENTICA a prevista: `chamado +13 -0` (pk 29431-29443), `pergunta +23 -0` (pk
+40926-40948), `disputa +5 -0` (pk 6518-6522). Cartorio: `julgadas=8609 carimbadas=9008 protestos=823
+emitidos=85 nunca_bateu=399 vetados=9`. Reversao em
+`/app/logs/o218/reversao_frota_20261007_225332.json` (9.008 celulas x 11 campos), resultado em
+`/app/logs/o218/resultado_20261007_225537.json`. **09 EXPORTADA antes e depois:
+`hash=dfd8d145c3d9af35fc768e765fe38461 linhas=17332`, INTACTA** -- o mesmo valor que a sombra mediu,
+o que diz que as duas bases partiam do mesmo lugar.
+
+**A LINHA QUE EU NAO ENTENDI NA HORA, e por que ela NAO contradiz o DIFF.** O resumo do apply diz
+`prod observou +1499 min · a sombra previu +1499 min (em 24 dia-colab)` e o DIFF dizia **+2.851 min em
+40 dia-colab**. Eu nao declarei prova antes de explicar, e a explicacao esta no filtro do proprio
+acumulador (`logs/o209_apply_frota_prod.py:447-451`): ele soma **so os dia-colab SEM lacuna**, isto e
+sem fato de prod nascido depois do dump. O numero se mediu na FUNCAO REAL, rodando o DRY (leitura
+pura) depois do apply: **17 dia-colab com lacuna**, e os fatos sao todos de `22:53`-`22:55` com pk
+29431-29443 / 40926-40948 / 6518-6522 -- **a cobranca que o PROPRIO ato acabou de emitir**. Um deles,
+col868 em 26/09, e prod andando e nao o ato: `chamado#29445`, pk **acima** do maior que o ato criou
+(29443), com `criado_em=atualizado_em=resolvido_em=2026-10-07T23:00:21` -- nasceu e fechou no mesmo
+instante, pelo lote `*/5`; na mesma linha o cron ainda re-julgou `pergunta#40938 julgado_em=23:00:21`,
+uma pergunta que o ato criou minutos antes.
+Descontado ele, eram **16 no instante do apply**, e a aritmetica fecha pelo pacote: **24 sem lacuna
+(+1.499 min) + 16 com lacuna (+1.352 min) = 40 dia-colab (+2.851 min)**. A soma e um SUB-RECORTE do
+DIFF, nunca um conjunto diferente: a conferencia FORTE e `mov == esp` por colab, e ela cobre os **40**
+-- os 24 colabs casaram em TODOS os seus dias, inclusive nos 16 que a soma descontou. (Cuidado de
+leitura: `24 colab(s)` casados e `24 dia-colab` contados sao coincidencia de numero, nao a mesma
+coisa.)
+
+**ACHADO DE INSTRUMENTO, nomeado e nao curado neste pouso:** `lacunas()` nao distingue fato nascido
+PELO ato de fato nascido em prod, e por isso o apply desconta da propria soma justamente os dias em
+que ele mesmo cobrou. Nao e dano -- a guarda forte nao usa esse recorte --, e' um medidor que
+subdeclara a propria cobertura. O conserto e barato e o material ja esta no script (`PK_ANTES` e
+`ch_antes_colab`, gravados antes da escrita): filtrar por pk. Vai como INSTRUMENTO, em pouso proprio
+(L-105), nunca junto do produto.
+
+**A PROVA DO PONTO FIXO, na funcao real, em PROD.** `ponto/services/cartorio.py::julgar_colab`
+chamado DUAS vezes seguidas no col146, com reversao gravada antes
+(`/app/logs/o218/reversao_col146_20261007_230643.json`):
+
+| passada | ata se moveu | veredito se moveu | delta de conjunto | #118980 | #118981 |
+|---|---|---|---|---|---|
+| A | 0 dia | 0 dia | `chamado +0 -0 · disputa +0 -0 · pergunta +0 -0` | ata=541 concorde | ata=545 concorde |
+| B | 0 dia | 0 dia | `chamado +0 -0 · disputa +0 -0 · pergunta +0 -0` | ata=541 concorde | ata=545 concorde |
+
+Os dois dias golden do aval, lidos do banco de prod: **celula#118980 (col146, 28/09)
+`ata.minutos_realizados=541`** e **celula#118981 (29/09) `=545`**, as duas `veredito=concorde
+via=cartorio`, `julgada_em=2026-10-07T22:53:32`. Era `0` e `894` antes do ato -- a lampada invertida
+que a O217 curou na origem. A 09 nao e alcancada **por construcao**, e isso se prova
+estruturalmente em vez de por hash: a lista que vai ao cartorio e filtrada por `data >= INI10` e tem
+`assert` em cima (`logs/o218_prova_col146.py:106`); 28 e 29/09 estao na competencia **10**
+(21/09..20/10), nao na 09.
+
+**O PONTO FIXO NA FROTA, que e o que fechou a celula.** Sonda somente leitura em prod
+(`logs/o218_pontofixo_frota.py`, 37 s): **9.008 dia-colab, 570 colabs, 0 sem lavra, 0 DIVERGENTE**,
+soma `ata 2.251.838 min · autoridade 2.251.838 min`, delta **+0**. O denominador se abre, porque
+metade dele e um *"nao sei"* que **nao se cala** (memoria `nao-sei-impossibilidade-vs-cobertura`):
+**4.159** dia-colab em que a autoridade da numero e ele bate, mais **4.849** em que ela devolve
+`sem_turno` -- e **deles, 0 tem minuto gravado na ata**. Nao ha divergencia escondida por denominador
+menor; foi por isso que a sonda ganhou esse contador antes de eu declarar o numero. Contra o
+`fd6c8c0e`, que mediu **2 de 7.859**: e o MESMO universo em datas diferentes (a janela julgada cresce
+um dia por dia), e os 2 eram exatamente o col146 em 28 e 29/09.
+
+**O PLACAR, pela funcao real.** `core/contratos_estruturais.py::linha_do_placar()` no `saas_core`:
+`contratos_estruturais: 15/20 verdes` (`verdes=15 total=20`, declaradas 17), e a LINHA HAIKU
+acompanha sozinha, porque monta o rotulo com `total()` no ato: `arquitetura: 15 de 20`, `faltam 5`
+(batida e escala x um juiz, chamado x um juiz e x um escritor, folha/export x um juiz). A celula
+**(celula/precedencia, um juiz por pergunta)** virou `verde=True` em commit SEPARADO do marco, depois
+de medida -- o censo dela ja estava em zero desde 05/10 (`PENDENTES['celula/precedencia'] == ()`,
+`len(PENDENTES_CELULA) == 0`), e o que faltava era EFEITO. Selos: 29 testes OK em
+`core.tests.test_selo_contratos_estruturais`, `ponto.tests.test_contract_juiz_celula`,
+`core.tests.test_haiku_contratos_estruturais` e `core.tests.test_haiku_contador_ordem`.
+
+**O QUE A CELULA NAO AFIRMA, e esta escrito nela.** O **VEREDITO** do dia nao e ponto fixo em UMA
+passada. Medido NA SOMBRA, relavrando a frota tres vezes seguidas: a **2a** move
+**31 dia-colab de 9.008 carimbados, em 14 colabs** -- todos `furo -> cobrado` com `real 0 -> 0`, soma
+**+0 min** (`logs/o218_idempotencia.out:33-71`) --, e a **3a** move **ZERO**
+(`logs/o218_idem3.out`). Converge em duas, nao oscila. A causa e
+`ponto/services/cartorio.py:637`, que le o numero de chamados VIVOS que a propria lavratura acabou de
+criar -- regra de **B5.3c (27/08)**, anterior a esta fatia (`git diff fd6c8c0e` nos tres arquivos nao
+tem uma linha de `cobrado`).
+Isso e a obra **O222** e nao toca a celula: ata, lampadas e minutos -- que e o que *"quantos minutos o
+dia realizou?"* pergunta -- fecham na PRIMEIRA passada.
+
+**A CLAUSULA `dias com ata de regra antiga` NAO CAI EM SILENCIO.** Ela so e computavel quando a
+VERSAO da regra for insumo da impressao, que e o 5o insumo da **O219** -- a casa dela e la, nao aqui.
+O que a O218 entrega no lugar e o proxy por competencia, medido pelo mesmo teste de ponto fixo: **10
+= 0 de 9.008**, **09 = 424 de 17.330 (2,45%)**, **08 = 756 de 16.894 (4,47%)**
+(`logs/o209_conf_ata_3comps.out`, 119 e 145 colabs). As duas exportadas so
+caem relavrando ata de competencia exportada, que e outro marco -- a lei que o autoriza existe desde
+07/10 19:xx (**L-113**).
+
+**OS DOIS `best-effort falhou` DO ATO NAO SAO ACHADO NOVO:** `operacao=tipo_marco_divergente
+motivo=intervalo_saida`, `pergunta_id=36573` e `38273`, `causa=Exception('marcos_faltantes=S x
+ata=E')`. Sao os MESMOS dois ids, com a mesma causa, que o apply da O209 registrou em 05/10 18:0x e
+que ja viraram a obra **O213** (BACKLOG:364). Passaram por `core/observ.py::registrar_engolido`, com
+traceback -- nao e silencio. O censo que a O213 pede segue NAO feito, e nenhuma pergunta foi tocada.
+
 ## O218 — **O DIFF DE FROTA, PUBLICADO ANTES DO APPLY** (07/10 22:2x, base LIMPA, sombra do dump de 21:59:53)
 
 Condicao 1 da `DINHEIRO-EM-COMPETENCIA-ABERTA`. Saida integral em `logs/o218_diff_10_limpo.out`; as

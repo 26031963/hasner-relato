@@ -1,22 +1,15 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:31 AFIRMA ato sem PROVA ao lado -- ## O218 — **APLICADO EM PROD, E A PROVA DEPOIS** (07/10 22:53→23:1x, **MARCO FECHADO**, placar 15/20)
->
-> O RELATO nao entrou neste ciclo porque uma afirmacao de ato
-> (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
-> seguem valendo -- eles descrevem, nao afirmam ato.
-
-
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 07/10/2026 23:26:31.**
+**Medido em 07/10/2026 23:32:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `1b6d5d02 [O218] pouso da raia-lavra: a bateria da lavratura entra no main com o DIFF de frota ja publicado` |
+| `HEAD` local | `b4372615 [O218] o marco da lavratura: a celula do juiz da celula fecha por EFEITO MEDIDO, e o placar vai a 15/20` |
 | `origin/main` | `fd6c8c0e [O209] a conferencia do marco: NAO virou 15/20, e o que falta sao 2 dia-colab de 7.859` |
-| commits a subir (`ahead`) | **3** |
+| commits a subir (`ahead`) | **4** |
 
 ## Fabrica
 
@@ -29,20 +22,18 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+b4372615 [O218] o marco da lavratura: a celula do juiz da celula fecha por EFEITO MEDIDO, e o placar vai a 15/20
 1b6d5d02 [O218] pouso da raia-lavra: a bateria da lavratura entra no main com o DIFF de frota ja publicado
 107e3bb5 [O218] a bateria da lavratura: a passada 1 escrevia lampada nova com minuto velho, e o match do dia dependia de onde a janela comecava
 cd37557a [O220] a dieta de carga: a casa inteira se lia em 1,3 MB de prosa, e -275.549 B sairam sem que uma regra mudasse
 fd6c8c0e [O209] a conferencia do marco: NAO virou 15/20, e o que falta sao 2 dia-colab de 7.859
-212b25a7 [O209] a ata da frota na 10 relavrada em prod: 92 de 92 casados com a sombra e a 09 intacta
 ```
 
 ## `git status --short`
 
 ```
  M app/config/crons_duracao.json
- M app/core/contratos_estruturais.py
  M app/docs/HANDOFF-SESSAO.md
- M app/docs/RELATO.md
  M bin/sombra.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -135,9 +126,9 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-● Ler o trecho do movimento da 2a passada
-  ⎿  $ cd /home/ronald/saas-hasner && sed -n '28,50p' logs/o218_idempotencia.out; echo "=== 70,80 ==="; sed -n '70,80p'
-     logs/o218_idempotencia.out
+● Localizar o emissor real do cartório
+  ⎿  $ cd /home/ronald/saas-hasner && grep -n "emissor" app/ponto/services/cartorio.py | head -25; echo "=== quem chama julgar_colab com
+     emissor real ==="; grep -rn "julgar_colab(" app --include=*.py | grep -v tests | head
   ⎿  Read docs/AVAIS.md (23 lines)
   ⎿  Referenced file ponto/turnos.py
   ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bl19mn3rk.output (15 lines)
@@ -146,7 +137,7 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Task "RED e construção do segundo intervalo" completed in background
 
-✢ Beboppin'… (5h 17m 42s · ↓ 458.8k tokens)
+· Beboppin'… (5h 23m 12s · ↓ 471.2k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
