@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 17:25:45.**
+**Medido em 08/10/2026 17:31:01.**
 
 | | |
 |---|---|
@@ -140,8 +140,8 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
      """A secao 8 (NO AR) e o fim da hora. Numeros todos MEDIDOS neste turno, nenhum de cabeca.
      A hor…
 
-* Compacting conversation… (4h 0m 6s · ↓ 417.6k tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 54%
+✢ Compacting conversation… (4h 5m 22s · ↓ 417.6k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱ 95%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                     0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
