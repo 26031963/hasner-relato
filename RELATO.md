@@ -73,6 +73,61 @@ existia e se tornou o caminho UNICO no dia que a ancora saiu de baixo dele.
   **zero revert executado**, logo o que se apaga e RUIDO, nao guarda. Lateral anotado, NAO curado: com
   o contador em 1699 o gatilho `== 2` esta morto ate um reset, e a cura acima e justamente quem volta
   a zera-lo.
+- **COMMIT 4 (instrumento, pouso PROPRIO -- L-105): o `bin/vigia_arvore.sh` para de REIMPLEMENTAR
+  o `no_relato`, e o selo que ficou cego para a cura 1 reabre o universo pela lei que ele mesmo
+  declara.** Duas curas de `bin/`, nenhuma de produto, e o motivo de nao terem vindo com os commits
+  2 e 3 e a L-105: instrumento nao pousa junto com produto.
+  - **o clone**: `bin/vigia_arvore.sh:160-168` tinha 9 linhas de python embutido que abriam o
+    RELATO, procuravam a ancora `## PENDENTES DO RONALD` e escreviam a linha -- byte-a-byte a
+    pergunta de que `app/core/esteira_vigia.py::no_relato` e o DONO. Medido: a ancora que ele
+    procurava tem **0** ocorrencia no RELATO do HEAD, pelo molde do proprio clone (inicio de
+    linha; ver PROVA abaixo), desde que a dieta de 02/10 (`2082e03d`) a
+    arquivou, e o clone caia para o EOF -- por ~6 dias TODO alarme desta casa foi depositado na
+    ULTIMA linha do arquivo, lido por fim, o oposto do que o proprio comentario prometia. A cura
+    da secao pinada (commit 3) **nao alcancaria** este arquivo: dois escritores do mesmo estado
+    mentem mesmo estando cada um certo, e curar so um lado e a meia-correcao que o CLAUDE.md
+    proibe nominalmente. Agora ele DELEGA (`python3 -c` que importa `core.esteira_vigia` e chama
+    `ev.no_relato`), sem `2>/dev/null` -- erro de delegacao tem de aparecer. Saiu tambem o
+    `RELATO=$R/app/docs/RELATO.md` da linha 24: **0 usos** no codigo depois da cura, e era uma
+    segunda declaracao de onde o RELATO mora (L-111).
+  - **o censo que licenciou a cura estreita** (MEIA-CORRECAO exige censo fechado ANTES): os
+    escritores do RELATO em `bin/` sao tres. `relato.sh:88` escreve `$TMP/ESTADO.md`, pergunta
+    outra. `deploy_agendado.sh:33-47` escreve no RELATO mas na secao PROPRIA que ele cria
+    (`## DEPLOYS AGENDADOS` = **1** no HEAD), com queda para `## NO AR HOJE` = **0** -- latente,
+    fica como lateral nomeada, nao e o alarme desta casa.
+    PROVA: contado no RELATO do **HEAD** (`git show HEAD:app/docs/RELATO.md`), nao no vivo -- a
+    prosa deste bloco cita as tres ancoras e contaria a si mesma, e foi essa contaminacao que
+    produziu 4/2/4 na primeira medicao. Molde = o do PROPRIO clone, `s.find('\n## <ancora>')`,
+    que e' INICIO DE LINHA: `## DEPLOYS AGENDADOS` = 1, `## NO AR HOJE` = 0,
+    `## PENDENTES DO RONALD` = **0** -- esta ultima e a ancora que o clone procurava, e por isso
+    ele caia para o EOF. Pelo molde LARGO (substring em qualquer posicao) as mesmas tres dao
+    2/0/2: os dois extras sao CITACOES em prosa, e seria esse o numero que diria "a ancora existe"
+    sobre uma ancora que nao existe. `vigia_arvore.sh` era o **unico** clone
+    da pergunta curada.
+  - **RED do selo novo** (`bin/tests/test_vigia_arvore_delega_no_relato.sh`): na copia do HEAD,
+    3 achados e `varredura: 1`; com a cura, `varredura: 0`. A varredura e sobre `bin/*.sh` e
+    `bin/*.py` **sem allowlist** e nao-recursiva, entao `bin/tests/` fica fora POR ESTRUTURA, nao
+    por excecao. O par que morde monta o clone velho em `tmp/mau` e o wrapper em `tmp/bom`.
+  - **SEM PROVA EM PRODUCAO, e o motivo e nomeado**: `bin/vigia_arvore.sh:16` sai cedo enquanto
+    `esteira.pausada` existir, e a pausa e do Ronald -- nao a levanto. A prova substituta e o
+    RED->GREEN do selo mais um smoke do wrapper com a string `python3 -c` LITERAL e `ev.RELATO`
+    apontado para uma COPIA: a linha pousou em 237, duas abaixo de `## ALARMES DA ESTEIRA` (235),
+    e `git diff --numstat -- app/docs/RELATO.md` provou o arquivo real intacto.
+  - **o selo que ficou cego, e o sitio era o FILTRO**: a pasta inteira voltou **1 VERMELHO de 64**
+    por causa do commit 1 --
+    `test_relato_guarda_pedido_de_patch.sh` recusou com `RED extrator cego:
+    core/tests/test_no_relato_tem_secao_pinada.py ... nao rendeu token nenhum`. O tripwire estava
+    CERTO em recusar; errado era a PORTA: o universo entrava por `"'RELATO.md'" in src`, criterio
+    pela FORMA, enquanto a lei escrita no cabecalho dele diz *"todo `app/*/tests/*.py` que LE
+    `docs/RELATO.md`"*. Meu teste monta a propria copia num tmpdir (`os.path.join(d, 'RELATO.md')`)
+    e nunca toca o vivo; o membro legitimo escreve `os.path.join(RAIZ, 'docs', 'RELATO.md')`.
+    Renomear o meu tmp seria band-aid no sitio errado. A porta nova (`_alcanca_o_vivo`) pergunta
+    por **AST** -- literal contendo `docs/RELATO.md`, ou `join` com `docs` E `RELATO.md` entre os
+    argumentos --, com par que MORDE proprio: se ela cegasse, o universo esvaziaria CALADO e o selo
+    passaria por zero declarado. MEDIDO na copia do HEAD: universo 2 arquivos / rc=1 antes,
+    1 arquivo / 4 contratos / rc=0 depois, e o membro legitimo manteve os 4 contratos de nome.
+  - **PROVA**: `bin/tests/` inteira na arvore com as tres curas -- **64 selos, 0 vermelho**.
+
 - **o que eu NAO fiz, de proposito**: dedup dentro do `no_relato` -- as 115 copias sao 115 EVENTOS
   reais, os 13 chamadores tem semanticas diferentes, e o acumulo e trabalho da DIETA, que passa a
   dever tambem o envelhecimento de linha de alarme DENTRO da secao pinada, pelo carimbo dela. E nada
