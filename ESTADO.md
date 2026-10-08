@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 09:40:46.**
+**Medido em 08/10/2026 09:46:01.**
 
 | | |
 |---|---|
 | `HEAD` local | `4adbbfff O211 pouso A: o CADASTRO da aplicacao de convencao nasce, e nenhum centavo se move` |
-| `origin/main` | `4d8e37f8 O158: o marcador ORDEM-VIVA-TOPO passa a ser AUTORIDADE, e a pergunta do selo muda em vez da tabela` |
-| commits a subir (`ahead`) | **1** |
+| `origin/main` | `4adbbfff O211 pouso A: o CADASTRO da aplicacao de convencao nasce, e nenhum centavo se move` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -112,14 +112,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-● O censo está limpo: fora da régua (já curada na cópia) e da tela que grava, ninguém lê VinculoSindicatoPraca para decidir dinheiro. Isso
-  sustenta a linha já decidida.
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-  Ran 10 shell commands
-
 ● A coluna que imprimi era dono (aplica), não PROTEGE — PROTEGE está vazia nessas leis. Vou ler as 8 pela posição que o selo usa.
 
   Ran 1 shell command
@@ -131,22 +123,30 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Escrevo o b6 na cópia agora — quatro âncoras, cada uma com assert count==1.
 
-● Escrever o patch b6 na copia do pouso B
-  ⎿  $ cd /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && python3 - <<'PY'
-     import py_compile, tempfile, os
-     alvo = 'pousoB/app/core/configuracao_efeito.py'
-     src = open(alvo, encoding='utf-8').read()
-     def troca(velho, novo):
-     global src
-     assert src.count(velho)…
+  Ran 3 shell commands
 
-✽ Cultivating… (3h 32m 9s · ↓ 430.4k tokens · thinking)
+● Medido na cópia, não assumido: consumido 27 → 26, cadastro 22 → 23, DECLARACAO 49 intacta, famílias idênticas, CONSUMIDO de folha/export
+  3 → 2.
+
+  Ran 11 shell commands
+
+● A matriz 2×2 é limpa: contra o HEAD a asserção invertida fica vermelha nos dois sentidos. Escrevo a inversão.
+
+  Ran 3 shell commands
+
+● A suíte passou: Ran 9982 tests in 738.187s / OK (skipped=42) — falta o control-plane. Sigo no pouso B.
+
+  Ran 2 shell commands
+
+● Background command "Empurrar o marco do pouso A pela regua" completed (exit code 0)
+
+✢ Cultivating… (3h 37m 25s · ↓ 450.0k tokens · still thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    9% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
