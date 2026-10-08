@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 19:29:01.**
+**Medido em 08/10/2026 19:34:31.**
 
 | | |
 |---|---|
@@ -113,44 +113,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  Ran 1 shell command
+
+● Ordem final registrada. O146 — HE-FIXA-DA-ESCALA-E-CADASTRO: as duas metades já avalizadas (cadastro pelo corte, e o cálculo próprio
+  dentro do motor pelo ! de 03/10 19:3x, com a zona inviolável destravada para este uso). Começo pelo censo no vivo, antes de qualquer
+  linha:
 
   Ran 1 shell command
 
-❯ aval Ronald: depois do item 1 da O214, a principal vai direto para a O146; os itens 2, 3 e 4 da O214 ficam depois da O146. a O204 segue
-  em paralelo na raia. segue a fila; PAREI so em lei ou !
-
-● Aval registrado — a principal vai direto para a O146; os itens 2-4 da O214 ficam depois dela. Entrego a raia e abro a O146.
+● permite_hora_extra existe e tem dois leitores — o nag e o rótulo da triagem. Mas a linha 58-59 promete "motor contabiliza a extra
+  normal". Vou conferir se o motor lê, e ler a L-097:
 
   Ran 1 shell command
 
-● O msg_commit.txt ainda diz RED=11 e não menciona o contador. Corrijo antes de entregar:
+● Confirmado: o motor não lê o campo, e escala/models.py:58-59 promete que lê. Agora o caminho de nascimento da HE, onde o "nasce
+  autorizada" tem de encaixar:
 
   Ran 1 shell command
 
-● A raia está em c849f340, atrás do main. Antes de entregar, preciso saber se ela carrega trabalho não pousado:
+● A arquitetura está clara: ponto/janela_he.py é o juiz puro e o motor o chama em 1305/1342 dentro do bloco da L-097. Agora a obra irmã e a
+  lei que protege os sítios (LEI-PROTEGE-SITIO é obrigatória antes do patch):
 
   Ran 1 shell command
 
-● A raia está limpa e é só velha — c849f340 é ancestral do main, nada se perde ao avançá-la. Mas bin/db_teste.sh:21 tem
-  NOME=juliani_db_test cravado: não existe flag para um segundo banco. Antes de soltar um agente que vai mergear e deployar sozinho em
-  prod, vou conferir a leitura:
+● Achado que muda o que eu ia construir: a O146 é fila única com a O145, e a célula dela diz "continuam uma fila so, mas com dois pousos",
+  com a O146 pousando depois. A O145 é bug PROVADO (HE-INVISIVEL). Vou conferir essa leitura antes de escrever o CASO:
 
-● Advising using Fable 5.1
+  Advising using Fable 5.1
 
-· Wrangling… (6h 3m 22s · ↓ 636.1k tokens)
+✢ Wrangling… (6h 8m 52s · ↓ 655.9k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-
-❯ aval Ronald: correcao de ordem: depois do item 1 da O214, a principal segue no ITEM 2 da O214 (autorizar por colaborador e periodo); a
-  O146 vem logo depois do item 2; os itens 3 e 4 ficam depois da O146. a O204 segue em paralelo na raia. segue a fila; PAREI so em lei ou
-  !
-  ctrl+x ctrl+s to send now
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ Press up to edit queued messages
+❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
+  ◯ fork  Grepping measured numbers in relato_o204.md                                                            2m 52s · ↓ 162.9k tokens
   ⧉  index
 ```
