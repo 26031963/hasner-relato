@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 13:35:31.**
+**Medido em 08/10/2026 13:41:01.**
 
 | | |
 |---|---|
@@ -33,7 +33,9 @@ RELATO, com a lista de nomes do banco como autoridade._
 
 ```
  M app/config/crons_duracao.json
+ M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/PROMPTS.md
  M bin/sombra.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -137,16 +139,16 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Task "RED e construção do segundo intervalo" completed in background
 
-● Ver a cauda do PROMPTS e o bloco OBRAS do BACKLOG
-  ⎿  $ cd /home/ronald/saas-hasner/app/docs && tail -12 PROMPTS.md && echo "=========== BACKLOG OBRAS: cabecalho e vizinhos de O146
-     ===========" && grep -n "O146\|^## OBRAS\|^### \|^| *O1[45][0-9]" BACKLOG.md | head -40
+  Searched for 2 patterns, read 3 files, ran 21 shell commands
 
-· Wrangling… (9m 52s · ↓ 17.7k tokens · thinking)
+● Advising using Fable 5.1
+
+✢ Wrangling… (15m 22s · ↓ 26.7k tokens)
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
