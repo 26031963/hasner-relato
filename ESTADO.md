@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 18:57:01.**
+**Medido em 08/10/2026 19:02:31.**
 
 | | |
 |---|---|
@@ -111,42 +111,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Background command "Esperar pelo arquivo de sinal do push" completed (exit code 0)
+
+  Listed 2 directories, ran 10 shell commands
+
+● O item declara um contador "esperado 0" no PRONTO. Ele cabe no mesmo sítio e lê a autoridade persistida — sem segunda regra:
+
+  Ran 2 shell commands
+  ⎿  Read docs/AVAIS.md (23 lines)
+  ⎿  Referenced file ponto/tests/test_o214_ponta_pequena.py
+  ⎿  Referenced file ponto/models.py
+  ⎿  Referenced file ponto/management/commands/recusar_ponta_pequena.py
+  ⎿  Referenced file config/crons.py
+
+● Task "RED e construção do segundo intervalo" completed in background
+
+● Background command "Rodar os vizinhos do campo na copia curada" completed (exit code 0)
+
+● Background command "Esperar o veredito dos vizinhos por arquivo" completed (exit code 0)
 
   Ran 1 shell command
 
-● Pouso do instrumento no remoto (1c27b268..1b485f9c, rc=0). Marco fechado — rodo o handoff:
+● O contrato da casa morde a minha cura — e está certo. Deixe-me ler o que ele aceita:
 
-  Ran 1 shell command
+  Searched for 1 pattern, ran 4 shell commands
 
-● MARCO FECHADO — pode compactar.
+● Handlers só da stdlib (RotatingFileHandler/StreamHandler, nenhum () próprio, nenhum filtro) — e esses guardam emit internamente via
+  Handler.handleError. O try/except era medo, não tratamento: cura na origem, sem allowlist.
 
-  Agora curo os selos: tiro o import morto, e escopo as duas varreduras AST à função que faz a pergunta (fromisoformat aparece em 7 sítios
-  legítimos de api/views.py, sobre data, não sobre hora de aparelho):
+  Running 1 shell command…
 
-  Ran 5 shell commands
-
-● O RED está nomeado — 11 vermelhos, inclusive o dedup engolindo uma batida (['09:00'] != ['05:00','23:00']). Agora a cura na mesma cópia:
-
-  Searched for 2 patterns, ran 6 shell commands
-
-● Vizinhos ainda correndo. Escrevo a seção do RELATO enquanto isso:
-
-  Searched for 1 pattern, ran 9 shell commands
-
-● O contra-exemplo medido fecha o caso real do BO: 1791071932000 → 2026-10-03 20:58:52, que é exatamente a hora que o col218 bateu e não
-  foi gravada.
-
-● Achar onde moram os contadores da LINHA HAIKU
-  ⎿  $ ls core/ | head -40; echo "=== HAIKU:"; grep -rln "HAIKU" --include=*.py core/ bin/ 2>/dev/null | head; ls ../bin/ | grep -i haiku
-
-· Wrangling… (5h 31m 22s · ↓ 578.4k tokens · thought for 8s)
+✢ Wrangling… (5h 36m 52s · ↓ 585.9k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    1% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
