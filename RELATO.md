@@ -5304,3 +5304,7 @@ pergunta e qual leitor nao migrou.
 **08/10 04:50 vigia da esteira (ALARME)** -- vigia sem efeito: 8 fatia(s) ativa(s) na fila e nenhum .out escrito ha 30 min -- a esteira esta parada e o vigia nao esta destravando.
 
 **08/10 05:55 vigia da esteira (ALARME)** -- vigia sem efeito: 8 fatia(s) ativa(s) na fila e nenhum .out escrito ha 30 min -- a esteira esta parada e o vigia nao esta destravando.
+
+## DEPLOYS AGENDADOS
+
+- 08/10 06:08 deploy agendado o221-pouso3, fatia o221-pouso3: rc=0 -- 08/10 06:08:15 O221 pouso 3 NO AR em 1f3d616f. Falta so o push, que e da mao. FIM

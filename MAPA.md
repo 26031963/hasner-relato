@@ -27,12 +27,12 @@ core/tests/test_selo_diagrama_do_codigo.py regenera os dois e compara.
 - ponto/signals.py::_nucleo_post_save_batida (post_save Batida)
 - ponto/signals.py::_realtime_post_save_batida (post_save Batida)
 - ponto/signals.py::_nucleo_post_delete_batida (post_delete Batida)
-- ponto/signals.py::_reconciliador_post_save_batida (post_save Batida)
 - ponto/signals.py::_nucleo_post_save_escala (post_save EscalaColaborador)
 - ponto/signals.py::_cartorio_post_save_batida (post_save Batida) -> julga
 - ponto/signals.py::_cartorio_post_delete_batida (post_delete Batida) -> julga
 - ponto/signals.py::_cartorio_post_save_ausencia (post_save Ausencia) -> julga
 - ponto/signals.py::_cartorio_post_delete_ausencia (post_delete Ausencia) -> julga
+- ponto/signals.py::_reconciliador_post_save_batida (post_save Batida)
 - chamados/signals.py::disputa_fechada_fecha_chamado_pai (post_save DisputaSupervisao)
 - chamados/signals.py::rebaixa_urgencia_ao_resolver (post_save ChamadoColaborador)
 - chamados/signals.py::resolve_perguntas_ao_resolver (post_save ChamadoColaborador)
