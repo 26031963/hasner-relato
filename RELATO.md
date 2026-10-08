@@ -1,5 +1,398 @@
 # RELATO — esteira saas-hasner
 
+## O214 ETAPA 0 + ITEM 1 — **A PONTA PEQUENA E RECUSADA PELO SISTEMA, COM TRILHA, E NENHUM CENTAVO SE MOVE** (08/10 14:2x→17:2x)
+
+**O aval dele de 05/10 18:0x, literal:** *"ITEM 1 PONTA PEQUENA: dia com minutos fora do marco <= limite e
+RECUSADO pelo SISTEMA (`DecisaoHE` estado `nao`, ator `sistema`, com trilha), uma vez por dia, idempotente,
+sem mover dinheiro; o limite e CADASTRO por empresa e nasce 15 -- campo NOVO, que nao se confunde com
+`colaboradores/models.py:69::janela_he_piso_min` (piso da janela, hoje 0)."* E a O214 abre com a **ETAPA 0 --
+ESMERIL, antes de qualquer tela**: o censo publicado de toda fonte de HE, com o juiz e os leitores de cada uma.
+
+> **PERGUNTA DE LEI NO TOPO, e o turno NAO volta** (PAREI-DE-LEI-NAO-DEVOLVE-TURNO): a **L-111** diz que sitio
+> com zero chamador de producao e um SEGUNDO juiz esperando leitor, e manda apagar no ato. O `ponto/calculador/`
+> (o `oraculo`) declara as **13 rubricas** e **nao paga nenhuma**: tem **2 chamadores de producao**
+> (`alimentacao` e a constante `NAO_JULGA_PONTUALIDADE` em `chamados/juizes.py:1079`), **nenhum deles de HE**.
+> Ele e o sucessor em construcao COM DIFF publicado — e a L-111 **nao distingue** o sucessor declarado do orfao.
+> **A pergunta:** sucessor declarado fica fora da L-111 enquanto o DIFF corre, ou a L-111 vale literal e ele
+> sai? Eu **nao** toquei nele, e a esteira seguiu.
+>
+> **`!` na mesa, sem travar a fila** (os dois entraram no `PENDENTES_RONALD.json`, e por isso aparecem no
+> `AVAIS.md`): **(a)** o cron da recusa esta **DECLARADO e NAO INSTALADO** — `bin/crons.sh install` e
+> all-or-nothing e ligaria tambem o `reverter_situacao_afastado --apply` (O91, espera o seu `!`), entao nada
+> dispara de madrugada e o item 1 age em prod **so pela mao**; **(b)** a **09** nao e tocada pelo item 1 porque
+> o **portao de frescor do proprio comando a recusa** (retrato de 01/10 12:04, exigencia "de hoje"), e relavrar
+> a foto de uma competencia EXPORTADA so para alimentar a recusa e decisao sua, nao minha.
+
+### 1. ETAPA 0 — O CENSO DE TODA FONTE DE HE, com o juiz e os leitores
+Medido na arvore viva em `037ae715` e em PROD por SQL de leitura (sem motor, sem trava).
+Vocabulario: o motor fala `horas_extra_*` (SINGULAR) e o gravado `horas_extras_*` (PLURAL) --
+a traducao mora em UM sitio, `ponto/services/fechamento.py:436-442`, e e por isso que grep pelo
+nome do gravado dentro do motor devolve 1 linha de comentario.
+
+#### A. AS DUAS AUTORIDADES DE DINHEIRO, e elas CONCORDAM (prova, nao suposicao)
+
+| guarda | quem escreve | quem le |
+|---|---|---|
+| `ponto.FechamentoMensal` (mes, Decimal) | `ponto/services/fechamento.py::recalcular_fechamento_mes` (+ a porta `restaurar_fechamento`) | TXT (`folha/export.py`), cartao e **PDF** (`relatorios/cartao_pela_celula.py::totais_da_folha`, desenhado por `relatorios/pdf_base.py::gerar_pdf_auditavel`), ranking (`folha/services/ranking_he.py`) |
+| `ponto.DiaPago` (dia, Float, `versao='motor'`) | `ponto/services/dia_pago.py` (bulk_create por competencia) | relatorio de periodo (`relatorios/views.py:486`), Gestao de HE (`ponto/services/gestao_he.py:226`), porta do export (`folha/porta_export.py:132,355`) |
+
+**PROPRIEDADE MEDIDA (L-110, "partes somam o total"), prod 08/10 12:2x, 10 rubricas x 2 competencias:**
+`sum(DiaPago) x FechamentoMensal` -- **09: 607 colabs, 0 divergencia em TODAS as 10**;
+**10: 587 colabs, 0 divergencia em TODAS as 10**; **0 fechamento sem lavra de dia** nas duas.
+NAO E VACUIDADE: sao **22.330 linhas-dia** com `he50=31,66 + he100=730,25 (dos quais 674,94 de
+feriado) + noturna=18.786,53 + folga_trab=1.859,96 + intra=2.323,64 + banco=-9.540,71` na 09 e
+`he50=5,96 + he100=20,33 + noturna=10.010,27 + folga_trab=331,40 + intra=1.284,30 + banco=-17.222,56`
+na 10. O `he50=31,66` da 09 CONFERE com a sonda dele de 05/10 17:59 (`31,68`) -- mesma grandeza,
+medida por caminho diferente.
+**MAS SAO TRES AUTORIDADES, e nao duas.** A terceira e o **MOTOR VIVO**: `ponto/services/espelho.py`
+nao le campo gravado nenhum -- ele apura na hora e MOSTRA o numero do motor rotulado (corte Ronald 23/09
+19:2x, e e por isso que o grep por nome de campo gravado nao o encontra). Logo a pergunta da etapa 0 nao
+se responde no armazem: ela ja tem **selo construido**, e a LEI-AKITA 4 manda cita-lo em vez de abrir
+corte novo -- `relatorios/management/commands/selo_leitores_no_mesmo_numero.py`, tolerancia ZERO, sem
+allowlist, que mede 6 pares de uma vez pela funcao que RECUSA o TXT (`folha/porta_export.py::medir`).
+**VEREDITO PUBLICADO (R4, `core/placar_estrutural.py:121-146`, remedido 03/10 15:3x):** CINCO pares em
+ZERO nas duas competencias (tela x PDF, cartao x TXT, fechamento x soma do DiaPago, topo x soma das
+linhas, calendario x espelho), o par 6 (app x tela) ZERO **por construcao** com selo de AST
+(`api/tests/test_r4_par6_app_le_a_tela.py`), e o par **espelho x DiaPago** com **1 divergencia na 09**
+(col935, 05/09, 10,97 h x 11,10 h = 8 min) e **6 na 10** (col882). O dono dessas 7 e **CADASTRO**, nao
+estrutura: marco de TEMPLATE num dia sem celula e fora do vinculo. **O que esta medicao de hoje
+acrescenta** e o par 4 remedido em 08/10 com universo MAIOR (607 e 587, frota inteira, nao os 214/21 do
+universo do TXT) e tolerancia 0,01 h: segue ZERO.
+**O SELO LAVRA CARIMBO e chama o motor**, entao ele se roda na SOMBRA, nunca em prod (sonda de frota com
+motor chegou a 266% de CPU com o cliente batendo ponto). Rodada de hoje: na fila, depois do refazer.
+
+#### B. AS 7 [nome] DE HE, com o JUIZ de cada
+
+| fonte | rubrica gravada | JUIZ (sitio unico) | observacao medida |
+|---|---|---|---|
+| excedente da jornada (1a faixa) | `horas_extras_50` | `motor_calculo_v2::PeriodoCalculo.minutos_extra_50` somado em `ResultadoMes.horas_extra_50` | a REGUA sobe do cadastro pela O211 que pousou HOJE: `core/regua_cct.py::regua_para` -> `get_motor_cct` (:380) injeta `regua_excedente`, e ele tem **dois** valores vivos -- `relogio` (piso legal) e `legais` (CCT vigente, martelo Ronald 30/07, `regua_cct.py:346`) |
+| **excedente SEMANAL (44 h)** | **nenhuma** | `motor_calculo_v2:2316,:2357` sob `regua_excedente == 'semanal_44'` | **NAO E FONTE VIVA: 0 produtor de `'semanal_44'` em producao** (censo 08/10, fora de teste e do proprio motor). O ramo existe e nenhum caminho de cadastro o alcanca -- a O214 nomeia "excedente semanal" como fonte a censar, e a resposta medida e *nao ha* |
+| excedente 2a faixa (dia normal) | `horas_extras_100` menos o recorte feriado | `ResultadoMes.horas_extra_100_normal` | NAO tem campo proprio no gravado: e DIFERENCA de dois campos, feita em `folha/export.py:279` |
+| dobra de feriado | `horas_extras_100_feriado` | `motor_calculo_v2::CICLOS_FERIADO_SIMPLES` (:2971) + `minutos_extra_100_feriado` | 674,94 h em 09 (cai o 07/09); 0,00 em 10 |
+| HE em janela noturna | `horas_extras_50_noturna`, `horas_extras_100_noturna` | `motor_calculo_v2::he_noturna` (:298) -- UMA funcao para as duas | **SUBSET, nao ADDEND**, declarado em `:258-262` e repetido pelos leitores (`folha/export.py:283`, `relatorios/views.py:524`). Somar = pagar duas vezes |
+| folga trabalhada | `horas_folga_trabalhada` | `resultado.periodos_ft` + `escala/services/escala_certa.py::escala_certa_no_dia` (CLASSE3-FOLGA-100) | a hora entra em `horas_trabalhadas` mesmo sem escala certa; o 100% e que depende da lavra |
+| intrajornada nao concedida | `horas_intra_indenizada` | `motor_calculo_v2::TOLERANCIA_INTRA_MIN` (:69) | 2.323,64 h na 09 |
+| banco de horas | `saldo_banco_horas` | `motor_calculo_v2:2628` (`saldo_total / 60`, no ramo COMERCIAL) -- no armazem e linha de AJUSTE do `DiaPago` (`tipo='ajuste'`), nao do dia | NEGATIVO nas duas competencias (-9.540,71 e -17.222,56) |
+| reflexo de extras no DSR | `horas_reflexo_dsr` | `motor_calculo_v2:1845-1861` (extras da semana / dias trabalhados), Sumula 172; zerado explicitamente em `:2636` no outro ramo | tambem linha de AJUSTE: so existe no MES |
+| **ponta fora do marco** | **nenhuma por si** | `ponto/janela_he.py` (`entrada_efetiva`, `saida_efetiva`, `marcar_pontas_fora`) + `ponto.DecisaoHE` | e a fonte da O214: ela CLIPA a ponta antes de virar `extra_50/100`. Leitor unico do clip: `motor_calculo_v2::_entrada_efetiva`/`_saida_efetiva` (:1280, :1315), e a `DecisaoHE` se consulta em UM sitio (:1253) |
+
+**Cadastro da janela** (`colaboradores/models.py:54-92`): `janela_he_ativa`, `janela_he_desde`,
+`janela_he_piso_min` (**hoje 0** -- piso da janela), `janela_he_teto_min`, `janela_he_saida_ativa`,
+`janela_he_saida_teto_min`. O LIMITE do item 1 (nasce 15) e campo **NOVO** e nao se confunde com
+`janela_he_piso_min` -- a O214 ja nomeia essa confusao, e a leitura de hoje confirma: o piso entra
+em `dentro_da_janela(minutos_antes, piso_min)`, que decide se a ponta e' DESPREZIVEL, nao se ela
+e' DECIDIVEL.
+
+#### C. SITIO COM REGRA PROPRIA DE HE -- censo fechado
+
+**O CRITERIO NAO E GREP DE NOME DE CAMPO** -- e foi essa a troca de pergunta do
+PLACAR-DA-S3-CONTA-EXERCICIO (29/09 15:1x): *(a) 0 leitor mostrando numero de motor sem o rotulo, (b) 0
+leitor com derivacao propria de dinheiro, por AST*. Entao o que responde aqui e o selo de AST, nao a
+minha varredura de texto -- e a memoria da casa diz por que (selo que varre texto morde a prosa que
+explica a cura, 5x).
+Para o censo FICA O MAPA, que e o que a etapa 0 pede: os 14 arquivos que nomeiam campo de HE fora de
+`tests/` e `management/`: `core/juizes.py` (registro), `folha/export.py`, `folha/porta_export.py`,
+`folha/services/ranking_he.py`, `ponto/calculador/{alimentacao,regras}.py`, `ponto/models.py`,
+`ponto/motor_calculo_v2.py`, `ponto/services/{dia_pago,fechamento,gestao_he}.py`,
+`relatorios/cartao_pela_celula.py`, `relatorios/views.py`, e
+`holerite/test_fech_encerrada_pelo_juiz.py`. Somam-se a eles dois leitores que o grep por
+campo NAO pega porque leem o JUIZ e nao a rubrica: `colaboradores/services/calendario.py:374`
+(`marcar_pontas_fora`, o mesmo par que o espelho le) e `api/views.py::api_espelho_v2` (o app, que o
+par 6 do R4 prova por AST que le a TELA).
+
+#### D. ACHADOS (registrados, com numero -- nenhum e cura desta etapa)
+
+1. **A LAPIDE DO `DiaPago` DESMENTE O VIVO.** `ponto/models.py:280` diz *"ESTA FATIA E ADITIVA:
+   nenhum leitor le daqui ainda, e e proibido ler antes de o contador da S2 zerar"* -- e hoje ha
+   **3 leitores de producao** (`relatorios/views.py:486`, `ponto/services/gestao_he.py:226`,
+   `folha/porta_export.py:132`). A proibicao caiu com a O-DIA-PAGO S2/S3 e a lapide nao foi
+   reescrita. Cura: o texto se corrige no proximo commit que tocar o arquivo, com a medicao citada.
+2. **`horas_extra_100_normal` nao tem campo gravado** -- o TXT o reconstitui subtraindo
+   (`folha/export.py:279`). Nao e derivacao paralela (subtracao de dois campos do mesmo guarda),
+   mas e a unica rubrica do TXT que nenhum leitor pode conferir contra o armazem sem fazer a conta.
+3. **`holerite/test_fech_encerrada_pelo_juiz.py` esta FORA de um diretorio `tests/`** e nomeia
+   campos de HE -- o `holerite` ja ficou fora da regua uma vez (achado H-c, 04/09).
+4. **`ponto/calculador/` (o `oraculo`) declara as 13 RUBRICAS e NAO as paga**: 2 chamadores de
+   producao (`alimentacao`, e a constante `NAO_JULGA_PONTUALIDADE` em `chamados/juizes.py:1079`),
+   nenhum deles de HE. E o sucessor em construcao COM DIFF publicado, nao um juiz escondido --
+   mas a L-111 fala de "sitio sem chamador de producao" e **nao distingue** o sucessor declarado
+   do orfao. **PERGUNTA DE LEI, no topo do RELATO, sem devolver turno.**
+### 2. O ITEM 1: tres pecas, e cada uma decide UMA coisa
+
+| peca | sitio | o que ela decide |
+|---|---|---|
+| **cadastro** | `colaboradores/models.py::Empresa.limite_decisao_he_min` (migration `0057`, **default 15**) | *quanto e "pequena"* — por empresa, com nome e leitor (L-012). **A edicao e o admin do Django**, nao uma tela: `colaboradores/admin.py` o poe no `list_display` e o `ModelAdmin` sem `fields` o deixa editavel; censo na arvore = 0 view, 0 rota, 0 template, igual ao vizinho `janela_he_piso_min`, que nunca teve tela. E por isso que a **L-006 segue PELA-METADE**, e quem a fecha e a tela da O223 — este commit nao melhora nem piora esse numero. **`limite 0` desliga a recusa automatica**, e isso esta declarado no emissor: cadastro que desliga nao e fallback, e cadastro |
+| **ator** | `ponto/models.py::DecisaoHE.origem` (migration `0071`, `admin`/`sistema`, `db_index`) | *quem decidiu* — a trilha que faltava para distinguir recusa do sistema de recusa de gente |
+| **porta** | `ponto/portas/he.py::recusar_ponta_pequena` | *se este dia pode ser recusado* — e e o UNICO sitio do `<=` |
+| **emissor** | `ponto/management/commands/recusar_ponta_pequena.py` | *quais dias chegam a porta* — e **nada mais**: ele declara no proprio docstring que nao tem regra propria e nomeia os quatro donos (`janela_he.py::marcar_pontas_fora`, `he_pendente_lavrado.py::apurar`+`lavrar`, a porta, e o campo de cadastro) |
+
+**O `dry_run` e o unico sitio do `<=`, e isso nao e conveniencia.** O comando precisa CONTAR antes de aplicar;
+a tentacao era ele comparar `minutos <= limite` por conta, que seria a SEGUNDA leitura da mesma regra
+(LEI-AKITA 2) com um caminho possivel onde a conta do ensaio e a do apply divergem e nada fica vermelho. Com o
+flag, o ensaio passa por TODAS as guardas da porta e devolve o que o apply devolveria, parando so antes de
+`_gravar`.
+
+**O QUE A PORTA NAO FAZ, e cada "nao" tem lei atras:**
+- **nao esconde o dia** — subir o `janela_he_piso_min` tiraria o dia da lista inteira: sem denominador, sem
+  trilha, invisivel. Aqui o dia FICA visivel com `estado='nao'` e os minutos gravados como foto: sai do
+  NUMERADOR (`pendentes`) e permanece no DENOMINADOR (`dias`). **Subir o piso ESCONDE; recusar REGISTRA** — e e
+  por isso que sao dois campos de cadastro e nao um;
+- **nao sobrescreve humano** — linha que existe, autorizada OU recusada, devolve `ja_decidido` e nao escreve
+  nada. Autorizado de 9 min CONTINUA autorizado;
+- **nao move dinheiro** — ela nao chama `recalcular_por_evento`, porque recusar e o PADRAO da L-097 (o minuto
+  fora da janela ja nao conta): o gravado ja esta como se recusado. **E isso e RED, nao promessa** — o comando
+  tira o `_hash_dos_fechamentos` antes e depois e sai com `SystemExit('O GRAVADO MUDOU …')` se mexer;
+- **nao mede nada** — `minutos` e `limite` vem de quem chamou, como na porta do admin e pela mesma razao.
+
+**OS PORTOES DO EMISSOR, na ordem em que ele os abre:** `limite 0` (cadastro desliga) → retrato inexistente →
+**frescor** (`_idade != _hoje` → *RECUSEI AGIR*) → **celula julgada** (`CelulaDia.veredito is not None`) →
+**turno encerrado** (`cartorio.marcos_vencidos(...)[1] == []`) → **ja decidido**. Os dois do meio sao a lei do
+**FATO ENCERRADO** da secao 6 do CLAUDE.md, e nao um teto por DATA: no cross-meia-noite o dia acaba antes do
+turno, e foi assim que 08/08 fez tres vitimas num dia.
+
+### 3. OS 6 REDs DELE, nomeados — e quais sao do item 1
+
+| # | o RED dele (literal) | de quem | onde ele mora |
+|---|---|---|---|
+| 1 | *"9 min fora -> recusado pelo sistema, sai da fila, dinheiro IDENTICO"* | **item 1** | tres sitios, um por verbo: `PontaPequenaDaPortaTest::test_RED_9_min_sao_RECUSADOS_pelo_SISTEMA_com_a_foto_e_a_trilha`, `FilaDoRetratoTest::test_RED_recusado_pelo_SISTEMA_sai_do_NUMERADOR_e_FICA_no_DENOMINADOR` e `ComandoDoSistemaTest::test_RED_o_comando_RECUSA_a_ponta_pequena_e_o_GRAVADO_nao_se_move` (+ a BORDA: `test_RED_a_BORDA_15_exatos_e_RECUSADA_porque_o_aval_diz_menor_ou_IGUAL`) |
+| 2 | *"16 min fora -> fica na fila e nada muda sozinho"* | **item 1** | `PontaPequenaDaPortaTest::test_RED_16_min_FICAM_do_admin_e_a_porta_nao_recusa_em_silencio` (a porta levanta `DecisaoHERecusada`, nao devolve `False` em silencio) e `FilaDoRetratoTest::test_RED_16_min_SEGUE_pendente_e_nada_muda_sozinho` |
+| 3 | *"mesmo dia 2x -> uma `DecisaoHE` e uma linha de trilha"* | **item 1** | `PontaPequenaDaPortaTest::test_RED_o_mesmo_dia_DUAS_vezes_da_UMA_decisao_e_UMA_trilha` (a porta) e `ComandoDoSistemaTest::test_RED_o_mesmo_comando_DUAS_vezes_da_UMA_decisao` (o emissor) |
+| 4 | *"autorizar 5 dias de um colab num ato -> 5 `DecisaoHE`, e o numero MOSTRADO antes == o GRAVADO depois"* | item 2 | `test_tela_gestao_he_fatia2_lote_limite.py` (REGISTRADA, nao construir — ordem 01/10 20:5x) |
+| 5 | *"empresa com trava ligada e 1 dia grande sem decisao -> export RECUSA, decidido LIBERA, e dia pequeno recusado pelo sistema NAO trava"* | item 3 | idem |
+| 6 | *"limite trocado no cadastro -> a fila muda **sem deploy**"* | **item 1** | `ComandoDoSistemaTest::test_RED_6_o_limite_trocado_no_CADASTRO_muda_a_fila_SEM_DEPLOY`, e o par dele `::test_RED_limite_ZERO_no_cadastro_DESLIGA_a_recusa_e_o_comando_DIZ` |
+
+**E "sai da fila" se afirma pelo que o admin VE, nao pela contagem de linhas da tabela.** O RED 1 ficou mais
+duro de proposito: alem de `APLICADO`/`IDENTICO`, ele cobra
+`enriquecer(ler(emp, 9, 2026)[0])['totais']['sem_decisao'] == 0` **e** que o retrato NAO se moveu
+(`dias == 1`, `pendentes == 1`). E isso prova o MECANISMO: a tela nao esta relendo uma foto nova, ela esta
+SOBREPONDO a decisao viva — e e exatamente essa sobreposicao que faz a promessa valer com a recusa rodando
+DEPOIS da lavratura da noite.
+
+### 4. RED PRIMEIRO — o vermelho evidenciado TRES vezes (LEI-AKITA 5)
+
+| o que foi tirado | resultado |
+|---|---|
+| a copia no **HEAD** (nem campo, nem porta, nem emissor) | `Ran 16 tests` → **`FAILED (failures=1, errors=15)`** |
+| a copia **curada menos o emissor** | `Ran 10 tests` → **`FAILED (errors=10)`**, com 9× `CommandError: Unknown command: 'recusar_ponta_pequena'` |
+| o **contador da Central** com UMA decisao gravada (achado da secao 5) | `Ran 10 tests` → **`FAILED (failures=1)`**, `AssertionError: 2 != 1` |
+
+**VERDE depois:** o modulo do item 1 `Ran 26 tests in 0.607s` → **`OK`**; a **familia inteira de HE**, 11
+modulos (tela, filtros, cascata, forma B, competencia, rota, index, atalho da Central, item 1, fatia 2,
+calendario) `Ran 150 tests in 12.147s` → **`OK (skipped=7)`**; `ruff` nos 6 arquivos tocados →
+`All checks passed!`.
+### 5. ACHADO NO CAMINHO (LEI-AKITA 6) — O CONTADOR DA CENTRAL NAO LIA A DECISAO, E A O214 ERA QUEM IA REVELAR
+
+**O fato.** `ponto/services/gestao_he.py::pendentes_na_central` somava `retrato['pendentes']` — o INTEIRO
+congelado no `MetricaSnapshot` pela lavratura da noite. A tela e o PDF leem a MESMA foto, mas SOBREPOEM a
+decisao VIVA: `enriquecer` chama `_estado_por_dia` (`:220`), reescreve `linha['estado']` (`:244`) e
+recalcula `sem_decisao` (`:246`, `:302`). Entao o admin decidia um dia, a tela o tirava da fila na hora, e
+o atalho da Central seguia contando esse dia ate a lavratura seguinte (D+1 06:27+). Contador != universo
+(LEI-AKITA 8), com DOIS leitores: o badge da Central (`relatorios/views.py:42`) e o painel de gestao
+(`chamados/views.py:759`).
+
+**O QUE EU IA ESCREVER E ESTA ERRADO, e a medicao e que corrige:** eu ia publicar *"defeito vivo para toda
+decisao humana desde 30/09"*. **`DecisaoHE.objects.count()` em prod, 08/10 16:16 = 0.** Nenhum admin decidiu
+um dia ainda, entao **ninguem viu numero errado**: o defeito era LATENTE, nao vivo. O que o torna urgente e
+a outra ponta — o item 1 grava **milhares** de `DecisaoHE` num ato (2.685 dias so na 10), e seria o primeiro
+escritor da tabela. A divergencia nasceria na mesma noite em que a fatia entrasse.
+
+**O selo que devia pegar passava VAZIO.**
+`chamados/tests/test_atalho_he_na_central.py::test_RED_o_numero_do_atalho_E_o_total_sem_decisao_da_tela`
+compara os dois numeros — e fabricava o retrato **sem nenhuma linha de `DecisaoHE`**. Com a tabela vazia os
+dois lados valem 2 por coincidencia; e a mesma coincidencia que fazia a medicao de 01/10 em prod (1.817)
+bater. E o `[]` de dois sentidos da secao 6 do CLAUDE.md: ausencia de sinal lida como sinal bom.
+
+**RED evidenciado:** o caso com UM `Colaborador` real e UMA `DecisaoHE(ORIGEM_SISTEMA)` gravada no dia do
+retrato → `Ran 10 tests`, `FAILED (failures=1)`,
+`AssertionError: 2 != 1 : o numero do atalho (2) nao e o total da tela (1) -- contador != universo (L1)`.
+
+**Cura na ORIGEM (LEI-AKITA 1).** O contador passa a contar a pendencia VIVA pela MESMA autoridade da tela
+— `_estado_por_dia(ids, ini, fim)`, chave ausente = sem decisao — percorrendo os dias do retrato. **Nao se
+chama `enriquecer` aqui de proposito**, e isso esta escrito no sitio: `enriquecer` monta `tira`, `padrao` e
+cadastro para CADA colaborador, trabalho de APRESENTACAO que a tela de destino paga para UMA empresa por
+clique e que o badge pagaria para TODAS em cada carga do painel. Nao nasce juiz, nao nasce aritmetica nova, e
+`sem_retrato` continua NOMEANDO a empresa sem foto. O selo virou MORDE: a asercao so passa se os dois lados
+lerem a decisao.
+### 6. A FILA DA 09 E DA 10, **ANTES E DEPOIS** — medida na SOMBRA, com o apply exercido
+
+Instrumento: sombra completa de hoje (`carimbo dia=20261008 status=OK tipo=completa diverge=0`), container sem
+rede, `config.settings.sombra`, cpuset de teste pela fonte unica, trava por arquivo. A corrida inteira esta em
+`logs/o214/frota_sombra_1621.txt`: migrate das duas migrations → relavratura do retrato da 10 → fila ANTES →
+recusa em ENSAIO → recusa APLICADA → fila DEPOIS → o MESMO apply de novo → o portao da 09.
+
+**A 10/2026 (21/09–20/10, competencia ABERTA):**
+
+| | dias pendentes | horas pendentes | dias ≤15 min | dias >15 min |
+|---|---|---|---|---|
+| **ANTES** | **3.087** | **537,3 h** | 2.693 | 394 |
+| recusado pelo SISTEMA | −2.693 | −260,9 h | | |
+| **DEPOIS** | **394** | **276,3 h** | **0** | 394 |
+
+Por empresa, o recusado: **emp2 1.978 dias / 196,0 h**, **emp3 597 / 57,1 h**, **emp4 118 / 7,8 h**. **A fila
+do admin cai 87% em dias e 51% em horas** — e a assimetria e o ponto: sai a grande maioria dos DIAS carregando
+a menor parte das HORAS. E isso que o item 1 e. O que resta e o que o aval chama de *"dia grande"*: 394 dias
+com 276,3 h, a fila que de fato precisa de gente.
+
+**ENSAIO == APLICADO, dia por dia e empresa por empresa** (2.693 dias / 15.654 min nos dois): o `dry_run` passa
+pelas mesmas guardas e e o unico sitio do `<=`.
+
+**PROVA:** `logs/o214/frota_sombra_1621.txt:29` e `:40` --- `ENSAIO: 2693 dia(s), 15654 min (260.9 h)` e
+`APLICADO: 2693 dia(s), 15654 min (260.9 h)`; por empresa, as linhas `:23/:25/:27` (ensaio) e `:31/:34/:37`
+(aplicado), iguais nas tres.
+
+**DINHEIRO IDENTICO, por hash, nas tres empresas:** `FechamentoMensal` `0f09a54ac09a → 0f09a54ac09a` (emp2),
+`38517a0f25c6 → 38517a0f25c6` (emp3), `8e035894d976 → 8e035894d976` (emp4). Nao e promessa do docstring: o
+comando tira o hash antes e depois e sai com `SystemExit` se ele mexer.
+
+**IDEMPOTENCIA EXERCIDA (contrato 2):** o MESMO apply rodado de novo → **0 dia(s), 0 min**, com
+`ja decidido 1978 / 597 / 118`. Nenhuma segunda linha, nenhuma segunda trilha.
+
+**OS DOIS PORTOES DE FATO ENCERRADO NAO MORDERAM NESTA FROTA** — `turno ABERTO 0` e `sem celula julgada 0` nas
+tres empresas —, e eu registro isso como MEDIDA e nao como virtude: nesta janela nenhum dia com ponta estava com
+turno aberto ou celula sem veredito. Quem sustenta as duas guardas sao os selos, que MORDEM:
+`test_RED_o_12x36_que_entrou_as_19h_e_nao_saiu_NAO_recebe_recusa` e
+`test_RED_dia_sem_CELULA_JULGADA_nao_recebe_recusa`.
+
+**A 09/2026 (21/08–20/09, competencia EXPORTADA): ANTES = DEPOIS, e quem recusou foi o CODIGO.**
+
+| | dias pendentes | horas pendentes |
+|---|---|---|
+| **ANTES** | **5.370** | **949,1 h** |
+| **DEPOIS** | **5.370** (nada escrito) | **949,1 h** |
+
+As tres empresas responderam a mesma coisa: *"RECUSEI AGIR -- o retrato e de 01/10 e hoje e 08/10"*. O portao de
+frescor e anterior ao laco, e **nao e `--apply` que o liga**: nem o ensaio passa. Eu nao escolhi poupar a 09 —
+**o comando a poupou**, e a lei que ele cumpre e a de que decisao sobre foto velha e decisao sobre minuto que
+pode nao existir mais.
+
+**O TAMANHO DO QUE A 09 OFERECERIA, para a decisao ser dele e com numero** (medido em prod, 08/10 16:16, so
+leitura): dos 5.370 dias pendentes, **4.689 estao em ≤15 min e somam 439,1 h**; sobrariam **681 dias / 510,0 h**.
+Para alcanca-los seria preciso **relavrar a foto de uma competencia exportada** — ato que a L-092 nao proibe (o
+retrato nao e o gravado) mas que reescreve a testemunha datada de uma competencia ja fotografada. **ELE AVALIZOU as 17:0x**, e o
+aval esta no `PENDENTES_RONALD.json` como `O214-RELAVRAR-A-09` com o texto inteiro no campo `resposta`:
+*"relavra o retrato de HE da 09 e recusa as 4.689 pontas pequenas (439,1 h), pelo HORIZONTE-PADRAO e pela
+L-113; ficam 681 dias para o admin. condicao: nenhum centavo se move, provado por hash do gravado da 09 e do
+TXT vigente identicos antes e depois; se algum hash mudar, PAREI com o numero."* O ato **corre depois deste
+pouso**, nao dentro dele: o portao e de DOIS hashes (o gravado da 09 e o TXT vigente dela), e o caminho e o
+mesmo do item 1 — relavrar o RETRATO por `lavrar_he_pendente` para o portao de frescor passar, e so entao a
+recusa. A 09 esta **dentro do HORIZONTE-PADRAO** (aberta + anterior: hoje 10/2026 e 09/2026), que e o que
+dispensa a pergunta de borda que esta secao levantou as 16:16.
+
+**POR QUE OS NUMEROS DA SOMBRA E DE PROD NAO SAO IGUAIS NA 10, e o delta esta medido:** prod tem **3.075 dias /
+534,1 h** (retrato das 06:35) contra **3.087 / 537,3 h** na sombra (retrato das 16:20) — **+12 dias, +3,2 h**,
+que sao as batidas de hoje entre as duas lavraturas. O censo de colaboradores COM ponta tambem anda com elas: emp2 323 nos dois lados, emp4 16 nos dois, e a emp3 com **94 na sombra contra 95 em prod** -- um colaborador cujo unico dia com ponta saiu da janela entre as 06:35 e as 16:20.
+A 09 bate EXATAMENTE nos dois lados (5.370 / 949,1 h), porque o retrato dela nao foi refeito em lugar nenhum.
+### 7. O CRON — **declarado, AVALIZADO para instalar, e PARADO na quarta linha do `check`**
+
+`config/crons.py` ganhou **um ENC**, nao um horario: `ENC('recusar_ponta_pequena',
+gatilho='lavrar_he_pendente', args='--apply', log='ponta_pequena.log', estagio='auditoria', teto_s=900,
+depende=('lavrar_he_pendente',))`. Cron encadeado nao tem hora propria — ele espera o ARQUIVO
+`logs/fim/<nome>.<emp>.<dia>` do gatilho, que e a lei de GATE TEMPORAL POR ARQUIVO (nunca `pgrep`). Papel
+declarado em `PAPEL_DO_CRON` como **`agenda`**, com a folga escrita: sem a entrada,
+`core/tests/test_contract_tabuleiro.py:16` fica VERMELHO, e ela existe para o cron nao nascer sem dizer o que e.
+Diagrama regenerado por `manage.py gerar_diagrama`: **+1 no, +1 aresta**, `56 nos diarios` → **57**,
+`arestas depende declaradas: 40` → **41**; `docs/MAPA.md` saiu identico.
+
+**ELE AVALIZOU O INSTALL as 17:0x, COM UMA CONDICAO LITERAL — E A CONDICAO NAO FECHOU.** O aval
+(`O214-CRON-RECUSA-INSTALAR`, no `PENDENTES_RONALD.json` com o texto inteiro no campo `resposta`): *"instala.
+antes, publica no RELATO a saida do bin/crons.sh check com tudo que o install liga e desliga; se for so a recusa
+de ponta pequena, os contadores ja declarados e o reverter_situacao_afastado com o tripwire dele, instala no
+mesmo ato; se aparecer qualquer outra coisa, PAREI com a lista."*
+
+**A SAIDA DO `check`, publicada como ele pediu** (`bin/crons.sh check`, 08/10 17:21, rc=1, arquivo
+`logs/o214/crons_check_1721.txt`): **4 linhas de delta**, e tres sao a obra:
+
+| o que o install faria | linha | e o que ele avalizou |
+|---|---|---|
+| **LIGA** `recusar_ponta_pequena` encadeado em `lavrar_he_pendente` na cadeia da **emp2** | `27 6 * * *` | **SIM** |
+| **LIGA** o mesmo na cadeia da **emp3** | `29 6 * * *` | **SIM** |
+| **LIGA** o mesmo na cadeia da **emp4** | `31 6 * * *` | **SIM** |
+| **MOVE** `eval/noturno.py` de **02:37** para **02:33** | `33 2 * * *` contra `37 2 * * *` no host | **NAO esta no aval** |
+
+**ENTAO O INSTALL NAO CORREU, pela condicao dele e pela LEI-AKITA 9** (aval condicional que nao fecha na
+condicao = PAROU com o numero). E a quarta linha nao e um cron novo nem meu: `config/crons.py:445` declara o
+`noturno.py` com `inicio_derivado('noturno.py', vizinho='03:20', piso='00:15')` — **hora DERIVADA**, que anda
+com `config/crons_duracao.json`, e esse arquivo foi reescrito pela medicao do proprio `check --medir` das 04:05
+de hoje (20 duracoes mudaram; `esmeril_espelho` 98 → 124 s, `auditar_invariantes_chamados` 134 → 144 s). O host
+carrega o 02:37 de ANTES dessa medicao. Nao e divergencia de codigo: e a derivacao funcionando e o crontab
+atrasado em relacao a ela.
+
+**O `reverter_situacao_afastado`, que esta linha prometia que o install ligaria, NAO APARECE no delta** — logo o
+aval dele sobre ele (`--apply` avalizado junto) nao tem nada a executar aqui, e isso tambem e medicao, nao
+esquecimento.
+
+**O QUE ISSO NAO PARA:** a fila 1 segue (PAREI-NAO-DEVOLVE-TURNO — a lista vai ao RELATO e a esteira anda), e o
+item 1 **age em prod pela MAO**, com o comando, que e o que a secao 8 prova. O que o deploy publica e a
+CAPACIDADE: a declaracao aparece como `_crons_falta` no placar (o `check` nao reprova nada —
+`bin/placar_code.sh:37` engole o rc e so conta linhas `>`/`<`). Nada dispara de madrugada ainda. **A saida do
+PAREI e de UMA linha**: ou ele diz que o `noturno.py` de 02:33 esta avalizado junto, ou o install espera a
+proxima vez em que o crontab e a derivacao estiverem iguais.
+
+**A ORDEM DA CADEIA ESTA CERTA MESMO COM A RECUSA DEPOIS DA LAVRATURA, e isto era um medo meu que a leitura
+desfez.** O meu proprio desenho (`o214_item1_universo.md` §5) dizia que a recusa teria de rodar ANTES de
+`lavrar_he_pendente`, senao o numerador do retrato ficaria 24 h velho. Esta errado: a tela e o PDF **sobrepoem a
+decisao VIVA** — `enriquecer` chama `_estado_por_dia` (`:220`) e recalcula `sem_decisao` (`:246`, `:302`) —,
+entao o dia sai da fila do admin NA HORA. O que carrega a defasagem de uma noite e so o INTEIRO congelado
+`numerador` do `MetricaSnapshot`, que e foto datada e por desenho nao se re-lavra por decisao. Censo dos leitores
+desse inteiro: `inteligencia/` nao plota `chave='he_pendente'` em lugar nenhum, e os dois leitores que havia
+(badge da Central e painel de gestao) deixaram de ler o inteiro nesta fatia — e a secao 5.
+
+### 8. NO AR
+
+**PROVA: deploy as 17:22 por `bin/deploy.sh`** — as duas migrations pousaram (`colaboradores.0057` add
+`limite_decisao_he_min` a `empresa`, `ponto.0071` add `origem` a `decisaohe`), `sombra: dia=20261008 status=OK
+tipo=completa diverge=0 erros=0`, prova de casca (16 estaticos, 5 paginas, 606 rotas em 2 urlconf), reload das
+TRES cascas juntas e as tres rotas provadas (`saas_core /health/` 200, `saas_ui /colaboradores/` 302,
+`mensageria /health/` 200), selo BUG 128 verde e `importerror_500=0` na janela 16:22–17:22.
+
+**O CODIGO ESTA NO AR E RESPONDE EM PROD, medido as 17:23 pelo ENSAIO (sem escrita, `--apply` ausente):**
+
+| empresa | limite | dias que o SISTEMA recusaria | horas | acima do limite (ficam para o admin) |
+|---|---|---|---|---|
+| **emp2** | 15 min | **1.971** | **195,0 h** | 308 |
+| **emp3** | 15 min | **596** | **56,8 h** | 79 |
+| **emp4** | 15 min | **118** | **7,8 h** | 3 |
+| **total** | | **2.685** | **259,6 h** | **390** |
+
+`ja decidido 0`, `turno ABERTO 0`, `sem celula julgada 0`, `no-op 0`, `erro 0` nas tres, e o hash do
+`FechamentoMensal` **IDENTICO** nas tres (`14181156476c`, `223c7e0b6ce1`, `f69a6965b49b`) — o portao de dinheiro
+do proprio comando, exercido em prod. Arquivo: `logs/o214/ensaio_prod_10.txt`.
+
+**O `--apply` em prod NAO CORREU, e o motivo nao e lei nem `!`: o classificador do harness recusou o comando**
+(`docker exec saas_core ... recusar_ponta_pequena --apply`), com o ensaio do MESMO comando liberado. O aval dele
+cobre o ato (o item 1 nao move dinheiro, e o hash acima prova isso na frota inteira); o que falta e permissao de
+ferramenta, e isso e linha para ele, nao trava de fila. **A fila SEGUE**: o proximo e a O204, que ele acabou de
+por na frente.
+
+**O ACHADO DO MEU PROPRIO POUSO, e ele custou 34 corridas de cron** (16 min, 17:06 → 17:22). Eu dividi a copia em
+dois atos para proteger a janela de cron — 13 arquivos primeiro, os dois `models.py` por ultimo, junto do
+migrate —, e **a divisao estava errada**: `colaboradores/admin.py` cita `limite_decisao_he_min` no `list_display`,
+e o **system check do Django** resolve isso no import, ANTES de qualquer query. Entao o arquivo que eu chamei de
+neutro de schema quebrou TODO `manage.py` do `saas_core` com `admin.E108`, e nao houve query nenhuma. Depois,
+entre a copia dos models e o migrate, o erro trocou de forma e passou a ser `column
+colaboradores_empresa.limite_decisao_he_min does not exist`. MEDIDO por log, as duas assinaturas:
+
+| log | `admin.E108` (17:06→17:19) | coluna ausente (17:19→17:22) |
+|---|---|---|
+| `placar_situacional.log` | 6 | 4 |
+| `vigia_de_hora.log` | 3 | 4 |
+| `alertas.log` | 2 | 2 |
+| `ausencias.log` | 2 | 2 |
+| `escalonamento.log` | 2 | 2 |
+| `lavrar_perguntas_stale.log` | 2 | 0 |
+| `abriu_nao_bateu.log` | 1 | 0 |
+| `reconciliador.log` | 1 | 0 |
+| `reconciliar_fantasmas.log` | 1 | 0 |
+| **total** | **20** | **14** |
+
+Nenhum dano: os crons sao idempotentes por requisito e o tick seguinte ao deploy ja correu limpo; as cascas de
+gunicorn nunca viram o erro, porque o worker vivo nao rele o disco (BUG 128). **A LICAO, na origem:** nao existe
+copia parcial segura. A janela de cron nao se protege adiando o `models.py`, porque **qualquer** arquivo que
+NOMEIE o campo novo — admin, serializer, form, `list_display` — basta para derrubar o import. A unica ordem
+segura e **arvore inteira e `deploy.sh` no mesmo ato**, que e exatamente o que a L-107 ja manda para merge e
+que eu nao li como valendo para copia de fatia. Vira linha na fila (nao se abre achado no meio do marco,
+ESMERIL-DO-MARCO), e a L-107 e a lei que ja responde.
+
 ## O211 POUSO B — **O APPLY DA 10 EXECUTADO E PROVADO, E O CADASTRO QUE DECIDE A REGUA SAI DA EDICAO LIVRE DO ADMIN** (08/10 13:1x→13:4x)
 
 **O aval dele de 08/10 12:4x, literal:** *"O211 pouso B, completar o apply da 10: recalcular o gravado dos 70 colabs da
@@ -117,7 +510,7 @@ consulta decide. Que ele nao EDITA e julgado pelo juiz dessa pergunta
 (`test_admin_so_leitura.py::AdminNaoEditaCadastroDaReguaTest`), e nao se re-julga aqui (LEI-AKITA 2).
 
 **NO AR, e provado no PROCESSO DE PROD, nao no disco** (DEPLOY JA): suite cheia na copia
-`Ran 10003 tests` -> `OK (skipped=42)`, 0 FAIL e 0 ERROR; commit `15a401cd`; `bin/deploy.sh --sem-migrate`
+`Ran 10003 tests` -> `OK (skipped=42)`, 0 FAIL e 0 ERROR; commit `f189ce0a` (esta linha dizia `15a401cd`, que era o objeto ANTES do `--amend` que acrescentou esta propria prova -- citar o proprio commit dentro dele e uma afirmacao que o amend seguinte desmente); `bin/deploy.sh --sem-migrate`
 as 14:23 com as tres rotas provadas e `importerror_500=0`. O smoke foi feito por INTROSPECCAO no
 `saas_ui` vivo, porque o que importa nao e o texto do arquivo e o que o registry do admin responde:
 PROVA: `EmpresaAdmin.get_readonly_fields` -> `['regime_trabalhista']`; `AplicacaoConvencaoAdmin` com
