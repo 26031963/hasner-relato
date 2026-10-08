@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 00:46:51.**
+**Medido em 08/10/2026 00:52:01.**
 
 | | |
 |---|---|
@@ -108,13 +108,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-  Ran 17 shell commands
-
-● Os REDs acima são da cópia nua (sem .git/hooks, sem settings.json, staticfiles vazio) — a pasta de host pertence à árvore viva, onde ela
-  já deu pasta_rc=0. A montagem entrega o staticfiles da árvore viva, então a suite tem css/js. Rodando a suite contra a cópia:
 
   Searched for 1 pattern, ran 2 shell commands
 
@@ -132,18 +125,25 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Agora o ato único — produto na árvore, commit e deploy sem nada no meio (L-107):
 
-● Empurrar o pouso 1 pela regua · 5m 26s
-  ⎿  $ cd /home/ronald/saas-hasner && git push origin main > logs/o221_p1_push.out 2>&1; echo "rc=$?"; tail -8 logs/o221_p1_push.out; echo
-     "=== remoto:"; git fetch origin -q && git log --oneline -1 origin/main (5m 26s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Descobrir a funcao que o hook usa para nomear o item da fila 1
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PY' 2>&1 | head -30
+     import sys, importlib.util
+     spec=importlib.util.spec_from_file_location('h','bin/hook_stop_fila1.py')
+     m=importlib.util.module_from_spec(spec)
+     try:
+     spec.loader.exec_module(m)
+     except SystemExit:
+     pass
+     for n in dir(m):
+     if 'fila' in n.lowe…
 
-✢ Beboppin'… (6h 38m 2s · ↓ 556.5k tokens)
+✢ Beboppin'… (6h 43m 12s · ↓ 558.2k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                   10% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens

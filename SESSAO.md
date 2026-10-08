@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 08/10/2026 00:46:51.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (427.1 MB). Acoes na janela: **631**.
+**Medido em 08/10/2026 00:52:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (427.2 MB). Acoes na janela: **635**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 00:51:55 | Bash | Descobrir a funcao que o hook usa para nomear o item da fila 1 | `cd /home/ronald/saas-hasner && python3 - <<'PY' 2>&1 \| head -30 import sys, importlib.util spec=importlib.util.spec_from_file_location('h','bin/hook_stop_fila1.py') m=importlib.util.module_from_spec(spec) try: spec.loader.exec_module(m) except SystemExit: pass for n in dir(m): if 'fila' in n.lower() or 'ordem' in n.lower() or 'item' in n.lower(): print('fn:', n) PY` |
+| 00:51:50 | Bash | Ler a ordem viva que o hook guarda | `cd /home/ronald/saas-hasner && grep -nE 'ORDEM\|fila 1\|CELULA-TURNO-FECHA' bin/hook_stop_fila1.py \| head -20` |
+| 00:51:39 | Bash | Ler a mensagem da reversao parcial | `cd /home/ronald/saas-hasner && git log -1 --format='%B' bea841ff \| head -40` |
+| 00:51:36 | Bash | Ler a raia-chamado e a reversao parcial sem tocar arvore | `cd /home/ronald/saas-hasner && echo "=== commits da raia-chamado:"; git log --oneline origin/main..142238fc 2>/dev/null \| head -10; echo; echo "=== a reversao parcial bea841ff:"; git log -1 --format='%h %ad%n%s%n' --date=format:'%d/%m %H:%M' bea841ff; git show --stat --oneline bea841ff \| tail -15` |
 | 00:41:25 | Bash | Empurrar o pouso 1 pela regua | `cd /home/ronald/saas-hasner && git push origin main > logs/o221_p1_push.out 2>&1; echo "rc=$?"; tail -8 logs/o221_p1_push.out; echo "=== remoto:"; git fetch origin -q && git log --oneline -1 origin/main` |
 | 00:41:18 | Bash | Dobrar a linha O221 e o RELATO no commit do pouso | `cd /home/ronald/saas-hasner && git add app/docs/TICKETS.md app/docs/RELATO.md && git commit --amend -F /tmp/msg_o221_p1.txt 2>&1 \| tail -4; echo "=== so o declarado?"; git show --stat --oneline HEAD \| tail -12` |
 | 00:41:13 | Bash | Gravar a secao do pouso 1 e o lateral do noturno | `python3 - <<'PY' p='docs/RELATO.md' s=open(p).read() anc='## O222 — **NO AR, E O PLACAR CONFERIDO PELO JUIZ**' assert s.count(anc)==1 sec = """## O221 POUSO 1 — **O PRODUTO DA O139 NO AR, E O INSTRUMENTO FICOU DE FORA DE PROPOSITO** (08/10 00:37:34) **PROVA:** `9b01e4e6`; `juizes_por_varredura()` pela funcao real = **25** na copia mesclada contra **27** no main `97e9e043`, `tupla ^ funcao = []`; s ...` |
