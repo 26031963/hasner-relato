@@ -5,7 +5,7 @@ a raspagem usa a lista de nomes do banco como autoridade, nunca regex adivinhada
 `colNNN`/`ecNNN` ficam, porque nao identificam ninguem fora desta casa. Obra FEITA sai desta
 lista — ela e o que esta EM PE._
 
-**226 obras abertas.**
+**227 obras abertas.**
 
 | ID | obra | estado |
 |---|---|---|
@@ -230,8 +230,9 @@ lista — ela e o que esta EM PE._
 | **O220** | DIETA-DE-CARGA | **paralela**, sem portao -- nao toca pro |
 | **O221** | POUSO DAS DUAS RAIAS AVALIZADAS | espera `!` |
 | **O222** | O VEREDITO DO DIA LE O CHAMADO QUE A PROPRIA PASSADA CRIA | **livre** |
-| **O223** | A APLICACAO DE CONVENCAO SE EDITA PELA UI | **fila 2 (UI)**, raia `wt-ui`, deploy `- |
+| **O223** | A APLICACAO DE CONVENCAO SE EDITA PELA UI | espera aval |
 | **O224** | DIETA-DO-CLAUDE-MD | livre -- nao toca codigo nem teste, e a  |
 | **O225** | UM ROTULO DE EFEITO SEM NENHUM LEITOR DE TEMPLATE | livre -- e tela e tag, nao numero. Fila  |
 | **O226** | DUAS VERDADES SOBRE "ESTE PARAMETRO TEM EFEITO" | livre. Fila de INSTRUMENTO (ordem dele d |
 | **O227** | O GUARDA DA L-092 RECUSA LEITURA | livre -- nao toca numero, so quem pode P |
+| **O228** | ESMERIL-CELULA-TURNO | **fila 1 no FIM**, junto de R6 item 4 e  |
