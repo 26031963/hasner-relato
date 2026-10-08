@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 02:06:31.**
+**Medido em 08/10/2026 02:12:01.**
 
 | | |
 |---|---|
@@ -110,38 +110,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+● Censo honesto, e ele não é zero — três raias devem trabalho real ao main: O137 (28 arquivos), O167 (11) e cert-ast (16, instrumento). As
+  outras já pousaram em substância (GEOFENCE 4/4, O139 4/4) ou estão na lista de não-mergear. A L-105 manda pousá-las antes de abrir fatia
+  nova, e ela já pré-aprova pouso de raia verde. Medindo a superfície de conflito do O137 contra a árvore que o main vai ser:
 
-● Cron armado para 08/10 06:08 (/etc/cron.d confere), o listar fica com a cura pronta e nomeada. O portão até as 06:00 é declarado, não é
-  PAREI — então sigo a ORDEM VIVA. O próprio aval estende o ! de pouso à raia de agente que migrou 2 crons-juiz, e L-105 manda pousar raia
-  verde antes de abrir fatia nova:
+  Ran 1 shell command
+
+● Trabalho real e de família da fila 1 — o esmeril de ausencia/ferias, incluindo o próprio juiz ponto/catalogo/ausencias.py que uma das
+  minhas laterais devidas acusa com dois leitores. Montando a junção em cópia, em cima da árvore que o main vai ser:
+
+  Ran 1 shell command
+
+● Zero conflitos. Agora as provas de não-destrutividade, antes de qualquer commit:
 
   Ran 2 shell commands
 
-● A raia é worktree-agent-aa191f4ffa104591b → 00bd05fb "[O139] o papel prazo … e dois crons o ocupam MEDIDOS". Mas o papel prazo já pousou
-  no pouso 1 (bb0bd0fa) e o selo dele no pouso 2. A pergunta honesta é se a raia ainda carrega algo que o main não tem:
+● Esta é a cura da minha própria lateral devida — o cobre_parte_do_dia vira um endereço em ponto/turnos.py, e o comentário diz
+  explicitamente "NAO e juiz novo: e o MESMO juiz, com UM endereco". Todas as provas limpas: 0 verde= movido, 0 marcador, 19 .py compilam,
+  0 migration, zonas invioláveis intactas. Agora a LEI ANTES DO PATCH:
 
-  Ran 1 shell command
+  Ran 2 shell commands
 
-● Esse diff é enganoso — a raia está 81 commits atrás, então o trabalho novo do main aparece como deleção. A contribuição real é contra a
-  base comum:
+● L-089 (ATESTADO SO TEM EFEITO EM DIA DE TRABALHO, PELA-METADE) aponta justamente para ferias/models.py, que este merge toca. Vendo se ele
+  move o estado dessa lei:
 
-  Ran 1 shell command
+● Ver o que o merge faz em ferias
+  ⎿  $ cd /home/ronald/wt-o137j && git diff --cached --stat -- app/ferias/ && echo "=== o que mudou em ferias/models.py:" && git diff
+     --cached -- app/ferias/models.py | grep -E '^[+-]' | grep -vE '^[+-]{3}' | head -30
 
-● 4 dos 6 arquivos já estão idênticos no main (os pousos 1 e 2 os levaram). Resta o essencial: config/crons.py — os dois crons — e o
-  diagrama gerado. Vendo o que a raia fez e se o main mexeu no mesmo arquivo desde a base:
-
-  Ran 1 shell command
-
-● O pouso 1 já levou o papel prazo. Então o que resta mesmo é só o delta contra o main de agora:
-
-● Diff direto de crons.py main x raia
-  ⎿  $ cd /home/ronald/saas-hasner && B=worktree-agent-aa191f4ffa104591b && diff <(git show main:app/config/crons.py) <(git show
-     "$B:app/config/crons.py") | head -60; echo "=== tamanho do delta:"; diff <(git show main:app/config/crons.py) <(git show
-     "$B:app/config/crons.py") | grep -c '^[<>]'
-
-✢ Beboppin'… (7h 57m 42s · ↓ 680.9k tokens · thinking)
+· Compacting conversation… (8h 3m 12s · ↓ 689.2k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱ 88%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    9% until auto-compact
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
