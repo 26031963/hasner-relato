@@ -6,10 +6,23 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 07/10/2026 22:22:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (422.4 MB). Acoes na janela: **376**.
+**Medido em 07/10/2026 22:28:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (423.0 MB). Acoes na janela: **389**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 22:27:15 | Bash | Ver estrutura de seções do RELATO | `sed -n '30,52p' docs/RELATO.md && echo "=== cabecalhos:" && grep -n '^## ' docs/RELATO.md \| head -8` |
+| 22:26:36 | Bash | Ver topo do RELATO | `sed -n '1,30p' docs/RELATO.md` |
+| 22:26:28 | Bash | Rodar régua de tickets e checar bloco | `cd /home/ronald/saas-hasner && bash bin/regua_tickets.sh 2>&1 \| tail -8; echo "--- bloco:"; tail -3 logs/o218_bloco_lancador.out 2>/dev/null; ls -la logs/crons_em_curso/ 2>/dev/null \| head` |
+| 22:26:22 | Bash | Inserir a linha do O218 no TICKETS e rodar a régua | `python3 - <<'PY' import io p='docs/TICKETS.md' s=io.open(p,encoding='utf-8').read() anc = "\|----\|--------\|-------\|--------\|--------\|------\|------\|-------------\|------\|\n" assert s.count(anc)==1, s.count(anc) linha = ( "\| O218 \| estrutural (familia celula/precedencia) \| " "**A PASSADA 1 ESCREVIA LAMPADA NOVA COM MINUTO VELHO, E O MATCH DO DIA DEPENDIA DE ONDE A JANELA COMECAVA** " "(av ...` |
+| 22:25:35 | Bash | Ver cabeçalho e linhas da tabela de fatias | `sed -n '118,126p' docs/TICKETS.md` |
+| 22:25:29 | Bash | Commitar a raia da lavratura | `cd /home/ronald/wt-lavra && git add app/escala/utils.py app/ponto/services/cartorio.py app/ponto/turnos.py app/ponto/tests/test_bateria_lavratura.py app/ponto/tests/test_realizado_do_dia_autoridade.py && git commit -F /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/msg_o218.txt 2>&1 \| tail -20` |
+| 22:25:00 | Bash | Conferir se o main andou e se há migrations | `cd /home/ronald/saas-hasner && git fetch -q origin 2>&1 \| tail -2; echo "=== fd6c8c0e..origin/main:"; git log --oneline fd6c8c0e..origin/main \| cat; echo "=== HEAD main local:"; git log --oneline -1 \| cat; echo "=== raia:"; cd /home/ronald/wt-lavra && git log --oneline -1 \| cat && git status --short \| cat && echo "=== migrations no diff:" && git diff fd6c8c0e --stat -- 'app/*/migrations/' \|  ...` |
+| 22:24:53 | Bash | Corrigir a mensagem de commit com o medido | `cd /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && python3 - <<'PY' import io p='msg_o218.txt' s=io.open(p,encoding='utf-8').read() v1 = """Cada cenario escrito pela REGRA antes do codigo (L-110), e a PROPRIEDADE FIXA de todos: lavrar duas vezes == lavrar uma vez (ata, lampadas, minutos, chamados). Cenario novo em producao entra na bateria, nao vira ...` |
+| 22:24:24 | Bash | Ler segunda metade da mensagem de commit | `cd /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && sed -n '45,80p' msg_o218.txt` |
+| 22:24:08 | Bash | Ler primeira metade da mensagem de commit | `cd /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && sed -n '1,45p' msg_o218.txt` |
+| 22:24:04 | Bash | Localizar trechos a corrigir na mensagem | `cd /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && grep -n 'PROPRIEDADE FIXA\\|duas vezes\\|+2851\\|col868\\|col898\\|MEDIDO\\|9673\\|suite' msg_o218.txt` |
+| 22:23:56 | Bash | Lançar bloco da manhã contra a árvore da raia | `cd /home/ronald/saas-hasner && nohup env SOMBRA_ARVORE=/home/ronald/wt-lavra/app bash bin/sombra.sh --bloco > logs/o218_bloco_lancador.out 2>&1 & echo "bloco lancado pid=$! as $(date '+%H:%M:%S')"` |
+| 22:23:45 | Bash | Conferir carimbo da sombra e trava | `cd /home/ronald/saas-hasner && cat .sombra_stamp && echo "--- trava:" && bash bin/trava_teste.sh --quem 2>&1 \| head -3 && echo "--- agora: $(date '+%H:%M:%S')"` |
 | 22:18:42 | Bash | Checar terceira passada | `cd /home/ronald/saas-hasner && grep -E 'ATA SE MOVEU\|DELTA DE CONJUNTO\|soma do realizado\|censo da O218' logs/o218_idem3.out 2>/dev/null; tail -2 logs/o218_idem3_lancador.out` |
 | 22:15:53 | Bash | Rodar terceira passada para provar convergencia | `cd /home/ronald/saas-hasner && nohup env SOMBRA_ARVORE=/home/ronald/wt-lavra/app bash bin/sombra.sh --rodar relavra10_frota_20261005.py o218_idem3 > logs/o218_idem3_lancador.out 2>&1 & echo "3a passada lancada pid=$!"` |
 | 22:12:20 | Bash | Ler a decisao do veredito cobrado | `cd /home/ronald/wt-lavra && sed -n '625,655p' app/ponto/services/cartorio.py` |
