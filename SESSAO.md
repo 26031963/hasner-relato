@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 07/10/2026 23:53:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (426.0 MB). Acoes na janela: **555**.
+**Medido em 07/10/2026 23:59:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (426.0 MB). Acoes na janela: **558**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 23:55:13 | Bash | Juntar o rodape ao commit e repetir o push | `cd /home/ronald/saas-hasner && SCR=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && git log -1 --pretty=%B > $SCR/msg3.txt && python3 - <<'PY' import io f='/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/msg3.txt' s=io.open(f,encoding='utf-8').read() anc='Selos de docs a mao:' assert s.count(anc)==1 add=( ...` |
+| 23:55:01 | Bash | Escrever o rodape do TICKETS pela porta canonica | `cd /home/ronald/saas-hasner && bash bin/tickets_rodape.sh --escrever 2>&1 \| tail -5; git diff --stat app/docs/TICKETS.md; bash bin/regua_tickets.sh 2>&1 \| tail -4` |
+| 23:54:45 | Bash | Push unico do marco, com a suite do pre-push | `cd /home/ronald/saas-hasner && timeout 1500 git push origin main 2>&1 \| tail -25; echo "=== rc acima; agora o remoto:"; git fetch origin 2>&1\|tail -1; git log --oneline origin/main -1; date '+%H:%M:%S'` |
 | 23:51:39 | Bash | Buscar o remoto e rodar a pasta de selos de host | `cd /home/ronald/saas-hasner && git fetch origin 2>&1\|tail -2; echo "=== a frente do main:"; git log --oneline origin/main..HEAD; echo "=== atras:"; git log --oneline HEAD..origin/main \| head; echo "=== PASTA DE SELOS DE HOST"; fail=0; for t in bin/tests/test_*.sh; do out=$(timeout 180 bash "$t" 2>&1); rc=$?; [ $rc -ne 0 ] && { fail=1; echo "RED $t rc=$rc"; echo "$out"\|tail -4; }; done; echo "pa ...` |
 | 23:51:30 | Bash | Juntar os docs ao commit da O222 | `cd /home/ronald/saas-hasner && SCR=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && git log -1 --pretty=%B > $SCR/msg2.txt && python3 - <<'PY' import io,os p=os.environ['HOME']+'/saas-hasner' f='/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/msg2.txt' s=io.open(f,encoding='utf-8').read() anc='LEI-AKITA:  ...` |
 | 23:51:06 | Bash | Rodar os dois selos de docs | `cd /home/ronald/saas-hasner && python3 bin/relato_afirma_com_prova.py app/docs/RELATO.md; echo "rc=$?"; bash bin/regua_tickets.sh 2>&1 \| tail -3; git status --porcelain app/docs bin \| head` |
