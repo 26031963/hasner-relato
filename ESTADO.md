@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 02:28:31.**
+**Medido em 08/10/2026 02:34:01.**
 
 | | |
 |---|---|
@@ -44,6 +44,7 @@ b4372615 [O218] o marco da lavratura: a celula do juiz da celula fecha por EFEIT
 ?? fatias_agendadas/o135-teto20/esteira.out
 ?? fatias_agendadas/o135-teto20/msg_commit.txt
 ?? fatias_agendadas/o221-pouso3/
+?? fatias_agendadas/o221-pouso4/
 ```
 
 ## PLACAR-ESTRUTURAL (L-099) -- o placar PRINCIPAL
@@ -110,38 +111,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  - Os 8 vermelhos de host da cópia são artefato, provado por controle: os mesmos 8 rodam rc 0 na árvore viva, e cada um é nomeado pelo
+    arquivo que falta na cópia (.git/hooks/pre-commit, .claude/settings.json, logs/deploy.stamp, app/staticfiles/admin, .env).
 
-● Zero conflitos. Agora as provas de não-destrutividade, antes de qualquer commit:
+  Bug de instrumento achado medindo isso — bin/encadeado.sh:24 tem R=/home/ronald/saas-hasner cravada, enquanto o selo vizinho deriva a
+  raiz. Consequência que importa não é o vermelho falso: selo de host rodado em cópia escreve na árvore viva —
+  logs/encadeado/_echo_teste.log da árvore viva ficou com mtime 02:25:05 pela minha rodada dentro de wt-o137j. Minha primeira hipótese era
+  resíduo de log de produção e ela morreu na medição. O censo proíbe cura em bloco: 13 scripts de bin/ têm raiz cravada e na maioria isso
+  está certo (esteira, integrador, vigias existem para operar a árvore viva); a pergunta é "quem é chamado por bin/tests/?", e a resposta é
+  um arquivo. Vai no pouso de instrumento, separado do produto (L-105).
 
-  Ran 2 shell commands
+  Ato do pouso 4 escrito e bash -n OK (fatias_agendadas/o221-pouso4/esteira.sh, 95 linhas, 6 guardas, sem pipe no --conferir). Ele não é
+  cron: os 30 arquivos foram conferidos um a um contra bin/auth_sitios.txt e nenhum é sítio de auth, então não há hora a esperar — o que
+  ele espera é um fato, origin/main == HEAD == 1f3d616f, isto é, o pouso 3 publicado. Antes disso o janela_auth compararia contra um
+  origin/main atrasado e barraria, pelo api/views.py da raia-chamado, um deploy que não tem nada de auth.
 
-● Esta é a cura da minha própria lateral devida — o cobre_parte_do_dia vira um endereço em ponto/turnos.py, e o comentário diz
-  explicitamente "NAO e juiz novo: e o MESMO juiz, com UM endereco". Todas as provas limpas: 0 verde= movido, 0 marcador, 19 .py compilam,
-  0 migration, zonas invioláveis intactas. Agora a LEI ANTES DO PATCH:
+  A ordem segue: cron das 06:08 faz o pouso 3 (merge + deploy, sem push) → eu empurro o pouso 3 → git fetch → só então o ato do pouso 4.
 
-  Ran 2 shell commands
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: PLACAR-ESTRUTURAL -- O ESTRUTURAL SE SEPARA DO DADO (corte dele 02/10 22:5x, que SUBSTITUI o item 3 da
+  ordem das 21:4x -- o resto d
 
-● L-089 (ATESTADO SO TEM EFEITO EM DIA DE TRABALHO, PELA-METADE) aponta justamente para ferias/models.py, que este merge toca. Vendo se ele
-  move o estado dessa lei:
+● O hook está certo: a fila 1 não está vazia e a suite não é trava. Enquanto ela corre eu não toco a árvore que ela monta — então pego o
+  próximo item da ORDEM VIVA pela via que a LEI-AKITA 10 manda: construir em cópia do HEAD, no scratchpad.
 
-  Committed 0437d80f, ran 18 shell commands
-  ⎿  Read docs/AVAIS.md (23 lines)
-  ⎿  Referenced file core/contratos_estruturais.py
-  ⎿  Referenced file ponto/turnos.py
-  ⎿  Referenced file ponto/services/cartorio.py
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bl19mn3rk.output (15 lines)
+● Achar o item PLACAR-ESTRUTURAL no BACKLOG
+  ⎿  $ cd /home/ronald/saas-hasner && grep -n 'PLACAR-ESTRUTURAL' app/docs/BACKLOG.md | head; echo "==="; grep -nE '^\s*(\||-|#)'
+     app/docs/BACKLOG.md | grep -n 'OBRAS' | head
 
-● Task "RED e construção do segundo intervalo" completed in background
-
-● Background command "Rodar a suite contra a copia do O137" completed (exit code 0)
-
-  Read 1 file, ran 20 shell commands
-
-  Advising using Fable 5.1
-
-✢ Beboppin'… (8h 19m 42s · ↓ 715.3k tokens)
+· Compacting conversation… (8h 25m 12s · ↓ 731.4k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 29%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    1% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
