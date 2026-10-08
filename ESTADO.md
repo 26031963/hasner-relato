@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 15:01:31.**
+**Medido em 08/10/2026 15:07:01.**
 
 | | |
 |---|---|
@@ -111,36 +111,36 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ⎿  Referenced file config/crons.py
-
-● Task "RED e construção do segundo intervalo" completed in background
-
-● O desenho literal resolve a colisão num sentido que eu não previa. Conferindo o estado da cópia antes de reescrever.
-
-  Ran 1 shell command
-
-● limite_decisao_he_min não existe em código nenhum — só no contrato. E o 0056 que o plano dele reservava já foi gasto pelo marco da O211.
-  Antes de reescrever, os números reais do limite, lendo o LAVRADO (snapshot, zero passada de motor).
-
-  Searched for 1 pattern, ran 3 shell commands
-
-● Números reais, e um fato que reenquadra o item: dias == pendentes nas seis linhas — não existe uma única DecisaoHE em nenhuma das duas
-  competências. A fila nunca foi trabalhada: 8.445 dias esperando um humano.
-
-  ┌──────────────────────┬──────────────────────────────┬────────────────────────────────┬─────────┐
-  │        limite        │ aberta 10/2026 (3.075 pend.) │ anterior 09/2026 (5.370 pend.) │  horas  │
-  ├──────────────────────┼──────────────────────────────┼────────────────────────────────┼─────────┤
-  │ 10 min (o ! dele)    │ 2.406 (78,2%)                │ 4.237 (78,9%)                  │ 543,8 h │
-  ├──────────────────────┼──────────────────────────────┼────────────────────────────────┼─────────┤
-  │ 15 min (meu palpite) │ 2.685 (87,3%)                │ 4.689 (87,3%)                  │ 634,7 h │
-  └──────────────────────┴──────────────────────────────┴────────────────────────────────┴─────────┘
-
   O 4.689 / 439,1 h que eu carregava era limite 15 sobre a 09. Vou consultar antes de reescrever, porque isto troca o nome do campo em
   modelo, migration e porta.
 
 ● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-✢ Wrangling… (1h 35m 52s · ↓ 155.7k tokens)
+● Quatro conferências antes de escrever.
+
+  Ran 1 shell command
+
+● O texto literal dele decide, e contra parte do que eu ia fazer: "o limite e CADASTRO por empresa e nasce 15 — campo NOVO", e PROIBIDO:
+  "fatia posterior para o cadastro". E a sonda dele reproduz exata: 5.370 dias, 4.689 até 15 min, 681 acima — os mesmos números que acabei
+  de medir.
+
+  Ran 1 shell command
+
+● Decisivo: o guarda do skip prende ponteiro de RELATO e vocabulário de template — não o campo. Birthing o campo não o deixa vermelho. E
+  limite_decisao_he_min não existe em código nenhum: nascer com esse nome é campo novo. Registrando a resolução antes de consultar.
+
+  Ran 1 shell command
+  ⎿  1 skill available
+
+● Durável. Reconciliando o default, porque tenho evidência primária contra a recomendação de 10.
+
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+
+  Running 1 shell command…
+
+✢ Wrangling… (1h 41m 22s · ↓ 164.4k tokens · thought for 6s)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
