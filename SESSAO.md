@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 08/10/2026 01:50:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (429.9 MB). Acoes na janela: **772**.
+**Medido em 08/10/2026 01:55:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (429.9 MB). Acoes na janela: **773**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 01:50:56 | Bash | Reler o ato agendado do pouso 3 | `cd /home/ronald/saas-hasner && cat fatias_agendadas/o221-pouso3/esteira.sh` |
 | 01:50:36 | Bash | Procurar qualquer commit automatico no main | `cd /home/ronald/saas-hasner && echo "=== quem chama pos_push.sh:" && grep -rln 'pos_push' bin/ app/ .git/hooks/ 2>/dev/null \| head && echo "=== hooks instalados:" && ls -1 .git/hooks/ \| grep -v sample && echo "=== cron do usuario que commita:" && crontab -l 2>/dev/null \| grep -iE 'pos_push\|git commit\|esteira\|integrador' \| head && echo "=== cron.d:" && ls -1 /etc/cron.d/ 2>/dev/null \| head  ...` |
 | 01:50:14 | Bash | Medir o rc real do conferir e a definicao de HOJE | `cd /home/ronald/saas-hasner && grep -n '^HOJE=\\|HOJE=' bin/sombra.sh \| head -5; echo "--- conferir SEM pipe:"; bash bin/sombra.sh --conferir > /tmp/cf.$$ 2>&1; echo "rc_sombra_REAL=$?"; cat /tmp/cf.$$; rm -f /tmp/cf.$$; echo "--- HOJE do sistema:"; date +%Y%m%d` |
 | 01:50:05 | Bash | Ler a funcao conferir | `cd /home/ronald/saas-hasner && sed -n '366,400p' bin/sombra.sh` |

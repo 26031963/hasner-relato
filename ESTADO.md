@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 01:50:45.**
+**Medido em 08/10/2026 01:55:45.**
 
 | | |
 |---|---|
 | `HEAD` local | `d0625307 [O221] pouso 2, so INSTRUMENTO: o selo do papel `prazo` morde na arvore viva, e a testemunha errada do pouso 1 fica corrigida` |
-| `origin/main` | `bb0bd0fa [O221] pouso 1, so PRODUTO: o papel `prazo` da O139 entra no main, e o selo dele fica para o ato seguinte` |
-| commits a subir (`ahead`) | **1** |
+| `origin/main` | `d0625307 [O221] pouso 2, so INSTRUMENTO: o selo do papel `prazo` morde na arvore viva, e a testemunha errada do pouso 1 fica corrigida` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -110,15 +110,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-● Task "RED e construção do segundo intervalo" completed in background
-
-● Task "Empurrar o pouso 2 pela regua do pre-push" still running in background
-
-● Task "Rodar a suite inteira contra a copia da juncao" still running in background
-
-● Ambos em voo e serializados pela trava (a suite pegou às 01:29:53; o pre-push do pouso 2 espera a vez). Enquanto isso, o lateral de
-  caminho podre:
-
   Searched for 1 pattern, ran 2 shell commands
 
 ● Vou pré-conferir, agora, as duas guardas do pouso que podem recusar por estado de fora (sombra e migration) — se alguma já estiver
@@ -133,18 +124,27 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Guarda 4 está vermelha agora (rc 1: carimbo 20261007 ≠ hoje 20261008) — o refazer das ~04:17 a repõe antes das 06:08. Mas isso levanta o
   risco de verdade: alguém commitar no main entre agora e o disparo e matar o --ff-only.
 
-  Procurar qualquer commit automatico no main
-  ⎿  $ cd /home/ronald/saas-hasner && echo "=== quem chama pos_push.sh:" && grep -rln 'pos_push' bin/ app/ .git/hooks/ 2>/dev/null | head
-     && echo "=== hooks instalados:" && ls -1 .git/hooks/ | grep -v sample && echo "=== cron do usuario que commita:" && crontab -l
-     2>/dev/null | grep -iE 'pos_push|git co…
+  Ran 1 shell command
 
-· Beboppin'… (7h 41m 56s · ↓ 652.5k tokens · thinking)
+● Confirmado por medição: pos_push.sh só é chamado por bin/push.sh (eu usei git push cru), não há hook de post-push, /etc/cron.d só tem
+  e2scrub_all/sysstat, nenhum cron de usuário commita, e a esteira está pausada desde 26/09. O main fica em d0625307 — o --ff-only do pouso
+  é seguro desde que eu não commite.
+
+  Antes de armar o cron que mergeia e deploya sem supervisão, vou reler o ato na íntegra:
+
+  Ran 1 shell command
+
+● O ato está íntegro e as cinco guardas cobrem exatamente o que o deploy.sh poderia recusar. Antes de armar:
+
+● Advising using Fable 5.1
+
+· Beboppin'… (7h 46m 56s · ↓ 653.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
