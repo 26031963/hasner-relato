@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 07:07:01.**
+**Medido em 08/10/2026 07:12:31.**
 
 | | |
 |---|---|
@@ -35,6 +35,7 @@ e7dcd970 [O167] pouso 5, a juncao da raia de agente: os quatro cadastros ficam s
  M app/config/crons_duracao.json
  M app/docs/HANDOFF-SESSAO.md
  M bin/sombra.sh
+?? app/core/tests/test_vigia_sem_efeito_respeita_pausa_com_dono.py
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -111,38 +112,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Emendado em cf03dbcb. logs/ é gitignored, então o desenho da dieta fica fora do commit — atualizo de todo modo, é o registro da próxima
-  fatia. Agora a cura 2, construída em cópia do HEAD (LEI-AKITA 10). Primeiro a pergunta que decide o tamanho do patch:
-  _fab_desligado_com_dono já está em escopo na linha 573?
+  ⎿  Referenced file config/crons.py
+
+● Task "RED e construção do segundo intervalo" completed in background
+
+● RED de pé: 3 falhas no HEAD, 0 na cura — e os casos (ii)/(iii) passam nos dois lados, que é o que um par anti-vacuidade tem de fazer.
+  Agora o selo, no molde do irmão:
 
   Ran 1 shell command
 
-● Uma função só (decidir, 384..588), variável atribuída em 513 — já em escopo na 573. A cura são duas linhas, sem hoisting. Agora o RED, e
-  para isso preciso da forma como decidir já é exercitada:
+❯ aval Ronald: celula chamado x juiz fica PARCIAL ate O168, O169 e o LASTRO; proibido reclassificar papel para virar verde. segue a fila;
+  PAREI so em lei ou !
 
   Ran 1 shell command
 
-● test_vigia_trava_a_com_fabricante_desligado.py é exatamente o selo da lei de 27/09 para o OUTRO leitor. É dele que o meu caso nasce —
-  mesma lei, leitor que faltou:
+❯ aval Ronald: linha do LEIS que a fonte medida desmente se corrige no proximo commit que tocar o LEIS, com a medicao citada. segue a
+  fila; PAREI so em lei ou !
+
+● Os dois avais já estão registrados — PROMPT-NAO-SE-REPETE, uma linha cada:
 
   Ran 1 shell command
 
-● Template exato. Preciso de um agora determinístico — teste que depende do relógio de parede é o que a casa já enumerou em
-  bin/relogio_solto.txt:
+● Ambos já registrados (PROMPTS.md:1080 e :1081), nenhum dos dois aciona neste marco — ele não toca contratos_estruturais.py nem LEIS.md
+  (selo mediu tocados neste push: 0). Sigo a fila. O selo da cura #2:
 
   Ran 1 shell command
 
-● Agora construo em cópia do HEAD, com âncora por grep e contagem única:
+❯ aval Ronald: carimba a CELULA-TURNO-FECHA como FECHADA; os 4 numeros do passo 6 batem no ar, faltou so o verde das duas celulas cair no
+  mesmo commit (turno 6319b10c, celula b4372615). segue a fila; PAREI so em lei ou !
 
-  Ran 1 shell command
-
-● Agora o RED, contra os dois lados, com quatro casos e o relógio cravado:
-
-● Running 1 shell command…
-
-✢ Cultivating… (58m 25s · ↓ 135.6k tokens)
+✢ Cultivating… (1h 3m 55s · ↓ 140.8k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    2% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

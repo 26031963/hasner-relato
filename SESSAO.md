@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 08/10/2026 07:07:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (444.0 MB). Acoes na janela: **1299**.
+**Medido em 08/10/2026 07:12:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (444.4 MB). Acoes na janela: **1300**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 07:12:27 | Bash | Escrever o selo da cura 2 | `cd /home/ronald/saas-hasner && cat > app/core/tests/test_vigia_sem_efeito_respeita_pausa_com_dono.py <<'PY' # -*- coding: ascii -*- """O alarme "vigia sem efeito" tambem respeita a PAUSA COM DONO -- o leitor que faltou migrar. A lei e a MESMA do corte Ronald 27/09 10:5x, ja escrita em `core/esteira_vigia.py` e ja obedecida pela `trava_a_vazia` via `_fab_desligado_com_dono`: alarme que repete um es ...` |
+| 07:11:48 | Bash | Conferir registro do aval do LEIS | `cd /home/ronald/saas-hasner && grep -n -o 'LEIS.\{0,60\}desmente\\|linha do LEIS que a fonte medida desmente' app/docs/PROMPTS.md \| head -5` |
+| 07:11:42 | Bash | Conferir se o aval ja esta registrado | `cd /home/ronald/saas-hasner && grep -n -i 'celula chamado x juiz\\|PARCIAL ate O168\\|reclassificar papel' app/docs/PROMPTS.md \| head; echo "--- nota viva no contratos ---"; grep -n -A3 "'chamado', *'um juiz por pergunta'" app/core/contratos_estruturais.py \| head -20` |
+| 07:11:36 | Bash | Reler o cabecalho do selo irmao | `cd /home/ronald/saas-hasner && sed -n '1,40p' app/core/tests/test_vigia_trava_a_com_fabricante_desligado.py` |
+| 07:07:09 | Bash | Provar RED no HEAD e GREEN na cura | `cd /home/ronald/saas-hasner S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad cat > $S/cura2/red.py <<'PY' import datetime, importlib.util, os, sys, tempfile def carrega(caminho, nome): spec = importlib.util.spec_from_file_location(nome, caminho) m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m); return m DONO = 'QUEM=Ronald\nQUANDO ...` |
 | 07:06:41 | Bash | Construir a cura 2 em copia do HEAD | `cd /home/ronald/saas-hasner S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad mkdir -p $S/cura2/core git show HEAD:app/core/esteira_vigia.py > $S/cura2/core/esteira_vigia_HEAD.py cp $S/cura2/core/esteira_vigia_HEAD.py $S/cura2/core/esteira_vigia.py python3 - "$S/cura2/core/esteira_vigia.py" <<'PY' import sys,re p=sys.argv[1] s=open(p,encoding='utf-8'). ...` |
 | 07:06:08 | Bash | Ler SEM_EFEITO_MIN e janela_aberta | `cd /home/ronald/saas-hasner grep -n 'SEM_EFEITO_MIN *=' app/core/esteira_vigia.py echo "--- janela_aberta ---" sed -n "$(grep -n 'def janela_aberta' app/core/esteira_vigia.py \| cut -d: -f1),+22p" app/core/esteira_vigia.py` |
 | 07:05:56 | Bash | Ler o selo irmao da mesma lei | `cd /home/ronald/saas-hasner cat app/core/tests/test_vigia_trava_a_com_fabricante_desligado.py` |
@@ -1305,7 +1310,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 19:12:47 | Bash | Mapa das funcoes do cartorio | `cd /home/ronald/wt-lavra/app && grep -n "def \\|montar_grade_prevista_periodo\\|ata_do_dia(" ponto/services/cartorio.py \| head -60` |
 | 19:12:42 | Bash | Fixture de teste que chama julgar_colab | `cd /home/ronald/wt-lavra/app && sed -n '1,120p' ponto/tests/test_t32_folga_sem_turno.py` |
 | 19:12:38 | Bash | Testes que chamam a lavratura | `cd /home/ronald/wt-lavra/app && grep -rln "julgar_colab\\|julgar_celula" --include=test_*.py . \| head -20` |
-| 19:12:12 | Bash | Ler o teste vizinho da lavratura | `cd /home/ronald/wt-lavra/app && wc -l ponto/tests/test_o116_lavratura_le_o_dia_do_motor.py ponto/tests/test_cartorio.py ponto/tests/test_lavra_fora_da_regua.py && echo "=== o116" && cat ponto/tests/test_o116_lavratura_le_o_dia_do_motor.py` |
-| 19:12:06 | Bash | Leis que protegem cartorio e juiz_batida | `cd /home/ronald/wt-lavra/app/docs && grep -n "cartorio.py\\|turnos.py::papel\\|turnos.py::realizado\\|juiz_batida" LEIS.md \| cut -c1-200` |
-| 19:12:01 | Bash | Grep das leis que protegem os sitios da cura | `cd /home/ronald/wt-lavra/app/docs && for f in LEIS.md DOSSIES.md CORTES.md; do echo "=== $f"; grep -n "ata_do_dia\\|papel_por_minuto_da_ata\\|realizado_do_dia\\|turnos_do_colab\\|montar_grade_prevista_periodo\\|julgar_colab\\|periodos_do_dia" $f 2>/dev/null \| cut -c1-240; done` |
-| 19:07:19 | Bash | Criar a raia da lavratura | `cd /home/ronald/saas-hasner && git worktree add -b raia-lavra /home/ronald/wt-lavra HEAD 2>&1 \| tail -3 && mkdir -p /home/ronald/wt-lavra/app/logs /home/ronald/wt-lavra/app/media && cd /home/ronald/wt-lavra && git log --oneline -1 && ls app/ponto/tests/ \| grep -i "cartorio\\|lavr"` |
