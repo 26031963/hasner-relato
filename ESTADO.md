@@ -1,9 +1,16 @@
 # ESTADO -- o repo e a sessao agora
 
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:92 AFIRMA ato sem PROVA ao lado -- **O QUE FOI FEITO, e por que registrar em vez de deixar fora:** `EmpresaAdmin.readonly_fields =
+>
+> O RELATO nao entrou neste ciclo porque uma afirmacao de ato
+> (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
+> seguem valendo -- eles descrevem, nao afirmam ato.
+
+
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 13:46:31.**
+**Medido em 08/10/2026 13:52:01.**
 
 | | |
 |---|---|
@@ -37,6 +44,7 @@ RELATO, com a lista de nomes do banco como autoridade._
  M app/docs/HANDOFF-SESSAO.md
  M app/docs/LEIS.md
  M app/docs/PROMPTS.md
+ M app/docs/RELATO.md
  M bin/sombra.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -114,14 +122,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-❯ continue
-
-  Ran 4 shell commands
-
-❯ aval Ronald: registrar obra DIETA-DO-CLAUDE-MD na fila 1, logo depois da O146 e antes dos BOs. FONTE: CLAUDE.md (30,2k tokens no
-  /context de 08/10 13:25). MUDA: so a NARRATIVA de cada regra (historia do caso, "nasceu medida", datas e exemplos) vai para
-  app/docs/LAPIDES.md com ponteiro; a REGRA fica, palavra por palavra. PROIBIDO: mover regra para skill ou outro arquivo, reescrever
-  regra, apagar em vez de mover, tocar codigo ou teste. PRONTO: /context antes e depois publicado no RELATO, com o CLAUDE.md pelo menos
   10k tokens menor, e a prova de que nenhuma linha de regra mudou. nao muda a ordem ate la. segue a fila; PAREI so em lei ou !
   ⎿  Read docs/AVAIS.md (23 lines)
   ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/patch_leis.py (113
@@ -132,7 +132,7 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Task "RED e construção do segundo intervalo" completed in background
 
-  Searched for 2 patterns, read 3 files, ran 21 shell commands
+  Searched for 2 patterns, read 3 files, ran 20 shell commands
 
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
@@ -141,11 +141,19 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Background command "GREEN do selo e dos vizinhos na copia" completed (exit code 0)
 
-● Ler os tres achados do pouso A
-  ⎿  $ cd /home/ronald/saas-hasner && sed -n '147,160p' app/docs/RELATO.md
+● Ler o topo e a tabela de OBRAS do BACKLOG
+  ⎿  $ sed -n '1,40p' docs/BACKLOG.md && echo '=== tabela 2 ===' && sed -n '143,156p' docs/BACKLOG.md
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/biv82p8a3.output (11 lines)
+  ⎿  Read docs/AVAIS.md (23 lines)
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/patch_leis.py (113
+     lines)
+  ⎿  Referenced file config/crons.py
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bgt1l604k.output (36 lines)
 
-✢ Wrangling… (20m 52s · ↓ 39.5k tokens)
-                                                                                                                    8% until auto-compact
+● Task "RED e construção do segundo intervalo" completed in background
+
+✢ Wrangling… (26m 22s · ↓ 46.6k tokens)
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
