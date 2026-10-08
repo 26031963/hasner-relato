@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 02:23:01.**
+**Medido em 08/10/2026 02:28:31.**
 
 | | |
 |---|---|
@@ -111,6 +111,8 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
+● Zero conflitos. Agora as provas de não-destrutividade, antes de qualquer commit:
+
   Ran 2 shell commands
 
 ● Esta é a cura da minha própria lateral devida — o cobre_parte_do_dia vira um endereço em ponto/turnos.py, e o comentário diz
@@ -133,13 +135,11 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Background command "Rodar a suite contra a copia do O137" completed (exit code 0)
 
-● Rodar os 8 selos vermelhos na arvore viva como controle · 52s
-  ⎿  $ cd /home/ronald/saas-hasner && for f in test_commit_so_o_declarado test_furo_encadeado_ao_cartorio test_handoff_sessao
-     test_hook_nao_e_copia test_import_tardio_contra_o_ar test_inventario_pessoal_no_commit test_montagem_vem_do_arvore_do_push
-     test_prepush_testa_o_commit; do timeout 180 bash "bin/t… (51s · 5 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Read 1 file, ran 20 shell commands
 
-✢ Beboppin'… (8h 14m 12s · ↓ 708.5k tokens)
+  Advising using Fable 5.1
+
+✢ Beboppin'… (8h 19m 42s · ↓ 715.3k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
