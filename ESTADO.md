@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 10:45:31.**
+**Medido em 08/10/2026 10:50:45.**
 
 | | |
 |---|---|
@@ -111,38 +111,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Read 1 file, ran 10 shell commands
-
-● Enquanto a suíte roda, preparo os dois instrumentos que faltam — o DIFF contra o GRAVADO (ponto 4) e o par da 09 (ponto 5) — sem tocar a
-  árvore que a medição monta:
-
-  Ran 1 shell command
-
-● A mesma colisão que já me custou um ERROR hoje — · em arquivo que declara ascii. Curo no ato:
-
-  Ran 1 shell command
-
-● Antes do DIFF, reconfiro a dobradiça: sem as linhas de AplicacaoConvencao na sombra o pouso B cairia no piso legal e o DIFF daria zero
-  por ausência de sinal.
-
-  Ran 4 shell commands
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-  Ran 3 shell commands
-
-● Preparo o patch do BACKLOG (marcador → O214, célula da O211 e o item novo da UI que o advisor cobra), para rodar quando a suíte fechar:
-
   Ran 1 shell command
 
 ● Erro meu no índice da coluna: escrevi em campos[5], que é pedido em, não onde esta. O ensaio mostrou — é para isso que ele existe.
 
-  Running 1 shell command…
+  Ran 4 shell commands
 
-✢ Cultivating… (4h 36m 55s · ↓ 565.5k tokens)
+● somente_leitura=True é exatamente a porta certa para a 09 — a mesma conta, sem gravar nada, logo sem colidir com a L-092. Confirmo que
+  ela não cai na recusa de exportada:
+
+  Ran 1 shell command
+
+● O guarda da L-092 roda antes e não isenta somente_leitura — então ele barra a própria medição que a mensagem de erro dele promete ("vira
+  Pauta DP com os dois números"). Isso é achado para registrar, não para curar numa fatia de dinheiro. A porta declarada resolve sem tocar
+  código:
+
+  Ran 6 shell commands
+
+● Instrumentos todos escritos e compilando. Esperando a suíte fechar (0 FAIL/ERROR até aqui) para então, em sequência: tirar o terceiro
+  assert, censo de régua, DIFF da 10 contra o gravado, leitura da 09, docs, selos de host, commit e deploy.
+
+  Esperar a suite liberar a trava e ler o veredito · 1m 55s
+  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
+     # espera por ARQUIVO/estado, nunca por pgrep: a trava nomeia o chamador
+     until ! bash /home/ronald/saas-hasner/bin/trava_teste.sh --quem | grep -q '^suite:'; do
+     sleep 20
+     done
+     echo "trava: $(bash /home/r… (1m 54s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+· Cultivating… (4h 42m 9s · ↓ 579.3k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    8% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
