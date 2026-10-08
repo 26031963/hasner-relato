@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 05:40:45.**
+**Medido em 08/10/2026 05:46:01.**
 
 | | |
 |---|---|
@@ -112,42 +112,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Item (5) names the gate file and what to read there — adequate. But it introduced one accented char into a file that may be pure ASCII,
-  and the patch is now stale against my edit. Both at once:
+● Gap work closed. The round found three real defects in my own cure and one non-defect I nearly "fixed":
 
-  Ran 1 shell command
+  The cure's stated cause was wrong. I had written that R6 copies the juiz's sentence "because gerar_estado.py loads the placar without
+  Django." Measured: the juiz answers fine with no Django at all — linha_do_placar() → 15/20 with DJANGO_SETTINGS_MODULE unset. The real
+  blocker is sys.path: bin/gerar_estado.py:137 inserts only raiz/bin and loads the file by path, and the file has zero imports (by AST). A
+  from core import … there raises ModuleNotFoundError, the except at :46 swallows it, and the ESTADO's principal placar renders
+  _indisponivel_ — all six rows gone to publish one. A false cause outlives the commit: whoever read "it's Django" would try django.setup()
+  and never understand why it doesn't help. Corrected in the commit message, the cure text, and the RELATO topo.
 
-● The live file carries only · as separator; my á is a style break in a file written without accents throughout. Fixing it and regenerating
-  the patch — which is now stale against both edits:
+  The selo guarded one of the two copied numbers. The cell publishes 15/20 verdes and 17 declaradas; the rascunho asserted only the first.
+  A cell gaining a teste without going verde moves declaradas() to 18 without moving verdes() — the 17 ages silently with the selo green,
+  which is the exact defect the selo exists to prevent. Added test_o_17_declaradas_tambem_vem_do_juiz, biting both ways; verified against
+  the juiz on the cured copy ({17}, no second value).
 
-  Ran 1 shell command
+  And :47-49 was counted, not grepped — the except is at :46, with two other except Exception at :21 and :85 making the slip easy. Fixed in
+  both artifacts.
 
-● Patch rebuilt (109 lines), base confirmed unmoved. Re-running the selo on the final copy and recording the measurement that now justifies
-  the copy:
+  The non-defect: 17 declaradas is correct. I'd hand-counted 16 by replicating the logic over MATRIZ; the difference is GLOBAL (+1), which
+  declaradas() adds — me doing precisely what LEI-AKITA 8 forbids. Nearly cured a healthy number.
 
-  Ran 1 shell command
+  Re-certified after every edit: patch identical and git apply --check -p1 OK; selo VERMELHO live / VERDE cured, INDETERMINADO (never
+  green) when it can't load; publish ensaio 0 afirmacao sem prova over both files against the post-chain tree. Prova in
+  logs/placar_estrutural/por_que_r6_copia_a_frase_20261008.txt (105 lines).
 
-● Now the commit message, which still describes the copy without its measured reason — and the new prova file isn't cited:
+  Also read-only: all 18 prova paths cited by the placar exist on disk, though placar() never checks — latent gap, measured healthy,
+  recorded as a fila-2 instrument candidate so it doesn't get reopened as a BO.
 
-  Ran 2 shell commands
+  05:44:28 · .done absent · cron.d intact · GUARDA 2 = 0 · HEAD == origin/main == d0625307 · nothing written under app/. Waiter bgt1l604k
+  armed on the file; no further edits to marco artifacts before it fires.
 
-● The commit message states the mechanism as "sem Django, entao derivar total() ali nao e opcao" — but I measured that the juiz works fine
-  without Django. The real blocker is sys.path. Correcting the cause in the commit that will outlive it:
-
-  Ran 1 shell command
-
-● Everything durable: cure, regenerated patch, commit message with the corrected cause, and the measurement record. ~29 minutes to the
-  signal. Checking my reasoning before I touch anything else:
-
-● Advising using Fable 5.1
-
-✶ Beboppin'… (11h 31m 56s · ↓ 1.1m tokens)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+✻ Brewed for 11h 36m 13s · done 5:45 AM · 2 shells still running
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ segue a fila
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
