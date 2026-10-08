@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 20:02:01.**
+**Medido em 08/10/2026 20:07:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `1b485f9c Instrumento: a porta da montagem entrega tmpfs para app/logs e app/media, e a copia do push volta a se apagar` |
+| `HEAD` local | `d2cf6606 O204: a hora do aparelho tem UM sitio, e o epoch deixa de virar data de 1791` |
 | `origin/main` | `1b485f9c Instrumento: a porta da montagem entrega tmpfs para app/logs e app/media, e a copia do push volta a se apagar` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -22,18 +22,18 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+d2cf6606 O204: a hora do aparelho tem UM sitio, e o epoch deixa de virar data de 1791
 1b485f9c Instrumento: a porta da montagem entrega tmpfs para app/logs e app/media, e a copia do push volta a se apagar
 1c27b268 O214 item 1: a reversao do apply se LE num descartavel, e o push deixa de morrer no rm da copia
 bf83856d O214 item 1: a PROVA do pouso -- deploy, ensaio em prod e o achado da copia parcial
 d4822319 O214 etapa 0 + item 1: a ponta pequena e recusada pelo SISTEMA, com trilha, e nenhum centavo se move
-f189ce0a O211 achado 3: o cadastro que decide a regua sai da edicao livre do admin
 ```
 
 ## `git status --short`
 
 ```
  M app/config/crons_duracao.json
- M app/docs/BACKLOG.md
+M  app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
  M app/docs/PROMPTS.md
  M app/docs/RELATO.md
@@ -115,35 +115,35 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-● O204 voltou verde e commitada, parada no meu arquivo. Isso é a L-105 (raia verde pousa, pré-aprovado) e o pouso é um ato só com os docs
-  (L-106/L-107). Orientando antes de agir:
+  Ran 1 shell command
+
+● Linha 422: a prosa do O160, que é justamente o item do selo "árvore sem conflito" — ele cita os marcadores literalmente. Ancoro o assert
+  no início da linha, como o próprio arvore_sem_conflito faz:
+
+  Ran 2 shell commands
+
+● Índice limpo, o hook lê a O204 como fechada, e a stash@{0} é a minha (a {1} é a pré-existente, não toco). Solto a minha e faço o smoke em
+  prod — só leitura, chamando a função real que acabou de subir:
 
   Ran 1 shell command
 
-● O rótulo da tela não mente — e isso fecha a conferência: linha 231 abre a soma nas duas pontas ({{ s.antes }} min antes da entrada · {{
-  s.depois }} min depois da saída) e as linhas 271-285 listam uma linha por ponta sob a coluna ponta. O "127 min de ponta" era leitura do
-  enunciado, não da testemunha. Nenhuma fila line.
-
-  E o merge é fast-forward puro, então o pouso não precisa de commit meu — a O204 já vem com a sua própria célula (L-106 cumprida pelo
-  commit dela). Conferindo o que o commit toca antes do ato:
+● Sonda errada, não o sistema — a função pede agora por palavra-chave. Corrijo e confiro as duas linhas novas do PROMPTS:
 
   Ran 1 shell command
 
-● Tudo confere: só BACKLOG.md colide, zero modelo, nenhum dos cinco arquivos travados, sombra de hoje diverge=0. Levanto o arquivo de ato,
-  guardo meu BACKLOG e faço merge+deploy num ato só (L-107):
+● O smoke em prod prova a cura com a própria evidência do BO: 1791071932000, que dava 1791-07-19, agora devolve 2026-10-03 20:58:52-03:00 —
+  exatamente a hora real do caso col218 — é descartada por antigo_demais e escreve a trilha que antes não existia. Agora o RELATO. Lendo a
+  forma do topo:
 
-  Ran 1 shell command
+● Ler o topo e a estrutura do RELATO
+  ⎿  $ cd /home/ronald/saas-hasner/app
+     sed -n '1,45p' docs/RELATO.md
+     echo "......"
+     echo "=== total de linhas / datas presentes (DIETA L-109: >3 dias sai) ==="
+     wc -l docs/RELATO.md
+     grep -n '^## ' docs/RELATO.md | head -12
 
-● Agora o ato: tirar meu BACKLOG do caminho, fast-forward e deploy encadeados, sem nada no meio:
-
-● Running 1 shell command…
-  ⎿  $ cd /home/ronald/saas-hasner
-     git stash push -m "docs da principal em curso (O145/avais) -- pouso O204" -- app/docs/BACKLOG.md \
-     && git merge --ff-only raia-bos \
-     && git log --oneline -1 \
-     && bin/deploy.sh --sem-migrate 2>&1 | tail -30
-
-✢ Wrangling… (6h 36m 22s · ↓ 716.1k tokens)
+· Wrangling… (6h 41m 52s · ↓ 733.8k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

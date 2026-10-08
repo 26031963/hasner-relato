@@ -212,7 +212,7 @@ lista — ela e o que esta EM PE._
 | **O201** | A REGRA 2 DO CONTRATO NAO PODE PASSAR A VARRER COMENTARIO | **fila 2** -- e INSTRUMENTO (selo), e a  |
 | **O202** | O TERCEIRO CALCULO DE GEO -- OS PINGS | **fila 2**. O aval dos 4 BOs o declarou  |
 | **O203** | O SELO DA COLUNA PROTEGE FICA CEGO QUANDO A CELULA E ESVAZIADA NO MESMO COMMIT | **fila 2** -- INSTRUMENTO (portao do pus |
-| **O204** | HORA-DO-APARELHO-LIDA-COMO-DATA | espera `!` |
+| **O204** | HORA-DO-APARELHO-LIDA-COMO-DATA | **NO AR 08/10 20:02** (`d2cf6606`, ff +  |
 | **O205** | O GATE TEMPORAL REVERTE POR ARQUIVO E NAO OLHA A ARVORE DEPOIS | **fila 2 -- e INSTRUMENTO**, e a L-105 m |
 | **O206** | PAINEL-OFERECE-COBRAR-NAO-REABRIR | espera `!` |
 | **O207** | VINCULO-INICIO-DECLARADO | **portao: RAIA wt-bos, um por vez -- 7o  |
