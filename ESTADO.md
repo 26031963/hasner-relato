@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 11:17:01.**
+**Medido em 08/10/2026 11:22:07.**
 
 | | |
 |---|---|
@@ -112,37 +112,37 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-  Ran 2 shell commands
+  Ran 4 shell commands
 
-● Medido, e o discriminante passa já na régua: emp3 (clt) = 0 de 113. Mudam 211 de 546, todos no sentido legal -> Sindicato dos Vigilantes
-  de Londrina — o número real, contra os 272 que a mensagem de commit estimava por topologia. Agora o dinheiro da 10:
-
-  Ran 1 shell command
-
-● Foto em 2m38 — a 09 cabe. Agora o lado novo:
+● Dois fatos a nomear, não a suavizar: col457 mexeu e não troca de régua, e 21 que trocam têm noturno > 0 e ficaram parados. Vou medir os
+  dois.
 
   Ran 1 shell command
 
-● O portão me recusou com rc=5 — fotos em travas diferentes. Não contorno: o par faz as duas dentro de uma trava só. Antes, vejo como ele
-  carimba a trava, porque disso depende o que eu posso afirmar do par de CSV que já tenho:
+● col457 moveu horas_noturnas 10.29 → 8.00. O censo tinha universo situacao='ativo' (546), e o fechamento tem 587 — então a hipótese é
+  cobertura do censo, não deriva. Mas hipótese não é medição: pergunto à função real.
 
   Ran 1 shell command
 
-● O guarda compara o SOMBRA_TRAVA_ID. Rodo o par, que refaz as duas dentro de uma trava só — e isso me dá de graça a prova de
-  reprodutibilidade: se os sha do TXT voltarem iguais, o par de CSV que já tenho está provado determinístico.
+● col457 é desligado — e o fechamento da 10 tem exatamente 546 ativos + 41 desligados = 587. O censo pediu só ativos, então ele não era
+  deriva: era colab fora do universo que eu censei. E a função real diz que ele troca de régua (emp2, cct, Londrina). Fecho a lacuna
+  medindo o censo no universo EXATO do DIFF, e no mesmo ato pergunto por que 21 com noturno > 0 ficaram parados.
 
-● Rodar o par dentro de uma trava so
+  Ran 3 shell commands
+
+● regua_para devolve a régua da EMPRESA; o CICLO entra depois, em get_motor_cct (linhas 314-324). Então "troca de régua" é o limite certo
+  do DIFF, e quem mexe centavo dentro dele depende do ciclo. Meço o censo no universo exato (587) com o ciclo ao lado.
+
+● Corrigir o campo e rodar o censo nos dois codigos
   ⎿  $ cd /home/ronald/saas-hasner
      S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
-     date +'inicio %H:%M:%S'
-     bash bin/simular_folha.sh par o211b $S/redB/app $S/pousoB/app > $S/par_o211b.out 2>&1; echo "par rc=$?"
-     date +'fim %H:%M:%S'
-     grep -E 'empresa|DIFF_FO…
+     sed -i 's/colaborador_id__in=universo, ativo=True/colaborador_id__in=universo, ativa=True/' $S/censo_regua2.py
+     grep -n 'ativa=True' $S/censo_regua2.py
+     for par in "antes redB…
 
-✢ Compacting conversation… (5h 8m 25s · ↓ 588.2k tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱ 85%
+✢ Cultivating… (5h 13m 30s · ↓ 601.3k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    0% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
