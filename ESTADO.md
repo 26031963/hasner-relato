@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 00:57:31.**
+**Medido em 08/10/2026 01:03:01.**
 
 | | |
 |---|---|
@@ -34,7 +34,9 @@ b4372615 [O218] o marco da lavratura: a celula do juiz da celula fecha por EFEIT
 ```
  M app/config/crons_duracao.json
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/RELATO.md
  M bin/sombra.sh
+?? bin/tests/test_papel_prazo_nao_deriva.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -109,37 +111,37 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-● Os REDs acima são da cópia nua (sem .git/hooks, sem settings.json, staticfiles vazio) — a pasta de host pertence à árvore viva, onde ela
-  já deu pasta_rc=0. A montagem entrega o staticfiles da árvore viva, então a suite tem css/js. Rodando a suite contra a cópia:
-
-  Searched for 1 pattern, ran 2 shell commands
-
-● Enquanto a suite roda, o que o advisor pediu que ficasse escrito agora — o portão da raia-chamado e o topo:
-
-  Ran 1 shell command
-
-● Background command "Rodar a suite inteira contra a copia mesclada" completed (exit code 0)
-
-  Ran 1 shell command
-
-● Suite da cópia VERDE: Ran 9675 tests in 621.827s → OK (skipped=42), rc=0. Pondo a prova no topo e trazendo o produto para a árvore:
-
-  Ran 7 shell commands
-
-● Agora o ato único — produto na árvore, commit e deploy sem nada no meio (L-107):
-
-  Amended commit bb0bd0fa, cherry-picked 9b01e4e6, searched for 3 patterns, ran 20 shell commands
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
   Ran 1 shell command
 
 ● Background command "Empurrar o pouso 1 pela regua" completed (exit code 0)
 
-✢ Beboppin'… (6h 48m 42s · ↓ 562.7k tokens)
+  Ran 1 shell command
+
+● Pouso 1 no remoto: 97e9e043..bb0bd0fa, suite 9675 OK (skipped=42) + control-plane 22 OK. Agora a origem do "não carimbar o passo 6":
+
+  Searched for 1 pattern, ran 1 shell command
+
+● Nenhuma dessas linhas é ! dele — são meus próprios registros do estado de então. Antes de carimbar, a medição honesta do que o selo
+  prova:
+
+  Ran 1 shell command
+
+● O selo não é quem prova isso — PAPEL_DO_CRON['lavrar_previsto_cego'] == 'lavra' e sem papel declarado == [] são, e isso vai dito no
+  RELATO. Pouso 2, o instrumento:
+
+● Provar que o selo morde devolvendo um cron para juiz, na copia
+  ⎿  $ cd /home/ronald/wt-o139 && cp app/config/crons.py /tmp/crons_bak.py && python3 - <<'PY'
+     p='app/config/crons.py'
+     s=open(p).read()
+     import re
+     # devolve vigia_de_hora para 'juiz' na lista de divida
+     m=re.search(r"(\n\s*)'vigia_de_hora':\s*'prazo'", s)
+     print('achou papel prazo do vigia_de_hora:', bool(…
+
+· Compacting conversation… (6h 54m 12s · ↓ 566.4k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱ 82%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    4% until auto-compact
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
