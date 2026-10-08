@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 06:40:45.**
+**Medido em 08/10/2026 06:45:45.**
 
 | | |
 |---|---|
@@ -33,8 +33,11 @@ e7dcd970 [O167] pouso 5, a juncao da raia de agente: os quatro cadastros ficam s
 
 ```
  M app/config/crons_duracao.json
+ M app/core/esteira_vigia.py
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/PROMPTS.md
  M bin/sombra.sh
+?? app/core/tests/test_no_relato_tem_secao_pinada.py
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -111,38 +114,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● Marco provado no ar pela função real, dentro do container: juiz em 15/20 verdes, a frase verbatim no R6, 17 declaradas presente, 122 só
-  dentro de ESTA LINHA DIZIA. Gravo a prova e fecho o marco (L-108):
-
-  Ran 1 shell command
-
-● MARCO FECHADO — pode compactar. 88bbc0c4 no remoto, no ar e provado pelo juiz real; handoff regenerado (44/60 linhas).
-
-  Agora o bug que apareceu no caminho, e que por lei vem antes de fatia nova (LEI-AKITA 6). A árvore voltou a ser escrevível, então monto a
-  cura em cópia do HEAD com RED primeiro:
+  app/core/esteira_vigia.py do disco no host. Logo a cura não precisa de deploy (nem bin/deploy.sh o alcança), e a prova é o próximo alarme
+  cair dentro da seção nova.
 
   Ran 1 shell command
 
-● O raio é maior do que eu disse: no_relato tem 9+ chamadores, incluindo AUTO-REVERT, quarentena (ALARME), ZUMBIDO e integrador ("o push do
-  lote foi REJEITADO"). Todos os alarmes mais altos do sistema estão caindo onde se lê por último. Meço o dano antes de desenhar a cura:
+● O timer confirma: última corrida 06:40:44, próxima 06:45:00 — processo novo a cada tick, sem restart, e a prova chega em minutos.
+  Registro os dois avais no mesmo turno (sem | nas células, que desloca a tabela):
 
   Ran 1 shell command
 
-● O dano está medido, e é grande: 126 linhas de alarme no RELATO vivo, 90 na cauda (depois do último heading datado), e 280 já varridas
-  para o ARQUIVO. Pior: elas repetem de hora em hora "a esteira esta parada e o vigia nao esta destravando" desde 07/10 18:35 — um alarme
-  vivo que ninguém leu porque foi depositado onde se lê por último. Gravo antes de desenhar:
+● Agora a cura, em cópia do HEAD (LEI-AKITA 10), com RED primeiro. A seção pinada não pode conter palavra de ATOS (## a torna forte no
+  portão), então o nome é ## ALARMES DA ESTEIRA:
 
-  Ran 2 shell commands
+  Ran 1 shell command
 
-● Limpo (as 4 eram ·; o grep -c saiu 0 — o exit 1 é "nenhuma ocorrência"). O desenho e as medições estão duráveis em 204 linhas. A cura
-  toca app/core num caminho de cron com 9 chamadores, então consulto antes de escrever:
+● Cura montada (+34/-3, compila). Agora o RED — e ele roda standalone, importando o módulo por caminho, porque o próprio arquivo declara
+  "so stdlib": assim provo RED no código do HEAD sem escrever na árvore antes do commit:
 
-● Advising using Fable 5.1
+  Ran 1 shell command
 
-· Cultivating… (32m 9s · ↓ 63.6k tokens)
+● RED evidenciado no HEAD — 6 falhas, inclusive a literal "(iii) MORDE: o alarme ficou na ULTIMA linha -- depositado no EOF" — e GREEN na
+  cura (0 falhas). Aplico no ato do commit e escrevo o selo que vai para a suite:
+
+  Ran 1 shell command
+
+● ruff vive no container, não no host. Rodo o lint e o selo novo, este pela porta canônica com a trava:
+
+  Running 1 shell command…
+
+· Cultivating… (37m 9s · ↓ 79.5k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    6% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
