@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 18:08:31.**
+**Medido em 08/10/2026 18:14:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `bf83856d O214 item 1: a PROVA do pouso -- deploy, ensaio em prod e o achado da copia parcial` |
+| `HEAD` local | `1c27b268 O214 item 1: a reversao do apply se LE num descartavel, e o push deixa de morrer no rm da copia` |
 | `origin/main` | `f189ce0a O211 achado 3: o cadastro que decide a regua sai da edicao livre do admin` |
-| commits a subir (`ahead`) | **2** |
+| commits a subir (`ahead`) | **3** |
 
 ## Fabrica
 
@@ -22,11 +22,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+1c27b268 O214 item 1: a reversao do apply se LE num descartavel, e o push deixa de morrer no rm da copia
 bf83856d O214 item 1: a PROVA do pouso -- deploy, ensaio em prod e o achado da copia parcial
 d4822319 O214 etapa 0 + item 1: a ponta pequena e recusada pelo SISTEMA, com trilha, e nenhum centavo se move
 f189ce0a O211 achado 3: o cadastro que decide a regua sai da edicao livre do admin
 86993cd2 O topo do TICKETS fechado no ato do push (O112)
-037ae715 O211 pouso B: a regua de dinheiro sobe da EMPRESA, e a praca so entra por linha declarada
 ```
 
 ## `git status --short`
@@ -34,8 +34,6 @@ f189ce0a O211 achado 3: o cadastro que decide a regua sai da edicao livre do adm
 ```
  M app/config/crons_duracao.json
  M app/docs/HANDOFF-SESSAO.md
- M app/docs/RELATO.md
- M app/ponto/tests/test_o214_ponta_pequena.py
  M bin/sombra.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -113,6 +111,7 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  rewrite would touch nothing published). I'll land section 8 as the PROVA commit of the same marco rather than stop the push, and flag it.
 
   Amended commit bf83856d, searched for 1 pattern, ran 15 shell commands
 
@@ -138,17 +137,16 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-● Rodar a pasta de selos de host
-  ⎿  $ cd /home/ronald/saas-hasner && fail=0; ok=0; for s in bin/tests/test_*.sh; do if bash "$s" >/tmp/selo.out 2>&1; then ok=$((ok+1));
-     else fail=$((fail+1)); echo "VERMELHO: $s"; tail -6 /tmp/selo.out; fi; done; echo "selos de host: $ok verde(s), $fail vermelho(s)"
+● Aplicar a recusa de ponta pequena na 09 conforme o aval
+  ⎿  $ sed -n 505,550p api/views_core.py
 
-· Wrangling… (4h 42m 52s · ↓ 482.9k tokens)
+✢ Wrangling… (4h 48m 22s · ↓ 490.6k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    8% until auto-compact
+                                                                                                                    1% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
 ❯ ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
