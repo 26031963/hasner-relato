@@ -1,7 +1,31 @@
 # RELATO — esteira saas-hasner
 
-**O211 POUSO B -- DIFF DE FROTA MEDIDO E PUBLICADO, e o apply e o deploy DESTE commit. Com ele a O211
-fecha: a regua de dinheiro sobe da EMPRESA, e a praca so entra por linha DECLARADA.**
+**O211 POUSO B NO AR as 11:52 de 08/10 -- commit de titulo `O211 pouso B: a regua de dinheiro sobe da
+EMPRESA...` --, e com ele a O211 esta FECHADA: a regua de dinheiro sobe da EMPRESA, e a praca so entra por
+linha DECLARADA.** (O hash NAO se cita aqui de proposito: este paragrafo entra NO proprio commit, entao
+todo hash que eu escrevesse morreria no amend seguinte -- morreu uma vez, as 12:0x. Quem quer o hash le o
+`git log`; `logs/deploy.stamp` guarda o do ato do deploy, cuja arvore de CODIGO e identica a esta -- o que
+mudou depois dele foi so este RELATO.)
+**PROVA:** medida em PROD depois do reload, nao de memoria -- `bin/deploy.sh` **rc=0** as 11:52 --
+`colaboradores.0056` aplicada no schema do cliente, sombra `dia=20261008 diverge=0 erros=0`, collectstatic,
+prova de casca (16 estaticos, 5 paginas, **599 rotas em 2 urlconfs**), tres cascas recarregadas juntas,
+tres rotas provadas, selo do BUG 128 verde, `importerror_500=0`. **A REGUA, pela funcao REAL
+(`regua_para(colab, ini)`, somente leitura, sem motor):** `emp1 col678 regime='cct' ->
+'Sindicato dos Vigilantes de Londrina'`, `emp2 col43 'cct' -> Londrina`, `emp4 col27 'cct' -> Londrina`
+e **`emp3 col49 'clt' -> 'legal (empresa em CLT: Juliani Seguranca Patrimonial)'`** -- o discriminante da
+lei de pe no ar, na janela `2026-09-21..2026-10-20`. **A 09 EXPORTADA INTACTA (L-092):** os 8 registros,
+3 vigentes, hash a hash IDENTICOS antes e depois do deploy (`logs/o211b_hash_export_antes_deploy.txt` x
+`..._depois_deploy.txt`, md5 `bd6d13650cf0520ab3ba4aea9933b4c0` nos dois).
+**O CONTADOR DO APPLY, medido duas vezes e com a razao MEDIDA, nao suposta:** linhas da 10 com
+`horas_noturnas` diferente da foto de 11:45 = **0 de 587** as 11:53 e ainda **0** as 12:00, contra um teto
+de **70**. O que NAO esta zerado e o escritor: **11 linhas da 10 foram reescritas depois do reload**, uma
+por minuto (11:53:41 a 12:00:07), 8 delas da emp2 -- o `recalcular_por_evento` esta rodando com a regua
+nova. **Por que o contador nao subiu com elas:** as 11 tem `horas_noturnas` **0,00 antes E depois**, ou
+seja nenhuma pertence ao universo que a cl.38-d move. O universo real na 10 e `emp2 151 de 445 com noturna`
+(soma 7.273,53 h), `emp3 43 de 117`, `emp4 7 de 21`, `emp1 0 de 4` -- e os 70 do DIFF saem dos 151 da emp2.
+O contador sobe quando um dos **151** produzir um fato, nao quando qualquer colab bater. O que eu NAO vou
+fazer e forcar relavratura de frota para o numero parecer pronto: **quem decide quando a competencia se
+recalcula e o DP** (`config/crons.py`, `recalcular_fechamento` em `FORA_DE_PIPELINE`).
 **DIFF ANTES DO APPLY, como a DINHEIRO-EM-COMPETENCIA-ABERTA manda** (artefato inteiro em
 `logs/o211b_diff_frota_081125.txt`): medido 08/10 11:25 na SOMBRA (dump de hoje 04:00), competencia **10**,
 `antes`=HEAD e `depois`=a fatia, pela porta unica `bin/simular_folha.sh par o211b` -- UMA trava, `rc=3` que
