@@ -1,5 +1,176 @@
 # RELATO — esteira saas-hasner
 
+## O211 POUSO B — **O APPLY DA 10 EXECUTADO E PROVADO, E O CADASTRO QUE DECIDE A REGUA SAI DA EDICAO LIVRE DO ADMIN** (08/10 13:1x→13:4x)
+
+**O aval dele, literal:** *"O211 pouso B, completar o apply da 10: recalcular o gravado dos 70 colabs da
+emp2 que o DIFF das 11:25 nomeia, pela porta, com a foto de reversao das 11:45 e a 09 intacta por hash;
+prova no RELATO. achado (3): Empresa.regime_trabalhista e AplicacaoConvencao saem da edicao livre do
+Django admin (so-leitura, molde O124) ate a tela do O223 existir, com selo, em commit proprio agora.
+achados (1), (2) e (4) vao para a fila de instrumento, so registrar."*
+
+### 1. O APPLY: executado as 13:16, pela porta, e o numero visto DUAS VEZES
+
+Porta: `ponto/services/fechamento.py::recalcular_fechamento_mes(10, 2026, empresa_id=2,
+colaborador_ids=<70>)` — **rc=OK, processados=70, 18,1 s**. Artefato inteiro em
+`logs/o211b_apply10_prova_1319.txt` (8 secoes), previsao somente-leitura das 13:11 em
+`logs/o211b_apply10_previsao_1311.txt`.
+
+**O TIE-OUT, e as duas medicoes ficam LADO A LADO de proposito** — dobrar uma na outra esconderia o que
+cada uma mede:
+
+| medicao | onde | quando | colabs que movem | soma do delta `horas_noturnas` |
+|---|---|---|---|---|
+| DIFF de frota (recalculo x recalculo, MESMOS dados) | SOMBRA, dump de hoje 04:00 | 08/10 11:25 | 70 de 587 | **−1204,86 h** |
+| previsao somente-leitura (antes do apply) | PROD | 08/10 13:11 | 67 de 70 | **−1190,80 h** |
+| GRAVADO, foto x foto (depois do apply) | PROD | 08/10 13:16 | 67 de 70 | **−1190,80 h** |
+
+A previsao e o realizado dao o MESMO numero — e e isso que torna o apply uma execucao, e nao uma
+descoberta. A diferenca entre sombra e prod esta MEDIDA, nao arredondada: `−1204,86` menos
+`col489+col879+col964` (`−14,27`) = `−1190,59`, contra `−1190,80` de prod, **gap 0,21 h**. Os tres que
+faltam na conta de prod sao EXATAMENTE as tres linhas das 70 cujo `atualizado_em` e posterior ao deploy
+das 11:52 — o `recalcular_por_evento` ja as havia reescrito com a regua nova no evento de uma batida. O
+gap de 0,21 h e batida chegada entre o dump das 04:00 e o apply.
+
+**As quatro condicoes da DINHEIRO-EM-COMPETENCIA-ABERTA, uma a uma:**
+- **(1) DIFF publicado ANTES** — `logs/o211b_diff_frota_081125.txt`, publicado neste RELATO as 11:2x.
+- **(2) reversao em `logs/`, agora com as DUAS tabelas** — `FechamentoMensal`
+  (`logs/o211b_foto_reversao_202610_130856.csv`, 587 linhas, md5 `09a95eb5140e802e352a14e8fd800450`) **e**
+  `DiaPago` (`logs/o211b_foto_reversao_diapago_202610_131413.csv`, 2.408 linhas, md5
+  `46bebe9792c0146b53013961ab0b07e5`). A segunda foto nao e zelo: o modo de ESCRITA da porta lavra tambem
+  o `DiaPago` (`fechamento.py:623`), nas versoes `'motor'` E `'oraculo'`, e `folha/porta_export.py:63,355`
+  compara exatamente as duas — reverter so o `FechamentoMensal` deixaria o `DiaPago` com a regua nova.
+  A FOTO DAS 11:45 QUE O SEU AVAL CITA fica como a referencia dele; **a que reverte e a de 13:08**, e o
+  motivo e medido: **254 das 587 linhas** sao reescritas por evento ao longo do dia, e a foto mais velha
+  desfaria o efeito LEGITIMO das batidas do intervalo junto com o meu apply.
+- **(3) a 09 EXPORTADA intacta** — md5 do gravado da 09 (16 campos de dinheiro, 587 linhas)
+  `ad605834b1237c85efab10ef4bd04e5a` **identico** antes e depois; `folha_exportacaodominio mes=9` com 8
+  registros e md5 `bd6d13650cf0520ab3ba4aea9933b4c0` nos dois lados.
+- **(4) prova depois** — e esta secao.
+
+**IDEMPOTENCIA (contrato 2 do estrutural):** a mesma previsao somente-leitura rodada DE NOVO depois do
+apply da `COLABS_QUE_MEXEM=0 de 70, OUTROS=NENHUM`. `status` dos 70: `aberto|70` antes e depois — a porta
+nao mexe em carimbo.
+
+**O QUE MEXEU FORA DO ALVO, com o fato que causou cada um** (7 campo-colab em 4 colabs, nenhum deles
+`horas_noturnas`): `col441` atestado **#4779** (05/10 a 12/10) aprovado 06/10 13:05 UTC, depois da ultima
+lavra da linha → `dias_previstos +2`, `minutos_abonados +1320`, `semanas_dsr` 2/3 → 3/2; `col245` e
+`col584` com 1 batida criada depois da lavra; `col572` com **0** batida nova e **0** celula tocada desde
+22/09 — nele o minuto mudou por CODIGO novo (lavra de 08/10 01:55 UTC, anterior ao commit `265e7e87`), nao
+por fato novo. **O discriminante ESTRUTURAL e mais forte que os quatro casos:** na sombra o DIFF foi
+recalculo x recalculo sobre os MESMOS dados e deu **ZERO** campo fora de `horas_noturnas` em 587 colabs —
+logo o pouso B nao move esses campos; em prod a comparacao e linha VELHA x recalculo FRESCO, e linha velha
+carrega o fato e o CODIGO do dia em que foi lavrada. O commit `037ae715` nao toca sitio nenhum que calcule
+`minutos_realizados`, `dias_previstos`, `minutos_abonados` ou `semanas_dsr_*`.
+
+**E 4 colabs FORA DOS 70 mexeram, e NAO fui eu:** `col592`, `col618`, `col962`, `col970` — cada um com UMA
+batida criada 0,4 s antes da sua linha ser reescrita, dentro da janela das fotos. A porta nao podia te-los
+tocado: o escopo e `pk__in` dos 70 (`ponto/services/fechamento.py:96-97`).
+
+**O QUE A PORTA RECUSOU, e por que nao e dano:** `col366` e `col960` tiveram a lavratura do `DiaPago`
+`versao='oraculo'` RECUSADA pela propria porta — *"2 campo(s) de dia sem dono declarado:
+horas_extras_100_noturna, horas_extras_50_noturna"*. E a recusa declarada de 02/10 (13 de 15 campos com
+dono; escrever ZERO perderia hora paga em silencio). Os dois tem **0** linha `'oraculo'` — nunca tiveram,
+nada ficou velho — e 23 linhas `'motor'` cada, lavradas agora; ninguem le `'oraculo'` hoje (calendario e
+`porta_export` filtram `versao='motor'`). Fica NOMEADO: espera a LEI do ancoramento do trecho extra.
+
+### 2. ACHADO (3): o cadastro que decide a regua sai da edicao livre do admin
+
+**RED EVIDENCIADO ANTES DA CURA** (copia do HEAD, `bin/suite.sh --dir <copia>`): `Ran 13 tests` →
+`FAILED (failures=2, errors=2)`. As quatro mensagens, que sao a propria medicao:
+- `colaboradores.Empresa.regime_trabalhista voltou a ser editavel no admin (EmpresaAdmin)`, e o assert
+  imprimiu os **15 campos editaveis** de `Empresa`;
+- `core.AplicacaoConvencao` → `KeyError` / `not found in {...}` com os **15 registros** do admin listados.
+
+**A MEDICAO CORRIGIU METADE DO SEU PEDIDO, e isso fica dito.** O aval diz *"saem da edicao livre do Django
+admin"* para as duas. Para `Empresa` era literal: a classe estava **PELADA** (`list_display` e
+`search_fields` nao trancam campo nenhum), entao `regime_trabalhista` — o campo que `regua_cct.py::regua_para`
+le para escolher entre piso legal e CCT — se trocava em um clique, sem porta e sem trilha, movendo a folha
+da empresa inteira. Para `core.AplicacaoConvencao` **nao havia edicao livre para tirar**: censo de
+`admin.register` na arvore, 08/10 13:2x — **13 registros, nenhum dela**. Nao e porta aberta, e cadastro que
+decide dinheiro e **nao se le em tela alguma**.
+
+**O QUE FOI FEITO, e por que registrar em vez de deixar fora:**
+PROVA: `colaboradores/admin.py:9` `readonly_fields = ["regime_trabalhista"]` e `core/admin.py:63`
+`@admin.register(AplicacaoConvencao)` com `(SoLeitura, admin.ModelAdmin)`; `Ran 13 tests OK` no selo,
+contra `FAILED (failures=2, errors=2)` na copia do HEAD; `ruff check` limpo nos 4 arquivos; **64 de 64**
+selos de host verdes.
+`EmpresaAdmin.readonly_fields =
+["regime_trabalhista"]` (UM campo — o escopo do aval e literal, LEI-AKITA 9: os outros campos de `Empresa`
+seguem como estavam) e `AplicacaoConvencaoAdmin(SoLeitura, admin.ModelAdmin)` em `core/admin.py` —
+**visivel, nao editavel**, que e o que o molde manda e o que da ao selo algo que MORDE. Fora do registro, um
+selo so poderia afirmar AUSENCIA DE SINAL, e no dia que alguem a registrasse pelada nada ficaria vermelho.
+O molde, ao contrario do que o aval supoe, **nao e mais a lista escrita do O124**: o O167 (corte dele 04/10
+00:0x) a substituiu por `core/admin.py::SoLeitura`, que deriva os campos do `_meta` — justamente porque a
+lista de 3 nomes do O124 deixou `latitude`/`longitude`/`raio_metros` editaveis no `PostoAdmin` por 10 dias.
+**GREEN:** `Ran 13 tests ... OK`, e os cinco modulos que enumeram admin ou a tabela juntos `Ran 56 tests ...
+OK`. O escritor da `AplicacaoConvencao` continua UM e com trilha: `semear_aplicacao_convencao`. O selo e
+`core/tests/test_admin_so_leitura.py::AdminNaoEditaCadastroDaReguaTest`, **6 casos**, e a suite cheia na
+copia se confere pelo par `^Ran N tests` + `^OK`.
+
+**O CONTRATO DA O211 FICOU VERMELHO, e a cura foi a PERGUNTA do selo, nao a lei** (molde do O158):
+`test_a_ARVORE_INTEIRA_so_tem_os_DOIS_sitios_da_AplicacaoConvencao` enumerava DOIS sitios com papel
+declarado, e `core/admin.py` era um terceiro. O contrato existe para proibir um **segundo juiz** de *"onde
+esta convencao se aplica"* — e o admin so-leitura nao julga, **EXIBE**. Entao o terceiro papel entra
+DECLARADO (`'EXIBE em somente-leitura (nao le para decidir, nao escreve)'`) e **traz prova no mesmo caso**,
+para a enumeracao nao virar allowlist de nome: por AST, `core/admin.py` nao pode ter `objects` — quem
+consulta decide. Que ele nao EDITA e julgado pelo juiz dessa pergunta
+(`test_admin_so_leitura.py::AdminNaoEditaCadastroDaReguaTest`), e nao se re-julga aqui (LEI-AKITA 2).
+
+### 3. ACHADO (6) e a DIVIDA QUE A TRANCA DEIXA — nomeada, nao tapada
+
+- **(6) os outros 14 campos de `Empresa` seguem editaveis no admin**, e a lista saiu do proprio RED:
+  `ativa`, `cnpj`, `dia_inicio_competencia`, `em_rollout`, `he_pendente_trava_export`, `id`,
+  `janela_he_ativa`, `janela_he_desde`, `janela_he_piso_min`, `janela_he_saida_ativa`,
+  `janela_he_saida_teto_min`, `janela_he_teto_min`, `nome_fantasia`, `razao_social`. Nao e escopo deste
+  aval e **nao foi tocado** (LEI-AKITA 9), mas tres deles mandam em dinheiro — `dia_inicio_competencia`
+  move a JANELA da folha, e os seis `janela_he_*` sao o cadastro do portao de HE que a **O214** esta
+  construindo. Fica registrado, com a lista, esperando a sua palavra.
+- **`regime_trabalhista` nao tem escritor em CODIGO nenhum**, medido: `grep -rn` na arvore volta so
+  LEITORES (`core/regua_cct.py`), a definicao do modelo, duas migrations e tres linhas de prosa em
+  `contratos_estruturais.py`/`configuracao_efeito.py`. O `semear_aplicacao_convencao` **nao** o escreve
+  (ele grava `ativo`/`motivo` da `AplicacaoConvencao`), e a emp1 virou `'cct'` em 09:01 por ato de shell
+  **com trilha** no `LogConfiguracao`. Ou seja: com a tranca de hoje, o campo que decide a regua de uma
+  empresa so se escreve por shell com trilha ate a tela existir. **Isso AMPLIA o O223**: ele tem de cobrir
+  o CAMPO `regime_trabalhista`, e nao apenas a tabela de aplicacao — a celula dele foi corrigida nesse
+  sentido neste commit.
+- **(7) o contrato de configuracao NAO VE nem `Empresa` nem `AplicacaoConvencao`** — e o sitio da lista
+  nao e o que eu escrevi primeiro, entao fica o nome LIDO: `ENTIDADES_COM_ADMIN` nao mora em
+  `core/configuracao_efeito.py`, mora em **`core/tests/test_contract_configuracao_nao_mente.py:35`**, e
+  tem seis nomes (`ParametroSistema`, `Praca`, `Posto`, `TipoAusencia`, `Feriado`, `Sindicato`). Duas
+  consequencias medidas: (a) `test_MORDE_todo_campo_editavel_esta_declarado` varre
+  `admin.site._registry` INTEIRO e descarta tudo que nao esta nessa tupla, logo o `regime_trabalhista`
+  nunca foi cobrado por ele e o registro novo da `AplicacaoConvencao` tambem nao e — foi por isso que os
+  56 testes dos cinco modulos ficaram verdes sem eu declarar nada; (b) **o que o contrato VIGIA esta
+  declarado no SELO, e nao na declaracao** — quem quiser saber se um campo de configuracao e cobrado tem
+  de abrir o teste. Declarar `Empresa` ali seria a cura estrutural de verdade e **nao esta no aval**;
+  pior, mexer em `configuracao_efeito` move o denominador do teto (L-100). Fica para a sua palavra.
+  No mesmo sitio, e nao e deste aval: o `editaveis_dos_admins` le `madmin.readonly_fields` CRU, e nao
+  `get_readonly_fields()` — entao o que o mixin `SoLeitura` deriva do `_meta` e **invisivel** para ele, e
+  um dos seis nomes da tupla trancado por mixin passaria por editavel.
+
+### 4. AS DUAS LINHAS MINHAS QUE A MEDICAO DESMENTIU, corrigidas no mesmo ato
+
+Pela sua LEIS-LINHA-DESMENTIDA-CORRIGE-NO-PROXIMO-TOQUE (08/10 06:4x): eu publiquei no pouso B, em dois
+lugares, que a `core.AplicacaoConvencao` *"se edita pelo mesmo admin do Django"* — a celula de ESTADO da
+**L-006** e a linha derivada *"clausula FORA do codigo"*. **O censo de 13:2x desmente**: ela nao estava em
+admin nenhum. As duas linhas foram corrigidas com a medicao citada; o veredito `PELA-METADE` e a contagem
+`1 de 3` **nao mudaram** — a lei nao andou, o que andou foi a verdade sobre qual porta existia. O achado
+(5) deste RELATO tambem foi corrigido no lugar.
+
+### 5. A SUA ORDEM DE 13:3x, REGISTRADA NO MESMO TURNO
+
+**Obra `DIETA-DO-CLAUDE-MD` = item `O224`**, fila 1 **entre a O146 e os BOs**, com a sua lista PROIBIDO
+inteira na celula (nao mover regra para skill nem outro arquivo, nao reescrever regra, nao apagar em vez de
+mover, nao tocar codigo nem teste) e o seu criterio de PRONTO (`/context` antes e depois no RELATO, CLAUDE.md
+**pelo menos 10k tokens** menor, prova de que nenhuma linha de regra mudou). O marcador `ORDEM-VIVA-TOPO`
+**nao mudou** (segue `O214`), porque o senhor disse *"nao muda a ordem ate la"*. O que falta DESENHAR, e esta
+dito no item: a prova de *"nenhuma linha de regra mudou"* tem de sair de **DIFF de REGRA**, nunca de contagem
+de linha — e e a mesma forma da **L-109**, que ja mandou a narrativa para o `LAPIDES.md` em 04/10.
+
+**E os achados (1), (2) e (4) foram para a fila de instrumento como voce mandou — SO REGISTRADOS**, itens
+`O225`, `O226` e `O227`, que **nao abrem** antes do pouso de instrumento depois da O211.
+
+
 **O211 POUSO B NO AR as 11:52 de 08/10 -- commit de titulo `O211 pouso B: a regua de dinheiro sobe da
 EMPRESA...` --, e com ele a O211 esta FECHADA: a regua de dinheiro sobe da EMPRESA, e a praca so entra por
 linha DECLARADA.** (O hash NAO se cita aqui de proposito: este paragrafo entra NO proprio commit, entao
@@ -23,9 +194,12 @@ por minuto (11:53:41 a 12:00:07), 8 delas da emp2 -- o `recalcular_por_evento` e
 nova. **Por que o contador nao subiu com elas:** as 11 tem `horas_noturnas` **0,00 antes E depois**, ou
 seja nenhuma pertence ao universo que a cl.38-d move. O universo real na 10 e `emp2 151 de 445 com noturna`
 (soma 7.273,53 h), `emp3 43 de 117`, `emp4 7 de 21`, `emp1 0 de 4` -- e os 70 do DIFF saem dos 151 da emp2.
-O contador sobe quando um dos **151** produzir um fato, nao quando qualquer colab bater. O que eu NAO vou
-fazer e forcar relavratura de frota para o numero parecer pronto: **quem decide quando a competencia se
-recalcula e o DP** (`config/crons.py`, `recalcular_fechamento` em `FORA_DE_PIPELINE`).
+O contador sobe quando um dos **151** produzir um fato, nao quando qualquer colab bater. O que eu NAO ia
+fazer era forcar relavratura de frota para o numero parecer pronto, porque **quem decide quando a
+competencia se recalcula e o DP** (`config/crons.py`, `recalcular_fechamento` em `FORA_DE_PIPELINE`).
+**ESTE PARAGRAFO E HISTORIA DAS 12:00, e o bloco do topo o SUPERA:** o senhor avalizou o apply as 13:0x,
+nomeando os 70 da emp2, e ele foi executado pela porta as 13:16 -- 67 colabs movendo `horas_noturnas` em
+`-1190,80 h`. O contador de `0 de 587` acima e o estado de ANTES do seu aval, nao uma pendencia viva.
 **DIFF ANTES DO APPLY, como a DINHEIRO-EM-COMPETENCIA-ABERTA manda** (artefato inteiro em
 `logs/o211b_diff_frota_081125.txt`): medido 08/10 11:25 na SOMBRA (dump de hoje 04:00), competencia **10**,
 `antes`=HEAD e `depois`=a fatia, pela porta unica `bin/simular_folha.sh par o211b` -- UMA trava, `rc=3` que
@@ -98,9 +272,12 @@ relavratura de FROTA segue sendo ato do DP; o que anda sozinho e o colab que bat
 pouso A: (4) **a guarda da L-092 recusa `somente_leitura`** -- para medir a 09 sem gravar eu tive de passar
 `permitir_exportada=True` junto, isto e, a porta nao distingue *"ler o que daria"* de *"gravar na
 exportada"*, e quem so quer LER precisa pedir permissao de ESCRITA; (5) `core.AplicacaoConvencao` nasceu
-com **0 view, 0 rota, 0 template** (censo na arvore, 08/10) -- a unica porta hoje e o admin do Django, que
-e exatamente o que a L-006 recusa, e por isso o **O223** nasce neste commit como item de fila 2 em vez de
-a divida sumir junto do carimbo FECHADA.
+com **0 view, 0 rota, 0 template** (censo na arvore, 08/10), e por isso o **O223** nasce neste commit como
+item de fila 2 em vez de a divida sumir junto do carimbo FECHADA. **CORRIGIDO as 13:3x, e a frase que
+estava aqui era minha:** eu escrevi que *"a unica porta hoje e o admin do Django"* -- o censo de
+`admin.register` da arvore (13 registros) mostrou que ela **nao estava em admin nenhum**. Nao havia porta
+de edicao: havia cadastro que decide dinheiro e que nao se lia em tela alguma. O achado (3) a registrou em
+`core/admin.py` com o mixin `SoLeitura` (visivel, nao editavel) -- ver o bloco do topo.
 **UM VERMELHO QUE NAO ERA VERMELHO, e o erro era meu:** um `ImportError` no meio da construcao parecia
 RED de teste e era **colisao de `# -*- coding: ascii -*-`** -- arquivo que declara ascii e recebe um byte
 nao-ASCII falha no IMPORT, com cara de ERROR de suite e corpo de lapso de autoria. Aconteceu duas vezes

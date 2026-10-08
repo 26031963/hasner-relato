@@ -1,16 +1,9 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:92 AFIRMA ato sem PROVA ao lado -- **O QUE FOI FEITO, e por que registrar em vez de deixar fora:** `EmpresaAdmin.readonly_fields =
->
-> O RELATO nao entrou neste ciclo porque uma afirmacao de ato
-> (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
-> seguem valendo -- eles descrevem, nao afirmam ato.
-
-
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 13:57:31.**
+**Medido em 08/10/2026 14:03:01.**
 
 | | |
 |---|---|
@@ -122,11 +115,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bpxqmktlu.output (17 lines)
-
-● Task "RED e construção do segundo intervalo" completed in background
-
-  Searched for 2 patterns, read 3 files, ran 20 shell commands
 
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
@@ -148,10 +136,15 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-● Ler como o contrato enumera os campos editáveis dos admins
-  ⎿  $ cd /home/ronald/saas-hasner && sed -n '40,100p' app/core/tests/test_contract_configuracao_nao_mente.py
+● Esperar o veredito da suite · 46s
+  ⎿  $ cd /home/ronald/saas-hasner &&
+     S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/achado3
+     until grep -qE '^(OK|FAILED)( |$)' $S/suite_cheia.out 2>/dev/null; do :; done
+     echo "=== fim $(date '+%H:%M:%S') ==="
+     grep -E '^Ran [0-9]+ tests' $S/suite_cheia.ou… (46s)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Wrangling… (31m 52s · ↓ 57.0k tokens · thinking)
+✢ Wrangling… (37m 22s · ↓ 67.7k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
