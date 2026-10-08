@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 09:30:45.**
+**Medido em 08/10/2026 09:35:45.**
 
 | | |
 |---|---|
@@ -111,19 +111,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-❯ aval Ronald: so REGISTRAR, nao construir, e nao muda a ordem da fila 1. adendo na O148 (FOLGAS DUPLICANDO) e na O152 (BUSCA-DA-CASA),
-  que passam a andar juntas como uma obra de UI do calendario de folgas, na fila 2 depois dos BOs: (1) admin pode excluir template que ele
-  mesmo gerou; (2) admin relata que gerar modelo nessa tela nem sempre sincroniza com o colab, medir junto com a duplicidade da O148
-  antes de propor cura; (3) a tela ganha a busca padrao da O152 e tem que servir para milhares de templates. segue a fila; PAREI so em lei
-  ou !
-
-  Ran 6 shell commands
-
-● Background command "Empurrar o marco do pouso A (pre-push roda a suite cheia)" completed (exit code 0)
-
-  Ran 3 shell commands
-  ⎿  Read docs/AVAIS.md (23 lines)
-  ⎿  Referenced file config/crons.py
   ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bgt1l604k.output (36 lines)
   ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bpxqmktlu.output (17 lines)
   ⎿  Referenced file
@@ -138,15 +125,28 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Commit 4adbbfff, 11 arquivos, crons_duracao.json fora (cron-dirty). Push agora — a suíte cheia do pre-push é a prova real.
 
-  Running 1 shell command…
+  Ran 1 shell command
 
-· Cultivating… (3h 22m 9s · ↓ 414.6k tokens · thought for 2s)
+● Enquanto o push corre (não escrevo na árvore nem em bin/ durante ele), avanço o patch b6 na cópia — fora da árvore, como a lei 10 pede.
+
+  Ran 3 shell commands
+
+● O censo está limpo: fora da régua (já curada na cópia) e da tela que grava, ninguém lê VinculoSindicatoPraca para decidir dinheiro. Isso
+  sustenta a linha já decidida.
+
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+
+  Ver o header da tabela de leis
+  ⎿  $ sed -n '55,58p' LEIS.md | cut -c1-300
+
+· Cultivating… (3h 27m 9s · ↓ 420.5k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
