@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 19:40:02.**
+**Medido em 08/10/2026 19:45:31.**
 
 | | |
 |---|---|
@@ -113,44 +113,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+● Task "RED e construção do segundo intervalo" completed in background
 
-  SELO: leitor de ponta com derivacao propria = 0; campo novo sem leitor = 0; juizes novos = 0.
+● Task "Pousar a O204 na raia wt-bos" still running in background
 
-  PROIBIDO: fallback; juiz novo; mexer em tolerancia ou no raio para o numero cair; certificar por DIFF contra o motor velho; declarar a
-  extra por codigo ou por script (quem declara e o admin, pela tela); regenerar celula sem a porta.
+❯ aval Ronald: BOS-EM-RAIA-UM-POR-VEZ. Os BOs andam na raia wt-bos em paralelo com a principal (O145 -> O146 -> item 2 da O214), UM de
+  cada vez, nesta ordem: O204 (em curso) -> O200 -> O206 -> O199 -> O198 -> O197 -> O207 -> O44 itens 2-8.
 
-  DINHEIRO: motor avalizado para esta obra. Apply so pela DINHEIRO-EM-COMPETENCIA-ABERTA (DIFF de frota no RELATO antes, reversao em
-  logs/, exportada intacta com hash, prova depois).
+  LIMITES:
+  1. A principal tem a vez na pista de teste e no deploy. BO so pede suite e so pousa ENTRE dois pousos da principal (L-105, L-107); rc 75
+  = esperar, nunca furar.
+  2. A raia nao toca ponto/motor_calculo_v2.py, ponto/janela_he.py, ponto/portas/he.py, escala/models.py nem escala/utils.py enquanto a
+  O146 nao pousar.
+  3. A O197 so abre DEPOIS do pouso da O146 (mesmo arquivo: colaboradores/services/calendario.py).
+  4. A O207 mexe em vinculo: constroi, mede e PARA no ! antes de qualquer apply. O codigo da porta pode pousar; dado de vinculo nao.
+  5. Um BO aberto por vez: so abre o proximo com o anterior pousado ou parado com motivo em UMA linha no RELATO.
+  6. Cada BO fecha com RED nomeado, selo que morde e a linha LEI-AKITA; achado de fora vira linha na fila, nunca trabalho agora.
 
-  LEI: a extra nas duas pontas esta cortada (08/10). Pergunta de lei ABERTA, vai ao topo do RELATO sem devolver turno: a extra declarada
-  entra no PREVISTO do dia (quem sai no marco fica devendo) ou e so HE (quem sai no marco nao deve nada)? Os casos c e f estao escritos
-  pela leitura "so HE". A O145 nao depende da resposta.
+  PROIBIDO: dois BOs abertos juntos; fallback; juiz novo; regra de negocio fora do que o BACKLOG ja descreve em cada item.
 
-  PRONTO: RELATO com os REDs a-j nomeados, o DIFF de frota e o commit; sem eles = INCOMPLETO com a lista do que falta.
+  Nenhuma lei nova. Registra a ordem no BACKLOG. segue a fila; PAREI so em lei ou !
 
-  LEI-AKITA: origem=ponto/janela_he.py (limite da janela) + TipoEscala/DNA (cadastro), testemunha=celula (dna) lida por motor e por
-  marcar_pontas_fora, RED=casos a-j, quem-mais-le=espelho, calendario, he_pendente_lavrado, recusar_ponta_pequena, Gestao de HE, juizes
-  novos=0
+● Novo aval recebido mid-turn (BOS-EM-RAIA-UM-POR-VEZ). Registro primeiro, porque o limite 2 tem de chegar à raia antes de ela abrir
+  qualquer coisa — e ao mesmo tempo fecho a leitura do paradoxo da O145:
 
-  LINHA HAIKU: (a) "extra da escala" entra no payload do copiloto com rotulo de admin; (b) golden: "quanto de HE da escala o colab X tem
-  no dia Y"; (c) degrau: leitura.
+● Running 1 shell command…
+  ⎿  $ cd /home/ronald/saas-hasner/app
+     echo "=== _match_marcos: de onde saem ini/fim do envelope ==="; sed -n '300,332p' escala/utils.py
 
-  segue a fila; PAREI so em lei ou !
-
-● O dossiê inverte a ordem — O145 primeiro — e o motivo que ele dá é exatamente a leitura que eu havia acabado de fazer. Mas o dossiê me
-  faz ver um perigo no que entreguei à raia: o patch_backlog.py tem o caminho da árvore viva cravado, e a raia commita na dela. Aviso antes
-  de qualquer coisa:
-
-✽ Wrangling… (6h 14m 23s · ↓ 665.2k tokens)
+✢ Wrangling… (6h 19m 52s · ↓ 670.9k tokens · thinking more)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    4% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
-❯ ◯ fork  Measuring trava occupancy in suite.sh                                                                   8m 23s · ↓ 90.5k tokens
+  ◯ fork  Checking esteira.pausada in deploy.sh                                                                 13m 52s · ↓ 111.6k tokens
   ⧉  index
 ```
