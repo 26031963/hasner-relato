@@ -1,4 +1,4 @@
-# AVAIS NA MESA — 9
+# AVAIS NA MESA — 6
 
 > Gerado por `bin/gerar_avais.py` a partir de `app/docs/PENDENTES_RONALD.json`.
 > **So itens ABERTOS.** Item respondido SOME daqui na proxima geracao -- a historia dele fica
@@ -12,13 +12,10 @@
 | 4 | `W12X36-HPD-SMOKE` | **smoke** | 2026-10-02T11:47 | 128 tipos 12x36, 0 com hpd, 0 de 896 dia-tipo mudam; serve 338 vinculos e 1.307 plantoes de fim de semana | `smoke Ronald: abri o wizard de um 12x36, marquei o domingo com horario proprio e salvou; um 12x36 sem marcar nada continuou igual -- pode fechar o W12X36-HPD` |
 | 5 | `PAUTA-DP-09-COL954` | **!** | 2026-10-02T17:30 | rubrica 8792, 2 dias (18/09 e 19/09), matricula 2103; emp2 213 linhas contra 210 | `col954: a falta de 18/09 e 19/09 (2 dias, rubrica 8792) entra na 09 do Dominio por correcao LA.   OU   gera TXT novo da 09 com `--usuario` e `--motivo` meus.   OU   fica fora da 09 e entra na 10.` |
 | 6 | `PAUTA-DP-09-COL900` | **!** | 2026-10-02T17:30 | rubricas 0200 = 7,37 e 0243 = 4,50; matricula 657; emp3 88 linhas contra 86 | `col900: as rubricas 0200 (7,37) e 0243 (4,50) entram na 09 do Dominio por correcao LA.   OU   gera TXT novo da 09 com `--usuario` e `--motivo` meus.   OU   ficam fora da 09.` |
-| 7 | `O214-CRON-RECUSA-INSTALAR` | **!** | 2026-10-08T16:30 | 2.693 dias / 260,9 h na 10; 0 na segunda rodada (idempotente); hash do gravado identico nas 3 empresas | `! instala o cron da recusa de ponta pequena junto com o resto do `bin/crons.sh install` (e ai o `reverter_situacao_afastado --apply` liga tambem, e ele espera `!` seu desde 24/09).   OU   a recusa segue pela MAO: eu rodo o comando uma vez por competencia, com a prova no RELATO, e dia pequeno de comp` |
-| 8 | `O214-RELAVRAR-A-09` | **!** | 2026-10-08T16:31 | 09: 5.370 dias / 949,1 h pendentes; <=15 min = 4.689 dias / 439,1 h; resto = 681 dias / 510,0 h | `! relavra o retrato da 09 e recusa as 4.689 pontas pequenas dela (439,1 h), deixando 681 dias para o admin.   OU   a 09 fica como esta e a recusa so vale da 10 em diante.` |
-| 9 | `O214-L111-SUCESSOR-DECLARADO` | **lei** | 2026-10-08T16:32 | 13 rubricas declaradas, 0 paga; 2 chamadores de producao, 0 de HE | `lei: sucessor DECLARADO com DIFF publicado fica fora da L-111 enquanto o DIFF corre (e o registro disso vai no sitio).   OU   a L-111 vale literal e o `ponto/calculador/` sai agora, com os testes dele.` |
 
 ---
 
-Total no JSON: **213** · aberto **9** · respondido **43** · sem-motivo **161**.
+Total no JSON: **213** · aberto **6** · respondido **46** · sem-motivo **161**.
 
 > `sem-motivo` nao e "resolvido": e *"ninguem julgou este item"*. A ordem de 18:4x proibe
 > triar os 163 antigos, entao eles ficam ai, nomeados, em vez de serem chutados para um lado.
