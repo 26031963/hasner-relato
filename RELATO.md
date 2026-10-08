@@ -1,5 +1,37 @@
 # RELATO — esteira saas-hasner
 
+**O ALARME DA ESTEIRA VOLTOU A SER LIDO PRIMEIRO -- e o bug era meu, de ~8 dias atras.**
+`core/esteira_vigia.py::no_relato` promete no proprio docstring que a linha "entra no TOPO do RELATO,
+onde se le primeiro". Ela ancorava em `\n## PENDENTES DO RONALD`, e a dieta a mao de `2082e03d`
+ARQUIVOU essa secao: desde entao o `i < 0` caia no `else` e DEPOSITAVA o alarme no FIM do arquivo --
+lido por ultimo, contra o que o docstring diz. Nao e um atalho que eu escrevi hoje: e um atalho que ja
+existia e se tornou o caminho UNICO no dia que a ancora saiu de baixo dele.
+- **o dano, medido**: 126 linhas de alarme vivas no RELATO, **90 delas na cauda** (depois do ultimo
+  titulo datado), 280 ja no `RELATO-ARQUIVO.md`, e **12 copias identicas** de um alarme VIVO
+  ("a esteira esta parada e o vigia nao esta destravando") entre 07/10 18:35 e 08/10 05:55. Nove
+  chamadores escrevem por essa porta -- ZUMBIDO, quarentena, AUTO-REVERT, lote rejeitado.
+- **a cura, na origem**: a ancora passa a ser uma secao PINADA propria, `## ALARMES DA ESTEIRA`, com
+  tres ramos EXPLICITOS (secao existe / nao existe / nao ha titulo algum) em vez de um `else` que cai
+  no EOF. O ramo "nao existe" insere na posicao do primeiro `## `, de modo que **`s[:j]` fica
+  byte-identico** -- e e isso que preserva o `PAREI:` dentro das 40 primeiras linhas que o
+  `bin/alarme_sessao_ociosa.py:120` le. O nome da secao foi escolhido sem nenhuma palavra de ATO,
+  porque `##` torna a linha *forte* para o portao de publicacao.
+- **PROVA:** RED evidenciado contra o codigo do HEAD, de pe: `falhas=6`, inclusive a literal
+  `(iii) MORDE: o alarme ficou na ULTIMA linha -- depositado no EOF`; GREEN na cura, `falhas=0`.
+  Selo na suite: `core/tests/test_no_relato_tem_secao_pinada.py` -- `Ran 5 tests` -> `OK`, rc=0 (via
+  `--only`), `ruff` limpo. As 90 orfas realocadas com conservacao provada: multiset de alarmes
+  **126 -> 126**, as **4.975** linhas que nao sao alarme identicas e na MESMA ordem, e delta de
+  **+23 B** = exatamente `## ALARMES DA ESTEIRA` mais os separadores.
+- **o que FALTA, e nao se carimba sem ela**: a prova de producao e o proximo alarme do vigia (throttle
+  `cada_min=60`, ultimo as 05:55) cair DENTRO da secao. Espero pelo ARQUIVO, nunca por `pgrep`. **Nao
+  ha deploy nesta cura**, e isso foi medido: o vigia e um `systemd --user` TIMER que nasce um `python3`
+  do HOST a cada tique e le o `.py` do disco -- `bin/deploy.sh` nao o alcanca nem precisa.
+- **o que eu NAO fiz, de proposito**: dedup dentro do `no_relato` -- as 12 copias sao 12 EVENTOS reais,
+  e o acumulo e trabalho da DIETA, que vai envelhecer linha de alarme DENTRO da secao pinada pelo
+  carimbo dela. E nada no `LEIS.md`: a coluna PROTEGE (a 6a) esta VAZIA na L-062 e na L-079, entao
+  `test_lei_protege_sitio` nao cobra citacao aqui (`8 sitio(s) protegido(s) em 81 leis, tocados 0`).
+  Fica o lateral: a L-079 nomeia `core/esteira_vigia.py::decidir` na coluna *dono*, nao na PROTEGE.
+
 **OS CINCO POUSOS DA O221, e os dois ultimos nasceram da L-105, nao do `!`.** O `!` de 07/10 19:35
 nomeou DUAS raias (a de agente da O139 e a `raia-chamado`); as outras tres pousam pela **L-105**
 ("raia com suite verde POUSA, e o pouso e PRE-APROVADO salvo o que esta na lista NUNCA PRE-APROVADO"),

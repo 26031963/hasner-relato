@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 06:50:45.**
+**Medido em 08/10/2026 06:56:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `32d1d7fd O topo do TICKETS fechado no ato do push (O112)` |
+| `HEAD` local | `78909bdf o alarme da esteira volta a ser lido PRIMEIRO: a ancora do no_relato passa a ser secao pinada propria, e nao um else que cai no EOF` |
 | `origin/main` | `88bbc0c4 [O221] o marco do PLACAR-ESTRUTURAL: o R6 passa a publicar a frase do juiz, e as duas notas que envelheceram dizem o que foi medido` |
-| commits a subir (`ahead`) | **1** |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -22,23 +22,19 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+78909bdf o alarme da esteira volta a ser lido PRIMEIRO: a ancora do no_relato passa a ser secao pinada propria, e nao um else que cai no EOF
 32d1d7fd O topo do TICKETS fechado no ato do push (O112)
 88bbc0c4 [O221] o marco do PLACAR-ESTRUTURAL: o R6 passa a publicar a frase do juiz, e as duas notas que envelheceram dizem o que foi medido
 9b64ee79 [O167] a uniao dos pousos 4 e 5: a raia do esmeril de ausencia entra na raia de agente, e o conflito e UMA linha de tabela
 e7dcd970 [O167] pouso 5, a juncao da raia de agente: os quatro cadastros ficam so-leitura no admin, e o gate do chamado ganha a trava que a porta do DP ja tinha
-265e7e87 [SEXTO-BANCO] a juncao do ESMERIL de ausencia: o catalogo responde pelo CADASTRO VIVO, e "cobre parte do dia" passa a ter UMA casa
 ```
 
 ## `git status --short`
 
 ```
  M app/config/crons_duracao.json
- M app/core/esteira_vigia.py
  M app/docs/HANDOFF-SESSAO.md
- M app/docs/PROMPTS.md
- M app/docs/RELATO.md
  M bin/sombra.sh
-?? app/core/tests/test_no_relato_tem_secao_pinada.py
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -116,37 +112,37 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-  Ran 1 shell command
-
-● :100 mostra que o label posicional vai por --only; o -- serve a flags. Corrijo:
+  Agora o que o commit precisa carregar:
 
   Ran 1 shell command
 
-● Selo GREEN: Ran 5 tests / OK, rc=0, pela porta canônica com a trava. E o timer já deve ter disparado desde que a cura foi ao disco — essa
-  é a prova que o advisor pediu:
+● O selo LEI-AKITA guarda o CLAUDE.md e o molde, não a minha mensagem — mas a linha de conduta eu escrevo de todo modo. Diff coerente com a
+  prova: RELATO +182/−181 (90 alarmes + 90 linhas em branco + cabeçalho e separador). Agora o topo do RELATO, lendo o formato vivo:
+
+  Ran 2 shell commands
+
+● Agora o topo do RELATO — sem reivindicar ato que ainda não tem prova:
+
+  Ran 2 shell commands
+
+● Exatamente os quatro indexados; crons_duracao.json, HANDOFF e bin/sombra.sh ficaram fora como devem. Commit:
+
+  Committed 78909bdf
+
+● 78909bdf. Agora a prova de produção — e eu a espero pelo arquivo, com o relógio lido no ato:
 
   Ran 1 shell command
 
-● O tick de 06:45:44 rodou depois da cura, mas não alarmou: o throttle é cada_min=60 e o último alarme foi 05:55, então o próximo vence
-  ~06:55. Prova pendente, e eu a espero pelo arquivo. Enquanto isso, as 90 órfãs — passo de DADO, com prova de conservação:
+● O tique acabou de disparar (06:55:10). Mas antes da prova, uma coisa não fecha: linhas 5990-5994 têm alarme na cauda, e eu afirmei no
+  RELATO que a cauda ficou sem alarme solto. Vou medir em vez de supor:
 
   Ran 1 shell command
 
-● Conservação provada: 90 órfãs recolhidas, multiset de alarmes 126 → 126, as 4.975 linhas que não são alarme idênticas e na mesma ordem, e
-  delta de +23 B — exatamente ## ALARMES DA ESTEIRA\n\n. Topo (1-154) byte-idêntico, seção em 155. Agora os portões:
+●
 
-● Rodar portoes e ler o selo do PROTEGE
-  ⎿  $ cd /home/ronald/saas-hasner
-     echo "=== PAREI segue nas 40 primeiras? ==="
-     head -40 app/docs/RELATO.md | grep -n 'PAREI' | head -3 || echo "(sem PAREI -- nada parado)"
-     echo
-     echo "=== portao de publicacao ==="
-     python3 bin/relato_afirma_com_prova.py app/docs/RELATO.md app/docs/RELATORIOS-PLANO.md 2>&…
-
-✶ Compacting conversation… (42m 9s · ↓ 86.3k tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱ 85%
+✢ Cultivating… (47m 25s · ↓ 101.6k tokens · thought for 21s)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    0% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
