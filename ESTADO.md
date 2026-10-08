@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 07:12:31.**
+**Medido em 08/10/2026 07:18:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `cf03dbcb o alarme da esteira volta a ser lido PRIMEIRO: a ancora do no_relato passa a ser secao pinada propria, e nao um else que cai no EOF` |
+| `HEAD` local | `6eeb129d o segundo leitor da pausa com dono migra: o "vigia sem efeito" para de chamar de travamento um estado que o Ronald escolheu` |
 | `origin/main` | `88bbc0c4 [O221] o marco do PLACAR-ESTRUTURAL: o R6 passa a publicar a frase do juiz, e as duas notas que envelheceram dizem o que foi medido` |
-| commits a subir (`ahead`) | **2** |
+| commits a subir (`ahead`) | **3** |
 
 ## Fabrica
 
@@ -22,11 +22,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+6eeb129d o segundo leitor da pausa com dono migra: o "vigia sem efeito" para de chamar de travamento um estado que o Ronald escolheu
 cf03dbcb o alarme da esteira volta a ser lido PRIMEIRO: a ancora do no_relato passa a ser secao pinada propria, e nao um else que cai no EOF
 32d1d7fd O topo do TICKETS fechado no ato do push (O112)
 88bbc0c4 [O221] o marco do PLACAR-ESTRUTURAL: o R6 passa a publicar a frase do juiz, e as duas notas que envelheceram dizem o que foi medido
 9b64ee79 [O167] a uniao dos pousos 4 e 5: a raia do esmeril de ausencia entra na raia de agente, e o conflito e UMA linha de tabela
-e7dcd970 [O167] pouso 5, a juncao da raia de agente: os quatro cadastros ficam so-leitura no admin, e o gate do chamado ganha a trava que a porta do DP ja tinha
 ```
 
 ## `git status --short`
@@ -35,7 +35,6 @@ e7dcd970 [O167] pouso 5, a juncao da raia de agente: os quatro cadastros ficam s
  M app/config/crons_duracao.json
  M app/docs/HANDOFF-SESSAO.md
  M bin/sombra.sh
-?? app/core/tests/test_vigia_sem_efeito_respeita_pausa_com_dono.py
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -112,36 +111,36 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ⎿  Referenced file config/crons.py
+  Ran 1 shell command
 
-● Task "RED e construção do segundo intervalo" completed in background
+● Selo VERMELHO no HEAD (2 falhas; os dois MORDE verdes nos dois lados). Commit da cura #2 — primeiro a linha de PROVA no RELATO:
 
-● RED de pé: 3 falhas no HEAD, 0 na cura — e os casos (ii)/(iii) passam nos dois lados, que é o que um par anti-vacuidade tem de fazer.
-  Agora o selo, no molde do irmão:
+  Committed 6eeb129d, ran 3 shell commands
+
+● Cura #2 em 6eeb129d. Agora o instrumento — cura #3, o segundo escritor:
+
+  Ran 2 shell commands
+
+● O censo abriu: há mais dois escritores em bin/. Antes de curar um, fecho o censo — é literalmente o que a meia-correção proíbe:
+
+  Ran 2 shell commands
+
+● Censo fechado, com números: relato.sh:88 escreve em $TMP/ESTADO.md (outra pergunta), deploy_agendado.sh escreve na sua própria seção
+  pinada (## DEPLOYS AGENDADOS = 1, existe), e só vigia_arvore.sh:160-168 clona a pergunta do alarme com a âncora morta (## PENDENTES DO
+  RONALD = 0). Antes de escolher o juiz do selo, vejo se ele já existe:
 
   Ran 1 shell command
 
-❯ aval Ronald: celula chamado x juiz fica PARCIAL ate O168, O169 e o LASTRO; proibido reclassificar papel para virar verde. segue a fila;
-  PAREI so em lei ou !
+● bin/tests/test_hook_nao_e_copia.sh é exatamente o idioma "clone em bin/" já existente — leio antes de inventar juiz:
 
   Ran 1 shell command
 
-❯ aval Ronald: linha do LEIS que a fonte medida desmente se corrige no proximo commit que tocar o LEIS, com a medicao citada. segue a
-  fila; PAREI so em lei ou !
+● O idioma existe: "o X DELEGA; se contiver a Y, é cópia, e cópia diverge" + par que MORDE. Tenho o censo fechado e três juízes candidatos
+  para o selo — chamo o revisor antes de cravar:
 
-● Os dois avais já estão registrados — PROMPT-NAO-SE-REPETE, uma linha cada:
+  Advising using Fable 5.1
 
-  Ran 1 shell command
-
-● Ambos já registrados (PROMPTS.md:1080 e :1081), nenhum dos dois aciona neste marco — ele não toca contratos_estruturais.py nem LEIS.md
-  (selo mediu tocados neste push: 0). Sigo a fila. O selo da cura #2:
-
-  Ran 1 shell command
-
-❯ aval Ronald: carimba a CELULA-TURNO-FECHA como FECHADA; os 4 numeros do passo 6 batem no ar, faltou so o verde das duas celulas cair no
-  mesmo commit (turno 6319b10c, celula b4372615). segue a fila; PAREI so em lei ou !
-
-✢ Cultivating… (1h 3m 55s · ↓ 140.8k tokens · thinking)
+✢ Cultivating… (1h 9m 25s · ↓ 156.7k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

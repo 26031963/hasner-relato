@@ -49,6 +49,30 @@ existia e se tornou o caminho UNICO no dia que a ancora saiu de baixo dele.
   nominalmente ("censo de escritores fechado antes"), entao ele passa a CHAMAR a funcao, pelo idioma
   que `bin/esteira.sh:96` e `bin/fabricante.sh:44` ja usam. Vai em commit PROPRIO: `bin/` e
   INSTRUMENTO e nao pousa com produto (L-105).
+- **COMMIT 2 (produto): o `vigia_sem_efeito` passa a LER a pausa -- e a lei nao e nova.** O corte de
+  27/09 10:5x esta escrito 60 linhas ACIMA, no mesmo arquivo, e a `trava_a_vazia` ja o obedece por
+  `_fab_desligado_com_dono` (exige `QUEM=` **e** `SAIDA=`). Este era o leitor que faltou migrar --
+  LEI-AKITA 4: a pergunta e "qual leitor nao migrou", nunca "qual a regra". A frase que ele repetia
+  ("a esteira esta parada e o vigia nao esta destravando") era FALSA no juizo: o vigia estava
+  respeitando a pausa que o Ronald declarou em 26/09 10:01 com dono, motivo e condicao de saida. Cura
+  de **2 linhas** (`and not _fab_desligado_com_dono` no `if`, `or _fab_desligado_com_dono` no `elif`
+  que RESOLVE): sem a segunda metade a linha de ontem ficaria de pe para sempre e o contador nunca
+  voltaria a zero. **NAO e silenciar emissor** (L-062 pede prazo + tripwire + fila): o tripwire ja
+  existe e e OUTRO caminho -- pausa ANONIMA segue alarmando por `pausa_sem_dono` (L-079), e o caso
+  (iii) do selo e o que impede o silencio de virar desculpa.
+  **PROVA:** selo novo `core/tests/test_vigia_sem_efeito_respeita_pausa_com_dono.py`, 4 casos com o
+  relogio CRAVADO em 08/10 10:00 (dentro da janela 00:00-22:40, fora do vao 03:40-04:45 -- borda de
+  relogio solto da verde por acidente as 23:00). VERMELHO contra o HEAD de pe, numa copia de
+  `git archive HEAD` rodada por `--dir`: `Ran 4 tests / FAILED (failures=2)`, a primeira dizendo
+  literalmente `[('alarme','vigia_sem_efeito', ...)] != []`. VERDE com a cura, e junto dos vizinhos do
+  mesmo assunto: `Ran 13 tests / OK` rc=0 (4 novos + 4 do selo irmao de 27/09 + 5 da cura #1). Ruff
+  limpo nos dois arquivos. Os dois casos MORDE ficam VERDES nos **dois** lados da cura, de proposito:
+  se tivessem virado verde so depois, o selo teria passado por o vigia ter ficado cego.
+  `sem_efeito_seguidas` estava em **1699**; os dois disparos do ramo que EXECUTA (`== 2` ->
+  `auto_revert`) foram 24/09 12:30 e 01/10 16:00, os dois terminando `-> arvore nao esta vermelha` --
+  **zero revert executado**, logo o que se apaga e RUIDO, nao guarda. Lateral anotado, NAO curado: com
+  o contador em 1699 o gatilho `== 2` esta morto ate um reset, e a cura acima e justamente quem volta
+  a zera-lo.
 - **o que eu NAO fiz, de proposito**: dedup dentro do `no_relato` -- as 115 copias sao 115 EVENTOS
   reais, os 13 chamadores tem semanticas diferentes, e o acumulo e trabalho da DIETA, que passa a
   dever tambem o envelhecimento de linha de alarme DENTRO da secao pinada, pelo carimbo dela. E nada
