@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 07/10/2026 22:01:01.**
+**Medido em 07/10/2026 22:06:31.**
 
 | | |
 |---|---|
@@ -116,44 +116,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  dump_de_prod_em do pacote estava errado por 2 dias. Dois fatos distintos; vejo o carimbo e quais dumps o refazer usa:
 
   Ran 1 shell command
 
-● A base é juliani_20261007_040001.dump (04:00 de hoje), carimbo OK — o juliani_agora.dump de 05/10 é resto de um --dump-agora e não é a
-  base. Vejo o carimbo e a função que erra:
+● Base de 22:03, dump de 21:59:53 — agora _instante_do_dump() lê o arquivo que foi de fato usado, e a idade no apply fica abaixo de 1 h.
+  Lanço o DIFF com a árvore da raia:
 
   Ran 1 shell command
 
-● Diagnóstico fechado, e são dois defeitos distintos:
-
-  - A base da sombra foi MUTADA — refeita hoje 04:20 do dump das 04:00, mas o RUN C das 18:45 relavrou col146 por cima. Daí o golden não
-    mover e 0 divergentes.
-  - _instante_do_dump() lê o arquivo errado: ele assume dumps/juliani_agora.dump, que só nasce com --dump-agora; com o dump do dia
-    (sombra.sh:214) esse arquivo é um resto de 05/10. O comentário dele já nomeava o buraco ("não há campo de INSTANTE no carimbo") e
-    adivinhou por mtime em vez de perguntar à autoridade.
-
-  E um terceiro, que decide o caminho: o gate 0 <= idade <= 12 h do apply não fecharia nem com instante certo — base das 04:00, apply às
-  22h = 18 h. --dump-agora resolve os três de uma vez. Lanço o refazer e leio a suite:
+● DIFF em curso. Enquanto corre, curo as duas derivas que o agente reportou e não tocou — a primeira é um contador que mente (LEI-AKITA 8):
 
   Ran 2 shell commands
 
-● Suite e refazer em curso. Enquanto correm, curo o _instante_do_dump() na origem — o instante tem de vir da autoridade (o carimbo), não de
-  um mtime adivinhado. Leio os dois sítios:
+● 4 vivos contra 3 declarados — a L-113 que eu declarei hoje é a quarta. Corrijo o contador:
 
-● Ler trecho do refazer e da gravacao do carimbo
-  ⎿  $ cd /home/ronald/saas-hasner && sed -n '200,265p' bin/sombra.sh
+  Searched for 1 pattern, ran 1 shell command
 
-· Beboppin'… (3h 52m 12s · ↓ 342.4k tokens · thinking some more)
+● Agora a segunda deriva, e a cura é tirar da célula o número que persegue a própria cauda. Vejo a célula da O220 e o DIFF:
+
+  Ran 1 shell command
+
+● DIFF em curso. Curo a célula da O220 — tiro dela a soma que persegue a própria cauda e deixo o delta, que é fato fechado:
+
+● Corrigir numeros da celula de ESTADO da O220
+  ⎿  $ cd /home/ronald/saas-hasner/app/docs && python3 - <<'PY'
+     import io
+     p='BACKLOG.md'; s=io.open(p,encoding='utf-8').read()
+     velho=("FECHADA 07/10, nao commitada (L-106: docs no commit do MARCO). Carga VIVA -275,8 KB (-21%): "
+     "CLAUDE -5,1 KB em 15 lapides, LEIS -29,0 KB em 77 celulas, RELATO -204,1 K…
+
+✢ Beboppin'… (3h 57m 42s · ↓ 351.6k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Copying docs snapshot into logs/o220_antes_07-10                                            48m 31s · ↓ 98.3k tokens
+  ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
   ⧉  index
 ```

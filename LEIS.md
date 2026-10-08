@@ -18,7 +18,7 @@ sem leitor, e foi isso que motivou a auditoria.
 | `INTEIRA` | toda clausula esta no codigo e tem teste que fica vermelho se o efeito sumir | 6 |
 | `SEM-PROVA` | o codigo faz, mas alguma clausula nao tem teste que morde | 14 |
 | `PELA-METADE` | alguma clausula nao esta, ou nao esta inteira, no codigo | 32 |
-| `SO-NO-PAPEL` | o que a lei manda nao tem efeito no codigo | 3 |
+| `SO-NO-PAPEL` | o que a lei manda nao tem efeito no codigo | 4 |
 | `CONDUTA` | regra de processo; o ESTADO diz quantas clausulas tem guarda mecanica | 25 |
 
 `TEXTO SUPERADO EM PARTE` no fim do ESTADO quer dizer que um corte posterior mudou a lei e o texto da
