@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 18:25:01.**
+**Medido em 08/10/2026 18:30:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `1c27b268 O214 item 1: a reversao do apply se LE num descartavel, e o push deixa de morrer no rm da copia` |
+| `HEAD` local | `1b485f9c Instrumento: a porta da montagem entrega tmpfs para app/logs e app/media, e a copia do push volta a se apagar` |
 | `origin/main` | `1c27b268 O214 item 1: a reversao do apply se LE num descartavel, e o push deixa de morrer no rm da copia` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -22,11 +22,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+1b485f9c Instrumento: a porta da montagem entrega tmpfs para app/logs e app/media, e a copia do push volta a se apagar
 1c27b268 O214 item 1: a reversao do apply se LE num descartavel, e o push deixa de morrer no rm da copia
 bf83856d O214 item 1: a PROVA do pouso -- deploy, ensaio em prod e o achado da copia parcial
 d4822319 O214 etapa 0 + item 1: a ponta pequena e recusada pelo SISTEMA, com trilha, e nenhum centavo se move
 f189ce0a O211 achado 3: o cadastro que decide a regua sai da edicao livre do admin
-86993cd2 O topo do TICKETS fechado no ato do push (O112)
 ```
 
 ## `git status --short`
@@ -111,8 +111,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Background command "Empurrar o marco O214 (um push por marco)" completed (exit code 0)
-
   Searched for 2 patterns, ran 6 shell commands
 
 ● Advising using Fable 5.1
@@ -136,11 +134,13 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Background command "Empurrar o marco O214 (segunda tentativa, com a causa)" completed (exit code 0)
 
-● Censo de consumidores da montagem
-  ⎿  $ cd /home/ronald/saas-hasner && echo "=== quem chama --montagem"; grep -rn "montagem" bin/*.sh | grep -v "^bin/arvore_do_push.sh" |
-     sed -n '1,40p'
+● Commitar o pouso do instrumento
+  ⎿  $ cd /home/ronald/saas-hasner && cat >
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/msg_instr.txt <<'MSGEOF'
+     Instrumento: a porta da montagem entrega tmpfs para app/logs e app/media, e a copia do push volta a se apagar
+     CAUSA: o container da suite rod…
 
-· Wrangling… (4h 59m 22s · ↓ 500.9k tokens · thought for 17s)
+✢ Wrangling… (5h 4m 52s · ↓ 514.6k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -149,6 +149,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
   ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-❯ ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
+  ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
   ⧉  index
 ```

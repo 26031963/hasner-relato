@@ -445,6 +445,55 @@ A copia orfa das 17:55 foi apagada por container root (eram **20 KB** -- o `rm` 
 resto antes de parar no arquivo): `docker run --rm -v /tmp:/host alpine rm -rf`, e depois
 `ls -d /tmp/prepush-arvore.*` devolve **0 copia**.
 
+### 10. O POUSO DO INSTRUMENTO — **a CLASSE morre na porta**, e o caso media veio junto (08/10 19:0x)
+
+O item 2 acima era a divida da secao 9, e pousa aqui **sozinho** (L-105: instrumento nao pousa com
+produto). `bin/arvore_do_push.sh --montagem` passa a entregar `--tmpfs /app/logs --tmpfs /app/media`
+ao lado dos tres caches, e o selo `bin/tests/test_montagem_vem_do_arvore_do_push.sh` passa a **cobrar
+os cinco**.
+
+**O DETALHE QUE EXPLICA POR QUE OS TRES CACHES NUNCA DOERAM** -- e que eu nao sabia quando escrevi a
+secao 9: tmpfs deixa o ponto de montagem **VAZIO**, e `rmdir` de diretorio vazio pede permissao no
+**PAI**, que e do usuario. Por isso `<copia>/app/.ruff_cache` sai como root em todo push e o `rm -rf`
+nunca reclamou. Um **ARQUIVO** de root dentro de um **DIRETORIO** de root nao se desfaz -- e e so
+isso que separa o vazamento de 03/10 (que se limpava) do push morto de 17:55 (que nao).
+
+**MEDIDO, com a porta de HEAD** (copia por `bin/arvore_do_push.sh HEAD`, container no cpuset de teste
+escrevendo um arquivo em CADA um dos dois):
+
+```
+--- root na copia:
+<copia>/app/.hypothesis  <copia>/app/.mypy_cache  <copia>/app/.ruff_cache
+<copia>/app/media/fotos  <copia>/app/media/fotos/f.jpg
+<copia>/app/logs/ponta_pequena  <copia>/app/logs/ponta_pequena/emp1_092026.json
+--- rm -rf: rc=1   (cannot remove ... Permission denied, nos DOIS)
+--- sobrou? /tmp/prepush-arvore.dLNrx3   A COPIA FICOU
+```
+
+**MEDIDO, com a porta curada**, mesmo container e mesmos dois arquivos (o container os ESCREVE e os
+ve -- `ls` devolve `emp1_092026.json`; eles morrem com ele):
+
+```
+--- root na copia (depois do container):
+<copia>/app/.hypothesis  <copia>/app/.ruff_cache  <copia>/app/.mypy_cache
+--- rm -rf: rc=0
+--- sobrou? (vazio)        copias orfas: 0
+```
+
+**RED do selo, literal**, antes de a porta mudar: `a porta nao entrega` + `--tmpfs /app/logs` e a
+mesma linha para `/app/media` -> `RED (2)`, rc=1. Depois: `OK -- uma porta entrega o que falta na
+copia`.
+
+**O QUE NAO MUDOU, e foi medido antes de escrever a linha:** ninguem le `<copia>/app/logs` depois do
+container (**0** leitores em `bin/`; o `pre-push.sh` le stdout, o `vigia_arvore.sh` cria os dois por
+conta propria em `:65` sobre copia de `rsync`, que nao perde o .gitignore). E na **ARVORE VIVA** esta
+porta nao e consultada: `bin/suite.sh:70` so pergunta quando ha `--dir`. Entao tmpfs aqui nao esconde
+saida de ninguem e nao alcanca `app/logs` de producao.
+
+A pergunta 1 do selo (UM ESCRITOR DA LISTA) **nao** cresceu: os seis scripts da sombra montam esses
+mesmos dois tmpfs sobre a **arvore viva** `:ro`, que nao e copia, e puni-los seria acusar inocente --
+a prosa do selo diz isso desde 03/10 e segue dizendo, agora com a razao de as duas coisas conviverem.
+
 ## O211 POUSO B — **O APPLY DA 10 EXECUTADO E PROVADO, E O CADASTRO QUE DECIDE A REGUA SAI DA EDICAO LIVRE DO ADMIN** (08/10 13:1x→13:4x)
 
 **O aval dele de 08/10 12:4x, literal:** *"O211 pouso B, completar o apply da 10: recalcular o gravado dos 70 colabs da
