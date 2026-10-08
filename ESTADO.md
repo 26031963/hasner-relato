@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 19:02:31.**
+**Medido em 08/10/2026 19:07:39.**
 
 | | |
 |---|---|
@@ -111,26 +111,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  Listed 2 directories, ran 10 shell commands
-
-● O item declara um contador "esperado 0" no PRONTO. Ele cabe no mesmo sítio e lê a autoridade persistida — sem segunda regra:
-
-  Ran 2 shell commands
-  ⎿  Read docs/AVAIS.md (23 lines)
-  ⎿  Referenced file ponto/tests/test_o214_ponta_pequena.py
-  ⎿  Referenced file ponto/models.py
-  ⎿  Referenced file ponto/management/commands/recusar_ponta_pequena.py
-  ⎿  Referenced file config/crons.py
-
-● Task "RED e construção do segundo intervalo" completed in background
-
-● Background command "Rodar os vizinhos do campo na copia curada" completed (exit code 0)
-
-● Background command "Esperar o veredito dos vizinhos por arquivo" completed (exit code 0)
-
-  Ran 1 shell command
-
 ● O contrato da casa morde a minha cura — e está certo. Deixe-me ler o que ele aceita:
 
   Searched for 1 pattern, ran 4 shell commands
@@ -138,9 +118,29 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Handlers só da stdlib (RotatingFileHandler/StreamHandler, nenhum () próprio, nenhum filtro) — e esses guardam emit internamente via
   Handler.handleError. O try/except era medo, não tratamento: cura na origem, sem allowlist.
 
-  Running 1 shell command…
+  Ran 2 shell commands
 
-✢ Wrangling… (5h 36m 52s · ↓ 585.9k tokens)
+● A promessa que escrevi no docstring tem de ser verdade: o selo passava só por hora_lida, nunca pela porta que emite a trilha.
+
+  Ran 4 shell commands
+
+● Ruff limpo. Agora o GREEN na cópia, com o contrato que mordeu incluído na rodada:
+
+  Ran 5 shell commands
+
+● 42 testes OK, incluindo o contrato que mordeu. Antes de pousar na árvore viva e deployar:
+
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+
+● Os quatro pontos procedem. Primeiro o relógio solto no selo e a conta em uma query:
+
+  Ran 1 shell command
+
+❯ aval Ronald: O214-CRON-RECUSA-INSTALAR: o noturno.py de 02:33 esta avalizado junto, e hora derivada; instala. segue a fila; PAREI so em
+  lei ou !
+
+· Wrangling… (5h 42m 0s · ↓ 596.3k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
