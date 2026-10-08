@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 08/10/2026 05:51:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (440.9 MB). Acoes na janela: **1262**.
+**Medido em 08/10/2026 05:57:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (441.4 MB). Acoes na janela: **1264**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 05:56:49 | Bash | Ler os dois sitios candidatos a juiz da S-ESCALA | `cd /home/ronald/saas-hasner/app echo "=== [1] escala_vigente (Q2) ===" grep -n "def escala_vigente" -A 14 escala/servico_jornada.py \| head -30 echo echo "=== [2] eh_dia_trabalho (Q3) -- cabeca ===" grep -n "def eh_dia_trabalho" -A 10 escala/models.py \| head -20` |
+| 05:52:58 | Bash | Conferir o sinal e o estado da cadeia | `cd /home/ronald/saas-hasner echo "AGORA: $(date '+%H:%M:%S')" echo ".done? $([ -f logs/deploy_agendado/o221-pouso3.done ] && echo SIM \|\| echo nao)" echo "cron.d? $([ -f /etc/cron.d/hasner-deploy-o221-pouso3 ] && echo intacto \|\| echo REMOVIDO)" echo "esteira.out: $(wc -l < fatias_agendadas/o221-pouso3/esteira.out 2>/dev/null \|\| echo '(ainda nao existe)')" echo "HEAD: $(git rev-parse --short H ...` |
 | 05:44:35 | Bash | Limpar acento do registro novo | `cd /home/ronald/saas-hasner sed -i 's/asserção/assercao/' logs/placar_estrutural/placar_nao_confere_prova_no_disco_20261008.txt python3 -c " s=open('logs/placar_estrutural/placar_nao_confere_prova_no_disco_20261008.txt',encoding='utf-8').read() print('nao-ASCII:', sorted({c for c in s if ord(c)>127}) or '(puro ASCII)')"` |
 | 05:44:27 | Bash | Gravar a lacuna latente medida sa | `cd /home/ronald/saas-hasner cat > logs/placar_estrutural/placar_nao_confere_prova_no_disco_20261008.txt <<'EOF' LACUNA LATENTE, MEDIDA SA -- NAO CONSTRUIR CURA HOJE (08/10 05:4x) ================================================================== PERGUNTA: `placar()` rebaixa para PENDENTE quando falta prova, mas O QUE ele pergunta e app/core/placar_estrutural.py:~350 prova_faltando = bool(numero) a ...` |
 | 05:43:57 | Bash | Conferir se as provas citadas existem no disco | `cd /home/ronald/saas-hasner PYTHONPATH=app python3 - <<'PY' import os, re from core import placar_estrutural as P RAIZ='/home/ronald/saas-hasner' print('AS PROVAS CITADAS PELO PLACAR EXISTEM NO DISCO? (placar() nunca pergunta)\n') tot=falta=0 for r in P.placar(): prova = r.get('prova') or '' # caminhos citados: logs/..., app/..., bin/..., <app>/tests/... cams = re.findall(r'(?:logs\|bin\|app)/[\w. ...` |

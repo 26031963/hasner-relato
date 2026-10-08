@@ -5251,3 +5251,5 @@ pergunta e qual leitor nao migrou.
 **08/10 03:40 vigia da esteira** -- esteira em espera de janela: 8 fatias prontas, reabre 04:45.
 
 **08/10 04:50 vigia da esteira (ALARME)** -- vigia sem efeito: 8 fatia(s) ativa(s) na fila e nenhum .out escrito ha 30 min -- a esteira esta parada e o vigia nao esta destravando.
+
+**08/10 05:55 vigia da esteira (ALARME)** -- vigia sem efeito: 8 fatia(s) ativa(s) na fila e nenhum .out escrito ha 30 min -- a esteira esta parada e o vigia nao esta destravando.
