@@ -1,6 +1,6 @@
 # RELATO — esteira saas-hasner
 
-**O211 POUSO A NO AR em `9bde5c51` -- o CADASTRO da aplicacao de convencao nasce, e nenhum centavo se move.**
+**O211 POUSO A NO AR, e o commit do marco e ESTE -- o CADASTRO da aplicacao de convencao nasce, e nenhum centavo se move.**
 **PROVA:** medida ao vivo as 09:0x de 08/10 contra o schema `juliani`, nao de memoria: `AplicacaoConvencao`
 com **3 ativas / 3 totais** -- `emp1 -> sind2 praca=None`, `emp2 -> sind2 praca=None`,
 `emp4 -> sind2 praca=None`; regimes relidos `emp1='cct'`, `emp2='cct'`, `emp3='clt'`, `emp4='cct'`; trilha
@@ -9,7 +9,7 @@ UTC-3 (o banco guarda `12:01:05+00`); `showmigrations core --schema=juliani` com
 `0017_aplicacaoconvencao` marcada; `bin/deploy.sh` rc=0 com sombra `dia=20261008 diverge=0 erros=0`, prova
 de casca (16 estaticos, 5 paginas, 599 rotas em 2 urlconfs), tres cascas recarregadas juntas e tres rotas
 provadas.
-REVERSAO EM UMA LINHA, se o senhor nao quiser: `git revert 9bde5c51` tira o modelo, o command e o selo; o
+REVERSAO EM UMA LINHA, se o senhor nao quiser: `git revert <este commit>` tira o modelo, o command e o selo; o
 cadastro ja gravado sai por `AplicacaoConvencao.objects.filter(ativo=True).update(ativo=False)` e o regime
 da emp1 volta a `''` pela mesma porta com trilha. Nenhum numero de folha depende disso hoje.
 - **ZERO CENTAVO SE MOVE, e isso nao e promessa minha: e o ramo do codigo que esta no ar.**
