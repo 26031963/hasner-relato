@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 12:04:21.**
+**Medido em 08/10/2026 12:09:51.**
 
 | | |
 |---|---|
@@ -133,14 +133,14 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Agora o push do marco — um por marco, com a regra lendo o veredito no remoto:
 
-  Pushing do marco O211 pouso B · 4s
+● Pushing do marco O211 pouso B · 5m 34s
   ⎿  $ cd /home/ronald/saas-hasner
      git push origin main > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_o211b.out
      2>&1; echo "push rc=$?"
-     tail -25 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_o211b… (4s)
+     tail -25 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_o211b… (5m 34s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Cultivating… (5h 55m 45s · ↓ 670.2k tokens)
+✢ Cultivating… (6h 1m 15s · ↓ 670.2k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
