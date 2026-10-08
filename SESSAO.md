@@ -6,10 +6,17 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 08/10/2026 02:34:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (431.4 MB). Acoes na janela: **863**.
+**Medido em 08/10/2026 02:39:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (431.9 MB). Acoes na janela: **870**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 02:39:30 | Bash | Ler topo do BACKLOG (ordem viva) | `sed -n '1,40p' docs/BACKLOG.md` |
+| 02:38:56 | Bash | Celula chamado x juiz e o cron do pouso 3 | `sed -n '230,290p' core/contratos_estruturais.py; echo "=== cron pouso3 ==="; ls -la /etc/cron.d/ 2>/dev/null \| grep -i hasner; echo "---"; sudo -n cat /etc/cron.d/hasner-deploy-o221-pouso3 2>/dev/null \|\| cat /etc/cron.d/hasner-deploy-o221-pouso3 2>/dev/null \|\| echo "sem leitura"` |
+| 02:38:33 | Bash | Ler a lei e a tupla JUIZES_POR_VARREDURA | `sed -n '1380,1510p' config/crons.py` |
+| 02:38:17 | Bash | Ler JUIZES_POR_VARREDURA e seus leitores | `grep -n 'JUIZES_POR_VARREDURA' -r --include=*.py . \| head -20; echo "=== bloco ==="; sed -n "$(grep -n 'JUIZES_POR_VARREDURA' config/crons.py \| head -1 \| cut -d: -f1),+90p" config/crons.py` |
+| 02:38:06 | Bash | Ler R6 inteiro | `awk "/'id': 'R6'/,0" core/placar_estrutural.py` |
+| 02:38:02 | Bash | Tail da suite e entrada R6 do placar | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/suite_o137.out; tail -5 "$S"; echo "=== R6 no placar ==="; cd /home/ronald/saas-hasner/app && awk '/R6/,0' core/placar_estrutural.py \| head -80` |
+| 02:37:51 | Bash | Ler veredito da suite por texto | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/suite_o137.out; wc -l "$S"; echo "--- verdito por TEXTO ---"; grep -nE 'Ran [0-9]+ tests\|^OK$\|^OK \(\|^FAILED \(\|^rc_suite=' "$S" \| tail -20; echo "--- data/hora agora ---"; date '+%F %T'` |
 | 02:33:29 | Bash | Achar o item PLACAR-ESTRUTURAL no BACKLOG | `cd /home/ronald/saas-hasner && grep -n 'PLACAR-ESTRUTURAL' app/docs/BACKLOG.md \| head; echo "==="; grep -nE '^\s*(\\|\|-\|#)' app/docs/BACKLOG.md \| grep -n 'OBRAS' \| head` |
 | 02:33:24 | Bash | Ler a ORDEM VIVA pelo proprio hook | `cd /home/ronald/saas-hasner && python3 bin/hook_stop_fila1.py 2>&1 \| head -40` |
 | 02:33:17 | Bash | Ler os RESULTADOS do placar | `cd /home/ronald/saas-hasner && sed -n '39,120p' app/core/placar_estrutural.py` |
