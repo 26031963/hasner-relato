@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 03:21:31.**
+**Medido em 08/10/2026 03:27:01.**
 
 | | |
 |---|---|
@@ -112,36 +112,36 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  Ran 3 shell commands
 
-● União commitada: 9b64ee79, os dois pais intactos, 42 arquivos / 1922 inserções. Carimbando a árvore no .out antes de lançar (é o que a
-  GUARDA 7 exige):
-
-  Ran 2 shell commands
-
-● Enquanto a suite corre, a conferência de citação à mão — a régua não vê a cópia (bin/regua_tickets.sh:16 faz cd para o repo principal):
-
-  Ran 6 shell commands
-
-● Suite correndo (iniciou 03:17:32, ~22 min). Consultando o revisor antes de me comprometer com a sequência dos três pushes:
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+● Verificando o que mais importa para as 06:08 — se o ensaio da sombra estará pronto (GUARDA 4 do pouso 3 o exige):
 
   Ran 1 shell command
 
-● Os dois perigos confirmados: bin/pos_push.sh:29-30 commita na main depois do push, e tickets_placar.sh --escrever suja o TICKETS.md sem
-  commitar — e os pousos 4 e 5 mudam esse arquivo, então o --ff-only seguinte seria recusado.
+● O carimbo é de ontem (dia=20261007); o cron das 04:17 refaz. Mas bin/sombra.sh está modificado e não commitado — e é esse script que vai
+  rodar:
 
   Ran 1 shell command
 
-● deploy_agendado.sh rodar não dá push — e pos_push.sh só roda via bin/push.sh. Então os três pousos podem cair por ff sem push no meio
-  (L-108: um push por MARCO). Vendo as guardas do pouso 4 e o bloco que eu inseri:
+● bash -n OK e os hunks só tocam cabeçalho/container()/dispatch — refazer() e bloco() intactos, então o cron das 04:17 está seguro. Agora o
+  perigo irmão: a árvore viva tem 4 arquivos sujos, e --ff-only recusa se um pouso mexer neles:
 
-● Ver guardas e blocos das esteiras 3 e 4
-  ⎿  $ cd /home/ronald/saas-hasner && for f in o221-pouso3 o221-pouso4; do echo "=========== $f ==========="; grep -nE
-     'origin/main|tickets_placar|regua_tickets|merge --ff-only|deploy\.sh|GUARDA' fatias_agendadas/$f/esteira.sh; done
+  Ran 1 shell command
 
-✢ Beboppin'… (9h 12m 42s · ↓ 820.7k tokens)
+● Colisão real achada: app/docs/RELATO.md. Um dos pousos muda esse arquivo e ele está sujo na árvore viva — o --ff-only seria recusado, e
+  isso teria matado o pouso 3 às 06:08:
+
+  Ran 1 shell command
+
+● O sujo do RELATO é append de cron (vigia, 02:05 e 03:10) — e ele se repete a cada hora, então às 06:08 haverá mais. Isso quebraria o
+  --ff-only de forma recorrente. Medindo se o conflito é real:
+
+  Ver o diff do pouso 3 no RELATO e quem é o vigia
+  ⎿  $ cd /home/ronald/saas-hasner && echo "=== o que o pouso 3 muda no RELATO ===" && git diff --stat d0625307 1f3d616f --
+     app/docs/RELATO.md && git diff d0625307 1f3d616f -- app/docs/RELATO.md | grep -E '^@@' && echo "=== o vigia escreve de onde? ===" &&
+     grep -rln 'vigia da esteira' bin/ app/core/mana…
+
+✢ Beboppin'… (9h 18m 12s · ↓ 835.8k tokens · still thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
