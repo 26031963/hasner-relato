@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 01:55:45.**
+**Medido em 08/10/2026 02:01:01.**
 
 | | |
 |---|---|
@@ -109,36 +109,36 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  Searched for 1 pattern, ran 2 shell commands
-
-● Vou pré-conferir, agora, as duas guardas do pouso que podem recusar por estado de fora (sombra e migration) — se alguma já estiver
-  vermelha, descubro em 4 h de antecedência e não às 06:08:
-
-  Ran 4 shell commands
-
-● Caí no mesmo furo do pipe: rc_sombra=0 era o rc do tail. Medindo sem pipe:
+  viva depois do pouso — escrever "NO AR" antes do ar seria a testemunha mentindo:
 
   Ran 1 shell command
 
-● Guarda 4 está vermelha agora (rc 1: carimbo 20261007 ≠ hoje 20261008) — o refazer das ~04:17 a repõe antes das 06:08. Mas isso levanta o
-  risco de verdade: alguém commitar no main entre agora e o disparo e matar o --ff-only.
+● import os não entrou (a linha é import re, sys, pathlib) — py_compile não pega nome indefinido:
 
   Ran 1 shell command
 
-● Confirmado por medição: pos_push.sh só é chamado por bin/push.sh (eu usei git push cru), não há hook de post-push, /etc/cron.d só tem
-  e2scrub_all/sysstat, nenhum cron de usuário commita, e a esteira está pausada desde 26/09. O main fica em d0625307 — o --ff-only do pouso
-  é seguro desde que eu não commite.
-
-  Antes de armar o cron que mergeia e deploya sem supervisão, vou reler o ato na íntegra:
+● Agora as duas provas pré-pouso contra a cópia — que é exatamente a árvore que vai entrar por fast-forward:
 
   Ran 1 shell command
 
-● O ato está íntegro e as cinco guardas cobrem exatamente o que o deploy.sh poderia recusar. Antes de armar:
+● rc=2 — ALARME, e a causa é minha: resolvi --ours um bullet que é gerado. O placar do TICKETS deriva da nota= do contrato, e o merge
+  trouxe a nota remedida da raia (131/12/119) enquanto eu mantive o texto velho do main (134/12/122). Vendo a extensão:
 
-● Advising using Fable 5.1
+  Ran 1 shell command
 
-· Beboppin'… (7h 46m 56s · ↓ 653.8k tokens)
+● Só 2 linhas (57 e 74), ambas do bloco gerado — a cura é o escritor canônico, não a mão:
+
+  Ran 1 shell command
+
+● regua_tickets rc=0, e de passagem fecha o ponto 5 da revisão por medição: "7 citacoes com linha na tabela". Agora os docs do pouso,
+  contra a cópia:
+
+● Rodar a pasta de selos de host na copia
+  ⎿  $ cd /home/ronald/wt-chamado2 && falhos=0; tot=0; for f in bin/tests/test_*.sh; do tot=$((tot+1)); if ! out=$(bash "$f" 2>&1); then
+     falhos=$((falhos+1)); echo "### VERMELHO: $f"; echo "$out" | tail -6; fi; done; echo "=== selos de host na copia: $tot rodados,
+     $falhos vermelho(s)"
+
+✢ Beboppin'… (7h 52m 12s · ↓ 665.4k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
