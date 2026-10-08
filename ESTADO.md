@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 01:14:01.**
+**Medido em 08/10/2026 01:19:11.**
 
 | | |
 |---|---|
-| `HEAD` local | `bb0bd0fa [O221] pouso 1, so PRODUTO: o papel `prazo` da O139 entra no main, e o selo dele fica para o ato seguinte` |
+| `HEAD` local | `d0625307 [O221] pouso 2, so INSTRUMENTO: o selo do papel `prazo` morde na arvore viva, e a testemunha errada do pouso 1 fica corrigida` |
 | `origin/main` | `bb0bd0fa [O221] pouso 1, so PRODUTO: o papel `prazo` da O139 entra no main, e o selo dele fica para o ato seguinte` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -22,23 +22,19 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+d0625307 [O221] pouso 2, so INSTRUMENTO: o selo do papel `prazo` morde na arvore viva, e a testemunha errada do pouso 1 fica corrigida
 bb0bd0fa [O221] pouso 1, so PRODUTO: o papel `prazo` da O139 entra no main, e o selo dele fica para o ato seguinte
 97e9e043 [O222] a caracterizacao do veredito: a passada 1 carimba `furo` e abre a cobranca, e so a 2 le a cobranca que ela mesma abriu
 b4372615 [O218] o marco da lavratura: a celula do juiz da celula fecha por EFEITO MEDIDO, e o placar vai a 15/20
 1b6d5d02 [O218] pouso da raia-lavra: a bateria da lavratura entra no main com o DIFF de frota ja publicado
-107e3bb5 [O218] a bateria da lavratura: a passada 1 escrevia lampada nova com minuto velho, e o match do dia dependia de onde a janela comecava
 ```
 
 ## `git status --short`
 
 ```
  M app/config/crons_duracao.json
- M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
- M app/docs/RELATO.md
- M app/docs/TICKETS.md
  M bin/sombra.sh
-?? bin/tests/test_papel_prazo_nao_deriva.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -112,6 +108,10 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  Ran 1 shell command
+
+● Pouso 1 no remoto: 97e9e043..bb0bd0fa, suite 9675 OK (skipped=42) + control-plane 22 OK. Agora a origem do "não carimbar o passo 6":
+
   Searched for 1 pattern, ran 1 shell command
 
 ● Nenhuma dessas linhas é ! dele — são meus próprios registros do estado de então. Antes de carimbar, a medição honesta do que o selo
@@ -134,20 +134,16 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-  Ver os regexes e o que o hook aponta
-  ⎿  $ cd /home/ronald/saas-hasner && grep -n "_NAO_ANDA\s*=\|_FECHADO\s*=" -A4 bin/hook_stop_fila1.py | head -20; echo "=== o que o hook
-     aponta agora ==="; python3 -c "
-     import sys; sys.path.insert(0,'bin')
-     import importlib.util
-     spec=importlib.util.spec_from_file_location('h','bin/hook_stop_fila1.py'); …
+  Empurrar o pouso 2 pela regua do pre-push
+  ⎿  $ cd /home/ronald/saas-hasner && git push origin main 2>&1 | tail -30
 
-✢ Beboppin'… (7h 5m 12s · ↓ 587.0k tokens)
+✶ Beboppin'… (7h 10m 22s · ↓ 598.1k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    7% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens

@@ -26,6 +26,7 @@ LEI-AKITA 9 o escopo do aval e literal, entao a celula do marco fica **RESULTADO
 esperando o seu `!`** em vez de eu me dar o verde. Frase pronta: *"! carimba a CELULA-TURNO-FECHA como
 FECHADA -- os 4 numeros do passo 6 batem no ar, e a unica coisa que faltou foi o `verde=True` das duas
 celulas cair no MESMO commit (turno em `6319b10c`, celula em `b4372615`)."*
+Com ela sem poder andar, a **ORDEM VIVA andou** (decisao tecnica, registrada e nao devolvida): o head passa a ser **`PLACAR-ESTRUTURAL`** (L-099, *"ANDA"*, proximo = R6 item 4), lido da MESMA fonte do hook (`bin/hook_stop_fila1.py::_proximo_da_fila`, o primeiro aberto do bloco OBRAS) e nao de um leitor novo; a **O219**, que o aval de 07/10 poe atras da O218, vem logo depois dela na mesma tabela. **PROVA:** `bin/tests/test_hook_nao_cobra_congelado.sh` = `OK -- ve id com espaco e aponta o 1o da ORDEM VIVA (PLACAR-ESTRUTURAL, lido do marcador)`, rc 0.
 
 **A `raia-chamado` (`wt-esmeril2`, `142238fc`) NAO POUSA AGORA, e o motivo e um portao DECLARADO, nao um
 `!` que falte: ela toca `app/api/views.py`, sitio de auth da lista `bin/auth_sitios.txt` (10 declarados),
