@@ -1,9 +1,16 @@
 # ESTADO -- o repo e a sessao agora
 
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:31 AFIRMA ato sem PROVA ao lado -- ## O222 — **NO AR, E O PLACAR CONFERIDO PELO JUIZ** (08/10 00:09, marco empurrado 23:5x)
+>
+> O RELATO nao entrou neste ciclo porque uma afirmacao de ato
+> (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
+> seguem valendo -- eles descrevem, nao afirmam ato.
+
+
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 00:09:40.**
+**Medido em 08/10/2026 00:15:01.**
 
 | | |
 |---|---|
@@ -109,22 +116,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  - o pouso da raia-chamado (O221) tem portão declarado, e não é lei nova: ela toca app/api/views.py, sítio de auth declarado em
-    bin/auth_sitios.txt, e bin/janela_auth.sh proíbe 23:20–06:00 — são 00:0x. Então ela espera a janela (depois das 06:00), e não o seu !,
-    que você já deu. Além disso o pouso dela não é merge simples: o main carrega bea841ff, o revert PARCIAL do merge anterior dessa mesma
-    raia, e o próprio commit diz a forma — git revert dele traz os 41 .py de volta, e só então entram os 6 commits novos. Ensaio de merge
-    sem tocar a árvore (git merge-tree): 7 conflitos, e os dois que cruzam o meu trabalho são core/contratos_estruturais.py (a dieta da
-    O220 encurtou a nota que a raia engorda) e core/tests/test_censo_escritas.py.
-  - a outra raia do seu ! (O139, 00bd05fb) pode pousar antes, sem auth no diff — mas ela mistura produto (config/crons.py, diagrama, docs,
-    teste) com instrumento (bin/tests/test_papel_prazo_nao_deriva.sh), e pela L-105 o instrumento vai em pouso próprio. Vou separar em
-    dois.
-
-  Depois do push: deploy.sh --sem-migrate. Passou da meia-noite, então o portão da sombra está cego (carimbo é de 20261007,
-  OK/completa/diverge=0, e o dump de hoje só nasce às 04:00) — vai com --sem-sombra e o motivo gravado na trilha, que é a porta declarada
-  da seção 2, e o commit não tem migration nem caminho de dinheiro.
-
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: CELULA-TURNO-FECHA -- CELULA+TURNO FECHA: a soma propria do realizado sai, e o dia sem par leva a
   PALAVRA (item 1 dos DOSSIES, aval
 
   Ran 1 shell command
@@ -133,14 +124,30 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Background command "Esperar pelo ARQUIVO de saida do push" completed (exit code 0)
 
-● Publicar o marco pela variavel declarada do deploy · 2s
-  ⎿  $ cd /home/ronald/saas-hasner && DEPLOY_SEM_SOMBRA="ensaio de 07/10 VERDE (completa, diverge=0, erros=0) e o deploy das 22:48 saiu
-     dele; passou da meia-noite e o portao fica cego ate o dump das 04:00 (sombra.sh:203 soma +1 quando o dump nao e do dia). Sobe teste +
-     docs + o flip de verde em core/con…
+  Ran 5 shell commands
+  ⎿  Read docs/AVAIS.md (23 lines)
+  ⎿  Referenced file ponto/turnos.py
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bl19mn3rk.output (15 lines)
+  ⎿  Referenced file ../logs/o209_apply_frota_prod.py
+  ⎿  Referenced file ../logs/sombra/relavra10_frota_20261005.py
 
-✻ Beboppin'… (6h 0m 51s · ↓ 524.2k tokens)
+● Task "RED e construção do segundo intervalo" completed in background
+
+● Deploy OK às 00:09:48. Agora a confirmação do placar pela autoridade, não por grep.
+
+  Ran 3 shell commands
+
+● 15/20 confirmado pelo juiz dentro do saas_core — não por grep. Marco no ar.
+
+● Gravar a prova do deploy no RELATO
+  ⎿  $ cat > /tmp/o222_sec.md <<'MD'
+     ## O222 — **NO AR, E O PLACAR CONFERIDO PELO JUIZ** (08/10 00:09, marco empurrado 23:5x)
+     `origin/main` = `97e9e043`; suite do push **75 OK (skipped=42)** + control-plane **22 OK**; selos de host
+     `pasta_rc=0`. `bin/deploy.sh --sem-migrate` as **00:09:48**: `migrations…
+
+✢ Beboppin'… (6h 6m 12s · ↓ 527.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    0% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

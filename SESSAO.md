@@ -6,10 +6,17 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 08/10/2026 00:09:40.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (426.2 MB). Acoes na janela: **576**.
+**Medido em 08/10/2026 00:15:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (426.7 MB). Acoes na janela: **583**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 00:15:01 | Bash | Gravar a prova do deploy no RELATO | `cat > /tmp/o222_sec.md <<'MD' ## O222 — **NO AR, E O PLACAR CONFERIDO PELO JUIZ** (08/10 00:09, marco empurrado 23:5x) `origin/main` = `97e9e043`; suite do push **75 OK (skipped=42)** + control-plane **22 OK**; selos de host `pasta_rc=0`. `bin/deploy.sh --sem-migrate` as **00:09:48**: `migrations pendentes: 0`, `janela_auth: OK -- nenhum sitio de auth mudou desde origin/main (10 declarados)`, prov ...` |
+| 00:14:39 | Bash | Listar as secoes do RELATO | `grep -n '^## ' docs/RELATO.md \| head -12` |
+| 00:14:31 | Bash | Ler o topo do RELATO | `head -30 docs/RELATO.md` |
+| 00:14:21 | Bash | Gerar o handoff do marco fechado | `cd /home/ronald/saas-hasner && bash bin/handoff_sessao.sh 2>&1 \| tail -8; echo "--- HEAD/origin:"; git log --oneline -1 HEAD; git log --oneline -1 origin/main` |
+| 00:14:13 | Bash | Perguntar o placar ao juiz dentro do saas_core | `cd /home/ronald/saas-hasner && cat > /tmp/placar_conf.py <<'PY' from core.contratos_estruturais import linha_do_placar, verdes, total print('contratos_estruturais:', linha_do_placar()) print('verdes=', verdes(), 'total=', total()) PY docker cp /tmp/placar_conf.py saas_core:/tmp/placar_conf.py >/dev/null && docker exec saas_core python manage.py tenant_command shell --schema=juliani --command "exec ...` |
+| 00:14:00 | Bash | Perguntar o placar ao juiz dentro do saas_core | `cd /home/ronald/saas-hasner && cat > /tmp/placar_conf.py <<'PY' from core.contratos_estruturais import linha_do_placar, verdes, total print('contratos_estruturais:', linha_do_placar()) print('verdes=', len(verdes()), 'total=', total()) PY docker cp /tmp/placar_conf.py saas_core:/tmp/placar_conf.py >/dev/null && docker exec saas_core python manage.py tenant_command shell --schema=juliani --command  ...` |
+| 00:13:45 | Bash | Perguntar o placar ao juiz dentro do saas_core | `cd /home/ronald/saas-hasner && cat > /tmp/placar_conf.py <<'PY' from core.contratos_estruturais import linha_do_placar, verdes, total from core.arquitetura_leitura import linha as _l print('contratos_estruturais:', linha_do_placar()) print('verdes=', len(verdes()), 'total=', total()) PY docker cp /tmp/placar_conf.py saas_core:/tmp/placar_conf.py >/dev/null && docker exec saas_core python manage.py ...` |
 | 00:09:37 | Bash | Publicar o marco pela variavel declarada do deploy | `cd /home/ronald/saas-hasner && DEPLOY_SEM_SOMBRA="ensaio de 07/10 VERDE (completa, diverge=0, erros=0) e o deploy das 22:48 saiu dele; passou da meia-noite e o portao fica cego ate o dump das 04:00 (sombra.sh:203 soma +1 quando o dump nao e do dia). Sobe teste + docs + o flip de verde em core/contratos_estruturais.py: sem migration, sem dinheiro, sem sitio de auth" timeout 900 bash bin/deploy.sh - ...` |
 | 00:09:30 | Bash | Ver como o modo e lido | `cd /home/ronald/saas-hasner && grep -n 'MODO=\\|sem-migrate\\|SEM_MIGRATE' bin/deploy.sh \| head -12` |
 | 00:09:23 | Bash | Ler o parser de argumentos do deploy | `cd /home/ronald/saas-hasner && grep -n "sem-sombra\\|SEM_SOMBRA_MOTIVO\\|while\\|case\\|shift" bin/deploy.sh \| head -30` |
