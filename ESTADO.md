@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 07/10/2026 23:15:45.**
+**Medido em 07/10/2026 23:21:01.**
 
 | | |
 |---|---|
@@ -33,6 +33,7 @@ fd6c8c0e [O209] a conferencia do marco: NAO virou 15/20, e o que falta sao 2 dia
 
 ```
  M app/config/crons_duracao.json
+ M app/core/contratos_estruturais.py
  M app/docs/HANDOFF-SESSAO.md
  M app/docs/RELATO.md
  M bin/sombra.sh
@@ -109,10 +110,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 8 shell commands
-
-● O padrão da casa é um arreio que só liga APLICAR. Rodo o DRY primeiro:
-
   Ran 1 shell command
 
 ● Comando composto recusado. Separo em passos individuais:
@@ -137,10 +134,14 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Task "RED e construção do segundo intervalo" completed in background
 
 ● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-✶ Beboppin'… (5h 6m 56s · ↓ 443.3k tokens)
+● Listar as seções do RELATO
+  ⎿  $ cd /home/ronald/saas-hasner && sed -n '95,104p' app/docs/RELATO.md
+
+· Beboppin'… (5h 12m 12s · ↓ 453.6k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    3% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
