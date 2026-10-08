@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 07/10/2026 23:42:51.**
+**Medido em 07/10/2026 23:48:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `b4372615 [O218] o marco da lavratura: a celula do juiz da celula fecha por EFEITO MEDIDO, e o placar vai a 15/20` |
+| `HEAD` local | `81547265 [O222] a caracterizacao do veredito: a passada 1 carimba `furo` e abre a cobranca, e so a 2 le a cobranca que ela mesma abriu` |
 | `origin/main` | `fd6c8c0e [O209] a conferencia do marco: NAO virou 15/20, e o que falta sao 2 dia-colab de 7.859` |
-| commits a subir (`ahead`) | **4** |
+| commits a subir (`ahead`) | **5** |
 
 ## Fabrica
 
@@ -22,11 +22,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+81547265 [O222] a caracterizacao do veredito: a passada 1 carimba `furo` e abre a cobranca, e so a 2 le a cobranca que ela mesma abriu
 b4372615 [O218] o marco da lavratura: a celula do juiz da celula fecha por EFEITO MEDIDO, e o placar vai a 15/20
 1b6d5d02 [O218] pouso da raia-lavra: a bateria da lavratura entra no main com o DIFF de frota ja publicado
 107e3bb5 [O218] a bateria da lavratura: a passada 1 escrevia lampada nova com minuto velho, e o match do dia dependia de onde a janela comecava
 cd37557a [O220] a dieta de carga: a casa inteira se lia em 1,3 MB de prosa, e -275.549 B sairam sem que uma regra mudasse
-fd6c8c0e [O209] a conferencia do marco: NAO virou 15/20, e o que falta sao 2 dia-colab de 7.859
 ```
 
 ## `git status --short`
@@ -34,7 +34,6 @@ fd6c8c0e [O209] a conferencia do marco: NAO virou 15/20, e o que falta sao 2 dia
 ```
  M app/config/crons_duracao.json
  M app/docs/HANDOFF-SESSAO.md
- M app/ponto/tests/test_bateria_lavratura.py
  M bin/sombra.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -109,6 +108,7 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+● Task "RED e construção do segundo intervalo" completed in background
 
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
@@ -133,12 +133,11 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ❯ aval Ronald: horizonte padrao de correcao de codigo = competencia aberta + anterior
 
-● Procurar contratos que enumeram a bateria e registros de emp1/horizonte
-  ⎿  $ cd /home/ronald/saas-hasner && grep -rn "bateria_lavratura" --include=*.py --include=*.sh --include=*.json app bin 2>/dev/null |
-     grep -v "^app/ponto/tests/test_bateria_lavratura.py" | head -20; echo "--- PROMPTS/CORTES/LEIS grep emp1+horizonte"; grep -rn
-     "horizonte" app/docs/LEIS.md app/docs/CORT…
+  Committed a159447a, amended commit 81547265, ran 6 shell commands
 
-✢ Beboppin'… (5h 34m 2s · ↓ 488.1k tokens)
+● Advising using Fable 5.1
+
+✢ Beboppin'… (5h 39m 12s · ↓ 495.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
