@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 07/10/2026 22:39:01.**
+**Medido em 07/10/2026 22:44:31.**
 
 | | |
 |---|---|
@@ -35,6 +35,7 @@ edb40127 [O208] o contador do recalculo era cego ao campo da cura: mexidos=36 er
  M app/config/crons_duracao.json
  M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/RELATO.md
  M app/docs/TICKETS.md
  M bin/sombra.sh
 ?? esteira.pausada
@@ -110,42 +111,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Committed 13b1cac4
-
-● Commit 13b1cac4. Agora a linha do TICKETS e a publicação do DIFF no RELATO — condição 1 da DINHEIRO-EM-COMPETENCIA-ABERTA, que tem de
-  existir antes do apply:
+  uma suite inteira:
 
   Ran 3 shell commands
 
-● Régua verde. Bloco ensaiando os 69 comandos. Agora publico o DIFF no RELATO — é condição 1, e tem de existir antes do apply:
+● Bloco ainda nos 69 comandos. Preparo o resto do ato sem tocar nada que ele leia — a célula ESTADO da L-103, que muda no commit do merge:
 
-  Ran 5 shell commands
+  Searched for 1 pattern, ran 1 shell command
 
-● Agora o commit [O220] da dieta. Confiro o que ela moveu antes de escolher os paths:
+● A cura é em montar_grade_prevista_periodo_por_turno — o sítio exato que a L-103 protege. Minha mensagem omitiu o sufixo; corrijo antes
+  que o commit saia da raia:
 
-  Committed cd37557a, ran 2 shell commands
+  Amended commit 107e3bb5, ran 1 shell command
 
-● Commit cd37557a. Enquanto o bloco roda, a linha de BACKLOG do achado das duas passadas — ele tem dono e número, e não pode ficar só no
-  RELATO:
+● Preparo a mensagem do merge enquanto o bloco fecha:
 
-  Searched for 2 patterns, ran 2 shell commands
+  Ran 4 shell commands
 
-● Bloco em curso. Espero por arquivo e, no intervalo, rodo a pasta de selos de host — ela responde em segundos e a recusa no push custaria
-  uma suite inteira:
+● A régua pegou antes do push, que é para isso que ela serve. A O220 precisa de linha própria:
 
-● Esperar o bloco terminar por arquivo · 6m 49s
-  ⎿  $ cd /home/ronald/saas-hasner && n=0; until grep -q 'SOMBRA_BLOCO=' .sombra_stamp && ! grep -q 'SOMBRA_BLOCO=nao_rodou' .sombra_stamp;
-     do n=$((n+1)); [ $n -gt 60 ] && echo TIMEOUT && break; sleep 20; done; echo "esperei ${n}x20s -- $(date '+%H:%M:%S')"; grep -E
-     'SOMBRA_BLOCO|SOMBRA_ERROS|SOMBRA_STA… (6m 49s)
-     (ctrl+b ctrl+b (twice) to run in background)
+● Adicionar linha do O220 no TICKETS e reconferir
+  ⎿  $ python3 - <<'PY'
+     import io
+     p='docs/TICKETS.md'
+     s=io.open(p,encoding='utf-8').read()
+     anc="|----|--------|-------|--------|--------|------|------|-------------|------|\n"
+     assert s.count(anc)==1
+     linha = (
+     "| O220 | instrumento (contexto) | **A CASA INTEIRA SE LIA EM 1,3 MB DE PROSA** -- DIETA-DE-CAR…
 
-· Beboppin'… (4h 30m 12s · ↓ 394.0k tokens)
+✢ Beboppin'… (4h 35m 42s · ↓ 401.7k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
