@@ -28,6 +28,80 @@ chamado pode NASCER numa competencia que o Dominio ja pagou?** -- nao ha L-NNN q
 e decisao tecnica (e dinheiro do colaborador na mesa do DP). Nao devolvo turno por isso
 (PAREI-DE-LEI-NAO-DEVOLVE-TURNO): a pergunta fica aqui com os numeros e a esteira **segue a O211**.
 
+## O218 — **O DIFF DE FROTA, PUBLICADO ANTES DO APPLY** (07/10 22:2x, base LIMPA, sombra do dump de 21:59:53)
+
+Condicao 1 da `DINHEIRO-EM-COMPETENCIA-ABERTA`. Saida integral em `logs/o218_diff_10_limpo.out`; as
+duas passadas de ponto fixo em `logs/o218_idempotencia.out` e `logs/o218_idem3.out`.
+
+**A BASE.** A primeira medicao foi JOGADA FORA e o motivo vale escrito: a sombra do dia estava
+**MUTADA**, nao velha. Lendo as duas celulas golden DENTRO dela, a ata ja marcava 541/545 com
+`julgada_em=2026-10-07T18:45:41-03:00` -- o RUN C daquela tarde as havia relavrado por cima da base,
+e o carimbo dizia `lavra_de_prod=OK data_ref_prod=2026-10-07` porque ele mede IDADE, nao MUTACAO. No
+mesmo diagnostico cairam outros dois defeitos, separados: `_instante_do_dump()` do arreio
+(`logs/sombra/relavra10_frota_20261005.py:228`) le `/sombra/dumps/juliani_agora.dump` por mtime, que
+so existe sob `--dump-agora`, entao devolvia um resto de 05/10 -- o `dump_de_prod_em` do pacote
+estava errado por DOIS DIAS; e o portao de idade do apply (`0 <= _idade_h <= 12`) reprovaria mesmo
+com instante certo, porque a base era de 04:00 e o apply e de ~22:00. `--refazer --dump-agora`
+resolveu os tres de uma vez: base nova de **07/10 22:03**, de um dump de prod de **21:59:53**,
+`SOMBRA_DIVERGE=0`, `dump_de_hoje=sim`. A cura de ORIGEM do instante (gravar `SOMBRA_DUMP_EM` no
+carimbo) e INSTRUMENTO e pousa sozinha depois do produto (L-105); o instante deste DIFF foi
+conferido **a mao** contra o mtime do `--dump-agora`.
+
+**O QUE SE MOVE.** `competencia 10/2026`, janela `2026-09-21..2026-10-20`, julgada ate `2026-10-06`.
+Substrato: 17.114 celulas da 10 em 579 colabs, 587 fechamentos, 10.852 linhas de DiaPago. O ato 1
+relavrou **570 colabs em 98 s** e o cartorio devolveu `julgadas=8609 carimbadas=9008 protestos=823
+emitidos=85 nunca_bateu=399 vetados=9`.
+
+- **A ata se move em 40 dia-colab, em 24 colabs.** Dos 40, **8 mudam MINUTO** (soma **+2.851 min**) e
+  **32 mudam so o VEREDITO**, com o realizado identico nos dois lados.
+- **O GOLDEN ANDA** -- a clausula de PRONTO do aval: `col146 2026-09-28 real 0 -> 541` e
+  `col146 2026-09-29 real 894 -> 545`. Os dois ficam `concorde` antes e depois; o que estava errado
+  era o NUMERO, nao o rotulo.
+- Os outros 7 que movem minuto sao o defeito (B), a ancora, aparecendo na frota: **col868** em tres
+  dias (`0 -> 658`, `0 -> 653`, `0 -> 648`), **col898** (`0 -> 699`), `col887 -2` e `col947 +3`. Todos
+  os grandes vinham `discordante` com `real 0`: turno que EXISTIA e nao era casado porque a borda da
+  janela era a ancora.
+- **Nascem em prod, pela porta** (`chamados.ChamadoColaborador.abrir`): `chamado +13 -0 · pergunta
+  +23 -0 · disputa +5 -0`. Os pks dos chamados nascidos na sombra: `29426..29438`.
+- **Comp 09 EXPORTADA INTACTA, medida tres vezes** pelo `hash09()` (md5 das celulas da 09 por
+  `colaborador_id, data, ata, dna, veredito, veredito_via, trabalha, origem`):
+  `dfd8d145c3d9af35fc768e765fe38461`, 17.332 linhas -- antes de tudo, depois do ato 1 e depois do ato
+  2. **Nenhuma celula da 09 se moveu.** (L-092)
+
+**O ATO 2 E IMPACTO, NAO ATO.** O apply de prod e **ATA SO**: `logs/o209_apply_frota_prod.py` nunca
+chama `recalcular_fechamento`, entao nada do ato 2 vira escrita em prod (LEI-AKITA 9 -- o aval nao se
+amplia). Medido so para ter dono: `fechamentos_mexidos=7 de 587`, **VAZOU para fora da lista:
+NENHUM**, APLICAVEIS (movimento so DENTRO) `2 -- [82, 898]`, SEPARADOS (movem campo FORA, fatia da
+deriva) **5** -- col146, col317, col868, col879, col950 --, 20 linhas de DiaPago movidas. O exemplo
+mais afiado da **O210** esta ai: `col879` tem `minutos_realizados -480` no motor enquanto a ata dele
+segue em 484.
+
+**A PROPRIEDADE FIXA DO AVAL, MEDIDA NA FROTA -- e ela precisa de uma QUALIFICACAO.** *Lavrar duas
+vezes == lavrar uma vez* vale como esta escrita para **ATA, LAMPADAS e MINUTOS**, e a frota a cumpre
+ja na primeira passada: a 2a passada move o golden em NADA (`[]`), `soma do realizado 0 -> 0`, e
+`chamado +0 · pergunta +0 · disputa +0`. Para o **VEREDITO** ela precisa de DUAS passadas, e o motivo
+**nao e desta fatia**: `ponto/services/cartorio.py:637` decide `cobrado` quando `not cods and vivos`,
+e `classificar_dia` recebe `chamados_vivos=len(vivos)` -- o protesto FURO deixa de existir quando a
+cobranca passa a existir, e a cobranca nasce **na mesma passada que carimbou o furo**
+(carimba-antes-de-emitir, regra de B5.3c de 27/08). MEDIDO: **31 dia-colab de 9.008 carimbados, em 14
+colabs**, mudam `furo -> cobrado` na 2a passada, todos com `real 0 -> 0`; **a 3a passada move ZERO**
+(`A ATA SE MOVEU em 0 dia-colab`, `DELTA DE CONJUNTO +0 -0`). Converge em DUAS, **nao oscila**. A
+pre-existencia e por LEITURA DE CODIGO, nao por medicao:
+`git diff fd6c8c0e -- ponto/services/cartorio.py escala/utils.py ponto/turnos.py | grep '^[+-].*cobrado'`
+e **VAZIO**. O cenario de convergencia entra na BATERIA (o aval manda: *"achou cenario novo em
+producao = entra na bateria, nao vira lei"*), no commit do flip, e a pergunta *"o cartorio devia reler
+`vivos` depois de emitir?"* vira **linha de BACKLOG da familia chamado** -- nao se toca o caminho de
+emissao com a raia-chamado esperando pouso (O221).
+
+**O PACOTE DO APPLY** esta em `logs/o218_esperado_20261007.json.ok` (md5
+`b4762cd48016866b61b5743700b0ed1f`), copia protegida: o vivo em `logs/sombra/` foi sobrescrito pelas
+passadas de idempotencia e **nao serve**. Ele carrega `dump_de_prod_em 2026-10-07T21:59:53-03:00`
+(idade < 1 h, o portao de 12 h fecha), 24 colabs, 40 dia-colab, soma +2.851 min e 448 linhas
+`[EMITE]`/`[FURO_PARCIAL]`.
+
+**SUITE:** as labels da regua na raia `wt-lavra`, pela porta canonica -- `Ran 9673 tests ... OK
+(skipped=42)`. A inversao do selo do registro era o unico vermelho e fechou.
+
 ## CONFERENCIA DO MARCO O209 — **NAO VIROU. O PLACAR E 14/20** (05/10 ~19:3x, medido no vivo)
 
 Resposta a ordem literal (*"mede agora por verdes() e responde uma de duas"*): **nao virou 15/20**.

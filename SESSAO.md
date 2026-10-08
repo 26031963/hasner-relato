@@ -6,10 +6,22 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 07/10/2026 22:28:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (423.0 MB). Acoes na janela: **389**.
+**Medido em 07/10/2026 22:33:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (423.1 MB). Acoes na janela: **401**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 22:32:11 | Bash | Esperar o bloco terminar por arquivo | `cd /home/ronald/saas-hasner && n=0; until grep -q 'SOMBRA_BLOCO=' .sombra_stamp && ! grep -q 'SOMBRA_BLOCO=nao_rodou' .sombra_stamp; do n=$((n+1)); [ $n -gt 60 ] && echo TIMEOUT && break; sleep 20; done; echo "esperei ${n}x20s -- $(date '+%H:%M:%S')"; grep -E 'SOMBRA_BLOCO\|SOMBRA_ERROS\|SOMBRA_STATUS\|SOMBRA_COMANDOS\|SOMBRA_DIVERGE' .sombra_stamp` |
+| 22:32:03 | Bash | Rodar selos de host chave | `cd /home/ronald/saas-hasner && for s in bin/tests/test_lei_akita.sh bin/tests/test_handoff_sessao.sh bin/tests/test_labels_fonte_unica.sh bin/tests/test_lei_protege_sitio.sh; do [ -f "$s" ] && printf '%-48s ' "$(basename $s)" && (bash "$s" >/dev/null 2>&1 && echo OK \|\| echo "VERMELHO rc=$?"); done; echo "--- hook_stop:"; python3 bin/hook_stop_fila1.py </dev/null 2>&1 \| head -3` |
+| 22:31:49 | Bash | Registrar o achado como O222 no BACKLOG | `python3 - <<'PY' import io p='docs/BACKLOG.md' s=io.open(p,encoding='utf-8').read() anc="\| # \| obra \| portao \| onde esta \| pedido em \|\n\|---\|---\|---\|---\|---\|\n" assert s.count(anc)==1 estado = ("ACHADO MEDIDO na O218, NAO curado: o veredito do dia le o numero de chamados VIVOS que a " "propria lavratura cria. 31 dia-colab de 9.008, em 14 colabs, mudam `furo -> cobrado` na 2a passada "  ...` |
+| 22:31:33 | Bash | Ver maior número de obra | `grep -o '^\| O[0-9]\+ ' docs/BACKLOG.md \| tr -d '\| O' \| sort -n \| tail -3` |
+| 22:31:20 | Bash | Ver forma das celulas do BACKLOG | `sed -n '112,118p' docs/BACKLOG.md \| cut -c1-300 && echo "...." && sed -n '637,648p' docs/BACKLOG.md \| cut -c1-240` |
+| 22:31:16 | Bash | Ver estrutura do BACKLOG | `grep -n '^## \\|^\| ID' docs/BACKLOG.md \| head -20` |
+| 22:31:07 | Bash | Commitar a dieta de carga | `cd /home/ronald/saas-hasner && cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/msg_o220.txt <<'MSG' [O220] a dieta de carga: a casa inteira se lia em 1,3 MB de prosa, e -275.549 B sairam sem que uma regra mudasse LEI-AKITA: origem=os seis arquivos de contexto (CLAUDE.md, LEIS.md, RELATO.md, BACKLOG.md, TICKETS.md, PROMPTS.md), testemunha=o byte m ...` |
+| 22:30:32 | Bash | Ver exatamente o diff do TICKETS | `cd /home/ronald/saas-hasner && git diff --numstat -- app/docs/TICKETS.md \| cat && git diff -- app/docs/TICKETS.md \| grep '^[+-]' \| grep -v '^[+-][+-]' \| cut -c1-110` |
+| 22:28:49 | Bash | Ver o que a dieta moveu nos docs | `cd /home/ronald/saas-hasner && git diff --stat -- CLAUDE.md app/docs/ \| cat` |
+| 22:28:17 | Bash | Rodar selo do RELATO no arquivo | `cd /home/ronald/saas-hasner && python3 bin/relato_afirma_com_prova.py app/docs/RELATO.md 2>&1 \| tail -8` |
+| 22:28:13 | Bash | Rodar selo do RELATO e checar bloco | `cd /home/ronald/saas-hasner && python3 bin/relato_afirma_com_prova.py 2>&1 \| tail -6; echo "=== bloco:"; tail -2 logs/o218_bloco_lancador.out; grep -c . logs/o218_bloco_lancador.out` |
+| 22:28:08 | Bash | Publicar o DIFF do O218 no RELATO | `python3 - <<'PY' import io p='docs/RELATO.md' s=io.open(p,encoding='utf-8').read() anc = "## CONFERENCIA DO MARCO O209 — **NAO VIROU. O PLACAR E 14/20**" assert s.count(anc)==1 novo = """## O218 — **O DIFF DE FROTA, PUBLICADO ANTES DO APPLY** (07/10 22:2x, base LIMPA, sombra do dump de 21:59:53) Condicao 1 da `DINHEIRO-EM-COMPETENCIA-ABERTA`. Saida integral em `logs/o218_diff_10_limpo.out`; as dua ...` |
 | 22:27:15 | Bash | Ver estrutura de seções do RELATO | `sed -n '30,52p' docs/RELATO.md && echo "=== cabecalhos:" && grep -n '^## ' docs/RELATO.md \| head -8` |
 | 22:26:36 | Bash | Ver topo do RELATO | `sed -n '1,30p' docs/RELATO.md` |
 | 22:26:28 | Bash | Rodar régua de tickets e checar bloco | `cd /home/ronald/saas-hasner && bash bin/regua_tickets.sh 2>&1 \| tail -8; echo "--- bloco:"; tail -3 logs/o218_bloco_lancador.out 2>/dev/null; ls -la logs/crons_em_curso/ 2>/dev/null \| head` |

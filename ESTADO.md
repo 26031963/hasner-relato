@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 07/10/2026 22:28:01.**
+**Medido em 07/10/2026 22:33:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `fd6c8c0e [O209] a conferencia do marco: NAO virou 15/20, e o que falta sao 2 dia-colab de 7.859` |
+| `HEAD` local | `cd37557a [O220] a dieta de carga: a casa inteira se lia em 1,3 MB de prosa, e -275.549 B sairam sem que uma regra mudasse` |
 | `origin/main` | `fd6c8c0e [O209] a conferencia do marco: NAO virou 15/20, e o que falta sao 2 dia-colab de 7.859` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -22,27 +22,21 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+cd37557a [O220] a dieta de carga: a casa inteira se lia em 1,3 MB de prosa, e -275.549 B sairam sem que uma regra mudasse
 fd6c8c0e [O209] a conferencia do marco: NAO virou 15/20, e o que falta sao 2 dia-colab de 7.859
 212b25a7 [O209] a ata da frota na 10 relavrada em prod: 92 de 92 casados com a sombra e a 09 intacta
 c8031f6d [O195] a relavratura 10 pousa nos 3 colabs: a ata anda -450 como publicado e a 09 nao se move
 edb40127 [O208] o contador do recalculo era cego ao campo da cura: mexidos=36 eram 174
-8fce4967 [O195] o dia do turno se decidia por 17 segundos: o juiz mandava o plantao para o dia de folga
 ```
 
 ## `git status --short`
 
 ```
- M CLAUDE.md
  M app/config/crons_duracao.json
  M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
- M app/docs/LEIS.md
- M app/docs/PROMPTS.md
- M app/docs/RELATO-ARQUIVO.md
- M app/docs/RELATO.md
  M app/docs/TICKETS.md
  M bin/sombra.sh
-?? app/docs/LAPIDES.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -116,23 +110,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Task "RED e construção do segundo intervalo" completed in background
-
-● A terceira passada fecha a afirmação: A ATA SE MOVEU em 0 dia-colab · DELTA DE CONJUNTO +0 -0 · soma +0 · censo []. Convergência em duas
-  passadas, medida — não oscilação. Lanço o bloco contra a árvore da raia agora, que é o caminho crítico do relógio:
-
-  Ran 2 shell commands
-
-● Enquanto ele roda (~18 min), corrijo a mensagem. Leio os trechos que o achado da frota tornou mais fortes que o medido:
-
-  Ran 4 shell commands
-
-● Agora as duas conferências que bloqueiam o marco — se o main andou, medi a árvore errada:
-
-  Ran 1 shell command
-
-● Main e raia na mesma base, zero migrations → deploy --sem-migrate. Commito a raia por PATH:
-
   Committed 13b1cac4
 
 ● Commit 13b1cac4. Agora a linha do TICKETS e a publicação do DIFF no RELATO — condição 1 da DINHEIRO-EM-COMPETENCIA-ABERTA, que tem de
@@ -142,10 +119,27 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Régua verde. Bloco ensaiando os 69 comandos. Agora publico o DIFF no RELATO — é condição 1, e tem de existir antes do apply:
 
-● Ver estrutura de seções do RELATO
-  ⎿  $ sed -n '30,52p' docs/RELATO.md && echo "=== cabecalhos:" && grep -n '^## ' docs/RELATO.md | head -8
+  Ran 5 shell commands
 
-✢ Beboppin'… (4h 19m 12s · ↓ 383.7k tokens)
+● Agora o commit [O220] da dieta. Confiro o que ela moveu antes de escolher os paths:
+
+  Committed cd37557a, ran 2 shell commands
+
+● Commit cd37557a. Enquanto o bloco roda, a linha de BACKLOG do achado das duas passadas — ele tem dono e número, e não pode ficar só no
+  RELATO:
+
+  Searched for 2 patterns, ran 2 shell commands
+
+● Bloco em curso. Espero por arquivo e, no intervalo, rodo a pasta de selos de host — ela responde em segundos e a recusa no push custaria
+  uma suite inteira:
+
+● Esperar o bloco terminar por arquivo · 1m 19s
+  ⎿  $ cd /home/ronald/saas-hasner && n=0; until grep -q 'SOMBRA_BLOCO=' .sombra_stamp && ! grep -q 'SOMBRA_BLOCO=nao_rodou' .sombra_stamp;
+     do n=$((n+1)); [ $n -gt 60 ] && echo TIMEOUT && break; sleep 20; done; echo "esperei ${n}x20s -- $(date '+%H:%M:%S')"; grep -E
+     'SOMBRA_BLOCO|SOMBRA_ERROS|SOMBRA_STA… (1m 19s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✢ Beboppin'… (4h 24m 42s · ↓ 394.0k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
