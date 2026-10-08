@@ -6,10 +6,26 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 08/10/2026 00:20:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (426.8 MB). Acoes na janela: **592**.
+**Medido em 08/10/2026 00:25:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (426.9 MB). Acoes na janela: **608**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 00:24:30 | Bash | Rodar a suite inteira contra a copia mesclada | `cd /home/ronald/saas-hasner && ESTEIRA_QUEM=suite-o139 bash bin/suite.sh --dir /home/ronald/wt-o139 --parallel 2 > logs/o139_suite.out 2>&1; echo "rc=$?"; grep -E '^(OK\|FAILED)' logs/o139_suite.out \| tail -3; tail -3 logs/o139_suite.out` |
+| 00:22:15 | Bash | Rodar a pasta de selos de host contra a copia | `cd /home/ronald/wt-o139 && rc=0; for s in bin/tests/test_*.sh; do if ! out=$(bash "$s" 2>&1); then echo "RED: $s"; echo "$out" \| tail -6; rc=1; fi; done; echo "pasta_rc=$rc"; bash bin/node_check.sh 2>&1 \| tail -2` |
+| 00:22:08 | Bash | Ler o trecho da pasta de selos na regua | `cd /home/ronald/saas-hasner && sed -n '134,160p' bin/regua.sh` |
+| 00:22:05 | Bash | Como a regua chama a pasta de selos | `cd /home/ronald/saas-hasner && grep -n 'bin/tests' bin/regua.sh \| head -6` |
+| 00:21:48 | Bash | Regenerar o diagrama do codigo mesclado | `cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null; docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file .env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 -v /home/ronald/wt-o139/app:/app -v /home/ronald/saas-hasner/app/staticfiles:/app/staticfiles:ro --tmpfs /app/.ruff_cache --tmpfs /app/.hypothesis --tmpfs /app/.mypy_cach ...` |
+| 00:21:39 | Bash | Ver o resto da porta da suite | `cd /home/ronald/saas-hasner && sed -n '80,130p' bin/suite.sh` |
+| 00:21:36 | Bash | Ler a porta canonica da suite | `cd /home/ronald/saas-hasner && sed -n '1,80p' bin/suite.sh` |
+| 00:21:31 | Bash | Ver os settings disponiveis e o que a suite usa | `cd /home/ronald/saas-hasner && ls app/config/settings/; grep -n 'DJANGO_SETTINGS_MODULE' bin/suite.sh \| head -5` |
+| 00:21:27 | Bash | Regenerar o diagrama a partir do codigo mesclado | `cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null 2>&1; ENVF=logs/.env_teste; ls -l $ENVF \| awk '{print $1, $NF}'; docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file $ENVF -e DJANGO_SETTINGS_MODULE=config.settings.teste_juliani -v /home/ronald/wt-o139/app:/app -v /home/ronald/saas-hasner/app/staticfiles:/app/staticfiles:ro --tmpfs  ...` |
+| 00:21:18 | Bash | Quem defende o diagrama | `cd /home/ronald/saas-hasner && grep -rln 'gerar_diagrama\\|ARQUITETURA.mmd' app/*/tests/ bin/ app/core/ 2>/dev/null \| head -10` |
+| 00:21:15 | Bash | Achar o selo que defende o diagrama | `cd /home/ronald/saas-hasner && grep -n 'gerar_diagrama' bin/tests/*.sh bin/*.sh 2>/dev/null \| head -5; echo "=== como o selo confere:"; ls bin/tests/ \| grep -i diagr` |
+| 00:21:11 | Bash | Pedir a montagem canonica da copia | `cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; MONT=$(bash bin/arvore_do_push.sh --montagem /home/ronald/wt-o139 2>/dev/null); echo "MONT=$MONT"` |
+| 00:20:59 | Bash | Rodar o selo da O139 contra a copia mesclada | `cd /home/ronald/wt-o139 && bash bin/tests/test_papel_prazo_nao_deriva.sh 2>&1 \| tail -20; echo "rc=$?"` |
+| 00:20:51 | Bash | Medir juizes_por_varredura antes e depois pela funcao real | `cd /home/ronald/wt-o139/app && python3 - <<'PY' import sys; sys.path.insert(0,'.') import config.crons as cr f=set(cr.juizes_por_varredura()); t=set(cr.JUIZES_POR_VARREDURA) print('funcao=',len(f),'tupla=',len(t)); print('dif simetrica=',sorted(f^t)) nomes={c.cmd for c in cr.CRONS} print('crons sem papel=',sorted(n for n in nomes if n not in cr.PAPEL_DO_CRON)) print('papel sem cron=',sorted(set(cr ...` |
+| 00:20:44 | Bash | Ver se o crons.py precisa de Django | `cd /home/ronald/wt-o139 && head -20 app/config/crons.py \| grep -nE '^(import\|from)' ; echo "---"; grep -nE '^(import\|from)' app/config/crons.py \| head -10; which python3; python3 -c "print(1)"` |
+| 00:20:38 | Bash | Preparar a medicao da funcao real na copia | `cd /home/ronald/wt-o139 && cat > /tmp/o139_mede.py <<'PY' import importlib, config.crons as cr importlib.reload(cr) f = set(cr.juizes_por_varredura()) t = set(cr.JUIZES_POR_VARREDURA) print('funcao=', len(f), 'tupla=', len(t)) print('diferenca simetrica=', sorted(f ^ t)) # crons declarados vs papel nomes = {c.cmd for c in cr.CRONS} sem_papel = sorted(n for n in nomes if n not in cr.PAPEL_DO_CRON)  ...` |
 | 00:20:31 | Bash | Ver o cron que o main acrescentou | `cd /home/ronald/wt-o139 && sed -n '360,380p' app/config/crons.py` |
 | 00:20:25 | Bash | Montar a copia e aplicar o commit da O139 nela | `cd /home/ronald/saas-hasner && git worktree add --detach /home/ronald/wt-o139 origin/main 2>&1 \| tail -3 && cd /home/ronald/wt-o139 && git cherry-pick -n 00bd05fb 2>&1 \| tail -10; echo "--- status:"; git status --short` |
 | 00:18:24 | Bash | Ler os sitios de auth declarados e quem tem a trava | `cd /home/ronald/saas-hasner && cat bin/auth_sitios.txt; echo "=== trava:"; bash bin/trava_teste.sh --quem 2>&1 \| head -3` |
