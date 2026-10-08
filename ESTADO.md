@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 04:00:01.**
+**Medido em 08/10/2026 04:05:31.**
 
 | | |
 |---|---|
@@ -112,36 +112,36 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  those two commits are already closed. I'll prepare the exact replacement and pay it in the marco's closing commit rather than slip it in.
-  Getting the column names so the later edit is mechanical:
+
+  Point 2 turned up something that cuts against the advisor's premise — the two authorities already occupying the papel are equally absent
+  from core/juizes.py. Nailing it before I reconcile:
 
   Ran 1 shell command
 
-● Column [4] is PROTEGE — which the standing constraint forbids me to change — and it too is now false. Getting the real header to name all
-  three stale columns exactly:
+● Primary source settles it, and it corrects the advisor's premise while confirming the prescription: core/juizes.py registers by question
+  per family (JUIZES = {...}, _Q_*) and mentions cartorio only in a comment — so neither incumbent authority is registered there, and
+  julgar_colab isn't in JUIZES_DO_PRAZO either (only marcos_vencidos is). The candidate still fails, for a sharper reason. Recording the
+  correction:
 
   Ran 1 shell command
 
-● Columns named: [4] dono, [5] PROTEGE (empty, and his), [6] selo, [7] estado. So the three stale cells are [4], [6], [7) — none in the
-  forbidden set. But I won't hand-stamp a veredito; checking whether an auditor computes it:
+● Durable. ~13 min before the sombra cron starts; continuing the census with the advisor's uniform test applied to the remaining
+  candidates. Locating their files:
 
   Ran 2 shell commands
 
-● Both green while L-101's row claims neither the papel nor its selo exists — so nothing catches a stale cell. Quantifying the exposure
-  before recording it:
+● Three read. A pattern is emerging that reframes the item, so I'll check the law that already answered this question before I claim
+  anything — LEI-AKITA 4:
 
-  Ran 1 shell command
+● Ler a pergunta de 25/09 e a L-060
+  ⎿  $ cd /home/ronald/saas-hasner/app
+     echo "=== CHAMADO-VARREDURA-NAO-JULGA: o que foi perguntado e respondido ==="
+     grep -rn "CHAMADO-VARREDURA-NAO-JULGA" docs/*.md docs/*.json 2>/dev/null | head
+     echo
+     echo "=== L-060 (cron de varredura e vigia, nunca juiz) ==="
+     grep -n "L-060" docs/LEIS.md | head -3 | …
 
-● Measured: test_lei_protege_sitio.sh can only ever cobrar 5 of 81 laws — 76 rows have an empty PROTEGE. Writing all three findings to the
-  durable draft:
-
-  Ran 1 shell command
-
-● Everything durable. Calling the advisor before I commit to how the rest of this window is spent:
-
-● Advising using Fable 5.1
-
-✢ Beboppin'… (9h 51m 12s · ↓ 912.4k tokens)
+✢ Beboppin'… (9h 56m 42s · ↓ 922.3k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
