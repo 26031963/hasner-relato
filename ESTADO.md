@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 08:00:45.**
+**Medido em 08/10/2026 08:05:45.**
 
 | | |
 |---|---|
-| `HEAD` local | `2dbd2007 CELULA-TURNO-FECHA CARIMBADA FECHADA, e a ordem da fila 1 passa a ser a dele` |
+| `HEAD` local | `85e2d722 O158: o marcador ORDEM-VIVA-TOPO passa a ser AUTORIDADE, e a pergunta do selo muda em vez da tabela` |
 | `origin/main` | `88bbc0c4 [O221] o marco do PLACAR-ESTRUTURAL: o R6 passa a publicar a frase do juiz, e as duas notas que envelheceram dizem o que foi medido` |
-| commits a subir (`ahead`) | **6** |
+| commits a subir (`ahead`) | **7** |
 
 ## Fabrica
 
@@ -22,21 +22,19 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+85e2d722 O158: o marcador ORDEM-VIVA-TOPO passa a ser AUTORIDADE, e a pergunta do selo muda em vez da tabela
 2dbd2007 CELULA-TURNO-FECHA CARIMBADA FECHADA, e a ordem da fila 1 passa a ser a dele
 a96a5256 o segundo escritor do RELATO em bin/ cai: o vigia DELEGA o no_relato, e o selo que ficou cego reabre o universo pela lei que ele declara
 58df169a a nota do selo da cura 1 passa a dizer o MOLDE de cada numero -- tres dos meus estavam errados ou sem rotulo
 6eeb129d o segundo leitor da pausa com dono migra: o "vigia sem efeito" para de chamar de travamento um estado que o Ronald escolheu
-cf03dbcb o alarme da esteira volta a ser lido PRIMEIRO: a ancora do no_relato passa a ser secao pinada propria, e nao um else que cai no EOF
 ```
 
 ## `git status --short`
 
 ```
  M app/config/crons_duracao.json
- M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
  M bin/sombra.sh
- M bin/tests/test_hook_nao_cobra_congelado.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -113,6 +111,9 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+● O158, então. Primeiro o check que o advisor pede, e o selo atual:
+
+  Ran 1 shell command
 
 ● O selo já importa o hook — não copia vocabulário. A cura da O158, em cópia:
 
@@ -133,16 +134,13 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Aplicando no ato do commit — selo, carimbo da O158 e a nota corrigida pela medição:
 
-  Aplicar o selo curado e os carimbos no BACKLOG
-  ⎿  $ cd /home/ronald/saas-hasner
-     S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/o158
-     cp $S/selo.sh bin/tests/test_hook_nao_cobra_congelado.sh
-     chmod 755 bin/tests/test_hook_nao_cobra_congelado.sh
-     python3 - <<'PY'
-     p = 'app/docs/BACKLOG.md'
-     ls = open(p, en…
+  Committed 85e2d722, ran 6 shell commands
 
-· Cultivating… (1h 52m 9s · ↓ 239.6k tokens)
+● Commit durável (85e2d722), 64 selos verdes. Antes do push do marco, consulto o advisor:
+
+● Advising using Fable 5.1
+
+* Cultivating… (1h 57m 9s · ↓ 245.5k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

@@ -1,5 +1,37 @@
 # RELATO — esteira saas-hasner
 
+**O158 FECHADA -- o marcador `ORDEM-VIVA-TOPO` passa a ser AUTORIDADE, e a sua ordem de hoje pode pousar.**
+REVERSAO EM UMA LINHA, se o senhor nao quiser: `git revert <este commit>` devolve a igualdade
+`marcador == 1o aberto da tabela` e o selo volta a cobrar `PLACAR-ESTRUTURAL`.
+- **por que entrou agora, e nao e a fila lateral de instrumento**: o seu aval das 07:5x poe a `O211` na
+  frente e manda o marcador acompanhar; com o marcador em `O211`,
+  `bin/tests/test_hook_nao_cobra_congelado.sh` ficava VERMELHO (1 de 64), porque ainda exigia que o
+  marcador FOSSE o 1o aberto da tabela. A lei que resolve e sua e esta escrita desde 03/10 19:3x
+  (O158), entao nao e PAREI -- e commit de INSTRUMENTO proprio (L-105), ato minimo para a ordem poder
+  pousar. A fila lateral de instrumento (O201, O203, selo do `tabela()`, `bin/dieta_relato.sh`,
+  `bin/ff_pouso.sh`) segue FECHADA ate o pouso de instrumento depois da O211.
+- **REARRANJAR LINHA NAO RESOLVIA, e o motivo e estrutural -- medido pelo criterio do proprio hook**
+  (`_linha_de_item_re`, `_FECHADO` em c[3]/c[2], `_NAO_ANDA` em c[3]): o bloco OBRAS tem duas tabelas de
+  cabecalhos diferentes; a 1a tem **exatamente 1** linha aberta (`PLACAR-ESTRUTURAL`, 6 celulas) e
+  precede a 2a INTEIRA, onde estao os 13 itens que o aval nomeia; a 2a tem **128** abertas, de 5 a 8
+  celulas. Mover linha entre tabelas muda o significado da coluna que o hook le como estado; hastear a
+  tabela 2 poria essas 128 abertas, que o senhor NAO nomeou, na frente do R6.
+- **a cura, na origem**: a PERGUNTA do selo. Sai `primeiro != esperado`; entra "o marcador aponta linha
+  que EXISTE no bloco OBRAS e esta ABERTA", com `_linha_de_item_re`/`_FECHADO`/`_NAO_ANDA`
+  **importados do hook**, nunca copiados -- selo que copia valor fica vermelho quando a cura move a
+  fonte, e aqui o vocabulario tem um dono so.
+  PROVA: tres vereditos contra o BACKLOG **real**, so trocando o marcador -- `ID-QUE-NAO-EXISTE` ->
+  RED "nao existe linha com esse id"; `CELULA-TURNO-FECHA` (FECHADA hoje) -> RED "esta FECHADO ou
+  PARADO"; `O211` -> verde. E o par que MORDE, embutido no selo, classifica quatro BACKLOGs sinteticos
+  (vivo/fechado/congelado/inexistente) mais o sem-marcador; MUTANDO a porta para dizer sempre `ok` o
+  par fica VERMELHO nos dois sentidos (`ausente` e `parado`). O selo do HEAD, no mesmo arranjo, da o
+  RED de hoje: *"o 1o aberto do bloco OBRAS e 'PLACAR-ESTRUTURAL', e o marcador diz 'O211'"*.
+- **o que NAO curei, e fica registrado**: `_proximo_da_fila()` segue derivando o 1o aberto pela ORDEM DA
+  TABELA, entao o `siga:` do hook do Stop nomeia `PLACAR-ESTRUTURAL` enquanto a cabeca declarada e a
+  `O211` -- **segundo leitor** de "qual o item em curso". Nao e porta: medido agora, o `PAREI` NAO
+  depende dele (`_relato_parou` consulta a lista `_ids_que_nao_andam()`, e `O211` esta entre os **129**
+  vivos), entao um `PAREI: ! ... O211` e aceito. Cura = fila de INSTRUMENTO, depois do pouso da O211.
+
 **O ALARME DA ESTEIRA VOLTOU A SER LIDO PRIMEIRO -- e o bug era meu, de ~6 dias atras.**
 `core/esteira_vigia.py::no_relato` promete no proprio docstring que a linha "entra no TOPO do RELATO,
 onde se le primeiro". Ela ancorava em `\n## PENDENTES DO RONALD`, e a dieta a mao de `2082e03d`
