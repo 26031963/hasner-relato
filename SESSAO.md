@@ -6,10 +6,19 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 08/10/2026 00:52:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (427.2 MB). Acoes na janela: **635**.
+**Medido em 08/10/2026 00:57:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (427.3 MB). Acoes na janela: **644**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 00:56:54 | Bash | Rodar o selo do import tardio contra o ar | `cd /home/ronald/saas-hasner && bash bin/tests/test_import_tardio_contra_o_ar.sh 2>&1 \| tail -4; echo "rc=$?"; echo "=== stamp:"; grep -E 'COMMIT=' logs/deploy.stamp 2>/dev/null \| tail -2` |
+| 00:53:04 | Bash | Ver como vai o push | `cd /home/ronald/saas-hasner && tail -5 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bzdfxvxk6.output 2>/dev/null; echo "=== remoto:"; git fetch origin -q 2>/dev/null; git log --oneline -1 origin/main; git log --oneline -1 HEAD` |
+| 00:52:47 | Bash | Medir as condicoes do passo 6 pelas funcoes reais | `cd /home/ronald/saas-hasner && cat > /tmp/p6.py <<'PY' from core.juizes import PENDENTES, PENDENTES_CELULA from core.contratos_estruturais import MATRIZ, verdes, total, linha_do_placar print('PEND celula/precedencia =', len(PENDENTES.get('celula/precedencia', ()))) print('PEND turno/marcos =', len(PENDENTES.get('turno/marcos', ()))) print('PENDENTES_CELULA =', len(PENDENTES_CELULA)) for k, c in MA ...` |
+| 00:52:40 | Bash | Medir as condicoes do passo 6 pelas funcoes reais | `cd /home/ronald/saas-hasner && cat > /tmp/p6.py <<'PY' from core.juizes import PENDENTES, PENDENTES_CELULA from core.contratos_estruturais import MATRIZ, verdes, total, linha_do_placar print('PENDENTES celula/precedencia =', len(PENDENTES.get('celula/precedencia', ()))) print('PENDENTES turno/marcos =', len(PENDENTES.get('turno/marcos', ()))) print('PENDENTES_CELULA =', len(PENDENTES_CELULA)) for  ...` |
+| 00:52:20 | Bash | Ler a celula celula/precedencia x um juiz por pergunta | `sed -n '164,200p' core/contratos_estruturais.py` |
+| 00:52:17 | Bash | Ver o estado das duas celulas do passo 6 | `grep -n "celula/precedencia\\|'celula'" core/contratos_estruturais.py \| head -12; echo "=== PENDENTES:"; grep -n "PENDENTES" core/juizes.py \| head -6` |
+| 00:52:10 | Bash | Ler o item CELULA-TURNO-FECHA por coluna | `sed -n '98p' docs/BACKLOG.md \| python3 -c " import sys cols=sys.stdin.read().split('\|') for k,c in enumerate(cols): print('--- col',k); print(c.strip()) "` |
+| 00:52:06 | Bash | Achar o item CELULA-TURNO-FECHA no BACKLOG | `grep -n 'CELULA-TURNO-FECHA' docs/BACKLOG.md \| head -3 \| cut -c1-120` |
+| 00:52:01 | Bash | Perguntar ao hook qual e o proximo item da fila 1 | `cd /home/ronald/saas-hasner && python3 - <<'PY' 2>&1 \| head -20 import importlib.util spec=importlib.util.spec_from_file_location('h','bin/hook_stop_fila1.py') m=importlib.util.module_from_spec(spec) try: spec.loader.exec_module(m) except SystemExit: pass import inspect print(inspect.signature(m._proximo_da_fila)) print(m._proximo_da_fila()) PY` |
 | 00:51:55 | Bash | Descobrir a funcao que o hook usa para nomear o item da fila 1 | `cd /home/ronald/saas-hasner && python3 - <<'PY' 2>&1 \| head -30 import sys, importlib.util spec=importlib.util.spec_from_file_location('h','bin/hook_stop_fila1.py') m=importlib.util.module_from_spec(spec) try: spec.loader.exec_module(m) except SystemExit: pass for n in dir(m): if 'fila' in n.lower() or 'ordem' in n.lower() or 'item' in n.lower(): print('fn:', n) PY` |
 | 00:51:50 | Bash | Ler a ordem viva que o hook guarda | `cd /home/ronald/saas-hasner && grep -nE 'ORDEM\|fila 1\|CELULA-TURNO-FECHA' bin/hook_stop_fila1.py \| head -20` |
 | 00:51:39 | Bash | Ler a mensagem da reversao parcial | `cd /home/ronald/saas-hasner && git log -1 --format='%B' bea841ff \| head -40` |

@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 00:52:01.**
+**Medido em 08/10/2026 00:57:31.**
 
 | | |
 |---|---|
 | `HEAD` local | `bb0bd0fa [O221] pouso 1, so PRODUTO: o papel `prazo` da O139 entra no main, e o selo dele fica para o ato seguinte` |
-| `origin/main` | `97e9e043 [O222] a caracterizacao do veredito: a passada 1 carimba `furo` e abre a cobranca, e so a 2 le a cobranca que ela mesma abriu` |
-| commits a subir (`ahead`) | **1** |
+| `origin/main` | `bb0bd0fa [O221] pouso 1, so PRODUTO: o papel `prazo` da O139 entra no main, e o selo dele fica para o ato seguinte` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -109,6 +109,9 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
+● Os REDs acima são da cópia nua (sem .git/hooks, sem settings.json, staticfiles vazio) — a pasta de host pertence à árvore viva, onde ela
+  já deu pasta_rc=0. A montagem entrega o staticfiles da árvore viva, então a suite tem css/js. Rodando a suite contra a cópia:
+
   Searched for 1 pattern, ran 2 shell commands
 
 ● Enquanto a suite roda, o que o advisor pediu que ficasse escrito agora — o portão da raia-chamado e o topo:
@@ -125,25 +128,22 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Agora o ato único — produto na árvore, commit e deploy sem nada no meio (L-107):
 
-  Descobrir a funcao que o hook usa para nomear o item da fila 1
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PY' 2>&1 | head -30
-     import sys, importlib.util
-     spec=importlib.util.spec_from_file_location('h','bin/hook_stop_fila1.py')
-     m=importlib.util.module_from_spec(spec)
-     try:
-     spec.loader.exec_module(m)
-     except SystemExit:
-     pass
-     for n in dir(m):
-     if 'fila' in n.lowe…
+  Amended commit bb0bd0fa, cherry-picked 9b01e4e6, searched for 3 patterns, ran 20 shell commands
 
-✢ Beboppin'… (6h 43m 12s · ↓ 558.2k tokens)
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+
+  Ran 1 shell command
+
+● Background command "Empurrar o pouso 1 pela regua" completed (exit code 0)
+
+✢ Beboppin'… (6h 48m 42s · ↓ 562.7k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                   10% until auto-compact
+                                                                                                                    4% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
