@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 08/10/2026 03:32:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (434.4 MB). Acoes na janela: **1009**.
+**Medido em 08/10/2026 03:38:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (434.8 MB). Acoes na janela: **1013**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 03:37:22 | Bash | Ler o bloco de guarda de sujos da esteira 5 | `cd /home/ronald/saas-hasner sed -n '130,200p' fatias_agendadas/o221-pouso5/esteira.sh` |
+| 03:37:03 | Bash | Conferir os crons armados e o estado do agendamento | `cd /home/ronald/saas-hasner echo "=== cron.d armados ==="; ls -l /etc/cron.d/ 2>/dev/null \| grep -i hasner echo "=== conteudo do pouso3 ==="; sudo -n cat /etc/cron.d/hasner-deploy-o221-pouso3 2>/dev/null \|\| cat /etc/cron.d/hasner-deploy-o221-pouso3 2>/dev/null echo "=== listar ==="; bash bin/deploy_agendado.sh listar 2>&1 \| head -30 echo "=== done ja existentes ==="; ls -l logs/deploy_agendado ...` |
+| 03:35:43 | Bash | Esperar o veredito da suite da uniao por ARQUIVO | `SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad until grep -qE '^rc_suite=' "$SP/suite_uniao_o167_o137.out"; do sleep 20; done echo "VEREDITO CHEGOU $(date '+%H:%M:%S')" grep -nE 'Ran [0-9]+ tests\|^OK$\|^OK \(\|^FAILED \(\|^rc_suite=' "$SP/suite_uniao_o167_o137.out"` |
+| 03:35:29 | ToolSearch |  | `-` |
 | 03:31:55 | Bash | Conferir o veredito da suite | `SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; date '+%H:%M:%S'; grep -nE 'Ran [0-9]+ tests\|^OK$\|^OK \(\|^FAILED \(\|rc_suite=' $SP/suite_uniao_o167_o137.out \|\| echo "(sem veredito, $(wc -l < $SP/suite_uniao_o167_o137.out) linhas)"` |
 | 03:31:40 | ToolSearch |  | `-` |
 | 03:31:27 | Bash | Tornar o rascunho e o RED do smoke duráveis em logs/ | `cd /home/ronald/saas-hasner && SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && mkdir -p logs/pousos && cp $SP/relato_topo_pousos.md logs/pousos/relato_topo_o221_pousos.md && cp $SP/smoke_pouso5_prod.py logs/pousos/smoke_pouso5_prod.py && cp $SP/smoke_pouso5_prod.py.red 2>/dev/null; docker exec saas_core python manage.py shell --command "exec(open ...` |
