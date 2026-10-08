@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 11:11:31.**
+**Medido em 08/10/2026 11:17:01.**
 
 | | |
 |---|---|
@@ -131,16 +131,16 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● O guarda compara o SOMBRA_TRAVA_ID. Rodo o par, que refaz as duas dentro de uma trava só — e isso me dá de graça a prova de
   reprodutibilidade: se os sha do TXT voltarem iguais, o par de CSV que já tenho está provado determinístico.
 
-● Rodar o par dentro de uma trava so · 2m 36s
+● Rodar o par dentro de uma trava so
   ⎿  $ cd /home/ronald/saas-hasner
      S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
      date +'inicio %H:%M:%S'
      bash bin/simular_folha.sh par o211b $S/redB/app $S/pousoB/app > $S/par_o211b.out 2>&1; echo "par rc=$?"
      date +'fim %H:%M:%S'
-     grep -E 'empresa|DIFF_FO… (2m 35s · 2 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
+     grep -E 'empresa|DIFF_FO…
 
-✢ Cultivating… (5h 2m 55s · ↓ 588.2k tokens)
+✢ Compacting conversation… (5h 8m 25s · ↓ 588.2k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱ 85%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                     0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

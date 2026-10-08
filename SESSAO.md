@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 08/10/2026 11:11:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (454.4 MB). Acoes na janela: **1379**.
+**Medido em 08/10/2026 11:17:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (454.4 MB). Acoes na janela: **1372**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1382,10 +1382,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 23:18:03 | Bash | Fazer o flip e reescrever a nota da célula | `python3 - <<'PY' import io p = 'core/contratos_estruturais.py' s = io.open(p, encoding='utf-8').read() velho = """ excecoes=(('core.juizes', 'PENDENTES_CELULA'),), verde=False, nota='FALTA O EFEITO, NAO O CENSO -- E A RELAVRATURA JA CORREU (medido 05/10 19:3x, O209). O censo esta em ' """ novo = """ excecoes=(('core.juizes', 'PENDENTES_CELULA'),), verde=True, nota='FECHADA EM 07/10 23:1x PELA O218 ...` |
 | 23:17:12 | Bash | Ver os limites da célula para substituir a nota | `sed -n '163,200p' core/contratos_estruturais.py \| cat -n \| sed -n '1,45p'` |
 | 23:17:05 | Bash | Medir o placar com o flip aplicado na declaração em memória | `cd /home/ronald/saas-hasner && docker exec saas_core python manage.py shell --command " from core.contratos_estruturais import MATRIZ, linha_do_placar, verdes, total k = ('celula/precedencia', 'um juiz por pergunta') print('antes: %s (celula verde=%s)' % (linha_do_placar(), MATRIZ[k]['verde'])) MATRIZ[k]['verde'] = True print('com o flip: %s' % linha_do_placar()) print('verdes=%s total=%s' % (verd ...` |
-| 23:16:57 | Bash | Ler verdes(), total() e linha_do_placar() | `grep -n 'def verdes\\|def total\\|def linha_do_placar\\|def declaradas' -A 14 core/contratos_estruturais.py \| sed -n '1,70p'` |
-| 23:16:23 | Bash | Conferir a linha Haiku e a descrição do O213 | `cd /home/ronald/saas-hasner && grep -n 'de 20\\|total()\\|verdes()\\|20' app/core/arquitetura_leitura.py \| head -15; echo === O213 ===; grep -n 'O213' app/docs/BACKLOG.md \| head -5` |
-| 23:12:59 | Bash | Ler o topo do RELATO | `cd /home/ronald/saas-hasner && head -40 app/docs/RELATO.md` |
-| 23:12:50 | Bash | Conferir o censo vivo e a existência da classe de teste | `cd /home/ronald/saas-hasner && docker exec saas_core python manage.py shell --command "from core.juizes import PENDENTES_CELULA, PENDENTES; print('PENDENTES_CELULA=%r len=%d' % (PENDENTES_CELULA, len(PENDENTES_CELULA))); print('PENDENTES[celula/precedencia]=%r' % (PENDENTES.get('celula/precedencia'),))" 2>&1 \| tail -4; echo ===; grep -n 'class JuizCelulaContratoTest' app/ponto/tests/test_contract ...` |
-| 23:12:34 | Bash | Medir o placar pela função real | `cd /home/ronald/saas-hasner && docker exec saas_core python manage.py shell --command "from core.contratos_estruturais import linha_do_placar, verdes, total; print(linha_do_placar()); print('verdes=%s total=%s' % (verdes(), total()))" 2>&1 \| tail -4` |
-| 23:12:25 | Bash | Medir o placar pela função real | `cd /home/ronald/saas-hasner && docker exec saas_core python manage.py shell --command "from core.contratos_estruturais import linha_do_placar, verdes, total; print(linha_do_placar()); print('verdes=%d total=%d' % (len(verdes()), total()))" 2>&1 \| tail -4` |
-| 23:12:18 | Bash | Medir o placar pela função real | `cd /home/ronald/saas-hasner && docker exec saas_core python manage.py shell --command "from core.contratos_estruturais import linha_do_placar, verdes, total, declaradas, PENDENTES; print(linha_do_placar()); print('verdes=%d total=%d declaradas=%d' % (len(verdes()), total(), len(declaradas()) if callable(declaradas) else -1))" 2>&1 \| tail -6` |
