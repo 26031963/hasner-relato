@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 21:06:05.**
+**Medido em 08/10/2026 21:11:31.**
 
 | | |
 |---|---|
@@ -44,6 +44,7 @@ bf83856d O214 item 1: a PROVA do pouso -- deploy, ensaio em prod e o achado da c
  M app/docs/PROMPTS.md
  M app/docs/RELATO.md
  M bin/sombra.sh
+?? app/ponto/tests/test_o145_testemunha_le_a_acusacao_do_motor.py
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -120,37 +121,37 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  Searched for 3 patterns, ran 2 shell commands
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+● Nenhum teste chama o espelho de verdade nessa cadeia — todos os existentes fazem mock. O RED vai ser o primeiro a atravessar a testemunha
+  inteira. Escrevendo o CASO com a resposta da regra ANTES do código (L-110):
 
-● Ponto 1 bloqueia o RED. Antes de escolher sítio, ler a lei na letra e o censo de quem lê a chave:
+  Read 1 file
 
-  Ran 1 shell command
-
-● Background command "Rodar o censo v2 na sombra" completed (exit code 0)
-
-  Ran 1 shell command
-
-● Controle duplo OK nos dois lados — os números agora são prova. E a 2ª passada partiu o bucket A em quatro causas: só 44 dos 78 são a
-  O145. Falta o minuto por causa e o real/cadastrado dos baldes (c) e (d):
+● Ruff limpo. Agora provar que o RED é vermelho de verdade — e que o valor de 90 min passa:
 
   Ran 2 shell commands
 
-● Agora o censo de quem lê a chave — é ele que decide se a cura entra em he_fora_da_janela ou numa marca própria do dia:
+● A porta já aceita rótulo arbitrário em --only:
 
-  Ran 2 shell commands
+  Ran 1 shell command
 
-● O portão já respondeu essa pergunta, e contra a minha leitura: a primeira versão dele lia só os dias acima do teto e isso foi julgado
-  ERRADO — "Contador e tela tem de responder a MESMA pergunta, e a pergunta e a da tela: todo minuto fora da janela." Então pendência é
-  universal, o B do col207 é a lei funcionando, e o meu achado 15 estava largo. E a trava do export nasce desligada (default=False), então
-  a pendência crescer não barra TXT por si:
+● RED evidenciado, e com a forma exata da frota: o motor acusa ('chegada fora da janela de HE', '18:56', '21:00', 124) e a testemunha
+  devolve []. Três verdes guardam o resto (a ponta de 90 nasce, a acusação existe no mesmo run, o intervalo não virou ponta). Agora o
+  sítio:
 
-● Running 1 shell command…
+  Searched for 1 pattern, ran 1 shell command
 
-· Wrangling… (7h 40m 26s · ↓ 868.7k tokens)
+● Cura mais restritiva (L-CURA-MAIS-RESTRITIVA): só o dia cuja célula da ponta está missing — 44 dias, não os 78. Antes, as causas que a
+  lista do motor pode trazer, porque ela também serve a L-084:
+
+● Censo das causas que entram na lista CXR
+  ⎿  $ grep -rn "_cadastro_x_realidade" ponto/motor_calculo_v2.py | head; echo '--- as duas causas literais ---'; sed -n
+     '1309,1313p;1346,1350p' ponto/motor_calculo_v2.py
+
+✢ Wrangling… (7h 45m 52s · ↓ 884.0k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    5% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -158,6 +159,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
-  ◯ fork  Staging oraculo.py patch, polling viz_o200.out                                                        40m 50s · ↓ 154.9k tokens
+  ◯ fork  Amending commit with ARQUITETURA.mmd                                                                  46m 16s · ↓ 167.6k tokens
   ⧉  index
 ```
