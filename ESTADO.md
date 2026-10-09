@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 21:17:01.**
+**Medido em 08/10/2026 21:22:31.**
 
 | | |
 |---|---|
@@ -121,10 +121,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  Searched for 1 pattern, ran 1 shell command
-
-● Cura mais restritiva (L-CURA-MAIS-RESTRITIVA): só o dia cuja célula da ponta está missing — 44 dias, não os 78. Antes, as causas que a
   lista do motor pode trazer, porque ela também serve a L-084:
 
   Searched for 1 pattern, ran 2 shell commands
@@ -149,7 +145,11 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Agent "Pousar a O204 na raia wt-bos" finished · 49m 46s
 
-· Wrangling… (7h 51m 22s · ↓ 889.9k tokens · still thinking)
+  Ran 15 shell commands
+
+● Advising using Fable 5.1
+
+✢ Wrangling… (7h 56m 52s · ↓ 901.2k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
