@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:87 AFIRMA ato sem PROVA ao lado -- ## O146 — **FECHADA, NO AR**: a extra declarada da escala desloca o limite, e o limite
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:113 AFIRMA ato sem PROVA ao lado -- ## O146 — **FECHADA, NO AR**: a extra declarada da escala desloca o limite, e o limite
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 03:32:43.**
+**Medido em 09/10/2026 03:38:01.**
 
 | | |
 |---|---|
@@ -147,15 +147,15 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Agora o selo da forma B — ele passa a contar por ato, em vez de somar os dois:
 
-● Roda os modulos afetados pela cura
-  ⎿  $ cd /home/ronald/saas-hasner
-     S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
-     bin/suite.sh --dir "$S/o214-item2/arvore" --only "ponto.tests.test_tela_gestao_he_forma_b ponto.tests.test_contract_no_except_pass
-     ponto.tests.test_o214_item2_autorizar_peri…
+● Aguarda a suite cheia relancada · 4m 33s
+  ⎿  $ cd /home/ronald/saas-hasner && for i in $(seq 1 29); do if grep -qE '^OK$|^OK \(|^FAILED \(' logs/o214item2/suite_cheia2.out
+     2>/dev/null; then break; fi; kill -0 1975594 2>/dev/null || break; sleep 20; done; date '+%H:%M:%S'; grep -nE '^OK$|^OK \(|^FAILED
+     \(|^Ran [0-9]+ tests?' logs/o214item2/sui… (4m 33s)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-· Wrangling… (14h 7m 4s · ↓ 1.7m tokens)
+✢ Wrangling… (14h 12m 22s · ↓ 1.7m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    8% until auto-compact
+                                                                                                                    6% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
