@@ -6,10 +6,18 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 09/10/2026 05:30:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (508.4 MB). Acoes na janela: **1548**.
+**Medido em 09/10/2026 05:35:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (508.6 MB). Acoes na janela: **1553**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 05:34:22 | Bash | Registra o bug medido e censa os testes do porta_export | `cd /home/ronald/saas-hasner && cat >> logs/o214item4/CASO.md <<'MD' --- # BUG PROVADO NO CAMINHO (LEI-AKITA 6) — A TRAVA DO TXT CONTA DIA DE OUTRA COMPETENCIA MEDIDO na sombra em 09/10 05:2x pela funcao REAL (`folha/porta_export.py::medir`, competencia 10/2026, saida em `logs/medir_o214_item3.out`). O numero REAL da trava, que era a pre-condicao do flip: \| empresa \| universo do TXT \| dia-colab  ...` |
+| 05:33:34 | Bash | Le o laco exato do he_pendente | `sed -n '280,320p' folha/porta_export.py` |
+| 05:33:31 | Bash | Localiza o laco do he_pendente no medir | `grep -n "he_pendente\\|_dia_esp\\|espelho_do_colab\\|for _dia_esp\\|ini, fim\\|periodo_apuracao\\|janela" folha/porta_export.py \| sed -n '1,60p'` |
+| 05:33:17 | Bash | Le o resultado da sonda do numero da trava | `cd /home/ronald/saas-hasner && cat logs/medir_o214_item3.out 2>/dev/null \| tail -40` |
+| 05:33:12 | Bash | Escreve o CASO e os REDs do item 4 | `cd /home/ronald/saas-hasner && mkdir -p logs/o214item4 && cat > logs/o214item4/CASO.md <<'MD' # O214 ITEM 4 — O CASO E OS REDs, ESCRITOS PELA REGRA ANTES DO CODIGO (L-110) LEI (literal, celula O214 do BACKLOG): **"ITEM 4 A 09: os dias acima do limite ficam decidiveis na Gestao de HE e o autorizado sai como linha na pauta do TXT da 09 ja aberta, com os dois numeros; a 09 nao se recalcula por este a ...` |
+| 05:31:18 | Bash | Le apurar e lavrar do retrato | `sed -n '61,180p' ponto/services/he_pendente_lavrado.py` |
+| 05:31:04 | Bash | Le a previa e o autorizar por periodo nas views | `sed -n '596,724p' ponto/views.py` |
+| 05:30:59 | Bash | Censo de chamadores | `echo "=== callers de enriquecer / itens_sem_decisao ==="; grep -rn "enriquecer(\\|itens_sem_decisao(" --include=*.py . \| grep -v "def enriquecer\\|def itens_sem_decisao"; echo; echo "=== views que usam gestao_he ==="; grep -rn "gestao_he\\|recusar_he_em_lote\\|autorizar_he" --include=*.py ponto/views.py config/urls.py ponto/urls.py 2>/dev/null \| head -30` |
 | 05:30:11 | Bash | Le o resto do servico de autorizacao por periodo | `cat -n ponto/services/autorizacao_he_periodo.py \| sed -n '120,230p'` |
 | 05:30:06 | Bash | Le a primeira metade do servico de autorizacao por periodo | `cat -n ponto/services/autorizacao_he_periodo.py \| sed -n '1,120p'` |
 | 05:30:02 | Bash | Le o padrao de uma pauta viva por competencia | `echo "=== pendentes_por_ancora ==="; sed -n '277,300p' pautas/services.py; echo "=== pre_fechamento._pauta ==="; sed -n '112,140p' folha/management/commands/pre_fechamento.py; echo "=== autor_sistema ==="; sed -n '70,96p' pautas/services.py` |
@@ -1555,6 +1563,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 17:36:01 | Bash | Ler o inicio do suite.sh para a forma do recorte | `cd /home/ronald/saas-hasner && sed -n '1,60p' bin/suite.sh` |
 | 17:35:55 | Bash | Rodar o selo O211 que ficou vermelho as 13:40 | `cd /home/ronald/saas-hasner && bin/suite.sh -- core.tests.test_regua_pela_empresa.OProibidoDaO211Test 2>&1 \| tail -15; echo "rc=$?"` |
 | 17:35:52 | Bash | Carimbar a hora de fim lida do date | `cd /home/ronald/saas-hasner && sed -n '3p' app/docs/RELATO.md && python3 - <<'PY' p='app/docs/RELATO.md' t=open(p,encoding='utf-8').read() assert t.count('(08/10 14:2x→17:2x)')==1 t=t.replace('(08/10 14:2x→17:2x)','(08/10 14:2x→17:3x)') open(p,'w',encoding='utf-8').write(t) print('fim -> 17:3x (date no ato: 17:35)') PY sed -n '3p' app/docs/RELATO.md` |
-| 17:35:42 | Bash | Ler a saida do selo O211 e a cronologia dos commits | `cd /home/ronald/saas-hasner && cat /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/biv82p8a3.output; echo "=== commits de hoje com hora ==="; git log --format='%h %ad %s' --date=format:'%d/%m %H:%M' -6; echo "=== trava ==="; bin/trava_teste.sh --quem` |
-| 17:35:28 | Bash | Conferir as duas saidas de tarefa e suas datas | `cd /home/ronald/saas-hasner && T=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks; ls -la $T/biv82p8a3.output $T/aa14fd1a6ffa27253.output 2>&1; echo "=== aa14 ==="; cat $T/aa14fd1a6ffa27253.output 2>&1 \| head -60` |
-| 17:35:20 | Bash | Hora, HEAD, status e saidas de tarefa | `date '+%d/%m %H:%M'; cd /home/ronald/saas-hasner && git log --oneline -1 && git status --porcelain \| head -20; echo "--- tasks ---"; ls -la /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/ 2>/dev/null \| tail -20` |
