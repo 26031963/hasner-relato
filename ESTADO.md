@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:154 AFIRMA ato sem PROVA ao lado -- ## O146 — **FECHADA, NO AR**: a extra declarada da escala desloca o limite, e o limite
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:248 AFIRMA ato sem PROVA ao lado -- ## O146 — **FECHADA, NO AR**: a extra declarada da escala desloca o limite, e o limite
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 06:29:31.**
+**Medido em 09/10/2026 06:35:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `ef10b802 O214 item 3: a trava do TXT conta so o dia que e do ADMIN` |
+| `HEAD` local | `3c610491 O214: a trava do TXT contava dia de outra competencia (L-097)` |
 | `origin/main` | `ef10b802 O214 item 3: a trava do TXT conta so o dia que e do ADMIN` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+3c610491 O214: a trava do TXT contava dia de outra competencia (L-097)
 ef10b802 O214 item 3: a trava do TXT conta so o dia que e do ADMIN
 c32acf2e O topo do TICKETS fechado no ato do push (O112)
 041fd2ac O214 item 2: um ato, um motivo, e a tela mostra o DIFF por rubrica ANTES de confirmar
 ce212bb8 As duas colunas da O146 entram no inventario pessoal, e o padrao fica intacto
-cfd4ff83 O146: a extra declarada da escala desloca o limite da janela, e o limite passa a ter UM sitio
 ```
 
 ## `git status --short`
@@ -118,36 +118,36 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ⎿  Read docs/HANDOFF-SESSAO.md (46 lines)
-  ⎿  Read ponto/services/he_pendente_lavrado.py (177 lines)
-  ⎿  Referenced file ponto/services/gestao_he.py
-  ⎿  Referenced file ponto/portas/he.py
+  Ran 3 shell commands
 
-● Task "RED e construção do segundo intervalo" completed in background
+● A suite inteira roda na cópia (21 min, ~10k testes); espero o Ran N tests — o monitor bntshiywc avisa. Enquanto isso, o que já está
+  provado e durável:
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+  - Certificação na sombra, pela função real (logs/o214item4/trava_curada.out): TOTAL emp2+3+4: trava 70 em 1148 dia-colab, FORA da janela
+    = 0 nas três, falhas = 0. A partição fecha sem sobra com a medida do defeito — 52+16+2 = 70, 776+337+35 = 1.148.
+  - Pasta de selos de host: toda verde no baseline.
+  - Carimbo da sombra de hoje: dia=20261009 status=OK tipo=completa diverge=0 erros=0 — o portão do deploy está aberto.
+  - Censo do diff da cópia contra HEAD: exatamente 4 arquivos, nenhum estranho.
+  - Mensagem de commit pronta citando L-097 (a cláusula "esperado 0" é a que o vazamento tornava mentirosa), L-095 e L-003; célula de
+    ESTADO do BACKLOG em 295 caracteres, sem |.
 
-  Ran 8 shell commands
-  ⎿  Read docs/AVAIS.md (24 lines)
-  ⎿  Read docs/HANDOFF-SESSAO.md (46 lines)
-  ⎿  Read ponto/services/he_pendente_lavrado.py (177 lines)
-  ⎿  Referenced file ponto/services/gestao_he.py
-  ⎿  Referenced file ponto/portas/he.py
+  Uma correção de método no caminho: minha primeira espera deu a suite por verde em cima de OK — nenhuma divergencia em 2026-10-09., que é
+  prosa de log — o ( |$) não distingue o espaço antes do travessão. A espera passou a ser pelo ^Ran [0-9]+ tests, que é o que o CLAUDE.md
+  manda ler junto do veredito.
 
-● Task "RED e construção do segundo intervalo" completed in background
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: O214 -- HE-DECISAO-EM-ESCALA (lei nova dele, 05/10 18:0x, 4 itens; entra logo depois da O211 e a FRENTE
+  dos BOs de tel
 
-● Background command "Espera o arquivo da medição" completed (exit code 0)
+  Ran 1 shell command
 
-  Searched for 2 patterns, ran 16 shell commands
+● Background command "Aguarda o Ran N tests da suite" completed (exit code 0)
 
-● Background command "Espera o veredito da suite" completed (exit code 0)
+● Estado do push
+  ⎿  $ cd /home/ronald/saas-hasner && echo "remoto: $(git ls-remote origin refs/heads/main | cut -c1-8) | HEAD: $(git rev-parse --short=8
+     HEAD)"; tail -4 logs/push_3c610491.out 2>/dev/null; bash bin/trava_teste.sh --quem
 
-● Aguarda o Ran N tests da suite
-  ⎿  $ cd /home/ronald/saas-hasner && until grep -qE '^Ran [0-9]+ tests' logs/suite_o214vaz.out 2>/dev/null; do sleep 30; done; grep -nA2
-     -E '^Ran [0-9]+ tests' logs/suite_o214vaz.out | tail -8; date '+%H:%M:%S'
-
-✢ Wrangling… (17h 3m 52s · ↓ 1.9m tokens)
+✢ Wrangling… (17h 9m 22s · ↓ 1.9m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
