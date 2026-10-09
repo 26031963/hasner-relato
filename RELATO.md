@@ -1,5 +1,1219 @@
 # RELATO — esteira saas-hasner
 
+## R1-RESIDUO-DO-INTERVALO — **EM CURSO** (09/10 09:xx; complemento da O73, sem id novo)
+
+**LEI QUE FALTA (vai no topo COM numero, e a esteira SEGUE — PAREI-DE-LEI-NAO-DEVOLVE-TURNO):**
+*a L-084 diz que 180 min nas DUAS pontas e o limite para o cadastro ainda DESCREVER o dia; o raio de
+atribuicao da ata (`tol_min`) e 90. **Qual dos dois governa uma SAIDA a 120 min do marco?*** Medido:
+**33 dia-colab / 103,1 h** das 500,7 h da competencia 10/2026 (balde A). Nesses dias a ata acende 3 dos
+4 marcos, da o marco de SAIDA (`hf`) a batida do MEIO e a ultima batida fica **ORFA** por estar fora do
+envelope de 90 min (a: 19:00 a 120 min de `hf` 17:00; b: 16:53 a 93 min de `hf` 15:20) — conservada pela
+S133, invisivel para todo leitor de marco. As duas curas candidatas batem em lei declarada: alargar o
+`tol_min` muda TODA ata da frota, e ler a `E` final como saida contradiz a borda da BUG-144
+(`ponto/turnos.py:394`, *"a ultima E solta nao conta"*) = juiz novo. Prova e aritmetica em
+`logs/r1/ata_a_b.out` e `logs/r1/MECANISMO.md`. **Trava o balde A; o balde P segue nesta fatia.**
+
+
+ORDEM-VIVA-TOPO passou a `O73`. O O214 fica ABERTO so pelo smoke dele (AVAIS #7) — os quatro itens
+pousaram (`3c610491`..`6a259f0b`, no ar). O handoff ainda imprime "item EM CURSO: O214" porque
+`_proximo_da_fila` le a ORDEM DA TABELA e o marcador e a autoridade desde a O158: divergencia
+LEGITIMA, declarada no selo (`bin/tests/test_hook_nao_cobra_congelado.sh` diz as duas). A cura dessa
+segunda voz e instrumento (`bin/handoff_sessao.sh`), e pousa sozinha pela L-105.
+
+**MEDIDO ANTES DE CURAR, como o aval exige, e as partes somam 126 com ZERO "outro"**
+(`logs/r1/MECANISMO.md`, `logs/r1/censo_126.out`, pela funcao REAL `turnos_do_colab` +
+`_pares_marcados` + `realizado_do_dia`, so leitura):
+`A-pausa-meio-absorvida 33 · G-celula-sem-marco 22 · P-par-interior-rejeitado 17 · D-par-sub-piso 15 ·
+X-turno-aberto-sem-pausa 14 · M-cruza-meia-noite 10 · T-tipo-nao-alterna 9 · Z-zero-batida 3 ·
+N-pareador-sem-defeito 3 = 126` (500,7 h, 46 colabs, competencia 10/2026).
+
+**O MECANISMO NAO E UM** — a primeira redacao deste achado dizia que era, e estava ERRADA. Sao tres
+sitios distintos, cada um a ORIGEM do seu balde: `_pares_marcados` (`ponto/turnos.py:513`) nega um par
+cujas DUAS pontas vieram marcadas, porque testa tipo GRAVADO `S`->`E` (balde P, caso c col114: 492
+contra 434); a porta PAUSA-DESLOCADA (`:966`) nao abre para a pausa 2 h fora do envelope de 90 min
+porque exige vizinho de tipo GRAVADO `E` (balde A, caso b col941: 294 contra 467, 173 min num turno
+solitario); e o desempate S158 entrega a batida a BORDA **por 14 segundos** (caso a col263: 370 contra
+551, 180 min perdidos). O sitio NUNCA e o tipo gravado — batida gravada e fato, e corrigir tipo por
+script e PROIBIDO pelo aval e pela ZONA INVIOLAVEL. O sitio e quem LE o tipo como se fosse papel.
+
+**Tres dos 126 sao erro do TERMOMETRO, nao da casa**, e isso e a lei de 09/10 se provando no primeiro
+uso: col949 29/09 pareia `00:28`->`06:00` = **332 min fechados e certos**, e a linha do oraculo traz
+`piso 0`, `teto 0`, coluna `batidas` VAZIA e `dif=-332` — ele atribuiu a noite a outro dia. O 126 e
+termometro; a certificacao e a BATERIA.
+
+**FATO, sem reescrever o RED dele**: os casos d e e do aval nomeiam 2 e 4 batidas; prod tem **3 e 5**,
+com um par sub-piso (1m28s em d, 9 min em e). Em `e` a alternancia pura da 296, nao 480 — o 480 so sai
+se o par de 9 min for lido como marcacao duplicada, e disso NAO ha lei escrita. Os dois cenarios entram
+na bateria nas DUAS formas (O218).
+
+
+## O214 ITEM 4 — **O DIA TEM DONO, E A DIFERENCA TEM DONO** (09/10 07:xx→08:xx, ITEM 4 FECHADO)
+
+A ordem era literal: *"os dias acima do limite ficam decidiveis na Gestao de HE e o autorizado sai como
+linha na pauta do TXT da 09 ja aberta, com os dois numeros; a 09 nao se recalcula por este ato"*. Entrou
+assim, e o que ela obrigou a desenhar foi uma distincao que o sistema nao tinha palavra para dizer.
+
+**`estado` x `dono`, e nao e um terceiro estado.** `estado` responde *o que foi decidido*
+(`sem_decisao|autorizado|nao`); `dono` responde *quem decide*. Um dia `sem_decisao` do **SISTEMA** -- ponta
+abaixo do `Empresa.limite_decisao_he_min` -- nunca esteve na fila do admin: quem o recusa e o
+`recusar_ponta_pequena` do item 1. Soma-lo ao que "espera o admin" e o contador discordando do universo
+(LEI-AKITA 8). Entao `gestao_he.DONOS = ('admin', 'sistema')` e `enriquecer` carimba o dono de cada dia.
+
+**ZERO JUIZ NOVO, e o censo esta fechado.** A pergunta "de quem e este dia" tem **UMA** comparacao:
+`ponto/portas/he.py::acima_do_limite(minutos, limite)` -> `int(minutos) > int(limite)`. Quem a CHAMA sao
+exatamente tres: `ponto/services/gestao_he.py` (o dono na tela), `folha/porta_export.py` (a trava do item 3)
+e a propria porta, em **duas guardas espelhadas** -- `:288` o sistema recusa o dia ACIMA, `:375` o admin
+recusa o dia ABAIXO. `ponto/services/autorizacao_he_periodo.py` **nao decide**: le o cadastro e entrega o
+`limite` a porta. O selo cobra isso por **AST** (2 chamadas na porta, `assertNotIn` no servico).
+
+**`limite` virou OBRIGATORIO em `enriquecer`, sem default.** Default aqui seria o leitor inventando o
+cadastro de quem esqueceu de perguntar -- e quem tem a empresa na mao e o chamador. Os cinco chamadores
+migraram (2 views, 3 selos); os selos que medem OUTRA regra passaram `limite=0`, que e o estado honesto da
+empresa sem cadastro: com zero nenhum dia e do sistema, e a guarda do dono nao morde a regra deles.
+
+**`so_acima` nasceu ASSIMETRICO, tambem sem default.** `True` no ato de PERIODO (autorizar PAGA, entao so o
+universo do admin entra); `False` no `recusar_em_lote` (ciencia nao move nada, entao os dois donos entram).
+Um default deixaria um chamador distraido autorizar o dia que o sistema ja recusou.
+
+**OS DOIS NUMEROS, cada um da SUA autoridade** (`_linha_para_o_dp`, marcador
+`[HE-AUTORIZADA-EM-EXPORTADA]`). O que foi **PAGO** sai da LAVRATURA (`dia_pago.soma_do_periodo` +
+`he_lavrada_do_colab`); o que **PASSA A VALER** sai do MOTOR (o mesmo `depois` que o admin viu na previa).
+Misturar as fontes seria a testemunha recalculando (LEI-AKITA 2). **Silencio chega como ROTULO, nunca como
+zero**: sem lavratura a linha diz *"sem apuracao ainda"*, porque "0,00 h" ali seria a AFIRMACAO de que o
+colaborador nao tem HE. `he_lavrada_do_colab` nasceu em `dia_pago.py` por ter ganhado o SEGUNDO leitor
+(L-111 ao contrario: o rotulo estava inline no laco de `enriquecer` e a linha do DP precisa do mesmo).
+
+**UMA CABECA VIVA por empresa+competencia.** O segundo ato RESPONDE o primeiro (`pai=_cab`) em vez de abrir
+pauta nova -- a ancora e `'%s:%04d-%02d'`, byte a byte a mesma de
+`folha/management/commands/pre_fechamento.py:86`. O marcador e proprio, e **nao** `[PRE-FECHAMENTO]`: aquela
+cabeca o cron reescreve toda noite.
+
+**A 09 NAO SE RECALCULA, e isso se le no codigo, nao na promessa.** Nao ha `if exportada` que mude a
+DECISAO: `decidir_he` grava na exportada do mesmo jeito que na aberta, e quem recusa mover o GRAVADO e o
+`recalcular_por_evento` (L-092), com a lapide que ja estava la. O unico `if r['exportada']` do item 4
+**escreve a linha** -- ele nao faz a decisao ser outra, faz a **diferenca ter dono** (REGEN-EM-EXPORTADA).
+
+**A PREVIA NAO FALA COM O DP.** A pauta mora DENTRO do `_ato`, e `previa` e o `_ato` dentro de
+`transaction.atomic()` + rollback: a linha morre com a transacao, por construcao -- nao por um `if previa`
+que alguem esquece. Conferido antes de aplicar: `pautas.services.escrever` e **so banco** (`Pauta.objects
+.create` + trilha + `lavrar`), sem FCM, sem arquivo -- entao o rollback e completo.
+
+**E se a pauta falhar, o ato INTEIRO cai** -- inclusive as `DecisaoHE`. Esta e a escolha, por
+CURA-MAIS-RESTRITIVA: autorizacao em competencia exportada **sem** a linha do DP e exatamente *"diferenca sem
+dono"*, que e o que a REGEN-EM-EXPORTADA proibe.
+
+**O SELO ESTAVA ERRADO E O CODIGO O CORRIGIU.** A primeira versao de `test_quem_DECIDE_o_dono_do_dia_CHAMA_o
+_juiz_da_porta` exigia que `autorizacao_he_periodo` nomeasse `acima_do_limite` -- e o desenho certo nao
+nomeia, porque esse servico nao decide. Satisfazer o selo seria o primeiro passo para uma segunda decisao.
+O selo foi reescrito; o porque ficou no docstring dele.
+
+**O RED que o banco de teste tinha e prod nao.** Os vizinhos deram **1 error** em
+`test_o214_item2_autorizar_periodo.ExportadaTest`: `PautaRecusada: Voce nao pertence ao departamento ti.` --
+`autor_sistema('ti')` recua para o primeiro superuser ATIVO, prod tem tres, banco virgem tem zero. Curado na
+**fixture** (a forma que a casa ja usa, `test_pautas_do_esmeril.py:14`), nao com fallback: o ato cair sem o
+superuser esta CERTO pelo paragrafo acima.
+
+**O CARRIER CORTAVA EM SILENCIO, E O CORTE COMIA O PORQUE** (LEI-AKITA 6 -- bug provado no meio da fatia,
+curado na hora; o bullet da lista NOMEADO, logo abaixo, dizia *"NAO CURADO"* e durou o tempo de medir).
+`pautas/models.py:89` da a `Pauta.texto` **500** caracteres e `pautas/services.py:128` faz `texto[:500]`.
+A linha do DP no pior caso mede **678** -- e os 178 que sobram sao EXATAMENTE a ultima linha: o texto
+gravado terminava em `'Motivo '`, o rotulo cortado no meio da palavra. O DP receberia um pedido de
+retificacao de folha **sem o porque**, que e justamente a trilha que a REGEN-EM-EXPORTADA exige por escrito.
+RED literal contra o HEAD: `Ran 7 tests` / `FAILED (failures=1)`, com o `'Motivo '` na mensagem.
+
+**A CURA E ORCAMENTO, E A ORDEM DO QUE CEDE E RECUPERABILIDADE -- nao gosto.** `escrever` ja tem o idioma
+do orcamento para `ancora_tipo=='dia'` (`pautas/services.py:122`), e seguir o idioma existente e a
+LEI-AKITA 4; alargar a coluna seria curar o carrier por causa de UM leitor. Quem cede, cede na ordem do que
+o sistema **ainda sabe dizer depois**: **(1)** o *motivo*, porque `DecisaoHE.motivo` e `TextField` gravado
+por DIA pela porta e o pedaco que fica aponta para la; **(2)** o *autor*, porque `DecisaoHE.decidida_por` e
+FK e responde "quem assina" dia a dia; **(3)** a lista das outras rubricas por ULTIMO, e so para um
+CONTADOR, nunca para o silencio. O que **nunca** cede: os dois numeros com as suas fontes, HE50/HE100, o
+colab, a competencia, a contagem de dias e a linha da L-092. Se nem a forma minima couber, o ato **falha
+INTEIRO** -- `DecisaoHERecusada` dentro do `atomic()` do `_ato` --, porque encolher abaixo disso e entregar
+ao DP uma trilha que nao ensina ninguem (CURA-MAIS-RESTRITIVA).
+
+**O teto se LE do campo**, `Pauta._meta.get_field('texto').max_length`: um `500` literal ali seria a
+TERCEIRA copia do tamanho da coluna (LEI-AKITA 2). Medido em cinco formas de entrada --
+**413 / 500 / 496 / 496 / 344**, todas `<= 500`, nenhuma silenciosa, todas com o rotulo do motivo, a linha da
+L-092 e a informacao das movidas presentes. O ramo do `raise` e **inalcancavel com o cadastro de hoje**
+(maior `username` ativo = **23** caracteres de 150 possiveis, em **727** usuarios, p95 **11**) e existe para
+o dia em que alguem alargar o nome ou a frase: nesse dia ele diz o NUMERO em vez de cortar. `MIN_MOTIVO`
+saiu de dentro de `_exigir_motivo` para `ponto/portas/he.py` porque o `>= 10` ganhou o **terceiro** leitor --
+o piso do fragmento que ainda ensina alguem --, e a docstring da propria funcao previa a divergencia de duas
+copias.
+
+**O SEGUNDO DEFEITO ERA MEU, E O PORTAO O PEGOU.** O censo de chamadores de `enriquecer` que eu declarei
+fechado tinha um fora: `chamados/tests/test_atalho_he_na_central.py` chamava sem o `limite` agora
+obrigatorio, e o push foi recusado -- `ERROR: test_RED_o_numero_do_atalho_E_o_total_sem_decisao_da_tela`
+sobre `Ran 10160 tests`. Curado com `limite=0`, que e o estado honesto para um selo que mede OUTRA regra:
+com zero nenhum dia e do SISTEMA, a guarda do dono nao morde e a Central segue medindo a MESMA foto da tela.
+Passar 15 ali faria o selo medir o recorte do dono, que e pergunta de outro selo. A licao esta no censo --
+eu varri a familia do SITIO (`ponto/`) e o chamador morava na familia do CHAMADOR (`chamados/`).
+
+**PROVA.** Selos do item 4: `Ran 12 tests` / **OK** (5 falhas + 3 errors no caminho, todos evidenciados).
+Vizinhos `ponto folha pautas colaboradores`: `Ran 4240 tests` / 1 error -> fixture -> os quatro modulos do
+O214 `Ran 82 tests` / **OK**. `ruff check` nos 9 arquivos: **All checks passed**. Juizes novos: **0**.
+Rubrica nova: **0**. Escritor novo de `DecisaoHE`: **0** (segue `decidir_he`). **Da segunda janela** (as duas curas,
+em copia nascida de `git show HEAD:`): RED evidenciado, depois `Ran 72 tests in 14.638s` / **OK** nos quatro
+modulos (item 4 + chamados + item 2 + ponta pequena), `ruff check` **All checks passed** nos 4 arquivos, e os
+vizinhos pela familia do CHAMADOR -- `ponto pautas chamados folha` -- `Ran 5988 tests in 586.954s` / **OK** (skipped=9).
+
+**NOMEADO, NAO CURADO** (vai para o BACKLOG, nao para esta fatia):
+- o filtro `?dono=` existe no servidor e **nao tem controle no markup** -- quem o liga e a **fatia 2** da
+  Gestao de HE, que ele proibiu construir agora. Ate la e chave com leitor e sem gesto, declarada aqui para
+  nao ser lida como chave sem leitor (LEI-AKITA 12);
+- `int(getattr(empresa, 'limite_decisao_he_min', 0) or 0)` aparece **5 vezes**; candidato a unificacao;
+- `_ato` devolve o `diff` por rubrica como RETORNO e **nao o persiste em lugar nenhum** (`_gravar` guarda
+  estado/minutos/motivo). E por isso que a lista das outras rubricas e a unica das tres partes que cede para
+  um contador: o motivo e o autor se recuperam na `DecisaoHE` do dia, o diff nao se recupera de ninguem;
+- `pautas/services.py` tem o **500 literal** em `:122` e `:128` -- segunda e terceira copia do tamanho da
+  coluna. A linha do DP ja le o teto do campo; o carrier ainda nao;
+- os **tres campos de cadastro de HE** (`limite_decisao_he_min` e os dois da janela) **nao tem controle de UI
+  nenhum**: nao existe `EmpresaForm` em lugar algum do repo. Hoje se cadastram por shell, o que e o pior tipo
+  de cadastro pela LEI-AKITA 12 -- tem leitor, nao tem gesto;
+- as duas metades de `UmJuizDoDonoDoDiaTest` que varrem `G` e `porta_export` medem por **TEXTO**, nao por
+  AST; o resto do selo ja e AST (memoria: selo estrutural varre AST, nao texto);
+- a ancora de competencia tem uma **terceira grafia**, sem zero a esquerda, em
+  `chamados/services/competencia_trancada.py:205`. Pre-existente; nomeada, nao tocada.
+
+**LEI-AKITA:** origem=`portas/he.py::autorizar_em_lote` (guarda espelho) + `autorizacao_he_periodo::_ato`
+(linha DP), testemunha=`acima_do_limite` (dono) / `soma_do_periodo`+`he_lavrada_do_colab` (PAGO) / `_medir`
+(VALE), RED=`test_o214_item4` 12 selos (5F+3E -> OK), quem-mais-le=`enriquecer` 2 views + 3 selos,
+`itens_sem_decisao` 2 views, `autorizar_em_lote` 1 servico + 3 selos, juizes novos=0.
+
+**LEI-AKITA (orcamento da linha do DP):** origem=`autorizacao_he_periodo::_linha_para_o_dp` (o orcamento
+no PRODUTOR da linha, nao no carrier) + `ponto/portas/he.py::MIN_MOTIVO` (o piso num sitio so),
+testemunha=`Pauta._meta.get_field('texto').max_length` (teto lido do campo) e
+`DecisaoHE.motivo`/`decidida_por` (o que o ponteiro promete),
+RED=`test_RED_10_a_linha_CABE_no_teto_da_pauta_e_o_motivo_NAO_desaparece` +
+`test_RED_10_MORDE_o_caso_que_CABE_chega_INTEIRO_e_sem_marca_de_corte`, quem-mais-le=`escrever` (1 carrier,
+as 2 copias do 500 nomeadas no BACKLOG) e os 5 chamadores de `enriquecer` (o 5o era o que faltava),
+juizes novos=**0**.
+
+### O ITEM 3 ESTA LIGADO (09/10 08:3x) -- e o numero nao era 70, era **81**
+
+O item 3 e literal: *"liga depois do item 2 no ar, nunca antes"*. O item 2 esta no ar desde o deploy de
+`a28ca8cf`, com prova de rota nas tres cascas -- entao a condicao se cumpriu, e **ligar e cadastro com
+trilha** (CLAUDE.md 7b item 1), nao apply de dinheiro: a trava BARRA o `Gerar TXT`, nao move um centavo.
+
+**O numero se LEU da autoridade, nao se recalculou** (LEI-AKITA 2 e 8): o carimbo de HOJE da porta
+(`folha/porta_export.py::CHAVE == 'porta_export_leitores'`, escopo `empresa`, `data_ref=2026-10-09`,
+falhas **0**), lido pelo `detalhe` como o `conferir` o le. Os **70** do paragrafo que esta linha substitui
+eram de ANTES de duas curas desta manha -- a que conta por DIA acima do limite e a da L-097, que tirava
+dia de outra competencia da conta --, e envelheceram em horas:
+
+| empresa | dias acima do limite e SEM decisao (10/2026) | limite | antes | depois |
+|---|---|---|---|---|
+| emp2 | **62** | 15 min | `False` | `True` |
+| emp3 | **17** | 15 min | `False` | `True` |
+| emp4 | **2** | 15 min | `False` | `True` |
+| **total** | **81** | | | |
+
+**A TRILHA SE CONTOU NO BANCO, nao no `print` do script.** `core/observ.py::evento` e best-effort por
+`engolir`: uma `acao` torta viraria rastro e eu teria um campo virado **sem trilha** -- LEI-AKITA 7 furada
+pela minha propria mao. Entao o ato conta `LogAuditoria` antes e depois: **409 -> 412, delta +3**, cada
+linha com `acao=editar`, `ator=sistema:shell`, `antes={'he_pendente_trava_export': False}`,
+`depois={... True}` e o motivo escrito (trilha #668545/6/7). **Idempotente**: rodar o mesmo ato de novo
+leu `antes=True` nas tres e gravou **delta +0** -- um escritor, uma linha por mudanca, zero duplicada
+(contrato 2 da secao 4b).
+
+**emp1 e as tres sem carimbo ficaram DESLIGADAS, e isso e leitura, nao esquecimento**: emp1 tem carimbo
+com `universo=0` e emp20/21/29 nao tem carimbo nenhum -- nao ha TXT para travar. Ligar trava onde nao ha
+porta do outro lado e exatamente o que `folha/porta_export.py:571-575` chama de *"paralisia com nome de
+lei"*. Uniformizar e cadastro dele, pela tela.
+
+**QUANDO MORDE:** o `conferir` le o DETALHE do carimbo, nunca o retorno vivo do `medir` -- entao a trava
+passa a barrar no **proximo carimbo**, sobre estes 81. Reversao: o mesmo ato com `LIGAR = False`
+(`logs/o214/flip_trava.py`), que devolve as tres a `False` e grava mais 3 linhas de trilha.
+
+**O QUE FICA EM PE DA O214:** o **smoke do item 2** (AVAIS #7) e o **`!` do apply do item 1**
+(`recusar_ponta_pequena --apply`, ensaio de 4.692 dias / 439,6 h, hashes em `logs/o214/hash_antes_09.txt`).
+
+## O214 — **A TRAVA DO TXT CONTAVA DIA DE OUTRA COMPETENCIA** (09/10 05:5x, LEI-AKITA 6)
+
+**Bug PROVADO no caminho do item 4, curado na hora.** Eu fui medir, na sombra, o numero com que o cadastro
+`he_pendente_trava_export` seria ligado -- a pre-condicao escrita no item 3, *"o numero da trava se le do
+carimbo, depois do deploy e ANTES do flip"* -- e a PROPRIA `folha/porta_export.py::medir` respondeu um numero
+que nao era da competencia.
+
+**MEDIDO pela funcao REAL** (`logs/sombra/vazamento_janela_he_pendente.py`, saida em `logs/vazamento_janela.out`;
+competencia **10/2026**, janela 21/09..20/10, limite 15 min; a sonda **particiona a saida do `medir`**, nao
+replica o laco):
+
+| empresa | `medir` em | dia-colab com pendencia | TRAVARIAM o TXT | dentro da janela | **VAZADOS** |
+|---|---|---|---|---|---|
+| 2 J.A | 191,4 s | 2.098 (776 dentro / 1.322 fora) | 255 | 52 | **203** (68 de ago, 135 da 09) |
+| 3 JSP | 140,4 s | 949 (337 dentro / 612 fora) | 68 | 16 | **52** (17 de ago, 35 da 09) |
+| 4 G3 | 100,8 s | 106 (35 dentro / 71 fora) | 3 | 2 | **1** (de ago) |
+| **total** | 432,6 s | **3.153** (1.148 dentro / **2.005 fora**) | **326** | **70** | **256** |
+
+Entao **256 dos 326** dia-colab que travariam o TXT da **10** sao dias de **outra** competencia -- **86 de
+agosto** e **170 da 09, que esta EXPORTADA** -- e **2.005 de 3.153 (63,6%)** das pendencias que o portao
+publica nao sao da competencia que ele mede. **O numero real da trava e 70**, nao 326 e nao os 469 da
+pre-medida de 04:5x (que era teto por outro universo, e esta declarada como teto no item 3).
+
+**A ORIGEM, e ela ja tinha lapide.** `medir` percorria `esp['dias']` **inteiro**, e `espelho_do_colab`
+devolve MAIS dias do que a janela pedida (medido no col87 em 01/10: **89 dias para uma competencia de 31**).
+O `apurar` do retrato lavrado curou **este mesmo** vazamento em 01/10 -- *"de 5.767 dias, 4.198 estavam FORA
+de 21/09..20/10"* -- e a lapide que ele deixou nomeia, por escrito, quem ainda leria errado: *"um numero
+errado gravado, que o portao `he_pendente` e o contador da Central tambem leriam"*. Era **este** portao, e
+ele ficou oito dias sem migrar. Band-aid seria filtrar no leitor; a cura vai no sitio que coleta.
+
+**E O DANO NAO E INFLACAO, E PRISAO.** `gestao_he.estado_por_dia(ids, ini, fim)` so carrega decisao **dentro**
+da janela, entao a chave de um dia vazado **nunca tem estado**: a trava o conta como "sem decisao" **mesmo
+depois de alguem o decidir**, e nenhum gesto do admin o solta. Hoje sao **0 de 256** -- ninguem decidiu dia de
+fora da janela ainda --, e **o item 4 e exatamente o que criaria os primeiros**, porque ele torna decidiveis
+os dias da 09 (170 dos 256). A cura e, portanto, **pre-requisito do item 4**, nao so do flip.
+
+**NAO HOUVE DANO EM PROD:** `he_pendente_trava_export` esta **False** nas quatro empresas, entao `falhas` nao
+somava a lista e nenhum TXT foi barrado. O que o vazamento contaminava era o **numero publicado no carimbo** --
+e era com ele que o flip ia ser decidido.
+
+**TRES FORMAS DA MESMA PERGUNTA DENTRO DE UMA FUNCAO, agora UMA** (LEI-AKITA 2). "Este dia e da competencia?"
+era respondida em `medir` de tres jeitos: o laco do `he_pendente` (**nenhum** -- o furo), a soma do `dif_topo`
+comparando por **TEXTO** (`str(ini) <= str(d['data'])[:10] <= str(fim)`) e o `apurar` do modulo vizinho
+comparando por **DATA**. A comparacao por texto e a que a lapide de `data_do_dia` proibe com nome: *"texto
+compara certo em ISO e erra em qualquer outro formato, e o dia em que alguem mudar o formato o filtro passa a
+aceitar tudo em silencio"*. As tres passam a chamar **`ponto/services/he_pendente_lavrado.py::data_do_dia`**,
+que era `_data_do_dia` e ficou **publica porque ganhou o segundo leitor** -- o mesmo motivo pelo qual
+`minutos_fora_do_dia` ficou publica no item 3. **Zero juiz novo** (o O214 proibe): a regra da janela e a de
+`janela_fechamento`, e quem a aplica e uma funcao que ja existia.
+
+**A COLETA VIROU FUNCAO PURA E NOMEADA**: `folha/porta_export.py::pendencias_he_da_janela(dias, ini, fim,
+colab_id)`, chamada por `medir` em uma linha. Ela nao mudou a **FORMA** da entrada -- segue **por ponta**, com
+`sentido`, `minutos_fora` da ponta e `minutos_do_dia` do dia (selo do B1, 30/09) --, e a razao de ser funcao
+e o caso da **borda**: dentro de `medir` o dia 21 e o dia 20 so se exercitam com um colaborador que
+`classificar_export` diga que ENTRA no TXT, o que custa codigo do Dominio, fechamento, celula e catalogo de
+rubricas. Fora dela, o caso morde em 17 ms.
+
+**RED PRIMEIRO, evidenciado** (`logs/o214item4/red_vazamento.out`): `Ran 8 tests` / **`FAILED (failures=6)`**
+contra uma copia de HEAD com o laco de HEAD **sob o nome novo** -- isto e, o defeito sob teste, nao um
+`ImportError`. Vermelhos: **o** (dia de agosto entra), **p** (dia da 09 exportada trava a 10), **q** (as duas
+bordas), **r** (dia sem data legivel entra por omissao), **u** (AST: `str(ini)` na comparacao, 2 ocorrencias),
+**v** (AST: DOIS sitios lendo `he_fora_da_janela`). Os dois verdes desde o RED -- **s** (segue por ponta com o
+minuto do DIA) e **t** (dia sem ponta nao vira entrada) -- sao guardas de FORMA, e e de proposito que eles
+passem no defeito: o que eles cobram e que a **cura** nao mude a forma. Verde depois: `Ran 22 tests` / `OK`
+(os 14 do item 3 mais os 8 novos), 276 vizinhos OK, ruff limpo.
+
+**CERTIFICADO NA SOMBRA PELA MESMA FUNCAO REAL** (`logs/o214item4/trava_curada.out`, arvore CURADA montada
+por `SOMBRA_ARVORE`): `medir` em 196,9 + 138,3 + 102,2 s, **`TOTAL emp2+3+4: trava 70 em 1148 dia-colab com
+pendencia`**, e **FORA da janela = 0** nas tres. Os numeros fecham com a particao da medida do defeito **sem
+sobra**: 52+16+2 = **70** (os "dentro" de cada empresa) e 776+337+35 = **1.148** (o "dentro" do universo) --
+`estado_por_dia` nao mudou, entao a cura tinha de reproduzir a particao exatamente, e reproduziu. `falhas = 0`
+nas tres e a testemunha de IMPACTO do terceiro ato (a soma do `dif_topo` saindo de TEXTO para DATA): nenhuma
+empresa ganhou falha de portao. **O flip do cadastro se decide sobre 70**, nao sobre 326 e nao sobre 469.
+
+**UM SELO EXISTENTE FICOU VERMELHO SOBRE O CODIGO CERTO, e foi RE-APONTADO, nao apagado**:
+`test_MORDE_o_contador_le_a_MESMA_fonte_que_a_TELA_risca` ancorava no **texto** de `inspect.getsource(medir)`,
+e a cura moveu o laco para fora de `medir`. A pergunta dele sobrevive inteira -- "o contador le a mesma fonte
+que a tela risca?" --, entao ele passa a ler o **coletor**, e a metade negativa ficou **mais forte** no mesmo
+ato: `assertNotIn("r.get('dias_he_fora_da_janela')")` passa a varrer o **modulo inteiro**, nao mais so
+`medir`. Ganhou tambem a linha que cobra a **delegacao** (`medir` tem de chamar `pendencias_he_da_janela`),
+para que o laco nao possa desaparecer sem alarme. E a licao e a de sempre nesta casa: **selo ancorado em texto
+de funcao de 400 linhas acusa o codigo certo no dia em que a cura move o laco**.
+
+**LEI ANTES DO PATCH** (grep em `LEIS.md`/`CORTES.md`/`DOSSIES.md` antes de montar o patch): o sitio esta
+protegido pela **L-097** -- *"o portao do export trava com HE pendente > 0: `folha/porta_export.py::medir`
+ganha `he_pendente`, esperado 0"* --, e e justamente a clausula (2) dela que o vazamento tornava mentirosa:
+"esperado 0" sobre um contador que inclui dia de agosto nao e portao, e numero. Ela nao muda de texto; o que
+muda e o universo passar a ser o que ela sempre disse, **a competencia**. Tambem passam por aqui a **L-095**
+(todo leitor le, ninguem recalcula -- o `medir` e contador, e por isso a janela se le do juiz) e a **L-003**
+(zero numero sem medicao na fonte, que foi o que pegou o bug: medir chamando a funcao REAL). O `DOSSIES.md:362`
+ja nomeava `folha/porta_export.py::medir::he_pendente` como sitio da familia.
+
+`LEI-AKITA: origem=folha/porta_export.py::medir (o laco que coletava a pendencia sem a janela) + a terceira forma por TEXTO no dif_topo, testemunha=ponto/janelas.py::janela_fechamento aplicada por he_pendente_lavrado.py::data_do_dia (o MESMO juiz que o retrato lavrado usa), RED=folha/tests/test_o214_item3_trava_export.py casos o-v (6 de 8 vermelhos em logs/o214item4/red_vazamento.out), quem-mais-le=censo fechado -- `he_pendente` so e lido dentro de folha/porta_export.py (medir -> carimbo -> conferir) e por NENHUM template, `data_do_dia` por apurar e agora pelo portao, juizes novos=0 (L-097, L-095, L-003 citadas)`
+
+## O214 item 3 — **A TRAVA DO TXT CONTA SO O DIA QUE E DO ADMIN** (09/10 04:5x)
+
+Item da fila 1, na ordem dele. A lei, literal: *"**ITEM 3 TRAVA**: `colaboradores/models.py:97::he_pendente_trava_export` passa a contar **so dia ACIMA do limite e sem decisao** em `folha/porta_export.py::medir` (:468-478), e **liga depois do item 2 no ar, nunca antes**."* O item 2 esta no ar desde `041fd2ac`/`c32acf2e`, entao a condicao temporal esta cumprida.
+
+**A PRE-MEDIDA, na sombra, ANTES de ligar nada** (`logs/sombra/medir_o214_item2.py`, competencia 10/2026, limite cadastrado 15 min nas quatro empresas). **E PRE-MEDIDA, e nao o numero da trava**, e a distincao e de UNIVERSO (LEI-AKITA 8): a sonda varreu o **retrato lavrado** -- *"colab com pendencia lavrada"* -- e replicou o predicado a mao, porque a funcao ainda nao existia; o `medir` alimenta `he_pendente` **so para quem `classificar_export` diz que ENTRA no TXT** (fica fora rescisao, sem codigo do Dominio, cadastro_zero) e le o **espelho vivo**, nao a foto da lavratura. Entao o 469 e **teto**, nao o numero: ele diz a ORDEM DE GRANDEZA do que a trava passaria a barrar.
+
+| empresa | dias SEM decisao | ACIMA do limite (= travam) | abaixo (do SISTEMA) |
+|---|---|---|---|
+| 1 Confiance | 0 | **0** | 0 |
+| 2 J.A | 399 (141 colabs) | **371** | 28 |
+| 3 JSP | 103 (37 colabs) | **93** | 10 |
+| 4 G3 | 7 (4 colabs) | **5** | 2 |
+| **total** | **509** | **469** | **40** |
+
+**O NUMERO DA TRAVA SE LE DO CARIMBO, depois do deploy e ANTES do flip**: `len(detalhe['he_pendente_trava_dias'])` do proximo `medir` em prod, que e a propria funcao julgando o proprio universo. Essa leitura e **pre-condicao do flip** do cadastro, nao um conferir depois dele. E o flip tem DOIS momentos, nao um: o `conferir` le `falhas` e `he_pendente_trava` do CARIMBO, entao ligar o cadastro so morde quando o `medir` seguinte rodar.
+
+Os **40** dias de diferenca sao a razao de ser do item 3: eles estao abaixo do limite, o proprio sistema **se recusa a decidi-los** (`recusar_ponta_pequena` devolve *"e do ADMIN"* so acima do limite), e com a conta antiga -- `len(he_pendente)` -- eles travariam o TXT **sem porta do outro lado**. O cadastro segue DESLIGADO: este numero e o que a trava passaria a valer se ligada, e e por isso que ele se publica antes.
+
+**O DEFEITO QUE ESTAVA NO CAMINHO, curado em passagem (LEI-AKITA 6 e 8).** A mensagem da recusa dizia *"HE fora da janela SEM decisao em %d dia(s)"* sobre `len(d['he_pendente'])`, que e uma entrada por **PONTA** desde 30/09 -- entao o dia com entrada **E** saida fora da janela se lia como **"2 dia(s)"**, e o **mesmo** `len` somava em `falhas`. Rotulo dizendo dia e conta contando ponta, no numero que vai no motivo da recusa do TXT. RED **g**.
+
+**TRES SITIOS, ZERO JUIZ NOVO** (o O214 proibe um), e nenhum deles nasceu: os tres **ganharam o segundo leitor** e por isso ganharam nome.
+1. **A soma do DIA** -- `ponto/services/he_pendente_lavrado.py::minutos_fora_do_dia`. O `apurar` ja a fazia inline; o `medir` precisa do **mesmo** total porque o limite se compara com o DIA, nao com a ponta (duas pontas de 8 min fazem 16, e com o limite em 15 o dia deixa de ser do sistema). Somar de novo no export seria a testemunha recalculando.
+2. **O predicado do limite** -- `ponto/portas/he.py::acima_do_limite`. O `recusar_ponta_pequena` ja o tinha como `_min > _lim`; a trava pergunta a **mesma** coisa ("este dia e do admin?"). Ele e **uniforme inclusive em LIMITE 0**: zero desliga a recusa automatica do item 1, nao a fila do admin -- com limite 0 nenhum dia e pequeno, e `minutos > limite` ja diz isso sem caso especial. RED **h**.
+3. **A decisao viva** -- `ponto/services/gestao_he.py::estado_por_dia`, que era `_estado_por_dia` e ficou **publica**. Uma terceira query ao `DecisaoHE` dentro do export nasceria com outra forma de chave (o lavrador indexa por `date`, esta funcao por `'YYYY-MM-DD'`) e com outra janela: as duas so discordariam **no dia da borda**, que e o dia que importa.
+
+A conta em si e `folha/porta_export.py::dias_acima_do_limite_sem_decisao` -- funcao **pura**, que so desduplica por dia e ordena; ela chama os dois juizes acima e recebe os estados como **dicionario**, lido UMA vez fora do laco (e zero query quando nao ha pendencia). **`NAO` LIBERA**: a lapide do `DecisaoHE` diz que `NAO` **e** decisao, nao ausencia dela, e travar por um `nao` deixaria o admin com um gesto so para liberar o TXT -- autorizar. RED **c**.
+
+**A lista vai ao CARIMBO** (`he_pendente_trava_dias`) porque o `conferir` le o `detalhe`, nunca o retorno vivo do `medir` -- fora de la a mensagem nao teria como nomear o dia que barrou. A entrada da pendencia segue **por ponta** com `sentido` (selo do B1, 30/09) e passa a carregar `minutos_do_dia` ao lado: `minutos_fora` e da ponta, `minutos_do_dia` e do dia, nenhuma no lugar da outra.
+
+**RED PRIMEIRO, evidenciado**: `logs/o214item3/red_item3.out` -- `Ran 14 tests` / **`FAILED (failures=3, errors=10)`**, 13 vermelhos nomeados antes de uma linha de cura. Verde depois: `Ran 14 tests` / `OK`. Os **dois selos existentes que a cura tornaria mentirosos foram VIRADOS, nao apagados** (`folha/tests/test_b1_portao_he_nasce_desligado.py`): a conta do `falhas` passa a chamar a funcao REAL e ganhou as duas metades novas (dia pequeno nao trava, dia com `nao` nao trava), e a assercao da mensagem passa a cobrar a chave nova. O `test_n` cobra a **procedencia** do valor por AST, nao por texto: `assertIn("'minutos_do_dia'")` ficaria verde com `'minutos_do_dia': _hf.get('minutos')` -- a chave do dia com o numero da ponta, que e exatamente o erro que o item 3 existe para nao cometer.
+
+`LEI-AKITA: origem=folha/porta_export.py::medir (a conta do portao) + ponto/portas/he.py (o predicado) + ponto/services/he_pendente_lavrado.py (a soma do dia), testemunha=DecisaoHE via gestao_he.estado_por_dia e o retrato de he_fora_da_janela que a TELA risca, RED=folha/tests/test_o214_item3_trava_export.py (14 casos, 13 vermelhos em logs/o214item3/red_item3.out), quem-mais-le=censo fechado -- `he_pendente` so e lido por folha/porta_export.py (7 sitios) e por nenhum template; `estado_por_dia` por gestao_he (2) e agora pelo export, juizes novos=0 (tres funcoes nomeadas sobre regra que ja existia, nenhuma com regra propria)`
+
+**O QUE O SMOKE DE PROD VAI MOSTRAR, dito ANTES para ninguem ler silencio como defeito**: o `conferir` le o carimbo, e o carimbo de hoje **nao tem** a chave `he_pendente_trava_dias` -- entao a linha de HE fica **ausente** da mensagem ate o proximo `medir`. Com o cadastro desligado ela ficaria ausente de todo jeito. O smoke e *"a rota responde e nao ha 500"*; a linha reaparece quando o carimbo for refeito.
+
+**ACHADO LATERAL DA MESMA MEDICAO, nomeado e nao curado** (a fatia esta no BACKLOG): o `confirmar` de 14 dias custa **5,32 s**, dos quais **5,12 s sao os 14 callbacks** de `recalcular_por_evento` no `on_commit` -- um `recalcular_fechamento_mes` **por dia**, todos da MESMA competencia do MESMO colab. O ato em si leva 0,20 s. O sobrecusto do caminho real contra a previa (0,30 s) e de **5,02 s**: e este o numero da decisao sincrono-x-job, e a cura e desduplicar por (colab, competencia) dentro de `recalcular_por_evento`, nao na tela.
+
+---
+
+## O214 item 2 — **UM ATO, UM MOTIVO, E A TELA MOSTRA O DIFF ANTES DE CONFIRMAR** (09/10 03:xx)
+
+Item da fila 1, pela ordem de 08/10 19:5x. A lei, literal: *"ITEM 2 AUTORIZAR POR COLABORADOR E PERIODO: um
+ato, um motivo, e a tela mostra **ANTES de confirmar** as horas que entram por rubrica (o DIFF daquele
+colab); grava uma `DecisaoHE` por dia."* **21 selos `a-p` verdes** (`Ran 21 tests` / `OK`), 97 nos vizinhos
+nomeados, e a **suite inteira da copia** -- `Ran 10126 tests` -- que achou DOIS vermelhos que os
+vizinhos nao viam, os dois meus e os dois curados na ORIGEM (abaixo). **Zero juiz novo, zero rubrica nova, zero escritor novo de
+`DecisaoHE`**: a porta `ponto/portas/he.py::decidir_he` segue sendo chamada dia a dia, como o lote de recusa
+ja faz, e as 7 rubricas tem UMA declaracao -- elas nasceram no `diff_janela_he.py`, mudaram de casa
+para `ponto/services/autorizacao_he_periodo.py::RUBRICAS` e o comando passou a LE-LAS, porque duas
+tuplas significariam a proxima rubrica entrando numa e nao na outra.
+
+**A PREVIA SAI DO MOTOR REAL, DENTRO DE TRANSACAO DESFEITA.** `ponto/services/autorizacao_he_periodo.py`
+grava as N `DecisaoHE` pela porta, roda `autoridade_do_periodo` antes e depois, diffa as 7 rubricas e
+`raise` no fim. Nao e a regra simulada por fora — isso seria a sonda propria que o CLAUDE.md secao 6
+proibe, e e a mesma lapide do `diff_janela_he`. **A tela nao soma nada**: o `mostrado` viaja no form em
+**minutos inteiros**, serializado canonicamente, e o confirmar **RECUSA** quando o gravado difere do
+mostrado — tela que mentiu nao confirma. O RED **m** prova que a recusa chega ao admin em PALAVRA, e a
+guarda vive no SERVICO, e nao na view, que e por isso que ela tambem cobre POST forjado.
+
+**O QUE A LEITURA DO VIVO MUDOU NO CONTRATO, antes de uma linha de codigo** (os cinco achados estao em
+`DOSSIES.md` secao 8, arquivo SEM teto, nunca aqui — a licao de 08/10):
+1. **`decidir_he` TROCA decisao existente.** O contrato dizia *"a porta devolve `no_op` e nao sobrescreve
+   humano"* e **e falso**: `no_op` so acontece com o estado IGUAL; estado diferente cai em `_gravar` com
+   `_trocada=True` e reescreve tudo. Virar um `nao` HUMANO em `sim` moveria dinheiro sem ninguem pedir, e o
+   guarda "mostrado == gravado" **nao pega** (a previa flipa igual, os dois lados batem). A exclusao e do
+   **LOTE**, cumprida por `autorizar_em_lote` pela lapide do `_gravar` — **nao um parametro novo na porta**
+   (seria juiz novo) nem um filtro na view (seria a regra escondida na tela). RED **c**.
+2. **Competencia EXPORTADA nao e exclusao de escrita.** O RED **h** dizia "o ato nao entra, porta propria",
+   e o vivo responde o contrario: `decidir_he` **grava** e quem recusa e `recalcular_por_evento`, com a
+   lapide *"nao e falha -- e a lei funcionando"*. Recusar no ato de PERIODO o que o ato de UM DIA aceita
+   seria um **segundo juiz da mesma pergunta** (LEI-AKITA 2). Mesma conduta nas duas portas.
+3. **A previa nao roda o motor N vezes**: `recalcular_por_evento` agenda em `on_commit`, e na previa os N
+   callbacks sao **descartados**. Custo ~2 `autoridade_do_periodo` + N inserts baratos.
+4. **ACHADO LATERAL, NOMEADO E NAO CURADO** (L-009, regra de negocio fora do pedido): `recusar_em_lote`
+   tem o buraco espelhado **em producao** — `ponto/views.py:559` filtra `sem_decisao` so no gesto "todos",
+   e a marcacao por CAIXA vai crua do form, entao um `sim` humano pode virar `nao` em lote por form velho.
+5. **No CONFIRMAR sao N `recalcular_fechamento_mes` da MESMA competencia do mesmo colab**, redundantes e
+   pos-commit. Nao e dano (idempotente); e numero, e a dedup por (colab, competencia) pertence a
+   `recalcular_por_evento` — origem, e fora deste pedido.
+
+**OS k-p FICARAM VERMELHOS POR FIXTURE, E O QUE ELA ENSINOU VALE MAIS QUE O VERDE.** Nenhuma linha de view,
+url ou template mudou para passar. Duas causas, as duas medidas:
+- **a grade do espelho sai da `CelulaDia.ata`, nunca do `dna`**: `leitor_celula.py::grade_da_celula` chama
+  `_celulas_da_ata`, que monta celulas e regua a partir de `ata['lampadas']`. Celula com DNA e ata NULA
+  devolve 0 celula e regua vazia -> `marcar_pontas_fora` sem o que marcar -> `he_fora_da_janela` vazio ->
+  retrato VAZIO -> e a tela respondia, **com razao**, que nao havia dia SEM DECISAO. A fixture passa a pedir
+  a lavratura **pela PORTA** (`cartorio.julgar_celula(forcar=True)`, o juiz do cron das 06:28 e do signal),
+  nunca escrevendo `ata=` a mao: fixture que grava ata e um SEGUNDO escritor. Ela precisa pedir porque
+  `bulk_create` nao dispara signal e `on_commit` nao roda dentro de `TestCase`; em prod a ata ja existe.
+  O dia IGUAL a hoje volta `None` do cartorio — teto temporal, o turno 07-19 nao terminou.
+- **o ator nao tinha `ver_folha`**: o ato gravava e o redirect para `/ponto/gestao-he/` dava **404**
+  (`views.py::gestao_he` levanta `Http404` sem ela). Em prod quem autoriza chega pelo BOTAO daquela tela;
+  ator com `autorizar_he` e sem `ver_folha` nao existe. **A tela nao ganhou gate** — a permissao do ato
+  segue so na porta, um juiz.
+
+`LEI-AKITA: origem=ponto/portas/he.py + a tela da Gestao de HE, testemunha=autoridade_do_periodo (as 7
+rubricas do diff_janela_he), RED=a-p (21, verdes), quem-mais-le=censo fechado em DOSSIES secao 8,
+juizes novos=0`
+
+FALTA, e esta nomeado: **smoke de clique do Ronald** nas duas cascas (FRONT SEM SMOKE NAO SOBE — a fatia
+toca template), e a **medicao do custo do confirmar** na sombra (N recalculos), que e o numero em que a
+decisao sincrono-x-job se apoia.
+
+
+### O QUE A SUITE INTEIRA ACHOU, e os vizinhos nao (09/10 03:2x -- `Ran 10126 tests` / `FAILED (failures=2)`)
+
+Os 21 selos do item 2 e os 97 dos seis modulos vizinhos estavam VERDES, e a suite cheia ficou **vermelha em
+dois**. Os dois eram meus, nenhum dos dois estava nos vizinhos que eu escolhi, e e por isso que a suite cheia
+nao e cerimonia: **eu escolhi os vizinhos pelo assunto, e estes dois cobram FORMA** -- um contrato de arvore
+e um selo de tela de outra fatia.
+
+1. **`test_contract_no_except_pass` morde `except: pass` em arquivo NOVO**, e o meu
+   `autorizacao_he_periodo.py` tinha um: `raise _Rollback()` / `except _Rollback: pass`, lendo `_out` de uma
+   atribuicao anterior ao `raise`. Nada era silenciado ali -- a excecao e propria e o rollback e o ato --,
+   **e a proibicao esta certa mesmo assim**: handler vazio obriga quem le a descobrir, pelo fluxo, que a
+   medicao sobreviveu a transacao desfeita. Cura na ORIGEM, nao na allowlist: a `_Rollback` passou a
+   **carregar a medicao** (`.medido`), e o handler faz o que handler faz -- `_out = _desfeita.medido`. O dado
+   anda pelo caminho declarado, e a allowlist do contrato segue do mesmo tamanho.
+2. **`test_tela_gestao_he_forma_b::test_MORDE_o_expandido_NAO_repete_rotulo_por_linha`**: `15 != 13`
+   campos `name="motivo"` ocultos. O numero 15 esta CERTO -- a linha da pessoa ganhou um segundo ato, e ele
+   leva o seu motivo --, e **a cura nao foi trocar 13 por 15**. Somar os dois atos num numero so era o
+   defeito do selo: o total cresce quando um ato novo nasce e **nao diz qual deles mudou**, que e exatamente
+   o sinal que se perde. Ele passou a contar **por ATO**, separando os forms pela `action`: um motivo por DIA
+   sem decisao (13), um por PESSOA com dia sem decisao (2), e **nunca dois no mesmo form** -- este ultimo e
+   novo e morde o caso em que o segundo campo venceria no POST sem ninguem saber qual o dialogo preencheu.
+
+Depois das duas curas: `Ran 59 tests` / **`OK`** nos quatro modulos envolvidos (`logs/o214item2/cura1.out`),
+ruff limpo, e a suite cheia **relancada**: `Ran 10126 tests in 1362.734s` / **`OK (skipped=42)`**
+(`logs/o214item2/suite_cheia2.out`, 03:32-03:55). O veredito que autoriza o pouso e **esse**, nao o dos
+vizinhos -- e a frase "suite da copia verde" so entrou neste RELATO depois dele existir.
+
+### O contrato, escrito ANTES do codigo (09/10 01:2x — a parte que a L-110 exige)
+
+Enquanto o ensaio da sombra da O146 corre (o portao e CEGO entre 00:00 e 04:00, CLAUDE.md secao 2, por
+isso `--refazer --dump-agora` + `--bloco`), o proximo item da fila 1 **nao ficou esperando**: o contrato
+de entrada, o desenho, os **REDs a-h** e o PROIBIDO da **O214 item 2** estao escritos **pela regra, antes
+do codigo** (L-110), em `app/docs/DOSSIES.md` **secao 8** — arquivo **sem teto**, e nao aqui, pela licao de
+08/10 (o dossie da O146 teve de ser recuperado do transcrito porque o ponteiro apontava para prosa que a
+DIETA apagou). **Nada construido**: a LEI 10 exige copia nascida do HEAD **no ato do patch**, e o HEAD muda
+no commit da O146.
+
+O achado que o contrato traz, e ele muda o desenho: **a recusa de `autorizar_em_lote` nao proibe lote.**
+Ela diz, literal (`ponto/portas/he.py:272`), *"dinheiro em lote exige DIFF publicado ANTES -- que e um ATO
+de esteira, nao um clique de tela"*. A lei do item 2 **cumpre** essa condicao em vez de dispensa-la (a tela
+mostra o DIFF antes de confirmar), entao a revogacao e do **TAMANHO DO ATO** — um dia passa a um
+colaborador num periodo —, nunca da condicao: **varios colaboradores e empresa inteira continuam
+levantando**. E a PREVIA sai do motor REAL dentro de transacao desfeita, pelo molde que
+`ponto/management/commands/diff_janela_he.py` ja usa, com as **7 rubricas que ele declara** — zero rubrica
+nova, zero escritor novo de `DecisaoHE` (a porta segue sendo chamada dia a dia, como `recusar_em_lote` faz).
+
+
+## O146 — **FECHADA, NO AR**: a extra declarada da escala desloca o limite, e o limite
+tem UM sitio (09/10 00:4x · `cfd4ff83`+`ce212bb8`, deploy 01:35, smoke OK)
+
+**PROVA:** gravado medido em prod 09/10 10:0x (so leitura, agregado): `TipoEscala` **353**, com extra declarada (`he_extra_antes_min>0 | he_extra_depois_min>0`) **0**; `CelulaDia` **124.358**, com `dna['extra_declarada']` **0**; `dna_versao` gravado **1: 20.785 · 2: 103.573** (nenhuma 3 -- a impressao digital do cartorio nao andou, como o item 4 prometeu). O sitio unico esta NO AR e o IMPACTO de hoje e **zero cadastro**: o limite se desloca quando alguem declarar a extra, e ninguem declarou ainda.
+
+Fatia da fila 1, pela ordem de 08/10 19:5x (`O145 -> O146 -> item 2 da O214 -> itens 3 e 4`), contra o
+dossie que mora em `app/docs/DOSSIES.md` secao 7. A lei que a governa e a resposta dele de 08/10 21:5x
+(`O146-EXTRA-E-SO-HE`): **a extra alarga o que se PODE ganhar, nunca o que se DEVE cumprir.**
+
+**OS 4 ITENS DE `MUDA`, cada um com o sitio:**
+
+1. **CADASTRO.** `escala/models.py:78` `he_extra_antes_min` e `:83` `he_extra_depois_min` —
+   `PositiveSmallIntegerField`, **default 0**, migration `escala/0042_o146_he_extra_declarada.py`. Entram
+   **pelo WIZARD** (`escala/views_wizard.py:40-41` e `:240`, `escala/services/cadastro_tipo.py:255`,
+   `templates/escala/wizard_tipo_escala.html` + `_wizard_preview.html`). **`permite_hora_extra` nao foi
+   reusado** — e booleano e tem outro uso (`ponto/triagem_batida.py:293`,
+   `ponto/management/commands/processar_alertas_turno.py:129`), os dois intactos.
+2. **DNA.** `gerar_celulas.py::montar_dna:123` congela `dna['extra_declarada'] = {'antes': N, 'depois': M}`
+   — chave de **topo** e emitida **so quando declarada**, para que a impressao digital do cartorio
+   (`ponto/services/cartorio.py:85::impressao_insumos`, que digere `dna_versao` + `marcos`) e as duas
+   comparacoes de dict inteiro (`tripwire_celulas.py:30`, `ponto/portas/celula.py:496`) **nao se movam em
+   dia que nao declara nada**. `DNA_VERSAO` segue **2**.
+3. **UMA FUNCAO DESLOCA O LIMITE.** `ponto/janela_he.py:54::minutos_fora_da_extra` — uma subtracao, um
+   sitio. Lida por `entrada_efetiva:76`, `saida_efetiva:117` e `marcar_pontas_fora:156`, e por cima dela
+   o motor (`motor_calculo_v2.py:1363` e `:1401`, pelo `j['extra_antes']`/`j['extra_depois']` de
+   `_janela_do_dia:1303`). **Nenhum leitor com conta propria** — e por isso que a comparacao `> piso` ja
+   havia virado `dentro_da_janela:41` em 29/09.
+4. **MINUTO DENTRO DA EXTRA = HE AUTORIZADA PELA ESCALA**, sem `DecisaoHE`. Fora dela, **ponta**, e a
+   L-097 segue inteira: o miudo que sobra continua bloqueado e cai no item 1 da O214.
+
+**QUEM PERGUNTA A EXTRA, e por que nao e o motor que le o cadastro:** o juiz e
+`EscalaColaborador.extra_declarada_do_dia` (`escala/models.py:1183`), **irmao do `intervalo_do_dia`** e com
+o contrato dele palavra por palavra — `celulas` e ALIMENTACAO, **chave ausente = "nao ha celula nesse dia",
+e dia sem celula le o template vivo** (`TipoEscala.extra_declarada_do_dia:310`). O motor **pergunta**
+(`motor_calculo_v2.py:1154::_extra_declarada`, memoizado por dia, injetado em `:1677`); ler
+`te.he_extra_antes_min` de dentro do motor seria o motor com cadastro proprio, e o passado reescrito por
+troca de template.
+
+**OS CASOS, pela regra ANTES do codigo (L-110).** `ponto/tests/test_o146_extra_declarada_da_escala.py` —
+**26 casos, `Ran 26 tests` / `OK`**. A **suite INTEIRA na copia**, pela porta unica
+(`bin/suite.sh --dir`): **`Ran 10105 tests in 1363.127s`** / **`OK (skipped=42)`** — mais os 143
+vizinhos do modulo e `ruff` limpo nos 10 `.py` tocados.
+
+
+| caso | o que a regra manda | teste |
+|---|---|---|
+| **a** | saida em marco+127 com extra 120 → **120 de HE, ponta de 7** | `test_a_...127_com_extra_120_da_120_de_HE_e_ponta_de_7` (+ 2 do teto: dentro nao acusa, acima **ainda** acusa CADASTRO x REALIDADE) |
+| **b** | saida em marco+60 com extra 120 → **60 de HE, ponta 0** | `test_b_...da_60_de_HE_e_ponta_zero` |
+| **c** | saida **no marco** com extra 120 → 0 de HE e **NAO e saida antecipada** | `test_c_...nao_da_HE_e_NAO_e_saida_antecipada` |
+| **d** | entrada 10 min antes **sem** extra → ponta de 10, **como hoje** | `test_d_...e_ponta_de_10_como_hoje` |
+| **e** | extra antes 60: entrada em marco−60 → 60 de HE; marco−70 → 60 **+ ponta de 10** | `test_e_...` e `test_e2_...` |
+| **f** | escala **sem** declaracao → **identica a hoje** | `test_f_escala_SEM_declaracao_e_IDENTICA_a_hoje` |
+| **g** | dia com `DecisaoHE` autorizado → tudo conta, como hoje | `test_g_...conta_TUDO_como_hoje` |
+| **h** | turno que **cruza a meia-noite** com extra depois | `test_h_extra_depois_no_turno_que_cruza_a_meia_noite` |
+| **i** | rodar 2x = **mesmo estado** | `test_i_...` e `test_i2_marcar_pontas_fora_2x_...nao_duplica_pendencia` |
+| **j** | **MORDE**: motor e `marcar_pontas_fora` dao o **MESMO** numero no caso **a** | `test_j_MORDE_motor_e_marcar_pontas_fora_dao_o_MESMO_numero` |
+| **k** | *(meu, do contrato do irmao)* celula que EXISTE e nao declara → **ZERO, nunca o template vivo**; dia **sem** celula → template vivo; e a alimentacao com **0 query** no laco | `test_k_...`, `test_k2_...`, `test_k3_a_alimentacao_tem_o_contrato_do_irmao` |
+
+Mais os selos do dossie: **previsto NAO cresce** com a extra (a clausula 1 da lei, com caso que morde a
+volta), a extra entra **pela PORTA do wizard** e **nao reusa** `permite_hora_extra`, o default e **ZERO**,
+a chave do DNA **nasce so quando declarada**, a impressao do cartorio **nao muda sem declaracao**, **a
+conta mora em UM sitio so** e **os dois leitores IMPORTAM a funcao do dono** (por AST).
+
+**O RED que vale mais do que os outros**, porque e o que distingue cura de silencio: o montador do espelho
+ficou **`AssertionError: 7 != 67`** com o CONTROLE verde ao lado (dia sem declaracao segue riscando os 67).
+Vermelho com controle verde quer dizer *"falta uma subtracao"*; vermelho sozinho quer dizer *"o montador
+esta mudo"*, e e esse o engano que a familia de vacuidade de 01/09 cobra.
+
+**IMPACTO DE FROTA = 0 h, por UNIVERSO VAZIO — e medido na fonte, nao por amostra.** Sonda
+`logs/sombra/universo_o146.py` pela porta `bin/sombra.sh --rodar` (`logs/o146/universo.out`, 09/10 00:48):
+
+```
+colunas novas presentes no esquema de prod: []     (nascem na 0042)
+TipoEscala cadastrados: 350                        (o denominador de quem PODERIA declarar)
+emp2 12.990 celulas / 8.327 de trabalho  |  emp3 3.434 / 1.901  |  emp4 600 / 352
+TOTAL 17.024 celulas, 10.580 dia-colab de TRABALHO, com a chave `extra_declarada` = 0
+```
+
+As duas fontes do juiz dao vazio ao mesmo tempo: **0 celulas** carregam a chave e as **duas colunas nao
+existem** no esquema de prod, logo nenhuma linha pode ter numero nelas — o unico escritor delas e o wizard,
+que **nasce nesta fatia**. Entao o deslocamento vale **0 min em 10.580 de 10.580** dia-colab da competencia
+10, e `minutos_fora_da_extra(x, 0) == x` e a **identidade** (auditada linha a linha nas duas efetivas: com
+`extra_min=0`, `sobra == bruto`, `marco − timedelta(0) == marco`, e o `max(0.0, …)` sobre bruto **negativo**
+— chegada atrasada, saida antecipada — cai no **mesmo ramo** de antes, porque `dentro_da_janela` compara
+`<= piso` e `piso >= 0`). **Nao ha apply de dinheiro nesta fatia.** Os 10.580 contra os 10.578 medidos em
+08/10 sao a diferenca de FONTE (sombra do dia x prod naquele dia), nao de regra.
+
+**POR QUE O DIFF NAO SE MEDE NA SOMBRA COM O CODIGO NOVO, e isso e lei da casa:** `bin/sombra.sh` **nunca
+migra a sombra** — ele so COMPARA `django_migrations` prod x sombra. A sombra tem o esquema de PROD, sem as
+duas colunas, e qualquer consulta a `TipoEscala` com o codigo novo quebraria ali. A pergunta certa para o
+esquema de hoje e a que a sonda faz: *as colunas existem?* Nao existem — e e isso que fecha o universo.
+
+**QUEM MAIS LE, censo fechado (o `quem-mais-le` do LEI-AKITA do aval):**
+- `ponto/services/espelho.py:728-736` — montador, **passa a extra** pelo mesmo juiz;
+- `colaboradores/services/calendario.py:434-437` — idem, com a carga de celulas **icada** para servir os
+  dois consumidores do mes numa consulta so;
+- `ponto/services/he_pendente_lavrado.py:53-98` — chama `espelho_do_colab` e le `d['he_fora_da_janela']`:
+  **herda**, sem linha nova;
+- `recusar_ponta_pequena` — documenta que le `marcar_pontas_fora` *"pelo montador do espelho"*: **herda**;
+- `ponto/services/espelho.py::pontas_do_relato` — **deliberadamente NAO recebe a extra**: ele TRADUZ a
+  linha publicada pelo motor, cujo `minutos_fora` ja e a sobra. Passar a extra ali subtrairia duas vezes;
+- `motor_calculo_v2.py:2725` (`Motor12x36ComEscala._entrada_efetiva`) — **herda** pelo `_janela_do_dia`,
+  sem copia;
+- `_acusa_cadastro_x_realidade` — **nao muda**: o `cadastrado` segue sendo o marco **CRU**, porque
+  `pontas_do_relato` casa por `it['cadastrado'] != marco_da_celula`; deslocar ali deixaria a cura da O145
+  **muda exatamente nos dias que declaram extra**. O `minutos_fora` ja chega como sobra.
+- **O pre-julgamento da L-084 fica nos marcos CRUS**, e isso e da propria L-084: ela pergunta se o
+  **cadastro descreve o dia** (3 h nas duas pontas). Deslocar o marco antes dela deixaria a extra decidir
+  se a L-084 se aplica.
+
+**TRES COISAS QUE EU VI E NAO CUREI, porque curar aqui seria regra de negocio fora do pedido:**
+1. declarar extra num template torna as celulas existentes **STALE** sob `tripwire_celulas.py:30` ate o
+   `regenerar_celulas_vinculo` — **igual a editar `hora_fim`**, e e o desenho (a celula e soberana);
+2. com `piso > 0`, o minuto que fica no piso **alem** da extra vira HE — mas a L-097 fixou **piso 0** nas
+   tres empresas, entao hoje isso nao alcanca ninguem;
+3. os dois leitores de `permite_hora_extra` ("batida tardia") seguem inalterados.
+
+`LEI-AKITA: origem=ponto/janela_he.py:54 (o limite da janela) + TipoEscala/DNA (cadastro), testemunha=a
+celula (dna.extra_declarada) lida pelo motor E por marcar_pontas_fora, RED=casos a-k + 10 selos,
+quem-mais-le=censo fechado acima (7 leitores, 2 herdam, 1 recusado com motivo), juizes novos=0`
+
+**FALTA, nomeado e nao escondido:** a **LINHA HAIKU** do dossie — contador *"extra da escala"* no payload
+do copiloto com rotulo de admin e o golden *"quanto de HE da escala o colab X tem no dia Y"*, degrau
+**leitura**. Ela mora na stack `mensageria/nucleo/ferramentas.py`, que tem deploy proprio, e **nao esta no
+`PRONTO` do dossie**; fica na celula da O146 como a PORTA-RETRATAR-BATIDA ficou com a dela.
+
+---
+
+## LEI RESPONDIDA — **A EXTRA DECLARADA E SO HE** (pergunta 08/10 20:0x, resposta dele 08/10 21:5x)
+
+A pergunta foi ao topo com o numero e **a esteira seguiu** (PAREI-DE-LEI-NAO-DEVOLVE-TURNO): no intervalo
+a O145 foi medida, curada e provada, e a O204 pousou no ar. **Nao houve PAREI.** A resposta chegou com a
+O145 em suite, que e exatamente o desenho da lei de 30/09.
+
+**O aval, literal** (`O146-EXTRA-E-SO-HE`):
+
+> *"a extra declarada na escala e hora extra, nao entra na jornada prevista do dia. Quem sai no marco nao
+> deve nada e nao tem saida antecipada; quem fica ate o fim da extra recebe a HE sem precisar de
+> autorizacao. segue a fila; PAREI so em lei ou !"*
+
+**O que ela decide, com o denominador que eu havia medido antes de perguntar** (`CelulaDia` na janela de
+`periodo_apuracao(10, 2026, corte_da_empresa)`, ORM puro, sem motor): 351 `TipoEscala` cadastrados, 559
+vinculos ativos, **10.578 dia-colab de TRABALHO na competencia 10** (emp2 8.325 · emp3 1.901 · emp4 352).
+Em nenhum desses dias o `minutos_previstos_do_dia` cresce com a extra declarada. A leitura que eu havia
+escrito nos casos **c** e **f** do dossie era a certa, e nenhuma linha de codigo nasceu sob a outra.
+
+**As tres clausulas, separadas porque cada uma mora num juiz diferente** — e e isso que a O146 vai
+construir:
+1. **PREVISTO não muda.** `escala/utils.py::minutos_previstos_do_dia` (e a grade que o materializa) segue
+   lendo so os marcos do DNA. A extra declarada **nao** entra na jornada prevista do dia.
+2. **PONTUALIDADE se mede contra o MARCO, nao contra o fim da extra.** Quem sai no marco **nao deve nada e
+   nao tem saida antecipada** — a extra nao desloca o marco de saida para o lado do desconto. (Nao confundir
+   com a L-084, que e outra coisa: la o dia inteiro esta em outro horario.)
+3. **A JANELA se desloca, e so para o lado de CIMA.** O minuto trabalhado dentro da extra declarada e **HE
+   autorizada pela ESCALA**, sem `DecisaoHE` e sem pendencia — e esse e o unico sentido em que o numero novo
+   do cadastro e lido. Fora dela, a L-097 segue inteira.
+
+Em uma frase: **o cadastro da extra alarga o que se PODE ganhar, nunca o que se DEVE cumprir.** A funcao
+unica do item 3 da O146 (`ponto/janela_he.py`, lida pelo motor **e** por `marcar_pontas_fora`) nasce com
+este sinal, e o selo dela tem de morder a volta: previsto que cresce com a extra = VERMELHO.
+
+---
+
+## AVAL REGISTRADO — **`GEO-SILENCIO-DE-PING`: O APARELHO QUE PARA DE PINGAR PASSA A AVISAR** (08/10 22:5x)
+
+Complemento da **O-GEO-DECISAO**, sem id novo, e ele mesmo diz onde entra: raia `wt-bos`, **depois da O198 e
+antes da O197**; a principal (O145 → O146 → item 2 da O214) **nao muda**. **Registrado no mesmo turno**
+(*"Registra no BACKLOG agora, executa na vez"*), com o contrato inteiro na coluna da obra. **Nada
+construido** -- a vez dele e depois da O198, e a raia esta na O200.
+
+**O que ele NAO descongela, e isso e da propria ordem:** a O-GEO-DECISAO segue **CONGELADA pela L-096**, e o
+aval abre o complemento dizendo literalmente *"Nao toca dinheiro nem celula (L-096 intacta)"*. Um vigia que
+so manda push nao julga celula nem move centavo -- por isso ele anda sem a obra descongelar, e o PROIBIDO
+dele fecha as portas que fariam o contrario: **barrar batida, abrir chamado por silencio, retratar ou julgar
+celula**.
+
+**O contrato ja vem com as tres coisas que esta casa costuma pagar depois:**
+- **X e Y nascem de MEDIDA, nao de palpite** -- *"X e Y saem dessa medida, nao de palpite"*: turnos dos
+  ultimos 14 dias por faixa de ping (0 · 1-3 · 4+) e colabs que ja pingaram alguma vez. E cadastro **por
+  empresa, pela UI, com nome e leitor** (LEI-AKITA 12), com **default DESLIGADO** (0 = nao avisa), e
+  `cravar X ou Y no codigo` esta na lista PROIBIDO.
+- **O vigia compara INSTANTE, nunca data** -- que e exatamente a conduta de 08/08 na secao 6 do CLAUDE.md
+  (teto por DATA nao basta: no cross-meia-noite o DIA acaba antes do TURNO), e o **RED f** a morde.
+- **Papel DECLARADO em `config/crons.py`: VIGIA, so alarma** (secao 4a), com contador de nome, numero,
+  esperado e dono, e a consulta em **LOTE, O(n), sem N+1**.
+
+**REDs a-g** (a: X+1 min → 1 push ao colab, e rodar 2x continua 1 · b: X+Y+1 → 1 push a supervisao, so 1 ·
+c: ping fecha o episodio e um silencio novo gera push novo, **MORDE** · d: quem nunca pingou, nenhum push ·
+e: turno fechado ou isento, nenhum push · f: cruza a meia-noite, conta pelo instante · g: cadastro 0, nada
+dispara). **SELO**: leitor de "sem ping" com regra propria fora de `ponto/presenca.py` = 0; chave nova sem
+leitor = 0. **SMOKE**: na sombra o envio de push esta desligado, entao o caso real e em prod, com o aparelho
+dele (col677), e o resultado vem para ca.
+
+**O que eu ainda NAO conferi, e fica dito em vez de suposto:** os cinco leitores do `quem-mais-le`
+(`painel_op.py`, `calendario.py`, `ponto/views.py:2900`, `api_ping_geo`) nao foram grepados, e o
+`PingGeo`/`classificar_presenca_turno` nao foram lidos ao vivo. **O censo se fecha na vez** -- afirmar agora
+seria narrar codigo de memoria, que e a conduta que esta casa paga mais caro.
+
+---
+
+## MARCO FECHADO — **O POUSO ESTA NO REMOTO, E O DOSSIE DA O146 APONTAVA PARA NADA** (08/10 23:4x)
+
+**O push do marco passou, e o veredito se leu no REMOTO, nao no log:** `git fetch` + `git log origin/main -1`
+devolve `d29b7f14`, o `logs/push_marco_o200.out` fecha em `d2cf6606..d29b7f14  main -> main`, e
+`git log origin/main..HEAD` esta **vazio**. As duas pistas do pre-push: suite **10079 OK (skipped=42)** em
+750 s e control-plane **22 OK** em 108 s. Um push por MARCO (L-108), nao um por commit.
+
+**ACHADO DO MARCO, e e um ponteiro para nada.** O dossie da O146 -- os **REDs a-j** escritos pela regra
+ANTES do codigo (L-110), que o PRONTO do proprio dossie exige nomeados -- era citado em **tres** sitios
+(`BACKLOG.md` no bloco OBRAS, a celula O146, `PROMPTS.md:1098`) todos dizendo *"no RELATO"*, e **nao existia
+em arquivo nenhum do repo**: o RELATO vivo so guardou o resumo do aval, e
+`grep -c 'extra declarada' docs/RELATO-ARQUIVO.md` = **0** -- a DIETA (L-109) arquivou a prosa e os
+ponteiros ficaram apontando para o vazio. Eu nao re-derivei de cabeca a lista que o Ronald escreveu: ela
+foi recuperada do transcrito da sessao, onde esta citada palavra por palavra, e **pousou em
+`app/docs/DOSSIES.md` secao 7** -- o arquivo que a propria abertura declara *"autoridade de leitura, nao
+resumo"* e que **nao tem teto**. Os dois ponteiros do BACKLOG passaram a citar a secao. Se eu tivesse
+comecado a O146 pelo codigo, teria construido 10 casos de memoria contra 10 casos escritos pela REGRA, que
+e precisamente o que a L-110 proibe.
+
+**AS TRES CURAS DE DOCS QUE ESPERAVAM O PUSH.** Nao se escreve na arvore durante o push -- os selos de host
+rodam dentro do pre-push e a arvore carimbada mudaria --, entao as tres ficaram prontas em copia e entraram
+depois do veredito. (1) As celulas de estado da O145 e da O200 passam a ABRIR com `**NO AR**`: o leitor
+unico (`bin/hook_stop_fila1.py:55`) exige a palavra LOGO depois do `**`, e `**CURADA E NO AR**` nao casa --
+item pousado vinha sendo cobrado como fila 1 viva, e o hook me devolveu `siga: O145` duas vezes por isso.
+(2) A frase errada das 06:00 (acima). (3) As duas chegadas repetidas ganharam linha no `PROMPTS.md`.
+PROVA: celula da O145 **278** caracteres e da O200 **281**, as duas abaixo do teto de 300 da L-109, as duas
+casando `^\*\*(FECHADA|FECHADO|NO AR|no ar)\b` -- a mesma regex do `_FECHADO` -- e nenhuma com `|` no texto;
+`git log origin/main..HEAD` vazio quando a primeira escrita aconteceu.
+
+---
+
+## O200 — **POUSOU E ESTA NO AR: O SITIO UNICO DO RAIO RESPONDE EM PROD** (08/10 23:1x)
+PROVA: `logs/deploy.stamp` traz `COMMIT=40be6f22...`, o objeto que o amend absorveu, e
+`git diff 40be6f22 HEAD --name-only` devolve **um** arquivo -- `app/docs/RELATO.md` --, entao o
+CODIGO no ar e o deste commit; `raio_efetivo_m` e `raio_do_posto`
+importam no ar com `RAIO_PADRAO_M=200`; vigia `{'universo': 208, 'n': 12, 'invalidos': 0,
+'teto_metros': 500}`; raio `<= 0` = **0** nos 208 ativos e nos 226 do total; deploy com 606 rotas
+e tres rotas provadas, `importerror_500=0`.
+
+**O POUSO FOI UM ATO**, como a L-107 cobra: `git merge --no-commit` -> docs do marco por PATH ->
+commit do merge (o objeto `40be6f22`, que o amend seguinte absorveu) ->
+`bin/deploy.sh --sem-migrate`, sem nada no meio. O deploy respondeu
+`migrations pendentes no schema do cliente: 0`, `sombra: carimbo dia=20261008 status=OK
+tipo=completa diverge=0`, prova de casca com **16 estaticos, 5 paginas e 606 rotas em 2 urlconf**,
+as tres cascas recarregadas juntas e as tres rotas provadas (`/health/` 200, `/colaboradores/` 302,
+mensageria 200), com `importerror_500=0` na janela.
+
+**PROVA EM PROD, lendo o codigo que esta no ar** (so leitura, `tenant_command shell`):
+
+| o que | resposta de prod |
+|---|---|
+| commit no ar | `40be6f22...` no `logs/deploy.stamp` — o objeto absorvido pelo amend, cujo diff contra o HEAD e **so** `app/docs/RELATO.md` |
+| sitio unico | `raio_efetivo_m` e `raio_do_posto` importam; `RAIO_PADRAO_M=200` |
+| vigia | `{'fonte': 'geofence_raios', 'universo': 208, 'n': 12, 'invalidos': 0, 'teto_metros': 500}` |
+| raio invalido | **0** postos com `raio <= 0` e **0** com raio NULO — nos 208 ativos **e** nos 226 do total |
+| raio largo | **2** postos acima do teto de 500 m (linha propria da pauta, nao somada ao resto) |
+| amostra | posto#1 `raio_metros=200` -> `raio_do_posto()=200` |
+
+**O DEPLOY DE RECONCILIACAO FOI RECUSADO POR UM PORTAO, e eu NAO o forcei.** Depois do amend eu
+rodei `bin/deploy.sh --sem-migrate` de novo com UM proposito -- fazer o `logs/deploy.stamp` nomear o
+HEAD final em vez do objeto absorvido. O `bin/janela_auth.sh` BARROU, as 23:23: este marco toca
+`app/api/views.py`, que e' sitio de auth, e a lei ACESSO-NUNCA-EM-LOTE (item 4) proibe auth no ar
+entre 23:20 e 06:00 -- o P0 de 20/09 comecou a meia-noite e levou os ~750 ao login (82% de 401 as
+00h, 100% as 20-23h). Ha a porta de emergencia (`SEM_JANELA_AUTH_MOTIVO`), e usa-la para arrumar um
+CAMPO DE TEXTO de stamp seria exatamente o atalho que a L-009 poe na lista NUNCA PRE-APROVADO: o
+portao nao estava errado, o meu motivo e' que nao era emergencia. O codigo que o cliente usa ja
+subiu as 23:1x, DENTRO da janela, e e' o mesmo -- medido, nao suposto: um unico arquivo de diff, e
+ele e' documentacao. O `bin/tests/test_import_tardio_contra_o_ar.sh`, que le esse campo, segue
+VERDE (`no_ar=40be6f22 imports_tardios=4285 acusados=0`). **FICA PARA QUEM VIER, e a primeira versao desta linha estava ERRADA.**
+Eu escrevi *"o proximo deploy que tocar auth so passa as 06:00"* e so DEPOIS medi a base do portao:
+`bin/janela_auth.sh:21` e' `BASE="${1:-origin/main}"` e a :74 roda
+`git diff --name-only "$BASE"...HEAD` -- ele pergunta o que esta ADIANTE DO REMOTO, nunca o que o
+stamp diz. Com este marco empurrado, `origin/main == HEAD`, o diff fica VAZIO e o portao LIBERA na
+hora; as **06:00** so prendem deploy que leve arquivo de auth AINDA NAO empurrado. A frase velha
+faria a proxima sessao esperar seis horas por nada, e ela nao cabia em `--amend` (o commit ja estava
+no push) nem em commit so de docs (L-106): viajou no commit da O146.
+
+**ESTA SECAO NAO ESCREVE O HASH DO PROPRIO COMMIT, e o motivo custou duas vezes neste turno.**
+Um commit nao pode nomear a si mesmo, e cada `--amend` mata o hash que o anterior publicou: primeiro
+`f512ec9f` (citado em quatro lugares do RELATO, na celula do BACKLOG, na linha do PROMPTS e dentro da
+propria mensagem do commit), depois `40be6f22`, que o `logs/deploy.stamp` tinha acabado de gravar como
+"o que esta no ar". O codigo nao mudou em nenhuma das duas -- so `docs/RELATO.md` --, mas um stamp
+apontando para objeto que so o reflog alcanca e' uma TESTEMUNHA MENTINDO sobre o que roda em prod, e
+`bin/tests/test_import_tardio_contra_o_ar.sh` le exatamente esse campo. Cura de forma, nao de texto: o
+documento cita o que e' ESTAVEL (a `6c53bc46` da raia, que e' pai do merge, e o estado "merge do
+pouso"), e a coerencia do stamp se faz pelo **deploy que roda DEPOIS do commit final** -- nunca por um
+hash digitado a mao.
+
+**OS DOIS DENOMINADORES SAO OS DOIS, de proposito**: o vigia mede **208 ativos** (e dele que sai a
+pauta do admin) e o censo do complemento mediu **226 postos**, o total com os 18 inativos. Nos dois
+o raio invalido da **0**, entao o numero nao muda de dono com a escolha do universo -- mas eles ficam
+dos dois lados escritos, porque "0 de 208" e "0 de 226" sao contas diferentes e a casa ja pagou por
+rotulo que nao diz qual universo mediu.
+
+**O DEFEITO CONTINUA LATENTE, e isso nao e' a mesma coisa que inexistente**: nao ha posto com raio 0
+HOJE, e bastava um admin digitar 0 na tela para o juiz acusar `ponto_fora` em toda batida de GPS bom
+daquele posto. A tela agora recusa, e o vigia conta. Nada foi corrigido por script -- o que havia a
+corrigir (os 2 postos acima do teto e os 24 colaboradores sem cerca) vai pela **pauta**, que e o que
+a ordem manda.
+
+**SMOKE que falta e e' dele**: o pino do `/painel/` muda de cor para quem tinha leitura imprecisa --
+`smoke Ronald: abrir /painel/ e conferir que o pino de quem esta no posto com GPS impreciso nao
+aparece mais vermelho`. A fatia nao tocou `static/js/`, service worker nem template base, entao ela
+nao cai na trava do FRONT SEM SMOKE; o pedido e' de conferencia, nao de portao.
+
+---
+
+## O200 COMPLEMENTO — **RAIO ZERO QUERIA DIZER DUAS COISAS OPOSTAS, E A CARA ERA ACUSAR QUEM ESTAVA NO LUGAR** (08/10 22:0x→22:5x)
+
+Aval literal, mesma obra, mesmo pouso, sem id novo (`O200-COMPLEMENTO-RAIO-ZERO`). A O200 fechou com o
+raio registrado como **linha de fila** -- "zero vitima nao e bug provado no caminho". Ele desfez isso no
+mesmo pouso, e estava certo: o numero media o CADASTRO DE HOJE, nao o codigo.
+
+**O DEFEITO.** `Posto.raio_metros` valia duas coisas opostas dentro do mesmo sistema. **Nove** leitores
+escreviam `raio_metros or 200` -- para eles 0 e *"posto sem raio declarado"*, e cai no padrao. **Dois**
+liam a coluna CRUA -- o escritor do alerta (`ponto/services/geofence.py::verificar_geofence`) e
+`reconciliar_geofence` -- e para eles 0 e *"cerca de zero metro"*, isto e, **toda batida fora**. Nesse
+caminho o juiz abre `ponto_fora`, dispara `push_supervisao` e nasce chamado **em cima de quem bateu no
+lugar certo, com GPS bom**. Nenhum dos onze tinha bug proprio: e a **MEIA-CORRECAO** da secao 6 do
+CLAUDE.md -- cada escritor certo, o conjunto mentindo, e pelo lado mais caro.
+
+**MEDIR ANTES** (prod, SO LEITURA, como a ordem manda): **226** postos ativos · `raio_metros <= 0` = **0**
+· nulo = **0** (a coluna e NOT NULL, medido por `IntegrityError`) · colabs em posto de raio invalido = **0**
+· `AlertaGeofence ponto_fora` nascido neles = **0 de 5.289**. Menor raio vivo = 49 m; 136 dos 226 em 200.
+**O defeito e LATENTE**, e a ordem ja decidia isso por escrito -- *"se for 0, o defeito e latente e a cura
+segue igual"*. Bastava um admin digitar 0 na tela. **Nada foi corrigido por script**: o que houver a
+corrigir vai pela pauta do admin, que e o que a ordem manda.
+
+**A CURA, DE ORIGEM.** O raio que VALE sai de **UM sitio** -- `ponto/services/geofence.py::raio_efetivo_m`
+/ `::raio_do_posto` -- e as **15 chamadas** medidas na arvore curada leem dele. Nao e fallback: e o
+`or 200` deixando de ser codigo repetido onze vezes e virando uma **frase com nome** -- raio ausente,
+ilegivel ou `<= 0` e ausencia de **CADASTRO**, e ausencia cai no `RAIO_PADRAO_M` declarado. Entram no
+sitio unico tambem os dois que so **MOSTRAM** (`services/detalhe.py` e o relatorio de
+`detectar_vinculo_divergente`): imprimir a coluna crua ao lado de uma acusacao medida contra 200 e a mesma
+mentira, so mais barata. O chamado passa a gravar em `contexto_json` o raio **EFETIVO**, porque
+`chamados/services/acoes_chamado.py` imprime esse campo como "raio permitido". O cadastro
+(`colaboradores/views.py`) **RECUSA** raio `<= 0` dizendo o que o zero provoca e nomeando o padrao. O
+vigia `geofence_raios.py` passa a **CONTAR** raio `<= 0`, com **linha propria** na pauta
+(`postos_com_raio_invalido`) -- nunca somado dentro de "sem cerca util", que esconderia justamente o
+cadastro que faz o juiz ACUSAR.
+
+**OS QUATRO REDs DO AVAL, NOMEADOS, medidos contra a arvore da O200 SEM o complemento: 3 de 4
+VERMELHOS.** Esse baseline nao tem hash para citar -- o amend o absorveu em **`6c53bc46`** --, entao
+ele se nomeia pelo ESTADO, e nao por um objeto que so o reflog alcanca.
+
+| caso | o que o aval pede | resultado na O200 sem o complemento |
+|---|---|---|
+| **(a)** | posto raio 0, batida a 50 m com accuracy 10 → **nao** acusa `ponto_fora` | **RED**: `'ponto_fora' != 'dentro'` |
+| **(b)** | posto raio 100, batida a 300 m com accuracy 10 → `ponto_fora`, **como hoje** | **verde (MORDE)** — e o controle |
+| **(c)** | salvar posto com raio 0 e com −5 pela tela → recusado com mensagem | **RED**: `a tela GRAVOU raio 0` |
+| **(d)** | o pino da O200 e o juiz dao a **mesma** resposta em (a) e (b) | **verde antes e depois** — ver abaixo |
+| *(vigia)* | contar raio invalido | **RED**: `None != 1` |
+
+**O (d) PASSOU NA ARVORE VELHA, e isso esta escrito no selo em vez de ajustado na assercao.** Fui ao sitio:
+a propria O200 acabara de fazer `_geo_do_pino` chamar `classificar_posicao(dist, acc, posto.raio_metros)`
+**CRU**, "como o juiz o le" -- entao pino e juiz **ja concordavam**, os dois acusando. O (d) nao prova o
+defeito; ele **guarda a cura pela METADE**: normalizar o raio so no juiz, ou so no pino, separaria os dois
+leitores outra vez. Caso verde com poder de morder vale; caso verde sem poder de morder e selo vazio
+(a familia do 01/09).
+
+**TRES DEFEITOS MEUS apareceram no primeiro GREEN, e os tres foram curados na ORIGEM, nao na assercao:**
+1. **um ramo inalcancavel** em `views.py` -- eu havia escrito "raio em branco = padrao", mas `raio_metros`
+   esta em `CAMPOS_OBRIGATORIOS_POSTO` e `_faltando_obrigatorios_posto` ja recusa o campo vazio **antes**.
+   Era um **segundo escritor** da pergunta "o que significa raio ausente" (LEI-AKITA 7). Apagado; o teste
+   virou `test_MORDE_c_a_AUSENCIA_tem_um_dono_so_e_nao_e_esta_guarda`, que cobra a frase
+   `Preencha os campos obrigatorios: Raio.`
+2. **o selo estourava em vez de morder** -- o caso NAO-MORDE carregava `%%` e o `ast.parse` levantava
+   `SyntaxError`, entao ele passava por **ERROR** sem afirmar nada. Selo que estoura nao e selo que morde.
+3. **um teste que fabricava um mundo proibido pelo schema** -- `update(raio_metros=None)` da
+   `IntegrityError`. O `is None` do vigia e defensivo, nao um estado alcancavel; o teste virou
+   `test_MORDE_raio_zero_e_invalido_e_NAO_e_raio_largo`.
+
+**SELO** `core/tests/test_selo_raio_de_um_sitio.py`: varredura por **AST** (texto fez o selo morder a
+propria prosa que explica a cura 5 vezes nesta casa) sobre todo `.py` da arvore, acusando `BoolOp(Or)` cuja
+esquerda LE `raio_metros`. **Zero allowlist**, nem para `geofence.py`. Duas excecoes por **FORMA**,
+declaradas e mordidas nos dois sentidos: esquerda `Compare` (pergunta, nao valor -- e a linha do vigia) e
+direita string literal (o traco de registro sem numero). Medido na arvore curada: **0 achados**.
+
+`LEI-AKITA: origem=ponto/services/geofence.py::raio_efetivo_m, testemunha=RAIO_PADRAO_M + a coluna
+Posto.raio_metros, RED=colaboradores/tests/test_o200c_raio_de_um_sitio.py (3 de 4 vermelhos medidos na
+O200 sem o complemento) + core/tests/test_selo_raio_de_um_sitio.py, quem-mais-le=censo fechado nos dois sentidos (11
+decidiam, 15 chamam o sitio unico; o vigia, o `or '-'` de acoes_chamado e o form ficam de fora,
+declarados), juizes novos=0 -- raio_efetivo_m e a regra que o `or 200` ja afirmava nove vezes, agora dita
+uma.`
+
+Tudo isso entrou **no mesmo commit da O200**, como a ordem pede: o amend levou `f512ec9f` a
+**`6c53bc46`** (20 arquivos, raia nao empurrada -- o hash velho fica so no reflog).
+Esta secao do RELATO viaja no ato do **pouso**, porque o RELATO tem um escritor so -- a arvore principal --
+e `6c53bc46` nao carrega `docs/RELATO.md`.
+
+**A SUITE DA COPIA: 10.071 TESTES, 2 VERMELHOS, OS DOIS MEUS E NOMEADOS.** `Ran 10071 tests in 1352s`
+com `FAILED (failures=2, skipped=42)` -- e nenhum dos dois toca a cura. (1) `test_ruff_zero`:
+`patch.py:4:8 F401 py_compile imported but unused`; (2) `test_so_o_juiz_resolve_o_posto_de_referencia`:
+`extras = ['patch.py']`. A causa e a mesma e e minha: os dois scripts de patch moram **dentro** da
+arvore que patcham (`D = dirname(__file__)`, a forma da LEI-AKITA 10), entao foram copiados para a
+copia junto da cura, e os selos ESTRUTURAIS varrem todo `.py` da arvore -- inclusive um script que
+carrega o codigo da cura em STRING e, por isso, parece um segundo leitor do posto. Tirados os dois
+arquivos, os **5** testes desses dois contratos voltam `OK` (`logs/o200c_recorte.out`). Nao e selo
+frouxo: e selo acertando sobre lixo meu. **A licao e de forma**: script de patch sai da arvore ANTES
+de qualquer selo, suite ou commit -- e e' por isso que o veredito se le com `^Ran` + `^OK$`/`^FAILED`
+e nao com `grep ^OK`, que neste mesmo log casa a prosa `OK:   31`.
+
+**A AUTORIDADE E A ARVORE MEDIDA, NAO O SCRIPT QUE A CONSTRUIU** -- e este era o jeito de commitar
+coisa que ninguem testou. Rodar `patch.py`/`patch2.py` na raia reproduziu **12 dos 15** arquivos e
+divergiu em **3**: `geofence_raios.py` (`largo` como PERGUNTA, `p.raio_metros is not None and > TETO`,
+em vez do `or 0` que inventava raio 0 para comparar), `colaboradores/views.py` (a guarda deixou de ter
+ramo proprio para o campo VAZIO -- a ausencia tem um dono so, `CAMPOS_OBRIGATORIOS_POSTO`) e
+`geofence.py` (o payload do chamado leva o raio EFETIVO `_raio`, nao a coluna crua). Os tres sao as
+curas que nasceram DEPOIS dos scripts, durante a construcao: quem reaplica o script sozinho **reverte
+em silencio** a cura refinada e commita uma arvore que nunca rodou. Entao o que foi para o commit sao
+os **15 arquivos da arvore MEDIDA**, provados por `md5sum` nos tres lugares -- cura, copia da suite e
+raia -- com **0 divergentes**.
+
+**SEIS SELOS DE HOST DAO VERMELHO FALSO QUANDO RODADOS DA RAIZ DE UMA RAIA, e isso e fila, nao cura.**
+Rodei `bin/tests/` inteiro de `/home/ronald/wt-bos` antes do pouso (a conduta de "pasta de selos antes
+do push"): **58 verdes, 6 vermelhos**. Os mesmos 6, rodados da arvore principal, dao **rc=0 todos**:
+`test_hook_nao_e_copia` (a raia nao tem `.git/hooks` -- o `.git` dela e um arquivo que aponta para o
+repo principal), `test_handoff_sessao` (`settings.json` ilegivel), `test_import_tardio_contra_o_ar`
+(`logs/deploy.stamp` sem `COMMIT=`), `test_commit_so_o_declarado`, `test_furo_encadeado_ao_cartorio` e
+`test_inventario_pessoal_no_commit`. Eles perguntam pelo AMBIENTE (hooks, stamp, logs), que mora na
+arvore principal, e a raia nao o tem. O que importa para esta fatia: **`test_lei_protege_sitio.sh`
+passou** na raia, com o diff do complemento inteiro -- nenhum dos 13 arquivos toca `arquivo::funcao`
+da coluna PROTEGE. Fila de instrumento (L-105, pouso proprio): nomear os 6 e decidir se eles leem a
+raiz do REPO em vez do `cwd`, ou se declaram que so respondem na principal.
+
+---
+
+## O145 — **PROVA DEPOIS DO DEPLOY: 45 DIAS E 8.095 MIN MUDARAM DE BALDE, E NADA SUMIU** (08/10 22:4x)
+
+Cura no ar em `32782d0d` (deploy feito). A PROVA e a MESMA sonda de antes, no MESMO lugar (sombra, por
+`bin/sombra.sh --rodar`), na MESMA competencia 10/2026, com a MESMA autoridade dos dois numeros --
+`espelho_do_colab`, a chamada que a tela, o PDF e o portao `he_pendente` usam. Nao e sonda nova: e o
+instrumento de antes apontado para o depois, que e a unica forma de o numero querer dizer algo.
+
+| balde | ANTES (`logs/o145_dois_v3.out`) | DEPOIS (`logs/o145-prova-controle.out`) |
+|---|---|---|
+| **A)** motor ACUSA e a testemunha CALA | **78 dias** · 17.349 min · 35 colabs | **33 dias** · 9.254 min · 18 colabs |
+| **B)** os dois falam | 112 dias · motor 9.952 · testemunha 6.556 | **157 dias** · motor 18.047 · testemunha **18.716** |
+| **C)** so a testemunha fala (<= teto, e o certo pela L-097) | 2.975 · 25.678 min | 2.975 · **25.678 min** |
+| **D)** nenhum dos dois | 13.125 | 13.125 |
+
+**A PROPRIEDADE QUE FAZ DISSO PROVA, e nao duas medicoes parecidas** (LEI-AKITA 13, propriedades fixas):
+**as partes somam o total.** A perdeu 45 dias (78 -> 33) e B ganhou exatamente 45 (112 -> 157). A perdeu
+8.095 min (17.349 -> 9.254) e `B_motor` ganhou exatamente 8.095 (9.952 -> 18.047). **C e D nao se mexeram**
+-- 2.975 e 13.125 identicos, 25.678 min identicos. Nenhum dia foi criado, nenhum foi engolido: 45 dias
+**trocaram de balde**, que e literalmente o que a cura promete -- a testemunha passou a dizer o que o motor
+ja acusava. E `B_testemunha` saiu de 6.556 para **18.716 min**: sao 12.160 min (202 h) de ponta de HE que
+existiam no julgamento e **nao chegavam a tela, ao PDF nem ao portao**.
+
+**A PREVISAO ERROU, e por isso ela se MEDE.** Antes do deploy eu havia escrito no BACKLOG o esperado:
+bucket A **78 -> 34** dias e **17.349 -> 10.517** min. Medido: **33** e **9.254**. A cura moveu **45** dias
+onde a previsao dizia 44, e 8.095 min onde dizia 6.832 -- **um dia e 1.263 min a mais**. A diferenca esta
+no tamanho da fatia: ela enumerava **44** dias curaveis e o tradutor alcancou **45**. **Nao decompus o dia
+extra** -- o "esperado" era projecao da sonda de antes, nao uma conta fechada --, e isso fica dito em vez
+de arredondado. O esperado fica escrito aqui ao lado do medido, que e a unica forma de a previsao ter custo;
+o que a PROVA sustenta e a conservacao acima, nao a projecao.
+
+**O CONTROLE SE INVERTEU COM A CURA, e isso teve de ser dito antes de o numero valer.** A primeira rodada
+pos-deploy carimbou `PAROU: o controle duplo nao bateu` -- e estava **certa**: o controle esperava `col253
+02/10` no balde **A**, e A era o DEFEITO. Um controle que exige o defeito reprova a cura. Invertido: col253
+02/10 e col207 02/10 esperam **B** ("os dois falam"), e **col37 06/10 fica em A** de proposito, porque
+controle sem um caso fora do balde esperado deixa de DISCRIMINAR -- passaria mesmo se tudo caisse em B.
+Os tres bateram: `caiu em=B OK`, `caiu em=B OK`, `caiu em=A OK`.
+
+**OS 33 QUE SOBRARAM TEM DONO, e nao sao residuo da O145** (2a passada, por `grade_da_celula`):
+- **16 dias · 2.042 min · 9 colabs — celula ATRIBUIDA e a testemunha ainda calou.** Esta e **outra causa**,
+  e ela nao se zera na conta da O145. O retrato mostra o alvo com `hora_marco=None` e `hora_prevista='·I2'`
+  (col346 03/10, col830 26/09) ou com `status=atraso` e a hora cadastrada vazia de marco (col915, 4 dias,
+  160-178 min). Vai para a fila com o numero, nao para o rodape desta fatia.
+- **17 dias · 7.212 min · 9 colabs — o dia nao tem celula na grade** (`alvo=None`): col37 06/10 959 min,
+  col250 30/09 960, col382 01/10 1.369, col594 03/10 1.080, col788 3 dias de 415-480, col511 03/10 169. E
+  **CADASTRO/ESTRUTURA pela L-099**, nao calculo: sem celula, nao ha marco contra o que a ponta se descreva.
+  **Dono declarado: O229.** Curar isso por codigo aqui seria o fallback que a LEI-AKITA 1 proibe.
+
+Os dois somam 33 -- o balde A inteiro, aberto por dono, **sem um dia sem nome**.
+
+---
+
+## O145 — **O "127 MIN DE PONTA" NAO E UMA PONTA: E A SOMA DO DIA, E O RAIO NAO FOI FURADO** (08/10 19:5x→20:0x)
+
+Ordem dele, literal: *"Medir primeiro, na O145: por que o dia 02/10 do col207 aparece com ponta de 127 min
+se o raio de atribuicao e 90 (escala/utils.py ~319, tol_min=90)."* **Medido — e a resposta refuta a premissa
+da pergunta, nao o sistema.** Medi sem motor: `grade_da_celula` -> `montar_realizado_grade` ->
+`marcar_pontas_fora`, e conferi no retrato JA lavrado (a medicao com motor sobre frota vai na sombra).
+
+```
+col207  empresa=2   CADASTRO DA JANELA: ativa=True piso_min=0 saida_ativa=True desde=2026-08-21
+CELULA 2026-10-02 id=115424 origem=gerada   dna.marcos = {'hi':'08:00','hf':'12:00'}  previstos=240
+  #116131  02/10 06:30:07  E  -> delta  -90  -> ponta 90 'antes'   (EXATAMENTE no limite)
+  #116447  02/10 12:37:45  S  -> delta  +37  -> ponta 37 'depois'
+  ata: n_orfas=0  n_missing=0  2 lampadas acesas
+  SOMA das pontas do dia = 127
+autoridade (a mesma que a tela le): HPL.ler(emp2, 10, 2026), retrato calculado_em 2026-10-08 09:35:58 UTC
+  -> col207 dia 2026-10-02: minutos=127  estado=sem_decisao  com as DUAS pontas listadas
+  -> universo do col207 no retrato: 1.211 min em 14 dias, 14 sem_decisao
+```
+
+**Tres coisas que a medicao estabelece:**
+
+1. **O 127 e uma SOMA, nao uma ponta.** O somador e `ponto/services/he_pendente_lavrado.py:108` —
+   `sum(... for x in _fora)` sobre as pontas do DIA. 90 + 37 = 127, e **nenhuma das duas passa do raio**.
+2. **O 90 e raio do TURNO, nao do MARCO.** `escala/utils.py:319-322`: `ini = abs_marcos[0][1]`,
+   `fim = abs_marcos[-1][1]`, janela `[ini-90, fim+90]`. Dentro do envelope o pareamento e DP + o
+   cluster-guard, e a distancia por marco **nao tem teto**. A linha 348 ja diz isso em voz alta:
+   *"O raio tol_min segue sendo raio de ATRIBUICAO."* A comparacao e **inclusiva**, e e por isso que a
+   batida de 06:30 — exatamente `08:00 menos 90` — casou com o marco em vez de virar orfa.
+3. **A TESTEMUNHA NAO MENTE** (conferi o rotulo, LEI-AKITA 8). `templates/ponto/gestao_he.html:231` abre a
+   soma nas duas pontas (`{{ s.antes }} min antes da entrada` · `{{ s.depois }} min depois da saida`), e as
+   linhas 271-285 listam **uma linha por ponta** sob a coluna `ponta`. O cabecalho (`:22`) diz *"minutos
+   batidos fora do marco"* — rotulo de SOMA. O "127 min de ponta" era leitura do enunciado, nao da tela.
+   **Nenhuma cura de rotulo a fazer.**
+
+**CONSEQUENCIA PARA A O145: este dia NAO e um caso dela.** A ponta nao desapareceu — apareceu inteira e
+esta no retrato lavrado, `sem_decisao`, esperando o admin. A O145 (a ponta que SOME porque a batida passou
+do raio, a batida ficou sem par e o marco foi a `missing`) **segue de pe e sem caso medido**: achar um e
+pergunta de FROTA, e por isso vai na sombra, nao em prod.
+
+O par de RED da O145 ja esta nomeado, e o primeiro ja esta medido aqui: batida em `marco-90` -> ponta 90
+VISIVEL (este dia); batida em `marco-91`, entrada unica -> marco `missing`, `marcar_pontas_fora` devolve
+`[]` e **a ponta nao nasce** (os minutos NAO somem do calculo: o motor conta a jornada do marco e acusa a
+distancia -- quem fica muda e a testemunha). **Dois valores, dois destinos** — o caso que MORDE. E a cura e do LEITOR: alargar
+`tol_min` re-pareia batida em toda a frota, e o dossie proibiu tocar o raio.
+
+**Achado lateral, dono CADASTRO (L-099), NAO e fatia:** col207 tem **14 de 14** dias com ponta na
+competencia, 1.211 min, numa escala de 4 h (08:00-12:00) com entrada as 06:30. Se os outros 13 dias
+repetem a forma, o DNA nao descreve o turno real — isso vai para a lista **CADASTRO x REALIDADE** pelo
+`e6_oraculo.py::dono_da_divergencia`, com o numero, e **nao se cura por codigo**.
+
+---
+
+## O145 — **A FATIA: 44 DIA-COLAB EM QUE A TESTEMUNHA ESTA MUDA, E A CURA E UM TRADUTOR** (08/10 20:4x→21:3x)
+
+**O defeito, na forma exata.** A batida que cai a mais de 90 min do seu marco nao e atribuida
+(`escala/utils.py::_alinhar`, `tol_min=90`), a celula daquele marco nasce `missing` e a batida fica **ORFA**.
+`ponto/janela_he.py:166` pula `missing` — e so por isso `dia['he_fora_da_janela']` volta `[]`. Nada se perde
+do calculo: o MOTOR pareia pelo marco, clipa pela janela (L-097) e **acusa** a distancia em
+`dias_cadastro_x_realidade`. O dinheiro esta CERTO e **nenhum centavo se move nesta fatia**. Quem fica muda e
+a testemunha — tela, PDF, `he_pendente` do portao, lavratura e calendario.
+
+**O ESCOPO, medido na sombra com controle duplo que PASSOU** (`logs/o145_dois_v3.out`; col253 02/10 esperado
+no bucket A e col207 02/10 esperado no B, os dois OK — sem os dois, nenhum numero abaixo seria prova):
+
+| bucket | o que e | dia-colab | minutos |
+|---|---|---|---|
+| A | motor ACUSA e testemunha VAZIA | 78 | 17.349 |
+| B | os dois falam (coerente) | 112 | 9.952 motor / 6.556 testemunha |
+| C | so a testemunha fala (dentro do teto: e o certo) | 2.975 | 25.678 |
+| D | nenhum dos dois | 13.125 | — |
+
+E o bucket A **nao e homogeneo** — foi preciso uma 2a passada para nao curar 78 com uma cura de 44:
+
+| causa do A | dia-colab | minutos | colabs | e fatia? |
+|---|---|---|---|---|
+| (a) celula MISSING, batida fora do raio de 90 | **44** | **6.832** | 21 | **SIM — a O145** |
+| (c) celula ATRIBUIDA e a testemunha calou | 16 | 2.042 | 9 | nao: os dois leitores alinharam a marcos DIFERENTES (delta 48/50/56 contra motor 64/172/178) |
+| (d) o dia nao tem celula na grade | 17 | 7.212 | 9 | nao: 959 a 1.369 min, familia da borda da meia-noite |
+| (e) nao ha celula do tipo da ponta | 1 | 1.263 | 1 | nao |
+
+**E (a) nao e so chegada**: col51 24/09 e SAIDA (17:56 contra o marco 16:00, 116 min) e col204 29/09 tambem
+(17:29 contra 15:20, 130). Cura que olhasse so a entrada deixaria metade do defeito de pe.
+
+**A CURA E UM TRADUTOR, e isso e LEI-AKITA 2.** `ponto/janela_he.py` ganha `pontas_do_relato(...)`: le as
+linhas que o motor JA publicou e as entrega na forma da pendencia que a casa ja tem
+(`hora/marco/minutos/sentido`). Ela nao compara minuto com piso nem com teto, nao resolve marco, nao pareia
+batida. `ponto/services/espelho.py` a chama no sitio da **Gestao de HE** onde a pendencia nasce -- o que
+alimenta tela, PDF, portao e lavratura --, logo depois de `marcar_pontas_fora`. **O CALENDARIO NAO e curado
+aqui, e isso se diz com o numero**: `colaboradores/services/calendario.py:374` e o SEGUNDO chamador de
+`marcar_pontas_fora` (censo `grep -rn marcar_pontas_fora app --include=*.py | grep -v /tests/`: 2 chamadores
+de producao), monta a linha com a celula do LEITOR (`grade_da_celula`) e **nao tem o `resultado_v2` na mao**.
+Depois do deploy, o espelho dira 124 min no dia do col253 e o calendario seguira calado no MESMO dia -- a
+L-099 ao contrario, por 1 dia-colab de cada vez, ate a **O197**, que e a fatia dele pelo aval
+`BOS-EM-RAIA-UM-POR-VEZ` (limite 3: a O197 so abre depois do pouso da O146, mesmo arquivo). A divergencia
+esta nomeada na **O229** como item, nao deixada para alguem descobrir na tela. **`tol_min` e o raio nao foram tocados** (o dossie proibiu, e alargar o raio re-pareia
+batida em toda a frota). **Juizes novos: 0** — o limiar segue em `entrada_efetiva`/`saida_efetiva`.
+
+Cinco guardas, cada uma com o caso medido que a pediu: **(1)** so linha com `'janela de HE'` na causa — o
+escritor da L-084 (`motor_calculo_v2.py:1543`) escreve na MESMA lista com outra forma de dict e **sem** chave
+`causa`; **(2)** dedup — a lista repete o dia (o col253 aparece duas vezes em cada data); **(3)** nada onde a
+testemunha ja falou (bucket B, 112 dias), senao a pendencia nasceria em DOBRO e o `he_pendente` contaria 2;
+**(4)** so quando a celula da ponta esta `missing` (CURA-MAIS-RESTRITIVA: 44, nao 78); **(5)** a linha do
+motor tem de nomear o MESMO marco que a celula nomeia — divergiram, o dia que o motor relatou nao e o dia que
+a grade montou, e ai a tela nao afirma. Mais o cadastro de sempre: `janela_he_saida_ativa` desligada, a ponta
+de saida nao nasce.
+
+**RED evidenciado** (`ponto/tests/test_o145_testemunha_le_a_acusacao_do_motor.py`, 8 casos; primeiro teste da
+casa a atravessar a cadeia inteira da testemunha sem mockar `espelho_do_colab`): na copia do HEAD,
+`Ran 8 tests` -> **`FAILED (failures=4)`**; na copia curada, `Ran 8 tests in 3.379s` -> **`OK`**. A
+autoridade vai citada na falha — *"a batida de 18:56 esta 124 min antes do marco
+21:00 e a testemunha esta MUDA ([]) — o motor acusa [('chegada fora da janela de HE', '18:56', '21:00',
+124)]"*. Os casos que MORDEM: a acusacao do motor existe no MESMO run (sem ela o RED mediria o nada — a
+vacuidade de 01/09); o numero e 124 exato com marco '21:00'; o INTERVALO nao vira ponta, inclusive com o
+almoco 120 min fora dos marcos e a ultima saida `missing` (o corte col369 de 01/10 pela porta de tras); a
+ponta de 90 min do bucket B continua sendo **UMA**, nao duas; e a saida DESLIGADA no cadastro nao gera ponta.
+
+**O que a cura muda para quem le** (censo fechado, 7 leitores, nenhum com regra propria):
+- **o portao do export NAO passa a barrar**: `he_pendente` cresce (**esperado 44 dia-colab, a MEDIR depois do
+  deploy** -- o censo mediu o codigo VELHO, e numero sem medicao na fonte nao conta, LEI-AKITA 8), e
+  `he_pendente_trava_export` e
+  **False nas tres empresas** — medido no CADASTRO na sombra (`logs/o145_trava.out`), nao no default do
+  modelo. `folha/porta_export.py:478` so soma esse numero ao que bloqueia com a flag ligada.
+- **o cron da recusa, que entrou no ar HOJE as 19:08, nao recusa nenhuma delas**: ele recusa a ponta abaixo
+  de `Empresa.limite_decisao_he_min`, que o cadastro diz ser **15 min** nas tres empresas
+  (`logs/o145_limite.out`). As 44 estao todas acima de 90 por construcao. Elas vao para a lista do admin,
+  que e onde a L-097 as quer.
+- **a tela passa a mostrar numeros grandes, e isso e ESPERADO** (previsao, a conferir na tela depois do
+  deploy): col174 24/09 deve dizer *"HE fora da janela: 1108 min"*. O dia esta no bucket (a) com o dict
+  inteiro impresso -- `motor=[('chegada fora da janela de HE', '02:32', '21:00', 1108)]` e
+  `alvo={'tipo': 'E', 'missing': True, 'hora_prevista': '21:00'}` (`logs/o145_dois_v3.out`) --, entao as
+  cinco guardas o deixam passar. Nao e bug da cura — e a acusacao do motor ficando visivel. Ler aquilo
+  como erro novo e ler o cadastro errado pela primeira vez.
+
+**A PRIMEIRA CURA FICOU MUDA, E O QUE A DENUNCIOU FOI O GREEN SER IDENTICO AO RED** (medido 08/10 21:3x).
+A copia curada voltou as MESMAS 4 falhas da copia do HEAD -- nao 2, nao 1: as quatro, iguais. Sem rodar o
+lado verde eu teria commitado um tradutor que nunca traduz, com o RED legitimamente vermelho ao lado dele
+servindo de prova de que a cura era necessaria -- e nenhum selo da casa morderia isso, porque a funcao
+EXISTE, e importada, e chamada.
+
+A causa, lida na fonte: **a celula `missing` tem outra FORMA**. `escala/utils.py:809`
+(`montar_realizado_grade`) monta `{'missing': True, 'tipo', 'hora', 'chamado_id'}` e poe a **hora do marco em
+`hora`** -- nao ha batida para ocupar essa chave. A celula ATRIBUIDA, no mesmo laco, monta
+`{'tipo','hora','status','delta','hora_marco','tipo_real','divergente'}`, com o marco em `hora_marco` e a
+BATIDA em `hora`. O `grade_da_celula` do calendario, por sua vez, entrega `hora_prevista` com o marco e
+`hora_marco: None` (impresso em `logs/o145_dois_v3.out`). Tres formas, tres chaves, para a mesma pergunta --
+*qual e o marco desta celula?* A guarda (5) lia `hora_marco or hora_prevista`, comparava `'21:00'` com `None`
+e descartava TODA linha. Cura: ler `hora_marco or hora_prevista or hora`, nessa ordem, **e so porque a guarda
+acima dela ja exigiu `missing`** -- na celula atribuida `hora` e a BATIDA, e compara-la com o marco casaria
+por acidente. `ponto/janela_he.py:180-182` ja documentava a diferenca de chaves entre construtor e leitor,
+**mas so para a celula atribuida**; a forma da `missing` nao estava escrita em lugar nenhum. Que nenhuma
+funcao responda *"qual o marco desta celula"* -- cada leitor soletra a ordem das chaves a mao -- e o **item 8
+da O229**.
+
+`LEI-AKITA: origem=ponto/janela_he.py (o laco que pula a celula missing) + ponto/services/espelho.py (o
+unico escritor da pendencia), testemunha=dias_cadastro_x_realidade do MOTOR (a mesma autoridade que ja clipa
+a ponta), RED=ponto/tests/test_o145_testemunha_le_a_acusacao_do_motor.py (4 falhas evidenciadas sem a cura, GREEN 8 OK),
+quem-mais-le=7 leitores de he_fora_da_janela, todos medidos com o numero, juizes novos=0 (tradutor; o limiar
+segue em entrada_efetiva/saida_efetiva)`
+
+**A SUITE INTEIRA, NA COPIA CURADA: `Ran 10049 tests in 1356.316s` -> `OK (skipped=42)`** (08/10 21:53→22:16,
+`logs/o145_suite_copia.out`, copia montada pela porta unica `bin/arvore_do_push.sh --montagem`). E os cinco
+selos que LEEM `app/docs/` foram re-rodados DEPOIS, com os docs de agora sincronizados na copia: `Ran 46
+tests` -> `OK (skipped=10)`. Eles precisavam disso porque a copia nasceu ANTES das edicoes da lei da O146 e
+do registro do complemento da O200 -- selo de doc rodado em copia velha afirma sobre um arquivo que nao
+existe mais, e passaria verde dizendo nada. Cura, RED e docs entram num commit SO, e o `bin/deploy.sh
+--sem-migrate` vem no MESMO ato (L-107). A PROVA na sombra -- bucket A **78 -> esperado 34**, minutos
+**17.349 -> 10.517**, pelo `logs/sombra/censo_o145_dois_leitores_v3.py` com o controle duplo (col253 02/10 no
+A, col207 02/10 no B) -- se mede DEPOIS do deploy, contra o codigo no ar, e volta aqui com o numero medido.
+
+---
+
+## O204 — **A HORA DO APARELHO TEM UM SITIO, E O EPOCH DEIXA DE VIRAR DATA DE 1791** (pousada 08/10 20:02)
+
+Primeiro BO da raia `wt-bos` (aval `BOS-EM-RAIA-UM-POR-VEZ`). Veio verde da raia, **pousou pela L-105** —
+`git merge --ff-only` + `bin/deploy.sh --sem-migrate` **num ato so** (L-107), sem nada no meio.
+
+```
+commit d2cf6606  (ff puro: 1b485f9c..d2cf6606)   6 arquivos, +601/-59
+suite da raia:  OK (skipped=28)   Ran 4744 tests in 595.769s   0 FAIL/ERROR nomeado
+deploy 20:02:   migrations pendentes 0 · sombra dia=20261008 OK diverge=0 · prova de casca 16 estaticos,
+                5 paginas, 606 rotas em 2 urlconf · 3 rotas provadas · selo BUG 128 verde · importerror_500=0
+limite 2 do aval conferido: nenhum dos cinco arquivos travados (motor_calculo_v2, janela_he, portas/he,
+                escala/models, escala/utils) aparece em `git diff --name-only HEAD raia-bos`
+```
+
+**SMOKE EM PROD, SO LEITURA** (nenhum POST — script que POSTa em porta de prod e ESCRITA, lei de 27/08).
+Chamei a funcao REAL que acabou de subir, com os dois epochs que o proprio BO provou:
+
+```
+batidas=77.937   com timestamp_dispositivo=0
+1791071932000              -> aparelho 2026-10-03 20:58:52-03:00  motivo='antigo_demais'  (defasagem 7148,2 min)
+   HORA_DO_APARELHO_DESCARTADA colab=None motivo=antigo_demais lido=2026-10-03T20:58:52-03:00
+1791158355000              -> aparelho 2026-10-04 20:59:15-03:00  motivo='antigo_demais'  (defasagem 5707,8 min)
+2026-10-08T20:00:00-03:00  -> aceita, motivo='offline_aceita'
+```
+
+O primeiro epoch e **o caso col218 do BO**: `parse_datetime` o lia como **1791-07-19 20:00:00**, e agora ele
+devolve `2026-10-03 20:58:52` — **a hora real da batida**, a mesma que o BO media. Descartada por velha,
+**com a trilha que antes nao existia** (o BO dizia *"grava a hora da CHEGADA sem log"*). O terceiro caso
+prova que a janela valida continua aceitando. Os `0 de 77.824` do aval seguem `0 de 77.937`: a conta exata
+das batidas atingidas e **impossivel sem ESCRITOR**, e nenhuma batida gravada foi tocada.
+
+**Banco da rodada (device que a celula do BACKLOG nomeava e a raia nao achou):** esta suite correu no banco
+**compartilhado, pela trava** — `grep -c REGUA_DB` na saida = **0**. A decisao do banco de teste mora em
+`config/settings/ci.py:17` (`REGUA_DB`), e `bin/db_teste.sh:21` (`NOME=juliani_db_test`) e o nome do
+CONTAINER, nao do banco. A proxima rodada da raia leva `REGUA_DB=test_juliani_bos`. De todo modo o PUSH
+serializa com a principal de qualquer jeito, porque `bin/pre-push.sh:130` pega a trava.
+
+**ACHADO DA RAIA, e ele e meu: o portao de arquivo NAO COBRIA ESCRITA EM DOCS.** O merge dela caiu as
+19:51 (`git merge --ff-only` recusado pelo git, nao conflito) porque `app/docs/BACKLOG.md` estava sujo na
+minha mao — e `logs/principal_em_ato.em_curso` estava **AUSENTE**. O arquivo protegia merge, push e deploy,
+e nao protegia escrita de docs; logo nao podia proteger um merge que toca docs. **Ausencia de sinal lida
+como sinal bom**, a mesma familia do `[]` de dois sentidos. Curado na conduta no mesmo ato: o
+`bin/pausar.sh` deste pouso declara `COBRE=merge, deploy, push E escrita em app/docs/`. A arvore viva ficou
+**intacta** durante a recusa (HEAD seguiu em `1b485f9c`, sem `MERGE_HEAD`), e a raia pegou e **soltou** a
+pista em vez de segurar ociosa.
+
+**L-109 cumprida no mesmo ato, no pior violador:** a celula de ESTADO da O204 tinha **2.500 caracteres** de
+historia acumulada (o teto e 300). Ela foi reescrita em **295**, e a historia e os avais estao aqui, que e
+onde a lei diz que moram. E o estado passou a abrir com `**NO AR`, porque
+`bin/hook_stop_fila1.py:56` casa `\*\*(FECHADA|FECHADO|NO AR|no ar)\b` — **`**CURA NO AR` nao casa**, e o
+hook seguiria cobrando a O204 como fila 1 com a cura ja no ar. **PROVA:** `FECHADO pelo hook: True`, e
+`test_hook_nao_cobra_congelado.sh` verde com o marcador em `O145`.
+
+---
+
+## DOIS AVAIS DELE, REGISTRADOS SEM PARAR A FILA (08/10 19:5x e 20:0x)
+
+Os dois viraram linha em `PROMPTS.md` e item no BACKLOG **no mesmo turno** (PROMPT-NAO-SE-REPETE: *"se nao
+virou item, nao foi recebido, foi lido"*).
+
+**19:5x — ordem final da principal:** `O145 -> O146 -> O214 item 2 -> itens 3 e 4`, *"as duas mexem no mesmo
+sitio"*. O `<!-- ORDEM-VIVA-TOPO -->` saiu de `O214` para **`O145`** — e esse marcador e a AUTORIDADE que o
+`bin/handoff_sessao.sh:58` le.
+
+**20:0x — `BOS-EM-RAIA-UM-POR-VEZ`:** os BOs andam em `wt-bos` **um de cada vez**, na ordem
+`O204 -> O200 -> O206 -> O199 -> O198 -> O197 -> O207 -> O44 itens 2-8`. As 8 linhas de BO ganharam
+`**portao: RAIA wt-bos**`, que e a forma exata que o `_NAO_ANDA` do hook reconhece — sem ela o hook cobraria
+oito itens de raia como fila 1 da principal. A ordem antiga (`1o O197, 2o O204...`) vivia repetida em
+**quatro** celulas; as quatro foram trocadas por um ponteiro para o aval novo, porque **ordem em dois
+sitios sao duas verdades**.
+
+Os limites 1 e 5 **ratificam device que ja existia**: a pista e o deploy sao da principal (e e para isso que
+serve `logs/principal_em_ato.em_curso`, levantado neste pouso as 20:01 com dono, motivo e condicao de
+saida), e `rc 75` da trava e *"a vez nao chegou"*, nunca vermelho.
+
+**A O204 esta pousada, entao a O200 e a proxima a abrir pelo limite 5.**
+
+---
+
+## FILA — linhas que nasceram deste turno (nao sao trabalho de agora)
+
+- **13 celulas de ESTADO do BACKLOG seguem acima do teto de 300 da L-109** (eram 14; a da O204 foi curada
+  neste ato, 2.500 -> 295). As piores restantes: **O206 1.835**, **O197 1.807**, **O200 1.733** — e as tres
+  sao celulas de raia, que e onde a historia mais se acumula.
+- **Comentario que mente em `escala/models.py:58-59`**: promete *"motor contabiliza a extra normal"* e o
+  motor nao le `permite_hora_extra`. Cura no marco que der a extra um leitor de verdade (a O146), nunca
+  antes — e **nao** reusando `permite_hora_extra`, que `triagem_batida.py:290` e
+  `processar_alertas_turno.py:123` ja consomem com outro sentido.
+- **Dia-colab de `col207` como caso de CADASTRO x REALIDADE** (14/14 dias, acima), pelo oraculo, sem codigo.
+
+
 ## O214 ITEM 1 — **O APPLY DA 10, E O HASH QUE NAO E TESTEMUNHA** (08/10 19:0x→19:2x)
 
 **Aval dele de 19:1x, literal:** *"o apply da recusa de ponta pequena da 10 foi rodado por mim no shell em
@@ -1302,6 +2516,10 @@ ausencia de sinal.
 ---
 
 ## ALARMES DA ESTEIRA
+
+**09/10 03:40 vigia da esteira** -- esteira em espera de janela: 8 fatias prontas, reabre 04:45.
+
+**08/10 22:40 vigia da esteira** -- esteira em espera de janela: 8 fatias prontas, reabre 00:00.
 
 **08/10 07:00 vigia da esteira (ALARME)** -- vigia sem efeito: 8 fatia(s) ativa(s) na fila e nenhum .out escrito ha 30 min -- a esteira esta parada e o vigia nao esta destravando.
 
