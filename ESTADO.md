@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 10:50:45.**
+**Medido em 09/10/2026 10:55:45.**
 
 | | |
 |---|---|
@@ -137,14 +137,14 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Now the three discriminating RED tests for cure v2, plus the prose that v2 contradicted.
 
-  Rodar o label ponto inteiro na copia · 3m 32s
+  Rodar os vizinhos escala folha core · 3m 39s
   ⎿  $ cd /home/ronald/saas-hasner &&
      C=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/p_head
-     ESTEIRA_QUEM=r1-ponto-v2 bash bin/suite.sh --dir $C --only ponto --espera 1800 > logs/r1/suite_ponto_v2.out 2>&1; echo "rc=$?"; grep
-     -E '^(OK|FAILED)( |$)|^Ran ' l… (3m 31s)
+     ESTEIRA_QUEM=r1-viz-v2 bash bin/suite.sh --dir $C --only "escala folha core" --espera 1800 > logs/r1/suite_vizinhos_v2.out 2>&1; echo
+     "rc=$?"; grep -E '^(OK|FAILED… (3m 38s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Wrangling… (21h 25m 6s · ↓ 2.4m tokens)
+· Wrangling… (21h 30m 6s · ↓ 2.4m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
