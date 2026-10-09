@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 04:05:01.**
+**Medido em 09/10/2026 04:10:31.**
 
 | | |
 |---|---|
@@ -119,35 +119,35 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-● Task "RED e construção do segundo intervalo" completed in background
+  - A sonda da medição do item 2 está escrita e compilada: logs/sombra/medir_o214_item2.py (119 linhas), para rodar pela porta única
+    bin/sombra.sh --rodar. Ela responde as três medições que o dossiê §8 declara — custo de UMA prévia, distribuição de dias sem decisão
+    por colaborador na 10, e quantos estão acima do limite — mais a quarta que eu nomeei: o sobrecusto do confirmar, que é onde entram os N
+    recalcular_por_evento do on_commit e é o número em que a decisão síncrono-x-job se apoia. Tudo pelas funções reais (itens_sem_decisao,
+    previa, confirmar), com o limite lido do cadastro (Empresa.limite_decisao_he_min), nunca o 15 literal — o TOLERANCIA_HE_MIN_DIA do
+    motor é 10, e confundir os dois contaria outro universo.
+  - A medição não roda agora, por duas razões medidas: a suite do pre-push está no cpuset de teste, que é o mesmo da receita da sombra, e o
+    cron sombra.sh --refazer && --bloco dispara às 04:17 (crontab -l) tomando a trava da sombra por ~20-40 min. Então ela espera o
+    ARQUIVO, não um palpite de horário.
+  - O item 3 já tem sítio lido e desenho: folha/porta_export.py:264 alimenta he_pendente com uma entrada por PONTA, sem olhar limite nem
+    decisão; quem compara com o limite hoje é ponto/portas/he.py:267-272, dentro da porta que escreve. Então o item 3 pede a mesma extração
+    que o item 2 fez com o _exigir_motivo: a comparação com o limite ganha um sítio só na porta, e o contador do export passa a LÊ-LO — em
+    vez de nascer uma segunda leitura da mesma regra, que é o que a própria lápide da porta diz que já foi recusado.
 
-● Background command "Espera o veredito da suite cheia" completed (exit code 0)
+  Espero o veredito do push.
 
-  Ran 7 shell commands
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: O214 -- HE-DECISAO-EM-ESCALA (lei nova dele, 05/10 18:0x, 4 itens; entra logo depois da O211 e a FRENTE
+  dos BOs de tel
 
-● Agora o selo da forma B — ele passa a contar por ato, em vez de somar os dois:
+  Ran 1 shell command
 
-  Ran 10 shell commands
+● O hook manda seguir, e a fila 1 tem os itens 3-4 do O214 abertos. Como não posso escrever na árvore durante o push, sigo pela LEI 10:
+  construir em cópia do HEAD, aplicar no commit.
 
-● Agora o pouso, em um ato (L-107):
+  Le _estado_por_dia e _decisoes
+  ⎿  $ sed -n '58,95p' ponto/services/gestao_he.py
 
-  Committed 041fd2ac, ran 12 shell commands
-  ⎿  Read docs/AVAIS.md (24 lines)
-  ⎿  Referenced file docs/DOSSIES.md
-  ⎿  Read ../../../../tmp/dbg2.out (29 lines)
-  ⎿  Read docs/HANDOFF-SESSAO.md (46 lines)
-  ⎿  Read ../../.claude/projects/-home-ronald-saas-hasner/memory/contrato-nao-mora-em-arquivo-com-teto.md (36 lines)
-
-● Task "RED e construção do segundo intervalo" completed in background
-
-● O push foi recusado pelo pre-push, e a causa em uma linha: o rodapé do TICKETS ficou 6 commits atrás de origin/main (teto 5) porque
-  ninguém rodou o pos_push depois do push da O146 pelo integrador — o derivado nasce velho no instante do push alheio. A cura é a declarada
-  pelo próprio selo.
-
-● Nova tentativa de push do marco
-  ⎿  $ cd /home/ronald/saas-hasner && git push origin main 2>&1 | tee logs/o214item2/push2.out; echo "PUSH_RC=${PIPESTATUS[0]}"
-
-✢ Wrangling… (14h 39m 22s · ↓ 1.7m tokens · thinking)
+✢ Wrangling… (14h 44m 52s · ↓ 1.7m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
