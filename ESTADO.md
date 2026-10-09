@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:697 AFIRMA ato sem PROVA ao lado -- onde a lei diz que moram. E o estado passou a abrir com `**NO AR`, porque
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:717 AFIRMA ato sem PROVA ao lado -- onde a lei diz que moram. E o estado passou a abrir com `**NO AR`, porque
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 01:23:01.**
+**Medido em 09/10/2026 01:28:31.**
 
 | | |
 |---|---|
@@ -123,38 +123,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  de 2 h.
 
-● Task "RED e construção do segundo intervalo" completed in background
+  4. --conferir LÊ o carimbo, não recalcula. bin/sombra.sh:12 e :367-374 leem $STAMP; a comparação q_mig prod×sombra vive em :247-261,
+  dentro do refazer, que carimba. Então o migrate do deploy não deixa o portão vermelho retroativamente — e o refazer do cron das 04:10
+  monta a sombra de um dump de prod já com a 0042.
 
-● Task "Suite inteira na copia" still running in background
+  Também corrigi o campo errado do smoke antes de rodá-lo: EscalaColaborador tem ativa, não ativo, e o vínculo precisa estar vigente no dia
+  que se pergunta — senão o juiz responderia sobre um dia que o cadastro não cobre. Superfície de aplicação reconferida por diff -rq:
+  exatamente 11 modificados + 2 novos, com crons_duracao.json de fora.
 
-● Background command "Suite inteira na copia" completed (exit code 0)
+  Falta só o sinal do ensaio (rc_conferir=0 no logs/o146/ensaio_sombra.out) — espero pelo arquivo, e não toco a árvore viva enquanto o
+  bloco roda, porque ele monta justamente essa árvore. Quando vier, o aplicar.sh roda num ato: asserção → 12 arquivos → git add dos 2 novos
+  → git commit --only (12 código + 6 docs, -F) → bin/deploy.sh com migrate.
 
-  Ran 1 shell command
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: O214 -- HE-DECISAO-EM-ESCALA (lei nova dele, 05/10 18:0x, 4 itens; entra logo depois da O211 e a FRENTE
+  dos BOs de tel
 
-● Suite verde na cópia: Ran 10105 tests in 1363.127s / OK (skipped=42).
-
-  Ran 36 shell commands
-  ⎿  Read docs/AVAIS.md (23 lines)
-  ⎿  Read ../../.claude/projects/-home-ronald-saas-hasner/memory/contrato-nao-mora-em-arquivo-com-teto.md (36 lines)
-  ⎿  Referenced file ../../wt-bos/app/colaboradores/tests/test_o200_pino_geo_le_o_juiz.py
-  ⎿  Read ../logs/sombra/censo_o145_dois_leitores.py (120 lines)
-  ⎿  Referenced file ../logs/o145_motor.out
-
-● Task "RED e construção do segundo intervalo" completed in background
-
-● Task "Refaz o ensaio da sombra com dump de agora e roda o bloco da manhã" still running in background
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-● Lê o trecho de migrate do deploy
+● Roda a pasta de selos de host · 18s
   ⎿  $ cd /home/ronald/saas-hasner
-     sed -n '100,130p' bin/deploy.sh
+     v=0; falhos=""
+     for t in bin/tests/test_*.sh; do
+     if out=$(bash "$t" 2>&1); then :; else v=$((v+1)); falhos="$falhos $t"; fi
+     done
+     echo "vermelhos=$v"
+     [ -n "$falhos" ] && { for f in $falhos; do echo "=== $f ==="; bash "$f" 2>&1 | tail -15; done; }
+     echo "--- ensaio ---"; d… (18s)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Wrangling… (11h 57m 22s · ↓ 1.4m tokens · thinking)
+✢ Wrangling… (12h 2m 52s · ↓ 1.4m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    3% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
