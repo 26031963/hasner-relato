@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 17:17:01.**
+**Medido em 09/10/2026 17:22:31.**
 
 | | |
 |---|---|
@@ -123,15 +123,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-● Task "Roda a suite inteira na copia final" still running in background
-
-● Background command "Roda a enumeracao nas duas arvores, duas competencias" completed (exit code 0)
-
-❯ aval Ronald: complemento do R1 balde A (L-115), sem id novo. Caso real para a bateria: col923, 02 a 19/09/2026. Vinculo ec1282 criado em
-  21/09 retroativo a 02/09; as 4 batidas do dia gravadas como E; pausa nos marcos 04:00 e 05:00; ultima batida ~09:30, a 120 min do marco
-  07:30. Pela L-115 o dia fecha com a saida pela posicao e o excedente e ponta de HE (L-097). Nenhuma lei nova. segue a fila; PAREI so em
-  lei ou !
-
   Ran 8 shell commands
 
 ❯ aval Ronald: RAIA-TEM-AGENTE-VIVO. (1) A raia wt-bos reabre AGORA com agente da sessao, na ordem ja dada (O206 -> O207 -> O199 -> O198
@@ -145,21 +136,30 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Agent(Raia wt-bos: O206)
   ⎿  Backgrounded agent (↓ to manage · ctrl+o to expand)
 
-● Confere a suite e o caso F
-  ⎿  $ cd /home/ronald/saas-hasner; grep -E '^Ran [0-9]+ test|^rc=' logs/l115/suite_final.out | tail -3; grep -cE '^(OK|FAILED)'
-     logs/l115/suite_final.out; tail -2 logs/l115/suite_final.out; echo "=== diff do main x copia na condicao (3)"; grep -n 'caso F'
-     logs/l115/casos.md | head
+● Registra a leitura corrigida do caso col923
+  ⎿  $ cd /home/ronald/saas-hasner; cat >> logs/l115/casos.md <<'MD'
+     ### col923 -- A FIGURA DO AVAL E A NOITE INTEIRA, e ela paga ZERO hoje (leitura corrigida)
+     Lendo os 18 dias em ordem, o desenho de col923 e o MESMO toda noite, e e' ele que a descricao do aval
+     retrata ("as 4 batidas do dia gravadas com…
 
-✢ Wrangling… (1d 3h 51m · ↓ 3.1m tokens · thinking)
+✢ Compacting conversation… (1d 3h 56m · ↓ 3.1m tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱ 78%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    8% until auto-compact
+
+❯ ok-desenho: a trava do TXT fica LIGADA nas tres empresas sobre os 81 dias.
+
+! curar fechar_cobranca_com_lastro na origem: fechar() devolve o quadro que usou e o comando imprime ESSE
+
+❯ aval Ronald: curar fechar_cobranca_com_lastro na origem: fechar() devolve o quadro que usou e o comando imprime ESSE
+  ctrl+x ctrl+s to send now
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ Press up to edit queued messages
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Reading _includes helper in test_selo_modal_nao_nasce_vazio.py                              3m 21s · ↓ 129.6k tokens
+  ◯ general-purpose  Writing test_selo_painel_oferece_cobrar.py                                                  8m 51s · ↓ 158.7k tokens
   ⧉  index
 ```
