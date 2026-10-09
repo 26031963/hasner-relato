@@ -1,5 +1,61 @@
 # RELATO — esteira saas-hasner
 
+## L-115 POUSO 1 — **A SAIDA PELA POSICAO ESTA NO AR, E A FIGURA DO AVAL NAO E ESTA** (09/10 17:3x)
+
+LEI-AKITA: origem=`ponto/turnos.py::realizado_dos_turnos` (ramo de DIA, antes do laco por turno),
+testemunha=`CelulaDia.ata` + `_fim_fechado`/`_pares_marcados` (nenhum leitor novo deriva nada),
+RED=`logs/l115/red1.out` (A 370 -> 550, B 192 -> 421), quem-mais-le=todo leitor de `realizado_do_dia`
+pela ATA (censo no `casos.md`), juizes novos=**0** (`_borda_posicional` e clausula do juiz que ja existe,
+nao autoridade nova — nada em `core/juizes.py`).
+
+**O QUE POUSOU.** `_borda_posicional` responde a lei do aval de 13:3x com SEIS clausulas, cada uma medida
+contra o dia que a exige, e o dia alcancado deixa de ser ABERTO, carimba `borda_posicional` e ganha
+contador informativo `realizado_borda_posicional` em `ponto/services/bordas_realizado.py` (esperado **nao**
+e 0 — e o universo da lei; o que se vigia e ele crescer sem obra que o explique). Os 8 casos da regra
+estao em `SaidaPosicionalDepoisDaPausaTest`, escritos **antes** do codigo (L-114). Suite inteira na copia:
+**`Ran 10211 tests` / `OK (skipped=42)`**, rc=0 (`logs/l115/suite_final.out`).
+
+**O UNIVERSO, MEDIDO NA SOMBRA, NAO ESTIMADO.** Competencia **10/2026**: **36 dia-colab, +7.345 min
+(122,4 h)** — e **nao** os 33 do balde do oraculo; col204 (1 dia) e col270 (4) estao na lei e fora do balde,
+e col373 07/10 e alcancado mas invisivel para a sonda por ser folga. `realizado_turno_aberto` **289 -> 253**
+e `ata_x_juiz_residual` **27 -> 63**: a MESMA familia de 36 dias, saindo de um contador e entrando no outro.
+Competencia **09/2026**: **35 dia-colab, +6.871 min (114,5 h)** — numero para **PUBLICAR, nunca para
+aplicar** (L-110), porque a 09 esta EXPORTADA; o unico caminho dela e a porta REGEN-EM-EXPORTADA, com TXT
+parcial de retificacao. Cinco colaboradores aparecem **so** la (col207, col913, col788, col868, col107).
+
+**O DEPLOY SOZINHO NAO MOVE A FOLHA, e isso nao e consolo — e a leitura certa de `DIFF_FOLHA=0`.** A folha
+le a **ATA** (`cartorio.py:285` escreve `minutos_realizados` -> `leitor_celula.py:364` le -> `dia_pago` ->
+`fechamento.py:533` -> `folha/export.py`), e `impressao_insumos` hasheia **so INSUMOS** (batidas, cobranca,
+chamados, dna, veto, teto), nunca a derivacao: entao um deploy de codigo nao invalida impressao nenhuma e o
+cartorio das 06:28 **pula** os dias alcancados. O numero so se move na **RE-LAVRA**, que e o ato `!` ja
+declarado da BUG-144 (`app/docs/TICKETS.md:936`: Pauta DP + `!` dele), com **reversao em `logs/` antes**.
+Nenhuma lei nova para isso (LEI-AKITA 4). O que `ata_x_juiz_residual` 27 -> 63 diz e exatamente isso:
+**63 dias em que a ata guardada discorda do juiz vivo e esperam a re-lavra** — passivo nomeado, nao divida
+escondida.
+
+**A FIGURA DO AVAL DE 15:1x NAO E ESTA BORDA, e o complemento se mediu antes de se responder.** col923,
+02 a 19/09: a noite generica dele entra ~23:2x, faz pausa nos marcos ~04:0x/~05:0x e sai ~09:2x do dia
+seguinte **com as quatro batidas gravadas `E`** — o botao errado toda vez. Hoje **8 dos 18 dias pagam ZERO**
+(03,04,05,06,10,16,17,18/09, turno `aberto=True`): quem trabalhou ~10 h recebe nada. **A clausula (1) do
+pouso 1 nao os alcanca** — ela exige um turno com borda FECHADA, e nestas noites **nenhuma `S` existe** —,
+e a batida da manha o pareador poe no dia SEGUINTE (`data_turno`), fora da lista do dia que ela encerra.
+Ali a borda nao se move: ela **NASCE**, e a origem e `parear_turnos`, nao o leitor de borda. Fundir as duas
+curas obrigaria a remedir tudo de novo com a origem trocada, entao ela anda como **O232 / POUSO 2**, com o
+caso escrito pela regra em `logs/l115/casos.md` (L-110) e os 8 dias passando de dono **BATIDA para
+ESTRUTURA** (L-099, e e a correcao de uma classificacao minha de hoje de manha). No mesmo pouso 2 fica
+col923 **02/09**, o unico dos 18 com borda fechada: passa (1),(2),(2b),(4),(5) e a **clausula (3)** o recusa
+porque a ata MARCOU a pausa (`papel=Xi` nas duas pontas) — pela regra o dia valeria **544** contra **423**
+de hoje (+121). Afrouxar a (3) mexe na guarda que a cura do balde P acabou de pousar (col518 05/09, +38 min;
+col923 12/09 e 19/09), entao ela so se afrouxa com censo proprio na sombra, nunca de passagem.
+
+**O que NAO entrou neste commit, nomeado:** a sonda `app/ponto/tests/test_zz_sonda_l115.py` (instrumento de
+medicao, ficou na copia); `bin/sombra.sh` (instrumento, pouso proprio pela L-105); a Pauta DP da 09 do balde
+P. **Avais respondidos neste turno** (`bin/gerar_avais.py --escrever`, mesa 8 -> 6): `O214-ITEM3-TRAVA-LIGADA`
+(*ok-desenho*, a trava do TXT fica LIGADA sobre os 81 dias — e o estado que ja esta no ar, nada construido)
+e `LASTRO-MEDE-DUAS-VEZES` (`!` concedido, virou **O231**: `fechar()` devolve o quadro que usou e o comando
+imprime ESSE — LEI-AKITA 2, testemunha LE, nao recalcula).
+
+
 ## L-114 TERMOMETRO RODADO — **O AMARELO CAIU POR MEDICAO, E OS 19 SEM DESTINO GANHARAM DONO** (09/10 15:1x)
 
 PROVA: `logs/e6_cauda2c/r1_dono_10_20261009.txt` (o nome e o que a fonte declarada do R1 pede,
