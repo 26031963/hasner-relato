@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:174 AFIRMA ato sem PROVA ao lado -- ## RE-LAVRA 10 (L-115) — **NO AR, E A FOLHA SE MOVEU: +5.451 MIN DE REALIZADO EM 6 COLABS** (09/10 18:2x, CONDICAO 4)
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:116 AFIRMA ato sem PROVA ao lado -- **NO AR, e a prova e PELA PORTA (09/10 20:1x).** Push liberado em `c7b8bfdb` — negocio
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 20:18:01.**
+**Medido em 09/10/2026 20:23:31.**
 
 | | |
 |---|---|
@@ -41,6 +41,7 @@ e38d4039 O230 pouso 1: a sonda de leitura do dev da casa esta na arvore, e quem 
 ```
  M app/config/crons_duracao.json
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/RELATO.md
  M bin/sombra.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -129,38 +130,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  carries no lâmpada field — so I correct the document before the code:
+● The O214 cell already says "Falta o smoke do 2 e o ! do apply do 1" — it IS waiting on Ronald, but not in the vocabulary the single
+  reader knows. Checking that vocabulary:
+
+  Ran 1 shell command
+
+● The estado cell is celulas[3], and the declared vocabulary for "waiting on Ronald" is espera o ! / aguardando. Verifying empirically what
+  the single reader answers today, before touching anything:
 
   Ran 3 shell commands
 
-● Now the cure, built as a patch script in the scratchpad (nothing in the tree while the push runs). First the exact attribute names it
-  must read:
+● Confirmed: _ids_que_nao_andam() has 208 ids and O214 is not among them, so the single reader answers O214 while ORDEM VIVA says O232. The
+  declared vocabulary that fixes it is espera o ! (as ABONO-NO-AR-NAO-FECHOU uses). Deliverables are durable — pouso A pushed and
+  deployed, RELATO line in, patch script and RED bateria in the scratchpad. Consulting before I touch BACKLOG data that drives the Stop
+  hook:
 
-  Ran 2 shell commands
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-● Background command "cd /home/ronald/saas-hasner && git push origin main > logs/l115/o232_push2.out 2>&1; echo "rc=$?" >>
-logs/l115/o232_push2.out; tail -20 logs/l115/o232_push2.out" completed (exit code 0)
+● Good catches. Simulating before editing, as instructed:
 
-● The push returned. Reading the veredito by the house form:
+● Running 1 shell command…
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PY'
+     import importlib.util
+     spec = importlib.util.spec_from_file_location('h', 'bin/hook_stop_fila1.py')
+     h = importlib.util.module_from_spec(spec); spec.loader.exec_module(h)
+     s = open('app/docs/BACKLOG.md', encoding='utf-8').read()
+     i = s.find('<!-- OBRAS:…
 
-  Ran 1 shell command
-
-● Push green: negócio Ran 10216 tests / OK (skipped=42), control-plane Ran 22 tests / OK, rc=0, remoto em c7b8bfdb, 0 a empurrar. Pouso A
-  não tocou modelo — deploy pela porta única:
-
-  Ran 1 shell command
-
-● Deploy OK. Now the prod smoke — read-only, pela porta real, on one mover: col217 29/09 must read 422 com janela 60:
-
-  Ran 6 shell commands
-
-● Four insumos identified. The smoke probe — read-only, asserts the prod DB, prints only colNNN and numbers:
-
-  Running 1 shell command…
-
-✢ Proofing… (2h 25m 15s · ↓ 298.5k tokens)
+· Compacting conversation… (2h 30m 45s · ↓ 306.3k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 48%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
