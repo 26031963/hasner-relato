@@ -144,8 +144,13 @@ DECIDE no repo e **0** vencendo. Os dois REDs estao em `logs/r1/red_selo_l114_20
 
 `logs/r1/gravado_quem_escreve.md` (56 linhas) e `logs/r1/hash_antes_deploy_20261009_1249.txt`. A
 competencia **09/2026, EXPORTADA, esta INTACTA** em TRES medicoes da mesma funcao `_h` ao longo de ~19 h
-(08/10 18:09, 08/10 19:11 e 09/10 12:49): **607 linhas, `4da388d4…`** nas tres, com as 21 exportacoes
-vigentes de hash igual e `invalidada_em=None`. A UNICA linha de comp 09 gravada no meio disso (09/10
+(08/10 18:09, 08/10 19:11 e 09/10 12:49): **607 linhas de `FechamentoMensal`, `4da388d4…`** nas tres.
+As **exportacoes** vigentes da 09 sao **TRES, uma por empresa** -- emp2 `361d0f96…` 210 linhas, emp3
+`5c503b95…` 86, emp4 `84c78cd0…` 9, **305 linhas de TXT**, as tres com `invalidada_em=None` --, remedidas
+as 13:44 e **identicas** as de 08/10 (O211b, `RELATO.md` mais abaixo). As outras 5 linhas de registro de
+09/2026 estao INVALIDADAS pela porta, nunca apagadas, e e assim que a memoria de versao funciona.
+*(Eu havia escrito aqui "21 exportacoes vigentes": era numero de outra conta. O registro da comp 09 tem
+**8 linhas**, **3 vigentes**; medido agora, pk a pk.)* A UNICA linha de comp 09 gravada no meio disso (09/10
 07:48:14) **moveu ZERO dos 24 campos de VALOR**, e o escritor tem NOME: `invalidar_previsto`
 (`ponto/services/fechamento.py:965`, chamado so de `escala/signals.py:132`), que escreve `previsto_em` e
 `atualizado_em` — e `previsto_em` nao esta em `CAMPOS`.
@@ -156,6 +161,14 @@ nominal — e as tres empresas tem exportacao vigente de 09/2026. Entao nenhum c
 silencio, e o deploy nao pode mover dinheiro exportado. A testemunha de quem pode escrever
 `FechamentoMensal` nao e um grep meu: e `folha/tests/test_chokepoint_folha_gate.py`, familia
 `folha/export`, **ALLOWLIST VAZIA**, por AST — porta unica `ponto/services/fechamento.py`.
+
+**A REVERSAO FOI TIRADA AS 13:43:00, imediatamente antes do apply** (exigencia 2 da
+DINHEIRO-EM-COMPETENCIA-ABERTA): `logs/r1/reversao_comp10_20261009_1343.json` guarda o **GRAVADO** campo
+a campo, pelos **24 campos de VALOR** do `CAMPOS` canonico (`ponto/management/commands/aplicar_09_corte_b.py:67`),
+das DUAS competencias -- **10/2026: 587 colabs, `7ea5dd89…`** e **09/2026: 607 colabs, `952550a8…`** --,
+mais os 8 registros de `ExportacaoDominio` da 09 com hash e estado. A reversao se executa **pela PORTA**
+(`ponto/services/fechamento.py`), nunca por `UPDATE` cru, e a 09 ainda exigiria `permitir_exportada=True`
+com motivo escrito: o arquivo e o VALOR de volta, nao uma licenca.
 
 **A 10/2026 se move por conta propria**, e por isso o "antes" dela nao se reusa: **tres hashes diferentes**
 nas tres medicoes (`127d6a83…` → `d6422334…` → `1bb6ec36…`, 587 linhas nas tres), **293 linhas** reescritas
