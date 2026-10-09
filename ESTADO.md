@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 05:14:01.**
+**Medido em 09/10/2026 05:19:31.**
 
 | | |
 |---|---|
@@ -142,18 +142,18 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● O marco está commitado e no ar. Agora o push — um por marco (L-108).
 
-● Pushing do marco do item 3 · 8m 11s
-  ⎿  $ cd /home/ronald/saas-hasner && git fetch -q origin && git log --oneline origin/main..HEAD | cat; echo "--- push ---"; git push
-     origin main > /tmp/push_item3.out 2>&1; echo "RC=$?"; tail -20 /tmp/push_item3.out (8m 11s · 3 lines)
+● Polling do push · 3m 20s
+  ⎿  $ O=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/buitajxaw.output; until grep -qE '^RC='
+     "$O" 2>/dev/null; do sleep 45; done; tail -25 "$O" (3m 19s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Wrangling… (15h 48m 22s · ↓ 1.8m tokens)
+· Wrangling… (15h 53m 52s · ↓ 1.8m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    8% until auto-compact
+                                                                                                                    7% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
