@@ -1,6 +1,6 @@
 # RELATO — esteira saas-hasner
 
-## L-114 TERMOMETRO RODADO — **O AMARELO CAIU POR MEDICAO, E OS 19 SEM DESTINO GANHARAM DONO** (09/10 15:0x)
+## L-114 TERMOMETRO RODADO — **O AMARELO CAIU POR MEDICAO, E OS 19 SEM DESTINO GANHARAM DONO** (09/10 15:1x)
 
 PROVA: `logs/e6_cauda2c/r1_dono_10_20261009.txt` (o nome e o que a fonte declarada do R1 pede,
 `fonte_do_medido: 'logs/e6_cauda2c/r1_dono_*.txt'`) — competencia **10/2026 ABERTA**, na sombra, carimbo
@@ -10,7 +10,7 @@ R1 por dono: **ESTRUTURA 110** (487,8 h, 42 colabs) · **CADASTRO 11** (84,2 h, 
 O placar renderizado pelo publicador saiu **`VERDE (termometro em dia)`**, R1 com `medido em 2026-10-09`
 e `EM DIA`, contra o `AMARELO (termometro sem data de medicao na fonte declarada)` de antes.
 Selos: `bin/tests/` **INTEIRA verde**, ruff limpo, `core/tests/test_l114_placar_papel_e_termometro.py`
-na suite `--only core` (`logs/l114/suite_core_l114.out`).
+na suite `--only core`: **`Ran 1263 tests` / `OK (skipped=21)`**, rc=0 (`logs/l114/suite_core_l114.out`), e o selo rodado NOMEADO a parte -- **`Ran 11 tests` / `OK`** com as 11 `test_MORDE_*` listadas em `logs/l114/selo_l114_so.out`, porque o ponto da suite longa nao diz QUAL teste correu.
 
 **A CADENCIA E DO AVAL, e ela mordeu a casa antes de eu rodar**: *"o termometro e OBRIGATORIO com
 cadencia: e6_oraculo por competencia aberta 1x por semana e apos cada pouso de obra de calculo; cada dia
@@ -40,6 +40,18 @@ quais slots ficaram `missing`, orfas, e D-1/D/D+1 com esp/orac/paridade). Leitur
 | **G2** dia de **FOLGA** pago com o rabo do turno de D-1, e D-1 paga ~0 | **3** | fecha com o dia D-1, que ja esta no csv |
 | **G3** cadastro **DESLOCADO** (celula diz turno diurno, o colaborador trabalha a noite) | **10** | **CADASTRO x REALIDADE**, lista do admin — proibido curar por codigo (L-099) |
 
+**"DESTINO" AQUI QUER DIZER LINHA QUE EXISTE, e eu fui perguntar a casa em vez de rotular.**
+PROVA: `logs/l114/casa_sombra.txt` e `casa2_sombra.txt`. Os **5 de G1 tem chamado `batida_ausente`
+carimbado NO DIA** — #28873 `em_analise`, #25155 `resolvido`, #27445 `em_analise`, #27070 `em_analise`,
+#28011 `aberto` —, e essa e a casa que o proprio R2 mediu para o dono BATIDA (*"com chamado carimbado
+NO DIA"*), nao a lista. Os **3 colaboradores de G3 estao na lista CADASTRO x REALIDADE** (`lavrado_em
+2026-10-08T08:31`, universo 519, 357 listados): col788 `A2 A3 A5 A8 A10`, col868 `A8`, col949 `A5 A7 A10`.
+A granularidade da lista e **colaborador+assinatura, nao dia**, e e o desenho certo para um cadastro
+deslocado em 7 noites seguidas. Isso corrige tambem uma suposicao minha: eu achava que a lista fosse
+alimentada por `dias_cadastro_x_realidade` (o juiz da L-084, que exige as DUAS pontas longe) e que por
+isso nao veria um dia de perna so — ela le `esmeril_espelho::ler_lavra`, outro juiz, e e por isso que
+os tres aparecem.
+
 **G1 — e o espelho que NOMEIA quem falta.** col37 05/10 `missing E@19:00`; col174 23/09 `E@21:00` e
 `S@02:00`; col235 30/09 `E@21:00`; col250 29/09 `E@18:00`; col594 02/10 `E@19:00`. Nos cinco, o conjunto
 da JORNADA (nao o do dia de calendario) e **IMPAR**, que e a lei da BUG-144 lida no conjunto certo.
@@ -65,10 +77,12 @@ pela **minha propria sonda**. A correcao esta no topo do arquivo, nao enterrada 
 
 ### O QUE MUDA NO INSTRUMENTO — e por que nao muda neste commit
 A escolha escrita no `dono_da_divergencia` (*"o dia sem batida nenhuma cai em ESTRUTURA... ali o fato
-existe e foi atribuido a outro dia, e atribuicao e do sistema"*) tinha a **suspeita certa e o reu errado**:
-em 18 dos 19, a atribuicao que difere e a do **ORACULO** — a chave dele e `tu[0].date()`, o dia de
+existe e foi atribuido a outro dia, e atribuicao e do sistema"*) tinha a **suspeita certa e o reu errado**.
+Nos **6 de G1+G1b** a atribuicao que difere e a do **ORACULO** — a chave dele e `tu[0].date()`, o dia de
 calendario da primeira batida do turno, e o espelho lavra pelo dia da **JORNADA**. O oraculo nao le celula
-**de proposito** (e o que o faz testemunha independente), entao isso e limite declarado, nao bug do produto.
+**de proposito** (e o que o faz testemunha independente), entao isso e limite declarado, nao bug do produto. Nos **13 de G2+G3** o que difere nao e chave nenhuma: e o CADASTRO, que nao descreve o
+turno. Em **nenhum dos 19** os dois leitores do produto discordam entre si — era isso que a palavra
+"ESTRUTURA" estava afirmando, e e isso que a medicao nega.
 A revisao, pela CARACTERIZACAO-SE-INVERTE: o selo `test_MORDE_dia_sem_batida_e_ESTRUTURA_nao_BATIDA`
 **nao se apaga** — a assercao dele troca e passa a morder a VOLTA, perguntando a paridade ao conjunto do
 TURNO do proprio oraculo, sem ler celula. Juiz novo = 0, dono novo = 0. **Isso e INSTRUMENTO e nao pousa

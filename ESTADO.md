@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 15:13:54.**
+**Medido em 09/10/2026 15:19:01.**
 
 | | |
 |---|---|
@@ -35,6 +35,7 @@ a28ca8cf O214 item 4: a linha do DP cabe no carrier, e o corte deixa de comer o 
  M app/config/crons_duracao.json
  M app/core/placar_estrutural.py
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/LEIS.md
  M app/docs/RELATO.md
  M bin/gerar_estado.py
  M bin/sombra.sh
@@ -72,7 +73,7 @@ a28ca8cf O214 item 4: a linha do DP cabe no carrier, e o corte deixa de comer o 
 
 | | resultado | numero de hoje | medido em | prazo | cadencia |
 |---|---|---|---|---|---|
-| **R1** | todo dia-colab divergente do E6 recebe UM dono -- ESTRUTURA, CADASTRO ou BATIDA -- pelas autoridades que ja existem, e as tres somam o total | 10/2026 medida em 09/10 na sombra: ESTRUTURA 110 (487,8 h, 42 colabs) · CADASTRO 11 (84,2 h, 7) · BATIDA 146 (706,4 h, 102) = 267, com BATE 93,9% de 4411 dias comparados. 09/2026, de 02/10: 197 (747,4 h, 60) · 29 (68,6 h, 12) · 208 (867,9 h, 118) = 434. A soma fecha nas duas, e o proprio comando a cobra. O movimento da semana se le por TAXA, nao por contagem: o denominador da 10 cresceu de 2694 para 4411 dias comparados enquanto o BATE subiu de 92,4% para 93,9%, entao ESTRUTURA 95 -> 110 e universo novo entrando, nao regressao -- e um csv so de DIVERGENCIA nao distingue "passou a bater" de "deixou de ser comparado". Os 19 dias de ESTRUTURA sem batida nenhuma estao TODOS com destino medido (5 BATIDA por entrada ausente em jornada noturna, 10 CADASTRO x REALIDADE por cadastro deslocado, 3 que fecham com o dia anterior, 1 que e limite nomeado da chave do proprio oraculo): nenhum sem destino, pela cadencia | 2026-10-09 | EM DIA | e6_oraculo por competencia ABERTA 1x por semana E depois de cada pouso de obra de calculo; cada dia de dono ESTRUTURA novo vira cenario na BATERIA ou linha na lista do admin, nunca fica sem destino |
+| **R1** | todo dia-colab divergente do E6 recebe UM dono -- ESTRUTURA, CADASTRO ou BATIDA -- pelas autoridades que ja existem, e as tres somam o total | 10/2026 medida em 09/10 na sombra: ESTRUTURA 110 (487,8 h, 42 colabs) · CADASTRO 11 (84,2 h, 7) · BATIDA 146 (706,4 h, 102) = 267, com BATE 93,9% de 4411 dias comparados. 09/2026, de 02/10: 197 (747,4 h, 60) · 29 (68,6 h, 12) · 208 (867,9 h, 118) = 434. A soma fecha nas duas, e o proprio comando a cobra. O movimento da semana se le por TAXA, nao por contagem: o denominador da 10 cresceu de 2694 para 4411 dias comparados enquanto o BATE subiu de 92,4% para 93,9%, entao ESTRUTURA 95 -> 110 e universo novo entrando, nao regressao -- e um csv so de DIVERGENCIA nao distingue "passou a bater" de "deixou de ser comparado". Os 19 dias de ESTRUTURA sem batida nenhuma estao TODOS com destino medido (5 BATIDA por entrada ausente em jornada noturna, 10 CADASTRO x REALIDADE por cadastro deslocado, 3 que fecham com o dia anterior, 1 que e limite nomeado da chave do proprio oraculo). E destino medido NA CASA, nao categoria atribuida: os 5 de BATIDA tem chamado batida_ausente carimbado NO DIA (#28873, #25155, #27445, #27070, #28011) e os 3 colaboradores de CADASTRO estao na lista Cadastro x Realidade (col788 A2/A3/A5/A8/A10, col868 A8, col949 A5/A7/A10) -- nenhum sem destino | 2026-10-09 | EM DIA | e6_oraculo por competencia ABERTA 1x por semana E depois de cada pouso de obra de calculo; cada dia de dono ESTRUTURA novo vira cenario na BATERIA ou linha na lista do admin, nunca fica sem destino |
 
 _A data sai do NOME do arquivo da fonte declarada em `fonte_do_medido` (`bin/gerar_estado.py::_medido_em`), nunca do mtime e nunca do proprio placar -- o modulo e puro e data literal nele e PROIBIDA (SELO-SEM-DATA-CRAVADA)._
 
@@ -125,18 +126,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-● The advisor is right: "0 sem destino" is a category claim, not a measurement. Checking whether the house actually holds those 15 days:
-
-  Ran 1 shell command
-
-● Background command "Run the core suite" completed (exit code 0)
-
-  Ran 1 shell command
-
 ● OK, Ran 1263 tests, rc=0 — but the dots don't name the selo, so proving it explicitly:
 
   Ran 3 shell commands
@@ -147,16 +136,28 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● colXXX is the pk. Reading the two house judges' shapes before the sonda:
 
-● Ask the house whether it holds the 15 days
-  ⎿  $ mkdir -p /tmp/sonda_l114 && cat > /tmp/sonda_l114/casa.py <<'PY'
-     # L-114: a CASA ja tem estes 15 dia-colab? (G1 -> chamado; G3 -> lista do admin). SO LEITURA.
-     # Imprime pk, codigo de assinatura, pk de chamado e contagem. NUNCA nome.
-     from django.apps import apps
-     from django.utils import timezone a…
+  Ran 3 shell commands
 
-✽ Wrangling… (1d 1h 48m · ↓ 2.8m tokens)
+● G3 is answered — all three are on the admin list. Fixing the field name for the chamado side:
+
+  Ran 3 shell commands
+
+● All 5 G1 days have batida_ausente carimbado no dia, and all 3 G3 colaboradores are on the list. The destino is measured, not asserted.
+  Now fixing the three claims the advisor flagged:
+
+  Ran 6 shell commands
+
+● L-114's own ESTADO says the cadence can't verify itself because gerar_estado.py doesn't read the date — this commit cures exactly that,
+  so the ESTADO moves in the same commit:
+
+● Full host selo folder, then the commit scope
+  ⎿  $ cd /home/ronald/saas-hasner && for f in bin/tests/test_*.sh; do out=$(bash "$f" 2>&1); rc=$?; if [ $rc -ne 0 ]; then echo "VERMELHO
+     rc=$rc $f"; echo "$out" | tail -8; fi; done; echo "=== folder completa (nada acima = verde)"; git status --short --
+     app/core/placar_estrutural.py bin/gerar_estado.py…
+
+· Wrangling… (1d 1h 53m · ↓ 2.8m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    5% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
