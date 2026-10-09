@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 09/10/2026 20:07:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (549.8 MB). Acoes na janela: **1318**.
+**Medido em 09/10/2026 20:12:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (549.9 MB). Acoes na janela: **1310**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 20:09:33 | Bash |  | `cd /home/ronald/saas-hasner && grep -n "^TETO_PAUSA_SEGUNDOS\\|^PISO_INTERVALO_SEGUNDOS\\|^def _minuto\\|^def data_local\\|^def _dist_marco" app/ponto/turnos.py; sed -n "$(grep -n '^def _minuto' app/ponto/turnos.py \| cut -d: -f1),+4p" app/ponto/turnos.py; grep -n "TETO_PAUSA_SEGUNDOS = " app/ponto/turnos.py; echo "--- push:"; tail -3 logs/l115/o232_push2.out` |
+| 20:08:10 | Bash |  | `SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/o232 && cat > "$SP/test_saida_pela_posicao_entre_turnos.py" <<'EOF' """L-115 pouso 2 (O232): a SAIDA pela POSICAO quando o pareador arquivou a candidata em OUTRO turno. A LEI E A MESMA, e isso e a condicao do aval (*"Nenhuma lei nova"*). L-115, `app/docs/LEIS.md:138`, em letra: *"Dia com par de pausa F ...` |
 | 20:06:34 | Bash |  | `cd /home/ronald/saas-hasner && tail -6 logs/l115/o232_push2.out` |
 | 20:06:26 | Bash |  | `cd /home/ronald/saas-hasner && sed -n '1000,1075p' app/ponto/turnos.py` |
 | 20:06:18 | Bash |  | `cd /home/ronald/saas-hasner && sed -n '219,330p' app/ponto/turnos.py` |
@@ -1318,13 +1320,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 08:22:23 | Bash | Como a porta lavra e le a trava | `sed -n '600,625p;665,690p' folha/porta_export.py` |
 | 08:22:19 | Bash | Onde mora MetricaSnapshot | `grep -rn "class MetricaSnapshot" --include=models.py . \| head; echo "--- quem le he_pendente_trava_dias ---"; grep -rn "he_pendente_trava_dias" --include=*.py . \| grep -v tests \| head` |
 | 08:22:13 | Bash | Ler o carimbo da trava por empresa | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad cat > "$S/ler_trava.py" <<'EOF' # LEITURA PURA: o carimbo que o item 3 lavrou, lido da autoridade (MetricaSnapshot), nunca recalculado. from core.models import MetricaSnapshot from colaboradores.models import Empresa from django.utils import timezone qs = MetricaSnapshot.objects.filter(chave='porta_expo ...` |
-| 08:11:47 | Bash | Um push por marco | `cd /home/ronald/saas-hasner && git fetch -q origin 2>&1 \| tail -2; echo "origin/main..HEAD:"; git log --oneline origin/main..HEAD echo "=== PUSH ==="; git push origin main 2>&1 \| tail -30` |
-| 08:11:08 | Bash | Conferir o selo que estava vermelho | `cd /home/ronald/saas-hasner && bash bin/tests/test_import_tardio_contra_o_ar.sh 2>&1 \| tail -4` |
-| 08:10:52 | Bash | Publicar a cura | `cd /home/ronald/saas-hasner && bin/deploy.sh --sem-migrate 2>&1 \| tail -40` |
-| 08:10:47 | Bash | Commit do item 4b | `cd /home/ronald/saas-hasner S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad git commit --only -F "$S/msg_item4b.txt" -- \ app/ponto/portas/he.py \ app/ponto/services/autorizacao_he_periodo.py \ app/ponto/tests/test_o214_item4_dia_do_admin.py \ app/chamados/tests/test_atalho_he_na_central.py \ app/docs/RELATO.md app/docs/PROMPTS.md app/docs/BACKLOG.md ...` |
-| 08:08:52 | Bash | Pasta de selos de host antes do commit | `cd /home/ronald/saas-hasner ok=0; bad=0 for s in bin/tests/test_*.sh; do if out=$(bash "$s" 2>&1); then ok=$((ok+1)); else bad=$((bad+1)); echo "=== VERMELHO: $s ==="; echo "$out" \| tail -12; fi done echo "=== selos de host: $ok verdes, $bad vermelhos ==="` |
-| 08:08:46 | Bash | Aplicar a cura na arvore viva | `cd /home/ronald/saas-hasner/app python3 - <<'PYEOF' import io p='docs/PROMPTS.md' t=io.open(p,encoding='utf-8').read() velho='Nada construido neste turno: a vez dela e depois da O206, e a raia esta nela;' novo=('Nada construido neste turno: a vez dela e depois da O206, e a raia esta nela. **Nenhuma sessao da raia ' 'viva no ato do registro** (`ListAgents`), entao a ordem nao se "repassa" a ninguem ...` |
-| 08:08:31 | ListAgents |  | `-` |
-| 08:08:24 | Bash | Fechar o RELATO e conferir migrations/templates | `cd /home/ronald/saas-hasner/app python3 - <<'PYEOF' import io p='docs/RELATO.md' t=io.open(p,encoding='utf-8').read(); o=t t=t.replace('VEREDITO_VIZINHOS', '`Ran 5988 tests in 586.954s` / **OK** (skipped=9)') velho='curado na hora; o bullet logo acima dizia *"NOMEADO, NAO CURADO"* e durou o tempo de medir).' novo ='curado na hora; o bullet da lista NOMEADO, logo abaixo, dizia *"NAO CURADO"* e duro ...` |
-| 08:08:06 | Bash | Veredito dos vizinhos | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bpjmlxt7m.output` |
-| 08:07:58 | Bash | Hora real de chegada dos dois avais | `J=/home/ronald/.claude/projects/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl for k in O207-SOBE-NA-RAIA FOLGA-CALENDARIO-SUBSTITUI; do echo "=== $k ===" grep -l . /dev/null >/dev/null grep -n "$k" "$J" \| head -3 \| while IFS=: read -r n rest; do python3 - "$J" "$n" <<'EOF' import sys,json p,n=sys.argv[1],int(sys.argv[2]) for i,l in enumerate(open(p),1): if i==n: d=json. ...` |
