@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 18:15:31.**
+**Medido em 09/10/2026 18:20:45.**
 
 | | |
 |---|---|
@@ -33,8 +33,10 @@ e38d4039 O230 pouso 1: a sonda de leitura do dev da casa esta na arvore, e quem 
 
 ```
  M app/config/crons_duracao.json
+ M app/docs/AVAIS.md
  M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/PENDENTES_RONALD.json
  M app/docs/RELATO.md
  M bin/sombra.sh
 ?? esteira.pausada
@@ -124,42 +126,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  publicada. segue a fila; PAREI so em lei ou !
-
-  Ran 2 shell commands
-
-● RED evidenciado (Ran 3, FAILED (failures=2)): julgar foi chamado 2 vezes e 'quadro' not found. Aplico a cura na copia.
-
-  Ran 6 shell commands
-
-● GREEN: Ran 3 / OK. Lanço os vizinhos (ponto chamados) e, enquanto correm, preparo a re-lavra da 10/2026 que o seu aval acabou de liberar.
-
-  Ran 15 shell commands
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-  Ran 2 shell commands
-
-● Cura viva em prod e o DIFF fecha: 37/+7.489 menos col941 2026-10-09 (+144, hoje — fora por fato encerrado, LIM = hoje-1) = 36 / +7.345,
-  igual ao publicado. Leio o molde de reversão da O195.
-
-  Ran 1 shell command
-
-● Condição 1 primeiro: a reconciliação do número vai ao RELATO antes de qualquer escrita.
-
-  Ran 3 shell commands
 
 ❯ smoke Ronald: abri a mesa de disputa, a resposta longe do marco agora diz a direcao e o que validar faz, e o Reabrir avisa quantas
   respostas apaga -- pode fechar a UI-RESPOSTA-DIZ-O-QUE-E
+  ⎿  Read docs/AVAIS.md (23 lines)
+  ⎿  Read docs/HANDOFF-SESSAO.md (45 lines)
+  ⎿  Referenced file ponto/tests/test_bateria_lavratura.py
+  ⎿  Referenced file ponto/turnos.py
+  ⎿  Read ../logs/r1/achado_papel_x.md (123 lines)
 
-✢ Compacting conversation… (22m 45s · ↓ 42.5k tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 64%
-                                                                                                                    0% until auto-compact
+● Task "RED e construção do segundo intervalo" completed in background
+
+  Ran 1 shell command
+
+● Background command "Vizinhos ponto+chamados na copia" completed (exit code 0)
+
+  Ran 1 shell command
+
+● Vizinhos GREEN: Ran 5571 tests / OK (skipped=9) — O231 pode pousar. Antes disso, fecho o smoke que você acabou de dar.
+
+  Ran 2 shell commands
+
+● Smoke fechado no registro (AVAIS 6 → 5), e os vizinhos do O231 voltaram verdes. Sigo a re-lavra — agora a reversão e o apply.
+
+  Escreve a reversao da condicao 2
+  ⎿  $ cd /home/ronald/saas-hasner; cat > logs/l115/relavra10_restore.py <<'PY'
+     # -*- coding: utf-8 -*-
+     """A FRASE DE REVERSAO DA RE-LAVRA 10 (L-115), EXECUTAVEL. Le `/tmp/l115_relavra10_foto.json`.
+     `DRY=True` (default) monta tudo, CONFERE as guardas e nao escreve -- e a prova de que a reversao
+     EXECUTA,…
+
+· Proofing… (27m 59s · ↓ 55.1k tokens)
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
