@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 15:08:31.**
+**Medido em 09/10/2026 15:13:54.**
 
 | | |
 |---|---|
@@ -125,42 +125,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● HEAD has it at 100644 — it's run via python3. Keeping the mode untouched so my commit carries no unrelated change:
 
-  Ran 2 shell commands
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-● VERDE, R1 in its own section, medido em 2026-10-09 / EM DIA. Checking that the screen dump at line 153 is a pre-existing capture and not
-  something I broke:
+● The advisor is right: "0 sem destino" is a category claim, not a measurement. Checking whether the house actually holds those 15 days:
 
   Ran 1 shell command
 
-● Now the proofs — ruff, host selos, then the core suite:
+● Background command "Run the core suite" completed (exit code 0)
+
+  Ran 1 shell command
+
+● OK, Ran 1263 tests, rc=0 — but the dots don't name the selo, so proving it explicitly:
 
   Ran 3 shell commands
 
-● All host selos green. Launching the core suite in background while I write the RELATO:
-
-  Ran 4 shell commands
-
-● The retention is already cleared (0 afirmacao sem prova). Confirming the faixa is gone from the rendered ESTADO:
+● The selo is named and green (11 tests, OK). Now the house claim — building the sonda:
 
   Ran 1 shell command
 
-● Writing the RELATO section at the top:
+● colXXX is the pk. Reading the two house judges' shapes before the sonda:
 
-● Re-running host selos after the RELATO edit · 20s
-  ⎿  $ cd /home/ronald/saas-hasner && for f in bin/tests/test_*.sh; do out=$(bash "$f" 2>&1); rc=$?; [ $rc -ne 0 ] && echo "VERMELHO rc=$rc
-     $f" && echo "$out" | tail -8; done; echo "=== selos de host apos o RELATO (nada acima = verde)"; tail -4
-     logs/l114/suite_core_l114.out 2>/dev/null; echo "=== suite … (20s)
-     (ctrl+b ctrl+b (twice) to run in background)
+● Ask the house whether it holds the 15 days
+  ⎿  $ mkdir -p /tmp/sonda_l114 && cat > /tmp/sonda_l114/casa.py <<'PY'
+     # L-114: a CASA ja tem estes 15 dia-colab? (G1 -> chamado; G3 -> lista do admin). SO LEITURA.
+     # Imprime pk, codigo de assinatura, pk de chamado e contagem. NUNCA nome.
+     from django.apps import apps
+     from django.utils import timezone a…
 
-· Wrangling… (1d 1h 42m · ↓ 2.8m tokens)
+✽ Wrangling… (1d 1h 48m · ↓ 2.8m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
