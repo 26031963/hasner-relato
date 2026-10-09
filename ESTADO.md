@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 11:16:31.**
+**Medido em 09/10/2026 11:21:32.**
 
 | | |
 |---|---|
@@ -115,44 +115,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Task "RED e construção do segundo intervalo" completed in background
-
-● Task "O230 sonda de leitura do fernando" still running in background
-
-  Ran 2 shell commands
-
-● Sombra gate is green (dia=20261009 status=OK tipo=completa diverge=0 erros=0). Now the owed sentence in the comment:
-
-  Ran 5 shell commands
-
-● Prediction file first, derived from the measurement (not typed), so the census can only confirm or contradict it:
-
-  Ran 1 shell command
-
-● The ±1–2 "NAO-FECHA" rows are my formula's rounding, not a real disagreement — and that exposes a question I must not guess at: how piso
-  itself was computed.
-
-  Ran 4 shell commands
-
-● piso traces to r1_10.csv's oracle columns — it is the termômetro, not the law. My prediction file framed it as the acceptance criterion,
-  which is the one thing L-110 forbids. Fixing the framing before measuring:
-
-  Ran 1 shell command
 
 ● Prediction is durable. Before running the two-tree census — the big substantive step — advisor check:
 
 ● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-✢ Wrangling… (21h 50m 52s · ↓ 2.4m tokens)
+  Ran 4 shell commands
+
+● ruff lives in the container, not the host. Building the census probe now — one file, mounted into both trees, comparable fields only
+  (papel is new in the cured tree, so printing it would make every line differ):
+
+  Ran 4 shell commands
+
+● The port works (E_SOMBRA passed, tenant_command shell ran). My sort lambda referenced t instead of x:
+
+  Ran 1 shell command
+
+● Full run (~13 min for both trees), in background:
+
+  Ran 1 shell command
+
+● While that runs, the reversão snapshot script (read-only in prod, no motor — just the ata fields):
+
+  Roda a pasta de selos de host na arvore principal · 1m 15s
+  ⎿  $ cd /home/ronald/saas-hasner && { for s in bin/tests/test_*.sh; do out="$(timeout 120 bash "$s" 2>&1)"; rc=$?; printf '%-62s rc=%s\n'
+     "$(basename "$s")" "$rc"; [ "$rc" != 0 ] && printf '%s\n' "$out" | tail -4 | sed 's/^/ /'; done; } 2>&1 | tail -40 (1m 14s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✻ Wrangling… (21h 55m 53s · ↓ 2.4m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Installing acl for setfacl                                                                  8m 40s · ↓ 165.3k tokens
+  ◯ general-purpose  Reading teste_envfile in recursos.sh                                                        13m 41s · ↓ 94.1k tokens
   ⧉  index
 ```
