@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 02:07:01.**
+**Medido em 09/10/2026 02:12:31.**
 
 | | |
 |---|---|
@@ -121,20 +121,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ```
   Ran 1 shell command
 
-● Fatos decisivos: ponto/views.py já é leitor declarado e já carrega o rótulo; DINHEIRO são nomes minutos_* e horas_* está em NAO_E_MOTOR.
-  Falta a grep de lei e o critério exato do censo:
-
-  Ran 1 shell command
-
-● O censo isenta management/commands ("comando de medicao nao e leitor de tela") e a mensagem dele diz que a classe "leitura de dinheiro" é
-  a que a L-095 proíbe. Isso bate de frente com a prévia síncrona num serviço novo. Lendo a L-095:
-
-  Ran 1 shell command
-
-● Quatro achados que mudam o desenho. Gravo-os antes de consultar, para não perder a medição:
-
-  Ran 1 shell command
-
 ● Conflito a resolver antes de escrever: o desenho proposto punha a prévia na porta, e a lápide do próprio decidir_he (he.py:99-104) conta
   que a 1ª versão dela chamava o motor e foi recusada por um selo da casa; o censo ainda isenta management/commands e chama "leitura de
   dinheiro" a classe que a L-095 proíbe.
@@ -144,13 +130,27 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Desenho fixado. Antes de escrever, pego o idioma exato da fixture do item 1 (autor com autorizar_he, _casa, janela de HE no cadastro):
 
-● Lê a fixture do item 1
-  ⎿  $ cd /home/ronald/saas-hasner/app
-     sed -n '140,200p' ponto/tests/test_o214_ponta_pequena.py
+  Ran 2 shell commands
 
-✢ Wrangling… (12h 41m 22s · ↓ 1.5m tokens · still thinking)
+● O RED a precisa de DIFF não-zero (0==0 passaria por ausência de sinal), e a L-097 já aponta o selo que monta esse cenário. Vou reusar a
+  fixture dele em vez de inventar a segunda:
+
+  Ran 4 shell commands
+
+● O _gravar responde a dúvida do RED c pela própria lápide: "o que fazer com linha que já existe fica em cada chamador, porque as duas
+  políticas são DIFERENTES de propósito". Então a política do período é do lote, não um parâmetro no decidir_he. Escrevendo os REDs:
+
+● Escreve os REDs a-i na cópia
+  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
+     A="$S/o214-item2/arvore"
+     test -d "$A/app/ponto/tests" && echo "copia OK: $(cat $S/o214-item2/BASE.txt 2>/dev/null)"
+     cat > "$A/app/ponto/tests/test_o214_item2_autorizar_periodo.py" <<'PYEOF'
+     # -*- codin…
+
+✢ Compacting conversation… (12h 46m 52s · ↓ 1.5m tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 59%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
