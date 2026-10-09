@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 01:56:01.**
+**Medido em 09/10/2026 02:01:31.**
 
 | | |
 |---|---|
 | `HEAD` local | `ce212bb8 As duas colunas da O146 entram no inventario pessoal, e o padrao fica intacto` |
-| `origin/main` | `d29b7f14 POUSO da raia wt-bos: o pino de geo le o juiz, e o raio do posto passa a ter UM sitio (O200 + complemento)` |
-| commits a subir (`ahead`) | **2** |
+| `origin/main` | `ce212bb8 As duas colunas da O146 entram no inventario pessoal, e o padrao fica intacto` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -119,42 +119,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Task "RED e construção do segundo intervalo" completed in background
-
-● Task "Segunda tentativa de push do marco" still running in background
-
-● Push ainda na suite (os dois commits seguem à frente do origin/main). Não toco a árvore. Releio o contrato para escrever os REDs pela
-  letra dele:
-
-  Ran 2 shell commands
-
-● _tot devolve float de hora — é exatamente a armadilha do RED i. Antes de fixar o desenho preciso saber se autoridade_do_periodo recalcula
-  ou lê o gravado (isso decide o que a prévia pode mostrar numa competência exportada):
 
   Ran 1 shell command
 
-● autoridade_do_periodo recalcula pelo motor (não lê FechamentoMensal) — então na exportada a prévia mostraria DIFF real do motor enquanto
-  o gravado não se move. É exatamente o que o RED h tem de afirmar. Desenho que vou escrever, antes de escrevê-lo:
+● Background command "Segunda tentativa de push do marco" completed (exit code 0)
 
-  SUT, 3 sítios, zero juiz novo
-  1. he.py::autorizar_em_lote deixa de ser recusa e passa a ser o ato (função nova ao lado dela = segundo juiz da mesma pergunta). Guardas
-     ANTES de qualquer escrita: motivo vazio → recusa (e); mais de um colaborador → recusa com a frase (d). Depois, laço chamando
-     decidir_he(..., SIM, motivo=...) — nenhum escritor novo, não é tudo-ou-nada (a, b, c).
-  2. ponto/services/autorizacao_he_periodo.py: RUBRICAS mudam de casa do command para cá (o command importa) — deixar a tupla no command e
-     o serviço precisar dela criaria a segunda declaração; _serializar() é o sítio único de hora→minutos inteiros (i); previa() = atomic +
-     porta + autoridade_do_periodo antes/depois + raise (f); confirmar(mostrado=...) = mesmo caminho sem rollback, compara a MESMA
-     serialização, divergência = recusa (i); exportada pelo juiz existente empresas_exportadas_no_escopo (h).
-  3. view/url/template finos: zero conta (g).
+● Push terminou — e o veredito se lê no remoto, não no rc:
 
-  Advising using Fable 5.1
+  Ran 1 shell command
 
-✢ Wrangling… (12h 30m 22s · ↓ 1.5m tokens)
+● Pousou: d29b7f14..ce212bb8. Marco O146 fechado e no remoto. Seguindo as leituras do item 2:
+
+  Ran 1 shell command
+
+● O gesto "todos sem decisão" filtra sem_decisao na view (views.py:559), mas a marcação por caixa vai crua do form — então o lote de recusa
+  de hoje pode virar um SIM humano em NAO. Isso é achado, não é o meu pedido; anoto e não amplio. Terceira leitura, a que decide o RED f:
+
+  Ran 2 shell commands
+
+● on_commit muda tudo: na prévia (atomic + raise) os N recálculos são descartados, então ela custa ~2 motores, não N+2. E no confirmar são
+  N recálculos redundantes da mesma competência. Mas há uma restrição mais dura: a própria lápide do decidir_he diz que a 1ª versão foi
+  recusada por chamar o motor na porta.
+
+  Ran 2 shell commands
+
+● O selo é tripwire de entrada com conjunto DECLARADO, e os DONOS incluem ponto/services/espelho.py. Preciso do critério do placar antes de
+  decidir onde a prévia mora:
+
+● Running 1 shell command…
+
+✢ Wrangling… (12h 35m 52s · ↓ 1.5m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
