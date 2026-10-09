@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 18:50:46.**
+**Medido em 09/10/2026 18:56:01.**
 
 | | |
 |---|---|
@@ -129,13 +129,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● 36/36 com o delta exato, soma +7.345, declarado +19, sub-minuto 0, zero chamado/pergunta nascidos, 09 intacta nos quatro hashes. Publico
-  a condição 4 e registro a ordem nova da fila 1.
-
-  Ran 24 shell commands
-  ⎿  Read docs/AVAIS.md (22 lines)
-  ⎿  Read docs/HANDOFF-SESSAO.md (45 lines)
   ⎿  Referenced file ponto/tests/test_bateria_lavratura.py
   ⎿  Referenced file ponto/turnos.py
   ⎿  Read ../logs/r1/achado_papel_x.md (123 lines)
@@ -145,9 +138,7 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-  Pushing e realizado_dos_turnos
-  ⎿  $ cd /home/ronald/saas-hasner; tail -2 logs/push_o231.out; echo "--- realizado_dos_turnos:"; sed -n "$(grep -n 'def
-     realizado_dos_turnos' app/ponto/turnos.py | cut -d: -f1),+48p" app/ponto/turnos.py
+  Committed 03fbfde9, ran 44 shell commands
   ⎿  Read docs/AVAIS.md (22 lines)
   ⎿  Read docs/HANDOFF-SESSAO.md (44 lines)
   ⎿  Referenced file ponto/tests/test_bateria_lavratura.py
@@ -158,7 +149,16 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Task "Empurra o marco O231 (roda a suite no pre-push)" still running in background
 
-✽ Proofing… (58m 0s · ↓ 114.0k tokens · thinking)
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+
+  Ran 9 shell commands
+
+● Agora ajusto a sonda para ler os marcos pela mesma porta do pareador:
+
+● Running 1 shell command…
+
+· Proofing… (1h 3m 15s · ↓ 120.0k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
