@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:248 AFIRMA ato sem PROVA ao lado -- ## O146 — **FECHADA, NO AR**: a extra declarada da escala desloca o limite, e o limite
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:337 AFIRMA ato sem PROVA ao lado -- ## O146 — **FECHADA, NO AR**: a extra declarada da escala desloca o limite, e o limite
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 07:21:33.**
+**Medido em 09/10/2026 07:26:56.**
 
 | | |
 |---|---|
-| `HEAD` local | `3c610491 O214: a trava do TXT contava dia de outra competencia (L-097)` |
+| `HEAD` local | `26a5316d O214 item 4: o dia tem DONO, e a diferenca em competencia exportada tem dono` |
 | `origin/main` | `3c610491 O214: a trava do TXT contava dia de outra competencia (L-097)` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+26a5316d O214 item 4: o dia tem DONO, e a diferenca em competencia exportada tem dono
 3c610491 O214: a trava do TXT contava dia de outra competencia (L-097)
 ef10b802 O214 item 3: a trava do TXT conta so o dia que e do ADMIN
 c32acf2e O topo do TICKETS fechado no ato do push (O112)
 041fd2ac O214 item 2: um ato, um motivo, e a tela mostra o DIFF por rubrica ANTES de confirmar
-ce212bb8 As duas colunas da O146 entram no inventario pessoal, e o padrao fica intacto
 ```
 
 ## `git status --short`
@@ -118,6 +118,8 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+
+  Searched for 6 patterns, ran 29 shell commands
   ⎿  Read docs/AVAIS.md (24 lines)
   ⎿  Read ponto/services/he_pendente_lavrado.py (186 lines)
   ⎿  Read docs/HANDOFF-SESSAO.md (46 lines)
@@ -142,12 +144,10 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Background command "Roda os vizinhos do item 4" completed (exit code 0)
 
-  Reroda os quatro modulos do O214 na copia
-  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
-     cd /home/ronald/saas-hasner && bash bin/suite.sh --dir $S/o214i4 --only ponto -- ponto.tests.test_o214_item2_autorizar_periodo
-     ponto.tests.test_o214_item4_dia_do_admin ponto.tests.test_o214_ponta_peque…
+● Deploying do item 4 · 2s
+  ⎿  $ cd /home/ronald/saas-hasner && timeout 900 bin/deploy.sh --sem-migrate 2>&1 | tail -30
 
-✢ Wrangling… (17h 55m 53s · ↓ 2.0m tokens)
+✻ Wrangling… (18h 1m 17s · ↓ 2.0m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
