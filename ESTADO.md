@@ -10,11 +10,11 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 19:56:01.**
+**Medido em 09/10/2026 20:01:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `3161c6ac [O232] pouso A: a guarda da pausa passa a ler a MESMA autoridade que o corpo soma, e 28 dias devolvem a janela declarada` |
+| `HEAD` local | `c7b8bfdb [O232] pouso A: a guarda da pausa passa a ler a MESMA autoridade que o corpo soma, e 28 dias devolvem a janela declarada` |
 | `origin/main` | `03fbfde9 [O231] marco: o comando imprime a medicao que AGIU, e a fila 1 passa a ser a ordem dele de 18:3x` |
 | commits a subir (`ahead`) | **1** |
 
@@ -29,7 +29,7 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
-3161c6ac [O232] pouso A: a guarda da pausa passa a ler a MESMA autoridade que o corpo soma, e 28 dias devolvem a janela declarada
+c7b8bfdb [O232] pouso A: a guarda da pausa passa a ler a MESMA autoridade que o corpo soma, e 28 dias devolvem a janela declarada
 03fbfde9 [O231] marco: o comando imprime a medicao que AGIU, e a fila 1 passa a ser a ordem dele de 18:3x
 5d9ec893 L-115 pouso 1: a saida pela posicao esta no ar, e a figura do aval nao e esta
 ca6f14f6 L-114 termometro: a cadencia passa a se verificar sozinha, e os 19 sem destino ganham dono
@@ -129,42 +129,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Background command "cd /home/ronald/saas-hasner && bash bin/simular_folha.sh par o232a /home/ronald/saas-hasner/app /tmp/o232-pousoA/app
-> logs/l115/o232_folha_par.out 2>&1; echo "rc=$? FIM" >> logs/l115/o232_folha_par.out" completed (exit code 0)
-
-● DIFF_FOLHA=0 — e na forma mais forte que havia: o sha do TXT de cada empresa é idêntico nas duas fotos (87e36e9ae36a, 7c753392f8ea,
-  58efa3d18779), 0 linha entrou, 0 saiu, 0 mudou, retidos iguais, as duas fotos sob a mesma trava. A cura é de testemunha, não de dinheiro.
-
-  Gravando o número no arquivo de casos antes de qualquer outra coisa:
-
-  Ran 2 shell commands
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-  Ran 8 shell commands
-
-● O leitura do motor é decisiva, e muda o texto do commit — não a cura:
-
-  Listed 1 directory, ran 10 shell commands
-
-● Agora movo os dois arquivos de código para a árvore no ato do commit (LEI-AKITA 10) e escrevo o RELATO:
-
   Committed 3161c6ac, ran 5 shell commands
 
 ● Commit 3161c6ac. Selos de host antes do push (respondem em segundos; a recusa custa uma suite inteira):
 
-● Running cd /home/ronald/saas-hasner && for i in $(seq 1 9…
-  ⎿  $ cd /home/ronald/saas-hasner && for i in $(seq 1 90); do if grep -q "^rc=.* FIM" logs/l115/o232_push.out 2>/dev/null; then echo
-     TERMINOU; break; fi; echo -n "."; command sleep 20; done; echo; tail -30 logs/l115/o232_push.out
+  Ran 3 shell commands
 
-✢ Proofing… (2h 3m 15s · ↓ 253.3k tokens · thought for 5s)
+● Background command "cd /home/ronald/saas-hasner && git fetch origin 2>&1 | tail -2; git log --oneline origin/main..HEAD | cat; echo "===
+empurrando (pre-push roda a suite):"; git push origin main > logs/l115/o232_push.out 2>&1; echo "rc=$? FIM" >> logs/l115/o232_push.out"
+completed (exit code 0)
+
+  Amended commit c7b8bfdb, ran 2 shell commands
+  ⎿  Read docs/AVAIS.md (22 lines)
+  ⎿  Read docs/HANDOFF-SESSAO.md (44 lines)
+  ⎿  Referenced file ponto/tests/test_bateria_lavratura.py
+  ⎿  Referenced file ponto/turnos.py
+  ⎿  Read ../logs/r1/achado_papel_x.md (123 lines)
+
+● Task "RED e construção do segundo intervalo" completed in background
+
+● O selo passou. Agora o push pela regua.
+
+  Ran 2 shell commands
+
+● Push correndo (a suite vai no pre-push). Pela ESMERIL-DO-MARCO o esmeril deste marco já fechou (0 órfãos), então uso a espera para montar
+  o pouso B em cópia, sem tocar a árvore que o push carrega.
+
+● Running cd /home/ronald/saas-hasner && sed -n '256,390p' …
+  ⎿  $ cd /home/ronald/saas-hasner && sed -n '256,390p' logs/l115/casos_o232.md
+
+✢ Proofing… (2h 8m 45s · ↓ 258.7k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    3% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
