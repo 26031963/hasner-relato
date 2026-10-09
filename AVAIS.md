@@ -1,4 +1,4 @@
-# AVAIS NA MESA — 6
+# AVAIS NA MESA — 7
 
 > Gerado por `bin/gerar_avais.py` a partir de `app/docs/PENDENTES_RONALD.json`.
 > **So itens ABERTOS.** Item respondido SOME daqui na proxima geracao -- a historia dele fica
@@ -12,10 +12,11 @@
 | 4 | `W12X36-HPD-SMOKE` | **smoke** | 2026-10-02T11:47 | 128 tipos 12x36, 0 com hpd, 0 de 896 dia-tipo mudam; serve 338 vinculos e 1.307 plantoes de fim de semana | `smoke Ronald: abri o wizard de um 12x36, marquei o domingo com horario proprio e salvou; um 12x36 sem marcar nada continuou igual -- pode fechar o W12X36-HPD` |
 | 5 | `PAUTA-DP-09-COL954` | **!** | 2026-10-02T17:30 | rubrica 8792, 2 dias (18/09 e 19/09), matricula 2103; emp2 213 linhas contra 210 | `col954: a falta de 18/09 e 19/09 (2 dias, rubrica 8792) entra na 09 do Dominio por correcao LA.   OU   gera TXT novo da 09 com `--usuario` e `--motivo` meus.   OU   fica fora da 09 e entra na 10.` |
 | 6 | `PAUTA-DP-09-COL900` | **!** | 2026-10-02T17:30 | rubricas 0200 = 7,37 e 0243 = 4,50; matricula 657; emp3 88 linhas contra 86 | `col900: as rubricas 0200 (7,37) e 0243 (4,50) entram na 09 do Dominio por correcao LA.   OU   gera TXT novo da 09 com `--usuario` e `--motivo` meus.   OU   ficam fora da 09.` |
+| 7 | `O214-ITEM2-PREVIA-SMOKE` | **smoke** | 2026-10-09T03:17 | 21 selos a-p verdes (`Ran 21` / OK), 97 vizinhos OK, ruff limpo; 0 juiz novo, 0 rubrica nova, 0 escritor novo -- a porta `decidir_he` segue escritora unica de `DecisaoHE` | `smoke Ronald: abri a Gestao de HE, autorizei o periodo de um colaborador, a previa me mostrou as horas por rubrica antes de confirmar e os dias sairam de SEM DECISAO -- pode fechar o O214 item 2` |
 
 ---
 
-Total no JSON: **213** · aberto **6** · respondido **46** · sem-motivo **161**.
+Total no JSON: **214** · aberto **7** · respondido **46** · sem-motivo **161**.
 
 > `sem-motivo` nao e "resolvido": e *"ninguem julgou este item"*. A ordem de 18:4x proibe
 > triar os 163 antigos, entao eles ficam ai, nomeados, em vez de serem chutados para um lado.
