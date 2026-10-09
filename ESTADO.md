@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:130 AFIRMA ato sem PROVA ao lado -- onde a lei diz que moram. E o estado passou a abrir com `**NO AR`, porque
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:207 AFIRMA ato sem PROVA ao lado -- onde a lei diz que moram. E o estado passou a abrir com `**NO AR`, porque
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 21:28:01.**
+**Medido em 08/10/2026 21:33:31.**
 
 | | |
 |---|---|
@@ -121,18 +121,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● A lista tem DUAS formas de linha: a da janela (causa/real/cadastrado/minutos_fora) e a da L-084 em :1543
-  (entrada_real/delta_entrada_min), que não tem causa. Então filtrar por 'janela de HE' in causa é guarda real, não enfeite. Montando a
-  cura em cópia do HEAD:
-
-  Ran 4 shell commands
-  ⎿  Read docs/AVAIS.md (23 lines)
-  ⎿  Read ../logs/sombra/censo_o145_dois_leitores.py (120 lines)
-  ⎿  Referenced file ../logs/o145_motor.out
-  ⎿  Read ../logs/o145.out (86 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b3j7lh9l6.output (13 lines)
-
-● Task "RED e construção do segundo intervalo" completed in background
 
 ● Task "Pousar a O204 na raia wt-bos" completed in background
 
@@ -146,12 +134,24 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-● Ler a seção O145 do RELATO
-  ⎿  $ cd /home/ronald/saas-hasner; sed -n '31,80p' app/docs/RELATO.md
+● Ler como o hook escolhe o próximo da fila
+  ⎿  $ cd /home/ronald/saas-hasner && grep -n "_proximo_da_fila" bin/hook_stop_fila1.py | head && sed -n "$(grep -n 'def _proximo_da_fila'
+     bin/hook_stop_fila1.py | cut -d: -f1),+45p" bin/hook_stop_fila1.py
+  ⎿  Read docs/AVAIS.md (23 lines)
+  ⎿  Read ../logs/sombra/censo_o145_dois_leitores.py (120 lines)
+  ⎿  Referenced file ../logs/o145_motor.out
+  ⎿  Read ../logs/o145.out (86 lines)
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b3j7lh9l6.output (13 lines)
 
-· Wrangling… (8h 2m 22s · ↓ 921.0k tokens)
+● Task "RED e construção do segundo intervalo" completed in background
+
+● Task "Pousar a O204 na raia wt-bos" completed in background
+
+● Task "Rodar RED no HEAD e GREEN na cura, em fila pela trava" still running in background
+
+✢ Wrangling… (8h 7m 52s · ↓ 927.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    2% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
