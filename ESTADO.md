@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 04:00:04.**
+**Medido em 09/10/2026 04:05:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `041fd2ac O214 item 2: um ato, um motivo, e a tela mostra o DIFF por rubrica ANTES de confirmar` |
+| `HEAD` local | `c32acf2e O topo do TICKETS fechado no ato do push (O112)` |
 | `origin/main` | `ce212bb8 As duas colunas da O146 entram no inventario pessoal, e o padrao fica intacto` |
-| commits a subir (`ahead`) | **1** |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+c32acf2e O topo do TICKETS fechado no ato do push (O112)
 041fd2ac O214 item 2: um ato, um motivo, e a tela mostra o DIFF por rubrica ANTES de confirmar
 ce212bb8 As duas colunas da O146 entram no inventario pessoal, e o padrao fica intacto
 cfd4ff83 O146: a extra declarada da escala desloca o limite da janela, e o limite passa a ter UM sitio
 d29b7f14 POUSO da raia wt-bos: o pino de geo le o juiz, e o raio do posto passa a ter UM sitio (O200 + complemento)
-6c53bc46 O200: o pino de geo do painel LE o juiz, e para de acusar leitura imprecisa
 ```
 
 ## `git status --short`
@@ -119,13 +119,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-  Searched for 2 patterns, ran 26 shell commands
-  ⎿  Read ../../../../tmp/dbg2.out (29 lines)
-  ⎿  Read docs/AVAIS.md (23 lines)
-  ⎿  Referenced file docs/DOSSIES.md
-  ⎿  Read docs/HANDOFF-SESSAO.md (45 lines)
-  ⎿  Read ../../.claude/projects/-home-ronald-saas-hasner/memory/contrato-nao-mora-em-arquivo-com-teto.md (36 lines)
-
 ● Task "RED e construção do segundo intervalo" completed in background
 
 ● Background command "Espera o veredito da suite cheia" completed (exit code 0)
@@ -138,22 +131,29 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Agora o pouso, em um ato (L-107):
 
-● Prova as rotas novas no container do ar
-  ⎿  $ cd /home/ronald/saas-hasner
-     cat > /tmp/rev_o214.py <<'PY'
-     from django.urls import reverse
-     for n in ('ponto:previa_he_periodo', 'ponto:autorizar_he_periodo', 'ponto:gestao_he'):
-     print(n, '->', reverse(n))
-     from django.template.loader import get_template
-     get_template('ponto/gestao_he_periodo_previa.…
+  Committed 041fd2ac, ran 12 shell commands
+  ⎿  Read docs/AVAIS.md (24 lines)
+  ⎿  Referenced file docs/DOSSIES.md
+  ⎿  Read ../../../../tmp/dbg2.out (29 lines)
+  ⎿  Read docs/HANDOFF-SESSAO.md (46 lines)
+  ⎿  Read ../../.claude/projects/-home-ronald-saas-hasner/memory/contrato-nao-mora-em-arquivo-com-teto.md (36 lines)
 
-✻ Wrangling… (14h 34m 25s · ↓ 1.7m tokens · thinking)
+● Task "RED e construção do segundo intervalo" completed in background
+
+● O push foi recusado pelo pre-push, e a causa em uma linha: o rodapé do TICKETS ficou 6 commits atrás de origin/main (teto 5) porque
+  ninguém rodou o pos_push depois do push da O146 pelo integrador — o derivado nasce velho no instante do push alheio. A cura é a declarada
+  pelo próprio selo.
+
+● Nova tentativa de push do marco
+  ⎿  $ cd /home/ronald/saas-hasner && git push origin main 2>&1 | tee logs/o214item2/push2.out; echo "PUSH_RC=${PIPESTATUS[0]}"
+
+✢ Wrangling… (14h 39m 22s · ↓ 1.7m tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    0% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
