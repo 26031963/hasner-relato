@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:572 AFIRMA ato sem PROVA ao lado -- onde a lei diz que moram. E o estado passou a abrir com `**NO AR`, porque
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:694 AFIRMA ato sem PROVA ao lado -- onde a lei diz que moram. E o estado passou a abrir com `**NO AR`, porque
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 00:50:46.**
+**Medido em 09/10/2026 00:55:46.**
 
 | | |
 |---|---|
@@ -45,6 +45,7 @@ d2cf6606 O204: a hora do aparelho tem UM sitio, e o epoch deixa de virar data de
  M app/docs/HANDOFF-SESSAO.md
  M app/docs/PROMPTS.md
  M app/docs/RELATO.md
+ M app/docs/TICKETS.md
  M bin/sombra.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -144,16 +145,16 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Background command "Mede o universo da mudanca na sombra" completed (exit code 0)
 
-  Escreve o bloco do RELATO
+● Confere se a sonda é versionada e lista docs sujos
   ⎿  $ cd /home/ronald/saas-hasner
-     S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
-     cat > "$S/o146/relato_bloco.md" <<'MD'
-     ## O146 — **A EXTRA DECLARADA DA ESCALA DESLOCA O LIMITE, E O LIMITE TEM UM SITIO** (09/10 00:4x)
-     Fatia da fila 1, pela ordem de 08/10…
+     git check-ignore -v logs/sombra/universo_o146.py || echo "NAO ignorado"
+     git ls-files logs/sombra/ | head -5
+     echo "=== docs sujos ==="
+     git status --porcelain app/docs/ app/config/ | cat
 
-✽ Wrangling… (11h 25m 7s · ↓ 1.4m tokens)
+✽ Wrangling… (11h 30m 7s · ↓ 1.4m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    5% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

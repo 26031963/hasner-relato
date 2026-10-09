@@ -154,7 +154,7 @@ lista — ela e o que esta EM PE._
 | **O143** | DIA COM BATIDA REAL E SEM VINCULO QUE O CUBRA E DONO CADASTRO, nao ESTRUTURA | ABERTA. Falta o censo de frota (dia-cola |
 | **O144** | O DIA QUE CONTA PARA OS 15 DA EMPRESA E O DECORRIDO, NAS DUAS TELAS | ABERTA. Falta provar o irmao `absenteism |
 | **O145** | HE-INVISIVEL | **NO AR** e CURADA (`32782d0d` + deploy) |
-| **O146** | HE-FIXA-DA-ESCALA-E-CADASTRO | espera `!` |
+| **O146** | HE-FIXA-DA-ESCALA-E-CADASTRO | espera corte |
 | **O147** | OS 3 ATRASADOS DA 09 | PAREI |
 | **O148** | FOLGAS DUPLICANDO | **FILA 2 (UI), depois dos BOs** -- ordem |
 | **O149** | 3 VINCULOS COM FIM ANTES DO INICIO | ENCAIXE. Mudanca de dado de VINCULO e NU |
