@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 15:40:41.**
+**Medido em 09/10/2026 15:45:45.**
 
 | | |
 |---|---|
@@ -122,15 +122,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Only my commit is ahead. Pushing (the hook runs both full runners, so it's long):
-
-  Ran 1 shell command
-
-● Push running. While it does (no tree writes during a push), drafting the L-115 cases in scratch — the law says cases by the rule before
-  the code:
-
-  Ran 12 shell commands
-  ⎿  Read docs/AVAIS.md (25 lines)
   ⎿  Read docs/HANDOFF-SESSAO.md (47 lines)
   ⎿  Referenced file ponto/turnos.py
   ⎿  Read ../logs/r1/achado_papel_x.md (123 lines)
@@ -147,13 +138,22 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Background command "Push the marco" completed (exit code 0)
 
-  Finding TipoEscala interval fields
-  ⎿  $ cd /home/ronald/saas-hasner && grep -n 'intervalo' app/escala/models.py | grep -n 'models\.\|def ' | cut -c1-130 | head -20
+● Writing the cases-by-the-rule doc
+  ⎿  $ mkdir -p /home/ronald/saas-hasner/logs/l115 && cat > /home/ronald/saas-hasner/logs/l115/casos.md <<'EOF'
+     # L-115 -- OS CASOS PELA REGRA, ANTES DO CODIGO (L-110)
+     > LEI: **DEPOIS DE PAUSA FECHADA, A SAIDA DO TURNO E POSICIONAL** (`app/docs/LEIS.md:138`,
+     > ORIGEM `aval Ronald 09/10 13:3x (R1-BALDE-A…
+  ⎿  Read docs/AVAIS.md (25 lines)
+  ⎿  Read docs/HANDOFF-SESSAO.md (47 lines)
+  ⎿  Referenced file ponto/turnos.py
+  ⎿  Read ../logs/r1/achado_papel_x.md (123 lines)
+  ⎿  Referenced file ponto/management/commands/e6_oraculo.py
 
-✢ Compacting conversation… (1d 2h 15m · ↓ 2.9m tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱ 91%
+● Task "RED e construção do segundo intervalo" completed in background
+
+· Wrangling… (1d 2h 20m · ↓ 2.9m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    0% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

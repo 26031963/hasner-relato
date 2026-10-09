@@ -6,10 +6,22 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 09/10/2026 15:40:41.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (535.6 MB). Acoes na janela: **1310**.
+**Medido em 09/10/2026 15:45:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (536.3 MB). Acoes na janela: **1321**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 15:45:43 | Bash | Write the cases-by-the-rule doc | `mkdir -p /home/ronald/saas-hasner/logs/l115 && cat > /home/ronald/saas-hasner/logs/l115/casos.md <<'EOF' # L-115 -- OS CASOS PELA REGRA, ANTES DO CODIGO (L-110) > LEI: **DEPOIS DE PAUSA FECHADA, A SAIDA DO TURNO E POSICIONAL** (`app/docs/LEIS.md:138`, > ORIGEM `aval Ronald 09/10 13:3x (R1-BALDE-A)`, PROTEGE `ponto/turnos.py::realizado_dos_turnos` > e `::_fim_fechado`, SELO = a BATERIA, ESTADO SO-N ...` |
+| 15:44:06 | Bash | Create copy of HEAD | `cd /home/ronald/saas-hasner && COPIA=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/l115/arvore && rm -rf "$COPIA" && mkdir -p "$COPIA" && git archive HEAD \| tar -x -C "$COPIA" && ls "$COPIA" && git -C . rev-parse --short HEAD && ls "$COPIA/app" \| head -5` |
+| 15:43:57 | Bash | Read suite.sh rest | `cd /home/ronald/saas-hasner && sed -n '70,140p' bin/suite.sh` |
+| 15:43:41 | Bash | Read suite.sh usage | `cd /home/ronald/saas-hasner && sed -n '1,70p' bin/suite.sh` |
+| 15:43:03 | Bash | How the cartorio gets minutos_realizados | `grep -n 'realizado\\|intervalo_do_dia' ponto/services/cartorio.py \| cut -c1-150` |
+| 15:42:49 | Bash | Find AUT_INTRA_MAX_S definition | `grep -rn 'AUT_INTRA_MAX_S' --include=*.py . \| cut -c1-160` |
+| 15:42:43 | Bash | Find other users of intra_max_s | `grep -rn 'intra_max_s' --include=*.py . \| grep -v 'ponto/turnos.py' \| cut -c1-140` |
+| 15:41:53 | Bash | Read turnos.py top and authority region | `sed -n '1,40p' ponto/turnos.py; echo "=== 310-500 ==="; sed -n '310,500p' ponto/turnos.py` |
+| 15:41:41 | Bash | Census of the 3h teto constant | `grep -n 'intra_max_s\\|3 \* 3600\\|PISO_INTERVALO_SEGUNDOS' ponto/turnos.py` |
+| 15:41:25 | Bash | Read _BaseLavratura | `sed -n '100,200p' ponto/tests/test_bateria_lavratura.py` |
+| 15:41:16 | Bash | Read bateria helpers | `sed -n '300,510p' ponto/tests/test_bateria_lavratura.py` |
+| 15:41:11 | Bash | Read bateria header | `sed -n '1,80p' ponto/tests/test_bateria_lavratura.py` |
 | 15:37:07 | Bash | Find TipoEscala interval fields | `cd /home/ronald/saas-hasner && grep -n 'intervalo' app/escala/models.py \| grep -n 'models\.\\|def ' \| cut -c1-130 \| head -20` |
 | 15:36:44 | Bash | Check whether the montador reads the BUG-144 authority | `cd /home/ronald/saas-hasner && grep -n 'realizado_do_dia\\|minutos_realizados' app/escala/utils.py \| head -20` |
 | 15:36:34 | Bash | Read bordas_realizado, the tripwire comparing the two readers | `cd /home/ronald/saas-hasner && sed -n '1,100p' app/ponto/services/bordas_realizado.py` |
@@ -1319,4 +1331,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 03:56:31 | Bash | Atualiza a celula de selo do TICKETS | `python3 - <<'PY' import io P='docs/TICKETS.md' t=io.open(P,encoding='utf-8').read() v = ("'**`Ran 97 tests` / `OK`** nos seis modulos nomeados; ruff limpo") v = "**`Ran 97 tests` / `OK`** nos seis modulos nomeados; ruff limpo" n = ("**`Ran 97 tests` / `OK`** nos seis modulos nomeados, e a SUITE CHEIA da copia " "(**`Ran 10126 tests` / `OK (skipped=42)`**) -- que na 1a rodada achou DOIS vermelhos q ...` |
 | 03:56:21 | Bash | Fecha o numero da suite no RELATO e no commit | `python3 - <<'PY' import io P='docs/RELATO.md' t=io.open(P,encoding='utf-8').read() v = """ruff limpo, e a suite cheia **relancada** -- o veredito dela e o que autoriza o pouso, nao o dos vizinhos.""" n = """ruff limpo, e a suite cheia **relancada**: `Ran 10126 tests in 1362.734s` / **`OK (skipped=42)`** (`logs/o214item2/suite_cheia2.out`, 03:32-03:55). O veredito que autoriza o pouso e **esse**, n ...` |
 | 03:52:59 | Bash | Continua aguardando a suite | `cd /home/ronald/saas-hasner && for i in $(seq 1 29); do if grep -qE '^OK$\|^OK \(\|^FAILED \(' logs/o214item2/suite_cheia2.out 2>/dev/null; then break; fi; kill -0 1975594 2>/dev/null \|\| break; sleep 20; done; date '+%H:%M:%S'; grep -nE '^OK$\|^OK \(\|^FAILED \(\|^Ran [0-9]+ tests?' logs/o214item2/suite_cheia2.out \| tail; grep -nE '^(FAIL\|ERROR):' logs/o214item2/suite_cheia2.out \| head; kill  ...` |
-| 03:43:13 | Bash | Continua aguardando a suite | `cd /home/ronald/saas-hasner && for i in $(seq 1 29); do if grep -qE '^OK$\|^OK \(\|^FAILED \(' logs/o214item2/suite_cheia2.out 2>/dev/null; then break; fi; kill -0 1975594 2>/dev/null \|\| break; sleep 20; done; date '+%H:%M:%S'; grep -nE '^OK$\|^OK \(\|^FAILED \(\|^Ran [0-9]+ tests?' logs/o214item2/suite_cheia2.out \| tail; kill -0 1975594 2>/dev/null && echo '[viva]' \|\| echo '[terminou]'` |
