@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 21:01:01.**
+**Medido em 08/10/2026 21:06:05.**
 
 | | |
 |---|---|
@@ -121,43 +121,43 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-● O controle só GRAVA nos ramos A e C — B e D não gravam. col207 02/10 tem ponta de 90 min "antes", e 90 > teto 60, então o motor TAMBÉM
-  acusa: o dia cai em B, e o meu controle leu "B" como "não visitado". Medindo antes de afirmar:
-
-  Ran 1 shell command
-
-● Hipótese (i) confirmada: col207 está no universo, o dia está na janela, e o bucket real é B — os dois falam. Os números do censo valem;
-  cega era a minha instrumentação de controle, que só gravava em A e C. Mas a lista de casos A mostra algo que eu não tinha separado —
-  metade é saida fora da janela de HE, e marcar_pontas_fora tem saida_ativa=False por default:
-
-  Searched for 1 pattern, ran 1 shell command
-
-● O espelho LÊ o cadastro da saída (janela_he_saida_ativa), então a mudez da saída não é default — ou é cadastro desligado, ou é a célula
-  missing. Isso parte o bucket A em duas causas, e eu não medi qual. Vou refazer o censo com o controle corrigido e com a causa de cada dia
-  A:
-
-  Ran 2 shell commands
-
-● Deixei uma linha de rascunho no script (cont({...}) if False else None). Ela não executa, mas não fica:
-
-  Ran 2 shell commands
-
-● Enquanto roda, o achado vai para o arquivo durável:
-
-  Ran 1 shell command
-
 ● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-✢ Wrangling… (7h 35m 22s · ↓ 860.0k tokens)
+● Ponto 1 bloqueia o RED. Antes de escolher sítio, ler a lei na letra e o censo de quem lê a chave:
+
+  Ran 1 shell command
+
+● Background command "Rodar o censo v2 na sombra" completed (exit code 0)
+
+  Ran 1 shell command
+
+● Controle duplo OK nos dois lados — os números agora são prova. E a 2ª passada partiu o bucket A em quatro causas: só 44 dos 78 são a
+  O145. Falta o minuto por causa e o real/cadastrado dos baldes (c) e (d):
+
+  Ran 2 shell commands
+
+● Agora o censo de quem lê a chave — é ele que decide se a cura entra em he_fora_da_janela ou numa marca própria do dia:
+
+  Ran 2 shell commands
+
+● O portão já respondeu essa pergunta, e contra a minha leitura: a primeira versão dele lia só os dias acima do teto e isso foi julgado
+  ERRADO — "Contador e tela tem de responder a MESMA pergunta, e a pergunta e a da tela: todo minuto fora da janela." Então pendência é
+  universal, o B do col207 é a lei funcionando, e o meu achado 15 estava largo. E a trava do export nasce desligada (default=False), então
+  a pendência crescer não barra TXT por si:
+
+● Running 1 shell command…
+
+· Wrangling… (7h 40m 26s · ↓ 868.7k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
-  ◯ fork  Grepping O200 cell in BACKLOG.md                                                                      35m 46s · ↓ 135.1k tokens
+  ◯ fork  Staging oraculo.py patch, polling viz_o200.out                                                        40m 50s · ↓ 154.9k tokens
   ⧉  index
 ```
