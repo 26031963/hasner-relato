@@ -6,10 +6,17 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 09/10/2026 19:01:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (546.3 MB). Acoes na janela: **1348**.
+**Medido em 09/10/2026 19:07:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (546.8 MB). Acoes na janela: **1349**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 19:06:47 | Bash |  | `cd /home/ronald/saas-hasner && python3 - <<'PY' import datetime as dt F = '%Y-%m-%d %H:%M:%S' casos = [ ('03','2026-09-03 23:27:20','2026-09-04 09:20:22',56.9), ('04','2026-09-04 23:21:19','2026-09-05 09:32:26',59.6), ('05','2026-09-05 23:30:18','2026-09-06 10:09:11',59.1), ('07','2026-09-07 23:28:59','2026-09-08 09:30:04',58.2), ('09','2026-09-09 23:28:39','2026-09-10 09:31:31',55.2), ('10','2026 ...` |
+| 19:06:32 | Bash |  | `cd /home/ronald/saas-hasner && python3 - <<'PY' import datetime as dt D = [ # (data_turno, entrada, candidata, pausa_carimbada_min, veredito) ('02/09','23:27:42','03/09 09:25:xx',59.3,'FECHA HOJE (pouso 1) -- fora do O232'), ('03/09','23:27:20','04/09 09:20:22',56.9,'FECHA'), ('04/09','23:21:19','05/09 09:32:26',59.6,'FECHA'), ('05/09','23:30:18','06/09 10:09:11',59.1,'FECHA'), ('06/09','23:20:47' ...` |
+| 19:05:11 | Bash |  | `cd /home/ronald/saas-hasner && python3 - <<'PY' import re, datetime as dt txt = open('logs/l115/o232_shape.out').read().splitlines() # blocos de turno blocos, cur = [], None for ln in txt: if ln.startswith('--- dt='): cur = {'head': ln.strip(), 'bats': []} blocos.append(cur) elif cur is not None and re.match(r'\s+#\d+', ln): cur['bats'].append(ln.strip()) elif cur is not None and 'pares_marcados=' ...` |
+| 19:04:37 | Bash |  | `cd /home/ronald/saas-hasner && grep -n "dt=2026-09-0[3-9]\\|dt=2026-09-1[0-9]\\|pares_marcados=\\|candidata #" logs/l115/o232_shape.out \| sed -n '1,120p'` |
+| 19:04:35 | Bash |  | `grep -n "_janela_declarada\\|def realizado_dos_turnos\\|janela_descontada\\|_pares_marcados(t)\\|intervalos_do_turno" ponto/turnos.py \| head -40` |
+| 19:04:29 | Bash | Le o resto do arquivo de casos do O232 | `cd /home/ronald/saas-hasner && sed -n '60,200p' logs/l115/casos_o232.md` |
+| 19:04:28 | Bash | Le o inicio do arquivo de casos do O232 | `cd /home/ronald/saas-hasner && sed -n '1,60p' logs/l115/casos_o232.md` |
 | 19:00:44 | Bash | Corrige a condicao (4) pela medicao | `cd /home/ronald/saas-hasner && python3 - <<'PY' p = 'logs/l115/casos_o232.md' t = open(p).read() velho4 = """4. por **INSTANTE** (nunca por hora-do-dia: secao 6 da CLAUDE.md), a candidata esta mais perto do `hf` DESTE turno do que do `hi` SEGUINTE -- o marco mais proximo dela e um marco de SAIDA, que e' o cluster-guard que a casa ja usa (`escala/utils.py::_alinhar`);""" assert t.count(velho4) == 1 ...` |
 | 18:59:09 | Bash | Le a secao de envelope/posicao | `cd /home/ronald/saas-hasner; sed -n "$(grep -n '^ENVELOPE' logs/l115/o232_shape.out \| cut -d: -f1),\$p" logs/l115/o232_shape.out` |
 | 18:59:01 | Bash | Gera o handoff de sessao | `cd /home/ronald/saas-hasner; bash bin/handoff_sessao.sh 2>&1 \| tail -5; echo "==="; sed -n '1,25p' app/docs/HANDOFF-SESSAO.md` |
@@ -1352,9 +1359,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 07:08:09 | Bash | Patches nos 4 sitios de views e censo final de chamadores | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cd $S/o214i4/app && python3 - <<'PY' p = 'ponto/views.py' s = open(p).read() def troca(velho, novo): global s assert s.count(velho) == 1, (s.count(velho), velho[:80]) s = s.replace(velho, novo, 1) # --- 1. CIENCIA EM LOTE (recusar_em_lote): os DOIS donos, porque nada se move ---------------------- troc ...` |
 | 07:07:09 | Bash | Censo de leitores do limite | `grep -rn "limite_decisao_he_min" --include=*.py --include=*.html \| grep -v tests/` |
 | 07:07:05 | Bash | Le os 4 sitios chamadores | `sed -n '525,565p;596,632p;740,770p;870,900p' ponto/views.py` |
-| 07:07:01 | Bash | Localiza os chamadores em views.py | `grep -n "itens_sem_decisao\\|enriquecer(" ponto/views.py` |
-| 07:03:44 | Bash | O ato le o limite e escreve a linha do DP | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cd $S/o214i4/app && python3 - <<'PY' p = 'ponto/services/autorizacao_he_periodo.py' s = open(p).read() def troca(velho, novo, n=1): global s assert s.count(velho) == n, (s.count(velho), velho[:70]) s = s.replace(velho, novo, n) # --- 1. o docstring do modulo: o ato nao DECIDE diferente na exportada, el ...` |
-| 07:02:21 | Bash | Le o corpo do laco de marcacao | `sed -n '199,250p' ponto/janela_he.py` |
-| 07:02:15 | Bash | Le o marcador de pontas fora | `grep -n "def marcar_pontas_fora" -A45 ponto/janela_he.py \| head -60` |
-| 07:01:58 | Bash | Confere o cadastro da fixture do item 2 | `sed -n '/^def _cenario/,/^def _itens/p' ponto/tests/test_o214_item2_autorizar_periodo.py` |
-| 07:01:36 | Bash | Le RUBRICAS e os medidores | `sed -n '/^RUBRICAS/,/^)/p' ponto/services/autorizacao_he_periodo.py; grep -n "def _medir\\|def _janela\\|def _exportada\\|def _serializar" -A12 ponto/services/autorizacao_he_periodo.py \| sed -n '1,70p'` |
