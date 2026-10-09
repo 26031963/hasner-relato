@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 23:46:30.**
+**Medido em 08/10/2026 23:47:31.**
 
 | | |
 |---|---|
@@ -122,7 +122,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  → linha do PROMPTS → bin/relato.sh → bin/handoff_sessao.sh.
 
   A fragilidade do leitor — adjetivo antes da palavra faz item fechado parecer aberto — vai para a lista de instrumento, que pousa sozinha
   (L-105); já custou isso duas vezes.
@@ -148,10 +147,11 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Background command "Push do marco (um por marco, L-108)" completed (exit code 0)
 
-● Publicar o RELATO
-  ⎿  $ cd /home/ronald/saas-hasner && timeout 600 bash bin/relato.sh 2>&1 | tail -12
+  Gerar o handoff de sessao
+  ⎿  $ cd /home/ronald/saas-hasner && timeout 300 bash bin/handoff_sessao.sh 2>&1 | tail -8; echo '---'; sed -n '1,20p'
+     app/docs/HANDOFF-SESSAO.md
 
-✽ Wrangling… (10h 20m 51s · ↓ 1.2m tokens · thought for 1s)
+· Wrangling… (10h 21m 52s · ↓ 1.2m tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                     8% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
