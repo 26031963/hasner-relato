@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 09/10/2026 06:18:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (510.9 MB). Acoes na janela: **1537**.
+**Medido em 09/10/2026 06:24:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (510.9 MB). Acoes na janela: **1535**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 06:19:27 | Bash | Aguarda o Ran N tests da suite | `cd /home/ronald/saas-hasner && until grep -qE '^Ran [0-9]+ tests' logs/suite_o214vaz.out 2>/dev/null; do sleep 30; done; grep -nA2 -E '^Ran [0-9]+ tests' logs/suite_o214vaz.out \| tail -8; date '+%H:%M:%S'` |
+| 06:19:20 | Bash | Confere se a suite ainda corre | `cd /home/ronald/saas-hasner && bash bin/trava_teste.sh --quem; echo "bytes: $(stat -c%s logs/suite_o214vaz.out)"; grep -nE '^Ran [0-9]+ tests' logs/suite_o214vaz.out; grep -nE '^(OK\|FAILED)( \|$)' logs/suite_o214vaz.out \| tail -5; date '+%H:%M:%S'` |
 | 06:13:12 | Bash | Aguarda o veredito da suite | `cd /home/ronald/saas-hasner && until grep -qE '^(OK\|FAILED)( \|$)' logs/suite_o214vaz.out 2>/dev/null; do sleep 30; done; grep -E '^Ran [0-9]+ tests\|^(OK\|FAILED)( \|$)' logs/suite_o214vaz.out; date '+%H:%M:%S'` |
 | 06:13:02 | Bash | Varre a mensagem por citacao indevida | `cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && grep -nE '\[[A-Za-z0-9-]+\]' $S/msg_vazamento.txt \|\| echo 'sem colchete na msg'; grep -n 'L-0' $S/msg_vazamento.txt \| head; echo '--- backtick/crase perigosa: so heredoc, ok'; head -1 $S/msg_vazamento.txt` |
 | 06:12:49 | Bash | Progresso da suite | `cd /home/ronald/saas-hasner && grep -cE '^(OK\|FAILED)( \|$)' logs/suite_o214vaz.out; grep -E '^Ran [0-9]+ tests\|^(OK\|FAILED)( \|$)\|^ERROR:\|^FAIL:' logs/suite_o214vaz.out \| tail -10; echo "--- bytes: $(stat -c%s logs/suite_o214vaz.out)"; date '+%H:%M:%S'` |
@@ -1543,7 +1545,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 18:24:40 | Bash | Ler o sitio do instrumento e o selo da montagem | `cd /home/ronald/saas-hasner && echo "=== copias orfas:"; ls -d /tmp/prepush-arvore.* 2>/dev/null \| wc -l; echo "=== arvore_do_push.sh 50-95"; sed -n '50,95p' bin/arvore_do_push.sh; echo; echo "=== selo da montagem:"; cat bin/tests/test_montagem_vem_do_arvore_do_push.sh` |
 | 18:24:24 | Bash | Confirmar o pouso do push no remoto | `cd /home/ronald/saas-hasner && tail -6 logs/o214/push_o214_b.out; echo "=== remoto:"; git fetch origin -q && git log --oneline origin/main -1; echo "=== origin/main..HEAD:"; git log --oneline origin/main..HEAD \| cat` |
 | 18:24:17 | Bash | Ler o dicionario do ts_dispositivo na linha 452 | `echo "=== views_core 436-500"; sed -n '436,500p' api/views_core.py` |
-| 18:19:47 | Bash | Conferir o push | `cd /home/ronald/saas-hasner && tail -3 logs/o214/push_o214_b.out; echo "--- remoto:"; git log --oneline origin/main -1` |
-| 18:19:41 | Bash | Ler o selo de batida offline e a paridade de casca | `echo "=== test_batida_offline.py (cabeca + nomes de caso)"; sed -n '1,60p' ponto/tests/test_batida_offline.py; echo "..."; grep -n "def test" ponto/tests/test_batida_offline.py; echo; echo "=== paridade de casca: quem testa as DUAS rotas de bater"; grep -rln "urls_core\\|HASNER_TENANT_URLCONF\\|override_settings(ROOT_URLCONF" --include=*.py api/tests ponto/tests \| head` |
-| 18:19:32 | Bash | Ler a assinatura do chokepoint e a chamada | `echo "=== registro_batida: assinatura"; grep -n "^def \\|^ def \\|timestamp_dispositivo" ponto/registro_batida.py \| head -40; echo; echo "=== como as views chamam o chokepoint"; sed -n '690,706p' api/views_core.py` |
-| 18:18:50 | Bash | Ler o ping e o destino de ts_efetivo | `echo "=== views_core 935-975 (ping)"; sed -n '935,975p' api/views_core.py; echo; echo "=== onde ts_efetivo vai (views_core)"; grep -n "ts_efetivo" api/views_core.py api/views.py` |
