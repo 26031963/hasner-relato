@@ -6,10 +6,19 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 09/10/2026 09:40:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (520.8 MB). Acoes na janela: **1532**.
+**Medido em 09/10/2026 09:46:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (521.0 MB). Acoes na janela: **1540**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 09:45:53 | Bash | Medir na autoridade qual marco cada batida acendeu | `cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/r1_ata_a_b.py <<'PY' # -*- coding: utf-8 -*- # R1 -- SO LEITURA. Pergunta a AUTORIDADE (CelulaDia.ata/dna + juiz_batida.periodos_do_dia) # qual marco cada batida acendeu nos casos a e b do balde A, e se a ULTIMA batida aparece # como ORFA ou nao aparece de jeito nenhum (envelope). Nunca imprime nome ...` |
+| 09:45:31 | Bash | Assinatura de periodos_do_dia | `grep -n "def periodos_do_dia" -A 25 ponto/juiz_batida.py \| head -45` |
+| 09:45:16 | Bash | Ler papel_por_minuto_da_ata | `sed -n '1058,1115p' ponto/turnos.py` |
+| 09:45:10 | Bash | Achar o leitor da ata e como abs_marcos/locs nascem | `grep -rn "def papel_por_minuto_da_ata" --include=*.py . ; echo ===; sed -n '440,490p' escala/utils.py` |
+| 09:42:08 | Bash | De onde sai o tol_min do envelope | `grep -n "tol_min" escala/utils.py \| head -20; echo "=== quem define:"; grep -n "tol_min *=\\|TOL_\\|tolerancia_atribuicao\\|RAIO" escala/utils.py \| head -20` |
+| 09:41:27 | Bash | Ler _alinhar e _match_marcos | `sed -n '217,260p;300,360p' escala/utils.py` |
+| 09:41:24 | Bash | Localizar _match_marcos e _alinhar | `grep -n "_match_marcos\\|def _alinhar" escala/utils.py \| head` |
+| 09:41:16 | Bash | Anexar as tres secoes medidas ao MECANISMO.md | `cd /home/ronald/saas-hasner && cat >> logs/r1/MECANISMO.md <<'MD' ## A ATA E MUDA NA ULTIMA BATIDA (09/10, `logs/r1/papel_casos_af.out`, so leitura) Pergunta: **que papel a ata da a ultima batida do balde A?** Resposta medida: **nenhum**. - caso a col263 23/09 -- a ata acende `08:50 -> 'E'`, `15:00 -> 'E'`, `16:00 -> 'S'`. A batida `#108560 tipo=E 23/09 19:00:14` sai do pareador com `_intra_dur=No ...` |
+| 09:40:38 | Bash | Numeros de linha do ramo que subtrai a pausa | `grep -n "if _pares_marcados(t):\\|elif not livre and _janela_declarada\\|janela += pausas\\|liquido = max(0, bruto - pausas)" ponto/turnos.py` |
 | 09:40:30 | Bash | Corrigir a afirmacao de que piso_min e o numero pela regra | `cd /home/ronald/saas-hasner && python3 - <<'PY' import io p='logs/r1/MECANISMO.md' s=io.open(p,encoding='utf-8').read() velho = """E os `piso_min` dos seis REDs SAO os numeros "pela regra" do aval (550/467/434/714/480/668 contra os 551/467/434/714/480/668 que ele escreveu): o aval nao trouxe uma terceira conta, trouxe o piso do oraculo.""" novo = """Os `piso_min` dos seis REDs COINCIDEM com os num ...` |
 | 09:40:19 | Bash | Ler o contexto da linha 10 | `cd /home/ronald/saas-hasner && sed -n '6,16p' logs/r1/MECANISMO.md` |
 | 09:40:14 | Bash | Achar a linha que chama piso_min de "o numero pela regra" | `cd /home/ronald/saas-hasner && grep -n "pela regra\\|piso_min" logs/r1/MECANISMO.md \| head -20; echo "--- linhas:"; wc -l logs/r1/MECANISMO.md` |
@@ -1541,4 +1550,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 21:48:43 | Bash | Localizar o cabecalho da tabela de fatias | `cd /home/ronald/saas-hasner && grep -n "^\| ID\\|^\|---\\|^\| id " app/docs/TICKETS.md \| head && echo "=== contexto do cabecalho da tabela de fatias ===" && awk 'NR>=1 && /^\\| ID/ {print NR": "$0}' app/docs/TICKETS.md && echo && grep -n "^## \\|^### " app/docs/TICKETS.md \| head -20` |
 | 21:48:35 | Bash | Conferir citacoes da msg e a forma da linha do TICKETS | `cd /home/ronald/saas-hasner && C=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && echo "=== citacoes que a regua veria na msg ===" && grep -oE '(^\|[^A-Za-z0-9_])\[[A-Z][A-Za-z0-9]+([ _-]?[A-Za-z0-9]+)*\]' $C/o145/msg_commit.txt \| grep -oE '\[[A-Z][A-Za-z0-9]+([ _-]?[A-Za-z0-9]+)*\]' \| tr -d '[]' \| grep -vE '^(ID\|XX\|NN\|PROMPTS\|RELATO)$' \| sor ...` |
 | 21:48:24 | Bash | Ler o segundo chamador e a regua de tickets | `cd /home/ronald/saas-hasner && echo "=== calendario.py 355-395 ===" && sed -n '355,395p' app/colaboradores/services/calendario.py && echo && echo "=== regua_tickets cabeca ===" && sed -n '1,90p' bin/regua_tickets.sh` |
-| 21:44:48 | Bash | Censo de chamadores, regex do TICKETS e coluna PROTEGE | `cd /home/ronald/saas-hasner && echo "=== quem chama marcar_pontas_fora (fora de teste) ===" && grep -rn "marcar_pontas_fora" app --include=*.py \| grep -v "/tests/" && echo && echo "=== o calendario ===" && grep -n "he_fora_da_janela\\|marcar_pontas_fora\\|espelho_do_colab" app/colaboradores/services/calendario.py \| head && echo && echo "=== regex do regua_tickets ===" && grep -n "grep\\|PAD\\|re ...` |
