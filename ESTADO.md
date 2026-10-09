@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 18:04:50.**
+**Medido em 09/10/2026 18:10:01.**
 
 | | |
 |---|---|
@@ -124,13 +124,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 4 shell commands
-
-● Background command "Espera o veredito do push pelo arquivo" completed (exit code 0)
-
-  Ran 3 shell commands
-
-› Message from @a67476fe31a516859 (ctrl+o to expand)
 
   Ran 1 shell command
 
@@ -149,17 +142,24 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
   (36 dia-colab, +7.345 min), reversao em logs/ antes, 09 intacta com hash antes e depois, prova no RELATO. A 09 nao se toca: fica
   publicada. segue a fila; PAREI so em lei ou !
 
-  Roda o RED do O231 pelo recorte --only
-  ⎿  $ cd /home/ronald/saas-hasner; C=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/o231;
-     ls -d $C && ESTEIRA_QUEM=o231-red timeout 1800 bash bin/suite.sh --dir $C --espera 300 --only
-     "ponto.tests.test_o231_lastro_mede_uma_vez" > logs/l115/o231_red.out 2>&…
+  Ran 2 shell commands
 
-✽ Proofing… (12m 4s · ↓ 22.0k tokens)
+● RED evidenciado (Ran 3, FAILED (failures=2)): julgar foi chamado 2 vezes e 'quadro' not found. Aplico a cura na copia.
+
+  Ran 6 shell commands
+
+● GREEN: Ran 3 / OK. Lanço os vizinhos (ponto chamados) e, enquanto correm, preparo a re-lavra da 10/2026 que o seu aval acabou de liberar.
+
+  Ran 15 shell commands
+
+● Advising using Fable 5.1
+
+✢ Proofing… (17m 15s · ↓ 32.6k tokens)
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
