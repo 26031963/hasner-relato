@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 01:45:01.**
+**Medido em 09/10/2026 01:50:31.**
 
 | | |
 |---|---|
@@ -40,6 +40,7 @@ d29b7f14 POUSO da raia wt-bos: o pino de geo le o juiz, e o raio do posto passa 
 
 ```
  M app/config/crons_duracao.json
+ M app/docs/DOSSIES.md
  M app/docs/HANDOFF-SESSAO.md
  M bin/sombra.sh
 ?? esteira.pausada
@@ -118,38 +119,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Só linhas derivadas (data, "há N dias", hash do último push). Vai no topo do marco em vez de nascer como commit só de docs (L-106), com a
-  carona declarada na mensagem:
+    canônica, e o selo morde nos dois sentidos.
+  - Censo fechado: o dinheiro anda por motor_calculo_v2.py:1293 (único sítio que clipa a ponta); o contador cai em chamados/views.py:758 e
+    relatorios/views.py:36, que leem a mesma função — nada a migrar neles.
+  - Sonda do MEDIR ANTES escrita com parada zero: a sombra foi refeita 01:06 e a 0042 entrou 01:35, e --rodar monta a árvore viva — sem a
+    assertiva no information_schema a sonda estouraria no meio em vez de medir. A cura (--refazer --dump-agora) espera o push: sombra e
+    suíte dividem o cpuset 4-7.
 
-  Amended commit ce212bb8
+  Raias com commit à frente do main (a linha que a L-105 cobra): cert-ast 7, pousos-0410 7, raia-pdf 4 (merge proibido por ele), tmp-ui 2,
+  lps-prova 1 — nenhuma conferida verde nesta sessão, e o contador delas é fila 2 por ordem dele, depois da CELULA-TURNO-FECHA e da O145.
 
-● Nova tentativa — causa em uma linha: o placar do topo do TICKETS carregava as linhas derivadas de ontem; regerado e amendado no topo do
-  marco.
+  Aguardando o veredito do push no remoto (não na saída) para então refazer a sombra e medir.
+
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: O214 -- HE-DECISAO-EM-ESCALA (lei nova dele, 05/10 18:0x, 4 itens; entra logo depois da O211 e a FRENTE
+  dos BOs de tel
 
   Ran 1 shell command
 
-● Push rodando. Enquanto ele corre (nada entra na árvore), preparo a O214 item 2 — relendo o MEDIR ANTES do contrato que ficou em DOSSIES
-  §8:
-
-  Ran 5 shell commands
-
-● Escrevendo a sonda do MEDIR ANTES (só leitura, em logs/sombra/ — zona livre, nada entra na árvore durante o push):
-
-  Ran 1 shell command
-
-● Push passou a régua e está na suíte. Não rodo a sonda agora — a sombra e a suíte dividem o cpuset 4-7, e contenção aí arrisca um RED de
-  tempo e outro push perdido. Uso a janela para ler a tela que o item 2 vai tocar:
+● Push ainda na suíte (~02:05). Sigo na O214 pelo que não depende dela: os REDs, escritos pela regra antes do código (L-110). Lendo a
+  fixture do irmão item 1 para não inventar outra:
 
   Ran 2 shell commands
 
-● O desenho tem uma tensão real: a lápide desta tela diz "nunca o medir no request (levou 7 min hoje)" — e a prévia do item 2 mede no
-  request, para um colaborador. É exatamente o que a medição (1) decide. Consultando antes de construir:
+● Agora o desenho fica forçado pelo que já existe: a lei revoga o "um dia por ato" dentro de autorizar_em_lote — função nova ao lado dela
+  seria um segundo juiz da mesma pergunta. E a prévia é o dry_run da própria porta, como o item 1 já fez. Lendo a recusa atual palavra por
+  palavra:
 
-  Advising using Fable 5.1
+● Running 1 shell command…
 
-✶ Wrangling… (12h 19m 22s · ↓ 1.5m tokens)
+✢ Wrangling… (12h 24m 52s · ↓ 1.5m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    2% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
