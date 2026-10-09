@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 16:40:31.**
+**Medido em 09/10/2026 16:45:39.**
 
 | | |
 |---|---|
@@ -122,25 +122,9 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● RED limpo e exatamente o previsto: 6 failures (A, B, e as duas propriedades em cada) + 1 error (o helper que ainda nao existe), com
-  B2/C/D/E/F/G verdes. Vou guardar o registro e escrever o codigo.
-
-  Ran 13 shell commands
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-● O advisor achou um defeito real na condicao (4). Vou conferir o traco e levantar os greps que nao tocam a copia (a suite esta rodando
-  sobre ela).
-
-  Ran 6 shell commands
-
-● O advisor achou um defeito real — e medi-lo mudou o numero: com a guarda espelhada (a > ini) a regra alcanca 32 de 33 e bate com o piso
   do oraculo em ±1 min nos 32; sem ela, col502 07/10 e col946 24/09 caem fora por "dois candidatos" e a regra alcancaria so 30.
 
-● Acha o invocador canonico da sombra
-  ⎿  $ cd /home/ronald/saas-hasner; sed -n 1,40p bin/r5_idempotencia_frota.sh
+  Ran 16 shell commands
   ⎿  Read docs/AVAIS.md (25 lines)
   ⎿  Read docs/HANDOFF-SESSAO.md (47 lines)
   ⎿  Referenced file ponto/turnos.py
@@ -151,7 +135,23 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Task "Guarda o patch e roda a suite inteira na copia" still running in background
 
-✢ Wrangling… (1d 3h 14m · ↓ 3.0m tokens)
+● Background command "Guarda o patch e roda a suite inteira na copia" completed (exit code 0)
+
+  Ran 2 shell commands
+
+● Agora a fase teste na cópia, e o RED do novo caso:
+
+  Ran 10 shell commands
+
+● Lanço os dois ao mesmo tempo — vizinhos na pista de teste, censo na sombra (recursos distintos, travas distintas):
+
+  DIFF de folha de frota entre HEAD e a copia na sombra
+  ⎿  $ cd /home/ronald/saas-hasner
+     C=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/l115/arvore
+     bash bin/simular_folha.sh par l115 /home/ronald/saas-hasner/app "$C/app" > logs/l115/diff_folha_frota.out 2>&1
+     echo "rc=$?"; tail -30 logs/l115/diff_folha_frota.…
+
+· Wrangling… (1d 3h 20m · ↓ 3.0m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
