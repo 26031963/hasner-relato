@@ -208,7 +208,7 @@ lista — ela e o que esta EM PE._
 | **O197** | FUTURO-NAO-E-EM-ABERTO | espera `!` |
 | **O198** | FALTA-EM-DIA-SEM-JORNADA | espera `!` |
 | **O199** | ACEITE-DE-FOLGA-DECIDE-O-DIA | espera corte |
-| **O200** | PINO-GEO-LE-O-JUIZ | espera `!` |
+| **O200** | PINO-GEO-LE-O-JUIZ | espera aval |
 | **O201** | A REGRA 2 DO CONTRATO NAO PODE PASSAR A VARRER COMENTARIO | **fila 2** -- e INSTRUMENTO (selo), e a  |
 | **O202** | O TERCEIRO CALCULO DE GEO -- OS PINGS | **fila 2**. O aval dos 4 BOs o declarou  |
 | **O203** | O SELO DA COLUNA PROTEGE FICA CEGO QUANDO A CELULA E ESVAZIADA NO MESMO COMMIT | **fila 2** -- INSTRUMENTO (portao do pus |
