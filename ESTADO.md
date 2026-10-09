@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:465 AFIRMA ato sem PROVA ao lado -- ## O146 — **FECHADA, NO AR**: a extra declarada da escala desloca o limite, e o limite
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:477 AFIRMA ato sem PROVA ao lado -- ## O146 — **FECHADA, NO AR**: a extra declarada da escala desloca o limite, e o limite
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 09:46:01.**
+**Medido em 09/10/2026 09:51:31.**
 
 | | |
 |---|---|
@@ -122,38 +122,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Task "RED e construção do segundo intervalo" completed in background
+  mesma leitura da cláusula que a própria L-032 declara faltando, e contradiz lei escrita em ≥ 11 dos 126 (9 dias do balde D por BUG 100,
+  col900 e col941 por L-032 cl.1). MECANISMO.md corrigido; expectativa de bateria sai da lei, nunca do CSV (L-110).
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+  Balde P está liberado e é a próxima fatia. Medi o ramo que subtrai a pausa (ponto/turnos.py:472-482): os três ramos são exclusivos —
+  havendo par marcado, a janela declarada nunca mais é olhada. Então reconhecer o par, sozinho, regride col900 04/10 (452 → ~482) e col941
+  30/09 (444 → ~460), pagando minuto de pausa que a L-032 cl.1 manda sair. A cura é o par mais max(batido gozado, janela declarada ∩
+  turno), com o carimbo janela_descontada declarando só o excedente não batido.
 
-  Searched for 1 pattern, listed 1 directory, ran 24 shell commands
+  Sigo com os REDs do P (col114 492→434, col900 fica 452, col941 fica 444) e o censo de quem mais lê realizado_dos_turnos antes do DIFF.
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: O214 -- HE-DECISAO-EM-ESCALA (lei nova dele, 05/10 18:0x, 4 itens; entra logo depois da O211 e a FRENTE
+  dos BOs de tel
 
-  Searched for 5 patterns, ran 9 shell commands
-  ⎿  Read docs/AVAIS.md (25 lines)
-  ⎿  Read docs/HANDOFF-SESSAO.md (47 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/r1_mecanismo.py (81
-     lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/botxutwp8.output (10 lines)
-  ⎿  Referenced file docs/BACKLOG.md
+  Searched for 1 pattern, listed 1 directory, ran 2 shell commands
 
-● Task "RED e construção do segundo intervalo" completed in background
+❯ aval Ronald: o RELATO esta retido desde 08/10 19:2x por RELATO.md:465 (titulo da O146 afirma ato sem a linha PROVA: ao lado). Poe a
+  PROVA no proximo commit de marco e confere no ESTADO que a faixa "RELATO retido" sumiu. Nenhuma lei nova. segue a fila; PAREI so em lei
+  ou !
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-● Medir na autoridade qual marco cada batida acendeu
-  ⎿  $ cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/r1_ata_a_b.py <<'PY'
+● Medir o gravado que prova o ato da O146 · 57s
+  ⎿  $ cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/o146_prova.py <<'PY'
      # -*- coding: utf-8 -*-
-     # R1 -- SO LEITURA. Pergunta a AUTORIDADE (CelulaDia.ata/dna + juiz_batida.periodos_do_dia)
-     # qual marco cada batida acendeu nos casos a e b do balde A,…
+     # PROVA do ato da O146 -- SO LEITURA, valor GRAVADO em prod.
+     from escala.models import TipoEscala, CelulaDia
+     from django.db.models import Q
+     tot_te = Tip… (57s · 2 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Wrangling… (20h 20m 22s · ↓ 2.3m tokens · thinking)
+✢ Wrangling… (20h 25m 52s · ↓ 2.3m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    3% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
