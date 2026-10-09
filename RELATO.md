@@ -1,5 +1,75 @@
 # RELATO — esteira saas-hasner
 
+## O230 POUSO 1 — **A SONDA DE LEITURA DO DEV DA CASA ESTA NA ARVORE** (09/10 14:1x, POUSO 1 FECHADO)
+
+PROVA: `bin/sonda_leitura.sh` na arvore (de `1723901e` da raia `agent-a375cb746ca034f0c`), os tres REDs
+rodados **como `fernando`** pelo caminho real `sudo -u ronald`: `logs/o230/red_a_20261009.txt` (886
+colaboradores pelo ORM e **886** por SQL cru, nos DOIS bancos), `logs/o230/red_b_20261009.txt` (**4 de 4**
+escritas negadas por `permission denied for table` com o cinto DESLIGADO, contagem 886 antes e depois nos
+dois bancos), `logs/o230/red_e_20261009.txt` (**18** variaveis no env da sonda, **0** chaves da casa,
+contra **26** no `saas_core`) e `logs/o230/red_dono_e_argv_20261009.txt`; **64 selos de host verdes**.
+
+**O AVAL, LITERAL** (09/10 13:4x, registrado no PROMPTS): *"O230 pousa AGORA, na frente do que vier depois
+do apply do R1. O role leitor e o sudoers ja existem; falta bin/sonda_leitura.sh na arvore e a leitura de
+logs e docs. Pousa o script com os REDs a, b e e provados; os outros REDs e o selo vem no pouso seguinte de
+instrumento. Nenhuma lei nova."* O escopo e literal e foi cumprido literalmente: pousou **um arquivo**,
+`bin/sonda_leitura.sh`. O selo `bin/tests/test_sonda_leitura.sh`, que existe na raia e pergunta ao CATALOGO
+do Postgres, **ficou lá** — ele e o POUSO 2, com os REDs c, d e f. Ato de INSTRUMENTO proprio (L-105),
+depois do produto, e **sem deploy**: nada que o gunicorn serve mudou.
+
+**UMA CORRECAO AO SCRIPT ANTES DE POUSAR, e e a secao 4 do CLAUDE.md se aplicando a mim.** As linhas 15-16
+prometiam que *"o selo le `has_table_privilege` do Postgres, nao esta prosa"* — e o selo nao vinha neste
+pouso. Promessa de guarda inexistente e exatamente o que fez o cartorio ler batida crua por meses. A linha
+agora DIZ que o selo e o POUSO 2 e que ate ele a guarda e documental mais o RED b.
+
+**O RED b MEDIA O CINTO E DAVA ISSO POR PROVA — e o cinto e desfazivel em uma linha.** Aqui o defeito era
+meu, e ele e o ponto inteiro da fatia. `default_transaction_read_only = on` faz o Postgres recusar com
+**25006** (`cannot execute UPDATE in a read-only transaction`) **antes** de olhar privilegio de tabela: a
+mensagem prova o CINTO, e o proprio aval chama o cinto de cinto (*"quem segura e o GRANT, nao o parametro
+de sessao"*; um `SET ... = off` o desfaz, e e `USERSET` — o leitor pode). O RED passou a morder nos DOIS
+valores, e so a rodada 2 certifica:
+
+- **rodada 1, cinto LIGADO**: UPDATE, DELETE, INSERT e UPDATE-pelo-ORM todos `cannot execute ... in a
+  read-only transaction`;
+- **rodada 2, cinto DESLIGADO pelo proprio leitor**: os quatro `permission denied for table
+  colaboradores_colaborador`. **4 de 4 pelo GRANT**, em `saas_hasner` **e** em `sombra`.
+
+Toda tentativa tem `where/values id = -1` (0 linhas possiveis) dentro de `atomic()` com `raise` no fim — a
+lei de 27/08 —, e a contagem fecha **886 antes e 886 depois** nas quatro rodadas.
+
+**E A PRIMEIRA FORMA DO RED b ERA UMA SONDA MAL PARAMETRIZADA**, o erro que esta casa ja leu como bug do
+sistema sete vezes: ela escrevia `set matricula = matricula`, e `matricula` **nao e coluna** de
+`colaboradores_colaborador` nem campo do modelo. Duas das quatro tentativas voltavam `column "matricula"
+does not exist` e `Colaborador has no field named 'matricula'` — negadas pela minha SONDA, nunca pelo
+GRANT, e a rodada 2 saiu **VERMELHA** com `2 de 4 por PERMISSION DENIED`. A sonda passou a usar `situacao`,
+que existe, preservando o valor nas duas formas (`situacao = situacao`, `F('situacao')`). A trilha guardou
+as duas: sha `d4f4e79d…` (errada) e `141188fd…` (certa), `quem=fernando` nas seis linhas.
+
+**O ARGUMENTO E DO CHAMADOR, e isso se mediu, nao se supos** (`logs/o230/red_dono_e_argv_20261009.txt`).
+Como `fernando`, os quatro alvos de outro dono dao **rc 2** sem devolver um byte de conteudo — `.env`,
+`logs/.env_teste`, `logs/.env_leitor` e `app/ponto/turnos.py` —, porque o veto julga o **DESCRITOR** ja
+aberto, antes do `exec`. O ultimo e o caso que mostra o desenho: o `fernando` **LE** `turnos.py` pela ACL,
+e mesmo assim nao o roda como sonda. E o argv estrito devolve `rc 2` em `--sombra` sem arquivo, sem
+argumento, com um `--settings=` colado e com dois arquivos.
+
+**A ACL DE `logs/` E `app/docs/` JA EXISTIA, e o aval dizia que faltava.** Medido como `fernando`, antes de
+tocar em nada: **NEGADO** em `.env`, `logs/.env_teste`, `logs/.senha_teste` e `backups/`; **LE** em `logs/`,
+`app/docs/`, `app/docs/LEIS.md`, `app/ponto/turnos.py` e `bin/recursos.sh`. Nao se refez o que estava
+feito. Depois do primeiro uso, o env-file nasceu **600 sem entrada de ACL** (`user::rw-`, `group::---`,
+`other::---`) e segue **NEGADO** ao `fernando`; a trilha `logs/sonda_leitura.log` ele **LE**, e isso e
+certo — ela nao carrega segredo, carrega quem/quando/banco/sha/rc.
+
+**O QUE ESTA PORTA ESCREVE, declarado porque e escrita no banco do CLIENTE** (LEI-AKITA 7): cada chamada de
+producao reafirma 5 linhas de catalogo em `saas_hasner` (`GRANT CONNECT`, `GRANT USAGE` x2 e
+`ALTER DEFAULT PRIVILEGES` x4) e um `ALTER ROLE leitor ... PASSWORD` no cluster. O `GRANT SELECT ON ALL
+TABLES` **so** sai quando o catalogo responde que falta — em `saas_hasner` a resposta e 0 e nao se escreve;
+na `sombra` recem-restaurada e 111, e e para isso que o ponto de uso existe: `bin/sombra.sh:221-225` a
+derruba toda noite com `pg_restore --no-privileges` e leva todo GRANT com ela.
+
+`LEI-AKITA: origem=bin/sonda_leitura.sh (porta unica de leitura do dev), testemunha=catalogo do Postgres
+(has_table_privilege / permission denied), RED=logs/o230/red_{a,b,e,dono_e_argv}_20261009.txt,
+quem-mais-le=0 (porta nova, nenhum chamador de produto), juizes novos=0`
+
 ## R1-RESIDUO-DO-INTERVALO — **EM CURSO** (09/10 09:xx; complemento da O73, sem id novo)
 
 **LEI RESPONDIDA às 13:3x — `L-115`, e a resposta não era nenhuma das minhas duas candidatas.**

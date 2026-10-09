@@ -237,4 +237,4 @@ lista — ela e o que esta EM PE._
 | **O227** | O GUARDA DA L-092 RECUSA LEITURA | livre -- nao toca numero, so quem pode P |
 | **O228** | ESMERIL-CELULA-TURNO | **fila 1 no FIM**, junto de R6 item 4 e  |
 | **O229** | OS IRMAOS DA O145 -- o que o censo dos dois leitores achou e a O145 NAO cura | **na fila, nenhum comecado** -- nascem d |
-| **O230** | SONDA-LEITURA-[nome]: o dev da casa le TUDO e nao escreve em nada | **POUSA AGORA** (aval 09/10 13:4x): role |
+| **O230** | SONDA-LEITURA-[nome]: o dev da casa le TUDO e nao escreve em nada | **POUSO 1 FECHADO** 09/10 14:1x: `bin/so |
