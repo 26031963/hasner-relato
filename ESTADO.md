@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:428 AFIRMA ato sem PROVA ao lado -- onde a lei diz que moram. E o estado passou a abrir com `**NO AR`, porque
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:430 AFIRMA ato sem PROVA ao lado -- onde a lei diz que moram. E o estado passou a abrir com `**NO AR`, porque
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 23:10:31.**
+**Medido em 08/10/2026 23:15:45.**
 
 | | |
 |---|---|
@@ -121,6 +121,12 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  Nenhuma lei nova. segue a fila; PAREI so em lei ou !
+
+  Ran 16 shell commands
+  ⎿  Read docs/AVAIS.md (23 lines)
+  ⎿  Referenced file ../../wt-bos/app/colaboradores/tests/test_o200_pino_geo_le_o_juiz.py
+  ⎿  Read ../logs/sombra/censo_o145_dois_leitores.py (120 lines)
   ⎿  Referenced file ../logs/o145_motor.out
   ⎿  Read ../logs/o145.out (86 lines)
 
@@ -141,18 +147,12 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Background command "Rodar so os dois contratos que ficaram vermelhos" completed (exit code 0)
 
-● Rodar a pasta de selos de host da raiz da raia · 17s
-  ⎿  $ cd /home/ronald/wt-bos
-     echo "=== selos de HOST rodados da RAIZ DA RAIA (antes do pouso) ==="
-     ok=0; bad=0; falhou=""
-     for s in bin/tests/test_*.sh; do
-     out=$(timeout 300 bash "$s" 2>&1); rc=$?
-     if [ $rc -eq 0 ]; then ok=$((ok+1)); else bad=$((bad+1)); falhou="$falhou $s"; echo "### VERMELHO rc=$rc $s… (16s · 6 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
+● Ler o fim da secao do complemento
+  ⎿  $ cd /home/ronald/saas-hasner; sed -n '148,160p' app/docs/RELATO.md
 
-✢ Wrangling… (9h 44m 52s · ↓ 1.1m tokens)
+· Wrangling… (9h 50m 6s · ↓ 1.2m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                   10% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
