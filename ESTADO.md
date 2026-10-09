@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 13:20:45.**
+**Medido em 09/10/2026 13:25:46.**
 
 | | |
 |---|---|
@@ -35,6 +35,7 @@ a28ca8cf O214 item 4: a linha do DP cabe no carrier, e o corte deixa de comer o 
  M app/config/crons_duracao.json
  M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/LEIS.md
  M app/docs/PROMPTS.md
  M app/docs/RELATO.md
  M app/docs/TICKETS.md
@@ -115,8 +116,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Searched for 4 patterns, ran 19 shell commands
-
 ● Background command "Rodar a suite ponto inteira na copia" completed (exit code 0)
 
   Searched for 3 patterns, ran 15 shell commands
@@ -135,22 +134,24 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Agora o patch do placar, montado em memória na cópia do HEAD:
 
-● Aplicar o patch dos papeis e das duas linhas novas
-  ⎿  $ SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
-     cd $SP/p_head/app && python3 - <<'PY'
-     import re, py_compile
-     p = 'core/placar_estrutural.py'
+● Publicar no RELATO o DIFF, o certificado, a L-114 e o antes do gravado
+  ⎿  $ python3 - <<'PY'
+     p = 'docs/RELATO.md'
      s = open(p).read()
-     # --- 1. os dois PAPEIS + a cadencia, ao lado dos tres estados
-     a = "FECHADO, PARCIAL, PEN…
+     anc = '\n## O214 ITEM 4 — **O DIA TEM DONO, E A DIFERENCA TEM DONO**'
+     assert s.count(anc) == 1
+     bloco = '''
+     ### O DIFF DE FROTA, PUBLICADO ANTES DO APPLY (09/10 12:29, na sombra — IMPACTO, nao prova)
+     DINHEIRO-EM-COMPETENCIA-ABERTA pede os qu…
 
-· Wrangling… (23h 55m 6s · ↓ 2.6m tokens)
+✽ Compacting conversation… (1d 0h 0m · ↓ 2.6m tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 48%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens

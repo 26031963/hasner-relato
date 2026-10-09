@@ -47,6 +47,111 @@ se o par de 9 min for lido como marcacao duplicada, e disso NAO ha lei escrita. 
 na bateria nas DUAS formas (O218).
 
 
+### O DIFF DE FROTA, PUBLICADO ANTES DO APPLY (09/10 12:29, na sombra — IMPACTO, nao prova)
+
+DINHEIRO-EM-COMPETENCIA-ABERTA pede os quatro, e o primeiro e este. Medido na SOMBRA pelas funcoes
+REAIS (`turnos_do_colab` + `_pares_marcados` + `realizado_dos_turnos`), janela **2026-08-21..2026-10-08**,
+**551 colaboradores / 26.999 dia-colab**, arvore base `ponto/turnos.py` md5 `ed186512…` (HEAD `6a259f0b`)
+contra `f4058711…` (veto v2). Censo inteiro em `logs/r1/censo_impacto.out`:
+
+**TOTAL −1.162 min (−19,37 h) em 55 dia-colab, 20 colaboradores.** Por competencia: **09/2026 29
+dia-colab, −447 min**; **10/2026 26 dia-colab, −715 min**. **0 linha nova** (a v2 e estritamente mais
+restritiva que a v1: ela admite um SUBCONJUNTO, entao o universo so pode encolher) e **0 delta deslocado**
+nas que ficam — as que ficam mantem o numero digito a digito. Os pares latentes de turno aberto, que a v1
+criava, foram de **14 a 0**.
+
+**AS SEIS SAIDAS, nomeadas** (a predicao escrita ANTES, `logs/r1/predicao_censo_v2.txt`, afirmava DUAS
+e o censo achou SEIS — a predicao esta FALSIFICADA no numero e e por isso que ela nao certifica nada):
+col438 **−117** · col518 **+38** · col921 **−60** · col890 **+1** · col923 12/09 **+1** · col923 19/09
+**+1**. As quatro ultimas sao as bordas que o arredondamento move; as duas primeiras sao os dois achados
+de `logs/r1/achado_papel_x.md`, que a v2 nasceu para curar.
+
+**O que o DIFF NAO e**: ele nao certifica. L-114 (abaixo) poe o nome em cada papel — o certificado e a
+BATERIA, o DIFF e IMPACTO, o oraculo e TERMOMETRO.
+
+### O CERTIFICADO: a BATERIA, com os quatro dias medidos escritos como CASO
+
+`ponto/tests/test_r1_pausa_de_autoridade_mista.py` — **3 cenarios / 14 testes**, cada caso com cadastro,
+batidas, ata e **a resposta da regra escrita ANTES do codigo** (L-110). O que ela cobra, e nenhuma delas
+e geometria pura: **o MINUTO do dia** ao lado do par (`realizado_dos_turnos`, o leitor que PAGA) —
+col438 11/09 vale **(360, 60)** onde a primeira forma pagava 243; col518 05/09 vale **(353, 60)** onde a
+primeira forma pagava 391. As duas assercoes passaram de primeira, o que e a predicao do minuto se
+confirmando. E o **contra-exemplo adversarial** (LEI-AKITA 5) guarda a ata FUTURA: `['E','S','Xi','Xi','S']`
+tem de dar o par DECLARADO `14:00→15:00`, e da — **nao por regra nova**, mas pela passada `_usados` da
+R2b (27/09, caso col843), que casa o par `_intra_declarado` ANTES do laco guloso. Se esse teste ficar
+vermelho algum dia, a cura e ESTENDER aquela passada, nunca afrouxar o veto.
+
+O selo do comportamento velho **nao foi apagado**: a assercao dele se inverteu e ele passou a morder a
+VOLTA do defeito (`test_MORDE_ata_MUDA_o_MARCO_SOZINHO_nao_abre_pausa`).
+
+**VEREDITO DAS SUITES** (`logs/r1/suite_veredito_20261009.txt`, os tres lidos pelo PAR que a secao 3 do
+CLAUDE.md exige — `^(OK|FAILED)( |$)` **mais** `^Ran N tests`): modulo **Ran 14 / OK**; familia ponto
+inteira **Ran 3163 / OK (skipped=7)**; vizinhos **Ran 7018 / OK (skipped=35)**. A nota no pe daquele
+arquivo mostra a linha de PROSA de log (`OK — nenhuma divergencia em 2026-10-09`) que casaria o padrao
+sozinha: foi ela que deu uma suite por verde em 08/10.
+
+### L-114 CERTIFICADO x IMPACTO x TERMOMETRO — a lei entra no codigo do placar, sem obra nova
+
+O corte das 09:0x pediu `L-NNN` em `LEIS.md` **e** mudanca em `core/placar_estrutural.py` no marco da
+obra em curso. Os dois estao neste commit. O placar ganhou **papel** por resultado:
+
+- **PRINCIPAL** — a **BATERIA** (o certificado, linha nova: 1 de 7 familias com bateria declarada, e a
+  de turno/marcos tem **15 cenarios / 48 testes** verdes somando os dois modulos), a **SOMA** (linha nova:
+  *as partes somam o total*, **invariante** com meta ZERO em producao — 197+29+208=434 na 09 e 95+15+95=205
+  na 10), mais R2..R6 como estavam;
+- **TERMOMETRO** — **so o R1**, a comparacao com o oraculo, porque so ela e pergunta de VALOR.
+
+A **correcao 1** dele e exatamente o que eu ia escrever errado: eu desceria R1 **e** R4, lendo *"os numeros
+de frota de R1 e R4"* ao pe da letra. R4 (*todo leitor da o mesmo numero*), R5 (idempotencia) e a soma das
+partes sao **invariantes**: valem sobre dado sujo tambem, e por isso continuam no placar principal com meta
+zero em prod. A **correcao 2** poe cadencia: `CADENCIA_TERMOMETRO_DIAS = 7`, e **bateria verde com
+termometro vencido = AMARELO**. HOJE O PLACAR SAI AMARELO, e isso e o primeiro uso da lei contra a propria
+casa: a ultima medicao do R1 e de **02/10 23:15** (`logs/e6_cauda2c/r1_dono_09_e_10.txt`), 7 dias — a semana
+correu. O `e6_oraculo` da competencia aberta e o passo logo depois do pouso, pela propria cadencia.
+
+O modulo **nao le relogio**: `placar(hoje)` recebe o dia de quem publica e, sem ele, o vencimento e `None`
+— *nao perguntado* —, nunca `False`. Ausencia de sinal lida como sinal bom e o defeito que custou quatro
+selos vazios em 01/09. **RED evidenciado** em `logs/r1/red_selo_l114_20261009.txt`: trocar o `>=` da borda
+por `>` derruba 3 dos 9 casos de `core/tests/test_l114_placar_papel_e_termometro.py` — a borda, a cor do
+veredito e a linha do ESTADO. A secao TERMOMETRO do ESTADO e render, mora em `bin/gerar_estado.py` e pousa
+em ato PROPRIO de instrumento, depois do produto (L-105).
+
+### O ANTES DO GRAVADO, MEDIDO EM PROD — e a 09 nao se move em silencio
+
+`logs/r1/gravado_quem_escreve.md` (56 linhas) e `logs/r1/hash_antes_deploy_20261009_1249.txt`. A
+competencia **09/2026, EXPORTADA, esta INTACTA** em TRES medicoes da mesma funcao `_h` ao longo de ~19 h
+(08/10 18:09, 08/10 19:11 e 09/10 12:49): **607 linhas, `4da388d4…`** nas tres, com as 21 exportacoes
+vigentes de hash igual e `invalidada_em=None`. A UNICA linha de comp 09 gravada no meio disso (09/10
+07:48:14) **moveu ZERO dos 24 campos de VALOR**, e o escritor tem NOME: `invalidar_previsto`
+(`ponto/services/fechamento.py:965`, chamado so de `escala/signals.py:132`), que escreve `previsto_em` e
+`atualizado_em` — e `previsto_em` nao esta em `CAMPOS`.
+
+**A guarda e ESTRUTURAL, nao conduta**: `ponto/services/fechamento.py:72-82` chama
+`empresas_exportadas_no_escopo(...)` e LEVANTA sem `permitir_exportada=True` + motivo escrito, com trilha
+nominal — e as tres empresas tem exportacao vigente de 09/2026. Entao nenhum caminho recalcula a 09 em
+silencio, e o deploy nao pode mover dinheiro exportado. A testemunha de quem pode escrever
+`FechamentoMensal` nao e um grep meu: e `folha/tests/test_chokepoint_folha_gate.py`, familia
+`folha/export`, **ALLOWLIST VAZIA**, por AST — porta unica `ponto/services/fechamento.py`.
+
+**A 10/2026 se move por conta propria**, e por isso o "antes" dela nao se reusa: **tres hashes diferentes**
+nas tres medicoes (`127d6a83…` → `d6422334…` → `1bb6ec36…`, 587 linhas nas tres), **293 linhas** reescritas
+desde 08/10 19:11, **81 na hora corrente**. `recalcular_fechamento` **nao tem cron** por desenho
+(`config/crons.py:902`: *"quem decide QUANDO uma competencia se recalcula e o DP"*) — entao ela nao anda no
+instante do deploy, e sim no proximo ato pela porta. Consequencia pratica, e e ela que manda no passo
+seguinte: **o snapshot de reversao da 10 se tira NO INSTANTE do apply**, sobre as 587 linhas x 24 campos.
+Nao atribuo as 293 linhas a um dos dois movedores possiveis — isso exigiria trilha por linha, que o modelo
+nao guarda.
+
+### O RELATO DESTRAVOU (aval dele de 08/10 19:2x)
+
+`bin/relato_afirma_com_prova.py app/docs/RELATO.md` -> **rc=0, 0 afirmacao sem prova**. A linha que o
+retinha era o titulo da O146 afirmando ato sem `PROVA:` ao lado, e a PROVA esta no lugar
+(`docs/RELATO.md:480`: 353 `TipoEscala`, 0 com extra declarada, 124.358 celulas, 0 com
+`dna['extra_declarada']`, `dna_versao` 1: 20.785 / 2: 103.573). Com rc=0 o proximo ciclo publica o RELATO
+e a faixa **RELATO retido** do topo do ESTADO nao nasce — ela e escrita por `bin/relato.sh:84` **so**
+quando o portao recusa.
+
+
 ## O214 ITEM 4 — **O DIA TEM DONO, E A DIFERENCA TEM DONO** (09/10 07:xx→08:xx, ITEM 4 FECHADO)
 
 A ordem era literal: *"os dias acima do limite ficam decidiveis na Gestao de HE e o autorizado sai como
