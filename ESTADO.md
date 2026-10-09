@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:116 AFIRMA ato sem PROVA ao lado -- **NO AR, e a prova e PELA PORTA (09/10 20:1x).** Push liberado em `c7b8bfdb` — negocio
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:128 AFIRMA ato sem PROVA ao lado -- **NO AR, e a prova e PELA PORTA (09/10 20:1x).** Push liberado em `c7b8bfdb` — negocio
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 20:29:01.**
+**Medido em 09/10/2026 20:34:16.**
 
 | | |
 |---|---|
@@ -131,36 +131,36 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+● Now closing the blind spot the advisor named in condition (4) — measuring hi on the nearest instance, not the calendar-day one:
 
   Ran 1 shell command
 
-● The hook's own line 116 already names this gap. Reading it so the fila line doesn't duplicate an existing one:
+● Adding the contra-exemplo fixture for it. Reading the recusa class first:
 
-  Ran 1 shell command
+  Ran 4 shell commands
 
-● Now the unmeasured RELATO claim (advisor point 3). Checking the model before probing prod:
-
-  Ran 1 shell command
-
-● DiaPago is aditiva ("nenhum leitor le daqui ainda"), so it isn't the payer — but it records what was lavrado, which is the honest
-  folha-side number. One read-only row, no motor:
+● Now the RED run on the untouched HEAD copy — the cure is not in it yet:
 
   Ran 2 shell commands
 
-● colNNN is the id, not a field. Correcting:
+● --only is the label slot itself:
 
   Ran 1 shell command
 
-● Measured — and it shows my RELATO claim was wrong, not merely unproven. The lavrado DiaPago of this morning (08:55, pre-deploy) carries
-  minutos_realizados=420, so the tela↔lavrado distance went 62 → 2 min, not 60 → 0. Correcting the published record:
+● RED evidenced precisely where designed: the 2 FECHA assertions fail (unexpectedly None, 0 != 533) while all 12 recusa/propriedade cases
+  already pass on HEAD — they must stay bit-identical. Applying the cure:
 
-  Ran 3 shell commands
+  Ran 1 shell command
 
-● Now the instrument fila line the advisor asked for, so a compacted session reads the right authority:
+● Three anchors applied, idempotent on second run. Running the bateria for GREEN plus ruff:
 
-● Running 1 shell command…
+  Running cd /home/ronald/saas-hasner && C=/tmp/claude-1001…
+  ⎿  $ cd /home/ronald/saas-hasner &&
+     C=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/pousoB && timeout 900 bash
+     bin/suite.sh --dir $C --only "ponto.tests.test_saida_pela_posicao_entre_turnos" 2>&1 | grep -E '^(OK|FAILED)(\(| |$)|^Ran [0-9]+ test'
+     | tail -…
 
-✢ Proofing… (2h 36m 15s · ↓ 313.9k tokens)
+✽ Proofing… (2h 41m 30s · ↓ 327.9k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
