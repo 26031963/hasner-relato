@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 01:50:31.**
+**Medido em 09/10/2026 01:56:01.**
 
 | | |
 |---|---|
@@ -119,38 +119,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-    canônica, e o selo morde nos dois sentidos.
-  - Censo fechado: o dinheiro anda por motor_calculo_v2.py:1293 (único sítio que clipa a ponta); o contador cai em chamados/views.py:758 e
-    relatorios/views.py:36, que leem a mesma função — nada a migrar neles.
-  - Sonda do MEDIR ANTES escrita com parada zero: a sombra foi refeita 01:06 e a 0042 entrou 01:35, e --rodar monta a árvore viva — sem a
-    assertiva no information_schema a sonda estouraria no meio em vez de medir. A cura (--refazer --dump-agora) espera o push: sombra e
-    suíte dividem o cpuset 4-7.
+● Task "RED e construção do segundo intervalo" completed in background
 
-  Raias com commit à frente do main (a linha que a L-105 cobra): cert-ast 7, pousos-0410 7, raia-pdf 4 (merge proibido por ele), tmp-ui 2,
-  lps-prova 1 — nenhuma conferida verde nesta sessão, e o contador delas é fila 2 por ordem dele, depois da CELULA-TURNO-FECHA e da O145.
+● Task "Segunda tentativa de push do marco" still running in background
 
-  Aguardando o veredito do push no remoto (não na saída) para então refazer a sombra e medir.
-
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: O214 -- HE-DECISAO-EM-ESCALA (lei nova dele, 05/10 18:0x, 4 itens; entra logo depois da O211 e a FRENTE
-  dos BOs de tel
-
-  Ran 1 shell command
-
-● Push ainda na suíte (~02:05). Sigo na O214 pelo que não depende dela: os REDs, escritos pela regra antes do código (L-110). Lendo a
-  fixture do irmão item 1 para não inventar outra:
+● Push ainda na suite (os dois commits seguem à frente do origin/main). Não toco a árvore. Releio o contrato para escrever os REDs pela
+  letra dele:
 
   Ran 2 shell commands
 
-● Agora o desenho fica forçado pelo que já existe: a lei revoga o "um dia por ato" dentro de autorizar_em_lote — função nova ao lado dela
-  seria um segundo juiz da mesma pergunta. E a prévia é o dry_run da própria porta, como o item 1 já fez. Lendo a recusa atual palavra por
-  palavra:
+● _tot devolve float de hora — é exatamente a armadilha do RED i. Antes de fixar o desenho preciso saber se autoridade_do_periodo recalcula
+  ou lê o gravado (isso decide o que a prévia pode mostrar numa competência exportada):
 
-● Running 1 shell command…
+  Ran 1 shell command
 
-✢ Wrangling… (12h 24m 52s · ↓ 1.5m tokens)
+● autoridade_do_periodo recalcula pelo motor (não lê FechamentoMensal) — então na exportada a prévia mostraria DIFF real do motor enquanto
+  o gravado não se move. É exatamente o que o RED h tem de afirmar. Desenho que vou escrever, antes de escrevê-lo:
+
+  SUT, 3 sítios, zero juiz novo
+  1. he.py::autorizar_em_lote deixa de ser recusa e passa a ser o ato (função nova ao lado dela = segundo juiz da mesma pergunta). Guardas
+     ANTES de qualquer escrita: motivo vazio → recusa (e); mais de um colaborador → recusa com a frase (d). Depois, laço chamando
+     decidir_he(..., SIM, motivo=...) — nenhum escritor novo, não é tudo-ou-nada (a, b, c).
+  2. ponto/services/autorizacao_he_periodo.py: RUBRICAS mudam de casa do command para cá (o command importa) — deixar a tupla no command e
+     o serviço precisar dela criaria a segunda declaração; _serializar() é o sítio único de hora→minutos inteiros (i); previa() = atomic +
+     porta + autoridade_do_periodo antes/depois + raise (f); confirmar(mostrado=...) = mesmo caminho sem rollback, compara a MESMA
+     serialização, divergência = recusa (i); exportada pelo juiz existente empresas_exportadas_no_escopo (h).
+  3. view/url/template finos: zero conta (g).
+
+  Advising using Fable 5.1
+
+✢ Wrangling… (12h 30m 22s · ↓ 1.5m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    2% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
