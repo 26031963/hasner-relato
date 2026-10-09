@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 04:15:45.**
+**Medido em 09/10/2026 04:20:45.**
 
 | | |
 |---|---|
 | `HEAD` local | `c32acf2e O topo do TICKETS fechado no ato do push (O112)` |
-| `origin/main` | `ce212bb8 As duas colunas da O146 entram no inventario pessoal, e o padrao fica intacto` |
-| commits a subir (`ahead`) | **2** |
+| `origin/main` | `c32acf2e O topo do TICKETS fechado no ato do push (O112)` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -118,17 +118,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  - A medição não roda agora, por duas razões medidas: a suite do pre-push está no cpuset de teste, que é o mesmo da receita da sombra, e o
-    cron sombra.sh --refazer && --bloco dispara às 04:17 (crontab -l) tomando a trava da sombra por ~20-40 min. Então ela espera o
-    ARQUIVO, não um palpite de horário.
-  - O item 3 já tem sítio lido e desenho: folha/porta_export.py:264 alimenta he_pendente com uma entrada por PONTA, sem olhar limite nem
-    decisão; quem compara com o limite hoje é ponto/portas/he.py:267-272, dentro da porta que escreve. Então o item 3 pede a mesma extração
-    que o item 2 fez com o _exigir_motivo: a comparação com o limite ganha um sítio só na porta, e o contador do export passa a LÊ-LO — em
-    vez de nascer uma segunda leitura da mesma regra, que é o que a própria lápide da porta diz que já foi recusado.
-
-  Espero o veredito do push.
-
-● Ran 1 stop hook
   ⎿  Stop hook error: siga: O214 -- HE-DECISAO-EM-ESCALA (lei nova dele, 05/10 18:0x, 4 itens; entra logo depois da O211 e a FRENTE
   dos BOs de tel
 
@@ -144,16 +133,27 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-● Le a estrutura do medir
-  ⎿  $ sed -n '150,200p' folha/porta_export.py
+  Searched for 1 pattern, ran 11 shell commands
 
-✢ Wrangling… (14h 50m 6s · ↓ 1.7m tokens · thinking)
+● Corrijo a sonda com os dois defeitos que o revisor apontou — o autor tem de passar pela guarda real da porta, e a medição do confirmar
+  não pode deixar resíduo na sombra de hoje.
+
+● Corrige a sonda: autor pela guarda real e confirmar sem residuo
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PY'
+     import io
+     p = 'logs/sombra/medir_o214_item2.py'
+     s = io.open(p, encoding='utf-8').read()
+     velho_autor = """_autor = get_user_model().objects.filter(is_staff=True, is_active=True).order_by('pk').first()
+     _p('autor da medicao: user pk=%s is_superuser=%s'…
+
+* Compacting conversation… (14h 55m 6s · ↓ 1.7m tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱ 90%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    6% until auto-compact
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
