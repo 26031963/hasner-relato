@@ -58,6 +58,34 @@ se o par de 9 min for lido como marcacao duplicada, e disso NAO ha lei escrita. 
 na bateria nas DUAS formas (O218).
 
 
+### A PROVA DEPOIS — NO AR as 13:49, e os quatro casos dao o numero DECLARADO em PROD
+
+PROVA: commit `185b9af0` no ar as 13:49 (3 rotas 200/302/200, `importerror_500=0`); GRAVADO da comp 09
+medido em prod antes e depois, **607 colabs `952550a8…`** e exportacoes vigentes `361d0f96…` /
+`5c503b95…` / `84c78cd0…` (combinado `5d017af6…`), **identicos**; smoke da funcao real **4/4**
+(`logs/r1/smoke_prod_20261009.txt`).
+
+Exigencia 4 da DINHEIRO-EM-COMPETENCIA-ABERTA, fechada com os numeros:
+
+- **commit `185b9af0`**, deploy `bin/deploy.sh --sem-migrate` **no mesmo ato** (L-107): migrations
+  pendentes **0**, portao da sombra `dia=20261009 status=OK tipo=completa diverge=0 erros=0`, prova de
+  casca **16 estaticos / 5 paginas / 608 rotas em 2 urlconf**, tres cascas recarregadas JUNTAS, tres
+  rotas provadas (core `/health/` 200, ui `/colaboradores/` 302, mensageria `/health/` 200), selo
+  BUG 128 verde, **`importerror_500=0`** na janela 12:49–13:49.
+- **SMOKE EM PROD chamando a funcao REAL** `ponto.turnos.realizado_do_dia` -- nao uma sonda que
+  reconstroi a chamada (`logs/r1/smoke_prod_20261009.txt`): **4 de 4** com o numero declarado na
+  bateria -- col438 11/09 **360** (o achado do papel `X`, turno aberto), col518 05/09 **353** (o par
+  guloso), col114 22/09 **434** (os 16 dias em que a ata chama a abertura de SAIDA), col853 28/08
+  **135** (a ata deu `S` a abertura -> ADMITE). O caminho velho pagava 243 e 391 nos dois primeiros.
+- **COMP 09 EXPORTADA INTACTA, hash ANTES e DEPOIS**: as **3 exportacoes vigentes** seguem
+  `361d0f96…` (emp2, 210 linhas), `5c503b95…` (emp3, 86) e `84c78cd0…` (emp4, 9), **hash combinado
+  `5d017af6…` identico** antes (13:44) e depois (13:49) do deploy; o `FechamentoMensal` da 09 tambem:
+  **607 colabs, `952550a8…`** nas duas medicoes. As 5 linhas de registro invalidadas seguem
+  invalidadas, nenhuma apagada.
+- **A 10/2026 segue andando por conta propria**, como a dupla medicao de 13:43/13:48 ja mostrara:
+  `cfe10382…` as 13:48 e `910d2ba3…` as 13:49. E por isso que a reversao dela se tira no instante, e
+  por isso que ela e a competencia onde o numero se move.
+
 ### O DIFF DE FROTA, PUBLICADO ANTES DO APPLY (09/10 12:29, na sombra — IMPACTO, nao prova)
 
 DINHEIRO-EM-COMPETENCIA-ABERTA pede os quatro, e o primeiro e este. Medido na SOMBRA pelas funcoes
@@ -162,11 +190,20 @@ silencio, e o deploy nao pode mover dinheiro exportado. A testemunha de quem pod
 `FechamentoMensal` nao e um grep meu: e `folha/tests/test_chokepoint_folha_gate.py`, familia
 `folha/export`, **ALLOWLIST VAZIA**, por AST — porta unica `ponto/services/fechamento.py`.
 
-**A REVERSAO FOI TIRADA AS 13:43:00, imediatamente antes do apply** (exigencia 2 da
-DINHEIRO-EM-COMPETENCIA-ABERTA): `logs/r1/reversao_comp10_20261009_1343.json` guarda o **GRAVADO** campo
+**A REVERSAO FOI TIRADA AS 13:48:10, imediatamente antes do commit e do deploy** (exigencia 2 da
+DINHEIRO-EM-COMPETENCIA-ABERTA): `logs/r1/reversao_comp10_20261009_1348.json` guarda o **GRAVADO** campo
 a campo, pelos **24 campos de VALOR** do `CAMPOS` canonico (`ponto/management/commands/aplicar_09_corte_b.py:67`),
-das DUAS competencias -- **10/2026: 587 colabs, `7ea5dd89…`** e **09/2026: 607 colabs, `952550a8…`** --,
-mais os 8 registros de `ExportacaoDominio` da 09 com hash e estado. A reversao se executa **pela PORTA**
+das DUAS competencias -- **10/2026: 587 colabs, `cfe10382…`** e **09/2026: 607 colabs, `952550a8…`** --,
+mais os 8 registros de `ExportacaoDominio` da 09 com hash e estado.
+
+**E A PROPRIA RETIRADA DUAS VEZES MEDIU A DIFERENCA ENTRE AS DUAS COMPETENCIAS**, sem sonda nova: a
+mesma funcao rodou as **13:43:00** e as **13:48:10**, cinco minutos de intervalo, com a esteira so
+escrevendo documento. A **10/2026 mudou de hash** (`7ea5dd89…` -> `cfe10382…`) e a **09/2026 NAO**
+(`952550a8…` nas duas). E por isso que o "antes" da 10 nao se reusa e tem de ser tirado no instante do
+apply, e e por isso que o "antes" da 09 vale desde 08/10: uma se move por conta propria, a outra esta
+congelada pela L-092 e pela guarda estrutural. *(O arquivo das 13:43 foi REMOVIDO no ato: dois
+"antes" da mesma competencia seriam dois escritores do mesmo estado, e o vigente e o de 13:48. O que
+ele media -- o hash -- esta aqui.)* A reversao se executa **pela PORTA**
 (`ponto/services/fechamento.py`), nunca por `UPDATE` cru, e a 09 ainda exigiria `permitir_exportada=True`
 com motivo escrito: o arquivo e o VALOR de volta, nao uma licenca.
 

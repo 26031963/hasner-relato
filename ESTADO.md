@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 13:47:31.**
+**Medido em 09/10/2026 13:52:32.**
 
 | | |
 |---|---|
-| `HEAD` local | `6a259f0b O112: o rodape do TICKETS volta ao git (derivado do pos_push)` |
+| `HEAD` local | `185b9af0 R1 balde P: a pausa precisa que a ATA chame a abertura de SAIDA (L-115 nasce, L-114 entra no placar)` |
 | `origin/main` | `6a259f0b O112: o rodape do TICKETS volta ao git (derivado do pos_push)` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -22,23 +22,19 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+185b9af0 R1 balde P: a pausa precisa que a ATA chame a abertura de SAIDA (L-115 nasce, L-114 entra no placar)
 6a259f0b O112: o rodape do TICKETS volta ao git (derivado do pos_push)
 c35a2f76 O214 item 3: a trava do TXT esta LIGADA, e o numero era 81, nao 70
 a28ca8cf O214 item 4: a linha do DP cabe no carrier, e o corte deixa de comer o porque
 26a5316d O214 item 4: o dia tem DONO, e a diferenca em competencia exportada tem dono
-3c610491 O214: a trava do TXT contava dia de outra competencia (L-097)
 ```
 
 ## `git status --short`
 
 ```
  M app/config/crons_duracao.json
- M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
- M app/docs/LEIS.md
- M app/docs/PROMPTS.md
  M app/docs/RELATO.md
- M app/docs/TICKETS.md
  M bin/sombra.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -56,10 +52,12 @@ a28ca8cf O214 item 4: a linha do DP cabe no carrier, e o corte deixa de comer o 
 
 > O estrutural se separa do dado. Escala errada e batida furada sempre vao existir. O sistema tem de ser 100% coerente, deterministico e idempotente com o cadastro que TEM: se aparece errado no espelho, esta errado em todo lugar do sistema; se aparece certo, esta certo em todo lugar.
 
-**placar_estrutural: 3 fechado(s), 3 parcial(is), 0 pendente(s) de 6**
+**placar_estrutural: 3 fechado(s), 4 parcial(is), 0 pendente(s) de 7 · AMARELO (termometro sem data de medicao na fonte declarada (ou `hoje` nao foi passado): R1)**
 
 | | resultado | numero de hoje | meta | prova |
 |---|---|---|---|---|
+| **BATERIA** | o CERTIFICADO (L-114): codigo de calculo so esta PRONTO quando passa a BATERIA de cenarios pela REGRA, em banco de teste, pelas escalas canonicas (6x1, 12x36 diurno e noturno, personalizado sem intervalo) -- e cada dia de dono ESTRUTURA que o termometro acha vira CENARIO aqui ou linha na lista do admin, nunca fica sem destino | UMA familia tem bateria declarada -- turno/marcos (lavratura + residuo do intervalo) --, medida 09/10 em DOIS modulos: **15 cenarios / 48 testes verdes**. ponto/tests/test_bateria_lavratura.py da 12 cenarios / 34 testes (lampada invertida, match x janela, evento x ata certa, ancora do sweep, cruza meia-noite, orfa nas duas pontas, dia sem celula, isento, ausencia sobre folga, tres pares no mesmo dia, celula regenerada, veredito converge em duas passadas) e ponto/tests/test_r1_pausa_de_autoridade_mista.py da 3 cenarios / 14 testes, estes NASCIDOS DO TERMOMETRO: os 4 dias que o censo de impacto nomeou (col438 11/09, col518 05/09, col334 25/08, col107 06/09), cada um com cadastro, batidas, ata e a resposta da REGRA escritos como CASO antes do codigo (L-110), mais o contra-exemplo adversarial e o MINUTO do dia ao lado da geometria do par. As outras **6 de 7** familias NAO tem bateria declarada, e e por isso que isto e PARCIAL e nao FECHADO | toda familia de calculo com bateria declarada e VERDE, sem allowlist; 0 dia de dono ESTRUTURA novo sem destino | logs/r1/suite_veredito_20261009.txt (os tres vereditos lidos pelo PAR exigido na secao 3 do CLAUDE.md -- `^(OK|FAILED)( |$)` MAIS `^Ran N tests`: Ran 14 / OK no modulo, Ran 3163 / OK (skipped=7) na familia ponto inteira, Ran 7018 / OK (skipped=35) nos vizinhos; a nota no pe do arquivo mostra a linha de PROSA de log que casaria o padrao sozinha) + logs/r1/achado_papel_x.md (os dois defeitos MEDIDOS que a bateria passou a morder, com o selo do comportamento velho INVERTIDO em vez de apagado) + logs/r1/predicao_censo_v2.txt (a predicao escrita ANTES de rodar, cujo PROIBIDO recusa ela mesma como certificacao) |
+| **SOMA** | INVARIANTE, nao termometro (correcao 1 de 09/10 09:1x): as PARTES somam o TOTAL -- os tres donos (ESTRUTURA, CADASTRO, BATIDA) fecham o total de divergentes, e isso vale para qualquer dado, limpo ou sujo | fecha nas duas competencias, e o PROPRIO comando a cobra: 09 -> 197 + 29 + 208 = 434; 10 -> 95 + 15 + 95 = 205. E a MESMA medicao do R1 respondendo OUTRA pergunta: o R1 pergunta quanto o espelho diverge do oraculo (VALOR, e por isso desceu para TERMOMETRO); esta linha pergunta se as partes somam (INVARIANTE, e por isso fica aqui com meta ZERO em producao) | ZERO discrepancia entre a soma dos donos e o total, medida em PRODUCAO | logs/e6_cauda2c/r1_dono_09_e_10.txt (a conferencia da soma impressa pelo comando) |
 | **R1** | todo dia-colab divergente do E6 recebe UM dono -- ESTRUTURA, CADASTRO ou BATIDA -- pelas autoridades que ja existem, e as tres somam o total | 09: ESTRUTURA 197 (747,4 h, 60 colabs) · CADASTRO 29 (68,6 h, 12) · BATIDA 208 (867,9 h, 118) = 434. 10: 95 (393,1 h, 40) · 15 (70,3 h, 8) · 95 (448,1 h, 75) = 205. A soma fecha nas duas, e o proprio comando a cobra | tres donos, soma igual ao total de divergentes, juiz novo = 0 | logs/e6_cauda2c/r1_dono_09_e_10.txt, r1_9.csv, r1_10.csv (coluna dono_da_divergencia) |
 | **R2** | so ESTRUTURA fica na fila 1; CADASTRO e BATIDA vao para a lista do admin pela MESMA fonte do Cadastro x Realidade, e nao se curam por codigo | gap real = 7 colabs (5 de CADASTRO fora da lista + col392 e col529 sem chamado), nao 82: BATIDA JA tem casa -- 103 de 118 na 09 e 67 de 75 na 10 com chamado carimbado NO DIA. Uma leitura do corte continua na mesa dele (a lista cresce uma secao de batida, ou BATIDA fica no chamado) | 0 colaborador de dono CADASTRO ou BATIDA sem destino | logs/e6_cauda2c/r2_lista_do_admin.py + r2b.py, medidos em prod so leitura |
 | **R3** | dia de turno ABERTO aparece EM ABERTO dizendo O QUE FALTA e MANTEM o numero rotulado (a soma dos pares fechados), igual em tela, PDF, cartao, app e TXT; o turno EM CURSO de hoje nao recebe a palavra -- quem esta dentro da jornada nao deixou nada em aberto | A PALAVRA ALCANCOU O TURNO ABERTO e os 5 leitores seguem CONCORDANDO (tela x PDF, cartao x TXT, calendario x espelho: todos 0 nas duas competencias; TXT=0 e RETIDOS=0 nos 6 pares empresa x competencia, medido CRUZADO HEAD x curada na mesma sombra). O VEREDITO, no universo `Colaborador.objects.filter(situacao="ativo")` (533 colabs): **0 dia de turno aberto MUDO** nas duas competencias. 09/2026: 244 dia-colab de turno aberto = 238 com a palavra + 6 DECIDIDOS pela folha (palavra propria) + 0 em curso. 10/2026: 193 = 135 com a palavra + 0 decididos + 58 EM CURSO (corte parte 2). O MUDOS=0 NAO MUDA DE UNIVERSO: no universo `FechamentoMensal` (607 e 572 colabs) da 275 = 269 + 6 + 0 na 09 e 194 = 136 + 0 + 58 na 10 -- e o 6 DECIDIDO e o mesmo nos dois. O `em curso` anda com o relogio POR DESENHO (`turno_aberto_de(agora=None)` le `timezone.now()`, ponto/turnos.py:1401): 3 medicoes no mesmo banco e no mesmo universo (ativos) deram 59 as 09:31, 58 as 09:43 e 51 as 09:55 -- e sao turnos abertos NO INSTANTE DO DUMP (ultima batida da sombra 03/10 04:11), nao gente na jornada agora. Encolher em_curso so empurra dia para a classe COM palavra, nunca para MUDO; o que nao anda e o MUDOS=0. `dias_em_aberto` subiu de 296 para 323 na 09 e de 133 para 145 na 10 -- +27 e +12 dias que ganharam a palavra, 0 que a perderam. SEGUE PARCIAL, e a parte que falta tem nome: a O130 -- a palavra dizer QUAL marco falta (hoje e a string fixa `Em aberto`). A O130 ESTA CONSTRUIDA E MEDIDA (04/10 05:2x, raia `raia-o130`, `97079d6e`; os 23 modulos vizinhos em `Ran 184 / OK`), e NAO ESTA NO AR: merge e deploy sao UM ato e o deploy publica o disco, que e o `!` da `janela_auth`. O numero dela, medido na sombra com as funcoes REAIS (09, emp 2/3/4, 863 colabs, 16.161 dia-colab com celula): a frase fala em 2.405 e cala em 13.756, min 11 / mediana 45 / MAX 88, por UM compositor (`ponto/services/dia_decidido.py::frase_do_que_falta`) que os CINCO leitores leem -- antes dela o `templates/ponto/espelho.html` montava a SEGUNDA redacao sozinho, com o CODIGO cru do marco (`S 19:00`), que o PDF e o celular nao tinham. Juiz novo = 0: os marcos vem da GRADE e a palavra de `Batida.TIPO_CHOICES`. MESMO ASSIM O R3 NAO VIRA FECHADO AQUI -- a clausula `com o que falta` e redacao dele, e placar nao carimba a propria meta. As duas partes do corte de 05:3x estao cumpridas e o MUDOS=0 esta medido nos dois universos; o que nao esta e a clausula `com o que falta`, que e da redacao dele e nao sai daqui para carimbar fechado. A 2a PALAVRA POUSOU em `7765ceb2` (03/10 14:2x, lei dele das 12:4x): o dia com minuto na ata e ZERO par pareavel leva `sem turno pareado` com o numero da ata rotulado, no molde do `Em aberto` -- **48 dia-colab, 312,9 h** na frota 09+10 (eu havia publicado 10 e 34,6 h, que era a premissa, nao a medicao), com **cartao, tela e api em 48 de 48** e a **grade em 25 de 48**, porque `turnos_do_colab` responde diferente conforme a JANELA pedida (col736: 9 turnos em 21/08-20/09 contra 26 em 01/09-30/09) -- e essa discordancia de janela e do O65, nao da palavra | os 5 leitores iguais, ZERO dia de turno aberto MUDO -- nenhum dia contado sem palavra nenhuma -- e a palavra NOMEANDO o marco ausente. NAO e "todo turno aberto ganha a palavra": dia que a folha DECIDIU tem palavra propria, mais informativa (corte R3 parte 1, 03/10 05:3x; LEI-AKITA 4) | logs/r3_cross/ -- r3_frota_invariante.txt (o MUDOS=0, com a sonda r3_frota.py ao lado), r3_cross_09_e_10.txt (TXT=0/RETIDOS=0 cruzado + o caso col643), r3_recon_universo_fechamento.txt (o mesmo invariante no outro universo), r3_detalhe_as_duas_classes.txt (os 6 decididos NOMEADOS com a palavra de cada um, e a prova de que o em-curso e do dump), r3_curso_agregado_classe_inteira.txt (os 51 em curso medidos SEM AMOSTRA: data_turno 02/10 nos 51, maior batida 04:11 = o dump), r3_suite_vizinhos.txt. Antes: logs/e6_cauda2c/r4_pares.txt + r1_dono_09_e_10.txt (dia_batida_impar). A PALAVRA: autoridade em relatorios/cartao_pela_celula.py:273::folha_manda (datas_em_aberto), aplicada em ponto/services/espelho.py:308, em relatorios/pdf_espelho.py:563 (+ badge :708), lida pelo app em api/views.py:1391 e mantida FORA do TXT com linha propria em folha/porta_export.py:466 |
@@ -116,10 +114,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Searched for 1 pattern, ran 18 shell commands
-
-● Now the top of the RELATO — the lei question becomes the lei answered:
-
   Ran 4 shell commands
   ⎿  Read docs/AVAIS.md (25 lines)
   ⎿  Referenced file docs/RELATO.md
@@ -140,12 +134,16 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-● Vereditos e o que o selo LEI-AKITA exige
-  ⎿  $ SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
-     for f in suite_ponto_v5.out suite_vizinhos_v3.out bateria_v5.out suite_core_l114_v2.out; do
-     printf '%-26s %s | %s\n' "$f" "$(grep -E '^(OK|FAILED)( |$)' $SP/$f | tr '\n' ' ')" "$(grep -E '^Ran [0-9]+ …
+  Ran 8 shell commands
 
-✢ Wrangling… (1d 0h 21m · ↓ 2.7m tokens · thought for 2s)
+● Agora o commit do marco.
+
+● Rodar a pasta de selos de host antes do push · 1m 16s
+  ⎿  $ cd /home/ronald/saas-hasner && fail=0; for t in bin/tests/test_*.sh; do out=$(bash "$t" 2>&1); rc=$?; [ $rc -ne 0 ] && {
+     fail=$((fail+1)); echo "=== RED $t (rc=$rc)"; echo "$out" | tail -6; }; done; echo "selos de host: $fail vermelho(s)" (1m 16s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✻ Wrangling… (1d 0h 26m · ↓ 2.7m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
