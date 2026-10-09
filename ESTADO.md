@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 08:53:01.**
+**Medido em 09/10/2026 08:58:31.**
 
 | | |
 |---|---|
 | `HEAD` local | `6a259f0b O112: o rodape do TICKETS volta ao git (derivado do pos_push)` |
-| `origin/main` | `a28ca8cf O214 item 4: a linha do DP cabe no carrier, e o corte deixa de comer o porque` |
-| commits a subir (`ahead`) | **2** |
+| `origin/main` | `6a259f0b O112: o rodape do TICKETS volta ao git (derivado do pos_push)` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -118,42 +118,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  lista do admin pela MESMA fonte do Cadastro x Realidade, com o horario real ao lado do cadastrado. O dia de FOLGA trabalhada nao tem
-  marco e por isso nao aparece la hoje: contar e publicar quantos sao.
-
-  DINHEIRO: competencia aberta, pela DINHEIRO-EM-COMPETENCIA-ABERTA (DIFF de frota no RELATO antes, reversao em logs/, exportada intacta
-  com hash, prova depois). Colab que CAI de valor (familia c) sai no DIFF com nome de classe e numero.
-
-  SELO: leitor com derivacao propria de realizado = 0; juizes novos = 0.
-  PROIBIDO: mexer no oraculo, na tolerancia ou na lista para o numero cair; fallback; teto inventado; corrigir cadastro ou tipo de batida
-  por script; juiz novo; abrir outro achado.
-  PRONTO: RELATO com o mecanismo medido, os REDs a-j nomeados, o DIFF, e o e6_oraculo --mes 10 RODADO DE NOVO depois do pouso com o novo
-  numero de ESTRUTURA ao lado do 126; R1 e R4 do placar remedidos. Sem isso = INCOMPLETO com a lista.
-
-  LEI-AKITA: origem=o sitio que a medicao apontar em ponto/turnos.py (pareador/realizado) e motor_calculo_v2.py, testemunha=celula (ata) e
-  o realizado do juiz, RED=a-j, quem-mais-le=espelho, cartao, PDF, DiaPago, fechamento, export, e6_oraculo, juizes novos=0
-  LINHA HAIKU: (a) contador "dias com pausa batida fora da janela" com rotulo de admin; (b) golden: "por que o espelho do colab X mostra
-  menos horas que as batidas no dia Y"; (c) degrau: leitura.
-
-  Nenhuma lei nova. segue a fila; PAREI so em lei ou !
 
   Ran 4 shell commands
 
 ● Background command "Esperar o marcador terminal do push" completed (exit code 0)
 
-● Ler o veredito do push pelo remoto
-  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
-     echo "=== esperador ==="; cat
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b5noo39a9.output
-     echo "=== push2.out (fim) ==="; tr '\r' '\n' < "$S/push2.out" | g…
+  Ran 5 shell commands
 
-✢ Wrangling… (19h 27m 22s · ↓ 2.2m tokens · thinking)
+❯ aval Ronald: R1-RESIDUO-DO-INTERVALO, correcao do PRONTO: a certificacao e a BATERIA -- os casos a-j pela regra, em banco de teste -- e
+  nao o numero da frota. O e6_oraculo roda uma vez depois do pouso so como TERMOMETRO (quanto mudou e para quem), nunca como meta:
+  producao sempre tera cadastro errado e batida furada (L-099). Os casos a-j entram na bateria permanente da lavratura, junto do O217, com
+  as escalas canonicas (6x1, 12x36 diurno e noturno, personalizado sem intervalo). Nenhuma lei nova. segue a fila; PAREI so em lei ou !
+
+  Ran 3 shell commands
+
+● Background command "Nova tentativa de push" completed (exit code 0)
+
+● Background command "Esperar o marcador terminal do REMOTO" completed (exit code 0)
+
+  Ran 8 shell commands
+
+❯ corte Ronald: CERTIFICADO-IMPACTO-TERMOMETRO (lei nova). (1) CERTIFICADO: codigo de calculo so esta certo quando passa a BATERIA de
+  cenarios pela regra (cadastro tal, batidas tais, o dia vale tanto), em banco de teste, pelas escalas canonicas; e o unico criterio de
+  PRONTO de obra de calculo, de contrato e de placar. (2) IMPACTO: DIFF de frota roda uma vez, antes de apply de dinheiro, so para dizer
+  quem muda e quanto; nunca e prova. (3) TERMOMETRO: oraculo e sonda em producao so servem para achar cenario que falta na bateria e para
+  a lista do admin; nunca sao meta, placar principal nem criterio de fechar. O placar principal do ESTADO ganha a linha da bateria
+  (cenarios por familia, verdes, e os que nasceram do termometro), e os numeros de frota de R1 e R4 descem para uma secao TERMOMETRO. A
+  LEI-AKITA 8 segue valendo para medir; ela nao define o que e pronto. Registra em LEIS.md com numero, ajusta core/placar_estrutural.py no
+  marco da obra em curso, sem obra nova. segue a fila; PAREI so em lei ou !
+
+✢ Wrangling… (19h 32m 52s · ↓ 2.2m tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    8% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
