@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:113 AFIRMA ato sem PROVA ao lado -- ## O146 — **FECHADA, NO AR**: a extra declarada da escala desloca o limite, e o limite
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:115 AFIRMA ato sem PROVA ao lado -- ## O146 — **FECHADA, NO AR**: a extra declarada da escala desloca o limite, e o limite
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 03:54:31.**
+**Medido em 09/10/2026 04:00:04.**
 
 | | |
 |---|---|
-| `HEAD` local | `ce212bb8 As duas colunas da O146 entram no inventario pessoal, e o padrao fica intacto` |
+| `HEAD` local | `041fd2ac O214 item 2: um ato, um motivo, e a tela mostra o DIFF por rubrica ANTES de confirmar` |
 | `origin/main` | `ce212bb8 As duas colunas da O146 entram no inventario pessoal, e o padrao fica intacto` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,24 +29,18 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+041fd2ac O214 item 2: um ato, um motivo, e a tela mostra o DIFF por rubrica ANTES de confirmar
 ce212bb8 As duas colunas da O146 entram no inventario pessoal, e o padrao fica intacto
 cfd4ff83 O146: a extra declarada da escala desloca o limite da janela, e o limite passa a ter UM sitio
 d29b7f14 POUSO da raia wt-bos: o pino de geo le o juiz, e o raio do posto passa a ter UM sitio (O200 + complemento)
 6c53bc46 O200: o pino de geo do painel LE o juiz, e para de acusar leitura imprecisa
-32782d0d O145: a testemunha LE a acusacao do motor, e a ponta de HE deixa de sumir fora do raio da grade
 ```
 
 ## `git status --short`
 
 ```
  M app/config/crons_duracao.json
- M app/docs/AVAIS.md
- M app/docs/BACKLOG.md
- M app/docs/DOSSIES.md
  M app/docs/HANDOFF-SESSAO.md
- M app/docs/PENDENTES_RONALD.json
- M app/docs/RELATO.md
- M app/docs/TICKETS.md
  M bin/sombra.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -124,13 +118,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ⎿  Referenced file ../../wt-bos/app/colaboradores/tests/test_o200_pino_geo_le_o_juiz.py
-  ⎿  Read ../logs/sombra/censo_o145_dois_leitores.py (120 lines)
-
-● Task "RED e construção do segundo intervalo" completed in background
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
   Searched for 2 patterns, ran 26 shell commands
   ⎿  Read ../../../../tmp/dbg2.out (29 lines)
@@ -147,15 +134,22 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Agora o selo da forma B — ele passa a contar por ato, em vez de somar os dois:
 
-● Continua aguardando a suite · 1m 31s
-  ⎿  $ cd /home/ronald/saas-hasner && for i in $(seq 1 29); do if grep -qE '^OK$|^OK \(|^FAILED \(' logs/o214item2/suite_cheia2.out
-     2>/dev/null; then break; fi; kill -0 1975594 2>/dev/null || break; sleep 20; done; date '+%H:%M:%S'; grep -nE '^OK$|^OK \(|^FAILED
-     \(|^Ran [0-9]+ tests?' logs/o214item2/sui… (1m 31s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Ran 10 shell commands
 
-· Wrangling… (14h 28m 52s · ↓ 1.7m tokens)
+● Agora o pouso, em um ato (L-107):
+
+● Prova as rotas novas no container do ar
+  ⎿  $ cd /home/ronald/saas-hasner
+     cat > /tmp/rev_o214.py <<'PY'
+     from django.urls import reverse
+     for n in ('ponto:previa_he_periodo', 'ponto:autorizar_he_periodo', 'ponto:gestao_he'):
+     print(n, '->', reverse(n))
+     from django.template.loader import get_template
+     get_template('ponto/gestao_he_periodo_previa.…
+
+✻ Wrangling… (14h 34m 25s · ↓ 1.7m tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    6% until auto-compact
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
