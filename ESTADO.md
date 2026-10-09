@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 20:34:16.**
+**Medido em 09/10/2026 20:39:41.**
 
 | | |
 |---|---|
@@ -131,42 +131,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Now closing the blind spot the advisor named in condition (4) — measuring hi on the nearest instance, not the calendar-day one:
+  (money), turnos_de_batidas:1194, turnos_do_colab:1634 (tela). _turno_aberto_puro never receives marcos_por_dia in either of its two call
+  sites, so turno_aberto_de and proximo_tipo_de — the batida chokepoint — are unreachable by construction, and "batida de chão nunca é
+  barrada em runtime" holds structurally, not by care. Written into logs/l115/casos_o232.md.
+
+  Next, once the vizinhos return: the two-tree impact DIFF through pouso A's own sonda (expecting 9 dia-colab, all col923, +4.647 min on
+  comp 09 and 0 on comp 10), then the mandatory folha DIFF on comp 10 with the 09 TXT hash shown intact — motor_calculo_v2 being reached is
+  precisely why that one isn't optional.
+
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: PLACAR-ESTRUTURAL -- O ESTRUTURAL SE SEPARA DO DADO (corte dele 02/10 22:5x, que SUBSTITUI o item 3 da
+  ordem das 21:4x -- o resto d
+
+● The hook is right — fila 1 isn't empty, pouso B is mid-flight. Continuing rather than yielding. Checking the vizinhos:
 
   Ran 1 shell command
 
-● Adding the contra-exemplo fixture for it. Reading the recusa class first:
-
-  Ran 4 shell commands
-
-● Now the RED run on the untouched HEAD copy — the cure is not in it yet:
+● Still running. Confirming the written prediction I'll check the DIFF against (L-110 — the case is written before the code):
 
   Ran 2 shell commands
 
-● --only is the label slot itself:
+● Prediction is precise and written: 9 dia-colab (03, 04, 05, 07, 09, 10, 16, 17, 18/09), all col923, 4.919 vs 272 → +4.647, comp 10 = 0.
+  Checking the suite:
 
   Ran 1 shell command
 
-● RED evidenced precisely where designed: the 2 FECHA assertions fail (unexpectedly None, 0 != 533) while all 12 recusa/propriedade cases
-  already pass on HEAD — they must stay bit-identical. Applying the cure:
+● Drafting the commit message while it runs — the LEI-AKITA line needs the census I just measured:
 
-  Ran 1 shell command
+  Running 1 shell command…
 
-● Three anchors applied, idempotent on second run. Running the bateria for GREEN plus ruff:
-
-  Running cd /home/ronald/saas-hasner && C=/tmp/claude-1001…
-  ⎿  $ cd /home/ronald/saas-hasner &&
-     C=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/pousoB && timeout 900 bash
-     bin/suite.sh --dir $C --only "ponto.tests.test_saida_pela_posicao_entre_turnos" 2>&1 | grep -E '^(OK|FAILED)(\(| |$)|^Ran [0-9]+ test'
-     | tail -…
-
-✽ Proofing… (2h 41m 30s · ↓ 327.9k tokens)
+✢ Proofing… (2h 46m 55s · ↓ 346.2k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    2% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
