@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 09:51:31.**
+**Medido em 09/10/2026 09:57:01.**
 
 | | |
 |---|---|
@@ -122,6 +122,11 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  hf 15:20). Duas hipóteses minhas morreram aí: o miolo _alinhar é monotônico (o que produz o desenho é minimizar distância, que não é
+  descrever o dia), e a ata não tem atribuidor próprio — o cartório copia a célula da grade. A pergunta afiada: a L-084 usa 180 min nas
+  duas pontas para dizer que o cadastro descreve o dia; o raio da ata é 90. Qual governa uma saída a 120?
+
+  Correção que importa: eu vinha tratando piso_min do oráculo como "o número pela regra". Não é — é (última − primeira) − pausa batida, a
   mesma leitura da cláusula que a própria L-032 declara faltando, e contradiz lei escrita em ≥ 11 dos 126 (9 dias do balde D por BUG 100,
   col900 e col941 por L-032 cl.1). MECANISMO.md corrigido; expectativa de bateria sai da lei, nunca do CSV (L-110).
 
@@ -142,22 +147,17 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
   PROVA no proximo commit de marco e confere no ESTADO que a faixa "RELATO retido" sumiu. Nenhuma lei nova. segue a fila; PAREI so em lei
   ou !
 
-● Medir o gravado que prova o ato da O146 · 57s
-  ⎿  $ cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/o146_prova.py <<'PY'
-     # -*- coding: utf-8 -*-
-     # PROVA do ato da O146 -- SO LEITURA, valor GRAVADO em prod.
-     from escala.models import TipoEscala, CelulaDia
-     from django.db.models import Q
-     tot_te = Tip… (57s · 2 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
+● Conferir a prova da O146 em curso
+  ⎿  $ cat /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b4poh6oaj.output 2>/dev/null | tail -8
 
-✢ Wrangling… (20h 25m 52s · ↓ 2.3m tokens)
+· Compacting conversation… (20h 31m 22s · ↓ 2.3m tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱ 91%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    3% until auto-compact
+                                                                                                                    1% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
