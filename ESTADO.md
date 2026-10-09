@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 20:01:31.**
+**Medido em 09/10/2026 20:07:01.**
 
 | | |
 |---|---|
@@ -129,11 +129,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Committed 3161c6ac, ran 5 shell commands
-
-● Commit 3161c6ac. Selos de host antes do push (respondem em segundos; a recusa custa uma suite inteira):
-
-  Ran 3 shell commands
 
 ● Background command "cd /home/ronald/saas-hasner && git fetch origin 2>&1 | tail -2; git log --oneline origin/main..HEAD | cat; echo "===
 empurrando (pre-push roda a suite):"; git push origin main > logs/l115/o232_push.out 2>&1; echo "rc=$? FIM" >> logs/l115/o232_push.out"
@@ -155,12 +150,17 @@ completed (exit code 0)
 ● Push correndo (a suite vai no pre-push). Pela ESMERIL-DO-MARCO o esmeril deste marco já fechou (0 órfãos), então uso a espera para montar
   o pouso B em cópia, sem tocar a árvore que o push carrega.
 
-● Running cd /home/ronald/saas-hasner && sed -n '256,390p' …
-  ⎿  $ cd /home/ronald/saas-hasner && sed -n '256,390p' logs/l115/casos_o232.md
+  Ran 12 shell commands
 
-✢ Proofing… (2h 8m 45s · ↓ 258.7k tokens · thinking)
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+
+● Running cd /home/ronald/saas-hasner && tail -6 logs/l115/…
+  ⎿  $ cd /home/ronald/saas-hasner && tail -6 logs/l115/o232_push2.out
+
+✢ Proofing… (2h 14m 15s · ↓ 270.7k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    8% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
