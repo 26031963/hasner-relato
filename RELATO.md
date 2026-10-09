@@ -1,5 +1,7 @@
 # RELATO — esteira saas-hasner
 
+PAREI: O214 itens 1 e 2 -- `!` do apply de dinheiro e smoke do Ronald | espera Ronald
+
 ## L-115 POUSO 1 — **A SAIDA PELA POSICAO ESTA NO AR, E A FIGURA DO AVAL NAO E ESTA** (09/10 17:3x)
 
 LEI-AKITA: origem=`ponto/turnos.py::realizado_dos_turnos` (ramo de DIA, antes do laco por turno),
