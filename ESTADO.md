@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:3 AFIRMA ato sem PROVA ao lado -- ## RE-LAVRA 10 (L-115) — **NO AR, E A FOLHA SE MOVEU: +5.451 MIN DE REALIZADO EM 6 COLABS** (09/10 18:2x, CONDICAO 4)
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:55 AFIRMA ato sem PROVA ao lado -- ## RE-LAVRA 10 (L-115) — **NO AR, E A FOLHA SE MOVEU: +5.451 MIN DE REALIZADO EM 6 COLABS** (09/10 18:2x, CONDICAO 4)
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 18:35:45.**
+**Medido em 09/10/2026 18:40:45.**
 
 | | |
 |---|---|
@@ -45,6 +45,7 @@ e38d4039 O230 pouso 1: a sonda de leitura do dev da casa esta na arvore, e quem 
  M app/docs/HANDOFF-SESSAO.md
  M app/docs/PENDENTES_RONALD.json
  M app/docs/RELATO.md
+ M app/docs/TICKETS.md
  M bin/sombra.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -133,13 +134,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  Ran 6 shell commands
-
-● Condição 2 provada e o DRY limpo (36 dias, nenhum dentro da 09, piso 21/09, células só até 08/10). Aplico.
-
-  Ran 1 shell command
-
 ❯ aval Ronald: ordem da fila 1 passa a ser O232 -> O219 -> O223 -> O224 -> contratos -> O228. Motivo: a L-115 foi ao ar e a folha nao se
   moveu sem re-lavra; a O219 e a cura dessa classe e tira a L-113 do papel. Nenhuma lei nova. segue a fila; PAREI so em lei ou !
 
@@ -161,10 +155,17 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Task "RED e construção do segundo intervalo" completed in background
 
 ● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-✶ Proofing… (42m 59s · ↓ 84.9k tokens)
+● Confere a trava e roda a pasta de selos de host · 1m 7s
+  ⎿  $ cd /home/ronald/saas-hasner; bin/trava_teste.sh --quem; echo "=== selos de host"; ls bin/tests/test_*.sh | wc -l; for f in
+     bin/tests/test_*.sh; do out=$(bash "$f" 2>&1); rc=$?; [ $rc -ne 0 ] && echo "RC=$rc $f :: $(echo "$out" | tail -2)"; done; echo "pasta
+     de selos: fim" (1m 6s · 4 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✶ Proofing… (48m 0s · ↓ 96.0k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                   11% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
