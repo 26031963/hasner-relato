@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 12:54:01.**
+**Medido em 09/10/2026 12:59:31.**
 
 | | |
 |---|---|
@@ -115,12 +115,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● The arithmetic closes on itself: 12 latent + 2 displaced = the 14 the v1 census created. Now the superseded conclusion in the achado
-  file:
-
-  Ran 8 shell commands
-
-● All host selos are green. Calling the advisor while the neighbour suite runs:
 
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
@@ -142,9 +136,15 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Background command "Rodar os vizinhos contra a copia v2" completed (exit code 0)
 
-● Running 1 shell command…
+  Searched for 2 patterns, ran 12 shell commands
 
-✢ Wrangling… (23h 28m 22s · ↓ 2.5m tokens · thought for 4s)
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+
+  Ver a guarda do recalculo contra competencia trancada
+  ⎿  $ sed -n '1,62p' folha/tests/test_chokepoint_folha_gate.py
+
+✢ Wrangling… (23h 33m 52s · ↓ 2.6m tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
