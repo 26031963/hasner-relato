@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 04:25:45.**
+**Medido em 09/10/2026 04:30:45.**
 
 | | |
 |---|---|
@@ -118,36 +118,36 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Cron da sombra em curso desde 04:17 (o --refazer já carimbou REFEITA/diverge=0; o --bloco corre até ~04:40). Ponho a sonda atrás da
-  espera por arquivo e sigo para os REDs do item 3 enquanto isso.
-
-  Ran 3 shell commands
-
-● A cópia nasceu com app/ deslocado para dentro de arvore/ — a raiz do repo é o214-item3/. Reponho app/ no lugar que --dir espera.
-
-  Read 1 file, ran 2 shell commands
-
-● The existing selo records that a full medir integration test is prohibitively expensive — so the count must become a pure, named function
-  to get a real RED. Antes de desenhar, confirmo com que minutos o limite se compara hoje.
-
-  Ran 1 shell command
-
-● Confirmado: o limite se compara ao total do dia (command:152 lê minutos do retrato, que é a soma de he_pendente_lavrado.py:108). Isso
-  torna o sítio único da soma obrigatório. Confiro o terreno dos selos estruturais antes de escrever.
-
-  Ran 1 shell command
-
-● Antes de escrever o selo estrutural, meço o universo real pela AST — não pelo texto.
 
   Ran 1 shell command
 
 ● O censo achou algo que preciso ler: gestao_he também soma minutos em quatro pontos. Confiro se algum deles já é a soma do dia.
 
-● Le os sitios de soma de minutos do gestao_he e do lavrado
-  ⎿  $ echo "=== _tira 112-125 ==="; sed -n '110,126p' ponto/services/gestao_he.py; echo; echo "=== enriquecer 295-325 ==="; sed -n
-     '295,325p' ponto/services/gestao_he.py; echo; echo "=== apurar 100-125 ==="; sed -n '98,124p' ponto/services/he_pendente_lavrado.py
+  Ran 1 shell command
 
-✶ Wrangling… (15h 0m 6s · ↓ 1.7m tokens · thinking)
+● O terreno está medido: apurar:108 é o único sítio que soma he_fora_da_janela num total de dia, e he.py:269 é a única comparação com o
+  limite de HE. Escrevo agora o CASO — os REDs pela regra, antes do código (L-110).
+
+  Ran 1 shell command
+
+● Agora rodo os REDs contra a cópia, pela porta única.
+
+  Ran 4 shell commands
+
+● RED evidenciado: Ran 14 tests / FAILED (failures=3, errors=10) — 10 errors são o ImportError da função que não existe, 3 failures são os
+  contratos estruturais; o único verde é test_m (o guard que já vale hoje). Gravo a prova.
+
+  Ran 3 shell commands
+
+● O arquivo salvo era só a cauda. Refaço o RED teando para arquivo, para a prova ficar inteira.
+
+  Ran 1 shell command
+
+● RED inteiro e durável em logs/o214item3/red_item3.out: 13 dos 14 vermelhos. Chamo o revisor antes de escrever a cura.
+
+● Advising using Fable 5.1
+
+✶ Wrangling… (15h 5m 6s · ↓ 1.8m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
