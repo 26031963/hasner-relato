@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 20:23:31.**
+**Medido em 09/10/2026 20:29:01.**
 
 | | |
 |---|---|
@@ -40,6 +40,7 @@ e38d4039 O230 pouso 1: a sonda de leitura do dev da casa esta na arvore, e quem 
 
 ```
  M app/config/crons_duracao.json
+ M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
  M app/docs/RELATO.md
  M bin/sombra.sh
@@ -130,38 +131,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● The O214 cell already says "Falta o smoke do 2 e o ! do apply do 1" — it IS waiting on Ronald, but not in the vocabulary the single
-  reader knows. Checking that vocabulary:
 
   Ran 1 shell command
 
-● The estado cell is celulas[3], and the declared vocabulary for "waiting on Ronald" is espera o ! / aguardando. Verifying empirically what
-  the single reader answers today, before touching anything:
+● The hook's own line 116 already names this gap. Reading it so the fila line doesn't duplicate an existing one:
+
+  Ran 1 shell command
+
+● Now the unmeasured RELATO claim (advisor point 3). Checking the model before probing prod:
+
+  Ran 1 shell command
+
+● DiaPago is aditiva ("nenhum leitor le daqui ainda"), so it isn't the payer — but it records what was lavrado, which is the honest
+  folha-side number. One read-only row, no motor:
+
+  Ran 2 shell commands
+
+● colNNN is the id, not a field. Correcting:
+
+  Ran 1 shell command
+
+● Measured — and it shows my RELATO claim was wrong, not merely unproven. The lavrado DiaPago of this morning (08:55, pre-deploy) carries
+  minutos_realizados=420, so the tela↔lavrado distance went 62 → 2 min, not 60 → 0. Correcting the published record:
 
   Ran 3 shell commands
 
-● Confirmed: _ids_que_nao_andam() has 208 ids and O214 is not among them, so the single reader answers O214 while ORDEM VIVA says O232. The
-  declared vocabulary that fixes it is espera o ! (as ABONO-NO-AR-NAO-FECHOU uses). Deliverables are durable — pouso A pushed and
-  deployed, RELATO line in, patch script and RED bateria in the scratchpad. Consulting before I touch BACKLOG data that drives the Stop
-  hook:
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-● Good catches. Simulating before editing, as instructed:
+● Now the instrument fila line the advisor asked for, so a compacted session reads the right authority:
 
 ● Running 1 shell command…
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PY'
-     import importlib.util
-     spec = importlib.util.spec_from_file_location('h', 'bin/hook_stop_fila1.py')
-     h = importlib.util.module_from_spec(spec); spec.loader.exec_module(h)
-     s = open('app/docs/BACKLOG.md', encoding='utf-8').read()
-     i = s.find('<!-- OBRAS:…
 
-· Compacting conversation… (2h 30m 45s · ↓ 306.3k tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 48%
+✢ Proofing… (2h 36m 15s · ↓ 313.9k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    0% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
