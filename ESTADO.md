@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 11:21:32.**
+**Medido em 09/10/2026 11:27:01.**
 
 | | |
 |---|---|
@@ -115,37 +115,37 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+● 44,057 "colaboradores" — that is the Meta.ordering trap: values_list().distinct() de-duplicates the pair, not the id. Only 18 real colabs
+  processed in 5 min because the list repeats. Killing and fixing:
 
-● Prediction is durable. Before running the two-tree census — the big substantive step — advisor check:
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-  Ran 4 shell commands
-
-● ruff lives in the container, not the host. Building the census probe now — one file, mounted into both trees, comparable fields only
-  (papel is new in the cured tree, so printing it would make every line differ):
-
-  Ran 4 shell commands
-
-● The port works (E_SOMBRA passed, tenant_command shell ran). My sort lambda referenced t instead of x:
+● Stop Task
+  ⎿  SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cd "$SP" && bash censo_run.sh >
+     censo_run.log 2>&1; echo "rc=$… · stopped
 
   Ran 1 shell command
 
-● Full run (~13 min for both trees), in background:
+● Container down, sombra trava released. Fixing the distinct() defect — and making the probe prove its universe instead of trusting it:
 
   Ran 1 shell command
 
-● While that runs, the reversão snapshot script (read-only in prod, no motor — just the ata fields):
+● The second witness measured the wrong thing (.count() subqueries the distinct away). Making it measure what actually broke:
 
-  Roda a pasta de selos de host na arvore principal · 1m 15s
-  ⎿  $ cd /home/ronald/saas-hasner && { for s in bin/tests/test_*.sh; do out="$(timeout 120 bash "$s" 2>&1)"; rc=$?; printf '%-62s rc=%s\n'
-     "$(basename "$s")" "$rc"; [ "$rc" != 0 ] && printf '%s\n' "$out" | tail -4 | sed 's/^/ /'; done; } 2>&1 | tail -40 (1m 14s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Ran 1 shell command
 
-✻ Wrangling… (21h 55m 53s · ↓ 2.4m tokens)
+● 551 real colabs, with both numbers on the record. Full run:
+
+  Ran 1 shell command
+
+● While it runs — the existing memory on this trap misses the part that just cost me the run:
+
+● Progresso do censo
+  ⎿  $ SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cat "$SP/censo_run.log"; echo "---
+     base=$(wc -l < "$SP/censo_base.out" 2>/dev/null) head=$(wc -l < "$SP/censo_head.out" 2>/dev/null) colabs=$(awk '/^R/{print $2}'
+     "$SP/censo_base.out" 2>/dev/null | s…
+
+✢ Wrangling… (22h 1m 22s · ↓ 2.4m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    9% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -153,6 +153,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Reading teste_envfile in recursos.sh                                                        13m 41s · ↓ 94.1k tokens
+  ◯ general-purpose  Writing fernando-sonda-leitura-PROVA-O230 sudoers file                                     19m 10s · ↓ 118.6k tokens
   ⧉  index
 ```
