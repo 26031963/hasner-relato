@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 19:45:01.**
+**Medido em 09/10/2026 19:50:31.**
 
 | | |
 |---|---|
@@ -129,21 +129,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  Ran 2 shell commands
-
-● DIFF exato à expectativa: 20/−1.140 e 8/−480, todo dia desce, todo dia carimba janela, 12.861 idênticos e nenhum dos 163 da forma B
-  tocado. Agora a prova que separa este pouso do B — a folha tem de voltar zero:
-
-  Ran 5 shell commands
-  ⎿  Read docs/AVAIS.md (22 lines)
-  ⎿  Read docs/HANDOFF-SESSAO.md (44 lines)
-  ⎿  Referenced file ponto/tests/test_bateria_lavratura.py
-  ⎿  Referenced file ponto/turnos.py
-  ⎿  Read ../logs/r1/achado_papel_x.md (123 lines)
-
-● Task "RED e construção do segundo intervalo" completed in background
-
 ● Trees confirmed: a cópia difere do HEAD só nesse ponto. Rodando o DIFF de folha da competência corrente (10/2026) na sombra, as duas
   árvores sob uma trava só:
 
@@ -152,19 +137,34 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Enquanto a medição corre (ESMERIL-DO-MARCO: só o esmeril deste marco, e ele já deu 0 órfãos — _pares_marcados segue com 3 chamadores de
   produção, 373/393/507), preparo o texto no scratchpad, sem tocar a árvore que a medição monta:
 
-● Running cd /home/ronald/saas-hasner && for i in $(seq 1 4… · 2m 20s
-  ⎿  $ cd /home/ronald/saas-hasner && for i in $(seq 1 40); do if grep -q "^rc=.* FIM" logs/l115/o232_folha_par.out 2>/dev/null; then echo
-     "TERMINOU"; break; fi; [ -f logs/simular_folha/o232a_depois.json ] && echo -n "d"; echo -n "."; command sleep 20 2>/dev/null || true;
-     done; echo; grep -v "lavratura … (2m 19s · 1 line)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Searched for 2 patterns, ran 11 shell commands
 
-✻ Proofing… (1h 52m 16s · ↓ 229.0k tokens)
+● Background command "cd /home/ronald/saas-hasner && bash bin/simular_folha.sh par o232a /home/ronald/saas-hasner/app /tmp/o232-pousoA/app
+> logs/l115/o232_folha_par.out 2>&1; echo "rc=$? FIM" >> logs/l115/o232_folha_par.out" completed (exit code 0)
+
+● DIFF_FOLHA=0 — e na forma mais forte que havia: o sha do TXT de cada empresa é idêntico nas duas fotos (87e36e9ae36a, 7c753392f8ea,
+  58efa3d18779), 0 linha entrou, 0 saiu, 0 mudou, retidos iguais, as duas fotos sob a mesma trava. A cura é de testemunha, não de dinheiro.
+
+  Gravando o número no arquivo de casos antes de qualquer outra coisa:
+
+  Ran 2 shell commands
+
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+
+  Ran 8 shell commands
+
+● O leitura do motor é decisiva, e muda o texto do commit — não a cura:
+
+● Running 1 shell command…
+
+✢ Proofing… (1h 57m 45s · ↓ 238.4k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
