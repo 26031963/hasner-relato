@@ -153,7 +153,7 @@ lista — ela e o que esta EM PE._
 | **O142** | `turnos_do_colab` RESPONDE DIFERENTE CONFORME A JANELA, e os 33 dia-colab sao isso | espera corte |
 | **O143** | DIA COM BATIDA REAL E SEM VINCULO QUE O CUBRA E DONO CADASTRO, nao ESTRUTURA | ABERTA. Falta o censo de frota (dia-cola |
 | **O144** | O DIA QUE CONTA PARA OS 15 DA EMPRESA E O DECORRIDO, NAS DUAS TELAS | ABERTA. Falta provar o irmao `absenteism |
-| **O145** | HE-INVISIVEL | **CURADA E NO AR** (`32782d0d` + deploy) |
+| **O145** | HE-INVISIVEL | **NO AR** e CURADA (`32782d0d` + deploy) |
 | **O146** | HE-FIXA-DA-ESCALA-E-CADASTRO | espera `!` |
 | **O147** | OS 3 ATRASADOS DA 09 | PAREI |
 | **O148** | FOLGAS DUPLICANDO | **FILA 2 (UI), depois dos BOs** -- ordem |
@@ -208,7 +208,7 @@ lista — ela e o que esta EM PE._
 | **O197** | FUTURO-NAO-E-EM-ABERTO | espera `!` |
 | **O198** | FALTA-EM-DIA-SEM-JORNADA | espera `!` |
 | **O199** | ACEITE-DE-FOLGA-DECIDE-O-DIA | espera corte |
-| **O200** | PINO-GEO-LE-O-JUIZ | RAIA `wt-bos`: CURADA em `6c53bc46` (320 |
+| **O200** | PINO-GEO-LE-O-JUIZ | **NO AR** (pouso + deploy 08/10 23:1x).  |
 | **O201** | A REGRA 2 DO CONTRATO NAO PODE PASSAR A VARRER COMENTARIO | **fila 2** -- e INSTRUMENTO (selo), e a  |
 | **O202** | O TERCEIRO CALCULO DE GEO -- OS PINGS | **fila 2**. O aval dos 4 BOs o declarou  |
 | **O203** | O SELO DA COLUNA PROTEGE FICA CEGO QUANDO A CELULA E ESVAZIADA NO MESMO COMMIT | **fila 2** -- INSTRUMENTO (portao do pus |

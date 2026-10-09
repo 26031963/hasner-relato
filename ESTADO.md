@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:536 AFIRMA ato sem PROVA ao lado -- onde a lei diz que moram. E o estado passou a abrir com `**NO AR`, porque
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:572 AFIRMA ato sem PROVA ao lado -- onde a lei diz que moram. E o estado passou a abrir com `**NO AR`, porque
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 23:42:01.**
+**Medido em 08/10/2026 23:46:30.**
 
 | | |
 |---|---|
 | `HEAD` local | `d29b7f14 POUSO da raia wt-bos: o pino de geo le o juiz, e o raio do posto passa a ter UM sitio (O200 + complemento)` |
-| `origin/main` | `d2cf6606 O204: a hora do aparelho tem UM sitio, e o epoch deixa de virar data de 1791` |
-| commits a subir (`ahead`) | **4** |
+| `origin/main` | `d29b7f14 POUSO da raia wt-bos: o pino de geo le o juiz, e o raio do posto passa a ter UM sitio (O200 + complemento)` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -40,7 +40,11 @@ d2cf6606 O204: a hora do aparelho tem UM sitio, e o epoch deixa de virar data de
 
 ```
  M app/config/crons_duracao.json
+ M app/docs/BACKLOG.md
+ M app/docs/DOSSIES.md
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/PROMPTS.md
+ M app/docs/RELATO.md
  M bin/sombra.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -118,10 +122,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  em $S/pos_push/01_o145_estado.py com as três asserções (casa o regex, ≤300 chars pela L-109, sem |).
-
-  Ela não aplica agora de propósito: o git push do marco está correndo (pre-push: a suite testa o commit empurrado d29b7f1424), e escrever
-  na árvore durante o push muda a árvore carimbada e derruba o push sem RED visível. A ordem, assim que o push der veredito: célula da O145
   → linha do PROMPTS → bin/relato.sh → bin/handoff_sessao.sh.
 
   A fragilidade do leitor — adjetivo antes da palavra faz item fechado parecer aberto — vai para a lista de instrumento, que pousa sozinha
@@ -131,8 +131,7 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
   ⎿  Stop hook error: siga: O145 -- HE-INVISIVEL (bug PROVADO, aval 03/10 18:1x item 5) -- a ponta de HE SOME quando a batida cai a
   mais de 90 min
 
-● Ver como o placar conta prompts_repetidos
-  ⎿  $ cd /home/ronald/saas-hasner; sed -n '320,336p' bin/placar_code.sh
+  Read 1 file, ran 36 shell commands
   ⎿  Read docs/AVAIS.md (23 lines)
   ⎿  Referenced file ../../wt-bos/app/colaboradores/tests/test_o200_pino_geo_le_o_juiz.py
   ⎿  Read ../logs/sombra/censo_o145_dois_leitores.py (120 lines)
@@ -147,13 +146,18 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Task "Esperar pelo veredito do push, por arquivo" still running in background
 
-✢ Wrangling… (10h 16m 22s · ↓ 1.2m tokens · thought for 4s)
+● Background command "Push do marco (um por marco, L-108)" completed (exit code 0)
+
+● Publicar o RELATO
+  ⎿  $ cd /home/ronald/saas-hasner && timeout 600 bash bin/relato.sh 2>&1 | tail -12
+
+✽ Wrangling… (10h 20m 51s · ↓ 1.2m tokens · thought for 1s)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    8% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
