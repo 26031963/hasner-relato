@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 09/10/2026 13:58:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (531.0 MB). Acoes na janela: **1334**.
+**Medido em 09/10/2026 14:03:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (531.0 MB). Acoes na janela: **1325**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 14:03:21 | Bash | Ver o que os commits do O230 trazem | `cd /home/ronald/saas-hasner && git show --stat 6d2ba03d 1723901e 2>&1 \| grep -E '^(commit\| \|,\| [a-z])\|file' \| head -40` |
 | 13:53:09 | Bash | Empurrar o marco | `cd /home/ronald/saas-hasner && git push origin main 2>&1 \| tail -25` |
 | 13:51:15 | Bash | Rodar a pasta de selos de host antes do push | `cd /home/ronald/saas-hasner && fail=0; for t in bin/tests/test_*.sh; do out=$(bash "$t" 2>&1); rc=$?; [ $rc -ne 0 ] && { fail=$((fail+1)); echo "=== RED $t (rc=$rc)"; echo "$out" \| tail -6; }; done; echo "selos de host: $fail vermelho(s)"` |
 | 13:50:48 | Bash | Por a linha PROVA ao lado da afirmacao | `python3 - <<'PY' p='docs/RELATO.md'; s=open(p).read() a = """### A PROVA DEPOIS — NO AR as 13:49, e os quatro casos dao o numero DECLARADO em PROD Exigencia 4""" assert s.count(a)==1 b = """### A PROVA DEPOIS — NO AR as 13:49, e os quatro casos dao o numero DECLARADO em PROD PROVA: commit `185b9af0` no ar as 13:49 (3 rotas 200/302/200, `importerror_500=0`); GRAVADO da comp 09 medido em prod antes  ...` |
@@ -1334,13 +1335,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 02:06:40 | Bash | Lê como o item 1 monta o autor com permissão | `cd /home/ronald/saas-hasner/app sed -n '140,200p' ponto/tests/test_o214_ponta_pequena.py` |
 | 02:06:37 | Bash | Lê a fixture do item 1 | `cd /home/ronald/saas-hasner/app grep -n "^def \\|^HOJE\\|^DIA\\|^from \\|^import " ponto/tests/test_o214_ponta_pequena.py \| head -40 echo "=== _casa ===" grep -n "def _casa" -A 40 ponto/tests/test_o214_ponta_pequena.py echo "=== autor com permissao ===" grep -n "autorizar_he\\|tem_acao\\|is_superuser\\|create_user\\|create_superuser" ponto/tests/test_o214_ponta_pequena.py \| head -20` |
 | 02:03:50 | Bash | Grava os achados da leitura do vivo | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad mkdir -p "$S/o214-item2" cat > "$S/o214-item2/ACHADOS-LEITURA.md" <<'EOF' # O214 ITEM 2 -- O QUE A LEITURA DO VIVO MUDOU NO CONTRATO (09/10, antes de uma linha de codigo) ## 1. `decidir_he` TROCA decisao existente -- a EXCLUSAO do contrato esta errada contra o vivo `ponto/portas/he.py:130-134`: `no_op`  ...` |
-| 02:02:44 | Bash | Lê a L-095 | `cd /home/ronald/saas-hasner/app awk -F'\|' '/\*\*L-095\*\*/{print $2; print "---TEXTO---"; print $3; print "---PROTEGE---"; print $6}' docs/LEIS.md \| head -40` |
-| 02:02:18 | Bash | Grep de lei e critério do censo | `cd /home/ronald/saas-hasner/app echo "=== LEI ANTES DO PATCH ===" for t in diff_janela_he autorizar_em_lote autoridade_do_periodo recusar_em_lote decidir_he; do echo "-- $t" grep -n "$t" docs/LEIS.md docs/CORTES.md 2>/dev/null \| head -6 done echo echo "=== NAO_E_MOTOR / DINHEIRO ===" sed -n '158,180p' ponto/tests/test_s3_placar_exercicio.py echo echo "=== a assercao do censo ===" sed -n '200,235p ...` |
-| 02:01:32 | Bash | Lê o placar da S3 | `cd /home/ronald/saas-hasner/app sed -n '1,55p' ponto/tests/test_s3_placar_exercicio.py echo "=============== quem o placar varre / lista ===============" grep -nE "^[A-Z_]+ *=\|def test\|ALLOW\|ROTULO\|rotulo" ponto/tests/test_s3_placar_exercicio.py \| head -40` |
-| 02:01:09 | Bash | Lê o cabeçalho do selo da S3 | `cd /home/ronald/saas-hasner/app sed -n '1,60p' ponto/tests/test_s3_leitor_nao_chama_motor.py` |
-| 02:01:06 | Bash | Localiza o selo que proíbe leitor novo do motor | `cd /home/ronald/saas-hasner/app grep -rn "nenhum_leitor_NOVO_chama_o_motor" --include=*.py . \| head echo "=== o selo ===" f=$(grep -rln "nenhum_leitor_NOVO_chama_o_motor" --include=*.py . \| head -1); echo "ARQ=$f"` |
-| 02:00:31 | Bash | Lê recalcular_por_evento | `cd /home/ronald/saas-hasner/app grep -n "def recalcular_por_evento" -A 45 ponto/services/fechamento.py` |
-| 02:00:07 | Bash | Procura efeitos fora do banco em fechamento.py | `cd /home/ronald/saas-hasner/app awk 'NR>=1 && NR<=140' ponto/services/fechamento.py \| grep -nE "def \|on_commit\|open\(\|write\|logger\|REVERSAO\|\.save\(\|calcular_mes\|autoridade_do_periodo\|signals\|post_save"` |
-| 01:59:46 | Bash | Lê a view do lote de recusa | `cd /home/ronald/saas-hasner/app sed -n '520,600p' ponto/views.py` |
-| 01:59:40 | Bash | Confere se o push pousou no remoto | `cd /home/ronald/saas-hasner git fetch -q origin 2>&1 \| tail -3 echo "--- a frente do remoto (vazio = pousou):" git log --oneline origin/main..HEAD echo "--- fim do push2.out:" tail -n 6 logs/o146/push2.out` |
-| 01:58:52 | Bash | Lê decidir_he inteiro | `cd /home/ronald/saas-hasner/app sed -n '58,140p' ponto/portas/he.py` |
