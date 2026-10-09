@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 10:02:31.**
+**Medido em 09/10/2026 10:07:39.**
 
 | | |
 |---|---|
@@ -115,9 +115,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  Searched for 1 pattern, listed 1 directory, ran 1 shell command
-
 ❯ aval Ronald: o RELATO esta retido desde 08/10 19:2x por RELATO.md:465 (titulo da O146 afirma ato sem a linha PROVA: ao lado). Poe a
   PROVA no proximo commit de marco e confere no ESTADO que a faixa "RELATO retido" sumiu. Nenhuma lei nova. segue a fila; PAREI so em lei
   ou !
@@ -141,12 +138,15 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
   ⎿  cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/o146_prova.py <<'PY'
      # -*- coding: utf-8 -*-… · stopped
 
-● Ler onde os carimbos nascem
-  ⎿  $ sed -n '800,935p' ponto/turnos.py
+● Rodar o RED curado e os selos vizinhos do pareador
+  ⎿  $ cd /home/ronald/saas-hasner &&
+     CP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/p_head && timeout 600 bash
+     bin/suite.sh --dir "$CP" --only "ponto.tests.test_r1_pausa_de_autoridade_mista ponto.tests.test_realizado_do_dia_autoridade
+     ponto.tests.test_s…
 
-✢ Wrangling… (20h 36m 52s · ↓ 2.3m tokens)
+· Wrangling… (20h 42m 0s · ↓ 2.3m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    4% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
