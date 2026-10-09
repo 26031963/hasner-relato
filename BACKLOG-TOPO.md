@@ -5,7 +5,7 @@ a raspagem usa a lista de nomes do banco como autoridade, nunca regex adivinhada
 `colNNN`/`ecNNN` ficam, porque nao identificam ninguem fora desta casa. Obra FEITA sai desta
 lista — ela e o que esta EM PE._
 
-**227 obras abertas.**
+**228 obras abertas.**
 
 | ID | obra | estado |
 |---|---|---|
@@ -236,3 +236,4 @@ lista — ela e o que esta EM PE._
 | **O226** | DUAS VERDADES SOBRE "ESTE PARAMETRO TEM EFEITO" | livre. Fila de INSTRUMENTO (ordem dele d |
 | **O227** | O GUARDA DA L-092 RECUSA LEITURA | livre -- nao toca numero, so quem pode P |
 | **O228** | ESMERIL-CELULA-TURNO | **fila 1 no FIM**, junto de R6 item 4 e  |
+| **O229** | OS IRMAOS DA O145 -- o que o censo dos dois leitores achou e a O145 NAO cura | **na fila, nenhum comecado** -- nascem d |
