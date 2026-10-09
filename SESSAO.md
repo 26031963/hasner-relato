@@ -6,10 +6,23 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 09/10/2026 09:04:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (518.6 MB). Acoes na janela: **1566**.
+**Medido em 09/10/2026 09:09:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (519.2 MB). Acoes na janela: **1565**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 09:08:46 | Bash | Ver os turnos dos casos b e c | `cd /home/ronald/saas-hasner && sed -n '56,135p' logs/r1/mecanismo_casos_af.out` |
+| 09:08:16 | Bash | Continuar o laco de parear_turnos | `sed -n '900,1000p' ponto/turnos.py` |
+| 09:08:06 | Bash | Ver os turnos do caso a | `cd /home/ronald/saas-hasner && sed -n '20,56p' logs/r1/mecanismo_casos_af.out` |
+| 09:07:58 | Bash | Ler parear_turnos | `grep -n 'def parear_turnos' ponto/turnos.py && sed -n '724,900p' ponto/turnos.py` |
+| 09:07:42 | Bash | Fim do marcador e o caso a medido | `sed -n '300,340p' ponto/turnos.py && echo "===== CASO a na sonda =====" && grep -n -A20 'CASO a ' /home/ronald/saas-hasner/logs/r1/mecanismo_casos_af.out \| sed -n '1,30p'` |
+| 09:07:33 | Bash | Ler o marcador de intra-duracao | `sed -n '180,300p' ponto/turnos.py` |
+| 09:07:28 | Bash | Ler a L-032 no LEIS.md | `grep -n 'L-032' docs/LEIS.md \| head -5 && echo "=== PROTEGE/linha inteira ===" && awk -F'\|' '/L-032/{for(i=1;i<=NF;i++) printf " [%d] %s\n", i, $i}' docs/LEIS.md \| head -20` |
+| 09:06:57 | Bash | Continuar o caso e | `cd /home/ronald/saas-hasner && sed -n '183,215p' logs/r1/mecanismo_casos_af.out` |
+| 09:06:54 | Bash | Ler o trecho do caso e na sonda | `cd /home/ronald/saas-hasner && grep -n -A24 'CASO e' logs/r1/mecanismo_casos_af.out \| head -40` |
+| 09:06:48 | Bash | Ler o trecho do caso d na sonda | `cd /home/ronald/saas-hasner && grep -n -A18 'CASO d' logs/r1/mecanismo_casos_af.out \| head -40` |
+| 09:06:33 | Bash | Ler a sintese do mecanismo | `cd /home/ronald/saas-hasner && cat -n logs/r1/MECANISMO.md` |
+| 09:06:29 | Bash | Registrar o aval novo em PROMPTS.md | `python3 - <<'PY' cols = [ "09/10 09:1x", "**aval (duas correcoes ao corte das 09:0x do mesmo turno)**", "`CERTIFICADO-IMPACTO-TERMOMETRO` (correcoes 1 e 2)", "**(1) INVARIANTE NAO E TERMOMETRO.** O corte das 09:0x mandava R1 e R4 descerem juntos; a correcao SEPARA: *\"todo leitor da o mesmo numero\"* (R4), idempotencia (R5) e *\"as partes somam o total\"* valem para QUALQUER dado, limpo ou sujo, s ...` |
+| 09:06:05 | Bash | Ver o formato da tabela de PROMPTS | `tail -5 docs/PROMPTS.md && echo "=== head tabela ===" && sed -n '1,14p' docs/PROMPTS.md` |
 | 09:01:46 | Bash | Gerar o handoff do marco fechado | `cd /home/ronald/saas-hasner && bash bin/handoff_sessao.sh 2>&1 \| tail -4 && echo "--- HEAD do handoff ---" && sed -n '1,12p' app/docs/HANDOFF-SESSAO.md` |
 | 08:59:18 | Bash | Registrar os três prompts e reescrever o rodapé | `date '+%d/%m %H:%M' && python3 - <<'PY' import io p = 'docs/PROMPTS.md' s = io.open(p, encoding='utf-8').read() linhas = [ ("09/10 08:4x", "aval (complemento de obra, SEM id novo)", "`R1-RESIDUO-DO-INTERVALO`", "**o residuo do R1 vira obra, como complemento da O73, a FRENTE da O223/O224/O219** -- motor e pareador avalizados SO para esta obra. " "Ele chega com a MEDICAO dele (prod, so leitura): `e6 ...` |
 | 08:58:37 | Bash | Ver o formato do PROMPTS.md | `tail -8 docs/PROMPTS.md && echo "--- head ---" && head -12 docs/PROMPTS.md` |
@@ -1562,17 +1575,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 21:10:47 | Bash | Achar onde as pendências do dia são montadas | `grep -n '_he_pendencias\\|_marcar_pontas(' ponto/services/espelho.py` |
 | 21:10:00 | Bash | Rodar o RED pela porta, com o rótulo em --only | `cd /home/ronald/saas-hasner && timeout 900 bash bin/suite.sh --only "ponto.tests.test_o145_testemunha_le_a_acusacao_do_motor" 2>&1 \| tail -50; echo "rc=${PIPESTATUS[0]}"` |
 | 21:09:54 | Bash | Ler como a porta compõe os argumentos | `cd /home/ronald/saas-hasner && grep -n 'only\\|LABELS\\|RESTO\\|"\$@"\\|manage.py test' bin/suite.sh \| head -30` |
-| 21:08:45 | Bash | Rodar o RED da O145 | `cd /home/ronald/saas-hasner && timeout 900 bash bin/suite.sh --only "ponto" -- ponto.tests.test_o145_testemunha_le_a_acusacao_do_motor 2>&1 \| tail -45; echo "rc=${PIPESTATUS[0]}"` |
-| 21:08:33 | Bash | Escrever o RED da O145 | `cat > ponto/tests/test_o145_testemunha_le_a_acusacao_do_motor.py <<'PY' # -*- coding: utf-8 -*- """O145: A BATIDA FORA DO RAIO DA GRADE FAZ A PENDENCIA DESAPARECER DA TESTEMUNHA. A LEI E A L-097, na letra: *"Todo minuto fora do marco -- ANTES da entrada ou DEPOIS da saida -- nao conta, **aparece riscado** e **vira pendencia**"*. E a casa ja julgou que isso vale em TODA a faixa, nao so acima do tet ...` |
-| 21:07:00 | Bash | Ver se o teste do portão chama o espelho de verdade | `grep -n 'espelho_do_colab\\|mock\\|def setUpTestData\\|class \\|def test' folha/tests/test_b1_portao_he_nasce_desligado.py \| head -25` |
-| 21:06:51 | Bash | Ver a estrutura do teste O214 | `grep -n 'class \\|def setUpTestData\\|def _esp\\|espelho_do_colab\\|he_fora_da_janela\\|CelulaDia.objects.create\\|Batida(' ponto/tests/test_o214_ponta_pequena.py \| head -30` |
-| 21:06:44 | Bash | Ler o teste do relógio riscado | `sed -n '1,60p' ponto/tests/test_b1_relogio_riscado_e_aviso.py; echo '...'; grep -n 'he_fora_da_janela\\|espelho_do_colab\\|def test' ponto/tests/test_b1_relogio_riscado_e_aviso.py` |
-| 21:06:38 | Bash | Achar testes que chamam o espelho | `grep -rln 'espelho_do_colab' --include=test_*.py . \| head; echo '=== o mais proximo: quem testa he_fora_da_janela pela testemunha ==='; grep -rln "he_fora_da_janela" --include=test_*.py . \| head` |
-| 21:06:29 | Bash | Ler o fixture do teste da saída | `sed -n '1,120p' ponto/tests/test_janela_he_saida.py` |
-| 21:06:26 | Bash | Ver os testes existentes da janela | `ls ponto/tests/ \| grep -i janela; echo '---'; grep -n 'espelho_do_colab\\|def setUp\\|CelulaDia\\|class ' ponto/tests/test_janela_he_saida.py \| head -40` |
-| 21:06:05 | Bash | Registrar escopo medido, correção do achado 15 e o sítio | `C=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cat >> $C/o145/ACHADO_O145.txt <<'TXT' ================================================================================ 08/10 21:1x -- O ESCOPO MEDIDO, E A CORRECAO DO MEU ACHADO 15 ================================================================================ (16) CONTROLE DUPLO OK NOS DOIS LADOS (` ...` |
-| 21:05:07 | Bash | Ler o comentário do portão e o default da trava | `sed -n '248,270p' folha/porta_export.py; echo '=== o default do cadastro da trava ==='; grep -rn 'he_pendente_trava_export' --include=models.py . \| head -3; grep -rn 'he_pendente_trava_export' -A 4 colaboradores/models.py 2>/dev/null \| head -12` |
-| 21:04:56 | Bash | Censo dos leitores da chave e do portão | `echo '=== quem le he_fora_da_janela (codigo, nao teste) ==='; grep -rn "he_fora_da_janela" --include=*.py --include=*.html . \| grep -v '/tests/' \| sed 's/:.*he_fora_da_janela/ <- he_fora_da_janela/' \| head -30 echo; echo '=== o portao: de onde sai he_pendente ==='; grep -n 'he_pendente' folha/porta_export.py \| head -20` |
-| 21:04:49 | Bash | Lançar a v3 na sombra | `cd /home/ronald/saas-hasner && nohup bash bin/sombra.sh --rodar logs/sombra/censo_o145_dois_leitores_v3.py o145_dois_v3 > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/o145_v3.lanc 2>&1 & echo "lancada; o veredito se le em logs/o145_dois_v3.out"` |
-| 21:04:43 | Bash | Escrever a v3 com minuto e colab por causa | `cd /home/ronald/saas-hasner && python3 - <<'PY' src = 'logs/sombra/censo_o145_dois_leitores_v2.py' dst = 'logs/sombra/censo_o145_dois_leitores_v3.py' s = open(src).read() s = s.replace("# O145 -- OS DOIS LEITORES DO MESMO MINUTO, v2.", "# O145 -- OS DOIS LEITORES DO MESMO MINUTO, v3. (v2 em 21:00 deu A=78 com o controle duplo OK e\n" "# partiu o A em 4 causas: 44 missing, 16 celula atribuida, 17 s ...` |
-| 21:04:01 | Bash | Ler o censo v2 | `cat /home/ronald/saas-hasner/logs/o145_dois_v2.out 2>/dev/null \| sed -n '1,70p'` |
