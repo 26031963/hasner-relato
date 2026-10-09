@@ -1,9 +1,16 @@
 # ESTADO -- o repo e a sessao agora
 
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:3 AFIRMA ato sem PROVA ao lado -- ## RE-LAVRA 10 (L-115) — **NO AR, E A FOLHA SE MOVEU: +5.451 MIN DE REALIZADO EM 6 COLABS** (09/10 18:2x, CONDICAO 4)
+>
+> O RELATO nao entrou neste ciclo porque uma afirmacao de ato
+> (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
+> seguem valendo -- eles descrevem, nao afirmam ato.
+
+
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 18:25:45.**
+**Medido em 09/10/2026 18:30:45.**
 
 | | |
 |---|---|
@@ -126,25 +133,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ⎿  Referenced file ponto/turnos.py
-  ⎿  Read ../logs/r1/achado_papel_x.md (123 lines)
-
-● Task "RED e construção do segundo intervalo" completed in background
-
-  Ran 1 shell command
-
-● Background command "Vizinhos ponto+chamados na copia" completed (exit code 0)
-
-  Ran 1 shell command
-
-● Vizinhos GREEN: Ran 5571 tests / OK (skipped=9) — O231 pode pousar. Antes disso, fecho o smoke que você acabou de dar.
-
-  Ran 2 shell commands
-
-● Smoke fechado no registro (AVAIS 6 → 5), e os vizinhos do O231 voltaram verdes. Sigo a re-lavra — agora a reversão e o apply.
-
-  Ran 7 shell commands
-
 ● Os três arquivos estão na árvore e compilam. Antes de escrever em prod, consulto o advisor.
 
 ● Advising using Fable 5.1
@@ -152,12 +140,31 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Adoto os seis pontos. Primeiro as duas correções nos arquivos (caminho do restore, e o hash da frota sai do assert).
 
-● Le a ancora exata do docstring
-  ⎿  $ cd /home/ronald/saas-hasner; grep -n "09 EXPORTADA intacta" -A 3 logs/l115/relavra10_apply.py | cat -A | sed -n 1,8p | sed 's/\$$//'
+  Ran 6 shell commands
 
-· Proofing… (32m 59s · ↓ 67.6k tokens)
+● Condição 2 provada e o DRY limpo (36 dias, nenhum dentro da 09, piso 21/09, células só até 08/10). Aplico.
+
+  Ran 1 shell command
+
+❯ aval Ronald: ordem da fila 1 passa a ser O232 -> O219 -> O223 -> O224 -> contratos -> O228. Motivo: a L-115 foi ao ar e a folha nao se
+  moveu sem re-lavra; a O219 e a cura dessa classe e tira a L-113 do papel. Nenhuma lei nova. segue a fila; PAREI so em lei ou !
+
+● Apply fechou: rc=0, 36/36 do censo com o delta exato, soma +7.345, e a 09 INTACTA nos quatro hashes. Tiro a foto do container (condição 2
+  só vive em logs/) e leio a cabeça do log.
+
+  Ran 1 shell command
+
+● 36/36 com o delta exato, soma +7.345, declarado +19, sub-minuto 0, zero chamado/pergunta nascidos, 09 intacta nos quatro hashes. Publico
+  a condição 4 e registro a ordem nova da fila 1.
+
+  Acha a linha dos contratos no bloco OBRAS
+  ⎿  $ cd /home/ronald/saas-hasner/app; sed -n '/<!-- OBRAS:INICIO -->/,/<!-- OBRAS:FIM -->/p' docs/BACKLOG.md | grep -n "^| " | grep -i
+     "contrato" | cut -c1-200
+
+* Compacting conversation… (37m 59s · ↓ 76.8k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱ 78%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    1% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
