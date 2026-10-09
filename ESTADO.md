@@ -10,11 +10,11 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 01:39:31.**
+**Medido em 09/10/2026 01:45:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `fb69b541 As duas colunas da O146 entram no inventario pessoal, e o padrao fica intacto` |
+| `HEAD` local | `ce212bb8 As duas colunas da O146 entram no inventario pessoal, e o padrao fica intacto` |
 | `origin/main` | `d29b7f14 POUSO da raia wt-bos: o pino de geo le o juiz, e o raio do posto passa a ter UM sitio (O200 + complemento)` |
 | commits a subir (`ahead`) | **2** |
 
@@ -29,7 +29,7 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
-fb69b541 As duas colunas da O146 entram no inventario pessoal, e o padrao fica intacto
+ce212bb8 As duas colunas da O146 entram no inventario pessoal, e o padrao fica intacto
 cfd4ff83 O146: a extra declarada da escala desloca o limite da janela, e o limite passa a ter UM sitio
 d29b7f14 POUSO da raia wt-bos: o pino de geo le o juiz, e o raio do posto passa a ter UM sitio (O200 + complemento)
 6c53bc46 O200: o pino de geo do painel LE o juiz, e para de acusar leitura imprecisa
@@ -118,42 +118,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 1 shell command
+● Só linhas derivadas (data, "há N dias", hash do último push). Vai no topo do marco em vez de nascer como commit só de docs (L-106), com a
+  carona declarada na mensagem:
 
-● O146 pousou: commit cfd4ff83, migration 0042 aplicada, três cascas provadas, importerror_500=0. Agora o smoke em prod — o juiz chamado de
-  verdade, só leitura:
+  Amended commit ce212bb8
 
-  Ran 1 shell command
-
-● Smoke verde: as duas colunas no ar NOT NULL, 351 TipoEscala com extra zero, o juiz devolvendo a identidade (0, 0). Antes do push, a pasta
-  de selos de host (segundos contra uma suíte inteira):
+● Nova tentativa — causa em uma linha: o placar do topo do TICKETS carregava as linhas derivadas de ontem; regerado e amendado no topo do
+  marco.
 
   Ran 1 shell command
 
-● Achado do próprio marco: as duas colunas novas caem no inventário pessoal. Lendo a regra antes de declarar:
+● Push rodando. Enquanto ele corre (nada entra na árvore), preparo a O214 item 2 — relendo o MEDIR ANTES do contrato que ficou em DOSSIES
+  §8:
+
+  Ran 5 shell commands
+
+● Escrevendo a sonda do MEDIR ANTES (só leitura, em logs/sombra/ — zona livre, nada entra na árvore durante o push):
+
+  Ran 1 shell command
+
+● Push passou a régua e está na suíte. Não rodo a sonda agora — a sombra e a suíte dividem o cpuset 4-7, e contenção aí arrisca um RED de
+  tempo e outro push perdido. Uso a janela para ler a tela que o item 2 vai tocar:
 
   Ran 2 shell commands
 
-● Casaram por antes/depois — e o arquivo já decidiu esta classe: não se afrouxa o PADRAO_PESSOAL, inventaria-se. São minutos de um template
-  de escala, sem pessoa nenhuma:
+● O desenho tem uma tensão real: a lápide desta tela diz "nunca o medir no request (levou 7 min hoje)" — e a prévia do item 2 mede no
+  request, para um colaborador. É exatamente o que a medição (1) decide. Consultando antes de construir:
 
-● Reroda a pasta de selos de host depois dos dois commits · 40s
-  ⎿  $ cd /home/ronald/saas-hasner
-     vermelhos=0; falhou=""
-     for t in bin/tests/test_*.sh; do
-     if ! out=$(bash "$t" 2>&1); then vermelhos=$((vermelhos+1)); falhou="$falhou $(basename $t)"; echo "=== VERMELHO: $t"; echo "$out" |
-     tail -14; fi
-     done
-     echo "---- selos de host: vermelhos=$vermelhos$falhou" (40s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Advising using Fable 5.1
 
-· Wrangling… (12h 13m 52s · ↓ 1.4m tokens)
+✶ Wrangling… (12h 19m 22s · ↓ 1.5m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
