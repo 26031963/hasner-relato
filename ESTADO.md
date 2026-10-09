@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 19:39:41.**
+**Medido em 09/10/2026 19:45:01.**
 
 | | |
 |---|---|
@@ -129,27 +129,13 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● RED evidenciado: 606 != 546, e só o caso A move — B, C, livre, sem-intervalo e as propriedades já passam no HEAD. Aplico a cura na cópia:
-
-  Ran 1 shell command
-
-● GREEN. Vizinhos — quem testa esta porta:
-
-  Ran 2 shell commands
-
-● 203 vizinhos OK. Ruff, e depois o DIFF nas duas árvores:
-
-  Ran 2 shell commands
-
-● Agora o DIFF da testemunha nas duas árvores:
 
   Ran 2 shell commands
 
 ● DIFF exato à expectativa: 20/−1.140 e 8/−480, todo dia desce, todo dia carimba janela, 12.861 idênticos e nenhum dos 163 da forma B
   tocado. Agora a prova que separa este pouso do B — a folha tem de voltar zero:
 
-  Running cd /home/ronald/saas-hasner && echo "== live turn…
-  ⎿  $ cd /home/ronald/saas-hasner && diff <(git show HEAD:app/ponto/turnos.py) /tmp/o232-pousoA/app/ponto/turnos.py; echo "rc_diff=$?"
+  Ran 5 shell commands
   ⎿  Read docs/AVAIS.md (22 lines)
   ⎿  Read docs/HANDOFF-SESSAO.md (44 lines)
   ⎿  Referenced file ponto/tests/test_bateria_lavratura.py
@@ -158,13 +144,27 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Task "RED e construção do segundo intervalo" completed in background
 
-✢ Proofing… (1h 46m 55s · ↓ 218.5k tokens · thinking)
+● Trees confirmed: a cópia difere do HEAD só nesse ponto. Rodando o DIFF de folha da competência corrente (10/2026) na sombra, as duas
+  árvores sob uma trava só:
+
+  Searched for 2 patterns, ran 3 shell commands
+
+● Enquanto a medição corre (ESMERIL-DO-MARCO: só o esmeril deste marco, e ele já deu 0 órfãos — _pares_marcados segue com 3 chamadores de
+  produção, 373/393/507), preparo o texto no scratchpad, sem tocar a árvore que a medição monta:
+
+● Running cd /home/ronald/saas-hasner && for i in $(seq 1 4… · 2m 20s
+  ⎿  $ cd /home/ronald/saas-hasner && for i in $(seq 1 40); do if grep -q "^rc=.* FIM" logs/l115/o232_folha_par.out 2>/dev/null; then echo
+     "TERMINOU"; break; fi; [ -f logs/simular_folha/o232a_depois.json ] && echo -n "d"; echo -n "."; command sleep 20 2>/dev/null || true;
+     done; echo; grep -v "lavratura … (2m 19s · 1 line)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✻ Proofing… (1h 52m 16s · ↓ 229.0k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
