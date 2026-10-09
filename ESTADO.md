@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 01:34:01.**
+**Medido em 09/10/2026 01:39:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `d29b7f14 POUSO da raia wt-bos: o pino de geo le o juiz, e o raio do posto passa a ter UM sitio (O200 + complemento)` |
+| `HEAD` local | `fb69b541 As duas colunas da O146 entram no inventario pessoal, e o padrao fica intacto` |
 | `origin/main` | `d29b7f14 POUSO da raia wt-bos: o pino de geo le o juiz, e o raio do posto passa a ter UM sitio (O200 + complemento)` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -29,23 +29,18 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+fb69b541 As duas colunas da O146 entram no inventario pessoal, e o padrao fica intacto
+cfd4ff83 O146: a extra declarada da escala desloca o limite da janela, e o limite passa a ter UM sitio
 d29b7f14 POUSO da raia wt-bos: o pino de geo le o juiz, e o raio do posto passa a ter UM sitio (O200 + complemento)
 6c53bc46 O200: o pino de geo do painel LE o juiz, e para de acusar leitura imprecisa
 32782d0d O145: a testemunha LE a acusacao do motor, e a ponta de HE deixa de sumir fora do raio da grade
-0d189ca7 O topo do TICKETS fechado no ato do push (O112)
-d2cf6606 O204: a hora do aparelho tem UM sitio, e o epoch deixa de virar data de 1791
 ```
 
 ## `git status --short`
 
 ```
  M app/config/crons_duracao.json
- M app/docs/BACKLOG.md
- M app/docs/DOSSIES.md
  M app/docs/HANDOFF-SESSAO.md
- M app/docs/PROMPTS.md
- M app/docs/RELATO.md
- M app/docs/TICKETS.md
  M bin/sombra.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -123,42 +118,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  3. O pre-commit não tem o que recusar. Li os dois: index_vs_arvore.sh (divergência índice×disco nos staged) e commit_so_o_declarado.sh
-  (deleção não declarada). Os dois olham forma de índice, nunca conteúdo — e o commit não apaga nada. Mesmo assim o passo 3 agora diz a
-  recuperação, e ela é para frente (corrigir a queixa e repetir o passo 3); voltar arquivo ao HEAD é ! dele, e o HUP das 03:30 está a mais
-  de 2 h.
+  Ran 1 shell command
 
-  4. --conferir LÊ o carimbo, não recalcula. bin/sombra.sh:12 e :367-374 leem $STAMP; a comparação q_mig prod×sombra vive em :247-261,
-  dentro do refazer, que carimba. Então o migrate do deploy não deixa o portão vermelho retroativamente — e o refazer do cron das 04:10
-  monta a sombra de um dump de prod já com a 0042.
+● O146 pousou: commit cfd4ff83, migration 0042 aplicada, três cascas provadas, importerror_500=0. Agora o smoke em prod — o juiz chamado de
+  verdade, só leitura:
 
-  Também corrigi o campo errado do smoke antes de rodá-lo: EscalaColaborador tem ativa, não ativo, e o vínculo precisa estar vigente no dia
-  que se pergunta — senão o juiz responderia sobre um dia que o cadastro não cobre. Superfície de aplicação reconferida por diff -rq:
-  exatamente 11 modificados + 2 novos, com crons_duracao.json de fora.
+  Ran 1 shell command
 
-  Falta só o sinal do ensaio (rc_conferir=0 no logs/o146/ensaio_sombra.out) — espero pelo arquivo, e não toco a árvore viva enquanto o
-  bloco roda, porque ele monta justamente essa árvore. Quando vier, o aplicar.sh roda num ato: asserção → 12 arquivos → git add dos 2 novos
-  → git commit --only (12 código + 6 docs, -F) → bin/deploy.sh com migrate.
+● Smoke verde: as duas colunas no ar NOT NULL, 351 TipoEscala com extra zero, o juiz devolvendo a identidade (0, 0). Antes do push, a pasta
+  de selos de host (segundos contra uma suíte inteira):
 
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: O214 -- HE-DECISAO-EM-ESCALA (lei nova dele, 05/10 18:0x, 4 itens; entra logo depois da O211 e a FRENTE
-  dos BOs de tel
+  Ran 1 shell command
 
-● Lê a fixture do teste da ponta pequena
-  ⎿  $ cd /home/ronald/saas-hasner/app
-     echo "linhas: $(wc -l < ponto/tests/test_o214_ponta_pequena.py)"
-     grep -n 'class \|def ' ponto/tests/test_o214_ponta_pequena.py | head -30
-     echo "=== setUp / fixture ==="
-     sed -n "$(grep -n 'def setUp' ponto/tests/test_o214_ponta_pequena.py | head -1 | cut -d: -f1),+4…
+● Achado do próprio marco: as duas colunas novas caem no inventário pessoal. Lendo a regra antes de declarar:
 
-✢ Compacting conversation… (12h 8m 22s · ↓ 1.4m tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱ 88%
+  Ran 2 shell commands
+
+● Casaram por antes/depois — e o arquivo já decidiu esta classe: não se afrouxa o PADRAO_PESSOAL, inventaria-se. São minutos de um template
+  de escala, sem pessoa nenhuma:
+
+● Reroda a pasta de selos de host depois dos dois commits · 40s
+  ⎿  $ cd /home/ronald/saas-hasner
+     vermelhos=0; falhou=""
+     for t in bin/tests/test_*.sh; do
+     if ! out=$(bash "$t" 2>&1); then vermelhos=$((vermelhos+1)); falhou="$falhou $(basename $t)"; echo "=== VERMELHO: $t"; echo "$out" |
+     tail -14; fi
+     done
+     echo "---- selos de host: vermelhos=$vermelhos$falhou" (40s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+· Wrangling… (12h 13m 52s · ↓ 1.4m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    1% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
