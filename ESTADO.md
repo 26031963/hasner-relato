@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:519 AFIRMA ato sem PROVA ao lado -- onde a lei diz que moram. E o estado passou a abrir com `**NO AR`, porque
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:536 AFIRMA ato sem PROVA ao lado -- onde a lei diz que moram. E o estado passou a abrir com `**NO AR`, porque
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,11 +10,11 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 23:20:45.**
+**Medido em 08/10/2026 23:25:45.**
 
 | | |
 |---|---|
-| `HEAD` local | `9a32d26f POUSO da raia wt-bos: o pino de geo le o juiz, e o raio do posto passa a ter UM sitio (O200 + complemento)` |
+| `HEAD` local | `d29b7f14 POUSO da raia wt-bos: o pino de geo le o juiz, e o raio do posto passa a ter UM sitio (O200 + complemento)` |
 | `origin/main` | `d2cf6606 O204: a hora do aparelho tem UM sitio, e o epoch deixa de virar data de 1791` |
 | commits a subir (`ahead`) | **4** |
 
@@ -29,7 +29,7 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
-9a32d26f POUSO da raia wt-bos: o pino de geo le o juiz, e o raio do posto passa a ter UM sitio (O200 + complemento)
+d29b7f14 POUSO da raia wt-bos: o pino de geo le o juiz, e o raio do posto passa a ter UM sitio (O200 + complemento)
 6c53bc46 O200: o pino de geo do painel LE o juiz, e para de acusar leitura imprecisa
 32782d0d O145: a testemunha LE a acusacao do motor, e a ponta de HE deixa de sumir fora do raio da grade
 0d189ca7 O topo do TICKETS fechado no ato do push (O112)
@@ -41,7 +41,6 @@ d2cf6606 O204: a hora do aparelho tem UM sitio, e o epoch deixa de virar data de
 ```
  M app/config/crons_duracao.json
  M app/docs/HANDOFF-SESSAO.md
- M app/docs/RELATO.md
  M bin/sombra.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -119,14 +118,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ⎿  Read ../logs/o145.out (86 lines)
-
-● Task "RED e construção do segundo intervalo" completed in background
-
-● Task "Registrar o complemento na linha O200 do BACKLOG" still running in background
-
-● Task "Rodar a suite inteira na copia curada" still running in background
-
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
@@ -138,19 +129,27 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Background command "Rodar so os dois contratos que ficaram vermelhos" completed (exit code 0)
 
-● Tirar do RELATO o hash que o amend mata e escrever a licao
+● Rodar a pasta de selos de host antes do push · 5s
   ⎿  $ cd /home/ronald/saas-hasner
-     python3 - <<'PY'
-     p = 'app/docs/RELATO.md'
-     t = open(p, encoding='utf-8').read()
-     velho_tit = "## O200 — **POUSOU E ESTA NO AR: `COMMIT=40be6f22` E O SITIO UNICO DO RAIO RESPONDE EM PROD** (08/10 23:1x)\n"
-     assert t.count(velho_tit) == 1
-     novo_tit = ("## O200 — **POUSOU E E…
+     v=0; r=0
+     for f in bin/tests/test_*.sh; do
+     if bash "$f" >/tmp/selo.out 2>&1; then v=$((v+1)); else r=$((r+1)); echo "RED $f"; tail -4 /tmp/selo.out | sed 's/^/ /'; fi
+     done
+     echo "=== verdes=$v vermelhos=$r ===" (5s)
+  ⎿  Read docs/AVAIS.md (23 lines)
+  ⎿  Referenced file ../../wt-bos/app/colaboradores/tests/test_o200_pino_geo_le_o_juiz.py
+  ⎿  Read ../logs/sombra/censo_o145_dois_leitores.py (120 lines)
+  ⎿  Referenced file ../logs/o145_motor.out
+  ⎿  Read ../logs/o145.out (86 lines)
 
-· Compacting conversation… (9h 55m 6s · ↓ 1.2m tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 61%
+● Task "RED e construção do segundo intervalo" completed in background
+
+● Task "Registrar o complemento na linha O200 do BACKLOG" still running in background
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✶ Wrangling… (10h 0m 6s · ↓ 1.2m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    0% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
