@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:385 AFIRMA ato sem PROVA ao lado -- ## O146 — **FECHADA, NO AR**: a extra declarada da escala desloca o limite, e o limite
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:394 AFIRMA ato sem PROVA ao lado -- ## O146 — **FECHADA, NO AR**: a extra declarada da escala desloca o limite, e o limite
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 08:05:01.**
+**Medido em 09/10/2026 08:10:31.**
 
 | | |
 |---|---|
@@ -39,11 +39,15 @@ c32acf2e O topo do TICKETS fechado no ato do push (O112)
 ## `git status --short`
 
 ```
+ M app/chamados/tests/test_atalho_he_na_central.py
  M app/config/crons_duracao.json
  M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
  M app/docs/PROMPTS.md
  M app/docs/RELATO.md
+ M app/ponto/portas/he.py
+ M app/ponto/services/autorizacao_he_periodo.py
+ M app/ponto/tests/test_o214_item4_dia_do_admin.py
  M bin/sombra.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -121,22 +125,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Searched for 1 pattern, ran 8 shell commands
-
-❯ corte Ronald: FOLGA-CALENDARIO-SUBSTITUI: calendario de folgas VINCULADO ao colaborador SUBSTITUI a folga semanal do modelo nos meses
-  que ele cobre; folga AVULSA lancada num dia continua so complementando (L-023 fica para a avulsa). A escolha "substitui" e cadastro do
-  calendario, com nome e leitor. Entra como complemento da pauta do calendario de folgas (O148/O152), junto do defeito da tela do plano
-  que grava as folgas projetadas como manuais (achado Q001 do Fernando). Lei nova: altera a L-023. segue a fila; PAREI so em lei ou !
-
-● Two avais registered — both say "segue a fila". I'll record them in PROMPTS/BACKLOG in this same commit (PROMPT-NAO-SE-REPETE). First the
-  suite against the copy:
-
-  Searched for 2 patterns, ran 8 shell commands
-
-● Background command "Vizinhos por label contra a copia" completed (exit code 0)
-  ⎿  Read docs/AVAIS.md (24 lines)
-  ⎿  Read docs/HANDOFF-SESSAO.md (46 lines)
-  ⎿  Referenced file ponto/tests/test_o214_item2_autorizar_periodo.py
   ⎿  Referenced file ponto/tests/test_o214_item4_dia_do_admin.py
   ⎿  Referenced file ponto/views.py
 
@@ -147,16 +135,32 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● The harness reported the launcher, not the suite (pid lançada, 07:55:32) — viz10.out is still being written (mtime = agora). Espero pelo
   ARQUIVO. Enquanto isso, os docs:
 
-● Forma da mensagem do commit anterior
-  ⎿  $ cd /home/ronald/saas-hasner && git log -1 --format=%B 26a5316d | head -30
+  Ran 15 shell commands
 
-✢ Wrangling… (18h 39m 22s · ↓ 2.1m tokens)
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+
+  Ran 1 shell command
+
+● Background command "Esperar o veredito dos vizinhos pelo arquivo" completed (exit code 0)
+
+  Read 1 file, ran 1 shell command
+
+● Pasta de selos de host antes do commit
+  ⎿  $ cd /home/ronald/saas-hasner
+     ok=0; bad=0
+     for s in bin/tests/test_*.sh; do
+     if out=$(bash "$s" 2>&1); then ok=$((ok+1)); else bad=$((bad+1)); echo "=== VERMELHO: $s ==="; echo "$out" | tail -12; fi
+     done
+     echo "=== selos de host: $ok verdes, $bad vermelhos ==="
+
+✢ Wrangling… (18h 44m 52s · ↓ 2.1m tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
