@@ -1,5 +1,86 @@
 # RELATO — esteira saas-hasner
 
+## L-114 TERMOMETRO RODADO — **O AMARELO CAIU POR MEDICAO, E OS 19 SEM DESTINO GANHARAM DONO** (09/10 15:0x)
+
+PROVA: `logs/e6_cauda2c/r1_dono_10_20261009.txt` (o nome e o que a fonte declarada do R1 pede,
+`fonte_do_medido: 'logs/e6_cauda2c/r1_dono_*.txt'`) — competencia **10/2026 ABERTA**, na sombra, carimbo
+`dia=20261009 tipo=completa diverge=0 erros=0`: **4411 dias comparados, BATE 93,9%**, `erros no espelho: 0`.
+R1 por dono: **ESTRUTURA 110** (487,8 h, 42 colabs) · **CADASTRO 11** (84,2 h, 7) · **BATIDA 146**
+(706,4 h, 102) = **267**, e a soma fecha com o total de divergentes — o proprio comando a cobra.
+O placar renderizado pelo publicador saiu **`VERDE (termometro em dia)`**, R1 com `medido em 2026-10-09`
+e `EM DIA`, contra o `AMARELO (termometro sem data de medicao na fonte declarada)` de antes.
+Selos: `bin/tests/` **INTEIRA verde**, ruff limpo, `core/tests/test_l114_placar_papel_e_termometro.py`
+na suite `--only core` (`logs/l114/suite_core_l114.out`).
+
+**A CADENCIA E DO AVAL, e ela mordeu a casa antes de eu rodar**: *"o termometro e OBRIGATORIO com
+cadencia: e6_oraculo por competencia aberta 1x por semana e apos cada pouso de obra de calculo; cada dia
+de dono ESTRUTURA novo vira CENARIO na bateria ou linha na lista do admin, nunca fica sem destino. Bateria
+verde sem termometro rodado na semana = placar AMARELO."* O `185b9af0` foi pouso de obra de calculo, entao
+o termometro **devia** rodar — e foi o AMARELO do placar que cobrou, nao a minha memoria. Era para isso que
+ele nasceu.
+
+**A SEMANA SE LE POR TAXA, NAO POR CONTAGEM.** ESTRUTURA foi de 95 (02/10) para **110** (09/10) e isso
+**nao e regressao**: o denominador da mesma competencia cresceu de **2694 para 4411** dias comparados —
+a 10 estava pela metade em 02/10 — enquanto o **BATE subiu de 92,4% para 93,9%**. Registro tambem o que o
+instrumento **nao** sabe responder: entre 02/10 e hoje, 26 dia-colab SAIRAM do csv, e um csv so de
+DIVERGENCIA nao distingue *"passou a bater"* de *"deixou de ser comparado"*. Chamar os 26 de "curados"
+seria inventar sinal onde ha ausencia dele.
+
+### OS 19 DIAS DE `ESTRUTURA` SEM BATIDA NENHUMA — 4 formas medidas, 19 com destino, 0 sem
+49,7 h de 487,8 h, 10 colaboradores, todos da classe `e6_zero_esp_trabalho`. Censo em
+`logs/l114/censo19b_sombra.txt` (por dia: marcos da celula, quais batidas a grade USOU `hora->marco`,
+quais slots ficaram `missing`, orfas, e D-1/D/D+1 com esp/orac/paridade). Leitura so de autoridade
+(`espelho_do_colab`, `minutos_do_oraculo`, `Batida`, `CelulaDia`, `DiaPago`), pela porta
+`bin/sonda_leitura.sh --sombra` — 5 sondas, rc=0 nas cinco.
+
+| forma | dias | destino |
+|---|---|---|
+| **G1** jornada noturna que acaba em D+1 com a **ENTRADA ausente**; conjunto do turno IMPAR | **5** | **dono BATIDA**, lista do admin (L-099) |
+| **G1b** mesma forma, turno **COMPLETO** — so a chave difere | **1** | limite nomeado do instrumento; zero fatia |
+| **G2** dia de **FOLGA** pago com o rabo do turno de D-1, e D-1 paga ~0 | **3** | fecha com o dia D-1, que ja esta no csv |
+| **G3** cadastro **DESLOCADO** (celula diz turno diurno, o colaborador trabalha a noite) | **10** | **CADASTRO x REALIDADE**, lista do admin — proibido curar por codigo (L-099) |
+
+**G1 — e o espelho que NOMEIA quem falta.** col37 05/10 `missing E@19:00`; col174 23/09 `E@21:00` e
+`S@02:00`; col235 30/09 `E@21:00`; col250 29/09 `E@18:00`; col594 02/10 `E@19:00`. Nos cinco, o conjunto
+da JORNADA (nao o do dia de calendario) e **IMPAR**, que e a lei da BUG-144 lida no conjunto certo.
+Nao se adivinha a batida ausente: o slot vazio da grade ja diz qual marco ficou sem ninguem.
+
+**G3 e o maior do censo, e nao e estrutural.** col949 tem **7 noites seguidas** com celula
+`hi 07:00 / hii 12:00 / hfi 13:00 / hf 19:00` e batidas 18:00→06:00: cada noite paga **0** no espelho
+enquanto o oraculo le 660 · 660 · 659 · 385 · 664 · 664 · 659 · 481. A causa esta medida — a grade do dia
+SEGUINTE toma a ultima batida da noite (`06:00 -> marco 07:00`, 60 min de distancia) como se fosse a sua
+ENTRADA, e a noite fica com uma perna so. Isso e **consequencia do cadastro deslocado**, nao defeito
+independente: com a celula certa a batida acha o seu proprio marco. Vai para a lista do admin com o
+horario real ao lado do cadastrado, e a L-099 **proibe** curar por codigo. Com col868 21/09, col788 26/09
+e col788 08/10, sao 10 dias.
+
+### CORRECAO DE UMA AFIRMACAO MINHA, DO MEIO DESTE MESMO TRABALHO
+Eu escrevi em `logs/l114/achado_chave_do_dia.md` que col174 23/09 **contava a mesma cauda DUAS VEZES**.
+**Nao conta.** A leitura crua da grade (`logs/l114/cru_sombra.txt`) mostrou que as duas primeiras linhas
+do dia sao `{'missing': True, ...}` e que o campo `hora` ali e o **MARCO**, nao uma batida — e as batidas
+usadas (#108731, #108746, #108754, todas de 24/09) sao disjuntas das de 22/09 (#107686, #107798, #107816,
+#107824). **Nenhum minuto e pago duas vezes**, e nos 19 casos os dois leitores do PRODUTO (espelho e
+`DiaPago`) dizem o MESMO numero. O que eu li como duplicidade era a hora do marco impressa no slot vazio
+pela **minha propria sonda**. A correcao esta no topo do arquivo, nao enterrada nele.
+
+### O QUE MUDA NO INSTRUMENTO — e por que nao muda neste commit
+A escolha escrita no `dono_da_divergencia` (*"o dia sem batida nenhuma cai em ESTRUTURA... ali o fato
+existe e foi atribuido a outro dia, e atribuicao e do sistema"*) tinha a **suspeita certa e o reu errado**:
+em 18 dos 19, a atribuicao que difere e a do **ORACULO** — a chave dele e `tu[0].date()`, o dia de
+calendario da primeira batida do turno, e o espelho lavra pelo dia da **JORNADA**. O oraculo nao le celula
+**de proposito** (e o que o faz testemunha independente), entao isso e limite declarado, nao bug do produto.
+A revisao, pela CARACTERIZACAO-SE-INVERTE: o selo `test_MORDE_dia_sem_batida_e_ESTRUTURA_nao_BATIDA`
+**nao se apaga** — a assercao dele troca e passa a morder a VOLTA, perguntando a paridade ao conjunto do
+TURNO do proprio oraculo, sem ler celula. Juiz novo = 0, dono novo = 0. **Isso e INSTRUMENTO e nao pousa
+junto com produto (L-105)**: vai em pouso proprio, com RED antes.
+
+**LEI-AKITA**: origem=`core/placar_estrutural.py` (o numero do R1) e `bin/gerar_estado.py` (quem publica
+faz o I/O), testemunha=`r1_dono_10_20261009.txt` lido da fonte DECLARADA pelo nome do arquivo (nunca
+`mtime`), RED=`AMARELO (termometro sem data de medicao na fonte declarada)` no artefato real, virando
+`VERDE (termometro em dia)`, quem-mais-le=`placar_estrutural` e importado por **um** sitio
+(`bin/gerar_estado.py`) e pelos seus testes — **nada em container o importa, entao prod nao precisa de
+deploy**, juizes novos=0.
+
 ## O230 POUSO 1 — **A SONDA DE LEITURA DO DEV DA CASA ESTA NA ARVORE** (09/10 14:1x, POUSO 1 FECHADO)
 
 PROVA: `bin/sonda_leitura.sh` na arvore (de `1723901e` da raia `agent-a375cb746ca034f0c`), os tres REDs
