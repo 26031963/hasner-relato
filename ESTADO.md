@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 08:20:45.**
+**Medido em 09/10/2026 08:25:45.**
 
 | | |
 |---|---|
@@ -118,12 +118,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ⎿  Referenced file ponto/views.py
-
-● Task "RED e construção do segundo intervalo" completed in background
-
-  Ran 2 shell commands
-
 ● The harness reported the launcher, not the suite (pid lançada, 07:55:32) — viz10.out is still being written (mtime = agora). Espero pelo
   ARQUIVO. Enquanto isso, os docs:
 
@@ -142,18 +136,24 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● O selo de host pegou a janela certa: a árvore tem MIN_MOTIVO e o worker no ar não. Ordem então é commit → deploy.sh → push.
 
-  Um push por marco · 8m 57s
-  ⎿  $ cd /home/ronald/saas-hasner && git fetch -q origin 2>&1 | tail -2; echo "origin/main..HEAD:"; git log --oneline origin/main..HEAD
-     echo "=== PUSH ==="; git push origin main 2>&1 | tail -30 (8m 57s · 5 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Committed a28ca8cf, ran 3 shell commands
 
-· Wrangling… (18h 55m 6s · ↓ 2.1m tokens)
+● Push correndo (suite do pre-push). Não escrevo na árvore enquanto ele corre — uso a janela para a medição read-only do flip:
+
+● Ensaio do flip, sem apply
+  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
+     cat > "$S/flip_trava.py" <<'EOF'
+     # FLIP do item 3 da O214, literal do aval: `he_pendente_trava_export` "liga depois do item 2 no ar, nunca
+     # antes" -- e o item 2 esta no ar (deploy a28ca8cf, 09/10 08:1…
+
+✶ Compacting conversation… (19h 0m 6s · ↓ 2.1m tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 42%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                   10% until auto-compact
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
