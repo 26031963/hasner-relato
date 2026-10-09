@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 15:45:45.**
+**Medido em 09/10/2026 15:51:01.**
 
 | | |
 |---|---|
@@ -122,7 +122,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ⎿  Read docs/HANDOFF-SESSAO.md (47 lines)
   ⎿  Referenced file ponto/turnos.py
   ⎿  Read ../logs/r1/achado_papel_x.md (123 lines)
   ⎿  Referenced file ponto/management/commands/e6_oraculo.py
@@ -138,11 +137,12 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Background command "Push the marco" completed (exit code 0)
 
-● Writing the cases-by-the-rule doc
-  ⎿  $ mkdir -p /home/ronald/saas-hasner/logs/l115 && cat > /home/ronald/saas-hasner/logs/l115/casos.md <<'EOF'
-     # L-115 -- OS CASOS PELA REGRA, ANTES DO CODIGO (L-110)
-     > LEI: **DEPOIS DE PAUSA FECHADA, A SAIDA DO TURNO E POSICIONAL** (`app/docs/LEIS.md:138`,
-     > ORIGEM `aval Ronald 09/10 13:3x (R1-BALDE-A…
+● Sonda: two candidates without marked pair
+  ⎿  $ C=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/l115/arvore; python3 - "$C" <<'PY'
+     import sys
+     p=sys.argv[1]+'/app/ponto/tests/test_zz_sonda_l115.py'
+     s=open(p).read()
+     s=s.replace(""" # caso 9 --""",""" # caso 10 -- DOIS candidatos, intervalo declarad…
   ⎿  Read docs/AVAIS.md (25 lines)
   ⎿  Read docs/HANDOFF-SESSAO.md (47 lines)
   ⎿  Referenced file ponto/turnos.py
@@ -151,9 +151,9 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Task "RED e construção do segundo intervalo" completed in background
 
-· Wrangling… (1d 2h 20m · ↓ 2.9m tokens)
+✢ Wrangling… (1d 2h 25m · ↓ 2.9m tokens · thought for 14s)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    8% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
