@@ -10,11 +10,19 @@ noites de col923 que pagam 0. Em vez de publicar o zero, perguntei **por clausul
 **INTERIOR**, quando a noite tem 3 batidas e a pausa e o **ULTIMO** par -- a batida que fecha a noite
 esta arquivada no turno do dia seguinte; (2) exigir que o 1o turno do dia seguinte tivesse UMA
 batida, quando em 06/09 tem duas. Corrigidas, a sonda acha exatamente as noites medidas:
-**9 dia-colab, 1 colab (col923), +4.887 min = 81,5 h na 09/2026 (EXPORTADA), e ZERO na 10/2026
+**9 dia-colab, 1 colab (col923), +4.887 min = 81,5 h de TRABALHO NAO CONTADO na 09/2026 (EXPORTADA), e ZERO na 10/2026
 (aberta)** -- nenhum centavo da competencia em curso depende disto. Forma real: turno ABERTO,
 `pares_marcados=0`, 3 batidas todas `E`, pausa de 55-77 min no ultimo par, `previsto=420`, **juiz=0**,
 saida real ~09:2x do dia seguinte. Dono **ESTRUTURA** (L-099); origem `parear_turnos`/`data_turno`,
-nao o leitor de borda. Prova: `logs/l115/shapeB_MEDIDO.md`. **O que o numero nao autoriza**: a 09
+nao o leitor de borda. A conta e `(span - pausa) - juiz`: **nao e HE** -- 3.780 min dos 4.887 sao jornada normal, e o resto
+(~1.107 min) e ponta de HE pela L-097 contra um marco agora **LIDO**: `hi 23:30 / hii 04:00 /
+hfi 05:00 / hf 07:30`, 6x1, 420 min, celula `origem=gerada` em todos os 18 dias
+(`logs/l115/marcos_col923.out`). O `cel.marcos=[None]*4` da sonda anterior era atributo errado, nao
+cadastro vazio -- e com o marco lido a **L-084 nao se aplica** (a entrada esta EM CIMA do `hi`; so a
+saida esta longe), entao o dono nao e CADASTRO. Universo:
+ECs ativas HOJE, entao "so col923" nao e exclusividade de frota. Terceira figura nomeada: col923
+09/09 (borda fechada em 10/09 04:03, juiz=275), ao lado de 02/09 (+121), as duas na lista do O232.
+Prova: `logs/l115/shapeB_MEDIDO.md`. **O que o numero nao autoriza**: a 09
 esta exportada -- as 81,5 h nao entram por recalculo; se forem ao Dominio, vao por pauta DP com os
 dois numeros.
 LEI-AKITA: origem=`ponto/turnos.py::realizado_dos_turnos` (ramo de DIA, antes do laco por turno),
