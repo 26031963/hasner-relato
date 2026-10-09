@@ -6,10 +6,21 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 08/10/2026 23:53:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (491.8 MB). Acoes na janela: **1435**.
+**Medido em 08/10/2026 23:58:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (492.0 MB). Acoes na janela: **1445**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 23:58:29 | Bash | Estado do scratchpad e do HEAD | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; ls "$S/o146/" 2>/dev/null; echo "---"; cd /home/ronald/saas-hasner && git log --oneline -1 && git status --porcelain \| head` |
+| 23:57:45 | Bash | Fixture existente da janela de saida | `cd /home/ronald/saas-hasner/app; sed -n '1,120p' ponto/tests/test_janela_he_saida.py` |
+| 23:57:24 | Bash | Como a grade do espelho nasce | `cd /home/ronald/saas-hasner/app; sed -n '480,580p' ponto/services/espelho.py` |
+| 23:57:14 | Bash | Assinatura do montar_dias | `cd /home/ronald/saas-hasner/app; grep -n "^def \\|^ def " ponto/services/espelho.py \| awk -F: '$1>300 && $1<1000'; echo "---- assinatura de montar_dias"; grep -n "def montar_dias" -A14 ponto/services/espelho.py` |
+| 23:57:12 | Bash | Fronteiras de funcao no calendario | `cd /home/ronald/saas-hasner/app; awk 'NR>=200 && NR<=540 && /^def \|^ def /{print NR": "$0}' colaboradores/services/calendario.py` |
+| 23:56:54 | Bash | O calendario e o segundo leitor | `cd /home/ronald/saas-hasner/app; sed -n '355,395p' colaboradores/services/calendario.py; echo "=== celulas no calendario ==="; grep -n "celulas" colaboradores/services/calendario.py \| head -30` |
+| 23:56:53 | Bash | De onde o montador tira as celulas | `cd /home/ronald/saas-hasner/app; grep -n "_marcos_por_data\\|_celulas_por\\|celulas=" ponto/services/espelho.py \| head -40` |
+| 23:55:55 | Bash | LEI ANTES DO PATCH: grep dos sitios | `cd /home/ronald/saas-hasner/app/docs; for f in LEIS.md DOSSIES.md CORTES.md; do echo "########## $f"; grep -n "janela_he\\|motor_calculo_v2\\|gerar_celulas\\|escala/models.py\\|TipoEscala" "$f" \| head -40; done` |
+| 23:55:54 | Bash | Como o tripwire compara o dna | `cd /home/ronald/saas-hasner/app; sed -n '1,60p' ponto/management/commands/tripwire_celulas.py; echo "=== celula.py 470-505 ==="; sed -n '470,505p' ponto/portas/celula.py` |
+| 23:53:33 | Bash | Ler onde o motor amarra o vinculo | `cd /home/ronald/saas-hasner/app; sed -n '1600,1625p' ponto/motor_calculo_v2.py` |
+| 23:53:30 | Bash | Onde o motor recebe o marcos_do_dia | `cd /home/ronald/saas-hasner/app; grep -rn "_marcos_do_dia_fn" --include=*.py . \| grep -v "/tests/"` |
 | 23:52:41 | Bash | Ler marcar_pontas_fora e os clipadores do motor | `cd /home/ronald/saas-hasner/app; sed -n '135,200p' ponto/janela_he.py; echo "=== _entrada_efetiva / _saida_efetiva do motor ==="; sed -n '1280,1352p' ponto/motor_calculo_v2.py` |
 | 23:52:40 | Bash | Ler as funcoes puras da janela | `cd /home/ronald/saas-hasner/app; sed -n '30,135p' ponto/janela_he.py` |
 | 23:52:05 | Bash | Ler o montador do espelho nos dois sitios | `cd /home/ronald/saas-hasner/app; sed -n '380,412p' ponto/services/espelho.py; echo "=== 690-760 ==="; sed -n '690,760p' ponto/services/espelho.py` |
@@ -1444,4 +1455,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 11:59:48 | Bash | Remedir o contador do apply em prod | `cd /home/ronald/saas-hasner cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/contador_apply.sql <<'SQL' WITH foto AS (SELECT * FROM (VALUES (0)) t(x)) SELECT to_char(now() AT TIME ZONE 'America/Sao_Paulo','HH24:MI:SS') AS agora, count(*) FILTER (WHERE f.atualizado_em > timestamp '2026-10-08 14:52:00' AT TIME ZONE 'UTC') AS reescritas_pos_deploy, c ...` |
 | 11:59:34 | Bash | Fechar o guarda de prova e reler o topo | `cd /home/ronald/saas-hasner python3 - <<'PYEOF' alvo = 'app/docs/RELATO.md' t = open(alvo, encoding='utf-8').read() V = "**PROVA, medida em PROD depois do reload e nao de memoria:**" N = "**PROVA:** medida em PROD depois do reload, nao de memoria --" assert t.count(V) == 1 open(alvo, 'w', encoding='utf-8').write(t.replace(V, N)) print('ok') PYEOF python3 bin/relato_afirma_com_prova.py app/docs/REL ...` |
 | 11:59:27 | Bash | Ler o guarda de afirmacao com prova | `cd /home/ronald/saas-hasner && sed -n '1,70p' bin/relato_afirma_com_prova.py` |
-| 11:53:58 | Bash | Carimbar NO AR no RELATO com a prova | `cd /home/ronald/saas-hasner S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad python3 - <<'PYEOF' alvo = 'app/docs/RELATO.md' VELHO = """**O211 POUSO B -- DIFF DE FROTA MEDIDO E PUBLICADO, e o apply e o deploy DESTE commit. Com ele a O211 fecha: a regua de dinheiro sobe da EMPRESA, e a praca so entra por linha DECLARADA.**""" NOVO = """**O211 POUSO B N ...` |
