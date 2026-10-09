@@ -4,7 +4,7 @@
 >
 > **livre** = pode virar fatia agora, sem humano. **corte/aval/smoke/dinheiro-ate-export** = tem dono humano e espera.
 
-<!-- ORDEM-VIVA-TOPO: O146 -->
+<!-- ORDEM-VIVA-TOPO: O214 -->
 <!-- ADENDO em 08/10 20:0x, AVAL DELE literal: *"BOS-EM-RAIA-UM-POR-VEZ. Os BOs andam na raia
      wt-bos em paralelo com a principal (O145 -> O146 -> item 2 da O214), UM de cada vez, nesta ordem:
      O204 (em curso) -> O200 -> O206 -> O199 -> O198 -> O197 -> O207 -> O44 itens 2-8."* LIMITES, dele:
