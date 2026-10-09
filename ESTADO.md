@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 14:46:31.**
+**Medido em 09/10/2026 14:52:01.**
 
 | | |
 |---|---|
@@ -113,22 +113,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Task "Push the O230 marco" still running in background
-
-● Background command "Run the e6 termometro on the sombra" completed (exit code 0)
-
-  Searched for 3 patterns, ran 15 shell commands
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-  Searched for 1 pattern, ran 13 shell commands
-
-● Background command "Push the O230 marco" completed (exit code 0)
-  ⎿  Read docs/AVAIS.md (25 lines)
-  ⎿  Read docs/HANDOFF-SESSAO.md (47 lines)
-  ⎿  Referenced file ponto/turnos.py
-  ⎿  Read ../logs/r1/achado_papel_x.md (123 lines)
   ⎿  Referenced file ponto/management/commands/e6_oraculo.py
 
 ● Task "RED e construção do segundo intervalo" completed in background
@@ -137,12 +121,28 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● The push landed (origin/main=e38d4039). The tree is free. First making the measurement durable, then the one over-claiming line:
 
-  Writing the day-key finding durably
-  ⎿  $ cd /home/ronald/saas-hasner && sed -i 's|SAIRAM=26 (todos saíram do csv: o dia passou a BATER)|SAIRAM=26 (sairam do csv de
-     DIVERGENCIA: BATEM ou deixaram de ser comparados -- csv so de divergencia nao distingue)|' logs/l114/termometro_20261009_destino.txt;
-     grep -n "SAIRAM" logs/l114/termometro_20…
+  Ran 1 shell command
 
-* Wrangling… (1d 1h 20m · ↓ 2.8m tokens)
+● Proving the double count by naming the hours on both sides, rather than by arithmetic inference:
+
+  Ran 1 shell command
+
+● The grade hours are not all batidas — 21:00/02:00 are not in col174's batida list. Reading the raw structure before I trust my own print:
+
+  Ran 1 shell command
+
+● My double-count claim was wrong, and the raw grade says why: the 23/09 slots are missing: True placeholders, and the batidas it used
+  (#108731/#108746/#108754) are disjoint from the 22/09 set. No batida is counted twice. Getting the full census of the real shape:
+
+  Ran 2 shell commands
+
+● 19 of 110 ESTRUTURA days (49,7 h of 487,8 h), one single class. Correcting the file — the double-count claim was wrong:
+
+  Ran 1 shell command
+
+  Advising using Fable 5.1
+
+✢ Wrangling… (1d 1h 26m · ↓ 2.8m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
