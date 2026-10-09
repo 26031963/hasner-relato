@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 06:13:01.**
+**Medido em 09/10/2026 06:18:31.**
 
 | | |
 |---|---|
@@ -118,7 +118,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Background command "Roda a sonda do vazamento na sombra" completed (exit code 0)
 
   Searched for 1 pattern, ran 31 shell commands
   ⎿  Read docs/AVAIS.md (24 lines)
@@ -143,11 +142,12 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Background command "Espera o arquivo da medição" completed (exit code 0)
 
-● Progresso da suite
-  ⎿  $ cd /home/ronald/saas-hasner && grep -cE '^(OK|FAILED)( |$)' logs/suite_o214vaz.out; grep -E '^Ran [0-9]+ tests|^(OK|FAILED)(
-     |$)|^ERROR:|^FAIL:' logs/suite_o214vaz.out | tail -10; echo "--- bytes: $(stat -c%s logs/suite_o214vaz.out)"; date '+%H:%M:%S'
+● Aguarda o veredito da suite · 5m 18s
+  ⎿  $ cd /home/ronald/saas-hasner && until grep -qE '^(OK|FAILED)( |$)' logs/suite_o214vaz.out 2>/dev/null; do sleep 30; done; grep -E
+     '^Ran [0-9]+ tests|^(OK|FAILED)( |$)' logs/suite_o214vaz.out; date '+%H:%M:%S' (5m 17s)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-· Wrangling… (16h 47m 22s · ↓ 1.9m tokens)
+· Wrangling… (16h 52m 52s · ↓ 1.9m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
