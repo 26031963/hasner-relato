@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 20:50:18.**
+**Medido em 09/10/2026 20:55:35.**
 
 | | |
 |---|---|
@@ -131,38 +131,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+● Salvando a lição que custou o ciclo, e preparando a célula do O232:
+
+  Ran 3 shell commands
+
+● Base pronta (406 KB), a cura rodando. Lendo a célula do O232 para fechá-la:
+
+  Ran 3 shell commands
+
+● Background command "Run two-tree impact DIFF for pouso B on the sombra" completed (exit code 0)
+
+● Selos de host: 0 RED. E o DIFF voltou:
 
   Ran 1 shell command
 
-● Nenhuma das três funções com PROTEGE é tocada — medido, não suposto. Agora o item 2 do advisor, que é o sério:
+● O DIFF divergiu da previsão — 13 dia-colab e 5 colaboradores, não 9 e um só, e a 10 não é 0. Cada desvio se explica antes do commit.
+  Primeiro a chave que desapareceu:
 
-  Ran 1 shell command
+  Ran 3 shell commands
 
-● A distinção está na docstring, mas a casa manda medir. Escrevendo a sonda para rodar assim que a bateria liberar a cópia (não se edita
-  árvore que medição monta):
+● A chave perdida é col923 08/09, que pagava 0 — o dia órfão desaparece porque o 07/09 absorveu a batida (39 → 581). Nenhum minuto se
+  perde. Mas os 4 dias não previstos precisam de explicação. Sonda nos dois lados:
 
-  Ran 1 shell command
-
-● Background command "cd /home/ronald/saas-hasner &&
-C=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/pousoB &&
-L=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/o232/vizinhos.out && rm -f $L && timeout
-2400 bash bin/suite.sh --dir $C --only "ponto escala folha chamados" > $L 2>&1; echo "rc=$?"; grep -E '^(OK|FAILED)(\(| |$)|^Ran [0-9]+
-test' $L | tail -2" completed (exit code 0)
-
-  Ran 1 shell command
-
-● VIZINHOS VERDE: Ran 6904 tests / OK (skipped=11). A cópia liberou — rodando a sonda anti-juiz-paralelo:
-
-● Running cd /home/ronald/saas-hasner SP=/tmp/claude-1001/-h…
+  Running cd /home/ronald/saas-hasner SP=/tmp/claude-1001/-h…
   ⎿  $ cd /home/ronald/saas-hasner
      SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
-     C=$SP/pousoB
-     cp $SP/o232/test_nao_e_segundo_juiz.py $C/app/ponto/tests/
-     timeout 900 bash bin/suite.sh --dir $C --only "ponto.tests.test_nao_e_segundo_juiz" > $SP/o232/segun…
+     cat > $SP/o232/forma_dos_4.py <<'PY'
+     # SOMENTE LEITURA. Imprime a FORMA dos dia-colab que o DIFF do pouso B moveu e que a previsao
+     # nao nomeava. So ids, tipos, instantes e…
 
-✽ Proofing… (2h 57m 32s · ↓ 359.6k tokens)
+· Proofing… (3h 2m 49s · ↓ 371.4k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                   12% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
