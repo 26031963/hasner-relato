@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 13:31:01.**
+**Medido em 09/10/2026 13:36:31.**
 
 | | |
 |---|---|
@@ -116,15 +116,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Agora o patch do placar, montado em memória na cópia do HEAD:
-
-  Ran 14 shell commands
-  ⎿  Read docs/AVAIS.md (25 lines)
-  ⎿  Read docs/HANDOFF-SESSAO.md (47 lines)
-  ⎿  Read ../logs/r1/achado_papel_x.md (123 lines)
-  ⎿  Read ../logs/r1/predicao_censo_v2.txt (39 lines)
-  ⎿  Read ../../.claude/projects/-home-ronald-saas-hasner/memory/meta-ordering-anula-o-distinct.md (32 lines)
-
 ● Task "RED e construção do segundo intervalo" completed in background
 
 ● Background command "Rodar a suite core contra a copia" completed (exit code 0)
@@ -143,15 +134,24 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● The aval answers the balde-A lei question that was at the top of the RELATO. First the RED that blocks the commit — the house's own selo
   caught my literal date, and it is right.
 
-● Running 1 shell command…
+  Searched for 1 pattern, ran 18 shell commands
 
-✢ Wrangling… (1d 0h 5m · ↓ 2.6m tokens)
+● Now the top of the RELATO — the lei question becomes the lei answered:
+
+● Registrar o balde A no BACKLOG e conferir a suite
+  ⎿  $ python3 - <<'PY'
+     p='docs/BACKLOG.md'; s=open(p).read()
+     a = ("**R1-RESIDUO-DO-INTERVALO (complemento, sem id novo; aval 09/10)** -- 126 dia-colab ESTRUTURA / 500,7 h em "
+     "10/2026, censados pela funcao real com 0 \"outro\" (A 33 G 22 P 17 D 15 X 14 M 10 T 9 Z 3 N 3). MEDIDO antes de "
+     "curar; cert…
+
+✢ Wrangling… (1d 0h 10m · ↓ 2.6m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    2% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens

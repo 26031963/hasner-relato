@@ -2,16 +2,27 @@
 
 ## R1-RESIDUO-DO-INTERVALO — **EM CURSO** (09/10 09:xx; complemento da O73, sem id novo)
 
-**LEI QUE FALTA (vai no topo COM numero, e a esteira SEGUE — PAREI-DE-LEI-NAO-DEVOLVE-TURNO):**
-*a L-084 diz que 180 min nas DUAS pontas e o limite para o cadastro ainda DESCREVER o dia; o raio de
-atribuicao da ata (`tol_min`) e 90. **Qual dos dois governa uma SAIDA a 120 min do marco?*** Medido:
+**LEI RESPONDIDA às 13:3x — `L-115`, e a resposta não era nenhuma das minhas duas candidatas.**
+A pergunta subiu aqui às 09:xx com número e a esteira seguiu (PAREI-DE-LEI-NAO-DEVOLVE-TURNO): *a L-084
+diz que 180 min nas DUAS pontas é o limite para o cadastro ainda DESCREVER o dia; o raio de atribuição
+da ata (`tol_min`) é 90. **Qual dos dois governa uma SAÍDA a 120 min do marco?*** A resposta dele:
+**nenhum dos dois se move.** *"O raio de 90 e a L-084 ficam como estão. Dia com par de pausa FECHADO e
+uma última batida depois dele: essa batida é a SAÍDA do turno pela posição, qualquer que seja o tipo
+gravado; o que passa do marco é ponta de HE pela L-097. Altera a borda da BUG-144 só nesse caso; 'última
+E solta' sem pausa fechada antes segue como está."* O que a **pausa fechada** faz na lei é o que eu não
+tinha: ela é a testemunha de que a pessoa **saiu e voltou**, e depois disso a última batida não pode ser
+uma entrada — então a POSIÇÃO responde onde o RAIO se cala, sem alargar envelope nenhum e sem juiz novo.
+E o excedente não vira trabalho silencioso: vira **ponta de HE pela L-097**, lei que já existia para o
+minuto fora do marco. Escrita em `docs/LEIS.md` como **L-115**, ESTADO `SO-NO-PAPEL`: os casos pela
+REGRA entram na bateria **antes** do código (L-114), na fatia seguinte desta mesma obra. Medido:
 **33 dia-colab / 103,1 h** das 500,7 h da competencia 10/2026 (balde A). Nesses dias a ata acende 3 dos
 4 marcos, da o marco de SAIDA (`hf`) a batida do MEIO e a ultima batida fica **ORFA** por estar fora do
 envelope de 90 min (a: 19:00 a 120 min de `hf` 17:00; b: 16:53 a 93 min de `hf` 15:20) — conservada pela
 S133, invisivel para todo leitor de marco. As duas curas candidatas batem em lei declarada: alargar o
 `tol_min` muda TODA ata da frota, e ler a `E` final como saida contradiz a borda da BUG-144
 (`ponto/turnos.py:394`, *"a ultima E solta nao conta"*) = juiz novo. Prova e aritmetica em
-`logs/r1/ata_a_b.out` e `logs/r1/MECANISMO.md`. **Trava o balde A; o balde P segue nesta fatia.**
+`logs/r1/ata_a_b.out` e `logs/r1/MECANISMO.md`. **O balde A deixou de estar travado**: ele é a fatia
+seguinte, com os casos na bateria primeiro; o balde P é o que pousa agora.
 
 
 ORDEM-VIVA-TOPO passou a `O73`. O O214 fica ABERTO so pelo smoke dele (AVAIS #7) — os quatro itens
@@ -115,6 +126,19 @@ selos vazios em 01/09. **RED evidenciado** em `logs/r1/red_selo_l114_20261009.tx
 por `>` derruba 3 dos 9 casos de `core/tests/test_l114_placar_papel_e_termometro.py` — a borda, a cor do
 veredito e a linha do ESTADO. A secao TERMOMETRO do ESTADO e render, mora em `bin/gerar_estado.py` e pousa
 em ato PROPRIO de instrumento, depois do produto (L-105).
+
+**E HOUVE UM SEGUNDO RED, que nao e meu: o selo da casa mordeu a primeira forma deste placar.** Eu havia
+escrito `medido_em: '2026-10-02'` LITERAL no modulo, e a suite `core` inteira voltou
+**`FAILED (failures=2)`** em `core/tests/test_selo_sem_data_cravada.py` (corte de 23/09) --
+`core/placar_estrutural.py:107`, classe **DECIDE**, **-7 dias**: *"migre por ESTADO, nao empurre a data"*.
+Ele estava certo e e a mesma classe do P0 de 21/09 (`api/credencial.py`, 304 pessoas sem autenticar as
+00:00): o arquivo compara com `hoje`, entao a data decide, e **a lei que eu estava escrevendo seria a
+primeira a envelhecer sozinha**. A cura foi na ORIGEM, nao em `DECLARADAS` -- que e a porta para data que
+NAO decide: quando a medicao aconteceu e **fato do mundo**, entao o R1 declara `fonte_do_medido`
+(`logs/e6_cauda2c/r1_dono_*.txt`, caminho e nao data), `placar(hoje, medido_em)` recebe a data de quem
+publica -- que e quem faz o I/O --, e **sem data o veredito e AMARELO, nunca VERDE**. Depois da cura:
+**Ran 16 / OK** nos dois modulos, e o censo da casa da **0** data em `core/placar_estrutural.py`, **0**
+DECIDE no repo e **0** vencendo. Os dois REDs estao em `logs/r1/red_selo_l114_20261009.txt`.
 
 ### O ANTES DO GRAVADO, MEDIDO EM PROD — e a 09 nao se move em silencio
 
