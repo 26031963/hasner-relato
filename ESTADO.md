@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 17:32:58.**
+**Medido em 09/10/2026 17:38:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `ca6f14f6 L-114 termometro: a cadencia passa a se verificar sozinha, e os 19 sem destino ganham dono` |
+| `HEAD` local | `5d9ec893 L-115 pouso 1: a saida pela posicao esta no ar, e a figura do aval nao e esta` |
 | `origin/main` | `ca6f14f6 L-114 termometro: a cadencia passa a se verificar sozinha, e os 19 sem destino ganham dono` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -22,27 +22,18 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+5d9ec893 L-115 pouso 1: a saida pela posicao esta no ar, e a figura do aval nao e esta
 ca6f14f6 L-114 termometro: a cadencia passa a se verificar sozinha, e os 19 sem destino ganham dono
 e38d4039 O230 pouso 1: a sonda de leitura do dev da casa esta na arvore, e quem segura e o GRANT
 185b9af0 R1 balde P: a pausa precisa que a ATA chame a abertura de SAIDA (L-115 nasce, L-114 entra no placar)
 6a259f0b O112: o rodape do TICKETS volta ao git (derivado do pos_push)
-c35a2f76 O214 item 3: a trava do TXT esta LIGADA, e o numero era 81, nao 70
 ```
 
 ## `git status --short`
 
 ```
  M app/config/crons_duracao.json
- M app/docs/AVAIS.md
- M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
- M app/docs/LEIS.md
- M app/docs/PENDENTES_RONALD.json
- M app/docs/PROMPTS.md
- M app/docs/RELATO.md
- M app/ponto/services/bordas_realizado.py
- M app/ponto/tests/test_bateria_lavratura.py
- M app/ponto/turnos.py
  M bin/sombra.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -131,8 +122,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Task "Raia wt-bos: O206" still running in background
-
 ● Task "Roda a suite inteira na copia final" still running in background
 
 ● Advising using Fable 5.1
@@ -150,18 +139,20 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Now escrevo as quatro linhas do PROMPTS, os itens novos do BACKLOG e viro os dois avais respondidos:
 
-  Ruff e a pasta inteira de selos de host · 21s
-  ⎿  $ cd /home/ronald/saas-hasner; docker run --rm -v "$PWD/app:/app:ro" -w /app --tmpfs /app/.ruff_cache --cpuset-cpus 4-7 --entrypoint
-     ruff saas-hasner-core check ponto/turnos.py ponto/tests/test_bateria_lavratura.py ponto/services/bordas_realizado.py 2>&1 | tail -5
-     echo "=== selos de host:"; bash -c… (21s · 3 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
+● Prepara o patch da cura do O231
+  ⎿  $ cd /home/ronald/saas-hasner; S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
+     cat > $S/o231_cura.py <<'PY'
+     # -*- coding: utf-8 -*-
+     """Aplica a cura do O231 numa ARVORE dada (argv[1] = raiz da copia ou do repo). Idempotente."""
+     import io, sys, os
+     raiz…
 
-✻ Wrangling… (1d 4h 7m · ↓ 3.1m tokens)
+· Wrangling… (1d 4h 12m · ↓ 3.1m tokens · thought for 9s)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
 
 ! curar fechar_cobranca_com_lastro na origem: fechar() devolve o quadro que usou e o comando imprime ESSE
   ctrl+x ctrl+s to send now
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                   10% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ Press up to edit queued messages
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -169,6 +160,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Converting multiline comments in modal_fio.html                                            19m 17s · ↓ 126.6k tokens
+  ◯ general-purpose  Verifying modal_fio comment tag fix                                                        24m 20s · ↓ 127.4k tokens
   ⧉  index
 ```
