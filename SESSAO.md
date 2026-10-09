@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 09/10/2026 18:20:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (544.2 MB). Acoes na janela: **1324**.
+**Medido em 09/10/2026 18:25:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (544.2 MB). Acoes na janela: **1327**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 18:25:33 | Bash | Le a ancora exata do docstring | `cd /home/ronald/saas-hasner; grep -n "09 EXPORTADA intacta" -A 3 logs/l115/relavra10_apply.py \| cat -A \| sed -n 1,8p \| sed 's/\$$//'` |
+| 18:25:18 | Bash | Aplica as correcoes do advisor nos dois arquivos | `cd /home/ronald/saas-hasner; S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/patch_relavra.py; cat > "$S" <<'PY' import io A = 'logs/l115/relavra10_apply.py' R = 'logs/l115/relavra10_restore.py' # ---- (2) o restore se copia com o NOME que o apply e a foto nomeiam r = io.open(R, encoding='utf-8').read() velho = ("# docker cp logs/l115/relavra10_resto ...` |
+| 18:22:15 | Bash | Escreve o apply da re-lavra | `cd /home/ronald/saas-hasner; cat > logs/l115/relavra10_apply.py <<'PY' # -*- coding: utf-8 -*- """O APPLY DA RE-LAVRA 10 (L-115) EM PROD, ESCOPADO NOS 6. `APLICAR=False` = DRY. AVAL (Ronald, 09/10 18:2x), literal: *"a re-lavra da L-115 na competencia 10/2026 (aberta) e PRE-APROVADA pela DINHEIRO-EM-COMPETENCIA-ABERTA: DIFF ja publicado (36 dia-colab, +7.345 min), reversao em logs/ antes, 09 intact ...` |
 | 18:20:20 | Bash | Escreve a reversao da condicao 2 | `cd /home/ronald/saas-hasner; cat > logs/l115/relavra10_restore.py <<'PY' # -*- coding: utf-8 -*- """A FRASE DE REVERSAO DA RE-LAVRA 10 (L-115), EXECUTAVEL. Le `/tmp/l115_relavra10_foto.json`. `DRY=True` (default) monta tudo, CONFERE as guardas e nao escreve -- e a prova de que a reversao EXECUTA, que e o que a condicao 2 da DINHEIRO-EM-COMPETENCIA-ABERTA pede. `DRY=False` escreve, num `atomic` so. ...` |
 | 18:19:45 | Bash | Gera o literal ESPERADO e confere contra a sombra | `cd /home/ronald/saas-hasner/logs/l115; awk '/^col/ && $8=="True" && $2!="2026-10-09" {printf " (%s, %s): %s,\n", substr($1,4), "\x27"$2"\x27", $5}' prod_precheck.out \| sort > /tmp/esp.txt; wc -l < /tmp/esp.txt; awk '/^col/ && $8=="True" && $2!="2026-10-09" {s+=$5} END{print "SOMA",s}' prod_precheck.out; echo "--- fora"; awk '/^col/ && $8=="False" {printf " (%s, %s): %s,\n", substr($1,4), "\x27"$2 ...` |
 | 18:19:31 | Bash | Campos de ExportacaoDominio | `cd /home/ronald/saas-hasner/app; grep -n "class ExportacaoDominio" -A 45 folha/models.py \| head -60` |

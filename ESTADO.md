@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 18:20:45.**
+**Medido em 09/10/2026 18:25:45.**
 
 | | |
 |---|---|
@@ -126,12 +126,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-❯ smoke Ronald: abri a mesa de disputa, a resposta longe do marco agora diz a direcao e o que validar faz, e o Reabrir avisa quantas
-  respostas apaga -- pode fechar a UI-RESPOSTA-DIZ-O-QUE-E
-  ⎿  Read docs/AVAIS.md (23 lines)
-  ⎿  Read docs/HANDOFF-SESSAO.md (45 lines)
-  ⎿  Referenced file ponto/tests/test_bateria_lavratura.py
   ⎿  Referenced file ponto/turnos.py
   ⎿  Read ../logs/r1/achado_papel_x.md (123 lines)
 
@@ -149,14 +143,20 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Smoke fechado no registro (AVAIS 6 → 5), e os vizinhos do O231 voltaram verdes. Sigo a re-lavra — agora a reversão e o apply.
 
-  Escreve a reversao da condicao 2
-  ⎿  $ cd /home/ronald/saas-hasner; cat > logs/l115/relavra10_restore.py <<'PY'
-     # -*- coding: utf-8 -*-
-     """A FRASE DE REVERSAO DA RE-LAVRA 10 (L-115), EXECUTAVEL. Le `/tmp/l115_relavra10_foto.json`.
-     `DRY=True` (default) monta tudo, CONFERE as guardas e nao escreve -- e a prova de que a reversao
-     EXECUTA,…
+  Ran 7 shell commands
 
-· Proofing… (27m 59s · ↓ 55.1k tokens)
+● Os três arquivos estão na árvore e compilam. Antes de escrever em prod, consulto o advisor.
+
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+
+● Adoto os seis pontos. Primeiro as duas correções nos arquivos (caminho do restore, e o hash da frota sai do assert).
+
+● Le a ancora exata do docstring
+  ⎿  $ cd /home/ronald/saas-hasner; grep -n "09 EXPORTADA intacta" -A 3 logs/l115/relavra10_apply.py | cat -A | sed -n 1,8p | sed 's/\$$//'
+
+· Proofing… (32m 59s · ↓ 67.6k tokens)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
