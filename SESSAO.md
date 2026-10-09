@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 09/10/2026 11:48:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (525.8 MB). Acoes na janela: **1430**.
+**Medido em 09/10/2026 11:54:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (526.3 MB). Acoes na janela: **1423**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 11:53:52 | Bash | Listar provas durÃ¡veis do R1 | `ls -la /home/ronald/saas-hasner/logs/r1/ 2>/dev/null` |
+| 11:53:23 | Bash | Ler bloco do veto | `SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad sed -n '530,585p' $SP/p_head/app/ponto/turnos.py` |
+| 11:53:19 | Bash | Localizar região do veto na cópia p_head | `SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad F=$SP/p_head/app/ponto/turnos.py ls -la $SP/p_head/app/ponto/turnos.py 2>/dev/null && md5sum $F echo "---- regiao do veto ----" grep -n '_par_misto\\|_ha_trabalho\\|_pap_b\\|_pap_nx\\|_par_da_ata\\|_bordas' $F \| head -40` |
+| 11:49:29 | Bash | Tabela de verificação da regra | `cat <<'EOF' REGRA: _par_misto admite SO quando a ATA deu papel 'S' a ponta de ABERTURA. 'X'/'Xi'/None = abstencao -> o par cai no teste gravado S->E de sempre. caso papel abertura regra nova esperado col114 (17 d) 'S' ADMITE admitir (pausa 118 min) <- balde P sobrevive col114 26/09 'S' (tipo=E) ADMITE L-087 honrada: papel vence o botao col438 11/09 'X' abstencao cai no gravado E,S RECUSA <- achado ...` |
+| 11:48:29 | Bash | Le o portao que descarta o dia | `SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad cd "$SP/p_head/app" && sed -n '1160,1240p' ponto/turnos.py` |
 | 11:48:19 | Bash | Le papel_por_minuto_da_ata | `SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad cd "$SP/p_head/app" && echo "=== quem produz papel_por_minuto (1090+) ==="; sed -n '1090,1160p' ponto/turnos.py` |
 | 11:48:15 | Bash | Acha o sitio onde papel_ata e carimbado | `SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad cd "$SP/p_head/app" && grep -n "_papel_ata\\|_intra_ata\\|papel_por_minuto" ponto/turnos.py \| head -40` |
 | 11:46:29 | Bash | Registra o segundo achado | `cd /home/ronald/saas-hasner/logs/r1 && cat >> achado_papel_x.md <<'EOF' --- # ACHADO 2 -- O PAR GULOSO DESLOCA O INTERVALO DECLARADO (mesmo censo) Independente do papel `X`, e tambem RED. `_pares_marcados` varre da esquerda para a direita e, ao aceitar um par, consome as DUAS pontas (`i += 2`). Nao ha pergunta de "qual dos candidatos e o intervalo": o PRIMEIRO que passa vence, e o verdadeiro fica  ...` |
@@ -1428,15 +1433,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 23:56:53 | Bash | De onde o montador tira as celulas | `cd /home/ronald/saas-hasner/app; grep -n "_marcos_por_data\\|_celulas_por\\|celulas=" ponto/services/espelho.py \| head -40` |
 | 23:55:55 | Bash | LEI ANTES DO PATCH: grep dos sitios | `cd /home/ronald/saas-hasner/app/docs; for f in LEIS.md DOSSIES.md CORTES.md; do echo "########## $f"; grep -n "janela_he\\|motor_calculo_v2\\|gerar_celulas\\|escala/models.py\\|TipoEscala" "$f" \| head -40; done` |
 | 23:55:54 | Bash | Como o tripwire compara o dna | `cd /home/ronald/saas-hasner/app; sed -n '1,60p' ponto/management/commands/tripwire_celulas.py; echo "=== celula.py 470-505 ==="; sed -n '470,505p' ponto/portas/celula.py` |
-| 23:53:33 | Bash | Ler onde o motor amarra o vinculo | `cd /home/ronald/saas-hasner/app; sed -n '1600,1625p' ponto/motor_calculo_v2.py` |
-| 23:53:30 | Bash | Onde o motor recebe o marcos_do_dia | `cd /home/ronald/saas-hasner/app; grep -rn "_marcos_do_dia_fn" --include=*.py . \| grep -v "/tests/"` |
-| 23:52:41 | Bash | Ler marcar_pontas_fora e os clipadores do motor | `cd /home/ronald/saas-hasner/app; sed -n '135,200p' ponto/janela_he.py; echo "=== _entrada_efetiva / _saida_efetiva do motor ==="; sed -n '1280,1352p' ponto/motor_calculo_v2.py` |
-| 23:52:40 | Bash | Ler as funcoes puras da janela | `cd /home/ronald/saas-hasner/app; sed -n '30,135p' ponto/janela_he.py` |
-| 23:52:05 | Bash | Ler o montador do espelho nos dois sitios | `cd /home/ronald/saas-hasner/app; sed -n '380,412p' ponto/services/espelho.py; echo "=== 690-760 ==="; sed -n '690,760p' ponto/services/espelho.py` |
-| 23:52:03 | Bash | Ler impressao_insumos | `cd /home/ronald/saas-hasner/app; sed -n '70,110p' ponto/services/cartorio.py` |
-| 23:51:50 | Bash | Ler marcos_do_dia do EscalaColaborador | `cd /home/ronald/saas-hasner/app; sed -n '1020,1110p' escala/models.py` |
-| 23:51:49 | Bash | Ler montar_dna | `cd /home/ronald/saas-hasner/app; sed -n '60,140p' ponto/management/commands/gerar_celulas.py` |
-| 23:51:45 | Bash | Localizar montar_dna | `cd /home/ronald/saas-hasner/app; grep -n "montar_dna" -r --include=*.py . \| grep -v "/tests/"` |
-| 23:51:44 | Bash | Ler o TipoEscala e o censo de permite_hora_extra | `cd /home/ronald/saas-hasner/app; sed -n '40,130p' escala/models.py; echo "=== grep permite_hora_extra ==="; grep -rn "permite_hora_extra" --include=*.py --include=*.html . \| grep -v "/tests/"` |
-| 23:51:37 | Bash | Censo de leitores da ponta | `cd /home/ronald/saas-hasner/app; grep -rn "he_fora_da_janela\\|minutos_fora\\|fora_da_janela\\|marcar_pontas_fora\\|pontas_do_relato" --include=*.py --include=*.html . \| grep -v "/tests/" \| grep -v "test_" \| sort` |
-| 23:51:36 | Bash | Ler o quinto chamador de _entrada_efetiva | `cd /home/ronald/saas-hasner/app; sed -n '2700,2740p' ponto/motor_calculo_v2.py` |
