@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 14:14:31.**
+**Medido em 09/10/2026 14:20:01.**
 
 | | |
 |---|---|
@@ -36,6 +36,7 @@ a28ca8cf O214 item 4: a linha do DP cabe no carrier, e o corte deixa de comer o 
  M app/docs/HANDOFF-SESSAO.md
  M app/docs/RELATO.md
  M bin/sombra.sh
+AM bin/sonda_leitura.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -114,10 +115,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  bin/sonda_leitura.sh na arvore e a leitura de logs e docs. Pousa o script com os REDs a, b e e provados; os outros REDs e o selo vem no
-  pouso seguinte de instrumento. Nenhuma lei nova. segue a fila; PAREI so em lei ou !
-
-● Background command "Rodar a suite core inteira contra a copia" completed (exit code 0)
 
   Searched for 5 patterns, read 1 file, ran 8 shell commands
 
@@ -142,8 +139,12 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
   Ran 7 shell commands
 
 ● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-✢ Wrangling… (1d 0h 48m · ↓ 2.7m tokens)
+  Finding the O230 line in the BACKLOG
+  ⎿  $ cd /home/ronald/saas-hasner && grep -n "O230" app/docs/BACKLOG.md | head -5
+
+* Wrangling… (1d 0h 54m · ↓ 2.7m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
