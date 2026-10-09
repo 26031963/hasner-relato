@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 08:15:45.**
+**Medido em 09/10/2026 08:20:45.**
 
 | | |
 |---|---|
@@ -142,12 +142,12 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● O selo de host pegou a janela certa: a árvore tem MIN_MOTIVO e o worker no ar não. Ordem então é commit → deploy.sh → push.
 
-  Um push por marco · 3m 58s
+  Um push por marco · 8m 57s
   ⎿  $ cd /home/ronald/saas-hasner && git fetch -q origin 2>&1 | tail -2; echo "origin/main..HEAD:"; git log --oneline origin/main..HEAD
-     echo "=== PUSH ==="; git push origin main 2>&1 | tail -30 (3m 57s · 5 lines)
+     echo "=== PUSH ==="; git push origin main 2>&1 | tail -30 (8m 57s · 5 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Wrangling… (18h 50m 6s · ↓ 2.1m tokens)
+· Wrangling… (18h 55m 6s · ↓ 2.1m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                    10% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
