@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:55 AFIRMA ato sem PROVA ao lado -- ## RE-LAVRA 10 (L-115) — **NO AR, E A FOLHA SE MOVEU: +5.451 MIN DE REALIZADO EM 6 COLABS** (09/10 18:2x, CONDICAO 4)
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:174 AFIRMA ato sem PROVA ao lado -- ## RE-LAVRA 10 (L-115) — **NO AR, E A FOLHA SE MOVEU: +5.451 MIN DE REALIZADO EM 6 COLABS** (09/10 18:2x, CONDICAO 4)
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 19:50:31.**
+**Medido em 09/10/2026 19:56:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `03fbfde9 [O231] marco: o comando imprime a medicao que AGIU, e a fila 1 passa a ser a ordem dele de 18:3x` |
+| `HEAD` local | `3161c6ac [O232] pouso A: a guarda da pausa passa a ler a MESMA autoridade que o corpo soma, e 28 dias devolvem a janela declarada` |
 | `origin/main` | `03fbfde9 [O231] marco: o comando imprime a medicao que AGIU, e a fila 1 passa a ser a ordem dele de 18:3x` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+3161c6ac [O232] pouso A: a guarda da pausa passa a ler a MESMA autoridade que o corpo soma, e 28 dias devolvem a janela declarada
 03fbfde9 [O231] marco: o comando imprime a medicao que AGIU, e a fila 1 passa a ser a ordem dele de 18:3x
 5d9ec893 L-115 pouso 1: a saida pela posicao esta no ar, e a figura do aval nao e esta
 ca6f14f6 L-114 termometro: a cadencia passa a se verificar sozinha, e os 19 sem destino ganham dono
 e38d4039 O230 pouso 1: a sonda de leitura do dev da casa esta na arvore, e quem segura e o GRANT
-185b9af0 R1 balde P: a pausa precisa que a ATA chame a abertura de SAIDA (L-115 nasce, L-114 entra no placar)
 ```
 
 ## `git status --short`
@@ -129,16 +129,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Trees confirmed: a cópia difere do HEAD só nesse ponto. Rodando o DIFF de folha da competência corrente (10/2026) na sombra, as duas
-  árvores sob uma trava só:
-
-  Searched for 2 patterns, ran 3 shell commands
-
-● Enquanto a medição corre (ESMERIL-DO-MARCO: só o esmeril deste marco, e ele já deu 0 órfãos — _pares_marcados segue com 3 chamadores de
-  produção, 373/393/507), preparo o texto no scratchpad, sem tocar a árvore que a medição monta:
-
-  Searched for 2 patterns, ran 11 shell commands
-
 ● Background command "cd /home/ronald/saas-hasner && bash bin/simular_folha.sh par o232a /home/ronald/saas-hasner/app /tmp/o232-pousoA/app
 > logs/l115/o232_folha_par.out 2>&1; echo "rc=$? FIM" >> logs/l115/o232_folha_par.out" completed (exit code 0)
 
@@ -156,11 +146,21 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● O leitura do motor é decisiva, e muda o texto do commit — não a cura:
 
-● Running 1 shell command…
+  Listed 1 directory, ran 10 shell commands
 
-✢ Proofing… (1h 57m 45s · ↓ 238.4k tokens)
+● Agora movo os dois arquivos de código para a árvore no ato do commit (LEI-AKITA 10) e escrevo o RELATO:
+
+  Committed 3161c6ac, ran 5 shell commands
+
+● Commit 3161c6ac. Selos de host antes do push (respondem em segundos; a recusa custa uma suite inteira):
+
+● Running cd /home/ronald/saas-hasner && for i in $(seq 1 9…
+  ⎿  $ cd /home/ronald/saas-hasner && for i in $(seq 1 90); do if grep -q "^rc=.* FIM" logs/l115/o232_push.out 2>/dev/null; then echo
+     TERMINOU; break; fi; echo -n "."; command sleep 20; done; echo; tail -30 logs/l115/o232_push.out
+
+✢ Proofing… (2h 3m 15s · ↓ 253.3k tokens · thought for 5s)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    3% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
