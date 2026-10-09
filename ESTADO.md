@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 18:40:45.**
+**Medido em 09/10/2026 18:45:46.**
 
 | | |
 |---|---|
-| `HEAD` local | `5d9ec893 L-115 pouso 1: a saida pela posicao esta no ar, e a figura do aval nao e esta` |
+| `HEAD` local | `03fbfde9 [O231] marco: o comando imprime a medicao que AGIU, e a fila 1 passa a ser a ordem dele de 18:3x` |
 | `origin/main` | `5d9ec893 L-115 pouso 1: a saida pela posicao esta no ar, e a figura do aval nao e esta` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,23 +29,18 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+03fbfde9 [O231] marco: o comando imprime a medicao que AGIU, e a fila 1 passa a ser a ordem dele de 18:3x
 5d9ec893 L-115 pouso 1: a saida pela posicao esta no ar, e a figura do aval nao e esta
 ca6f14f6 L-114 termometro: a cadencia passa a se verificar sozinha, e os 19 sem destino ganham dono
 e38d4039 O230 pouso 1: a sonda de leitura do dev da casa esta na arvore, e quem segura e o GRANT
 185b9af0 R1 balde P: a pausa precisa que a ATA chame a abertura de SAIDA (L-115 nasce, L-114 entra no placar)
-6a259f0b O112: o rodape do TICKETS volta ao git (derivado do pos_push)
 ```
 
 ## `git status --short`
 
 ```
  M app/config/crons_duracao.json
- M app/docs/AVAIS.md
- M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
- M app/docs/PENDENTES_RONALD.json
- M app/docs/RELATO.md
- M app/docs/TICKETS.md
  M bin/sombra.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -134,6 +129,8 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  Ran 1 shell command
+
 ❯ aval Ronald: ordem da fila 1 passa a ser O232 -> O219 -> O223 -> O224 -> contratos -> O228. Motivo: a L-115 foi ao ar e a folha nao se
   moveu sem re-lavra; a O219 e a cura dessa classe e tira a L-113 do papel. Nenhuma lei nova. segue a fila; PAREI so em lei ou !
 
@@ -157,19 +154,17 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-● Confere a trava e roda a pasta de selos de host · 1m 7s
-  ⎿  $ cd /home/ronald/saas-hasner; bin/trava_teste.sh --quem; echo "=== selos de host"; ls bin/tests/test_*.sh | wc -l; for f in
-     bin/tests/test_*.sh; do out=$(bash "$f" 2>&1); rc=$?; [ $rc -ne 0 ] && echo "RC=$rc $f :: $(echo "$out" | tail -2)"; done; echo "pasta
-     de selos: fim" (1m 6s · 4 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
+● Confere o push
+  ⎿  $ cd /home/ronald/saas-hasner; tail -3 logs/push_o231.out
 
-✶ Proofing… (48m 0s · ↓ 96.0k tokens)
+✻ Compacting conversation… (53m 0s · ↓ 101.8k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱ 74%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                   11% until auto-compact
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
