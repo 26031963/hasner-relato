@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 02:01:31.**
+**Medido em 09/10/2026 02:07:01.**
 
 | | |
 |---|---|
@@ -119,36 +119,36 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  Ran 1 shell command
+
+● Fatos decisivos: ponto/views.py já é leitor declarado e já carrega o rótulo; DINHEIRO são nomes minutos_* e horas_* está em NAO_E_MOTOR.
+  Falta a grep de lei e o critério exato do censo:
 
   Ran 1 shell command
 
-● Background command "Segunda tentativa de push do marco" completed (exit code 0)
-
-● Push terminou — e o veredito se lê no remoto, não no rc:
-
-  Ran 1 shell command
-
-● Pousou: d29b7f14..ce212bb8. Marco O146 fechado e no remoto. Seguindo as leituras do item 2:
+● O censo isenta management/commands ("comando de medicao nao e leitor de tela") e a mensagem dele diz que a classe "leitura de dinheiro" é
+  a que a L-095 proíbe. Isso bate de frente com a prévia síncrona num serviço novo. Lendo a L-095:
 
   Ran 1 shell command
 
-● O gesto "todos sem decisão" filtra sem_decisao na view (views.py:559), mas a marcação por caixa vai crua do form — então o lote de recusa
-  de hoje pode virar um SIM humano em NAO. Isso é achado, não é o meu pedido; anoto e não amplio. Terceira leitura, a que decide o RED f:
+● Quatro achados que mudam o desenho. Gravo-os antes de consultar, para não perder a medição:
 
-  Ran 2 shell commands
+  Ran 1 shell command
 
-● on_commit muda tudo: na prévia (atomic + raise) os N recálculos são descartados, então ela custa ~2 motores, não N+2. E no confirmar são
-  N recálculos redundantes da mesma competência. Mas há uma restrição mais dura: a própria lápide do decidir_he diz que a 1ª versão foi
-  recusada por chamar o motor na porta.
+● Conflito a resolver antes de escrever: o desenho proposto punha a prévia na porta, e a lápide do próprio decidir_he (he.py:99-104) conta
+  que a 1ª versão dela chamava o motor e foi recusada por um selo da casa; o censo ainda isenta management/commands e chama "leitura de
+  dinheiro" a classe que a L-095 proíbe.
 
-  Ran 2 shell commands
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-● O selo é tripwire de entrada com conjunto DECLARADO, e os DONOS incluem ponto/services/espelho.py. Preciso do critério do placar antes de
-  decidir onde a prévia mora:
+● Desenho fixado. Antes de escrever, pego o idioma exato da fixture do item 1 (autor com autorizar_he, _casa, janela de HE no cadastro):
 
-● Running 1 shell command…
+● Lê a fixture do item 1
+  ⎿  $ cd /home/ronald/saas-hasner/app
+     sed -n '140,200p' ponto/tests/test_o214_ponta_pequena.py
 
-✢ Wrangling… (12h 35m 52s · ↓ 1.5m tokens)
+✢ Wrangling… (12h 41m 22s · ↓ 1.5m tokens · still thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
