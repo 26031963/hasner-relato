@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 11:32:31.**
+**Medido em 09/10/2026 11:37:55.**
 
 | | |
 |---|---|
@@ -115,37 +115,37 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+
+● My display script's setdefault hid duplicate keys — the census itself is fine. Both resolve: col921's pair is 60.15 min with jd_b=0
+  (−60), col438's is 176 min against jd_b=60 (−116, reported −117 by truncation). So the whole diff has one mechanism. Verifying that as an
+  arithmetic invariant rather than eyeballing:
+
   Ran 1 shell command
 
-● While it runs — the existing memory on this trap misses the part that just cost me the run:
+● Property closes in 61 of 61 — one mechanism, zero exceptions. And col868 (the predicted miss) is reached: the pair is born
+  (01:50:37→02:50:41), but min=0 both sides because the turno is aberto.
 
-  Read 1 file, ran 6 shell commands
-
-● Census is nearly through the base tree. Meanwhile, the balde-A measurement that the lei question at the top of the RELATO still needs:
+  One thing needs proving before I accept: col114 carries 17 of the 61 days at ≈−57 each, and its new pair ends at 17:08. If that's the
+  day's exit, the code is deducting the tail, not a pause. Checking the actual batidas:
 
   Ran 2 shell commands
 
-● Base tree done (40,527 lines, rc=0); cured tree running. Finding the chamado module name for the balde-A question:
+● Resolved, and exactly: col114 22/09 has batidas 09:58:35 E · 15:10:02 S · 17:08:04 S · 19:10:17 E. The turno ends at 19:10, so
+  15:10→17:08 is genuinely interior — not the tail. The DNA declares the interval as 14:00→15:00 (60 min); the ata records 118 min. Span
+  552 − 60 = 492 (base) and 552 − 118 = 434 (head), exact. The cure reads the ata instead of the declared window.
 
-  Searched for 1 pattern, ran 3 shell commands
+  Making the verdict durable before judging it:
 
-● data_turno and categoria aren't model fields — the day comes from data_do_chamado and the kind from modulo_origem. Rewriting that part
-  against the real juiz:
+  Ran 1 shell command
 
-  Searched for 1 pattern, ran 2 shell commands
+● logs/r1/censo_impacto.out is written and alvos.txt has the 27 competência-10 targets. The deliverable is durable; consulting before I
+  accept this and move to the commit:
 
-● Background command "Roda o censo completo nas duas arvores" completed (exit code 0)
+● Advising using Fable 5.1
 
-● Both trees done, 40,527 lines each, rc=0. Reading the diff:
-
-● Le o veredito do censo
-  ⎿  $ SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cd "$SP" && python3 censo_ler.py
-     "$SP" > censo_veredito.out 2>&1; echo "rc=$?"; head -70 censo_veredito.out
-
-✢ Compacting conversation… (22h 6m 52s · ↓ 2.4m tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱ 87%
+· Wrangling… (22h 12m 16s · ↓ 2.4m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    1% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -153,6 +153,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Writing bin/tests/test_sonda_leitura.sh                                                    24m 40s · ↓ 143.7k tokens
+  ◯ general-purpose  Writing rodar_selos_vivo.sh comparison script                                               30m 4s · ↓ 163.2k tokens
   ⧉  index
 ```
