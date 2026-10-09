@@ -6,10 +6,23 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 09/10/2026 18:45:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (545.4 MB). Acoes na janela: **1346**.
+**Medido em 09/10/2026 18:50:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (546.0 MB). Acoes na janela: **1346**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 18:50:41 | Bash | Push e realizado_dos_turnos | `cd /home/ronald/saas-hasner; tail -2 logs/push_o231.out; echo "--- realizado_dos_turnos:"; sed -n "$(grep -n 'def realizado_dos_turnos' app/ponto/turnos.py \| cut -d: -f1),+48p" app/ponto/turnos.py` |
+| 18:50:21 | Bash | Le _pares_marcados | `cd /home/ronald/saas-hasner/app; sed -n "$(grep -n 'def _pares_marcados' ponto/turnos.py \| cut -d: -f1),+75p" ponto/turnos.py` |
+| 18:49:35 | Bash | Le _fechar_aberto_com_saida_seguinte | `cd /home/ronald/saas-hasner/app; sed -n "$(grep -n 'def _fechar_aberto_com_saida_seguinte' ponto/turnos.py \| cut -d: -f1),+60p" ponto/turnos.py` |
+| 18:49:25 | Bash | Le _teto_s_da_jornada | `cd /home/ronald/saas-hasner/app; grep -n "_teto_s_da_jornada" ponto/turnos.py \| head; echo ---; sed -n "$(grep -n 'def _teto_s_da_jornada' ponto/turnos.py \| cut -d: -f1),+28p" ponto/turnos.py` |
+| 18:48:48 | Bash | Le a secao col923 de casos.md | `cd /home/ronald/saas-hasner; sed -n '210,300p' logs/l115/casos.md` |
+| 18:48:42 | Bash | Le a regra do pouso 1 e os casos | `cd /home/ronald/saas-hasner; sed -n '1,60p' logs/l115/casos.md` |
+| 18:48:39 | Bash | Cabecalhos de casos.md e push | `cd /home/ronald/saas-hasner; grep -n '^#' logs/l115/casos.md; echo "--- push:"; tail -2 logs/push_o231.out` |
+| 18:48:00 | Bash | Le o shape B medido | `cd /home/ronald/saas-hasner; cat logs/l115/shapeB_MEDIDO.md` |
+| 18:47:44 | Bash | Le o diagnostico col923 | `cd /home/ronald/saas-hasner; cat logs/l115/diag_col923.out \| head -80` |
+| 18:47:41 | Bash | Push e inventario de logs/l115 | `cd /home/ronald/saas-hasner; tail -4 logs/push_o231.out; echo "=== shapeB ==="; ls logs/l115/` |
+| 18:47:33 | Bash | Le o resto do laco de parear_turnos | `cd /home/ronald/saas-hasner/app; sed -n '1010,1140p' ponto/turnos.py` |
+| 18:47:28 | Bash | Le parear_turnos ao vivo | `cd /home/ronald/saas-hasner/app; sed -n '872,1010p' ponto/turnos.py` |
+| 18:47:21 | Bash | Le _data_do_turno ao vivo | `cd /home/ronald/saas-hasner/app; sed -n '80,165p' ponto/turnos.py` |
 | 18:43:43 | Bash | Confere o push | `cd /home/ronald/saas-hasner; tail -3 logs/push_o231.out` |
 | 18:43:35 | Bash | Le _data_do_turno, candidato de origem do O232 | `cd /home/ronald/saas-hasner/app; sed -n '88,160p' ponto/turnos.py` |
 | 18:43:28 | Bash | Le parear_turnos | `cd /home/ronald/saas-hasner/app; sed -n '872,975p' ponto/turnos.py` |
@@ -1343,16 +1356,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 06:56:28 | Bash | Gera handoff e corrige a linha torta do RED | `cd /home/ronald/saas-hasner && bin/handoff_sessao.sh 2>&1 \| tail -6; echo "=== fix da linha torta no RED ==="; S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cd $S/o214i4/app && python3 - <<'PY' p='ponto/tests/test_o214_item4_dia_do_admin.py' s=open(p).read() velho = """ p = previa(_itens, autor=self.quem, motivo=self.motivo, mes=MES, ANO=ANO) if  ...` |
 | 06:56:17 | Bash | Confere o veredito do push | `cd /home/ronald/saas-hasner && cat /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bml1qlh3c.output 2>/dev/null \| tail -5; echo "--- remoto:"; git ls-remote origin refs/heads/main; echo "--- HEAD:"; git rev-parse HEAD; echo "--- log do push:"; grep -E '^(OK\|FAILED)( \|$)\|^Ran [0-9]+ tests' logs/push_3c610491.out; tail -4 logs/push_3c610491.out; echo "--- ...` |
 | 06:51:36 | Bash | Escreve os REDs do item 4 na copia | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cd $S/o214i4/app && cat > ponto/tests/test_o214_item4_dia_do_admin.py <<'PYEOF' # -*- coding: utf-8 -*- """O214 ITEM 4: O DIA ACIMA DO LIMITE E DO ADMIN -- e o autorizado em competencia EXPORTADA sai como LINHA. A LEI (literal, celula O214 do BACKLOG): *"ITEM 4 A 09: os dias acima do limite ficam decid ...` |
-| 06:49:04 | Bash | Confere unicidade do cpf | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cd $S/o214i4/app && grep -n 'cpf' colaboradores/models.py \| head -12` |
-| 06:48:51 | Bash | Topo de gestao_he.py | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cd $S/o214i4/app && sed -n '1,60p' ponto/services/gestao_he.py; echo ...; grep -n "^ESTADOS\\|^TETO_TIRA" ponto/services/gestao_he.py` |
-| 06:48:29 | Bash | Lista os selos do item 2 | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cd $S/o214i4/app && grep -n 'def test_\\|^class ' ponto/tests/test_o214_item2_autorizar_periodo.py` |
-| 06:47:04 | Bash | Le o RED h do item 2 | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cd $S/o214i4/app && sed -n '378,420p' ponto/tests/test_o214_item2_autorizar_periodo.py` |
-| 06:46:53 | Bash | Como o item 2 lida com on_commit | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cd $S/o214i4/app && grep -n 'captureOnCommitCallbacks\\|_hash_gravado\\|CompetenciaExportada\\|recalcular_por_evento' ponto/tests/test_o214_item2_autorizar_periodo.py` |
-| 06:46:41 | Bash | Exemplo de fixture de ExportacaoDominio e e_vigente | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cd $S/o214i4/app && sed -n '28,45p' folha/tests/test_export_vigente.py; echo === ; sed -n '118,145p' folha/models.py` |
-| 06:46:37 | Bash | Procura vigente e exemplos de fixture de exportacao | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cd $S/o214i4/app && grep -n 'e_vigente\\|def vigente' folha/models.py \| head; echo ===; grep -rn 'ExportacaoDominio.objects.create' --include=*.py . \| grep tests \| head -5` |
-| 06:46:33 | Bash | Le empresas_exportadas_no_escopo e ExportacaoDominio | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cd $S/o214i4/app && grep -n 'def empresas_exportadas_no_escopo' -A 30 ponto/services/fechamento.py; echo ===; grep -n 'class ExportacaoDominio' -A 45 folha/models.py \| grep -n 'models\.\\|def \\|class \\|vigente' \| head -40` |
-| 06:46:26 | Bash | Le _casa | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cd $S/o214i4/app && grep -n 'def _casa' -A 40 ponto/tests/test_o214_ponta_pequena.py` |
-| 06:46:15 | Bash | Continua o teste do item 2 | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cd $S/o214i4/app && sed -n '120,240p' ponto/tests/test_o214_item2_autorizar_periodo.py` |
-| 06:46:09 | Bash | Le o inicio do teste do item 2 | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cd $S/o214i4/app && sed -n '1,120p' ponto/tests/test_o214_item2_autorizar_periodo.py` |
-| 06:46:05 | Bash | Lista testes de HE/O214 | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cd $S/o214i4/app && ls ponto/tests/ \| grep -i 'o214\\|he'` |
-| 06:45:53 | Bash | Le soma_do_periodo | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cd $S/o214i4/app && grep -n 'def soma_do_periodo' -A 60 ponto/services/dia_pago.py \| head -80` |
