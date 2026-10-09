@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 01:12:01.**
+**Medido em 09/10/2026 01:17:31.**
 
 | | |
 |---|---|
@@ -123,6 +123,9 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+
+  Ran 14 shell commands
   ⎿  Read docs/AVAIS.md (23 lines)
   ⎿  Read ../../.claude/projects/-home-ronald-saas-hasner/memory/contrato-nao-mora-em-arquivo-com-teto.md (36 lines)
   ⎿  Referenced file ../../wt-bos/app/colaboradores/tests/test_o200_pino_geo_le_o_juiz.py
@@ -139,22 +142,19 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Suite verde na cópia: Ran 10105 tests in 1363.127s / OK (skipped=42).
 
-● Reroda a pasta de selos e vê o ensaio · 27s
+● Corrige o campo ativa e a vigência no smoke
   ⎿  $ cd /home/ronald/saas-hasner
-     echo "=== pasta de selos de novo (tem de sair 0 RED) ==="
-     n=0
-     for t in bin/tests/test_*.sh; do
-     out=$(bash "$t" 2>&1); rc=$?
-     if [ $rc -ne 0 ]; then n=$((n+1)); echo "RED $(basename $t)"; echo "$out" | head -4 | sed 's/^/ /'; fi
-     done
-     echo "vermelhos=$n"
-     echo
-     date '+%F %T… (27s · 2 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
+     S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
+     python3 - "$S/o146/smoke_prod.py" <<'PY'
+     import io, sys
+     p = sys.argv[1]
+     s = io.open(p, encoding='utf-8').read()
+     velho = """ec = EscalaColaborador.objects.filter(ativo=True).…
 
-· Wrangling… (11h 46m 22s · ↓ 1.4m tokens)
+✢ Compacting conversation… (11h 51m 52s · ↓ 1.4m tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱ 86%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    4% until auto-compact
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
