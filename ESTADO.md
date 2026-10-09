@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 03:22:01.**
+**Medido em 09/10/2026 03:27:31.**
 
 | | |
 |---|---|
@@ -140,10 +140,10 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-● Aguarda o veredito da suite cheia · 20s
+● Aguarda o veredito da suite cheia · 5m 50s
   ⎿  $ cd /home/ronald/saas-hasner && for i in $(seq 1 24); do if ! kill -0 1932567 2>/dev/null; then break; fi; if grep -qE '^OK$|^OK
      \(|^FAILED \(' logs/o214item2/suite_cheia.out 2>/dev/null; then break; fi; sleep 20; done; grep -nE '^OK$|^OK \(|^FAILED \(|^Ran
-     [0-9]+ tests?' logs/o214item2/suite_chei… (20s)
+     [0-9]+ tests?' logs/o214item2/suite_chei… (5m 50s)
   ⎿  Read ../../../../tmp/dbg2.out (29 lines)
   ⎿  Read docs/AVAIS.md (23 lines)
   ⎿  Referenced file docs/DOSSIES.md
@@ -153,7 +153,7 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Task "RED e construção do segundo intervalo" completed in background
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Wrangling… (13h 56m 22s · ↓ 1.7m tokens)
+✢ Wrangling… (14h 1m 52s · ↓ 1.7m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
