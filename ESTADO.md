@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 17:54:05.**
+**Medido em 09/10/2026 17:59:31.**
 
 | | |
 |---|---|
@@ -33,7 +33,9 @@ e38d4039 O230 pouso 1: a sonda de leitura do dev da casa esta na arvore, e quem 
 
 ```
  M app/config/crons_duracao.json
+ M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/RELATO.md
  M bin/sombra.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -147,12 +149,12 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ❯ segue a fila; PAREI so em lei ou !
 
-● Confere o runner do diagnostico
-  ⎿  $ cd /home/ronald/saas-hasner; S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/l115;
-     timeout 600 bash $S/roda_diag.sh 2>&1 | tail -3; echo "==="; cat logs/l115/diag_col923.out
+  Ran 13 shell commands
 
-· Proofing… (1m 19s · ↓ 4.7k tokens)
-                                                                                                   ✔ Update installed · Restart to update
+● Advising using Fable 5.1
+
+✢ Proofing… (6m 45s · ↓ 12.8k tokens)
+                                                                                                                    9% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -160,6 +162,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Hardening test_MORDE_04f owner walk                                                        40m 24s · ↓ 139.3k tokens
+  ◯ general-purpose  Running test_lei_protege_sitio.sh seal                                                     45m 51s · ↓ 156.6k tokens
   ⧉  index
 ```

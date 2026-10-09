@@ -2,6 +2,21 @@
 
 ## L-115 POUSO 1 — **A SAIDA PELA POSICAO ESTA NO AR, E A FIGURA DO AVAL NAO E ESTA** (09/10 17:3x)
 
+
+**A FORMA B DO POUSO 2 ESTA MEDIDA, e o primeiro numero que ela deu era sonda errada (18:0x).**
+Duas rodadas devolveram `dia-colab=0` nas duas janelas, e zero contradizia fato ja medido -- as 8
+noites de col923 que pagam 0. Em vez de publicar o zero, perguntei **por clausula**, dia a dia
+(`logs/l115/diag_col923.out`), e as duas clausulas erradas eram minhas: (1) exigir a pausa
+**INTERIOR**, quando a noite tem 3 batidas e a pausa e o **ULTIMO** par -- a batida que fecha a noite
+esta arquivada no turno do dia seguinte; (2) exigir que o 1o turno do dia seguinte tivesse UMA
+batida, quando em 06/09 tem duas. Corrigidas, a sonda acha exatamente as noites medidas:
+**9 dia-colab, 1 colab (col923), +4.887 min = 81,5 h na 09/2026 (EXPORTADA), e ZERO na 10/2026
+(aberta)** -- nenhum centavo da competencia em curso depende disto. Forma real: turno ABERTO,
+`pares_marcados=0`, 3 batidas todas `E`, pausa de 55-77 min no ultimo par, `previsto=420`, **juiz=0**,
+saida real ~09:2x do dia seguinte. Dono **ESTRUTURA** (L-099); origem `parear_turnos`/`data_turno`,
+nao o leitor de borda. Prova: `logs/l115/shapeB_MEDIDO.md`. **O que o numero nao autoriza**: a 09
+esta exportada -- as 81,5 h nao entram por recalculo; se forem ao Dominio, vao por pauta DP com os
+dois numeros.
 LEI-AKITA: origem=`ponto/turnos.py::realizado_dos_turnos` (ramo de DIA, antes do laco por turno),
 testemunha=`CelulaDia.ata` + `_fim_fechado`/`_pares_marcados` (nenhum leitor novo deriva nada),
 RED=`logs/l115/red1.out` (A 370 -> 550, B 192 -> 421), quem-mais-le=todo leitor de `realizado_do_dia`

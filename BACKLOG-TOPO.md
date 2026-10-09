@@ -239,5 +239,5 @@ lista — ela e o que esta EM PE._
 | **O229** | OS IRMAOS DA O145 -- o que o censo dos dois leitores achou e a O145 NAO cura | **na fila, nenhum comecado** -- nascem d |
 | **O230** | SONDA-LEITURA-[nome]: o dev da casa le TUDO e nao escreve em nada | **POUSO 1 FECHADO** 09/10 14:1x: `bin/so |
 | **O231** | LASTRO-MEDE-DUAS-VEZES | espera `!` |
-| **O232** | L-115 POUSO 2 -- A BORDA QUE NASCE | ABERTO -- caso escrito pela regra em `lo |
+| **O232** | L-115 POUSO 2 -- A BORDA QUE NASCE | ABERTO -- MEDIDA na sombra: 9 dia-colab, |
 | **O233** | CONTADOR DE RAIA SEM COMMIT | espera aval |
