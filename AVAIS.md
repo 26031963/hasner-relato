@@ -1,4 +1,4 @@
-# AVAIS NA MESA — 7
+# AVAIS NA MESA — 8
 
 > Gerado por `bin/gerar_avais.py` a partir de `app/docs/PENDENTES_RONALD.json`.
 > **So itens ABERTOS.** Item respondido SOME daqui na proxima geracao -- a historia dele fica
@@ -13,10 +13,11 @@
 | 5 | `PAUTA-DP-09-COL954` | **!** | 2026-10-02T17:30 | rubrica 8792, 2 dias (18/09 e 19/09), matricula 2103; emp2 213 linhas contra 210 | `col954: a falta de 18/09 e 19/09 (2 dias, rubrica 8792) entra na 09 do Dominio por correcao LA.   OU   gera TXT novo da 09 com `--usuario` e `--motivo` meus.   OU   fica fora da 09 e entra na 10.` |
 | 6 | `PAUTA-DP-09-COL900` | **!** | 2026-10-02T17:30 | rubricas 0200 = 7,37 e 0243 = 4,50; matricula 657; emp3 88 linhas contra 86 | `col900: as rubricas 0200 (7,37) e 0243 (4,50) entram na 09 do Dominio por correcao LA.   OU   gera TXT novo da 09 com `--usuario` e `--motivo` meus.   OU   ficam fora da 09.` |
 | 7 | `O214-ITEM2-PREVIA-SMOKE` | **smoke** | 2026-10-09T03:17 | 21 selos a-p verdes (`Ran 21` / OK), 97 vizinhos OK, ruff limpo; 0 juiz novo, 0 rubrica nova, 0 escritor novo -- a porta `decidir_he` segue escritora unica de `DecisaoHE` | `smoke Ronald: abri a Gestao de HE, autorizei o periodo de um colaborador, a previa me mostrou as horas por rubrica antes de confirmar e os dias sairam de SEM DECISAO -- pode fechar o O214 item 2` |
+| 8 | `O214-ITEM3-TRAVA-LIGADA` | **ok-desenho** | 2026-10-09T08:33 | 81 dias acima do limite (15 min) e SEM decisao na competencia 10/2026, lidos do carimbo de hoje da porta (chave porta_export_leitores, data_ref 2026-10-09, falhas 0): emp2 62, emp3 17, emp4 2. Os 70 do registro anterior  | `ok-desenho: a trava do TXT fica LIGADA nas tres empresas sobre os 81 dias.   OU   desliga: roda `logs/o214/flip_trava.py` com LIGAR = False` |
 
 ---
 
-Total no JSON: **214** · aberto **7** · respondido **46** · sem-motivo **161**.
+Total no JSON: **215** · aberto **8** · respondido **46** · sem-motivo **161**.
 
 > `sem-motivo` nao e "resolvido": e *"ninguem julgou este item"*. A ordem de 18:4x proibe
 > triar os 163 antigos, entao eles ficam ai, nomeados, em vez de serem chutados para um lado.
