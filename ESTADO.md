@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 16:18:31.**
+**Medido em 09/10/2026 16:24:01.**
 
 | | |
 |---|---|
@@ -144,14 +144,14 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● RED limpo e exatamente o previsto: 6 failures (A, B, e as duas propriedades em cada) + 1 error (o helper que ainda nao existe), com
   B2/C/D/E/F/G verdes. Vou guardar o registro e escrever o codigo.
 
-● Guarda o patch e roda a suite inteira na copia · 1m 14s
+● Guarda o patch e roda a suite inteira na copia · 6m 43s
   ⎿  $ C=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/l115/arvore
      cp "$C/../patch_l115.py" /home/ronald/saas-hasner/logs/l115/patch_l115.py
      cp "$C/../green1.out" /home/ronald/saas-hasner/logs/l115/green_cenario.out
-     echo "guardados em logs/l115/: $(ls /hom… (1m 13s · 6 lines)
+     echo "guardados em logs/l115/: $(ls /hom… (6m 43s · 6 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Wrangling… (1d 2h 52m · ↓ 3.0m tokens)
+✢ Wrangling… (1d 2h 58m · ↓ 3.0m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
