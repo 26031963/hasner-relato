@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 22:26:31.**
+**Medido em 08/10/2026 22:32:01.**
 
 | | |
 |---|---|
@@ -118,8 +118,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  (c) degrau: leitura.
-
   Nenhuma lei nova. segue a fila; PAREI so em lei ou !
 
   Ran 1 shell command
@@ -142,14 +140,16 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Task "Registrar o complemento na linha O200 do BACKLOG" still running in background
 
-● Conferir selo e localizar o censo v3 · 38s
-  ⎿  $ cd /home/ronald/saas-hasner && bash bin/tests/test_import_tardio_contra_o_ar.sh 2>&1 | tail -3; ls -la
-     logs/sombra/censo_o145_dois_leitores_v3.py; grep -n 'rodar' bin/sombra.sh | head -8 (29s)
-     (ctrl+b ctrl+b (twice) to run in background)
+● Rodar o detector na copia curada
+  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; A=$(cat $S/o200c/copia_atual.txt);
+     cp $S/o200c/cura/core/tests/test_selo_raio_de_um_sitio.py $A/app/core/tests/; python3 - "$A/app" <<'PY'
+     import ast, pathlib, sys
+     APP = pathlib.Path(sys.argv[1])
+     def …
 
-✢ Wrangling… (9h 0m 52s · ↓ 1.0m tokens)
+✢ Wrangling… (9h 6m 22s · ↓ 1.0m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    2% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
