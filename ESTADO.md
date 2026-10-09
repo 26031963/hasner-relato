@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 13:52:32.**
+**Medido em 09/10/2026 13:58:01.**
 
 | | |
 |---|---|
@@ -114,6 +114,7 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+
   Ran 4 shell commands
   ⎿  Read docs/AVAIS.md (25 lines)
   ⎿  Referenced file docs/RELATO.md
@@ -138,12 +139,11 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Agora o commit do marco.
 
-● Rodar a pasta de selos de host antes do push · 1m 16s
-  ⎿  $ cd /home/ronald/saas-hasner && fail=0; for t in bin/tests/test_*.sh; do out=$(bash "$t" 2>&1); rc=$?; [ $rc -ne 0 ] && {
-     fail=$((fail+1)); echo "=== RED $t (rc=$rc)"; echo "$out" | tail -6; }; done; echo "selos de host: $fail vermelho(s)" (1m 16s)
+● Empurrar o marco · 4m 51s
+  ⎿  $ cd /home/ronald/saas-hasner && git push origin main 2>&1 | tail -25 (4m 51s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✻ Wrangling… (1d 0h 26m · ↓ 2.7m tokens)
+✢ Wrangling… (1d 0h 32m · ↓ 2.7m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

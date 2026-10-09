@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 09/10/2026 13:52:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (531.0 MB). Acoes na janela: **1337**.
+**Medido em 09/10/2026 13:58:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (531.0 MB). Acoes na janela: **1334**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 13:53:09 | Bash | Empurrar o marco | `cd /home/ronald/saas-hasner && git push origin main 2>&1 \| tail -25` |
 | 13:51:15 | Bash | Rodar a pasta de selos de host antes do push | `cd /home/ronald/saas-hasner && fail=0; for t in bin/tests/test_*.sh; do out=$(bash "$t" 2>&1); rc=$?; [ $rc -ne 0 ] && { fail=$((fail+1)); echo "=== RED $t (rc=$rc)"; echo "$out" \| tail -6; }; done; echo "selos de host: $fail vermelho(s)"` |
 | 13:50:48 | Bash | Por a linha PROVA ao lado da afirmacao | `python3 - <<'PY' p='docs/RELATO.md'; s=open(p).read() a = """### A PROVA DEPOIS — NO AR as 13:49, e os quatro casos dao o numero DECLARADO em PROD Exigencia 4""" assert s.count(a)==1 b = """### A PROVA DEPOIS — NO AR as 13:49, e os quatro casos dao o numero DECLARADO em PROD PROVA: commit `185b9af0` no ar as 13:49 (3 rotas 200/302/200, `importerror_500=0`); GRAVADO da comp 09 medido em prod antes  ...` |
 | 13:50:39 | Bash | Publicar a PROVA depois no RELATO | `python3 - <<'PY' p='docs/RELATO.md'; s=open(p).read() a = "### O DIFF DE FROTA, PUBLICADO ANTES DO APPLY (09/10 12:29, na sombra — IMPACTO, nao prova)" assert s.count(a)==1 b = """### A PROVA DEPOIS — NO AR as 13:49, e os quatro casos dao o numero DECLARADO em PROD Exigencia 4 da DINHEIRO-EM-COMPETENCIA-ABERTA, fechada com os numeros: - **commit `185b9af0`**, deploy `bin/deploy.sh --sem-migrate` * ...` |
@@ -1343,7 +1344,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 01:59:46 | Bash | Lê a view do lote de recusa | `cd /home/ronald/saas-hasner/app sed -n '520,600p' ponto/views.py` |
 | 01:59:40 | Bash | Confere se o push pousou no remoto | `cd /home/ronald/saas-hasner git fetch -q origin 2>&1 \| tail -3 echo "--- a frente do remoto (vazio = pousou):" git log --oneline origin/main..HEAD echo "--- fim do push2.out:" tail -n 6 logs/o146/push2.out` |
 | 01:58:52 | Bash | Lê decidir_he inteiro | `cd /home/ronald/saas-hasner/app sed -n '58,140p' ponto/portas/he.py` |
-| 01:55:22 | Bash | Lê autoridade_do_periodo | `cd /home/ronald/saas-hasner/app grep -n "def autoridade_do_periodo" -A 60 ponto/services/espelho.py \| head -75` |
-| 01:54:55 | Bash | Lê o molde do diff_janela_he | `cd /home/ronald/saas-hasner/app wc -l ponto/management/commands/diff_janela_he.py sed -n '1,95p' ponto/management/commands/diff_janela_he.py` |
-| 01:54:32 | Bash | Lê a seção 8 do DOSSIES (contrato do item 2) | `cd /home/ronald/saas-hasner/app awk '/^## /{n++} n==8' docs/DOSSIES.md \| sed -n '1,200p'` |
-| 01:54:24 | Bash | Lê o veredito do push no remoto | `cd /home/ronald/saas-hasner tail -n 20 logs/o146/push2.out 2>/dev/null echo "=== remoto ===" git fetch -q origin 2>&1 \| tail -3 git log --oneline origin/main..HEAD 2>&1` |
