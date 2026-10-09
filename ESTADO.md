@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 20:39:41.**
+**Medido em 09/10/2026 20:45:01.**
 
 | | |
 |---|---|
@@ -131,38 +131,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  (money), turnos_de_batidas:1194, turnos_do_colab:1634 (tela). _turno_aberto_puro never receives marcos_por_dia in either of its two call
-  sites, so turno_aberto_de and proximo_tipo_de — the batida chokepoint — are unreachable by construction, and "batida de chão nunca é
-  barrada em runtime" holds structurally, not by care. Written into logs/l115/casos_o232.md.
-
-  Next, once the vizinhos return: the two-tree impact DIFF through pouso A's own sonda (expecting 9 dia-colab, all col923, +4.647 min on
-  comp 09 and 0 on comp 10), then the mandatory folha DIFF on comp 10 with the 09 TXT hash shown intact — motor_calculo_v2 being reached is
-  precisely why that one isn't optional.
-
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: PLACAR-ESTRUTURAL -- O ESTRUTURAL SE SEPARA DO DADO (corte dele 02/10 22:5x, que SUBSTITUI o item 3 da
-  ordem das 21:4x -- o resto d
-
-● The hook is right — fila 1 isn't empty, pouso B is mid-flight. Continuing rather than yielding. Checking the vizinhos:
-
-  Ran 1 shell command
-
-● Still running. Confirming the written prediction I'll check the DIFF against (L-110 — the case is written before the code):
-
-  Ran 2 shell commands
-
-● Prediction is precise and written: 9 dia-colab (03, 04, 05, 07, 09, 10, 16, 17, 18/09), all col923, 4.919 vs 272 → +4.647, comp 10 = 0.
   Checking the suite:
 
   Ran 1 shell command
 
 ● Drafting the commit message while it runs — the LEI-AKITA line needs the census I just measured:
 
-  Running 1 shell command…
+  Ran 3 shell commands
+  ⎿  Read docs/AVAIS.md (22 lines)
+  ⎿  Read docs/HANDOFF-SESSAO.md (44 lines)
+  ⎿  Referenced file ponto/turnos.py
+  ⎿  Referenced file ponto/tests/test_bateria_lavratura.py
+  ⎿  Read ../logs/r1/achado_papel_x.md (123 lines)
 
-✢ Proofing… (2h 46m 55s · ↓ 346.2k tokens)
+● Task "RED e construção do segundo intervalo" completed in background
+
+● Task "cd /home/ronald/saas-hasner &&
+  C=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/pousoB &&
+  L=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-4… [+228 chars]" still running in background
+
+● ESMERIL do marco, medido: 3 funções novas, 0 removidas, 0 usos caídos — o pouso B não órfã nada, então a L-111 não tem o que cobrar aqui.
+  Registrando:
+
+  Running 1 shell command…
+  ⎿  $ cd /home/ronald/saas-hasner
+     cat >> logs/l115/casos_o232.md <<'MD'
+     ## ESMERIL DO POUSO B -- o que ESTE marco deixou orfao (medido 09/10, AST nas duas arvores)
+     A rotina ESMERIL-DO-MARCO manda censar, na espera da bateria, **so o que AQUELE marco deixou orfao**.
+     Medido por AST sobre `app/ponto/turno…
+
+✶ Proofing… (2h 52m 15s · ↓ 350.4k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    2% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
