@@ -1,5 +1,42 @@
 # RELATO — esteira saas-hasner
 
+## RE-LAVRA 10 (L-115) — **CONDICAO 1: O DIFF RECONCILIADO CONTRA PROD, ANTES DE ESCREVER** (09/10 18:1x)
+
+**AVAL** (Ronald, 09/10 18:1x, literal): *"a re-lavra da L-115 na competencia 10/2026 (aberta) e
+PRE-APROVADA pela DINHEIRO-EM-COMPETENCIA-ABERTA: DIFF ja publicado (36 dia-colab, +7.345 min),
+reversao em logs/ antes, 09 intacta com hash antes e depois, prova no RELATO. A 09 nao se toca: fica
+publicada."*
+
+**O DIFF QUE DESCREVE ESTE ATO E O DE PROD, NAO O DA SOMBRA** (condicao 1). A sombra mediu sobre o
+dump das 04:00; o ato escreve em prod as 18:xx. Pre-check de LEITURA em prod, recortado nos 6 colabs
+alcancados e **sem** o filtro `tipo_dia == 'trabalho'` da sonda da sombra
+(`logs/l115/prod_precheck.py` -> `.out`, 18:11:56):
+
+| | dia-colab | minutos |
+|---|---|---|
+| publicado na sombra (04:00) | 36 | +7.345 |
+| prod, 18:11 | **37** | **+7.489** |
+| menos `col941 2026-10-09` — **HOJE** | -1 | -144 |
+| **o que este ato alcanca** | **36** | **+7.345** |
+
+A deriva e UMA linha e ela **nao entra por construcao**: o cartorio so julga dia passado e a lista
+do ato tem teto `LIM = hoje - 1` (fato encerrado, CLAUDE.md 6). O numero do ato e **identico ao
+publicado**. A cura do pouso 1 esta **VIVA na casca que vai escrever** (`pos=True` em 37 dias; se
+fosse `0` o deploy das 17:35 nao teria pegado, e o ato pararia aqui).
+
+**O QUE A LISTA INTEIRA DRENA ALEM DOS 36, DECLARADO ANTES** (a lista vai inteira: `_julgar_colab_corpo`
+tira a janela de batidas de `cels[0].data`/`cels[-1].data`, e recorte por dia fabrica par fechado com a
+cauda da vespera). Nos 6 colabs ha **2 dias de familia diferente**, que o `forcar` vai relavrar junto:
+`col941 2026-09-30` (ata 444, juiz 460, **+16**) e `col941 2026-09-25` (447 -> 450, **+3**) — **+19 min**,
+`pos=False`: sao do passivo `ata_x_juiz_residual` (BUG-144), **nao** da L-115. Ficam **declarados fora do
+criterio**, com o numero, em vez de aparecerem depois como surpresa. Qualquer OUTRO dia-colab que se mover
+= PAREI com a tabela e restauro daquele colab antes do ATO 2.
+
+**FORA DO ESCOPO, nomeado** (ESCOPO DO AVAL E LITERAL): `col373 2026-10-07` e alcancado pela lei e e
+**invisivel** para a sonda por ser dia de **folga**; delta **nao medido**, nao entra neste ato — fica
+residual nomeado para o pouso 2. Os **35 dia-colab / +6.871 min** da **09/2026** seguem **publicados e
+nao aplicados** (L-092 / TXT-FOTOGRAFIA): o unico caminho deles e a porta REGEN-EM-EXPORTADA.
+
 ## L-115 POUSO 1 — **A SAIDA PELA POSICAO ESTA NO AR, E A FIGURA DO AVAL NAO E ESTA** (09/10 17:3x)
 
 
