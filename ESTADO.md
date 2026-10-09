@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 12:32:01.**
+**Medido em 09/10/2026 12:37:31.**
 
 | | |
 |---|---|
@@ -116,6 +116,10 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
+  Ran 1 shell command
+
+● Re-running the head census against the current tree so the durable file's md5 is the one actually measured:
+
   Ran 3 shell commands
 
 ● Two sentences in the generated file need correcting — and one of them is a real finding. Checking col868 in both trees first:
@@ -134,19 +138,15 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● The arithmetic closes on itself: 12 latent + 2 displaced = the 14 the v1 census created. Now the superseded conclusion in the achado
   file:
 
-● Reescrever a conclusao superada do achado
-  ⎿  $ cd /home/ronald/saas-hasner
-     python3 - <<'PY'
-     import io
-     f = 'logs/r1/achado_papel_x.md'
-     s = io.open(f, encoding='utf-8').read()
-     marca = '## E a consequencia para o balde P (col114, 17 dos 61 dias)'
-     i = s.index(marca)
-     novo = '''## E a consequencia para o balde P (col114, 17 dos 55 dias do censo v2)…
+  Rodar os vizinhos contra a copia v2 · 4m 38s
+  ⎿  $ cd /home/ronald/saas-hasner && SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
+     bash bin/suite.sh --dir $SP/p_head --only "api chamados colaboradores comunicados core escala ferias folha holerite inteligencia
+     pautas relatorios" > $SP/suite_vizinhos_… (4m 38s)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Wrangling… (23h 6m 22s · ↓ 2.5m tokens · thought for 5s)
+✢ Wrangling… (23h 11m 52s · ↓ 2.5m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    8% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
