@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 22:00:45.**
+**Medido em 08/10/2026 22:05:45.**
 
 | | |
 |---|---|
@@ -123,21 +123,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  situacional.py:195, painel_cell.py:54, geofence.py:55 e :104, reconciliar_vinculo.py:57).
-  - 2 leitores usam o raio CRU: ponto/services/geofence.py::verificar_geofence (:118, :140-181) e
-  ponto/management/commands/reconciliar_geofence.py:56. Com raio 0 o juiz acusa ponto_fora em toda batida com GPS bom, manda push e abre
-  chamado.
-  - colaboradores/services/geofence_raios.py:35 (o vigia) so conta raio LARGO; raio 0 nao aparece.
-
-  MUDA:
-  1. O raio efetivo do posto sai de UM sitio em ponto/services/geofence.py, e os 11 leitores leem dele. Nenhum "or 200" solto.
-  2. O cadastro (colaboradores/views.py:745) recusa raio <= 0 dizendo o motivo.
-  3. O vigia geofence_raios passa a contar raio <= 0.
-
-  RED:
-  a. posto raio 0, batida a 50 m com accuracy 10 -> nao acusa ponto_fora (hoje acusa).
-  b. posto raio 100, batida a 300 m com accuracy 10 -> ponto_fora, como hoje (MORDE).
-  c. salvar posto com raio 0 e com raio -5 pela tela -> recusado com mensagem.
   d. o pino da O200 e o juiz dao a mesma resposta nos casos a e b.
 
   MEDIR ANTES (so leitura, vai no RELATO): quantos postos tem raio_metros <= 0 hoje e quantos AlertaGeofence ponto_fora nasceram neles. Se
@@ -153,10 +138,25 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
   (c) degrau: leitura.
 
   Nenhuma lei nova. segue a fila; PAREI so em lei ou !
-  ctrl+x ctrl+s to send now
-                                                                                                                    0% until auto-compact
+
+  Ran 1 shell command
+
+● Registrar o complemento na linha O200 do BACKLOG · 18s
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PY'
+     p = 'app/docs/BACKLOG.md'
+     L = open(p, encoding='utf-8').read().split('\n')
+     i = next(k for k, l in enumerate(L) if l.startswith('| O200 |'))
+     c = L[i].split('|')
+     assert len(c) == 7, len(c)
+     if 'COMPLEMENTO-RAIO-ZERO' in L[i]:
+     print('ja registrado -- na… (18s · 4 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+· Wrangling… (8h 40m 6s · ↓ 990.4k tokens)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ Press up to edit queued messages
+❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
