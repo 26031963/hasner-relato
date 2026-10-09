@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 15:19:01.**
+**Medido em 09/10/2026 15:24:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `e38d4039 O230 pouso 1: a sonda de leitura do dev da casa esta na arvore, e quem segura e o GRANT` |
+| `HEAD` local | `ca6f14f6 L-114 termometro: a cadencia passa a se verificar sozinha, e os 19 sem destino ganham dono` |
 | `origin/main` | `e38d4039 O230 pouso 1: a sonda de leitura do dev da casa esta na arvore, e quem segura e o GRANT` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -22,22 +22,18 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+ca6f14f6 L-114 termometro: a cadencia passa a se verificar sozinha, e os 19 sem destino ganham dono
 e38d4039 O230 pouso 1: a sonda de leitura do dev da casa esta na arvore, e quem segura e o GRANT
 185b9af0 R1 balde P: a pausa precisa que a ATA chame a abertura de SAIDA (L-115 nasce, L-114 entra no placar)
 6a259f0b O112: o rodape do TICKETS volta ao git (derivado do pos_push)
 c35a2f76 O214 item 3: a trava do TXT esta LIGADA, e o numero era 81, nao 70
-a28ca8cf O214 item 4: a linha do DP cabe no carrier, e o corte deixa de comer o porque
 ```
 
 ## `git status --short`
 
 ```
  M app/config/crons_duracao.json
- M app/core/placar_estrutural.py
  M app/docs/HANDOFF-SESSAO.md
- M app/docs/LEIS.md
- M app/docs/RELATO.md
- M bin/gerar_estado.py
  M bin/sombra.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -126,22 +122,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● OK, Ran 1263 tests, rc=0 — but the dots don't name the selo, so proving it explicitly:
-
-  Ran 3 shell commands
-
-● The selo is named and green (11 tests, OK). Now the house claim — building the sonda:
-
-  Ran 1 shell command
-
-● colXXX is the pk. Reading the two house judges' shapes before the sonda:
-
-  Ran 3 shell commands
-
-● G3 is answered — all three are on the admin list. Fixing the field name for the chamado side:
-
-  Ran 3 shell commands
-
 ● All 5 G1 days have batida_ausente carimbado no dia, and all 3 G3 colaboradores are on the list. The destino is measured, not asserted.
   Now fixing the three claims the advisor flagged:
 
@@ -150,18 +130,34 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● L-114's own ESTADO says the cadence can't verify itself because gerar_estado.py doesn't read the date — this commit cures exactly that,
   so the ESTADO moves in the same commit:
 
-● Full host selo folder, then the commit scope
-  ⎿  $ cd /home/ronald/saas-hasner && for f in bin/tests/test_*.sh; do out=$(bash "$f" 2>&1); rc=$?; if [ $rc -ne 0 ]; then echo "VERMELHO
-     rc=$rc $f"; echo "$out" | tail -8; fi; done; echo "=== folder completa (nada acima = verde)"; git status --short --
-     app/core/placar_estrutural.py bin/gerar_estado.py…
+  Committed ca6f14f6, ran 5 shell commands
 
-· Wrangling… (1d 1h 53m · ↓ 2.8m tokens)
+● Only my commit is ahead. Pushing (the hook runs both full runners, so it's long):
+
+  Ran 1 shell command
+
+● Push running. While it does (no tree writes during a push), drafting the L-115 cases in scratch — the law says cases by the rule before
+  the code:
+
+  Reading _fim_fechado, the L-115 site
+  ⎿  $ cd /home/ronald/saas-hasner && grep -n 'def _fim_fechado' -A 45 app/ponto/turnos.py
+  ⎿  Read docs/AVAIS.md (25 lines)
+  ⎿  Read docs/HANDOFF-SESSAO.md (47 lines)
+  ⎿  Referenced file ponto/turnos.py
+  ⎿  Read ../logs/r1/achado_papel_x.md (123 lines)
+  ⎿  Referenced file ponto/management/commands/e6_oraculo.py
+
+● Task "RED e construção do segundo intervalo" completed in background
+
+● Task "Push the marco" still running in background
+
+✢ Wrangling… (1d 1h 58m · ↓ 2.8m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    5% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
