@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:430 AFIRMA ato sem PROVA ao lado -- ## O146 — **FECHADA, NO AR**: a extra declarada da escala desloca o limite, e o limite
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:465 AFIRMA ato sem PROVA ao lado -- ## O146 — **FECHADA, NO AR**: a extra declarada da escala desloca o limite, e o limite
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 09:20:31.**
+**Medido em 09/10/2026 09:25:45.**
 
 | | |
 |---|---|
@@ -40,8 +40,10 @@ a28ca8cf O214 item 4: a linha do DP cabe no carrier, e o corte deixa de comer o 
 
 ```
  M app/config/crons_duracao.json
+ M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
  M app/docs/PROMPTS.md
+ M app/docs/RELATO.md
  M app/docs/TICKETS.md
  M bin/sombra.sh
 ?? esteira.pausada
@@ -120,10 +122,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  com meta ZERO; ficam no placar principal. So a pergunta de VALOR (o numero esta certo pela regra?) e exclusiva da bateria; desce para
-  TERMOMETRO apenas o R1 (comparacao com o oraculo). (2) O termometro e OBRIGATORIO com cadencia: e6_oraculo por competencia aberta 1x por
-  semana e apos cada pouso de obra de calculo; cada dia de dono ESTRUTURA novo vira CENARIO na bateria ou linha na lista do admin, nunca
-  fica sem destino. Bateria verde sem termometro rodado na semana = placar AMARELO. segue a fila; PAREI so em lei ou !
   ⎿  Read docs/AVAIS.md (25 lines)
   ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/botxutwp8.output (10 lines)
   ⎿  Read docs/HANDOFF-SESSAO.md (47 lines)
@@ -148,8 +146,12 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Task "RED e construção do segundo intervalo" completed in background
 
 ● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-✢ Wrangling… (19h 54m 52s · ↓ 2.2m tokens)
+● Ler o bloco de absorcao, S158 e PAUSA-DESLOCADA
+  ⎿  $ sed -n '860,1000p' ponto/turnos.py
+
+· Wrangling… (20h 0m 6s · ↓ 2.2m tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
