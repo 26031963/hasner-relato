@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 20:12:31.**
+**Medido em 09/10/2026 20:18:01.**
 
 | | |
 |---|---|
 | `HEAD` local | `c7b8bfdb [O232] pouso A: a guarda da pausa passa a ler a MESMA autoridade que o corpo soma, e 28 dias devolvem a janela declarada` |
-| `origin/main` | `03fbfde9 [O231] marco: o comando imprime a medicao que AGIU, e a fila 1 passa a ser a ordem dele de 18:3x` |
-| commits a subir (`ahead`) | **1** |
+| `origin/main` | `c7b8bfdb [O232] pouso A: a guarda da pausa passa a ler a MESMA autoridade que o corpo soma, e 28 dias devolvem a janela declarada` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -129,42 +129,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-completed (exit code 0)
+  carries no lâmpada field — so I correct the document before the code:
 
-  Amended commit c7b8bfdb, ran 2 shell commands
-  ⎿  Read docs/AVAIS.md (22 lines)
-  ⎿  Read docs/HANDOFF-SESSAO.md (44 lines)
-  ⎿  Referenced file ponto/tests/test_bateria_lavratura.py
-  ⎿  Referenced file ponto/turnos.py
-  ⎿  Read ../logs/r1/achado_papel_x.md (123 lines)
+  Ran 3 shell commands
 
-● Task "RED e construção do segundo intervalo" completed in background
-
-● O selo passou. Agora o push pela regua.
+● Now the cure, built as a patch script in the scratchpad (nothing in the tree while the push runs). First the exact attribute names it
+  must read:
 
   Ran 2 shell commands
 
-● Push correndo (a suite vai no pre-push). Pela ESMERIL-DO-MARCO o esmeril deste marco já fechou (0 órfãos), então uso a espera para montar
-  o pouso B em cópia, sem tocar a árvore que o push carrega.
+● Background command "cd /home/ronald/saas-hasner && git push origin main > logs/l115/o232_push2.out 2>&1; echo "rc=$?" >>
+logs/l115/o232_push2.out; tail -20 logs/l115/o232_push2.out" completed (exit code 0)
 
-  Ran 12 shell commands
+● The push returned. Reading the veredito by the house form:
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+  Ran 1 shell command
 
-● Running cd /home/ronald/saas-hasner && grep -n "^TETO_PAU…
-  ⎿  $ cd /home/ronald/saas-hasner && grep -n "^TETO_PAUSA_SEGUNDOS\|^PISO_INTERVALO_SEGUNDOS\|^def _minuto\|^def data_local\|^def
-     _dist_marco" app/ponto/turnos.py; sed -n "$(grep -n '^def _minuto' app/ponto/turnos.py | cut -d: -f1),+4p" app/ponto/turnos.py; grep
-     -n "TETO_PAUSA_SEGUNDOS = " app/ponto/tu…
+● Push green: negócio Ran 10216 tests / OK (skipped=42), control-plane Ran 22 tests / OK, rc=0, remoto em c7b8bfdb, 0 a empurrar. Pouso A
+  não tocou modelo — deploy pela porta única:
 
-✢ Compacting conversation… (2h 19m 45s · ↓ 284.2k tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱ 86%
+  Ran 1 shell command
+
+● Deploy OK. Now the prod smoke — read-only, pela porta real, on one mover: col217 29/09 must read 422 com janela 60:
+
+  Ran 6 shell commands
+
+● Four insumos identified. The smoke probe — read-only, asserts the prod DB, prints only colNNN and numbers:
+
+  Running 1 shell command…
+
+✢ Proofing… (2h 25m 15s · ↓ 298.5k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    0% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
