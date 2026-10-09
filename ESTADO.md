@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:247 AFIRMA ato sem PROVA ao lado -- onde a lei diz que moram. E o estado passou a abrir com `**NO AR`, porque
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:257 AFIRMA ato sem PROVA ao lado -- onde a lei diz que moram. E o estado passou a abrir com `**NO AR`, porque
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 22:21:01.**
+**Medido em 08/10/2026 22:26:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `0d189ca7 O topo do TICKETS fechado no ato do push (O112)` |
+| `HEAD` local | `32782d0d O145: a testemunha LE a acusacao do motor, e a ponta de HE deixa de sumir fora do raio da grade` |
 | `origin/main` | `d2cf6606 O204: a hora do aparelho tem UM sitio, e o epoch deixa de virar data de 1791` |
-| commits a subir (`ahead`) | **1** |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -29,24 +29,19 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+32782d0d O145: a testemunha LE a acusacao do motor, e a ponta de HE deixa de sumir fora do raio da grade
 0d189ca7 O topo do TICKETS fechado no ato do push (O112)
 d2cf6606 O204: a hora do aparelho tem UM sitio, e o epoch deixa de virar data de 1791
 1b485f9c Instrumento: a porta da montagem entrega tmpfs para app/logs e app/media, e a copia do push volta a se apagar
 1c27b268 O214 item 1: a reversao do apply se LE num descartavel, e o push deixa de morrer no rm da copia
-bf83856d O214 item 1: a PROVA do pouso -- deploy, ensaio em prod e o achado da copia parcial
 ```
 
 ## `git status --short`
 
 ```
  M app/config/crons_duracao.json
- M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
- M app/docs/PROMPTS.md
- M app/docs/RELATO.md
- M app/docs/TICKETS.md
  M bin/sombra.sh
-?? app/ponto/tests/test_o145_testemunha_le_a_acusacao_do_motor.py
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -147,12 +142,12 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Task "Registrar o complemento na linha O200 do BACKLOG" still running in background
 
-● Localizar a copia do O145 e conferir registros
-  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; ls -d $S/o145 $S/o145/* 2>/dev/null
-     | head -20; echo "--- BACKLOG O200 registrado?"; grep -c 'COMPLEMENTO RAIO-ZERO\|COMPLEMENTO raio-zero'
-     /home/ronald/saas-hasner/app/docs/BACKLOG.md; echo "--- PROM…
+● Conferir selo e localizar o censo v3 · 38s
+  ⎿  $ cd /home/ronald/saas-hasner && bash bin/tests/test_import_tardio_contra_o_ar.sh 2>&1 | tail -3; ls -la
+     logs/sombra/censo_o145_dois_leitores_v3.py; grep -n 'rodar' bin/sombra.sh | head -8 (29s)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Wrangling… (8h 55m 22s · ↓ 1.0m tokens)
+✢ Wrangling… (9h 0m 52s · ↓ 1.0m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

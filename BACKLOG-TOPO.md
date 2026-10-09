@@ -153,7 +153,7 @@ lista — ela e o que esta EM PE._
 | **O142** | `turnos_do_colab` RESPONDE DIFERENTE CONFORME A JANELA, e os 33 dia-colab sao isso | espera corte |
 | **O143** | DIA COM BATIDA REAL E SEM VINCULO QUE O CUBRA E DONO CADASTRO, nao ESTRUTURA | ABERTA. Falta o censo de frota (dia-cola |
 | **O144** | O DIA QUE CONTA PARA OS 15 DA EMPRESA E O DECORRIDO, NAS DUAS TELAS | ABERTA. Falta provar o irmao `absenteism |
-| **O145** | HE-INVISIVEL | espera corte |
+| **O145** | HE-INVISIVEL | espera aval |
 | **O146** | HE-FIXA-DA-ESCALA-E-CADASTRO | espera `!` |
 | **O147** | OS 3 ATRASADOS DA 09 | PAREI |
 | **O148** | FOLGAS DUPLICANDO | **FILA 2 (UI), depois dos BOs** -- ordem |
