@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 19:23:31.**
+**Medido em 09/10/2026 19:29:01.**
 
 | | |
 |---|---|
@@ -130,35 +130,35 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-  Ran 1 shell command
-
-● ACHADO 2 é de frota e move dinheiro hoje: 62 dia-colab / 2.557 min na 09, 41 / 1.412 na 10 — e para baixo (hora paga sem pausa
-  descontada). Isso inverte a ordem: ele vira pouso próprio, antes.
-
-  Ran 1 shell command
-
-● O censo fecha o desenho e inverte a ordem: o ACHADO 2 é independente, morde hoje em turno que já fecha, e compõe com o O232 (09/09 só
-  chega a 543 com os dois). Vou gravar isso e partir a obra em dois pousos:
-
-  Ran 3 shell commands
-  ⎿  Read docs/AVAIS.md (22 lines)
-  ⎿  Read docs/HANDOFF-SESSAO.md (44 lines)
-  ⎿  Referenced file ponto/tests/test_bateria_lavratura.py
-  ⎿  Referenced file ponto/turnos.py
-  ⎿  Read ../logs/r1/achado_papel_x.md (123 lines)
-
-● Task "RED e construção do segundo intervalo" completed in background
-
-● O nome colide com o ACHADO 2 do R1 (logs/r1/achado_papel_x.md:60, o par guloso, já CURADO). Renomeio o meu antes que um commit diga
-  "ACHADO 2" significando duas coisas:
+● O advisor acertou, e o desenho é unânime: forma B são 163 dia-colab e em todos a última batida é E e o par começa exatamente no
+  _fim_fechado — E 07:26 | S 13:01 | E 14:00, almoçou e esqueceu a saída. Descontar a janela declarada do trecho 07:26→13:01 tiraria 60 min
+  de quem trabalhou direto. Só a forma A é o bug:
 
   Ran 1 shell command
 
-● Entregável durável. Antes de escrever uma linha de cura:
+● motor_calculo_v2 não está na lista. Isso muda o enquadramento do pouso A — preciso confirmar de quem é o número que ele move:
 
-● Advising using Fable 5.1
+  Searched for 1 pattern
 
-· Proofing… (1h 30m 45s · ↓ 179.7k tokens)
+● Decisivo: o motor tem derivação de pausa própria (intervalos_do_motor, _intra_real, O119) e não chama realizado_dos_turnos. O pouso A não
+  move folha — move a testemunha. Gravando o reenquadramento:
+
+  Ran 1 shell command
+
+● Agora o RED. Vou seguir o idioma da bateria que o R1 deixou:
+
+  Ran 2 shell commands
+
+● Para o RED ser CASO (L-110) e não palpite sintético, preciso do desenho de forma A. Patch na sonda e uma rodada:
+
+  Ran 1 shell command
+
+● Caso exato para o RED. Antes de escrevê-lo, preciso saber se _borda_posicional intercepta a forma B:
+
+● Running sed -n '453,535p' ponto/turnos.py
+  ⎿  $ sed -n '453,535p' ponto/turnos.py
+
+✢ Proofing… (1h 36m 15s · ↓ 196.6k tokens · still thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
