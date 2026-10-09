@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:115 AFIRMA ato sem PROVA ao lado -- ## O146 — **FECHADA, NO AR**: a extra declarada da escala desloca o limite, e o limite
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:150 AFIRMA ato sem PROVA ao lado -- ## O146 — **FECHADA, NO AR**: a extra declarada da escala desloca o limite, e o limite
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 04:52:31.**
+**Medido em 09/10/2026 04:58:01.**
 
 | | |
 |---|---|
@@ -41,6 +41,7 @@ d29b7f14 POUSO da raia wt-bos: o pino de geo le o juiz, e o raio do posto passa 
 ```
  M app/config/crons_duracao.json
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/RELATO.md
  M bin/sombra.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -118,8 +119,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Agora o predicado do limite, na porta.
-
   Ran 2 shell commands
 
 ● Agora a autoridade da decisão viva deixa de ser privada, para o export poder lê-la em vez de reconsultar.
@@ -132,10 +131,7 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Agora o patch do porta_export: a função pura, o minutos_do_dia na entrada, a conta do falhas, o carimbo e a mensagem.
 
-  Roda os vizinhos na copia · 9m 11s
-  ⎿  $ C=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/o214-item3; cd
-     /home/ronald/saas-hasner && bash bin/suite.sh --dir $C --espera 1800 --only "folha ponto chamados core relatorios escala" >
-     logs/o214item3/viz_item3.out 2>&1; echo "RC=$?"; grep -nE '^OK… (9m 10s)
+  Searched for 1 pattern, ran 17 shell commands
   ⎿  Read docs/AVAIS.md (24 lines)
   ⎿  Read docs/HANDOFF-SESSAO.md (46 lines)
   ⎿  Referenced file ponto/views.py
@@ -145,15 +141,20 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Task "RED e construção do segundo intervalo" completed in background
 
 ● Task "Espera o cron da sombra e roda a sonda de medicao" still running in background
-     (ctrl+b ctrl+b (twice) to run in background)
 
-· Wrangling… (15h 26m 52s · ↓ 1.8m tokens)
+● Background command "Espera o cron da sombra e roda a sonda de medicao" completed (exit code 0)
+
+  Searched for 2 patterns, ran 10 shell commands
+
+● Advising using Fable 5.1
+
+✢ Wrangling… (15h 32m 22s · ↓ 1.8m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
