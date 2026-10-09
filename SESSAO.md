@@ -6,10 +6,21 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 09/10/2026 00:04:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (492.6 MB). Acoes na janela: **1442**.
+**Medido em 09/10/2026 00:09:29.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (492.9 MB). Acoes na janela: **1451**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 00:09:27 | Bash | Ruff no selo novo | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; A="$S/o146/arvore" cd /home/ronald/saas-hasner docker run --rm -v "$A/app/ponto/tests/test_o146_extra_declarada_da_escala.py":/x.py:ro --entrypoint sh saas-hasner-core -c 'ruff check --no-cache /x.py 2>&1 \| tail -20' 2>&1 \| tail -20 \|\| echo "(ruff via docker nao disponivel)"` |
+| 00:09:20 | Bash | Estado da trava e uso da suite | `cd /home/ronald/saas-hasner; bash bin/trava_teste.sh --quem; echo "---"; sed -n '1,60p' bin/suite.sh` |
+| 00:09:12 | Bash | Escrever o RED a-k na copia | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; A="$S/o146/arvore" cat > "$A/app/ponto/tests/test_o146_extra_declarada_da_escala.py" <<'PYEOF' # -*- coding: utf-8 -*- """O146 HE-FIXA-DA-ESCALA: a extra DECLARADA no cadastro vale nas DUAS pontas. CORTE (03/10, + corte Ronald 08/10 19:38): *"a extra declarada vale NAS DUAS PONTAS, antes da entrada e d ...` |
+| 00:06:09 | Bash | Conferir a copia de construcao | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; A="$S/o146/arvore"; ls -d "$A/app/ponto/tests" && git -C /home/ronald/saas-hasner rev-parse --short HEAD` |
+| 00:05:33 | Bash | pausas_do_dia do EC e do TE | `cd /home/ronald/saas-hasner/app; grep -n "def pausas_do_dia" -A45 escala/models.py \| sed -n '1,120p'` |
+| 00:05:27 | Bash | minutos_previstos_do_dia e montar_dna | `cd /home/ronald/saas-hasner/app; grep -n "def minutos_previstos_do_dia" -A12 escala/utils.py; echo "=== montar_dna ==="; sed -n '40,100p' ponto/management/commands/gerar_celulas.py` |
+| 00:05:23 | Bash | Campos do DecisaoHE | `cd /home/ronald/saas-hasner/app; sed -n '1219,1280p' ponto/models.py` |
+| 00:05:16 | Bash | DecisaoHE e _janela_do_dia | `cd /home/ronald/saas-hasner/app; grep -rn "class DecisaoHE" -A30 ponto/models.py \| head -45; echo "=== he_decisoes no motor ==="; sed -n '1154,1270p' ponto/motor_calculo_v2.py` |
+| 00:04:45 | Bash | Porta de cadastro do TipoEscala | `cd /home/ronald/saas-hasner/app; sed -n '220,290p' escala/services/cadastro_tipo.py; echo "=== defs ==="; grep -n "^def \\|^class " escala/services/cadastro_tipo.py` |
+| 00:04:04 | Bash | Ler entrada_efetiva, saida_efetiva e marcar_pontas_fora | `cd /home/ronald/saas-hasner/app; sed -n '53,190p' ponto/janela_he.py` |
+| 00:04:01 | Bash | Assinaturas de janela_he.py | `cd /home/ronald/saas-hasner/app; grep -n "^def \\|^ return\\|piso_min\\|teto_min\\|def " ponto/janela_he.py \| head -40; echo ===; sed -n '1,40p' ponto/janela_he.py` |
 | 00:03:56 | Bash | Ler _entrada_efetiva, _saida_efetiva e _janela_do_par | `cd /home/ronald/saas-hasner/app; sed -n '1270,1400p' ponto/motor_calculo_v2.py` |
 | 00:03:30 | Bash | Resto do calcular_mes do MotorComercial | `cd /home/ronald/saas-hasner/app; sed -n '2520,2620p' ponto/motor_calculo_v2.py` |
 | 00:03:14 | Bash | Ler MotorComercial.calcular_periodo | `cd /home/ronald/saas-hasner/app; sed -n '2395,2520p' ponto/motor_calculo_v2.py` |
@@ -1450,5 +1461,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 12:14:41 | Bash | Censo: onde o motor deriva cada HE | `cd /home/ronald/saas-hasner/app echo '=== JUIZ: quem decide HE no motor (rotulos de rubrica/campo) ===' grep -nE "horas_extras_(50\|100)[a-z_]*\|he_?50\|he_?100" ponto/motor_calculo_v2.py \| head -40` |
 | 12:14:36 | Bash | Censo: campos de HE e DecisaoHE | `cd /home/ronald/saas-hasner/app echo '=== 1. campos de HE no FechamentoMensal (o que o TXT/tela leem) ===' grep -nE '^\s+(horas_extras\|he_\|horas_noturnas\|intrajornada\|banco)[a-z0-9_]*\s*=' ponto/models.py \| head -40 echo echo '=== 2. DecisaoHE ===' sed -n '1180,1235p' ponto/models.py` |
 | 12:14:26 | Bash | Ler o item O214 do BACKLOG | `cd /home/ronald/saas-hasner grep -n 'O214' app/docs/BACKLOG.md \| head echo '================' awk '/\\| \*\*O214\*\*/{print; exit}' app/docs/BACKLOG.md \| tr '\|' '\n' \| sed -n '1,12p' \| cut -c1-900` |
-| 12:04:16 | Bash | Push do marco O211 pouso B | `cd /home/ronald/saas-hasner git push origin main > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_o211b.out 2>&1; echo "push rc=$?" tail -25 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_o211b.out` |
-| 12:04:11 | Bash | Amend com o placar do TICKETS curado | `cd /home/ronald/saas-hasner S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad git status --porcelain app/docs/ git add -- app/docs/TICKETS.md && git commit --amend -F $S/msg_commit_o211b.txt 2>&1 \| tail -3 git log --oneline -1 && git diff --stat HEAD~1 HEAD \| tail -3` |
