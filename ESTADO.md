@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 05:03:15.**
+**Medido em 09/10/2026 05:08:41.**
 
 | | |
 |---|---|
-| `HEAD` local | `c32acf2e O topo do TICKETS fechado no ato do push (O112)` |
+| `HEAD` local | `ef10b802 O214 item 3: a trava do TXT conta so o dia que e do ADMIN` |
 | `origin/main` | `c32acf2e O topo do TICKETS fechado no ato do push (O112)` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+ef10b802 O214 item 3: a trava do TXT conta so o dia que e do ADMIN
 c32acf2e O topo do TICKETS fechado no ato do push (O112)
 041fd2ac O214 item 2: um ato, um motivo, e a tela mostra o DIFF por rubrica ANTES de confirmar
 ce212bb8 As duas colunas da O146 entram no inventario pessoal, e o padrao fica intacto
 cfd4ff83 O146: a extra declarada da escala desloca o limite da janela, e o limite passa a ter UM sitio
-d29b7f14 POUSO da raia wt-bos: o pino de geo le o juiz, e o raio do posto passa a ter UM sitio (O200 + complemento)
 ```
 
 ## `git status --short`
@@ -41,7 +41,6 @@ d29b7f14 POUSO da raia wt-bos: o pino de geo le o juiz, e o raio do posto passa 
 ```
  M app/config/crons_duracao.json
  M app/docs/HANDOFF-SESSAO.md
- M app/docs/RELATO.md
  M bin/sombra.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -119,18 +118,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Agora o sítio principal: o porta_export. Leio o trecho exato antes de montar o patch.
-
-  Ran 3 shell commands
-
-● Agora o patch do porta_export: a função pura, o minutos_do_dia na entrada, a conta do falhas, o carimbo e a mensagem.
-
-  Searched for 1 pattern, ran 17 shell commands
-  ⎿  Read docs/AVAIS.md (24 lines)
-  ⎿  Read docs/HANDOFF-SESSAO.md (46 lines)
-  ⎿  Referenced file ponto/views.py
-  ⎿  Referenced file ponto/services/gestao_he.py
-  ⎿  Referenced file ponto/services/autorizacao_he_periodo.py
 
 ● Task "RED e construção do segundo intervalo" completed in background
 
@@ -143,14 +130,26 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-  Espera o veredito dos vizinhos pelo arquivo · 4m 1s
-  ⎿  $ cd /home/ronald/saas-hasner && until grep -qE '^OK$|^OK \(|^FAILED \(' logs/o214item3/viz_item3.out 2>/dev/null; do sleep 45; done;
-     grep -nE '^OK$|^OK \(|^FAILED \(|^Ran [0-9]+ tests?' logs/o214item3/viz_item3.out (4m 1s)
+  Ran 4 shell commands
+
+● Background command "Roda os vizinhos na copia" completed (exit code 0)
+
+  Ran 2 shell commands
+
+● Agora a aplicação na árvore viva, no ato do commit (LEI 10).
+
+  Committed ef10b802, searched for 1 pattern, ran 6 shell commands
+
+● O marco está commitado e no ar. Agora o push — um por marco (L-108).
+
+  Pushing do marco do item 3 · 2m 52s
+  ⎿  $ cd /home/ronald/saas-hasner && git fetch -q origin && git log --oneline origin/main..HEAD | cat; echo "--- push ---"; git push
+     origin main > /tmp/push_item3.out 2>&1; echo "RC=$?"; tail -20 /tmp/push_item3.out (2m 51s · 3 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Wrangling… (15h 37m 36s · ↓ 1.8m tokens)
+✢ Wrangling… (15h 43m 2s · ↓ 1.8m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    8% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

@@ -221,7 +221,7 @@ lista — ela e o que esta EM PE._
 | **O211** | REGUA-PELA-EMPRESA | **fila 1, logo ATRAS da O209** (ordem li |
 | **O212** | O INCREMENTAL DA SOMBRA NAO FECHA A FK DO CADASTRO | **fila 2, pouso de INSTRUMENTO proprio** |
 | **O213** | O TIPO DERIVADO DO MOTIVO DISCORDA DO TIPO DA ATA NO MESMO MARCO | **sem portao** -- achado medido, nao e d |
-| **O214** | HE-DECISAO-EM-ESCALA | espera `!` |
+| **O214** | HE-DECISAO-EM-ESCALA | espera aval |
 | **O215** | PAUTA-DP-09-RELAVRATURA: O NUMERO DO DOMINIO, TXT x TXT | **sem portao** -- e MEDICAO na sombra, n |
 | **O216** | O NUMERO DA L-103 SE REPUBLICA COM O JUIZ CURADO | **sem portao** -- conta e publica, PRE-A |
 | **O217** | A LAVRATURA NAO E PONTO FIXO: relavrar de novo muda o numero | **sem portao** -- medir na sombra e PRE- |
