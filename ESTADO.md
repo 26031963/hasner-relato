@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 22:37:31.**
+**Medido em 08/10/2026 22:43:01.**
 
 | | |
 |---|---|
@@ -41,6 +41,7 @@ d2cf6606 O204: a hora do aparelho tem UM sitio, e o epoch deixa de virar data de
 ```
  M app/config/crons_duracao.json
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/RELATO.md
  M bin/sombra.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -118,10 +119,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-  Ran 13 shell commands
 
 ● Background command "Rodar a suite inteira na copia curada" completed (exit code 0)
   ⎿  Read docs/AVAIS.md (23 lines)
@@ -134,9 +131,7 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Task "Registrar o complemento na linha O200 do BACKLOG" still running in background
 
-● Ver como o tipo do pino viaja na linha
-  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; grep -rn "geo_tipo\|_geo_do_pino"
-     $S/o200c/cura/ | head -20
+  Committed 32782d0d, searched for 2 patterns, read 2 files, ran 55 shell commands
   ⎿  Read docs/AVAIS.md (23 lines)
   ⎿  Read ../logs/sombra/censo_o145_dois_leitores.py (120 lines)
   ⎿  Referenced file ../logs/o145_motor.out
@@ -147,7 +142,13 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Task "Registrar o complemento na linha O200 do BACKLOG" still running in background
 
-✢ Wrangling… (9h 11m 52s · ↓ 1.1m tokens)
+● Três achados reais da rodada. Vou curar os três na origem.
+
+  Ver o caso NAO-MORDE do selo
+  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; sed -n '100,140p'
+     $S/o200c/cura/core/tests/test_selo_raio_de_um_sitio.py
+
+✢ Wrangling… (9h 17m 22s · ↓ 1.1m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
