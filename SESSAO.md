@@ -6,10 +6,21 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 09/10/2026 15:35:21.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (535.5 MB). Acoes na janela: **1299**.
+**Medido em 09/10/2026 15:40:41.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (535.6 MB). Acoes na janela: **1310**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 15:37:07 | Bash | Find TipoEscala interval fields | `cd /home/ronald/saas-hasner && grep -n 'intervalo' app/escala/models.py \| grep -n 'models\.\\|def ' \| cut -c1-130 \| head -20` |
+| 15:36:44 | Bash | Check whether the montador reads the BUG-144 authority | `cd /home/ronald/saas-hasner && grep -n 'realizado_do_dia\\|minutos_realizados' app/escala/utils.py \| head -20` |
+| 15:36:34 | Bash | Read bordas_realizado, the tripwire comparing the two readers | `cd /home/ronald/saas-hasner && sed -n '1,100p' app/ponto/services/bordas_realizado.py` |
+| 15:36:25 | Bash | Find who writes minutos_realizados in the ata | `cd /home/ronald/saas-hasner && grep -n '_min\b' -A4 app/ponto/tests/test_bateria_lavratura.py \| sed -n '1,14p'; echo "=== quem escreve minutos_realizados ==="; grep -rn 'minutos_realizados' app/ponto/services/*.py app/ponto/*.py 2>/dev/null \| cut -c1-130 \| head -12` |
+| 15:36:16 | Bash | Read _BaseMarcos and one marcos cenario | `cd /home/ronald/saas-hasner && sed -n '434,560p' app/ponto/tests/test_bateria_lavratura.py` |
+| 15:36:10 | Bash | Survey the bateria files | `cd /home/ronald/saas-hasner && ls app/ponto/tests/ \| grep -i bateria; echo ---; grep -n 'class \\|^CENARIO\\|^# CENARIO' app/ponto/tests/test_bateria_lavratura.py \| head -25` |
+| 15:35:54 | Bash | Write MARCO FECHADO in the panel | `cd /home/ronald/saas-hasner && echo "MARCO FECHADO -- pode compactar (ca6f14f6 no remoto, 0 a empurrar, handoff 15:35)" \| tee -a logs/marcos_fechados.log; tmux list-panes -a -F '#{session_name}:#{window_index}.#{pane_index} #{pane_title}' 2>/dev/null \| head -5` |
+| 15:35:47 | Bash | Find the painel file | `cd /home/ronald/saas-hasner && grep -rn 'painel' bin/gerar_estado.py \| head -5; ls -la logs/painel* 2>/dev/null; grep -rn 'MARCO FECHADO' bin/*.sh logs/painel* 2>/dev/null \| head -5` |
+| 15:35:40 | Bash | Run the handoff after the marco landed | `cd /home/ronald/saas-hasner && bash bin/handoff_sessao.sh 2>&1 \| tail -6; echo "=== rc=$? ==="; sed -n '1,12p' app/docs/HANDOFF-SESSAO.md` |
+| 15:35:31 | Bash | Check push completion and the remote | `cd /home/ronald/saas-hasner && tail -6 logs/l114/push_l114.out; echo "=== remoto ==="; git fetch origin -q 2>&1\|tail -2; git log --oneline origin/main -1; git rev-list --count origin/main..HEAD` |
+| 15:35:18 | Bash | Find the selos that assert the old border | `cd /home/ronald/saas-hasner && grep -n 'def test' app/ponto/tests/test_realizado_do_dia_autoridade.py \| head -30; echo "=== solta ==="; grep -rn 'solta' app/ponto/tests/*.py \| cut -c1-140 \| head -20` |
 | 15:35:08 | Bash | Read the BUG-144 authority block and L-102 | `cd /home/ronald/saas-hasner && sed -n '388,416p' app/ponto/turnos.py; echo "=== L-102 ==="; sed -n '128p' app/docs/LEIS.md \| tr '\|' '\n' \| sed 's/^ *//' \| sed -n '1,2p;5,7p' \| cut -c1-400` |
 | 15:35:00 | Bash | Check push and grep the laws protecting the two sites | `cd /home/ronald/saas-hasner && tail -4 logs/l114/push_l114.out; echo "=== LEI ANTES DO PATCH ==="; for f in app/docs/LEIS.md app/docs/DOSSIES.md app/docs/CORTES.md; do echo "--- $f"; grep -n 'realizado_dos_turnos\\|_fim_fechado' $f \| cut -c1-120 \| head -12; done` |
 | 15:33:15 | Bash | Count csv rows for the cited colaboradores | `cd /home/ronald/saas-hasner && for k in 270 899 263 941 502; do printf "col%s: " $k; awk -F, -v c=$k '$2==c{n++} END{print n+0}' logs/r1/r1_10.csv; done; echo "=== col270 linhas ==="; awk -F, '$2==270{print}' logs/r1/r1_10.csv \| head -8` |
