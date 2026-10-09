@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 01:28:31.**
+**Medido em 09/10/2026 01:34:01.**
 
 | | |
 |---|---|
@@ -123,6 +123,9 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  3. O pre-commit não tem o que recusar. Li os dois: index_vs_arvore.sh (divergência índice×disco nos staged) e commit_so_o_declarado.sh
+  (deleção não declarada). Os dois olham forma de índice, nunca conteúdo — e o commit não apaga nada. Mesmo assim o passo 3 agora diz a
+  recuperação, e ela é para frente (corrigir a queixa e repetir o passo 3); voltar arquivo ao HEAD é ! dele, e o HUP das 03:30 está a mais
   de 2 h.
 
   4. --conferir LÊ o carimbo, não recalcula. bin/sombra.sh:12 e :367-374 leem $STAMP; a comparação q_mig prod×sombra vive em :247-261,
@@ -141,20 +144,17 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
   ⎿  Stop hook error: siga: O214 -- HE-DECISAO-EM-ESCALA (lei nova dele, 05/10 18:0x, 4 itens; entra logo depois da O211 e a FRENTE
   dos BOs de tel
 
-● Roda a pasta de selos de host · 18s
-  ⎿  $ cd /home/ronald/saas-hasner
-     v=0; falhos=""
-     for t in bin/tests/test_*.sh; do
-     if out=$(bash "$t" 2>&1); then :; else v=$((v+1)); falhos="$falhos $t"; fi
-     done
-     echo "vermelhos=$v"
-     [ -n "$falhos" ] && { for f in $falhos; do echo "=== $f ==="; bash "$f" 2>&1 | tail -15; done; }
-     echo "--- ensaio ---"; d… (18s)
-     (ctrl+b ctrl+b (twice) to run in background)
+● Lê a fixture do teste da ponta pequena
+  ⎿  $ cd /home/ronald/saas-hasner/app
+     echo "linhas: $(wc -l < ponto/tests/test_o214_ponta_pequena.py)"
+     grep -n 'class \|def ' ponto/tests/test_o214_ponta_pequena.py | head -30
+     echo "=== setUp / fixture ==="
+     sed -n "$(grep -n 'def setUp' ponto/tests/test_o214_ponta_pequena.py | head -1 | cut -d: -f1),+4…
 
-✢ Wrangling… (12h 2m 52s · ↓ 1.4m tokens)
+✢ Compacting conversation… (12h 8m 22s · ↓ 1.4m tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱ 88%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    3% until auto-compact
+                                                                                                                    1% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
