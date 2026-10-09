@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 08:58:31.**
+**Medido em 09/10/2026 09:04:01.**
 
 | | |
 |---|---|
@@ -41,6 +41,8 @@ a28ca8cf O214 item 4: a linha do DP cabe no carrier, e o corte deixa de comer o 
 ```
  M app/config/crons_duracao.json
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/PROMPTS.md
+ M app/docs/TICKETS.md
  M bin/sombra.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -119,21 +121,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-  Ran 4 shell commands
-
-● Background command "Esperar o marcador terminal do push" completed (exit code 0)
-
-  Ran 5 shell commands
-
-❯ aval Ronald: R1-RESIDUO-DO-INTERVALO, correcao do PRONTO: a certificacao e a BATERIA -- os casos a-j pela regra, em banco de teste -- e
-  nao o numero da frota. O e6_oraculo roda uma vez depois do pouso so como TERMOMETRO (quanto mudou e para quem), nunca como meta:
-  producao sempre tera cadastro errado e batida furada (L-099). Os casos a-j entram na bateria permanente da lavratura, junto do O217, com
-  as escalas canonicas (6x1, 12x36 diurno e noturno, personalizado sem intervalo). Nenhuma lei nova. segue a fila; PAREI so em lei ou !
-
-  Ran 3 shell commands
-
-● Background command "Nova tentativa de push" completed (exit code 0)
-
 ● Background command "Esperar o marcador terminal do REMOTO" completed (exit code 0)
 
   Ran 8 shell commands
@@ -147,9 +134,24 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
   LEI-AKITA 8 segue valendo para medir; ela nao define o que e pronto. Registra em LEIS.md com numero, ajusta core/placar_estrutural.py no
   marco da obra em curso, sem obra nova. segue a fila; PAREI so em lei ou !
 
-✢ Wrangling… (19h 32m 52s · ↓ 2.2m tokens · thinking)
+  Read 1 file, ran 1 shell command
+
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+
+  Ran 1 shell command
+
+❯ aval Ronald: CERTIFICADO-IMPACTO-TERMOMETRO, duas correcoes ao corte de 09/10 09:0x. (1) INVARIANTE nao e termometro: "todo leitor da o
+  mesmo numero" (R4), idempotencia (R5) e "as partes somam o total" valem para QUALQUER dado, limpo ou sujo, e se medem tambem em producao
+  com meta ZERO; ficam no placar principal. So a pergunta de VALOR (o numero esta certo pela regra?) e exclusiva da bateria; desce para
+  TERMOMETRO apenas o R1 (comparacao com o oraculo). (2) O termometro e OBRIGATORIO com cadencia: e6_oraculo por competencia aberta 1x por
+  semana e apos cada pouso de obra de calculo; cada dia de dono ESTRUTURA novo vira CENARIO na bateria ou linha na lista do admin, nunca
+  fica sem destino. Bateria verde sem termometro rodado na semana = placar AMARELO. segue a fila; PAREI so em lei ou !
+
+✢ Compacting conversation… (19h 38m 22s · ↓ 2.2m tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱ 77%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    8% until auto-compact
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
