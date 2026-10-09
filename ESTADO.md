@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:300 AFIRMA ato sem PROVA ao lado -- onde a lei diz que moram. E o estado passou a abrir com `**NO AR`, porque
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:428 AFIRMA ato sem PROVA ao lado -- onde a lei diz que moram. E o estado passou a abrir com `**NO AR`, porque
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 22:54:01.**
+**Medido em 08/10/2026 22:59:31.**
 
 | | |
 |---|---|
@@ -40,7 +40,9 @@ d2cf6606 O204: a hora do aparelho tem UM sitio, e o epoch deixa de virar data de
 
 ```
  M app/config/crons_duracao.json
+ M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/PROMPTS.md
  M app/docs/RELATO.md
  M bin/sombra.sh
 ?? esteira.pausada
@@ -119,38 +121,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ⎿  Read ../logs/sombra/censo_o145_dois_leitores.py (120 lines)
-  ⎿  Referenced file ../logs/o145_motor.out
-  ⎿  Read ../logs/o145.out (86 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b3j7lh9l6.output (13 lines)
+  RED:
+  a. turno aberto, ultimo ping ha X+1 min -> 1 push ao colab; rodar o vigia 2x -> continua 1 (idempotencia).
+  b. mesmo turno, X+Y+1 min -> 1 push a supervisao, e so 1.
+  c. chega ping -> episodio fecha; novo silencio > X -> novo push (MORDE).
+  d. colab que nunca pingou -> nenhum push.
+  e. turno fechado ou isento -> nenhum push.
+  f. turno que cruza a meia-noite -> conta pelo instante.
+  g. cadastro 0 -> nada dispara.
 
-● Task "RED e construção do segundo intervalo" completed in background
+  SELO: leitor de "sem ping" com regra propria fora de ponto/presenca.py = 0; chave nova sem leitor = 0.
+  PROIBIDO: barrar batida; abrir chamado por silencio; retratar ou julgar celula; juiz novo; fallback; cravar X ou Y no codigo.
+  SMOKE (infra externa, push): na sombra o envio esta desligado; em prod, 1 caso real com o aparelho do Ronald (col677), resultado no
+  RELATO.
+  PRONTO: RELATO com a medida, os REDs a-g nomeados, o smoke e o commit; sem eles = INCOMPLETO com a lista.
 
-● Task "Registrar o complemento na linha O200 do BACKLOG" still running in background
+  LEI-AKITA: origem=ponto/presenca.py (silencio do turno) + cadastro por empresa, testemunha=PingGeo e turno aberto, RED=a-g,
+  quem-mais-le=painel_op.py, calendario.py, ponto/views.py:2900, api_ping_geo, juizes novos=0
+  LINHA HAIKU: (a) contador "turnos abertos em silencio de ping" (esperado 0) com rotulo de admin; (b) golden: "quem esta em turno sem
+  sinal do posto agora"; (c) degrau: leitura.
 
-● Três achados reais da rodada. Vou curar os três na origem.
+  Nenhuma lei nova. segue a fila; PAREI so em lei ou !
 
-  Ran 20 shell commands
-  ⎿  Read docs/AVAIS.md (23 lines)
-  ⎿  Referenced file ../../wt-bos/app/colaboradores/tests/test_o200_pino_geo_le_o_juiz.py
-  ⎿  Read ../logs/sombra/censo_o145_dois_leitores.py (120 lines)
-  ⎿  Referenced file ../logs/o145_motor.out
-  ⎿  Read ../logs/o145.out (86 lines)
+● Listar exatamente os arquivos do complemento
+  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
+     echo "=== arquivos que DIFEREM (cura x wt-bos/app) ==="
+     diff -rq --exclude=__pycache__ $S/o200c/cura /home/ronald/wt-bos/app 2>/dev/null | grep ' differ$' | sed "s|Files $S/o200c/cura/||; s|
+     and /home/…
 
-● Task "RED e construção do segundo intervalo" completed in background
-
-● Task "Registrar o complemento na linha O200 do BACKLOG" still running in background
-
-● Task "Rodar a suite inteira na copia curada" still running in background
-
-● Background command "Rodar a prova O145 com o controle invertido" completed (exit code 0)
-
-● Ver o que f512ec9f toca
-  ⎿  $ cd /home/ronald/wt-bos && git show --stat --format='' f512ec9f
-
-✢ Wrangling… (9h 28m 22s · ↓ 1.1m tokens)
+✢ Compacting conversation… (9h 33m 52s · ↓ 1.1m tokens)
+  ▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 22%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
