@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 05:08:41.**
+**Medido em 09/10/2026 05:14:01.**
 
 | | |
 |---|---|
@@ -142,12 +142,12 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● O marco está commitado e no ar. Agora o push — um por marco (L-108).
 
-  Pushing do marco do item 3 · 2m 52s
+● Pushing do marco do item 3 · 8m 11s
   ⎿  $ cd /home/ronald/saas-hasner && git fetch -q origin && git log --oneline origin/main..HEAD | cat; echo "--- push ---"; git push
-     origin main > /tmp/push_item3.out 2>&1; echo "RC=$?"; tail -20 /tmp/push_item3.out (2m 51s · 3 lines)
+     origin main > /tmp/push_item3.out 2>&1; echo "RC=$?"; tail -20 /tmp/push_item3.out (8m 11s · 3 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Wrangling… (15h 43m 2s · ↓ 1.8m tokens)
+✢ Wrangling… (15h 48m 22s · ↓ 1.8m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                     8% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
