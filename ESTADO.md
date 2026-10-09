@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 08:10:31.**
+**Medido em 09/10/2026 08:15:45.**
 
 | | |
 |---|---|
-| `HEAD` local | `26a5316d O214 item 4: o dia tem DONO, e a diferenca em competencia exportada tem dono` |
+| `HEAD` local | `a28ca8cf O214 item 4: a linha do DP cabe no carrier, e o corte deixa de comer o porque` |
 | `origin/main` | `3c610491 O214: a trava do TXT contava dia de outra competencia (L-097)` |
-| commits a subir (`ahead`) | **1** |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -29,25 +29,18 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+a28ca8cf O214 item 4: a linha do DP cabe no carrier, e o corte deixa de comer o porque
 26a5316d O214 item 4: o dia tem DONO, e a diferenca em competencia exportada tem dono
 3c610491 O214: a trava do TXT contava dia de outra competencia (L-097)
 ef10b802 O214 item 3: a trava do TXT conta so o dia que e do ADMIN
 c32acf2e O topo do TICKETS fechado no ato do push (O112)
-041fd2ac O214 item 2: um ato, um motivo, e a tela mostra o DIFF por rubrica ANTES de confirmar
 ```
 
 ## `git status --short`
 
 ```
- M app/chamados/tests/test_atalho_he_na_central.py
  M app/config/crons_duracao.json
- M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
- M app/docs/PROMPTS.md
- M app/docs/RELATO.md
- M app/ponto/portas/he.py
- M app/ponto/services/autorizacao_he_periodo.py
- M app/ponto/tests/test_o214_item4_dia_do_admin.py
  M bin/sombra.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -125,7 +118,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ⎿  Referenced file ponto/tests/test_o214_item4_dia_do_admin.py
   ⎿  Referenced file ponto/views.py
 
 ● Task "RED e construção do segundo intervalo" completed in background
@@ -146,17 +138,18 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   Read 1 file, ran 1 shell command
 
-● Pasta de selos de host antes do commit
-  ⎿  $ cd /home/ronald/saas-hasner
-     ok=0; bad=0
-     for s in bin/tests/test_*.sh; do
-     if out=$(bash "$s" 2>&1); then ok=$((ok+1)); else bad=$((bad+1)); echo "=== VERMELHO: $s ==="; echo "$out" | tail -12; fi
-     done
-     echo "=== selos de host: $ok verdes, $bad vermelhos ==="
+  Ran 2 shell commands
 
-✢ Wrangling… (18h 44m 52s · ↓ 2.1m tokens · thinking)
+● O selo de host pegou a janela certa: a árvore tem MIN_MOTIVO e o worker no ar não. Ordem então é commit → deploy.sh → push.
+
+  Um push por marco · 3m 58s
+  ⎿  $ cd /home/ronald/saas-hasner && git fetch -q origin 2>&1 | tail -2; echo "origin/main..HEAD:"; git log --oneline origin/main..HEAD
+     echo "=== PUSH ==="; git push origin main 2>&1 | tail -30 (3m 57s · 5 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+· Wrangling… (18h 50m 6s · ↓ 2.1m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                   10% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
