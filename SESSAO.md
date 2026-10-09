@@ -6,10 +6,18 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 09/10/2026 04:10:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (505.5 MB). Acoes na janela: **1575**.
+**Medido em 09/10/2026 04:15:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (505.7 MB). Acoes na janela: **1577**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 04:15:45 | Bash | Acha o laco e a janela no medir | `grep -n "def medir\\|for c in \\|_ini\b\\|_fim\b\\|janela_fechamento\\|colabs =" folha/porta_export.py \| sed -n '1,25p'` |
+| 04:15:40 | Bash | Le a estrutura do medir | `sed -n '150,200p' folha/porta_export.py` |
+| 04:14:51 | Bash | Compara os dois construtores do mapa de decisao | `sed -n '35,50p' ponto/management/commands/lavrar_he_pendente.py; echo "=== o apurar recebe 'decisoes' de quem? ==="; grep -n "def apurar\\|decisoes" ponto/services/he_pendente_lavrado.py \| head -10` |
+| 04:14:47 | Bash | Le a soma do dia no apurar | `sed -n '90,125p' ponto/services/he_pendente_lavrado.py` |
+| 04:14:40 | Bash | Confere o push e os dois fatos do item 3 | `echo "=== (A) push ==="; tail -3 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bnstuz4ij.output echo; echo "=== (B) porta_export 552-566 -- o rotulo 'dia(s)' ==="; sed -n '552,566p' folha/porta_export.py echo; echo "=== (C) total do dia ao lado de he_fora_da_janela ==="; grep -rn "he_fora_da_janela\\|minutos_fora_do_dia\\|he_fora_min" --include=*.py ponto ...` |
+| 04:10:39 | Bash | Le o selo do portao do export | `sed -n '1,75p' folha/tests/test_b1_portao_he_nasce_desligado.py` |
+| 04:10:35 | Bash | Procura os testes que falam do he_pendente | `grep -rln "he_pendente" --include=*.py folha/tests/ ponto/tests/ 2>/dev/null; echo "=== assercoes ==="; grep -rn "he_pendente" --include=*.py folha/tests/ ponto/tests/ 2>/dev/null \| head -20` |
+| 04:10:28 | Bash | Le _estado_por_dia e _decisoes | `sed -n '58,95p' ponto/services/gestao_he.py` |
 | 04:10:21 | Bash | Le o modelo DecisaoHE | `sed -n '1185,1240p' ponto/models.py` |
 | 04:10:18 | Bash | Le a comparacao com o limite na porta | `sed -n '255,290p' ponto/portas/he.py` |
 | 04:10:07 | Bash | Nasce a copia do HEAD para o item 3 | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad cd /home/ronald/saas-hasner && mkdir -p "$S/o214-item3" && git archive HEAD \| tar -x -C "$S/o214-item3" && mkdir -p "$S/o214-item3/arvore" && mv "$S/o214-item3/app" "$S/o214-item3/arvore/app" 2>/dev/null \|\| true ls "$S/o214-item3/arvore/app" \| head -5; echo "--- HEAD da copia: $(git rev-parse --shor ...` |
@@ -1579,9 +1587,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 16:17:55 | Bash | Conferir o estado da sombra | `cd /home/ronald/saas-hasner && bash bin/sombra.sh --conferir 2>&1 \| tail -15; echo "--- trava:"; bash bin/trava_teste.sh --quem 2>/dev/null; ls -la logs/sombra.lock 2>/dev/null; echo "--- cobre:"; bash bin/sombra.sh --cobre-competencia 2>&1 \| tail -3` |
 | 16:17:06 | Bash | Censo de DecisaoHE em prod e as horas do subconjunto | `C=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad cat > $C/sonda_dec.py <<'PY' # -*- coding: utf-8 -*- import datetime as dt from django.db.models import Count, Min, Max from ponto.models import DecisaoHE print('DecisaoHE total', DecisaoHE.objects.count()) for r in DecisaoHE.objects.values('estado').annotate(n=Count('id'), d1=Min('data'), d2=Max('data' ...` |
 | 16:16:44 | Bash | Medir a fila de HE de hoje em prod, somente leitura | `C=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad cat > $C/sonda_antes.py <<'PY' # -*- coding: utf-8 -*- """A fila de HE de HOJE em PROD, por empresa e competencia, LENDO a autoridade -- nunca recalculando. Autoridade: `ponto/services/he_pendente_lavrado.py::ler` (o retrato) + `gestao_he._estado_por_dia` (a decisao VIVA, a mesma que a tela sobrepoe). S ...` |
-| 16:15:34 | Bash | Ler o molde do comando HE na sombra | `cd /home/ronald/saas-hasner && sed -n '1,45p' bin/diff_janela_he_total.sh` |
-| 16:15:29 | Bash | Achar a forma de rodar comando contra a sombra | `cd /home/ronald/saas-hasner && grep -rn "settings.sombra\\|E_SOMBRA" bin/*.sh \| head -20` |
-| 16:15:02 | Bash | Ver o que a copia tem | `C=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad ls -la $C/o214/app/docs/ 2>/dev/null \| head -20 echo "=== diff copia x live (arquivos) ===" cd $C/o214/app && git --git-dir=/home/ronald/saas-hasner/.git --work-tree=$C/o214 status --short 2>/dev/null \| head -30` |
-| 16:14:48 | Bash | Ler o achado do contador | `C=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cat $C/o214_achado_contador.md` |
-| 16:14:46 | Bash | Ler o topo do RELATO | `sed -n '1,60p' docs/RELATO.md; echo "=== :115-125 ==="; sed -n '115,125p' docs/RELATO.md; echo "=== date ==="; date '+%d/%m %H:%M'` |
-| 16:10:36 | Bash | Conferir o gate da reversao | `C=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad cd $C/o214/app grep -n '_escrever_reversao\\|_apply\b' ponto/management/commands/recusar_ponta_pequena.py \| head -20` |

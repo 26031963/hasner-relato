@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 04:10:31.**
+**Medido em 09/10/2026 04:15:45.**
 
 | | |
 |---|---|
@@ -118,13 +118,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  - A sonda da medição do item 2 está escrita e compilada: logs/sombra/medir_o214_item2.py (119 linhas), para rodar pela porta única
-    bin/sombra.sh --rodar. Ela responde as três medições que o dossiê §8 declara — custo de UMA prévia, distribuição de dias sem decisão
-    por colaborador na 10, e quantos estão acima do limite — mais a quarta que eu nomeei: o sobrecusto do confirmar, que é onde entram os N
-    recalcular_por_evento do on_commit e é o número em que a decisão síncrono-x-job se apoia. Tudo pelas funções reais (itens_sem_decisao,
-    previa, confirmar), com o limite lido do cadastro (Empresa.limite_decisao_he_min), nunca o 15 literal — o TOLERANCIA_HE_MIN_DIA do
-    motor é 10, e confundir os dois contaria outro universo.
   - A medição não roda agora, por duas razões medidas: a suite do pre-push está no cpuset de teste, que é o mesmo da receita da sombra, e o
     cron sombra.sh --refazer && --bloco dispara às 04:17 (crontab -l) tomando a trava da sombra por ~20-40 min. Então ela espera o
     ARQUIVO, não um palpite de horário.
@@ -144,12 +137,19 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● O hook manda seguir, e a fila 1 tem os itens 3-4 do O214 abertos. Como não posso escrever na árvore durante o push, sigo pela LEI 10:
   construir em cópia do HEAD, aplicar no commit.
 
-  Le _estado_por_dia e _decisoes
-  ⎿  $ sed -n '58,95p' ponto/services/gestao_he.py
+  Searched for 1 pattern, ran 5 shell commands
 
-✢ Wrangling… (14h 44m 52s · ↓ 1.7m tokens)
+● Antes de fixar o desenho do item 3 — e há um ponto de unidade (ponta x dia) que pode morder um selo existente — consulto o revisor.
+
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+
+● Le a estrutura do medir
+  ⎿  $ sed -n '150,200p' folha/porta_export.py
+
+✢ Wrangling… (14h 50m 6s · ↓ 1.7m tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    6% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
