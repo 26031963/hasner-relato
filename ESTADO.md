@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 08/10/2026 20:55:45.**
+**Medido em 08/10/2026 21:01:01.**
 
 | | |
 |---|---|
@@ -120,44 +120,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  - a TESTEMUNHA: he_fora_da_janela = []. Tela, PDF e portão he_pendente não veem nada.
 
-  Hipótese (ii) confirmada: a origem é o LEITOR, e não move dinheiro — o motor já clipou. E dois achados laterais: col81/col325 eram atraso
-  (órfã 156/154 min depois do marco, que o motor julga certo — meu abs() misturou as duas direções), e a lista CXR do col253 traz cada dia
-  DUPLICADO.
-
-  Read 1 file
-
-● O escopo certo se mede comparando os dois leitores direto, sem o juiz do dono. Escrevo o censo da frota — e filtro a lista CXR pela
-  janela, porque o col253 já mostrou entradas de 21/08 num resultado de competência 10:
+● O controle só GRAVA nos ramos A e C — B e D não gravam. col207 02/10 tem ponta de 90 min "antes", e 90 > teto 60, então o motor TAMBÉM
+  acusa: o dia cai em B, e o meu controle leu "B" como "não visitado". Medindo antes de afirmar:
 
   Ran 1 shell command
 
-● Enquanto a frota roda, deixo pronta a cura do pos_push (aplica no pouso de INSTRUMENTO, L-105) com o selo que morde:
+● Hipótese (i) confirmada: col207 está no universo, o dia está na janela, e o bucket real é B — os dois falam. Os números do censo valem;
+  cega era a minha instrumentação de controle, que só gravava em A e C. Mas a lista de casos A mostra algo que eu não tinha separado —
+  metade é saida fora da janela de HE, e marcar_pontas_fora tem saida_ativa=False por default:
+
+  Searched for 1 pattern, ran 1 shell command
+
+● O espelho LÊ o cadastro da saída (janela_he_saida_ativa), então a mudez da saída não é default — ou é cadastro desligado, ou é a célula
+  missing. Isso parte o bucket A em duas causas, e eu não medi qual. Vou refazer o censo com o controle corrigido e com a causa de cada dia
+  A:
 
   Ran 2 shell commands
 
-● O selo tem de morder por COMPORTAMENTO, não por casar texto. Ele extrai a linha real do pos_push.sh e a executa num repo descartável:
+● Deixei uma linha de rascunho no script (cont({...}) if False else None). Ela não executa, mas não fica:
 
-● Escrever o selo e provar RED e GREEN
-  ⎿  $ C=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cat >
-     $C/pospush/test_pos_push_commita_so_o_tickets.sh <<'SH'
-     #!/usr/bin/env bash
-     # SELO DE HOST -- o commit derivado do pos_push leva SO o TICKETS.md, nunca carona.
-     #
-     # POR COMPORTAMENTO, NAO POR TEX…
+  Ran 2 shell commands
 
-· Compacting conversation… (7h 30m 6s · ↓ 845.2k tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱ 83%
+● Enquanto roda, o achado vai para o arquivo durável:
+
+  Ran 1 shell command
+
+● Advising using Fable 5.1
+
+✢ Wrangling… (7h 35m 22s · ↓ 860.0k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    0% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
-  ◯ fork  Compiling sonda_o200.py impact probe                                                                  30m 29s · ↓ 107.8k tokens
+  ◯ fork  Grepping O200 cell in BACKLOG.md                                                                      35m 46s · ↓ 135.1k tokens
   ⧉  index
 ```
