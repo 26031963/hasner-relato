@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 23:04:01.**
+**Medido em 09/10/2026 23:09:31.**
 
 | | |
 |---|---|
@@ -123,44 +123,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  cobra citação — mas a lei do sítio é a L-099 e vai citada. Escrevendo as duas mensagens no scratchpad (seguro durante o push):
 
-  Ran 2 shell commands
-
-● A raia O228 liberou a trava às 23:01 e a suite do push está correndo agora (pre-push:3944973). Esperando por arquivo, não por relógio:
+● Push ainda na suite. O outro PARCIAL é a BATERIA (L-114: certificado só está pronto quando passa a bateria; existe em 1 de 7 famílias).
+  Medindo pela fonte também:
 
   Ran 1 shell command
 
-● Enquanto espera — a raia O228 liberou a trava, o que significa que a suite dela terminou. Pela L-105 ela pousa antes de eu abrir fatia
-  nova, então preciso do veredito dela:
+● BATERIA: 1 de 7 famílias. O número declarado é 15 cenários / 48 testes, e a própria fonte define cenário = classe e teste = def test_ —
+  isso se confere por AST sem suite e sem pista:
 
-  Ran 2 shell commands
+  Ran 1 shell command
 
-● Raia O228 ainda está construindo (sem commit; ponto/precedencia.py e o teste modificados) — não há pouso pendente. Usando a espera do
-  push para o LEI-ANTES-DO-PATCH do col935, que decide se ele é fatia ou pergunta de lei:
+● Divergência — mas antes de afirmar, a contagem por forma infla: classe base ou mixin não é cenário. Olhando os nomes e se os arquivos
+  mudaram depois da medição:
 
-● Running cd /home/ronald/saas-hasner/app/docs echo "=== 'se…
-  ⎿  $ cd /home/ronald/saas-hasner/app/docs
-     echo "=== 'sem celula' no LEIS.md ==="
-     grep -n 'sem celula' LEIS.md | cut -c1-320
-     echo
-     echo "=== L-112 (a mais nova que nomeia vinculo) ==="
-     grep -n '\*\*L-112\*\*' LEIS.md | cut -c1-700
-     echo
-     echo "=== L-041 e L-040 ==="
-     grep -n '\*\*L-04[01]\*\*' LEIS.md | cu…
+  Ran 1 shell command
 
-✢ Proofing… (5h 11m 15s · ↓ 609.8k tokens)
+● Achado provado, e o número é de hoje: o placar enumera 12 cenários nominais para o test_bateria_lavratura.py, e os 12 somam exatamente 34
+  testes — o método bate. Mas o arquivo tem um 13º cenário, SaidaPosicionalDepoisDaPausaTest, com 16 testes, nascido no pouso da
+  L-115/O232 que foi ao ar às 22:1x desta noite. O outro módulo bate exato (3/14).
+
+  Então a BATERIA declara 15/48 e o real é 16 cenários / 64 testes — um número que envelheceu em horas, pela minha própria mão. Gravando
+  antes de qualquer afirmação:
+
+  Ran 1 shell command
+
+● Isso muda a forma: agora há dois números vencidos no placar, não um. Construindo o patch da BATERIA pelo mesmo arnês já verificado
+
+· Proofing… (5h 16m 45s · ↓ 630.1k tokens · thought for 8s)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    2% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 5 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Checking msg_o207.txt bracket citations                                                    47m 33s · ↓ 143.6k tokens
-  ◯ general-purpose  Inserting O228 row into TICKETS.md                                                         47m 33s · ↓ 164.4k tokens
+  ◯ general-purpose  Updating REGRA 3 comment in _fase_12x36.html                                                53m 3s · ↓ 164.3k tokens
+  ◯ general-purpose  Committing lápides in ponto/precedencia.py                                                  53m 3s · ↓ 164.4k tokens
   ⧉  index
 ```
