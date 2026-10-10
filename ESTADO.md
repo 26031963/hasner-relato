@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 05:54:38.**
+**Medido em 10/10/2026 06:00:01.**
 
 | | |
 |---|---|
@@ -125,14 +125,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 5 shell commands
-
-● Três achados que mudam o desenho. Vou torná-los duráveis antes de consultar:
-
-  Ran 1 shell command
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
 ● O ×0,875 é exato: 9577/10945, 10500/12000, 9800/11200, 8813/10072, 8387/9585, 11200/12800 — todos 7/8 = 52'30"/60', a hora reduzida do
   Art.73 §1. Medindo em vez de raciocinar:
@@ -146,17 +138,25 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● A 0025 sai direto de fech.horas_noturnas — campo gravado, zero régua na montagem. Então o ×7/8 é o gravado que mudou. Medindo a hipótese
   da hora reduzida (§6b, 01/09) e os furos:
 
-● Reconcile the ratio, the closed doors and the col954 pauta
-  ⎿  $ cat > /home/ronald/saas-hasner/logs/sonda/a0b_reconcilia.py <<'PY'
-     # Reconciliacao dos 6 DIVERGE da Q1. LEITURA PURA. So ids/matriculas/rubricas/contagens/datas.
-     from django.conf import settings
-     from django.db import connection
-     assert settings.DATABASES['default']['NAME'] == 'saas_hasner'
-     assert …
+  Ran 1 shell command
 
-✶ Proofing… (11h 59m 52s · ↓ 1.4m tokens)
+● 27 matrículas com ratio exatamente 7/8, e o TXT vigente saiu em 01/09 10:08 — o mesmo dia em que o HORA_REDUZIDA_12X36_EM_SECO=False
+  entrou em prod (§6b). Corrigindo o campo da batida (timestamp, não data_hora) para as partes 2 e 3:
+
+  Ran 1 shell command
+
+● O juiz mudou, não o dado: oito dos treze têm turnos_abertos=0 inconsist=0 e zero batida retratada / zero célula regenerada depois da
+  entrega — snapshot intacto, e hoje são furo_espelho. E o col954 está fora por rescisao_modulo_proprio. Qual motivo o retentor dá a quem
+  tem 0/0:
+
+● Reading the espelho retention judge
+  ⎿  $ cd /home/ronald/wt-l113/app && grep -rn "def motivos_retencao_espelho" --include=*.py . && f=$(grep -rln "def
+     motivos_retencao_espelho" --include=*.py . | head -1) && sed -n "$(grep -n 'def motivos_retencao_espelho' $f | cut -d: -f1),+55p" $f
+
+✢ Compacting conversation… (12h 5m 15s · ↓ 1.4m tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱ 95%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    5% until auto-compact
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
