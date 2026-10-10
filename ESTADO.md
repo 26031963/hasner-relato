@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 18:45:45.**
+**Medido em 10/10/2026 18:51:01.**
 
 | | |
 |---|---|
@@ -130,19 +130,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-● The container writes as root into a bind mount — that's the root-owned-orphan hazard. Better: emit only the ~3.500 moved rows to stdout,
-  which tee already makes durable on the host. That's the detail that matters, with no new mount.
-
-  Ran 3 shell commands
-
-● Bloco still running. Building the queda in the copy — no DB, no cpuset. First a full census of the surface.
-
-  Ran 1 shell command
-
-● The surface is wider than the "4 selos" estimate. Let me read each decisive site in the copy.
-
-  Ran 2 shell commands
-
 ● Now the patch for fechamento.py — in memory, unique anchors, py_compile before writing.
 
   Read 1 file, ran 6 shell commands
@@ -157,8 +144,21 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Task "Refazer a sombra e rodar o bloco" still running in background
 
 ● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-✶ Proofing… (1d 0h 50m · ↓ 2.9m tokens)
+● Advisor confirms (B) — declared read, not caught exception. Implementing that plus the three wording fixes.
+
+● Patching dos 4 sitios de prosa
+  ⎿  $ python3 - <<'PY'
+     C = '/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/o219q/copia/app/'
+     import py_compile, tempfile, os
+     def patch(rel, pares):
+     cam = C + rel
+     src = open(cam).read()
+     for velho, novo in pares:
+     assert src.count(velho) == 1, '%s: ancora nao…
+
+✢ Proofing… (1d 0h 56m · ↓ 2.9m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
