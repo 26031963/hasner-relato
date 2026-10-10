@@ -86,13 +86,25 @@ enquanto a tela lia `servico.listar()` (ordenado por razao social). Nao davam nu
 **ORDEM** diferente, e e assim que um leitor paralelo comeca. Agora `--listar` le a porta, e a ordem impressa
 passa a ser a que a tela ja mostrava.
 
-**Verde, e por que ele nao e o verde do commit ainda.** Selo do censo + 11 vizinhos: `Found 139` / `Ran 139
-tests in 53.802s` / `OK`, rc 0, `0` linhas `^(FAIL|ERROR):` (`logs/o223/verde_pousob.out`); `ruff` limpo nos
-4 arquivos; suite CHEIA correndo na **copia** (`Found 10312 test(s)`, `logs/o223/suite_pousob.out`). O
-docstring com data vencida em `core/tests/test_o223_porta_humana_da_aplicacao.py:4` (diz `PELA-METADE` em
-`docs/LEIS.md:149`, linha que acabou de sair) **ficou de fora da copia de proposito**: editar a arvore que a
-medicao monta troca os bytes medidos, e editar depois da suite poe no commit bytes que a suite nao viu.
-Entra quando a suite fechar, com o modulo e os selos de varredura de texto rodados outra vez.
+**Verde.** Selo do censo + 11 vizinhos: `Found 139` / `Ran 139 tests in 53.802s` / `OK`, rc 0, `0` linhas
+`^(FAIL|ERROR):` (`logs/o223/verde_pousob.out`). Suite CHEIA na **copia**: `Ran 10309 tests in 1400.556s` /
+`OK (skipped=42)`, rc 0, `0` linhas `^(FAIL|ERROR):` (`logs/o223/suite_pousob.out`). `ruff check` **All
+checks passed** nos **5** arquivos, e o censo md5 da copia inteira contra `HEAD:app/*` da exatamente esses 5
+DIFERE e nenhum FALTA.
+
+**O 5o arquivo entra com os bytes do commit DIFERENTES dos bytes da suite, e isso se diz com os md5.** O
+docstring de `core/tests/test_o223_porta_humana_da_aplicacao.py` apontava para `docs/LEIS.md:149` dizendo
+`PELA-METADE` -- a linha que a cura deste pouso tirou de la -- e dizia que a 3a clausula custava **7
+declaracoes**, que e o numero que eu errei. Ele **ficou de fora da copia enquanto a suite corria**, de
+proposito: editar a arvore que a medicao monta troca os bytes medidos. Depois do veredito foi editado na
+copia (md5 `df5cddb71d0d66b5ffc8036db4113747` -> `021ce7d55df0663fd0c03a07062bc7a0`), e o que mudou e
+**docstring, zero linha executavel** -- a correcao de 7 para 15 com a causa (`EmpresaAdmin` sem `fields`), e
+o endereco passando a citar a LEI em vez do numero de linha, que foi o que envelheceu. O modulo e os
+vizinhos de varredura correram outra vez sobre os bytes novos: `Ran 54 tests in 2.904s` / `OK`, rc 0
+(`logs/o223/revizinho_docstring.out`, com `core.tests.test_contract_configuracao_nao_mente`,
+`chamados.tests.test_selo_lapide_legado`, `core.tests.test_regua_pela_empresa` e
+`core.tests.test_admin_so_leitura`). Entao: dos 5 arquivos, 4 foram medidos pela suite cheia e 1 por 54
+casos dirigidos -- nao por "e so comentario".
 
 
 ## O223 pouso A — A APLICACAO DE CONVENCAO GANHA PORTA HUMANA, E O CAMPO QUE DECIDE PISO x CCT GANHA ESCRITOR (10/10 08:0x)

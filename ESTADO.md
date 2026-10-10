@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 09:55:01.**
+**Medido em 10/10/2026 10:00:09.**
 
 | | |
 |---|---|
@@ -127,38 +127,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 15 shell commands
-  ⎿  Read docs/AVAIS.md (30 lines)
-  ⎿  Read docs/HANDOFF-SESSAO.md (47 lines)
-  ⎿  Referenced file core/tests/test_o223_porta_humana_da_aplicacao.py
-  ⎿  Read core/management/commands/semear_aplicacao_convencao.py (119 lines)
+● Background command "Run the full suite on the copy" completed (exit code 0)
 
-● Task "RED e construção do segundo intervalo" completed in background
+● The gate reads only RELATO.md and RELATORIOS-PLANO.md — the 88 hits in BACKLOG/TICKETS are outside it. And the suite just finished.
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+  Ran 1 shell command
 
-  Listed 1 directory, ran 60 shell commands
-  ⎿  Read docs/AVAIS.md (30 lines)
-  ⎿  Read docs/HANDOFF-SESSAO.md (47 lines)
-  ⎿  Referenced file core/tests/test_o223_porta_humana_da_aplicacao.py
-  ⎿  Read core/management/commands/semear_aplicacao_convencao.py (119 lines)
+● Suite green on the copy: Ran 10309 tests in 1400.556s / OK (skipped=42), rc 0, zero FAIL/ERROR. Now the deferred docstring.
 
-● Task "RED e construção do segundo intervalo" completed in background
+  Ran 2 shell commands
 
-● Task "Run the full suite on the copy" still running in background
+● Two stale claims, not one: the docs/LEIS.md:149 anchor (the line I removed) and the "este pouso NAO declara Empresa … custa 7 declaracoes
+  … isso e o pouso B" paragraph — pouso B did it, with 15.
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+  Ran 1 shell command
 
-  Checking BACKLOG and TICKETS for unproved affirmations
+● Both remaining hits are deliberate: one is the historical statement, one is the lápide naming the dead address. Now re-run on the copy.
+
+  Ran 5 shell commands
+
+● Exactly 5 differ, none missing, ruff clean on all 5. Now the docs must say 5, and say honestly that one file's committed bytes are not
+  the suite's bytes.
+
+  Checking handoff commit history and running every host seal · 1m 18s
   ⎿  $ cd /home/ronald/saas-hasner
-     grep -n 'relato_afirma_com_prova' bin/*.sh bin/*.py 2>/dev/null | cut -c1-160
+     echo "--- HANDOFF em commits recentes:"; git log --oneline -6 --name-only -- app/docs/HANDOFF-SESSAO.md | head -20
+     echo "--- selos de host (pasta inteira):"; for f in bin/tests/test_*.sh; do out=$(bash "$f" 2>&1); rc=$?; [ $rc -ne 0 ] && echo
+     "VERMELHO $f rc=$rc"; done… (1m 18s · 15 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Compacting conversation… (16h 0m 15s · ↓ 1.9m tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱ 95%
+· Proofing… (16h 5m 23s · ↓ 1.9m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    0% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
