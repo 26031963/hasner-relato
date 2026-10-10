@@ -1,6 +1,80 @@
 # RELATO — esteira saas-hasner
 
-## LEI QUE FALTA — A DIETA CHEGOU AO CHAO DO QUE O AVAL MANDA MOVER, E OS 10k PEDEM REGRA (10/10, com numero)
+## O224 DIETA-DO-CLAUDE-MD — FECHADA: AS DUAS TABELAS DE LOOKUP SAEM, E O PRONTO PASSA A SER O NUMERO QUE ISSO DEU (10/10 11:3x)
+`LEI-AKITA: origem=CLAUDE.md (a tabela de consulta pesa em TODO turno e nao decide nada: quem decide e o codigo vivo), testemunha=app/docs/JUIZES.md + app/docs/CRONS.md + LAPIDES.md 58-60 (o lookup e a janela vencida passam a ter endereco proprio, com ponteiro NO LUGAR de onde sairam), RED=$SC/o224b/prova2.py (3 perguntas, 0/0/0) + os 66 selos de host da pasta inteira, quem-mais-le=grep de `OS JUIZES`/`GEOMETRIA DE TURNO`/`processar_alertas_turno`/`SUPRA_JUIZ` em bin/tests/*.sh, bin/*.sh e bin/*.py = 0 hit; 4 testes de Python citam as secoes 5 e 7 em PROSA e por isso os dois cabecalhos FICAM, juizes novos=0`
+
+**A pergunta que estava no topo, e a resposta.** A 2a fatia fechou em **-6.898** chars e eu escrevi aqui que
+o PRONTO de **-10k** nao se alcancava sem tocar REGRA -- com os 15.737 que faltavam abertos em tres classes,
+cada uma dentro de um PROIBIDO do seu proprio aval. Nao devolvi o turno por isso
+(**PAREI-DE-LEI-NAO-DEVOLVE-TURNO**): o numero ficou no topo, a esteira seguiu, e as **11:0x** ele respondeu,
+literal: *"O224: as tabelas de consulta (secao 5 juizes e lista de crons da secao 7) saem para arquivo
+proprio com ponteiro, e as regras de janela vencida (RODADA 3, 'um colaborador por ato', ordem da fila 2 de
+29/09) vao para LAPIDES. O PRONTO passa a ser o numero que isso der."* Ele cortou a classe **(a)** e a **(b)**
+e **redefiniu o PRONTO** -- que era a classe (c). A pergunta certa, na hora certa, fez a obra fechar.
+
+**O numero, e ele E o PRONTO.** `CLAUDE.md` **56.473 -> 49.036** chars nesta fatia (**-7.437**). Desde o
+`037ae715`, inicio da obra: **60.865 -> 49.036 = -11.829** chars. Pela razao DERIVADA da leitura DELE
+(**30,2k tokens** em 08/10 13:25 para os **60.865** chars daquele commit = **2.016 chars/token**), isso e
+**~-5,9k tokens**, de ~30,2k para **~24,3k**. Nascem `app/docs/JUIZES.md` (**5.748** B) e `app/docs/CRONS.md`
+(**3.809** B); `LAPIDES.md` passa a **60** lapides.
+
+**O QUE NAO SAIU, e aqui esta o desenho da fatia.** A secao 7 **nao sai inteira**, porque tem REGRA DENTRO
+da lista: a **CORRENTE SEM MINUTO** (corte 29/09, BLOCO-DA-MANHA-SATURADO -- os crons de 06:36 e 06:40
+perderam o horario e cada elo espera o ARQUIVO do anterior, *"porque horario e aposta sobre duracao e arquivo
+e FATO"*) e o aviso do **SUPRA_JUIZ** (*"o nome engana: NAO e so leitura"* + *"mexer em
+`ponto/supra_juiz.py::classificar_dia` muda o que e RETRATADO em prod"*). Levar qualquer uma delas seria
+exatamente o *"mover regra para outro arquivo"* que o aval de 08/10 proibe. Entao a secao foi recortada em
+**4 trechos** e so os HORARIOS viajaram: a corrente ficou, com `ver app/docs/CRONS.md` no lugar da ordem;
+o aviso do SUPRA_JUIZ ficou, com os 9 horarios fora. Os cabecalhos `## 5.` e `## 7.` **ficam**, carregando o
+ponteiro, porque **4 testes de Python citam as duas secoes em prosa** --
+`chamados/tests/test_porta_chamado_ciclo.py:407`, `colaboradores/tests/test_led_pelo_juiz.py:17`,
+`escala/tests/test_contador_vigencia_impossivel.py:116`,
+`ponto/tests/test_realizado_do_dia_autoridade.py:189` -- e o aval proibe tocar teste: apagar o cabecalho
+deixaria quatro citacoes apontando para o vazio. **Decisao tecnica registrada, nao perguntada**
+(PAREI-SO-LEI): DOIS arquivos de destino, um por assunto, e nao um "CONSULTA.md" unico.
+
+**A lapide 59 nasce DENTRO do item numerado.** A REGEN-EM-EXPORTADA diz *"estas quatro condicoes juntas"*;
+o *"UM colaborador por ato"* era a condicao **1 de 4**, e a TXT-E-FOTOGRAFIA de 30/09 ja a revoga no proprio
+paragrafo (*"cai tambem o 'UM colaborador por ato'"*). Renumerar 2 para 1 seria **reescrever a regra**, entao
+a numeracao fica e o ponteiro ocupa o slot: `    1. (historia: LAPIDES.md#lap-59)`.
+
+**PROVA (`$SC/o224b/prova2.py`, 3 perguntas, 0/0/0).** (a) toda ADICAO no `CLAUDE.md` e ponteiro de lapide ou
+um dos 3 ponteiros DECLARADOS -- **0** fora disso; (b) toda REMOCAO reaparece no destino -- **0** perdida;
+(c) todo trecho declarado esta **NO SEU** destino, tabela byte a byte e lapide linha a linha -- **0** faltando.
+A pergunta (c) nasceu de um defeito do proprio conferidor: o normalizador herdado da 1a passada fazia
+`.replace('> ', ' ')` cego para desfazer a citacao de lapide, e isso **come a seta** -- `-> periodo_apuracao`
+virava `- periodo_apuracao` so do lado da remocao, e 4 trechos deram VERMELHO falso. Curei o NORMALIZADOR
+(a desmarcacao passou a ser ancorada em inicio de linha, `^> ?`, que e onde a citacao mora), nao a pergunta,
+e a (b) sozinha passaria por COINCIDENCIA se um trecho igual ja existisse no destino -- por isso a (c).
+
+**PORTAO.** A pasta INTEIRA de selos de host, do jeito que `bin/regua.sh:138-145` a roda: **66 selos, 0
+VERMELHO**; `bin/node_check.sh` verde (12 arquivos). **A suite do Django nao e o portao desta fatia**, e isso
+se mediu: `grep` de `CLAUDE.md` em `app/**/*.py` = **0**. E o ponto cego que eu fui procurar: `grep` de
+`OS JUIZES`, `GEOMETRIA DE TURNO`, `processar_alertas_turno` e `SUPRA_JUIZ` em `bin/tests/*.sh`, `bin/*.sh` e
+`bin/*.py` = **0 hit** -- nenhum dos 66 esta verde **porque** a tabela saiu.
+
+**O que mais entra neste commit do marco (L-106: docs entram com o codigo do marco).** `PROMPTS.md` com as
+**3** linhas dos avais de 11:2x (PAUTAS-09-UM-TXT-SO, O228-TURNO-E-ESMERO, DOIS-MANDATOS-COM-GATILHO-20-20);
+`PENDENTES_RONALD.json` + `AVAIS.md` com **7** itens respondidos pelas palavras dele -- a mesa cai de **14
+para 7**, e o `O224-OS-10k-PEDEM-REGRA` e um deles; e os dois itens novos do bloco OBRAS, **O243
+ESMERIL-3-VALIDACAO** e **O244 CONTRATOS-DAS-FAMILIAS**, registrados com o gatilho dele
+(*"abre quando contratos_estruturais = 20/20"*, hoje **15/20**) e **sem obra agora** -- a palavra `aguardando`
+na celula de estado e o que faz o `hook_stop_fila1` NAO os cobrar como fila 1, conferido chamando o proprio
+`_proximo_da_fila`/`_ids_que_nao_andam` (O243 e O244 fora, O224 fora por `**FECHADA`).
+
+**A celula da O224 fechou na celula 3, nao na 4, e isso tambem foi medido.** O juiz de *"qual item esta
+ABERTO"* e um so -- `bin/hook_stop_fila1.py::_proximo_da_fila` --, e ele le `celulas[3]`. O cabecalho da
+tabela chama essa coluna de `portao`, mas **as linhas fechadas poem o ESTADO ali** (O223:260, O126:283,
+O120, O124). A linha da O224 nascera com o portao na 3 e o estado na 4: fechar so na 4 deixaria o hook
+cobrando para sempre um item resolvido. Estado subiu para a 3, portao desceu para a 4, as duas dentro do
+teto de **300** chars da **L-109** (**291** e **220**, medidos).
+
+**PROXIMO.** Pela ordem dele de 10:4x (*"fechada a O224, a principal volta ao miolo da O219"*): o pouso da
+`raia-celula` (O228 da familia celula) e a abertura da familia turno como **passada de esmero** pelo aval de
+11:2x, e dai o **miolo da O219** -- a versao da regra em `impressao_insumos` --, que e tambem o portao do TXT
+unico da 09 com as cinco correcoes do DP pelo aval das 11:2x.
+
+## LEI RESPONDIDA 10/10 11:0x — era esta a pergunta do topo, e ele a respondeu ALARGANDO o aval (o registro fica; a resposta esta na secao acima)
 Nao devolvo o turno por isto (**PAREI-DE-LEI-NAO-DEVOLVE-TURNO**): o numero fica aqui no topo, a esteira
 seguiu para o miolo da O219, e a resposta entra quando vier. Item no AVAIS: `O224-OS-10k-PEDEM-REGRA`.
 

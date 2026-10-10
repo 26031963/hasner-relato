@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 11:30:31.**
+**Medido em 10/10/2026 11:35:45.**
 
 | | |
 |---|---|
@@ -40,6 +40,7 @@ d20a0e45 [O219] pouso: os docs do marco A0-b entram junto, e o merge que eu pedi
  M app/docs/LAPIDES.md
  M app/docs/PENDENTES_RONALD.json
  M app/docs/PROMPTS.md
+ M app/docs/RELATO.md
  M app/docs/TICKETS.md
  M bin/sonda_frota.sh
 ?? app/docs/CRONS.md
@@ -132,44 +133,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● A green seal can be green because the table left — checking the ones that could read it:
 
-  Ran 5 shell commands
+❯ aval Ronald: QUATRO REGISTROS E UM DESCONGELAMENTO. Nenhuma lei nova; aplica L-096, L-105, L-106, L-109, L-110, L-111.
 
-❯ aval Ronald: registrar no bloco OBRAS do BACKLOG, no commit do proximo marco (L-106), dois itens com gatilho "abre quando
-  contratos_estruturais = 20/20", sem obra agora. (1) ESMERIL-3-VALIDACAO (mandato meu de 10/09): sessao de polimento, validacao e
-  double-check dos setores criticos do core, uma familia por vez por ordem de dinheiro (folha/export, celula/precedencia, turno/marcos,
-  ausencia/ferias, chamado, feriado/prazo, fechamento), com leitura antes de lixa, RED contra o HEAD, oraculo externo (recibos do Dominio,
-  cartao Nexti, planilha RS) pela L-110, zona inviolavel so com aval no commit; orfao achado sai pela L-111. (2) CONTRATOS-DAS-FAMILIAS
-  (mandato meu de 21/09): um doc curto por familia em app/docs dizendo quem manda e o que quebra se mexer, que e a camada 2 da secao 8 do
-  CLAUDE.md. Celula de estado ate 300 caracteres (L-109). Nenhuma lei nova. Segue a fila; PAREI so em lei ou !
+  (A) REGISTRAR no bloco OBRAS do BACKLOG, no commit do proximo marco (L-106), celula de estado ate 300 caracteres (L-109), sem obra
+  agora, os tres com gatilho "abre quando contratos_estruturais = 20/20":
+  1. ESMERIL-3-VALIDACAO (mandato meu de 10/09): polimento, validacao e double-check dos setores criticos do core, uma familia por vez por
+  ordem de dinheiro (folha/export, celula/precedencia, turno/marcos, ausencia/ferias, chamado, feriado/prazo, fechamento). Leitura antes
+  de lixa, RED contra o HEAD, oraculo externo (recibos do Dominio, cartao Nexti, planilha RS) pela L-110, zona inviolavel so com aval no
+  commit, orfao sai pela L-111.
+  2. CONTRATOS-DAS-FAMILIAS (mandato meu de 21/09): um doc curto por familia em app/docs dizendo quem manda e o que quebra se mexer = a
+  camada 2 da secao 8 do CLAUDE.md.
+  3. DIAGRAMA-VIVO-EXPLICA (pedido meu de 27/09): o diagrama gerado por manage.py gerar_diagrama passa a mostrar, por bloco e em camadas
+  (familias -> familia -> juiz), a pergunta que responde, o juiz, leis, selos, numero vivo e obras abertas. Gerado do codigo, nunca a mao.
 
-● Third aval: two OBRAS items with a 20/20 trigger, no work now — and this commit is the next marco, so they go in it. Reading the OBRAS
-  table shape:
+  (B) DESCONGELAR a O98 GLOSSARIO. A L-096 segue congelando dinheiro e celula; a O98 e so documento e nao toca nucleo. Anda em RAIA
+  PROPRIA, e SO abre quando a raia do esmeril da familia celula (O228) pousar -- ocupa a vaga dela, nao soma raia nova.
+   FONTE: CLAUDE.md, LEIS.md, core/juizes.py, MAPA-JUIZES.md.
+   FAZ: app/docs/GLOSSARIO.md com termo / definicao em uma frase / onde mora (arquivo::funcao, ancorado por grep) / lei / selo. Entram no
+  minimo: celula soberana, tabuleiro, lampada, ata, lavra, cartorio, juiz, supra_juiz, testemunha, DNA, marco, furo, orfao, raia, pouso,
+  sombra, regua, selo, tripwire, lapide, esmeril.
+   MUDA: CLAUDE.md:365 deixa de apontar para "memoria [[mapa-sistema]]" e aponta para arquivo do repo; CLAUDE.md e PRIMER apontam o
+  GLOSSARIO. Eu colo o texto do mapa antigo quando a raia abrir -- pedir no RELATO.
+   LINHA HAIKU: o card mensageria/nucleo/cards/glossario.md passa a ser GERADO do GLOSSARIO.md, nao escrito a mao.
+   SELO de host: termo do glossario cujo "onde mora" nao existe no grep = VERMELHO; ponteiro para memoria dentro de CLAUDE.md = VERMELHO.
+   PROIBIDO: definicao sem ancora, segunda lista de termos em outro arquivo, juiz novo, tocar codigo de nucleo.
+   PRONTO: RELATO com contagem de termos, selo verde nomeado, CLAUDE.md:365 corrigido, card gerado e commit. Faltando um = INCOMPLETO com
+  a lista.
 
-● Ver quem le o topo do RELATO
-  ⎿  $ cd /home/ronald/saas-hasner/bin; grep -rln 'LEI QUE FALTA\|RELATO.md' tests/*.sh *.py *.sh 2>/dev/null | tr '\n' ' '; echo; grep -rn
-     'LEI QUE FALTA' . 2>/dev/null | head -5 | cut -c1-140
-  ⎿  Read AVAIS.md (24 lines)
-  ⎿  Read HANDOFF-SESSAO.md (47 lines)
-  ⎿  Referenced file ../core/tests/test_o223_porta_humana_da_aplicacao.py
-  ⎿  Read ../core/management/commands/semear_aplicacao_convencao.py (128 lines)
-  ⎿  Referenced file ../ponto/services/cartorio.py
-
-● Task "RED e construção do segundo intervalo" completed in background
-
-● Task "O199 na raia wt-bos" still running in background
-
-✢ Proofing… (17h 35m 45s · ↓ 2.1m tokens)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+  Segue a fila; PAREI so em lei ou !
+  ctrl+x ctrl+s to send now
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ Press up to edit queued messages
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Grepping tests asserting acao_validar_pergunta messages                                     27m 26s · ↓ 96.1k tokens
+  ◯ general-purpose  Running test_o199_aceite_de_folga suite recut                                              32m 40s · ↓ 119.7k tokens
   ⧉  index
 ```
