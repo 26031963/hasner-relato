@@ -161,6 +161,43 @@ era o unico uso.
 (os 12 casos do modulo mais os 3 do selo, juntos); `ruff check folha/` no container ->
 `All checks passed!`; e a pasta inteira de selos de host (**66**) sem um vermelho.
 
+### A0-b, A MEDICAO ANTES DO CODIGO: **A IMPRESSAO DIGITAL DO GRAVADO TEM TRES COPIAS, E A TERCEIRA DISCORDA DAS OUTRAS DUAS EM UM CAMPO** (10/10 04:0x)
+
+A lista de pendentes mandava eu LER `lavrar_dias_pagos::_hash_dos_fechamentos` em vez de aceitar
+que ele e *"o mesmo universo"* das outras duas -- porque essa frase saia de **duas docstrings**, e
+nao de mim. Lido, e o contrario:
+
+**PROVA, por comando:**
+- `ponto/management/commands/carimbo_gravado.py:27-28` -> `FORA` com **11** nomes;
+- `ponto/portas/regen_exportada.py:35-36` -> `_FORA_DO_HASH` com os **MESMOS 11**;
+- `ponto/management/commands/lavrar_dias_pagos.py:68-69` -> `_fora` com **10**. O que falta e
+  **`previsto_em`** -- isto e, o terceiro **INCLUI** no hash o campo que os outros dois excluem.
+
+E a casa ja escreveu por que ele tem de ficar fora, com data: `hash_do_gravado` diz
+*"`previsto_em` fica FORA do universo, e a razao foi medida em 29/09: ele e carimbo de controle e
+muda a cada recalculo, entao inclui-lo faria o hash acusar mudanca em toda corrida -- ruido que faz
+a proxima pessoa parar de olhar o alarme"*. E **exatamente o campo** que o `invalidar_previsto`
+(`ponto/services/fechamento.py:965`) anula em TODA competencia do colaborador a cada mudanca de
+escala -- os **123 de 125** que fizeram o meu contador ser 98% ruido. Ou seja: a terceira copia
+carrega o defeito que as outras duas ja curaram, e a diferenca entre elas e de **um nome**.
+
+Mais tres fatos que decidem a forma da A0-b, e nenhum deles vem de docstring:
+1. os **tres** derivam os nomes de `FechamentoMensal._meta.concrete_fields` (campo novo entra sem
+   ninguem lembrar) -- isso e **bom** e se preserva; o que nao se preserva e o conjunto de
+   exclusao escrito **tres vezes**;
+2. `_hash_dos_fechamentos` **nao e persistido**: e `md5` truncado em 12, calculado em memoria por
+   corrida e **impresso**. Entao **nao** e um baseline sem migration, como eu havia suposto -- a
+   suposicao morreu aqui, antes de virar codigo;
+3. `logs/carimbo_gravado/` tem **0 arquivo**, entao nao ha foto velha de onde partir. O baseline da
+   A0-b nasce no `ExportacaoDominio.registrar` -- no ato em que o TXT sai da casa --, que e o unico
+   instante em que *"o gravado que gerou ESTE arquivo"* existe sem precisar de passado.
+
+**Nao se cura aqui**: a A0-a esta no portao de pouso e e deduplicacao pura em 5 arquivos de `folha/`
+com a suite cheia ja medida contra essa arvore -- tocar `ponto/` agora invalida a medicao e faz a
+fatia deixar de ser o que a sua propria linha diz que e. A cura e a A0-b, **o proximo passo deste
+mesmo item**, e ela nasce ja sabendo que **o juiz da impressao do gravado e UM** e que
+`previsto_em` fica fora dele.
+
 ### O `!` QUE A CLAUSULA 1 PEDE (nao devolve turno -- a fila segue em A0-b)
 Tirar o `raise CompetenciaExportada` de `ponto/services/fechamento.py:72-77` e **`!` de dinheiro
 exportado** pelo item (c) da DINHEIRO-EM-COMPETENCIA-ABERTA, e esta na lista NUNCA PRE-APROVADO.
