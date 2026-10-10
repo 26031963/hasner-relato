@@ -1,15 +1,22 @@
 # ESTADO -- o repo e a sessao agora
 
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:23 AFIRMA ato sem PROVA ao lado -- nas celulas **[2] e [3]** e `_NAO_ANDA` na **[3]**. `**NO AR**` na celula do portao seria a certidao de
+>
+> O RELATO nao entrou neste ciclo porque uma afirmacao de ato
+> (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
+> seguem valendo -- eles descrevem, nao afirmam ato.
+
+
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 12:22:31.**
+**Medido em 10/10/2026 12:28:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `0093834b [O224] as duas tabelas de lookup saem do CLAUDE.md e o PRONTO passa a ser o numero que isso deu: -7.437 chars nesta fatia, -11.829 na obra, e a pergunta de lei que eu levei ao topo foi o que a fechou` |
+| `HEAD` local | `cb6cd342 [O228] pouso da metade CELULA: os tres sitios sem chamador entram na principal, e a raia NAO vaga -- a familia turno abre nela` |
 | `origin/main` | `d20a0e45 [O219] pouso: os docs do marco A0-b entram junto, e o merge que eu pedi sem commit virou FAST-FORWARD -- o codigo estava na arvore viva antes deste commit` |
-| commits a subir (`ahead`) | **5** |
+| commits a subir (`ahead`) | **7** |
 
 ## Fabrica
 
@@ -22,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+cb6cd342 [O228] pouso da metade CELULA: os tres sitios sem chamador entram na principal, e a raia NAO vaga -- a familia turno abre nela
 0093834b [O224] as duas tabelas de lookup saem do CLAUDE.md e o PRONTO passa a ser o numero que isso deu: -7.437 chars nesta fatia, -11.829 na obra, e a pergunta de lei que eu levei ao topo foi o que a fechou
 9cf55592 [O224] a narrativa sai de perto da regra: 57 lapides com ponteiro, -6.898 chars, e a prova e de palavra -- o PRONTO de -10k pede REGRA e nao se alcanca aqui
 04392fe4 [O223] pouso B: a Empresa entra no censo de cadastro, e o custo que eu havia declarado em 7 foi medido em 15
 3b2c4f98 [O223] pouso A, 2 de 2: o link do hub entra DEPOIS do reload, e a prova que eu havia dado dele era vazia
-ae775a7b [O223] pouso A: a linha que diz QUAL CCT vale em QUAL empresa ganha porta humana, e o campo que escolhe entre piso legal e CCT deixa de se escrever por shell
 ```
 
 ## `git status --short`
@@ -34,7 +41,10 @@ ae775a7b [O223] pouso A: a linha que diz QUAL CCT vale em QUAL empresa ganha por
 ```
  M app/config/crons_duracao.json
  M app/docs/HANDOFF-SESSAO.md
+A  bin/esmeril_celula_censo.py
+A  bin/esmeril_celula_censo_de_hoje.txt
  M bin/sonda_frota.sh
+A  bin/tests/test_esmeril_celula_censo.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -123,44 +133,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-    contra a cópia que a suíte rodou → commit -F → deploy.sh --sem-migrate), executável e não rodado
-  - portão do deploy conferido: logs/crons_em_curso/ vazio, sombra: carimbo dia=20261010 status=OK tipo=completa diverge=0 erros=0
+  marco (L-106).
 
-  A suíte (bz7gxb5rh, trava pouso-celula:1261330) segue correndo — 67.774 bytes às 11:59, zero linha Ran N tests ainda; a linha de base da
-  raia foi Ran 10242 tests in 1382.950s, ~23 min, e ela começou 11:54. A árvore viva segue intocada em 0093834b.
+  (1) RELATO-CURTO: secao de marco no RELATO com teto de 25 linhas. Entra SO: titulo, linha LEI-AKITA, o que mudou (arquivo::funcao), os
+  numeros medidos, a PROVA ao lado de cada ato, commit, e o que ficou INCOMPLETO em lista. A historia do caso ("nasceu medida", "o caso e
+  meu", a narrativa do caminho) sai do RELATO e mora no corpo do commit e, quando virar regra, em LAPIDES.md. NAO muda: pergunta de lei no
+  TOPO com numeros, linha PAREI, tabela PENDENTES, DIFF de frota antes de apply de dinheiro. Selo de host: secao nova com mais de 25
+  linhas = VERMELHO; secoes ja escritas nao se reescrevem.
+   CUSTO: nenhum caso faz o Code parar; so encurta o que ele escreve.
 
-  Espero a saída do shell de fundo (é ele o sinal; não vou poluir com polling). Quando o veredito cair: leio com a forma da casa (grep -E
-  '^(OK|FAILED)( \(|$)' | tail -1 mais ^Ran  | tail -1), monto $SC/msg.fullcom a cauda MEDIDO, e se verde rodo$SC/ato.sh`.
+  (2) MORATORIA-DE-LEI ate contratos_estruturais = 20/20: o Code nao numera nem propoe lei nova por iniciativa propria. Lei nova so nasce
+  de corte meu literal. Caso que parece pedir lei vai ao topo do RELATO como pergunta, com numeros, e a fila segue
+  (PAREI-DE-LEI-NAO-DEVOLVE-TURNO).
+   CUSTO: nenhuma parada nova; o que muda e que achado vira pergunta em vez de lei.
 
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: PLACAR-ESTRUTURAL -- O ESTRUTURAL SE SEPARA DO DADO (corte dele 02/10 22:5x, que SUBSTITUI o item 3 da
-  ordem das 21:4x -- o resto d
+  (3) REGISTRAR, sem obra agora, dentro da O243 ESMERIL-3-VALIDACAO como complemento (nao e id novo): CENSO-DE-TESTES -- por familia,
+  classificar cada teste em GUARDA (selo/contrato, permanente) ou ANDAIME (RED de cura ja coberta por selo); andaime so sai com certidao:
+  a lei tem selo, e o selo MORDE quando o codigo e quebrado de proposito. Primeiro passo, que pode entrar ja como instrumento quando
+  houver vaga: medir a duracao por teste da suite e publicar os 30 mais lentos. PROIBIDO podar teste antes do censo da familia.
 
-  Ran 7 shell commands
+  Segue a fila; PAREI so em lei ou !
+
+● Três cortes recebidos. Registro vem no marco (L-106) — primeiro fecho o merge do instrumento, que está em curso com índice montado. Vendo
+  o sítio da varredura complementar:
+
+  Ran 1 shell command
 
 ● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-  Searched for 1 pattern, ran 25 shell commands
-
-● Background command "Rodar a suite na copia mergeada, banco proprio" completed (exit code 0)
-
-  Corrigir o numero de arquivos na cabeca da mensagem
-  ⎿  $ SC=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/pouso-celula; cd
-     /home/ronald/saas-hasner && echo "medido agora: commits=$(git rev-list --count b5700cbb..HEAD) arquivos=$(git diff --name-only
-     b5700cbb HEAD | wc -l)"; python3 - "$SC/msg.head" <<'PY'…
-
-✢ Compacting conversation… (18h 27m 45s · ↓ 2.2m tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱ 92%
+✢ Proofing… (18h 33m 15s · ↓ 2.2m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    0% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Running full suite via suite.sh                                                         1h 19m 26s · ↓ 160.0k tokens
+❯ ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
+  ◯ general-purpose  Running full suite via suite.sh                                                         1h 24m 56s · ↓ 160.0k tokens
   ⧉  index
 ```

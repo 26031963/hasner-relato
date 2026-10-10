@@ -235,7 +235,7 @@ lista — ela e o que esta EM PE._
 | **O225** | UM ROTULO DE EFEITO SEM NENHUM LEITOR DE TEMPLATE | livre -- e tela e tag, nao numero. Fila  |
 | **O226** | DUAS VERDADES SOBRE "ESTE PARAMETRO TEM EFEITO" | livre. Fila de INSTRUMENTO (ordem dele d |
 | **O227** | O GUARDA DA L-092 RECUSA LEITURA | livre -- nao toca numero, so quem pode P |
-| **O228** | ESMERIL-CELULA-TURNO | **fila 1 no FIM**, junto de R6 item 4 e  |
+| **O228** | ESMERIL-CELULA-TURNO | **raia PROPRIA** (`raia-celula`), nao ma |
 | **O229** | OS IRMAOS DA O145 -- o que o censo dos dois leitores achou e a O145 NAO cura | **na fila, nenhum comecado** -- nascem d |
 | **O230** | SONDA-LEITURA-[nome]: o dev da casa le TUDO e nao escreve em nada | **POUSO 1 FECHADO** 09/10 14:1x: `bin/so |
 | **O231** | LASTRO-MEDE-DUAS-VEZES | espera `!` |
