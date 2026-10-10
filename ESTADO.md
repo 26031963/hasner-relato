@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:135 AFIRMA ato sem PROVA ao lado -- nas celulas **[2] e [3]** e `_NAO_ANDA` na **[3]**. `**NO AR**` na celula do portao seria a certidao de
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:149 AFIRMA ato sem PROVA ao lado -- nas celulas **[2] e [3]** e `_NAO_ANDA` na **[3]**. `**NO AR**` na celula do portao seria a certidao de
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 15:30:01.**
+**Medido em 10/10/2026 15:35:31.**
 
 | | |
 |---|---|
@@ -40,7 +40,9 @@ dc1c84ec [O228] pouso do INSTRUMENTO da familia turno em ato proprio: o censo na
 
 ```
  M app/config/crons_duracao.json
+ M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/RELATO.md
  M bin/sonda_frota.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -130,38 +132,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+● New aval received mid-turn. Running the portão to see the actual flagged act rather than guessing from the line number, since my insert
+  shifted the file by 14 lines:
 
-● Seal green on a copy of the post-pouso main: 4 at-zero sitios = baseline, and MORDE proves it bites (4 → 5 with the planted sitio). The
-  catraca holds, so it lands as the raia has it. Running the merge window:
+  Ran 2 shell commands
 
-  Ran 1 shell command
-
-● Both landed — O228 INTEIRA está no main: produto 31fce87c, instrumento dc1c84ec, and the 3 pre-existing dirty files stayed out of both.
-  Two things to check rather than assume — the instrumento pouso carried zero docs, and the precedent 8735524c is the test of whether
-  that's the house's form:
+● The portão names it precisely: :149 (his :110 predates my 14-line insert). Reading the actual act in full before deciding between the two
+  cures he offered:
 
   Ran 1 shell command
 
-● The precedent is decisive: 8735524c carried RELATO +23, BACKLOG, LEIS, PROMPTS — an instrumento pouso does carry its docs. Mine carried
-  zero, so the marco's section is missing and L-106 forbids fixing it as a docs-only commit. Gathering the facts before choosing the
-  repair:
+● The flagged line is a false positive of the house's own known family: :149 contains the token NO AR only as prose explaining why not to
+  write it ("**NO AR** na celula do portao SERIA a certidao de obito") — a hypothetical, and NEGA doesn't reach it because the "NAO FECHA"
+  sits on :148. Same shape as commit-que-explica-parado-cita-parado: the prose explaining the mechanism gets read as the act. So his second
+  cure is the honest one — no act happened there, and a PROVA: line would be appeasement. First, the facts his requested line needs:
 
   Ran 1 shell command
 
-● The field indices resolve: the hook's celulas[3] (estado) is the "raia PROPRIA" cell, and the raia wrote its result into the next column
-  — which _FECHADO never reads. So O228 is still open to the hook, and the estado cell is now stale. dc1c84ec is in no remote. Writing the
-  marco's docs before touching history:
+● Both avals are registered — PROMPTS.md:1132 (RECALC-09, 13:5x) and :1133 (O48, 14:0x), each with its technical decision already recorded.
+  Now the portão fix and the publish mechanism:
 
-  Ran 1 shell command
+  Ver o mecanismo de publicacao do RELATO
+  ⎿  $ cd /home/ronald/saas-hasner
+     echo "=== o que bin/relato.sh faz ==="
+     grep -nE 'afirma_com_prova|git |curl|cp |scp|publica|RELATO' bin/relato.sh | head -20
+     echo
+     echo "=== quem mais chama o portao (pre-push?) ==="
+     grep -rn 'relato_afirma_com_prova' bin/ --include=*.sh | head
 
-● Insertion goes above line 17, per the landing-order decision already registered in the produto commit. Writing both doc edits with
-  anchors:
-
-● Running 1 shell command…
-
-✢ Proofing… (21h 35m 15s · ↓ 2.5m tokens)
+✢ Compacting conversation… (21h 40m 45s · ↓ 2.5m tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱ 70%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                   12% until auto-compact
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
