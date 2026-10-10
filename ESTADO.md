@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 05:07:31.**
+**Medido em 10/10/2026 05:13:01.**
 
 | | |
 |---|---|
@@ -35,6 +35,7 @@ a364847b [O218] corretivo: a guarda da sombra volta a ter UM sitio, e o selo que
  M app/config/crons_duracao.json
  M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/RELATO.md
  M app/docs/TICKETS.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -123,38 +124,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Erro da minha sonda, não do sistema: o campo é gerado_em. Corrijo:
+  tipo, valor. Nenhum nome. Então o diff de linhas pode ser impresso. E folha/services já existe:
 
   Ran 1 shell command
 
-● Background command "Push the marco to origin with the pre-push battery" completed (exit code 0)
+● Linha é 43 chars com posições fixas (10+mat10+comp6+rub4+11+val9+cod10), então o diff se desmonta de volta em matrícula/rubrica/valor sem
+  heurística. Leio o modelo antes do RED:
 
-● O push fechou (exit 0) e a medição respondeu. Confiro o veredito no remoto primeiro:
+  Ran 2 shell commands
 
-  Ran 1 shell command
-
-● Push confirmado no remoto: 374b7712346c9453f4a96ed56d7a580e8da00aad refs/heads/main, a364847b..374b7712 main -> main, control-plane Ran
-  22 tests / OK, pre-push: OK — push liberado, 0 a empurrar, trava livre. Um push por marco, cumprido.
-
-  Agora a obrigação pós-push — bin/tickets_rodape.sh --escrever sozinho, nunca o pos_push.sh:
+● anotar_vigencia decide vigência por (gerado_em, pk) e ignora invalidada_em — então um TXT invalidado sem substituta continua sendo o
+  vigente derivado. Isso é contrato da Q1 e não decido por feeling:
 
   Ran 1 shell command
 
-● Rodapé escrito: push 374b7712 (10/10 04:47) · regua 04/10 17:26 · serie T 110. Agora a medição da Q2, que mudou o universo dela — e não
-  só o número:
+● Medido e limpo: 5 invalidadas, todas com substituida_por, todas NÃO vigentes — invalidadas que são vigentes: 0. Os 7 vigentes: emp2
+  08+09, emp3 07+09, emp4 06+07+09, nenhum com hash vazio ou total_linhas=0.
 
-  Ran 1 shell command
+  Mas o modelo permite substituida_por=None, então "invalidada e ainda vigente" é estado alcançável: aí o vigia não pode alarmar "o gravado
+  mudou debaixo do TXT entregue" sobre um arquivo que alguém já revogou. É a diferença entre terceiro estado alcançável e mordido por
+  teste (honesto reportar 0) e terceiro estado decorativo. Reuso o fixture da A0-a em vez de inventar:
 
-● Agora a raia recebe o pouso, para o próximo diff dela ser só a A0-b:
+  Ran 2 shell commands
 
-● Fast-forward the raia to carry the landed marco
-  ⎿  $ cd /home/ronald/wt-l113 && echo "== antes =="; git log --oneline -1; git status --porcelain | head -5; echo "== ff =="; git merge
-     --ff-only main 2>&1 | tail -5; echo "rc=$?"; echo "== depois =="; git log --oneline -1; echo "== diff raia x main =="; git rev-list
-     --count main..HEAD; git rev-list --…
+● Tenho o contrato inteiro. Um detalhe que a leitura da linha impõe e que eu teria errado: a linha não carrega o tipo (dias x horas) — o 11
+  é constante. Então o vigia publica o campo valor como está no arquivo, nunca dividido por 100 como "horas": derivar aqui seria
+  testemunha com regra própria (LEI-AKITA 2). Escrevo o RED:
 
-✢ Proofing… (11h 12m 45s · ↓ 1.3m tokens · thinking)
+  Running 1 shell command…
+
+✢ Proofing… (11h 18m 15s · ↓ 1.3m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                   11% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

@@ -355,6 +355,105 @@ PORTA e que ela *"nunca toca `conteudo` nem `hash_sha256`"*, e 06/2026 e' compet
 
 ---
 
+### A0-b, A TERCEIRA DECISAO MEDIDA: **EU IA CONSTRUIR UMA BASELINE QUE JA EXISTE** (10/10 05:0x)
+
+Eu tinha a A0-b empacotada como UMA fatia: o vigia, a extracao da impressao digital para
+`ponto/services/` e a persistencia da baseline da `foto()` no `registrar`. Tres decisoes num
+pacote, e a primeira nao depende das outras duas -- o que e' o bastante para o pacote estar errado.
+
+O que desfez o pacote foi ler o que a A0-a acabou de pousar, nao raciocinar sobre ele: o
+`conteudo` guardado em `ExportacaoDominio` **JA E uma baseline persistida**, e do universo
+exatamente certo -- o `entra_set` do momento do export, porque foi `montar_linhas_export` quem o
+montou (`folha/export.py:457`). Um diff de **linhas** entre o guardado e o regerado ja nomeia
+matricula + rubrica + valor, isto e, **QUEM** e **O QUE**. Sem nenhuma `foto()`.
+
+O que a `foto()` acrescenta e' mais fino, e e' por isso que ela nao e' o alarme: *qual CAMPO do
+`FechamentoMensal` mexeu*, e a discriminacao "o gravado mexeu" contra "a traducao para TXT mexeu".
+Isso e' detalhe forense **depois** do alarme. Construir a persistencia dela agora seria pagar uma
+migration (ou um arquivo escrito de dentro de um request do `saas_ui`) para responder a segunda
+pergunta antes de a primeira existir.
+
+E a persistencia nao esta nem medida: *"no `registrar`"* diz QUANDO, nao ONDE. A `PASTA` de hoje e'
+`os.path.join('logs','carimbo_gravado')` (`ponto/management/commands/carimbo_gravado.py:30`) e
+`logs/carimbo_gravado/` tem **0 arquivos**; antes de escolher esse caminho e' preciso PROVAR que
+`app/logs` e' bind-mount duravel na casca do `saas_ui`, e nao tmpfs. Baseline em tmpfs nao e'
+baseline. Fica como terceira decisao, com a medicao antes dela.
+
+Entao o corte: **A0-b = Q1 + Q2 + diff de linhas + `ENC`**, leitura pura, zero mudanca em caminho
+de escrita -- a mesma forma de instrumento da A0-a. A extracao de `FORA`/`campos_do_fechamento`/
+`foto`/`_mudou` vira marco PROPRIO de dedup, e e' ela que cura o 10-contra-11 do
+`lavrar_dias_pagos._fora` medido por AST em 04:0x. Nao se empacotam tres decisoes quando as duas
+primeiras nao dependem da terceira.
+
+### A0-b, A QUARTA DECISAO MEDIDA: **O GATILHO DO VIGIA E UM ARQUIVO, E A CAUDA DA CADEIA JA ESTA ESCRITA** (10/10 05:0x)
+
+A pergunta era em que minuto o vigia roda, e ela esta mal feita. Nenhum cron escreve
+`FechamentoMensal`: a escrita e' por EVENTO, via `recalcular_por_evento`. Entao nao existe
+"escritor agendado" para pendurar o vigia, e qualquer minuto que eu escolhesse seria aposta -- o
+que o proprio `ENC` ja diz em docstring: *"Horario e uma aposta sobre duracao; arquivo e um fato"*.
+
+Medido em `config/crons.py`, nao suposto. A cadeia `ENC` viva, encadeada por ARQUIVO, e':
+
+`processar_cartorio` -> `apurar_furos_diarios` (:1235) -> `disparar_perguntas_competencia` (:1247)
+-> `reconciliar_perguntas_orfas` (:1250) -> `lavrar_deslogados` (:1263) -> `lavrar_he_pendente`
+(:1278) -> **`recusar_ponta_pequena`** (:1291)
+
+Nenhum `ENC` tem `gatilho='recusar_ponta_pequena'`: ela e' a **CAUDA**, e e' justamente a cadeia que
+poderia mexer em HE e em ponta, isto e, no que vira dinheiro. Logo o vigia espera o carimbo
+`logs/fim/recusar_ponta_pequena.<emp>.<dia>` que o `bin/cron_run.sh` deixa (`crons.py:47`), com a
+razao escrita: **nada agendado escreve o gravado; o vigia le depois de tudo que PODERIA ter
+escrito.** A entrada fica DECLARADA em `ENCADEADOS`, para contrato nao ficar verde por ausencia de
+sinal.
+
+O candidato que eu ia usar por reflexo era o ultimo por *schedule*: medi 54 entradas `C()` com
+minuto fixo entre 04h e 09h, e a ultima e' `pautas_do_esmeril` as **08:40** (`crons.py:489`).
+Schedule e' aposta; a cauda da cadeia e' fato. No MESMO commit muda a celula de `carimbo_gravado`
+em `FORA_DE_PIPELINE` (`crons.py:601`/`:625`/`:632`), que e' onde a bifurcacao esta escrita --
+*"ou ele vira cron da competencia exportada ou sai daqui com o command"* -- e a secao 7 do
+CLAUDE.md.
+
+### A0-b, A QUINTA DECISAO MEDIDA: **DUAS PERGUNTAS, DOIS UNIVERSOS, E DOIS TERCEIROS ESTADOS QUE NAO SAO O MESMO** (10/10 05:0x)
+
+Eu ia escrever "tres estados nas duas perguntas" e deixar o leitor supor que o terceiro estado e' o
+mesmo. Ele nao e', e unificar os dois e' precisamente o que faz o alarme do pk=2 voltar.
+
+A **Q1** -- *"o TXT que saiu da casa ainda e' o que o gravado de hoje montaria?"* -- ja tem os tres
+estados, e eles sao da A0-a (`folha/export.py:413-455`): `tem_export=False` e' o INCOMPARAVEL, com
+o motivo escrito *"nao ha TXT vigente nesta competencia: nada saiu da casa"*; `divergente=False`
+bate; `divergente=True` diverge. E o `hash_sha256` e' comparavel para **toda** linha, inclusive
+pre-0005, porque ele sempre foi computado do conteudo no ato do `registrar`.
+
+A **Q2** -- *"o conteudo guardado bate com a prova guardada?"* -- NAO herda esse corte. O
+INCOMPARAVEL dela e' outro: *nasceu antes de o campo `conteudo` existir*. Medido em prod agora:
+
+- `folha/0005_exportacaodominio_conteudo` aplicada em **2026-07-02T10:13:20-03:00**
+- registros: **26** · VIGENTES: **7** -- nascidos antes da 0005: **0** · conteudo vazio: **0**
+- NAO vigentes (versao anterior guardada): **19** -- nascidos antes da 0005: **1** (o pk=2)
+
+A minha suposicao estava certa, e e' exatamente por isso que ela e' uma armadilha: **se a Q2 olhar
+so o vigente, ela da 7 comparaveis e 0 incomparaveis -- e o terceiro estado nasce VAZIO**, isto e,
+nasce por ausencia de sinal, que e' o selo vacuo que a casa proibe por regra. A lei do
+TXT-fotografia promete que as versoes anteriores ficam guardadas em silencio com conteudo, hash,
+data e quem gerou; quem guarda tem de provar que o guardado continua inteiro. Entao a Q1 pergunta
+sobre o **VIGENTE** (7) e a Q2 pergunta sobre o **ACERVO** (26) -- e e' no acervo que o terceiro
+estado tem **1** ocupante que MORDE. Universo unico aqui seria conveniencia: ou a Q2 ficaria cega
+para 19 versoes guardadas, ou o terceiro estado dela seria decorativo.
+
+O corte da Q2 continua sendo a data de APLICACAO da migration lida do `django_migrations`, e nao o
+atalho `conteudo == ''`: o atalho leria uma escrita genuina pos-0005 como INCOMPARAVEL em vez de
+DIVERGENTE -- trocaria um defeito por um silencio.
+
+E os dois eixos do censo ficam separados na escrita, porque apontam para lados opostos por razoes
+opostas: **populacao = UNIAO** do `entra_set` da baseline com o de hoje, porque quem SAIU do TXT e'
+precisamente a divergencia que se quer ver; **campos = INTERSECCAO**, que e' a regra que o
+`_mudou()` ja documenta, porque campo que entra ou sai do modelo e' VOCABULARIO, nao dado -- tirar
+`previsto_em` do universo fez uma foto nova relatar 454 mudancas espurias, todas
+`previsto_em: <data> -> None`. Uma frase nao pode colapsar os dois.
+
+Erro de sonda no caminho, registrado para nao voltar: o campo e' `gerado_em`, nao `criado_em` --
+`AttributeError` no primeiro tiro. A excecao pegou o erro antes de a conclusao sair, que e' o
+contrario da sonda que conta erro e segue imprimindo zero.
+
 ### O `!` QUE A CLAUSULA 1 PEDE (nao devolve turno -- a fila segue em A0-b)
 Tirar o `raise CompetenciaExportada` de `ponto/services/fechamento.py:72-77` e **`!` de dinheiro
 exportado** pelo item (c) da DINHEIRO-EM-COMPETENCIA-ABERTA, e esta na lista NUNCA PRE-APROVADO.
