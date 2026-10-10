@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 00:41:01.**
+**Medido em 10/10/2026 00:46:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `f415e116 [PLACAR-ESTRUTURAL] instrumento: o placar deixa de poder dizer que esta fora do ar um commit que o git ja tem no tronco` |
+| `HEAD` local | `353818c5 [O207] pouso: a terceira opcao do Inicio da apuracao entra no ar no mesmo ato do merge, e o smoke dele fecha o W12X36-HPD achando um BO de tela` |
 | `origin/main` | `f415e116 [PLACAR-ESTRUTURAL] instrumento: o placar deixa de poder dizer que esta fora do ar um commit que o git ja tem no tronco` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -22,22 +22,18 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+353818c5 [O207] pouso: a terceira opcao do Inicio da apuracao entra no ar no mesmo ato do merge, e o smoke dele fecha o W12X36-HPD achando um BO de tela
+4831eb93 [O207] a tela do assistente de fase ganha a terceira opcao -- a data que o admin DECLARA --, e a inativa sobreposta deixa de cobrir o trecho de outra vigencia
 f415e116 [PLACAR-ESTRUTURAL] instrumento: o placar deixa de poder dizer que esta fora do ar um commit que o git ja tem no tronco
 1c281f92 [PLACAR-ESTRUTURAL] BATERIA: a contagem que envelheceu em horas pela minha propria mao passa a ser a dos modulos que a fonte nomeia
 ec4b1994 [PLACAR-ESTRUTURAL] R3: a linha que dizia a O130 fora do ar passa a dizer o que o git diz, e quem a desmentir fica vermelho
-1c5b2e20 [O206] cura: a lapide do dono da cobranca para de nomear o delimitador que o selo varre, e o render nao se move um byte
-b5700cbb [O206] pouso: o aviso de pergunta sem resposta para de mandar na acao que APAGA resposta, e cobrarChamado passa a ter uma definicao so
 ```
 
 ## `git status --short`
 
 ```
  M app/config/crons_duracao.json
- M app/docs/AVAIS.md
  M app/docs/HANDOFF-SESSAO.md
- M app/docs/PENDENTES_RONALD.json
- M app/docs/PROMPTS.md
- M app/docs/RELATO.md
  M bin/sombra.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -126,42 +122,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  Ran 1 shell command
 
-● Agora o desenho está claro, e ele é deliberado: _tem_trabalho_em_curso() não libera — só congela o teto. O comentário é explícito:
-  "Enquanto a prova esta rodando, o hook COBRA." Então a casa quer que eu siga trabalhando sobre a prova, não que eu encerre. E há trabalho
-  real nela: o log da suíte já pode dizer se a falha herdada morreu no merge, que é a afirmação central do pouso:
+● O pouso fechou num ato só, rc=0 — commit 353818c5, três cascas recarregadas juntas e três rotas provadas. O portão da sombra foi lido
+  duas vezes com a mesma resposta (meu gate e o do deploy.sh), que era exatamente o ponto de ter um portão.
+
+  Agora o push, com o veredito lido no remoto:
+
+  Ran 1 shell command
+
+● Exatamente o escopo desenhado: 12 arquivos, e os três que tinham de ficar fora ficaram — crons_duracao.json (cron-sujo, nunca commitado),
+  bin/sombra.sh (instrumento O218, pouso próprio pela L-105) e o HANDOFF-SESSAO.md derivado. Os dois commits a empurrar são meus, nenhum
+  do integrador.
+
+  Um push por marco, pela régua normal:
+
+  Ran 1 shell command
+
+● O push corre com a régua inteira pela frente; não escrevo na árvore enquanto ele carimba. Uma leitura que é deste marco — o aval do
+  RELATO pedia conferir que a faixa de retenção sumiu:
 
   Ran 2 shell commands
-  ⎿  Read docs/AVAIS.md (26 lines)
-  ⎿  Read docs/HANDOFF-SESSAO.md (47 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/blfy3t2pb.output (12 lines)
-  ⎿  Referenced file ponto/turnos.py
-  ⎿  Referenced file ponto/tests/test_bateria_lavratura.py
 
-● Task "RED e construção do segundo intervalo" completed in background
+● O selo do RELATO fecha o aval dele: afirma_com_prova: OK — 0 afirmacao sem prova. A faixa de retenção que ele mandou conferir sumiu.
 
-● Background command "Run the full suite against the merged copy" completed (exit code 0)
-
-● Background command "Rebuild the sombra with today's dump and run the morning block" completed (exit code 0)
-
-● Os dois veredictos chegaram, cada um pela sua autoridade:
-
-  - suíte da cópia mergeada: OK (skipped=42) sobre Ran 10253 tests — CHEIA, não recorte, e 0 FAIL/ERROR no log (a falha herdada morreu no
-    merge, como o pouso afirma)
-  - sombra: bin/sombra.sh --conferir rc=0 — dia=20261010 status=OK tipo=completa diverge=0 erros=0, que é o portão byte-idêntico do
-    deploy.sh:167
-
-  Confiro o script do ato uma última vez antes de disparar o irreversível:
+  Falta a seção do pouso da O207, que só podia nascer depois do ato porque é feita dos números dele. Preparo o texto no scratchpad — não na
+  árvore, que está carimbada pelo push:
 
 ● Running 1 shell command…
 
-· Proofing… (6h 48m 15s · ↓ 797.4k tokens)
+✢ Proofing… (6h 53m 45s · ↓ 807.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens

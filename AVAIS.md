@@ -1,4 +1,4 @@
-# AVAIS NA MESA — 9
+# AVAIS NA MESA — 10
 
 > Gerado por `bin/gerar_avais.py` a partir de `app/docs/PENDENTES_RONALD.json`.
 > **So itens ABERTOS.** Item respondido SOME daqui na proxima geracao -- a historia dele fica
@@ -15,10 +15,11 @@
 | 7 | `PAUTA-DP-09-COL923-O232B` | **!** | 2026-10-09T23:25 | 09/2026 GRAVADA 35,88 h -> PASSARIA A 113,36 h (+4.649 min = +77,48 h) em 9 dia(s); matricula 2076, emp2; 09 EXPORTADA intacta nos 3 hashes | `col923: os 9 dias de 09/2026 vale **+4.649 min (+77,48 h)** -- a 09 tem **35,88 h** gravadas e passaria a **113,36 h**. (1) AUTORIZO a fatia que constroi a porta de re-lavra da competencia exportada (DIFF antes, reversao em `logs/`, TXT novo COMPLETO com o nome canonico substituindo o vigente, anter` |
 | 8 | `PAUTA-DP-09-COL735-O232B` | **!** | 2026-10-09T23:25 | 09/2026 GRAVADA 98,32 h -> PASSARIA A 102,22 h (+234 min = +3,90 h) em 1 dia(s); matricula 1960, emp2; 09 EXPORTADA intacta nos 3 hashes | `col735: o dia 10/09 de 09/2026 vale **+234 min (+3,90 h)** -- a 09 tem **98,32 h** gravadas e passaria a **102,22 h**. (1) AUTORIZO a fatia que constroi a porta de re-lavra da competencia exportada (DIFF antes, reversao em `logs/`, TXT novo COMPLETO com o nome canonico substituindo o vigente, anteri` |
 | 9 | `PAUTA-DP-09-COL736-O232B` | **!** | 2026-10-09T23:25 | 09/2026 GRAVADA 169,47 h -> PASSARIA A 172,92 h (+207 min = +3,45 h) em 1 dia(s); matricula 1961, emp2; 09 EXPORTADA intacta nos 3 hashes | `col736: o dia 17/09 de 09/2026 vale **+207 min (+3,45 h)** -- a 09 tem **169,47 h** gravadas e passaria a **172,92 h**. (1) AUTORIZO a fatia que constroi a porta de re-lavra da competencia exportada (DIFF antes, reversao em `logs/`, TXT novo COMPLETO com o nome canonico substituindo o vigente, anter` |
+| 10 | `O207-INICIO-DECLARADO-SMOKE` | **smoke** | 2026-10-10T00:25 | pouso do merge de 4831eb93; suite CHEIA sobre a arvore MERGEADA: `Ran 10253 tests in 1412.830s` / `OK (skipped=42)`, um run por vez (trava o207-merge). A falha que a raia carregava nao era dela -- test_contract_lapide_na | `smoke Ronald: abri o assistente de fase de um colab de TESTE, o Inicio da apuracao me mostrou as tres opcoes com a previa de cada uma, declarei a data e ela foi a gravada -- pode fechar o O207` |
 
 ---
 
-Total no JSON: **220** · aberto **9** · respondido **50** · sem-motivo **161**.
+Total no JSON: **221** · aberto **10** · respondido **50** · sem-motivo **161**.
 
 > `sem-motivo` nao e "resolvido": e *"ninguem julgou este item"*. A ordem de 18:4x proibe
 > triar os 163 antigos, entao eles ficam ai, nomeados, em vez de serem chutados para um lado.

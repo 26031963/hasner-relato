@@ -5,7 +5,7 @@ a raspagem usa a lista de nomes do banco como autoridade, nunca regex adivinhada
 `colNNN`/`ecNNN` ficam, porque nao identificam ninguem fora desta casa. Obra FEITA sai desta
 lista — ela e o que esta EM PE._
 
-**233 obras abertas.**
+**234 obras abertas.**
 
 | ID | obra | estado |
 |---|---|---|
@@ -215,7 +215,7 @@ lista — ela e o que esta EM PE._
 | **O204** | HORA-DO-APARELHO-LIDA-COMO-DATA | **NO AR 08/10 20:02** (`d2cf6606`, ff +  |
 | **O205** | O GATE TEMPORAL REVERTE POR ARQUIVO E NAO OLHA A ARVORE DEPOIS | **fila 2 -- e INSTRUMENTO**, e a L-105 m |
 | **O206** | PAINEL-OFERECE-COBRAR-NAO-REABRIR | espera `!` |
-| **O207** | VINCULO-INICIO-DECLARADO | **portao: RAIA wt-bos, um por vez -- 7o  |
+| **O207** | VINCULO-INICIO-DECLARADO | **RAIA wt-bos VERDE -- falta o POUSO (me |
 | **O209** | A ATA DA FROTA ESTA STALE CONTRA O JUIZ DE HOJE | espera `!` |
 | **O210** | A DERIVA DA COMPETENCIA 10: 174 de 572 fechamentos | **portao aberto** -- comp 10 aberta, app |
 | **O211** | REGUA-PELA-EMPRESA | **fila 1, logo ATRAS da O209** (ordem li |
@@ -242,3 +242,4 @@ lista — ela e o que esta EM PE._
 | **O232** | L-115 POUSO 2 -- A BORDA QUE NASCE | **POUSOS A E B NO AR 09/10.** A: -1.140  |
 | **O233** | CONTADOR DE RAIA SEM COMMIT | espera aval |
 | **O234** | O SELO DE PUBLICACAO NAO VE CONTAGEM VENCIDA | livre -- toca so `bin/tests/`, nao toca  |
+| **O235** | BO-WIZARD-DIZ-O-QUE-GRAVA | ABERTO -- **medido antes de uma linha de |
