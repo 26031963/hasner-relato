@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 08:13:01.**
+**Medido em 10/10/2026 08:18:31.**
 
 | | |
 |---|---|
@@ -137,17 +137,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-  Searched for 1 pattern, ran 3 shell commands
-
-● The link belongs next to Sindicatos. Building the copy so the suite sees it while prod doesn't:
-
-  Ran 7 shell commands
-
-● No RED log survives for the O223 module (the directory was missing when that run wrote). I will not quote one I don't have — correcting
-  the cell now and reconstituting the RED against HEAD after the suite frees the pista:
-
-  Searched for 1 pattern, ran 7 shell commands
-
 ● The import_tardio seal is RED and names exactly the live gap — its declared cure is the deploy, which is the next act. Checking who else
   writes the field, adversarially, while the suite runs:
 
@@ -161,13 +150,24 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● ESMERIL of this marco: nothing was orphaned by it (the command's inline write was replaced, not abandoned). One real finding inside the
   obra — the command's --listar still builds its own queryset instead of reading the porta. That's a fila line, not work now:
 
-● Listing the BACKLOG prova-check line numbers
-  ⎿  $ cd /home/ronald/saas-hasner && python3 bin/relato_afirma_com_prova.py app/docs/BACKLOG.md 2>&1 | grep -o
-     '^app/docs/BACKLOG.md:[0-9]*'
+  Ran 4 shell commands
 
-✢ Proofing… (14h 18m 15s · ↓ 1.7m tokens · thinking)
+● The background suite will notify on completion. Writing the TICKETS row now (docs only — it can't affect the bytes under test):
+
+● Inserting the O223 pouso A row in TICKETS
+  ⎿  $ python3 - <<'PY'
+     p='docs/TICKETS.md'
+     L=open(p,encoding='utf-8').read().split('\n')
+     i=next(i for i,l in enumerate(L) if l.startswith('| O219 |') and 'A0-b' in l)
+     cols=[
+     ' O223 ',
+     ' estrutural (familia folha/export -- cadastro que decide a REGUA), fatia **pouso A** ',
+     (' **A APLICACAO DE CONVENCAO …
+
+✢ Compacting conversation… (14h 23m 45s · ↓ 1.7m tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱ 94%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    4% until auto-compact
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
