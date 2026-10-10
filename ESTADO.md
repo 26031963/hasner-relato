@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 10:57:31.**
+**Medido em 10/10/2026 11:03:01.**
 
 | | |
 |---|---|
@@ -34,6 +34,7 @@ d20a0e45 [O219] pouso: os docs do marco A0-b entram junto, e o merge que eu pedi
 ```
  M app/config/crons_duracao.json
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/PROMPTS.md
  M bin/sonda_frota.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -123,38 +124,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 1 shell command
-  ⎿  Read docs/AVAIS.md (31 lines)
-  ⎿  Read docs/HANDOFF-SESSAO.md (47 lines)
-  ⎿  Referenced file core/tests/test_o223_porta_humana_da_aplicacao.py
-  ⎿  Read core/management/commands/semear_aplicacao_convencao.py (128 lines)
 
-● Task "RED e construção do segundo intervalo" completed in background
+  Read 1 file, ran 3 shell commands
 
-● core.hooksPath empty + .git/hooks/pre-commit executable ⇒ the hook fired; commit scope is the 8 declared files, no stray. date = 10/10
-  10:47, so the 10:4x stamps are right.
-
-  L-108: marco fechado → handoff, then orient on the O219 miolo.
-
-  Searched for 5 patterns, listed 1 directory, ran 6 shell commands
-
-● Orientation done. Writing the CONTRATO DE ENTRADA before any edit, then advisor.
+● processar_cartorio universe = 103.880 dia-colab (pulados=103609 julgadas=271), measured duration 442 s. So the first virada moves ~26k
+  from pulados to julgadas — dosage is a measurement input, exactly as the advisor said. Updating the contract with the literal-horizonte
+  reading:
 
   Ran 1 shell command
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+● Building in a copy from HEAD. First the GOLDEN hashes, computed from HEAD's own function — that's what makes RED 2/10 bite:
 
-● The dynamic-horizonte churn is a real defect — a day falling out of the window would rejulga ~17k dias every 21st on identical inputs.
-  Reading the cartório's own fila before fixing the contract.
+  Ran 4 shell commands
 
-● Look for the cartorio cron log and its duration
-  ⎿  $ cd /home/ronald/saas-hasner/logs 2>/dev/null && ls -la | grep -i cartorio | head; echo "=== ultimas linhas do cartorio.log:"; tail
-     -12 cartorio.log 2>/dev/null
+❯ aval Ronald: duas coisas. (1) O224: as tabelas de consulta (secao 5 juizes e lista de crons da secao 7) saem para arquivo proprio com
+  ponteiro, e as regras de janela vencida (RODADA 3, "um colaborador por ato", ordem da fila 2 de 29/09) vao para LAPIDES. O PRONTO passa
+  a ser o numero que isso der. (2) RAIAS: a wt-bos abre a O199 agora e a raia-celula pousa a O228 da familia celula e abre a familia
+  turno; raia com item aberto nao fica sem agente. Nenhuma lei nova. segue a fila; PAREI so em lei ou !
 
-✢ Proofing… (17h 2m 45s · ↓ 2.0m tokens · thinking some more)
+● Two orders arrived. Registering them first (PROMPT-NAO-SE-REPETE), then measuring what reads the two lookup tables before moving them.
+
+  Searched for 1 pattern, ran 2 shell commands
+
+● No seal asserts on §5/§7 content (only 4 prose citations, which a kept heading preserves). Registering both avals:
+
+  Read 1 file, ran 2 shell commands
+
+● Spawning the wt-bos agent for O199 now (its own worktree, parallel to my fila-1 work); the raia-celula pouso touches main, so I serialize
+  that one myself after the O224 commit.
+
+✢ Proofing… (17h 8m 15s · ↓ 2.0m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    1% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
