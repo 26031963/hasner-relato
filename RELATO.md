@@ -78,7 +78,7 @@ HEAD) --, e o numero esta em `logs/o223/red_head.out`.
 **MEDIDO.** `logs/o223/cura1.out`: `Ran 24 tests` / `FAILED (failures=1, errors=1)` -- as **duas** eram
 defeito do MEU teste, nao da cura: a fixture dava `rbac_gerir_usuarios` e a `form_empresa` cobra
 `editar_cadastro` (duas portas com acoes genuinamente diferentes), e `{{ motivo|default:linha.motivo }}`
-explodia com `linha=None` no caminho de recusa. `logs/o223/cura2.out`: `Ran 24 tests` / `OK`.
+explodia com `linha=None` no caminho de recusa. `logs/o223/cura2.out`: `Ran 24 tests` / `OK` -- **e este log nao e o verde desta fatia**, e eu so descobri isso conferindo a contagem antes do commit. Ele abre com `Found 24 test(s)`, e os dois modulos tem **25** casos agora (12 no da O223 e 13 no censo, contados por AST, sem nome de metodo repetido e sem decorador que pule nada): o `cura2` correu ANTES da ultima edicao dos modulos, e o mtime dele e o do arquivo de teste caem no mesmo minuto. Um caso ficou fora do verde. **Verde que nao cobre um caso nao e verde dos bytes que entram no commit**, entao o numero citado passa a ser o de `logs/o223/verde25.out`, rodado sobre a COPIA que a suite mediu -- e a cura nao foi mudar o log, foi rodar de novo. Fica aqui porque e exatamente a forma de erro que esta casa chama de numero sem medicao: o `OK` era verdadeiro, e descrevia outra arvore.
 `logs/o223/vizinhos.out` (`core colaboradores`): `Ran 1934 tests` / `OK (skipped=21)` -- e eles importam,
 porque e ali que moram `test_rota_pede_sessao`, `test_contract_configuracao_nao_mente` e
 `test_admin_so_leitura`, os contratos que rota e view novas derrubam. `ruff` limpo nos 7 arquivos.

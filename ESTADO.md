@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 08:24:01.**
+**Medido em 10/10/2026 08:29:31.**
 
 | | |
 |---|---|
@@ -137,42 +137,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  Ran 1 shell command
 
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: PLACAR-ESTRUTURAL -- O ESTRUTURAL SE SEPARA DO DADO (corte dele 02/10 22:5x, que SUBSTITUI o item 3 da
-  ordem das 21:4x -- o resto d
-
-  Ran 2 shell commands
-
-● 25 def test_ mas a cura deu Ran 24 — isso tem de ser explicado antes, não depois. Medindo por AST em vez de grep:
+● Background command "Chain the RED run after the suite finishes" completed (exit code 0)
 
   Ran 1 shell command
 
-● Ran 24 = 12 + 12, mas o censo tem 13 casos agora. Isso decide se o cura2.out descreve os bytes que vão no commit:
+● RED medido: Found 25 / Ran 25 / FAILED (failures=3, errors=7) — 10 casos vermelhos, e as 10 linhas FAIL/ERROR batem com failures+errors.
+  Agora quais, por módulo, para substituir o "dois dos 12 passavam" que vinha do log perdido:
 
   Ran 1 shell command
 
-● HEAD já tinha 13 — então 25 casos, e o cura2 disse 24. Lendo o log inteiro (605 bytes) para ver o que ele de fato rodou:
+● No HEAD: 9 dos 12 casos da O223 vermelhos e 1 dos 13 do censo (o censo dos 4 sítios) — então a emenda do censo tem RED próprio, não pega
+  carona. Nomeando os 3 que passam:
 
   Ran 1 shell command
 
-● Found 24 test(s) — o runner achou 24, o AST conta 25. A diferença de 1 é suspeita de método redefinido (nome repetido na mesma classe
-  sobrescreve e o caso desaparece em silêncio):
+● 9 vermelhos, 3 passam — e um dos 3 passa por vacuidade, o que precisa ser dito: no HEAD o form_empresa não grava o campo, então "valor
+  inválido não grava" (RED9) é verdade por ausência, e só morde junto com o RED8.
 
-  Ran 2 shell commands
+  A suite cheia ficou FAILED por uma falha, minha, já curada na cópia. Custo de tempo não é argumento (LEI-AKITA 3): re-rodo a suite
+  inteira, não só o selo:
 
-● Found 24 com 25 casos coletáveis, e nenhum nome repetido — então o cura2.out (07:46) rodou uma versão anterior aos arquivos de teste de
-  hoje. Conferindo se a cópia que a suite está medindo é byte a byte a dos commits:
+● Writing the green re-run chain
+  ⎿  $ cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/verde_apos_cura.sh <<'SH'
+     #!/bin/bash
+     # Depois da cura do `{% comment %}` no hub.html da COPIA: verde focado, selo da
+     # lapide, e a SUITE CHEIA de novo. rc 75 = a vez nao chegou, nao e vermelho.
+     cd…
 
-● Running 1 shell command…
-
-· Proofing… (14h 29m 15s · ↓ 1.7m tokens)
+✢ Proofing… (14h 34m 45s · ↓ 1.7m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                   11% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
