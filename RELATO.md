@@ -1,6 +1,6 @@
 # RELATO — esteira saas-hasner
 
-## RAIA QUE NAO POUSA — O MOTIVO EM UMA LINHA CADA (L-105, medido 10/10 06:0x)
+## RAIA QUE NAO POUSA — O MOTIVO EM UMA LINHA CADA (L-105, medido 10/10 03:3x)
 A **L-105** manda a raia que nao pode pousar dizer o motivo em UMA linha, e eu nunca tinha escrito
 essas linhas: o censo de agora acha **0** ocorrencia de `raia-celula`/`wt-celula` no BACKLOG e no
 RELATO. O contador que isto vira (*"raias com commit a frente do main ha mais de 6 h, esperado 0"*)
@@ -19,7 +19,7 @@ O que esta tabela NAO e: triagem das 47 worktrees. Ela nomeia as **6** raias com
 main agora, e duas delas saem daqui com o motivo em aberto -- escrito como aberto, que e a diferenca
 entre uma linha de L-105 e uma linha de conforto.
 
-## O219 A0-a — A FORMA DO TXT DO DOMINIO TINHA CINCO COPIAS, E DUAS SONDAS MINHAS MORRERAM ANTES DESTA (10/10 05:xx)
+## O219 A0-a — A FORMA DO TXT DO DOMINIO TINHA CINCO COPIAS, E DUAS SONDAS MINHAS MORRERAM ANTES DESTA (10/10 03:1x)
 A L-113 manda a competencia exportada deixar de BARRAR o recalculo, e o unico risco que a casa soube
 nomear contra isso foi *"o gravado passa a mudar EM SILENCIO debaixo de um TXT entregue"*. Para
 responder isso e preciso PERGUNTAR se o TXT entregue ainda e o que o gravado montaria -- e essa
