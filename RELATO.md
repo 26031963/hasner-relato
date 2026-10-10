@@ -143,6 +143,42 @@ sem enfeite: editar o `.py` depois de a suite cheia comecar faria os bytes do co
 MEDIDOS, e esta casa ja me ensinou duas vezes hoje que comentario nao e inerte -- ha selo que varre TEXTO.
 Curar custaria 23 min de suite para uma frase; declarar custa uma linha e o pouso B ja abre o arquivo.
 
+**O POUSO TEM DOIS COMMITS, E A ORDEM FOI MEDIDA, NAO ESCOLHIDA.** O primeiro commit leva o codigo, os
+tres caminhos novos do `core/urls.py` e os docs, e o `bin/deploy.sh --sem-migrate` vem nele, sem nada no meio
+(L-107). O `templates/core/config/hub.html` fica FORA dele e entra **depois do reload**, num segundo commit,
+com a tela provada por `curl`. A razao e aritmetica: o link do hub cita `{% url %}` de uma rota que nasce
+**neste mesmo marco**, e template vale no instante da gravacao enquanto o `.py` espera o reload -- gravar o
+link antes do reload poe o hub de **todos** os admins em `NoReverseMatch`, que e exatamente o 500 que eu
+causei hoje de manha no `empresa_form`. Commit de template nao precisa de reload, entao a segunda metade nao
+custa um segundo deploy.
+**A ordem inversa (deploy antes do commit) tambem dava zero 500 e foi DESCARTADA POR MEDICAO:**
+`bin/deploy.sh:326` carimba `COMMIT=$(git -C ... rev-parse HEAD)` em `logs/deploy.stamp`, e esse carimbo e
+lido por `bin/import_tardio_contra_o_ar.py` -- o vigia que decide se um vermelho nasceu **depois** do deploy e
+so entao reverte. Deployar antes de commitar escreveria `d20a0e45` como "o commit no ar" com o codigo da O223
+rodando: carimbo mentindo para o unico leitor que o usa para reverter. **Quase segui por esse ramo errado por
+causa de um grep meu:** o primeiro padrao pedia `git ` colado ao verbo e voltou **0 linhas**, porque o
+`deploy.sh` escreve `git -C <raiz> rev-parse` com o `-C` no meio -- e 0 linhas se leu como "o deploy.sh e
+git-agnostico", que e falso. Com o `-C` opcional o mesmo grep acha **2 linhas**. Criterio pela FORMA conta
+errado, e aqui contou a favor do ramo mais conveniente.
+
+**A ORDEM CUMPRIU-SE, E A PRIMEIRA PROVA QUE EU DEI DELA ERA VAZIA.** Commit do codigo `ae775a7b` +
+`deploy.sh --sem-migrate` (prova de casca: 16 estaticos, 5 paginas, 611 rotas em 2 urlconf; 3 rotas provadas;
+selo BUG 128 verde; `importerror_500=0`). A rota nova respondeu **302** deslogada contra **404** de uma rota
+inventada -- esse contraste e o que prova que ela EXISTE no worker, e nao que um catch-all respondeu. So
+**depois** disso o `hub.html` entrou na arvore viva, e `/configuracoes/` respondeu 302 nas tres tentativas.
+**Mas 302 deslogado nao prova nada sobre o template**: a view redireciona para o login ANTES de renderizar,
+entao o `{% url %}` nunca e resolvido -- eu quase assinei como prova uma ausencia de sinal, que e a doenca
+que o SELO ANTI-VACUIDADE desta casa existe para pegar. A prova que vale RENDERIZA: no mesmo molde da
+`bin/prova_de_casca.sh` (container efemero, `config.settings.saas`, sem rede, `/app` so leitura),
+`get_template('core/config/hub.html').render({})` devolveu **84.311 bytes**, os dois `reverse` resolveram
+(`/configuracoes/aplicacoes-convencao/` e `.../nova/`), o href da rota nova **aparece** no HTML e o texto da
+lapide **nao** vaza para a tela. A `prova_de_casca` nao pegaria isso sozinha: ela faz `get_template(nome)` em
+5 paginas e o `hub.html` nao esta nelas -- e compilar nao e renderizar.
+**Guarda errada minha, de novo pelo mesmo vicio:** a primeira guarda do ato 2 perguntava a rota a um
+`docker exec python`, que e processo NOVO -- le o disco, nao a memoria do worker -- e nem chega a responder,
+porque `config.settings` nao tem `ROOT_URLCONF` (o urlconf do tenant vem do compose). Quem sabe o que esta no
+ar e o worker, e pergunta-se a ele por HTTP.
+
 **O QUE SEGURA O PUSH: o smoke de clique.** A fatia toca template, e FRONT SEM SMOKE NAO SOBE -- o push
 espera o clique nas DUAS cascas.
 

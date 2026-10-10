@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 09:01:01.**
+**Medido em 10/10/2026 09:06:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `d20a0e45 [O219] pouso: os docs do marco A0-b entram junto, e o merge que eu pedi sem commit virou FAST-FORWARD -- o codigo estava na arvore viva antes deste commit` |
+| `HEAD` local | `ae775a7b [O223] pouso A: a linha que diz QUAL CCT vale em QUAL empresa ganha porta humana, e o campo que escolhe entre piso legal e CCT deixa de se escrever por shell` |
 | `origin/main` | `d20a0e45 [O219] pouso: os docs do marco A0-b entram junto, e o merge que eu pedi sem commit virou FAST-FORWARD -- o codigo estava na arvore viva antes deste commit` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -22,34 +22,20 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+ae775a7b [O223] pouso A: a linha que diz QUAL CCT vale em QUAL empresa ganha porta humana, e o campo que escolhe entre piso legal e CCT deixa de se escrever por shell
 d20a0e45 [O219] pouso: os docs do marco A0-b entram junto, e o merge que eu pedi sem commit virou FAST-FORWARD -- o codigo estava na arvore viva antes deste commit
 10de79cb [O219] A0-b: o TXT entregue passa a ser PERGUNTADO todo dia, e o alarme cai de 6 de 7 para 1 de 7 porque valor movido deixa de ser confundido com porta movida
 374b7712 [O219] pouso: a A0-a entra no main com os docs do marco, e a linha do CLAUDE.md que ensinava o veredito solto passa a ensinar o estrito
 89570af4 [O219] A0-a: a forma e a prova do TXT do Dominio passam a ter UM sitio, e o empate de carimbo deixa de poder guardar um registro e substituir outro
-a364847b [O218] corretivo: a guarda da sombra volta a ter UM sitio, e o selo que faltava nasce VERMELHO no commit anterior
 ```
 
 ## `git status --short`
 
 ```
- M CLAUDE.md
- M app/colaboradores/views.py
  M app/config/crons_duracao.json
- M app/core/management/commands/semear_aplicacao_convencao.py
- M app/core/tests/test_regua_pela_empresa.py
- M app/core/urls.py
- M app/core/views_config.py
- M app/docs/BACKLOG.md
- M app/docs/HANDOFF-SESSAO.md
- M app/docs/LEIS.md
  M app/docs/RELATO.md
- M app/docs/TICKETS.md
- M app/templates/colaboradores/empresa_form.html
+ M app/templates/core/config/hub.html
  M bin/sonda_frota.sh
-?? app/core/services/aplicacao_convencao.py
-?? app/core/tests/test_o223_porta_humana_da_aplicacao.py
-?? app/templates/core/config/aplicacao_form.html
-?? app/templates/core/config/aplicacoes.html
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -137,18 +123,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: PLACAR-ESTRUTURAL -- O ESTRUTURAL SE SEPARA DO DADO (corte dele 02/10 22:5x, que SUBSTITUI o item 3 da
-  ordem das 21:4x -- o resto d
-
-  Ran 1 shell command
-
-● Background command "Run the lapide seal then the full suite" completed (exit code 0)
-
-  Ran 2 shell commands
-
-● Stop Task
-  ⎿  F=/home/ronald/saas-hasner/logs/o223/suite_copia2.out
      until grep -q 'rc_real=' "$F" 2>/dev/null; do sleep 10; done… · stopped
 
   Ran 6 shell commands
@@ -160,13 +134,25 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● The discriminator fires — and it fires because my own grep was too tight:
 
-  Locating the hub paragraph in the commit message
-  ⎿  $ D=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
-     sed -n '30,50p' "$D/msg_o223.txt"
-     echo "......"
-     sed -n '82,98p' "$D/msg_o223.txt"
+  Ran 12 shell commands
 
-✢ Proofing… (15h 6m 15s · ↓ 1.8m tokens)
+● My guard was the wrong probe — a fresh docker exec python reads the disk, not the worker's memory, and config.settings has no
+  ROOT_URLCONF at all (the tenant urlconf is given by the compose env). Asking the running worker instead:
+
+  Ran 2 shell commands
+
+● The 302 is a vacuous proof — logged out, the view redirects before the template renders, so it never resolves the {% url %}. I need
+  something that actually renders it:
+
+  Ran 6 shell commands
+
+● The real proof — it renders, both tags reverse, and the lápide does not leak:
+
+● Reading the O223 TICKETS row and its pipe count
+  ⎿  $ cd /home/ronald/saas-hasner/app
+     awk 'NR==122{print; print "pipes=" gsub(/\|/,"|")}' docs/TICKETS.md | head -2 | cut -c1-600
+
+· Proofing… (15h 11m 45s · ↓ 1.8m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
