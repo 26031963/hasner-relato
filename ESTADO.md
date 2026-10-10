@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 19:34:01.**
+**Medido em 10/10/2026 19:39:31.**
 
 | | |
 |---|---|
@@ -129,42 +129,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Ran 22 / OK. Now the census of who else depends on that declaration — the vizinhos before the full suite:
-
-  Ran 1 shell command
-
-● versao_para showing no caller outside its own module would mean the virada moves nothing — yet the ensaio moved 1894 days. Finding the
-  real consumer:
-
-  Ran 1 shell command
-
-● The consumer is inside cartorio.py itself (:599 _regra_cache → :635/:710) — my grep excluded the file that holds it. The virada is live
-  through processar_cartorio, as the ensaio showed. Ruff first, then the targeted batch including every module that touches
-  impressao_insumos:
-
-  Ran 1 shell command
-
-● Ruff clean across all 20 touched files. Now the full targeted batch — the queda's modules plus every vizinho of impressao_insumos:
-
-  Ran 1 shell command
-
-● Three failures, and one of them is mine in a familiar way. Reading them before touching anything:
-
   Ran 2 shell commands
 
 ● Both b5u failures have one cause, and the fixture's own comment already names the law: it builds the stored impression by replicating the
   judge's call (impressao_insumos([], None, [], cel.dna)) instead of asking the judge's authority — so with regra:1 now in play the cell
   looks forever "changed" and the idempotence guard is never exercised. Curing at the origin:
 
-● Running 1 shell command…
+  Ran 1 shell command
 
-* Proofing… (1d 1h 39m · ↓ 3.0m tokens)
+● emp is in scope. Now the third failure — my lápide prose tripped a selo that scans text for CompetenciaExportada. That is the house's own
+  repeated lesson (6th time), so the cure goes in the selo: ask the AST:
+
+  Ran 2 shell commands
+
+● Ran 123 / OK — all three failures cured at origin. Every one of the 15 targeted modules is now green. Launching the full suite over the
+  copy:
+
+  Ran 1 shell command
+
+● While that runs, the marco's docs. First what the RED selo actually requires:
+
+  Ler o bloco ATO e a linha da L-113
+  ⎿  $ cd /home/ronald/saas-hasner/app/docs
+     echo "=== o bloco de ATO (ultimas linhas)"
+     awk '/^## CORTES que sao ATO, nao lei/,0' LEIS.md | head -30
+     echo
+     echo "=== a linha da L-113"
+     grep -n "L-113" LEIS.md
+
+✢ Compacting conversation… (1d 1h 44m · ↓ 3.0m tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱ 89%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    6% until auto-compact
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
