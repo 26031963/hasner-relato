@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 06:20:45.**
+**Medido em 10/10/2026 06:26:00.**
 
 | | |
 |---|---|
@@ -128,11 +128,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   Ran 1 shell command
 
-● The split works: the alarm went from 6 of 7 to 1 — and that 1 is real money. All 27 are rubrica 0025, and mat 2040 too (6000/6857 =
-  0.8750). Checking the direction of the ×7/8 against the parecer:
-
-  Ran 1 shell command
-
 ● Confirmed with a timestamp: the flag went False in 2206451b at 01/09 14:59 — and the TXT left at 01/09 10:08:07, 4h51 before cl.38-d went
   live. Computing the total:
 
@@ -144,8 +139,7 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Now the wiring. Reading the ENC structure:
 
-● Reading vigia command head
-  ⎿  $ cd /home/ronald/wt-l113/app && sed -n '1,80p' folha/management/commands/vigiar_txt_dominio.py
+  Ran 28 shell commands
   ⎿  Read docs/AVAIS.md (28 lines)
   ⎿  Read docs/HANDOFF-SESSAO.md (47 lines)
   ⎿  Referenced file folha/export.py
@@ -154,9 +148,15 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Task "RED e construção do segundo intervalo" completed in background
 
-✶ Proofing… (12h 26m 0s · ↓ 1.5m tokens · still thinking)
+● Now the carimbo_gravado fork:
+
+  Running the diagram seal (expect RED)
+  ⎿  $ cd /home/ronald/saas-hasner && ESTEIRA_QUEM=a0b-diagrama bin/suite.sh --dir /home/ronald/wt-l113 --espera 1200 --only
+     "core.tests.test_selo_diagrama_do_codigo" 2>&1 | tail -30
+
+✽ Proofing… (12h 31m 14s · ↓ 1.5m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                   10% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
