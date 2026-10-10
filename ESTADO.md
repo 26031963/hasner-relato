@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 10:00:09.**
+**Medido em 10/10/2026 10:05:31.**
 
 | | |
 |---|---|
@@ -33,6 +33,11 @@ d20a0e45 [O219] pouso: os docs do marco A0-b entram junto, e o merge que eu pedi
 
 ```
  M app/config/crons_duracao.json
+ M app/core/configuracao_efeito.py
+ M app/core/contratos_estruturais.py
+ M app/core/management/commands/semear_aplicacao_convencao.py
+ M app/core/tests/test_contract_configuracao_nao_mente.py
+ M app/core/tests/test_o223_porta_humana_da_aplicacao.py
  M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
  M app/docs/LEIS.md
@@ -127,17 +132,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Background command "Run the full suite on the copy" completed (exit code 0)
-
-● The gate reads only RELATO.md and RELATORIOS-PLANO.md — the 88 hits in BACKLOG/TICKETS are outside it. And the suite just finished.
-
-  Ran 1 shell command
-
-● Suite green on the copy: Ran 10309 tests in 1400.556s / OK (skipped=42), rc 0, zero FAIL/ERROR. Now the deferred docstring.
-
-  Ran 2 shell commands
-
-● Two stale claims, not one: the docs/LEIS.md:149 anchor (the line I removed) and the "este pouso NAO declara Empresa … custa 7 declaracoes
   … isso e o pouso B" paragraph — pouso B did it, with 15.
 
   Ran 1 shell command
@@ -149,14 +143,25 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Exactly 5 differ, none missing, ruff clean on all 5. Now the docs must say 5, and say honestly that one file's committed bytes are not
   the suite's bytes.
 
-  Checking handoff commit history and running every host seal · 1m 18s
+  Ran 11 shell commands
+
+● All host seals green. Now copy the 5 files into the live tree and commit.
+
+  Ran 4 shell commands
+
+● Deliverable is durable (code in the tree, docs written, message file ready). Calling the advisor before the commit+deploy act.
+
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+
+● Re-running every host seal against the new code and locating lápide seals · 1m 49s
   ⎿  $ cd /home/ronald/saas-hasner
-     echo "--- HANDOFF em commits recentes:"; git log --oneline -6 --name-only -- app/docs/HANDOFF-SESSAO.md | head -20
-     echo "--- selos de host (pasta inteira):"; for f in bin/tests/test_*.sh; do out=$(bash "$f" 2>&1); rc=$?; [ $rc -ne 0 ] && echo
-     "VERMELHO $f rc=$rc"; done… (1m 18s · 15 lines)
+     echo "=== selos de host COM o codigo novo na arvore:"
+     for f in bin/tests/test_*.sh; do out=$(bash "$f" 2>&1); rc=$?; [ $rc -ne 0 ] && echo "VERMELHO $f rc=$rc"; done; echo "fim"
+     echo "=== selos de lapide:"; ls app/*/tests/test_contract_lapide* app/*/tests/*lapide* 2>/d… (1m 48s · 2 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Proofing… (16h 5m 23s · ↓ 1.9m tokens)
+✢ Proofing… (16h 10m 45s · ↓ 1.9m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
