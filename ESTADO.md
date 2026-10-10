@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 06:00:01.**
+**Medido em 10/10/2026 06:05:31.**
 
 | | |
 |---|---|
@@ -125,38 +125,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● O ×0,875 é exato: 9577/10945, 10500/12000, 9800/11200, 8813/10072, 8387/9585, 11200/12800 — todos 7/8 = 52'30"/60', a hora reduzida do
-  Art.73 §1. Medindo em vez de raciocinar:
+  motivos_retencao_celula(colaborador, ini, fim), which reads the célula VIVA. Reading it:
 
   Ran 1 shell command
 
-● furo_espelho lê campos gravados (fech.turnos_abertos, fech.inconsistencias), não espelho vivo. E a 0025 sai de rubricas_do_fechamento:
+● motivos_retencao_celula reads CelulaDia.veredito live today, and sem_celula retains any past day without célula — the snapshot fields
+  never mattered. And it already offers com_dias=True precisely so I don't reimplement the loop. Recording the measurement durably first:
 
-  Ran 4 shell commands
+  Read 1 file
 
-● A 0025 sai direto de fech.horas_noturnas — campo gravado, zero régua na montagem. Então o ×7/8 é o gravado que mudou. Medindo a hipótese
-  da hora reduzida (§6b, 01/09) e os furos:
-
-  Ran 1 shell command
-
-● 27 matrículas com ratio exatamente 7/8, e o TXT vigente saiu em 01/09 10:08 — o mesmo dia em que o HORA_REDUZIDA_12X36_EM_SECO=False
-  entrou em prod (§6b). Corrigindo o campo da batida (timestamp, não data_hora) para as partes 2 e 3:
+● Now asking the authority itself which day and which motivo — com_dias=True, the door that exists so nobody reimplements the loop:
 
   Ran 1 shell command
 
-● O juiz mudou, não o dado: oito dos treze têm turnos_abertos=0 inconsist=0 e zero batida retratada / zero célula regenerada depois da
-  entrega — snapshot intacto, e hoje são furo_espelho. E o col954 está fora por rescisao_modulo_proprio. Qual motivo o retentor dá a quem
-  tem 0/0:
+● The dates give it away — those are 06-21..07-20, the 07 window, and cel=None veredito=None for 30 of 30 days. Let me see the whole output
+  and the delivery dates together:
 
-● Reading the espelho retention judge
-  ⎿  $ cd /home/ronald/wt-l113/app && grep -rn "def motivos_retencao_espelho" --include=*.py . && f=$(grep -rln "def
-     motivos_retencao_espelho" --include=*.py . | head -1) && sed -n "$(grep -n 'def motivos_retencao_espelho' $f | cut -d: -f1),+55p" $f
+  Ran 1 shell command
 
-✢ Compacting conversation… (12h 5m 15s · ↓ 1.4m tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱ 95%
+● All 44 are sem_celula, the ENTIRE window missing — 31/31 and 30/30 days, cel=None. And the three delivery dates are 06/08, 12/08, 19/08 —
+  all before 28/08, the date HX-BORDA-CELULA replaced this judge. Measuring whether the célula acervo simply starts later:
+
+  Ran 1 shell command
+
+● Decisive. Appending this before I interpret it:
+
+  Read 1 file
+
+  Advising using Fable 5.1
+
+✢ Proofing… (12h 10m 45s · ↓ 1.4m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    0% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
