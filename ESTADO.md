@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 08:02:01.**
+**Medido em 10/10/2026 08:07:31.**
 
 | | |
 |---|---|
@@ -136,20 +136,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● Neighbours green: Ran 1934 / OK (skipped=21), rc 0 — that includes test_rota_pede_sessao, test_contract_configuracao_nao_mente and
-  test_admin_so_leitura. Now the L-006 ESTADO line, which must move in this same commit:
-
-  Ran 1 shell command
-
-● This section is derived ("Gerada do ESTADO de cada linha") — the authoritative ESTADO is the law's own row. Finding the source:
-
-  Searched for 1 pattern, ran 3 shell commands
-
-● The test_lei_protege_sitio.sh seal cobra the diff's sites against the PROTEGE column — I touch files that may not be listed. Reading it
-  before I write anything:
-
-  Ran 6 shell commands
   ⎿  Read core/management/commands/semear_aplicacao_convencao.py (119 lines)
   ⎿  Referenced file core/tests/test_o223_porta_humana_da_aplicacao.py
   ⎿  Read docs/AVAIS.md (29 lines)
@@ -161,17 +147,31 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Nothing of mine is under a PROTEGE cell (only L-104 declares sites, in files I don't touch). Columns are ID | lei | origem | dono |
   PROTEGE | selo | estado — so the dono/selo/estado cells of the L-006 row are the ones to move:
 
-  Running the two LEIS.md host seals
-  ⎿  $ cd /home/ronald/saas-hasner && bash bin/tests/test_leis_indice.sh 2>&1 | tail -5; echo "rc=$?"; bash
-     bin/tests/test_lei_protege_sitio.sh 2>&1 | tail -5; echo "rc=$?"
+  Searched for 2 patterns, read 1 file, ran 5 shell commands
 
-✢ Proofing… (14h 7m 15s · ↓ 1.7m tokens)
+● The hub link is the last hazard — the suite must see it while the live tree must not. Let me see how the house builds a copy for --dir:
+
+  Searched for 1 pattern, ran 3 shell commands
+
+● The link belongs next to Sindicatos. Building the copy so the suite sees it while prod doesn't:
+
+  Ran 7 shell commands
+
+● No RED log survives for the O223 module (the directory was missing when that run wrote). I will not quote one I don't have — correcting
+  the cell now and reconstituting the RED against HEAD after the suite frees the pista:
+
+● Running the host seals pasta and showing only failures · 50s
+  ⎿  $ cd /home/ronald/saas-hasner && for f in bin/tests/test_*.sh; do out=$(timeout 300 bash "$f" 2>&1); rc=$?; [ $rc -ne 0 ] && { echo
+     "### RC=$rc $f"; echo "$out" | tail -6; }; done; echo "=== fim da pasta" (50s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✢ Proofing… (14h 12m 45s · ↓ 1.7m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens

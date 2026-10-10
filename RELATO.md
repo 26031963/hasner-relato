@@ -24,6 +24,76 @@ que o juiz de hoje teria produzido* (e entao os tres de agosto nao sao comparave
 cobra corte para isso. **O que NAO muda com a resposta:** nenhum dos 44 entra em `valor_moveu`; eles sao
 `porta_moveu`, que nao alarma. O alarme de hoje e **1 de 7**, e nao depende desta pergunta.
 
+## O223 pouso A — A APLICACAO DE CONVENCAO GANHA PORTA HUMANA, E O CAMPO QUE DECIDE PISO x CCT GANHA ESCRITOR (10/10 08:0x)
+`LEI-AKITA: origem=core/services/aplicacao_convencao.py (porta unica) + colaboradores/views.py::form_empresa, testemunha=core/regua_cct.py::_aplicacao_vigente (quem decide segue sendo ela; a tela so cadastra e DIZ o empate), RED=core/tests/test_o223_porta_humana_da_aplicacao.py (12 casos) reconstituido em logs/o223/red_head.out, quem-mais-le=censo de 4 sitios com PROVA por papel em core/tests/test_regua_pela_empresa.py, juizes novos=0`
+
+**O que estava medido antes da fatia, e nao e pedido novo.** O pouso B da O211 (08/10) deixou duas dividas
+NOMEADAS, as duas da L-006 (*tudo tem cadastro pela UI*): o cadastro `core.AplicacaoConvencao` nasceu com
+**0 view, 0 rota, 0 template** (censo na arvore, 08/10) e nao estava em **admin NENHUM** (censo de
+`admin.register`, 13 registros); e `Empresa.regime_trabalhista` tinha **LEITOR e escritor NENHUM em codigo
+algum** -- so a definicao do modelo e duas migrations --, entao o valor que escolhe entre **piso legal** e
+**CCT de uma empresa inteira** se escrevia por shell. Desde o achado (3) de 08/10 a tabela esta no admin com
+o mixin `SoLeitura`: visivel e nao editavel, de proposito.
+
+**O desenho, e por que ele e UM e nao dois.** A escrita da tabela tinha UM escritor -- o corpo do
+`semear_aplicacao_convencao`. Uma tela com caminho proprio seria o **segundo escritor do mesmo estado**, e
+campo de estado com dois escritores mente mesmo com cada escritor certo (LEI-AKITA 7). Entao nasceu
+`core/services/aplicacao_convencao.py` -- `listar / obter / empates / cadastrar / desativar` + `CadastroInvalido`
+-- e **os dois** entram por ela: o command passou a DELEGAR e a view **nao nomeia o modelo**. Isso nao e
+promessa de conduta, e assercao medida por AST no selo: a view nao casa o nome, o command tem **0** verbo de
+escrita (`create/get_or_create/save/update/delete/bulk_create` = `[]`) e a porta tem `get_or_create` e `save`.
+
+**O que a tela diz, e que a tabela nao dizia.** `empates()` devolve as linhas ATIVAS do mesmo nivel, e a
+lista as marca em vermelho com a frase: *duas linhas ativas do mesmo nivel se anulam e a empresa cai no piso
+legal*. O criterio de nivel e o MESMO de `_aplicacao_vigente` -- a tela **repete para DIZER**, nunca para
+julgar; quem decide dinheiro continua sendo a regua. Desativar **nao apaga**: `ativo=False` com trilha, e a
+tela diz isso no proprio campo.
+
+**UMA mudanca de contrato, declarada e nao escondida.** `--desativar` passou a **EXIGIR `--motivo`**, que
+antes dispensava (`and not o['desativar']`). Nao e regra nova: e a LEI-AKITA 7 alcancando um caminho que lhe
+escapava -- desativar a linha derruba a CCT de uma empresa inteira no piso legal, e sem motivo escrito a
+forense nao reconstroi isso depois.
+
+**O erro que eu cometi no meio da fatia, e a licao que ele deixou na ORDEM.** Escrevi
+`{% url 'core:lista_aplicacoes' %}` dentro de `templates/colaboradores/empresa_form.html`, que e template
+**VIVO**: sem `cached.Loader`, o Django rele o arquivo do disco a cada request enquanto o `.py` espera o
+reload -- a tela de edicao de empresa ficou em **NoReverseMatch (500) por cerca de um minuto**, ate eu
+trocar o link por texto. Era exatamente o risco que eu havia NOMEADO para o `hub.html` e no qual pisei em
+outro arquivo. O que mudou por causa disso: o link do hub nasceu na **COPIA** (`/tmp/o223-copia-suite`), a
+suite cheia correu **la**, e ele so entra na arvore viva no ato do commit, com o `deploy.sh` em seguida e
+nada no meio (L-107).
+
+**A vacuidade que eu devia responder.** Dos 12 casos, dois passavam na primeira rodada **porque a feature
+nao existia** -- entre eles o RED11, que e assercao de AUSENCIA (*a view nao nomeia o modelo*). Verde de
+ausencia nao prova nada, entao o RED11 ganhou gemeo que MORDE: o mesmo criterio de AST corre sobre um fonte
+de view **sintetico** que nomeia o modelo, e tem de REPROVAR. Sem ele, apagar o criterio deixaria o selo
+verde.
+
+**O RED, dito como esta.** O log da primeira rodada vermelha **se perdeu**: a redirecao apontava para
+`logs/o223/` antes de o diretorio existir. RED que nao se le nao e evidencia (LEI-AKITA 5), entao a rodada
+foi **REFEITA** -- modulo novo contra o codigo de **HEAD**, em copia (`/tmp/o223-red-head`: porta e
+templates fora, `core/urls.py`, `core/views_config.py`, `colaboradores/views.py` e o command voltados a
+HEAD) --, e o numero esta em `logs/o223/red_head.out`.
+
+**MEDIDO.** `logs/o223/cura1.out`: `Ran 24 tests` / `FAILED (failures=1, errors=1)` -- as **duas** eram
+defeito do MEU teste, nao da cura: a fixture dava `rbac_gerir_usuarios` e a `form_empresa` cobra
+`editar_cadastro` (duas portas com acoes genuinamente diferentes), e `{{ motivo|default:linha.motivo }}`
+explodia com `linha=None` no caminho de recusa. `logs/o223/cura2.out`: `Ran 24 tests` / `OK`.
+`logs/o223/vizinhos.out` (`core colaboradores`): `Ran 1934 tests` / `OK (skipped=21)` -- e eles importam,
+porque e ali que moram `test_rota_pede_sessao`, `test_contract_configuracao_nao_mente` e
+`test_admin_so_leitura`, os contratos que rota e view novas derrubam. `ruff` limpo nos 7 arquivos.
+
+**L-006: 1 de 3 -> 2 de 3 clausulas no codigo, e a aritmetica esta declarada na celula** (a contagem antiga
+ja creditava a 2a clausula pela metade LEITOR, e essa metade nao mudou hoje). FALTA a 3a -- `Empresa` fora
+de `core/configuracao_efeito.py::TELAS` --, que e a MESMA falta da 2a metade da 2a clausula: UMA fatia fecha
+as duas, o **pouso B**, com custo **MEDIDO por AST**: **7 declaracoes** -- as 6 chaves de POST que a
+`form_empresa` le (`ativa`, `cnpj`, `dia_inicio_competencia`, `em_rollout`, `nome_fantasia`,
+`razao_social`) mais o `regime_trabalhista`. A docstring do modulo dizia **12** por suposicao minha, e a
+medicao a corrigiu antes de o numero virar lei.
+
+**O QUE SEGURA O PUSH: o smoke de clique.** A fatia toca template, e FRONT SEM SMOKE NAO SOBE -- o push
+espera o clique nas DUAS cascas.
+
 ## O219 A0-b — O VIGIA DO TXT NASCE, E O ALARME CAI DE 6 DE 7 PARA 1 DE 7 (10/10 06:4x)
 A A0-a deu **um** sitio para a forma e a prova do TXT. A A0-b faz a pergunta que a L-113 precisa
 respondida antes de a clausula 1 cair: *"o gravado pode mudar debaixo de um arquivo entregue?"*. Fatia de
