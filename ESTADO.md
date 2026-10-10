@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 05:13:01.**
+**Medido em 10/10/2026 05:18:31.**
 
 | | |
 |---|---|
@@ -124,20 +124,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  tipo, valor. Nenhum nome. Então o diff de linhas pode ser impresso. E folha/services já existe:
-
-  Ran 1 shell command
-
-● Linha é 43 chars com posições fixas (10+mat10+comp6+rub4+11+val9+cod10), então o diff se desmonta de volta em matrícula/rubrica/valor sem
-  heurística. Leio o modelo antes do RED:
-
-  Ran 2 shell commands
-
-● anotar_vigencia decide vigência por (gerado_em, pk) e ignora invalidada_em — então um TXT invalidado sem substituta continua sendo o
-  vigente derivado. Isso é contrato da Q1 e não decido por feeling:
-
-  Ran 1 shell command
-
 ● Medido e limpo: 5 invalidadas, todas com substituida_por, todas NÃO vigentes — invalidadas que são vigentes: 0. Os 7 vigentes: emp2
   08+09, emp3 07+09, emp4 06+07+09, nenhum com hash vazio ou total_linhas=0.
 
@@ -151,11 +137,25 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
   é constante. Então o vigia publica o campo valor como está no arquivo, nunca dividido por 100 como "horas": derivar aqui seria
   testemunha com regra própria (LEI-AKITA 2). Escrevo o RED:
 
-  Running 1 shell command…
+  Ran 1 shell command
 
-✢ Proofing… (11h 18m 15s · ↓ 1.3m tokens)
+● Compila. Agora provo que está VERMELHO antes de escrever o serviço:
+
+  Ran 4 shell commands
+
+● RED evidenciado: ModuleNotFoundError: No module named 'folha.services.vigia_txt' / FAILED (errors=1). Agora o serviço:
+
+● Writing the vigia_txt service
+  ⎿  $ cd /home/ronald/wt-l113/app && cat > folha/services/vigia_txt.py <<'PY'
+     # -*- coding: utf-8 -*-
+     r"""L-113 A0-b -- O VIGIA do TXT do Dominio. LAMPADA, nunca juiz (CLAUDE.md 4a).
+     A L-113 manda a competencia exportada deixar de BARRAR o recalculo, e o unico risco que a casa
+     soube nomear contra isso …
+
+✢ Compacting conversation… (11h 23m 45s · ↓ 1.4m tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱ 87%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                   11% until auto-compact
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
