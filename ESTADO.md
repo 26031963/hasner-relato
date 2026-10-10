@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 01:19:01.**
+**Medido em 10/10/2026 01:24:31.**
 
 | | |
 |---|---|
@@ -121,20 +121,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  Ran 1 shell command
-
-● Essa falha é da minha sonda, não da cura: eu desescapei \" → " ao extrair E_SOMBRA, e o valor precisa dos backslashes (é o que vira aspa
-  dentro do --command no sh -c). Reconstruí a chamada em vez de usá-la. Sem o replace:
-
-  Ran 1 shell command
-
-● A única diferença é espaço em branco inicial — a guarda e todo o resto são byte-idênticos, e sh -n aceita as duas. Falta converter isso
-  em fato executado, chamando a função REAL:
-
-  Ran 1 shell command
-
-● ALCANCEI saiu — a composição por newline roda no container real e a guarda passou. Mas a minha contraprova não barrou, e a causa é sonda
   mal parametrizada: config.settings.sombra tem o banco literal (CLAUDE.md §6), então POSTGRES_DB é ignorado e current_database() devolveu
   sombra corretamente. Provo o que eu realmente preciso — que o mecanismo morde — trocando só a constante esperada:
 
@@ -148,11 +134,25 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Push a 509s — não toco a árvore. Preparo a mensagem do commit corretivo e o parágrafo do RELATO em scratchpad:
 
-  Running 1 shell command…
+  Ran 2 shell commands
+  ⎿  Read docs/AVAIS.md (27 lines)
+  ⎿  Read docs/HANDOFF-SESSAO.md (47 lines)
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/blfy3t2pb.output (12 lines)
+  ⎿  Referenced file ponto/turnos.py
+  ⎿  Referenced file ponto/tests/test_bateria_lavratura.py
 
-✢ Proofing… (7h 26m 15s · ↓ 884.3k tokens)
+● Task "RED e construção do segundo intervalo" completed in background
+
+● Task "Push the instrument marco through the pre-push regua" still running in background
+
+● Suite principal verde (Ran 10253 / OK (skipped=42)), control-plane correndo. Preparo o parágrafo do RELATO:
+
+● Running 1 shell command…
+  ⎿  $ sed -n '1,30p' docs/RELATO.md
+
+· Proofing… (7h 31m 45s · ↓ 888.6k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    4% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
