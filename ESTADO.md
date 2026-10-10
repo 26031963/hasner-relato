@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 05:02:01.**
+**Medido em 10/10/2026 05:07:31.**
 
 | | |
 |---|---|
 | `HEAD` local | `374b7712 [O219] pouso: a A0-a entra no main com os docs do marco, e a linha do CLAUDE.md que ensinava o veredito solto passa a ensinar o estrito` |
-| `origin/main` | `a364847b [O218] corretivo: a guarda da sombra volta a ter UM sitio, e o selo que faltava nasce VERMELHO no commit anterior` |
-| commits a subir (`ahead`) | **2** |
+| `origin/main` | `374b7712 [O219] pouso: a A0-a entra no main com os docs do marco, e a linha do CLAUDE.md que ensinava o veredito solto passa a ensinar o estrito` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -123,42 +123,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Então o corte honesto são três decisões, não uma:
-  1. A0-b = Q1 (TXT vigente x gravado) + Q2 (conteúdo x prova) + diff de linhas + ENC. Leitura pura, zero mudança em caminho de escrita, a
-     mesma forma de instrumento da A0-a.
-  2. A extração de FORA/campos_do_fechamento/foto/_mudou para ponto/services/ como marco próprio de dedup — um conjunto, três leitores, e é
-     o 10-contra-11 do lavrar_dias_pagos que ela cura. Mesmo padrão da A0-a.
-  3. Onde a baseline da foto() persiste — decisão separada, tomada só quando o lugar estiver medido. "No registrar" diz quando, não onde; e
-     logs/carimbo_gravado/ escrito de dentro de um request do saas_ui exige antes provar que app/logs é bind-mount durável naquela casca,
-     não tmpfs. Baseline em tmpfs não é baseline.
+● Erro da minha sonda, não do sistema: o campo é gerado_em. Corrijo:
 
-  Não empacoto as três: as duas primeiras não dependem da terceira.
+  Ran 1 shell command
 
-  E os dois eixos ficam separados quando eu escrever, porque apontam para lados opostos por razões opostas: população = UNIÃO (entra_set da
-  baseline ∪ hoje — quem saiu do TXT é precisamente a divergência que se quer ver); campos = INTERSEÇÃO (a regra do _mudou() — campo que
-  entra ou sai do modelo é vocabulário, não dado). O corte da Q2 continua sendo a data de aplicação da 0005 lida do django_migrations, e
-  não o atalho conteudo == '' — o atalho leria uma escrita genuína pós-0005 como INCOMPARÁVEL em vez de DIVERGENTE.
+● Background command "Push the marco to origin with the pre-push battery" completed (exit code 0)
 
-  Sobre o ENC: nenhum cron escreve FechamentoMensal (a escrita é por evento, via recalcular_por_evento), então não há "escritor" natural
-  para pendurar. O defensável é o fim do bloco da manhã — o último carimbo logs/fim/<nome>.<emp>.<dia> da cadeia —, com a razão escrita:
-  nada agendado escreve o gravado; o vigia lê depois de tudo que poderia ter escrito. Qual é o último, eu meço no DAG em vez de supor.
+● O push fechou (exit 0) e a medição respondeu. Confiro o veredito no remoto primeiro:
 
-  Paro de cutucar o push de minuto em minuto — a notificação chega, e a árvore fica como estava às 04:51 até lá. Quando fechar: git -C
-  /home/ronald/wt-l113 merge --ff-only main para a raia carregar os docs e o CLAUDE.md pousados (ff puro, sem commit de merge, para o
-  próximo diff da raia ser só a A0-b), e então escrevo as decisões no RELATO e abro a A0-b.
+  Ran 1 shell command
 
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: PLACAR-ESTRUTURAL -- O ESTRUTURAL SE SEPARA DO DADO (corte dele 02/10 22:5x, que SUBSTITUI o item 3 da
-  ordem das 21:4x -- o resto d
+● Push confirmado no remoto: 374b7712346c9453f4a96ed56d7a580e8da00aad refs/heads/main, a364847b..374b7712 main -> main, control-plane Ran
+  22 tests / OK, pre-push: OK — push liberado, 0 a empurrar, trava livre. Um push por marco, cumprido.
 
-✢ Compacting conversation… (11h 7m 15s · ↓ 1.3m tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱ 94%
+  Agora a obrigação pós-push — bin/tickets_rodape.sh --escrever sozinho, nunca o pos_push.sh:
+
+  Ran 1 shell command
+
+● Rodapé escrito: push 374b7712 (10/10 04:47) · regua 04/10 17:26 · serie T 110. Agora a medição da Q2, que mudou o universo dela — e não
+  só o número:
+
+  Ran 1 shell command
+
+● Agora a raia recebe o pouso, para o próximo diff dela ser só a A0-b:
+
+● Fast-forward the raia to carry the landed marco
+  ⎿  $ cd /home/ronald/wt-l113 && echo "== antes =="; git log --oneline -1; git status --porcelain | head -5; echo "== ff =="; git merge
+     --ff-only main 2>&1 | tail -5; echo "rc=$?"; echo "== depois =="; git log --oneline -1; echo "== diff raia x main =="; git rev-list
+     --count main..HEAD; git rev-list --…
+
+✢ Proofing… (11h 12m 45s · ↓ 1.3m tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    0% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
