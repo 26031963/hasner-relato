@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 05:18:31.**
+**Medido em 10/10/2026 05:23:32.**
 
 | | |
 |---|---|
@@ -124,38 +124,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Medido e limpo: 5 invalidadas, todas com substituida_por, todas NÃO vigentes — invalidadas que são vigentes: 0. Os 7 vigentes: emp2
-  08+09, emp3 07+09, emp4 06+07+09, nenhum com hash vazio ou total_linhas=0.
 
-  Mas o modelo permite substituida_por=None, então "invalidada e ainda vigente" é estado alcançável: aí o vigia não pode alarmar "o gravado
-  mudou debaixo do TXT entregue" sobre um arquivo que alguém já revogou. É a diferença entre terceiro estado alcançável e mordido por
-  teste (honesto reportar 0) e terceiro estado decorativo. Reuso o fixture da A0-a em vez de inventar:
-
-  Ran 2 shell commands
-
-● Tenho o contrato inteiro. Um detalhe que a leitura da linha impõe e que eu teria errado: a linha não carrega o tipo (dias x horas) — o 11
-  é constante. Então o vigia publica o campo valor como está no arquivo, nunca dividido por 100 como "horas": derivar aqui seria
-  testemunha com regra própria (LEI-AKITA 2). Escrevo o RED:
+  Logo '' != 'e3b0c442…' e um TXT de zero linha é DIVERGENTE para sempre. Conferindo quem mais lê antes de curar:
 
   Ran 1 shell command
 
-● Compila. Agora provo que está VERMELHO antes de escrever o serviço:
+● Censo fechado: dois chamadores de produção (regerar_txt_dominio.py:106 e o vigia), e ninguém compara hash_hoje com '' — os dois selos da
+  A0-a comparam os dois campos entre si, então a cura na origem não os quebra. Curando no sítio que é a fonte:
 
-  Ran 4 shell commands
+  Ran 1 shell command
 
-● RED evidenciado: ModuleNotFoundError: No module named 'folha.services.vigia_txt' / FAILED (errors=1). Agora o serviço:
+● A cura precisa do selo que a morde no sítio do juiz, e o ramo ValueError que eu criei precisa do seu. Vendo onde encaixam:
 
-● Writing the vigia_txt service
-  ⎿  $ cd /home/ronald/wt-l113/app && cat > folha/services/vigia_txt.py <<'PY'
-     # -*- coding: utf-8 -*-
-     r"""L-113 A0-b -- O VIGIA do TXT do Dominio. LAMPADA, nunca juiz (CLAUDE.md 4a).
-     A L-113 manda a competencia exportada deixar de BARRAR o recalculo, e o unico risco que a casa
-     soube nomear contra isso …
+  Ran 1 shell command
 
-✢ Compacting conversation… (11h 23m 45s · ↓ 1.4m tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱ 87%
+● Ótimo — a A0-a já decidiu explicitamente que o juiz PROPAGA (test_MORDE_sem_integracao_o_juiz_PROPAGA…), o que confirma que nomear o caso
+  é camada da varredura, não do juiz. Lendo esse selo e a âncora:
+
+  Ran 3 shell commands
+
+● Agora o ramo ValueError do vigia, que criei e que ainda não tem caso que o morde:
+
+● Adding the biting test and running both modules
+  ⎿  $ cd /home/ronald/wt-l113/app && python3 - <<'PY'
+     p = 'folha/tests/test_l113_a0b_vigia_do_txt.py'
+     s = open(p, encoding='utf-8').read()
+     anc = """ def test_MORDE_a_versao_substituida_nao_entra_na_Q1(self):
+     """
+     teste = ''' def test_MORDE_empresa_que_perdeu_a_integracao_e_INCOMPARAVEL_nao_DIVERGE(self)…
+
+* Proofing… (11h 28m 46s · ↓ 1.4m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    0% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
