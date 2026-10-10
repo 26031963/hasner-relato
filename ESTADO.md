@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 06:58:31.**
+**Medido em 10/10/2026 07:03:45.**
 
 | | |
 |---|---|
@@ -127,42 +127,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ordem das 21:4x -- o resto d
 
-● The hook blocks the Stop, and by his aval it's neither obeyed nor touched — the cure is a later instrument pouso. The turn continues
-  anyway: checking the suite.
+● Row in at line 122, ruler green from the root. Now the suite's veredito:
 
   Ran 1 shell command
 
-● Rather than idle-poll, let me verify the push gates that the [O219] citation will face:
+● Suite still running (21 min of a ~23 min baseline). But that DatabaseOperationForbidden in the stream needs context — zero ^ERROR:
+  headers so far, which means it was printed, not raised as a failure:
+
+  Ran 1 shell command
+
+● Those are best-effort falhou: lines swallowed by core/observ.py::engolir — the dots keep going, so the tests pass. Checking whether they
+  are pre-existing noise rather than something my marco introduced:
+
+  Ran 1 shell command
+
+● Identical 22/12 in every full-suite log, including the A0-a green run (Ran 10265 / OK (skipped=42)) — pre-existing swallowed-trail noise,
+  not a regression. Preparing the two queued raia edits as a script while the tree is still mounted:
 
   Ran 2 shell commands
 
-● Launching a single-notification waiter, then doing the docs that ride the marco (in main — the suite mounts the raia, not this tree):
+● Suite still holding the pista. Verifying the raia commit message is intact, then calling the advisor before the pouso (the merge+deploy
+  is the irreversible act):
 
-  Read 1 file, ran 6 shell commands
+  Ran 1 shell command
 
-● The assert caught a | inside the estado cell — exactly the "pipe em celula quebra o hook" trap. Fixing it:
+● All pieces are durable (TICKETS row, RELATO, BACKLOG, AVAIS, the edit script, the commit message). Calling the advisor before the pouso:
 
-● Inserting the A0-b TICKETS row and running the ruler from the repo root
-  ⎿  $ python3 - <<'PY'
-     p = 'docs/TICKETS.md'
-     linhas = open(p).read().split('\n')
-     i = next(n for n, l in enumerate(linhas) if l.startswith('| O219 |'))
-     assert 'A0-a' in linhas[i]
-     assert 'fatia **A0-b**' not in '\n'.join(linhas), 'ja inserida'
-     cels = [
-     '', ' O219 ',
-     ' estrutural (familia folha/export) --…
+● Advising using Fable 5.1
 
-✢ Compacting conversation… (13h 3m 45s · ↓ 1.5m tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱ 94%
+✶ Proofing… (13h 8m 59s · ↓ 1.5m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    0% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
