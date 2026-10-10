@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 13:05:31.**
+**Medido em 10/10/2026 13:11:01.**
 
 | | |
 |---|---|
@@ -130,35 +130,35 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 2 shell commands
-  ⎿  Read docs/AVAIS.md (24 lines)
-  ⎿  Read
-     ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/pouso-celula/turno_prompt.md
-     (47 lines)
-  ⎿  Read docs/HANDOFF-SESSAO.md (46 lines)
-  ⎿  Referenced file core/tests/test_o223_porta_humana_da_aplicacao.py
-  ⎿  Read core/management/commands/semear_aplicacao_convencao.py (128 lines)
-
-● Task "RED e construção do segundo intervalo" completed in background
-
-● Task "O228 familia turno na raia-celula" still running in background
-
-● Task "Rodar a suite cheia contra a copia" still running in background
-
-● Suite at 924 lines. Now the docs script — the four edits, each by unique anchor:
-
-  Ran 8 shell commands
-
-● The wait is the esmeril of this marco (ESMERIL-DO-MARCO) — so: what did this marco leave orphan? Measuring instead of assuming:
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: PLACAR-ESTRUTURAL -- O ESTRUTURAL SE SEPARA DO DADO (corte dele 02/10 22:5x, que SUBSTITUI o item 3 da
+  ordem das 21:4x -- o resto d
 
   Ran 1 shell command
 
-● Both are signature changes, not removals — this marco orphans nothing, so its esmeril has nothing to delete under L-111. Checking with
-  the advisor before the irreversible act:
+● The hook won't release the turn and the verdict isn't in. The sanctioned way to hold on a condition — ESMERIL-DO-MARCO forbids opening
+  any other achado during this wait:
 
-● Advising using Fable 5.1
+● The harness already tracks the suite's exit, so a second waiter adds nothing. The in-scope work that needs neither pista nor new achado
+  is step 4 of this same obra — the virada's ensaio. Checking the verdict, then building it:
 
-✢ Proofing… (19h 10m 45s · ↓ 2.2m tokens)
+  Ran 2 shell commands
+
+● simular_folha.sh foto <rotulo> <arvore> already takes a tree and carries every sombra guard. But the virada's three numbers come from the
+  cartório, not from folha — reading what its dry-run reports:
+
+  Ran 1 shell command
+
+● Dry-run prints exactly the three numbers' sources. Is there a generic door for running a command against the sombra, or only
+  simular_folha?
+
+● Ver se a sonda de leitura e porta generica
+  ⎿  $ cd /home/ronald/saas-hasner
+     echo "=== sonda_leitura.sh: cabecalho e se aceita comando"
+     sed -n '1,30p' bin/sonda_leitura.sh
+     echo "..."; grep -nE 'add_argument|case |comando|CMD|tenant_command' bin/sonda_leitura.sh | head -15
+
+✢ Proofing… (19h 16m 15s · ↓ 2.2m tokens · still thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -168,6 +168,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   ● main
 ❯ ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Reading _marca_intra_duracao in turnos.py                                                  16m 43s · ↓ 167.6k tokens
+  ◯ general-purpose  Running test_marca_intra_duracao_invariantes RED                                           22m 13s · ↓ 111.4k tokens
   ⧉  index
 ```
