@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 00:52:01.**
+**Medido em 10/10/2026 00:57:31.**
 
 | | |
 |---|---|
@@ -122,38 +122,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  A própria lápide dele nomeia um chamador que forka seu docker run. Isso é a forma exata do defeito que a §3 do CLAUDE.md já pagou — porta
-  cujo maior chamador mora fora dela. Meço antes de afirmar:
 
   Ran 1 shell command
 
-● Medição afiada: 4 scripts além do sombra.sh forkam o próprio docker run com as settings da sombra, e não existe selo de host para a
-  porta. É a forma exata do bin/suite.sh da §3 — porta cujos maiores chamadores moram fora dela. A pergunta que decide a gravidade é se os
-  forks são só duplicados ou mais fracos:
+● Confirmado: bin/sombra.sh não está na coluna PROTEGE (0 ocorrências), então o commit do instrumento não precisa citar lei. De passagem,
+  isso explica a linha do push: colaboradores/services/vinculo.py e views_fase.py estão protegidos, e é por isso que a régua disse tocados
+  neste push: 1 (L-112, citados) no commit da O207.
+
+  Preparo a mensagem do commit do instrumento, para ele ser um ato curto quando o push cair:
 
   Ran 1 shell command
 
-● Três dos quatro forks estão equipados. Mas um não: bin/sonda_leitura.sh não tem nem a guarda de banco nem o proxy morto. Antes de chamar
-  isso de defeito, leio — pode ser que ele aponte de propósito para outro banco, e aí exigir sombra seria eu que estaria errado:
+● [rotulo] é um literal entre colchetes, e minha cicatriz aqui é exata — um literal em colchetes já travou a régua. Confiro o padrão que
+  ela casa antes de mudar às cegas:
 
   Ran 1 shell command
 
-● Eu estava errado sobre o sonda_leitura.sh, e ler evitou a afirmação: ele lê prod (saas_hasner) por desenho, então exigir
-  current_database()=='sombra' dele seria o errado. A guarda dele é outra e mais forte — a role leitor sem um GRANT de escrita, e uma rede
-  dedicada que contém só o saas_db, o que também explica a ausência do proxy morto.
-
-  O achado real encolhe e fica preciso. Registro durável antes de decidir o escopo:
+● O padrão exige maiúscula inicial (\[[A-Z]…\]), então [rotulo] não é citação — nenhuma mudança necessária. Corrijo só um typo e sigo para
+  a leitura do sítio da O219, que é o próximo item de verdade:
 
   Ran 1 shell command
 
-● O censo está durável e a árvore carimbada segue intacta (os mesmos 3 sujos conhecidos). Estou a ponto de decidir o escopo do próximo ato
-  — o pouso do instrumento O218 — então consulto antes de me comprometer:
+● O sítio responde com clareza: impressao_insumos já faz hash de quatro insumos (batidas, cobertura, chamados, DNA versão+marcos) e tem
+  dois precedentes condicionais no próprio corpo — veto e teto, cada um com a mesma disciplina que a O219 pede no RED (2): "só entra quando
+  HÁ veto: célula sem veto guarda a mesma impressão de sempre, e a frota não é rejulgada por causa desta linha".
 
-● Advising using Fable 5.1
+  A §6 do CLAUDE.md exige contrato de entrada antes de codar regra nova. Escrevo-o — é o primeiro passo da O219 e é durável:
 
-✢ Proofing… (6h 59m 15s · ↓ 821.6k tokens)
+● Running 1 shell command…
+
+✢ Proofing… (7h 4m 45s · ↓ 839.6k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    1% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
