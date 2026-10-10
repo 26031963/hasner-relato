@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 18:09:01.**
+**Medido em 10/10/2026 18:14:06.**
 
 | | |
 |---|---|
@@ -33,7 +33,11 @@ c1d3a6e4 [O228] pouso do INSTRUMENTO da familia turno em ato proprio: o censo na
 
 ```
  M app/config/crons_duracao.json
+ M app/docs/BACKLOG.md
+ M app/docs/CORTES.json
+ M app/docs/CORTES.md
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/PROMPTS.md
  M app/docs/RELATO.md
  M bin/sonda_frota.sh
 ?? esteira.pausada
@@ -125,35 +129,35 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-❯ aval Ronald: corte Ronald: juiz dia_encerrado nasce, um so, mesmo predicado de hoje (dia < hoje); flip_auto e supra_juiz leem dele;
-  universo do cron nao muda. Segue a fila; PAREI so em lei ou !
+❯ aval Ronald: a raia wt-bos abre a O198 agora (censo da frota antes da cura) e segue GEO-SILENCIO-DE-PING -> O197 -> O44 itens 2-8, um
+  por vez, nos limites do BOS-EM-RAIA-UM-POR-VEZ; a principal nao para. Nenhuma lei nova. Segue a fila; PAREI so em lei ou !
 
-❯ aval Ronald: corte Ronald: juiz par_completo nasce (fato encerrado = o PAR); detectar_par_relampago so muda de papel depois dele;
-  universo do cron nao muda. Segue a fila; PAREI so em lei ou !
+● A third aval, and it's an order for the raia. Let me get the JSON schema and check the raia state together.
 
-● Two cortes arrived — both TRAVA JUIZ-NOVO authorizations. Recording them before launching the ensaio, so the docs are written while
-  nothing is mounted. Let me check the required form first.
+  Ran 2 shell commands
+
+● wt-bos is live at c44c6c80, and the BACKLOG already declares that exact raia order — his aval ratifies it and says start. Let me read the
+  limits and O198's own portão.
 
   Ran 1 shell command
 
-● The selo matches the literal phrase. Let me see the house formats before writing.
+● All three register this turn. Let me write them into the canonical source.
 
-● Ver cabecalho de CORTES.md e seu escritor
-  ⎿  $ cd /home/ronald/saas-hasner/app
-     echo "=== CORTES.md head 30 ==="
-     head -30 docs/CORTES.md
-     echo
-     echo "=== quem escreve CORTES.md? ==="
-     grep -rln "CORTES.md" ../bin/ 2>/dev/null | head -20
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bmq1rhnnw.output (25 lines)
-  ⎿  Read docs/AVAIS.md (23 lines)
-  ⎿  Read docs/HANDOFF-SESSAO.md (45 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bxqthlo3j.output (7 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bhrpwyexr.output (25 lines)
+  Ran 3 shell commands
 
-● Task "RED e construção do segundo intervalo" completed in background
+● Both signatures are in the box. Now the PROMPTS lines and the two new OBRAS items.
 
-· Proofing… (1d 0h 14m · ↓ 2.8m tokens)
+● Rodar a pasta de selos de host · 1m 42s
+  ⎿  $ cd /home/ronald/saas-hasner
+     v=0
+     for s in bin/tests/test_*.sh; do
+     out=$(bash "$s" 2>&1); rc=$?
+     if [ $rc -ne 0 ]; then v=$((v+1)); echo "=== VERMELHO $s (rc=$rc)"; echo "$out" | tail -6; fi
+     done
+     echo "selos de host vermelhos: $v" (1m 42s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✻ Proofing… (1d 0h 19m · ↓ 2.8m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
