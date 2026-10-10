@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 07:20:01.**
+**Medido em 10/10/2026 07:25:31.**
 
 | | |
 |---|---|
@@ -122,38 +122,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 1 shell command
+● The check answers it cleanly — and the answer is declared, not inferred:
 
-● Exit 2 with the alarm naming exactly one key — q1.competencias_com_valor_movido: 1, not q2, not cego. Checking the push:
+  # RC 2 CARIMBA, e isto e' declarado: 2 e alarme de NEGOCIO (o cron rodou e achou algo), nao falha
+  if [ "$RC" -eq 0 ] || [ "$RC" -eq 2 ]; then ... date -Iseconds > "$FIM_DIR/${N}.${E}.$DIA"
 
-  Ran 1 shell command
+  So tomorrow the vigia carimba on its exit 2, and the second and third cartório lines hit [ -f "$FIM/$CMD.-.$DIA" ] && exit 0. alarmes=1,
+  not 3 — contador == universo. No fila line needed there.
 
-● Pre-push is running the suite against the pushed commit d20a0e4525; the remote is still at 374b7712. Waiting by file, not by guess:
+  Writing the fast-forward lesson to memory now (outside the project tree, so it's safe during the push) — it will recur on every
+  one-commit raia, and wt-bos and raia-celula are both queued:
 
-  Ran 1 shell command
+  Ran 1 shell command, wrote 1 memory
 
-● Preparing the pouso proof as a script to apply once the push releases the tree (ESMERIL-DO-MARCO: the censo of this marco's orphans was
-  already closed with zero):
+● Now the push status, read-only:
 
-  Ran 1 shell command
+  Ran 2 shell commands
 
-● Push is running the suite against d20a0e4525. Calling the advisor while it runs — the marco is committed, deployed and proven in the air,
-  so the deliverable is durable:
+● origin/main still at 374b7712 — the pre-push is running the full suite against d20a0e4525. Preparing the two post-push edits while it
+  runs. First reading the exact L-107 form line in CLAUDE.md that needs --no-ff:
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+  Ran 5 shell commands
 
-● Taking the advisor's 10-second check now — whether cron_run.sh writes the FIM carimbo on exit 2, which decides if the vigia runs once or
-  three times tomorrow:
+● relato_pouso.py is ready. Now writing the second post-push script — the --no-ff correction to CLAUDE.md §2 (the VIVO manda, §8) and the
+  O242 fila line for the two instrument findings, so they live in the BACKLOG and not only in a RELATO that archives in 3 days:
 
-  Checking whether cron_run.sh carimba the FIM on exit 2
-  ⎿  $ cd /home/ronald/saas-hasner && grep -n 'FIM_DIR\|FIM=' bin/cron_run.sh; echo "=== o contexto da escrita do carimbo:"; n=$(grep -n
-     'FIM_DIR' bin/cron_run.sh | tail -1 | cut -d: -f1); sed -n "$((n-14)),$((n+8))p" bin/cron_run.sh
+● Checking how far along the pre-push suite is
+  ⎿  $ cd /home/ronald/saas-hasner && tail -3 logs/o219/push_a0b.out; echo "=== idade do log:"; date '+agora %H:%M:%S'; stat -c '%y'
+     logs/o219/push_a0b.out
 
-✶ Compacting conversation… (13h 25m 16s · ↓ 1.6m tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱ 75%
+✢ Proofing… (13h 30m 45s · ↓ 1.6m tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    1% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
