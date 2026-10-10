@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 23:52:31.**
+**Medido em 09/10/2026 23:58:01.**
 
 | | |
 |---|---|
@@ -140,17 +140,17 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Não há mais trabalho deste marco a fazer em paralelo — o que falta é o veredito. Bloqueio no próprio processo do push, sem sleep e sem
   polling:
 
-● Block on the push process until it exits · 4m 18s
+● Block on the push process until it exits · 9m 47s
   ⎿  $ cd /home/ronald/saas-hasner
      PID=$(pgrep -x -f "git push origin main" | head -1)
      echo "esperando o pid do push: $PID (hora $(date '+%H:%M:%S'))"
      # bloqueia sem sleep: tail --pid retorna quando o processo morre
      tail --pid="$PID" -f /dev/null
      echo "o push TERMINOU em $(date '+%H:%M:%S')"
-     echo "=== v… (4m 17s · 2 lines)
+     echo "=== v… (9m 47s · 2 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Proofing… (5h 59m 45s · ↓ 710.5k tokens)
+✢ Proofing… (6h 5m 15s · ↓ 710.5k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                     3% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -160,6 +160,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Awaiting g4 verdict before fixing HOJE comment                                           1h 36m 3s · ↓ 104.1k tokens
+  ◯ general-purpose  Awaiting g4 verdict before fixing HOJE comment                                          1h 41m 33s · ↓ 104.1k tokens
   ⧉  index
 ```
