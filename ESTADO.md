@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 21:55:01.**
+**Medido em 09/10/2026 22:00:31.**
 
 | | |
 |---|---|
@@ -142,16 +142,16 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Ruff limpo. Aval novo registrado — ele detalha a ordem interna da wt-bos; o item 3 do aval anterior (O228 em segunda raia) não é tocado
   por ele, então valem os dois. Rodo a suite na cópia mergeada:
 
-● Running 2 shell commands · 2m 26s…
+● Running 2 shell commands · 7m 56s…
   ⎿  $ cd /home/ronald/saas-hasner
      export SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
      CP="$SP/raias/wt-merge-o206"
      bin/suite.sh --dir "$CP" --only "chamados core" > "$SP/raias/suite_o206.out" 2>&1
      echo "suite rc=$?"
-     grep -E '^Ran [0-9]+ test' "$SP/rai… (2m 26s)
+     grep -E '^Ran [0-9]+ test' "$SP/rai… (7m 55s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Proofing… (4h 2m 15s · ↓ 478.1k tokens)
+· Proofing… (4h 7m 45s · ↓ 478.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

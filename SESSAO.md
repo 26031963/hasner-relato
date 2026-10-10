@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 09/10/2026 21:55:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (555.5 MB). Acoes na janela: **1380**.
+**Medido em 09/10/2026 22:00:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (555.5 MB). Acoes na janela: **1376**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1386,7 +1386,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 10:00:53 | Bash | Medir o gravado da O146 por agregado | `cd /home/ronald/saas-hasner && cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/o146_prova2.py <<'PY' # -*- coding: utf-8 -*- # PROVA do ato da O146 -- SO LEITURA, valor GRAVADO em prod. Agregado, sem laco. from escala.models import CelulaDia from django.db.models import Count print('CelulaDia total=%d com dna[extra_declarada]=%d' % ( CelulaDia.ob ...` |
 | 10:00:45 | TaskStop |  | `-` |
 | 10:00:42 | ToolSearch |  | `-` |
-| 09:58:53 | Bash | Corrigir a secao do max() no MECANISMO.md | `cd /home/ronald/saas-hasner && python3 - <<'PY' import io p='logs/r1/MECANISMO.md' s=io.open(p,encoding='utf-8').read() ini=s.index('## QUEM SUBTRAI A PAUSA') fim=s.index('## O PISO NAO E A LEI') novo = u"""## QUEM SUBTRAI A PAUSA: o ramo [nome] E A LEI -- `max()` esta DESCARTADO `ponto/turnos.py:472-482` (AUTORIDADE BUG-144, corte Ronald 14/09 ~21h30): - `if _pares_marcados(t):` -> subtrai **s ...` |
-| 09:58:25 | Bash | Reler a docstring da autoridade | `sed -n '446,487p' ponto/turnos.py` |
-| 09:58:16 | Bash | Ver a secao que afirma o max() | `cd /home/ronald/saas-hasner && grep -n 'QUEM SUBTRAI' -A 60 logs/r1/MECANISMO.md \| head -80` |
-| 09:58:07 | Bash | Reler o selo que assere 500 | `sed -n '40,100p' ponto/tests/test_realizado_do_dia_autoridade.py` |
