@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 11:40:45.**
+**Medido em 10/10/2026 11:45:45.**
 
 | | |
 |---|---|
-| `HEAD` local | `9cf55592 [O224] a narrativa sai de perto da regra: 57 lapides com ponteiro, -6.898 chars, e a prova e de palavra -- o PRONTO de -10k pede REGRA e nao se alcanca aqui` |
+| `HEAD` local | `0093834b [O224] as duas tabelas de lookup saem do CLAUDE.md e o PRONTO passa a ser o numero que isso deu: -7.437 chars nesta fatia, -11.829 na obra, e a pergunta de lei que eu levei ao topo foi o que a fechou` |
 | `origin/main` | `d20a0e45 [O219] pouso: os docs do marco A0-b entram junto, e o merge que eu pedi sem commit virou FAST-FORWARD -- o codigo estava na arvore viva antes deste commit` |
-| commits a subir (`ahead`) | **4** |
+| commits a subir (`ahead`) | **5** |
 
 ## Fabrica
 
@@ -22,29 +22,19 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+0093834b [O224] as duas tabelas de lookup saem do CLAUDE.md e o PRONTO passa a ser o numero que isso deu: -7.437 chars nesta fatia, -11.829 na obra, e a pergunta de lei que eu levei ao topo foi o que a fechou
 9cf55592 [O224] a narrativa sai de perto da regra: 57 lapides com ponteiro, -6.898 chars, e a prova e de palavra -- o PRONTO de -10k pede REGRA e nao se alcanca aqui
 04392fe4 [O223] pouso B: a Empresa entra no censo de cadastro, e o custo que eu havia declarado em 7 foi medido em 15
 3b2c4f98 [O223] pouso A, 2 de 2: o link do hub entra DEPOIS do reload, e a prova que eu havia dado dele era vazia
 ae775a7b [O223] pouso A: a linha que diz QUAL CCT vale em QUAL empresa ganha porta humana, e o campo que escolhe entre piso legal e CCT deixa de se escrever por shell
-d20a0e45 [O219] pouso: os docs do marco A0-b entram junto, e o merge que eu pedi sem commit virou FAST-FORWARD -- o codigo estava na arvore viva antes deste commit
 ```
 
 ## `git status --short`
 
 ```
- M CLAUDE.md
  M app/config/crons_duracao.json
- M app/docs/AVAIS.md
- M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
- M app/docs/LAPIDES.md
- M app/docs/PENDENTES_RONALD.json
- M app/docs/PROMPTS.md
- M app/docs/RELATO.md
- M app/docs/TICKETS.md
  M bin/sonda_frota.sh
-?? app/docs/CRONS.md
-?? app/docs/JUIZES.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -133,6 +123,10 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  de lixa, RED contra o HEAD, oraculo externo (recibos do Dominio, cartao Nexti, planilha RS) pela L-110, zona inviolavel so com aval no
+  commit, orfao sai pela L-111.
+  2. CONTRATOS-DAS-FAMILIAS (mandato meu de 21/09): um doc curto por familia em app/docs dizendo quem manda e o que quebra se mexer = a
+  camada 2 da secao 8 do CLAUDE.md.
   3. DIAGRAMA-VIVO-EXPLICA (pedido meu de 27/09): o diagrama gerado por manage.py gerar_diagrama passa a mostrar, por bloco e em camadas
   (familias -> familia -> juiz), a pergunta que responde, o juiz, leis, selos, numero vivo e obras abertas. Gerado do codigo, nunca a mao.
 
@@ -152,25 +146,21 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   Segue a fila; PAREI so em lei ou !
 
-● Fechar o texto e reconferir os 66 selos e a regua de tickets · 1m 10s
-  ⎿  $ cd /home/ronald/saas-hasner; /usr/bin/python3 - <<'PYEOF'
-     import pathlib
-     p = pathlib.Path('/home/ronald/saas-hasner/app/docs/RELATO.md')
-     s = p.read_text(encoding='utf-8')
-     velho = ('e os dois itens novos do bloco OBRAS, **O243\nESMERIL-3-VALIDACAO** e **O244 CONTRATOS-DAS-FAMILIAS**, '
-     'registrado… (1m 9s · 2 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
+● Procurar o veredito de suite na mensagem do commit
+  ⎿  $ cd /home/ronald/wt-celula; git log -1 --format=%B b4d938aa | sed -n '40,120p' | grep -i -n 'suite\|Ran \|OK (\|portao\|selo' | head
+     -20
 
-· Proofing… (17h 45m 59s · ↓ 2.1m tokens)
+· Compacting conversation… (17h 50m 59s · ↓ 2.1m tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱ 83%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    6% until auto-compact
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Running test_o199_aceite_de_folga suite recut                                              37m 40s · ↓ 119.7k tokens
+  ◯ general-purpose  Grepping LEIS.md for touched sites                                                         42m 40s · ↓ 132.4k tokens
   ⧉  index
 ```
