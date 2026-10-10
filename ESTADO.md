@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 01:55:45.**
+**Medido em 10/10/2026 02:01:01.**
 
 | | |
 |---|---|
@@ -121,38 +121,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 3 shell commands
+  Ran 1 shell command
 
-● processados é int — o RED está correto. Curo só o MORDE, que afirmava sobre ausência de sinal:
+● Prova direta: isEnabledFor(INFO) == False no core vivo. O zero era cegueira — e a trava morde em silêncio hoje. Registro:
+
+  Ran 1 shell command
+
+● Agora o alcance pela autoridade do dado, na sombra. Vejo a porta:
 
   Ran 2 shell commands
 
-● MORDE verde com processados >= 1 provado; 3 RED vermelhos pela trava. Registro o censo completo:
+● Sonda na sombra, chamando as funções reais do sistema:
+
+  Ran 2 shell commands
+
+● Enquanto a sonda corre (e a árvore está montada por ela — só leio), faço o check da L-092 que o advisor pediu:
 
   Ran 1 shell command
 
-● Agora a cura. Leio o sítio vivo antes de montar:
+● Background command "Run the reach probe on the sombra" completed (exit code 0)
+
+● L-092 PROTEGE nomeia recalcular_fechamento_mes — o commit cita as duas. A sonda voltou:
 
   Ran 1 shell command
 
-● Decido remover permitir_exportada na origem (rotular "sem efeito" seria band-aid). Meço as chamadas reais que preciso migrar:
+● 10.111 de 26.954 — mas esse número superestima o futuro: inclui batidas que eram da competência corrente quando gravadas. O corte certo é
+  a data do export. Refaço:
 
-  Ran 1 shell command
+● Running 1 shell command…
 
-● Só 4 chamadas reais. Meço se a própria exceção fica órfã (L-111 morde no mesmo marco):
-
-  Ran 1 shell command
-
-● Achado que muda o tamanho do commit: há um único raise, então a classe fica órfã e a L-111 morde no mesmo marco. Registro antes de
-  decidir:
-
-  Ran 1 shell command
-
-● Advising using Fable 5.1
-
-✶ Proofing… (8h 2m 59s · ↓ 957.5k tokens)
+✢ Proofing… (8h 8m 15s · ↓ 970.0k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    8% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
