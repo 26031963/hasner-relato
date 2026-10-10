@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 20:17:01.**
+**Medido em 10/10/2026 20:22:31.**
 
 | | |
 |---|---|
@@ -129,42 +129,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Task "RED e construção do segundo intervalo" completed in background
-
-● Task "Rodar a suite cheia sobre a copia com o comentario curado" still running in background
-
-● Background command "Rodar o ensaio do bloco com a queda, medindo o gravado da 09" completed (exit code 0)
-
-  Read 1 file, ran 1 shell command
-
-● O refazer está bom (diverge=0, máscara OK) — a corrente parou no meu próprio portão: --conferir exige STATUS=OK, e logo depois de um
-  refazer o status é REFEITA; o OK só vem com o bloco. Vou corrigir o portão e retomar do passo 2, sem repetir o refazer (a sombra está
-  limpa de 20:11 e ninguém escreveu desde então).
 
   Ran 3 shell commands
 
-● O ensaio corre (espero pelo ARQUIVO). Enquanto isso, releio o ato que vai pousar, linha por linha — é ele que commita e deploya:
+● O mesmo escape me morde de novo: \n dentro de heredoc não-quotado virou newline de verdade. Corrijo sem escape nenhum:
+
+  Ran 1 shell command
+
+● Os dois compilam. Enquanto o bloco corre, confiro a suite:
+
+  Ran 1 shell command
+
+● Esmeril deste marco já está fechado (0 órfão por AST). O resto é espera — e espera é por arquivo:
 
   Ran 3 shell commands
 
-● A mensagem está completa. Falta nela o que só o ensaio em curso pode dizer — e isso também não se digita:
+● Background command "Esperar o arquivo do ensaio do bloco terminar" completed (exit code 0)
 
-  Ran 2 shell commands
+● Minha própria armadilha outra vez: ^== .* FIM$ casou o == HASH FIM do passo 2. A espera tem de casar o fim do SCRIPT, não prosa do log:
 
-● O md5 do ANTES — 892768aa… — é o mesmo md5 do snapshot de reversão, que foi tirado em PROD. Isso não é coincidência decorativa: diz que o
-  gravado da 09 na sombra é byte-idêntico ao de prod, e portanto a medição fala do número real. Vou conferir na fonte e fazer o ato dizer
-  isso só se for verdade:
+  Ran 1 shell command
 
-● Conferir o md5 do snapshot de reversao em prod
-  ⎿  $ cd /home/ronald/saas-hasner && grep -n -iE 'md5|linhas' logs/o219/reversao_09_20261010_1912.txt | head -8
+● Terceira vez que essa classe me morde — a memória existe e eu escrevi o padrão frouxo de novo. Vou endurecê-la:
 
-✢ Proofing… (1d 2h 22m · ↓ 3.1m tokens)
+  Read 1 file, ran 2 shell commands
+
+● O padrão agora casa uma linha só — e o frouxo casava. 15 de 71 comandos. Enquanto corre, levo o ato ao revisor antes do ato irreversível:
+
+● Advising using Fable 5.1
+
+✢ Proofing… (1d 2h 27m · ↓ 3.1m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
