@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 01:45:45.**
+**Medido em 10/10/2026 01:47:40.**
 
 | | |
 |---|---|
@@ -122,35 +122,35 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-● Sem import morto. A pista está com o push, então não rodo o RED ainda. Avanço a cláusula 3 — mas primeiro medir onde a pauta DP é
-  pré-condição, porque eu não sei:
-
-  Ran 1 shell command
-
-● Pista presa pelo pre-push:121901. Meço se a cláusula 3 tem sítio próprio ou vive dentro da 1:
-
-  Ran 2 shell commands
-  ⎿  Read docs/AVAIS.md (27 lines)
-  ⎿  Read docs/HANDOFF-SESSAO.md (47 lines)
-  ⎿  Referenced file docs/RELATO.md
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/blfy3t2pb.output (12 lines)
-  ⎿  Referenced file ponto/turnos.py
-
 ● Task "RED e construção do segundo intervalo" completed in background
 
 ● Background command "Push the corrective marco through the pre-push regua" completed (exit code 0)
 
 ● O push pousou. Confiro no remoto, não no log:
 
-  Confirming the push verdict at the remote
-  ⎿  $ cd /home/ronald/saas-hasner
-     git fetch --quiet origin 2>&1 | sed 's/^/ /'
-     echo " HEAD: $(git rev-parse --short HEAD)"
-     echo " origin/main: $(git rev-parse --short origin/main)"
-     echo " a empurrar: $(git rev-list --count origin/main..HEAD)"
-     git merge-base --is-ancestor HEAD origin/main && echo " is-a…
+  Ran 1 shell command
 
-· Proofing… (7h 52m 59s · ↓ 933.7k tokens)
+● Veredito no remoto: a364847b = origin/main, a empurrar: 0, is-ancestor SIM. Pista livre. Lanço o RED da cláusula 1 na cópia enquanto
+  fecho o marco:
+
+  Ran 5 shell commands
+
+● RED evidenciado. Confiro que os 3 errors são a trava, e não fixture quebrada:
+
+  Ran 1 shell command
+
+● RED evidenciado pelos três caminhos, com a mesma exceção — e a mensagem dela acabou de responder a medição da cláusula 3. Registro:
+
+  Ran 1 shell command
+
+● Agora fecho o marco O218 pela L-108:
+
+● Running 1 shell command…
+  ⎿  $ cd /home/ronald/saas-hasner
+     bash bin/relato.sh 2>&1 | tail -20 | sed 's/^/ /'
+     echo " rc=${PIPESTATUS[0]}"
+
+✻ Proofing… (7h 54m 54s · ↓ 939.4k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
