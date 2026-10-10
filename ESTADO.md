@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 09:39:01.**
+**Medido em 10/10/2026 09:44:20.**
 
 | | |
 |---|---|
@@ -33,9 +33,11 @@ d20a0e45 [O219] pouso: os docs do marco A0-b entram junto, e o merge que eu pedi
 
 ```
  M app/config/crons_duracao.json
+ M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
  M app/docs/LEIS.md
  M app/docs/RELATO.md
+ M app/docs/TICKETS.md
  M bin/sonda_frota.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -135,15 +137,14 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-● Adding the pouso B row to TICKETS
-  ⎿  $ cd /home/ronald/saas-hasner/app
-     python3 - <<'PY'
-     import pathlib
-     cols = [
-     ' O223',
-     'estrutural (familia folha/export -- cadastro que decide a REGUA), fatia **pouso B**',
-     '**A EMPRESA ENTRA NO CENSO DE "CHAVE SEM LEITOR", E A L-006 FECHA.** A linha da L-006 previa que UMA '
-     'fatia fechava as duas d…
+● Running the whole host-seal folder · 1m 14s
+  ⎿  $ cd /home/ronald/saas-hasner
+     falhas=0
+     for s in bin/tests/test_*.sh; do
+     out=$(timeout 180 bash "$s" 2>&1); rc=$?
+     if [ $rc -ne 0 ]; then falhas=$((falhas+1)); echo "### VERMELHO rc=$rc: $s"; echo "$out" | tail -12; fi
+     done
+     echo "=== selos de host vermelhos: $falhas ===" (1m 14s)
   ⎿  Read docs/AVAIS.md (30 lines)
   ⎿  Read docs/HANDOFF-SESSAO.md (47 lines)
   ⎿  Referenced file core/tests/test_o223_porta_humana_da_aplicacao.py
@@ -152,10 +153,11 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Task "RED e construção do segundo intervalo" completed in background
 
 ● Task "Run the full suite on the copy" still running in background
+     (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Proofing… (15h 44m 15s · ↓ 1.8m tokens)
+✻ Proofing… (15h 49m 34s · ↓ 1.9m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                   12% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

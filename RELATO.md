@@ -66,8 +66,11 @@ documentar; `readonly_fields` e comportamento, e `rotulo_de_efeito` so devolve r
 entao **zero template mudou** e a fatia nao passa pelo FRONT-SEM-SMOKE. **Fila nova nascida aqui**: os 8
 campos de janela de HE (e os vizinhos do `regime_trabalhista`) tem escritor de producao em
 `colaboradores/services/estrutura.py::atualizar_empresa`, e o **admin escreve por fora dele**. Isso e achado
-de **contrato 2** (*um escritor por entidade*) da familia `folha/export`, nao desta fatia: vai para a fila,
-nao para este commit. Trancar aqui seria regra de negocio fora do pedido.
+de **contrato 2** (*um escritor por entidade*), nao desta fatia: vai para a fila, nao para este commit.
+Trancar aqui seria regra de negocio fora do pedido. **A linha tem nome e endereco**, para nao morrer em
+prosa: `ADMIN-ESCREVE-EMPRESA-FORA-DA-PORTA` no bloco OBRAS, com portao `**registrada**` -- fila DEPOIS
+dos contratos. E ela NAO entrou em `core/juizes.py::PENDENTES` de proposito: escolher a familia e a
+pergunta ali **move celula do placar**, e isso nao se decide de passagem dentro de outra fatia.
 
 **Uma nota que teria comecado a mentir.** A celula `folha/export x parametro consumido ou sem efeito` de
 `core/contratos_estruturais.py` dizia *"Sobram 2 CONSUMIDO ... O total da DECLARACAO nao mudou (49)"*. Com
