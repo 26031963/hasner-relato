@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 16:55:01.**
+**Medido em 10/10/2026 17:00:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `ccad3d52 [O48] passo 2: a porta de LEITURA do fechamento nasce sem segundo derivador, e a prova de que nao ha segundo e o DIFF de frota ZERO` |
+| `HEAD` local | `0ab4717e [O48] passo 2, numero de FROTA: lido == gravado em 583 de 583 colabs da 10/2026, e os 4 que sobram sao universo de cadastro, nao buraco da porta` |
 | `origin/main` | `d20a0e45 [O219] pouso: os docs do marco A0-b entram junto, e o merge que eu pedi sem commit virou FAST-FORWARD -- o codigo estava na arvore viva antes deste commit` |
-| commits a subir (`ahead`) | **17** |
+| commits a subir (`ahead`) | **18** |
 
 ## Fabrica
 
@@ -22,21 +22,18 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+0ab4717e [O48] passo 2, numero de FROTA: lido == gravado em 583 de 583 colabs da 10/2026, e os 4 que sobram sao universo de cadastro, nao buraco da porta
 ccad3d52 [O48] passo 2: a porta de LEITURA do fechamento nasce sem segundo derivador, e a prova de que nao ha segundo e o DIFF de frota ZERO
 c1d3a6e4 [O228] pouso do INSTRUMENTO da familia turno em ato proprio: o censo nasce com a catraca medida FORA da janela do merge, porque ele le a arvore onde mora
 31fce87c [O228] pouso do PRODUTO da metade TURNO: o merge devolve rc 1 POR MEDIDA, e a uniao dos docs vem da copia que a suite rodou
 447bb013 [O199] pouso: o aceite de folga declarada DECIDE o dia pela porta que ja existia, e o pouso foi certificado por BYTE em vez de confianca na raia
-33f80dfb [O219] miolo: a versao da regra entra na impressao do cartorio e a declaracao nasce VAZIA -- o mecanismo pousa movendo ZERO dia, e a virada fica sendo ato de frota
 ```
 
 ## `git status --short`
 
 ```
  M app/config/crons_duracao.json
- M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
- M app/docs/RELATO.md
- M app/docs/TICKETS.md
  M bin/sonda_frota.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -126,38 +123,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Committed ccad3d52, read 1 file, ran 10 shell commands
+● MARCO FECHADO — pode compactar
 
-● Enquanto a sonda corre, o estado do marco:
+  O48 passo 2 fechado com o número de frota medido depois do deploy.
 
-  - commit ccad3d52 — [O48] passo 2: a porta de LEITURA do fechamento nasce sem segundo derivador… (10 arquivos, 309+/32-)
-  - no ar — bin/deploy.sh --sem-migrate: prova de casca (16 estáticos, 5 páginas, 611 rotas em 2 urlconf), três cascas recarregadas juntas,
-    três rotas provadas (core /health/ 200, ui /colaboradores/ 302, mensageria /health/ 200), selo BUG 128 verde, importerror_500=0
-  - portões do push verdes sobre o commit — regua_tickets: OK -- 6 citacoes com linha na tabela, tickets_placar OK, e o que mais importava
-    aqui: test_lei_protege_sitio: tocados neste push: 1 (L-113, citados) — o sítio protegido que eu toquei (recalcular_fechamento_mes) está
-    citado no corpo do commit
-  - ruff limpo nos 3 arquivos, 0 selo de host vermelho na pasta inteira
+  - lido == gravado em 583 de 583 colabs da 10/2026, DIFEREM = 0 nos 26 campos, listas de campos e de quem difere vazias. É a frase do RED
+    do aval ao pé da letra: o par rodou --recalcular na mesma sombra às 16:26–16:31, então o "gravado" da 10/2026 é a lavratura derivada
+    ali — dito com o horário para não se ler como comparação contra o gravado de prod.
+  - custo: lote de 583 em 107,5 s (0,184 s/colab), uma chamada da porta em 0,19 s, pk is None confirmado, porta-de-um × lote divergem em 0
+    campo, fora do universo → None.
+  - os 4 so_gravado são universo, não buraco: medidos com o predicado da própria função (fechamento.py:94), 4 de 4 são desligado com
+    demissão anterior a 2026-09-02. Fica linha de fila — eles seguem com status=aberto numa competência que o recálculo já não cobre.
+  - "GET que escreve" fechado por AST: as duas chamadas de _lavrar_dia_pago (:655, :718) estão sob o mesmo if de :645 (not somente_leitura
+    or lavrar_dias_pagos), e fechamento_lido fecha os dois. Corroboração no log: o caminho de escrita imprimiu 210 linhas de lavratura
+    falhou, a sonda de leitura 0 — o canal existe, a tentativa não. Fila: o caso 3 do RED roda em julho, e o bloco de :707 é >= (2026,10).
+  - esmeril do marco: retornar_objeto não orfanou o ramo de dicionário (4 chamadores de produção vivos) — L-111 não dispara.
 
-  Ran 3 shell commands
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bxqthlo3j.output (7 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bhrpwyexr.output (25 lines)
-  ⎿  Read docs/AVAIS.md (23 lines)
-  ⎿  Read docs/HANDOFF-SESSAO.md (45 lines)
-  ⎿  Read
-     ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/pouso-celula/turno_prompt.md
-     (47 lines)
+  Commit 0ab4717e (3 docs, +6/-2), com a razão L-106 escrita: o número é fisicamente posterior ao pouso porque a sonda monta a árvore viva.
+  Portões: regua_tickets OK, tickets_placar OK, 0 selo de host vermelho. 18 a empurrar, push retido pelo smoke.
 
-● Task "RED e construção do segundo intervalo" completed in background
+  Sigo para RECALC-09-PARA-AUDITORIA.
 
-● Background command "Esperar pelo fim da sonda de frota" completed (exit code 0)
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: PLACAR-ESTRUTURAL -- O ESTRUTURAL SE SEPARA DO DADO (corte dele 02/10 22:5x, que SUBSTITUI o item 3 da
+  ordem das 21:4x -- o resto d
 
-  Ran 14 shell commands
+  Ran 12 shell commands
 
 ● Advising using Fable 5.1
 
-✢ Proofing… (23h 0m 15s · ↓ 2.7m tokens)
+✢ Proofing… (23h 5m 45s · ↓ 2.7m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    7% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
