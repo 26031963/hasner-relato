@@ -1,5 +1,60 @@
 # RELATO — esteira saas-hasner
 
+## W12X36-HPD FECHADO PELO SMOKE DELE, E O SMOKE ACHOU UM BO — **MEDIDO ANTES DE UMA LINHA DE CURA** (10/10 00:0x)
+O smoke dele fechou as duas metades que o numero previa: *"marquei o domingo com horario proprio e salvou;
+um 12x36 sem marcar nada continuou igual"* -- e o "continuou igual" era exatamente o `0 de 896 dia-tipo
+mudam` da medicao de 02/10. Item **respondido** pelo escritor canonico (AVAIS 10 -> 9).
+**PROVA:** `app/docs/PENDENTES_RONALD.json` com `W12X36-HPD-SMOKE.estado='respondido'` e
+`respondido_em='2026-10-10T00:0x'`; `git diff --stat` do JSON = **1 arquivo, 3 insercoes, 2 delecoes**
+(so este item, nada de churn); `bin/gerar_avais.py --escrever` imprimiu `AVAIS NA MESA: 9`.
+
+No MESMO smoke ele achou um BO de TELA e mandou medir: *"Publica quantos TipoEscala foram criados com o
+campo vazio desde 24/08, so leitura"*. **O numero pedido nao se conta pela linha, e isso e medicao, nao
+desculpa**: `intervalo_duracao_min` **nao e nullable** (`escala/models.py:110`, `default=60`, sem
+`null=True`), entao "vazio no wizard" e "60 digitado" caem no MESMO valor; e `TipoEscala` **nao tem campo
+de criacao** nem trilha (`grep` de auditoria em `cadastro_tipo.py` = 0), entao "desde 24/08" nao tem
+autoridade na linha. O que esta medido, em prod e so leitura: **355 tipos**, **333 em 60** -- que e **TETO**
+da classe "nasceu sem duracao declarada", nunca a classe --, **22** com duracao digitada de verdade, e
+**0 em valor 0**: o caso que o rotulo da tela promete nunca foi gravado uma vez em 355 tipos, embora seja
+gravavel (`request.POST.get` devolve `'0'`, que passa pelo `isdigit`). Recorte por data **como PROXY
+declarado**: dos 333 em 60, 49 tem vinculo com `data_inicio >= 24/08`, 205 tem vinculo mais antigo e 79
+nao tem vinculo nenhum.
+**PROVA:** `logs/w12x36/sonda_dur.out` (sonda com as duas assercoes de banco, `settings` e `connection`
+== `saas_hasner`, nada escrito), sonda em `logs/w12x36/sonda_dur.py` e a leitura em
+`logs/w12x36/MEDIDO.md`.
+
+**O BO e PIOR do que o aval descreve, e o sentido se INVERTE.** O aval diz "vazio nao grava"; medido, vazio
+tem DOIS efeitos e nenhum deles e "sem pausa": na **CRIACAO** o atributo nunca e atribuido
+(`cadastro_tipo.py:243-245`, `_dur.isdigit()` False) e o tipo nasce com o `default=60` do modelo -- o
+sistema desconta **uma hora**, o OPOSTO do que o rotulo promete --; na **EDICAO**, vazio **preserva o valor
+anterior**: limpar o campo nao limpa nada. E `cadastro_tipo.py:239` promete por escrito *"Vazio = None"*,
+valor que um `PositiveSmallIntegerField` sem `null=True` nao pode guardar. Virou **O235**, na raia wt-bos
+depois da O207, como ele mandou; cura de TELA e de ROTULO, **0 juiz novo, 0 escritor novo**.
+
+## PLACAR-ESTRUTURAL — AS TRES **NO REMOTO**, E A ORDEM DELE REPOE O ITEM NO 5o LUGAR (10/10 00:0x)
+O marco fechou onde estava: as tres (`ec4b1994` R3, `1c281f92` BATERIA, `f415e116` instrumento) estao no
+tronco, e o veredito e **do remoto**, nao de rc de background nem de `tail` de log -- a licao de 08/10,
+quando `OK -- nenhuma divergencia` casou um `grep` de veredito e me deu por verde uma suite que terminava
+em `FAILED`.
+**PROVA:** `git fetch && git rev-list --count origin/main..HEAD` = **0**; HEAD == origin/main ==
+`f415e116`; `git merge-base --is-ancestor` devolve ancestral para as **tres**.
+
+O aval das 00:0x **corrige a ordem que eu vinha seguindo**: eu estava no `siga` do hook, que manda
+PLACAR-ESTRUTURAL, e ele diz que o item e o **5o** -- a principal vai para a **O219** (ordem de 18:3x:
+O232 -> O219 -> O223 -> O224 -> contratos -> O228). A divergencia do hook **nao se cura agora**, por ordem
+dele (*"se cura em pouso de instrumento, depois"*): entao ela fica como esta, e eu **nao** invento palavra
+de estado no BACKLOG para o hook concordar com a fila. Antes da O219 entra o **pouso da O207**, que e o
+lugar que a L-105 reserva para raia verde.
+
+**O marco nao devia nada ao ar, e isso foi medido, nao assumido.** `core/placar_estrutural.py` nao tem UM
+importador na aplicacao: quem o le e o HOST, por `spec_from_file_location` (`bin/gerar_estado.py:54-69`),
+entao nenhuma casca o importa e um reload nao mudaria nada para ele. Foi por isso que eu **nao** rodei
+`bin/deploy.sh` as 23:5x com o portao da sombra a minutos de ficar cego -- e `--sem-sombra` com motivo
+inventado para fechar o marco antes da meia-noite seria atalho, e atalho e `!`.
+**PROVA:** `logs/placar/DEPLOY_NAO_E_DEVIDO.md` (0 importador Python na app, 0 template, so os leitores de
+host); e o veredito do placar sai da funcao REAL: `veredito()` devolveu `VERDE (termometro em dia)` com
+`medido_em={'R1': '2026-10-09'}` lido do NOME do arquivo da fonte declarada, nao de prosa.
+
 ## PLACAR-ESTRUTURAL BATERIA — **A CONTAGEM ENVELHECEU EM HORAS, PELA MAO DE QUEM A ESCREVEU** (09/10 23:2x, mesmo item em curso)
 Com o R3 medido e o selo dele construido, fui remedir os outros DOIS registros ainda PARCIAIS -- porque
 a licao do R3 nao e "aquela frase estava errada", e **ninguem perguntava a fonte**. O R6 passou: pelas
