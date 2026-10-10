@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 04:45:45.**
+**Medido em 10/10/2026 04:51:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `a364847b [O218] corretivo: a guarda da sombra volta a ter UM sitio, e o selo que faltava nasce VERMELHO no commit anterior` |
+| `HEAD` local | `374b7712 [O219] pouso: a A0-a entra no main com os docs do marco, e a linha do CLAUDE.md que ensinava o veredito solto passa a ensinar o estrito` |
 | `origin/main` | `a364847b [O218] corretivo: a guarda da sombra volta a ter UM sitio, e o selo que faltava nasce VERMELHO no commit anterior` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -22,23 +22,19 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+374b7712 [O219] pouso: a A0-a entra no main com os docs do marco, e a linha do CLAUDE.md que ensinava o veredito solto passa a ensinar o estrito
+89570af4 [O219] A0-a: a forma e a prova do TXT do Dominio passam a ter UM sitio, e o empate de carimbo deixa de poder guardar um registro e substituir outro
 a364847b [O218] corretivo: a guarda da sombra volta a ter UM sitio, e o selo que faltava nasce VERMELHO no commit anterior
 672f88e1 [O218] instrumento: a porta da sombra passa a enxergar a arvore de uma raia, e com isso a medicao cabe ANTES do pouso
 353818c5 [O207] pouso: a terceira opcao do Inicio da apuracao entra no ar no mesmo ato do merge, e o smoke dele fecha o W12X36-HPD achando um BO de tela
-4831eb93 [O207] a tela do assistente de fase ganha a terceira opcao -- a data que o admin DECLARA --, e a inativa sobreposta deixa de cobrir o trecho de outra vigencia
-f415e116 [PLACAR-ESTRUTURAL] instrumento: o placar deixa de poder dizer que esta fora do ar um commit que o git ja tem no tronco
 ```
 
 ## `git status --short`
 
 ```
- M CLAUDE.md
  M app/config/crons_duracao.json
- M app/docs/AVAIS.md
  M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
- M app/docs/PENDENTES_RONALD.json
- M app/docs/RELATO.md
  M app/docs/TICKETS.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -127,36 +123,36 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  depois. Não escrevi PAREI, não toquei no hook nem na ordem do BACKLOG — a fila 1 continua na O219, e o próximo item depois do pouso é a
-  A0-b, que é leitura e não depende do !.
-  ⎿  Read docs/AVAIS.md (28 lines)
-  ⎿  Read docs/HANDOFF-SESSAO.md (47 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b354njfld.output (30 lines)
-  ⎿  Referenced file ../../wt-l113/app/ponto/services/fechamento.py
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/blfy3t2pb.output (12 lines)
+● O portão da sombra abriu. Antes de entrar na janela do merge, fecho as duas pontas que o advisor abriu:
 
-● Task "RED e construção do segundo intervalo" completed in background
+  Ran 2 shell commands
 
-● Task "Wait in background for the sombra gate: cron file gone and carimbo OK" still running in background
-
-  Ran 13 shell commands
-
-● Falso alarme da minha própria sonda, e preciso dizer isso antes de qualquer conclusão: anotar_vigencia/so_vigentes existem — moram em
-  folha/models.py, não em folha/export.py, e o meu hasattr(X, ...) perguntou ao módulo errado. O comando commitado está correto. Mas a
-  medição que eu fiz no caminho achou coisa de verdade:
-
-  Ran 3 shell commands
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-● O advisor pegou uma hipótese vestida de fato na minha própria prosa. Medindo antes de deixar isso entrar num commit imutável:
+● Medição decide, e o meu texto estava errado: a migration 0005_exportacaodominio_conteudo foi aplicada em 02/07/2026 13:13, e o pk=2
+  nasceu em 30/06/2026 20:19 — dois dias antes de o campo existir. O '' dele é o default da migration, não uma cópia perdida. Fechando o
+  censo com a data certa:
 
   Ran 1 shell command
 
-● Background command "Wait in background for the sombra gate: cron file gone and carimbo OK" completed (exit code 0)
+● O veredito muda de sinal: comparáveis=25, batem=25, divergentes=0, incomparáveis=1. O acervo está limpo. Corrigindo o que eu havia
+  escrito, antes de entrar no commit:
 
-✶ Proofing… (10h 50m 59s · ↓ 1.3m tokens)
+  Ran 2 shell commands
+
+● Portão aberto e verificado duas vezes (status=OK ... diverge=0 erros=0, rc 0 sem pipe). Pousando:
+
+  Committed 374b7712, ran 1 shell command
+
+● No ar, deploy rc 0. Medindo que o código está de fato nas cascas, e não só no disco:
+
+  Ran 3 shell commands
+
+● 66 selos de host verdes, 0 vermelho. Fechando o marco:
+
+  Regenerating the session handoff after the deploy
+  ⎿  $ cd /home/ronald/saas-hasner && bash bin/handoff_sessao.sh 2>&1 | tail -3; echo "--- o que o handoff passou a dizer ---"; sed -n
+     '5,8p;18,24p;45,48p' app/docs/HANDOFF-SESSAO.md
+
+· Proofing… (10h 56m 15s · ↓ 1.3m tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
