@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 20:22:31.**
+**Medido em 10/10/2026 20:28:01.**
 
 | | |
 |---|---|
@@ -130,41 +130,41 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-  Ran 3 shell commands
+  Ran 2 shell commands
 
-● O mesmo escape me morde de novo: \n dentro de heredoc não-quotado virou newline de verdade. Corrijo sem escape nenhum:
-
-  Ran 1 shell command
-
-● Os dois compilam. Enquanto o bloco corre, confiro a suite:
+● Há uma terceira testemunha, mais forte que o md5 para "houve escrita?": FechamentoMensal.atualizado_em é auto_now=True (models.py:436) —
+  qualquer save() o move, mesmo gravando valor idêntico. Escrevo a sonda dela agora, com o corte derivado do próprio ensaio:
 
   Ran 1 shell command
 
-● Esmeril deste marco já está fechado (0 órfão por AST). O resto é espera — e espera é por arquivo:
-
-  Ran 3 shell commands
-
-● Background command "Esperar o arquivo do ensaio do bloco terminar" completed (exit code 0)
-
-● Minha própria armadilha outra vez: ^== .* FIM$ casou o == HASH FIM do passo 2. A espera tem de casar o fim do SCRIPT, não prosa do log:
+● Agora os portões que faltavam no ato — md5 igual não basta:
 
   Ran 1 shell command
 
-● Terceira vez que essa classe me morde — a memória existe e eu escrevi o padrão frouxo de novo. Vou endurecê-la:
+● Background command "Rodar a suite cheia sobre a copia com o comentario curado" completed (exit code 0)
 
-  Read 1 file, ran 2 shell commands
+  Ran 1 shell command
 
-● O padrão agora casa uma linha só — e o frouxo casava. 15 de 71 comandos. Enquanto corre, levo o ato ao revisor antes do ato irreversível:
+● Background command "Esperar o veredito da suite cheia sobre a copia" completed (exit code 0)
 
-● Advising using Fable 5.1
+● Suite 2 verde com o comentário curado dentro: Ran 10349 tests in 1457.478s / OK (skipped=42), 0 FAIL/ERROR. Agora os dois pré-voos
+  baratos, antes de o cp deixar 21 arquivos na árvore viva:
 
-✢ Proofing… (1d 2h 27m · ↓ 3.1m tokens)
+  Ran 1 shell command
+
+● deploys_agendados=0 — nenhum disparo único para colidir. Leio as duas guardas que o pre-commit vai cobrar:
+
+  Ran 1 shell command
+
+● Ambas as guardas são satisfeitas pelo ato (zero deleção, lista declarada idêntica, index == disco). Confirmo o que é arquivo novo, que é
+
+· Proofing… (1d 2h 33m · ↓ 3.1m tokens · thought for 9s)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    6% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
