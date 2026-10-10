@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 02:17:31.**
+**Medido em 10/10/2026 02:23:01.**
 
 | | |
 |---|---|
@@ -121,42 +121,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 2 shell commands
-
-● 26 campos, menos mes/ano = 24. Escrevendo a sonda que usa a porta real, com mutação vazia — assim a coluna efeito prova que a cura não
-  move aritmética, e a deriva é o passivo:
+● Item 7 fechado: ninguém rotula "exportada" por FechamentoMensal — a autoridade é ExportacaoDominio em todos os leitores. Registrando o
+  achado da medição, que muda a decisão:
 
   Ran 1 shell command
 
-● Escrevendo a sonda na porta da sombra:
-
-  Ran 2 shell commands
-
-● Sombra do dia, diverge=0, livre. Disparando o DIFF pela porta:
+● Background command "Run the DIFF probe on the sombra" completed (exit code 0)
 
   Ran 1 shell command
 
-● Enquanto corre (a árvore viva não se toca durante a medição), abro a raia — criar worktree não escreve na árvore principal:
-
-  Ran 2 shell commands
-
-● Raia limpa em a364847b. Recenseando os sítios do commit A dentro da raia (a árvore viva está sob medição):
+● O número completo: 560 colaboradores nas 7 competências. Registrando — e corrigindo a frase do efeito, que prova idempotência das duas
+  leituras, não que a cura não move aritmética:
 
   Ran 1 shell command
 
-● O censo na raia é maior do que o contrato registrava. Deixo isso durável antes de decidir:
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+
+● Dois cheques antes de qualquer frase: o que a cláusula 2 é, e se a testemunha já existe:
 
   Ran 1 shell command
 
-  Advising using Fable 5.1
+● A cláusula 2 é a guarda HX-REGEN-NAO-TOCA-EXPORTADO — removê-la alarga o funil. A inversão A↔B estava construída sobre um rótulo errado e
+  cai. Agora a testemunha — os 3 hashes:
 
-✢ Proofing… (8h 24m 45s · ↓ 992.2k tokens)
+● Reading ExportacaoDominio fields to find a stored witness
+  ⎿  $ cd /home/ronald/saas-hasner/app
+     echo "=== campos de ExportacaoDominio ==="
+     sed -n '/^class ExportacaoDominio/,/^class /p' folha/models.py | grep -nE '= models\.|def |@property' | head -40
+
+✢ Proofing… (8h 30m 15s · ↓ 1.0m tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                   12% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
