@@ -1,18 +1,25 @@
 # RELATO — esteira saas-hasner
 
-> **PERGUNTA DE LEI NO TOPO, e o turno NAO volta** (PAREI-DE-LEI-NAO-DEVOLVE-TURNO): o **backfill de aceite de
-> folga** da O199 e **LOTE**, e nao ha lei escrita para lote. A raia `raia-bos` (`c44c6c80`) curou o ATO: dali
-> para frente o aceite do admin decide o dia. O que ela **nao** curou, por ser dado retroativo de escala
-> (NUNCA PRE-APROVADO, L-009), sao os aceites **ja carimbados**: `FOLGA_CONTESTA` tem **340** perguntas, **265**
-> validadas e **100 validadas sem materializar**; em dias distintos isso da **135**, dos quais **23 ja sao folga**
-> (honrados por outro caminho) e **112 dias, em 60 colaboradores**, estao na situacao do BO. O juiz real
-> (`ponto/services/declarar_dia.py::checar_declaracao`) responde hoje **103 ACEITA (pode declarar)** e **9
-> recusados por veto de precedencia** (o dia ja tem outro lancamento). `FALTA_DIA` e `ATESTADO` tem backlog
-> **0** -- o roteador os resolve na RESPOSTA, e e essa assimetria que e o item.
-> **A LEI QUE FALTA:** a L-092 + REGEN-EM-EXPORTADA dao a forma de **UM colaborador por ato** com TXT parcial de
-> retificacao -- mas **112 dias / 60 colaboradores nao e um ato, sao 60**, e parte deles cai em competencia
-> exportada. **Qual e a forma do backfill em LOTE?** Enquanto nao houver lei, o backfill nao foi fabricado e a
-> esteira SEGUIU (a O199 pousa sem ele; nada do que foi entregue depende desta resposta).
+## MARCO 10/10 16:3x — O48 PASSO 2: A PORTA DE LEITURA DO FECHAMENTO NASCE SEM SEGUNDO DERIVADOR, E A PROVA DE QUE NAO HA SEGUNDO E O DIFF DE FROTA ZERO
+
+LEI-AKITA: origem=`ponto/services/fechamento.py` (a propria `recalcular_fechamento_mes`, que passa a saber devolver OBJETO -- nenhuma derivacao nova), testemunha=a MESMA derivacao que grava quando grava, RED=`ponto/tests/test_o48_fechamento_lido.py` (4 casos; o 2 morde `objects.get` disfarcado de leitura e o 3 morde escrita medida no banco), quem-mais-le=0 consumidor novo nesta fatia (a porta nasce sem leitor; o passo 3 e quem a le), juizes novos=0
+
+TOPO FECHADO: a pergunta de lei do backfill de folga em LOTE foi RESPONDIDA pelo aval dele de 16:0x e virou a **O246**; o censo que a abriu (340 / 265 / 100 / 135 / 23 / **112 dias em 60 colaboradores** / 103 ACEITA / 9 vetados) mudou de casa para a celula da O246 no BACKLOG, pela L-109 (mover, nunca apagar).
+
+O QUE MUDOU
+- `ponto/services/fechamento.py:1007` nasce **`fechamento_lido(colaborador, mes, ano)`**: devolve o `FechamentoMensal` DERIVADO AGORA, instancia DESTACADA (`pk is None`, entao um `save()` seria alteracao muda e nao acidente), e `None` -- nunca casca vazia -- fora do universo. Ela nao tem UMA LINHA de derivacao propria: delega a `recalcular_fechamento_mes(..., somente_leitura=True, retornar_objeto=True)`. **UM JUIZ, NAO DOIS**, que e o PROIBIDO literal do aval. Competencia exportada LEVANTA `CompetenciaExportada` de proposito -- a porta nao passa `permitir_exportada`, entao ela nao e a terceira porta da L-113.
+- `recalcular_fechamento_mes` ganha `retornar_objeto=False` e a SEMENTE do ramo `somente_leitura` passa a copiar a linha INTEIRA do gravado, nao so `status` e `inconsistencias`.
+- `ponto/tests/test_s4_ninguem_recalcula_para_ler.py:43`: so o MOTIVO da linha permitida, que passa a nomear a porta. `len(PERMITIDO)` segue **12** -- a fatia nao abriu excecao nenhuma.
+
+OS NUMEROS, MEDIDOS NA FONTE
+- **DIFF DE FROTA = 0**, pela porta unica da casa (`bin/simular_folha.sh par o48p2`), competencia **10/2026** na sombra (carimbo `dia=20261010 status=OK tipo=completa diverge=0`), as duas fotos dentro de **UMA** trava: emp2 133 linhas, emp3 70, emp4 5, o `sha` de cada empresa **IGUAL nos dois lados** (`dcec03c1dcdc` / `8bfd0c0fecb2` / `b47fa40cecd9`), `entraram=0 sairam=0 mudaram=0`, `TXT=0 RETIDOS=0`, `comparar rc=0` (rc 5 seria foto de trava diferente).
+- RAIO DE ALCANCE da semente, por **AST** e nao por argumento: `recalcular_fechamento_mes` tem **27** atributos escritos, **37** leituras e **4** leituras-antes-de-escrita (`inconsistencias`, `status`, `.save`, `.pk`) -- **as MESMAS 4 no HEAD e na cura** --, e os dois campos de dado entre elas sao exatamente os que o HEAD JA copiava do gravado. O `save()` mora no `elif` do MESMO `if somente_leitura:`: o caminho que grava dinheiro nao foi tocado, e isso se mediu antes de commitar, nao se argumentou.
+- SUITE CHEIA sobre a copia certificada por md5 (`abded237f546df7ff42f6b6f4712dd90`): `Ran 10344 tests in 1418.789s` / `OK (skipped=42)` / rc 0, zero `^FAIL:`/`^ERROR:`. **+4** contra os 10340 do pouso da O228 -- os 4 casos novos correram DENTRO dela, nao ao lado.
+
+INCOMPLETO (linha de fila, nao trabalho agora)
+- o numero de FROTA da porta em si (lido x gravado, colab a colab) sai **depois** do deploy: `bin/sonda_leitura.sh --sombra` monta a arvore VIVA (`/app:ro`), e e o commit que poe `fechamento_lido` nela. A sonda esta pronta e RECUSA a arvore sem a porta em vez de medir outra coisa.
+- `ponto/services/fechamento.py:717-722` faz "o motor falhou" e "fora do universo" responderem os DOIS `None`, e os confunde num so balde.
+- a diferenca **26 x 28** entre `CAMPOS` do `aplicar_09_corte_b` e os campos concretos do modelo -- e o fato de um dict de servico importar a sua lista de campos de um management command de uma vez.
 
 ## MARCO 10/10 15:2x — O228 POUSA INTEIRA: O PRODUTO E O INSTRUMENTO EM ATOS SEPARADOS, E A CATRACA SE MEDE EM COPIA PORQUE O CENSO LE A ARVORE ONDE MORA
 
