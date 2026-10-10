@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 19:55:45.**
+**Medido em 10/10/2026 20:01:01.**
 
 | | |
 |---|---|
@@ -130,41 +130,41 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-● Ran 123 / OK — all three failures cured at origin. Every one of the 15 targeted modules is now green. Launching the full suite over the
-  copy:
+● Task "Rodar a suite cheia sobre a copia" still running in background
+
+● Suite still green-silent (2003 lines, 0 falhas, sem veredito). Agora o ensaio da sombra — que o apply sujou — e ele vai correr sobre a
+  cópia, não sobre a árvore viva: container() honra SOMBRA_ARVORE (bin/sombra.sh:149-156), então o ensaio certifica o código que vai
+  pousar.
+
+  Ran 2 shell commands
+
+● O ensaio já foi refeito depois do apply — eu quase repeti 40 min de trabalho: SOMBRA_REFEITA="10/10 18:31", SOMBRA_BLOCO="10/10 18:55",
+  71 comandos, ERROS=0, DIVERGE=0, STATUS=OK. O apply foi 18:15→18:23, então o refazer das 18:31 apagou o que ele escreveu.
 
   Ran 1 shell command
 
-● While that runs, the marco's docs. First what the RED selo actually requires:
+● Portão do deploy verde (rc 0), os 8 alarmes são os de negócio conhecidos. Agora o ato do pouso, no molde do ato.sh:
 
-  Searched for 2 patterns, read 2 files, ran 14 shell commands
-  ⎿  Read AVAIS.md (23 lines)
-  ⎿  Read ../../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bkds3iwbt.output (47
-     lines)
-  ⎿  Read ../../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bbqklvm2d.output (10
-     lines)
-  ⎿  Read HANDOFF-SESSAO.md (45 lines)
-  ⎿  Read ../../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bmq1rhnnw.output (25
-     lines)
+  Ran 4 shell commands
 
-● Task "RED e construção do segundo intervalo" completed in background
+● Background command "Rodar a suite cheia sobre a copia" completed (exit code 0)
 
-● Task "Rodar a suite cheia sobre a copia" still running in background
+  Ran 1 shell command
 
-● Background command "Rodar a pasta inteira de selos de host" completed (exit code 0)
+● Suite VERDE: Ran 10349 tests in 1456.507s / OK (skipped=42), rc 0. O miolo já estava no ar com a tupla vazia (33f80dfb); a cópia carrega
+  a virada. Mas um comentário da cópia ainda fala da tupla vazia como se fosse o presente:
 
-● Ver onde o sombra roda e se houve migration hoje
-  ⎿  $ cd /home/ronald/saas-hasner && grep -n 'cpuset\|TESTE_DOCKER\|docker run\|recursos.sh' bin/sombra.sh | head -20; echo "===
-     migrations hoje?"; git log --since='2026-10-10 04:00' --name-only --pretty=format:'%h %s' | grep -i 'migrations/' | head
+● Ler o comentario da copia que fala da tupla vazia
+  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; C=$S/o219q/copia; sed -n '585,605p'
+     $C/app/ponto/services/cartorio.py
 
-· Compacting conversation… (1d 2h 0m · ↓ 3.0m tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱ 73%
+✢ Proofing… (1d 2h 6m · ↓ 3.0m tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    0% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
