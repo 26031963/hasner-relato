@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 23:30:45.**
+**Medido em 09/10/2026 23:36:01.**
 
 | | |
 |---|---|
@@ -122,44 +122,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Commit A2: 1c281f92. Agora o commit B — o instrumento. Vendo se o selo embute o python ou lê um irmão:
+
+● Esmeril fechado com número: 0 def/class removida, 0 criada nos três commits — o marco mexeu em prosa do registro e acrescentou um selo de
+  host, então não há órfão a apagar pela L-111. Nada a fazer nessa frente.
+
+  Estado do push:
 
   Ran 1 shell command
 
-● O .sh embute o python por heredoc, que é a forma da casa (3 selos vizinhos fazem igual) — o selo_corpo.py era extração só do meu banco de
-  patch e não embarca. Instalando e rodando a pasta inteira:
+● O pre-push passou da trava e está na suite (testa o commit empurrado f415e1162b). Veredito só pelo remoto — a empurrar: 3 ainda.
+
+  A espera é do próprio marco, e R4 é linha do mesmo placar. Orientação somente leitura para ele (L-110 manda escrever o CASO antes do
+  código, e antes disso tem de se saber qual autoridade o leitor consulta):
 
   Ran 2 shell commands
 
-● 65 selos de host, 0 vermelho. Rodando o rodapé derivado para entrar junto (L-106: docs não viajam sozinhas):
+● R4 tem um RED nomeado: col935 05/09, espelho 10,97 h x dia_pago 11,10 h = 8 min (18:52→19:00), porque EC#1186.marcos_do_dia devolve marco
+  de TEMPLATE num dia sem célula e fora do vínculo — o espelho ancora no marco, o dia_pago lê a batida crua. A cura é no LEITOR.
+  Orientação, só leitura:
 
-  Committed f415e116, ran 1 shell command
+● Reading the two authority sites in espelho
+  ⎿  $ cd /home/ronald/saas-hasner/app
+     echo "=== 120-140 (a funcao que devolve as horas do dia) ==="
+     sed -n '118,140p' ponto/services/espelho.py
+     echo
+     echo "=== 798-820 (pago_do_dia, a autoridade declarada) ==="
+     sed -n '798,820p' ponto/services/espelho.py
 
-● Três commits pousados. Pré-voo barato antes do push (ruff + a régua de tickets, que morde citação sem linha):
-
-  Ran 1 shell command
-
-● Tudo verde. Push — ele vai entrar na fila da trava que a raia wt-bos segura, o que é o device da casa:
-
-  Pushing the three PLACAR-ESTRUTURAL commits
-  ⎿  $ cd /home/ronald/saas-hasner
-     export SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
-     echo "a empurrar: $(git rev-list --count origin/main..HEAD)"; git log --oneline -3
-     echo "trava: $(bash bin/trava_teste.sh --quem 2>&1|tail -1)"
-     git push origin main …
-
-· Compacting conversation… (5h 37m 59s · ↓ 671.3k tokens)
-  ▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 15%
+✢ Proofing… (5h 43m 15s · ↓ 676.1k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    0% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Polling g3.out for suite verdict                                                        1h 14m 16s · ↓ 168.2k tokens
-  ◯ general-purpose  Grepping msg_262ae3ac.txt for docs mentions                                             1h 14m 16s · ↓ 109.5k tokens
+  ◯ general-purpose  Grepping g3.out past log prose                                                          1h 19m 33s · ↓ 168.2k tokens
+  ◯ general-purpose  Committing esmeril_celula_censo.py as instrument                                        1h 19m 33s · ↓ 135.0k tokens
   ⧉  index
 ```
