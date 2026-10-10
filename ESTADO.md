@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 04:51:01.**
+**Medido em 10/10/2026 04:56:31.**
 
 | | |
 |---|---|
@@ -123,42 +123,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● O portão da sombra abriu. Antes de entrar na janela do merge, fecho as duas pontas que o advisor abriu:
+     quem resolve essa bifurcação, e a célula do FORA_DE_PIPELINE muda no mesmo commit.
+
+  Mais a terceira decisão que já estava medida: universo = entra_set do baseline união o de hoje (retido não move um byte), e três estados
+  nas duas perguntas — na segunda, o corte é a aplicação da 0005, senão o pk=2 alarma para sempre e alguém cala o alarme.
+
+  A L-113 segue SO-NO-PAPEL -- 0 de 3: a A0-a é instrumento, não move cláusula. O ! da cláusula 1 continua na mesa (item 11 do AVAIS).
+  Assim que o push fechar, escrevo as três decisões da A0-b no RELATO e começo a fatia — ela é leitura e não depende do !.
+
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: PLACAR-ESTRUTURAL -- O ESTRUTURAL SE SEPARA DO DADO (corte dele 02/10 22:5x, que SUBSTITUI o item 3 da
+  ordem das 21:4x -- o resto d
 
   Ran 2 shell commands
 
-● Medição decide, e o meu texto estava errado: a migration 0005_exportacaodominio_conteudo foi aplicada em 02/07/2026 13:13, e o pk=2
-  nasceu em 30/06/2026 20:19 — dois dias antes de o campo existir. O '' dele é o default da migration, não uma cópia perdida. Fechando o
-  censo com a data certa:
+● _mudou() já tem os três estados e documenta o porquê com número. E corrige um detalhe do meu plano:
 
   Ran 1 shell command
 
-● O veredito muda de sinal: comparáveis=25, batem=25, divergentes=0, incomparáveis=1. O acervo está limpo. Corrigindo o que eu havia
-  escrito, antes de entrar no commit:
+● Confirmado por AST, não de memória: 11 / 11 / 10 nomes, e a única diferença é exatamente previsto_em, ausente no lavrar_dias_pagos — a
+  terceira cópia discordando, que é o que a extração da A0-b cura.
 
   Ran 2 shell commands
 
-● Portão aberto e verificado duas vezes (status=OK ... diverge=0 erros=0, rc 0 sem pipe). Pousando:
+● O LEI-ANTES-DO-PATCH da A0-b está feito e é citável: nenhuma célula PROTEGE nomeia os sítios dela; a lei mais próxima é a L-092
+  (substituída pela lei do TXT-fotografia), e a A0-b não a move. Como o desenho da A0-b mudou duas vezes na última meia hora, confiro antes
+  de escrever:
 
-  Committed 374b7712, ran 1 shell command
+● Advising using Fable 5.1
 
-● No ar, deploy rc 0. Medindo que o código está de fato nas cascas, e não só no disco:
-
-  Ran 3 shell commands
-
-● 66 selos de host verdes, 0 vermelho. Fechando o marco:
-
-  Regenerating the session handoff after the deploy
-  ⎿  $ cd /home/ronald/saas-hasner && bash bin/handoff_sessao.sh 2>&1 | tail -3; echo "--- o que o handoff passou a dizer ---"; sed -n
-     '5,8p;18,24p;45,48p' app/docs/HANDOFF-SESSAO.md
-
-· Proofing… (10h 56m 15s · ↓ 1.3m tokens · thinking)
+✢ Proofing… (11h 1m 45s · ↓ 1.3m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    2% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
