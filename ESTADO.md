@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 18:25:01.**
+**Medido em 10/10/2026 18:30:31.**
 
 | | |
 |---|---|
@@ -130,41 +130,41 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-  Ran 2 shell commands
-
-● All real functions identified. Writing the census now.
+● Now the cross-check his CORTE DE ORDEM requires: 1894/1606 against O218's 424/2.
 
   Ran 1 shell command
 
-● One leftover to clean — that conditional is garbage I left mid-edit.
+● The expectation the house wrote was 424 for 09 and 0 for 10; I measured 1894 and 1606. That divergence has to be named, not averaged.
+  First launching the raia's census — cpuset 4-7 is free and it needs no timing.
 
-  Read 1 file, ran 2 shell commands
+  Ran 3 shell commands
 
-● Let me update O198's estado cell to show it's open — the "virou item" the BACKLOG should carry.
+● Now the divergence. Both numbers claim to be about "ata movida" — I need to read what each one actually asked.
 
   Ran 1 shell command
 
-● 283 chars. Now let me use the ensaio's wall clock on the queda, which needs no DB. First the exact surface in the copy.
+● Background command "Rodar o censo da O198 em prod, somente leitura" completed (exit code 0)
 
-  Ran 2 shell commands
+  Ran 1 shell command
 
-● The three clauses are explicit. Let me measure where clauses 2 and 3 actually live before deciding the ESTADO count.
+● The O198 census is done and clean: 10 dia-colab, and the case the BACKLOG row cited (col951 04/10) is not one of them. Let me get the
+  divergence evidence before interpreting either.
 
-  Medir onde vivem as clausulas 2 e 3 da L-113
-  ⎿  $ cd /home/ronald/saas-hasner/app
-     echo "=== clausula 2: HX-REGEN-NAO-TOCA-EXPORTADO (a guarda de regeneracao) ==="
-     grep -rn "HX-REGEN-NAO-TOCA-EXPORTADO" --include=*.py . | head -10
-     echo; echo "=== clausula 3: pauta DP como PRE-CONDICAO -- onde o codigo EXIGE a pauta antes do ato? ==="
-     grep -rn "Pa…
+  Ran 3 shell commands
 
-✢ Compacting conversation… (1d 0h 30m · ↓ 2.9m tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱ 91%
+● Now I can see exactly why the numbers differ. The 424 is a minutes comparison (ata_min vs autoridade_min) over a 14-day window for the
+  10; my 1894/1606 counts movement in seven ata fields over the full windows. Different questions — but that means I don't yet have the
+  number his CONDITION actually requires.
+
+● Advising using Fable 5.1
+
+✢ Proofing… (1d 0h 35m · ↓ 2.9m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    0% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
