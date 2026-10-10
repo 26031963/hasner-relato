@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 04:56:31.**
+**Medido em 10/10/2026 05:02:01.**
 
 | | |
 |---|---|
@@ -123,38 +123,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-     quem resolve essa bifurcação, e a célula do FORA_DE_PIPELINE muda no mesmo commit.
+  Então o corte honesto são três decisões, não uma:
+  1. A0-b = Q1 (TXT vigente x gravado) + Q2 (conteúdo x prova) + diff de linhas + ENC. Leitura pura, zero mudança em caminho de escrita, a
+     mesma forma de instrumento da A0-a.
+  2. A extração de FORA/campos_do_fechamento/foto/_mudou para ponto/services/ como marco próprio de dedup — um conjunto, três leitores, e é
+     o 10-contra-11 do lavrar_dias_pagos que ela cura. Mesmo padrão da A0-a.
+  3. Onde a baseline da foto() persiste — decisão separada, tomada só quando o lugar estiver medido. "No registrar" diz quando, não onde; e
+     logs/carimbo_gravado/ escrito de dentro de um request do saas_ui exige antes provar que app/logs é bind-mount durável naquela casca,
+     não tmpfs. Baseline em tmpfs não é baseline.
 
-  Mais a terceira decisão que já estava medida: universo = entra_set do baseline união o de hoje (retido não move um byte), e três estados
-  nas duas perguntas — na segunda, o corte é a aplicação da 0005, senão o pk=2 alarma para sempre e alguém cala o alarme.
+  Não empacoto as três: as duas primeiras não dependem da terceira.
 
-  A L-113 segue SO-NO-PAPEL -- 0 de 3: a A0-a é instrumento, não move cláusula. O ! da cláusula 1 continua na mesa (item 11 do AVAIS).
-  Assim que o push fechar, escrevo as três decisões da A0-b no RELATO e começo a fatia — ela é leitura e não depende do !.
+  E os dois eixos ficam separados quando eu escrever, porque apontam para lados opostos por razões opostas: população = UNIÃO (entra_set da
+  baseline ∪ hoje — quem saiu do TXT é precisamente a divergência que se quer ver); campos = INTERSEÇÃO (a regra do _mudou() — campo que
+  entra ou sai do modelo é vocabulário, não dado). O corte da Q2 continua sendo a data de aplicação da 0005 lida do django_migrations, e
+  não o atalho conteudo == '' — o atalho leria uma escrita genuína pós-0005 como INCOMPARÁVEL em vez de DIVERGENTE.
+
+  Sobre o ENC: nenhum cron escreve FechamentoMensal (a escrita é por evento, via recalcular_por_evento), então não há "escritor" natural
+  para pendurar. O defensável é o fim do bloco da manhã — o último carimbo logs/fim/<nome>.<emp>.<dia> da cadeia —, com a razão escrita:
+  nada agendado escreve o gravado; o vigia lê depois de tudo que poderia ter escrito. Qual é o último, eu meço no DAG em vez de supor.
+
+  Paro de cutucar o push de minuto em minuto — a notificação chega, e a árvore fica como estava às 04:51 até lá. Quando fechar: git -C
+  /home/ronald/wt-l113 merge --ff-only main para a raia carregar os docs e o CLAUDE.md pousados (ff puro, sem commit de merge, para o
+  próximo diff da raia ser só a A0-b), e então escrevo as decisões no RELATO e abro a A0-b.
 
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: PLACAR-ESTRUTURAL -- O ESTRUTURAL SE SEPARA DO DADO (corte dele 02/10 22:5x, que SUBSTITUI o item 3 da
   ordem das 21:4x -- o resto d
 
-  Ran 2 shell commands
-
-● _mudou() já tem os três estados e documenta o porquê com número. E corrige um detalhe do meu plano:
-
-  Ran 1 shell command
-
-● Confirmado por AST, não de memória: 11 / 11 / 10 nomes, e a única diferença é exatamente previsto_em, ausente no lavrar_dias_pagos — a
-  terceira cópia discordando, que é o que a extração da A0-b cura.
-
-  Ran 2 shell commands
-
-● O LEI-ANTES-DO-PATCH da A0-b está feito e é citável: nenhuma célula PROTEGE nomeia os sítios dela; a lei mais próxima é a L-092
-  (substituída pela lei do TXT-fotografia), e a A0-b não a move. Como o desenho da A0-b mudou duas vezes na última meia hora, confiro antes
-  de escrever:
-
-● Advising using Fable 5.1
-
-✢ Proofing… (11h 1m 45s · ↓ 1.3m tokens)
+✢ Compacting conversation… (11h 7m 15s · ↓ 1.3m tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱ 94%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    2% until auto-compact
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
