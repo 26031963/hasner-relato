@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 12:55:01.**
+**Medido em 10/10/2026 13:00:07.**
 
 | | |
 |---|---|
@@ -130,37 +130,37 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 2 shell commands
-
-● While that runs, pinning the line numbers for the commit body:
-
-  Ran 2 shell commands
-
-› Message from @a9ff306920139d535 (ctrl+o to expand)
-
-● The O199 raia is closed and committed (c44c6c80), not landed — that pouso is mine, and it goes after the O219 deploy returns, never
-  interleaved. Checking the O219 green run:
-
-  Ran 1 shell command
-
-● Background command "Rodar o GREEN com os oito vizinhos" completed (exit code 0)
-
-● Agent "O199 na raia wt-bos" finished · 1h 51m 5s
-
-● GREEN on the cure: Ran 145 tests / OK, rc 0. Launching the full suite against the copy:
-
-  Ran 1 shell command
-
 ● The wait is this marco's esmeril. Finishing the commit's MEDIDO tail — first re-reading the PROTEGE line, since inserting L-116/L-117
   shifted it:
 
-● Ver a segunda tabela que cita a L-113
-  ⎿  $ cd /home/ronald/saas-hasner/app
-     sed -n '180,192p' docs/LEIS.md | cut -c1-240
+  Ran 6 shell commands
 
-✢ Proofing… (19h 0m 15s · ↓ 2.2m tokens · thinking)
+● The full suite is running. Drafting the RELATO section under the new 25-line ceiling while it does:
+
+  Ran 1 shell command
+
+● 36 lines breaks the ceiling of the law I just registered. Rewriting under it — the lever is fewer, longer lines, which the file already
+  uses:
+
+  Ran 1 shell command
+
+● Now the O199 agent's lei question — it goes to the top of the RELATO with numbers, and does not return the turn:
+
+  Ran 4 shell commands
+
+● The suite is still running. Writing the apply script with its guards now, so the act is a single pass when the veredito lands:
+
+  Escrever o ato do miolo
+  ⎿  $ SCO=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/o219
+     cat > "$SCO/ato.sh" <<'SH'
+     #!/usr/bin/env bash
+     # ATO UNICO DO MIOLO DA O219: arvore <- copia testada, docs, commit, deploy.
+     # Nada entre o commit e o deploy (L-107: a arvore viva E o bind-mount)…
+
+✢ Compacting conversation… (19h 5m 21s · ↓ 2.2m tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱ 77%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                   11% until auto-compact
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -168,6 +168,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   ● main
 ❯ ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Grepping for sequencia_relogio_x_jornada readers                                            6m 13s · ↓ 119.7k tokens
+  ◯ general-purpose  Reading reconciliar_fantasmas docstring and writes                                         11m 18s · ↓ 154.4k tokens
   ⧉  index
 ```
