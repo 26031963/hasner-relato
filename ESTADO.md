@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 07:51:01.**
+**Medido em 10/10/2026 07:56:31.**
 
 | | |
 |---|---|
@@ -135,18 +135,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 2 shell commands
-
-● Measured: the command now has zero write verbs in its AST and the service has both — that's the proof each papel needs. Amending the
-  census:
-
-  Ran 6 shell commands
-
-● From 9 red to 2 of 24. Reading the survivors:
-
-  Ran 2 shell commands
-
-● Both are my own defects, not the cure's: RED8 is a permission mismatch (form_empresa gates on editar_cadastro, my fixture only granted
   gerir_usuarios) and RED3 is a template lookup on linha=None:
 
   Ran 2 shell commands
@@ -158,15 +146,27 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Ruff clean. Running the neighbours (core + colaboradores) — that covers the three contracts a new route/view could trip:
 
-● Running the core and colaboradores labels · 3m 50s
-  ⎿  $ cd /home/ronald/saas-hasner && bash bin/suite.sh --only "core colaboradores" > logs/o223/vizinhos.out 2>&1; echo "rc_real=$?"; grep
-     -nE '^Ran [0-9]+ test' logs/o223/vizinhos.out | tail -1; grep -nE '^(OK|FAILED)( \(.*\))?$' logs/o223/vizinhos.out | tail -1; grep -nE
-     '^(FAIL|ERROR):' logs/o223/viz… (3m 49s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Ran 1 shell command
 
-✢ Proofing… (13h 56m 15s · ↓ 1.6m tokens)
+● Neighbours green: Ran 1934 / OK (skipped=21), rc 0 — that includes test_rota_pede_sessao, test_contract_configuracao_nao_mente and
+  test_admin_so_leitura. Now the L-006 ESTADO line, which must move in this same commit:
+
+  Ran 1 shell command
+
+● This section is derived ("Gerada do ESTADO de cada linha") — the authoritative ESTADO is the law's own row. Finding the source:
+
+  Searched for 1 pattern, ran 3 shell commands
+
+● The test_lei_protege_sitio.sh seal cobra the diff's sites against the PROTEGE column — I touch files that may not be listed. Reading it
+  before I write anything:
+
+● Reading the PROTEGE seal
+  ⎿  $ cd /home/ronald/saas-hasner && sed -n '1,70p' bin/tests/test_lei_protege_sitio.sh
+
+· Compacting conversation… (14h 1m 45s · ↓ 1.6m tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 41%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    3% until auto-compact
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
