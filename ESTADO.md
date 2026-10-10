@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 03:05:45.**
+**Medido em 10/10/2026 03:10:45.**
 
 | | |
 |---|---|
@@ -121,38 +121,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Following that. Removing the vigia and the three functions that alarm on the wrong question, keeping the extraction:
-
-  Ran 1 shell command
-
-● Now the check that could reorder everything — naming the 2 rows and finding their door:
-
-  Ran 1 shell command
-
-● rc=0 despite the traceback — the wrapper's rc isn't the veredito. Rewriting the probe to read the vigência authority directly, and to ask
-  the trail model its own field names rather than guess:
-
-  Ran 2 shell commands
-
-● No regen_em_exportada trail for either (that porta's 7 lines name other colabs). The instants carry batida/celula events. Decisive
-  question: was the trava even deployed then?
-
-  Ran 1 shell command
-
-● Trava landed 27/09 10:12 — both writes are after it. Finding the callers that can pass through, and the log line the porta leaves:
-
-  Ran 1 shell command
-
-● All recalculo_de_competencia_EXPORTADA lines in logs/ come from test runs (empresas=[1], [499]…) — none from prod. So neither case used
   the porta. Reading the two paths that could write without it:
 
-  Reading restaurar_fechamento and recalcular_por_evento
-  ⎿  $ cd /home/ronald/wt-l113/app && sed -n '772,800p' ponto/services/fechamento.py; echo '=== recalcular_por_evento:'; sed -n
-     '1020,1045p' ponto/services/fechamento.py
+  Ran 1 shell command
 
-✢ Proofing… (9h 10m 59s · ↓ 1.1m tokens · still thinking)
+● recalcular_por_evento refuses correctly and restaurar_fechamento doesn't touch previsto_em — so only the recalc past the trava could have
+  written those. Listing every export row of those two competências:
+
+  Ran 1 shell command
+
+● Let me reproduce it directly on the sombra rather than keep theorizing — call the recalc for col49 in the exported 09/2026 and see
+  whether the trava fires:
+
+  Ran 1 shell command
+
+● The trava fires today for both — so there's no live bypass. One cheap check closes it: the porta's trail rows carry FechamentoMensal pks,
+  not colab ids:
+
+  Ran 1 shell command
+
+● The porta's trail names colabs 414/416/418/515/616/877/932 — not these two. Recording the bounded finding and moving to land the
+  extraction:
+
+● Recording the two-case finding
+  ⎿  $ cd /home/ronald/saas-hasner && cat >> logs/o219/CONTRATO_DE_ENTRADA.md <<'MD'
+     ## OS DOIS CASOS: NAO HA BYPASS VIVO, E HA UM ACHADO HISTORICO (10/10 04:2x, sombra)
+     O advisor pediu para nomear os 2 do `previsto_em > foto` antes de qualquer coisa, porque "sem trilha =
+     trava furada = LEI-AKITA 6". Me…
+
+✶ Compacting conversation… (9h 15m 59s · ↓ 1.1m tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱ 85%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    8% until auto-compact
+                                                                                                                    1% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
