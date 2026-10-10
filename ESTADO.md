@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 07:40:45.**
+**Medido em 10/10/2026 07:45:52.**
 
 | | |
 |---|---|
@@ -33,14 +33,21 @@ a364847b [O218] corretivo: a guarda da sombra volta a ter UM sitio, e o selo que
 
 ```
  M CLAUDE.md
+ M app/colaboradores/views.py
  M app/config/crons_duracao.json
  M app/core/management/commands/semear_aplicacao_convencao.py
+ M app/core/tests/test_regua_pela_empresa.py
+ M app/core/urls.py
+ M app/core/views_config.py
  M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
  M app/docs/RELATO.md
+ M app/templates/colaboradores/empresa_form.html
  M bin/sonda_frota.sh
 ?? app/core/services/aplicacao_convencao.py
 ?? app/core/tests/test_o223_porta_humana_da_aplicacao.py
+?? app/templates/core/config/aplicacao_form.html
+?? app/templates/core/config/aplicacoes.html
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -128,38 +135,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  One hazard to respect in the build order: hub.html gets a {% url %} for a route that doesn't exist until the reload, and templates are
-  read from disk live — so that one file is written last, immediately before bin/deploy.sh. Building the porta first:
+  Ran 2 shell commands
 
-  Searched for 2 patterns, ran 9 shell commands
-  ⎿  Read ../../.claude/projects/-home-ronald-saas-hasner/memory/merge-no-commit-pode-fast-forward.md (27 lines)
-  ⎿  Read docs/AVAIS.md (29 lines)
-  ⎿  Referenced file folha/export.py
-  ⎿  Read docs/HANDOFF-SESSAO.md (47 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b354njfld.output (30 lines)
-
-● Task "RED e construção do segundo intervalo" completed in background
-
-● Measuring the pouso-B cost exactly before I let a number stand in the docstring — my earlier "12" was from a wrong reading of
-  form_empresa:
+● That {% url %} just went into a live template referencing a route the running worker doesn't know — NoReverseMatch, 500 on the empresa
+  edit screen right now. Neutralizing it immediately:
 
   Ran 1 shell command
 
-● 6, not 12 — so pouso B costs 7 declarations (the 6 plus regime_trabalhista). Fixing the docstring number and building the cure:
+● The four remaining are inside the two new templates — nothing includes them and no live route reaches them, so they're inert until the
+  reload. Now the census seal, which will bite on the 4th site:
 
-● Making the command delegate writes to the service
-  ⎿  $ python3 - <<'PY'
-     import pathlib
-     p = pathlib.Path('core/tests/test_o223_porta_humana_da_aplicacao.py')
-     t = p.read_text()
-     velho = '''"sem efeito". Isso e o
-     pouso B, medido campo a campo; enfiar aqui seria declarar por atacado, que e o contrato de
-     arvore com allowlist que a casa recusa.'''
-     novo = ''…
+  Ran 2 shell commands
 
-* Proofing… (13h 45m 59s · ↓ 1.6m tokens · thinking)
+● Measured: the command now has zero write verbs in its AST and the service has both — that's the proof each papel needs. Amending the
+  census:
+
+  Ran 6 shell commands
+
+● From 9 red to 2 of 24. Reading the survivors:
+
+  Ran 2 shell commands
+
+● Both are my own defects, not the cure's: RED8 is a permission mismatch (form_empresa gates on editar_cadastro, my fixture only granted
+  gerir_usuarios) and RED3 is a template lookup on linha=None:
+
+  Re-running the two modules
+  ⎿  $ cd /home/ronald/saas-hasner && bash bin/suite.sh --only "core.tests.test_o223_porta_humana_da_aplicacao
+     core.tests.test_regua_pela_empresa" > logs/o223/cura2.out 2>&1; echo "rc_real=$?"; grep -nE '^Ran [0-9]+ test' logs/o223/cura2.out |
+     tail -1; grep -nE '^(OK|FAILED)( \(.*\))?$' logs/o223/cura2.…
+
+✻ Proofing… (13h 51m 6s · ↓ 1.6m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    7% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
