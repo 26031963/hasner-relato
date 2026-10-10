@@ -88,6 +88,20 @@ UMA corrida depois de TODAS, o universo e o acervo inteiro de `ExportacaoDominio
 identicas, 124 linhas de saida cada**. O `teto_s=900` do ENC **nao e a minha duracao**: e o teto de ESPERA
 pelo carimbo do **gatilho** (`recusar_ponta_pequena` mede 30 s), e a minha duracao entra no
 `crons_duracao.json` pelo medidor que le o placar.
+**E O ALARME TEM LEITOR NOMEADO, porque alarme sem leitor e selo provado e mudo.** O `--alarme` sai com
+`SystemExit(2)`, e o 2 e a convencao da casa para *alarme de negocio*: o `bin/cron_run.sh` grava a corrida em
+`app/logs/placar.jsonl` com `"exit":2`, o `core/management/commands/pipeline_placar.py::medidos` conta isso
+como `alarmes` (e nao como `erros` -- comentario ESMERIL2-ALARME no proprio sitio), e **de proposito nao abre
+pauta de TI**: o `cron_run.sh` so chama `cron_quebrado` para `exit != 0 e != 2`. E o mesmo caminho pelo qual o
+`supra_juiz --alarme` grita o A6 desde 09/09. O texto do grito fica em `logs/vigia_txt_dominio.log`.
+
+**UMA CORRECAO DE ROTULO DE HORA, minha, medida contra o `date` e nao contra a cabeca.** Escrevi a primeira
+versao desta secao e do item de mesa com `07:5x`/`08:05`, e o `date` no ato devolveu **06:47** -- 1h15 a
+frente. Os horarios certos sao: o comando real correu as **06:12** (`logs/a0b_comando.out`) e a sonda de
+duracao as **06:21** (`logs/sonda/a0b_duracao.py`), entao o comentario do `ENC` que diz *"duas corridas
+identicas em 10/10 07:5x"* esta com a hora errada e se corrige para **06:2x** no commit da raia -- nao agora,
+porque a suite esta montando aquela arvore e nao se edita arvore que medicao monta. Os **7,0 s e 6,9 s** nao
+mudam: foram cronometrados pelo relogio do processo, nao pelo meu rotulo.
 
 **O ACHADO DE DENTRO DO MARCO: o contador do tabuleiro lia METADE do universo.**
 `gerar_diagrama.py::bloco_tabuleiro` montava `por_papel` a partir de `CRONS` -- e `CRONS` **nao tem os

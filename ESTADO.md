@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 06:47:31.**
+**Medido em 10/10/2026 06:53:01.**
 
 | | |
 |---|---|
@@ -127,42 +127,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+     The commit message is written; the raia commit comes first, then the L-107 merge.
 
-● Suite is running. Per ESMERIL-DO-MARCO the wait is this marco's esmeril — writing the RELATO and the AVAIS item now. First the current
-  RELATO top:
+  Also replaced a promise I shouldn't have made: option (1) of the pauta said I'd "say how to register the decision" — that door doesn't
+  exist in code, so it's now phrased as a fatia the aval would authorize. And the alarm has a named reader, which I verified rather than
+  asserted: cron_run.sh writes exit=2 into placar.jsonl, pipeline_placar.py::medidos counts it as alarmes (not erros), and deliberately
+  opens no TI pauta — the same path supra_juiz --alarme uses.
 
-  Ran 1 shell command
+  Deploy gate checked ahead of time: sombra: carimbo dia=20261010 status=OK diverge=0 erros=0, so the pouso won't need --sem-sombra. Two
+  comment-only edits are queued for the raia commit — the hour, and a fifth @juiz-unico-de line declaring partes_da_linha as the authority
+  on desmontagem of a TXT line, since A0-b created that authority and the header declares the other four.
 
-● Now the RELATO. The lei question goes to the TOP with its numbers, and the esteira continues (PAREI-DE-LEI-NAO-DEVOLVE-TURNO):
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: PLACAR-ESTRUTURAL -- O ESTRUTURAL SE SEPARA DO DADO (corte dele 02/10 22:5x, que SUBSTITUI o item 3 da
+  ordem das 21:4x -- o resto d
 
-  Read 1 file, ran 2 shell commands
-
-● RELATO clean. Now the ×7/8 to the mesa. Reading the shape of the existing pauta item first:
-
-  Ran 4 shell commands
-
-● Deliverables are durable (RELATO + AVAIS item 12). Suite still running. Calling the advisor before the pouso:
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-● The advisor is right on the clock — let me read date now and recover the real measurement time:
+● The hook blocks the Stop, and by his aval it's neither obeyed nor touched — the cure is a later instrument pouso. The turn continues
+  anyway: checking the suite.
 
   Ran 1 shell command
 
-● Both confirmed: it is 06:47 (my labels were ~1h15 ahead), and the raia is not committed — HEAD is still 374b7712, so a merge would carry
-  nothing. Fixing the clock first:
+● Rather than idle-poll, let me verify the push gates that the [O219] citation will face:
 
-● Seeing how encadeado.sh handles a link's non-zero rc
-  ⎿  $ cd /home/ronald/saas-hasner && grep -n 'ALARME\|rc\b\|exit\|teto' bin/encadeado.sh | head -30
+  Ran 2 shell commands
 
-· Proofing… (12h 52m 45s · ↓ 1.5m tokens · thought for 1s)
+● Launching a single-notification waiter, then doing the docs that ride the marco (in main — the suite mounts the raia, not this tree):
+
+● Splitting the O219 TICKETS row into cells
+  ⎿  $ awk 'NR==121' docs/TICKETS.md | awk -F'|' '{for(i=1;i<=NF;i++) printf "[%d] (%d ch) %s\n", i, length($i), substr($i,1,260)}'
+
+✢ Proofing… (12h 58m 15s · ↓ 1.5m tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    4% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
