@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 20:11:34.**
+**Medido em 10/10/2026 20:17:01.**
 
 | | |
 |---|---|
@@ -129,42 +129,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+● Task "RED e construção do segundo intervalo" completed in background
 
-  Ran 5 shell commands
+● Task "Rodar a suite cheia sobre a copia com o comentario curado" still running in background
 
-● Enquanto os dois correm, curo o ponto 3 do advisor: o ato não digita mais hora nenhuma — ele lê o carimbo e o hash, e PARA se o gravado
-  da 09 se moveu.
+● Background command "Rodar o ensaio do bloco com a queda, medindo o gravado da 09" completed (exit code 0)
+
+  Read 1 file, ran 1 shell command
+
+● O refazer está bom (diverge=0, máscara OK) — a corrente parou no meu próprio portão: --conferir exige STATUS=OK, e logo depois de um
+  refazer o status é REFEITA; o OK só vem com o bloco. Vou corrigir o portão e retomar do passo 2, sem repetir o refazer (a sombra está
+  limpa de 20:11 e ninguém escreveu desde então).
 
   Ran 3 shell commands
 
-● Esmeril deste marco (L-111/ESMERIL): censo do que a queda deixou órfão, na cópia.
+● O ensaio corre (espero pelo ARQUIVO). Enquanto isso, releio o ato que vai pousar, linha por linha — é ele que commita e deploya:
 
-  Ran 1 shell command
+  Ran 3 shell commands
 
-● Censo: toda sobrevivência é lápide ou asserção MORDE. Mas isso é afirmação de texto — a casa pede AST:
+● A mensagem está completa. Falta nela o que só o ensaio em curso pode dizer — e isso também não se digita:
 
-  Ran 1 shell command
+  Ran 2 shell commands
 
-● AST: 0 uso executável dos nomes derrubados em toda a cópia. Isso entra na linha que já existe, sem crescer a seção:
+● O md5 do ANTES — 892768aa… — é o mesmo md5 do snapshot de reversão, que foi tirado em PROD. Isso não é coincidência decorativa: diz que o
+  gravado da 09 na sombra é byte-idêntico ao de prod, e portanto a medição fala do número real. Vou conferir na fonte e fazer o ato dizer
+  isso só se for verdade:
 
-● Gravar o censo do esmeril no RELATO e conferir o teto de linhas
-  ⎿  $ python3 - <<'PY'
-     import pathlib
-     p = pathlib.Path('docs/RELATO.md')
-     s = p.read_text(encoding='utf-8')
-     anc = 'nao um segundo juiz de "isto grava?".'
-     assert s.count(anc) == 1, s.count(anc)
-     novo = (anc + ' CENSO POR AST do que a queda deixou orfao (ESMERIL deste marco): **0** uso '
-     'EXECUTAVEL de `Co…
+● Conferir o md5 do snapshot de reversao em prod
+  ⎿  $ cd /home/ronald/saas-hasner && grep -n -iE 'md5|linhas' logs/o219/reversao_09_20261010_1912.txt | head -8
 
-✻ Compacting conversation… (1d 2h 16m · ↓ 3.1m tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 58%
+✢ Proofing… (1d 2h 22m · ↓ 3.1m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    0% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
