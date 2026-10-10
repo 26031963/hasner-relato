@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 00:30:45.**
+**Medido em 10/10/2026 00:35:45.**
 
 | | |
 |---|---|
@@ -126,38 +126,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● sombra.sh não se registra em crons_em_curso numa rodada à mão — o sinal é o próprio carimbo, escrito na linha 360, no fim do bloco.
-  Confiro se --conferir só fica verde depois dele, porque então um portão serve às duas perguntas:
+  Ran 1 shell command
 
-  Ran 3 shell commands
+● Os dois seguem. Em vez de devolver o turno com a fila 1 em pé, espero pela condição, não por tempo:
 
-● conferir() só pergunta SOMBRA_DIA e SOMBRA_STATUS — não olha o bloco. Então ele fica verde já depois do --refazer, e não serve como sinal
-  de fim; pior, a prosa do CLAUDE.md promete que ele cobra o bloco e o vivo diz outra coisa. O sinal honesto de fim é o próprio carimbo do
-  bloco:
+● O caminho certo aqui não é sondar: os dois são trabalhos rastreados e me reinvocam ao sair, então um laço de espera seria desperdício.
+  Faço então a higiene que a casa já pagou caro por omitir — a cópia do marco anterior, já pousado, que ficou órfã:
 
   Ran 1 shell command
 
-● O carimbo responde: hoje, dump de hoje, diverge=0 — mas SOMBRA_STATUS=REFEITA e SOMBRA_BLOCO=nao_rodou, logo --conferir está em rc=1 e o
-  deploy recusaria agora. E os campos COMANDOS=70 ERROS=0 ALARMES=7 são do bloco de ontem, sobreviventes do refazer — uma armadilha para
-  quem lesse SOMBRA_ERROS em vez do STATUS:
+● wt-merge-o206: 0 commit único sobre o remoto, 41 MB, e 4 entradas de root — a mesma classe do incidente de 03/10. É cópia minha de um
+  marco já pousado, e está na lista de limpeza. Vejo o que são as 4 antes de apagar:
 
   Ran 1 shell command
 
-● Fecha o raciocínio: SOMBRA_STATUS=OK só é escrito na linha 360, no fim do bloco, e só com diverge=0 e erros=0. Então o rc de --conferir
-  responde às três perguntas de uma vez — e um portão só, idêntico ao do deploy, dispensa o arquivo de sinal que eu havia inventado:
+● Removida limpa — as 4 entradas de root eram os pontos de montagem vazios (staticfiles, .ruff_cache, .hypothesis, .mypy_cache), e o app/
+  que as contém é meu, então a deleção obedeceu ao dono do diretório, como o modelo de permissão prevê. Restam duas cópias, e a da suíte
+  não se toca.
+
+  Agora, sobre o siga que me barra: ele não se cura agora, por ordem dele — mas eu preciso saber o que ele aceita, e ler não é curar:
 
   Ran 1 shell command
 
-● Uma falha real no meu próprio portão: sob set -e, CONF="$(cmd)" com cmd em rc≠0 mata o script antes de RC_CONF=$? ser lido — e o
-  --conferir está em rc=1 agora, então esse caminho seria tomado de verdade, sem imprimir o PAROU. Provo e corrijo:
+● Há um caminho que eu não conhecia: _tem_trabalho_em_curso() (linha 233). Leio o que ele considera trabalho em curso:
 
-  Ran 1 shell command
+● Reading the hook main decision flow
+  ⎿  $ cd /home/ronald/saas-hasner
+     grep -n '_tem_trabalho_em_curso\|_relato_parou()\|_proximo_da_fila()' bin/hook_stop_fila1.py
+     echo "=== o main ==="; sed -n "$(grep -n 'def main' bin/hook_stop_fila1.py | cut -d: -f1),\$p" bin/hook_stop_fila1.py
 
-● RED evidenciado: a forma antiga morreu calada (sem "cheguei aqui"), a nova fala — e o próprio script agora recusa com o motivo, o que
-
-· Proofing… (6h 37m 59s · ↓ 777.2k tokens · thought for 5s)
+· Proofing… (6h 42m 59s · ↓ 793.9k tokens · still thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    2% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
