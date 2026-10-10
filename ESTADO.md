@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 02:39:31.**
+**Medido em 10/10/2026 02:44:32.**
 
 | | |
 |---|---|
@@ -121,38 +121,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  which leaves the raia file inconsistent — permitir_exportada is referenced at :74 but is no longer a parameter. Restoring it first, so
-  nothing is left half-cured:
-
-● Update(~/wt-l113/app/ponto/services/fechamento.py)
-  ⎿  Added 1 line, removed 1 line
-      17
-      18
-      19  def recalcular_fechamento_mes(mes, ano, empresa_id=None, colaborador_ids=None,
-      20 -                              motivo_exportada='', somente_leitura=False,
-      20 +                              permitir_exportada=False, motivo_exportada='', somente_leitura=False,
-      21                                lavrar_dias_pagos=False):
-      22      """Roda o motor p/ os colabs ativos do mes/empresa e grava FechamentoMensal.
-      23
-  ⎿  Allowed by auto mode classifier
-
-  Ran 1 shell command
-
-● The raia is byte-identical to HEAD again. Recording the wall in the contract before changing approach:
-
-  Ran 4 shell commands
-
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-  Inspecting the witness command and the counter-reading pattern
-  ⎿  $ cd /home/ronald/wt-l113/app && echo "=== regerar_txt_dominio: o compare ===" && grep -n
-     "hash_sha256\|sha256\|IDENTICO\|montar_linhas_export\|validar_layout" folha/management/commands/regerar_txt_dominio.py
-     echo; echo "=== quem le empresas_sem_regime (padrao de contador esperado 0) ===" && grep -…
+  Ran 12 shell commands
 
-✢ Proofing… (8h 44m 45s · ↓ 1.0m tokens · thought for 2s)
+● Three content-form sites and three hashers — so the extraction is mandatory, not optional. Checking what's already there:
+
+  Ran 3 shell commands
+
+● Now building A0. Step 1 — the extracted juiz in folha/export.py:
+
+  Ran 4 shell commands
+
+● Step 2 — the vigia:
+
+  Ran 5 shell commands
+
+● Measuring the vigia's duration on the sombra, against the raia tree:
+
+● Measuring the vigia duration on the sombra
+  ⎿  $ cd /home/ronald/saas-hasner && cat > logs/sombra/o219_vigia_txt_duracao.py <<'PY'
+     # -*- coding: utf-8 -*-
+     """Mede o vigia_txt_divergente chamando o COMANDO REAL (LEI-AKITA 8: medir na fonte).
+     So na sombra. Nao escreve nada -- o proprio comando nao escreve.
+     """
+     import io
+     import time
+     from django.co…
+
+✶ Proofing… (8h 49m 46s · ↓ 1.0m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    8% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
