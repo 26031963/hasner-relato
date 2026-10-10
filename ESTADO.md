@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 07:09:01.**
+**Medido em 10/10/2026 07:14:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `374b7712 [O219] pouso: a A0-a entra no main com os docs do marco, e a linha do CLAUDE.md que ensinava o veredito solto passa a ensinar o estrito` |
+| `HEAD` local | `d20a0e45 [O219] pouso: os docs do marco A0-b entram junto, e o merge que eu pedi sem commit virou FAST-FORWARD -- o codigo estava na arvore viva antes deste commit` |
 | `origin/main` | `374b7712 [O219] pouso: a A0-a entra no main com os docs do marco, e a linha do CLAUDE.md que ensinava o veredito solto passa a ensinar o estrito` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -22,23 +22,18 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+d20a0e45 [O219] pouso: os docs do marco A0-b entram junto, e o merge que eu pedi sem commit virou FAST-FORWARD -- o codigo estava na arvore viva antes deste commit
+10de79cb [O219] A0-b: o TXT entregue passa a ser PERGUNTADO todo dia, e o alarme cai de 6 de 7 para 1 de 7 porque valor movido deixa de ser confundido com porta movida
 374b7712 [O219] pouso: a A0-a entra no main com os docs do marco, e a linha do CLAUDE.md que ensinava o veredito solto passa a ensinar o estrito
 89570af4 [O219] A0-a: a forma e a prova do TXT do Dominio passam a ter UM sitio, e o empate de carimbo deixa de poder guardar um registro e substituir outro
 a364847b [O218] corretivo: a guarda da sombra volta a ter UM sitio, e o selo que faltava nasce VERMELHO no commit anterior
-672f88e1 [O218] instrumento: a porta da sombra passa a enxergar a arvore de uma raia, e com isso a medicao cabe ANTES do pouso
-353818c5 [O207] pouso: a terceira opcao do Inicio da apuracao entra no ar no mesmo ato do merge, e o smoke dele fecha o W12X36-HPD achando um BO de tela
 ```
 
 ## `git status --short`
 
 ```
  M app/config/crons_duracao.json
- M app/docs/AVAIS.md
- M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
- M app/docs/PENDENTES_RONALD.json
- M app/docs/RELATO.md
- M app/docs/TICKETS.md
  M bin/sonda_frota.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -127,42 +122,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Proven: the ALARME from my raia run landed in main's log at 07:05:45 while the raia's dir stayed empty, and the seal is green on main at
-  the right root. The seal's four cases are cron_run.sh, apurar_furos_diarios, and two _echo_teste runs — my new ENC is in none of them.
-  But that same run manipulated live carimbos, so let me check what it left behind:
+  the work. Rodapé, then one push for the marco:
 
   Ran 1 shell command
 
-● The 4 carimbos of today were deleted by the seal's own _limpar (pre-existing design — it runs on every pre-push). Today's chain already
-  completed and nothing re-invokes it, so no damage; that's a fila line, not work now per ESMERIL-DO-MARCO. Applying the two queued raia
-  edits now that the pista is free:
+● Pushing — one push for the marco. The pre-push hook runs both runners, so this goes to a log and I'll read the veredito from the remote,
+  not from the absence of output:
 
   Ran 1 shell command
 
-● The .mmd is unchanged by the 5th tag (the 6/3 diff is the earlier tabuleiro cure). But the command also writes MAPA.md — checking that
-  and the seals:
+● Two commits, both mine, nothing to pull. Pushing:
 
   Ran 1 shell command
 
-● ruff needs the full montagem — asking the single door for it instead of hand-mounting:
+● While the push runs I won't touch the tree. Proving the vigia answers from the deployed code (read-only, writes nothing, ~7 s):
 
-  Ran 2 shell commands
+  Ran 1 shell command
 
-● ruff clean. Now the seals that read the bolha and the diagram, on the raia tree:
+● Same number from the deployed code in 8 s. Confirming the --alarme contract (exit 2 = business alarm, which cron_run.sh records as
+  alarmes, not erros):
 
-● Running the bolha, diagram and L-113 seals on the raia tree · 32s
-  ⎿  $ cd /home/ronald/saas-hasner && ESTEIRA_QUEM="o219-selos-bolha" bash bin/suite.sh --dir /home/ronald/wt-l113 --only
-     "core.tests.test_selo_diagrama_do_codigo core.tests.test_selo_bolha_nao_importa core.tests.test_selo_teste_sem_relogio
-     folha.tests.test_l113_a0_forma_do_txt folha.tests.test_l113_a0b… (32s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Ran 1 shell command
 
-✢ Proofing… (13h 14m 15s · ↓ 1.6m tokens)
+● Exit 2 with the alarm naming exactly one key — q1.competencias_com_valor_movido: 1, not q2, not cego. Checking the push:
+
+● Checking the push progress against the remote
+  ⎿  $ cd /home/ronald/saas-hasner && echo "=== push log (ate agora):"; tail -6 logs/o219/push_a0b.out 2>/dev/null || echo "(sem saida
+     ainda)"; echo; echo "=== veredito do REMOTO (a ausencia de saida nao e falha):"; git fetch origin 2>/dev/null; git rev-parse
+     origin/main HEAD; echo; echo "=== origin/mai…
+
+✢ Proofing… (13h 19m 45s · ↓ 1.6m tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    4% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens

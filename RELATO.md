@@ -128,6 +128,37 @@ ganhou nao foi um escritor nomeado, foi um **vigia diario uma camada acima**. O 
 gatilho declarado -- **o alarme do vigia** -- e papel mais nitido: o vigia compara **linha de TXT**, o
 carimbo desce ao **campo** do `FechamentoMensal`. Gatilho que era suspeita virou fato.
 
+**A SUITE CHEIA, LIDA PELA FORMA ESTRITA E COM A CONTA DA VACUIDADE FEITA ANTES DO VEREDITO.**
+`logs/o219/a0b_suite.out`: `Ran 10297 tests in 1408.453s` / `OK (skipped=42)`, `rc=0` do processo,
+**0** linha `^FAIL:` ou `^ERROR:`, veredito lido por `grep -nE '^(OK|FAILED)( \(.*\))?$' | tail -1`.
+A conta que importa vem ANTES do `OK`: a A0-a correu `Ran 10265`, esta correu `Ran 10297`, **+32** --
+e os 32 estao nomeados, nao estimados: **31** `def test_` no modulo novo
+`folha/tests/test_l113_a0b_vigia_do_txt.py` mais **1** no existente, que foi de 12 (no HEAD) para 13.
+Verde com `Ran` IGUAL ou MENOR seria verde oco, porque significaria modulo nao coletado -- e e por isso
+que a conta vem primeiro. Selos de alvo depois, na arvore da raia: 61 testes `OK` em 52,274 s
+(diagrama + bolha + relogio + os dois modulos da L-113), `ruff check --no-cache folha/ config/ core/`
+**All checks passed!**, e o `core.tests.test_selo_pendentes_so_decisao` correu contra o JSON do **main**
+(o que tem o item 12) -- `Ran 3 tests` / `OK` --, porque a copia da raia nao o tem e o selo le a arvore
+em que esta montado.
+
+**O ACHADO DE FORA DO MARCO VAI PARA A FILA, NAO PARA A FATIA, E ELE QUASE ME FEZ CULPAR A MINHA PROPRIA
+FIACAO.** Dos 8 selos de host VERMELHOS na raia eu havia disposto dos 8 re-rodando-os VERDES no `main` --
+conclusivo para 7, **nao** para o `bin/tests/test_furo_encadeado_ao_cartorio.sh`: ele e justamente o selo
+da corrente dos ENCADEADOS, e o `main` **nao tem o elo que eu acabei de somar**, entao "verde no main" nao
+responde por uma raia que mexeu na corrente. Medido no sitio em vez de suposto: `bin/encadeado.sh:24`
+crava `R=/home/ronald/saas-hasner`, entao a corrida disparada DE DENTRO da raia escreveu o ALARME em
+`logs/encadeado/_echo_teste.log` do **main** -- a linha esta la, `2026-10-10T07:05:45-03:00 ALARME:
+_echo_teste nao rodou -- faltaram 3 carimbo(s)` -- enquanto `wt-l113/logs/encadeado/` ficou **vazio**, que
+e onde o selo procura. RED de raiz trocada, nao de fiacao: os quatro casos do selo perguntam por
+`cron_run.sh`, por `apurar_furos_diarios` e por duas corridas de `_echo_teste`, e o elo novo nao aparece em
+nenhum deles. **E A MEDICAO DEVOLVEU UM SEGUNDO FATO, que e a linha de fila**: esse selo mexe em carimbo
+VIVO por desenho -- o `_limpar` dele apaga `logs/fim/processar_cartorio.{2,3,4}.<dia>` e
+`logs/fim/apurar_furos_diarios.-.<dia>` --, e os quatro de hoje estao **AUSENTE** agora, contra **64**
+carimbos do dia que seguem de pe. Hoje nao ha dano (a corrente do dia ja fechou -- `fechar_cobranca_com_lastro`
+carimbou 06:40 -- e nenhum cron a re-invoca), mas um selo que apaga o carimbo de idempotencia de um cron de
+prod e capaz de fabricar ALARME falso no proximo que o leia. **Fila, pela ESMERIL-DO-MARCO**: achado fora do
+marco e linha, nunca trabalho agora.
+
 `LEI-AKITA: origem=folha/services/vigia_txt.py (a pergunta nasce onde a forma e a prova do TXT ja moram, apos a A0-a), testemunha=folha/export.py::classificar_export + montar_linhas_export + hash_do_txt (nenhuma regra propria de dia, soma ou classe) e ponto/e6_oraculo.py::dono_da_divergencia para dono, RED=folha/tests/test_l113_a0b_vigia_do_txt.py::test_MORDE_matricula_em_um_lado_so_e_PORTA_MOVEU_nao_valor + ::test_MORDE_a_q1_nao_alarma_por_diverge_e_sim_por_valor_movido + core/tests/test_selo_diagrama_do_codigo.py (2 falhas antes da regeneracao), quem-mais-le=folha/export.py sem mudanca de assinatura publica, 1 ENC novo nos ENCADEADOS, 1 papel novo no PAPEL_DO_CRON, 1 contador curado em gerar_diagrama.py, juizes novos=0 (o censo deixou de carregar `dono` -- tabela motivo->dono seria juiz novo e pede corte pela TRAVA JUIZ-NOVO)`
 
 ## RAIA QUE NAO POUSA — O MOTIVO EM UMA LINHA CADA (L-105, medido 10/10 03:3x)

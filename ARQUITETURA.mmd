@@ -12,7 +12,7 @@ flowchart TD
     fr_chamados -.->|topo PROIBIDO, allowlist VAZIA| fr_ponto
   end
 
-  %% (b) PIPELINE DIARIO — fonte: config/crons.py (57 nos diarios)
+  %% (b) PIPELINE DIARIO — fonte: config/crons.py (58 nos diarios)
   subgraph e_infra["infra"]
     c_rotacionar_access_log["rotacionar_access_log<br/>00:12"]
   end
@@ -71,6 +71,7 @@ flowchart TD
     c_tripwire_tipo_batida["tripwire_tipo_batida<br/>07:21"]
     c_vigia_b5_ausencia["vigia_b5_ausencia<br/>07:22"]
     c_vigia_plantio_overnight["vigia_plantio_overnight<br/>07:28"]
+    c_vigiar_txt_dominio["vigiar_txt_dominio<br/>apos recusar_ponta_pequena"]
   end
   subgraph e_alerta["alerta"]
     c_alertar_disputas_pendentes["alertar_disputas_pendentes<br/>08:00"]
@@ -125,7 +126,9 @@ flowchart TD
   c_detectar_par_relampago --> c_verificar_nucleo
   c_processar_cartorio --> c_vigia_b5_ausencia
   c_flip_automatico --> c_vigia_plantio_overnight
-  %% arestas `depende` declaradas: 41
+  c_recusar_ponta_pequena --> c_vigiar_txt_dominio
+  c_processar_cartorio --> c_vigiar_txt_dominio
+  %% arestas `depende` declaradas: 43
 
   %% (c) PORTAS CANONICAS — fonte: AST sobre app/ (nome usado, nunca string)
   subgraph PORTAS["escritores unicos / portas canonicas"]
@@ -175,7 +178,7 @@ flowchart TD
     t_celula["CELULA / ATA por marco<br/>o que aconteceu (lampada)"]
     t_evento["EVENTO<br/>batida, ausencia, chamado -> cartorio julga na hora (signals B5.2)"]
     t_consumidor["CONSUMIDORES<br/>chamado, pergunta, tela, folha: leem a lampada, nunca re-julgam"]
-    t_vigia["CRON = VIGIA<br/>20 vigias; contador esperado 0, so alarma"]
+    t_vigia["CRON = VIGIA<br/>21 vigias; contador esperado 0, so alarma"]
     t_prazo["CRON = PRAZO (L-101)<br/>2 cron(s): a falta nao emite evento, o relogio e o unico sinal dela;<br/>julgam pela funcao do juiz da casa, sem regra propria (PRAZO_DELEGA_A)"]
     t_juiz["JUIZ POR VARREDURA (divida)<br/>25 crons ainda julgam: esperado 0"]
     t_escala --> t_celula
