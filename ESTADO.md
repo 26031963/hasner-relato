@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 17:58:01.**
+**Medido em 10/10/2026 18:03:31.**
 
 | | |
 |---|---|
@@ -125,37 +125,37 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+  Ran 2 shell commands
 
-● Adopting all six. Running the census the advisor named before building.
-
-  Ran 1 shell command
-
-● Background command "Rodar o ensaio da virada na sombra" completed (exit code 0)
-
-● Ensaio finished — that's the gate. Reading it first.
-
-  Read 1 file
-
-● The ensaio contradicts the expected shape — but possibly benignly. Before I treat it as a PAROU, let me establish what julgadas actually
-  counts and whether the 10 falling in the horizon is by design.
+● I have the exact door. Building the apply-ensaio — snapshotting a content hash for the whole célula universe, which also proves the
+  horizon held outside 09+10.
 
   Ran 1 shell command
 
-● The docstring settles it — and it also names the number I don't have. Let me find how O218 measured "ata de regra antiga" so I reuse that
-  authority rather than inventing a second one.
+● Writing the apply-ensaio. All three numbers in one act, with the horizon proven by diffing the whole universe.
 
-  Ran 1 shell command
+  Ran 2 shell commands
 
-● The 424 is now precise: O218 compared stored ata against the authority. My ensaio measured re-judgments, not moved atas — neither of the
-  two numbers the docstring demands. Let me make the measurement durable before deciding.
+❯ aval Ronald: corte Ronald: juiz dia_encerrado nasce, um so, mesmo predicado de hoje (dia < hoje); flip_auto e supra_juiz leem dele;
+  universo do cron nao muda. Segue a fila; PAREI so em lei ou !
 
-● Running 1 shell command…
+❯ aval Ronald: corte Ronald: juiz par_completo nasce (fato encerrado = o PAR); detectar_par_relampago so muda de papel depois dele;
+  universo do cron nao muda. Segue a fila; PAREI so em lei ou !
 
-✢ Proofing… (1d 0h 3m · ↓ 2.8m tokens)
+● Two cortes arrived — both TRAVA JUIZ-NOVO authorizations. Recording them before launching the ensaio, so the docs are written while
+  nothing is mounted. Let me check the required form first.
+
+● Conferir a forma que o selo do juiz novo cobra
+  ⎿  $ cd /home/ronald/saas-hasner
+     echo "=== onde mora CORTES.md ==="
+     ls -la app/docs/CORTES.md 2>/dev/null | head -2
+     echo
+     echo "=== o que o selo cobra ==="
+     cat bin/tests/test_juiz_novo_tem_corte.sh 2>/dev/null | head -45
+
+✢ Proofing… (1d 0h 8m · ↓ 2.8m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    2% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
