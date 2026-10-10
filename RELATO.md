@@ -1,5 +1,87 @@
 # RELATO — esteira saas-hasner
 
+## O207 POUSA — **UM ATO SO, E O PORTAO DA SOMBRA FOI LIDO DUAS VEZES COM A MESMA RESPOSTA** (10/10 00:4x, L-105 + L-107)
+A terceira opcao do *Inicio da apuracao* -- a data que o admin DECLARA -- esta no ar. O pouso foi na forma
+da **L-107**: `git merge --no-commit` -> resolver -> commit -> `bin/deploy.sh --sem-migrate`, **sem nada no
+meio**, porque a arvore E o bind-mount e um merge escreve dezenas de `.py` nela enquanto o worker segue com
+o codigo de antes.
+**PROVA:** commit `353818c5`, **12 arquivos, 532 insercoes, 38 delecoes**; `pouso.sh` rc=**0** com o log
+inteiro em `logs/o207/pouso.out`; `deploy: OK -- migrations em dia, tres cascas reiniciadas juntas, tres
+rotas provadas` (core `/health/` 200, ui `/colaboradores/` 302, mensageria `/health/` 200), `prova de casca:
+16 estaticos, 5 paginas compiladas, 608 rotas em 2 urlconf(s)`, selo BUG 128 verde, `importerror_500=0`.
+
+**A SUITE JULGOU A ARVORE QUE O MERGE PRODUZ, e isso se mediu em vez de se supor.** `git diff HEAD raia-bos`
+e **SIMETRICO**: ele listava 14 arquivos, e 6 deles eram aqueles em que o *main* andou (PLACAR-ESTRUTURAL,
+O206) e a raia nunca tocou. O que o merge escreve e o que a RAIA mudou desde a base.
+**PROVA:** `git merge-base HEAD raia-bos` = `b5700cbb`; `git diff --name-only b5700cbb raia-bos` = **8
+arquivos**; o `status --porcelain` da copia `wt-o207` -- a arvore onde correu a suite, com HEAD em
+`f415e116` -- tem **exatamente esses 8**, e o `diff` das duas listas imprimiu `IDENTICO`. Veredito
+`OK (skipped=42)` sobre `Ran 10253 tests in 1412.830s`, **0 FAIL/ERROR no log**.
+
+**A FALHA QUE A RAIA HERDAVA MORRE NO MERGE, e isso se prova por ANCESTRALIDADE, nao por um run que eu
+nao tenho.** A raia nasceu de `b5700cbb`, que **antecede** a cura `1c5b2e20` (*"a lapide do dono da
+cobranca para de nomear o delimitador que o selo varre"*), entao ela carrega a versao velha de
+`templates/chamados/partials/_js_cobranca.html` e o selo da lapide a morde quando ela corre sozinha.
+**PROVA:** `git merge-base --is-ancestor 1c5b2e20 b5700cbb` = **NAO** (a raia e anterior a cura);
+`git merge-base --is-ancestor 1c5b2e20 HEAD` = **SIM** (o merge a traz); `git diff raia-bos HEAD --
+app/templates/chamados/partials/_js_cobranca.html` = **DIFERENTE**, e a arvore viva depois do pouso
+esta igual a HEAD. Nao se cita aqui o veredito vermelho da raia isolada: eu nao o medi nesta sessao, e
+afirmacao sem arquivo que a persiga nao conta.
+
+**O MESMO PORTAO, NAO UMA SEGUNDA VERSAO DELE.** O gate de sombra do `pouso.sh` e o **rc de
+`bin/sombra.sh --conferir`**, a condicao byte-identica do `deploy.sh:167`. Escrever ali um `grep` de
+`dia=... status=OK` seria a segunda verdade: ela passaria e o deploy recusaria **depois** do merge, com a
+arvore viva ja escrita. E esse rc responde TRES perguntas de uma vez, porque `conferir()` exige
+`SOMBRA_STATUS=OK` e esse valor so e escrito em `bloco():360`, no fim, com `diverge=0` e `erros=0`.
+**PROVA:** a linha `sombra: carimbo dia=20261010 status=OK tipo=completa diverge=0 erros=0` aparece **duas
+vezes** em `logs/o207/pouso.out` -- a primeira e o meu gate, a segunda e a do `deploy.sh`.
+
+**O ATO IRREVERSIVEL FOI ENSAIADO INTEIRO ANTES, e o ensaio achou um VERMELHO.** Numa terceira copia
+descartavel (`wt-ensaio`, detached em `f415e116`) o merge e a cadeia inteira correram: depois do resolve
+reescrever `BACKLOG.md`/`TICKETS.md` -- os dois **staged pelo merge** --, `bin/index_vs_arvore.sh` RECUSA o
+commit, porque arquivo staged que tambem difere da arvore e a condicao que ele morde.
+**PROVA:** `index_vs_arvore` rc=**1** antes do `git add` dos dois, rc=**0** depois; cadeia completa rc=0 com
+o commit de ensaio `89a41c82`. Sem o ensaio, esse vermelho apareceria com a arvore VIVA ja escrita.
+
+**DOIS GATES MEUS ESTAVAM ERRADOS, e os dois eram do mesmo tipo: ausencia de sinal lida como sinal bom.**
+(1) O veredito da suite: eu escrevi `^OK(\(| |$)`, e o espaco SOLTO casa **prosa de log** -- `OK -- nenhuma
+divergencia em 2026-10-10` passa por veredito. Pior: essa forma **nao casa `FAILED` de forma alguma**, entao
+ela nao distingue "falhou" de "nao achei veredito". O discriminador e **espaco-parentese ou fim de linha**
+(`^(OK|FAILED)( \(|$)`) mais `tail -1`, mais um `Ran N` com N >= 9000, porque recorte nao e suite cheia. (2) `CONF="$(cmd)"; RC=$?` **morre sob `set -e` antes de `$?` ser lido**: o PAROU nunca sairia.
+A forma e `RC=0; CONF="$(cmd)" || RC=$?`.
+**PROVA:** `logs/o207/gates_RED.txt` -- tabela de 5 strings com as duas formas lado a lado (a velha CASA
+`OK -- nenhuma divergencia`, recusa `FAILED`; a nova separa os tres) e os dois `bash -c` do gate 2, onde a
+forma velha mata o shell com rc=1 **sem imprimir nada** e a nova imprime `cheguei aqui, rc=1`.
+**E O PROPRIO CENSO SE CORRIGIU AO SER MEDIDO**, no mesmo arquivo: eu havia escrito que aquela prosa estava
+"literalmente dentro deste run" -- ela esta **0** vez no `suite_merge.out` (vive no log da SOMBRA) -- e que
+a forma velha casava `OK:   31`, que ela **recusa**, porque ali ha dois-pontos e nao espaco. O erro era do
+mesmo tipo do gate: afirmar de cabeca o que o arquivo responderia.
+
+**E quase li numero de ONTEM como de hoje:** o carimbo mostrava `SOMBRA_COMANDOS=70 SOMBRA_ERROS=0` ao lado
+de `SOMBRA_BLOCO=nao_rodou`, porque o `--refazer` zera o `STATUS` e deixa os campos do bloco anterior no
+lugar. Um gate em `SOMBRA_ERROS` teria lido 09/10. Registrado no comentario do script.
+
+**O ESMERIL DO MARCO, pela ESMERIL-DO-MARCO: 0 orfao, 0 segundo juiz, 1 linha de fila.** Censo pedido a
+arvore mergeada, nao a memoria.
+**PROVA:** `logs/o207/ESMERIL.md`; `git grep 'modo_inicio\|MODOS_INICIO' raia-bos -- app` da
+`templates/colaboradores/partials/_fase_12x36.html` (linhas 22, 26, 31) como **unico** leitor das chaves
+cruas -- **0** `.py` de producao, **0** JS, **0** outro template; o unico teste removido e um **RENAME** com
+assercao invertida e lapide no sitio. **Fila (nao trabalho agora):** o template **enumera** os tres modos no
+markup em vez de iterar `MODOS_INICIO` (`colaboradores/views_fase.py:23`), entao um quarto modo envelheceria
+em silencio e o selo `html.count('name="modo_inicio"') == 3` ficaria VERDE contando o markup do proprio
+template. Iterar pede rotulo e `hx-get` por modo: e DESENHO, nao cura.
+
+**O que o commit NAO levou, e por que:** `app/config/crons_duracao.json` (cron-sujo, nunca se commita),
+`bin/sombra.sh` (instrumento da O218 -- a **L-105** manda instrumento pousar SOZINHO, depois do produto) e
+`app/docs/HANDOFF-SESSAO.md` (derivado). **PROVA:** `git status --porcelain` depois do ato = exatamente
+esses tres, e nenhum deles no `git show --stat HEAD`.
+
+**Na mesa:** `O207-INICIO-DECLARADO-SMOKE` (AVAIS 10), o unico item do aval que nao e codigo -- o print da
+tela com a terceira opcao num colab de TESTE. **ORDEM VIVA**, pela ordem dele de 18:3x: **O219** -> O223 ->
+O224 -> contratos -> O228, com a **O235** (BO-WIZARD-DIZ-O-QUE-GRAVA) na vaga logo apos a O207 na raia
+`wt-bos`. O `siga: PLACAR-ESTRUTURAL` do hook **nao se cura aqui**: ele mesmo disse que isso e pouso de
+instrumento, depois.
+
 ## W12X36-HPD FECHADO PELO SMOKE DELE, E O SMOKE ACHOU UM BO — **MEDIDO ANTES DE UMA LINHA DE CURA** (10/10 00:0x)
 O smoke dele fechou as duas metades que o numero previa: *"marquei o domingo com horario proprio e salvou;
 um 12x36 sem marcar nada continuou igual"* -- e o "continuou igual" era exatamente o `0 de 896 dia-tipo

@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 01:03:01.**
+**Medido em 10/10/2026 01:04:24.**
 
 | | |
 |---|---|
@@ -34,6 +34,7 @@ ec4b1994 [PLACAR-ESTRUTURAL] R3: a linha que dizia a O130 fora do ar passa a diz
 ```
  M app/config/crons_duracao.json
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/RELATO.md
  M bin/sombra.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -122,38 +123,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 1 shell command
 
-● [rotulo] é um literal entre colchetes, e minha cicatriz aqui é exata — um literal em colchetes já travou a régua. Confiro o padrão que
-  ela casa antes de mudar às cegas:
+● Push exit 0 — mas o veredito se lê no remoto, não no rc (memória push-em-background-com-tail-nao-da-sinal):
 
   Ran 1 shell command
 
-● O padrão exige maiúscula inicial (\[[A-Z]…\]), então [rotulo] não é citação — nenhuma mudança necessária. Corrijo só um typo e sigo para
-  a leitura do sítio da O219, que é o próximo item de verdade:
+● Pouso no remoto: f415e116..353818c5, origin/main == HEAD, 0 a empurrar, 0 FAILED/ERROR no log inteiro do push, e o portão do próprio
+  pre-push disse OK — push liberado. O marco está fechado. A árvore deixou de estar carimbada.
+
+  E a leitura do PROTEGE deu um achado preciso para a O219: a lei é a L-113, cujo SELO diz "NENHUM ainda: os 4 REDs da O219 e a bateria da
+  O218 sao os selos desta lei" e cujo ESTADO é SO-NO-PAPEL -- 0 de 3 clausulas no codigo. A O219 não é só uma mudança de hash: é o commit
+  que move esse ESTADO.
+
+  Agora o RELATO:
 
   Ran 1 shell command
 
-● O sítio responde com clareza: impressao_insumos já faz hash de quatro insumos (batidas, cobertura, chamados, DNA versão+marcos) e tem
-  dois precedentes condicionais no próprio corpo — veto e teto, cada um com a mesma disciplina que a O219 pede no RED (2): "só entra quando
-  HÁ veto: célula sem veto guarda a mesma impressão de sempre, e a frota não é rejulgada por causa desta linha".
+● relato.sh confirmado: commita só em /home/ronald/hasner-relato, nada aqui. A seção entra no topo (00:4x é mais recente que 00:0x) e o
+  arquivo em árvore pega o commit do próximo marco (L-106):
 
-  A §6 do CLAUDE.md exige contrato de entrada antes de codar regra nova. Escrevo-o — é o primeiro passo da O219 e é durável:
-
-  Writing the O219 entry contract and verifying its PROTEGE claim
+  Publishing the RELATO and confirm it was not retained
   ⎿  $ cd /home/ronald/saas-hasner
-     mkdir -p logs/o219
-     cat > logs/o219/CONTRATO_DE_ENTRADA.md <<'FIM'
-     # O219 REGRA-NA-IMPRESSAO — CONTRATO DE ENTRADA (secao 6 do CLAUDE.md), escrito 10/10 00:5x
-     Quatro linhas antes de uma linha de codigo. Pergunta zero: "de qual fonte EXISTENTE isso sai?"
-     | | |
-     |---|---|
-     …
+     bash bin/relato.sh 2>&1 | tail -20
+     echo "--- rc=$? ---"
+     echo
+     echo "=== o aval dele: 'confere no ESTADO que a faixa sumiu' ==="
+     grep -niE 'relato (retido|RETIDO)|faixa|retido' app/docs/ESTADO.md | head -5 || echo "nenhuma mencao a retido no ESTADO"
+     echo
+     echo "=== e no r…
 
-✢ Compacting conversation… (7h 10m 15s · ↓ 842.3k tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱ 95%
+✽ Proofing… (7h 11m 38s · ↓ 846.7k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    0% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
