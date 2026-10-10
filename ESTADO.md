@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 23:09:31.**
+**Medido em 09/10/2026 23:15:01.**
 
 | | |
 |---|---|
@@ -123,20 +123,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● Push ainda na suite. O outro PARCIAL é a BATERIA (L-114: certificado só está pronto quando passa a bateria; existe em 1 de 7 famílias).
-  Medindo pela fonte também:
-
-  Ran 1 shell command
-
-● BATERIA: 1 de 7 famílias. O número declarado é 15 cenários / 48 testes, e a própria fonte define cenário = classe e teste = def test_ —
-  isso se confere por AST sem suite e sem pista:
-
-  Ran 1 shell command
-
-● Divergência — mas antes de afirmar, a contagem por forma infla: classe base ou mixin não é cenário. Olhando os nomes e se os arquivos
-  mudaram depois da medição:
-
   Ran 1 shell command
 
 ● Achado provado, e o número é de hoje: o placar enumera 12 cenários nominais para o test_bateria_lavratura.py, e os 12 somam exatamente 34
@@ -149,18 +135,32 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
   Ran 1 shell command
 
 ● Isso muda a forma: agora há dois números vencidos no placar, não um. Construindo o patch da BATERIA pelo mesmo arnês já verificado
+  (constrói de git show HEAD:, importa o candidato, confere antes de gravar):
 
-· Proofing… (5h 16m 45s · ↓ 630.1k tokens · thought for 8s)
+  Ran 2 shell commands
+
+● Armadilha real nisso, e vale registrar: os dois patches constroem de git show HEAD:, então rodar o segundo antes de commitar o primeiro
+  descartaria o primeiro. A ordem tem de ser commit A (R3) → commit A2 (BATERIA, já construído sobre o HEAD novo) → commit B (instrumento).
+
+● Running cd /home/ronald/saas-hasner export SP=/tmp/claude-…
+  ⎿  $ cd /home/ronald/saas-hasner
+     export SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
+     date '+%H:%M:%S'; wc -l < "$SP/raias/push_o206_v2.out"; tail -3 "$SP/raias/push_o206_v2.out"
+     echo "trava: $(bash bin/trava_teste.sh --quem 2>&1|tail -1)"
+     git fetch -…
+
+✢ Compacting conversation… (5h 22m 15s · ↓ 632.8k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱ 95%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    2% until auto-compact
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 5 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 6 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Updating REGRA 3 comment in _fase_12x36.html                                                53m 3s · ↓ 164.3k tokens
-  ◯ general-purpose  Committing lápides in ponto/precedencia.py                                                  53m 3s · ↓ 164.4k tokens
+  ◯ general-purpose  Checking g2.out size and lock holder                                                       58m 32s · ↓ 165.0k tokens
+  ◯ general-purpose  Running test_a2_precedencia and neighbor selos                                             58m 32s · ↓ 165.1k tokens
   ⧉  index
 ```
