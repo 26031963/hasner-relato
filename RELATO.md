@@ -1,5 +1,40 @@
 # RELATO — esteira saas-hasner
 
+## AVAL 10/10 11:4x — TRES REGISTROS COM GATILHO, O DESCONGELAMENTO DA O98, E UM `:365` QUE JA NASCEU VELHO
+Chegou no meio deste marco e entra NELE (L-106: docs no commit do marco). Nada construido: *"sem obra agora"*.
+
+**(A) Os tres com gatilho `contratos_estruturais = 20/20`.** Os itens **1** e **2** ja estavam registrados
+neste mesmo turno, pelo aval de 11:2x -- **O243 ESMERIL-3-VALIDACAO** e **O244 CONTRATOS-DAS-FAMILIAS** --,
+entao nao nascem de novo (**PROMPT-NAO-SE-REPETE**: prompt cujo titulo ja esta no `PROMPTS.md` responde em uma
+linha e nao refaz nada). O que entra e o **item 3**: **O245 DIAGRAMA-VIVO-EXPLICA** (pedido dele de 27/09) --
+o `manage.py gerar_diagrama` passa a mostrar, por bloco e **em camadas** (familias -> familia -> juiz), a
+pergunta que o bloco responde, o juiz, leis, selos, **numero vivo** e obras abertas, *"gerado do codigo, nunca
+a mao"*. Os tres com `aguardando` na celula de estado, que e a palavra que o `hook_stop_fila1` le para NAO os
+cobrar como fila 1 -- conferido chamando o proprio `_ids_que_nao_andam`: O243, O244 e O245 fora. Estados em
+**172**, **156** e **126** chars (teto 300 da **L-109**).
+
+**(B) A O98 GLOSSARIO DESCONGELA, e o portao dela nao e a fila -- e uma VAGA.** *"A L-096 segue congelando
+dinheiro e celula; a O98 e so documento e nao toca nucleo. Anda em RAIA PROPRIA, e SO abre quando a raia do
+esmeril da familia celula (O228) pousar -- ocupa a vaga dela, nao soma raia nova."* Isso e a **L-105** lida
+pelo lado do RECURSO: o que limita nao e o numero de itens abertos, e o numero de raias com agente vivo. A
+celula da O98 saiu de `**CONGELADA (L-096)**` para `**aguardando a VAGA**`, com a especificacao dele inteira
+na coluna da obra -- FONTE, FAZ (os **21** termos nomeados), MUDA, LINHA HAIKU, SELO de host, PROIBIDO e
+PRONTO, palavra por palavra.
+
+**O `:365` dele ja nascera velho, e o caso e meu.** O aval manda *"CLAUDE.md:365 deixa de apontar para
+memoria [[mapa-sistema]]"*. Esse ponteiro esta HOJE na **:281**, e no HEAD ja estava na **:334** -- a O224
+encurtou o arquivo em 7.437 chars **neste mesmo commit**, e offset anda a cada commit (o CLAUDE.md diz isso
+de si mesmo: *"ancorar por grep, nunca por linha"*). O proprio PROIBIDO dele (*"definicao sem ancora"*) e a
+cura, e ela ja esta escrita na celula: o sitio se acha por **grep do duplo colchete**, que acha **1** so no
+arquivo inteiro -- o que tambem mede o selo que ele pediu (*"ponteiro para memoria dentro de CLAUDE.md =
+VERMELHO"*): hoje ele morderia **1** linha, e depois da O98, **0**.
+
+**PEDIDO A ELE, como o aval manda** (*"Eu colo o texto do mapa antigo quando a raia abrir -- pedir no
+RELATO"*): **quando a vaga da O98 abrir** -- isto e, quando a raia da O228/familia celula pousar -- **cole
+aqui o texto do mapa antigo** (`[[mapa-sistema]]`: roteamento, middleware, fluxo app x PWA), porque a memoria
+nao entra no repo por mim e o `GLOSSARIO.md` nasce sem ele. Sem o texto, a O98 fecha **INCOMPLETA com a
+lista**, pelo seu proprio PRONTO.
+
 ## O224 DIETA-DO-CLAUDE-MD — FECHADA: AS DUAS TABELAS DE LOOKUP SAEM, E O PRONTO PASSA A SER O NUMERO QUE ISSO DEU (10/10 11:3x)
 `LEI-AKITA: origem=CLAUDE.md (a tabela de consulta pesa em TODO turno e nao decide nada: quem decide e o codigo vivo), testemunha=app/docs/JUIZES.md + app/docs/CRONS.md + LAPIDES.md 58-60 (o lookup e a janela vencida passam a ter endereco proprio, com ponteiro NO LUGAR de onde sairam), RED=$SC/o224b/prova2.py (3 perguntas, 0/0/0) + os 66 selos de host da pasta inteira, quem-mais-le=grep de `OS JUIZES`/`GEOMETRIA DE TURNO`/`processar_alertas_turno`/`SUPRA_JUIZ` em bin/tests/*.sh, bin/*.sh e bin/*.py = 0 hit; 4 testes de Python citam as secoes 5 e 7 em PROSA e por isso os dois cabecalhos FICAM, juizes novos=0`
 
@@ -48,17 +83,22 @@ virava `- periodo_apuracao` so do lado da remocao, e 4 trechos deram VERMELHO fa
 e a (b) sozinha passaria por COINCIDENCIA se um trecho igual ja existisse no destino -- por isso a (c).
 
 **PORTAO.** A pasta INTEIRA de selos de host, do jeito que `bin/regua.sh:138-145` a roda: **66 selos, 0
-VERMELHO**; `bin/node_check.sh` verde (12 arquivos). **A suite do Django nao e o portao desta fatia**, e isso
-se mediu: `grep` de `CLAUDE.md` em `app/**/*.py` = **0**. E o ponto cego que eu fui procurar: `grep` de
+VERMELHO**; `bin/node_check.sh` verde (12 arquivos). **A suite do Django nao e o portao desta fatia**, e o numero
+certo nao e zero -- sao DOIS numeros: `grep` da string `CLAUDE.md` em `app/**/*.py` da **270 linhas em
+193 arquivos**, todas PROSA, e **0** delas tem `open(`/`read_text`/`Path(`/`BASE_DIR`. **Ninguem LE o arquivo; 193
+arquivos o CITAM.** Eu ia publicar `= 0` para a pergunta da citacao, e ela e falsa pelo meu proprio
+paragrafo acima: os 4 testes que citam as secoes 5 e 7 escrevem `CLAUDE.md` na prosa. Citacao nao e
+leitura, e um grep so nao separa as duas. E o ponto cego que eu fui procurar: `grep` de
 `OS JUIZES`, `GEOMETRIA DE TURNO`, `processar_alertas_turno` e `SUPRA_JUIZ` em `bin/tests/*.sh`, `bin/*.sh` e
 `bin/*.py` = **0 hit** -- nenhum dos 66 esta verde **porque** a tabela saiu.
 
 **O que mais entra neste commit do marco (L-106: docs entram com o codigo do marco).** `PROMPTS.md` com as
 **3** linhas dos avais de 11:2x (PAUTAS-09-UM-TXT-SO, O228-TURNO-E-ESMERO, DOIS-MANDATOS-COM-GATILHO-20-20);
 `PENDENTES_RONALD.json` + `AVAIS.md` com **7** itens respondidos pelas palavras dele -- a mesa cai de **14
-para 7**, e o `O224-OS-10k-PEDEM-REGRA` e um deles; e os dois itens novos do bloco OBRAS, **O243
-ESMERIL-3-VALIDACAO** e **O244 CONTRATOS-DAS-FAMILIAS**, registrados com o gatilho dele
-(*"abre quando contratos_estruturais = 20/20"*, hoje **15/20**) e **sem obra agora** -- a palavra `aguardando`
+para 7**, e o `O224-OS-10k-PEDEM-REGRA` e um deles; e os **tres** itens novos do bloco OBRAS -- **O243
+ESMERIL-3-VALIDACAO**, **O244 CONTRATOS-DAS-FAMILIAS** e **O245 DIAGRAMA-VIVO-EXPLICA** --, registrados com o
+gatilho dele (*"abre quando contratos_estruturais = 20/20"*, hoje **15/20**) e **sem obra agora**, mais a
+**O98 GLOSSARIO DESCONGELADA** pelo aval de 11:4x (secao acima) -- a palavra `aguardando`
 na celula de estado e o que faz o `hook_stop_fila1` NAO os cobrar como fila 1, conferido chamando o proprio
 `_proximo_da_fila`/`_ids_que_nao_andam` (O243 e O244 fora, O224 fora por `**FECHADA`).
 

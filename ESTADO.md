@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 11:35:45.**
+**Medido em 10/10/2026 11:40:45.**
 
 | | |
 |---|---|
@@ -133,17 +133,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-❯ aval Ronald: QUATRO REGISTROS E UM DESCONGELAMENTO. Nenhuma lei nova; aplica L-096, L-105, L-106, L-109, L-110, L-111.
-
-  (A) REGISTRAR no bloco OBRAS do BACKLOG, no commit do proximo marco (L-106), celula de estado ate 300 caracteres (L-109), sem obra
-  agora, os tres com gatilho "abre quando contratos_estruturais = 20/20":
-  1. ESMERIL-3-VALIDACAO (mandato meu de 10/09): polimento, validacao e double-check dos setores criticos do core, uma familia por vez por
-  ordem de dinheiro (folha/export, celula/precedencia, turno/marcos, ausencia/ferias, chamado, feriado/prazo, fechamento). Leitura antes
-  de lixa, RED contra o HEAD, oraculo externo (recibos do Dominio, cartao Nexti, planilha RS) pela L-110, zona inviolavel so com aval no
-  commit, orfao sai pela L-111.
-  2. CONTRATOS-DAS-FAMILIAS (mandato meu de 21/09): um doc curto por familia em app/docs dizendo quem manda e o que quebra se mexer = a
-  camada 2 da secao 8 do CLAUDE.md.
   3. DIAGRAMA-VIVO-EXPLICA (pedido meu de 27/09): o diagrama gerado por manage.py gerar_diagrama passa a mostrar, por bloco e em camadas
   (familias -> familia -> juiz), a pergunta que responde, o juiz, leis, selos, numero vivo e obras abertas. Gerado do codigo, nunca a mao.
 
@@ -162,15 +151,26 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
   a lista.
 
   Segue a fila; PAREI so em lei ou !
-  ctrl+x ctrl+s to send now
-                                                                                                   ✔ Update installed · Restart to update
+
+● Fechar o texto e reconferir os 66 selos e a regua de tickets · 1m 10s
+  ⎿  $ cd /home/ronald/saas-hasner; /usr/bin/python3 - <<'PYEOF'
+     import pathlib
+     p = pathlib.Path('/home/ronald/saas-hasner/app/docs/RELATO.md')
+     s = p.read_text(encoding='utf-8')
+     velho = ('e os dois itens novos do bloco OBRAS, **O243\nESMERIL-3-VALIDACAO** e **O244 CONTRATOS-DAS-FAMILIAS**, '
+     'registrado… (1m 9s · 2 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+· Proofing… (17h 45m 59s · ↓ 2.1m tokens)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+                                                                                                                    6% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ Press up to edit queued messages
+❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Running test_o199_aceite_de_folga suite recut                                              32m 40s · ↓ 119.7k tokens
+  ◯ general-purpose  Running test_o199_aceite_de_folga suite recut                                              37m 40s · ↓ 119.7k tokens
   ⧉  index
 ```

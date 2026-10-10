@@ -5,7 +5,7 @@ a raspagem usa a lista de nomes do banco como autoridade, nunca regex adivinhada
 `colNNN`/`ecNNN` ficam, porque nao identificam ninguem fora desta casa. Obra FEITA sai desta
 lista — ela e o que esta EM PE._
 
-**243 obras abertas.**
+**244 obras abertas.**
 
 | ID | obra | estado |
 |---|---|---|
@@ -107,7 +107,7 @@ lista — ela e o que esta EM PE._
 | **O95** | A PAUSA DECLARADA ABSORVE QUEM NAO VOLTOU | espera aval |
 | **O96** | PAUSA MAXIMA E CADASTRO DA ESCALA, nao constante de classe | espera aval |
 | **O97** | SELO VAZIO DESDE 30/06 | **FECHADA 30/09 21:1x -- os DOIS selos v |
-| **O98** | CONGELADA (L-096) -- GLOSSARIO DO DOMINIO | **CONGELADA (L-096)** -- a lei de 28/09  |
+| **O98** | GLOSSARIO DO DOMINIO -- DESCONGELADA 10/10 11:4x | **aguardando a VAGA, nao a fila 1** (des |
 | **O99** | VERDADE-NAO-E-INCOMODA | espera `!` |
 | **O101** | A TRILHA DA ISENCAO E ENGOLIDA EM SILENCIO | espera aval |
 | **O102** | O RELOGIO RISCADO SAIU COM O DOBRO DO TEXTO | **FECHADA 30/09 22:3x** |
@@ -231,7 +231,7 @@ lista — ela e o que esta EM PE._
 | **O221** | POUSO DAS DUAS RAIAS AVALIZADAS | espera `!` |
 | **O222** | O VEREDITO DO DIA LE O CHAMADO QUE A PROPRIA PASSADA CRIA | **livre** |
 | **O223** | A APLICACAO DE CONVENCAO SE EDITA PELA UI | espera aval |
-| **O224** | DIETA-DO-CLAUDE-MD | **FECHADA 10/10 11:3x.** 2a fatia (aval  |
+| **O224** | DIETA-DO-CLAUDE-MD | **FECHADA 10/10 11:3x.** 3a fatia (aval  |
 | **O225** | UM ROTULO DE EFEITO SEM NENHUM LEITOR DE TEMPLATE | livre -- e tela e tag, nao numero. Fila  |
 | **O226** | DUAS VERDADES SOBRE "ESTE PARAMETRO TEM EFEITO" | livre. Fila de INSTRUMENTO (ordem dele d |
 | **O227** | O GUARDA DA L-092 RECUSA LEITURA | livre -- nao toca numero, so quem pode P |
@@ -250,5 +250,6 @@ lista — ela e o que esta EM PE._
 | **O240** | O PADRAO DE VEREDITO DA SUITE AINDA CASA PROSA DE LOG, E SO O `tail -1` SALVA | livre -- toca so `bin/` e a secao 3 do C |
 | **O241** | DUAS RAIAS COM 7 COMMITS CADA A FRENTE DO MAIN E NENHUM MOTIVO NOMEADO | espera `!` |
 | **O242** | O SELO DA CORRENTE DA UM RED FALSO EM QUALQUER COPIA, E APAGA CARIMBO VIVO DE CRON | medicao e cura de INSTRUMENTO: pouso PRO |
-| **O243** | ESMERIL-3-VALIDACAO | **registrada 10/10 11:3x, nada construid |
-| **O244** | CONTRATOS-DAS-FAMILIAS | **registrada 10/10 11:3x, nada construid |
+| **O243** | ESMERIL-3-VALIDACAO | **registrada 10/10 11:4x, nada construid |
+| **O244** | CONTRATOS-DAS-FAMILIAS | **registrada 10/10 11:4x, nada construid |
+| **O245** | DIAGRAMA-VIVO-EXPLICA | **registrada 10/10 11:4x, nada construid |
