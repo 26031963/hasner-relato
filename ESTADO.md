@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 20:44:31.**
+**Medido em 10/10/2026 20:50:01.**
 
 | | |
 |---|---|
@@ -151,14 +151,14 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● O hook está certo: fila 1 de pé, sigo no mesmo turno. Vejo o bloco:
 
-● Esperar o marcador de fim do ensaio e ler o veredito · 3m 0s
+● Esperar o marcador de fim do ensaio e ler o veredito · 8m 29s
   ⎿  $ cd /home/ronald/saas-hasner && F=logs/o219/ensaio_bloco_com_a_queda_20261010_2015.txt
      timeout 540 tail -n0 -f "$F" | grep -m1 -E '^== [0-9]{2}:[0-9]{2}:[0-9]{2} FIM$|^RC-(BLOCO|HASH-DEPOIS)=' ; echo "saiu em $(date
      +%H:%M:%S)"
-     sed -n '/== OS DOIS NUMEROS/,$p' "$F" (2m 59s · 2 lines)
+     sed -n '/== OS DOIS NUMEROS/,$p' "$F" (8m 29s · 2 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Proofing… (1d 2h 49m · ↓ 3.1m tokens)
+✢ Proofing… (1d 2h 55m · ↓ 3.1m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
