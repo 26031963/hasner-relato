@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 19:13:01.**
+**Medido em 10/10/2026 19:18:14.**
 
 | | |
 |---|---|
@@ -129,22 +129,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ├─────────────────────┼───────────────────────────────┼──────────────────────────┤
-  │ dias 09             │ 424                           │ 465 (+9,7%)              │
-  ├─────────────────────┼───────────────────────────────┼──────────────────────────┤
-  │ delta de minutos 09 │ +155.323                      │ +151.038 (−2,8%)         │
-  └─────────────────────┴───────────────────────────────┴──────────────────────────┘
-
-  The 1894 is a different question, now measured and not supposed: só 465 dos 1894 movem minuto. FORA-DO-HORIZONTE = 0 nas células e nos
-  chamados.
-
-  Ran 1 shell command
-
-● The 10's 30 split 18 in 21-30/09 and 12 in October — larger in day count than o209's 2 over the overlapping sub-window, tiny in minutes
-  (−722). That goes to the fila as a named INCOMPLETO, not swept into prose. Now step 2 of his CONDITION — the reversão, by the declared
-  read-only door:
-
-  Ran 1 shell command
 
 ● Reversão durable: 607 linhas, md5 892768aa7803aa3e116d775e59c11332, read_only=on e grants_de_escrita_do_papel=0. Dois achados que a
   leitura entregou de graça:
@@ -157,10 +141,26 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
   Calling the advisor before writing the virada and landing.
 
 ● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-✢ Proofing… (1d 1h 18m · ↓ 2.9m tokens)
+● Item 3 is a real defect and I'll take it: a WARNING saying "recalculado" on a somente_leitura call is the witness claiming a write that
+  never happened — and O48 passo 3 makes fechamento_lido the tela's reader, so every espelho view of the 09 would log it. Item 1 is
+  time-sensitive: the 10 emitidos exist only until the refazer. Taking that first.
+
+  Ran 2 shell commands
+
+● status_local, and the model carries a celula FK — which gives the day directly for the 6 that have no date "pela lei":
+
+● Reler os emitidos com celula e status_local
+  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
+     sed -i "s/c\.status,/c.status_local,/; s/status=%-12s/status=%-12s/" $S/o219/emitidos_sombra.py
+     python3 - <<'PY'
+     import re
+     p = '/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1…
+
+✽ Proofing… (1d 1h 23m · ↓ 2.9m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    8% until auto-compact
+                                                                                                                    4% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
