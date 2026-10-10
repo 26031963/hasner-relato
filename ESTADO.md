@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 19:02:01.**
+**Medido em 10/10/2026 19:07:31.**
 
 | | |
 |---|---|
@@ -129,42 +129,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+● The sonda runs on cpuset 4-7 — it would steal CPU from the ensaio and distort SEGUNDOS, one of the virada's three numbers. It waits.
+  Meanwhile I write it (scratchpad only, no tree edit): first the field census, so no name/CPF/R$ can leak into the reversão.
 
-● Zero live references to the trava left in production. Now the VIRADA in the same copy.
+  Ran 3 shell commands
+
+● All 26 CAMPOS are hours/minutes/counts — no R$. But the model has fields beyond them, three carrying free text/JSON (observacao,
+  motivos_espelho, causa_espelho) that his aval forbids emitting. So the reversão must cover exactly what the WRITER can move — measured by
+  AST, not guessed:
 
   Ran 2 shell commands
 
-● Background command "Refazer a sombra e rodar o bloco" completed (exit code 0)
-
-● Sombra clean (diverge=0). Checking whether the RECALC-09 DIFF already exists before spending the sombra on it.
-
-  Ran 1 shell command
-  ⎿  Read docs/AVAIS.md (23 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bkds3iwbt.output (47 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bbqklvm2d.output (10 lines)
-  ⎿  Read docs/HANDOFF-SESSAO.md (45 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bmq1rhnnw.output (25 lines)
-
-● Task "RED e construção do segundo intervalo" completed in background
-
-● RECALC-09 already landed at 17:3x — reading what it published before spending the sombra again.
+● The | tail -40 buffers all interim output — the durable artifact is the log file. Watching that instead:
 
   Ran 1 shell command
 
-● RECALC-09 is published (clause 1 of his CONDITION done, logs/recalc09/recalc09_20261010_1731.txt, 243 de 603 mudam). Next in his order:
-  the v2 apply-ensaio for the virada's three numbers, then reversão em logs/. Checking the v2 runner is intact.
+● Ensaio is in the APPLY phase (teto ANTES = 30079, same as v1 — consistent restore). Writing the reversão sonda meanwhile, scoped to
+  exactly the fields the writer moves:
 
-● Ler o ensaio v2
-  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
-     cat $S/o219/ensaio_apply_v2.py
+  Esperar o fim do ensaio pelo arquivo · 29s
+  ⎿  $ cd /home/ronald/saas-hasner
+     A=logs/o219/ensaio_virada_apply_v2_20261010_1902.txt
+     for i in $(seq 1 40); do
+     grep -q "ENSAIO V2 FIM" "$A" && break
+     sleep 15
+     done
+     grep -q "ENSAIO V2 FIM" "$A" && echo "TERMINOU" || echo "ainda correndo"
+     sed -n '/== OS TRES NUMEROS/,/== DETALHE DAS MOVIDAS/p' "$A" (29s)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Proofing… (1d 1h 7m · ↓ 2.9m tokens · thinking)
+✢ Proofing… (1d 1h 12m · ↓ 2.9m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
