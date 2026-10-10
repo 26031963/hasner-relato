@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 13:49:31.**
+**Medido em 10/10/2026 13:55:01.**
 
 | | |
 |---|---|
@@ -130,44 +130,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: PLACAR-ESTRUTURAL -- O ESTRUTURAL SE SEPARA DO DADO (corte dele 02/10 22:5x, que SUBSTITUI o item 3 da
-  ordem das 21:4x -- o resto d
+     echo "--- suite: $(wc -l <"/tmp/claude-1001/-home-ronald-saas-…
 
-  Ran 5 shell commands
-
-❯ aval Ronald: COMPLEMENTO DA O219 (nao e id novo) -- RECALC-09-PARA-AUDITORIA. So medicao, na SOMBRA. Nenhuma lei nova (moratoria).
-  Aplica L-110 (medida de IMPACTO, nunca validacao), L-113, L-114 e a intacta da exportada em PROD.
-
-  CONTEXTO EM UMA LINHA: estou auditando os 574 holerites da 09 (feitos a mao pelo DP) contra o sistema; o gravado da 09 e anterior a
-  O211/O223 e preciso do numero que o codigo e o cadastro de HOJE dao.
-
-  FONTE: ponto/services/fechamento.py::recalcular_fechamento_mes -- a funcao REAL, nao replica.
-  FAZ: na sombra do dia (que ja traz as 3 linhas de AplicacaoConvencao de 08/10), recalcular a competencia 09/2026 das empresas 2, 3 e 4
-  com o HEAD. Gravar logs/audit_holerite_09/recalc_09_<data>.json com cabecalho {HEAD, carimbo da sombra, "ids = pk de prod": sim/nao} e,
-  por colaborador, {antes:{...}, depois:{...}} com os campos: horas_trabalhadas, horas_noturnas, horas_extras_50, horas_extras_50_noturna,
-  horas_extras_100, horas_extras_100_feriado, horas_extras_100_noturna, horas_folga_trabalhada, horas_falta, horas_atraso,
-  horas_saida_antecipada, horas_intra_indenizada, horas_reflexo_dsr. "antes" = o gravado como esta na sombra antes do recalculo.
-  COMO passar a porta da exportada DENTRO da sombra: decisao tecnica sua, registrada em uma linha.
-  QUANDO: depois do deploy que esta esperando a suite; nao fura o miolo da O219 nem o pouso da O199.
-  PROIBIDO: tocar o gravado da 09 em PROD; apply; gerar TXT; mexer na porta da exportada no codigo de prod; deixar o portao do deploy
-  vermelho (se a sombra ficar suja, refazer); nome, CPF ou valor em reais no arquivo ou no RELATO.
-  PRONTO: secao no RELATO (teto 25 linhas) com: colabs recalculados por empresa; soma antes -> depois de horas_noturnas, HE50, HE100 (as
-  tres colunas) e intrajornada, por empresa; quantos colabs mudaram; caminho do arquivo; HEAD. Sem um deles = INCOMPLETO com a lista.
-  LINHA HAIKU: nenhuma -- medicao, sem juiz, contador ou porta nova.
-
-  Segue a fila; PAREI so em lei ou !
-
-✢ Proofing… (19h 54m 45s · ↓ 2.3m tokens · thinking)
+✢ Compacting conversation… (20h 0m 15s · ↓ 2.3m tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱ 92%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    8% until auto-compact
+
+❯ aval Ronald: CORTE DE ORDEM, com urgencia -- a O48 FECHAMENTO-ONLINE entra na fila 1 LOGO ATRAS do miolo da O219, ANTES de voltar aos
+  contratos. Nenhuma lei nova: a lei da O48 e o meu corte de 20/09 21:0x (fechamento = LEITURA da celula soberana; recalcular deixa de
+  existir; so ATOS persistem). Se a L-096 a segura, este aval a libera SO para a O48.
+
+  FONTE: a linha O48 do BACKLOG e app/docs/FECHAMENTO-ONLINE.md (censo de 20/09) -- reler o censo contra o HEAD antes de cortar, porque
+  ele tem 20 dias.
+  ORDEM DOS [nome] (do proprio plano), um pouso por passo, cada um com suite e deploy pela L-105/L-107:
+   2. fechamento_lido(colab, mes, ano): funcao PURA, devolve o objeto sem salvar, pela MESMA derivacao de recalcular_fechamento_mes (um
+  juiz, nao dois). RED: lido == gravado logo apos recalcular, na frota, competencia 10.
+   3. os 4 leitores por colaborador passam a ler online.
+   4. bin/simular_folha.sh compara leitura x leitura; a foto para de escrever.
+   5. folha/export.py le online -- so com DIFF = 0 nas 3 empresas publicado ANTES.
+   6. leitores de frota com cache declarado e invalidacao, no molde do previsto_em.
+   O passo 1 (K8) so se o censo relido disser que ainda falta.
+  PROIBIDO: segundo derivador de dinheiro; tocar ponto/motor_calculo_v2.py; passo 5 sem o DIFF zero; GET que escreve; fallback para o
+  gravado "por enquanto".
+  PRONTO DE CADA PASSO: RED nomeado, numero medido na fonte, commit, PROVA de rota no ar -- no RELATO em ate 25 linhas. O passo 2 pronto
+  ja serve a auditoria dos holerites da 09 (recalculo sem escrita).
+  LINHA HAIKU: quando o passo 3 pousar, o card do copiloto que le fechamento passa a ler fechamento_lido; 1 pergunta no golden ("quanto de
+  adicional noturno o colab X tem na competencia Y") com esperado pela ferramenta.
+
+  Os contratos (15/20) e as raias seguem como estao; so a PRINCIPAL muda de alvo depois do miolo da O219. Segue a fila; PAREI so em lei ou
+  !
+  ctrl+x ctrl+s to send now
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ Press up to edit queued messages
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Reading suite.sh command construction                                                    1h 0m 43s · ↓ 162.3k tokens
+  ◯ general-purpose  Reading suite.sh command construction                                                    1h 6m 13s · ↓ 162.3k tokens
   ⧉  index
 ```
