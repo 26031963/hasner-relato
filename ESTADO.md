@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 01:50:45.**
+**Medido em 10/10/2026 01:55:45.**
 
 | | |
 |---|---|
@@ -121,36 +121,36 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● O push pousou. Confiro no remoto, não no log:
+  Ran 3 shell commands
 
-  Ran 1 shell command
-
-● Veredito no remoto: a364847b = origin/main, a empurrar: 0, is-ancestor SIM. Pista livre. Lanço o RED da cláusula 1 na cópia enquanto
-  fecho o marco:
-
-  Ran 5 shell commands
-
-● RED evidenciado. Confiro que os 3 errors são a trava, e não fixture quebrada:
-
-  Ran 1 shell command
-
-● RED evidenciado pelos três caminhos, com a mesma exceção — e a mensagem dela acabou de responder a medição da cláusula 3. Registro:
-
-  Ran 1 shell command
-
-● Agora fecho o marco O218 pela L-108:
+● processados é int — o RED está correto. Curo só o MORDE, que afirmava sobre ausência de sinal:
 
   Ran 2 shell commands
 
-● Marco durável: push no remoto, RED evidenciado em logs/o219/red_clausula1.out, contrato em 185 linhas, RELATO publicado (0 vazamento),
-  handoff com a empurrar: 0.
+● MORDE verde com processados >= 1 provado; 3 RED vermelhos pela trava. Registro o censo completo:
 
-  MARCO FECHADO -- pode compactar
+  Ran 1 shell command
+
+● Agora a cura. Leio o sítio vivo antes de montar:
+
+  Ran 1 shell command
+
+● Decido remover permitir_exportada na origem (rotular "sem efeito" seria band-aid). Meço as chamadas reais que preciso migrar:
+
+  Ran 1 shell command
+
+● Só 4 chamadas reais. Meço se a própria exceção fica órfã (L-111 morde no mesmo marco):
+
+  Ran 1 shell command
+
+● Achado que muda o tamanho do commit: há um único raise, então a classe fica órfã e a L-111 morde no mesmo marco. Registro antes de
+  decidir:
+
+  Ran 1 shell command
 
 ● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-* Proofing… (7h 57m 59s · ↓ 940.5k tokens · thinking)
+✶ Proofing… (8h 2m 59s · ↓ 957.5k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
