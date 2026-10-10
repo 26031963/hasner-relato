@@ -3,12 +3,12 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 01:24:31.**
+**Medido em 10/10/2026 01:30:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `672f88e1 [O218] instrumento: a porta da sombra passa a enxergar a arvore de uma raia, e com isso a medicao cabe ANTES do pouso` |
-| `origin/main` | `353818c5 [O207] pouso: a terceira opcao do Inicio da apuracao entra no ar no mesmo ato do merge, e o smoke dele fecha o W12X36-HPD achando um BO de tela` |
+| `HEAD` local | `a364847b [O218] corretivo: a guarda da sombra volta a ter UM sitio, e o selo que faltava nasce VERMELHO no commit anterior` |
+| `origin/main` | `672f88e1 [O218] instrumento: a porta da sombra passa a enxergar a arvore de uma raia, e com isso a medicao cabe ANTES do pouso` |
 | commits a subir (`ahead`) | **1** |
 
 ## Fabrica
@@ -22,11 +22,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+a364847b [O218] corretivo: a guarda da sombra volta a ter UM sitio, e o selo que faltava nasce VERMELHO no commit anterior
 672f88e1 [O218] instrumento: a porta da sombra passa a enxergar a arvore de uma raia, e com isso a medicao cabe ANTES do pouso
 353818c5 [O207] pouso: a terceira opcao do Inicio da apuracao entra no ar no mesmo ato do merge, e o smoke dele fecha o W12X36-HPD achando um BO de tela
 4831eb93 [O207] a tela do assistente de fase ganha a terceira opcao -- a data que o admin DECLARA --, e a inativa sobreposta deixa de cobrir o trecho de outra vigencia
 f415e116 [PLACAR-ESTRUTURAL] instrumento: o placar deixa de poder dizer que esta fora do ar um commit que o git ja tem no tronco
-1c281f92 [PLACAR-ESTRUTURAL] BATERIA: a contagem que envelheceu em horas pela minha propria mao passa a ser a dos modulos que a fonte nomeia
 ```
 
 ## `git status --short`
@@ -121,36 +121,36 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  mal parametrizada: config.settings.sombra tem o banco literal (CLAUDE.md §6), então POSTGRES_DB é ignorado e current_database() devolveu
-  sombra corretamente. Provo o que eu realmente preciso — que o mecanismo morde — trocando só a constante esperada:
 
-  Ran 1 shell command
-
-● Guarda morde: constante errada → NAO_E_SOMBRA, rc=90; constante certa → PASSOU, rc=0. E app/config/settings/sombra.py:30 explica por que
-  a minha primeira contraprova não podia funcionar — o próprio arquivo avisa em :16 que POSTGRES_DB esquecido não desvia este settings.
-  Fixo as quatro provas no arquivo:
-
-  Ran 1 shell command
-
-● Push a 509s — não toco a árvore. Preparo a mensagem do commit corretivo e o parágrafo do RELATO em scratchpad:
+● Nada rodando, árvore limpa. A cópia tem o caso temporário --provar-composicao que não vai à árvore — então aplico por âncora, não por
+  cópia:
 
   Ran 2 shell commands
-  ⎿  Read docs/AVAIS.md (27 lines)
-  ⎿  Read docs/HANDOFF-SESSAO.md (47 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/blfy3t2pb.output (12 lines)
-  ⎿  Referenced file ponto/turnos.py
-  ⎿  Referenced file ponto/tests/test_bateria_lavratura.py
 
-● Task "RED e construção do segundo intervalo" completed in background
+● rc lido do PIPESTATUS[0], não do $? depois do pipe. Agora o portão do push:
 
-● Task "Push the instrument marco through the pre-push regua" still running in background
+  Committed a364847b, ran 2 shell commands
 
-● Suite principal verde (Ran 10253 / OK (skipped=42)), control-plane correndo. Preparo o parágrafo do RELATO:
+● O RC=$? ali mediu o tail, não o git — o veredito é a linha [main a364847b] ... 3 files changed. E preciso conferir uma coisa que o meu
+  próprio script pode ter feito de mais: o dedupe de linhas em branco varre o arquivo INTEIRO.
 
-● Running 1 shell command…
-  ⎿  $ sed -n '1,30p' docs/RELATO.md
+  Ran 1 shell command
 
-· Proofing… (7h 31m 45s · ↓ 888.6k tokens · thinking)
+● Todas as 21 deleções no RELATO são linhas vazias — 0 linha de prosa removida (medido, não suposto): o dedupe do meu script colapsou
+  brancos duplos em outros trechos. Whitespace, nenhum conteúdo. Push:
+
+  Ran 1 shell command
+
+● Enquanto a bateria corre, o esmeril deste marco (ESMERIL-DO-MARCO: só o que ele deixou órfão, nada de fora):
+
+● Recording the esmeril result durably
+  ⎿  $ cd /home/ronald/saas-hasner
+     cat > logs/o218/ESMERIL.md <<'FIM'
+     # ESMERIL DO MARCO O218 CORRETIVO — 10/10 01:4x
+     Regra aplicada: **ESMERIL-DO-MARCO** (Ronald 08/10 17:1x). Censo **so** do que ESTE marco deixou orfao,
+     com prova de zero chamador; achado de FORA do marco vira linha na fila, nunca trab…
+
+* Proofing… (7h 37m 15s · ↓ 902.9k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

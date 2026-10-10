@@ -1,5 +1,54 @@
 # RELATO — esteira saas-hasner
 
+## O218 CORRETIVO — **EU CRIEI O SEGUNDO JUIZ E ESCREVI NO COMENTARIO QUE ELE NAO EXISTIA** (10/10 01:3x, ESMERIL-DO-MARCO + LEI-AKITA 2)
+O esmeril do proprio marco achou, no unico arquivo que o marco mudou, um defeito que a mensagem do
+`672f88e1` NEGA. Ao extrair a receita da guarda de banco para `E_SOMBRA` (bin/sombra.sh:63) eu deixei de pe
+a copia LITERAL que `bloco()` usa, e comentei que a variavel era *"o unico sitio onde ela mora"*. A
+pergunta "estou na sombra?" passou a ter **dois juizes no mesmo arquivo**, e o que ficou de fora e o sitio
+que o `bin/deploy.sh:167` exige antes de publicar.
+**PROVA:** `git show 672f88e1 -- bin/sombra.sh | grep '^+.*current_database'` = **1 linha** (a :63);
+`git blame -L311,311 -- bin/sombra.sh` = **`3d8d835f`** (a fatia E2, o nascimento da sombra). Uma copia
+antes daquele commit, **duas** depois. O comentario falso esta em `bin/sombra.sh:421-423`.
+
+**O SELO NASCEU VERMELHO NO COMMIT ANTERIOR, e morde nos TRES sentidos.** "Copias == 1" ficaria **VERDE**
+com a guarda apagada do portao do deploy -- a familia do `[]` de dois sentidos --, entao o selo afirma
+tambem que a definicao existe UMA vez e que **dois** sitios a LEEM.
+**PROVA:** `logs/o218/SELO_RED_guarda.txt` sobre o HEAD anterior: `(a) ... aparece 2 vez(es), esperado 1` e
+`(c) '$E_SOMBRA' lida em 1 sitio(s), esperado >= 2`. Medido em quatro arvores: HEAD = RED por (a)+(c);
+curada = `OK -- 1 assercao, 1 definicao, 2 leitores da MESMA guarda`; curada sem o `$E_SOMBRA` do `bloco()`
+= RED por (c); curada sem a definicao = RED por (a)+(b). Os comentarios saem da conta antes de contar
+(`grep -vE '^\s*#'`), pela 5a lapide da casa.
+
+**O COMANDO QUE `container()` RECEBE NAO MUDA UM BYTE, e isso nao ficou no papel.** `container()` termina em
+`sh -c "$1"` (bin/sombra.sh:159) -- UM argumento --, e o bloco multilinha de aspas simples ja provava que
+ele aceita newline.
+**PROVA:** `sh -n` OK nas duas formas; o diff do argumento composto, extraido VERBATIM dos arquivos, e
+**uma linha vazia e 4 espacos** de indentacao -- o texto da guarda e o resto do bloco sao byte-identicos; e
+`container "$E_SOMBRA"'<NL>echo ALCANCEI'` rodou na funcao **REAL** e imprimiu **ALCANCEI**, com a arvore
+entrando pela porta nova (`SOMBRA_ARVORE`). A guarda MORDE com dois valores dando dois status: constante
+esperada trocada -> `NAO_E_SOMBRA` **rc=90**; verdadeira -> `PASSOU` **rc=0**.
+
+**A MINHA PRIMEIRA CONTRAPROVA ESTAVA MAL PARAMETRIZADA, e fica registrada.** Tentei falsificar a guarda com
+`-e POSTGRES_DB=juliani` e ela nao barrou -- que por um instante se le como guarda furada. Nao e: o env e
+ignorado **por desenho**, e o desenho e uma protecao.
+**PROVA:** `app/config/settings/sombra.py:30` faz `DATABASES['default']['NAME'] = NOME_DO_BANCO`, e `:16`
+avisa que `POSTGRES_DB` esquecido no `.env` nao desvia este settings. Quem errou foi a sonda -- setima vez
+nesta casa. A sonda certa troca so a constante ESPERADA, e e a do paragrafo acima.
+
+**E O NUMERO 2 ESTAVA NA MINHA MAO HORAS ANTES.** O censo que eu mesmo escrevi nesta noite diz, da porta:
+``tem (`E_SOMBRA`, 2 sitios)``. Eu li aquele 2 como "definida + lida" e nunca perguntei se havia uma
+terceira copia literal: contei o TOKEN, nao o JUIZO.
+**PROVA:** `logs/o218/CENSO_PORTA_SOMBRA.md:11`. O achado inteiro, com as quatro provas e o que ele **nao**
+fecha, esta em `logs/o218/ACHADO_GUARDA_DOIS_SITIOS.md` (101 linhas).
+
+**O QUE NAO SE FEZ, e por que:** nao se emendou `672f88e1` -- ele estava a caminho do remoto, e a cura vem
+em commit proprio; nao se re-rodou `--refazer`/`--bloco` (~38 min dentro da faixa cega 00:00-04:00, e o
+carimbo de hoje e o portao vivo do deploy); e **nao se declara fechada** a linha de fila dos 3 forks da
+receita (`diff_janela_he_total.sh`, `simular_folha.sh`, `r5_idempotencia_frota.sh`): esta cura e de UM
+arquivo. Os comentarios :62, :145 e :421-423 **nao foram reescritos** -- a cura os torna verdadeiros.
+**PROVA:** `bin/sombra.sh --conferir` segue **rc=0** com `dia=20261010 status=OK tipo=completa diverge=0
+erros=0`; `bash -n bin/sombra.sh` OK; pasta de selos de host verde.
+
 ## O207 POUSA — **UM ATO SO, E O PORTAO DA SOMBRA FOI LIDO DUAS VEZES COM A MESMA RESPOSTA** (10/10 00:4x, L-105 + L-107)
 A terceira opcao do *Inicio da apuracao* -- a data que o admin DECLARA -- esta no ar. O pouso foi na forma
 da **L-107**: `git merge --no-commit` -> resolver -> commit -> `bin/deploy.sh --sem-migrate`, **sem nada no
@@ -636,7 +685,6 @@ a guarda IDENTICA, `if any(_pares_marcados(t) for t in do_dia)`. A hipotese e qu
 14 min bloqueie a saida posicional da L-115 exatamente nos dias do tipo col252. **Mesma classe,
 hipotese e nao prova** — fica como linha, para medir quando a fila chegar nela.
 
-
 ## O231 — **O COMANDO IMPRIMIA UMA MEDICAO E FECHAVA OUTRA; agora ha UMA** (09/10 18:4x, marco)
 
 **AVAL** (`!` dele 09/10 17:2x, literal): *"curar fechar_cobranca_com_lastro na origem: fechar()
@@ -687,7 +735,6 @@ LEI-AKITA: origem=ponto/services/lastro.py::fechar (a porta devolve o quadro que
 `quadro` da propria porta lido pelo comando, RED=ponto/tests/test_o231_lastro_mede_uma_vez.py::test_MORDE_as_duas_medicoes_discordando,
 quem-mais-le=censo por AST de `lastro.julgar` e `lastro.fechar` -- so o comando e `contador()`, e o
 `contador()` nao mudou; juizes novos=0
-
 
 ## RE-LAVRA 10 (L-115) — **NO AR, E A FOLHA SE MOVEU: +5.451 MIN DE REALIZADO EM 6 COLABS** (09/10 18:2x, CONDICAO 4)
 
@@ -793,7 +840,6 @@ nao aplicados** (L-092 / TXT-FOTOGRAFIA): o unico caminho deles e a porta REGEN-
 
 ## L-115 POUSO 1 — **A SAIDA PELA POSICAO ESTA NO AR, E A FIGURA DO AVAL NAO E ESTA** (09/10 17:3x)
 
-
 **A FORMA B DO POUSO 2 ESTA MEDIDA, e o primeiro numero que ela deu era sonda errada (18:0x).**
 Duas rodadas devolveram `dia-colab=0` nas duas janelas, e zero contradizia fato ja medido -- as 8
 noites de col923 que pagam 0. Em vez de publicar o zero, perguntei **por clausula**, dia a dia
@@ -868,7 +914,6 @@ P. **Avais respondidos neste turno** (`bin/gerar_avais.py --escrever`, mesa 8 ->
 (*ok-desenho*, a trava do TXT fica LIGADA sobre os 81 dias — e o estado que ja esta no ar, nada construido)
 e `LASTRO-MEDE-DUAS-VEZES` (`!` concedido, virou **O231**: `fechar()` devolve o quadro que usou e o comando
 imprime ESSE — LEI-AKITA 2, testemunha LE, nao recalcula).
-
 
 ## L-114 TERMOMETRO RODADO — **O AMARELO CAIU POR MEDICAO, E OS 19 SEM DESTINO GANHARAM DONO** (09/10 15:1x)
 
@@ -1059,7 +1104,6 @@ S133, invisivel para todo leitor de marco. As duas curas candidatas batem em lei
 `logs/r1/ata_a_b.out` e `logs/r1/MECANISMO.md`. **O balde A deixou de estar travado**: ele é a fatia
 seguinte, com os casos na bateria primeiro; o balde P é o que pousa agora.
 
-
 ORDEM-VIVA-TOPO passou a `O73`. O O214 fica ABERTO so pelo smoke dele (AVAIS #7) — os quatro itens
 pousaram (`3c610491`..`6a259f0b`, no ar). O handoff ainda imprime "item EM CURSO: O214" porque
 `_proximo_da_fila` le a ORDEM DA TABELA e o marcador e a autoridade desde a O158: divergencia
@@ -1091,7 +1135,6 @@ termometro; a certificacao e a BATERIA.
 com um par sub-piso (1m28s em d, 9 min em e). Em `e` a alternancia pura da 296, nao 480 — o 480 so sai
 se o par de 9 min for lido como marcacao duplicada, e disso NAO ha lei escrita. Os dois cenarios entram
 na bateria nas DUAS formas (O218).
-
 
 ### A PROVA DEPOIS — NO AR as 13:49, e os quatro casos dao o numero DECLARADO em PROD
 
@@ -1259,7 +1302,6 @@ retinha era o titulo da O146 afirmando ato sem `PROVA:` ao lado, e a PROVA esta 
 `dna['extra_declarada']`, `dna_versao` 1: 20.785 / 2: 103.573). Com rc=0 o proximo ciclo publica o RELATO
 e a faixa **RELATO retido** do topo do ESTADO nao nasce — ela e escrita por `bin/relato.sh:84` **so**
 quando o portao recusa.
-
 
 ## O214 ITEM 4 — **O DIA TEM DONO, E A DIFERENCA TEM DONO** (09/10 07:xx→08:xx, ITEM 4 FECHADO)
 
@@ -1640,7 +1682,6 @@ FALTA, e esta nomeado: **smoke de clique do Ronald** nas duas cascas (FRONT SEM 
 toca template), e a **medicao do custo do confirmar** na sombra (N recalculos), que e o numero em que a
 decisao sincrono-x-job se apoia.
 
-
 ### O QUE A SUITE INTEIRA ACHOU, e os vizinhos nao (09/10 03:2x -- `Ran 10126 tests` / `FAILED (failures=2)`)
 
 Os 21 selos do item 2 e os 97 dos seis modulos vizinhos estavam VERDES, e a suite cheia ficou **vermelha em
@@ -1687,7 +1728,6 @@ levantando**. E a PREVIA sai do motor REAL dentro de transacao desfeita, pelo mo
 `ponto/management/commands/diff_janela_he.py` ja usa, com as **7 rubricas que ele declara** — zero rubrica
 nova, zero escritor novo de `DecisaoHE` (a porta segue sendo chamada dia a dia, como `recusar_em_lote` faz).
 
-
 ## O146 — **FECHADA, NO AR**: a extra declarada da escala desloca o limite, e o limite
 tem UM sitio (09/10 00:4x · `cfd4ff83`+`ce212bb8`, deploy 01:35, smoke OK)
 
@@ -1730,7 +1770,6 @@ troca de template.
 **26 casos, `Ran 26 tests` / `OK`**. A **suite INTEIRA na copia**, pela porta unica
 (`bin/suite.sh --dir`): **`Ran 10105 tests in 1363.127s`** / **`OK (skipped=42)`** — mais os 143
 vizinhos do modulo e `ruff` limpo nos 10 `.py` tocados.
-
 
 | caso | o que a regra manda | teste |
 |---|---|---|
@@ -2426,7 +2465,6 @@ saida), e `rc 75` da trava e *"a vez nao chegou"*, nunca vermelho.
   antes — e **nao** reusando `permite_hora_extra`, que `triagem_batida.py:290` e
   `processar_alertas_turno.py:123` ja consomem com outro sentido.
 - **Dia-colab de `col207` como caso de CADASTRO x REALIDADE** (14/14 dias, acima), pelo oraculo, sem codigo.
-
 
 ## O214 ITEM 1 — **O APPLY DA 10, E O HASH QUE NAO E TESTEMUNHA** (08/10 19:0x→19:2x)
 
@@ -3205,7 +3243,6 @@ linha ensinava como cura (ela mesma conta que o `^(OK|FAILED)` pelado ja havia d
 porque o Django so imprime `OK`, `OK (skipped=N)` ou `FAILED (...)` — **e** o `tail -1`, porque o veredito
 e a ULTIMA linha do run e a prosa vem no meio. A linha do CLAUDE.md nao tinha nem um nem outro. Corrigida
 neste commit com os sitios citados; nenhum script mudou, porque nenhum script estava errado.
-
 
 **O211 POUSO B NO AR as 11:52 de 08/10 -- commit de titulo `O211 pouso B: a regua de dinheiro sobe da
 EMPRESA...` --, e com ele a O211 esta FECHADA: a regua de dinheiro sobe da EMPRESA, e a praca so entra por
@@ -6206,7 +6243,6 @@ o outro lado do interruptor da fatia 2) = `Ran 30 tests / OK (skipped=7)`. **62 
 vermelhos=0** (o novo incluido). `tickets_placar: OK`, `regua_tickets: OK`. Os 5 nomes conferidos no
 vivo um por um.
 
-
 # PEDIDO DE PATCH DA RAIA UI -> MAIN: **GESTAO-HE-FATIA-2-LOTE-E-LIMITE** (01/10 20:1x-21:xx, `wt-ui`)
 
 > **RECORTE DE 01/10 20:5x, e ele muda o que esta escrito abaixo.** A obra virou DUAS fatias. A **FATIA 1** --
@@ -6916,7 +6952,6 @@ ve o motivo ao lado do numero -- ela so veria o numero, e o numero so chega la p
 **nao esta neste ato**. Tambem quer dizer que o `realizado_sem_turno` ainda **nao** e' um rotulo que
 a folha possa mostrar: se um dia tiver de ser, e' fatia propria, com leitor nomeado.
 
-
 ## 05/10 00:3x — O191 PASSO 5: A SUITE VOLTOU **VERDE (9.629)**, AS 5 FALHAS ERAM **UMA MEIA-CORRECAO MINHA**, E A MINHA PROPRIA TABELA DE LEITORES ESTAVA **INVERTIDA**
 
 **ESTADO: a cura (b)+(c) esta CONSTRUIDA e VERDE na copia, nada aplicado, nada commitado, nada no ar.**
@@ -7287,7 +7322,6 @@ no topo da secao das 18:0x e a esteira segue sem ela; (b) a cura de origem da ch
 precisou fixar o sitio; (c) `.ruff_cache` das copias tem arquivo **root** dentro (classe O192) --
 gitignored, entao nao entra em commit, mas o `rm -rf` da limpeza falha como `ronald`.
 
-
 **A PORTA NOVA ACHOU O SEGUNDO SELO PROVADO E MUDO, E O SELO ESTAVA CERTO.** O gate na copia deu
 `nucleo_rc=1`: `nucleo.tests.test_prompt_gerado::test_o_arquivo_esta_em_sincronia_com_o_codigo`.
 A primeira pergunta nao foi "como fica verde", foi **de quem e o defeito** -- e a resposta e medida: o
@@ -7629,7 +7663,6 @@ a conta muda e o lugar de pedir tmpfs e o escritor unico da montagem, nunca um `
 REGISTRADO, nao construido: `bin/vigia_arvore.sh` passa a receber `mensageria/` na copia (ele consome a mesma
 porta unica) mas **nao chama a suite do nucleo** -- o vigia periodico segue cego a ela. Vai como item, nao
 como obra de hoje.
-
 
 ## 04/10 15:5x — OS 515 TESTES DO NUCLEO NAO TINHAM PORTA, E UM DELES ESTAVA **VERMELHO DESDE 16/09**
 
@@ -9115,7 +9148,6 @@ dura ate segunda 06:00 = **28 h**. Aqui e' inofensiva — o diff do O142 e aditi
 cartorio, nenhuma celula existente se move sozinha — mas a casa nao tem isso escrito em lugar nenhum:
 **o cron le o disco, o worker le a memoria, e entre um deploy e outro eles sao dois sistemas.**
 
-
 ### 6. O APPLY, FEITO E PROVADO — **02:08:19**, condicao 4
 PROVA: `logs/o142_PROVA_depois.json`, relido em processo NOVO as 02:09:03, e o
 `md5(ponto/turnos.py)` visto por ESSE processo = `05a22f22b759ccadfb1e96ae4981bca2` (a cura).
@@ -9222,7 +9254,6 @@ comando imprime esse. Espera o seu `!` porque o arquivo esta na lista.
 total historico **568** · **VIVOS = 0** (`('aberto','em_analise','registrado')`) · na fila do
 painel **0**. Por status: `resolvido` 459 · `fechado` 102 · `superado` 7.
 Nao ha acervo a triar — o detector das 06:48 nao tem passivo.
-
 
 **A MINHA FOTO DE GEOMETRIA ERA CEGA AO CAMPO QUE VIRA CHAMADO (03/10 23:2x).** Os 48 moventes da
 competencia 09 que eu publiquei saem de uma foto que imprime `entrada>saida` em `HH:MM:SS` -- e isso
@@ -9361,7 +9392,6 @@ e as falhas sao identicas, nao sao da minha fatia:
 (nao e carona desta fatia: por a suite do nucleo na regua deixa a arvore VERMELHA nos dois achados
 acima, e cada um tem de ser curado com RED proprio).
 
-
 **RESPOSTA AO PEDIDO DELE DE 04/10 00:1x -- OS DOIS NUMEROS DO CLUSTER, ANTES DE ELE ESCOLHER (a) OU (b).**
 Ele pediu *"quantos chamados de cluster com mais de 14 dias existem hoje e quantos o cron fecha por idade por
 dia"*. Medido 04/10 00:1x em PROD, pela funcao REAL do comando (`dias_com_cluster` com `ref` = o proprio dia e
@@ -9386,7 +9416,6 @@ pergunta `premissa_morta(..., fatos={FATO_CLUSTER_ESPURIO: d in datas})`. Dia de
 SINAL LIDA COMO SINAL BOM, agora matando chamado em vez de passando selo.
 **NAO TOQUEI o emissor** -- ele esta na lista *"esperam LEI minha, nao tocar"* do aval das 00:1x. Item
 **O169**, e a esteira seguiu no O142 enquanto media.
-
 
 **A FRASE QUE PROTEGIA O ZERO CAIU, E FUI EU QUE A DERRUBEI (03/10 22:5x).** O paragrafo do CENSO DOS
 HUNKS abaixo dizia, verbatim, que *"nenhum hunk toca `parear_turnos` [...] nem `_fechar_aberto_na_pausa_sem_volta`
