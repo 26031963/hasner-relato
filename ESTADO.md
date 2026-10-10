@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 06:26:00.**
+**Medido em 10/10/2026 06:31:01.**
 
 | | |
 |---|---|
@@ -125,7 +125,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
   Ran 1 shell command
 
 ● Confirmed with a timestamp: the flag went False in 2206451b at 01/09 14:59 — and the TXT left at 01/09 10:08:07, 4h51 before cl.38-d went
@@ -150,13 +149,14 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Now the carimbo_gravado fork:
 
-  Running the diagram seal (expect RED)
-  ⎿  $ cd /home/ronald/saas-hasner && ESTEIRA_QUEM=a0b-diagrama bin/suite.sh --dir /home/ronald/wt-l113 --espera 1200 --only
-     "core.tests.test_selo_diagrama_do_codigo" 2>&1 | tail -30
+● Running the host seals in the raia · 1m 0s
+  ⎿  $ cd /home/ronald/wt-l113 && ls bin/tests/*.sh | wc -l && for t in bin/tests/*.sh; do out=$(bash "$t" 2>&1); rc=$?; [ $rc -ne 0 ] && {
+     echo "=== VERMELHO rc=$rc: $t"; echo "$out" | tail -8; }; done; echo "--- fim dos selos de host ---" (1m 0s · 5 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-✽ Proofing… (12h 31m 14s · ↓ 1.5m tokens)
+✢ Proofing… (12h 36m 15s · ↓ 1.5m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                   10% until auto-compact
+                                                                                                                    1% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
