@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 12:28:01.**
+**Medido em 10/10/2026 12:33:31.**
 
 | | |
 |---|---|
@@ -133,17 +133,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  marco (L-106).
-
-  (1) RELATO-CURTO: secao de marco no RELATO com teto de 25 linhas. Entra SO: titulo, linha LEI-AKITA, o que mudou (arquivo::funcao), os
-  numeros medidos, a PROVA ao lado de cada ato, commit, e o que ficou INCOMPLETO em lista. A historia do caso ("nasceu medida", "o caso e
-  meu", a narrativa do caminho) sai do RELATO e mora no corpo do commit e, quando virar regra, em LAPIDES.md. NAO muda: pergunta de lei no
-  TOPO com numeros, linha PAREI, tabela PENDENTES, DIFF de frota antes de apply de dinheiro. Selo de host: secao nova com mais de 25
-  linhas = VERMELHO; secoes ja escritas nao se reescrevem.
-   CUSTO: nenhum caso faz o Code parar; so encurta o que ele escreve.
-
-  (2) MORATORIA-DE-LEI ate contratos_estruturais = 20/20: o Code nao numera nem propoe lei nova por iniciativa propria. Lei nova so nasce
-  de corte meu literal. Caso que parece pedir lei vai ao topo do RELATO como pergunta, com numeros, e a fila segue
   (PAREI-DE-LEI-NAO-DEVOLVE-TURNO).
    CUSTO: nenhuma parada nova; o que muda e que achado vira pergunta em vez de lei.
 
@@ -160,8 +149,19 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
   Ran 1 shell command
 
 ● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-✢ Proofing… (18h 33m 15s · ↓ 2.2m tokens)
+● Seguindo. Primeiro a pasta de selos de host na árvore mergeada (ninguém a rodou com os três arquivos novos):
+
+● Rodar a pasta de selos de host na arvore mergeada · 1m 10s
+  ⎿  $ cd /home/ronald/saas-hasner
+     SC=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/pouso-celula
+     falhou=0
+     for s in bin/tests/test_*.sh; do
+     if out="$(bash "$s" 2>&1)"; then printf 'OK %s\n' "$(basename $s)"; else printf 'VERMELHO %s\n' "$(basename $s)"; ech… (1m 8s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✢ Proofing… (18h 38m 45s · ↓ 2.2m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -171,6 +171,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   ● main
 ❯ ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Running full suite via suite.sh                                                         1h 24m 56s · ↓ 160.0k tokens
+  ◯ general-purpose  Polling full.log for suite verdict                                                      1h 30m 26s · ↓ 160.4k tokens
   ⧉  index
 ```
