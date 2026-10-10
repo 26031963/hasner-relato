@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 07:03:45.**
+**Medido em 10/10/2026 07:09:01.**
 
 | | |
 |---|---|
@@ -127,42 +127,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● Row in at line 122, ruler green from the root. Now the suite's veredito:
-
-  Ran 1 shell command
-
-● Suite still running (21 min of a ~23 min baseline). But that DatabaseOperationForbidden in the stream needs context — zero ^ERROR:
-  headers so far, which means it was printed, not raised as a failure:
+● Proven: the ALARME from my raia run landed in main's log at 07:05:45 while the raia's dir stayed empty, and the seal is green on main at
+  the right root. The seal's four cases are cron_run.sh, apurar_furos_diarios, and two _echo_teste runs — my new ENC is in none of them.
+  But that same run manipulated live carimbos, so let me check what it left behind:
 
   Ran 1 shell command
 
-● Those are best-effort falhou: lines swallowed by core/observ.py::engolir — the dots keep going, so the tests pass. Checking whether they
-  are pre-existing noise rather than something my marco introduced:
+● The 4 carimbos of today were deleted by the seal's own _limpar (pre-existing design — it runs on every pre-push). Today's chain already
+  completed and nothing re-invokes it, so no damage; that's a fila line, not work now per ESMERIL-DO-MARCO. Applying the two queued raia
+  edits now that the pista is free:
 
   Ran 1 shell command
 
-● Identical 22/12 in every full-suite log, including the A0-a green run (Ran 10265 / OK (skipped=42)) — pre-existing swallowed-trail noise,
-  not a regression. Preparing the two queued raia edits as a script while the tree is still mounted:
+● The .mmd is unchanged by the 5th tag (the 6/3 diff is the earlier tabuleiro cure). But the command also writes MAPA.md — checking that
+  and the seals:
+
+  Ran 1 shell command
+
+● ruff needs the full montagem — asking the single door for it instead of hand-mounting:
 
   Ran 2 shell commands
 
-● Suite still holding the pista. Verifying the raia commit message is intact, then calling the advisor before the pouso (the merge+deploy
-  is the irreversible act):
+● ruff clean. Now the seals that read the bolha and the diagram, on the raia tree:
 
-  Ran 1 shell command
+● Running the bolha, diagram and L-113 seals on the raia tree · 32s
+  ⎿  $ cd /home/ronald/saas-hasner && ESTEIRA_QUEM="o219-selos-bolha" bash bin/suite.sh --dir /home/ronald/wt-l113 --only
+     "core.tests.test_selo_diagrama_do_codigo core.tests.test_selo_bolha_nao_importa core.tests.test_selo_teste_sem_relogio
+     folha.tests.test_l113_a0_forma_do_txt folha.tests.test_l113_a0b… (32s)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-● All pieces are durable (TICKETS row, RELATO, BACKLOG, AVAIS, the edit script, the commit message). Calling the advisor before the pouso:
-
-● Advising using Fable 5.1
-
-✶ Proofing… (13h 8m 59s · ↓ 1.5m tokens)
+✢ Proofing… (13h 14m 15s · ↓ 1.6m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
