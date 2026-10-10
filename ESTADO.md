@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 23:47:01.**
+**Medido em 09/10/2026 23:52:31.**
 
 | | |
 |---|---|
@@ -122,44 +122,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  órfãos → 258/252/6, refeito pelo instrumento que está no repo) e 7cb0efbb (instrumento + selo de host que é catraca). Mas a suite dela
+  deu FAILED (failures=1) sobre Ran 10242 — não é verde. A falha é alheia (test_nenhuma_lapide_multilinha_em_templates sobre
+  _js_cobranca.html:14, arquivo que o diff dela não toca) e o main já a curou em 1c5b2e20, cujo pai é exatamente a base dela. Então o pouso
+  não é "merge de raia verde": é merge do main para dentro da raia, suite, e só com ela verde o pouso — pela forma da L-107, num ato só.
+  Ela não fez isso porque o aval é literal, e estava certa. Instrumento pousa depois do produto. Conflito esperado: uma linha no topo da
+  tabela do TICKETS.md.
 
-● A suite da raia está em 22 min; a minha entra depois dela. Enquanto isso, conferindo que o passo de fechamento do marco não vai nascer
-  com um leitor novo — a L-108 exige que o handoff leia o hook_stop_fila1, não uma segunda fonte:
+  Também fica registrado o que eu não fiz: o R4 está parado, e o motivo é que o CASO que eu escrevi citava a L-084, que não dispara em 8
+  minutos — então não está provado que 11,10 é o número certo, só que dois leitores discordam. O primeiro passo dele é medição
+  (dono_da_divergencia e as datas da EC contra a lavra), não código, e é trabalho de depois do marco.
 
-  Ran 1 shell command
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: PLACAR-ESTRUTURAL -- O ESTRUTURAL SE SEPARA DO DADO (corte dele 02/10 22:5x, que SUBSTITUI o item 3 da
+  ordem das 21:4x -- o resto d
 
-● Os dois confirmados, e isso evita um erro de ordem: handoff_sessao.sh importa hook_stop_fila1 em três sítios (e o selo dele proíbe
-  segundo leitor da fila), e o git add -A do relato.sh é dentro de /home/ronald/hasner-relato — não toca a árvore principal. Mas o
-  relato.sh não deve correr antes do push, e a razão é o que as seções novas afirmam:
+● Não há mais trabalho deste marco a fazer em paralelo — o que falta é o veredito. Bloqueio no próprio processo do push, sem sleep e sem
+  polling:
 
-  Ran 2 shell commands
+● Block on the push process until it exits · 4m 18s
+  ⎿  $ cd /home/ronald/saas-hasner
+     PID=$(pgrep -x -f "git push origin main" | head -1)
+     echo "esperando o pid do push: $PID (hora $(date '+%H:%M:%S'))"
+     # bloqueia sem sleep: tail --pid retorna quando o processo morre
+     tail --pid="$PID" -f /dev/null
+     echo "o push TERMINOU em $(date '+%H:%M:%S')"
+     echo "=== v… (4m 17s · 2 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-› Message from @a0b2a23e444ca5949 (ctrl+o to expand)
-
-● Dois fatos novos, e o primeiro é urgente: grep -c "git push origin main" devolveu 3, e a lei da casa é "nunca 2 push simultâneos".
-  Medindo quem são, antes de qualquer outra coisa:
-
-  Pushed to main
-
-● Um push só: o binário git push é o pid 4064687 (16 min, meu) com o seu helper remote-https. O processo de 7 dias é casca órfã de uma
-  sessão antiga cujo push já terminou (d25595c1..751b53c4  exit=0), e o terceiro casamento era o shell da minha própria medição. Nenhuma
-  violação da lei de push simultâneo — medido, não suposto.
-
-  O segundo fato: a raia raia-celula (O228) voltou pronta. Registro o estado de pouso das duas raias, para que não se perca:
-
-  Running 1 shell command…
-
-✢ Proofing… (5h 54m 15s · ↓ 705.8k tokens)
+✢ Proofing… (5h 59m 45s · ↓ 710.5k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    6% until auto-compact
+                                                                                                                    3% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Reading test_selo_teste_sem_relogio.py                                                   1h 30m 33s · ↓ 89.5k tokens
-  ◯ general-purpose  Handing back O228 census report                                                         1h 30m 33s · ↓ 165.9k tokens
+  ◯ general-purpose  Awaiting g4 verdict before fixing HOJE comment                                           1h 36m 3s · ↓ 104.1k tokens
   ⧉  index
 ```
