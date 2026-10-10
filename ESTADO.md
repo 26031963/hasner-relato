@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:23 AFIRMA ato sem PROVA ao lado -- nas celulas **[2] e [3]** e `_NAO_ANDA` na **[3]**. `**NO AR**` na celula do portao seria a certidao de
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:46 AFIRMA ato sem PROVA ao lado -- nas celulas **[2] e [3]** e `_NAO_ANDA` na **[3]**. `**NO AR**` na celula do portao seria a certidao de
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 12:33:31.**
+**Medido em 10/10/2026 12:39:01.**
 
 | | |
 |---|---|
@@ -39,8 +39,13 @@ cb6cd342 [O228] pouso da metade CELULA: os tres sitios sem chamador entram na pr
 ## `git status --short`
 
 ```
+M  CLAUDE.md
  M app/config/crons_duracao.json
+M  app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
+M  app/docs/LEIS.md
+M  app/docs/PROMPTS.md
+M  app/docs/RELATO.md
 A  bin/esmeril_celula_censo.py
 A  bin/esmeril_celula_censo_de_hoje.txt
  M bin/sonda_frota.sh
@@ -133,15 +138,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  (PAREI-DE-LEI-NAO-DEVOLVE-TURNO).
-   CUSTO: nenhuma parada nova; o que muda e que achado vira pergunta em vez de lei.
-
-  (3) REGISTRAR, sem obra agora, dentro da O243 ESMERIL-3-VALIDACAO como complemento (nao e id novo): CENSO-DE-TESTES -- por familia,
-  classificar cada teste em GUARDA (selo/contrato, permanente) ou ANDAIME (RED de cura ja coberta por selo); andaime so sai com certidao:
-  a lei tem selo, e o selo MORDE quando o codigo e quebrado de proposito. Primeiro passo, que pode entrar ja como instrumento quando
-  houver vaga: medir a duracao por teste da suite e publicar os 30 mais lentos. PROIBIDO podar teste antes do censo da familia.
-
-  Segue a fila; PAREI so em lei ou !
 
 ● Três cortes recebidos. Registro vem no marco (L-106) — primeiro fecho o merge do instrumento, que está em curso com índice montado. Vendo
   o sítio da varredura complementar:
@@ -153,17 +149,26 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Seguindo. Primeiro a pasta de selos de host na árvore mergeada (ninguém a rodou com os três arquivos novos):
 
-● Rodar a pasta de selos de host na arvore mergeada · 1m 10s
+  Ran 9 shell commands
+
+● Pasta de selos: 67 selos, 0 vermelhos. Agora o registro dos três cortes, que entra neste mesmo commit (L-106). Vendo o BACKLOG:
+
+  Ran 10 shell commands
+
+● O hook lê _NAO_ANDA só na célula [3] — a linha nova cairia na fila 1. Perguntando ao juiz em vez de ler o cabeçalho:
+
+● Inserir a secao no RELATO e montar o index
   ⎿  $ cd /home/ronald/saas-hasner
      SC=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/pouso-celula
-     falhou=0
-     for s in bin/tests/test_*.sh; do
-     if out="$(bash "$s" 2>&1)"; then printf 'OK %s\n' "$(basename $s)"; else printf 'VERMELHO %s\n' "$(basename $s)"; ech… (1m 8s)
-     (ctrl+b ctrl+b (twice) to run in background)
+     python3 - "$SC/relato_instrumento.md" <<'PY'
+     import sys, pathlib
+     p = pathlib.Path('app/docs/RELATO.md')
+     s = p.read_text(encoding='utf-8').split('\n')
+     assert s[…
 
-✢ Proofing… (18h 38m 45s · ↓ 2.2m tokens)
+✢ Proofing… (18h 44m 15s · ↓ 2.2m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    5% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -171,6 +176,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   ● main
 ❯ ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Polling full.log for suite verdict                                                      1h 30m 26s · ↓ 160.4k tokens
+  ◯ general-purpose  Polling full.log for suite verdict                                                      1h 35m 56s · ↓ 161.1k tokens
   ⧉  index
 ```
