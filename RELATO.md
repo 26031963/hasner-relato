@@ -1,5 +1,62 @@
 # RELATO — esteira saas-hasner
 
+## O206 POUSA — **O AVISO PARA DE MANDAR NA ACAO QUE APAGA RESPOSTA** (09/10 22:0x, aval dele de 21:4x)
+
+PROVA: merge **em COPIA** antes da arvore viva (L-107 segunda forma, LEI-AKITA 10): worktree
+`wt-merge-o206` em `a5ae5013`, `git merge --no-commit raia-bos` -> *"Automatic merge went well"*,
+**0 arquivo em conflito**. Suite da copia MERGEADA pela porta unica
+(`bin/suite.sh --dir ... --only "chamados core"`, cpuset 4-7): **`Ran 3669 tests` / `OK (skipped=23)`**,
+rc 0, **0** FAILED/ERROR (`logs/l115/o206_suite_copia.out`). Ruff limpo nos dois `.py`.
+
+**O SELO NOVO CORREU DENTRO DISSO, e nao e suposicao:** `chamados/tests/` tem **2334** `def test_` na
+copia contra **2322** no main = **+12**, exatamente os 12 casos `test_MORDE_*` do
+`test_selo_painel_oferece_cobrar.py`; a classe e `SimpleTestCase` (coletada) e o arquivo tem **zero**
+`skip`. Os 23 skipped sao os de sempre.
+
+**O BO, em uma linha:** com pergunta sem resposta o painel do fio mandava *"Aguarde a resposta ou use
+Reabrir questionario"* -- e o Reabrir **APAGA** as respostas ja dadas (col267, chamado 8954: 5 respostas
+certas apagadas em 28/09). A tela empurrava o admin para a acao destrutiva. Agora o aviso indica
+**"Cobrar resposta (nao apaga nada)"**, que so manda push pela rota que **ja existia**
+(`chamados:cobrar_chamado`, `views_cobrar.py:33`) -- **0 rota nova** --, e o Reabrir fica ABAIXO com a
+condicao escrita, dizendo **quantas** respostas apaga (o `n_apaga` da UI-RESPOSTA-DIZ-O-QUE-E, que
+sobreviveu ao merge intacto em `modal_fio.html:332-335`).
+
+**UMA DEFINICAO SO, pela lei das DUAS CASCAS (corte 08/09).** `cobrarChamado` morava em
+`_lista_chamados.html:171`, entao a tela que abre o painel SEM a lista nao tinha como cobrar. Ela saiu
+para `_js_cobranca.html:35` (`window.cobrarChamado`), incluido por `base.html` -- e o sitio velho ficou
+com **lapide**, nao vazio (`_lista_chamados.html:170`). `git grep` na raia da **1** definicao. O selo
+afirma sobre as DUAS raizes pelo **fecho transitivo do `extends`** (`CASCA_ADMIN`/`CASCA_COLAB`), nao
+por fixture: casos 04b (o admin alcanca), 04c (as telas que abrem o painel alcancam), 04d (a casca do
+COLABORADOR **nao** recebe acao de gestor) e 04f (a previa do push e a mesma nas duas telas).
+
+**NAO FUREI A FRONT-SEM-SMOKE-NAO-SOBE, e o commit toca `base.html`.** Quem suspendeu a espera foi o
+aval dele, literal: *"O206 pousa agora por deploy --sem-migrate; o smoke de clique nas duas cascas e do
+Fernando logo em seguida, e o resultado vem por mim; a frase do smoke entra no AVAIS"*. A frase entrou
+**neste ato**: `O206-PAINEL-COBRAR-SMOKE`, AVAIS **5 -> 6**.
+
+**E AQUI EU CORRIJO UMA AFIRMACAO MINHA, que estava FALSA no arquivo.** O RELATO de 20:1x dizia, sobre
+esta mesma raia: *"e a frase ja esta no AVAIS"*. **Nao estava.** Medido: `0` item citando `O206` no
+`PENDENTES_RONALD.json` (215 itens), e a busca por `PAINEL`/`COBRAR`/`Reabrir` devolvia 25 itens, **nenhum
+deles este**. Eu dei por feito um ato que nao existia -- e o aval dele de 21:4x mandou fazer justamente
+isso. O item nasceu agora, com `desde` lido do `date` no ato, e o JSON cresceu **12 linhas e removeu 0**
+(forma canonica `indent=2`, sem churn). Nao e detalhe: AVAIS e a fila de DECISAO dele, e afirmar que a
+trava esta na mesa quando ela nao esta e deixar a fatia pendurada em prosa.
+
+**O CRITERIO DE PRONTO SAIU DA CELULA DO BACKLOG E FICA AQUI** (L-109, mover e nunca apagar). Era, literal:
+*"PRONTO = selo de tela com os **4 casos** nas telas que renderizam o `modal_fio` + commit + print do
+painel do chamado **#28304** com o botao; sem isso = INCOMPLETO."* Os 4 casos viraram **12**; o commit e
+este; o print do **#28304** e o smoke do Fernando. **E o #28304 nao e instrucao velha**: medido no vivo
+agora -- `status_local=em_analise`, VIVO pelo `motor.VIVOS`, col382 da emp2, **3 perguntas e 3 sem
+resposta**, que e exatamente o gatilho do aviso que esta fatia reescreve.
+
+**AS DUAS RAIAS ABREM NESTE MESMO ATO**, pelos avais dele de 21:4x: a `wt-bos` segue **uma de cada vez,
+em paralelo com a principal** e abre a **O207** (VINCULO-INICIO-DECLARADO) assim que a O206 pousa -- com o
+limite 4 do BOS-EM-RAIA-UM-POR-VEZ colado: constroi, mede e **PARA no `!`** antes de qualquer apply, o
+codigo da porta pode pousar e **dado de vinculo nao**; depois dela, `O199 -> O198 -> GEO-SILENCIO-DE-PING
+-> O197 -> O44 itens 2-8`. E a **O228** (ESMERIL-CELULA-TURNO) abre em **SEGUNDA raia**, so na familia
+**celula**, pelo metodo da certidao de obito da L-111 -- censo por **AST, nunca grep de texto**. Nenhuma
+das duas mergeia, deploya ou empurra: o pouso e meu, entre dois pousos meus (L-105).
+
 ## O232 POUSO B — **NO AR, E O APPLY NAO E O DEPLOY: E A BATIDA** (09/10 21:3x, CONDICAO 4)
 
 PROVA: `bin/deploy.sh --sem-migrate` rc **0** (`logs/l115/o232B_deploy.out`) — prova de casca com 16
