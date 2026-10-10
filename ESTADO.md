@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 09:23:01.**
+**Medido em 10/10/2026 09:28:19.**
 
 | | |
 |---|---|
@@ -122,13 +122,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-     A prova_de_casca não pegaria: ela faz get_template em 5 páginas e o hub.html não está nelas — compilar não é renderizar.
-
-  E um quarto, pego pelo revisor: o item de smoke do AVAIS citava 32ece217, o sha que a minha própria emenda tinha tirado da história.
-  Corrigido para não citar sha nenhum do commit 2 — um commit não pode citar o próprio.
-
-  Suíte: Found 10312 / Ran 10309 tests in 1397.280s / OK (skipped=42), rc 0, 0 linha ^FAIL:/^ERROR:. O vão 10312 → 10309 é idêntico no run
-  anterior: é do carregador, não da fatia. Selos de host: 0 vermelhos. regua_tickets OK.
 
   O push está segurado — a fatia nasce 3 telas e toca o empresa_form, e FRONT SEM SMOKE NÃO SOBE. A frase pronta está no AVAIS.md item 13 e
   cobre as duas metades (cadastrar/desativar com trilha na tela nova, e o Regime trabalhista gravando no empresa_form).
@@ -150,10 +143,17 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Task "RED e construção do segundo intervalo" completed in background
 
 ● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-✢ Proofing… (15h 28m 15s · ↓ 1.8m tokens)
+● Running the seal and its neighbours in the copy
+  ⎿  $ cd /home/ronald/saas-hasner
+     MODS="core.tests.test_contract_configuracao_nao_mente core.tests.test_selo_contratos_estruturais
+     core.tests.test_haiku_contratos_estruturais core.tests.test_contract_tabuleiro core.tests.test_aplicacao_convencao
+     core.tests.test_o223_porta_humana_da_aplicacao core.tests…
+
+✶ Proofing… (15h 33m 33s · ↓ 1.8m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    7% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
