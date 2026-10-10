@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 23:25:31.**
+**Medido em 09/10/2026 23:30:45.**
 
 | | |
 |---|---|
-| `HEAD` local | `1c5b2e20 [O206] cura: a lapide do dono da cobranca para de nomear o delimitador que o selo varre, e o render nao se move um byte` |
+| `HEAD` local | `f415e116 [PLACAR-ESTRUTURAL] instrumento: o placar deixa de poder dizer que esta fora do ar um commit que o git ja tem no tronco` |
 | `origin/main` | `1c5b2e20 [O206] cura: a lapide do dono da cobranca para de nomear o delimitador que o selo varre, e o render nao se move um byte` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **3** |
 
 ## Fabrica
 
@@ -22,20 +22,18 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+f415e116 [PLACAR-ESTRUTURAL] instrumento: o placar deixa de poder dizer que esta fora do ar um commit que o git ja tem no tronco
+1c281f92 [PLACAR-ESTRUTURAL] BATERIA: a contagem que envelheceu em horas pela minha propria mao passa a ser a dos modulos que a fonte nomeia
+ec4b1994 [PLACAR-ESTRUTURAL] R3: a linha que dizia a O130 fora do ar passa a dizer o que o git diz, e quem a desmentir fica vermelho
 1c5b2e20 [O206] cura: a lapide do dono da cobranca para de nomear o delimitador que o selo varre, e o render nao se move um byte
 b5700cbb [O206] pouso: o aviso de pergunta sem resposta para de mandar na acao que APAGA resposta, e cobrarChamado passa a ter uma definicao so
-a5ae5013 [O232] pouso B: a saida que nasce entre dois turnos passa pela porta que ja decide fecho, e a noite de col923 deixa de pagar 0
-c7b8bfdb [O232] pouso A: a guarda da pausa passa a ler a MESMA autoridade que o corpo soma, e 28 dias devolvem a janela declarada
-03fbfde9 [O231] marco: o comando imprime a medicao que AGIU, e a fila 1 passa a ser a ordem dele de 18:3x
 ```
 
 ## `git status --short`
 
 ```
  M app/config/crons_duracao.json
- M app/core/placar_estrutural.py
  M app/docs/HANDOFF-SESSAO.md
- M app/docs/RELATO.md
  M bin/sombra.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -57,7 +55,7 @@ c7b8bfdb [O232] pouso A: a guarda da pausa passa a ler a MESMA autoridade que o 
 
 | | resultado | numero de hoje | meta | prova |
 |---|---|---|---|---|
-| **BATERIA** | o CERTIFICADO (L-114): codigo de calculo so esta PRONTO quando passa a BATERIA de cenarios pela REGRA, em banco de teste, pelas escalas canonicas (6x1, 12x36 diurno e noturno, personalizado sem intervalo) -- e cada dia de dono ESTRUTURA que o termometro acha vira CENARIO aqui ou linha na lista do admin, nunca fica sem destino | UMA familia tem bateria declarada -- turno/marcos (lavratura + residuo do intervalo) --, medida 09/10 em DOIS modulos: **15 cenarios / 48 testes verdes**. ponto/tests/test_bateria_lavratura.py da 12 cenarios / 34 testes (lampada invertida, match x janela, evento x ata certa, ancora do sweep, cruza meia-noite, orfa nas duas pontas, dia sem celula, isento, ausencia sobre folga, tres pares no mesmo dia, celula regenerada, veredito converge em duas passadas) e ponto/tests/test_r1_pausa_de_autoridade_mista.py da 3 cenarios / 14 testes, estes NASCIDOS DO TERMOMETRO: os 4 dias que o censo de impacto nomeou (col438 11/09, col518 05/09, col334 25/08, col107 06/09), cada um com cadastro, batidas, ata e a resposta da REGRA escritos como CASO antes do codigo (L-110), mais o contra-exemplo adversarial e o MINUTO do dia ao lado da geometria do par. As outras **6 de 7** familias NAO tem bateria declarada, e e por isso que isto e PARCIAL e nao FECHADO | toda familia de calculo com bateria declarada e VERDE, sem allowlist; 0 dia de dono ESTRUTURA novo sem destino | logs/r1/suite_veredito_20261009.txt (os tres vereditos lidos pelo PAR exigido na secao 3 do CLAUDE.md -- `^(OK|FAILED)( |$)` MAIS `^Ran N tests`: Ran 14 / OK no modulo, Ran 3163 / OK (skipped=7) na familia ponto inteira, Ran 7018 / OK (skipped=35) nos vizinhos; a nota no pe do arquivo mostra a linha de PROSA de log que casaria o padrao sozinha) + logs/r1/achado_papel_x.md (os dois defeitos MEDIDOS que a bateria passou a morder, com o selo do comportamento velho INVERTIDO em vez de apagado) + logs/r1/predicao_censo_v2.txt (a predicao escrita ANTES de rodar, cujo PROIBIDO recusa ela mesma como certificacao) |
+| **BATERIA** | o CERTIFICADO (L-114): codigo de calculo so esta PRONTO quando passa a BATERIA de cenarios pela REGRA, em banco de teste, pelas escalas canonicas (6x1, 12x36 diurno e noturno, personalizado sem intervalo) -- e cada dia de dono ESTRUTURA que o termometro acha vira CENARIO aqui ou linha na lista do admin, nunca fica sem destino | UMA familia tem bateria declarada -- turno/marcos (lavratura + residuo do intervalo) --, REMEDIDA 09/10 23:1x nos DOIS modulos que a `fonte` nomeia: **16 cenarios / 64 testes**. ESTA LINHA DIZIA 15 E 48, E ENVELHECEU EM HORAS, pela mao de quem a escreveu: o 13o cenario do test_bateria_lavratura.py -- `SaidaPosicionalDepoisDaPausaTest`, 16 testes -- nasceu nos commits de 09/10 (`185b9af0` R1 balde P e `5d9ec893` L-115 pouso 1, no ar as 22:1x) e a contagem ficou atras dele. O metodo de remedicao se autoriza REPRODUZINDO o numero antigo: os 12 cenarios nominais abaixo somam 34 testes exatos, e o segundo modulo da 3/14 exatos; o delta inteiro e o cenario novo. `_BaseLavratura` e `_BaseMarcos` nao sao caso (zero `def test_`). ponto/tests/test_bateria_lavratura.py da 13 cenarios / 50 testes (lampada invertida, match x janela, evento x ata certa, ancora do sweep, cruza meia-noite, orfa nas duas pontas, dia sem celula, isento, ausencia sobre folga, tres pares no mesmo dia, celula regenerada, veredito converge em duas passadas) e ponto/tests/test_r1_pausa_de_autoridade_mista.py da 3 cenarios / 14 testes, estes NASCIDOS DO TERMOMETRO: os 4 dias que o censo de impacto nomeou (col438 11/09, col518 05/09, col334 25/08, col107 06/09), cada um com cadastro, batidas, ata e a resposta da REGRA escritos como CASO antes do codigo (L-110), mais o contra-exemplo adversarial e o MINUTO do dia ao lado da geometria do par. As outras **6 de 7** familias NAO tem bateria declarada, e e por isso que isto e PARCIAL e nao FECHADO | toda familia de calculo com bateria declarada e VERDE, sem allowlist; 0 dia de dono ESTRUTURA novo sem destino | logs/r1/suite_veredito_20261009.txt (os tres vereditos lidos pelo PAR exigido na secao 3 do CLAUDE.md -- `^(OK|FAILED)( |$)` MAIS `^Ran N tests`: Ran 14 / OK no modulo, Ran 3163 / OK (skipped=7) na familia ponto inteira, Ran 7018 / OK (skipped=35) nos vizinhos; a nota no pe do arquivo mostra a linha de PROSA de log que casaria o padrao sozinha) + logs/r1/achado_papel_x.md (os dois defeitos MEDIDOS que a bateria passou a morder, com o selo do comportamento velho INVERTIDO em vez de apagado) + logs/r1/predicao_censo_v2.txt (a predicao escrita ANTES de rodar, cujo PROIBIDO recusa ela mesma como certificacao) |
 | **SOMA** | INVARIANTE, nao termometro (correcao 1 de 09/10 09:1x): as PARTES somam o TOTAL -- os tres donos (ESTRUTURA, CADASTRO, BATIDA) fecham o total de divergentes, e isso vale para qualquer dado, limpo ou sujo | fecha nas duas competencias, e o PROPRIO comando a cobra: 09 -> 197 + 29 + 208 = 434; 10 -> 95 + 15 + 95 = 205. E a MESMA medicao do R1 respondendo OUTRA pergunta: o R1 pergunta quanto o espelho diverge do oraculo (VALOR, e por isso desceu para TERMOMETRO); esta linha pergunta se as partes somam (INVARIANTE, e por isso fica aqui com meta ZERO em producao) | ZERO discrepancia entre a soma dos donos e o total, medida em PRODUCAO | logs/e6_cauda2c/r1_dono_09_e_10.txt (a conferencia da soma impressa pelo comando) |
 | **R2** | so ESTRUTURA fica na fila 1; CADASTRO e BATIDA vao para a lista do admin pela MESMA fonte do Cadastro x Realidade, e nao se curam por codigo | gap real = 7 colabs (5 de CADASTRO fora da lista + col392 e col529 sem chamado), nao 82: BATIDA JA tem casa -- 103 de 118 na 09 e 67 de 75 na 10 com chamado carimbado NO DIA. Uma leitura do corte continua na mesa dele (a lista cresce uma secao de batida, ou BATIDA fica no chamado) | 0 colaborador de dono CADASTRO ou BATIDA sem destino | logs/e6_cauda2c/r2_lista_do_admin.py + r2b.py, medidos em prod so leitura |
 | **R3** | dia de turno ABERTO aparece EM ABERTO dizendo O QUE FALTA e MANTEM o numero rotulado (a soma dos pares fechados), igual em tela, PDF, cartao, app e TXT; o turno EM CURSO de hoje nao recebe a palavra -- quem esta dentro da jornada nao deixou nada em aberto | A PALAVRA ALCANCOU O TURNO ABERTO e os 5 leitores seguem CONCORDANDO (tela x PDF, cartao x TXT, calendario x espelho: todos 0 nas duas competencias; TXT=0 e RETIDOS=0 nos 6 pares empresa x competencia, medido CRUZADO HEAD x curada na mesma sombra). O VEREDITO, no universo `Colaborador.objects.filter(situacao="ativo")` (533 colabs): **0 dia de turno aberto MUDO** nas duas competencias. 09/2026: 244 dia-colab de turno aberto = 238 com a palavra + 6 DECIDIDOS pela folha (palavra propria) + 0 em curso. 10/2026: 193 = 135 com a palavra + 0 decididos + 58 EM CURSO (corte parte 2). O MUDOS=0 NAO MUDA DE UNIVERSO: no universo `FechamentoMensal` (607 e 572 colabs) da 275 = 269 + 6 + 0 na 09 e 194 = 136 + 0 + 58 na 10 -- e o 6 DECIDIDO e o mesmo nos dois. O `em curso` anda com o relogio POR DESENHO (`turno_aberto_de(agora=None)` le `timezone.now()`, ponto/turnos.py:1401): 3 medicoes no mesmo banco e no mesmo universo (ativos) deram 59 as 09:31, 58 as 09:43 e 51 as 09:55 -- e sao turnos abertos NO INSTANTE DO DUMP (ultima batida da sombra 03/10 04:11), nao gente na jornada agora. Encolher em_curso so empurra dia para a classe COM palavra, nunca para MUDO; o que nao anda e o MUDOS=0. `dias_em_aberto` subiu de 296 para 323 na 09 e de 133 para 145 na 10 -- +27 e +12 dias que ganharam a palavra, 0 que a perderam. SEGUE PARCIAL, e a parte que falta tem nome: a O130 -- a palavra dizer QUAL marco falta (hoje e a string fixa `Em aberto`). A O130 POUSOU E ESTA NO AR: construida e medida em 04/10 05:2x na raia `raia-o130` (`97079d6e` e `4c8a50aa`, os 23 modulos vizinhos em `Ran 184 / OK`), entrou no main pelo merge `381af46b` e o compositor esta no disco que as tres cascas leem -- o ultimo deploy a publica-lo e o de `b5700cbb` em 09/10 22:1x (`logs/l115/o206_deploy.out`). ESTA LINHA AFIRMOU O CONTRARIO POR CINCO DIAS: ela nomeava o `!` da `janela_auth` como a trava, e a trava nao prendia mais nada. Quem desmente nao e a prosa, e o git -- e desde 09/10 quem pergunta e o selo de host `bin/tests/test_placar_nao_afirma_fora_do_ar.sh`, que cruza todo hash citado aqui com `merge-base --is-ancestor`. O numero dela, medido na sombra com as funcoes REAIS (09, emp 2/3/4, 863 colabs, 16.161 dia-colab com celula): a frase fala em 2.405 e cala em 13.756, min 11 / mediana 45 / MAX 88, por UM compositor (`ponto/services/dia_decidido.py::frase_do_que_falta`) que os CINCO leitores leem -- antes dela o `templates/ponto/espelho.html` montava a SEGUNDA redacao sozinho, com o CODIGO cru do marco (`S 19:00`), que o PDF e o celular nao tinham. Juiz novo = 0: os marcos vem da GRADE e a palavra de `Batida.TIPO_CHOICES`. MESMO ASSIM O R3 NAO VIRA FECHADO AQUI -- a clausula `com o que falta` e redacao dele, e placar nao carimba a propria meta. As duas partes do corte de 05:3x estao cumpridas e o MUDOS=0 esta medido nos dois universos; o que nao esta e a clausula `com o que falta`, que e da redacao dele e nao sai daqui para carimbar fechado. A 2a PALAVRA POUSOU em `7765ceb2` (03/10 14:2x, lei dele das 12:4x): o dia com minuto na ata e ZERO par pareavel leva `sem turno pareado` com o numero da ata rotulado, no molde do `Em aberto` -- **48 dia-colab, 312,9 h** na frota 09+10 (eu havia publicado 10 e 34,6 h, que era a premissa, nao a medicao), com **cartao, tela e api em 48 de 48** e a **grade em 25 de 48**, porque `turnos_do_colab` responde diferente conforme a JANELA pedida (col736: 9 turnos em 21/08-20/09 contra 26 em 01/09-30/09) -- e essa discordancia de janela e do O65, nao da palavra | os 5 leitores iguais, ZERO dia de turno aberto MUDO -- nenhum dia contado sem palavra nenhuma -- e a palavra NOMEANDO o marco ausente. NAO e "todo turno aberto ganha a palavra": dia que a folha DECIDIU tem palavra propria, mais informativa (corte R3 parte 1, 03/10 05:3x; LEI-AKITA 4) | logs/r3_cross/ -- r3_frota_invariante.txt (o MUDOS=0, com a sonda r3_frota.py ao lado), r3_cross_09_e_10.txt (TXT=0/RETIDOS=0 cruzado + o caso col643), r3_recon_universo_fechamento.txt (o mesmo invariante no outro universo), r3_detalhe_as_duas_classes.txt (os 6 decididos NOMEADOS com a palavra de cada um, e a prova de que o em-curso e do dump), r3_curso_agregado_classe_inteira.txt (os 51 em curso medidos SEM AMOSTRA: data_turno 02/10 nos 51, maior batida 04:11 = o dump), r3_suite_vizinhos.txt. Antes: logs/e6_cauda2c/r4_pares.txt + r1_dono_09_e_10.txt (dia_batida_impar). A PALAVRA: autoridade em relatorios/cartao_pela_celula.py:273::folha_manda (datas_em_aberto), aplicada em ponto/services/espelho.py:308, em relatorios/pdf_espelho.py:563 (+ badge :708), lida pelo app em api/views.py:1391 e mantida FORA do TXT com linha propria em folha/porta_export.py:466 |
@@ -124,44 +122,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+● Commit A2: 1c281f92. Agora o commit B — o instrumento. Vendo se o selo embute o python ou lê um irmão:
 
   Ran 1 shell command
 
-● Checando se a pauta da O232 ainda é devida antes de encadear commits:
+● O .sh embute o python por heredoc, que é a forma da casa (3 selos vizinhos fazem igual) — o selo_corpo.py era extração só do meu banco de
+  patch e não embarca. Instalando e rodando a pasta inteira:
 
   Ran 2 shell commands
 
-● A pauta da O232 é devida (os 3 ids não existem). Antes de escolher a forma do commit, vendo se a L-106 tem selo que morde commit só-docs:
+● 65 selos de host, 0 vermelho. Rodando o rodapé derivado para entrar junto (L-106: docs não viajam sozinhas):
+
+  Committed f415e116, ran 1 shell command
+
+● Três commits pousados. Pré-voo barato antes do push (ruff + a régua de tickets, que morde citação sem linha):
 
   Ran 1 shell command
 
-● L-106 não tem guarda mecânica — é conduta, e ela diz que docs não viajam sozinhas. Então a pauta da O232 anda junto do commit A (que
-  carrega código), nomeada na mensagem, em vez de virar commit só-docs. Vendo a forma de enxertar no RELATO:
+● Tudo verde. Push — ele vai entrar na fila da trava que a raia wt-bos segura, o que é o device da casa:
 
-  Ran 2 shell commands
-
-● Agora o commit A, na ordem: patch → RELATO → mesa → pauta da O232 → regerar AVAIS.
-
-● Running 1 shell command…
+  Pushing the three PLACAR-ESTRUTURAL commits
   ⎿  $ cd /home/ronald/saas-hasner
      export SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
-     set -e
-     echo "=== 1. patch do R3 ==="
-     python3 "$SP/placar/patch_r3_no_ar.py" --escrever 2>&1 | tail -4
-     echo "=== 2. RELATO ==="
-     python3 "$SP/placar/enxertar.py" "$SP/…
+     echo "a empurrar: $(git rev-list --count origin/main..HEAD)"; git log --oneline -3
+     echo "trava: $(bash bin/trava_teste.sh --quem 2>&1|tail -1)"
+     git push origin main …
 
-✢ Proofing… (5h 32m 45s · ↓ 660.0k tokens)
+· Compacting conversation… (5h 37m 59s · ↓ 671.3k tokens)
+  ▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 15%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                   10% until auto-compact
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Launching full suite via suite.sh                                                         1h 9m 3s · ↓ 167.8k tokens
-  ◯ general-purpose  Reading test_lei_akita.sh selo rules                                                      1h 9m 3s · ↓ 166.0k tokens
+  ◯ general-purpose  Polling g3.out for suite verdict                                                        1h 14m 16s · ↓ 168.2k tokens
+  ◯ general-purpose  Grepping msg_262ae3ac.txt for docs mentions                                             1h 14m 16s · ↓ 109.5k tokens
   ⧉  index
 ```

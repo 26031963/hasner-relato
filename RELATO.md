@@ -1,5 +1,61 @@
 # RELATO — esteira saas-hasner
 
+## PLACAR-ESTRUTURAL BATERIA — **A CONTAGEM ENVELHECEU EM HORAS, PELA MAO DE QUEM A ESCREVEU** (09/10 23:2x, mesmo item em curso)
+Com o R3 medido e o selo dele construido, fui remedir os outros DOIS registros ainda PARCIAIS -- porque
+a licao do R3 nao e "aquela frase estava errada", e **ninguem perguntava a fonte**. O R6 passou: pelas
+funcoes REAIS (`core/contratos_estruturais.py`, importado por caminho com `python3` puro -- sem Django,
+sem banco, sem container, o que importa porque a pista de teste estava TOMADA pelo push), o placar da
+`contratos_estruturais: 15/20 verdes`, 17 declaradas, teto 20 por `familias_sem_cadastro() ->
+('escala', 'chamado')` da L-100, e **5** celulas faltando. A frase copiada no R6 esta CORRETA e ATUAL:
+nada a corrigir ali. As 5 que faltam, com o que falta em cada uma, para quando a vez delas chegar:
+`batida x um juiz por pergunta` (teste NENHUM, mas censo e as duas chaves de `core/juizes.py` ja
+existem, remedido 08/10) · `escala x um juiz por pergunta` (teste NENHUM, ninguem comecou, sem
+`JUIZES["escala"]`) · `chamado x um juiz por pergunta` (2 excecoes cheias, 58 sitios) ·
+`chamado x um escritor por entidade` (a maior: 131 escritas na familia, 12 na porta, **119 FORA**, 49
+arquivos) · `folha/export x um juiz por pergunta` (1 excecao, 13 sitios, **8 de dinheiro**).
+
+**E A MINHA PROPRIA SONDA DO R6 MENTIU PRIMEIRO, E VALE DIZER COMO.** Ela lia cada celula da matriz com
+`getattr(cel, 'verde', False)` e me imprimiu `verdes=0 vermelhas=19` contra os `15` do juiz. Nao
+publiquei a divergencia: fui ao fonte. `C(...)` devolve um **dict**, nao um objeto, e `verdes()` le
+`c['verde']` -- entao o meu `getattr` entregava o default `False` para **todas** as 19 celulas. E a
+classe que a casa ja nomeou: **ausencia de sinal lida como sinal bom**, com o agravante de que aqui a
+ausencia de sinal era a minha, e o juiz estava certo o tempo todo.
+
+**O BATERIA, porem, nao passou -- e o numero vencido e de HOJE.** O registro declarava *"medida 09/10 em
+DOIS modulos: **15 cenarios / 48 testes** verdes"*. Por AST sobre os dois modulos que o campo `fonte` do
+proprio registro nomeia, o real e **16 cenarios / 64 testes**. O metodo nao se autoriza por ser
+razoavel: ele se autoriza **reproduzindo o numero antigo**. Os 12 cenarios que a linha velha nomina
+somam **34 testes exatos** (2+1+2+4+3+4+3+3+3+4+3+2) e o segundo modulo da **3 / 14 exatos** -- os dois
+numeros que a linha velha afirmava. Reproduzidos os dois, o universo e o mesmo, e o **delta inteiro e UM
+cenario**: `SaidaPosicionalDepoisDaPausaTest`, 16 testes, nascido nos pousos de 09/10 `185b9af0` (R1
+balde P) e `5d9ec893` (L-115 pouso 1), **no ar as 22:1x**. A linha ficou atras do codigo que eu mesmo
+pus nela, com menos de uma hora de diferenca.
+
+A minha primeira contagem tambem errou, para o outro lado: deu **20 / 64**, porque contou **classe pela
+forma**. `_BaseLavratura`, `_BaseMarcos`, `_B` e `_Bd` sao bases com **zero** `def test_` -- nao sao
+cenario. E a memoria `criterio-pela-forma-conta-errado` em ato, e foi por nao publicar aquele 20 que o
+16 apareceu.
+
+**O QUE NAO SE MOVE, e e a parte que importa**: a BATERIA segue **PARCIAL**, e nao pela contagem. Ela e
+parcial porque **UMA familia das sete** tem bateria declarada; trocar 48 por 64 nao fecha nada. Numero e
+estado sao coisas diferentes neste placar -- o patch afirma isso em assercao antes de gravar, igual ao do
+R3 (*placar nao carimba a propria meta*).
+
+**E ISTO EXPOE O LIMITE DO SELO QUE EU ACABEI DE CONSTRUIR**, o que e melhor descobrir sozinho do que
+depois: ele cobra afirmacao de **PUBLICACAO** -- hash que o tronco ja tem e a linha diz fora do ar -- e
+teria deixado esta passar **inteira**. Contagem vencida e outra classe, e ela tambem e derivavel, porque
+a `fonte` nomeia os modulos e declara a unidade em letra (*cenario = classe de caso, teste = `def
+test_`*). Virou a **O234** no bloco OBRAS, registrada **no mesmo commit que e o RED dela** -- pela
+ESMERIL-DO-MARCO, achado fora do marco e linha na fila, nunca trabalho agora.
+
+**UMA ARMADILHA DE FORMA, medida e nao suposta.** Os dois patches constroem a copia de
+`git show HEAD:` (LEI-AKITA 10), entao rodar o do BATERIA **antes** de commitar o do R3 **descartaria o
+R3 em silencio** -- sem erro, sem conflito, a frase velha voltando calada. O patch passou a exigir, em
+assercao, que a frase nova do R3 esteja no HEAD de onde ele construiu, e a rodar o selo contra o
+candidato. A exigencia foi **vista VERMELHA** antes do pouso do R3
+(`AssertionError: o commit A nao esta no HEAD de onde este patch construiu`): a ordem dos dois commits
+deixou de depender de eu lembrar dela.
+
 ## PLACAR-ESTRUTURAL R3 — **A LINHA DIZIA QUE A O130 ESTAVA FORA DO AR, E O GIT DIZ QUE ELA POUSOU EM 04/10** (09/10 23:2x, item em curso)
 Medido pelo publicador REAL, e nao pela minha propria chamada: `pe.placar()` me devolveu
 **AMARELO** (*"termometro sem data de medicao na fonte declarada (ou `hoje` nao foi passado): R1"*) e eu

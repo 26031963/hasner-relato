@@ -1,4 +1,4 @@
-# AVAIS NA MESA — 6
+# AVAIS NA MESA — 10
 
 > Gerado por `bin/gerar_avais.py` a partir de `app/docs/PENDENTES_RONALD.json`.
 > **So itens ABERTOS.** Item respondido SOME daqui na proxima geracao -- a historia dele fica
@@ -12,10 +12,14 @@
 | 4 | `PAUTA-DP-09-COL900` | **!** | 2026-10-02T17:30 | rubricas 0200 = 7,37 e 0243 = 4,50; matricula 657; emp3 88 linhas contra 86 | `col900: as rubricas 0200 (7,37) e 0243 (4,50) entram na 09 do Dominio por correcao LA.   OU   gera TXT novo da 09 com `--usuario` e `--motivo` meus.   OU   ficam fora da 09.` |
 | 5 | `O214-ITEM2-PREVIA-SMOKE` | **smoke** | 2026-10-09T03:17 | 21 selos a-p verdes (`Ran 21` / OK), 97 vizinhos OK, ruff limpo; 0 juiz novo, 0 rubrica nova, 0 escritor novo -- a porta `decidir_he` segue escritora unica de `DecisaoHE` | `smoke Ronald: abri a Gestao de HE, autorizei o periodo de um colaborador, a previa me mostrou as horas por rubrica antes de confirmar e os dias sairam de SEM DECISAO -- pode fechar o O214 item 2` |
 | 6 | `O206-PAINEL-COBRAR-SMOKE` | **smoke** | 2026-10-09T22:05 | merge em COPIA verde: `Ran 3669 tests` / `OK (skipped=23)`, rc 0, 0 FAILED; o selo novo correu DENTRO (2334 contra 2322 `def test_` em chamados/tests = +12, os 12 casos MORDE, zero skip); `cobrarChamado` com UMA definica | `smoke Ronald: o Fernando abriu o painel do chamado #28304 nas duas cascas -- o aviso de pergunta sem resposta manda em "Cobrar resposta (nao apaga nada)", o clique mandou o push, o Reabrir ficou abaixo dizendo quantas respostas apaga e a casca do colaborador nao mostra acao de gestor -- pode fechar ` |
+| 7 | `R3-CLAUSULA-COM-O-QUE-FALTA` | **!** | 2026-10-09T23:25 | MUDOS=0 nos dois universos (ativos 533 / FechamentoMensal 607 e 572); O130 no ar desde o merge 381af46b, 2.405 dias com a palavra de 16.161; 2a palavra 48 dia-colab e 312,9 h, cartao/tela/api 48 de 48 e grade 25 de 48 (o | `corte Ronald R3: a clausula 'com o que falta' esta cumprida -- o dia de turno aberto diz QUAL marco falta (2.405 dias falam, por um compositor so) e o dia sem par pareavel diz 'sem turno pareado' (48 dia-colab, 312,9 h), com MUDOS=0 nos dois universos. FECHA o R3.   OU   nomeia o que ainda falta na ` |
+| 8 | `PAUTA-DP-09-COL923-O232B` | **!** | 2026-10-09T23:25 | 09/2026 GRAVADA 35,88 h -> PASSARIA A 113,36 h (+4.649 min = +77,48 h) em 9 dia(s); matricula 2076, emp2; 09 EXPORTADA intacta nos 3 hashes | `col923: os 9 dias de 09/2026 vale **+4.649 min (+77,48 h)** -- a 09 tem **35,88 h** gravadas e passaria a **113,36 h**. (1) AUTORIZO a fatia que constroi a porta de re-lavra da competencia exportada (DIFF antes, reversao em `logs/`, TXT novo COMPLETO com o nome canonico substituindo o vigente, anter` |
+| 9 | `PAUTA-DP-09-COL735-O232B` | **!** | 2026-10-09T23:25 | 09/2026 GRAVADA 98,32 h -> PASSARIA A 102,22 h (+234 min = +3,90 h) em 1 dia(s); matricula 1960, emp2; 09 EXPORTADA intacta nos 3 hashes | `col735: o dia 10/09 de 09/2026 vale **+234 min (+3,90 h)** -- a 09 tem **98,32 h** gravadas e passaria a **102,22 h**. (1) AUTORIZO a fatia que constroi a porta de re-lavra da competencia exportada (DIFF antes, reversao em `logs/`, TXT novo COMPLETO com o nome canonico substituindo o vigente, anteri` |
+| 10 | `PAUTA-DP-09-COL736-O232B` | **!** | 2026-10-09T23:25 | 09/2026 GRAVADA 169,47 h -> PASSARIA A 172,92 h (+207 min = +3,45 h) em 1 dia(s); matricula 1961, emp2; 09 EXPORTADA intacta nos 3 hashes | `col736: o dia 17/09 de 09/2026 vale **+207 min (+3,45 h)** -- a 09 tem **169,47 h** gravadas e passaria a **172,92 h**. (1) AUTORIZO a fatia que constroi a porta de re-lavra da competencia exportada (DIFF antes, reversao em `logs/`, TXT novo COMPLETO com o nome canonico substituindo o vigente, anter` |
 
 ---
 
-Total no JSON: **217** · aberto **6** · respondido **49** · sem-motivo **162**.
+Total no JSON: **220** · aberto **10** · respondido **49** · sem-motivo **161**.
 
 > `sem-motivo` nao e "resolvido": e *"ninguem julgou este item"*. A ordem de 18:4x proibe
 > triar os 163 antigos, entao eles ficam ai, nomeados, em vez de serem chutados para um lado.
