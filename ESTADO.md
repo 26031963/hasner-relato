@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 13:33:01.**
+**Medido em 10/10/2026 13:38:31.**
 
 | | |
 |---|---|
@@ -130,37 +130,37 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  A invariante que o próprio placar impõe — "numero sem prova nao conta" (core/placar_estrutural.py:518) — está verde: todos os 8 números
-  declarados carregam a sua prova, nenhum rebaixado.
-
-  E os quatro PARCIAL não estão parados por falta de trabalho meu:
-  - R3 está na mesa dele, com número e frase pronta (R3-CLAUSULA-COM-O-QUE-FALTA, desde 09/10 23:25): MUDOS=0 nos dois universos, 2.405
-    dias com a palavra, 48 dia-colab / 312,9 h sem par pareável. Fechar ou nomear o que falta é corte dele, não execução minha.
-  - R4 e BATERIA estão na lista explícita de não carimbar — "placar nao carimba a propria meta".
-  - R6 tem meta N = 20 contratos, hoje 15/20, e as 5 células que faltam são batida x um juiz, escala x um juiz, chamado x um juiz, chamado
-    x um escritor (119 escritas fora da porta) e folha/export x um juiz. A ordem dele das 10:4x põe contratos depois da O219 e da O228 —
-    que é por isso que a ORDEM VIVA no topo diz O219, e é nela que eu estou.
-
-  A fila: o219-full2 esperando; a vez segue de o228-turno-full (desde 13:22:26, ~23 min de rodada). Árvore viva intocada, três arquivos
-  sujos e são os que o commit exclui.
-
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: PLACAR-ESTRUTURAL -- O ESTRUTURAL SE SEPARA DO DADO (corte dele 02/10 22:5x, que SUBSTITUI o item 3 da
-  ordem das 21:4x -- o resto d
-
-● A peça mais falível do ato é docs.py — quatro edições ancoradas, dois tetos e as asserções do hook. Ela falha em segurança, mas queima o
-  momento. Vou ensaiá-la de verdade:
-
   Ran 1 shell command
 
 ● Ensaio em cópia: R passa a sair do ambiente com o mesmo default, e o passo 4 (hook) se mede no vivo, então fica fora do ensaio:
 
-● Running 1 shell command…
+  Ran 1 shell command
 
-✢ Proofing… (19h 38m 15s · ↓ 2.3m tokens)
+● O marcador ainda está lá porque numero.py só roda com o veredito. Então o ensaio vai inteiro em cópia — docs.py, a seção e a pergunta —
+  sem tocar os artefatos reais:
+
+  Ran 1 shell command
+
+● Os três tocam. Agora a forma do resultado — o hook lê colunas, e célula deslocada é hook lendo prosa como estado:
+
+  Ran 1 shell command
+
+● BACKLOG: 6 colunas de cada lado, não deslocou. O meu localizador de linha é que não serve para o LEIS — a forma da tabela lá é outra:
+
+● Reconferir colunas da L-113 e as regexes do hook
+  ⎿  $ SCO=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/o219
+     ENS=$(cat "$SCO/.ensaio_docs_dir")
+     python3 - "$ENS" <<'PY'
+     import io, re, sys
+     E = sys.argv[1]; V = '/home/ronald/saas-hasner'
+     def linha_de(p, pad):
+     for l in io.open(p, encoding='utf-8'):
+     if re.m…
+
+✢ Compacting conversation… (19h 43m 45s · ↓ 2.3m tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱ 94%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    4% until auto-compact
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -168,6 +168,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   ● main
 ❯ ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Fixing column index in aplicar_docs.py                                                      44m 13s · ↓ 92.9k tokens
+  ◯ general-purpose  Checking FAIL lines in full.log                                                            49m 43s · ↓ 131.6k tokens
   ⧉  index
 ```
