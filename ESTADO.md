@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 16:39:01.**
+**Medido em 10/10/2026 16:44:03.**
 
 | | |
 |---|---|
-| `HEAD` local | `c1d3a6e4 [O228] pouso do INSTRUMENTO da familia turno em ato proprio: o censo nasce com a catraca medida FORA da janela do merge, porque ele le a arvore onde mora` |
+| `HEAD` local | `ccad3d52 [O48] passo 2: a porta de LEITURA do fechamento nasce sem segundo derivador, e a prova de que nao ha segundo e o DIFF de frota ZERO` |
 | `origin/main` | `d20a0e45 [O219] pouso: os docs do marco A0-b entram junto, e o merge que eu pedi sem commit virou FAST-FORWARD -- o codigo estava na arvore viva antes deste commit` |
-| commits a subir (`ahead`) | **16** |
+| commits a subir (`ahead`) | **17** |
 
 ## Fabrica
 
@@ -22,29 +22,19 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+ccad3d52 [O48] passo 2: a porta de LEITURA do fechamento nasce sem segundo derivador, e a prova de que nao ha segundo e o DIFF de frota ZERO
 c1d3a6e4 [O228] pouso do INSTRUMENTO da familia turno em ato proprio: o censo nasce com a catraca medida FORA da janela do merge, porque ele le a arvore onde mora
 31fce87c [O228] pouso do PRODUTO da metade TURNO: o merge devolve rc 1 POR MEDIDA, e a uniao dos docs vem da copia que a suite rodou
 447bb013 [O199] pouso: o aceite de folga declarada DECIDE o dia pela porta que ja existia, e o pouso foi certificado por BYTE em vez de confianca na raia
 33f80dfb [O219] miolo: a versao da regra entra na impressao do cartorio e a declaracao nasce VAZIA -- o mecanismo pousa movendo ZERO dia, e a virada fica sendo ato de frota
-61c83e49 [O228] o censo da familia turno NASCE com DUAS catracas, e as DUAS guardas que eram cegas em raia passam a ver
 ```
 
 ## `git status --short`
 
 ```
  M app/config/crons_duracao.json
- M app/docs/AVAIS.md
- M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
- M app/docs/PENDENTES_RONALD.json
- M app/docs/PROMPTS.md
- M app/docs/RELATO.md
- M app/docs/TICKETS.md
- M app/ponto/services/fechamento.py
- M app/ponto/tests/test_s4_ninguem_recalcula_para_ler.py
  M bin/sonda_frota.sh
-?? app/docs/O98-MAPA-ANTIGO-ENTRADA.md
-?? app/ponto/tests/test_o48_fechamento_lido.py
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -133,42 +123,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ⎿  Referenced file core/tests/test_o223_porta_humana_da_aplicacao.py
-  ⎿  Read core/management/commands/semear_aplicacao_convencao.py (128 lines)
-
-● Task "RED e construção do segundo intervalo" completed in background
+  Ran 13 shell commands
 
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-  Ran 15 shell commands
-  ⎿  Read AVAIS.md (23 lines)
-  ⎿  Read HANDOFF-SESSAO.md (46 lines)
-  ⎿  Read ../../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/pouso-celula/turno_pr
-     ompt.md (47 lines)
-  ⎿  Referenced file ../core/tests/test_o223_porta_humana_da_aplicacao.py
-  ⎿  Read ../core/management/commands/semear_aplicacao_convencao.py (128 lines)
+  Ran 1 shell command
 
-● Task "RED e construção do segundo intervalo" completed in background
+● Background command "Ruff nos tres arquivos e a pasta inteira de selos de host" completed (exit code 0)
 
-● Background command "Esperar pelo fim do DIFF de frota por arquivo" completed (exit code 0)
+  Committed ccad3d52, read 1 file, ran 10 shell commands
 
-  Read 1 file
+● Enquanto a sonda corre, o estado do marco:
 
-● DIFF_FOLHA=0 — e os sha por empresa são idênticos nos dois lados (dcec03c1dcdc / 8bfd0c0fecb2 / b47fa40cecd9), comparar rc=0 (fotos da
-  MESMA trava, senão seria rc 5). A frota da competência 10 não move um centavo entre o HEAD e a cura.
+  - commit ccad3d52 — [O48] passo 2: a porta de LEITURA do fechamento nasce sem segundo derivador… (10 arquivos, 309+/32-)
+  - no ar — bin/deploy.sh --sem-migrate: prova de casca (16 estáticos, 5 páginas, 611 rotas em 2 urlconf), três cascas recarregadas juntas,
+    três rotas provadas (core /health/ 200, ui /colaboradores/ 302, mensageria /health/ 200), selo BUG 128 verde, importerror_500=0
+  - portões do push verdes sobre o commit — regua_tickets: OK -- 6 citacoes com linha na tabela, tickets_placar OK, e o que mais importava
+    aqui: test_lei_protege_sitio: tocados neste push: 1 (L-113, citados) — o sítio protegido que eu toquei (recalcular_fechamento_mes) está
+    citado no corpo do commit
+  - ruff limpo nos 3 arquivos, 0 selo de host vermelho na pasta inteira
 
-  Ran 13 shell commands
+● Censo dos chamadores do ramo de leitura
+  ⎿  $ cd /home/ronald/saas-hasner/app
+     echo "=== quem chama com somente_leitura ==="
+     grep -rn 'somente_leitura' --include=*.py . | grep -v '/tests/' | grep -v 'services/fechamento.py' | cut -c1-180
+     echo; echo "=== e nos testes ==="
+     grep -rn 'somente_leitura' --include=*.py */tests/ | cut -c1-160
 
-● Advising using Fable 5.1
-
-✢ Proofing… (22h 44m 15s · ↓ 2.7m tokens)
+✶ Compacting conversation… (22h 49m 17s · ↓ 2.7m tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 44%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
