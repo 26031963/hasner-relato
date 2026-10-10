@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 07:45:52.**
+**Medido em 10/10/2026 07:51:01.**
 
 | | |
 |---|---|
@@ -137,16 +137,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ```
   Ran 2 shell commands
 
-● That {% url %} just went into a live template referencing a route the running worker doesn't know — NoReverseMatch, 500 on the empresa
-  edit screen right now. Neutralizing it immediately:
-
-  Ran 1 shell command
-
-● The four remaining are inside the two new templates — nothing includes them and no live route reaches them, so they're inert until the
-  reload. Now the census seal, which will bite on the 4th site:
-
-  Ran 2 shell commands
-
 ● Measured: the command now has zero write verbs in its AST and the service has both — that's the proof each papel needs. Amending the
   census:
 
@@ -159,14 +149,24 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Both are my own defects, not the cure's: RED8 is a permission mismatch (form_empresa gates on editar_cadastro, my fixture only granted
   gerir_usuarios) and RED3 is a template lookup on linha=None:
 
-  Re-running the two modules
-  ⎿  $ cd /home/ronald/saas-hasner && bash bin/suite.sh --only "core.tests.test_o223_porta_humana_da_aplicacao
-     core.tests.test_regua_pela_empresa" > logs/o223/cura2.out 2>&1; echo "rc_real=$?"; grep -nE '^Ran [0-9]+ test' logs/o223/cura2.out |
-     tail -1; grep -nE '^(OK|FAILED)( \(.*\))?$' logs/o223/cura2.…
+  Ran 2 shell commands
 
-✻ Proofing… (13h 51m 6s · ↓ 1.6m tokens)
+● 24/24, rc=0. Now the anti-vacuity twin RED11 owes (it asserts an absence), and the contract that enumerates — my own memory says a new
+  view is exactly what a tree contract catches:
+
+  Searched for 2 patterns, ran 2 shell commands
+
+● Ruff clean. Running the neighbours (core + colaboradores) — that covers the three contracts a new route/view could trip:
+
+● Running the core and colaboradores labels · 3m 50s
+  ⎿  $ cd /home/ronald/saas-hasner && bash bin/suite.sh --only "core colaboradores" > logs/o223/vizinhos.out 2>&1; echo "rc_real=$?"; grep
+     -nE '^Ran [0-9]+ test' logs/o223/vizinhos.out | tail -1; grep -nE '^(OK|FAILED)( \(.*\))?$' logs/o223/vizinhos.out | tail -1; grep -nE
+     '^(FAIL|ERROR):' logs/o223/viz… (3m 49s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✢ Proofing… (13h 56m 15s · ↓ 1.6m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    7% until auto-compact
+                                                                                                                    3% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
