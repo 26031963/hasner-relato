@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 03:00:45.**
+**Medido em 10/10/2026 03:05:45.**
 
 | | |
 |---|---|
@@ -121,38 +121,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 3 shell commands
-
-● Found it: two writers bump the carimbo without touching money and without the trava — invalidar_previsto:965 (every competência of a
-  colaborador whose escala changed) and reabrir_periodo:857. Measuring whether that is the 125:
+● Following that. Removing the vigia and the three functions that alarm on the wrong question, keeping the extraction:
 
   Ran 1 shell command
 
-● Decisive: 123 of 125 carry the invalidar_previsto signature (previsto_em IS NULL) — noise. Only 2 have previsto_em > foto, the signature
-  of an actual recalc after the photo. Checking whether a money-write carimbo exists at all:
+● Now the check that could reorder everything — naming the 2 rows and finding their door:
 
   Ran 1 shell command
 
-● carimbo_gravado.py and ponto/portas/regen_exportada.py already answer "did the gravado change?", excluding control carimbos. Reading them
-  before I build a second juiz:
+● rc=0 despite the traceback — the wrapper's rc isn't the veredito. Rewriting the probe to read the vigência authority directly, and to ask
+  the trail model its own field names rather than guess:
+
+  Ran 2 shell commands
+
+● No regen_em_exportada trail for either (that porta's 7 lines name other colabs). The instants carry batida/celula events. Decisive
+  question: was the trava even deployed then?
 
   Ran 1 shell command
 
-● The command's own docstring was born from this exact question — and it records that atualizado_em read zero while an exported competência
-  changed. Checking the existing photos and the second copy of FORA:
+● Trava landed 27/09 10:12 — both writes are after it. Finding the callers that can pass through, and the log line the porta leaves:
 
   Ran 1 shell command
 
-● Three copies of the same "universo de campos do gravado" exist, and at least three implementations of "o gravado mudou". Making the
-  findings durable before deciding:
+● All recalculo_de_competencia_EXPORTADA lines in logs/ come from test runs (empresas=[1], [499]…) — none from prod. So neither case used
+  the porta. Reading the two paths that could write without it:
 
-  Ran 1 shell command
+  Reading restaurar_fechamento and recalcular_por_evento
+  ⎿  $ cd /home/ronald/wt-l113/app && sed -n '772,800p' ponto/services/fechamento.py; echo '=== recalcular_por_evento:'; sed -n
+     '1020,1045p' ponto/services/fechamento.py
 
-● Advising using Fable 5.1
-
-· Proofing… (9h 5m 59s · ↓ 1.1m tokens)
+✢ Proofing… (9h 10m 59s · ↓ 1.1m tokens · still thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    8% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
