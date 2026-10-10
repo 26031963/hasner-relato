@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 18:14:06.**
+**Medido em 10/10/2026 18:19:31.**
 
 | | |
 |---|---|
@@ -37,6 +37,7 @@ c1d3a6e4 [O228] pouso do INSTRUMENTO da familia turno em ato proprio: o censo na
  M app/docs/CORTES.json
  M app/docs/CORTES.md
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/LEIS.md
  M app/docs/PROMPTS.md
  M app/docs/RELATO.md
  M bin/sonda_frota.sh
@@ -129,41 +130,41 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-❯ aval Ronald: a raia wt-bos abre a O198 agora (censo da frota antes da cura) e segue GEO-SILENCIO-DE-PING -> O197 -> O44 itens 2-8, um
-  por vez, nos limites do BOS-EM-RAIA-UM-POR-VEZ; a principal nao para. Nenhuma lei nova. Segue a fila; PAREI so em lei ou !
-
-● A third aval, and it's an order for the raia. Let me get the JSON schema and check the raia state together.
-
   Ran 2 shell commands
 
-● wt-bos is live at c44c6c80, and the BACKLOG already declares that exact raia order — his aval ratifies it and says start. Let me read the
-  limits and O198's own portão.
+● The lápide right below the juiz names the authority for exactly this question. Let me check the ensaio and then consult before building.
 
   Ran 1 shell command
 
-● All three register this turn. Let me write them into the canonical source.
+● The ensaio is in its apply phase and wt-bos sits exactly where his aval says — O199 landed, O198 is the vez. Let me consult before
+  building the census.
 
-  Ran 3 shell commands
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-● Both signatures are in the box. Now the PROMPTS lines and the two new OBRAS items.
+● All seven stand. Let me do the no-DB orientation — door, resolver, and the real strings.
 
-● Rodar a pasta de selos de host · 1m 42s
-  ⎿  $ cd /home/ronald/saas-hasner
-     v=0
-     for s in bin/tests/test_*.sh; do
-     out=$(bash "$s" 2>&1); rc=$?
-     if [ $rc -ne 0 ]; then v=$((v+1)); echo "=== VERMELHO $s (rc=$rc)"; echo "$out" | tail -6; fi
-     done
-     echo "selos de host vermelhos: $v" (1m 42s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Ran 1 shell command
 
-✻ Proofing… (1d 0h 19m · ↓ 2.8m tokens)
+● sonda_leitura.sh defaults to prod read-only — the raia's census needs no sombra at all. Now the resolver and the real strings.
+
+  Ran 2 shell commands
+
+● All four real strings confirmed. Let me write the census — no DB yet, since the ensaio owns cpuset 4-7.
+
+  Ran 2 shell commands
+
+● All real functions identified. Writing the census now.
+
+● Running 1 shell command…
+
+✢ Proofing… (1d 0h 24m · ↓ 2.8m tokens · thought for 5s)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    7% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
