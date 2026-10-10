@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 04:10:02.**
+**Medido em 10/10/2026 04:15:31.**
 
 | | |
 |---|---|
@@ -126,7 +126,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  que saía de duas docstrings. São três cópias da impressão digital do gravado, e a terceira discorda em um campo: carimbo_gravado.FORA 11
   nomes, regen_exportada._FORA_DO_HASH os mesmos 11, lavrar_dias_pagos._fora 10 — falta previsto_em, exatamente o campo que o
   invalidar_previsto anula a cada mudança de escala (os 123 de 125 do meu contador). A própria casa escreveu por que ele fica fora, em
   29/09. E ele não é persistido (md5:12 em memória, impresso), então não é o baseline sem migration que eu supunha — o baseline nasce no
@@ -150,14 +149,15 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
   ⎿  Monitor started · task bl16bv82j · timeout 1500s
   ⎿  Allowed by auto mode classifier
 
-● Counting the inline form and proof sites in HEAD by command
-  ⎿  $ cd /home/ronald/saas-hasner && echo "=== HEAD a364847b: sitios da FORMA (join CRLF) em producao ===" && for f in $(git ls-tree -r
-     --name-only HEAD -- app/ | grep '\.py$' | grep -v '/tests/'); do n=$(git show HEAD:"$f" 2>/dev/null | grep -cF "\r\n'.join(linhas)");
-     [ "$n" -gt 0 ] && echo " $f : $n"…
+● Finding every TICKETS row mentioning L-113 and the law's own row
+  ⎿  $ cd /home/ronald/saas-hasner && echo "=== linhas do TICKETS que falam de L-113 (id + frente) ===" && awk -F'|' '/L-113/{printf "linha
+     %d | id=%s | frente=%s\n", NR, $2, substr($3,1,90)}' app/docs/TICKETS.md; echo; echo "=== no LEIS.md, a linha da L-113 ===" && sed -n
+     '140p' app/docs/LEIS.md | cut …
 
-✽ Proofing… (10h 15m 16s · ↓ 1.2m tokens)
+✢ Compacting conversation… (10h 20m 45s · ↓ 1.2m tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱ 91%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    7% until auto-compact
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
