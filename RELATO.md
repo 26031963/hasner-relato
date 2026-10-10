@@ -252,6 +252,38 @@ conteudo, zero `|` no texto. Selos de host do BACKLOG verdes: `test_fabricante_b
 `test_hook_parei_casa_id_inteiro.sh`, `test_hook_nao_cobra_congelado.sh` (rc=0 nos cinco).
 
 
+### A LINHA DO CLAUDE.md QUE ENSINAVA O FURO QUE ELA MESMA CONDENA (curada neste marco, 10/10 04:3x)
+
+O assunto do commit de pouso diz *"o veredito da suite se le pela forma estrita, nao pela do
+CLAUDE.md"*, e eu fui conferir se isso ainda era verdade depois do paragrafo que a casa escreveu
+em 08/10. Era, e de um jeito pior do que eu pensava: **o COMANDO da linha 197 ensinava
+`^(OK|FAILED)( |\(|$)` enquanto a PROSA das linhas 201-206, logo abaixo, dizia com todas as
+letras que esse padrao NAO CURA** -- *"`OK -- nenhuma divergencia` tem `OK` seguido de ESPACO,
+entao casa igual"*. A prosa estava certa; o comando ao lado dela estava errado. Quem copiasse
+copiava o furo -- e copiar o comando e exatamente o que se faz com uma linha que comeca em
+`Veredito:`.
+
+O furo me pegou **duas vezes**, e as duas estao medidas neste RELATO: em 08/10 14:03 ele deu por
+verde um `.out` que terminava em `FAILED`, e em 10/10 03:4x um laco de espera meu deu a suite por
+terminada com ela ainda correndo, casando a linha de prosa `OK -- nenhuma divergencia em
+2026-10-10` da linha 965 do log.
+
+Curado na ORIGEM, que e a propria linha: o comando passou a ser
+`grep -E '^(OK|FAILED)($| \()' <log> | tail -1`, com o `rc do PROCESSO` (L-074) nomeado como
+terceira perna, e a prosa abaixo passou a registrar que a linha literal tambem estava errada e
+quando caiu. **Isto NAO e a O240** -- a O240 e a cura dos **12 sitios em 9 scripts** que carregam
+o padrao solto, e ela segue na fila como instrumento, com commit proprio, porque a cura la e UMA
+funcao que os 9 leem e nao uma 13a copia do padrao. O que se curou aqui e o ENSINO: enquanto a
+linha 197 estivesse errada, a O240 nasceria copiando o furo de novo.
+
+**PROVA:** `grep -n 'OK|FAILED' CLAUDE.md` -> as duas ocorrencias sao a linha 197 (o comando,
+agora `($| \()`) e a linha 199 (a prosa que cita o padrao velho como historia). Selos que leem
+o CLAUDE.md, todos rc 0: `test_suite_sh.sh` (recorta a sec.3 pela estrutura),
+`test_lei_akita.sh` (13 linhas numeradas no topo), `test_labels_fonte_unica.sh`,
+`test_segredo_fora_do_argv.sh`, `test_recursos_sourced.sh`. E a pasta inteira de selos de host
+(**66**) verde depois da edicao.
+
+
 ### A0-b, A SEGUNDA DECISAO MEDIDA: **O UNIVERSO DA IMPRESSAO NAO E O GRAVADO INTEIRO, E QUEM ENTRA NO TXT** (10/10 04:2x)
 
 A pergunta que faltava decidir antes de escrever a A0-b era o UNIVERSO: a impressao digital

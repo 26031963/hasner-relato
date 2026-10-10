@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 04:30:45.**
+**Medido em 10/10/2026 04:35:45.**
 
 | | |
 |---|---|
@@ -127,38 +127,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  conferir: a linha 197 prescrevia ^(OK|FAILED)( |\(|$) enquanto a prosa das linhas 201-206, logo abaixo, dizia com todas as letras que
+  esse padrão não cura — OK -- nenhuma divergencia tem OK seguido de espaço e casa igual. A prosa certa, o comando ao lado dela errado, e
+  quem copia copia o comando. Esse furo me pegou duas vezes (08/10 14:03 e um laço de espera meu de 10/10 03:4x). A linha passou a
+  prescrever ($| \() com o rc do PROCESSO (L-074) nomeado como terceira perna. Isto não é a O240: ela segue na fila, porque a cura dos 12
+  sítios em 9 scripts é uma função que os 9 leem, nunca a 13ª cópia do padrão — e enquanto a linha 197 estivesse errada, a própria O240
+  nasceria copiando o furo. Os 5 selos que leem o CLAUDE.md e a pasta inteira (66) ficaram verdes depois da edição; a mensagem de pouso foi
+  corrigida no mesmo ato para não dizer mais que nada foi curado.
 
-  Commitado na raia: 89570af4, 6 arquivos, 350 inserções. Base conferida antes: raia-l113 e main na mesma a364847b (raia-l113..main = 0),
-  então a árvore medida é a que pousa.
+  A ESMERIL confirmou de novo, agora no arquivo que mais mudou: o diff do regerar_txt_dominio.py tira import hashlib (morto) e não deixa
+  nenhum helper local órfão — zero órfãos neste marco, L-111 sem o que aplicar.
 
-  A segunda decisão da A0-b, também por leitura: o universo da impressão é quem entra no TXT, não o gravado inteiro — montar_linhas_export
-  filtra status aberto/aprovado e dá continue em quem não está no entra_set (:396-403), então retido não move um byte, e foram 200/238/94
-  retidos. Como a população é uma das três causas de divergência, o universo é entra_set do baseline união o de hoje. Quem diz se divergiu
-  é o txt_vigente_x_gravado que está pousando; a impressão do gravado responde quem se moveu.
+  Medi o portão em vez de supor: com o carimbo em status=REFEITA, bin/sombra.sh --conferir devolve rc 1 (medido sem pipe, porque rc depois
+  de pipe é do último), e bin/deploy.sh:167 testa exatamente esse rc. A espera não é zelo meu — é a condição que o deploy já cobra. Disco
+  em 22% (246 G livres), então o outro portão do deploy está aberto.
 
-  66 selos de host verdes, regua_tickets OK, checker do RELATO rc 0.
+  Os passos do pouso estão escritos em logs/o219/POUSO_PASSOS.md (69 linhas, em logs/, que é gitignored — não nasce segunda autoridade): o
+  --no-ff porque o main está na merge-base, os seis arquivos que viajam no commit do marco (CLAUDE.md + os cinco docs) e os dois que não
+  viajam (HANDOFF-SESSAO.md, derivado; crons_duracao.json, cron-dirty), o merge→commit→deploy sem nada no meio, e a regra de recuperação se
+  o deploy der vermelho (reler o motivo e rodar de novo — nunca checkout/reset).
 
-  Esperando o portão da sombra (cron das 04:17, dois gates --refazer && --bloco): o arquivo logs/crons_em_curso/sombra.sh_-.375629 ainda
-  está lá e o carimbo diz status=REFEITA — o --bloco corre agora. O merge só começa quando o arquivo sumir e o --conferir disser status=OK
-  diverge=0 erros=0; a espera está armada por arquivo, não por pgrep.
+  Sobre o siga: PLACAR-ESTRUTURAL do hook: segue sendo a dívida registrada que a sua ordem de 18:3x deixou para um pouso de instrumento
+  depois. Não escrevi PAREI, não toquei no hook nem na ordem do BACKLOG — a fila 1 continua na O219, e o próximo item depois do pouso é a
+  A0-b, que é leitura e não depende do !.
 
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: PLACAR-ESTRUTURAL -- O ESTRUTURAL SE SEPARA DO DADO (corte dele 02/10 22:5x, que SUBSTITUI o item 3 da
   ordem das 21:4x -- o resto d
 
-  Reflow the corrected line and run the seals that read CLAUDE.md
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PY'
-     import io
-     p='CLAUDE.md'
-     s=io.open(p,encoding='utf-8').read()
-     velho="rc do PROCESSO (L-074), que e a\nforma do VIVO --"
-     novo ="rc do PROCESSO (L-074), que e a forma do VIVO --"
-     assert s.count(velho)==1
-     io.open(p,'w',encoding='utf-8').write(s.replace(…
-
-· Proofing… (10h 35m 59s · ↓ 1.2m tokens · thinking)
+· Compacting conversation… (10h 40m 59s · ↓ 1.3m tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱ 70%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                   10% until auto-compact
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
