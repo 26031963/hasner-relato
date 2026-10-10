@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 05:23:32.**
+**Medido em 10/10/2026 05:28:34.**
 
 | | |
 |---|---|
@@ -124,36 +124,36 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+● Serviço verde e ruff limpo. Chamando o advisor antes de construir o comando e a fiação de cron, que é o resto do desenho:
 
-  Logo '' != 'e3b0c442…' e um TXT de zero linha é DIVERGENTE para sempre. Conferindo quem mais lê antes de curar:
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+
+● Cinco pontos certos. O #1 é real — _acervo não anota vigência, então vigente sairia None nas 26 linhas. Curando #1 e #4:
+
+  Ran 4 shell commands
+
+● 32 verdes. Agora o #3 — as entradas ENC vivas, antes de escrever a minha:
 
   Ran 1 shell command
 
-● Censo fechado: dois chamadores de produção (regerar_txt_dominio.py:106 e o vigia), e ninguém compara hash_hoje com '' — os dois selos da
-  A0-a comparam os dois campos entre si, então a cura na origem não os quebra. Curando no sítio que é a fonte:
+● A dúvida do #3 está respondida no próprio bloco: bin/encadeado.sh já faz flock + espera os carimbos das três e roda uma vez — então o
+  vigia não precisa de --empresa.
 
-  Ran 1 shell command
+  Mas ler isso expôs uma decisão que eu ia errar: se o vigia alarmar com incomparavel != 0, ele alarma todo dia para sempre, porque o pk=2
+  pré-0005 é permanente. E um alarme que sempre dispara treina a casa a ignorá-lo. A separação não precisa de constante — ela se deriva:
+  registro pré-0005 não pode mais nascer (gerado_em é auto_now_add), então essa classe só encolhe; as outras são cegueira viva.
 
-● A cura precisa do selo que a morde no sítio do juiz, e o ramo ValueError que eu criei precisa do seu. Vendo onde encaixam:
-
-  Ran 1 shell command
-
-● Ótimo — a A0-a já decidiu explicitamente que o juiz PROPAGA (test_MORDE_sem_integracao_o_juiz_PROPAGA…), o que confirma que nomear o caso
-  é camada da varredura, não do juiz. Lendo esse selo e a âncora:
-
-  Ran 3 shell commands
-
-● Agora o ramo ValueError do vigia, que criei e que ainda não tem caso que o morde:
-
-● Adding the biting test and running both modules
+  Adding CEGO/HISTORICO biting tests and running
   ⎿  $ cd /home/ronald/wt-l113/app && python3 - <<'PY'
      p = 'folha/tests/test_l113_a0b_vigia_do_txt.py'
      s = open(p, encoding='utf-8').read()
-     anc = """ def test_MORDE_a_versao_substituida_nao_entra_na_Q1(self):
-     """
-     teste = ''' def test_MORDE_empresa_que_perdeu_a_integracao_e_INCOMPARAVEL_nao_DIVERGE(self)…
+     # --- a invariante da abertura, no censo
+     velho = """ self.assertEqual(d['q2']['bate'] + d['q2']['diverge'] + d['q2']['incomparavel'],
+     d['q2']['universo'])"""
+     novo =…
 
-* Proofing… (11h 28m 46s · ↓ 1.4m tokens)
+✽ Proofing… (11h 33m 48s · ↓ 1.4m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
