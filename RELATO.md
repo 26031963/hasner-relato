@@ -252,6 +252,34 @@ conteudo, zero `|` no texto. Selos de host do BACKLOG verdes: `test_fabricante_b
 `test_hook_parei_casa_id_inteiro.sh`, `test_hook_nao_cobra_congelado.sh` (rc=0 nos cinco).
 
 
+### A0-b, A SEGUNDA DECISAO MEDIDA: **O UNIVERSO DA IMPRESSAO NAO E O GRAVADO INTEIRO, E QUEM ENTRA NO TXT** (10/10 04:2x)
+
+A pergunta que faltava decidir antes de escrever a A0-b era o UNIVERSO: a impressao digital
+cobre todo `FechamentoMensal` da competencia, ou so quem entrou no arquivo? Lido o codigo, a
+resposta nao e de gosto:
+
+**PROVA:** `folha/export.py::montar_linhas_export` filtra
+`status__in=('aberto', 'aprovado')` (`:396-397`) e, dentro do laco, faz
+`if fech.colaborador_id not in entra_set: continue` (`:402-403`). **Um colaborador RETIDO nao
+move um byte do TXT** -- e a retencao nao e marginal: as tres empresas retiveram 200, 238 e 94
+na medicao que eu ja tinha publicado. Impressao sobre o gravado INTEIRO alarmaria sobre linhas
+que nao podem mudar o arquivo, e isso e exatamente o ruido que a casa escreveu em 29/09 sobre o
+`previsto_em`: *"inclui-lo faria o hash acusar mudanca em toda corrida -- ruido que faz a
+proxima pessoa parar de olhar o alarme"*. Duas vezes a mesma licao, por dois caminhos.
+
+**MAS `entra_set` DE QUANDO?** O `entra_set` de HOJE sozinho tem um furo que eu mesmo medi antes:
+**a POPULACAO e uma das tres causas de divergencia de hash** (as outras duas sao traducao e
+gravado). Quem era retido e virou entrante MUDA o TXT e **nao estaria no baseline**; quem era
+entrante e virou retido tambem. Entao o universo da A0-b e **`entra_set` do baseline UNIAO
+`entra_set` de hoje**, e nao a interseccao -- a uniao e a leitura mais restritiva, a que nao
+pode calar.
+
+E a divisao de trabalho fica limpa, sem juiz novo: **quem diz SE o arquivo divergiu e o
+`txt_vigente_x_gravado` que a A0-a acabou de pousar** (ele reconstroi e compara hash, que e a
+pergunta de verdade); a impressao digital do gravado responde **QUEM** se moveu, depois que o
+hash do TXT ja acusou. Um juiz para cada pergunta, e nenhum dos dois reimplementando o outro.
+
+
 ### O `!` QUE A CLAUSULA 1 PEDE (nao devolve turno -- a fila segue em A0-b)
 Tirar o `raise CompetenciaExportada` de `ponto/services/fechamento.py:72-77` e **`!` de dinheiro
 exportado** pelo item (c) da DINHEIRO-EM-COMPETENCIA-ABERTA, e esta na lista NUNCA PRE-APROVADO.

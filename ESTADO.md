@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 04:25:45.**
+**Medido em 10/10/2026 04:30:45.**
 
 | | |
 |---|---|
@@ -32,6 +32,7 @@ f415e116 [PLACAR-ESTRUTURAL] instrumento: o placar deixa de poder dizer que esta
 ## `git status --short`
 
 ```
+ M CLAUDE.md
  M app/config/crons_duracao.json
  M app/docs/AVAIS.md
  M app/docs/BACKLOG.md
@@ -126,38 +127,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Monitor(veredito da suite cheia da A0-a (forma estrita + Ran + rc))
-  ⎿  Monitor started · task bl16bv82j · timeout 1500s
 
-  Ran 27 shell commands
-  ⎿  Read docs/AVAIS.md (28 lines)
-  ⎿  Read docs/HANDOFF-SESSAO.md (47 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b354njfld.output (30 lines)
-  ⎿  Referenced file ../../wt-l113/app/ponto/services/fechamento.py
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/blfy3t2pb.output (12 lines)
+  Commitado na raia: 89570af4, 6 arquivos, 350 inserções. Base conferida antes: raia-l113 e main na mesma a364847b (raia-l113..main = 0),
+  então a árvore medida é a que pousa.
 
-● Task "RED e construção do segundo intervalo" completed in background
+  A segunda decisão da A0-b, também por leitura: o universo da impressão é quem entra no TXT, não o gravado inteiro — montar_linhas_export
+  filtra status aberto/aprovado e dá continue em quem não está no entra_set (:396-403), então retido não move um byte, e foram 200/238/94
+  retidos. Como a população é uma das três causas de divergência, o universo é entra_set do baseline união o de hoje. Quem diz se divergiu
+  é o txt_vigente_x_gravado que está pousando; a impressão do gravado responde quem se moveu.
 
-● Task "Run the full suite against the cured copy" still running in background
+  66 selos de host verdes, regua_tickets OK, checker do RELATO rc 0.
 
-● Task "veredito da suite cheia da A0-a (forma estrita + Ran + rc)" still running in background
+  Esperando o portão da sombra (cron das 04:17, dois gates --refazer && --bloco): o arquivo logs/crons_em_curso/sombra.sh_-.375629 ainda
+  está lá e o carimbo diz status=REFEITA — o --bloco corre agora. O merge só começa quando o arquivo sumir e o --conferir disser status=OK
+  diverge=0 erros=0; a espera está armada por arquivo, não por pgrep.
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: PLACAR-ESTRUTURAL -- O ESTRUTURAL SE SEPARA DO DADO (corte dele 02/10 22:5x, que SUBSTITUI o item 3 da
+  ordem das 21:4x -- o resto d
 
-  Ran 2 shell commands
+  Reflow the corrected line and run the seals that read CLAUDE.md
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PY'
+     import io
+     p='CLAUDE.md'
+     s=io.open(p,encoding='utf-8').read()
+     velho="rc do PROCESSO (L-074), que e a\nforma do VIVO --"
+     novo ="rc do PROCESSO (L-074), que e a forma do VIVO --"
+     assert s.count(velho)==1
+     io.open(p,'w',encoding='utf-8').write(s.replace(…
 
-● Background command "Run the full suite against the cured copy" failed with exit code 1
-
-● Monitor "veredito da suite cheia da A0-a (forma estrita + Ran + rc)" stream ended
-
-  Checking the sombra wait progress
-  ⎿  $ cat /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bv5r9lv2n.output 2>/dev/null; echo
-     "---"; cd /home/ronald/saas-hasner && ls -1 logs/crons_em_curso/ 2>/dev/null; date '+%H:%M:%S'
-
-· Proofing… (10h 30m 59s · ↓ 1.2m tokens · thought for 2s)
+· Proofing… (10h 35m 59s · ↓ 1.2m tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                   10% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
