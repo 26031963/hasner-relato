@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 06:05:31.**
+**Medido em 10/10/2026 06:10:45.**
 
 | | |
 |---|---|
@@ -125,36 +125,36 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  motivos_retencao_celula(colaborador, ini, fim), which reads the célula VIVA. Reading it:
-
-  Ran 1 shell command
-
-● motivos_retencao_celula reads CelulaDia.veredito live today, and sem_celula retains any past day without célula — the snapshot fields
-  never mattered. And it already offers com_dias=True precisely so I don't reimplement the loop. Recording the measurement durably first:
-
   Read 1 file
 
-● Now asking the authority itself which day and which motivo — com_dias=True, the door that exists so nobody reimplements the loop:
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+
+● Implementing all of it. First the current shapes:
 
   Ran 1 shell command
 
-● The dates give it away — those are 06-21..07-20, the 07 window, and cel=None veredito=None for 30 of 30 days. Let me see the whole output
-  and the delivery dates together:
+● entra_set, not the classificação — but it accepts itens=, so one snapshot serves both. Current vigia shape:
 
-  Ran 1 shell command
+  Ran 2 shell commands
 
-● All 44 are sem_celula, the ENTIRE window missing — 31/31 and 30/30 days, cel=None. And the three delivery dates are 06/08, 12/08, 19/08 —
-  all before 28/08, the date HX-BORDA-CELULA replaced this judge. Measuring whether the célula acervo simply starts later:
+● Now the code. One snapshot of live state serving both the lines and the motivos:
 
-  Ran 1 shell command
+  Ran 2 shell commands
 
-● Decisive. Appending this before I interpret it:
+● Now the command — the alarm must point at valor_moveu, not at diverge:
 
-  Read 1 file
+  Ran 3 shell commands
 
-  Advising using Fable 5.1
+● Now the biting tests for the split and for the removed dono:
 
-✢ Proofing… (12h 10m 45s · ↓ 1.4m tokens)
+  Ran 2 shell commands
+
+● Now the tests that bite the split:
+
+● Running 1 shell command…
+
+· Proofing… (12h 15m 59s · ↓ 1.5m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
