@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 22:15:45.**
+**Medido em 09/10/2026 22:20:46.**
 
 | | |
 |---|---|
@@ -121,36 +121,34 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Commit b5700cbb. Deploy na sequência:
+  Ran 1 shell command
+
+● Push na fase da suíte, trava com ele — as raias esperam pelo rc 75, como mandei. Agora a Pauta DP que devo da O232. Lendo o script como
+  está:
 
   Ran 1 shell command
 
-● Deploy verde: três cascas reiniciadas juntas, três rotas provadas, importerror_500=0. Push do marco (um por marco) em segundo plano:
+● Três consertos pendentes. Conferindo a forma canônica do item e se a porta citada existe mesmo no código:
 
   Ran 1 shell command
 
-● Push correndo (pre-push roda a suíte inteira do merge). Enquanto isso, as duas raias. Primeiro o estado delas e o pedido de cada obra:
+● Nenhum nome no JSON nem no gerador — então a nota era sobre a chave de match, e o script hoje cita exatamente a chave que a lei proíbe
+  (matricula). E o push está carimbando a árvore, então não escrevo em app/docs/ agora (memória nao-commitar-durante-o-push). Conferindo a
+  porta citada antes de reescrever o primeiro OU:
 
   Ran 1 shell command
 
-● A célula da O228 já declara a segunda raia e o recorte (família celula já; turno só depois do pouso 1 da L-115, que pousou). Preparando
-  as duas raias:
+● Confirmado: zero código da porta REGEN-EM-EXPORTADA — só existe a guarda CompetenciaExportada, que barra, não abre. O primeiro OU estava
+  oferecendo um caminho que não existe. Corrigindo o script (só no scratchpad, a árvore está sob push):
 
   Ran 1 shell command
 
-● O ff abortou (o rc=0 que imprimi é do tail — memória rc-depois-de-pipe-e-do-ultimo): HANDOFF-SESSAO.md modificado na wt-bos. Vendo o que
-  é antes de deixar o ff passar por cima:
+● Script corrigido e em DRY com os 3 itens. Antes de escrever na árvore, consulto o revisor — a decisão da chave de match envolve dado
+  pessoal num repo que vai para o GitHub:
 
-  Ran 1 shell command
+  Advising using Fable 5.1
 
-● A versão local da raia é um handoff velho (08/10 23:11, apontando 6c53bc46); o do main é de hoje 21:12. Derivado e vencido, com cópia
-  guardada — deixo o ff passar por cima:
-
-  Ran 1 shell command
-
-● Duas raias em b5700cbb, limpas. Abrindo as duas com os limites colados:
-
-✻ Proofing… (4h 23m 0s · ↓ 510.9k tokens)
+✽ Proofing… (4h 28m 0s · ↓ 522.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -159,6 +157,8 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
   ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
+  ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
+  ◯ general-purpose  Reading vincular_escala in views.py                                                         4m 17s · ↓ 140.5k tokens
+  ◯ general-purpose  Censusing escala/signals.py and orfa_classe.py                                              4m 17s · ↓ 118.4k tokens
   ⧉  index
 ```
