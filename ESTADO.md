@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 08:50:45.**
+**Medido em 10/10/2026 08:55:46.**
 
 | | |
 |---|---|
@@ -138,26 +138,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-  Ran 2 shell commands
-
-● O portão da sombra conferido antes do ato, e com o rc lido direto do comando e não depois de um pipe (foi assim que eu quase li um portão
-  vermelho como verde): rc=0, carimbo dia=20261010 status=OK tipo=completa diverge=0 erros=0. Então o bin/deploy.sh --sem-migrate do ato
-  passa pelo ensaio de hoje e não vai precisar de --sem-sombra, que é o atalho que eu teria de justificar.
-
-  Suite sem nenhuma linha ^FAIL:/^ERROR: até aqui (139 KB, 08:49:33) — mas o veredito é a última linha do run, não a ausência de sinal no
-  meio, então quem decide é o bsa9r46h4.
-
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: PLACAR-ESTRUTURAL -- O ESTRUTURAL SE SEPARA DO DADO (corte dele 02/10 22:5x, que SUBSTITUI o item 3 da
-  ordem das 21:4x -- o resto d
-
-  Ran 4 shell commands
-
-● O item de smoke já está escrito na forma canônica (avais_o223.py), e a forma não é minha invenção: é a que o bin/gerar_avais.py lê e a
-  que o arquivo já carrega — json.dumps(itens, ensure_ascii=False, indent=2) + '\n', item no fim, nada reordenado, com assert contra
-  duplicata e os 223 existentes intocados. A frase pronta cobre as duas metades da fatia (cadastrar/desativar com trilha na tela nova, e o
-  Regime trabalhista salvando no empresa_form), porque é essa a segunda que me quebrou a tela hoje.
-
   Ele roda depois do commit, pegando o sha do próprio ato (git rev-parse --short HEAD), e tem um único campo a fechar: o SUITE_LINHA_AVAIS.
 
   Falta exatamente o mesmo número em três lugares — mensagem de commit, item do AVAIS — e ele vem do bsa9r46h4.
@@ -166,9 +146,29 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
   ⎿  Stop hook error: siga: PLACAR-ESTRUTURAL -- O ESTRUTURAL SE SEPARA DO DADO (corte dele 02/10 22:5x, que SUBSTITUI o item 3 da
   ordem das 21:4x -- o resto d
 
-· Proofing… (14h 55m 59s · ↓ 1.8m tokens)
+● Re-measuring the 7 declarations the pouso B owes
+  ⎿  $ python3 - <<'PY'
+     import ast, pathlib
+     # RE-MEDIR o 7 que a celula do TICKETS publica: as chaves de POST que a form_empresa LE.
+     src = pathlib.Path('colaboradores/views.py').read_text()
+     arv = ast.parse(src)
+     fn = next(n for n in ast.walk(arv)
+     if isinstance(n, ast.FunctionDef) and n.name == 'form_empr…
+  ⎿  Read docs/AVAIS.md (29 lines)
+  ⎿  Referenced file docs/RELATO.md
+  ⎿  Read docs/HANDOFF-SESSAO.md (47 lines)
+  ⎿  Referenced file core/tests/test_o223_porta_humana_da_aplicacao.py
+  ⎿  Read core/management/commands/semear_aplicacao_convencao.py (119 lines)
+
+● Task "RED e construção do segundo intervalo" completed in background
+
+● Task "Run the lapide seal then the full suite" still running in background
+
+● Task "veredito da suite cheia da O223 na copia" still running in background
+
+✻ Proofing… (15h 1m 0s · ↓ 1.8m tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    1% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
