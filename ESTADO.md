@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 08:45:45.**
+**Medido em 10/10/2026 08:50:45.**
 
 | | |
 |---|---|
@@ -138,41 +138,41 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-  Ran 3 shell commands
-
-● Agora o parágrafo que falhou por âncora não única — localizando um ponto único no texto:
-
   Ran 2 shell commands
 
-● Selo da lápide verde (Ran 6 / OK) — o portão abriu e a suite cheia está correndo. Enquanto isso, os números medidos entram nos lugares
-  que ainda têm marcador:
+● O portão da sombra conferido antes do ato, e com o rc lido direto do comando e não depois de um pipe (foi assim que eu quase li um portão
+  vermelho como verde): rc=0, carimbo dia=20261010 status=OK tipo=completa diverge=0 erros=0. Então o bin/deploy.sh --sem-migrate do ato
+  passa pelo ensaio de hoje e não vai precisar de --sem-sombra, que é o atalho que eu teria de justificar.
 
-  Searched for 2 patterns, ran 19 shell commands
-  ⎿  Referenced file docs/RELATO.md
-  ⎿  Read docs/AVAIS.md (29 lines)
-  ⎿  Read docs/HANDOFF-SESSAO.md (47 lines)
-  ⎿  Referenced file core/tests/test_o223_porta_humana_da_aplicacao.py
-  ⎿  Read core/management/commands/semear_aplicacao_convencao.py (119 lines)
+  Suite sem nenhuma linha ^FAIL:/^ERROR: até aqui (139 KB, 08:49:33) — mas o veredito é a última linha do run, não a ausência de sinal no
+  meio, então quem decide é o bsa9r46h4.
 
-● Task "RED e construção do segundo intervalo" completed in background
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: PLACAR-ESTRUTURAL -- O ESTRUTURAL SE SEPARA DO DADO (corte dele 02/10 22:5x, que SUBSTITUI o item 3 da
+  ordem das 21:4x -- o resto d
 
-● Task "Run the lapide seal then the full suite" still running in background
+  Ran 4 shell commands
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+● O item de smoke já está escrito na forma canônica (avais_o223.py), e a forma não é minha invenção: é a que o bin/gerar_avais.py lê e a
+  que o arquivo já carrega — json.dumps(itens, ensure_ascii=False, indent=2) + '\n', item no fim, nada reordenado, com assert contra
+  duplicata e os 223 existentes intocados. A frase pronta cobre as duas metades da fatia (cadastrar/desativar com trilha na tela nova, e o
+  Regime trabalhista salvando no empresa_form), porque é essa a segunda que me quebrou a tela hoje.
 
-  Running the whole host seal folder · 56s
-  ⎿  $ cd /home/ronald/saas-hasner && for s in bin/tests/test_*.sh; do out=$(bash "$s" 2>&1); rc=$?; if [ $rc -ne 0 ]; then echo
-     "VERMELHO($rc) $s"; echo "$out" | tail -4 | sed 's/^/ /'; fi; done; echo "=== fim ===" (56s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Ele roda depois do commit, pegando o sha do próprio ato (git rev-parse --short HEAD), e tem um único campo a fechar: o SUITE_LINHA_AVAIS.
 
-· Proofing… (14h 50m 59s · ↓ 1.7m tokens)
+  Falta exatamente o mesmo número em três lugares — mensagem de commit, item do AVAIS — e ele vem do bsa9r46h4.
+
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: PLACAR-ESTRUTURAL -- O ESTRUTURAL SE SEPARA DO DADO (corte dele 02/10 22:5x, que SUBSTITUI o item 3 da
+  ordem das 21:4x -- o resto d
+
+· Proofing… (14h 55m 59s · ↓ 1.8m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    1% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells, 1 monitor · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
