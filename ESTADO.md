@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:110 AFIRMA ato sem PROVA ao lado -- nas celulas **[2] e [3]** e `_NAO_ANDA` na **[3]**. `**NO AR**` na celula do portao seria a certidao de
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:135 AFIRMA ato sem PROVA ao lado -- nas celulas **[2] e [3]** e `_NAO_ANDA` na **[3]**. `**NO AR**` na celula do portao seria a certidao de
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 15:24:31.**
+**Medido em 10/10/2026 15:30:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `447bb013 [O199] pouso: o aceite de folga declarada DECIDE o dia pela porta que ja existia, e o pouso foi certificado por BYTE em vez de confianca na raia` |
+| `HEAD` local | `dc1c84ec [O228] pouso do INSTRUMENTO da familia turno em ato proprio: o censo nasce com a catraca medida FORA da janela do merge, porque ele le a arvore onde mora` |
 | `origin/main` | `d20a0e45 [O219] pouso: os docs do marco A0-b entram junto, e o merge que eu pedi sem commit virou FAST-FORWARD -- o codigo estava na arvore viva antes deste commit` |
-| commits a subir (`ahead`) | **12** |
+| commits a subir (`ahead`) | **16** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+dc1c84ec [O228] pouso do INSTRUMENTO da familia turno em ato proprio: o censo nasce com a catraca medida FORA da janela do merge, porque ele le a arvore onde mora
+31fce87c [O228] pouso do PRODUTO da metade TURNO: o merge devolve rc 1 POR MEDIDA, e a uniao dos docs vem da copia que a suite rodou
 447bb013 [O199] pouso: o aceite de folga declarada DECIDE o dia pela porta que ja existia, e o pouso foi certificado por BYTE em vez de confianca na raia
 33f80dfb [O219] miolo: a versao da regra entra na impressao do cartorio e a declaracao nasce VAZIA -- o mecanismo pousa movendo ZERO dia, e a virada fica sendo ato de frota
-c44c6c80 [O199] o aceite da folga declarada DECIDE o dia pela porta que ja existia, e a casca para de dizer "gravado" quando nada foi gravado
-8735524c [O228] pouso do INSTRUMENTO em ato proprio: a catraca do censo remedida no main de hoje da 6 -> 6, e as duas leis de economia dele nascem numeradas
-cb6cd342 [O228] pouso da metade CELULA: os tres sitios sem chamador entram na principal, e a raia NAO vaga -- a familia turno abre nela
+61c83e49 [O228] o censo da familia turno NASCE com DUAS catracas, e as DUAS guardas que eram cegas em raia passam a ver
 ```
 
 ## `git status --short`
@@ -131,41 +131,41 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-● That measurement is wrong in both directions, and the counter-examples prove it rather than suggest it:
+● Seal green on a copy of the post-pouso main: 4 at-zero sitios = baseline, and MORDE proves it bites (4 → 5 with the planted sitio). The
+  catraca holds, so it lands as the raia has it. Running the merge window:
 
   Ran 1 shell command
 
-● Both directions confirmed: get_user_sistema is User.objects.get_or_create(username='sistema') — fetching the system user, not judging,
-  and it alone flags 7 of the 12. And flip_automatico, which CLAUDE.md §7 declares "escritor unico flip_tipo", lands in the "no write seen"
-  list — it writes through ponto.services.flip_batida::flip_tipo (:51,:65), one level deeper than the sweep reaches. Rewriting the bank
-  with the negative result, which is the useful part:
+● Both landed — O228 INTEIRA está no main: produto 31fce87c, instrumento dc1c84ec, and the 3 pre-existing dirty files stayed out of both.
+  Two things to check rather than assume — the instrumento pouso carried zero docs, and the precedent 8735524c is the test of whether
+  that's the house's form:
 
   Ran 1 shell command
 
-● Battery at ~19 min, 0 FAIL/ERROR, still growing. Pouso 2's script is new work this window and the pouso itself is the irreversible act on
-  the live bind-mount — checking before I run either:
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-● All four are right, and #1 is a real defect I can confirm: I wrote the script with a quoted heredoc (<<'SH'), so $O stayed literal and
-  the script never defines it — under set -u it dies at the commit line, after the merge. Checking pouso 1 for the same door first, since
-  it runs next:
+● The precedent is decisive: 8735524c carried RELATO +23, BACKLOG, LEIS, PROMPTS — an instrumento pouso does carry its docs. Mine carried
+  zero, so the marco's section is missing and L-106 forbids fixing it as a docs-only commit. Gathering the facts before choosing the
+  repair:
 
   Ran 1 shell command
 
-● pousar.sh is sound (:11-12 define SCP/O/DIR) — pouso 1 is clear. Rewriting pouso 2 as the advisor set it out: the measurement moves out
-  of the merge window into a copy, and the catraca only descends:
+● The field indices resolve: the hook's celulas[3] (estado) is the "raia PROPRIA" cell, and the raia wrote its result into the next column
+  — which _FECHADO never reads. So O228 is still open to the hook, and the estado cell is now stale. dc1c84ec is in no remote. Writing the
+  marco's docs before touching history:
+
+  Ran 1 shell command
+
+● Insertion goes above line 17, per the landing-order decision already registered in the produto commit. Writing both doc edits with
+  anchors:
 
 ● Running 1 shell command…
 
-· Proofing… (21h 29m 45s · ↓ 2.5m tokens)
+✢ Proofing… (21h 35m 15s · ↓ 2.5m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                   12% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
