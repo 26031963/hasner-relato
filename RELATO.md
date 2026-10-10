@@ -1,5 +1,65 @@
 # RELATO — esteira saas-hasner
 
+## O232 POUSO B — **NO AR, E O APPLY NAO E O DEPLOY: E A BATIDA** (09/10 21:3x, CONDICAO 4)
+
+PROVA: `bin/deploy.sh --sem-migrate` rc **0** (`logs/l115/o232B_deploy.out`) — prova de casca com 16
+estaticos, 5 paginas e 608 rotas em 2 urlconf; tres rotas provadas (core /health/ 200 · ui
+/colaboradores/ 302 · mensageria /health/ 200); selo BUG 128 verde nas 3 cascas; **importerror_500=0**
+(20:33 a 21:33). Remoto em `a5ae5013`, **0** a empurrar, suite do pre-push `Ran 10230 tests` /
+`OK (skipped=42)` e `Ran 22` / `OK`, **0** ocorrencia de FAILED no log.
+
+**SMOKE EM PROD, PELA TELA: 0 de 6 casos DIFEREM da sombra.** Nao e render de pagina — e a porta que a
+tela usa (`_realizado_do_dia_tela`, com os quatro insumos montados como `montar_dias` os monta):
+
+| dia-colab | prod (tela) | sombra | janela descontada |
+|---|---|---|---|
+| col923 03/09 | **533** | 533 | 60 |
+| col923 07/09 | **581** | 581 | 60 |
+| col923 18/09 | **541** | 541 | 60 |
+| col735 10/09 | **447** | 447 | 0 |
+| col736 17/09 | **325** | 325 | 0 |
+| col899 26/09 | **538** | 538 | 0 |
+
+**A 09 EXPORTADA, RELIDA DEPOIS DO DEPLOY (L-092).** 8 registros, **3 vigentes**, os tres com o sha
+IDENTICO ao de antes: emp2 `361d0f9685f86d3a` (210 linhas), emp3 `5c503b95f9f9cd35` (86),
+emp4 `84c78cd0871f5f52` (9). E o GRAVADO tambem nao se moveu, medido pelo CARIMBO em vez de por hash:
+as 607 linhas de `FechamentoMensal` da 09/2026 tem o ultimo `atualizado_em` em **09/10 16:04:48** — ou
+seja, **nada escreveu a 09 depois disso**, nem a re-lavra da 10 das 18:26, nem os dois deploys.
+
+**EU ESCREVI ERRADO NA SECAO ANTERIOR, E A CORRECAO E O ACHADO DESTE ATO.** Eu disse que *"o gravado
+nao se move por este deploy; o que o deploy move e a TELA"*. A primeira metade e verdade e esta medida
+acima. A segunda e **falsa**, e quem me corrigiu foi o carimbo: a 10/2026 tem **344 escritas hoje**,
+uma por colaborador, espalhadas de 05:01 a 21:34 — col155 21:30:07, col107 21:33:26, col259 21:34:26,
+depois do meu deploy. Nao e cron (nenhum dos dois escritores do gravado e agendado, e isso segue
+valendo). **E A BATIDA**, e e lei declarada: `ponto/registro_batida.py:119` chama
+`_fechamento_por_evento(colaborador, timestamp, 'batida')` -> `recalcular_por_evento`, com o aval ao
+lado — *"A BATIDA E O EVENTO (aval Ronald 27/09, E5)"*, nascido de um numero (*"em 28/09 ao recalcular
+09 inteira: 58 colabs se moveram, horas_trabalhadas +289,50 h"*).
+
+**ENTAO O APPLY DESTA CURA CHEGA POR TRAFEGO, UM COLABORADOR POR VEZ, E ISSO ESTA DENTRO DA LEI:**
+- **a 09 EXPORTADA esta protegida na PORTA, nao por convencao.** `recalcular_por_evento` tem
+  `except CompetenciaExportada` com a frase escrita no sitio (`ponto/services/fechamento.py:1033`):
+  *"L-092: competencia exportada nao muda o gravado. Nao e falha -- e a lei funcionando."* Batida em dia
+  da 09 e RECUSADA e logada. Por isso os +5.095 min da 09 seguem **publicados e nao aplicados**, e por
+  isso **nao ha PAREI** aqui;
+- **a 10 ABERTA recebe.** `recalcular_por_evento` recalcula a competencia **do dia do fato** (`quando`,
+  nao hoje) para **aquele** colaborador. col899 ainda nao bateu depois do deploy — o gravado dele esta
+  como a reversao o fotografou: `minutos_realizados=6264`, `horas_trabalhadas=102.24`,
+  `horas_extras_50=0.00`, `turnos_abertos=2`, carimbo **16:00:08**. Na proxima batida dele o escritor
+  CANONICO do sistema aplica os +419 min, sem ninguem rodar comando.
+
+**AS QUATRO CONDICOES DA DINHEIRO-EM-COMPETENCIA-ABERTA ESTAVAM CUMPRIDAS ANTES DO DEPLOY**, e e por
+isso que esse apply por trafego nao e um apply as escuras: (1) DIFF de frota publicado na secao acima,
+ANTES; (2) reversao em `logs/l115/o232B_reversao_col899.json` — o gravado de col899 campo a campo mais
+as 52 linhas de `DiaPago`; (3) 09 intacta, com hash e carimbo antes e depois; (4) esta secao.
+**A conferencia que falta e de AMANHA, nao de hoje**: reler col899 e comparar com a reversao. Se ele
+nao tiver batido, a re-lavra dele na 10 e ato PROPRIO e PRE-APROVADO pela mesma lei.
+
+**O que fica na fila, nomeado:** a guarda identica em `_borda_posicional:507` e a discordancia de
+duracao de pausa que ela cria em col107 21/08 (+5 min, 09 EXPORTADA, publicado e nao aplicado — **nao
+vai a pauta DP** enquanto nao se decidir qual leitor manda). As pautas de DP da 09 sao de col923
+(+4.649), col735 (+234) e col736 (+207), uma por colaborador, em `AVAIS.md`.
+
 ## O232 POUSO B — **O DIFF DA FROTA, ANTES DE QUALQUER ESCRITA** (09/10 21:3x, CONDICAO 1)
 
 PROVA: medido na sombra nas DUAS arvores (`c7b8bfdb` limpa contra a curada), uma trava de sombra,
