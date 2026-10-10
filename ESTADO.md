@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 09:06:31.**
+**Medido em 10/10/2026 09:12:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `ae775a7b [O223] pouso A: a linha que diz QUAL CCT vale em QUAL empresa ganha porta humana, e o campo que escolhe entre piso legal e CCT deixa de se escrever por shell` |
+| `HEAD` local | `3b2c4f98 [O223] pouso A, 2 de 2: o link do hub entra DEPOIS do reload, e a prova que eu havia dado dele era vazia` |
 | `origin/main` | `d20a0e45 [O219] pouso: os docs do marco A0-b entram junto, e o merge que eu pedi sem commit virou FAST-FORWARD -- o codigo estava na arvore viva antes deste commit` |
-| commits a subir (`ahead`) | **1** |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -22,19 +22,18 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+3b2c4f98 [O223] pouso A, 2 de 2: o link do hub entra DEPOIS do reload, e a prova que eu havia dado dele era vazia
 ae775a7b [O223] pouso A: a linha que diz QUAL CCT vale em QUAL empresa ganha porta humana, e o campo que escolhe entre piso legal e CCT deixa de se escrever por shell
 d20a0e45 [O219] pouso: os docs do marco A0-b entram junto, e o merge que eu pedi sem commit virou FAST-FORWARD -- o codigo estava na arvore viva antes deste commit
 10de79cb [O219] A0-b: o TXT entregue passa a ser PERGUNTADO todo dia, e o alarme cai de 6 de 7 para 1 de 7 porque valor movido deixa de ser confundido com porta movida
 374b7712 [O219] pouso: a A0-a entra no main com os docs do marco, e a linha do CLAUDE.md que ensinava o veredito solto passa a ensinar o estrito
-89570af4 [O219] A0-a: a forma e a prova do TXT do Dominio passam a ter UM sitio, e o empate de carimbo deixa de poder guardar um registro e substituir outro
 ```
 
 ## `git status --short`
 
 ```
  M app/config/crons_duracao.json
- M app/docs/RELATO.md
- M app/templates/core/config/hub.html
+ M app/docs/HANDOFF-SESSAO.md
  M bin/sonda_frota.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -123,19 +122,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-     until grep -q 'rc_real=' "$F" 2>/dev/null; do sleep 10; done… · stopped
-
-  Ran 6 shell commands
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-  Ran 2 shell commands
-
-● The discriminator fires — and it fires because my own grep was too tight:
-
-  Ran 12 shell commands
-
 ● My guard was the wrong probe — a fresh docker exec python reads the disk, not the worker's memory, and config.settings has no
   ROOT_URLCONF at all (the tenant urlconf is given by the compose env). Asking the running worker instead:
 
@@ -148,13 +134,26 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● The real proof — it renders, both tags reverse, and the lápide does not leak:
 
-● Reading the O223 TICKETS row and its pipe count
-  ⎿  $ cd /home/ronald/saas-hasner/app
-     awk 'NR==122{print; print "pipes=" gsub(/\|/,"|")}' docs/TICKETS.md | head -2 | cut -c1-600
+  Committed 32ece217, amended commit f06c0f07, ran 10 shell commands
 
-· Proofing… (15h 11m 45s · ↓ 1.8m tokens)
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+
+  Ran 1 shell command
+
+● 32ece217 still resolves as a loose object but is no longer in history — the committed AVAIS item points at a commit the branch doesn't
+  contain. Fixing it so no sha chases itself:
+
+● Close the marco: regenerate handoff and re-run the host gates · 36s
+  ⎿  $ cd /home/ronald/saas-hasner && bash bin/handoff_sessao.sh >/dev/null 2>&1 && sed -n '6,7p' app/docs/HANDOFF-SESSAO.md | cut -c1-130
+     echo "== regua dos tickets e selos de host, ja com os dois commits"
+     bash bin/regua_tickets.sh 2>&1 | tail -3
+     fail=0; for s in bin/tests/test_*.sh; do bash "$s" >/dev… (36s · 7 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✢ Proofing… (15h 17m 15s · ↓ 1.8m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    7% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

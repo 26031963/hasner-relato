@@ -179,6 +179,15 @@ lapide **nao** vaza para a tela. A `prova_de_casca` nao pegaria isso sozinha: el
 porque `config.settings` nao tem `ROOT_URLCONF` (o urlconf do tenant vem do compose). Quem sabe o que esta no
 ar e o worker, e pergunta-se a ele por HTTP.
 
+**O SEGUNDO COMMIT DO MARCO NAO TEM SHA EM LUGAR NENHUM, E ISSO E DE PROPOSITO.** O item de smoke do AVAIS
+se gera DEPOIS do deploy, e eu o gerei citando o sha do commit 2; depois emendei esse mesmo commit para levar
+os dois derivados (`PENDENTES_RONALD.json` e `AVAIS.md`), porque commit SO de docs nao existe (L-106) -- e a
+emenda trocou o sha. O item ficou apontando para um commit **fora da historia**: `git cat-file -t` ainda o
+resolve como objeto solto, mas `git log` nao o tem. E a mesma mentira de carimbo que me fez descartar a ordem
+inversa do deploy, agora dentro de um artefato meu. Nao se cura citando o sha novo -- um commit nao pode citar
+o proprio --, entao o item passa a dizer "o link do hub no commit SEGUINTE do marco", sem sha, como o TICKETS
+e este RELATO ja dizem. Quem procura o commit 2 acha pelo `[O223] pouso A, 2 de 2` no titulo.
+
 **O QUE SEGURA O PUSH: o smoke de clique.** A fatia toca template, e FRONT SEM SMOKE NAO SOBE -- o push
 espera o clique nas DUAS cascas.
 
