@@ -6,10 +6,18 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 10/10/2026 07:56:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (583.1 MB). Acoes na janela: **1431**.
+**Medido em 10/10/2026 08:02:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (583.7 MB). Acoes na janela: **1426**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 08:02:00 | Bash | Find O223 in BACKLOG | `grep -n 'O223' docs/BACKLOG.md \| head -10` |
+| 08:01:57 | Bash | Run the two LEIS.md host seals | `cd /home/ronald/saas-hasner && bash bin/tests/test_leis_indice.sh 2>&1 \| tail -5; echo "rc=$?"; bash bin/tests/test_lei_protege_sitio.sh 2>&1 \| tail -5; echo "rc=$?"` |
+| 08:01:51 | Bash | Update L-006 dono/selo/estado and the derived row | `python3 - <<'PY' import io p='docs/LEIS.md' txt=open(p,encoding='utf-8').read() L=txt.split('\n') i=next(i for i,l in enumerate(L) if l.startswith('\| **L-006** \|')) f=L[i].split('\|') assert len(f)==9, len(f) DONO=(' core/regua_cct.py::regua_para (le Empresa.regime_trabalhista E, desde a O211 pouso B, o ' 'cadastro core.AplicacaoConvencao por core/regua_cct.py::_aplicacao_vigente); ' 'core/confi ...` |
+| 08:01:15 | Bash | Read the derived section around line 149 | `sed -n '140,155p' docs/LEIS.md` |
+| 08:00:48 | Bash | Name the LEIS.md columns | `grep -n '^\| ID \| a lei em uma frase \|' docs/LEIS.md && grep -n '^\| ID \| a lei em uma frase \|' docs/LEIS.md \| cut -d: -f1 \| while read n; do sed -n "${n}p" docs/LEIS.md \| tr '\|' '\n' \| cat -n; done` |
+| 08:00:33 | Bash | Read LEIS.md header and L-006 row | `awk 'NR==60\|\|NR==61\|\|NR==64' docs/LEIS.md \| cat -n \| fold -w 200 \| head -60` |
+| 08:00:27 | Bash | List PROTEGE sites touching my files | `python3 - <<'PY' import re linhas = open('docs/LEIS.md', encoding='utf-8').read().split('\n') i_hdr = next(i for i,l in enumerate(linhas) if l.startswith('\| ID \| a lei em uma frase \|')) cab = [c.strip() for c in linhas[i_hdr].split('\|')] i_prot = next(i for i,c in enumerate(cab) if c.startswith('PROTEGE')) alvo = ('views_config.py','urls.py','aplicacao_convencao.py','views.py','regua_cct.py',' ...` |
+| 08:00:13 | Bash | Read rest of PROTEGE seal | `cd /home/ronald/saas-hasner && sed -n '70,200p' bin/tests/test_lei_protege_sitio.sh` |
 | 07:55:43 | Bash | Read the PROTEGE seal | `cd /home/ronald/saas-hasner && sed -n '1,70p' bin/tests/test_lei_protege_sitio.sh` |
 | 07:55:20 | Bash | Read the index seal | `cd /home/ronald/saas-hasner && head -40 bin/tests/test_leis_indice.sh` |
 | 07:55:18 | Bash | See what the index seal checks | `cd /home/ronald/saas-hasner && grep -n "o que falta\\|PELA-METADE\\|secao\\|149" bin/tests/test_leis_indice.sh \| head -20` |
@@ -1428,16 +1436,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 20:04:30 | Bash |  | `cd /home/ronald/saas-hasner && grep -n "seg1_bats\\|bats=" logs/l115/o232_shape.out \| head -30` |
 | 20:02:08 | Bash |  | `cd /home/ronald/saas-hasner && tail -4 logs/l115/o232_push2.out; grep -n "_intra_dur\\|_intra_ata" app/ponto/turnos.py \| head -20` |
 | 20:02:03 | Bash |  | `cd /home/ronald/saas-hasner && sed -n '70,100p' app/ponto/turnos.py; echo "=== 915-1000:"; sed -n '915,1000p' app/ponto/turnos.py` |
-| 20:01:52 | Bash |  | `cd /home/ronald/saas-hasner && sed -n "$(grep -n 'def marcos_dna_periodo' app/escala/utils.py \| cut -d: -f1),+40p" app/escala/utils.py` |
-| 20:01:46 | Bash |  | `cd /home/ronald/saas-hasner && grep -n "_teto_s_da_jornada\\|marcos_por_dia\\|marcos_dna_periodo" app/ponto/turnos.py \| head -40; echo "=== def:"; sed -n "$(grep -n 'def _teto_s_da_jornada' app/ponto/turnos.py \| cut -d: -f1),+22p" app/ponto/turnos.py` |
-| 20:01:38 | Bash |  | `cd /home/ronald/saas-hasner && python3 - <<'PY' p='logs/l115/casos_o232.md' s=open(p,encoding='utf-8').read() velho = """- [ ] **RED que MORDE o ACHADO PAUSA-ZERO**: turno fechado cujo unico par e abaixo do piso, com janela declarada -> subtrai a JANELA, nao 0;""" novo = """- [x] **RED que MORDE o ACHADO PAUSA-ZERO** -- `ponto/tests/test_pausa_zero_guarda_le_o_mesmo.py`, 10 casos em 3 classes, `Si ...` |
-| 20:01:26 | Bash |  | `cd /home/ronald/saas-hasner && sed -n '256,390p' logs/l115/casos_o232.md` |
-| 20:01:19 | Bash |  | `cd /home/ronald/saas-hasner && tail -5 logs/l115/o232_push2.out 2>/dev/null; echo "--- rest:"; sed -n '150,260p' logs/l115/casos_o232.md` |
-| 20:01:12 | Bash |  | `cd /home/ronald/saas-hasner && sed -n '1,150p' logs/l115/casos_o232.md` |
-| 20:01:09 | Bash |  | `cd /home/ronald/saas-hasner && grep -n "POUSO B\\|pouso B\\|borda" logs/l115/casos_o232.md \| head -40` |
-| 20:01:04 | Bash |  | `cd /home/ronald/saas-hasner && sed -n '437,540p' app/ponto/turnos.py` |
-| 20:00:53 | Bash |  | `cd /home/ronald/saas-hasner && sed -n '740,900p' app/ponto/turnos.py` |
-| 20:00:50 | Bash |  | `cd /home/ronald/saas-hasner && grep -n "_fechar_aberto_com_saida_seguinte\\|_fim_fechado\\|def _borda_posicional" app/ponto/turnos.py \| head -40` |
-| 20:00:36 | Bash |  | `cd /home/ronald/saas-hasner && git push origin main > logs/l115/o232_push2.out 2>&1; echo "rc=$?" >> logs/l115/o232_push2.out; tail -20 logs/l115/o232_push2.out` |
-| 20:00:29 | Bash |  | `cd /home/ronald/saas-hasner && git log --oneline -1 && echo "--- index:" && git diff --cached --name-only && echo "--- a empurrar:" && git log --oneline origin/main..HEAD && echo "--- trava:" && bash bin/trava_teste.sh --quem` |
-| 19:56:39 | Bash |  | `cd /home/ronald/saas-hasner && python3 - <<'PY' p = 'app/docs/TICKETS.md' L = open(p, encoding='utf-8').read().split('\n') c = L[120].split('\|') assert c[4].strip() == '**NO AR 09/10**', c[4] c[4] = ' **POUSO A NO AR 09/10** -- pouso B (a borda) em voo ' L[120] = '\|'.join(c) assert L[120].count('\|') == 10 open(p, 'w', encoding='utf-8').write('\n'.join(L)) print('estado =', c[4].strip()) PY git  ...` |

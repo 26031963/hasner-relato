@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 07:56:31.**
+**Medido em 10/10/2026 08:02:01.**
 
 | | |
 |---|---|
@@ -41,6 +41,7 @@ a364847b [O218] corretivo: a guarda da sombra volta a ter UM sitio, e o selo que
  M app/core/views_config.py
  M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/LEIS.md
  M app/docs/RELATO.md
  M app/templates/colaboradores/empresa_form.html
  M bin/sonda_frota.sh
@@ -135,18 +136,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  gerir_usuarios) and RED3 is a template lookup on linha=None:
-
-  Ran 2 shell commands
-
-● 24/24, rc=0. Now the anti-vacuity twin RED11 owes (it asserts an absence), and the contract that enumerates — my own memory says a new
-  view is exactly what a tree contract catches:
-
-  Searched for 2 patterns, ran 2 shell commands
-
-● Ruff clean. Running the neighbours (core + colaboradores) — that covers the three contracts a new route/view could trip:
-
-  Ran 1 shell command
 
 ● Neighbours green: Ran 1934 / OK (skipped=21), rc 0 — that includes test_rota_pede_sessao, test_contract_configuracao_nao_mente and
   test_admin_so_leitura. Now the L-006 ESTADO line, which must move in this same commit:
@@ -160,13 +149,25 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● The test_lei_protege_sitio.sh seal cobra the diff's sites against the PROTEGE column — I touch files that may not be listed. Reading it
   before I write anything:
 
-● Reading the PROTEGE seal
-  ⎿  $ cd /home/ronald/saas-hasner && sed -n '1,70p' bin/tests/test_lei_protege_sitio.sh
+  Ran 6 shell commands
+  ⎿  Read core/management/commands/semear_aplicacao_convencao.py (119 lines)
+  ⎿  Referenced file core/tests/test_o223_porta_humana_da_aplicacao.py
+  ⎿  Read docs/AVAIS.md (29 lines)
+  ⎿  Read docs/HANDOFF-SESSAO.md (47 lines)
+  ⎿  Read ../../.claude/projects/-home-ronald-saas-hasner/memory/merge-no-commit-pode-fast-forward.md (27 lines)
 
-· Compacting conversation… (14h 1m 45s · ↓ 1.6m tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 41%
+● Task "RED e construção do segundo intervalo" completed in background
+
+● Nothing of mine is under a PROTEGE cell (only L-104 declares sites, in files I don't touch). Columns are ID | lei | origem | dono |
+  PROTEGE | selo | estado — so the dono/selo/estado cells of the L-006 row are the ones to move:
+
+  Running the two LEIS.md host seals
+  ⎿  $ cd /home/ronald/saas-hasner && bash bin/tests/test_leis_indice.sh 2>&1 | tail -5; echo "rc=$?"; bash
+     bin/tests/test_lei_protege_sitio.sh 2>&1 | tail -5; echo "rc=$?"
+
+✢ Proofing… (14h 7m 15s · ↓ 1.7m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    0% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
