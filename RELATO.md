@@ -25,7 +25,7 @@ cobra corte para isso. **O que NAO muda com a resposta:** nenhum dos 44 entra em
 `porta_moveu`, que nao alarma. O alarme de hoje e **1 de 7**, e nao depende desta pergunta.
 
 ## O223 pouso A — A APLICACAO DE CONVENCAO GANHA PORTA HUMANA, E O CAMPO QUE DECIDE PISO x CCT GANHA ESCRITOR (10/10 08:0x)
-`LEI-AKITA: origem=core/services/aplicacao_convencao.py (porta unica) + colaboradores/views.py::form_empresa, testemunha=core/regua_cct.py::_aplicacao_vigente (quem decide segue sendo ela; a tela so cadastra e DIZ o empate), RED=core/tests/test_o223_porta_humana_da_aplicacao.py (12 casos) reconstituido em logs/o223/red_head.out, quem-mais-le=censo de 4 sitios com PROVA por papel em core/tests/test_regua_pela_empresa.py, juizes novos=0`
+`LEI-AKITA: origem=core/services/aplicacao_convencao.py (porta unica) + colaboradores/views.py::form_empresa, testemunha=core/regua_cct.py::_aplicacao_vigente (quem decide segue sendo ela; a tela so cadastra e DIZ o empate), RED=core/tests/test_o223_porta_humana_da_aplicacao.py (12 casos, 9 VERMELHOS no HEAD) + core/tests/test_regua_pela_empresa.py (13 casos, 1 VERMELHO) reconstituido em logs/o223/red_head.out: Ran 25 / FAILED (failures=3, errors=7), quem-mais-le=censo de 4 sitios com PROVA por papel em core/tests/test_regua_pela_empresa.py, juizes novos=0`
 
 **O que estava medido antes da fatia, e nao e pedido novo.** O pouso B da O211 (08/10) deixou duas dividas
 NOMEADAS, as duas da L-006 (*tudo tem cadastro pela UI*): o cadastro `core.AplicacaoConvencao` nasceu com
@@ -63,11 +63,48 @@ outro arquivo. O que mudou por causa disso: o link do hub nasceu na **COPIA** (`
 suite cheia correu **la**, e ele so entra na arvore viva no ato do commit, com o `deploy.sh` em seguida e
 nada no meio (L-107).
 
-**A vacuidade que eu devia responder.** Dos 12 casos, dois passavam na primeira rodada **porque a feature
-nao existia** -- entre eles o RED11, que e assercao de AUSENCIA (*a view nao nomeia o modelo*). Verde de
-ausencia nao prova nada, entao o RED11 ganhou gemeo que MORDE: o mesmo criterio de AST corre sobre um fonte
-de view **sintetico** que nomeia o modelo, e tem de REPROVAR. Sem ele, apagar o criterio deixaria o selo
-verde.
+**E A COPIA PEGOU O SEGUNDO ERRO MEU NA MESMA FATIA -- que e exatamente o que ela existe para fazer.** A
+suite cheia na copia voltou `Ran 10309 tests` / **`FAILED (failures=1, skipped=42)`**: UMA falha em 10.309,
+e minha. `holerite/tests/test_contract_lapide_nao_vaza.py::test_nenhuma_lapide_multilinha_em_templates`
+apontou `templates/core/config/hub.html:34` -- eu escrevi a lapide do link como comentario de uma cerquilha
+esticado em **TRES LINHAS**, e esse comentario so vale numa LINHA: em varias ele nao fecha e o texto **VAZA
+PARA A TELA**. Nao e descoberta nova desta casa e eu nao tenho escusa: a licao estava escrita (*compilar nao
+e renderizar*), e eu pisei nela no mesmo arquivo em que acabara de me queimar com o `{% url %}`. Cura na
+ORIGEM: o bloco virou `{% comment %}` ... `{% endcomment %}`, que e o que o proprio selo manda na mensagem de
+erro. **O que isso prova sobre o desenho do pouso**: se o link tivesse nascido na arvore viva, como eu fiz com
+o `empresa_form.html`, esse texto estaria VAZANDO no hub de todos os admins no instante em que eu gravei o
+arquivo -- template nao espera reload. A copia nao foi cautela de processo: foi a diferenca entre um selo
+vermelho e uma tela suja em prod.
+
+**E A CURA FICOU VERMELHA TAMBEM, pela SEXTA vez na mesma classe.** O selo re-rodado seguiu reprovando, agora
+na linha 38: a frase que eu escrevi DENTRO da lapide para explicar a regra continha o token proibido, e o selo
+varre **TEXTO**, nao estrutura. E a mesma familia que esta casa ja viu cinco vezes (*selo estrutural varre
+AST, nao texto -- varrer texto faz o selo morder a prosa que explica a cura*), e a sexta fui eu. Duas curas
+eram possiveis: dizer a regra **por extenso**, sem o literal, ou ensinar o selo a varrer estrutura. Pela
+CURA-MAIS-RESTRITIVA eu fiz a primeira, que nao mexe em selo de outra familia no meio de uma fatia; a segunda
+e a linha de fila que ja existe para a impercisao desse selo, e ESMERIL-DO-MARCO proibe abri-la agora. A
+lapide nova diz a regra por extenso e **declara por que**: a frase que explica a regra nao pode conter o token
+que a regra proibe.
+
+**Depois das duas curas a bateria correu de novo sobre a copia**, porque custo de tempo nao e argumento
+(LEI-AKITA 3) -- e com um portao: o selo da lapide (0,7 s) corre ANTES da suite cheia, e se ele nao ficar
+verde a suite nao roda. Queimar 23 min sobre uma copia que um selo de 0,7 s ja reprova nao e rigor, e
+desperdicio.
+
+**A vacuidade que eu devia responder, agora com o numero MEDIDO e nao o lembrado.** Esta linha dizia *"dois
+dos 12 passavam"*, e esse dois vinha do log que se perdeu -- ou seja, de memoria. O RED reconstituido
+(`logs/o223/red_head.out`) responde: **sao TRES**, e os tres tem nome e motivo diferente:
+
+| caso | passa no HEAD porque |
+|---|---|
+| `test_RED11_a_VIEW_nao_nomeia_o_modelo` | e assercao de **AUSENCIA**: no HEAD nao ha view nenhuma, entao nada nomeia o modelo e o verde e por vazio |
+| `test_MORDE_o_criterio_do_RED11_se_a_view_nomear_o_modelo` | e **auto-contido** de proposito: corre o criterio de AST sobre um fonte de view **sintetico**, entao passa em qualquer arvore -- e por isso que ele vale |
+| `test_RED9_regime_invalido_NAO_grava` | **VACUIDADE, e eu nao a tinha visto**: no HEAD a `form_empresa` nao grava o campo de jeito nenhum, entao *"valor invalido nao grava"* e verdade por ausencia de caminho. Ele so morde ACOMPANHADO do RED8, que prova que existe caminho de escrita |
+
+O RED11 e assercao de ausencia e por isso ganhou o gemeo que MORDE -- sem ele, apagar o criterio deixaria o
+selo verde. O RED9 e o caso que a medicao me ensinou: um teste que eu teria contado como prova e que, sozinho,
+nao prova nada. Ele fica, porque junto do RED8 a dupla cobre as duas metades (grava o valido, recusa o
+invalido); o que muda e o que eu digo dele.
 
 **O RED, dito como esta.** O log da primeira rodada vermelha **se perdeu**: a redirecao apontava para
 `logs/o223/` antes de o diretorio existir. RED que nao se le nao e evidencia (LEI-AKITA 5), entao a rodada
