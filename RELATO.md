@@ -1,5 +1,121 @@
 # RELATO — esteira saas-hasner
 
+## LEI QUE FALTA — O TXT ENTREGUE SOB O JUIZ DE RETENCAO ANTERIOR CONTA COMO VIGENTE NA Q1? (10/10, com numero)
+Nao devolvo o turno por isto (**PAREI-DE-LEI-NAO-DEVOLVE-TURNO**): a pergunta fica aqui no topo com os
+numeros, a esteira seguiu para o pouso da A0-b, e a resposta entra quando vier.
+
+**A pergunta.** O vigia da A0-b compara o TXT **VIGENTE** com o que o gravado de **HOJE** montaria. Tres
+dos sete vigentes sairam da casa **antes de 28/08**, quando a HX-BORDA-CELULA trocou o juiz de retencao:
+`pk=14` em 2026-08-06, `pk=16` em 2026-08-12, `pk=17` em 2026-08-19. O juiz de hoje
+(`folha/export.py::motivos_retencao_celula`, :830) retem por `sem_celula` **todo dia passado com vinculo e
+sem celula** -- e essa retencao **nao existia** quando aqueles tres arquivos foram gerados.
+
+**O numero.** As matriculas que foram **ENTREGUES** naqueles TXT e que **HOJE sao retidas** respondem
+`['sem_celula']` em **44 de 44**, sobre a janela INTEIRA de cada competencia: 31/31 em emp4/06, 30/30 em
+emp4/07 e 30/30 em emp3/07, todas com `cel=None veredito=None`. O acervo de celula das janelas explica:
+emp4/06 tem **0** celulas, emp4/07 tem **0**, e emp3/07 tem **57 celulas de 2 colaboradores** para **33
+entregues**. (Dito como medido: emp4 **tem** celula no acervo -- a mais antiga em 2026-04-20 --, so nao
+nessas duas janelas. "TXT mais velho que o acervo" seria falso.)
+
+**Por que e lei e nao codigo.** Nao ha regra escrita que diga se "vigente" na Q1 significa *o arquivo que a
+casa entregou* (e entao os 44 sao PORTA MOVIDA legitima, e o vigia esta certo em acusa-la) ou *o arquivo
+que o juiz de hoje teria produzido* (e entao os tres de agosto nao sao comparaveis e deviam entrar como
+`HISTORICO`, que nunca alarma). Escolher sozinho seria inventar juiz de vigencia -- e a TRAVA JUIZ-NOVO
+cobra corte para isso. **O que NAO muda com a resposta:** nenhum dos 44 entra em `valor_moveu`; eles sao
+`porta_moveu`, que nao alarma. O alarme de hoje e **1 de 7**, e nao depende desta pergunta.
+
+## O219 A0-b — O VIGIA DO TXT NASCE, E O ALARME CAI DE 6 DE 7 PARA 1 DE 7 (10/10 07:5x)
+A A0-a deu **um** sitio para a forma e a prova do TXT. A A0-b faz a pergunta que a L-113 precisa
+respondida antes de a clausula 1 cair: *"o gravado pode mudar debaixo de um arquivo entregue?"*. Fatia de
+**leitura pura** -- zero mudanca em caminho de escrita, zero `--apply`, e o comando nao existe com flag de
+conserto.
+
+**DUAS perguntas, dois universos, e o terceiro estado de cada um e DIFERENTE.** `Q1 = VIGENTE`: *"o TXT que
+saiu da casa ainda e o que o gravado de HOJE montaria?"* -- universo 7. `Q2 = ACERVO`: *"o conteudo guardado
+bate com a prova guardada?"* -- universo 26. Na Q1 o terceiro estado e `CEGO` e **alarma** (nao consegui
+comparar, e isso e defeito meu). Na Q2 e `HISTORICO` e **nunca alarma** (registro anterior ao corte da
+migration 0005, `2026-07-02 13:13:20.524068+00:00`, que nao tem prova porque a prova nasceu depois).
+
+**O QUE MUDOU O NUMERO: separar VALOR MOVIDO de PORTA MOVIDA.** A primeira versao do vigia comparava
+linha-a-linha e acusava **6 de 7**. Seis de sete e o numero de um alarme que ninguem vai ler. Lendo o que
+cada divergencia era, duas coisas MUITO diferentes estavam no mesmo balde: a matricula que esta nos **dois**
+lados com **valor diferente** (dinheiro se moveu debaixo do arquivo -- e o perigo que a L-113 nomeia) e a
+matricula que esta **em um lado so** (a PORTA mudou: ela entrou ou saiu do TXT, e de valor nao se pode
+dizer nada). O corte e o conjunto `ambos = v_mat & h_mat`, e so o primeiro grupo alarma.
+**MEDIDO PELO COMANDO REAL em prod** (`logs/a0b_comando.out`):
+`Q1 universo 7: bate=1 diverge=6 incomparavel=0 (cego=0 historico=0)` ·
+**`VALOR MOVEU: 1 competencia(s), 27 matricula-competencia | PORTA MOVEU: 6 competencia(s)`** ·
+`Q2 universo 26: bate=25 diverge=0 incomparavel=1 (cego=0 historico=1)`.
+**De 6 de 7 para 1 de 7**, sem mexer em tolerancia e sem tirar caso da lista -- o que mudou foi a pergunta
+ter deixado de misturar duas.
+
+**O UNICO VALOR MOVIDO TEM DATA, HORA E COMMIT.** emp2/08, `pk=19`, `gerado_em=2026-09-01 10:08:07-0300`:
+**27 matriculas, TODAS na rubrica 0025** (adicional noturno), `entregue 263.964 (2.639,64 h)` contra
+`hoje 230.968 (2.309,68 h)`, delta **-32.996 (-329,96 h)**. A razao e **7/8 em 27 de 27** (mat 224:
+686 -> 600, e 686x7/8 = 600,25 -- a diferenca e arredondamento), entao e **causa unica**, nao 27 casos.
+A causa tem commit: `HORA_REDUZIDA_12X36_EM_SECO = False` (`core/regua_cct.py:123`) entrou em `2206451b`,
+01/09 **14:59** -- **4h51 DEPOIS** de o TXT sair. Direcao, pela clausula: a hora reduzida faz o adicional
+**MAIOR** (60/52,5 = 8/7), logo **o entregue esta COM reduzida e o gravado de hoje esta SEM** -- o arquivo
+que o Dominio recebeu paga **mais** do que o parecer diz devido. Corrigir **reduziria** o pagamento de 27
+pessoas numa competencia **EXPORTADA e paga**: isso e **mesa com os dois numeros** (L-092, *"a diferenca
+tem dono"*), **nunca fatia**. Entrou nos AVAIS.
+
+**A PORTA MOVIDA conta TRES historias, e o vigia nao as mistura** (ele imprime `status` e `motivo` de
+`classificar_export` ao lado de cada uma, sem tabela propria): (1) `so_no_vigente motivo=rescisao_modulo_proprio`
+-- 6 em emp2/08 e col954 em emp2/09, **correto** pela lapide de 31/07 (TRCT, art.477 par.6); (2)
+`so_no_vigente motivo=furo_espelho|ferias_com_batida` -- sao os **44** da pergunta de lei la em cima; (3)
+`so_em_hoje status=entra` -- 5 em emp2/09, 2 em emp3/09 e 1 em emp3/07, e e a classe da **pauta DP**: col900
+confere digito a digito com a pauta que ja estava na mesa, e a medicao e **mais larga que a pauta**.
+
+**DOIS CEGOS DECLARADOS, nomeados e nao curados.** (a) De matricula que **nao e emitida hoje** o vigia **nao
+pode** dizer se o gravado dela tambem se moveu -- ele compara LINHA. `porta_moveu` autoriza *"nao ha valor
+comparavel"*, e **nunca** *"nada mudou"*. (b) `mat 570` e `mat 637` de emp3/07 voltam `status=None
+motivo=None`: estao no TXT entregue e **hoje nao tem item nenhum** no `classificar_export` de emp3 -- nem
+entra, nem fora. Virou linha de fila, nao cura agora.
+
+**A FIACAO: ELO, nao horario.** O vigia entrou como **ultimo elo dos ENCADEADOS**, com gatilho
+`recusar_ponta_pequena`. Nao e gosto: a Q1 **le a celula viva** -- `classificar_export` delega a
+`motivos_retencao_celula`, que julga pelo `CelulaDia.veredito`, cujo escritor unico (`lavrar_veredito`) e
+acionado pelo `processar_cartorio`. Por minuto fixo eu perguntaria *"o gravado se moveu?"* sobre celula que o
+cartorio ainda nao julgou, e celula pela metade vira **porta movida que amanhece sozinha**. Por isso o
+`depende` declara `('recusar_ponta_pequena', 'processar_cartorio')`: dependencia declarada e um **fato** que os
+contratos de ordem leem. Confirmado tambem que **nenhum cron diario escreve `FechamentoMensal`**
+(`recalcular_fechamento` nao esta nos CRONS diarios), entao a unica autoridade diaria que o vigia le e a
+celula. **Sem `--empresa`**, de proposito: `bin/encadeado.sh` (flock + espera pelos carimbos das tres) garante
+UMA corrida depois de TODAS, o universo e o acervo inteiro de `ExportacaoDominio`, e a Q2 nem olha empresa.
+**DURACAO MEDIDA, nao digitada** (LEI-AKITA 8, e o B6 ja diz que a duracao deixou de ser digitada):
+`logs/sonda/a0b_duracao.py` chamou o **comando real** em prod e cronometrou -- **7,0 s e 6,9 s, duas corridas
+identicas, 124 linhas de saida cada**. O `teto_s=900` do ENC **nao e a minha duracao**: e o teto de ESPERA
+pelo carimbo do **gatilho** (`recusar_ponta_pequena` mede 30 s), e a minha duracao entra no
+`crons_duracao.json` pelo medidor que le o placar.
+
+**O ACHADO DE DENTRO DO MARCO: o contador do tabuleiro lia METADE do universo.**
+`gerar_diagrama.py::bloco_tabuleiro` montava `por_papel` a partir de `CRONS` -- e `CRONS` **nao tem os
+ENCADEADOS**. Os **sete** elos da corrente da manha nao tinham papel nenhum no desenho, e o numero publicado
+era **20 vigias com 21 declarados**. Papel declarado que o desenho nao mostra e papel nao declarado para quem
+le o desenho. Pior: `juizes_por_varredura()` **ja** contava a corrente -- a propria docstring dela diz *"OS
+ENCADEADOS CONTAM"* --, entao uma divida certa aparecia ao lado de um contador pela metade, que e exatamente
+a mistura que faz um placar **parecer** coerente. Cura na origem: `por_papel` passa a ler
+`todas_as_entradas()`, a fonte unica de *"quais crons existem"*. **RED evidenciado**: o selo do diagrama
+(`core/tests/test_selo_diagrama_do_codigo.py`) ficou VERMELHO com 2 falhas -- `AssertionError: 1 != 0 :
+docs/ARQUITETURA.mmd divergiu do codigo` -- e voltou VERDE com o `.mmd` regenerado pelo
+`manage.py gerar_diagrama` (nunca a mao): **57 -> 58 nos diarios, 41 -> 43 arestas `depende`, 20 -> 21
+vigias**. Selo novo nao fez falta: o selo que existe **morde a volta** sozinha, porque o `.mmd` divergiria.
+A regeneracao correu em container montando a RAIA no cpuset de teste, com `--user $(id -u):$(id -g)` -- o
+`bin/gerar_diagrama.py` faz `docker exec saas_core` e escreveria na arvore VIVA.
+
+**DUAS LINHAS DE DOC CURADAS NA ORIGEM, porque as duas tinham envelhecido.** (1) A secao 7 do CLAUDE.md
+listava `06:36 apurar_furos_diarios` e `06:40 reconciliar_perguntas_orfas` **por minuto**, e os dois nao tem
+mais horario desde o corte BLOCO-DA-MANHA-SATURADO: quem procurasse por minuto nao acharia. O instinto errado
+era acrescentar o vigia aquela lista; o certo foi trocar a linha pela **corrente declarada**, na ordem, dos
+oito elos. (2) A celula `carimbo_gravado` do `FORA_DE_PIPELINE` tinha uma **bifurcacao em aberto** (*"ou vira
+cron da competencia exportada ou sai daqui"*) e **nenhuma das duas saidas era a certa**: o que a investigacao
+ganhou nao foi um escritor nomeado, foi um **vigia diario uma camada acima**. O carimbo FICA, e passa a ter
+gatilho declarado -- **o alarme do vigia** -- e papel mais nitido: o vigia compara **linha de TXT**, o
+carimbo desce ao **campo** do `FechamentoMensal`. Gatilho que era suspeita virou fato.
+
+`LEI-AKITA: origem=folha/services/vigia_txt.py (a pergunta nasce onde a forma e a prova do TXT ja moram, apos a A0-a), testemunha=folha/export.py::classificar_export + montar_linhas_export + hash_do_txt (nenhuma regra propria de dia, soma ou classe) e ponto/e6_oraculo.py::dono_da_divergencia para dono, RED=folha/tests/test_l113_a0b_vigia_do_txt.py::test_MORDE_matricula_em_um_lado_so_e_PORTA_MOVEU_nao_valor + ::test_MORDE_a_q1_nao_alarma_por_diverge_e_sim_por_valor_movido + core/tests/test_selo_diagrama_do_codigo.py (2 falhas antes da regeneracao), quem-mais-le=folha/export.py sem mudanca de assinatura publica, 1 ENC novo nos ENCADEADOS, 1 papel novo no PAPEL_DO_CRON, 1 contador curado em gerar_diagrama.py, juizes novos=0 (o censo deixou de carregar `dono` -- tabela motivo->dono seria juiz novo e pede corte pela TRAVA JUIZ-NOVO)`
+
 ## RAIA QUE NAO POUSA — O MOTIVO EM UMA LINHA CADA (L-105, medido 10/10 03:3x)
 A **L-105** manda a raia que nao pode pousar dizer o motivo em UMA linha, e eu nunca tinha escrito
 essas linhas: o censo de agora acha **0** ocorrencia de `raia-celula`/`wt-celula` no BACKLOG e no
