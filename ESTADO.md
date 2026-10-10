@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 21:00:45.**
+**Medido em 09/10/2026 21:05:45.**
 
 | | |
 |---|---|
@@ -131,25 +131,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 1 shell command
-
-● O DIFF divergiu da previsão — 13 dia-colab e 5 colaboradores, não 9 e um só, e a 10 não é 0. Cada desvio se explica antes do commit.
-  Primeiro a chave que desapareceu:
-
-  Ran 3 shell commands
-
-● A chave perdida é col923 08/09, que pagava 0 — o dia órfão desaparece porque o 07/09 absorveu a batida (39 → 581). Nenhum minuto se
-  perde. Mas os 4 dias não previstos precisam de explicação. Sonda nos dois lados:
-
-  Ran 1 shell command
-
-● A forma dos 4 é a mesma família da L-115, só fora de col923: pausa carimbada fechada + uma batida solta depois. Lendo o lado da cura para
-  confirmar e entender o col107 de +5:
-
-  Ran 1 shell command
-
-● Os 4 não previstos são a mesma família, fora de col923 — e o col107 é outra coisa. Escrevendo cada um antes do commit:
-
   Ran 2 shell commands
 
 ● Agora o DIFF de folha da 10, que deixou de ser formalidade:
@@ -158,15 +139,34 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● O DIFF de folha está correndo e a análise dos 4 desvios já está em arquivo. Chamando o advisor sobre a divergência:
 
-  Advising using Fable 5.1
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-· Proofing… (3h 7m 59s · ↓ 381.6k tokens)
+● Todos os cinco procedem — o item 1 é afirmação disfarçada de medição. Corrigindo na fonte:
+
+  Ran 1 shell command
+
+❯ aval Ronald: o RELATO esta retido de novo (RELATO.md:128 afirma ato sem a linha PROVA: ao lado). Poe a PROVA no commit do pouso B da
+  O232 e confere no ESTADO que a faixa sumiu. Nenhuma lei nova. segue a fila; PAREI so em lei ou !
+  ⎿  Read docs/AVAIS.md (22 lines)
+  ⎿  Read docs/HANDOFF-SESSAO.md (44 lines)
+  ⎿  Referenced file ponto/turnos.py
+  ⎿  Referenced file ponto/tests/test_bateria_lavratura.py
+  ⎿  Read ../logs/r1/achado_papel_x.md (123 lines)
+
+● Task "RED e construção do segundo intervalo" completed in background
+
+  Ran 1 shell command
+
+● Background command "Run folha DIFF for pouso B on comp 10" completed (exit code 0)
+
+· Proofing… (3h 12m 59s · ↓ 383.9k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    2% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens

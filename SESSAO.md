@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 09/10/2026 21:00:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (552.8 MB). Acoes na janela: **1353**.
+**Medido em 09/10/2026 21:05:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (553.2 MB). Acoes na janela: **1354**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 21:05:42 | Bash |  | `SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad echo "=== folha DIFF ===" tail -25 "$SP/o232/folha_pousoB.out" 2>/dev/null \|\| echo "(sem arquivo ainda)" echo echo "=== RELATO.md 120-135 ===" sed -n '118,136p' /home/ronald/saas-hasner/app/docs/RELATO.md \| cat -n` |
+| 21:01:40 | Bash |  | `cd /home/ronald/saas-hasner python3 - <<'PY' p='logs/l115/casos_o232.md' s=open(p,encoding='utf-8').read() old = """Os +5 min sao a diferenca entre a pausa medida (65) e o intervalo CADASTRADO (60) -- e e a **L-032** (*"PRE-ASSINALACAO DO INTERVALO: o intervalo CADASTRADO sempre sai da jornada"*) passando a valer porque a cura esta na ORIGEM e nao no leitor. A coluna `janela 0 -> 60` do DIFF e a a ...` |
 | 20:58:04 | Bash | Run folha DIFF for pouso B on comp 10 | `cd /home/ronald/saas-hasner && SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && bash bin/simular_folha.sh par o232b $SP/baseB/app $SP/pousoB/app > $SP/o232/folha_pousoB.out 2>&1; echo "rc=$?" >> $SP/o232/folha_pousoB.out; tail -40 $SP/o232/folha_pousoB.out` |
 | 20:57:56 | Bash |  | `cd /home/ronald/saas-hasner cat >> logs/l115/casos_o232.md <<'MD' ## DIFF DE IMPACTO DO POUSO B, DUAS ARVORES, FROTA INTEIRA (medido 09/10 20:5x na sombra) `$SP/o232/roda_diff_pousoB.sh` -- a MESMA sonda do pouso A (`diff_espelho.py`, so leitura, com a assertiva `connection.settings_dict['NAME'] == 'sombra'`), rodada contra `baseB` (c7b8bfdb limpo) e `pousoB` (patched). UNIVERSO: **todo colaborado ...` |
 | 20:57:10 | Bash |  | `cd /home/ronald/saas-hasner python3 - <<'PY' c923=[533,551,579,542,271,549,543,540,541] print('col923: %d dias, soma %+d (previsto +4.647)'%(len(c923),sum(c923))) outros={'col107 21/08':5,'col735 10/09':234,'col736 17/09':207} print('outros na 09: %+d -> total 09 %+d'%(sum(outros.values()),sum(c923)+sum(outros.values()))) print('10/2026: col899 26/09 %+d'%419) print('col923 07/09: base 39 -> 581;  ...` |
@@ -1362,4 +1364,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 09:06:33 | Bash | Ler a sintese do mecanismo | `cd /home/ronald/saas-hasner && cat -n logs/r1/MECANISMO.md` |
 | 09:06:29 | Bash | Registrar o aval novo em PROMPTS.md | `python3 - <<'PY' cols = [ "09/10 09:1x", "**aval (duas correcoes ao corte das 09:0x do mesmo turno)**", "`CERTIFICADO-IMPACTO-TERMOMETRO` (correcoes 1 e 2)", "**(1) INVARIANTE NAO E TERMOMETRO.** O corte das 09:0x mandava R1 e R4 descerem juntos; a correcao SEPARA: *\"todo leitor da o mesmo numero\"* (R4), idempotencia (R5) e *\"as partes somam o total\"* valem para QUALQUER dado, limpo ou sujo, s ...` |
 | 09:06:05 | Bash | Ver o formato da tabela de PROMPTS | `tail -5 docs/PROMPTS.md && echo "=== head tabela ===" && sed -n '1,14p' docs/PROMPTS.md` |
-| 09:01:46 | Bash | Gerar o handoff do marco fechado | `cd /home/ronald/saas-hasner && bash bin/handoff_sessao.sh 2>&1 \| tail -4 && echo "--- HEAD do handoff ---" && sed -n '1,12p' app/docs/HANDOFF-SESSAO.md` |
