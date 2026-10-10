@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 20:06:31.**
+**Medido em 10/10/2026 20:11:34.**
 
 | | |
 |---|---|
@@ -130,41 +130,41 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-● Suite verde, mas essa cláusula do comentário expirou com a virada — ela justificava o cache por "a tupla é vazia". Vou medir primeiro
-  quem lê esse arquivo como TEXTO antes de tocar nele:
-
-  Searched for 1 pattern
-
-● Raio de alcance medido: 4 leitores de fonte (3 sítios AST do selo O219, o getsource do b5u) e 2 contratos que varrem pasta. Vou curar o
-  comentário na origem e re-rodar a suite inteira — não há pressa, e deixar justificativa expirada no código é o que esta casa paga caro.
-
   Ran 5 shell commands
 
-● O ato está escrito e sintaticamente provado. Antes do ato irreversível (commit + deploy em prod), vou consultar o advisor:
+● Enquanto os dois correm, curo o ponto 3 do advisor: o ato não digita mais hora nenhuma — ele lê o carimbo e o hash, e PARA se o gravado
+  da 09 se moveu.
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+  Ran 3 shell commands
 
-● O advisor achou um furo real. Vou medir:
+● Esmeril deste marco (L-111/ESMERIL): censo do que a queda deixou órfão, na cópia.
 
   Ran 1 shell command
 
-● Confirmado — o v2 das 19:02→19:09 escreveu na sombra depois do bloco das 18:55: o carimbo está cego, como a própria casa documenta. O
-  ensaio tem de ser refeito, e o advisor está certo que ele vale mais do que o portão:
+● Censo: toda sobrevivência é lápide ou asserção MORDE. Mas isso é afirmação de texto — a casa pede AST:
 
-  Ran 5 shell commands
+  Ran 1 shell command
 
-● O medidor: o mesmo SELECT da reversão, do lado da sombra, hash por linha e hash do conjunto.
+● AST: 0 uso executável dos nomes derrubados em toda a cópia. Isso entra na linha que já existe, sem crescer a seção:
 
-● Running 1 shell command…
+● Gravar o censo do esmeril no RELATO e conferir o teto de linhas
+  ⎿  $ python3 - <<'PY'
+     import pathlib
+     p = pathlib.Path('docs/RELATO.md')
+     s = p.read_text(encoding='utf-8')
+     anc = 'nao um segundo juiz de "isto grava?".'
+     assert s.count(anc) == 1, s.count(anc)
+     novo = (anc + ' CENSO POR AST do que a queda deixou orfao (ESMERIL deste marco): **0** uso '
+     'EXECUTAVEL de `Co…
 
-✢ Proofing… (1d 2h 11m · ↓ 3.1m tokens)
+✻ Compacting conversation… (1d 2h 16m · ↓ 3.1m tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 58%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
