@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 00:09:01.**
+**Medido em 10/10/2026 00:14:31.**
 
 | | |
 |---|---|
@@ -33,7 +33,10 @@ b5700cbb [O206] pouso: o aviso de pergunta sem resposta para de mandar na acao q
 
 ```
  M app/config/crons_duracao.json
+ M app/docs/AVAIS.md
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/PENDENTES_RONALD.json
+ M app/docs/PROMPTS.md
  M bin/sombra.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -122,42 +125,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Medido. O número mais afiado não é o que o aval previu: valor 0 = zero ocorrências em 355 tipos — o caso que o rótulo promete nunca foi
-  gravado. Vou tornar isso durável antes de consultar:
 
-  Ran 1 shell command
-
-❯ aval Ronald: o proximo item da principal e a O219, pela minha ordem de 18:3x (O232 -> O219 -> O223 -> O224 -> contratos -> O228).
-  PLACAR-ESTRUTURAL e o 5o; o hook que manda "siga: PLACAR-ESTRUTURAL" se cura em pouso de instrumento, depois. Nenhuma lei nova. segue a
-  fila; PAREI so em lei ou !
-
-› Message from @ad94d4e82be419b25 (ctrl+o to expand)
-
-● Agent "O207 na raia wt-bos" finished · 1h 49m 37s
-
-● Três coisas chegaram juntas. Medindo o relógio e os portões antes de planejar — a hora decide se o pouso da O207 é possível agora:
-
-  Ran 1 shell command
-
-● 00:07 de 10/10 — o portão da sombra está cego (carimbo dia=20261009, e o dump do dia só nasce às 04:17). Isso decide a forma do pouso da
-  O207. Duas checagens antes:
-
-  Ran 1 shell command
-
-● bin/sombra.sh modificado é o instrumento da O218 (SOMBRA_ARVORE) — não entra em commit de produto, e com a variável desligada o --refazer
-  roda igual. A O207 não toca bin/. Agora o cartório dos três prompts:
+● Merge sem um conflito — inclusive em BACKLOG.md e TICKETS.md. Suíte cheia sobre a cópia mergeada:
 
   Ran 2 shell commands
 
-  Advising using Fable 5.1
+● Os dois pólos correm. Agora o cartório — e a PROVA vai para logs/, não para o rascunho:
 
-✢ Proofing… (6h 16m 15s · ↓ 729.6k tokens)
+  Ran 1 shell command
+
+● --escrever só normaliza e regenera — responder é mudar o estado na forma canônica. Vendo a forma do item antes de tocar:
+
+  Ran 2 shell commands
+
+● AVAIS 10 → 9, e o diff do JSON toca só esse item. Agora as três linhas do PROMPTS:
+
+  Ran 3 shell commands
+
+● Minhas linhas batem com a forma viva (5 células; a deriva do cabeçalho é anterior a mim). Preparando a linha da O235 como script, para o
+  resolve ser de segundos:
+
+● Checking obra row cell count and the prompt-to-item selo
+  ⎿  $ cd /home/ronald/saas-hasner
+     echo "=== celulas das linhas de obra vivas ==="
+     grep -nE "^\| O(230|231|233) \|" app/docs/BACKLOG.md | while IFS=: read -r n rest; do
+     echo "linha $n: $(sed -n "${n}p" app/docs/BACKLOG.md | awk -F'|' '{print NF-2}') celulas"
+     done
+     echo
+     echo "=== o selo que cobra prompt->…
+
+· Proofing… (6h 21m 45s · ↓ 740.4k tokens · still thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                   12% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
