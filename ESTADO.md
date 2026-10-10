@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 09:28:19.**
+**Medido em 10/10/2026 09:33:41.**
 
 | | |
 |---|---|
@@ -34,6 +34,7 @@ d20a0e45 [O219] pouso: os docs do marco A0-b entram junto, e o merge que eu pedi
 ```
  M app/config/crons_duracao.json
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/LEIS.md
  M bin/sonda_frota.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -122,11 +123,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  O push está segurado — a fatia nasce 3 telas e toca o empresa_form, e FRONT SEM SMOKE NÃO SOBE. A frase pronta está no AVAIS.md item 13 e
-  cobre as duas metades (cadastrar/desativar com trilha na tela nova, e o Regime trabalhista gravando no empresa_form).
-
-  Sigo no mesmo turno para o pouso B: Empresa dentro de core/configuracao_efeito.py::TELAS com as 7 declarações que acabei de reconferir
   por AST (ativa, cnpj, dia_inicio_competencia, em_rollout, nome_fantasia, razao_social, regime_trabalhista), cada uma com leitor nomeado
   ou rótulo "sem efeito", mais os dois itens de esmeril declarados no semear_aplicacao_convencao.py.
 
@@ -145,19 +141,24 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-● Running the seal and its neighbours in the copy
-  ⎿  $ cd /home/ronald/saas-hasner
-     MODS="core.tests.test_contract_configuracao_nao_mente core.tests.test_selo_contratos_estruturais
-     core.tests.test_haiku_contratos_estruturais core.tests.test_contract_tabuleiro core.tests.test_aplicacao_convencao
-     core.tests.test_o223_porta_humana_da_aplicacao core.tests…
+  Updating LEIS.md for L-006
+  ⎿  $ cd /home/ronald/saas-hasner/app
+     python3 - <<'PY'
+     import pathlib
+     p = pathlib.Path('docs/LEIS.md'); s = p.read_text()
+     # (1) coluna TESTE: o selo passa a cobrar a Empresa
+     a = "test_MORDE_todo_campo_editavel_esta_declarado (nao cobre Empresa);"
+     assert s.count(a) == 1, 'ancora TESTE'
+     s = s.replace(a, …
 
-✶ Proofing… (15h 33m 33s · ↓ 1.8m tokens)
+✢ Compacting conversation… (15h 38m 55s · ↓ 1.8m tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱ 77%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    7% until auto-compact
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
