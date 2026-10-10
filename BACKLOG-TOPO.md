@@ -226,7 +226,7 @@ lista — ela e o que esta EM PE._
 | **O216** | O NUMERO DA L-103 SE REPUBLICA COM O JUIZ CURADO | **sem portao** -- conta e publica, PRE-A |
 | **O217** | A LAVRATURA NAO E PONTO FIXO: relavrar de novo muda o numero | **sem portao** -- medir na sombra e PRE- |
 | **O218** | BATERIA-DA-LAVRATURA | **fila 1, a FRENTE da O211** (ordem lite |
-| **O219** | REGRA-NA-IMPRESSAO | **fila 1, atras da O218**. O `impressao_ |
+| **O219** | REGRA-NA-IMPRESSAO | **fila 1: o MIOLO pousou, a VIRADA nao** |
 | **O220** | DIETA-DE-CARGA | **paralela**, sem portao -- nao toca pro |
 | **O221** | POUSO DAS DUAS RAIAS AVALIZADAS | espera `!` |
 | **O222** | O VEREDITO DO DIA LE O CHAMADO QUE A PROPRIA PASSADA CRIA | **livre** |
