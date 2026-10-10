@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 02:55:31.**
+**Medido em 10/10/2026 03:00:45.**
 
 | | |
 |---|---|
@@ -121,36 +121,36 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● The sharp witness exists in the gravado itself: atualizado_em is maintained by hand in both number-writers. Rebuilding the counter on it:
-
-  Ran 1 shell command
-  ⎿  Referenced file ../../wt-l113/app/ponto/services/fechamento.py
-  ⎿  Read docs/AVAIS.md (27 lines)
-  ⎿  Read docs/HANDOFF-SESSAO.md (47 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/blfy3t2pb.output (12 lines)
-  ⎿  Referenced file ponto/turnos.py
-
-● Task "RED e construção do segundo intervalo" completed in background
-
-● The slice wasn't the tail — contador_txt_divergente isn't the last function. Let me see the real layout:
-
-  Ran 1 shell command
-
-● contador_txt_divergente sits at :454, before montar_linhas_export. Replacing by line range instead of tail-slice:
-
-  Ran 2 shell commands
-
-● Renaming the command too — the label must say what the count counts:
-
   Ran 3 shell commands
 
-● Now the tie-case fix (advisor item 5) plus ruff over the raia:
+● Found it: two writers bump the carimbo without touching money and without the trava — invalidar_previsto:965 (every competência of a
+  colaborador whose escala changed) and reabrir_periodo:857. Measuring whether that is the 125:
 
-  Running 1 shell command…
-  ⎿  $ cd /home/ronald/wt-l113/app && sed -n '55,100p' folha/management/commands/regerar_txt_dominio.py
+  Ran 1 shell command
 
-✢ Proofing… (9h 0m 45s · ↓ 1.1m tokens · thinking)
+● Decisive: 123 of 125 carry the invalidar_previsto signature (previsto_em IS NULL) — noise. Only 2 have previsto_em > foto, the signature
+  of an actual recalc after the photo. Checking whether a money-write carimbo exists at all:
+
+  Ran 1 shell command
+
+● carimbo_gravado.py and ponto/portas/regen_exportada.py already answer "did the gravado change?", excluding control carimbos. Reading them
+  before I build a second juiz:
+
+  Ran 1 shell command
+
+● The command's own docstring was born from this exact question — and it records that atualizado_em read zero while an exported competência
+  changed. Checking the existing photos and the second copy of FORA:
+
+  Ran 1 shell command
+
+● Three copies of the same "universo de campos do gravado" exist, and at least three implementations of "o gravado mudou". Making the
+  findings durable before deciding:
+
+  Ran 1 shell command
+
+● Advising using Fable 5.1
+
+· Proofing… (9h 5m 59s · ↓ 1.1m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
