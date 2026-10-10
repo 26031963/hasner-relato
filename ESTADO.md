@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 04:40:45.**
+**Medido em 10/10/2026 04:45:45.**
 
 | | |
 |---|---|
@@ -127,18 +127,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  nenhum helper local órfão — zero órfãos neste marco, L-111 sem o que aplicar.
-
-  Medi o portão em vez de supor: com o carimbo em status=REFEITA, bin/sombra.sh --conferir devolve rc 1 (medido sem pipe, porque rc depois
-  de pipe é do último), e bin/deploy.sh:167 testa exatamente esse rc. A espera não é zelo meu — é a condição que o deploy já cobra. Disco
-  em 22% (246 G livres), então o outro portão do deploy está aberto.
-
-  Os passos do pouso estão escritos em logs/o219/POUSO_PASSOS.md (69 linhas, em logs/, que é gitignored — não nasce segunda autoridade): o
-  --no-ff porque o main está na merge-base, os seis arquivos que viajam no commit do marco (CLAUDE.md + os cinco docs) e os dois que não
-  viajam (HANDOFF-SESSAO.md, derivado; crons_duracao.json, cron-dirty), o merge→commit→deploy sem nada no meio, e a regra de recuperação se
-  o deploy der vermelho (reler o motivo e rodar de novo — nunca checkout/reset).
-
-  Sobre o siga: PLACAR-ESTRUTURAL do hook: segue sendo a dívida registrada que a sua ordem de 18:3x deixou para um pouso de instrumento
   depois. Não escrevi PAREI, não toquei no hook nem na ordem do BACKLOG — a fila 1 continua na O219, e o próximo item depois do pouso é a
   A0-b, que é leitura e não depende do !.
   ⎿  Read docs/AVAIS.md (28 lines)
@@ -151,18 +139,30 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Task "Wait in background for the sombra gate: cron file gone and carimbo OK" still running in background
 
-  Checking whether the empty-case impact is declared in the two commit messages and the RELATO
-  ⎿  $ cd /home/ronald/saas-hasner && echo "=== o impacto do caso VAZIO esta declarado na msg do commit da raia? ==="; grep -niE
-     "vazio|\[\]|r.n.$|sem linha" logs/o219/msg_commit_a0a.txt | head -20; echo; echo "=== e na msg do pouso? ==="; grep -niE "vazio|sem
-     linha|guarda" logs/o219/msg_pouso_a0a.txt |…
+  Ran 13 shell commands
 
-✢ Proofing… (10h 45m 59s · ↓ 1.3m tokens)
+● Falso alarme da minha própria sonda, e preciso dizer isso antes de qualquer conclusão: anotar_vigencia/so_vigentes existem — moram em
+  folha/models.py, não em folha/export.py, e o meu hasattr(X, ...) perguntou ao módulo errado. O comando commitado está correto. Mas a
+  medição que eu fiz no caminho achou coisa de verdade:
+
+  Ran 3 shell commands
+
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+
+● O advisor pegou uma hipótese vestida de fato na minha própria prosa. Medindo antes de deixar isso entrar num commit imutável:
+
+  Ran 1 shell command
+
+● Background command "Wait in background for the sombra gate: cron file gone and carimbo OK" completed (exit code 0)
+
+✶ Proofing… (10h 50m 59s · ↓ 1.3m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens

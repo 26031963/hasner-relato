@@ -312,6 +312,49 @@ pergunta de verdade); a impressao digital do gravado responde **QUEM** se moveu,
 hash do TXT ja acusou. Um juiz para cada pergunta, e nenhum dos dois reimplementando o outro.
 
 
+### A PROVA DO TXT NAO DESCREVE O CONTEUDO EM 1 DOS 26 REGISTROS -- achado DENTRO da bolha que a A0-a acabou de unificar (10/10 04:4x)
+
+A espera do portao da sombra foi gasta no esmeril DESTE marco, e a pergunta que eu fui conferir era a
+L-110: ao trocar cinco sitios por `conteudo_do_txt`, **quem muda de valor e quanto**. Medido no HEAD, as
+cinco formas NAO eram iguais -- duas delas, `views.py:195` e `regerar_txt_dominio.py:88`, montavam
+`'\r\n'.join(linhas) + '\r\n'` **sem a guarda do caso vazio** que o `validacao_pdf.py:67` tinha. Com
+`linhas == []` as duas produziam `'\r\n'`; a forma unica produz `''`. Entao a unificacao **escolheu uma
+das duas** e e' preciso dizer qual e quanto custa: ficou a guardada, e o selo
+`test_MORDE_lista_vazia_da_string_vazia` e quem a prende.
+
+**PROVA do impacto, pela pergunta a autoridade e nao pela forma** (`ExportacaoDominio` do schema
+`juliani`, so leitura, 26 registros): `conteudo == '\r\n'` -> **0 registro**. Ou seja, o caso vazio
+nunca passou pelas duas formas sem guarda no acervo, e a troca **nao move um byte do que esta gravado**.
+Impacto medido: **0**.
+
+**E a mesma medicao achou outra coisa, que nao e' a que eu fui buscar.** Recalculei o sha256 do
+`conteudo` de cada um dos 26 e comparei com o `hash_sha256` guardado: **25 batem, 1 NAO BATE**. E o
+`pk=2`, empresa_id=4, competencia 06/2026, gerado em 30/06/2026, `reexportacao=True`: `len(conteudo)=0`
+com `hash` guardado `80f417a64296`, quando o sha256 de `''` e' `e3b0c44298fc`. A prova guardada descreve
+um conteudo que o registro nao tem mais.
+
+**O que isso NAO e':** nao e' risco de dinheiro, e a diferenca importa. Perguntei quem VALE a
+`folha/models.py::anotar_vigencia`/`so_vigentes` -- a autoridade da casa, nao uma regra minha -- e o
+vigente de empresa 4 / 06/2026 e' o **`pk=16`**, 508 bytes, com hash batendo. O `pk=2` e' uma versao
+**SUPERADA**. O que se perdeu foi uma COPIA ARQUIVADA, e e' exatamente a promessa da lei do TXT como
+fotografia: *"as versoes anteriores ficam guardadas EM SILENCIO -- conteudo, hash, data, quem gerou"*.
+Uma linha guardou o hash e perdeu o conteudo.
+
+**O que eu NAO vou fazer, e por que:** nao toco o registro. A lei do TXT diz que a invalidacao se da
+**pela porta** e que ela *"nunca toca `conteudo` nem `hash_sha256`"*, e 06/2026 e' competencia
+EXPORTADA -- curar dado aqui seria a porta que a L-113 clausula 1 ainda espera o `!` para abrir, usada
+por um atalho meu. O codigo de hoje tambem nao produz mais esse par: `ExportacaoDominio.registrar`
+calcula o hash DO conteudo que recebe, agora pela fonte unica `hash_do_txt`, entao o par so nasceria se
+alguem gravasse os dois campos separadamente.
+
+**Onde isso entra, sem virar fatia nova:** a A0-b -- o vigia que a clausula 1 exige, proxima fatia desta
+mesma O219 -- passa a responder **DUAS** perguntas em vez de uma, porque sao a mesma bolha e o mesmo
+juiz: (1) o TXT vigente ainda bate com o gravado? (2) o conteudo de cada registro bate com a PROVA dele?
+A segunda e' uma linha de codigo e um estado a mais no veredito, e sem ela o acervo tem um ponto cego que
+so apareceu porque eu fui medir outra coisa. O `pk=2` e' o caso que MORDE o selo dela.
+
+---
+
 ### O `!` QUE A CLAUSULA 1 PEDE (nao devolve turno -- a fila segue em A0-b)
 Tirar o `raise CompetenciaExportada` de `ponto/services/fechamento.py:72-77` e **`!` de dinheiro
 exportado** pelo item (c) da DINHEIRO-EM-COMPETENCIA-ABERTA, e esta na lista NUNCA PRE-APROVADO.
