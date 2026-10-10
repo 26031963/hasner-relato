@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 06:53:01.**
+**Medido em 10/10/2026 06:58:31.**
 
 | | |
 |---|---|
@@ -127,19 +127,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-     The commit message is written; the raia commit comes first, then the L-107 merge.
-
-  Also replaced a promise I shouldn't have made: option (1) of the pauta said I'd "say how to register the decision" — that door doesn't
-  exist in code, so it's now phrased as a fatia the aval would authorize. And the alarm has a named reader, which I verified rather than
-  asserted: cron_run.sh writes exit=2 into placar.jsonl, pipeline_placar.py::medidos counts it as alarmes (not erros), and deliberately
-  opens no TI pauta — the same path supra_juiz --alarme uses.
-
-  Deploy gate checked ahead of time: sombra: carimbo dia=20261010 status=OK diverge=0 erros=0, so the pouso won't need --sem-sombra. Two
-  comment-only edits are queued for the raia commit — the hour, and a fifth @juiz-unico-de line declaring partes_da_linha as the authority
-  on desmontagem of a TXT line, since A0-b created that authority and the header declares the other four.
-
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: PLACAR-ESTRUTURAL -- O ESTRUTURAL SE SEPARA DO DADO (corte dele 02/10 22:5x, que SUBSTITUI o item 3 da
   ordem das 21:4x -- o resto d
 
 ● The hook blocks the Stop, and by his aval it's neither obeyed nor touched — the cure is a later instrument pouso. The turn continues
@@ -153,12 +140,25 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Launching a single-notification waiter, then doing the docs that ride the marco (in main — the suite mounts the raia, not this tree):
 
-● Splitting the O219 TICKETS row into cells
-  ⎿  $ awk 'NR==121' docs/TICKETS.md | awk -F'|' '{for(i=1;i<=NF;i++) printf "[%d] (%d ch) %s\n", i, length($i), substr($i,1,260)}'
+  Read 1 file, ran 6 shell commands
 
-✢ Proofing… (12h 58m 15s · ↓ 1.5m tokens · thinking)
+● The assert caught a | inside the estado cell — exactly the "pipe em celula quebra o hook" trap. Fixing it:
+
+● Inserting the A0-b TICKETS row and running the ruler from the repo root
+  ⎿  $ python3 - <<'PY'
+     p = 'docs/TICKETS.md'
+     linhas = open(p).read().split('\n')
+     i = next(n for n, l in enumerate(linhas) if l.startswith('| O219 |'))
+     assert 'A0-a' in linhas[i]
+     assert 'fatia **A0-b**' not in '\n'.join(linhas), 'ja inserida'
+     cels = [
+     '', ' O219 ',
+     ' estrutural (familia folha/export) --…
+
+✢ Compacting conversation… (13h 3m 45s · ↓ 1.5m tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱ 94%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    4% until auto-compact
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
