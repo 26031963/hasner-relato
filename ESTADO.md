@@ -3,11 +3,11 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 15:40:45.**
+**Medido em 10/10/2026 15:41:51.**
 
 | | |
 |---|---|
-| `HEAD` local | `dc1c84ec [O228] pouso do INSTRUMENTO da familia turno em ato proprio: o censo nasce com a catraca medida FORA da janela do merge, porque ele le a arvore onde mora` |
+| `HEAD` local | `c1d3a6e4 [O228] pouso do INSTRUMENTO da familia turno em ato proprio: o censo nasce com a catraca medida FORA da janela do merge, porque ele le a arvore onde mora` |
 | `origin/main` | `d20a0e45 [O219] pouso: os docs do marco A0-b entram junto, e o merge que eu pedi sem commit virou FAST-FORWARD -- o codigo estava na arvore viva antes deste commit` |
 | commits a subir (`ahead`) | **16** |
 
@@ -22,7 +22,7 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
-dc1c84ec [O228] pouso do INSTRUMENTO da familia turno em ato proprio: o censo nasce com a catraca medida FORA da janela do merge, porque ele le a arvore onde mora
+c1d3a6e4 [O228] pouso do INSTRUMENTO da familia turno em ato proprio: o censo nasce com a catraca medida FORA da janela do merge, porque ele le a arvore onde mora
 31fce87c [O228] pouso do PRODUTO da metade TURNO: o merge devolve rc 1 POR MEDIDA, e a uniao dos docs vem da copia que a suite rodou
 447bb013 [O199] pouso: o aceite de folga declarada DECIDE o dia pela porta que ja existia, e o pouso foi certificado por BYTE em vez de confianca na raia
 33f80dfb [O219] miolo: a versao da regra entra na impressao do cartorio e a declaracao nasce VAZIA -- o mecanismo pousa movendo ZERO dia, e a virada fica sendo ato de frota
@@ -33,9 +33,7 @@ dc1c84ec [O228] pouso do INSTRUMENTO da familia turno em ato proprio: o censo na
 
 ```
  M app/config/crons_duracao.json
- M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
- M app/docs/RELATO.md
  M bin/sonda_frota.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -125,14 +123,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 1 shell command
-
-● Both avals are registered — PROMPTS.md:1132 (RECALC-09, 13:5x) and :1133 (O48, 14:0x), each with its technical decision already recorded.
-  Now the portão fix and the publish mechanism:
-
-  Ran 2 shell commands
-  ⎿  Read docs/AVAIS.md (24 lines)
-  ⎿  Read docs/HANDOFF-SESSAO.md (46 lines)
   ⎿  Read
      ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/pouso-celula/turno_prompt.md
      (47 lines)
@@ -149,12 +139,20 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Portão rc=0 on both published files. Now the line he asked for — it goes into the section being published:
 
-● Achar quem declara a ordem viva do topo
-  ⎿  $ cd /home/ronald/saas-hasner && grep -n 'ORDEM.VIVA\|ORDEM_VIVA' bin/handoff_sessao.sh | head -5
-     echo "--- o marcador no BACKLOG ---"
-     grep -n 'ORDEM-VIVA-TOPO' app/docs/BACKLOG.md | head -5
+  Ran 4 shell commands
 
-· Proofing… (21h 45m 59s · ↓ 2.6m tokens)
+● Section is 17 lines (L-116 ceiling 25). Now the amend that carries the marco's docs into the instrumento commit, per the 8735524c
+  precedent:
+
+  Amended commit c1d3a6e4, ran 3 shell commands
+
+● Amend landed c1d3a6e4 — 7 files, matching the 8735524c precedent, no dangling sha, the 3 known-dirty files still out. Now publishing
+  (PRE-APROVADO: "registrar no BACKLOG e publicar o RELATO"):
+
+  Publicar o RELATO
+  ⎿  $ cd /home/ronald/saas-hasner && bash bin/relato.sh 2>&1 | tail -30; echo "rc=${PIPESTATUS[0]}"
+
+· Proofing… (21h 47m 5s · ↓ 2.6m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
