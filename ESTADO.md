@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 19:18:14.**
+**Medido em 10/10/2026 19:23:41.**
 
 | | |
 |---|---|
@@ -129,21 +129,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● Reversão durable: 607 linhas, md5 892768aa7803aa3e116d775e59c11332, read_only=on e grants_de_escrita_do_papel=0. Dois achados que a
-  leitura entregou de graça:
-
-  Ran 1 shell command
-
-● Both deliverables are durable (ensaio_virada_apply_v2_20261010_1902.txt, reversao_09_20261010_1912.txt). The emp1 rows are the all-zero
-  test colabs (col950 included), and marcos_da_competencia:947 reads ExportacaoDominio — confirming the queda's routing had to key off the
-  export, not status (no 09 row carries status='exportado'; keying off status would have found ZERO and silently dropped the retrato).
-  Calling the advisor before writing the virada and landing.
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-● Item 3 is a real defect and I'll take it: a WARNING saying "recalculado" on a somente_leitura call is the witness claiming a write that
   never happened — and O48 passo 3 makes fechamento_lido the tela's reader, so every espelho view of the 09 would log it. Item 1 is
   time-sensitive: the 10 emitidos exist only until the refazer. Taking that first.
 
@@ -151,16 +136,31 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● status_local, and the model carries a celula FK — which gives the day directly for the 6 that have no date "pela lei":
 
-● Reler os emitidos com celula e status_local
-  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
-     sed -i "s/c\.status,/c.status_local,/; s/status=%-12s/status=%-12s/" $S/o219/emitidos_sombra.py
-     python3 - <<'PY'
-     import re
-     p = '/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1…
+  Ran 1 shell command
 
-✽ Proofing… (1d 1h 23m · ↓ 2.9m tokens)
+● All 10 characterized, and the RED holds with a sharper statement: 4 batida_ausente all on 2026-10-09 with célula do mesmo dia (dentro do
+  horizonte), e 6 disputa_supervisao_manual que não têm dia por construção — contexto é {'chamados_orfaos_ids'}, célula None, e nascem
+  resolvido. Nenhum dos 10 está fora do horizonte. Agora os itens 2 e 7, baratos:
+
+  Ran 1 shell command
+
+● Item 2 confirmed — test_a_declaracao_nasce_vazia:68 asserts REGRA_VERSOES == (), so the virada inverts it too: the surface is 9 files,
+  not the aval's 4. On item 7 the raw count is just the same 10 files I'm changing; what matters is whether a raia added a call:
+
+  Ran 1 shell command
+
+● Zero added lines, zero of the 10 files touched by any raia — no merge carries a TypeError. Now the lei line's second number, from prod:
+
+  Contar DiaPago da 09 por evento_origem em prod
+  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
+     cat > $S/o219/diapago_09.py <<'PYEOF'
+     """O SEGUNDO NUMERO DA PERGUNTA DE LEI: quanto do `DiaPago` da 09 (competencia EXPORTADA) e RETRATO
+     do gravado e quanto e recalculo. A pergunta que vai ao topo do …
+
+✢ Compacting conversation… (1d 1h 28m · ↓ 3.0m tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱ 95%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    4% until auto-compact
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
