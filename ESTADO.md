@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 22:00:31.**
+**Medido em 09/10/2026 22:05:45.**
 
 | | |
 |---|---|
@@ -33,6 +33,8 @@ ca6f14f6 L-114 termometro: a cadencia passa a se verificar sozinha, e os 19 sem 
 
 ```
  M app/config/crons_duracao.json
+ M app/docs/AVAIS.md
+ M app/docs/PENDENTES_RONALD.json
  M app/docs/RELATO.md
  M bin/sombra.sh
 ?? esteira.pausada
@@ -122,38 +124,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● cobrarChamado tem uma definição só (_js_cobranca.html:35, com lápide no sítio antigo) e o texto da UI-RESPOSTA sobrevive. Faço o merge em
-  cópia primeiro, como a L-107 e a LEI-AKITA 10 mandam:
+
+● Suite da cópia terminou — leio o veredito pela forma da casa:
+
+  Read 1 file
+
+● Cópia mergeada VERDE: Ran 3669 tests / OK (skipped=23), rc=0, 0 FAILED. Confirmo que o selo novo de 336 linhas realmente correu:
 
   Ran 1 shell command
 
-● Merge limpo na cópia, zero conflito. Ruff nos dois arquivos de teste antes da suite:
+● 12 casos MORDE e as duas cascas por fecho do extends. Confirmo que ele não está entre os 23 skipped:
+
+  Ran 1 shell command
+
+● +12 testes exatamente (2334 vs 2322), SimpleTestCase, zero skip — o selo correu e passou dentro dos 3669. Agora os docs que cavalgam no
+  commit. Corrijo a sonda do chamado:
 
   Ran 3 shell commands
 
-● Forma do esmeril_da_copia. Ruff nos dois .py que o merge trouxe:
+● #28304 está vivo — status_local=em_analise, 3 perguntas e 3 sem resposta: é exatamente o gatilho do aviso que a O206 reescreve, então a
+  instrução do smoke não está velha. Escrevo o item no AVAIS:
 
-  Ran 1 shell command
+  Ran 2 shell commands
 
-❯ aval Ronald: raia wt-bos anda uma de cada vez, em paralelo com a principal. (1) O206 pousa agora por deploy --sem-migrate; o smoke de
-  clique nas duas cascas e do Fernando logo em seguida, e a frase do smoke entra no AVAIS. (2) Pousada a O206, abre a O207, e depois a
-  ordem ja dada: O199 -> O198 -> GEO-SILENCIO-DE-PING -> O197 -> O44 itens 2-8. Nenhuma lei nova. segue a fila; PAREI so em lei ou !
+● JSON sem churn (12 adições, 0 remoções), AVAIS 5 → 6. Agora a linha do TICKETS, que o regua_tickets vai cobrar no push:
 
-● Ruff limpo. Aval novo registrado — ele detalha a ordem interna da wt-bos; o item 3 do aval anterior (O228 em segunda raia) não é tocado
-  por ele, então valem os dois. Rodo a suite na cópia mergeada:
-
-● Running 2 shell commands · 7m 56s…
+  Running cd /home/ronald/saas-hasner awk -F'|' '$2==" O231 …
   ⎿  $ cd /home/ronald/saas-hasner
-     export SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
-     CP="$SP/raias/wt-merge-o206"
-     bin/suite.sh --dir "$CP" --only "chamados core" > "$SP/raias/suite_o206.out" 2>&1
-     echo "suite rc=$?"
-     grep -E '^Ran [0-9]+ test' "$SP/rai… (7m 55s)
-     (ctrl+b ctrl+b (twice) to run in background)
+     awk -F'|' '$2==" O231 "{for(i=2;i<=NF;i++) printf " col%d: %s\n", i-1, substr($i,1,150); exit}' app/docs/TICKETS.md
 
-· Proofing… (4h 7m 45s · ↓ 478.1k tokens)
+· Proofing… (4h 12m 59s · ↓ 489.3k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    6% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
