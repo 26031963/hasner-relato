@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 02:01:01.**
+**Medido em 10/10/2026 02:06:31.**
 
 | | |
 |---|---|
@@ -121,38 +121,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 1 shell command
-
-● Prova direta: isEnabledFor(INFO) == False no core vivo. O zero era cegueira — e a trava morde em silêncio hoje. Registro:
 
   Ran 1 shell command
 
-● Agora o alcance pela autoridade do dado, na sombra. Vejo a porta:
+● e_vigente é property, não método. Pergunto ao modelo:
 
   Ran 2 shell commands
 
-● Sonda na sombra, chamando as funções reais do sistema:
-
-  Ran 2 shell commands
-
-● Enquanto a sonda corre (e a árvore está montada por ela — só leio), faço o check da L-092 que o advisor pediu:
+● O número verdadeiro: 125 batidas, 43 colaboradores, a mais recente de ontem 13:37. Isso muda a rota — registro antes de decidir:
 
   Ran 1 shell command
 
-● Background command "Run the reach probe on the sombra" completed (exit code 0)
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-● L-092 PROTEGE nomeia recalcular_fechamento_mes — o commit cita as duas. A sonda voltou:
+● Três correções. Leio a L-113 na íntegra antes de escolher o rótulo — o texto decide, não a minha memória:
 
   Ran 1 shell command
 
-● 10.111 de 26.954 — mas esse número superestima o futuro: inclui batidas que eram da competência corrente quando gravadas. O corte certo é
-  a data do export. Refaço:
+● A lei nomeia o caminho literalmente: "Se mudei uma batida e o calculo exportado mudou… Se o export ficou diferente, refaz." Registro as
+  três correções e a reconciliação:
 
-● Running 1 shell command…
+● Recording the three corrections and the reconciliation
+  ⎿  $ cd /home/ronald/saas-hasner
+     cat >> logs/o219/CONTRATO_DE_ENTRADA.md <<'FIM'
+     ## CORRECOES AO BLOCO ACIMA (10/10 02:2x) — nao reescrevo, corrijo
+     **(1) "o proximo evento dos 43 recalcula" esta ERRADO.** `recalcular_por_evento`
+     recalcula a competencia de `quando`, nao a de hoje: a batida de hoje de u…
 
-✢ Proofing… (8h 8m 15s · ↓ 970.0k tokens)
+· Compacting conversation… (8h 13m 45s · ↓ 979.3k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 42%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    8% until auto-compact
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
