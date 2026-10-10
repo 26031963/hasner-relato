@@ -6,6 +6,31 @@ PERGUNTA DE LEI x2 (nao devolve turno -- PAREI-DE-LEI-NAO-DEVOLVE-TURNO; a estei
 
 **(2) o `detectar_par_relampago` pode ocupar o papel `prazo`, e com qual fato encerrado?** O VEREDITO dele JA delega, medido por AST em 10/10: `varrer_pares_embutidos:232` -> `par_embutido_retratavel:208` -> `_par_embutido_retratavel_geometria:220` -> `_score_geometria:86` -> `escala/utils.py::montar_grade_prevista_periodo_por_turno`, a autoridade da GRADE. O proprio dele e a CANDIDATURA (`:245-249`, `zip` adjacente + tipos alternados + gap <= `DURACAO_MAX_MIN=10`), e ela nao e derivacao de prazo pelo criterio do proprio selo -- fato GRAVADO contra teto de FORMA, sem relogio. **Nao movi o nome, e por duas razoes somadas:** (a) `bin/tests/test_papel_prazo_nao_deriva.sh` DECLARA no cabecalho que nao ve essa segunda porta e NOMEIA este cron, logo o verde dele seria ausencia de sinal, a familia que esta casa diz ser a que mais custou; (b) o seu aval nesta celula (`core/contratos_estruturais.py:252-262`) proibe em letra *"reclassificar o papel de um sitio para ela virar verde -- o que falta e juiz, nao rotulo"*. E a prescricao do censo de 04/10 nao fecha: `turnos_do_colab` nao enumera este par, porque `ponto/turnos.py::parear_turnos` declara *"E abre turno; S fecha o aberto"* e o par embutido e o ECO DENTRO de um turno -- ele nao E um turno (`pares_relampago` usa turnos_do_colab para o caso complementar, o turno inteiro curto). Entao: **(i)** o fato encerrado e o PAR, e ai falta funcao da casa que responda *"este par e completo?"* -> juiz novo, TRAVA JUIZ-NOVO; ou **(ii)** o fato encerrado e o TURNO QUE CONTEM o par (`t.aberto`), e ai `turnos_do_colab` ja e o juiz, mas de outra pergunta que a do censo -- e isso MUDA O UNIVERSO de um cron que roda `--apply` e RETRATA batida. Nao propus nenhuma (L-117).
 
+## MARCO 10/10 17:3x — RECALC-09: O DIFF DE IMPACTO DA 09 EXPORTADA, PUBLICADO E **NAO APLICADO** (clausula 1 da CONDICAO dele de 16:xx)
+
+LEI-AKITA: origem=`ponto/services/fechamento.py::recalcular_fechamento_mes` -- a MESMA derivacao que grava quando grava, chamada com `somente_leitura=True`, testemunha=o GRAVADO da 09 (`FechamentoMensal`, a foto que virou TXT) contra o LIDO de hoje, RED=nao se aplica -- **ZERO linha de codigo mudou**, e a nao-escrita e de CONSTRUCAO, nao de promessa (role `leitor` com ZERO grant de escrita + `objetos lidos COM pk = 0` nas tres empresas), quem-mais-le=0, juizes novos=0
+
+O ATO: `bin/sonda_leitura.sh --sombra` (cpuset 4-7) sobre sombra `tipo=completa diverge=0 erros=0`, UMA chamada por empresa de `recalcular_fechamento_mes(9, 2026, empresa_id=e, somente_leitura=True, retornar_objeto=True, permitir_exportada=True, motivo_exportada=...)` -- a porta da L-113 deixou os tres `recalculo_de_competencia_EXPORTADA por porta` na trilha, como tem de deixar. **PROD nao foi tocado, nada foi aplicado, NENHUM TXT foi gerado.** `delta = lido - gravado`, os **26** campos de `CAMPOS`, so `colXXX` (nome e CPF suprimidos por filtro de log: `erro_colab=0 outros=0`, nada a suprimir de fato).
+PROVA: `logs/recalc09/recalc09_20261010_1731.txt` — rc=0, 17:31:26 -> 17:33:17.
+
+O NUMERO — dos **603** colabs presentes nos DOIS lados: **IGUAIS 360 · MUDAM 243 (40,3%)**
+- emp2 gravado 460 / lido 473 (84,1 s) · ambos 459 · **IGUAIS 248 MUDAM 211**
+- emp3 gravado 122 / lido 123 (22,0 s) · ambos 122 · **IGUAIS 92 MUDAM 30**
+- emp4 gravado 22 / lido 22 (3,6 s) · ambos 22 · **IGUAIS 20 MUDAM 2**
+
+O QUE MAIS SE MOVE (emp2, por campo, `colabs`/`delta`): `minutos_realizados` 93 / **+32.251 min** · `horas_noturnas` 84 / **-2.260,68 h** · `horas_atraso` 51 / -29,77 h · `horas_saida_antecipada` 42 / -68,32 h · `horas_trabalhadas` **31 / -4,51 h** · `minutos_abonados` 10 / +19.580 · `horas_folga_trabalhada` 11 / +123,01 h · `saldo_banco_horas` 15 / +94,51 h · `minutos_previstos` 7 / -5.510. Na emp3: `horas_trabalhadas` 6 / +131,11 h e `horas_folga_trabalhada` 2 / -141,23 h. Na emp4: so `horas_atraso` 2 / -0,53 h.
+LEITURA DA TABELA, e so isso (a CAUSA de cada campo nao esta medida, e nao se adivinha aqui): o que mais anda e **geometria** (`minutos_realizados`) e **rubrica noturna**; a `horas_trabalhadas` da emp2 anda **-4,51 h em 31 colabs** -- ou seja, o total de hora trabalhada quase nao se move, e quem se move e a CLASSIFICACAO dela.
+
+UNIVERSO, nomeado e nao curado (L-099: isto e CADASTRO, nao ESTRUTURA)
+- `so_gravado=1`: `col305` (desligado 2026-02-24) -- e exatamente o RED (b) que o R4 do PLACAR-ESTRUTURAL ja tem aberto, com `minutos_previstos` 13.020 x grade 0. Nao e buraco da porta.
+- `so_lido=15` (14 na emp2 + `col980` na emp3): colabs que o recalculo de hoje PASSARIA a cobrir e que nao tem linha gravada na 09. `motor_falhou=0` e `SEM EXPLICACAO=0` nas tres empresas -- nenhum colab caiu no `except` que confunde "motor falhou" com "fora do universo".
+
+O QUE ISTO E, PELA L-110: **medida de IMPACTO, nunca validacao.** O caminho velho (o gravado da 09) se le UMA vez, aqui, so para dizer QUEM muda de valor e QUANTO. Nenhuma linha acima certifica o calculo novo -- quem certifica sao os casos e as propriedades fixas, e isso e outro ato.
+
+INCOMPLETO (fila, nao trabalho agora)
+- a CAUSA por campo (quais curas pos-export -- L-084, folga trabalhada, noturno -- respondem por quais dos 243) nao esta medida; a tabela acima nomeia o universo, nao a origem.
+- os **15** `so_lido` sao pergunta de UNIVERSO da 09, nao de porta: se a competencia for relavrada, eles entram pela primeira vez.
+
 ## MARCO 10/10 16:3x — O48 PASSO 2: A PORTA DE LEITURA DO FECHAMENTO NASCE SEM SEGUNDO DERIVADOR, E A PROVA DE QUE NAO HA SEGUNDO E O DIFF DE FROTA ZERO
 
 LEI-AKITA: origem=`ponto/services/fechamento.py` (a propria `recalcular_fechamento_mes`, que passa a saber devolver OBJETO -- nenhuma derivacao nova), testemunha=a MESMA derivacao que grava quando grava, RED=`ponto/tests/test_o48_fechamento_lido.py` (4 casos; o 2 morde `objects.get` disfarcado de leitura e o 3 morde escrita medida no banco), quem-mais-le=0 consumidor novo nesta fatia (a porta nasce sem leitor; o passo 3 e quem a le), juizes novos=0
