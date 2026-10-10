@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 19:07:31.**
+**Medido em 10/10/2026 19:13:01.**
 
 | | |
 |---|---|
@@ -129,42 +129,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● The sonda runs on cpuset 4-7 — it would steal CPU from the ensaio and distort SEGUNDOS, one of the virada's three numbers. It waits.
-  Meanwhile I write it (scratchpad only, no tree edit): first the field census, so no name/CPF/R$ can leak into the reversão.
+  ├─────────────────────┼───────────────────────────────┼──────────────────────────┤
+  │ dias 09             │ 424                           │ 465 (+9,7%)              │
+  ├─────────────────────┼───────────────────────────────┼──────────────────────────┤
+  │ delta de minutos 09 │ +155.323                      │ +151.038 (−2,8%)         │
+  └─────────────────────┴───────────────────────────────┴──────────────────────────┘
 
-  Ran 3 shell commands
-
-● All 26 CAMPOS are hours/minutes/counts — no R$. But the model has fields beyond them, three carrying free text/JSON (observacao,
-  motivos_espelho, causa_espelho) that his aval forbids emitting. So the reversão must cover exactly what the WRITER can move — measured by
-  AST, not guessed:
-
-  Ran 2 shell commands
-
-● The | tail -40 buffers all interim output — the durable artifact is the log file. Watching that instead:
+  The 1894 is a different question, now measured and not supposed: só 465 dos 1894 movem minuto. FORA-DO-HORIZONTE = 0 nas células e nos
+  chamados.
 
   Ran 1 shell command
 
-● Ensaio is in the APPLY phase (teto ANTES = 30079, same as v1 — consistent restore). Writing the reversão sonda meanwhile, scoped to
-  exactly the fields the writer moves:
+● The 10's 30 split 18 in 21-30/09 and 12 in October — larger in day count than o209's 2 over the overlapping sub-window, tiny in minutes
+  (−722). That goes to the fila as a named INCOMPLETO, not swept into prose. Now step 2 of his CONDITION — the reversão, by the declared
+  read-only door:
 
-  Esperar o fim do ensaio pelo arquivo · 29s
-  ⎿  $ cd /home/ronald/saas-hasner
-     A=logs/o219/ensaio_virada_apply_v2_20261010_1902.txt
-     for i in $(seq 1 40); do
-     grep -q "ENSAIO V2 FIM" "$A" && break
-     sleep 15
-     done
-     grep -q "ENSAIO V2 FIM" "$A" && echo "TERMINOU" || echo "ainda correndo"
-     sed -n '/== OS TRES NUMEROS/,/== DETALHE DAS MOVIDAS/p' "$A" (29s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Ran 1 shell command
 
-✢ Proofing… (1d 1h 12m · ↓ 2.9m tokens)
+● Reversão durable: 607 linhas, md5 892768aa7803aa3e116d775e59c11332, read_only=on e grants_de_escrita_do_papel=0. Dois achados que a
+  leitura entregou de graça:
+
+  Ran 1 shell command
+
+● Both deliverables are durable (ensaio_virada_apply_v2_20261010_1902.txt, reversao_09_20261010_1912.txt). The emp1 rows are the all-zero
+  test colabs (col950 included), and marcos_da_competencia:947 reads ExportacaoDominio — confirming the queda's routing had to key off the
+  export, not status (no 09 row carries status='exportado'; keying off status would have found ZERO and silently dropped the retrato).
+  Calling the advisor before writing the virada and landing.
+
+● Advising using Fable 5.1
+
+✢ Proofing… (1d 1h 18m · ↓ 2.9m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    8% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
