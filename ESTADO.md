@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 02:44:32.**
+**Medido em 10/10/2026 02:50:01.**
 
 | | |
 |---|---|
@@ -121,38 +121,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-  Ran 12 shell commands
-
-● Three content-form sites and three hashers — so the extraction is mandatory, not optional. Checking what's already there:
-
-  Ran 3 shell commands
-
-● Now building A0. Step 1 — the extracted juiz in folha/export.py:
-
-  Ran 4 shell commands
-
-● Step 2 — the vigia:
-
-  Ran 5 shell commands
 
 ● Measuring the vigia's duration on the sombra, against the raia tree:
 
-● Measuring the vigia duration on the sombra
-  ⎿  $ cd /home/ronald/saas-hasner && cat > logs/sombra/o219_vigia_txt_duracao.py <<'PY'
-     # -*- coding: utf-8 -*-
-     """Mede o vigia_txt_divergente chamando o COMANDO REAL (LEI-AKITA 8: medir na fonte).
-     So na sombra. Nao escreve nada -- o proprio comando nao escreve.
-     """
-     import io
-     import time
-     from django.co…
+  Ran 1 shell command
 
-✶ Proofing… (8h 49m 46s · ↓ 1.0m tokens)
+● 7 of 7 diverge, 7,12 s. Two rows show linhas_hoje=0 — a number that needs a cause before it's published:
+
+  Ran 1 shell command
+
+● This changes the meaning of the divergence. Recording it before I act on it:
+
+  Ran 1 shell command
+
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+
+  Ran 3 shell commands
+
+● The sharp witness exists in the gravado itself: atualizado_em is maintained by hand in both number-writers. Rebuilding the counter on it:
+
+● Replace the hash counter with the sharp gravado-after-photo counter
+  ⎿  $ cd /home/ronald/wt-l113/app && python3 - <<'PY'
+     import py_compile, tempfile, os
+     p = 'folha/export.py'
+     s = open(p).read()
+     # o cabecalho da bolha: o juiz do gravado-apos-foto entra declarado
+     velho_h = """@juiz-unico-de se o TXT que saiu da casa ainda e o que o gravado de hoje montaria (txt_divergen…
+
+✢ Compacting conversation… (8h 55m 15s · ↓ 1.1m tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 55%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    8% until auto-compact
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
