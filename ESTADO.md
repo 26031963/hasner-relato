@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 10:05:31.**
+**Medido em 10/10/2026 10:10:45.**
 
 | | |
 |---|---|
-| `HEAD` local | `3b2c4f98 [O223] pouso A, 2 de 2: o link do hub entra DEPOIS do reload, e a prova que eu havia dado dele era vazia` |
+| `HEAD` local | `04392fe4 [O223] pouso B: a Empresa entra no censo de cadastro, e o custo que eu havia declarado em 7 foi medido em 15` |
 | `origin/main` | `d20a0e45 [O219] pouso: os docs do marco A0-b entram junto, e o merge que eu pedi sem commit virou FAST-FORWARD -- o codigo estava na arvore viva antes deste commit` |
-| commits a subir (`ahead`) | **2** |
+| commits a subir (`ahead`) | **3** |
 
 ## Fabrica
 
@@ -22,27 +22,19 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+04392fe4 [O223] pouso B: a Empresa entra no censo de cadastro, e o custo que eu havia declarado em 7 foi medido em 15
 3b2c4f98 [O223] pouso A, 2 de 2: o link do hub entra DEPOIS do reload, e a prova que eu havia dado dele era vazia
 ae775a7b [O223] pouso A: a linha que diz QUAL CCT vale em QUAL empresa ganha porta humana, e o campo que escolhe entre piso legal e CCT deixa de se escrever por shell
 d20a0e45 [O219] pouso: os docs do marco A0-b entram junto, e o merge que eu pedi sem commit virou FAST-FORWARD -- o codigo estava na arvore viva antes deste commit
 10de79cb [O219] A0-b: o TXT entregue passa a ser PERGUNTADO todo dia, e o alarme cai de 6 de 7 para 1 de 7 porque valor movido deixa de ser confundido com porta movida
-374b7712 [O219] pouso: a A0-a entra no main com os docs do marco, e a linha do CLAUDE.md que ensinava o veredito solto passa a ensinar o estrito
 ```
 
 ## `git status --short`
 
 ```
  M app/config/crons_duracao.json
- M app/core/configuracao_efeito.py
- M app/core/contratos_estruturais.py
- M app/core/management/commands/semear_aplicacao_convencao.py
- M app/core/tests/test_contract_configuracao_nao_mente.py
- M app/core/tests/test_o223_porta_humana_da_aplicacao.py
- M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
- M app/docs/LEIS.md
  M app/docs/RELATO.md
- M app/docs/TICKETS.md
  M bin/sonda_frota.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -132,36 +124,36 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  … isso e o pouso B" paragraph — pouso B did it, with 15.
+  Próximo pela L-105: o pouso da raia wt-bos (O207, suíte verde) antes de abrir fatia nova na fila 1 — merge --no-commit → commit → deploy
+  num ato só.
+
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: PLACAR-ESTRUTURAL -- O ESTRUTURAL SE SEPARA DO DADO (corte dele 02/10 22:5x, que SUBSTITUI o item 3 da
+  ordem das 21:4x -- o resto d
+
+● The hook points at the 5th item; Ronald's order puts the wt-bos pouso next and says the hook cures itself in a pouso de instrumento,
+  later. Orienting on the raia.
+
+  Ran 2 shell commands
+
+● The O207 pouso already landed (353818c5), so that L-105 gate is satisfied. Next in Ronald's order is O224.
+
+  Ran 2 shell commands
+
+● O224 is DIETA-DO-CLAUDE-MD: a narrativa sai para LAPIDES.md, a regra fica palavra por palavra. Orientando.
 
   Ran 1 shell command
 
-● Both remaining hits are deliberate: one is the historical statement, one is the lápide naming the dead address. Now re-run on the copy.
+● 15 lápides já mudadas, convenção firme. Medindo onde está a massa narrativa.
 
-  Ran 5 shell commands
+  Ran 2 shell commands
 
-● Exactly 5 differ, none missing, ruff clean on all 5. Now the docs must say 5, and say honestly that one file's committed bytes are not
-  the suite's bytes.
+● Ratio anchored: his /context of 30,2k tokens read a 60.865-char file ⇒ 2,016 chars/token. Hoje: 63.335 chars ≈ 31,4k. Calling the advisor
+  before cutting.
 
-  Ran 11 shell commands
+  Advising using Fable 5.1
 
-● All host seals green. Now copy the 5 files into the live tree and commit.
-
-  Ran 4 shell commands
-
-● Deliverable is durable (code in the tree, docs written, message file ready). Calling the advisor before the commit+deploy act.
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-● Re-running every host seal against the new code and locating lápide seals · 1m 49s
-  ⎿  $ cd /home/ronald/saas-hasner
-     echo "=== selos de host COM o codigo novo na arvore:"
-     for f in bin/tests/test_*.sh; do out=$(bash "$f" 2>&1); rc=$?; [ $rc -ne 0 ] && echo "VERMELHO $f rc=$rc"; done; echo "fim"
-     echo "=== selos de lapide:"; ls app/*/tests/test_contract_lapide* app/*/tests/*lapide* 2>/d… (1m 48s · 2 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
-
-✢ Proofing… (16h 10m 45s · ↓ 1.9m tokens)
+· Proofing… (16h 15m 59s · ↓ 1.9m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

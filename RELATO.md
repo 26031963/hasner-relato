@@ -106,6 +106,13 @@ vizinhos de varredura correram outra vez sobre os bytes novos: `Ran 54 tests in 
 `core.tests.test_admin_so_leitura`). Entao: dos 5 arquivos, 4 foram medidos pela suite cheia e 1 por 54
 casos dirigidos -- nao por "e so comentario".
 
+**NO AR** (commit `04392fe4`, 10 arquivos, +196/-31).
+PROVA: `bin/deploy.sh --sem-migrate` rc 0 --
+`migrations pendentes no schema do cliente: 0`; `sombra: carimbo dia=20261010 status=OK tipo=completa
+diverge=0 erros=0`; `prova de casca: 16 estaticos conferidos, 5 paginas compiladas, 611 rotas importadas em 2
+urlconf(s)`; as tres rotas -- `saas_core /health/ -> 200`, `saas_ui /colaboradores/ -> 302`,
+`mensageria /health/ -> 200`; selo BUG 128 verde nas 3 cascas; `importerror_500=0` (09:06 a 10:06).
+
 
 ## O223 pouso A — A APLICACAO DE CONVENCAO GANHA PORTA HUMANA, E O CAMPO QUE DECIDE PISO x CCT GANHA ESCRITOR (10/10 08:0x)
 `LEI-AKITA: origem=core/services/aplicacao_convencao.py (porta unica) + colaboradores/views.py::form_empresa, testemunha=core/regua_cct.py::_aplicacao_vigente (quem decide segue sendo ela; a tela so cadastra e DIZ o empate), RED=core/tests/test_o223_porta_humana_da_aplicacao.py (12 casos, 9 VERMELHOS no HEAD) + core/tests/test_regua_pela_empresa.py (13 casos, 1 VERMELHO) reconstituido em logs/o223/red_head.out: Ran 25 / FAILED (failures=3, errors=7), quem-mais-le=censo de 4 sitios com PROVA por papel em core/tests/test_regua_pela_empresa.py, juizes novos=0`
