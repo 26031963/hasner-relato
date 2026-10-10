@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 05:49:25.**
+**Medido em 10/10/2026 05:54:38.**
 
 | | |
 |---|---|
@@ -125,38 +125,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Falso RED do meu grep — a linha VERDE do próprio selo cita FALHOU. Pasta verde. Guarda do motor antes de apontar para prod:
+  Ran 5 shell commands
 
-  Ran 2 shell commands
-
-● @nao-importa get_motor / calcular_mes / MotorBase declarado no cabeçalho, leitura do GRAVADO. Medindo em prod:
+● Três achados que mudam o desenho. Vou torná-los duráveis antes de consultar:
 
   Ran 1 shell command
 
-● Q2 em prod: 25 BATE, 0 DIVERGE, 1 HISTORICO — a sombra dizia 25 DIVERGE, e era a máscara. Agora o topo da Q1:
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+
+● O ×0,875 é exato: 9577/10945, 10500/12000, 9800/11200, 8813/10072, 8387/9585, 11200/12800 — todos 7/8 = 52'30"/60', a hora reduzida do
+  Art.73 §1. Medindo em vez de raciocinar:
 
   Ran 1 shell command
 
-● As duas pautas do AVAIS, conferidas contra o vigia:
+● furo_espelho lê campos gravados (fech.turnos_abertos, fech.inconsistencias), não espelho vivo. E a 0025 sai de rubricas_do_fechamento:
 
-  Ran 1 shell command
+  Ran 4 shell commands
 
-● emp3/09 confere dígito a dígito com a pauta do col900: mat 657, 0200 → 737 (7,37) e 0243 → 450 (4,50). Mas há três coisas que preciso
-  medir antes de publicar qualquer "7 DIVERGE": a pauta do col954 (mat 2103, 8792) não aparece nas 13 linhas novas de emp2/09, e emp4/06,
-  emp4/07 montam hoje=0 linhas.
+● A 0025 sai direto de fech.horas_noturnas — campo gravado, zero régua na montagem. Então o ×7/8 é o gravado que mudou. Medindo a hipótese
+  da hora reduzida (§6b, 01/09) e os furos:
 
-● Re-measuring the owner of each divergence
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PY'
-     p = 'logs/sonda/a0b_donos.py'
-     s = open(p, encoding='utf-8').read()
-     velho = """ cls = classificar_export(emp, mes, ano)
-     linhas, _ = montar_linhas_export(emp, mes, ano)
-     print('emp%s %02d/%s | FechamentoMensal=%d | entram=%d fora=%d | linhas_hoje=%d'
-     %…
+● Reconcile the ratio, the closed doors and the col954 pauta
+  ⎿  $ cat > /home/ronald/saas-hasner/logs/sonda/a0b_reconcilia.py <<'PY'
+     # Reconciliacao dos 6 DIVERGE da Q1. LEITURA PURA. So ids/matriculas/rubricas/contagens/datas.
+     from django.conf import settings
+     from django.db import connection
+     assert settings.DATABASES['default']['NAME'] == 'saas_hasner'
+     assert …
 
-· Proofing… (11h 54m 39s · ↓ 1.4m tokens)
+✶ Proofing… (11h 59m 52s · ↓ 1.4m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                   12% until auto-compact
+                                                                                                                    5% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
