@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 20:28:01.**
+**Medido em 10/10/2026 20:33:31.**
 
 | | |
 |---|---|
@@ -130,37 +130,37 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
+  Ran 1 shell command
+
+● Decisão 3 é minha (PAREI-SO-LEI: horário de cron é decisão técnica) e vai escrita hoje. Leio a seção para escrever dentro de um item —
+  ela está no teto de 25 linhas:
+
+  Ran 1 shell command
+
+● Decisão escrita — e ela se resolve pela lei, não pelo gosto: adiantar o cartório à mão seria eu tocar a competência exportada (porta de
+  !); o cron de pé é a consequência que o aval dele comprou.
+
   Ran 2 shell commands
 
-● Há uma terceira testemunha, mais forte que o md5 para "houve escrita?": FechamentoMensal.atualizado_em é auto_now=True (models.py:436) —
-  qualquer save() o move, mesmo gravando valor idêntico. Escrevo a sonda dela agora, com o corte derivado do próprio ensaio:
+● O bloco já passou do 06:28. Vejo o que o cartório fez com a virada dentro:
 
   Ran 1 shell command
 
-● Agora os portões que faltavam no ato — md5 igual não basta:
+● O cartório correu com a virada dentro, no meio da sequência da manhã: emp2 396 s · emp3 70 s · emp4 14 s, e trilha=0 até aqui. Ponho na
+  decisão os números do BLOCO — que são o análogo melhor de amanhã — lidos do arquivo:
 
-  Ran 1 shell command
+● Ler os numeros do cartorio dentro do bloco
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PY'
+     import glob, pathlib, re
+     # os numeros do cartorio DENTRO do bloco, lidos dos logs do proprio ensaio (nunca digitados)
+     linhas = []
+     for f in sorted(glob.glob('logs/sombra/cmd/*cartorio*.log')):
+     emp = re.search(r'--empresa (\d+)', pathlib.Path(f).read_…
 
-● Background command "Rodar a suite cheia sobre a copia com o comentario curado" completed (exit code 0)
-
-  Ran 1 shell command
-
-● Background command "Esperar o veredito da suite cheia sobre a copia" completed (exit code 0)
-
-● Suite 2 verde com o comentário curado dentro: Ran 10349 tests in 1457.478s / OK (skipped=42), 0 FAIL/ERROR. Agora os dois pré-voos
-  baratos, antes de o cp deixar 21 arquivos na árvore viva:
-
-  Ran 1 shell command
-
-● deploys_agendados=0 — nenhum disparo único para colidir. Leio as duas guardas que o pre-commit vai cobrar:
-
-  Ran 1 shell command
-
-● Ambas as guardas são satisfeitas pelo ato (zero deleção, lista declarada idêntica, index == disco). Confirmo o que é arquivo novo, que é
-
-· Proofing… (1d 2h 33m · ↓ 3.1m tokens · thought for 9s)
+✢ Compacting conversation… (1d 2h 38m · ↓ 3.1m tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱ 91%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    6% until auto-compact
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
