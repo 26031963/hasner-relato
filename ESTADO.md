@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 11:14:01.**
+**Medido em 10/10/2026 11:19:31.**
 
 | | |
 |---|---|
@@ -32,10 +32,14 @@ d20a0e45 [O219] pouso: os docs do marco A0-b entram junto, e o merge que eu pedi
 ## `git status --short`
 
 ```
+ M CLAUDE.md
  M app/config/crons_duracao.json
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/LAPIDES.md
  M app/docs/PROMPTS.md
  M bin/sonda_frota.sh
+?? app/docs/CRONS.md
+?? app/docs/JUIZES.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -124,44 +128,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ⎿  Backgrounded agent (↓ to manage · ctrl+o to expand)
-  ⎿  Read docs/AVAIS.md (31 lines)
-  ⎿  Read docs/HANDOFF-SESSAO.md (47 lines)
-  ⎿  Referenced file core/tests/test_o223_porta_humana_da_aplicacao.py
-  ⎿  Read core/management/commands/semear_aplicacao_convencao.py (128 lines)
-  ⎿  Referenced file ponto/services/cartorio.py
+● Applying to the live tree and running the host-seal folder (the real gate for O224):
 
-● Task "RED e construção do segundo intervalo" completed in background
+  Ran 4 shell commands
 
-● Task "O199 na raia wt-bos" still running in background
+● New files in app/docs/ can trip a contract that enumerates the directory — checking that before the commit:
 
-  Ran 5 shell commands
+  Ran 1 shell command
 
-● Now the O224 remainder. Setting up a second pass in the scratchpad, base from git show HEAD: (the first pass is already committed in
-  9cf55592):
+● A green seal can be green because the table left — checking the ones that could read it:
 
-  Ran 6 shell commands
+● Ver o formato de um item respondido no JSON
+  ⎿  $ cd /home/ronald/saas-hasner; python3 - <<'PY'
+     import json, io, collections
+     it = json.load(io.open('app/docs/PENDENTES_RONALD.json', encoding='utf-8'))
+     print('itens:', len(it))
+     print('chaves de um respondido:')
+     r = [x for x in it if x.get('estado') == 'respondido']
+     print(' exemplo:', json.dumps({k…
 
-❯ aval Ronald: as pautas DP da 09 (col954, col900, col923, col735, col736) nao se decidem uma a uma. Ficam publicadas ate a O219 pousar;
-  ai gera-se UM TXT novo da 09 com todas as correcoes, guarda-se o anterior e entrega-se ao DP a diferenca por colaborador. A folha de
-  agosto (0025, 27 matriculas) fica como foi paga, registrada com os dois numeros. Nenhuma lei nova, e a L-113. segue a fila; PAREI so em
-  lei ou !
-
-✢ Proofing… (17h 19m 15s · ↓ 2.0m tokens · still thinking)
+· Proofing… (17h 24m 45s · ↓ 2.0m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
 
-❯ aval Ronald: a O228 na familia turno nao e so certidao de obito. E passada de esmero: censo, leitura dirigida dos pontos quentes de
-  ponto/turnos.py, e cada achado sai com arquivo:linha e numero. Bug provado cura na hora com RED; o resto vira linha de fila. Otimizacao
-  so com medida antes e depois. Anda em raia, sem tocar o que a O219 abrir. Nenhuma lei nova. segue a fila; PAREI so em lei ou !
+❯ aval Ronald: registrar no bloco OBRAS do BACKLOG, no commit do proximo marco (L-106), dois itens com gatilho "abre quando
+  contratos_estruturais = 20/20", sem obra agora. (1) ESMERIL-3-VALIDACAO (mandato meu de 10/09): sessao de polimento, validacao e
+  double-check dos setores criticos do core, uma familia por vez por ordem de dinheiro (folha/export, celula/precedencia, turno/marcos,
+  ausencia/ferias, chamado, feriado/prazo, fechamento), com leitura antes de lixa, RED contra o HEAD, oraculo externo (recibos do Dominio,
+  cartao Nexti, planilha RS) pela L-110, zona inviolavel so com aval no commit; orfao achado sai pela L-111. (2) CONTRATOS-DAS-FAMILIAS
+  (mandato meu de 21/09): um doc curto por familia em app/docs dizendo quem manda e o que quebra se mexer, que e a camada 2 da secao 8 do
+  CLAUDE.md. Celula de estado ate 300 caracteres (L-109). Nenhuma lei nova. Segue a fila; PAREI so em lei ou !
   ctrl+x ctrl+s to send now
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    3% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ Press up to edit queued messages
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
-❯ ● main
+  ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Reading q_vivas and fechar_por_admin                                                       10m 56s · ↓ 111.9k tokens
+  ◯ general-purpose  Reading avaliar_hora_implausivel in juizes.py                                              16m 27s · ↓ 139.2k tokens
   ⧉  index
 ```
