@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 16:49:31.**
+**Medido em 10/10/2026 16:55:01.**
 
 | | |
 |---|---|
@@ -33,7 +33,10 @@ c1d3a6e4 [O228] pouso do INSTRUMENTO da familia turno em ato proprio: o censo na
 
 ```
  M app/config/crons_duracao.json
+ M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/RELATO.md
+ M app/docs/TICKETS.md
  M bin/sonda_frota.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -123,6 +126,8 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  Committed ccad3d52, read 1 file, ran 10 shell commands
+
 ● Enquanto a sonda corre, o estado do marco:
 
   - commit ccad3d52 — [O48] passo 2: a porta de LEITURA do fechamento nasce sem segundo derivador… (10 arquivos, 309+/32-)
@@ -146,13 +151,11 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Background command "Esperar pelo fim da sonda de frota" completed (exit code 0)
 
-● Medir o tamanho da secao do marco
-  ⎿  $ cd /home/ronald/saas-hasner/app
-     awk 'NR>=3 && /^## MARCO 10\/10 15:2x/{print "secao termina na linha " NR-1; exit}' docs/RELATO.md
-     awk 'NR>=3 && NR<=21 {n++} END{}' docs/RELATO.md
-     sed -n '3,21p' docs/RELATO.md | grep -c ''
+  Ran 14 shell commands
 
-✢ Proofing… (22h 54m 45s · ↓ 2.7m tokens · thinking)
+● Advising using Fable 5.1
+
+✢ Proofing… (23h 0m 15s · ↓ 2.7m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
