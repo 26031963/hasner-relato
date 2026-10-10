@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 19:28:56.**
+**Medido em 10/10/2026 19:34:01.**
 
 | | |
 |---|---|
@@ -129,38 +129,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● The more restrictive gate is the one already written at :654 — (not somente_leitura) or lavrar_dias_pagos — because somente_leitura=True
-  with lavrar_dias_pagos=True does write (DiaPago). Reusing that exact predicate keeps the trail over every write and invents no second
-  juiz:
+● Ran 22 / OK. Now the census of who else depends on that declaration — the vizinhos before the full suite:
 
   Ran 1 shell command
 
-● Sharpening the now-stale phrase (there is a condition again — the intent was about the flag, not the mode):
+● versao_para showing no caller outside its own module would mean the virada moves nothing — yet the ensaio moved 1894 days. Finding the
+  real consumer:
+
+  Ran 1 shell command
+
+● The consumer is inside cartorio.py itself (:599 _regra_cache → :635/:710) — my grep excluded the file that holds it. The virada is live
+  through processar_cartorio, as the ensaio showed. Ruff first, then the targeted batch including every module that touches
+  impressao_insumos:
+
+  Ran 1 shell command
+
+● Ruff clean across all 20 touched files. Now the full targeted batch — the queda's modules plus every vizinho of impressao_insumos:
+
+  Ran 1 shell command
+
+● Three failures, and one of them is mine in a familiar way. Reading them before touching anything:
 
   Ran 2 shell commands
 
-● Cases 3 and 4 already exercise writes, so that part of the advisor's item is satisfied. What has no selo is the gate itself. Writing its
-  anti-vacuity pair — read is silent, backfill still speaks:
+● Both b5u failures have one cause, and the fixture's own comment already names the law: it builds the stored impression by replicating the
+  judge's call (impressao_insumos([], None, [], cel.dna)) instead of asking the judge's authority — so with regra:1 now in play the cell
+  looks forever "changed" and the idempotence guard is never exercised. Curing at the origin:
 
-  Ran 2 shell commands
+● Running 1 shell command…
 
-● Now RED evidence for the new pair — the gate reverted, the same two cases run against it:
-
-  Ran 3 shell commands
-
-● --only is the slot that lands in the positional position; -- extras come after --noinput, where argparse won't take a label:
-
-● Rodada RED do portao com only
-  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
-     C=$S/o219q/copia
-     cd /home/ronald/saas-hasner
-     bash bin/suite.sh --dir $C --only "ponto.tests.test_o80_selo_l092" 2>&1 | tee $S/o219/red_portao.out | tail -35
-     echo "--- veredito:"; grep -E '^(OK|FAILED)(…
-
-✻ Proofing… (1d 1h 34m · ↓ 3.0m tokens)
+* Proofing… (1d 1h 39m · ↓ 3.0m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    6% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
