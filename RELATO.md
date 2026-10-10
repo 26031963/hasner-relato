@@ -1,5 +1,56 @@
 # RELATO — esteira saas-hasner
 
+## PLACAR-ESTRUTURAL R3 — **A LINHA DIZIA QUE A O130 ESTAVA FORA DO AR, E O GIT DIZ QUE ELA POUSOU EM 04/10** (09/10 23:2x, item em curso)
+Medido pelo publicador REAL, e nao pela minha propria chamada: `pe.placar()` me devolveu
+**AMARELO** (*"termometro sem data de medicao na fonte declarada (ou `hoje` nao foi passado): R1"*) e eu
+quase li isso como o estado da casa -- o parentese da propria mensagem e que me pegou. Carregando
+`bin/gerar_estado.py` e chamando `_placar_estrutural(raiz)`, que e quem PUBLICA, o placar diz
+**`3 fechado(s), 4 parcial(is), 0 pendente(s) de 7 · VERDE (termometro em dia)`**: fechados SOMA, R2 e
+R5; parciais BATERIA, R3, R4 e R6; o R1 e o TERMOMETRO, com `fonte_do_medido` em
+`logs/e6_cauda2c/r1_dono_*.txt` e data `2026-10-09`. LEI-AKITA 2 e 8 na pratica: chamar a funcao que o
+sistema usa, nunca reproduzir a chamada. Pela ordem da **L-099** (*R1 e R2 primeiro, depois R5, R3, R4,
+R6*), com R1/R2/R5 fechados, o proximo e o **R3**.
+
+**E O R3 DAVA DUAS RAZOES PARA FICAR PARCIAL; UMA DELAS ERA FALSA.** A linha dizia, com nome e hash:
+*"a parte que falta tem nome: a O130 ... A O130 ESTA CONSTRUIDA E MEDIDA (raia `raia-o130`,
+`97079d6e`), e NAO ESTA NO AR: merge e deploy sao UM ato e o deploy publica o disco, que e o `!` da
+`janela_auth`"*. **A O130 ESTA NO AR desde 04/10.**
+PROVA: `git merge-base --is-ancestor 97079d6e main` e `... 4c8a50aa main` respondem **SIM** nos dois;
+a entrada no main foi o merge **`381af46b`** (`Merge branch 'raia-o130' into raia-merge`); o compositor
+unico `ponto/services/dia_decidido.py::frase_do_que_falta` esta no disco desde **04/10 20:43** e houve
+deploy depois (`c7b8bfdb` 09/10 20:17 e `b5700cbb` 22:1x, `logs/l115/o206_deploy.out`). E o `!` que a
+linha nomeava **nao prendia nada**: dos **10** sitios declarados em `bin/auth_sitios.txt`, o merge da
+O130 toca **0** -- medido pela forma do proprio portao, `git diff --name-only main...raia-o130`.
+
+**A outra razao segue de pe, e e dele**: *"a clausula `com o que falta` e redacao dele, e placar nao
+carimba a propria meta"*. Entao o **estado do R3 nao se move** -- continua PARCIAL, e eu nao o carimbo.
+O que se move e uma frase falsa: a linha passa a dizer que a O130 pousou, por qual merge, e que **esta
+linha afirmou o contrario por cinco dias**. A clausula vai para a mesa como o item
+`R3-CLAUSULA-COM-O-QUE-FALTA` (`!`, nao trava a fila 1), com os numeros ao lado: MUDOS=0 nos dois
+universos, 2.405 dias de 16.161 com a palavra, 2a palavra em 48 dia-colab e 312,9 h, grade 25 de 48
+porque os 23 restantes sao a discordancia de janela do **O65**. Pela PAREI-DE-LEI-NAO-DEVOLVE-TURNO a
+esteira nao espera a resposta: segue no **R4**.
+
+**O DEFEITO DE ORIGEM NAO ERA A FRASE, ERA NINGUEM PERGUNTAR AO GIT.** A prosa do placar envelheceu
+cinco dias em silencio, e isso nao e novidade na propria tabela: o R4 diz de si mesmo *"este campo
+dizia '0 na 10', e era numero que envelheceu em silencio, o mesmo defeito que o R4 existe para
+nomear"*. O que faltava era uma guarda, e ela nasce agora:
+`bin/tests/test_placar_nao_afirma_fora_do_ar.sh` cruza **todo** hash citado no placar com
+`merge-base --is-ancestor` e fica VERMELHO quando uma frase declarada de "fora do ar" aparece na MESMA
+SENTENCA que um commit que o tronco ja tem. Ele le a autoridade de dois lados e nao replica nenhum: o
+`RESULTADOS` do proprio modulo (que e PURO, importado por caminho, sem Django) e o git.
+RED: contra a arvore de hoje o selo acusou **1** -- *"R3 (campo numero) diz fora do ar sobre 97079d6e,
+que ESTA no tronco"* --, e contra o candidato curado, **0**. E ele MORDE, com os dois casos no corpo
+antes de julgar o vivo: um registro de mentira que afirma fora do ar o proprio HEAD do tronco **tem** de
+ser acusado, e uma raia de verdade nao pousada (`0000000`) **nao** pode ser. Raia que nao pousou tem
+hash fora do tronco, e o selo fica verde nela de proposito.
+
+**E ELE E A SEXTA VEZ DA CLASSE QUE ME MORDEU HA UMA HORA**, entao a diferenca esta escrita no cabecalho
+dele: este selo le **UM** arquivo de produto, por **sentenca**, com as frases **declaradas** em lista, e
+**nunca a si mesmo** -- era exatamente o que faltava ao selo da lapide, que varre a pasta inteira e por
+isso mordeu a prosa que explicava a cura. A disciplina que isso impoe ao placar: historia de frase velha
+nao se cita com hash ao lado; ela mora aqui, no RELATO.
+
 ## O206 POUSA — **O AVISO PARA DE MANDAR NA ACAO QUE APAGA RESPOSTA** (09/10 22:0x, aval dele de 21:4x)
 
 PROVA: merge **em COPIA** antes da arvore viva (L-107 segunda forma, LEI-AKITA 10): worktree

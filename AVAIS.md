@@ -15,7 +15,7 @@
 
 ---
 
-Total no JSON: **216** · aberto **6** · respondido **49** · sem-motivo **161**.
+Total no JSON: **217** · aberto **6** · respondido **49** · sem-motivo **162**.
 
 > `sem-motivo` nao e "resolvido": e *"ninguem julgou este item"*. A ordem de 18:4x proibe
 > triar os 163 antigos, entao eles ficam ai, nomeados, em vez de serem chutados para um lado.
