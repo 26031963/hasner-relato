@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 23:41:31.**
+**Medido em 09/10/2026 23:47:01.**
 
 | | |
 |---|---|
@@ -123,35 +123,35 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-● O hook manda seguir, e o push ainda corre — então o trabalho que cabe é o do próprio item, só leitura. A pergunta que decide a cura do R4
-  é qual par o selo realmente compara:
+● A suite da raia está em 22 min; a minha entra depois dela. Enquanto isso, conferindo que o passo de fechamento do marco não vai nascer
+  com um leitor novo — a L-108 exige que o handoff leia o hook_stop_fila1, não uma segunda fonte:
+
+  Ran 1 shell command
+
+● Os dois confirmados, e isso evita um erro de ordem: handoff_sessao.sh importa hook_stop_fila1 em três sítios (e o selo dele proíbe
+  segundo leitor da fila), e o git add -A do relato.sh é dentro de /home/ronald/hasner-relato — não toca a árvore principal. Mas o
+  relato.sh não deve correr antes do push, e a razão é o que as seções novas afirmam:
 
   Ran 2 shell commands
 
-● Isso corrige a minha própria orientação: a cura de 29/09 já trocou a pergunta — "ELA COMPARA DINHEIRO COM DINHEIRO". A hipótese que eu
-  escrevi (realizado_h x pago_h) era o defeito já curado, não o atual. Lendo o corpo da testemunha:
+› Message from @a0b2a23e444ca5949 (ctrl+o to expand)
 
-  Ran 1 shell command
+● Dois fatos novos, e o primeiro é urgente: grep -c "git push origin main" devolveu 3, e a lei da casa é "nunca 2 push simultâneos".
+  Medindo quem são, antes de qualquer outra coisa:
 
-● Agora a comparação está exata (folha/porta_export.py:65-85): h_esp é a soma de p.minutos_trabalhados do motor por dia de entrada; h_dp é
-  horas_trabalhadas + horas_folga_trabalhada do DiaPago lavrado; tolerância 0,02 h. Dinheiro contra dinheiro, como a cura de 29/09 deixou.
-  Escrevo o CASO pela regra, que a L-110 exige antes de qualquer linha:
+  Pushed to main
 
-  Ran 1 shell command
+● Um push só: o binário git push é o pid 4064687 (16 min, meu) com o seu helper remote-https. O processo de 7 dias é casca órfã de uma
+  sessão antiga cujo push já terminou (d25595c1..751b53c4  exit=0), e o terceiro casamento era o shell da minha própria medição. Nenhuma
+  violação da lei de push simultâneo — medido, não suposto.
 
-● O CASO está durável. Chamo o advisor antes de me comprometer com a cura do R4:
+  O segundo fato: a raia raia-celula (O228) voltou pronta. Registro o estado de pouso das duas raias, para que não se perca:
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+  Running 1 shell command…
 
-● O advisor pegou um erro real e caro: a L-084 não dispara aqui. O gatilho dela é >180 min nas DUAS pontas; col935 são 8 min. Então "11,10
-  é o certo pela regra" não está provado por lei escrita — está derivado por mim. Corrijo o arquivo durável, que é onde a afirmação mora:
-
-● Running 1 shell command…
-
-✢ Proofing… (5h 48m 45s · ↓ 686.7k tokens)
+✢ Proofing… (5h 54m 15s · ↓ 705.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    6% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -159,7 +159,7 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Tightening verdict grep on g3.out                                                         1h 25m 2s · ↓ 81.1k tokens
-  ◯ general-purpose  Inspecting HANDOFF-SESSAO.md churn                                                       1h 25m 2s · ↓ 153.3k tokens
+  ◯ general-purpose  Reading test_selo_teste_sem_relogio.py                                                   1h 30m 33s · ↓ 89.5k tokens
+  ◯ general-purpose  Handing back O228 census report                                                         1h 30m 33s · ↓ 165.9k tokens
   ⧉  index
 ```
