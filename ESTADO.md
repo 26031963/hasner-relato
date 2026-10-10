@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 00:46:31.**
+**Medido em 10/10/2026 00:52:01.**
 
 | | |
 |---|---|
@@ -122,36 +122,36 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 1 shell command
-
-● O pouso fechou num ato só, rc=0 — commit 353818c5, três cascas recarregadas juntas e três rotas provadas. O portão da sombra foi lido
-  duas vezes com a mesma resposta (meu gate e o do deploy.sh), que era exatamente o ponto de ter um portão.
-
-  Agora o push, com o veredito lido no remoto:
+  A própria lápide dele nomeia um chamador que forka seu docker run. Isso é a forma exata do defeito que a §3 do CLAUDE.md já pagou — porta
+  cujo maior chamador mora fora dela. Meço antes de afirmar:
 
   Ran 1 shell command
 
-● Exatamente o escopo desenhado: 12 arquivos, e os três que tinham de ficar fora ficaram — crons_duracao.json (cron-sujo, nunca commitado),
-  bin/sombra.sh (instrumento O218, pouso próprio pela L-105) e o HANDOFF-SESSAO.md derivado. Os dois commits a empurrar são meus, nenhum
-  do integrador.
-
-  Um push por marco, pela régua normal:
+● Medição afiada: 4 scripts além do sombra.sh forkam o próprio docker run com as settings da sombra, e não existe selo de host para a
+  porta. É a forma exata do bin/suite.sh da §3 — porta cujos maiores chamadores moram fora dela. A pergunta que decide a gravidade é se os
+  forks são só duplicados ou mais fracos:
 
   Ran 1 shell command
 
-● O push corre com a régua inteira pela frente; não escrevo na árvore enquanto ele carimba. Uma leitura que é deste marco — o aval do
-  RELATO pedia conferir que a faixa de retenção sumiu:
+● Três dos quatro forks estão equipados. Mas um não: bin/sonda_leitura.sh não tem nem a guarda de banco nem o proxy morto. Antes de chamar
+  isso de defeito, leio — pode ser que ele aponte de propósito para outro banco, e aí exigir sombra seria eu que estaria errado:
 
-  Ran 2 shell commands
+  Ran 1 shell command
 
-● O selo do RELATO fecha o aval dele: afirma_com_prova: OK — 0 afirmacao sem prova. A faixa de retenção que ele mandou conferir sumiu.
+● Eu estava errado sobre o sonda_leitura.sh, e ler evitou a afirmação: ele lê prod (saas_hasner) por desenho, então exigir
+  current_database()=='sombra' dele seria o errado. A guarda dele é outra e mais forte — a role leitor sem um GRANT de escrita, e uma rede
+  dedicada que contém só o saas_db, o que também explica a ausência do proxy morto.
 
-  Falta a seção do pouso da O207, que só podia nascer depois do ato porque é feita dos números dele. Preparo o texto no scratchpad — não na
-  árvore, que está carimbada pelo push:
+  O achado real encolhe e fica preciso. Registro durável antes de decidir o escopo:
 
-● Running 1 shell command…
+  Ran 1 shell command
 
-✢ Proofing… (6h 53m 45s · ↓ 807.1k tokens)
+● O censo está durável e a árvore carimbada segue intacta (os mesmos 3 sujos conhecidos). Estou a ponto de decidir o escopo do próximo ato
+  — o pouso do instrumento O218 — então consulto antes de me comprometer:
+
+● Advising using Fable 5.1
+
+✢ Proofing… (6h 59m 15s · ↓ 821.6k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
