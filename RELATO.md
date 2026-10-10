@@ -161,6 +161,21 @@ era o unico uso.
 (os 12 casos do modulo mais os 3 do selo, juntos); `ruff check folha/` no container ->
 `All checks passed!`; e a pasta inteira de selos de host (**66**) sem um vermelho.
 
+**E A PROVA QUE FALTAVA -- A SUITE CHEIA SOBRE A ARVORE CURADA, VERDE:** `Ran 10265 tests in
+1401.635s` / `OK (skipped=42)`, **0** linha `^FAIL:` ou `^ERROR:`, **rc do processo = 0**
+(`logs/o219/suite_a0a_cheia2.out`, veredito na linha 1990 pela forma ESTRITA
+`^(OK|FAILED)($| \()` com `tail -1`). **O MESMO universo do run VERMELHO** -- 10265 nos dois --,
+entao o verde nao e um run menor disfarcado de cura. E a notificacao da task dizia *"failed with
+exit code 1"*: o rc do COMPOSTO era o do ultimo comando, um `grep -c` que devolve **1 quando a
+conta da 0**. O veredito da suite e o `rc do PROCESSO`, que a propria linha imprimia -- a mesma
+classe do `rc depois de pipe e do ultimo`, agora vista num `;` em vez de num `|`.
+
+A arvore medida e a que pousou: `raia-l113` e `main` tinham a MESMA base `a364847b`
+(`git rev-list --count raia-l113..main` = **0**, `merge-base` = `a364847b`), entao a suite correu
+sobre `main` + A0-a, nao sobre uma base velha. Commit da raia: `89570af4`, 6 arquivos, 350
+insercoes.
+
+
 ### A0-b, A MEDICAO ANTES DO CODIGO: **A IMPRESSAO DIGITAL DO GRAVADO TEM TRES COPIAS, E A TERCEIRA DISCORDA DAS OUTRAS DUAS EM UM CAMPO** (10/10 04:0x)
 
 A lista de pendentes mandava eu LER `lavrar_dias_pagos::_hash_dos_fechamentos` em vez de aceitar
