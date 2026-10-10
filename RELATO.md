@@ -1,5 +1,24 @@
 # RELATO — esteira saas-hasner
 
+## RAIA QUE NAO POUSA — O MOTIVO EM UMA LINHA CADA (L-105, medido 10/10 06:0x)
+A **L-105** manda a raia que nao pode pousar dizer o motivo em UMA linha, e eu nunca tinha escrito
+essas linhas: o censo de agora acha **0** ocorrencia de `raia-celula`/`wt-celula` no BACKLOG e no
+RELATO. O contador que isto vira (*"raias com commit a frente do main ha mais de 6 h, esperado 0"*)
+e fila 2 por ordem dele -- **ate la a guarda e a conduta, e a conduta e esta tabela**. Medido com
+`git rev-list --count main..<raia>`, nao de memoria:
+
+| raia | a frente do main | motivo de nao ter pousado | lei / `!` / janela |
+|---|---|---|---|
+| `raia-celula` (O228) | 2 (`b4d938aa` produto, `7cb0efbb` instrumento) | a suite da raia deu `FAILED (failures=1, skipped=42)` sobre `Ran 10242`, e a falha **nao e dela** -- e alheia, JA curada no main por `1c5b2e20`. O ato e: merge do **main NA raia** -> suite -> so entao o pouso, e o produto pousa ANTES do instrumento (L-105) | **janela** (pista de teste) |
+| `raia-pdf` | 4 (ate `584265a9`, 29/09) | o ultimo commit dela **retira do contrato** a composicao de `total_trabalhadas` dizendo que e PERGUNTA DE LEI, com as duas formas em prod. Nao pousa sem a lei respondida, e ha ordem expressa dele de **nao mergear** | **`!`** |
+| `raia-l113` (O219 A0-a) | **0** -- e o dado importante: a A0-a esta na arvore de `wt-l113` **sem commit**, entao `rev-list` a enxerga como zero. Pousa neste marco | — |
+| `cert-ast` · `pousos-0410` | 7 cada, compartilhando `a13ec7da` e `cb84a4ac` | **MOTIVO NAO NOMEADO POR MIM.** Os commits de `pousos-0410` DIZEM *"pouso 1/3, 2/3, 3/3 entra no main"* (04/10 18:5x) e o main **nao os tem** -- ou pousaram por outra rota e o ramo ficou, ou nao pousaram. Nao vou escrever motivo que nao medi: isto e **linha de fila**, nao diagnostico | a MEDIR |
+| `lps-prova` · `tmp-ui` | 1 e 2 | o proprio commit de `lps-prova` se declara *"commit de ensaio, descartavel"*; `tmp-ui` traz o UI-GRADE-CALENDARIO *"COMMITADO SEM PUSH, aguarda o smoke"* (28/09) | **janela** (smoke dele) |
+
+O que esta tabela NAO e: triagem das 47 worktrees. Ela nomeia as **6** raias com commit a frente do
+main agora, e duas delas saem daqui com o motivo em aberto -- escrito como aberto, que e a diferenca
+entre uma linha de L-105 e uma linha de conforto.
+
 ## O219 A0-a — A FORMA DO TXT DO DOMINIO TINHA CINCO COPIAS, E DUAS SONDAS MINHAS MORRERAM ANTES DESTA (10/10 05:xx)
 A L-113 manda a competencia exportada deixar de BARRAR o recalculo, e o unico risco que a casa soube
 nomear contra isso foi *"o gravado passa a mudar EM SILENCIO debaixo de um TXT entregue"*. Para
