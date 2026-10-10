@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 15:13:31.**
+**Medido em 10/10/2026 15:19:01.**
 
 | | |
 |---|---|
@@ -130,16 +130,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  doesn't recognize "por enquanto", so testing whether the label is covered or a band-aid:
-
-  Ran 1 shell command
-
-● All three have zero production callers — every hit is a definition, a comment or a lápide. And two independent sitios already name
-  minutos_previstos_periodo as a parallel derivation of previsto (core/placar_estrutural.py:288, escala/services/previsto_cego.py:19),
-  which §4 declares forbidden since the GRADE is the fonte unica. One claim needs checking, because it contradicts the AST:
-
-  Ran 1 shell command
-
 ● This is the marco's own instrument finding something the label hid. Banking it with the proof before anything else:
 
   Ran 1 shell command
@@ -151,17 +141,27 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Marco esmeril is complete and banked. De-risking pouso 2 with the remaining time — extracting the raia's censo instrument and checking
   how it derives its root (the selo-de-host-prova-a-raiz-antes hazard) before it ever lands:
 
-  Inspecionar a derivacao de raiz do censo
-  ⎿  $ set -u
-     cd /home/ronald/saas-hasner
-     SCP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
-     O=$SCP/o228; mkdir -p "$O/instr"
-     git show 61c83e49:bin/esmeril_turno_censo.py > "$O/instr/esmeril_turno_censo.py"
-     git show 61c83e49:bin/tests/test_esmeril_turno_cen…
+  Ran 1 shell command
 
-✢ Proofing… (21h 18m 45s · ↓ 2.5m tokens · thinking)
+● Measured, and it changes pouso 2's shape: the censo has no --dir — it derives RAIZ from its own __file__ and imports esmeril_comum from
+  its own directory, so it can only measure the tree it lives in. Re-measuring "on main first" is therefore impossible without writing to
+  bin/ outside a commit. The seal itself is correct (it proves the root before asserting, per the memory). So pouso 2 measures inside the
+  merge window:
+
+● Escrever o script do pouso do instrumento
+  ⎿  $ set -u
+     SCP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
+     O=$SCP/o228
+     cat > "$O/pousar_instrumento.sh" <<'SH'
+     #!/bin/bash
+     # POUSO 2 -- o INSTRUMENTO da O228 (61c83e49), em ato PROPRIO e SEM deploy.
+     #
+     # L-105 LITERAL: *"INSTRUMENTO nao pousa junto com…
+
+✢ Compacting conversation… (21h 24m 15s · ↓ 2.5m tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱ 95%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    2% until auto-compact
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
