@@ -6,10 +6,22 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 10/10/2026 08:07:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (583.9 MB). Acoes na janela: **1439**.
+**Medido em 10/10/2026 08:13:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (584.0 MB). Acoes na janela: **1449**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 08:12:49 | Bash | List the BACKLOG prova-check line numbers | `cd /home/ronald/saas-hasner && python3 bin/relato_afirma_com_prova.py app/docs/BACKLOG.md 2>&1 \| grep -o '^app/docs/BACKLOG.md:[0-9]*'` |
+| 08:12:43 | Bash | Re-check the docs guards and suite progress | `cd /home/ronald/saas-hasner && bash bin/regua_tickets.sh 2>&1 \| tail -4; python3 bin/relato_afirma_com_prova.py app/docs/BACKLOG.md 2>&1 \| tail -2; wc -c logs/o223/suite_copia.out; date '+%H:%M'` |
+| 08:12:38 | Bash | Declare pouso B scope and the esmeril finding in the O223 obra cell | `python3 - <<'PY' p='docs/BACKLOG.md' L=open(p,encoding='utf-8').read().split('\n') i=next(i for i,l in enumerate(L) if l.startswith('\| O223 \|')) f=L[i].split('\|') assert len(f)==7 add=(' **POUSO B, o que falta (declarado no pouso A, 10/10)**: `Empresa` entra em ' '`core/configuracao_efeito.py::TELAS` com as **7** declaracoes MEDIDAS por AST -- as 6 chaves de ' 'POST que a `form_empresa` le (`at ...` |
+| 08:12:01 | Bash | Check suite log size and clock | `sleep 1; cd /home/ronald/saas-hasner && wc -c logs/o223/suite_copia.out && date '+%H:%M'` |
+| 08:11:56 | Bash | Read the TICKETS placar and rodapé blocks | `sed -n '20,40p' docs/TICKETS.md; echo '===== rodape:'; sed -n '730,745p' docs/TICKETS.md` |
+| 08:11:41 | Bash | Measure the regime/aplicacao counters in prod, read-only | `cd /home/ronald/saas-hasner && cat > /tmp/o223_contador.py <<'PY' from django.db import connection from django_tenants.utils import schema_context assert connection.settings_dict['NAME'] == 'saas_hasner', connection.settings_dict['NAME'] with schema_context('juliani'): from core.regua_cct import empresas_sem_regime from core.models import AplicacaoConvencao from colaboradores.models import Empresa ...` |
+| 08:11:15 | Bash | Read TICKETS columns and top placar | `sed -n '119p' docs/TICKETS.md \| tr '\|' '\n' \| cat -n; echo '--- rodape/placar topo:'; sed -n '1,20p' docs/TICKETS.md` |
+| 08:11:10 | Bash | Locate the TICKETS table header | `awk 'NR<121 && /^\\|---/{h=NR-1} END{print h}' docs/TICKETS.md; grep -n '^\|---' docs/TICKETS.md \| awk -F: '$1<121' \| tail -1` |
+| 08:11:01 | Bash | Check TICKETS rows and run the tickets guard | `cd /home/ronald/saas-hasner && grep -n 'O219' app/docs/TICKETS.md \| head -3; echo '--- regua:'; bash bin/regua_tickets.sh 2>&1 \| tail -12` |
+| 08:10:54 | Bash | Inspect the pre-commit hook and the TICKETS line | `cd /home/ronald/saas-hasner && git config core.hooksPath; echo "--- pre-commit:"; cat "$(git rev-parse --git-path hooks/pre-commit)" 2>/dev/null \| head -40; echo "--- O223 em TICKETS:"; grep -n 'O223' app/docs/TICKETS.md \| head` |
+| 08:08:40 | Bash | Check the suite's progress | `cd /home/ronald/saas-hasner && head -12 logs/o223/suite_copia.out && echo ... && tail -2 logs/o223/suite_copia.out && date '+%H:%M'` |
+| 08:08:32 | Bash | Census of regime_trabalhista sites | `echo '=== quem NOMEIA regime_trabalhista (fora de tests/migrations):' && grep -rn 'regime_trabalhista' --include=*.py --include=*.html . \| grep -v '/tests/' \| grep -v '/migrations/' \| grep -v staticfiles \| sed 's/:.*regime/: ...regime/' \| head -20` |
 | 08:06:40 | Bash | Run the host seals pasta and show only failures | `cd /home/ronald/saas-hasner && for f in bin/tests/test_*.sh; do out=$(timeout 300 bash "$f" 2>&1); rc=$?; [ $rc -ne 0 ] && { echo "### RC=$rc $f"; echo "$out" \| tail -6; }; done; echo "=== fim da pasta"` |
 | 08:06:30 | Bash | Run the prova checker on the RELATO | `cd /home/ronald/saas-hasner && python3 bin/relato_afirma_com_prova.py app/docs/RELATO.md 2>&1 \| tail -25` |
 | 08:06:27 | Bash | Run the RELATO prova checker | `cd /home/ronald/saas-hasner && python3 bin/relato_afirma_com_prova.py 2>&1 \| tail -20` |
@@ -1447,5 +1459,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 20:14:04 | Bash |  | `cd /home/ronald/saas-hasner && sed -n '40,80p' app/ponto/turnos.py; echo "=== _janela_declarada 456 ==="; sed -n '456,470p' app/ponto/turnos.py; echo "=== _fechar_aberto_com_saida_seguinte ==="; sed -n '740,805p' app/ponto/turnos.py` |
 | 20:13:56 | ToolSearch |  | `-` |
 | 20:13:51 | Bash |  | `SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; ls -la $SP \| head -40; echo "--- push tail:"; tail -5 /home/ronald/saas-hasner/logs/l115/o232_push2.out; echo "--- rc?"; grep -c '^rc=' /home/ronald/saas-hasner/logs/l115/o232_push2.out` |
-| 20:09:33 | Bash |  | `cd /home/ronald/saas-hasner && grep -n "^TETO_PAUSA_SEGUNDOS\\|^PISO_INTERVALO_SEGUNDOS\\|^def _minuto\\|^def data_local\\|^def _dist_marco" app/ponto/turnos.py; sed -n "$(grep -n '^def _minuto' app/ponto/turnos.py \| cut -d: -f1),+4p" app/ponto/turnos.py; grep -n "TETO_PAUSA_SEGUNDOS = " app/ponto/turnos.py; echo "--- push:"; tail -3 logs/l115/o232_push2.out` |
-| 20:08:10 | Bash |  | `SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/o232 && cat > "$SP/test_saida_pela_posicao_entre_turnos.py" <<'EOF' """L-115 pouso 2 (O232): a SAIDA pela POSICAO quando o pareador arquivou a candidata em OUTRO turno. A LEI E A MESMA, e isso e a condicao do aval (*"Nenhuma lei nova"*). L-115, `app/docs/LEIS.md:138`, em letra: *"Dia com par de pausa F ...` |
