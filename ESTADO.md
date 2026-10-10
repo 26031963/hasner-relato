@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 10:52:01.**
+**Medido em 10/10/2026 10:57:31.**
 
 | | |
 |---|---|
@@ -123,17 +123,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-❯ aval Ronald: na Q1 do vigia, VIGENTE e o arquivo que a casa entregou, pela TXT-E-FOTOGRAFIA de 30/09. Os 44 sao porta movida legitima e
-  seguem sem alarme. Nenhuma lei nova, e leitura. segue a fila; PAREI so em lei ou !
-
-❯ aval Ronald: fechada a O224, a principal volta ao miolo da O219 (versao da regra em impressao_insumos) antes de contratos e O228. A A0
-  foi preparo; a L-113 segue so no papel. Nenhuma lei nova. segue a fila; PAREI so em lei ou !
-
-  Committed 9cf55592, ran 19 shell commands
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
   Ran 1 shell command
   ⎿  Read docs/AVAIS.md (31 lines)
   ⎿  Read docs/HANDOFF-SESSAO.md (47 lines)
@@ -147,12 +136,23 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   L-108: marco fechado → handoff, then orient on the O219 miolo.
 
-  Checking whether any raia already holds O219 miolo work
-  ⎿  $ echo "=== LEIS.md (impressao_insumos / cartorio):"; grep -n "impressao_insumos\|cartorio.py" docs/LEIS.md | sed -E
-     's/^([0-9]+):.*(\*\*L-[0-9]+\*\*)?.*/&/' | cut -c1-240; echo; echo "=== DOSSIES.md:"; grep -n "impressao_insumos\|cartorio"
-     docs/DOSSIES.md | cut -c1-200 | head -20; echo; echo "=== …
+  Searched for 5 patterns, listed 1 directory, ran 6 shell commands
 
-✢ Proofing… (16h 57m 15s · ↓ 2.0m tokens)
+● Orientation done. Writing the CONTRATO DE ENTRADA before any edit, then advisor.
+
+  Ran 1 shell command
+
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+
+● The dynamic-horizonte churn is a real defect — a day falling out of the window would rejulga ~17k dias every 21st on identical inputs.
+  Reading the cartório's own fila before fixing the contract.
+
+● Look for the cartorio cron log and its duration
+  ⎿  $ cd /home/ronald/saas-hasner/logs 2>/dev/null && ls -la | grep -i cartorio | head; echo "=== ultimas linhas do cartorio.log:"; tail
+     -12 cartorio.log 2>/dev/null
+
+✢ Proofing… (17h 2m 45s · ↓ 2.0m tokens · thinking some more)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
