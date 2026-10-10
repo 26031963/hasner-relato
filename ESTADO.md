@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 05:39:16.**
+**Medido em 10/10/2026 05:44:20.**
 
 | | |
 |---|---|
@@ -124,23 +124,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  o TXT carrega além do reg 10:
-
-  Ran 1 shell command
-
-● Dois registros, não um: o TXT carrega reg 10 (43ch, o valor) e reg 11 (11ch, uma DATA de falta, filho do reg 10 da rubrica 8792) —
-  autoridade validar_layout_dominio:153. As 25 linhas que eu chamei de "fora do layout" são reg 11 válidas. Rótulo mentindo sobre o que a
-  conta faz (LEI-AKITA 8), e num log diário de cron seria o falso alarme que treina a casa a ignorar. Curando, com o desmontador ao lado do
-  montador e do validador — um arquivo, não dois:
-
-  Ran 3 shell commands
-  ⎿  Read docs/AVAIS.md (28 lines)
-  ⎿  Read docs/HANDOFF-SESSAO.md (47 lines)
-  ⎿  Referenced file folha/export.py
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b354njfld.output (30 lines)
-  ⎿  Referenced file ../../wt-l113/app/ponto/services/fechamento.py
-
-● Task "RED e construção do segundo intervalo" completed in background
 
 ● O validador atribui o reg 11 posicionalmente ao reg 10 anterior (:197-205). Então o diff pode nomear a DATA sob a matrícula — que é
   exatamente o que a pauta do col954 diz (matrícula 2103, rubrica 8792, dias 18 e 19/09). Reescrevendo o diff com os dois registros:
@@ -149,11 +132,28 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Agora o comando e os selos, com o caso do dia que troca sem mudar o valor:
 
-● Rewriting the layout seals for both record types
-  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null 2>&1; bash bin/suite.sh --dir
-     /home/ronald/wt-l113 --only folha -- folha.tests.test_l113_a0b_vigia_do_txt folha.tests.test_l113_a0_forma_do_txt 2>&1 | tail -25
+  Ran 5 shell commands
 
-✽ Proofing… (11h 44m 30s · ↓ 1.4m tokens)
+● 23 + 13 = 36, verde. Ruff e depois a medição em prod:
+
+  Ran 5 shell commands
+
+● O deliverable está durável (36 verdes, ruff limpo). Antes de tocar instrumento para medir em prod, vou consultar:
+
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+
+● Executando os quatro pontos. Primeiro a honestidade do _desmontar e o [] de dois sentidos no DIVERGE:
+
+  Ran 2 shell commands
+
+● Agora o comando imprime o arranjo e a data órfã, e os selos que mordem as duas bordas:
+
+● Printing the arranjo and seal both new borders
+  ⎿  $ cd /home/ronald/saas-hasner && bash bin/suite.sh --dir /home/ronald/wt-l113 --only "folha.tests.test_l113_a0b_vigia_do_txt
+     folha.tests.test_l113_a0_forma_do_txt" 2>&1 | tail -12
+
+✽ Proofing… (11h 49m 34s · ↓ 1.4m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
