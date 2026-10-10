@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:84 AFIRMA ato sem PROVA ao lado -- nas celulas **[2] e [3]** e `_NAO_ANDA` na **[3]**. `**NO AR**` na celula do portao seria a certidao de
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:110 AFIRMA ato sem PROVA ao lado -- nas celulas **[2] e [3]** e `_NAO_ANDA` na **[3]**. `**NO AR**` na celula do portao seria a certidao de
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 14:52:01.**
+**Medido em 10/10/2026 14:57:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `33f80dfb [O219] miolo: a versao da regra entra na impressao do cartorio e a declaracao nasce VAZIA -- o mecanismo pousa movendo ZERO dia, e a virada fica sendo ato de frota` |
+| `HEAD` local | `447bb013 [O199] pouso: o aceite de folga declarada DECIDE o dia pela porta que ja existia, e o pouso foi certificado por BYTE em vez de confianca na raia` |
 | `origin/main` | `d20a0e45 [O219] pouso: os docs do marco A0-b entram junto, e o merge que eu pedi sem commit virou FAST-FORWARD -- o codigo estava na arvore viva antes deste commit` |
-| commits a subir (`ahead`) | **10** |
+| commits a subir (`ahead`) | **12** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+447bb013 [O199] pouso: o aceite de folga declarada DECIDE o dia pela porta que ja existia, e o pouso foi certificado por BYTE em vez de confianca na raia
 33f80dfb [O219] miolo: a versao da regra entra na impressao do cartorio e a declaracao nasce VAZIA -- o mecanismo pousa movendo ZERO dia, e a virada fica sendo ato de frota
+c44c6c80 [O199] o aceite da folga declarada DECIDE o dia pela porta que ja existia, e a casca para de dizer "gravado" quando nada foi gravado
 8735524c [O228] pouso do INSTRUMENTO em ato proprio: a catraca do censo remedida no main de hoje da 6 -> 6, e as duas leis de economia dele nascem numeradas
 cb6cd342 [O228] pouso da metade CELULA: os tres sitios sem chamador entram na principal, e a raia NAO vaga -- a familia turno abre nela
-0093834b [O224] as duas tabelas de lookup saem do CLAUDE.md e o PRONTO passa a ser o numero que isso deu: -7.437 chars nesta fatia, -11.829 na obra, e a pergunta de lei que eu levei ao topo foi o que a fechou
-9cf55592 [O224] a narrativa sai de perto da regra: 57 lapides com ponteiro, -6.898 chars, e a prova e de palavra -- o PRONTO de -10k pede REGRA e nao se alcanca aqui
 ```
 
 ## `git status --short`
@@ -130,38 +130,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  Ran 1 shell command
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+● Dry-run clean. Executing the pouso as one act (L-107: merge → commit → deploy, nothing in between):
+
+  Committed 447bb013
+
+● O199 pousou: 447bb013, deploy rc=0, three rotas provadas, importerror_500=0. Now the O228 produto. Re-measuring the merge against the new
+  HEAD and reusing the merged-copy script from the O199 pouso:
 
   Ran 1 shell command
 
-● Advisor gate 1 passes: the certified copy contains test_o219_versao_da_regra.py (base included 33f80dfb) and merge-tree against the live
-  HEAD predicts zero conflicts. Verifying the certified bytes, then composing everything in the scratchpad:
+● Conflicts exactly where predicted — both docs, zero in code. Reading the script I used for O199 and the agent's doc sides:
 
   Ran 1 shell command
 
-● Certified bytes match exactly what will land (5 raia files + 3 O219 files identical). Checking what the Stop hook reads, so my BACKLOG
-  cell doesn't hand it a false certidão:
+● Merge-tree returns rc 1 (docs conflict), so there's no clean tree OID. Building the copy as HEAD + the 2 code files + pre-resolved docs —
+  first verifying main never touched those code files since the base:
 
-  Ran 1 shell command
+  Conferir limpeza do lado de codigo e ler os lados do conflito
+  ⎿  $ set -u
+     cd /home/ronald/saas-hasner
+     SCP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
+     mkdir -p "$SCP/o228"
+     BASE=$(git merge-base HEAD 71bf924f)
+     echo "merge-base: $(git log -1 --format='%h %s' $BASE | cut -c1-70)"
+     echo
+     echo "=== o main tocou turnos.py…
 
-● Hook is consistent (O199 already outside fila 1; "NO AR" keeps it out). Composing all four doc pieces + the applier in the scratchpad, so
-  the live window stays seconds:
-
-  Ran 1 shell command
-
-● 27 lines — L-116's ceiling is 25. Trimming:
-
-  Ran 6 shell commands
-
-● Dry-run clean and idempotent. Verifying the rendered rows, then the live act:
-
-● Running 1 shell command…
-
-✢ Proofing… (20h 57m 15s · ↓ 2.5m tokens · thought for 6s)
+✢ Compacting conversation… (21h 2m 45s · ↓ 2.5m tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱ 85%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    8% until auto-compact
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
