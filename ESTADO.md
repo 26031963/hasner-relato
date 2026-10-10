@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 21:32:09.**
+**Medido em 09/10/2026 21:33:01.**
 
 | | |
 |---|---|
@@ -122,7 +122,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
   Ran 1 shell command
 
 ● Pousou no remoto. Confirmando que nenhum runner deu FAILED, e fechando a pergunta (A) do revisor no código:
@@ -145,13 +144,14 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Enxerto no RELATO (push terminado, árvore livre) e publico:
 
-● Running 2 shell commands…
+● Running 2 shell commands · 52s…
   ⎿  $ cd /home/ronald/saas-hasner
      export SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
      bash bin/relato.sh > "$SP/o232/relato1.out" 2>&1; echo "rc=$?"
-     tail -14 "$SP/o232/relato1.out"
+     tail -14 "$SP/o232/relato1.out" (52s)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-* Proofing… (3h 39m 23s · ↓ 440.3k tokens)
+✢ Proofing… (3h 40m 15s · ↓ 440.4k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
