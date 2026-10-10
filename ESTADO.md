@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 09:12:01.**
+**Medido em 10/10/2026 09:17:31.**
 
 | | |
 |---|---|
@@ -122,38 +122,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● My guard was the wrong probe — a fresh docker exec python reads the disk, not the worker's memory, and config.settings has no
-  ROOT_URLCONF at all (the tenant urlconf is given by the compose env). Asking the running worker instead:
+     A prova_de_casca não pegaria: ela faz get_template em 5 páginas e o hub.html não está nelas — compilar não é renderizar.
 
-  Ran 2 shell commands
+  E um quarto, pego pelo revisor: o item de smoke do AVAIS citava 32ece217, o sha que a minha própria emenda tinha tirado da história.
+  Corrigido para não citar sha nenhum do commit 2 — um commit não pode citar o próprio.
 
-● The 302 is a vacuous proof — logged out, the view redirects before the template renders, so it never resolves the {% url %}. I need
-  something that actually renders it:
+  Suíte: Found 10312 / Ran 10309 tests in 1397.280s / OK (skipped=42), rc 0, 0 linha ^FAIL:/^ERROR:. O vão 10312 → 10309 é idêntico no run
+  anterior: é do carregador, não da fatia. Selos de host: 0 vermelhos. regua_tickets OK.
 
-  Ran 6 shell commands
+  O push está segurado — a fatia nasce 3 telas e toca o empresa_form, e FRONT SEM SMOKE NÃO SOBE. A frase pronta está no AVAIS.md item 13 e
+  cobre as duas metades (cadastrar/desativar com trilha na tela nova, e o Regime trabalhista gravando no empresa_form).
 
-● The real proof — it renders, both tags reverse, and the lápide does not leak:
+  Sigo no mesmo turno para o pouso B: Empresa dentro de core/configuracao_efeito.py::TELAS com as 7 declarações que acabei de reconferir
+  por AST (ativa, cnpj, dia_inicio_competencia, em_rollout, nome_fantasia, razao_social, regime_trabalhista), cada uma com leitor nomeado
+  ou rótulo "sem efeito", mais os dois itens de esmeril declarados no semear_aplicacao_convencao.py.
 
-  Committed 32ece217, amended commit f06c0f07, ran 10 shell commands
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: PLACAR-ESTRUTURAL -- O ESTRUTURAL SE SEPARA DO DADO (corte dele 02/10 22:5x, que SUBSTITUI o item 3 da
+  ordem das 21:4x -- o resto d
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+● Reading total() and counting today's families by AST
+  ⎿  $ cd /home/ronald/saas-hasner/app
+     grep -n 'def total' -A20 core/contratos_estruturais.py
+     echo "== familias com parametro HOJE (perguntando a funcao, nao lendo a tabela)"
+     cd /home/ronald/saas-hasner && docker exec saas_ui python -c "
+     import sys; sys.path.insert(0,'/app')
+     " 2>/dev/null
+     python3 - <<'P…
 
-  Ran 1 shell command
-
-● 32ece217 still resolves as a loose object but is no longer in history — the committed AVAIS item points at a commit the branch doesn't
-  contain. Fixing it so no sha chases itself:
-
-● Close the marco: regenerate handoff and re-run the host gates · 36s
-  ⎿  $ cd /home/ronald/saas-hasner && bash bin/handoff_sessao.sh >/dev/null 2>&1 && sed -n '6,7p' app/docs/HANDOFF-SESSAO.md | cut -c1-130
-     echo "== regua dos tickets e selos de host, ja com os dois commits"
-     bash bin/regua_tickets.sh 2>&1 | tail -3
-     fail=0; for s in bin/tests/test_*.sh; do bash "$s" >/dev… (36s · 7 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
-
-✢ Proofing… (15h 17m 15s · ↓ 1.8m tokens)
+✢ Compacting conversation… (15h 22m 45s · ↓ 1.8m tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱ 84%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    7% until auto-compact
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
