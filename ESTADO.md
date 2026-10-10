@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 21:49:31.**
+**Medido em 09/10/2026 21:55:01.**
 
 | | |
 |---|---|
@@ -122,36 +122,36 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 1 shell command
-
-● O206 está em raia-bos (ahead=1, behind=20). Vejo o que ela toca, a lei da raia e as três células inteiras:
-
-  Ran 1 shell command
-
-● base.html está no commit — e é justamente por isso que o aval nomeia o smoke do Fernando depois. Leio a lei da raia inteira e os limites
-  do BOS:
+● cobrarChamado tem uma definição só (_js_cobranca.html:35, com lápide no sítio antigo) e o texto da UI-RESPOSTA sobrevive. Faço o merge em
+  cópia primeiro, como a L-107 e a LEI-AKITA 10 mandam:
 
   Ran 1 shell command
 
-● Tenho os limites. Antes do merge, confiro o veredito da suite da raia, a exclusão mútua por arquivo e o estado sujo da principal:
+● Merge limpo na cópia, zero conflito. Ruff nos dois arquivos de teste antes da suite:
 
   Ran 3 shell commands
 
-● O RELATO afirma "a frase ja esta no AVAIS" — mas o AVAIS tem 5 itens e nenhum é O206. Confiro no JSON e procuro o log verde da raia:
-
-  Ran 2 shell commands
-
-● Selo da O206 confirmado ausente do main. Leio as três células inteiras para montar o pouso e os prompts das raias:
+● Forma do esmeril_da_copia. Ruff nos dois .py que o merge trouxe:
 
   Ran 1 shell command
 
-● Tenho o quadro completo. Registro o plano dos três itens e consulto antes de mergear:
+❯ aval Ronald: raia wt-bos anda uma de cada vez, em paralelo com a principal. (1) O206 pousa agora por deploy --sem-migrate; o smoke de
+  clique nas duas cascas e do Fernando logo em seguida, e a frase do smoke entra no AVAIS. (2) Pousada a O206, abre a O207, e depois a
+  ordem ja dada: O199 -> O198 -> GEO-SILENCIO-DE-PING -> O197 -> O44 itens 2-8. Nenhuma lei nova. segue a fila; PAREI so em lei ou !
 
-  Ran 1 shell command
+● Ruff limpo. Aval novo registrado — ele detalha a ordem interna da wt-bos; o item 3 do aval anterior (O228 em segunda raia) não é tocado
+  por ele, então valem os dois. Rodo a suite na cópia mergeada:
 
-● Advising using Fable 5.1
+● Running 2 shell commands · 2m 26s…
+  ⎿  $ cd /home/ronald/saas-hasner
+     export SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
+     CP="$SP/raias/wt-merge-o206"
+     bin/suite.sh --dir "$CP" --only "chamados core" > "$SP/raias/suite_o206.out" 2>&1
+     echo "suite rc=$?"
+     grep -E '^Ran [0-9]+ test' "$SP/rai… (2m 26s)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Proofing… (3h 56m 45s · ↓ 471.6k tokens)
+✢ Proofing… (4h 2m 15s · ↓ 478.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
