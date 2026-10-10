@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 06:10:45.**
+**Medido em 10/10/2026 06:15:45.**
 
 | | |
 |---|---|
@@ -125,38 +125,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Read 1 file
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-● Implementing all of it. First the current shapes:
+● My seal scanned text and matched q2's legitimate tuple — the exact trap my own memory names. The fix is to declare the mapping instead of
+  regexing it:
 
   Ran 1 shell command
 
-● entra_set, not the classificação — but it accepts itens=, so one snapshot serves both. Current vigia shape:
+● 44 green. Ruff, then the published numbers must come from the real command, not my probes:
 
-  Ran 2 shell commands
+  Ran 1 shell command
 
-● Now the code. One snapshot of live state serving both the lines and the motivos:
+● The split works: the alarm went from 6 of 7 to 1 — and that 1 is real money. All 27 are rubrica 0025, and mat 2040 too (6000/6857 =
+  0.8750). Checking the direction of the ×7/8 against the parecer:
 
-  Ran 2 shell commands
+  Ran 1 shell command
 
-● Now the command — the alarm must point at valor_moveu, not at diverge:
+● Confirmed with a timestamp: the flag went False in 2206451b at 01/09 14:59 — and the TXT left at 01/09 10:08:07, 4h51 before cl.38-d went
+  live. Computing the total:
 
   Ran 3 shell commands
 
-● Now the biting tests for the split and for the removed dono:
+● 686 × 7/8 = 600.25, stored 600 — rounding. All 27 are 7/8, single cause. Recording:
 
-  Ran 2 shell commands
+  Read 1 file
 
-● Now the tests that bite the split:
+● Now the wiring. Reading the ENC structure:
 
-● Running 1 shell command…
+  Locating ENCADEADOS and the chain tail
+  ⎿  $ cd /home/ronald/wt-l113/app && sed -n '1227,1298p' config/crons.py
 
-· Proofing… (12h 15m 59s · ↓ 1.5m tokens)
+· Compacting conversation… (12h 20m 59s · ↓ 1.5m tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 58%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    1% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
