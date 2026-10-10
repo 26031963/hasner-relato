@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 08:18:31.**
+**Medido em 10/10/2026 08:24:01.**
 
 | | |
 |---|---|
@@ -43,6 +43,7 @@ a364847b [O218] corretivo: a guarda da sombra volta a ter UM sitio, e o selo que
  M app/docs/HANDOFF-SESSAO.md
  M app/docs/LEIS.md
  M app/docs/RELATO.md
+ M app/docs/TICKETS.md
  M app/templates/colaboradores/empresa_form.html
  M bin/sonda_frota.sh
 ?? app/core/services/aplicacao_convencao.py
@@ -137,41 +138,41 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-● The import_tardio seal is RED and names exactly the live gap — its declared cure is the deploy, which is the next act. Checking who else
-  writes the field, adversarially, while the suite runs:
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: PLACAR-ESTRUTURAL -- O ESTRUTURAL SE SEPARA DO DADO (corte dele 02/10 22:5x, que SUBSTITUI o item 3 da
+  ordem das 21:4x -- o resto d
 
   Ran 2 shell commands
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+● 25 def test_ mas a cura deu Ran 24 — isso tem de ser explicado antes, não depois. Medindo por AST em vez de grep:
 
-  Searched for 1 pattern, ran 6 shell commands
+  Ran 1 shell command
 
-● ESMERIL of this marco: nothing was orphaned by it (the command's inline write was replaced, not abandoned). One real finding inside the
-  obra — the command's --listar still builds its own queryset instead of reading the porta. That's a fila line, not work now:
+● Ran 24 = 12 + 12, mas o censo tem 13 casos agora. Isso decide se o cura2.out descreve os bytes que vão no commit:
 
-  Ran 4 shell commands
+  Ran 1 shell command
 
-● The background suite will notify on completion. Writing the TICKETS row now (docs only — it can't affect the bytes under test):
+● HEAD já tinha 13 — então 25 casos, e o cura2 disse 24. Lendo o log inteiro (605 bytes) para ver o que ele de fato rodou:
 
-● Inserting the O223 pouso A row in TICKETS
-  ⎿  $ python3 - <<'PY'
-     p='docs/TICKETS.md'
-     L=open(p,encoding='utf-8').read().split('\n')
-     i=next(i for i,l in enumerate(L) if l.startswith('| O219 |') and 'A0-b' in l)
-     cols=[
-     ' O223 ',
-     ' estrutural (familia folha/export -- cadastro que decide a REGUA), fatia **pouso A** ',
-     (' **A APLICACAO DE CONVENCAO …
+  Ran 1 shell command
 
-✢ Compacting conversation… (14h 23m 45s · ↓ 1.7m tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱ 94%
+● Found 24 test(s) — o runner achou 24, o AST conta 25. A diferença de 1 é suspeita de método redefinido (nome repetido na mesma classe
+  sobrescreve e o caso desaparece em silêncio):
+
+  Ran 2 shell commands
+
+● Found 24 com 25 casos coletáveis, e nenhum nome repetido — então o cura2.out (07:46) rodou uma versão anterior aos arquivos de teste de
+  hoje. Conferindo se a cópia que a suite está medindo é byte a byte a dos commits:
+
+● Running 1 shell command…
+
+· Proofing… (14h 29m 15s · ↓ 1.7m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    0% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
