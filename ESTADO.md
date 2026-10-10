@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 00:03:31.**
+**Medido em 10/10/2026 00:09:01.**
 
 | | |
 |---|---|
@@ -122,44 +122,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+● Medido. O número mais afiado não é o que o aval previu: valor 0 = zero ocorrências em 355 tipos — o caso que o rótulo promete nunca foi
+  gravado. Vou tornar isso durável antes de consultar:
 
-● Uma nuance honesta nisso: app/docs/AVAIS.md tem mtime depois do início do push, mas o git status não o lista — ou seja, um script da casa
-  o regerou byte a byte idêntico. Não afeta a árvore do push (o git não vê diferença) e o HEAD está intacto. Nenhuma escrita minha na
-  árvore: tudo o que eu escrevi nesta janela foi para o rascunho.
+  Ran 1 shell command
 
-  Pré-checagem do worktree que eu vou remover ao fechar o marco — para não apagar trabalho que não seja descartável:
+❯ aval Ronald: o proximo item da principal e a O219, pela minha ordem de 18:3x (O232 -> O219 -> O223 -> O224 -> contratos -> O228).
+  PLACAR-ESTRUTURAL e o 5o; o hook que manda "siga: PLACAR-ESTRUTURAL" se cura em pouso de instrumento, depois. Nenhuma lei nova. segue a
+  fila; PAREI so em lei ou !
 
-● Checking the scratch worktree is disposable
-  ⎿  $ cd /home/ronald/saas-hasner
-     echo "=== worktrees ==="; git worktree list
-     echo
-     for W in /home/ronald/wt-merge-o206; do
-     [ -d "$W" ] || { echo "$W: nao existe"; continue; }
-     echo "=== $W ==="
-     echo " ramo/HEAD: $(git -C "$W" log --oneline -1 2>&1 | head -1)"
-     echo " commits unicos (nao alcancaveis do ma…
+› Message from @ad94d4e82be419b25 (ctrl+o to expand)
 
-· Compacting conversation… (6h 10m 45s · ↓ 713.0k tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱ 95%
+● Agent "O207 na raia wt-bos" finished · 1h 49m 37s
+
+● Três coisas chegaram juntas. Medindo o relógio e os portões antes de planejar — a hora decide se o pouso da O207 é possível agora:
+
+  Ran 1 shell command
+
+● 00:07 de 10/10 — o portão da sombra está cego (carimbo dia=20261009, e o dump do dia só nasce às 04:17). Isso decide a forma do pouso da
+  O207. Duas checagens antes:
+
+  Ran 1 shell command
+
+● bin/sombra.sh modificado é o instrumento da O218 (SOMBRA_ARVORE) — não entra em commit de produto, e com a variável desligada o --refazer
+  roda igual. A O207 não toca bin/. Agora o cartório dos três prompts:
+
+  Ran 2 shell commands
+
+  Advising using Fable 5.1
+
+✢ Proofing… (6h 16m 15s · ↓ 729.6k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-
-❯ smoke Ronald: abri o wizard de um 12x36, marquei o domingo com horario proprio e salvou; um 12x36 sem marcar nada continuou igual --
-  pode fechar o W12X36-HPD
-
-  aval Ronald: BO de tela achado no smoke, entra na raia wt-bos depois da O207, sem furar a ordem. O wizard de escala diz "0 ou vazio =
-  sem pausa descontada" (templates/escala/wizard_tipo_escala.html:99), mas vazio nao grava (escala/services/cadastro_tipo.py:243-245) e o
-  modelo novo nasce com intervalo_duracao_min=60 (escala/models.py:110). E dia com horario proprio sem pausa digitada vira "sem pausa" sem
-  a tela avisar na criacao (wizard_tipo_escala.html:312). A tela passa a dizer o que grava, nos dois casos. Publica quantos TipoEscala
-  foram criados com o campo vazio desde 24/08, so leitura. Nenhuma lei nova. segue a fila; PAREI so em lei ou !
-  ctrl+x ctrl+s to send now
-                                                                                                                    0% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ Press up to edit queued messages
+❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Running bin/tests host selos and regua_tickets.sh                                        1h 47m 3s · ↓ 131.4k tokens
+  ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
   ⧉  index
 ```
