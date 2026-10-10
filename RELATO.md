@@ -198,6 +198,45 @@ fatia deixar de ser o que a sua propria linha diz que e. A cura e a A0-b, **o pr
 mesmo item**, e ela nasce ja sabendo que **o juiz da impressao do gravado e UM** e que
 `previsto_em` fica fora dele.
 
+### UM ID CARREGANDO DUAS OBRAS: a contradicao que eu achei ANTES de commitar com o rotulo `[O219]` (10/10 04:1x)
+
+Eu ia commitar a A0-a com o rotulo `[O219]` e fui conferir a linha dele. **A celula de OBRA
+(col2) da linha `O219` do BACKLOG nao fala de TXT nenhum**: ela e a `REGRA-NA-IMPRESSAO`
+(aval 07/10 19:xx) -- a versao da regra entrando como quinto insumo do
+`ponto/services/cartorio.py::impressao_insumos`, com os adendos `AVISO-E-ESCOLHA` (19:5x) e
+`HORIZONTE-PADRAO-ABERTA-MAIS-ANTERIOR` (23:4x). **A minha A0-a e outra coisa**: a forma e a
+prova do TXT do Dominio passando a ter UM sitio. E a linha `O219` do TICKETS (`:121`) diz, na
+coluna da frente, *"estrutural (familia folha/export) -- L-113 O-SISTEMA-CALCULA-O-QUE-TEM,
+fatia A0-a"*. Um id, duas obras.
+
+**NAO INVENTEI ID NOVO, E NAO RENOMEEI LINHA NENHUMA.** Medi, e a resposta estava dentro da
+propria celula dele: a obra `REGRA-NA-IMPRESSAO` declara, com estas palavras, **"SEM EXCECAO
+DE COMPETENCIA (L-113)"** -- que E a clausula 1, a recusa de recalculo em competencia
+exportada. E o adendo dele de 09/10 18:3x, no topo do BACKLOG, e literal: *"a O219 e a cura
+dessa classe e tira a L-113 do papel"*. Entao a O219 **tem** duas pernas, e isso nao e
+vocabulario paralelo: a impressao com versao e o caminho pelo qual a regra nova alcanca o dia,
+e a clausula 1 e a trava que hoje barra esse alcance na competencia exportada. **A A0 e o
+instrumento que a clausula exige**: sem um vigia que diga se o TXT vigente ainda bate com o
+gravado, apagar a recusa e apagar a trava sem por nada no lugar.
+
+O que eu mudei foi **a unica celula que e minha**: a de ESTADO (col4), que passa a dizer a
+ponte em vez de so o progresso -- *"A0 e o instrumento que a clausula SEM EXCECAO DE
+COMPETENCIA (L-113) desta linha exige: o vigia que ve se o TXT vigente ainda bate com o
+gravado"*. A celula de OBRA (col2) e texto de aval **dele**, com dois adendos, e nao se
+reescreve. LEI-AKITA 11: um programador novo tem de se situar sem arqueologia, e a arqueologia
+que eu acabei de fazer e exatamente o que a ponte poupa do proximo.
+
+**PROVA:** `awk -F'|'` sobre `app/docs/BACKLOG.md` -- a linha 252 e a UNICA com id `O219` e a
+unica do bloco OBRAS que cita `L-113`; `grep -nE 'O-SISTEMA-CALCULA|txt_vigente|vigia do TXT'`
+no BACKLOG = **0 linhas**, entao nao existe outra obra para onde a A0 pudesse ir. No TICKETS,
+as linhas que citam L-113 sao `O219` (:121) e `O220` (:133, instrumento de contexto) -- nenhuma
+terceira. Celula de estado reescrita com **295 caracteres** (teto L-109 = 300, cobrado por
+`assert` que **ja me barrou duas vezes nesta mesma edicao**, em 415 e em 331), 5 colunas de
+conteudo, zero `|` no texto. Selos de host do BACKLOG verdes: `test_fabricante_backlog.sh`,
+`test_fabricante_le_a_ordem.sh`, `test_hook_stop_saida_valida.sh`,
+`test_hook_parei_casa_id_inteiro.sh`, `test_hook_nao_cobra_congelado.sh` (rc=0 nos cinco).
+
+
 ### O `!` QUE A CLAUSULA 1 PEDE (nao devolve turno -- a fila segue em A0-b)
 Tirar o `raise CompetenciaExportada` de `ponto/services/fechamento.py:72-77` e **`!` de dinheiro
 exportado** pelo item (c) da DINHEIRO-EM-COMPETENCIA-ABERTA, e esta na lista NUNCA PRE-APROVADO.
