@@ -5,7 +5,7 @@ a raspagem usa a lista de nomes do banco como autoridade, nunca regex adivinhada
 `colNNN`/`ecNNN` ficam, porque nao identificam ninguem fora desta casa. Obra FEITA sai desta
 lista — ela e o que esta EM PE._
 
-**238 obras abertas.**
+**240 obras abertas.**
 
 | ID | obra | estado |
 |---|---|---|
@@ -247,3 +247,5 @@ lista — ela e o que esta EM PE._
 | **O237** | TRES FORQUILHAS DE SOMBRA E O SELO DE PORTA QUE FALTA | livre -- toca so `bin/`. Fila de INSTRUM |
 | **O238** | O CARIMBO `atualizado_em` NAO TESTEMUNHA NUMERO, E A TRILHA DA PORTA NOMEIA O MODELO ERRAD | livre -- (2) e trilha, nao numero. (1) n |
 | **O239** | DUAS ESCRITAS NO GRAVADO DE UMA COMPETENCIA EXPORTADA E PAGA, SEM PORTA E SEM TRILHA | espera `!` |
+| **O240** | O PADRAO DE VEREDITO DA SUITE AINDA CASA PROSA DE LOG, E SO O `tail -1` SALVA | livre -- toca so `bin/` e a secao 3 do C |
+| **O241** | DUAS RAIAS COM 7 COMMITS CADA A FRENTE DO MAIN E NENHUM MOTIVO NOMEADO | espera `!` |

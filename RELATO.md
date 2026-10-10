@@ -12,12 +12,29 @@ e fila 2 por ordem dele -- **ate la a guarda e a conduta, e a conduta e esta tab
 | `raia-celula` (O228) | 2 (`b4d938aa` produto, `7cb0efbb` instrumento) | a suite da raia deu `FAILED (failures=1, skipped=42)` sobre `Ran 10242`, e a falha **nao e dela** -- e alheia, JA curada no main por `1c5b2e20`. O ato e: merge do **main NA raia** -> suite -> so entao o pouso, e o produto pousa ANTES do instrumento (L-105) | **janela** (pista de teste) |
 | `raia-pdf` | 4 (ate `584265a9`, 29/09) | o ultimo commit dela **retira do contrato** a composicao de `total_trabalhadas` dizendo que e PERGUNTA DE LEI, com as duas formas em prod. Nao pousa sem a lei respondida, e ha ordem expressa dele de **nao mergear** | **`!`** |
 | `raia-l113` (O219 A0-a) | **0** -- e o dado importante: a A0-a esta na arvore de `wt-l113` **sem commit**, entao `rev-list` a enxerga como zero. Pousa neste marco | — |
-| `cert-ast` · `pousos-0410` | 7 cada, compartilhando `a13ec7da` e `cb84a4ac` | **MOTIVO NAO NOMEADO POR MIM.** Os commits de `pousos-0410` DIZEM *"pouso 1/3, 2/3, 3/3 entra no main"* (04/10 18:5x) e o main **nao os tem** -- ou pousaram por outra rota e o ramo ficou, ou nao pousaram. Nao vou escrever motivo que nao medi: isto e **linha de fila**, nao diagnostico | a MEDIR |
+| `cert-ast` · `pousos-0410` | 7 cada, compartilhando `a13ec7da` e `cb84a4ac` | **MOTIVO NAO NOMEADO POR MIM.** Os commits de `pousos-0410` DIZEM *"pouso 1/3, 2/3, 3/3 entra no main"* (04/10 18:5x) e o main **nao os tem** -- ou pousaram por outra rota e o ramo ficou, ou nao pousaram. Nao vou escrever motivo que nao medi: isto e **linha de fila**, nao diagnostico -- e a linha existe: obra **O241** | a MEDIR |
 | `lps-prova` · `tmp-ui` | 1 e 2 | o proprio commit de `lps-prova` se declara *"commit de ensaio, descartavel"*; `tmp-ui` traz o UI-GRADE-CALENDARIO *"COMMITADO SEM PUSH, aguarda o smoke"* (28/09) | **janela** (smoke dele) |
 
 O que esta tabela NAO e: triagem das 47 worktrees. Ela nomeia as **6** raias com commit a frente do
 main agora, e duas delas saem daqui com o motivo em aberto -- escrito como aberto, que e a diferenca
 entre uma linha de L-105 e uma linha de conforto.
+
+### O achado da espera: o padrao de veredito da suite ainda casa prosa de log (10/10 03:42)
+Esperando a suite cheia da A0-a, a ESMERIL-DO-MARCO manda censo **do que este marco deixou orfao** e
+manda achado de fora virar **linha na fila, nunca trabalho na hora**. O achado veio do meu proprio
+log: ao ler o veredito pela forma que a secao 3 do CLAUDE.md ensina, a primeira linha que casou foi
+`OK -- nenhuma divergencia em 2026-10-10.` -- **prosa de um teste**, nao o veredito do Django.
+**PROVA:** `grep -nE '^(OK|FAILED)( |\(|$)' logs/o219/suite_a0a_cheia.out` devolve a linha **965**
+com essa prosa, e `grep -rnE "\^\(OK\|FAILED\)" bin/` devolve **11 sitios vivos** com o mesmo
+padrao, entre eles `bin/regua.sh:170-171` (o veredito da REGUA) e `bin/isolamento.sh:34`.
+O proprio CLAUDE.md ja mediu isso em 08/10 14:03 e escreve que o espaco nao cura -- e o comando
+literal que ele ensina continua aceitando `OK` seguido de espaco. O que salva os 11 hoje e o
+`tail -1`, e ele salva **enquanto a suite termina**: suite morta no meio deixa a prosa como ultima
+linha casada e o teste da **VERDE em suite que nao acabou**. Nao curei agora, por duas razoes
+escritas: nao e deste marco, e a cura certa e **uma funcao unica** lida pelos 11, nao a 12a copia do
+padrao. Virou a obra **O240**, com o numero e o PROIBIDO (nada de allowlist de log que pode dizer
+`OK`, nada de corrigir em 11 lugares). Aqui eu usei a forma estrita -- fim de linha ou abre
+parenteses depois do veredito --, e e por ela que o pouso desta fatia foi medido.
 
 ## O219 A0-a — A FORMA DO TXT DO DOMINIO TINHA CINCO COPIAS, E DUAS SONDAS MINHAS MORRERAM ANTES DESTA (10/10 03:1x)
 A L-113 manda a competencia exportada deixar de BARRAR o recalculo, e o unico risco que a casa soube
