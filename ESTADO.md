@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 01:30:01.**
+**Medido em 10/10/2026 01:35:31.**
 
 | | |
 |---|---|
@@ -122,35 +122,35 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-● Nada rodando, árvore limpa. A cópia tem o caso temporário --provar-composicao que não vai à árvore — então aplico por âncora, não por
-  cópia:
+  Ran 1 shell command
 
-  Ran 2 shell commands
-
-● rc lido do PIPESTATUS[0], não do $? depois do pipe. Agora o portão do push:
-
-  Committed a364847b, ran 2 shell commands
-
-● O RC=$? ali mediu o tail, não o git — o veredito é a linha [main a364847b] ... 3 files changed. E preciso conferir uma coisa que o meu
-  próprio script pode ter feito de mais: o dedupe de linhas em branco varre o arquivo INTEIRO.
+● Enquanto a bateria corre, resolvo a restrição da O219 no texto da lei, antes de qualquer código:
 
   Ran 1 shell command
 
-● Todas as 21 deleções no RELATO são linhas vazias — 0 linha de prosa removida (medido, não suposto): o dedupe do meu script colapsou
-  brancos duplos em outros trechos. Whitespace, nenhum conteúdo. Push:
+● A lei decide a questão: ela REVOGA a recusa de recálculo em competência exportada — o SEM EXCECAO DE COMPETENCIA está na própria célula.
+  Leio o código que ela revoga:
+
+  Read 1 file, ran 2 shell commands
+
+● Esmeril fechado (0 órfão). Uso a espera para corrigir o contrato da O219, que eu escrevi antes de ler a L-113 inteira:
 
   Ran 1 shell command
 
-● Enquanto a bateria corre, o esmeril deste marco (ESMERIL-DO-MARCO: só o que ele deixou órfão, nada de fora):
+● O contrato já carrega o SEM EXCECAO DE COMPETENCIA no RED (3). O que falta nele são as três cláusulas que a própria célula da L-113 manda
+  cair na O219. Meço os sítios:
 
-● Recording the esmeril result durably
-  ⎿  $ cd /home/ronald/saas-hasner
-     cat > logs/o218/ESMERIL.md <<'FIM'
-     # ESMERIL DO MARCO O218 CORRETIVO — 10/10 01:4x
-     Regra aplicada: **ESMERIL-DO-MARCO** (Ronald 08/10 17:1x). Censo **so** do que ESTE marco deixou orfao,
-     com prova de zero chamador; achado de FORA do marco vira linha na fila, nunca trab…
+  Ran 1 shell command
 
-* Proofing… (7h 37m 15s · ↓ 902.9k tokens · thinking)
+● Achado relevante e dentro da O219: existe um arquivo de porta que eu havia dado por inexistente. Meço antes de afirmar:
+
+  Ran 1 shell command
+
+● A porta existe (186 linhas) com 0 chamador de produção — e é ela a sucessora declarada da trava que a O219 derruba. Escrevo no contrato:
+
+● Running 1 shell command…
+
+✢ Proofing… (7h 42m 45s · ↓ 914.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
