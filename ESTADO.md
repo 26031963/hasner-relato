@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 01:04:24.**
+**Medido em 10/10/2026 01:08:01.**
 
 | | |
 |---|---|
@@ -123,36 +123,36 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● Push exit 0 — mas o veredito se lê no remoto, não no rc (memória push-em-background-com-tail-nao-da-sinal):
-
-  Ran 1 shell command
-
-● Pouso no remoto: f415e116..353818c5, origin/main == HEAD, 0 a empurrar, 0 FAILED/ERROR no log inteiro do push, e o portão do próprio
-  pre-push disse OK — push liberado. O marco está fechado. A árvore deixou de estar carimbada.
-
-  E a leitura do PROTEGE deu um achado preciso para a O219: a lei é a L-113, cujo SELO diz "NENHUM ainda: os 4 REDs da O219 e a bateria da
-  O218 sao os selos desta lei" e cujo ESTADO é SO-NO-PAPEL -- 0 de 3 clausulas no codigo. A O219 não é só uma mudança de hash: é o commit
-  que move esse ESTADO.
-
-  Agora o RELATO:
+● Publicado em f0d2f6b, seção presente, 0 vazamento. O ESTADO.md é gerado direto no destino — a faixa se confere lá:
 
   Ran 1 shell command
 
-● relato.sh confirmado: commita só em /home/ronald/hasner-relato, nada aqui. A seção entra no topo (00:4x é mais recente que 00:0x) e o
-  arquivo em árvore pega o commit do próximo marco (L-106):
+● Os únicos "retido" no ESTADO são o texto do meu próprio comando, ecoado na seção de sessão — não uma faixa. Confiro pela redação real que
+  o gerador emitiria:
 
-  Publishing the RELATO and confirm it was not retained
+  Ran 1 shell command
+
+● Faixa confirmada ausente: a redação real do gerador é > **RELATO retido:** e ela tem 0 ocorrência no ESTADO publicado (os 2 hits de
+  RETIDO são RETIDOS=0 da célula R3, outra palavra). O aval do RELATO está cumprido nas duas metades.
+
+  Marco O207 fechado — o handoff que a L-108 cobra, e inspeção das duas cópias antes de mexer em git:
+
+  Ran 1 shell command
+
+● Ambas as cópias são DESTACADA — nenhum ramo morre com elas, e estão dentro do meu scratchpad desta sessão. Removo só essas duas e rodo o
+  portão do pouso de instrumento:
+
+● Removing my scratchpad copies and running every host seal · 1m 14s
   ⎿  $ cd /home/ronald/saas-hasner
-     bash bin/relato.sh 2>&1 | tail -20
-     echo "--- rc=$? ---"
-     echo
-     echo "=== o aval dele: 'confere no ESTADO que a faixa sumiu' ==="
-     grep -niE 'relato (retido|RETIDO)|faixa|retido' app/docs/ESTADO.md | head -5 || echo "nenhuma mencao a retido no ESTADO"
-     echo
-     echo "=== e no r…
+     SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
+     for w in wt-o207 wt-ensaio; do
+     git worktree remove --force "$SP/raias/$w" 2>&1 && echo "removida: $w" || echo "FALHOU: $w"
+     done
+     git worktree prune
+     echo "copias de scratchpa… (1m 14s · 6 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-✽ Proofing… (7h 11m 38s · ↓ 846.7k tokens)
+✢ Proofing… (7h 15m 15s · ↓ 852.2k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
