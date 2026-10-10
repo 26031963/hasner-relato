@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 23:58:01.**
+**Medido em 10/10/2026 00:03:31.**
 
 | | |
 |---|---|
 | `HEAD` local | `f415e116 [PLACAR-ESTRUTURAL] instrumento: o placar deixa de poder dizer que esta fora do ar um commit que o git ja tem no tronco` |
-| `origin/main` | `1c5b2e20 [O206] cura: a lapide do dono da cobranca para de nomear o delimitador que o selo varre, e o render nao se move um byte` |
-| commits a subir (`ahead`) | **3** |
+| `origin/main` | `f415e116 [PLACAR-ESTRUTURAL] instrumento: o placar deixa de poder dizer que esta fora do ar um commit que o git ja tem no tronco` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -122,44 +122,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  órfãos → 258/252/6, refeito pelo instrumento que está no repo) e 7cb0efbb (instrumento + selo de host que é catraca). Mas a suite dela
-  deu FAILED (failures=1) sobre Ran 10242 — não é verde. A falha é alheia (test_nenhuma_lapide_multilinha_em_templates sobre
-  _js_cobranca.html:14, arquivo que o diff dela não toca) e o main já a curou em 1c5b2e20, cujo pai é exatamente a base dela. Então o pouso
-  não é "merge de raia verde": é merge do main para dentro da raia, suite, e só com ela verde o pouso — pela forma da L-107, num ato só.
-  Ela não fez isso porque o aval é literal, e estava certa. Instrumento pousa depois do produto. Conflito esperado: uma linha no topo da
-  tabela do TICKETS.md.
 
-  Também fica registrado o que eu não fiz: o R4 está parado, e o motivo é que o CASO que eu escrevi citava a L-084, que não dispara em 8
-  minutos — então não está provado que 11,10 é o número certo, só que dois leitores discordam. O primeiro passo dele é medição
-  (dono_da_divergencia e as datas da EC contra a lavra), não código, e é trabalho de depois do marco.
+● Uma nuance honesta nisso: app/docs/AVAIS.md tem mtime depois do início do push, mas o git status não o lista — ou seja, um script da casa
+  o regerou byte a byte idêntico. Não afeta a árvore do push (o git não vê diferença) e o HEAD está intacto. Nenhuma escrita minha na
+  árvore: tudo o que eu escrevi nesta janela foi para o rascunho.
 
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: PLACAR-ESTRUTURAL -- O ESTRUTURAL SE SEPARA DO DADO (corte dele 02/10 22:5x, que SUBSTITUI o item 3 da
-  ordem das 21:4x -- o resto d
+  Pré-checagem do worktree que eu vou remover ao fechar o marco — para não apagar trabalho que não seja descartável:
 
-● Não há mais trabalho deste marco a fazer em paralelo — o que falta é o veredito. Bloqueio no próprio processo do push, sem sleep e sem
-  polling:
-
-● Block on the push process until it exits · 9m 47s
+● Checking the scratch worktree is disposable
   ⎿  $ cd /home/ronald/saas-hasner
-     PID=$(pgrep -x -f "git push origin main" | head -1)
-     echo "esperando o pid do push: $PID (hora $(date '+%H:%M:%S'))"
-     # bloqueia sem sleep: tail --pid retorna quando o processo morre
-     tail --pid="$PID" -f /dev/null
-     echo "o push TERMINOU em $(date '+%H:%M:%S')"
-     echo "=== v… (9m 47s · 2 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
+     echo "=== worktrees ==="; git worktree list
+     echo
+     for W in /home/ronald/wt-merge-o206; do
+     [ -d "$W" ] || { echo "$W: nao existe"; continue; }
+     echo "=== $W ==="
+     echo " ramo/HEAD: $(git -C "$W" log --oneline -1 2>&1 | head -1)"
+     echo " commits unicos (nao alcancaveis do ma…
 
-✢ Proofing… (6h 5m 15s · ↓ 710.5k tokens)
+· Compacting conversation… (6h 10m 45s · ↓ 713.0k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱ 95%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    3% until auto-compact
+
+❯ smoke Ronald: abri o wizard de um 12x36, marquei o domingo com horario proprio e salvou; um 12x36 sem marcar nada continuou igual --
+  pode fechar o W12X36-HPD
+
+  aval Ronald: BO de tela achado no smoke, entra na raia wt-bos depois da O207, sem furar a ordem. O wizard de escala diz "0 ou vazio =
+  sem pausa descontada" (templates/escala/wizard_tipo_escala.html:99), mas vazio nao grava (escala/services/cadastro_tipo.py:243-245) e o
+  modelo novo nasce com intervalo_duracao_min=60 (escala/models.py:110). E dia com horario proprio sem pausa digitada vira "sem pausa" sem
+  a tela avisar na criacao (wizard_tipo_escala.html:312). A tela passa a dizer o que grava, nos dois casos. Publica quantos TipoEscala
+  foram criados com o campo vazio desde 24/08, so leitura. Nenhuma lei nova. segue a fila; PAREI so em lei ou !
+  ctrl+x ctrl+s to send now
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ Press up to edit queued messages
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Awaiting g4 verdict before fixing HOJE comment                                          1h 41m 33s · ↓ 104.1k tokens
+  ◯ general-purpose  Running bin/tests host selos and regua_tickets.sh                                        1h 47m 3s · ↓ 131.4k tokens
   ⧉  index
 ```
