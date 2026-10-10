@@ -132,6 +132,35 @@ de prod. Nao se cura um caminho que nao se nomeou, e nao ha bug vivo: o provado 
 em voz alta antes da clausula 1: a trava que a L-113 remove e, hoje, a unica coisa entre um recalculo
 e o gravado de uma competencia **ja paga**.
 
+### O SELO DA CASA ME PEGOU, E A SUITE CHEIA E O MOTIVO (10/10 04:0x)
+
+O modulo novo sozinho deu `Ran 12` / `OK` e os 97 vizinhos de `folha`+`relatorios` deram
+`Ran 613` / `OK`. A suite **CHEIA** voltou **VERMELHA**, num selo que mora em outro app:
+
+**PROVA:** `logs/o219/suite_a0a_cheia.out` -> `Ran 10265 tests in 1402.381s` ·
+`FAILED (failures=1, skipped=42)` · rc do processo **1** ·
+`FAIL: test_MORDE_teste_novo_com_relogio_solto_e_vermelho
+(core.tests.test_selo_teste_sem_relogio)` ->
+`Lists differ: ['folha/tests/test_l113_a0_forma_do_txt.py'] != []`.
+
+A falha era **minha**: o caso (d), o do empate de carimbo, precisa do *mesmo instante duas
+vezes* e eu o escrevi lendo o relogio real. O selo TESTE-SEM-RELOGIO (corte dele de 19/09)
+existe exatamente para isso, e o que ele proibe nao e o relogio: e **nascer** um teste novo
+que o le sem congelar.
+
+Cura na **ORIGEM**, e nao na allowlist -- `core/tests/testes_sem_relogio.txt` **so encolhe**
+(`test_a_lista_so_encolhe`), entao escrever o meu arquivo nela era a porta proibida. O caso
+passa a usar um **instante FIXO** dentro da competencia que ele grava. Isso e **mais
+restritivo que congelar**: congelar intercepta a leitura, o instante fixo **remove** a
+leitura -- e de quebra tira o caso da classe que o `bin/regua_calendario.sh` caca (virada de
+dia, dia 20, dia 21 00:05). O `from django.utils import timezone` saiu no mesmo ato, porque
+era o unico uso.
+
+**PROVA da cura:** o predicado do proprio selo, rodado sobre o arquivo curado, devolve
+`sitios de relogio solto = 0`; `logs/o219/alvo_pos_cura.out` -> `Ran 15 tests` / `OK`, rc **0**
+(os 12 casos do modulo mais os 3 do selo, juntos); `ruff check folha/` no container ->
+`All checks passed!`; e a pasta inteira de selos de host (**66**) sem um vermelho.
+
 ### O `!` QUE A CLAUSULA 1 PEDE (nao devolve turno -- a fila segue em A0-b)
 Tirar o `raise CompetenciaExportada` de `ponto/services/fechamento.py:72-77` e **`!` de dinheiro
 exportado** pelo item (c) da DINHEIRO-EM-COMPETENCIA-ABERTA, e esta na lista NUNCA PRE-APROVADO.
