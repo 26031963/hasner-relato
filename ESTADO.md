@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 12:00:46.**
+**Medido em 10/10/2026 12:06:01.**
 
 | | |
 |---|---|
@@ -123,44 +123,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-   PROIBIDO: definicao sem ancora, segunda lista de termos em outro arquivo, juiz novo, tocar codigo de nucleo.
-   PRONTO: RELATO com contagem de termos, selo verde nomeado, CLAUDE.md:365 corrigido, card gerado e commit. Faltando um = INCOMPLETO com
-  a lista.
+● Task "Rodar a suite na copia mergeada, banco proprio" still running in background
 
-  Segue a fila; PAREI so em lei ou !
+● Tudo pronto e durável, esperando só o veredito. Estado do que está montado:
 
-  Committed 0093834b, ran 22 shell commands
-  ⎿  Read docs/AVAIS.md (24 lines)
-  ⎿  Read docs/HANDOFF-SESSAO.md (46 lines)
-  ⎿  Referenced file core/tests/test_o223_porta_humana_da_aplicacao.py
-  ⎿  Read core/management/commands/semear_aplicacao_convencao.py (128 lines)
-  ⎿  Referenced file ponto/services/cartorio.py
+  - $SC/arvore — cópia mergeada (archive do HEAD + patch de 148 linhas + os dois docs resolvidos), os dois arquivos de código
+    byte-idênticos a b4d938aa, ruff All checks passed!
+  - $SC/BACKLOG.md (portão 250 chars, estado 281) e $SC/TICKETS.md — resolução por UNIÃO, com o hook conferido pelo próprio hook
+    (_proximo_da_fila() = PLACAR-ESTRUTURAL antes e depois, 214 fora nos dois, O228 DENTRO da fila e O98 fora)
+  - $SC/msg.head + $SC/msg.body + a linha LEI-AKITA de b4d938aa já recuperada para o rodapé
+  - $SC/relato.md — seção do marco, com o PEDIDO explícito a ele do texto do mapa antigo quando a vaga da O98 abrir
+  - $SC/ato.sh — o ato único da L-107 (merge --no-commit → docs resolvidos + RELATO → git add por path → asserção do índice → diff -q
+    contra a cópia que a suíte rodou → commit -F → deploy.sh --sem-migrate), executável e não rodado
+  - portão do deploy conferido: logs/crons_em_curso/ vazio, sombra: carimbo dia=20261010 status=OK tipo=completa diverge=0 erros=0
 
-● Task "RED e construção do segundo intervalo" completed in background
+  A suíte (bz7gxb5rh, trava pouso-celula:1261330) segue correndo — 67.774 bytes às 11:59, zero linha Ran N tests ainda; a linha de base da
+  raia foi Ran 10242 tests in 1382.950s, ~23 min, e ela começou 11:54. A árvore viva segue intocada em 0093834b.
 
-● Task "O199 na raia wt-bos" still running in background
+  Espero a saída do shell de fundo (é ele o sinal; não vou poluir com polling). Quando o veredito cair: leio com a forma da casa (grep -E
+  '^(OK|FAILED)( \(|$)' | tail -1 mais ^Ran  | tail -1), monto $SC/msg.fullcom a cauda MEDIDO, e se verde rodo$SC/ato.sh`.
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: PLACAR-ESTRUTURAL -- O ESTRUTURAL SE SEPARA DO DADO (corte dele 02/10 22:5x, que SUBSTITUI o item 3 da
+  ordem das 21:4x -- o resto d
 
-● Conferir andamento da suite
-  ⎿  $ SC=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/pouso-celula; python3 -c "
-     import time,os
-     p='$SC/suite.out'
-     print('bytes', os.path.getsize(p), 'mtime', time.strftime('%H:%M:%S', time.localtime(os.path.getmtime(p))))
-     " ; grep -cE '^Ran [0-9]+ test' …
+● Ver o build do O219 e o andamento da suite
+  ⎿  $ SC=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; sed -n '60,150p'
+     $SC/o219/build/cartorio_HEAD.py
 
-✽ Compacting conversation… (18h 6m 0s · ↓ 2.1m tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 54%
+✢ Proofing… (18h 11m 15s · ↓ 2.1m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    0% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Freezing clock in test_o199_aceite_de_folga                                                57m 41s · ↓ 142.8k tokens
+  ◯ general-purpose  Reading test_lei_akita.sh selo requirements                                              1h 2m 56s · ↓ 152.2k tokens
   ⧉  index
 ```
