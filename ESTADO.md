@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 23:36:01.**
+**Medido em 09/10/2026 23:41:31.**
 
 | | |
 |---|---|
@@ -123,33 +123,33 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-● Esmeril fechado com número: 0 def/class removida, 0 criada nos três commits — o marco mexeu em prosa do registro e acrescentou um selo de
-  host, então não há órfão a apagar pela L-111. Nada a fazer nessa frente.
-
-  Estado do push:
-
-  Ran 1 shell command
-
-● O pre-push passou da trava e está na suite (testa o commit empurrado f415e1162b). Veredito só pelo remoto — a empurrar: 3 ainda.
-
-  A espera é do próprio marco, e R4 é linha do mesmo placar. Orientação somente leitura para ele (L-110 manda escrever o CASO antes do
-  código, e antes disso tem de se saber qual autoridade o leitor consulta):
+● O hook manda seguir, e o push ainda corre — então o trabalho que cabe é o do próprio item, só leitura. A pergunta que decide a cura do R4
+  é qual par o selo realmente compara:
 
   Ran 2 shell commands
 
-● R4 tem um RED nomeado: col935 05/09, espelho 10,97 h x dia_pago 11,10 h = 8 min (18:52→19:00), porque EC#1186.marcos_do_dia devolve marco
-  de TEMPLATE num dia sem célula e fora do vínculo — o espelho ancora no marco, o dia_pago lê a batida crua. A cura é no LEITOR.
-  Orientação, só leitura:
+● Isso corrige a minha própria orientação: a cura de 29/09 já trocou a pergunta — "ELA COMPARA DINHEIRO COM DINHEIRO". A hipótese que eu
+  escrevi (realizado_h x pago_h) era o defeito já curado, não o atual. Lendo o corpo da testemunha:
 
-● Reading the two authority sites in espelho
-  ⎿  $ cd /home/ronald/saas-hasner/app
-     echo "=== 120-140 (a funcao que devolve as horas do dia) ==="
-     sed -n '118,140p' ponto/services/espelho.py
-     echo
-     echo "=== 798-820 (pago_do_dia, a autoridade declarada) ==="
-     sed -n '798,820p' ponto/services/espelho.py
+  Ran 1 shell command
 
-✢ Proofing… (5h 43m 15s · ↓ 676.1k tokens · thinking)
+● Agora a comparação está exata (folha/porta_export.py:65-85): h_esp é a soma de p.minutos_trabalhados do motor por dia de entrada; h_dp é
+  horas_trabalhadas + horas_folga_trabalhada do DiaPago lavrado; tolerância 0,02 h. Dinheiro contra dinheiro, como a cura de 29/09 deixou.
+  Escrevo o CASO pela regra, que a L-110 exige antes de qualquer linha:
+
+  Ran 1 shell command
+
+● O CASO está durável. Chamo o advisor antes de me comprometer com a cura do R4:
+
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+
+● O advisor pegou um erro real e caro: a L-084 não dispara aqui. O gatilho dela é >180 min nas DUAS pontas; col935 são 8 min. Então "11,10
+  é o certo pela regra" não está provado por lei escrita — está derivado por mim. Corrijo o arquivo durável, que é onde a afirmação mora:
+
+● Running 1 shell command…
+
+✢ Proofing… (5h 48m 45s · ↓ 686.7k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -159,7 +159,7 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Grepping g3.out past log prose                                                          1h 19m 33s · ↓ 168.2k tokens
-  ◯ general-purpose  Committing esmeril_celula_censo.py as instrument                                        1h 19m 33s · ↓ 135.0k tokens
+  ◯ general-purpose  Tightening verdict grep on g3.out                                                         1h 25m 2s · ↓ 81.1k tokens
+  ◯ general-purpose  Inspecting HANDOFF-SESSAO.md churn                                                       1h 25m 2s · ↓ 153.3k tokens
   ⧉  index
 ```
