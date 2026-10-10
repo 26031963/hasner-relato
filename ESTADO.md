@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 05:34:01.**
+**Medido em 10/10/2026 05:39:16.**
 
 | | |
 |---|---|
@@ -124,16 +124,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  pós-0005 divergindo, conteúdo lido como uma única linha fora de layout) é de máscara sobre o conteudo. Conferindo antes de concluir:
-
-  Ran 1 shell command
-
-● Confirmado, e é um achado que muda onde esta pergunta se mede: a sombra substitui conteudo por '… 5b642c8d13' (12 caracteres). O
-  mascarador de texto livre apaga exatamente o campo que a Q2 compara — logo a Q2 é cega na sombra por construção. Lendo o censo inteiro:
-
-  Ran 1 shell command
-
-● Dois achados, e o segundo é meu: fora_layout=25 sobre as 284 linhas de hoje — essas não vêm da sombra, vêm da montagem. Lendo o que mais
   o TXT carrega além do reg 10:
 
   Ran 1 shell command
@@ -143,19 +133,29 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
   conta faz (LEI-AKITA 8), e num log diário de cron seria o falso alarme que treina a casa a ignorar. Curando, com o desmontador ao lado do
   montador e do validador — um arquivo, não dois:
 
-● Moving partes_da_linha into export.py with both reg types
-  ⎿  $ cd /home/ronald/wt-l113/app && python3 - <<'PY'
-     p = 'folha/export.py'
-     s = open(p, encoding='utf-8').read()
-     anc = "def codigos_homologados(empresa):"
-     nova = '''def partes_da_linha(linha):
-     """Desmonta UMA linha do TXT do Dominio. -> dict com 'reg' | None
-     MORA AQUI, ao lado de quem MONTA (`montar_li…
+  Ran 3 shell commands
+  ⎿  Read docs/AVAIS.md (28 lines)
+  ⎿  Read docs/HANDOFF-SESSAO.md (47 lines)
+  ⎿  Referenced file folha/export.py
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b354njfld.output (30 lines)
+  ⎿  Referenced file ../../wt-l113/app/ponto/services/fechamento.py
 
-✢ Compacting conversation… (11h 39m 15s · ↓ 1.4m tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 61%
+● Task "RED e construção do segundo intervalo" completed in background
+
+● O validador atribui o reg 11 posicionalmente ao reg 10 anterior (:197-205). Então o diff pode nomear a DATA sob a matrícula — que é
+  exatamente o que a pauta do col954 diz (matrícula 2103, rubrica 8792, dias 18 e 19/09). Reescrevendo o diff com os dois registros:
+
+  Ran 2 shell commands
+
+● Agora o comando e os selos, com o caso do dia que troca sem mudar o valor:
+
+● Rewriting the layout seals for both record types
+  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null 2>&1; bash bin/suite.sh --dir
+     /home/ronald/wt-l113 --only folha -- folha.tests.test_l113_a0b_vigia_do_txt folha.tests.test_l113_a0_forma_do_txt 2>&1 | tail -25
+
+✽ Proofing… (11h 44m 30s · ↓ 1.4m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    0% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
