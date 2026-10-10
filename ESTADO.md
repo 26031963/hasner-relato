@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 20:01:01.**
+**Medido em 10/10/2026 20:06:31.**
 
 | | |
 |---|---|
@@ -130,41 +130,41 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-● Task "Rodar a suite cheia sobre a copia" still running in background
+● Suite verde, mas essa cláusula do comentário expirou com a virada — ela justificava o cache por "a tupla é vazia". Vou medir primeiro
+  quem lê esse arquivo como TEXTO antes de tocar nele:
 
-● Suite still green-silent (2003 lines, 0 falhas, sem veredito). Agora o ensaio da sombra — que o apply sujou — e ele vai correr sobre a
-  cópia, não sobre a árvore viva: container() honra SOMBRA_ARVORE (bin/sombra.sh:149-156), então o ensaio certifica o código que vai
-  pousar.
+  Searched for 1 pattern
 
-  Ran 2 shell commands
+● Raio de alcance medido: 4 leitores de fonte (3 sítios AST do selo O219, o getsource do b5u) e 2 contratos que varrem pasta. Vou curar o
+  comentário na origem e re-rodar a suite inteira — não há pressa, e deixar justificativa expirada no código é o que esta casa paga caro.
 
-● O ensaio já foi refeito depois do apply — eu quase repeti 40 min de trabalho: SOMBRA_REFEITA="10/10 18:31", SOMBRA_BLOCO="10/10 18:55",
-  71 comandos, ERROS=0, DIVERGE=0, STATUS=OK. O apply foi 18:15→18:23, então o refazer das 18:31 apagou o que ele escreveu.
+  Ran 5 shell commands
 
-  Ran 1 shell command
+● O ato está escrito e sintaticamente provado. Antes do ato irreversível (commit + deploy em prod), vou consultar o advisor:
 
-● Portão do deploy verde (rc 0), os 8 alarmes são os de negócio conhecidos. Agora o ato do pouso, no molde do ato.sh:
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-  Ran 4 shell commands
-
-● Background command "Rodar a suite cheia sobre a copia" completed (exit code 0)
+● O advisor achou um furo real. Vou medir:
 
   Ran 1 shell command
 
-● Suite VERDE: Ran 10349 tests in 1456.507s / OK (skipped=42), rc 0. O miolo já estava no ar com a tupla vazia (33f80dfb); a cópia carrega
-  a virada. Mas um comentário da cópia ainda fala da tupla vazia como se fosse o presente:
+● Confirmado — o v2 das 19:02→19:09 escreveu na sombra depois do bloco das 18:55: o carimbo está cego, como a própria casa documenta. O
+  ensaio tem de ser refeito, e o advisor está certo que ele vale mais do que o portão:
 
-● Ler o comentario da copia que fala da tupla vazia
-  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; C=$S/o219q/copia; sed -n '585,605p'
-     $C/app/ponto/services/cartorio.py
+  Ran 5 shell commands
 
-✢ Proofing… (1d 2h 6m · ↓ 3.0m tokens · thinking)
+● O medidor: o mesmo SELECT da reversão, do lado da sombra, hash por linha e hash do conjunto.
+
+● Running 1 shell command…
+
+✢ Proofing… (1d 2h 11m · ↓ 3.1m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
