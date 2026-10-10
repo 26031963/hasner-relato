@@ -24,6 +24,74 @@ que o juiz de hoje teria produzido* (e entao os tres de agosto nao sao comparave
 cobra corte para isso. **O que NAO muda com a resposta:** nenhum dos 44 entra em `valor_moveu`; eles sao
 `porta_moveu`, que nao alarma. O alarme de hoje e **1 de 7**, e nao depende desta pergunta.
 
+## O223 pouso B — A EMPRESA ENTRA NO CENSO DE CADASTRO, E O CUSTO QUE EU HAVIA DECLARADO EM 7 FOI MEDIDO EM 15 (10/10 09:4x)
+`LEI-AKITA: origem=core/configuracao_efeito.py (o censo de "chave sem leitor" -- unico sitio onde um campo editavel se declara), testemunha=core/tests/test_contract_configuracao_nao_mente.py::test_MORDE_todo_campo_editavel_esta_declarado (o SELO fez o censo, nao a minha AST), RED=logs/o223/red_pousob.out (`FAILED (failures=1)`, `First list contains 15 additional elements`), quem-mais-le=core/contratos_estruturais.py (nota da celula folha/export x contrato 3) + core/configuracao_efeito.py::familias_com_parametro (lido por core/contratos_estruturais.py::total) + os dois pinos E0 do proprio selo, juizes novos=0`
+
+**O que a fatia fecha, dito sem inflar.** A L-006 estava `PELA-METADE` com a 3a clausula (*chave sem leitor*)
+e a 2a metade da 2a em aberto, e a propria linha dela previa que **UMA** fatia fechava as duas: por a
+`Empresa` no censo. Fechou -- a L-006 passa a `INTEIRA -- 3 de 3 clausulas no codigo, 3 de 3 com teste que
+morde`. **O que NAO se move: o placar de contratos.** Perguntei ao juiz na copia antes de escrever a linha:
+`total()=20 | verdes=15`, e as familias com parametro seguem as **MESMAS 5** (`ausencia/ferias`, `batida`,
+`celula/precedencia`, `folha/export`, `turno/marcos`) -- o teto da L-100 nao se mexe e nenhuma celula da
+matriz vira verde com isto. Esta fatia fecha clausula de **LEI**, nao celula de matriz, e dizer o contrario
+seria inflar o placar.
+
+**O NUMERO QUE EU ERREI, e como ele se corrigiu.** A linha da L-006 declarava o custo do pouso B em **7
+declaracoes** -- as chaves de POST que a `colaboradores/views.py::form_empresa` le (`ativa`, `cnpj`,
+`dia_inicio_competencia`, `em_rollout`, `nome_fantasia`, `razao_social`, `regime_trabalhista`). Sao **15**.
+A diferenca inteira e o **ADMIN**: `EmpresaAdmin` nao declara `fields`, e `ModelAdmin` sem `fields` deixa
+**todo** campo editavel -- a mesma segunda porta de edicao que a O124 fechou em `Praca` e em `Posto`, e o
+selo ja a varria por `editaveis_dos_admins()`. Declarar 7 e deixar 8 editaveis pelo admin seria a
+**MEIA-CORRECAO** de sempre, com censo meio aberto: a `Empresa` seria a primeira entidade VIGIADA na tela e
+CEGA no admin. **E o 15 nao e estimativa minha**: armei o RED com a `Empresa` em `TELAS` e em
+`ENTIDADES_COM_ADMIN` e **nenhuma** declaracao, e o selo respondeu o censo por escrito --
+`logs/o223/red_pousob.out`, `First list contains 15 additional elements`, nomeando os 8 que a minha AST da
+tela nunca veria. **O selo e o censo** (LEI-AKITA 5 e 8 no mesmo ato): quem conta e a autoridade, nao a
+sonda de quem esta curando.
+
+**O que entrou.** 15 declaracoes em `core/configuracao_efeito.py::DECLARACAO`, cada uma com leitor NOMEADO:
+13 `CONSUMIDO` e 2 `CADASTRO`. Os 2 `CADASTRO` sao `razao_social` e `nome_fantasia`, que **so se imprimem**
+(cabecalho do TXT, painel, bootstrap do tenant) e nao decidem valor -- e `CADASTRO` entra com `familia=None`
+por lei do proprio selo (`familias_com_parametro` pula `familia is None`, e
+`test_declaracao_so_tem_os_tres_estados` cobra *"cadastro nao e parametro de familia"*). O `cnpj` entrou
+como `CONSUMIDO`, e nao como identidade, porque `colaboradores/queries.py::empresas_visiveis` **tira do
+universo das telas** o CNPJ de diagnostico `11222333*`: ele decide quem aparece. Dos 13, **10 sao da familia
+`folha/export`** -- `dia_inicio_competencia` (o corte da competencia, nunca 21 cravado),
+`regime_trabalhista` (piso legal ou CCT, pela O211 pouso B) e os **8 da janela de HE**, que o
+`motor_calculo_v2` e a `folha/porta_export.py` leem. Pinos E0 movidos **com o motivo medido ao lado**:
+`CONSUMIDO 26 -> 39` e `DECLARACAO 49 -> 64`.
+
+**O que esta fatia NAO faz, e esta dito no codigo e nao so aqui.** Nao tranca campo nenhum. Declarar e
+documentar; `readonly_fields` e comportamento, e `rotulo_de_efeito` so devolve rotulo para `SEM_EFEITO` --
+entao **zero template mudou** e a fatia nao passa pelo FRONT-SEM-SMOKE. **Fila nova nascida aqui**: os 8
+campos de janela de HE (e os vizinhos do `regime_trabalhista`) tem escritor de producao em
+`colaboradores/services/estrutura.py::atualizar_empresa`, e o **admin escreve por fora dele**. Isso e achado
+de **contrato 2** (*um escritor por entidade*) da familia `folha/export`, nao desta fatia: vai para a fila,
+nao para este commit. Trancar aqui seria regra de negocio fora do pedido.
+
+**Uma nota que teria comecado a mentir.** A celula `folha/export x parametro consumido ou sem efeito` de
+`core/contratos_estruturais.py` dizia *"Sobram 2 CONSUMIDO ... O total da DECLARACAO nao mudou (49)"*. Com
+esta fatia os 2 viram 12 e o total vai a 64 -- emendei a nota **no mesmo commit**, porque testemunha que
+recalcula ou envelhece e exatamente o que a LEI-AKITA 2 proibe.
+
+**Esmeril do marco (ESMERIL-DO-MARCO), so o que o pouso A deixou orfao.** Dois itens, os dois declarados
+antes: (1) o docstring de `core/management/commands/semear_aplicacao_convencao.py` dizia que o
+`get_or_create` *"guarda aqui"* -- o endereco **mudou no pouso A** para
+`core/services/aplicacao_convencao.py::cadastrar`, e docstring que aponta para o sitio velho manda a proxima
+sessao fazer arqueologia; (2) o `--listar` tinha **queryset proprio** (`order_by('empresa_id','praca_id')`)
+enquanto a tela lia `servico.listar()` (ordenado por razao social). Nao davam numero diferente -- davam
+**ORDEM** diferente, e e assim que um leitor paralelo comeca. Agora `--listar` le a porta, e a ordem impressa
+passa a ser a que a tela ja mostrava.
+
+**Verde, e por que ele nao e o verde do commit ainda.** Selo do censo + 11 vizinhos: `Found 139` / `Ran 139
+tests in 53.802s` / `OK`, rc 0, `0` linhas `^(FAIL|ERROR):` (`logs/o223/verde_pousob.out`); `ruff` limpo nos
+4 arquivos; suite CHEIA correndo na **copia** (`Found 10312 test(s)`, `logs/o223/suite_pousob.out`). O
+docstring com data vencida em `core/tests/test_o223_porta_humana_da_aplicacao.py:4` (diz `PELA-METADE` em
+`docs/LEIS.md:149`, linha que acabou de sair) **ficou de fora da copia de proposito**: editar a arvore que a
+medicao monta troca os bytes medidos, e editar depois da suite poe no commit bytes que a suite nao viu.
+Entra quando a suite fechar, com o modulo e os selos de varredura de texto rodados outra vez.
+
+
 ## O223 pouso A — A APLICACAO DE CONVENCAO GANHA PORTA HUMANA, E O CAMPO QUE DECIDE PISO x CCT GANHA ESCRITOR (10/10 08:0x)
 `LEI-AKITA: origem=core/services/aplicacao_convencao.py (porta unica) + colaboradores/views.py::form_empresa, testemunha=core/regua_cct.py::_aplicacao_vigente (quem decide segue sendo ela; a tela so cadastra e DIZ o empate), RED=core/tests/test_o223_porta_humana_da_aplicacao.py (12 casos, 9 VERMELHOS no HEAD) + core/tests/test_regua_pela_empresa.py (13 casos, 1 VERMELHO) reconstituido em logs/o223/red_head.out: Ran 25 / FAILED (failures=3, errors=7), quem-mais-le=censo de 4 sitios com PROVA por papel em core/tests/test_regua_pela_empresa.py, juizes novos=0`
 

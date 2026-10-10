@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 09:33:41.**
+**Medido em 10/10/2026 09:39:01.**
 
 | | |
 |---|---|
@@ -35,6 +35,7 @@ d20a0e45 [O219] pouso: os docs do marco A0-b entram junto, e o merge que eu pedi
  M app/config/crons_duracao.json
  M app/docs/HANDOFF-SESSAO.md
  M app/docs/LEIS.md
+ M app/docs/RELATO.md
  M bin/sonda_frota.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -123,13 +124,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  por AST (ativa, cnpj, dia_inicio_competencia, em_rollout, nome_fantasia, razao_social, regime_trabalhista), cada uma com leitor nomeado
-  ou rótulo "sem efeito", mais os dois itens de esmeril declarados no semear_aplicacao_convencao.py.
-
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: PLACAR-ESTRUTURAL -- O ESTRUTURAL SE SEPARA DO DADO (corte dele 02/10 22:5x, que SUBSTITUI o item 3 da
-  ordem das 21:4x -- o resto d
-
   Ran 15 shell commands
   ⎿  Read docs/AVAIS.md (30 lines)
   ⎿  Read docs/HANDOFF-SESSAO.md (47 lines)
@@ -141,20 +135,27 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-  Updating LEIS.md for L-006
+● Adding the pouso B row to TICKETS
   ⎿  $ cd /home/ronald/saas-hasner/app
      python3 - <<'PY'
      import pathlib
-     p = pathlib.Path('docs/LEIS.md'); s = p.read_text()
-     # (1) coluna TESTE: o selo passa a cobrar a Empresa
-     a = "test_MORDE_todo_campo_editavel_esta_declarado (nao cobre Empresa);"
-     assert s.count(a) == 1, 'ancora TESTE'
-     s = s.replace(a, …
+     cols = [
+     ' O223',
+     'estrutural (familia folha/export -- cadastro que decide a REGUA), fatia **pouso B**',
+     '**A EMPRESA ENTRA NO CENSO DE "CHAVE SEM LEITOR", E A L-006 FECHA.** A linha da L-006 previa que UMA '
+     'fatia fechava as duas d…
+  ⎿  Read docs/AVAIS.md (30 lines)
+  ⎿  Read docs/HANDOFF-SESSAO.md (47 lines)
+  ⎿  Referenced file core/tests/test_o223_porta_humana_da_aplicacao.py
+  ⎿  Read core/management/commands/semear_aplicacao_convencao.py (119 lines)
 
-✢ Compacting conversation… (15h 38m 55s · ↓ 1.8m tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱ 77%
+● Task "RED e construção do segundo intervalo" completed in background
+
+● Task "Run the full suite on the copy" still running in background
+
+✢ Proofing… (15h 44m 15s · ↓ 1.8m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    0% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
