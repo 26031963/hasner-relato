@@ -25,16 +25,16 @@ manda achado de fora virar **linha na fila, nunca trabalho na hora**. O achado v
 log: ao ler o veredito pela forma que a secao 3 do CLAUDE.md ensina, a primeira linha que casou foi
 `OK -- nenhuma divergencia em 2026-10-10.` -- **prosa de um teste**, nao o veredito do Django.
 **PROVA:** `grep -nE '^(OK|FAILED)( |\(|$)' logs/o219/suite_a0a_cheia.out` devolve a linha **965**
-com essa prosa, e `grep -rnE "\^\(OK\|FAILED\)" bin/` devolve **11 sitios vivos** com o mesmo
-padrao, entre eles `bin/regua.sh:170-171` (o veredito da REGUA) e `bin/isolamento.sh:34`.
+com essa prosa, e `grep -rnE "\^\(OK\|FAILED\)" bin/` devolve **12 linhas vivas em 9 arquivos** com o mesmo
+padrao (o `bin/pre-push.sh` nao entra: padrao outro, papel de formatador, veredito pelo rc da L-074), entre eles `bin/regua.sh:170-171` (o veredito da REGUA) e `bin/isolamento.sh:34`.
 O proprio CLAUDE.md ja mediu isso em 08/10 14:03 e escreve que o espaco nao cura -- e o comando
-literal que ele ensina continua aceitando `OK` seguido de espaco. O que salva os 11 hoje e o
+literal que ele ensina continua aceitando `OK` seguido de espaco. O que salva as 12 hoje e o
 `tail -1`, e ele salva **enquanto a suite termina**: suite morta no meio deixa a prosa como ultima
 linha casada e o teste da **VERDE em suite que nao acabou**. Nao curei agora, por duas razoes
-escritas: nao e deste marco, e a cura certa e **uma funcao unica** lida pelos 11, nao a 12a copia do
+escritas: nao e deste marco, e a cura certa e **uma funcao unica** lida pelos 9 arquivos, nao a 13a copia do
 padrao. Virou a obra **O240**, com o numero e o PROIBIDO (nada de allowlist de log que pode dizer
-`OK`, nada de corrigir em 11 lugares). Aqui eu usei a forma estrita -- fim de linha ou abre
-parenteses depois do veredito --, e e por ela que o pouso desta fatia foi medido.
+`OK`, nada de corrigir em 11 lugares). Aqui eu passei a usar a forma estrita -- fim de linha ou abre parenteses depois do veredito --, e e
+por ela que o veredito desta fatia se le, nao pela do CLAUDE.md.
 
 ## O219 A0-a — A FORMA DO TXT DO DOMINIO TINHA CINCO COPIAS, E DUAS SONDAS MINHAS MORRERAM ANTES DESTA (10/10 03:1x)
 A L-113 manda a competencia exportada deixar de BARRAR o recalculo, e o unico risco que a casa soube
