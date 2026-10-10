@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 21:27:31.**
+**Medido em 09/10/2026 21:32:09.**
 
 | | |
 |---|---|
 | `HEAD` local | `a5ae5013 [O232] pouso B: a saida que nasce entre dois turnos passa pela porta que ja decide fecho, e a noite de col923 deixa de pagar 0` |
-| `origin/main` | `c7b8bfdb [O232] pouso A: a guarda da pausa passa a ler a MESMA autoridade que o corpo soma, e 28 dias devolvem a janela declarada` |
-| commits a subir (`ahead`) | **1** |
+| `origin/main` | `a5ae5013 [O232] pouso B: a saida que nasce entre dois turnos passa pela porta que ja decide fecho, e a noite de col923 deixa de pagar 0` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -33,6 +33,7 @@ ca6f14f6 L-114 termometro: a cadencia passa a se verificar sozinha, e os 19 sem 
 
 ```
  M app/config/crons_duracao.json
+ M app/docs/RELATO.md
  M bin/sombra.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -121,42 +122,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● O cabeçalho (d) ainda carrega a afirmação que o corpo refuta. Corrijo o título para o que foi medido:
 
   Ran 1 shell command
 
-● Monto o script dos três itens de pauta (ainda não rodo: há push em curso e não se escreve na árvore durante ele):
+● Pousou no remoto. Confirmando que nenhum runner deu FAILED, e fechando a pergunta (A) do revisor no código:
 
   Ran 1 shell command
 
-● Dry OK. Só rodo depois do deploy + releitura dos hashes — a frase afirma "relido depois do pouso", e isso tem de ser verdade quando for
-  escrita. Vendo o push:
+● Isso responde (A) no código, e muda o que eu ia escrever. Mas abre uma pergunta própria: retratar_exportada escreve minutos_realizados
+  por dia a partir de "grade gravada" — se essa grade for derivada ao vivo, o pouso B move DiaPago da 09 EXPORTADA. Verificando:
 
-  Ran 2 shell commands
+  Ran 3 shell commands
 
-● O rótulo 21:4x no cabeçalho é chute — vou lê-lo do date no ato do enxerto. Preparo o script:
+● Fechado com código: nenhum dos dois escritores é cron — "cronificar seria o sistema reescrevendo a folha sozinho na madrugada". O deploy
+  não é o apply. Conferindo se a seção que vou enxertar afirma o contrário:
 
   Ran 1 shell command
 
-● rot perdeu os dois-pontos (212x). Corrijo:
+● Limpa. Acrescento à seção o que acabei de medir no código — é o que decide se a 09 EXPORTADA corre risco amanhã:
 
-● Running cd /home/ronald/saas-hasner export SP=/tmp/claude-…
+  Ran 1 shell command
+
+● Enxerto no RELATO (push terminado, árvore livre) e publico:
+
+● Running 2 shell commands…
   ⎿  $ cd /home/ronald/saas-hasner
      export SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
-     python3 - <<'PY'
-     import os
-     p=os.environ['SP']+'/o232/enxertar_relato.py'
-     s=open(p).read()
-     v="rot = '%s %s%sx' % (d, hm[:2], hm[3]) # 09/10 21:2x"
-     n="rot = '%s %s%sx'…
+     bash bin/relato.sh > "$SP/o232/relato1.out" 2>&1; echo "rc=$?"
+     tail -14 "$SP/o232/relato1.out"
 
-✢ Proofing… (3h 34m 45s · ↓ 432.7k tokens · thinking)
+* Proofing… (3h 39m 23s · ↓ 440.3k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens

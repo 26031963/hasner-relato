@@ -1,5 +1,73 @@
 # RELATO — esteira saas-hasner
 
+## O232 POUSO B — **O DIFF DA FROTA, ANTES DE QUALQUER ESCRITA** (09/10 21:3x, CONDICAO 1)
+
+PROVA: medido na sombra nas DUAS arvores (`c7b8bfdb` limpa contra a curada), uma trava de sombra,
+pelo espelho (`ponto/services/espelho.py`) sobre **12.889 dia-colab** — universo = todo colaborador
+com batida nao retratada na janela, nao amostra. Log: `logs/l115/casos_o232.md`.
+
+**A PREVISAO ERROU, e fica escrito.** Eu previa 9 dia-colab, col923 sozinho, +4.647 min na 09 e **0**
+na 10 — previsao montada sobre os 18 dias de col923, isto e, uma AMOSTRA. A frota diz:
+
+| competencia | dia-colab | minutos |
+|---|---|---|
+| 09/2026 (EXPORTADA) | 12 | **+5.095** (84,9 h) |
+| 10/2026 (aberta) | 1 | **+419** (7,0 h) |
+
+Por colaborador: **col923 +4.649** (9 noites), **col735 +234** (10/09), **col736 +207** (17/09),
+**col107 +5** (21/08), **col899 +419** (26/09, comp 10). Uma chave de um lado so: `col923 08/09`,
+que pagava **0** e foi absorvida em 07/09 (39 → 581) — zero minuto perdido.
+
+col735, col736 e col899 sao a MESMA familia de col923 fora dele: a saida nasce depois da meia-noite e
+o pareador a largava como turno proprio. **col107 nao e desta familia e nao se afirma como acerto**: o
+dia sai do leitor `_borda_posicional` (que mede a pausa por criterio proprio, 65 min) e entra no corpo
+de `realizado_dos_turnos`, onde `_pares_marcados` RECUSA o par `S 14:09 / S 15:14` (duas pontas
+gravadas `S`, ata MUDA = abstencao pela R1 balde P) e vale a janela DECLARADA de 60. Sao **dois
+leitores discordando de quanto durou a pausa** — a classe do pouso A, que JA existia e que esta cura
+so atravessa. Fila, com a guarda identica de `_borda_posicional:507`.
+
+**A FOLHA DA 10: `DIFF_FOLHA=1`, e o que se move NAO e o TXT.** O `sha256` das tres empresas e
+IDENTICO antes e depois (`87e36e9ae36a`, `7c753392f8ea`, `58efa3d18779`) — `TXT=0 RETIDOS=1`. O unico
+retido que muda e **col899/emp2**, que segue retido pelo MESMO motivo (`furo_espelho`) e com o mesmo
+`apto_folha pct=56.0`: `horas_trabalhadas 95.40 → 104.36`, `horas_extras_50 0 → 1.96`,
+`turnos_abertos 2 → 0`. **O Dominio da 10 nao recebe um centavo diferente por esta cura.**
+
+A sonda dos turnos de col899 explica os dois numeros sem inventar um terceiro: em 26/09 a base tem
+**DOIS** turnos (`n=3` e `n=1`) e a cura tem **UM** (`n=4`) — os dois turnos abertos sao o mesmo dia. O
+motor pagava **0** no dia aberto e passa a pagar **538 min = 8,96 h**; o espelho ja MOSTRAVA 119 min,
+entao o delta dele e `538 − 119 = 419`. `8,96 − 6,98 = 1,98 h = 119 min`, a menos de 1 min
+(arredondamento de horas a 2 casas). Mesma familia do "+5.451 contra +7.345" da re-lavra da 10: *ata =
+o que a casa viu; DiaPago = o que o dia paga*.
+
+**A 09 NAO SE TOCA** (L-092): os +5.095 min ficam **PUBLICADOS e nao aplicados**, e a diferenca entre o
+que a 09 pagou e o que passa a valer vai por **Pauta DP**, por colaborador. Condicao 2 cumprida ANTES:
+`logs/l115/o232B_reversao_col899.json` — o GRAVADO de prod de col899 na 10 (`minutos_realizados=6264`,
+`horas_trabalhadas=102.24`, `turnos_abertos=2`, mais os 52 `DiaPago`, campo por campo). Os hashes da 09
+lidos ANTES pela porta de vigencia: emp2 `361d0f9685f86d3a` (210 linhas), emp3 `5c503b95f9f9cd35` (86),
+emp4 `84c78cd0871f5f52` (9) — 8 registros, 3 vigentes.
+
+**DOIS DONOS, e os dois com destino (L-099)**: a metade ESTRUTURAL de col899 26/09 e esta cura; a de
+CADASTRO (DNA 08:00–16:00 contra batidas 11:00–21:00) e de col923 14/09 (noite trabalhada em dia de
+FOLGA, recusada pela condicao 3) aparece na lista CADASTRO x REALIDADE — que e DERIVADA do motor
+(`dias_cadastro_x_realidade`), nao escrita a mao.
+
+**O DEPLOY NAO E O APPLY, e isso se LE no codigo -- nao se supoe.** Eu ia escrever aqui que o
+`processar_cartorio --apply` das 06:28 lavraria sozinho o dia de col899 que o pouso B passa a fechar.
+**Esta errado.** Os dois escritores do gravado nao sao rotina, e a casa diz por que, com o corte ao lado:
+`config/crons.py:902` -- *"`recalcular_fechamento` NAO tem cron de proposito: quem decide QUANDO uma
+competencia se recalcula e o DP -- cronificar seria o sistema reescrevendo a folha sozinho na
+madrugada"* (corte Ronald 24/09) -- e `config/crons.py:797` -- *"BACKFILL DE OBRA, e obra nao vira
+rotina"* para o `lavrar_dias_pagos`. `grep -E '^\s*C\('` nos dois nomes da **0** entradas agendadas, e
+o `processar_cartorio` importa `impressao_insumos, julgar_colab, contadores`, nao `lavrar`. E a 09
+EXPORTADA tem porta PROPRIA e estreita, `ponto/services/dia_pago.py::retratar_exportada`: *"sem
+recalcular motor, sem tocar o fechamento"*, com a grade saindo de `grade_do_fechamento(fech)`.
+CONSEQUENCIA: o gravado **nao se move por este deploy** -- nem o da 09 (L-092 intacta, sem PAREI) nem o
+de col899 na 10. O que o deploy move e a TELA. A re-lavra de col899 na 10 e ato PROPRIO, PRE-APROVADO
+pela DINHEIRO-EM-COMPETENCIA-ABERTA com as 4 condicoes ja cumpridas aqui (DIFF publicado, reversao em
+`logs/l115/o232B_reversao_col899.json`, 09 intacta com hash antes e depois, prova depois) -- e e'
+trabalho do ato seguinte, nao deste. **E a mesma classe que o aval nomeia**: *"a L-115 foi ao ar e a
+folha nao se moveu sem re-lavra; a O219 e a cura dessa classe"*.
+
 ## O232 pouso A — **A GUARDA DA PAUSA LIA UMA AUTORIDADE E O CORPO SOMAVA OUTRA** (09/10 19:5x, marco)
 
 Bug **PROVADO no caminho do O232**, curado na hora (LEI-AKITA 6). O pouso B — a borda que nasce,
