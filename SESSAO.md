@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 10/10/2026 03:37:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (571.0 MB). Acoes na janela: **1404**.
+**Medido em 10/10/2026 03:43:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (571.4 MB). Acoes na janela: **1399**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 03:42:50 | Bash | Read the suite veredito with the strict Django form | `cd /home/ronald/saas-hasner && echo "--- veredito ESTRITO (so a forma do Django) ---"; grep -nE '^(OK\|FAILED)($\| \()' logs/o219/suite_a0a_cheia.out \| tail -3; echo "(vazio = ainda correndo)"; echo "--- Ran ---"; grep -E '^Ran [0-9]+ tests' logs/o219/suite_a0a_cheia.out \| tail -1; echo "--- cabeca do log ---"; head -12 logs/o219/suite_a0a_cheia.out; echo "--- idade ---"; stat -c '%y' logs/o219/ ...` |
+| 03:42:38 | Bash | Check suite progress and the sombra cron window | `cd /home/ronald/saas-hasner && date '+%d/%m %H:%M:%S %Z' && ls -l logs/o219/suite_a0a_cheia.out && tail -3 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bpgx227gx.output 2>/dev/null; echo "--- veredito ---"; grep -E '^(OK\|FAILED)( \|\()' logs/o219/suite_a0a_cheia.out \| tail -1; grep -E '^Ran [0-9]+ tests' logs/o219/suite_a0a_cheia.out \| tail -1; echo " ...` |
 | 03:37:28 | Bash | Fix the BACKLOG cell and the JSON wording | `python3 - <<'PY' import io, json p='docs/BACKLOG.md'; s=io.open(p,encoding='utf-8').read() m=[l for l in s.split('\n') if l.startswith('\| O219 \|')] assert len(m)==1 velha=m[0]; cels=velha.split(' \| ') novo=('A0-a FECHADA na raia `wt-l113`, pousa neste marco: a forma e a prova do TXT do Dominio passam a ter ' 'UM sitio (`folha/export.py`) e as 5 copias saem. RED em `logs/o219/SELO_RED_forma_do_t ...` |
 | 03:37:11 | Bash | Remove the premature NO AR claims and fix the juiz count | `python3 - <<'PY' import io, json # ---- TICKETS: tira a afirmacao de ato ANTES do deploy, e corrige o juizes-novos p='docs/TICKETS.md'; s=io.open(p,encoding='utf-8').read() a='\| **FECHADA no main** -- **NO AR** pelo deploy deste marco (`--sem-migrate`, a fatia nao toca modelo) \|' b=('\| **FECHADA na raia `wt-l113` e PRONTA para pousar (neste commit)** -- o deploy deste marco e ' '`--sem-migrate` ...` |
 | 03:36:51 | Bash | Confirm core/juizes.py untouched in the raia | `cd /home/ronald/wt-l113 && git status --short && echo "--- core/juizes.py tocado? ---" && git diff --stat HEAD -- app/core/juizes.py && echo "(vazio = nao tocado)"` |
@@ -1407,10 +1409,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 15:43:57 | Bash | Read suite.sh rest | `cd /home/ronald/saas-hasner && sed -n '70,140p' bin/suite.sh` |
 | 15:43:41 | Bash | Read suite.sh usage | `cd /home/ronald/saas-hasner && sed -n '1,70p' bin/suite.sh` |
 | 15:43:03 | Bash | How the cartorio gets minutos_realizados | `grep -n 'realizado\\|intervalo_do_dia' ponto/services/cartorio.py \| cut -c1-150` |
-| 15:42:49 | Bash | Find AUT_INTRA_MAX_S definition | `grep -rn 'AUT_INTRA_MAX_S' --include=*.py . \| cut -c1-160` |
-| 15:42:43 | Bash | Find other users of intra_max_s | `grep -rn 'intra_max_s' --include=*.py . \| grep -v 'ponto/turnos.py' \| cut -c1-140` |
-| 15:41:53 | Bash | Read turnos.py top and authority region | `sed -n '1,40p' ponto/turnos.py; echo "=== 310-500 ==="; sed -n '310,500p' ponto/turnos.py` |
-| 15:41:41 | Bash | Census of the 3h teto constant | `grep -n 'intra_max_s\\|3 \* 3600\\|PISO_INTERVALO_SEGUNDOS' ponto/turnos.py` |
-| 15:41:25 | Bash | Read _BaseLavratura | `sed -n '100,200p' ponto/tests/test_bateria_lavratura.py` |
-| 15:41:16 | Bash | Read bateria helpers | `sed -n '300,510p' ponto/tests/test_bateria_lavratura.py` |
-| 15:41:11 | Bash | Read bateria header | `sed -n '1,80p' ponto/tests/test_bateria_lavratura.py` |

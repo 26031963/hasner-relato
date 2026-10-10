@@ -3889,6 +3889,8 @@ ausencia de sinal.
 
 ## ALARMES DA ESTEIRA
 
+**10/10 03:40 vigia da esteira** -- esteira em espera de janela: 8 fatias prontas, reabre 04:45.
+
 **09/10 22:40 vigia da esteira** -- esteira em espera de janela: 8 fatias prontas, reabre 00:00.
 
 **09/10 03:40 vigia da esteira** -- esteira em espera de janela: 8 fatias prontas, reabre 04:45.
