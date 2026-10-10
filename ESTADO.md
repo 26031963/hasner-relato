@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 22:36:31.**
+**Medido em 09/10/2026 22:42:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `b5700cbb [O206] pouso: o aviso de pergunta sem resposta para de mandar na acao que APAGA resposta, e cobrarChamado passa a ter uma definicao so` |
+| `HEAD` local | `1c5b2e20 [O206] cura: a lapide do dono da cobranca para de nomear o delimitador que o selo varre, e o render nao se move um byte` |
 | `origin/main` | `a5ae5013 [O232] pouso B: a saida que nasce entre dois turnos passa pela porta que ja decide fecho, e a noite de col923 deixa de pagar 0` |
-| commits a subir (`ahead`) | **2** |
+| commits a subir (`ahead`) | **3** |
 
 ## Fabrica
 
@@ -22,17 +22,19 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+1c5b2e20 [O206] cura: a lapide do dono da cobranca para de nomear o delimitador que o selo varre, e o render nao se move um byte
 b5700cbb [O206] pouso: o aviso de pergunta sem resposta para de mandar na acao que APAGA resposta, e cobrarChamado passa a ter uma definicao so
 a5ae5013 [O232] pouso B: a saida que nasce entre dois turnos passa pela porta que ja decide fecho, e a noite de col923 deixa de pagar 0
 c7b8bfdb [O232] pouso A: a guarda da pausa passa a ler a MESMA autoridade que o corpo soma, e 28 dias devolvem a janela declarada
 03fbfde9 [O231] marco: o comando imprime a medicao que AGIU, e a fila 1 passa a ser a ordem dele de 18:3x
-7fac2bcf O206: o painel do fio manda COBRAR, e o Reabrir desce com a condicao escrita
 ```
 
 ## `git status --short`
 
 ```
  M app/config/crons_duracao.json
+ M app/docs/HANDOFF-SESSAO.md
+ M app/docs/RELATO.md
  M bin/sombra.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -121,44 +123,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● O remoto está em a5ae5013 e faltam 2 — o push não pousou, apesar do exit code 0 do comando de fundo (aquele rc é do tail, não do git
-  push). Lendo o log:
+● Render byte-idêntico (md5 bc334ff3…, 2095 bytes) e o código do selo acusa 0. Escrevendo o RELATO — o bloco do NO AR que já estava pronto,
+  mais o RED da lápide — e o commit:
 
-  Ran 1 shell command
+  Ran 4 shell commands
 
-● RED no pre-push, e ele é meu. test_nenhuma_lapide_multilinha_em_templates acusa _js_cobranca.html — lápide {# #} multilinha, que compila
-  e VAZA para a tela (é exatamente a classe que a casa já pagou). E template está vivo no disco: isso está na tela agora. Curando na hora:
+● Guarda verde. Commitando — commit NOVO, nunca amend no b5700cbb:
+
+  Committed 1c5b2e20
+
+● Commit 1c5b2e20. Rodando a pasta de selos de host antes do push (responde em segundos; a recusa custa uma suite inteira):
 
   Ran 2 shell commands
 
-● A lápide está em {% comment %} — a linha 14 só menciona {# na prosa que explica a cura, e o selo varre TEXTO, não estrutura. É a 6ª vez
-  dessa classe nesta casa. Medindo antes de escolher a cura: (a) vaza de fato na tela? (b) o selo já tolera isso em outro lugar?
+● Push correndo. Enquanto ele carimba a árvore, sigo o PLACAR-ESTRUTURAL no R3 — só leitura. O R3 nomeia o próprio bloqueio: a O130 está
+  construída e medida e não está no ar, segurada pelo ! da janela_auth. Medindo se esse ! é real:
 
-  Ran 3 shell commands
+  Ran 2 shell commands
 
-● Provado pelo lexer REAL do Django: nada vaza — 2095 bytes, a saída começa em <script>, zero {#. O {% comment %} consome tudo, inclusive o
-  literal da linha 14. Não há bug em produção; o RED é falso positivo do selo, que varre texto e morde a prosa que documenta a cura. Censo
-  antes de escolher:
+● A lista é declarada (10 sítios, lei de 23/09 — "auth = zona de dinheiro", nascida do P0 de 20/09 em que ~750 caíram no login). Medindo se
+  a O130 toca algum:
 
   Ran 1 shell command
 
-● Um caso só, meu, e dentro de {% comment %}. E o selo tem regex própria (UM_LINHA, linha 47) — réplica do tag_re do Django, isto é, um
-  segundo escritor da lei do lexer. Consultando antes de escolher a cura:
+● A raia-o130 está 0 commits à frente do main. Conferindo se a O130 já pousou — isso mudaria o que o R3 afirma:
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+● Running 1 shell command…
 
-· Proofing… (4h 43m 45s · ↓ 550.9k tokens · thinking)
+✢ Proofing… (4h 49m 15s · ↓ 565.4k tokens · thought for 1s)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Adding declared mode to views_fase.py                                                       20m 3s · ↓ 144.8k tokens
-  ◯ general-purpose  Reading RED verdict in red.out                                                              20m 3s · ↓ 120.3k tokens
+  ◯ general-purpose  Running ruff on colaboradores app                                                          25m 32s · ↓ 149.9k tokens
+  ◯ general-purpose  Extracting ESTADO cell from BACKLOG.md                                                     25m 32s · ↓ 146.1k tokens
   ⧉  index
 ```

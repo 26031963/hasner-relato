@@ -57,6 +57,60 @@ codigo da porta pode pousar e **dado de vinculo nao**; depois dela, `O199 -> O19
 **celula**, pelo metodo da certidao de obito da L-111 -- censo por **AST, nunca grep de texto**. Nenhuma
 das duas mergeia, deploya ou empurra: o pouso e meu, entre dois pousos meus (L-105).
 
+**NO AR, com a prova do deploy** -- a DEPLOY-JA cobra smoke em prod logo depois, e a metade que e
+minha e esta.
+PROVA: deploy rc **0**, 3 rotas provadas (200/302/200), `importerror_500=0`, selo BUG 128 verde nas
+tres cascas -- `logs/l115/o206_deploy.out`, 22 linhas.
+
+O que o portao mediu: `bin/deploy.sh --sem-migrate` **rc 0** (`logs/l115/o206_deploy.out`) -- `0` migration pendente
+no schema do cliente, `janela_auth` OK (nenhum sitio de auth mudou), sombra do **dia** com
+`status=OK tipo=completa diverge=0 erros=0`, **collectstatic rodou** (static/template mais novo que o
+manifest), prova de casca com **16 estaticos, 5 paginas compiladas, 608 rotas em 2 urlconf**, as **tres
+cascas recarregadas juntas** e **tres rotas provadas** (core `/health/` 200, ui `/colaboradores/` 302,
+mensageria `/health/` 200), selo BUG 128 verde nas tres e **`importerror_500=0`** na janela de 21:13 a
+22:13. **O template ja estava na tela no ato do merge** -- nao ha `cached.Loader` (`base.py:74`) --, e
+por isso o merge e o deploy foram **um ato so** (L-107). A metade que falta e o clique do Fernando, que
+e o `O206-PAINEL-COBRAR-SMOKE` na mesa.
+
+**ESMERIL DESTE MARCO (L-108 / ESMERIL-DO-MARCO): `0` orfao, e o censo e por ALCANCE, nao por grep de
+prosa.** A O206 move duas funcoes, e mover e o caso em que orfao nasce: `cobrarChamado` tem **1**
+definicao (`_js_cobranca.html:35`) e `hxPreviewCobranca` tem **1** (`:23`, mais o `window.` de
+exportacao); os dois sitios velhos ficaram com **lapide**, nao vazios (`_lista_chamados.html:170` e
+`painel_gestao.html:48`); o partial tem **UM** include, de `base.html:377` -- e **nao** do
+`base_app.html`, que e exatamente o caso 04d do selo (*a casca do COLABORADOR nao recebe acao de
+gestor*); e os **tres** sitios de chamada (`modal_fio.html:317`, `_lista_chamados.html:84`,
+`painel_gestao.html:63`) alcancam a definicao pelo fecho do `extends`. Nenhum achado de fora do marco
+entrou aqui: o que apareceu virou linha na fila.
+
+**UMA LINHA DE HIGIENE, para nao ser descoberta depois**: para levar a `wt-bos` ao main eu descartei o
+`app/docs/HANDOFF-SESSAO.md` local DELA, que era um handoff **gerado** de 08/10 23:11 apontando
+`6c53bc46` -- derivado de `bin/handoff_sessao.sh`, vencido, que **prod nao le**, e com copia guardada
+antes. Nao e o `!` de *voltar ao HEAD arquivo que prod usa*; se fosse, eu teria parado.
+
+**E O PRE-PUSH FICOU VERMELHO, no meu proprio arquivo: `test_nenhuma_lapide_multilinha_em_templates`.**
+Nada vazou -- e isso **se mediu**, nao se supos. A lapide do `_js_cobranca.html` esta em
+`{% comment %}`, e dentro de um bloco de comentario o lexer do Django consome tudo: a linha 14 so
+**mencionava** o delimitador de uma cerquilha na prosa que explica por que o cabecalho nao usa essa
+forma. O selo (`holerite/tests/test_contract_lapide_nao_vaza.py`, corte dele de 05/09) varre **TEXTO**,
+nao estrutura -- entao ele mordeu a prosa que documenta a cura. **E a 6a vez dessa classe nesta casa.**
+PROVA: render pelo lexer REAL do Django, md5 **identico** antes e depois do patch
+(`bc334ff3106fd89e1874f444899cdcac`, 2095 bytes, saida comecando em `<script>`, zero delimitador de
+cerquilha na saida); e o **proprio codigo do selo** (sua regex e sua funcao `lapides_que_vazam`,
+extraidas por AST do arquivo dele e executadas) acusa **0** nos templates depois do patch, contra **1**
+antes.
+
+**A cura foi a MINHA PROSA, nao o selo, e a escolha tem razao escrita** (CURA-MAIS-RESTRITIVA): das duas
+candidatas, reescrever tres palavras de um comentario meu **nao relaxa nada**, enquanto ensinar o selo a
+pular blocos `{% comment %}` **estreita o alcance de uma guarda** cujo falso negativo e texto na tela do
+DP. O selo erra para o lado certo de proposito -- o docstring dele de 05/09 ja sabia que `{% comment %}`
+existe e ainda assim escolheu *"qualquer cerquilha que nao fecha na propria linha"*. O arquivo do selo
+**nao foi tocado** neste commit.
+
+**A imprecisao do selo vira LINHA NA FILA, nao trabalho agora** (ESMERIL-DO-MARCO: achado de fora deste
+marco nao abre escopo): *o selo lapide-nao-vaza varre texto e acusa cerquilha escrita em prosa DENTRO de
+`{% comment %}`; 1 caso medido em 09/10, hoje zero; a cura certa le o `TextNode` do parser real, nunca
+uma segunda regex que rastreie `{% comment %}` -- isso seria o derivador paralelo da LEI-AKITA 1.*
+
 ## O232 POUSO B — **NO AR, E O APPLY NAO E O DEPLOY: E A BATIDA** (09/10 21:3x, CONDICAO 4)
 
 PROVA: `bin/deploy.sh --sem-migrate` rc **0** (`logs/l115/o232B_deploy.out`) — prova de casca com 16
@@ -3432,6 +3486,8 @@ ausencia de sinal.
 ---
 
 ## ALARMES DA ESTEIRA
+
+**09/10 22:40 vigia da esteira** -- esteira em espera de janela: 8 fatias prontas, reabre 00:00.
 
 **09/10 03:40 vigia da esteira** -- esteira em espera de janela: 8 fatias prontas, reabre 04:45.
 
