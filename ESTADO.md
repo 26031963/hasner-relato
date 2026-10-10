@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 06:31:01.**
+**Medido em 10/10/2026 06:36:31.**
 
 | | |
 |---|---|
@@ -149,12 +149,12 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Now the carimbo_gravado fork:
 
-● Running the host seals in the raia · 1m 0s
+● Running the host seals in the raia
   ⎿  $ cd /home/ronald/wt-l113 && ls bin/tests/*.sh | wc -l && for t in bin/tests/*.sh; do out=$(bash "$t" 2>&1); rc=$?; [ $rc -ne 0 ] && {
-     echo "=== VERMELHO rc=$rc: $t"; echo "$out" | tail -8; }; done; echo "--- fim dos selos de host ---" (1m 0s · 5 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
+     echo "=== VERMELHO rc=$rc: $t"; echo "$out" | tail -8; }; done; echo "--- fim dos selos de host ---"
 
-✢ Proofing… (12h 36m 15s · ↓ 1.5m tokens)
+✢ Compacting conversation… (12h 41m 45s · ↓ 1.5m tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱ 95%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                     1% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
