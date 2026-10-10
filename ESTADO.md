@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 20:55:35.**
+**Medido em 09/10/2026 21:00:45.**
 
 | | |
 |---|---|
@@ -131,18 +131,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Salvando a lição que custou o ciclo, e preparando a célula do O232:
-
-  Ran 3 shell commands
-
-● Base pronta (406 KB), a cura rodando. Lendo a célula do O232 para fechá-la:
-
-  Ran 3 shell commands
-
-● Background command "Run two-tree impact DIFF for pouso B on the sombra" completed (exit code 0)
-
-● Selos de host: 0 RED. E o DIFF voltou:
-
   Ran 1 shell command
 
 ● O DIFF divergiu da previsão — 13 dia-colab e 5 colaboradores, não 9 e um só, e a 10 não é 0. Cada desvio se explica antes do commit.
@@ -153,20 +141,32 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● A chave perdida é col923 08/09, que pagava 0 — o dia órfão desaparece porque o 07/09 absorveu a batida (39 → 581). Nenhum minuto se
   perde. Mas os 4 dias não previstos precisam de explicação. Sonda nos dois lados:
 
-  Running cd /home/ronald/saas-hasner SP=/tmp/claude-1001/-h…
-  ⎿  $ cd /home/ronald/saas-hasner
-     SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
-     cat > $SP/o232/forma_dos_4.py <<'PY'
-     # SOMENTE LEITURA. Imprime a FORMA dos dia-colab que o DIFF do pouso B moveu e que a previsao
-     # nao nomeava. So ids, tipos, instantes e…
+  Ran 1 shell command
 
-· Proofing… (3h 2m 49s · ↓ 371.4k tokens)
+● A forma dos 4 é a mesma família da L-115, só fora de col923: pausa carimbada fechada + uma batida solta depois. Lendo o lado da cura para
+  confirmar e entender o col107 de +5:
+
+  Ran 1 shell command
+
+● Os 4 não previstos são a mesma família, fora de col923 — e o col107 é outra coisa. Escrevendo cada um antes do commit:
+
+  Ran 2 shell commands
+
+● Agora o DIFF de folha da 10, que deixou de ser formalidade:
+
+  Ran 1 shell command
+
+● O DIFF de folha está correndo e a análise dos 4 desvios já está em arquivo. Chamando o advisor sobre a divergência:
+
+  Advising using Fable 5.1
+
+· Proofing… (3h 7m 59s · ↓ 381.6k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                   12% until auto-compact
+                                                                                                                    2% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
