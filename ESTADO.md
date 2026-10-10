@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 21:11:01.**
+**Medido em 09/10/2026 21:16:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `c7b8bfdb [O232] pouso A: a guarda da pausa passa a ler a MESMA autoridade que o corpo soma, e 28 dias devolvem a janela declarada` |
+| `HEAD` local | `a5ae5013 [O232] pouso B: a saida que nasce entre dois turnos passa pela porta que ja decide fecho, e a noite de col923 deixa de pagar 0` |
 | `origin/main` | `c7b8bfdb [O232] pouso A: a guarda da pausa passa a ler a MESMA autoridade que o corpo soma, e 28 dias devolvem a janela declarada` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -22,20 +22,17 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+a5ae5013 [O232] pouso B: a saida que nasce entre dois turnos passa pela porta que ja decide fecho, e a noite de col923 deixa de pagar 0
 c7b8bfdb [O232] pouso A: a guarda da pausa passa a ler a MESMA autoridade que o corpo soma, e 28 dias devolvem a janela declarada
 03fbfde9 [O231] marco: o comando imprime a medicao que AGIU, e a fila 1 passa a ser a ordem dele de 18:3x
 5d9ec893 L-115 pouso 1: a saida pela posicao esta no ar, e a figura do aval nao e esta
 ca6f14f6 L-114 termometro: a cadencia passa a se verificar sozinha, e os 19 sem destino ganham dono
-e38d4039 O230 pouso 1: a sonda de leitura do dev da casa esta na arvore, e quem segura e o GRANT
 ```
 
 ## `git status --short`
 
 ```
  M app/config/crons_duracao.json
- M app/docs/BACKLOG.md
- M app/docs/HANDOFF-SESSAO.md
- M app/docs/RELATO.md
  M bin/sombra.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -124,42 +121,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 3 shell commands
+  Ran 1 shell command
 
-● O selo é TETO (assertLessEqual) e passou no run dos vizinhos na árvore curada — o chokepoint não se move porque registrar_batida é um dos
-  11 chamadores que não passam marcos_por_dia. Agora a foto de reversão de col899:
+● Aplicando no ato do commit (L-010) — dois arquivos de código e os três docs do marco:
 
-  Ran 3 shell commands
+  Committed a5ae5013, ran 1 shell command
 
-● /app/logs é a árvore do app, não o logs/ da raiz. Imprimindo e gravando no host:
+● Commit a5ae5013. Conferindo a sombra (para que um RED posterior seja atribuível) e o remoto antes do push:
 
   Ran 1 shell command
 
-● Reversão gravada (minutos_realizados=6264, turnos_abertos=2, 52 DiaPago). Vendo a medição dos dois turnos:
-
-  Ran 3 shell commands
-
-● t.entrada/t.saida são Batida, não datetime. Corrigindo:
+● Sombra diverge=0, um commit meu a empurrar. Push (o hook roda os dois runners):
 
   Ran 1 shell command
 
-● Escrevendo o resultado da folha enquanto a sonda roda:
+● Push rodando. Enquanto isso, sem tocar a árvore carimbada — preparando a Pauta DP da 09 com o medido em scratchpad:
+
+  Ran 2 shell commands
+
+● Push na fase da suite. Vendo como o ESTADO mostra a faixa (só leitura, sem tocar a árvore durante o push):
+
+  Ran 3 shell commands
+
+● A faixa é o banner que bin/relato.sh prepende ao ESTADO quando a guarda retém. Conferir = publicar e ver o banner ausente — depois do
+  push. Vendo o push:
 
 ● Running SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/…
   ⎿  $ SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
-     if [ -f "$SP/o232/col899.done" ]; then
-     cat "$SP/o232/col899.rc"
-     echo "=== diff base x cura ==="
-     diff <(grep -vE '^[0-9]+ objects imported' "$SP/o232/col899_base.out") \
-     <(grep -vE '^[0-9]+ objects imp…
+     tail -5 "$SP/o232/push_pousoB.out"; echo "---"; wc -l "$SP/o232/push_pousoB.out"
 
-✢ Proofing… (3h 18m 15s · ↓ 403.3k tokens · still thinking)
+· Proofing… (3h 23m 45s · ↓ 416.2k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    9% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
