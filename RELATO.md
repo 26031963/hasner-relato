@@ -159,6 +159,35 @@ carimbou 06:40 -- e nenhum cron a re-invoca), mas um selo que apaga o carimbo de
 prod e capaz de fabricar ALARME falso no proximo que o leia. **Fila, pela ESMERIL-DO-MARCO**: achado fora do
 marco e linha, nunca trabalho agora.
 
+**O POUSO, E O QUE ELE ME ENSINOU SOBRE A FORMA DA L-107.** Eu pedi
+`git merge --no-commit raia-l113` pela forma da L-107 e recebi um **FAST-FORWARD**: `--no-commit` **nao**
+suprime o fast-forward, e o main estava exatamente um commit atras da raia. Entao nao houve commit de
+merge, o `MERGE_HEAD` nasceu **vazio**, e `10de79cb` entrou no main sozinho -- com o codigo **ja na arvore
+viva**, que E o bind-mount, as 07:11. A L-107 existe justamente contra essa janela, e ela se fechou do jeito
+certo porque o `bin/deploy.sh` veio **imediatamente** depois, sem nada no meio. Fica como FORMA e nao como
+susto: quem quer o commit de merge pede `--no-ff` junto com o `--no-commit`; quem pede so `--no-commit`
+pode receber um fast-forward e deve tratar o pouso como **ja comecado**. Os docs do marco entraram em
+`d20a0e45`, no mesmo ato, pela L-106.
+
+**PROVA DO AR, NAO DO DISCO.** `bin/deploy.sh --sem-migrate` rc **0**: `migrations pendentes no schema do
+cliente: 0`, `sombra: carimbo dia=20261010 status=OK tipo=completa diverge=0 erros=0`, prova de casca com
+`16 estaticos conferidos, 5 paginas compiladas, 608 rotas importadas em 2 urlconf(s)`, tres rotas provadas
+(core `/health/` 200, ui `/colaboradores/` 302, mensageria `/health/` 200), selo BUG 128 verde nas tres
+cascas e `importerror_500=0` na janela 06:12-07:12. O elo novo entrou no crontab por `bin/crons.sh install`
+(backup em `logs/crontab_backup_20261010_071308.txt`) e o `check` seguinte fecha a conta:
+`crontab == config/crons.py (102 linhas)` -- o `check` anterior acusava exatamente a diferenca de **1** elo,
+nas tres linhas do cartorio, porque **as tres empresas o chamam** e o `flock -n 9` faz so a primeira
+trabalhar.
+
+**E O COMANDO RESPONDEU DO CODIGO PUBLICADO, nao do que eu media antes de commitar**: rodado em prod as
+07:13:49, **8 s**, `Q1 ... universo 7: bate=1 diverge=6 incomparavel=0 (cego=0 historico=0)` com
+**VALOR MOVEU 1 competencia e 27 matricula-competencia** contra **PORTA MOVEU 6 competencias**, e
+`Q2 ... universo 26: bate=25 diverge=0 incomparavel=1 (cego=0 historico=1)` -- o MESMO numero da medicao de
+06:12, agora saindo do ar. Sem `--alarme` ele sai **0**; com `--alarme` sai **2** e a linha e
+`ALARME TXT-DOMINIO: {'q1.competencias_com_valor_movido': 1}` -- **uma** chave, nomeada: nao e a Q2, nao e
+`cego`, nao e o `diverge=6`. O alarme aponta para a unica coisa que tem dono na mesa, e as 124 linhas de
+saida nao trazem **nenhum nome** de colaborador.
+
 `LEI-AKITA: origem=folha/services/vigia_txt.py (a pergunta nasce onde a forma e a prova do TXT ja moram, apos a A0-a), testemunha=folha/export.py::classificar_export + montar_linhas_export + hash_do_txt (nenhuma regra propria de dia, soma ou classe) e ponto/e6_oraculo.py::dono_da_divergencia para dono, RED=folha/tests/test_l113_a0b_vigia_do_txt.py::test_MORDE_matricula_em_um_lado_so_e_PORTA_MOVEU_nao_valor + ::test_MORDE_a_q1_nao_alarma_por_diverge_e_sim_por_valor_movido + core/tests/test_selo_diagrama_do_codigo.py (2 falhas antes da regeneracao), quem-mais-le=folha/export.py sem mudanca de assinatura publica, 1 ENC novo nos ENCADEADOS, 1 papel novo no PAPEL_DO_CRON, 1 contador curado em gerar_diagrama.py, juizes novos=0 (o censo deixou de carregar `dono` -- tabela motivo->dono seria juiz novo e pede corte pela TRAVA JUIZ-NOVO)`
 
 ## RAIA QUE NAO POUSA — O MOTIVO EM UMA LINHA CADA (L-105, medido 10/10 03:3x)

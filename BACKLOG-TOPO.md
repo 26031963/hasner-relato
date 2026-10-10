@@ -5,7 +5,7 @@ a raspagem usa a lista de nomes do banco como autoridade, nunca regex adivinhada
 `colNNN`/`ecNNN` ficam, porque nao identificam ninguem fora desta casa. Obra FEITA sai desta
 lista — ela e o que esta EM PE._
 
-**240 obras abertas.**
+**241 obras abertas.**
 
 | ID | obra | estado |
 |---|---|---|
@@ -249,3 +249,4 @@ lista — ela e o que esta EM PE._
 | **O239** | DUAS ESCRITAS NO GRAVADO DE UMA COMPETENCIA EXPORTADA E PAGA, SEM PORTA E SEM TRILHA | espera `!` |
 | **O240** | O PADRAO DE VEREDITO DA SUITE AINDA CASA PROSA DE LOG, E SO O `tail -1` SALVA | livre -- toca so `bin/` e a secao 3 do C |
 | **O241** | DUAS RAIAS COM 7 COMMITS CADA A FRENTE DO MAIN E NENHUM MOTIVO NOMEADO | espera `!` |
+| **O242** | O SELO DA CORRENTE DA UM RED FALSO EM QUALQUER COPIA, E APAGA CARIMBO VIVO DE CRON | medicao e cura de INSTRUMENTO: pouso PRO |

@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 07:25:31.**
+**Medido em 10/10/2026 07:30:45.**
 
 | | |
 |---|---|
 | `HEAD` local | `d20a0e45 [O219] pouso: os docs do marco A0-b entram junto, e o merge que eu pedi sem commit virou FAST-FORWARD -- o codigo estava na arvore viva antes deste commit` |
-| `origin/main` | `374b7712 [O219] pouso: a A0-a entra no main com os docs do marco, e a linha do CLAUDE.md que ensinava o veredito solto passa a ensinar o estrito` |
-| commits a subir (`ahead`) | **2** |
+| `origin/main` | `d20a0e45 [O219] pouso: os docs do marco A0-b entram junto, e o merge que eu pedi sem commit virou FAST-FORWARD -- o codigo estava na arvore viva antes deste commit` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -32,8 +32,11 @@ a364847b [O218] corretivo: a guarda da sombra volta a ter UM sitio, e o selo que
 ## `git status --short`
 
 ```
+ M CLAUDE.md
  M app/config/crons_duracao.json
+ M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/RELATO.md
  M bin/sonda_frota.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -122,42 +125,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● The check answers it cleanly — and the answer is declared, not inferred:
+  Ran 1 shell command
 
-  # RC 2 CARIMBA, e isto e' declarado: 2 e alarme de NEGOCIO (o cron rodou e achou algo), nao falha
-  if [ "$RC" -eq 0 ] || [ "$RC" -eq 2 ]; then ... date -Iseconds > "$FIM_DIR/${N}.${E}.$DIA"
+● Background command "Push the marco" completed (exit code 0)
 
-  So tomorrow the vigia carimba on its exit 2, and the second and third cartório lines hit [ -f "$FIM/$CMD.-.$DIA" ] && exit 0. alarmes=1,
-  not 3 — contador == universo. No fila line needed there.
+● Background command "Wait for the push to finish by file marker" completed (exit code 0)
 
-  Writing the fast-forward lesson to memory now (outside the project tree, so it's safe during the push) — it will recur on every
-  one-commit raia, and wt-bos and raia-celula are both queued:
+● Push landed. Confirming from the remote, not from the log:
 
-  Ran 1 shell command, wrote 1 memory
+  Ran 1 shell command
 
-● Now the push status, read-only:
+● origin/main == HEAD == d20a0e45, 0 a empurrar. The marco is fully landed. Applying the pouso proof and the two post-push edits now that
+  the tree is free:
 
-  Ran 2 shell commands
+  Ran 3 shell commands
 
-● origin/main still at 374b7712 — the pre-push is running the full suite against d20a0e4525. Preparing the two post-push edits while it
-  runs. First reading the exact L-107 form line in CLAUDE.md that needs --no-ff:
+● Marco closed. Continuing the turn at O223 per the fila order — the law says don't return the turn with fila 1 open. Reading the fixture
+  patterns the RED will need:
 
-  Ran 5 shell commands
+  Ran 1 shell command
 
-● relato_pouso.py is ready. Now writing the second post-push script — the --no-ff correction to CLAUDE.md §2 (the VIVO manda, §8) and the
-  O242 fila line for the two instrument findings, so they live in the BACKLOG and not only in a RELATO that archives in 3 days:
+● My memory flags exactly this trap — the existing fixture CNPJ 11222333… is excluded by empresas_visiveis, so a view test using it would
+  pass vazio. Confirming the filter before writing the RED:
 
-● Checking how far along the pre-push suite is
-  ⎿  $ cd /home/ronald/saas-hasner && tail -3 logs/o219/push_a0b.out; echo "=== idade do log:"; date '+agora %H:%M:%S'; stat -c '%y'
-     logs/o219/push_a0b.out
+  Searched for 2 patterns, ran 1 shell command
 
-✢ Proofing… (13h 30m 45s · ↓ 1.6m tokens · thinking)
+● Now writing the RED for O223 pouso A — all ten cases, with view fixtures that survive empresas_visiveis:
+
+  Finding the form_empresa route name
+
+· Proofing… (13h 35m 59s · ↓ 1.6m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    6% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
