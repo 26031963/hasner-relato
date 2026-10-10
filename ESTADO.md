@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 17:00:31.**
+**Medido em 10/10/2026 17:05:45.**
 
 | | |
 |---|---|
@@ -123,16 +123,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● MARCO FECHADO — pode compactar
-
-  O48 passo 2 fechado com o número de frota medido depois do deploy.
-
-  - lido == gravado em 583 de 583 colabs da 10/2026, DIFEREM = 0 nos 26 campos, listas de campos e de quem difere vazias. É a frase do RED
-    do aval ao pé da letra: o par rodou --recalcular na mesma sombra às 16:26–16:31, então o "gravado" da 10/2026 é a lavratura derivada
-    ali — dito com o horário para não se ler como comparação contra o gravado de prod.
-  - custo: lote de 583 em 107,5 s (0,184 s/colab), uma chamada da porta em 0,19 s, pk is None confirmado, porta-de-um × lote divergem em 0
-    campo, fora do universo → None.
-  - os 4 so_gravado são universo, não buraco: medidos com o predicado da própria função (fechamento.py:94), 4 de 4 são desligado com
     demissão anterior a 2026-09-02. Fica linha de fila — eles seguem com status=aberto numa competência que o recálculo já não cobre.
   - "GET que escreve" fechado por AST: as duas chamadas de _lavrar_dia_pago (:655, :718) estão sob o mesmo if de :645 (not somente_leitura
     or lavrar_dias_pagos), e fechamento_lido fecha os dois. Corroboração no log: o caminho de escrita imprimiu 210 linhas de lavratura
@@ -151,10 +141,20 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
   Ran 12 shell commands
 
 ● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-✢ Proofing… (23h 5m 45s · ↓ 2.7m tokens)
+  Procurar a pergunta de lei do dia_encerrado
+  ⎿  $ cd /home/ronald/saas-hasner/app
+     echo "=== dia_encerrado nos docs ==="
+     grep -rn 'dia_encerrado' docs/CORTES.md docs/RELATO.md docs/RELATO-ARQUIVO.md docs/LEIS.md docs/PENDENTES_RONALD.json 2>/dev/null |
+     cut -c1-170
+     echo "=== e no codigo ==="
+     grep -rn 'dia_encerrado' --include=*.py . | cut -c1-140
+
+· Compacting conversation… (23h 10m 59s · ↓ 2.7m tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱ 90%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    7% until auto-compact
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
