@@ -5,7 +5,7 @@ a raspagem usa a lista de nomes do banco como autoridade, nunca regex adivinhada
 `colNNN`/`ecNNN` ficam, porque nao identificam ninguem fora desta casa. Obra FEITA sai desta
 lista — ela e o que esta EM PE._
 
-**241 obras abertas.**
+**243 obras abertas.**
 
 | ID | obra | estado |
 |---|---|---|
@@ -231,7 +231,7 @@ lista — ela e o que esta EM PE._
 | **O221** | POUSO DAS DUAS RAIAS AVALIZADAS | espera `!` |
 | **O222** | O VEREDITO DO DIA LE O CHAMADO QUE A PROPRIA PASSADA CRIA | **livre** |
 | **O223** | A APLICACAO DE CONVENCAO SE EDITA PELA UI | espera aval |
-| **O224** | DIETA-DO-CLAUDE-MD | livre -- nao toca codigo nem teste, e a  |
+| **O224** | DIETA-DO-CLAUDE-MD | **FECHADA 10/10 11:3x.** 2a fatia (aval  |
 | **O225** | UM ROTULO DE EFEITO SEM NENHUM LEITOR DE TEMPLATE | livre -- e tela e tag, nao numero. Fila  |
 | **O226** | DUAS VERDADES SOBRE "ESTE PARAMETRO TEM EFEITO" | livre. Fila de INSTRUMENTO (ordem dele d |
 | **O227** | O GUARDA DA L-092 RECUSA LEITURA | livre -- nao toca numero, so quem pode P |
@@ -250,3 +250,5 @@ lista — ela e o que esta EM PE._
 | **O240** | O PADRAO DE VEREDITO DA SUITE AINDA CASA PROSA DE LOG, E SO O `tail -1` SALVA | livre -- toca so `bin/` e a secao 3 do C |
 | **O241** | DUAS RAIAS COM 7 COMMITS CADA A FRENTE DO MAIN E NENHUM MOTIVO NOMEADO | espera `!` |
 | **O242** | O SELO DA CORRENTE DA UM RED FALSO EM QUALQUER COPIA, E APAGA CARIMBO VIVO DE CRON | medicao e cura de INSTRUMENTO: pouso PRO |
+| **O243** | ESMERIL-3-VALIDACAO | **registrada 10/10 11:3x, nada construid |
+| **O244** | CONTRATOS-DAS-FAMILIAS | **registrada 10/10 11:3x, nada construid |
