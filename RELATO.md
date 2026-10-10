@@ -1,28 +1,61 @@
 # RELATO — esteira saas-hasner
 
-## LEI QUE FALTA — O TXT ENTREGUE SOB O JUIZ DE RETENCAO ANTERIOR CONTA COMO VIGENTE NA Q1? (10/10, com numero)
-Nao devolvo o turno por isto (**PAREI-DE-LEI-NAO-DEVOLVE-TURNO**): a pergunta fica aqui no topo com os
-numeros, a esteira seguiu para o pouso da A0-b, e a resposta entra quando vier.
+## LEI QUE FALTA — A DIETA CHEGOU AO CHAO DO QUE O AVAL MANDA MOVER, E OS 10k PEDEM REGRA (10/10, com numero)
+Nao devolvo o turno por isto (**PAREI-DE-LEI-NAO-DEVOLVE-TURNO**): o numero fica aqui no topo, a esteira
+seguiu para o miolo da O219, e a resposta entra quando vier. Item no AVAIS: `O224-OS-10k-PEDEM-REGRA`.
 
-**A pergunta.** O vigia da A0-b compara o TXT **VIGENTE** com o que o gravado de **HOJE** montaria. Tres
-dos sete vigentes sairam da casa **antes de 28/08**, quando a HX-BORDA-CELULA trocou o juiz de retencao:
-`pk=14` em 2026-08-06, `pk=16` em 2026-08-12, `pk=17` em 2026-08-19. O juiz de hoje
-(`folha/export.py::motivos_retencao_celula`, :830) retem por `sem_celula` **todo dia passado com vinculo e
-sem celula** -- e essa retencao **nao existia** quando aqueles tres arquivos foram gerados.
+**O numero.** O `CLAUDE.md` saiu de **63.335** para **56.437** chars -- **-6.898**. Pela razao DERIVADA da
+sua leitura (**30,2k tokens** em 08/10 13:25 para os **60.865** chars do `037ae715` = **2,016 chars/token**)
+isso e **~-3,4k tokens**, de ~31,4k para **~28,0k**. O seu PRONTO pede **-10k**, ou seja <= ~40.700 chars:
+faltam **15.737**.
 
-**O numero.** As matriculas que foram **ENTREGUES** naqueles TXT e que **HOJE sao retidas** respondem
-`['sem_celula']` em **44 de 44**, sobre a janela INTEIRA de cada competencia: 31/31 em emp4/06, 30/30 em
-emp4/07 e 30/30 em emp3/07, todas com `cel=None veredito=None`. O acervo de celula das janelas explica:
-emp4/06 tem **0** celulas, emp4/07 tem **0**, e emp3/07 tem **57 celulas de 2 colaboradores** para **33
-entregues**. (Dito como medido: emp4 **tem** celula no acervo -- a mais antiga em 2026-04-20 --, so nao
-nessas duas janelas. "TXT mais velho que o acervo" seria falso.)
+**Por que e lei e nao trabalho.** Os 15.737 que faltam **nao sao narrativa** -- a narrativa acabou. Sao tres
+classes, e cada uma esta num PROIBIDO do seu proprio aval (*"mover regra para skill ou para outro arquivo,
+reescrever regra, apagar em vez de mover"*): **(a)** tabela de **LOOKUP** -- a secao 5 (juizes, **4.860**
+chars) e a lista de crons da 7 (**3.434**), **8.294** somadas: nao e historia, e consulta, e sairia inteira
+para arquivo proprio com ponteiro, que e "mover regra para outro arquivo"; **(b)** regra com **janela
+vencida dentro do texto** -- as duas janelas da RODADA 3 (JANELA DE FECHAMENTO de 20/09 e CONGELAMENTO DE
+DINHEIRO de 16-17/09, ~460 chars), o "UM colaborador por ato" da REGEN-EM-EXPORTADA que a
+TXT-E-FOTOGRAFIA de 30/09 **ja revoga no proprio paragrafo**, e a ORDEM da FILA-2-EM-RAIA-PROPRIA de 29/09:
+tirar isso e "mover regra", ainda que a regra esteja morta; **(c)** **-3,4k e o numero**, e o PRONTO se
+corrige. Escolher sozinho seria eu decidindo o que e regra e o que nao e, dentro de um aval que me proibiu
+de tocar regra. **O que NAO depende da resposta:** as 57 lapides estao movidas e provadas, e nenhuma
+palavra de regra mudou.
 
-**Por que e lei e nao codigo.** Nao ha regra escrita que diga se "vigente" na Q1 significa *o arquivo que a
-casa entregou* (e entao os 44 sao PORTA MOVIDA legitima, e o vigia esta certo em acusa-la) ou *o arquivo
-que o juiz de hoje teria produzido* (e entao os tres de agosto nao sao comparaveis e deviam entrar como
-`HISTORICO`, que nunca alarma). Escolher sozinho seria inventar juiz de vigencia -- e a TRAVA JUIZ-NOVO
-cobra corte para isso. **O que NAO muda com a resposta:** nenhum dos 44 entra em `valor_moveu`; eles sao
-`porta_moveu`, que nao alarma. O alarme de hoje e **1 de 7**, e nao depende desta pergunta.
+## O224 DIETA-DO-CLAUDE-MD — 57 LAPIDES MOVIDAS, -6.898 CHARS, E A PROVA E DE PALAVRA, NAO DE INTENCAO (10/10 10:4x)
+`LEI-AKITA: origem=CLAUDE.md (a narrativa mora encostada na regra e pesa em TODO turno, nao no turno que a le), testemunha=app/docs/LAPIDES.md (o arquivo que a L-109 abriu em 04/10 exatamente para isto) + o word-diff dos dois arquivos, RED=o conferidor de palavra ficou VERMELHO duas vezes contra MIM -- corte largo em §6 reintroduzindo a palavra "Antes" fora de ponteiro, e dois cortes que desgrudavam a virgula de "CONTRARIO," e os dois pontos de "`TOTAL`:" --, e a cura foi ENCOLHER ou DESISTIR do corte, nunca afrouxar o conferidor, quem-mais-le=os 3 selos de host que afirmam sobre o CONTEUDO do CLAUDE.md (bin/tests/test_lei_akita.sh, test_suite_sh.sh, test_segredo_fora_do_argv.sh) e **0 leitor em Python** (varredura de open/read_text/Path sobre os dois nomes: nada -- os 2 arquivos que citam LAPIDES citam em prosa), juizes novos=0`
+
+**O que a passada fez.** 42 lapides novas (ids **16 a 57**) nas secoes **7b, 6, 2, 3, 0 e 4b**, cada uma com
+a linha "De onde saiu" dizendo secao e REGRA, e no lugar de onde saiu fica exatamente
+`(historia: LAPIDES.md#lap-NN)`. `CLAUDE.md` **63.335 -> 56.437** chars; `LAPIDES.md` **11.182 -> 31.300**,
+**57** lapides.
+
+**A O220 havia declarado 0, 2 e 4b fora, e a O224 entrou em tres desses sitios -- o que mudou nao foi a
+lei, foi o CORTE.** O motivo da O220 (*"nelas o caso MEDIDO e o alcance da regra"*) nao alcanca uma cauda
+que comeca em `NASCEU MEDIDA, e o caso e meu:`: ali a regra JA acabou, com ponto, e o corte e no limite da
+frase. O cabecalho da `LAPIDES.md` **diz isso no mesmo commit** -- o paragrafo da O220 fica palavra por
+palavra e ganha a ressalva embaixo, porque deixa-lo afirmando "ficaram onde estavam, de proposito" seria o
+arquivo mentindo sobre si.
+
+PROVA: conferidor de palavra sobre `git diff --no-index --word-diff=porcelain` dos dois pares base/novo --
+**ADICIONADO ao CLAUDE.md que NAO e ponteiro: 0** · **REMOVIDO que NAO reaparece na lapide: 0**; ponteiros
+**57/57 unicos**, conjunto IGUAL ao dos 57 titulos, sequencia 01..57 sem buraco; os 3 selos de conteudo
+verdes (13 itens numerados da LEI-AKITA, bloco canonico da §3 ainda nomeando `bin/suite.sh`, 0
+`-e DB_PASSWORD` sem backtick) e a **pasta inteira de host 66/66 verde**. A dieta nao se emenda: ela se
+**refaz do HEAD** a cada rodada (`git show HEAD:` -> 6 especificacoes -> cabecalho -> conferidor), e o
+conferidor e a ULTIMA linha da rodada.
+
+**O PRONTO dele NAO esta alcancado, e isto nao se arredonda:** -3,4k contra -10k. A lei esta no topo, com as
+tres classes e os numeros de cada uma.
+
+## LEI RESPONDIDA 10/10 — Q1 DO VIGIA: VIGENTE E O ARQUIVO QUE A CASA ENTREGOU
+A pergunta que estava neste topo desde 07:xx (os 44 dia-matricula entregues antes da HX-BORDA-CELULA, hoje
+retidos por `sem_celula`) foi respondida por ele, literal: *"na Q1 do vigia, VIGENTE e o arquivo que a casa
+entregou, pela TXT-E-FOTOGRAFIA de 30/09. Os 44 sao porta movida legitima e seguem sem alarme. Nenhuma lei
+nova, e leitura."* Entao: **o vigia esta certo como esta**, os 44 continuam em `porta_moveu` -- que nao
+alarma --, nenhum deles entra em `valor_moveu`, e o alarme segue **1 de 7**. **Nada se construiu**: a
+resposta confirma o codigo no ar, e e por isso que ela nao tem commit proprio. Historia em
+`RELATO-ARQUIVO.md` quando esta entrada vencer os 3 dias da **L-109**.
 
 ## O223 pouso B — A EMPRESA ENTRA NO CENSO DE CADASTRO, E O CUSTO QUE EU HAVIA DECLARADO EM 7 FOI MEDIDO EM 15 (10/10 09:4x)
 `LEI-AKITA: origem=core/configuracao_efeito.py (o censo de "chave sem leitor" -- unico sitio onde um campo editavel se declara), testemunha=core/tests/test_contract_configuracao_nao_mente.py::test_MORDE_todo_campo_editavel_esta_declarado (o SELO fez o censo, nao a minha AST), RED=logs/o223/red_pousob.out (`FAILED (failures=1)`, `First list contains 15 additional elements`), quem-mais-le=core/contratos_estruturais.py (nota da celula folha/export x contrato 3) + core/configuracao_efeito.py::familias_com_parametro (lido por core/contratos_estruturais.py::total) + os dois pinos E0 do proprio selo, juizes novos=0`
