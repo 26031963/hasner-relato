@@ -128,6 +128,21 @@ as duas, o **pouso B**, com custo **MEDIDO por AST**: **7 declaracoes** -- as 6 
 `razao_social`) mais o `regime_trabalhista`. A docstring do modulo dizia **12** por suposicao minha, e a
 medicao a corrigiu antes de o numero virar lei.
 
+**ESMERIL DESTE MARCO (ESMERIL-DO-MARCO, durante a espera da suite): `0` orfao e `2` linhas de fila, as
+duas no MESMO arquivo que o marco mudou.** Orfao zero nao e por sorte: o corpo de escrita do command foi
+**SUBSTITUIDO** pela chamada a porta, nao abandonado -- conferido verbo a verbo contra `git show HEAD:`, e o
+`get_or_create` e o `save(update_fields=...)` que o HEAD tinha ali nao existem mais em sitio nenhum do
+command. As duas linhas de fila, as duas para o pouso B, que ja abre este arquivo:
+(1) o `--listar` monta queryset proprio (`order_by('empresa_id', 'praca_id')`) em vez de ler
+`servico.listar()` -- e um SEGUNDO leitor com regra propria de ordem, LEI-AKITA 2, e nao se cura hoje porque
+a suite cheia esta correndo sobre estes bytes;
+(2) a docstring do modulo, linha 20, ainda diz que *"o `get_or_create` guarda aqui"* -- e desde hoje ele
+guarda na PORTA. **Nao e numero errado, e endereco errado**, e endereco errado em docstring e o que faz um
+programador novo procurar o escritor no lugar que nao o tem (LEI-AKITA 11). Por que nao curei agora, dito
+sem enfeite: editar o `.py` depois de a suite cheia comecar faria os bytes do commit divergirem dos bytes
+MEDIDOS, e esta casa ja me ensinou duas vezes hoje que comentario nao e inerte -- ha selo que varre TEXTO.
+Curar custaria 23 min de suite para uma frase; declarar custa uma linha e o pouso B ja abre o arquivo.
+
 **O QUE SEGURA O PUSH: o smoke de clique.** A fatia toca template, e FRONT SEM SMOKE NAO SOBE -- o push
 espera o clique nas DUAS cascas.
 
