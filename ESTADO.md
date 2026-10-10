@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 10:43:39.**
+**Medido em 10/10/2026 10:46:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `04392fe4 [O223] pouso B: a Empresa entra no censo de cadastro, e o custo que eu havia declarado em 7 foi medido em 15` |
+| `HEAD` local | `9cf55592 [O224] a narrativa sai de perto da regra: 57 lapides com ponteiro, -6.898 chars, e a prova e de palavra -- o PRONTO de -10k pede REGRA e nao se alcanca aqui` |
 | `origin/main` | `d20a0e45 [O219] pouso: os docs do marco A0-b entram junto, e o merge que eu pedi sem commit virou FAST-FORWARD -- o codigo estava na arvore viva antes deste commit` |
-| commits a subir (`ahead`) | **3** |
+| commits a subir (`ahead`) | **4** |
 
 ## Fabrica
 
@@ -22,26 +22,18 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+9cf55592 [O224] a narrativa sai de perto da regra: 57 lapides com ponteiro, -6.898 chars, e a prova e de palavra -- o PRONTO de -10k pede REGRA e nao se alcanca aqui
 04392fe4 [O223] pouso B: a Empresa entra no censo de cadastro, e o custo que eu havia declarado em 7 foi medido em 15
 3b2c4f98 [O223] pouso A, 2 de 2: o link do hub entra DEPOIS do reload, e a prova que eu havia dado dele era vazia
 ae775a7b [O223] pouso A: a linha que diz QUAL CCT vale em QUAL empresa ganha porta humana, e o campo que escolhe entre piso legal e CCT deixa de se escrever por shell
 d20a0e45 [O219] pouso: os docs do marco A0-b entram junto, e o merge que eu pedi sem commit virou FAST-FORWARD -- o codigo estava na arvore viva antes deste commit
-10de79cb [O219] A0-b: o TXT entregue passa a ser PERGUNTADO todo dia, e o alarme cai de 6 de 7 para 1 de 7 porque valor movido deixa de ser confundido com porta movida
 ```
 
 ## `git status --short`
 
 ```
- M CLAUDE.md
  M app/config/crons_duracao.json
- M app/docs/AVAIS.md
- M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
- M app/docs/LAPIDES.md
- M app/docs/PENDENTES_RONALD.json
- M app/docs/PROMPTS.md
- M app/docs/RELATO.md
- M app/docs/TICKETS.md
  M bin/sonda_frota.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -156,13 +148,13 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ❯ aval Ronald: fechada a O224, a principal volta ao miolo da O219 (versao da regra em impressao_insumos) antes de contratos e O228. A A0
   foi preparo; a L-113 segue so no papel. Nenhuma lei nova. segue a fila; PAREI so em lei ou !
 
-● Register both prompts and re-run the doc seals
-  ⎿  $ cd /home/ronald/saas-hasner
-     bash bin/relato.sh --conferir 2>&1 | tail -15
+  Committed 9cf55592, ran 19 shell commands
 
-· Proofing… (16h 48m 53s · ↓ 2.0m tokens)
+● Advising using Fable 5.1
+
+✢ Proofing… (16h 51m 45s · ↓ 2.0m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    4% until auto-compact
+                                                                                                                    1% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
