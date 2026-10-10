@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 07:30:45.**
+**Medido em 10/10/2026 07:35:45.**
 
 | | |
 |---|---|
@@ -38,6 +38,8 @@ a364847b [O218] corretivo: a guarda da sombra volta a ter UM sitio, e o selo que
  M app/docs/HANDOFF-SESSAO.md
  M app/docs/RELATO.md
  M bin/sonda_frota.sh
+?? app/core/services/aplicacao_convencao.py
+?? app/core/tests/test_o223_porta_humana_da_aplicacao.py
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -125,23 +127,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 1 shell command
-
-● Background command "Push the marco" completed (exit code 0)
-
-● Background command "Wait for the push to finish by file marker" completed (exit code 0)
-
-● Push landed. Confirming from the remote, not from the log:
-
-  Ran 1 shell command
-
-● origin/main == HEAD == d20a0e45, 0 a empurrar. The marco is fully landed. Applying the pouso proof and the two post-push edits now that
-  the tree is free:
-
-  Ran 3 shell commands
-
-● Marco closed. Continuing the turn at O223 per the fila order — the law says don't return the turn with fila 1 open. Reading the fixture
-  patterns the RED will need:
 
   Ran 1 shell command
 
@@ -152,11 +137,28 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Now writing the RED for O223 pouso A — all ten cases, with view fixtures that survive empresas_visiveis:
 
-  Finding the form_empresa route name
+  Searched for 1 pattern, read 1 file, ran 1 shell command
 
-· Proofing… (13h 35m 59s · ↓ 1.6m tokens)
+● 11 RED cases. Evidencing the RED now — the trava makes this one run at a time:
+
+  Ran 1 shell command
+
+● RED evidenced: Ran 11 / FAILED (failures=2, errors=7) — 9 red. The 2 that pass do so because the feature is absent (RED9 is vacuously
+  green until RED8 is cured; RED11 is the guard that must stay green), and I'll say so rather than count them as proof.
+
+  One hazard to respect in the build order: hub.html gets a {% url %} for a route that doesn't exist until the reload, and templates are
+  read from disk live — so that one file is written last, immediately before bin/deploy.sh. Building the porta first:
+
+  Writing the single-writer service for AplicacaoConvencao
+  ⎿  $ mkdir -p core/services && cat > core/services/aplicacao_convencao.py <<'PYEOF'
+     """PORTA UNICA do cadastro `core.AplicacaoConvencao` -- a tela E o comando entram por aqui (O223).
+     POR QUE ESTA PORTA NASCE. Ate a O223 o escritor desta tabela era o corpo do
+     `semear_aplicacao_convencao.py::handle`: lo…
+
+· Compacting conversation… (13h 40m 59s · ↓ 1.6m tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱ 82%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    6% until auto-compact
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
