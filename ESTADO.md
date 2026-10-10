@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 05:44:20.**
+**Medido em 10/10/2026 05:49:25.**
 
 | | |
 |---|---|
@@ -37,6 +37,7 @@ a364847b [O218] corretivo: a guarda da sombra volta a ter UM sitio, e o selo que
  M app/docs/HANDOFF-SESSAO.md
  M app/docs/RELATO.md
  M app/docs/TICKETS.md
+ M bin/sonda_frota.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -124,38 +125,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● O validador atribui o reg 11 posicionalmente ao reg 10 anterior (:197-205). Então o diff pode nomear a DATA sob a matrícula — que é
-  exatamente o que a pauta do col954 diz (matrícula 2103, rubrica 8792, dias 18 e 19/09). Reescrevendo o diff com os dois registros:
+● Falso RED do meu grep — a linha VERDE do próprio selo cita FALHOU. Pasta verde. Guarda do motor antes de apontar para prod:
 
   Ran 2 shell commands
 
-● Agora o comando e os selos, com o caso do dia que troca sem mudar o valor:
+● @nao-importa get_motor / calcular_mes / MotorBase declarado no cabeçalho, leitura do GRAVADO. Medindo em prod:
 
-  Ran 5 shell commands
+  Ran 1 shell command
 
-● 23 + 13 = 36, verde. Ruff e depois a medição em prod:
+● Q2 em prod: 25 BATE, 0 DIVERGE, 1 HISTORICO — a sombra dizia 25 DIVERGE, e era a máscara. Agora o topo da Q1:
 
-  Ran 5 shell commands
+  Ran 1 shell command
 
-● O deliverable está durável (36 verdes, ruff limpo). Antes de tocar instrumento para medir em prod, vou consultar:
+● As duas pautas do AVAIS, conferidas contra o vigia:
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+  Ran 1 shell command
 
-● Executando os quatro pontos. Primeiro a honestidade do _desmontar e o [] de dois sentidos no DIVERGE:
+● emp3/09 confere dígito a dígito com a pauta do col900: mat 657, 0200 → 737 (7,37) e 0243 → 450 (4,50). Mas há três coisas que preciso
+  medir antes de publicar qualquer "7 DIVERGE": a pauta do col954 (mat 2103, 8792) não aparece nas 13 linhas novas de emp2/09, e emp4/06,
+  emp4/07 montam hoje=0 linhas.
 
-  Ran 2 shell commands
+● Re-measuring the owner of each divergence
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PY'
+     p = 'logs/sonda/a0b_donos.py'
+     s = open(p, encoding='utf-8').read()
+     velho = """ cls = classificar_export(emp, mes, ano)
+     linhas, _ = montar_linhas_export(emp, mes, ano)
+     print('emp%s %02d/%s | FechamentoMensal=%d | entram=%d fora=%d | linhas_hoje=%d'
+     %…
 
-● Agora o comando imprime o arranjo e a data órfã, e os selos que mordem as duas bordas:
-
-● Printing the arranjo and seal both new borders
-  ⎿  $ cd /home/ronald/saas-hasner && bash bin/suite.sh --dir /home/ronald/wt-l113 --only "folha.tests.test_l113_a0b_vigia_do_txt
-     folha.tests.test_l113_a0_forma_do_txt" 2>&1 | tail -12
-
-✽ Proofing… (11h 49m 34s · ↓ 1.4m tokens)
+· Proofing… (11h 54m 39s · ↓ 1.4m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                   12% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
