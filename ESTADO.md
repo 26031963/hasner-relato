@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 03:21:01.**
+**Medido em 10/10/2026 03:26:31.**
 
 | | |
 |---|---|
@@ -33,6 +33,7 @@ f415e116 [PLACAR-ESTRUTURAL] instrumento: o placar deixa de poder dizer que esta
 
 ```
  M app/config/crons_duracao.json
+ M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
  M app/docs/RELATO.md
 ?? esteira.pausada
@@ -122,10 +123,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Searched for 1 pattern, read 1 file, ran 15 shell commands
-  ⎿  Read docs/AVAIS.md (27 lines)
-  ⎿  Referenced file ../../wt-l113/app/ponto/services/fechamento.py
-  ⎿  Read docs/HANDOFF-SESSAO.md (47 lines)
   ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/blfy3t2pb.output (12 lines)
   ⎿  Referenced file ponto/turnos.py
 
@@ -142,18 +139,22 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Background command "Neighbour pass: folha and relatorios" completed (exit code 0)
 
-● Inserting the RELATO entry
+● Register the four fila lines
   ⎿  $ python3 - <<'PY'
-     p='docs/RELATO.md'
+     p='docs/BACKLOG.md'
      s=open(p).read()
-     novo=open('/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/relato_a0a.md').read()
-     cab='# RELATO — esteira saas-hasner\n\n'
-     assert s.startswith(cab)
-     open(p,'w').write(cab + novo + '\n' + s[len(cab):]…
+     linhas=s.split('\n')
+     i=[n for n,l in enumerate(linhas) if l.startswith('| O234 |')]
+     assert len(i)==1, i
+     i=i[0]
+     novas=[]
+     novas.append(('O236',
+     '**A RETENCAO MOVE A POPULACAO DO TXT, E ERA ELA O MEU "O GRAVADO MUDOU"** (achado medido no caminho …
 
-✢ Proofing… (9h 26m 15s · ↓ 1.1m tokens · thought for 10s)
+· Compacting conversation… (9h 31m 45s · ↓ 1.1m tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱ 93%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    3% until auto-compact
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

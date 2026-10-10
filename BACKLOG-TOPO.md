@@ -5,7 +5,7 @@ a raspagem usa a lista de nomes do banco como autoridade, nunca regex adivinhada
 `colNNN`/`ecNNN` ficam, porque nao identificam ninguem fora desta casa. Obra FEITA sai desta
 lista — ela e o que esta EM PE._
 
-**234 obras abertas.**
+**238 obras abertas.**
 
 | ID | obra | estado |
 |---|---|---|
@@ -226,7 +226,7 @@ lista — ela e o que esta EM PE._
 | **O216** | O NUMERO DA L-103 SE REPUBLICA COM O JUIZ CURADO | **sem portao** -- conta e publica, PRE-A |
 | **O217** | A LAVRATURA NAO E PONTO FIXO: relavrar de novo muda o numero | **sem portao** -- medir na sombra e PRE- |
 | **O218** | BATERIA-DA-LAVRATURA | **fila 1, a FRENTE da O211** (ordem lite |
-| **O219** | REGRA-NA-IMPRESSAO | **fila 1, atras da O218**. O `impressao_ |
+| **O219** | REGRA-NA-IMPRESSAO | espera `!` |
 | **O220** | DIETA-DE-CARGA | **paralela**, sem portao -- nao toca pro |
 | **O221** | POUSO DAS DUAS RAIAS AVALIZADAS | espera `!` |
 | **O222** | O VEREDITO DO DIA LE O CHAMADO QUE A PROPRIA PASSADA CRIA | **livre** |
@@ -243,3 +243,7 @@ lista — ela e o que esta EM PE._
 | **O233** | CONTADOR DE RAIA SEM COMMIT | espera aval |
 | **O234** | O SELO DE PUBLICACAO NAO VE CONTAGEM VENCIDA | livre -- toca so `bin/tests/`, nao toca  |
 | **O235** | BO-WIZARD-DIZ-O-QUE-GRAVA | ABERTO -- **medido antes de uma linha de |
+| **O236** | A RETENCAO MOVE A POPULACAO DO TXT, E ERA ELA O MEU "O GRAVADO MUDOU" | espera `!` |
+| **O237** | TRES FORQUILHAS DE SOMBRA E O SELO DE PORTA QUE FALTA | livre -- toca so `bin/`. Fila de INSTRUM |
+| **O238** | O CARIMBO `atualizado_em` NAO TESTEMUNHA NUMERO, E A TRILHA DA PORTA NOMEIA O MODELO ERRAD | livre -- (2) e trilha, nao numero. (1) n |
+| **O239** | DUAS ESCRITAS NO GRAVADO DE UMA COMPETENCIA EXPORTADA E PAGA, SEM PORTA E SEM TRILHA | espera `!` |
