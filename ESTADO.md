@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 19:50:31.**
+**Medido em 10/10/2026 19:55:45.**
 
 | | |
 |---|---|
@@ -130,8 +130,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-  Ran 2 shell commands
-
 ● Ran 123 / OK — all three failures cured at origin. Every one of the 15 targeted modules is now green. Launching the full suite over the
   copy:
 
@@ -155,12 +153,14 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Background command "Rodar a pasta inteira de selos de host" completed (exit code 0)
 
-● Ver o que o hook le do BACKLOG
-  ⎿  $ cd /home/ronald/saas-hasner && sed -n '137,200p' bin/hook_stop_fila1.py
+● Ver onde o sombra roda e se houve migration hoje
+  ⎿  $ cd /home/ronald/saas-hasner && grep -n 'cpuset\|TESTE_DOCKER\|docker run\|recursos.sh' bin/sombra.sh | head -20; echo "===
+     migrations hoje?"; git log --since='2026-10-10 04:00' --name-only --pretty=format:'%h %s' | grep -i 'migrations/' | head
 
-✢ Proofing… (1d 1h 55m · ↓ 3.0m tokens · thinking)
+· Compacting conversation… (1d 2h 0m · ↓ 3.0m tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱ 73%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                   11% until auto-compact
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
