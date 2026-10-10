@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 00:57:31.**
+**Medido em 10/10/2026 01:03:01.**
 
 | | |
 |---|---|
 | `HEAD` local | `353818c5 [O207] pouso: a terceira opcao do Inicio da apuracao entra no ar no mesmo ato do merge, e o smoke dele fecha o W12X36-HPD achando um BO de tela` |
-| `origin/main` | `f415e116 [PLACAR-ESTRUTURAL] instrumento: o placar deixa de poder dizer que esta fora do ar um commit que o git ja tem no tronco` |
-| commits a subir (`ahead`) | **2** |
+| `origin/main` | `353818c5 [O207] pouso: a terceira opcao do Inicio da apuracao entra no ar no mesmo ato do merge, e o smoke dele fecha o W12X36-HPD achando um BO de tela` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -122,15 +122,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  Ran 1 shell command
-
-● Confirmado: bin/sombra.sh não está na coluna PROTEGE (0 ocorrências), então o commit do instrumento não precisa citar lei. De passagem,
-  isso explica a linha do push: colaboradores/services/vinculo.py e views_fase.py estão protegidos, e é por isso que a régua disse tocados
-  neste push: 1 (L-112, citados) no commit da O207.
-
-  Preparo a mensagem do commit do instrumento, para ele ser um ato curto quando o push cair:
-
   Ran 1 shell command
 
 ● [rotulo] é um literal entre colchetes, e minha cicatriz aqui é exata — um literal em colchetes já travou a régua. Confiro o padrão que
@@ -149,15 +140,24 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   A §6 do CLAUDE.md exige contrato de entrada antes de codar regra nova. Escrevo-o — é o primeiro passo da O219 e é durável:
 
-● Running 1 shell command…
+  Writing the O219 entry contract and verifying its PROTEGE claim
+  ⎿  $ cd /home/ronald/saas-hasner
+     mkdir -p logs/o219
+     cat > logs/o219/CONTRATO_DE_ENTRADA.md <<'FIM'
+     # O219 REGRA-NA-IMPRESSAO — CONTRATO DE ENTRADA (secao 6 do CLAUDE.md), escrito 10/10 00:5x
+     Quatro linhas antes de uma linha de codigo. Pergunta zero: "de qual fonte EXISTENTE isso sai?"
+     | | |
+     |---|---|
+     …
 
-✢ Proofing… (7h 4m 45s · ↓ 839.6k tokens)
+✢ Compacting conversation… (7h 10m 15s · ↓ 842.3k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱ 95%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    1% until auto-compact
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
