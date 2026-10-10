@@ -1,16 +1,9 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:128 AFIRMA ato sem PROVA ao lado -- **NO AR, e a prova e PELA PORTA (09/10 20:1x).** Push liberado em `c7b8bfdb` — negocio
->
-> O RELATO nao entrou neste ciclo porque uma afirmacao de ato
-> (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
-> seguem valendo -- eles descrevem, nao afirmam ato.
-
-
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 21:05:45.**
+**Medido em 09/10/2026 21:11:01.**
 
 | | |
 |---|---|
@@ -131,36 +124,36 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 2 shell commands
+  Ran 3 shell commands
 
-● Agora o DIFF de folha da 10, que deixou de ser formalidade:
+● O selo é TETO (assertLessEqual) e passou no run dos vizinhos na árvore curada — o chokepoint não se move porque registrar_batida é um dos
+  11 chamadores que não passam marcos_por_dia. Agora a foto de reversão de col899:
 
-  Ran 1 shell command
+  Ran 3 shell commands
 
-● O DIFF de folha está correndo e a análise dos 4 desvios já está em arquivo. Chamando o advisor sobre a divergência:
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-● Todos os cinco procedem — o item 1 é afirmação disfarçada de medição. Corrigindo na fonte:
+● /app/logs é a árvore do app, não o logs/ da raiz. Imprimindo e gravando no host:
 
   Ran 1 shell command
 
-❯ aval Ronald: o RELATO esta retido de novo (RELATO.md:128 afirma ato sem a linha PROVA: ao lado). Poe a PROVA no commit do pouso B da
-  O232 e confere no ESTADO que a faixa sumiu. Nenhuma lei nova. segue a fila; PAREI so em lei ou !
-  ⎿  Read docs/AVAIS.md (22 lines)
-  ⎿  Read docs/HANDOFF-SESSAO.md (44 lines)
-  ⎿  Referenced file ponto/turnos.py
-  ⎿  Referenced file ponto/tests/test_bateria_lavratura.py
-  ⎿  Read ../logs/r1/achado_papel_x.md (123 lines)
+● Reversão gravada (minutos_realizados=6264, turnos_abertos=2, 52 DiaPago). Vendo a medição dos dois turnos:
 
-● Task "RED e construção do segundo intervalo" completed in background
+  Ran 3 shell commands
+
+● t.entrada/t.saida são Batida, não datetime. Corrigindo:
 
   Ran 1 shell command
 
-● Background command "Run folha DIFF for pouso B on comp 10" completed (exit code 0)
+● Escrevendo o resultado da folha enquanto a sonda roda:
 
-· Proofing… (3h 12m 59s · ↓ 383.9k tokens)
+● Running SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/…
+  ⎿  $ SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
+     if [ -f "$SP/o232/col899.done" ]; then
+     cat "$SP/o232/col899.rc"
+     echo "=== diff base x cura ==="
+     diff <(grep -vE '^[0-9]+ objects imported' "$SP/o232/col899_base.out") \
+     <(grep -vE '^[0-9]+ objects imp…
+
+✢ Proofing… (3h 18m 15s · ↓ 403.3k tokens · still thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

@@ -1,5 +1,276 @@
 # RELATO — esteira saas-hasner
 
+## O232 pouso A — **A GUARDA DA PAUSA LIA UMA AUTORIDADE E O CORPO SOMAVA OUTRA** (09/10 19:5x, marco)
+
+Bug **PROVADO no caminho do O232**, curado na hora (LEI-AKITA 6). O pouso B — a borda que nasce,
+que e o O232 propriamente — fica ABERTO e vem em cima deste.
+
+**A ORIGEM, em uma frase.** Em `ponto/turnos.py::realizado_dos_turnos` (`:572` no HEAD `03fbfde9`) a
+guarda perguntava `if _pares_marcados(t)` — QUALQUER par que a autoridade marcou — e o corpo somava
+`intervalos_do_turno(t)`, que e so o par **acima** do `PISO_INTERVALO_SEGUNDOS` (900 s). Quando as
+duas discordavam — todo par do turno abaixo do piso — a guarda entrava, o corpo somava **0** e o
+`elif` da **janela DECLARADA** nunca era consultado: o dia pagava como jornada a hora de almoco que o
+cadastro pre-assinala. Guarda e corpo passam a ler a mesma autoridade (LEI-AKITA 2), e
+`_pares_marcados` deixa de ser um SEGUNDO juiz desta porta. **A cura e de UM token.**
+
+**A LEI JA EXISTIA** (LEI-AKITA 4), e e por isso que nao nasce corte novo: a **L-032**
+(pre-assinalacao do intervalo, CLT art. 74 par.2 — *"o intervalo CADASTRADO sempre sai da jornada"*),
+o Art.71 par.1 que o **proprio docstring do juiz** ja citava (*"abaixo do piso nao e intervalo e
+conta como trabalho"*) e o contador da casa `pares_de_intervalo_abaixo_do_piso` (esperado 0,
+dono=admin). Nao faltava regra: faltava o leitor cumpri-la. Este commit toca o sitio que a **L-115**
+protege (`realizado_dos_turnos`) e **nao** mexe em clausula dela.
+
+**A ASSIMETRIA, o defeito dito do jeito mais curto:** quem **nao batia pausa nenhuma** tinha a janela
+declarada descontada; quem batia um par de **14 min** nao tinha. O par sub-piso dava MAIS credito de
+jornada que par nenhum. Nenhuma lei jamais disse isso.
+
+**DUAS FORMAS, e elas NAO sao o mesmo bug** — discriminador = `intervalos_do_turno(t)` sem filtro:
+- **FORMA A** (31 dia-colab, 28 perdendo janela): nenhum par acima do piso em todo o turno — nao
+  houve pausa batida, e a janela declarada se aplica. **E so esta que a cura alcanca;**
+- **FORMA B** (163 dia-colab): existe par acima do piso, mas ele cai **DEPOIS** do `_fim_fechado`.
+  Forma medida **unanime** — 163/163 com a ultima batida `E`, 161/163 com o par comecando exatamente
+  no `_fim_fechado` (`E 07:26 / S 13:01 (=fim) / E 14:00`): saiu para o almoco e **nao bateu a saida
+  do fim do dia**. O trecho CONTADO e o de antes do almoco, que nao teve pausa nenhuma — entao o
+  **0 de hoje e a resposta certa**, e descontar tiraria 60 min de col206 21/08, que trabalhou direto.
+  A guarda **nao** virou `pausas == 0` por causa dela, e os casos B e C do RED mordem essa cura
+  errada.
+
+**E TESTEMUNHA, NAO FOLHA — medido, nao argumentado.** `ponto/motor_calculo_v2.py` **nao le** esta
+porta (0 mencoes) e tem derivacao propria de pausa. Censo `quem-mais-le` = **6 leitores, nenhum
+escreve dinheiro**: `ponto/services/espelho.py:300-301` (tela), `relatorios/pdf_espelho.py:522-523`,
+`ponto/services/bordas_realizado.py:76` (contador de borda), `escala/regua_defesa.py:352` (vigia),
+`escala/utils.py:1484` — dentro de `montar_grade_prevista_periodo_por_turno`, montagem em MEMORIA com
+a linha literal *"copia em MEMORIA — nunca salva, nunca .save()"* — e
+`relatorios/management/commands/vinculo_do_dia_divergentes.py:40` (relatorio). O lado da FOLHA
+declara o mesmo por escrito: `folha/porta_export.py:36` registra que a porta do export **LIA**
+`realizado_do_dia` e foi curada em 29/09 para comparar dinheiro com dinheiro — **ela le o MOTOR**.
+
+**DIFF DE FOLHA DA COMPETENCIA 10, NA SOMBRA = 0** (`bin/simular_folha.sh par o232a`, as duas fotos
+na MESMA trava — `logs/l115/o232_folha_par.out`):
+
+    empresa 2 10/2026: linhas 131 -> 131 · retidos 315 -> 315 · entraram=0 sairam=0 mudaram=0 · IGUAL
+    empresa 3 10/2026: linhas  68 ->  68 · retidos  58 ->  58 · entraram=0 sairam=0 mudaram=0 · IGUAL
+    empresa 4 10/2026: linhas   5 ->   5 · retidos  12 ->  12 · entraram=0 sairam=0 mudaram=0 · IGUAL
+    TXT=0 RETIDOS=0 · DIFF_FOLHA=0
+
+E na forma mais forte que havia: o **sha do conteudo do TXT nao se moveu** em nenhuma empresa —
+emp2 `87e36e9ae36a`, emp3 `7c753392f8ea`, emp4 `58efa3d18779`, identicos nos dois lados. Por isso
+**nao ha apply, nao ha re-lavra, nao se devem as 4 condicoes da DINHEIRO-EM-COMPETENCIA-ABERTA e a
+competencia 09 EXPORTADA nao e tocada**.
+
+**DIFF DE ESPELHO, DUAS ARVORES, UMA TRAVA** (`o232_espelho_base.out` x `o232_espelho_cura.out`):
+universo **12.889** dia-colab, **12.861 identicos, 28 MOVERAM**. A sonda ASSEGUROU, e nao so
+imprimiu: universos iguais, **nenhum dia CRESCEU**, e os 28 todos de `janela 0` para `janela > 0`.
+
+    == 09/2026: 20 dia-colab, -1.140 min, 7 colaboradores
+       col252  21/08 25/08 27/08 31/08 01/09 02/09 03/09 04/09 09/09 10/09 11/09 16/09 17/09 18/09  (-60 cada)
+       col269  24/08 -60    col349 14/09 -57    col592 30/08 -60
+       col666  08/09 -60    col906 15/09 -60    col923 09/09  -3
+    == 10/2026:  8 dia-colab,  -480 min, 2 colaboradores
+       col217  29/09 -60     col252 23/09 24/09 25/09 28/09 01/10 02/10 06/10  (-60 cada)
+
+**Zero** da forma B, como a regra previa. O `col923 09/09` a **-3** e o encaixe previsto com o pouso
+B: hoje o dia fecha 04:03 e a janela 04:00-05:00 so o cruza por 3 min; quando a borda nascer ele
+fecha 10/09 09:31, a janela cabe INTEIRA e o dia vale **543**, como os 8 vizinhos. **Sem este pouso A
+o pouso B entregaria 603** — a pausa paga como trabalho. Os dois COMPOEM, e e a medicao que impoe a
+ordem.
+
+**A CURA LEVA A TELA *PARA* A FOLHA, nao contra ela** — a pergunta da coerencia da **L-099**,
+respondida com numero (`logs/l115/o232_diapago.out`, so leitura na sombra):
+
+    comp     colab   data        espelho base -> cura | DiaPago(motor): htrab  min_real  min_prev | intra
+    09/2026  col252  2026-08-21   606 -> 546           |                600,0     540,0     540,0 | 1,00 h
+    09/2026  col269  2026-08-24   717 -> 657           |                717,0     660,0     660,0 | 1,00 h
+    10/2026  col217  2026-09-29   482 -> 422           |                471,0     420,0     420,0 | 0,88 h
+
+O `DiaPago` de col252 paga `minutos_realizados` = **540** (o previsto) e lanca a hora de pausa que
+faltou em **rubrica propria**, `horas_intra_indenizada = 1,00 h` (Art.71 par.4): **o motor nunca
+pagou aquela hora como jornada**. A tela era o unico leitor que a somava dentro de *"Realizado"* —
+606 contra 540 eram 66 min de folga; com a cura, 546 contra 540 sao **6**, o excedente REAL do
+relogio. Nos 28 dia-colab a distancia tela-x-folha **diminui**; em 2 deles o motor paga 0 hoje
+(col349 14/09 e col923 09/09) e ali a pergunta da tela e independente da folha. Nota de forma: a
+leitura do `DiaPago` e da foto DEPOIS, porque foi o ultimo `--recalcular` da trava — e vale para as
+duas arvores **exatamente porque** o `DIFF_FOLHA=0` provou que a base produz a mesma folha.
+
+**RED EVIDENCIADO ANTES**, na copia do HEAD: `ponto/tests/test_pausa_zero_guarda_le_o_mesmo.py`,
+10 casos em 3 classes — `Ran 10 tests` / `FAILED (failures=2)`, as duas `AssertionError: 606 != 546`.
+Com a cura: `Ran 10 tests` / `OK`. Os casos que mordem a cura ERRADA estao la de proposito
+(`test_MORDE_a_cura_ERRADA_pausa_DEPOIS_do_fim_segue_sem_desconto`, col206 21/08 a 335/0, e o gemeo
+de col39 22/08 a 313/0), mais o caso normal que segue descontado e **sem carimbo** de janela.
+**VIZINHOS:** 19 modulos que citam
+`realizado_dos_turnos|realizado_do_dia|janela_descontada|_pares_marcados|intervalos_do_turno` —
+`Ran 203 tests` / `OK`. Ruff limpo. **0 juiz novo, 0 escritor novo.**
+
+**ESMERIL DO MARCO** (L-111): o unico candidato era `_pares_marcados`, que perdeu esta porta como
+chamadora. Censo: segue com **3 chamadores de producao** (`ponto/turnos.py:373`, `:393` e `:507`) —
+**zero orfaos a apagar neste marco**.
+
+**A METADE DE CADASTRO NAO SE CURA POR CODIGO** (L-099): col252 declara 60 min de intervalo e bate
+~14 min **todos os dias**. Vai para a lista CADASTRO x REALIDADE do admin, com o horario real ao lado
+do cadastrado — nao por script.
+
+**O CASO FOI ESCRITO ANTES DO CODIGO** (L-110): `logs/l115/casos_o232.md`, 390 linhas, com a regra, o
+porque de cada condicao, as propriedades fixas, os casos medidos, o que a medicao MUDOU na regra, os
+contra-exemplos e o que o numero NAO autoriza.
+
+**A AUTORIDADE DA FILA E O MARCADOR, NAO O `PROXIMO PASSO` DO HANDOFF (linha de fila, medida 09/10 20:3x).**
+Fechando o marco eu corrigi a celula da **O214** para a palavra que o unico leitor conhece (`espera o !` --
+ela aguarda o `!` do apply do item 1 e o smoke do item 2, AVAIS #5), e o `hook_stop_fila1` passou a ve-la
+como parada. Mas o `PROXIMO PASSO` do handoff NAO passou a dizer O232: ele chama
+`H._proximo_da_fila()`, que e o **1o ABERTO na ordem FISICA da tabela**, e medido com a O214 fora o 1o
+sobrevivente fisico e `PLACAR-ESTRUTURAL` -- item de fila 1 legitimo (o *"contratos"* do aval), mas **5o** na
+ordem dele. A O158 ja havia desacoplado o marcador `ORDEM-VIVA-TOPO` de *"1o aberto"*, e esta e a ponta que
+faltou migrar. **Quem manda e a linha `ORDEM VIVA (topo declarado)`, que o handoff le do marcador e que diz
+`O232`.** Marcar os intermediarios como parados para forcar o numero seria mentir no dado para consertar o
+leitor; a cura e o `PROXIMO PASSO` passar a ler o marcador, e ela e **INSTRUMENTO**, entao vai em pouso
+proprio (L-105), nao neste.
+
+**NO AR, e a prova e PELA PORTA (09/10 20:1x).** Push liberado em `c7b8bfdb` — negocio
+PROVA: remoto em `c7b8bfdb` com **0** a empurrar (`git fetch` e `origin/main..HEAD` vazio); as tres cascas provadas no proprio deploy com `importerror_500=0` e selo BUG 128 verde; sombra do dia `dia=20261009 status=OK tipo=completa diverge=0 erros=0`.
+`Ran 10216 tests` / `OK (skipped=42)`, control-plane `Ran 22 tests` / `OK`, `rc=0`, remoto em
+`c7b8bfdb`, 0 a empurrar. `bin/deploy.sh --sem-migrate` (a fatia nao toca modelo): sombra
+`dia=20261009 status=OK tipo=completa diverge=0 erros=0`, prova de casca 16 estaticos / 5 paginas /
+608 rotas em 2 urlconf, tres cascas recarregadas juntas, tres rotas provadas, selo BUG 128 verde,
+`importerror_500=0`. **SMOKE DE PROD, so leitura, pela porta que a TELA usa**
+(`ponto/services/espelho.py::_realizado_do_dia_tela`, com os quatro insumos montados como
+`montar_dias` os monta — nao se reconstroi a chamada que o sistema faz):
+
+    col217 2026-09-29  minutos=422 (esperado 422)  janela_descontada=60 (esperado 60)  -> OK
+
+Era **482 com janela 0**. O numero que a sombra previu e o numero que prod devolve.
+**O QUE A DISTANCIA tela↔folha FEZ, MEDIDO E NAO SUPOSTO (LEI-AKITA 8).** Eu havia escrito aqui que
+ela *"caiu de 60 para 0"*, e isso era CONTA MINHA, nao leitura: eu provei 482→422 pela porta da tela e
+nao li o lado da folha. Lido (uma linha, so leitura, `DiaPago` de col217 em 2026-09-29, lavrada 09/10
+05:55 UTC-3 — `lavrado_em` cru e `08:55:52+00:00`, UTC --, ANTES do deploy das 20:17): `minutos_realizados=420`, `minutos_previstos=420`. Entao a distancia
+tela↔lavrado deste dia foi de **62 para 2 min**, nao de 60 para 0 -- e os 2 que sobram NAO sao ruido de
+arredondamento enquanto ninguem os mediu. A mesma linha carrega `horas_trabalhadas=7,85 h` (471 min), um
+TERCEIRO numero para o mesmo dia: fica como LINHA DE FILA, nao como achado desta fatia (ESMERIL).
+E o lado da folha **nao se moveu com o deploy**: a lavratura e de antes, e so a re-lavra a move -- que e
+exatamente o motivo do aval que poe a **O219** depois da O232.
+
+**FILA (uma linha, pela ESMERIL — nao e trabalho agora):** `_borda_posicional` (`turnos.py:507`) usa
+a guarda IDENTICA, `if any(_pares_marcados(t) for t in do_dia)`. A hipotese e que um par sub-piso de
+14 min bloqueie a saida posicional da L-115 exatamente nos dias do tipo col252. **Mesma classe,
+hipotese e nao prova** — fica como linha, para medir quando a fila chegar nela.
+
+
+## O231 — **O COMANDO IMPRIMIA UMA MEDICAO E FECHAVA OUTRA; agora ha UMA** (09/10 18:4x, marco)
+
+**AVAL** (`!` dele 09/10 17:2x, literal): *"curar fechar_cobranca_com_lastro na origem: fechar()
+devolve o quadro que usou e o comando imprime ESSE"*.
+
+**O DEFEITO, na origem.** `ponto/management/commands/fechar_cobranca_com_lastro.py::handle` chamava
+`julgar()` para IMPRIMIR e, no fim, `fechar(True)` -- que julga de NOVO para AGIR. Duas medicoes do
+mesmo universo, com minutos de distancia entre elas, uma a cada hora pelo cron. O log descrevia um
+quadro e o comando fechava outro: na serie, `(a)=0` em dia que fechou 6 (soma **5 contra 10**
+fechados). Nao e divergencia de contador -- e **a testemunha recalculando** (LEI-AKITA 2).
+
+**A CURA, no sitio.** `ponto/services/lastro.py::fechar` passa a devolver `'quadro': r` -- a medicao
+que USOU, com as LINHAS e nao so as contagens -- e o `handle` le ESSA, inclusive no dry-run
+(`fechar(False)` nao escreve nada, entao o caminho de leitura e o mesmo dos dois lados). O rodape
+`fechados=` sai do MESMO retorno. Nao sobrou caminho que meca duas vezes: o `julgar()` do comando
+foi removido, nao mantido "por seguranca".
+
+**RED EVIDENCIADO ANTES.** `ponto/tests/test_o231_lastro_mede_uma_vez.py`, 3 casos
+(`Ran 3` / `OK` na copia): `test_MORDE_as_duas_medicoes_discordando` faz as duas passadas
+discordarem e exige que a impressao siga a que AGIU -- vermelho no HEAD, verde na cura;
+`test_dry_run_imprime_o_quadro_e_nao_escreve`; `test_a_porta_devolve_o_quadro_que_usou`.
+**VIZINHOS:** `logs/l115/o231_vizinhos.out` -- `Ran 5571 tests` / `OK (skipped=9)`. Ruff limpo nos
+tres arquivos.
+
+**ESMERIL DO MARCO** (L-111, pelo metodo da certidao de obito): o unico candidato era
+`ponto/services/lastro.py::julgar`, que perdeu o comando como chamador. Censo: `contador()` no
+mesmo arquivo segue chamando -- **chamador de producao != 0, zero orfaos a apagar neste marco**.
+
+**L-105, e em UMA linha:** a raia do **O206** esta verde e **nao pousa** -- ela toca template BASE e
+depende do smoke de clique dele nas duas cascas (FRONT-SEM-SMOKE-NAO-SOBE). Nao e janela nem lei: e
+smoke dele, e a frase ja esta no AVAIS. Por isso a fila 1 abre o **O232** com ela no ar.
+
+**UI-RESPOSTA-DIZ-O-QUE-E FECHADA no mesmo ato**, pelo smoke dele de 18:3x (literal): *"abri a mesa
+de disputa, a resposta longe do marco agora diz a direcao e o que validar faz, e o Reabrir avisa
+quantas respostas apaga -- pode fechar a UI-RESPOSTA-DIZ-O-QUE-E"*. As duas celulas (BACKLOG e
+TICKETS) diziam "espera o smoke dele" e viraram FECHADA **neste commit** (L-106: docs andam com o
+marco). AVAIS: 6 -> 5.
+
+**A ORDEM DELE DE 18:3x ESTA NO BACKLOG**, e nao em prosa: marcador `ORDEM-VIVA-TOPO` = **O232** (a
+autoridade, pela O158) e as linhas subiram na tabela de 5 colunas na ordem O232, O219, O223, O224,
+O228. O slot "contratos" e o **PLACAR-ESTRUTURAL** (R6 item 4) pela glosa DELE de 08/10 19:5x --
+*"O219 -> R6 item 4 e os contratos que faltam -> O228"*. O `siga:` do hook segue dizendo `O214`
+porque a ordem interliga as DUAS tabelas do bloco OBRAS, e a **O158 ja julgou isso**: o marcador e a
+autoridade, o `siga:` e o segundo leitor, registrado como fila de INSTRUMENTO. Selo:
+`bin/tests/test_hook_nao_cobra_congelado.sh` = `OK -- marcador 'O232' EXISTE e esta aberto`.
+
+LEI-AKITA: origem=ponto/services/lastro.py::fechar (a porta devolve o quadro que USOU), testemunha=o
+`quadro` da propria porta lido pelo comando, RED=ponto/tests/test_o231_lastro_mede_uma_vez.py::test_MORDE_as_duas_medicoes_discordando,
+quem-mais-le=censo por AST de `lastro.julgar` e `lastro.fechar` -- so o comando e `contador()`, e o
+`contador()` nao mudou; juizes novos=0
+
+
+## RE-LAVRA 10 (L-115) — **NO AR, E A FOLHA SE MOVEU: +5.451 MIN DE REALIZADO EM 6 COLABS** (09/10 18:2x, CONDICAO 4)
+
+PROVA: o GRAVADO, medido em `FechamentoMensal.minutos_realizados` da 10/2026 depois do apply (tabela do ATO 2: 4.617->4.829 · 6.397->7.087 · 1.003->2.104 · 5.849->6.754 · 5.990->6.641 · 4.298->6.190 = **+5.451**); ata `julgadas=108 carimbadas=108`; 09 EXPORTADA IGUAL nos 4 hashes (frota `67375ead…`, 607 linhas); `logs/l115/relavra10_apply.out` rc **0**.
+
+A prova que a DINHEIRO-EM-COMPETENCIA-ABERTA cobra DEPOIS. Log integral:
+`logs/l115/relavra10_apply.out` (rc **0**). Os quatro requisitos, cada um com onde se confere:
+
+| condicao | como foi cumprida | prova |
+|---|---|---|
+| 1 DIFF publicado ANTES | pre-check de leitura em prod, reconciliado com o publicado | secao abaixo + `logs/l115/prod_precheck.out` |
+| 2 reversao em `logs/` ANTES | foto FRESCA (0 s) + restore provado em DRY | `logs/l115/relavra10_foto_182709.json` (180 celulas, 6 fechamento, 340 DiaPago) · `logs/l115/relavra10_restore_dry.out` |
+| 3 09 exportada intacta | 4 hashes, antes e depois | atas 09 dos 6 `ae1a20fa…` IGUAL · fechamento 09 dos 6 IGUAL · fechamento 09 da FROTA `67375ead…` (607 linhas) IGUAL · `ExportacaoDominio` 09 (8 registros) IGUAL |
+| 4 prova DEPOIS | esta secao | — |
+
+**ATO 1 — A ATA.** `julgar_colab(..., forcar=True)` sobre a lista INTEIRA da comp10 de cada colab,
+piso em `periodo_apuracao(10, 2026, 21)` = 2026-09-21 e teto `min(FIM10, hoje-1)` = 2026-10-08.
+`julgadas=108 carimbadas=108 protestos=43 emitidos=5 nunca_bateu=0 vetados=0`.
+**A ata moveu em 38 dia-colab, e os 38 estavam escritos antes de escrever:**
+
+- **36 do censo**, cada um com o delta EXATO do DIFF publicado (o selo e por dia, nao por soma):
+  soma **+7.345 min**, identica a publicada. `0` dia do censo deixou de mover;
+- **2 declarados FORA** na condicao 1 — `col941 2026-09-30` (+16) e `col941 2026-09-25` (+3),
+  familia `ata_x_juiz_residual`/BUG-144, que re-lavra de janela inteira drena: **+19**;
+- **0 dia-colab fora do censo e nao declarado**, e **0** movimento sub-minuto;
+- **0 chamado e 0 pergunta nascidos** (delta de CONJUNTO no banco contra a foto, nao `contadores()`).
+
+**ATO 2 — O FECHAMENTO** (`recalcular_fechamento --mes 10 --ano 2026 --colabs 204,263,270,502,941,946 --apply`).
+E ele que responde a frase do aval de 18:3x — *"a folha nao se moveu sem re-lavra"*:
+
+| colab | minutos_realizados 10/2026 | delta |
+|---|---|---|
+| col204 | 4.617 -> 4.829 | **+212** |
+| col263 | 6.397 -> 7.087 | **+690** |
+| col270 | 1.003 -> 2.104 | **+1.101** |
+| col502 | 5.849 -> 6.754 | **+905** |
+| col941 | 5.990 -> 6.641 | **+651** |
+| col946 | 4.298 -> 6.190 | **+1.892** |
+| | | **+5.451 min** |
+
+**POR QUE +5.451 E NAO +7.345, e isto nao e divergencia**: a ata guarda o realizado CRU
+(col263 24/09 vai a 551 min), e o `DiaPago(motor)` do dia se fecha no previsto do DNA (420 no caso).
+Os dois leem a mesma autoridade; o que difere e a PERGUNTA — ata = "o que a casa viu", DiaPago =
+"o que o dia paga". O numero do aval e o da ATA, e ele fechou no minuto.
+**Um unico dia-colab fora do censo mexeu no ATO 2**: `col263 2026-10-09` 306 -> 367 (**+61**), com a
+ata PARADA nesse dia — e deriva de fechamento do dia de HOJE, que o recalculo drena e que esta
+competencia aberta absorve. Nenhum outro campo de `FechamentoMensal` de nenhum dos 6 se moveu:
+so `minutos_realizados`.
+
+**O QUE A 09 FEZ: NADA.** Os 36 dias do censo ficam todos em 21/09..08/10 por CONSTRUCAO (o piso e
+`INI10`), e o DRY imprimiu `dias do censo dentro da 09 EXPORTADA: nenhum` antes de qualquer escrita.
+`processar_cartorio --forcar` NAO foi usado, e o motivo esta no docstring do apply: a fila dele e
+todo `CelulaDia` com `data < hoje` da empresa, **sem piso** — ele alcancaria a 09. A guarda de
+exportada (`chamados/juizes.py:1195`) silencia EMISSAO, nao lavratura.
+
+**A REVERSAO SEGUE DE PE**, e e uma linha: `logs/l115/relavra10_restore.py` com
+`DRY=False` sobre `logs/l115/relavra10_foto_182709.json` (copiar para
+`saas_core:/tmp/l115_relavra10_restore.py` e a foto para `/tmp/l115_relavra10_foto.json`).
+
+**ORDEM DA FILA 1, ordem Ronald 09/10 18:3x (literal):** *"ordem da fila 1 passa a ser O232 ->
+O219 -> O223 -> O224 -> contratos -> O228. Motivo: a L-115 foi ao ar e a folha nao se moveu sem
+re-lavra; a O219 e a cura dessa classe e tira a L-113 do papel. Nenhuma lei nova."* Registrada no
+bloco OBRAS do BACKLOG; **nao e lei nova**, e re-ordenacao.
+
+LEI-AKITA: origem=ponto/services/cartorio.py::julgar_colab (a ata, re-lavrada no sitio), testemunha=CelulaDia.ata lida por folha/export.py::grade_do_fechamento, RED=logs/l115/relavra10_dry.out (36 esperados, delta por dia) -> logs/l115/relavra10_apply.out (36/36 OK), quem-mais-le=DiaPago(motor) + FechamentoMensal dos 6, medidos campo a campo; juizes novos=0
+
 ## RE-LAVRA 10 (L-115) — **CONDICAO 1: O DIFF RECONCILIADO CONTRA PROD, ANTES DE ESCREVER** (09/10 18:1x)
 
 **AVAL** (Ronald, 09/10 18:1x, literal): *"a re-lavra da L-115 na competencia 10/2026 (aberta) e
