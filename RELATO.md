@@ -1,5 +1,173 @@
 # RELATO — esteira saas-hasner
 
+> **PERGUNTA DE LEI NO TOPO, e o turno NAO volta** (PAREI-DE-LEI-NAO-DEVOLVE-TURNO): o **backfill de aceite de
+> folga** da O199 e **LOTE**, e nao ha lei escrita para lote. A raia `raia-bos` (`c44c6c80`) curou o ATO: dali
+> para frente o aceite do admin decide o dia. O que ela **nao** curou, por ser dado retroativo de escala
+> (NUNCA PRE-APROVADO, L-009), sao os aceites **ja carimbados**: `FOLGA_CONTESTA` tem **340** perguntas, **265**
+> validadas e **100 validadas sem materializar**; em dias distintos isso da **135**, dos quais **23 ja sao folga**
+> (honrados por outro caminho) e **112 dias, em 60 colaboradores**, estao na situacao do BO. O juiz real
+> (`ponto/services/declarar_dia.py::checar_declaracao`) responde hoje **103 ACEITA (pode declarar)** e **9
+> recusados por veto de precedencia** (o dia ja tem outro lancamento). `FALTA_DIA` e `ATESTADO` tem backlog
+> **0** -- o roteador os resolve na RESPOSTA, e e essa assimetria que e o item.
+> **A LEI QUE FALTA:** a L-092 + REGEN-EM-EXPORTADA dao a forma de **UM colaborador por ato** com TXT parcial de
+> retificacao -- mas **112 dias / 60 colaboradores nao e um ato, sao 60**, e parte deles cai em competencia
+> exportada. **Qual e a forma do backfill em LOTE?** Enquanto nao houver lei, o backfill nao foi fabricado e a
+> esteira SEGUIU (a O199 pousa sem ele; nada do que foi entregue depende desta resposta).
+
+## MARCO 10/10 15:2x — O228 POUSA INTEIRA: O PRODUTO E O INSTRUMENTO EM ATOS SEPARADOS, E A CATRACA SE MEDE EM COPIA PORQUE O CENSO LE A ARVORE ONDE MORA
+
+LEI-AKITA: origem=o pouso (nenhum sitio de producao tocado por mim; o codigo e o da raia), testemunha=a suite cheia sobre a copia certificada por md5 e o proprio selo de host do censo rodando de dentro da copia do main de destino, RED=`bin/tests/test_esmeril_turno_censo.sh` (mordida 4 -> 5 com sitio plantado), quem-mais-le=0 (o instrumento e `bin/`, que o container nao monta), juizes novos=0
+
+- **PRODUTO `31fce87c`** (L-107, ato unico): a suite cheia correu na copia certificada — `Ran 10340 tests in 1391.244s` / `OK (skipped=42)` / `rc=0` / 0 FAIL-ERROR (10343 achados menos 3 em quarentena). O merge devolveu **rc 1 POR MEDIDA**, nao por falha: os dois conflitos sao `RELATO.md` e `TICKETS.md`, exatamente onde o pouso do O199 acabou de inserir. Por isso a guarda do ato julga a **lista literal de nao-mergeados**, nunca o rc — a forma do O199 (`|| morre`) teria abortado NO MEIO, deixando `MERGE_HEAD` de pe e marcador de conflito em doc que **e** o bind-mount. Os tres docs vieram da copia que a suite rodou, resolvidos por **UNIAO** (`--ours` apagaria a linha da raia, `--theirs` reverteria o marco do main). **md5 5 de 5** iguais a copia. Deploy `--sem-migrate` rc=0, tres rotas provadas, selo BUG 128 verde, `importerror_500=0`.
+- **INSTRUMENTO (neste commit)** em ato PROPRIO e sem deploy (L-105: *"bin/, selo de host e portao do push vao em pouso PROPRIO"*; `bin/` nao vai ao container). 5 arquivos, +434/-4, zero doc de produto.
+- **A DECISAO TECNICA que vale guardar** (PAREI-SO-LEI: decisao tecnica o Code decide e registra). A catraca TEM de ser remedida na arvore de destino — catraca que pousa sem remedicao nasce VERMELHA no primeiro pre-push (precedente `cb6cd342`). Mas `bin/esmeril_turno_censo.py` **nao tem `--dir`**: deriva a raiz do proprio `__file__` (`:48`,`:51-52`), e o selo de host do proprio `BASH_SOURCE` (`:25-30`, que PROVA `[ -d "$RAIZ/app/ponto" ]` antes de afirmar). Ele so mede a arvore onde FISICAMENTE mora, e gravar o script em `bin/` fora do ato do commit e proibido. Saida pela lei da casa: **"a arvore onde ele mora" pode ser uma COPIA** — `git archive HEAD` do main JA com o produto, mais os 5 de `git show 61c83e49:`, com o selo rodando de dentro. Verde: **4 sitios sem chamador, igual a base**, e a mordida subiu 4 -> 5. A janela do merge ficou so com o que pode falhar POR CAUSA do merge. Bonus medido: o sitio que o selo planta (`app/ponto/_selo_turno_mordida_tmp.py`) nasce e morre na copia, nunca no bind-mount vivo.
+- **A catraca SO DESCE**: o veredito e o selo, nao um diff do `.txt` a mao. Verde -> pousa como a raia o tem. Vermelho que DESCEU -> remede e certifica por md5; que SUBIU -> **PARA**, porque copiar o numero novo por cima e mudar o teto para ele caber, o PROIBIDO da L-099.
+
+- **RESPOSTA AO AVAL DO RELATO RETIDO (ele, hoje: *"ponha a PROVA ao lado de cada ato ou troque a palavra pelo estado real"*).** A linha retida era a `:149` e ela **nao afirmava ato**: o token de fechamento estava dentro da PROSA que explica por que **nao** escrever aquela palavra na celula do portao -- mesma familia do `commit-que-explica-parado-cita-parado` (o texto que explica o alarme virou o alarme). Das duas curas que ele ofereceu escolhi a SEGUNDA, trocar a palavra pelo estado real, porque **ato ali nao houve** e uma linha `PROVA:` seria carimbo para ato inexistente -- o oposto do que o portao defende. 1 sitio trocado, sentido preservado. **PROVA:** `python3 bin/relato_afirma_com_prova.py app/docs/RELATO.md app/docs/RELATORIOS-PLANO.md` -> `afirma_com_prova: OK (2 arquivo(s), 0 afirmacao sem prova)`, **rc=0** -- os dois arquivos que o `bin/relato.sh:72-73` confere.
+- **OS DOIS AVAIS DE HOJE FORAM RECEBIDOS, e o registro e a prova, nao a minha palavra:** `RECALC-09-PARA-AUDITORIA` esta em `app/docs/PROMPTS.md:1132` (10/10 13:5x, **complemento da O219, nao id novo**, com a decisao tecnica da porta da exportada ja escrita -- `somente_leitura=True` + `permitir_exportada=True` com motivo -- e o **QUANDO** dele, *"depois do deploy que esta esperando a suite"*, agora cumprido); o **CORTE DE ORDEM da O48** esta em `:1133` (10/10 14:0x), registrado onde o corte manda pela **O158**: o marcador de autoridade `app/docs/BACKLOG.md:7` le `<!-- ORDEM-VIVA-TOPO: O48 -->`, movido de O219 para O48, e o censo de 20 dias do `FECHAMENTO-ONLINE.md` ja foi relido contra o HEAD (achado: `fechamento_lido` tem **0** referencia `.py` em todo o `git log --all -S` e nas 3 raias vivas; `fechamento_em_memoria` andou `:534` -> `:974`).
+
+**INCOMPLETO, em lista:**
+1. **FILA (achado do esmeril deste marco, com prova):** `escala/utils.py:210::calibrar_ancora_se_aplicavel` e um `return 0` cuja PROPRIA docstring declara a condicao de saida (*"Mantida como no-op ate F2b remover o ultimo chamador"*) — e **a condicao esta cumprida**: 0 chamador de producao por AST (os 3 hits sao o `def`, a docstring do modulo e uma lapide em `:1558`), 0 referencia dinamica. Agravante: `escala/utils.py:3-6` ainda AFIRMA que ele e *"chamado pelos endpoints que criam Batida"* — falso duas vezes (nao ha chamador; nao escreve nada) e ensina que batida escreve a fase, que o corte F2 proibe. Pela **L-111** ele se apaga com lapide, levando as **3** assercoes que o chamam (`test_ancora_catalogo_premissa.py:79`, `test_contract_fase_declarada.py:100`, `test_f2_batida_nao_escreve.py:28`) e **mantendo** as **2** que mordem o CHAMADOR (`test_contract_fase_declarada.py:110`, `test_f2_batida_nao_escreve.py:41`, ambas `assertNotIn`) — essas selam o CORTE, nao a funcao. Companheiros pelo mesmo criterio: `minutos_previstos_periodo:1563` (0 chamador, e `core/placar_estrutural.py:288` ja o chama *"derivacao PARALELA"*) e `pausas_de_celulas:112` (0 chamador). **A catraca da raia rotula os tres `[FORA DE ALCANCE]`**, entao isto e achado de FORA deste marco e vira linha, nao trabalho agora (ESMERIL-DO-MARCO). Prova em `scratchpad/o228/fila_calibrar_ancora.md`.
+2. **PLACAR-ESTRUTURAL R6 item (4), medido e NAO aberto** (L-105 nao deixa abrir fatia antes do pouso; L-099 manda medir primeiro): `config.crons::juizes_por_varredura()` = **25** = `JUIZES_POR_VARREDURA`, **identico** aos 25 de 08/10 — **0 deriva**, perguntado a funcao real. **25 de 25 tem arquivo de command** (0 fantasma) e **0 de 25** declaram o papel de VIGIA na propria docstring/`help`, que o tabuleiro (CLAUDE.md 4a) exige. **O que NAO vai como numero:** tentei medir *quem dos 25 escreve* e o criterio pela FORMA errou nos DOIS sentidos — `core/utils.py::get_user_sistema` e so `get_or_create` do usuario sistema e sozinho acusa 7 falsos; e `flip_automatico`, que o CLAUDE.md 7 declara *"escritor unico flip_tipo"*, escapa porque escreve um nivel abaixo (`:51`,`:65`). A autoridade e a **PORTA** da familia, nao profundidade de import. Medida em `scratchpad/o228/medida_r6_item4.md`.
+3. **PEDIDO A ELE:** a O228 pousou INTEIRA, entao a **vaga da raia abre para a O98 GLOSSARIO** pela ordem de 11:4x — e ela depende do texto do mapa antigo, que ele disse colar quando a raia abrisse. **Cola o texto do mapa?** Sem ele a O98 nao comeca.
+
+## MARCO 10/10 13:4x — O228 METADE TURNO: O CENSO DA FAMILIA NASCE, E O 24x48 RECEBE O ENVELOPE QUE O MOTOR DECLARA
+
+PERGUNTA DE LEI (L-117, e ela nao devolve turno): `ponto/turnos.py::batidas_apuraveis(colab, ini, fim)` EXIGE janela, e os DOIS sitios que alimentam `parear_turnos` com universo CRU querem historia INTEIRA — `ponto/utils_turno_orfao.py:26` e `ponto/management/commands/reconciliar_fantasmas.py:85` (cron `*/15` com `--apply`, `config/crons.py:279`). MEDIDO na sombra: **81** colabs com batida retratada, **58** deles com geometria de pareamento divergente, **10** dia-turno em que o universo cru diz FECHADO e a apuracao diz ABERTO, **35** ao contrario, **113** pares `(dia, aberto)` divergentes. E o filtro **nao e monotono**: **107** `E` e **~97** `S` retratadas, e tirar uma `S` retratada REABRE turno. Ou a autoridade ganha forma sem janela, ou os dois sitios ganham janela declarada — as duas sao REGRA NOVA, entao nenhuma se escolhe aqui.
+
+LEI-AKITA: origem=`ponto/turnos.py:310` (o ramo `_ENVELOPE_SS` lia o literal `14 * 3600` onde os outros dois ramos da MESMA funcao leem o parametro `cont_max_s`), testemunha=o envelope que o CHAMADOR declara — `MotorPlantao.AUT_CONT_MAX_S = 26 * 3600` (`ponto/motor_calculo_v2.py:2752`, *"volta do plantao dista >14h da saida"*), RED=`ponto/tests/test_marca_intra_duracao_invariantes.py::EnvelopeSSLeOEnvelopeDoChamadorTest`, quem-mais-le=censo do literal FECHADO (1 de 1 em corpo de funcao em `app/`; as outras 6 ocorrencias sao DEFAULT de assinatura, que e o valor do MotorBase), juizes novos=0
+
+O QUE MUDOU
+- `ponto/turnos.py::_marca_intra_duracao` — o ramo `_ENVELOPE_SS` passa a ler `cont_max_s`; as duas prosas que diziam "14h" passam a dizer de quem e o envelope (LEI-AKITA 11). 1 token de comportamento, 3 hunks.
+- `bin/esmeril_turno_censo.py` + `bin/esmeril_turno_censo_de_hoje.txt` + `bin/tests/test_esmeril_turno_censo.sh` — o censo da familia **turno/marcos** NASCE, na forma do par da familia celula, com DUAS catracas.
+- `bin/tests/test_commit_so_o_declarado.sh:52` **e** `bin/index_vs_arvore.sh::--conferir` — os DOIS curados: liam `.git/hooks/` da raia, e em worktree `.git` e um PONTEIRO de 58 bytes. O segundo e o PIOR dos dois: `bin/pre-push.sh:19` o chama, entao ele barrava o push de QUALQUER raia (rc **1** em `wt-celula`, rc **0** em `saas-hasner`, MESMO commit), e a prosa do ALARME mandava `printf > .git/hooks/pre-commit`, que na raia SOBRESCREVE o ponteiro do worktree. Morde nos tres casos: sem hook, hook mudo, hook certo.
+
+OS NUMEROS, COM A PROVA AO LADO
+- censo turno, que NASCE hoje: **16** modulos declarados por pergunta, **251** def de producao, **247** com chamador, **4** em ZERO; e a 2a catraca, **11** juizes declarados na superficie e **0** sem chamador fora de `core/juizes.py`. PROVA: `bash bin/tests/test_esmeril_turno_censo.sh` → OK (4 = base) e MORDE (sitio plantado: 4 → 5), rc 0.
+- a cura, RED PRIMEIRO: `Ran 10 tests in 0.001s` + `FAILED (failures=1)` com a mensagem nomeando o sitio (`logs/o228turno/red.log`) → depois `Ran 10 tests in 0.001s` + `OK` (`logs/o228turno/green.log`). Os outros 9 passaram nas duas rodadas: a mordida sao DOIS valores dando DOIS status.
+- impacto de FROTA, medido na sombra: **0**. Defeito PROVADO e LATENTE — **5** templates de plantao (`TPL-24x48`, `PAI-PLANTAO.1`, `PAI-PLANTAO.2`, `PAI-PLANTAO`, `PAI-CUSTOM.7`) e **0** vinculo ativo e **0** vinculo de QUALQUER vigencia; ativos por `tipo_base`: 12x36=**344**, comercial=**162**, turno_partido=**30**, intermitente=**10**.
+- a origem, datada: `6af9b27d` (21/08 21:04) e o commit que CRIOU `cont_max_s` e converteu **2 dos 3** usos, deixando o terceiro literal; o bloco `_ENVELOPE_SS` nasceu antes, em `ce736f62` (04/08), sem parametro nenhum. **50 dias** de migracao pela metade.
+- pasta de selos de HOST na raia: **68** selos, **6** VERMELHOS e todos os 6 VERDES no main no MESMO commit — RED FALSO de worktree. **1** curado aqui, **5** em fila.
+- bateria da raia pela porta unica, contra COPIA, banco `test_juliani_celula`: **`Ran 10312 tests in 1390.537s`** + **`OK (skipped=42)`** (`logs/o228turno/full.log`, forma da casa com `tail -1`). O rc do PROCESSO NAO foi capturado — o lancamento redirecionou so o stdout, e `bin/suite.sh` nao escreve carimbo de rc; `bin/suite.sh` nao escreve carimbo de rc, entao o rc nao se inventa aqui -- e a trava ja passou para `o219-full2` (13:46:01), que e a prova de que o run TERMINOU.
+
+INCOMPLETO (fila, nao trabalho agora — ESMERIL-DO-MARCO)
+- universo CRU em `parear_turnos`: `ponto/utils_turno_orfao.py:26` (**36** batidas retratadas vazadas nas **2.306** entradas pendentes da frota; **102** colabs com `tem_bloqueio=True`, **0** bloqueado POR retratada) e `reconciliar_fantasmas.py:85` (os numeros da pergunta de lei). Censo dos **11** chamadores de producao de `parear_turnos`: **2** pela porta, **7** copiam `retratada_em__isnull=True` a mao, **2** crus — e isso E o tripwire B5-j que a CLAUDE.md sec.4 declara inexistente.
+- chamada PROVADAMENTE morta em `api/views.py:340` e `api/views_core.py:329`: `regularizacao_obrigatoria = False` e literal em `:343`/`:332`, e por request de `/api/me/` o `detectar_bloqueio_turno_orfao` materializa mediana **125**, media **136,4**, max **430** batidas (frota **74.449**) mais pareamento de historia inteira, e joga fora. Otimizacao exige medida ANTES e DEPOIS, e `api_me` e comparada por AST nos dois kernels.
+- `ponto/turnos.py:1963::sequencia_relogio_x_jornada`, 0 chamador: **FILA, nao baixa** — e CONTADOR do ticket `TURNO-G5-SEQUENCIA-DA-BATIDA` (FEITO 15/09), LE a autoridade `sequencia_na_jornada` e nao tem derivacao propria. Mesmo criterio que `cb6cd342` usou para deixar `com_dia_sem_celula` e `fila_de_orfas` em pe.
+- os **5** selos de host que dao RED falso em qualquer raia: `test_furo_encadeado_ao_cartorio`, `test_handoff_sessao`, `test_hook_nao_e_copia`, `test_import_tardio_contra_o_ar`, `test_inventario_pessoal_no_commit` — todos leem caminho que so existe na arvore principal (`.claude/settings.json`, `logs/deploy.stamp`, `logs/` do cron). O curado aqui e o precedente da forma, e o SEXTO caso da mesma classe apareceu agora: `bin/tickets_placar.sh --conferir` da **ALARME** na raia e **OK** no main com o TICKETS.md BYTE-IDENTICO (`diff` vazio) — a divergencia e o prefixo `regua OK (04/10 17:26)` da linha 93, que ele deriva do carimbo da regua, e o carimbo so existe na arvore principal.
+
+## O199 POUSA — **O ACEITE DE FOLGA DECIDE O DIA, E A CASCA PARA DE DIZER "GRAVADO"** (10/10 14:4x, L-105 + L-107)
+
+LEI-AKITA: origem=chamados/services/validacao.py::validar_pergunta (o verbo do humano, onde o aceite ficava sem destino), testemunha=ponto/services/declarar_dia.py::checar_declaracao + escala/folgas.py::lancar_folga, RED=chamados/tests/test_o199_aceite_de_folga_decide_o_dia.py (293 linhas novas na raia) + test_MORDE_a_tela_nao_diz_gravado_quando_nada_foi_gravado, quem-mais-le=censo no corpo de `c44c6c80`, juizes novos=0
+
+O QUE MUDOU (pousa SO o produto; a raia `raia-bos` nao tinha instrumento):
+- `chamados/services/validacao.py::validar_pergunta` — o aceite de `FOLGA_CONTESTA` entra como GATE, ANTES do
+  carimbo, e decide o dia por `ponto/services/declarar_dia.py::declarar_dia(tipo='folga')`. Compara o CODIGO,
+  nunca texto livre. `_carimbar_validacao` vira sitio proprio: dois atos decidem, UM escritor de `validada_em`.
+- `ponto/services/declarar_dia.py` — a PERGUNTA `o_dia_ja_e_folga` nasce na PORTA, nao no chamado, e `_folga_do_dia` fica leitor UNICO da `FolgaDia` no modulo.
+- `chamados/services/acoes_disputa.py` — BUG NO CAMINHO, curado na hora (LEI-AKITA 6): a casca dizia *"ponto
+  gravado no espelho"* para TODO estado desconhecido, `ok=False` inclusive (`competencia_trancada` de 16/09 ja
+  caia la). Passa a LER o `ok` do service, que e quem sabe o que aconteceu.
+
+NUMEROS, medidos com o juiz REAL na frota: `FOLGA_CONTESTA` tem **340** respostas, **265** aceitas e **135** dias
+distintos aceitos — **23** ja eram folga e **112 NAO**, em **60** colaboradores; `FALTA_DIA` (54) e `ATESTADO`
+(260) tem backlog **0**, e era essa assimetria o item. IDEMPOTENCIA pela forma do BO: 4 aceites do mesmo dia =
+**1** FolgaDia, 1 linha de trilha, 1 nota no fio, 1 chamado resolvido.
+
+PROVA DO POUSO: `merge-tree` sobre o HEAD vivo = **0 conflito**, **0 migration**, 5 arquivos (+503/-7). A copia
+certificada e BYTE-IDENTICA ao que pousa — md5 dos 5 arquivos contra `raia-bos` e dos 3 do O219 contra o HEAD,
+todos IGUAIS: a suite verde certificou ESTA combinacao, nao uma base velha. Suite CHEIA na copia mergeada:
+`Ran 10337 tests in 1400.476s` / `OK (skipped=42)` / `rc=0`, **0** linha `^FAIL:`/`^ERROR:` em 1.992 linhas.
+
+INCOMPLETO: o **backfill dos 112 dias ja carimbados** NAO entra — dado retroativo de escala (L-009, NUNCA
+PRE-APROVADO), e a pergunta de lei fica no TOPO deste arquivo com os numeros.
+
+## MARCO 10/10 14:xx — O219 MIOLO: A VERSAO DA REGRA ENTRA NA IMPRESSAO DO CARTORIO, E A DECLARACAO NASCE VAZIA
+
+LEI-AKITA: origem=ponto/services/cartorio.py::impressao_insumos (o hash dos insumos nao sabia QUAL regra julgou o dia, entao correcao de regra nao rejulgava nada), testemunha=ponto/janelas.py::janela_atual (o juiz da competencia, S7 14/09 -- `versao_para` so o LE, nao recalcula), RED=`ponto.tests.test_o219_versao_da_regra` dando `Ran 21 tests` / `FAILED (failures=3, errors=23)` contra o cartorio do HEAD, quem-mais-le=2 chamadores de producao (`:610` e `:685`, os dois em `_julgar_colab_corpo`), 1 patcher (`test_selo_b5u...:162`, curado no mesmo ato), 1 leitor da fonte por `inspect.getsource`; juizes novos=**0**
+
+O QUE MUDOU
+- `ponto/services/cartorio.py`: `REGRA_VERSOES: tuple[tuple[int, str], ...] = ()` (`:85`), validacao no IMPORT (`:110`), `versao_para(data, empresa)` (`:121`), `impressao_insumos(..., regra=None)` (`:143` e `:170`), e o helper UNICO `_regra_do_dia` (`:572`) chamado nos dois ramos (`:610`, `:685`) -- cada ramo montando a sua faria o dia alternar entre dois hashes para sempre.
+- `ponto/tests/test_o219_versao_da_regra.py` novo, 21 selos com os cinco GOLDEN e as fixtures que os geram carimbadas no arquivo; `ponto/tests/test_selo_b5u_nunca_bateu_ve_ausencia.py:162` ganha `**kw` no `_cega`.
+- `app/docs/LEIS.md`: a L-113 deixa de dizer "selo NENHUM ainda" — os 4 REDs dela passam a existir. O ESTADO dela **nao** muda: segue 0 de 3 clausulas.
+
+OS NUMEROS, COM A PROVA AO LADO
+- **este pouso move ZERO dia**: 5 de 5 impressoes byte-identicas as de hoje. PROVA: `conferir_byte_identico.py` recorta `impressao_insumos` dos DOIS arquivos por AST e executa as duas com `hashlib`, sem Django; e a parte nova MORDE quando a versao chega (`regra=None/0/1/2` -> quatro hashes distintos).
+- RED -> GREEN: `FAILED (failures=3, errors=23)` -> `Ran 145 tests` / `OK`, rc 0 (os 21 novos + os 8 vizinhos nomeados). A linha que mordia o defeito: `AssertionError: 'regra' not found in ['veto', 'teto']`.
+- custo por celula com a tupla vazia: **zero** banco, **zero** janela. PROVA: `if not REGRA_VERSOES: return None` esta em `:134-135`, ANTES do `from ponto.janelas import janela_atual` de `:136` — e o cron das 06:28 visita **103.880 dia-colab** (rodada de hoje: `pulados=103.609` em **442 s**).
+- a suite CHEIA achou um RED **meu**, curado na ORIGEM: `core.tests.test_contract_mypy` acusou `ponto/services/cartorio.py:110 Need type annotation for "_v"/"_h"` (`Ran 10330 tests` / `FAILED (failures=1, skipped=42)`, rc 1). Quem nao tinha tipo nao era o laco, era a DECLARACAO: tupla VAZIA nao tem elemento de onde inferir. `REGRA_VERSOES` passa a carregar `tuple[tuple[int, str], ...]`, a forma que `core/juizes.py:246` ja usa na casa -- **zero** `type: ignore`, **zero** linha nova no `mypy.ini`.
+- suite CHEIA contra a copia do HEAD `8735524c`: `Ran 10330 tests in 1408.700s` / `OK (skipped=42)`, rc=0. A copia e o HEAD **mais exatamente os tres arquivos deste commit** -- `diff -rq` contra `git archive 8735524c` nao devolve um quarto arquivo, so os pontos de montagem e os caches de ferramenta: a suite certificou ESTE commit, nada mais e nada menos.
+- commit: ESTE marco (sem sha — um commit nao cita o proprio); deploy `--sem-migrate`, nenhum modelo tocado.
+
+INCOMPLETO
+- **A VIRADA NAO ACONTECEU, e com ela a pauta DP.** Declarar `(1, '2026-09')` e ato de FROTA e exige os tres numeros do ensaio na sombra publicados ANTES: dias com ata movida (esperado **424** da 09 e **0** da 10), `emitidos` (a O209 teve 23), e **SEGUNDOS**. O **TXT novo da 09 espera a VIRADA, nao este pouso** — gerado agora, entregaria ao DP exatamente o numero que a obra existe para corrigir.
+- fora deste miolo, dito e nao escorregado: o selo de host do bump da versao (`bin/` e INSTRUMENTO, pousa sozinho pela L-105), os adendos AVISO-E-ESCOLHA e excecao-como-cadastro (obra de tela/tabela), o contador `dias_com_regra_velha`, e o rotulo "recalculado em <data>" (escrita de ata, pertence a tela do adendo c).
+- a **L-113 segue 0 de 3 clausulas**: este commit nao toca `ponto/services/fechamento.py:74-75` nem os 6 `permitir_exportada` — a clausula 1 espera o `!` dele (AVAIS `L113-CLAUSULA1-RECUSA-DE-RECALCULO`).
+- **RECALC-09-PARA-AUDITORIA** (aval 13:5x, complemento desta O219) nao rodou: o QUANDO dele e *"depois do deploy"* e *"nao fura o pouso da O199"*. A decisao tecnica que ele me deixou esta tomada e e UMA linha: `somente_leitura=True` **mais** `permitir_exportada=True` com `motivo_exportada` escrito -- o primeiro porque e *a MESMA conta sem gravar NADA* (`fechamento.py:19-21`, `:723`), o segundo porque a guarda da L-092 dispara ANTES do laco e INDEPENDE do modo (`:71-82`). Zero patch no codigo de prod, sombra que nao suja, portao do deploy intocado.
+- **a PRINCIPAL muda de alvo neste commit** (corte de ordem dele 14:0x): **O48 FECHAMENTO-ONLINE** entra logo atras deste miolo e ANTES dos contratos, e por isso o `ORDEM-VIVA-TOPO` vai de `O219` para `O48` AQUI -- pelo O158 o marcador e a AUTORIDADE da ordem, nao a prosa da celula. A ordem que eu executo, declarada: pouso da O199 -> RECALC-09 (medicao) -> O48. **A VIRADA da O219 fica atras da O48 pela ordem dele**, com a celula do O48 corrigida de uma afirmacao FALSA minha (`fechamento_lido` = **0** arquivo .py em toda ref e nas 3 raias; `fechamento_em_memoria` migrou da **:534** para a **:974**).
+
+## MARCO 10/10 12:3x — POUSO DO INSTRUMENTO DO O228, E AS DUAS LEIS DE ECONOMIA NUMERADAS
+
+**Primeira secao sob a L-116** (teto de 25 linhas): a historia deste pouso esta no corpo do commit.
+
+LEI-AKITA: origem=bin/ (a ferramenta que mediu o O228 nao morava no repo), testemunha=bin/esmeril_comum.py::producao (o escritor unico de "o que e producao?") e a propria arvore de b4d938aa^ relida por git archive, RED=bin/tests/test_esmeril_celula_censo.sh nas duas mordidas -- base falsificada para 5 devolve rc=1, e sitio novo plantado sobe 6 para 7, quem-mais-le=0 (nada em app/ importa bin/; o container da suite nao monta bin/, e o selo e chamado pela pasta que a regua ja varre), juizes novos=0
+
+O QUE MUDOU
+- `bin/esmeril_celula_censo.py` + `bin/esmeril_celula_censo_de_hoje.txt` + `bin/tests/test_esmeril_celula_censo.sh` entram no main vindos de `7cb0efbb`, byte a byte como a raia os escreveu.
+- `app/docs/LEIS.md`: **L-116 RELATO-CURTO** e **L-117 MORATORIA-DE-LEI** numeradas; `CLAUDE.md` secao 7b ganha as duas em 12 linhas.
+- `app/docs/BACKLOG.md`: complemento **CENSO-DE-TESTES** na celula da O243 (nao e id novo) e obra **RELATO-CURTO-SELO** registrada, nada construido.
+
+OS NUMEROS, COM A PROVA AO LADO
+- catraca REMEDIDA no main de hoje (`cb6cd342`, que andou 17 commits desde a base da raia, um deles em `ponto/turnos.py`): **6 -> 6**. PROVA: `python3 bin/esmeril_celula_censo.py` contra `bin/esmeril_celula_censo_de_hoje.txt`, contador identico — base NAO se regrava.
+- selo do censo: **OK** (6 igual a base) e **MORDE** (sitio novo plantado: 6 -> 7). PROVA: `bash bin/tests/test_esmeril_celula_censo.sh`, rc 0.
+- pasta de selos de HOST inteira na arvore mergeada: **67 selos, 0 vermelhos**. PROVA: o laco da `regua.sh:138-145`, rodado a mao porque o pre-push ainda espera o smoke dele.
+- juiz do hook perguntado por import, nao por leitura: `_proximo_da_fila()` segue **PLACAR-ESTRUTURAL**, `_ids_que_nao_andam()` **214 -> 215** (a linha nova), O228 ABERTA, O243 e RELATO-CURTO-SELO fora.
+- **SEM deploy, e e assercao, nao escolha**: `git diff --cached --name-only | grep '^app/'` = **0**. A L-107 fala da arvore viva, e `bin/` nao esta no bind-mount.
+
+INCOMPLETO
+- **RELATO-CURTO-SELO**: registrado, nao construido. A secao de `cb6cd342` tem 39 linhas e e legitima — o selo tem de ancorar o "novo" num COMMIT.
+- **deriva informacional no censo**: no main, a varredura complementar de TEXTO lista o proprio ledger (`bin/esmeril_*_censo_de_hoje.txt`) e o selo como "leitor fora do .py". Nao move o contador (`fora_py` nunca alimenta `sem`, `:226`) e a base da raia ja listava o ledger da familia batida: **FILA**, nao cura agora (ESMERIL-DO-MARCO).
+- **O219 miolo**: construido em copia e medido (5 de 5 impressoes byte-identicas), REDs ainda nao rodados — a pista esta com a raia do O199.
+
+## MARCO 10/10 — POUSO DA RAIA-CELULA (O228 metade CELULA), E A VAGA DA O98 DECIDIDA NO MESMO ATO
+Ordem dele de 11:0x item 2: *"a raia-celula pousa a O228 da familia celula e abre a familia turno; raia
+com item aberto nao fica sem agente"*. Pousou o **PRODUTO** (`b4d938aa`); o **INSTRUMENTO** (`7cb0efbb`)
+ficou na raia para pouso proprio, pela **L-105** (*"INSTRUMENTO nao pousa junto com PRODUTO"*).
+
+**A PERGUNTA DO POUSO NAO E "a raia estava verde".** Ela ficou verde em 09/10 23:03 e o main andou **17
+commits / 48 arquivos** desde a base `b5700cbb`. A pergunta e se o que a raia faz ainda responde no main de
+HOJE, e isso se mede antes de tocar a arvore:
+- `git merge-tree` acusa conflito **so** em `app/docs/BACKLOG.md` e `app/docs/TICKETS.md`. Os dois arquivos
+  de codigo entram limpos, e os que pousam sao **byte-identicos** ao `b4d938aa` -- nao resultado de
+  auto-merge (`git show | diff -q`).
+- **ZERO chamador novo** para os tres apagados (`_ausencias_do_dia`, `_escala_do_dia`,
+  `fase_apos_folga_compensatoria`): grep em `.py .html .sh .md .json` de `app/`, `bin/` e `scripts/`, fora
+  de `app/docs/`, devolve so as tres definicoes mais as 3 linhas do teste que o diff substitui. Censo de
+  chamador **envelhece**, e a L-111 apaga por ele: um leitor nascido no main depois de 09/10 faria a baixa
+  virar `NameError` em prod.
+- Os docs se resolvem por **UNIAO** (`git show HEAD:` + a celula/linha da raia, com o estado atualizado):
+  `--ours` apagaria a linha da raia, `--theirs` reverteria a O224 nos dois arquivos.
+
+**A O228 NAO FECHA, e a mecanica importa mais que a redacao.** O `hook_stop_fila1.py:151-162` le `_FECHADO`
+nas celulas **[2] e [3]** e `_NAO_ANDA` na **[3]**. A palavra de fechamento na celula do portao seria a certidao de
+obito da obra INTEIRA -- o hook nunca mais nomearia a familia turno, que o aval de 11:2x acabou de abrir.
+O estado do pouso foi para a celula **[4]**; a [3] diz a raia e a ordem. Conferido **perguntando ao juiz**:
+`_proximo_da_fila()` devolve `PLACAR-ESTRUTURAL` antes e depois, `_ids_que_nao_andam()` da **214** nos dois,
+com `O228` DENTRO da fila e `O98` fora.
+
+**A VAGA DA O98: dois avais dele de hoje se cruzam, e isso nao devolve turno.** O de 11:0x manda a raia
+*"pousar a O228 da familia celula e ABRIR a familia turno"*; o de 11:4x descongela a O98 e diz que ela *"so
+abre quando a raia do esmeril da familia celula (O228) pousar -- ocupa a vaga dela, nao soma raia nova"*.
+Ao pe da letra, o primeiro ja ocupou a vaga que o segundo prometeu. **Decisao tecnica pela PAREI-SO-LEI**
+(que nao devolve turno, e nem e pergunta de lei -- e ordem de recurso): **a vaga e da O228 INTEIRA**. A
+metade celula pousou, a raia **NAO** vagou, e a celula da O98 passa a dizer isso por escrito, mantendo a
+palavra `aguardando` -- que e tambem o device que a tira da fila 1. **Se ele quiser a O98 andando JA, e uma
+linha de aval**, e eu abro a raia.
+
+**PEDIDO A ELE (segue de 11:4x, nao cumprido e nao vencido):** quando a vaga da O98 abrir, o texto do mapa
+antigo -- o que hoje mora na memoria `[[mapa-sistema]]`, apontada por `CLAUDE.md:281` -- tem de ser COLADO
+por ele. Sem ele nao ha o que ancorar, e o PROIBIDO do proprio aval e *"definicao sem ancora"*.
+
 ## AVAL 10/10 11:4x — TRES REGISTROS COM GATILHO, O DESCONGELAMENTO DA O98, E UM `:365` QUE JA NASCEU VELHO
 Chegou no meio deste marco e entra NELE (L-106: docs no commit do marco). Nada construido: *"sem obra agora"*.
 
