@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 05:28:34.**
+**Medido em 10/10/2026 05:34:01.**
 
 | | |
 |---|---|
@@ -124,38 +124,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Serviço verde e ruff limpo. Chamando o advisor antes de construir o comando e a fiação de cron, que é o resto do desenho:
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-● Cinco pontos certos. O #1 é real — _acervo não anota vigência, então vigente sairia None nas 26 linhas. Curando #1 e #4:
-
-  Ran 4 shell commands
-
-● 32 verdes. Agora o #3 — as entradas ENC vivas, antes de escrever a minha:
+  pós-0005 divergindo, conteúdo lido como uma única linha fora de layout) é de máscara sobre o conteudo. Conferindo antes de concluir:
 
   Ran 1 shell command
 
-● A dúvida do #3 está respondida no próprio bloco: bin/encadeado.sh já faz flock + espera os carimbos das três e roda uma vez — então o
-  vigia não precisa de --empresa.
+● Confirmado, e é um achado que muda onde esta pergunta se mede: a sombra substitui conteudo por '… 5b642c8d13' (12 caracteres). O
+  mascarador de texto livre apaga exatamente o campo que a Q2 compara — logo a Q2 é cega na sombra por construção. Lendo o censo inteiro:
 
-  Mas ler isso expôs uma decisão que eu ia errar: se o vigia alarmar com incomparavel != 0, ele alarma todo dia para sempre, porque o pk=2
-  pré-0005 é permanente. E um alarme que sempre dispara treina a casa a ignorá-lo. A separação não precisa de constante — ela se deriva:
-  registro pré-0005 não pode mais nascer (gerado_em é auto_now_add), então essa classe só encolhe; as outras são cegueira viva.
+  Ran 1 shell command
 
-  Adding CEGO/HISTORICO biting tests and running
+● Dois achados, e o segundo é meu: fora_layout=25 sobre as 284 linhas de hoje — essas não vêm da sombra, vêm da montagem. Lendo o que mais
+  o TXT carrega além do reg 10:
+
+  Ran 1 shell command
+
+● Dois registros, não um: o TXT carrega reg 10 (43ch, o valor) e reg 11 (11ch, uma DATA de falta, filho do reg 10 da rubrica 8792) —
+  autoridade validar_layout_dominio:153. As 25 linhas que eu chamei de "fora do layout" são reg 11 válidas. Rótulo mentindo sobre o que a
+  conta faz (LEI-AKITA 8), e num log diário de cron seria o falso alarme que treina a casa a ignorar. Curando, com o desmontador ao lado do
+  montador e do validador — um arquivo, não dois:
+
+● Moving partes_da_linha into export.py with both reg types
   ⎿  $ cd /home/ronald/wt-l113/app && python3 - <<'PY'
-     p = 'folha/tests/test_l113_a0b_vigia_do_txt.py'
+     p = 'folha/export.py'
      s = open(p, encoding='utf-8').read()
-     # --- a invariante da abertura, no censo
-     velho = """ self.assertEqual(d['q2']['bate'] + d['q2']['diverge'] + d['q2']['incomparavel'],
-     d['q2']['universo'])"""
-     novo =…
+     anc = "def codigos_homologados(empresa):"
+     nova = '''def partes_da_linha(linha):
+     """Desmonta UMA linha do TXT do Dominio. -> dict com 'reg' | None
+     MORA AQUI, ao lado de quem MONTA (`montar_li…
 
-✽ Proofing… (11h 33m 48s · ↓ 1.4m tokens)
+✢ Compacting conversation… (11h 39m 15s · ↓ 1.4m tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 61%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
