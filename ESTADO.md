@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 00:35:45.**
+**Medido em 10/10/2026 00:41:01.**
 
 | | |
 |---|---|
@@ -126,42 +126,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 1 shell command
 
-● Os dois seguem. Em vez de devolver o turno com a fila 1 em pé, espero pela condição, não por tempo:
+● Agora o desenho está claro, e ele é deliberado: _tem_trabalho_em_curso() não libera — só congela o teto. O comentário é explícito:
+  "Enquanto a prova esta rodando, o hook COBRA." Então a casa quer que eu siga trabalhando sobre a prova, não que eu encerre. E há trabalho
+  real nela: o log da suíte já pode dizer se a falha herdada morreu no merge, que é a afirmação central do pouso:
 
-● O caminho certo aqui não é sondar: os dois são trabalhos rastreados e me reinvocam ao sair, então um laço de espera seria desperdício.
-  Faço então a higiene que a casa já pagou caro por omitir — a cópia do marco anterior, já pousado, que ficou órfã:
+  Ran 2 shell commands
+  ⎿  Read docs/AVAIS.md (26 lines)
+  ⎿  Read docs/HANDOFF-SESSAO.md (47 lines)
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/blfy3t2pb.output (12 lines)
+  ⎿  Referenced file ponto/turnos.py
+  ⎿  Referenced file ponto/tests/test_bateria_lavratura.py
 
-  Ran 1 shell command
+● Task "RED e construção do segundo intervalo" completed in background
 
-● wt-merge-o206: 0 commit único sobre o remoto, 41 MB, e 4 entradas de root — a mesma classe do incidente de 03/10. É cópia minha de um
-  marco já pousado, e está na lista de limpeza. Vejo o que são as 4 antes de apagar:
+● Background command "Run the full suite against the merged copy" completed (exit code 0)
 
-  Ran 1 shell command
+● Background command "Rebuild the sombra with today's dump and run the morning block" completed (exit code 0)
 
-● Removida limpa — as 4 entradas de root eram os pontos de montagem vazios (staticfiles, .ruff_cache, .hypothesis, .mypy_cache), e o app/
-  que as contém é meu, então a deleção obedeceu ao dono do diretório, como o modelo de permissão prevê. Restam duas cópias, e a da suíte
-  não se toca.
+● Os dois veredictos chegaram, cada um pela sua autoridade:
 
-  Agora, sobre o siga que me barra: ele não se cura agora, por ordem dele — mas eu preciso saber o que ele aceita, e ler não é curar:
+  - suíte da cópia mergeada: OK (skipped=42) sobre Ran 10253 tests — CHEIA, não recorte, e 0 FAIL/ERROR no log (a falha herdada morreu no
+    merge, como o pouso afirma)
+  - sombra: bin/sombra.sh --conferir rc=0 — dia=20261010 status=OK tipo=completa diverge=0 erros=0, que é o portão byte-idêntico do
+    deploy.sh:167
 
-  Ran 1 shell command
+  Confiro o script do ato uma última vez antes de disparar o irreversível:
 
-● Há um caminho que eu não conhecia: _tem_trabalho_em_curso() (linha 233). Leio o que ele considera trabalho em curso:
+● Running 1 shell command…
 
-● Reading the hook main decision flow
-  ⎿  $ cd /home/ronald/saas-hasner
-     grep -n '_tem_trabalho_em_curso\|_relato_parou()\|_proximo_da_fila()' bin/hook_stop_fila1.py
-     echo "=== o main ==="; sed -n "$(grep -n 'def main' bin/hook_stop_fila1.py | cut -d: -f1),\$p" bin/hook_stop_fila1.py
-
-· Proofing… (6h 42m 59s · ↓ 793.9k tokens · still thinking)
+· Proofing… (6h 48m 15s · ↓ 797.4k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    2% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
