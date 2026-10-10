@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 10/10/2026 14:25:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (602.9 MB). Acoes na janela: **1491**.
+**Medido em 10/10/2026 14:30:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (602.9 MB). Acoes na janela: **1490**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 14:30:40 | Bash | Gates do advisor: leituras do objeto, overlap da raia, filtro do universo | `cd /home/ronald/saas-hasner/app echo "=== 1. LEITURAS de fechamento.<attr> no corpo do laco (126-572), por AST ===" python3 - <<'PY' import ast, io s = io.open('ponto/services/fechamento.py', encoding='utf-8').read() t = ast.parse(s) # alvos de atribuicao (escrita) para nao confundir com leitura escritos = set() for no in ast.walk(t): if isinstance(no, ast.Assign): for tg in no.targets: if isinsta ...` |
 | 14:24:48 | Bash | Censo de quem usa somente_leitura e onde os 4 campos sao setados | `cd /home/ronald/saas-hasner/app echo "=== quem passa somente_leitura (AST, em app/) ===" python3 - <<'PY' import ast, os, io for r, d, fs in os.walk('.'): d[:] = [x for x in d if x not in ('migrations', 'staticfiles', '__pycache__', '.git')] for f in fs: if not f.endswith('.py'): continue p = os.path.join(r, f) try: t = ast.parse(io.open(p, encoding='utf-8').read()) except SyntaxError: continue fo ...` |
 | 14:24:30 | Bash | Ler como os valores chegam ao objeto antes da coleta da leitura | `cd /home/ronald/saas-hasner/app sed -n '555,600p' ponto/services/fechamento.py` |
 | 14:24:18 | Bash | Ler o log da certificacao O199 na forma da casa | `SCP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad L="$SCP/o199/mergeada.out" echo "--- linhas: $(wc -l < "$L" 2>/dev/null \|\| echo SEM-ARQUIVO)" echo "--- veredito (forma da casa):" grep -E '^(OK\|FAILED)( \(\|$)' "$L" 2>/dev/null \| tail -1 grep '^Ran ' "$L" 2>/dev/null \| tail -1 grep -n '^rc=' "$L" 2>/dev/null \| tail -3 echo "--- tail 6:" tail - ...` |
@@ -1499,5 +1500,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 02:34:10 | Edit |  | `/home/ronald/wt-l113/app/ponto/services/fechamento.py` |
 | 02:31:42 | Edit |  | `/home/ronald/wt-l113/app/ponto/services/fechamento.py` |
 | 02:31:18 | Bash | Patch the fechamento trava into an unconditional trail | `cd /home/ronald/wt-l113/app && python3 - <<'PY' import re p = 'ponto/services/fechamento.py' s = open(p).read() velho = """ L-092 / O80 (27/09): **competencia EXPORTADA nao muda o gravado.** Se alguma empresa do escopo ja exportou o TXT desta competencia, isto RECUSA com `CompetenciaExportada` em vez de gravar. A lei existia desde 27/09 02:2x e nao tinha guarda nenhuma -- era a mais perigosa da li ...` |
-| 02:30:40 | Edit |  | `/home/ronald/wt-l113/app/ponto/services/fechamento.py` |
-| 02:30:18 | Read |  | `/home/ronald/wt-l113/app/ponto/services/fechamento.py` |
