@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 20:50:01.**
+**Medido em 10/10/2026 20:55:31.**
 
 | | |
 |---|---|
@@ -129,38 +129,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  - RELATO corrigido onde o advisor mordeu: a diferença dos dois cartórios agora se lê pelos carimbos (status=OK às 18:15 = segunda passada
-    do dia; REFEITA às 20:15 = primeira, dentro do bloco), e a causa que eu havia atribuído a gerar_celulas/cluster/relâmpago saiu — não
-    medi, e o texto passa a dizer isso. A conferência de amanhã virou faixa das duas medições (20069-20119/21175-21225/240-244 ·
-    5727-5742/5777-5792/15-16 · 999-1000/999-1000/4-5), com a distinção entre o emitidos do fim: (emissão julgada) e as ~10 linhas novas
-    medidas pelo teto do id. Seção segue em 25 linhas (L-116).
-  - Compositores dry-rodados com o carimbo real: RELATO e msg_queda.txt saíram certos (Ran 10349 tests in 1457.478s / OK (skipped=42), md5
-    09 892768aa…, trilha 0) e os dois passaram a carregar alarme de negocio=N do carimbo, para a linha não se ler como bloco limpo quando
-    há rc=2.
-  - Cópia intocada desde a suite (0 arquivos mais novos), 0 migration/model nos 21 — é isso que autoriza o --sem-migrate — e a pista de
-    teste livre desde 20:27.
-  - Trilha da queda: 0 em 64 comandos, com o cartório já passado: nenhum cron da manhã escreve através da barreira derrubada.
 
-  Falta, em ordem: o == OS DOIS NUMEROS do ensaio → a terceira testemunha (--rodar o219_escrita_depois.py, conferindo que o CORTE impresso
-  é ~20:15:50 antes de confiar no E9) → ato_queda.sh, que se barra sozinho nas três testemunhas e termina em bin/deploy.sh --sem-migrate
-  sem nada no meio.
+  Ran 3 shell commands
 
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: PLACAR-ESTRUTURAL -- O ESTRUTURAL SE SEPARA DO DADO (corte dele 02/10 22:5x, que SUBSTITUI o item 3 da
-  ordem das 21:4x -- o resto d
+● Terceira testemunha verde, e o CORTE impresso é 10/10 20:15:50 — exatamente o mtime do bloco.txt, como o advisor pediu que eu conferisse
+  antes de confiar no número. ESCRITAS DEPOIS DO CORTE = 0 na 09 e na 10; o atualizado_em mais novo da 09 é de ontem. Agora o par
+  controlado do vigia:
 
-● O hook está certo: fila 1 de pé, sigo no mesmo turno. Vejo o bloco:
+  Ran 1 shell command
 
-● Esperar o marcador de fim do ensaio e ler o veredito · 8m 29s
-  ⎿  $ cd /home/ronald/saas-hasner && F=logs/o219/ensaio_bloco_com_a_queda_20261010_2015.txt
-     timeout 540 tail -n0 -f "$F" | grep -m1 -E '^== [0-9]{2}:[0-9]{2}:[0-9]{2} FIM$|^RC-(BLOCO|HASH-DEPOIS)=' ; echo "saiu em $(date
-     +%H:%M:%S)"
-     sed -n '/== OS DOIS NUMEROS/,$p' "$F" (8m 29s · 2 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
+● Comparação controlada e idêntica byte a byte, com as árvores se identificando sozinhas (barreira=True/portao=True contra
+  barreira=False/portao=False). Duas conclusões medidas:
 
-✢ Proofing… (1d 2h 55m · ↓ 3.1m tokens)
+  - as 4 diferenças que eu havia visto entre os dois logs de bloco vinham da mutação de estado do bloco, não da queda — agora medido, não
+    suposto;
+  - ganhei uma quarta testemunha, e a melhor: o vigia do TXT que a casa já tinha vê exatamente o mesmo com e sem a queda, e assina VALOR
+    MOVEU: 0.
+
+  Vou escrever isso e pôr um portão no ato para a frase não poder ser publicada sem a medição:
+
+  Ran 2 shell commands
+
+● O caminho que escrevi está errado em três minutos — e ponteiro de prova errado é prova nenhuma:
+
+● Corrigir o caminho e conferir todo ponteiro de prova da secao
+  ⎿  $ cd /home/ronald/saas-hasner && sed -i 's#logs/o219/tres_testemunhas_20261010_2050.txt#logs/o219/tres_testemunhas_20261010_2053.txt#'
+     app/docs/RELATO.md && grep -c 'tres_testemunhas_20261010_2053.txt' app/docs/RELATO.md
+     # todo ponteiro de prova da secao existe?
+     awk '/^## /{n++} n==1' app/docs/RELA…
+
+✢ Proofing… (1d 3h 0m · ↓ 3.1m tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    9% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
