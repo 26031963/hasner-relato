@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 01:13:31.**
+**Medido em 10/10/2026 01:19:01.**
 
 | | |
 |---|---|
@@ -124,35 +124,35 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   Ran 1 shell command
 
-● Na espera — que a ESMERIL-DO-MARCO manda ser o esmeril deste marco — confiro que o instrumento que acabei de posar faz o que a mensagem
-  afirma, e que o caminho DEFAULT não mudou:
+● Essa falha é da minha sonda, não da cura: eu desescapei \" → " ao extrair E_SOMBRA, e o valor precisa dos backslashes (é o que vira aspa
+  dentro do --command no sh -c). Reconstruí a chamada em vez de usá-la. Sem o replace:
 
   Ran 1 shell command
 
-● Três confirmados — mas o item 2 me desmente: a linha 311 carrega a mesma asserção literal, enquanto a minha mensagem de commit afirma que
-  a guarda "mora só aqui". Leio antes de afirmar qualquer das duas coisas:
+● A única diferença é espaço em branco inicial — a guarda e todo o resto são byte-idênticos, e sh -n aceita as duas. Falta converter isso
+  em fato executado, chamando a função REAL:
 
   Ran 1 shell command
 
-● A linha 311 é uma cópia literal da guarda, e o comentário que poso em :421-423 afirma "o unico sitio onde ela mora". Preciso saber se ela
-  é minha ou pré-existente antes de dizer qualquer coisa:
+● ALCANCEI saiu — a composição por newline roda no container real e a guarda passou. Mas a minha contraprova não barrou, e a causa é sonda
+  mal parametrizada: config.settings.sombra tem o banco literal (CLAUDE.md §6), então POSTGRES_DB é ignorado e current_database() devolveu
+  sombra corretamente. Provo o que eu realmente preciso — que o mecanismo morde — trocando só a constante esperada:
 
   Ran 1 shell command
 
-● Medido, e o defeito é meu, do commit que acabou de pousar: a linha 311 vem de 3d8d835f (a E2 original) e eu acrescentei a segunda cópia
-  ao extrair E_SOMBRA para o caminho novo, deixando a literal de pé — e então poso um comentário dizendo "o unico sitio onde ela mora".
-  Dois sítios do mesmo juízo, com a testemunha afirmando o contrário. Registro durável antes de qualquer cura:
+● Guarda morde: constante errada → NAO_E_SOMBRA, rc=90; constante certa → PASSOU, rc=0. E app/config/settings/sombra.py:30 explica por que
+  a minha primeira contraprova não podia funcionar — o próprio arquivo avisa em :16 que POSTGRES_DB esquecido não desvia este settings.
+  Fixo as quatro provas no arquivo:
 
   Ran 1 shell command
 
-● Achado registrado. Estou num ponto de decisão (forma da cura, selo de host, e commit corretivo x emenda com o push em voo) e os
-  entregáveis estão duráveis — consulto o revisor:
+● Push a 509s — não toco a árvore. Preparo a mensagem do commit corretivo e o parágrafo do RELATO em scratchpad:
 
-● Advising using Fable 5.1
+  Running 1 shell command…
 
-✢ Proofing… (7h 20m 45s · ↓ 865.2k tokens)
+✢ Proofing… (7h 26m 15s · ↓ 884.3k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    4% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
