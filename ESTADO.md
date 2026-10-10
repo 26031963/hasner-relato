@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 12:39:01.**
+**Medido em 10/10/2026 12:44:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `cb6cd342 [O228] pouso da metade CELULA: os tres sitios sem chamador entram na principal, e a raia NAO vaga -- a familia turno abre nela` |
+| `HEAD` local | `8735524c [O228] pouso do INSTRUMENTO em ato proprio: a catraca do censo remedida no main de hoje da 6 -> 6, e as duas leis de economia dele nascem numeradas` |
 | `origin/main` | `d20a0e45 [O219] pouso: os docs do marco A0-b entram junto, e o merge que eu pedi sem commit virou FAST-FORWARD -- o codigo estava na arvore viva antes deste commit` |
-| commits a subir (`ahead`) | **7** |
+| commits a subir (`ahead`) | **9** |
 
 ## Fabrica
 
@@ -29,27 +29,19 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+8735524c [O228] pouso do INSTRUMENTO em ato proprio: a catraca do censo remedida no main de hoje da 6 -> 6, e as duas leis de economia dele nascem numeradas
 cb6cd342 [O228] pouso da metade CELULA: os tres sitios sem chamador entram na principal, e a raia NAO vaga -- a familia turno abre nela
 0093834b [O224] as duas tabelas de lookup saem do CLAUDE.md e o PRONTO passa a ser o numero que isso deu: -7.437 chars nesta fatia, -11.829 na obra, e a pergunta de lei que eu levei ao topo foi o que a fechou
 9cf55592 [O224] a narrativa sai de perto da regra: 57 lapides com ponteiro, -6.898 chars, e a prova e de palavra -- o PRONTO de -10k pede REGRA e nao se alcanca aqui
 04392fe4 [O223] pouso B: a Empresa entra no censo de cadastro, e o custo que eu havia declarado em 7 foi medido em 15
-3b2c4f98 [O223] pouso A, 2 de 2: o link do hub entra DEPOIS do reload, e a prova que eu havia dado dele era vazia
 ```
 
 ## `git status --short`
 
 ```
-M  CLAUDE.md
  M app/config/crons_duracao.json
-M  app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
-M  app/docs/LEIS.md
-M  app/docs/PROMPTS.md
-M  app/docs/RELATO.md
-A  bin/esmeril_celula_censo.py
-A  bin/esmeril_celula_censo_de_hoje.txt
  M bin/sonda_frota.sh
-A  bin/tests/test_esmeril_celula_censo.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -138,10 +130,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● Três cortes recebidos. Registro vem no marco (L-106) — primeiro fecho o merge do instrumento, que está em curso com índice montado. Vendo
-  o sítio da varredura complementar:
-
   Ran 1 shell command
 
 ● Advising using Fable 5.1
@@ -157,25 +145,29 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● O hook lê _NAO_ANDA só na célula [3] — a linha nova cairia na fila 1. Perguntando ao juiz em vez de ler o cabeçalho:
 
-● Inserir a secao no RELATO e montar o index
-  ⎿  $ cd /home/ronald/saas-hasner
-     SC=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/pouso-celula
-     python3 - "$SC/relato_instrumento.md" <<'PY'
-     import sys, pathlib
-     p = pathlib.Path('app/docs/RELATO.md')
-     s = p.read_text(encoding='utf-8').split('\n')
-     assert s[…
+  Committed 8735524c, ran 6 shell commands
 
-✢ Proofing… (18h 44m 15s · ↓ 2.2m tokens)
+● Instrumento no ar em 8735524c, sem deploy (asserção: 0 arquivo de código de app/ no índice). Agora a raia volta para o main antes de
+  receber agente — senão a metade turno leria ponto/turnos.py de ontem:
+
+  Atualizar o mandato da metade turno
+  ⎿  $ SC=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/pouso-celula
+     python3 - "$SC/turno_prompt.md" <<'PY'
+     import sys, pathlib
+     p = pathlib.Path(sys.argv[1]); s = p.read_text(encoding='utf-8')
+     velho = """ `bin/esmeril_celula_censo_de_hoje.txt` que ele trav…
+
+✢ Compacting conversation… (18h 49m 45s · ↓ 2.2m tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱ 67%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    5% until auto-compact
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
 ❯ ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Polling full.log for suite verdict                                                      1h 35m 56s · ↓ 161.1k tokens
+  ◯ general-purpose  Confirming pre-existing lapide RED in test_contract_lapide_nao_vaza                     1h 41m 26s · ↓ 166.2k tokens
   ⧉  index
 ```
