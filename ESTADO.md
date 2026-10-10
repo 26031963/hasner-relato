@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 21:33:01.**
+**Medido em 09/10/2026 21:38:31.**
 
 | | |
 |---|---|
@@ -122,38 +122,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 1 shell command
-
-● Pousou no remoto. Confirmando que nenhum runner deu FAILED, e fechando a pergunta (A) do revisor no código:
-
-  Ran 1 shell command
-
-● Isso responde (A) no código, e muda o que eu ia escrever. Mas abre uma pergunta própria: retratar_exportada escreve minutos_realizados
-  por dia a partir de "grade gravada" — se essa grade for derivada ao vivo, o pouso B move DiaPago da 09 EXPORTADA. Verificando:
-
-  Ran 3 shell commands
-
-● Fechado com código: nenhum dos dois escritores é cron — "cronificar seria o sistema reescrevendo a folha sozinho na madrugada". O deploy
-  não é o apply. Conferindo se a seção que vou enxertar afirma o contrário:
+● col899 não se moveu (6264 / turnos_abertos=2, carimbo de 16:00:08) — a frase se sustenta para ele. Mas há escrita contínua na 10 toda a
+  noite, 1-8 por minuto. Vendo QUEM:
 
   Ran 1 shell command
 
-● Limpa. Acrescento à seção o que acabei de medir no código — é o que decide se a 09 EXPORTADA corre risco amanhã:
+● 3 escritas desde 21:30, uma por colaborador, espaçadas — e 344 hoje, de 05:01 a 21:34. Isso tem cara de leitura que lavra, não de cron.
+  Achando o escritor:
 
   Ran 1 shell command
 
-● Enxerto no RELATO (push terminado, árvore livre) e publico:
+● Padrão de ~21:00-21:34, um colab por vez, 344 no dia — tem cara de batida, não de cron (a virada do 12x36 é à noite). Verificando o
+  escritor no caminho da batida:
 
-● Running 2 shell commands · 52s…
-  ⎿  $ cd /home/ronald/saas-hasner
-     export SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
-     bash bin/relato.sh > "$SP/o232/relato1.out" 2>&1; echo "rc=$?"
-     tail -14 "$SP/o232/relato1.out" (52s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Ran 1 shell command
 
-✢ Proofing… (3h 40m 15s · ↓ 440.4k tokens)
+● Achado, e é lei declarada: registro_batida.py:119 → recalcular_por_evento, com o aval de 27/09 ao lado — "A BATIDA E O EVENTO". Então a
+  batida é o apply. A pergunta que decide se há PAREI é se ela respeita a 09 exportada:
+
+  Ran 1 shell command
+
+● A guarda é explícita e nomeada: except CompetenciaExportada → "L-092: competencia exportada nao muda o gravado. Nao e falha -- e a lei
+  funcionando." Então não há PAREI — e minha frase do RELATO estava incompleta. Rodo o smoke e os hashes antes de corrigi-la:
+
+  Ran 1 shell command
+
+● Smoke 0 de 6 diferem e os 3 hashes vigentes idênticos. Escrevo a seção NO AR — com a correção do que eu havia afirmado sobre o apply:
+
+  Running 1 shell command…
+
+✢ Proofing… (3h 45m 45s · ↓ 456.2k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    2% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
