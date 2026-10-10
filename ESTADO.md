@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 22:58:31.**
+**Medido em 09/10/2026 23:04:01.**
 
 | | |
 |---|---|
@@ -123,34 +123,34 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Task "O207 na raia wt-bos" still running in background
-
-● Task "O228 na raia wt-celula" still running in background
-
-● Task "Push main with the lápide cure" still running in background
-
-● Push ainda correndo (pre-push na suite, atrás da trava da raia O228) — árvore continua fechada para escrita. Termino a leitura do R4 e do
-  R6, que é o item em curso:
-
-  Ran 3 shell commands
-
-● Placar: R1/R2/R5/SOMA fechados; faltam R3, R4, R6 (+BATERIA). Pela ordem da L-099 é R3 → R4 → R6, e o R3 já está construído e verificado
-  no scratchpad. Orientação do R4 enquanto o push corre (só leitura):
+  cobra citação — mas a lei do sítio é a L-099 e vai citada. Escrevendo as duas mensagens no scratchpad (seguro durante o push):
 
   Ran 2 shell commands
 
-● O R4 ficou claro: o único dos três REDs cujo dono é ESTRUTURA (logo, fatia) é o col935 — o espelho ancora num marco de TEMPLATE num dia
-  sem célula e fora do vínculo, enquanto dia_pago lê a batida crua: dois leitores, dois números, LEI-AKITA 2. E ele não depende do !,
-  porque a cura é no leitor, não no dado de vínculo. O código que espera o ! são as duas portas (demissão / encerrar vínculo).
+● A raia O228 liberou a trava às 23:01 e a suite do push está correndo agora (pre-push:3944973). Esperando por arquivo, não por relógio:
 
   Ran 1 shell command
 
-● O push está parado no arsenal negocio (ci) esperando a trava que a raia O228 tomou às 22:37 — é a serialização correta, não falha.
-  Consultando antes de fixar a ordem dos próximos atos:
+● Enquanto espera — a raia O228 liberou a trava, o que significa que a suite dela terminou. Pela L-105 ela pousa antes de eu abrir fatia
+  nova, então preciso do veredito dela:
 
-● Advising using Fable 5.1
+  Ran 2 shell commands
 
-✢ Proofing… (5h 5m 45s · ↓ 598.4k tokens)
+● Raia O228 ainda está construindo (sem commit; ponto/precedencia.py e o teste modificados) — não há pouso pendente. Usando a espera do
+  push para o LEI-ANTES-DO-PATCH do col935, que decide se ele é fatia ou pergunta de lei:
+
+● Running cd /home/ronald/saas-hasner/app/docs echo "=== 'se…
+  ⎿  $ cd /home/ronald/saas-hasner/app/docs
+     echo "=== 'sem celula' no LEIS.md ==="
+     grep -n 'sem celula' LEIS.md | cut -c1-320
+     echo
+     echo "=== L-112 (a mais nova que nomeia vinculo) ==="
+     grep -n '\*\*L-112\*\*' LEIS.md | cut -c1-700
+     echo
+     echo "=== L-041 e L-040 ==="
+     grep -n '\*\*L-04[01]\*\*' LEIS.md | cu…
+
+✢ Proofing… (5h 11m 15s · ↓ 609.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -160,7 +160,7 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Reading L-112 entry in LEIS.md                                                               42m 3s · ↓ 97.1k tokens
-  ◯ general-purpose  Polling green.out for suite verdict                                                         42m 3s · ↓ 147.4k tokens
+  ◯ general-purpose  Checking msg_o207.txt bracket citations                                                    47m 33s · ↓ 143.6k tokens
+  ◯ general-purpose  Inserting O228 row into TICKETS.md                                                         47m 33s · ↓ 164.4k tokens
   ⧉  index
 ```
