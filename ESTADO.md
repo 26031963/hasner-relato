@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 07:14:31.**
+**Medido em 10/10/2026 07:20:01.**
 
 | | |
 |---|---|
@@ -122,42 +122,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  the work. Rodapé, then one push for the marco:
-
-  Ran 1 shell command
-
-● Pushing — one push for the marco. The pre-push hook runs both runners, so this goes to a log and I'll read the veredito from the remote,
-  not from the absence of output:
-
-  Ran 1 shell command
-
-● Two commits, both mine, nothing to pull. Pushing:
-
-  Ran 1 shell command
-
-● While the push runs I won't touch the tree. Proving the vigia answers from the deployed code (read-only, writes nothing, ~7 s):
-
-  Ran 1 shell command
-
-● Same number from the deployed code in 8 s. Confirming the --alarme contract (exit 2 = business alarm, which cron_run.sh records as
-  alarmes, not erros):
-
   Ran 1 shell command
 
 ● Exit 2 with the alarm naming exactly one key — q1.competencias_com_valor_movido: 1, not q2, not cego. Checking the push:
 
-● Checking the push progress against the remote
-  ⎿  $ cd /home/ronald/saas-hasner && echo "=== push log (ate agora):"; tail -6 logs/o219/push_a0b.out 2>/dev/null || echo "(sem saida
-     ainda)"; echo; echo "=== veredito do REMOTO (a ausencia de saida nao e falha):"; git fetch origin 2>/dev/null; git rev-parse
-     origin/main HEAD; echo; echo "=== origin/mai…
+  Ran 1 shell command
 
-✢ Proofing… (13h 19m 45s · ↓ 1.6m tokens · thinking)
+● Pre-push is running the suite against the pushed commit d20a0e4525; the remote is still at 374b7712. Waiting by file, not by guess:
+
+  Ran 1 shell command
+
+● Preparing the pouso proof as a script to apply once the push releases the tree (ESMERIL-DO-MARCO: the censo of this marco's orphans was
+  already closed with zero):
+
+  Ran 1 shell command
+
+● Push is running the suite against d20a0e4525. Calling the advisor while it runs — the marco is committed, deployed and proven in the air,
+  so the deliverable is durable:
+
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+
+● Taking the advisor's 10-second check now — whether cron_run.sh writes the FIM carimbo on exit 2, which decides if the vigia runs once or
+  three times tomorrow:
+
+  Checking whether cron_run.sh carimba the FIM on exit 2
+  ⎿  $ cd /home/ronald/saas-hasner && grep -n 'FIM_DIR\|FIM=' bin/cron_run.sh; echo "=== o contexto da escrita do carimbo:"; n=$(grep -n
+     'FIM_DIR' bin/cron_run.sh | tail -1 | cut -d: -f1); sed -n "$((n-14)),$((n+8))p" bin/cron_run.sh
+
+✶ Compacting conversation… (13h 25m 16s · ↓ 1.6m tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱ 75%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    4% until auto-compact
+                                                                                                                    1% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
