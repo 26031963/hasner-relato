@@ -1,5 +1,107 @@
 # RELATO — esteira saas-hasner
 
+## O219 A0-a — A FORMA DO TXT DO DOMINIO TINHA CINCO COPIAS, E DUAS SONDAS MINHAS MORRERAM ANTES DESTA (10/10 05:xx)
+A L-113 manda a competencia exportada deixar de BARRAR o recalculo, e o unico risco que a casa soube
+nomear contra isso foi *"o gravado passa a mudar EM SILENCIO debaixo de um TXT entregue"*. Para
+responder isso e preciso PERGUNTAR se o TXT entregue ainda e o que o gravado montaria -- e essa
+pergunta nao tinha onde ser feita: a FORMA do arquivo estava escrita TRES vezes e a PROVA dele DUAS,
+e nenhuma das cinco copias respondia a pergunta. Cada uma montava a sua.
+
+**O NUMERO 5 NAO E MEU, E DO SELO.** O predicado do selo novo, rodado contra o HEAD anterior, acha
+exatamente as cinco: `regerar_txt_dominio` (forma + hash), `models.py` (hash), `validacao_pdf.py`
+(forma) e `views.py` (forma).
+**PROVA:** `logs/o219/SELO_RED_forma_do_txt.txt` -- *"ARVORE HEAD (a364847b): 30 arquivo(s) de
+producao em folha/, 5 violacao(oes)"*, com o predicado EXTRAIDO do proprio selo por regex em vez de
+reescrito (replicar a logica na sonda seria a segunda verdade). Na arvore curada: **0**.
+
+**O QUE NASCEU**, em `folha/export.py`, ao lado do `nome_canonico` que ja era fonte unica pelo mesmo
+caso: `conteudo_do_txt` (a forma), `hash_do_txt` (a prova) e `txt_vigente_x_gravado` (o juiz da
+pergunta). O Dominio le o arquivo por POSICAO -- terminador diferente e ARQUIVO DIFERENTE para ele
+ainda que o olho nao veja --, e com tres copias o PDF podia um dia validar um conteudo que nao era o
+que saiu.
+**PROVA:** `folha/tests/test_l113_a0_forma_do_txt.py`, **`Ran 12 tests` / `OK`** em 0,104 s; `ruff
+check folha/` **All checks passed!**; e o caso que amarra os dois lados -- `ExportacaoDominio.registrar`
+(quem GRAVA a prova) e `hash_do_txt` (quem a CONFERE) dao o MESMO sha256, que era o pior lugar
+possivel para divergir: a divergencia apareceria na tela como *"o TXT mudou"* sem nada ter mudado.
+
+**UM FURO REAL CURADO NO CAMINHO: o empate de carimbo.** `regerar_txt_dominio` escolhia o TXT
+anterior por `.order_by('-gerado_em').first()`, que e a MESMA pergunta que
+`folha/models.py::anotar_vigencia` responde -- com um desempate a mais, `(gerado_em, pk)`. Em empate
+de carimbo os dois podiam escolher registros DIFERENTES, e o comando guardaria o anterior de um
+enquanto comparasse contra o outro.
+**PROVA:** `test_MORDE_empate_de_carimbo_escolhe_por_pk` (dois registros com o MESMO `gerado_em`, o
+juiz escolhe o pk maior); e a guarda no comando e `raise CommandError`, nao `assert` -- `python -O`
+apaga `assert` e com ele a guarda.
+
+**O NOME MUDOU ANTES DE POUSAR, e isso e a TRAVA JUIZ-NOVO funcionando.** Ele nasceu
+`txt_divergente`, e a casa ja tem `cartao_x_txt_divergentes` (relatorios/, corte 17/09) respondendo
+OUTRA pergunta: se o CARTAO do colaborador bate com o TXT. Dois nomes 90% iguais para duas perguntas
+diferentes e vocabulario paralelo -- e vocabulario paralelo so aparece depois que os numeros se
+afastaram.
+**PROVA:** censo dos chamadores fora de `folha/` antes do rename (`grep` de 5 nomes em `--include=*.py`):
+os 10 arquivos que casavam citavam o contador ANTIGO, nenhum monta TXT nem calcula hash; o novo nome
+diz os dois lados, como o dele.
+
+**E O SELO PRENDE O AVESSO DE UM FALLBACK.** Empresa sem codigo no Dominio nao tem TXT para montar e
+o juiz PROPAGA o erro da autoridade que ele le. Um `try/except` devolvendo `divergente=False` ali
+seria o `[]` de dois sentidos -- lampada apagada lida como *"esta tudo em ordem"*.
+**PROVA:** `test_MORDE_sem_integracao_o_juiz_PROPAGA_em_vez_de_dizer_que_nao_diverge`; o caso nasceu
+de um ERROR real da primeira rodada (11 testes, 1 error), nao de imaginacao.
+
+**NENHUMA CLAUSULA DA L-113 SE MOVE AQUI, de proposito:** a linha dela em `docs/LEIS.md` segue
+`SO-NO-PAPEL -- 0 de 3`. Isto e pre-condicao, nao clausula.
+
+### AS DUAS SONDAS QUE EU MATEI COM A MINHA PROPRIA MEDICAO (fica registrado, e o custo foi meu)
+A pergunta de A0-b -- *"o gravado mudou debaixo do TXT?"* -- eu tentei responder DUAS vezes errado.
+
+**(i) PELO HASH DO TXT: 7 de 7 competencias "divergem", e a causa dominante nao e o gravado.** O
+contador nasceu dizendo 7/7 e eu quase o publiquei como alarme. Ele confunde TRES causas: a populacao
+mudou (RETENCAO), a traducao mudou (`_rubricas_map`, `eventos_do_fechamento`, `_ciclo_do_colab`,
+`feriado_12x36_em_dobra`, `datas_falta`) e o gravado mudou. **So a terceira e o risco da L-113.**
+**PROVA:** `logs/o219/CONTRATO_DE_ENTRADA.md`; a retencao por `furo_espelho` mede **200/238/94** nas
+tres empresas -- ela sozinha move a populacao do TXT e portanto o hash.
+
+**(ii) PELO CARIMBO `atualizado_em > foto`: 125 linhas, e 123 sao RUIDO DE UM CRON DE ESCALA.** O
+contador leu 125 dia-colab em 4 de 7 competencias em 7,18 s, e **123 deles carregam
+`previsto_em IS NULL`** -- a assinatura de `ponto/services/fechamento.py::invalidar_previsto:965`,
+que ao mudar escala anula o previsto materializado em TODA competencia daquele colaborador, exportada
+ou nao, e carimba `atualizado_em` **na mao**. Nao e defeito dele: invalidar o previsto MUDA o
+registro. O defeito era o meu contador.
+**PROVA:** `logs/o219/CONTRATO_DE_ENTRADA.md` -- distribuicao por dia e status, **0 de 125** pela
+porta de aprovacao que eu havia DECLARADO no docstring como a falsa-positiva (declarei a porta errada),
+e censo de escritores por AST.
+
+**E O CARIMBO ERRA NOS DOIS SENTIDOS -- a casa ja tinha escrito isso, em arquivo que eu nao havia
+lido.** `ponto/management/commands/carimbo_gravado.py` registra um falso NEGATIVO medido: o
+`FechamentoMensal` de emp2 **09/2026 (EXPORTADA)** mudou entre 09:14 e 09:27 de 29/09 com **zero**
+linhas `atualizado_em=hoje`, porque `auto_now` nao dispara em `queryset.update()`. Carimbo testemunha
+*"alguem escreveu algo"*, nunca *"um NUMERO mudou"*.
+**PROVA:** o docstring de `carimbo_gravado.py` e o censo dos 11 nomes excluidos, que aparece
+IDENTICO em `ponto/portas/regen_exportada.py::_FORA_DO_HASH` -- a autoridade de *"o gravado mudou, e em
+qual campo"* **ja existe, em duas copias literais**. A LEI-AKITA 4 em estado puro: a pergunta nao era
+"qual a regra", era "qual leitor nao migrou".
+
+### OS DOIS CASOS DE `previsto_em > foto`: NAO HA BYPASS VIVO (achado historico, vira linha de fila)
+Dos 125, dois nao sao do cron: emp3 09/2026 col49 (`FechamentoMensal` pk4884, recalculo 30/09 22:27
+contra foto de 30/09 20:07) e emp2 09/2026 col221 (pk4689, 03/10 00:55 contra 01/10 22:44) -- escritas
+no gravado de competencia EXPORTADA, posteriores ao commit da trava (`ae058f68`, 27/09 10:12).
+**A trava FIRA hoje para os dois, e nao foi pela porta.**
+**PROVA:** reproducao na sombra dentro de `atomic()` com `raise` no fim --
+`empresas_exportadas_no_escopo(9, 2026, colaborador_ids=[49])` = `[3]`, `([221])` = `[2]`, e
+`recalcular_fechamento_mes` **RECUSOU** nos dois; as 7 linhas `regen_em_exportada` do `LogAuditoria`
+nomeiam 414/416/418/515/616/877/932 e **nenhuma cita 49 nem 221**; e toda ocorrencia de
+`recalculo_de_competencia_EXPORTADA` em `logs/` e de SUITE (`empresas=[1]`, `[499]`, `[1858]`), nenhuma
+de prod. Nao se cura um caminho que nao se nomeou, e nao ha bug vivo: o provado e que a trava funciona.
+**E as duas competencias estao em `marco='paga'`**, com `violacoes=['paga sem trancada']` -- vale dito
+em voz alta antes da clausula 1: a trava que a L-113 remove e, hoje, a unica coisa entre um recalculo
+e o gravado de uma competencia **ja paga**.
+
+### O `!` QUE A CLAUSULA 1 PEDE (nao devolve turno -- a fila segue em A0-b)
+Tirar o `raise CompetenciaExportada` de `ponto/services/fechamento.py:72-77` e **`!` de dinheiro
+exportado** pelo item (c) da DINHEIRO-EM-COMPETENCIA-ABERTA, e esta na lista NUNCA PRE-APROVADO.
+Vai para a mesa com o numero, e o turno **nao para**: A0-b (o vigia) e a proxima do mesmo item e nao
+depende do `!`.
+
 ## O218 CORRETIVO — **EU CRIEI O SEGUNDO JUIZ E ESCREVI NO COMENTARIO QUE ELE NAO EXISTIA** (10/10 01:3x, ESMERIL-DO-MARCO + LEI-AKITA 2)
 O esmeril do proprio marco achou, no unico arquivo que o marco mudou, um defeito que a mensagem do
 `672f88e1` NEGA. Ao extrair a receita da guarda de banco para `E_SOMBRA` (bin/sombra.sh:63) eu deixei de pe

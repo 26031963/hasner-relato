@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 03:15:45.**
+**Medido em 10/10/2026 03:21:01.**
 
 | | |
 |---|---|
@@ -34,6 +34,7 @@ f415e116 [PLACAR-ESTRUTURAL] instrumento: o placar deixa de poder dizer que esta
 ```
  M app/config/crons_duracao.json
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/RELATO.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -121,27 +122,7 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  written those. Listing every export row of those two competências:
-
-  Ran 1 shell command
-
-● Let me reproduce it directly on the sombra rather than keep theorizing — call the recalc for col49 in the exported 09/2026 and see
-  whether the trava fires:
-
-  Ran 1 shell command
-
-● The trava fires today for both — so there's no live bypass. One cheap check closes it: the porta's trail rows carry FechamentoMensal pks,
-  not colab ids:
-
-  Ran 1 shell command
-
-● The porta's trail names colabs 414/416/418/515/616/877/932 — not these two. Recording the bounded finding and moving to land the
-  extraction:
-
-  Ruff on folha in the raia
-  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; docker run --rm $TESTE_DOCKER -v
-     /home/ronald/wt-l113/app:/app:ro -w /app saas-hasner-core:latest sh -c 'ruff check folha/ --output-format concise --no-cache' 2>&1 |
-     tail -20
+  Searched for 1 pattern, read 1 file, ran 15 shell commands
   ⎿  Read docs/AVAIS.md (27 lines)
   ⎿  Referenced file ../../wt-l113/app/ponto/services/fechamento.py
   ⎿  Read docs/HANDOFF-SESSAO.md (47 lines)
@@ -150,9 +131,29 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Task "RED e construção do segundo intervalo" completed in background
 
-✶ Proofing… (9h 21m 0s · ↓ 1.1m tokens)
+● Background command "Run the new selo module" completed (exit code 0)
+
+  Read 1 file, ran 7 shell commands
+
+● The name would sit 90% on top of the existing cartao_x_txt_divergentes (a different question). Renaming before the suite rather than
+  after:
+
+  Searched for 1 pattern, read 2 files, ran 5 shell commands
+
+● Background command "Neighbour pass: folha and relatorios" completed (exit code 0)
+
+● Inserting the RELATO entry
+  ⎿  $ python3 - <<'PY'
+     p='docs/RELATO.md'
+     s=open(p).read()
+     novo=open('/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/relato_a0a.md').read()
+     cab='# RELATO — esteira saas-hasner\n\n'
+     assert s.startswith(cab)
+     open(p,'w').write(cab + novo + '\n' + s[len(cab):]…
+
+✢ Proofing… (9h 26m 15s · ↓ 1.1m tokens · thought for 10s)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    3% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
