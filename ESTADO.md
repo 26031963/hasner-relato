@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 01:08:01.**
+**Medido em 10/10/2026 01:13:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `353818c5 [O207] pouso: a terceira opcao do Inicio da apuracao entra no ar no mesmo ato do merge, e o smoke dele fecha o W12X36-HPD achando um BO de tela` |
+| `HEAD` local | `672f88e1 [O218] instrumento: a porta da sombra passa a enxergar a arvore de uma raia, e com isso a medicao cabe ANTES do pouso` |
 | `origin/main` | `353818c5 [O207] pouso: a terceira opcao do Inicio da apuracao entra no ar no mesmo ato do merge, e o smoke dele fecha o W12X36-HPD achando um BO de tela` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -22,11 +22,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+672f88e1 [O218] instrumento: a porta da sombra passa a enxergar a arvore de uma raia, e com isso a medicao cabe ANTES do pouso
 353818c5 [O207] pouso: a terceira opcao do Inicio da apuracao entra no ar no mesmo ato do merge, e o smoke dele fecha o W12X36-HPD achando um BO de tela
 4831eb93 [O207] a tela do assistente de fase ganha a terceira opcao -- a data que o admin DECLARA --, e a inativa sobreposta deixa de cobrir o trecho de outra vigencia
 f415e116 [PLACAR-ESTRUTURAL] instrumento: o placar deixa de poder dizer que esta fora do ar um commit que o git ja tem no tronco
 1c281f92 [PLACAR-ESTRUTURAL] BATERIA: a contagem que envelheceu em horas pela minha propria mao passa a ser a dos modulos que a fonte nomeia
-ec4b1994 [PLACAR-ESTRUTURAL] R3: a linha que dizia a O130 fora do ar passa a dizer o que o git diz, e quem a desmentir fica vermelho
 ```
 
 ## `git status --short`
@@ -34,8 +34,6 @@ ec4b1994 [PLACAR-ESTRUTURAL] R3: a linha que dizia a O130 fora do ar passa a diz
 ```
  M app/config/crons_duracao.json
  M app/docs/HANDOFF-SESSAO.md
- M app/docs/RELATO.md
- M bin/sombra.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -123,42 +121,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Publicado em f0d2f6b, seção presente, 0 vazamento. O ESTADO.md é gerado direto no destino — a faixa se confere lá:
 
   Ran 1 shell command
 
-● Os únicos "retido" no ESTADO são o texto do meu próprio comando, ecoado na seção de sessão — não uma faixa. Confiro pela redação real que
-  o gerador emitiria:
+● Na espera — que a ESMERIL-DO-MARCO manda ser o esmeril deste marco — confiro que o instrumento que acabei de posar faz o que a mensagem
+  afirma, e que o caminho DEFAULT não mudou:
 
   Ran 1 shell command
 
-● Faixa confirmada ausente: a redação real do gerador é > **RELATO retido:** e ela tem 0 ocorrência no ESTADO publicado (os 2 hits de
-  RETIDO são RETIDOS=0 da célula R3, outra palavra). O aval do RELATO está cumprido nas duas metades.
-
-  Marco O207 fechado — o handoff que a L-108 cobra, e inspeção das duas cópias antes de mexer em git:
+● Três confirmados — mas o item 2 me desmente: a linha 311 carrega a mesma asserção literal, enquanto a minha mensagem de commit afirma que
+  a guarda "mora só aqui". Leio antes de afirmar qualquer das duas coisas:
 
   Ran 1 shell command
 
-● Ambas as cópias são DESTACADA — nenhum ramo morre com elas, e estão dentro do meu scratchpad desta sessão. Removo só essas duas e rodo o
-  portão do pouso de instrumento:
+● A linha 311 é uma cópia literal da guarda, e o comentário que poso em :421-423 afirma "o unico sitio onde ela mora". Preciso saber se ela
+  é minha ou pré-existente antes de dizer qualquer coisa:
 
-● Removing my scratchpad copies and running every host seal · 1m 14s
-  ⎿  $ cd /home/ronald/saas-hasner
-     SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
-     for w in wt-o207 wt-ensaio; do
-     git worktree remove --force "$SP/raias/$w" 2>&1 && echo "removida: $w" || echo "FALHOU: $w"
-     done
-     git worktree prune
-     echo "copias de scratchpa… (1m 14s · 6 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Ran 1 shell command
 
-✢ Proofing… (7h 15m 15s · ↓ 852.2k tokens)
+● Medido, e o defeito é meu, do commit que acabou de pousar: a linha 311 vem de 3d8d835f (a E2 original) e eu acrescentei a segunda cópia
+  ao extrair E_SOMBRA para o caminho novo, deixando a literal de pé — e então poso um comentário dizendo "o unico sitio onde ela mora".
+  Dois sítios do mesmo juízo, com a testemunha afirmando o contrário. Registro durável antes de qualquer cura:
+
+  Ran 1 shell command
+
+● Achado registrado. Estou num ponto de decisão (forma da cura, selo de host, e commit corretivo x emenda com o push em voo) e os
+  entregáveis estão duráveis — consulto o revisor:
+
+● Advising using Fable 5.1
+
+✢ Proofing… (7h 20m 45s · ↓ 865.2k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
