@@ -6,10 +6,18 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 10/10/2026 06:42:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (579.8 MB). Acoes na janela: **1427**.
+**Medido em 10/10/2026 06:47:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (579.9 MB). Acoes na janela: **1420**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 06:47:31 | Bash | Read the rest of encadeado.sh and find who reads cron alarms | `cd /home/ronald/saas-hasner && sed -n '49,90p' bin/encadeado.sh; echo "=== quem le o log/rc de cron (vigia da esteira / negou_fogo):"; grep -rn 'vigia_txt_dominio\\|supra_juiz_a6\\|SystemExit(2)' bin/*.sh 2>/dev/null \| head -8` |
+| 06:47:23 | Bash | See how encadeado.sh handles a link's non-zero rc | `cd /home/ronald/saas-hasner && grep -n 'ALARME\\|rc\b\\|exit\\|teto' bin/encadeado.sh \| head -30` |
+| 06:47:16 | Bash | Fix the RELATO heading hour | `grep -n '07:5x\\|08:05' docs/RELATO.md \| head && sed -i 's/^## O219 A0-b — O VIGIA DO TXT NASCE, E O ALARME CAI DE 6 DE 7 PARA 1 DE 7 (10\/10 07:5x)$/## O219 A0-b — O VIGIA DO TXT NASCE, E O ALARME CAI DE 6 DE 7 PARA 1 DE 7 (10\/10 06:4x)/' docs/RELATO.md && grep -n '^## O219 A0-b' docs/RELATO.md` |
+| 06:46:59 | Bash | Read the clock, the probe mtimes and the raia's commit state | `date '+AGORA: %d/%m %H:%M:%S'; echo "--- sonda da duracao:"; stat -c '%n mtime=%y' /home/ronald/saas-hasner/logs/sonda/a0b_duracao.py 2>&1; ls -l --time-style='+%d/%m %H:%M' /home/ronald/saas-hasner/logs/a0b_comando.out 2>&1; echo "--- raia:"; git -C /home/ronald/wt-l113 log --oneline -1; echo "--- status da raia:"; git -C /home/ronald/wt-l113 status --short \| head -20` |
+| 06:43:05 | Bash | Check suite progress and the test lock holder | `cd /home/ronald/saas-hasner && wc -l logs/o219/a0b_suite.out 2>/dev/null; tail -4 logs/o219/a0b_suite.out 2>/dev/null; echo "--- trava:"; bash bin/trava_teste.sh --quem 2>&1 \| head -2` |
+| 06:42:57 | Bash | Add the pauta item and regenerate AVAIS.md | `python3 - <<'FIM' import json p = 'docs/PENDENTES_RONALD.json' itens = json.load(open(p)) ID = 'PAUTA-DP-08-ADIC-NOTURNO-7-8-O219' assert not [x for x in itens if x.get('id') == ID], 'item ja existe' novo = { "id": ID, "tipo": "!", "quando": "10/10 07:5x", "estado": "aberto", "desde": "2026-10-10T08:05", "trava_fila1": False, "o_que": ( "**PAUTA DP** (`!` porque e dinheiro de competencia EXPORTADA ...` |
+| 06:42:12 | Bash | List the keys and non-o_que values of the pauta item | `python3 - <<'FIM' import json d = json.load(open('docs/PENDENTES_RONALD.json')) it = [x for x in d if x.get('id') == 'PAUTA-DP-09-COL923-O232B'][0] print('CHAVES:', list(it)) for k in it: if k != 'o_que': v = it[k] print('\n--- %s = %s' % (k, json.dumps(v, ensure_ascii=False)[:900])) FIM` |
+| 06:42:07 | Bash | Read the existing pauta item shape from PENDENTES_RONALD.json | `python3 - <<'FIM' import json d = json.load(open('docs/PENDENTES_RONALD.json')) print(type(d), len(d)) it = [x for x in d if x.get('id') == 'PAUTA-DP-09-COL923-O232B'] print(json.dumps(it, ensure_ascii=False, indent=2)[:2600]) FIM` |
 | 06:41:58 | Bash | Run the proof checker on the RELATO and read the Stop hook verdict | `python3 ../bin/relato_afirma_com_prova.py docs/RELATO.md 2>&1 \| tail -15; echo "rc=$?"; echo "=== hook stop le o topo:"; python3 ../bin/hook_stop_fila1.py </dev/null 2>&1 \| head -8` |
 | 06:41:54 | Bash | Insert the section at the top of the RELATO and run the proof checker | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && head -1 docs/RELATO.md > $S/novo.md && cat $S/relato_a0b.md >> $S/novo.md && tail -n +2 docs/RELATO.md >> $S/novo.md && cp $S/novo.md docs/RELATO.md && wc -l docs/RELATO.md && sed -n '1,6p' docs/RELATO.md && echo "=== checador de prova:" && python3 ../bin/relato_afirma_com_prova.py 2>&1 \| tail -12` |
 | 06:41:45 | Bash | Draft the A0-b RELATO section | `cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/relato_a0b.md <<'FIM' ## LEI QUE FALTA — O TXT ENTREGUE SOB O JUIZ DE RETENCAO ANTERIOR CONTA COMO VIGENTE NA Q1? (10/10, com numero) Nao devolvo o turno por isto (**PAREI-DE-LEI-NAO-DEVOLVE-TURNO**): a pergunta fica aqui no topo com os numeros, a esteira seguiu para o pouso da A0-b, e a resposta en ...` |
@@ -1422,18 +1430,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 18:47:44 | Bash | Le o diagnostico col923 | `cd /home/ronald/saas-hasner; cat logs/l115/diag_col923.out \| head -80` |
 | 18:47:41 | Bash | Push e inventario de logs/l115 | `cd /home/ronald/saas-hasner; tail -4 logs/push_o231.out; echo "=== shapeB ==="; ls logs/l115/` |
 | 18:47:33 | Bash | Le o resto do laco de parear_turnos | `cd /home/ronald/saas-hasner/app; sed -n '1010,1140p' ponto/turnos.py` |
-| 18:47:28 | Bash | Le parear_turnos ao vivo | `cd /home/ronald/saas-hasner/app; sed -n '872,1010p' ponto/turnos.py` |
-| 18:47:21 | Bash | Le _data_do_turno ao vivo | `cd /home/ronald/saas-hasner/app; sed -n '80,165p' ponto/turnos.py` |
-| 18:43:43 | Bash | Confere o push | `cd /home/ronald/saas-hasner; tail -3 logs/push_o231.out` |
-| 18:43:35 | Bash | Le _data_do_turno, candidato de origem do O232 | `cd /home/ronald/saas-hasner/app; sed -n '88,160p' ponto/turnos.py` |
-| 18:43:28 | Bash | Le parear_turnos | `cd /home/ronald/saas-hasner/app; sed -n '872,975p' ponto/turnos.py` |
-| 18:43:25 | Bash | Localiza parear_turnos e os usos de data_turno | `cd /home/ronald/saas-hasner/app; grep -n "def parear_turnos\\|data_turno" ponto/turnos.py \| head -30` |
-| 18:43:18 | Bash | Confere o andamento do push | `cd /home/ronald/saas-hasner; tail -5 logs/push_o231.out 2>/dev/null; echo "---"; ls -la logs/push_o231.out` |
-| 18:43:12 | Bash | Mapa dos casos escritos pela regra | `cd /home/ronald/saas-hasner; grep -n "^#\\|^## \\|^### " logs/l115/casos.md \| head -40` |
-| 18:43:07 | Bash | Le a medida do shape B do O232 | `cd /home/ronald/saas-hasner; ls -la logs/l115/ \| head -20; echo "==="; sed -n '1,80p' logs/l115/shapeB_MEDIDO.md 2>/dev/null` |
-| 18:43:04 | Bash | Le o item O232 inteiro | `cd /home/ronald/saas-hasner/app; grep "^\| O232 \|" docs/BACKLOG.md \| tr '\|' '\n' \| sed -n '2,6p' \| fold -w 180 \| head -60` |
-| 18:42:55 | Bash | Empurra o marco O231 (roda a suite no pre-push) | `cd /home/ronald/saas-hasner; git push origin main > logs/push_o231.out 2>&1; echo "rc=$?"; tail -6 logs/push_o231.out` |
-| 18:42:44 | Bash | Confere o que falta empurrar | `cd /home/ronald/saas-hasner; git fetch -q origin 2>&1 \| tail -2; git log --oneline origin/main..HEAD \| cat` |
-| 18:42:33 | Bash | Smoke em prod: dry-run do comando curado | `cd /home/ronald/saas-hasner; timeout 600 docker exec saas_core python manage.py tenant_command fechar_cobranca_com_lastro --schema=juliani 2>&1 \| tail -15` |
-| 18:42:23 | Bash | Confere que fechar(False) nao escreve | `cd /home/ronald/saas-hasner/app; sed -n '268,300p' ponto/services/lastro.py` |
-| 18:42:07 | Bash | Publica o marco O231 | `cd /home/ronald/saas-hasner; bin/deploy.sh --sem-migrate 2>&1 \| tail -25` |

@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 06:42:01.**
+**Medido em 10/10/2026 06:47:31.**
 
 | | |
 |---|---|
@@ -33,8 +33,10 @@ a364847b [O218] corretivo: a guarda da sombra volta a ter UM sitio, e o selo que
 
 ```
  M app/config/crons_duracao.json
+ M app/docs/AVAIS.md
  M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/PENDENTES_RONALD.json
  M app/docs/RELATO.md
  M app/docs/TICKETS.md
  M bin/sonda_frota.sh
@@ -125,23 +127,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ⎿  Referenced file ../../wt-l113/app/ponto/services/fechamento.py
-
-● Task "RED e construção do segundo intervalo" completed in background
-
-● Host seals in the raia came back with 8 RED — but a worktree lacks .git/hooks, logs/ and staticfiles (all gitignored), which is exactly
-  what most of those messages name. Let me run the same pasta on the main tree to separate false RED from real.
-
-  Ran 1 shell command
-
-● All 8 were the worktree's missing gitignored infra (.git/hooks, logs/, staticfiles), not my fatia — 58 green in the raia, those 8 green
-  on main. Now the full suite. First the staticfiles the montagem seal flagged as empty:
-
-  Ran 3 shell commands
-
-● Montagem door green. Launching the full suite on the raia in background:
-
-  Ran 1 shell command
 
 ● Suite is running. Per ESMERIL-DO-MARCO the wait is this marco's esmeril — writing the RELATO and the AVAIS item now. First the current
   RELATO top:
@@ -150,11 +135,28 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Now the RELATO. The lei question goes to the TOP with its numbers, and the esteira continues (PAREI-DE-LEI-NAO-DEVOLVE-TURNO):
 
-  Inserting the section at the top of the RELATO and running the proof checker
-  ⎿  $ python3 ../bin/relato_afirma_com_prova.py docs/RELATO.md 2>&1 | tail -15; echo "rc=$?"; echo "=== hook stop le o topo:"; python3
-     ../bin/hook_stop_fila1.py </dev/null 2>&1 | head -8
+  Read 1 file, ran 2 shell commands
 
-✢ Proofing… (12h 47m 15s · ↓ 1.5m tokens · thinking)
+● RELATO clean. Now the ×7/8 to the mesa. Reading the shape of the existing pauta item first:
+
+  Ran 4 shell commands
+
+● Deliverables are durable (RELATO + AVAIS item 12). Suite still running. Calling the advisor before the pouso:
+
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+
+● The advisor is right on the clock — let me read date now and recover the real measurement time:
+
+  Ran 1 shell command
+
+● Both confirmed: it is 06:47 (my labels were ~1h15 ahead), and the raia is not committed — HEAD is still 374b7712, so a merge would carry
+  nothing. Fixing the clock first:
+
+● Seeing how encadeado.sh handles a link's non-zero rc
+  ⎿  $ cd /home/ronald/saas-hasner && grep -n 'ALARME\|rc\b\|exit\|teto' bin/encadeado.sh | head -30
+
+· Proofing… (12h 52m 45s · ↓ 1.5m tokens · thought for 1s)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

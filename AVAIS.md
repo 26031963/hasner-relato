@@ -1,4 +1,4 @@
-# AVAIS NA MESA — 11
+# AVAIS NA MESA — 12
 
 > Gerado por `bin/gerar_avais.py` a partir de `app/docs/PENDENTES_RONALD.json`.
 > **So itens ABERTOS.** Item respondido SOME daqui na proxima geracao -- a historia dele fica
@@ -17,10 +17,11 @@
 | 9 | `PAUTA-DP-09-COL736-O232B` | **!** | 2026-10-09T23:25 | 09/2026 GRAVADA 169,47 h -> PASSARIA A 172,92 h (+207 min = +3,45 h) em 1 dia(s); matricula 1961, emp2; 09 EXPORTADA intacta nos 3 hashes | `col736: o dia 17/09 de 09/2026 vale **+207 min (+3,45 h)** -- a 09 tem **169,47 h** gravadas e passaria a **172,92 h**. (1) AUTORIZO a fatia que constroi a porta de re-lavra da competencia exportada (DIFF antes, reversao em `logs/`, TXT novo COMPLETO com o nome canonico substituindo o vigente, anter` |
 | 10 | `O207-INICIO-DECLARADO-SMOKE` | **smoke** | 2026-10-10T00:25 | pouso do merge de 4831eb93; suite CHEIA sobre a arvore MERGEADA: `Ran 10253 tests in 1412.830s` / `OK (skipped=42)`, um run por vez (trava o207-merge). A falha que a raia carregava nao era dela -- test_contract_lapide_na | `smoke Ronald: abri o assistente de fase de um colab de TESTE, o Inicio da apuracao me mostrou as tres opcoes com a previa de cada uma, declarei a data e ela foi a gravada -- pode fechar o O207` |
 | 11 | `L113-CLAUSULA1-RECUSA-DE-RECALCULO` | **!** | 2026-10-10T03:35 | 1 `raise` (fechamento.py:75) · 3 `except` vivos · 6 sitios `permitir_exportada` · 12 arquivos citando `CompetenciaExportada` · 4 selos a INVERTER com lapide. Dinheiro parado atras da clausula, ja publicado e nao aplicado | ``!` Ronald: apaga a recusa de recalculo em competencia exportada (`ponto/services/fechamento.py:74-75`) e fecha a clausula 1 da L-113 -- os 3 `except` ficam mortos, os 6 `permitir_exportada` perdem sentido e os 4 selos se INVERTEM com lapide, mantendo versao anterior do TXT, trilha e DIFF antes.   O` |
+| 12 | `PAUTA-DP-08-ADIC-NOTURNO-7-8-O219` | **!** | 2026-10-10T08:05 | emp2/08 `pk=19` gerado_em 2026-09-01 10:08:07-0300: entregue 263.964 (2.639,64 h) -> hoje 230.968 (2.309,68 h), delta -32.996 min (-329,96 h) em 27 matriculas, TODAS rubrica 0025; razao 7/8 em 27 de 27; causa `2206451b`  | `adicional noturno 08/2026 emp2: o TXT entregue paga **+329,96 h** a mais que o gravado de hoje em **27 matriculas** (rubrica 0025, razao 7/8), porque saiu **4h51 antes** de a clausula 38-d ser ligada (`2206451b`). (1) O ENTREGUE FICA e a 08 nao se toca -- a diferenca e perda consciente, nao se cobra` |
 
 ---
 
-Total no JSON: **222** · aberto **11** · respondido **50** · sem-motivo **161**.
+Total no JSON: **223** · aberto **12** · respondido **50** · sem-motivo **161**.
 
 > `sem-motivo` nao e "resolvido": e *"ninguem julgou este item"*. A ordem de 18:4x proibe
 > triar os 163 antigos, entao eles ficam ai, nomeados, em vez de serem chutados para um lado.

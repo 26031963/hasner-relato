@@ -24,7 +24,7 @@ que o juiz de hoje teria produzido* (e entao os tres de agosto nao sao comparave
 cobra corte para isso. **O que NAO muda com a resposta:** nenhum dos 44 entra em `valor_moveu`; eles sao
 `porta_moveu`, que nao alarma. O alarme de hoje e **1 de 7**, e nao depende desta pergunta.
 
-## O219 A0-b — O VIGIA DO TXT NASCE, E O ALARME CAI DE 6 DE 7 PARA 1 DE 7 (10/10 07:5x)
+## O219 A0-b — O VIGIA DO TXT NASCE, E O ALARME CAI DE 6 DE 7 PARA 1 DE 7 (10/10 06:4x)
 A A0-a deu **um** sitio para a forma e a prova do TXT. A A0-b faz a pergunta que a L-113 precisa
 respondida antes de a clausula 1 cair: *"o gravado pode mudar debaixo de um arquivo entregue?"*. Fatia de
 **leitura pura** -- zero mudanca em caminho de escrita, zero `--apply`, e o comando nao existe com flag de
