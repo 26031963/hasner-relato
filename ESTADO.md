@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 09/10/2026 22:20:46.**
+**Medido em 09/10/2026 22:25:46.**
 
 | | |
 |---|---|
@@ -121,36 +121,36 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 1 shell command
 
-● Push na fase da suíte, trava com ele — as raias esperam pelo rc 75, como mandei. Agora a Pauta DP que devo da O232. Lendo o script como
-  está:
+● Estou situado na O219. Enquanto o push fecha, o estado do turno:
 
-  Ran 1 shell command
+  O206 pousou e está no ar. O ato foi um só, pela L-107: merge em cópia primeiro (wt-merge-o206, 0 conflito, suíte da cópia Ran 3669 tests
+  / OK (skipped=23), 0 FAILED, ruff limpo), depois merge na árvore viva → commit b5700cbb → bin/deploy.sh --sem-migrate rc 0, sem nada no
+  meio. O deploy provou as três cascas juntas (core 200, ui 302, mensageria 200), rodou collectstatic, selo BUG 128 verde e
+  importerror_500=0.
 
-● Três consertos pendentes. Conferindo a forma canônica do item e se a porta citada existe mesmo no código:
+  O que a fatia muda: o aviso de pergunta sem resposta parava de mandar no Reabrir, que apaga as respostas já dadas — era o caso
+  col267/chamado 8954, 5 respostas certas apagadas em 28/09. Agora o aviso indica "Cobrar resposta (não apaga nada)", pela rota que já
+  existia (0 rota nova), e o Reabrir desceu com a condição escrita dizendo quantas respostas apaga. E cobrarChamado passou a ter uma
+  definição, alcançável das duas cascas pelo fecho do extends — com lápide no sítio velho.
 
-  Ran 1 shell command
+  Achei uma afirmação minha falsa e corrigi no RELATO: o relato de 20:1x dizia que a frase do smoke "já está no AVAIS". Não estava — 0 item
+  citava O206 no PENDENTES_RONALD.json. O item nasceu agora (O206-PAINEL-COBRAR-SMOKE, AVAIS 5 → 6), e o chamado #28304 que ele manda
+  abrir está vivo com 3 de 3 perguntas sem resposta, conferido no vivo.
 
-● Nenhum nome no JSON nem no gerador — então a nota era sobre a chave de match, e o script hoje cita exatamente a chave que a lei proíbe
-  (matricula). E o push está carimbando a árvore, então não escrevo em app/docs/ agora (memória nao-commitar-durante-o-push). Conferindo a
-  porta citada antes de reescrever o primeiro OU:
+  As duas raias abriram no mesmo ato, as duas em b5700cbb: wt-bos com a O207 (com o limite 4 colado — constrói, mede e para no !, o código
+  da porta pode pousar e dado de vínculo não) e wt-celula, nova, com a O228 só na família célula, por AST e proibida de curar
+  comportamento. Nenhuma das duas mergeia, deploya ou empurra.
 
-  Ran 1 shell command
+  Duas coisas que corrigi no caminho e que valem dizer:
 
-● Confirmado: zero código da porta REGEN-EM-EXPORTADA — só existe a guarda CompetenciaExportada, que barra, não abre. O primeiro OU estava
-  oferecendo um caminho que não existe. Corrigindo o script (só no scratchpad, a árvore está sob push):
-
-  Ran 1 shell command
-
-● Script corrigido e em DRY com os 3 itens. Antes de escrever na árvore, consulto o revisor — a decisão da chave de match envolve dado
-  pessoal num repo que vai para o GitHub:
-
-  Advising using Fable 5.1
-
-✽ Proofing… (4h 28m 0s · ↓ 522.1k tokens)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+  - a Pauta DP da comp-09 que eu ia escrever citava lei revogada — "um colaborador por ato" e "TXT parcial de retificação" caíram na O TXT
+    É FOTOGRAFIA DO CÁLCULO de 30/09. E o 2º OU era oco: classificar_export:425-433 lê FechamentoMensal já lavrado, e o gravado da 09 nunca
+    recebeu estes números, então gerar TXT novo hoje devolveria arquivo idêntico. A decisão tem duas saídas de verdade, não três.
+    Reescrita, e agora com os dois números que a própria lei pede: col923 35,88 h → 113,36 h, col735 98,32 h → 102,22 h, col736 169,47 h →
+    172,92 h.
+  -
+                                                                                                                   10% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -158,7 +158,7 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Reading vincular_escala in views.py                                                         4m 17s · ↓ 140.5k tokens
-  ◯ general-purpose  Censusing escala/signals.py and orfa_classe.py                                              4m 17s · ↓ 118.4k tokens
+  ◯ general-purpose  Reading barrados text in celula.py                                                          9m 17s · ↓ 171.1k tokens
+  ◯ general-purpose  Extracting PROTEGE column from LEIS.md                                                      9m 17s · ↓ 163.6k tokens
   ⧉  index
 ```
