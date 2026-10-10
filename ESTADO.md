@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 15:45:45.**
+**Medido em 10/10/2026 15:50:45.**
 
 | | |
 |---|---|
@@ -34,6 +34,7 @@ c1d3a6e4 [O228] pouso do INSTRUMENTO da familia turno em ato proprio: o censo na
 ```
  M app/config/crons_duracao.json
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/PROMPTS.md
  M bin/sonda_frota.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -123,38 +124,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 4 shell commands
 
-● Section is 17 lines (L-116 ceiling 25). Now the amend that carries the marco's docs into the instrumento commit, per the 8735524c
-  precedent:
+  Ran 5 shell commands
 
-  Amended commit c1d3a6e4, ran 3 shell commands
-
-● Amend landed c1d3a6e4 — 7 files, matching the 8735524c precedent, no dangling sha, the 3 known-dirty files still out. Now publishing
-  (PRE-APROVADO: "registrar no BACKLOG e publicar o RELATO"):
-
-  Ran 2 shell commands
-
-● Published at 15:42, commit 0b9869c, 0 vazamento, and zero retention warnings in the ESTADO — the RELATO entered the cycle for the first
-  time since 13h. Now the L-108 handoff, since this marco is closed:
+● The mentira is the cure with the impoverished 4-field seed — fechamento_lido exists but rebuilt from the dict path. Rebuilding all three
+  trees from current HEAD, with the cure re-derived from git show HEAD: at patch time (LEI-AKITA 10) and certified by md5:
 
   Ran 1 shell command
 
-● MARCO FECHADO — pode compactar (L-108: handoff regenerated, 45 lines; never mid-DIFF, and nothing is mid-apply).
-
-  Let me check the state of the next item before committing to it — the ORDEM VIVA marker (authority per O158) says O48, while the
-  handoff's "próximo passo" still derives from the OBRAS table:
+● Cure re-derived from HEAD is byte-identical to the 14:34 build — the design transfers with proof. Now the advisor's 26-vs-28 check,
+  measured at the source rather than trusted from the docstring prose:
 
   Ran 2 shell commands
 
-● fechamento_em_memoria:974 is just an empty-model constructor ("só para ler a grade") — it derives nothing, so it is not a rival to
-  fechamento_lido. The built patch stands. Before committing to the pouso:
+● The dict's 26 comes from CAMPOS in a management command. Measuring the actual set difference:
 
-  Advising using Fable 5.1
+  Ran 1 shell command
 
-· Proofing… (21h 50m 59s · ↓ 2.6m tokens)
+● Measured: the 4 the update() writes and the dict withholds are atualizado_em, causa_espelho, motivos_espelho, previsto_em (the dict also
+  adds mes/ano, the identity). None of the 13 fields RECALC-09 asks for is missing — so RECALC-09 does not depend on passo 2 landing. Now
+  the callers:
+
+● Censo dos chamadores de producao do caminho do dict
+  ⎿  $ cd /home/ronald/saas-hasner/app
+     echo "=== quem chama somente_leitura=True em PRODUCAO (fora de tests/) ==="
+     grep -rn 'somente_leitura=True' --include=*.py . | grep -v '/tests/' | grep -v 'test_'
+     echo
+     echo "=== algum deles le um dos 4 ausentes? ==="
+     for c in motivos_espelho causa_espelho previsto_…
+
+✶ Proofing… (21h 55m 59s · ↓ 2.6m tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                   11% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
