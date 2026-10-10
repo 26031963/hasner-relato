@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 13:44:01.**
+**Medido em 10/10/2026 13:49:31.**
 
 | | |
 |---|---|
@@ -130,44 +130,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● O marcador ainda está lá porque numero.py só roda com o veredito. Então o ensaio vai inteiro em cópia — docs.py, a seção e a pergunta —
-  sem tocar os artefatos reais:
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: PLACAR-ESTRUTURAL -- O ESTRUTURAL SE SEPARA DO DADO (corte dele 02/10 22:5x, que SUBSTITUI o item 3 da
+  ordem das 21:4x -- o resto d
 
-  Ran 1 shell command
+  Ran 5 shell commands
 
-● Os três tocam. Agora a forma do resultado — o hook lê colunas, e célula deslocada é hook lendo prosa como estado:
+❯ aval Ronald: COMPLEMENTO DA O219 (nao e id novo) -- RECALC-09-PARA-AUDITORIA. So medicao, na SOMBRA. Nenhuma lei nova (moratoria).
+  Aplica L-110 (medida de IMPACTO, nunca validacao), L-113, L-114 e a intacta da exportada em PROD.
 
-  Ran 1 shell command
+  CONTEXTO EM UMA LINHA: estou auditando os 574 holerites da 09 (feitos a mao pelo DP) contra o sistema; o gravado da 09 e anterior a
+  O211/O223 e preciso do numero que o codigo e o cadastro de HOJE dao.
 
-● BACKLOG: 6 colunas de cada lado, não deslocou. O meu localizador de linha é que não serve para o LEIS — a forma da tabela lá é outra:
+  FONTE: ponto/services/fechamento.py::recalcular_fechamento_mes -- a funcao REAL, nao replica.
+  FAZ: na sombra do dia (que ja traz as 3 linhas de AplicacaoConvencao de 08/10), recalcular a competencia 09/2026 das empresas 2, 3 e 4
+  com o HEAD. Gravar logs/audit_holerite_09/recalc_09_<data>.json com cabecalho {HEAD, carimbo da sombra, "ids = pk de prod": sim/nao} e,
+  por colaborador, {antes:{...}, depois:{...}} com os campos: horas_trabalhadas, horas_noturnas, horas_extras_50, horas_extras_50_noturna,
+  horas_extras_100, horas_extras_100_feriado, horas_extras_100_noturna, horas_folga_trabalhada, horas_falta, horas_atraso,
+  horas_saida_antecipada, horas_intra_indenizada, horas_reflexo_dsr. "antes" = o gravado como esta na sombra antes do recalculo.
+  COMO passar a porta da exportada DENTRO da sombra: decisao tecnica sua, registrada em uma linha.
+  QUANDO: depois do deploy que esta esperando a suite; nao fura o miolo da O219 nem o pouso da O199.
+  PROIBIDO: tocar o gravado da 09 em PROD; apply; gerar TXT; mexer na porta da exportada no codigo de prod; deixar o portao do deploy
+  vermelho (se a sombra ficar suja, refazer); nome, CPF ou valor em reais no arquivo ou no RELATO.
+  PRONTO: secao no RELATO (teto 25 linhas) com: colabs recalculados por empresa; soma antes -> depois de horas_noturnas, HE50, HE100 (as
+  tres colunas) e intrajornada, por empresa; quantos colabs mudaram; caminho do arquivo; HEAD. Sem um deles = INCOMPLETO com a lista.
+  LINHA HAIKU: nenhuma -- medicao, sem juiz, contador ou porta nova.
 
-  Ran 17 shell commands
-  ⎿  Read docs/HANDOFF-SESSAO.md (46 lines)
-  ⎿  Read docs/AVAIS.md (24 lines)
-  ⎿  Read
-     ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/pouso-celula/turno_prompt.md
-     (47 lines)
-  ⎿  Referenced file core/tests/test_o223_porta_humana_da_aplicacao.py
-  ⎿  Read core/management/commands/semear_aplicacao_convencao.py (128 lines)
+  Segue a fila; PAREI so em lei ou !
 
-● Task "RED e construção do segundo intervalo" completed in background
-
-● Task "O228 familia turno na raia-celula" still running in background
-
-● Task "Enfileirar a suite cheia contra a cópia curada" still running in background
-
-● Advising using Fable 5.1
-
-✢ Proofing… (19h 49m 15s · ↓ 2.3m tokens)
+✢ Proofing… (19h 54m 45s · ↓ 2.3m tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    8% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Checking FAIL lines in full.log                                                            55m 13s · ↓ 131.6k tokens
+  ◯ general-purpose  Reading suite.sh command construction                                                    1h 0m 43s · ↓ 162.3k tokens
   ⧉  index
 ```
