@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 11/10/2026 00:10:02.**
+**Medido em 11/10/2026 00:15:31.**
 
 | | |
 |---|---|
@@ -122,13 +122,11 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Checando o round-trip das celulas — é isso que decide o dono do fato (A):
-
   Ran 2 shell commands
 
 ● O round-trip existe (sdRender() roda no load e preenche o hidden). Procurando quem salvou em 06/10 19:23 UTC:
 
-  Searched for 1 pattern, ran 6 shell commands
+  Searched for 1 pattern, ran 5 shell commands
 
 ● Agora sei o horizonte: gerar_celulas lavra só a competência corrente (_janela_default). Lendo o contrato do cron antes de declarar:
 
@@ -140,19 +138,21 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Construindo na raia. Primeiro a fonte única da derivação (um juiz, não dois):
 
-● Gravar MUDA 2 e a fonte unica da derivacao
-  ⎿  $ cd /home/ronald/wt-bos && python3 - <<'PYEOF'
-     import io
-     p = 'app/escala/folgas.py'
-     s = io.open(p, encoding='utf-8').read()
-     VELHO = '''def gerar_foto_folgas(ec, ano, mes):
-     """Materializa (idempotente) as FolgaDia do vinculo ec no (ano, mes) a
-     partir de ec.folga_calendario. Reconcilia: apaga a foto…
+  Ler lancar_folga para ver a guarda de competencia
+  ⎿  $ cd /home/ronald/wt-bos && sed -n '225,290p' app/escala/folgas.py
+  ⎿  Read docs/AVAIS.md (23 lines)
+  ⎿  Read docs/HANDOFF-SESSAO.md (45 lines)
+  ⎿  Referenced file ponto/services/fechamento.py
+  ⎿  Read ponto/tests/test_s4_ninguem_recalcula_para_ler.py (151 lines)
+  ⎿  Referenced file ponto/services/dia_pago.py
 
-✽ Compacting conversation… (1h 51m 12s · ↓ 213.1k tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱ 71%
+● Task "RED e construção do segundo intervalo" completed in background
+
+● Task "O198 falta em dia sem jornada" still running in background
+
+✢ Spelunking… (1h 56m 41s · ↓ 223.9k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    0% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -160,6 +160,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
-  ◯ fork  Compiling test_o198_falta_em_dia_sem_jornada.py                                                       20m 28s · ↓ 100.8k tokens
+  ◯ fork  Inspecting O-row format in TICKETS.md                                                                 25m 57s · ↓ 136.7k tokens
   ⧉  index
 ```
