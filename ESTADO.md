@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 11/10/2026 04:15:45.**
+**Medido em 11/10/2026 04:20:45.**
 
 | | |
 |---|---|
@@ -124,42 +124,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ├──────────────────────┼──────────────────────────────────┼───────────────────────────────┤
-  │ HEAD de main         │ a96169b5 (nada commitado)        │ = árvore certificada 3bf9c778 │
-  └──────────────────────┴──────────────────────────────────┴───────────────────────────────┘
+     backfill é condicional ("aplica SO se esses 7 mudam e ninguem SAI do TXT"). Os 7 foram medidos numa sombra de dia=20261010; o refazer
+     que está correndo agora traz o dado de hoje. Então o adendo 5 do runbook põe o número para se RE-PERGUNTAR: dry-run do command (inerte
+     por construção — :159-161 retorna antes de gravar) na sombra refeita, confronto com o 7, DIFF de "ninguém sai do TXT" sobre o dado de
+     hoje; bate → install com os dois números no RELATO; não bate → o código fica no ar, o install é PAREI com a tabela e o crons.sh check
+     vermelho é o estado honesto.
 
-  O portão é o cron 16 4 * * * + ~18 min de bloco, então abre ≈04:35-04:40. O esperador buwjqcux9 consulta o carimbo por ARQUIVO a cada 30
-  s e me acorda quando os dois gates fecharem — nada de --sem-sombra.
+  Passageiro nomeado no commit do pouso 1: o app/docs/RELATO.md sujo são 2 inserções, uma linha do vigia da esteira no bloco ALARMES — não
+  é minha, anda junto porque git add leva o arquivo inteiro, e está dito no corpo.
 
-  Não toco em .py nenhum até lá, nem na principal nem na cópia: a árvore que a suite certificou (Ran 10375 tests / OK (skipped=42) / rc 0)
-  é a que pousa, e um commit fora de docs mataria a certificação — foi o que matou a SUITE 2. A ordem quando abrir é a do runbook, sem nada
-  no meio de cada ato: O198 50d2a6f6 (merge --no-ff --no-commit → commit → bin/deploy.sh --sem-migrate), minutos depois a foto 8272b439
-  com os docs do marco dentro do commit, a prova de árvore git diff --stat 3bf9c778 HEAD -- . ':!app/docs' vazia, bin/crons.sh install &&
-  check com o 47 5 * * * citado, e só então o commit da discriminação do R4.
+  Portão: o sombra.sh_-.2668546 acabou de aparecer em logs/crons_em_curso/ — o refazer está correndo, carimbo ainda dia=20261010. Fecha
+  ≈04:35-04:40 e o buwjqcux9 me acorda; exijo os dois gates (dia=20261011 status=OK tipo=completa diverge=0 erros=0 e a entrada do cron
+  ausente) antes do primeiro git merge. main segue em a96169b5, nenhum .py tocado.
 
-✻ Worked for 6m 9s · done 4:08 AM · 2 shells still running
+✻ Baked for 7m 12s · done 4:19 AM · 1 shell still running
 
-❯ segue a fila; PAREI so em lei ou !
-
-  Ran 1 shell command
-
-● O portão abre ≈04:35. A própria lei diz o que se faz nessa espera (ESMERIL-DO-MARCO: "a espera da suite de um marco e o esmeril DAQUELE
-  marco"), então vou ao censo de órfãos das duas raias que estão pousando — só leitura, nada de .py tocado.
-
-  Ran 5 shell commands
-
-● Censo do esmeril fechado — e o resultado é zero órfão. Vou gravar a prova.
+● Background command "Esperar o portao da sombra abrir" completed (exit code 0)
 
   Ran 1 shell command
 
-● Advising using Fable 5.1
+● O esperador disparou no dia=20261011, mas a linha inteira diz status=REFEITA, não OK — e o sombra.sh_-.2668546 segue em
+  logs/crons_em_curso/. O refazer acabou; o bloco da manhã é que ainda não correu, e é ele que o portão do deploy exige. Não pouso: o gate
+  1 não fechou.
 
-* Gesticulating… (2m 58s · ↓ 7.6k tokens)
+  Read 1 file, ran 2 shell commands
+
+● O portão responde pela própria autoridade que o deploy.sh:167 pergunta: rc_conferir=1, fechado. O esperador antigo casava só dia=20261011
+  e teria me levado a uma recusa de deploy — troco a condição pelo rc e pelo arquivo do cron.
+
+  Running 1 shell command…
+
+✶ Schlepping… (45s · ↓ 2.6k tokens)
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
