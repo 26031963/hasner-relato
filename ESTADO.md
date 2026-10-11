@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 11/10/2026 13:37:32.**
+**Medido em 11/10/2026 13:43:01.**
 
 | | |
 |---|---|
@@ -40,6 +40,7 @@ faa783e1 [O197] pouso da raia wt-bos: "Em aberto" era 1,4% verdade, e a cura sep
 
 ```
  M app/config/crons_duracao.json
+ M app/docs/HANDOFF-SESSAO.md
  M bin/sonda_frota.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -129,38 +130,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  A consequência que eu não ia perguntar (LEI-AKITA 8), e é a que importa: a linha ZERO de um afastado não é filtrada pelo juiz único do
+  TXT. Na 07, que já tem 8 dessas linhas, cinco saem entra, motivo=None — dentro das 300. Então a cura muda quem está no TXT, não só
+  quanto: o universo do juiz da 10 vai de 587 para até 598, o entra de 189 para até ~200. Isso foi para a frente do ! (item 8 em AVAIS.md).
 
-  Ran 5 shell commands
+  O deploy não mudou uma tela, e eu medi em vez de supor: fechamento_lido segue com zero chamador de produção e ponto/views.py:945 lê o
+  gravado direto por .first(). A cura é latente — materializa na próxima recalculação. Isso derrubou o ponto 5 do advisor, que supunha a
+  tela virando hoje.
 
-● Tudo durável (artefato 206 linhas, PENDENTES 229, AVAIS 8, RELATO seção nova 15 linhas, BACKLOG 286 chars). Antes do commit + deploy,
-  consulto o advisor — tenho uma contradição a levantar:
+  Pista: suite cheia Ran 10390 / OK (skipped=42) / rc 0, árvore certificada diferindo do HEAD em 2 arquivos e só neles (cmp sobre os 3.209
+  rastreados, citado no corpo do commit); deploy com 3 rotas provadas e importerror_500=0.
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+  Aberto, nomeado: a frase do ! foi reescrita para destravar a chave no export da 10, não antes, porque o limite é literal dele
+  (BACKLOG.md:56). Achado lateral para a fila, com número: a 09 exportada já é tocada pelo caminho automático depois do TXT (198 linhas,
+  198 colabs) desde que a cláusula 1 da L-113 caiu em 10/10 — não é efeito desta fatia. E a PROVA de prod ainda não tem citação em doc: ela
+  entra no RELATO do próximo marco, que é o pouso da raia do leitor, nascida agora de main para começar da forma certificada.
 
-  Ran 1 shell command
+  Push segue retido pelo FRONT SEM SMOKE NÃO SOBE (33 commits à frente).
 
-● CLAUDE.md = a regra AUTONOMIA-DE-CODIGO (ele mandou morar lá, nunca terá código próprio); PROMPTS.md = as 3 linhas de prompt que a
-  PROMPT-NAO-SE-REPETE exige no mesmo turno. Nenhuma das duas terá marco próprio, então entram neste, declaradas. Check 2:
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: PLACAR-ESTRUTURAL -- O ESTRUTURAL SE SEPARA DO DADO (corte dele 02/10 22:5x, que SUBSTITUI o item 3 da
+  ordem das 21:4x -- o resto d
 
-  Ran 1 shell command
+● O hook cobra o item em pé da fila 1. Leio a ordem viva inteira em vez de supor qual é:
 
-● Leis que protegem o sítio: L-009, L-092, L-094, L-095, L-113 — nenhuma fala de quem entra no universo. Faço o ato numa cadeia só (L-107):
+● Le o bloco que explica a derivacao do hook
+  ⎿  $ cd /home/ronald/saas-hasner
+     sed -n '255,275p' app/docs/BACKLOG.md
 
-  Ran 1 shell command
-
-● Os dois arquivos vão para a árvore viva e o ato segue sem intervalo:
-
-  Committed 541ce443
-
-● Commit 541ce443 (8 arquivos, 172+/6−), os dois cron-sujos fora. Deploy agora:
-
-  Publica o marco · 11s
-  ⎿  $ cd /home/ronald/saas-hasner && bin/deploy.sh --sem-migrate 2>&1 | tail -40
-
-✽ Infusing… (8h 51m 27s · ↓ 842.8k tokens)
+✢ Compacting conversation… (8h 56m 57s · ↓ 849.1k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱ 91%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    5% until auto-compact
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
