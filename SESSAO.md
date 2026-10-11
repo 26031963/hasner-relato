@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 11/10/2026 14:46:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (669.2 MB). Acoes na janela: **1139**.
+**Medido em 11/10/2026 14:52:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (669.2 MB). Acoes na janela: **1138**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1148,4 +1148,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 02:53:37 | Bash | Listar as provas do par 6 | `cd /home/ronald/saas-hasner && ls -1 logs/placar_estrutural/ \| grep r4_par6 && echo "--- fila" && ls -1 logs/fila/ \| grep -E 'r4_par6\|porta_export_81'` |
 | 02:52:35 | Bash | Ler a cauda da celula R4 | `cd /home/ronald/saas-hasner && sed -n '300,330p' app/core/placar_estrutural.py` |
 | 02:52:30 | Bash | Ler a celula R4 viva do placar | `cd /home/ronald/saas-hasner && md5sum app/core/placar_estrutural.py && sed -n '216,300p' app/core/placar_estrutural.py` |
-| 02:46:34 | Bash | Conferir os 10 dias do col882 nas provas de 01:5x | `cd /home/ronald/saas-hasner && for f in logs/placar_estrutural/r4_par6_linha_ou_zero_20261011_0157.txt logs/placar_estrutural/r4_par6_os_sete_20261011_0156.txt; do echo "=== $f"; cat "$f" 2>/dev/null \| head -30; done` |
