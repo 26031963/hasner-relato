@@ -34,6 +34,26 @@ PERGUNTA DE LEI x2 -- **RESPONDIDAS em 10/10 18:0x** pelos dois cortes dele (`ju
 
 **(2) o `detectar_par_relampago` pode ocupar o papel `prazo`, e com qual fato encerrado?** O VEREDITO dele JA delega, medido por AST em 10/10: `varrer_pares_embutidos:232` -> `par_embutido_retratavel:208` -> `_par_embutido_retratavel_geometria:220` -> `_score_geometria:86` -> `escala/utils.py::montar_grade_prevista_periodo_por_turno`, a autoridade da GRADE. O proprio dele e a CANDIDATURA (`:245-249`, `zip` adjacente + tipos alternados + gap <= `DURACAO_MAX_MIN=10`), e ela nao e derivacao de prazo pelo criterio do proprio selo -- fato GRAVADO contra teto de FORMA, sem relogio. **Nao movi o nome, e por duas razoes somadas:** (a) `bin/tests/test_papel_prazo_nao_deriva.sh` DECLARA no cabecalho que nao ve essa segunda porta e NOMEIA este cron, logo o verde dele seria ausencia de sinal, a familia que esta casa diz ser a que mais custou; (b) o seu aval nesta celula (`core/contratos_estruturais.py:252-262`) proibe em letra *"reclassificar o papel de um sitio para ela virar verde -- o que falta e juiz, nao rotulo"*. E a prescricao do censo de 04/10 nao fecha: `turnos_do_colab` nao enumera este par, porque `ponto/turnos.py::parear_turnos` declara *"E abre turno; S fecha o aberto"* e o par embutido e o ECO DENTRO de um turno -- ele nao E um turno (`pares_relampago` usa turnos_do_colab para o caso complementar, o turno inteiro curto). Entao: **(i)** o fato encerrado e o PAR, e ai falta funcao da casa que responda *"este par e completo?"* -> juiz novo, TRAVA JUIZ-NOVO; ou **(ii)** o fato encerrado e o TURNO QUE CONTEM o par (`t.aberto`), e ai `turnos_do_colab` ja e o juiz, mas de outra pergunta que a do censo -- e isso MUDA O UNIVERSO de um cron que roda `--apply` e RETRATA batida. Nao propus nenhuma (L-117).
 
+CORTE QUE FALTA (TRAVA JUIZ-NOVO, nao devolve turno -- a fila SEGUE pelos 6 que a lei ja responde) --
+**o item 2 da CONTRATOS-ATE-A-VIRADA (`folha/export x um juiz`) esta PARTIDO EM DOIS, e a metade de DINHEIRO e a
+que precisa de voce.** CONTRATO DE ENTRADA, medido na FONTE (`core/juizes.py` importado no `saas_core`, so leitura,
+rc 0 -- `logs/contrato_folha_export_juiz_20261011.out`): FONTE `PENDENTES['fechamento']` x `JUIZES['fechamento']`;
+UNIDADE sitio; UNIVERSO os 13 pendentes declarados; EXCLUSOES nenhuma (os 13 contam).
+- **os numeros da nota da celula CONFERIRAM hoje, nao envelheceram**: `len(PENDENTES['fechamento'])` = **13**
+  (dinheiro **8**, tela 4, cobranca 1) e a **IMPRESSAO de todos os 13 ainda esta VIVA** no arquivo
+  (`vivas=13 mortas=0`) -- nenhum pendente e fantasma, nenhum sitio se mudou de lugar.
+- **6 dos 13 podem ser curados AGORA**, porque a pergunta JA tem juiz declarado: 4 em
+  *"o que 'fechado' quer dizer"* -> `ponto/services/fechamento.py::competencia_trancada` e 2 em *"que
+  FechamentoMensal e o da competencia de hoje"* -> `ponto/janelas.py::janela_atual`. **3 deles sao dinheiro.**
+- **7 estao atras de CORTE SEU, nao de trabalho meu:** **6** na pergunta *"a competencia pode ser
+  aprovada/trancada (o que bloqueia)?"* -- **5 de DINHEIRO**, em `ponto/views.py` (4) e `folha/views.py` (1), o lote
+  cego que pula conta vazia e o TXT que aprova sem os crivos do botao -- e **1** na pergunta *"a competencia ja foi
+  entregue (lavrada)?"* (`chamados/juizes.py`). As DUAS perguntas tem **juiz declarado NENHUM**, e registrar
+  autoridade exige a frase `corte Ronald: juiz <nome> nasce` no CORTES.md. **Nao propus nome** (L-117).
+- consequencia que fica dita: a celula `folha/export x um juiz` **nao fica verde** sem esse corte -- allowlist zero
+  e a linha, e `PENDENTES_FECHAMENTO` nao chega a zero com 7 sem autoridade. O que a fila faz sem esperar: os **6**
+  com juiz, que e cura de LEITOR (o sitio passa a chamar a autoridade), zero juiz novo.
+
 FILA DO MARCO DO PASSO 3 (nao devolve turno, nada parado por elas):
 
 **BALDE v = CADASTRO, nao ESTRUTURA (L-099; dono MEDIDO, nao PAREI).** Os 4 da 10 com horas e ata zerada (col960,

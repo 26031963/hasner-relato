@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 11/10/2026 19:08:32.**
+**Medido em 11/10/2026 19:14:02.**
 
 | | |
 |---|---|
@@ -22,7 +22,7 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2385.4 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2385.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 60 arquivo(s) sujo(s)
@@ -31,19 +31,19 @@ RELATO, com a lista de nomes do banco como autoridade._
   - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **153.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261011`) -- **SEM AGENTE**
-  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **15.8 h** (passou das 6 h da L-105)
+  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **15.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **270.0 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **270.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **174.1 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **174.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
-  - 4 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **0.5 h**
+  - 4 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **0.6 h**
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **291.8 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **291.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 18 arquivo(s) sujo(s)
@@ -68,9 +68,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 
 ```
  M app/config/crons_duracao.json
+ M app/docs/AVAIS.md
  M app/docs/BACKLOG.md
  M app/docs/FECHAMENTO-ONLINE.md
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/PENDENTES_RONALD.json
  M app/docs/RELATO.md
  M app/docs/TICKETS.md
  M bin/sonda_frota.sh
@@ -162,44 +164,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Task "Raia wt-bos: O44 itens 2-8" still running in background
+    escrever: recon_onprem não tem merge-base com o main (fatal: no merge base) — é história disjunta, e os "1053 commit a frente" são a
+    história inteira dela contada por rev-list main..HEAD. Ela não pode pousar nunca. Os outros cinco: wt-cert e wt-esmeril são instrumento
+    (L-105, pouso próprio — e bin/esmeril_mecanico_censo* não existe no main); wt-lps é ensaio descartável pelo próprio commit (a coluna
+    PROTEGE + selo já pousaram por 1cde743a); wt-comboio é cópia de certificação minha; wt-pdf está no ! dele ("não mergear raia-pdf").
+    - Fila (achado fora do marco, ESMERIL-DO-MARCO manda virar linha): bin/raias_estado.py chama "N commit a frente do main" o que rev-list
+      conta numa história sem merge-base, e cobra L-105 de uma raia que não tem como mergear.
+    - O primeiro loop que eu rodei engoliu o fatal: e contou 0 arquivo no diff — o defeito "sonda não conclui com erro"; refiz com o erro
+      visível.
+  - Pré-merge medido: raia-o48p3..main = 0 behind, 4 ahead, índice limpo — a suite está certificando uma árvore que contém o main de agora.
+  - Mensagem do pouso escrita ($S/msg_pouso_corpo.txt, 63 linhas: LEI-AKITA, a cura _dentro, a tabela das 3 redações com "valor que a cura
+    MOVE = 0", os 362/509/264/ZERO, ZERO-NA-TELA 0, 68/154/176 ms, o balde v como CADASTRO, o contrato da Pauta 22→17 e os 3 INCOMPLETOS).
+  - Script do pouso escrito ($S/pouso_o48p3.sh, L-107 num ato só): lista dos .py tirada antes do merge → merge --no-ff --no-commit →
+    MERGE_HEAD preenchido → censo cmp contra a cópia → git write-tree do índice == 2e2a7fd4^{tree} (a prova forte, antes dos docs entrarem)
+    → git add dos 4 docs → índice tem de ser exatamente 16 caminhos e nenhum proibido → commit -F → bin/deploy.sh --sem-migrate. Sem
+    deleção no pouso (1 A, 11 M), então nada de HASNER_COMMIT_DEL.
 
-● Task "Raia wt-ui: UI-FECHAMENTO etapa 1" still running in background
+  Parado em nada — a trava está com raia-bos-suite-o44 desde 18:54 e $S/suite_cert.out tem 0 linha; a vez é minha em seguida. Leio o
+  veredito pela forma da casa (^(OK|FAILED) + ^Ran N + rc) e aí a cadeia roda inteira.
 
-● Background command "Rodar a pasta de selos de host na raia" completed (exit code 0)
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: PLACAR-ESTRUTURAL -- O ESTRUTURAL SE SEPARA DO DADO (corte dele 02/10 22:5x, que SUBSTITUI o item 3 da
+  ordem das 21:4x -- o resto d
 
-  Searched for 1 pattern, read 1 file, ran 8 shell commands
+● Registrar o item novo e regerar o AVAIS
+  ⎿  $ cd /home/ronald/saas-hasner && git diff --stat -- app/docs/PENDENTES_RONALD.json app/docs/AVAIS.md; echo "--- so adicao?"; git diff
+     --numstat -- app/docs/PENDENTES_RONALD.json
 
-● Background command "Rodar os 12 vizinhos na raia (fila da trava)" completed (exit code 0)
-
-  Searched for 3 patterns, ran 37 shell commands
-  ⎿  Read docs/AVAIS.md (24 lines)
-  ⎿  Read docs/FECHAMENTO-ONLINE.md (76 lines)
-  ⎿  Referenced file folha/export.py
-  ⎿  Read ../logs/o48p4_prova_lido_20261011.out (27 lines)
-  ⎿  Referenced file ../../wt-o48p4/app/folha/management/commands/simular_folha.py
-
-● Task "RED e construção do segundo intervalo" completed in background
-
-● Task "Raia wt-bos: O44 itens 2-8" still running in background
-
-● Task "Raia wt-ui: UI-FECHAMENTO etapa 1" still running in background
-
-● Task "Suite cheia certificadora na raia" still running in background
-
-  Advising using Fable 5.1
-
-✢ Infusing… (14h 22m 27s · ↓ 1.3m tokens)
+· Infusing… (14h 27m 56s · ↓ 1.3m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    3% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 5 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
 ❯ ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Tailing suite_copia_20261011_184837.txt progress                                        1h 56m 39s · ↓ 139.1k tokens
-  ◯ general-purpose  Running test_contract_busca against base tree                                           1h 56m 39s · ↓ 164.6k tokens
+  ◯ general-purpose  Tailing suite_copia_20261011_184837.txt progress                                          2h 2m 8s · ↓ 139.1k tokens
+  ◯ general-purpose  Comparing copia_ui2 against wt-ui/app files                                               2h 2m 8s · ↓ 169.0k tokens
   ⧉  index
 ```
