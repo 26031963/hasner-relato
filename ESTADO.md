@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 23:31:31.**
+**Medido em 10/10/2026 23:37:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `1ceed412 [O219] a queda da clausula 1 da L-113 e a virada da regra no MESMO ato: a recusa sai de onde nascia e vira TRILHA, e a declaracao passa a (1, '2026-09')` |
+| `HEAD` local | `3f87ede9 [O48] SEM CELULA NAO E ZERO: a grade DIZ `sem_celula` e a derivacao respondia 0 -- o TXT escrevia zero hora realizada de quem trabalhou 189,90 h` |
 | `origin/main` | `d20a0e45 [O219] pouso: os docs do marco A0-b entram junto, e o merge que eu pedi sem commit virou FAST-FORWARD -- o codigo estava na arvore viva antes deste commit` |
-| commits a subir (`ahead`) | **20** |
+| commits a subir (`ahead`) | **21** |
 
 ## Fabrica
 
@@ -22,26 +22,17 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+3f87ede9 [O48] SEM CELULA NAO E ZERO: a grade DIZ `sem_celula` e a derivacao respondia 0 -- o TXT escrevia zero hora realizada de quem trabalhou 189,90 h
 1ceed412 [O219] a queda da clausula 1 da L-113 e a virada da regra no MESMO ato: a recusa sai de onde nascia e vira TRILHA, e a declaracao passa a (1, '2026-09')
 13582547 [PLACAR-ESTRUTURAL] R6 item 4 MEDIDO: o 25 do JUIZES_POR_VARREDURA nao desce por medicao, desce por corte -- e duas afirmacoes da propria casa eram falsas
 0ab4717e [O48] passo 2, numero de FROTA: lido == gravado em 583 de 583 colabs da 10/2026, e os 4 que sobram sao universo de cadastro, nao buraco da porta
 ccad3d52 [O48] passo 2: a porta de LEITURA do fechamento nasce sem segundo derivador, e a prova de que nao ha segundo e o DIFF de frota ZERO
-c1d3a6e4 [O228] pouso do INSTRUMENTO da familia turno em ato proprio: o censo nasce com a catraca medida FORA da janela do merge, porque ele le a arvore onde mora
 ```
 
 ## `git status --short`
 
 ```
- M CLAUDE.md
  M app/config/crons_duracao.json
- M app/docs/BACKLOG.md
- M app/docs/HANDOFF-SESSAO.md
-A  app/docs/O148-COMPLEMENTO.md
- M app/docs/O98-MAPA-ANTIGO-ENTRADA.md
- M app/docs/PROMPTS.md
- M app/docs/RELATO.md
- M app/ponto/services/fechamento.py
-A  app/ponto/tests/test_o48_sem_celula_nao_e_zero.py
  M bin/sonda_frota.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -132,37 +123,37 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
+  Ran 2 shell commands
+  ⎿  Read docs/AVAIS.md (23 lines)
+  ⎿  Read docs/HANDOFF-SESSAO.md (45 lines)
+  ⎿  Read ponto/tests/test_s4_ninguem_recalcula_para_ler.py (151 lines)
+  ⎿  Referenced file ponto/services/fechamento.py
+  ⎿  Referenced file ponto/services/dia_pago.py
+
+● Task "RED e construção do segundo intervalo" completed in background
+
+● Carimbo de hoje verde, 23:36 — dá o pouso dentro da janela. Commit e deploy no mesmo sopro:
+
+  Committed 3f87ede9
+
+● Commit 3f87ede9 com as duas guardas de host passando. Deploy agora:
+
   Ran 1 shell command
 
-● Os cinco campos do FechamentoMensal são null=True (models.py:400-414), então o None é gravável. E a lavratura não recebe esses campos:
-  recebe os três mapas da grade, e o comentário do próprio sítio diz que com grade vazia "dia sem grade nao ganha linha". Falta provar que
-  o meu raise deixa os mapas vazios, não indefinidos:
+● Três cascas provadas. Smoke que importa: provar que o worker vivo já responde None em vez de 0 — leitura pura, um colab, sem escrever:
 
-  Ran 1 shell command
-
-● :418 nasce _abono_dia, _prev_dia_m, _real_dia_m = {}, {}, {} antes do try: de :419. Falta uma coisa: o meu raise tem de cair antes do
-  :565, que é onde os mapas se enchem — senão a lavratura ganharia linhas com 0 justamente nos dias sem célula:
-
-  Ran 1 shell command
-
-● :570 (o raise) vem antes de :586 (onde os mapas se enchem) — então a lavratura recebe {} e dia sem célula não ganha linha: o "não sei"
-  declarado, não zero. A cadeia está fechada. Publicando o DIFF e pousando:
-
-  Ran 3 shell commands
-
-● Bytes idênticos aos certificados. Fechando a mensagem com os números medidos e commitando:
-
-● Fechar a mensagem e preparar o indice
+● Smoke de leitura em prod, um colab, sem escrita
   ⎿  $ cd /home/ronald/saas-hasner
-     S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
-     cat >> "$S/msg_o48_sem_celula.txt" <<'MD'
-     O PAR CONTROLADO, porque contra o GRAVADO nao se isola nada. O gravado da 10 envelheceu contra o
-     motor -- 174 de 579 colabs diverge…
+     cat > /tmp/o48_smoke_prod.py <<'PY'
+     from django.db import connection
+     from django.conf import settings
+     assert settings.DATABASES['default']['NAME'] == 'saas_hasner', 'banco errado'
+     assert connection.settings_dict['NAME'] == 'saas_hasner', 'banco errado (vivo)'
+     from pont…
 
-✢ Compacting conversation… (1h 12m 41s · ↓ 142.8k tokens)
-  ▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 23%
+✢ Spelunking… (1h 18m 11s · ↓ 145.9k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    0% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
