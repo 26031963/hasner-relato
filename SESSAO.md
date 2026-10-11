@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 11/10/2026 17:58:03.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (676.4 MB). Acoes na janela: **1093**.
+**Medido em 11/10/2026 18:03:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (676.8 MB). Acoes na janela: **1088**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 18:03:30 | Bash | Ler de onde vem a ata em grade_da_celula | `sed -n '280,345p' escala/services/leitor_celula.py` |
+| 18:03:20 | Bash | Ler o contexto do RELATO:3727 | `R=/home/ronald/saas-hasner; sed -n '3710,3745p' $R/app/docs/RELATO.md` |
+| 18:03:19 | Bash | Ler o contexto do RELATO:2449 | `R=/home/ronald/saas-hasner; sed -n '2435,2470p' $R/app/docs/RELATO.md` |
 | 17:57:46 | Bash | Procurar a origem do nao-toque em leitor_celula:364 | `R=/home/ronald/saas-hasner; echo "=== por que :364 e nao-toque"; grep -rn 'leitor_celula.py:364\\|leitor_celula:364\\|:364' $R/app/docs/RELATO.md $R/app/docs/CORTES.md $R/app/docs/LEIS.md 2>/dev/null \| cut -c1-300 \| head` |
 | 17:57:11 | Bash | Ler o nucleo do leitor_celula | `R=/home/ronald/saas-hasner; sed -n '300,375p' $R/app/escala/services/leitor_celula.py` |
 | 17:57:08 | Bash | Ver onde o leitor de celula monta minutos_realizados | `R=/home/ronald/saas-hasner; grep -n 'minutos_realizados' $R/app/escala/services/leitor_celula.py \| head -20` |
@@ -1095,11 +1098,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 06:05:53 | Bash | Le a forma do arquivo caso5 | `R=/home/ronald/saas-hasner; sed -n '1,40p' $R/logs/o197/caso5_20261011_0553.out` |
 | 06:05:49 | Bash | Mede quantos dos 55 caem em hoje x passado | `R=/home/ronald/saas-hasner; echo "=== linhas de data no caso5 ==="; grep -cE '^20[0-9]{2}-[0-9]{2}-[0-9]{2} status=' $R/logs/o197/caso5_20261011_0553.out; echo "--- distribuicao por data ---"; grep -oE '^2026-[0-9]{2}-[0-9]{2}' $R/logs/o197/caso5_20261011_0553.out \| sort \| uniq -c \| sort -k2; echo "--- quantas em 2026-10-11 (hoje) ---"; grep -cE '^2026-10-11 status=' $R/logs/o197/caso5_20261011 ...` |
 | 06:03:48 | Bash | Grava o desenho da cura | `R=/home/ronald/saas-hasner; cat > $R/logs/o197/DESENHO_20261011.txt <<'EOF' O197 -- DESENHO DA CURA (11/10, DEPOIS de achar o leitor irmao que JA cumpre as duas leis) MUDEI DE DESENHO E A RAZAO E PRIMARIA, nao preferencia: `escala/services/furos_diarios.py` -- o leitor IRMAO da MESMA metrica (furo) -- declara no docstring (:5-8) e cumpre no codigo (:26-29) as DUAS exclusoes que eu ia tratar como f ...` |
-| 06:02:45 | Bash | Le os precedentes do isento sobre furo | `cd /home/ronald/wt-bos/app; echo "=== supra_juiz 118-135 ==="; sed -n '118,135p' ponto/supra_juiz.py; echo "=== furos_diarios 1-35 ==="; sed -n '1,35p' escala/services/furos_diarios.py` |
-| 06:02:36 | Bash | Censo de chamadores do derivador e do juiz isento | `cd /home/ronald/wt-bos/app; grep -rn "datas_em_aberto_de" --include=*.py . ; echo "--- isento_ponto chamadores ---"; grep -rn "isento_ponto" --include=*.py . \| grep -v "/tests/" \| grep -v "models.py"` |
-| 06:01:43 | Bash | Le o corpo do derivador | `cd /home/ronald/wt-bos/app; sed -n '268,300p' ponto/services/dia_decidido.py` |
-| 06:01:38 | Bash | Le os sitios de cura e os leitores | `cd /home/ronald/wt-bos/app echo "=== dia_decidido.py: datas_em_aberto_de ==="; grep -n "def datas_em_aberto_de" -A 30 ponto/services/dia_decidido.py echo "=== cartao_pela_celula.py 285-325 ==="; sed -n '285,325p' relatorios/cartao_pela_celula.py echo "=== pdf_espelho.py 395,425 ==="; sed -n '395,425p' relatorios/pdf_espelho.py echo "=== contexto_calendario signature ==="; grep -n "def contexto_cal ...` |
-| 06:01:27 | Bash | Le o resto do molde | `sed -n '120,270p' /home/ronald/wt-bos/app/relatorios/tests/test_r3_em_aberto_alcanca_turno_aberto.py` |
-| 06:01:23 | Bash | Le o molde de fixture do selo irmao | `sed -n '1,120p' /home/ronald/wt-bos/app/relatorios/tests/test_r3_em_aberto_alcanca_turno_aberto.py` |
-| 06:01:18 | Bash | Confere limpeza da raia wt-bos | `git -C /home/ronald/wt-bos status --porcelain; echo "rc=$?"; git -C /home/ronald/wt-bos rev-parse HEAD` |
-| 06:01:13 | Bash | Confere estado da raia wt-bos e saida da task antiga | `cd /home/ronald/wt-bos 2>/dev/null && git log --oneline -1 && git status --short; echo "--- task out ---"; tail -40 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/aa14fd1a6ffa27253.output 2>/dev/null \|\| echo "(sem arquivo)"` |
