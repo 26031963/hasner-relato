@@ -56,6 +56,25 @@ a lista que a L-099 nomeia como autoridade do dono e cega em 2 dos 4. PROVA: `lo
   `-v .../staticfiles:ro` e os cinco `--tmpfs`. Sem isso os cinco smokes de chromium dariam **RED FALSO** por css/js
   ausente -- o defeito que a memoria da casa ja tinha nome para ("suite em worktree precisa do staticfiles").
 
+- **AS 6 RAIAS SEM AGENTE ganham MOTIVO, e a medicao derrubou a primeira linha que eu ia escrever** (item 4 do
+  RAIAS-ANDAM-JA; `bin/raias_estado.py --linhas`: uniao=30, sem_agente=6, velhas=6). A declaracao canonica mora em
+  `logs/raias/<raia>.agente` (escrita por `bin/raia_agente.sh`) -- quem nao tem obra viva nao ganha declaracao
+  FALSA, ganha motivo aqui, que e o que o proprio medidor cobra:
+  - `recon_onprem` -- **nao e raia**: `git merge-base HEAD main` responde **"no merge base"** (historia DISJUNTA,
+    HEAD `612be166` de 04/07, "WIP chamados: pre-resync"). Os "1053 commit a frente" sao a historia INTEIRA dela
+    contada por `rev-list main..HEAD`; ela nao pode pousar nunca. Apagar e `!` dele.
+  - `wt-cert` (`0bb105db`, 05/10, 17 arquivos / 4 `.py`: `bin/`, selos de host, hooks, mensageria) e `wt-esmeril`
+    (`0dfaef6f`, 30/09, `bin/esmeril_mecanico_censo*`, que NAO existe no main) sao **INSTRUMENTO**: pouso PROPRIO
+    depois do produto -- **lei, L-105**.
+  - `wt-lps` (`79da3e2a`, 04/10) e **ensaio descartavel pelo proprio commit** ("commit de ensaio, descartavel"): a
+    coluna PROTEGE + selo JA pousaram no main por `1cde743a`, e os 2 arquivos que sobram sao `docs/LEIS.md` e
+    `bin/tests/test_lei_protege_sitio.sh` de ensaio -- **lei**: coluna de `LEIS.md` so muda no commit da lei.
+  - `wt-comboio` (`02261de0`, 11/10 03:17) e **copia de certificacao MINHA**, nao obra: sai na limpeza.
+  - `wt-pdf` (`584265a9`, 29/09) esta no **`!` dele: "nao mergear raia-pdf"**.
+  FILA (achado FORA deste marco -- ESMERIL-DO-MARCO manda virar LINHA, nao trabalho agora): `bin/raias_estado.py`
+  chama "N commit a frente do `main`" o que `rev-list` conta numa historia SEM merge-base, e cobra L-105 de uma raia
+  que nao tem como mergear. O rotulo certo e "historia disjunta", e o selo da L-105 nunca podera ficar verde com ela.
+
 ## MARCO 11/10 19:0x — O48 passo 3, O VINCULO NAO E SILENCIO: a abstencao do previsto se mede DENTRO do vinculo, e a medicao escolheu o corte ESTREITO
 
 LEI-AKITA: origem=`ponto/services/fechamento.py:584` (o predicado da abstencao, nao um leitor), testemunha=
