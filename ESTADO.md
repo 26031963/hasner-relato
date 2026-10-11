@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 23:59:01.**
+**Medido em 11/10/2026 00:04:31.**
 
 | | |
 |---|---|
@@ -122,35 +122,35 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● O RED está confirmado por leitura: 6x1 sem folga_dia_semana, sem foto no mês → cai em TipoEscala.eh_dia_trabalho → True em todos os dias.
-  Escrevendo a primeira medição (ORM puro, sem motor, leitura):
+  Ran 1 shell command
 
-  Ran 5 shell commands
-  ⎿  Read docs/AVAIS.md (23 lines)
-  ⎿  Referenced file ponto/services/fechamento.py
-  ⎿  Read docs/HANDOFF-SESSAO.md (45 lines)
-  ⎿  Read ponto/tests/test_s4_ninguem_recalcula_para_ler.py (151 lines)
-  ⎿  Referenced file ponto/services/dia_pago.py
-
-● Task "RED e construção do segundo intervalo" completed in background
-
-● Task "O198 falta em dia sem jornada" still running in background
-
-● Medição feita — e ela derruba a premissa do backfill. Antes de qualquer cura preciso provar o porquê:
+● O arquivo levou nome de pessoa (os calendários são nomeados com o nome do colaborador). Scrubbing — nome não vai para arquivo nem relato:
 
   Ran 2 shell commands
 
-● Achado decisivo. Gravando a medição em disco antes de qualquer cura:
+● Isto mudou a fatia. Gravando e lendo a porta que salvou o calendário:
 
-● Gravar a medicao em logs
+  Ran 3 shell commands
+
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+
+● Checando o round-trip das celulas — é isso que decide o dono do fato (A):
+
+  Ran 2 shell commands
+
+● O round-trip existe (sdRender() roda no load e preenche o hidden). Procurando quem salvou em 06/10 19:23 UTC:
+
+● Procurar a trilha do esvaziamento do calendario
   ⎿  $ cd /home/ronald/saas-hasner
-     mkdir -p logs/foto_folga
-     F=logs/foto_folga/medicao1_$(date +%Y%m%d_%H%M).txt
-     {
-     echo "PRIMEIRA MEDICAO -- FOTO-DE-FOLGA-CONTINUA (O148 COMPLEMENTO), publicada ANTES da cura"
-     echo "quando: $(date '+%d/%m/%Y %H:%M') | onde: PROD (saas_hasner, schema juliani), LEITURA PURA…
+     echo "=== logs do caddy/ui disponiveis ==="
+     ls -la logs/*.log 2>/dev/null | head; docker logs saas_caddy --since 2026-10-06T19:00:00 --until 2026-10-06T19:40:00 2>&1 | grep -i
+     "folga" | head -20
+     echo "--- rc=$?"
+     echo "=== a URL do editor ==="
+     cd app && grep -n "folga_c…
 
-· Spelunking… (1h 40m 11s · ↓ 186.8k tokens · thinking)
+✢ Spelunking… (1h 45m 41s · ↓ 199.2k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -160,6 +160,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
-  ◯ fork  Planning RED for veto_de_lancamento                                                                    9m 27s · ↓ 125.7k tokens
+  ◯ fork  Writing test_o198_falta_em_dia_sem_jornada.py                                                         14m 58s · ↓ 168.5k tokens
   ⧉  index
 ```
