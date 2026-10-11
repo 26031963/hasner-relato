@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:55 AFIRMA ato sem PROVA ao lado -- ## MARCO 11/10 11:1x — O148 item 1 **NO AR DE VERDADE**: o cron da lavra instalado, e a pegada da lavra e maior que as 23 FolgaDia porque o 
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:71 AFIRMA ato sem PROVA ao lado -- ## MARCO 11/10 11:1x — O148 item 1 **NO AR DE VERDADE**: o cron da lavra instalado, e a pegada da lavra e maior que as 23 FolgaDia porque o 
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 11/10/2026 13:32:31.**
+**Medido em 11/10/2026 13:37:32.**
 
 | | |
 |---|---|
-| `HEAD` local | `89ed5deb [O148] o cron da lavra da foto de folga INSTALADO, e a medicao derrubou minha premissa: a lavra tambem re-lavra a CELULA, nao so grava FolgaDia` |
+| `HEAD` local | `541ce443 [O48] a cura do UNIVERSO do fechamento: `situacao='ativo'` era um SEGUNDO juiz de "esta afastado?", e a cura muda QUEM esta no TXT, nao so quanto` |
 | `origin/main` | `d20a0e45 [O219] pouso: os docs do marco A0-b entram junto, e o merge que eu pedi sem commit virou FAST-FORWARD -- o codigo estava na arvore viva antes deste commit` |
-| commits a subir (`ahead`) | **32** |
+| commits a subir (`ahead`) | **33** |
 
 ## Fabrica
 
@@ -29,23 +29,17 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+541ce443 [O48] a cura do UNIVERSO do fechamento: `situacao='ativo'` era um SEGUNDO juiz de "esta afastado?", e a cura muda QUEM esta no TXT, nao so quanto
 89ed5deb [O148] o cron da lavra da foto de folga INSTALADO, e a medicao derrubou minha premissa: a lavra tambem re-lavra a CELULA, nao so grava FolgaDia
 faa783e1 [O197] pouso da raia wt-bos: "Em aberto" era 1,4% verdade, e a cura separa AUSENCIA de PRESENCA em vez de pedir ao leitor que se comporte
 5ecebd95 [O197] "Em aberto" era 1,4% verdade: o dia que NAO ACONTECEU e o isento do Art.62 saiam com a palavra, e o teto que faltava JA TINHA NOME nesta casa
 6dcaf1a7 [PLACAR-ESTRUTURAL] as DUAS hipoteses do +6 do R4 par 6 eram FALSAS, e a terceira se mediu: o codigo e identico nas tres arvores, quem andou foi o DADO
-90bc68d6 [O148] pouso 2 do COMBOIO: a lavra da foto de folga entra com o cron, e o escopo da janela se corrigiu ANTES da suite -- a versao estreita escrevia ZERO hoje
 ```
 
 ## `git status --short`
 
 ```
- M CLAUDE.md
  M app/config/crons_duracao.json
- M app/docs/AVAIS.md
- M app/docs/BACKLOG.md
- M app/docs/PENDENTES_RONALD.json
- M app/docs/PROMPTS.md
- M app/docs/RELATO.md
  M bin/sonda_frota.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -135,38 +129,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+
   Ran 5 shell commands
 
-● A letra é explícita — não vira antes de 20/10. Reescrevo o item para destravar a chave no export da 10, não antes:
+● Tudo durável (artefato 206 linhas, PENDENTES 229, AVAIS 8, RELATO seção nova 15 linhas, BACKLOG 286 chars). Antes do commit + deploy,
+  consulto o advisor — tenho uma contradição a levantar:
+
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
   Ran 1 shell command
 
-● Item 8 reescrito (churn 12+/0− no JSON). Agora o censo da árvore certificada antes do pouso:
+● CLAUDE.md = a regra AUTONOMIA-DE-CODIGO (ele mandou morar lá, nunca terá código próprio); PROMPTS.md = as 3 linhas de prompt que a
+  PROMPT-NAO-SE-REPETE exige no mesmo turno. Nenhuma das duas terá marco próprio, então entram neste, declaradas. Check 2:
 
   Ran 1 shell command
 
-● Exatamente 2 arquivos divergem do HEAD. Confirmo que não há arquivo NOVO na cópia e vejo o que a cura mudou no selo:
+● Leis que protegem o sítio: L-009, L-092, L-094, L-095, L-113 — nenhuma fala de quem entra no universo. Faço o ato numa cadeia só (L-107):
 
   Ran 1 shell command
 
-● Os dois diffs são exatamente a cura e o selo. Leio a seção do RELATO que devo corrigir e confiro o portão do deploy:
+● Os dois arquivos vão para a árvore viva e o ato segue sem intervalo:
 
-  Ran 1 shell command
+  Committed 541ce443
 
-● Portão VERDE (dia=20261011 status=OK tipo=completa diverge=0). Antes de escrever o RELATO, resolvo uma contradição entre a seção das
-  11:5x ("zero chamador de producao") e o ponto 5 do advisor ("lido por views.py:945") — isso decide se o deploy muda tela hoje:
+● Commit 541ce443 (8 arquivos, 172+/6−), os dois cron-sujos fora. Deploy agora:
 
-  Ran 1 shell command
+  Publica o marco · 11s
+  ⎿  $ cd /home/ronald/saas-hasner && bin/deploy.sh --sem-migrate 2>&1 | tail -40
 
-● Medido: fechamento_lido tem zero chamador de produção (só a definição e 4 testes) e views.py:945 lê o gravado direto por .first() — a
-  seção das 11:5x está certa e a premissa do ponto 5 do advisor não se sustenta. Isso muda o que o deploy faz. Escrevo a seção nova:
-
-  Le a hora no ato
-  ⎿  $ date '+%d/%m %H:%M'
-
-✢ Infusing… (8h 46m 27s · ↓ 829.0k tokens)
+✽ Infusing… (8h 51m 27s · ↓ 842.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    5% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
