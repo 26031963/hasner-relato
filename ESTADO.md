@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 11/10/2026 02:23:23.**
+**Medido em 11/10/2026 02:28:51.**
 
 | | |
 |---|---|
@@ -124,8 +124,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-  Ran 1 shell command
-
 ● A reta final da suite não me libera o cpuset ainda. Mas há um número do R4 que o mesmo run já computa e eu ia deixar envelhecer: a
   afirmação central "CINCO pares em ZERO".
 
@@ -148,17 +146,19 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Agora a medição de frota do R4, que a trava liberou:
 
-  Running 1 shell command…
-  ⎿  $ export S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cd /home/ronald/saas-hasner
-     && bash "$S/lanca_r4_par6.sh"
+  Esperar a medicao em foreground sem busy-wait · 3m 29s
+  ⎿  $ command -v inotifywait || echo "sem inotifywait"; cd /home/ronald/saas-hasner && F=logs/placar_estrutural/r4_par6_20261011_0223.txt;
+     while ! grep -q 'rc_processo=' "$F" 2>/dev/null; do read -t 20 _ < /dev/zero 2>/dev/null || true; done; echo "PRONTA $(date
+     '+%H:%M:%S')"; cat "$F" (3m 28s · 2 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-* Spelunking… (4h 4m 33s · ↓ 465.7k tokens)
+✢ Spelunking… (4h 10m 1s · ↓ 472.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
