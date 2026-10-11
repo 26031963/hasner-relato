@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 11/10/2026 02:28:51.**
+**Medido em 11/10/2026 02:34:01.**
 
 | | |
 |---|---|
@@ -146,13 +146,13 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Agora a medição de frota do R4, que a trava liberou:
 
-  Esperar a medicao em foreground sem busy-wait · 3m 29s
+● Esperar a medicao em foreground sem busy-wait · 8m 39s
   ⎿  $ command -v inotifywait || echo "sem inotifywait"; cd /home/ronald/saas-hasner && F=logs/placar_estrutural/r4_par6_20261011_0223.txt;
      while ! grep -q 'rc_processo=' "$F" 2>/dev/null; do read -t 20 _ < /dev/zero 2>/dev/null || true; done; echo "PRONTA $(date
-     '+%H:%M:%S')"; cat "$F" (3m 28s · 2 lines)
+     '+%H:%M:%S')"; cat "$F" (8m 38s · 2 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Spelunking… (4h 10m 1s · ↓ 472.1k tokens)
+✢ Spelunking… (4h 15m 11s · ↓ 472.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
