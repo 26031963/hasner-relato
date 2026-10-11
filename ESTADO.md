@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 22:16:01.**
+**Medido em 10/10/2026 22:21:31.**
 
 | | |
 |---|---|
@@ -33,6 +33,7 @@ c1d3a6e4 [O228] pouso do INSTRUMENTO da familia turno em ato proprio: o censo na
 
 ```
  M app/config/crons_duracao.json
+ M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
  M app/docs/PROMPTS.md
  M bin/sonda_frota.sh
@@ -125,40 +126,40 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  RED de cada item sai dos casos R01-R12 do documento do Fernando (10/10), com fixture sintetica. PROIBIDO: fallback, juiz novo, curar
-  cadastro por codigo (L-099). Origem: leitura do Fernando (fernando/handoff f75397e), conferida no origin/main d20a0e45.
+  dias (vermelho hoje); idempotencia da lavra; manual na data do calendario; casos R03, R04 e R05 do documento do Fernando.
+  SELO: gerar_foto_folgas chamado fora do comando e dos 3 sitios de tela = 0.
+  PROIBIDO: o gerador de celulas ler o calendario direto (segundo leitor); fallback; juiz novo; tocar folga_dia_semana de modelo; curar os
+  35 sem calendario por codigo (L-099, e cadastro).
+  PRONTO: RELATO curto (L-116) com os 5 itens, a medicao dos 41, o DIFF do backfill, o tempo da lavra e o commit. Sem eles = INCOMPLETO
+  com lista.
+  LINHA HAIKU: (a) contador vinculos_com_calendario_sem_foto no copiloto, rotulo "calendario de folga sem agenda gerada"; (b) golden
+  "quantos colaboradores tem calendario de folga e estao sem folga gerada no mes que vem?" via ferramentas; (c) degrau do HAIKU-DENTES.
+  LEI-AKITA: origem=escala/folgas.py::gerar_foto_folgas, testemunha=FolgaDia + CelulaDia, RED=acima,
+  quem-mais-le=eh_dia_trabalho_calculado e gerar_celulas (leem a foto, nao mudam), juizes novos=0
 
-  Segue a fila; PAREI so em lei ou !
+  Segue a fila; PAREI so em lei ou ! !
 
-● Recebido o complemento da O148. Registrando — e só registrando, como você pediu: não constrói, não muda a ordem da fila 1 nem da wt-bos,
-  não abre id novo.
+● Aval novo recebido: FOTO-DE-FOLGA-CONTINUA. Registrando primeiro (PROMPT-NAO-SE-REPETE exige linha no PROMPTS e item no OBRAS no mesmo
+  turno), e me orientando no sítio:
 
-  Ran 1 shell command
+● Registrar o item 1 no BACKLOG e a secao no documento
+  ⎿  $ python3 - <<'PY'
+     import io
+     p = 'BACKLOG.md'
+     s = io.open(p, encoding='utf-8').read()
+     velho = ("| **FILA 2 (UI), depois dos BOs** -- ordem dele de 08/10, junto da O152. Medicao, nao cura: publicar "
+     "antes de propor qualquer coisa | nao comecada, e agora e metade de uma obra so com a O152. "
+     "`/tmp…
 
-● Complemento da O148 registrado, e só registrado:
+✢ Compacting conversation… (2m 41s · ↓ 6.3k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 56%
 
-  - app/docs/O148-COMPLEMENTO.md (27 linhas) com os 8 itens na sua ordem literal, cada um com o arquivo e a função que ele nomeia, mais as
-    três proibições (fallback, juiz novo, curar cadastro por código — L-099), a origem (fernando/handoff f75397e, conferida no origin/main
-    d20a0e45) e os casos R01-R12 como fonte do RED com fixture sintética.
-  - Linha em app/docs/PROMPTS.md pela PROMPT-NAO-SE-REPETE, sem | dentro do texto da célula ([[pipe-em-celula-quebra-o-hook]] — pipe em
-    célula desloca as colunas e o hook lê prosa como estado).
-
-  Preservei as suas três condições: não é id novo (é complemento da O148, não abri linha nova no OBRAS), não construí nada, e a ordem da
-  fila 1 e da wt-bos está intacta. O item 1 vindo antes do 4 ficou escrito com o motivo que você deu — "nos meses que ele cobre" exige a
-  foto existir —, porque é a razão que impede alguém de reordenar depois.
-
-  Uma coisa que eu preciso dizer sem enfeite, sobre o turno: a medição do R4 não rodou. O guarda de sombra passou (nenhum NAO_E_SOMBRA), e
-  achei dois fatos reais no caminho — o juiz dono_da_divergencia tem assinatura (horarios, declarada), não (colab, dia), e ele mora dentro
-  de um management command (ponto/management/commands/e6_oraculo.py), não em módulo de domínio, com zero chamador de produção (7 selos + 1
-  docstring). Mas o sed que corrigiria o import do script falhou (unknown option to 's' — o # que eu usei como delimitador aparece dentro
-  do próprio texto do comentário) e a última rodada morreu no mesmo ModuleNotFoundError. O script em logs/sombra/r4_passo1_medicao.py segue
-  com o import errado na linha 19 — não o conserte achando que está pronto.
-
-  Estado durável desta sessão, sem nada commitado:
-
-                                                                                                   ✔ Update installed · Restart to update
+❯ aval Ronald: turno devolvido sem trava nomeada. Commite a cura da O48 que estava na copia se a suite estiver verde, conserte o import do
+  r4_passo1_medicao.py e rode a medicao do R4. Segue a fila; PAREI so em lei ou !
+  ctrl+x ctrl+s to send now
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ Press up to edit queued messages
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 

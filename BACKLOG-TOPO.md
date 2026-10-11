@@ -156,7 +156,7 @@ lista — ela e o que esta EM PE._
 | **O145** | HE-INVISIVEL | **NO AR** e CURADA (`32782d0d` + deploy) |
 | **O146** | HE-FIXA-DA-ESCALA-E-CADASTRO | espera corte |
 | **O147** | OS 3 ATRASADOS DA 09 | PAREI |
-| **O148** | FOLGAS DUPLICANDO | **FILA 2 (UI), depois dos BOs** -- ordem |
+| **O148** | FOLGAS DUPLICANDO | nao comecado |
 | **O149** | 3 VINCULOS COM FIM ANTES DO INICIO | ENCAIXE. Mudanca de dado de VINCULO e NU |
 | **O150** | FURO DO HOOK NAO-PARAR | ENCAIXE. Selo de host, sem Django |
 | **O151** | OS 13 CHAMADOS DO `--forcar` DE 02/10 | ENCAIXE. Retratacao pela porta (`chamado |
