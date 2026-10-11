@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 22:00:31.**
+**Medido em 10/10/2026 22:05:45.**
 
 | | |
 |---|---|
@@ -123,38 +123,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+
+● DiaPago.minutos_* são FloatField(default=0.0) sem null=True — então :658 passando None escreve NULL em coluna NOT NULL. O caminho except
+  já carrega esse risco latente, e a cura o alargaria. O cartão, por outro lado, é None-safe (:81-85, :170: "NONE NAO SOBRESCREVE"). Lendo
+  a medição:
+
   Ran 1 shell command
 
-● Background command "Esperar o DIFF-C pelo marcador" completed (exit code 0)
-
-● Decisivo, e ele refuta a minha linha da 07: os 175 colabs cujo minutos_previstos o lido zera estão todos os 175 SEM célula no período (0
-  com célula). Isso não é deriva de regra — é o leitor respondendo zero onde não há o que ler. Mas horas_trabalhadas zera em 0 colabs, e as
-  duas medem a mesma coisa. Medindo a contradição em vez de inferi-la:
+● A grade não está vazia — ela tem 30 dias e todos dizem tipo_dia='sem_celula'. A autoridade já pronuncia a palavra; é o filtro :551 (in
+  ('trabalho','ausencia')) que a joga no mesmo balde de folga e devolve 0. Isso torna o predicado da cura limpo: leio uma palavra que a
+  grade já diz, sem vocabulário novo. E mais três números: 497 de 629 na 07 têm horas_trabalhadas=0 (a 07 é pré-rollout, então a frase
+  "paga sob a regra de julho" é da 08, não da 07), e o zero já está GRAVADO em 6 na 07, 14 na 08, 2 na 09. Vendo a lavratura antes de
+  patchar:
 
   Ran 2 shell commands
 
-● Medido, e é o achado do turno: a 07 tem 217 células para 15 colabs (contra 16.894/560 na 08 e 17.332/577 na 09) — a competência é
-  pré-célula. E a contradição é real: 131 colabs em que o MESMO objeto lido diz minutos_realizados=0 e horas_trabalhadas>0 (col89: 189,90 h
-  trabalhadas, 0 min realizados), contra 2 coerentes. Pela L-099 isso é ESTRUTURA, o único dono que é fatia. Achando a origem:
-
-  Searched for 1 pattern
-
-● :595 já tem o caminho = None, e folha/export.py:791-792 distingue exatamente os dois: None → cai em trab; 0 → zero hora realizada para
-  quem trabalhou 189,90 h. Lendo a condição:
+● :633 é o update() do FechamentoMensal, cujos minutos_* são nuláveis (o :595 já grava None ali). A lavratura do DiaPago é outro bloco
+  (:672), e ela monta as linhas do por_dia_da_grade. Confirmando que o None não alcança a coluna NOT NULL:
 
   Ran 1 shell command
 
-● Agora a origem está nua, e é a família que esta casa nomeia: o except produz None, mas o caminho 0 é sum({}.values()) — a grade vazia
-  (sem célula) lida como "zero minuto realizado" em vez de "sem resposta". É o [] de dois sentidos, e folha/export.py:791 já sabe tratar
-  None (cai em trab). Gravando o achado antes de decidir a cura:
+● O comentário do próprio sítio já diz: "dia sem grade nao ganha linha" — o None não alcança a coluna NOT NULL. A cura é segura e sem
+  migration. Montando numa cópia nova do HEAD, com o RED nos dois sentidos:
 
-  Ran 1 shell command
+  Searched for 1 pattern, ran 3 shell commands
 
-● Advising using Fable 5.1
+● Agora o RED, com a fixture já validada e o dna na forma que a casa usa:
 
-✢ Proofing… (1d 4h 5m · ↓ 3.2m tokens)
+  Running 1 shell command…
+
+· Proofing… (1d 4h 10m · ↓ 3.2m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    6% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
