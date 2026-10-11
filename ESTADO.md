@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 11/10/2026 00:15:31.**
+**Medido em 11/10/2026 00:20:45.**
 
 | | |
 |---|---|
@@ -122,7 +122,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 2 shell commands
 
 ● O round-trip existe (sdRender() roda no load e preenche o hidden). Procurando quem salvou em 06/10 19:23 UTC:
 
@@ -138,8 +137,9 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Construindo na raia. Primeiro a fonte única da derivação (um juiz, não dois):
 
-  Ler lancar_folga para ver a guarda de competencia
-  ⎿  $ cd /home/ronald/wt-bos && sed -n '225,290p' app/escala/folgas.py
+  Ler o ramo 6x1 e eh_dia_trabalho_calculado
+  ⎿  $ cd /home/ronald/wt-bos && sed -n '825,860p' app/escala/models.py && echo "=== 1215,1300 ===" && sed -n '1215,1300p'
+     app/escala/models.py
   ⎿  Read docs/AVAIS.md (23 lines)
   ⎿  Read docs/HANDOFF-SESSAO.md (45 lines)
   ⎿  Referenced file ponto/services/fechamento.py
@@ -150,9 +150,9 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Task "O198 falta em dia sem jornada" still running in background
 
-✢ Spelunking… (1h 56m 41s · ↓ 223.9k tokens · thinking)
+* Spelunking… (2h 1m 54s · ↓ 243.5k tokens · thought for 20s)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    9% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -160,6 +160,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
-  ◯ fork  Inspecting O-row format in TICKETS.md                                                                 25m 57s · ↓ 136.7k tokens
+  ◯ fork  Hitting leftover timezone assertion in patch script                                                   31m 10s · ↓ 165.6k tokens
   ⧉  index
 ```
