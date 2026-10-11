@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 11/10/2026 00:04:31.**
+**Medido em 11/10/2026 00:10:02.**
 
 | | |
 |---|---|
@@ -122,37 +122,37 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 1 shell command
-
-● O arquivo levou nome de pessoa (os calendários são nomeados com o nome do colaborador). Scrubbing — nome não vai para arquivo nem relato:
-
-  Ran 2 shell commands
-
-● Isto mudou a fatia. Gravando e lendo a porta que salvou o calendário:
-
-  Ran 3 shell commands
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
 ● Checando o round-trip das celulas — é isso que decide o dono do fato (A):
 
   Ran 2 shell commands
 
 ● O round-trip existe (sdRender() roda no load e preenche o hidden). Procurando quem salvou em 06/10 19:23 UTC:
 
-● Procurar a trilha do esvaziamento do calendario
-  ⎿  $ cd /home/ronald/saas-hasner
-     echo "=== logs do caddy/ui disponiveis ==="
-     ls -la logs/*.log 2>/dev/null | head; docker logs saas_caddy --since 2026-10-06T19:00:00 --until 2026-10-06T19:40:00 2>&1 | grep -i
-     "folga" | head -20
-     echo "--- rc=$?"
-     echo "=== a URL do editor ==="
-     cd app && grep -n "folga_c…
+  Searched for 1 pattern, ran 6 shell commands
 
-✢ Spelunking… (1h 45m 41s · ↓ 199.2k tokens)
+● Agora sei o horizonte: gerar_celulas lavra só a competência corrente (_janela_default). Lendo o contrato do cron antes de declarar:
+
+  Ran 2 shell commands
+
+● Universo real: 71 vínculos (não 48). Indo para a raia construir:
+
+  Ran 6 shell commands
+
+● Construindo na raia. Primeiro a fonte única da derivação (um juiz, não dois):
+
+● Gravar MUDA 2 e a fonte unica da derivacao
+  ⎿  $ cd /home/ronald/wt-bos && python3 - <<'PYEOF'
+     import io
+     p = 'app/escala/folgas.py'
+     s = io.open(p, encoding='utf-8').read()
+     VELHO = '''def gerar_foto_folgas(ec, ano, mes):
+     """Materializa (idempotente) as FolgaDia do vinculo ec no (ano, mes) a
+     partir de ec.folga_calendario. Reconcilia: apaga a foto…
+
+✽ Compacting conversation… (1h 51m 12s · ↓ 213.1k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱ 71%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -160,6 +160,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
-  ◯ fork  Writing test_o198_falta_em_dia_sem_jornada.py                                                         14m 58s · ↓ 168.5k tokens
+  ◯ fork  Compiling test_o198_falta_em_dia_sem_jornada.py                                                       20m 28s · ↓ 100.8k tokens
   ⧉  index
 ```
