@@ -6,10 +6,28 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 11/10/2026 16:22:03.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (672.3 MB). Acoes na janela: **1069**.
+**Medido em 11/10/2026 16:27:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (672.5 MB). Acoes na janela: **1087**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 16:27:31 | Bash | Ver como o lido monta o universo | `cd /home/ronald/saas-hasner && grep -n 'lido' app/folha/management/commands/simular_folha.py \| head -40` |
+| 16:27:12 | Bash | Ver a prova completa ate agora | `cat /home/ronald/saas-hasner/logs/o48p4_prova_lido_20261011.out` |
+| 16:27:08 | Bash | Progresso da prova na sombra | `cat /home/ronald/saas-hasner/logs/o48p4_prova_lido_20261011.out \| tail -8; echo "=== docker:"; docker ps --format '{{.Names}} {{.Status}} {{.Image}}' \| grep -i core \| head` |
+| 16:26:53 | Bash | Ver que celula o hook considera fechada | `cd /home/ronald/saas-hasner && sed -n '50,70p;145,165p' bin/hook_stop_fila1.py` |
+| 16:26:50 | Bash | Ver como o hook le o BACKLOG | `cd /home/ronald/saas-hasner && grep -n 'BACKLOG\\|ORDEM-VIVA\\|onde esta\\|split' bin/hook_stop_fila1.py \| head -30` |
+| 16:26:44 | Bash | Ver as celulas da linha da O48 | `awk -F'\|' 'NR==531{print NF" fields"; for(i=1;i<=NF;i++) printf "[%d] %.120s\n", i, $i}' docs/BACKLOG.md` |
+| 16:26:38 | Bash | Ver o cabecalho da tabela de obras | `awk 'NR>=500 && NR<=532 && /^\\|/' docs/BACKLOG.md \| awk -F'\|' 'NF<8 {print NR": "NF" cells"}' \| head; echo "=== header da tabela OBRAS:"; grep -n '^\| *# *\|' docs/BACKLOG.md \| head` |
+| 16:26:30 | Bash | Achar a linha da O48 no BACKLOG | `grep -n 'O48' docs/BACKLOG.md \| head -20` |
+| 16:26:25 | Bash | Tornar a PROVA durável em logs/ | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad R=/home/ronald/saas-hasner mkdir -p $R/logs/o48p4 cp $S/p4/red_sem_cura.log $R/logs/o48p4/red1_head_sem_cura.log cp $S/p4/red3.log $R/logs/o48p4/red2_com_a_cura.log cp $S/p4/red_costura.log $R/logs/o48p4/red3_costura_montar_linhas.log cp $S/p4/red_costura2.log $R/logs/o48p4/red4_costura_retidos.log cp $ ...` |
+| 16:23:17 | Bash | Reler a mensagem de commit | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cat -n $S/p4/msg_commit.txt` |
+| 16:23:08 | Bash | Olhar a saida parcial da prova | `cat /home/ronald/saas-hasner/logs/o48p4_prova_lido_20261011.out 2>/dev/null \| tail -20; echo "--- bytes:"; wc -c /home/ronald/saas-hasner/logs/o48p4_prova_lido_20261011.out 2>/dev/null` |
+| 16:23:05 | Bash | Olhar a saida parcial da prova | `sleep 60; tail -30 /home/ronald/saas-hasner/logs/o48p4_prova_lido_20261011.out 2>/dev/null; echo "---"; ls -la /home/ronald/saas-hasner/logs/o48p4_prova_lido_20261011.out` |
+| 16:23:00 | Bash | Preencher o resultado da costura 2 no marco | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad python3 - "$S/p4/relato_marco.md" <<'PYEOF' import sys p = sys.argv[1] src = open(p, encoding='utf-8').read() old = 'RESULTADO_COSTURA2.' new = ('`FAILED (failures=1)`, e o caso que morde e o (a): `retidos[...][\'horas_extras_50\']` ' '**`3.00` contra `99.00`** -- o retido entraria com a foto velha enqu ...` |
+| 16:22:51 | Bash | Reler o rascunho do marco | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cat -n $S/p4/relato_marco.md` |
+| 16:22:46 | Bash | Rodar a prova de frota na sombra | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad APP_DIR=/home/ronald/wt-o48p4/app bash $S/sombra_run.sh p4_prova_lido.py > /home/ronald/saas-hasner/logs/o48p4_prova_lido_20261011.out 2>&1; echo "rc=$?"` |
+| 16:22:38 | Bash | Reler a sonda de prova na sombra | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cat $S/p4_prova_lido.py` |
+| 16:22:24 | Bash | Rodar ruff na raia | `cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1 docker run --rm $TESTE_DOCKER -v /home/ronald/wt-o48p4/app:/app:ro --tmpfs /app/.ruff_cache \ saas-hasner-core:latest ruff check /app/folha/ /app/ponto/services/fechamento.py 2>&1 \| tail -5` |
+| 16:22:01 | Bash | Remedir o degrau do HEAD sem cura | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad grep -n 'lido' $S/p4/sem_cura/app/folha/management/commands/simular_folha.py \| head -3 cp /home/ronald/wt-o48p4/app/folha/tests/test_o48_passo4_simular_folha_lido.py $S/p4/sem_cura/app/folha/tests/ cd /home/ronald/saas-hasner && timeout 900 bin/suite.sh --dir $S/p4/sem_cura --only folha.tests.test_o48_ ...` |
 | 16:21:48 | Bash | Ver por que o caso do gravado morde na costura 1 | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; awk '/^FAIL: test_MORDE_sem_lido/,0' $S/p4/red_costura.log \| sed -n '1,25p'` |
 | 16:21:24 | Bash | Remedir a costura 1 com o teste atual | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad grep -n 'COSTURA DESFEITA' $S/p4/costura/app/folha/export.py cp /home/ronald/wt-o48p4/app/folha/tests/test_o48_passo4_simular_folha_lido.py $S/p4/costura/app/folha/tests/ cd /home/ronald/saas-hasner && timeout 900 bin/suite.sh --dir $S/p4/costura --only folha.tests.test_o48_passo4_simular_folha_lido > $ ...` |
 | 16:21:16 | Bash | Listar os artefatos da fatia | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; ls $S/p4/ ; echo ---; ls $S/p4/*.sh 2>/dev/null` |
