@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 11/10/2026 17:37:01.**
+**Medido em 11/10/2026 17:42:02.**
 
 | | |
 |---|---|
@@ -18,6 +18,41 @@ RELATO, com a lista de nomes do banco como autoridade._
 - por que: 19-26/09: portas 149->149, noites 0-2 fatias, 28 de 44 caidos, O57
 - condicao de saida: criterio do estrutural fechado + corte Ronald
 - pacotes caidos: **78** (baseline divergiu 40, nunca lancada 33, o processo morreu sem escrever fim 2, vermelho da ARVORE no lote 2, copia falhou 1)
+
+## Raias
+
+- **recon_onprem** (`(detached)`) -- **SEM AGENTE**
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2383.9 h** (passou das 6 h da L-105)
+  - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
+- **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
+  - 0 commit(s) a frente do `main`, 44 arquivo(s) sujo(s)
+  - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
+- **wt-cert** (`cert-ast`) -- **SEM AGENTE**
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **152.4 h** (passou das 6 h da L-105)
+  - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
+- **wt-comboio** (`comboio-20261011`) -- **SEM AGENTE**
+  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **14.4 h** (passou das 6 h da L-105)
+  - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
+- **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **268.5 h** (passou das 6 h da L-105)
+  - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
+- **wt-lps** (`lps-prova`) -- **SEM AGENTE**
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **172.7 h** (passou das 6 h da L-105)
+  - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
+- **wt-o48p3** (`raia-o48p3`) -- **SEM AGENTE**
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2.5 h**
+  - sem declaracao em `logs/raias/wt-o48p3.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
+- **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **290.4 h** (passou das 6 h da L-105)
+  - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
+- **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
+  - 0 commit(s) a frente do `main`, 8 arquivo(s) sujo(s)
+  - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
+- **21 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
+
+**sem agente: 7** (raia com commit a frente e sem declaracao, esperado 0) -- **a frente do main ha mais de 6 h: 6** -- uniao medida: 30
+
+> Raia sem agente por mais de um marco pede linha de motivo no RELATO -- lei, `!` ou pista (item 4 do aval).
 
 ## `git log --oneline -5`
 
@@ -37,7 +72,11 @@ faa783e1 [O197] pouso da raia wt-bos: "Em aberto" era 1,4% verdade, e a cura sep
  M app/docs/HANDOFF-SESSAO.md
  M app/docs/PROMPTS.md
  M app/docs/RELATO.md
+ M bin/gerar_estado.py
  M bin/sonda_frota.sh
+?? bin/raia_agente.sh
+?? bin/raias_estado.py
+?? bin/tests/test_raia_declarada_no_estado.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -126,18 +165,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● Agentes travados no pré-pouso. Agora o item 4 — construo em cópia do HEAD (L-110) e leio a forma do gerador antes.
-
-  Ran 1 shell command
-
-● O precedente está no próprio arquivo: a seção Fabrica lê uma declaração por um MEDIDOR (bin/fabrica_estado.py) justamente para não ter
-  testemunha que recalcula. Faço a das raias no mesmo molde.
-
-  Ran 1 shell command
-
-● Molde claro. Construo em cópia do HEAD: um ESCRITOR, um MEDIDOR, e o gerador só LÊ.
-
   Ran 32 shell commands
   ⎿  Read docs/AVAIS.md (25 lines)
   ⎿  Read docs/FECHAMENTO-ONLINE.md (76 lines)
@@ -152,18 +179,30 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Task "Raia wt-ui: UI-FECHAMENTO etapa 1" still running in background
 
 ● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-✢ Infusing… (12h 50m 57s · ↓ 1.2m tokens)
+  Ran 1 shell command
+
+● Background command "Rodar a pasta de selos de host na arvore viva" completed (exit code 0)
+
+● Aplicar os 4 arquivos na arvore e provar o gerador vivo
+  ⎿  $ cd /home/ronald/saas-hasner; python3 bin/gerar_estado.py 2>&1 | tail -12; echo "--- como relato.sh o chama ---"; grep -n
+     'gerar_estado' bin/relato.sh | head
+
+✢ Infusing… (12h 55m 57s · ↓ 1.2m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    6% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ aval Ronald: O48-PASSO3-SEPARA-DO-5. DIFF do passo 3 lido (07: 362 de 629, 08: 509 de 618, 09: 264 de 607, 10: zero). O passo 3
+  (leitores por colab lendo online) POUSA agora, depois da cura do fechamento.py:568 (zero vira sem resposta) com RED. O passo 5 (TXT
+  online) segue travado ate o export da competencia 10. Os colabs com horas e zero hora realizada no gravado das exportadas (6, 14 e 2)
+  saem como Pauta DP com os dois numeros, sem apply. Segue a fila; PAREI so em lei ou !
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Grepping LEIS.md for L-050 and L-051                                                        25m 9s · ↓ 108.4k tokens
-  ◯ general-purpose  Adding com_itens flag to fora_da_folha                                                      25m 9s · ↓ 168.3k tokens
+❯ ◯ general-purpose  Inverting caso3b pergunta assertion                                                         30m 8s · ↓ 120.4k tokens
+  ◯ general-purpose  Checking janela_atual signature in janelas.py                                               30m 8s · ↓ 109.9k tokens
   ⧉  index
 ```
