@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 23:20:45.**
+**Medido em 10/10/2026 23:26:01.**
 
 | | |
 |---|---|
@@ -129,42 +129,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  Próximo ato, já montado para sair em sequência quando o verde chegar: publicar o DIFF no RELATO → copiar os dois arquivos certificados →
-  git add -- do teste novo → git commit --only por PATH com -F → bin/deploy.sh --sem-migrate no mesmo sopro, antes da meia-noite.
-
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: PLACAR-ESTRUTURAL -- O ESTRUTURAL SE SEPARA DO DADO (corte dele 02/10 22:5x, que SUBSTITUI o item 3 da
-  ordem das 21:4x -- o resto d
-
-● O hook manda seguir — e tem razão, nada está travado. Checando os dois:
+  colaborador se move. Os 492 contra o gravado são envelhecimento do gravado contra o motor — o par prova que não são da cura. Extraindo o
+  resto:
 
   Ran 1 shell command
 
-● Os dois vivos (a suite acumula pontos na mesma linha; o DIFF está no bloco de leitura). Revisando o rascunho da mensagem de commit, que
-  vai receber veredito + censo + números do DIFF antes de sair:
+● O par deu a linha de base também: sem a cura, 174 de 579 colabs já divergem do gravado (o 492 de antes era ruído de representação) —
+  envelhecimento do gravado contra o motor, não da cura.
+
+  Mas há uma consequência que o HEAD de hoje criou: a cláusula 1 da L-113 caiu no 1ceed412, então o recálculo já move competência exportada
+  com trilha. Isso torna a cláusula 3 (09 intacta) material, não automática. Medindo a 09 no mesmo par, enquanto escrevo o RELATO:
 
   Ran 2 shell commands
 
-● Suite há 20:50 (a primeira levou 23:25) — ~3 min. Não vou somar um terceiro processo no cpuset. Esperando o container da suite sair, sem
-  sleep e sem pgrep:
+● Background command "Lancar o par da competencia 09 exportada" completed (exit code 0)
 
-● Esperar o container da suite sair e ler o veredito · 2m 24s
+● Coerência fechada: 174 + 9 = 183 na ponta com cura, e os 9 flips 0→None só existem lá. Mas o lançador da 09 saiu sem wait — é o caso do
+  "background duplo perde o veredito". Conferindo se as pontas sobreviveram:
+
+  Ran 1 shell command
+
+● Vivas (órfãs, mas escrevendo). Esperando as duas e lendo a 09:
+
+  Esperar e ler o par da 09 exportada · 10s
   ⎿  $ cd /home/ronald/saas-hasner
-     timeout 420 docker wait suspicious_thompson 2>&1 | sed 's/^/rc_do_container_da_suite=/'
-     echo "--- VEREDITO (forma da L-074) ---"
-     grep -E '^(OK|FAILED)($| \()' logs/o48sc_suite2.out | tail -1
-     grep -E '^Ran [0-9]+ tests' logs/o48sc_suite2.out | tail -1
-     date '+%H:%M:%S' (2m 24s)
+     timeout 420 docker wait blissful_satoshi pedantic_jemison 2>&1 | tr '\n' ' ' | sed 's/^/rc das duas pontas: /'; echo
+     echo "=== 09/2026, identidade e tamanho:"
+     grep -h 'ARVORE (ela se identifica\|FIM DA LINHA CANONICA' logs/sombra/o48_par_COM_CURA_09.out logs/sombra/o48… (10s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Spelunking… (1h 1m 55s · ↓ 116.3k tokens)
+✢ Spelunking… (1h 7m 11s · ↓ 127.5k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
