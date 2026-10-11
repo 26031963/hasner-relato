@@ -34,6 +34,80 @@ PERGUNTA DE LEI x2 -- **RESPONDIDAS em 10/10 18:0x** pelos dois cortes dele (`ju
 
 **(2) o `detectar_par_relampago` pode ocupar o papel `prazo`, e com qual fato encerrado?** O VEREDITO dele JA delega, medido por AST em 10/10: `varrer_pares_embutidos:232` -> `par_embutido_retratavel:208` -> `_par_embutido_retratavel_geometria:220` -> `_score_geometria:86` -> `escala/utils.py::montar_grade_prevista_periodo_por_turno`, a autoridade da GRADE. O proprio dele e a CANDIDATURA (`:245-249`, `zip` adjacente + tipos alternados + gap <= `DURACAO_MAX_MIN=10`), e ela nao e derivacao de prazo pelo criterio do proprio selo -- fato GRAVADO contra teto de FORMA, sem relogio. **Nao movi o nome, e por duas razoes somadas:** (a) `bin/tests/test_papel_prazo_nao_deriva.sh` DECLARA no cabecalho que nao ve essa segunda porta e NOMEIA este cron, logo o verde dele seria ausencia de sinal, a familia que esta casa diz ser a que mais custou; (b) o seu aval nesta celula (`core/contratos_estruturais.py:252-262`) proibe em letra *"reclassificar o papel de um sitio para ela virar verde -- o que falta e juiz, nao rotulo"*. E a prescricao do censo de 04/10 nao fecha: `turnos_do_colab` nao enumera este par, porque `ponto/turnos.py::parear_turnos` declara *"E abre turno; S fecha o aberto"* e o par embutido e o ECO DENTRO de um turno -- ele nao E um turno (`pares_relampago` usa turnos_do_colab para o caso complementar, o turno inteiro curto). Entao: **(i)** o fato encerrado e o PAR, e ai falta funcao da casa que responda *"este par e completo?"* -> juiz novo, TRAVA JUIZ-NOVO; ou **(ii)** o fato encerrado e o TURNO QUE CONTEM o par (`t.aberto`), e ai `turnos_do_colab` ja e o juiz, mas de outra pergunta que a do censo -- e isso MUDA O UNIVERSO de um cron que roda `--apply` e RETRATA batida. Nao propus nenhuma (L-117).
 
+FILA DO MARCO DO PASSO 3 (nao devolve turno, nada parado por elas):
+
+**BALDE v = CADASTRO, nao ESTRUTURA (L-099; dono MEDIDO, nao PAREI).** Os 4 da 10 com horas e ata zerada (col960,
+col956, col936, col511) tem ata LAVRADA e o juiz `realizado_do_dia` diz SEM_TURNO em 38 de 39 dias -> `ata_x_juiz_residual=0`:
+as batidas provam DESLOCAMENTO DE UM DIA no DNA 12x36 (trabalham as noites IMPARES). **Proibido curar por codigo** -> Cadastro x
+Realidade + Pauta DP. FILA, e aqui ha ESTRUTURA: `dias_cadastro_x_realidade` ve col956=16 e col511=1, mas col960=0 e col936=0 --
+a lista que a L-099 nomeia como autoridade do dono e cega em 2 dos 4. PROVA: `logs/o48p3_baldev_{juiz,dono}_20261011.out`.
+
+- **POUSO-EM-COMBOIO respondido por MEDICAO, nao por suposicao (L-117):** `git worktree list` + `git status --porcelain`
+  por raia dizem que `wt-ui` esta **266 atras / 0 a frente** com arvore suja e `wt-bos` **5 atras / 0 a frente**, suja --
+  nenhuma das duas fica pronta em 30 min, entao **`wt-o48p3` roda sozinha** e as duas pousam depois, UMA POR VEZ.
+- **A PASTA DE SELOS DE HOST E VERMELHA NA WORKTREE E VERDE NO MAIN, e o motivo e AMBIENTE, nao codigo (medido 18:5x):**
+  **7 de 69** vermelhos em `/home/ronald/wt-o48p3` (`test_handoff_sessao` -- `settings.json` ilegivel; `test_hook_nao_e_copia`
+  -- `hook_pre_push=AUSENTE`, o hook mora no `.git` do repo principal; `test_prepush_testa_o_commit` e
+  `test_montagem_vem_do_arvore_do_push` -- `app/staticfiles` existe e esta VAZIO, e faltam os pontos `app/logs` e
+  `app/media` para o tmpfs; `test_furo_encadeado_ao_cartorio`, `test_import_tardio_contra_o_ar`,
+  `test_inventario_pessoal_no_commit`) e **0 de 7** vermelhos no main para os MESMOS sete. Dois deles nao eram ambiente e
+  sim DIVIDA desta copia, e foram pagos ANTES da suite certificadora: `mkdir app/logs app/media` + `collectstatic`
+  (186 arquivos) na worktree, e `test_montagem_vem_do_arvore_do_push` virou **OK** com a porta entregando o
+  `-v .../staticfiles:ro` e os cinco `--tmpfs`. Sem isso os cinco smokes de chromium dariam **RED FALSO** por css/js
+  ausente -- o defeito que a memoria da casa ja tinha nome para ("suite em worktree precisa do staticfiles").
+
+## MARCO 11/10 19:0x — O48 passo 3, O VINCULO NAO E SILENCIO: a abstencao do previsto se mede DENTRO do vinculo, e a medicao escolheu o corte ESTREITO
+
+LEI-AKITA: origem=`ponto/services/fechamento.py:584` (o predicado da abstencao, nao um leitor), testemunha=
+`grade_do_fechamento` -> `leitor_celula.py::grade_da_celula` (a MESMA autoridade de ontem), RED=
+`test_o48_sem_celula_nao_e_zero::test_MORDE_admitido_no_meio_sem_celula_no_vinculo_tambem_nao_diz_zero`,
+quem-mais-le=5 sitios e TODOS tratam `None` (`folha/export.py:791-824` -- `:822-823` PREFERE `horas_trabalhadas`
+quando o realizado e None --, `cartao_pela_celula.py:81-85`, `e6_piso_autopsia.py:95-125`, `dia_pago.py:406-408`
+le o dict); aritmetica sem guarda **0**; juizes novos **0** (porta por porta, escritor do `None` unico).
+
+**A CURA.** `if _dias_g and all(tipo_dia=='sem_celula')` -> o mesmo `all` sobre `_dentro = [d for d in _dias_g
+if tipo_dia != 'fora_vinculo']`. Sem ninguem fora do vinculo `_dentro == _dias_g`: nao e porta nova, e a de
+ontem dita no universo certo. MEDIDO EM PROD, LEITURA, 3 redacoes no MESMO universo (`logs/o48p3_predicado_20261011.out`):
+
+| comp | universo | HOJE | DENTRO | LARGO (`not _dt_trab`) | DENTRO-HOJE | valor que a cura MOVE |
+|---|---|---|---|---|---|---|
+| 10/2026 | 587 | 10 | 10 | 41 | **0** | 0 |
+| 09/2026 | 607 | 9 | 14 | 51 | 5 | 0 |
+| 08/2026 | 618 | 7 | 18 | 77 | 11 | 0 |
+| 07/2026 | 629 | 490 | 544 | 615 | 54 | 0 |
+
+**O CORTE LARGO FOI MEDIDO E RECUSADO**, e e o 2o caso novo: `not _dt_trab` silenciaria na 10 **31 colabs que a
+grade RESPONDEU** (`fora_vinculo` e resposta -- "nao havia vinculo, previsto 0" --, nao silencio), quatro com
+previsto GRAVADO (col316/col846/col870/col927: 14.400/9.900/10.800/9.900 min). Os +70 que a cura alcanca estao
+TODOS com 0 hoje: na competencia viva o delta e **zero**. E por isso que o DIFF do passo 4 disse "10: zero" sem
+mentir -- gravado x lido NAO VE o balde v (os dois lados leem a MESMA ata), e `horas_trabalhadas` vem do motor.
+
+## MARCO 11/10 19:0x — O48, a Pauta DP dos colabs com horas e zero realizado: CONTRATO DE ENTRADA, e a medicao PARTIU o balde de 22 em seis -- com 5 CERTOS
+
+O aval manda "os colabs com horas e zero hora realizada no gravado das exportadas (6, 14 e 2) saem como Pauta DP com
+os dois numeros, sem apply". Antes de existir arquivo, o contrato -- e a pergunta zero ja tinha resposta na casa.
+
+**CONTRATO DE ENTRADA.** FONTE: `FechamentoMensal.causa_espelho['causa']`, gravado pelo escritor unico
+(`ponto/services/fechamento.py:619`) a partir do juiz unico da causa do furo (`folha/causas.py::classificar_causa`) --
+a Pauta LE o rotulo, **nao** monta `filter(horas_trabalhadas__gt=0, minutos_realizados=0)` proprio (seria 2o derivador,
+LEI-AKITA 8). UNIDADE: colaborador x competencia. UNIVERSO: o GRAVADO das competencias exportadas 07, 08 e 09/2026
+(629 / 618 / 607). EXCLUSOES: `causa='sem_furo'` -- e e aqui que a medicao morde.
+
+**O BALDE DE 22 NAO E UMA DOENCA, SAO SEIS -- e 5 dos 22 estao CERTOS** (LEITURA em prod, rc 0,
+`logs/o48p3_pauta_causa_20261011.out`): o juiz ja rotula 16 dos 22, com `sem_furo` **5**, `sem_escala` **5**,
+`dias_trocados` **2**, `escala_fase_deslocada` **2**, `sem_previsao_escala` **1**, `falta_real` **1**. Os **5
+`sem_furo` dizem `isento de ponto (Art.62)`** (col41, col128, col181, col440, col642): isento tem hora de batida e
+nao tem previsto nem realizado **por lei** -- nao e divergencia, e o desenho. Eles SAEM da Pauta, e o balde do aval
+cai de 22 para **17**.
+
+**OS 6 DA 07 ESTAO SEM ROTULO** (`causa=None` nos seis: col34, col41, col79, col142, col753, col754) -- a foto deles
+e anterior ao campo do plano de acao, e esse e o `gravado_velho` com nome: nao e defeito de derivacao, e foto que
+ninguem re-lavrou. Eles entram na Pauta como **"sem causa gravada"**, nunca com causa inventada na hora.
+
+Por L-099 o dono dos 11 restantes e **CADASTRO** ou **BATIDA** -- **proibido curar por codigo**, que e o que o aval
+pediu. Molde: `ponto/services/pautas_dos_deslogados.py` (`sincronizar(apply=)`, MARCADOR, ancora `colab`, fecha por
+`marcar_feita_pelo_sistema`). INCOMPLETO: o servico nao existe -- entra depois do pouso do passo 3.
+
 ## MARCO 11/10 17:4x — O250 RAIA-COM-AGENTE-DECLARADO: o ESTADO passa a ter **uma linha por raia**, e "agente vivo" e DECLARACAO, nunca `pgrep`
 
 `LEI-AKITA: origem=bin/raias_estado.py (o medidor) + bin/raia_agente.sh (o escritor unico), testemunha=a declaracao em logs/raias/<raia>.agente mais o git da propria worktree, RED=bin/tests/test_raia_declarada_no_estado.sh (repo git de verdade, worktree 1 commit a frente: sem declaracao -> SEM AGENTE/sem_agente=1; com declaracao -> agente vivo/sem_agente=0), quem-mais-le=censo fechado, grep de logs/raias em bin/ = 0 fora do escritor/medidor; juizes novos=0 -- medidor de HOST no molde de bin/fabrica_estado.py, nada registrado em core/juizes.py`
