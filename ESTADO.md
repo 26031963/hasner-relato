@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 22:43:01.**
+**Medido em 10/10/2026 22:48:31.**
 
 | | |
 |---|---|
@@ -36,6 +36,7 @@ c1d3a6e4 [O228] pouso do INSTRUMENTO da familia turno em ato proprio: o censo na
  M app/config/crons_duracao.json
  M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/O98-MAPA-ANTIGO-ENTRADA.md
  M app/docs/PROMPTS.md
  M app/docs/RELATO.md
  M bin/sonda_frota.sh
@@ -128,38 +129,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ⎿  Read docs/HANDOFF-SESSAO.md (45 lines)
-  ⎿  Read ponto/tests/test_s4_ninguem_recalcula_para_ler.py (151 lines)
-  ⎿  Referenced file ponto/services/fechamento.py
-  ⎿  Referenced file ponto/services/dia_pago.py
+  Esmeril deste marco: a cura removeu 1 linha (a cabeça da compreensão que ela reescreve) e acrescentou 12 não-comentário; _GradeSemCelula
+  tem 1 raiser e 1 handler no mesmo arquivo. Zero órfão — nenhuma função perdeu o último chamador, então não há L-111 a cumprir neste
+  marco.
 
-● Task "RED e construção do segundo intervalo" completed in background
+  Pronto para o instante do veredito: logs/sombra/o48_diff_10_2026.py (py_compile OK) mede o DIFF de frota da 10/2026 contra o gravado, nas
+  duas árvores, com a árvore se identificando sozinha por hasattr(_fm, '_GradeSemCelula') — é a cláusula 1 da
+  DINHEIRO-EM-COMPETENCIA-ABERTA, e roda depois da suite para não disputar o cpuset 4-7 com ela.
 
-● Task "Suite cheia contra a copia da cura" still running in background
+  Espero o veredito pela porta da L-074 (^(OK|FAILED)($| \() + ^Ran N + rc do processo) — a trava da pista está nomeada
+  (o48-sem-celula:2198336), e a suite me devolve o turno quando sair.
 
-● Item 1 do advisor conferido na própria cópia: o except zera os SEIS campos (inclusive minutos_realizados, fechamento.py:617 na cópia), e
-  a lavratura do DiaPago está em :689, fora do try (que fecha no except de :611). Nem meia-correção nem lavratura perdida.
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: PLACAR-ESTRUTURAL -- O ESTRUTURAL SE SEPARA DO DADO (corte dele 02/10 22:5x, que SUBSTITUI o item 3 da
+  ordem das 21:4x -- o resto d
 
-  Ran 3 shell commands
+● O hook não devolve o turno com a fila 1 em pé — sigo no PLACAR-ESTRUTURAL com o que não depende da suite nem toca .py da árvore viva
+  (SUITE-UMA-VEZ-POR-ARVORE):
 
-● Agora as correções e os registros das três ordens, num script só:
-
-  Ran 4 shell commands
-
-● Agora as regras de pista em CLAUDE.md §7b (sem número — L-117):
-
-● Inserir as regras de pista no CLAUDE.md 7b
+● Estado dos seis R do placar
   ⎿  $ cd /home/ronald/saas-hasner
      python3 - <<'PY'
-     import io
-     p='CLAUDE.md'; s=io.open(p,encoding='utf-8').read()
-     anc = "PLACAR-DA-S3-CONTA-EXERCICIO"
-     i = s.index(anc)
-     novo = """POUSO-EM-COMBOIO e SUITE-UMA-VEZ-POR-ARVORE (regra de PISTA, Ronald 10/10 ~23:0x; **nenhuma lei de
-     negocio**, e por isso sem n…
+     import io,re
+     s=io.open('app/core/placar_estrutural.py',encoding='utf-8').read()
+     for m in re.finditer(r"\{'id': '(R\d)'", s):
+     i=m.start()
+     bloco=s[i:i+2600]
+     est=re.search(r"'estado':\s*([A-Za-z_]+)", bloco)
+     meta=re.search(r"'meta':\s*(.{0,160})", bloco, …
 
-✢ Spelunking… (24m 11s · ↓ 41.4k tokens)
-                                                                                                   ✔ Update installed · Restart to update
+✢ Compacting conversation… (29m 41s · ↓ 62.1k tokens)
+  ▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 1%
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
