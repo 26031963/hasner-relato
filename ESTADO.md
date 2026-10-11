@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 11/10/2026 00:20:45.**
+**Medido em 11/10/2026 00:25:45.**
 
 | | |
 |---|---|
@@ -123,10 +123,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-● O round-trip existe (sdRender() roda no load e preenche o hidden). Procurando quem salvou em 06/10 19:23 UTC:
-
-  Searched for 1 pattern, ran 5 shell commands
-
 ● Agora sei o horizonte: gerar_celulas lavra só a competência corrente (_janela_default). Lendo o contrato do cron antes de declarar:
 
   Ran 2 shell commands
@@ -137,9 +133,12 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Construindo na raia. Primeiro a fonte única da derivação (um juiz, não dois):
 
-  Ler o ramo 6x1 e eh_dia_trabalho_calculado
-  ⎿  $ cd /home/ronald/wt-bos && sed -n '825,860p' app/escala/models.py && echo "=== 1215,1300 ===" && sed -n '1215,1300p'
-     app/escala/models.py
+  Escrever os REDs e os selos da fatia
+  ⎿  $ cd /home/ronald/wt-bos && cat > app/escala/tests/test_foto_folga_continua.py <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     """FOTO-DE-FOLGA-CONTINUA: a foto de folga do calendario deixa de depender da tela.
+     O RED, com a lei na mao: 6x1 SEM `folga_dia_semana` responde TRABALHO em TODO dia
+     (escala/models.py:83…
   ⎿  Read docs/AVAIS.md (23 lines)
   ⎿  Read docs/HANDOFF-SESSAO.md (45 lines)
   ⎿  Referenced file ponto/services/fechamento.py
@@ -150,9 +149,10 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Task "O198 falta em dia sem jornada" still running in background
 
-* Spelunking… (2h 1m 54s · ↓ 243.5k tokens · thought for 20s)
+· Compacting conversation… (2h 6m 55s · ↓ 250.9k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱ 90%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    9% until auto-compact
+                                                                                                                    3% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -160,6 +160,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
-  ◯ fork  Hitting leftover timezone assertion in patch script                                                   31m 10s · ↓ 165.6k tokens
+  ◯ fork  Grepping "hoje" occurrences in test_o198_falta_em_dia_sem_jornada.py                                  36m 11s · ↓ 101.0k tokens
   ⧉  index
 ```
