@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 11/10/2026 14:57:31.**
+**Medido em 11/10/2026 15:03:01.**
 
 | | |
 |---|---|
@@ -150,16 +150,16 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Background command "Esperar o veredito da suite cheia" completed (exit code 0)
 
-● Continuar a espera do veredito · 2m 17s
+  Continuar a espera do veredito · 7m 47s
   ⎿  $ cd /home/ronald/saas-hasner
      L=logs/o48p3_suite_cheia2.out
      for i in $(seq 1 55); do grep -qE '^(OK|FAILED)($| \()' "$L" 2>/dev/null && break; sleep 10; done
      grep -E '^(OK|FAILED)($| \()' "$L" | tail -1
      grep -E '^Ran [0-9]+ tests' "$L" | tail -1
-     grep -E '^(FAIL|ERROR):' "$L" | head (2m 16s)
+     grep -E '^(FAIL|ERROR):' "$L" | head (7m 46s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Infusing… (10h 11m 27s · ↓ 936.9k tokens)
+✢ Infusing… (10h 16m 57s · ↓ 936.9k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                     7% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
