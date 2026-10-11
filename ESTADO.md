@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 11/10/2026 04:05:45.**
+**Medido em 11/10/2026 04:10:45.**
 
 | | |
 |---|---|
@@ -124,42 +124,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  │ 2     │ o espelho moveu?         │ não — a função REAL devolve os mesmos 7, com os mesmos valores, em ca2d50d9 (03/10), 1f3d616f   │
-  │       │                          │ (08/10) e HEAD                                                                                  │
-  ├───────┼──────────────────────────┼─────────────────────────────────────────────────────────────────────────────────────────────────┤
-  │ 3     │ o código do universo     │ não — classificar_export responde idêntico nas duas árvores: 221 na 09, 19 na 10                │
-  │       │ moveu?                   │                                                                                                 │
-  └───────┴──────────────────────────┴─────────────────────────────────────────────────────────────────────────────────────────────────┘
+● Task "RED e construção do segundo intervalo" completed in background
 
-  As duas hipóteses que a célula nomeava eram falsas. O que mudou é dado: a porta furo_espelho lê motivos_retencao_celula (célula), e os
-  fechamentos de col290 e col146 já existiam em 03/10 — caiu a retenção, ata lavrada entre 03/10 e 11/10. De brinde, corrige uma atribuição
-  de causa da própria célula: col882 já estava fora na árvore velha — 98924ef0 só deu nome à porta.
+● Task "Esperar o portao da sombra abrir" still running in background
 
-  Prova em logs/placar_estrutural/r4_par6_discriminacao_20261011.txt (67 linhas, só colXXX).
+● Pré-voo do pouso conferido — os 11 arquivos existem e os únicos placeholders em pé são os que se preenchem no ato (hashes dos dois
+  merges, hora e commit do R4).
 
-  Pouso pronto, nada tocou o main (qualquer commit fora de app/docs mataria a certificação):
-  - comboio VERDE pelas três pernas da L-074: Ran 10375 tests in 1415.384s / OK (skipped=42) / rc 0 — árvore 3bf9c778, commit 02261de0
-  - sobreposição entre a árvore suja e os dois merges: vazia nos dois (medido, não suposto) — nenhum merge será recusado
-  - trava de teste livre; portão da sombra ainda em dia=20261010, esperando por arquivo (carimbo), cron 04:16 + bloco ≈ 04:35
+  Estado, medido agora (04:02):
 
-  Patch da célula R4 e a seção do RELATO (14 linhas, dentro da L-116) ficam prontos para depois dos dois pousos, em commit próprio —
-  placar_estrutural não tem importador de runtime, só bin/gerar_estado.py, então esse commit não pede deploy.
+  ┌──────────────────────┬──────────────────────────────────┬───────────────────────────────┐
+  │         gate         │              medido              │            precisa            │
+  ├──────────────────────┼──────────────────────────────────┼───────────────────────────────┤
+  │ carimbo da sombra    │ dia=20261010 status=OK diverge=0 │ dia=20261011                  │
+  ├──────────────────────┼──────────────────────────────────┼───────────────────────────────┤
+  │ logs/crons_em_curso/ │ vazio                            │ sem sombra.sh_-*              │
+  ├──────────────────────┼──────────────────────────────────┼───────────────────────────────┤
+  │ trava de teste       │ livre                            │ livre                         │
+  ├──────────────────────┼──────────────────────────────────┼───────────────────────────────┤
+  │ HEAD de main         │ a96169b5 (nada commitado)        │ = árvore certificada 3bf9c778 │
+  └──────────────────────┴──────────────────────────────────┴───────────────────────────────┘
 
-✻ Cogitated for 5h 35m 33s · done 3:54 AM · 2 shells still running
+  O portão é o cron 16 4 * * * + ~18 min de bloco, então abre ≈04:35-04:40. O esperador buwjqcux9 consulta o carimbo por ARQUIVO a cada 30
+  s e me acorda quando os dois gates fecharem — nada de --sem-sombra.
 
-❯ segue a fila; PAREI so em lei ou !
+  Não toco em .py nenhum até lá, nem na principal nem na cópia: a árvore que a suite certificou (Ran 10375 tests / OK (skipped=42) / rc 0)
+  é a que pousa, e um commit fora de docs mataria a certificação — foi o que matou a SUITE 2. A ordem quando abrir é a do runbook, sem nada
+  no meio de cada ato: O198 50d2a6f6 (merge --no-ff --no-commit → commit → bin/deploy.sh --sem-migrate), minutos depois a foto 8272b439
+  com os docs do marco dentro do commit, a prova de árvore git diff --stat 3bf9c778 HEAD -- . ':!app/docs' vazia, bin/crons.sh install &&
+  check com o 47 5 * * * citado, e só então o commit da discriminação do R4.
 
-  Estado da espera do portao
-  ⎿  $ cd /home/ronald/saas-hasner && date '+%H:%M:%S'; tail -2 logs/espera_sombra_20261011.log; ls logs/crons_em_curso/ 2>&1; echo "---
-     HEAD ---"; git rev-parse --short HEAD | cat
-
-· Compacting conversation… (2m 57s · ↓ 444 tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱ 84%
-                                                                                                                    0% until auto-compact
+✻ Worked for 6m 9s · done 4:08 AM · 2 shells still running
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ pousa quando abrir; segue a fila
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
