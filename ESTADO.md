@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 11/10/2026 11:11:31.**
+**Medido em 11/10/2026 11:17:01.**
 
 | | |
 |---|---|
@@ -129,38 +129,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  - chamado x um escritor por entidade (119 escritas fora da porta) ate a celula ficar verde
+  - depois chamado x um juiz por pergunta; a O168 entra nesta raia antes dela
 
-● Mudança material: a célula #104359 de 10-07 passou a trabalha=False com regen=1, e as células de 10-21..11-20 nasceram (#124400, #124403,
-  #124404, #124410). Preciso saber QUEM regenerou antes de qualquer outra coisa:
+  LIMITES:
+  - O48 passo 5 (TXT online) NAO vira em producao antes do export da competencia 10. Custo: se a celula folha/export exigir o passo 5, ela
+  nao fecha antes de 20/10; nesse caso dizer no RELATO em uma linha e seguir o item 3.
+  - batida, escala e chamado x juiz: juiz novo so com a frase "corte Ronald: juiz <nome> nasce"; os cortes chegam em aval separado ate
+  13/10. Sem a frase, a pergunta sobe ao topo do RELATO com numero e a fila segue o proximo item (PAREI-DE-LEI-NAO-DEVOLVE-TURNO).
+  - motor_calculo_v2 so com aval explicito.
+  - UI de fechamento NAO se constroi por este aval.
 
-  Searched for 1 pattern, ran 1 shell command
+  RESULTADOS OBSERVAVEIS:
+  1. linha_do_placar() sobe a cada celula fechada, medida no container, colada no RELATO
+  2. cada celula verde tem classe de teste existente e lista de excecoes vazia (CLAUDE.md 4b)
+  3. PENDENTES da familia = 0 no mesmo commit em que a celula vira verde
+  4. raia wt-bos com BO em curso em toda publicacao do ESTADO
+  5. nenhum BO com estado "pela metade" por mais de um marco sem a linha de motivo (L-105)
 
-● gerar_foto_folgas sempre re-lavra a célula do mês civil (escala/folgas.py:189-191, TORNEIRA FOLGAS-NO-ESPELHO de 02/09) — então a pegada
-  da lavra é maior que as 23 FolgaDia. Medindo a pegada real em célula:
+  PROIBIDO: reclassificar papel de sitio para a celula virar verde; tirar pendente com a impressao ainda no codigo; fallback; fatia
+  posterior; juiz novo sem corte.
+  PRONTO: RELATO com a celula nomeada, o numero de linha_do_placar() e o commit. Sem os tres = INCOMPLETO com a lista do que falta.
+  LINHA HAIKU: a que ja existe (core/arquitetura_leitura.py, "arquitetura: N de 20"); golden: 1 pergunta "quais contratos estruturais
+  faltam" com esperado via a funcao real; degrau: sem mudanca.
+  LEI-AKITA: origem=core/contratos_estruturais.py, testemunha=linha_do_placar(), RED=o selo de cada celula,
+  quem-mais-le=bin/gerar_estado.py e TICKETS, juizes novos=0 neste aval.
 
-  Ran 1 shell command
+  Segue a fila; PAREI so em lei ou !
 
-● Pegada medida e limpa. Agora o passo da irretroatividade: rodar o gerador na sombra (sob trava) e ver se ele move algo que a lavra já
-  lavrou.
-
-  Searched for 1 pattern, ran 3 shell commands
-
-● Enquanto o gerador corre, escrevo a reversão — e ela mudou de forma, porque a pegada em célula não se desfaz por delete:
-
-  Ran 1 shell command
-
-● Background command "Espera pelo fim do gerador na sombra" completed (exit code 0)
-
-  Ran 1 shell command
-
-● A prova decisiva: celulas 2026-09-21..2026-10-20 **criadas=0 atualizadas=0** puladas=10113 — o gerador, logo depois da lavra, não cria
-  nem atualiza nada. Confirmando o veredito:
-
-● Running 1 shell command…
-
-✢ Infusing… (6h 25m 26s · ↓ 571.7k tokens · thought for 5s)
+✽ Compacting conversation… (6h 30m 56s · ↓ 581.1k tokens)
+  ▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 0%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
