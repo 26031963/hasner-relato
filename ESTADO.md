@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 11/10/2026 20:21:32.**
+**Medido em 11/10/2026 20:26:49.**
 
 | | |
 |---|---|
-| `HEAD` local | `0224e9d5 [O48] pouso da raia raia-o48p3: o leitor por colaborador le a CELULA, e a abstencao do previsto passa a se medir DENTRO do vinculo` |
+| `HEAD` local | `dbd72d28 [O48] pouso da raia raia-ui: a UI do fechamento LE um retrato gravado, e o badge e o len da MESMA lista que a tabela mostra` |
 | `origin/main` | `d20a0e45 [O219] pouso: os docs do marco A0-b entram junto, e o merge que eu pedi sem commit virou FAST-FORWARD -- o codigo estava na arvore viva antes deste commit` |
-| commits a subir (`ahead`) | **41** |
+| commits a subir (`ahead`) | **43** |
 
 ## Fabrica
 
@@ -22,31 +22,31 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2386.6 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2386.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
-  - 0 commit(s) a frente do `main`, 62 arquivo(s) sujo(s)
+  - 0 commit(s) a frente do `main`, 63 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **155.1 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **155.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261011`) -- **SEM AGENTE**
-  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **17.1 h** (passou das 6 h da L-105)
+  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **17.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **271.2 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **271.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **175.3 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **175.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **293.0 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **293.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
-  - 1 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **1.1 h**
+  - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
 - **21 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
@@ -57,24 +57,18 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+dbd72d28 [O48] pouso da raia raia-ui: a UI do fechamento LE um retrato gravado, e o badge e o len da MESMA lista que a tabela mostra
 0224e9d5 [O48] pouso da raia raia-o48p3: o leitor por colaborador le a CELULA, e a abstencao do previsto passa a se medir DENTRO do vinculo
+7fb6b4ed [O48] o retrato da folha: a tela LE um retrato GRAVADO, e o badge e o `len` da MESMA lista -- quem entra na folha nao ganhou um segundo derivador
 2e2a7fd4 [O48] fecha o INCOMPLETO de e14e653f: a docstring de modulo do cartao ainda contava a autoridade VELHA
 d89d0a6a Merge branch 'main' into raia-o48p3
-b9b650ed [O48] o vinculo nao e silencio: a abstencao do previsto se mede DENTRO do vinculo, e a medicao escolheu o corte ESTREITO
-30d48a4d [O250] "agente vivo" e DECLARACAO, nunca processo: o ESTADO ganha uma linha por raia, e a medicao reescreveu o desenho
 ```
 
 ## `git status --short`
 
 ```
  M app/config/crons_duracao.json
- M app/docs/AVAIS.md
- M app/docs/BACKLOG.md
- M app/docs/FECHAMENTO-ONLINE.md
  M app/docs/HANDOFF-SESSAO.md
- M app/docs/PENDENTES_RONALD.json
- M app/docs/PROMPTS.md
- M app/docs/RELATO.md
  M bin/sonda_frota.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -164,37 +158,37 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 7 shell commands
-
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-  Ran 6 shell commands
-  ⎿  Message queued for delivery to afb3c86c93768ac83 at its next tool round.
+  Searched for 1 pattern, ran 14 shell commands
 
-  Read 1 file, ran 11 shell commands
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/docs_do_marco_ui.md (76
-     lines)
-  ⎿  Read docs/AVAIS.md (25 lines)
-  ⎿  Referenced file docs/RELATO.md
-  ⎿  Read docs/FECHAMENTO-ONLINE.md (76 lines)
-  ⎿  Referenced file folha/export.py
+● MARCO FECHADO -- pode compactar.
 
-● Task "RED e construção do segundo intervalo" completed in background
+  Pouso da raia-ui (UI-FECHAMENTO-NOVA etapa 1) no ar: dbd72d28, bin/deploy.sh rc 0 com a migration 0011_retratofolha aplicada, três cascas
+  provadas.
 
-● Task "Raia wt-bos: O44 itens 2-8" still running in background
+  - Suite re-certificada na árvore MERGEADA (não na da raia, cuja base está 266 commits atrás): Ran 10443 tests in 1414.303s / OK
+    (skipped=42) / rc_suite=0, sobre git merge-tree --write-tree main raia-ui = 125d4dd7…, mount conferido por docker inspect. No pouso,
+    git write-tree do índice deu o mesmo hash, e o cmp deu 17 iguais / 0 diferentes — a árvore que a suite certificou é a que pousou.
+  - Rota nova e as duas telas da barra em prod: 302 / 302 / 302, nenhum 500 (a janela do lap-01 foi medida antes do merge: zero {% url novo
+    nos dois templates compartilhados).
+  - O INCOMPLETO ganhou o número que lhe faltava: lavra por empresa, cronometrada em prod — emp1 1,31 s, emp2 11,04 s, emp3 3,77 s, emp4
+    1,65 s = ~17,8 s para 8 retratos (4 empresas × 2 competências). 8 gravados; emp2 10/2026: total 445, entram 129, bloqueado 280, módulo
+    próprio 36.
 
-● Task "Rodar a suite cheia sobre a copia main+raia-ui" still running in background
+  Push segue retido pela FRONT SEM SMOKE (43 commits à frente) — o item O48-RETRATO-DA-FOLHA-SMOKE está no PENDENTES_RONALD.json e o AVAIS
+  subiu para 9.
 
-● Background command "Rodar a suite cheia sobre a copia main+raia-ui" completed (exit code 0)
+  Sigo na fila: o custo medido acima é exatamente o que tira o lavrador do FORA_DE_PIPELINE.
 
-  Ran 19 shell commands
+● Ler os contratos de casa e de FORA_DE_PIPELINE
+  ⎿  $ sed -n '165,230p' chamados/tests/test_contract_crons.py
 
-  Advising using Fable 5.1
-
-✢ Infusing… (15h 35m 27s · ↓ 1.4m tokens)
+✽ Compacting conversation… (15h 40m 43s · ↓ 1.4m tokens)
+  ▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 11%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    1% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -202,6 +196,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Reading _jz import context in cartorio.py                                                3h 9m 39s · ↓ 129.0k tokens
+  ◯ general-purpose  Inverting tranca cases in test_furo_parcial_sem_cobranca.py                             3h 14m 55s · ↓ 157.1k tokens
   ⧉  index
 ```
