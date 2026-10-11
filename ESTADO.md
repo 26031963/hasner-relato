@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 11/10/2026 08:30:45.**
+**Medido em 11/10/2026 08:36:01.**
 
 | | |
 |---|---|
@@ -143,16 +143,16 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Background command "Roda a parte 5 (universo do TXT) nas duas arvores, nucleo de teste 6" completed (exit code 0)
 
-● Espera o fim e le a parte 4 nas duas arvores · 3m 34s
+● Ultima espera das partes 2-4 · 3m 42s
   ⎿  $ O=/home/ronald/saas-hasner/logs/o197
      for i in $(seq 1 10); do
      grep -qE 'FIM_PROVA_P234 rc=0$' $O/PROVA_p234_runner_20261011.out 2>/dev/null && { echo PRONTO; break; }
      read -t 30 x < /dev/zero || true
      done
-     date +%H:%M:%S; cat $O/PROVA_p234_runner_20261011.out; echo "--- parte 4 das duas:"; grep -A… (3m 33s)
+     date +%H:%M:%S; cat $O/PROVA_p234_runner_20261011.out; echo "--- fim com_cura:"; tail -4 $O/… (3m 42s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✶ Infusing… (3h 44m 41s · ↓ 292.4k tokens)
+✢ Infusing… (3h 49m 57s · ↓ 292.7k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
