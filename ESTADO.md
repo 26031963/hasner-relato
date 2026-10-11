@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 11/10/2026 06:45:31.**
+**Medido em 11/10/2026 06:50:45.**
 
 | | |
 |---|---|
@@ -37,6 +37,7 @@ a96169b5 [PLACAR-ESTRUTURAL] o par 6 do R4 se pergunta ao CONTADOR, e ele diz 7 
  M app/docs/HANDOFF-SESSAO.md
  M app/docs/PENDENTES_RONALD.json
  M app/docs/RELATO.md
+ M app/docs/TICKETS.md
  M bin/sonda_frota.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -151,13 +152,13 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-● Estado da raia antes do commit
-  ⎿  $ cd /home/ronald/saas-hasner && git -C /home/ronald/wt-bos rev-parse --abbrev-ref HEAD && git -C /home/ronald/wt-bos status
-     --porcelain && git -C /home/ronald/wt-bos log --oneline -1
+● Topo do RELATO
+  ⎿  $ sed -n '1,55p' docs/RELATO.md
 
-✢ Infusing… (1h 59m 26s · ↓ 216.6k tokens)
+· Compacting conversation… (2h 4m 40s · ↓ 231.5k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 65%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    2% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
