@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 11/10/2026 16:44:01.**
+**Medido em 11/10/2026 16:49:31.**
 
 | | |
 |---|---|
@@ -133,21 +133,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● Bateria correndo contra wt-o48p4 (~24 min). Tudo o que não depende dela está fechado:
-
-  Medido neste trecho
-  - PROVA de frota na sombra fechou: carimbo final: NADA ESCRITO — ESCREVEU=NAO valeu para as seis leituras (cinco em --lido), incluindo
-    09, 08 e 07/2026 (310/394, 382/389, 8/344 linhas/retidos). lido x lido DIFF=0; gravado x lido recusado com AUTORIDADE DIFERENTE por
-    empresa; custo 112,9 s × 3,6 s.
-  - Corrigi um número meu antes de ele virar commit: eu havia escrito "SETE leituras de frota". A contagem em logs/o48p4/p4_prova_lido.py
-    diz seis (instantaneo nas linhas 40, 48, 61 e 3× no laço da 71). Já está certo nos dois textos.
-  - Esmeril deste marco: VAZIO, com prova — o diff não remove uma única chamada; toda linha - é assinatura ou corpo substituído no mesmo
-    lugar, então nenhuma função perdeu chamador e a L-111 não tem o que alcançar aqui.
-  - LEI ANTES DO PATCH medida: das 85 leis do LEIS.md, 7 têm PROTEGE não-vazia e nenhuma nomeia montar_linhas_export, classificar_export,
-    instantaneo, _retidos ou comparar — test_lei_protege_sitio.sh não morde este push.
-  - Seção do RELATO em 25 linhas exatas (teto L-116), com a PROVA de frota dentro; a história do achado da assertiva vazia saiu para o
-    corpo do commit, que é onde a L-116 a manda.
   - Passageiros de docs declarados: BACKLOG.md, FECHAMENTO-ONLINE.md e RELATO.md já estavam sujos com edições do passo 3 da mesma obra e
     embarcam nomeados; HANDOFF-SESSAO.md, crons_duracao.json e bin/sonda_frota.sh ficam fora.
   - Textos do marco agora duráveis em logs/o48p4/ (não só no scratchpad).
@@ -162,7 +147,22 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
   ⎿  Stop hook error: siga: PLACAR-ESTRUTURAL -- O ESTRUTURAL SE SEPARA DO DADO (corte dele 02/10 22:5x, que SUBSTITUI o item 3 da
   ordem das 21:4x -- o resto d
 
-✢ Infusing… (11h 57m 56s · ↓ 1.1m tokens · still thinking)
+● O hook está certo em não me liberar: o turno não devolve com item em pé, e a espera da bateria não é parada. Leio o próximo item da ORDEM
+  VIVA enquanto ela corre — leitura de arquivo não disputa o cpuset.
+
+  Ran 2 shell commands
+
+● O próximo do PLACAR-ESTRUTURAL é R4 col290, e ele está exatamente dentro do ! aberto R4-PAR6-DIFERENCA-DA-09-EXPORTADA (a 09 é EXPORTADA
+  — tocar o gravado dela é a lista NUNCA PRE-APROVADO). Não abro medição de sombra agora: a bateria está com o cpuset 4-7. Espero pelo
+  arquivo do veredito, que é o item em curso de verdade.
+
+● Esperar pelo veredito da suite no arquivo · 4m 53s
+  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; until grep -qE '^(OK|FAILED)($|
+     \()' $S/p4/suite_cheia_v2.log 2>/dev/null; do sleep 20; done; echo "veredito escrito:"; grep -E '^(OK|FAILED)($| \()'
+     $S/p4/suite_cheia_v2.log | tail -1; grep -E '^Ran … (4m 52s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✢ Infusing… (12h 3m 27s · ↓ 1.1m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
