@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 11/10/2026 01:19:31.**
+**Medido em 11/10/2026 01:25:01.**
 
 | | |
 |---|---|
@@ -123,38 +123,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+      32  (`ponto/janelas.py::competencia_fechada`), perguntado nas DUAS pontas do mes civil --
+  ⎿  Allowed by auto mode classifier
 
-● Agent "O198 falta em dia sem jornada" finished · 1h 3m 48s
+  Read 1 file, ran 5 shell commands
 
-  Amended commit 25aabfc7, merged 50d2a6f6, ran 15 shell commands
+● Update(~/wt-bos/app/config/crons.py)
+  ⎿  Added 6 lines, removed 3 lines
+      76      'gerar_celulas': 20, 'termometro_regua': 40, 'reconciliar_grade': 60,
+      77      # MEDIDO na sombra em 11/10 00:4x, nao estimado: o dry-run sobre 132 vinculo-mes
+      78      # custou ~1 s e o `--apply` de um alvo (4 datas + regeneracao das celulas do mes)
+      79 -    # 2,6 s COM o boot do Django. 120 s e o teto do pior caso -- os 132 vinculo-mes
+      80 -    # virando alvo de uma vez, que e o dia em que os 65 templates vazios forem
+      81 -    # preenchidos pelo admin -- e ainda deixa um minuto antes do gerador das 05:50.
+      79 +    # 2,6 s COM o boot do Django. REMEDIDO 11/10 com a janela do aval (corrente +
+      80 +    # SEGUINTE, 3 meses): `medir()` 0,4-0,6 s sobre 203-213 vinculo-mes, e o `--apply`
+      81 +    # real **1,9 s para 3 alvos = 0,65 s/alvo**; o pior caso ja datado -- os 66 alvos de
+      82 +    # 21/10, quando dezembro entra na janela -- da **~43 s**. 120 s segue sendo teto, nao
+      83 +    # estimativa, e ainda deixa um minuto antes do gerador das 05:50. O teto absoluto
+      84 +    # (os 83 templates vazios preenchidos pelo admin de uma vez) cabe nele.
+      85      'lavrar_foto_folgas': 120,
+      86      'detectar_cluster_espurio': 30, 'detectar_par_relampago': 20,
+      87      'apurar_furos_diarios': 45, 'processar_cartorio': 60, 'supra_juiz': 60,
+  ⎿  Allowed by auto mode classifier
 
-● Agent "O198 falta em dia sem jornada" finished · 1h 12m 44s
+● Refazer a arvore do comboio com a cura da janela
+  ⎿  $ cd /home/ronald/wt-comboio && git merge --no-ff --no-edit 8272b439 2>&1 | tail -5; echo "=== estado ==="; git log --oneline -1; git
+     rev-parse HEAD^{tree}; echo "=== conflito? ==="; git status --short | head; echo "=== migrations no diff vs main ==="; git diff --stat
+     80b1db30 HEAD -- '*/migrations…
 
-  Ran 24 shell commands
-  ⎿  Read docs/AVAIS.md (23 lines)
-  ⎿  Read docs/HANDOFF-SESSAO.md (45 lines)
-  ⎿  Referenced file ponto/services/fechamento.py
-  ⎿  Read docs/O148-COMPLEMENTO.md (89 lines)
-  ⎿  Read ponto/tests/test_s4_ninguem_recalcula_para_ler.py (151 lines)
-
-● Task "RED e construção do segundo intervalo" completed in background
-
-● Task "Suite cheia unica sobre a arvore do comboio" still running in background
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-  Ran 6 shell commands
-
-● Stop Task
-  ⎿  cd /home/ronald/saas-hasner && LOG=logs/comboio/suite_comboio_20261011_0100.txt && mkdir -p logs/comboio && bash bin/suite.sh
-     --dir /home/ronald/wt-comboio > "$… · stopped
-
-● Running 1 shell command…
-
-· Spelunking… (3h 0m 41s · ↓ 334.9k tokens · thinking)
+✢ Spelunking… (3h 6m 11s · ↓ 350.7k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    4% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
