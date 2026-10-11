@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:84 AFIRMA ato sem PROVA ao lado -- ## MARCO 11/10 11:1x — O148 item 1 **NO AR DE VERDADE**: o cron da lavra instalado, e a pegada da lavra e maior que as 23 FolgaDia porque o 
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:110 AFIRMA ato sem PROVA ao lado -- ## MARCO 11/10 11:1x — O148 item 1 **NO AR DE VERDADE**: o cron da lavra instalado, e a pegada da lavra e maior que as 23 FolgaDia porque o 
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 11/10/2026 17:00:31.**
+**Medido em 11/10/2026 17:05:45.**
 
 | | |
 |---|---|
-| `HEAD` local | `541ce443 [O48] a cura do UNIVERSO do fechamento: `situacao='ativo'` era um SEGUNDO juiz de "esta afastado?", e a cura muda QUEM esta no TXT, nao so quanto` |
+| `HEAD` local | `455cda29 [O48] pouso da raia raia-o48p4: o DIFF de folha passa a LER a competencia, e a prova de frota diz que ele nao escreve` |
 | `origin/main` | `d20a0e45 [O219] pouso: os docs do marco A0-b entram junto, e o merge que eu pedi sem commit virou FAST-FORWARD -- o codigo estava na arvore viva antes deste commit` |
-| commits a subir (`ahead`) | **33** |
+| commits a subir (`ahead`) | **35** |
 
 ## Fabrica
 
@@ -29,24 +29,18 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+455cda29 [O48] pouso da raia raia-o48p4: o DIFF de folha passa a LER a competencia, e a prova de frota diz que ele nao escreve
+00e4593a [O48] o DIFF de folha passa a LER a competencia, e o que isso compra nao e velocidade: e poder medir em PROD
 541ce443 [O48] a cura do UNIVERSO do fechamento: `situacao='ativo'` era um SEGUNDO juiz de "esta afastado?", e a cura muda QUEM esta no TXT, nao so quanto
 89ed5deb [O148] o cron da lavra da foto de folga INSTALADO, e a medicao derrubou minha premissa: a lavra tambem re-lavra a CELULA, nao so grava FolgaDia
 faa783e1 [O197] pouso da raia wt-bos: "Em aberto" era 1,4% verdade, e a cura separa AUSENCIA de PRESENCA em vez de pedir ao leitor que se comporte
-5ecebd95 [O197] "Em aberto" era 1,4% verdade: o dia que NAO ACONTECEU e o isento do Art.62 saiam com a palavra, e o teto que faltava JA TINHA NOME nesta casa
-6dcaf1a7 [PLACAR-ESTRUTURAL] as DUAS hipoteses do +6 do R4 par 6 eram FALSAS, e a terceira se mediu: o codigo e identico nas tres arvores, quem andou foi o DADO
 ```
 
 ## `git status --short`
 
 ```
  M app/config/crons_duracao.json
- M app/docs/BACKLOG.md
- M app/docs/FECHAMENTO-ONLINE.md
  M app/docs/HANDOFF-SESSAO.md
- M app/docs/RELATO.md
-M  app/folha/export.py
-M  app/folha/management/commands/simular_folha.py
-A  app/folha/tests/test_o48_passo4_simular_folha_lido.py
  M bin/sonda_frota.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -136,38 +130,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  Ran 1 shell command
 
-● Verde: Ran 10401 tests in 1406.217s / OK (skipped=42). O rc do processo e a digital reconferida — nesta ordem, antes do git add.
+● Ambos no bloco OBRAS; PLACAR-ESTRUTURAL (linha 382) vem antes do O48 (531), então o hook nunca chega à célula do O48 — a ordem da tabela
+  decide, não o _FECHADO. Corrijo o patch para medir o que importa:
 
   Ran 1 shell command
 
-● Background command "Rodar a suite cheia contra a raia" completed (exit code 0)
+● Patch aplicado e medido. Agora a seção no RELATO:
 
-● Digital idêntica nas duas metades, rc 0, zero FAILED/ERROR. Preencho o veredito e committo a raia.
+  Committed 455cda29, ran 3 shell commands
 
-  Ran 1 shell command
-
-● Background command "Esperar pelo veredito da suite no arquivo" completed (exit code 0)
-
-● A suíte rodou com bind-mount da própria raia, então a digital da raia é a da árvore certificada. Commit da raia:
-
-  Committed 00e4593a
-
-● Raia em 00e4593a, árvore limpa. Pouso (L-107, num ato só) — portão, merge e o cmp:
+● Merge em 455cda29. O deploy no mesmo ato (L-107):
 
   Ran 1 shell command
 
-● Merge real (não fast-forward), cmp igual nos três. Os passageiros de docs, com o sha da raia:
+● Deploy verde — passo 4 no ar. Agora a prova que faltava: a afirmação "None lê o gravado byte-idêntico" nunca foi medida contra o HEAD. O
+  cpuset está livre.
 
-  Ran 1 shell command
+  Ran 2 shell commands
 
-● O selo do próprio patch recusou: 307 > 300 da L-109. Encurto a célula.
+● Prova fechada: sha das linhas e dos retidos idênticos nas quatro empresas, HEAD × código novo — o único campo novo é
+  autoridade='gravado'. Guardo a prova e sigo ao pouso 2 (instrumento), onde ela se cita.
 
-● Running 1 shell command…
+  Guardar a prova do ramo default
+  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; R=/home/ronald/saas-hasner; { echo
+     "PROVA do ramo DEFAULT (fechamentos=None le o gravado IGUAL ao HEAD) -- 11/10 17:0x, banco=sombra"; echo "mesma arvore de banco, duas
+     arvores de CODIGO: HEAD 541ce44…
 
-✢ Infusing… (12h 14m 27s · ↓ 1.1m tokens · thought for 2s)
+· Compacting conversation… (12h 19m 40s · ↓ 1.1m tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 59%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
