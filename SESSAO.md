@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 11/10/2026 08:10:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (651.0 MB). Acoes na janela: **1271**.
+**Medido em 11/10/2026 08:15:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (651.0 MB). Acoes na janela: **1265**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1275,9 +1275,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 20:15:54 | Bash | Reler o ato do pouso | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cat -n $S/o219/ato_queda.sh` |
 | 20:15:42 | Bash | Relancar o ensaio do bloco com a queda do passo 2 | `cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; C=$S/o219q/copia; mkdir -p logs/o219 nohup bash $S/o219/ensaio_bloco_com_a_queda.sh "$C" "$PWD/logs/o219" > logs/o219/ensaio_bloco_com_a_queda_$(date +%Y%m%d_%H%M).txt 2>&1 & echo "lancado pid=$!"; sleep 2; ls -t logs/o219/ensaio_bloco_com_a_queda_*.txt \| head -1` |
 | 20:15:32 | Bash | Corrigir o portao do passo 1 do ensaio | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; python3 - <<PY import pathlib p = pathlib.Path("$S/o219/ensaio_bloco_com_a_queda.sh") s = p.read_text() velho = '''echo "== \$(date +%H:%M:%S) 1. REFAZER (a sombra tem o apply v2 de 19:02 dentro)" bash bin/sombra.sh --refazer \|\| { echo "RC-REFAZER=\$?"; exit 1; } bash bin/sombra.sh --conferir \|\| {  ...` |
-| 20:15:07 | Bash | Ler o script do ensaio | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cat -n $S/o219/ensaio_bloco_com_a_queda.sh` |
-| 20:14:53 | Bash | Ler o carimbo da sombra e o conferir | `cd /home/ronald/saas-hasner && cat .sombra_stamp 2>/dev/null; echo "---- conferir:"; bash bin/sombra.sh --conferir 2>&1 \| tail -5` |
-| 20:14:51 | Bash | Ler a saida completa do ensaio | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bqqxtkt3b.output` |
-| 20:14:42 | Bash | Reconferir o selo do indice de leis | `cd /home/ronald/saas-hasner && bash bin/tests/test_leis_indice.sh 2>&1 \| tail -12; echo "rc=$?"` |
-| 20:14:41 | Bash | Conferir os dois trabalhos de fundo pelos arquivos | `cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad echo "== suite2: $(wc -l < $S/o219/suite_cheia2.out 2>/dev/null) linhas" grep -E '^(OK\|FAILED)( \(\|$)' $S/o219/suite_cheia2.out 2>/dev/null \| tail -1 grep '^Ran ' $S/o219/suite_cheia2.out 2>/dev/null \| tail -1 grep -cE '^(FAIL\|ERROR):' $S/o219/suite_cheia2.out 2>/dev/ ...` |
-| 20:10:14 | Bash | Gravar o censo do esmeril no RELATO e conferir o teto de linhas | `python3 - <<'PY' import pathlib p = pathlib.Path('docs/RELATO.md') s = p.read_text(encoding='utf-8') anc = 'nao um segundo juiz de "isto grava?".' assert s.count(anc) == 1, s.count(anc) novo = (anc + ' CENSO POR AST do que a queda deixou orfao (ESMERIL deste marco): **0** uso ' 'EXECUTAVEL de `CompetenciaExportada` e de `permitir_exportada` na copia inteira -- as 35 ' 'mencoes que sobram sao LAPID ...` |
