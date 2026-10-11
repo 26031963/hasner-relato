@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 11/10/2026 09:13:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (652.9 MB). Acoes na janela: **1210**.
+**Medido em 11/10/2026 09:19:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (652.9 MB). Acoes na janela: **1199**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 09:13:55 | Bash | Grava o censo do forcar | `cd /home/ronald/saas-hasner cat >> logs/o44/CENSO_VIVO_20261011.md <<'EOF' --- ## CENSO DO `forcar=True` -- A FORMA DA CURA DE `:829` SE MEDE, NAO SE SUPOE A cura minima e legal de `ponto/services/cartorio.py:829` e `_cala_emissao = bool(vivos) or (_trancado and not forcar)` -- o mesmo "cron SCOPE, nao recusa de toque" que `escala/services/furos_diarios.py:66-69` ja usa. Ela so vale se **nenhuma v ...` |
 | 09:13:22 | Bash | Mede o cron do corrigir_escala_retroativa | `cd /home/ronald/saas-hasner/app echo "=== a linha de cron do corrigir_escala_retroativa ===" grep -n "corrigir_escala_retroativa" -B2 -A8 config/crons.py echo; echo "=== default do --regenerar-desde ===" sed -n '38,44p;220,240p' colaboradores/management/commands/corrigir_escala_retroativa.py` |
 | 09:13:06 | Bash | Mede o universo dos dois commands com forcar | `cd /home/ronald/saas-hasner/app echo "=== rejulgar_ausencia_em_folga: ini,fim ===" sed -n '46,58p' ponto/management/commands/rejulgar_ausencia_em_folga.py echo; echo "=== curar_residuo_bug115: universo ===" grep -n "filter\\|data\b\\|janela\\|localdate" ponto/management/commands/curar_residuo_bug115.py \| sed -n '1,18p' echo; echo "=== as linhas de cron desses dois ===" grep -n "rejulgar_ausencia_ ...` |
 | 09:12:55 | Bash | Mede os sweeps com forcar | `cd /home/ronald/saas-hasner/app echo "=== esses 3 estao no cron? ===" for c in cobrar_furos_sem_cobranca rejulgar_ausencia_em_folga curar_residuo_bug115 corrigir_escala_retroativa; do printf "%-32s " "$c"; grep -c "'$c'" config/crons.py done echo; echo "=== furos_sem_cobranca.py 60-110 (o continue da tranca + o sweep) ===" sed -n '60,110p' ponto/services/furos_sem_cobranca.py echo; echo "=== rejul ...` |
@@ -1208,15 +1209,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 21:22:53 | Bash | Achar selos sobre os leitores | `echo "=== selos que afirmam sobre os 4 leitores:" && grep -rln 'totais_da_folha\\|apuracao_colab' --include='test_*.py' . \| head -20` |
 | 21:22:51 | Bash | Procurar DIFF 07/08 ja medido | `cd /home/ronald/saas-hasner && echo "=== DIFF de 07 e 08 em logs/ (existe?):" && ls -1 logs/ \| grep -iE 'o48\|diff_07\|diff_08\|gravado_x_lido' \| head -20; echo "--- o que ha de o48:"; ls -1d logs/o48* 2>/dev/null \| head` |
 | 21:22:49 | Bash | Ler a linha O48 do BACKLOG | `echo "=== A LINHA O48 DO BACKLOG:" && grep -n 'O48' docs/BACKLOG.md \| head -5` |
-| 21:17:58 | Bash | Achar o aval de 14:0x que reabriu a O48 | `echo "=== o aval de 10/10 14:0x no PROMPTS:" && grep -n '14:0x' docs/PROMPTS.md \| head -6 && echo "=== no CORTES:" && grep -n 'O48' docs/CORTES.md \| head -8` |
-| 21:15:00 | Bash | Localizar os outros dois leitores por colab | `echo "=== ponto/views.py: quais leituras sao POR COLAB (uma pessoa):" && grep -n 'FechamentoMensal.objects' ponto/views.py \| head -20 && echo "=== calcular_scores 62-85:" && sed -n '62,85p' inteligencia/management/commands/calcular_scores.py` |
-| 21:14:53 | Bash | Ler os dois primeiros sitios | `echo "=== 1) relatorios/cartao_pela_celula.py:45-60" && sed -n '40,62p' relatorios/cartao_pela_celula.py && echo "=== 2) folha/services/ranking_he.py:155-175" && sed -n '152,180p' folha/services/ranking_he.py` |
-| 21:14:41 | Bash | Ler o resto do selo da S4 | `sed -n '70,200p' ponto/tests/test_s4_ninguem_recalcula_para_ler.py` |
-| 21:14:34 | Bash | Ler o selo da S4 | `sed -n '1,70p' ponto/tests/test_s4_ninguem_recalcula_para_ler.py` |
-| 21:14:30 | Bash | Achar o selo da S4 que inverte | `grep -rln 'S4' --include='test_*.py' . \| head -10 && echo "=== selos que afirmam 'le o GRAVADO':" && grep -rn 'le o gravado\\|LE O GRAVADO\\|lem o gravado\\|leem o gravado' --include='*.py' . \| head -10` |
-| 21:14:19 | Bash | Ver o retorno e os 4 sitios | `sed -n '1058,1075p' ponto/services/fechamento.py && echo "=== OS 4 SITIOS:" && for s in "ponto/cartao_pela_celula.py" "ponto/ranking_he.py" "ponto/views.py" "ponto/management/commands/calcular_scores.py"; do f=$(ls $s 2>/dev/null \|\| find . -name "$(basename $s)" -not -path './node_modules/*' \| head -1); echo "--- $f"; grep -n 'FechamentoMensal' "$f" \| head -6; done` |
-| 21:14:14 | Bash | Ler a assinatura de fechamento_lido | `echo "=== fechamento_lido (a porta do passo 2):" && grep -n 'def fechamento_lido' -A 25 ponto/services/fechamento.py \| head -40` |
-| 21:14:07 | Bash | Ler o censo de fechamento-online | `cd /home/ronald/saas-hasner && sed -n '1,100p' app/docs/FECHAMENTO-ONLINE.md` |
-| 21:14:03 | Bash | Ler o censo do passo 3 | `cd /home/ronald/saas-hasner && grep -n 'passo 3\\|PASSO 3\\|4 leitores\\|leitores por colaborador' app/docs/FECHAMENTO-ONLINE.md \| head -20` |
-| 21:13:49 | Bash | Localizar as linhas de tabela | `cd /home/ronald/saas-hasner && grep -n '^\| *`\?O219\\|^\| *`\?O48\\|^\| O219\\|^\| O48' app/docs/BACKLOG.md \| head && echo "--- linha O48 inteira:" && grep -n 'O48' app/docs/BACKLOG.md \| grep -i 'passo\\|ABERT\\|FECHAD' \| head -5` |
-| 21:13:44 | Bash | Ver o estado das linhas O219 e O48 no BACKLOG | `cd /home/ronald/saas-hasner && grep -n 'O219\\|O48' app/docs/BACKLOG.md \| head -12` |
