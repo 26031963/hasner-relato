@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 11/10/2026 09:08:01.**
+**Medido em 11/10/2026 09:13:31.**
 
 | | |
 |---|---|
@@ -126,11 +126,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-  Ran 1 shell command
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
   Read 1 file, ran 17 shell commands
   ⎿  Read docs/AVAIS.md (26 lines)
   ⎿  Read ../../../../tmp/r4selos.out (8 lines)
@@ -147,16 +142,21 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-● Acha os horizontes do supra_juiz e do reconciliador
-  ⎿  $ cd /home/ronald/saas-hasner/app
-     echo "=== supra_juiz: horizonte de data do command ==="
-     grep -n "janela\|data__\|localdate\|add_argument" ponto/management/commands/*supra*.py 2>/dev/null | head -20
-     echo; echo "=== reconciliador: horizonte ==="
-     grep -n "janela\|data__\|localdate\|def rodar\|def re…
+  Ran 15 shell commands
 
-· Infusing… (4h 21m 56s · ↓ 338.5k tokens)
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+
+● Mede o cron do corrigir_escala_retroativa
+  ⎿  $ cd /home/ronald/saas-hasner/app
+     echo "=== a linha de cron do corrigir_escala_retroativa ==="
+     grep -n "corrigir_escala_retroativa" -B2 -A8 config/crons.py
+     echo; echo "=== default do --regenerar-desde ==="
+     sed -n '38,44p;220,240p' colaboradores/management/commands/corrigir_escala_retroativa.py
+
+✢ Infusing… (4h 27m 27s · ↓ 349.8k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    1% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
