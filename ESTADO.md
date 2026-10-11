@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 11/10/2026 12:43:31.**
+**Medido em 11/10/2026 12:49:01.**
 
 | | |
 |---|---|
@@ -133,42 +133,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  limpa: cura de universo = 2 arquivos em ponto/, cura de leitor = 2 em relatorios/, zero sobreposição.
-
-  Ran 2 shell commands
-
-● Enquanto a 10 mede, registro o aval novo e caracterizo os 48.
-
-  Ran 3 shell commands
-
-● --ids dá a composição por rubrica. Lanço a 09 de novo com ele, em paralelo.
-
-  Ran 6 shell commands
-
-● Registro o aval nos dois sítios onde a casa o exige.
-
-  Ran 4 shell commands
-
-● Background command "Mede o comparador honesto na competencia 10" completed (exit code 0)
+  em 28 colabs é diferença de regra. Não publico isso como "vão de O48" sem saber de qual lado vem.
 
   Ran 1 shell command
 
-● A medição da 10 inverte a conclusão. Preciso ler a letra completa do passo 3 antes de qualquer afirmação.
+● Dois mapeamentos diferentes para total_noturnas no mesmo arquivo — linha 100 pega adicional_noturno de eventos_do_fechamento, linha 176
+  pega o campo horas_noturnas. Preciso saber em qual função está a 176.
 
-● Le a letra dos 6 passos do O48 na linha certa
-  ⎿  $ R=/home/ronald/saas-hasner; grep -n '^| O48 |' $R/app/docs/BACKLOG.md | cut -d: -f1 | while read n; do sed -n "${n}p"
-     $R/app/docs/BACKLOG.md | python3 -c "
-     import sys
-     print(sys.stdin.read().split('|')[2])
-     "; done
+  Ran 1 shell command
 
-✢ Infusing… (7h 57m 27s · ↓ 732.9k tokens · thinking)
+● Linha 176 é do _totais_da_lavratura (caminho DiaPago), não do comparador — então os dois lados dos 48 usam o mesmo adicional_noturno. A
+  comparação é legítima e o +50 h é real. Uma sonda em col411 diz de onde vem.
+
+  Ran 1 shell command
+
+● Sinal invertido do que eu li nas tuplas: o GRAVADO de col411 é 163,44 h e o ONLINE 112,00 — a cura reduz noturnas. Confiro a ordem da
+  tupla e a assinatura real antes de refazer a tabela.
+
+  Ran 1 shell command
+
+● Tupla confirmada: (resumo, tot) = (ONLINE, GRAVADO). Minha tabela estava com o sinal invertido. Refaço com o sinal certo.
+
+● Refaz a tabela de magnitude com o sinal correto
+  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
+     echo "=== como eu chamo eventos_do_fechamento (linhas 86-105) ==="; sed -n '86,105p' $S/o48p3b/app/relatorios/cartao_pela_celula.py
+     echo
+     echo "=== TABELA CORRIGIDA: delta = ONLINE - GRAVADO ==="
+     python…
+
+· Compacting conversation… (8h 2m 56s · ↓ 748.8k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 66%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    1% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
