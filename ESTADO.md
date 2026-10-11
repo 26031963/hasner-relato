@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 11/10/2026 03:49:31.**
+**Medido em 11/10/2026 03:55:01.**
 
 | | |
 |---|---|
@@ -124,42 +124,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ⎿  Read ../../wt-bos/app/escala/management/commands/lavrar_foto_folgas.py (190 lines)
-  ⎿  Referenced file ../../wt-bos/app/escala/tests/test_foto_folga_continua.py
+● Discriminação do R4 par 6 fechada e durável; pouso armado e esperando o portão.
 
-● Task "RED e construção do segundo intervalo" completed in background
+  O que mediu (banco=sombra, só leitura, cpu7 para não disputar com a suíte):
 
-● Task "Rodar a suite contra a copia re-certificada" still running in background
-  ⎿  Read docs/AVAIS.md (24 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/l114.out (8 lines)
-  ⎿  Referenced file ../../wt-bos/app/config/crons.py
-  ⎿  Read ../../wt-bos/app/escala/management/commands/lavrar_foto_folgas.py (190 lines)
-  ⎿  Referenced file ../../wt-bos/app/escala/tests/test_foto_folga_continua.py
+  ┌───────┬──────────────────────────┬─────────────────────────────────────────────────────────────────────────────────────────────────┐
+  │ perna │         pergunta         │                                            resposta                                             │
+  ├───────┼──────────────────────────┼─────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ 1     │ o gravado da 09 moveu?   │ não — 0 de 11.475 DiaPago re-lavrados depois de 03/10                                           │
+  ├───────┼──────────────────────────┼─────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ 2     │ o espelho moveu?         │ não — a função REAL devolve os mesmos 7, com os mesmos valores, em ca2d50d9 (03/10), 1f3d616f   │
+  │       │                          │ (08/10) e HEAD                                                                                  │
+  ├───────┼──────────────────────────┼─────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ 3     │ o código do universo     │ não — classificar_export responde idêntico nas duas árvores: 221 na 09, 19 na 10                │
+  │       │ moveu?                   │                                                                                                 │
+  └───────┴──────────────────────────┴─────────────────────────────────────────────────────────────────────────────────────────────────┘
 
-● Task "RED e construção do segundo intervalo" completed in background
+  As duas hipóteses que a célula nomeava eram falsas. O que mudou é dado: a porta furo_espelho lê motivos_retencao_celula (célula), e os
+  fechamentos de col290 e col146 já existiam em 03/10 — caiu a retenção, ata lavrada entre 03/10 e 11/10. De brinde, corrige uma atribuição
+  de causa da própria célula: col882 já estava fora na árvore velha — 98924ef0 só deu nome à porta.
 
-● Background command "Rodar a suite contra a copia re-certificada" completed (exit code 0)
+  Prova em logs/placar_estrutural/r4_par6_discriminacao_20261011.txt (67 linhas, só colXXX).
 
-  Searched for 1 pattern, ran 14 shell commands
+  Pouso pronto, nada tocou o main (qualquer commit fora de app/docs mataria a certificação):
+  - comboio VERDE pelas três pernas da L-074: Ran 10375 tests in 1415.384s / OK (skipped=42) / rc 0 — árvore 3bf9c778, commit 02261de0
+  - sobreposição entre a árvore suja e os dois merges: vazia nos dois (medido, não suposto) — nenhum merge será recusado
+  - trava de teste livre; portão da sombra ainda em dia=20261010, esperando por arquivo (carimbo), cron 04:16 + bloco ≈ 04:35
 
-● Universo medido nas duas árvores: idêntico. A discriminação fechou.
+  Patch da célula R4 e a seção do RELATO (14 linhas, dentro da L-116) ficam prontos para depois dos dois pousos, em commit próprio —
+  placar_estrutural não tem importador de runtime, só bin/gerar_estado.py, então esse commit não pede deploy.
 
-  Searched for 2 patterns, ran 6 shell commands
-
-● O baseline de 03/10 tem dois arquivos que discordam entre si (emp2 na 09: 143 x 147; na 10: 15 x 156). Vou reescrever a prova sem a
-  aritmética que dependia de um deles.
-
-  Ran 5 shell commands
-
-● Advising using Fable 5.1
-
-· Spelunking… (5h 30m 41s · ↓ 635.9k tokens)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+✻ Cogitated for 5h 35m 33s · done 3:54 AM · 2 shells still running
+                                                                                                                    5% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ pousa os dois quando o portão abrir
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
