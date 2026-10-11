@@ -6,10 +6,22 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 11/10/2026 20:32:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (683.2 MB). Acoes na janela: **1213**.
+**Medido em 11/10/2026 20:37:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (683.4 MB). Acoes na janela: **1223**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 20:34:01 | Bash | Baseline: arvore e portao dos crons | `cd /home/ronald/saas-hasner && git status --porcelain \| head; echo "=== HEAD"; git rev-parse --short HEAD; echo "=== crons.sh check"; timeout 120 bin/crons.sh check 2>&1 \| tail -15; echo "rc=$?"` |
+| 20:33:41 | Bash | Ler motivos_retencao_celula | `grep -n "def motivos_retencao_celula" -A28 folha/export.py \| head -45` |
+| 20:33:36 | Bash | Rastrear a origem de furo_espelho | `grep -rn "furo_espelho" --include=*.py folha/ ponto/ \| grep -v tests \| head -15; echo "=== motivos_retencao_celula"; sed -n '820,845p' folha/export.py` |
+| 20:33:18 | Bash | Ver como sombra.sh usa o bloco_da_manha | `cd /home/ronald/saas-hasner && grep -n "bloco_da_manha\\|SOMBRA_BLOCO\\|bloco" bin/sombra.sh \| head -40` |
+| 20:33:08 | Bash | Ler linhas() inteira | `sed -n '1395,1470p' config/crons.py` |
+| 20:33:02 | Bash | Ler os contratos B6.2 restantes | `sed -n '230,340p' chamados/tests/test_contract_crons.py` |
+| 20:32:55 | Bash | Ler PAPEL_DO_CRON inteiro | `sed -n '1612,1673p' config/crons.py` |
+| 20:32:52 | Bash | Localizar PAPEL_DO_CRON e as entradas de lavra | `grep -n "PAPEL_DO_CRON" config/crons.py; echo "=== lavra entries"; grep -n "'lavra'" config/crons.py \| head -20` |
+| 20:32:46 | Bash | Ler PAPEIS, nome_do_cron e papel | `sed -n '1538,1560p' config/crons.py; echo "=== papel()"; sed -n '1674,1740p' config/crons.py` |
+| 20:32:42 | Bash | Localizar a declaracao de papel dos crons | `grep -n "PAPEIS\s*=\\|^def papel\\|^def nome_do_cron\\|^def juizes_por_varredura\\|PAPEL_DE\\|_PAPEL" config/crons.py \| head -20` |
+| 20:32:31 | Bash | Ler comentario do diagrama e _DUR_DECLARADA | `sed -n '240,262p' core/management/commands/gerar_diagrama.py; echo "=== _DUR_DECLARADA"; sed -n '95,120p' config/crons.py` |
+| 20:32:25 | Bash | Censo de leitores do ultimo elo e de DUR_MAX_S | `grep -rn "vigiar_txt_dominio" --include=*.py . \| grep -v "config/crons.py" \| head -20; echo "=== DUR_MAX_S"; grep -n "DUR_MAX_S" config/crons.py \| head` |
 | 20:31:59 | Bash | Ver estagios declarados | `grep -n "_estagio\b" config/crons.py \| head; echo "=== ESTAGIOS"; grep -n "ESTAGIOS\\|^def _estagio" -A12 config/crons.py \| sed -n '1,40p'` |
 | 20:31:48 | Bash | Ler def ENC e o fim do bloco ENCADEADOS | `sed -n '30,60p' config/crons.py; echo "=== fim do ENCADEADOS"; sed -n '1300,1400p' config/crons.py` |
 | 20:31:44 | Bash | Ler o inicio do bloco ENCADEADOS e a def de ENC | `sed -n '1270,1300p' config/crons.py; echo "=== ENC def"; grep -n "^def ENC\\|^ENC\b\\|def ENC(" config/crons.py` |
@@ -1221,5 +1233,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 08:38:54 | Bash | Insere os bullets da PROVA na secao do O197 e mede o teto da L-116 | `cd /home/ronald/saas-hasner/app python3 - <<'PY' S='/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/' p='docs/RELATO.md' t=open(p).read() novo=open(S+'relato_prova_o197.md').read() anc='- **INCOMPLETO, com dono**: (a) `calendario.py::_classificar:723`' assert t.count(anc)==1, t.count(anc) t=t.replace(anc, novo+anc) open(p,'w').write(t) # conferir o tet ...` |
 | 08:38:47 | Bash | Escreve os quatro bullets da PROVA para o RELATO | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad cat > $S/relato_prova_o197.md <<'EOF' - **PROVA DEPOIS DO DEPLOY -- a MESMA sonda nas DUAS arvores, na MESMA sombra** (11/10 07:2x-08:3x, `dia=20261011`, erros 0 e rc 0 nas 4 rodadas; sem cura = `6dcaf1a7:app`, com cura = a arvore no ar; `logs/o197/PROVA_p1_*`, `PROVA_p234_*`, `PROVA_p5_*`, resumo em `P ...` |
 | 08:38:23 | Bash | Fecha o log durave da PROVA com as partes 2-4 | `cat >> /home/ronald/saas-hasner/logs/o197/PROVA_ACHADO_numero_publicado_20261011.txt <<'EOF' PARTES 2-4 (passivo da Pauta DP, placar do export, fila nova) -- rc=0 nas duas rodadas Logs: logs/o197/PROVA_p234_sem_cura_20261011.out e PROVA_p234_com_cura_20261011.out SEM CURA COM CURA PAUTA DP 09/2026 (dias/colabs) 309 / 43 52 / 32 emp2 / emp3 / emp4 (dias) 218 / 45 / 46 41 / 7 / 4 PAUTA DP 10/2026 (d ...` |
-| 08:37:26 | Bash | Fecha a espera das partes 2-4 | `O=/home/ronald/saas-hasner/logs/o197 for i in $(seq 1 10); do grep -qE 'FIM_PROVA_P234 rc=0$' $O/PROVA_p234_runner_20261011.out 2>/dev/null && { echo PRONTO; break; } read -t 30 x < /dev/zero \|\| true done date +%H:%M:%S; tail -2 $O/PROVA_p234_runner_20261011.out; echo "--- parte 4 curada:"; grep -A1 '=== 4' $O/PROVA_p234_com_cura_20261011.out; tail -1 $O/PROVA_p234_com_cura_20261011.out` |
-| 08:32:18 | Bash | Ultima espera das partes 2-4 | `O=/home/ronald/saas-hasner/logs/o197 for i in $(seq 1 10); do grep -qE 'FIM_PROVA_P234 rc=0$' $O/PROVA_p234_runner_20261011.out 2>/dev/null && { echo PRONTO; break; } read -t 30 x < /dev/zero \|\| true done date +%H:%M:%S; cat $O/PROVA_p234_runner_20261011.out; echo "--- fim com_cura:"; tail -4 $O/PROVA_p234_com_cura_20261011.out` |
