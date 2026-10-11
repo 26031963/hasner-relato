@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 21:00:45.**
+**Medido em 10/10/2026 21:05:45.**
 
 | | |
 |---|---|
@@ -129,15 +129,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● O portão passa no caso bom e morde no viciado. Ponho as duas testemunhas na mensagem do commit:
-
-  Ran 2 shell commands
-
-● Falta uma pergunta honesta sobre os 8 alarmes: algum deles nasceu com a queda? Comparo os 8 contra o bloco anterior, arquivado:
-
-  Ran 1 shell command
-
 ● Nenhum é novo — os 8 comandos já alarmavam. Mas "o log existe" não prova "alarmou": para os que diferem, leio o número que decide o rc=2
   nos dois lados:
 
@@ -151,16 +142,25 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● --alarme sem --executar é dry-run (o retratar está atrás de o.get('executar'), :227). Então posso medir controlado, como fiz com o vigia:
 
-● Medir o A6 da emp4 controlado nas duas arvores
-  ⎿  $ cd /home/ronald/saas-hasner && cat > logs/sombra/o219_a6_emp4.py <<'PY'
-     # O A6 da emp4 na competencia ENCERRADA (a 09), no PAR CONTROLADO.
-     # `--encerrada --alarme` SEM `--executar` e dry-run: o retratar esta atras de
-     # o.get('executar') (ponto/management/commands/supra_juiz.py:227), entao rodar d…
+  Ran 1 shell command
+  ⎿  Read docs/AVAIS.md (23 lines)
+  ⎿  Read ../../.claude/projects/-home-ronald-saas-hasner/memory/espera-casa-com-prosa-do-log.md (30 lines)
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bqqxtkt3b.output (14 lines)
+  ⎿  Read docs/HANDOFF-SESSAO.md (45 lines)
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bkds3iwbt.output (47 lines)
 
-· Compacting conversation… (1d 3h 5m · ↓ 3.1m tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱ 79%
+● Task "RED e construção do segundo intervalo" completed in background
+
+● O par controlado respondeu: idênticos. emp4/09 COBRANCA_SEM_FURO=1 aparece com a árvore de HEAD e com a queda dentro, na mesma sombra —
+  vem do ESTADO, não do código. Vou gravar isso dentro da linha que já existe, sem crescer a seção:
+
+  Ran 4 shell commands
+
+  Advising using Fable 5.1
+
+· Proofing… (1d 3h 10m · ↓ 3.2m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    0% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
