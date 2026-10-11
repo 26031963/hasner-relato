@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 23:48:01.**
+**Medido em 10/10/2026 23:53:31.**
 
 | | |
 |---|---|
@@ -122,38 +122,37 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Selo cobra estrutura e presença de prova, não a prosa do número — seguro. Aplicando na árvore e levando a célula de ESTADO do O48 no
-  mesmo commit (L-106):
-
-  Committed 80b1db30, ran 3 shell commands
-
-● Minha sonda errou a chave, não o módulo — papel é derivado. Perguntando à função que o placar usa:
-
-  Ran 2 shell commands
-
-● Achado no ato: a troca caiu no campo prova — é lá que o número velho estava publicado. E isso revelou coisa nova: o campo numero ainda
-  diz "1 na 09 (col935 05/09)", e col935 é justamente o caso que hoje mede 0,01 min. Esse número também é suspeito, mas isso se mede, não
-  se reescreve — registrando a linha de fila em disco:
+● O198: o que resta é estrutural (o veto na porta) e o censo já está feito. Abrindo o agente dela e subindo wt-bos ao main em paralelo:
 
   Ran 1 shell command
 
-● Dois marcos no ar, carimbo == HEAD. MARCO FECHADO — pode compactar.
+● fork(O198 falta em dia sem jornada)
+  ⎿  Backgrounded agent (↓ to manage · ctrl+o to expand)
 
-  Seguindo a fila: o próximo item é a FOTO-DE-FOLGA-CONTINUA com a O198 em agente próprio (seu aval, item 2). Orientando antes de abrir:
-
-  Ran 2 shell commands
-
-● raia-bos está 0 à frente e 32 atrás do main — o O199 dela já pousou, nada a mergear (L-105 satisfeita). Lendo a especificação da obra:
+● Agente da O198 em curso. Agora a foto — primeiro o código, porque é ele que decide o método do DIFF:
 
   Ran 1 shell command
 
-● Especificação completa em mão. Antes de abrir a obra, consultando — e wt-bos precisa subir ao main (está 32 atrás, sem commit próprio):
+● Dois achados decisivos no código: (1) gerar_foto_folgas já chama relavrar_celulas_da_foto → regenerar_celulas_vinculo, então a lavra
+  regenera célula — o DIFF é medição de dinheiro, não trivial; (2) o delete() só apaga calendario_origem__isnull=False e o bulk_create vem
+  depois, então folga manual na mesma data dá IntegrityError pelo unique_together — é o MUDA 2, confirmado por leitura. Agora a primeira
+  medição:
 
-● Advising using Fable 5.1
+  Ran 5 shell commands
 
-· Spelunking… (1h 29m 11s · ↓ 165.4k tokens)
+● O RED está confirmado por leitura: 6x1 sem folga_dia_semana, sem foto no mês → cai em TipoEscala.eh_dia_trabalho → True em todos os dias.
+  Escrevendo a primeira medição (ORM puro, sem motor, leitura):
+
+● Confirmar os campos e as funcoes de janela
+  ⎿  $ cd /home/ronald/saas-hasner/app
+     sed -n '188,200p' escala/models.py
+     echo "=== janela_atual / proxima ==="
+     grep -n "^def " ponto/janelas.py
+
+✢ Compacting conversation… (1h 34m 41s · ↓ 175.7k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱ 82%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -161,5 +160,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
+  ◯ fork  Listing censo_falta_sem_jornada logs                                                                   3m 57s · ↓ 183.4k tokens
   ⧉  index
 ```
