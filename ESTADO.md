@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 11/10/2026 13:00:01.**
+**Medido em 11/10/2026 13:05:31.**
 
 | | |
 |---|---|
@@ -133,42 +133,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  Ran 2 shell commands
-
-● 27 de 28 com o DADO PARADO — zero célula regenerada ou editada depois do gravado. Os dois lados leem as MESMAS células, então o dono não
-  é CADASTRO nem BATIDA: é ESTRUTURA, na derivação. Qual commit a moveu:
-
-  Ran 1 shell command
-
-● Dono medido: ESTRUTURA. Agora completo o DIFF que o aval pede literalmente — ele cobra 07, 08 e 09, e eu só tinha a 09 e a 10.
-
-  Ran 2 shell commands
-
-● Enquanto correm, o trabalho durável. Primeiro a célula do O48, cuja afirmação a medição da 10 falsificou:
-
-  Ran 3 shell commands
-
-● Agora o rótulo que a minha docstring prometia e o comando não cumpria (LEI-AKITA 8: rótulo diz o que a conta faz) — na raia do leitor:
-
   Ran 2 shell commands
 
 ● Escrevo o DIFF durável agora (a 09 e a 10 já medidas; 07/08 entram quando chegarem):
 
-  Escreve o artefato durável do DIFF
-  ⎿  $ cd /home/ronald/saas-hasner
-     cat > logs/o48p3_diff_gravado_x_lido_20261011.md <<'CAB'
-     # O48 passo 3 -- o DIFF que o aval EXIGE: `FechamentoMensal` GRAVADO x LIDO da celula
-     > `CORTES.md:65`, letra dele: *"a chave so vira em prod depois de o Ronald LER o DIFF"*.
-     > Medido em 11/10 na SOMBRA (`banco=s…
+  Ran 2 shell commands
 
-✶ Infusing… (8h 13m 56s · ↓ 772.6k tokens)
+● Scrub limpo (o casamento é a minha própria caixa alta "DADO PARADO", não um nome). Deliverable durável. Chamo o advisor antes de pousar o
+  marco.
+
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+
+● Oito pontos justos. #1 e #2 primeiro — eu afirmei "não é BATIDA" sem ter medido batida.
+
+  Ran 8 shell commands
+
+● O advisor estava certo e o número mudou: 25 de 28, não 27 — e três colabs se separam por dono. Corrijo o artefato com a prova em arquivo:
+
+  Ran 1 shell command
+
+● Background command "Roda o comparador na competencia 07 e 08 contra a copia curada" completed (exit code 0)
+
+  Ran 1 shell command
+
+● DIFF completo das quatro competências. A 10 em 0 de 189 e a 07 em 6 de 300 contra a 08 em 150 de 238 — o padrão confirma a leitura do
+  atraso do gravado. Atualizo o artefato:
+
+● Running 1 shell command…
+
+✢ Infusing… (8h 19m 27s · ↓ 782.3k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    5% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
