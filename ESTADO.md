@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 11/10/2026 12:54:31.**
+**Medido em 11/10/2026 13:00:01.**
 
 | | |
 |---|---|
@@ -133,42 +133,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Linha 176 é do _totais_da_lavratura (caminho DiaPago), não do comparador — então os dois lados dos 48 usam o mesmo adicional_noturno. A
-  comparação é legítima e o +50 h é real. Uma sonda em col411 diz de onde vem.
+
+  Ran 2 shell commands
+
+● 27 de 28 com o DADO PARADO — zero célula regenerada ou editada depois do gravado. Os dois lados leem as MESMAS células, então o dono não
+  é CADASTRO nem BATIDA: é ESTRUTURA, na derivação. Qual commit a moveu:
 
   Ran 1 shell command
 
-● Sinal invertido do que eu li nas tuplas: o GRAVADO de col411 é 163,44 h e o ONLINE 112,00 — a cura reduz noturnas. Confiro a ordem da
-  tupla e a assinatura real antes de refazer a tabela.
+● Dono medido: ESTRUTURA. Agora completo o DIFF que o aval pede literalmente — ele cobra 07, 08 e 09, e eu só tinha a 09 e a 10.
 
-  Ran 1 shell command
+  Ran 2 shell commands
 
-● Tupla confirmada: (resumo, tot) = (ONLINE, GRAVADO). Minha tabela estava com o sinal invertido. Refaço com o sinal certo.
+● Enquanto correm, o trabalho durável. Primeiro a célula do O48, cuja afirmação a medição da 10 falsificou:
 
-  Ran 1 shell command
-  ⎿  Read docs/AVAIS.md (24 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/sombra_run.sh (22 lines)
-  ⎿  Referenced file ../logs/foto_folga/diff_folha_o148_20261011.txt
+  Ran 3 shell commands
 
-● Task "RED e construção do segundo intervalo" completed in background
+● Agora o rótulo que a minha docstring prometia e o comando não cumpria (LEI-AKITA 8: rótulo diz o que a conta faz) — na raia do leitor:
 
-● Tabela corrigida e publicável: −870,50 h líquidas, 48 colabs de 221. Agora o dono da diferença (L-099) — e ele se pergunta ao git, não à
-  aritmética: o gravado é de 28/09 03:45, então a pergunta é qual commit moveu a regra depois disso.
+  Ran 2 shell commands
 
-  Pergunta ao git qual commit moveu a regra de noturnas e atraso
+● Escrevo o DIFF durável agora (a 09 e a 10 já medidas; 07/08 entram quando chegarem):
+
+  Escreve o artefato durável do DIFF
   ⎿  $ cd /home/ronald/saas-hasner
-     echo "=== commits que tocaram 'noturn' desde 28/09 (o gravado e de 28/09 03:45) ==="
-     git log --since=2026-09-28 --format='%h %ad %s' --date=format:'%d/%m %H:%M' -S'noturn' --pickaxe-regex -- app/ | head -30
-     echo
-     echo "=== e 'atraso' (24 colabs, TODOS descem, 26,20 h) =…
+     cat > logs/o48p3_diff_gravado_x_lido_20261011.md <<'CAB'
+     # O48 passo 3 -- o DIFF que o aval EXIGE: `FechamentoMensal` GRAVADO x LIDO da celula
+     > `CORTES.md:65`, letra dele: *"a chave so vira em prod depois de o Ronald LER o DIFF"*.
+     > Medido em 11/10 na SOMBRA (`banco=s…
 
-✢ Infusing… (8h 8m 27s · ↓ 750.9k tokens · thinking more)
+✶ Infusing… (8h 13m 56s · ↓ 772.6k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens

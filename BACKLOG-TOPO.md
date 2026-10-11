@@ -56,7 +56,7 @@ lista — ela e o que esta EM PE._
 | **O45** | EM-ABERTO-CARTAO-X-TELA | **REMEDIDO 02/10 06:2x, e o fato e MAIS  |
 | **O46** | EXECUTA-CLAUDE-6 / SINAL-QUE-MENTE | o que afirma |
 | **O47** | AUDITORIA-JSP02: ato de admin sem IP | **na fila BO, dentro do RASTRO-ADMIN (O4 |
-| **O48** | FECHAMENTO-ONLINE | espera aval |
+| **O48** | FECHAMENTO-ONLINE | espera `!` |
 | **O49** | INTERVALO-CADASTRADO-NAO-VIRA-HE | espera `!` |
 | **O50** | VINCULO-FIM-ANTES-DO-INICIO | espera `!` |
 | **O51** | CARTAO-COLUNA-SAIDA-ANT | nao comecado |
