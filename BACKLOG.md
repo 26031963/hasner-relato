@@ -5,6 +5,39 @@
 > **livre** = pode virar fatia agora, sem humano. **corte/aval/smoke/dinheiro-ate-export** = tem dono humano e espera.
 
 <!-- ORDEM-VIVA-TOPO: O48 -->
+<!-- ADENDO em 11/10 11:3x, AVAL DELE `CONTRATOS-ATE-A-VIRADA` (re-ordenacao, nao lei; a L-117
+     segue). Fonte que ele nomeia: `core/contratos_estruturais.py::linha_do_placar` (hoje **15/20**)
+     e `core/juizes.py::PENDENTES`.
+     ORDEM DA PRINCIPAL, substituindo a ordem viva DEPOIS do item em curso: (1) **O48 passos 3 e 4**
+     -> (2) **folha/export x um juiz por pergunta** (13 pendentes; *"as leis ja respondem: O44 a/b/c
+     'nada tranca' e 'o TXT e fotografia do calculo'"*) -> (3) **batida x um juiz por pergunta** (2
+     pendentes de dinheiro) -> (4) **escala x um juiz por pergunta** (S-ESCALA) -> (5) **O48 passo 6 e
+     os 25 crons de varredura** (R6 item 4, O248, O249), *"depois do item 4"*. O marcador do topo JA
+     aponta `O48` -- nada se move nele.
+     RAIA `wt-bos`: *"nunca fica vazia e nunca troca BO pela metade: o BO aberto vai ate o POUSO
+     (L-105, L-107) antes do seguinte"*; ordem *"o que esta em curso (cron da foto de folga, O44 itens
+     2-8) -> pouso da O207 -> resto da O148"*; BO provado novo entra ATRAS do BO em curso, *"so P7.1 de
+     producao fura"*; e **contrato da principal NAO espera BO, e BO NAO espera contrato** -- a pista de
+     teste segue uma so, com a regra que ja existe (L-117 POUSO-EM-COMBOIO / SUITE-UMA-VEZ-POR-ARVORE).
+     RAIA DO CHAMADO (`CHAMADO-EM-RAIA`, onde ja esta): **chamado x um escritor por entidade** (119
+     escritas fora da porta) ate a celula ficar verde, depois **chamado x um juiz por pergunta**, e a
+     **O168 entra nesta raia antes dela**.
+     LIMITES, dele: o **O48 passo 5 (TXT online) NAO vira em producao antes do export da competencia
+     10** -- *"se a celula folha/export exigir o passo 5, ela nao fecha antes de 20/10; nesse caso
+     dizer no RELATO em uma linha e seguir o item 3"*; juiz novo em batida/escala/chamado **so com a
+     frase `corte Ronald: juiz <nome> nasce`**, e os cortes *"chegam em aval separado ate 13/10" --
+     sem a frase, a pergunta sobe ao topo do RELATO com numero e a fila segue o proximo item
+     (PAREI-DE-LEI-NAO-DEVOLVE-TURNO)*; `motor_calculo_v2` so com aval explicito; **UI de fechamento
+     NAO se constroi por este aval**.
+     RESULTADOS OBSERVAVEIS: (1) `linha_do_placar()` sobe a cada celula fechada, MEDIDA no container e
+     colada no RELATO; (2) cada celula verde tem classe de teste existente e lista de excecoes VAZIA
+     (CLAUDE.md 4b); (3) PENDENTES da familia = 0 no MESMO commit em que a celula vira verde; (4) a
+     raia `wt-bos` com BO em curso em toda publicacao do ESTADO; (5) nenhum BO "pela metade" por mais
+     de um marco sem a linha de motivo (L-105).
+     PROIBIDO, literal: *"reclassificar papel de sitio para a celula virar verde; tirar pendente com a
+     impressao ainda no codigo; fallback; fatia posterior; juiz novo sem corte."*
+     PRONTO: *"RELATO com a celula nomeada, o numero de `linha_do_placar()` e o commit. Sem os tres =
+     INCOMPLETO com a lista do que falta."* -->
 <!-- ADENDO em 10/10 10:4x, AVAL DELE literal: *"fechada a O224, a principal volta ao miolo da
      O219 (versao da regra em impressao_insumos) antes de contratos e O228. A A0 foi preparo; a
      L-113 segue so no papel. Nenhuma lei nova."* Re-ordenacao, nao lei: a fila 1 passa a ser

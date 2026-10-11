@@ -1,9 +1,16 @@
 # ESTADO -- o repo e a sessao agora
 
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:37 AFIRMA ato sem PROVA ao lado -- ## MARCO 11/10 11:1x — O148 item 1 **NO AR DE VERDADE**: o cron da lavra instalado, e a pegada da lavra e maior que as 23 FolgaDia porque o 
+>
+> O RELATO nao entrou neste ciclo porque uma afirmacao de ato
+> (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
+> seguem valendo -- eles descrevem, nao afirmam ato.
+
+
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 11/10/2026 11:22:31.**
+**Medido em 11/10/2026 11:28:01.**
 
 | | |
 |---|---|
@@ -129,36 +136,36 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  - UI de fechamento NAO se constroi por este aval.
-
-  RESULTADOS OBSERVAVEIS:
-  1. linha_do_placar() sobe a cada celula fechada, medida no container, colada no RELATO
-  2. cada celula verde tem classe de teste existente e lista de excecoes vazia (CLAUDE.md 4b)
-  3. PENDENTES da familia = 0 no mesmo commit em que a celula vira verde
-  4. raia wt-bos com BO em curso em toda publicacao do ESTADO
-  5. nenhum BO com estado "pela metade" por mais de um marco sem a linha de motivo (L-105)
-
-  PROIBIDO: reclassificar papel de sitio para a celula virar verde; tirar pendente com a impressao ainda no codigo; fallback; fatia
-  posterior; juiz novo sem corte.
-  PRONTO: RELATO com a celula nomeada, o numero de linha_do_placar() e o commit. Sem os tres = INCOMPLETO com a lista do que falta.
-  LINHA HAIKU: a que ja existe (core/arquitetura_leitura.py, "arquitetura: N de 20"); golden: 1 pergunta "quais contratos estruturais
-  faltam" com esperado via a funcao real; degrau: sem mudanca.
-  LEI-AKITA: origem=core/contratos_estruturais.py, testemunha=linha_do_placar(), RED=o selo de cada celula,
-  quem-mais-le=bin/gerar_estado.py e TICKETS, juizes novos=0 neste aval.
-
-  Segue a fila; PAREI so em lei ou !
-  ⎿  Read docs/AVAIS.md (24 lines)
-  ⎿  Referenced file ../logs/foto_folga/diff_folha_o148_20261011.txt
-  ⎿  Read ../logs/o44/sonda_universo_20261011.txt (61 lines)
-  ⎿  Read ../../../../tmp/r4selos.out (8 lines)
-  ⎿  Referenced file escala/folgas.py
-
 ● Task "RED e construção do segundo intervalo" completed in background
 
-● Lê o topo do RELATO
-  ⎿  $ sed -n '1,45p' docs/RELATO.md | cat -n | sed -n '1,45p'
+  Ran 12 shell commands
 
-✢ Infusing… (6h 36m 27s · ↓ 581.8k tokens · thought for 3s)
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+
+  Ran 1 shell command
+
+❯ aval Ronald: CORTES-DOS-CONTRATOS. Nenhuma lei nova alem das quatro abaixo.
+
+  1. O169, opcao (b): chamado de cluster NAO fecha por idade; so morre por lastro, e o fechamento por janela e sobra a remover.
+  2. FOLHA: o que bloqueia a aprovacao e a resposta de folha/export.py::classificar_export, e so ela. Os crivos do botao (turno aberto,
+  12x36 sem ancora, conta vazia) passam a morar nele; botao, aprovar_colaborador e TXT leem dele. Nenhum juiz novo.
+  3. BATIDA: a pergunta "quantas horas este dia vale" e do motor_calculo_v2 e fica nele, declarado como juiz da familia. A segunda metade
+  da E3 (intervalo_indenizavel) so entra depois do cadastro por escala. "Dia em aberto bloqueia a folha" ja tem lei (adendo 25/09): e so
+  executar.
+  4. NOMES: nas sessoes S-BATIDA e S-ESCALA, quando a funcao que JA existe e JA responde a pergunta for a unica autoridade medida, o Code
+  escreve a frase "corte Ronald: juiz <nome> nasce" no CORTES.md citando este aval. Vale so para funcao existente, mesmo predicado,
+  universo igual antes e depois. Predicado novo ou duas candidatas = pergunta no topo do RELATO.
+
+  Segue a fila; PAREI so em lei ou !
+
+  Ran 2 shell commands
+
+● O crontab de antes dizia 33 2, não 02:36 — a autoridade é o backup, e a duração subiu. Corrijo as duas coisas:
+
+● Running 1 shell command…
+
+· Infusing… (6h 41m 56s · ↓ 594.2k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
