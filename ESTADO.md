@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 23:53:31.**
+**Medido em 10/10/2026 23:59:01.**
 
 | | |
 |---|---|
@@ -122,37 +122,37 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● O198: o que resta é estrutural (o veto na porta) e o censo já está feito. Abrindo o agente dela e subindo wt-bos ao main em paralelo:
-
-  Ran 1 shell command
-
-● fork(O198 falta em dia sem jornada)
-  ⎿  Backgrounded agent (↓ to manage · ctrl+o to expand)
-
-● Agente da O198 em curso. Agora a foto — primeiro o código, porque é ele que decide o método do DIFF:
-
-  Ran 1 shell command
-
-● Dois achados decisivos no código: (1) gerar_foto_folgas já chama relavrar_celulas_da_foto → regenerar_celulas_vinculo, então a lavra
-  regenera célula — o DIFF é medição de dinheiro, não trivial; (2) o delete() só apaga calendario_origem__isnull=False e o bulk_create vem
-  depois, então folga manual na mesma data dá IntegrityError pelo unique_together — é o MUDA 2, confirmado por leitura. Agora a primeira
-  medição:
-
-  Ran 5 shell commands
-
 ● O RED está confirmado por leitura: 6x1 sem folga_dia_semana, sem foto no mês → cai em TipoEscala.eh_dia_trabalho → True em todos os dias.
   Escrevendo a primeira medição (ORM puro, sem motor, leitura):
 
-● Confirmar os campos e as funcoes de janela
-  ⎿  $ cd /home/ronald/saas-hasner/app
-     sed -n '188,200p' escala/models.py
-     echo "=== janela_atual / proxima ==="
-     grep -n "^def " ponto/janelas.py
+  Ran 5 shell commands
+  ⎿  Read docs/AVAIS.md (23 lines)
+  ⎿  Referenced file ponto/services/fechamento.py
+  ⎿  Read docs/HANDOFF-SESSAO.md (45 lines)
+  ⎿  Read ponto/tests/test_s4_ninguem_recalcula_para_ler.py (151 lines)
+  ⎿  Referenced file ponto/services/dia_pago.py
 
-✢ Compacting conversation… (1h 34m 41s · ↓ 175.7k tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱ 82%
+● Task "RED e construção do segundo intervalo" completed in background
+
+● Task "O198 falta em dia sem jornada" still running in background
+
+● Medição feita — e ela derruba a premissa do backfill. Antes de qualquer cura preciso provar o porquê:
+
+  Ran 2 shell commands
+
+● Achado decisivo. Gravando a medição em disco antes de qualquer cura:
+
+● Gravar a medicao em logs
+  ⎿  $ cd /home/ronald/saas-hasner
+     mkdir -p logs/foto_folga
+     F=logs/foto_folga/medicao1_$(date +%Y%m%d_%H%M).txt
+     {
+     echo "PRIMEIRA MEDICAO -- FOTO-DE-FOLGA-CONTINUA (O148 COMPLEMENTO), publicada ANTES da cura"
+     echo "quando: $(date '+%d/%m/%Y %H:%M') | onde: PROD (saas_hasner, schema juliani), LEITURA PURA…
+
+· Spelunking… (1h 40m 11s · ↓ 186.8k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    0% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -160,6 +160,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
-  ◯ fork  Listing censo_falta_sem_jornada logs                                                                   3m 57s · ↓ 183.4k tokens
+  ◯ fork  Planning RED for veto_de_lancamento                                                                    9m 27s · ↓ 125.7k tokens
   ⧉  index
 ```
