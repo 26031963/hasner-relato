@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 22:26:34.**
+**Medido em 10/10/2026 22:32:01.**
 
 | | |
 |---|---|
@@ -126,42 +126,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Aval novo recebido: FOTO-DE-FOLGA-CONTINUA. Registrando primeiro (PROMPT-NAO-SE-REPETE exige linha no PROMPTS e item no OBRAS no mesmo
-  turno), e me orientando no sítio:
+  FLUXO PWA: as mesmas telas HTML sem via_app -> PlataformaGateMiddleware julga por User-Agent (android -> gate_android "instale o app";
+  admin + mobile -> gate_admin_mobile; UA vazio passa).
 
-  Searched for 1 pattern, read 1 file, ran 5 shell commands
-  ⎿  Read AVAIS.md (23 lines)
-  ⎿  Read HANDOFF-SESSAO.md (45 lines)
-  ⎿  Read ../ponto/tests/test_s4_ninguem_recalcula_para_ler.py (151 lines)
-  ⎿  Referenced file ../ponto/services/fechamento.py
-  ⎿  Read ../ponto/janelas.py (109 lines)
+  CADEIA DE MIDDLEWARE (core/middleware.py): porta de sessao (usuario nao-staff barrado da web admin) + PlataformaGateMiddleware, com
+  isencoes /api/ /static/ /media/ /health /webview/ /sw.js /manifest e sessao via_app.
 
-● Task "RED e construção do segundo intervalo" completed in background
+  JUIZES DE ACESSO: tem_acao (colaboradores/mixins.py, permissao rbac_* via Group x Setor) = juiz de tela/acao; pode_agir_chamado
+  (chamados/utils.py) = juiz contextual por area de chamado; is_admin_user (api/login_helpers) = corte admin-so-PC no login; is_staff =
+  populacao staff x colab (semantica, nao permissao).
 
-❯ aval Ronald: turno devolvido sem trava nomeada. Commite a cura da O48 que estava na copia se a suite estiver verde, conserte o import do
-  r4_passo1_medicao.py e rode a medicao do R4. Segue a fila; PAREI so em lei ou !
+  IDENTIDADE DE APARELHO: DeviceColaborador (device_id unico, plataforma, version_code, gravado no device-register pelos dois kernels);
+  colaborador.plataforma_principal e FOSSIL do 1o pareamento -- telemetria, nunca juiz de gate.
 
-  Ran 3 shell commands
+  SESSAO WEB: 18 h (SESSION_COOKIE_AGE 64800) -- mudanca de gate leva ate 18 h para alcancar a frota.
 
-❯ aval Ronald: POUSO-EM-COMBOIO. Raia pronta para a suite pergunta se a outra (principal ou wt-bos) fica pronta em ate 30 min; se sim, UMA
-  copia com main + as duas, UMA suite, e as duas pousam em sequencia pela L-107 com o hash da arvore certificada
-  (SUITE-UMA-VEZ-POR-ARVORE). Se nao, roda sozinha -- ninguem espera mais de 30 min. Vermelho no comboio = separa e roda cada uma.
-  Conflito de merge entre as duas = fora do comboio. Instrumento segue em pouso proprio (L-105). Nenhuma lei de negocio; e regra de pista.
+  TIPO DA BATIDA: ao vivo, api/views_core.py sobrescreve o tipo do cliente por proximo_tipo_de quando a diferenca e de ate 5 min;
+  retroativa, ponto/turnos.py::tipo_por_marcos grava o tipo do MARCO quando a batida atrasada casa a menos de 30 min com marco de tipo
+  oposto (caso-ancora col607).
+
+  GUARDA DE PARIDADE DO MATERIALIZADOR: chamados/models.py::_vizinha_mesmo_tipo recusa plantio quando a batida imediata (menos de 12 h)
+  tem o mesmo tipo.
+
+  REGRA DE MANUTENCAO DO MAPA: so muda quando a TOPOLOGIA muda (rota do caddy, middleware, discriminador, fluxo, juiz); nunca por feature.
+
   Segue a fila; PAREI so em lei ou !
 
-  Ruff dos dois arquivos dentro do container, contra o ruff.toml da copia
-  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
-     C2=$S/o48sc/copia
-     R=/home/ronald/saas-hasner
-     cd $R && source bin/recursos.sh >/dev/null 2>&1
-     docker run --rm $TESTE_DOCKER -v "$C2/app:/app:ro" --tmpfs /app/.ruff_cache -w /app saas-hasner-core:latest …
+  Ran 9 shell commands
 
-✶ Spelunking… (7m 44s · ↓ 11.1k tokens)
-                                                                                                   ✔ Update installed · Restart to update
+  Advising using Fable 5.1
+
+✢ Spelunking… (13m 11s · ↓ 31.5k tokens · thought for 1s)
+                                                                                                                    2% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
