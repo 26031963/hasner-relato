@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 11/10/2026 04:00:31.**
+**Medido em 11/10/2026 04:05:45.**
 
 | | |
 |---|---|
@@ -124,15 +124,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Discriminação do R4 par 6 fechada e durável; pouso armado e esperando o portão.
-
-  O que mediu (banco=sombra, só leitura, cpu7 para não disputar com a suíte):
-
-  ┌───────┬──────────────────────────┬─────────────────────────────────────────────────────────────────────────────────────────────────┐
-  │ perna │         pergunta         │                                            resposta                                             │
-  ├───────┼──────────────────────────┼─────────────────────────────────────────────────────────────────────────────────────────────────┤
-  │ 1     │ o gravado da 09 moveu?   │ não — 0 de 11.475 DiaPago re-lavrados depois de 03/10                                           │
-  ├───────┼──────────────────────────┼─────────────────────────────────────────────────────────────────────────────────────────────────┤
   │ 2     │ o espelho moveu?         │ não — a função REAL devolve os mesmos 7, com os mesmos valores, em ca2d50d9 (03/10), 1f3d616f   │
   │       │                          │ (08/10) e HEAD                                                                                  │
   ├───────┼──────────────────────────┼─────────────────────────────────────────────────────────────────────────────────────────────────┤
@@ -155,11 +146,20 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
   placar_estrutural não tem importador de runtime, só bin/gerar_estado.py, então esse commit não pede deploy.
 
 ✻ Cogitated for 5h 35m 33s · done 3:54 AM · 2 shells still running
-                                                                                                                    5% until auto-compact
+
+❯ segue a fila; PAREI so em lei ou !
+
+  Estado da espera do portao
+  ⎿  $ cd /home/ronald/saas-hasner && date '+%H:%M:%S'; tail -2 logs/espera_sombra_20261011.log; ls logs/crons_em_curso/ 2>&1; echo "---
+     HEAD ---"; git rev-parse --short HEAD | cat
+
+· Compacting conversation… (2m 57s · ↓ 444 tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱ 84%
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ pousa os dois quando o portão abrir
+❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
