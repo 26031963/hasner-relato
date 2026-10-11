@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 11/10/2026 05:35:45.**
+**Medido em 11/10/2026 05:40:45.**
 
 | | |
 |---|---|
@@ -33,7 +33,10 @@ a96169b5 [PLACAR-ESTRUTURAL] o par 6 do R4 se pergunta ao CONTADOR, e ele diz 7 
 
 ```
  M app/config/crons_duracao.json
+ M app/docs/AVAIS.md
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/PENDENTES_RONALD.json
+ M app/docs/RELATO.md
  M bin/sonda_frota.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -123,6 +126,10 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+● Decisivo: timestamp_dispositivo_ns preenchido = 0 de 505, provider vazio em 100%, from_mock = 0. Pelo contrato de presenca.py:14 esses
+  campos são do APK Kotlin — o app nativo nunca pingou uma única vez. E 45% dos pings são de um colab só. Agora o cliente que existe no
+  repo:
+
   Searched for 1 pattern, ran 1 shell command
 
 ● Agora a origem está medida inteira. O PWA agenda o ping com um setTimeout de 15–90 min dentro da página (static/pwa.js:380-390), que
@@ -133,16 +140,11 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Agora as linhas de fila que o censo achou, e a pergunta no topo do RELATO:
 
-● Le o formato de um item recente do PENDENTES
-  ⎿  $ python3 -c "
-     import json
-     d=json.load(open('docs/PENDENTES_RONALD.json'))
-     print(type(d), (list(d.keys()) if isinstance(d,dict) else len(d)))
-     itens = d['itens'] if isinstance(d,dict) and 'itens' in d else d
-     print('n itens', len(itens))
-     for x in itens:
-     if x.get('id','').startswith('R4-PAR6'):
-     print(…
+● Reproduz a medida do aval nos 3 colabs na sombra
+  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && cat > $S/sonda_o197_tres.py
+     <<'PYEOF'
+     # O197 FUTURO-NAO-E-EM-ABERTO -- reproduzir a medida do aval nos 3 colabs nomeados.
+     # SO LEITURA. Banco=sombra, assert literal. Imprime so ids, datas, status e …
   ⎿  Read docs/AVAIS.md (25 lines)
   ⎿  Referenced file docs/RELATO.md
   ⎿  Read ../../../../tmp/r4selos.out (8 lines)
@@ -152,9 +154,10 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Task "RED e construção do segundo intervalo" completed in background
 
-· Infusing… (49m 40s · ↓ 94.0k tokens)
+· Compacting conversation… (54m 40s · ↓ 110.8k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 33%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

@@ -1,4 +1,4 @@
-# AVAIS NA MESA — 8
+# AVAIS NA MESA — 9
 
 > Gerado por `bin/gerar_avais.py` a partir de `app/docs/PENDENTES_RONALD.json`.
 > **So itens ABERTOS.** Item respondido SOME daqui na proxima geracao -- a historia dele fica
@@ -14,10 +14,11 @@
 | 6 | `O223-PORTA-DA-APLICACAO-SMOKE` | **smoke** | 2026-10-10T08:55 | 2 commits: codigo em ae775a7b (com o deploy --sem-migrate) e o link do hub no commit SEGUINTE do marco (sem sha: um commit nao pode citar o proprio, e este foi emendado uma vez), de proposito DEPOIS do reload -- template | `smoke Ronald: abri Configuracoes -> Aplicacao de convencao, cadastrei uma linha com motivo, a lista me mostrou ela ativa e o empate dito, desativei e ela ficou la como inativa com a trilha; e na edicao de uma empresa o Regime trabalhista salvou -- pode fechar a O223 pouso A` |
 | 7 | `O148-TEMPLATE-DE-CALENDARIO-DE-FOLGA` | **!** | 2026-10-11T01:50 | 71 vinculos no universo da lavra em 10/2026 (autoridade `escala/folgas.py::vinculos_com_calendario_no_mes`): 63 com foto, 303 `FolgaDia` -- 303 de `calendario_origem` e ZERO manual --, 8 sem foto. Dos 8: 7 em `cal#28` (` | `corte Ronald: o `!` do backfill dos 7 esta vazio como foi dado (o `cal#28` manda ZERO data, entao nao ha o que gravar) -- preencher template de calendario de folga e CADASTRO do admin pela UI, e eu/o DP preenchemos os tamanhos 28 e 30 dos calendarios `dias_mes` e as celulas do `cal#28`; o cron da la` |
 | 8 | `R4-PAR6-DIFERENCA-DA-09-EXPORTADA` | **!** | 2026-10-11T03:05 | 7 dia-colab na 09, 0 na 10, universo do TXT 221/19 (prova logs/placar_estrutural/r4_par6_20261011_0223.txt, banco=sombra, rc 0). A FAVOR do colaborador no gravado: col146, ~11,9 h a MAIS em 2 dias (14,99 e 14,89 gravadas | `! Ronald: a diferenca do par 6 na 09 EXPORTADA -- col146 com ~11,9 h a mais e col290+col499 com 16,0 h a menos -- sai como Pauta DP com os dois numeros, SEM tocar o gravado da 09.   OU   autoriza a porta REGEN-EM-EXPORTADA nesses 4 colabs, com TXT parcial de retificacao e hash publicado.` |
+| 9 | `GEO-SILENCIO-DE-PING-ORIGEM-NO-CLIENTE` | **!** | 2026-10-11T06:05 | 14 dias (27/09-11/10), banco=sombra, rc 0: 6177 turnos / 480 colabs com entrada; 0 ping em 6143 (99,4%), 1-3 ping em 32, 4+ ping em 2 -- e 4 e o 'esperado' que ponto/presenca.py:12 declara. 444 de 480 nunca pingaram; dos | `! Ronald: CURA O CLIENTE PRIMEIRO -- o ping passa a nascer de evento que sobrevive a aba fechada (service worker / disparo na batida e no visibilitychange) mais o release do APK, irmao do APP-DESENHA-A-PALAVRA-DO-DIA -- e o vigia de silencio vem DEPOIS, quando o ping existir.   OU   constroi o vigia` |
 
 ---
 
-Total no JSON: **227** · aberto **8** · respondido **58** · sem-motivo **161**.
+Total no JSON: **228** · aberto **9** · respondido **58** · sem-motivo **161**.
 
 > `sem-motivo` nao e "resolvido": e *"ninguem julgou este item"*. A ordem de 18:4x proibe
 > triar os 163 antigos, entao eles ficam ai, nomeados, em vez de serem chutados para um lado.
