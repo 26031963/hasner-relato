@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 11/10/2026 19:25:02.**
+**Medido em 11/10/2026 19:30:11.**
 
 | | |
 |---|---|
@@ -28,25 +28,25 @@ RELATO, com a lista de nomes do banco como autoridade._
   - 0 commit(s) a frente do `main`, 62 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **154.1 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **154.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261011`) -- **SEM AGENTE**
-  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **16.1 h** (passou das 6 h da L-105)
+  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **16.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **270.2 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **270.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **174.4 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **174.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 4 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **0.8 h**
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **292.1 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **292.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
-  - 1 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **0.1 h**
+  - 1 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **0.2 h**
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
 - **21 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
@@ -164,44 +164,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  afirmação minha que ia entrar no commit:
+
+  O passo 3 pousa 1 de 4, não 4 de 4. grep -rn fechamento_lido --include=*.py fora de testes, na árvore da raia: 1 chamador de produção —
+  relatorios/cartao_pela_celula.py:73 (mais o command cartao_x_txt_divergentes.py). Os três restantes seguem lendo o GRAVADO direto:
+  folha/services/ranking_he.py:179, ponto/views.py:945 (espelho de um colab) e inteligencia/management/commands/calcular_scores.py:72. Os
+  :1026/:1082 de ponto/views.py são frota e são do passo 6.
+
+  Corrigido nos quatro sítios que diziam o plural, todos ainda não commitados: docs/FECHAMENTO-ONLINE.md:60 (item 3 deixa de estar riscado
+  como FEITO), docs/TICKETS.md:125, as duas células de estado do docs/BACKLOG.md e o corpo do commit (a linha LEI-AKITA nomeava "os 4
+  leitores" como origem — agora nomeia o cartão). Duas linhas de fila novas no RELATO: a do 1-de-4 e a do esmeril. A prova de frota
+  (362/509/264/ZERO) não muda: ela mede gravado × lido nos DADOS, vale igual para os quatro leitores.
+
+  Esmeril: zero órfão. A única chamada removida (from folha import export as fx) mudou de sítio para _totais_do_fechamento —
+  eventos_do_fechamento, _ciclo_do_colab, feriado_12x36_em_dobra e datas_falta seguem com chamador, nada a apagar pela L-111.
+
+  Prontos para a corrente: interseção sujo × raia vazia (o merge não bate), regua_tickets: OK — 11 citações com linha, portão da sombra
+  dia=20261011 status=OK tipo=completa diverge=0 (o deploy.sh --sem-migrate não vai recusar).
 
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: PLACAR-ESTRUTURAL -- O ESTRUTURAL SE SEPARA DO DADO (corte dele 02/10 22:5x, que SUBSTITUI o item 3 da
   ordem das 21:4x -- o resto d
 
-  Searched for 2 patterns, ran 26 shell commands
-  ⎿  Referenced file docs/RELATO.md
-  ⎿  Read docs/AVAIS.md (25 lines)
-  ⎿  Read docs/FECHAMENTO-ONLINE.md (76 lines)
-  ⎿  Referenced file folha/export.py
-  ⎿  Read ../logs/o48p4_prova_lido_20261011.out (27 lines)
+  Esperar o veredito da suite em primeiro plano · 1m 56s
+  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; until grep -qE '^rc='
+     "$S/suite_cert.out"; do sleep 15; done; date '+%H:%M:%S'; grep -E '^(OK|FAILED)($| \()' "$S/suite_cert.out" | tail -1; grep -E '^Ran
+     [0-9]+ tests' "$S/suite_cert.out" | tail -1; … (1m 56s)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-● Task "RED e construção do segundo intervalo" completed in background
-
-● Task "Raia wt-bos: O44 itens 2-8" still running in background
-
-● Task "Raia wt-ui: UI-FECHAMENTO etapa 1" still running in background
-
-● Task "Suite cheia certificadora na raia" still running in background
-
-› Message from @ab96816178ba62d06 (ctrl+o to expand)
-
-● Agent "Raia wt-ui: UI-FECHAMENTO etapa 1" finished · 2h 10m 23s
-
-  Ran 7 shell commands
-
-● Advising using Fable 5.1
-
-✢ Infusing… (14h 38m 56s · ↓ 1.3m tokens)
+✽ Infusing… (14h 44m 5s · ↓ 1.4m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    9% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
 ❯ ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Reading test_pauta_do_dia.py assertions                                                   2h 13m 8s · ↓ 90.5k tokens
+  ◯ general-purpose  Adding Pauta DP line to RELATO.md                                                       2h 18m 18s · ↓ 116.0k tokens
   ⧉  index
 ```
