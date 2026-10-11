@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 11/10/2026 17:47:32.**
+**Medido em 11/10/2026 17:53:02.**
 
 | | |
 |---|---|
-| `HEAD` local | `455cda29 [O48] pouso da raia raia-o48p4: o DIFF de folha passa a LER a competencia, e a prova de frota diz que ele nao escreve` |
+| `HEAD` local | `30d48a4d [O250] "agente vivo" e DECLARACAO, nunca processo: o ESTADO ganha uma linha por raia, e a medicao reescreveu o desenho` |
 | `origin/main` | `d20a0e45 [O219] pouso: os docs do marco A0-b entram junto, e o merge que eu pedi sem commit virou FAST-FORWARD -- o codigo estava na arvore viva antes deste commit` |
-| commits a subir (`ahead`) | **35** |
+| commits a subir (`ahead`) | **36** |
 
 ## Fabrica
 
@@ -22,25 +22,25 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2384.0 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2384.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
-  - 0 commit(s) a frente do `main`, 43 arquivo(s) sujo(s)
+  - 0 commit(s) a frente do `main`, 46 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **152.5 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **152.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261011`) -- **SEM AGENTE**
-  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **14.5 h** (passou das 6 h da L-105)
+  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **14.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **268.6 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **268.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
   - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **172.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2.6 h**
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2.7 h**
   - sem declaracao em `logs/raias/wt-o48p3.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
   - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **290.5 h** (passou das 6 h da L-105)
@@ -57,28 +57,19 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+30d48a4d [O250] "agente vivo" e DECLARACAO, nunca processo: o ESTADO ganha uma linha por raia, e a medicao reescreveu o desenho
 455cda29 [O48] pouso da raia raia-o48p4: o DIFF de folha passa a LER a competencia, e a prova de frota diz que ele nao escreve
 00e4593a [O48] o DIFF de folha passa a LER a competencia, e o que isso compra nao e velocidade: e poder medir em PROD
 541ce443 [O48] a cura do UNIVERSO do fechamento: `situacao='ativo'` era um SEGUNDO juiz de "esta afastado?", e a cura muda QUEM esta no TXT, nao so quanto
 89ed5deb [O148] o cron da lavra da foto de folga INSTALADO, e a medicao derrubou minha premissa: a lavra tambem re-lavra a CELULA, nao so grava FolgaDia
-faa783e1 [O197] pouso da raia wt-bos: "Em aberto" era 1,4% verdade, e a cura separa AUSENCIA de PRESENCA em vez de pedir ao leitor que se comporte
 ```
 
 ## `git status --short`
 
 ```
  M app/config/crons_duracao.json
- M app/docs/AVAIS.md
- M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
- M app/docs/PENDENTES_RONALD.json
- M app/docs/PROMPTS.md
- M app/docs/RELATO.md
- M bin/gerar_estado.py
  M bin/sonda_frota.sh
-?? bin/raia_agente.sh
-?? bin/raias_estado.py
-?? bin/tests/test_raia_declarada_no_estado.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -167,10 +158,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Task "Raia wt-ui: UI-FECHAMENTO etapa 1" still running in background
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
   Ran 1 shell command
 
@@ -183,28 +170,32 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
   online) segue travado ate o export da competencia 10. Os colabs com horas e zero hora realizada no gravado das exportadas (6, 14 e 2)
   saem como Pauta DP com os dois numeros, sem apply. Segue a fila; PAREI so em lei ou !
 
-● Marcar o ! do passo 5 como respondido e regerar o AVAIS
-  ⎿  $ cd /home/ronald/saas-hasner/app; python3 - <<'PYEOF'
-     import io, json, subprocess
-     p = 'docs/PENDENTES_RONALD.json'
-     itens = json.load(io.open(p, encoding='utf-8'))
-     alvo = [x for x in itens if x.get('id') == 'O48-PASSO5-CHAVE-COM-O-DIFF-LIDO']
-     assert len(alvo) == 1, alvo
-     x = alvo[0]
-     assert x['estado…
+  Committed 30d48a4d, ran 22 shell commands
+  ⎿  Read docs/AVAIS.md (24 lines)
+  ⎿  Read docs/FECHAMENTO-ONLINE.md (76 lines)
+  ⎿  Read ../logs/o48p4_prova_lido_20261011.out (27 lines)
+  ⎿  Referenced file ../../wt-o48p4/app/folha/management/commands/simular_folha.py
+  ⎿  Read ../../wt-o48p3/app/core/tests/test_selo_teste_sem_relogio.py (85 lines)
 
-✢ Compacting conversation… (13h 1m 27s · ↓ 1.2m tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱ 94%
+● Task "RED e construção do segundo intervalo" completed in background
+
+● Task "Raia wt-bos: O44 itens 2-8" still running in background
+
+● Task "Raia wt-ui: UI-FECHAMENTO etapa 1" still running in background
+
+● Advising using Fable 5.1
+
+✢ Infusing… (13h 6m 57s · ↓ 1.2m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    0% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Listing uncommitted changes in cartorio.py and tranca_do_dia.py                            35m 38s · ↓ 154.2k tokens
-  ◯ general-purpose  Checking ruff on lavrar_retrato_folha.py                                                   35m 38s · ↓ 143.9k tokens
+❯ ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
+  ◯ general-purpose  Counting RELATO.md lines before inserting MARCO                                              41m 9s · ↓ 78.1k tokens
+  ◯ general-purpose  Checking ruff on lavrar_retrato_folha.py                                                    41m 9s · ↓ 143.9k tokens
   ⧉  index
 ```
