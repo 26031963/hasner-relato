@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 11/10/2026 01:35:45.**
+**Medido em 11/10/2026 01:40:45.**
 
 | | |
 |---|---|
@@ -123,38 +123,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-      79 -    # 2,6 s COM o boot do Django. 120 s e o teto do pior caso -- os 132 vinculo-mes
-      80 -    # virando alvo de uma vez, que e o dia em que os 65 templates vazios forem
-      81 -    # preenchidos pelo admin -- e ainda deixa um minuto antes do gerador das 05:50.
-      79 +    # 2,6 s COM o boot do Django. REMEDIDO 11/10 com a janela do aval (corrente +
-      80 +    # SEGUINTE, 3 meses): `medir()` 0,4-0,6 s sobre 203-213 vinculo-mes, e o `--apply`
-      81 +    # real **1,9 s para 3 alvos = 0,65 s/alvo**; o pior caso ja datado -- os 66 alvos de
-      82 +    # 21/10, quando dezembro entra na janela -- da **~43 s**. 120 s segue sendo teto, nao
-      83 +    # estimativa, e ainda deixa um minuto antes do gerador das 05:50. O teto absoluto
-      84 +    # (os 83 templates vazios preenchidos pelo admin de uma vez) cabe nele.
-      85      'lavrar_foto_folgas': 120,
-      86      'detectar_cluster_espurio': 30, 'detectar_par_relampago': 20,
-      87      'apurar_furos_diarios': 45, 'processar_cartorio': 60, 'supra_juiz': 60,
+  Registro pela porta canônica: $S/pouso_pendentes_o148.py acrescenta O148-TEMPLATE-DE-CALENDARIO-DE-FOLGA (!, não trava a fila 1) e
+  devolve o JSON na forma do bin/gerar_avais.py (indent=2); ensaiado em cópia — 226 itens, e a 2ª chamada não faz nada.
 
-  Escrever as duas mensagens de pouso e ligá-las ao runbook
-  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
-     cat > "$S/msg_pouso_o198.txt" <<'TXTEOF'
-     [O198] pouso 1 do COMBOIO: a falta em dia sem jornada passa a ser recusada NA PORTA, e a suite que certifica este codigo correu UMA
-     vez para os dois pousos
-     Merg…
-  ⎿  Referenced file ../../wt-bos/app/config/crons.py
-  ⎿  Read ../../wt-bos/app/escala/management/commands/lavrar_foto_folgas.py (190 lines)
-  ⎿  Referenced file ../../wt-bos/app/escala/tests/test_foto_folga_continua.py
-  ⎿  Read docs/AVAIS.md (23 lines)
-  ⎿  Read docs/HANDOFF-SESSAO.md (45 lines)
+  Runbook + mensagens: $S/pouso_runbook_o148.md com os dois pousos pela L-107, a prova git diff --stat 678c1a73 HEAD -- . ':!app/docs'
+  vazia, o crons.sh install (o deploy.sh não instala crontab) e as duas mensagens prontas (msg_pouso_o198.txt, msg_pouso_foto.txt). Uma
+  descoberta que mudou a obrigatoriedade da ordem: a linha de TICKETS do O148 se insere acima da âncora do O198, e essa âncora não existe
+  no main (vem do merge 50d2a6f6, está no comboio na linha 121) — então O198 primeiro deixou de ser preferência e virou dependência. Rodei
+  o extrator de citações da regua_tickets nas duas mensagens: O198 e O148, um id cada, e os [(2026,9),…] da prosa não casam (o regex exige
+  [A-Z]).
 
-● Task "RED e construção do segundo intervalo" completed in background
+  Censo do marco (ESMERIL): meses_da_janela tem 1 chamador de produção e 1 de teste, nenhum rótulo velho sobrou, nenhum órfão. Os 4 achados
+  de fora do marco foram para logs/fila/o148_achados_laterais_20261011.txt — calendário de folga sem trilha (LEI-AKITA 7), a validação que
+  a tela deveria ter, e o agente aa14fd1a6ffa27253 que voltou "completed" sem commitar (medido: a árvore dele é ancestral do main).
 
-● Task "Rodar a suite cheia unica sobre a arvore nova do comboio" still running in background
+  Suite em logs/comboio/suite_comboio_20261011_0140.txt, 12 min corridos, veredito por volta de 01:49 — leio pela forma estrita da L-074. O
+  pouso em si não acontece antes de ~04:55: o portão do deploy é cego até 04:00 e o carimbo de hoje só nasce depois do cron das 04:10.
 
-· Spelunking… (3h 16m 55s · ↓ 370.8k tokens)
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: PLACAR-ESTRUTURAL -- O ESTRUTURAL SE SEPARA DO DADO (corte dele 02/10 22:5x, que SUBSTITUI o item 3 da
+  ordem das 21:4x -- o resto d
+
+  Ver como o par 6 foi medido
+  ⎿  $ cd /home/ronald/saas-hasner
+     grep -n 'espelho_x_dia_pago\|col935\|col882\|par 6\|PAR 6' logs/e6_cauda2c/r4_pares.txt 2>/dev/null | head -20
+     echo "=== arquivos do r4_pares ==="; ls -l logs/e6_cauda2c/ | head -15
+     echo "=== como medir() calcula espelho_x_dia_pago ==="
+     grep -n 'espelho_x_dia_pago' app…
+
+· Compacting conversation… (3h 21m 55s · ↓ 382.9k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 64%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
