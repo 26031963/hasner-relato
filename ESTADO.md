@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 11/10/2026 01:50:46.**
+**Medido em 11/10/2026 01:56:01.**
 
 | | |
 |---|---|
@@ -123,6 +123,11 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: PLACAR-ESTRUTURAL -- O ESTRUTURAL SE SEPARA DO DADO (corte dele 02/10 22:5x, que SUBSTITUI o item 3 da
+  ordem das 21:4x -- o resto d
+
   Ran 17 shell commands
   ⎿  Read docs/AVAIS.md (23 lines)
   ⎿  Referenced file ../../wt-bos/app/config/crons.py
@@ -143,22 +148,17 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Background command "Esperar o fim da suite por ARQUIVO" completed (exit code 0)
 
-  Conferir o diagrama com o settings correto · 2s
-  ⎿  $ cd /home/ronald/saas-hasner
-     . bin/recursos.sh >/dev/null 2>&1
-     for W in /home/ronald/wt-bos /home/ronald/wt-comboio; do
-     echo "=== $W ($(git -C $W rev-parse --short HEAD)) ==="
-     timeout 240 docker run --rm $TESTE_DOCKER \
-     -v "$W/app:/app:ro" --tmpfs /app/logs --tmpfs /app/media \
-     saas-hasner-core:la…
+● Conferir as chaves do retorno de medir
+  ⎿  $ cd /home/ronald/saas-hasner/app
+     sed -n '540,575p' folha/porta_export.py
 
-✽ Spelunking… (3h 31m 56s · ↓ 395.6k tokens)
+· Spelunking… (3h 37m 11s · ↓ 411.1k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    8% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
