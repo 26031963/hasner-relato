@@ -128,6 +128,32 @@ a lista que a L-099 nomeia como autoridade do dono e cega em 2 dos 4. PROVA: `lo
   chama "N commit a frente do `main`" o que `rev-list` conta numa historia SEM merge-base, e cobra L-105 de uma raia
   que nao tem como mergear. O rotulo certo e "historia disjunta", e o selo da L-105 nunca podera ficar verde com ela.
 
+## MARCO 11/10 20:1x — UI-FECHAMENTO-NOVA etapa 1 (complemento do passo 6 da O48): a tela do fechamento LE um retrato GRAVADO, e o badge e o len da MESMA lista que a tabela mostra
+
+LEI-AKITA: origem=folha/fora_da_folha.py::fora_da_folha (le folha/export.py::classificar_export), testemunha=o retrato GRAVADO (folha/models.py::RetratoFolha.linhas), RED=folha/tests/test_retrato_folha_contador.py + test_retrato_folha_smoke_chromium.py, quem-mais-le=censo por AST em folha/tests/test_retrato_folha_um_derivador.py, juizes novos=0
+- Tela nova FORA do menu (`folha/urls.py::retrato_folha`) responde "quem entra na folha desta competencia,
+  quem esta bloqueado, e por que?" LENDO retrato GRAVADO, sem calcular ao abrir (PROVA:
+  `test_MORDE_a_tela_NAO_calcula_ao_abrir`, as duas fontes patcheadas, `call_count == 0`).
+- `fora_da_folha` ganhou `com_itens=False` ADITIVO (PROVA: `test_com_itens_False_devolve_EXATAMENTE_o_que_
+  devolvia`); `itens` sai da MESMA chamada de `classificar_export`: 0 derivador novo de quem entra (AST).
+- `folha/models.py::RetratoFolha` (molde `core.PlacarSituacional`, unico por empresa+mes+ano), ESCRITOR
+  UNICO `manage.py lavrar_retrato_folha --apply` (PROVA: `LavradorEscritorUnicoTest`, 2x = mesmo estado).
+- `folha/retrato_folha.py::linhas_do_retrato` e a UNICA derivacao: badge e tabela sao a MESMA chamada
+  (L1 -- PROVA: badge lido da PAGINA == `html.count('data-retrato-linha=')`).
+- COLUNA "dias que seguram" NASCEU porque a fonte ENTREGA (`motivos_retencao_celula(com_dias=True)`, o
+  juiz do export), e so para retido por `furo_espelho`; nos outros 5 motivos sai VAZIA, nunca zero.
+- Estilo nao se moveu (O122): `divergencias: 0 de 14 elementos`; o selo do O122 so GANHOU caso (3 que
+  MORDEM, 48 linhas, ZERO removida) e o include do icone na pilula e GUARDADO por `{% if it.icone %}`.
+  Smoke headless 1920 / 1366x768 / 1024x768: `4 == pilulas`, `2 == icones`, `pag <= win`, console limpo.
+- ESMERIL DO MARCO: zero orfao, medido no diff -- as 3 linhas de `.py` removidas sao assinatura, return e
+  import SUBSTITUIDOS no lugar; mapa de icone 9 -> 11 chaves, ZERO perdida (na arvore MERGEADA).
+- RE-CERTIFICADA em COPIA de `main` + `raia-ui` (mount conferido por `docker inspect`), porque a bateria
+  da propria raia certificou arvore 266 commits atras do main: `Ran 10443 tests in 1414.303s` / `OK (skipped=42)`, rc 0. POUSO-EM-COMBOIO medido:
+  `wt-bos` 0 commit a frente, ~60 arquivos sujos, agente no meio da O44 -- **a wt-ui roda SOZINHA**.
+- INCOMPLETO: o CRON do lavrador (`config/crons.py::FORA_DE_PIPELINE`, custo na frota nao medido -- e ele
+  nao e a unica linha de nucleo: `folha/models.py`, a migration `0011`, `fora_da_folha.py`, `folha/urls.py`
+  e o command tambem sao) e o smoke de clique do Ronald.
+
 ## MARCO 11/10 19:0x — O48 passo 3, O VINCULO NAO E SILENCIO: a abstencao do previsto se mede DENTRO do vinculo, e a medicao escolheu o corte ESTREITO
 
 LEI-AKITA: origem=`ponto/services/fechamento.py:584` (o predicado da abstencao, nao um leitor), testemunha=

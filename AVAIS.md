@@ -1,4 +1,4 @@
-# AVAIS NA MESA — 8
+# AVAIS NA MESA — 9
 
 > Gerado por `bin/gerar_avais.py` a partir de `app/docs/PENDENTES_RONALD.json`.
 > **So itens ABERTOS.** Item respondido SOME daqui na proxima geracao -- a historia dele fica
@@ -14,10 +14,11 @@
 | 6 | `O223-PORTA-DA-APLICACAO-SMOKE` | **smoke** | 2026-10-10T08:55 | 2 commits: codigo em ae775a7b (com o deploy --sem-migrate) e o link do hub no commit SEGUINTE do marco (sem sha: um commit nao pode citar o proprio, e este foi emendado uma vez), de proposito DEPOIS do reload -- template | `smoke Ronald: abri Configuracoes -> Aplicacao de convencao, cadastrei uma linha com motivo, a lista me mostrou ela ativa e o empate dito, desativei e ela ficou la como inativa com a trilha; e na edicao de uma empresa o Regime trabalhista salvou -- pode fechar a O223 pouso A` |
 | 7 | `R4-PAR6-DIFERENCA-DA-09-EXPORTADA` | **!** | 2026-10-11T03:05 | 7 dia-colab na 09, 0 na 10, universo do TXT 221/19 (prova logs/placar_estrutural/r4_par6_20261011_0223.txt, banco=sombra, rc 0). A FAVOR do colaborador no gravado: col146, ~11,9 h a MAIS em 2 dias (14,99 e 14,89 gravadas | `! Ronald: a diferenca do par 6 na 09 EXPORTADA -- col146 com ~11,9 h a mais e col290+col499 com 16,0 h a menos -- sai como Pauta DP com os dois numeros, SEM tocar o gravado da 09.   OU   autoriza a porta REGEN-EM-EXPORTADA nesses 4 colabs, com TXT parcial de retificacao e hash publicado.` |
 | 8 | `FOLHA-EXPORT-JUIZ-DO-QUE-BLOQUEIA` | **!** | 2026-10-11T19:30 | 13 pendentes (8 dinheiro), 6 curaveis hoje, 7 sem autoridade declarada (5 de dinheiro numa pergunta so) | `corte Ronald: juiz <nome> nasce -- a pergunta 'a competencia pode ser aprovada/trancada (o que bloqueia)?' passa a ter autoridade unica, e os 5 sitios de dinheiro de ponto/views.py e folha/views.py a chamam em vez de cada um ter seu crivo.   OU   diz que a celula `folha/export x um juiz` fica VERMEL` |
+| 9 | `O48-RETRATO-DA-FOLHA-SMOKE` | **smoke** | 2026-10-11T20:17 | suite CHEIA sobre a arvore MERGEADA main+raia-ui (git merge-tree --write-tree = 125d4dd7fb5fe5c8f2f145c087eb4ebc7d099330, mount conferido por docker inspect): Ran 10443 tests in 1414.303s, OK (skipped=42), rc 0 -- a bate | `smoke Ronald: abri a tela do retrato da folha de uma competencia, as quatro pilulas me deram Entram / Bloqueados / Rescisao / Total, clicar numa delas filtrou a tabela sem perder a competencia, a coluna Dias que seguram mostrou numero so para quem tem furo de espelho e a tela nao demorou a abrir -- ` |
 
 ---
 
-Total no JSON: **230** · aberto **8** · respondido **61** · sem-motivo **161**.
+Total no JSON: **231** · aberto **9** · respondido **61** · sem-motivo **161**.
 
 > `sem-motivo` nao e "resolvido": e *"ninguem julgou este item"*. A ordem de 18:4x proibe
 > triar os 163 antigos, entao eles ficam ai, nomeados, em vez de serem chutados para um lado.
