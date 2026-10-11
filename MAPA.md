@@ -58,4 +58,3 @@ core/tests/test_selo_diagrama_do_codigo.py regenera os dois e compara.
 ## (h) VIGIAS e contadores
 - config/crons.py: papel vigia, AGENDADOS_FORA_DO_CRON, linhas `# contador=... · esperado=... · dono=...`
 - host: bin/placar_code.sh (o placar inteiro), bin/vigia_arvore.sh, bin/vigia_esteira.sh -> core/esteira_vigia.py
-- arquivo que nao existe

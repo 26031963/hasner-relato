@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 11/10/2026 05:03:40.**
+**Medido em 11/10/2026 05:09:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `90bc68d6 [O148] pouso 2 do COMBOIO: a lavra da foto de folga entra com o cron, e o escopo da janela se corrigiu ANTES da suite -- a versao estreita escrevia ZERO hoje` |
+| `HEAD` local | `6dcaf1a7 [PLACAR-ESTRUTURAL] as DUAS hipoteses do +6 do R4 par 6 eram FALSAS, e a terceira se mediu: o codigo e identico nas tres arvores, quem andou foi o DADO` |
 | `origin/main` | `d20a0e45 [O219] pouso: os docs do marco A0-b entram junto, e o merge que eu pedi sem commit virou FAST-FORWARD -- o codigo estava na arvore viva antes deste commit` |
-| commits a subir (`ahead`) | **28** |
+| commits a subir (`ahead`) | **29** |
 
 ## Fabrica
 
@@ -22,22 +22,18 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+6dcaf1a7 [PLACAR-ESTRUTURAL] as DUAS hipoteses do +6 do R4 par 6 eram FALSAS, e a terceira se mediu: o codigo e identico nas tres arvores, quem andou foi o DADO
 90bc68d6 [O148] pouso 2 do COMBOIO: a lavra da foto de folga entra com o cron, e o escopo da janela se corrigiu ANTES da suite -- a versao estreita escrevia ZERO hoje
 2eb92a98 [O198] pouso 1 do COMBOIO: a falta em dia sem jornada passa a ser recusada NA PORTA, e a suite que certifica este codigo correu UMA vez para os dois pousos
 a96169b5 [PLACAR-ESTRUTURAL] o par 6 do R4 se pergunta ao CONTADOR, e ele diz 7 na 09 e 0 na 10 -- a celula publicava 1 e 6, que era campo comparado com campo
 8272b439 [O148] a janela da lavra cobria SO a competencia corrente, e o aval diz "corrente E a seguinte": novembro ficava fora e a foto dele nasceria 3 min antes das celulas
-25aabfc7 [O148] FOTO-DE-FOLGA-CONTINUA: a foto de folga do calendario deixa de depender de alguem abrir a tela -- e a varredura e ADITIVA, porque o escritor RECONCILIA
 ```
 
 ## `git status --short`
 
 ```
  M app/config/crons_duracao.json
- M app/core/placar_estrutural.py
- M app/docs/AVAIS.md
  M app/docs/HANDOFF-SESSAO.md
- M app/docs/PENDENTES_RONALD.json
- M app/docs/RELATO.md
  M bin/sonda_frota.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -127,38 +123,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Os dois riscos medem seguro: o cron das 04:05 roda check --medir (install = 0 ocorrências, nada se arma sozinho), e crons.sh check só é
-  lido por bin/placar_code.sh:37, que engole o rc e conta ^>  como contador de placar — não é portão de deploy nem de push.
+  Ran 1 shell command
 
-  Searched for 2 patterns, ran 1 shell command
-
-● Censo corrige um ponto: gerar_foto_folgas já tinha três chamadores de produção antes do cron. Isso muda o que o ! decide, e a tabela tem
-  de dizer.
+● Marco fechado. Rodo o handoff_sessao.sh que a L-108 pede.
 
   Ran 1 shell command
 
-● Agora atualizo o item #7 do PENDENTES com o número medido — uma linha, não um aval novo.
+● MARCO FECHADO — pode compactar. Handoff em app/docs/HANDOFF-SESSAO.md (46 linhas, HEAD 6dcaf1a7, 29 a empurrar, sem linha PAREI). Pego o
+  próximo da fila 1 pela sua ordem: GEO-SILENCIO-DE-PING.
 
-  Ran 3 shell commands
+  Ran 2 shell commands
 
-● 227 itens, 8 abertos — nenhum item novo, nenhum churn. Agora o bloco ! que o pouso 2 inseriu no topo do RELATO.
+● Começo pela ordem do próprio aval: o censo dos cinco leitores (que ele deixou declarado como "fecha na vez") e a leitura ao vivo das
+  fontes, antes de qualquer medida.
 
-  Ran 7 shell commands
+  Ran 1 shell command
 
-● Pré-existente, e ruff aqui seleciona só F/E9/B — comprimento não é lei. Agora a seção do RELATO e a mensagem.
+● A wt-bos está em 8272b439, que já pousou no main — a raia está vazia de trabalho. Faço o censo e a leitura ao vivo das fontes (leitura é
+  segura em qualquer árvore).
 
-  Ran 3 shell commands
+  Ran 1 shell command
 
-● Não existe ESTADO.md no repo — bin/gerar_estado.py é ferramenta de stdout, nada a regenerar. Rodo o que lê a célula: o check do diagrama
-  e os dois selos que varrem o placar.
+● Primeiro achado do censo: ponto/painel_op.py não existe — o aval nomeava um leitor que não está lá. E PingGeo tem três sítios que criam e
+  leem pings_recentes. Preciso saber quais estão roteados.
 
-● Roda os dois selos que leem o placar
-  ⎿  $ cd /home/ronald/saas-hasner && bash bin/suite.sh -- core.tests.test_l114_placar_papel_e_termometro
-     core.tests.test_selo_diagrama_do_codigo > /tmp/r4selos.out 2>&1; echo "rc_processo=$?"; grep -E '^(OK|FAILED)($| \()' /tmp/r4selos.out
-     | tail -1; grep -E '^Ran [0-9]+ tests' /tmp/r4selos.out | tail …
+● Mapeia as tres portas de ping e suas rotas
+  ⎿  $ echo '=== as 3 portas de ping: qual URL leva a cada uma? ==='; grep -rn 'ping.geo\|ping_geo' config/urls.py config/urls_core.py
+     api/urls*.py ponto/urls*.py 2>/dev/null | head -20; echo; echo '=== nome das funcoes nos 3 sitios ==='; for pair in "ponto/views.py
+     2770" "api/views_core.py 905" "api/vi…
 
-✻ Infusing… (17m 35s · ↓ 36.8k tokens)
-                                                                                                   ✔ Update installed · Restart to update
+✢ Compacting conversation… (22m 57s · ↓ 50.3k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 36%
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
