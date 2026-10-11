@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 11/10/2026 02:34:01.**
+**Medido em 11/10/2026 02:39:31.**
 
 | | |
 |---|---|
@@ -123,42 +123,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  - col499 24/08 (4,01 × 0,0), 26/08, 30/08
+  - col935 05/09: 10,97 × 11,10 = 0,13 h = 7,8 min — exatamente o RED que HEAD dizia ter virado 0,01 min
 
-● A reta final da suite não me libera o cpuset ainda. Mas há um número do R4 que o mesmo run já computa e eu ia deixar envelhecer: a
-  afirmação central "CINCO pares em ZERO".
+  Ran 1 shell command
 
-  Ran 3 shell commands
-  ⎿  Read docs/AVAIS.md (23 lines)
-  ⎿  Referenced file ../../wt-bos/app/config/crons.py
-  ⎿  Read ../../wt-bos/app/escala/management/commands/lavrar_foto_folgas.py (190 lines)
-  ⎿  Referenced file ../../wt-bos/app/escala/tests/test_foto_folga_continua.py
-  ⎿  Read docs/HANDOFF-SESSAO.md (45 lines)
+● Background command "Rodar a medicao de frota do par 6 do R4 na sombra" completed (exit code 0)
 
-● Task "RED e construção do segundo intervalo" completed in background
+● Background command "Esperar o fim da medicao do R4 pelo arquivo" completed (exit code 0)
 
-● Background command "Rodar a suite cheia sobre a arvore corrigida do comboio" completed (exit code 0)
+● Background command "Esperar a medicao em foreground sem busy-wait" completed (exit code 0)
 
-● Background command "Esperar o veredito da suite 2" completed (exit code 0)
+● Números finais, pela função do contador: 7 na 09 · 0 na 10 (o campo diz "1 na 09 e 6 na 10"). Preciso do dono de cada caso novo antes de
+  escrever — a L-099 cobra isso:
 
-● A suite 2 do comboio voltou VERDE. Vou carimbar o veredito e lançar a medição de frota do R4, que estava só esperando o cpuset.
+  Ran 4 shell commands
 
-  Ran 3 shell commands
+● Donos medidos, e três deles são ESTRUTURA com defeito nomeável. Falta uma coisa decisiva: quando cada linha foi lavrada — é o que separa
+  "o número envelheceu" de "a medição de 03/10 era incompleta":
 
-● Agora a medição de frota do R4, que a trava liberou:
+  Ran 1 shell command
 
-● Esperar a medicao em foreground sem busy-wait · 8m 39s
-  ⎿  $ command -v inotifywait || echo "sem inotifywait"; cd /home/ronald/saas-hasner && F=logs/placar_estrutural/r4_par6_20261011_0223.txt;
-     while ! grep -q 'rc_processo=' "$F" 2>/dev/null; do read -t 20 _ < /dev/zero 2>/dev/null || true; done; echo "PRONTA $(date
-     '+%H:%M:%S')"; cat "$F" (8m 38s · 2 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
+● TODOS os 7 foram lavrados em 30/09 16:56-16:58 — três dias antes da medição de 03/10 que escreveu "1 na 09". O gravado não moveu: a
+  medição de 03/10 não viu 6 dos 7. Vou ler o que ela mediu:
 
-✢ Spelunking… (4h 15m 11s · ↓ 472.1k tokens)
+● Ler a prova da medicao de 03/10 que disse 1 na 09
+  ⎿  $ cd /home/ronald/saas-hasner && for f in logs/placar_estrutural/r4_pares_20261003.txt logs/e6_cauda2c/r4_pares.txt; do echo "=== $f";
+     [ -f "$f" ] && { wc -l "$f"; grep -niE 'espelho_x_dia_pago|espelho x dia|universo|emp[0-9]|col(290|146|499|935)' "$f" | head -25; }
+     || echo "NAO EXISTE"; done
+
+✢ Spelunking… (4h 20m 41s · ↓ 484.5k tokens · thinking some more)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
