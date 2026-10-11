@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 11/10/2026 06:55:45.**
+**Medido em 11/10/2026 07:00:45.**
 
 | | |
 |---|---|
@@ -36,6 +36,7 @@ a96169b5 [PLACAR-ESTRUTURAL] o par 6 do R4 se pergunta ao CONTADOR, e ele diz 7 
  M app/docs/AVAIS.md
  M app/docs/HANDOFF-SESSAO.md
  M app/docs/PENDENTES_RONALD.json
+ M app/docs/RELATO-ARQUIVO.md
  M app/docs/RELATO.md
  M app/docs/TICKETS.md
  M bin/sonda_frota.sh
@@ -127,8 +128,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/pouso_runbook_o148.md
-     (98 lines)
   ⎿  Referenced file ponto/turnos.py
 
 ● Task "RED e construção do segundo intervalo" completed in background
@@ -152,11 +151,13 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Suite still running (~8 min in). Preparing the pouso paperwork while it runs.
 
-  Confere a dieta de prosa do RELATO
-  ⎿  $ grep -n '^## ' docs/RELATO.md | tail -12; echo '--- total linhas'; wc -l docs/RELATO.md; echo '--- arquivo'; wc -l
-     docs/RELATO-ARQUIVO.md 2>/dev/null; echo '--- selo da dieta?'; ls /home/ronald/saas-hasner/bin/tests/ | grep -iE 'dieta|relato'
+● Roda a pasta de selos de host no main · 1m 20s
+  ⎿  $ cd /home/ronald/saas-hasner && red=0; tot=0; for t in bin/tests/test_*.sh; do tot=$((tot+1)); if ! timeout 180 bash "$t"
+     >/tmp/selo.out 2>&1; then red=$((red+1)); echo "VERMELHO: $(basename $t)"; tail -3 /tmp/selo.out | cut -c1-160; fi; done; echo "===
+     $red vermelho(s) de $tot" (1m 20s)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-· Infusing… (2h 9m 40s · ↓ 235.9k tokens · thinking)
+· Infusing… (2h 14m 40s · ↓ 251.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
