@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 11/10/2026 04:20:45.**
+**Medido em 11/10/2026 04:26:01.**
 
 | | |
 |---|---|
@@ -124,42 +124,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-     backfill é condicional ("aplica SO se esses 7 mudam e ninguem SAI do TXT"). Os 7 foram medidos numa sombra de dia=20261010; o refazer
-     que está correndo agora traz o dado de hoje. Então o adendo 5 do runbook põe o número para se RE-PERGUNTAR: dry-run do command (inerte
-     por construção — :159-161 retorna antes de gravar) na sombra refeita, confronto com o 7, DIFF de "ninguém sai do TXT" sobre o dado de
-     hoje; bate → install com os dois números no RELATO; não bate → o código fica no ar, o install é PAREI com a tabela e o crons.sh check
-     vermelho é o estado honesto.
 
-  Passageiro nomeado no commit do pouso 1: o app/docs/RELATO.md sujo são 2 inserções, uma linha do vigia da esteira no bloco ALARMES — não
-  é minha, anda junto porque git add leva o arquivo inteiro, e está dito no corpo.
-
-  Portão: o sombra.sh_-.2668546 acabou de aparecer em logs/crons_em_curso/ — o refazer está correndo, carimbo ainda dia=20261010. Fecha
-  ≈04:35-04:40 e o buwjqcux9 me acorda; exijo os dois gates (dia=20261011 status=OK tipo=completa diverge=0 erros=0 e a entrada do cron
-  ausente) antes do primeiro git merge. main segue em a96169b5, nenhum .py tocado.
-
-✻ Baked for 7m 12s · done 4:19 AM · 1 shell still running
-
-● Background command "Esperar o portao da sombra abrir" completed (exit code 0)
+● A lição do portão pertence a uma memória que já existe — estendo ela em vez de duplicar:
 
   Ran 1 shell command
 
-● O esperador disparou no dia=20261011, mas a linha inteira diz status=REFEITA, não OK — e o sombra.sh_-.2668546 segue em
-  logs/crons_em_curso/. O refazer acabou; o bloco da manhã é que ainda não correu, e é ele que o portão do deploy exige. Não pouso: o gate
-  1 não fechou.
+● Portão fechado por medição, não por suposição — e o esperador agora pergunta à autoridade certa.
 
-  Read 1 file, ran 2 shell commands
+  O que o gate 1 escondia: a v1 do esperador casava a substring dia=20261011 e abriu às 04:20 com status=REFEITA. O --refazer tinha
+  acabado; o bloco da manhã nem começara. O portão de verdade é o RC de bash bin/sombra.sh --conferir, que é literalmente o que
+  bin/deploy.sh:167 pergunta — e ali ele valia 1. REFEITA não é erro: é um status intermediário legítimo que contém a substring do gate,
+  então a condição frouxa nunca falha, só abre cedo — e me teria levado a uma recusa de deploy no meio de um pouso certificado. A lição
+  entrou na memória espera-casa-com-prosa-do-log, que já é a casa dessa família.
 
-● O portão responde pela própria autoridade que o deploy.sh:167 pergunta: rc_conferir=1, fechado. O esperador antigo casava só dia=20261011
-  e teria me levado a uma recusa de deploy — troco a condição pelo rc e pelo arquivo do cron.
+  O esperador novo (bss1rf196, log logs/espera_sombra2_20261011.log) exige os dois gates pela autoridade de cada um: rc 0 do --conferir e
+  zero entrada sombra.sh_* em logs/crons_em_curso/ — espera por arquivo, nunca por pgrep. Agora atrelado ao harness: o primeiro lançamento
+  caiu no background duplo (run_in_background mais &), o harness reportou o lançador morto no sleep bloqueado e o esperador real ficou
+  solto sem notificação; matei o solto e religuei sem o &.
 
-  Running 1 shell command…
+  O bloco leva ~18 min desde o fim do refazer, então o portão abre ≈04:38-04:40.
 
-✶ Schlepping… (45s · ↓ 2.6k tokens)
+  Pouso segue armado e nada mudou nele: main em a96169b5, nenhum .py tocado, árvore certificada 3bf9c778 / commit 02261de0, trava livre. As
+  três mudanças que a espera pagou:
+
+  1. Esmeril do marco fechado, zero órfão — logs/esmeril/esmeril_marco_o198_foto_20261011.txt.
+  2. Censo cmp agora citado nas duas mensagens de commit, com o lugar do resultado real reservado; a cláusula da SUITE-UMA-VEZ-POR-ARVORE
+     exige isso no corpo do commit e as mensagens não o tinham.
+  3. bin/crons.sh install deixou de ser passo mecânico no runbook — ele é o apply do backfill (arma o --apply das 05:47), e o ! dele é
+     condicional nos 7, medidos numa sombra de ontem. O adendo 5 põe o número para se re-perguntar na sombra refeita antes do install; não
+     batendo, o código fica no ar e o install é PAREI com a tabela.
+
+✻ Worked for 2m 19s · done 4:22 AM · 2 shells still running
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ segue a fila; PAREI so em lei ou !
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
