@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 11/10/2026 12:10:42.**
+**Medido em 11/10/2026 12:16:01.**
 
 | | |
 |---|---|
@@ -133,44 +133,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  próprio ao lado — zero arquivo em comum com o O48 passo 3, medido.
+  inversões de selo.
 
-● fork(O247 universo cru + tripwire B5-j)
-  ⎿  Backgrounded agent (↓ to manage · ctrl+o to expand)
+  Ran 2 shell commands
 
-● O247 anda ao lado. Volto ao O48 passo 3 — a cura do universo está escrita na cópia, falta o GREEN.
+● A cura está escrita. Agora meço o que fica vermelho, em vez de supor quais selos invertem.
+
+  Ran 2 shell commands
+
+● Os dois casos exatos, e o RED prova que o número trocou de fonte. Antes de decidir o desenho do divergencia() — que é o ponto não óbvio —
+  leio os dois sítios verbatim.
+
+  Ran 2 shell commands
+
+● divergencia() compara o resumo contra a MESMA função que escreveu o resumo. Isso pode já ser vácuo hoje, antes da minha cura — meço antes
+  de afirmar.
 
   Ran 1 shell command
 
-● GREEN: Ran 5 / OK, rc 0 — e o desligado_antigo_fica_fora segue verde, então o predicado não alargou além do valor morto. Agora os dois
-  checks contra a CÓPIA.
+● Agora o achado não óbvio: divergencia() compara o resumo contra a mesma função que escreveu o resumo — nos três ramos de folha_manda.
+  Isso o torna estruturalmente vazio já no HEAD, não pela minha cura. Meço na sombra antes de afirmar.
 
-  Read 1 file, ran 6 shell commands
+  Ran 2 shell commands
 
-● CHECK 1 responde, e responde bem: os 11 afastados devolvem objeto com 5/5 campos de grade NULOS — "sem resposta", não zero. A guarda
-  _GradeSemCelula cobre o caso de grade vazia, então o problema que o 3c42f82c curou não renasce. Enquanto o check 2 corre, construo a cura
-  do leitor.
+● Lancei com nohup & dentro de run_in_background — a combinação que faz o harness reportar o lançador, não o container. O veredito se lê no
+  arquivo, e é por ele que espero.
 
-  Aplica a cura do leitor na copia
-  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; python3 -
-     "$S/o48p3b/app/relatorios/cartao_pela_celula.py" <<'PYEOF'
-     import sys
-     p = sys.argv[1]
-     src = open(p, encoding='utf-8').read()
-     velho = '''def totais_da_folha(colab, mes, ano):
-     """Os totais do …
+● Advising using Fable 5.1
 
-✶ Compacting conversation… (7h 24m 38s · ↓ 673.2k tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱ 92%
+✢ Infusing… (7h 29m 57s · ↓ 682.0k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    0% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
-❯ ◯ fork  Diffing totais_da_folha against HEAD                                                                   6m 11s · ↓ 102.8k tokens
+  ◯ fork  Writing findings to o48p3c_achados.md                                                                 11m 28s · ↓ 135.9k tokens
   ⧉  index
 ```
