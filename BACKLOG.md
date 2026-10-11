@@ -42,6 +42,19 @@
      contam e publicam."* Entao o limite 4 abaixo se LE assim: o codigo da porta POUSA, o dado de
      vinculo NAO -- que e a linha NUNCA PRE-APROVADO da L-009 e nada alem dela. *"Nenhuma lei nova
      (L-112 ja escrita)."*]
+     GEO-SILENCIO-DE-PING SAIU DA ORDEM DA RAIA em 11/10 ~10:3x, por DECISAO dele e sem uma linha de codigo.
+     Aval literal: *"GEO-SILENCIO, opcao (a). O vigia nao se constroi agora. O ping passa a ser
+     requisito do proximo release ja planejado do APK e da especificacao do app iOS; nenhum build so
+     para isso. Registrar e seguir."* A medida que eu levei a ele destruiu a premissa do item: 0 de
+     505 pings tem marcador de APK, 444 de 480 colabs nunca pingaram e 6143 de 6177 turnos (99,4%)
+     tem ZERO ping -- nao havia universo para o vigia olhar, e nascer dois campos de Empresa cujo
+     leitor vigia universo vazio e o que o precedente O124 acabou de desfazer. O ping e agora
+     REQUISITO DE RELEASE, irmao do `APP-DESENHA-A-PALAVRA-DO-DIA`: o mesmo build do APK carrega os
+     dois, e nenhum build nasce so para isso. O vigia volta a ser fatia QUANDO O PING EXISTIR, com a
+     medida refeita -- nao antes. A `O-GEO-DECISAO` (linha propria) segue CONGELADA pela L-096, e a
+     ordem da raia passa a ser: O197 (POUSADA 11/10) -> O44 itens 2-8 (em curso).
+     Prova da medida: `logs/geo/medida_x_y_20261011.txt`; as quatro linhas de fila que ela abriu
+     ficam em `logs/fila/geo_tres_portas_de_ping_20261011.txt`, com a decisao carimbada no fim.]
      (1) a principal tem a vez na pista de teste e no deploy, BO so pede suite e so pousa ENTRE dois
      pousos da principal (L-105, L-107), e *"rc 75 = esperar, nunca furar"*; (2) a raia NAO toca
      ponto/motor_calculo_v2.py, ponto/janela_he.py, ponto/portas/he.py, escala/models.py nem
