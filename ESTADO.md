@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 11/10/2026 07:10:46.**
+**Medido em 11/10/2026 07:16:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `6dcaf1a7 [PLACAR-ESTRUTURAL] as DUAS hipoteses do +6 do R4 par 6 eram FALSAS, e a terceira se mediu: o codigo e identico nas tres arvores, quem andou foi o DADO` |
+| `HEAD` local | `faa783e1 [O197] pouso da raia wt-bos: "Em aberto" era 1,4% verdade, e a cura separa AUSENCIA de PRESENCA em vez de pedir ao leitor que se comporte` |
 | `origin/main` | `d20a0e45 [O219] pouso: os docs do marco A0-b entram junto, e o merge que eu pedi sem commit virou FAST-FORWARD -- o codigo estava na arvore viva antes deste commit` |
-| commits a subir (`ahead`) | **29** |
+| commits a subir (`ahead`) | **31** |
 
 ## Fabrica
 
@@ -22,23 +22,18 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+faa783e1 [O197] pouso da raia wt-bos: "Em aberto" era 1,4% verdade, e a cura separa AUSENCIA de PRESENCA em vez de pedir ao leitor que se comporte
+5ecebd95 [O197] "Em aberto" era 1,4% verdade: o dia que NAO ACONTECEU e o isento do Art.62 saiam com a palavra, e o teto que faltava JA TINHA NOME nesta casa
 6dcaf1a7 [PLACAR-ESTRUTURAL] as DUAS hipoteses do +6 do R4 par 6 eram FALSAS, e a terceira se mediu: o codigo e identico nas tres arvores, quem andou foi o DADO
 90bc68d6 [O148] pouso 2 do COMBOIO: a lavra da foto de folga entra com o cron, e o escopo da janela se corrigiu ANTES da suite -- a versao estreita escrevia ZERO hoje
 2eb92a98 [O198] pouso 1 do COMBOIO: a falta em dia sem jornada passa a ser recusada NA PORTA, e a suite que certifica este codigo correu UMA vez para os dois pousos
-a96169b5 [PLACAR-ESTRUTURAL] o par 6 do R4 se pergunta ao CONTADOR, e ele diz 7 na 09 e 0 na 10 -- a celula publicava 1 e 6, que era campo comparado com campo
-8272b439 [O148] a janela da lavra cobria SO a competencia corrente, e o aval diz "corrente E a seguinte": novembro ficava fora e a foto dele nasceria 3 min antes das celulas
 ```
 
 ## `git status --short`
 
 ```
  M app/config/crons_duracao.json
- M app/docs/AVAIS.md
  M app/docs/HANDOFF-SESSAO.md
- M app/docs/PENDENTES_RONALD.json
- M app/docs/RELATO-ARQUIVO.md
- M app/docs/RELATO.md
- M app/docs/TICKETS.md
  M bin/sonda_frota.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -128,17 +123,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-  Committed 5ecebd95, searched for 1 pattern, ran 23 shell commands
-  ⎿  Read docs/AVAIS.md (26 lines)
-  ⎿  Referenced file docs/RELATO.md
-  ⎿  Read ../../../../tmp/r4selos.out (8 lines)
-  ⎿  Read ../../.claude/projects/-home-ronald-saas-hasner/memory/espera-casa-com-prosa-do-log.md (38 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/pouso_runbook_o148.md
-     (98 lines)
-
-● Task "RED e construção do segundo intervalo" completed in background
 
 ● Suite still running (~8 min in). Preparing the pouso paperwork while it runs.
 
@@ -151,19 +135,30 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-● Espera mais 90s pelo fim da suite · 17s
-  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; i=0; while [ $i -lt 3 ]; do grep -q
-     'FIM_SUITE_O197 rc=' $S/suite_o197.out && break; read -t 30 x < /dev/zero 2>/dev/null; i=$((i+1)); done; date '+%H:%M:%S'; grep -c
-     'FIM_SUITE_O197 rc=' $S/suite_o19… (17s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Ran 8 shell commands
 
-✽ Infusing… (2h 24m 41s · ↓ 262.0k tokens)
+● Background command "Espera o fim da suite por 5 min" completed (exit code 0)
+
+  Committed faa783e1, searched for 1 pattern, ran 8 shell commands
+
+● Commit faa783e1. Deploy now, nothing in between (L-107).
+
+  Ran 1 shell command
+
+● Deploy verde. Agora a PROVA depois, na sombra.
+
+● Le a sonda da PROVA do O197
+  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; sed -n '1,96p'
+     $S/sonda_o197_prova.py
+
+✢ Compacting conversation… (2h 29m 57s · ↓ 269.6k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱ 84%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    6% until auto-compact
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
