@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 11/10/2026 13:05:31.**
+**Medido em 11/10/2026 13:10:45.**
 
 | | |
 |---|---|
@@ -133,15 +133,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 2 shell commands
-
-● Escrevo o DIFF durável agora (a 09 e a 10 já medidas; 07/08 entram quando chegarem):
-
-  Ran 2 shell commands
-
-● Scrub limpo (o casamento é a minha própria caixa alta "DADO PARADO", não um nome). Deliverable durável. Chamo o advisor antes de pousar o
-  marco.
-
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
@@ -160,11 +151,20 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● DIFF completo das quatro competências. A 10 em 0 de 189 e a 07 em 6 de 300 contra a 08 em 150 de 238 — o padrão confirma a leitura do
   atraso do gravado. Atualizo o artefato:
 
-● Running 1 shell command…
+  Ran 1 shell command
 
-✢ Infusing… (8h 19m 27s · ↓ 782.3k tokens)
+● Agora o #4 do advisor — o TOPO do RELATO é contrato com o hook:
+
+  Le o topo do RELATO e procura PAREI pendurado
+  ⎿  $ cd /home/ronald/saas-hasner
+     echo "=== TOPO do RELATO (as 42 primeiras) ==="; sed -n '1,42p' app/docs/RELATO.md
+     echo
+     echo "=== o hook ve PAREI? ==="; grep -nE '^(PAREI|\*\*PAREI)' app/docs/RELATO.md | head
+
+· Compacting conversation… (8h 24m 40s · ↓ 784.2k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱ 95%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    5% until auto-compact
+                                                                                                                    4% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
