@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 11/10/2026 13:16:01.**
+**Medido em 11/10/2026 13:21:31.**
 
 | | |
 |---|---|
@@ -135,38 +135,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+● Esta é a medida decisiva: linha-zero de afastado ENTRA no TXT — no 07, que já tem essas linhas, col53/col199/col271/col646/col649 saem
+  entra, motivo=None, dentro dos 300. Torno isso durável no artefato antes de qualquer commit:
 
-  Read 1 file
+  Ran 1 shell command
 
-● Procedência resolvida: é o meu RED — a linha LEI-AKITA da seção de MARCO já o cita com os 2 casos. Fica na raia. Agora o ponto #8, a
-  lista de reversão com os ids:
+● Artefato em 178 linhas, scrub limpo (0 ocorrências). Com um achado material novo na mesa e o commit à frente, consulto o advisor:
 
-  Ran 3 shell commands
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-● Agora a lista de reversão — quem a cura do universo passa a ADMITIR, por competência, com os ids:
+● O ponto 1 do advisor bloqueia: o FechamentoMensal#5339 da 10 tem previsto_em 09/10 06:45 — hora de cron. Meço antes de qualquer commit:
 
   Ran 2 shell commands
 
-● Os 11 são sempre os mesmos — todos afastado, demissao=None. Isso contradiz a minha previsão ("0 inserts na 10"): são 11 na 10. A pergunta
-  da LEI-AKITA 8 agora é se a linha nasce vazia:
+● recalcular_por_evento é automático (on_commit de batida, de folga aceita, de decisão de HE) — a frase "nada recalcula sozinho" é falsa
+  como escrita. Preciso saber se ela ESCREVE para quem não tem batida, e quem é o cron das 06:45:
 
-  Ran 3 shell commands
+  Ran 2 shell commands
 
-● Os 11 são afastados de verdade — Ausência cobrindo a janela, 0 batidas em 10 deles; só col649 tem fato (20 batidas na 08, as 112,18 h que
-  o comentário da cura cita). Então a pergunta que falta é se linha-zero ENTRA no TXT — e o 07 já tem essas linhas, logo se mede sem
-  simular:
+● recalcular_por_evento roda no on_commit da batida — e crons noturnos retratam batida. Então a pergunta se responde pelo DADO, não por
+  leitura de código: quem escreveu FechamentoMensal em hora de cron?
 
-● Pergunta ao juiz do export se linha-zero de afastado entra
-  ⎿  $ cd /home/ronald/saas-hasner
-     S=/tomp 2>/dev/null
-     S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
-     cat > $S/o48uni_entra_no_txt.py <<'PY'
-     # -*- coding: utf-8 -*-
-     """Linha-zero de afastado ENTRA no TXT? Pergunta ao JUIZ UNICO do export, nao a um criteri…
+  Ran 1 shell command
 
-✢ Infusing… (8h 29m 57s · ↓ 799.5k tokens · still thinking)
+● A medida derruba a minha frase e dá o número: escritas em faixa de cron existem — 220 em 14 dias, 185 delas o congelamento conhecido de
+  28/09 00:45 — e o 09 exportado está entre as tocadas depois do TXT. Mas 0 dos 11 foi tocado em faixa de cron. Corrijo o artefato:
+
+● Running 1 shell command…
+
+✢ Infusing… (8h 35m 26s · ↓ 811.3k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    3% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
