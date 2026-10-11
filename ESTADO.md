@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 11/10/2026 12:16:01.**
+**Medido em 11/10/2026 12:21:31.**
 
 | | |
 |---|---|
@@ -133,44 +133,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  inversões de selo.
-
-  Ran 2 shell commands
-
-● A cura está escrita. Agora meço o que fica vermelho, em vez de supor quais selos invertem.
-
-  Ran 2 shell commands
-
-● Os dois casos exatos, e o RED prova que o número trocou de fonte. Antes de decidir o desenho do divergencia() — que é o ponto não óbvio —
-  leio os dois sítios verbatim.
-
-  Ran 2 shell commands
-
-● divergencia() compara o resumo contra a MESMA função que escreveu o resumo. Isso pode já ser vácuo hoje, antes da minha cura — meço antes
-  de afirmar.
 
   Ran 1 shell command
 
-● Agora o achado não óbvio: divergencia() compara o resumo contra a mesma função que escreveu o resumo — nos três ramos de folha_manda.
-  Isso o torna estruturalmente vazio já no HEAD, não pela minha cura. Meço na sombra antes de afirmar.
+● Dois fatos duros:
+
+  A vacuidade está medida: cartao_x_txt_divergentes no HEAD, competência 09 — 221 colabs no TXT, 0 divergente(s). Em 23/09 a mesma
+  varredura achava 7. O comparador ficou vazio quando a escrita e a comparação convergiram na mesma função.
+
+  E a premissa da O247 quebrou: o agente está editando relatorios/cartao_pela_celula.py e ponto/services/fechamento.py numa cópia o48p3u —
+  exatamente os dois arquivos da principal, não os três da O247.
 
   Ran 2 shell commands
 
-● Lancei com nohup & dentro de run_in_background — a combinação que faz o harness reportar o lançador, não o container. O veredito se lê no
-  arquivo, e é por ele que espero.
+● O agente derivou para a minha fatia, não para a O247 — "lê o selo do cartão", "lê folha_manda e divergencia", "censo de chamadores". Duas
+  implementações da mesma cura é o BUG 139 com outro nome. Confino pela AUTONOMIA-DE-CODIGO item 2.
+  ⎿  Message queued for delivery to a03e8c57c1c78f81f at its next tool round.
+  ⎿  Allowed by auto mode classifier
 
-● Advising using Fable 5.1
+● Agora a refatoração que o advisor apontou: o divergencia precisa do lado do TXT pelo mesmo mapeamento, não por uma segunda extração.
 
-✢ Infusing… (7h 29m 57s · ↓ 682.0k tokens)
+● Fatora o mapeamento e cura o comparador
+  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; python3 -
+     "$S/o48p3b/app/relatorios/cartao_pela_celula.py" <<'PYEOF'
+     import sys, re
+     p = sys.argv[1]
+     src = open(p, encoding='utf-8').read()
+     # 1. o corpo que MAPEIA fechamento -> chaves do cartao sai pa…
+
+✢ Infusing… (7h 35m 27s · ↓ 689.9k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
-  ◯ fork  Writing findings to o48p3c_achados.md                                                                 11m 28s · ↓ 135.9k tokens
+  ◯ fork  Tailing o48_checkB_20261011.out for progress                                               16m 59s · ↓ 167.5k tokens · 1 queued
   ⧉  index
 ```
