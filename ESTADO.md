@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 11/10/2026 05:45:45.**
+**Medido em 11/10/2026 05:50:45.**
 
 | | |
 |---|---|
@@ -126,7 +126,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Searched for 1 pattern, ran 1 shell command
 
 ● Agora a origem está medida inteira. O PWA agenda o ping com um setTimeout de 15–90 min dentro da página (static/pwa.js:380-390), que
   morre quando o celular descarta a aba — e o APK, que preencheria ts_ns/provider, nunca pingou. Corrigindo o arquivo do achado com o que a
@@ -136,8 +135,7 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Agora as linhas de fila que o censo achou, e a pergunta no topo do RELATO:
 
-  Le o dict de retorno
-  ⎿  $ sed -n '866,905p' colaboradores/services/calendario.py
+  Searched for 8 patterns, ran 36 shell commands
   ⎿  Read docs/AVAIS.md (25 lines)
   ⎿  Referenced file docs/RELATO.md
   ⎿  Read ../../../../tmp/r4selos.out (8 lines)
@@ -155,7 +153,9 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Task "RED e construção do segundo intervalo" completed in background
 
-* Infusing… (59m 41s · ↓ 111.9k tokens · thought for 1s)
+● Advising using Fable 5.1
+
+* Infusing… (1h 4m 41s · ↓ 122.3k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
