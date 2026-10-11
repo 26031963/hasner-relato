@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 11/10/2026 13:27:01.**
+**Medido em 11/10/2026 13:32:31.**
 
 | | |
 |---|---|
@@ -135,38 +135,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  Ran 5 shell commands
 
-● O ponto 1 do advisor bloqueia: o FechamentoMensal#5339 da 10 tem previsto_em 09/10 06:45 — hora de cron. Meço antes de qualquer commit:
-
-  Ran 2 shell commands
-
-● recalcular_por_evento é automático (on_commit de batida, de folga aceita, de decisão de HE) — a frase "nada recalcula sozinho" é falsa
-  como escrita. Preciso saber se ela ESCREVE para quem não tem batida, e quem é o cron das 06:45:
-
-  Ran 2 shell commands
-
-● recalcular_por_evento roda no on_commit da batida — e crons noturnos retratam batida. Então a pergunta se responde pelo DADO, não por
-  leitura de código: quem escreveu FechamentoMensal em hora de cron?
+● A letra é explícita — não vira antes de 20/10. Reescrevo o item para destravar a chave no export da 10, não antes:
 
   Ran 1 shell command
 
-● A medida derruba a minha frase e dá o número: escritas em faixa de cron existem — 220 em 14 dias, 185 delas o congelamento conhecido de
-  28/09 00:45 — e o 09 exportado está entre as tocadas depois do TXT. Mas 0 dos 11 foi tocado em faixa de cron. Corrijo o artefato:
+● Item 8 reescrito (churn 12+/0− no JSON). Agora o censo da árvore certificada antes do pouso:
 
-● Corrige a frase falsa e os dois overclaims no artefato
-  ⎿  $ cd /home/ronald/saas-hasner
-     S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
-     cat > $S/fix_artefato.py <<'PY'
-     # -*- coding: utf-8 -*-
-     import io
-     P = 'logs/o48p3_diff_gravado_x_lido_20261011.md'
-     src = io.open(P, encoding='utf-8').read()
-     VELHO = """**O Q…
+  Ran 1 shell command
 
-✢ Compacting conversation… (8h 40m 57s · ↓ 813.1k tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱ 95%
+● Exatamente 2 arquivos divergem do HEAD. Confirmo que não há arquivo NOVO na cópia e vejo o que a cura mudou no selo:
+
+  Ran 1 shell command
+
+● Os dois diffs são exatamente a cura e o selo. Leio a seção do RELATO que devo corrigir e confiro o portão do deploy:
+
+  Ran 1 shell command
+
+● Portão VERDE (dia=20261011 status=OK tipo=completa diverge=0). Antes de escrever o RELATO, resolvo uma contradição entre a seção das
+  11:5x ("zero chamador de producao") e o ponto 5 do advisor ("lido por views.py:945") — isso decide se o deploy muda tela hoje:
+
+  Ran 1 shell command
+
+● Medido: fechamento_lido tem zero chamador de produção (só a definição e 4 testes) e views.py:945 lê o gravado direto por .first() — a
+  seção das 11:5x está certa e a premissa do ponto 5 do advisor não se sustenta. Isso muda o que o deploy faz. Escrevo a seção nova:
+
+  Le a hora no ato
+  ⎿  $ date '+%d/%m %H:%M'
+
+✢ Infusing… (8h 46m 27s · ↓ 829.0k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    1% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
