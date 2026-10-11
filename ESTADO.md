@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:71 AFIRMA ato sem PROVA ao lado -- ## MARCO 11/10 11:1x — O148 item 1 **NO AR DE VERDADE**: o cron da lavra instalado, e a pegada da lavra e maior que as 23 FolgaDia porque o 
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:84 AFIRMA ato sem PROVA ao lado -- ## MARCO 11/10 11:1x — O148 item 1 **NO AR DE VERDADE**: o cron da lavra instalado, e a pegada da lavra e maior que as 23 FolgaDia porque o 
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 11/10/2026 15:08:31.**
+**Medido em 11/10/2026 15:14:01.**
 
 | | |
 |---|---|
@@ -40,7 +40,10 @@ faa783e1 [O197] pouso da raia wt-bos: "Em aberto" era 1,4% verdade, e a cura sep
 
 ```
  M app/config/crons_duracao.json
+ M app/docs/BACKLOG.md
+ M app/docs/FECHAMENTO-ONLINE.md
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/RELATO.md
  M bin/sonda_frota.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -130,7 +133,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
 ● Background command "Rodar os 27 vizinhos na raia apos a inversao" completed (exit code 0)
 
   Ran 15 shell commands
@@ -149,19 +151,20 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Background command "Esperar o veredito da suite cheia" completed (exit code 0)
 
-● Continuar a espera do veredito · 4m 1s
-  ⎿  $ cd /home/ronald/saas-hasner
-     L=logs/o48p3_suite_cheia2.out
-     for i in $(seq 1 55); do grep -qE '^(OK|FAILED)($| \()' "$L" 2>/dev/null && break; sleep 10; done
-     grep -E '^(OK|FAILED)($| \()' "$L" | tail -1
-     grep -E '^Ran [0-9]+ tests' "$L" | tail -1
-     grep -E '^(FAIL|ERROR):' "$L" | head
-     echo "idade do l… (4m 1s)
-     (ctrl+b ctrl+b (twice) to run in background)
+● Corrigir o censo falso nos dois docs
+  ⎿  $ cd /home/ronald/saas-hasner/app/docs
+     python3 - <<'PYEOF'
+     # 1. BACKLOG:531 -- o censo falso dos chamadores
+     p = 'BACKLOG.md'
+     linhas = open(p, encoding='utf-8').readlines()
+     old = ('e **2 chamadores** (o botao da tela e `simular_folha --recalcular`) -- o cron `pre_fechamento` '
+     '**nao** recalcula')
+     n…
 
-· Infusing… (10h 22m 26s · ↓ 937.2k tokens)
+✢ Compacting conversation… (10h 27m 57s · ↓ 945.1k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱ 82%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    7% until auto-compact
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
