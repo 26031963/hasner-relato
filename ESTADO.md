@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 11/10/2026 13:21:31.**
+**Medido em 11/10/2026 13:27:01.**
 
 | | |
 |---|---|
@@ -135,15 +135,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Esta é a medida decisiva: linha-zero de afastado ENTRA no TXT — no 07, que já tem essas linhas, col53/col199/col271/col646/col649 saem
-  entra, motivo=None, dentro dos 300. Torno isso durável no artefato antes de qualquer commit:
-
-  Ran 1 shell command
-
-● Artefato em 178 linhas, scrub limpo (0 ocorrências). Com um achado material novo na mesa e o commit à frente, consulto o advisor:
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
 ● O ponto 1 do advisor bloqueia: o FechamentoMensal#5339 da 10 tem previsto_em 09/10 06:45 — hora de cron. Meço antes de qualquer commit:
 
@@ -162,15 +153,24 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● A medida derruba a minha frase e dá o número: escritas em faixa de cron existem — 220 em 14 dias, 185 delas o congelamento conhecido de
   28/09 00:45 — e o 09 exportado está entre as tocadas depois do TXT. Mas 0 dos 11 foi tocado em faixa de cron. Corrijo o artefato:
 
-● Running 1 shell command…
+● Corrige a frase falsa e os dois overclaims no artefato
+  ⎿  $ cd /home/ronald/saas-hasner
+     S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
+     cat > $S/fix_artefato.py <<'PY'
+     # -*- coding: utf-8 -*-
+     import io
+     P = 'logs/o48p3_diff_gravado_x_lido_20261011.md'
+     src = io.open(P, encoding='utf-8').read()
+     VELHO = """**O Q…
 
-✢ Infusing… (8h 35m 26s · ↓ 811.3k tokens)
+✢ Compacting conversation… (8h 40m 57s · ↓ 813.1k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱ 95%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    3% until auto-compact
+                                                                                                                    1% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
