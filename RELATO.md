@@ -6,6 +6,32 @@ PERGUNTA DE LEI x2 -- **RESPONDIDAS em 10/10 18:0x** pelos dois cortes dele (`ju
 
 **(2) o `detectar_par_relampago` pode ocupar o papel `prazo`, e com qual fato encerrado?** O VEREDITO dele JA delega, medido por AST em 10/10: `varrer_pares_embutidos:232` -> `par_embutido_retratavel:208` -> `_par_embutido_retratavel_geometria:220` -> `_score_geometria:86` -> `escala/utils.py::montar_grade_prevista_periodo_por_turno`, a autoridade da GRADE. O proprio dele e a CANDIDATURA (`:245-249`, `zip` adjacente + tipos alternados + gap <= `DURACAO_MAX_MIN=10`), e ela nao e derivacao de prazo pelo criterio do proprio selo -- fato GRAVADO contra teto de FORMA, sem relogio. **Nao movi o nome, e por duas razoes somadas:** (a) `bin/tests/test_papel_prazo_nao_deriva.sh` DECLARA no cabecalho que nao ve essa segunda porta e NOMEIA este cron, logo o verde dele seria ausencia de sinal, a familia que esta casa diz ser a que mais custou; (b) o seu aval nesta celula (`core/contratos_estruturais.py:252-262`) proibe em letra *"reclassificar o papel de um sitio para ela virar verde -- o que falta e juiz, nao rotulo"*. E a prescricao do censo de 04/10 nao fecha: `turnos_do_colab` nao enumera este par, porque `ponto/turnos.py::parear_turnos` declara *"E abre turno; S fecha o aberto"* e o par embutido e o ECO DENTRO de um turno -- ele nao E um turno (`pares_relampago` usa turnos_do_colab para o caso complementar, o turno inteiro curto). Entao: **(i)** o fato encerrado e o PAR, e ai falta funcao da casa que responda *"este par e completo?"* -> juiz novo, TRAVA JUIZ-NOVO; ou **(ii)** o fato encerrado e o TURNO QUE CONTEM o par (`t.aberto`), e ai `turnos_do_colab` ja e o juiz, mas de outra pergunta que a do censo -- e isso MUDA O UNIVERSO de um cron que roda `--apply` e RETRATA batida. Nao propus nenhuma (L-117).
 
+## CONFERENCIA 10/10 23:0x — O98: as **20 afirmacoes** do mapa antigo contra o vivo, **12 entram, 7 corrigidas, 1 nao entra**
+
+LEI-AKITA: origem=nenhuma -- **ato de CONFERENCIA, zero linha de codigo**, testemunha=o VIVO no HEAD `1ceed412` (grep/sed ao vivo, nunca memoria -- secao 6 LER ANTES DE AFIRMAR), RED=nao se aplica, quem-mais-le=0, juizes novos=0 (L-005, TRAVA JUIZ-NOVO)
+
+O texto dele das 23:2x e INSUMO sob a condicao literal (*"onde divergir, o VIVO manda"*), conferido na ESPERA da
+suite da O48 -- tempo de grep, nao de CPU. Resultado em `docs/O98-MAPA-ANTIGO-ENTRADA.md`, com `arquivo:linha`:
+
+- **12 ENTRAM** (A1 A2 A5 A6 A7 A10 A11 A18 limpas; A12 A13 A16 A19 com precisao acrescentada). Os dois numeros
+  do fim conferem exatos: **300 s** ao vivo (`api/views_core.py:588-591`) e **tol_min=30** retroativo
+  (`ponto/turnos.py:2009`), este ultimo mais ESTRITO que o texto -- so decide com `len(casados) == 1`.
+- **7 CORRIGIDAS pelo vivo**: **A9** a "porta de sessao que barra nao-staff" **nao existe como middleware**
+  (`grep is_staff core/middleware.py` = **0**; a cadeia da casa e `settings/base.py:60-63`); **A8** sao **TRES**
+  cartoes, nao dois, e o 1o discriminador nao e o UA e sim `carimbo_app` (`core/utils.py:45`), com `gate_apk`
+  antes dos outros dois; **A15** nao sao "dois kernels gravando" -- e **um escritor** (`colaboradores/services/
+  aparelho.py:16`, E3) chamado pelas duas portas; **A20** mora em `chamados/services/materializacao.py:71`, nao
+  em `chamados/models.py` (la so ha re-export); **A4** o `/webview/entrar/` roda na casca **UI** (app `core` !=
+  casca CORE); **A17** o 64800 esta em `saas.py:108`/`prod.py:49`, nao em `base.py`; **A3** `/plano/*` nao chega
+  ao UI, o Caddy o serve (`Caddyfile:34-37`).
+- **1 NAO ENTRA**: **A14** (*"`is_staff` e semantica, nao permissao"*) nao se confere por grep -- sao **66 sitios**
+  de producao e alguns DECIDEM tela (`core/portas_da_tela.py` x3, `chamados/views.py` x4, `core/views_usuarios.py`
+  x9). Afirmacao normativa pede censo proprio: **linha de fila**, nao linha de glossario.
+
+INCOMPLETO, nomeado: o `GLOSSARIO.md` em si **nao nasceu** -- a O98 segue esperando a VAGA da raia (a O228 inteira
+pousou, mas o aval 11:0x abriu a familia turno nela). O que esta feito e a conferencia do insumo, que era o unico
+passo que nao precisa de raia nem de nucleo.
+
 ## MEDICAO 10/10 22:3x — R4 do PLACAR-ESTRUTURAL: o DONO do par 6 e **ESTRUTURA**, e os 8 min que a celula publica **nao existem mais na sombra**
 
 LEI-AKITA: origem=nenhuma -- **ato de MEDICAO, zero linha de codigo**, testemunha=`e6_oraculo::dono_da_divergencia` + `minutos_do_oraculo` + `espelho_do_colab`, as funcoes REAIS que o comando chama (nao reconstruidas: a sonda espelha a janela `-12h/+14h` e a query de `Batida` do proprio caller), RED=nao se aplica, quem-mais-le=0, juizes novos=0

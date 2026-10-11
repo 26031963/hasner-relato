@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 22:59:31.**
+**Medido em 10/10/2026 23:05:01.**
 
 | | |
 |---|---|
@@ -129,38 +129,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 2 shell commands
-
-● O selo morde o meu teste novo — RED legítimo da casa, não do selo. Vou ler o que ele exige e onde meu teste lê o relógio:
-
-  Ran 6 shell commands
-
-● O selo é legítimo e a lista dele só encolhe — então a cura é no meu teste, não na lista. sem_celula nasce só da ausência de CelulaDia +
-  admissão/demissão (escala/services/leitor_celula.py:339-342), não do hoje — logo a competência pode ser cravada:
-
-  Ran 3 shell commands
-
-● Cura no teste (crava a competência, zero relógio) — e a lista do selo não cresce:
-
-  Ran 3 shell commands
-
-● Recorte verde (Ran 6 tests / OK / rc 0). A árvore mudou → a certificação se refaz inteira:
 
   Ran 1 shell command
 
 ● Suite 2 em voo (b6qmoat54). Enquanto corre — trabalho de grep puro, zero CPU do cpuset: a conferência das 20 afirmações do mapa antigo
   (aval dele de hoje, nenhuma conferida ainda):
 
-● A16/A17: fossil e sessao de 18h
-  ⎿  $ cd /home/ronald/saas-hasner/app
-     echo "=== A16: plataforma_principal -- definicao e leitores:"
-     grep -n "plataforma_principal" colaboradores/models.py | head
-     echo "--- leitores em producao:"; grep -rn "plataforma_principal" --include=*.py . | grep -v
-     "/tests/\|/migrations/\|colaboradores/models.py"…
+  Ran 22 shell commands
 
-· Spelunking… (40m 41s · ↓ 81.0k tokens · thinking)
+● Vinte afirmações varridas. Escrevendo o resultado no arquivo (docs — exceção de rotina), com arquivo:linha em cada linha:
+
+  Ran 2 shell commands
+
+● Agora o RELATO da conferência (L-116, teto 25 linhas) e a linha de fila do achado:
+
+  Ran 2 shell commands
+
+● 26 > 25 — aperto uma linha para caber no teto da L-116:
+
+  Ran 4 shell commands
+
+● Suite a 922 linhas. Enquanto corre, preparo a mensagem do pouso (durável, para o commit ser um ato):
+
+  Ran 2 shell commands
+
+● Momento certo para o advisor: o pouso muda o que o fechamento grava em prod, e isso puxa as cláusulas da DINHEIRO-EM-COMPETENCIA-ABERTA e
+  a L-092. Tudo já está durável (docs gravados, msg rascunhada, cura na cópia):
+
+● Advising using Fable 5.1
+
+* Spelunking… (46m 11s · ↓ 99.0k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    2% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

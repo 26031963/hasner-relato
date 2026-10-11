@@ -107,7 +107,7 @@ lista — ela e o que esta EM PE._
 | **O95** | A PAUSA DECLARADA ABSORVE QUEM NAO VOLTOU | espera aval |
 | **O96** | PAUSA MAXIMA E CADASTRO DA ESCALA, nao constante de classe | espera aval |
 | **O97** | SELO VAZIO DESDE 30/06 | **FECHADA 30/09 21:1x -- os DOIS selos v |
-| **O98** | GLOSSARIO DO DOMINIO -- DESCONGELADA 10/10 11:4x | **aguardando a VAGA, nao a fila 1** (des |
+| **O98** | GLOSSARIO DO DOMINIO -- DESCONGELADA 10/10 11:4x | espera aval |
 | **O99** | VERDADE-NAO-E-INCOMODA | espera `!` |
 | **O101** | A TRILHA DA ISENCAO E ENGOLIDA EM SILENCIO | espera aval |
 | **O102** | O RELOGIO RISCADO SAIU COM O DOBRO DO TEXTO | **FECHADA 30/09 22:3x** |
