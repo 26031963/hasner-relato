@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 20:55:31.**
+**Medido em 10/10/2026 21:00:45.**
 
 | | |
 |---|---|
@@ -130,37 +130,37 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-  Ran 3 shell commands
-
-● Terceira testemunha verde, e o CORTE impresso é 10/10 20:15:50 — exatamente o mtime do bloco.txt, como o advisor pediu que eu conferisse
-  antes de confiar no número. ESCRITAS DEPOIS DO CORTE = 0 na 09 e na 10; o atualizado_em mais novo da 09 é de ontem. Agora o par
-  controlado do vigia:
-
-  Ran 1 shell command
-
-● Comparação controlada e idêntica byte a byte, com as árvores se identificando sozinhas (barreira=True/portao=True contra
-  barreira=False/portao=False). Duas conclusões medidas:
-
-  - as 4 diferenças que eu havia visto entre os dois logs de bloco vinham da mutação de estado do bloco, não da queda — agora medido, não
-    suposto;
-  - ganhei uma quarta testemunha, e a melhor: o vigia do TXT que a casa já tinha vê exatamente o mesmo com e sem a queda, e assina VALOR
-    MOVEU: 0.
-
-  Vou escrever isso e pôr um portão no ato para a frase não poder ser publicada sem a medição:
+● O portão passa no caso bom e morde no viciado. Ponho as duas testemunhas na mensagem do commit:
 
   Ran 2 shell commands
 
-● O caminho que escrevi está errado em três minutos — e ponteiro de prova errado é prova nenhuma:
+● Falta uma pergunta honesta sobre os 8 alarmes: algum deles nasceu com a queda? Comparo os 8 contra o bloco anterior, arquivado:
 
-● Corrigir o caminho e conferir todo ponteiro de prova da secao
-  ⎿  $ cd /home/ronald/saas-hasner && sed -i 's#logs/o219/tres_testemunhas_20261010_2050.txt#logs/o219/tres_testemunhas_20261010_2053.txt#'
-     app/docs/RELATO.md && grep -c 'tres_testemunhas_20261010_2053.txt' app/docs/RELATO.md
-     # todo ponteiro de prova da secao existe?
-     awk '/^## /{n++} n==1' app/docs/RELA…
+  Ran 1 shell command
 
-✢ Proofing… (1d 3h 0m · ↓ 3.1m tokens · thinking)
+● Nenhum é novo — os 8 comandos já alarmavam. Mas "o log existe" não prova "alarmou": para os que diferem, leio o número que decide o rc=2
+  nos dois lados:
+
+  Ran 3 shell commands
+
+● O A6 mudou de conjunto: emp3/10 FURO_SEM_COBRANCA=1 saiu e emp4/09 COBRANCA_SEM_FURO=1 apareceu — e a 09 é a competência deste marco.
+  Dois blocos não isolam a variável, então preciso saber se é o CÓDIGO ou o ESTADO. Confiro primeiro que a forma --encerrada --alarme não
+  escreve:
+
+  Ran 1 shell command
+
+● --alarme sem --executar é dry-run (o retratar está atrás de o.get('executar'), :227). Então posso medir controlado, como fiz com o vigia:
+
+● Medir o A6 da emp4 controlado nas duas arvores
+  ⎿  $ cd /home/ronald/saas-hasner && cat > logs/sombra/o219_a6_emp4.py <<'PY'
+     # O A6 da emp4 na competencia ENCERRADA (a 09), no PAR CONTROLADO.
+     # `--encerrada --alarme` SEM `--executar` e dry-run: o retratar esta atras de
+     # o.get('executar') (ponto/management/commands/supra_juiz.py:227), entao rodar d…
+
+· Compacting conversation… (1d 3h 5m · ↓ 3.1m tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱ 79%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    9% until auto-compact
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
