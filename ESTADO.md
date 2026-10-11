@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 11/10/2026 19:50:46.**
+**Medido em 11/10/2026 19:55:46.**
 
 | | |
 |---|---|
@@ -22,7 +22,7 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2386.1 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2386.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 62 arquivo(s) sujo(s)
@@ -34,19 +34,19 @@ RELATO, com a lista de nomes do banco como autoridade._
   - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **16.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **270.7 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **270.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **174.8 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **174.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **292.5 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **292.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
-  - 1 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **0.5 h**
+  - 1 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **0.6 h**
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
 - **21 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
@@ -69,6 +69,7 @@ b9b650ed [O48] o vinculo nao e silencio: a abstencao do previsto se mede DENTRO 
 ```
  M app/config/crons_duracao.json
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/PROMPTS.md
  M app/docs/RELATO.md
  M bin/sonda_frota.sh
 ?? esteira.pausada
@@ -159,25 +160,12 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ⎿  Stop hook error: siga: PLACAR-ESTRUTURAL -- O ESTRUTURAL SE SEPARA DO DADO (corte dele 02/10 22:5x, que SUBSTITUI o item 3 da
-  ordem das 21:4x -- o resto d
-
-  Searched for 1 pattern, ran 9 shell commands
-
-● Background command "Suite cheia certificadora na raia" completed (exit code 0)
-
-● VERDE — Ran 10406 tests in 1447.405s / OK (skipped=42) / rc=0. Rodando a corrente do pouso.
-
-  Ran 1 shell command
 
 ● Background command "Esperar o veredito da suite em primeiro plano" completed (exit code 0)
 
 ● Background command "Esperar o veredito da suite certificadora pelo ARQUIVO" completed (exit code 0)
 
-  Medir o merge de main + raia-ui contra o main novo
-  ⎿  $ cd /home/ronald/saas-hasner && git merge-tree --write-tree main raia-ui; echo "rc_mergetree=$?"; echo "--- base e distancia"; echo
-     "merge-base: $(git merge-base main raia-ui | cut -c1-8) · main..raia-ui=$(git rev-list --count main..raia-ui) · raia-ui..main=$(git
-     rev-list --count raia-ui..main)"; …
+  Ran 8 shell commands
   ⎿  Read docs/AVAIS.md (25 lines)
   ⎿  Read docs/FECHAMENTO-ONLINE.md (76 lines)
   ⎿  Referenced file folha/export.py
@@ -187,16 +175,29 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Task "Raia wt-bos: O44 itens 2-8" still running in background
 
-· Infusing… (15h 4m 40s · ↓ 1.4m tokens · thinking)
+❯ aval Ronald: O44, leitura (c). Horizonte declarado: a emissao passa a ter piso de data, 2026-09, pela mesma forma do REGRA_VERSOES do
+  cartorio. Os 1.390 dia-colab calados em competencia trancada ficam abaixo do piso por decisao escrita; so o dia tocado pelo admin emite.
+  Nenhum chamado nasce em lote. Segue a fila; PAREI so em lei ou !
+
+  Searched for 1 pattern, ran 5 shell commands
+  ⎿  Message queued for delivery to afb3c86c93768ac83 at its next tool round.
+  ⎿  Allowed by auto mode classifier
+
+● Conferir que nenhum icone desapareceu do mapa
+  ⎿  $ cd /home/ronald/saas-hasner && B=$(git merge-base main raia-ui); for lado in "$B" raia-ui; do echo "=== $lado"; git show
+     "$lado:app/templates/core/_icone_barra.html" | grep -o "icone == '[a-z_]*'" | sed "s/.*'\(.*\)'/\1/" | sort > /tmp/ic_$(echo $lado |
+     tr -d '/'). 2>/dev/null; git show "$lado:ap…
+
+✶ Infusing… (15h 9m 41s · ↓ 1.4m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Listing worktrees and checking suite_copia log counts                                   2h 38m 52s · ↓ 152.0k tokens
+  ◯ general-purpose  Locating _cala_emissao in cartorio.py                                                   2h 43m 53s · ↓ 165.0k tokens
   ⧉  index
 ```
