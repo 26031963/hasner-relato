@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 11/10/2026 07:32:01.**
+**Medido em 11/10/2026 07:37:31.**
 
 | | |
 |---|---|
@@ -142,17 +142,17 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-● Espera as partes 2-4 · 20s
+● Espera as partes 2-4 · 5m 51s
   ⎿  $ O=/home/ronald/saas-hasner/logs/o197
      for i in $(seq 1 14); do
      if grep -qE '^== [0-9]{2}:[0-9]{2}:[0-9]{2} FIM_PROVA_P234 rc=0$' $O/PROVA_p234_runner_20261011.out 2>/dev/null; then echo PRONTO;
      break; fi
      read -t 30 x < /dev/zero || true
      done
-     date +%H:%M:%S; cat $O/PROVA_p234_runner_20261011.out (21s)
+     date +%H:%M:%S; cat $O/PROVA_p234_runner_20261011.out (5m 50s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Infusing… (2h 45m 57s · ↓ 285.9k tokens)
+· Infusing… (2h 51m 26s · ↓ 285.9k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
