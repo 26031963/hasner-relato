@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 11/10/2026 09:45:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (654.5 MB). Acoes na janela: **1199**.
+**Medido em 11/10/2026 09:50:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (655.0 MB). Acoes na janela: **1203**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 09:49:21 | Bash | Registra o RED v2 no censo durável | `cd /home/ronald/saas-hasner && python3 - <<'PY' import pathlib p = pathlib.Path('logs/o44/CENSO_VIVO_20261011.md') p.write_text(p.read_text() + ''' --- ## RED MEDIDO VERMELHO (11/10, antes da cura) Arquivo: `/home/ronald/wt-bos/app/chamados/tests/test_o44_tranca_nao_barra_o_toque.py` (6 casos da L-110 + selo estrutural por AST + o caso que MORDE). Veredito: `logs/o44/red_o44_v2_20261011.out` -- `R ...` |
+| 09:48:41 | Bash | Le o corpo do caso 3 | `cd /home/ronald/wt-bos/app && sed -n '/def test_caso3/,/def test_caso4/p' chamados/tests/test_o44_tranca_nao_barra_o_toque.py` |
+| 09:48:28 | Bash | Lista as falhas do RED v2 | `grep -nE '^(FAIL\|ERROR):' /home/ronald/saas-hasner/logs/o44/red_o44_v2_20261011.out; echo '--- corpos ---'; sed -n '/^FAIL: /,$p' /home/ronald/saas-hasner/logs/o44/red_o44_v2_20261011.out \| grep -E '^(FAIL:\|AssertionError\|ValueError\|.*Error:)' \| cut -c1-320` |
+| 09:48:03 | Bash | Roda o RED do O44 na raia depois das correcoes | `cd /home/ronald/saas-hasner && bash bin/suite.sh --dir /home/ronald/wt-bos --only chamados.tests.test_o44_tranca_nao_barra_o_toque > /home/ronald/saas-hasner/logs/o44/red_o44_v2_20261011.out 2>&1; echo "rc_processo=$?" >> /home/ronald/saas-hasner/logs/o44/red_o44_v2_20261011.out; grep -E '^(OK\|FAILED)($\| \()\|^Ran \|^rc_processo=' /home/ronald/saas-hasner/logs/o44/red_o44_v2_20261011.out \| tail ...` |
 | 09:41:48 | Bash | Corrige a fixture (adesao) e o selo estrutural (alias + papel por nome) | `cd /home/ronald/wt-bos/app && python3 - <<'PY' import pathlib p = pathlib.Path('chamados/tests/test_o44_tranca_nao_barra_o_toque.py') s = p.read_text() # ---- 1. ADESAO: col317 TEM batida na vida; sem isso o dia cai no ramo `nunca_bateu` velho = """ cls.cel_outro_dia = CelulaDia.objects.create( colaborador=cls.colab, data=OUTRO_DIA, trabalha=True, origem='gerada', escala_geradora=cls.ec, dna=MARCO ...` |
 | 09:40:53 | Bash | Le o que a tela faz com a tranca | `cd /home/ronald/wt-bos/app && sed -n '110,132p' templates/colaboradores/partials/_calendario_grade.html` |
 | 09:40:49 | Bash | Acha quem usa o filtro de tranca na tela | `cd /home/ronald/wt-bos/app && grep -rn "competencia_trancada\\|tranca_tags" templates/ \| head -20; echo '=== periodo_fechado nos templates ==='; grep -rln "periodo_fechado" templates/ \| head` |
