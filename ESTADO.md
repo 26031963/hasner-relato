@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 22:10:45.**
+**Medido em 10/10/2026 22:16:01.**
 
 | | |
 |---|---|
@@ -34,7 +34,9 @@ c1d3a6e4 [O228] pouso do INSTRUMENTO da familia turno em ato proprio: o censo na
 ```
  M app/config/crons_duracao.json
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/PROMPTS.md
  M bin/sonda_frota.sh
+?? app/docs/O148-COMPLEMENTO.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -123,38 +125,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  RED de cada item sai dos casos R01-R12 do documento do Fernando (10/10), com fixture sintetica. PROIBIDO: fallback, juiz novo, curar
+  cadastro por codigo (L-099). Origem: leitura do Fernando (fernando/handoff f75397e), conferida no origin/main d20a0e45.
+
+  Segue a fila; PAREI so em lei ou !
+
+● Recebido o complemento da O148. Registrando — e só registrando, como você pediu: não constrói, não muda a ordem da fila 1 nem da wt-bos,
+  não abre id novo.
 
   Ran 1 shell command
 
-● O comentário do próprio sítio já diz: "dia sem grade nao ganha linha" — o None não alcança a coluna NOT NULL. A cura é segura e sem
-  migration. Montando numa cópia nova do HEAD, com o RED nos dois sentidos:
+● Complemento da O148 registrado, e só registrado:
 
-  Searched for 1 pattern, ran 3 shell commands
+  - app/docs/O148-COMPLEMENTO.md (27 linhas) com os 8 itens na sua ordem literal, cada um com o arquivo e a função que ele nomeia, mais as
+    três proibições (fallback, juiz novo, curar cadastro por código — L-099), a origem (fernando/handoff f75397e, conferida no origin/main
+    d20a0e45) e os casos R01-R12 como fonte do RED com fixture sintética.
+  - Linha em app/docs/PROMPTS.md pela PROMPT-NAO-SE-REPETE, sem | dentro do texto da célula ([[pipe-em-celula-quebra-o-hook]] — pipe em
+    célula desloca as colunas e o hook lê prosa como estado).
 
-● Agora o RED, com a fixture já validada e o dna na forma que a casa usa:
+  Preservei as suas três condições: não é id novo (é complemento da O148, não abri linha nova no OBRAS), não construí nada, e a ordem da
+  fila 1 e da wt-bos está intacta. O item 1 vindo antes do 4 ficou escrito com o motivo que você deu — "nos meses que ele cobre" exige a
+  foto existir —, porque é a razão que impede alguém de reordenar depois.
 
-  Ran 2 shell commands
+  Uma coisa que eu preciso dizer sem enfeite, sobre o turno: a medição do R4 não rodou. O guarda de sombra passou (nenhum NAO_E_SOMBRA), e
+  achei dois fatos reais no caminho — o juiz dono_da_divergencia tem assinatura (horarios, declarada), não (colab, dia), e ele mora dentro
+  de um management command (ponto/management/commands/e6_oraculo.py), não em módulo de domínio, com zero chamador de produção (7 selos + 1
+  docstring). Mas o sed que corrigiria o import do script falhou (unknown option to 's' — o # que eu usei como delimitador aparece dentro
+  do próprio texto do comentário) e a última rodada morreu no mesmo ModuleNotFoundError. O script em logs/sombra/r4_passo1_medicao.py segue
+  com o import errado na linha 19 — não o conserte achando que está pronto.
 
-● RED evidenciado: minutos_previstos volta 0 com zero célula e 8,00 h trabalhadas — e os outros dois casos passam, então a grade realmente
-  diz sem_celula e a cobertura parcial já responde. Antes de patchar, o censo de quem lê esses campos com None:
+  Estado durável desta sessão, sem nada commitado:
 
-  Searched for 1 pattern
-
-● Todos os consumidores são None-safe por construção (export.py:760 guarda o bloco inteiro, :791-793 e o cartão testam is not None).
-  Aplicando a cura na origem:
-
-● Aplicar a cura na copia
-  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; C2=$S/o48sc/copia; cd $C2/app &&
-     python3 - <<'PY'
-     import io, re
-     p = 'ponto/services/fechamento.py'
-     s = io.open(p, encoding='utf-8').read()
-     # 1) a excecao nomeada, no nivel do modulo (ancora: a def do …
-
-· Compacting conversation… (1d 4h 15m · ↓ 3.3m tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱ 90%
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    0% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
