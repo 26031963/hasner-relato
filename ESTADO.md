@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 11/10/2026 12:21:31.**
+**Medido em 11/10/2026 12:27:01.**
 
 | | |
 |---|---|
@@ -133,44 +133,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  3. seletor de competencia e o filtro da casa (core/filtro.py)
+  4. tabela hx-table, 50 por pagina, resto por rolagem: LED 11px, Colaborador, Posto, Escala, O que falta (o motivo de
+  classificar_export), Dias que seguram (so se a fonte ja entrega; senao a coluna nao nasce nesta etapa). Sem coluna de horas.
 
-  Ran 1 shell command
+  MUDA:
+  - core/_barra_gestao.html: a pilula passa a aceitar icone (CHAVE, como o atalho). Inerte para quem nao passa.
+  - core/_icone_barra.html: duas chaves novas, folha_ok e folha_bloqueio, svg inline no tamanho da casa (L10).
+  - tooltip dos dois badges vem de UM mapa no modulo dono (L7).
 
-● Dois fatos duros:
+  RED / SELO:
+  - numero do badge == len da lista filtrada, pela MESMA chamada (L1), com caso que MORDE
+  - HTML do painel situacional e do holerite identico antes e depois da mudanca no partial
+  - smoke headless em 1920, 1366x768 e 1024x768
 
-  A vacuidade está medida: cartao_x_txt_divergentes no HEAD, competência 09 — 221 colabs no TXT, 0 divergente(s). Em 23/09 a mesma
-  varredura achava 7. O comparador ficou vazio quando a escrita e a comparação convergiram na mesma função.
+  RESULTADOS OBSERVAVEIS:
+  1. o link abre sem calcular: os numeros vem do retrato, com a hora
+  2. clicar no verde lista so quem entra; clicar no bloqueado lista so quem esta fora
+  3. entram + bloqueados + rescisao == total de classificar_export
+  4. situacional e holerite sem mudanca visual
 
-  E a premissa da O247 quebrou: o agente está editando relatorios/cartao_pela_celula.py e ponto/services/fechamento.py numa cópia o48p3u —
-  exatamente os dois arquivos da principal, não os três da O247.
+  NAO ENTRA nesta etapa: quadros "Quem age" e "Cadastro", drawer, atos (aprovar, gerar TXT), troca da tela antiga.
+  PROIBIDO: CSS novo, cor chapada forte, emoji, dialogo nativo, juiz novo, segundo derivador de quem entra, tocar ponto/fechamento.html.
+  PRONTO: link no RELATO, os REDs nomeados e o commit. Pouso pela L-105; depois o smoke visual do Ronald no link.
+  LINHA HAIKU: fora_da_folha ja e ferramenta do Haiku; golden: "quantos entram e quantos estao bloqueados na folha da competencia" com
+  esperado via ferramentas.fora_da_folha; degrau sem mudanca.
+  LEI-AKITA: origem=folha/fora_da_folha.py::fora_da_folha, testemunha=folha/export.py::classificar_export, RED=selo L1 da tela nova,
+  quem-mais-le=painel situacional e holerite (partial da barra), juizes novos=0
 
-  Ran 2 shell commands
-
-● O agente derivou para a minha fatia, não para a O247 — "lê o selo do cartão", "lê folha_manda e divergencia", "censo de chamadores". Duas
-  implementações da mesma cura é o BUG 139 com outro nome. Confino pela AUTONOMIA-DE-CODIGO item 2.
-  ⎿  Message queued for delivery to a03e8c57c1c78f81f at its next tool round.
-  ⎿  Allowed by auto mode classifier
-
-● Agora a refatoração que o advisor apontou: o divergencia precisa do lado do TXT pelo mesmo mapeamento, não por uma segunda extração.
-
-● Fatora o mapeamento e cura o comparador
-  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; python3 -
-     "$S/o48p3b/app/relatorios/cartao_pela_celula.py" <<'PYEOF'
-     import sys, re
-     p = sys.argv[1]
-     src = open(p, encoding='utf-8').read()
-     # 1. o corpo que MAPEIA fechamento -> chaves do cartao sai pa…
-
-✢ Infusing… (7h 35m 27s · ↓ 689.9k tokens · thinking)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+  Segue a fila; PAREI so em lei ou !
+  ctrl+x ctrl+s to send now
+                                                                                                                    9% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ Press up to edit queued messages
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  paste again to expand
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
-  ◯ fork  Tailing o48_checkB_20261011.out for progress                                               16m 59s · ↓ 167.5k tokens · 1 queued
+  ◯ fork  Checking git status of ponto/turnos.py                                                                22m 29s · ↓ 122.6k tokens
   ⧉  index
 ```
