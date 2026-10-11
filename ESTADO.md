@@ -3,11 +3,11 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 23:37:01.**
+**Medido em 10/10/2026 23:42:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `3f87ede9 [O48] SEM CELULA NAO E ZERO: a grade DIZ `sem_celula` e a derivacao respondia 0 -- o TXT escrevia zero hora realizada de quem trabalhou 189,90 h` |
+| `HEAD` local | `3c42f82c [O48] SEM CELULA NAO E ZERO: a grade DIZ `sem_celula` e a derivacao respondia 0 -- o TXT escrevia zero hora realizada de quem trabalhou 189,90 h` |
 | `origin/main` | `d20a0e45 [O219] pouso: os docs do marco A0-b entram junto, e o merge que eu pedi sem commit virou FAST-FORWARD -- o codigo estava na arvore viva antes deste commit` |
 | commits a subir (`ahead`) | **21** |
 
@@ -22,7 +22,7 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
-3f87ede9 [O48] SEM CELULA NAO E ZERO: a grade DIZ `sem_celula` e a derivacao respondia 0 -- o TXT escrevia zero hora realizada de quem trabalhou 189,90 h
+3c42f82c [O48] SEM CELULA NAO E ZERO: a grade DIZ `sem_celula` e a derivacao respondia 0 -- o TXT escrevia zero hora realizada de quem trabalhou 189,90 h
 1ceed412 [O219] a queda da clausula 1 da L-113 e a virada da regra no MESMO ato: a recusa sai de onde nascia e vira TRILHA, e a declaracao passa a (1, '2026-09')
 13582547 [PLACAR-ESTRUTURAL] R6 item 4 MEDIDO: o 25 do JUIZES_POR_VARREDURA nao desce por medicao, desce por corte -- e duas afirmacoes da propria casa eram falsas
 0ab4717e [O48] passo 2, numero de FROTA: lido == gravado em 583 de 583 colabs da 10/2026, e os 4 que sobram sao universo de cadastro, nao buraco da porta
@@ -33,6 +33,7 @@ ccad3d52 [O48] passo 2: a porta de LEITURA do fechamento nasce sem segundo deriv
 
 ```
  M app/config/crons_duracao.json
+ M app/docs/HANDOFF-SESSAO.md
  M bin/sonda_frota.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -123,35 +124,35 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-  Ran 2 shell commands
-  ⎿  Read docs/AVAIS.md (23 lines)
-  ⎿  Read docs/HANDOFF-SESSAO.md (45 lines)
-  ⎿  Read ponto/tests/test_s4_ninguem_recalcula_para_ler.py (151 lines)
-  ⎿  Referenced file ponto/services/fechamento.py
-  ⎿  Referenced file ponto/services/dia_pago.py
+  Amended commit 3c42f82c, ran 1 shell command
 
-● Task "RED e construção do segundo intervalo" completed in background
-
-● Carimbo de hoje verde, 23:36 — dá o pouso dentro da janela. Commit e deploy no mesmo sopro:
-
-  Committed 3f87ede9
-
-● Commit 3f87ede9 com as duas guardas de host passando. Deploy agora:
+● Marco fechado. Rodando o handoff (L-108) e consultando antes de abrir o próximo item:
 
   Ran 1 shell command
 
-● Três cascas provadas. Smoke que importa: provar que o worker vivo já responde None em vez de 0 — leitura pura, um colab, sem escrever:
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-● Smoke de leitura em prod, um colab, sem escrita
-  ⎿  $ cd /home/ronald/saas-hasner
-     cat > /tmp/o48_smoke_prod.py <<'PY'
-     from django.db import connection
-     from django.conf import settings
-     assert settings.DATABASES['default']['NAME'] == 'saas_hasner', 'banco errado'
-     assert connection.settings_dict['NAME'] == 'saas_hasner', 'banco errado (vivo)'
-     from pont…
+  Ran 2 shell commands
 
-✢ Spelunking… (1h 18m 11s · ↓ 145.9k tokens · thinking)
+● Dois leitores reais do COMMIT= (bin/import_tardio_contra_o_ar.py e três sítios de core/esteira_vigia.py). O carimbo aponta para um sha
+  que o amend desfez — re-carimbando com o HEAD verdadeiro, que é mais barato que raciocinar sobre cada leitor:
+
+  Ran 1 shell command
+
+● Carimbo == HEAD. Agora o R4, em cópia do HEAD (LEI-AKITA 10) — primeiro o número publicado que vai substituir o envelhecido:
+
+  Ran 4 shell commands
+
+● Medição de hoje: espelho 666,0 min x oráculo 665,9896 min = 0,01 min — a divergência de 8 min não reproduz mais. Construindo a correção
+  em cópia do HEAD:
+
+● Achar quem afirma sobre as celulas do placar
+  ⎿  $ cd /home/ronald/saas-hasner/app
+     grep -n "prova\|numero\|R4\|assert" core/tests/test_l114_placar_papel_e_termometro.py | head -25
+     date '+%H:%M:%S'
+
+✢ Spelunking… (1h 23m 41s · ↓ 156.2k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
