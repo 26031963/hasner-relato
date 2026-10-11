@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 21:27:31.**
+**Medido em 10/10/2026 21:33:01.**
 
 | | |
 |---|---|
@@ -123,38 +123,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● A autoridade do "por rubrica" é a lista CAMPOS, não uma minha:
+● RED na cópia enquanto o DIFF-B corre — o caso que mostra a inversão nomeada:
 
   Ran 1 shell command
 
-● Agora o DIFF que o aval exige — 07, 08 e 09, por colab e por rubrica, lendo a lista canônica:
+● Essa segunda asserção que escrevi está errada (if False else sempre dá 3.0) e a terceira adivinha o número 4,0. Corrijo as duas pela
+  autoridade, não por chute:
+
+  Ran 1 shell command
+
+● Agora evidenciar a RED. Vendo a forma que a porta da suíte aceita para um módulo só:
 
   Ran 2 shell commands
 
-● Enquanto o DIFF corre, construo o passo 3 em cópia. Primeiro a pergunta que decide a semântica do None:
-
-  Ran 3 shell commands
-
-● Duas respostas medidas: eventos_do_fechamento só toca fech.colaborador (nenhum pk, nenhuma relação — a instância destacada serve), e
-  fechamento_lido devolve objeto mesmo sem linha gravada (semente dict(colaborador=…, status='aberto') na linha 448). Esse segundo fato é o
-  que realmente inverte o selo. Vendo o DIFF e abrindo a cópia:
-
-  Ran 5 shell commands
-
-● Processo vivo (1:34, no lavra_de_prod). Espero por arquivo. Enquanto isso, a RED na cópia — reaproveitando a fixture do selo que vai
-  inverter:
+● RED evidenciada — mas preciso ver se falha pelo motivo certo, não por fixture:
 
   Ran 1 shell command
 
-● Achei a tensão real, e ela é maior que o selo da linha 124. Deixo medida antes de decidir:
+● Os dois falham pelo motivo exato: o número do leitor mudou com a foto (3,0→99,0) e a célula diz 2,0 h onde a foto diz 3,0. (Meu chute de
+  4,0 estava errado — a autoridade respondeu 2,0; foi por isso que a asserção foi ancorada nela.) Vendo o DIFF-B:
 
-● Ler o corte de 23/09 que manda ler o gravado
-  ⎿  $ echo "=== o corte de 23/09 19:2x, literal, no codigo:" && sed -n '66,76p' relatorios/cartao_pela_celula.py; echo "=== e no
-     CORTES.md:"; grep -n 'RESUMO-UMA-FONTE' docs/CORTES.md | head -3
+  Ran 1 shell command
 
-✢ Proofing… (1d 3h 32m · ↓ 3.2m tokens · thinking more)
+● Enquanto o DIFF-B corre, confirmo o selo que o corte de 23/09 prometeu — antes de afirmar que não existe:
+
+● Confirmar ausencia do selo de performance
+  ⎿  $ echo "=== busca larga pelo selo de performance prometido:"; grep -rln 'assertNumQueries\|num_queries' --include='*.py' . | grep -i
+     'test' | xargs grep -ln 'espelho\|cartao\|resumo\|folha_manda\|totais' 2>/dev/null | head; echo "--- (vazio = nenhum selo de query na
+     tela do espelho/cartao)"; echo "…
+
+✢ Proofing… (1d 3h 38m · ↓ 3.2m tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    1% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
