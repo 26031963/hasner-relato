@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 11/10/2026 16:38:31.**
+**Medido em 11/10/2026 16:44:01.**
 
 | | |
 |---|---|
@@ -134,35 +134,35 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-● Pista livre, digital tirada. Suíte cheia contra a raia.
+● Bateria correndo contra wt-o48p4 (~24 min). Tudo o que não depende dela está fechado:
 
-  Ran 1 shell command
+  Medido neste trecho
+  - PROVA de frota na sombra fechou: carimbo final: NADA ESCRITO — ESCREVEU=NAO valeu para as seis leituras (cinco em --lido), incluindo
+    09, 08 e 07/2026 (310/394, 382/389, 8/344 linhas/retidos). lido x lido DIFF=0; gravado x lido recusado com AUTORIDADE DIFERENTE por
+    empresa; custo 112,9 s × 3,6 s.
+  - Corrigi um número meu antes de ele virar commit: eu havia escrito "SETE leituras de frota". A contagem em logs/o48p4/p4_prova_lido.py
+    diz seis (instantaneo nas linhas 40, 48, 61 e 3× no laço da 71). Já está certo nos dois textos.
+  - Esmeril deste marco: VAZIO, com prova — o diff não remove uma única chamada; toda linha - é assinatura ou corpo substituído no mesmo
+    lugar, então nenhuma função perdeu chamador e a L-111 não tem o que alcançar aqui.
+  - LEI ANTES DO PATCH medida: das 85 leis do LEIS.md, 7 têm PROTEGE não-vazia e nenhuma nomeia montar_linhas_export, classificar_export,
+    instantaneo, _retidos ou comparar — test_lei_protege_sitio.sh não morde este push.
+  - Seção do RELATO em 25 linhas exatas (teto L-116), com a PROVA de frota dentro; a história do achado da assertiva vazia saiu para o
+    corpo do commit, que é onde a L-116 a manda.
+  - Passageiros de docs declarados: BACKLOG.md, FECHAMENTO-ONLINE.md e RELATO.md já estavam sujos com edições do passo 3 da mesma obra e
+    embarcam nomeados; HANDOFF-SESSAO.md, crons_duracao.json e bin/sonda_frota.sh ficam fora.
+  - Textos do marco agora duráveis em logs/o48p4/ (não só no scratchpad).
 
-● Enquanto a bateria corre — o esmeril DESTE marco (L-111/ESMERIL) e os números da escada na mensagem.
+  Fila (números, sem virar trabalho agora): nomear os +7 retidos que o lido tem e o gravado não — gente que nunca teve foto, e que por isso
+  sai do TXT em vez de entrar nele.
 
-  Ran 1 shell command
+  Falta, na ordem: veredito da suíte → reconferir a digital antes do git add (o git diff passa a ver o teste assim que ele entra no índice)
+  → commit da raia → merge --no-ff --no-commit + cmp + passageiros + bin/deploy.sh --sem-migrate no mesmo ato.
 
-● A PROVA de frota é o número mais importante do marco e não está na seção. Pela L-116 a história do achado sai do RELATO e fica no corpo
-  do commit — isso abre a linha.
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: PLACAR-ESTRUTURAL -- O ESTRUTURAL SE SEPARA DO DADO (corte dele 02/10 22:5x, que SUBSTITUI o item 3 da
+  ordem das 21:4x -- o resto d
 
-  Ran 2 shell commands
-
-● 25 linhas exatas. Agora o esmeril DESTE marco — que só tem sentido se algo perdeu chamador — e os números na mensagem.
-
-  Ran 1 shell command
-
-● Nada foi deletado — toda linha removida é assinatura ou corpo substituído. O esmeril deste marco é vazio, e tem prova: zero chamada
-  removida. Agora os números na mensagem.
-
-  Ran 1 shell command
-
-● Enquanto a bateria corre (~24 min), deixo os textos duráveis fora do scratchpad e chamo o review.
-
-  Ran 1 shell command
-
-● Advising using Fable 5.1
-
-✢ Infusing… (11h 52m 27s · ↓ 1.1m tokens)
+✢ Infusing… (11h 57m 56s · ↓ 1.1m tokens · still thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
