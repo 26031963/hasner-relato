@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 23:05:01.**
+**Medido em 10/10/2026 23:10:31.**
 
 | | |
 |---|---|
@@ -129,16 +129,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  Ran 1 shell command
-
-● Suite 2 em voo (b6qmoat54). Enquanto corre — trabalho de grep puro, zero CPU do cpuset: a conferência das 20 afirmações do mapa antigo
-  (aval dele de hoje, nenhuma conferida ainda):
-
-  Ran 22 shell commands
-
-● Vinte afirmações varridas. Escrevendo o resultado no arquivo (docs — exceção de rotina), com arquivo:linha em cada linha:
-
   Ran 2 shell commands
 
 ● Agora o RELATO da conferência (L-116, teto 25 linhas) e a linha de fila do achado:
@@ -157,10 +147,20 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
   a L-092. Tudo já está durável (docs gravados, msg rascunhada, cura na cópia):
 
 ● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-* Spelunking… (46m 11s · ↓ 99.0k tokens)
+● Advice taken — e o item 1 é o que manda a ordem: depois da meia-noite o deploy.sh não acha ensaio de hoje, e commit sem deploy seria
+  publicado sem portão pelo HUP das 03:30. Então: medir agora, e só copiar para a árvore viva se o deploy sair no mesmo ato.
+
+● Hora e carimbo da sombra
+  ⎿  $ cd /home/ronald/saas-hasner
+     echo "=== relogio:"; date '+%H:%M:%S (%d/%m)'
+     echo; echo "=== sombra --conferir:"; bash bin/sombra.sh --conferir 2>&1 | tail -12
+
+✢ Compacting conversation… (51m 41s · ↓ 99.9k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 65%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    2% until auto-compact
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
