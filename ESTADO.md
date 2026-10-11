@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 21:33:01.**
+**Medido em 10/10/2026 21:38:31.**
 
 | | |
 |---|---|
@@ -123,38 +123,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● RED na cópia enquanto o DIFF-B corre — o caso que mostra a inversão nomeada:
-
-  Ran 1 shell command
-
-● Essa segunda asserção que escrevi está errada (if False else sempre dá 3.0) e a terceira adivinha o número 4,0. Corrijo as duas pela
-  autoridade, não por chute:
-
-  Ran 1 shell command
-
-● Agora evidenciar a RED. Vendo a forma que a porta da suíte aceita para um módulo só:
-
-  Ran 2 shell commands
-
-● RED evidenciada — mas preciso ver se falha pelo motivo certo, não por fixture:
-
-  Ran 1 shell command
-
-● Os dois falham pelo motivo exato: o número do leitor mudou com a foto (3,0→99,0) e a célula diz 2,0 h onde a foto diz 3,0. (Meu chute de
-  4,0 estava errado — a autoridade respondeu 2,0; foi por isso que a asserção foi ancorada nela.) Vendo o DIFF-B:
-
-  Ran 1 shell command
-
 ● Enquanto o DIFF-B corre, confirmo o selo que o corte de 23/09 prometeu — antes de afirmar que não existe:
 
-● Confirmar ausencia do selo de performance
-  ⎿  $ echo "=== busca larga pelo selo de performance prometido:"; grep -rln 'assertNumQueries\|num_queries' --include='*.py' . | grep -i
-     'test' | xargs grep -ln 'espelho\|cartao\|resumo\|folha_manda\|totais' 2>/dev/null | head; echo "--- (vazio = nenhum selo de query na
-     tela do espelho/cartao)"; echo "…
+  Ran 1 shell command
 
-✢ Proofing… (1d 3h 38m · ↓ 3.2m tokens · thinking)
+● Confirmado: o selo de performance que o corte de 23/09 prometeu ("0 query de motor a mais na tela dos 750") nunca foi construído — nada
+  vai ficar vermelho sozinho quando o passo 3 puser motor na página. Isso vai para a mesa dele junto do DIFF. Vendo a forma do topo do
+  RELATO:
+
+  Ran 2 shell commands
+  ⎿  Read docs/AVAIS.md (23 lines)
+  ⎿  Read docs/HANDOFF-SESSAO.md (45 lines)
+  ⎿  Read ponto/tests/test_s4_ninguem_recalcula_para_ler.py (151 lines)
+  ⎿  Referenced file ponto/services/fechamento.py
+  ⎿  Referenced file docs/RELATO.md
+
+● Task "RED e construção do segundo intervalo" completed in background
+
+● Terminou — e o mesmo entrelaçamento de antes (duas linhas FIM, uma truncada em ED DO AVAL). Lendo o arquivo inteiro:
+
+  Ran 1 shell command
+
+● DIFF-B completo e coerente — e ele derruba a minha própria hipótese do None != 0.0: nulo->valor vazio, valor->nulo nenhum, SO campo que
+  nao existia=0 nas três. Toda diferença é valor→valor. Mas isso levanta a pergunta que vale medir antes de publicar: na 07,
+  minutos_previstos move −2.036.747 min em 181 colabs — −187 h por colab, o mês inteiro. Isso não é deriva de regra, é o lido respondendo
+  0. Vendo o script e medindo:
+
+● Ver imports do script DIFF-B
+  ⎿  $ cd /home/ronald/saas-hasner && sed -n '1,25p' logs/sombra/o48_diff_b.py
+
+✢ Proofing… (1d 3h 43m · ↓ 3.2m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    1% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
