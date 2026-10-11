@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 21:38:31.**
+**Medido em 10/10/2026 21:44:01.**
 
 | | |
 |---|---|
@@ -123,24 +123,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Enquanto o DIFF-B corre, confirmo o selo que o corte de 23/09 prometeu — antes de afirmar que não existe:
-
-  Ran 1 shell command
-
-● Confirmado: o selo de performance que o corte de 23/09 prometeu ("0 query de motor a mais na tela dos 750") nunca foi construído — nada
-  vai ficar vermelho sozinho quando o passo 3 puser motor na página. Isso vai para a mesa dele junto do DIFF. Vendo a forma do topo do
-  RELATO:
-
-  Ran 2 shell commands
-  ⎿  Read docs/AVAIS.md (23 lines)
-  ⎿  Read docs/HANDOFF-SESSAO.md (45 lines)
-  ⎿  Read ponto/tests/test_s4_ninguem_recalcula_para_ler.py (151 lines)
-  ⎿  Referenced file ponto/services/fechamento.py
-  ⎿  Referenced file docs/RELATO.md
-
-● Task "RED e construção do segundo intervalo" completed in background
-
-● Terminou — e o mesmo entrelaçamento de antes (duas linhas FIM, uma truncada em ED DO AVAL). Lendo o arquivo inteiro:
 
   Ran 1 shell command
 
@@ -149,10 +131,28 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
   minutos_previstos move −2.036.747 min em 181 colabs — −187 h por colab, o mês inteiro. Isso não é deriva de regra, é o lido respondendo
   0. Vendo o script e medindo:
 
-● Ver imports do script DIFF-B
-  ⎿  $ cd /home/ronald/saas-hasner && sed -n '1,25p' logs/sombra/o48_diff_b.py
+  Searched for 1 pattern, read 1 file, ran 4 shell commands
 
-✢ Proofing… (1d 3h 43m · ↓ 3.2m tokens)
+● Enquanto roda, consulto o advisor — estou a ponto de fixar a leitura que vai ao RELATO:
+
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+
+● Duas coisas enquanto roda. Primeiro a anti-vacuidade do próprio DIFF — o ramo somente_leitura atribui as 24 rubricas, ou algumas ficam
+  herdadas do gravado e leem IGUAIS por vazio?
+
+  Searched for 1 pattern, ran 2 shell commands
+
+● As 24 rubricas são todas atribuídas no corpo — 0 herdadas do gravado, então IGUAIS=258 não é verde por ausência de sinal. O DIFF se
+  sustenta. Rascunhando o RELATO no scratchpad com a linha da 07 em aberto:
+
+● Esperar o DIFF-C pelo marcador · 52s
+  ⎿  $ cd /home/ronald/saas-hasner && for i in 1 2 3 4 5 6 7 8 9 10 11 12; do n=$(grep -c 'FIM-C$' logs/o48_diff_c.out 2>/dev/null || echo
+     0); if [ "$n" -ge 1 ]; then echo "PRONTO (marcadores=$n)"; break; fi; sleep 55; done; echo "---"; cat logs/o48_diff_c.out 2>/dev/null
+     | tail -30 (53s · 3 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✢ Proofing… (1d 3h 49m · ↓ 3.2m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
