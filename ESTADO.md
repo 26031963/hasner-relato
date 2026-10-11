@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 11/10/2026 16:00:46.**
+**Medido em 11/10/2026 16:06:01.**
 
 | | |
 |---|---|
@@ -156,13 +156,13 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
   ⎿  Stop hook error: siga: PLACAR-ESTRUTURAL -- O ESTRUTURAL SE SEPARA DO DADO (corte dele 02/10 22:5x, que SUBSTITUI o item 3 da
   ordem das 21:4x -- o resto d
 
-  Aguardar o veredito da suite · 5s
+● Aguardar o veredito da suite · 1m 20s
   ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
-     timeout 115 bash -c "tail -n +1 -f $S/p4/suite_cheia.log | grep -m1 -E '^(OK|FAILED)(\$| \()'" ; echo "--- parciais ---"; grep -oE
-     'Ran [0-9]+ tests' $S/p4/suite_cheia.log | tail -1; grep -cE '^(FAIL|E… (4s)
+     timeout 115 bash -c "tail -n +1 -f $S/p4/suite_cheia.log | grep -m1 -E '^(OK|FAILED)(\$| \()'" ; echo "--- parciais ---"; grep -cE
+     '^(FAIL|ERROR): ' $S/p4/suite_cheia.log; wc -c < $S/p4/suite_cheia.log (1m 19s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✽ Infusing… (11h 14m 41s · ↓ 1.0m tokens)
+✢ Infusing… (11h 19m 57s · ↓ 1.0m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                     3% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
