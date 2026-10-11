@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 11/10/2026 01:56:01.**
+**Medido em 11/10/2026 02:01:31.**
 
 | | |
 |---|---|
@@ -123,9 +123,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: PLACAR-ESTRUTURAL -- O ESTRUTURAL SE SEPARA DO DADO (corte dele 02/10 22:5x, que SUBSTITUI o item 3 da
   ordem das 21:4x -- o resto d
 
   Ran 17 shell commands
@@ -148,17 +145,20 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Background command "Esperar o fim da suite por ARQUIVO" completed (exit code 0)
 
-● Conferir as chaves do retorno de medir
-  ⎿  $ cd /home/ronald/saas-hasner/app
-     sed -n '540,575p' folha/porta_export.py
+● Gravar o achado do R4 na fila
+  ⎿  $ cd /home/ronald/saas-hasner
+     cat > logs/fila/r4_par6_o_numero_de_10_10_leu_campo_lateral_20261011.txt <<'EOF'
+     R4 / par 6 (`espelho_x_dia_pago`) -- ACHADO 11/10 02:0x, na SOMBRA (carimbo 20261010, completa, diverge=0)
+     =================================================================================…
 
-· Spelunking… (3h 37m 11s · ↓ 411.1k tokens · thinking)
+✢ Compacting conversation… (3h 42m 41s · ↓ 421.1k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱ 87%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    8% until auto-compact
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
