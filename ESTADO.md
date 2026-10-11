@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:37 AFIRMA ato sem PROVA ao lado -- ## MARCO 11/10 11:1x — O148 item 1 **NO AR DE VERDADE**: o cron da lavra instalado, e a pegada da lavra e maior que as 23 FolgaDia porque o 
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:55 AFIRMA ato sem PROVA ao lado -- ## MARCO 11/10 11:1x — O148 item 1 **NO AR DE VERDADE**: o cron da lavra instalado, e a pegada da lavra e maior que as 23 FolgaDia porque o 
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 11/10/2026 11:28:01.**
+**Medido em 11/10/2026 11:33:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `faa783e1 [O197] pouso da raia wt-bos: "Em aberto" era 1,4% verdade, e a cura separa AUSENCIA de PRESENCA em vez de pedir ao leitor que se comporte` |
+| `HEAD` local | `89ed5deb [O148] o cron da lavra da foto de folga INSTALADO, e a medicao derrubou minha premissa: a lavra tambem re-lavra a CELULA, nao so grava FolgaDia` |
 | `origin/main` | `d20a0e45 [O219] pouso: os docs do marco A0-b entram junto, e o merge que eu pedi sem commit virou FAST-FORWARD -- o codigo estava na arvore viva antes deste commit` |
-| commits a subir (`ahead`) | **31** |
+| commits a subir (`ahead`) | **32** |
 
 ## Fabrica
 
@@ -29,24 +29,18 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+89ed5deb [O148] o cron da lavra da foto de folga INSTALADO, e a medicao derrubou minha premissa: a lavra tambem re-lavra a CELULA, nao so grava FolgaDia
 faa783e1 [O197] pouso da raia wt-bos: "Em aberto" era 1,4% verdade, e a cura separa AUSENCIA de PRESENCA em vez de pedir ao leitor que se comporte
 5ecebd95 [O197] "Em aberto" era 1,4% verdade: o dia que NAO ACONTECEU e o isento do Art.62 saiam com a palavra, e o teto que faltava JA TINHA NOME nesta casa
 6dcaf1a7 [PLACAR-ESTRUTURAL] as DUAS hipoteses do +6 do R4 par 6 eram FALSAS, e a terceira se mediu: o codigo e identico nas tres arvores, quem andou foi o DADO
 90bc68d6 [O148] pouso 2 do COMBOIO: a lavra da foto de folga entra com o cron, e o escopo da janela se corrigiu ANTES da suite -- a versao estreita escrevia ZERO hoje
-2eb92a98 [O198] pouso 1 do COMBOIO: a falta em dia sem jornada passa a ser recusada NA PORTA, e a suite que certifica este codigo correu UMA vez para os dois pousos
 ```
 
 ## `git status --short`
 
 ```
  M app/config/crons_duracao.json
- M app/docs/AVAIS.md
- M app/docs/BACKLOG.md
- M app/docs/HANDOFF-SESSAO.md
- M app/docs/PENDENTES_RONALD.json
- M app/docs/PROMPTS.md
  M app/docs/RELATO.md
- M app/docs/TICKETS.md
  M bin/sonda_frota.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -136,38 +130,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Task "RED e construção do segundo intervalo" completed in background
 
-  Ran 12 shell commands
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+  Os dois avais novos entraram registrados no mesmo commit. Agora a ordem nova: o item 1 da principal é O48 passos 3 e 4, e o ! do
+  CORTES.md:65 é literal — "Virar a chave em prod SO depois do DIFF lido pelo Ronald" — então ele cobre a chave em prod, não
+  construir/commitar/medir:
 
   Ran 1 shell command
 
-❯ aval Ronald: CORTES-DOS-CONTRATOS. Nenhuma lei nova alem das quatro abaixo.
+● A cópia do passo 3 nasceu 10/10 21:25 — antes dos pousos de 11/10. Pelo que já me custou uma vez, o que distingue "eu editei" de "a cópia
+  envelheceu" é o mtime, não o diff:
 
-  1. O169, opcao (b): chamado de cluster NAO fecha por idade; so morre por lastro, e o fechamento por janela e sobra a remover.
-  2. FOLHA: o que bloqueia a aprovacao e a resposta de folha/export.py::classificar_export, e so ela. Os crivos do botao (turno aberto,
-  12x36 sem ancora, conta vazia) passam a morar nele; botao, aprovar_colaborador e TXT leem dele. Nenhum juiz novo.
-  3. BATIDA: a pergunta "quantas horas este dia vale" e do motor_calculo_v2 e fica nele, declarado como juiz da familia. A segunda metade
-  da E3 (intervalo_indenizavel) so entra depois do cadastro por escala. "Dia em aberto bloqueia a folha" ja tem lei (adendo 25/09): e so
-  executar.
-  4. NOMES: nas sessoes S-BATIDA e S-ESCALA, quando a funcao que JA existe e JA responde a pergunta for a unica autoridade medida, o Code
-  escreve a frase "corte Ronald: juiz <nome> nasce" no CORTES.md citando este aval. Vale so para funcao existente, mesmo predicado,
-  universo igual antes e depois. Predicado novo ou duas candidatas = pergunta no topo do RELATO.
+  Ran 4 shell commands
 
-  Segue a fila; PAREI so em lei ou !
+● O passo 3 tem o RED evidenciado e o DIFF medido; o que falta é publicá-lo — e ele achou um bug de dinheiro no caminho. Publico com as
+  três correções (fora a frase "paga sob a regra de julho", que o próprio DIFF falsificou), dentro do teto da L-116:
 
-  Ran 2 shell commands
+  Read 1 file, ran 1 shell command
 
-● O crontab de antes dizia 33 2, não 02:36 — a autoridade é o backup, e a duração subiu. Corrijo as duas coisas:
+● Agora o bug no caminho (LEI-AKITA 6). Cópia nova do HEAD, com o RED que já existe:
 
-● Running 1 shell command…
+  Ran 1 shell command
 
-· Infusing… (6h 41m 56s · ↓ 594.2k tokens)
+● O bug do :568 já está curado no vivo — foi feito em janela anterior. Confiro o sítio inteiro e o selo antes de afirmar:
+
+● Censo do curativo e do selo
+  ⎿  $ sed -n '605,640p' ponto/services/fechamento.py; echo "=== quem testa _GradeSemCelula / sem resposta ==="; grep -rln
+     'fechamento_lido\|sem_celula' --include=test_*.py ponto/tests folha/tests relatorios/tests | head; echo "=== git log do sitio ===";
+     git log --oneline -3 -- ponto/services/fechamento…
+
+✢ Compacting conversation… (6h 47m 27s · ↓ 612.7k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 41%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

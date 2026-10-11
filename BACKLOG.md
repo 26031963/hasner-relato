@@ -5,6 +5,37 @@
 > **livre** = pode virar fatia agora, sem humano. **corte/aval/smoke/dinheiro-ate-export** = tem dono humano e espera.
 
 <!-- ORDEM-VIVA-TOPO: O48 -->
+<!-- ADENDO em 11/10 11:4x, AVAL DELE `CORTES-DOS-CONTRATOS` -- **QUATRO CORTES**, literais, que
+     respondem as perguntas que seguravam tres celulas de `core/contratos_estruturais.py`. Ele diz
+     *"nenhuma lei nova alem das quatro abaixo"*: sao LEI, e nasceram de corte dele (a L-117 nao se
+     aplica a corte literal; ela proibe o Code propor). **O `L-NNN` de cada uma entra no `LEIS.md` no
+     commit que mexer no codigo da familia** (LEI-PROTEGE-SITIO, 04/10) -- nao antes, porque a coluna
+     PROTEGE pede o sitio.
+     **(1) O169, opcao (b)** -- literal: *"chamado de cluster NAO fecha por idade; so morre por lastro,
+     e o fechamento por janela e sobra a remover."* Ele escolhe a opcao (b) da pergunta da O169: o
+     fechamento por janela nao e regra, e DIVIDA -- sai do codigo.
+     **(2) FOLHA** -- literal: *"o que bloqueia a aprovacao e a resposta de `folha/export.py::classificar_export`,
+     e so ela. Os crivos do botao (turno aberto, 12x36 sem ancora, conta vazia) passam a morar nele;
+     botao, `aprovar_colaborador` e TXT leem dele. Nenhum juiz novo."* E a resposta da celula
+     **folha/export x um juiz por pergunta** (13 pendentes): `classificar_export` E o juiz, os tres
+     crivos MIGRAM para dentro dele e os tres leitores passam a LER (LEI-AKITA 2 -- testemunha le, nao
+     recalcula). **Juiz novo = 0**, por letra dele.
+     **(3) BATIDA** -- literal: *"a pergunta 'quantas horas este dia vale' e do `motor_calculo_v2` e fica
+     nele, declarado como juiz da familia. A segunda metade da E3 (`intervalo_indenizavel`) so entra
+     depois do cadastro por escala. 'Dia em aberto bloqueia a folha' ja tem lei (adendo 25/09): e so
+     executar."* Resolve a celula **batida x um juiz** sem tocar a ZONA INVIOLAVEL: o motor nao muda,
+     ele se DECLARA. E separa o que NAO entra agora (`intervalo_indenizavel`, que espera cadastro por
+     escala) do que ja tem lei e so falta executar.
+     **(4) NOMES -- delegacao condicional da TRAVA JUIZ-NOVO**, literal: *"nas sessoes S-BATIDA e
+     S-ESCALA, quando a funcao que JA existe e JA responde a pergunta for a unica autoridade medida, o
+     Code escreve a frase 'corte Ronald: juiz <nome> nasce' no `CORTES.md` citando este aval. Vale so
+     para funcao existente, mesmo predicado, universo igual antes e depois. Predicado novo ou duas
+     candidatas = pergunta no topo do RELATO."* As **tres condicoes sao conjuntas** e se MEDEM antes de
+     escrever a frase: (i) a funcao JA existe, (ii) o predicado e o MESMO (nao se amplia a pergunta),
+     (iii) o universo e IGUAL antes e depois -- e esta ultima e a que morde, porque foi exatamente ela
+     que me fez nao mover o `detectar_par_relampago` em 10/10 (`t.aberto` MUDA o universo de um cron de
+     `--apply`). Toda frase escrita por esta delegacao **cita este aval** no `CORTES.md`, e a medida das
+     tres condicoes vai ao RELATO ao lado dela. Duas candidatas = pergunta no topo, fila SEGUE. -->
 <!-- ADENDO em 11/10 11:3x, AVAL DELE `CONTRATOS-ATE-A-VIRADA` (re-ordenacao, nao lei; a L-117
      segue). Fonte que ele nomeia: `core/contratos_estruturais.py::linha_do_placar` (hoje **15/20**)
      e `core/juizes.py::PENDENTES`.
