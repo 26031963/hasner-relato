@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 23:10:31.**
+**Medido em 10/10/2026 23:15:45.**
 
 | | |
 |---|---|
@@ -129,42 +129,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  Ran 1 shell command
+
+● Censo limpo: o delta de .py entre a árvore certificada e a viva é exatamente fechamento.py + o teste novo. Agora a guarda da sombra e o
+  script do DIFF:
+
+  Ran 1 shell command
+
+● sombra_cobre=sim (completa de hoje) — a guarda da casa libera a janela 21/09–20/10. Agora o script do DIFF, para garantir que ele imprime
+  o antes por colaborador (é esse stdout que vira o arquivo de reversão da cláusula 2):
+
+  Ran 1 shell command
+
+● Falta a cláusula 2: o stdout precisa carregar o antes de cada colaborador que move, não 4 exemplos — é esse arquivo que é a reversão.
+  Patch no script (ele mora em logs/sombra/, fora da árvore certificada):
+
   Ran 2 shell commands
 
-● Agora o RELATO da conferência (L-116, teto 25 linhas) e a linha de fila do achado:
+● Enquanto o veredito vem, o que o advisor pediu para o item 5: quem rega a competência aberta (para datar a PROVA da cláusula 4 em prod
+  como INCOMPLETO, não como feita):
 
   Ran 2 shell commands
 
-● 26 > 25 — aperto uma linha para caber no teto da L-116:
+● O regador é recalcular_por_evento (batida ponto/registro_batida.py:136, portas de célula/HE, validação de chamado) — então a PROVA em
+  prod chega quando um evento disparar, e vai datada como INCOMPLETO. Vendo o veredito:
 
-  Ran 4 shell commands
+  Ran 1 shell command
 
-● Suite a 922 linhas. Enquanto corre, preparo a mensagem do pouso (durável, para o commit ser um ato):
+● Suite parada em 1776 linhas há 5 min, e a meia-noite é o portão do deploy. O DIFF roda na sombra, banco diferente da pista de teste
 
-  Ran 2 shell commands
-
-● Momento certo para o advisor: o pouso muda o que o fechamento grava em prod, e isso puxa as cláusulas da DINHEIRO-EM-COMPETENCIA-ABERTA e
-  a L-092. Tudo já está durável (docs gravados, msg rascunhada, cura na cópia):
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-● Advice taken — e o item 1 é o que manda a ordem: depois da meia-noite o deploy.sh não acha ensaio de hoje, e commit sem deploy seria
-  publicado sem portão pelo HUP das 03:30. Então: medir agora, e só copiar para a árvore viva se o deploy sair no mesmo ato.
-
-● Hora e carimbo da sombra
-  ⎿  $ cd /home/ronald/saas-hasner
-     echo "=== relogio:"; date '+%H:%M:%S (%d/%m)'
-     echo; echo "=== sombra --conferir:"; bash bin/sombra.sh --conferir 2>&1 | tail -12
-
-✢ Compacting conversation… (51m 41s · ↓ 99.9k tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 65%
+· Spelunking… (56m 55s · ↓ 107.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    0% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
