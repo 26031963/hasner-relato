@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 11/10/2026 05:25:01.**
+**Medido em 11/10/2026 05:30:31.**
 
 | | |
 |---|---|
@@ -123,38 +123,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Atenção: o rc=0 ali é do tail (pipe), não do merge — o merge abortou, o .mmd sujo barrou. E o aval não define "isento": vou perguntar ao
-  vivo em vez de inventar.
-
-  Searched for 1 pattern, ran 2 shell commands
-
-● "isento" tem juiz no vivo — core/constants.py::isento_ponto (Art.62). E o .mmd sujo é byte-idêntico ao do main, então restaurá-lo não
-  perde nada:
-
-  Merged main, searched for 1 pattern, ran 1 shell command
-
-● Raia em 6dcaf1a7, limpa. Agora a porta que cobra "chave sem leitor":
-
-  Ran 2 shell commands
-
-● A sonda terminou. O número que define X e Y:
-
-  Ran 1 shell command
-
-● 99,4% dos turnos têm ZERO ping — 6143 de 6177, e só 49 colabs já pingaram alguma vez na história. A premissa do aval ("4 amostras por
-  turno é o esperado") não acontece em prod. Antes de decidir, discrimino por quê:
-
-  Searched for 1 pattern, ran 3 shell commands
-
-● Isto discrimina. Gravando o achado antes de decidir:
-
   Ran 1 shell command
 
 ● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-✢ Infusing… (38m 56s · ↓ 77.6k tokens)
+● O advisor achou um erro meu: a linha SEM device cadastrado é 21 de 36 (58%) contra 20 de 444 (4,5%) — não é a mesma mistura, é o sinal
+  mais forte da tabela e aponta para o lado oposto. Medindo por PING em vez de por colab:
+
+  Ran 1 shell command
+
+● Decisivo: timestamp_dispositivo_ns preenchido = 0 de 505, provider vazio em 100%, from_mock = 0. Pelo contrato de presenca.py:14 esses
+  campos são do APK Kotlin — o app nativo nunca pingou uma única vez. E 45% dos pings são de um colab só. Agora o cliente que existe no
+  repo:
+
+  Searched for 1 pattern, ran 1 shell command
+
+● Agora a origem está medida inteira. O PWA agenda o ping com um setTimeout de 15–90 min dentro da página (static/pwa.js:380-390), que
+  morre quando o celular descarta a aba — e o APK, que preencheria ts_ns/provider, nunca pingou. Corrigindo o arquivo do achado com o que a
+  medida discriminou:
+
+  Ran 2 shell commands
+
+● Agora as linhas de fila que o censo achou, e a pergunta no topo do RELATO:
+
+● Le a estrutura do topo do RELATO
+  ⎿  $ echo '=== topo do RELATO: os itens numerados ==='; grep -n '^([0-9])\|^PERGUNTA DE LEI\|^PAREI' docs/RELATO.md | head -20; echo;
+     echo '=== onde termina o item (7) ==='; sed -n '55,80p' docs/RELATO.md
+
+✢ Compacting conversation… (44m 27s · ↓ 88.8k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱ 75%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                   10% until auto-compact
+                                                                                                                    1% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
