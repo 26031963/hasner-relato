@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 21:55:01.**
+**Medido em 10/10/2026 22:00:31.**
 
 | | |
 |---|---|
@@ -123,36 +123,36 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Searched for 1 pattern, ran 2 shell commands
+  Ran 1 shell command
 
-● As 24 rubricas são todas atribuídas no corpo — 0 herdadas do gravado, então IGUAIS=258 não é verde por ausência de sinal. O DIFF se
-  sustenta. Rascunhando o RELATO no scratchpad com a linha da 07 em aberto:
+● Background command "Esperar o DIFF-C pelo marcador" completed (exit code 0)
 
-  Ran 4 shell commands
+● Decisivo, e ele refuta a minha linha da 07: os 175 colabs cujo minutos_previstos o lido zera estão todos os 175 SEM célula no período (0
+  com célula). Isso não é deriva de regra — é o leitor respondendo zero onde não há o que ler. Mas horas_trabalhadas zera em 0 colabs, e as
+  duas medem a mesma coisa. Medindo a contradição em vez de inferi-la:
 
-● Enquanto o DIFF-C corre, o censo que a cura vai precisar de qualquer jeito — quem chama fechamento_lido em produção e o que cada um faz
-  com None:
+  Ran 2 shell commands
+
+● Medido, e é o achado do turno: a 07 tem 217 células para 15 colabs (contra 16.894/560 na 08 e 17.332/577 na 09) — a competência é
+  pré-célula. E a contradição é real: 131 colabs em que o MESMO objeto lido diz minutos_realizados=0 e horas_trabalhadas>0 (col89: 189,90 h
+  trabalhadas, 0 min realizados), contra 2 coerentes. Pela L-099 isso é ESTRUTURA, o único dono que é fatia. Achando a origem:
 
   Searched for 1 pattern
 
-● fechamento_lido tem ZERO chamadores de produção hoje — ele nasceu no passo 2 e quem o chamaria é o passo 3. Conferindo contra a prova que
-  o passo 2 publicou:
+● :595 já tem o caminho = None, e folha/export.py:791-792 distingue exatamente os dois: None → cai em trab; 0 → zero hora realizada para
+  quem trabalhou 189,90 h. Lendo a condição:
 
   Ran 1 shell command
 
-● Isso fecha a leitura mais importante para ele, e é medida: o DIFF-ZERO que o passo 2 publicou foi na 10/2026 (583 de 583), cuja foto é
-  recente. A 07/08 não o contradiz — é a idade da foto. Acrescentando ao rascunho:
+● Agora a origem está nua, e é a família que esta casa nomeia: o except produz None, mas o caminho 0 é sum({}.values()) — a grade vazia
+  (sem célula) lida como "zero minuto realizado" em vez de "sem resposta". É o [] de dois sentidos, e folha/export.py:791 já sabe tratar
+  None (cai em trab). Gravando o achado antes de decidir a cura:
 
-  Ran 3 shell commands
+  Ran 1 shell command
 
-● Vivo e correndo (--cpus 1, 15 min decorridos; a saída sai em bloco no fim por buffer). Esperando pelo marcador:
+● Advising using Fable 5.1
 
-● Esperar e ler o DIFF-C · 45s
-  ⎿  $ cd /home/ronald/saas-hasner && for i in $(seq 1 10); do n=$({ grep -c 'FIM-C$' logs/o48_diff_c.out 2>/dev/null || true; }); [
-     "${n:-0}" -ge 1 ] && { echo "PRONTO marcadores=$n"; break; }; sleep 50; done; echo "=== CONTEUDO:"; cat logs/o48_diff_c.out (45s)
-     (ctrl+b ctrl+b (twice) to run in background)
-
-✢ Proofing… (1d 4h 0m · ↓ 3.2m tokens)
+✢ Proofing… (1d 4h 5m · ↓ 3.2m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
