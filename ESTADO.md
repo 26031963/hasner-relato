@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 11/10/2026 04:42:31.**
+**Medido em 11/10/2026 04:47:32.**
 
 | | |
 |---|---|
-| `HEAD` local | `a96169b5 [PLACAR-ESTRUTURAL] o par 6 do R4 se pergunta ao CONTADOR, e ele diz 7 na 09 e 0 na 10 -- a celula publicava 1 e 6, que era campo comparado com campo` |
+| `HEAD` local | `2eb92a98 [O198] pouso 1 do COMBOIO: a falta em dia sem jornada passa a ser recusada NA PORTA, e a suite que certifica este codigo correu UMA vez para os dois pousos` |
 | `origin/main` | `d20a0e45 [O219] pouso: os docs do marco A0-b entram junto, e o merge que eu pedi sem commit virou FAST-FORWARD -- o codigo estava na arvore viva antes deste commit` |
-| commits a subir (`ahead`) | **23** |
+| commits a subir (`ahead`) | **25** |
 
 ## Fabrica
 
@@ -22,11 +22,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+2eb92a98 [O198] pouso 1 do COMBOIO: a falta em dia sem jornada passa a ser recusada NA PORTA, e a suite que certifica este codigo correu UMA vez para os dois pousos
 a96169b5 [PLACAR-ESTRUTURAL] o par 6 do R4 se pergunta ao CONTADOR, e ele diz 7 na 09 e 0 na 10 -- a celula publicava 1 e 6, que era campo comparado com campo
+50d2a6f6 [O198] FALTA EM DIA SEM JORNADA: a L-089 ja mandava, o EFEITO ja obedecia, e quem nao migrou foi a PORTA
 80b1db30 [PLACAR-ESTRUTURAL] o numero do RED (a) do R4 envelheceu e se TROCA, nao se apaga: remedido, os dois leitores leem 666,0 x 665,9896 min -- 0,01 min, nao 8
 3c42f82c [O48] SEM CELULA NAO E ZERO: a grade DIZ `sem_celula` e a derivacao respondia 0 -- o TXT escrevia zero hora realizada de quem trabalhou 189,90 h
-1ceed412 [O219] a queda da clausula 1 da L-113 e a virada da regra no MESMO ato: a recusa sai de onde nascia e vira TRILHA, e a declaracao passa a (1, '2026-09')
-13582547 [PLACAR-ESTRUTURAL] R6 item 4 MEDIDO: o 25 do JUIZES_POR_VARREDURA nao desce por medicao, desce por corte -- e duas afirmacoes da propria casa eram falsas
 ```
 
 ## `git status --short`
@@ -34,7 +34,6 @@ a96169b5 [PLACAR-ESTRUTURAL] o par 6 do R4 se pergunta ao CONTADOR, e ele diz 7 
 ```
  M app/config/crons_duracao.json
  M app/docs/HANDOFF-SESSAO.md
- M app/docs/RELATO.md
  M bin/sonda_frota.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -125,28 +124,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-● A lição do portão pertence a uma memória que já existe — estendo ela em vez de duplicar:
-
-  Ran 1 shell command
-
-● Portão fechado por medição, não por suposição — e o esperador agora pergunta à autoridade certa.
-
-  O que o gate 1 escondia: a v1 do esperador casava a substring dia=20261011 e abriu às 04:20 com status=REFEITA. O --refazer tinha
-  acabado; o bloco da manhã nem começara. O portão de verdade é o RC de bash bin/sombra.sh --conferir, que é literalmente o que
-  bin/deploy.sh:167 pergunta — e ali ele valia 1. REFEITA não é erro: é um status intermediário legítimo que contém a substring do gate,
-  então a condição frouxa nunca falha, só abre cedo — e me teria levado a uma recusa de deploy no meio de um pouso certificado. A lição
-  entrou na memória espera-casa-com-prosa-do-log, que já é a casa dessa família.
-
-  O esperador novo (bss1rf196, log logs/espera_sombra2_20261011.log) exige os dois gates pela autoridade de cada um: rc 0 do --conferir e
-  zero entrada sombra.sh_* em logs/crons_em_curso/ — espera por arquivo, nunca por pgrep. Agora atrelado ao harness: o primeiro lançamento
-  caiu no background duplo (run_in_background mais &), o harness reportou o lançador morto no sleep bloqueado e o esperador real ficou
-  solto sem notificação; matei o solto e religuei sem o &.
-
-  O bloco leva ~18 min desde o fim do refazer, então o portão abre ≈04:38-04:40.
-
-  Pouso segue armado e nada mudou nele: main em a96169b5, nenhum .py tocado, árvore certificada 3bf9c778 / commit 02261de0, trava livre. As
-  três mudanças que a espera pagou:
-
   1. Esmeril do marco fechado, zero órfão — logs/esmeril/esmeril_marco_o198_foto_20261011.txt.
   2. Censo cmp agora citado nas duas mensagens de commit, com o lugar do resultado real reservado; a cláusula da SUITE-UMA-VEZ-POR-ARVORE
      exige isso no corpo do commit e as mensagens não o tinham.
@@ -154,12 +131,34 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
      condicional nos 7, medidos numa sombra de ontem. O adendo 5 põe o número para se re-perguntar na sombra refeita antes do install; não
      batendo, o código fica no ar e o install é PAREI com a tabela.
 
-✻ Worked for 2m 19s · done 4:22 AM · 2 shells still running
-                                                                                                   ✔ Update installed · Restart to update
+✻ Worked for 2m 19s · done 4:22 AM · 1 shell still running
+
+● Background command "Esperar o portao do deploy abrir (rc 0 + cron fora de curso)" completed (exit code 0)
+
+  Ran 1 shell command
+
+● PORTÃO ABERTO — rc_conferir=0, dia=20261011 status=OK tipo=completa diverge=0 erros=0, crons_em_curso vazio, trava livre, main intacto em
+  a96169b5. Releio o runbook do pouso 1 antes do primeiro merge.
+
+  Ran 1 shell command
+
+● Portão aberto é a condição; o "~04:55" do runbook era proxy do carimbo, que já nasceu. POUSO 1 — O198.
+
+  Ran 5 shell commands
+
+● Censo cmp byte a byte: 2 arquivos, 0 divergente — o que vai ao ar é exatamente o que a suite certificou. Commit e deploy num ato só:
+
+● Committing e deploy do pouso 1 (O198) · 2s
+  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad &&
+     git add -- app/docs/RELATO.md && echo "=== INDEX ===" && git diff --cached --name-only | cat && if git diff --cached --name-only |
+     grep -qE 'crons_duracao|sonda_frota'…
+
+✽ Infusing… (1m 27s · ↓ 5.1k tokens)
+                                                                                                                   11% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ segue a fila; PAREI so em lei ou !
+❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
