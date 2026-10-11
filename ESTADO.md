@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 11/10/2026 12:27:01.**
+**Medido em 11/10/2026 12:32:31.**
 
 | | |
 |---|---|
@@ -133,26 +133,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  3. seletor de competencia e o filtro da casa (core/filtro.py)
-  4. tabela hx-table, 50 por pagina, resto por rolagem: LED 11px, Colaborador, Posto, Escala, O que falta (o motivo de
-  classificar_export), Dias que seguram (so se a fonte ja entrega; senao a coluna nao nasce nesta etapa). Sem coluna de horas.
-
-  MUDA:
-  - core/_barra_gestao.html: a pilula passa a aceitar icone (CHAVE, como o atalho). Inerte para quem nao passa.
-  - core/_icone_barra.html: duas chaves novas, folha_ok e folha_bloqueio, svg inline no tamanho da casa (L10).
-  - tooltip dos dois badges vem de UM mapa no modulo dono (L7).
-
-  RED / SELO:
-  - numero do badge == len da lista filtrada, pela MESMA chamada (L1), com caso que MORDE
-  - HTML do painel situacional e do holerite identico antes e depois da mudanca no partial
-  - smoke headless em 1920, 1366x768 e 1024x768
-
-  RESULTADOS OBSERVAVEIS:
-  1. o link abre sem calcular: os numeros vem do retrato, com a hora
-  2. clicar no verde lista so quem entra; clicar no bloqueado lista so quem esta fora
-  3. entram + bloqueados + rescisao == total de classificar_export
-  4. situacional e holerite sem mudanca visual
-
   NAO ENTRA nesta etapa: quadros "Quem age" e "Cadastro", drawer, atos (aprovar, gerar TXT), troca da tela antiga.
   PROIBIDO: CSS novo, cor chapada forte, emoji, dialogo nativo, juiz novo, segundo derivador de quem entra, tocar ponto/fechamento.html.
   PRONTO: link no RELATO, os REDs nomeados e o commit. Pouso pela L-105; depois o smoke visual do Ronald no link.
@@ -162,15 +142,35 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
   quem-mais-le=painel situacional e holerite (partial da barra), juizes novos=0
 
   Segue a fila; PAREI so em lei ou !
-  ctrl+x ctrl+s to send now
-                                                                                                                    9% until auto-compact
+
+● Chegou um aval novo no meio do turno. Registro ele já (PROMPT-NAO-SE-REPETE) e corrijo a medição que morreu no time do sh.
+
+  Ran 1 shell command
+
+● Agent "O247 universo cru + tripwire B5-j" finished · 23m 30s
+
+● O agente devolveu algo aproveitável e algo que preciso conferir — ele cita um chamador que meu grep não viu, e um corte de custo que
+  minha cura pode não cumprir.
+
+  Ran 1 shell command
+
+● Isso muda o desenho. CORTES.md RESUMO-UMA-FONTE 2ª metade é corte dele e diz o oposto da minha cura: "na competencia a tela LE o
+  fechamento gravado, SEM corrida de motor extra; selo: 0 query de motor a mais na tela dos 750" — e o custo medido é 176 ms de motor por
+  página. Falta um fato antes de eu decidir o que pousa.
+
+  Ve quais competencias os crons recalculam
+  ⎿  $ R=/home/ronald/saas-hasner; echo "=== crons que recalculam fechamento ==="; grep -n 'recalcular' $R/app/config/crons.py | head -20
+
+✢ Compacting conversation… (7h 46m 27s · ↓ 709.8k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱ 89%
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ Press up to edit queued messages
+❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  paste again to expand
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
-  ◯ fork  Checking git status of ponto/turnos.py                                                                22m 29s · ↓ 122.6k tokens
   ⧉  index
 ```
