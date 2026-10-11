@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 11/10/2026 16:55:01.**
+**Medido em 11/10/2026 17:00:31.**
 
 | | |
 |---|---|
@@ -44,6 +44,9 @@ faa783e1 [O197] pouso da raia wt-bos: "Em aberto" era 1,4% verdade, e a cura sep
  M app/docs/FECHAMENTO-ONLINE.md
  M app/docs/HANDOFF-SESSAO.md
  M app/docs/RELATO.md
+M  app/folha/export.py
+M  app/folha/management/commands/simular_folha.py
+A  app/folha/tests/test_o48_passo4_simular_folha_lido.py
  M bin/sonda_frota.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -133,42 +136,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  - Passageiros de docs declarados: BACKLOG.md, FECHAMENTO-ONLINE.md e RELATO.md já estavam sujos com edições do passo 3 da mesma obra e
-    embarcam nomeados; HANDOFF-SESSAO.md, crons_duracao.json e bin/sonda_frota.sh ficam fora.
-  - Textos do marco agora duráveis em logs/o48p4/ (não só no scratchpad).
 
-  Fila (números, sem virar trabalho agora): nomear os +7 retidos que o lido tem e o gravado não — gente que nunca teve foto, e que por isso
-  sai do TXT em vez de entrar nele.
+● Verde: Ran 10401 tests in 1406.217s / OK (skipped=42). O rc do processo e a digital reconferida — nesta ordem, antes do git add.
 
-  Falta, na ordem: veredito da suíte → reconferir a digital antes do git add (o git diff passa a ver o teste assim que ele entra no índice)
-  → commit da raia → merge --no-ff --no-commit + cmp + passageiros + bin/deploy.sh --sem-migrate no mesmo ato.
+  Ran 1 shell command
 
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: PLACAR-ESTRUTURAL -- O ESTRUTURAL SE SEPARA DO DADO (corte dele 02/10 22:5x, que SUBSTITUI o item 3 da
-  ordem das 21:4x -- o resto d
+● Background command "Rodar a suite cheia contra a raia" completed (exit code 0)
 
-● O hook está certo em não me liberar: o turno não devolve com item em pé, e a espera da bateria não é parada. Leio o próximo item da ORDEM
-  VIVA enquanto ela corre — leitura de arquivo não disputa o cpuset.
+● Digital idêntica nas duas metades, rc 0, zero FAILED/ERROR. Preencho o veredito e committo a raia.
 
-  Ran 2 shell commands
+  Ran 1 shell command
 
-● O próximo do PLACAR-ESTRUTURAL é R4 col290, e ele está exatamente dentro do ! aberto R4-PAR6-DIFERENCA-DA-09-EXPORTADA (a 09 é EXPORTADA
-  — tocar o gravado dela é a lista NUNCA PRE-APROVADO). Não abro medição de sombra agora: a bateria está com o cpuset 4-7. Espero pelo
-  arquivo do veredito, que é o item em curso de verdade.
+● Background command "Esperar pelo veredito da suite no arquivo" completed (exit code 0)
 
-● Seguir esperando o veredito · 15s
-  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; date '+%H:%M:%S'; wc -l <
-     $S/p4/suite_cheia_v2.log; until grep -qE '^(OK|FAILED)($| \()' $S/p4/suite_cheia_v2.log 2>/dev/null; do sleep 20; done; date
-     '+%H:%M:%S'; grep -E '^(OK|FAILED)($| \()' $S/p4/… (15s · 3 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
+● A suíte rodou com bind-mount da própria raia, então a digital da raia é a da árvore certificada. Commit da raia:
 
-✢ Infusing… (12h 8m 57s · ↓ 1.1m tokens)
+  Committed 00e4593a
+
+● Raia em 00e4593a, árvore limpa. Pouso (L-107, num ato só) — portão, merge e o cmp:
+
+  Ran 1 shell command
+
+● Merge real (não fast-forward), cmp igual nos três. Os passageiros de docs, com o sha da raia:
+
+  Ran 1 shell command
+
+● O selo do próprio patch recusou: 307 > 300 da L-109. Encurto a célula.
+
+● Running 1 shell command…
+
+✢ Infusing… (12h 14m 27s · ↓ 1.1m tokens · thought for 2s)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
