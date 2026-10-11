@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 11/10/2026 09:40:45.**
+**Medido em 11/10/2026 09:45:45.**
 
 | | |
 |---|---|
@@ -125,11 +125,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 5 shell commands
-
-● wt-bos limpo em faa783e1. Agora o RED. Primeiro os moldes de fixture que a casa já tem para tranca + cobrar_dia.
-
-  Searched for 1 pattern, ran 2 shell commands
 
 ● O RED decide o fork (duas rotas de pergunta no toque). Vou ao molde da casa.
 
@@ -149,14 +144,19 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Background command "Roda o RED dos 6 casos na copia da raia" completed (exit code 0)
 
-● Le os leitores de escopo e de exibicao
-  ⎿  $ cd /home/ronald/wt-bos/app && sed -n '58,75p' escala/services/furos_diarios.py; echo '=== furos_sem_cobranca 62-75 ==='; sed -n
-     '62,75p' ponto/services/furos_sem_cobranca.py; echo '=== tranca_tags ==='; cat ponto/templatetags/tranca_tags.py; echo '===
-     catalogo/recusa.py ==='; sed -n '1,35p' chama…
+  Corrige a fixture (adesao) e o selo estrutural (alias + papel por nome)
+  ⎿  $ cd /home/ronald/wt-bos/app && python3 - <<'PY'
+     import pathlib
+     p = pathlib.Path('chamados/tests/test_o44_tranca_nao_barra_o_toque.py')
+     s = p.read_text()
+     # ---- 1. ADESAO: col317 TEM batida na vida; sem isso o dia cai no ramo `nunca_bateu`
+     velho = """ cls.cel_outro_dia = CelulaDia.objects.create(
+     c…
 
-· Infusing… (4h 54m 40s · ↓ 402.4k tokens · still thinking)
+· Compacting conversation… (4h 59m 40s · ↓ 407.9k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱ 93%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    6% until auto-compact
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

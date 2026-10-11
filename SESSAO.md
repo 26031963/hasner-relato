@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 11/10/2026 09:40:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (654.5 MB). Acoes na janela: **1202**.
+**Medido em 11/10/2026 09:45:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (654.5 MB). Acoes na janela: **1199**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 09:41:48 | Bash | Corrige a fixture (adesao) e o selo estrutural (alias + papel por nome) | `cd /home/ronald/wt-bos/app && python3 - <<'PY' import pathlib p = pathlib.Path('chamados/tests/test_o44_tranca_nao_barra_o_toque.py') s = p.read_text() # ---- 1. ADESAO: col317 TEM batida na vida; sem isso o dia cai no ramo `nunca_bateu` velho = """ cls.cel_outro_dia = CelulaDia.objects.create( colaborador=cls.colab, data=OUTRO_DIA, trabalha=True, origem='gerada', escala_geradora=cls.ec, dna=MARCO ...` |
+| 09:40:53 | Bash | Le o que a tela faz com a tranca | `cd /home/ronald/wt-bos/app && sed -n '110,132p' templates/colaboradores/partials/_calendario_grade.html` |
+| 09:40:49 | Bash | Acha quem usa o filtro de tranca na tela | `cd /home/ronald/wt-bos/app && grep -rn "competencia_trancada\\|tranca_tags" templates/ \| head -20; echo '=== periodo_fechado nos templates ==='; grep -rln "periodo_fechado" templates/ \| head` |
 | 09:40:27 | Bash | Le os leitores de escopo e de exibicao | `cd /home/ronald/wt-bos/app && sed -n '58,75p' escala/services/furos_diarios.py; echo '=== furos_sem_cobranca 62-75 ==='; sed -n '62,75p' ponto/services/furos_sem_cobranca.py; echo '=== tranca_tags ==='; cat ponto/templatetags/tranca_tags.py; echo '=== catalogo/recusa.py ==='; sed -n '1,35p' chamados/catalogo/recusa.py` |
 | 09:40:02 | Bash | Le o ramo nunca_bateu | `cd /home/ronald/wt-bos/app && sed -n '625,665p' ponto/services/cartorio.py` |
 | 09:39:57 | Bash | Acha o ramo nunca_bateu do cartorio | `cd /home/ronald/wt-bos/app && grep -n "nunca_bateu" ponto/services/cartorio.py \| head -20` |
@@ -1206,9 +1209,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 21:53:35 | Bash | Mensagem do commit do passo 2 | `cd /home/ronald/saas-hasner && git log -1 --format=%B 0ab4717e \| head -12` |
 | 21:53:21 | Bash | Chamadores de fechamento_lido em producao | `grep -rn "fechamento_lido" --include='*.py' . \| grep -v "/tests/\\|test_" \| grep -v "def fechamento_lido"` |
 | 21:53:11 | Bash | Estado parcial do DIFF-C | `cd /home/ronald/saas-hasner && grep -c 'FIM-C$' logs/o48_diff_c.out 2>/dev/null; echo "--- parcial:"; cat logs/o48_diff_c.out 2>/dev/null` |
-| 21:43:07 | Bash | Esperar o DIFF-C pelo marcador | `cd /home/ronald/saas-hasner && for i in 1 2 3 4 5 6 7 8 9 10 11 12; do n=$(grep -c 'FIM-C$' logs/o48_diff_c.out 2>/dev/null \|\| echo 0); if [ "$n" -ge 1 ]; then echo "PRONTO (marcadores=$n)"; break; fi; sleep 55; done; echo "---"; cat logs/o48_diff_c.out 2>/dev/null \| tail -30` |
-| 21:43:02 | Bash | Rascunhar a entrada do RELATO | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; mkdir -p $S/o48p3 && cat > $S/o48p3/relato_entrada.md <<'MD' ## O48 passo 3 — O DIFF QUE O AVAL DELE PEDE, E ELE PARA AQUI (a chave nao vira sem a leitura dele) LEI-AKITA: origem=`relatorios/cartao_pela_celula.py::totais_da_folha` (o leitor le a FOTO; a autoridade e a celula), testemunha=`ponto/service ...` |
-| 21:42:10 | Bash | Progresso do DIFF-C | `cd /home/ronald/saas-hasner && grep -c 'FIM-C$' logs/o48_diff_c.out 2>/dev/null; tail -3 logs/o48_diff_c.out 2>/dev/null` |
-| 21:42:03 | Bash | Rubricas nunca atribuidas no ramo de leitura | `python3 - <<'PY' import re, io src = io.open('ponto/services/fechamento.py', encoding='utf-8').read() # campos canonicos cam = io.open('ponto/management/commands/aplicar_09_corte_b.py', encoding='utf-8').read() m = re.search(r'CAMPOS\s*=\s*[\(\[](.*?)[\)\]]', cam, re.S) campos = re.findall(r"'([a-z_0-9]+)'", m.group(1)) rubricas = [c for c in campos if c not in ('mes','ano')] atrib = set(re.findal ...` |
-| 21:41:54 | Bash | Ramo somente_leitura no fim do calculo | `sed -n '600,625p' ponto/services/fechamento.py` |
-| 21:41:50 | Bash | Sitios do somente_leitura | `grep -n "somente_leitura" ponto/services/fechamento.py \| head -20` |
