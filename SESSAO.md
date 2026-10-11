@@ -6,10 +6,26 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 11/10/2026 15:30:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (670.2 MB). Acoes na janela: **1086**.
+**Medido em 11/10/2026 15:35:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (670.8 MB). Acoes na janela: **1086**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 15:35:01 | Bash | Conferir dias da semana | `which python3 && python3 -c " import datetime for d in ('2026-09-07','2026-09-08','2026-09-09','2026-09-10'): x=datetime.date.fromisoformat(d); print(d, x.strftime('%a'), x.weekday()) "` |
+| 15:34:28 | Bash | Ler eventos_do_fechamento | `cd /home/ronald/wt-o48p4/app grep -n "def eventos_do_fechamento" -A 60 folha/export.py` |
+| 15:34:23 | Bash | Ler fixture do pdf_export_conservacao | `cd /home/ronald/wt-o48p4/app cat -n folha/tests/test_pdf_export_conservacao.py \| sed -n '1,120p'` |
+| 15:34:17 | Bash | Ler test_sem_furo.py | `cd /home/ronald/wt-o48p4/app cat -n folha/tests/test_sem_furo.py` |
+| 15:34:14 | Bash | Ler helper de celulas | `cd /home/ronald/wt-o48p4/app cat -n folha/tests/_celulas.py` |
+| 15:34:10 | Bash | Achar testes que montam fixture entra | `cd /home/ronald/wt-o48p4/app grep -rln "status.*entra\\|'entra'" folha/tests/*.py \| head -20 echo "=== quem cria CelulaDia em folha/tests" grep -rln "CelulaDia" folha/tests/*.py \| head -20` |
+| 15:33:59 | Bash | Ver vereditos da CelulaDia | `cd /home/ronald/wt-o48p4/app sed -n '1700,1735p' escala/models.py` |
+| 15:33:52 | Bash | Resto do juiz de retencao + constantes | `cd /home/ronald/wt-o48p4/app sed -n '919,945p' folha/export.py; echo "=== VEREDITOS_ACUSAM / NAO_COBRAVEIS"; grep -rn "VEREDITOS_ACUSAM\s*=\\|NAO_COBRAVEIS_DO_COLABORADOR\s*=" --include=*.py . \| head` |
+| 15:33:21 | Bash | Ler motivos_retencao_celula | `cd /home/ronald/wt-o48p4/app grep -rn "def motivos_retencao_celula" -A 60 --include=*.py . \| head -80` |
+| 15:33:17 | Bash | Ler motivos_retencao_espelho e codigos_homologados | `cd /home/ronald/wt-o48p4/app grep -n "def motivos_retencao_espelho" -A 45 folha/export.py; echo "---- codigos_homologados"; grep -n "def codigos_homologados" -A 12 folha/export.py` |
+| 15:33:09 | Bash | Resto do classificar_export 2 | `cd /home/ronald/wt-o48p4/app sed -n '700,800p' folha/export.py` |
+| 15:33:06 | Bash | Resto do classificar_export | `cd /home/ronald/wt-o48p4/app sed -n '604,700p' folha/export.py` |
+| 15:32:56 | Bash | Ler simular_folha.py patchado parte 2 | `cd /home/ronald/wt-o48p4/app cat -n folha/management/commands/simular_folha.py \| sed -n '140,260p'` |
+| 15:32:52 | Bash | Ler simular_folha.py patchado parte 1 | `cd /home/ronald/wt-o48p4/app cat -n folha/management/commands/simular_folha.py \| sed -n '1,140p'` |
+| 15:32:48 | Bash | Ler montar_linhas_export inteiro | `cd /home/ronald/wt-o48p4/app grep -n "def montar_linhas_export" -A 95 folha/export.py` |
+| 15:32:40 | Bash | Ler resto da fixture do L113 | `cd /home/ronald/wt-o48p4 sed -n '90,180p' app/folha/tests/test_l113_a0_forma_do_txt.py` |
 | 15:26:43 | Bash | Ler fixture completa de TXT | `cd /home/ronald/wt-o48p4 echo "===== test_l113_a0_forma_do_txt.py: a fixture completa =====" sed -n '1,90p' app/folha/tests/test_l113_a0_forma_do_txt.py` |
 | 15:26:39 | Bash | Entender a fixture de integracao Dominio | `cd /home/ronald/wt-o48p4 echo "===== codigo_no_sistema_dominio + _rubricas_map =====" sed -n '23,46p' app/folha/export.py sed -n "$(grep -n 'def _rubricas_map' app/folha/export.py \| cut -d: -f1),+9p" app/folha/export.py echo echo "===== fixture com integracao: quem cria IntegracaoDominio/Rubrica nos testes =====" grep -rln "codigo_no_sistema\\|RubricaDominio\\|IntegracaoDominio" app/folha/tests/  ...` |
 | 15:26:21 | Bash | Ler o teste existente do simular_folha | `cd /home/ronald/wt-o48p4 cat -n app/folha/tests/test_simular_folha.py` |
@@ -1080,19 +1096,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 03:37:01 | Bash | Conferir nomes de campo da celula e da batida | `grep -n "gerada_em\\|regenerada_em\\|editada_em\\|regeneracoes\s*=\\|origem = \\|dna_anterior" escala/models.py \| head -12; echo "=== Batida timestamps"; grep -n "class Batida" -A 30 ponto/models.py \| grep -nE "= models\.(DateTime\|Char)" \| head -12` |
 | 03:36:20 | Bash | Ler a prova do par 6 de 03/10 | `cd /home/ronald/saas-hasner && ls -la logs/e6_cauda2c/r4_pares*.txt 2>/dev/null; grep -n "espelho_x_dia_pago\\|universo\\|col146\\|col290\\|col499\\|col935\\|col882" logs/e6_cauda2c/r4_pares.txt \| head -40` |
 | 03:36:10 | Bash | Montar copia em ca2d50d9 e ler a prova velha | `cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && rm -rf $S/bis2 && mkdir -p $S/bis2 && git archive ca2d50d9 app \| tar -x -C $S/bis2 && mkdir -p $S/bis2/app/logs $S/bis2/app/media && git log -1 --format='ca2d50d9 = %ad %s' --date=format:'%d/%m %H:%M' ca2d50d9 \| cut -c1-110 && echo "--- prova velha:" && ls -la logs/pl ...` |
-| 03:35:43 | Bash | Ler o bloco antigo do R4 | `cd /home/ronald/saas-hasner && git show 80b1db30:app/core/placar_estrutural.py \| sed -n '214,245p'` |
-| 03:35:39 | Bash | Ver como o par 6 era declarado antes | `cd /home/ronald/saas-hasner && git show 80b1db30:app/core/placar_estrutural.py \| grep -n "par 6\\|espelho_x_dia_pago\\|prova" \| head -30` |
-| 03:35:26 | Bash | Ler o bisect das duas arvores | `cd /home/ronald/saas-hasner && cat logs/placar_estrutural/r4_par6_bisect_20261011_0335.txt` |
-| 03:35:19 | Bash | Rodar a mesma funcao real nas duas arvores | `cd /home/ronald/saas-hasner && cat > logs/sombra/r4_par6_bisect_espelho.py <<'PY' # -*- coding: utf-8 -*- """R4 par 6, INCOMPLETO (a): a MESMA funcao real, nos MESMOS 4 colabs, com codigo de DUAS datas. LEI-AKITA 8: chama `folha/porta_export.py::dias_fora_do_dia_pago` -- a funcao que o sistema usa para julgar o par --, nunca uma copia da conta. O universo fica FIXO nos 4 colabs nomeados pela medic ...` |
-| 03:34:41 | Bash | Montar a copia do codigo pre-curas de turno | `cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && rm -rf $S/bis && mkdir -p $S/bis && git archive 265e7e87^ app \| tar -x -C $S/bis && mkdir -p $S/bis/app/logs $S/bis/app/media && echo "copia em 265e7e87^ = $(git rev-parse --short 265e7e87^)" && ls $S/bis/app \| head -5 && grep -c "def dias_fora_do_dia_pago" $S/bis/app ...` |
-| 03:33:53 | Bash | Quem mudou o lado do espelho depois do corte | `cd /home/ronald/saas-hasner && for f in app/ponto/motor_calculo_v2.py app/ponto/turnos.py app/escala/services/leitor_celula.py app/escala/models.py; do echo "=== $f"; git log --since=2026-10-03 --format=' %h %ad %s' --date=format:'%d/%m %H:%M' -- $f \| head -6; done; echo "=== autoridade_do_periodo (-L)"; git log --since=2026-10-01 --format=' %h %ad %s' --date=format:'%d/%m %H:%M' -L :autoridade_d ...` |
-| 03:33:41 | Bash | Ler a 7a testemunha | `sed -n '25,105p' folha/porta_export.py` |
-| 03:33:17 | Bash | Ler o juiz da retencao do espelho | `grep -n "def motivos_retencao_espelho" -A 40 folha/export.py \| head -60` |
-| 03:32:44 | Bash | Ler o diff da cura O48 no fechamento.py | `cd /home/ronald/saas-hasner && git show 3c42f82c --format="" -- app/ponto/services/fechamento.py` |
-| 03:32:35 | Bash | Ver o que a cura da O48 mudou | `cd /home/ronald/saas-hasner && git show 3c42f82c --stat --format='%h %ad %s' --date=format:'%d/%m %H:%M' \| head -20 && echo "=== === ===" && git show 3c42f82c --format="" -- app \| grep -E '^(\+\+\+\|---\|@@\|[+-][^+-])' \| grep -vE '^[+-]\s*#' \| head -60` |
-| 03:31:59 | Bash | Ler o resultado da sonda | `cd /home/ronald/saas-hasner && cat logs/placar_estrutural/r4_par6_quando_20261011_0331.txt` |
-| 03:31:55 | Bash | Rodar a sonda de discriminacao na sombra | `cd /home/ronald/saas-hasner && python3 - <<'PY' p='logs/sombra/r4_par6_quando_mudou.py' s=open(p).read() old="""def _lado(x): return 'DEPOIS do corte' if (x and x >= CORTE) else ('antes', 'antes')[0]""" new="""def _lado(x): return 'DEPOIS do corte' if (x and x >= CORTE) else 'antes do corte'""" assert s.count(old)==1 open(p,'w').write(s.replace(old,new)) PY cat > /tmp/claude-1001/-home-ronald-saas ...` |
-| 03:31:39 | Bash | Escrever a sonda de discriminacao do +6 | `cd /home/ronald/saas-hasner && cat > logs/sombra/r4_par6_quando_mudou.py <<'PY' # -*- coding: utf-8 -*- """R4 par 6, INCOMPLETO (a): DISCRIMINAR as duas hipoteses do +6. O contador `espelho_x_dia_pago` nao mudou de codigo desde 29/09 00:39 (`git log -L :dias_fora_do_dia_pago:app/folha/porta_export.py` -> um unico commit, 0a918855), e a medicao que publicou "1" e de 02-03/10. Entao o +6 so pode vir ...` |
-| 03:30:54 | Bash | Ver como a sonda do par 6 foi lancada | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cat $S/lanca_r4_par6.sh` |
-| 03:30:51 | Bash | Ver o scratchpad e os scripts de sombra | `cd /home/ronald/saas-hasner && ls $S 2>/dev/null; S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; ls -t $S \| head -30; echo "=== scripts de sombra em bin/"; ls bin/ \| grep -i sombra` |
-| 03:30:35 | Bash | Campos do FechamentoMensal | `sed -n '366,470p' ponto/models.py \| grep -nE "^\s+[a-z_]+ = models\|class Meta" \| head -40` |
