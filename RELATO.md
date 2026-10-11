@@ -54,6 +54,23 @@ UNIDADE sitio; UNIVERSO os 13 pendentes declarados; EXCLUSOES nenhuma (os 13 con
   e a linha, e `PENDENTES_FECHAMENTO` nao chega a zero com 7 sem autoridade. O que a fila faz sem esperar: os **6**
   com juiz, que e cura de LEITOR (o sitio passa a chamar a autoridade), zero juiz novo.
 
+**POUSOU: `0224e9d5`, e o SMOKE EM PROD e do caminho curado, nao da porta** (DEPLOY JA cobra o smoke com o
+resultado aqui). Suite CHEIA sobre a arvore da raia: `Ran 10406 tests in 1447.405s` / `OK (skipped=42)` /
+rc 0. A arvore que pousou e a MESMA que ela certificou -- `git write-tree` do indice mergeado =
+`17a5ce2f4a5bd96f69adec22c9acfc0c8c9900a2` = `2e2a7fd4^{tree}`, provado ANTES dos docs entrarem no indice,
+mais `cmp` arquivo a arquivo 12 iguais / 0 diferentes. `deploy.sh --sem-migrate` rc 0: 3 cascas
+reiniciadas juntas, 3 rotas provadas, selo BUG 128 verde, `importerror_500=0`. SMOKE (prod, SO LEITURA,
+`relatorios/cartao_pela_celula.py::totais_da_folha` chamada de verdade): competencia VIVA 10/2026, **60
+colabs lidos, 60 com numero, 0 `None`, 0 erro, 175 ms/colab** -- o mesmo custo dos 176 ms medidos antes do
+pouso, e nenhum colaborador caiu na abstencao por causa da cura.
+
+- **FILA, e o smoke e que achou: ha FOTO de competencia FUTURA no banco de prod.** O censo de
+  `FechamentoMensal` por (ano, mes) devolve **19 em 11/2026 e 18 em 12/2026** -- contra 587 na 10 (a viva),
+  607 na 09, 618 na 08, 629 na 07. Hoje e 11/10/2026: a competencia 12/2026 corre de 21/11 a 20/12 e nao
+  comecou. Isso e da familia da K8-FM-DE-HOJE ("que FechamentoMensal e o da competencia de hoje?"), nao
+  deste marco -- ESMERIL-DO-MARCO manda virar LINHA, nao trabalho agora. Medido chamando o ORM em
+  `saas_core` com as duas assercoes de `saas_hasner`, so leitura.
+
 FILA DO MARCO DO PASSO 3 (nao devolve turno, nada parado por elas):
 
 - **O PASSO 3 POUSA 1 DE 4, e foi o esmeril DO PROPRIO MARCO que derrubou a palavra que eu ja havia escrito**
