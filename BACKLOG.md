@@ -5,6 +5,26 @@
 > **livre** = pode virar fatia agora, sem humano. **corte/aval/smoke/dinheiro-ate-export** = tem dono humano e espera.
 
 <!-- ORDEM-VIVA-TOPO: O48 -->
+<!-- ADENDO em 11/10 17:1x, AVAL DELE `RAIAS-ANDAM-JA` -- *"Reforco da CONTRATOS-ATE-A-VIRADA,
+     nenhuma lei nova."* Nao move a ORDEM-VIVA-TOPO (segue `O48`): o que ele reforca e que as RAIAS
+     andam ao lado dela.
+     **(1)** `wt-bos` **abre agente AGORA e nao fica mais sem agente**: O44 itens 2-8 -> pouso da O207
+     -> resto da O148 (complemento dos 8 itens). **Um por vez ate o POUSO.**
+     **(2)** A **UI-FECHAMENTO-NOVA etapa 1** segue em **agente proprio na `wt-ui`**, ao lado.
+     **(3)** *"A principal NAO espera as raias e as raias NAO esperam a principal. So o POUSO se
+     enfileira (L-105, L-107)."* -- e a RAIA-NAO-FICA-PARADA dita para estas duas por nome.
+     **(4)** *"Toda publicacao do ESTADO traz uma linha por raia: obra em curso, agente vivo ou nao, e
+     o que falta para pousar. Raia sem agente por mais de um marco = linha de motivo no RELATO (lei,
+     ! ou pista)."* **NAO e obra nova**: e a divida que a ficha da **L-105** (`LEIS.md:131`) ja nomeia
+     -- *"nao achei contador de raia em bin/gerar_estado.py nem checagem em bin/pre-push.sh"* --, e que
+     o `CLAUDE.md` tinha adiado para depois da CELULA-TURNO-FECHA e da O145. Este aval a **ANTECIPA**.
+     E **INSTRUMENTO**, entao vai em **pouso proprio** (L-105), nunca no pacote do produto.
+     **(5)** *"A linha sem PROVA em RELATO.md:84 se cura no proximo marco, para o RELATO voltar a
+     publicar."* -- **CUMPRIDO em 11/10 17:1x**: a linha e a **110** hoje (a secao do passo 4 a
+     deslocou 26), o que faltava era a **forma** `PROVA:` que o `bin/relato_afirma_com_prova.py` exige
+     nas 6 linhas seguintes a um titulo que afirma ato consumado, e o fato entrou **medido ao vivo**
+     (`crontab -l` grep da lavra = 1; `bin/crons.sh check` rc 0, `crontab == config/crons.py`).
+     Varredor: de 1 afirmacao sem prova para **rc 0**. -->
 <!-- ADENDO em 11/10 11:4x, AVAL DELE `CORTES-DOS-CONTRATOS` -- **QUATRO CORTES**, literais, que
      respondem as perguntas que seguravam tres celulas de `core/contratos_estruturais.py`. Ele diz
      *"nenhuma lei nova alem das quatro abaixo"*: sao LEI, e nasceram de corte dele (a L-117 nao se

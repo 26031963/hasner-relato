@@ -1,16 +1,9 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:110 AFIRMA ato sem PROVA ao lado -- ## MARCO 11/10 11:1x — O148 item 1 **NO AR DE VERDADE**: o cron da lavra instalado, e a pegada da lavra e maior que as 23 FolgaDia porque o 
->
-> O RELATO nao entrou neste ciclo porque uma afirmacao de ato
-> (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
-> seguem valendo -- eles descrevem, nao afirmam ato.
-
-
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 11/10/2026 17:10:45.**
+**Medido em 11/10/2026 17:15:45.**
 
 | | |
 |---|---|
@@ -40,7 +33,10 @@ faa783e1 [O197] pouso da raia wt-bos: "Em aberto" era 1,4% verdade, e a cura sep
 
 ```
  M app/config/crons_duracao.json
+ M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/PROMPTS.md
+ M app/docs/RELATO.md
  M bin/sonda_frota.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -130,36 +126,34 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ⎿  Read ../logs/o48p4_prova_lido_20261011.out (27 lines)
-  ⎿  Referenced file ../../wt-o48p4/app/folha/management/commands/simular_folha.py
-  ⎿  Read docs/FECHAMENTO-ONLINE.md (76 lines)
-  ⎿  Read ../../wt-o48p3/app/core/tests/test_selo_teste_sem_relogio.py (85 lines)
 
-● Task "RED e construção do segundo intervalo" completed in background
-
-● Prova durável em logs/o48p4/prova_default_igual_ao_head_20261011.txt. Agora o L-108 do marco que pousou.
+● A seção tem as provas em parênteses, mas o varredor exige uma linha PROVA:. Meço o fato ao vivo antes de escrever.
 
   Ran 1 shell command
 
-❯ aval Ronald: RAIAS-ANDAM-JA. Reforco da CONTRATOS-ATE-A-VIRADA, nenhuma lei nova.
-
-  1. A raia wt-bos abre agente AGORA e nao fica mais sem agente: O44 itens 2-8 -> pouso da O207 -> resto da O148 (complemento dos 8
-  itens). Um por vez ate o POUSO.
-  2. A UI-FECHAMENTO-NOVA etapa 1 segue em agente proprio na wt-ui, ao lado.
-  3. A principal NAO espera as raias e as raias NAO esperam a principal. So o POUSO se enfileira (L-105, L-107).
-  4. Toda publicacao do ESTADO traz uma linha por raia: obra em curso, agente vivo ou nao, e o que falta para pousar. Raia sem agente por
-  mais de um marco = linha de motivo no RELATO (lei, ! ou pista).
-  5. A linha sem PROVA em RELATO.md:84 se cura no proximo marco, para o RELATO voltar a publicar.
-
-  Segue a fila; PAREI so em lei ou !
-
-● Aval novo recebido. Registro e abro as duas raias.
+● Seção tem 16 linhas — cabe o acréscimo. Curo a linha com o fato medido agora.
 
   Ran 1 shell command
 
-● Duas raias com agente agora. Primeiro os agentes (item 1 diz AGORA), depois o registro.
+● Varredor rc 0 — o RELATO volta a publicar. Agora o item 4: a linha por raia no ESTADO.
 
-· Infusing… (12h 24m 40s · ↓ 1.1m tokens)
+  Ran 2 shell commands
+
+● Há registro de raia existente (bin/esteira_status.sh), mas é a esteira do fabricante, não as worktrees. Localizo o ESTADO antes de
+  decidir.
+
+  Ran 1 shell command
+
+● O achado que decide: a ficha da L-105 (LEIS.md:131) já nomeia essa lacuna — "Nao achei contador de raia em bin/gerar_estado.py" — e o
+  CLAUDE.md a tinha adiado para depois da CELULA-TURNO-FECHA. O item 4 dele antecipa isso. Registro o aval e consulto antes de construir.
+
+  Ran 2 shell commands
+
+● Registro feito. Consulto antes de construir o item 4, que é instrumento e abre uma pergunta de autoridade.
+
+● Advising using Fable 5.1
+
+✶ Infusing… (12h 29m 41s · ↓ 1.1m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -168,6 +162,8 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
   ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
+  ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
+  ◯ general-purpose  Mapping aviso_da_tranca callers in regularizacao_ext                                        3m 53s · ↓ 164.9k tokens
+  ◯ general-purpose  Reading empresas_visiveis in queries.py                                                     3m 53s · ↓ 162.0k tokens
   ⧉  index
 ```
