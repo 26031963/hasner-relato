@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 11/10/2026 16:49:31.**
+**Medido em 11/10/2026 16:55:01.**
 
 | | |
 |---|---|
@@ -156,19 +156,19 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
   — tocar o gravado dela é a lista NUNCA PRE-APROVADO). Não abro medição de sombra agora: a bateria está com o cpuset 4-7. Espero pelo
   arquivo do veredito, que é o item em curso de verdade.
 
-● Esperar pelo veredito da suite no arquivo · 4m 53s
-  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; until grep -qE '^(OK|FAILED)($|
-     \()' $S/p4/suite_cheia_v2.log 2>/dev/null; do sleep 20; done; echo "veredito escrito:"; grep -E '^(OK|FAILED)($| \()'
-     $S/p4/suite_cheia_v2.log | tail -1; grep -E '^Ran … (4m 52s)
+● Seguir esperando o veredito · 15s
+  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; date '+%H:%M:%S'; wc -l <
+     $S/p4/suite_cheia_v2.log; until grep -qE '^(OK|FAILED)($| \()' $S/p4/suite_cheia_v2.log 2>/dev/null; do sleep 20; done; date
+     '+%H:%M:%S'; grep -E '^(OK|FAILED)($| \()' $S/p4/… (15s · 3 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Infusing… (12h 3m 27s · ↓ 1.1m tokens)
+✢ Infusing… (12h 8m 57s · ↓ 1.1m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
