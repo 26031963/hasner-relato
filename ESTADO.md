@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 11/10/2026 08:36:01.**
+**Medido em 11/10/2026 08:41:07.**
 
 | | |
 |---|---|
@@ -34,6 +34,8 @@ faa783e1 [O197] pouso da raia wt-bos: "Em aberto" era 1,4% verdade, e a cura sep
 ```
  M app/config/crons_duracao.json
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/RELATO.md
+ M app/docs/TICKETS.md
  M bin/sonda_frota.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -124,14 +126,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-● Background command "Roda a PROVA nas duas arvores contra a sombra" completed (exit code 0)
-
-  Ran 6 shell commands
-
-● Background command "Reroda a PROVA nas duas arvores com os dois defeitos corrigidos" completed (exit code 0)
-
-  Ran 4 shell commands
-
 ● O diff é exatamente o esperado — e ele corrige o número publicado no título do marco. Parte 1 provada; agora as partes 2-4.
 
   Ran 3 shell commands
@@ -143,22 +137,30 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Background command "Roda a parte 5 (universo do TXT) nas duas arvores, nucleo de teste 6" completed (exit code 0)
 
-● Ultima espera das partes 2-4 · 3m 42s
-  ⎿  $ O=/home/ronald/saas-hasner/logs/o197
-     for i in $(seq 1 10); do
-     grep -qE 'FIM_PROVA_P234 rc=0$' $O/PROVA_p234_runner_20261011.out 2>/dev/null && { echo PRONTO; break; }
-     read -t 30 x < /dev/zero || true
+  Ran 9 shell commands
+
+● Background command "Roda as partes 2-4 da PROVA nas duas arvores" completed (exit code 0)
+
+● PROVA completa: 5 partes, duas árvores, 4 rodadas, rc=0 e erros=0 em todas.
+
+● Roda a pasta de selos de host no main depois das edicoes de docs · 1m 45s
+  ⎿  $ cd /home/ronald/saas-hasner
+     vermelhos=0; total=0
+     for f in bin/tests/test_*.sh; do
+     total=$((total+1))
+     if ! bash "$f" >/tmp/selo_out.$$ 2>&1; then vermelhos=$((vermelhos+1)); echo "VERMELHO: $f"; tail -3 /tmp/selo_out.$$; fi
      done
-     date +%H:%M:%S; cat $O/PROVA_p234_runner_20261011.out; echo "--- fim com_cura:"; tail -4 $O/… (3m 42s)
+     rm -f /tmp/selo_out.$$
+     echo "SELOS_DE_HOST total=$total vermelhos=$ve… (1m 44s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Infusing… (3h 49m 57s · ↓ 292.7k tokens)
+✢ Infusing… (3h 55m 3s · ↓ 301.2k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    7% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
