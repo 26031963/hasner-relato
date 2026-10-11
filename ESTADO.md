@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 23:26:01.**
+**Medido em 10/10/2026 23:31:31.**
 
 | | |
 |---|---|
@@ -36,11 +36,13 @@ c1d3a6e4 [O228] pouso do INSTRUMENTO da familia turno em ato proprio: o censo na
  M app/config/crons_duracao.json
  M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
+A  app/docs/O148-COMPLEMENTO.md
  M app/docs/O98-MAPA-ANTIGO-ENTRADA.md
  M app/docs/PROMPTS.md
  M app/docs/RELATO.md
+ M app/ponto/services/fechamento.py
+A  app/ponto/tests/test_o48_sem_celula_nao_e_zero.py
  M bin/sonda_frota.sh
-?? app/docs/O148-COMPLEMENTO.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -129,38 +131,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  colaborador se move. Os 492 contra o gravado são envelhecimento do gravado contra o motor — o par prova que não são da cura. Extraindo o
-  resto:
 
   Ran 1 shell command
 
-● O par deu a linha de base também: sem a cura, 174 de 579 colabs já divergem do gravado (o 492 de antes era ruído de representação) —
-  envelhecimento do gravado contra o motor, não da cura.
-
-  Mas há uma consequência que o HEAD de hoje criou: a cláusula 1 da L-113 caiu no 1ceed412, então o recálculo já move competência exportada
-  com trilha. Isso torna a cláusula 3 (09 intacta) material, não automática. Medindo a 09 no mesmo par, enquanto escrevo o RELATO:
-
-  Ran 2 shell commands
-
-● Background command "Lancar o par da competencia 09 exportada" completed (exit code 0)
-
-● Coerência fechada: 174 + 9 = 183 na ponta com cura, e os 9 flips 0→None só existem lá. Mas o lançador da 09 saiu sem wait — é o caso do
-  "background duplo perde o veredito". Conferindo se as pontas sobreviveram:
+● Os cinco campos do FechamentoMensal são null=True (models.py:400-414), então o None é gravável. E a lavratura não recebe esses campos:
+  recebe os três mapas da grade, e o comentário do próprio sítio diz que com grade vazia "dia sem grade nao ganha linha". Falta provar que
+  o meu raise deixa os mapas vazios, não indefinidos:
 
   Ran 1 shell command
 
-● Vivas (órfãs, mas escrevendo). Esperando as duas e lendo a 09:
+● :418 nasce _abono_dia, _prev_dia_m, _real_dia_m = {}, {}, {} antes do try: de :419. Falta uma coisa: o meu raise tem de cair antes do
+  :565, que é onde os mapas se enchem — senão a lavratura ganharia linhas com 0 justamente nos dias sem célula:
 
-  Esperar e ler o par da 09 exportada · 10s
+  Ran 1 shell command
+
+● :570 (o raise) vem antes de :586 (onde os mapas se enchem) — então a lavratura recebe {} e dia sem célula não ganha linha: o "não sei"
+  declarado, não zero. A cadeia está fechada. Publicando o DIFF e pousando:
+
+  Ran 3 shell commands
+
+● Bytes idênticos aos certificados. Fechando a mensagem com os números medidos e commitando:
+
+● Fechar a mensagem e preparar o indice
   ⎿  $ cd /home/ronald/saas-hasner
-     timeout 420 docker wait blissful_satoshi pedantic_jemison 2>&1 | tr '\n' ' ' | sed 's/^/rc das duas pontas: /'; echo
-     echo "=== 09/2026, identidade e tamanho:"
-     grep -h 'ARVORE (ela se identifica\|FIM DA LINHA CANONICA' logs/sombra/o48_par_COM_CURA_09.out logs/sombra/o48… (10s)
-     (ctrl+b ctrl+b (twice) to run in background)
+     S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
+     cat >> "$S/msg_o48_sem_celula.txt" <<'MD'
+     O PAR CONTROLADO, porque contra o GRAVADO nao se isola nada. O gravado da 10 envelheceu contra o
+     motor -- 174 de 579 colabs diverge…
 
-✢ Spelunking… (1h 7m 11s · ↓ 127.5k tokens)
+✢ Compacting conversation… (1h 12m 41s · ↓ 142.8k tokens)
+  ▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 23%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
