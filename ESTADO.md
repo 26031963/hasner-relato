@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 11/10/2026 02:12:31.**
+**Medido em 11/10/2026 02:18:01.**
 
 | | |
 |---|---|
@@ -123,38 +123,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  - $S/r4edit/backlog_estado.txt — 279 de 300 (L-109), sem |
+  - logs/sombra/r4_par6_remedido.py — chama medir, nunca lavrar; agora também devolve o pk, a célula dos dias nomeados e o universo do TXT
+
+  Dois negativos limpos no caminho, que valem por não virarem obra: as 34 de 34 provas citadas pelo placar existem, e a frase verbatim do
+  R6 confere com o juiz (contratos_estruturais: 15/20 verdes, 17 declaradas, teto 20) — não envelheceu desde 08/10. E o esmeril do comboio
+  deu 0 órfão.
+
+  Suite 2 na reta final (151 KB, ~22 min). Quando ela liberar o cpuset: $S/lanca_r4_par6.sh → os quatro números → aplicar.py → commit único
+  com placar + RELATO + BACKLOG (L-106). R4 segue PARCIAL, sem selo de FECHADO.
+
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: PLACAR-ESTRUTURAL -- O ESTRUTURAL SE SEPARA DO DADO (corte dele 02/10 22:5x, que SUBSTITUI o item 3 da
+  ordem das 21:4x -- o resto d
+
   Ran 1 shell command
 
-● Sigo no PLACAR-ESTRUTURAL pelo que não disputa cpuset — e pela mesma apodrecida que acabou de me pegar: "numero sem prova nao conta"
-  (L-099). Censo de todos os caminhos de PROVA que o placar cita.
+● A reta final da suite não me libera o cpuset ainda. Mas há um número do R4 que o mesmo run já computa e eu ia deixar envelhecer: a
+  afirmação central "CINCO pares em ZERO".
 
-  Ran 1 shell command
+● Somar os outros pares a sonda, do mesmo medir
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PY'
+     p = 'logs/sombra/r4_par6_remedido.py'
+     s = open(p).read()
+     old = """ print('%s emp%s universo_do_TXT=%s universo_declarado=%s espelho_x_dia_pago=%d'
+     % (comp, emp.pk, r.get('universo'), univ, len(dif)))"""
+     assert s.count(old) == 1
+     s = s.replace(old, ""…
 
-● 34 de 34 provas existem — o placar não tem número órfão de prova.
-
-  Ran 3 shell commands
-
-● R6 carrega uma frase copiada do juiz (o próprio placar diz que ela já envelheceu duas vezes em silêncio). Pergunto ao juiz se ela ainda
-  vale — leitura barata, e se mudou é número para trocar no mesmo commit.
-
-  Ran 2 shell commands
-
-● R6 confere: a frase do juiz é literalmente contratos_estruturais: 15/20 verdes, 17 declaradas, teto 20 — a cópia não envelheceu desde
-  08/10.
-
-● Conferir o veredito da suite 2
-  ⎿  $ cd /home/ronald/saas-hasner; date '+%H:%M:%S'
-     L=logs/comboio/suite_comboio_20261011_0154.txt
-     if grep -q 'rc_processo=' "$L"; then
-     echo "=== VEREDITO (L-074) ==="
-     grep -E '^(OK|FAILED)($| \()' "$L" | tail -1
-     grep -E '^Ran [0-9]+ tests' "$L" | tail -1
-     grep 'rc_processo=' "$L" | tail -1
-     grep -nE '^(…
-
-✢ Spelunking… (3h 53m 41s · ↓ 446.5k tokens)
+✢ Compacting conversation… (3h 59m 11s · ↓ 463.6k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 45%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
