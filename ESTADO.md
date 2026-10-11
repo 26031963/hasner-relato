@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 21:49:31.**
+**Medido em 10/10/2026 21:55:01.**
 
 | | |
 |---|---|
@@ -123,36 +123,36 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  Ran 1 shell command
-
-● DIFF-B completo e coerente — e ele derruba a minha própria hipótese do None != 0.0: nulo->valor vazio, valor->nulo nenhum, SO campo que
-  nao existia=0 nas três. Toda diferença é valor→valor. Mas isso levanta a pergunta que vale medir antes de publicar: na 07,
-  minutos_previstos move −2.036.747 min em 181 colabs — −187 h por colab, o mês inteiro. Isso não é deriva de regra, é o lido respondendo
-  0. Vendo o script e medindo:
-
-  Searched for 1 pattern, read 1 file, ran 4 shell commands
-
-● Enquanto roda, consulto o advisor — estou a ponto de fixar a leitura que vai ao RELATO:
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-● Duas coisas enquanto roda. Primeiro a anti-vacuidade do próprio DIFF — o ramo somente_leitura atribui as 24 rubricas, ou algumas ficam
-  herdadas do gravado e leem IGUAIS por vazio?
-
   Searched for 1 pattern, ran 2 shell commands
 
 ● As 24 rubricas são todas atribuídas no corpo — 0 herdadas do gravado, então IGUAIS=258 não é verde por ausência de sinal. O DIFF se
   sustenta. Rascunhando o RELATO no scratchpad com a linha da 07 em aberto:
 
-● Esperar o DIFF-C pelo marcador · 6m 23s
-  ⎿  $ cd /home/ronald/saas-hasner && for i in 1 2 3 4 5 6 7 8 9 10 11 12; do n=$(grep -c 'FIM-C$' logs/o48_diff_c.out 2>/dev/null || echo
-     0); if [ "$n" -ge 1 ]; then echo "PRONTO (marcadores=$n)"; break; fi; sleep 55; done; echo "---"; cat logs/o48_diff_c.out 2>/dev/null
-     | tail -30 (6m 23s · 15 lines)
+  Ran 4 shell commands
+
+● Enquanto o DIFF-C corre, o censo que a cura vai precisar de qualquer jeito — quem chama fechamento_lido em produção e o que cada um faz
+  com None:
+
+  Searched for 1 pattern
+
+● fechamento_lido tem ZERO chamadores de produção hoje — ele nasceu no passo 2 e quem o chamaria é o passo 3. Conferindo contra a prova que
+  o passo 2 publicou:
+
+  Ran 1 shell command
+
+● Isso fecha a leitura mais importante para ele, e é medida: o DIFF-ZERO que o passo 2 publicou foi na 10/2026 (583 de 583), cuja foto é
+  recente. A 07/08 não o contradiz — é a idade da foto. Acrescentando ao rascunho:
+
+  Ran 3 shell commands
+
+● Vivo e correndo (--cpus 1, 15 min decorridos; a saída sai em bloco no fim por buffer). Esperando pelo marcador:
+
+● Esperar e ler o DIFF-C · 45s
+  ⎿  $ cd /home/ronald/saas-hasner && for i in $(seq 1 10); do n=$({ grep -c 'FIM-C$' logs/o48_diff_c.out 2>/dev/null || true; }); [
+     "${n:-0}" -ge 1 ] && { echo "PRONTO marcadores=$n"; break; }; sleep 50; done; echo "=== CONTEUDO:"; cat logs/o48_diff_c.out (45s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Proofing… (1d 3h 54m · ↓ 3.2m tokens)
+✢ Proofing… (1d 4h 0m · ↓ 3.2m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

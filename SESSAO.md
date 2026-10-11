@@ -6,10 +6,17 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 10/10/2026 21:49:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (624.7 MB). Acoes na janela: **1368**.
+**Medido em 10/10/2026 21:55:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (624.7 MB). Acoes na janela: **1371**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 21:54:15 | Bash | Esperar e ler o DIFF-C | `cd /home/ronald/saas-hasner && for i in $(seq 1 10); do n=$({ grep -c 'FIM-C$' logs/o48_diff_c.out 2>/dev/null \|\| true; }); [ "${n:-0}" -ge 1 ] && { echo "PRONTO marcadores=$n"; break; }; sleep 50; done; echo "=== CONTEUDO:"; cat logs/o48_diff_c.out` |
+| 21:54:03 | Bash | Containers vivos e processos da sombra | `cd /home/ronald/saas-hasner && docker ps --format '{{.Names}} \| {{.Image}} \| {{.Status}}' \| head; echo "--- procs sombra:"; ps -eo pid,etime,cmd \| grep -E "sombra\.sh\|o48_diff_c" \| grep -v grep` |
+| 21:53:57 | Bash | Conferir se o container do DIFF-C esta vivo | `cd /home/ronald/saas-hasner && ls -la logs/o48_diff_c.out; docker ps --format '{{.Names}} {{.Status}}' \| grep -i sombra \|\| echo "(sem container sombra listado)"` |
+| 21:53:53 | Bash | Acrescentar ao rascunho e conferir o DIFF-C | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cat >> $S/o48p3/relato_entrada.md <<'MD' ISTO NAO CONTRADIZ O PASSO 2, E A DISTINCAO E O CENTRO DA LEITURA: o DIFF-ZERO que o passo 2 publicou (`0ab4717e`, *"lido == gravado em 583 de 583"*) foi medido na **10/2026**, cuja foto a casa recalculou dias atras. O que a 07 e a 08 mostram nao e a porta erran ...` |
+| 21:53:35 | Bash | Mensagem do commit do passo 2 | `cd /home/ronald/saas-hasner && git log -1 --format=%B 0ab4717e \| head -12` |
+| 21:53:21 | Bash | Chamadores de fechamento_lido em producao | `grep -rn "fechamento_lido" --include='*.py' . \| grep -v "/tests/\\|test_" \| grep -v "def fechamento_lido"` |
+| 21:53:11 | Bash | Estado parcial do DIFF-C | `cd /home/ronald/saas-hasner && grep -c 'FIM-C$' logs/o48_diff_c.out 2>/dev/null; echo "--- parcial:"; cat logs/o48_diff_c.out 2>/dev/null` |
 | 21:43:07 | Bash | Esperar o DIFF-C pelo marcador | `cd /home/ronald/saas-hasner && for i in 1 2 3 4 5 6 7 8 9 10 11 12; do n=$(grep -c 'FIM-C$' logs/o48_diff_c.out 2>/dev/null \|\| echo 0); if [ "$n" -ge 1 ]; then echo "PRONTO (marcadores=$n)"; break; fi; sleep 55; done; echo "---"; cat logs/o48_diff_c.out 2>/dev/null \| tail -30` |
 | 21:43:02 | Bash | Rascunhar a entrada do RELATO | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; mkdir -p $S/o48p3 && cat > $S/o48p3/relato_entrada.md <<'MD' ## O48 passo 3 — O DIFF QUE O AVAL DELE PEDE, E ELE PARA AQUI (a chave nao vira sem a leitura dele) LEI-AKITA: origem=`relatorios/cartao_pela_celula.py::totais_da_folha` (o leitor le a FOTO; a autoridade e a celula), testemunha=`ponto/service ...` |
 | 21:42:10 | Bash | Progresso do DIFF-C | `cd /home/ronald/saas-hasner && grep -c 'FIM-C$' logs/o48_diff_c.out 2>/dev/null; tail -3 logs/o48_diff_c.out 2>/dev/null` |
@@ -1374,7 +1381,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 09:55:32 | Bash | Read the stale docstring and the current LEIS.md neighbourhood | `cd /tmp/o223b echo "=== docstring vivo (1,22p):"; sed -n '1,22p' app/core/tests/test_o223_porta_humana_da_aplicacao.py echo "=== md5 ANTES:"; md5sum app/core/tests/test_o223_porta_humana_da_aplicacao.py echo "=== LEIS.md linha 149 hoje (segunda tabela):"; sed -n '143,150p' /home/ronald/saas-hasner/app/docs/LEIS.md \| cut -c1-120` |
 | 09:55:24 | Bash | Read the strict veredito of the full suite on the copy | `cd /home/ronald/saas-hasner echo "--- veredito ESTRITO:"; grep -nE '^(OK\|FAILED)( \(.*\))?$' logs/o223/suite_pousob.out \| tail -1 echo "--- Ran:"; grep -nE '^Ran [0-9]+ tests' logs/o223/suite_pousob.out \| tail -1 echo "--- FAIL/ERROR:"; grep -cE '^(FAIL\|ERROR):' logs/o223/suite_pousob.out echo "--- tail:"; tail -5 logs/o223/suite_pousob.out echo "--- task out:"; tail -5 /tmp/claude-1001/-home- ...` |
 | 09:55:16 | Bash | Read the gate's invocation of the proof checker | `cd /home/ronald/saas-hasner sed -n '60,85p' bin/relato.sh` |
-| 09:49:53 | Bash | Which files the proof checker is run against in the gates | `cd /home/ronald/saas-hasner grep -n 'relato_afirma_com_prova' bin/*.sh bin/*.py 2>/dev/null \| cut -c1-160` |
-| 09:49:48 | Bash | Check BACKLOG and TICKETS for unproved affirmations | `cd /home/ronald/saas-hasner python3 bin/relato_afirma_com_prova.py app/docs/BACKLOG.md app/docs/TICKETS.md 2>&1 \| tail -20; echo "rc_real=${PIPESTATUS[0]}"` |
-| 09:49:41 | Bash | Check the RELATO for unproved affirmations | `cd /home/ronald/saas-hasner python3 bin/relato_afirma_com_prova.py app/docs/RELATO.md 2>&1 \| tail -25 echo "rc_real=${PIPESTATUS[0]}"` |
-| 09:49:37 | Bash | Run the RELATO proof checker | `cd /home/ronald/saas-hasner python3 bin/relato_afirma_com_prova.py 2>&1 \| tail -20; echo "rc=$?"` |
