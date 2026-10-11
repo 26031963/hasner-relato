@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 11/10/2026 11:49:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (661.3 MB). Acoes na janela: **1206**.
+**Medido em 11/10/2026 11:55:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (661.7 MB). Acoes na janela: **1199**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 11:54:58 | Bash | Acha a assinatura do recalcular_fechamento_mes | `sed -n '1,120p' ponto/services/fechamento.py \| grep -n 'def recalcular_fechamento_mes' ; grep -n 'def recalcular_fechamento_mes' ponto/services/fechamento.py` |
 | 11:49:02 | Bash | Localiza a leitura do gravado no ranking_he | `grep -n 'FechamentoMensal' folha/services/ranking_he.py; echo "---"; sed -n '175,215p' folha/services/ranking_he.py; echo "=== quem chama apuracao_colab ==="; grep -rn 'apuracao_colab' --include='*.py' . \| grep -v '/tests/'` |
 | 11:48:55 | Bash | Confere os outros dois leitores de request | `echo "=== 3: ranking_he.py:161 ==="; sed -n '150,175p' folha/services/ranking_he.py; echo; echo "=== 3: ponto/views.py:945 ==="; sed -n '935,960p' ponto/views.py` |
 | 11:48:28 | Bash | Lê o re-DIFF completo | `cd /home/ronald/saas-hasner && sed -n '1,200p' logs/o48_diff_head_20261011.out \| grep -vE '^$'` |
@@ -1208,11 +1209,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 23:57:16 | Bash | Escrever a sonda da primeira medicao | `mkdir -p /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/foto cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/foto/medicao1.py <<'PYEOF' # -*- coding: utf-8 -*- """PRIMEIRA MEDICAO da FOTO-DE-FOLGA-CONTINUA -- publicada ANTES da cura. LEITURA PURA em prod: ORM + os RESOLVERS REAIS (escala/folgas.py).  ...` |
 | 23:56:25 | Bash | Ler os resolvers de calendario | `sed -n '1,85p' escala/folgas.py` |
 | 23:56:21 | Bash | Ler assinaturas dos resolvers e campos | `cd /home/ronald/saas-hasner/app echo "=== folgas.py: assinaturas ===" grep -n "^def \\|^ def " escala/folgas.py \| head -40 echo "=== EC: campos relevantes ===" grep -n "folga_calendario\\| ativa = \\| data_inicio\\| data_fim" escala/models.py \| head -20 echo "=== CICLO 6x1 constante ===" grep -n "CICLO_6x1\\|6x1" escala/models.py \| head -10` |
-| 23:50:55 | Bash | Confirmar os campos e as funcoes de janela | `cd /home/ronald/saas-hasner/app sed -n '188,200p' escala/models.py echo "=== janela_atual / proxima ===" grep -n "^def " ponto/janelas.py` |
-| 23:50:38 | Bash | Ler eh_dia_trabalho_calculado, o leitor da foto | `cd /home/ronald/saas-hasner/app sed -n '1223,1300p' escala/models.py` |
-| 23:50:34 | Bash | Achar o leitor da foto no gerador | `cd /home/ronald/saas-hasner/app echo "=== quem LE a foto no gerador de celula e no eh_dia_trabalho ===" grep -rn "folgas_dia\\|FolgaDia" escala/models.py ponto/management/commands/gerar_celulas.py escala/services/leitor_celula.py 2>/dev/null \| head -14 echo "=== eh_dia_trabalho (publico) x _calculado ===" grep -n "def eh_dia_trabalho" escala/models.py` |
-| 23:50:29 | Bash | Censo dos leitores da foto | `cd /home/ronald/saas-hasner/app echo "=== quem LE FolgaDia (producao) ===" grep -rn "FolgaDia" --include=*.py . \| grep -v "/tests/\\|/migrations/\\|test_" \| grep -v "^./escala/folgas.py" \| head -20` |
-| 23:50:19 | Bash | Ler o fallback que le a FolgaDia e o tipo 6x1 | `cd /home/ronald/saas-hasner/app sed -n '820,870p' escala/models.py echo "=== onde o 6x1 se identifica (TipoEscala) ===" grep -n "6x1\\|seis_por_um\\|dias_trabalho\\|class TipoEscala" escala/models.py \| head -12` |
-| 23:50:13 | Bash | Procurar a sonda dele e os campos do vinculo | `cd /home/ronald/saas-hasner ls -t logs/ \| grep -i folga \| head find logs -newermt '2026-10-10 20:00' \( -name '*folga*' -o -name '*foto*' \) 2>/dev/null \| head echo "=== como se diz 6x1 sem folga fixa ===" grep -n "folga_dia_semana\\|folga_calendario" app/escala/models.py \| head -12` |
-| 23:49:40 | Bash | Ler o escritor da foto e o modelo | `cd /home/ronald/wt-bos/app echo "########## escala/folgas.py ##########" cat escala/folgas.py echo "########## FolgaDia (modelo) ##########" grep -n "class FolgaDia" -A 30 escala/models.py \| head -45` |
-| 23:49:33 | Agent | O198 falta em dia sem jornada | `Você constrói a **O198 FALTA-EM-DIA-SEM-JORNADA** no seu próprio worktree, em paralelo com a FOTO-DE-FOLGA-CONTINUA que eu (a sessão principal) construo em `/home/ronald/wt-bos`. Isso é ordem literal do Ronald (aval 10/10 ~23:1x, item 2): *"a O198 NAO fica parada. Ela anda em agente proprio junto com a foto, porque os arquivos nao se cruzam (O198 = ponto/precedencia.py::veto_de_lancamento e a port ...` |
