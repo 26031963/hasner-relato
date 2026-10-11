@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 11/10/2026 12:49:01.**
+**Medido em 11/10/2026 12:54:31.**
 
 | | |
 |---|---|
@@ -133,15 +133,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  em 28 colabs é diferença de regra. Não publico isso como "vão de O48" sem saber de qual lado vem.
-
-  Ran 1 shell command
-
-● Dois mapeamentos diferentes para total_noturnas no mesmo arquivo — linha 100 pega adicional_noturno de eventos_do_fechamento, linha 176
-  pega o campo horas_noturnas. Preciso saber em qual função está a 176.
-
-  Ran 1 shell command
-
 ● Linha 176 é do _totais_da_lavratura (caminho DiaPago), não do comparador — então os dois lados dos 48 usam o mesmo adicional_noturno. A
   comparação é legítima e o +50 h é real. Uma sonda em col411 diz de onde vem.
 
@@ -154,17 +145,26 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Tupla confirmada: (resumo, tot) = (ONLINE, GRAVADO). Minha tabela estava com o sinal invertido. Refaço com o sinal certo.
 
-● Refaz a tabela de magnitude com o sinal correto
-  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
-     echo "=== como eu chamo eventos_do_fechamento (linhas 86-105) ==="; sed -n '86,105p' $S/o48p3b/app/relatorios/cartao_pela_celula.py
-     echo
-     echo "=== TABELA CORRIGIDA: delta = ONLINE - GRAVADO ==="
-     python…
+  Ran 1 shell command
+  ⎿  Read docs/AVAIS.md (24 lines)
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/sombra_run.sh (22 lines)
+  ⎿  Referenced file ../logs/foto_folga/diff_folha_o148_20261011.txt
 
-· Compacting conversation… (8h 2m 56s · ↓ 748.8k tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 66%
+● Task "RED e construção do segundo intervalo" completed in background
+
+● Tabela corrigida e publicável: −870,50 h líquidas, 48 colabs de 221. Agora o dono da diferença (L-099) — e ele se pergunta ao git, não à
+  aritmética: o gravado é de 28/09 03:45, então a pergunta é qual commit moveu a regra depois disso.
+
+  Pergunta ao git qual commit moveu a regra de noturnas e atraso
+  ⎿  $ cd /home/ronald/saas-hasner
+     echo "=== commits que tocaram 'noturn' desde 28/09 (o gravado e de 28/09 03:45) ==="
+     git log --since=2026-09-28 --format='%h %ad %s' --date=format:'%d/%m %H:%M' -S'noturn' --pickaxe-regex -- app/ | head -30
+     echo
+     echo "=== e 'atraso' (24 colabs, TODOS descem, 26,20 h) =…
+
+✢ Infusing… (8h 8m 27s · ↓ 750.9k tokens · thinking more)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    1% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
