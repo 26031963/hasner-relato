@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 23:15:45.**
+**Medido em 10/10/2026 23:20:45.**
 
 | | |
 |---|---|
@@ -129,42 +129,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+
+  Próximo ato, já montado para sair em sequência quando o verde chegar: publicar o DIFF no RELATO → copiar os dois arquivos certificados →
+  git add -- do teste novo → git commit --only por PATH com -F → bin/deploy.sh --sem-migrate no mesmo sopro, antes da meia-noite.
+
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: PLACAR-ESTRUTURAL -- O ESTRUTURAL SE SEPARA DO DADO (corte dele 02/10 22:5x, que SUBSTITUI o item 3 da
+  ordem das 21:4x -- o resto d
+
+● O hook manda seguir — e tem razão, nada está travado. Checando os dois:
+
   Ran 1 shell command
 
-● Censo limpo: o delta de .py entre a árvore certificada e a viva é exatamente fechamento.py + o teste novo. Agora a guarda da sombra e o
-  script do DIFF:
-
-  Ran 1 shell command
-
-● sombra_cobre=sim (completa de hoje) — a guarda da casa libera a janela 21/09–20/10. Agora o script do DIFF, para garantir que ele imprime
-  o antes por colaborador (é esse stdout que vira o arquivo de reversão da cláusula 2):
-
-  Ran 1 shell command
-
-● Falta a cláusula 2: o stdout precisa carregar o antes de cada colaborador que move, não 4 exemplos — é esse arquivo que é a reversão.
-  Patch no script (ele mora em logs/sombra/, fora da árvore certificada):
+● Os dois vivos (a suite acumula pontos na mesma linha; o DIFF está no bloco de leitura). Revisando o rascunho da mensagem de commit, que
+  vai receber veredito + censo + números do DIFF antes de sair:
 
   Ran 2 shell commands
 
-● Enquanto o veredito vem, o que o advisor pediu para o item 5: quem rega a competência aberta (para datar a PROVA da cláusula 4 em prod
-  como INCOMPLETO, não como feita):
+● Suite há 20:50 (a primeira levou 23:25) — ~3 min. Não vou somar um terceiro processo no cpuset. Esperando o container da suite sair, sem
+  sleep e sem pgrep:
 
-  Ran 2 shell commands
+● Esperar o container da suite sair e ler o veredito · 2m 24s
+  ⎿  $ cd /home/ronald/saas-hasner
+     timeout 420 docker wait suspicious_thompson 2>&1 | sed 's/^/rc_do_container_da_suite=/'
+     echo "--- VEREDITO (forma da L-074) ---"
+     grep -E '^(OK|FAILED)($| \()' logs/o48sc_suite2.out | tail -1
+     grep -E '^Ran [0-9]+ tests' logs/o48sc_suite2.out | tail -1
+     date '+%H:%M:%S' (2m 24s)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-● O regador é recalcular_por_evento (batida ponto/registro_batida.py:136, portas de célula/HE, validação de chamado) — então a PROVA em
-  prod chega quando um evento disparar, e vai datada como INCOMPLETO. Vendo o veredito:
-
-  Ran 1 shell command
-
-● Suite parada em 1776 linhas há 5 min, e a meia-noite é o portão do deploy. O DIFF roda na sombra, banco diferente da pista de teste
-
-· Spelunking… (56m 55s · ↓ 107.1k tokens)
+· Spelunking… (1h 1m 55s · ↓ 116.3k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
