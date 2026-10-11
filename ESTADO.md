@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 11/10/2026 04:10:45.**
+**Medido em 11/10/2026 04:15:45.**
 
 | | |
 |---|---|
@@ -124,23 +124,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Task "RED e construção do segundo intervalo" completed in background
-
-● Task "Esperar o portao da sombra abrir" still running in background
-
-● Pré-voo do pouso conferido — os 11 arquivos existem e os únicos placeholders em pé são os que se preenchem no ato (hashes dos dois
-  merges, hora e commit do R4).
-
-  Estado, medido agora (04:02):
-
-  ┌──────────────────────┬──────────────────────────────────┬───────────────────────────────┐
-  │         gate         │              medido              │            precisa            │
-  ├──────────────────────┼──────────────────────────────────┼───────────────────────────────┤
-  │ carimbo da sombra    │ dia=20261010 status=OK diverge=0 │ dia=20261011                  │
-  ├──────────────────────┼──────────────────────────────────┼───────────────────────────────┤
-  │ logs/crons_em_curso/ │ vazio                            │ sem sombra.sh_-*              │
-  ├──────────────────────┼──────────────────────────────────┼───────────────────────────────┤
-  │ trava de teste       │ livre                            │ livre                         │
   ├──────────────────────┼──────────────────────────────────┼───────────────────────────────┤
   │ HEAD de main         │ a96169b5 (nada commitado)        │ = árvore certificada 3bf9c778 │
   └──────────────────────┴──────────────────────────────────┴───────────────────────────────┘
@@ -155,11 +138,28 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
   check com o 47 5 * * * citado, e só então o commit da discriminação do R4.
 
 ✻ Worked for 6m 9s · done 4:08 AM · 2 shells still running
+
+❯ segue a fila; PAREI so em lei ou !
+
+  Ran 1 shell command
+
+● O portão abre ≈04:35. A própria lei diz o que se faz nessa espera (ESMERIL-DO-MARCO: "a espera da suite de um marco e o esmeril DAQUELE
+  marco"), então vou ao censo de órfãos das duas raias que estão pousando — só leitura, nada de .py tocado.
+
+  Ran 5 shell commands
+
+● Censo do esmeril fechado — e o resultado é zero órfão. Vou gravar a prova.
+
+  Ran 1 shell command
+
+● Advising using Fable 5.1
+
+* Gesticulating… (2m 58s · ↓ 7.6k tokens)
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ pousa quando abrir; segue a fila
+❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
