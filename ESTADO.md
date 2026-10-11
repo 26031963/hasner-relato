@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 21:11:01.**
+**Medido em 10/10/2026 21:16:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `13582547 [PLACAR-ESTRUTURAL] R6 item 4 MEDIDO: o 25 do JUIZES_POR_VARREDURA nao desce por medicao, desce por corte -- e duas afirmacoes da propria casa eram falsas` |
+| `HEAD` local | `1ceed412 [O219] a queda da clausula 1 da L-113 e a virada da regra no MESMO ato: a recusa sai de onde nascia e vira TRILHA, e a declaracao passa a (1, '2026-09')` |
 | `origin/main` | `d20a0e45 [O219] pouso: os docs do marco A0-b entram junto, e o merge que eu pedi sem commit virou FAST-FORWARD -- o codigo estava na arvore viva antes deste commit` |
-| commits a subir (`ahead`) | **19** |
+| commits a subir (`ahead`) | **20** |
 
 ## Fabrica
 
@@ -22,24 +22,18 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+1ceed412 [O219] a queda da clausula 1 da L-113 e a virada da regra no MESMO ato: a recusa sai de onde nascia e vira TRILHA, e a declaracao passa a (1, '2026-09')
 13582547 [PLACAR-ESTRUTURAL] R6 item 4 MEDIDO: o 25 do JUIZES_POR_VARREDURA nao desce por medicao, desce por corte -- e duas afirmacoes da propria casa eram falsas
 0ab4717e [O48] passo 2, numero de FROTA: lido == gravado em 583 de 583 colabs da 10/2026, e os 4 que sobram sao universo de cadastro, nao buraco da porta
 ccad3d52 [O48] passo 2: a porta de LEITURA do fechamento nasce sem segundo derivador, e a prova de que nao ha segundo e o DIFF de frota ZERO
 c1d3a6e4 [O228] pouso do INSTRUMENTO da familia turno em ato proprio: o censo nasce com a catraca medida FORA da janela do merge, porque ele le a arvore onde mora
-31fce87c [O228] pouso do PRODUTO da metade TURNO: o merge devolve rc 1 POR MEDIDA, e a uniao dos docs vem da copia que a suite rodou
 ```
 
 ## `git status --short`
 
 ```
  M app/config/crons_duracao.json
- M app/docs/BACKLOG.md
- M app/docs/CORTES.json
- M app/docs/CORTES.md
  M app/docs/HANDOFF-SESSAO.md
- M app/docs/LEIS.md
- M app/docs/PROMPTS.md
- M app/docs/RELATO.md
  M bin/sonda_frota.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -114,7 +108,7 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 | E4 | colunas Atraso e Saida antecipada lendo a folha (O51b) | **FALTA** | (sem prova) |
 | E4 | o tipo de escala exibido sai da DEFINICAO, nao do rotulo gravado | em curso | O74: `rotulo_do_desenho` + filtro `desenho_do_turno`; ficha no ar, lista de tipos espera o deploy |
 | E5 | a 09 lida da celula, sem gravado envelhecendo | **FALTA** | (sem prova) |
-| E5 | competencia exportada nao muda o gravado (L-092) | FEITO | O80 no ar 27/09 10:1x: `ponto/services/fechamento.py::CompetenciaExportada` + `empresas_exportadas_no_escopo` (le `marcos_da_competencia`), conferido  |
+| E5 | todo toque em competencia exportada deixa trilha (L-113 cl.1) | FEITO | queda da recusa em 10/10 pelo `!`: `recalcular_fechamento_mes` nao levanta mais, e o `logger.warning` dele carimba competencia, empresas e motivo em T |
 | E6 | calculador independente do motor, dia a dia | FEITO | `/tmp/e6b.py` roda e publica CSV; metodo VALIDADO em 27/09 (erro real no campo comparado, medido em 1,0 h contra vao de 87 h) |
 | E6 | com batidas COMPLETAS, espelho e oraculo batem (divergencia aqui e bug nosso | em curso | MEDIDO 27/09 19:3x na FROTA, depois do apply: **91,4%** (6.877 de 7.521 dia-colab). Divergem 644 em 153 colabs -- 247 entre 10 e 60 min, 272 acima de  |
 | E6 | dia de batidas IMPARES aparece EM ABERTO com o que falta, nunca com numero | **FALTA** | MEDIDO 27/09 19:3x: **30,9%** (146 de 473 dia-colab). **327 dias em 167 colabs mostram um NUMERO** onde devia estar "em aberto". Caso calibrado a mao: |
@@ -130,37 +124,37 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-  Ran 2 shell commands
+  Ran 1 shell command
 
-● --dump existe e é leitura, mas o --alarme sai antes dele. Vou rodar --dump para o juiz me dizer o dia, e então perguntar à ata quando ela
-  foi julgada:
+● Pousou: 1ceed412, 27 arquivos, deploy com as três rotas provadas. Agora o handoff (L-108) e o estado do push:
 
   Ran 1 shell command
 
-● Agora a pergunta decisiva: a ata desse dia foi julgada depois do início do bloco (20:15:50)?
-
-  Ran 3 shell commands
-
-● A ata nomeada pelo juiz foi re-julgada dentro deste bloco (20:28:00, escritor único = processar_cartorio) e ficou cobrado com
-  realizado=240 >= previsto=240 — enquanto a cobrança viva (#29664) nasceu em 08/10, antes do re-julgamento. É a forma exata da cobrança
-  órfã. Vou ver se o 06:54 a retrata ou a preserva:
+● O push segue preso por trava nomeada: 4 templates do O223 estão no intervalo não empurrado, e o smoke dele está na mesa. Marco fechado —
+  vou situar o estado e pegar o próximo da fila 1:
 
   Ran 2 shell commands
 
-● O "ou" virou número. Vou substituir a frase errada pela cadeia medida:
+● MARCO FECHADO — pode compactar.
 
-● Corrigir a atribuicao no RELATO
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PY'
-     import io
-     p='app/docs/RELATO.md'
-     t=io.open(p,encoding='utf-8').read()
-     velho=("**O alarme e ESTADO, nao CODIGO** -- a cobranca de emp4 na 09 "
-     "ja existia e nasceu do que o bloco mexeu em celula/ata, igual as 4 linhas do vigia. PROVA "
-     "`logs/o219_a6…
+  1ceed412 no ar: a queda da cláusula 1 da L-113 e a virada da regra no mesmo ato, 27 arquivos, deploy com as três rotas provadas. O push
+  segue preso por trava nomeada (4 templates do O223 no intervalo, smoke dele na mesa).
 
-✢ Proofing… (1d 3h 16m · ↓ 3.2m tokens · thought for 1s)
+  Pegando o próximo da fila 1 — O48 passo 3, que a ordem dele destravou:
+
+  Ran 2 shell commands
+
+● Passo 3 são os 4 leitores por colaborador. Orientando nos sítios e no selo da S4 que inverte:
+
+  Searched for 2 patterns, ran 5 shell commands
+
+● Tenho a orientação dos quatro sítios. Antes de construir:
+
+● Advising using Fable 5.1
+
+✢ Proofing… (1d 3h 21m · ↓ 3.2m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    3% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
