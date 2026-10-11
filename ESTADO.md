@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 21:44:01.**
+**Medido em 10/10/2026 21:49:31.**
 
 | | |
 |---|---|
@@ -146,13 +146,13 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● As 24 rubricas são todas atribuídas no corpo — 0 herdadas do gravado, então IGUAIS=258 não é verde por ausência de sinal. O DIFF se
   sustenta. Rascunhando o RELATO no scratchpad com a linha da 07 em aberto:
 
-● Esperar o DIFF-C pelo marcador · 52s
+● Esperar o DIFF-C pelo marcador · 6m 23s
   ⎿  $ cd /home/ronald/saas-hasner && for i in 1 2 3 4 5 6 7 8 9 10 11 12; do n=$(grep -c 'FIM-C$' logs/o48_diff_c.out 2>/dev/null || echo
      0); if [ "$n" -ge 1 ]; then echo "PRONTO (marcadores=$n)"; break; fi; sleep 55; done; echo "---"; cat logs/o48_diff_c.out 2>/dev/null
-     | tail -30 (53s · 3 lines)
+     | tail -30 (6m 23s · 15 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Proofing… (1d 3h 49m · ↓ 3.2m tokens)
+· Proofing… (1d 3h 54m · ↓ 3.2m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
