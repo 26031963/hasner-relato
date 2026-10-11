@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 11/10/2026 20:26:49.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (682.8 MB). Acoes na janela: **1210**.
+**Medido em 11/10/2026 20:32:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (683.2 MB). Acoes na janela: **1213**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 20:31:59 | Bash | Ver estagios declarados | `grep -n "_estagio\b" config/crons.py \| head; echo "=== ESTAGIOS"; grep -n "ESTAGIOS\\|^def _estagio" -A12 config/crons.py \| sed -n '1,40p'` |
+| 20:31:48 | Bash | Ler def ENC e o fim do bloco ENCADEADOS | `sed -n '30,60p' config/crons.py; echo "=== fim do ENCADEADOS"; sed -n '1300,1400p' config/crons.py` |
+| 20:31:44 | Bash | Ler o inicio do bloco ENCADEADOS e a def de ENC | `sed -n '1270,1300p' config/crons.py; echo "=== ENC def"; grep -n "^def ENC\\|^ENC\b\\|def ENC(" config/crons.py` |
+| 20:31:38 | Bash | Ler o bloco FORA_DE_PIPELINE vivo | `grep -n "FORA_DE_PIPELINE" config/crons.py \| head -20; echo "=== bloco"; sed -n '620,665p' config/crons.py` |
 | 20:26:37 | Bash | Ler os contratos de casa e de FORA_DE_PIPELINE | `sed -n '165,230p' chamados/tests/test_contract_crons.py` |
 | 20:26:31 | Bash | Listar os testes dos contratos de cron | `grep -n 'def test' chamados/tests/test_contract_crons.py \| head -40; echo "=== B6 duracao/horario:"; grep -n 'def test' core/tests/test_contract_crons_duracao_horario.py \| head -20; echo "=== quebrados:"; grep -n 'def test' core/tests/test_crons_quebrados.py \| head` |
 | 20:26:26 | Bash | Achar os contratos B6 dos crons | `grep -rln 'FORA_DE_PIPELINE' --include=*.py \| grep -i test; echo "---"; grep -rn 'def test' core/tests/test_contrato_b6*.py 2>/dev/null \| head -20; echo "--- arquivos b6:"; ls core/tests/ \| grep -i 'b6\\|cron'` |
@@ -1219,4 +1223,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 08:38:23 | Bash | Fecha o log durave da PROVA com as partes 2-4 | `cat >> /home/ronald/saas-hasner/logs/o197/PROVA_ACHADO_numero_publicado_20261011.txt <<'EOF' PARTES 2-4 (passivo da Pauta DP, placar do export, fila nova) -- rc=0 nas duas rodadas Logs: logs/o197/PROVA_p234_sem_cura_20261011.out e PROVA_p234_com_cura_20261011.out SEM CURA COM CURA PAUTA DP 09/2026 (dias/colabs) 309 / 43 52 / 32 emp2 / emp3 / emp4 (dias) 218 / 45 / 46 41 / 7 / 4 PAUTA DP 10/2026 (d ...` |
 | 08:37:26 | Bash | Fecha a espera das partes 2-4 | `O=/home/ronald/saas-hasner/logs/o197 for i in $(seq 1 10); do grep -qE 'FIM_PROVA_P234 rc=0$' $O/PROVA_p234_runner_20261011.out 2>/dev/null && { echo PRONTO; break; } read -t 30 x < /dev/zero \|\| true done date +%H:%M:%S; tail -2 $O/PROVA_p234_runner_20261011.out; echo "--- parte 4 curada:"; grep -A1 '=== 4' $O/PROVA_p234_com_cura_20261011.out; tail -1 $O/PROVA_p234_com_cura_20261011.out` |
 | 08:32:18 | Bash | Ultima espera das partes 2-4 | `O=/home/ronald/saas-hasner/logs/o197 for i in $(seq 1 10); do grep -qE 'FIM_PROVA_P234 rc=0$' $O/PROVA_p234_runner_20261011.out 2>/dev/null && { echo PRONTO; break; } read -t 30 x < /dev/zero \|\| true done date +%H:%M:%S; cat $O/PROVA_p234_runner_20261011.out; echo "--- fim com_cura:"; tail -4 $O/PROVA_p234_com_cura_20261011.out` |
-| 08:27:12 | Bash | Espera o fim e le a parte 4 nas duas arvores | `O=/home/ronald/saas-hasner/logs/o197 for i in $(seq 1 10); do grep -qE 'FIM_PROVA_P234 rc=0$' $O/PROVA_p234_runner_20261011.out 2>/dev/null && { echo PRONTO; break; } read -t 30 x < /dev/zero \|\| true done date +%H:%M:%S; cat $O/PROVA_p234_runner_20261011.out; echo "--- parte 4 das duas:"; grep -A1 '=== 4' $O/PROVA_p234_sem_cura_20261011.out $O/PROVA_p234_com_cura_20261011.out; tail -2 $O/PROVA_p ...` |
