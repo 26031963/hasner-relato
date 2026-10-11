@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 21:05:45.**
+**Medido em 10/10/2026 21:11:01.**
 
 | | |
 |---|---|
@@ -129,36 +129,36 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Nenhum é novo — os 8 comandos já alarmavam. Mas "o log existe" não prova "alarmou": para os que diferem, leio o número que decide o rc=2
-  nos dois lados:
+
+  Ran 2 shell commands
+
+● --dump existe e é leitura, mas o --alarme sai antes dele. Vou rodar --dump para o juiz me dizer o dia, e então perguntar à ata quando ela
+  foi julgada:
+
+  Ran 1 shell command
+
+● Agora a pergunta decisiva: a ata desse dia foi julgada depois do início do bloco (20:15:50)?
 
   Ran 3 shell commands
 
-● O A6 mudou de conjunto: emp3/10 FURO_SEM_COBRANCA=1 saiu e emp4/09 COBRANCA_SEM_FURO=1 apareceu — e a 09 é a competência deste marco.
-  Dois blocos não isolam a variável, então preciso saber se é o CÓDIGO ou o ESTADO. Confiro primeiro que a forma --encerrada --alarme não
-  escreve:
+● A ata nomeada pelo juiz foi re-julgada dentro deste bloco (20:28:00, escritor único = processar_cartorio) e ficou cobrado com
+  realizado=240 >= previsto=240 — enquanto a cobrança viva (#29664) nasceu em 08/10, antes do re-julgamento. É a forma exata da cobrança
+  órfã. Vou ver se o 06:54 a retrata ou a preserva:
 
-  Ran 1 shell command
+  Ran 2 shell commands
 
-● --alarme sem --executar é dry-run (o retratar está atrás de o.get('executar'), :227). Então posso medir controlado, como fiz com o vigia:
+● O "ou" virou número. Vou substituir a frase errada pela cadeia medida:
 
-  Ran 1 shell command
-  ⎿  Read docs/AVAIS.md (23 lines)
-  ⎿  Read ../../.claude/projects/-home-ronald-saas-hasner/memory/espera-casa-com-prosa-do-log.md (30 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bqqxtkt3b.output (14 lines)
-  ⎿  Read docs/HANDOFF-SESSAO.md (45 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bkds3iwbt.output (47 lines)
+● Corrigir a atribuicao no RELATO
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PY'
+     import io
+     p='app/docs/RELATO.md'
+     t=io.open(p,encoding='utf-8').read()
+     velho=("**O alarme e ESTADO, nao CODIGO** -- a cobranca de emp4 na 09 "
+     "ja existia e nasceu do que o bloco mexeu em celula/ata, igual as 4 linhas do vigia. PROVA "
+     "`logs/o219_a6…
 
-● Task "RED e construção do segundo intervalo" completed in background
-
-● O par controlado respondeu: idênticos. emp4/09 COBRANCA_SEM_FURO=1 aparece com a árvore de HEAD e com a queda dentro, na mesma sombra —
-  vem do ESTADO, não do código. Vou gravar isso dentro da linha que já existe, sem crescer a seção:
-
-  Ran 4 shell commands
-
-  Advising using Fable 5.1
-
-· Proofing… (1d 3h 10m · ↓ 3.2m tokens)
+✢ Proofing… (1d 3h 16m · ↓ 3.2m tokens · thought for 1s)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
