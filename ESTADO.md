@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 11/10/2026 12:32:31.**
+**Medido em 11/10/2026 12:38:01.**
 
 | | |
 |---|---|
@@ -133,38 +133,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  NAO ENTRA nesta etapa: quadros "Quem age" e "Cadastro", drawer, atos (aprovar, gerar TXT), troca da tela antiga.
-  PROIBIDO: CSS novo, cor chapada forte, emoji, dialogo nativo, juiz novo, segundo derivador de quem entra, tocar ponto/fechamento.html.
-  PRONTO: link no RELATO, os REDs nomeados e o commit. Pouso pela L-105; depois o smoke visual do Ronald no link.
-  LINHA HAIKU: fora_da_folha ja e ferramenta do Haiku; golden: "quantos entram e quantos estao bloqueados na folha da competencia" com
-  esperado via ferramentas.fora_da_folha; degrau sem mudanca.
-  LEI-AKITA: origem=folha/fora_da_folha.py::fora_da_folha, testemunha=folha/export.py::classificar_export, RED=selo L1 da tela nova,
-  quem-mais-le=painel situacional e holerite (partial da barra), juizes novos=0
-
-  Segue a fila; PAREI so em lei ou !
-
-● Chegou um aval novo no meio do turno. Registro ele já (PROMPT-NAO-SE-REPETE) e corrijo a medição que morreu no time do sh.
-
-  Ran 1 shell command
-
-● Agent "O247 universo cru + tripwire B5-j" finished · 23m 30s
-
-● O agente devolveu algo aproveitável e algo que preciso conferir — ele cita um chamador que meu grep não viu, e um corte de custo que
-  minha cura pode não cumprir.
-
-  Ran 1 shell command
-
 ● Isso muda o desenho. CORTES.md RESUMO-UMA-FONTE 2ª metade é corte dele e diz o oposto da minha cura: "na competencia a tela LE o
   fechamento gravado, SEM corrida de motor extra; selo: 0 query de motor a mais na tela dos 750" — e o custo medido é 176 ms de motor por
   página. Falta um fato antes de eu decidir o que pousa.
 
-  Ve quais competencias os crons recalculam
-  ⎿  $ R=/home/ronald/saas-hasner; echo "=== crons que recalculam fechamento ==="; grep -n 'recalcular' $R/app/config/crons.py | head -20
+  Ran 2 shell commands
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/sombra_run.sh (22 lines)
+  ⎿  Read docs/AVAIS.md (24 lines)
+  ⎿  Referenced file ../logs/foto_folga/diff_folha_o148_20261011.txt
 
-✢ Compacting conversation… (7h 46m 27s · ↓ 709.8k tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱ 89%
+● Task "RED e construção do segundo intervalo" completed in background
+
+● Background command "Mede o comparador honesto e o custo" completed (exit code 0)
+
+  Ran 4 shell commands
+
+● O comparador honesto deu o número: 48 divergentes de 221 na 09 (HEAD dá 0). Falta um fato que decide se a cura de universo pode pousar
+  sozinha.
+
+  Ran 2 shell commands
+
+● Três fatos decidem, e o último derruba a objeção que eu estava montando:
+
+  - comparador honesto: 48 de 221 divergentes na 09 (HEAD dá 0) → cartao_x_txt=48 > 0 → porta_export.py:4 RECUSA o TXT
+  - nenhum cron escreve FechamentoMensal (crons.py:942, "NAO tem cron de proposito"); pre_fechamento só escreve Pauta
+  - a recusa de competência exportada JÁ CAIU pelo ! dele (cláusula 1 da L-113, 10/10): "COMPETENCIA EXPORTADA MUDA O GRAVADO, COM TRILHA"
+    — então a cura de universo não abre porta nova na 09
+
+● Advising using Fable 5.1
+
+✢ Infusing… (7h 51m 57s · ↓ 715.6k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    0% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
