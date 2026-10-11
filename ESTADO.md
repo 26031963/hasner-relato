@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 22:54:01.**
+**Medido em 10/10/2026 22:59:31.**
 
 | | |
 |---|---|
@@ -129,42 +129,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: PLACAR-ESTRUTURAL -- O ESTRUTURAL SE SEPARA DO DADO (corte dele 02/10 22:5x, que SUBSTITUI o item 3 da
-  ordem das 21:4x -- o resto d
-
-● O hook não devolve o turno com a fila 1 em pé — sigo no PLACAR-ESTRUTURAL com o que não depende da suite nem toca .py da árvore viva
-  (SUITE-UMA-VEZ-POR-ARVORE):
-
-  Ran 2 shell commands
-  ⎿  Read docs/AVAIS.md (23 lines)
-  ⎿  Read docs/HANDOFF-SESSAO.md (45 lines)
-  ⎿  Read ponto/tests/test_s4_ninguem_recalcula_para_ler.py (151 lines)
-  ⎿  Referenced file ponto/services/fechamento.py
-  ⎿  Referenced file ponto/services/dia_pago.py
-
-● Task "RED e construção do segundo intervalo" completed in background
-
-● Background command "Suite cheia contra a copia da cura" completed (exit code 0)
-
-● Veredito chegou: FAILED (failures=1, skipped=42) / Ran 10352 tests in 1405.806s. Qual falha:
-
   Ran 2 shell commands
 
 ● O selo morde o meu teste novo — RED legítimo da casa, não do selo. Vou ler o que ele exige e onde meu teste lê o relógio:
 
-  Ler o selo do relogio solto
-  ⎿  $ cd /home/ronald/saas-hasner
-     echo "===== SELO ====="; sed -n '1,80p' app/core/tests/test_selo_teste_sem_relogio.py
+  Ran 6 shell commands
 
-✢ Spelunking… (35m 11s · ↓ 63.5k tokens)
+● O selo é legítimo e a lista dele só encolhe — então a cura é no meu teste, não na lista. sem_celula nasce só da ausência de CelulaDia +
+  admissão/demissão (escala/services/leitor_celula.py:339-342), não do hoje — logo a competência pode ser cravada:
+
+  Ran 3 shell commands
+
+● Cura no teste (crava a competência, zero relógio) — e a lista do selo não cresce:
+
+  Ran 3 shell commands
+
+● Recorte verde (Ran 6 tests / OK / rc 0). A árvore mudou → a certificação se refaz inteira:
+
+  Ran 1 shell command
+
+● Suite 2 em voo (b6qmoat54). Enquanto corre — trabalho de grep puro, zero CPU do cpuset: a conferência das 20 afirmações do mapa antigo
+  (aval dele de hoje, nenhuma conferida ainda):
+
+● A16/A17: fossil e sessao de 18h
+  ⎿  $ cd /home/ronald/saas-hasner/app
+     echo "=== A16: plataforma_principal -- definicao e leitores:"
+     grep -n "plataforma_principal" colaboradores/models.py | head
+     echo "--- leitores em producao:"; grep -rn "plataforma_principal" --include=*.py . | grep -v
+     "/tests/\|/migrations/\|colaboradores/models.py"…
+
+· Spelunking… (40m 41s · ↓ 81.0k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
