@@ -56,6 +56,20 @@ UNIDADE sitio; UNIVERSO os 13 pendentes declarados; EXCLUSOES nenhuma (os 13 con
 
 FILA DO MARCO DO PASSO 3 (nao devolve turno, nada parado por elas):
 
+- **O PASSO 3 POUSA 1 DE 4, e foi o esmeril DO PROPRIO MARCO que derrubou a palavra que eu ja havia escrito**
+  (ESMERIL-DO-MARCO; `app/docs/FECHAMENTO-ONLINE.md:60` dizia "os leitores por colab (cartao, ranking,
+  `ponto/views.py`, scores) leem `fechamento_lido`" -- plural). MEDIDO na arvore da raia:
+  `grep -rn fechamento_lido --include=*.py` fora de testes da **1** chamador de producao,
+  `relatorios/cartao_pela_celula.py:73` (mais o command `cartao_x_txt_divergentes.py`). Os TRES que faltam
+  seguem lendo o GRAVADO direto -- `folha/services/ranking_he.py:179`, `ponto/views.py:945` (o espelho de um
+  colab) e `inteligencia/management/commands/calcular_scores.py:72`. Os `:1026`/`:1082` de `ponto/views.py` sao
+  FROTA e pertencem ao passo 6, nao a este. A PROVA de frota (362/509/264/ZERO) e dos DADOS, nao do leitor: ela
+  mede gravado x lido na competencia e vale igual para os quatro. Doc corrigido no mesmo commit do marco.
+- **ESMERIL DO MARCO: zero orfao.** O marco removeu UMA linha de chamada (`from folha import export as fx` em
+  `totais_da_folha`), e ela MUDOU DE SITIO para `_totais_do_fechamento` -- `fx.eventos_do_fechamento`,
+  `fx._ciclo_do_colab`, `fx.feriado_12x36_em_dobra` e `fx.datas_falta` seguem com chamador. Nenhuma funcao
+  perdeu o ultimo chamador de producao, entao nada a apagar pela L-111 neste marco.
+
 **BALDE v = CADASTRO, nao ESTRUTURA (L-099; dono MEDIDO, nao PAREI).** Os 4 da 10 com horas e ata zerada (col960,
 col956, col936, col511) tem ata LAVRADA e o juiz `realizado_do_dia` diz SEM_TURNO em 38 de 39 dias -> `ata_x_juiz_residual=0`:
 as batidas provam DESLOCAMENTO DE UM DIA no DNA 12x36 (trabalham as noites IMPARES). **Proibido curar por codigo** -> Cadastro x
