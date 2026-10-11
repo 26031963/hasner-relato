@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 11/10/2026 04:47:32.**
+**Medido em 11/10/2026 04:53:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `2eb92a98 [O198] pouso 1 do COMBOIO: a falta em dia sem jornada passa a ser recusada NA PORTA, e a suite que certifica este codigo correu UMA vez para os dois pousos` |
+| `HEAD` local | `90bc68d6 [O148] pouso 2 do COMBOIO: a lavra da foto de folga entra com o cron, e o escopo da janela se corrigiu ANTES da suite -- a versao estreita escrevia ZERO hoje` |
 | `origin/main` | `d20a0e45 [O219] pouso: os docs do marco A0-b entram junto, e o merge que eu pedi sem commit virou FAST-FORWARD -- o codigo estava na arvore viva antes deste commit` |
-| commits a subir (`ahead`) | **25** |
+| commits a subir (`ahead`) | **28** |
 
 ## Fabrica
 
@@ -22,11 +22,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+90bc68d6 [O148] pouso 2 do COMBOIO: a lavra da foto de folga entra com o cron, e o escopo da janela se corrigiu ANTES da suite -- a versao estreita escrevia ZERO hoje
 2eb92a98 [O198] pouso 1 do COMBOIO: a falta em dia sem jornada passa a ser recusada NA PORTA, e a suite que certifica este codigo correu UMA vez para os dois pousos
 a96169b5 [PLACAR-ESTRUTURAL] o par 6 do R4 se pergunta ao CONTADOR, e ele diz 7 na 09 e 0 na 10 -- a celula publicava 1 e 6, que era campo comparado com campo
-50d2a6f6 [O198] FALTA EM DIA SEM JORNADA: a L-089 ja mandava, o EFEITO ja obedecia, e quem nao migrou foi a PORTA
-80b1db30 [PLACAR-ESTRUTURAL] o numero do RED (a) do R4 envelheceu e se TROCA, nao se apaga: remedido, os dois leitores leem 666,0 x 665,9896 min -- 0,01 min, nao 8
-3c42f82c [O48] SEM CELULA NAO E ZERO: a grade DIZ `sem_celula` e a derivacao respondia 0 -- o TXT escrevia zero hora realizada de quem trabalhou 189,90 h
+8272b439 [O148] a janela da lavra cobria SO a competencia corrente, e o aval diz "corrente E a seguinte": novembro ficava fora e a foto dele nasceria 3 min antes das celulas
+25aabfc7 [O148] FOTO-DE-FOLGA-CONTINUA: a foto de folga do calendario deixa de depender de alguem abrir a tela -- e a varredura e ADITIVA, porque o escritor RECONCILIA
 ```
 
 ## `git status --short`
@@ -124,37 +124,37 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-  1. Esmeril do marco fechado, zero órfão — logs/esmeril/esmeril_marco_o198_foto_20261011.txt.
-  2. Censo cmp agora citado nas duas mensagens de commit, com o lugar do resultado real reservado; a cláusula da SUITE-UMA-VEZ-POR-ARVORE
-     exige isso no corpo do commit e as mensagens não o tinham.
-  3. bin/crons.sh install deixou de ser passo mecânico no runbook — ele é o apply do backfill (arma o --apply das 05:47), e o ! dele é
-     condicional nos 7, medidos numa sombra de ontem. O adendo 5 põe o número para se re-perguntar na sombra refeita antes do install; não
-     batendo, o código fica no ar e o install é PAREI com a tabela.
-
-✻ Worked for 2m 19s · done 4:22 AM · 1 shell still running
-
-● Background command "Esperar o portao do deploy abrir (rc 0 + cron fora de curso)" completed (exit code 0)
-
-  Ran 1 shell command
-
-● PORTÃO ABERTO — rc_conferir=0, dia=20261011 status=OK tipo=completa diverge=0 erros=0, crons_em_curso vazio, trava livre, main intacto em
-  a96169b5. Releio o runbook do pouso 1 antes do primeiro merge.
-
-  Ran 1 shell command
-
-● Portão aberto é a condição; o "~04:55" do runbook era proxy do carimbo, que já nasceu. POUSO 1 — O198.
-
   Ran 5 shell commands
 
 ● Censo cmp byte a byte: 2 arquivos, 0 divergente — o que vai ao ar é exatamente o que a suite certificou. Commit e deploy num ato só:
 
-● Committing e deploy do pouso 1 (O198) · 2s
-  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad &&
-     git add -- app/docs/RELATO.md && echo "=== INDEX ===" && git diff --cached --name-only | cat && if git diff --cached --name-only |
-     grep -qE 'crons_duracao|sonda_frota'…
+  Committed 2eb92a98
 
-✽ Infusing… (1m 27s · ↓ 5.1k tokens)
-                                                                                                                   11% until auto-compact
+● POUSO 1 no ar: commit 2eb92a98, deploy rc 0 — três cascas reiniciadas juntas, três rotas provadas, importerror_500=0, selo BUG 128 verde.
+  POUSO 2 — a foto, minutos depois:
+
+  Ran 1 shell command
+
+● Censo cmp do pouso 2: 4 arquivos, 0 divergente. Agora os docs do marco, dentro deste commit (L-106):
+
+  Committed 90bc68d6, ran 5 shell commands
+
+● Os dois pousos no ar — 2eb92a98 e 90bc68d6, cada um com deploy rc 0. Agora a prova de árvore: o que está no ar tem de ser exatamente o
+  que a suite certificou.
+
+  Ran 1 shell command
+
+● Prova de árvore VAZIA e diagrama rc 0 — o código no ar é exatamente o que a suite certificou. Agora o portão do crons.sh install, que é o
+  apply: re-pergunto o número na sombra de hoje.
+
+● Dry-run da lavra na sombra de hoje
+  ⎿  $ cd /home/ronald/saas-hasner && mkdir -p logs/foto_folga && OUT=logs/foto_folga/dryrun_pos_pouso_20261011_0450.txt && docker run --rm
+     --cpuset-cpus 7 --cpus 1 --memory 2g --network saas-hasner_default --env-file .env -e DJANGO_SETTINGS_MODULE=config.settings.sombra
+     -e POSTGRES_DB=sombra -e TZ=Amer…
+
+· Compacting conversation… (6m 56s · ↓ 13.6k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱ 83%
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
