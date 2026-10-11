@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 11/10/2026 14:35:46.**
+**Medido em 11/10/2026 14:41:01.**
 
 | | |
 |---|---|
@@ -147,7 +147,7 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-  Esperar o veredito da suite · 1m 22s
+● Esperar o veredito da suite · 6m 37s
   ⎿  $ cd /home/ronald/saas-hasner
      L=logs/o48p3_suite_cheia.out
      for i in $(seq 1 55); do
@@ -156,10 +156,10 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
      done
      grep -E '^(OK|FAILED)($| \()' "$L" | tail -1
      grep -E '^Ran [0-9]+ tests' "$L" | tail -1
-     tail -3 "$L" (1m 21s)
+     tail -3 "$L" (6m 36s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✽ Infusing… (9h 49m 41s · ↓ 927.5k tokens)
+· Infusing… (9h 54m 56s · ↓ 927.5k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
