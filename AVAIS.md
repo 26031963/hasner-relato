@@ -1,4 +1,4 @@
-# AVAIS NA MESA — 8
+# AVAIS NA MESA — 7
 
 > Gerado por `bin/gerar_avais.py` a partir de `app/docs/PENDENTES_RONALD.json`.
 > **So itens ABERTOS.** Item respondido SOME daqui na proxima geracao -- a historia dele fica
@@ -13,11 +13,10 @@
 | 5 | `O207-INICIO-DECLARADO-SMOKE` | **smoke** | 2026-10-10T00:25 | pouso do merge de 4831eb93; suite CHEIA sobre a arvore MERGEADA: `Ran 10253 tests in 1412.830s` / `OK (skipped=42)`, um run por vez (trava o207-merge). A falha que a raia carregava nao era dela -- test_contract_lapide_na | `smoke Ronald: abri o assistente de fase de um colab de TESTE, o Inicio da apuracao me mostrou as tres opcoes com a previa de cada uma, declarei a data e ela foi a gravada -- pode fechar o O207` |
 | 6 | `O223-PORTA-DA-APLICACAO-SMOKE` | **smoke** | 2026-10-10T08:55 | 2 commits: codigo em ae775a7b (com o deploy --sem-migrate) e o link do hub no commit SEGUINTE do marco (sem sha: um commit nao pode citar o proprio, e este foi emendado uma vez), de proposito DEPOIS do reload -- template | `smoke Ronald: abri Configuracoes -> Aplicacao de convencao, cadastrei uma linha com motivo, a lista me mostrou ela ativa e o empate dito, desativei e ela ficou la como inativa com a trilha; e na edicao de uma empresa o Regime trabalhista salvou -- pode fechar a O223 pouso A` |
 | 7 | `R4-PAR6-DIFERENCA-DA-09-EXPORTADA` | **!** | 2026-10-11T03:05 | 7 dia-colab na 09, 0 na 10, universo do TXT 221/19 (prova logs/placar_estrutural/r4_par6_20261011_0223.txt, banco=sombra, rc 0). A FAVOR do colaborador no gravado: col146, ~11,9 h a MAIS em 2 dias (14,99 e 14,89 gravadas | `! Ronald: a diferenca do par 6 na 09 EXPORTADA -- col146 com ~11,9 h a mais e col290+col499 com 16,0 h a menos -- sai como Pauta DP com os dois numeros, SEM tocar o gravado da 09.   OU   autoriza a porta REGEN-EM-EXPORTADA nesses 4 colabs, com TXT parcial de retificacao e hash publicado.` |
-| 8 | `O48-PASSO5-CHAVE-COM-O-DIFF-LIDO` | **!** | 2026-10-11T13:12 | Comparador cartao x TXT por rubrica, universo = os itens que classificar_export devolve com status=entra, tolerancia INTACTA (0,5 dias_falta / 0,02 as outras cinco), delta = online - gravado. 07/2026: 300 no TXT, 6 diver | `! Ronald: li o DIFF do passo 5 -- 10/2026 0 de 189 (ZERO), 09/2026 48 de 221 e -870,50 h, 08/2026 150 de 238 e -981,84 h, 07/2026 6 de 300 e +13,77 h, com 25 de 28 na 09 sendo ESTRUTURA (gravado de 28/09 contra a lei de hoje, 16 commits de motor no meio), e a cura do universo trazendo 11 afastados p` |
 
 ---
 
-Total no JSON: **229** · aberto **8** · respondido **60** · sem-motivo **161**.
+Total no JSON: **229** · aberto **7** · respondido **61** · sem-motivo **161**.
 
 > `sem-motivo` nao e "resolvido": e *"ninguem julgou este item"*. A ordem de 18:4x proibe
 > triar os 163 antigos, entao eles ficam ai, nomeados, em vez de serem chutados para um lado.
