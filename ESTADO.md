@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 11/10/2026 03:22:01.**
+**Medido em 11/10/2026 03:27:31.**
 
 | | |
 |---|---|
@@ -123,38 +123,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ⎿  Read ../../wt-bos/app/escala/management/commands/lavrar_foto_folgas.py (190 lines)
-  ⎿  Referenced file ../../wt-bos/app/escala/tests/test_foto_folga_continua.py
-  ⎿  Read docs/HANDOFF-SESSAO.md (45 lines)
+    · PENDENTES 12 + / 0 − · _proximo_da_fila() segue PLACAR-ESTRUTURAL
+  - sem leitor de producao: quem le core/placar_estrutural.py e bin/gerar_estado.py, no host, direto do disco — nao havia deploy pendente
+    dele
+  - novo na mesa: R4-PAR6-DIFERENCA-DA-09-EXPORTADA (!) — col146 ~11,9 h a MAIS e col290+col499 16,0 h a MENOS na 09 exportada: Pauta DP
+    com os dois numeros, ou a porta REGEN-EM-EXPORTADA nesses 4 com TXT parcial. Nada aplicado.
 
-● Task "RED e construção do segundo intervalo" completed in background
+  O achado que mudou o caso: a borda da janela do col290 tem dois lados. O turno 20/09 19:00 → 21/09 07:00 nao esta gravado em nenhuma das
+  duas competencias — o dia 20 tem DiaPago com 0,0 e previsto 720, e o dia 21, que e da 10 ja lavrada, nao tem linha nenhuma. A 10 tambem
+  nao o acusa, porque a entrada cai fora da janela dela e o par compara 0 com 0. Classe nova, nao a do O48.
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+  Agora: a arvore que a suite de 01:54 certificou (a6787fd3) envelheceu no instante em que esse commit moveu o main com um arquivo fora de
+  app/docs. Em vez de pousar com a deviacao escrita, re-mergei o main na copia do comboio (3bf9c778, commit 02261de0 = a96169b5 + O198 +
+  foto, 0 conflito) e a bateria esta correndo — a espera do portao da sombra paga a suite de graca: o carimbo de hoje so nasce depois do
+  cron das 04:16 + ~18 min de bloco, e o pouso comeca ai. --sem-sombra nao entra: e atalho em porta que abre sozinha em uma hora.
 
-  Committed a96169b5, read 1 file, ran 28 shell commands
-  ⎿  Read docs/AVAIS.md (23 lines)
-  ⎿  Referenced file ../../wt-bos/app/config/crons.py
-  ⎿  Read ../../wt-bos/app/escala/management/commands/lavrar_foto_folgas.py (190 lines)
-  ⎿  Referenced file ../../wt-bos/app/escala/tests/test_foto_folga_continua.py
-  ⎿  Read docs/HANDOFF-SESSAO.md (45 lines)
+  Enquanto corre, so scratchpad: runbook e as duas mensagens de pouso atualizadas para a 3a arvore, a secao do RELATO do O198 escrita com o
+  censo (10 dia-colab, 187 faltas na janela, 7 de um colaborador so, 8 em celula nunca regenerada, e o exemplo do proprio BACKLOG nao e um
+  caso) e a L-089 citada — ela e a lei que ja existia, e o que faltava era a porta perguntar.
 
-● Task "RED e construção do segundo intervalo" completed in background
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: PLACAR-ESTRUTURAL -- O ESTRUTURAL SE SEPARA DO DADO (corte dele 02/10 22:5x, que SUBSTITUI o item 3 da
+  ordem das 21:4x -- o resto d
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+● Ver os 6 commits candidatos
+  ⎿  $ cd /home/ronald/saas-hasner && for c in 10de79cb 89570af4 3c610491 ef10b802 98924ef0 e8963dc2; do echo "=== $c $(git log -1
+     --format='%ad %s' --date=format:'%d/%m %H:%M' $c | cut -c1-120)"; git show --stat --format="" $c -- app/folha/export.py
+     app/folha/porta_export.py | tail -5; done
 
-  Committed 02261de0, ran 26 shell commands
-
-● O marco do R4 fechou e a arvore do comboio esta sendo re-certificada.
-
-  MARCO FECHADO — pode compactar
-
-  a96169b5 [PLACAR-ESTRUTURAL] — o par 6 do R4 se pergunta ao CONTADOR, e ele diz 7 na 09 e 0 na 10; a celula publicava 1 e 6, que era
-  campo comparado com campo.
-
-  -
-                                                                                                                    3% until auto-compact
+✢ Compacting conversation… (5h 8m 41s · ↓ 578.1k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱ 95%
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
