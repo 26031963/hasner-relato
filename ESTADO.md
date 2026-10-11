@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 10/10/2026 22:05:45.**
+**Medido em 10/10/2026 22:10:45.**
 
 | | |
 |---|---|
@@ -124,23 +124,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-● DiaPago.minutos_* são FloatField(default=0.0) sem null=True — então :658 passando None escreve NULL em coluna NOT NULL. O caminho except
-  já carrega esse risco latente, e a cura o alargaria. O cartão, por outro lado, é None-safe (:81-85, :170: "NONE NAO SOBRESCREVE"). Lendo
-  a medição:
-
-  Ran 1 shell command
-
-● A grade não está vazia — ela tem 30 dias e todos dizem tipo_dia='sem_celula'. A autoridade já pronuncia a palavra; é o filtro :551 (in
-  ('trabalho','ausencia')) que a joga no mesmo balde de folga e devolve 0. Isso torna o predicado da cura limpo: leio uma palavra que a
-  grade já diz, sem vocabulário novo. E mais três números: 497 de 629 na 07 têm horas_trabalhadas=0 (a 07 é pré-rollout, então a frase
-  "paga sob a regra de julho" é da 08, não da 07), e o zero já está GRAVADO em 6 na 07, 14 na 08, 2 na 09. Vendo a lavratura antes de
-  patchar:
-
-  Ran 2 shell commands
-
-● :633 é o update() do FechamentoMensal, cujos minutos_* são nuláveis (o :595 já grava None ali). A lavratura do DiaPago é outro bloco
-  (:672), e ela monta as linhas do por_dia_da_grade. Confirmando que o None não alcança a coluna NOT NULL:
-
   Ran 1 shell command
 
 ● O comentário do próprio sítio já diz: "dia sem grade nao ganha linha" — o None não alcança a coluna NOT NULL. A cura é segura e sem
@@ -150,11 +133,28 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Agora o RED, com a fixture já validada e o dna na forma que a casa usa:
 
-  Running 1 shell command…
+  Ran 2 shell commands
 
-· Proofing… (1d 4h 10m · ↓ 3.2m tokens)
+● RED evidenciado: minutos_previstos volta 0 com zero célula e 8,00 h trabalhadas — e os outros dois casos passam, então a grade realmente
+  diz sem_celula e a cobertura parcial já responde. Antes de patchar, o censo de quem lê esses campos com None:
+
+  Searched for 1 pattern
+
+● Todos os consumidores são None-safe por construção (export.py:760 guarda o bloco inteiro, :791-793 e o cartão testam is not None).
+  Aplicando a cura na origem:
+
+● Aplicar a cura na copia
+  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; C2=$S/o48sc/copia; cd $C2/app &&
+     python3 - <<'PY'
+     import io, re
+     p = 'ponto/services/fechamento.py'
+     s = io.open(p, encoding='utf-8').read()
+     # 1) a excecao nomeada, no nivel do modulo (ancora: a def do …
+
+· Compacting conversation… (1d 4h 15m · ↓ 3.3m tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱ 90%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    6% until auto-compact
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
