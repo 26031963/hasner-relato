@@ -186,6 +186,8 @@ LEI-AKITA: origem=`config/crons.py` (a CASA do command, nao um leitor) e `linhas
 
 ## ALARMES DA ESTEIRA
 
+**12/10 03:40 vigia da esteira** -- esteira em espera de janela: 8 fatias prontas, reabre 04:45.
+
 **11/10 22:40 vigia da esteira** -- esteira em espera de janela: 8 fatias prontas, reabre 00:00.
 
 ## MARCO 11/10 20:1x — UI-FECHAMENTO-NOVA etapa 1 (complemento do passo 6 da O48): a tela do fechamento LE um retrato GRAVADO, e o badge e o len da MESMA lista que a tabela mostra
