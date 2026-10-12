@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 12/10/2026 15:25:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (726.5 MB). Acoes na janela: **1023**.
+**Medido em 12/10/2026 15:30:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (726.5 MB). Acoes na janela: **1022**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1032,4 +1032,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 03:31:43 | Bash | Run the DIFF probe against the uncured tree | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && cd /home/ronald/saas-hasner && bash "$S/o247/roda_diff.sh" "$S/o247/head" diff_head_20261012 "$S/o247/diff_o247.py" "$PWD/logs/o247" 2>&1 \| tail -5 && echo "=== primeiras linhas:" && head -8 logs/o247/diff_head_20261012.txt && echo "=== resumo:" && grep -E '^(A \|B (linhas\|contador)\|C total)' logs ...` |
 | 03:31:35 | Bash | Write the sombra DIFF runner | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && cd /home/ronald/saas-hasner && cat > "$S/o247/roda_diff.sh" <<'EOF' #!/usr/bin/env bash # DIFF O247 na SOMBRA -- forma do bin/r5_idempotencia_frota.sh (cpuset de TESTE, proxy morto, /app:ro). set -uo pipefail RAIZ=/home/ronald/saas-hasner ARVORE="$1"; ROTULO="$2"; PROBE="$3"; SAIDA="$4" source "$RAIZ ...` |
 | 03:31:21 | Bash | Check clock, crons in flight and sombra stamp | `cd /home/ronald/saas-hasner && date '+%F %H:%M:%S %u' && ls logs/crons_em_curso/ 2>/dev/null \| head -20 && echo "--- sombra:" && bin/sombra.sh --conferir 2>&1 \| tail -3` |
-| 03:25:49 | Bash | Build the uncured copy and write the sombra DIFF probe | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && cd /home/ronald/saas-hasner && rm -rf "$S/o247/head" && mkdir -p "$S/o247/head" && git archive HEAD \| tar -x -C "$S/o247/head" && for t in head copia; do mkdir -p "$S/o247/$t/app/logs" "$S/o247/$t/app/media"; done && cat > "$S/o247/diff_o247.py" <<'PYEOF' # DIFF O247 na SOMBRA -- a mesma pergunta na ...` |
