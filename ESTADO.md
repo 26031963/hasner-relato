@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 12/10/2026 11:20:02.**
+**Medido em 12/10/2026 11:25:32.**
 
 | | |
 |---|---|
@@ -22,28 +22,28 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2401.6 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2401.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **170.0 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **170.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261011`) -- **SEM AGENTE**
-  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **32.0 h** (passou das 6 h da L-105)
+  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **32.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **286.2 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **286.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **190.3 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **190.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **308.0 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **308.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 11 arquivo(s) sujo(s)
@@ -69,6 +69,7 @@ fb3f6ad9 [O247] o pareador passa a ver o MESMO universo que a apuracao, e o trip
 ```
  M app/config/crons_duracao.json
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/RELATO.md
  M bin/sonda_frota.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -159,44 +160,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  │ células com teste=None                             │ 3 → 2                                                                         │
-  └────────────────────────────────────────────────────┴───────────────────────────────────────────────────────────────────────────────┘
+  ordem das 21:4x -- o resto d
 
-  O censo do motor mordeu duas vezes nesta sessão e é por isso que ficou nesta forma: a 1ª redação mediu a ausência de um nome
-  (calcular_dia) e um grep achou 8 ajudantes privados com o dia no nome; a 2ª varreu dia/jornada nos 35 públicos e ficou VERMELHA em
-  ResultadoMes.horas_intrajornada_indenizada:283, que não é porta nenhuma. A forma que ficou declara o conjunto das 19 PORTAS
-  (PORTAS_DO_MOTOR) e compara por igualdade: porta nova fica vermelha e alguém tem de dizer se ela é o DIA. Dos 35 públicos, 16 são
-  propriedades das classes de RESULTADO e 19 são portas, com universos PAR / MÊS / BATIDAS — nenhum o DIA. motor_calculo_v2.py foi lido por
-  AST, 0 bytes de diff.
-
-  No topo do RELATO, com os números e sem devolver turno: o NOME do juiz do dinheiro do DIA. Predicado novo + duas candidatas ⇒ a
-  AUTONOMIA-DE-CODIGO item 3 não me dá a frase corte Ronald: juiz <nome> nasce; as três formas possíveis estão escritas lá para o seu
-  corte.
-
-  Seguindo a fila no mesmo turno: MARCO B do item 3 — o pendente [2] ("dia em aberto bloqueia a folha", 373 dias / 121 colabs / 24 que
-  mudam de bloqueado→entra). É DINHEIRO em competência aberta, então entra por DINHEIRO-EM-COMPETENCIA-ABERTA: DIFF de frota na sombra
-  publicado antes, arquivo de reversão em logs/, competência exportada intacta com hash antes/depois, PROVA depois. O agente do O253 (fila
-  2, wt-ui) segue construindo em raia própria.
+● Parado. Nada mais a fazer ou dizer neste turno.
 
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: PLACAR-ESTRUTURAL -- O ESTRUTURAL SE SEPARA DO DADO (corte dele 02/10 22:5x, que SUBSTITUI o item 3 da
   ordem das 21:4x -- o resto d
 
-● Reading the setUpClass error
-  ⎿  $ cd /home/ronald/saas-hasner && grep -A 16 "^ERROR: setUpClass" logs/fila/furo_intervalo_red_20261012.log | tail -4; echo "=== campos
-     de Empresa:"; cd app && sed -n '40,70p' colaboradores/models.py | grep -nE "^ [a-z_]+ = " | head -15
+● O loop do hook não se resolve por mais resposta minha. Encerrado.
 
-✢ Compacting conversation… (2h 34m 44s · ↓ 227.2k tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱ 92%
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    0% until auto-compact
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: PLACAR-ESTRUTURAL -- O ESTRUTURAL SE SEPARA DO DADO (corte dele 02/10 22:5x, que SUBSTITUI o item 3 da
+  ordem das 21:4x -- o resto d
+
+● Encerrado.
+
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: PLACAR-ESTRUTURAL -- O ESTRUTURAL SE SEPARA DO DADO (corte dele 02/10 22:5x, que SUBSTITUI o item 3 da
+  ordem das 21:4x -- o resto d
+
+● Encerrado. O estado está na árvore; a retomada não depende desta sessão.
+
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: PLACAR-ESTRUTURAL -- O ESTRUTURAL SE SEPARA DO DADO (corte dele 02/10 22:5x, que SUBSTITUI o item 3 da
+  ordem das 21:4x -- o resto d
+
+● A hook blocked the turn from ending 9 consecutive times — overriding and ending turn. For Stop/SubagentStop hooks, check
+  stop_hook_active in the input and return success while it's true. Set CLAUDE_CODE_STOP_HOOK_BLOCK_CAP to raise this limit.
+
+✻ Waiting for 1 background agent to finish
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ arruma o hook pra ler a tabela certa
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · ← for agents · ↓ to manage
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Censusing orphan functions in retrato_folha.py                                          1h 16m 57s · ↓ 132.6k tokens
+  ◯ general-purpose  Censusing orphan functions in retrato_folha.py                                          1h 22m 27s · ↓ 132.6k tokens
   ⧉  index
 ```
