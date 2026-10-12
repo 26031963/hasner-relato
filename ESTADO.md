@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 12/10/2026 00:17:02.**
+**Medido em 12/10/2026 00:22:32.**
 
 | | |
 |---|---|
@@ -22,31 +22,31 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2390.5 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2390.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
-  - 1 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **1.8 h**
+  - 1 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **1.9 h**
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **159.0 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **159.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261011`) -- **SEM AGENTE**
-  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **21.0 h** (passou das 6 h da L-105)
+  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **21.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **275.1 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **275.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **179.2 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **179.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **296.9 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **297.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
-  - 0 commit(s) a frente do `main`, 15 arquivo(s) sujo(s)
+  - 0 commit(s) a frente do `main`, 16 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
 - **21 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
@@ -158,17 +158,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 35 shell commands
-  ⎿  Read docs/AVAIS.md (23 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bgs1qmuc8.output (49 lines)
-  ⎿  Read ../../.claude/projects/-home-ronald-saas-hasner/memory/mtime-nao-distingue-reescrita-identica.md (27 lines)
-  ⎿  Referenced file config/crons.py
-  ⎿  Read folha/management/commands/lavrar_retrato_folha.py (79 lines)
-
-● Task "RED e construção do segundo intervalo" completed in background
-
-● Task "Raia wt-ui: UI etapa 2" still running in background
-
 ● Task "Rodar a suite cheia contra a cópia resolvida" still running in background
 
 ● Background command "Rodar a suite cheia contra a cópia resolvida" completed (exit code 0)
@@ -178,24 +167,35 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-  Esperar o bloco da manhã na sombra · 29s
-  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb
-     i=0
-     until grep -q "rc_bloco=" $S/tasks/b2m2q5fb8.output || [ $i -ge 11 ]; do sleep 10; i=$((i+1)); done
-     echo "hora: $(date '+%T')"; tail -3 $S/tasks/b2m2q5fb8.output
-     echo "--- log da sombra ($(wc -l < /home/ronal… (28s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Ran 18 shell commands
 
-✢ Infusing… (19h 24m 48s · ↓ 1.8m tokens)
+❯ aval Ronald: BO-PREVIA-E-CAMPO-SEM-TELA, dois achados do smoke do Fernando, fila 2 atras da O207. (1) O206: a previa da cobranca mostra
+  HTML bruto porque hxConfirm escreve por textContent (core/_dialogo.html:216) e _js_cobranca.html:26-34 monta HTML; e a previa e texto
+  fixo no JS enquanto o push le _texto_cobranca (chamados/views_cobrar.py:19-29) -- a previa passa a LER o titulo e corpo do servidor e a
+  ser exibida como texto, sem segundo derivador. (2) form_sindicato (core/views_config.py) nao le nem grava prorrogacao_noturna_pos5h
+  (default True em core/models.py:72): o campo entra na tela de sindicato; depois o template SINEEPRES fica com prorrogacao DESLIGADA pela
+  tela, com trilha. RED antes, nenhuma lei nova. Segue a fila; PAREI so em lei ou !
+
+● Ler os sítios do achado 2 do aval
+  ⎿  $ cd /home/ronald/saas-hasner/app
+     echo "=== core/models.py:66-78 (o campo e o default)"
+     sed -n '66,78p' core/models.py | cat -n
+     echo
+     echo "=== quem LE prorrogacao_noturna_pos5h"
+     grep -rn "prorrogacao_noturna_pos5h" --include=*.py --include=*.html . | grep -v "/tests/" | cut -c1-150
+     echo
+     echo "=== f…
+
+✢ Infusing… (19h 30m 18s · ↓ 1.8m tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                   11% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Counting tests in green_alvo2.log                                                       1h 57m 54s · ↓ 134.3k tokens
+❯ ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
+  ◯ general-purpose  Reading classificar_export in folha/export.py                                            2h 3m 23s · ↓ 167.9k tokens
   ⧉  index
 ```
