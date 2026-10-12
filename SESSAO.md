@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 11/10/2026 21:32:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (685.3 MB). Acoes na janela: **1218**.
+**Medido em 11/10/2026 21:38:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (685.3 MB). Acoes na janela: **1206**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1216,15 +1216,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 09:38:33 | Bash | Corrige o caso 6 com as assinaturas reais | `cd /home/ronald/wt-bos/app && python3 - <<'PY' import re, pathlib p = pathlib.Path('chamados/tests/test_o44_tranca_nao_barra_o_toque.py') s = p.read_text() velho = s[s.index(' # ------------------------------------------------------------------ caso 6'):s.index('class O44SeloEstruturalTest')] novo = ''' # ------------------------------------------------------------------ caso 6 def test_caso6_ause ...` |
 | 09:38:17 | Bash | Le TipoAusencia | `sed -n '519,560p' ponto/models.py` |
 | 09:38:07 | Bash | Acha TipoAusencia e le julgar_vinculo | `grep -rn "class TipoAusencia" --include=*.py . ; echo '=== julgar_vinculo 17-35 ==='; sed -n '17,26p' colaboradores/services/vinculo.py` |
-| 09:38:00 | Bash | Confere assinaturas e campos usados no RED | `sed -n '104,115p' ponto/services/ausencia.py; echo '=== vinculo def ==='; grep -n "^def " colaboradores/services/vinculo.py; echo '=== TipoAusencia campos ==='; grep -n "class TipoAusencia" -A 25 escala/models.py \| grep -E "^\S*[0-9]+- [a-z_]+ = " \| head -20; echo '=== LogAuditoria ==='; grep -n "class LogAuditoria" -A 20 core/models.py \| grep -E "= models" \| head -12` |
-| 09:37:53 | Bash | Escreve o RED dos 6 casos na raia wt-bos | `cat > /home/ronald/wt-bos/app/chamados/tests/test_o44_tranca_nao_barra_o_toque.py <<'PY' """O44 ARQUIVO-SIMPLES v2 (corte Ronald 25/09 10:0x) -- A TRANCA NAO BARRA O TOQUE DO ADMIN. AS TRES LEIS que este arquivo defende, literais do corte: (a) **arquivado = unico silencio** -- sai da vista e congela a cobranca; o FATO fica na celula e todo leitor de periodo mostra tudo; (b) **toque do admin num (c ...` |
-| 09:36:25 | Bash | Le o topo da via para achar VIA e marcadores | `sed -n '1,60p' chamados/services/competencia_trancada.py` |
-| 09:36:22 | Bash | Le a via competencia_trancada | `grep -n "^def \\|VIA_\\|status_local\\|resolucao" chamados/services/competencia_trancada.py \| head -40` |
-| 09:36:07 | Bash | Confere corte da competencia e le cobrar_dia | `grep -n "dia_inicio_competencia" colaboradores/models.py \| head -3; echo '=== cobrar_dia completo ==='; cat chamados/services/cobrar_dia.py` |
-| 09:35:45 | Bash | Le os sitios J1/J2 do fechamento | `sed -n '915,965p' ponto/services/fechamento.py` |
-| 09:35:31 | Bash | Le a porta de validacao | `grep -n "^def " chamados/services/validacao.py \| head -20; echo '=== 240-300 ==='; sed -n '240,300p' chamados/services/validacao.py` |
-| 09:35:25 | Bash | Le a porta de ausencia e o piso do vinculo | `echo '=== ausencia.py 175-210 ==='; sed -n '175,210p' ponto/services/ausencia.py; echo '=== def criar_ausencia ==='; grep -n "^def \\|^ def " ponto/services/ausencia.py \| head -30; echo '=== vinculo 25-45 ==='; sed -n '25,45p' colaboradores/services/vinculo.py` |
-| 09:35:18 | Bash | Acha o modelo PeriodoFechado | `grep -rn "class PeriodoFechado" --include=*.py . ; echo '=== campos ==='; python3 - <<'PY' import re,io s=open('ponto/models.py').read() if 'class PeriodoFechado' in open('ponto/models.py').read() else '' PY grep -rn "class PeriodoFechado" -A 30 --include=models.py . \| head -45` |
-| 09:35:04 | Bash | Confere wt-bos e le o molde de fixture | `cd /home/ronald/saas-hasner && git -C /home/ronald/wt-bos rev-parse HEAD 2>&1; git -C /home/ronald/wt-bos status --porcelain 2>&1; echo '--- MOLDE ---'; sed -n '1,80p' app/ponto/tests/test_hx_cartorio_ressuscita.py` |
-| 09:34:59 | Bash | Anexa o bloco da sonda 3 ao censo durável | `cd /home/ronald/saas-hasner && cat >> logs/o44/CENSO_VIVO_20261011.md <<'EOF' --- ## SONDA 3 — A FRONTEIRA DO EXPORTADO (J5): O NUMERO DO DIFF `logs/o44/sonda_universo3_20261011.txt` (61 linhas, `FIM rc=0`, `rc_processo=0`, banco=sombra, hoje=2026-10-11). FONTE = `ExportacaoDominio` + `folha.export.janela_competencia`, a MESMA que `chamados/juizes.py::dia_em_competencia_exportada` le (:1214-1218)  ...` |
-| 09:33:57 | Bash | Le a regiao do loop de pergunta no julgar_colab | `sed -n '520,575p' ponto/services/cartorio.py` |
