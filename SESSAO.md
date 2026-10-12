@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 12/10/2026 15:04:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (726.5 MB). Acoes na janela: **1050**.
+**Medido em 12/10/2026 15:09:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (726.5 MB). Acoes na janela: **1046**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1056,7 +1056,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 03:13:42 | Bash | Read the triagem universe block verbatim | `sed -n '125,200p' ponto/services/triagem_batida.py \| cut -c1-160` |
 | 03:13:19 | Bash | Check whether the batida is recorded despite the bloqueio | `echo "=== o que acontece DEPOIS do chamado (views.py 280-320)" && sed -n '280,320p' ponto/views.py \| cut -c1-150 && echo && echo "=== triagem_batida: de onde vem entradas_sem_saida (o universo que GATEIA)" && grep -n 'entradas_sem_saida\\|Batida.objects\\|batidas_apuraveis\\|parear_turnos' ponto/services/triagem_batida.py \| cut -c1-150` |
 | 03:13:10 | Bash | Trace whether the web path gates the batida | `echo "=== _tem_bloqueio_turno: todos os usos" && grep -rn '_tem_bloqueio_turno\\|tem_bloqueio_turno' --include=*.py . \| grep -v '/tests/' \| cut -c1-160 && echo && echo "=== ponto/views.py: contexto dos 3 sitios" && for L in 195 249 266; do echo "--- :$L"; sed -n "$((L-12)),$((L+6))p" ponto/views.py \| cut -c1-150; done` |
-| 03:07:40 | Bash | Create the O247 copy and census parear_turnos callers | `cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && rm -rf "$S/o247" && mkdir -p "$S/o247/copia" && git archive HEAD \| tar -x -C "$S/o247/copia" && echo "copia de $(git rev-parse --short HEAD) nascida: $(find "$S/o247/copia" -name '*.py' \| wc -l) .py" && cd "$S/o247/copia/app" && echo "=== assinatura de _completude:" & ...` |
-| 03:07:10 | Bash | Trace who sets the blocked-entry context | `grep -rn "entrada_bloqueada_turno_aberto" --include=*.py . \| grep -v '/tests/' \| cut -c1-130 \| head -20` |
-| 03:06:55 | Bash | Find the block judge and the live reader | `sed -n '180,195p' ponto/views.py && echo "=== def tem_bloqueio_turno:" && grep -rn 'def tem_bloqueio_turno' --include=*.py . && echo "=== detector_anomalias 20-60:" && sed -n '20,60p' chamados/detector_anomalias.py` |
-| 03:06:48 | Bash | Census the readers of the orphan-shift block | `echo "=== quem chama _tem_bloqueio_turno / detectar_bloqueio_turno_orfao:" && grep -rn '_tem_bloqueio_turno\\|detectar_bloqueio_turno_orfao' --include=*.py . \| grep -v '/tests/' \| cut -c1-140 && echo && echo "=== def _tem_bloqueio_turno:" && sed -n "$(grep -n 'def _tem_bloqueio_turno' ponto/views.py \| cut -d: -f1),+25p" ponto/views.py` |
