@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 11/10/2026 23:14:32.**
+**Medido em 11/10/2026 23:19:49.**
 
 | | |
 |---|---|
@@ -22,31 +22,31 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2389.5 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2389.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
-  - 1 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **0.8 h**
+  - 1 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **0.9 h**
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
   - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **158.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261011`) -- **SEM AGENTE**
-  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **19.9 h** (passou das 6 h da L-105)
+  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **20.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **274.1 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **274.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **178.2 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **178.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **295.9 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **296.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
-  - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
+  - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
 - **21 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
@@ -166,37 +166,37 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  == na viva (é um dos 7 arquivos do marco). A árvore certificada é, por conteúdo, a árvore que pousa. Provas vivas:
+  Ran 2 shell commands
+
+● O guarda corrigido PAROU — e está certo em parar: mtime não distingue "eu editei" de "a suite reescreveu bytes idênticos". O critério
+  honesto é CONTEÚDO:
+
+  Ran 3 shell commands, wrote 1 memory
+
+● A corrente resolveu 8 elos da declaração às 23:08 e está percorrendo. Vendo onde ela está:
+
+  Ran 3 shell commands
+
+● Achado no caminho da própria fatia, e ele muda a leitura do passo 5: logs/fim/processar_cartorio.*.20261011 não existe — o último é
+  06/10. Medindo antes de concluir:
+
+  Ran 3 shell commands
+
+● O carimbo só sai com RC 0 ou 2. Então o cartório saiu com RC ≠ 0/2 hoje — e isso tem registro próprio:
 
   Ran 1 shell command
 
-❯ aval Ronald: O44-POUSO-E-OS-DOIS-DOCS -- no merge main->raia-bos, RELATO.md e TICKETS.md ficam com a versao do MAIN (marcos do dia
-  preservados) e a linha da O44 entra por cima; suite verde na copia e pouso por L-107. Segue a fila; PAREI so em lei ou !
+● ran com exit=0 hoje (3 do cartório, 1 do apurar) — então o carimbo foi escrito e alguém o apagou:
 
-❯ corte Ronald R3: NAO fecha -- a grade diz 'sem turno pareado' em 25 de 48 dia-colab e cartao/tela/api em 48 de 48; leitor da grade
-  discordando (L-099) vira cura do leitor, sem juiz novo. Segue a fila; PAREI so em lei ou !
+  Ver se o selo do furo apaga carimbo de prod
+  ⎿  $ cd /home/ronald/saas-hasner
+     echo "=== encadeado.sh: toca/apaga logs/fim?"; grep -n 'FIM\|fim/' bin/encadeado.sh
+     echo "=== o selo do furo: ele mexe em logs/fim de PROD? (ele rodou no passo 1, as ~23:0x)"
+     grep -n 'FIM\|fim/\|rm ' bin/tests/test_furo_encadeado_ao_cartorio.sh | head -20
 
-❯ aval Ronald: a diferenca do par 6 na 09 EXPORTADA -- col146 com ~11,9 h a mais e col290+col499 com 16,0 h a menos -- sai como Pauta DP
-  com os dois numeros, SEM tocar o gravado da 09. Segue a fila; PAREI so em lei ou !
-
-● Quatro avais no mesmo turno. Gravando os quatro verbatim antes de qualquer outra coisa (durabilidade primeiro), enquanto as provas vivas
-  correm:
-
-  Read 1 file, ran 3 shell commands
-
-● Provas vivas ainda correndo (o caminho feliz roda a corrente inteira). Enquanto isso, construo a §6 do escritor de docs — os quatro
-  avais, que por PROMPT-NAO-SE-REPETE têm de virar linha no mesmo turno:
-
-  Searched for 1 pattern, ran 5 shell commands
-
-● Os quatro avais estão gravados em disco e o escritor de docs deles compila. Antes de commitar o marco e encadear o pouso da O44, consulto
-  o advisor — a ordem da fila mudou com os quatro:
-
-● Advising using Fable 5.1
-
-✢ Infusing… (18h 22m 18s · ↓ 1.6m tokens)
+✢ Infusing… (18h 27m 36s · ↓ 1.7m tokens · still thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    3% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -204,6 +204,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Re-reading aval_etapa2.md scope constraints                                                55m 23s · ↓ 100.6k tokens
+  ◯ general-purpose  Mapping functions in retrato_folha.py                                                    1h 0m 40s · ↓ 134.9k tokens
   ⧉  index
 ```
