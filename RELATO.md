@@ -4174,4 +4174,5 @@ linha dele** ("inclui a chamado e a pdf") e elas entram no proximo ato.
 
 ## DEPLOYS AGENDADOS
 
+- 12/10 06:08 deploy agendado o44-noar, fatia o44-deploy: rc=0 -- == O44-NO-AR  publicado 12/10 06:08:15 carimbo=4c9cad9306cf893331cf88c864ecd01ad9582227 FIM
 - 08/10 06:08 deploy agendado o221-pouso3, fatia o221-pouso3: rc=0 -- 08/10 06:08:15 O221 pouso 3 NO AR em 1f3d616f. Falta so o push, que e da mao. FIM
