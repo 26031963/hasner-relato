@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 12/10/2026 15:40:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (726.5 MB). Acoes na janela: **985**.
+**Medido em 12/10/2026 15:46:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (726.5 MB). Acoes na janela: **984**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -994,4 +994,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 03:48:34 | Bash | Cut the line and apply the remaining two doc edits | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && python3 - "$S/o247/docs_do_marco.py" <<'PYEOF' import io, sys p = sys.argv[1] src = io.open(p, encoding='utf-8').read() velho = """- **O CENSO ANTIGO DIZIA 2 E ESTAVA ERRADO: SAO 3.** `RELATO.md:632` e o BACKLOG falavam de `utils_turno_orfao.py:26` e `reconciliar_fantasmas.py:85`; o terceiro esta no  ...` |
 | 03:48:24 | Bash | Compress one more line and apply all four doc edits | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && python3 - "$S/o247/docs_do_marco.py" <<'PYEOF' import io, sys p = sys.argv[1] src = io.open(p, encoding='utf-8').read() velho = """- **O CENSO ANTIGO DIZIA 2 E ESTAVA ERRADO: SAO 3.** `RELATO.md:632` e a linha da O247 no BACKLOG falavam de `utils_turno_orfao.py:26` e `reconciliar_fantasmas.py:85`. O  ...` |
 | 03:48:12 | Bash | Trim the RELATO section to the 25-line cap and re-apply | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && python3 - "$S/o247/docs_do_marco.py" <<'PYEOF' import io, sys p = sys.argv[1] src = io.open(p, encoding='utf-8').read() velho_ini = src.index('RELATO = """') velho_fim = src.index('"""\n\n# ------------------------------------------------------------------ 4. BACKLOG') novo = '''RELATO = """## MARCO  ...` |
-| 03:42:04 | Bash | Apply the marco docs: CLAUDE.md §4, TICKETS, RELATO, BACKLOG | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && cat > "$S/o247/docs_do_marco.py" <<'PYEOF' # -*- coding: utf-8 -*- """Docs do marco O247 -- L-106 (entram no commit do marco), L-116 (secao <=25 linhas), L-109 (celula de ESTADO do BACKLOG <=300 chars). Idempotente por marcador.""" import io import os import sys RAIZ = '/home/ronald/saas-hasner' # -- ...` |
