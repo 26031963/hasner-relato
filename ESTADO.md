@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 12/10/2026 13:16:32.**
+**Medido em 12/10/2026 13:22:02.**
 
 | | |
 |---|---|
-| `HEAD` local | `4242f1dd [O255] o hook do Stop passa a LER o marcador ORDEM-VIVA-TOPO em vez de derivar a fila pela 1a linha da tabela (instrumento, pouso proprio L-105)` |
+| `HEAD` local | `850d4eec [O254] o dia com entrada e saida batidas e SO a pausa sem batida deixa de RETER a folha (L-033, MARCO B do item 3 da CONTRATOS-ATE-A-VIRADA)` |
 | `origin/main` | `d20a0e45 [O219] pouso: os docs do marco A0-b entram junto, e o merge que eu pedi sem commit virou FAST-FORWARD -- o codigo estava na arvore viva antes deste commit` |
-| commits a subir (`ahead`) | **56** |
+| commits a subir (`ahead`) | **57** |
 
 ## Fabrica
 
@@ -22,28 +22,28 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2403.5 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2403.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **172.0 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **172.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261011`) -- **SEM AGENTE**
-  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **34.0 h** (passou das 6 h da L-105)
+  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **34.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **288.1 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **288.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **192.2 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **192.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **309.9 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **310.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -57,30 +57,19 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+850d4eec [O254] o dia com entrada e saida batidas e SO a pausa sem batida deixa de RETER a folha (L-033, MARCO B do item 3 da CONTRATOS-ATE-A-VIRADA)
 4242f1dd [O255] o hook do Stop passa a LER o marcador ORDEM-VIVA-TOPO em vez de derivar a fila pela 1a linha da tabela (instrumento, pouso proprio L-105)
 06898bbd [O253] a caixa SITUACAO sai, o LED da linha passa a ser a cor do DONO e a tela abre na competencia CORRENTE (pouso da raia `wt-ui`, parte FEITA da etapa E1 da UI-RETRATO-TRIAGEM)
 f2659343 [O253] a caixa SITUACAO sai, o LED da linha passa a ser a cor do DONO e a tela abre na competencia CORRENTE (UI-RETRATO-CORRECOES, raia wt-ui)
 27c1b4f6 [O254] a celula `batida x um juiz por pergunta` ganha LEITOR, e o NOME do juiz do DIA vai ao TOPO (item 3 da CONTRATOS-ATE-A-VIRADA, MARCO A)
-ff3078c6 [O48] os tres quadros do retrato da folha passam a ser GRAVADOS pelo lavrador (pouso da raia-ui, etapa 2 da UI de fechamento)
 ```
 
 ## `git status --short`
 
 ```
  M app/config/crons_duracao.json
- M app/core/juizes.py
- M app/core/tests/test_contract_juiz_tela.py
- M app/docs/ARQUITETURA.mmd
- M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
- M app/docs/LEIS.md
- M app/docs/RELATO.md
- M app/docs/TICKETS.md
- M app/folha/export.py
- M app/folha/previa.py
  M bin/sonda_frota.sh
-?? app/folha/tests/test_furo_so_intervalo_nao_retem.py
-?? app/folha/tests/test_previa_cobre_pelo_juiz.py
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -170,7 +159,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Searched for 8 patterns, ran 17 shell commands
 
 ● Background command "Roda a suite inteira na copia curada em segundo plano" completed (exit code 0)
 
@@ -189,25 +177,26 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Agora insiro a seção no RELATO vivo, antes do primeiro marco (linha 177):
 
-● Insere a linha do MARCO B no TICKETS e roda a regua
-  ⎿  $ python3 - docs/TICKETS.md <<'PY'
-     import sys
-     p = sys.argv[1]
-     ls = open(p, encoding='utf-8').read().splitlines(True)
-     if any('MARCO B: a **L-033** sai do papel' in l for l in ls):
-     print('ja inserida'); raise SystemExit(0)
-     alvo = [n for n, l in enumerate(ls) if l.startswith('| O255 |')]
-     assert len(al…
+● Relavra o retrato da competencia 10
+  ⎿  $ cd /home/ronald/saas-hasner && ls -A logs/crons_em_curso/ | wc -l && docker exec saas_core python manage.py tenant_command
+     lavrar_retrato_folha --schema=juliani --apply --mes 10 --ano 2026 2>&1 | tail -20
 
-✢ Concocting… (1h 48m 21s · ↓ 188.3k tokens)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    7% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
-───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+ Bash command
 
-❯ ● main
-  ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
-  ⧉  index
+   │ cd /home/ronald/saas-hasner && ls -A logs/crons_em_curso/ | wc -l && docker exec saas_core python manage.py tenant_command
+   │ lavrar_retrato_folha --schema=juliani --apply --mes 10 --ano 2026 2>&1 | tail -20
+   Relavra o retrato da competencia 10
+
+ │ Auto mode classifier requires confirmation for this command.
+ │ 20 actions were blocked this session. Please review the transcript before continuing.
+ │
+ │ Latest blocked action: The server-side auto mode classifier judged this action dangerous (it gave no explanation)
+
+ Do you want to proceed?
+ ❯ 1. Yes
+   2. Yes, and don’t ask again for: cd *
+   3. No
+
+ Esc to cancel · Tab to amend
 ```
