@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 12/10/2026 20:12:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (737.5 MB). Acoes na janela: **947**.
+**Medido em 12/10/2026 20:18:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (737.9 MB). Acoes na janela: **949**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 20:17:41 | Bash | Ver universo do previa:124 e cabeca do o_que_segura | `echo "=== previa.py:108,128 ==="; sed -n '108,128p' folha/previa.py; echo "=== o_que_segura docstring/assinatura ==="; sed -n '172,178p' folha/fora_da_folha.py` |
+| 20:17:26 | Bash | Censo de chamadores e definicao de isento_ponto | `echo "=== chamadores de o_que_segura ==="; grep -rn 'o_que_segura' --include='*.py' --include='*.html' . \| grep -v 'fora_da_folha.py:172' \| head -20; echo; echo "=== _cobre_a_retencao: chamador e guarda ==="; grep -n '_cobre_a_retencao' folha/previa.py; echo; echo "=== isento_ponto ==="; grep -n 'def isento_ponto' -A 12 core/constants.py` |
+| 20:17:16 | Bash | Ver universos dos outros dois sitios | `echo "=== fora_da_folha.py:178,195 ==="; sed -n '178,195p' folha/fora_da_folha.py; echo; echo "=== quem chama a funcao do :186 ==="; sed -n '180,186p' folha/fora_da_folha.py \| grep -n 'def '; grep -n '^def ' folha/fora_da_folha.py; echo; echo "=== previa: quem chama o :173 ==="; sed -n '140,160p' folha/previa.py \| grep -n 'def '; grep -n '^def \\|_propostos_sao_todos\\|def _cobre' folha/previa.p ...` |
+| 20:17:06 | Bash | Ver se fora_da_folha filtra isento antes de chamar | `echo "=== quem chama _dias_que_retem ==="; grep -n '_dias_que_retem' folha/fora_da_folha.py; echo; echo "=== contexto do chamador ==="; sed -n '/_motivos, _dias = _dias_que_retem/,+0p' folha/fora_da_folha.py; grep -n 'isento\\|universo\\|for c in\\|colabs_da' folha/fora_da_folha.py \| head -30` |
+| 20:16:56 | Bash | Ler os dois leitores que desempacotam e a funcao | `echo "=== fora_da_folha.py:80-100 ==="; sed -n '80,100p' folha/fora_da_folha.py; echo; echo "=== previa.py:165,180 ==="; sed -n '165,180p' folha/previa.py; echo; echo "=== export.py:968-1020 ==="; sed -n '968,1020p' folha/export.py` |
 | 20:12:17 | Bash | Censo dos chamadores de com_dias e dos early returns | `echo "=== chamadores com com_dias ==="; grep -rn 'com_dias' --include='*.py' . \| grep -v '^./folha/export.py' \| head -20; echo; echo "=== os tres early-return de motivos_retencao_celula ==="; sed -n '988,1001p' folha/export.py \| grep -n 'return \[\]' ; sed -n '991,1001p' folha/export.py` |
 | 20:12:03 | Bash | Le o resultado da medicao | `cd /home/ronald/saas-hasner && grep -v '^ ' logs/o259/porta_furo_pausa.log \| tail -20` |
 | 20:11:59 | Bash | Le o bloco ATO do LEIS.md | `sed -n '193,230p' docs/LEIS.md` |
@@ -954,6 +959,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 08:18:26 | Bash | Read the judge's travas_aprovacao construction | `sed -n '605,640p' folha/export.py` |
 | 08:18:18 | Bash | Locate _ORDEM_TRAVA occurrences | `grep -n '_ORDEM_TRAVA' ponto/views.py` |
 | 08:18:02 | Bash | Find where _ORDEM_TRAVA is defined in the live tree | `grep -n '_ORDEM_TRAVA' ponto/views.py \| head; echo "--- contexto (indentacao diz se e local) ---"; sed -n "$(grep -n '_ORDEM_TRAVA *=' ponto/views.py \| head -1 \| cut -d: -f1),+3p" ponto/views.py \| cat -A \| sed 's/\$$//' \| cut -c1-120` |
-| 08:17:55 | Bash | Run a read-only prod smoke proving the judge answers in the running code | `cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && cat > "$S/fx/smoke_prod.py" <<'PY' # SMOKE DE PROD, SO LEITURA. Nenhuma escrita, nenhum POST, nenhum nome impresso. from django.conf import settings from django.db import connection assert settings.DATABASES['default']['NAME'] == 'saas_hasner', settings.DATABASES['defau ...` |
-| 08:17:28 | Bash | Read the classificar_export signature | `sed -n "$(grep -n '^def classificar_export' folha/export.py \| cut -d: -f1),+14p" folha/export.py` |
-| 08:16:58 | Bash | Run the one-act pouso: copy, census, docs, commit, deploy | `cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && bash "$S/fx/pouso.sh" 2>&1 \| tee "$S/fx/pouso.out" \| tail -70` |
