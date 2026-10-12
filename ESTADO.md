@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 12/10/2026 01:00:14.**
+**Medido em 12/10/2026 01:05:42.**
 
 | | |
 |---|---|
@@ -22,28 +22,28 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2391.2 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2391.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **159.7 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **159.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261011`) -- **SEM AGENTE**
-  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **21.7 h** (passou das 6 h da L-105)
+  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **21.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **275.8 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **275.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **180.0 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **180.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **297.7 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **297.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 16 arquivo(s) sujo(s)
@@ -160,44 +160,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-      22  set -uo pipefail
-      23  RAIZ="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-      24  LISTA="$RAIZ/bin/auth_sitios.txt"
-      25 -BASE="${1:-origin/main}"
-      25 +# A BASE E O QUE ESTA NO AR, nao `origin/main` (cura 12/10 ~01:0x, achado no pouso da O44).
-      26 +# A pergunta da guarda e "o que este deploy POE no ar que ainda nao esta", e `origin/main` responde
-      27 +# outra: ela fala do REMOTO. As duas formas em que a base velha errava, nos DOIS sentidos:
-      28 +#   - CEGA depois do push: com HEAD == origin/main o diff sai VAZIO e auth sobe as 03:00 sem guarda;
-      29 +#   - GRITA sem motivo com 44 commits a frente do remoto, por fatia que ninguem vai publicar agora.
-      30 +# O carimbo de QUEM ESTA NO AR ja existe e tem um escritor: `logs/deploy.stamp` (COMMIT=), escrito
-      31 +# pelo proprio deploy.sh ao publicar (AUTO-REVERT, corte Ronald 20/09). Sem argumento, a guarda le
-      32 +# dali -- e assim quem chama nao precisa saber a resposta, que e o que fazia o `--reload-agendado`
-      33 +# se declarar isento com uma premissa FALSA ("nao publica codigo novo": o HUP publica o DISCO).
-      34 +# `JANELA_AUTH_STAMP` substitui o caminho do carimbo, mesma costura declarada do relogio, para o selo.
-      35 +CARIMBO="${JANELA_AUTH_STAMP:-$RAIZ/logs/deploy.stamp}"
-      36 +BASE="${1:-}"
-      37 +if [ -z "$BASE" ]; then
-      38 +  BASE="$(grep -m1 '^COMMIT=' "$CARIMBO" 2>/dev/null | cut -d= -f2)"
-      39 +  # Sem carimbo legivel NAO se afirma nada: deixo a base VAZIA de proposito e a propria guarda cai no
-      40 +  # ramo "base nao existe -- trato como se auth tivesse mudado". UM escritor dessa regra, nao dois.
-      41 +  [ -n "$BASE" ] || BASE="SEM-CARIMBO-DE-PUBLICACAO"
-      42 +fi
-      43
-      44  # A COSTURA DE RELOGIO E DECLARADA, e existe para o SELO: `JANELA_AUTH_DOW`/`JANELA_AUTH_HHMM`
-      45  # substituem o `date` quando presentes. Sem elas, le `date` no ato -- datar de cabeca ja errou 6 h
+  ⎿  Read docs/AVAIS.md (23 lines)
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bgs1qmuc8.output (49 lines)
+  ⎿  Read ../../.claude/projects/-home-ronald-saas-hasner/memory/mtime-nao-distingue-reescrita-identica.md (27 lines)
+  ⎿  Referenced file config/crons.py
+
+● Task "RED e construção do segundo intervalo" completed in background
+
+● Task "Raia wt-ui: UI etapa 2" still running in background
+
+● Update(~/saas-hasner/bin/janela_auth.sh)
+  ⎿  Added 4 lines, removed 1 line
+       92
+       93  mudou=()
+       94  if git -C "$RAIZ" rev-parse --verify -q "$BASE" >/dev/null; then
+       95 -  mapfile -t _diff < <(git -C "$RAIZ" diff --name-only "$BASE"...HEAD)
+       95 +  # `"$BASE" --` (DISCO), nunca `"$BASE"...HEAD`: o deploy publica o que esta no DISCO -- a arvore
+       96 +  # viva E o bind-mount --, e o tres-pontos compara COMMIT com COMMIT. Com o merge pousado e o
+       97 +  # `.py` ainda nao recarregado, era exatamente a diferenca que a guarda precisava ver.
+       98 +  mapfile -t _diff < <(git -C "$RAIZ" diff --name-only "$BASE" --)
+       99    for s in "${SITIOS[@]}"; do
+      100      for d in "${_diff[@]}"; do [ "$s" = "$d" ] && mudou+=("$s"); done
+      101    done
   ⎿  Allowed by auto mode classifier
 
-* Compacting conversation… (20h 8m 1s · ↓ 1.8m tokens)
-  ▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 5%
+  Locating the auth-window call in deploy.sh
+  ⎿  $ cd /home/ronald/saas-hasner && echo "=== VIVO 100-160"; sed -n '100,160p' bin/deploy.sh; echo; echo "=== CURADO 140,170"; sed -n
+     '140,172p' /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/cura_janela/deploy.sh
+
+✢ Infusing… (20h 13m 28s · ↓ 1.8m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    0% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Reading probe output for _retrato_barra.html fileiras                                    2h 41m 6s · ↓ 100.6k tokens
+  ◯ general-purpose  Counting BACKLOG cell chars in docs_do_marco_ui2.md                                     2h 46m 34s · ↓ 128.4k tokens
   ⧉  index
 ```
