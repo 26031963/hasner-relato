@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 12/10/2026 10:58:32.**
+**Medido em 12/10/2026 11:04:02.**
 
 | | |
 |---|---|
-| `HEAD` local | `ff3078c6 [O48] os tres quadros do retrato da folha passam a ser GRAVADOS pelo lavrador (pouso da raia-ui, etapa 2 da UI de fechamento)` |
+| `HEAD` local | `27c1b4f6 [O254] a celula `batida x um juiz por pergunta` ganha LEITOR, e o NOME do juiz do DIA vai ao TOPO (item 3 da CONTRATOS-ATE-A-VIRADA, MARCO A)` |
 | `origin/main` | `d20a0e45 [O219] pouso: os docs do marco A0-b entram junto, e o merge que eu pedi sem commit virou FAST-FORWARD -- o codigo estava na arvore viva antes deste commit` |
-| commits a subir (`ahead`) | **52** |
+| commits a subir (`ahead`) | **53** |
 
 ## Fabrica
 
@@ -22,28 +22,28 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2401.2 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2401.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **169.7 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **169.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261011`) -- **SEM AGENTE**
-  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **31.7 h** (passou das 6 h da L-105)
+  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **31.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **285.8 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **285.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **189.9 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **190.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **307.6 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **307.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 10 arquivo(s) sujo(s)
@@ -57,22 +57,18 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+27c1b4f6 [O254] a celula `batida x um juiz por pergunta` ganha LEITOR, e o NOME do juiz do DIA vai ao TOPO (item 3 da CONTRATOS-ATE-A-VIRADA, MARCO A)
 ff3078c6 [O48] os tres quadros do retrato da folha passam a ser GRAVADOS pelo lavrador (pouso da raia-ui, etapa 2 da UI de fechamento)
 3676e7c9 [O141] o botao de aprovar deixa de ter crivo proprio e LE o juiz do TXT (eram TRES crivos, e um deles sai do arquivo)
 fb3f6ad9 [O247] o pareador passa a ver o MESMO universo que a apuracao, e o tripwire B5-j NASCE (eram TRES sitios, nao dois)
 8191f06b [O48] passo 3 de 6: os QUATRO leitores por colaborador leem a CELULA, e a linha gravada fica so com o que e ATO
-e1449cb9 [O48] etapa 2 da UI do fechamento: tres quadros GRAVADOS respondem de quem depende cada bloqueado, qual o tipo do problema e quanto falta para ele entrar
 ```
 
 ## `git status --short`
 
 ```
  M app/config/crons_duracao.json
- M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
- M app/docs/PROMPTS.md
- M app/docs/RELATO.md
- M app/docs/TICKETS.md
  M bin/sonda_frota.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -163,14 +159,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Task "RED e construção do segundo intervalo" completed in background
-
-● Task "O253 UI-RETRATO-CORRECOES na raia wt-ui" still running in background
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-  Ran 1 shell command
 
 ● Certifying suite is running against the copy (logs/fila/batida_cheia_20261012.log). While it runs, the commit message is written at
   $S/o254_msg.txt and the two docs claims the selo disproved are corrected in docs/RELATO.md (both the topo pergunta and the marco section)
@@ -185,22 +173,30 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Suite is mid-run (1446 lines of progress, no FAILED yet). Waiting on the veredito.
 
-  Continue waiting for the suite veredito · 8m 57s
-  ⎿  $ cd /home/ronald/saas-hasner && i=0; until grep -qE '^(OK|FAILED)($| \()' logs/fila/batida_cheia_20261012.log 2>/dev/null || [ $i -ge
-     55 ]; do sleep 10; i=$((i+1)); done; echo "voltas=$i"; grep -E '^Ran [0-9]+ tests' logs/fila/batida_cheia_20261012.log | tail -1;
-     grep -E '^(OK|FAILED)($| \()' logs… (8m 56s)
+  Ran 1 shell command
+
+● Background command "Wait for the suite veredito line" completed (exit code 0)
+
+  Ran 2 shell commands
+
+● Background command "Run the full certifying suite on the copy" completed (exit code 0)
+
+● Running the host selo folder on the live tree · 1m 42s
+  ⎿  $ cd /home/ronald/saas-hasner && vermelhos=0; for t in bin/tests/test_*.sh; do if ! bash "$t" >/tmp/claude-1001/selo.out 2>&1; then
+     echo "VERMELHO: $t"; tail -2 /tmp/claude-1001/selo.out | cut -c1-160; vermelhos=$((vermelhos+1)); fi; done; echo "=== selos de host
+     vermelhos: $vermelhos de $(ls bin/t… (1m 41s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Bloviating… (2h 13m 14s · ↓ 201.1k tokens)
+✢ Bloviating… (2h 18m 44s · ↓ 208.5k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Polling trava_teste.sh for suite lock                                                      55m 27s · ↓ 158.9k tokens
+  ◯ general-purpose  Reading measured bar heights from medir.log                                              1h 0m 57s · ↓ 168.1k tokens
   ⧉  index
 ```
