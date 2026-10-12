@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 12/10/2026 00:55:02.**
+**Medido em 12/10/2026 01:00:14.**
 
 | | |
 |---|---|
@@ -28,22 +28,22 @@ RELATO, com a lista de nomes do banco como autoridade._
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **159.6 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **159.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261011`) -- **SEM AGENTE**
-  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **21.6 h** (passou das 6 h da L-105)
+  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **21.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **275.7 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **275.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **179.9 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **180.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **297.6 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **297.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 16 arquivo(s) sujo(s)
@@ -69,7 +69,9 @@ dbd72d28 [O48] pouso da raia raia-ui: a UI do fechamento LE um retrato gravado, 
 ```
  M app/config/crons_duracao.json
  M app/docs/HANDOFF-SESSAO.md
+ M bin/janela_auth.sh
  M bin/sonda_frota.sh
+ M bin/tests/test_janela_auth.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -158,37 +160,37 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● O revisor acha um bloqueador que eu não medi: BUG 143 — import dentro de função lê o disco na hora da chamada. Os workers estão em
-  bf783df7 e o disco já é o novo. Medindo a exposição antes de qualquer cura:
+      22  set -uo pipefail
+      23  RAIZ="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+      24  LISTA="$RAIZ/bin/auth_sitios.txt"
+      25 -BASE="${1:-origin/main}"
+      25 +# A BASE E O QUE ESTA NO AR, nao `origin/main` (cura 12/10 ~01:0x, achado no pouso da O44).
+      26 +# A pergunta da guarda e "o que este deploy POE no ar que ainda nao esta", e `origin/main` responde
+      27 +# outra: ela fala do REMOTO. As duas formas em que a base velha errava, nos DOIS sentidos:
+      28 +#   - CEGA depois do push: com HEAD == origin/main o diff sai VAZIO e auth sobe as 03:00 sem guarda;
+      29 +#   - GRITA sem motivo com 44 commits a frente do remoto, por fatia que ninguem vai publicar agora.
+      30 +# O carimbo de QUEM ESTA NO AR ja existe e tem um escritor: `logs/deploy.stamp` (COMMIT=), escrito
+      31 +# pelo proprio deploy.sh ao publicar (AUTO-REVERT, corte Ronald 20/09). Sem argumento, a guarda le
+      32 +# dali -- e assim quem chama nao precisa saber a resposta, que e o que fazia o `--reload-agendado`
+      33 +# se declarar isento com uma premissa FALSA ("nao publica codigo novo": o HUP publica o DISCO).
+      34 +# `JANELA_AUTH_STAMP` substitui o caminho do carimbo, mesma costura declarada do relogio, para o selo.
+      35 +CARIMBO="${JANELA_AUTH_STAMP:-$RAIZ/logs/deploy.stamp}"
+      36 +BASE="${1:-}"
+      37 +if [ -z "$BASE" ]; then
+      38 +  BASE="$(grep -m1 '^COMMIT=' "$CARIMBO" 2>/dev/null | cut -d= -f2)"
+      39 +  # Sem carimbo legivel NAO se afirma nada: deixo a base VAZIA de proposito e a propria guarda cai no
+      40 +  # ramo "base nao existe -- trato como se auth tivesse mudado". UM escritor dessa regra, nao dois.
+      41 +  [ -n "$BASE" ] || BASE="SEM-CARIMBO-DE-PUBLICACAO"
+      42 +fi
+      43
+      44  # A COSTURA DE RELOGIO E DECLARADA, e existe para o SELO: `JANELA_AUTH_DOW`/`JANELA_AUTH_HHMM`
+      45  # substituem o `date` quando presentes. Sem elas, le `date` no ato -- datar de cabeca ja errou 6 h
+  ⎿  Allowed by auto mode classifier
 
-  Ran 1 shell command
-
-● O bloqueador é real: a árvore VELHA — a que os workers rodam — tem três imports tardios de um módulo que já não está no disco. Medindo
-  quais rotas chegam lá:
-
-  Ran 1 shell command
-
-● Dois deles são ação real: materializar_regularizacao_externa (caminho de regularização, saas_core) e veredito_celula_view (admin). E o
-  _frase_da_tranca era chamado no TOPO do módulo. Medindo se esses módulos entram eager e quem os alcança:
-
-  Ran 1 shell command
-
-● O censo saiu largo demais, mas os fatos que importam estão nele: recusa.py:22 chama _frase_da_tranca() no topo do módulo, e quem o
-  importa (acoes_disputa:29,160, fio:654, materializacao:861, validacao:361) o faz tardio — logo o worker velho levanta ModuleNotFoundError
-  na primeira vez. Lendo o resto da guarda antes de curá-la:
-
-  Ran 1 shell command
-
-● A guarda está bem feita: base inexistente ela já trata como "auth mudou" (nunca o contrário), e diff vazio libera a qualquer hora. Então
-  a cura é de base, não de regra. Lendo o selo das 9 bordas antes:
-
-  Ler o selo da janela de auth
-  ⎿  $ cd /home/ronald/saas-hasner
-     cat bin/tests/test_janela_auth.sh
-
-✶ Infusing… (20h 2m 49s · ↓ 1.8m tokens · thinking some more)
+* Compacting conversation… (20h 8m 1s · ↓ 1.8m tokens)
+  ▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 5%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -196,6 +198,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Restoring two-row split in _retrato_barra.html                                          2h 35m 53s · ↓ 169.2k tokens
+  ◯ general-purpose  Reading probe output for _retrato_barra.html fileiras                                    2h 41m 6s · ↓ 100.6k tokens
   ⧉  index
 ```
