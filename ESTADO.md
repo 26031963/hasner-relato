@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 12/10/2026 19:45:46.**
+**Medido em 12/10/2026 19:50:46.**
 
 | | |
 |---|---|
@@ -22,34 +22,34 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2410.0 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2410.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cb** (`(detached)`) -- **SEM AGENTE**
-  - 3 commit(s) a frente do `main`, 12 arquivo(s) sujo(s), commit a frente ha **1.5 h**
+  - 3 commit(s) a frente do `main`, 12 arquivo(s) sujo(s), commit a frente ha **1.6 h**
   - sem declaracao em `logs/raias/wt-cb.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **178.5 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **178.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261011`) -- **SEM AGENTE**
-  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **40.5 h** (passou das 6 h da L-105)
+  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **40.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **294.6 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **294.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **198.7 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **198.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **316.4 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **316.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
-  - 2 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **1.5 h**
+  - 2 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **1.6 h**
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
 - **24 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-batida, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-folha, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-p5, wt-regua, wt-sj, wt-vinculo
 
@@ -71,6 +71,8 @@ f2659343 [O253] a caixa SITUACAO sai, o LED da linha passa a ser a cor do DONO e
 
 ```
  M app/config/crons_duracao.json
+ M app/core/juizes.py
+ M app/docs/ARQUITETURA.mmd
  M app/docs/AVAIS.md
  M app/docs/BACKLOG.md
  M app/docs/CORTES.json
@@ -81,7 +83,26 @@ f2659343 [O253] a caixa SITUACAO sai, o LED da linha passa a ser a cor do DONO e
  M app/docs/PROMPTS.md
  M app/docs/RELATO.md
  M app/docs/TICKETS.md
+ M app/folha/export.py
+M  app/folha/models.py
+M  app/folha/retrato_folha.py
+ M app/folha/tests/_celulas.py
+ M app/folha/tests/test_contrato_export_um_juiz.py
+ M app/folha/tests/test_integracao.py
+M  app/folha/tests/test_retrato_folha_quadros.py
+M  app/folha/tests/test_retrato_folha_smoke_chromium.py
+M  app/folha/tests/test_retrato_folha_tela2.py
+ M app/folha/tests/test_sm1_monster_export.py
+ M app/folha/views.py
+M  app/folha/views_retrato.py
+ M app/ponto/views.py
+ M app/relatorios/tests/test_cauda_trilha_do_cartao.py
+M  app/templates/core/_barra_gestao.html
+M  app/templates/folha/_retrato_barra.html
+M  app/templates/folha/_retrato_lista.html
  M bin/sonda_frota.sh
+?? app/folha/tests/test_txt_le_a_celula_e_o_juiz.py
+?? app/ponto/tests/test_porta_de_um_colab_le_o_juiz.py
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -171,13 +192,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ⎿  Read docs/AVAIS.md (24 lines)
-  ⎿  Read ../logs/o48p5/frota_porta_txt.log (21 lines)
-  ⎿  Read ../logs/o48p5/causa_emp2.log (11 lines)
-  ⎿  Read ../logs/o48p5/diff_gravado_x_lido.log (24 lines)
-  ⎿  Referenced file core/juizes.py
-
-● Task "RED e construção do segundo intervalo" completed in background
 
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
@@ -188,9 +202,7 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Background command "Roda a suite cheia sobre a copia do comboio" completed (exit code 0)
 
-  Roda a pasta inteira de selos de host · 1m 34s
-  ⎿  $ cd /home/ronald/saas-hasner && _red=0; _n=0; for t in bin/tests/test_*.sh; do _n=$((_n+1)); if ! out=$(bash "$t" 2>&1); then
-     _red=$((_red+1)); echo "RED $t"; echo "$out" | tail -2 | sed 's/^/ /'; fi; done; echo "=== $_n selos, $_red RED" (1m 34s)
+  Searched for 1 pattern, ran 38 shell commands
   ⎿  Read docs/AVAIS.md (25 lines)
   ⎿  Referenced file docs/RELATO.md
   ⎿  Read ../logs/o48p5/frota_porta_txt.log (21 lines)
@@ -198,9 +210,18 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
   ⎿  Read ../logs/o48p5/diff_gravado_x_lido.log (24 lines)
 
 ● Task "RED e construção do segundo intervalo" completed in background
-     (ctrl+b ctrl+b (twice) to run in background)
 
-· Concocting… (5h 15m 56s · ↓ 537.7k tokens)
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+
+● Faz o merge sem commit, copia os 12 arquivos e censa a arvore
+  ⎿  $ cd /home/ronald/saas-hasner && set -e
+     S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
+     git merge --no-ff --no-commit raia-ui
+     echo "MERGE_HEAD=$(git rev-parse -q --verify MERGE_HEAD)"
+     [ -n "$(git rev-parse -q --verify MERGE_HEAD)" ] || { echo "SEM MER…
+
+✶ Concocting… (5h 20m 56s · ↓ 544.0k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
