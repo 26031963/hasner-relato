@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 12/10/2026 09:49:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (718.2 MB). Acoes na janela: **1201**.
+**Medido em 12/10/2026 09:55:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (718.3 MB). Acoes na janela: **1205**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 09:54:13 | Bash | Census every reader of the LED and eixo tables | `echo "=== CENSO app inteiro: leitores de led/eixos"; grep -rn "led_da_linha\\|ROTULO_DO_LED\\|COR_DO_LED\\|\bLEDS\b\\|ROTULO_DO_GRUPO\\|GRUPOS_RECORTE\\|GRUPOS_PILULA" --include=*.py --include=*.html . \| grep -v "^./folha/retrato_folha.py" \| sed 's/:\( *\)/: /' \| cut -c1-170` |
+| 09:50:14 | Bash | Verify the new table rows' shape | `python3 - <<'PY' import io L=io.open('docs/BACKLOG.md',encoding='utf-8').read().split('\n') for i,l in enumerate(L,1): if l.startswith('\| O253 '): c=[x for x in l.split('\|')][1:-1] print('linha',i,'campos',len(c)) for j,x in enumerate(c): print(' campo',j,len(x),'chars ->',x.strip()[:70]) P=io.open('docs/PROMPTS.md',encoding='utf-8').read().split('\n') u=[l for l in P if 'UI-RETRATO-CORRECOES' i ...` |
+| 09:50:07 | Bash | Fix the script and apply the registration | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && python3 - "$S/registra_0944.py" <<'PY' import io,sys p=sys.argv[1] s=io.open(p,encoding='utf-8').read() old="_p = edita('docs/PROMPTS.md', [], insercoes=[])\n\n" assert s.count(old)==1 io.open(p,'w',encoding='utf-8').write(s.replace(old,'')) print('ok') PY echo "--- DRY 2"; DRY=1 python3 "$S/registra ...` |
+| 09:49:59 | Bash | Write and dry-run the registration patcher | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && cat > "$S/registra_0944.py" <<'PY' # -*- coding: utf-8 -*- """Registra o aval UI-RETRATO-CORRECOES (12/10 09:44) e aplica a correcao de PRECISAO no texto do O252 / RELATO ("le status + motivo" supervalorizava: aprovavel E `status == 'entra'` sozinho). Toda troca passa por `assert s.count(old) == 1` A ...` |
 | 09:49:03 | Bash | Read the PROMPTS table shape | `head -8 docs/PROMPTS.md \| cut -c1-200; echo "=== ultima linha"; tail -1 docs/PROMPTS.md \| cut -c1-200; echo "campos=$(tail -1 docs/PROMPTS.md \| tr -cd '\|' \| wc -c)"` |
 | 09:48:29 | Bash | Count the columns of each BACKLOG table | `python3 - <<'PY' L=open('docs/BACKLOG.md',encoding='utf-8').read().split('\n') for n in (407,408,490,491,492,493): print(n, repr(L[n-1][:160])) for n in (765,775,776): print(n, 'campos=', L[n-1].count('\|')-1, repr(L[n-1][:80])) PY` |
 | 09:48:22 | Bash | Read the OBRAS table header and column names | `grep -n "OBRAS:INICIO" docs/BACKLOG.md; awk 'NR>=96 && NR<=103' docs/BACKLOG.md \| cut -c1-260; echo "=== header da tabela OBRAS"; grep -n "^\| id \\|^\| ID \\|^\|---" docs/BACKLOG.md \| sed -n '1,6p'` |
