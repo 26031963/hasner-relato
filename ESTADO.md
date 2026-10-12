@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 12/10/2026 20:45:02.**
+**Medido em 12/10/2026 20:50:32.**
 
 | | |
 |---|---|
@@ -29,31 +29,31 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2411.0 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2411.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cb** (`(detached)`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 12 arquivo(s) sujo(s), commit a frente ha **2.5 h**
+  - 1 commit(s) a frente do `main`, 12 arquivo(s) sujo(s), commit a frente ha **2.6 h**
   - sem declaracao em `logs/raias/wt-cb.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **179.5 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **179.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261011`) -- **SEM AGENTE**
   - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **41.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **295.6 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **295.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **199.7 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **199.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **317.4 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **317.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -176,12 +176,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  consumidor le a lampada, nunca re-julga) + contrato 2 (um escritor por entidade). Nenhum juiz novo: a LAMPADA ja e o juiz de "o dia
-  deve? o que e onde".
-  1. A vida da pergunta e da cobranca DERIVA da lampada: lampada acesa no marco = fio vivo obrigatorio (pergunta viva ou acao de admin
-  nomeada); lampada apagada = fio fecha. Nada mata pergunta sem apagar a lampada pela porta da celula.
-  2. Censo de ESCRITORES do estado de PerguntaDisputa (vias fantasma, completude_turno, sem_turno_aberto, chamado_encerrado, declaracao,
-  validacao, paridade_recusada, ausencia_dia e o que mais o censo achar): cada um passa a escrever PELA lampada ou se aposenta (L-111).
   Fechar a pergunta = apagar a lampada; lampada que reacende = fio reabre.
   3. Leitores que nao migraram, todos na mesma fatia: chamados/services/disputa_emissao.py::motivo_fora_da_fabrica (:670 recusa
   'pergunta_do_chamado_ja_encerrada' sem olhar a celula; mesma classe curada em 03/09 no _ja_perguntou), ponto/supra_juiz.py:163-168
@@ -195,19 +189,25 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● O corte novo chegou — registro ele neste turno. Primeiro fecho a âncora que falhou (faltou o parêntese; nada foi aplicado, o arquivo está
   intacto).
 
-● Aplicar as duas correcoes de prosa restantes
-  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cat > $S/o259_prosa2.py <<'PYEOF'
-     import io, sys
-     W = sys.argv[1]
-     def sub(p, old, new, rot):
-     s = io.open(p, encoding='utf-8').read()
-     assert s.count(old) == 1, (rot, s.count(old))
-     io.open(p, 'w', encodi…
+  Ran 3 shell commands
+  ⎿  Read docs/AVAIS.md (25 lines)
+  ⎿  Referenced file docs/LEIS.md
+  ⎿  Referenced file folha/export.py
+  ⎿  Referenced file core/juizes.py
+  ⎿  Referenced file ponto/tests/test_contract_juiz_batida.py
 
-✢ Compacting conversation… (6h 15m 12s · ↓ 668.9k tokens)
-  ▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 15%
+● Task "RED e construção do segundo intervalo" completed in background
+
+● Prosa corrigida. Agora o corte novo — registro dele neste turno.
+
+● Ler os tres leitores que o corte nomeia
+  ⎿  $ echo "=== disputa_emissao motivo_fora_da_fabrica ===" && grep -n 'def motivo_fora_da_fabrica' -A 4
+     chamados/services/disputa_emissao.py | head -20 && echo "--- :660-685 ---" && sed -n '660,685p' chamados/services/disputa_emissao.py
+     && echo "=== _ja_perguntou ===" && grep -n '_ja_perguntou' chamad…
+
+· Concocting… (6h 20m 42s · ↓ 669.8k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    0% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

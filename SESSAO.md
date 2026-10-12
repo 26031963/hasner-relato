@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 12/10/2026 20:45:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (739.2 MB). Acoes na janela: **962**.
+**Medido em 12/10/2026 20:50:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (739.7 MB). Acoes na janela: **964**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 20:50:24 | Bash | Ler os tres leitores que o corte nomeia | `echo "=== disputa_emissao motivo_fora_da_fabrica ===" && grep -n 'def motivo_fora_da_fabrica' -A 4 chamados/services/disputa_emissao.py \| head -20 && echo "--- :660-685 ---" && sed -n '660,685p' chamados/services/disputa_emissao.py && echo "=== _ja_perguntou ===" && grep -n '_ja_perguntou' chamados/services/disputa_emissao.py \| head && echo "=== core/juizes.py _C1 ===" && grep -n '_C1' core/juiz ...` |
+| 20:50:13 | Bash | Ler PROMPTS tail e ultima entrada de CORTES.json | `echo "=== PROMPTS tail ===" && tail -6 docs/PROMPTS.md && echo "=== CORTES.json ultima entrada ===" && python3 -c " import json,io d=json.load(io.open('docs/CORTES.json',encoding='utf-8')) print(type(d), len(d) if hasattr(d,'__len__') else '') if isinstance(d,dict): print(list(d.keys())[:8]) ent = d['cortes'] if isinstance(d,dict) and 'cortes' in d else d print('n=',len(ent)) print(json.dumps(ent[ ...` |
 | 20:44:46 | Bash | Aplicar as duas correcoes de prosa restantes | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cat > $S/o259_prosa2.py <<'PYEOF' import io, sys W = sys.argv[1] def sub(p, old, new, rot): s = io.open(p, encoding='utf-8').read() assert s.count(old) == 1, (rot, s.count(old)) io.open(p, 'w', encoding='utf-8').write(s.replace(old, new)) sub(W + '/core/contratos_estruturais.py', """ 'RELATO -- nao fra ...` |
 | 20:44:17 | Bash | Ver os bytes exatos da ancora 3 | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cd $S/wt-o259/app && grep -n 'calcular_dia NAO EXISTE' -A 10 core/contratos_estruturais.py \| cat -A \| sed -n '1,14p'` |
 | 20:44:11 | Bash | Corrigir a ancora e aplicar a correcao de prosa | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; sed -i "s\|'criterio 4b), e os DOIS pendentes sao zona=dinheiro. '\"\"\"\|(criterio 4b), e os DOIS pendentes sao zona=dinheiro. '\"\"\"\|; s\|\"\"\"'criterio 4b). QUANTOS\|\"\"\"(criterio 4b). QUANTOS\|" $S/o259_prosa.py && grep -n 'criterio 4b' $S/o259_prosa.py \| head -4 && python3 $S/o259_prosa.py $ ...` |
