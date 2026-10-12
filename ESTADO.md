@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 12/10/2026 16:55:46.**
+**Medido em 12/10/2026 17:01:02.**
 
 | | |
 |---|---|
@@ -22,28 +22,28 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2407.2 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2407.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **175.6 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **175.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261011`) -- **SEM AGENTE**
-  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **37.6 h** (passou das 6 h da L-105)
+  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **37.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
   - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **291.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **195.9 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **196.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **313.6 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **313.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -162,19 +162,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● O ponto decisivo do item (4) já aparece na fonte: folha/retrato_folha.py:134 declara "saldo conta SO retido por furo_espelho" — literal
-  de um aval anterior dele — e :240 rotula o quadro como "Dos bloqueados por furo de espelho". Então os 4 podem ser (i) bloqueados que não
-  são furo_espelho, ou (ii) furo_espelho sem dias. São curas diferentes, e só a medição decide. Despacho a raia de UI com isso explícito e
-  sigo na fila 1:
-
-● Agent(Raia wt-ui: completa a E1 do retrato)
-  ⎿  Backgrounded agent (↓ to manage · ctrl+o to expand)
-
-  Ran 1 shell command
-
-● Passo 4 já construiu a injeção (fechamentos= em montar_linhas_export e classificar_export, default byte-idêntico) — então o passo 5 é só
-  o chamador de produção passar os objetos LIDOS. Censo dos chamadores:
-
   Searched for 1 pattern
 
 ● Os três alvos caem na mesma função (folha/views.py gerar_dominio_txt): o passo 5, o carimbo :164 do CONFORME e o juiz. E há um risco de
@@ -186,20 +173,33 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Seguindo a ordem. Primeiro a linha de números devida no topo do RELATO (está atrasada e é barata):
 
-● Le o topo do RELATO
+  Le o topo do RELATO
   ⎿  $ sed -n '1,20p' docs/RELATO.md
+  ⎿  Read docs/AVAIS.md (24 lines)
+  ⎿  Referenced file docs/RELATO.md
+  ⎿  Referenced file docs/BACKLOG.md
+  ⎿  Referenced file core/juizes.py
+  ⎿  Referenced file folha/export.py
 
-✶ Compacting conversation… (2h 25m 56s · ↓ 252.3k tokens)
-  ▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 4%
+● Task "RED e construção do segundo intervalo" completed in background
+
+● Task "Raia wt-ui: completa a E1 do retrato" still running in background
+
+✢ Concocting… (2h 31m 10s · ↓ 252.5k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    6% until auto-compact
+
+❯ corte Ronald: juiz competencia_lavrada nasce -- a pergunta 'a competencia ja foi entregue (lavrada)?' passa a ter autoridade unica
+  extraida de gerar_celulas.py:147-194 (TXT ou holerite publicado, BUG 85), e gerar_celulas passa a chama-la. Segue a fila; PAREI so em
+  lei ou !
+  ctrl+x ctrl+s to send now
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ Press up to edit queued messages
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Measuring saldo orphans via sonda_frota.sh                                                  3m 25s · ↓ 132.0k tokens
+  ◯ general-purpose  Planning cure for `_saldo_cru` in retrato_folha.py                                          8m 40s · ↓ 161.1k tokens
   ⧉  index
 ```
