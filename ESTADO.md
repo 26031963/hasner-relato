@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 12/10/2026 20:07:02.**
+**Medido em 12/10/2026 20:12:32.**
 
 | | |
 |---|---|
@@ -35,25 +35,25 @@ RELATO, com a lista de nomes do banco como autoridade._
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cb** (`(detached)`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 12 arquivo(s) sujo(s), commit a frente ha **1.9 h**
+  - 1 commit(s) a frente do `main`, 12 arquivo(s) sujo(s), commit a frente ha **2.0 h**
   - sem declaracao em `logs/raias/wt-cb.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **178.8 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **178.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261011`) -- **SEM AGENTE**
-  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **40.8 h** (passou das 6 h da L-105)
+  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **40.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **294.9 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **295.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **199.1 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **199.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **316.8 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **316.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -175,38 +175,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-❯ corte Ronald: a leitura literal fica -- so conta vazia sai do carimbo da porta cega; turno aberto segue barrando o carimbo, pelo corte
-  das 09:27 parte (2). Porta carimba 157. Segue a fila; PAREI so em lei ou !
-
-  Searched for 3 patterns, ran 24 shell commands
-  ⎿  Referenced file core/juizes.py
-  ⎿  Read docs/AVAIS.md (25 lines)
-  ⎿  Read ../logs/o48p5/frota_porta_txt.log (21 lines)
-  ⎿  Read ../logs/o48p5/causa_emp2.log (11 lines)
-  ⎿  Read ../logs/o48p5/diff_gravado_x_lido.log (24 lines)
-
-● Task "RED e construção do segundo intervalo" completed in background
-
-❯ aval Ronald: CORRIGE o CHAMADO-X-JUIZ das 17:0x -- valem os cortes de 10/10 (O248 juiz dia_encerrado nasce; O249 juiz par_completo
-  nasce); a parte 'nao nasce juiz dia_encerrado' e a de 'varrer_pares_embutidos chama turnos_do_colab' ficam ANULADAS. O juiz
-  dia_encerrado responde por fato encerrado (turno fechado, CLAUDE.md secao 6, TETO TEMPORAL), nunca por data < hoje; flip_auto.py:274 e
-  supra_juiz.py:149 passam a chama-lo; DIFF do universo publicado antes (supra_juiz retrata). O resto do aval vale (raia wt-bos, censo dos
-  outros 23). Segue a fila; PAREI so em lei ou !
-
-❯ corte Ronald: juiz calcular_periodo nasce -- a pergunta da familia batida passa a ser 'quantas horas este PAR (turno) vale', o dia se le
-  pelo data_turno do turno; motor_calculo_v2 nao e tocado. Segue a fila; PAREI so em lei ou !
-
-● Dois recados dele chegaram juntos. Antes de qualquer linha de código, vou medir o que cada um toca.
-
-  Searched for 2 patterns, ran 6 shell commands
-
-● Dois recados dele. Medi o que cada um toca antes de escrever. Vou consultar o advisor antes de abrir a fatia.
-
 ● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-✢ Concocting… (5h 37m 12s · ↓ 573.3k tokens)
+  Searched for 1 pattern, ran 8 shell commands
+
+● Vou lançar a medição do pendente[1] em fundo (leitura, cpuset de teste) e escrever os registros enquanto ela roda.
+
+  Ran 2 shell commands
+
+● Background command "Mede a porta extra da E2 na frota" completed (exit code 0)
+
+  Searched for 1 pattern, ran 3 shell commands
+
+● Background command "Relanca a medicao da porta" completed (exit code 0)
+
+  Searched for 1 pattern, ran 3 shell commands
+
+● Background command "Relanca a medicao com o modulo certo" completed (exit code 0)
+
+  Ran 1 shell command
+
+● Achei um bug provado no caminho, no meio da medição. Vou censar antes de curar.
+
+  Censo dos chamadores de com_dias e dos early returns
+  ⎿  $ echo "=== chamadores com com_dias ==="; grep -rn 'com_dias' --include='*.py' . | grep -v '^./folha/export.py' | head -20; echo; echo
+     "=== os tres early-return de motivos_retencao_celula ==="; sed -n '988,1001p' folha/export.py | grep -n 'return \[\]' ; sed -n
+     '991,1001p' folha/export.py
+
+✢ Compacting conversation… (5h 42m 42s · ↓ 590.4k tokens)
+  ▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 13%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
