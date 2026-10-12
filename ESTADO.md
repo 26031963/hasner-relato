@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 12/10/2026 04:39:02.**
+**Medido em 12/10/2026 04:44:32.**
 
 | | |
 |---|---|
@@ -22,31 +22,31 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2394.9 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2395.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **163.4 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **163.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261011`) -- **SEM AGENTE**
   - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **25.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **279.5 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **279.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **183.6 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **183.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **301.3 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **301.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **3.4 h**
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **3.5 h**
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
 - **21 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
@@ -165,36 +165,36 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-  Ran 11 shell commands
-
-● Background command "Wait by file for the comboio suite verdict" failed with exit code 1
-  ⎿  Read docs/AVAIS.md (24 lines)
-  ⎿  Read ../bin/janela_auth.sh (124 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/o251_linhas.md (10
-     lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bgs1qmuc8.output (49 lines)
-  ⎿  Read relatorios/tests/test_o48_passo3_cartao_le_online.py (121 lines)
-
-● Task "RED e construção do segundo intervalo" completed in background
-
-  Ran 1 shell command
-
-● The comboio is GREEN: Ran 10472 tests in 1444.394s / OK (skipped=42) / rc_comboio=0. The waiter's rc=1 is its own tail, not the verdict.
-
-  Ran 1 shell command
-
-● Anchors unique, spans exactly the two sentences. Now a fresh sandbox and all three appliers in pouso order:
-
   Ran 2 shell commands
 
 ● Both cells read correctly, pipe count unchanged. One provisional claim remains at the top: line 5's "A certificacao do pouso e UMA: a
   suite do comboio" has no verdict. Same file, same commit — so the same applier closes it:
 
-● Running 1 shell command…
+  Ran 3 shell commands
 
-✢ Infusing… (23h 46m 48s · ↓ 2.2m tokens)
+● All three run in order, idempotent, live tree untouched. Now wire it into the pouso script:
+
+  Ran 2 shell commands
+
+● Advisor item (2) is closed. Now the critical path for the 06:08 gate — its own PAROU_ENSAIO guard:
+
+  Ran 1 shell command
+
+● The 04:16 sombra cron is 24 min in (bloco takes 18–31). Waiting by FILE, and meanwhile measuring the selo that will block this marco's
+  push:
+
+  Ran 2 shell commands
+
+● Census file verified discriminating: 17/17 OK against the certified copy, 0/17 against the live tree — it is not a vacuous check.
+  test_lei_akita.sh rc=1 confirmed (fila line, not this marco — ESMERIL-DO-MARCO forbids touching it now).
+
+  Ran 1 shell command
+
+● Preparation is durable and dry-run clean; the next act is irreversible (two commits + a prod deploy). Calling the advisor before it:
+
+  Advising using Fable 5.1
+
+· Infusing… (23h 52m 18s · ↓ 2.2m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
