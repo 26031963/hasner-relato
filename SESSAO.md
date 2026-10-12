@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 12/10/2026 06:41:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (708.9 MB). Acoes na janela: **1183**.
+**Medido em 12/10/2026 06:46:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (709.4 MB). Acoes na janela: **1175**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 06:46:17 | Bash | Confirm HEAD, deploy stamp and clean tree | `cd /home/ronald/saas-hasner && git log --oneline -3 && echo "--- stamp:" && grep '^COMMIT=' logs/deploy.stamp && echo "--- status app de codigo:" && git status --porcelain -- app ':!app/docs' ':!app/config/crons_duracao.json' \| head && echo "(vazio acima = limpa)"` |
+| 06:46:07 | Bash | Read the pouso output | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bgs3o9dof.output` |
 | 06:39:48 | Bash | Read the pouso's interim output | `sleep 25; cat /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bgs3o9dof.output 2>/dev/null \| tail -40; echo "---"; date '+%H:%M:%S'` |
 | 06:39:23 | Bash | Run the comboio pouso (merge + docs + deploy) | `cd /home/ronald/saas-hasner && bash /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/pouso_comboio.sh 2>&1` |
 | 06:39:05 | Bash | Wait by file for the last elo's carimbo | `cd /home/ronald/saas-hasner i=0 until [ -f logs/fim/lavrar_retrato_folha.-.20261012 ] \|\| [ $i -ge 20 ]; do sleep 5; i=$((i+1)); done date '+%H:%M:%S' if [ -f logs/fim/lavrar_retrato_folha.-.20261012 ]; then echo "CARIMBO:"; ls -l logs/fim/lavrar_retrato_folha.-.20261012; cat logs/fim/lavrar_retrato_folha.-.20261012 else echo "ainda em voo; cron em curso:"; ls -1 logs/crons_em_curso/ 2>/dev/null  ...` |
@@ -1183,13 +1185,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 18:46:44 | Bash | Ver o consumo de classificar_causa e os campos gravados | `sed -n '605,630p' ponto/services/fechamento.py; echo "=== campos no models:"; grep -n "causa_espelho\\|motivos_espelho" ponto/models.py` |
 | 18:46:36 | Bash | Ler o resto de causas.py e seus chamadores | `sed -n '60,120p' folha/causas.py; echo "=== quem chama classificar_causa:"; grep -rn "classificar_causa" --include=*.py . \| grep -v "folha/causas.py"` |
 | 18:46:32 | Bash | Ler folha/causas.py | `sed -n '1,60p' folha/causas.py; echo "=== defs:"; grep -n "^def \\|^class " folha/causas.py` |
-| 18:46:27 | Bash | Censo de quem le minutos_realizados em producao | `grep -rn "minutos_realizados" --include=*.py . \| grep -v "/tests/" \| grep -v migrations \| head -30` |
-| 18:46:18 | Bash | Ler o leitor que ja ve a contradicao do gravado | `sed -n '786,830p' folha/export.py` |
-| 18:46:05 | Bash | Procurar gravado_velho em logs e docs | `cd /home/ronald/saas-hasner && grep -rln "gravado_velho" logs/ app/docs/ 2>/dev/null \| head; echo "---"; grep -rn "gravado_velho" app/docs/*.md 2>/dev/null \| head -5` |
-| 18:45:59 | Bash | Achar quem produz o rotulo gravado_velho | `grep -rn "gravado_velho" --include=*.py --include=*.html . \| head -30` |
-| 18:45:54 | Bash | Enxugar o TOPO do balde v | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cp $S/topo_balde_v.md $S/baldev_corpo.md; cat > $S/topo_balde_v3.md <<'EOF' **BALDE v = CADASTRO, nao ESTRUTURA (L-099; dono MEDIDO, nao PAREI).** Os 4 da 10 com horas e ata zerada (col960, col956, col936, col511) tem ata LAVRADA e o juiz `realizado_do_dia` diz SEM_TURNO em 38 de 39 dias -> `ata_x_juiz ...` |
-| 18:45:41 | Bash | Ler os dois rascunhos | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; echo "=== topo_balde_v.md ($(wc -l < $S/topo_balde_v.md) linhas)"; cat $S/topo_balde_v.md; echo; echo "=== relato_o48p3.md ($(wc -l < $S/relato_o48p3.md) linhas)"; cat $S/relato_o48p3.md` |
-| 18:45:28 | Bash | Rodar os 12 vizinhos na raia (fila da trava) | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cd /home/ronald/saas-hasner && ESTEIRA_QUEM=o48p3-vizinhos timeout 3300 bash bin/suite.sh --dir /home/ronald/wt-o48p3 --only "ponto.tests.test_o48_fechamento_lido ponto.tests.test_o48_sem_celula_nao_e_zero relatorios.tests.test_o48_passo3_cartao_le_online relatorios.tests.test_cartao_pela_celula folha. ...` |
-| 18:45:17 | Bash | Ler o cabecalho do suite.sh | `cd /home/ronald/saas-hasner && sed -n '1,60p' bin/suite.sh` |
-| 18:45:12 | Bash | Conferir que os 12 modulos vizinhos existem | `cd /home/ronald/wt-o48p3/app && for m in ponto/tests/test_o48_fechamento_lido.py ponto/tests/test_o48_sem_celula_nao_e_zero.py relatorios/tests/test_o48_passo3_cartao_le_online.py relatorios/tests/test_cartao_pela_celula.py folha/tests/test_borda_celula.py folha/tests/test_prontidao.py folha/tests/test_corte_vinculo.py folha/tests/test_causas_sem_previsao.py folha/tests/test_porta_do_export.py pon ...` |
-| 18:44:58 | Bash | Ver quem segura a trava de teste | `cd /home/ronald/saas-hasner && bash bin/trava_teste.sh --quem 2>&1 \| head -3` |
