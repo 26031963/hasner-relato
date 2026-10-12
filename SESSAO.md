@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 12/10/2026 13:33:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (726.5 MB). Acoes na janela: **1190**.
+**Medido em 12/10/2026 13:38:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (726.5 MB). Acoes na janela: **1185**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1195,8 +1195,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 01:38:50 | Bash | Read painel_fechamento | `echo "=========== 2) ponto/views.py painel_fechamento"; sed -n "$(grep -n 'def painel_fechamento' ponto/views.py \| cut -d: -f1),+75p" ponto/views.py` |
 | 01:38:45 | Bash | Read the landed mold | `echo "=========== MOLDE: relatorios/cartao_pela_celula.py"; sed -n '40,105p' relatorios/cartao_pela_celula.py` |
 | 01:38:39 | Bash | Find the censo list of per-colab readers | `grep -n -i 'por colaborador\\|4 leitores\\|leitor por colab\\|frota' docs/FECHAMENTO-ONLINE.md \| head -30` |
-| 01:38:30 | Bash | Find the O48 cell in the BACKLOG | `grep -n 'passo 3\\|passo 4\\|O48' docs/BACKLOG.md \| head -40` |
-| 01:38:19 | Bash | Map ranking_he.py structure and _carimbo | `echo "=== cabeca + defs:"; grep -n '^def \\|^from \\|^import \\|^"""' folha/services/ranking_he.py \| head -40; echo; echo "=== FechamentoMensal no arquivo:"; grep -n 'FechamentoMensal' folha/services/ranking_he.py; echo; echo "=== _carimbo:"; sed -n "$(grep -n 'def _carimbo' folha/services/ranking_he.py \| cut -d: -f1),+22p" folha/services/ranking_he.py` |
-| 01:38:12 | Bash | Read the ranking_he leitor | `echo "=========== 1) folha/services/ranking_he.py"; sed -n '150,235p' folha/services/ranking_he.py` |
-| 01:37:56 | Bash | Check raia-ui hunks in ponto/views.py and the state of the o48p3 raia | `cd /home/ronald/saas-hasner && echo "=== raia-ui x main em ponto/views.py (hunks):"; git diff -U0 main raia-ui -- app/ponto/views.py \| grep -E '^@@' ; echo "=== raia-o48p3: log x main"; git log --oneline main..raia-o48p3 2>/dev/null \| head; echo "=== raia-o48p3 arquivos:"; git diff --name-only main raia-o48p3 2>/dev/null \| head -30; echo "=== status wt-o48p3:"; git -C /home/ronald/wt-o48p3 stat ...` |
-| 01:37:40 | Bash | Check time, armed gate state and tree pin | `date '+%Y-%m-%d %H:%M:%S %u'; echo "--- gate:"; cd /home/ronald/saas-hasner && bin/deploy_agendado.sh listar 2>&1 \| head -5; echo "--- fatia.done:"; ls -la fatias_agendadas/o44-deploy/ 2>&1; echo "--- HEAD:"; git rev-parse HEAD; echo "--- app sujo (esperado vazio):"; git status --porcelain -- app ':!app/docs' ':!app/config/crons_duracao.json'` |
