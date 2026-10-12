@@ -174,6 +174,19 @@ a lista que a L-099 nomeia como autoridade do dono e cega em 2 dos 4. PROVA: `lo
   chama "N commit a frente do `main`" o que `rev-list` conta numa historia SEM merge-base, e cobra L-105 de uma raia
   que nao tem como mergear. O rotulo certo e "historia disjunta", e o selo da L-105 nunca podera ficar verde com ela.
 
+## 12/10 11:5x — `[O253]` a caixa SITUACAO sai, o LED da linha e a cor do DONO, a tela abre na competencia CORRENTE (pouso da raia `wt-ui`)
+
+LEI-AKITA: origem=`folha/retrato_folha.py::LED_DA_LINHA` (a tabela unica de estado -> cor + rotulo), testemunha=o retrato GRAVADO pelo lavrador e `ponto/janelas.py::janela_atual`, RED=12 selos vermelhos em 5 arquivos (colados no corpo do commit), quem-mais-le=`templates/core/_led.html` (o 2o leitor da cor, que perdeu a escada de `{% if %}`), juizes novos=0
+
+- **O aval das 09:44 (`UI-RETRATO-CORRECOES`) foi SUBSTITUIDO as 11:4x** pelo `UI-RETRATO-TRIAGEM`, de 4 etapas, que **absorve o feito**: este pouso e a parte FEITA da etapa **E1**. O que a E1 ainda pede e nao esta aqui: **TIPO fora da barra** (vai para o drawer) e o filtro **Total como moldura**, nao botao.
+- o que mudou: `folha/retrato_folha.py` (`LED_DA_LINHA`/`COR_DO_LED`/`ROTULO_DO_LED`/`HEX_DO_TOKEN`, `led_da_linha`, `desenho_do_led`, `GRUPOS_PILULA` sem o eixo `led`, `quadros_barra_retrato` com DONO fixo) · `folha/views_retrato.py` (`janela_anterior` -> `janela_atual`, L-026/L-090) · `templates/core/_led.html` recebe `cor` e `rotulo` PRONTOS · `_retrato_lista.html` · `retrato_folha.html` (a barra vem ANTES do `#retrato-form`) · `_retrato_barra.html` (tabela de altura re-medida) · 5 arquivos de selo
+- numeros MEDIDOS: suite CHEIA sobre a arvore da raia `Ran 10635 tests in 1454.391s` / `OK (skipped=42)`, rc 0 — **PROVA** · chromium headless, badge aceso, 19 pilulas: altura **95 / 131 / 167** em 1920/1366/1024 (era 131/167/203 com 23 pilulas), `fileiras=1 amassadas=0 fora=0`, console limpo — **PROVA** · ruff `All checks passed!` nos 7 `.py`
+- `led=` na URL segue ACEITO e `ler_grupos` o DESCARTA, para o link salvo do admin nao derrubar a tela. A colisao de token (`bloqueio` e badge E dono; `cinza` e Rescisao E Total) esta declarada, e o selo pergunta *"toda cor que o LED emite tem PELO MENOS UM botao com rotulo na barra"*, nunca `== 1`
+- merge `--no-ff --no-commit` de `f2659343` com `MERGE_HEAD` conferido, docs no MESMO commit (L-106), `bin/deploy.sh --sem-migrate` no mesmo ato (L-107). Arvore certificada == arvore que pousou: `git diff raia-ui -- app` so acusa os dois sujos de sempre (`crons_duracao.json`, `HANDOFF-SESSAO.md`), nenhum dos dois no index
+- esmeril do marco (L-111): censo das 22 funcoes de `folha/retrato_folha.py` por chamador fora de teste — **zero orfaos** com a morte do eixo `led`
+- commit: (neste push)
+- **INCOMPLETO, e e dele**: o smoke de clique nas DUAS cascas (a fatia toca `templates/`, BUG 73) e o **smoke 7 do AVAIS**, que se ATUALIZA e nao se duplica
+
 ## MARCO 12/10 11:0x — a celula `batida x um juiz por pergunta` ganha LEITOR, e o NOME do juiz do DIA vai ao TOPO (`[O254]`, item 3 da CONTRATOS-ATE-A-VIRADA, MARCO A)
 
 LEI-AKITA: origem=`core/contratos_estruturais.py` (celula com `teste=None`) + `core/juizes.py:989` (`PENDENTES_BATIDA` sem leitor), testemunha=`core.juizes.JUIZES/SEM_JUIZ/PENDENTES['batida']` e `ponto/motor_calculo_v2.py` lido por AST, RED=`ponto/tests/test_contract_juiz_batida.py` NAO EXISTIA e a chave nao tinha leitor, quem-mais-le=censo fechado (1 definicao, 0 leitores reais; o outro achado de grep e PROSA dentro de string em `core/placar_estrutural.py:542`), juizes novos=0
