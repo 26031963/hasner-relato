@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 11/10/2026 22:10:46.**
+**Medido em 11/10/2026 22:15:46.**
 
 | | |
 |---|---|
@@ -22,28 +22,28 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2388.4 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2388.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 64 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **156.9 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **157.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261011`) -- **SEM AGENTE**
-  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **18.9 h** (passou das 6 h da L-105)
+  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **19.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **273.0 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **273.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **177.1 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **177.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **294.8 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **294.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
@@ -162,44 +162,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ⎿  Referenced file config/crons.py
-  ⎿  Read folha/management/commands/lavrar_retrato_folha.py (75 lines)
-  ⎿  Read docs/FECHAMENTO-ONLINE.md (76 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/docs_do_marco_ui.md (76
-     lines)
+  2. filtro universal da casa (core/filtro.py::ler e ::aplicar, partials core/_filtro_*.html): faixa de A a Z, praca, posto, escala, nome.
+  Seletor de empresa a parte, com "todas"
+  3. combinacao: entre grupos E; dentro do mesmo grupo OU
+  4. o numero de cada pilula segue o comportamento da tela de chamados (recalcula com o filtro, ou fica fixo): medir la e fazer igual
+  5. ordem padrao da lista: bloqueados primeiro, saldo crescente
 
-● Task "RED e construção do segundo intervalo" completed in background
+  RED / SELO:
+  - numero de cada pilula == len da lista filtrada por ela, pela MESMA chamada (L1), com caso que MORDE
+  - Admin + Colab + Chamado + Ninguem == bloqueados; soma dos Tipos + Sem causa == bloqueados
+  - a tela segue sem calcular ao abrir (o selo da etapa 1 continua verde)
+  - situacional e holerite com HTML identico; smoke headless nas tres larguras
 
-● Task "Raia wt-bos: O44 itens 2-8" still running in background
+  RESULTADOS OBSERVAVEIS:
+  1. os seis itens do bloco A visiveis na tela
+  2. clicar em Dono Ninguem + Tipo Escala + praca lista so a intersecao, e os numeros batem com a lista
+  3. clicar em Saldo 1 lista quem entra na folha com um dia resolvido
+  4. filtrar por A ate D e por nome funciona junto com as pilulas
+  5. as duas somas fecham em bloqueados
 
-● Task "Suite cheia sobre a copia (fundo)" still running in background
+  NAO ENTRA: drawer, espelho no drawer, modo "por causa", PDF, movimento diario, atos, troca da tela antiga.
+  PROIBIDO: CSS novo, cor chapada forte, emoji, dialogo nativo, juiz novo, segundo derivador de quem entra ou de causa, filtro proprio
+  fora do core/filtro.py, tocar ponto/fechamento.html.
+  PRONTO: link no RELATO, os REDs nomeados, o commit e o que faltou em lista. Pouso pela L-105; depois o smoke visual do Ronald.
+  LINHA HAIKU: fora_da_folha ja e ferramenta; golden: "quantos bloqueados dependem so do admin na competencia" com esperado via
+  ferramentas.fora_da_folha; degrau sem mudanca.
+  LEI-AKITA: origem=folha/retrato_folha.py::linhas_do_retrato e o lavrador, testemunha=fora_da_folha, classificar_causa e
+  motivos_retencao_celula, RED=os selos de soma e de L1, quem-mais-le=painel situacional e holerite (partial da barra), juizes novos=0
 
-● Background command "Suite cheia sobre a copia (fundo)" completed (exit code 0)
-
-  Ran 9 shell commands
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-  Ran 16 shell commands
-
-● Background command "Suite cheia na copia patcheada (fundo)" completed (exit code 0)
-
-  Quem chama o check do crontab e quando
-  ⎿  $ cd /home/ronald/saas-hasner
-     grep -rn "crons.sh check\|crons check" bin/ app/config/crons.py app/core 2>/dev/null | grep -v Binary | head -10
-
-· Compacting conversation… (17h 24m 40s · ↓ 1.5m tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱ 93%
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    0% until auto-compact
+  Segue a fila; PAREI so em lei ou !
+  ctrl+x ctrl+s to send now
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ Press up to edit queued messages
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Appending vizinho census to msg_commit.txt                                              4h 58m 52s · ↓ 118.2k tokens
+  ◯ general-purpose  Awaiting verdict in suite_copia log                                                      5h 3m 53s · ↓ 118.2k tokens
   ⧉  index
 ```
