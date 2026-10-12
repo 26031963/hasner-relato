@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 12/10/2026 08:45:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (714.9 MB). Acoes na janela: **1150**.
+**Medido em 12/10/2026 08:50:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (714.9 MB). Acoes na janela: **1138**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1148,15 +1148,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 20:51:13 | Bash | Conferir andamento da suite cheia | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; wc -l $S/suite_cron_cheia.log 2>/dev/null; tail -3 $S/suite_cron_cheia.log 2>/dev/null \| cut -c1-200` |
 | 20:51:00 | Bash | Medir as celulas da linha da O48 | `python3 - <<'PY' import io l = io.open('docs/BACKLOG.md', encoding='utf-8').read().split('\n')[550] cels = l.split('\|') for i,c in enumerate(cels): print(i, len(c.strip()), repr(c.strip()[:90])) PY` |
 | 20:50:51 | Bash | Localizar a linha da O48 no BACKLOG | `grep -n "O48" docs/BACKLOG.md \| head -12` |
-| 20:50:46 | Bash | Ver as 15 linhas removidas do crons.py | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cd /home/ronald/saas-hasner git show HEAD:app/config/crons.py > $S/_h.tmp; diff -u $S/_h.tmp $S/cron_retrato/app/config/crons.py \| grep '^-[^-]'; rm -f $S/_h.tmp` |
-| 20:50:40 | Bash | Esmeril do marco: censo de removidos no diff | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cd /home/ronald/saas-hasner for f in app/config/crons.py app/core/management/commands/gerar_diagrama.py app/folha/management/commands/lavrar_retrato_folha.py app/docs/ARQUITETURA.mmd app/docs/MAPA.md; do echo "=== $f"; git show HEAD:$f > $S/_h.tmp 2>/dev/null && diff -u $S/_h.tmp $S/cron_retrato/$f \|  ...` |
-| 20:50:27 | Bash | Ler a secao do marco anterior inteira | `sed -n '125,160p' docs/RELATO.md` |
-| 20:50:23 | Bash | Localizar as secoes de MARCO do RELATO | `grep -n "^### MARCO\\|^## MARCO\\|^### \\|^## " docs/RELATO.md \| head -25` |
-| 20:50:18 | Bash | Ler o topo do RELATO | `wc -l docs/RELATO.md && sed -n '1,60p' docs/RELATO.md` |
-| 20:50:00 | Bash | Suite cheia sobre a copia (fundo) | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad cd /home/ronald/saas-hasner && bash bin/suite.sh --dir $S/cron_retrato > $S/suite_cron_cheia.log 2>&1; echo "rc=$?"` |
-| 20:46:50 | Bash | Rodar a suite alvo contra a copia | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad cd /home/ronald/saas-hasner MODS="api.tests.test_api_mensageria_saude chamados.tests.test_contract_crons chamados.tests.test_contract_status_literal chamados.tests.test_cron_longo_sai_da_medida chamados.tests.test_hx_um_emissor chamados.tests.test_porta_veredito_pergunta chamados.tests.test_selo_emissor ...` |
-| 20:46:40 | Bash | Listar testes de crons e retrato | `ls core/tests/test_crons*.py folha/tests/test_retrato*.py 2>&1` |
-| 20:46:36 | Bash | Censo de testes que leem crons/diagrama | `grep -rln "ARQUITETURA.mmd\\|MAPA.md\\|gerar_diagrama\\|config.crons\\|from config import crons\\|config/crons.py\\|todas_as_entradas\\|FORA_DE_PIPELINE\\|ENCADEADOS\\|bloco_da_manha\\|PAPEL_DO_CRON" --include="test_*.py" . \| sort` |
-| 20:46:27 | Bash | Rodar ruff na copia pelo container de teste | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad docker run --rm --cpuset-cpus 4-7 --cpus 4 --memory 2g --user $(id -u):$(id -g) -e HOME=/tmp -e RUFF_CACHE_DIR=/tmp/ruffcache \ -v $S/cron_retrato/app:/app saas-hasner-core:latest \ ruff check --config /app/ruff.toml /app/config/crons.py /app/folha/management/commands/lavrar_retrato_folha.py /app/core/m ...` |
-| 20:46:19 | Bash | Rodar ruff na copia com o ruff.toml da casa | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; which ruff 2>&1; cd $S/cron_retrato/app && ruff check --config ruff.toml config/crons.py folha/management/commands/lavrar_retrato_folha.py core/management/commands/gerar_diagrama.py 2>&1 \| tail -20; echo "rc=$?"` |
-| 20:46:13 | Bash | Conferir se a copia tem ruff.toml | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; ls -la $S/cron_retrato/ \| head -20; echo "--- ruff.toml?"; ls -l $S/cron_retrato/ruff.toml $S/cron_retrato/app/ruff.toml 2>&1 \| tail -3` |
