@@ -130,6 +130,34 @@ a lista que a L-099 nomeia como autoridade do dono e cega em 2 dos 4. PROVA: `lo
   chama "N commit a frente do `main`" o que `rev-list` conta numa historia SEM merge-base, e cobra L-105 de uma raia
   que nao tem como mergear. O rotulo certo e "historia disjunta", e o selo da L-105 nunca podera ficar verde com ela.
 
+## MARCO 12/10 04:0x — O247: o pareador passa a ver o MESMO universo que a apuracao, e o tripwire B5-j NASCE
+(**CERTIFICADA, POUSO ENFILEIRADO**: o gate `o44-noar` das 06:08 PINA `HEAD==4c9cad93` e exige `app/` limpa
+-- `fatias_agendadas/o44-deploy/esteira.sh:46-58` --, entao o commit vem DEPOIS do gate e do O48 passo 3.)
+
+LEI-AKITA: origem=`ponto/turnos.py::batidas_apuraveis` (a porta ganha janela OPCIONAL -- nao nasce funcao),
+testemunha=o universo de apuracao (L-025 / secao 4), RED=`test_o247_retratada_fora_do_pareamento.py` (4/4
+vermelhos na arvore CRUA, `logs/o247/red_comportamento.out`) + `test_tripwire_b5j_universo_de_apuracao.py`
+(CRUS 3 -> 0), quem-mais-le=AST COM APELIDO, 15 chamadas de `parear_turnos` (2 por parametro, 8 copiadores
+a mao com `retratada_em` explicito, 3 CRUS), juizes novos=0.
+
+- **O CENSO ANTIGO DIZIA 2 E ESTAVA ERRADO: SAO 3.** `RELATO.md:632` e o BACKLOG falavam de
+  `utils_turno_orfao.py:26` e `reconciliar_fantasmas.py:85`; o 3o esta no caminho **VIVO** da batida,
+  `triagem_batida.py:162`, invisivel a censo de TEXTO -- a chamada e por APELIDO (`parear_turnos as _pt`).
+- **O QUE MUDOU:** `batidas_apuraveis(colab, ini=None, fim=None)` (mesmo filtro, cada ponta solta quando
+  `None`); os tres sitios passam a LER a porta; os 2 imports de `Batida` que ficaram sem uso morreram (L-111).
+- **DIFF DE FROTA NA SOMBRA** (`logs/o247/DIFF_O247.md`; carimbo `dia=20261012 OK completa diverge=0`; as
+  funcoes REAIS, mesma sonda nas DUAS arvores): `reconciliar_fantasmas --dry-run` **IDENTICO** (146 linhas,
+  `fantasmas=0 legitimos=145 skip=0`) -- movimento ZERO neste sitio hoje; `detectar_bloqueio_turno_orfao`
+  com `tem_bloqueio` IGUAL em **82 de 82** (zero chamado muda) e orfas **463 -> 440** em 47 colabs.
+- **A ORIGEM DE CADA LINHA DO DELTA, MEDIDA:** das 46 que sairam, 37 eram a propria retratada e **9 eram
+  entradas VIVAS que uma retratada SOMBREAVA** (9/9 com retratada entre ela e a sua S viva); das 23 que
+  entraram, **23/23** tem a proxima batida sendo uma **S RETRATADA** -- estavam fechadas por uma saida que a
+  apuracao nao ve. A cura nao apaga nem inventa turno: ela iguala o universo.
+- **O QUE O TRIPWIRE NAO VARRE** (escrito nele e na secao 4): universo recebido por PARAMETRO (2 sitios
+  declarados) e caminho que nao passa pelo pareador. O vizinho `test_tripwire_bocais_apuracao.py` responde
+  outra pergunta (6 arquivos NOMEADOS, regex, allowlist de contagem) e **nenhum** dos 3 curados estava nela.
+- INCOMPLETO (fila): a docstring de `utils_turno_orfao.py:3` aponta `ponto/views.py:350-395`, hoje `:241`.
+
 ## MARCO 12/10 01:1x — a ISENCAO de auth do reload das 03:30 MORRE, e a base da guarda passa a ser o CARIMBO DE PUBLICACAO
 
 LEI-AKITA: origem=`bin/deploy.sh` (a isencao) + `bin/janela_auth.sh` (a base errada), testemunha=`logs/deploy.stamp::COMMIT` (escritor unico de "o que esta no ar", AUTO-REVERT 20/09), RED=`bin/tests/test_janela_auth.sh` secoes D e E, **4 achados** contra a arvore doente, quem-mais-le=`bin/deploy.sh` e o UNICO chamador da guarda (1 sitio), juizes novos=**0**.
