@@ -229,6 +229,7 @@ Estavam no indice como vigentes e alguma clausula nao tem efeito. Gerada do ESTA
 - `JUIZES-TRES-ASSINATURAS`
 - `K1-DIA-DO-CHAMADO`
 - `K8-COMPETENCIA-NAO-E-MES-CIVIL`
+- `LEITURA-LITERAL-DO-CARIMBO`
 - `MARCA-DO-VEREDITO`
 - `ME-POSTO-GEO`
 - `NOITE-23-09`

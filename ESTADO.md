@@ -1,15 +1,22 @@
 # ESTADO -- o repo e a sessao agora
 
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:4377 AFIRMA ato sem PROVA ao lado -- | **LEITURA-LITERAL-DO-CARIMBO** | 2026-10-12 19:5x | 0 h | CUMPRIDO SEM UMA LINHA DE CODIGO, e isso se MEDE: ele carimba exatamente o que p
+>
+> O RELATO nao entrou neste ciclo porque uma afirmacao de ato
+> (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
+> seguem valendo -- eles descrevem, nao afirmam ato.
+
+
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 12/10/2026 19:50:46.**
+**Medido em 12/10/2026 19:56:02.**
 
 | | |
 |---|---|
-| `HEAD` local | `850d4eec [O254] o dia com entrada e saida batidas e SO a pausa sem batida deixa de RETER a folha (L-033, MARCO B do item 3 da CONTRATOS-ATE-A-VIRADA)` |
+| `HEAD` local | `4abe38e2 [O48] a porta do TXT passa a LER a competencia, e o carimbo do ato de gerar passa pelo juiz (passo 5 de 6, aval O48-PASSO5-DESTRAVA + corte (A) de 12/10 18:5x)` |
 | `origin/main` | `d20a0e45 [O219] pouso: os docs do marco A0-b entram junto, e o merge que eu pedi sem commit virou FAST-FORWARD -- o codigo estava na arvore viva antes deste commit` |
-| commits a subir (`ahead`) | **57** |
+| commits a subir (`ahead`) | **60** |
 
 ## Fabrica
 
@@ -22,13 +29,13 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2410.1 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2410.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cb** (`(detached)`) -- **SEM AGENTE**
-  - 3 commit(s) a frente do `main`, 12 arquivo(s) sujo(s), commit a frente ha **1.6 h**
+  - 1 commit(s) a frente do `main`, 12 arquivo(s) sujo(s), commit a frente ha **1.7 h**
   - sem declaracao em `logs/raias/wt-cb.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
   - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **178.6 h** (passou das 6 h da L-105)
@@ -37,19 +44,19 @@ RELATO, com a lista de nomes do banco como autoridade._
   - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **40.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **294.7 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **294.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **198.8 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **198.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **316.5 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **316.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
-  - 2 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **1.6 h**
+  - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
 - **24 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-batida, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-folha, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-p5, wt-regua, wt-sj, wt-vinculo
 
@@ -60,49 +67,25 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+4abe38e2 [O48] a porta do TXT passa a LER a competencia, e o carimbo do ato de gerar passa pelo juiz (passo 5 de 6, aval O48-PASSO5-DESTRAVA + corte (A) de 12/10 18:5x)
+afc05e16 [O253] o LED da linha passa a CLICAR: o leitor da tela entrega ao `desenho_do_led` os MESMOS objetos que a barra recebe (a UMA linha que a E1 prometeu)
+c5b08d15 [O253] a E1 do retrato FECHA: LED com uma cor por Dono, LED que E o filtro, Tipo fora da barra, Total como moldura e o Saldo somando o universo que a fonte sabe dizer
 850d4eec [O254] o dia com entrada e saida batidas e SO a pausa sem batida deixa de RETER a folha (L-033, MARCO B do item 3 da CONTRATOS-ATE-A-VIRADA)
 4242f1dd [O255] o hook do Stop passa a LER o marcador ORDEM-VIVA-TOPO em vez de derivar a fila pela 1a linha da tabela (instrumento, pouso proprio L-105)
-06898bbd [O253] a caixa SITUACAO sai, o LED da linha passa a ser a cor do DONO e a tela abre na competencia CORRENTE (pouso da raia `wt-ui`, parte FEITA da etapa E1 da UI-RETRATO-TRIAGEM)
-f2659343 [O253] a caixa SITUACAO sai, o LED da linha passa a ser a cor do DONO e a tela abre na competencia CORRENTE (UI-RETRATO-CORRECOES, raia wt-ui)
-27c1b4f6 [O254] a celula `batida x um juiz por pergunta` ganha LEITOR, e o NOME do juiz do DIA vai ao TOPO (item 3 da CONTRATOS-ATE-A-VIRADA, MARCO A)
 ```
 
 ## `git status --short`
 
 ```
  M app/config/crons_duracao.json
- M app/core/juizes.py
- M app/docs/ARQUITETURA.mmd
- M app/docs/AVAIS.md
  M app/docs/BACKLOG.md
  M app/docs/CORTES.json
  M app/docs/CORTES.md
  M app/docs/HANDOFF-SESSAO.md
  M app/docs/LEIS.md
- M app/docs/PENDENTES_RONALD.json
  M app/docs/PROMPTS.md
  M app/docs/RELATO.md
- M app/docs/TICKETS.md
- M app/folha/export.py
-M  app/folha/models.py
-M  app/folha/retrato_folha.py
- M app/folha/tests/_celulas.py
- M app/folha/tests/test_contrato_export_um_juiz.py
- M app/folha/tests/test_integracao.py
-M  app/folha/tests/test_retrato_folha_quadros.py
-M  app/folha/tests/test_retrato_folha_smoke_chromium.py
-M  app/folha/tests/test_retrato_folha_tela2.py
- M app/folha/tests/test_sm1_monster_export.py
- M app/folha/views.py
-M  app/folha/views_retrato.py
- M app/ponto/views.py
- M app/relatorios/tests/test_cauda_trilha_do_cartao.py
-M  app/templates/core/_barra_gestao.html
-M  app/templates/folha/_retrato_barra.html
-M  app/templates/folha/_retrato_lista.html
  M bin/sonda_frota.sh
-?? app/folha/tests/test_txt_le_a_celula_e_o_juiz.py
-?? app/ponto/tests/test_porta_de_um_colab_le_o_juiz.py
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -192,18 +175,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-  Ran 19 shell commands
-
-● Background command "Espera o veredito da suite" completed (exit code 0)
-
-● Background command "Roda a suite cheia sobre a copia do comboio" completed (exit code 0)
-
-  Searched for 1 pattern, ran 38 shell commands
-  ⎿  Read docs/AVAIS.md (25 lines)
   ⎿  Referenced file docs/RELATO.md
   ⎿  Read ../logs/o48p5/frota_porta_txt.log (21 lines)
   ⎿  Read ../logs/o48p5/causa_emp2.log (11 lines)
@@ -214,16 +185,28 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-● Faz o merge sem commit, copia os 12 arquivos e censa a arvore
-  ⎿  $ cd /home/ronald/saas-hasner && set -e
-     S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
-     git merge --no-ff --no-commit raia-ui
-     echo "MERGE_HEAD=$(git rev-parse -q --verify MERGE_HEAD)"
-     [ -n "$(git rev-parse -q --verify MERGE_HEAD)" ] || { echo "SEM MER…
+  Committed 4abe38e2, ran 8 shell commands
 
-✶ Concocting… (5h 20m 56s · ↓ 544.0k tokens)
+● Background command "Publica o pouso com deploy.sh --sem-migrate" completed (exit code 0)
+
+  Ran 6 shell commands
+
+❯ corte Ronald: a leitura literal fica -- so conta vazia sai do carimbo da porta cega; turno aberto segue barrando o carimbo, pelo corte
+  das 09:27 parte (2). Porta carimba 157. Segue a fila; PAREI so em lei ou !
+
+● Compara item a item os pendentes de fechamento
+  ⎿  $ cd /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && python3 - <<'PY'
+     import ast
+     def itens(p):
+     t=ast.parse(open(p).read()); out=[]
+     for node in t.body:
+     if isinstance(node,ast.Assign) and len(node.targets)==1:
+     tg=node.targets[0]
+     if isinstance(tg,ast.Su…
+
+✢ Concocting… (5h 26m 12s · ↓ 561.4k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    3% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
