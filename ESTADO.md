@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 12/10/2026 10:47:32.**
+**Medido em 12/10/2026 10:53:02.**
 
 | | |
 |---|---|
@@ -22,19 +22,19 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2401.0 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2401.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **169.5 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **169.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261011`) -- **SEM AGENTE**
-  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **31.5 h** (passou das 6 h da L-105)
+  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **31.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **285.6 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **285.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
   - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **189.8 h** (passou das 6 h da L-105)
@@ -163,11 +163,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ⎿  Referenced file docs/RELATO.md
-  ⎿  Read templates/folha/_retrato_lista.html (47 lines)
-  ⎿  Read templates/core/_led.html (11 lines)
-  ⎿  Read templates/folha/_retrato_barra.html (41 lines)
-
 ● Task "RED e construção do segundo intervalo" completed in background
 
 ● Task "O253 UI-RETRATO-CORRECOES na raia wt-ui" still running in background
@@ -186,21 +181,26 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
   tail -1, and the process rc), then fill the PROVA block with the full-suite numbers — the earlier Ran 33 / Ran 4560 runs certified the
   previous form of the selo, so they get labelled as such rather than quoted as this tree's proof.
 
-● Waiting for the suite veredito line · 8m 7s
+  Ran 2 shell commands
+
+● Suite is mid-run (1446 lines of progress, no FAILED yet). Waiting on the veredito.
+
+● Continue waiting for the suite veredito · 3m 27s
   ⎿  $ cd /home/ronald/saas-hasner && i=0; until grep -qE '^(OK|FAILED)($| \()' logs/fila/batida_cheia_20261012.log 2>/dev/null || [ $i -ge
-     110 ]; do sleep 10; i=$((i+1)); done; echo "voltas=$i"; tail -4 logs/fila/batida_cheia_20261012.log (8m 6s)
+     55 ]; do sleep 10; i=$((i+1)); done; echo "voltas=$i"; grep -E '^Ran [0-9]+ tests' logs/fila/batida_cheia_20261012.log | tail -1;
+     grep -E '^(OK|FAILED)($| \()' logs… (3m 26s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Bloviating… (2h 2m 14s · ↓ 200.6k tokens)
+✢ Bloviating… (2h 7m 44s · ↓ 201.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 5 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Awaiting medir.log measurement verdict                                                     44m 27s · ↓ 139.0k tokens
+  ◯ general-purpose  Polling trava_teste.sh for suite lock                                                      49m 57s · ↓ 158.9k tokens
   ⧉  index
 ```
