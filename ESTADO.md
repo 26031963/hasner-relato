@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 11/10/2026 22:53:02.**
+**Medido em 11/10/2026 22:58:32.**
 
 | | |
 |---|---|
@@ -22,28 +22,28 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2389.1 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2389.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
-  - 1 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **0.4 h**
+  - 1 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **0.5 h**
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **157.6 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **157.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261011`) -- **SEM AGENTE**
-  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **19.6 h** (passou das 6 h da L-105)
+  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **19.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **273.7 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **273.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **177.8 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **177.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **295.5 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **295.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -163,36 +163,37 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ⎿  Referenced file config/crons.py
-  ⎿  Read docs/FECHAMENTO-ONLINE.md (76 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/docs_do_marco_ui.md (76
-     lines)
 
-● Task "RED e construção do segundo intervalo" completed in background
+  1. O observável do install estava do desenho VELHO. Eu ia conferir crontab -l | grep -c lavrar_retrato_folha = 3 — mas é exatamente a
+     cura que faz o nome do elo desaparecer da linha. Os observáveis certos: encadeado.sh --corrente processar_cartorio = 3, qualquer
+     encadeado.sh  = 3, lavrar_retrato_folha = 0, e o verbo devolvendo 8 linhas de 5 campos e nada mais no stdout (linha estranha viraria
+     "elo" lixo passado à forma de 5 args).
+  2. A prova adversarial do ALARME estava rotulada errada. O rc=2 das 22:39 veio de invalid choice: 'corrente' — o container lê /app, a
+     árvore viva, que ainda não tem o verbo. Aquilo provou o ramo render falhou, não o ramo corrente vazia. Os dois docs agora dizem isso
+     em letra, e o segundo ramo (rc=0 elos=0, saindo 2) está na lista de provas vivas, não dado por provado.
+  3. Hora e caminhos. Li date: o aval da etapa 2 é ~22:1x (mtime 22:18), não 22:2x; a seção é 22:5x. E PENDENTES_RONALD.json + AVAIS.md
+     entraram na lista de caminhos do commit — o §5 passou a escrevê-los e eles ficariam sujos.
 
-● Task "Raia wt-ui: UI etapa 2" still running in background
+  O44 voltou verde e PAROU em pré-pouso (raia-bos 31ad7449, Ran 10445 / OK (skipped=42) / rc 0, impressão digital idêntica antes do add,
+  depois do veredito e depois do commit). O merge do main na raia trava no conflito de RELATO.md/TICKETS.md, e o --ours foi negado ao
+  agente pelo classificador. Não fiz por ele: isso lavaria a permissão que a negativa pediu que fosse sua. Virou item !
+  O44-POUSO-E-OS-DOIS-DOCS com as duas decisões juntas e a frase pronta — entra no commit deste marco. A cópia certificada
+  copia_o44_20261011_215935 fica de pé, é a referência do cmp.
 
-● Task "Suite cheia na copia certificada" still running in background
+  Suite da cópia em 1.780 linhas de log, correndo. Quando ela sair eu leio o veredito pela L-074 (OK|FAILED com tail -1 + Ran N + rc do
+  processo) e sigo transferir → provas vivas → preencher os 3 placeholders com o medido → docs → commit → deploy.sh --sem-migrate → handoff
+  da L-108.
 
-› Message from @afb3c86c93768ac83 (ctrl+o to expand)
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: PLACAR-ESTRUTURAL -- O ESTRUTURAL SE SEPARA DO DADO (corte dele 02/10 22:5x, que SUBSTITUI o item 3 da
+  ordem das 21:4x -- o resto d
 
-● Agent "Raia wt-bos: O44 itens 2-8" finished · 5h 33m 1s
+● Ler o item R6 do placar
+  ⎿  $ sed -n '430,470p' core/placar_estrutural.py
 
-  Ran 2 shell commands
-  ⎿  Resuming agent afb3c86
-  ⎿  Allowed by auto mode classifier
-
-  Ran 2 shell commands
-
-› Message from @afb3c86c93768ac83 (ctrl+o to expand)
-
-  Ran 2 shell commands
-
-● Advising using Fable 5.1
-
-✢ Infusing… (18h 0m 48s · ↓ 1.6m tokens)
+✢ Infusing… (18h 6m 18s · ↓ 1.6m tokens · still thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                   10% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -200,7 +201,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Reading _pessoas_da_celula in holerite/views.py                                            33m 54s · ↓ 167.5k tokens
-  ◯ general-purpose  Handing back pouso_recado.md findings                                                       2m 49s · ↓ 167.7k tokens
+  ◯ general-purpose  Checking wt-ui HEAD and task output                                                         39m 23s · ↓ 97.4k tokens
   ⧉  index
 ```
