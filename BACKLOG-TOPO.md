@@ -52,7 +52,7 @@ lista — ela e o que esta EM PE._
 | **O41** | GEOFENCE-VALIDAR-SEM-VOLTA | **FECHADA 25/09** (`ebde81d4`, nome `GEO |
 | **O42** | ESTEIRA-SECA-25-09 + ADENDO | **8 de 10 feitos; 1 e 2 em cura** |
 | **O43** | RASTRO-ADMIN | **livre** |
-| **O44** | ARQUIVO-SIMPLES v2 | **portao: RAIA wt-bos, um por vez -- 8o  |
+| **O44** | ARQUIVO-SIMPLES v2 | **itens 2-8 + PISO DA EMISSAO (aval 11/1 |
 | **O45** | EM-ABERTO-CARTAO-X-TELA | **REMEDIDO 02/10 06:2x, e o fato e MAIS  |
 | **O46** | EXECUTA-CLAUDE-6 / SINAL-QUE-MENTE | o que afirma |
 | **O47** | AUDITORIA-JSP02: ato de admin sem IP | **na fila BO, dentro do RASTRO-ADMIN (O4 |

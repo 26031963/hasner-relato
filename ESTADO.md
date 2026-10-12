@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 12/10/2026 00:39:02.**
+**Medido em 12/10/2026 00:44:32.**
 
 | | |
 |---|---|
-| `HEAD` local | `bf783df7 [O48] o retrato vira ultimo elo da corrente; e a corrente sai da LINHA do crontab (teto medido: 998 chars)` |
+| `HEAD` local | `70d159b9 [O44] pouso da raia raia-bos: a TRANCA da competencia deixa de ser criterio do chamado, e o PISO da emissao passa a ser o horizonte` |
 | `origin/main` | `d20a0e45 [O219] pouso: os docs do marco A0-b entram junto, e o merge que eu pedi sem commit virou FAST-FORWARD -- o codigo estava na arvore viva antes deste commit` |
-| commits a subir (`ahead`) | **44** |
+| commits a subir (`ahead`) | **46** |
 
 ## Fabrica
 
@@ -22,28 +22,28 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2390.9 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2391.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
-  - 1 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **2.2 h**
+  - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **159.4 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **159.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261011`) -- **SEM AGENTE**
   - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **21.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **275.5 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **275.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **179.6 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **179.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **297.3 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **297.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 16 arquivo(s) sujo(s)
@@ -57,11 +57,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+70d159b9 [O44] pouso da raia raia-bos: a TRANCA da competencia deixa de ser criterio do chamado, e o PISO da emissao passa a ser o horizonte
 bf783df7 [O48] o retrato vira ultimo elo da corrente; e a corrente sai da LINHA do crontab (teto medido: 998 chars)
+31ad7449 [O44] itens 2-8 + o PISO DA EMISSAO: a TRANCA deixa de ser CRITERIO, e o escopo do silencio AUTOMATICO passa a ser um PISO DE DATA declarado, de onde o TOQUE do admin sai
 dbd72d28 [O48] pouso da raia raia-ui: a UI do fechamento LE um retrato gravado, e o badge e o len da MESMA lista que a tabela mostra
 0224e9d5 [O48] pouso da raia raia-o48p3: o leitor por colaborador le a CELULA, e a abstencao do previsto passa a se medir DENTRO do vinculo
-7fb6b4ed [O48] o retrato da folha: a tela LE um retrato GRAVADO, e o badge e o `len` da MESMA lista -- quem entra na folha nao ganhou um segundo derivador
-2e2a7fd4 [O48] fecha o INCOMPLETO de e14e653f: a docstring de modulo do cartao ainda contava a autoridade VELHA
 ```
 
 ## `git status --short`
@@ -158,11 +158,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Task "Rodar a suite cheia contra a cópia resolvida" still running in background
-
-● Background command "Rodar a suite cheia contra a cópia resolvida" completed (exit code 0)
-
-  Ran 5 shell commands
 
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
@@ -176,19 +171,24 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
   (default True em core/models.py:72): o campo entra na tela de sindicato; depois o template SINEEPRES fica com prorrogacao DESLIGADA pela
   tela, com trilha. RED antes, nenhuma lei nova. Segue a fila; PAREI so em lei ou !
 
-● Esperar o fim do bloco e o conferir · 50s
-  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb
-     i=0
-     until grep -q "rc_conferir=" $S/tasks/b2m2q5fb8.output || [ $i -ge 11 ]; do sleep 10; i=$((i+1)); done
-     echo "$(date '+%T')"
-     cat $S/tasks/b2m2q5fb8.output
-     echo "=== cauda do log da sombra:"
-     tail -6 /home/ronal… (50s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Ran 19 shell commands
 
-✢ Infusing… (19h 46m 48s · ↓ 1.8m tokens)
+● Background command "Refazer a sombra com dump de agora e rodar o bloco da manhã" completed (exit code 0)
+
+● Executar o pouso da O44 em um ato
+  ⎿  $ cd /home/ronald/saas-hasner
+     S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
+     LP=logs/pouso_o44_$(date +%Y%m%d_%H%M%S).log
+     echo "$LP" > $S/o44_pousolog.txt
+     bash $S/pousar_o44.sh > "$LP" 2>&1
+     echo "rc_pouso=$?"
+     echo "=== $LP"
+     cat "$LP"
+
+✢ Compacting conversation… (19h 52m 18s · ↓ 1.8m tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱ 95%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    1% until auto-compact
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -196,6 +196,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Writing docs_do_marco_ui2.md                                                            2h 19m 53s · ↓ 149.0k tokens
+  ◯ general-purpose  Polling verde_ui2.log for verdict                                                       2h 25m 23s · ↓ 152.7k tokens
   ⧉  index
 ```
