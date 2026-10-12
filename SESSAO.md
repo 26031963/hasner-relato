@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 12/10/2026 15:57:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (726.5 MB). Acoes na janela: **966**.
+**Medido em 12/10/2026 16:02:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (726.5 MB). Acoes na janela: **963**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -973,6 +973,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 04:02:47 | Bash | Find the clock reads in the new O247 test file | `cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && grep -nE 'today\(\)\|now\(\)\|localdate\(\)\|localtime\(\)\|freeze_time' "$S/o247/copia/app/ponto/tests/test_o247_retratada_fora_do_pareamento.py"` |
 | 04:02:40 | Bash | Read the TESTE-SEM-RELOGIO selo rule | `sed -n '1,80p' core/tests/test_selo_teste_sem_relogio.py` |
 | 04:02:33 | Bash | Read the failure traceback and message | `cd /home/ronald/saas-hasner && sed -n '1960,2030p' logs/o247/suite_cheia.out` |
-| 04:02:29 | Bash | Find the failing test name in the suite log | `cd /home/ronald/saas-hasner && grep -nE '^(FAIL\|ERROR):' logs/o247/suite_cheia.out \| head -20` |
-| 04:02:25 | Bash | Read the comboio runner failure and both suite verdicts | `cd /home/ronald/saas-hasner && echo "=== runner b8451sq74 output:" && cat /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b8451sq74.output && echo "=== veredito O247 (forma da casa):" && grep -E '^(OK\|FAILED)($\| \()' logs/o247/suite_cheia.out \| tail -1 && grep -E '^Ran ' logs/o247/suite_cheia.out \| tail -1 && echo "=== rc do processo (b9ck6yzu3 saiu 0): ...` |
-| 04:02:17 | Bash | Check suite log sizes and who holds the test lock | `cd /home/ronald/saas-hasner && date '+%H:%M:%S' && ls -l logs/o247/suite_cheia.out logs/o247/suite_comboio.out 2>&1 \| sed 's/^/ /' && echo "--- trava:" && bin/trava_teste.sh --quem 2>&1 \| head -3` |
