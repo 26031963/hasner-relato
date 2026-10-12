@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 12/10/2026 13:05:46.**
+**Medido em 12/10/2026 13:11:02.**
 
 | | |
 |---|---|
@@ -22,19 +22,19 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2403.3 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2403.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **171.8 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **171.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261011`) -- **SEM AGENTE**
-  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **33.8 h** (passou das 6 h da L-105)
+  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **33.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **287.9 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **288.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
   - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **192.1 h** (passou das 6 h da L-105)
@@ -68,8 +68,17 @@ ff3078c6 [O48] os tres quadros do retrato da folha passam a ser GRAVADOS pelo la
 
 ```
  M app/config/crons_duracao.json
+ M app/core/juizes.py
+ M app/core/tests/test_contract_juiz_tela.py
+ M app/docs/ARQUITETURA.mmd
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/LEIS.md
+ M app/docs/RELATO.md
+ M app/folha/export.py
+ M app/folha/previa.py
  M bin/sonda_frota.sh
+?? app/folha/tests/test_furo_so_intervalo_nao_retem.py
+?? app/folha/tests/test_previa_cobre_pelo_juiz.py
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -159,16 +168,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ⎿  Read templates/core/_led.html (17 lines)
-  ⎿  Read templates/folha/_retrato_barra.html (40 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/wt-folha/app/folha/tests
-     /test_furo_so_intervalo_nao_retem.py (146 lines)
-
-● Task "RED e construção do segundo intervalo" completed in background
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
   Searched for 8 patterns, ran 17 shell commands
 
 ● Background command "Roda a suite inteira na copia curada em segundo plano" completed (exit code 0)
@@ -177,9 +176,7 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Background command "Espera o veredito da suite pelo arquivo de log" completed (exit code 0)
 
-● Le propriedades e mensagem de commit preparadas
-  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cat $S/marcob_propriedades.md; echo
-     "=========== MSG"; cat $S/marcob_msg_commit.txt
+  Searched for 1 pattern, ran 20 shell commands
   ⎿  Read docs/AVAIS.md (24 lines)
   ⎿  Referenced file docs/RELATO.md
   ⎿  Read templates/folha/_retrato_barra.html (40 lines)
@@ -188,7 +185,19 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Task "RED e construção do segundo intervalo" completed in background
 
-* Concocting… (1h 37m 36s · ↓ 159.2k tokens · thinking)
+● Agora insiro a seção no RELATO vivo, antes do primeiro marco (linha 177):
+
+● Adiciona as propriedades e o DIFF de frota a mensagem de commit
+  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && cat >> $S/marcob_msg_commit.txt
+     <<'EOF'
+     EOF
+     python3 - "$S/marcob_msg_commit.txt" <<'PY'
+     import sys
+     p = sys.argv[1]
+     s = open(p, encoding='utf-8').read()
+     marca = 'AS SEIS PROPRIEDADES, escritas ANTES …
+
+✢ Concocting… (1h 42m 51s · ↓ 177.6k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
