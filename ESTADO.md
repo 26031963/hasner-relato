@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 12/10/2026 16:30:03.**
+**Medido em 12/10/2026 16:35:08.**
 
 | | |
 |---|---|
@@ -22,19 +22,19 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2406.7 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2406.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **175.2 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **175.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261011`) -- **SEM AGENTE**
-  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **37.2 h** (passou das 6 h da L-105)
+  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **37.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **291.3 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **291.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
   - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **195.5 h** (passou das 6 h da L-105)
@@ -161,36 +161,36 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  depois não pode, por construção, estar no commit que a precede.
+
+  Ran 2 shell commands
+
+● A sonda foi heredoc e não sobreviveu — então a medição se refaz hoje com o predicado REAL. Censo dos sítios do botão primeiro:
+
+  Ran 2 shell commands
+
+● Agora o predicado REAL do botão. Lendo as três portas:
 
   Ran 1 shell command
 
-● O marcador ORDEM-VIVA-TOPO ainda aponta O254, que fechou — e o hook agora LÊ o marcador, então item fechado no marcador deixa o selo do
-  O158 vermelho. Antes de mover, medir o que sobrou do item 3:
-
-  Ran 3 shell commands
-
-● 5 células contam e não estão verdes; batida | um juiz por pergunta está travada no corte dele (o NOME do juiz do DIA). Pela
-  PAREI-DE-LEI-NAO-DEVOLVE-TURNO a esteira segue o próximo item que não depende dela — e o item 2 (folha/export) da CONTRATOS-ATE-A-VIRADA
-  vem antes do 3 e ficou com resto:
-
-  Searched for 1 pattern, ran 3 shell commands
-
-● O252 está registrado e é o item 2 da ordem — está "atrás do item 3", mas o item 3 trava no corte dele. Movo o marcador
-  (AUTONOMIA-DE-CODIGO item 1) depois de conferir que o selo lê o O254 como fechado:
-
-  Ran 3 shell commands
-
-● O hook já diz siga: O252 e os 3 selos do marcador estão verdes. Agora os sítios vivos do O252 — e já há um deslocamento a conferir: a
-  baixa deste marco moveu os índices dos pendentes.
+● Achado que muda a fatia: o LOTE já migrou (O48 passo 3) — aprovar_fechamento já lê travas_aprovacao. E o 2x2 de 05:40 é anterior ao
+  deploy do MARCO B das 13:17, que moveu 58 colabs para entra — 12 deles com turno_aberto. Lendo as duas portas que faltam:
 
   Ran 1 shell command
 
-● Antes de codar: o advisor vê o transcript inteiro e esta é a fatia de dinheiro do item 2.
+● Uma contradição a conferir antes de medir: aprovar_colaborador lê o LIDO (celula) por desenho do O48 passo 3, e o juiz lê o gravado?
 
-  Advising using Fable 5.1
+  Ran 2 shell commands
 
-✶ Concocting… (2h 0m 12s · ↓ 205.5k tokens)
+● Confirmado — e isso muda a fatia: travas_aprovacao lê fech.turnos_abertos (o GRAVADO, folha/export.py:632), enquanto aprovar_colaborador
+  lê o LIDO por desenho do O48 passo 3. Migrar essa porta ao juiz a devolveria à foto. Medindo o predicado real:
+
+  Mede o predicado real do botao contra o juiz
+  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad &&
+     cat > $S/sonda_o252_botao.py <<'PY'
+     # O252 -- LEITURA de saas_hasner. Mede o predicado REAL do botao (travas_aprovacao, o campo
+     # que `aprovar_fechamento` indexa) cont…
+
+✢ Concocting… (2h 5m 18s · ↓ 216.5k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
