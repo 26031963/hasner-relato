@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 12/10/2026 16:24:32.**
+**Medido em 12/10/2026 16:30:03.**
 
 | | |
 |---|---|
@@ -22,28 +22,28 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2406.6 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2406.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **175.1 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **175.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261011`) -- **SEM AGENTE**
-  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **37.1 h** (passou das 6 h da L-105)
+  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **37.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **291.2 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **291.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **195.4 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **195.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **313.1 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **313.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -68,7 +68,9 @@ f2659343 [O253] a caixa SITUACAO sai, o LED da linha passa a ser a cor do DONO e
 
 ```
  M app/config/crons_duracao.json
+ M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/RELATO.md
  M bin/sonda_frota.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -159,38 +161,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  depois não pode, por construção, estar no commit que a precede.
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+  Ran 1 shell command
 
-  Searched for 8 patterns, ran 17 shell commands
-
-● Background command "Roda a suite inteira na copia curada em segundo plano" completed (exit code 0)
+● O marcador ORDEM-VIVA-TOPO ainda aponta O254, que fechou — e o hook agora LÊ o marcador, então item fechado no marcador deixa o selo do
+  O158 vermelho. Antes de mover, medir o que sobrou do item 3:
 
   Ran 3 shell commands
 
-● Background command "Espera o veredito da suite pelo arquivo de log" completed (exit code 0)
+● 5 células contam e não estão verdes; batida | um juiz por pergunta está travada no corte dele (o NOME do juiz do DIA). Pela
+  PAREI-DE-LEI-NAO-DEVOLVE-TURNO a esteira segue o próximo item que não depende dela — e o item 2 (folha/export) da CONTRATOS-ATE-A-VIRADA
+  vem antes do 3 e ficou com resto:
 
-  Searched for 1 pattern, ran 20 shell commands
-  ⎿  Read docs/AVAIS.md (24 lines)
-  ⎿  Referenced file docs/RELATO.md
-  ⎿  Read templates/folha/_retrato_barra.html (40 lines)
-  ⎿  Read templates/core/_led.html (17 lines)
-  ⎿  Read templates/folha/_retrato_lista.html (47 lines)
+  Searched for 1 pattern, ran 3 shell commands
 
-● Task "RED e construção do segundo intervalo" completed in background
+● O252 está registrado e é o item 2 da ordem — está "atrás do item 3", mas o item 3 trava no corte dele. Movo o marcador
+  (AUTONOMIA-DE-CODIGO item 1) depois de conferir que o selo lê o O254 como fechado:
 
-● Agora insiro a seção no RELATO vivo, antes do primeiro marco (linha 177):
+  Ran 3 shell commands
 
-● Prova que as exportacoes ficaram intactas
-  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad &&
-     bin/sonda_frota.sh $S/sonda_marcob_hash_export.py 2>&1 | grep -E '^(EXP\||EXP_TOTAL)' > logs/fx/marcob_export_hash_depois.txt; diff
-     <(grep -E '^(EXP\||EXP_TOTAL)' logs…
+● O hook já diz siga: O252 e os 3 selos do marcador estão verdes. Agora os sítios vivos do O252 — e já há um deslocamento a conferir: a
+  baixa deste marco moveu os índices dos pendentes.
 
-· Compacting conversation… (1h 54m 42s · ↓ 194.7k tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱ 90%
+  Ran 1 shell command
+
+● Antes de codar: o advisor vê o transcript inteiro e esta é a fatia de dinheiro do item 2.
+
+  Advising using Fable 5.1
+
+✶ Concocting… (2h 0m 12s · ↓ 205.5k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    0% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

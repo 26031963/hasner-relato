@@ -4,7 +4,7 @@
 >
 > **livre** = pode virar fatia agora, sem humano. **corte/aval/smoke/dinheiro-ate-export** = tem dono humano e espera.
 
-<!-- ORDEM-VIVA-TOPO: O254 -->
+<!-- ORDEM-VIVA-TOPO: O252 -->
 <!-- ADENDO em 11/10 ~23:0x, QUATRO AVAIS/CORTES DELE NO MESMO TURNO. Nenhuma lei nova (ele diz
      *"Nenhuma lei nova"* no primeiro e *"PAREI so em lei ou !"* nos quatro). O que cada um MOVE:
      **(1) `FOLHA-EXPORT-JUIZ-DO-QUE-BLOQUEIA` CAI** -- *"ja esta respondido pelo corte (2) de
