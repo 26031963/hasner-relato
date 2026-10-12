@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 12/10/2026 20:23:32.**
+**Medido em 12/10/2026 20:29:02.**
 
 | | |
 |---|---|
@@ -29,22 +29,22 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2410.6 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2410.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cb** (`(detached)`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 12 arquivo(s) sujo(s), commit a frente ha **2.2 h**
+  - 1 commit(s) a frente do `main`, 12 arquivo(s) sujo(s), commit a frente ha **2.3 h**
   - sem declaracao em `logs/raias/wt-cb.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **179.1 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **179.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261011`) -- **SEM AGENTE**
-  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **41.1 h** (passou das 6 h da L-105)
+  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **41.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **295.2 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **295.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
   - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **199.4 h** (passou das 6 h da L-105)
@@ -85,6 +85,7 @@ c5b08d15 [O253] a E1 do retrato FECHA: LED com uma cor por Dono, LED que E o fil
  M app/docs/LEIS.md
  M app/docs/PROMPTS.md
  M app/docs/RELATO.md
+ M app/docs/TICKETS.md
  M bin/sonda_frota.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -175,38 +176,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+           (5) print do retrato sem os 73 de hoje no dono C
+  PROIBIDO fallback, filtro na tela escondendo os dias, juiz novo sem corte, curar so o golden, mexer em competencia exportada
+  LEI-AKITA a linha de selo vai obrigatoria em cada cura
+  LINHA HAIKU contador fio_morto no copiloto, rotulo "dias parados sem ninguem para agir"
 
-● O advisor está certo em três pontos que eu pulei. Começo pela LEI ANTES DO PATCH, que é devida antes de qualquer old_str.
+  Segue a fila; PAREI so em lei ou !
 
-  Searched for 2 patterns, ran 1 shell command
+● Novo aval recebido mid-turn: BUG-FIO-MORTO-CHAMADO, P7.1, com a medição dele. Registro no mesmo turno (PROMPT-NAO-SE-REPETE) — e há uma
+  dependência de código que ele não podia saber.
 
-● L-033 é a lei do sítio (PROTEGE nomeia motivos_retencao_celula); o arquivo de teste já é congelado. Agora o guard de forma na sonda —
-  leio a resposta do juiz, não a replico.
+  Ran 2 shell commands
 
-  Ran 3 shell commands
-
-● Dois números de uma vez. Vou ler o texto literal do pendente antes de afirmar.
-
-  Ran 1 shell command
-
-● BARRADOS_SO_POR_PAUSA = 0 em 8 universos (664 barrados), com universo NÃO vazio: 580 dias de furo-só-de-pausa existem e 58 colabs passam
-  tendo um. E retorno_mal_formado=90 prova o bug na frota real. Agora as registrações devidas no mesmo turno.
-
-  Searched for 1 pattern, read 1 file, ran 1 shell command
-
-● Agora escrevo as duas linhas do PROMPTS.md e os dois ids do ATO.
+● TICKETS para O261, e já levanto a FASE 1 (medição read-only) em paralelo.
 
   Ran 1 shell command
 
-● Selo verde. Agora o BACKLOG: O258 passa a juizes novos = 2 e o marcador da ORDEM VIVA.
+❯ aval Ronald: complemento BUG-FIO-MORTO-CHAMADO -- ponto/supra_juiz.py:163-168 conta chamados_vivos como cobranca feita sem perguntar se
+  ha pergunta viva; o A6 (FURO_SEM_COBRANCA) deu VERDE sobre os 60 dias. Entra na FASE 2 como leitor que nao migrou: chamado vivo SEM
+  pergunta viva e com fato encerrado nao e cobranca. RED com golden da tabela; censo de quem mais le chamados_vivos. Segue a fila; PAREI
+  so em lei ou !
 
-● Ver colunas da tabela de fatias do TICKETS
-  ⎿  $ sed -n '118,122p' docs/TICKETS.md | cut -c1-400; echo "=== cabecalho da tabela ==="; sed -n '100,118p' docs/TICKETS.md | grep -n
-     '^|---\|| *fatia\|| *#' | head
+● Complemento registrado e o censo que ele pede é um grep — faço junto.
 
-✢ Concocting… (5h 53m 42s · ↓ 607.9k tokens · thinking)
+● Ler o sitio e censar quem le chamados_vivos
+  ⎿  $ echo "=== supra_juiz.py:155,175 ==="; sed -n '155,175p' ponto/supra_juiz.py; echo; echo "=== CENSO quem_mais_le chamados_vivos ===";
+     grep -rn 'chamados_vivos' --include='*.py' --include='*.html' . | grep -v '/tests/' ; echo "--- em testes ---"; grep -rln
+     'chamados_vivos' --include='*.py' . | grep…
+
+· Compacting conversation… (5h 59m 12s · ↓ 628.4k tokens)
+  ▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 21%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

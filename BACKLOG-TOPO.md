@@ -5,7 +5,7 @@ a raspagem usa a lista de nomes do banco como autoridade, nunca regex adivinhada
 `colNNN`/`ecNNN` ficam, porque nao identificam ninguem fora desta casa. Obra FEITA sai desta
 lista — ela e o que esta EM PE._
 
-**257 obras abertas.**
+**260 obras abertas.**
 
 | ID | obra | estado |
 |---|---|---|
@@ -266,3 +266,6 @@ lista — ela e o que esta EM PE._
 | **O256** | UI-RETRATO-TRIAGEM | **ABERTO** -- E1 incompleta. FEITO: `O25 |
 | **O257** | JUIZ-COMPETENCIA-LAVRADA | espera `!` |
 | **O258** | CHAMADO-X-JUIZ-EM-PARALELO | espera `!` |
+| **O259** | JUIZ-DO-PAR-DECLARADO | espera `!` |
+| **O260** | COM-DIAS-HONRA-O-CONTRATO | **EM CURSO 12/10 20:3x** -- RED primeiro |
+| **O261** | BUG-FIO-MORTO-CHAMADO | espera `!` |
