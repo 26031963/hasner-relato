@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 12/10/2026 08:35:46.**
+**Medido em 12/10/2026 08:40:46.**
 
 | | |
 |---|---|
@@ -22,19 +22,19 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2398.8 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2398.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **167.3 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **167.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261011`) -- **SEM AGENTE**
-  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **29.3 h** (passou das 6 h da L-105)
+  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **29.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **283.4 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **283.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
   - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **187.6 h** (passou das 6 h da L-105)
@@ -46,7 +46,7 @@ RELATO, com a lista de nomes do banco como autoridade._
   - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **305.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **7.3 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **7.4 h** (passou das 6 h da L-105)
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
 - **21 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
@@ -162,38 +162,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+● O advisor acha o buraco certo: ponto/calculador/ importa MotorBase e constantes sem nunca chamar calcular_mes. Meço se é um segundo
+  motor:
+
+  Searched for 1 pattern, ran 7 shell commands
+
+● Achado que decide a fatia: fechamento.py:782 → rubricas_por_dia → minutos_do_oraculo, e o mins que vira rubrica sai de v.minutos (soma do
+  oráculo), não de p.minutos_trabalhados do motor. Confiro se isso já está registrado em alguma família:
+
   Ran 1 shell command
 
-● Três calcular_periodo com a mesma impressão — meço isso antes de qualquer desenho:
+● Dois derivadores no mesmo predicado, e nenhum dos dois está registrado. Meço o que cada um grava antes de formular a pergunta:
 
   Ran 1 shell command
 
-● A célula não tem classe de teste (só nota=), e as três perguntas do SEM_JUIZ esbarram no corte (4): duas têm DUAS candidatas e a terceira
-  já foi medida e recusada pela condição (iii). Meço a superfície do motor para declarar o juiz certo:
+● DiaPago.versao tem default='motor' e a lavratura do oráculo passa versao='oraculo': as duas convivem de propósito, para o DIFF. Então a
+  pergunta decisiva é quem CONSOME cada versão:
 
-  Ran 3 shell commands
-  ⎿  Read docs/AVAIS.md (24 lines)
-  ⎿  Referenced file folha/export.py
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bd6m8ngik.output (64 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bgs3o9dof.output (76 lines)
-  ⎿  Referenced file ponto/views.py
+  Ran 1 shell command
 
-● Task "RED e construção do segundo intervalo" completed in background
+● Confirmo a afirmação de fechamento.py:762-764 em vez de acreditar nela, e leio o critério de verde da matriz:
 
-● calcular_mes é o único método do motor com chamador de produção fora dele. Confiro o que selecao_periodo pergunta e o que o selo da TRAVA
-  exige:
+  Reading all 'um juiz por pergunta' cells to copy the form
+  ⎿  $ python3 - <<'PY'
+     import importlib.util as iu, re
+     sp=iu.spec_from_file_location('ce','core/contratos_estruturais.py'); m=iu.module_from_spec(sp)
+     try: sp.loader.exec_module(m)
+     except Exception as e: print('exec falhou:',e); raise SystemExit
+     JUIZ=[k for k in m.MATRIZ if k[1]=='um juiz por pergunta']…
 
-  Ran 3 shell commands
-
-● O selo da TRAVA tem um buraco relevante para este ato — meço antes de decidir:
-
-  Ran 2 shell commands
-
-  Advising using Fable 5.1
-
-· Infusing… (1d 3h 43m · ↓ 2.6m tokens)
+· Infusing… (1d 3h 48m · ↓ 2.6m tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    5% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
