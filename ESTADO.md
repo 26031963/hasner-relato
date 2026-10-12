@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 12/10/2026 20:18:02.**
+**Medido em 12/10/2026 20:23:32.**
 
 | | |
 |---|---|
@@ -29,31 +29,31 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2410.5 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2410.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cb** (`(detached)`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 12 arquivo(s) sujo(s), commit a frente ha **2.1 h**
+  - 1 commit(s) a frente do `main`, 12 arquivo(s) sujo(s), commit a frente ha **2.2 h**
   - sem declaracao em `logs/raias/wt-cb.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **179.0 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **179.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261011`) -- **SEM AGENTE**
-  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **41.0 h** (passou das 6 h da L-105)
+  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **41.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **295.1 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **295.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **199.3 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **199.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **317.0 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **317.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -175,36 +175,36 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Achei um bug provado no caminho, no meio da medição. Vou censar antes de curar.
+
+● O advisor está certo em três pontos que eu pulei. Começo pela LEI ANTES DO PATCH, que é devida antes de qualquer old_str.
+
+  Searched for 2 patterns, ran 1 shell command
+
+● L-033 é a lei do sítio (PROTEGE nomeia motivos_retencao_celula); o arquivo de teste já é congelado. Agora o guard de forma na sonda —
+  leio a resposta do juiz, não a replico.
+
+  Ran 3 shell commands
+
+● Dois números de uma vez. Vou ler o texto literal do pendente antes de afirmar.
 
   Ran 1 shell command
-  ⎿  Read docs/AVAIS.md (25 lines)
-  ⎿  Referenced file docs/LEIS.md
-  ⎿  Referenced file folha/export.py
-  ⎿  Referenced file core/juizes.py
-  ⎿  Read ../logs/o48p5/frota_porta_txt.log (21 lines)
 
-● Task "RED e construção do segundo intervalo" completed in background
+● BARRADOS_SO_POR_PAUSA = 0 em 8 universos (664 barrados), com universo NÃO vazio: 580 dias de furo-só-de-pausa existem e 58 colabs passam
+  tendo um. E retorno_mal_formado=90 prova o bug na frota real. Agora as registrações devidas no mesmo turno.
 
-● Bug provado: com_dias=True tem três saídas antecipadas que devolvem [] em vez de ([], []), e há dois leitores de produção que
-  desempacotam. Vou medir a alcançabilidade antes de curar.
+  Searched for 1 pattern, read 1 file, ran 1 shell command
+
+● Agora escrevo as duas linhas do PROMPTS.md e os dois ids do ATO.
 
   Ran 1 shell command
 
-● Dois leitores de produção desempacotam. Agora a alcançabilidade: o fora_da_folha filtra isento antes?
+● Selo verde. Agora o BACKLOG: O258 passa a juizes novos = 2 e o marcador da ORDEM VIVA.
 
-  Ran 2 shell commands
+● Ver colunas da tabela de fatias do TICKETS
+  ⎿  $ sed -n '118,122p' docs/TICKETS.md | cut -c1-400; echo "=== cabecalho da tabela ==="; sed -n '100,118p' docs/TICKETS.md | grep -n
+     '^|---\|| *fatia\|| *#' | head
 
-● o_que_segura é a ferramenta do HAIKU, chamável para QUALQUER colab. Essa é a alcançável.
-
-  Searched for 1 pattern, ran 1 shell command
-
-● previa:124 é guardado (só quem está FORA, logo motivos não-vazio). O único sítio alcançável é o_que_segura — ferramenta do Haiku, sem
-  guarda. Vou medir o universo alcançável com ORM puro (sem passar pelo caminho quebrado).
-
-● Running 1 shell command…
-
-✢ Concocting… (5h 48m 12s · ↓ 594.3k tokens)
+✢ Concocting… (5h 53m 42s · ↓ 607.9k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

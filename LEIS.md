@@ -200,6 +200,7 @@ Estavam no indice como vigentes e alguma clausula nao tem efeito. Gerada do ESTA
 - `CERT-VIGIA`
 - `CHAMADO-GANHA-CADASTRO`
 - `CHAMADO-VARREDURA-NAO-JULGA`
+- `CHAMADO-X-JUIZ-CORRIGIDO`
 - `CHAMADO-X-JUIZ-EM-PARALELO`
 - `COL200-DIA-DO-TURNO`
 - `CONTA-VAZIA-NAO-BARRA-O-CARIMBO`
@@ -220,6 +221,7 @@ Estavam no indice como vigentes e alguma clausula nao tem efeito. Gerada do ESTA
 - `FILA-24-09-16-5X`
 - `JANELA-EXATA`
 - `JUIZ-BATIDA-NASCE`
+- `JUIZ-CALCULAR-PERIODO-NASCE`
 - `JUIZ-COMPETENCIA-LAVRADA-NASCE`
 - `JUIZ-DE-BATIDA-E-DE-ESCALA`
 - `JUIZ-DIA-ENCERRADO-NASCE`
