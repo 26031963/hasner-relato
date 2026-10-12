@@ -259,8 +259,8 @@ lista — ela e o que esta EM PE._
 | **O249** | JUIZ-PAR-COMPLETO | espera aval |
 | **O250** | RAIA-COM-AGENTE-DECLARADO | **construido em copia do HEAD, selo VERD |
 | **O251** | BO-PREVIA-E-CAMPO-SEM-TELA | **RED antes em cada um; nenhuma lei nova |
-| **O252** | FOLHA-EXPORT-BOTAO-UNIFICA-E-377-CONFORME | **O DIFF DE FROTA SE REFAZ NO DIA DO APP |
+| **O252** | FOLHA-EXPORT-BOTAO-UNIFICA-E-377-CONFORME | **MEDIDO 16:4x** (993 ABERTO, pelo juiz  |
 | **O253** | UI-RETRATO-CORRECOES | POUSADA 12/10 11:5x: merge --no-ff de f2 |
 | **O254** | CONTRATO-BATIDA-GANHA-LEITOR | espera aval |
 | **O255** | HOOK-LE-O-MARCADOR | **FECHADA 12/10 11:5x (neste push), no a |
-| **O256** | UI-RETRATO-TRIAGEM | **ABERTO** -- registrado 12/10 11:5x no  |
+| **O256** | UI-RETRATO-TRIAGEM | **ABERTO** -- E1 incompleta. FEITO: `O25 |
