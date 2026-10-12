@@ -219,6 +219,7 @@ Estavam no indice como vigentes e alguma clausula nao tem efeito. Gerada do ESTA
 - `FECHAMENTO-UI-PORTAS`
 - `[nome]-IOS`
 - `FILA-24-09-16-5X`
+- `FIO-MORTO-E-ESTRUTURAL`
 - `JANELA-EXATA`
 - `JUIZ-BATIDA-NASCE`
 - `JUIZ-CALCULAR-PERIODO-NASCE`
