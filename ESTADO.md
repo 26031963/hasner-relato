@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 12/10/2026 11:51:02.**
+**Medido em 12/10/2026 11:56:32.**
 
 | | |
 |---|---|
-| `HEAD` local | `27c1b4f6 [O254] a celula `batida x um juiz por pergunta` ganha LEITOR, e o NOME do juiz do DIA vai ao TOPO (item 3 da CONTRATOS-ATE-A-VIRADA, MARCO A)` |
+| `HEAD` local | `4242f1dd [O255] o hook do Stop passa a LER o marcador ORDEM-VIVA-TOPO em vez de derivar a fila pela 1a linha da tabela (instrumento, pouso proprio L-105)` |
 | `origin/main` | `d20a0e45 [O219] pouso: os docs do marco A0-b entram junto, e o merge que eu pedi sem commit virou FAST-FORWARD -- o codigo estava na arvore viva antes deste commit` |
-| commits a subir (`ahead`) | **53** |
+| commits a subir (`ahead`) | **56** |
 
 ## Fabrica
 
@@ -22,31 +22,31 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2402.1 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2402.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **170.6 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **170.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261011`) -- **SEM AGENTE**
   - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **32.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **286.7 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **286.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **190.8 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **190.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **308.5 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **308.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **0.1 h**
+  - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
 - **23 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-batida, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-folha, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
@@ -57,42 +57,19 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+4242f1dd [O255] o hook do Stop passa a LER o marcador ORDEM-VIVA-TOPO em vez de derivar a fila pela 1a linha da tabela (instrumento, pouso proprio L-105)
+06898bbd [O253] a caixa SITUACAO sai, o LED da linha passa a ser a cor do DONO e a tela abre na competencia CORRENTE (pouso da raia `wt-ui`, parte FEITA da etapa E1 da UI-RETRATO-TRIAGEM)
+f2659343 [O253] a caixa SITUACAO sai, o LED da linha passa a ser a cor do DONO e a tela abre na competencia CORRENTE (UI-RETRATO-CORRECOES, raia wt-ui)
 27c1b4f6 [O254] a celula `batida x um juiz por pergunta` ganha LEITOR, e o NOME do juiz do DIA vai ao TOPO (item 3 da CONTRATOS-ATE-A-VIRADA, MARCO A)
 ff3078c6 [O48] os tres quadros do retrato da folha passam a ser GRAVADOS pelo lavrador (pouso da raia-ui, etapa 2 da UI de fechamento)
-3676e7c9 [O141] o botao de aprovar deixa de ter crivo proprio e LE o juiz do TXT (eram TRES crivos, e um deles sai do arquivo)
-fb3f6ad9 [O247] o pareador passa a ver o MESMO universo que a apuracao, e o tripwire B5-j NASCE (eram TRES sitios, nao dois)
-8191f06b [O48] passo 3 de 6: os QUATRO leitores por colaborador leem a CELULA, e a linha gravada fica so com o que e ATO
 ```
 
 ## `git status --short`
 
 ```
  M app/config/crons_duracao.json
-M  app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
-M  app/docs/RELATO.md
-M  app/docs/TICKETS.md
-M  app/folha/retrato_folha.py
-M  app/folha/tests/test_retrato_folha_duas_cascas.py
-M  app/folha/tests/test_retrato_folha_quadros.py
-M  app/folha/tests/test_retrato_folha_smoke_chromium.py
-M  app/folha/tests/test_retrato_folha_tela2.py
-M  app/folha/views_retrato.py
-M  app/ponto/tests/test_k8_tela_abre_na_competencia.py
-M  app/templates/core/_led.html
-M  app/templates/folha/_retrato_barra.html
-M  app/templates/folha/_retrato_lista.html
-M  app/templates/folha/retrato_folha.html
- M bin/handoff_sessao.sh
- M bin/hook_stop_fila1.py
  M bin/sonda_frota.sh
- M bin/tests/test_handoff_sessao.sh
- M bin/tests/test_hook_nao_cobra_congelado.sh
- M bin/tests/test_hook_nao_para_por_processo.sh
- M bin/tests/test_hook_parei_so_lei.sh
- M bin/tests/test_hook_stop_saida_valida.sh
- M bin/tests/test_hook_teto_nao_conta_espera.sh
-?? bin/tests/test_hook_le_o_marcador.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -182,38 +159,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-❯ aval Ronald: UI-RETRATO-TRIAGEM -- SUBSTITUI e absorve o UI-RETRATO-CORRECOES das 09:4x (mesma raia wt-ui; o que ja estiver feito dele
-  fica). Pousa em 4 etapas, cada uma com smoke headless nas 3 larguras e linha no AVAIS. (E1 BARRA) core/_barra_gestao.html na 1a linha e
-  core/_filtro_universal.html abaixo (L6, core/filtro.py:68/:159); na barra ficam so FOLHA (Entram/Bloqueados/Rescisao) e DONO
-  (Admin/Colab/Chamado/Ninguem) e SALDO; saem SITUACAO (= Dono somado), TIPO (vai para o drawer) e o filtro Total (vira moldura, nao
-  botao); todo rotulo e UMA palavra; LED da linha = cor do Dono com o botao correspondente; abre na competencia corrente por
-  ponto/janelas.py::janela_atual. (E2 COLUNA Furos) substitui 'Dias que seguram': dias com furo do colab no periodo escolhido --
-  competencia (default corrente, do dia 21 ate hoje) ou de/ate dentro dela -- FONTE a celula do dia
-  (escala/servico_jornada.py::classificar_falta), mesma que o espelho pinta; periodo = competencia le o retrato gravado, periodo livre le
-  as celulas em UMA consulta agregada por colab (sem N+1); SALDO le o MESMO numero em faixas. (E3 DRAWER) core/_drawer_generico.html abre
-  o MESMO espelho do perfil do colab (o partial que o perfil ja inclui -- confirmar por grep quem o usa), sem template novo e sem numero
-  proprio. (E4 HAIKU) abaixo do espelho, texto didatico 'o que esta errado / o que fazer' gerado SO ao abrir o drawer, redigido sobre
-  numeros dos juizes existentes (dono_da_divergencia, lista cadastro x realidade, ferramentas fora_da_folha/o_que_segura); numero que nao
-  sai de juiz nao entra no texto; falta de ferramenta vira item, nunca texto inventado. RESULTADOS OBSERVAVEIS: 1 barra na 1a linha so com
-  Folha/Dono/Saldo; 2 Situacao e Tipo fora da barra; 3 todo rotulo com uma palavra; 4 Furos do colab == dias com furo contados no espelho
-  dele no mesmo periodo (selo, L1); 5 periodo = competencia inteira da o mesmo Furos pelo retrato e pelas celulas (selo); 6 drawer mostra
-  o espelho identico ao do perfil; 7 texto do Haiku so cita numero de juiz. LINHA HAIKU: Furos por periodo entra no copiloto com rotulo
-  de admin + 1 pergunta no eval/golden.py. RED antes em cada etapa; juizes novos = 0; nenhuma lei nova (L1, L2, L6, LEI-AKITA 2 e 8).
-  Contratos da fila 1 seguem na frente; isto e fila 2 em raia. Segue a fila; PAREI so em lei ou !
-
-● Aval novo recebido e absorvido — ele substitui o UI-RETRATO-CORRECOES mantendo o que já está feito, e o que está em voo agora (merge da
   O253) é exatamente a parte feita da E1. Fecho o pouso primeiro (os templates já estão no disco e o .py ainda não carregou — a janela de
   500 está aberta), e registro o aval no commit do instrumento logo em seguida.
 
-● Monta a mensagem e estagia os docs do marco
-  ⎿  $ cd /home/ronald/saas-hasner && cat >
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/msg_o253.txt <<'EOF'
-     [O253] a caixa SITUACAO sai, o LED da linha passa a ser a cor do DONO e a tela abre na competencia CORRENTE (pouso da raia `wt-ui`,
-     parte FEITA d…
+  Ran 9 shell commands
 
-✢ Concocting… (22m 51s · ↓ 49.4k tokens · thinking)
-                                                                                                   ✔ Update installed · Restart to update
+● Commit e deploy no mesmo ato (L-107), nada no meio:
+
+  Committed 06898bbd
+
+● Pousada: 06898bbd, deploy verde, 3 rotas provadas, importerror_500=0. Agora o pouso próprio do instrumento (L-105) — que leva também o
+  registro do aval novo. Primeiro o id livre:
+
+  Ran 2 shell commands
+
+● O254 está aberto e o juiz do hook o lê como ok — então o marcador passa a apontar para ele (o marco B da batida, que o aval manda
+  retomar). Escrevo os docs do pouso do instrumento, já com o aval novo registrado:
+
+  Committed 4242f1dd, ran 4 shell commands
+
+● Dois pousos no ar: 06898bbd (produto, deployado) e 4242f1dd (instrumento). Agora o handoff da L-108 e o RED do marco B:
+
+  Ran 2 shell commands
+
+● Os dois vermelhos são a mesma lei (o segundo também afirma [] == motivos): 2 RED, 9 MORDE verdes. Agora o sítio da cura, lido ao vivo:
+
+● Le o arquivo RED do marco B
+  ⎿  $ echo "=== o RED, inteiro ==="; sed -n '1,140p' /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/sc
+     ratchpad/wt-folha/app/folha/tests/test_furo_so_intervalo_nao_retem.py
+
+✢ Compacting conversation… (28m 21s · ↓ 69.2k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 26%
+                                                                                                                    1% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

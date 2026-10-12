@@ -174,6 +174,23 @@ a lista que a L-099 nomeia como autoridade do dono e cega em 2 dos 4. PROVA: `lo
   chama "N commit a frente do `main`" o que `rev-list` conta numa historia SEM merge-base, e cobra L-105 de uma raia
   que nao tem como mergear. O rotulo certo e "historia disjunta", e o selo da L-105 nunca podera ficar verde com ela.
 
+## 12/10 11:5x — `[O255]` o hook do Stop passa a LER o marcador `ORDEM-VIVA-TOPO` (instrumento, pouso proprio L-105)
+
+LEI-AKITA: origem=`bin/hook_stop_fila1.py::_proximo_da_fila`, testemunha=o marcador `ORDEM-VIVA-TOPO` do BACKLOG (autoridade desde o O158, `BACKLOG.md:703`), RED=`bin/tests/test_hook_le_o_marcador.sh` (5 casos, vermelho evidenciado contra o HEAD), quem-mais-le=`bin/handoff_sessao.sh` (3 chamadas) e `bin/backlog_estado.py`, juizes novos=0
+
+- **o defeito, MEDIDO**: o bloco OBRAS tem DUAS tabelas de cabecalho diferente. A 1a tem **UMA** linha aberta (`PLACAR-ESTRUTURAL`) e precede a 2a INTEIRA, onde a ordem viva mora (**128** abertas). O hook derivava "o item em curso" pela 1a linha aberta em ordem FISICA, entao cobrava `PLACAR-ESTRUTURAL` turno a turno enquanto o marcador dizia `O48` — duas respostas para uma pergunta, com o hook RECALCULANDO em vez de LER a autoridade (LEI-AKITA 2 invertida)
+- **o RED, colado**: `hook_le_o_marcador: VERMELHO -- o marcador aponta ITEM-SEGUNDO e o hook nao o nomeou. Saida: {"decision": "block", "reason": "siga: ITEM-PRIMEIRO -- o 1o da tabela, aberto"}`, rc=1 — **PROVA**
+- o que mudou: nascem `_item_da_ordem_viva` (o juiz UNICO de *"qual o item em curso"*, com 4 vereditos — `sem-marcador` `ausente` `parado` `ok`), `_ha_item_aberto`, `_recado_do_marcador` e `_backlog_texto`; `_proximo_da_fila` passa a devolver o item do MARCADOR
+- **DUAS PERGUNTAS, e confundi-las era o defeito**: *"QUAL item esta em curso"* sai do marcador; *"existe ALGUM aberto"* sai da tabela e **nao nomeia item nenhum** — e e por isso que o `PROIBIDO fallback para a tabela` conviveu com o caso *"fila vazia libera"* que `test_hook_nao_para_por_processo.sh:62-80` ja guardava desde antes
+- **marcador quebrado BLOQUEIA**, nao libera: eu ia escrever `return None -> _libera('fila 1 vazia')`, que repetia o buraco que este MESMO arquivo ja curou em 27/09 (*"CONTADOR ILEGIVEL NAO ABRE A PORTA"*, `main()`). Autoridade que nao responde nao e fila vazia. A valvula contra armadilha segue sendo o TETO, intocado
+- um juiz SAIU em vez de entrar: o selo do O158 perdeu o `_primeiro_aberto` (L-111) e o seu `_julga` passou a PERGUNTAR ao hook — comparar marcador com tabela deixou de ter sentido no instante em que o hook passa a ler o marcador
+- **buraco de guarda fechado no mesmo ato**: `bin/handoff_sessao.sh:58` tinha regex PROPRIO do marcador (2o leitor da fila), e a guarda que proibia exatamente isso so varria `OBRAS:INICIO` — passou a varrer `ORDEM-VIVA-TOPO` tambem
+- numeros MEDIDOS: familia do hook **8 de 8** verde · pasta inteira de selos de host **69 de 70** (o unico vermelho e o `test_lei_akita.sh` pre-existente, band-aid em `relatorios/`) · contra o BACKLOG REAL o hook curado diz `siga: O48` onde o do HEAD dizia `siga: PLACAR-ESTRUTURAL` — **PROVA**
+- 5 fixtures irmas ganharam marcador declarado; a 2a do `test_hook_nao_para_por_processo.sh` fica SEM marcador **de proposito**, porque e ela que mede a fila vazia
+- **sem deploy**: `bin/` nao e bind-mount de container, entao nao ha casca para recarregar (L-105 — instrumento em pouso proprio, depois do produto)
+- o marcador passou a apontar **`O254`** neste commit: e o marco B da batida, que ele mandou retomar. Ordem de fila, AUTONOMIA-DE-CODIGO item 1
+- commit: (neste push)
+
 ## 12/10 11:5x — `[O253]` a caixa SITUACAO sai, o LED da linha e a cor do DONO, a tela abre na competencia CORRENTE (pouso da raia `wt-ui`)
 
 LEI-AKITA: origem=`folha/retrato_folha.py::LED_DA_LINHA` (a tabela unica de estado -> cor + rotulo), testemunha=o retrato GRAVADO pelo lavrador e `ponto/janelas.py::janela_atual`, RED=12 selos vermelhos em 5 arquivos (colados no corpo do commit), quem-mais-le=`templates/core/_led.html` (o 2o leitor da cor, que perdeu a escada de `{% if %}`), juizes novos=0
