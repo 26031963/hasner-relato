@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 12/10/2026 17:17:15.**
+**Medido em 12/10/2026 17:22:27.**
 
 | | |
 |---|---|
@@ -22,22 +22,22 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2407.5 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2407.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **176.0 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **176.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261011`) -- **SEM AGENTE**
-  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **38.0 h** (passou das 6 h da L-105)
+  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **38.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **292.1 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **292.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **196.2 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **196.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
@@ -46,7 +46,7 @@ RELATO, com a lista de nomes do banco como autoridade._
   - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **314.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
-  - 0 commit(s) a frente do `main`, 4 arquivo(s) sujo(s)
+  - 0 commit(s) a frente do `main`, 5 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
 - **23 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-batida, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-folha, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
@@ -164,44 +164,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  172 é o default e os 28 vão ao topo como pergunta. A sonda terminou:
 
-● Antes de lançar: conferir que os imports da sonda existem com esses nomes (nunca afirmar de memória).
+  Read 1 file
 
-  Searched for 1 pattern, ran 1 shell command
+● DIFF lido. Três leituras, e uma delas desmonta a bifurcação que o advisor apontou:
 
-● Imports e chaves conferidos. Lançando pela porta declarada (bin/sonda_frota.sh, cpuset 4-7, leitura de saas_hasner):
+  - O eixo VEREDITO confirma o "zero" dele: mudam=0 nas três empresas e o conjunto entra é idêntico (so_gravado=0|so_lido=0). Logo o garfo
+    "entra no LIDO sem linha gravada" é vazio — ninguém entra só pelo lido.
+  - O eixo CONTEÚDO não é zero: emp2 tem sha_g != sha_l com 2 linhas de cada lado (170 = 170). emp3 e emp4 são idênticas byte a byte.
+  - CUSTO: emp2 total_p5 = 83,3 s (motor 81,2 + export 2,1) contra 2,6 s do gravado.
 
-  Ran 1 shell command
-
-● Enquanto a sonda corre, leio o sítio da migração do :1443 — parte do mesmo marco e independente do DIFF:
-
-  Ran 1 shell command
-
-● :1418 + 25 = 1443 confirmado. Agora o ramo injetado: preciso saber se passar UMA lista de um elemento recorta o universo a esse
-  colaborador (senão a chamada por colab seria a frota inteira):
+  Esses 83 s decidem sync-vs-job. Mas antes de decidir por gosto, mede-se o precedente: o botão Recalcular de hoje roda o MESMO motor sobre
+  os MESMOS 448:
 
   Ran 1 shell command
 
-● fechs = sorted(fechamentos, ...) — o universo é a lista injetada, então fechamentos=[_lido] dá exatamente um item. Agora o lote já
-  migrado, para espelhar a forma (e não inventar segunda):
+● Precedente achado, e ele decide: ponto/views.py:1219 — a view recalcular_fechamento (:1193) roda recalcular_fechamento_mes(mes, ano,
+  empresa_id) síncrona sobre a empresa inteira e grava. A casa já aceita esse custo nessa escala nesse ato; o passo 5 é a mesma conta sem
+  gravar, e dispensa a prensa do Recalcular antes do TXT. Decisão: síncrono por precedente, não por gosto — uma linha no RELATO, sem job.
+  Agora a causa das 2 linhas:
 
-  Ran 5 shell commands
+  Ran 1 shell command
 
-● Sítio, semântica da injeção e a forma do lote medidos. Antes de escrever código de produção (é o momento em que a abordagem cristaliza),
-  consulto:
+● Layout: 10 + mat(10) + comp(6) + rub(4) + 11 + val(9) + cod(10) → o prefixo [0:22] identifica pessoa+competência+rubrica. Sonda 2 pareia
+  por esse prefixo e nomeia o CAMPO divergente, sem imprimir mat nem valor:
 
-● Advising using Fable 5.1
+  Running 1 shell command…
 
-✽ Concocting… (2h 47m 25s · ↓ 292.7k tokens)
+✻ Concocting… (2h 52m 36s · ↓ 300.6k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Checking RAIZ path in test_retrato_folha_quadros.py                                        24m 54s · ↓ 164.6k tokens
+  ◯ general-purpose  Reading test_o_que_a_porta_devolve_SEMPRE_passa_pelo_recortar                                30m 5s · ↓ 87.0k tokens
   ⧉  index
 ```
