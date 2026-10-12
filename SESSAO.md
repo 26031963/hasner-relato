@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 12/10/2026 02:30:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (697.8 MB). Acoes na janela: **1163**.
+**Medido em 12/10/2026 02:35:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (697.8 MB). Acoes na janela: **1159**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1169,7 +1169,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 14:43:25 | Bash | Ver o padrão de freeze_time da casa | `cd /home/ronald/wt-o48p3/app echo "=== classes com freeze_time que usam setUpTestData ===" grep -rln "freeze_time" --include="test_*.py" api core ponto relatorios colaboradores \| head -20 echo echo "=== exemplo: api/tests/test_espelho_app_fonte_e_geometria.py topo ===" sed -n '1,40p' api/tests/test_espelho_app_fonte_e_geometria.py` |
 | 14:43:05 | Bash | Ler o selo do relógio | `sed -n '1,75p' /home/ronald/wt-o48p3/app/core/tests/test_selo_teste_sem_relogio.py` |
 | 14:42:59 | Bash | Ler a falha da suite cheia | `cd /home/ronald/saas-hasner grep -nE '^(FAIL\|ERROR):' logs/o48p3_suite_cheia.out echo "--- traceback ---" awk '/^={10,}/{f=1} f' logs/o48p3_suite_cheia.out \| head -60` |
-| 14:34:23 | Bash | Esperar o veredito da suite | `cd /home/ronald/saas-hasner L=logs/o48p3_suite_cheia.out for i in $(seq 1 55); do grep -qE '^(OK\|FAILED)($\| \()' "$L" 2>/dev/null && break sleep 10 done grep -E '^(OK\|FAILED)($\| \()' "$L" \| tail -1 grep -E '^Ran [0-9]+ tests' "$L" \| tail -1 tail -3 "$L"` |
-| 14:34:17 | Bash | Preparar a seção do RELATO | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad cat > "$S/o48p3_relato.md" <<'RELEOF' ## MARCO 11/10 HHMM — O48 passo 3, os 9 selos INVERTIDOS: a duvida que eles levantavam se mediu na frota e a resposta e **ZERO NA TELA = 0** LEI-AKITA: origem=`relatorios/cartao_pela_celula.py::totais_da_folha`, testemunha=`ponto/services/fechamento.py::fechamento_l ...` |
-| 14:33:32 | Bash | Checar o andamento da suite cheia | `cd /home/ronald/saas-hasner L=logs/o48p3_suite_cheia.out echo "linhas: $(wc -l < $L)"; grep -cE '^(OK\|FAILED)($\| \()' "$L" \|\| true grep -E '^Ran [0-9]+ tests' "$L" \| tail -1 tail -2 "$L"` |
-| 14:33:25 | Bash | Ver o topo do RELATO | `cd /home/ronald/saas-hasner/app/docs ls -la RELATO*.md 2>/dev/null echo "=== topo do RELATO (40 linhas) ===" sed -n '1,40p' RELATO.md 2>/dev/null \|\| true` |
