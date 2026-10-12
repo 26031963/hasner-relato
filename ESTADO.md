@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 12/10/2026 11:04:02.**
+**Medido em 12/10/2026 11:09:16.**
 
 | | |
 |---|---|
@@ -22,31 +22,31 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2401.3 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2401.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **169.8 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **169.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261011`) -- **SEM AGENTE**
-  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **31.8 h** (passou das 6 h da L-105)
+  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **31.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **285.9 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **286.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **190.0 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **190.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **307.7 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **307.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
-  - 0 commit(s) a frente do `main`, 10 arquivo(s) sujo(s)
+  - 0 commit(s) a frente do `main`, 11 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
 - **22 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-batida, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
@@ -159,44 +159,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  │ células com teste=None                             │ 3 → 2                                                                         │
+  └────────────────────────────────────────────────────┴───────────────────────────────────────────────────────────────────────────────┘
 
-● Certifying suite is running against the copy (logs/fila/batida_cheia_20261012.log). While it runs, the commit message is written at
-  $S/o254_msg.txt and the two docs claims the selo disproved are corrected in docs/RELATO.md (both the topo pergunta and the marco section)
-  and in the nota of the copy's core/contratos_estruturais.py — now stating the measured separation: of the 35 public methods, 16 are
-  properties of the RESULT classes and 19 are PORTS of the Motor classes, and none of the 19 has the DIA as universe.
+  O censo do motor mordeu duas vezes nesta sessão e é por isso que ficou nesta forma: a 1ª redação mediu a ausência de um nome
+  (calcular_dia) e um grep achou 8 ajudantes privados com o dia no nome; a 2ª varreu dia/jornada nos 35 públicos e ficou VERMELHA em
+  ResultadoMes.horas_intrajornada_indenizada:283, que não é porta nenhuma. A forma que ficou declara o conjunto das 19 PORTAS
+  (PORTAS_DO_MOTOR) e compara por igualdade: porta nova fica vermelha e alguém tem de dizer se ela é o DIA. Dos 35 públicos, 16 são
+  propriedades das classes de RESULTADO e 19 são portas, com universos PAR / MÊS / BATIDAS — nenhum o DIA. motor_calculo_v2.py foi lido por
+  AST, 0 bytes de diff.
 
-  Marco section is 17 lines (L-116 teto 25). I'll read the veredito as the three things together (^(OK|FAILED)($| \() tail -1, ^Ran N tests
-  tail -1, and the process rc), then fill the PROVA block with the full-suite numbers — the earlier Ran 33 / Ran 4560 runs certified the
-  previous form of the selo, so they get labelled as such rather than quoted as this tree's proof.
+  No topo do RELATO, com os números e sem devolver turno: o NOME do juiz do dinheiro do DIA. Predicado novo + duas candidatas ⇒ a
+  AUTONOMIA-DE-CODIGO item 3 não me dá a frase corte Ronald: juiz <nome> nasce; as três formas possíveis estão escritas lá para o seu
+  corte.
 
-  Ran 2 shell commands
+  Seguindo a fila no mesmo turno: MARCO B do item 3 — o pendente [2] ("dia em aberto bloqueia a folha", 373 dias / 121 colabs / 24 que
+  mudam de bloqueado→entra). É DINHEIRO em competência aberta, então entra por DINHEIRO-EM-COMPETENCIA-ABERTA: DIFF de frota na sombra
+  publicado antes, arquivo de reversão em logs/, competência exportada intacta com hash antes/depois, PROVA depois. O agente do O253 (fila
+  2, wt-ui) segue construindo em raia própria.
 
-● Suite is mid-run (1446 lines of progress, no FAILED yet). Waiting on the veredito.
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: PLACAR-ESTRUTURAL -- O ESTRUTURAL SE SEPARA DO DADO (corte dele 02/10 22:5x, que SUBSTITUI o item 3 da
+  ordem das 21:4x -- o resto d
 
-  Ran 1 shell command
+  Creating a fresh worktree copy at HEAD for the folha cure
+  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad &&
+     git worktree add --detach "$S/wt-folha" 27c1b4f6 2>&1 | tail -2 && mkdir -p "$S/wt-folha/app/logs" "$S/wt-folha/app/media" && echo
+     "copia pronta em wt-folha"
 
-● Background command "Wait for the suite veredito line" completed (exit code 0)
-
-  Ran 2 shell commands
-
-● Background command "Run the full certifying suite on the copy" completed (exit code 0)
-
-● Running the host selo folder on the live tree · 1m 42s
-  ⎿  $ cd /home/ronald/saas-hasner && vermelhos=0; for t in bin/tests/test_*.sh; do if ! bash "$t" >/tmp/claude-1001/selo.out 2>&1; then
-     echo "VERMELHO: $t"; tail -2 /tmp/claude-1001/selo.out | cut -c1-160; vermelhos=$((vermelhos+1)); fi; done; echo "=== selos de host
-     vermelhos: $vermelhos de $(ls bin/t… (1m 41s)
-     (ctrl+b ctrl+b (twice) to run in background)
-
-✢ Bloviating… (2h 18m 44s · ↓ 208.5k tokens)
+* Bloviating… (2h 23m 58s · ↓ 222.7k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    4% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Reading measured bar heights from medir.log                                              1h 0m 57s · ↓ 168.1k tokens
+  ◯ general-purpose  Verifying 11 modified files stay dirty                                                    1h 6m 10s · ↓ 98.3k tokens
   ⧉  index
 ```

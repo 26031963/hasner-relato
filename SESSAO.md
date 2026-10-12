@@ -6,10 +6,37 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 12/10/2026 11:04:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (720.7 MB). Acoes na janela: **1198**.
+**Medido em 12/10/2026 11:09:16.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (721.0 MB). Acoes na janela: **1219**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 11:08:51 | Bash | Create a fresh worktree copy at HEAD for the folha cure | `cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && git worktree add --detach "$S/wt-folha" 27c1b4f6 2>&1 \| tail -2 && mkdir -p "$S/wt-folha/app/logs" "$S/wt-folha/app/media" && echo "copia pronta em wt-folha"` |
+| 11:08:37 | Bash | Confirm the CelulaDia ata/dna/protestos field definitions | `grep -nE "^ (ata\|dna\|protestos\|veredito\|veredito_via) = " -A 3 escala/models.py \| head -30` |
+| 11:08:14 | Bash | Read the rest of lampadas_do_dia to see the lampada fields | `sed -n '334,375p' ponto/services/cartorio.py` |
+| 11:08:10 | Bash | Read lampadas_do_dia to learn the lampada structure | `grep -n "def lampadas_do_dia" -A 40 ponto/services/cartorio.py \| sed -n '1,45p'` |
+| 11:07:55 | Bash | Read the existing interval-missing test in the supra-juiz | `sed -n '25,60p' ponto/tests/test_supra_juiz_cobranca.py` |
+| 11:07:44 | Bash | Look for the authority on which marcos lack a batida | `grep -rn "def ata_do_dia" -A 12 ponto/services/cartorio.py \| head -20; echo "=== quem responde marco sem batida:"; grep -rn "def .*missing\\|missing\b" --include=*.py ponto/ escala/ \| grep "def \\|_n_missing =" \| head -8` |
+| 11:07:33 | Bash | Read the canonical marco key order declaration | `sed -n '1595,1640p' escala/models.py` |
+| 11:07:29 | Bash | Inspect the CelulaDia fields relevant to marcos | `grep -n "class CelulaDia" -A 45 escala/models.py \| grep -nE "marco\|tipo\|ordem\|dna\|def " \| head -25` |
+| 11:07:19 | Bash | Find the marco type vocabulary for interval marks | `grep -rn "intervalo" escala/models.py \| grep -iE "tipo\|choice\|= \(\|saida_int\|volta" \| head -12; echo "=== tipos de marco:"; grep -rn "TIPOS_MARCO\\|MARCOS = \\|tipo_marco" --include=*.py escala/ ponto/ \| head -10` |
+| 11:07:03 | Bash | Read the FURO_PARCIAL branch of the supra-juiz | `sed -n '225,250p' ponto/supra_juiz.py` |
+| 11:06:59 | Bash | Find the emitters of the furo protest codes | `grep -rn "FURO_SEM_COBRANCA\\|FURO_PARCIAL" --include=*.py . \| grep -v tests \| grep -v "escala/models.py" \| head -12` |
+| 11:06:44 | Bash | Read the protest code catalog | `sed -n '1545,1580p' escala/models.py` |
+| 11:06:39 | Bash | Census the protest codes and where protestos are written | `grep -rnoE "'FURO[A-Z_]*'" --include=*.py . \| sort -u \| head -20; echo "=== protestos escritos:"; grep -rn "protestos" --include=*.py ponto/ escala/ \| grep -iE "append\|= \[\|set\(\|add\(" \| head -12` |
+| 11:06:33 | Bash | Read the protest vocabulary in supra_juiz | `grep -n "NAO_COBRAVEIS_DO_COLABORADOR" -A 14 ponto/supra_juiz.py \| head -30; echo "=== codigos com intervalo:"; grep -rn "intervalo" ponto/supra_juiz.py \| head -15` |
+| 11:06:19 | Bash | Read motivos_retencao_celula, the origin | `sed -n '910,992p' folha/export.py` |
+| 11:06:15 | Bash | Locate motivos_retencao_celula and its callers | `grep -rn "def motivos_retencao_celula" --include=*.py . ; echo ---; grep -rn "motivos_retencao_celula" --include=*.py . \| grep -v "def " \| head` |
+| 11:06:11 | Bash | Read motivos_retencao_espelho | `sed -n '993,1060p' folha/export.py` |
+| 11:06:04 | Bash | Grep export.py for the furo/aberto vocabulary | `grep -n "furo\\|aberto\\|espelho" folha/export.py \| head -40` |
+| 11:05:59 | Bash | Grep for furo_so_intervalo across the app | `grep -rn "furo_so_intervalo" --include=*.py . \| head -20` |
+| 11:05:48 | Bash | Print the two batida pendentes from the live juizes module | `python3 - <<'PY' import importlib.util, sys, json def carrega(nome, caminho): spec = importlib.util.spec_from_file_location(nome, caminho) m = importlib.util.module_from_spec(spec); sys.modules[nome] = m spec.loader.exec_module(m); return m j = carrega('core.juizes', 'core/juizes.py') for i, p in enumerate(j.PENDENTES['batida']): print('=== pendente', i) for k, v in (p.items() if isinstance(p, dic ...` |
+| 11:05:41 | Bash | Grep for batida keys in juizes.py | `grep -n "batida" core/juizes.py \| grep -v "^9[0-9][0-9]:" \| grep -niE "pendent\|'batida'\|\"batida\"" \| head -20` |
+| 11:05:37 | Bash | Find the batida entries in PENDENTES | `grep -n "'batida': (" core/juizes.py \| head; echo ---; awk "NR>=$(grep -n "^PENDENTES = {" core/juizes.py \| cut -d: -f1) && NR<=$(grep -n "^PENDENTES = {" core/juizes.py \| cut -d: -f1)+400" core/juizes.py \| grep -n "'batida'" \| head` |
+| 11:05:31 | Bash | Read the PENDENTES_BATIDA declaration | `sed -n '985,1035p' core/juizes.py` |
+| 11:05:19 | Bash | Read the BACKLOG context around the placar marker | `awk 'NR>=344 && NR<=372' docs/BACKLOG.md \| cut -c1-230` |
+| 11:05:15 | Bash | Locate the PLACAR-ESTRUTURAL row in the BACKLOG | `grep -n "PLACAR-ESTRUTURAL" docs/BACKLOG.md \| head -5` |
+| 11:05:11 | Bash | Read the full fila-1 hook message | `cd /home/ronald/saas-hasner && python3 bin/hook_stop_fila1.py 2>&1 \| head -40` |
+| 11:04:44 | Bash | Regenerate the session handoff after closing the marco | `cd /home/ronald/saas-hasner && bash bin/handoff_sessao.sh 2>&1 \| tail -6; echo "---"; head -12 app/docs/HANDOFF-SESSAO.md` |
 | 11:02:19 | Bash | Run the host selo folder on the live tree | `cd /home/ronald/saas-hasner && vermelhos=0; for t in bin/tests/test_*.sh; do if ! bash "$t" >/tmp/claude-1001/selo.out 2>&1; then echo "VERMELHO: $t"; tail -2 /tmp/claude-1001/selo.out \| cut -c1-160; vermelhos=$((vermelhos+1)); fi; done; echo "=== selos de host vermelhos: $vermelhos de $(ls bin/tests/test_*.sh \| wc -l)"` |
 | 11:01:58 | Bash | Deploy the marco without migrations | `cd /home/ronald/saas-hasner && bin/deploy.sh --sem-migrate 2>&1 \| tail -25; echo "rc_deploy=${PIPESTATUS[0]}"` |
 | 11:01:55 | Bash | Check no cron is in flight before deploying | `cd /home/ronald/saas-hasner && ls -A logs/crons_em_curso/ \| head; echo "--- vazio? $(ls -A logs/crons_em_curso/ \| wc -l) itens"; git log --oneline -1` |
@@ -1202,9 +1229,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 23:10:39 | Bash | Ver as provas vivas em curso | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bgs1qmuc8.output 2>/dev/null \| tail -60` |
 | 23:10:29 | Bash | Ver a forma de um item respondido | `python3 - <<'PY' import json it = json.load(open('docs/PENDENTES_RONALD.json', encoding='utf-8')) resp = [x for x in it if x.get('estado') == 'respondido'] print('respondidos:', len(resp)) # o mais recente por respondido_em resp.sort(key=lambda x: x.get('respondido_em') or '') import pprint pprint.pprint({k: (v[:160] + '...' if isinstance(v, str) and len(v) > 160 else v) for k, v in resp[-1].items ...` |
 | 23:10:22 | Bash | Gravar os 4 avais e ver como gerar_avais marca respondido | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad cat > $S/avais_11_10_23h.md <<'EOF' # QUATRO avais/cortes recebidos em 11/10 ~23:0x (hora lida do relogio no ato: 23:01 / 23:06) # LITERAIS. Nada aqui e parafrase. ## (1) FOLHA-EXPORT-JUIZ-DO-QUE-BLOQUEIA -> responde AVAIS item 8 (trava_fila1) aval Ronald: FOLHA-EXPORT-JUIZ-DO-QUE-BLOQUEIA ja esta respo ...` |
-| 23:07:44 | Bash | Rodar as 5 provas vivas | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad bash $S/provas_vivas_cron.sh 2>&1 \| tail -70` |
-| 23:07:34 | Bash | Medir se os 3 tocados mudaram de conteudo | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad C=$S/cron_retrato echo "=== os 3 tocados DURANTE a suite: quem os escreveu, e eles mudaram de CONTEUDO?" for f in app/docs/ARQUITETURA.mmd app/docs/MAPA.md app/templates/base_app.html; do printf '%-34s copia=%s HEAD=%s viva=%s\n' "$f" \ "$(md5sum "$C/$f" 2>/dev/null \| cut -c1-12)" \ "$(cd /home/ronald/ ...` |
-| 23:07:22 | Bash | Conferir que nada foi tocado durante a suite | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad C=$S/cron_retrato echo "=== o T0 do guarda era o mtime do LOG = FIM da suite, nao o inicio. Medindo o inicio de verdade:" FIM=$(stat -c %Y $S/suite_cron.log); INI=$((FIM-1414)) echo "fim = $(date -d @$FIM -Iseconds)" echo "inicio (fim - 1413.740s) = $(date -d @$INI -Iseconds)" echo "--- arquivos da copi ...` |
-| 23:07:06 | Bash | Transferir a cura da copia para a arvore viva | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad bash $S/transferir_cron.sh 2>&1 \| tail -40; echo "rc=${PIPESTATUS[0]}"` |
-| 23:06:57 | Bash | Ler o veredito da suite | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad echo "=== veredito (L-074: OK\|FAILED + Ran N + rc do processo) ===" grep -E '^(OK\|FAILED)($\| \()' $S/suite_cron.log \| tail -1 grep -E '^Ran [0-9]+ test' $S/suite_cron.log \| tail -1 echo "rc do processo: 0 (task but6k3v2q, exit code 0)" echo "=== linhas: ==="; grep -c '' $S/suite_cron.log echo "===  ...` |
-| 23:06:35 | Bash | Ler o adendo CORTES-DOS-CONTRATOS | `sed -n '26,80p' docs/BACKLOG.md` |
