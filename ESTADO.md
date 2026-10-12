@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 12/10/2026 17:22:27.**
+**Medido em 12/10/2026 17:27:52.**
 
 | | |
 |---|---|
@@ -22,35 +22,35 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2407.6 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2407.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **176.1 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **176.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261011`) -- **SEM AGENTE**
-  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **38.1 h** (passou das 6 h da L-105)
+  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **38.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **292.2 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **292.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **196.3 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **196.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **314.0 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **314.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
-  - 0 commit(s) a frente do `main`, 5 arquivo(s) sujo(s)
+  - 0 commit(s) a frente do `main`, 7 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
-- **23 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-batida, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-folha, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
+- **24 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-batida, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-folha, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-p5, wt-regua, wt-sj, wt-vinculo
 
-**sem agente: 6** (raia com commit a frente e sem declaracao, esperado 0) -- **a frente do main ha mais de 6 h: 6** -- uniao medida: 32
+**sem agente: 6** (raia com commit a frente e sem declaracao, esperado 0) -- **a frente do main ha mais de 6 h: 6** -- uniao medida: 33
 
 > Raia sem agente por mais de um marco pede linha de motivo no RELATO -- lei, `!` ou pista (item 4 do aval).
 
@@ -164,37 +164,37 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  172 é o default e os 28 vão ao topo como pergunta. A sonda terminou:
+  último recálculo. O DIFF≠0 é a cura funcionando, não bloqueio; e o turnos_abertos do colab 919 divergindo é exatamente por que a porta
+  tem de ler o LIDO.
 
-  Read 1 file
-
-● DIFF lido. Três leituras, e uma delas desmonta a bifurcação que o advisor apontou:
-
-  - O eixo VEREDITO confirma o "zero" dele: mudam=0 nas três empresas e o conjunto entra é idêntico (so_gravado=0|so_lido=0). Logo o garfo
-    "entra no LIDO sem linha gravada" é vazio — ninguém entra só pelo lido.
-  - O eixo CONTEÚDO não é zero: emp2 tem sha_g != sha_l com 2 linhas de cada lado (170 = 170). emp3 e emp4 são idênticas byte a byte.
-  - CUSTO: emp2 total_p5 = 83,3 s (motor 81,2 + export 2,1) contra 2,6 s do gravado.
-
-  Esses 83 s decidem sync-vs-job. Mas antes de decidir por gosto, mede-se o precedente: o botão Recalcular de hoje roda o MESMO motor sobre
-  os MESMOS 448:
+  Mas isso expõe uma coisa: meus 172/28/313 foram medidos sobre travas do gravado, e a porta vai ler travas do LIDO. O número publicado
+  antes do pouso tem de ser o da autoridade que o código usará:
 
   Ran 1 shell command
 
-● Precedente achado, e ele decide: ponto/views.py:1219 — a view recalcular_fechamento (:1193) roda recalcular_fechamento_mes(mes, ano,
-  empresa_id) síncrona sobre a empresa inteira e grava. A casa já aceita esse custo nessa escala nesse ato; o passo 5 é a mesma conta sem
-  gravar, e dispensa a prensa do Recalcular antes do TXT. Decisão: síncrono por precedente, não por gosto — uma linha no RELATO, sem job.
-  Agora a causa das 2 linhas:
+● Agora os patches na cópia. Primeiro o selo que CARACTERIZA o defeito — ele não se apaga, a asserção inverte:
 
   Ran 1 shell command
 
-● Layout: 10 + mat(10) + comp(6) + rub(4) + 11 + val(9) + cod(10) → o prefixo [0:22] identifica pessoa+competência+rubrica. Sonda 2 pareia
-  por esse prefixo e nomeia o CAMPO divergente, sem imprimir mat nem valor:
+● Esse trecho cita o motivo do registro ("aprovar_colaborador (so turno)"), que deixa de ser verdade com a cura — o texto migra junto.
+  Aplicando o patch 1 na cópia:
 
-  Running 1 shell command…
+  Ran 2 shell commands
 
-✻ Concocting… (2h 52m 36s · ↓ 300.6k tokens)
+● Decisão de desenho que o juiz dita: a trava barra o carimbo, nunca a entrada no TXT — status responde "entra?" e travas_aprovacao
+  responde "pode aprovar?"; deixar a trava decidir a entrada seria o segundo derivador de "quem entra" que a lista de PROIBIDOS da O252
+  veda. Lendo a forma do CONFORME antes de escrever:
+
+  Ran 2 shell commands
+
+● Background command "Mede o DIFF de frota da porta do TXT sobre o LIDO" completed (exit code 0)
+
+● Reading 1 file…
+  ⎿  $ cat /home/ronald/saas-hasner/logs/o48p5/frota_porta_txt.log
+
+✢ Concocting… (2h 58m 2s · ↓ 321.5k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    3% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -202,6 +202,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Reading test_o_que_a_porta_devolve_SEMPRE_passa_pelo_recortar                                30m 5s · ↓ 87.0k tokens
+  ◯ general-purpose  Running test_contract_esmeril ruff checks                                                  35m 31s · ↓ 124.3k tokens
   ⧉  index
 ```
