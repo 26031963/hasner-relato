@@ -1,4 +1,4 @@
-# AVAIS NA MESA — 6
+# AVAIS NA MESA — 7
 
 > Gerado por `bin/gerar_avais.py` a partir de `app/docs/PENDENTES_RONALD.json`.
 > **So itens ABERTOS.** Item respondido SOME daqui na proxima geracao -- a historia dele fica
@@ -12,10 +12,11 @@
 | 4 | `O207-INICIO-DECLARADO-SMOKE` | **smoke** | 2026-10-10T00:25 | pouso do merge de 4831eb93; suite CHEIA sobre a arvore MERGEADA: `Ran 10253 tests in 1412.830s` / `OK (skipped=42)`, um run por vez (trava o207-merge). A falha que a raia carregava nao era dela -- test_contract_lapide_na | `smoke Ronald: abri o assistente de fase de um colab de TESTE, o Inicio da apuracao me mostrou as tres opcoes com a previa de cada uma, declarei a data e ela foi a gravada -- pode fechar o O207` |
 | 5 | `O223-PORTA-DA-APLICACAO-SMOKE` | **smoke** | 2026-10-10T08:55 | 2 commits: codigo em ae775a7b (com o deploy --sem-migrate) e o link do hub no commit SEGUINTE do marco (sem sha: um commit nao pode citar o proprio, e este foi emendado uma vez), de proposito DEPOIS do reload -- template | `smoke Ronald: abri Configuracoes -> Aplicacao de convencao, cadastrei uma linha com motivo, a lista me mostrou ela ativa e o empate dito, desativei e ela ficou la como inativa com a trilha; e na edicao de uma empresa o Regime trabalhista salvou -- pode fechar a O223 pouso A` |
 | 6 | `O48-RETRATO-DA-FOLHA-SMOKE` | **smoke** | 2026-10-11T20:17 | suite CHEIA sobre a arvore MERGEADA main+raia-ui (git merge-tree --write-tree = 125d4dd7fb5fe5c8f2f145c087eb4ebc7d099330, mount conferido por docker inspect): Ran 10443 tests in 1414.303s, OK (skipped=42), rc 0 -- a bate | `smoke Ronald: abri a tela do retrato da folha de uma competencia, as quatro pilulas me deram Entram / Bloqueados / Rescisao / Total, clicar numa delas filtrou a tabela sem perder a competencia, a coluna Dias que seguram mostrou numero so para quem tem furo de espelho e a tela nao demorou a abrir -- ` |
+| 7 | `O48-RETRATO-DA-FOLHA-ETAPA2-SMOKE` | **smoke** | 2026-10-12T01:17 | somas MEDIDAS na frota real pela MESMA chamada da tela (bin/sonda_frota.sh, cpuset 4-7, leitura de saas_hasner): 6 universos, Admin+Colab+Chamado+Ninguem == bloqueados FECHA=True em 6/6 e Tipos+Sem causa == bloqueados FE | `smoke Ronald: abri a tela do retrato, liguei o badge Bloqueados e os tres quadros novos apareceram; clicar em Depende de Ninguem mais Tipo Escala mais uma praca me deu so a intersecao e os numeros bateram com a lista; Saldo 1 me deu quem falta um dia; filtrar por letra e por nome funcionou junto com` |
 
 ---
 
-Total no JSON: **232** · aberto **6** · respondido **65** · sem-motivo **161**.
+Total no JSON: **233** · aberto **7** · respondido **65** · sem-motivo **161**.
 
 > `sem-motivo` nao e "resolvido": e *"ninguem julgou este item"*. A ordem de 18:4x proibe
 > triar os 163 antigos, entao eles ficam ai, nomeados, em vez de serem chutados para um lado.
