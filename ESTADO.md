@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 12/10/2026 08:19:32.**
+**Medido em 12/10/2026 08:25:02.**
 
 | | |
 |---|---|
@@ -22,31 +22,31 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2398.6 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2398.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **167.0 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **167.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261011`) -- **SEM AGENTE**
-  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **29.0 h** (passou das 6 h da L-105)
+  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **29.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
   - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **283.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **187.3 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **187.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **305.0 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **305.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **7.0 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **7.1 h** (passou das 6 h da L-105)
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
 - **21 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
@@ -71,6 +71,7 @@ fb3f6ad9 [O247] o pareador passa a ver o MESMO universo que a apuracao, e o trip
  M app/docs/AVAIS.md
  M app/docs/HANDOFF-SESSAO.md
  M app/docs/PENDENTES_RONALD.json
+ M app/docs/RELATO.md
  M bin/sonda_frota.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -162,37 +163,37 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-● Antes do ato real, ensaio da inserção de docs numa cópia — o trecho perigoso é depois do cp, e ele não pode falhar lá:
+  Ran 1 shell command
 
-  Ran 5 shell commands
+● Corte (3) é a minha fatia nova, e o corte (4) delega a frase da TRAVA JUIZ-NOVO sob três condições que se medem. Primeiro a linha que o
+  limite dele pede:
 
-● Ensaio limpo nos quatro pontos, e só [O141] entre colchetes. Agora espero o veredito por arquivo:
+  Ran 2 shell commands
+
+● Agora a fatia nova. Leio as autoridades antes de desenhar — motor, o sítio do furo no export, e o que a célula da matriz exige:
 
   Ran 1 shell command
 
-● Background command "Run the full suite against the frozen copy" completed (exit code 0)
+● Três calcular_periodo com a mesma impressão — meço isso antes de qualquer desenho:
 
-● Suite VERDE: OK (skipped=42) / Ran 10491 tests in 1441.116s / rc 0 — e 10491 − 10472 = +19, exatamente os 9 + 8 + 2 casos novos: a
-  bateria viu os selos, não os pulou. Pouso num ato:
+  Measuring the three calcular_periodo sites and read the batida judge cell
+  ⎿  $ python3 - <<'PY'
+     import ast
+     s=open('ponto/motor_calculo_v2.py').read()
+     t=ast.parse(s)
+     def pai_classe(tree):
+     out={}
+     for n in ast.walk(tree):
+     for c in ast.iter_child_nodes(n):
+     out[c]=n
+     return out
+     pais=pai_classe(t)
+     for n in ast.walk(t):
+     if isinstance(n,ast.FunctionDef) and n.name=='calcular_periodo…
 
-  Ran 1 shell command
-
-● Pouso feito: 3676e7c9, deploy rc 0. Agora o smoke de prod — só leitura, nunca um POST em aprovar_fechamento:
-
-  Searched for 1 pattern, ran 6 shell commands
-
-● Smoke de prod verde — e o número cruza com a sombra (524 abertos na emp2 de 06/2026, a mesma forma medida). Registro o número e fecho o
-  marco:
-
-● Recording the prod smoke in the fila file and running the tickets ruler
-  ⎿  $ cd /home/ronald/saas-hasner && cat >> logs/fila/folha_export_botao_le_o_juiz_20261012.txt <<'EOF'
-     --- SMOKE DE PROD, SO LEITURA (12/10 08:2x, depois do deploy de 08:17, commit 3676e7c9) ---
-     `classificar_export` no ar, emp2 competencia 06/2026 (a mais cheia de abertos): itens 524 ·
-     sem a chave `tr…
-
-✢ Infusing… (1d 3h 27m · ↓ 2.6m tokens)
+✢ Infusing… (1d 3h 32m · ↓ 2.6m tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    2% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
