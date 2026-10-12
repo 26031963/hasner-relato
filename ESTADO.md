@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 12/10/2026 00:44:32.**
+**Medido em 12/10/2026 00:49:48.**
 
 | | |
 |---|---|
@@ -22,7 +22,7 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2391.0 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2391.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
@@ -31,19 +31,19 @@ RELATO, com a lista de nomes do banco como autoridade._
   - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **159.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261011`) -- **SEM AGENTE**
-  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **21.4 h** (passou das 6 h da L-105)
+  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **21.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **275.6 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **275.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **179.7 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **179.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **297.4 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **297.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 16 arquivo(s) sujo(s)
@@ -158,44 +158,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+● git show num commit de MERGE só mostra o diff combinado. Medindo contra o main de antes:
+
+  Ran 2 shell commands
+
+● Todos dentro de {% comment %} — o template vivo não carrega mais a library apagada. Agora o portão: o deploy está barrado até 06:00, mas
+  o reload das 03:30 publica a árvore viva. Verificando se ele passa pela mesma janela:
+
+  Ran 2 shell commands
+
+● Achado provado, e é do caminho: o --reload-agendado das 03:30 é isento da janela de auth (deploy.sh:147, AGENDADO != 1) com a razão
+  escrita "ele nao publica codigo novo" — e essa premissa é falsa agora. O HUP publica a árvore viva, que já tem app/api/views.py
+  commitado. Medindo o tamanho do risco:
+
+  Ran 1 shell command
+
+● Achado durável antes de decidir o caminho:
+
+  Ran 1 shell command
+
+● Existe autoridade declarada para "o que está no ar": logs/deploy.stamp com COMMIT= (AUTO-REVERT, corte 20/09, deploy.sh:322-328). Então a
+  isenção não precisa de regra nova — precisa de medição.
+
+  Ran 1 shell command
+
+● Tudo medido. Antes de tocar a guarda, consulto o revisor — é um portão de prod com relógio de 2h40 até as 03:30.
 
 ● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-  Ran 18 shell commands
-
-❯ aval Ronald: BO-PREVIA-E-CAMPO-SEM-TELA, dois achados do smoke do Fernando, fila 2 atras da O207. (1) O206: a previa da cobranca mostra
-  HTML bruto porque hxConfirm escreve por textContent (core/_dialogo.html:216) e _js_cobranca.html:26-34 monta HTML; e a previa e texto
-  fixo no JS enquanto o push le _texto_cobranca (chamados/views_cobrar.py:19-29) -- a previa passa a LER o titulo e corpo do servidor e a
-  ser exibida como texto, sem segundo derivador. (2) form_sindicato (core/views_config.py) nao le nem grava prorrogacao_noturna_pos5h
-  (default True em core/models.py:72): o campo entra na tela de sindicato; depois o template SINEEPRES fica com prorrogacao DESLIGADA pela
-  tela, com trilha. RED antes, nenhuma lei nova. Segue a fila; PAREI so em lei ou !
-
-  Ran 19 shell commands
-
-● Background command "Refazer a sombra com dump de agora e rodar o bloco da manhã" completed (exit code 0)
-
-● Executar o pouso da O44 em um ato
-  ⎿  $ cd /home/ronald/saas-hasner
-     S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
-     LP=logs/pouso_o44_$(date +%Y%m%d_%H%M%S).log
-     echo "$LP" > $S/o44_pousolog.txt
-     bash $S/pousar_o44.sh > "$LP" 2>&1
-     echo "rc_pouso=$?"
-     echo "=== $LP"
-     cat "$LP"
-
-✢ Compacting conversation… (19h 52m 18s · ↓ 1.8m tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱ 95%
+✶ Infusing… (19h 57m 35s · ↓ 1.8m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    0% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Polling verde_ui2.log for verdict                                                       2h 25m 23s · ↓ 152.7k tokens
+  ◯ general-purpose  Adding MORDE cases to test_retrato_folha_smoke_chromium.py                              2h 30m 39s · ↓ 167.0k tokens
   ⧉  index
 ```
