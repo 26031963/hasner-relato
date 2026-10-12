@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 12/10/2026 07:35:32.**
+**Medido em 12/10/2026 07:41:02.**
 
 | | |
 |---|---|
@@ -22,19 +22,19 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2397.8 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2397.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **166.3 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **166.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261011`) -- **SEM AGENTE**
-  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **28.3 h** (passou das 6 h da L-105)
+  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **28.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **282.4 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **282.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
   - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **186.6 h** (passou das 6 h da L-105)
@@ -46,7 +46,7 @@ RELATO, com a lista de nomes do banco como autoridade._
   - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **304.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **6.3 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **6.4 h** (passou das 6 h da L-105)
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
 - **21 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
@@ -162,20 +162,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bgs3o9dof.output (76 lines)
-  ⎿  Referenced file ponto/views.py
-  ⎿  Read ponto/services/fechamento_lista.py (115 lines)
-
-● Task "RED e construção do segundo intervalo" completed in background
-
-  Ran 2 shell commands
-
-● The red is exactly the one step (f) closes — the cured site's impressão vanished and the selo demands the row leave. Everything else (the
-  9 new parity cases, the export contract, post_sanitizado) is green.
-
-  Ran 2 shell commands
-
-● 30 of 30 collected (9+8+9+4), zero skips — so the 9 parity cases and the MORDE all passed. Now step (f).
 
   Ran 2 shell commands
 
@@ -186,14 +172,28 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● ANTES → DEPOIS: len(pend) 12 → 11 · zonas (8,0,0,4) → (7,0,0,4) · teto 13 → 11 · _teto (8,0,1,4) → (7,0,1,4). Now orienting on (e) — the
   new PROIBIDO patterns are where a text-sweeping selo bites its own prose:
 
-  Reading the two unexpected hits
-  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad &&
-     C=$S/fx/copia/app && echo "=== inteligencia/views.py:360-380 ==="; awk 'NR>=360 && NR<=380 {printf "%d\t%s\n", NR, $0}'
-     $C/inteligencia/views.py; echo; echo "=== ponto…
+  Ran 11 shell commands
 
-✢ Infusing… (1d 2h 43m · ↓ 2.5m tokens · still thinking)
+● Measured: making folha/export.py livre costs 0 blindness today (it hits none of the three old patterns), and with the two anchored
+  patterns the whole tree gives ruins = 0. Before writing (e), the design check:
+
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+
+  Ran 1 shell command
+
+● No cross-family iterator — only the shared fora_da_autoridade (test_contract_juiz_celula.py:50,57) and test_c5_canal.py:73, which reads
+  the chamado family only. Writing (e):
+
+● Running the fechamento bundle plus every contract-selo vizinho of core/juizes.py · 59s
+  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad &&
+     bin/suite.sh --dir "$S/fx/copia" --espera 1800 --only "ponto.tests.test_botao_aprovar_le_o_juiz
+     folha.tests.test_contrato_export_um_juiz ponto.tests.test_contract_juiz… (59s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✢ Infusing… (1d 2h 48m · ↓ 2.5m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                   10% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
