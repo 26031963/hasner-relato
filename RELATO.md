@@ -50,6 +50,29 @@ PERGUNTA DE LEI x2 -- **RESPONDIDAS em 10/10 18:0x** pelos dois cortes dele (`ju
 
 **(2) o `detectar_par_relampago` pode ocupar o papel `prazo`, e com qual fato encerrado?** O VEREDITO dele JA delega, medido por AST em 10/10: `varrer_pares_embutidos:232` -> `par_embutido_retratavel:208` -> `_par_embutido_retratavel_geometria:220` -> `_score_geometria:86` -> `escala/utils.py::montar_grade_prevista_periodo_por_turno`, a autoridade da GRADE. O proprio dele e a CANDIDATURA (`:245-249`, `zip` adjacente + tipos alternados + gap <= `DURACAO_MAX_MIN=10`), e ela nao e derivacao de prazo pelo criterio do proprio selo -- fato GRAVADO contra teto de FORMA, sem relogio. **Nao movi o nome, e por duas razoes somadas:** (a) `bin/tests/test_papel_prazo_nao_deriva.sh` DECLARA no cabecalho que nao ve essa segunda porta e NOMEIA este cron, logo o verde dele seria ausencia de sinal, a familia que esta casa diz ser a que mais custou; (b) o seu aval nesta celula (`core/contratos_estruturais.py:252-262`) proibe em letra *"reclassificar o papel de um sitio para ela virar verde -- o que falta e juiz, nao rotulo"*. E a prescricao do censo de 04/10 nao fecha: `turnos_do_colab` nao enumera este par, porque `ponto/turnos.py::parear_turnos` declara *"E abre turno; S fecha o aberto"* e o par embutido e o ECO DENTRO de um turno -- ele nao E um turno (`pares_relampago` usa turnos_do_colab para o caso complementar, o turno inteiro curto). Entao: **(i)** o fato encerrado e o PAR, e ai falta funcao da casa que responda *"este par e completo?"* -> juiz novo, TRAVA JUIZ-NOVO; ou **(ii)** o fato encerrado e o TURNO QUE CONTEM o par (`t.aberto`), e ai `turnos_do_colab` ja e o juiz, mas de outra pergunta que a do censo -- e isso MUDA O UNIVERSO de um cron que roda `--apply` e RETRATA batida. Nao propus nenhuma (L-117).
 
+CORTE QUE FALTA (TRAVA JUIZ-NOVO, nao devolve turno -- o MARCO A do `[O254]` POUSOU sem ele e a fila SEGUIU) --
+**a familia `batida` declara UMA autoridade, e ela NAO e a do dinheiro do DIA.** O `CORTES-DOS-CONTRATOS` (3) diz
+*"a pergunta 'quantas horas este dia vale' e do `motor_calculo_v2` e fica nele, declarado como juiz da familia"* --
+e **nao ha funcao cujo universo seja o DIA**. MEDIDO por AST, SO LEITURA, na ZONA INVIOLAVEL (12/10):
+- `calcular_dia` -- **ZERO** definicoes. Nao existe ponto de entrada do DIA.
+- `calcular_periodo` -- **6** (`MotorBase:2000` abstrata, com `raise` no fim; `Motor12x36:2024`; `MotorTurnoPartido:2153`;
+  `MotorComercial:2477`; `MotorPlantao:2773`; `Motor12x36ComEscala:2785`). Universo = o **PAR**.
+- `montar_periodos` -- **5** (`MotorBase:1997` com `raise`, mais 4). `calcular_mes` -- **3** (`MotorBase:1648`,
+  `MotorTurnoPartido:2174`, `MotorComercial:2558`). Universo = o **MES**.
+**Por que eu nao escrevo a frase:** a AUTONOMIA-DE-CODIGO item 3 me da `corte Ronald: juiz <nome> nasce` so para
+*"funcao existente, mesmo predicado, universo igual antes e depois"*, e aqui o predicado e **NOVO** (DIA) e as
+candidatas sao **DUAS** (par e mes) -- a propria lei manda isso ao topo do RELATO. O corte e de UMA linha, e tem tres
+formas, a escolha sendo sua: (a) `juiz calcular_periodo nasce` e a pergunta da familia passa a ser *"quantas horas este
+PAR vale"*, o dia deixando de ser a unidade; (b) `juiz calcular_mes nasce` e o dia se le pelo mes; (c) nasce um ponto de
+entrada do DIA no motor -- e isso e **tocar a zona inviolavel**, logo `!`, nao aval.
+- **o selo ja morde a volta**: `test_o_dinheiro_do_DIA_nao_tem_funcao_cujo_universo_seja_o_DIA` fica VERMELHO no dia que
+  um `calcular_dia` aparecer. Nada envelhece calado.
+- **as outras 3 perguntas da familia seguem SEM JUIZ por DECLARACAO, com motivo** (`SEM_JUIZ['batida']`, dict de 3:
+  geofence, cluster espurio, par relampago) -- e os cortes delas voce disse que *"chegam em aval separado ate 13/10"*.
+- **a regra 3 e VACUA nesta familia**: `PROIBIDOS` e `AUTORIDADE_DOS_PADROES` tem 6 familias cada e nenhuma e `'batida'`
+  (a mesma fonte mentirosa da **2** achados em `fechamento` e **0** em `batida`). Declarado, nao escondido.
+- **placar INTACTO**: `total()` = **20**, `verdes()` = **15**. A celula ganhou LEITOR; segue `verde=False`.
+
 CORTE QUE FALTA (TRAVA JUIZ-NOVO, nao devolve turno -- a fila SEGUE pelos 6 que a lei ja responde) --
 **o item 2 da CONTRATOS-ATE-A-VIRADA (`folha/export x um juiz`) esta PARTIDO EM DOIS, e a metade de DINHEIRO e a
 que precisa de voce.** CONTRATO DE ENTRADA, medido na FONTE (`core/juizes.py` importado no `saas_core`, so leitura,
@@ -141,6 +164,21 @@ a lista que a L-099 nomeia como autoridade do dono e cega em 2 dos 4. PROVA: `lo
   FILA (achado FORA deste marco -- ESMERIL-DO-MARCO manda virar LINHA, nao trabalho agora): `bin/raias_estado.py`
   chama "N commit a frente do `main`" o que `rev-list` conta numa historia SEM merge-base, e cobra L-105 de uma raia
   que nao tem como mergear. O rotulo certo e "historia disjunta", e o selo da L-105 nunca podera ficar verde com ela.
+
+## MARCO 12/10 10:1x — a celula `batida x um juiz por pergunta` ganha LEITOR, e o NOME do juiz do DIA vai ao TOPO (`[O254]`, item 3 da CONTRATOS-ATE-A-VIRADA, MARCO A)
+
+LEI-AKITA: origem=`core/contratos_estruturais.py` (celula com `teste=None`) + `core/juizes.py:989` (`PENDENTES_BATIDA` sem leitor), testemunha=`core.juizes.JUIZES/SEM_JUIZ/PENDENTES['batida']` e `ponto/motor_calculo_v2.py` lido por AST, RED=`ponto/tests/test_contract_juiz_batida.py` NAO EXISTIA e a chave nao tinha leitor, quem-mais-le=censo fechado (1 definicao, 0 leitores reais; o outro achado de grep e PROSA dentro de string em `core/placar_estrutural.py:542`), juizes novos=0
+
+- **o que mudou**: `ponto/tests/test_contract_juiz_batida.py` NASCE (9 testes) e a celula `('batida','um juiz por pergunta')` passa de `teste=None` para `teste='ponto.tests.test_contract_juiz_batida.JuizBatidaContratoTest'` com `excecoes=(('core.juizes','PENDENTES_BATIDA'),)`.
+- **RED evidenciado, nao narrado**: a chave `PENDENTES_BATIDA` tinha **zero** leitor (LEI-AKITA 12: chave sem leitor = VERMELHO) e a celula era **1 de 3** com `teste=None` em 20. Agora sao **2** (`('escala','um juiz por pergunta')` e `('chamado','um escritor por entidade')`).
+- **a nota da celula ERRAVA por 2, e a correcao foi na FONTE**: afirmava CINCO perguntas sem resposta (geofence, espuria, par relampago, **aparelho**, **janela offline**) e `SEM_JUIZ['batida']` declara **3** -- "aparelho" e "janela offline" nao aparecem em `core/juizes.py` (grep 12/10). O numero saiu da prosa e virou selo (`assertEqual(len(sem), 3)`), para nao derivar de novo. FILA: onde essas duas perguntas sao respondidas hoje, se forem, e censo que este marco nao fez.
+- **a regra 3 do molde e VACUA nesta familia, e ficou DECLARADA com morde COMPARATIVA**: `PROIBIDOS` e `AUTORIDADE_DOS_PADROES` tem 6 familias cada e **nenhuma e `'batida'`**; a MESMA fonte mentirosa da **2** achados em `fechamento` e **0** em `batida`. Selo: `test_a_familia_NAO_TEM_PADRAO_PROIBIDO_e_a_ausencia_e_DECLARADA`. Um teste que so afirmasse "0 fora de autoridade" passaria por ausencia de sinal e nao prenderia nada.
+- **o que este marco NAO fecha, e esta no TOPO com os numeros**: o NOME do juiz do dinheiro do DIA. MEDIDO por AST no motor: `calcular_dia` = **ZERO** definicoes, `calcular_periodo` = **6** (universo PAR), `calcular_mes` = **3** (universo MES), `montar_periodos` = **5**. Predicado NOVO + DUAS candidatas => a AUTONOMIA-DE-CODIGO item 3 nao me da a frase, e a propria lei manda a pergunta ao topo. O selo `test_o_dinheiro_do_DIA_nao_tem_funcao_cujo_universo_seja_o_DIA` fica VERMELHO no dia que um `calcular_dia` aparecer -- ou seja, no dia que a declaracao ficar possivel.
+- **ZONA INVIOLAVEL respeitada**: `ponto/motor_calculo_v2.py` foi **lido por AST**, nunca tocado -- 0 bytes de diff.
+- **PROVA**: copia `wt-batida` (worktree detached em `ff3078c6`); ruff com `--config /app/ruff.toml` = "All checks passed!"; alvo `Ran 33 tests` / `OK`, rc 0 (`logs/fila/batida_alvo_20261012.log`); selo novo sozinho `Ran 9 tests` / `OK` (`logs/fila/batida_so_novo_20261012.log`); placar INTACTO -- `core/contratos_estruturais.py::total()` = **20**, `verdes()` = **15**.
+- **L-NNN citadas (LEI ANTES DO PATCH)**: L-110, L-111 (e por isso o pendente [2] NAO se baixou calado), L-116, L-117 (nenhuma lei nova proposta), TRAVA JUIZ-NOVO, AUTONOMIA-DE-CODIGO item 3, SELO ANTI-VACUIDADE, LEI-AKITA 12.
+- **INCOMPLETO**: (a) MARCO B -- o pendente [2] (*"dia em aberto bloqueia a folha"*, 373 dias / 121 colabs / 24 sem outro furo) e DINHEIRO e vai pela DINHEIRO-EM-COMPETENCIA-ABERTA, com DIFF de frota publicado ANTES; (b) a celula so fica VERDE quando os DOIS pendentes cairem, e o [1] espera o corte do nome.
+- commit: (neste push)
 
 ## 12/10 -- OS TRES QUADROS DO RETRATO DA FOLHA, GRAVADOS (UI-FECHAMENTO-NOVA etapa 2, complemento do passo 6 da O48)
 
