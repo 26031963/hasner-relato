@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 12/10/2026 18:26:12.**
+**Medido em 12/10/2026 18:31:22.**
 
 | | |
 |---|---|
@@ -22,34 +22,34 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2408.7 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2408.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cb** (`(detached)`) -- **SEM AGENTE**
-  - 3 commit(s) a frente do `main`, 2 arquivo(s) sujo(s), commit a frente ha **0.2 h**
+  - 3 commit(s) a frente do `main`, 6 arquivo(s) sujo(s), commit a frente ha **0.3 h**
   - sem declaracao em `logs/raias/wt-cb.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
   - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **177.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261011`) -- **SEM AGENTE**
-  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **39.1 h** (passou das 6 h da L-105)
+  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **39.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **293.3 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **293.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **197.4 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **197.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **315.1 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **315.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
-  - 2 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **0.2 h**
+  - 2 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **0.3 h**
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
 - **24 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-batida, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-folha, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-p5, wt-regua, wt-sj, wt-vinculo
 
@@ -167,36 +167,36 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Confirmo a hipótese antes de mexer na fixture — o _com_vinculo é quem explica B:
-
-  Ran 1 shell command
-
-● Confirmado: B tem vínculo cobrindo a janela e zero célula → sem_celula → furo_espelho → 'fora'. O vínculo que criou a trava criou a
-  retenção. Vou ver o mínimo que CelulaDia exige e como os testes da casa a criam:
-
-  Ran 2 shell commands
-
-● Vou ver a fixture e os eixos declarados do arquivo antes de editar:
-
-  Ran 2 shell commands
-
-● Dois reparos: B precisa de célula julgada para ENTRAR, e o caso 4 não pode assertar o carimbo (isso é do caso 3, e o duplicado o tornaria
-  vermelho no HEAD — ele é MORDE, tem de ser verde nos dois lados):
-
-  Ran 4 shell commands
 
 ● O caso 3 agora dá o RED verdadeiro ('aprovado' != 'aberto': B foi carimbado onde o botão barra). Resta o caso 4 passando um dict onde a
   função quer lista:
 
-● Corrige o caso 4 e roda de novo
-  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && cd $S/wt-p5/app && python3 -
-     folha/tests/test_txt_le_a_celula_e_o_juiz.py <<'PY'
-     import sys
-     p = sys.argv[1]
-     s = open(p, encoding='utf-8').read()
-     old = """ from folha.export import classificar_export…
+  Ran 2 shell commands
 
-✶ Concocting… (3h 56m 22s · ↓ 424.0k tokens)
+● RED agora idêntico ao declarado: 4 falhas = casos 0,1,2,3; os dois MORDE verdes na baseline. Vou medir o arquivo do ponto na mesma cópia
+  e gravar os vereditos:
+
+  Ran 2 shell commands
+
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+
+● Executo as quatro portas. Primeiro a 1 e a 3, que são leitura:
+
+  Ran 2 shell commands
+
+● Sem interseção nas três direções. Copio os patches, ruff e grep de band-aid:
+
+  Ran 2 shell commands
+
+● Teto da LEI-AKITA cobre só app/relatorios/ — meus 6 arquivos não entram. Agora o GREEN dos dois arquivos e as portas do deploy:
+
+  GREEN dos tres arquivos na copia
+  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && cd /home/ronald/saas-hasner &&
+     ESTEIRA_QUEM=p5-green bash bin/suite.sh --dir $S/wt-cb --espera 180 --only "folha.tests.test_txt_le_a_celula_e_o_juiz
+     ponto.tests.test_porta_de_um_colab_le_o_juiz folh…
+
+✢ Concocting… (4h 1m 32s · ↓ 429.5k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
