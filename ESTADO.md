@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 12/10/2026 20:34:32.**
+**Medido em 12/10/2026 20:39:39.**
 
 | | |
 |---|---|
@@ -29,7 +29,7 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2410.8 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2410.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
@@ -38,29 +38,29 @@ RELATO, com a lista de nomes do banco como autoridade._
   - 1 commit(s) a frente do `main`, 12 arquivo(s) sujo(s), commit a frente ha **2.4 h**
   - sem declaracao em `logs/raias/wt-cb.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **179.3 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **179.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261011`) -- **SEM AGENTE**
-  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **41.3 h** (passou das 6 h da L-105)
+  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **41.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **295.4 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **295.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **199.5 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **199.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **317.2 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **317.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
-- **24 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-batida, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-folha, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-p5, wt-regua, wt-sj, wt-vinculo
+- **25 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-batida, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-folha, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o259, wt-o37, wt-orfa, wt-p5, wt-regua, wt-sj, wt-vinculo
 
-**sem agente: 7** (raia com commit a frente e sem declaracao, esperado 0) -- **a frente do main ha mais de 6 h: 6** -- uniao medida: 34
+**sem agente: 7** (raia com commit a frente e sem declaracao, esperado 0) -- **a frente do main ha mais de 6 h: 6** -- uniao medida: 35
 
 > Raia sem agente por mais de um marco pede linha de motivo no RELATO -- lei, `!` ou pista (item 4 do aval).
 
@@ -176,36 +176,36 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Novo aval recebido mid-turn: BUG-FIO-MORTO-CHAMADO, P7.1, com a medição dele. Registro no mesmo turno (PROMPT-NAO-SE-REPETE) — e há uma
-  dependência de código que ele não podia saber.
+● Registro fechado e os três selos verdes. Antes de construir, consulto o advisor — vou tocar core/juizes.py e folha/export.py no mesmo
+  pouso.
 
-  Ran 2 shell commands
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-● TICKETS para O261, e já levanto a FASE 1 (medição read-only) em paralelo.
+  Searched for 1 pattern, ran 2 shell commands
+
+● Checagem 1 do advisor é a que decide o build. A impressão do pendente[0] é periodo.minutos_trabalhados = max(0, duracao) dentro do motor
+  — preciso saber qual função a hospeda.
 
   Ran 1 shell command
 
-❯ aval Ronald: complemento BUG-FIO-MORTO-CHAMADO -- ponto/supra_juiz.py:163-168 conta chamados_vivos como cobranca feita sem perguntar se
-  ha pergunta viva; o A6 (FURO_SEM_COBRANCA) deu VERDE sobre os 60 dias. Entra na FASE 2 como leitor que nao migrou: chamado vivo SEM
-  pergunta viva e com fato encerrado nao e cobranca. RED com golden da tabela; censo de quem mais le chamados_vivos. Segue a fila; PAREI
-  so em lei ou !
+● Medição decisiva: a impressão do pendente[0] vive só dentro de calcular_periodo (3 subclasses: Motor12x36:2056, MotorTurnoPartido:2166,
+  MotorComercial:2515) e em nenhuma outra função. A baixa é literalmente "a impressão virou o juiz" — leitura (A) do advisor, por medição.
 
-● Complemento registrado e o censo que ele pede é um grep — faço junto.
+  Ran 1 shell command
 
-  Searched for 1 pattern, ran 2 shell commands
-  ⎿  Read docs/AVAIS.md (25 lines)
-  ⎿  Referenced file docs/LEIS.md
-  ⎿  Referenced file docs/PROMPTS.md
-  ⎿  Referenced file docs/BACKLOG.md
-  ⎿  Referenced file folha/export.py
+● wt-bos e wt-ui têm 0 commits à frente do main (28/0 e 1/0) — não há comboio possível, a cópia roda sozinha. Medido, não suposto.
 
-● Task "RED e construção do segundo intervalo" completed in background
+  Ran 3 shell commands
 
-● Censo fechado. Registro o complemento nos três sítios.
+● Tenho todas as âncoras. Construo na cópia — O260 primeiro (RED → cura), depois O259.
 
-  Running 1 shell command…
+  Rodar o RED do O260 na copia
+  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cd /home/ronald/saas-hasner &&
+     mkdir -p logs/o259 && timeout 560 bash bin/suite.sh --dir $S/wt-o259 --only "folha.tests.test_haiku_fora_da_folha" >
+     logs/o259/red_o260.log 2>&1; echo "rc=$?"; grep -E '…
 
-✢ Concocting… (6h 4m 42s · ↓ 632.3k tokens)
+✻ Concocting… (6h 9m 48s · ↓ 648.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
