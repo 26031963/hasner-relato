@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 12/10/2026 10:00:32.**
+**Medido em 12/10/2026 10:05:46.**
 
 | | |
 |---|---|
@@ -22,28 +22,28 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2400.2 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2400.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **168.7 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **168.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261011`) -- **SEM AGENTE**
-  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **30.7 h** (passou das 6 h da L-105)
+  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **30.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **284.8 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **284.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **189.0 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **189.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **306.7 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **306.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -163,35 +163,34 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-● Task "RED e construção do segundo intervalo" completed in background
+  Dispatching the UI obra to its own agent in wt-ui (RAIA-NAO-FICA-PARADA — it shares no file with fila 1), then returning to the batida
+  contract.
 
-❯ aval Ronald: UI-RETRATO-CORRECOES (fila 2, raia wt-ui, so templates/static/teste de tela). (1) a barra de badges da casa vai para a
-  PRIMEIRA linha, o filtro universal abaixo dela (L6). (2) a caixa SITUACAO (Sem dono / Esperando / Entra / Rescisao) SAI: Sem dono +
-  Esperando = Bloqueados e Entra/Rescisao repetem a barra FOLHA -- e a pergunta 'de quem depende' tem um juiz so, o quadro DONO da etapa 2
-  (L2); rotulos de UMA palavra (Admin, Colab, Chamado, Ninguem). (3) os LEDs da linha passam a ser a cor do DONO, com o botao
-  correspondente na barra como filtro fixo e legenda pelo proprio rotulo; LED sem botao e sem nome = proibido. (4) a tela abre na
-  competencia CORRENTE por ponto/janelas.py::janela_atual da empresa escolhida, nunca na encerrada. RED antes: selo que morde caixa
-  Situacao presente, LED sem botao, abertura fora da corrente; contador == universo nos botoes de Dono (L1). Smoke headless nas 3
-  larguras, deploy --sem-migrate, smoke 7 atualizado no AVAIS. Nenhuma lei nova, juizes novos = 0. Segue a fila; PAREI so em lei ou !
+● Agent(O253 UI-RETRATO-CORRECOES na raia wt-ui)
+  ⎿  Backgrounded agent (↓ to manage · ctrl+o to expand)
 
-  Searched for 4 patterns, read 4 files, ran 11 shell commands
+● Agent is building O253 in wt-ui. Back to fila 1 — item 3, batida x um juiz por pergunta. Re-measuring the live authority before writing
+  assertions against it:
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+  Searched for 1 pattern, ran 8 shell commands
 
-  Census every reader of the LED and eixo tables
-  ⎿  $ echo "=== quem inclui core/_led.html"; grep -rn '_led.html' --include=*.html --include=*.py . ; echo; echo "=== a soma dos donos ==
-     bloqueados, onde esta hoje"; grep -rn "bloqueados\|_soma\|assertEqual(len(_bq" folha/tests/test_retrato_folha_quadros.py | sed -n
-     '1,25p' | cut -c1-150
-  ⎿  Read docs/AVAIS.md (24 lines)
-  ⎿  Read templates/folha/_retrato_barra.html (41 lines)
-  ⎿  Read templates/folha/retrato_folha.html (51 lines)
-  ⎿  Read templates/folha/_retrato_lista.html (47 lines)
-  ⎿  Read templates/core/_led.html (11 lines)
+● The batida cell already carries a nota measured 08/10; what's missing is teste= and excecoes=. Measuring the exact numbers my assertions
+  will carry — including the vacuity of regra 3:
 
-● Task "RED e construção do segundo intervalo" completed in background
+  Ran 1 shell command
 
-· Bloviating… (1h 15m 14s · ↓ 115.9k tokens)
+● Regra 3 is provably vacuous for batida (same source: 2 hits in fechamento, 0 in batida — PROIBIDOS has 6 families, none of them batida).
+  And 'aparelho'/'janela offline', which the cell's nota claims are unanswered perguntas, appear nowhere in the declaration — the nota
+  overstates by 2.
+
+  Building in a copy of HEAD (LEI-AKITA 10):
+
+  Creating a detached worktree copy at HEAD
+  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && rm
+     -rf "$S/wt-batida" && git worktree add --detach "$S/wt-batida" HEAD 2>&1 | tail -3 && mkdir -p "$S/wt-batida/app/logs"
+     "$S/wt-batida/app/media" && echo "--- copia e…
+
+· Bloviating… (1h 20m 28s · ↓ 135.5k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -200,6 +199,7 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
   ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
+  ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
+  ◯ general-purpose  Reading test_retrato_folha_smoke_chromium.py sonda                                          2m 40s · ↓ 162.3k tokens
   ⧉  index
 ```
