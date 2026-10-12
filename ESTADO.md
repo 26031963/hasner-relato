@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 12/10/2026 17:01:02.**
+**Medido em 12/10/2026 17:06:32.**
 
 | | |
 |---|---|
@@ -28,22 +28,22 @@ RELATO, com a lista de nomes do banco como autoridade._
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **175.7 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **175.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261011`) -- **SEM AGENTE**
-  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **37.7 h** (passou das 6 h da L-105)
+  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **37.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **291.8 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **291.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **196.0 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **196.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **313.7 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **313.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -69,6 +69,8 @@ f2659343 [O253] a caixa SITUACAO sai, o LED da linha passa a ser a cor do DONO e
 ```
  M app/config/crons_duracao.json
  M app/docs/BACKLOG.md
+ M app/docs/CORTES.json
+ M app/docs/CORTES.md
  M app/docs/HANDOFF-SESSAO.md
  M app/docs/PROMPTS.md
  M app/docs/RELATO.md
@@ -162,44 +164,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Searched for 1 pattern
 
-● Os três alvos caem na mesma função (folha/views.py gerar_dominio_txt): o passo 5, o carimbo :164 do CONFORME e o juiz. E há um risco de
-  custo que preciso medir — o TXT é operação de FROTA e o saas_ui tem timeout=30, enquanto o censo do O48 diz que leitura online custa
-  ~0,12 s/colab. Consultando antes de fixar a forma:
+● Registro agora, com âncora única por edição. Primeiro o CORTES.json (fonte do CORTES.md) e o PROMPTS.md:
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+  Ran 1 shell command
 
-● Seguindo a ordem. Primeiro a linha de números devida no topo do RELATO (está atrasada e é barata):
+● Agora o PROMPTS.md e as linhas de obra no BACKLOG.md:
 
-  Le o topo do RELATO
-  ⎿  $ sed -n '1,20p' docs/RELATO.md
-  ⎿  Read docs/AVAIS.md (24 lines)
-  ⎿  Referenced file docs/RELATO.md
-  ⎿  Referenced file docs/BACKLOG.md
-  ⎿  Referenced file core/juizes.py
-  ⎿  Referenced file folha/export.py
+  Ran 2 shell commands
 
-● Task "RED e construção do segundo intervalo" completed in background
+● O257 ficou com 321 chars — acima do teto 300 da L-109. Corrigindo pela porta declarada (bin/backlog_estado.py), nunca à mão:
 
-● Task "Raia wt-ui: completa a E1 do retrato" still running in background
+  Ran 1 shell command
 
-✢ Concocting… (2h 31m 10s · ↓ 252.5k tokens)
+● Registro fechado nos três. Volto à fila 1. Primeiro a linha de números devida no TOPO do RELATO, e o censo que o advisor pediu:
+
+  Ran 1 shell command
+
+● O número que corrige a premissa dele apareceu: PENDENTES['fechamento'] tem 11 linhas (5 _K1 + 4 _K4 + 2 _K8) e a célula só fica verde com
+  a chave vazia. Preciso dos textos exatos antes de afirmar:
+
+  Ran 1 shell command
+
+● Um achado que liga os dois avais: o pendente _K4 nº 9 (ranking_he.py::LAVRADOS) diz literalmente "chama 'lavrado' o status; gerar_celulas
+  chama lavra o TXT/holerite" — é exatamente a pergunta do corte competencia_lavrada que ele acabou de dar. Conferindo os números durables
+  antes de afirmar:
+
+● Running 1 shell command…
+
+· Concocting… (2h 36m 42s · ↓ 274.4k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-
-❯ corte Ronald: juiz competencia_lavrada nasce -- a pergunta 'a competencia ja foi entregue (lavrada)?' passa a ter autoridade unica
-  extraida de gerar_celulas.py:147-194 (TXT ou holerite publicado, BUG 85), e gerar_celulas passa a chama-la. Segue a fila; PAREI so em
-  lei ou !
-  ctrl+x ctrl+s to send now
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ Press up to edit queued messages
+❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Planning cure for `_saldo_cru` in retrato_folha.py                                          8m 40s · ↓ 161.1k tokens
+  ◯ general-purpose  Checking _led.html includers and TICKETS coverage                                           14m 10s · ↓ 78.0k tokens
   ⧉  index
 ```
