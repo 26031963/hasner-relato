@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 12/10/2026 11:40:47.**
+**Medido em 12/10/2026 11:45:49.**
 
 | | |
 |---|---|
@@ -22,31 +22,31 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2401.9 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2402.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **170.4 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **170.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261011`) -- **SEM AGENTE**
-  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **32.4 h** (passou das 6 h da L-105)
+  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **32.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **286.5 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **286.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **190.6 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **190.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **308.3 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **308.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
-  - 0 commit(s) a frente do `main`, 11 arquivo(s) sujo(s)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **0.0 h**
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
 - **23 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-batida, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-folha, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
@@ -69,7 +69,16 @@ fb3f6ad9 [O247] o pareador passa a ver o MESMO universo que a apuracao, e o trip
 ```
  M app/config/crons_duracao.json
  M app/docs/HANDOFF-SESSAO.md
+ M bin/handoff_sessao.sh
+ M bin/hook_stop_fila1.py
  M bin/sonda_frota.sh
+ M bin/tests/test_handoff_sessao.sh
+ M bin/tests/test_hook_nao_cobra_congelado.sh
+ M bin/tests/test_hook_nao_para_por_processo.sh
+ M bin/tests/test_hook_parei_so_lei.sh
+ M bin/tests/test_hook_stop_saida_valida.sh
+ M bin/tests/test_hook_teto_nao_conta_espera.sh
+?? bin/tests/test_hook_le_o_marcador.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -159,44 +168,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  ⎿  Read templates/core/_led.html (11 lines)
+  ⎿  Referenced file core/juizes.py
+
+● Task "RED e construção do segundo intervalo" completed in background
+
+● Task "O253 UI-RETRATO-CORRECOES na raia wt-ui" still running in background
+
+● The cured hook names O48 against the real BACKLOG; HEAD's names PLACAR-ESTRUTURAL. That is the defect, measured on the real authority.
+
+  Now the last unmeasured selo:
+
   Ran 1 shell command
 
-● Dois achados que mudam o escopo: bin/backlog_estado.py também é chamador, e test_handoff_sessao.sh:107 já proíbe o handoff de varrer
-  OBRAS por conta própria — mas só grepa OBRAS:INICIO, então o regex do marcador no :58 passou pela guarda. Monto a cópia do HEAD:
-
-  Ran 4 shell commands
-
-● Achado decisivo: test_hook_nao_para_por_processo.sh:62-80 já guarda "fila vazia libera". Então a cura separa duas perguntas — qual o item
-  (marcador, autoridade) e existe algum item aberto (tabela) —, e nunca nomeia item da tabela como fila. Escrevo o RED:
+● Background command "Roda o RED do furo so de intervalo na copia" completed (exit code 0)
 
   Ran 2 shell commands
 
-● RED evidenciado: o hook do HEAD nomeia ITEM-PRIMEIRO (a tabela) tendo marcador em ITEM-SEGUNDO. Agora a cura na origem:
-
-  Ran 3 shell commands
-
-● Quatro fixtures precisam declarar o marcador — exatamente o que o revisor previu. Patch:
+● 8 of 8. Now the census of exactly what the copy changed, before applying:
 
   Ran 2 shell commands
 
-● Agora o selo do O158 deixa de ter o próprio _julga e passa a importar o juiz do hook — duas cópias da pergunta são duas respostas
-  possíveis:
+● Applied. Now the whole bin/tests/ pasta against the live tree:
 
-● Compara hook curado x HEAD contra o BACKLOG real
-  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad &&
-     echo "=== o hook CURADO contra o BACKLOG REAL ==="; HOOK_STOP_RAIZ=/home/ronald/saas-hasner python3 "$S/hook/bin/hook_stop_fila1.py"
-     </dev/null; echo; echo "=== o hook…
+● Roda a pasta inteira de selos de host · 1m 50s
+  ⎿  $ cd /home/ronald/saas-hasner && mkdir -p logs/fila && OUT=logs/fila/pasta_selos_hook_20261012.log && : > "$OUT" && for t in
+     bin/tests/test_*.sh; do s=$(timeout 180 bash "$t" 2>&1); rc=$?; printf '%-62s rc=%-4s :: %s\n' "$(basename "$t")" "$rc" "$(printf '%s'
+     "$s" | grep -E 'OK|FAILED|VERMELHO|PARO… (1m 50s)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-✽ Compacting conversation… (12m 36s · ↓ 28.2k tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱ 91%
-                                                                                                                    0% until auto-compact
+✻ Concocting… (17m 38s · ↓ 31.8k tokens)
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Checking trava_teste holder status                                                      1h 37m 42s · ↓ 133.3k tokens
+  ◯ general-purpose  Amending commit message in msg_commit.txt                                               1h 42m 44s · ↓ 145.6k tokens
   ⧉  index
 ```
