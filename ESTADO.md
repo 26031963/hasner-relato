@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 12/10/2026 09:44:02.**
+**Medido em 12/10/2026 09:49:32.**
 
 | | |
 |---|---|
@@ -22,28 +22,28 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2400.0 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2400.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **168.4 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **168.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261011`) -- **SEM AGENTE**
-  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **30.4 h** (passou das 6 h da L-105)
+  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **30.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **284.6 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **284.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **188.7 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **188.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **306.4 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **306.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -162,24 +162,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-  Searched for 1 pattern, ran 7 shell commands
-
-● Now the OBRAS registration (PROMPT-NAO-SE-REPETE owes an item, not just a line):
-
-  Committed ff3078c6, ran 17 shell commands
-
-❯ aval Ronald: CORRIGE o aval do botao de aprovar das 08:4x -- (a) os 95 de rescisao_modulo_proprio NAO passam a ser aprovaveis pelo
-  botao: seguem fora do aprovar, so nao contam como bloqueio; libera so os 77 que o juiz diz (entra); (b) o crivo de turno aberto (:375)
-  fica como esta, lendo a CELULA, e so migra junto do passo 5 do O48, como voce mesmo mediu na parte (2). O resto do aval vale: barra os
-  352, DIFF de frota publicado antes, competencia exportada intacta. Segue a fila; PAREI so em lei ou ! !
-
-  Searched for 2 patterns, read 1 file, ran 15 shell commands
-  ⎿  Read docs/AVAIS.md (24 lines)
-  ⎿  Referenced file core/juizes.py
-  ⎿  Referenced file ponto/views.py
   ⎿  Referenced file folha/export.py
 
 ● Task "RED e construção do segundo intervalo" completed in background
@@ -187,13 +169,31 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-  Finding the selo that validates the matriz cells
-  ⎿  $ sed -n '62,90p' core/contratos_estruturais.py && echo "=== verdes()/declaradas()" && sed -n '883,935p' core/contratos_estruturais.py
+  Searched for 4 patterns, read 1 file, ran 8 shell commands
+  ⎿  Read docs/AVAIS.md (24 lines)
+  ⎿  Referenced file docs/RELATO.md
+  ⎿  Read ponto/tests/test_contract_juiz_fechamento.py (143 lines)
+  ⎿  Referenced file core/juizes.py
+  ⎿  Referenced file ponto/views.py
 
-✢ Compacting conversation… (58m 44s · ↓ 88.3k tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱ 95%
+● Task "RED e construção do segundo intervalo" completed in background
+
+❯ aval Ronald: UI-RETRATO-CORRECOES (fila 2, raia wt-ui, so templates/static/teste de tela). (1) a barra de badges da casa vai para a
+  PRIMEIRA linha, o filtro universal abaixo dela (L6). (2) a caixa SITUACAO (Sem dono / Esperando / Entra / Rescisao) SAI: Sem dono +
+  Esperando = Bloqueados e Entra/Rescisao repetem a barra FOLHA -- e a pergunta 'de quem depende' tem um juiz so, o quadro DONO da etapa 2
+  (L2); rotulos de UMA palavra (Admin, Colab, Chamado, Ninguem). (3) os LEDs da linha passam a ser a cor do DONO, com o botao
+  correspondente na barra como filtro fixo e legenda pelo proprio rotulo; LED sem botao e sem nome = proibido. (4) a tela abre na
+  competencia CORRENTE por ponto/janelas.py::janela_atual da empresa escolhida, nunca na encerrada. RED antes: selo que morde caixa
+  Situacao presente, LED sem botao, abertura fora da corrente; contador == universo nos botoes de Dono (L1). Smoke headless nas 3
+  larguras, deploy --sem-migrate, smoke 7 atualizado no AVAIS. Nenhuma lei nova, juizes novos = 0. Segue a fila; PAREI so em lei ou !
+
+● Reading the PROMPTS table shape
+  ⎿  $ head -8 docs/PROMPTS.md | cut -c1-200; echo "=== ultima linha"; tail -1 docs/PROMPTS.md | cut -c1-200; echo "campos=$(tail -1
+     docs/PROMPTS.md | tr -cd '|' | wc -c)"
+
+✢ Bloviating… (1h 4m 14s · ↓ 106.6k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    0% until auto-compact
+                                                                                                                    6% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
