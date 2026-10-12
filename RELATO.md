@@ -128,6 +128,10 @@ a lista que a L-099 nomeia como autoridade do dono e cega em 2 dos 4. PROVA: `lo
   chama "N commit a frente do `main`" o que `rev-list` conta numa historia SEM merge-base, e cobra L-105 de uma raia
   que nao tem como mergear. O rotulo certo e "historia disjunta", e o selo da L-105 nunca podera ficar verde com ela.
 
+## ALARMES DA ESTEIRA
+
+**11/10 22:40 vigia da esteira** -- esteira em espera de janela: 8 fatias prontas, reabre 00:00.
+
 ## MARCO 11/10 20:1x — UI-FECHAMENTO-NOVA etapa 1 (complemento do passo 6 da O48): a tela do fechamento LE um retrato GRAVADO, e o badge e o len da MESMA lista que a tabela mostra
 
 LEI-AKITA: origem=folha/fora_da_folha.py::fora_da_folha (le folha/export.py::classificar_export), testemunha=o retrato GRAVADO (folha/models.py::RetratoFolha.linhas), RED=folha/tests/test_retrato_folha_contador.py + test_retrato_folha_smoke_chromium.py, quem-mais-le=censo por AST em folha/tests/test_retrato_folha_um_derivador.py, juizes novos=0
