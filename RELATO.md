@@ -1,5 +1,3 @@
-PAREI: contexto-da-sessao-esgotado | espera proximo turno -- MARCO B (fila 1 item 3) no RED em voo, logs/fila/furo_intervalo_red2_20261012.log; folha/export.py intocado. Hook devolve PLACAR-ESTRUTURAL pelo defeito de leitor de BACKLOG.md:361-368 (pouso de instrumento, L-105).
-
 # RELATO — esteira saas-hasner
 
 **PERGUNTA DE LEI (folha/export x um juiz) -- as TRES partes RESPONDIDAS por ele em 12/10: a (1) e a (3) as **08:45**, a (2) as **09:27**, no MESMO aval que CORRIGIU a (1); a fila NUNCA parou por nenhuma delas** (PAREI-DE-LEI-NAO-DEVOLVE-TURNO; **nenhuma lei nova proposta**, L-117). Tudo medido na frota real, so leitura.
