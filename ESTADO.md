@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 12/10/2026 06:30:46.**
+**Medido em 12/10/2026 06:35:46.**
 
 | | |
 |---|---|
@@ -22,31 +22,31 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2396.7 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2396.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **165.2 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **165.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261011`) -- **SEM AGENTE**
-  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **27.2 h** (passou das 6 h da L-105)
+  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **27.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **281.3 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **281.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **185.5 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **185.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **303.2 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **303.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **5.2 h**
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **5.3 h**
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
 - **21 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
@@ -165,38 +165,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  auth window, which is the cure working. Recording the one refinement the MORDE fixture just forced:
+    assertLessEqual(len(pend), 13) e o vetor (8,0,1,4) — medido hoje: 12 linhas, (8,0,0,4). As 3 que saem são todas DINHEIRO → o passo (f)
+    desce para 9 e (5,0,0,4), apertando duas folgas que já estavam lá.
+  - O _trava(cid) tinha um fallback embutido que eu não havia nomeado — o ramo "id sem item" devolvendo () aprovaria quem tem turno aberto.
+    A costura que o mata já existe e não é minha: classificar_export(..., fechamentos=None) (folha/export.py:583-588), já injetada por
+    dois chamadores de produção. Universo único, sem join, sem ramo de ausência.
+  - Mas o qs do botão não é de uma empresa: filter(mes, ano, status='aberto') e o filtro de empresa só entra if empresa_id
+    (ponto/views.py:1223-1225) — o defeito que o pendente :376 já nomeia. Então o sítio agrupa por empresa e chama o juiz uma vez por
+    empresa (uma só, no caso normal da tela).
+  - O MORDE não se soma ao que existe: o caso atual afirma 3 pelos padrões ANTIGOS e continuaria 3 com os novos; escrever os seis idiomas
+    numa fonte só seria afirmar == 7 e deixar um padrão cobrir o buraco do outro. Caso irmão, com o 4/3 medido.
 
-  Ran 4 shell commands
+  E uma coisa que a fatia não passa a guardar, dita em voz alta: fora_da_autoridade exclui por arquivo, então ponto/views.py segue cego ao
+  PROIBIDO enquanto :376 e :378 morarem nele — o PROIBIDO novo guarda a volta dos idiomas em arquivo novo, não a permanência neles. É essa
+  a razão da conversão da família para AST estar na fila como instrumento.
+
+  Aguardo o carimbo por arquivo (waiter bieg6ggdw); teto 07:00, e aí olho logs/encadeado/ antes de esperar mais.
+
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: PLACAR-ESTRUTURAL -- O ESTRUTURAL SE SEPARA DO DADO (corte dele 02/10 22:5x, que SUBSTITUI o item 3 da
+  ordem das 21:4x -- o resto d
+
+  Ran 2 shell commands
+
+● The sketch is stale in exactly the places the measurements moved. Rewriting sections 3 and 4:
+
+  Ran 2 shell commands
 
 ● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-● Three checkable items. First the baixa mechanism the advisor flagged:
-
-  Ran 2 shell commands
-
-● The advisor's concern #1 resolves by measurement — ajustar_contadores was removed in O11; the counter derives. But there IS a teto.
-  Reading it:
-
-  Ran 2 shell commands
-
-● Measured: 12 rows, zones (8,0,0,4), teto 13 and (8,0,1,4) — both already loose by 1. Recording the teto descent as part of step (f):
-
-  Ran 1 shell command
-
-● Advisor concern #2 — the missing-id seam. Reading both universes:
-
-  Ran 2 shell commands
-
-● The fechamentos= seam already exists and two production callers use it — that removes the missing-id branch entirely. Verifying the
-  botão's base matches:
-
-● Running 1 shell command…
-
-* Infusing… (1d 1h 38m · ↓ 2.4m tokens)
+* Infusing… (1d 1h 43m · ↓ 2.4m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    7% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
