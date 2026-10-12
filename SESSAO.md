@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 12/10/2026 13:22:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (726.5 MB). Acoes na janela: **1221**.
+**Medido em 12/10/2026 13:27:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (726.5 MB). Acoes na janela: **1214**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1224,10 +1224,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 01:29:07 | Bash | Test the tree-pin pathspec | `cd /home/ronald/saas-hasner && git rev-parse HEAD && echo "--- pin test:" && git status --porcelain -- app ':!app/docs' ':!app/config/crons_duracao.json'; echo "rc=$? (saida vazia acima = arvore app limpa)"; echo "--- controle (sem exclusao):"; git status --porcelain -- app` |
 | 01:28:56 | Bash | Find the minutes of the long-running crons | `cd /home/ronald/saas-hasner && crontab -l \| grep -vE '^\s*#' \| grep -E 'esmeril_espelho\|auditar_invariantes_chamados\|disparar_perguntas\|health_crawl' \| awk '{print $1" "$2" "$0}' \| cut -c1-120` |
 | 01:28:34 | Bash | Run the prod smoke now to calibrate the gate assertions | `cd /home/ronald/saas-hasner && docker cp fatias_agendadas/o44-deploy/smoke_o44_prod.py saas_core:/tmp/smoke_o44_prod.py >/dev/null && docker exec saas_core python manage.py tenant_command shell --schema=juliani --command "exec(open('/tmp/smoke_o44_prod.py').read())" 2>&1 \| tail -20` |
-| 01:25:00 | Bash | Add anchored end markers the scheduler greps for | `cd /home/ronald/saas-hasner/fatias_agendadas/o44-deploy && python3 - <<'PY' import re p='esteira.sh' s=open(p).read() # O `rodar` do deploy_agendado grepa marcador ANCORADO (`FIM$\|-- parado$\|falhou$`) no esteira.out para # escrever a linha do RELATO. Sem marcador a linha sai "sem marcador" -- e foi o que a abono-no-ar fez. subs = [ ('echo "PAROU_FAIXA $_hhmm" > "$T/fatia.done"; exit 1', 'echo "P ...` |
-| 01:24:47 | Bash | Verify deploy flag spellings | `cd /home/ronald/saas-hasner && grep -n 'sem-migrate\\|sem-sombra\\|reload-agendado\\|reload-copia' bin/deploy.sh \| sed -n '1,12p'` |
-| 01:24:32 | Bash | Build the scheduled deploy gate fatia | `mkdir -p /home/ronald/saas-hasner/fatias_agendadas/o44-deploy && cd /home/ronald/saas-hasner/fatias_agendadas/o44-deploy && cat > esteira.sh <<'EOF' #!/bin/bash # O44-NO-AR -- gate temporal do deploy DEVIDO da O44 (pouso 70a..., commit do marco 4c9cad93). # # POR QUE AGENDADO: o pouso da O44 as 00:39 de 12/10 commitou (70d159b9) e o `bin/deploy.sh` RECUSOU -- # `app/api/views.py` e sitio de auth d ...` |
-| 01:23:15 | Bash | Read the prepared prod smoke script | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cat "$S/smoke_o44_prod.py"` |
-| 01:23:01 | Bash | Read the rest of the precedent gate esteira | `cd /home/ronald/saas-hasner && sed -n '25,85p' fatias_agendadas/abono-no-ar/esteira.sh; echo "=== msg_commit.txt:"; cat fatias_agendadas/abono-no-ar/msg_commit.txt` |
-| 01:22:56 | Bash | Survey existing scheduled fatia dirs and their esteira.sh shape | `cd /home/ronald/saas-hasner && ls fatias_agendadas/ 2>/dev/null; echo "=== molde: tail do esteira.sh de uma fatia agendada antiga:"; for f in fatias_agendadas/*/esteira.sh; do echo "--- $f ($(wc -l <$f) linhas)"; done; echo; sed -n '1,25p' fatias_agendadas/abono-no-ar/esteira.sh 2>/dev/null` |
-| 01:22:46 | Bash | Check for pending migrations between the stamp and the disk | `cd /home/ronald/saas-hasner && echo "HEAD=$(git rev-parse --short HEAD)"; echo "=== migrations entre o carimbo e o DISCO:"; git diff --name-only bf783df7 -- '*/migrations/*' \| head; echo "(vazio = nenhuma)"; echo "=== makemigrations --check (dry):"; docker exec saas_core python manage.py makemigrations --check --dry-run 2>&1 \| tail -3` |
