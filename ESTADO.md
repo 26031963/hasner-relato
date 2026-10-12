@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 11/10/2026 23:25:03.**
+**Medido em 11/10/2026 23:30:32.**
 
 | | |
 |---|---|
@@ -28,22 +28,22 @@ RELATO, com a lista de nomes do banco como autoridade._
   - 1 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **1.0 h**
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **158.1 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **158.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261011`) -- **SEM AGENTE**
-  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **20.1 h** (passou das 6 h da L-105)
+  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **20.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **274.2 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **274.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **178.4 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **178.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **296.1 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **296.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 2 arquivo(s) sujo(s)
@@ -73,7 +73,12 @@ d89d0a6a Merge branch 'main' into raia-o48p3
  M app/core/management/commands/crons.py
  M app/core/management/commands/gerar_diagrama.py
  M app/docs/ARQUITETURA.mmd
+ M app/docs/AVAIS.md
+ M app/docs/BACKLOG.md
+ M app/docs/CRONS.md
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/PENDENTES_RONALD.json
+ M app/docs/PROMPTS.md
  M app/docs/RELATO.md
  M app/folha/management/commands/lavrar_retrato_folha.py
  M bin/encadeado.sh
@@ -166,37 +171,37 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  ⎿  Read ../../.claude/projects/-home-ronald-saas-hasner/memory/mtime-nao-distingue-reescrita-identica.md (27 lines)
+  ⎿  Read docs/AVAIS.md (26 lines)
+  ⎿  Read folha/management/commands/lavrar_retrato_folha.py (79 lines)
+  ⎿  Referenced file config/crons.py
+  ⎿  Read docs/FECHAMENTO-ONLINE.md (76 lines)
 
-● Achado no caminho da própria fatia, e ele muda a leitura do passo 5: logs/fim/processar_cartorio.*.20261011 não existe — o último é
-  06/10. Medindo antes de concluir:
+● Task "RED e construção do segundo intervalo" completed in background
+
+● Task "Raia wt-ui: UI etapa 2" still running in background
+
+● Background command "Rodar as 5 provas vivas" completed (exit code 0)
+
+  Read 1 file
+
+● Todas as cinco provas mediram. O passo 5 não é rc=0 — e a causa é minha própria prova 1. Lendo o relato para preencher só com texto
+  medido:
+
+  Ran 5 shell commands
+
+● A guarda DEPLOY é minha e está morder a prosa, não um placeholder — a seção nunca teve esse placeholder (os três eram
+  SUITE_CHEIA/INSTALL/SELO_HOST, e a linha 10 diz **DEPLOY** como consequência medida). Corrigindo a guarda, não o texto:
 
   Ran 3 shell commands
 
-● O carimbo só sai com RC 0 ou 2. Então o cartório saiu com RC ≠ 0/2 hoje — e isso tem registro próprio:
+● Árvore escrita e censo fechado. Antes do commit:
 
-  Ran 1 shell command
+● Advising using Fable 5.1
 
-● ran com exit=0 hoje (3 do cartório, 1 do apurar) — então o carimbo foi escrito e alguém o apagou:
-
-  Ran 2 shell commands
-
-● Causa achada, e ela é grave: bin/tests/test_furo_encadeado_ao_cartorio.sh:18 apaga os carimbos REAIS de produção —
-
-  Ran 1 shell command
-
-● Fato fechado. Gravando o achado antes de qualquer conclusão — ele é a causa do passo 5 e tem dono:
-
-  Gravar o achado com as quatro medidas
-  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
-     cat > $S/achado_selo_apaga_prod.md <<'EOF'
-     # ACHADO no caminho da propria fatia (LEI-AKITA 6), 11/10 23:1x -- MEDIDO, nao inferido
-     ## O FATO, em quatro medidas fechadas
-     1. `bin/cron_run.sh:22-26` carim…
-
-✽ Compacting conversation… (18h 32m 49s · ↓ 1.7m tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱ 93%
+✢ Infusing… (18h 38m 18s · ↓ 1.7m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    0% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -204,6 +209,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Rewriting _alterna and _pilula in retrato_folha.py                                       1h 5m 54s · ↓ 162.1k tokens
+  ◯ general-purpose  Reading views_retrato.py and retrato_folha.html                                         1h 11m 24s · ↓ 166.9k tokens
   ⧉  index
 ```
