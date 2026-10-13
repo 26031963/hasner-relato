@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:239 AFIRMA ato sem PROVA ao lado -- ## MARCO 13/10 14:3x — pouso da **`wt-ui`**: o link ORIGINAL de fechamento do menu do admin passa a abrir o **RETRATO** (`[O48]` passo 6, av
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:258 AFIRMA ato sem PROVA ao lado -- ## MARCO 13/10 14:3x — pouso da **`wt-ui`**: o link ORIGINAL de fechamento do menu do admin passa a abrir o **RETRATO** (`[O48]` passo 6, av
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 13/10/2026 15:34:02.**
+**Medido em 13/10/2026 15:39:32.**
 
 | | |
 |---|---|
-| `HEAD` local | `ee4a25ca [O48] pouso da raia wt-ui: o link ORIGINAL de fechamento do menu do admin abre o RETRATO, e o botao de PDF da barra volta para o partial UNICO da casa (merge --no-ff, L-105/L-107)` |
+| `HEAD` local | `5d157d1f [O263] o desconto do intervalo batido SOBE para o sitio unico do noturno: `MotorComercial` e `MotorTurnoPartido` pagavam adicional de hora de intervalo, e a HE noturna tinha o MESMO furo` |
 | `origin/main` | `d20a0e45 [O219] pouso: os docs do marco A0-b entram junto, e o merge que eu pedi sem commit virou FAST-FORWARD -- o codigo estava na arvore viva antes deste commit` |
-| commits a subir (`ahead`) | **92** |
+| commits a subir (`ahead`) | **93** |
 
 ## Fabrica
 
@@ -29,28 +29,28 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2429.8 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2429.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **198.3 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **198.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **11.5 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **11.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **314.4 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **314.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **218.5 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **218.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **336.2 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **336.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -64,23 +64,17 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+5d157d1f [O263] o desconto do intervalo batido SOBE para o sitio unico do noturno: `MotorComercial` e `MotorTurnoPartido` pagavam adicional de hora de intervalo, e a HE noturna tinha o MESMO furo
 ee4a25ca [O48] pouso da raia wt-ui: o link ORIGINAL de fechamento do menu do admin abre o RETRATO, e o botao de PDF da barra volta para o partial UNICO da casa (merge --no-ff, L-105/L-107)
 fb9195bf [O48] o botao de PDF da barra do retrato volta para o partial UNICO da casa: o <a> cru que o pouso anterior deixou no template sai, e o contrato de arvore inteira fica VERDE com allowlist vazia
 d4779277 [O48] passo 6: o link ORIGINAL de fechamento do menu do admin abre o RETRATO, e a tela antiga ganha o atalho "Tela anterior" DENTRO da barra
 7856486d [O261] pouso de INSTRUMENTO: o gerador do MAPA-JUIZES nunca rodava (`collections` sem import) e a sonda de frota passa a aceitar a arvore de uma RAIA sem um segundo `docker run`
-220f5317 [O261] a chave `_C15` DECLARA a autoridade que ja era unica: `fio_vivo` entra no mapa dos juizes (familia `chamado` 13 -> 14), e os tres derivados do mapa se regeneram pelo gerador
 ```
 
 ## `git status --short`
 
 ```
  M app/config/crons_duracao.json
- M app/docs/BACKLOG.md
- M app/docs/HANDOFF-SESSAO.md
- M app/docs/LEIS.md
- M app/docs/PROMPTS.md
- M app/docs/RELATO.md
- M app/docs/TICKETS.md
  M bin/sonda_leitura.sh
 ?? app/GREEN
 ?? bin/aplicar_o263_comp10.py
@@ -175,38 +169,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  Ran 2 shell commands
+
+● COL3 passou do teto de 300 da L-109. Aparando:
+
+  Ran 5 shell commands
+
+● O263 pousa. Censo cmp arquivo a arquivo da cópia certificada contra a árvore viva:
+
   Ran 1 shell command
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-● O conselho morde em dois pontos. Resolvendo o buraco do carimbar e os três sítios "ler o VIVO":
+● Censo = os 6 arquivos da fatia + os 4 docs (declarados) + o crons_duracao.json (cron-dirty, nunca commita). Conferindo que os 5 vivos estão em HEAD antes de sobrescrever:
 
   Ran 2 shell commands
 
-● Fechado o buraco, e com ordem explícita dele no sítio: carimbar (ponto/portas/celula.py:563) só faz cel.save — e o comentário de celula.py:~290 diz "SIGNAL EM CelulaDia NAO (ordem dele,
-  explicita)". A cadeia para ali de propósito. Lendo os três sítios que faltam:
+● Censo limpo. Commitando a O263:
 
-  Ran 2 shell commands
+  Committed 5d157d1f
 
-● lavrar_dias_pagos é a porta que já lavra sem tocar fechamento — e ela desvia a competência exportada. Lendo o desvio:
+● Commit 5d157d1f. Deploy agora, sem nada no meio (L-107):
 
-  Ran 2 shell commands
+  Ran 1 shell command
 
-● Background command "Re-run the full suite against the cured copy" completed (exit code 0)
+● O263 NO AR (15:38, três rotas provadas). Agora a cadeia de apply da comp 10 — reversão primeiro:
 
-● Suite da O263 VERDE (rc_PROCESSO=0), e os arquivos da cura não cruzam os dois da O263. A O263 pousa agora (L-105). Pegando o veredito literal:
+● Reading the snapshot script header for invocation
+  ⎿  $ cd /home/ronald/saas-hasner; echo "=== como estes scripts se chamam (cabecalho)"; head -20 bin/snapshot_o263_comp10.py; echo; echo "=== crons"; ls -1 logs/crons_em_curso/
+     2>/dev/null | head -3; echo "(vazio=livre)"
 
-  Ran 3 shell commands
-
-● Agora o RELATO: o veredito de ORIGEM que ele pediu, e o ! que a medição destapou.
-
-● Finding the marco section structure
-  ⎿  $ cd /home/ronald/saas-hasner/app; grep -n "^## " docs/RELATO.md | head -8
-
-· Concocting… (1d 1h 4m · ↓ 2.8m tokens · thinking)
+✢ Compacting conversation… (1d 1h 9m · ↓ 2.8m tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 56%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                                                                    11% until auto-compact
+                                                                                                                                                                     0% until auto-compact
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
