@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 13/10/2026 20:41:02.**
+**Medido em 13/10/2026 20:46:21.**
 
 | | |
 |---|---|
@@ -29,28 +29,28 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2434.9 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2435.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **203.4 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **203.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **16.6 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **16.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **319.5 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **319.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **223.6 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **223.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **341.3 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **341.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -171,35 +171,35 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-● Task "RED e construção do segundo intervalo" completed in background
+● O envelope explica as duas falhas: turnos.py:1151 só absorve a pausa que cabe na jornada que começou (720 min de 10:00 ⇒ 22:00), e todo intervalo que vaza da
+  janela termina fora dele. Mas turnos.py:1042-1044 diz o que faltava: quando a escala tem marcos de intervalo cadastrados, o par é intrajornada pelos MARCOS e o
+  teto de duração não é consultado — é essa a forma do col889. Com ela a fixture reproduz o caso dele com os números do aval:
 
-● Task "Insert the new obra and move the live-order marker" still running in background
+  Ran 4 shell commands
 
-● O272 — RED escrito nas duas cópias ($SP/o272_red, $SP/o272_cura), 104 linhas, app/ponto/tests/test_o272_intra_fora_da_janela.py:
-
-  - caso do aval, literal: marco 10:00–22:00, janela ligada com teto 0, batidas E15:09 S16:09 E23:00 S23:08 → janela [15:09, 22:00] = 411 min; intervalo cru
-    16:09→23:00 = 411 ⇒ minutos_trabalhados 0 hoje; recortado 16:09→22:00 = 351 ⇒ 60, o número que a própria autoridade manda.
-  - a geometria vem antes do número: o teste exige 1 periodo e 1 intervalo_do_motor com mensagem própria — se a fixture não reproduzir o par do col889, ela diz isso
-    em letra em vez de dar RED falso (memória parear_turnos em fatia de 1 dia).
-  - MORDE: intervalo inteiro dentro da janela (10:00–14:00/15:00–22:00) não perde um minuto — 60 descontados, 660 trabalhados.
-  - última asserção é a da LEI-AKITA 2: o par carimbado em intervalos_do_motor termina na janela. É ela que proíbe a cura de morar dentro de _intra_real — o censo
-    mediu 3 leitores desse campo (alimentacao.py:111 QUEBRA o segmento por esses pares, regras.py:704, motor:945), e recortar só na soma deixaria a conta dizendo 351
-    e o carimbo dizendo 411: segundo derivador nascendo junto com a cura. A cura recorta a LISTA uma vez por ramo, depois da janela e antes de _carimbar_segmento.
-  - o censo também corrige a premissa do aval: dos três calcular_periodo que chamam _janela_do_par, dois descontam intra (:2156, :2608); o :2271 não chama
-    _intra_real — o sítio da soma já era único. Está escrito na docstring do teste.
-
-  O263-FT segue primeiro na fila de pouso (L-105/L-107, um pouso por vez): suite viva em $SP/o263_cura, 1991 linhas às 20:36, trava suite:117320. Faltam os dois
-  portões já declarados — veredito da suite e bin/simular_folha.sh par o263ft $SP/head_agora/app $SP/o263_cura/app com a tabela no RELATO antes do bin/deploy.sh.
-  Nada de O272 roda até a trava liberar: um run por vez no juliani_db_test.
-
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: O272 -- BUG-INTRA-FORA-DA-JANELA (aval dele 13/10 19:3x -- bug PROVADO, P7.1; DINHEIRO). MotorBase._intra_real soma os
+● A guarda do cadastro (escala/models.py:798) proíbe a geometria que eu supus: intervalo declarado não pode terminar depois da saída. Então o par do col889 não vem
+  do cadastro — a própria docstring do pareador diz quem tem prioridade: a flag is_intervalo gravada na batida, e o papel Xi da ata. Meço se o campo existe antes de
+  reescrever de novo:
 
   Ran 1 shell command
 
-● Background command "Wait on the test lock then read the suite verdict" completed (exit code 0)
+● is_intervalo existe e é lido com prioridade. Antes de reescrever pela quarta vez, leio se o envelope de :1151 cede à flag:
 
-✢ Concocting… (1d 6h 11m · ↓ 3.3m tokens · thinking)
+  Ran 1 shell command
+
+● O envelope só morde quando not _iv (turnos.py:1171,1177): a flag is_intervalo passa por fora do teto e do marco. É esse o caminho — cadastro válido, par interno
+  por declaração na batida:
+
+  Rebuilding fixture with is_intervalo flag and running RED
+  ⎿  $ SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
+     python3 - "$SP/test_o272_intra_fora_da_janela.py" <<'PY'
+     import sys
+     p = sys.argv[1]
+     s = open(p, encoding='utf-8').read()
+     s = s.replace("hora_inicio_intervalo='16:00', hora_fim_intervalo='23:00',",
+     "ho…
+
+* Concocting… (1d 6h 16m · ↓ 3.3m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                              ✔ Update installed · Restart to update
 ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
