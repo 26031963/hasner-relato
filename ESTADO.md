@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 13/10/2026 16:15:57.**
+**Medido em 13/10/2026 16:21:02.**
 
 | | |
 |---|---|
@@ -29,28 +29,28 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2430.5 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2430.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **199.0 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **199.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **12.2 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **12.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **315.1 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **315.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **219.2 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **219.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **336.9 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **337.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -85,6 +85,7 @@ d4779277 [O48] passo 6: o link ORIGINAL de fechamento do menu do admin abre o RE
 ?? bin/restore_o263_comp10.py
 ?? bin/snapshot_badge_linha_09_10.py
 ?? bin/snapshot_o263_comp10.py
+?? bin/txt_antes_badge_linha.py
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -174,21 +175,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Condição 2 quitada, e com dois defeitos meus achados pelo próprio restore antes de escrever: 10.493 das 31.864 linhas têm competência diferente do mês da data (a v1 as reverteria na
-  competência errada) e 1.663 são ajuste sem data. Reversão provada: reversao_badge_linha_09_10_v3.json, sha256 e224d5f8…, restore DRY montando as 31.864 linhas sem nenhum colab ausente.
-
-  Ran 1 shell command
-
-● O hash do TXT errou — e "não pude medir" não é prova. Lendo as funções de verdade:
-
-  Ran 1 shell command
-
-● montar_linhas_export devolve (linhas, entra_ids) — tupla; meu chamador estava errado. Mas há uma prova mais forte que hash de amostra, e ela é estrutural:
-
-  Ran 1 shell command
-
-● Background command "Run the sombra DIFF ensaio" completed (exit code 0)
-
   Ran 1 shell command
 
 ● O ensaio mediu algo que refuta a premissa da parte A para a 09 — e em números. Lendo o resto:
@@ -197,21 +183,36 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Decisivo, e em números. Lendo o sítio das 111 falhas antes de concluir:
 
-  Splitting failures motor vs oraculo
-  ⎿  $ cd /home/ronald/saas-hasner; echo "motor:"; grep -c "^dia_pago: lavratura falhou\|[^ ]dia_pago: lavratura falhou" logs/badge_linha_diff_antes.out; echo "oraculo:"; grep -c "dia_pago
-     oraculo: lavratura falhou" logs/badge_linha_diff_antes.out; echo "=== o sitio 790-815 ==="; sed -n '795,815p' app/p…
+  Ran 3 shell commands
+  ⎿  Read docs/AVAIS.md (23 lines)
+  ⎿  Referenced file core/juizes.py
+  ⎿  Read ../logs/o261b/watch_5min_o256.log (6 lines)
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/buulw0j03.output (6 lines)
+  ⎿  Referenced file ponto/services/cartorio.py
 
-✽ Compacting conversation… (1d 1h 46m · ↓ 2.8m tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱ 77%
+● Task "RED e construção do segundo intervalo" completed in background
+
+● Task "Raia paralela BUG-SOBRA-TIPO-TROCADO" still running in background
+
+● Task "Insert the new obra and move the live-order marker" still running in background
+
+● The 111 refusals are settled: all 111 are on the oraculo path (fechamento.py:809, versao='oraculo'), zero on the motor path (:756). My relavra is versao='motor' — it completed for every
+  colab. Now the TXT "before" in prod, read-only.
+
+  Checking what identities the ensaio kept
+  ⎿  $ cd /home/ronald/saas-hasner; echo "=== o que o ensaio guardou de identidade ==="; grep -n 'col[0-9]' logs/badge_linha_diff_antes.out | grep -v 'lavratura falhou' | head -30; echo
+     "=== json do ensaio? ==="; ls -la logs/ | grep -i 'badge\|relavra' ; echo "=== o script guardou json? ==="; grep -n 'j…
+
+✢ Concocting… (1d 1h 51m · ↓ 2.9m tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                                                                     0% until auto-compact
+                                                                                                                                                    ✔ Update installed · Restart to update
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                                                                  1h 3m 8s · ↓ 428.9k tokens
-  ◯ fork  Writing RED test_sobra_tipo_trocado.py                                                                                                                  13m 3s · ↓ 148.0k tokens
+  ◯ fork  Grepping placar_estrutural.py for ESTRUTURA counters                                                                                                    18m 9s · ↓ 167.7k tokens
   ⧉  index
 ```
