@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 12/10/2026 23:30:02.**
+**Medido em 12/10/2026 23:35:32.**
 
 | | |
 |---|---|
@@ -29,31 +29,31 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2413.7 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2413.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cb** (`(detached)`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 12 arquivo(s) sujo(s), commit a frente ha **5.3 h**
+  - 1 commit(s) a frente do `main`, 12 arquivo(s) sujo(s), commit a frente ha **5.4 h**
   - sem declaracao em `logs/raias/wt-cb.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **182.2 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **182.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261011`) -- **SEM AGENTE**
-  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **44.2 h** (passou das 6 h da L-105)
+  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **44.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **298.3 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **298.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **202.5 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **202.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **320.2 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **320.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -174,38 +174,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  templates/chamados/partials/_raiox_lente.html + abrirDrawer 920), sem juiz novo, so leitura do retrato GRAVADO (RetratoFolha.linhas).
+  (1) botao Raio-X na barra abre a LENTE do filtro ativo (dono/praca/empresa): grupos por Tipo com contagem, linha clicavel abre o drawer
+  do colab (E3). (2) PLACAR ontem x hoje lido de DOIS retratos gravados da mesma competencia: Bloqueados por dono antes -> agora, quantos
+  entraram; a tela nao recalcula. (3) com dono Colab ativo, o bloco Aceite das cobrancas reusa chamados.services.verbos::placar_aceite.
+  (4) o drawer do colab ganha o BOTAO DE ACAO que leva a porta que ja resolve o motivo (cobrar, validar pergunta, vinculo da escala), so
+  link para porta existente, nenhum escritor novo. (5) acao em lote "cobrar todos os filtrados" ESPERA o conserto do HTML bruto do O206.
+  Contador == universo nos grupos (L1). Nenhuma lei nova. Segue a fila; PAREI so em lei ou !
 
-● Section needs a real rewrite (bullet 1 inverts, table verb wrong). Doing that, then registering the new aval — both this turn.
-
-  Ran 1 shell command
-
-● 22 lines, one section, honest. Now the new aval — registering it and locating the code in the same pass.
-
-  Ran 1 shell command
-
-● Measuring the O206 bug first — the aval's core question is cheap and it shapes the registration text.
-
-  Searched for 1 pattern, read 1 file, ran 1 shell command
-
-● hxPreviewCobranca is an HTML string handed to hxConfirm, and the title/body text is hard-coded in JS. Measuring both ends.
+● Measurements close: both pushes read the one _texto_cobranca() (:55, :134), push_fcm_colaborador persists no row (it forwards to
+  push_fcm), wt-ui is clean, and validacao.py:177 is indeed the gate line. Registering the new aval — item (5) of it waits on exactly what
+  I'm building.
 
   Ran 1 shell command
 
-● Both ends measured. Reading the authority of the sent text before I design.
+● All four moldes the aval cites exist (views.py:1458, _raiox_lente.html, verbos.py:250::placar_aceite, abrirDrawer), and push_fcm persists
+  nothing. Registering.
 
-  Ran 1 shell command
+  Ran 2 shell commands
 
-● Measured, both ends. Registering the aval now (owed this turn), then advisor before I build.
+● 8 cells is this table's norm — registration clean. Now building the O206 cure.
 
-  Read 1 file, ran 5 shell commands
+  Listed 1 directory
 
-● Registered and durable (CORTES 84, PROMPTS, BACKLOG). One measurement before advisor — who else calls the previa.
+● chamados/services/cobranca.py already exists — the right home. And comunicados/views.py:112 is a third reader. Reading both.
 
-● Censo de chamadores da previa
+  Ler o service de cobranca e o console
+  ⎿  $ echo "=== services/cobranca.py (cabecalho + defs) ===" && head -18 chamados/services/cobranca.py && grep -n "^def \|^from \|^import
+     " chamados/services/cobranca.py && echo && echo "=== comunicados/views.py 105-125 ===" && sed -n '105,125p' comunicados/views.py
 
-✢ Concocting… (9h 0m 12s · ↓ 998.0k tokens · still thinking)
+✢ Concocting… (9h 5m 42s · ↓ 1.0m tokens · thinking some more)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    2% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
