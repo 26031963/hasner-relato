@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 13/10/2026 14:29:32.**
+**Medido em 13/10/2026 14:35:02.**
 
 | | |
 |---|---|
-| `HEAD` local | `7856486d [O261] pouso de INSTRUMENTO: o gerador do MAPA-JUIZES nunca rodava (`collections` sem import) e a sonda de frota passa a aceitar a arvore de uma RAIA sem um segundo `docker run`` |
+| `HEAD` local | `ee4a25ca [O48] pouso da raia wt-ui: o link ORIGINAL de fechamento do menu do admin abre o RETRATO, e o botao de PDF da barra volta para o partial UNICO da casa (merge --no-ff, L-105/L-107)` |
 | `origin/main` | `d20a0e45 [O219] pouso: os docs do marco A0-b entram junto, e o merge que eu pedi sem commit virou FAST-FORWARD -- o codigo estava na arvore viva antes deste commit` |
-| commits a subir (`ahead`) | **89** |
+| commits a subir (`ahead`) | **92** |
 
 ## Fabrica
 
@@ -29,19 +29,19 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2428.7 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2428.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **197.2 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **197.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **10.4 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **10.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **313.3 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **313.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
   - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **217.5 h** (passou das 6 h da L-105)
@@ -53,7 +53,7 @@ RELATO, com a lista de nomes do banco como autoridade._
   - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **335.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
-  - 2 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **0.7 h**
+  - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
 - **21 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
@@ -64,11 +64,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+ee4a25ca [O48] pouso da raia wt-ui: o link ORIGINAL de fechamento do menu do admin abre o RETRATO, e o botao de PDF da barra volta para o partial UNICO da casa (merge --no-ff, L-105/L-107)
+fb9195bf [O48] o botao de PDF da barra do retrato volta para o partial UNICO da casa: o <a> cru que o pouso anterior deixou no template sai, e o contrato de arvore inteira fica VERDE com allowlist vazia
+d4779277 [O48] passo 6: o link ORIGINAL de fechamento do menu do admin abre o RETRATO, e a tela antiga ganha o atalho "Tela anterior" DENTRO da barra
 7856486d [O261] pouso de INSTRUMENTO: o gerador do MAPA-JUIZES nunca rodava (`collections` sem import) e a sonda de frota passa a aceitar a arvore de uma RAIA sem um segundo `docker run`
 220f5317 [O261] a chave `_C15` DECLARA a autoridade que ja era unica: `fio_vivo` entra no mapa dos juizes (familia `chamado` 13 -> 14), e os tres derivados do mapa se regeneram pelo gerador
-bceab5ba [O261] a reducao de uma COLECAO de perguntas a bool passa a ter UMA porta: os seis leitores de `any(pergunta_viva(...))` chamam `fio_vivo`, e os dois selos de caracterizacao se INVERTEM
-914fba40 [O256] pouso da raia wt-ui: o PDF da barra do retrato LE o recorte da tela, e o CSS novo na barra fica em ZERO (merge --no-ff da raia-ui, L-105/L-107)
-e540e3c0 [O256] o botao PDF da barra perde o `margin-left:auto`: CSS novo na barra e' ZERO pela leitura LITERAL do aval
 ```
 
 ## `git status --short`
@@ -80,11 +80,6 @@ e540e3c0 [O256] o botao PDF da barra perde o `margin-left:auto`: CSS novo na bar
  M app/docs/LEIS.md
  M app/docs/PROMPTS.md
  M app/docs/RELATO.md
-A  app/folha/tests/test_o48_passo6_menu_abre_o_retrato.py
-M  app/folha/tests/test_retrato_folha_contador.py
-M  app/folha/tests/test_retrato_folha_smoke_chromium.py
-M  app/templates/base.html
-M  app/templates/folha/_retrato_barra.html
  M bin/sonda_leitura.sh
 ?? app/GREEN
 ?? esteira.pausada
@@ -176,10 +171,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Task "RED e construção do segundo intervalo" completed in background
-
-● Task "Certify the merged tree with the full suite" still running in background
-
 ● Background command "Fix the import and re-run the DIFF probe" completed (exit code 0)
 
   Ran 4 shell commands
@@ -199,19 +190,23 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Background command "Certify the merged tree with the full suite" completed (exit code 0)
 
-● Merging raia-ui without commit and verifying the tree census
-  ⎿  $ cd /home/ronald/saas-hasner; cat > /tmp/msg_o48_pouso.txt <<'EOF'
-     [O48] pouso da raia wt-ui: o link ORIGINAL de fechamento do menu do admin abre o RETRATO, e o botao de PDF da barra volta para o partial UNICO da casa (merge --no-ff, L-105/L-107)
-     Aval PUBLICAR-RETRATO (13/10 12:1x), literal: "o li…
+  Showing the lines before the first section
+  ⎿  $ cd /home/ronald/saas-hasner/app; sed -n '218,232p' docs/RELATO.md
+  ⎿  Read docs/AVAIS.md (23 lines)
+  ⎿  Referenced file core/juizes.py
+  ⎿  Read ../logs/o261b/watch_5min_o256.log (6 lines)
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/buulw0j03.output (6 lines)
+  ⎿  Referenced file ponto/services/cartorio.py
 
-✢ Compacting conversation… (23h 59m 42s · ↓ 2.6m tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 31%
+● Task "RED e construção do segundo intervalo" completed in background
+
+✢ Concocting… (1d 0h 5m · ↓ 2.6m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                                                                     1% until auto-compact
+                                                                                                                                                    ✔ Update installed · Restart to update
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                                                                  1h 3m 8s · ↓ 428.9k tokens
