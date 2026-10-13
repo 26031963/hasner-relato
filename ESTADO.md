@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 13/10/2026 16:48:02.**
+**Medido em 13/10/2026 16:53:13.**
 
 | | |
 |---|---|
@@ -29,19 +29,19 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2431.0 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2431.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **199.5 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **199.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **12.7 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **12.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **315.6 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **315.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
   - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **219.8 h** (passou das 6 h da L-105)
@@ -50,7 +50,7 @@ RELATO, com a lista de nomes do banco como autoridade._
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **337.5 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **337.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -175,35 +175,35 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Task "Raia paralela BUG-SOBRA-TIPO-TROCADO" still running in background
-
-● Task "Insert the new obra and move the live-order marker" still running in background
-
-● emp2 on the 10: 448 colaborador(es), hash 18db627c6720 -> 18db627c6720: IDENTICO, 0 recusas de motor. Comp 10 fechada (11.027 → 11.104 linhas). Agora a 09 — a competência EXPORTADA, que
-  a porta desvia para retratar_exportada.
 
   Ran 1 shell command
 
-● A porta se comportou exatamente como o sítio declara: emp4 e emp3 na 09 → EXPORTADA -> RETRATO do gravado ... Motor NAO rodou. Falta emp2 na 09.
+● Nenhuma linha nova ou sumida carrega dinheiro (todas ZERO). Restam 17 movimentos de dinheiro, 9 colabs, e cada um precisa de causa medida. Começo pelo que já foi medido hoje:
 
   Ran 1 shell command
 
-● Apply completo nas duas competências. Agora a foto "depois" do TXT e o snapshot pós-apply, para a condição 4 e o DIFF.
+● Os 5 movimentos de 12/10 vão de 7,00 h para 6,00 h exatos em ex100_noturna — a assinatura do intervalo de 1 h dentro da janela 22–05. Mas o DIFF do O263 diz "nenhum outro colaborador da
+  frota" move na 10. Vou medir na fonte, por batida e célula:
 
-  Ran 5 shell commands
+  Ran 1 shell command
 
-● Condições 3 e 4 fechadas: gravado da 09 intacto (8 registros, todos conteudo==hash SIM, zero movimento) e montado da 10 com DIFF 0 — não há PAUSA. Agora o snapshot "depois" e o DIFF do
-  DiaPago.
+● O campo é timestamp, não data_hora — e o modelo tem is_intervalo, que mede o intervalo sem eu inventar lacuna.
 
-● Diff the DiaPago snapshots before and after the apply
-  ⎿  $ SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cat > $SP/diff_badge_linha.py <<'PY'
-     import json, sys
-     from collections import defaultdict
-     A = json.load(open(sys.argv[1])); D = json.load(open(sys.argv[2]))
-     assert A['_campos'] == D['_campos']
-     CAMPOS…
+  Ran 4 shell commands
 
-✢ Concocting… (1d 2h 18m · ↓ 2.9m tokens · thinking more)
+● Decisivo. Dos 9 colabs, 6 têm batida nova nas últimas 30 h (col174/218/235/474/923 no 12/10 e col248 hoje) e col467 teve a célula regenerada hoje 10:34 — gravado envelhecido, causa
+  medida. Sobram col366 (3 dias), col697 e col900 sem evento nenhum: a causa só pode ser código. Vou ler o DIFF do O263 inteiro antes de atribuir.
+
+  Ran 1 shell command
+
+● O DIFF do O263 é explícito: horas_trabalhadas, horas_folga_trabalhada e horas_intra_indenizada são idênticas nas duas rodadas na 10 — não são da cura. Então col366/col697/col900 têm
+  outra causa. Vou ao commit da cura e ao histórico do que pousou entre a lavra anterior e agora.
+
+● Inspecting the O263 cure and recent landings
+  ⎿  $ cd /home/ronald/saas-hasner; echo "=== O263: o que a cura toca ==="; git show --stat 5d157d1f | head -20; echo; git show 5d157d1f -- app/ponto/motor_calculo_v2.py | grep -nE
+     '^[-+].*(trabalhad|intra|intervalo|folga|noturn)' | head -30; echo; echo "=== commits que pousaram nas ultimas 36h (lavra a…
+
+✻ Concocting… (1d 2h 23m · ↓ 2.9m tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                                     ✔ Update installed · Restart to update
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -213,6 +213,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                                                                  1h 3m 8s · ↓ 428.9k tokens
-  ◯ fork  Comparing lavra outputs for col190                                                                                                                      45m 9s · ↓ 100.6k tokens
+  ◯ fork  Running escala sobra-na-borda tests                                                                                                                    50m 19s · ↓ 133.0k tokens
   ⧉  index
 ```
