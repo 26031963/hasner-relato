@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 13/10/2026 20:20:46.**
+**Medido em 13/10/2026 20:25:46.**
 
 | | |
 |---|---|
@@ -29,7 +29,7 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2434.6 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2434.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
@@ -38,19 +38,19 @@ RELATO, com a lista de nomes do banco como autoridade._
   - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **203.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **16.3 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **16.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **319.2 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **319.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **223.3 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **223.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **341.0 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **341.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -168,35 +168,35 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-● Zero órfão (_folga_do_par: 1 nascimento, 1 escritor, 1 leitor; _janela_do_dia segue com os 3 chamadores). Confiro que o caminho _j pré-pronto não é um segundo
-  derivador de janela:
+  Ran 1 shell command
+
+● #2 OK: a cópia é HEAD eee94960 + exatamente os 2 arquivos (o resto é cache/montagem, não código). #3: BACKLOG e TICKETS limpos. Agora #5, que decide se mexo no .py
+  antes da suite acabar:
 
   Ran 1 shell command
 
-● Único _j nasce em _janela_do_par:1516 — porta única confirmada, sem segundo derivador. A docstring diz "quatro calcular_periodo" e eu escrevi três: meço antes de
-  afirmar.
+● #5 resolvido sem tocar .py: o irmão _janela_fora_por_l084 também nasce em calcular_mes (:1782) e também é lido defensivamente (try/except AttributeError, :1368) —
+  meu getattr é o espelho exato. A suite que corre segue válida. Agora o #1, que é o que bloqueia o deploy:
 
   Ran 1 shell command
 
-● Seis def calcular_periodo em produção, só três chamam a porta. Fecho o censo do "quem mais lê" antes de pousar:
+● A ferramenta da casa faz exatamente o DIFF que falta (par, todos os campos do fechamento, numa trava só). Ela disputa os mesmos vCPU 4-7 da suite, então roda
+  depois. Enquanto isso, o #4: o campo PROTEGE dos sítios que meu diff toca:
 
   Ran 1 shell command
 
-● Achado que fecha o censo: Motor12x36ComEscala:2896 chama _entrada_efetiva solto, fora da porta — é o quarto leitor da janela (o que a docstring contava). Confiro
-  que ele cai no mesmo _janela_do_dia e como trata j is None:
+● PROTEGE fechado: as cinco leis que protegem os sítios que toco (L-097, L-085, L-086, L-088, L-089) estão todas citadas, e o único colchete é [O263-FT]. Monto a
+  linha do TICKETS pelo formato vivo:
 
-  Ran 1 shell command
+  Locating the slice-prefix table in TICKETS
+  ⎿  $ cd /home/ronald/saas-hasner
+     echo "=== onde moram os prefixos de fatia no TICKETS:"
+     grep -n 'O261\|O219\|BUG-LINHA-X-BADGE' app/docs/TICKETS.md | head -8
+     echo
+     echo "=== contexto da tabela (cabecalho mais proximo):"
+     n=$(grep -n 'O261' app/docs/TICKETS.md | head -1 | cut -d: -f1); sed -n "$((n-6)),$…
 
-● if not j: return entrada, 0.0 — janela None devolve a entrada crua, zero minuto fora. Os quatro leitores caem no mesmo _janela_do_dia, logo a cura cobre os quatro.
-  Corrijo o censo nos dois drafts:
-
-  Fit the RELATO to the cap and fix the commit census
-  ⎿  $ SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
-     cat > $SP/o263ft_relato.md <<'EOF'
-     ## MARCO — O263-FT: a folga trabalhada nao se recorta (13/10 ~20:xx)
-     LEI-AKITA: origem=`motor_calculo_v2.py::MotorBase._janela_do_dia` (+ o julgamento de folga que S…
-
-· Concocting… (1d 5h 50m · ↓ 3.2m tokens · thinking)
+✢ Concocting… (1d 5h 55m · ↓ 3.2m tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                              ✔ Update installed · Restart to update
 ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
