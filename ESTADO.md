@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:335 AFIRMA ato sem PROVA ao lado -- ## MARCO 13/10 14:3x — pouso da **`wt-ui`**: o link ORIGINAL de fechamento do menu do admin passa a abrir o **RETRATO** (`[O48]` passo 6, av
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:336 AFIRMA ato sem PROVA ao lado -- ## MARCO 13/10 14:3x — pouso da **`wt-ui`**: o link ORIGINAL de fechamento do menu do admin passa a abrir o **RETRATO** (`[O48]` passo 6, av
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 13/10/2026 18:13:02.**
+**Medido em 13/10/2026 18:18:32.**
 
 | | |
 |---|---|
-| `HEAD` local | `45cf0353 [O219] a parte A do BUG-LINHA-X-BADGE pousa como DADO, nao como codigo: a relavra pela porta existente leva a comp 10 de 2 a ZERO divergencia linha x badge, e a comp 09 cai no ramo RETRATO com o dinheiro INTOCADO` |
+| `HEAD` local | `6e29f0b3 [O261] o push do lote cura as duas causas que a regua mediu as 18:03: a citacao FIO-RESSUSCITA ganha linha no TICKETS e o band-aid confessado em relatorios/ volta ao teto 1` |
 | `origin/main` | `d20a0e45 [O219] pouso: os docs do marco A0-b entram junto, e o merge que eu pedi sem commit virou FAST-FORWARD -- o codigo estava na arvore viva antes deste commit` |
-| commits a subir (`ahead`) | **94** |
+| commits a subir (`ahead`) | **95** |
 
 ## Fabrica
 
@@ -35,22 +35,22 @@ RELATO, com a lista de nomes do banco como autoridade._
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **200.9 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **201.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **14.2 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **14.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **317.0 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **317.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **221.2 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **221.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **338.9 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **339.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -64,21 +64,18 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+6e29f0b3 [O261] o push do lote cura as duas causas que a regua mediu as 18:03: a citacao FIO-RESSUSCITA ganha linha no TICKETS e o band-aid confessado em relatorios/ volta ao teto 1
 45cf0353 [O219] a parte A do BUG-LINHA-X-BADGE pousa como DADO, nao como codigo: a relavra pela porta existente leva a comp 10 de 2 a ZERO divergencia linha x badge, e a comp 09 cai no ramo RETRATO com o dinheiro INTOCADO
 5d157d1f [O263] o desconto do intervalo batido SOBE para o sitio unico do noturno: `MotorComercial` e `MotorTurnoPartido` pagavam adicional de hora de intervalo, e a HE noturna tinha o MESMO furo
 ee4a25ca [O48] pouso da raia wt-ui: o link ORIGINAL de fechamento do menu do admin abre o RETRATO, e o botao de PDF da barra volta para o partial UNICO da casa (merge --no-ff, L-105/L-107)
 fb9195bf [O48] o botao de PDF da barra do retrato volta para o partial UNICO da casa: o <a> cru que o pouso anterior deixou no template sai, e o contrato de arvore inteira fica VERDE com allowlist vazia
-d4779277 [O48] passo 6: o link ORIGINAL de fechamento do menu do admin abre o RETRATO, e a tela antiga ganha o atalho "Tela anterior" DENTRO da barra
 ```
 
 ## `git status --short`
 
 ```
  M app/config/crons_duracao.json
- M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
- M app/docs/PROMPTS.md
- M app/docs/RELATO.md
  M bin/sonda_leitura.sh
 ?? app/GREEN
 ?? esteira.pausada
@@ -170,44 +167,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+   Usage by model:
+          claude-opus-5:  8.5m input, 56.3m output, 10.7b cache read, 156.1m cache write ($8144.61)
+       claude-fable-5-1:  106.7m input, 8.6m output, 6.4m cache read, 443.5k cache write ($1505.38)
+        claude-sonnet-5:  101.0k input, 90.0k output, 6.5m cache read, 277.2k cache write ($3.10)
+   Prompt cache (main):   40681 requests · 99% of input tokens from cache · 90 misses (last 2m 7s ago — likely cause: prompt unchanged — likely server-side, 14.1m
+   tokens re-cached) · 662 expected rebuilds (compaction or tool-result clearing) · warm (1h TTL, last activity 1m 12s ago)
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+   Current session
+   ██████████▌                                        21% used
+   Resets 7pm (America/Sao_Paulo)
 
-  Ran 1 shell command
+   Current week (all models)
+   ████████████████████████████████████████████████▌  97% used
+   Resets Oct 14, 6pm (America/Sao_Paulo)
 
-❯ aval Ronald: pergunta 2 — intermitente em feriado recebe dobra (452-A §6, Lei 605 art.9, Sum.146); docstring errada, os 2 zeros de 12/10 sao bug; leitura passa
-  pelo DP antes de virar lei. Segue a fila; PAREI so em lei ou !
+   Current week (Fable)
+   ██                                                 4% used
+   Resets Oct 14, 6pm (America/Sao_Paulo)
 
-❯ aval Ronald: pergunta 3 — O48 p6: foto se refaz com dia_encerrado como gatilho, nunca tela online (L-095); entra depois do export da 10. Segue a fila; PAREI so em
-  lei ou !
+   What's contributing to your limits usage?
+   Approximate, based on local sessions on this machine — does not include other devices or claude.ai
 
-❯ aval Ronald: pergunta 4 — O262: vinculo_do_dia nasce (O69); vinculo_que_cobre nasce em escala/folgas.py e gerar_celulas chama; DIFF das copias antes. Segue a
-  fila; PAREI so em lei ou !
+   Last 24h · these are independent characteristics of your usage, not a breakdown
 
-❯ aval Ronald: pergunta 5 — O258 item 3: tres juizes por familia comparando INSTANTE (turno_passou_do_fim, prazo_documento_vencido, janela_de_deteccao_aberta); fila
-  depois do export. Segue a fila; PAREI so em lei ou !
+   100% of your usage came from subagent-heavy sessions
+    Each subagent runs its own requests. Be deliberate about spawning them — and
+    consider configuring a cheaper model for simpler subagents.
 
-❯ aval Ronald: pergunta 6 — O256 E2: coluna conta DIAS QUE SEGURAM (1.546), rotulo "Dias que seguram". Segue a fila; PAREI so em lei ou !
+   100% of your usage came from sessions active for 8+ hours
+    These are often background/loop sessions. Continuous usage can add up quickly
+    so make sure it is intentional.
 
-❯ aval Ronald: pergunta 1 — (b) MOTOR DE HOJE na 09 (corte 07/10 "o sistema calcula o que tem, exportada sem trava"; L-113 cl.1 trilha). Condicao antes do apply: o
-  RETRATO da 09 le ExportacaoDominio.conteudo (o TXT pago), nunca o DiaPago; provado isso, retratar_exportada e apagada como a docstring dela manda e o DiaPago da
-  09 vira motor-de-hoje com DIFF de frota publicado (O211 + O263 + HE-INTRA-DOBRADA, os quatro numeros) e arquivo de reversao; a diferenca pago x calculado sai como
-  Pauta DP. O "PROIBIDO tocar a 09" da O263 cai junto. Apply so apos 14/10 18h. Segue a fila; PAREI so em lei ou !
+   27% of your usage was at >150k context
+    Longer sessions are more expensive even when cached. /compact mid-task, /clear
+    when switching to new tasks.
 
-❯ aval Ronald: push — o Code corrige as duas causas medidas (linha FIO-RESSUSCITA no TICKETS no mesmo commit; as 3 prosas "fallback" em relatorios/ voltam ao teto
-  1) e tenta de novo pela regua (pre-aprovado 25/09). Segue a fila; PAREI so em lei ou !
-
-✢ Concocting… (1d 3h 43m · ↓ 3.1m tokens · still thinking)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                             ✔ Update installed · Restart to update
-─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
-─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
-
-  ● main
-  ◯ fork  Confirming commit hashes in worktree                                                                                           1h 3m 8s · ↓ 428.9k tokens
-  ◯ fork  Grepping lampadas_do_dia window logic                                                                                            8m 23s · ↓ 174.0k tokens
-  ⧉  index
+   23% of your usage came from subagents under "general-purpose"
+    If this runs frequently, consider configuring its subagents with a cheaper
+    model or tightening their prompts.
+                                                                                                                                                                   ↓
 ```
