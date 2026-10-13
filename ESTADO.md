@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:4501 AFIRMA ato sem PROVA ao lado -- | **LEITURA-LITERAL-DO-CARIMBO** | 2026-10-12 19:5x | 4 h | CUMPRIDO SEM UMA LINHA DE CODIGO, e isso se MEDE: ele carimba exatamente o que p
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:4527 AFIRMA ato sem PROVA ao lado -- | **LEITURA-LITERAL-DO-CARIMBO** | 2026-10-12 19:5x | 4 h | CUMPRIDO SEM UMA LINHA DE CODIGO, e isso se MEDE: ele carimba exatamente o que p
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 13/10/2026 00:06:33.**
+**Medido em 13/10/2026 00:12:02.**
 
 | | |
 |---|---|
-| `HEAD` local | `d6eae5c9 [O256] pouso da E2: a coluna Dias do retrato entra na principal (merge --no-ff da raia-ui, L-105/L-107)` |
+| `HEAD` local | `d6cadadb [O206] a previa do Cobrar passa a mostrar TEXTO, e o texto do push volta a ter UM dono: a autoridade muda de casa para o app que ESCREVE o cadastro (complemento do aval dele das 23:5x, O206-PREVIA-DO-PUSH-MOSTRA-HTML-BRUTO; smoke D do Fernando, chamado #28304)` |
 | `origin/main` | `d20a0e45 [O219] pouso: os docs do marco A0-b entram junto, e o merge que eu pedi sem commit virou FAST-FORWARD -- o codigo estava na arvore viva antes deste commit` |
-| commits a subir (`ahead`) | **64** |
+| commits a subir (`ahead`) | **65** |
 
 ## Fabrica
 
@@ -29,70 +29,53 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2414.3 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2414.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
-- **wt-cb** (`(detached)`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 12 arquivo(s) sujo(s), commit a frente ha **5.9 h**
-  - sem declaracao em `logs/raias/wt-cb.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **182.8 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **182.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261011`) -- **SEM AGENTE**
-  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **44.8 h** (passou das 6 h da L-105)
+  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **44.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **298.9 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **299.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **203.1 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **203.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **320.8 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **320.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
-  - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
+  - 0 commit(s) a frente do `main`, 2 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
-- **25 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-batida, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-folha, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o259, wt-o37, wt-orfa, wt-p5, wt-regua, wt-sj, wt-vinculo
+- **21 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
-**sem agente: 7** (raia com commit a frente e sem declaracao, esperado 0) -- **a frente do main ha mais de 6 h: 6** -- uniao medida: 35
+**sem agente: 6** (raia com commit a frente e sem declaracao, esperado 0) -- **a frente do main ha mais de 6 h: 6** -- uniao medida: 30
 
 > Raia sem agente por mais de um marco pede linha de motivo no RELATO -- lei, `!` ou pista (item 4 do aval).
 
 ## `git log --oneline -5`
 
 ```
+d6cadadb [O206] a previa do Cobrar passa a mostrar TEXTO, e o texto do push volta a ter UM dono: a autoridade muda de casa para o app que ESCREVE o cadastro (complemento do aval dele das 23:5x, O206-PREVIA-DO-PUSH-MOSTRA-HTML-BRUTO; smoke D do Fernando, chamado #28304)
 d6eae5c9 [O256] pouso da E2: a coluna Dias do retrato entra na principal (merge --no-ff da raia-ui, L-105/L-107)
 8460bbd3 [O256] a coluna do retrato se chama Dias e passa a responder por um RECORTE: as DATAS que seguram nascem GRAVADAS e UM leitor as conta (E2, aval dele das 21:0x O256-E2-A-E4-ANDAM-JA)
 7834b94d [O259] a pergunta da familia batida passa a ser o PAR: MotorBase.calcular_periodo se DECLARA juiz de "quantas horas este par (turno) vale?" e o pendente do DIA sai no mesmo commit (corte dele das 20:0x, JUIZ-CALCULAR-PERIODO-NASCE)
 c2ab8cf5 [O260] com_dias=True deixa de devolver a LISTA CRUA: as duas saidas antecipadas de motivos_retencao_celula honram o contrato da PROPRIA funcao (bug provado no caminho da O261, LEI-AKITA 6)
-4abe38e2 [O48] a porta do TXT passa a LER a competencia, e o carimbo do ato de gerar passa pelo juiz (passo 5 de 6, aval O48-PASSO5-DESTRAVA + corte (A) de 12/10 18:5x)
 ```
 
 ## `git status --short`
 
 ```
- M app/chamados/templatetags/chamados_tags.py
- M app/chamados/tests/test_selo_painel_oferece_cobrar.py
- M app/chamados/tests/test_sininho_template.py
- M app/chamados/views_cobrar.py
- M app/comunicados/services.py
- M app/comunicados/views.py
  M app/config/crons_duracao.json
- M app/docs/AVAIS.md
- M app/docs/BACKLOG.md
- M app/docs/CORTES.json
- M app/docs/CORTES.md
  M app/docs/HANDOFF-SESSAO.md
- M app/docs/PENDENTES_RONALD.json
- M app/docs/PROMPTS.md
- M app/docs/RELATO.md
- M app/templates/chamados/partials/_js_cobranca.html
  M bin/sonda_frota.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -183,34 +166,34 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Searched for 2 patterns, ran 1 shell command
+  Ran 1 shell command
 
-● Safe — test_porta_arquivo_silencio.py:480 explicitly excludes docs/ from its sweep and the other two are prose mentions. Drafting the
-  RELATO section while the suite runs:
-
-  Searched for 1 pattern, ran 2 shell commands
-
-● Section drafted at 23 lines (L-116 teto 25). Checking the suite before writing it with real numbers:
+● Deploy OK, three routes proved. Now the positive proof that the 500 is actually gone — the deploy's /colaboradores/ -> 302 doesn't render
+  base.html, so that alone proves nothing about the tag:
 
   Ran 1 shell command
 
-● Suite still running (31 OK so far, 0 erro). Using the wait to get a review before I commit:
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-● The advisor caught something urgent. The template is live on disk but the workers' chamados_tags Library was imported before my tag
-  existed — that's a 500 on the whole admin casca. Checking prod now:
+● Tag resolves, both cascas compile, and the previa body is now plain text. The ProgrammingError is the expected public-schema path —
+  registrar_engolido swallowed it and returned the house default, exactly as designed. Proving the tenant path, where the table exists:
 
   Ran 1 shell command
 
-● 4 hits. Reading them to see whether they're mine:
+● Prod is cured — tenant path reads the live cadastro (0 rows, so the default is what's sent) and the previa shows exactly that text, no
+  markup. Closing checks:
 
-● Reading the matching log lines
-  ⎿  $ cd /home/ronald/saas-hasner && docker logs saas_ui --since 2h 2>&1 | grep -n "texto_push_cobranca\|Invalid block
-     tag\|TemplateSyntaxError" | head -20
+  Ran 1 shell command
 
-✢ Concocting… (9h 36m 43s · ↓ 1.1m tokens · thinking)
+● Zero new tag errors, trava livre (the wt-ui agent already did its ff-only merge). Marco closed — running the handoff per L-108 and
+  clearing my own scratchpad worktrees:
+
+  Ran 1 shell command
+
+● Marco closed. Checking the push gate — I should measure it, not assert from memory:
+
+● Running 1 shell command…
+  ⎿  $ cd /home/ronald/saas-hasner && bash bin/tests/test_lei_akita.sh 2>&1 | tail -8; echo "SELO_RC=${PIPESTATUS[0]}"
+
+✢ Concocting… (9h 42m 12s · ↓ 1.1m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -220,7 +203,7 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Reading test_selo_celula_absolve_o_chamado fixtures                                        11m 13s · ↓ 165.0k tokens
-  ◯ general-purpose  Confirming no RetratoFolha history model                                                   11m 13s · ↓ 112.6k tokens
+  ◯ general-purpose  Writing test_o261_lavra_le_a_lampada.py                                                    16m 42s · ↓ 102.8k tokens
+  ◯ general-purpose  Extracting _pedido in views_retrato.py                                                     16m 42s · ↓ 149.8k tokens
   ⧉  index
 ```
