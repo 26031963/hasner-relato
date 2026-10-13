@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:362 AFIRMA ato sem PROVA ao lado -- ## MARCO 13/10 14:3x — pouso da **`wt-ui`**: o link ORIGINAL de fechamento do menu do admin passa a abrir o **RETRATO** (`[O48]` passo 6, av
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:361 AFIRMA ato sem PROVA ao lado -- ## MARCO 13/10 14:3x — pouso da **`wt-ui`**: o link ORIGINAL de fechamento do menu do admin passa a abrir o **RETRATO** (`[O48]` passo 6, av
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 13/10/2026 20:51:42.**
+**Medido em 13/10/2026 20:57:02.**
 
 | | |
 |---|---|
@@ -29,28 +29,28 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2435.1 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2435.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **203.6 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **203.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **16.8 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **16.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **319.7 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **319.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **223.8 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **223.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **341.5 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **341.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -170,38 +170,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● O retidos guarda os 13 campos de hora por colaborador (números, sem nome) — censo campo a campo nos 29:
 
-  Ran 1 shell command
-
-● O lado retido mostra a forma certa: 3 campos, todos na direção da cura (trabalhadas +33,30 h), e zero em extras, atraso, falta, motivo e apto_folha. Falta o censo
-  dos 20 que estão no TXT; leio o layout antes de tocar nas linhas, para não imprimir nome nem valor:
-
-  Ran 2 shell commands
-
-● Existe folha/export.py::partes_da_linha — o leitor da própria casa. Uso ele para o censo por rubrica, imprimindo só código e contagem:
-
-  Ran 2 shell commands
-
-● Só a rubrica 0200 mudou — mas meu censo conta 10 e a autoridade conta 20 linhas; não publico DIFF que não reconcilia. Leio as chaves reais do parser e conto LINHA,
-  como o comparar conta:
-
-  Ran 1 shell command
-
-● Reconcilia: o comparar conta a diferença simétrica de linhas (so_antes=9 so_depois=9 ⇒ 18; +2 na emp3), e 20 linhas = exatamente os meus 10 pares (colab, rubrica).
-  Confirmo o que é a 0200 no catálogo:
+● folga_trabalhada_diurna ← horas_folga_trabalhada, e o bloco diz que ela é a rubrica 200 junto do HE 100% (export.py:330-341) — a 0200 é o alvo, e foi a única que
+  moveu. Agora o hash "antes" da 09, leitura pura em prod:
 
   Ran 3 shell commands
 
-● A 0200 é rubrica_hora_extra_100 / rubrica_dsr_trabalhado (ponto/models.py:924,930) — a rubrica da folga trabalhada, o alvo literal do O263-FT. O DIFF fechou com a
-  forma que o aval exige: no TXT mudou uma só rubrica, a do alvo; nos retidos, 3 campos de hora, todos do mecanismo da cura; entraram=0 sairam=0, motivo 0,
-  apto_folha 0, emp4 IGUAL. Consulto antes de pousar dinheiro:
+● Hash "antes" da 09 em mão (8 registros de export + impressão digital do gravado: 460/122/22). Agora reconcilio o universo que o advisor cobra — os 58 da sombra
+  contra os 39 do DIFF:
 
-  Advising using Fable 5.1
+  Ran 1 shell command
 
-✢ Concocting… (1d 6h 21m · ↓ 3.3m tokens)
+● O sombra_cura.out agrega (não lista ids), então não vou afirmar onde estão os 19 — digo os dois universos e deixo a reconciliação por id como linha de fila. Agora
+  o RELATO, com o DIFF e a reversão, dentro do teto de 25:
+
+  Ran 2 shell commands
+
+● 36 linhas — fura o teto de 25 da L-116. Reescrevo a seção inteira enxuta; a narrativa vai para o corpo do commit, que é onde a L-116 manda:
+
+  Ran 6 shell commands
+
+● 24 linhas, dentro do teto. Agora o pouso: copio as duas da cópia certificada e faço o censo cmp que a L-117 exige:
+
+● Census the certified copy against the live tree
+  ⎿  $ cd /home/ronald/saas-hasner
+     SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
+     echo "=== o que a copia certificada tem de diferente do HEAD (so .py):"
+     diff -rq --exclude=__pycache__ --exclude='*.pyc' <(true) /dev/null >/dev/null 2>&1
+     for f in $(cd $SP…
+
+✢ Concocting… (1d 6h 27m · ↓ 3.3m tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                             ✔ Update installed · Restart to update
+                                                                                                                                              5% until auto-compact
 ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
