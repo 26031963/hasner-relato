@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 13/10/2026 16:58:42.**
+**Medido em 13/10/2026 17:04:02.**
 
 | | |
 |---|---|
@@ -29,28 +29,28 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2431.2 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2431.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **199.7 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **199.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **12.9 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **13.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **315.8 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **315.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **219.9 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **220.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **337.6 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **337.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -175,22 +175,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● retratada_em vazio, zero batida nova, zero aprovação: a causa de col366/col697/col900 é código. E col697 mudou de pareamento (12:00→16:59 = 4,98 h virou 13:23→16:59 = 3,60 h, respeitando
-  o tipo E/S) — que é exatamente o que a raia paralela está curando. Preciso saber com que árvore meu docker exec rodou:
-
-  Ran 1 shell command
-
-● Zero .py modificado na árvore viva, HEAD 5d157d1f — a relavra rodou com código commitado. As duas rodadas do O263 têm saída crua guardada; vou perguntar a elas diretamente pelos três
-  colabs:
-
-  Ran 1 shell command
-
-● A rodada VELHO (código pré-cura) já continha estes movimentos: horas_folga_trabalhada colabs=1 soma=−32.98 é literalmente o col366, e horas_trabalhadas colabs=7 +43.04,
-  horas_intra_indenizada colabs=3 −1.00, saldo_banco_horas +112.45. Ou seja: classe já medida e publicada às 14:1x como gravado envelhecido, não a cura e não a régua. Nenhuma classe nova —
-  não há PAREI. Agora, se o badge lê o gravado ou o motor decide como medir o pós-apply:
-
-  Ran 1 shell command
-
 ● O badge é o motor ONLINE (recalcular_fechamento_mes(..., somente_leitura=True)) e a linha é o gravado: a divergência é, por construção, a IDADE da lavra — o que é a origem da parte B.
   Medir a frota pós-apply exige motor, logo sombra com dump de agora. Vou lançar isso em segundo plano enquanto escrevo a PROVA:
 
@@ -199,20 +183,36 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● O carimbo da sombra está OK/completa/diverge=0 — é o portão do deploy verde, e um --refazer o zeraria por ~40 min. Melhor caminho: o selo lê pela mesma porta que o comando da casa acabou
   de rodar duas vezes em prod. Vou adaptar o selo com a asserção de prod e contagem antes/depois:
 
-  Reading the sombra selo script
-  ⎿  $ cd /home/ronald/saas-hasner && sed -n '1,200p' logs/sombra/selo_linha_x_badge.py
+  Ran 2 shell commands
+  ⎿  Read docs/AVAIS.md (23 lines)
+  ⎿  Referenced file core/juizes.py
+  ⎿  Read ../logs/o261b/watch_5min_o256.log (6 lines)
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/buulw0j03.output (6 lines)
+  ⎿  Referenced file ponto/turnos.py
 
-✢ Compacting conversation… (1d 2h 28m · ↓ 2.9m tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 56%
+● Task "RED e construção do segundo intervalo" completed in background
+
+● Task "Raia paralela BUG-SOBRA-TIPO-TROCADO" still running in background
+
+● Task "Insert the new obra and move the live-order marker" still running in background
+
+● O BACKLOG entrou (col3 = 281 chars, dentro da L-109). Sombra verde e nenhum cron em curso — lanço a corrente do ensaio em fundo (refazer pós-apply → selo → bloco, para o portão do deploy
+  voltar verde):
+
+● Extracting comp10 emp1/4/3 apply log lines
+  ⎿  $ cd /home/ronald/saas-hasner && grep -nE 'IDENTICO|MUDOU|RETRATO|colaborador\(es\) lidos|linha\(s\) de DiaPago' logs/apply_badge_linha_comp10_emp143.out; echo "--- oraculo nesse:
+     $(grep -c 'oraculo:' logs/apply_badge_linha_comp10_emp143.out)"; echo "--- motor falhou: $(grep -c 'dia_pago motor' log…
+
+* Concocting… (1d 2h 34m · ↓ 2.9m tokens · thinking more)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                                                                     0% until auto-compact
+                                                                                                                                                    ✔ Update installed · Restart to update
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                                                                  1h 3m 8s · ↓ 428.9k tokens
-  ◯ fork  Writing medir_sobra_com_tipo_trocado in tripwire_celulas.py                                                                                            55m 48s · ↓ 165.0k tokens
+  ◯ fork  Appending ContadorHaikuDaSobraNaBordaTest class                                                                                                        1h 1m 9s · ↓ 94.4k tokens
   ⧉  index
 ```
