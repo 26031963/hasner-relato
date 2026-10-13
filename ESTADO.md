@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 13/10/2026 12:20:46.**
+**Medido em 13/10/2026 12:25:47.**
 
 | | |
 |---|---|
@@ -29,7 +29,7 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2426.6 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2426.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
@@ -38,19 +38,19 @@ RELATO, com a lista de nomes do banco como autoridade._
   - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **195.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **8.3 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **8.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **311.2 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **311.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **215.3 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **215.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **333.0 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **333.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -75,6 +75,7 @@ e540e3c0 [O256] o botao PDF da barra perde o `margin-left:auto`: CSS novo na bar
 
 ```
  M app/config/crons_duracao.json
+ M app/docs/BACKLOG.md
  M app/docs/CORTES.json
  M app/docs/CORTES.md
  M app/docs/HANDOFF-SESSAO.md
@@ -170,13 +171,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Searched for 3 patterns, listed 1 directory, ran 4 shell commands
-
-● Terreno medido: o link do menu do admin é um só (templates/base.html:139), base_app.html não tem fechamento, e a barra do retrato é templates/folha/_retrato_barra.html. A raia wt-ui está
-  limpa e 1 commit atrás do main. Obra de tela, zero arquivo em comum com a fatia na pista → agente próprio agora (RAIA-NAO-FICA-PARADA):
-
-● claude(Raia wt-ui: troca do link do menu)
-  ⎿  Backgrounded agent (↓ to manage · ctrl+o to expand)
 
 ● Agora o registro no mesmo turno. Entrada 94 do CORTES.json (o título PUBLICAR-RETRATO já existe — isto é alteração, não entrada nova):
 
@@ -188,19 +182,26 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● O diff de 133 linhas é só a coluna idade avançando 4 h (derivado). Agora a linha em PROMPTS.md e a célula do BACKLOG:
 
-● Appending the aval line to PROMPTS.md
-  ⎿  $ python3 - docs/PROMPTS.md <<'PY'
-     import io, sys
-     P = sys.argv[1]
-     t = io.open(P, encoding='utf-8').read()
-     assert '13/10 12:1x' not in t, 'linha JA escrita'
-     linha = (
-     '| 13/10 12:1x | **aval** (`PUBLICAR-RETRATO` -- **titulo JA recebido as 08:1x, mas NAO e repeticao: '
-     'ALTERA o aval**; abre o passo…
+  Ran 3 shell commands
 
-· Concocting… (21h 50m 56s · ↓ 2.4m tokens · thinking)
+● Registro fechado. Agora, enquanto a suite corre, a célula do O261 que está velha (ela cita cartorio.py:799 e um sítio já curado):
+
+  Ran 1 shell command
+
+● Suite correndo. Pela ESMERIL-DO-MARCO, a espera é o censo de órfão deste marco — nada mais:
+
+  Searched for 1 pattern, ran 4 shell commands
+
+● Esmeril do marco fechado com número: zero órfão, e o único candidato real era o juiz injetado:
+
+● Locating the pending NO AR draft and check whether the bullets are already in the RELATO
+  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; find "$S" -maxdepth 2 -name "no_ar*" 2>/dev/null; find /home/ronald/saas-hasner/logs
+     -maxdepth 3 -name "no_ar*" 2>/dev/null | head; echo "=== ja ha bullet NO AR para 10f67c49 ou 914fba40 no RELATO?"; …
+
+✽ Compacting conversation… (21h 55m 57s · ↓ 2.4m tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱ 85%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                                                    ✔ Update installed · Restart to update
+                                                                                                                                                                     1% until auto-compact
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -208,6 +209,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   ● main
   ◯ fork    Confirming commit hashes in worktree                                                                                                                1h 3m 8s · ↓ 428.9k tokens
-  ◯ claude  Checking folha include in urls_core.py                                                                                                                 3m 1s · ↓ 147.3k tokens
+  ◯ claude  Writing test_o48_passo6_menu_abre_o_retrato.py                                                                                                         8m 2s · ↓ 169.5k tokens
   ⧉  index
 ```
