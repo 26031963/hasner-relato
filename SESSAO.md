@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 13/10/2026 13:19:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (786.9 MB). Acoes na janela: **1290**.
+**Medido em 13/10/2026 13:25:03.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (787.3 MB). Acoes na janela: **1292**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 13:24:45 | Bash | Show the head of the probe output and the test lock holder | `cd /home/ronald/saas-hasner; sed -n '1,20p' logs/o263/red_geometria.out; echo "=== trava:"; bin/trava_teste.sh --quem` |
+| 13:19:48 | Bash | Read-only probe for the col297 and col843 geometry and the partido census | `cd /home/ronald/saas-hasner; mkdir -p logs/o263; cat > logs/o263/sonda_red_o263.py <<'PY' import datetime from django_tenants.utils import schema_context from django.db.models import Max ALVO = {297: [(2026, 8, 21)], 843: [(2026, 8, 26)]} with schema_context('juliani'): from django.utils import timezone as tz from colaboradores.models import Colaborador from escala.models import EscalaColaborador, ...` |
 | 13:18:59 | Bash | Read the working probe and the frota probe runner | `cd /home/ronald/saas-hasner; echo "=== noites_sis2.py ==="; cat logs/audit_holerite_09/noites_sis2.py; echo; echo "=== sonda_frota.sh (head 60) ==="; sed -n '1,60p' bin/sonda_frota.sh` |
 | 13:18:26 | Bash | Read the two noturno audit outputs from today | `cd /home/ronald/saas-hasner/logs/audit_holerite_09; ls -lt \| head -8; echo "=== rodada18 ==="; cat rodada18_noites_sis_20261013_1257.out \| head -80; echo "=== rodada17 (head 60) ==="; head -60 rodada17_noites_sis_20261013_1254.out` |
 | 13:18:17 | Bash | Look for the col297 case in the audit logs and check not_rel reuse | `cd /home/ronald/saas-hasner; echo "=== col297 em logs/audit_holerite_09/ ==="; ls logs/audit_holerite_09/ 2>/dev/null \| head -20; grep -rln "col297" logs/audit_holerite_09/ 2>/dev/null \| head; echo; echo "=== col297 + noturn em qualquer log (nomes) ==="; grep -rl "col297" logs/*.log logs/*.out logs/*.json 2>/dev/null \| head -30; echo; cd app; echo "=== uso de not_rel/not_leg depois da escrita = ...` |
