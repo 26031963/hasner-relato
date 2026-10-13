@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 13/10/2026 16:05:46.**
+**Medido em 13/10/2026 16:10:46.**
 
 | | |
 |---|---|
@@ -29,19 +29,19 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2430.3 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2430.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **198.8 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **198.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **12.0 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **12.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **314.9 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **315.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
   - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **219.1 h** (passou das 6 h da L-105)
@@ -81,7 +81,9 @@ d4779277 [O48] passo 6: o link ORIGINAL de fechamento do menu do admin abre o RE
  M bin/sonda_leitura.sh
 ?? app/GREEN
 ?? bin/aplicar_o263_comp10.py
+?? bin/restore_badge_linha_09_10.py
 ?? bin/restore_o263_comp10.py
+?? bin/snapshot_badge_linha_09_10.py
 ?? bin/snapshot_o263_comp10.py
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -172,44 +174,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Nova ordem recebida — URGENCIA-HOJE. Ela reordena tudo: parte A do badge×linha é minha agora, e a BUG-SOBRA vai para raia paralela na mesma sessão (RAIA-NAO-FICA-PARADA). Antes de
-  qualquer coisa, corrijo uma afirmação não medida que acabei de escrever sobre o col655:
 
-  Ran 2 shell commands
+  Ran 3 shell commands
 
-● Ordem clara. Parte A do badge×linha é minha; a BUG-SOBRA vai para raia paralela, como ele mandou:
-
-● fork(Raia paralela BUG-SOBRA-TIPO-TROCADO)
-  ⎿  Backgrounded agent (↓ to manage · ctrl+o to expand)
+● Montando o ensaio na sombra — um run, as duas competências, com o hash puro do TXT nas duas pontas:
 
   Ran 1 shell command
 
-● A porta já roteia a 09 para o retrato (corte dele de 29/09 09:0x), não para o motor de hoje — é exatamente o que mantém o TXT da 09 intacto. Lendo o resto:
+● Rodando o ensaio na sombra (motor sobre a frota, duas competências, com hash do TXT nas duas pontas):
+
+  Ran 1 shell command
+
+● Enquanto o ensaio corre, a condição 2 — a reversão. Modelada na da O263, e ela substitui aquela para o DiaPago:
+
+  Ran 1 shell command
+
+● crons_em_curso vazio — caminho livre. Tirando a foto em prod (só leitura):
+
+  Ran 1 shell command
+
+● Foto em prod: 31.864 linhas / 624 colabs / 6,5 MB. Agora o restore que a prova (DRY), e o estado do ensaio:
 
   Ran 2 shell commands
 
-● O desenho está claro e tem uma consequência que preciso medir antes de aplicar. Estado da pista e censo do que vou relavrar:
+● O restore apontou um defeito na minha própria foto, antes de qualquer escrita: ela gravou a data mas não o mes/ano da linha — e a competência corre do 21 ao 20, então a data não
+  determina a competência. Refazendo a foto com a chave completa (a primeira fica, foto não se apaga):
 
-  Ran 2 shell commands
+● Running 1 shell command…
 
-● Dois fatos decisivos, e o segundo muda o que a parte A pode fechar:
-
-  Ran 2 shell commands
-
-● Encontrei um conflito declarado em letra no próprio sítio entre o que ele quer da 09 e o que a porta que ele nomeou faz. Vou consultar antes de construir a cadeia de apply:
-
-● Advising using Fable 5.1
-
-* Concocting… (1d 1h 35m · ↓ 2.8m tokens)
+✶ Concocting… (1d 1h 40m · ↓ 2.8m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                                     ✔ Update installed · Restart to update
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                                                                  1h 3m 8s · ↓ 428.9k tokens
-  ◯ fork  Grepping CORTES.md for tipo gravado                                                                                                                     2m 53s · ↓ 168.6k tokens
+  ◯ fork  Correcting section 2 of ORIGEM_medida_13-10.md                                                                                                          7m 52s · ↓ 119.9k tokens
   ⧉  index
 ```
