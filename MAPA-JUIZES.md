@@ -93,6 +93,7 @@ _nenhum juiz declarado nesta familia._
 | a fabrica de perguntas alcanca o chamado (e se nao, por que)? | `chamados/services/disputa_emissao.py::motivo_fora_da_fabrica` |
 | a pergunta da disputa esta viva? | `chamados/juizes.py::pergunta_viva` |
 | a premissa do chamado morreu (pode fechar)? | `chamados/catalogo/premissa.py::premissa_morta` |
+| alguma pergunta desta colecao esta viva? | `chamados/juizes.py::fio_vivo` |
 | o chamado e duplicado (mesmo fato)? | `chamados/models.py::ChamadoColaborador.abrir` |
 | o chamado esta vivo (ou cobra alguem)? | `chamados/catalogo/motor.py::VIVOS` |
 | o prazo (SLA) do chamado estourou? | `chamados/catalogo/motor.py::prazo_estourou` |
@@ -180,9 +181,9 @@ _nenhum juiz declarado nesta familia._
 | `celula/precedencia` | 8 | 0 | 0 |
 | `escala` | 0 | 2 | 1 |
 | `ausencia/ferias` | 14 | 0 | 0 |
-| `chamado` | 13 | 1 | 0 |
+| `chamado` | 14 | 1 | 0 |
 | `fechamento` | 7 | 1 | 10 |
 | `feriado/prazo` | 6 | 2 | 13 |
 | `tela` | 10 | 1 | 113 |
 | `portas` | 1 | 0 | 124 |
-| **total** | **73** | **10** | **261** |
+| **total** | **74** | **10** | **261** |
