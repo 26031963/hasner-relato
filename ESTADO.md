@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 13/10/2026 20:46:21.**
+**Medido em 13/10/2026 20:51:42.**
 
 | | |
 |---|---|
@@ -29,28 +29,28 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2435.0 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2435.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **203.5 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **203.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **16.7 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **16.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **319.6 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **319.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **223.7 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **223.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **341.4 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **341.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -170,36 +170,36 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● O envelope explica as duas falhas: turnos.py:1151 só absorve a pausa que cabe na jornada que começou (720 min de 10:00 ⇒ 22:00), e todo intervalo que vaza da
-  janela termina fora dele. Mas turnos.py:1042-1044 diz o que faltava: quando a escala tem marcos de intervalo cadastrados, o par é intrajornada pelos MARCOS e o
-  teto de duração não é consultado — é essa a forma do col889. Com ela a fixture reproduz o caso dele com os números do aval:
-
-  Ran 4 shell commands
-
-● A guarda do cadastro (escala/models.py:798) proíbe a geometria que eu supus: intervalo declarado não pode terminar depois da saída. Então o par do col889 não vem
-  do cadastro — a própria docstring do pareador diz quem tem prioridade: a flag is_intervalo gravada na batida, e o papel Xi da ata. Meço se o campo existe antes de
-  reescrever de novo:
+● O retidos guarda os 13 campos de hora por colaborador (números, sem nome) — censo campo a campo nos 29:
 
   Ran 1 shell command
 
-● is_intervalo existe e é lido com prioridade. Antes de reescrever pela quarta vez, leio se o envelope de :1151 cede à flag:
+● O lado retido mostra a forma certa: 3 campos, todos na direção da cura (trabalhadas +33,30 h), e zero em extras, atraso, falta, motivo e apto_folha. Falta o censo
+  dos 20 que estão no TXT; leio o layout antes de tocar nas linhas, para não imprimir nome nem valor:
+
+  Ran 2 shell commands
+
+● Existe folha/export.py::partes_da_linha — o leitor da própria casa. Uso ele para o censo por rubrica, imprimindo só código e contagem:
+
+  Ran 2 shell commands
+
+● Só a rubrica 0200 mudou — mas meu censo conta 10 e a autoridade conta 20 linhas; não publico DIFF que não reconcilia. Leio as chaves reais do parser e conto LINHA,
+  como o comparar conta:
 
   Ran 1 shell command
 
-● O envelope só morde quando not _iv (turnos.py:1171,1177): a flag is_intervalo passa por fora do teto e do marco. É esse o caminho — cadastro válido, par interno
-  por declaração na batida:
+● Reconcilia: o comparar conta a diferença simétrica de linhas (so_antes=9 so_depois=9 ⇒ 18; +2 na emp3), e 20 linhas = exatamente os meus 10 pares (colab, rubrica).
+  Confirmo o que é a 0200 no catálogo:
 
-  Rebuilding fixture with is_intervalo flag and running RED
-  ⎿  $ SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
-     python3 - "$SP/test_o272_intra_fora_da_janela.py" <<'PY'
-     import sys
-     p = sys.argv[1]
-     s = open(p, encoding='utf-8').read()
-     s = s.replace("hora_inicio_intervalo='16:00', hora_fim_intervalo='23:00',",
-     "ho…
+  Ran 3 shell commands
 
-* Concocting… (1d 6h 16m · ↓ 3.3m tokens)
+● A 0200 é rubrica_hora_extra_100 / rubrica_dsr_trabalhado (ponto/models.py:924,930) — a rubrica da folga trabalhada, o alvo literal do O263-FT. O DIFF fechou com a
+  forma que o aval exige: no TXT mudou uma só rubrica, a do alvo; nos retidos, 3 campos de hora, todos do mecanismo da cura; entraram=0 sairam=0, motivo 0,
+  apto_folha 0, emp4 IGUAL. Consulto antes de pousar dinheiro:
+
+  Advising using Fable 5.1
+
+✢ Concocting… (1d 6h 21m · ↓ 3.3m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                              ✔ Update installed · Restart to update
 ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
