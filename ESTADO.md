@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 13/10/2026 16:53:13.**
+**Medido em 13/10/2026 16:58:42.**
 
 | | |
 |---|---|
@@ -29,22 +29,22 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2431.1 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2431.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **199.6 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **199.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **12.8 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **12.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **315.7 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **315.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **219.8 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **219.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -175,44 +175,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+● retratada_em vazio, zero batida nova, zero aprovação: a causa de col366/col697/col900 é código. E col697 mudou de pareamento (12:00→16:59 = 4,98 h virou 13:23→16:59 = 3,60 h, respeitando
+  o tipo E/S) — que é exatamente o que a raia paralela está curando. Preciso saber com que árvore meu docker exec rodou:
 
   Ran 1 shell command
 
-● Nenhuma linha nova ou sumida carrega dinheiro (todas ZERO). Restam 17 movimentos de dinheiro, 9 colabs, e cada um precisa de causa medida. Começo pelo que já foi medido hoje:
+● Zero .py modificado na árvore viva, HEAD 5d157d1f — a relavra rodou com código commitado. As duas rodadas do O263 têm saída crua guardada; vou perguntar a elas diretamente pelos três
+  colabs:
 
   Ran 1 shell command
 
-● Os 5 movimentos de 12/10 vão de 7,00 h para 6,00 h exatos em ex100_noturna — a assinatura do intervalo de 1 h dentro da janela 22–05. Mas o DIFF do O263 diz "nenhum outro colaborador da
-  frota" move na 10. Vou medir na fonte, por batida e célula:
+● A rodada VELHO (código pré-cura) já continha estes movimentos: horas_folga_trabalhada colabs=1 soma=−32.98 é literalmente o col366, e horas_trabalhadas colabs=7 +43.04,
+  horas_intra_indenizada colabs=3 −1.00, saldo_banco_horas +112.45. Ou seja: classe já medida e publicada às 14:1x como gravado envelhecido, não a cura e não a régua. Nenhuma classe nova —
+  não há PAREI. Agora, se o badge lê o gravado ou o motor decide como medir o pós-apply:
 
   Ran 1 shell command
 
-● O campo é timestamp, não data_hora — e o modelo tem is_intervalo, que mede o intervalo sem eu inventar lacuna.
-
-  Ran 4 shell commands
-
-● Decisivo. Dos 9 colabs, 6 têm batida nova nas últimas 30 h (col174/218/235/474/923 no 12/10 e col248 hoje) e col467 teve a célula regenerada hoje 10:34 — gravado envelhecido, causa
-  medida. Sobram col366 (3 dias), col697 e col900 sem evento nenhum: a causa só pode ser código. Vou ler o DIFF do O263 inteiro antes de atribuir.
+● O badge é o motor ONLINE (recalcular_fechamento_mes(..., somente_leitura=True)) e a linha é o gravado: a divergência é, por construção, a IDADE da lavra — o que é a origem da parte B.
+  Medir a frota pós-apply exige motor, logo sombra com dump de agora. Vou lançar isso em segundo plano enquanto escrevo a PROVA:
 
   Ran 1 shell command
 
-● O DIFF do O263 é explícito: horas_trabalhadas, horas_folga_trabalhada e horas_intra_indenizada são idênticas nas duas rodadas na 10 — não são da cura. Então col366/col697/col900 têm
-  outra causa. Vou ao commit da cura e ao histórico do que pousou entre a lavra anterior e agora.
+● O carimbo da sombra está OK/completa/diverge=0 — é o portão do deploy verde, e um --refazer o zeraria por ~40 min. Melhor caminho: o selo lê pela mesma porta que o comando da casa acabou
+  de rodar duas vezes em prod. Vou adaptar o selo com a asserção de prod e contagem antes/depois:
 
-● Inspecting the O263 cure and recent landings
-  ⎿  $ cd /home/ronald/saas-hasner; echo "=== O263: o que a cura toca ==="; git show --stat 5d157d1f | head -20; echo; git show 5d157d1f -- app/ponto/motor_calculo_v2.py | grep -nE
-     '^[-+].*(trabalhad|intra|intervalo|folga|noturn)' | head -30; echo; echo "=== commits que pousaram nas ultimas 36h (lavra a…
+  Reading the sombra selo script
+  ⎿  $ cd /home/ronald/saas-hasner && sed -n '1,200p' logs/sombra/selo_linha_x_badge.py
 
-✻ Concocting… (1d 2h 23m · ↓ 2.9m tokens · thinking)
+✢ Compacting conversation… (1d 2h 28m · ↓ 2.9m tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 56%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                                                    ✔ Update installed · Restart to update
+                                                                                                                                                                     0% until auto-compact
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                                                                  1h 3m 8s · ↓ 428.9k tokens
-  ◯ fork  Running escala sobra-na-borda tests                                                                                                                    50m 19s · ↓ 133.0k tokens
+  ◯ fork  Writing medir_sobra_com_tipo_trocado in tripwire_celulas.py                                                                                            55m 48s · ↓ 165.0k tokens
   ⧉  index
 ```
