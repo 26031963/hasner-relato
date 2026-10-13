@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 13/10/2026 11:00:46.**
+**Medido em 13/10/2026 11:06:02.**
 
 | | |
 |---|---|
@@ -29,28 +29,28 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2425.2 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2425.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **193.7 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **193.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
   - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **7.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **309.8 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **309.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **214.0 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **214.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **331.7 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **331.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -166,37 +166,37 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: O261 -- BUG-FIO-MORTO-CHAMADO (aval dele 12/10 20:2x, P7.1 -- bug PROVADO POR ELE, fura a fila; id novo
-  por ordem lite
-
-  Searched for 1 pattern, ran 10 shell commands
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-  Ran 1 shell command
-
-● Background command "Watch saas_ui for 500s for 5 minutes after the deploy" completed (exit code 0)
-
-  Read 1 file, ran 4 shell commands
-
-● O vigia fechou limpo: saas_ui: 5xx=0 traceback=0 best_effort=0, igual em saas_core e saas_caddy, nos 5 min seguintes ao deploy
   (2026-10-13T13:52:38Z → 13:57:38Z). A condição do seu aval está cumprida — nada a reverter.
 
   Ran 1 shell command
   ⎿  Resuming agent a742c7f
   ⎿  Allowed by auto mode classifier
 
-● Reading motivo_fora_da_fabrica in full
-  ⎿  $ echo "=== motivo_fora_da_fabrica (assinatura + corpo):"; S=$(grep -n "def motivo_fora_da_fabrica"
-     chamados/services/disputa_emissao.py | cut -d: -f1); echo " def na linha $S"; sed -n "$((S-30)),$((S+60))p"
-     chamados/services/disputa_emissao.py
+  Ran 2 shell commands
 
-✶ Concocting… (20h 30m 56s · ↓ 2.2m tokens · thought for 8s)
+● motivo_fora_da_fabrica e supra_juiz.py:165 já estão curados na árvore viva (90546b2f, item 3) — a célula do BACKLOG está velha nesse
+  ponto. O que sobra do item 3 é o _C1 e o guard do cartorio.py:826. Censo antes de tocar qualquer um:
+
+  Ran 1 shell command
+
+● Censo por AST — quem reduz pergunta_viva sobre as perguntas de um chamado/disputa (cópias paralelas do fio_vivo):
+
+  Ran 1 shell command
+
+● 17 reduções pela FORMA — mas a pergunta é que classifica, não a forma. Lendo os candidatos:
+
+  Ran 1 shell command
+
+● 2 cópias verdadeiras (as outras 15 respondem pergunta DIFERENTE). Antes de declarar, leio a trava e a célula do contrato:
+
+● Reading the juiz-novo trava selo and the chamado contract cells
+  ⎿  $ cd /home/ronald/saas-hasner && echo "=== o selo da TRAVA JUIZ-NOVO:"; cat bin/tests/test_juiz_novo_tem_corte.sh; echo; echo "===
+     celula chamado x '1 juiz por pergunta' no contratos_estruturais:"; grep -n "chamado" app/core/contratos_estruturais.py | head -20
+
+✢ Compacting conversation… (20h 36m 12s · ↓ 2.2m tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱ 83%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    9% until auto-compact
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -204,6 +204,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  wt-ui: condições (a) e (b) do PUBLICAR-RETRATO                                                 21s · ↓ 160.7k tokens
+  ◯ general-purpose  Reading RetratoFolha fixture in test_retrato_folha_contador.py                              5m 37s · ↓ 107.2k tokens
   ⧉  index
 ```
