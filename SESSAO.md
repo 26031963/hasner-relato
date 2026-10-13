@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 13/10/2026 03:47:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (759.2 MB). Acoes na janela: **1274**.
+**Medido em 13/10/2026 03:53:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (759.2 MB). Acoes na janela: **1275**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 03:50:27 | Bash | Keep waiting for the suite veredito | `cd /home/ronald/saas-hasner \|\| exit 1 i=0 until grep -qE "^SUITE_RC=" logs/o261/comboio_suite.log 2>/dev/null \|\| [ $i -ge 22 ]; do sleep 25; i=$((i+1)); done date '+%H:%M:%S'; tail -3 logs/o261/comboio_suite.log` |
 | 03:41:12 | Bash | Wait for the suite veredito by file | `cd /home/ronald/saas-hasner \|\| exit 1 i=0 until grep -qE "^SUITE_RC=" logs/o261/comboio_suite.log 2>/dev/null \|\| [ $i -ge 22 ]; do sleep 25; i=$((i+1)); done date '+%H:%M:%S'; tail -4 logs/o261/comboio_suite.log` |
 | 03:40:58 | Bash | Check the suite progress | `date '+%H:%M:%S'; cd /home/ronald/saas-hasner \|\| exit 1 wc -c < logs/o261/comboio_suite.log grep -cE "^(OK\|FAILED)($\| \()" logs/o261/comboio_suite.log 2>/dev/null; echo "(0 = ainda correndo)" grep -n "^FAIL:\\|^ERROR:" logs/o261/comboio_suite.log \| head -10` |
 | 03:40:51 | Bash | Add the esmeril FILA line to the FASE 3 section | `cd /home/ronald/wt-fio/app \|\| exit 1 python3 - docs/RELATO.md <<'PY' import sys p = sys.argv[1] s = open(p, encoding='utf-8').read() old = "(e) smoke em prod depois do deploy, com o resultado aqui.\n" new = ("(e) smoke em prod depois do deploy, com o resultado aqui; " "(f) FILA, achado do esmeril deste marco: **4** sitios reduzem lista de perguntas pelo `viva` " "com o mesmo idiom -- `folha/fora ...` |
