@@ -54,6 +54,17 @@ esperam migrar -- a lista so encolhe).
 | uma ausencia cobre o dia para a folha? | `ponto/turnos.py::ausencia_cobre` |
 | uma ausencia suspende a cobranca do dia? | `ponto/turnos.py::ausencia_cobre` |
 
+## Familia `escala`
+
+_nenhum juiz declarado nesta familia._
+
+**SEM JUIZ declarado** (2):
+
+- **o vinculo cobre a data?** -- nao migrada, e nao ha autoridade declarada: `escala/folgas.py::vinculo_que_cobre` (com o `_cobre`) responde para 3 chamadores, e `ponto/management/commands/gerar_celulas.py::_outro_vinculo_cobre` e a SEGUNDA copia, no caminho da GERACAO (chamada por `ponto/portas/celula.py:190`). Duas copias, zero d
+- **qual vinculo vale neste dia?** -- a LEI existe (O69, prompt dele de 27/09 00:xx): a resposta e `CelulaDia.escala_geradora`, lida por `escala/alimentacao.py::vinculo_do_dia`. Falta a FRASE da TRAVA JUIZ-NOVO pelo nome da funcao, e eu nao posso escreve-la: a autonomia de 11/10 exige autoridade unica MEDIDA, e sao 8 arquivos (9 linhas)
+
+**PENDENTES nesta familia**: 1 leitor(es) com regra propria, esperando migrar.
+
 ## Familia `ausencia/ferias`
 
 | pergunta | juiz (dono) |
@@ -167,10 +178,11 @@ esperam migrar -- a lista so encolhe).
 | `batida` | 2 | 3 | 0 |
 | `turno/marcos` | 12 | 0 | 0 |
 | `celula/precedencia` | 8 | 0 | 0 |
+| `escala` | 0 | 2 | 1 |
 | `ausencia/ferias` | 14 | 0 | 0 |
 | `chamado` | 13 | 1 | 0 |
 | `fechamento` | 7 | 1 | 10 |
 | `feriado/prazo` | 6 | 2 | 13 |
 | `tela` | 10 | 1 | 113 |
 | `portas` | 1 | 0 | 124 |
-| **total** | **73** | **8** | **260** |
+| **total** | **73** | **10** | **261** |
