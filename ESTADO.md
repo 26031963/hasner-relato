@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 13/10/2026 00:12:02.**
+**Medido em 13/10/2026 00:17:32.**
 
 | | |
 |---|---|
@@ -29,35 +29,35 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2414.4 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2414.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **182.9 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **183.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261011`) -- **SEM AGENTE**
-  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **44.9 h** (passou das 6 h da L-105)
+  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **45.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **299.0 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **299.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **203.2 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **203.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **320.9 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **321.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
-  - 0 commit(s) a frente do `main`, 2 arquivo(s) sujo(s)
+  - 0 commit(s) a frente do `main`, 6 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
-- **21 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
+- **22 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-fio, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
-**sem agente: 6** (raia com commit a frente e sem declaracao, esperado 0) -- **a frente do main ha mais de 6 h: 6** -- uniao medida: 30
+**sem agente: 6** (raia com commit a frente e sem declaracao, esperado 0) -- **a frente do main ha mais de 6 h: 6** -- uniao medida: 31
 
 > Raia sem agente por mais de um marco pede linha de motivo no RELATO -- lei, `!` ou pista (item 4 do aval).
 
@@ -75,6 +75,7 @@ c2ab8cf5 [O260] com_dias=True deixa de devolver a LISTA CRUA: as duas saidas ant
 
 ```
  M app/config/crons_duracao.json
+ M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
  M bin/sonda_frota.sh
 ?? esteira.pausada
@@ -166,36 +167,36 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 1 shell command
 
-● Deploy OK, three routes proved. Now the positive proof that the 500 is actually gone — the deploy's /colaboradores/ -> 302 doesn't render
-  base.html, so that alone proves nothing about the tag:
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: O261 -- BUG-FIO-MORTO-CHAMADO (aval dele 12/10 20:2x, P7.1 -- bug PROVADO POR ELE, fura a fila; id novo
+  por ordem lite
 
-  Ran 1 shell command
-
-● Tag resolves, both cascas compile, and the previa body is now plain text. The ProgrammingError is the expected public-schema path —
-  registrar_engolido swallowed it and returned the house default, exactly as designed. Proving the tenant path, where the table exists:
+● The hook is right to refuse — O261 is the open fila-1 item and the turn doesn't end with fila 1 in pé. Reading what the hook demands and
+  what O261 still owes, before I act:
 
   Ran 1 shell command
 
-● Prod is cured — tenant path reads the live cadastro (0 rows, so the default is what's sent) and the previa shows exactly that text, no
-  markup. Closing checks:
+● The hook wants the fila to advance, not the turn to end — and it's correct. The wt-fio agent owns FASE 2's code; let me read what O261
+  still owes the principal, which is file-disjoint from it:
 
-  Ran 1 shell command
+  Searched for 1 pattern
 
-● Zero new tag errors, trava livre (the wt-ui agent already did its ff-only merge). Marco closed — running the handoff per L-108 and
-  clearing my own scratchpad worktrees:
+● The BACKLOG cell is stale — it still says "FASE 1 EM CURSO" when FASE 1 closed with the censo published. Correcting it to the truth, and
+  measuring the principal's board:
 
-  Ran 1 shell command
+● Updating the O261 state cell to reflect FASE 1 closed
+  ⎿  $ python3 - <<'PY'
+     import io
+     alvo = 'docs/BACKLOG.md'
+     s = io.open(alvo, encoding='utf-8').read()
+     velho = ('| **FASE 1 EM CURSO, em raia PROPRIA `wt-fio`** (aval dele 12/10 22:3x): o censo passa a ser de '
+     '**CODIGO** (AST), nao de frota -- e por isso **nao depende mais da O260**. Os 6 sitios que el…
 
-● Marco closed. Checking the push gate — I should measure it, not assert from memory:
-
-● Running 1 shell command…
-  ⎿  $ cd /home/ronald/saas-hasner && bash bin/tests/test_lei_akita.sh 2>&1 | tail -8; echo "SELO_RC=${PIPESTATUS[0]}"
-
-✢ Concocting… (9h 42m 12s · ↓ 1.1m tokens)
+✢ Compacting conversation… (9h 47m 42s · ↓ 1.1m tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱ 88%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -203,7 +204,7 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Writing test_o261_lavra_le_a_lampada.py                                                    16m 42s · ↓ 102.8k tokens
-  ◯ general-purpose  Extracting _pedido in views_retrato.py                                                     16m 42s · ↓ 149.8k tokens
+  ◯ general-purpose  Consulting advisor on lavrar guard placement                                               22m 12s · ↓ 125.3k tokens
+  ◯ general-purpose  Adding Raio-X button to _retrato_barra.html                                                22m 12s · ↓ 168.3k tokens
   ⧉  index
 ```
