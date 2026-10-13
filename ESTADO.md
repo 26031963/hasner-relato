@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:4504 AFIRMA ato sem PROVA ao lado -- | **LEITURA-LITERAL-DO-CARIMBO** | 2026-10-12 19:5x | 2 h | CUMPRIDO SEM UMA LINHA DE CODIGO, e isso se MEDE: ele carimba exatamente o que p
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:4501 AFIRMA ato sem PROVA ao lado -- | **LEITURA-LITERAL-DO-CARIMBO** | 2026-10-12 19:5x | 3 h | CUMPRIDO SEM UMA LINHA DE CODIGO, e isso se MEDE: ele carimba exatamente o que p
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 12/10/2026 23:24:32.**
+**Medido em 12/10/2026 23:30:02.**
 
 | | |
 |---|---|
@@ -29,31 +29,31 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2413.6 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2413.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cb** (`(detached)`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 12 arquivo(s) sujo(s), commit a frente ha **5.2 h**
+  - 1 commit(s) a frente do `main`, 12 arquivo(s) sujo(s), commit a frente ha **5.3 h**
   - sem declaracao em `logs/raias/wt-cb.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **182.1 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **182.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261011`) -- **SEM AGENTE**
-  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **44.1 h** (passou das 6 h da L-105)
+  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **44.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **298.2 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **298.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **202.4 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **202.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **320.1 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **320.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -78,7 +78,11 @@ c2ab8cf5 [O260] com_dias=True deixa de devolver a LISTA CRUA: as duas saidas ant
 
 ```
  M app/config/crons_duracao.json
+ M app/docs/BACKLOG.md
+ M app/docs/CORTES.json
+ M app/docs/CORTES.md
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/PROMPTS.md
  M app/docs/RELATO.md
  M bin/sonda_frota.sh
 ?? esteira.pausada
@@ -171,35 +175,35 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-● Advisor is right — I printed the ja gate and didn't close the loop. Three measurements before I rewrite that bullet.
-
-  Ran 1 shell command
-  ⎿  Read docs/AVAIS.md (23 lines)
-  ⎿  Referenced file ponto/tests/test_contract_juiz_batida.py
-  ⎿  Referenced file core/juizes.py
-  ⎿  Referenced file folha/export.py
-  ⎿  Referenced file docs/LEIS.md
-
-● Task "RED e construção do segundo intervalo" completed in background
-
-● Three answers, and the middle one is the honest outcome. Confirming the mechanics before I rewrite.
+● Section needs a real rewrite (bullet 1 inverts, table verb wrong). Doing that, then registering the new aval — both this turn.
 
   Ran 1 shell command
 
-● ja finding confirmed at primary source — no materializada_em filter, so a carimbada pergunta holds its own motivo slot. And :824 is the
-  middle outcome. Two measurements to land the rewrite.
+● 22 lines, one section, honest. Now the new aval — registering it and locating the code in the same pass.
 
   Ran 1 shell command
 
-● 27 by this criterion vs the 21 my published censo used — different detectors, so I won't swap numbers across them. Re-running the
-  original censo and intersecting.
+● Measuring the O206 bug first — the aval's core question is cheap and it shapes the registration text.
 
-● Re-rodar o censo original
-  ⎿  $ cd /home/ronald/wt-fio/app && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && ls
-     -la $S/vias_classe.py $S/vias_abc.py 2>&1 | head -4 && echo "=== os 21 do censo publicado, com a DIRECAO perguntada ao MESMO corpo
-     ===" && python3 $S/vias_abc.py . 2…
+  Searched for 1 pattern, read 1 file, ran 1 shell command
 
-· Concocting… (8h 54m 42s · ↓ 975.6k tokens · thinking)
+● hxPreviewCobranca is an HTML string handed to hxConfirm, and the title/body text is hard-coded in JS. Measuring both ends.
+
+  Ran 1 shell command
+
+● Both ends measured. Reading the authority of the sent text before I design.
+
+  Ran 1 shell command
+
+● Measured, both ends. Registering the aval now (owed this turn), then advisor before I build.
+
+  Read 1 file, ran 5 shell commands
+
+● Registered and durable (CORTES 84, PROMPTS, BACKLOG). One measurement before advisor — who else calls the previa.
+
+● Censo de chamadores da previa
+
+✢ Concocting… (9h 0m 12s · ↓ 998.0k tokens · still thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
