@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 12/10/2026 23:35:32.**
+**Medido em 12/10/2026 23:40:46.**
 
 | | |
 |---|---|
@@ -29,22 +29,22 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2413.8 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2413.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cb** (`(detached)`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 12 arquivo(s) sujo(s), commit a frente ha **5.4 h**
+  - 1 commit(s) a frente do `main`, 12 arquivo(s) sujo(s), commit a frente ha **5.5 h**
   - sem declaracao em `logs/raias/wt-cb.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **182.3 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **182.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261011`) -- **SEM AGENTE**
-  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **44.3 h** (passou das 6 h da L-105)
+  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **44.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **298.4 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **298.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
   - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **202.6 h** (passou das 6 h da L-105)
@@ -174,13 +174,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  templates/chamados/partials/_raiox_lente.html + abrirDrawer 920), sem juiz novo, so leitura do retrato GRAVADO (RetratoFolha.linhas).
-  (1) botao Raio-X na barra abre a LENTE do filtro ativo (dono/praca/empresa): grupos por Tipo com contagem, linha clicavel abre o drawer
-  do colab (E3). (2) PLACAR ontem x hoje lido de DOIS retratos gravados da mesma competencia: Bloqueados por dono antes -> agora, quantos
-  entraram; a tela nao recalcula. (3) com dono Colab ativo, o bloco Aceite das cobrancas reusa chamados.services.verbos::placar_aceite.
-  (4) o drawer do colab ganha o BOTAO DE ACAO que leva a porta que ja resolve o motivo (cobrar, validar pergunta, vinculo da escala), so
-  link para porta existente, nenhum escritor novo. (5) acao em lote "cobrar todos os filtrados" ESPERA o conserto do HTML bruto do O206.
-  Contador == universo nos grupos (L1). Nenhuma lei nova. Segue a fila; PAREI so em lei ou !
 
 ● Measurements close: both pushes read the one _texto_cobranca() (:55, :134), push_fcm_colaborador persists no row (it forwards to
   push_fcm), wt-ui is clean, and validacao.py:177 is indeed the gate line. Registering the new aval — item (5) of it waits on exactly what
@@ -199,13 +192,20 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● chamados/services/cobranca.py already exists — the right home. And comunicados/views.py:112 is a third reader. Reading both.
 
-  Ler o service de cobranca e o console
-  ⎿  $ echo "=== services/cobranca.py (cabecalho + defs) ===" && head -18 chamados/services/cobranca.py && grep -n "^def \|^from \|^import
-     " chamados/services/cobranca.py && echo && echo "=== comunicados/views.py 105-125 ===" && sed -n '105,125p' comunicados/views.py
+  Ran 1 shell command
 
-✢ Concocting… (9h 5m 42s · ↓ 1.0m tokens · thinking some more)
+● A fourth copy of the same text: comunicados/views.py:113-114 hand-copies both defaults as literals. So the censo is one authority and
+  three readers, two of which recalculate. Checking the homes before I write.
+
+● Ver comunicados, tags e o modelo
+  ⎿  $ echo "=== comunicados/ ===" && ls comunicados/ && echo && echo "=== chamados_tags.py: cabecalho ===" && head -14
+     chamados/templatetags/chamados_tags.py && echo "... defs:" && grep -n "^def \|register\." chamados/templatetags/chamados_tags.py |
+     head -12 && echo && echo "=== TemplatePush modelo ===…
+
+· Compacting conversation… (9h 10m 56s · ↓ 1.0m tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱ 95%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    2% until auto-compact
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
