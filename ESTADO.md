@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 13/10/2026 19:22:02.**
+**Medido em 13/10/2026 19:27:32.**
 
 | | |
 |---|---|
@@ -29,28 +29,28 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2433.6 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2433.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **202.1 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **202.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **15.3 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **15.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **318.2 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **318.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **222.3 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **222.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **340.0 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **340.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -178,22 +178,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  Ran 1 shell command
-
-● Both avais are in the esteira with your words literal, and the O270 universe now carries your number, not mine.
-
-  O270 INTRA-4H-A-6H-INDENIZA — jornada 4h–6h sem pausa indeniza o suprimido do mínimo (Art.71 §1+§4), mesmo max(cadastro, piso), mesma tolerância de 10 min.
-  Universe corrected to 15 dias / 4 colabs: col504 12 dias (previsto 360 vs template 471 declarando 60 por duração numa jornada de 6h → o 60 vai à lista do admin
-  confirmar, e até ele responder o mínimo segue max(cadastro, piso)), col881 23/08, col123 08/09, col138 10/09. Os 25 dias de col823/892/248/41 saíram — jornada
-  prevista de 4h, a L-097 já corta e Art.71 só devolve intervalo a partir de 4h. Registrado que a CCT dos 4 não está conferida e cláusula própria manda, e que o DIFF
-  da 10 tem de mostrar só esses 15 dias.
-
-  O263-FT FT-SEM-MARCO-NAO-SE-RECORTA fica logo antes dela, como complemento da O263.
-
-  Parte B, enquanto isso: a suíte cheia deu 10916 tests, 1 failure — e o vermelho era meu: linha_x_badge passou a ler fonte_dos_totais e o censo de leitores
-  (relatorios/tests/test_fonte_dos_totais_tem_leitor.py::LEITORES) existe exatamente para não deixar leitor crescer calado. Declarei o leitor #5 com o motivo (badge
-  de lavratura lê o próprio DiaPago, então não serve de testemunha) e os dois módulos voltaram verdes (24 OK). O contador real está rodando na sombra para as comps
   09 e 10 (breexxe5o → logs/parteB_sombra.out); é dele que sai a PROVA do 7º par do R4, e com ela fecho o commit do marco e o bin/deploy.sh (com migrate, por causa
   do drift 0012 da O256 que o makemigrations --check pegou).
 
@@ -201,21 +185,37 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
   ⎿  Stop hook error: siga: BUG-LINHA-X-BADGE -- BUG-LINHA-X-BADGE (aval dele 13/10 15:1x em partes, P7.1 -- fura a fila; id dado por ELE). ACHADO MEDIDO POR
   E
 
-● Waiting for the sombra counter output · 7m 44s
-  ⎿  $ cd /home/ronald/saas-hasner; until grep -qE "comp10|Error|Traceback" logs/parteB_sombra.out; do sleep 30; done; grep -E "comp(09|10)|Error"
-     logs/parteB_sombra.out | tail -8 (7m 44s)
+  Ran 2 shell commands
+
+● Sombra counter still running (carimbo written, medir sweeping the frota). Using the wait for the marco's esmeril — the one thing the rotina allows now.
+
+  Ran 1 shell command
+
+● Esmeril clean: all four new names have callers (impressao_da_regua 9, linha_x_badge 23, regua_das_linhas 1, PARES_LINHA_X_BADGE 1), and parte B orphaned nothing —
+  it only adds, so there's no L-111 debt to pay in this marco. Waiting on the counter file.
+
+● Waiting for the sombra counter to reach comp 10 · 2m 39s
+  ⎿  $ cd /home/ronald/saas-hasner; until grep -qE "comp10 |Error|Traceback" logs/parteB_sombra.out; do sleep 45; done; date +%H:%M; grep -E "comp(09|10) |Error"
+     logs/parteB_sombra.out | tail -8 (2m 39s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Concocting… (1d 4h 52m · ↓ 3.1m tokens)
+✢ Concocting… (1d 4h 57m · ↓ 3.1m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+
+❯ aval Ronald: BUG-COMERCIAL-SEM-PONTUALIDADE -- MotorComercial.calcular_periodo nao chama aplicar_tolerancia (regua unica F0-CONFORMIDADE 11/08, "consumida pelos
+  dois julgadores"); 6x1/5x2 continuos (inclusive os que o corte (b) de 27/09 tirou do turno partido) nunca descontam atraso nem saida antecipada; medido sonda
+  13/10: col406 27/08 77 min de atraso com atr=0 e sem alerta; idem col709/648/864/892/468/248/390/549/823 e sabados do col504. Cura na ORIGEM: o comercial passa
+  pela mesma regua (aplicar_tolerancia + L-084 + L-093 + O73), sem copia; RED col406 27/08; DIFF da 10 antes; 09 so numero. Banco de horas segue como esta (sem lei;
+  nao exportado). Segue a fila; PAREI so em lei ou !
+  ctrl+x ctrl+s to send now
                                                                                                                              ✔ Update installed · Restart to update
 ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ Press up to edit queued messages
 ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                                           1h 3m 8s · ↓ 428.9k tokens
-  ◯ fork  Diagnosing stalled haiku_sobra_frota run                                                                                     1h 17m 23s · ↓ 137.5k tokens
+  ◯ fork  Diagnosing stalled haiku_sobra_frota run                                                                                     1h 22m 53s · ↓ 137.5k tokens
   ⧉  index
 ```
