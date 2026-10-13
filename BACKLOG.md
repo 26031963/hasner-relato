@@ -5,6 +5,28 @@
 > **livre** = pode virar fatia agora, sem humano. **corte/aval/smoke/dinheiro-ate-export** = tem dono humano e espera.
 
 <!-- ORDEM-VIVA-TOPO: O261 -->
+<!-- ADENDO em 13/10 ~08:2x, AVAL `RECESSO-PISTA-DO-ADMIN` (vale de agora ate o export da
+     competencia 10 CONFIRMADO). *"Nenhuma lei nova"*, e ele nao abre obra: REPRIORIZA as abertas.
+     A ORDEM, literal: **(1) O261 passivo** -- relavratura dos 124 pela impressao nova (`ae7f08f3`),
+     DIFF de frota ANTES, reversao em `logs/`; **(2) o pouso da `wt-ui`** com os ajustes da UI do
+     retrato (RETRATO-DONO-SAO-TRES + legenda dos LEDs + PDF na barra); **(3) batida 16/20 pela
+     L-118**; **(4) os contratos seguintes, UM POR VEZ enquanto houver cota**, pelo CRITERIO novo --
+     *"cura com DIFF de frota ZERO na competencia 10 anda; cura que muda quem entra ou o valor da 10
+     (folha/export, dinheiro, celula) PAUSA ate o export e vira linha no RELATO"*. A celula
+     **folha/export x um juiz** fica para DEPOIS do export (CONTRATOS-ATE-A-VIRADA).
+     **DEPOIS**: GRUPO-D, Raio-X, E4, O48 passos 3 e 6, O44, chamado x juiz.
+     **JANELA DE FECHAMENTO**: de 19/10 ate o export **so sobe tela e bug PROVADO**; deploy de tela
+     com smoke headless nas 3 LARGURAS **antes**, e 500 em `saas_ui` nos 5 min seguintes = reverter o
+     PROPRIO commit pela porta + PAREI no RELATO. O **smoke de clique da O256 passa ao Fernando**.
+     O QUE ISSO CUSTA, e o custo e meu, nao dele: o **GRUPO-D sai da frente** -- o censo que o corte
+     das 07:3x pediu fechou NO ATO deste aval e fica em `logs/o261/censo_grupod_13-10.txt` (4.311
+     dias de lampada acesa sem fio em 405 colabs pelo juiz REAL `_fio_do_dia`, nao os 1.884 do
+     predicado largo; nucleo de 210 dias em 55 colabs; e so **13** dias com a porta de
+     `cartorio.py:957` ABERTA e todos os guardas passando), e a CURA pelo emissor espera a vez.
+     O marcador ORDEM-VIVA-TOPO **nao se move**: ele ja aponta `O261`, que e o item (1).
+     As raias **nao param de construir** (RAIA-NAO-FICA-PARADA: *"o que se enfileira e o POUSO,
+     nunca a construcao"*) -- `wt-o48p3` e `wt-bos` seguem, e so o POUSO delas desce na fila; as tres
+     foram avisadas no mesmo turno. -->
 <!-- ADENDO em 11/10 ~23:0x, QUATRO AVAIS/CORTES DELE NO MESMO TURNO. Nenhuma lei nova (ele diz
      *"Nenhuma lei nova"* no primeiro e *"PAREI so em lei ou !"* nos quatro). O que cada um MOVE:
      **(1) `FOLHA-EXPORT-JUIZ-DO-QUE-BLOQUEIA` CAI** -- *"ja esta respondido pelo corte (2) de
