@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 13/10/2026 15:06:32.**
+**Medido em 13/10/2026 15:12:02.**
 
 | | |
 |---|---|
@@ -29,28 +29,28 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2429.3 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2429.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **197.8 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **197.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
   - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **11.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **313.9 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **314.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **218.1 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **218.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **335.8 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **335.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -176,41 +176,41 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-  Ran 17 shell commands
+  Esmeril do marco — 0 órfãos (fiz o censo enquanto ela corre, e só do que ESTE marco mexeu): os quatro sítios do noturno seguem com chamador de produção — minutos_noturnos_dos_intervalos
+  (motor:390, :1627), _noturno_dos_intervalos (motor:912, calculador/regras.py:62 e :85), calcular_noturnas (motor:930), he_noturna (motor:941, regras.py:698). Nenhuma função perdeu o
+  último chamador, então a L-111 não tem o que apagar aqui.
 
-❯ corte Ronald: intermitente que trabalha em feriado [recebe dobra pela Lei 605 art.9 / não recebe, como o MotorIntermitente declara]. Segue a fila; PAREI só em lei ou !
+  Achado que muda o apply, medido agora em prod (leitura): o ANTES de col297 andou — a comp 10 está viva e ele hoje trabalhou.
 
-  Ran 39 shell commands
-  ⎿  Read docs/AVAIS.md (23 lines)
-  ⎿  Referenced file core/juizes.py
-  ⎿  Read ../logs/o261b/watch_5min_o256.log (6 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/buulw0j03.output (6 lines)
-  ⎿  Referenced file ponto/services/cartorio.py
+  ┌───────────────────────┬────────────────────────────────┬────────────────────┐
+  │                       │ DIFF publicado (sombra, 14:2x) │ prod agora (15:0x) │
+  ├───────────────────────┼────────────────────────────────┼────────────────────┤
+  │ col297 horas_noturnas │ 82,49                          │ 87,15              │
+  ├───────────────────────┼────────────────────────────────┼────────────────────┤
+  │ col457 horas_noturnas │ 8,00                           │ 8,00               │
+  └───────────────────────┴────────────────────────────────┴────────────────────┘
 
-● Task "RED e construção do segundo intervalo" completed in background
+  O bin/aplicar_o263_comp10.py não trava nisso (ele imprime o ANTES, não o assere), mas a magnitude publicada (−10,69 h em col297) é a da sombra; a que vale é o antes/depois do próprio
+  apply em prod, e isso vai dito no RELATO junto da prova. O lado bom: col297 ter sido recalculado agora significa que o gravado dele está fresco, não envelhecido — o apply deve mover só
+  campo noturno.
 
-● Task "Run the full suite against the post-merge O263 copy" still running in background
+  Commit message já atualizada com o RED, a cura, o esmeril e a dupla certificação (100 linhas, com o veredito da segunda suite a preencher). Aguardando a suite; nada do encadeamento
+  commit → deploy.sh --sem-migrate → snapshot → DRY → apply começa antes dela ficar verde.
 
-● Background command "Run the full suite against the post-merge O263 copy" completed (exit code 0)
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: O261 -- BUG-FIO-MORTO-CHAMADO (aval dele 12/10 20:2x, P7.1 -- bug PROVADO POR ELE, fura a fila; id novo por ordem lite
 
-● Confirming the accumulator line
-  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; sed -n '137p' $S/o263b/app/ponto/motor_calculo_v2.py | cat -A | head -2; echo "===
-     metodo no VIVO (1611 equivalente)"; grep -n "def _noturno_dos_intervalos" -A14 /home/ronald/saas-hasner/app/ponto/mot…
-  ⎿  Read docs/AVAIS.md (23 lines)
-  ⎿  Referenced file core/juizes.py
-  ⎿  Read ../logs/o261b/watch_5min_o256.log (6 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/buulw0j03.output (6 lines)
-  ⎿  Referenced file ponto/services/cartorio.py
+  Ran 1 shell command
 
-● Task "RED e construção do segundo intervalo" completed in background
+❯ corte Ronald: volta da pausa dentro da tolerancia de conformidade (10 min por marcacao) [nao desconta / desconta] do adicional noturno. Segue a fila; PAREI so em lei ou !
 
-✢ Concocting… (1d 0h 36m · ↓ 2.7m tokens · thinking)
+* Concocting… (1d 0h 42m · ↓ 2.7m tokens · still thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                                     ✔ Update installed · Restart to update
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                                                                  1h 3m 8s · ↓ 428.9k tokens
