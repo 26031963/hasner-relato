@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 13/10/2026 06:23:32.**
+**Medido em 13/10/2026 06:28:36.**
 
 | | |
 |---|---|
@@ -29,19 +29,19 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2420.6 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2420.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **189.1 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **189.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2.3 h**
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2.4 h**
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **305.2 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **305.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
   - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **209.4 h** (passou das 6 h da L-105)
@@ -167,37 +167,37 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-  Ran 2 shell commands
+● Task "RED e construção do segundo intervalo" completed in background
 
-● Fixture shape confirmed: all marcos matched but real < prev → cods empty. Writing the RED:
-
-  Ran 8 shell commands
-
-● The fixture's day is fully lit, so BUG-115 legitimately reconciles the chamado. Reading FURO_PARCIAL's gate to find the real shape of the
-  25:
-
-  Ran 2 shell commands
-
-● All 25 share one shape: ata com zero marcos, marcos_acesos = None (so BUG-115 never reconciles), cods empty. Rebuilding the fixture to
-  that shape:
+● The fixture now reaches the writer's region but the template fallback gave it prev — so the migrated cascade fires
+  FURO_COM_COBRANCA_MORTA. I need to see how the real 25 get trabalha=True with zero marcos:
 
   Ran 4 shell commands
 
-● Zero batidas in the colab's life triggers the nunca_bateu short-circuit — the colab needs adesão without a batida on the judged day:
+● The probe measured the ata, not the previsto. Let me measure the actual shape that keeps cods empty for the 25 — trabalha, batidas no
+  dia, previsto:
 
-  Rodar o RED com adesao fora do dia
-  ⎿  $ cd /home/ronald/wt-fio/app && python3 - ponto/tests/test_o261_cobrado_le_o_fio.py <<'PY'
-     import sys
-     p = sys.argv[1]
-     s = open(p).read()
-     old = """ def _bat(self, h, m, tipo):
-     return Batida.objects.create(colaborador=self.colab, tipo=tipo,
-     timestamp=timezone.make_aware(datetime.datetime.combine(self…
+  Ran 7 shell commands
 
-✢ Compacting conversation… (15h 53m 42s · ↓ 1.7m tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱ 95%
+● Now I have the measured shape: dia de trabalho, todos os marcos casados, mas realizado < previsto (por isso COBRANCA_SEM_FURO não nasce e
+  cods sai vazio). Reconstruo a fixture nessa forma:
+
+  Ran 1 shell command
+
+● The guard passes and cods == [], but nobody writes 'cobrado' at all — so vivos is empty. Let me check what chamados_que_falam_de_batida
+  requires:
+
+  Debug: ver se o cartorio acha o chamado
+  ⎿  $ cd /home/ronald/wt-fio/app && cat >> ponto/tests/test_o261_cobrado_le_o_fio.py <<'PYEOF'
+     def test_TEMP_debug(self):
+     from ponto.services.cartorio import chamados_que_falam_de_batida
+     from chamados.catalogo.motor import VIVOS
+     ch = self._ch(); self._pd(ch, morta=False)
+     chs = chamados_que_falam_de_bat…
+
+* Concocting… (15h 58m 46s · ↓ 1.7m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    0% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
