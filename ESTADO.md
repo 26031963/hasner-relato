@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:250 AFIRMA ato sem PROVA ao lado -- - **PROVA DA RAIA**: `Ran 281 tests in 23.330s` / **OK**, rc 0, zero skip (`--only` de 17 modulos, os 281 conferidos arquivo a arquivo), com
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:251 AFIRMA ato sem PROVA ao lado -- - **PROVA DA RAIA**: `Ran 281 tests in 23.330s` / **OK**, rc 0, zero skip (`--only` de 17 modulos, os 281 conferidos arquivo a arquivo), com
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 13/10/2026 12:57:32.**
+**Medido em 13/10/2026 13:03:02.**
 
 | | |
 |---|---|
@@ -29,31 +29,31 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2427.2 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2427.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **195.7 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **195.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **8.9 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **9.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **311.8 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **311.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **215.9 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **216.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **333.6 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **333.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
-  - 1 commit(s) a frente do `main`, 3 arquivo(s) sujo(s), commit a frente ha **0.3 h**
+  - 1 commit(s) a frente do `main`, 3 arquivo(s) sujo(s), commit a frente ha **0.4 h**
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
 - **21 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
@@ -76,6 +76,9 @@ e540e3c0 [O256] o botao PDF da barra perde o `margin-left:auto`: CSS novo na bar
 ```
  M app/config/crons_duracao.json
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/LEIS.md
+ M app/docs/RELATO.md
+?? app/GREEN
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -165,44 +168,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+     # (ancora, novo) -- o novo entra ANTES da ancora, na posicao alfabetica entre os vizinhos
+     pares = [
+     ('- `O256-ORDEM-DRAWER-PRIMEIRO`\n', '- `O256-LEGENDA-E-PDF-ANTES-DO-R…
 
-  Ran 5 shell commands
-  ⎿  Message queued for delivery to a63fdd909d479e9c7 at its next tool round.
-
-  Ran 1 shell command
-
-● Background command "Re-certify the two modules against the cured copy" completed (exit code 0)
-
-  Committed bceab5ba, 220f5317, 7856486d, ran 44 shell commands
-  ⎿  Read docs/AVAIS.md (23 lines)
-  ⎿  Read ../logs/o261b/watch_5min_o256.log (6 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/buulw0j03.output (6 lines)
-  ⎿  Referenced file core/juizes.py
-  ⎿  Referenced file ponto/services/cartorio.py
-
-● Task "RED e construção do segundo intervalo" completed in background
-
-● Task "Raia wt-ui: troca do link do menu" still running in background
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-● Five-minute 500 watch after the deploy · 1m 42s
-  ⎿  $ cd /home/ronald/saas-hasner; cat logs/deploy.stamp; INI=$(date -u +%s); INIS=$(date -u -d "@$INI" +%Y-%m-%dT%H:%M:%SZ); FIM=$((INI+300)); echo "watch: $INIS -> $(date -u -d "@$FIM"
-     +%Y-%m-%dT%H:%M:%SZ)"; until [ "$(date -u +%s)" -ge "$FIM" ]; do sleep 20; done; { echo "O261 item 3 -- janela de 5 … (1m 40s · 5 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
-
-✢ Concocting… (22h 27m 42s · ↓ 2.4m tokens)
+✢ Concocting… (22h 33m 12s · ↓ 2.4m tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                                                    ✔ Update installed · Restart to update
+
+❯ FONTE: ponto/motor_calculo_v2.py::MotorBase._noturno_dos_intervalos (BO col29, 30/07). Hoje so Motor12x36.calcular_periodo a chama; MotorComercial.calcular_periodo e
+  MotorTurnoPartido.calcular_periodo preenchem minutos_noturnos_* com calcular_noturnas(e, s) sem descontar o intervalo batido. Conferir no VIVO antes de mexer.
+
+❯ MUDA: ORIGEM. O desconto sobe para o sitio unico pelo qual todo calcular_periodo preenche minutos_noturnos_relogio/legais (ou calcular_noturnas passa a receber os intervalos). PROIBIDO
+  copiar o bloco do 12x36 em cada motor. Verificar se as parcelas de HE noturna (minutos_extra_50/100_noturna) tem o mesmo furo e entram no mesmo ato.
+
+❯ RED: (1) o caso col297 21/08 acima; (2) caso equivalente no MotorTurnoPartido; (3) guarda: a 12x36 do col843 26/08 (E 18:55, S 23:00, E 00:00, S 07:00 -> 6,00 h) nao se move.
+
+❯ SELO: todo calcular_periodo que escreve minutos_noturnos_* passa pelo sitio unico; caso que MORDE (tirar o desconto deixa o RED vermelho).
+
+❯ DIFF: frota da competencia 10 (aberta) na sombra, contra o GRAVADO, publicado no RELATO antes do apply. Competencia 09 (exportada): so o numero, sem apply (L-110).
+
+❯ APPLY: competencia 10 pelas 4 condicoes da DINHEIRO-EM-COMPETENCIA-ABERTA (DIFF antes, reversao em logs/, 09 intacta com hash, prova depois).
+
+❯ PROIBIDO: fallback, juiz novo, tocar a 09, mudar tolerancia, cura por motor.
+
+❯ PRONTO: RED -> GREEN; suite verde; DIFF da 10 publicado; apply com prova; reproduzir o oraculo logs/audit_holerite_09/oraculo_an2.py na 10 com diferenca 0 nos alcancados.
+
+❯ LEI-AKITA: origem=MotorBase (sitio unico do noturno), testemunha=PeriodoCalculo.minutos_noturnos_*, RED=caso col297 21/08, quem-mais-le=horas_noturnas -> FechamentoMensal -> evento
+  adicional_noturno (rubrica 25), espelho, DiaPago; juizes novos=0
+
+❯ Segue a fila; PAREI so em lei ou !
+  ctrl+x ctrl+s to send now
+                                                                                                                            Removed 1 invisible character · review and press Enter to send
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ Press up to edit queued messages
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells, 1 monitor · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork    Confirming commit hashes in worktree                                                                                                                1h 3m 8s · ↓ 428.9k tokens
-  ◯ claude  Grepping viz.log and medir2.log vereditos                                                                                                             39m 47s · ↓ 94.2k tokens
+  ◯ claude  Writing cmp_arvore_certificada.sh                                                                                                                    41m 25s · ↓ 103.7k tokens
   ⧉  index
 ```
