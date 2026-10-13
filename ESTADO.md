@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:211 AFIRMA ato sem PROVA ao lado -- ## 12/10 22:5x — a E2 esta NO AR e o seu COMPLEMENTO esta respondido: a linha de ferias com batida ja chega com `Dias que seguram` PREENCHID
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:4478 AFIRMA ato sem PROVA ao lado -- | **LEITURA-LITERAL-DO-CARIMBO** | 2026-10-12 19:5x | 2 h | CUMPRIDO SEM UMA LINHA DE CODIGO, e isso se MEDE: ele carimba exatamente o que p
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 12/10/2026 22:51:32.**
+**Medido em 12/10/2026 22:57:02.**
 
 | | |
 |---|---|
@@ -29,31 +29,31 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2413.1 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2413.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cb** (`(detached)`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 12 arquivo(s) sujo(s), commit a frente ha **4.6 h**
+  - 1 commit(s) a frente do `main`, 12 arquivo(s) sujo(s), commit a frente ha **4.7 h**
   - sem declaracao em `logs/raias/wt-cb.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **181.6 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **181.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261011`) -- **SEM AGENTE**
-  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **43.6 h** (passou das 6 h da L-105)
+  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **43.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **297.7 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **297.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **201.8 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **201.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **319.5 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **319.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -170,19 +170,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  celula, ou se aposenta (L-111); lampada que reacende reabre o fio; os leitores leem a lampada. Frota so para dimensionar: DIFF antes do
-  apply, nao exportada com reversao em logs/, exportada intacta (L-092). Selo da FASE 3 sem mudanca. Juizes novos = 0. COMPLEMENTO O256
-  (smoke Fernando 12/10): linha 127 "Bateu ponto dentro de ferias" com Dias que seguram VAZIO no retrato das 16:19, anterior ao O260;
-  conferir no proximo retrato lavrado e, se persistir, RED com essa linha. TIPO fora dos quadros e o desenho da O256 (vai para o drawer),
-  nao falha. Nenhuma lei nova. Segue a fila; PAREI so em lei ou !
-
-  Ran 30 shell commands
-  ⎿  Read docs/AVAIS.md (23 lines)
-  ⎿  Referenced file ponto/tests/test_contract_juiz_batida.py
-  ⎿  Referenced file core/juizes.py
-  ⎿  Referenced file folha/export.py
-  ⎿  Referenced file docs/LEIS.md
-
 ● Task "RED e construção do segundo intervalo" completed in background
 
 ● Background command "Suite cheia sobre a arvore da raia" completed (exit code 0)
@@ -198,10 +185,23 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● MARCO FECHADO — pode compactar ([O256] E2, d6eae5c9, no ar + re-lavrado; handoff em 44 linhas).
 
 ● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-✢ Concocting… (8h 21m 42s · ↓ 912.6k tokens)
+● The advisor caught a real arithmetic error and an unproven claim. Fixing both before anything rides into a commit.
+
+  Searched for 1 pattern, ran 4 shell commands
+
+● The authority itself answers it: emp2 10/2026 returns 0 colabs — the retrato is faithful to its fonte, there is no broken fio. Correcting
+  both the totals and the claim.
+
+● Medir se a lampada acorda alguem
+  ⎿  $ cd /home/ronald/wt-fio/app && echo "== receivers de CelulaDia (qualquer signal, producao):"; grep -rn
+     "sender=.*CelulaDia\|sender=CelulaDia" --include=*.py . | grep -v '/tests/'; echo "(fim)"; echo; echo "== quem LE o evento
+     'veredito_celula':"; grep -rn "veredito_celula" --include=*.py . | grep …
+
+✢ Concocting… (8h 27m 12s · ↓ 924.9k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    4% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
