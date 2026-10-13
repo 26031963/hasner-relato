@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 13/10/2026 20:05:06.**
+**Medido em 13/10/2026 20:10:21.**
 
 | | |
 |---|---|
@@ -29,28 +29,28 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2434.3 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2434.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **202.8 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **202.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **16.0 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **16.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **318.9 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **319.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **223.0 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **223.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **340.7 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **340.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -167,38 +167,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  Ran 1 shell command
+
+● RED is literal: 300,0 != 330,0 — 30 min clipados por um marco que o dia de folga não tem, e o MORDE já verde no código de hoje. Agora a cura:
+
+  Ran 1 shell command
+
+● GREEN 2/2, rc 0. Now o censo de quem-mais-lê — a cura move um bloco dentro de calcular_mes e acrescenta uma saída em _janela_do_dia:
 
   Ran 4 shell commands
 
-● Both mechanism and authority are written in the house's own docstrings. Now the RED, into both copies:
-
-  Ran 1 shell command
-
-● Now the cure in the copy — the hoist makes the classification site need no change at all (same loop scope):
-
-  Ran 1 shell command
-
-● Background command "Retry the push and read its verdict" completed (exit code 0)
-
-  Ran 1 shell command
-
-● Push rc=0 — 6e29f0b3..eee94960, the three marco commits are on origin/main. BUG-LINHA-X-BADGE parte B is closed and in the air. The trava is free, so the O263-FT
-  RED runs now:
+● Ruff limpo e 166 vizinhos OK. Agora o DIFF da 10 na sombra — pela função REAL, não por uma sonda que remonta a chamada:
 
   Ran 2 shell commands
 
-● tipo is E/S, not the long words — my fixture never formed a turn. Fixing in both copies and re-running:
+● O juiz único do número é autoridade_do_periodo — leio dele, não recalculo. Script para a sombra:
 
-● Fixing the fixture and re-run the RED
-  ⎿  $ cd /home/ronald/saas-hasner; SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; for d in o263_red o263_cura; do
-     python3 - "$SP/$d/app/ponto/tests/test_o263ft_folga_nao_tem_marco.py" <<'PY'
-     import sys
-     p=sys.argv[1]; s=open(p,encoding='utf-8').read()
-     o…
+  Ran 2 shell commands
 
-* Concocting… (1d 5h 35m · ↓ 3.2m tokens)
+● A number que surpreende: ele mediu 2,45 h na 09 (6 colabs 12x36) e a autoridade me dá 79,27 h em 61 colabs. Antes de qualquer apply, a tabela:
+
+  Ran 1 shell command
+
+● Os 6 do aval estão todos na lista e somam 2,12 h — a medida reproduz a rodada19 dele. O resto (77 h) é o MESMO sítio nas outras famílias de motor, que a amostra
+  12x36 dele não viu. Agora o par HEAD×CURA na sombra:
+
+  Measuring the same thing against the cure tree · 2s
+  ⎿  $ cd /home/ronald/saas-hasner; SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cp logs/sombra/o263ft_diff.py
+     $SP/o263_cura/app/../logs/sombra/ 2>/dev/null || mkdir -p $SP/o263_cura/logs/sombra && cp logs/sombra/o263ft_diff.py $SP/o263_cura/logs/somb…
+
+✽ Concocting… (1d 5h 40m · ↓ 3.2m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                             ✔ Update installed · Restart to update
+                                                                                                                                             10% until auto-compact
 ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
