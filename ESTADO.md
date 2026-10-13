@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 13/10/2026 08:46:02.**
+**Medido em 13/10/2026 08:51:32.**
 
 | | |
 |---|---|
@@ -29,31 +29,31 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2423.0 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2423.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 15 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **191.5 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **191.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **4.7 h**
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **4.8 h**
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **307.6 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **307.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **211.7 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **211.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **329.4 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **329.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
-  - 2 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **0.0 h**
+  - 2 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **0.1 h**
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
 - **21 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
@@ -166,13 +166,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-    08/10, dias antes). Não há o que reverter lá;
-  - 10/2026 (aberta) mexeu o hash em 2 linhas de 587, as duas dentro da janela do apply, e nas duas o gravado == o que o motor responde
-    agora. n 587→587, criados 0, retencao_10_por_motivo delta {} — ninguém entra, ninguém sai, nenhum motivo troca.
-
-  Duas afirmações minhas caíram, e estão corrigidas no código (ponto/services/cartorio.py, só comentário):
-  - os seus 124 eram um pico de meio-de-corrente: medidos 06:10, entre o relâmpago e o apply das 06:27 que leva a HX-CARTORIO-RESSUSCITA
-    dentro. Outubro oscila todo dia (74→19); o núcleo durável são os 50 de 08/09, iguais nas três medições;
   - a previsão de "15 colabs e 104 dias saem da retenção" está refutada: cobrado->furo (49 dos 70) segue retendo, agora por furo_espelho. A
     cura acerta a lâmpada e o fio, não a lista de quem entra na folha — e é por isso que o critério do item (4) fica cumprido por medição.
 
@@ -184,26 +177,33 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
   Item (3) já estava fechado: medi o vivo e contratos_estruturais = 16/20 (verdes() = 15 células + o global). Item (2) está em agente na
   wt-ui; sigo com o item (4).
 
-● Reading the escala x um juiz cell
-  ⎿  $ echo "=== o que a MATRIZ diz da celula escala x um juiz:"; python3 - <<'PY'
-     import re
-     s=open('core/contratos_estruturais.py').read()
-     i=s.find("('escala', 'um juiz por pergunta')")
-     print(s[i-80:i+1400] if i>0 else 'NAO ACHEI a chave literal')
-     PY
+  Searched for 2 patterns, listed 1 directory, ran 12 shell commands
+  ⎿  Read docs/AVAIS.md (23 lines)
+  ⎿  Referenced file ponto/services/cartorio.py
+  ⎿  Referenced file chamados/services/vigia_fio.py
+  ⎿  Referenced file docs/LEIS.md
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/o261i3/sonda_cobrado_sem
+     _fio.py (68 lines)
 
-✢ Compacting conversation… (18h 16m 12s · ↓ 2.0m tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱ 92%
+● Task "RED e construção do segundo intervalo" completed in background
+
+● Task "wt-bos: CHAMADO-X-JUIZ" still running in background
+
+● Task "wt-ui: condições (a) e (b) do PUBLICAR-RETRATO" still running in background
+
+● Advising using Fable 5.1
+
+· Concocting… (18h 21m 42s · ↓ 2.0m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    0% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells, 1 monitor · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Running bin/tests host selo folder                                                      1h 10m 23s · ↓ 158.0k tokens
-  ◯ general-purpose  Checking frozen clock dates in ci_calendario.py                                            22m 35s · ↓ 154.7k tokens
+  ◯ general-purpose  Loading Monitor to watch suite_20261013.log                                              1h 15m 53s · ↓ 83.4k tokens
+  ◯ general-purpose  Reading montar_linhas and no_periodo in retrato_folha.py                                     28m 5s · ↓ 98.7k tokens
   ⧉  index
 ```
