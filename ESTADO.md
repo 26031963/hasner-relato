@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 13/10/2026 15:39:32.**
+**Medido em 13/10/2026 15:45:02.**
 
 | | |
 |---|---|
@@ -29,28 +29,28 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2429.9 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2430.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **198.4 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **198.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **11.6 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **11.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **314.5 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **314.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **218.6 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **218.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **336.3 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **336.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -169,38 +169,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 2 shell commands
+    PROIBIDO: teto de minutos novo; juiz novo; regra por tipo gravado; curar dado por shell; fallback.
+    PRONTO: frota 10 com a classe em 0 (ou cada sobrevivente com prova de outra classe); chamado #26219 morto por lastro sozinho;
+      print do calendario do col190 26/09 sem "Em aberto"; PROVA no RELATO.
+    LEI-AKITA: origem=<o juiz fora da E3, a medir>, testemunha=celula/ata, RED=col190 26/09, quem-mais-le=chamados (fio), espelho, TXT (retencao), juizes novos=0
+    HAIKU: contador sobra_com_tipo_trocado (esperado 0, dono ESTRUTURA).
 
-● COL3 passou do teto de 300 da L-109. Aparando:
-
-  Ran 5 shell commands
-
-● O263 pousa. Censo cmp arquivo a arquivo da cópia certificada contra a árvore viva:
-
-  Ran 1 shell command
-
-● Censo = os 6 arquivos da fatia + os 4 docs (declarados) + o crons_duracao.json (cron-dirty, nunca commita). Conferindo que os 5 vivos estão em HEAD antes de sobrescrever:
+● Novo prompt recebido — registro primeiro (PROMPT-NAO-SE-REPETE), e a cadeia de apply da O263 segue, que é o INCOMPLETO declarado do marco.
 
   Ran 2 shell commands
 
-● Censo limpo. Commitando a O263:
+● Reversão gravada (24.571 bytes, sha256 154c6674). Agora o DRY do restore — provar que o caminho de volta existe antes de mover um centavo:
 
-  Committed 5d157d1f
+  Ran 2 shell commands
 
-● Commit 5d157d1f. Deploy agora, sem nada no meio (L-107):
+● ANTES relido: col297 87,15 (andou de 82,49 — competência ABERTA), col457 8,00. Antes de aplicar, conferir se o script mede TODOS os campos (o apply por recalculo não é cirúrgico —
+  L-095/AVAL-DE-CRITERIO (b)):
 
   Ran 1 shell command
 
-● O263 NO AR (15:38, três rotas provadas). Agora a cadeia de apply da comp 10 — reversão primeiro:
+● Mede todos os campos do FechamentoMensal e imprime cada um que se move — é a condição (b) medida contra o GRAVADO, não motor×motor. Aplicando:
 
-● Reading the snapshot script header for invocation
-  ⎿  $ cd /home/ronald/saas-hasner; echo "=== como estes scripts se chamam (cabecalho)"; head -20 bin/snapshot_o263_comp10.py; echo; echo "=== crons"; ls -1 logs/crons_em_curso/
-     2>/dev/null | head -3; echo "(vazio=livre)"
+  Ran 1 shell command
 
-✢ Compacting conversation… (1d 1h 9m · ↓ 2.8m tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 56%
+● 4 campos movidos, todos noturnos, zero em qualquer outro campo dos dois colabs — a condição (b) medida contra o GRAVADO, não motor×motor. Agora a condição 3 (a 09 INTACTA) e a
+  conferência contra o DIFF publicado:
+
+● Reading per-colab numbers from the published DIFF
+  ⎿  $ cd /home/ronald/saas-hasner; echo "=== DIFF publicado, por colab"; grep -n "297\|457\|noturn" logs/o263/DIFF_FROTA_comp10_20261013.md | head -20
+
+✢ Concocting… (1d 1h 15m · ↓ 2.8m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                                                                     0% until auto-compact
+                                                                                                                                                    ✔ Update installed · Restart to update
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
