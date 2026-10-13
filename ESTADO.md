@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:243 AFIRMA ato sem PROVA ao lado -- ## MARCO 13/10 10:4x — pouso da **`wt-ui`** no COMBOIO: o balde do admin passa a ser TRES e a legenda dos LEDs estava NO AR e INVISIVEL (`[O
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:250 AFIRMA ato sem PROVA ao lado -- - **PROVA DA RAIA**: `Ran 281 tests in 23.330s` / **OK**, rc 0, zero skip (`--only` de 17 modulos, os 281 conferidos arquivo a arquivo), com
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 13/10/2026 12:47:02.**
+**Medido em 13/10/2026 12:52:04.**
 
 | | |
 |---|---|
-| `HEAD` local | `bceab5ba [O261] a reducao de uma COLECAO de perguntas a bool passa a ter UMA porta: os seis leitores de `any(pergunta_viva(...))` chamam `fio_vivo`, e os dois selos de caracterizacao se INVERTEM` |
+| `HEAD` local | `7856486d [O261] pouso de INSTRUMENTO: o gerador do MAPA-JUIZES nunca rodava (`collections` sem import) e a sonda de frota passa a aceitar a arvore de uma RAIA sem um segundo `docker run`` |
 | `origin/main` | `d20a0e45 [O219] pouso: os docs do marco A0-b entram junto, e o merge que eu pedi sem commit virou FAST-FORWARD -- o codigo estava na arvore viva antes deste commit` |
-| commits a subir (`ahead`) | **87** |
+| commits a subir (`ahead`) | **89** |
 
 ## Fabrica
 
@@ -29,31 +29,31 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2427.0 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2427.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **195.5 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **195.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **8.7 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **8.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **311.6 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **311.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **215.7 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **215.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **333.4 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **333.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
-  - 1 commit(s) a frente do `main`, 2 arquivo(s) sujo(s), commit a frente ha **0.1 h**
+  - 1 commit(s) a frente do `main`, 3 arquivo(s) sujo(s), commit a frente ha **0.2 h**
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
 - **21 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
@@ -64,28 +64,17 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+7856486d [O261] pouso de INSTRUMENTO: o gerador do MAPA-JUIZES nunca rodava (`collections` sem import) e a sonda de frota passa a aceitar a arvore de uma RAIA sem um segundo `docker run`
+220f5317 [O261] a chave `_C15` DECLARA a autoridade que ja era unica: `fio_vivo` entra no mapa dos juizes (familia `chamado` 13 -> 14), e os tres derivados do mapa se regeneram pelo gerador
 bceab5ba [O261] a reducao de uma COLECAO de perguntas a bool passa a ter UMA porta: os seis leitores de `any(pergunta_viva(...))` chamam `fio_vivo`, e os dois selos de caracterizacao se INVERTEM
 914fba40 [O256] pouso da raia wt-ui: o PDF da barra do retrato LE o recorte da tela, e o CSS novo na barra fica em ZERO (merge --no-ff da raia-ui, L-105/L-107)
 e540e3c0 [O256] o botao PDF da barra perde o `margin-left:auto`: CSS novo na barra e' ZERO pela leitura LITERAL do aval
-0b750de2 [O256] o PDF da barra do retrato LE o recorte da tela: um so caminho monta o universo, e o papel nao refaz a pergunta
-10f67c49 [O256] pouso da raia wt-ui: o balde do admin passa a ser TRES e a legenda dos LEDs sai de INVISIVEL (merge --no-ff da wt-ui, L-105/L-107, em COMBOIO com o O262)
 ```
 
 ## `git status --short`
 
 ```
  M app/config/crons_duracao.json
- M app/core/juizes.py
- M app/docs/ARQUITETURA.mmd
- M app/docs/BACKLOG.md
- M app/docs/CORTES.json
- M app/docs/CORTES.md
- M app/docs/HANDOFF-SESSAO.md
- M app/docs/MAPA-JUIZES.md
- M app/docs/PROMPTS.md
- M app/docs/RELATO.md
- M bin/gerar_mapa_juizes.py
- M bin/sonda_frota.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -175,7 +164,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Background command "Run the full suite against the copy in the background" completed (exit code 0)
 
   Read 1 file, ran 5 shell commands
 
@@ -191,8 +179,7 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Background command "Re-certify the two modules against the cured copy" completed (exit code 0)
 
-● Finding where 10f67c49 already appears
-  ⎿  $ cd /home/ronald/saas-hasner; grep -n "10f67c49" app/docs/RELATO.md | cut -c1-200; echo "--- NO AR ---"; grep -n "NO AR 13/10" app/docs/RELATO.md | cut -c1-200
+  Committed bceab5ba, 220f5317, 7856486d, ran 44 shell commands
   ⎿  Read docs/AVAIS.md (23 lines)
   ⎿  Read ../logs/o261b/watch_5min_o256.log (6 lines)
   ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/buulw0j03.output (6 lines)
@@ -203,16 +190,18 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Task "Raia wt-ui: troca do link do menu" still running in background
 
-✢ Concocting… (22h 17m 12s · ↓ 2.4m tokens)
+  Advising using Fable 5.1
+
+· Concocting… (22h 22m 14s · ↓ 2.4m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                                     ✔ Update installed · Restart to update
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork    Confirming commit hashes in worktree                                                                                                                1h 3m 8s · ↓ 428.9k tokens
-  ◯ claude  Running folha and core suites on the copy                                                                                                            29m 18s · ↓ 158.6k tokens
+  ◯ claude  Running ruff on folha/tests after the inversion                                                                                                       34m 19s · ↓ 75.9k tokens
   ⧉  index
 ```
