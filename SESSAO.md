@@ -6,10 +6,20 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 13/10/2026 09:08:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (774.1 MB). Acoes na janela: **1322**.
+**Medido em 13/10/2026 09:13:16.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (774.3 MB). Acoes na janela: **1328**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 09:11:17 | Bash | Run refined dono sonda | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/s-escala; sed -e "s/if len(amostra) < 25:/if False:/" $S/dono_dos_1214.py > $S/dono_v2.py && python3 - $S/dono_v2.py <<'PY' import sys p=sys.argv[1]; s=open(p).read() old=""" colabs.add(c.pk) por_classe_colabs.setdefault(k, set()).add(c.pk)""" new=""" colabs.add(c.pk) por_classe_colabs.setdefault(k, set ...` |
+| 09:10:51 | Bash | Read sonda output sample | `cd /home/ronald/saas-hasner && head -c 1200 logs/s_escala/dono_20261013.out; echo; echo "=== grep amostra classes ==="; python3 - logs/s_escala/dono_20261013.out <<'PY' import json,sys,re t=open(sys.argv[1]).read() j=json.loads(t[t.index('JSON_DONO ')+10:]) for a in j['amostra'][:12]: print(a) PY` |
+| 09:10:19 | Bash | Check sonda progress | `cd /home/ronald/saas-hasner && date +%H:%M:%S; wc -c logs/s_escala/dono_20261013.out; tail -c 600 logs/s_escala/dono_20261013.out` |
+| 09:10:10 | Bash | Read batida test body | `sed -n '150,260p' ponto/tests/test_contract_juiz_batida.py` |
+| 09:10:06 | Bash | Read batida contract test head | `sed -n '1,120p' ponto/tests/test_contract_juiz_batida.py` |
+| 09:09:59 | Bash | Run dono sonda in background | `cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/s-escala; mkdir -p logs/s_escala; date +%H:%M:%S; nohup bin/sonda_frota.sh $S/dono_dos_1214.py > logs/s_escala/dono_20261013.out 2>&1 & echo lancado` |
+| 09:09:54 | Bash | Write dono sonda | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/s-escala; cat > $S/dono_dos_1214.py <<'PY' # S-ESCALA -- DONO da divergencia dos dia-colab em que os dois leitores do vinculo discordam # na competencia 10 (L-099: ESTRUTURA x CADASTRO x BATIDA). LEITURA PURA de saas_hasner. # Funcoes REAIS: escala.alimentacao (celulas/escalas/vinculo_do_dia), escala.ut ...` |
+| 09:09:13 | Bash | Read previsto_cego | `sed -n '1,90p' escala/services/previsto_cego.py` |
+| 09:09:00 | Bash | Re-read vinculo_do_dia | `sed -n '140,200p' escala/alimentacao.py` |
+| 09:08:40 | Bash | Census readers of escala_geradora | `grep -rn "escala_geradora" --include=*.py . \| grep -v __pycache__ \| grep -v "/tests/" \| grep -v "/migrations/"` |
 | 09:08:02 | Bash | Grep O69 in docs | `grep -rn "O69" docs/*.md docs/*.json 2>/dev/null \| head -20` |
 | 09:07:57 | Bash | Grep geradora in CORTES.json, LEIS, LAPIDES | `grep -n "geradora\\|O69\\|vinculo_do_dia\\|vinculo do dia" docs/CORTES.json \| head -30; echo "=== LEIS/LAPIDES ==="; grep -n "geradora" docs/LEIS.md docs/LAPIDES.md \| head -30` |
 | 09:07:52 | Bash | Locate CORTES files | `cd /home/ronald/saas-hasner && ls app/docs/CORTES* ; find . -name "CORTES.json" -not -path "*/node_modules/*" 2>/dev/null \| head` |
@@ -1328,7 +1338,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 21:13:48 | Bash | Censar os chamadores de fora_da_folha | `cd /home/ronald/wt-ui/app && grep -rn "fora_da_folha(" --include=*.py . \| grep -v "/tests/\\|def fora_da_folha\\|^./folha/fora_da_folha.py" \| head -20` |
 | 21:13:32 | Bash | Ler o selo do retorno exato e censar os consumidores de colabs | `cd /home/ronald/wt-ui/app && grep -rn "test_com_itens_False_devolve_EXATAMENTE" -A 30 folha/tests/*.py \| head -45 && echo "=== consumidores de colabs ===" && grep -rn "\['colabs'\]\\|get('colabs')\\|\"colabs\"" --include=*.py . \| grep -v "/tests/" \| head -20` |
 | 21:13:16 | Bash | Ler o corpo do fora_da_folha | `cd /home/ronald/wt-ui/app && sed -n '85,210p' folha/fora_da_folha.py` |
-| 21:13:01 | Bash | Medir se o fora_da_folha carrega a lista de dias e ler o filtro universal | `cd /home/ronald/wt-ui/app && grep -n "com_dias\\|_dias_que_retem\\|'dias'\\|dias=" folha/fora_da_folha.py \| head -40 && echo "=== _filtro_universal ===" && cat -n templates/core/_filtro_universal.html` |
-| 21:09:12 | Bash | Ler o modelo do retrato e o cron do lavrador | `cd /home/ronald/wt-ui/app && grep -n "class RetratoFolha" -A 45 folha/models.py && echo "=== CRON ===" && grep -rn "lavrar_retrato_folha" config/crons.py docs/CRONS.md 2>/dev/null \| head` |
-| 21:08:40 | Bash | Ler o selo de um derivador | `cd /home/ronald/wt-ui/app && cat -n folha/tests/test_retrato_folha_um_derivador.py \| head -120` |
-| 21:08:26 | Bash | Medir o que os commits da E1 tocaram | `cd /home/ronald/wt-ui && git show --stat --oneline c5b08d15 \| head -30 && echo "=== afc05e16 ===" && git show --stat --oneline afc05e16 \| head -20` |
