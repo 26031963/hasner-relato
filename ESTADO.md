@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 12/10/2026 23:45:46.**
+**Medido em 12/10/2026 23:50:52.**
 
 | | |
 |---|---|
@@ -29,31 +29,31 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2414.0 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2414.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cb** (`(detached)`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 12 arquivo(s) sujo(s), commit a frente ha **5.5 h**
+  - 1 commit(s) a frente do `main`, 12 arquivo(s) sujo(s), commit a frente ha **5.6 h**
   - sem declaracao em `logs/raias/wt-cb.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **182.5 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **182.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261011`) -- **SEM AGENTE**
-  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **44.5 h** (passou das 6 h da L-105)
+  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **44.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **298.6 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **298.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **202.7 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **202.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **320.4 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **320.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -77,7 +77,12 @@ c2ab8cf5 [O260] com_dias=True deixa de devolver a LISTA CRUA: as duas saidas ant
 ## `git status --short`
 
 ```
+ M app/chamados/templatetags/chamados_tags.py
+ M app/chamados/tests/test_selo_painel_oferece_cobrar.py
+ M app/chamados/tests/test_sininho_template.py
+ M app/chamados/views_cobrar.py
  M app/comunicados/services.py
+ M app/comunicados/views.py
  M app/config/crons_duracao.json
  M app/docs/BACKLOG.md
  M app/docs/CORTES.json
@@ -85,6 +90,7 @@ c2ab8cf5 [O260] com_dias=True deixa de devolver a LISTA CRUA: as duas saidas ant
  M app/docs/HANDOFF-SESSAO.md
  M app/docs/PROMPTS.md
  M app/docs/RELATO.md
+ M app/templates/chamados/partials/_js_cobranca.html
  M bin/sonda_frota.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -175,36 +181,36 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-● Point 1 first — a selo forbidding {% in that partial would turn the lápide amendment into a RED.
-
-  Searched for 1 pattern
-
-● No selo forbids template syntax in the partial — the prose is the only guard, and its stated reason (the per-screen alvo) doesn't cover a
-  global cadastro's text. Checking the cycle and the import weight of reusing chamados_tags.
-
-  Searched for 2 patterns, ran 1 shell command
-
-● No cycle; chamados/utils.py has zero module-level imports, so reusing chamados_tags adds nothing heavy and no new module. Reading the
-  selo's helpers to reuse them.
+● Step 3 — running the RED:
 
   Ran 1 shell command
 
-● Order matters for a clean RED: the service lands first as a pure addition, then the selo asserts about the still-uncured partial.
-  Checking the registrar_engolido catalog before I move the sitio's label.
-
-  Searched for 1 pattern, ran 2 shell commands
-
-● Free-form logger name, only the sitio cites it. Step 1 — the authority moves into the app that owns the cadastro:
+● RED evidenced — 4 failures, each naming the defect (<div inside the previa body, the authority still in views_cobrar, the third copy in
+  the console). Now the cure. Tag first:
 
   Ran 1 shell command
 
-● Step 2 — the RED, against the still-uncured partial:
+● Now the template — lápide amended and the previa turned into text:
 
-  Running 1 shell command…
+  Ran 2 shell commands
 
-· Concocting… (9h 15m 56s · ↓ 1.0m tokens)
+● 20 of 21 green — the one red is my test's fault, not the cure's: escapejs renders - as \u002D (correct JS escaping; the browser
+  un-escapes it). Asserting on the escaped form, scoped to the previa:
+
+  Ran 1 shell command
+
+❯ aval Ronald: ao fechar a cura da O206 (previa em texto), a sessao abre JA dois agentes em paralelo: (1) wt-fio = O261 FASE 2 pelo censo
+  de codigo ja feito (cada escritor de PerguntaDisputa apaga pela lampada ou se aposenta, comecando por lavrar_sem_turno_aberto, RED
+  primeiro); (2) wt-ui = O256 E3 (drawer + legenda dos LEDs + Raio-X do retrato). A principal so integra e pousa, uma suite por vez na
+  trava. Raia parada com suite livre pede linha de motivo no RELATO. Nenhuma lei nova. Segue a fila; PAREI so em lei ou !
+
+● Noted — two agents in parallel the moment this cure closes. Finishing it first; my new helper errored:
+
+  Ver o traceback
+  ⎿  $ cd /home/ronald/saas-hasner && timeout 600 bash bin/suite.sh --only "chamados.tests.test_sininho_template" 2>&1 | sed -n
+     '/^Traceback/,/^Ran /p' | head -25
+
+· Concocting… (9h 21m 2s · ↓ 1.0m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
