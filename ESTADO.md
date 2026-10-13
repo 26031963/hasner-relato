@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 13/10/2026 16:10:46.**
+**Medido em 13/10/2026 16:15:57.**
 
 | | |
 |---|---|
@@ -29,28 +29,28 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2430.4 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2430.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **198.9 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **199.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **12.1 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **12.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **315.0 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **315.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **219.1 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **219.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **336.8 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **336.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -174,44 +174,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  Ran 3 shell commands
-
-● Montando o ensaio na sombra — um run, as duas competências, com o hash puro do TXT nas duas pontas:
+● Condição 2 quitada, e com dois defeitos meus achados pelo próprio restore antes de escrever: 10.493 das 31.864 linhas têm competência diferente do mês da data (a v1 as reverteria na
+  competência errada) e 1.663 são ajuste sem data. Reversão provada: reversao_badge_linha_09_10_v3.json, sha256 e224d5f8…, restore DRY montando as 31.864 linhas sem nenhum colab ausente.
 
   Ran 1 shell command
 
-● Rodando o ensaio na sombra (motor sobre a frota, duas competências, com hash do TXT nas duas pontas):
+● O hash do TXT errou — e "não pude medir" não é prova. Lendo as funções de verdade:
 
   Ran 1 shell command
 
-● Enquanto o ensaio corre, a condição 2 — a reversão. Modelada na da O263, e ela substitui aquela para o DiaPago:
+● montar_linhas_export devolve (linhas, entra_ids) — tupla; meu chamador estava errado. Mas há uma prova mais forte que hash de amostra, e ela é estrutural:
 
   Ran 1 shell command
 
-● crons_em_curso vazio — caminho livre. Tirando a foto em prod (só leitura):
+● Background command "Run the sombra DIFF ensaio" completed (exit code 0)
 
   Ran 1 shell command
 
-● Foto em prod: 31.864 linhas / 624 colabs / 6,5 MB. Agora o restore que a prova (DRY), e o estado do ensaio:
+● O ensaio mediu algo que refuta a premissa da parte A para a 09 — e em números. Lendo o resto:
 
-  Ran 2 shell commands
+  Ran 1 shell command
 
-● O restore apontou um defeito na minha própria foto, antes de qualquer escrita: ela gravou a data mas não o mes/ano da linha — e a competência corre do 21 ao 20, então a data não
-  determina a competência. Refazendo a foto com a chave completa (a primeira fica, foto não se apaga):
+● Decisivo, e em números. Lendo o sítio das 111 falhas antes de concluir:
 
-● Running 1 shell command…
+  Splitting failures motor vs oraculo
+  ⎿  $ cd /home/ronald/saas-hasner; echo "motor:"; grep -c "^dia_pago: lavratura falhou\|[^ ]dia_pago: lavratura falhou" logs/badge_linha_diff_antes.out; echo "oraculo:"; grep -c "dia_pago
+     oraculo: lavratura falhou" logs/badge_linha_diff_antes.out; echo "=== o sitio 790-815 ==="; sed -n '795,815p' app/p…
 
-✶ Concocting… (1d 1h 40m · ↓ 2.8m tokens)
+✽ Compacting conversation… (1d 1h 46m · ↓ 2.8m tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱ 77%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                                                    ✔ Update installed · Restart to update
+                                                                                                                                                                     0% until auto-compact
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                                                                  1h 3m 8s · ↓ 428.9k tokens
-  ◯ fork  Correcting section 2 of ORIGEM_medida_13-10.md                                                                                                          7m 52s · ↓ 119.9k tokens
+  ◯ fork  Writing RED test_sobra_tipo_trocado.py                                                                                                                  13m 3s · ↓ 148.0k tokens
   ⧉  index
 ```
