@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 13/10/2026 02:38:52.**
+**Medido em 13/10/2026 02:44:02.**
 
 | | |
 |---|---|
@@ -29,7 +29,7 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2416.9 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2417.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
@@ -41,23 +41,23 @@ RELATO, com a lista de nomes do banco como autoridade._
   - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **47.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **301.5 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **301.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **205.6 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **205.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **323.3 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **323.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 1 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **0.1 h**
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
-- **21 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
+- **22 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-fio, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
-**sem agente: 6** (raia com commit a frente e sem declaracao, esperado 0) -- **a frente do main ha mais de 6 h: 6** -- uniao medida: 30
+**sem agente: 6** (raia com commit a frente e sem declaracao, esperado 0) -- **a frente do main ha mais de 6 h: 6** -- uniao medida: 31
 
 > Raia sem agente por mais de um marco pede linha de motivo no RELATO -- lei, `!` ou pista (item 4 do aval).
 
@@ -166,44 +166,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ⎿  Referenced file core/contratos_estruturais.py
-  ⎿  Referenced file core/juizes.py
-  ⎿  Referenced file ponto/tests/test_contract_juiz_batida.py
+  vigia antes de escolher a forma:
 
-● Task "RED e construção do segundo intervalo" completed in background
+  Ran 1 shell command
 
-● Task "O256 E3 na raia wt-ui" still running in background
+● Universo medido em prod (leitura, cpuset de teste, 0,8 s): 2712 chamados vivos com célula → 2099 lâmpadas acesas, FIO MORTO = 360 (94 sem
+  pergunta nenhuma + 266 cuja pergunta morreu), acesas_de_HOJE=0 e divergência p.viva x pergunta_viva = 0 — com controle positivo (1739
+  células em que os dois predicados dizem VIVO). O teto de hoje cai por herança, sem nenhuma comparação de data no juízo, e a pergunta do
+  leitor não-migrado fica resolvida em zero.
 
-● Background command "Run the prod smoke waiter in background" completed (exit code 0)
+  Escrevo o vigia no molde do O259:
 
-● Smoke de prod VERDE (logs/o261/smoke_prod.log, run carimbado 02:30:26 — o primeiro elo com o código novo):
+  Ran 3 shell commands
 
-  - SMOKE1 carimbos_novos_da_via=0 | com_pergunta_VIVA=0 (esperado 0) ✓
-  - SMOKE2 universo_do_caminho_velho=1580 | barradas_pela_guarda=1580 | seguem_lavraveis=0 — a guarda nova fecha 100% do universo que o
-    caminho velho carimbaria na janela de 45 dias, e o lado positivo está medido, não inferido de ausência.
+› Message from @a2232824976ef506b (ctrl+o to expand)
 
-  Agora a FASE 3. Antes de escrever o vigia, vou submeter o desenho (a questão dos dois predicados de "viva" é decisão de autoridade, não
-  de código):
+● A pista está livre e a raia-ui está verde e commitada. Antes de decidir a ordem de pouso, termino os selos da FASE 3 — se ficarem
+  prontos, as duas vão em UM comboio (L-117), poupando um ciclo de suite. Leio o resto do molde de fixture que eu mesmo montei na FASE 2:
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+  Ran 1 shell command
 
-● Vou fazer as quatro leituras que ele pede antes de escrever uma linha:
+● Agent "O256 E3 na raia wt-ui" finished · 2h 46m 50s
 
-● Reading sonda_frota usage
-  ⎿  $ cd /home/ronald/saas-hasner || exit 1
-     sed -n '1,60p' bin/sonda_frota.sh
+● Finding ChamadoColaborador creation example
+  ⎿  $ cd /home/ronald/wt-fio/app || exit 1
+     grep -rn "ChamadoColaborador.objects.create(" --include=*.py chamados/tests/ | head -3
+     echo "=== um exemplo completo:"; grep -rn -A 8 "ChamadoColaborador.objects.create(" chamados/tests/test_reconciliador_c1_escopo.py
+     2>/dev/null | head -14
+     echo "=== campos ob…
 
-· Concocting… (12h 9m 2s · ↓ 1.3m tokens · thinking)
+✢ Concocting… (12h 14m 12s · ↓ 1.3m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    8% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-❯ ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Reading test_leis_indice.sh index gaps                                                  2h 43m 31s · ↓ 124.3k tokens
+❯ ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
   ⧉  index
 ```
