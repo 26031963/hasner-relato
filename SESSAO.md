@@ -6,10 +6,27 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 12/10/2026 22:10:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (744.5 MB). Acoes na janela: **1015**.
+**Medido em 12/10/2026 22:15:06.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (744.7 MB). Acoes na janela: **1032**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 22:15:01 | Bash | Suite cheia sobre a arvore da raia | `cd /home/ronald/saas-hasner && ESTEIRA_QUEM=o256-e2-cheia bin/suite.sh --dir /home/ronald/wt-ui --espera 900 > logs/o256_e2_cheia.log 2>&1; echo "rc=$?" >> logs/o256_e2_cheia.log; echo lancada` |
+| 22:14:56 | Bash | Conferir trava e crons em curso | `cd /home/ronald/saas-hasner && bin/trava_teste.sh --quem; ls logs/crons_em_curso/ 2>/dev/null \| head` |
+| 22:14:19 | Bash | Corrigir o ponteiro de FONTE da E2 no BACKLOG | `cd /home/ronald/wt-ui/app && python3 - docs/BACKLOG.md <<'PY' import sys p = sys.argv[1]; s = open(p).read() anc = '(*filtro na tela escondendo os dias*). \|' assert s.count(anc) == 1, 'ancora do fim da descricao da O256 nao e unica: %d' % s.count(anc) nota = (' **A FONTE DA E2 ESTAVA ERRADA NO TEXTO DESTA OBRA e eu a corrijo aqui, no commit da fatia ' '(AUTONOMIA-DE-CODIGO item 1, encaixe por dep ...` |
+| 22:13:59 | Bash | Escrever a celula de estado da O256 | `cd /home/ronald/wt-ui && bin/backlog_estado.py "O256" "**E1 e E2 NO AR** (a E2 neste commit). A coluna virou **Dias**, contada da celula por \`no_periodo\`, com de/ate no filtro universal: 0 migration, 0 juiz novo. **E3-E4 ANDAM JA** na raia \`wt-ui\`. Pergunta de lei no TOPO com numeros: 1.546 dias que seguram x 580 furos. Smoke: UM no fim da E4." 2>&1 \| tail -6` |
+| 22:13:42 | Bash | Uso do backlog_estado.py | `cd /home/ronald/saas-hasner && sed -n '1,40p' bin/backlog_estado.py` |
+| 22:13:31 | Bash | Cortar a secao para o teto de 25 linhas | `cd /home/ronald/wt-ui/app && python3 - docs/RELATO.md <<'PY' import sys p = sys.argv[1]; s = open(p).read() bloco = '''- **TRES falhas da 1a rodada eram FATOS do sistema, nao bugs dele**, e cada uma virou caso DECLARADO em vez de assercao amolecida: o LED carrega o periodo no `href` (ele E o filtro, O253), a ordem default segue o numero CONTADO (`_ORDEM_SALDO`, menos dias primeiro) e a contagem de ...` |
+| 22:13:21 | Bash | Secao de marco no RELATO | `cd /home/ronald/wt-ui/app && python3 - docs/RELATO.md <<'PY' import sys p = sys.argv[1]; s = open(p).read() anc = '## MARCO 12/10 21:4x — a pergunta da familia batida passa a ser o PAR' assert s.count(anc) == 1, 'ancora do marco vizinho nao e unica' sec = '''## MARCO 12/10 22:1x — a coluna do retrato se chama **Dias** e passa a responder por um RECORTE: as DATAS que seguram nascem GRAVADAS e UM le ...` |
+| 22:12:54 | Bash | Flags do lavrar_retrato_folha | `cd /home/ronald/wt-ui/app && grep -n "add_argument\\|def handle\\|--apply\\|mes\\|ano" folha/management/commands/lavrar_retrato_folha.py \| head -20` |
+| 22:12:50 | Bash | Comando da lavra do retrato | `cd /home/ronald/wt-ui/app && ls folha/management/commands/ && grep -rn "lavrar_retrato" --include=*.py -l . \| head` |
+| 22:12:20 | Bash | Pergunta de lei no topo do RELATO | `cd /home/ronald/wt-ui/app && python3 - docs/RELATO.md <<'PY' import sys p = sys.argv[1]; s = open(p).read() cab = '# RELATO — esteira saas-hasner\n\n' assert s.startswith(cab), 'o cabecalho do RELATO mudou' topo = '''**PERGUNTA DE LEI NO TOPO, COM OS NUMEROS (12/10 22:1x, O256 E2) -- a fila NAO parou** (PAREI-DE-LEI-NAO-DEVOLVE-TURNO; nenhuma lei nova proposta por mim, L-117). - **A coluna conta " ...` |
+| 22:12:00 | Bash | Primeiras linhas do RELATO | `cd /home/ronald/wt-ui/app && sed -n '1,3p' docs/RELATO.md \| cut -c1-200 && echo "...[linha 3 tem $(sed -n '3p' docs/RELATO.md \| wc -c) chars]"` |
+| 22:11:37 | Bash | Medir as duas leituras da coluna Dias na frota | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && cat > $S/sonda_dias_tres_leituras.py <<'PY' # SONDA DE LEITURA (prod, cpuset de teste): as DUAS leituras possiveis da coluna "Dias" do retrato. # (1) "dias que RETEM a folha" -> folha/export.py::motivos_retencao_celula (o que a coluna conta HOJE) # (2) "dias com FURO na celula" -> veredito 'furo' da  ...` |
+| 22:10:58 | Bash | Assinatura de classificar_falta | `grep -rn "def classificar_falta" -A12 escala/servico_jornada.py \| head -30` |
+| 22:10:49 | Bash | Uso do sonda_frota.sh | `cd /home/ronald/saas-hasner && sed -n '1,60p' bin/sonda_frota.sh` |
+| 22:10:14 | Bash | Junta antes do marco novo | `cd /home/ronald/wt-ui/app && sed -n '180,193p' docs/RELATO.md \| cut -c1-300` |
+| 22:10:09 | Bash | Secoes do RELATO | `cd /home/ronald/wt-ui/app && grep -n "^## \\|^### " docs/RELATO.md \| head -30` |
+| 22:10:05 | Bash | Topo do RELATO | `cd /home/ronald/wt-ui/app && sed -n '1,60p' docs/RELATO.md` |
 | 22:09:31 | Bash | Header da tabela do TICKETS | `cd /home/ronald/wt-ui/app && grep -n "^\| *# *\\|\|---" docs/TICKETS.md \| head -6; echo '=== header ==='; sed -n '110,122p' docs/TICKETS.md \| cut -c1-400` |
 | 22:09:24 | Bash | Linhas do TICKETS da O256 | `cd /home/ronald/wt-ui/app && grep -n "O256\\|retrato_folha" docs/TICKETS.md \| head -20` |
 | 22:09:12 | Bash | Linha da obra O256 no BACKLOG | `cd /home/ronald/wt-ui/app && grep -n "O256" docs/BACKLOG.md \| head -20` |
