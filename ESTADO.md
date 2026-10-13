@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 13/10/2026 17:15:02.**
+**Medido em 13/10/2026 17:20:32.**
 
 | | |
 |---|---|
-| `HEAD` local | `5d157d1f [O263] o desconto do intervalo batido SOBE para o sitio unico do noturno: `MotorComercial` e `MotorTurnoPartido` pagavam adicional de hora de intervalo, e a HE noturna tinha o MESMO furo` |
+| `HEAD` local | `45cf0353 [O219] a parte A do BUG-LINHA-X-BADGE pousa como DADO, nao como codigo: a relavra pela porta existente leva a comp 10 de 2 a ZERO divergencia linha x badge, e a comp 09 cai no ramo RETRATO com o dinheiro INTOCADO` |
 | `origin/main` | `d20a0e45 [O219] pouso: os docs do marco A0-b entram junto, e o merge que eu pedi sem commit virou FAST-FORWARD -- o codigo estava na arvore viva antes deste commit` |
-| commits a subir (`ahead`) | **93** |
+| commits a subir (`ahead`) | **94** |
 
 ## Fabrica
 
@@ -29,28 +29,28 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2431.5 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2431.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **200.0 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **200.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **13.2 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **13.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **316.1 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **316.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **220.2 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **220.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **337.9 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **338.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -64,28 +64,20 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+45cf0353 [O219] a parte A do BUG-LINHA-X-BADGE pousa como DADO, nao como codigo: a relavra pela porta existente leva a comp 10 de 2 a ZERO divergencia linha x badge, e a comp 09 cai no ramo RETRATO com o dinheiro INTOCADO
 5d157d1f [O263] o desconto do intervalo batido SOBE para o sitio unico do noturno: `MotorComercial` e `MotorTurnoPartido` pagavam adicional de hora de intervalo, e a HE noturna tinha o MESMO furo
 ee4a25ca [O48] pouso da raia wt-ui: o link ORIGINAL de fechamento do menu do admin abre o RETRATO, e o botao de PDF da barra volta para o partial UNICO da casa (merge --no-ff, L-105/L-107)
 fb9195bf [O48] o botao de PDF da barra do retrato volta para o partial UNICO da casa: o <a> cru que o pouso anterior deixou no template sai, e o contrato de arvore inteira fica VERDE com allowlist vazia
 d4779277 [O48] passo 6: o link ORIGINAL de fechamento do menu do admin abre o RETRATO, e a tela antiga ganha o atalho "Tela anterior" DENTRO da barra
-7856486d [O261] pouso de INSTRUMENTO: o gerador do MAPA-JUIZES nunca rodava (`collections` sem import) e a sonda de frota passa a aceitar a arvore de uma RAIA sem um segundo `docker run`
 ```
 
 ## `git status --short`
 
 ```
  M app/config/crons_duracao.json
- M app/docs/BACKLOG.md
- M app/docs/PROMPTS.md
- M app/docs/RELATO.md
+ M app/docs/HANDOFF-SESSAO.md
  M bin/sonda_leitura.sh
 ?? app/GREEN
-?? bin/aplicar_o263_comp10.py
-?? bin/restore_badge_linha_09_10.py
-?? bin/restore_o263_comp10.py
-?? bin/snapshot_badge_linha_09_10.py
-?? bin/snapshot_o263_comp10.py
-?? bin/txt_antes_badge_linha.py
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -175,37 +167,37 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● 16 colabs, não 10 — seis ficaram fora da minha tabela (todos em 13/10, hoje). Preciso medir, não presumir:
-
-  Ran 2 shell commands
-
-● Medido: todos os seis têm 4/4 batidas criadas hoje — classe dado NOVO, igual ao col248. Corrijo a tabela de causa (16, não 10) e reconcilio o 445:
-
-  Ran 1 shell command
-
-● O \u0022 é decodificado na tokenização e fechou a string — refaço com delimitador simples:
-
-  Ran 2 shell commands
-
-● O selo já rodou — rc 0. O número pós-apply:
-
-  Ran 1 shell command
-
-● O selo pós-apply respondeu, e é o número que a parte A existia para mover:
-
-  Searched for 1 pattern, read 1 file, ran 5 shell commands
-
 ● Commit do marco — caminhos declarados, sem o crons_duracao.json nem o instrumento da sonda:
 
-● Writing the commit message file
-  ⎿  $ SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cat > $SP/msg_badge_linha_parteA.txt <<'EOF'
-     [O219] a parte A do BUG-LINHA-X-BADGE pousa como DADO, nao como codigo: a relavra pela porta existente leva a comp 10 de 2 a ZERO divergencia linha x badg…
+  Committed 45cf0353, searched for 1 pattern, ran 3 shell commands
+  ⎿  Read docs/AVAIS.md (23 lines)
+  ⎿  Referenced file docs/RELATO.md
+  ⎿  Referenced file core/juizes.py
+  ⎿  Read ../logs/o261b/watch_5min_o256.log (6 lines)
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/buulw0j03.output (6 lines)
 
-✢ Compacting conversation… (1d 2h 45m · ↓ 3.0m tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 33%
+● Task "RED e construção do segundo intervalo" completed in background
+
+● Task "Raia paralela BUG-SOBRA-TIPO-TROCADO" still running in background
+
+● Task "Insert the new obra and move the live-order marker" still running in background
+
+● Task "Refresh sombra post-apply, run the selo, then the morning block" still running in background
+  ⎿  Message queued for delivery to a7794e5825ac4f369 at its next tool round.
+  ⎿  Allowed by auto mode classifier
+
+● Marco da parte A commitado em 45cf0353 e handoff gerado.
+
+  MARCO FECHADO -- pode compactar
+
+  Agora a parte B. Leitura do vivo primeiro:
+
+● Reading dia_pago header and function list
+  ⎿  $ sed -n '135,205p' ponto/services/dia_pago.py
+
+✢ Concocting… (1d 2h 50m · ↓ 3.0m tokens · thinking more)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                                                                     0% until auto-compact
+                                                                                                                                                    ✔ Update installed · Restart to update
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -213,6 +205,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                                                                  1h 3m 8s · ↓ 428.9k tokens
-  ◯ fork  Running sobra_borda_grade_diff.py against HEAD                                                                                                       1h 12m 9s · ↓ 124.1k tokens
+  ◯ fork  Running sobra_borda_grade_diff.py against HEAD                                                                                           1h 17m 39s · ↓ 124.1k tokens · 1 queued
   ⧉  index
 ```
