@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 13/10/2026 03:31:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (758.9 MB). Acoes na janela: **1257**.
+**Medido em 13/10/2026 03:36:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (759.0 MB). Acoes na janela: **1261**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 03:36:17 | Bash | Read perguntas_vivas_de and its callers | `cd /home/ronald/wt-fio/app \|\| exit 1 sed -n '832,852p' chamados/juizes.py echo "=== chamadores de perguntas_vivas_de ===" grep -rn "perguntas_vivas_de" --include=*.py . \| grep -v "juizes.py:8" \| head` |
+| 03:35:51 | Bash | Read the pergunta_viva juiz and census who filters lists by viva | `cd /home/ronald/wt-fio/app \|\| exit 1 echo "=== juizes.py de chamados: defs ===" grep -n "^def \\|^PENDENTE\\|^VIVOS" chamados/juizes.py echo; echo "=== pergunta_viva ===" sed -n "$(grep -n 'def pergunta_viva' chamados/juizes.py \| cut -d: -f1),+30p" chamados/juizes.py echo; echo "=== quem mais filtra 'viva' em lista? censo ===" grep -rn "if p\.viva\\|if .*\.viva\b" --include=*.py . \| grep -v "/ ...` |
+| 03:35:15 | Bash | Read folha/fora_da_folha.py::_fio_do_dia | `cd /home/ronald/wt-fio/app \|\| exit 1 grep -n "_fio_do_dia" folha/fora_da_folha.py \| head echo "=== def ===" sed -n "$(grep -n 'def _fio_do_dia' folha/fora_da_folha.py \| cut -d: -f1),+22p" folha/fora_da_folha.py` |
+| 03:34:59 | Bash | Check the suite start and the diagram drift | `cd /home/ronald/saas-hasner \|\| exit 1 echo "=== suite arrancou? ==="; head -20 logs/o261/comboio_suite.log echo; echo "=== O259 tocou derivados? ==="; git show --stat 649a9e7b \| grep -E 'ARQUITETURA\|MAPA' \|\| echo "(nenhum)" echo; echo "=== vigia_pausa no .mmd da raia ==="; grep -c "vigia_pausa\\|vigiar_pausa" /home/ronald/wt-fio/app/docs/ARQUITETURA.mmd echo "=== vigia_fio no .mmd ==="; grep ...` |
 | 03:30:18 | Bash | Read the lei_akita host selo | `cd /home/ronald/saas-hasner \|\| exit 1 sed -n '1,80p' bin/tests/test_lei_akita.sh` |
 | 03:30:10 | Bash | Grep the new files for band-aid vocabulary | `cd /home/ronald/wt-fio/app \|\| exit 1 grep -niE "fallback\|por enquanto\|caso comum\|arriscaria\|band-aid\|bandaid" \ chamados/services/vigia_fio.py chamados/management/commands/vigiar_fio_morto.py chamados/tests/test_o261_vigia_fio.py config/crons.py \| head echo "RC=$? (1 = nenhuma ocorrencia)"` |
 | 03:29:55 | Bash | Launch the single comboio suite on the certification copy | `cd /home/ronald/saas-hasner \|\| exit 1 bin/suite.sh --dir /home/ronald/wt-comboio > logs/o261/comboio_suite.log 2>&1; echo "SUITE_RC=$?" >> logs/o261/comboio_suite.log` |
