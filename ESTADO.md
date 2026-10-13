@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 13/10/2026 19:54:32.**
+**Medido em 13/10/2026 20:00:03.**
 
 | | |
 |---|---|
@@ -29,28 +29,28 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2434.1 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2434.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **202.6 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **202.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
   - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **15.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **318.7 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **318.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **222.9 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **223.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **340.6 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **340.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -168,41 +168,41 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-  Ran 1 shell command
-
-● Agent "Raia paralela BUG-SOBRA-TIPO-TROCADO" finished · 1h 35m 48s
-
-  Ran 3 shell commands
-
-● Cause in one line: the TICKETS footer still pointed at d20a0e45, 95 commits behind — the 18:14 push landed and the derivative footer wasn't rewritten. The selo
-  names its own cure.
-
-  Committed 5e8922d4, ran 3 shell commands
-  ⎿  Read docs/AVAIS.md (23 lines)
-  ⎿  Referenced file ponto/motor_calculo_v2.py
-  ⎿  Referenced file core/juizes.py
-  ⎿  Read ../logs/o261b/watch_5min_o256.log (6 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/buulw0j03.output (6 lines)
-
 ● Task "RED e construção do segundo intervalo" completed in background
 
 ● Task "Insert the new obra and move the live-order marker" still running in background
 
 ● The --no-verify was the wrong instinct — the hook is a guard, not noise. Same act, through the hook:
 
-  Retrying the push and read its verdict · 8m 33s
-  ⎿  $ cd /home/ronald/saas-hasner; rm -f logs/push_13-10_20h2.out; nohup bash -c 'git push origin main > logs/push_13-10_20h2.out 2>&1; echo "push rc=$?" >>
-     logs/push_13-10_20h2.out' >/dev/null 2>&1 & echo lancado; until [ -f logs/push_13-10_20h2.out ] && grep -q 'push rc=' logs/push_13-10_20h2.out; do… (8m 33s · 2
-     lines)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Amended commit 425229ab, ran 2 shell commands
 
-✢ Concocting… (1d 5h 24m · ↓ 3.2m tokens)
+● Push is running the full régua in the background. While it runs I can't touch the carimbed tree — so the wait goes into O263-FT, read-only, per ESMERIL/aval:
+
+  Ran 4 shell commands
+
+● The mechanism is now documented, not guessed: EC.marcos_do_dia falls back to the template on a folga (escala/models.py:1110 + the selo test_folga_cai_no_template),
+  so _janela_do_dia gets hi from a template mark the FT day never had. The same docstring records that changing marcos_do_dia turns 5 selos red — the cure belongs
+  in the reader.
+
+  Ran 1 shell command
+
+● Host selos all green this time (the L-113 citation satisfied test_lei_protege_sitio); the suite is now running under the trava. Before I write the O263-FT cure, a
+  review pass:
+
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+
+● Verifying the entrada passed to the window and where per-run state is born
+  ⎿  $ cd /home/ronald/saas-hasner/app; sed -n '2112,2126p' ponto/motor_calculo_v2.py; echo "=== os outros dois ==="; sed -n '2244,2248p;2566,2570p'
+     ponto/motor_calculo_v2.py; echo "=== onde nascem as listas por calculo (1750-1780) ==="; sed -n '1770,1780p' ponto/motor_calculo_v2.py
+
+· Concocting… (1d 5h 30m · ↓ 3.2m tokens · still thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                              ✔ Update installed · Restart to update
 ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                                           1h 3m 8s · ↓ 428.9k tokens
