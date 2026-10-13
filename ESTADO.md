@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 13/10/2026 07:25:46.**
+**Medido em 13/10/2026 07:31:02.**
 
 | | |
 |---|---|
@@ -29,28 +29,28 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2421.7 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2421.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **190.1 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **190.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **3.4 h**
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **3.5 h**
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
   - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **306.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **210.4 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **210.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **328.1 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **328.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -75,7 +75,9 @@ f78c78fc [O261] FASE 3: o fio morto vira CONTADOR com o vocabulario do CARTORIO,
 
 ```
  M app/config/crons_duracao.json
+ M app/docs/CORTES.json
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/PROMPTS.md
  M bin/sonda_frota.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -166,37 +168,37 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  emitiu o fio (emissor que pulou o dia), cura pelo emissor que le a lampada, e o contador da FASE 3 passa a contar tambem celula acusa +
-  0 pergunta + 0 chamado (esperado 0, o dia de HOJE fora pelo teto temporal). Juizes novos = 0. Nenhuma lei nova. Segue a fila; PAREI so
+  folha/fora_da_folha.py::DESTRAVA). O alarme e SILENCIOSO para o admin e vive so no placar da casa (ESTADO + contador da O261, esperado
+  0, o dia de HOJE fora); > 0 = bug provado, fura a fila. Contador == universo (L1): Admin + Colab + Hoje = Bloqueados. Juizes novos = 0.
+  Nenhuma lei nova. Segue a fila; PAREI so em lei ou !
+
+● Terceiro corte, e ele cruza as duas raias. Leio o DESTRAVA e o derivador do dono antes de repartir.
+
+  Searched for 1 pattern, ran 1 shell command
+
+● O corte muda o que o agente da wt-ui está desenhando agora (os donos do LED). Aviso na hora.
+  ⎿  Message queued for delivery to ab3ba0eabad76fd3b at its next tool round.
+  ⎿  Allowed by auto mode classifier
+
+● Registro os três prompts (PROMPT-NAO-SE-REPETE, mesmo turno).
+
+  Ran 2 shell commands
+
+❯ aval Ronald: complemento da O261 -- o dia acusando SEM pergunta e SEM chamado (antigo dono Ninguem, 47 colabs na J.A comp 10; GRUPO-D do
+  BACKLOG, 78/399 na 09) e a outra metade da mesma falha da CLAUDE.md 4a: censo de quem acende a lampada sem emitir o fio e cura pelo
+  emissor que le a lampada; o contador da FASE 3 conta tambem esse caso (esperado 0, HOJE fora). E na O256 a legenda dos LEDs e o PDF na
+  barra respeitando filtros entram no proximo pouso da wt-ui, antes do Raio-X. Juizes novos = 0. Nenhuma lei nova. Segue a fila; PAREI so
   em lei ou !
 
-❯ aval Ronald: na O256, a legenda dos LEDs na barra e o botao PDF na barra respeitando os filtros (itens 2 e 4 da pauta de 12/10) entram
-  no PROXIMO pouso da wt-ui, antes do Raio-X. Juizes novos = 0. Nenhuma lei nova. Segue a fila; PAREI so em lei ou !
-
-  Searched for 1 pattern
-
-● Dois prompts novos. Registro primeiro (PROMPT-NAO-SE-REPETE, mesmo turno), depois oriento.
+● Quarto prompt = repetição dos dois primeiros (títulos já gravados). Linha única, nada refeito.
 
   Ran 1 shell command
 
-● wt-ui está limpa e parada em a11e0736 (já integrada). Vou mandar os itens 2 e 4 da pauta para ela em agente próprio
-  (RAIA-NAO-FICA-PARADA) e fico com o GRUPO-D.
+● Advising using Fable 5.1
 
-  Ran 1 shell command
-
-● Agent(wt-ui: legenda dos LEDs e PDF na barra)
-  ⎿  Backgrounded agent (↓ to manage · ctrl+o to expand)
-
-● Agente da wt-ui lançado. Agora o GRUPO-D — orientação no emissor.
-
-● Censo do GRUPO-D na frota (leitura)
-  ⎿  $ mkdir -p /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/grupod && cat >
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/grupod/censo1.py <<'PY'
-     """GRUPO-D (corte Ronald 13/10): lampada ACESA, 0 pergunta, …
-
-✶ Concocting… (16h 55m 56s · ↓ 1.8m tokens)
+✢ Concocting… (17h 1m 12s · ↓ 1.8m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    9% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -204,6 +206,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Grepping retrato_folha.py for legenda_dos_leds                                              1m 22s · ↓ 106.1k tokens
+  ◯ general-purpose  Reading `_fio_do_dia` and `DESTRAVA` in fora_da_folha.py                                    6m 38s · ↓ 125.7k tokens
   ⧉  index
 ```
