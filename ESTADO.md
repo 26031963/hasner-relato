@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 13/10/2026 15:12:02.**
+**Medido em 13/10/2026 15:17:32.**
 
 | | |
 |---|---|
@@ -29,28 +29,28 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2429.4 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2429.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **197.9 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **198.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **11.1 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **11.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **314.0 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **314.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **218.2 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **218.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **335.9 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **336.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -175,40 +175,40 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+    e trabalhadas e atraso pelo DIFF da sombra.
 
-  Esmeril do marco — 0 órfãos (fiz o censo enquanto ela corre, e só do que ESTE marco mexeu): os quatro sítios do noturno seguem com chamador de produção — minutos_noturnos_dos_intervalos
-  (motor:390, :1627), _noturno_dos_intervalos (motor:912, calculador/regras.py:62 e :85), calcular_noturnas (motor:930), he_noturna (motor:941, regras.py:698). Nenhuma função perdeu o
-  último chamador, então a L-111 não tem o que apagar aqui.
+❯ Causa fora da regua O211 = classe nova = PAREI com a tabela.
 
-  Achado que muda o apply, medido agora em prod (leitura): o ANTES de col297 andou — a comp 10 está viva e ele hoje trabalhou.
+❯ MUDA: a lavra passa a ser a da regua vigente, pela porta que ja lavra. Nenhum leitor muda.
 
-  ┌───────────────────────┬────────────────────────────────┬────────────────────┐
-  │                       │ DIFF publicado (sombra, 14:2x) │ prod agora (15:0x) │
-  ├───────────────────────┼────────────────────────────────┼────────────────────┤
-  │ col297 horas_noturnas │ 82,49                          │ 87,15              │
-  ├───────────────────────┼────────────────────────────────┼────────────────────┤
-  │ col457 horas_noturnas │ 8,00                           │ 8,00               │
-  └───────────────────────┴────────────────────────────────┴────────────────────┘
+❯ RED: col418 22/08, linha 9,05 x badge 5,92. Selo: competencia com fechamento -> soma das linhas == badge em noturnas, atraso e trabalhadas.
 
-  O bin/aplicar_o263_comp10.py não trava nisso (ele imprime o ANTES, não o assere), mas a magnitude publicada (−10,69 h em col297) é a da sombra; a que vale é o antes/depois do próprio
-  apply em prod, e isso vai dito no RELATO junto da prova. O lado bom: col297 ter sido recalculado agora significa que o gravado dele está fresco, não envelhecido — o apply deve mover só
-  campo noturno.
+❯ HAIKU: contador linha_x_badge_divergentes (esperado 0, dono ESTRUTURA) no placar da casa.
 
-  Commit message já atualizada com o RED, a cura, o esmeril e a dupla certificação (100 linhas, com o veredito da segunda suite a preencher). Aguardando a suite; nada do encadeamento
-  commit → deploy.sh --sem-migrate → snapshot → DRY → apply começa antes dela ficar verde.
+● O aval está completo agora. Antes de escrever, duas decisões de ordem/encaixe que são minhas (AUTONOMIA-DE-CODIGO 1 e 2) e uma dependência de código que muda tudo:
 
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: O261 -- BUG-FIO-MORTO-CHAMADO (aval dele 12/10 20:2x, P7.1 -- bug PROVADO POR ELE, fura a fila; id novo por ordem lite
+  Ran 4 shell commands
 
-  Ran 1 shell command
+● Agora o item de BACKLOG, no mesmo turno, com o aval inteiro:
 
-❯ corte Ronald: volta da pausa dentro da tolerancia de conformidade (10 min por marcacao) [nao desconta / desconta] do adicional noturno. Segue a fila; PAREI so em lei ou !
+● Inserting the new obra and moving the live-order marker · 41s
+  ⎿  $ cd /home/ronald/saas-hasner/app; python3 - docs/BACKLOG.md <<'PY'
+     import sys
+     p = sys.argv[1]
+     s = open(p, encoding='utf-8').read()
+     col2 = ("**BUG-LINHA-X-BADGE** (aval dele 13/10 15:1x em partes, **P7.1 -- fura a fila**; id dado por ELE). "
+     "ACHADO MEDIDO POR ELE (`logs/audit_holerite_09/`): espel… (41s · 3 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-* Concocting… (1d 0h 42m · ↓ 2.7m tokens · still thinking)
+✢ Concocting… (1d 0h 47m · ↓ 2.7m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                                                    ✔ Update installed · Restart to update
+
+❯ MUDA: ORIGEM primeiro -- medir se a regua CCT (core/regua_cct.py::regua_para: fonte, prorrogacao, hora_reduzida, feriado_dobra) entra na impressao da lavra (O219, impressao_insumos).
+  Nao entra = a cura e ela entrar, e a relavra da 10 e da 09 sai por esse caminho, nunca por relavra manual. Entra e mesmo assim nao relavrou = PAREI com a tabela.
+  ctrl+x ctrl+s to send now
+                                                                                                                                                                     4% until auto-compact
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ Press up to edit queued messages
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
