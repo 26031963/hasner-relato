@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 13/10/2026 06:07:02.**
+**Medido em 13/10/2026 06:12:32.**
 
 | | |
 |---|---|
@@ -35,22 +35,22 @@ RELATO, com a lista de nomes do banco como autoridade._
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **188.8 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **188.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2.1 h**
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2.2 h**
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **304.9 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **305.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **209.1 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **209.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **326.8 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **326.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -167,35 +167,35 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-● Agora a inversão em test_supra_juiz.py:
+  Ran 2 shell commands
 
-  Ran 37 shell commands
-  ⎿  Read docs/AVAIS.md (23 lines)
-  ⎿  Referenced file core/contratos_estruturais.py
-  ⎿  Referenced file core/juizes.py
-  ⎿  Referenced file ponto/tests/test_contract_juiz_batida.py
+● Confirmed — the 'cobrado' writer at :808 is a 4th leitor que não migrou, two lines below the reduction I already migrated. But narrowing
+  it naively would kill the RESSUSCITA arm. Reading both gates:
 
-● Task "RED e construção do segundo intervalo" completed in background
+  Ran 2 shell commands
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+● The origin is confirmed and the fix is minimal — but it changes what the export retains, so let me measure the blast radius first:
 
-  Ran 21 shell commands
-  ⎿  Read docs/AVAIS.md (23 lines)
-  ⎿  Referenced file core/contratos_estruturais.py
-  ⎿  Referenced file core/juizes.py
-  ⎿  Referenced file ponto/tests/test_contract_juiz_batida.py
-  ⎿  Referenced file escala/models.py
+  Ran 6 shell commands
 
-● Task "RED e construção do segundo intervalo" completed in background
+● 990 células say 'cobrado'; 124 of them have live chamados whose fio is dead — the lying lâmpada, measured. 40 are in the exported 09, so
+  I must check the cron's piso before touching the writer:
 
-● The TRANCA measurement is decisive — and it closes the branch I was weighing:
+  Ran 2 shell commands
 
-  Ran 1 shell command
+● No piso at all — the cron walks every past célula. So the question is whether the cartório already re-lavras exported days. Measuring
+  instead of reasoning:
 
-● Advising using Fable 5.1
+  Ran 2 shell commands
 
-· Concocting… (15h 37m 12s · ↓ 1.7m tokens)
+● The cartório already relavra the exported 09 — 5.979 células after 28/09 19:54, 107 of them 'cobrado'. The write path is pre-existing; my
+  change alters the value, not the set. Now the RED for the writer:
+
+● Achar testes do cartorio escritor
+  ⎿  $ cd /home/ronald/wt-fio/app && grep -rln "julgar_celula\|julgar_colab" ponto/tests/ chamados/tests/ | head -20; echo '=== quem assere
+     cobrado ==='; grep -rln "'cobrado'" ponto/tests/ chamados/tests/ folha/tests/ | head
+
+✢ Concocting… (15h 42m 42s · ↓ 1.7m tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
