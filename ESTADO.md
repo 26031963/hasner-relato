@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 13/10/2026 15:17:32.**
+**Medido em 13/10/2026 15:23:02.**
 
 | | |
 |---|---|
@@ -29,19 +29,19 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2429.5 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2429.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **198.0 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **198.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **11.2 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **11.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **314.1 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **314.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
   - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **218.3 h** (passou das 6 h da L-105)
@@ -175,42 +175,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-    e trabalhadas e atraso pelo DIFF da sombra.
 
-❯ Causa fora da regua O211 = classe nova = PAREI com a tabela.
+❯ ORIGEM PRIMEIRO: medir se a regua CCT (regua_para: fonte, prorrogacao, hora_reduzida, feriado_dobra) entra na
 
-❯ MUDA: a lavra passa a ser a da regua vigente, pela porta que ja lavra. Nenhum leitor muda.
+❯ impressao da lavra (O219, impressao_insumos). Nao entra = a cura e ela entrar; a relavra sai por esse caminho, nunca manual.
 
-❯ RED: col418 22/08, linha 9,05 x badge 5,92. Selo: competencia com fechamento -> soma das linhas == badge em noturnas, atraso e trabalhadas.
+❯ Entra e mesmo assim nao relavrou = PAREI com a tabela.
 
-❯ HAIKU: contador linha_x_badge_divergentes (esperado 0, dono ESTRUTURA) no placar da casa.
+❯ ANTES DE CADA APPLY: DIFF por CAUSA de trabalhadas e atraso na sombra; causa fora da regua = classe nova = PAREI.
 
-● O aval está completo agora. Antes de escrever, duas decisões de ordem/encaixe que são minhas (AUTONOMIA-DE-CODIGO 1 e 2) e uma dependência de código que muda tudo:
+❯ COMP 10: anda so com DIFF do TXT da 10 = 0 (aval RECESSO-PISTA-DO-ADMIN); se mover o TXT, PAUSA ate o export + linha no RELATO.
 
-  Ran 4 shell commands
+❯ COMP 09: pelo aval Ronald abaixo; TXT/ExportacaoDominio da 09 intactos.
 
-● Agora o item de BACKLOG, no mesmo turno, com o aval inteiro:
+❯ RED: col418 22/08, linha 9,05 x badge 5,92. Selo: comp com fechamento -> soma das linhas == badge em noturnas, atraso, trabalhadas.
 
-● Inserting the new obra and moving the live-order marker · 41s
-  ⎿  $ cd /home/ronald/saas-hasner/app; python3 - docs/BACKLOG.md <<'PY'
-     import sys
-     p = sys.argv[1]
-     s = open(p, encoding='utf-8').read()
-     col2 = ("**BUG-LINHA-X-BADGE** (aval dele 13/10 15:1x em partes, **P7.1 -- fura a fila**; id dado por ELE). "
-     "ACHADO MEDIDO POR ELE (`logs/audit_holerite_09/`): espel… (41s · 3 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
+❯ PROIBIDO: leitor da linha recalcular motor; fallback; juiz novo; relavra manual; tocar o TXT da 09.
 
-✢ Concocting… (1d 0h 47m · ↓ 2.7m tokens)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+❯ PRONTO: 10 e 09 com divergem 0 nas 3 chaves; R4 do placar REMEDIDO (o "topo x soma das linhas" e de 11/10, antes do passo 3);
 
-❯ MUDA: ORIGEM primeiro -- medir se a regua CCT (core/regua_cct.py::regua_para: fonte, prorrogacao, hora_reduzida, feriado_dobra) entra na impressao da lavra (O219, impressao_insumos).
-  Nao entra = a cura e ela entrar, e a relavra da 10 e da 09 sai por esse caminho, nunca por relavra manual. Entra e mesmo assim nao relavrou = PAREI com a tabela.
+❯ print do espelho do col418 com coluna == badge; reversao em logs/; PROVA no RELATO.
+
+❯ LEI-AKITA: origem=impressao da lavra (O219) / dia_pago.lavrar, testemunha=totais_da_folha, RED=col418 22/08, quem-mais-le=cartao PDF + app + soma_da_competencia (S2) + R4, juizes
+  novos=0
+
+❯ HAIKU: contador linha_x_badge_divergentes (esperado 0, dono ESTRUTURA).
+
+❯ CAUDA: depois da O263 aplicada, a mesma medida, porque o noturno muda de novo e a lavra tem de acompanhar sozinha.
+
+❯ aval Ronald: BUG-LINHA-X-BADGE relavra o DiaPago da competencia 09 (exportada) pela regua vigente, pela origem da O219, DIFF de frota publicado antes, reversao em logs/, TXT da 09
+  intacto. Segue a fila; PAREI so em lei ou !
   ctrl+x ctrl+s to send now
-                                                                                                                                                                     4% until auto-compact
+                                                                                                                                                                     0% until auto-compact
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ Press up to edit queued messages
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                                                                  1h 3m 8s · ↓ 428.9k tokens
