@@ -6,10 +6,22 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 13/10/2026 05:29:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (762.8 MB). Acoes na janela: **1304**.
+**Medido em 13/10/2026 05:35:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (763.3 MB). Acoes na janela: **1313**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 05:34:31 | Bash | Revisar vizinhos com chamados_vivos=1 | `cd /home/ronald/wt-fio/app && sed -n '1,60p' ponto/tests/test_supra_juiz_cobranca.py; echo "=== contagem_unica 40-95"; sed -n '40,95p' ponto/tests/test_contagem_unica.py` |
+| 05:34:22 | Bash | Censo de call sites de classificar_dia | `cd /home/ronald/wt-fio/app && grep -rn "classificar_dia(" --include=*.py \| grep -v "def classificar_dia" \| grep -v "relatorios/\\|inteligencia/"` |
+| 05:33:59 | Bash | Ler as duas caracterizações | `cd /home/ronald/wt-fio/app && cat -n ponto/tests/test_hx_cobranca_morta.py; echo "=== supra_juiz test 1-70"; sed -n '1,70p' ponto/tests/test_supra_juiz.py` |
+| 05:33:54 | Bash | Idioma de lavrar_veredito em testes | `cd /home/ronald/wt-fio/app && grep -rn "lavrar_veredito(via=" --include=*.py \| head -8; echo "---"; sed -n '1759,1800p' escala/models.py` |
+| 05:33:20 | Bash | Ler test_pergunta_no_app_causas.py | `cd /home/ronald/wt-fio/app && cat -n chamados/tests/test_pergunta_no_app_causas.py` |
+| 05:33:14 | Bash | Reler motivo_fora_da_fabrica | `cd /home/ronald/wt-fio/app && sed -n '620,700p' chamados/services/disputa_emissao.py` |
+| 05:32:50 | Bash | Conferir veredito e FK celula | `cd /home/ronald/wt-fio/app grep -n "VEREDITOS_ACUSAM" escala/models.py \| head -5 sed -n '1712,1725p' escala/models.py echo "--- veredito field:"; grep -n "veredito" escala/models.py \| sed -n '1,12p' echo "--- chamado.celula:"; sed -n '30,45p' chamados/models.py` |
+| 05:32:40 | Bash | Ler fixture _Base | `cd /home/ronald/wt-fio/app && sed -n '1,95p' chamados/tests/test_pergunta_no_app.py` |
+| 05:32:35 | Bash | Lançar medição ANTES das causas na frota | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad mkdir -p "$S/o261i3" cat > "$S/o261i3/sonda_causas.py" <<'PY' # O261 item 3 -- DIFF do sitio (1): quem a fabrica RETEM hoje, por causa. # LEITURA pura: chama a FUNCAO REAL `pergunta_no_app.medir()`. Nenhum nome impresso. import json from django.db import connection from django.conf import settings asser ...` |
+| 05:32:18 | Bash | Ler medir() | `cd /home/ronald/wt-fio/app && sed -n '100,160p' chamados/services/pergunta_no_app.py` |
+| 05:32:14 | Bash | Reler pergunta_no_app 1-100 | `cd /home/ronald/wt-fio/app && sed -n '1,100p' chamados/services/pergunta_no_app.py` |
+| 05:32:08 | Bash | Estado da wt-fio e uso da sonda | `cd /home/ronald/wt-fio && git status --porcelain && git log --oneline -1 echo "--- crons_em_curso:"; ls /home/ronald/saas-hasner/logs/crons_em_curso/ 2>/dev/null \| head echo "--- sonda uso:"; sed -n '1,60p' /home/ronald/saas-hasner/bin/sonda_frota.sh` |
 | 05:27:06 | Bash | Read cartorio 735-800 | `cd /home/ronald/wt-fio/app \|\| exit 1 sed -n '735,800p' ponto/services/cartorio.py` |
 | 05:26:35 | Bash | Census of the any(pergunta_viva) reduction | `cd /home/ronald/wt-fio/app \|\| exit 1 echo "=== quem reduz any(pergunta_viva(...)) ===" grep -rn "pergunta_viva(" --include=*.py . \| grep -v "^./chamados/juizes.py\\|tests/\\|def pergunta_viva\\|_pergunta_viva_calc" \| sed 's/^\.\///'` |
 | 05:25:49 | Bash | Read _Base fixture of pergunta_no_app tests | `cd /home/ronald/wt-fio/app \|\| exit 1 sed -n '1,90p' chamados/tests/test_pergunta_no_app.py` |
@@ -1311,6 +1323,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 17:35:34 | Bash | Le a regiao dos pendentes de fechamento | `cd /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/wt-p5/app && sed -n '386,455p' core/juizes.py` |
 | 17:35:28 | Bash | Declara a guarda e o incompleto no passo 5 | `cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && python3 - "$S/wt-p5/app/folha/views.py" <<'PY' import sys p = sys.argv[1] s = open(p, encoding='utf-8').read() # (a) a guarda do gravado responde outra pergunta depois do passo 5 -- dito, nao mexido old = " if not fechamentos.exists():\n" assert s.count(old) == 1, s.cou ...` |
 | 17:35:03 | Bash | Le a guarda do gravado com espacos exatos | `cd /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/wt-p5/app && sed -n '140,160p' folha/views.py \| cat -A \| sed -n '1,21p' \| sed 's/\$$//'` |
-| 17:34:46 | Bash | Confere STATUS_NO_TXT e o diff da copia | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && grep -n "STATUS_NO_TXT = \\|STATUS_NO_TXT=" folha/export.py && echo "=== diff da copia vs HEAD em folha/views.py ===" && cd "$S/wt-p5" && git diff --stat -- app/folha/views.py app/ponto/views.py && echo "--- regiao patchada ---" && grep -n "_fechs_lido\\|_travas_txt\\|montar_linhas_export\\|classific ...` |
-| 17:34:37 | Bash | Confere uso de fechamentos no corpo | `sed -n '509,568p' folha/export.py \| grep -n "fechamentos\\|itens\\|classificar"` |
-| 17:34:31 | Bash | Confere a assinatura de montar_linhas_export | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && echo "=== assinatura montar_linhas_export (HEAD) ===" && grep -n "def montar_linhas_export" -A 4 folha/export.py && echo "=== onde montar_linhas_export usa fechamentos/itens ===" && awk '/^def montar_linhas_export/,/^def [a-z_]+\(/' folha/export.py \| grep -n "fechamentos\\|itens\\|classificar_export ...` |
