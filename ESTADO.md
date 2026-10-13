@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 13/10/2026 00:22:37.**
+**Medido em 13/10/2026 00:28:02.**
 
 | | |
 |---|---|
@@ -29,31 +29,31 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2414.6 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2414.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **183.1 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **183.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261011`) -- **SEM AGENTE**
-  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **45.1 h** (passou das 6 h da L-105)
+  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **45.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **299.2 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **299.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **203.3 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **203.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **321.0 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **321.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
-  - 0 commit(s) a frente do `main`, 6 arquivo(s) sujo(s)
+  - 0 commit(s) a frente do `main`, 8 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
 - **22 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-fio, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
@@ -167,44 +167,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Task "O261 FASE 2 na raia wt-fio" still running in background
+  MESMO commit em que o contador nasce. Juizes novos = 0. Nenhuma lei nova. Segue a fila; PAREI so em lei ou !
 
-● Task "O256 E3 na raia wt-ui" still running in background
+● His corte answers the TOPO question and converts item (3) into concrete work: the number becomes a contador (vigia, esperado 0, caso que
+  MORDE), and PENDENTES['batida'] empties in the same commit — which turns the celula ('batida','um juiz por pergunta') green and moves
+  contratos_estruturais 15→16.
 
-● 357 chars, over the L-109 teto of 300. Trimming:
+  Registering the corte first, then building. Note the trava is held by wt-fio-o261-full since 00:22:35 — its full suite is running, so I
+  build now and take the pista after.
+
+  Listed 1 directory, ran 1 shell command
+
+● The sonda log here shows only one universe line (barrados=1, dias_so_pausa=0) plus a traceback — not the 8/8, 664, 580, 58 the corte
+  cites. Before I build a contador whose expected value rests on those numbers, let me find the run that produced them:
 
   Ran 1 shell command
 
-● Cell now 276 chars, inside the L-109 teto. Now the principal's own board — contratos_estruturais and what "escala × um juiz" owes:
+● The only logged measurement is a single universe (CNPJ 82218652, 09/2026, n_fech=3, barrados=1) — the 8/8, 664, 580 and 58 the corte
+  cites are not in any log. That is fine for the work, because the contador he ordered is precisely what produces the number with its own
+  prova; I'll build it and let it measure, rather than inherit a figure I can't source. Finding the convention for "contador esperado 0":
 
-  Searched for 1 pattern, ran 2 shell commands
+  Searched for 1 pattern
 
-● Batida has exactly 1 pendente left (O259 closed the other), and its own text names the condition that would retire it: "o PENDENTE FICA
-  pela porta extra da E2 (furo_so_intervalo que bloqueia apto = 0), que ainda nao fechou." That is principal-owned fila-1 work (ordem item
-  3), read-only to start, and file-disjoint from both raias. Orienting:
+● folha/services/vigia_txt.py establishes the vigia shape (censo(empresas=None), contador with esperado 0). Registering the corte durably
+  before I design:
 
-  Searched for 2 patterns, listed 1 directory, ran 3 shell commands
+● Running 1 shell command…
 
-● The retrato already declares motivos_retencao_celula its autoridade unica, so the chain is single-juiz. The pendente's own sitio is
-  classificar_export — reading how it decides apto:
-
-  Searched for 1 pattern, ran 1 shell command
-
-● I have the orientation I need. Calling the advisor before committing to this approach:
-
-● Advising using Fable 5.1
-
-✽ Concocting… (9h 52m 46s · ↓ 1.1m tokens)
+✢ Concocting… (9h 58m 12s · ↓ 1.1m tokens · thought for 28s)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Stopping detached suite.sh container                                                       27m 16s · ↓ 153.5k tokens
-  ◯ general-purpose  Checking import constraints for retrato_raiox                                              27m 16s · ↓ 117.1k tokens
+❯ ◯ general-purpose  Checking brackets in msg_o261.txt                                                          32m 42s · ↓ 158.7k tokens
+  ◯ general-purpose  Running folha label tests in suite.sh                                                      32m 42s · ↓ 140.0k tokens
   ⧉  index
 ```
