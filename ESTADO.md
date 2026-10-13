@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 13/10/2026 18:29:32.**
+**Medido em 13/10/2026 18:34:43.**
 
 | | |
 |---|---|
 | `HEAD` local | `6e29f0b3 [O261] o push do lote cura as duas causas que a regua mediu as 18:03: a citacao FIO-RESSUSCITA ganha linha no TICKETS e o band-aid confessado em relatorios/ volta ao teto 1` |
-| `origin/main` | `d20a0e45 [O219] pouso: os docs do marco A0-b entram junto, e o merge que eu pedi sem commit virou FAST-FORWARD -- o codigo estava na arvore viva antes deste commit` |
-| commits a subir (`ahead`) | **95** |
+| `origin/main` | `6e29f0b3 [O261] o push do lote cura as duas causas que a regua mediu as 18:03: a citacao FIO-RESSUSCITA ganha linha no TICKETS e o band-aid confessado em relatorios/ volta ao teto 1` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -29,19 +29,19 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2432.7 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2432.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **201.2 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **201.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **14.4 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **14.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **317.3 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **317.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
   - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **221.5 h** (passou das 6 h da L-105)
@@ -75,9 +75,17 @@ fb9195bf [O48] o botao de PDF da barra do retrato volta para o partial UNICO da 
 
 ```
  M app/config/crons_duracao.json
+ M app/core/regua_cct.py
  M app/docs/HANDOFF-SESSAO.md
+ M app/folha/porta_export.py
+ M app/folha/tests/test_porta_do_export.py
+ M app/ponto/models.py
+ M app/ponto/services/dia_pago.py
+ M app/ponto/services/fechamento.py
+ M app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py
  M bin/sonda_leitura.sh
 ?? app/GREEN
+?? app/folha/migrations/0012_retrato_linhas_help_text_o256.py
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -167,44 +175,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+   Usage by model:
+          claude-opus-5:  8.5m input, 56.3m output, 10.7b cache read, 156.1m cache write ($8144.61)
+       claude-fable-5-1:  106.9m input, 8.7m output, 13.0m cache read, 628.2k cache write ($1516.96)
+        claude-sonnet-5:  101.0k input, 90.0k output, 6.5m cache read, 277.2k cache write ($3.10)
+   Prompt cache (main):   40701 requests · 99% of input tokens from cache · 90 misses (last 19m 46s ago — likely cause: prompt unchanged — likely server-side,
+   14.1m tokens re-cached) · 663 expected rebuilds (compaction or tool-result clearing) · warm (1h TTL, last activity 7m 11s ago)
 
-● A pending migration for RetratoFolha.linhas showed up — not a field I touched. Checking whether it's pre-existing drift on HEAD and what the diff is.
+   Current session
+   ████████████▌                                      25% used
+   Resets 7pm (America/Sao_Paulo)
 
-  Ran 1 shell command
+   Current week (all models)
+   █████████████████████████████████████████████████  98% used
+   Resets Oct 14, 6pm (America/Sao_Paulo)
 
-● Found a pre-existing drift: a help_text-only change on RetratoFolha.linhas from O256 (114e3ecb) that's missing its migration, which could trip the deploy gate
-  check. I'll generate the migration into the copy and review what deploy.sh requires. · summarized
+   Current week (Fable)
+   ███                                                6% used
+   Resets Oct 14, 6pm (America/Sao_Paulo)
 
-  Ran 1 shell command
+   What's contributing to your limits usage?
+   Approximate, based on local sessions on this machine — does not include other devices or claude.ai
 
-● Confirmed the deploy scripts don't trigger makemigrations, so this drift wouldn't have blocked deployment—but it's still a valid model/migration mismatch to fix
-  (help_text only, no SQL changes). Adding the migration to the patch set and drafting the commit message while the push completes. · summarized
+   Last 24h · these are independent characteristics of your usage, not a breakdown
 
-  Ran 1 shell command
+   100% of your usage came from subagent-heavy sessions
+    Each subagent runs its own requests. Be deliberate about spawning them — and
+    consider configuring a cheaper model for simpler subagents.
 
-● The push still holds the test lock; nothing left in parte B runs without it. Waiting on the verdict FILE (push rc=), in 10-minute windows.
+   100% of your usage came from sessions active for 8+ hours
+    These are often background/loop sessions. Continuous usage can add up quickly
+    so make sure it is intentional.
 
-● Waiting for the push verdict line in its log
-  ⎿  $ cd /home/ronald/saas-hasner; date +%H:%M; until grep -q "^push rc=" logs/push_13-10_18h14.out; do sleep 20; done; date +%H:%M; tail -4
-     logs/push_13-10_18h14.out (4m 3s · 2 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
+   26% of your usage was at >150k context
+    Longer sessions are more expensive even when cached. /compact mid-task, /clear
+    when switching to new tasks.
 
-✢ Concocting… (1d 3h 59m · ↓ 3.1m tokens)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔
-   Select model
-   Switch between Claude models. Your pick becomes the default for new sessions. For other/previous model names, specify with --model.
-
-     1. Default (recommended)  Opus 5 with 1M context · Best for everyday, complex tasks
-     2. Opus (1M context)      Opus 5 with 1M context · Best for everyday, complex tasks
-     3. Fable ✔                Fable 5.1 · Most capable for your hardest and longest-running tasks
-     4. Sonnet                 Sonnet 5 · Efficient for routine tasks
-     5. Haiku                  Haiku 4.5 · Fastest for quick answers
-   ❯ 6. Opus 5.5 (disabled)    Update to 2.1.280+ to use Opus 5.5
-
-
-
-   Use /fast to turn on Fast mode (Opus 5).
-
-   Esc to cancel
+   23% of your usage came from subagents under "general-purpose"
+    If this runs frequently, consider configuring its subagents with a cheaper
+    model or tightening their prompts.
+                                                                                                                                                                   ↓
 ```
