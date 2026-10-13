@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 13/10/2026 03:20:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (758.3 MB). Acoes na janela: **1234**.
+**Medido em 13/10/2026 03:25:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (758.7 MB). Acoes na janela: **1235**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 03:25:11 | Bash | Read the FASE 2 marco section for format | `cd /home/ronald/wt-fio/app \|\| exit 1 sed -n '205,240p' docs/RELATO.md` |
 | 03:19:52 | Bash | Find the marco section structure in the RELATO | `cd /home/ronald/wt-fio/app \|\| exit 1 grep -n "^## \\|^# " docs/RELATO.md \| head -12 wc -l docs/RELATO.md` |
 | 03:19:47 | Bash | Read the RELATO top | `cd /home/ronald/wt-fio/app \|\| exit 1 sed -n '1,40p' docs/RELATO.md` |
 | 03:19:25 | Bash | Inspect raia-ui merge base and its crons.py change | `cd /home/ronald/saas-hasner \|\| exit 1 echo "merge-base main raia-ui: $(git merge-base main raia-ui)" git log --oneline $(git merge-base main raia-ui)..716ca260 \| cat echo "--- crons.py: raia-ui vs base ---" git diff $(git merge-base main raia-ui)..716ca260 -- app/config/crons.py \| head -40` |
