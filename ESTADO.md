@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 13/10/2026 12:05:46.**
+**Medido em 13/10/2026 12:10:46.**
 
 | | |
 |---|---|
@@ -29,19 +29,19 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2426.3 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2426.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **194.8 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **194.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **8.0 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **8.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **310.9 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **311.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
   - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **215.1 h** (passou das 6 h da L-105)
@@ -166,22 +166,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Nenhum teste Django LÊ esses docs (só prosa) — os gerados ficam guardados pelos dois selos de host. Agora a declaração. Leio a entrada do
-  CORTES.json:
-
-  Ran 1 shell command
-
-● O corte decide o escopo contra o meu plano anterior: _C1 é leitor do item 3, e o próprio estado do corte manda o censo de ESCRITORES
-  (item 2) vir antes de tocar qualquer leitor do item 3. Então o _C1 não se parte nesta fatia. Confiro o que guarda o registro:
-
-  Ran 2 shell commands
-
-● Registro agora as três trocas da declaração no applier (instrumento durável):
-
-  Ran 3 shell commands
-
-● Mesma classe de erro de âncora: o _C14 do dict tem comentário no fim da linha e minha âncora era só o prefixo — o # DECIDIR-642 migrou
-  para a minha linha. Curo o applier e a cópia:
 
   Ran 3 shell commands
 
@@ -193,17 +177,33 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   Ran 1 shell command
 
-  Advising using Fable 5.1
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-· Concocting… (21h 35m 56s · ↓ 2.4m tokens)
+  Ran 1 shell command
+
+❯ aval Ronald: PUBLICAR-RETRATO -- o link ORIGINAL de fechamento no menu do admin passa a abrir /folha/exportar/retrato/ (passo 6 da O48, troca da tela). A tela antiga NAO some: ganha um
+  atalho "Tela anterior" dentro da barra do retrato, porque gerar o TXT e as acoes de fechar/reabrir ainda moram nela; ela sai de vez so quando essas acoes estiverem no retrato. Smoke de
+  clique: o meu de 13/10 12:0x vale para o que esta no ar ("assim esta otimo"). Pouso so de tela/url, smoke headless nas 3 larguras antes, deploy --sem-migrate, 500 em saas_ui nos 5 min
+  seguintes = reverter o proprio commit pela porta e PAREI. Linha no RELATO com a hora da troca. Nenhuma lei nova. Segue a fila; PAREI so em lei ou !
+
+● Novo aval recebido — obra de TELA/URL, zero arquivo em comum com a fatia que está na pista (templates x .py do núcleo), então ela anda em raia própria ao lado. Primeiro o registro no
+  mesmo turno (PROMPT-NAO-SE-REPETE):
+
+  Reading the BACKLOG OBRAS block format
+  ⎿  $ echo "=== bloco OBRAS do BACKLOG, cabeca e as 2 primeiras obras:"; sed -n "/^## OBRAS/,+28p" docs/BACKLOG.md; echo "=== e a celula da O256/O261:"; grep -n "^| O25[0-9]\|^| O26[0-9]"
+     docs/BACKLOG.md | head
+
+· Compacting conversation… (21h 40m 56s · ↓ 2.4m tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 58%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    4% until auto-compact
-───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+                                                                                                                                                                     1% until auto-compact
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
-───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
+  ◯ fork  Confirming commit hashes in worktree                                                                                                                  1h 3m 8s · ↓ 428.9k tokens
   ⧉  index
 ```
