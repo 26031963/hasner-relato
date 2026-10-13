@@ -6,10 +6,19 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 13/10/2026 17:41:00.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (800.2 MB). Acoes na janela: **1396**.
+**Medido em 13/10/2026 17:46:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (800.4 MB). Acoes na janela: **1399**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 17:45:18 | Bash | Read PROMPTS.md structure | `head -14 docs/PROMPTS.md; echo "....... TAIL ......."; tail -6 docs/PROMPTS.md; echo "=== wc"; wc -l docs/PROMPTS.md` |
+| 17:45:11 | Bash | Run the tolerance and tripwire measurement on the sombra | `cd /home/ronald/saas-hasner && { echo "=== TOL 0.02 + tripwire do entra $(date +%H:%M:%S)"; bin/sombra.sh --rodar logs/sombra/selo_linha_x_badge_tol002.py parteB_tol002; echo "rc=$?"; echo "=== FIM $(date +%H:%M:%S)"; } > logs/parteB_tol002.out 2>&1` |
+| 17:44:47 | Bash | Write the two decisive sombra measurements | `cd /home/ronald/saas-hasner && cat > logs/sombra/selo_linha_x_badge_tol002.py <<'PY' """PARTE B, as DUAS medicoes que decidem o codigo -- na SOMBRA, leitura pura. 1. A TOLERANCIA: o par linha x badge com TOL **0,02 h** (a da casa no par irmao `espelho_x_dia_pago`), e nao os 0,05 do primeiro selo. Declarar "esperado 0" com uma tolerancia mais larga do que a do vizinho seria afrouxar para o numero c ...` |
+| 17:43:28 | Bash | Read the badge totals mapping and the trabalhadas convention | `sed -n '100,160p' relatorios/cartao_pela_celula.py` |
+| 17:43:16 | Bash | Exact call sites of folha_manda | `grep -rn 'folha_manda(' --include=*.py . \| grep -v '/tests/' \| grep -v 'def folha_manda'` |
+| 17:43:11 | Bash | Identify the overlay function and its production callers | `awk 'NR<=326 && /^def /{n=$0; l=NR} END{}' relatorios/cartao_pela_celula.py; grep -n '^def ' relatorios/cartao_pela_celula.py \| awk -F: '$1<=326' \| tail -2; echo "=== callers"; grep -rn 'folha_manda' --include=*.py . \| grep -v '/tests/' \| head` |
+| 17:43:02 | Bash | Read the overlay function and its callers | `sed -n '286,340p' relatorios/cartao_pela_celula.py; echo "=== quem chama essa funcao"; grep -rn "$(sed -n '286,300p' relatorios/cartao_pela_celula.py \| grep -o 'def [a-z_]*' \| head -1 \| cut -d' ' -f2)" --include=*.py . \| grep -v 'cartao_pela_celula.py' \| head` |
+| 17:42:55 | Bash | Check gate state and badge overlay callers | `cd /home/ronald/saas-hasner && tail -6 logs/sombra_pos_apply_badge_linha.out; echo "=== conferir"; bin/sombra.sh --conferir 2>&1 \| tail -8; echo "=== callers de aplicar_nos_totais"; cd app && grep -rn 'aplicar_nos_totais(' --include=*.py . \| grep -v 'def aplicar' \| head` |
+| 17:42:46 | Bash | Find where the badge overlay happens | `grep -n 'aplicar_nos_totais\\|totais_da_folha\\|fonte_dos_totais' -r --include=*.py . \| grep -v '/tests/' \| head -20` |
 | 17:37:23 | Bash | Read R4 declaration in the placar | `sed -n '200,300p' core/placar_estrutural.py` |
 | 17:37:05 | Bash | Read lavrar signature and body | `sed -n '135,160p' ponto/services/dia_pago.py; echo "...... 255-320 ......"; sed -n '255,320p' ponto/services/dia_pago.py` |
 | 17:36:46 | Bash | Read the fatia loop and the lavra call site | `sed -n '295,330p' ponto/services/fechamento.py; echo "..... 690-760 ....."; sed -n '690,760p' ponto/services/fechamento.py` |
@@ -1400,9 +1409,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 05:46:28 | Bash | Ler retencao e _marco_ja_perguntado | `cd /home/ronald/wt-fio/app && sed -n '40,100p' chamados/services/pergunta_no_app.py` |
 | 05:46:25 | Bash | Mapear a cascata de retencao | `cd /home/ronald/wt-fio/app && grep -n "marco_apagado\\|_marco_ja_perguntado\\|fabrica_nao_rodou\\|def retencao\\|def medir\\|CAUSAS" chamados/services/pergunta_no_app.py \| head -40` |
 | 05:46:12 | Bash | Ler a falha do green | `cd /home/ronald/saas-hasner && sed -n '/^====/,$p' logs/o261/green_i3.log \| head -60` |
-| 05:45:51 | Bash | Rodar o GREEN dos quatro modulos na copia | `cd /home/ronald/saas-hasner && mkdir -p logs/o261 && bin/suite.sh --dir /home/ronald/wt-fio --espera 900 --only "chamados.tests.test_o261_fabrica_le_a_lampada ponto.tests.test_hx_cobranca_morta ponto.tests.test_supra_juiz ponto.tests.test_tripwire_o261_gate_le_o_fio" > logs/o261/green_i3.log 2>&1; echo "rc=$?"; grep -E '^(OK\|FAILED)($\| \()' logs/o261/green_i3.log \| tail -1; grep -E '^Ran [0-9]+ ...` |
-| 05:45:41 | Bash | Fazer a fixture ler o juiz do fio pelo nome | `cd /home/ronald/wt-fio/app && python3 - chamados/tests/test_o261_fabrica_le_a_lampada.py <<'PY' import sys p = sys.argv[1] s = open(p).read() old = """ def _fio_morto(self, ch): from chamados.models import pergunta_viva return not any(pergunta_viva(p) for p in PerguntaDisputa.objects.filter(chamado_destino=ch)) """ new = """ def _fio_morto(self, ch): \"\"\"Le o juiz do fio pelo nome (`chamados.jui ...` |
-| 05:45:32 | Bash | Conferir onde vive pergunta_viva | `cd /home/ronald/wt-fio/app && grep -rn "^def pergunta_viva\\|^from\\|^import" chamados/juizes.py \| head -20; echo ---; grep -n "pergunta_viva" chamados/models.py \| head` |
-| 05:45:25 | Bash | Ler o arquivo de teste novo inteiro | `cd /home/ronald/wt-fio/app && cat -n chamados/tests/test_o261_fabrica_le_a_lampada.py` |
-| 05:45:19 | Bash | Mover a limpeza para o topo do laco | `cd /home/ronald/wt-fio/app && python3 - chamados/tests/test_o261_fabrica_le_a_lampada.py <<'PY' import sys p = sys.argv[1] s = open(p).read() old = """ from escala.models import CelulaDia from chamados.services.disputa_emissao import motivo_fora_da_fabrica for v in CelulaDia.VEREDITOS_ACUSAM: with self.subTest(veredito=v): cel = self.celula(v) ch = self.chamado(celula=cel) self.encerrar_pergunta(c ...` |
-| 05:45:01 | Bash | Ler o laco de subTest do RED novo | `cd /home/ronald/wt-fio/app && grep -n "todo_veredito" -A 30 chamados/tests/test_o261_fabrica_le_a_lampada.py \| head -50` |
