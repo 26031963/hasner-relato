@@ -11,6 +11,19 @@ responde ainda, com o motivo declarado) · **PENDENTES** (leitores que respondem
 esperam migrar -- a lista so encolhe).
 
 
+## Familia `batida`
+
+| pergunta | juiz (dono) |
+|---|---|
+| quantas horas este PAR (turno) vale? | `ponto/motor_calculo_v2.py::MotorBase.calcular_periodo` |
+| que periodos e que intervalo teve este dia? | `ponto/juiz_batida.py::periodos_do_dia` |
+
+**SEM JUIZ declarado** (3):
+
+- **a batida e espuria (cluster)?** -- nao migrada: `detectar_cluster_espurio --apply` e o cluster-guard de `escala/utils.py` decidem em sitios diferentes
+- **a batida esta dentro do geofence?** -- nao migrada: `reconciliar_geofence` e `acao_recusar_geofence` respondem cada um por si -- candidata do corte de 25/09, sem censo
+- **o par e relampago?** -- nao migrada: `detectar_par_relampago` decide e RETRATA; nenhum outro leitor pergunta
+
 ## Familia `turno/marcos`
 
 | pergunta | juiz (dono) |
@@ -18,16 +31,15 @@ esperam migrar -- a lista so encolhe).
 | a entrada atrasou ou a saida adiantou alem da tolerancia? | `ponto/motor_calculo_v2.py::MotorBase.aplicar_tolerancia` |
 | a proxima batida e entrada ou saida? | `ponto/turnos.py::proximo_tipo_de` |
 | a que turno (data_turno) pertence a batida? | `ponto/turnos.py::turnos_do_colab` |
+| este turno tem dois blocos (e partido)? | `escala/servico_jornada.py::eh_turno_partido` |
 | ha turno aberto vivo agora? | `ponto/turnos.py::turno_aberto_de` |
+| o dia esta encerrado? | `ponto/turnos.py::dia_encerrado` |
 | o tipo gravado deve virar (flip)? | `ponto/turnos.py::decidir_tipo_estrito` |
 | o turno previsto cruza a meia-noite? | `escala/servico_jornada.py::turno_cruza_meia_noite` |
-| este turno tem dois blocos (e partido)? | `escala/servico_jornada.py::eh_turno_partido` |
 | o vao entre batidas foi intervalo? | `ponto/turnos.py::intervalos_do_turno` |
 | quais sao os marcos previstos do dia? | `escala/models.py::EscalaColaborador.marcos_do_dia` |
 | que marco previsto a batida ocupa? | `escala/utils.py::_match_marcos` |
 | que status (ok, atraso, adianto, grave) tem a lampada do marco? | `escala/utils.py::status_do_delta` |
-
-**PENDENTES nesta familia**: 2 leitor(es) com regra propria, esperando migrar.
 
 ## Familia `celula/precedencia`
 
@@ -42,8 +54,6 @@ esperam migrar -- a lista so encolhe).
 | uma ausencia cobre o dia para a folha? | `ponto/turnos.py::ausencia_cobre` |
 | uma ausencia suspende a cobranca do dia? | `ponto/turnos.py::ausencia_cobre` |
 
-**PENDENTES nesta familia**: 1 leitor(es) com regra propria, esperando migrar.
-
 ## Familia `ausencia/ferias`
 
 | pergunta | juiz (dono) |
@@ -51,7 +61,7 @@ esperam migrar -- a lista so encolhe).
 | a ausencia esta aberta ou decidida? | `ponto/services/ausencia.py::ABERTAS` |
 | a ausencia exige documento, e em que prazo? | `ponto/services/ausencia.py::estado_inicial` |
 | a ausencia paga, desconta ou suprime o dia? | `ponto/catalogo/ausencias.py::efeito_vigente` |
-| ha 3 ou mais atestados na competencia? | `ponto/services/alertas_ausencia.py::resumo_atestados` |
+| ha 3 ou mais lancamentos medicos na competencia? | `ponto/services/alertas_ausencia.py::resumo_atestados` |
 | o aviso de 30 dias foi dado (art.135)? | `ferias/situacao.py::DIAS_AVISO_PREVIO` |
 | o colaborador esta afastado hoje? | `ponto/turnos.py::afastado_hoje` |
 | o colaborador esta de ferias hoje? | `ferias/services.py::em_gozo_hoje` |
@@ -62,8 +72,6 @@ esperam migrar -- a lista so encolhe).
 | quanto a ausencia dura, e o tipo e valido? | `ponto/catalogo/ausencias.py::fim_de` |
 | quantos dias ainda podem ser vendidos (abono, 1/3)? | `ferias/models.py::PeriodoAquisitivo.dias_vendaveis` |
 | que dias a ausencia ocupa? | `ponto/turnos.py::cobertura_ausencia_periodo` |
-
-**PENDENTES nesta familia**: 1 leitor(es) com regra propria, esperando migrar.
 
 ## Familia `chamado`
 
@@ -91,6 +99,7 @@ esperam migrar -- a lista so encolhe).
 
 | pergunta | juiz (dono) |
 |---|---|
+| a competencia pode ser aprovada/trancada (o que bloqueia)? | `folha/export.py::classificar_export` |
 | o periodo foi reaberto? | `ponto/services/fechamento.py::periodo_trancado` |
 | o que "fechado" quer dizer (qual fronteira barra a escrita)? | `ponto/services/fechamento.py::competencia_trancada` |
 | qual e a competencia encerrada (a anterior a de hoje)? | `ponto/janelas.py::janela_anterior` |
@@ -98,12 +107,11 @@ esperam migrar -- a lista so encolhe).
 | que FechamentoMensal e o da competencia de hoje? | `ponto/janelas.py::janela_atual` |
 | quem entra no TXT da folha? | `folha/export.py::classificar_export` |
 
-**SEM JUIZ declarado** (2):
+**SEM JUIZ declarado** (1):
 
-- **a competencia ja foi entregue (lavrada)?** -- dividida: chamados/juizes.dia_em_competencia_exportada (so TXT) x gerar_celulas (TXT ou holerite publicado)
-- **a competencia pode ser aprovada/trancada (o que bloqueia)?** -- dividida: botao (turno aberto, 12x36 sem ancora, conta vazia), aprovar_colaborador (so turno), TXT (classificar_export, sem trancar) e os bloqueios do pre-fechamento (pauta, nao trava)
+- **a competencia ja foi entregue (lavrada)?** -- uma leitora so, e ela NAO e declarada: gerar_celulas.py:147-194 le a lavra direto e conta TXT ou holerite publicado (BUG 85). Era dividida com chamados/juizes.dia_em_competencia_exportada (so TXT) ate 11/10, quando o O44 SEM FRONTEIRA matou essa metade (L-111). Declarar gerar_celulas como autoridade
 
-**PENDENTES nesta familia**: 19 leitor(es) com regra propria, esperando migrar.
+**PENDENTES nesta familia**: 10 leitor(es) com regra propria, esperando migrar.
 
 ## Familia `feriado/prazo`
 
@@ -121,7 +129,7 @@ esperam migrar -- a lista so encolhe).
 - **o que e dia util?** -- nenhuma: seg-sex sem feriado nem escala (VT, VA, janela comercial do escalonamento)
 - **que horas do turno que cruza a meia-noite contam como feriado?** -- nenhuma: tudo pela data local da ENTRADA (turno partido pelo dia da jornada); 191 vinculos ativos cruzam a meia-noite em 14/09 -- PARADO S6-BORDA-DO-FERIADO
 
-**PENDENTES nesta familia**: 14 leitor(es) com regra propria, esperando migrar.
+**PENDENTES nesta familia**: 13 leitor(es) com regra propria, esperando migrar.
 
 ## Familia `tela`
 
@@ -142,7 +150,7 @@ esperam migrar -- a lista so encolhe).
 
 - **numero de tela sem autoridade declarada (score, faixa de horario, atraso de sincronizacao)?** -- score (produtor inteiro por conta propria, pendentes A1/C1), faixa manha/tarde/noite e atraso de sincronizacao -- pergunta de negocio de cada tela, vem na fatia dela
 
-**PENDENTES nesta familia**: 121 leitor(es) com regra propria, esperando migrar.
+**PENDENTES nesta familia**: 113 leitor(es) com regra propria, esperando migrar.
 
 ## Familia `portas`
 
@@ -156,12 +164,13 @@ esperam migrar -- a lista so encolhe).
 
 | familia | juizes | sem juiz | pendentes |
 |---|---|---|---|
-| `turno/marcos` | 10 | 0 | 2 |
-| `celula/precedencia` | 8 | 0 | 1 |
-| `ausencia/ferias` | 14 | 0 | 1 |
+| `batida` | 2 | 3 | 0 |
+| `turno/marcos` | 12 | 0 | 0 |
+| `celula/precedencia` | 8 | 0 | 0 |
+| `ausencia/ferias` | 14 | 0 | 0 |
 | `chamado` | 13 | 1 | 0 |
-| `fechamento` | 6 | 2 | 19 |
-| `feriado/prazo` | 6 | 2 | 14 |
-| `tela` | 10 | 1 | 121 |
+| `fechamento` | 7 | 1 | 10 |
+| `feriado/prazo` | 6 | 2 | 13 |
+| `tela` | 10 | 1 | 113 |
 | `portas` | 1 | 0 | 124 |
-| **total** | **68** | **6** | **282** |
+| **total** | **73** | **8** | **260** |

@@ -190,8 +190,8 @@ flowchart TD
     t_evento["EVENTO<br/>batida, ausencia, chamado -> cartorio julga na hora (signals B5.2)"]
     t_consumidor["CONSUMIDORES<br/>chamado, pergunta, tela, folha: leem a lampada, nunca re-julgam"]
     t_vigia["CRON = VIGIA<br/>23 vigias; contador esperado 0, so alarma"]
-    t_prazo["CRON = PRAZO (L-101)<br/>2 cron(s): a falta nao emite evento, o relogio e o unico sinal dela;<br/>julgam pela funcao do juiz da casa, sem regra propria (PRAZO_DELEGA_A)"]
-    t_juiz["JUIZ POR VARREDURA (divida)<br/>25 crons ainda julgam: esperado 0"]
+    t_prazo["CRON = PRAZO (L-101)<br/>3 cron(s): a falta nao emite evento, o relogio e o unico sinal dela;<br/>julgam pela funcao do juiz da casa, sem regra propria (PRAZO_DELEGA_A)"]
+    t_juiz["JUIZ POR VARREDURA (divida)<br/>24 crons ainda julgam: esperado 0"]
     t_escala --> t_celula
     t_evento --> t_celula
     t_celula --> t_consumidor
@@ -210,7 +210,6 @@ flowchart TD
   j_fechar_becos_disputa["fechar_becos_disputa"] -.-> t_juiz
   j_fechar_chamados_ausencia["fechar_chamados_ausencia"] -.-> t_juiz
   j_fechar_cobranca_com_lastro["fechar_cobranca_com_lastro"] -.-> t_juiz
-  j_flip_automatico["flip_automatico"] -.-> t_juiz
   j_marcar_foto_ausente_retro["marcar_foto_ausente_retro"] -.-> t_juiz
   j_processar_alertas_avancados["processar_alertas_avancados"] -.-> t_juiz
   j_processar_alertas_turno["processar_alertas_turno"] -.-> t_juiz
@@ -224,6 +223,7 @@ flowchart TD
   j_silenciar_chamados_isentos["silenciar_chamados_isentos"] -.-> t_juiz
   j_supra_juiz["supra_juiz"] -.-> t_juiz
   j_termometro_regua["termometro_regua"] -.-> t_juiz
+  pz_flip_automatico["flip_automatico<br/>ponto.turnos::dia_encerrado"] -.-> t_prazo
   pz_processar_cartorio["processar_cartorio<br/>ponto.services.cartorio::julgar_colab"] -.-> t_prazo
   pz_vigia_de_hora["vigia_de_hora<br/>ponto.services.cartorio::marcos_vencidos"] -.-> t_prazo
 
@@ -296,7 +296,7 @@ flowchart TD
     ja_escala_servico_jornada_py(["escala/servico_jornada.py"]) --- jf_celula_precedencia
     ja_escala_utils_py(["escala/utils.py"]) --- jf_celula_precedencia
     jmais_celula_precedencia["... +2 arquivos de juiz"] --- jf_celula_precedencia
-    jf_turno_marcos["turno/marcos<br/>11 com juiz · 0 sem juiz<br/>registro: 0 sitio(s)"]
+    jf_turno_marcos["turno/marcos<br/>12 com juiz · 0 sem juiz<br/>registro: 0 sitio(s)"]
     ja_escala_models_py(["escala/models.py"]) --- jf_turno_marcos
     ja_escala_servico_jornada_py(["escala/servico_jornada.py"]) --- jf_turno_marcos
     ja_escala_utils_py(["escala/utils.py"]) --- jf_turno_marcos
