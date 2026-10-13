@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 13/10/2026 00:17:32.**
+**Medido em 13/10/2026 00:22:37.**
 
 | | |
 |---|---|
@@ -29,19 +29,19 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2414.5 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2414.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **183.0 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **183.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261011`) -- **SEM AGENTE**
-  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **45.0 h** (passou das 6 h da L-105)
+  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **45.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **299.1 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **299.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
   - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **203.3 h** (passou das 6 h da L-105)
@@ -167,44 +167,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+● Task "O261 FASE 2 na raia wt-fio" still running in background
 
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: O261 -- BUG-FIO-MORTO-CHAMADO (aval dele 12/10 20:2x, P7.1 -- bug PROVADO POR ELE, fura a fila; id novo
-  por ordem lite
+● Task "O256 E3 na raia wt-ui" still running in background
 
-● The hook is right to refuse — O261 is the open fila-1 item and the turn doesn't end with fila 1 in pé. Reading what the hook demands and
-  what O261 still owes, before I act:
+● 357 chars, over the L-109 teto of 300. Trimming:
 
   Ran 1 shell command
 
-● The hook wants the fila to advance, not the turn to end — and it's correct. The wt-fio agent owns FASE 2's code; let me read what O261
-  still owes the principal, which is file-disjoint from it:
+● Cell now 276 chars, inside the L-109 teto. Now the principal's own board — contratos_estruturais and what "escala × um juiz" owes:
 
-  Searched for 1 pattern
+  Searched for 1 pattern, ran 2 shell commands
 
-● The BACKLOG cell is stale — it still says "FASE 1 EM CURSO" when FASE 1 closed with the censo published. Correcting it to the truth, and
-  measuring the principal's board:
+● Batida has exactly 1 pendente left (O259 closed the other), and its own text names the condition that would retire it: "o PENDENTE FICA
+  pela porta extra da E2 (furo_so_intervalo que bloqueia apto = 0), que ainda nao fechou." That is principal-owned fila-1 work (ordem item
+  3), read-only to start, and file-disjoint from both raias. Orienting:
 
-● Updating the O261 state cell to reflect FASE 1 closed
-  ⎿  $ python3 - <<'PY'
-     import io
-     alvo = 'docs/BACKLOG.md'
-     s = io.open(alvo, encoding='utf-8').read()
-     velho = ('| **FASE 1 EM CURSO, em raia PROPRIA `wt-fio`** (aval dele 12/10 22:3x): o censo passa a ser de '
-     '**CODIGO** (AST), nao de frota -- e por isso **nao depende mais da O260**. Os 6 sitios que el…
+  Searched for 2 patterns, listed 1 directory, ran 3 shell commands
 
-✢ Compacting conversation… (9h 47m 42s · ↓ 1.1m tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱ 88%
+● The retrato already declares motivos_retencao_celula its autoridade unica, so the chain is single-juiz. The pendente's own sitio is
+  classificar_export — reading how it decides apto:
+
+  Searched for 1 pattern, ran 1 shell command
+
+● I have the orientation I need. Calling the advisor before committing to this approach:
+
+● Advising using Fable 5.1
+
+✽ Concocting… (9h 52m 46s · ↓ 1.1m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    0% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Consulting advisor on lavrar guard placement                                               22m 12s · ↓ 125.3k tokens
-  ◯ general-purpose  Adding Raio-X button to _retrato_barra.html                                                22m 12s · ↓ 168.3k tokens
+  ◯ general-purpose  Stopping detached suite.sh container                                                       27m 16s · ↓ 153.5k tokens
+  ◯ general-purpose  Checking import constraints for retrato_raiox                                              27m 16s · ↓ 117.1k tokens
   ⧉  index
 ```
