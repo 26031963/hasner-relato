@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:4624 AFIRMA ato sem PROVA ao lado -- | **LEITURA-LITERAL-DO-CARIMBO** | 2026-10-12 19:5x | 12 h | CUMPRIDO SEM UMA LINHA DE CODIGO, e isso se MEDE: ele carimba exatamente o que 
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:4629 AFIRMA ato sem PROVA ao lado -- | **LEITURA-LITERAL-DO-CARIMBO** | 2026-10-12 19:5x | 12 h | CUMPRIDO SEM UMA LINHA DE CODIGO, e isso se MEDE: ele carimba exatamente o que 
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 13/10/2026 08:35:32.**
+**Medido em 13/10/2026 08:40:46.**
 
 | | |
 |---|---|
-| `HEAD` local | `ae7f08f3 [O261] pouso do item 3: a impressao do cartorio passa a codificar o FIO, e e isso que leva a cura aos dias presos (merge --no-ff da raia wt-fio, L-105/L-107)` |
+| `HEAD` local | `2cb57138 [O261] item (1): os "124" eram um PICO de meio-de-corrente -- a relavratura cura os 69 da bancada e nao move um centavo, e a previsao dos 104 dias era MINHA e esta refutada` |
 | `origin/main` | `d20a0e45 [O219] pouso: os docs do marco A0-b entram junto, e o merge que eu pedi sem commit virou FAST-FORWARD -- o codigo estava na arvore viva antes deste commit` |
-| commits a subir (`ahead`) | **74** |
+| commits a subir (`ahead`) | **75** |
 
 ## Fabrica
 
@@ -29,19 +29,19 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2422.8 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2422.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
-  - 0 commit(s) a frente do `main`, 11 arquivo(s) sujo(s)
+  - 0 commit(s) a frente do `main`, 14 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **191.3 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **191.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **4.5 h**
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **4.6 h**
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **307.4 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **307.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
   - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **211.6 h** (passou das 6 h da L-105)
@@ -53,7 +53,7 @@ RELATO, com a lista de nomes do banco como autoridade._
   - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **329.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **0.7 h**
+  - 1 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **0.8 h**
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
 - **21 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
@@ -64,25 +64,18 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+2cb57138 [O261] item (1): os "124" eram um PICO de meio-de-corrente -- a relavratura cura os 69 da bancada e nao move um centavo, e a previsao dos 104 dias era MINHA e esta refutada
 ae7f08f3 [O261] pouso do item 3: a impressao do cartorio passa a codificar o FIO, e e isso que leva a cura aos dias presos (merge --no-ff da raia wt-fio, L-105/L-107)
 90546b2f [O261] item 3: o `cobrado` nasce do FIO, e a IMPRESSAO do cartorio era CEGA a pergunta -- sem ela a cura nunca chegaria aos dias presos
 a11e0736 [O256] o drawer do colab nasce das chaves GRAVADAS e o Saldo ganha a faixa Cadastro: o eixo de dia passa a fechar com Bloqueados (pouso dos itens 1 e 2 da E3)
 635ceae1 [O261] pouso da FASE 3 em COMBOIO: o fio morto vira CONTADOR no ar, e o unico vermelho da certificacao era o DESENHO derivado (merge --no-ff da raia wt-fio, L-105/L-107, POUSO-EM-COMBOIO)
-f78c78fc [O261] FASE 3: o fio morto vira CONTADOR com o vocabulario do CARTORIO, e o teto que eu quase declarei era FALSO
 ```
 
 ## `git status --short`
 
 ```
- M app/chamados/tests/test_o261_fabrica_le_a_lampada.py
  M app/config/crons_duracao.json
- M app/docs/BACKLOG.md
- M app/docs/CORTES.json
- M app/docs/CORTES.md
  M app/docs/HANDOFF-SESSAO.md
- M app/docs/PROMPTS.md
- M app/docs/RELATO.md
- M app/ponto/tests/test_o261_cobrado_le_o_fio.py
  M bin/sonda_frota.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -173,6 +166,16 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  ⎿  Referenced file ponto/services/cartorio.py
+  ⎿  Referenced file chamados/services/vigia_fio.py
+  ⎿  Referenced file docs/LEIS.md
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/o261i3/sonda_cobrado_sem
+     _fio.py (68 lines)
+
+● Task "RED e construção do segundo intervalo" completed in background
+
+● Task "wt-bos: CHAMADO-X-JUIZ" still running in background
+
 ● Task "Censo dos 23 crons de varredura" still running in background
 
 ● Task "wt-ui: condições (a) e (b) do PUBLICAR-RETRATO" still running in background
@@ -186,23 +189,13 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-● Per-pk fio DIFF with correct prefixes
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PY'
-     import gzip,json
-     from collections import Counter
-     TS='20261013T0818'
-     def ler(path,pref,gz=False):
-     d={}
-     op=gzip.open(path,'rt') if gz else open(path)
-     for ln in op:
-     if ln.startswith(pref+' '):
-     r=json.loads(ln[len(pref)+1:]); d[r[0]]=r[1:]
-     return d
-     pare…
+  Generating the handoff for the closed marco
+  ⎿  $ cd /home/ronald/saas-hasner && bash bin/handoff_sessao.sh 2>&1 | tail -5; echo "=== HEAD:"; git log --oneline -1; echo "===
+     origin/main..HEAD:"; git rev-list --count origin/main..HEAD
 
-✢ Concocting… (18h 5m 42s · ↓ 2.0m tokens · thinking)
+· Concocting… (18h 10m 56s · ↓ 2.0m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    8% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -210,7 +203,7 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   ● main
   ◯ fork                  Confirming commit hashes in worktree                                                 1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose (+1)  Inspecting write path in gerar_mapa_juizes.py                                          59m 53s · ↓ 83.7k tokens
-  ◯ general-purpose       Grepping dono refs in test_retrato_folha_quadros.py                                    12m 5s · ↓ 167.4k tokens
+  ◯ general-purpose (+1)  Inserting O258 row into TICKETS.md                                                   1h 5m 7s · ↓ 134.2k tokens
+  ◯ general-purpose       Reading the haiku golden in test_haiku_fora_da_folha.py                               17m 19s · ↓ 139.1k tokens
   ⧉  index
 ```
