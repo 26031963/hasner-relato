@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 13/10/2026 03:05:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (757.4 MB). Acoes na janela: **1202**.
+**Medido em 13/10/2026 03:10:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (757.9 MB). Acoes na janela: **1204**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 03:09:42 | Bash | Read sonda_frota.sh usage | `cd /home/ronald/saas-hasner \|\| exit 1 sed -n '1,80p' bin/sonda_frota.sh` |
+| 03:09:36 | Bash | Read the vigia service | `cd /home/ronald/wt-fio/app \|\| exit 1 cat -n chamados/services/vigia_fio.py` |
 | 03:04:18 | Bash | Read FURO_MODULES and the cartorio vocabulary | `cd /home/ronald/saas-hasner/app \|\| exit 1 grep -n "FURO_MODULES" chamados/catalogo/furo_modulos.py \| head -5 grep -n "def chamados_que_falam_de_batida" -A 18 ponto/services/cartorio.py \| sed -n '1,25p'` |
 | 03:01:05 | Bash | Read the HAIKU placar command and its consumers | `cd /home/ronald/saas-hasner/app \|\| exit 1 sed -n '1,40p' core/management/commands/placar_haiku_acoes.py echo === quem consome cd /home/ronald/saas-hasner && grep -rn "placar_haiku_acoes\\|placar_haiku" bin/ app/config/crons.py 2>/dev/null \| head` |
 | 03:00:54 | Bash | See how LINHA HAIKU contadores are realized | `cd /home/ronald/saas-hasner \|\| exit 1 grep -o "LINHA HAIKU: contador \`[a-z_]*\`[^\|]\{0,60\}" app/docs/BACKLOG.md \| head -12 echo === onde vivem esses contadores grep -rn "acoes_perdidas_no_fio\\|js_por_posicao" --include=*.py app/core/ bin/ \| grep -v tests \| head -6` |
