@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 13/10/2026 15:23:02.**
+**Medido em 13/10/2026 15:28:32.**
 
 | | |
 |---|---|
@@ -29,28 +29,28 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2429.6 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2429.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **198.1 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **198.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **11.3 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **11.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **314.2 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **314.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **218.3 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **218.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **336.0 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **336.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -176,26 +176,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-❯ ORIGEM PRIMEIRO: medir se a regua CCT (regua_para: fonte, prorrogacao, hora_reduzida, feriado_dobra) entra na
-
-❯ impressao da lavra (O219, impressao_insumos). Nao entra = a cura e ela entrar; a relavra sai por esse caminho, nunca manual.
-
-❯ Entra e mesmo assim nao relavrou = PAREI com a tabela.
-
-❯ ANTES DE CADA APPLY: DIFF por CAUSA de trabalhadas e atraso na sombra; causa fora da regua = classe nova = PAREI.
-
-❯ COMP 10: anda so com DIFF do TXT da 10 = 0 (aval RECESSO-PISTA-DO-ADMIN); se mover o TXT, PAUSA ate o export + linha no RELATO.
-
-❯ COMP 09: pelo aval Ronald abaixo; TXT/ExportacaoDominio da 09 intactos.
-
-❯ RED: col418 22/08, linha 9,05 x badge 5,92. Selo: comp com fechamento -> soma das linhas == badge em noturnas, atraso, trabalhadas.
-
-❯ PROIBIDO: leitor da linha recalcular motor; fallback; juiz novo; relavra manual; tocar o TXT da 09.
-
-❯ PRONTO: 10 e 09 com divergem 0 nas 3 chaves; R4 do placar REMEDIDO (o "topo x soma das linhas" e de 11/10, antes do passo 3);
-
-❯ print do espelho do col418 com coluna == badge; reversao em logs/; PROVA no RELATO.
-
 ❯ LEI-AKITA: origem=impressao da lavra (O219) / dia_pago.lavrar, testemunha=totais_da_folha, RED=col418 22/08, quem-mais-le=cartao PDF + app + soma_da_competencia (S2) + R4, juizes
   novos=0
 
@@ -205,10 +185,30 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ❯ aval Ronald: BUG-LINHA-X-BADGE relavra o DiaPago da competencia 09 (exportada) pela regua vigente, pela origem da O219, DIFF de frota publicado antes, reversao em logs/, TXT da 09
   intacto. Segue a fila; PAREI so em lei ou !
-  ctrl+x ctrl+s to send now
-                                                                                                                                                                     0% until auto-compact
+
+● Ele mudou o ID: complemento da O219 — exatamente o sítio que a medição apontou. Fechando o elo que falta (impressão mudada → relavra):
+
+  Ran 1 shell command
+
+● A docstring do REGRA_VERSOES descreve o bug dele palavra por palavra. Agora o elo cartório → relavra do DiaPago:
+
+  Ran 3 shell commands
+
+● O cartório não relavra (zero referência) e recalcular_fechamento_mes não tem pulo. Medindo o slot que a lavra já tem:
+
+  Ran 2 shell commands
+
+● Medição fechada. Gravando-a antes de declarar o veredito:
+
+  Ran 1 shell command
+
+  Advising using Fable 5.1
+
+✢ Concocting… (1d 0h 58m · ↓ 2.7m tokens)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+                                                                                                                                                    ✔ Update installed · Restart to update
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ Press up to edit queued messages
+❯ 
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
 
