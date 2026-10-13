@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 13/10/2026 20:30:46.**
+**Medido em 13/10/2026 20:35:47.**
 
 | | |
 |---|---|
@@ -29,28 +29,28 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2434.7 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2434.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **203.2 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **203.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
   - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **16.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **319.3 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **319.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **223.5 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **223.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **341.2 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **341.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -170,38 +170,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Agora as três edições de docs (entram no commit do marco, L-106), com a célula de estado reescrita dentro do teto da L-109:
 
   Ran 1 shell command
 
-● RELATO e TICKETS entraram; a assertiva do teto da L-109 mordeu (317 > 300). Encurto e re-rodo (as duas primeiras partes são idempotentes):
+● _intra_real tem dois chamadores (2156, 2608), não três. Leio o contexto para ver como [e, s] e o intervalo se combinam:
 
   Ran 1 shell command
 
-● Docs fechados. Rodo a pasta inteira de selos de host agora (barato, e é o que recusa o push):
+● Bug confirmado na origem: duracao usa a janela clipada [e, s], mas _intra_real soma os intervalos crus. Vejo o terceiro calcular_periodo (o aval fala de três) e
+  quem lê o intervalo carimbado:
 
   Ran 1 shell command
 
-● Os dois correm em paralelo (selos em background, suite na pista de teste). Ponho um monitor no arquivo de veredito da suite, em vez de poll manual:
+● Censo fecha diferente do que o aval presumiu, e isso muda a forma da cura:
 
-● Para uma notificação só, uso until por fato — a trava deixar de ser segurada por este run (a suite não grava .rc sozinha):
+  - dois calcular_periodo descontam intra (2156, 2608); o terceiro (2262) não desconta nada — o sítio já é único.
+  - _carimbar_segmento grava intervalos_do_motor cru, e três leitores derivam dele (alimentacao.py:111 quebra o segmento por ele, regras.py:704, motor:945). Recortar
+    só dentro de _intra_real deixaria o carimbo dizendo uma coisa e a conta outra — segundo derivador.
 
-  Ran 1 shell command
+  Então a cura mais restritiva (L-083) é recortar a lista uma vez por ramo, antes do carimbo: um sítio, e todos os leitores passam a ler o mesmo intervalo. Construo
+  em cópia nascida da árvore do O263-FT:
 
-● Enquanto os dois correm, confiro os pré-requisitos do DIFF e do deploy (leitura barata, para não descobrir no fim):
+  Creating the O272 copies from the O263-FT tree
+  ⎿  $ SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
+     set -e
+     for alvo in o272_red o272_cura; do
+     rm -rf $SP/$alvo; mkdir -p $SP/$alvo
+     (cd $SP/o263_cura && tar -c --exclude=__pycache__ --exclude=.ruff_cache --exclude=.mypy_cache \
+     --exclude=.hypothesis --e…
 
-  Ran 1 shell command
-
-● Background command "Run the whole host-selo folder" completed (exit code 0)
-
-● Sombra pronta (carimbo de hoje, diverge=0, completa) e o portão do deploy limpo. Leio o resultado dos selos:
-
-  Reading the host-selo results
-  ⎿  $ cat /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bff1doauu.output
-
-· Concocting… (1d 6h 0m · ↓ 3.2m tokens · thinking)
+✽ Concocting… (1d 6h 5m · ↓ 3.3m tokens · still thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                             ✔ Update installed · Restart to update
+                                                                                                                                              5% until auto-compact
 ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
