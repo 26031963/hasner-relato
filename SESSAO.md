@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 13/10/2026 01:55:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (754.5 MB). Acoes na janela: **1081**.
+**Medido em 13/10/2026 02:00:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (754.5 MB). Acoes na janela: **1084**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 01:59:18 | Bash | Wait for suite verdict | `cd /home/ronald/saas-hasner && n=0; until grep -qE "^(OK\|FAILED)($\| \()" logs/o259/suite_o259.log \|\| [ $n -ge 11 ]; do sleep 10; n=$((n+1)); done; grep -cE "^(ERROR\|FAIL):" logs/o259/suite_o259.log; date "+%H:%M:%S"; tail -c 150 logs/o259/suite_o259.log` |
+| 01:57:24 | Bash | Wait for suite verdict | `cd /home/ronald/saas-hasner && n=0; until grep -qE "^(OK\|FAILED)($\| \()" logs/o259/suite_o259.log \|\| [ $n -ge 11 ]; do sleep 10; n=$((n+1)); done; grep -cE "^(ERROR\|FAIL):" logs/o259/suite_o259.log; grep -E "^Ran [0-9]+ tests" logs/o259/suite_o259.log \| tail -1; date "+%H:%M:%S"` |
+| 01:55:29 | Bash | Wait for suite verdict | `cd /home/ronald/saas-hasner && n=0; until grep -qE "^(OK\|FAILED)($\| \()" logs/o259/suite_o259.log \|\| [ $n -ge 11 ]; do sleep 10; n=$((n+1)); done; grep -cE "^(ERROR\|FAIL):" logs/o259/suite_o259.log; date "+%H:%M:%S"` |
 | 01:53:34 | Bash | Wait for suite verdict | `cd /home/ronald/saas-hasner && n=0; until grep -qE "^(OK\|FAILED)($\| \()" logs/o259/suite_o259.log \|\| [ $n -ge 11 ]; do sleep 10; n=$((n+1)); done; grep -cE "^(ERROR\|FAIL):" logs/o259/suite_o259.log; date "+%H:%M:%S"` |
 | 01:51:40 | Bash | Wait for suite verdict | `cd /home/ronald/saas-hasner && n=0; until grep -qE "^(OK\|FAILED)($\| \()" logs/o259/suite_o259.log \|\| [ $n -ge 11 ]; do sleep 10; n=$((n+1)); done; grep -cE "^(ERROR\|FAIL):" logs/o259/suite_o259.log; date "+%H:%M:%S"` |
 | 01:49:45 | Bash | Wait for suite verdict | `cd /home/ronald/saas-hasner && n=0; until grep -qE "^(OK\|FAILED)($\| \()" logs/o259/suite_o259.log \|\| [ $n -ge 11 ]; do sleep 10; n=$((n+1)); done; grep -cE "^(ERROR\|FAIL):" logs/o259/suite_o259.log; date "+%H:%M:%S"` |
