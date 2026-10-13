@@ -6,10 +6,17 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 13/10/2026 09:13:16.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (774.3 MB). Acoes na janela: **1328**.
+**Medido em 13/10/2026 09:18:42.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (774.8 MB). Acoes na janela: **1326**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 09:18:41 | Bash | Read batida block as model | `sed -n '960,1056p' core/juizes.py` |
+| 09:18:38 | Bash | Copy HEAD files and map top-level anchors | `cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/s-escala; mkdir -p $S/copia/core $S/copia/escala/tests; for f in core/juizes.py core/contratos_estruturais.py escala/models.py; do git show HEAD:app/$f > $S/copia/$f; done; ls -l $S/copia/core $S/copia/escala; cd app && grep -n "^PENDENTES_\\|^JUIZES\[\\|^SEM_JUIZ\[\\|^PEN ...` |
+| 09:18:28 | Bash | Re-verify orphan callers | `echo "--- vigente_de ---"; grep -rn "vigente_de" --include=*.py --include=*.html --include=*.js . \| grep -v '/migrations/'; echo "--- rascunho_de ---"; grep -rn "rascunho_de" --include=*.py --include=*.html --include=*.js . \| grep -v '/migrations/'; echo "--- fim ---"` |
+| 09:18:23 | Bash | Write desenho v2 and read orphan region | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/s-escala; cat > $S/desenho_v2.md <<'EOF' # S-ESCALA -- ('escala','um juiz por pergunta') [desenho v2, 13/10] Substitui o v1 (escrito antes do advisor e antes da sonda de DONO). Tres correcoes do v1: P1 nao e pergunta de LEI (a lei e DELE); P3 nao e pendente novo (e divida da celula/precedencia); "114 si ...` |
+| 09:17:13 | Bash | Read escala juiz cell | `sed -n '400,445p' core/contratos_estruturais.py` |
+| 09:17:08 | Bash | Find escala cells in contratos_estruturais | `grep -n "escala" core/contratos_estruturais.py \| head -40` |
+| 09:16:40 | Bash | Wait for sonda v2 verdict | `cd /home/ronald/saas-hasner && until grep -q 'JSON_DONO\\|Traceback\\|rror' logs/s_escala/dono_v2_20261013.out 2>/dev/null; do sleep 5; done; date +%H:%M:%S; tail -c 3000 logs/s_escala/dono_v2_20261013.out` |
 | 09:11:17 | Bash | Run refined dono sonda | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/s-escala; sed -e "s/if len(amostra) < 25:/if False:/" $S/dono_dos_1214.py > $S/dono_v2.py && python3 - $S/dono_v2.py <<'PY' import sys p=sys.argv[1]; s=open(p).read() old=""" colabs.add(c.pk) por_classe_colabs.setdefault(k, set()).add(c.pk)""" new=""" colabs.add(c.pk) por_classe_colabs.setdefault(k, set ...` |
 | 09:10:51 | Bash | Read sonda output sample | `cd /home/ronald/saas-hasner && head -c 1200 logs/s_escala/dono_20261013.out; echo; echo "=== grep amostra classes ==="; python3 - logs/s_escala/dono_20261013.out <<'PY' import json,sys,re t=open(sys.argv[1]).read() j=json.loads(t[t.index('JSON_DONO ')+10:]) for a in j['amostra'][:12]: print(a) PY` |
 | 09:10:19 | Bash | Check sonda progress | `cd /home/ronald/saas-hasner && date +%H:%M:%S; wc -c logs/s_escala/dono_20261013.out; tail -c 600 logs/s_escala/dono_20261013.out` |
@@ -1329,12 +1336,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 21:20:51 | Bash | Procurar selo que enumera as chaves da linha | `cd /home/ronald/wt-ui/app && grep -rn "'saldo'\\|\"saldo\"\\|chaves\\|keys()" folha/tests/test_retrato_folha*.py \| head -30 && echo "==== export dias dict" && grep -n "'data':" folha/export.py \| sed -n '1,12p'` |
 | 21:20:34 | Bash | Ler montar_linhas | `cd /home/ronald/wt-ui/app && sed -n '660,733p' folha/retrato_folha.py` |
 | 21:20:34 | Bash | Ler a linha dos colabs em fora_da_folha | `cd /home/ronald/wt-ui/app && grep -n "datas\\|'dias'" folha/fora_da_folha.py \| head -40 && echo ---- && sed -n '120,170p' folha/fora_da_folha.py` |
-| 21:15:46 | Bash | Ler as faixas de saldo e os quadros da barra | `cd /home/ronald/wt-ui/app && sed -n '190,264p;555,655p' folha/retrato_folha.py` |
-| 21:14:56 | Bash | Ler os campos do filtro universal | `cd /home/ronald/wt-ui/app && cat -n templates/core/_filtro_campos.html` |
-| 21:14:25 | Bash | Ler a autoridade das datas de furo apurado no espelho | `cd /home/ronald/wt-ui/app && sed -n '1100,1135p' ponto/services/espelho.py` |
-| 21:14:21 | Bash | Medir como o espelho marca furo no dia | `cd /home/ronald/wt-ui/app && grep -n "furo\\|veredito" ponto/services/espelho.py \| head -40` |
-| 21:14:04 | Bash | Localizar o espelho e os chamadores de classificar_falta | `cd /home/ronald/wt-ui/app && grep -rn "def espelho_do_colab" --include=*.py . \| head -3 && grep -rn "classificar_falta" --include=*.py . \| grep -v "/tests/\\|def classificar_falta" \| head -20` |
-| 21:13:52 | Bash | Censo largo dos leitores do modulo fora_da_folha | `cd /home/ronald/wt-ui/app && grep -rn "fora_da_folha" --include=*.py . \| grep -v "^./folha/fora_da_folha.py\\|^./folha/retrato_folha.py\\|^./folha/models.py" \| grep -v "test_" \| head -20` |
-| 21:13:48 | Bash | Censar os chamadores de fora_da_folha | `cd /home/ronald/wt-ui/app && grep -rn "fora_da_folha(" --include=*.py . \| grep -v "/tests/\\|def fora_da_folha\\|^./folha/fora_da_folha.py" \| head -20` |
-| 21:13:32 | Bash | Ler o selo do retorno exato e censar os consumidores de colabs | `cd /home/ronald/wt-ui/app && grep -rn "test_com_itens_False_devolve_EXATAMENTE" -A 30 folha/tests/*.py \| head -45 && echo "=== consumidores de colabs ===" && grep -rn "\['colabs'\]\\|get('colabs')\\|\"colabs\"" --include=*.py . \| grep -v "/tests/" \| head -20` |
-| 21:13:16 | Bash | Ler o corpo do fora_da_folha | `cd /home/ronald/wt-ui/app && sed -n '85,210p' folha/fora_da_folha.py` |
