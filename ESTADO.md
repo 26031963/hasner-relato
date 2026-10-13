@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:4611 AFIRMA ato sem PROVA ao lado -- | **LEITURA-LITERAL-DO-CARIMBO** | 2026-10-12 19:5x | 4 h | CUMPRIDO SEM UMA LINHA DE CODIGO, e isso se MEDE: ele carimba exatamente o que p
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:4611 AFIRMA ato sem PROVA ao lado -- | **LEITURA-LITERAL-DO-CARIMBO** | 2026-10-12 19:5x | 11 h | CUMPRIDO SEM UMA LINHA DE CODIGO, e isso se MEDE: ele carimba exatamente o que 
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 13/10/2026 07:36:32.**
+**Medido em 13/10/2026 07:42:02.**
 
 | | |
 |---|---|
@@ -29,28 +29,28 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2421.8 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2421.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **190.3 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **190.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
   - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **3.6 h**
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **306.4 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **306.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **210.6 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **210.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **328.3 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **328.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -76,8 +76,10 @@ f78c78fc [O261] FASE 3: o fio morto vira CONTADOR com o vocabulario do CARTORIO,
 ```
  M app/config/crons_duracao.json
  M app/docs/CORTES.json
+ M app/docs/CORTES.md
  M app/docs/HANDOFF-SESSAO.md
  M app/docs/PROMPTS.md
+ M app/docs/RELATO.md
  M bin/sonda_frota.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -168,44 +170,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ⎿  Allowed by auto mode classifier
-
-❯ aval Ronald: as raias paradas voltam a andar em paralelo, mesma sessao: (1) wt-o48p3 fecha o passo 3 da O48 (fechamento.py:604, RED +
-  DIFF gravado x lido na 10) e pousa; em seguida o passo 6; (2) wt-bos pousa a O44 (suite verde ja medida) e abre JA o CHAMADO-X-JUIZ do
-  aval de 12/10 17:0x; (3) a principal fecha a celula batida x um juiz assim que o corte PENDENTE-SAI estiver no CORTES.md. Raia parada
-  com trava livre pede linha de motivo no RELATO. Nenhuma lei nova. Segue a fila; PAREI so em lei ou !
-
-● Quinto prompt: três raias em paralelo. O item (3) dele tem um portão — o corte no CORTES.md. Vejo primeiro.
-
-  Ran 3 shell commands
-
-● O44 e o passo anterior da O48 já estão no main (31ad7449 e 2e2a7fd4 são ancestrais) — não há pouso a refazer. Lanço as duas raias com o
-  que de fato resta.
-
-● Agent(wt-o48p3: passo 3 da O48)
   ⎿  Backgrounded agent (↓ to manage · ctrl+o to expand)
+  ⎿  Read docs/AVAIS.md (23 lines)
+  ⎿  Referenced file ponto/services/cartorio.py
+  ⎿  Referenced file chamados/services/vigia_fio.py
+  ⎿  Referenced file docs/LEIS.md
+  ⎿  Referenced file core/contratos_estruturais.py
 
-● Agent(wt-bos: CHAMADO-X-JUIZ)
-  ⎿  Backgrounded agent (↓ to manage · ctrl+o to expand)
+● Task "RED e construção do segundo intervalo" completed in background
 
-✢ Compacting conversation… (17h 6m 42s · ↓ 1.8m tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 44%
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+● Task "wt-ui: legenda dos LEDs e PDF na barra" still running in background
+
+● Task "wt-o48p3: passo 3 da O48" still running in background
+
+● Task "wt-bos: CHAMADO-X-JUIZ" still running in background
+
+  Ran 2 shell commands
 
 ❯ aval Ronald: o corte RETRATO-DONO-SAO-TRES (PROMPTS.md:1195) foi recebido e nao esta no CORTES.md nem no BACKLOG.md depois do pouso
   ae7f08f3 -- registrar agora, com linha na O256 (barra Dono = Admin, Colab, Hoje) e na O261 (alarme silencioso no placar), pela
   PROMPT-NAO-SE-REPETE. Nenhuma lei nova. Segue a fila; PAREI so em lei ou !
-  ctrl+x ctrl+s to send now
-                                                                                                                    0% until auto-compact
+
+● Regenerating CORTES.md from JSON
+  ⎿  $ cd /home/ronald/saas-hasner && python3 bin/gerar_cortes.py; rc=$?; echo "rc=$rc"; echo "=== grep CORTES.md:"; grep -n
+     'RETRATO-DONO-SAO-TRES\|O261-GRUPO-D-E-A-OUTRA-METADE\|O256-LEGENDA-E-PDF' app/docs/CORTES.md; echo "=== git status docs:"; git status
+     --porcelain app/docs/ | head
+
+✢ Concocting… (17h 12m 12s · ↓ 1.8m tokens)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ Press up to edit queued messages
+❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-❯ ◯ general-purpose  Reading docker run invocation in suite.sh                                                   12m 8s · ↓ 168.4k tokens
-  ◯ general-purpose  Grepping RELATO.md for passo 3 INCOMPLETO                                                    1m 39s · ↓ 99.3k tokens
-  ◯ general-purpose  Backing up HANDOFF-SESSAO.md                                                                    52s · ↓ 72.4k tokens
+  ◯ general-purpose  Checking arvore_do_push.sh montagem output                                                 17m 38s · ↓ 118.6k tokens
+  ◯ general-purpose  Reading montar_resumos in fechamento_lista.py                                                7m 9s · ↓ 146.9k tokens
+  ◯ general-purpose  Consulting advisor on classificar_dia purity                                                6m 23s · ↓ 109.7k tokens
   ⧉  index
 ```
