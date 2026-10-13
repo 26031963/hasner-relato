@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 13/10/2026 07:15:46.**
+**Medido em 13/10/2026 07:20:46.**
 
 | | |
 |---|---|
-| `HEAD` local | `a11e0736 [O256] o drawer do colab nasce das chaves GRAVADAS e o Saldo ganha a faixa Cadastro: o eixo de dia passa a fechar com Bloqueados (pouso dos itens 1 e 2 da E3)` |
+| `HEAD` local | `ae7f08f3 [O261] pouso do item 3: a impressao do cartorio passa a codificar o FIO, e e isso que leva a cura aos dias presos (merge --no-ff da raia wt-fio, L-105/L-107)` |
 | `origin/main` | `d20a0e45 [O219] pouso: os docs do marco A0-b entram junto, e o merge que eu pedi sem commit virou FAST-FORWARD -- o codigo estava na arvore viva antes deste commit` |
-| commits a subir (`ahead`) | **72** |
+| commits a subir (`ahead`) | **74** |
 
 ## Fabrica
 
@@ -29,56 +29,53 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2421.5 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2421.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **190.0 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **190.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **3.2 h**
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **3.3 h**
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **306.1 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **306.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **210.2 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **210.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **327.9 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **328.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
-- **22 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-fio, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
+- **21 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
-**sem agente: 6** (raia com commit a frente e sem declaracao, esperado 0) -- **a frente do main ha mais de 6 h: 5** -- uniao medida: 31
+**sem agente: 6** (raia com commit a frente e sem declaracao, esperado 0) -- **a frente do main ha mais de 6 h: 5** -- uniao medida: 30
 
 > Raia sem agente por mais de um marco pede linha de motivo no RELATO -- lei, `!` ou pista (item 4 do aval).
 
 ## `git log --oneline -5`
 
 ```
+ae7f08f3 [O261] pouso do item 3: a impressao do cartorio passa a codificar o FIO, e e isso que leva a cura aos dias presos (merge --no-ff da raia wt-fio, L-105/L-107)
+90546b2f [O261] item 3: o `cobrado` nasce do FIO, e a IMPRESSAO do cartorio era CEGA a pergunta -- sem ela a cura nunca chegaria aos dias presos
 a11e0736 [O256] o drawer do colab nasce das chaves GRAVADAS e o Saldo ganha a faixa Cadastro: o eixo de dia passa a fechar com Bloqueados (pouso dos itens 1 e 2 da E3)
 635ceae1 [O261] pouso da FASE 3 em COMBOIO: o fio morto vira CONTADOR no ar, e o unico vermelho da certificacao era o DESENHO derivado (merge --no-ff da raia wt-fio, L-105/L-107, POUSO-EM-COMBOIO)
 f78c78fc [O261] FASE 3: o fio morto vira CONTADOR com o vocabulario do CARTORIO, e o teto que eu quase declarei era FALSO
-716ca260 [O256] o drawer do colab nasce das chaves GRAVADAS e o Saldo ganha a faixa Cadastro: o eixo de dia passa a fechar com Bloqueados (pouso dos itens 1 e 2 da E3)
-1aff2a52 [O261] pouso da FASE 2: o escritor da via sem_turno_aberto passa a LER a lampada, e a celula que ABSOLVE assina com o proprio nome (merge --no-ff da raia wt-fio, L-105/L-107)
 ```
 
 ## `git status --short`
 
 ```
  M app/config/crons_duracao.json
- M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
- M app/docs/LEIS.md
- M app/docs/RELATO.md
  M bin/sonda_frota.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -169,7 +166,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 2 shell commands
 
 ● RED exato e evidenciado: pulados: 1 — o cron pula a célula e a mentira fica presa (os 124). Aplico a cura da impressão:
 
@@ -193,14 +189,15 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-  Conferir estado da raia e os derivados
-  ⎿  $ cd /home/ronald/wt-fio && git status --porcelain; echo "=== derivados (md5 wt-fio x main):"; for f in app/docs/ARQUITETURA.mmd
-     app/docs/MAPA.md app/templates/base_app.html; do a=$(md5sum $f 2>/dev/null | cut -d' ' -f1); b=$(md5sum /home/ronald/saas-hasner/$f
-     2>/dev/null | cut -d' ' -f1); echo "$f…
+● Registrar o smoke e rodar o handoff do marco
+  ⎿  $ cd /home/ronald/saas-hasner && { echo "SMOKE PROD (leitura, funcao pura, 0 escrita) -- 13/10 07:2x, depois do deploy de ae7f08f3";
+     echo "impressao_insumos no ar: fio na assinatura=True; base==fio_None=True; base!=fio:0=True; fio:0!=fio:1=True"; } >
+     logs/o261/smoke_prod_impressao_13-10.txt; bash b…
 
-· Concocting… (16h 45m 56s · ↓ 1.8m tokens · thinking)
+✶ Compacting conversation… (16h 50m 56s · ↓ 1.8m tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱ 82%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    7% until auto-compact
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
