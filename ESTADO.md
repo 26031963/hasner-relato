@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 13/10/2026 18:45:32.**
+**Medido em 13/10/2026 18:50:46.**
 
 | | |
 |---|---|
@@ -29,28 +29,28 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2433.0 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2433.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **201.5 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **201.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **14.7 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **14.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **317.6 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **317.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **221.7 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **221.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **339.4 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **339.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -175,35 +175,35 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+
   Ran 1 shell command
 
-● Background command "Push the lot through the pre-push regua (background)" completed (exit code 0)
+● Parte B is built, applied and evidenced; the full suite is certifying the live tree now.
 
-● Push is through: d20a0e45..6e29f0b3, push rc=0 — the 94 commits are on origin/main and the lock is free. Now the RED evidence.
+  Done since the break
+  - Push landed: d20a0e45..6e29f0b3, push rc=0 — the 94 commits are on origin/main, pre-push régua green.
+  - Parte B complete across 8 files (7 patched + 1 migration), applied to the live tree after ruff/py_compile on the copies.
+  - RED on an unpatched HEAD copy: 4 reds — the 3 new MORDE tests plus the contract that enumerates medir's keys (logs/parteB_RED.out).
+  - GREEN: 21/21 folha.tests.test_porta_do_export, 52 neighbours OK across dia_pago_soma/fechamento/the B5-j tripwire, 3 host selos green, makemigrations --check
+    rc 0.
+  - One finding I cured in the same marco: makemigrations --check on the copy exposed a pending AlterField on RetratoFolha.linhas — a help_text drift the O256
+    (114e3ecb) left behind, not something parte B touched. It's now folha/migrations/0012_retrato_linhas_help_text_o256 (no data SQL), so the deploy goes with
+    migrate, not --sem-migrate.
 
-  Ran 2 shell commands
+  Remaining in this marco (gated on the suite verdict, background brwhrlw7o): run the real counter on the sombra for the 09 and 10, cite that file as PROVA in the R4
+  7th pair (stays PARCIAL), commit code+docs with the RELATO section already drafted at 22 lines, then bin/deploy.sh. The 09 itself stays untouched until 14/10 18h
+  under O269.
 
-● --dir wants the repo root, not app/. Rebuilding the RED copy correctly.
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: BUG-LINHA-X-BADGE -- BUG-LINHA-X-BADGE (aval dele 13/10 15:1x em partes, P7.1 -- fura a fila; id dado por ELE). ACHADO MEDIDO POR
+  E
 
-  Ran 3 shell commands
+  Waiting for the full suite verdict on the live tree · 4m 37s
+  ⎿  $ cd /home/ronald/saas-hasner; T=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/brwhrlw7o.output; until grep -qE
+     "^(OK|FAILED)($| \()" logs/parteB_suite.out; do sleep 30; done; date +%H:%M; grep -E "^(OK|FAILED)($| \()|^Ran " logs/parteB_suite.out | tail -2… (4m 36s)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-● RED evidenced on unpatched HEAD: the 3 new MORDE tests ERROR (import absent) plus the key-enumeration contract FAILS — 4 reds, exactly the costura. Applying to the
-  live tree and running GREEN.
-
-  Ran 2 shell commands
-
-● The only error is a bad label I guessed (ponto.tests.test_dia_pago doesn't exist) — all 21 folha tests are GREEN. Finding the real ponto modules and running the
-  host selos.
-
-  Ran 2 shell commands
-
-● 52 neighbours OK, host selos green. Launching the full suite over the live tree.
-
-● Fixing the attribution line and waiting for the full suite verdict
-  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/parteB; sed -i 's|^Co-Authored-By: .*|Co-Authored-By: Claude
-     Opus 5 (1M context) <noreply@anthropic.com>|' $S/msg_commit.txt; tail -1 $S/msg_commit.txt; cd /home/ronald/saas-hasner; until grep -qE "^(O…
-
-✢ Concocting… (1d 4h 15m · ↓ 3.1m tokens · thinking)
+· Concocting… (1d 4h 20m · ↓ 3.1m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                              ✔ Update installed · Restart to update
 ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -213,6 +213,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                                           1h 3m 8s · ↓ 428.9k tokens
-  ◯ fork  Running ruff on tripwire_celulas.py                                                                                             40m 52s · ↓ 127.1k tokens
+  ◯ fork  Running ruff on tripwire_celulas.py                                                                                              46m 6s · ↓ 127.1k tokens
   ⧉  index
 ```
