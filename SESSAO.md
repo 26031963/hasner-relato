@@ -6,10 +6,16 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 13/10/2026 01:22:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (753.6 MB). Acoes na janela: **1045**.
+**Medido em 13/10/2026 01:28:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (753.7 MB). Acoes na janela: **1051**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 01:27:30 | Bash | Correct the hour label to the clock read now | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; C=$S/o259; cd $C/app && sed -i 's/13\/10 01:5x/13\/10 01:2x/g' core/juizes.py core/contratos_estruturais.py && grep -n "01:2x" core/juizes.py core/contratos_estruturais.py` |
+| 01:27:21 | Bash | Read the clock | `date '+%H:%M %d/%m'` |
+| 01:27:12 | Bash | Find the published question about BARRADOS_SO_POR_PAUSA | `grep -n "BARRADOS_SO_POR_PAUSA\\|porta extra\\|664" docs/RELATO.md \| head -20; echo ===; grep -n "^## MARCO" docs/RELATO.md \| head -5` |
+| 01:27:03 | Bash | Read the top of the RELATO and the pending question | `sed -n '1,40p' docs/RELATO.md; echo "=== 310-345 ==="; sed -n '310,345p' docs/RELATO.md` |
+| 01:26:57 | Bash | Queue the neighbour batch behind the lock | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; C=$S/o259; cd /home/ronald/saas-hasner && ESTEIRA_QUEM=o259-vizinhos bin/suite.sh --dir $C --espera 3600 --only "ponto.tests.test_contract_juiz_batida core.tests.test_selo_contratos_estruturais core.tests.test_contract_tabuleiro core.tests.test_haiku_contratos_estruturais folha.tests.test_o259_vigia_pa ...` |
+| 01:26:48 | Bash | Ask who holds the test lock | `cd /home/ronald/saas-hasner && bin/trava_teste.sh --quem` |
 | 01:16:43 | Bash | Run the neighbour batch against the copy | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; C=$S/o259; cd /home/ronald/saas-hasner && mkdir -p logs/o259 && ESTEIRA_QUEM=o259-vizinhos bin/suite.sh --dir $C --espera 600 --only "ponto.tests.test_contract_juiz_batida core.tests.test_selo_contratos_estruturais core.tests.test_contract_tabuleiro core.tests.test_haiku_contratos_estruturais folha.tes ...` |
 | 01:16:34 | Bash | Ruff the touched files in the copy | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; C=$S/o259; docker run --rm --user $(id -u):$(id -g) -e HOME=/tmp -e RUFF_CACHE_DIR=/tmp/ruffcache --cpuset-cpus 4-7 -v $C/app:/app -w /app saas-hasner-core:latest ruff check core/juizes.py core/contratos_estruturais.py ponto/tests/test_contract_juiz_batida.py folha/services/vigia_pausa.py folha/export. ...` |
 | 01:16:26 | Bash | Read suite.sh to compose the targeted run | `cd /home/ronald/saas-hasner && sed -n '1,120p' bin/suite.sh` |
