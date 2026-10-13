@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:336 AFIRMA ato sem PROVA ao lado -- ## MARCO 13/10 14:3x — pouso da **`wt-ui`**: o link ORIGINAL de fechamento do menu do admin passa a abrir o **RETRATO** (`[O48]` passo 6, av
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:362 AFIRMA ato sem PROVA ao lado -- ## MARCO 13/10 14:3x — pouso da **`wt-ui`**: o link ORIGINAL de fechamento do menu do admin passa a abrir o **RETRATO** (`[O48]` passo 6, av
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 13/10/2026 20:25:46.**
+**Medido em 13/10/2026 20:30:46.**
 
 | | |
 |---|---|
@@ -35,22 +35,22 @@ RELATO, com a lista de nomes do banco como autoridade._
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **203.1 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **203.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **16.4 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **16.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
   - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **319.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **223.4 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **223.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **341.1 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **341.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -75,7 +75,10 @@ eee94960 [BUG-LINHA-X-BADGE] o rodape do TICKETS volta a dizer o push de verdade
 
 ```
  M app/config/crons_duracao.json
+ M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/RELATO.md
+ M app/docs/TICKETS.md
  M bin/sonda_leitura.sh
 ?? app/GREEN
 ?? esteira.pausada
@@ -167,42 +170,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+● Agora as três edições de docs (entram no commit do marco, L-106), com a célula de estado reescrita dentro do teto da L-109:
 
   Ran 1 shell command
 
-● #2 OK: a cópia é HEAD eee94960 + exatamente os 2 arquivos (o resto é cache/montagem, não código). #3: BACKLOG e TICKETS limpos. Agora #5, que decide se mexo no .py
-  antes da suite acabar:
+● RELATO e TICKETS entraram; a assertiva do teto da L-109 mordeu (317 > 300). Encurto e re-rodo (as duas primeiras partes são idempotentes):
 
   Ran 1 shell command
 
-● #5 resolvido sem tocar .py: o irmão _janela_fora_por_l084 também nasce em calcular_mes (:1782) e também é lido defensivamente (try/except AttributeError, :1368) —
-  meu getattr é o espelho exato. A suite que corre segue válida. Agora o #1, que é o que bloqueia o deploy:
+● Docs fechados. Rodo a pasta inteira de selos de host agora (barato, e é o que recusa o push):
 
   Ran 1 shell command
 
-● A ferramenta da casa faz exatamente o DIFF que falta (par, todos os campos do fechamento, numa trava só). Ela disputa os mesmos vCPU 4-7 da suite, então roda
-  depois. Enquanto isso, o #4: o campo PROTEGE dos sítios que meu diff toca:
+● Os dois correm em paralelo (selos em background, suite na pista de teste). Ponho um monitor no arquivo de veredito da suite, em vez de poll manual:
+
+● Para uma notificação só, uso until por fato — a trava deixar de ser segurada por este run (a suite não grava .rc sozinha):
 
   Ran 1 shell command
 
-● PROTEGE fechado: as cinco leis que protegem os sítios que toco (L-097, L-085, L-086, L-088, L-089) estão todas citadas, e o único colchete é [O263-FT]. Monto a
-  linha do TICKETS pelo formato vivo:
+● Enquanto os dois correm, confiro os pré-requisitos do DIFF e do deploy (leitura barata, para não descobrir no fim):
 
-  Locating the slice-prefix table in TICKETS
-  ⎿  $ cd /home/ronald/saas-hasner
-     echo "=== onde moram os prefixos de fatia no TICKETS:"
-     grep -n 'O261\|O219\|BUG-LINHA-X-BADGE' app/docs/TICKETS.md | head -8
-     echo
-     echo "=== contexto da tabela (cabecalho mais proximo):"
-     n=$(grep -n 'O261' app/docs/TICKETS.md | head -1 | cut -d: -f1); sed -n "$((n-6)),$…
+  Ran 1 shell command
 
-✢ Concocting… (1d 5h 55m · ↓ 3.2m tokens · thinking)
+● Background command "Run the whole host-selo folder" completed (exit code 0)
+
+● Sombra pronta (carimbo de hoje, diverge=0, completa) e o portão do deploy limpo. Leio o resultado dos selos:
+
+  Reading the host-selo results
+  ⎿  $ cat /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bff1doauu.output
+
+· Concocting… (1d 6h 0m · ↓ 3.2m tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                              ✔ Update installed · Restart to update
 ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                                           1h 3m 8s · ↓ 428.9k tokens
