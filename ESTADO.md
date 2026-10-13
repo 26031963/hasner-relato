@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:258 AFIRMA ato sem PROVA ao lado -- ## MARCO 13/10 14:3x — pouso da **`wt-ui`**: o link ORIGINAL de fechamento do menu do admin passa a abrir o **RETRATO** (`[O48]` passo 6, av
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:283 AFIRMA ato sem PROVA ao lado -- ## MARCO 13/10 14:3x — pouso da **`wt-ui`**: o link ORIGINAL de fechamento do menu do admin passa a abrir o **RETRATO** (`[O48]` passo 6, av
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 13/10/2026 15:45:02.**
+**Medido em 13/10/2026 15:50:32.**
 
 | | |
 |---|---|
@@ -29,28 +29,28 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2430.0 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2430.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **198.5 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **198.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **11.7 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **11.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **314.6 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **314.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **218.7 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **218.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **336.4 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **336.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -75,6 +75,8 @@ d4779277 [O48] passo 6: o link ORIGINAL de fechamento do menu do admin abre o RE
 
 ```
  M app/config/crons_duracao.json
+ M app/docs/PROMPTS.md
+ M app/docs/RELATO.md
  M bin/sonda_leitura.sh
 ?? app/GREEN
 ?? bin/aplicar_o263_comp10.py
@@ -169,36 +171,36 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-    PROIBIDO: teto de minutos novo; juiz novo; regra por tipo gravado; curar dado por shell; fallback.
-    PRONTO: frota 10 com a classe em 0 (ou cada sobrevivente com prova de outra classe); chamado #26219 morto por lastro sozinho;
-      print do calendario do col190 26/09 sem "Em aberto"; PROVA no RELATO.
-    LEI-AKITA: origem=<o juiz fora da E3, a medir>, testemunha=celula/ata, RED=col190 26/09, quem-mais-le=chamados (fio), espelho, TXT (retencao), juizes novos=0
-    HAIKU: contador sobra_com_tipo_trocado (esperado 0, dono ESTRUTURA).
 
-● Novo prompt recebido — registro primeiro (PROMPT-NAO-SE-REPETE), e a cadeia de apply da O263 segue, que é o INCOMPLETO declarado do marco.
+❯ corte Ronald: VOLTA-DA-PAUSA-NA-TOLERANCIA -- volta da pausa dentro da tolerancia de conformidade (10 min por marcacao) NAO desconta do adicional noturno. Segue a fila; PAREI so em lei
+  ou !
 
-  Ran 2 shell commands
-
-● Reversão gravada (24.571 bytes, sha256 154c6674). Agora o DRY do restore — provar que o caminho de volta existe antes de mover um centavo:
-
-  Ran 2 shell commands
-
-● ANTES relido: col297 87,15 (andou de 82,49 — competência ABERTA), col457 8,00. Antes de aplicar, conferir se o script mede TODOS os campos (o apply por recalculo não é cirúrgico —
-  L-095/AVAL-DE-CRITERIO (b)):
+● Corte recebido e ele fecha a pergunta de lei que eu devia (VOLTA-DA-PAUSA-NA-TOLERANCIA): a volta dentro dos 10 min não desconta do adicional noturno. Antes de tudo, tornar durável a
+  PROVA do apply da O263 — que é a condição 4 que eu devo agora:
 
   Ran 1 shell command
 
-● Mede todos os campos do FechamentoMensal e imprime cada um que se move — é a condição (b) medida contra o GRAVADO, não motor×motor. Aplicando:
+❯ corte Ronald: INTERMITENTE-EM-FERIADO -- intermitente que trabalha em feriado RECEBE a dobra (Lei 605 art.9); o override morto do MotorIntermitente sai pela L-111. Segue a fila; PAREI
+  so em lei ou !
+
+● Dois cortes, duas perguntas de lei minhas fechadas. Gravando a PROVA do apply da O263 primeiro (condição 4, devida agora), e as duas respostas no mesmo ato:
 
   Ran 1 shell command
 
-● 4 campos movidos, todos noturnos, zero em qualquer outro campo dos dois colabs — a condição (b) medida contra o GRAVADO, não motor×motor. Agora a condição 3 (a 09 INTACTA) e a
-  conferência contra o DIFF publicado:
+● Agora as duas respostas de lei, nos sítios que já existem (PROMPT-NAO-SE-REPETE: delta na linha, não linha nova):
 
-● Reading per-colab numbers from the published DIFF
-  ⎿  $ cd /home/ronald/saas-hasner; echo "=== DIFF publicado, por colab"; grep -n "297\|457\|noturn" logs/o263/DIFF_FROTA_comp10_20261013.md | head -20
+  Locating the two law-question rows and printing their columns
+  ⎿  $ cd /home/ronald/saas-hasner/app; python3 - docs/PROMPTS.md <<'PY'
+     import sys
+     p = sys.argv[1]
+     s = open(p, encoding='utf-8').read()
+     linhas = s.split('\n')
+     alvos = {'VOLTA-DA-PAUSA-NA-TOLERANCIA': None, 'INTERMITENTE-EM-FERIADO': None}
+     for i, L in enumerate(linhas):
+     for k in alvos:
+     if ('`%s`' % k) i…
 
-✢ Concocting… (1d 1h 15m · ↓ 2.8m tokens)
+✢ Concocting… (1d 1h 20m · ↓ 2.8m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                                     ✔ Update installed · Restart to update
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
