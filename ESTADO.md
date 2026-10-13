@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 13/10/2026 11:33:32.**
+**Medido em 13/10/2026 11:38:34.**
 
 | | |
 |---|---|
-| `HEAD` local | `10f67c49 [O256] pouso da raia wt-ui: o balde do admin passa a ser TRES e a legenda dos LEDs sai de INVISIVEL (merge --no-ff da wt-ui, L-105/L-107, em COMBOIO com o O262)` |
+| `HEAD` local | `914fba40 [O256] pouso da raia wt-ui: o PDF da barra do retrato LE o recorte da tela, e o CSS novo na barra fica em ZERO (merge --no-ff da raia-ui, L-105/L-107)` |
 | `origin/main` | `d20a0e45 [O219] pouso: os docs do marco A0-b entram junto, e o merge que eu pedi sem commit virou FAST-FORWARD -- o codigo estava na arvore viva antes deste commit` |
-| commits a subir (`ahead`) | **83** |
+| commits a subir (`ahead`) | **86** |
 
 ## Fabrica
 
@@ -29,31 +29,31 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2425.8 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2425.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **194.3 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **194.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **7.5 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **7.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **310.4 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **310.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **214.5 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **214.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **332.2 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **332.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
-  - 2 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **0.1 h**
+  - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
 - **21 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
@@ -64,11 +64,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+914fba40 [O256] pouso da raia wt-ui: o PDF da barra do retrato LE o recorte da tela, e o CSS novo na barra fica em ZERO (merge --no-ff da raia-ui, L-105/L-107)
+e540e3c0 [O256] o botao PDF da barra perde o `margin-left:auto`: CSS novo na barra e' ZERO pela leitura LITERAL do aval
+0b750de2 [O256] o PDF da barra do retrato LE o recorte da tela: um so caminho monta o universo, e o papel nao refaz a pergunta
 10f67c49 [O256] pouso da raia wt-ui: o balde do admin passa a ser TRES e a legenda dos LEDs sai de INVISIVEL (merge --no-ff da wt-ui, L-105/L-107, em COMBOIO com o O262)
 3bf5337e [O262] a familia escala passa a EXISTIR no mapa dos juizes: a declaracao nasce com a DIVIDA nomeada, e o pendente tem numero e condicao de saida
-f1249fa8 [O258] pouso do item 1: o flip automatico PERGUNTA ao juiz do dia encerrado, e o teto por DATA sai do caminho (merge --no-ff da raia wt-bos, L-105/L-107)
-114e3ecb [O256] RETRATO-DONO-SAO-TRES: o fio segue sendo quatro no cartorio e o balde da UI do admin passa a ser TRES
-cb1ccd16 [O258] a raia se RE-BASEIA no main antes de certificar: a base `ae7f08f3` nascia com o selo TESTE-SEM-RELOGIO vermelho, e o main ja o havia curado
 ```
 
 ## `git status --short`
@@ -166,38 +166,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  folha/previa.py:147::_material, que recebe o juiz por parâmetro. Antes de declarar o invariante, preciso saber de quem é essa redução
-  injetada:
+● Deploy OK, rc=0 — pouso completo (3 cascas reiniciadas juntas, 3 rotas provadas, importerror_500=0). Abrindo o watch de 5 min que o aval
+  exige e, em paralelo, escrevendo o aplicador durável:
+
+  Ran 2 shell commands
+
+● Deploy às 11:35 (epoch 1791902145) — o watch de 5 min fecha às 11:40. Abrindo-o em segundo plano e escrevendo o selo final (com o aperto
+  do default que o advisor apontou):
+
+  Ran 2 shell commands
+
+● Background command "Open the 5-minute post-deploy 5xx watch in the background" completed (exit code 0)
+
+● 12 trocas na cópia nova de 914fba40. Lendo o watch e medindo o censo + ruff na cópia:
+
+  Read 1 file, ran 1 shell command
+
+● Censo fecha a condição (b): 1 redução no app inteiro, dentro de fio_vivo, 0 fora. O watch saiu vazio — run_in_background com & perdeu o
+  veredito (lição já conhecida), e ausência não é veredito: medindo a janela agora, que já fechou:
 
   Ran 1 shell command
 
-● O juiz é injetado dentro do próprio módulo (previa.py:39 importa, :99 passa) — é uma 6ª redução à mão, só roteada por parâmetro. Antes de
-  decidir se ela entra, medindo se a injeção serve a algum teste:
+● Janela ainda não fechou (11:38 de 11:40) — o & fez o harness reportar o lançador, não o bloco. Faço trabalho útil nesses 2 min: ruff e os
+  selos de host na cópia.
 
-  Ran 1 shell command
+  Running ruff on the copy with the house config
+  ⎿  $ D=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/o261d; cd /home/ronald/saas-hasner
+     && source bin/recursos.sh >/dev/null 2>&1; echo "=== ruff na copia (lei da casa, app/ruff.toml):"; docker run --rm --user "$(id
+     -u):$(id -g)" -e HOME=/tmp -e RUFF_CAC…
 
-● Agent "wt-ui: condições (a) e (b) do PUBLICAR-RETRATO" finished · 3m 30s
-
-● Nenhum teste chama _material — a injeção não serve a nada, é passagem local dentro de montar_previa. É uma 6ª redução, e previa.py não
-  está em PROTEGE. Gravando o estado durável antes de consultar:
-
-  Ran 1 shell command
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-● Tudo aceito. Escrevendo o aplicador durável e idempotente (11 trocas, incluindo o 6º sítio) com o selo final ao lado — assim a
-  re-aplicação depois do pouso da wt-ui é um comando:
-
-  Searched for 1 pattern
-
-› Message from @a742c7ff21ad4a851 (ctrl+o to expand)
-
-● Agent "wt-ui: condições (a) e (b) do PUBLICAR-RETRATO" finished · 4m 33s
-
-✢ Concocting… (21h 3m 42s · ↓ 2.3m tokens · thinking)
+· Concocting… (21h 8m 44s · ↓ 2.3m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    1% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
