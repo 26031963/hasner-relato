@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 13/10/2026 10:50:46.**
+**Medido em 13/10/2026 10:55:46.**
 
 | | |
 |---|---|
-| `HEAD` local | `3bf5337e [O262] a familia escala passa a EXISTIR no mapa dos juizes: a declaracao nasce com a DIVIDA nomeada, e o pendente tem numero e condicao de saida` |
+| `HEAD` local | `10f67c49 [O256] pouso da raia wt-ui: o balde do admin passa a ser TRES e a legenda dos LEDs sai de INVISIVEL (merge --no-ff da wt-ui, L-105/L-107, em COMBOIO com o O262)` |
 | `origin/main` | `d20a0e45 [O219] pouso: os docs do marco A0-b entram junto, e o merge que eu pedi sem commit virou FAST-FORWARD -- o codigo estava na arvore viva antes deste commit` |
-| commits a subir (`ahead`) | **79** |
+| commits a subir (`ahead`) | **83** |
 
 ## Fabrica
 
@@ -29,7 +29,7 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2425.1 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2425.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
@@ -38,22 +38,22 @@ RELATO, com a lista de nomes do banco como autoridade._
   - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **193.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **6.8 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **6.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **309.7 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **309.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **213.8 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **213.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **331.5 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **331.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
-  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **1.0 h**
+  - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
 - **21 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
@@ -64,11 +64,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+10f67c49 [O256] pouso da raia wt-ui: o balde do admin passa a ser TRES e a legenda dos LEDs sai de INVISIVEL (merge --no-ff da wt-ui, L-105/L-107, em COMBOIO com o O262)
 3bf5337e [O262] a familia escala passa a EXISTIR no mapa dos juizes: a declaracao nasce com a DIVIDA nomeada, e o pendente tem numero e condicao de saida
 f1249fa8 [O258] pouso do item 1: o flip automatico PERGUNTA ao juiz do dia encerrado, e o teto por DATA sai do caminho (merge --no-ff da raia wt-bos, L-105/L-107)
+114e3ecb [O256] RETRATO-DONO-SAO-TRES: o fio segue sendo quatro no cartorio e o balde da UI do admin passa a ser TRES
 cb1ccd16 [O258] a raia se RE-BASEIA no main antes de certificar: a base `ae7f08f3` nascia com o selo TESTE-SEM-RELOGIO vermelho, e o main ja o havia curado
-f5a1ad77 [O258] item 1: nasce o juiz `dia_encerrado` e o `flip_automatico` deixa de ser juiz de varredura -- o teto por DATA e CEGO ao cross-meia-noite, e o DIFF do universo do cron e ZERO
-2cb57138 [O261] item (1): os "124" eram um PICO de meio-de-corrente -- a relavratura cura os 69 da bancada e nao move um centavo, e a previsao dos 104 dias era MINHA e esta refutada
 ```
 
 ## `git status --short`
@@ -166,6 +166,9 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+● Background command "Run full suite over the combo copy" completed (exit code 0)
+
+  Searched for 1 pattern, ran 15 shell commands
   ⎿  Read docs/AVAIS.md (23 lines)
   ⎿  Referenced file docs/RELATO.md
   ⎿  Referenced file ponto/services/cartorio.py
@@ -173,35 +176,32 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
   ⎿  Referenced file docs/LEIS.md
 
 ● Task "RED e construção do segundo intervalo" completed in background
-  ⎿  Read docs/AVAIS.md (23 lines)
-  ⎿  Referenced file ponto/services/cartorio.py
-  ⎿  Referenced file chamados/services/vigia_fio.py
-  ⎿  Referenced file docs/LEIS.md
 
-● Task "RED e construção do segundo intervalo" completed in background
+● O pouso (ii) caiu e subiu: merge 10f67c49 (MERGE_HEAD=114e3ecb, cmp=20/20 contra a árvore que a suíte certificou, 0 conflito) e
+  bin/deploy.sh --sem-migrate rc 0 no mesmo ato — collectstatic, prova de casca (16 estáticos, 5 páginas, 612 rotas), 3 rotas provadas,
+  selo BUG 128 verde, importerror_500=0. Carimbo: logs/deploy.stamp QUANDO=1791899571 = 13/10 10:52 -03, COMMIT=10f67c49.
 
-● Task "Run full suite over the combo copy" still running in background
+  Na árvore viva confirmei o que o pouso tinha de entregar: folha/views_retrato.py:274 com 'retrato_legenda': legenda_dos_leds() (a cura da
+  legenda invisível), DONOS = ('admin','colab','hoje') em folha/retrato_folha.py:188, e zero entrada de retrato no menu do admin —
+  PUBLICAR-RETRATO (a) não fechou (o PDF não tem porta), então a tela não ganha menu, pelo ESCOPO DO AVAL É LITERAL.
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+  O vigia de 5xx em saas_ui está correndo os 5 min da janela do seu aval (a partir de 2026-10-13T13:52:38Z).
 
-  Ran 26 shell commands
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: O261 -- BUG-FIO-MORTO-CHAMADO (aval dele 12/10 20:2x, P7.1 -- bug PROVADO POR ELE, fura a fila; id novo
+  por ordem lite
 
-● Background command "Run full suite over the combo copy" completed (exit code 0)
+● Checking the 500-watch result
+  ⎿  $ T=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/buulw0j03.output; date -u
+     +'agora=%H:%M:%SZ'; echo "---"; cat "$T"
 
-  Prove the two RED host selos predate this commit
-  ⎿  $ cd /home/ronald/saas-hasner && echo "=== o commit nao tocou CORTES.md nem LEIS.md (prova de que os 2 selos sao ANTERIORES):"; git
-     show --name-only --format='' 3bf5337e; echo "=== o leis_indice era vermelho antes? (os 5 cortes estao em CORTES.md desde antes deste
-     commit):"; git log --oneline -3 --…
-
-· Compacting conversation… (20h 20m 56s · ↓ 2.2m tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱ 90%
+· Concocting… (20h 25m 56s · ↓ 2.2m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    0% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
