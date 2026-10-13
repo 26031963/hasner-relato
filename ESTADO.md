@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:4406 AFIRMA ato sem PROVA ao lado -- | **LEITURA-LITERAL-DO-CARIMBO** | 2026-10-12 19:5x | 1 h | CUMPRIDO SEM UMA LINHA DE CODIGO, e isso se MEDE: ele carimba exatamente o que p
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:211 AFIRMA ato sem PROVA ao lado -- ## 12/10 22:5x — a E2 esta NO AR e o seu COMPLEMENTO esta respondido: a linha de ferias com batida ja chega com `Dias que seguram` PREENCHID
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 12/10/2026 22:46:02.**
+**Medido em 12/10/2026 22:51:32.**
 
 | | |
 |---|---|
-| `HEAD` local | `7834b94d [O259] a pergunta da familia batida passa a ser o PAR: MotorBase.calcular_periodo se DECLARA juiz de "quantas horas este par (turno) vale?" e o pendente do DIA sai no mesmo commit (corte dele das 20:0x, JUIZ-CALCULAR-PERIODO-NASCE)` |
+| `HEAD` local | `d6eae5c9 [O256] pouso da E2: a coluna Dias do retrato entra na principal (merge --no-ff da raia-ui, L-105/L-107)` |
 | `origin/main` | `d20a0e45 [O219] pouso: os docs do marco A0-b entram junto, e o merge que eu pedi sem commit virou FAST-FORWARD -- o codigo estava na arvore viva antes deste commit` |
-| commits a subir (`ahead`) | **62** |
+| commits a subir (`ahead`) | **64** |
 
 ## Fabrica
 
@@ -29,7 +29,7 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2413.0 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2413.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
@@ -38,25 +38,25 @@ RELATO, com a lista de nomes do banco como autoridade._
   - 1 commit(s) a frente do `main`, 12 arquivo(s) sujo(s), commit a frente ha **4.6 h**
   - sem declaracao em `logs/raias/wt-cb.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **181.5 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **181.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261011`) -- **SEM AGENTE**
-  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **43.5 h** (passou das 6 h da L-105)
+  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **43.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **297.6 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **297.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **201.7 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **201.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **319.4 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **319.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
-  - 0 commit(s) a frente do `main`, 13 arquivo(s) sujo(s)
+  - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
 - **25 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-batida, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-folha, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o259, wt-o37, wt-orfa, wt-p5, wt-regua, wt-sj, wt-vinculo
 
@@ -67,11 +67,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+d6eae5c9 [O256] pouso da E2: a coluna Dias do retrato entra na principal (merge --no-ff da raia-ui, L-105/L-107)
+8460bbd3 [O256] a coluna do retrato se chama Dias e passa a responder por um RECORTE: as DATAS que seguram nascem GRAVADAS e UM leitor as conta (E2, aval dele das 21:0x O256-E2-A-E4-ANDAM-JA)
 7834b94d [O259] a pergunta da familia batida passa a ser o PAR: MotorBase.calcular_periodo se DECLARA juiz de "quantas horas este par (turno) vale?" e o pendente do DIA sai no mesmo commit (corte dele das 20:0x, JUIZ-CALCULAR-PERIODO-NASCE)
 c2ab8cf5 [O260] com_dias=True deixa de devolver a LISTA CRUA: as duas saidas antecipadas de motivos_retencao_celula honram o contrato da PROPRIA funcao (bug provado no caminho da O261, LEI-AKITA 6)
 4abe38e2 [O48] a porta do TXT passa a LER a competencia, e o carimbo do ato de gerar passa pelo juiz (passo 5 de 6, aval O48-PASSO5-DESTRAVA + corte (A) de 12/10 18:5x)
-afc05e16 [O253] o LED da linha passa a CLICAR: o leitor da tela entrega ao `desenho_do_led` os MESMOS objetos que a barra recebe (a UMA linha que a E1 prometeu)
-c5b08d15 [O253] a E1 do retrato FECHA: LED com uma cor por Dono, LED que E o filtro, Tipo fora da barra, Total como moldura e o Saldo somando o universo que a fonte sabe dizer
 ```
 
 ## `git status --short`
@@ -170,12 +170,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-❯ aval Ronald: O261 anda JA em raia propria (wt-fio), em paralelo com a O256 na wt-ui, mesma sessao do Code. A FASE 1 deixa de ser censo
-  de frota e passa a ser censo de CODIGO: todo escritor do estado de PerguntaDisputa (fantasma, completude_turno, sem_turno_aberto,
-  chamado_encerrado, declaracao, validacao, paridade_recusada, ausencia_dia e o que o AST achar) e todo leitor de chamados_vivos
-  (disputa_emissao.py:670, supra_juiz.py:163-168, core/juizes.py _C1, cartorio.py:780, commands/supra_juiz.py:182,
-  emitir_furo_retroativo.py:79). FASE 2 direto pela CLAUDE.md 4a: cada escritor passa a fechar a pergunta APAGANDO a lampada pela porta da
   celula, ou se aposenta (L-111); lampada que reacende reabre o fio; os leitores leem a lampada. Frota so para dimensionar: DIFF antes do
   apply, nao exportada com reversao em logs/, exportada intacta (L-092). Selo da FASE 3 sem mudanca. Juizes novos = 0. COMPLEMENTO O256
   (smoke Fernando 12/10): linha 127 "Bateu ponto dentro de ferias" com Dias que seguram VAZIO no retrato das 16:19, anterior ao O260;
@@ -195,11 +189,17 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● SUITE VERDE: Ran 10715 tests in 1442.241s / OK (skipped=42) / rc=0.
 
-  Provar que nenhum .py mudou depois do veredito
-  ⎿  $ cd /home/ronald/wt-ui && echo "== .py modificados depois do inicio da suite (22:15:02)? =="; for f in $(git status --porcelain | awk
-     '{print $2}' | grep '\.py$'); do printf '%s %s\n' "$(date -r "$f" '+%H:%M:%S')" "$f"; done
+  Committed 8460bbd3, d6eae5c9, ran 20 shell commands
 
-· Concocting… (8h 16m 12s · ↓ 896.6k tokens)
+● Background command "Publicar a E2 em producao" completed (exit code 0)
+
+  Ran 9 shell commands
+
+● MARCO FECHADO — pode compactar ([O256] E2, d6eae5c9, no ar + re-lavrado; handoff em 44 linhas).
+
+● Advising using Fable 5.1
+
+✢ Concocting… (8h 21m 42s · ↓ 912.6k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

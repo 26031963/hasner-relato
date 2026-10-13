@@ -263,7 +263,7 @@ lista — ela e o que esta EM PE._
 | **O253** | UI-RETRATO-CORRECOES | POUSADA 12/10 11:5x: merge --no-ff de f2 |
 | **O254** | CONTRATO-BATIDA-GANHA-LEITOR | espera aval |
 | **O255** | HOOK-LE-O-MARCADOR | **FECHADA 12/10 11:5x (neste push), no a |
-| **O256** | UI-RETRATO-TRIAGEM | **E1 FECHADA e NO AR** (c5b08d15 + afc05 |
+| **O256** | UI-RETRATO-TRIAGEM | **E1 e E2 NO AR** (a E2 neste commit). A |
 | **O257** | JUIZ-COMPETENCIA-LAVRADA | espera `!` |
 | **O258** | CHAMADO-X-JUIZ-EM-PARALELO | espera `!` |
 | **O259** | JUIZ-DO-PAR-DECLARADO | espera `!` |
