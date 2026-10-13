@@ -235,6 +235,7 @@ Estavam no indice como vigentes e alguma clausula nao tem efeito. Gerada do ESTA
 - `LEITURA-LITERAL-DO-CARIMBO`
 - `MARCA-DO-VEREDITO`
 - `ME-POSTO-GEO`
+- `O256-E2-A-E4-ANDAM-JA`
 - `NOITE-23-09`
 - `NON-STOP`
 - `O122-ETAPA-0-E-ESTILO-CALCULADO`
@@ -249,6 +250,7 @@ Estavam no indice como vigentes e alguma clausula nao tem efeito. Gerada do ESTA
 - `RESUMO-UMA-FONTE`
 - `RETRATAR-93752`
 - `SALDO-GANHA-O-BOTAO-CADASTRO`
+- `SMOKE-DO-RETRATO-E-UM-NO-FIM`
 - `SELO-DO-ULTIMO-PUSH-ACEITA-ANCESTRAL`
 - `SUSPENSAO-DESCONTA-JORNADA`
 - `TETO-DA-MATRIZ-E-21`

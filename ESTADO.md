@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 12/10/2026 20:55:42.**
+**Medido em 12/10/2026 21:00:46.**
 
 | | |
 |---|---|
@@ -35,25 +35,25 @@ RELATO, com a lista de nomes do banco como autoridade._
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cb** (`(detached)`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 12 arquivo(s) sujo(s), commit a frente ha **2.7 h**
+  - 1 commit(s) a frente do `main`, 12 arquivo(s) sujo(s), commit a frente ha **2.8 h**
   - sem declaracao em `logs/raias/wt-cb.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **179.6 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **179.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261011`) -- **SEM AGENTE**
-  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **41.6 h** (passou das 6 h da L-105)
+  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **41.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
   - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **295.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **199.9 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **200.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **317.6 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **317.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -78,11 +78,13 @@ c5b08d15 [O253] a E1 do retrato FECHA: LED com uma cor por Dono, LED que E o fil
 
 ```
  M app/config/crons_duracao.json
+ M app/docs/AVAIS.md
  M app/docs/BACKLOG.md
  M app/docs/CORTES.json
  M app/docs/CORTES.md
  M app/docs/HANDOFF-SESSAO.md
  M app/docs/LEIS.md
+ M app/docs/PENDENTES_RONALD.json
  M app/docs/PROMPTS.md
  M app/docs/RELATO.md
  M app/docs/TICKETS.md
@@ -176,44 +178,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  4. Vigia esperado 0: lampada acesa + fato encerrado + zero fio vivo. Allowlist ZERO, caso que MORDE, dia de hoje fora (teto temporal).
-  5. Passivo: comp nao exportada pela porta, com DIFF de frota e reversao em logs/; exportada intacta.
-     PRONTO: censo de escritores publicado; RED por via; /tmp/audit_c.py com (b) e (c) = 0; vigia verde; print do retrato sem dono C por
-  fio morto.
-     Segue a fila; PAREI so em lei ou !
+❯ aval Ronald: os smokes O48-RETRATO-DA-FOLHA-SMOKE, O48-RETRATO-DA-FOLHA-ETAPA2-SMOKE e O256-UI-RETRATO-TRIAGEM-E1-SMOKE saem da mesa,
+  substituidos por UM smoke de clique ao fim da O256 (E4), escrito sobre a tela final. Smoke de UI do retrato nao segura push: a tela ja
+  esta em producao e o push e copia. Os 5 smokes do Fernando (O214-2, O206, O207, O223, APP-DESENHA) seguem valendo. Nenhuma lei nova.
+  Segue a fila; PAREI so em lei ou !
 
-● O corte novo chegou — registro ele neste turno. Primeiro fecho a âncora que falhou (faltou o parêntese; nada foi aplicado, o arquivo está
-  intacto).
+● Novo aval chegou — registro ele neste turno. Primeiro vejo a porta declarada do PENDENTES_RONALD.json.
 
-  Ran 3 shell commands
-  ⎿  Read docs/AVAIS.md (25 lines)
-  ⎿  Referenced file docs/LEIS.md
-  ⎿  Referenced file folha/export.py
-  ⎿  Referenced file core/juizes.py
-  ⎿  Referenced file ponto/tests/test_contract_juiz_batida.py
+  Searched for 1 pattern, ran 5 shell commands
 
-● Task "RED e construção do segundo intervalo" completed in background
+❯ aval Ronald: O256 UI-RETRATO-TRIAGEM E2 a E4 andam JA na raia wt-ui, em paralelo com a O261 na principal, mesma sessao do Code
+  (FILA-2-EM-RAIA-PROPRIA). Motivo: a UI e a ferramenta para fechar a folha da 10 no dia 21. Inclui a pauta de 12/10 (palavra unica, LED
+  com legenda, Dias no lugar de Saldo contado da celula com de/ate no filtro universal, PDF na barra respeitando filtros, drawer = espelho
+  do perfil + texto so de numeros do juiz, dia de hoje = Hoje sem dono). O complemento "dono Chamado so outro tipo" espera a cura da
+  O261. Smoke de clique unico ao fim da E4. Nenhuma lei nova. Segue a fila; PAREI so em lei ou !
 
-● Prosa corrigida. Agora o corte novo — registro dele neste turno.
+● Mais um aval, no mesmo fio. Registro os dois juntos — primeiro pego as âncoras.
 
-  Ran 5 shell commands
+● Desambiguar as duas ocorrencias no TICKETS
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PY'
+     import io
+     p='app/docs/TICKETS.md'; s=io.open(p,encoding='utf-8').read()
+     alvo='FRONT SEM SMOKE NAO SOBE -- segura o PUSH, nao o deploy)'
+     i=0
+     for n in range(2):
+     i=s.find(alvo,i+1)
+     print('--- ocorrencia %d, ctx ---' % (n+1))
+     print(repr(s[i-180:i+10]))
+     …
 
-● Deixei um placeholder no TICKETS — corrijo e regenero o CORTES.md.
-
-● Regenerar o diagrama dentro da copia
-  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad &&
-     source bin/recursos.sh >/dev/null 2>&1; EF=$(teste_envfile) && md5sum $S/wt-o259/app/docs/ARQUITETURA.mmd $S/wt-o259/app/docs/MAPA.md
-     && docker run --rm --cpuset-cpus …
-
-· Concocting… (6h 25m 52s · ↓ 686.3k tokens)
+· Concocting… (6h 30m 56s · ↓ 703.0k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    6% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
-  ● main
+❯ ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
   ⧉  index
 ```
