@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 13/10/2026 18:24:02.**
+**Medido em 13/10/2026 18:29:32.**
 
 | | |
 |---|---|
@@ -29,28 +29,28 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2432.6 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2432.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **201.1 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **201.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **14.3 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **14.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **317.2 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **317.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **221.4 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **221.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **339.1 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **339.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -168,28 +168,28 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
+● A pending migration for RetratoFolha.linhas showed up — not a field I touched. Checking whether it's pre-existing drift on HEAD and what the diff is.
+
   Ran 1 shell command
 
-● _soma_dia_pago is imported locally inside medir; linha_x_badge needs its own import. One fix, then ruff again and check the push.
+● Found a pre-existing drift: a help_text-only change on RetratoFolha.linhas from O256 (114e3ecb) that's missing its migration, which could trip the deploy gate
+  check. I'll generate the migration into the copy and review what deploy.sh requires. · summarized
 
-  Ran 2 shell commands
+  Ran 1 shell command
 
-● Parte B is fully built in the scratchpad: all seven copies patched, py_compile clean, ruff All checks passed!. The live tree is untouched (only the two known dirty
-  files, neither mine to commit).
+● Confirmed the deploy scripts don't trigger makemigrations, so this drift wouldn't have blocked deployment—but it's still a valid model/migration mismatch to fix
+  (help_text only, no SQL changes). Adding the migration to the patch set and drafting the commit message while the push completes. · summarized
 
-  What's standing between this and the commit is a single named gate: the push bn43tvl9p is still inside the pre-push régua (arsenal negocio (ci)...), which holds
-  the test lock and forbids writes to the tree. Nothing left in parte B is independent of that — the RED run, the apply, the suite and the sombra counter all need
-  the lock or the tree — so I'm waiting on the task notification (push rc= in logs/push_13-10_18h14.out). State is saved in scratchpad/parteB/ESTADO.txt so the
-  sequence survives a compaction.
+  Ran 1 shell command
 
-  When the push ends: RED of the 3 new tests against an unpatched HEAD copy → apply the 7 files → bin/tests/ + targeted tests → makemigrations --check → full suite →
-  real counter on the sombra (09 and 10) as PROVA for the R4 7th pair → marco commit (RELATO ≤25 lines, the 09 table under O269) → bin/deploy.sh.
+● The push still holds the test lock; nothing left in parte B runs without it. Waiting on the verdict FILE (push rc=), in 10-minute windows.
 
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: BUG-LINHA-X-BADGE -- BUG-LINHA-X-BADGE (aval dele 13/10 15:1x em partes, P7.1 -- fura a fila; id dado por ELE). ACHADO MEDIDO POR
-  E
+● Waiting for the push verdict line in its log
+  ⎿  $ cd /home/ronald/saas-hasner; date +%H:%M; until grep -q "^push rc=" logs/push_13-10_18h14.out; do sleep 20; done; date +%H:%M; tail -4
+     logs/push_13-10_18h14.out (4m 3s · 2 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Concocting… (1d 3h 54m · ↓ 3.1m tokens · still thinking)
+✢ Concocting… (1d 3h 59m · ↓ 3.1m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
 ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔
    Select model
