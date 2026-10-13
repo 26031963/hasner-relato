@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 13/10/2026 20:35:47.**
+**Medido em 13/10/2026 20:41:02.**
 
 | | |
 |---|---|
@@ -29,19 +29,19 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2434.8 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2434.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **203.3 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **203.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **16.5 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **16.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **319.4 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **319.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
   - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **223.6 h** (passou das 6 h da L-105)
@@ -171,41 +171,41 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
+● Task "RED e construção do segundo intervalo" completed in background
+
+● Task "Insert the new obra and move the live-order marker" still running in background
+
+● O272 — RED escrito nas duas cópias ($SP/o272_red, $SP/o272_cura), 104 linhas, app/ponto/tests/test_o272_intra_fora_da_janela.py:
+
+  - caso do aval, literal: marco 10:00–22:00, janela ligada com teto 0, batidas E15:09 S16:09 E23:00 S23:08 → janela [15:09, 22:00] = 411 min; intervalo cru
+    16:09→23:00 = 411 ⇒ minutos_trabalhados 0 hoje; recortado 16:09→22:00 = 351 ⇒ 60, o número que a própria autoridade manda.
+  - a geometria vem antes do número: o teste exige 1 periodo e 1 intervalo_do_motor com mensagem própria — se a fixture não reproduzir o par do col889, ela diz isso
+    em letra em vez de dar RED falso (memória parear_turnos em fatia de 1 dia).
+  - MORDE: intervalo inteiro dentro da janela (10:00–14:00/15:00–22:00) não perde um minuto — 60 descontados, 660 trabalhados.
+  - última asserção é a da LEI-AKITA 2: o par carimbado em intervalos_do_motor termina na janela. É ela que proíbe a cura de morar dentro de _intra_real — o censo
+    mediu 3 leitores desse campo (alimentacao.py:111 QUEBRA o segmento por esses pares, regras.py:704, motor:945), e recortar só na soma deixaria a conta dizendo 351
+    e o carimbo dizendo 411: segundo derivador nascendo junto com a cura. A cura recorta a LISTA uma vez por ramo, depois da janela e antes de _carimbar_segmento.
+  - o censo também corrige a premissa do aval: dos três calcular_periodo que chamam _janela_do_par, dois descontam intra (:2156, :2608); o :2271 não chama
+    _intra_real — o sítio da soma já era único. Está escrito na docstring do teste.
+
+  O263-FT segue primeiro na fila de pouso (L-105/L-107, um pouso por vez): suite viva em $SP/o263_cura, 1991 linhas às 20:36, trava suite:117320. Faltam os dois
+  portões já declarados — veredito da suite e bin/simular_folha.sh par o263ft $SP/head_agora/app $SP/o263_cura/app com a tabela no RELATO antes do bin/deploy.sh.
+  Nada de O272 roda até a trava liberar: um run por vez no juliani_db_test.
+
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: O272 -- BUG-INTRA-FORA-DA-JANELA (aval dele 13/10 19:3x -- bug PROVADO, P7.1; DINHEIRO). MotorBase._intra_real soma os
+
   Ran 1 shell command
 
-● _intra_real tem dois chamadores (2156, 2608), não três. Leio o contexto para ver como [e, s] e o intervalo se combinam:
+● Background command "Wait on the test lock then read the suite verdict" completed (exit code 0)
 
-  Ran 1 shell command
-
-● Bug confirmado na origem: duracao usa a janela clipada [e, s], mas _intra_real soma os intervalos crus. Vejo o terceiro calcular_periodo (o aval fala de três) e
-  quem lê o intervalo carimbado:
-
-  Ran 1 shell command
-
-● Censo fecha diferente do que o aval presumiu, e isso muda a forma da cura:
-
-  - dois calcular_periodo descontam intra (2156, 2608); o terceiro (2262) não desconta nada — o sítio já é único.
-  - _carimbar_segmento grava intervalos_do_motor cru, e três leitores derivam dele (alimentacao.py:111 quebra o segmento por ele, regras.py:704, motor:945). Recortar
-    só dentro de _intra_real deixaria o carimbo dizendo uma coisa e a conta outra — segundo derivador.
-
-  Então a cura mais restritiva (L-083) é recortar a lista uma vez por ramo, antes do carimbo: um sítio, e todos os leitores passam a ler o mesmo intervalo. Construo
-  em cópia nascida da árvore do O263-FT:
-
-  Creating the O272 copies from the O263-FT tree
-  ⎿  $ SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
-     set -e
-     for alvo in o272_red o272_cura; do
-     rm -rf $SP/$alvo; mkdir -p $SP/$alvo
-     (cd $SP/o263_cura && tar -c --exclude=__pycache__ --exclude=.ruff_cache --exclude=.mypy_cache \
-     --exclude=.hypothesis --e…
-
-✽ Concocting… (1d 6h 5m · ↓ 3.3m tokens · still thinking)
+✢ Concocting… (1d 6h 11m · ↓ 3.3m tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                                              5% until auto-compact
+                                                                                                                             ✔ Update installed · Restart to update
 ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                                           1h 3m 8s · ↓ 428.9k tokens
