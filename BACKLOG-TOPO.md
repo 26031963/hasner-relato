@@ -5,7 +5,7 @@ a raspagem usa a lista de nomes do banco como autoridade, nunca regex adivinhada
 `colNNN`/`ecNNN` ficam, porque nao identificam ninguem fora desta casa. Obra FEITA sai desta
 lista — ela e o que esta EM PE._
 
-**268 obras abertas.**
+**269 obras abertas.**
 
 | ID | obra | estado |
 |---|---|---|
@@ -277,3 +277,4 @@ lista — ela e o que esta EM PE._
 | **O267** | COLUNA-DIAS-QUE-SEGURAM | espera corte |
 | **O268** | TRES-JUIZES-DE-INSTANTE | espera corte |
 | **O269** | RELAVRA-09-MOTOR-DE-HOJE | espera corte |
+| **O270** | INTRA-4H-A-6H-INDENIZA | aberta, atras da O263-FT (mesma familia  |
