@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 13/10/2026 02:28:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (755.8 MB). Acoes na janela: **1147**.
+**Medido em 13/10/2026 02:33:29.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (756.1 MB). Acoes na janela: **1148**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 02:32:57 | Bash | Check prod smoke log and wt-fio state | `cd /home/ronald/saas-hasner \|\| exit 1 echo "=== smoke_prod.log:"; cat logs/o261/smoke_prod.log 2>/dev/null \|\| echo "(ainda nao existe)" echo "=== fim/reconciliar_chamados:"; cat logs/fim/reconciliar_chamados.-.20261013 2>/dev/null echo; echo "=== crons_em_curso:"; ls logs/crons_em_curso/ 2>/dev/null echo "=== date:"; date '+%F %H:%M:%S' echo "=== wt-fio:"; git -C /home/ronald/wt-fio log --onel ...` |
 | 02:27:21 | Bash | Check janela_competencia and CelulaDia fields | `cd /home/ronald/wt-fio/app \|\| exit 1 grep -n "def janela_competencia" -A 12 folha/export.py \| head -20; echo "=== CelulaDia campos chave:"; grep -n "^ data = \\|^ colaborador = \\|^ veredito = " escala/models.py \| head` |
 | 02:26:50 | Bash | Read PerguntaDisputa.viva | `cd /home/ronald/wt-fio/app \|\| exit 1 sed -n '1730,1760p' chamados/models.py` |
 | 02:26:45 | Bash | Read the head of fora_da_folha for the mapper | `cd /home/ronald/wt-fio/app \|\| exit 1 sed -n '1,58p' folha/fora_da_folha.py` |
