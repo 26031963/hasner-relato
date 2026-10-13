@@ -5,6 +5,24 @@
 > **livre** = pode virar fatia agora, sem humano. **corte/aval/smoke/dinheiro-ate-export** = tem dono humano e espera.
 
 <!-- ORDEM-VIVA-TOPO: O261 -->
+<!-- ADENDO em 13/10 ~08:1x, AVAL `PUBLICAR-RETRATO` -- o unico item NOVO de hoje, e ele e
+     CONDICIONAL. *"Nenhuma lei nova"*. O ato: a tela `/folha/exportar/retrato/` ganha **entrada no
+     menu do admin**, ao lado da tela de fechamento atual, *"que fica como esta"* -- pouso **so de
+     tela**, smoke headless nas 3 LARGURAS antes, `--sem-migrate`, 500 em `saas_ui` nos 5 min
+     seguintes = reverter o PROPRIO commit pela porta + PAREI, e **linha no RELATO com a HORA em que
+     entrou no menu**. As TRES condicoes, e ESCOPO DO AVAL E LITERAL (aval condicional que nao fecha
+     na condicao e PAROU com o numero): **(a)** o pouso da `wt-ui` com **legenda dos LEDs E PDF na
+     barra** no ar; **(b)** o corte **RETRATO-DONO-SAO-TRES** no ar; **(c)** a **relavratura dos 124**
+     aplicada, com o retrato lido DEPOIS dela.
+     MEDIDO NO ATO DO RECEBIMENTO, e e por isso que o menu nao sobe por tabela hoje: das tres, so a
+     **(c)** esta em curso. A **(a)** nao fecha com o que existe -- `3fbe73a7` na `raia-ui` entrega o
+     MARKUP (`templates/folha/_retrato_legenda.html` + o include na barra) e **nao toca**
+     `folha/views_retrato.py`; o partial guarda `{% if retrato_legenda %}` DENTRO, de proposito,
+     entao pousar `3fbe73a7` sozinho sobe a legenda **INERTE**, e o PDF na barra (item 4 da pauta de
+     12/10) **nao esta construido** em raia que possa pousar (`raia-pdf` segue sem aval de merge).
+     A **(b)** tambem nao esta construida: `folha/retrato_folha.py::DONOS` tem **quatro**
+     (`admin, colab, chamado, ninguem`) e **nao existe** dono `hoje` na arvore -- e `.py` de folha.
+     O item vive na **O256**; o menu e o **ULTIMO** ato. -->
 <!-- ADENDO em 13/10 ~08:2x, AVAL `RECESSO-PISTA-DO-ADMIN` (vale de agora ate o export da
      competencia 10 CONFIRMADO). *"Nenhuma lei nova"*, e ele nao abre obra: REPRIORIZA as abertas.
      A ORDEM, literal: **(1) O261 passivo** -- relavratura dos 124 pela impressao nova (`ae7f08f3`),
