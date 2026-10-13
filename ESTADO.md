@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 13/10/2026 13:08:32.**
+**Medido em 13/10/2026 13:14:02.**
 
 | | |
 |---|---|
@@ -29,7 +29,7 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2427.4 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2427.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
@@ -38,22 +38,22 @@ RELATO, com a lista de nomes do banco como autoridade._
   - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **195.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **9.1 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **9.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **312.0 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **312.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **216.1 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **216.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **333.8 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **333.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
-  - 1 commit(s) a frente do `main`, 3 arquivo(s) sujo(s), commit a frente ha **0.5 h**
+  - 1 commit(s) a frente do `main`, 3 arquivo(s) sujo(s), commit a frente ha **0.6 h**
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
 - **21 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
@@ -77,6 +77,7 @@ e540e3c0 [O256] o botao PDF da barra perde o `margin-left:auto`: CSS novo na bar
  M app/config/crons_duracao.json
  M app/docs/HANDOFF-SESSAO.md
  M app/docs/LEIS.md
+ M app/docs/PROMPTS.md
  M app/docs/RELATO.md
 ?? app/GREEN
 ?? esteira.pausada
@@ -169,36 +170,36 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-❯ MUDA: ORIGEM. O desconto sobe para o sitio unico pelo qual todo calcular_periodo preenche minutos_noturnos_relogio/legais (ou calcular_noturnas passa a receber os intervalos). PROIBIDO
-  copiar o bloco do 12x36 em cada motor. Verificar se as parcelas de HE noturna (minutos_extra_50/100_noturna) tem o mesmo furo e entram no mesmo ato.
-
-❯ RED: (1) o caso col297 21/08 acima; (2) caso equivalente no MotorTurnoPartido; (3) guarda: a 12x36 do col843 26/08 (E 18:55, S 23:00, E 00:00, S 07:00 -> 6,00 h) nao se move.
-
-❯ SELO: todo calcular_periodo que escreve minutos_noturnos_* passa pelo sitio unico; caso que MORDE (tirar o desconto deixa o RED vermelho).
-
-❯ DIFF: frota da competencia 10 (aberta) na sombra, contra o GRAVADO, publicado no RELATO antes do apply. Competencia 09 (exportada): so o numero, sem apply (L-110).
-
-❯ APPLY: competencia 10 pelas 4 condicoes da DINHEIRO-EM-COMPETENCIA-ABERTA (DIFF antes, reversao em logs/, 09 intacta com hash, prova depois).
-
-❯ PROIBIDO: fallback, juiz novo, tocar a 09, mudar tolerancia, cura por motor.
-
-❯ PRONTO: RED -> GREEN; suite verde; DIFF da 10 publicado; apply com prova; reproduzir o oraculo logs/audit_holerite_09/oraculo_an2.py na 10 com diferenca 0 nos alcancados.
-
-❯ LEI-AKITA: origem=MotorBase (sitio unico do noturno), testemunha=PeriodoCalculo.minutos_noturnos_*, RED=caso col297 21/08, quem-mais-le=horas_noturnas -> FechamentoMensal -> evento
-  adicional_noturno (rubrica 25), espelho, DiaPago; juizes novos=0
-
 ❯ Segue a fila; PAREI so em lei ou !
 
 ● Chegou aval novo no meio do pouso. Registro primeiro (PROMPT-NAO-SE-REPETE), depois leio o VIVO.
 
-● Reading the calculador's he_noturna reader and _carimbar_segmento
-  ⎿  $ cd /home/ronald/saas-hasner/app; echo "=== regras.py he_noturna ==="; grep -n "he_noturna" ponto/calculador/regras.py | cut -c1-160; echo; sed -n '685,715p'
-     ponto/calculador/regras.py; echo "=== _carimbar_segmento 1491-1524 ==="; sed -n '1491,1524p' ponto/motor_calculo_v2.py
+  Ran 25 shell commands
+  ⎿  Read docs/AVAIS.md (23 lines)
+  ⎿  Referenced file core/juizes.py
+  ⎿  Read ../logs/o261b/watch_5min_o256.log (6 lines)
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/buulw0j03.output (6 lines)
+  ⎿  Referenced file ponto/services/cartorio.py
 
-✢ Compacting conversation… (22h 38m 42s · ↓ 2.5m tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱ 92%
+● Task "RED e construção do segundo intervalo" completed in background
+
+● Task "Raia wt-ui: troca do link do menu" completed in background
+
+● Registro da fatia nova (PROMPT-NAO-SE-REPETE) antes de qualquer código:
+
+  Register the new aval in PROMPTS.md
+  ⎿  $ cd /home/ronald/saas-hasner/app; python3 - docs/PROMPTS.md <<'PY'
+     import sys
+     p=sys.argv[1]; s=open(p).read()
+     guard='NOTURNO-NO-SITIO-UNICO'
+     assert guard not in s, 'titulo ja registrado'
+     linha = (
+     '| 13/10 13:0x | **aval** (`NOTURNO-NO-SITIO-UNICO`, titulo NOVO -- **fatia de DINHEIRO em ZONA '
+     'IN…
+
+· Concocting… (22h 44m 12s · ↓ 2.5m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                                                                     0% until auto-compact
+                                                                                                                                                    ✔ Update installed · Restart to update
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
