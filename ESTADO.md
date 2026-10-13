@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 13/10/2026 10:45:46.**
+**Medido em 13/10/2026 10:50:46.**
 
 | | |
 |---|---|
-| `HEAD` local | `f1249fa8 [O258] pouso do item 1: o flip automatico PERGUNTA ao juiz do dia encerrado, e o teto por DATA sai do caminho (merge --no-ff da raia wt-bos, L-105/L-107)` |
+| `HEAD` local | `3bf5337e [O262] a familia escala passa a EXISTIR no mapa dos juizes: a declaracao nasce com a DIVIDA nomeada, e o pendente tem numero e condicao de saida` |
 | `origin/main` | `d20a0e45 [O219] pouso: os docs do marco A0-b entram junto, e o merge que eu pedi sem commit virou FAST-FORWARD -- o codigo estava na arvore viva antes deste commit` |
-| commits a subir (`ahead`) | **78** |
+| commits a subir (`ahead`) | **79** |
 
 ## Fabrica
 
@@ -29,31 +29,31 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2425.0 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2425.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **193.5 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **193.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **6.7 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **6.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **309.6 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **309.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **213.7 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **213.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **331.4 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **331.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
-  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **0.9 h**
+  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **1.0 h**
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
 - **21 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
@@ -64,27 +64,19 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+3bf5337e [O262] a familia escala passa a EXISTIR no mapa dos juizes: a declaracao nasce com a DIVIDA nomeada, e o pendente tem numero e condicao de saida
 f1249fa8 [O258] pouso do item 1: o flip automatico PERGUNTA ao juiz do dia encerrado, e o teto por DATA sai do caminho (merge --no-ff da raia wt-bos, L-105/L-107)
 cb1ccd16 [O258] a raia se RE-BASEIA no main antes de certificar: a base `ae7f08f3` nascia com o selo TESTE-SEM-RELOGIO vermelho, e o main ja o havia curado
 f5a1ad77 [O258] item 1: nasce o juiz `dia_encerrado` e o `flip_automatico` deixa de ser juiz de varredura -- o teto por DATA e CEGO ao cross-meia-noite, e o DIFF do universo do cron e ZERO
 2cb57138 [O261] item (1): os "124" eram um PICO de meio-de-corrente -- a relavratura cura os 69 da bancada e nao move um centavo, e a previsao dos 104 dias era MINHA e esta refutada
-ae7f08f3 [O261] pouso do item 3: a impressao do cartorio passa a codificar o FIO, e e isso que leva a cura aos dias presos (merge --no-ff da raia wt-fio, L-105/L-107)
 ```
 
 ## `git status --short`
 
 ```
  M app/config/crons_duracao.json
- M app/core/contratos_estruturais.py
- M app/core/juizes.py
- M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
- M app/docs/MAPA-JUIZES.md
- M app/docs/RELATO.md
- M app/docs/TICKETS.md
- M app/escala/models.py
  M bin/sonda_frota.sh
-?? app/escala/tests/test_contract_juiz_escala.py
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -174,6 +166,8 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  ⎿  Read docs/AVAIS.md (23 lines)
+  ⎿  Referenced file docs/RELATO.md
   ⎿  Referenced file ponto/services/cartorio.py
   ⎿  Referenced file chamados/services/vigia_fio.py
   ⎿  Referenced file docs/LEIS.md
@@ -195,17 +189,15 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Background command "Run full suite over the combo copy" completed (exit code 0)
 
-● Fixing O258 and re-run pouso (i) · 1m 15s
-  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
-     python3 - "$S/o262/estados.json" <<'PY'
-     import json, sys
-     p=sys.argv[1]; d=json.load(open(p))
-     d['O258']=d['O258'].replace('os 3 crons de PREDICADO NOVO, que sao seus.','os 3 crons de PREDICADO NOVO (seu… (1m 15s · 4 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Prove the two RED host selos predate this commit
+  ⎿  $ cd /home/ronald/saas-hasner && echo "=== o commit nao tocou CORTES.md nem LEIS.md (prova de que os 2 selos sao ANTERIORES):"; git
+     show --name-only --format='' 3bf5337e; echo "=== o leis_indice era vermelho antes? (os 5 cortes estao em CORTES.md desde antes deste
+     commit):"; git log --oneline -3 --…
 
-· Concocting… (20h 15m 56s · ↓ 2.2m tokens)
+· Compacting conversation… (20h 20m 56s · ↓ 2.2m tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱ 90%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    2% until auto-compact
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
