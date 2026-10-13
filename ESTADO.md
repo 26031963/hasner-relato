@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 13/10/2026 11:11:32.**
+**Medido em 13/10/2026 11:17:02.**
 
 | | |
 |---|---|
@@ -29,19 +29,19 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2425.4 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2425.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **193.9 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **194.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **7.1 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **7.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **310.0 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **310.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
   - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **214.2 h** (passou das 6 h da L-105)
@@ -53,7 +53,7 @@ RELATO, com a lista de nomes do banco como autoridade._
   - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **331.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
-  - 0 commit(s) a frente do `main`, 3 arquivo(s) sujo(s)
+  - 0 commit(s) a frente do `main`, 4 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
 - **21 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
@@ -167,34 +167,34 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-  Ran 1 shell command
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/buulw0j03.output (6 lines)
-  ⎿  Read docs/AVAIS.md (23 lines)
-  ⎿  Referenced file ponto/services/cartorio.py
-  ⎿  Referenced file chamados/services/vigia_fio.py
-  ⎿  Referenced file docs/LEIS.md
-
-● Task "RED e construção do segundo intervalo" completed in background
-
-● Task "wt-ui: condições (a) e (b) do PUBLICAR-RETRATO" still running in background
-
-● Célula chamado × um juiz por pergunta existe e é testada. Leio o registro, o contrato e a base da trava antes de desenhar:
-
-  Ran 2 shell commands
-
-● pergunta_viva já está na base da trava (linha 8) — chave nova apontando pra ela não acorda o selo. Leio o contrato e os dois sítios:
-
-  Searched for 1 pattern, ran 2 shell commands
-
 ● O contador da família chamado está em ZERO e é catraca (assertLessEqual(len(pend), 0)) — pendente novo no dict iria VERMELHO. Preciso dos
   números exatos antes de desenhar:
 
-● Reading the scanner used by the contract test
-  ⎿  $ echo "=== _fontes e fora_da_autoridade (quem e varrido):"; sed -n "$(grep -n 'def _fontes' ponto/tests/test_contract_juiz_celula.py
-     | cut -d: -f1),+22p" ponto/tests/test_contract_juiz_celula.py; echo "=== fora_da_autoridade:"; sed -n "$(grep -n 'def
-     fora_da_autoridade' ponto/tests/test_contract_j…
+  Ran 2 shell commands
 
-✢ Concocting… (20h 41m 42s · ↓ 2.2m tokens · thinking)
+● Dados na mesa. Leio o texto exato dos candidatos e as portas que já existem:
+
+  Ran 2 shell commands
+
+● Classificação fechada por PERGUNTA, com a forma medida. Gravo o censo e o desenho antes de construir:
+
+  Ran 1 shell command
+
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+
+● Primeiro o bloqueio apontado: CORTES.md é GERADO.
+
+  Ran 2 shell commands
+
+● CORTES.md sai de CORTES.json. Vejo o precedente literal e o schema:
+
+● Checking the literal frase precedent and CORTES.json schema
+  ⎿  $ echo "=== a frase LITERAL que a trava grepa, ja existe para quem?"; grep -c "corte Ronald: juiz" docs/CORTES.md; grep -o "corte
+     Ronald: juiz [a-z_]* nasce" docs/CORTES.md | sort -u; echo; echo "=== idem no JSON:"; grep -o "corte Ronald: juiz [a-z_]* nasce"
+     docs/CORTES.json | sort -u; echo; echo "…
+
+✢ Concocting… (20h 47m 12s · ↓ 2.3m tokens · thinking some more)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -204,6 +204,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Reading LINHAS fixture in test_retrato_folha_quadros.py                                     11m 7s · ↓ 148.1k tokens
+  ◯ general-purpose  Verifying neighbour test module paths                                                      16m 37s · ↓ 168.3k tokens
   ⧉  index
 ```
