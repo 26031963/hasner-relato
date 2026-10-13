@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 13/10/2026 01:17:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (753.6 MB). Acoes na janela: **1051**.
+**Medido em 13/10/2026 01:22:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (753.6 MB). Acoes na janela: **1045**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1055,9 +1055,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 16:20:58 | Bash | Prova que as exportacoes ficaram intactas | `cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && bin/sonda_frota.sh $S/sonda_marcob_hash_export.py 2>&1 \| grep -E '^(EXP\\|\|EXP_TOTAL)' > logs/fx/marcob_export_hash_depois.txt; diff <(grep -E '^(EXP\\|\|EXP_TOTAL)' logs/fx/marcob_export_hash_antes.txt) logs/fx/marcob_export_hash_depois.txt && echo "EXPORTACOES IDENT ...` |
 | 16:20:45 | Bash | Compara o previsto com o medido depois do apply | `cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && echo "=== previsto(12:57) x agora(13:30)" && python3 $S/cmp_marcob.py logs/fx/marcob_depois_1257.txt logs/fx/marcob_prova_1330.txt 2>&1 \| sed -n '1,14p'` |
 | 16:20:15 | Bash | Mede a frota depois do deploy e do apply | `cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && bin/sonda_frota.sh $S/sonda_marcob_diff.py > logs/fx/marcob_prova_1330.txt 2>&1; echo "rc=$?"; grep '^RT\|' logs/fx/marcob_prova_1330.txt` |
-| 13:17:54 | Bash | Relavra o retrato da competencia 10 | `cd /home/ronald/saas-hasner && ls -A logs/crons_em_curso/ \| wc -l && docker exec saas_core python manage.py tenant_command lavrar_retrato_folha --schema=juliani --apply --mes 10 --ano 2026 2>&1 \| tail -20` |
-| 13:17:26 | Bash | Espera o deploy terminar | `cd /home/ronald/saas-hasner && until grep -qE '^rc=' logs/fx/marcob_deploy_1325.log 2>/dev/null; do sleep 15; done; tail -20 logs/fx/marcob_deploy_1325.log` |
-| 13:17:22 | Bash | Publica o marco B | `cd /home/ronald/saas-hasner && nohup bash -c 'bin/deploy.sh --sem-migrate > logs/fx/marcob_deploy_1325.log 2>&1; echo "rc=$?" >> logs/fx/marcob_deploy_1325.log' > /dev/null 2>&1 & echo lancado` |
-| 13:17:18 | Bash | Confere o portao da sombra antes do deploy | `cd /home/ronald/saas-hasner && ls -A logs/crons_em_curso/ \| wc -l; bin/sombra.sh --conferir 2>&1 \| tail -8` |
-| 13:17:12 | Bash | Commita o marco B declarando os caminhos | `cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && P="app/core/juizes.py app/core/tests/test_contract_juiz_tela.py app/folha/export.py app/folha/previa.py app/folha/tests/test_furo_so_intervalo_nao_retem.py app/folha/tests/test_previa_cobre_pelo_juiz.py app/docs/ARQUITETURA.mmd app/docs/BACKLOG.md app/docs/LEIS.md app/d ...` |
-| 13:17:05 | Bash | Acrescenta os numeros da suite e do censo a mensagem | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && python3 - "$S/marcob_msg_commit.txt" <<'PY' import sys p = sys.argv[1] s = open(p, encoding='utf-8').read() if 'Ran 10659' in s: print('ja tem'); raise SystemExit(0) old = 'fechamento e baixa diferida verdes; ruff limpo nos 6 arquivos.' new = ('''fechamento e baixa diferida verdes; ruff limpo nos 6 a ...` |
