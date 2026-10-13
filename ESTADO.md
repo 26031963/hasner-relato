@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 12/10/2026 23:56:02.**
+**Medido em 13/10/2026 00:01:32.**
 
 | | |
 |---|---|
@@ -29,31 +29,31 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2414.2 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2414.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cb** (`(detached)`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 12 arquivo(s) sujo(s), commit a frente ha **5.7 h**
+  - 1 commit(s) a frente do `main`, 12 arquivo(s) sujo(s), commit a frente ha **5.8 h**
   - sem declaracao em `logs/raias/wt-cb.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **182.6 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **182.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261011`) -- **SEM AGENTE**
-  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **44.6 h** (passou das 6 h da L-105)
+  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **44.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **298.8 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **298.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **202.9 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **203.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **320.6 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **320.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -181,44 +181,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  de codigo ja feito (cada escritor de PerguntaDisputa apaga pela lampada ou se aposenta, comecando por lavrar_sem_turno_aberto, RED
-  primeiro); (2) wt-ui = O256 E3 (drawer + legenda dos LEDs + Raio-X do retrato). A principal so integra e pousa, uma suite por vez na
-  trava. Raia parada com suite livre pede linha de motivo no RELATO. Nenhuma lei nova. Segue a fila; PAREI so em lei ou !
 
-● Noted — two agents in parallel the moment this cure closes. Finishing it first; my new helper errored:
+  Ran 2 shell commands
 
-  Ran 3 shell commands
-
-● GREEN: Ran 21 tests / OK / rc 0. Measuring the +1 query the tag costs per admin page:
+● Ruff clean, trava livre, nenhum cron em curso. Launching the vizinho suite in background:
 
   Ran 1 shell command
 
-● +1 query exactly, as predicted. Registering the new aval before opening the raias:
+● Suite running. Per ESMERIL-DO-MARCO, the wait is this marco's esmeril — censo só do que a O206 deixou órfão:
 
-  Read 1 file, ran 3 shell commands
+  Searched for 1 pattern
 
-● Both raias exist already — confirming their paths and state before handing them over:
+● Censo closed: zero órfão. _texto_cobranca survives only as the name the selo asserts is absent (that's the MORDE), nobody imports the old
+  constants, the two literals live in exactly one place, and the readers are exactly the 3 declared — views_cobrar.py:46/:125 (envio),
+  chamados_tags.py:193 (previa), comunicados/views.py:113 (console). Nothing for L-111 to retire.
 
-  Ran 1 shell command
+  Now the pendente's frase PRONTA, which the 23:5x aval held open:
 
-● Both raias clean, trava livre. Opening the two agents now, per the aval:
+● Inspecting the O206 pendente entry
+  ⎿  $ python3 - <<'PY'
+     import json
+     d = json.load(open('docs/PENDENTES_RONALD.json'))
+     itens = d if isinstance(d, list) else d.get('itens', d.get('pendentes'))
+     print('tipo raiz:', type(d).__name__, '| n itens:', len(itens))
+     for i in itens:
+     if i.get('id') == 'O206-PAINEL-COBRAR-SMOKE':
+     for k, v in i.items…
 
-● 2 background agents launched (↓ to manage)
-   ├ O261 FASE 2 na raia wt-fio
-   └ O256 E3 na raia wt-ui
-
-✢ Compacting conversation… (9h 26m 12s · ↓ 1.1m tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 37%
+✢ Concocting… (9h 31m 42s · ↓ 1.1m tokens · thought for 8s)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    0% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Reading retratar_perguntas_absolvidas_por_celula in reconciliador.py                           41s · ↓ 113.5k tokens
-  ◯ general-purpose  Reading folha/retrato_folha.py                                                                 41s · ↓ 115.0k tokens
+  ◯ general-purpose  Tracing lavrar_sem_turno_aberto against pergunta_viva                                       6m 11s · ↓ 138.7k tokens
+  ◯ general-purpose  Listing routes in chamados/urls.py                                                          6m 11s · ↓ 166.1k tokens
   ⧉  index
 ```
