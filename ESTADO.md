@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 13/10/2026 04:09:02.**
+**Medido em 13/10/2026 04:14:32.**
 
 | | |
 |---|---|
@@ -29,34 +29,34 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2418.4 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2418.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **186.9 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **187.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **0.1 h**
+  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **0.2 h**
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **303.0 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **303.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-fio** (`raia-fio`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **0.1 h**
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **0.2 h**
   - sem declaracao em `logs/raias/wt-fio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **207.1 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **207.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **324.8 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **324.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
-  - 1 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **1.5 h**
+  - 1 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **1.6 h**
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
 - **21 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
@@ -170,42 +170,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Task "RED e construção do segundo intervalo" completed in background
+  - Medido nas duas árvores: gerado contra wt-fio e contra a árvore mesclada do comboio → md5 add1c92a nas duas, logo a raia-ui não move o
+    desenho e o derivado pertence ao marco da raia-fio.
+  - Amend: 2ff28216 → f78c78fc (7 arquivos, 747 inserções) com o .mmd, o parágrafo da docstring sobre perguntas_vivas_de e o item (f) do
+    RELATO.
+  - Cert nova: merge-tree rc 0 duas vezes → árvore 8dd7dbfd, cert 727bcead, 21 arquivos contra o main, 0 migration; HEAD^{tree} conferido
+    em wt-comboio, md5 dos 21 carimbado antes do run.
+  - UMA suite rodando (logs/o261/comboio_suite2.log), trava livre e crons_em_curso vazio na largada.
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+  Portão do deploy, medido agora: bin/sombra.sh --conferir = dia=20261012, rc 1 — o ensaio de hoje nasce às 04:16 e leva ~18-38 min. Há
+  pista até 06:27 (cartório), então espero o carimbo de hoje em vez de usar --sem-sombra; a espera é por FATO (rc do --conferir +
+  logs/crons_em_curso vazio), em laço de fundo. Primeira versão desse laço deu falso OK por ler $? depois de um pipe — a mesma pedra que já
+  está na memória; corrigido para capturar o rc sem pipe.
 
-  Ran 5 shell commands
+  Preparado fora de qualquer árvore, para a janela do pouso ser só inserção: seção de pouso da FASE 3 (12 linhas, teto L-116), célula de
+  ESTADO da O261 em 286 chars, mensagem do merge commit, e o bullet do comboio + prova do deploy para a seção da O256. Ordem do pouso: fio
+  primeiro (é ela que leva app/docs/), depois ui.
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: O261 -- BUG-FIO-MORTO-CHAMADO (aval dele 12/10 20:2x, P7.1 -- bug PROVADO POR ELE, fura a fila; id novo
+  por ordem lite
 
-  Ran 13 shell commands
-
-● Background command "Launch the single comboio suite on the certification copy" completed (exit code 0)
-
-  Amended commit f78c78fc, ran 15 shell commands
-  ⎿  Read docs/AVAIS.md (23 lines)
-  ⎿  Referenced file core/contratos_estruturais.py
-  ⎿  Referenced file core/juizes.py
-  ⎿  Referenced file ponto/tests/test_contract_juiz_batida.py
-
-● Task "RED e construção do segundo intervalo" completed in background
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-  Checking the shadow rehearsal gate state
+● Waiting for the suite veredito by file · 8s
   ⎿  $ cd /home/ronald/saas-hasner || exit 1
-     timeout 100 bin/sombra.sh --conferir 2>&1 | tail -20; echo "rc=${PIPESTATUS[0]}"
+     L=logs/o261/comboio_suite2.log
+     fim=$((SECONDS+100))
+     until grep -qE '^(OK|FAILED)($| \()' $L || [ $SECONDS -ge $fim ]; do sleep 10; done
+     date '+%H:%M:%S'; grep -cE '^Ran [0-9]+ test' $L; tail -c 80 $L; echo; cat /tmp/claude-1001/-home-ronald-saas-hasner-app/ca… (8s)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Concocting… (13h 39m 12s · ↓ 1.5m tokens · thinking)
+✢ Concocting… (13h 44m 42s · ↓ 1.5m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    3% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
 ❯ ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
