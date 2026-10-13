@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 13/10/2026 19:05:47.**
+**Medido em 13/10/2026 19:11:02.**
 
 | | |
 |---|---|
@@ -29,19 +29,19 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2433.3 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2433.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **201.8 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **201.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **15.0 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **15.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **317.9 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **318.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
   - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **222.1 h** (passou das 6 h da L-105)
@@ -179,14 +179,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-❯ aval Ronald: jornada entre 4h e 6h sem pausa indeniza o suprimido do minimo (Art.71 §1 + §4), com o mesmo max(cadastro, piso) e a tolerancia de 10 min; hoje o
-  portao de >6h a deixa sem nada (39 dias / 7 colabs na 09). Segue a fila; PAREI so em lei ou !
-
-● Background command "Fix the attribution line and wait for the full suite verdict" completed (exit code 0)
-
-● Suite: 10916 tests, 1 failure — and it's my own costura biting: fonte_dos_totais grew a new reader (linha_x_badge) without being declared in the censo. Curing
-  that, then registering the new aval.
-
   Ran 1 shell command
 
 ● Background command "Wait for the full suite verdict on the live tree" completed (exit code 0)
@@ -195,18 +187,26 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Censo cured (24 OK). Registering the new aval, then the sombra counter for the PROVA.
 
-● Re-running the sombra counter with the right import · 2m 11s
+● Re-running the sombra counter with the right import · 7m 26s
   ⎿  $ cd /home/ronald/saas-hasner; sed -i 's/^from core.models import Empresa$/from colaboradores.models import Empresa/' logs/sombra/parteB_contador.py;
-     bin/sombra.sh --rodar logs/sombra/parteB_contador.py parteB_lxb > logs/parteB_sombra.out 2>&1; echo rc=$?; grep -E "comp(09|10)|Error" logs/parteB_so… (2m 9s)
+     bin/sombra.sh --rodar logs/sombra/parteB_contador.py parteB_lxb > logs/parteB_sombra.out 2>&1; echo rc=$?; grep -E "comp(09|10)|Error" logs/parteB_so… (7m 24s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✻ Concocting… (1d 4h 35m · ↓ 3.1m tokens)
+✢ Concocting… (1d 4h 41m · ↓ 3.1m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
 
 ❯ aval Ronald: BUG-8792-LE-AUSENCIA-CRUA -- folha/export.py::datas_falta le Ausencia direto (_datas_ausencia_tipo_janela) e nao a CELULA SOBERANA (L-095/L-002,
   celula/precedencia); medido rodada21: col643 17/09 celula 'justificado' (atestado + falta aprovados no dia) e o TXT desconta falta; 15/09 celula 'concorde' com
   batida e o TXT desconta falta. Cura na ORIGEM: as datas do 8792 saem do veredito da celula/DiaPago, nunca da Ausencia crua; RED col643 17/09; DIFF da 10 antes; 09
   so numero. Complemento da O219. Segue a fila; PAREI so em lei ou !
+
+❯ aval Ronald: BUG-8792-LE-AUSENCIA-CRUA -- folha/export.py::datas_falta le Ausencia direto (_datas_ausencia_tipo_janela) e nao a CELULA SOBERANA (L-095/L-002,
+  celula/precedencia); medido rodada21: col643 17/09 celula 'justificado' (atestado + falta aprovados no dia) e o TXT desconta falta; 15/09 celula 'concorde' com
+  batida e o TXT desconta falta. Cura na ORIGEM: as datas do 8792 saem do veredito da celula/DiaPago, nunca da Ausencia crua; RED col643 17/09; DIFF da 10 antes; 09
+  so numero. Complemento da O219. Segue a fila; PAREI so em lei ou !
+
+❯ aval Ronald: jornada entre 4h e 6h sem pausa indeniza o suprimido do minimo (Art.71 §1 + §4), com o mesmo max(cadastro, piso) e a tolerancia de 10 min; hoje o
+  portao de >6h a deixa sem nada (39 dias / 7 colabs na 09). Segue a fila; PAREI so em lei ou !
   ctrl+x ctrl+s to send now
                                                                                                                              ✔ Update installed · Restart to update
 ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -216,6 +216,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                                           1h 3m 8s · ↓ 428.9k tokens
-  ◯ fork  Drafting RELATO_secao_draft.md section                                                                                         1h 1m 7s · ↓ 132.7k tokens
+  ◯ fork  Drafting RELATO_secao_draft.md section                                                                                        1h 6m 22s · ↓ 132.7k tokens
   ⧉  index
 ```
