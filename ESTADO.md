@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 13/10/2026 00:33:32.**
+**Medido em 13/10/2026 00:39:02.**
 
 | | |
 |---|---|
@@ -29,28 +29,28 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2414.8 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2414.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **183.3 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **183.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261011`) -- **SEM AGENTE**
-  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **45.3 h** (passou das 6 h da L-105)
+  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **45.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **299.4 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **299.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **203.5 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **203.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **321.2 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **321.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 8 arquivo(s) sujo(s)
@@ -171,44 +171,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Forwarded to the raia that owns it. Registering it:
-
-  Ran 1 shell command
-
-● Already registered — SALDO-GANHA-O-BOTAO-CADASTRO is the corte B of 12/10 18:5x. So this message is a new pouso ordering on an existing
-  corte, not a new corte. Reading the existing entry to update its estado instead of duplicating it:
-
-  Ran 1 shell command
-
-● The corte B already carries the design (Saldo gains a 'Cadastro' button reading the juiz's motivo); this message adds the measured gap
-  and a pouso ordering. Note his numbers moved from 268/272 to 267/271 — the retrato was regenerated since. Updating the existing entry
-  rather than duplicating:
-
-  Ran 1 shell command
-
-● Both avals are registered and the UI one is in the raia's hands. Back to my own fatia — the contador. Calling the advisor before writing
-  the substantive code:
-
-● Advising using Fable 5.1
-
-✢ Concocting… (10h 3m 42s · ↓ 1.1m tokens)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-
-❯ aval Ronald: dentro da O256 a ORDEM na wt-ui passa a ser: (1) DRAWER do colab primeiro -- espelho do perfil + bloco "o que fazer"
-  montado SO das chaves gravadas na linha do retrato (motivo, dono, tipo, datas), sem texto gerado + botao que leva a porta que ja resolve
-  aquele motivo + legenda dos LEDs; (2) Saldo ganha o botao Cadastro (Saldo == Bloqueados, 4 faltando na J.A comp 10); (3) a lente
-  Raio-X, cuja linha abre esse drawer; (4) texto do Haiku por cima do bloco "o que fazer" (E4). Mesmo pouso para (1) e (2). Juizes novos =
   0. Nenhuma lei nova. Segue a fila; PAREI so em lei ou !
-  ctrl+x ctrl+s to send now
-                                                                                                                    6% until auto-compact
+
+❯ corte Ronald: PENDENTE-SAI-PELA-CONDICAO-ESCRITA (altera a O141, lei nova). Pendente de core/juizes.py cuja CONDICAO DE SAIDA esta
+  escrita em corte meu SAI sem nova pergunta, se e so se, os quatro juntos: (1) a condicao e medida na FROTA inteira pela funcao REAL que
+  o sistema usa para julgar, com o universo NAO vazio declarado ao lado; (2) o numero bate a condicao literal, sem leitura ampliada; (3)
+  no MESMO commit a condicao vira CONTADOR no codigo (vigia, esperado o valor da condicao, caso que MORDE), nunca so sonda em docs; (4)
+  linha no RELATO com os numeros e a frase de reversao (o pendente volta se o contador sair do esperado). Condicao ambigua, universo vazio
+  ou numero fora = pergunta no topo do RELATO como hoje. Primeiro uso: o 2o pendente da batida ("o dia em aberto bloqueia a folha?"),
+  BARRADOS_SO_POR_PAUSA = 0 em 8 de 8 universos, 580 dias de furo so de pausa e 58 colabs passando com um. Juizes novos = 0. Segue a fila;
+  PAREI so em lei ou !
+
+● Two more: an ordem for wt-ui's raia, and a lei nova — PENDENTE-SAI-PELA-CONDICAO-ESCRITA — whose four conjunct conditions govern exactly
+  the fatia I'm building, and whose first named use is my pendente. Its condition (1) makes the full-frota run by the real function a gate
+  on the commit, and (3) requires the contador in the same commit — which is the design the advisor and I converged on. Forwarding the
+  raia's ordem first, since its agent is mid-build:
+  ⎿  Message queued for delivery to a2232824976ef506b at its next tool round.
+  ⎿  Allowed by auto mode classifier
+
+● Now registering both. Checking how laws are added, since the lei nova needs a number and I'm constrained not to alter LEIS.md's existing
+  columns:
+
+● Inspecting LEIS.md structure and whether a generator writes it
+  ⎿  $ echo "=== maiores L-NNN ==="; grep -o "L-1[0-9][0-9]" docs/LEIS.md | sort -u | tail -6; echo "=== header + ultima linha ==="; grep
+     -n "^|" docs/LEIS.md | head -2 | cut -c1-240; echo "---"; grep -n "^| \*\*L-11[5-9]" docs/LEIS.md | cut -c1-240; echo "=== gerador?
+     ==="; ls bin/gerar_leis.py ../bin/…
+
+✢ Compacting conversation… (10h 9m 12s · ↓ 1.1m tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱ 88%
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ Press up to edit queued messages
+❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Waiting on full_o261.rc verdict                                                            38m 11s · ↓ 159.1k tokens
-  ◯ general-purpose  Waiting on o256_e3_folha.log verdict                                                        38m 11s · ↓ 67.5k tokens
+❯ ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
+  ◯ general-purpose  Waiting on full_o261.rc verdict                                                            43m 42s · ↓ 159.1k tokens
+  ◯ general-purpose  Reading painel_colaborador.html tab structure                                              43m 42s · ↓ 116.7k tokens
   ⧉  index
 ```
