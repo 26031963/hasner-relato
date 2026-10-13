@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 13/10/2026 19:27:32.**
+**Medido em 13/10/2026 19:33:02.**
 
 | | |
 |---|---|
@@ -29,28 +29,28 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2433.7 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2433.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **202.2 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **202.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **15.4 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **15.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **318.3 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **318.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **222.4 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **222.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **340.1 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **340.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -178,15 +178,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  09 e 10 (breexxe5o → logs/parteB_sombra.out); é dele que sai a PROVA do 7º par do R4, e com ela fecho o commit do marco e o bin/deploy.sh (com migrate, por causa
-  do drift 0012 da O256 que o makemigrations --check pegou).
-
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: BUG-LINHA-X-BADGE -- BUG-LINHA-X-BADGE (aval dele 13/10 15:1x em partes, P7.1 -- fura a fila; id dado por ELE). ACHADO MEDIDO POR
-  E
-
-  Ran 2 shell commands
-
 ● Sombra counter still running (carimbo written, medir sweeping the frota). Using the wait for the marco's esmeril — the one thing the rotina allows now.
 
   Ran 1 shell command
@@ -194,12 +185,12 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Esmeril clean: all four new names have callers (impressao_da_regua 9, linha_x_badge 23, regua_das_linhas 1, PARES_LINHA_X_BADGE 1), and parte B orphaned nothing —
   it only adds, so there's no L-111 debt to pay in this marco. Waiting on the counter file.
 
-● Waiting for the sombra counter to reach comp 10 · 2m 39s
+● Waiting for the sombra counter to reach comp 10 · 8m 10s
   ⎿  $ cd /home/ronald/saas-hasner; until grep -qE "comp10 |Error|Traceback" logs/parteB_sombra.out; do sleep 45; done; date +%H:%M; grep -E "comp(09|10) |Error"
-     logs/parteB_sombra.out | tail -8 (2m 39s)
+     logs/parteB_sombra.out | tail -8 (8m 9s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Concocting… (1d 4h 57m · ↓ 3.1m tokens)
+✢ Concocting… (1d 5h 3m · ↓ 3.1m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
 
 ❯ aval Ronald: BUG-COMERCIAL-SEM-PONTUALIDADE -- MotorComercial.calcular_periodo nao chama aplicar_tolerancia (regua unica F0-CONFORMIDADE 11/08, "consumida pelos
@@ -207,6 +198,15 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
   13/10: col406 27/08 77 min de atraso com atr=0 e sem alerta; idem col709/648/864/892/468/248/390/549/823 e sabados do col504. Cura na ORIGEM: o comercial passa
   pela mesma regua (aplicar_tolerancia + L-084 + L-093 + O73), sem copia; RED col406 27/08; DIFF da 10 antes; 09 so numero. Banco de horas segue como esta (sem lei;
   nao exportado). Segue a fila; PAREI so em lei ou !
+
+❯ aval Ronald: BUG-INTRA-FORA-DA-JANELA -- MotorBase._intra_real soma os intervalos da autoridade sem recorta-los a janela efetiva [e, s] que a L-097 ja aplicou;
+  medido sonda 13/10: col889 01/09 (E15:09 S16:09 E23:00 S23:08, marco 10-22) -- duracao 15:09-22:00 = 411, intervalo descontado 16:09-23:00 = 411, trab=0; pela
+  propria autoridade o certo e 60. Cura na ORIGEM: o intervalo conta so a parte dentro de [e, s], nos tres calcular_periodo pelo mesmo sitio; RED col889 01/09; DIFF
+  da 10 antes (quantos periodos tem intervalo vazando da janela); 09 so numero. Segue a fila; PAREI so em lei ou !
+
+❯ aval Ronald: complemento do BUG-COMERCIAL-SEM-PONTUALIDADE -- no Motor12x36ComEscala a entrada perto do marco de volta do intervalo vira "fragmento" sem consultar
+  o juiz da cabeca do turno (ponto/turnos.py), e o dia fica sem pontualidade e sem alerta; medido col60 01/09 (unica entrada 12:00, previsto 07-19, 234 min). A
+  pergunta "esta batida e a cabeca do turno?" passa a ser respondida pelo juiz, nao pela proximidade. Segue a fila; PAREI so em lei ou !
   ctrl+x ctrl+s to send now
                                                                                                                              ✔ Update installed · Restart to update
 ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -216,6 +216,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                                           1h 3m 8s · ↓ 428.9k tokens
-  ◯ fork  Diagnosing stalled haiku_sobra_frota run                                                                                     1h 22m 53s · ↓ 137.5k tokens
+  ◯ fork  Updating ORIGEM_medida memo with signal diagnosis                                                                            1h 28m 23s · ↓ 149.2k tokens
   ⧉  index
 ```
