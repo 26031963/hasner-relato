@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 13/10/2026 19:11:02.**
+**Medido em 13/10/2026 19:16:32.**
 
 | | |
 |---|---|
@@ -29,28 +29,28 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2433.4 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2433.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **201.9 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **202.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **15.1 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **15.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **318.0 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **318.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **222.1 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **222.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **339.8 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **339.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -181,41 +181,41 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   Ran 1 shell command
 
-● Background command "Wait for the full suite verdict on the live tree" completed (exit code 0)
+● Both avais are in the esteira with your words literal, and the O270 universe now carries your number, not mine.
 
-  Ran 1 shell command
+  O270 INTRA-4H-A-6H-INDENIZA — jornada 4h–6h sem pausa indeniza o suprimido do mínimo (Art.71 §1+§4), mesmo max(cadastro, piso), mesma tolerância de 10 min.
+  Universe corrected to 15 dias / 4 colabs: col504 12 dias (previsto 360 vs template 471 declarando 60 por duração numa jornada de 6h → o 60 vai à lista do admin
+  confirmar, e até ele responder o mínimo segue max(cadastro, piso)), col881 23/08, col123 08/09, col138 10/09. Os 25 dias de col823/892/248/41 saíram — jornada
+  prevista de 4h, a L-097 já corta e Art.71 só devolve intervalo a partir de 4h. Registrado que a CCT dos 4 não está conferida e cláusula própria manda, e que o DIFF
+  da 10 tem de mostrar só esses 15 dias.
 
-● Censo cured (24 OK). Registering the new aval, then the sombra counter for the PROVA.
+  O263-FT FT-SEM-MARCO-NAO-SE-RECORTA fica logo antes dela, como complemento da O263.
 
-● Re-running the sombra counter with the right import · 7m 26s
-  ⎿  $ cd /home/ronald/saas-hasner; sed -i 's/^from core.models import Empresa$/from colaboradores.models import Empresa/' logs/sombra/parteB_contador.py;
-     bin/sombra.sh --rodar logs/sombra/parteB_contador.py parteB_lxb > logs/parteB_sombra.out 2>&1; echo rc=$?; grep -E "comp(09|10)|Error" logs/parteB_so… (7m 24s)
+  Parte B, enquanto isso: a suíte cheia deu 10916 tests, 1 failure — e o vermelho era meu: linha_x_badge passou a ler fonte_dos_totais e o censo de leitores
+  (relatorios/tests/test_fonte_dos_totais_tem_leitor.py::LEITORES) existe exatamente para não deixar leitor crescer calado. Declarei o leitor #5 com o motivo (badge
+  de lavratura lê o próprio DiaPago, então não serve de testemunha) e os dois módulos voltaram verdes (24 OK). O contador real está rodando na sombra para as comps
+  09 e 10 (breexxe5o → logs/parteB_sombra.out); é dele que sai a PROVA do 7º par do R4, e com ela fecho o commit do marco e o bin/deploy.sh (com migrate, por causa
+  do drift 0012 da O256 que o makemigrations --check pegou).
+
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: BUG-LINHA-X-BADGE -- BUG-LINHA-X-BADGE (aval dele 13/10 15:1x em partes, P7.1 -- fura a fila; id dado por ELE). ACHADO MEDIDO POR
+  E
+
+  Waiting for the sombra counter output · 2m 14s
+  ⎿  $ cd /home/ronald/saas-hasner; until grep -qE "comp10|Error|Traceback" logs/parteB_sombra.out; do sleep 30; done; grep -E "comp(09|10)|Error"
+     logs/parteB_sombra.out | tail -8 (2m 13s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Concocting… (1d 4h 41m · ↓ 3.1m tokens)
+✢ Concocting… (1d 4h 46m · ↓ 3.1m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-
-❯ aval Ronald: BUG-8792-LE-AUSENCIA-CRUA -- folha/export.py::datas_falta le Ausencia direto (_datas_ausencia_tipo_janela) e nao a CELULA SOBERANA (L-095/L-002,
-  celula/precedencia); medido rodada21: col643 17/09 celula 'justificado' (atestado + falta aprovados no dia) e o TXT desconta falta; 15/09 celula 'concorde' com
-  batida e o TXT desconta falta. Cura na ORIGEM: as datas do 8792 saem do veredito da celula/DiaPago, nunca da Ausencia crua; RED col643 17/09; DIFF da 10 antes; 09
-  so numero. Complemento da O219. Segue a fila; PAREI so em lei ou !
-
-❯ aval Ronald: BUG-8792-LE-AUSENCIA-CRUA -- folha/export.py::datas_falta le Ausencia direto (_datas_ausencia_tipo_janela) e nao a CELULA SOBERANA (L-095/L-002,
-  celula/precedencia); medido rodada21: col643 17/09 celula 'justificado' (atestado + falta aprovados no dia) e o TXT desconta falta; 15/09 celula 'concorde' com
-  batida e o TXT desconta falta. Cura na ORIGEM: as datas do 8792 saem do veredito da celula/DiaPago, nunca da Ausencia crua; RED col643 17/09; DIFF da 10 antes; 09
-  so numero. Complemento da O219. Segue a fila; PAREI so em lei ou !
-
-❯ aval Ronald: jornada entre 4h e 6h sem pausa indeniza o suprimido do minimo (Art.71 §1 + §4), com o mesmo max(cadastro, piso) e a tolerancia de 10 min; hoje o
-  portao de >6h a deixa sem nada (39 dias / 7 colabs na 09). Segue a fila; PAREI so em lei ou !
-  ctrl+x ctrl+s to send now
                                                                                                                              ✔ Update installed · Restart to update
 ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ Press up to edit queued messages
+❯ 
 ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                                           1h 3m 8s · ↓ 428.9k tokens
-  ◯ fork  Drafting RELATO_secao_draft.md section                                                                                        1h 6m 22s · ↓ 132.7k tokens
+  ◯ fork  Collecting grade3_HEAD.out placar results                                                                                    1h 11m 53s · ↓ 134.7k tokens
   ⧉  index
 ```
