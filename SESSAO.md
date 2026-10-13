@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 13/10/2026 02:44:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (756.5 MB). Acoes na janela: **1161**.
+**Medido em 13/10/2026 02:49:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (756.6 MB). Acoes na janela: **1162**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 02:45:03 | Bash | Write the FASE 3 MORDE selo | `cd /home/ronald/wt-fio/app \|\| exit 1 cat > chamados/tests/test_o261_vigia_fio.py <<'PY' """O261 FASE 3 — O VIGIA DO FIO MORTO: contador, esperado 0, caso que MORDE, allowlist ZERO. A pergunta do corte `FIO-MORTO-E-ESTRUTURAL` item 4 (aval Ronald 12/10 20:2x): *"lampada acesa + fato encerrado + zero fio vivo"*. Este selo nao pergunta se o numero da frota e 0 -- isso e o cron que diz, e hoje ele e ...` |
 | 02:43:07 | Bash | Find ChamadoColaborador creation example | `cd /home/ronald/wt-fio/app \|\| exit 1 grep -rn "ChamadoColaborador.objects.create(" --include=*.py chamados/tests/ \| head -3 echo "=== um exemplo completo:"; grep -rn -A 8 "ChamadoColaborador.objects.create(" chamados/tests/test_reconciliador_c1_escopo.py 2>/dev/null \| head -14 echo "=== campos obrigatorios do modelo (sem default/null/blank):"; sed -n '15,120p' chamados/models.py \| grep -n "=  ...` |
 | 02:42:58 | Bash | Read FASE 2 fixture helpers | `cd /home/ronald/wt-fio/app \|\| exit 1 sed -n '88,210p' chamados/tests/test_o261_lavra_le_a_lampada.py` |
 | 02:42:02 | Bash | Read FASE 2 test fixtures as mold | `cd /home/ronald/wt-fio/app \|\| exit 1 echo "###### FASE2 selo (fixtures que eu ja montei):"; sed -n '1,90p' chamados/tests/test_o261_lavra_le_a_lampada.py` |
