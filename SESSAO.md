@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 13/10/2026 21:08:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (806.7 MB). Acoes na janela: **1259**.
+**Medido em 13/10/2026 21:13:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (806.7 MB). Acoes na janela: **1248**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1258,14 +1258,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 09:17:13 | Bash | Read escala juiz cell | `sed -n '400,445p' core/contratos_estruturais.py` |
 | 09:17:08 | Bash | Find escala cells in contratos_estruturais | `grep -n "escala" core/contratos_estruturais.py \| head -40` |
 | 09:16:40 | Bash | Wait for sonda v2 verdict | `cd /home/ronald/saas-hasner && until grep -q 'JSON_DONO\\|Traceback\\|rror' logs/s_escala/dono_v2_20261013.out 2>/dev/null; do sleep 5; done; date +%H:%M:%S; tail -c 3000 logs/s_escala/dono_v2_20261013.out` |
-| 09:11:17 | Bash | Run refined dono sonda | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/s-escala; sed -e "s/if len(amostra) < 25:/if False:/" $S/dono_dos_1214.py > $S/dono_v2.py && python3 - $S/dono_v2.py <<'PY' import sys p=sys.argv[1]; s=open(p).read() old=""" colabs.add(c.pk) por_classe_colabs.setdefault(k, set()).add(c.pk)""" new=""" colabs.add(c.pk) por_classe_colabs.setdefault(k, set ...` |
-| 09:10:51 | Bash | Read sonda output sample | `cd /home/ronald/saas-hasner && head -c 1200 logs/s_escala/dono_20261013.out; echo; echo "=== grep amostra classes ==="; python3 - logs/s_escala/dono_20261013.out <<'PY' import json,sys,re t=open(sys.argv[1]).read() j=json.loads(t[t.index('JSON_DONO ')+10:]) for a in j['amostra'][:12]: print(a) PY` |
-| 09:10:19 | Bash | Check sonda progress | `cd /home/ronald/saas-hasner && date +%H:%M:%S; wc -c logs/s_escala/dono_20261013.out; tail -c 600 logs/s_escala/dono_20261013.out` |
-| 09:10:10 | Bash | Read batida test body | `sed -n '150,260p' ponto/tests/test_contract_juiz_batida.py` |
-| 09:10:06 | Bash | Read batida contract test head | `sed -n '1,120p' ponto/tests/test_contract_juiz_batida.py` |
-| 09:09:59 | Bash | Run dono sonda in background | `cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/s-escala; mkdir -p logs/s_escala; date +%H:%M:%S; nohup bin/sonda_frota.sh $S/dono_dos_1214.py > logs/s_escala/dono_20261013.out 2>&1 & echo lancado` |
-| 09:09:54 | Bash | Write dono sonda | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/s-escala; cat > $S/dono_dos_1214.py <<'PY' # S-ESCALA -- DONO da divergencia dos dia-colab em que os dois leitores do vinculo discordam # na competencia 10 (L-099: ESTRUTURA x CADASTRO x BATIDA). LEITURA PURA de saas_hasner. # Funcoes REAIS: escala.alimentacao (celulas/escalas/vinculo_do_dia), escala.ut ...` |
-| 09:09:13 | Bash | Read previsto_cego | `sed -n '1,90p' escala/services/previsto_cego.py` |
-| 09:09:00 | Bash | Re-read vinculo_do_dia | `sed -n '140,200p' escala/alimentacao.py` |
-| 09:08:40 | Bash | Census readers of escala_geradora | `grep -rn "escala_geradora" --include=*.py . \| grep -v __pycache__ \| grep -v "/tests/" \| grep -v "/migrations/"` |
-| 09:08:02 | Bash | Grep O69 in docs | `grep -rn "O69" docs/*.md docs/*.json 2>/dev/null \| head -20` |
