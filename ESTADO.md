@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 14/10/2026 20:28:02.**
+**Medido em 14/10/2026 20:33:32.**
 
 | | |
 |---|---|
@@ -29,28 +29,28 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2458.7 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2458.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **227.2 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **227.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **40.4 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **40.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **343.3 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **343.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **247.4 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **247.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **365.1 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **365.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -168,39 +168,39 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-● A cura está coerente. Mas há um ponto a medir antes de rodar: em dry_run a porta devolve revogada=True sem apagar, e o apurar então marca o dia como pendente —
-  se o comando lavra nesse estado, o retrato gravado mente. Conferindo:
+● --only cai direto como label do manage.py test, então o recorte por módulo pontilhado vale — a esteira está correta. Push:
 
   Ran 1 shell command
 
-● lavrar só roda com --apply — então no DRY nada é gravado e o retrato impresso é a prévia, não uma mentira persistida. Confiro a última costura que podia falhar
-  calada, a assinatura da trilha, contra o irmão _gravar:
+● Enquanto o arsenal corre, escrevo o DIFF da sombra que o aval exige — e o desenho dele é o que o raio pequeno pede: provar que as 3.566 restantes ficam
+  idênticas, não só que as 17 voltam:
 
-  Ran 1 shell command
+  Writing the sombra DIFF script for O273
+  ⎿  $ SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cat > "$SP/o273_diff_sombra.py" <<'PY'
+     # -*- coding: utf-8 -*-
+     """O DIFF DA 10 NA SOMBRA (O273, HE-01): o raio e PEQUENO, entao o DIFF prova o QUE NAO MUDA.
+     17 de 3.583 recusas do sistema devem perde…
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bto17ew1j.output (8 lines)
+  ⎿  Read docs/AVAIS.md (23 lines)
+  ⎿  Referenced file ponto/motor_calculo_v2.py
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bff1doauu.output (9 lines)
+  ⎿  Referenced file core/juizes.py
 
-● Assinatura casa. Mas a revogação vem do cron (request=None) e o aval exige TRILHA — então a pergunta que importa é se registrar_log grava sem request:
+● Task "RED e construção do segundo intervalo" completed in background
 
-  Ran 1 shell command
+● Task "Insert the new obra and move the live-order marker" still running in background
 
-● Trilha grava sem request (ator=None, ip=None) — o aval está atendido. Falta o censo que a LEI-AKITA 5 cobra: quem mais lê DecisaoHE, já que a cura APAGA linha:
+● Task "Push the marco commit" still running in background
 
-  Ran 1 shell command
-
-● O leitor que importa apareceu: o motor lê DecisaoHE para clipar a ponta (motor_calculo_v2.py:1392). Se ausência de linha não for igual a estado='nao' ali,
-  revogar moveria dinheiro — o que o aval proíbe. É a pergunta central da O273:
-
-  Ran 1 shell command
-
-● Confirmado na autoridade real: o motor pergunta só == 'autorizado' (motor_calculo_v2.py:1408). estado='nao' e ausência de linha dão os dois autorizado=False —
-  revogar uma recusa não pode mover um minuto. A garantia do aval ("nada é autorizado nem pago") é estrutural, não argumento. Estado do push:
-
-● Running 1 shell command…
-
-✢ Propagating… (2h 26m 50s · ↓ 347.9k tokens)
+· Propagating… (2h 32m 20s · ↓ 355.2k tokens · thought for 3s)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                                            6% until auto-compact
+
+❯ aval Ronald: O273 -- a recusa do sistema que perde efeito NAO se apaga: a linha fica, marcada como revogada (quando, por que, minutos antes/depois), e sai do
+  calculo; decisao do admin intocada. Segue a fila; PAREI so em lei ou !
+  ctrl+x ctrl+s to send now
+                                                                                                                           ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ Press up to edit queued messages
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
 
