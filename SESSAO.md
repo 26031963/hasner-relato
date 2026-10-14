@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 14/10/2026 05:47:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (806.7 MB). Acoes na janela: **264**.
+**Medido em 14/10/2026 05:52:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (806.7 MB). Acoes na janela: **262**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -272,5 +272,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 17:54:28 | Bash | Read dias_fora_do_dia_pago body | `sed -n '25,80p' folha/porta_export.py` |
 | 17:54:24 | Bash | Locate dias_fora_do_dia_pago | `grep -rn "def dias_fora_do_dia_pago" --include=*.py . ; echo "--- corpo:"; f=ponto/services/espelho.py; grep -n "dias_fora_do_dia_pago" -r --include=*.py . \| head; echo "=== autoridade retorno:"; sed -n '933,1100p' ponto/services/espelho.py \| grep -n "return" \| head` |
 | 17:54:14 | Bash | Read tol002 selo script | `cd /home/ronald/saas-hasner && sed -n '1,90p' logs/sombra/selo_linha_x_badge_tol002.py` |
-| 17:51:28 | Bash | Read autoridade_do_periodo | `grep -rn "def autoridade_do_periodo" --include=*.py . \| head; echo "---"; f=$(grep -rln "def autoridade_do_periodo" --include=*.py . \| head -1); echo "FILE=$f"; sed -n "$(grep -n 'def autoridade_do_periodo' $f \| head -1 \| cut -d: -f1),+45p" $f` |
-| 17:50:40 | Bash | Check sombra run and backlog insertion | `cd /home/ronald/saas-hasner && echo "=== parteB_tol002.out ==="; tail -40 logs/parteB_tol002.out 2>/dev/null \|\| echo "(sem arquivo)"; echo; echo "=== bf47yy4ew.output ==="; tail -5 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bf47yy4ew.output 2>/dev/null; echo; echo "=== git status docs ==="; git status --porcelain app/docs/ \| head` |
