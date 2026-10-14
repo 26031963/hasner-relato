@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 14/10/2026 01:25:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (806.7 MB). Acoes na janela: **777**.
+**Medido em 14/10/2026 01:30:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (806.7 MB). Acoes na janela: **771**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -781,9 +781,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 13:31:55 | Bash | Read the procedencia selo and turnos_via_autoridade | `cd /home/ronald/saas-hasner/app; echo "=== s5b_regra_noturnas 100-150"; sed -n '100,150p' ponto/tests/test_s5b_regra_noturnas.py; echo; echo "=== (4) turnos_via_autoridade + AUT_*"; sed -n '/^def turnos_via_autoridade/,/^def /p' ponto/motor_calculo_v2.py \| head -45` |
 | 13:31:46 | Bash | Check PENDENTES impressions and text enumerators | `cd /home/ronald/saas-hasner/app; echo "=== (2) PENDENTES com arquivo do motor/regras/export"; python3 - <<'PY' import re, json, ast, sys src = open('core/juizes.py', encoding='utf-8').read() import importlib.util # apenas varre o texto por blocos com 'arquivo': for m in re.finditer(r"\{[^{}]*'arquivo'\s*:\s*'([^']+)'[^{}]*\}", src, re.S): arq = m.group(1) if arq in ('ponto/motor_calculo_v2.py', 'p ...` |
 | 13:31:36 | Bash | Full census of the noturno field mentions | `cd /home/ronald/saas-hasner/app; echo "=== (1) TODAS as mencoes no motor"; grep -n "minutos_noturnos_relogio\\|minutos_noturnos_legais" ponto/motor_calculo_v2.py; echo; echo "=== (1b) tree-wide fora de tests"; grep -rn "minutos_noturnos_relogio\\|minutos_noturnos_legais" --include=*.py . \| grep -v "/tests/" \| grep -v motor_calculo_v2.py` |
-| 13:27:37 | Bash | Create a copy of HEAD for the fatia and read the export comment | `cd /home/ronald/saas-hasner; S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; rm -rf "$S/o263"; mkdir -p "$S/o263"; git archive HEAD \| tar -x -C "$S/o263"; ls "$S/o263" \| head; echo "HEAD=$(git rev-parse --short HEAD)"; echo "=== export.py 310-345"; sed -n '310,345p' "$S/o263/app/folha/export.py"` |
-| 13:27:09 | Bash | Read the private-helper contract and the s5b test body | `cd /home/ronald/saas-hasner/app; sed -n '140,200p' ponto/tests/test_contract_juiz_batida.py; echo "######## s5b 39-115"; sed -n '39,115p' ponto/tests/test_s5b_split_noturno_tem_um_dono.py` |
-| 13:26:58 | Bash | Read the enumerating contracts | `cd /home/ronald/saas-hasner/app; sed -n '80,140p' ponto/tests/test_contract_juiz_batida.py; echo "=== s5b split; grep headers"; grep -n "def test_\\|^class \\|he_noturna\\|he_pontas" ponto/tests/test_s5b_split_noturno_tem_um_dono.py` |
-| 13:26:40 | Bash | Read the tail of _noturno_dos_intervalos | `cd /home/ronald/saas-hasner/app; sed -n '1524,1545p' ponto/motor_calculo_v2.py` |
-| 13:26:34 | Bash | Read _noturno_dos_intervalos and the calculador sites | `cd /home/ronald/saas-hasner/app; sed -n '1486,1535p' ponto/motor_calculo_v2.py; echo "=== regras.py 55-95"; sed -n '55,95p' ponto/calculador/regras.py; echo "=== regras.py 690-715"; sed -n '688,715p' ponto/calculador/regras.py` |
-| 13:26:06 | Bash | Read minutos_noturnos and he_noturna | `cd /home/ronald/saas-hasner/app; echo "=== minutos_noturnos"; grep -n "^def minutos_noturnos" -B2 -A 60 ponto/motor_calculo_v2.py; echo "=== he_noturna 290-340"; sed -n '290,340p' ponto/motor_calculo_v2.py` |
