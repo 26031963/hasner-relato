@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 13/10/2026 23:00:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (806.7 MB). Acoes na janela: **1021**.
+**Medido em 13/10/2026 23:05:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (806.7 MB). Acoes na janela: **1016**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1026,8 +1026,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 11:09:53 | Bash | Read PENDENTES_CHAMADO in juizes.py | `echo "=== PENDENTES_CHAMADO:"; grep -n "PENDENTES_CHAMADO" core/juizes.py \| head; echo "---"; sed -n "$(grep -n 'PENDENTES_CHAMADO = ' core/juizes.py \| cut -d: -f1),+28p" core/juizes.py` |
 | 11:09:45 | Bash | Check trava base list and the chamado contract cell | `cd /home/ronald/saas-hasner && echo "=== base da trava tem fio_vivo/pergunta_viva?"; grep -nE "fio_vivo\|pergunta_viva\|catalogo/motor" bin/tests/juizes_antes_da_trava.txt; echo "(total $(grep -c . bin/tests/juizes_antes_da_trava.txt) entradas)"; echo; echo "=== contrato chamado x um juiz por pergunta:"; sed -n '253,270p' app/core/contratos_estruturais.py` |
 | 11:09:43 | Bash | Read the juizes.py keys and authorities region | `echo "=== juizes.py :90-130 (as chaves):"; sed -n '88,132p' core/juizes.py; echo; echo "=== :190-215 (as autoridades):"; sed -n '190,215p' core/juizes.py` |
-| 11:03:21 | Bash | Read the juiz-novo trava selo and the chamado contract cells | `cd /home/ronald/saas-hasner && echo "=== o selo da TRAVA JUIZ-NOVO:"; cat bin/tests/test_juiz_novo_tem_corte.sh; echo; echo "=== celula chamado x '1 juiz por pergunta' no contratos_estruturais:"; grep -n "chamado" app/core/contratos_estruturais.py \| head -20` |
-| 11:02:39 | Bash | Read the five candidate reduction sites | `for s in "folha/previa.py:140,152" "ponto/management/commands/reconciliar_grade.py:443,452" "chamados/management/commands/encerrar_perguntas_com_fato.py:78,88" "chamados/services/disputa_emissao.py:1172,1184" "chamados/services/fio.py:236,248"; do f=${s%%:*}; r=${s##*:}; echo "=== $f ($r)"; sed -n "${r/,/,}p" "$f"; echo; done` |
-| 11:02:16 | Bash | AST census of parallel fio reductions | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; mkdir -p "$S/o261b"; cat > "$S/o261b/censo_fio.py" <<'PY' """Censo por AST: quem REDUZ `pergunta_viva` sobre uma COLECAO (any/all/comprehension com filtro) -- isto e, quem responde "ha fio vivo?" por regra propria em vez de chamar `chamados/juizes.py::fio_vivo`. Leitura de UMA pergunta (pergunta_viva(p ...` |
-| 11:01:22 | Bash | Census the production readers of VIVOS | `echo "=== quem le VIVOS (producao, fora de testes):"; grep -rn "VIVOS" --include=*.py . \| grep -v "/tests/" \| grep -v "^./chamados/catalogo/motor.py" \| sed 's/:[[:space:]]*/: /' \| head -30; echo; echo "=== a definicao:"; sed -n '18,30p' chamados/catalogo/motor.py` |
-| 11:00:47 | Bash | Check which O261 readers are already cured | `cd /home/ronald/saas-hasner && echo "=== quando motivo_fora_da_fabrica foi curado:"; git log --oneline -3 -S"VEREDITOS_ACUSAM" -- app/chamados/services/disputa_emissao.py; echo; echo "=== supra_juiz.py:150-175 (o not chamados_vivos / cobrancas_vivas):"; sed -n '120,175p' app/ponto/supra_juiz.py` |
