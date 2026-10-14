@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 13/10/2026 22:44:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (806.7 MB). Acoes na janela: **1049**.
+**Medido em 13/10/2026 22:50:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (806.7 MB). Acoes na janela: **1048**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1058,4 +1058,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 10:53:05 | Bash | Watch saas_ui for 500s for 5 minutes after the deploy | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; bash "$S/o262/vigia_500.sh" 2026-10-13T13:52:38 300 2>&1 \| tail -40` |
 | 10:52:27 | Bash | Execute pouso (ii): merge raia-ui + deploy as one act | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; bash "$S/o262/pouso_ii_ui.sh" 2>&1 \| tail -60` |
 | 10:52:21 | Bash | Re-read the pre-scripted pouso (ii) | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cat "$S/o262/pouso_ii_ui.sh"` |
-| 10:47:15 | Bash | Prove the two RED host selos predate this commit | `cd /home/ronald/saas-hasner && echo "=== o commit nao tocou CORTES.md nem LEIS.md (prova de que os 2 selos sao ANTERIORES):"; git show --name-only --format='' 3bf5337e; echo "=== o leis_indice era vermelho antes? (os 5 cortes estao em CORTES.md desde antes deste commit):"; git log --oneline -3 --name-only -- app/docs/CORTES.md \| head -8` |
