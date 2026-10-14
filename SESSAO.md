@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 14/10/2026 05:20:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (806.7 MB). Acoes na janela: **312**.
+**Medido em 14/10/2026 05:25:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (806.7 MB). Acoes na janela: **301**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -311,14 +311,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 17:26:49 | Bash | Check key enumeration contracts and bloco progress | `echo "=== contrato que enumera chaves do carimbo" && grep -rn "fechamento_x_soma_dias_pagos\\|espelho_x_dia_pago" folha/tests/test_porta_do_export.py \| head; echo "=== quem le o carimbo (chaves)"; grep -rn "lavratura_congelada_na_exportada" --include=*.py --include=*.sh --include=*.html -l . 2>/dev/null \| head; echo "=== bloco"; tail -2 ../logs/sombra_pos_apply_badge_linha.out` |
 | 17:26:25 | Bash | Read the rest of regua_para to see the returned dict | `sed -n '300,350p' core/regua_cct.py` |
 | 17:26:22 | Bash | Read regua_cct public surface | `grep -n '^def \\|^REGUA\\|^PISO' core/regua_cct.py \| head -30; echo "=== regua_para"; grep -n 'def regua_para' -A 30 core/regua_cct.py \| head -45` |
-| 17:25:45 | Bash | Finish reading the lavra call and the regua reader | `sed -n '745,775p' ponto/services/fechamento.py; echo "=== get_motor_cct no fechamento (313)"; sed -n '305,322p' ponto/services/fechamento.py` |
-| 17:25:41 | Bash | Read the lavra call site | `sed -n '700,745p' ponto/services/fechamento.py` |
-| 17:25:14 | Bash | Find where adicional_noturno is computed | `grep -n "adicional_noturno" folha/export.py \| head -20` |
-| 17:24:49 | Bash | Read totais_da_folha, the badge | `grep -n 'def totais_da_folha' -A 60 relatorios/cartao_pela_celula.py \| head -75` |
-| 17:24:36 | Bash | Find where fech_do_colab originates | `grep -n 'fech_do_colab' folha/porta_export.py; echo "=== contexto"; sed -n '300,330p' folha/porta_export.py` |
-| 17:24:31 | Bash | Read how fech_do_colab is obtained and the regua in the lavra caller | `echo "=== 420-455 (como fech_do_colab nasce)" && sed -n '420,455p' folha/porta_export.py; echo; echo "=== (2) regua no caller da lavra" && grep -n 'regua_para\\|regua_cct\\|_aplicacao_vigente\\|regua\b' ponto/services/fechamento.py \| head -30` |
-| 17:24:26 | Bash | Check how medir gets the fechamento per colab | `echo "=== (1) como medir obtem o fechamento por colab" && grep -n 'recalcular_fechamento_mes\\|fechamento_lido\\|totais_da_folha\\|fech = \\|fech=\\|_medir_dia_pago' folha/porta_export.py \| head -30` |
-| 17:21:29 | Bash | Read the declared universe of the counters | `sed -n '455,512p' folha/porta_export.py; echo "=== 540-575"; sed -n '540,575p' folha/porta_export.py` |
-| 17:21:02 | Bash | Read dias_fora_do_dia_pago, the 7a testemunha | `sed -n '25,115p' folha/porta_export.py` |
-| 17:20:58 | Bash | Map porta_export.py | `grep -n 'espelho_x_dia_pago\\|def \\|universo_dos_contadores' folha/porta_export.py \| sed -n '1,80p'` |
-| 17:20:51 | Bash | Find the sibling counter implementation | `grep -rn 'fechamento_x_soma_dias_pagos' --include=*.py \| head -20` |
