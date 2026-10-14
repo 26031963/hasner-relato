@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 14/10/2026 19:01:20.**
+**Medido em 14/10/2026 19:06:43.**
 
 | | |
 |---|---|
@@ -35,22 +35,22 @@ RELATO, com a lista de nomes do banco como autoridade._
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **225.7 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **225.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **39.0 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **39.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
   - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **341.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **246.0 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **246.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **363.7 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **363.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -79,6 +79,7 @@ eee94960 [BUG-LINHA-X-BADGE] o rodape do TICKETS volta a dizer o push de verdade
  M app/docs/HANDOFF-SESSAO.md
  M app/docs/PROMPTS.md
  M app/docs/RELATO.md
+ M app/docs/TICKETS.md
  M bin/sonda_leitura.sh
 ?? app/GREEN
 ?? esteira.pausada
@@ -170,42 +171,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+● Enquanto a suite corre, pago a condição 2 da DINHEIRO-EM-COMPETENCIA-ABERTA: o arquivo de reversão por colaborador, lido de prod em leitura pura (assert duplo em
+  saas_hasner):
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+  Ran 4 shell commands
 
-  Ran 3 shell commands
-
-● Dois achados fortes no censo de leitores — leio o resto antes de afirmar:
+● Reversão gravada (595 + 607 fechamentos, 8 hashes da 09 exportada). Ajusto a posse e monto os textos do pouso:
 
   Ran 1 shell command
 
-● O leitor declara o próprio caso: alimentacao.py já tem contador para a janela invertida e nomeia o col788 30/09 com 113,86 min como resíduo da obra O65. Leio a
-  declaração inteira:
+● O achado da janela invertida já é lei escrita: alimentacao.py:28-33 declara a origem (entrada crua clipada ao marco → efetivo −960 min), o motor decide
+  minutos_trabalhados=0 e manda os minutos para minutos_fora_janela (L-093), e há contador. Então não nasce item novo — cito o que existe (LEI-AKITA 4):
 
   Ran 2 shell commands
 
-● O leitor que o advisor apontou persiste: fechamento.py:789-812 lavra dia_pago com versao='oraculo' a partir de rubricas_por_dia — fora dos 13 campos e fora do
-  TXT. Como a intercepção enumerou os períodos de forma exaustiva, o raio é fechado. Confiro o job do BACKLOG e corrijo o censo do docstring:
+● Monto a linha do TICKETS e a seção do RELATO (teto 25 linhas, L-116):
 
-  Ran 3 shell commands
-
-● Agora a linha no declarador do alimentacao.py — o caso que ele declara (col788 30/09, 113,86 min) é exatamente o que a cura remove na origem:
-
-● Updating the declarator comment and running ruff on the three changed files
-  ⎿  $ cd /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/o272_teste/green/app
+● Inserting the O272 TICKETS row and running the ticket ruler
+  ⎿  $ cd /home/ronald/saas-hasner/app
      python3 - <<'PY'
-     p='ponto/calculador/alimentacao.py'
-     s=open(p,encoding='utf-8').read()
-     velho = """ # rubrica. Fica declarado: 1 colaborador em 520 na competencia 10, e o caso e de…
+     p='docs/TICKETS.md'
+     s=open(p,encoding='utf-8').read().split('\n')
+     hdr=118-1; sep=119-1
+     assert s[hdr].startswith('| ID | frente'), s[hdr][:40]
+     assert s[sep].startswith('|----'), s[sep][:20]
+     cel = [
+     'O272',
+     'dinheiro (familia **turno/marcos**) -- ava…
 
-✻ Propagating… (1h 0m 7s · ↓ 157.9k tokens)
+✢ Compacting conversation… (1h 5m 30s · ↓ 170.0k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱ 81%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                           ✔ Update installed · Restart to update
+                                                                                                                                            0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                                         1h 3m 8s · ↓ 428.9k tokens
