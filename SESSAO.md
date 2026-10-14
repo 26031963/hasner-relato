@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 14/10/2026 05:30:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (806.7 MB). Acoes na janela: **289**.
+**Medido em 14/10/2026 05:36:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (806.7 MB). Acoes na janela: **279**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -289,13 +289,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 17:36:23 | Bash | Check motor stores the regua params as attributes | `grep -n 'self.regua_excedente\\|self.prorrogacao_noturna_pos5h\\|self.hora_reduzida_afastada\\|self.feriado_em_dobra\\|self.parametros *=' ponto/motor_calculo_v2.py \| head` |
 | 17:36:18 | Bash | Read rest of get_motor to see motor attributes | `sed -n '3160,3230p' ponto/motor_calculo_v2.py` |
 | 17:36:12 | Bash | Read get_motor signature | `grep -n 'def get_motor' -A 40 ponto/motor_calculo_v2.py \| head -70` |
-| 17:36:02 | Bash | Read regua_para and get_motor_cct | `sed -n '270,380p' core/regua_cct.py` |
-| 17:35:56 | Bash | Census of versao_motor/versao_dna readers and writers | `grep -rn 'versao_motor\\|versao_dna' --include=*.py . \| grep -v 'migrations/' \| head -20` |
-| 17:35:35 | Bash | Read DiaPago model and its docstring | `sed -n '271,362p' ponto/models.py` |
-| 17:34:42 | Bash | Read the sombra selo script | `cd /home/ronald/saas-hasner && cat logs/sombra/selo_linha_x_badge.py` |
-| 17:34:37 | Bash | Read the post-apply selo numbers | `cd /home/ronald/saas-hasner && sed -n '1,200p' logs/sombra_pos_apply_badge_linha.out \| grep -n 'rc_refazer\\|=== SELO\\|rc_selo\\|divergen\\|comp\\|noturnas\\|atraso\\|trabalhadas\\|TOTAL\\|col' \| head -60` |
-| 17:34:22 | Bash | Read the placar command and the key enumeration test | `cat relatorios/management/commands/selo_leitores_no_mesmo_numero.py; echo "=========="; sed -n '135,215p' folha/tests/test_porta_do_export.py` |
-| 17:34:16 | Bash | Find readers of the existing counters | `grep -rn 'espelho_x_dia_pago\\|fechamento_x_soma_dias_pagos' --include=*.py . \| grep -v 'porta_export.py' \| head -20` |
-| 17:34:08 | Bash | Find callers of porta_export.medir | `grep -rn 'porta_export import\\|porta_export\.' --include=*.py . \| grep -v '/tests/' \| head -20; echo "=== lavrar/medir def"; sed -n '540,620p' folha/porta_export.py` |
-| 17:33:49 | Bash | Read medir body first half | `sed -n '200,345p' folha/porta_export.py` |
-| 17:33:31 | Bash | Check sombra block progress and tree state | `cd /home/ronald/saas-hasner && tail -5 logs/sombra_pos_apply_badge_linha.out; echo "=== crons_em_curso"; ls logs/crons_em_curso/ 2>/dev/null \| head; echo "=== git"; git log --oneline -1; git status --porcelain \| head -20` |
