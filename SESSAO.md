@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 13/10/2026 21:13:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (806.7 MB). Acoes na janela: **1248**.
+**Medido em 13/10/2026 21:19:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (806.7 MB). Acoes na janela: **1239**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1249,12 +1249,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 09:20:18 | Bash | Census of juizes registry consumers | `grep -rn "fora_de_autoridade\\|juizes.PENDENTES\\|from core.juizes import\\|from core import juizes\\|SEM_JUIZ" --include=*.py . \| grep -v '^./core/juizes.py' \| sed 's/:.*import/: import/' \| sort -u \| head -40` |
 | 09:19:49 | Bash | Read TRAVA JUIZ-NOVO selo | `cd /home/ronald/saas-hasner && cat bin/tests/test_juiz_novo_tem_corte.sh` |
 | 09:19:39 | Bash | Write escala registry block | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/s-escala; cat > $S/bloco_escala.py.txt <<'BLOCO' # --------------------------------------------------------------------------- # ESCALA (S-ESCALA, 13/10). A FAMILIA NAO GANHA `JUIZES['escala']`, E ISSO E MEDICAO, NAO CAUTELA. # # A LEI DA PERGUNTA 1 EXISTE E E DELE, escrita antes de qualquer censo meu:  ...` |
-| 09:18:53 | Bash | Zona constants | `grep -n "^DINHEIRO\\|^TELA\\|^DOCUMENTO_LEGAL\\|^COBRANCA\\|^CADASTRO" core/juizes.py` |
-| 09:18:47 | Bash | Read JUIZES/SEM_JUIZ/_p definitions | `sed -n '120,150p;220,290p' core/juizes.py` |
-| 09:18:41 | Bash | Read batida block as model | `sed -n '960,1056p' core/juizes.py` |
-| 09:18:38 | Bash | Copy HEAD files and map top-level anchors | `cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/s-escala; mkdir -p $S/copia/core $S/copia/escala/tests; for f in core/juizes.py core/contratos_estruturais.py escala/models.py; do git show HEAD:app/$f > $S/copia/$f; done; ls -l $S/copia/core $S/copia/escala; cd app && grep -n "^PENDENTES_\\|^JUIZES\[\\|^SEM_JUIZ\[\\|^PEN ...` |
-| 09:18:28 | Bash | Re-verify orphan callers | `echo "--- vigente_de ---"; grep -rn "vigente_de" --include=*.py --include=*.html --include=*.js . \| grep -v '/migrations/'; echo "--- rascunho_de ---"; grep -rn "rascunho_de" --include=*.py --include=*.html --include=*.js . \| grep -v '/migrations/'; echo "--- fim ---"` |
-| 09:18:23 | Bash | Write desenho v2 and read orphan region | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/s-escala; cat > $S/desenho_v2.md <<'EOF' # S-ESCALA -- ('escala','um juiz por pergunta') [desenho v2, 13/10] Substitui o v1 (escrito antes do advisor e antes da sonda de DONO). Tres correcoes do v1: P1 nao e pergunta de LEI (a lei e DELE); P3 nao e pendente novo (e divida da celula/precedencia); "114 si ...` |
-| 09:17:13 | Bash | Read escala juiz cell | `sed -n '400,445p' core/contratos_estruturais.py` |
-| 09:17:08 | Bash | Find escala cells in contratos_estruturais | `grep -n "escala" core/contratos_estruturais.py \| head -40` |
-| 09:16:40 | Bash | Wait for sonda v2 verdict | `cd /home/ronald/saas-hasner && until grep -q 'JSON_DONO\\|Traceback\\|rror' logs/s_escala/dono_v2_20261013.out 2>/dev/null; do sleep 5; done; date +%H:%M:%S; tail -c 3000 logs/s_escala/dono_v2_20261013.out` |
