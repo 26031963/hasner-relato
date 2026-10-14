@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 13/10/2026 21:02:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (806.5 MB). Acoes na janela: **1271**.
+**Medido em 13/10/2026 21:08:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (806.7 MB). Acoes na janela: **1259**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1269,15 +1269,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 09:09:00 | Bash | Re-read vinculo_do_dia | `sed -n '140,200p' escala/alimentacao.py` |
 | 09:08:40 | Bash | Census readers of escala_geradora | `grep -rn "escala_geradora" --include=*.py . \| grep -v __pycache__ \| grep -v "/tests/" \| grep -v "/migrations/"` |
 | 09:08:02 | Bash | Grep O69 in docs | `grep -rn "O69" docs/*.md docs/*.json 2>/dev/null \| head -20` |
-| 09:07:57 | Bash | Grep geradora in CORTES.json, LEIS, LAPIDES | `grep -n "geradora\\|O69\\|vinculo_do_dia\\|vinculo do dia" docs/CORTES.json \| head -30; echo "=== LEIS/LAPIDES ==="; grep -n "geradora" docs/LEIS.md docs/LAPIDES.md \| head -30` |
-| 09:07:52 | Bash | Locate CORTES files | `cd /home/ronald/saas-hasner && ls app/docs/CORTES* ; find . -name "CORTES.json" -not -path "*/node_modules/*" 2>/dev/null \| head` |
-| 09:07:47 | Bash | Grep O69 and geradora in CORTES | `cd /home/ronald/saas-hasner && grep -n "O69\\|geradora" app/docs/CORTES.md \| head -40; echo "=== CORTES.json ==="; grep -n "O69\\|geradora\\|vinculo_do_dia" bin/CORTES.json app/docs/CORTES.json 2>/dev/null \| head -20` |
-| 09:04:48 | Bash | Write design note | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/s-escala; mkdir -p $S; cat > $S/desenho_v1.md <<'EOF' # S-ESCALA -- um juiz por pergunta: DESENHO v1 (13/10, antes do patch) ## DIFF de frota (feito, logs/s_escala/diff_juiz_vinculo_20261013T0854.out) comp10: 23910 dia-colab, vinculo_difere 1256 (47 colabs), A_nao_acha_B_acha 1214 (== B_fora_da_vigencia ...` |
-| 09:04:12 | Bash | Read aplicar | `sed -n '652,730p' escala/services/propositor.py` |
-| 09:04:06 | Bash | Read _piso_de_aplicacao | `sed -n '549,565p' escala/services/propositor.py; echo "=== quem chama _piso_de_aplicacao ==="; grep -rn "_piso_de_aplicacao" --include=*.py . \| grep -v __pycache__` |
-| 09:03:56 | Bash | Read propositor head | `sed -n '1,40p' escala/services/propositor.py; echo "=== defs ==="; grep -n "^def \\|^ def \\|^\"\"\"" escala/services/propositor.py \| head -40` |
-| 09:03:33 | Bash | Read _cobre and callers | `sed -n '355,400p' escala/folgas.py; echo "=== quem chama vinculo_que_cobre/_cobre ==="; grep -rn "vinculo_que_cobre\\|_cobre(" --include=*.py . \| grep -v __pycache__ \| grep -v "/tests/"` |
-| 09:03:12 | Bash | Read fase_conflitante | `sed -n '1,80p' escala/services/fase_conflitante.py` |
-| 09:03:00 | Bash | Measure P3 authority | `echo "=== _tem_foto_mes ==="; grep -rn "_tem_foto_mes" --include=*.py . \| grep -v __pycache__; echo; echo "=== eh_dia_trabalho_calculado chamadores ==="; grep -rn "eh_dia_trabalho_calculado" --include=*.py . \| grep -v __pycache__; echo; echo "=== sed 1223,1275 models ==="; sed -n '1223,1275p' escala/models.py` |
-| 09:02:44 | Bash | Read batida block | `sed -n '960,1055p' core/juizes.py` |
-| 09:02:39 | Bash | Read JUIZES head and SEM_JUIZ | `sed -n '135,160p' core/juizes.py && echo ---- && sed -n '227,260p' core/juizes.py` |
