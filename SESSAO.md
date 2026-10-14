@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 14/10/2026 05:25:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (806.7 MB). Acoes na janela: **301**.
+**Medido em 14/10/2026 05:30:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (806.7 MB). Acoes na janela: **289**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -299,15 +299,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 17:34:08 | Bash | Find callers of porta_export.medir | `grep -rn 'porta_export import\\|porta_export\.' --include=*.py . \| grep -v '/tests/' \| head -20; echo "=== lavrar/medir def"; sed -n '540,620p' folha/porta_export.py` |
 | 17:33:49 | Bash | Read medir body first half | `sed -n '200,345p' folha/porta_export.py` |
 | 17:33:31 | Bash | Check sombra block progress and tree state | `cd /home/ronald/saas-hasner && tail -5 logs/sombra_pos_apply_badge_linha.out; echo "=== crons_em_curso"; ls logs/crons_em_curso/ 2>/dev/null \| head; echo "=== git"; git log --oneline -1; git status --porcelain \| head -20` |
-| 17:28:42 | Bash | Find the topo x coluna comparison | `grep -n 'dif_topo' folha/porta_export.py \| head; echo "==="; grep -n 'dif_topo.append' -B 25 folha/porta_export.py \| sed -n '1,40p'` |
-| 17:28:36 | Bash | Read what topo_x_coluna compares | `grep -rn "topo_x_coluna" --include=*.py folha/porta_export.py \| head -5; echo "=== o que topo_x_coluna compara"; grep -n "topo_x_coluna" -B 6 -A 18 folha/porta_export.py \| sed -n '1,60p'` |
-| 17:28:31 | Bash | Find par 5 topo x soma das linhas | `grep -n "topo" core/placar_estrutural.py \| head -20` |
-| 17:28:18 | Bash | Read R4 declaration structure | `sed -n '216,250p' core/placar_estrutural.py` |
-| 17:28:03 | Bash | Read placar_estrutural around the counter mention | `sed -n '360,400p' core/placar_estrutural.py; echo "=== estrutura do placar"; grep -n "^def \\|^R[0-9]\\|'R[0-9]'" core/placar_estrutural.py \| head -30` |
-| 17:27:56 | Bash | Find how the counters reach the HAIKU placar | `grep -rn "espelho_x_dia_pago\\|fechamento_x_soma_dias_pagos" --include=*.py core/ inteligencia/ relatorios/ \| grep -v tests \| head -15; echo "=== placar files"; ls core/placar*.py core/arquitetura_leitura.py 2>/dev/null` |
-| 17:27:26 | Bash | Read aplicar_nos_totais and divergencia | `sed -n '201,258p' relatorios/cartao_pela_celula.py` |
-| 17:27:16 | Bash | Map cartao_pela_celula and read _totais_da_lavratura | `grep -n '^def \\|^ return {' relatorios/cartao_pela_celula.py \| head -30; echo "=== _totais_da_lavratura corpo"; sed -n '140,185p' relatorios/cartao_pela_celula.py` |
-| 17:27:06 | Bash | Read the remaining badge keys | `sed -n '104,140p' relatorios/cartao_pela_celula.py` |
-| 17:26:49 | Bash | Check key enumeration contracts and bloco progress | `echo "=== contrato que enumera chaves do carimbo" && grep -rn "fechamento_x_soma_dias_pagos\\|espelho_x_dia_pago" folha/tests/test_porta_do_export.py \| head; echo "=== quem le o carimbo (chaves)"; grep -rn "lavratura_congelada_na_exportada" --include=*.py --include=*.sh --include=*.html -l . 2>/dev/null \| head; echo "=== bloco"; tail -2 ../logs/sombra_pos_apply_badge_linha.out` |
-| 17:26:25 | Bash | Read the rest of regua_para to see the returned dict | `sed -n '300,350p' core/regua_cct.py` |
-| 17:26:22 | Bash | Read regua_cct public surface | `grep -n '^def \\|^REGUA\\|^PISO' core/regua_cct.py \| head -30; echo "=== regua_para"; grep -n 'def regua_para' -A 30 core/regua_cct.py \| head -45` |
