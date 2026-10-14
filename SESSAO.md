@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 13/10/2026 23:43:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (806.7 MB). Acoes na janela: **967**.
+**Medido em 13/10/2026 23:48:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (806.7 MB). Acoes na janela: **965**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -975,5 +975,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 11:52:44 | Bash | Find which test modules exercise each migrated site | `for n in encerrar_perguntas_com_fato competencia_trancada _ja_perguntou disputa_emissao reconciliar_grade montar_previa _material disputa_viva_do_chamado fio_vivo pergunta_viva; do echo "===== $n"; grep -rln "$n" --include='test_*.py' . 2>/dev/null \| sed 's#^\./##' \| sort; done` |
 | 11:51:14 | Bash | Create a pristine copy and run the twelve selos there as baseline | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cd /home/ronald/saas-hasner && rm -rf "$S/o261base" && mkdir -p "$S/o261base" && git archive 914fba40 \| tar -x -C "$S/o261base" && mkdir -p "$S/o261base/app/logs" "$S/o261base/app/media" && echo "copia PRISTINA de 914fba40 criada"; cd "$S/o261base" && echo "--- os 12 extras na copia PRISTINA (sem as m ...` |
 | 11:51:09 | Bash | Read the failure text of four selos on the copy | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cd "$S/o261d" && for t in test_import_tardio_contra_o_ar test_selo_nao_nasce_vazio test_handoff_sessao test_hook_nao_e_copia; do echo "===== $t"; bash bin/tests/$t.sh 2>&1 \| tail -14; done` |
-| 11:46:31 | Bash | Run the host selo folder on the live tree as baseline | `cd /home/ronald/saas-hasner && echo "--- selo pasta NA ARVORE VIVA (baseline, rc por selo):"; for t in bin/tests/test_*.sh; do out=$(bash "$t" 2>&1); rc=$?; [ $rc -ne 0 ] && echo "RC=$rc $t"; done; echo "--- fim"` |
-| 11:46:30 | Bash | Run the host selo folder on the copy and list the failures | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cd "$S/o261d" && echo "copia: $PWD"; ls bin/tests/*.sh \| wc -l; echo "--- selo pasta NA COPIA (rc por selo):"; for t in bin/tests/test_*.sh; do out=$(bash "$t" 2>&1); rc=$?; [ $rc -ne 0 ] && echo "RC=$rc $t"; done; echo "--- fim"` |
