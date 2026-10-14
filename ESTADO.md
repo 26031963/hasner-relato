@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:402 AFIRMA ato sem PROVA ao lado -- ## MARCO 13/10 14:3x — pouso da **`wt-ui`**: o link ORIGINAL de fechamento do menu do admin passa a abrir o **RETRATO** (`[O48]` passo 6, av
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:263 AFIRMA ato sem PROVA ao lado -- - **POUSO FEITO**: suite CHEIA sobre a arvore certificada **`OK (skipped=42)` / `Ran 10920 tests in 1470.036s` / rc 0**, 0 linha `FAIL|ERROR
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,11 +10,11 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 14/10/2026 20:06:02.**
+**Medido em 14/10/2026 20:11:32.**
 
 | | |
 |---|---|
-| `HEAD` local | `375a5c1b [O272] o intervalo conta so a parte DENTRO da janela: um recorte, antes do carimbo, nos tres calcular_periodo` |
+| `HEAD` local | `b71b3a79 [O272] o intervalo conta so a parte DENTRO da janela: um recorte, antes do carimbo, nos tres calcular_periodo` |
 | `origin/main` | `3d644aa8 [O263-FT] o derivado do marco: o placar do topo do TICKETS volta a bater com o mundo e os alarmes do vigia entram` |
 | commits a subir (`ahead`) | **1** |
 
@@ -29,28 +29,28 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2458.3 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2458.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **226.8 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **226.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **40.0 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **40.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **342.9 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **343.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **247.1 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **247.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **364.8 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **364.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -64,7 +64,7 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
-375a5c1b [O272] o intervalo conta so a parte DENTRO da janela: um recorte, antes do carimbo, nos tres calcular_periodo
+b71b3a79 [O272] o intervalo conta so a parte DENTRO da janela: um recorte, antes do carimbo, nos tres calcular_periodo
 3d644aa8 [O263-FT] o derivado do marco: o placar do topo do TICKETS volta a bater com o mundo e os alarmes do vigia entram
 8c851906 [O263-FT] a folga trabalhada volta a ser medida pelo relogio: a janela nao recorta um dia que nao tem marco
 eee94960 [BUG-LINHA-X-BADGE] o rodape do TICKETS volta a dizer o push de verdade (derivado de bin/tickets_rodape.sh), e o sitio da O263-FT fica registrado onde a obra o espera
@@ -166,38 +166,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+● Commit do marco: b71b3a79. Antes do push (um por marco, e o pre-push roda o arsenal de novo), consulto:
 
-  Ran 4 shell commands
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-● Minha sonda errou a chave — 595 de 595 como "NOVO" é artefato, não fato. Olho a estrutura real do snapshot:
-
-  Ran 2 shell commands
-
-● Snapshot é indexado por colaborador_id (27–991, igual ao vivo; pk vive em 5033–5677). Corrijo a chave e o e_vigente:
+● Os três são justos. Corrijo — começando pelo que bloqueia: o arquivo citado como PROVA é um log de crash.
 
   Ran 1 shell command
 
-● Dois fatos a apurar: colabs fora do escopo escritos às 20:01:53/56, e o snapshot das 19:02 pode já estar velho (há movers de 19:00 e 20:00). Corrijo a formatação
-  e peço o quadro inteiro:
+● O snapshot canônico da casa já documenta exatamente esse fenômeno — leio antes de chamar minha observação de lição nova (LEI-AKITA 4):
 
   Ran 1 shell command
 
-● Quadro legível. Antes de escrever a PROVA, duas medições a fechar — e_vigente (3 "mudou" com hash idêntico é sonda minha, não fato) e quem escreve comp 10 a
-  noite toda:
+● Confirmado, e é mais do que o advisor supôs: o CAMPOS canônico da casa (aplicar_09_corte_b.py:67) tem minutos_realizados e mais 10 campos que meu snapshot não
+  capturou — meu snapshot criou uma segunda lista de "o que a reversão cobre". Curo os três pontos:
 
   Ran 2 shell commands
 
-● e_vigente é @property — então os 3 são fato, não artefato: hash idêntico mas a vigência mudou. Vou ver o que apareceu:
+● linhas=1 idêntico nos três não é medição — é provável erro do --since. Confiro:
 
-● Measuring the export vigência divergence
+  Ran 2 shell commands
+
+● Logs fluem; o idioma da casa é duração, não hora de relógio, e o 5xx tem padrão próprio (bin/selo_paginas_500.sh:16). Uso o selo da casa em vez de reinventar:
+
+● Running the prod smoke with the house seal and a duration window · 3s
   ⎿  $ cd /home/ronald/saas-hasner; SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
-     cat > "$SP/o272_vigencia.py" <<'PY'
-     # SO LE. Os 3 pks com vigencia divergente do snapshot: hash IGUAL, vigencia mudou. A pergunta e se
-     # nasceu TXT novo para a mesma (empr…
+     # A JANELA SE DIZ EM DURACAO, nao em hora de relogio: `--since 20:01` e ERRO do docker ("invalid
+     # value"), e a saida de erro conta UMA linha -- sonda que nao conclui com …
 
-✢ Propagating… (2h 4m 50s · ↓ 307.2k tokens · thinking)
+✢ Propagating… (2h 10m 20s · ↓ 321.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                           ✔ Update installed · Restart to update
+                                                                                                                                            2% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
