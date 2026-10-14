@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 14/10/2026 03:18:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (806.7 MB). Acoes na janela: **527**.
+**Medido em 14/10/2026 03:23:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (806.7 MB). Acoes na janela: **522**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -532,8 +532,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 15:26:17 | Bash | Find carimbar and the skip logic | `cd /home/ronald/saas-hasner/app; echo "=== carimbar"; grep -n "^def carimbar\\|^ def carimbar\\|def carimbar" ponto/services/cartorio.py; echo "--- 700-760 (o pulo e o carimbo)"; sed -n '700,760p' ponto/services/cartorio.py` |
 | 15:25:48 | Bash | Read REGRA_VERSOES, versao_para and carimbar | `cd /home/ronald/saas-hasner/app; echo "=== REGRA_VERSOES e versao_para (cartorio 85-170)"; sed -n '85,100p;145,195p' ponto/services/cartorio.py; echo; echo "=== o que carimbar faz com impressao diferente"; grep -n "def carimbar" -A 45 ponto/services/cartorio.py \| head -60` |
 | 15:25:31 | Bash | Census of impressao consumers and the lavra site | `cd /home/ronald/saas-hasner/app; echo "=== quem consome impressao_insumos / o campo impressao"; grep -rn "impressao_insumos\\|impressao=" --include='*.py' . \| grep -v '/tests/' \| head -30; echo; echo "=== fechamento.py 700-770 (o sitio que lavra)"; sed -n '700,775p' ponto/services/fechamento.py` |
-| 15:19:56 | Bash | Census of lavrar callers and its body | `cd /home/ronald/saas-hasner/app; echo "=== chamadores de lavrar"; grep -rn "dia_pago import\\|dia_pago\.lavrar\\|from ponto.services.dia_pago" --include='*.py' . \| grep -v '/tests/' \| head -20; echo; echo "=== corpo de lavrar (135-200)"; sed -n '135,200p' ponto/services/dia_pago.py` |
-| 15:19:30 | Bash | Read REGRA_VERSOES and dia_pago's rule awareness | `cd /home/ronald/saas-hasner/app; echo "=== REGRA_VERSOES declarado"; grep -n "REGRA_VERSOES" -A 6 ponto/services/cartorio.py \| head -20; echo; echo "=== dia_pago: regua / impressao / lavrar"; grep -n "def lavrar\\|impressao\\|regua_para\\|regua_cct\\|versao_para" ponto/services/dia_pago.py \| head -30` |
-| 15:19:22 | Bash | Read versao_para, the rule-version authority | `cd /home/ronald/saas-hasner/app; echo "=== versao_para"; grep -rn "def versao_para" -A 30 --include='*.py' . \| head -45` |
-| 15:19:08 | Bash | Read impressao_insumos | `cd /home/ronald/saas-hasner/app; grep -n "def impressao_insumos" -A 45 ponto/services/cartorio.py \| head -60` |
-| 15:19:03 | Bash | Confirm the BACKLOG edit landed | `cd /home/ronald/saas-hasner/app; ls -la docs/BACKLOG.md; grep -c "BUG-LINHA-X-BADGE" docs/BACKLOG.md; grep -n "ORDEM-VIVA-TOPO:" docs/BACKLOG.md \| head -2` |
