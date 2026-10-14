@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 13/10/2026 23:48:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (806.7 MB). Acoes na janela: **965**.
+**Medido em 13/10/2026 23:54:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (806.7 MB). Acoes na janela: **961**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -971,7 +971,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 11:56:02 | Bash | Read both failing selos in full | `echo "===== chamados/tests/test_pergunta_viva_no_guarda.py"; cat -n chamados/tests/test_pergunta_viva_no_guarda.py; echo; echo "===== ponto/tests/test_cq_c6.py"; cat -n ponto/tests/test_cq_c6.py` |
 | 11:56:01 | Bash | Census every test asserting the literal source text | `echo "=== assercoes com o LITERAL 'pergunta_viva(' em teste (fonte-como-texto):"; grep -rn "pergunta_viva(" --include='test_*.py' . \| grep -E "assert(In\|NotIn\|True\|False).*['\"]pergunta_viva\(\|['\"]pergunta_viva\(" \| sed 's#^\./##'; echo; echo "=== e o literal 'any(pergunta_viva':"; grep -rn "any(pergunta_viva" --include='test_*.py' . \| sed 's#^\./##'` |
 | 11:55:43 | Bash | Read the two failures in detail | `cd /home/ronald/saas-hasner && grep -nE '^(FAIL\|ERROR):' logs/o261b/vizinhos_o261.log; echo "===== detalhe:"; sed -n '/^=\{20,\}$/,$p' logs/o261b/vizinhos_o261.log \| head -90` |
-| 11:53:12 | Bash | Run the focused neighbor batch against the copy | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad V="chamados.tests.test_o261_fio_tem_uma_porta chamados.tests.test_contract_juiz_chamado chamados.tests.test_disputa_s127 chamados.tests.test_pergunta_viva_no_guarda chamados.tests.test_contract_leitores_vitalidade chamados.tests.test_porta_veredito_pergunta chamados.tests.test_porta_disputa_emissao cham ...` |
-| 11:52:44 | Bash | Find which test modules exercise each migrated site | `for n in encerrar_perguntas_com_fato competencia_trancada _ja_perguntou disputa_emissao reconciliar_grade montar_previa _material disputa_viva_do_chamado fio_vivo pergunta_viva; do echo "===== $n"; grep -rln "$n" --include='test_*.py' . 2>/dev/null \| sed 's#^\./##' \| sort; done` |
-| 11:51:14 | Bash | Create a pristine copy and run the twelve selos there as baseline | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cd /home/ronald/saas-hasner && rm -rf "$S/o261base" && mkdir -p "$S/o261base" && git archive 914fba40 \| tar -x -C "$S/o261base" && mkdir -p "$S/o261base/app/logs" "$S/o261base/app/media" && echo "copia PRISTINA de 914fba40 criada"; cd "$S/o261base" && echo "--- os 12 extras na copia PRISTINA (sem as m ...` |
-| 11:51:09 | Bash | Read the failure text of four selos on the copy | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cd "$S/o261d" && for t in test_import_tardio_contra_o_ar test_selo_nao_nasce_vazio test_handoff_sessao test_hook_nao_e_copia; do echo "===== $t"; bash bin/tests/$t.sh 2>&1 \| tail -14; done` |
