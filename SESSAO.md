@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 14/10/2026 02:50:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (806.7 MB). Acoes na janela: **603**.
+**Medido em 14/10/2026 02:56:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (806.7 MB). Acoes na janela: **585**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -595,21 +595,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 14:56:15 | Bash | Read PROMPTS.md format | `cd /home/ronald/saas-hasner/app; head -14 docs/PROMPTS.md; echo "=== tail"; tail -6 docs/PROMPTS.md` |
 | 14:56:10 | Bash | Read top of RELATO | `cd /home/ronald/saas-hasner/app; sed -n '1,40p' docs/RELATO.md` |
 | 14:56:04 | Bash | Suite veredito check | `cd /home/ronald/saas-hasner; tail -c 300 logs/o263/suite_full_o263b.log; echo; echo "--- veredito:"; grep -E '^(OK\|FAILED)($\| \()' logs/o263/suite_full_o263b.log \| tail -1; grep -E '^Ran [0-9]+ test' logs/o263/suite_full_o263b.log \| tail -1; grep -n 'rc_PROCESSO' logs/o263/suite_full_o263b.log` |
-| 14:55:54 | Bash | Which vinculo was live on the feriado | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cat > $S/censo_vinculo_no_feriado.py <<'PY' # READ-ONLY: o vinculo VIGENTE no dia do feriado dos colabs que receberam a dobra. # Sem nome, sem CPF, sem reais. import datetime from django.db import connection from escala.models import EscalaColaborador print('banco =', connection.settings_dict['NAME'])  ...` |
-| 14:55:18 | Bash | Rerun census with correct porta signature | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; python3 - $S/censo_intermitente_feriado.py <<'PY' import sys p = sys.argv[1] s = open(p).read() old = """ bs = batidas_apuraveis(colaborador_id__in=COLABS, data_hora__gte=datetime.datetime.combine(ini, datetime.time(0, 0)), data_hora__lt=datetime.datetime.combine(fim + datetime.timedelta(days=1), datet ...` |
-| 14:55:05 | Bash | Read batidas_apuraveis signature | `cd /home/ronald/saas-hasner/app; grep -n "def batidas_apuraveis" -A 30 ponto/turnos.py \| head -45` |
-| 14:54:58 | Bash | Census read-only: intermitente x feriado | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; mkdir -p $S; cat > $S/censo_intermitente_feriado.py <<'PY' # CENSO READ-ONLY -- intermitente x feriado (corte Ronald 13/10, pergunta de LEI). # Nenhum nome, nenhum CPF, nenhum valor em reais. So colXXX, contagem e horas. import datetime from django.db import connection from django.utils import timezone ...` |
-| 14:54:27 | Bash | Read EscalaColaborador fields | `cd /home/ronald/saas-hasner/app; sed -n '871,915p' escala/models.py` |
-| 14:54:19 | Bash | Read FechamentoMensal and Feriado | `cd /home/ronald/saas-hasner/app; sed -n '366,440p' ponto/models.py; echo "=== core.Feriado"; sed -n '5,40p' core/models.py` |
-| 14:54:16 | Bash | Locate FechamentoMensal and Feriado models | `cd /home/ronald/saas-hasner/app; grep -rn "class FechamentoMensal" --include=*.py . ; echo "==="; grep -rn "class Feriado" --include=*.py . \| head` |
-| 14:54:12 | Bash | FechamentoMensal fields | `cd /home/ronald/saas-hasner/app; grep -n "class FechamentoMensal" -A 70 folha/models.py \| grep -n "= models\." \| head -50` |
-| 14:54:04 | Bash | Find feriado fields in FechamentoMensal | `cd /home/ronald/saas-hasner/app; grep -n "feriado" folha/models.py \| head -30; echo "=== ResultadoMes 252"; sed -n '248,256p' ponto/motor_calculo_v2.py` |
-| 14:53:56 | Bash | Read is_feriado and __init__ | `cd /home/ronald/saas-hasner/app; sed -n '28,48p' ponto/motor_calculo_v2.py; echo "=== 660-680"; sed -n '660,680p' ponto/motor_calculo_v2.py` |
-| 14:53:43 | Bash | Read Motor12x36.calcular_periodo | `cd /home/ronald/saas-hasner/app; sed -n '2024,2135p' ponto/motor_calculo_v2.py` |
-| 14:53:38 | Bash | Map classes and calcular_periodo | `cd /home/ronald/saas-hasner/app; grep -n "^class \\|^ def calcular_periodo" ponto/motor_calculo_v2.py` |
-| 14:53:33 | Bash | Census of feriado call sites | `cd /home/ronald/saas-hasner/app; grep -n "_feriado_dobra_no_dia\\|self.feriados\\|is_feriado\\|minutos_extra_100_feriado" ponto/motor_calculo_v2.py` |
-| 14:53:26 | Bash | Read get_motor ciclo resolution | `cd /home/ronald/saas-hasner/app; sed -n '3060,3140p' ponto/motor_calculo_v2.py` |
-| 14:53:20 | Bash | Read _feriado_dobra_no_dia and eh_feriado | `cd /home/ronald/saas-hasner/app; sed -n '780,840p' ponto/motor_calculo_v2.py` |
-| 14:53:10 | Bash | Find tipo_base field | `cd /home/ronald/saas-hasner/app; grep -n "tipo_base\\|tipo_ciclo" escala/models.py \| head -40; echo "=== TipoEscala class"; grep -n "^class " escala/models.py \| head -30` |
-| 14:53:04 | Bash | Read sonda_leitura.sh | `cd /home/ronald/saas-hasner; sed -n '1,80p' bin/sonda_leitura.sh` |
-| 14:52:57 | Bash | Check suite progress | `cd /home/ronald/saas-hasner; tail -c 600 logs/o263/suite_full_o263b.log; echo "---"; grep -cE '^(OK\|FAILED)($\| \()' logs/o263/suite_full_o263b.log 2>/dev/null; echo "rc_grep=$?"` |
