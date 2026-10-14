@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 14/10/2026 00:05:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (806.7 MB). Acoes na janela: **935**.
+**Medido em 14/10/2026 00:10:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (806.7 MB). Acoes na janela: **932**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -942,6 +942,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 12:15:12 | Bash | Find the admin menu link and the retrato url names | `echo "=== base.html: linhas com fechamento:"; grep -n "fechamento\\|exportar" templates/base.html \| head -20; echo; echo "=== urls de folha com retrato/exportar:"; grep -rn "retrato\\|exportar" folha/urls.py \| head -20` |
 | 12:15:05 | Bash | List worktrees and check the wt-ui raia state | `cd /home/ronald/saas-hasner && echo "=== worktrees:"; git worktree list; echo; echo "=== status wt-ui:"; git -C wt-ui status --porcelain 2>&1 \| head; echo "rev wt-ui: $(git -C wt-ui rev-parse --short HEAD 2>&1) \| branch: $(git -C wt-ui rev-parse --abbrev-ref HEAD 2>&1)"; echo "main: $(git rev-parse --short HEAD)"` |
 | 12:15:03 | Bash | Check suite progress and find the admin menu fechamento link | `echo "=== progresso da suite:"; tail -3 /home/ronald/saas-hasner/logs/o261b/suite_o261_item3.log 2>/dev/null; wc -l /home/ronald/saas-hasner/logs/o261b/suite_o261_item3.log 2>/dev/null; echo; echo "=== link de fechamento no menu do admin:"; grep -rn "fechamento" templates/ --include=*.html -l \| head -20` |
-| 12:09:25 | Bash | Read the BACKLOG OBRAS block format | `echo "=== bloco OBRAS do BACKLOG, cabeca e as 2 primeiras obras:"; sed -n "/^## OBRAS/,+28p" docs/BACKLOG.md; echo "=== e a celula da O256/O261:"; grep -n "^\| O25[0-9]\\|^\| O26[0-9]" docs/BACKLOG.md \| head` |
-| 12:09:23 | Bash | Read the PROMPTS tail and check docs/JUIZES.md | `echo "=== PROMPTS.md, as 12 ultimas linhas:"; tail -12 docs/PROMPTS.md; echo; echo "=== docs/JUIZES.md existe?"; ls -la docs/JUIZES.md 2>&1 \| head -2; head -14 docs/JUIZES.md 2>/dev/null` |
-| 12:08:49 | Bash | Check who cross-checks docs/JUIZES.md and the generator imports | `cd /home/ronald/saas-hasner && echo "=== quem cruza docs/JUIZES.md com core/juizes.py:"; grep -rn "JUIZES.md" bin/tests app/*/tests 2>/dev/null; echo "(fim)"; echo; echo "=== JUIZES.md: tem linha por chave? as 3 ultimas da familia chamado:"; grep -n "competencia_do_chamado\\|pergunta_viva\\|fio_vivo" app/docs/JUIZES.md \| head; echo; echo "=== gerar_mapa_juizes.py importa collections?"; grep -n "^ ...` |
