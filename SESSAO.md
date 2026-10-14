@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 14/10/2026 07:45:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (806.7 MB). Acoes na janela: **146**.
+**Medido em 14/10/2026 07:50:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (806.7 MB). Acoes na janela: **144**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -154,5 +154,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 19:56:37 | Bash | Find who answers the day marks | `cd /home/ronald/saas-hasner/app; echo "=== quem e _marcos_do_dia_fn ==="; grep -n '_marcos_do_dia_fn' ponto/motor_calculo_v2.py \| head; echo; echo "=== def marcos_do_dia (escala) ==="; grep -rn 'def marcos_do_dia' escala/ \| head` |
 | 19:56:23 | Bash | Read the folga classification and the juiz it calls | `cd /home/ronald/saas-hasner/app; echo "=== 1885,1932 (classificacao FT e o juiz) ==="; sed -n '1885,1932p' ponto/motor_calculo_v2.py; echo; echo "=== _folga_pelo_dia_previsto: def ==="; grep -n '_folga_pelo_dia_previsto\\|_eh_dia_trabalho_fn\\|eh_dia_trabalho' ponto/motor_calculo_v2.py \| head -20` |
 | 19:56:12 | Bash | Read the window function that the cure belongs in | `cd /home/ronald/saas-hasner/app; echo "=== _janela_do_dia (1279) ==="; sed -n '1279,1360p' ponto/motor_calculo_v2.py` |
-| 19:45:57 | Bash | Retry the push and read its verdict | `cd /home/ronald/saas-hasner; rm -f logs/push_13-10_20h2.out; nohup bash -c 'git push origin main > logs/push_13-10_20h2.out 2>&1; echo "push rc=$?" >> logs/push_13-10_20h2.out' >/dev/null 2>&1 & echo lancado; until [ -f logs/push_13-10_20h2.out ] && grep -q 'push rc=' logs/push_13-10_20h2.out; do :; done; echo "=== cauda ==="; tail -6 logs/push_13-10_20h2.out; echo "=== RED/ALARME no log ==="; gre ...` |
-| 19:45:51 | Bash | Record the second cause and fold it into the same commit | `cd /home/ronald/saas-hasner; python3 - <<'PY' p='app/docs/RELATO.md'; s=open(p,encoding='utf-8').read() anc='pelo escritor que o proprio selo nomeia (`bin/tickets_rodape.sh --escrever`, derivado) e re-tentado.\n' assert s.count(anc)==1 add=('Segunda recusa, outra causa e tambem UMA linha: `test_lei_protege_sitio` RED -- o range toca\n' '`ponto/services/fechamento.py::recalcular_fechamento_mes`, si ...` |
