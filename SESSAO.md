@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 14/10/2026 07:13:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (806.7 MB). Acoes na janela: **179**.
+**Medido em 14/10/2026 07:18:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (806.7 MB). Acoes na janela: **177**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -187,5 +187,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 19:24:51 | Bash | Wait for the sombra counter to reach comp 10 | `cd /home/ronald/saas-hasner; until grep -qE "comp10 \|Error\|Traceback" logs/parteB_sombra.out; do sleep 45; done; date +%H:%M; grep -E "comp(09\|10) \|Error" logs/parteB_sombra.out \| tail -8` |
 | 19:24:38 | Bash | Esmeril: confirm every new function has a production caller and nothing was orphaned | `cd /home/ronald/saas-hasner/app; for f in impressao_da_regua linha_x_badge regua_das_linhas PARES_LINHA_X_BADGE; do printf "%-22s chamadores=%s\n" $f "$(grep -rn "$f" --include=*.py . \| grep -v "def $f\\|^./folha/tests/\\|$f = " \| wc -l)"; done; echo "--- orfao deixado pela parte B (L-111):"; grep -rn "def soma_da_competencia" --include=*.py . \| head -1 \| cut -c1-70; cd /home/ronald/saas-hasne ...` |
 | 19:24:20 | Bash | Check the sombra run's progress | `cd /home/ronald/saas-hasner; wc -l logs/parteB_sombra.out; tail -3 logs/parteB_sombra.out \| cut -c1-160` |
-| 19:14:16 | Bash | Wait for the sombra counter output | `cd /home/ronald/saas-hasner; until grep -qE "comp10\|Error\|Traceback" logs/parteB_sombra.out; do sleep 30; done; grep -E "comp(09\|10)\|Error" logs/parteB_sombra.out \| tail -8` |
-| 19:13:57 | Bash | Log the correction and fix O270's universe in the BACKLOG | `cd /home/ronald/saas-hasner/app; python3 - <<'PY' p='docs/PROMPTS.md'; s=open(p,encoding='utf-8').read() anc='\| 13/10 ~19:1x \| **aval** (`INTRA-4H-A-6H-INDENIZA`' i=s.index(anc); j=s.index('\n',i)+1 row=('\| 13/10 ~19:2x \| **aval** (`INTRA-4H-A-6H-NUMERO-CORRIGIDO`, CORRIGE o numero do de 19:1x; a REGRA nao muda) \| ' '*"aval Ronald: CORRIGE o numero do aval da faixa 4h-6h (o de 19:0x): medido  ...` |
