@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:387 AFIRMA ato sem PROVA ao lado -- ## MARCO 13/10 14:3x — pouso da **`wt-ui`**: o link ORIGINAL de fechamento do menu do admin passa a abrir o **RETRATO** (`[O48]` passo 6, av
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:402 AFIRMA ato sem PROVA ao lado -- ## MARCO 13/10 14:3x — pouso da **`wt-ui`**: o link ORIGINAL de fechamento do menu do admin passa a abrir o **RETRATO** (`[O48]` passo 6, av
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 14/10/2026 19:06:43.**
+**Medido em 14/10/2026 19:12:02.**
 
 | | |
 |---|---|
@@ -29,28 +29,28 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2457.3 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2457.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **225.8 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **225.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
   - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **39.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **341.9 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **342.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **246.1 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **246.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **363.8 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **363.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -171,38 +171,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Enquanto a suite corre, pago a condição 2 da DINHEIRO-EM-COMPETENCIA-ABERTA: o arquivo de reversão por colaborador, lido de prod em leitura pura (assert duplo em
-  saas_hasner):
 
-  Ran 4 shell commands
+● Task "Insert the new obra and move the live-order marker" still running in background
 
-● Reversão gravada (595 + 607 fechamentos, 8 hashes da 09 exportada). Ajusto a posse e monto os textos do pouso:
+● Task "Run the full suite over the certified copy" still running in background
+
+● O placar falhou só pelo caminho relativo (rodei de app/). Rodo da raiz e escrevo a seção do RELATO:
 
   Ran 1 shell command
 
-● O achado da janela invertida já é lei escrita: alimentacao.py:28-33 declara a origem (entrada crua clipada ao marco → efetivo −960 min), o motor decide
-  minutos_trabalhados=0 e manda os minutos para minutos_fora_janela (L-093), e há contador. Então não nasce item novo — cito o que existe (LEI-AKITA 4):
+● TICKETS verde. Agora a seção do RELATO (teto 25 linhas, L-116):
 
   Ran 2 shell commands
 
-● Monto a linha do TICKETS e a seção do RELATO (teto 25 linhas, L-116):
+● Docs prontos e selos de host verdes. Preparo a mensagem de commit enquanto a suite corre:
 
-● Inserting the O272 TICKETS row and running the ticket ruler
-  ⎿  $ cd /home/ronald/saas-hasner/app
-     python3 - <<'PY'
-     p='docs/TICKETS.md'
-     s=open(p,encoding='utf-8').read().split('\n')
-     hdr=118-1; sep=119-1
-     assert s[hdr].startswith('| ID | frente'), s[hdr][:40]
-     assert s[sep].startswith('|----'), s[sep][:20]
-     cel = [
-     'O272',
-     'dinheiro (familia **turno/marcos**) -- ava…
+  Ran 1 shell command
 
-✢ Compacting conversation… (1h 5m 30s · ↓ 170.0k tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱ 81%
+● Portão do deploy liberado (crons_em_curso/ vazio). Vejo o andamento da suite:
+
+  Ran 1 shell command
+
+● Suite correndo (trava o272-suite desde 19:01). Uso a espera para o O273, que não cruza arquivo com o O272 (RAIA-NAO-FICA-PARADA). Oriento-me no sítio:
+
+  Ran 7 shell commands
+
+● Tenho o sítio inteiro do O273. Checkpoint antes de escrever código:
+
+● Advising using Fable 5.1
+
+✢ Propagating… (1h 10m 50s · ↓ 182.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                                            0% until auto-compact
+                                                                                                                           ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
