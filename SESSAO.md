@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 13/10/2026 21:45:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (806.7 MB). Acoes na janela: **1180**.
+**Medido em 13/10/2026 21:50:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (806.7 MB). Acoes na janela: **1174**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1184,9 +1184,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 09:52:24 | Bash |  | `cd /home/ronald/saas-hasner && for f in app/chamados/tests/test_o261_fabrica_le_a_lampada.py app/ponto/tests/test_o261_cobrado_le_o_fio.py; do for r in ae7f08f3 2cb57138 f5a1ad77 cb1ccd16; do printf "%s %s freeze_time=%s\n" "$r" "$(basename $f)" "$(git show $r:$f 2>/dev/null \| grep -c freeze_time)"; done; done` |
 | 09:52:03 | Bash |  | `cd /home/ronald/saas-hasner && ls -l --time-style=+%F_%T logs/o258/ \| head -30; echo "=== head do log:"; head -25 logs/o258/suite2_20261013.log \| cut -c1-200` |
 | 09:51:45 | Bash |  | `cd /home/ronald/saas-hasner && L=logs/o258/suite2_20261013.log; ls -l --time-style=+%F_%T $L 2>/dev/null; echo "== veredito:"; grep -E '^(OK\|FAILED)($\| \()' $L \| tail -1; grep -E '^Ran ' $L \| tail -1; echo "== FAIL/ERROR:"; grep -cE '^(FAIL\|ERROR):' $L; echo "== commit cb1ccd16:"; git log -1 --format=%ci cb1ccd16; echo "== f5a1ad77:"; git log -1 --format=%ci f5a1ad77` |
-| 09:48:11 | Bash | Draft merge commit message | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; mkdir -p $S/pouso-bos && cat > $S/pouso-bos/msg.txt <<'EOF' [O258] pouso do item 1: o flip automatico PERGUNTA ao juiz do dia encerrado, e o teto por DATA sai do caminho (merge --no-ff da raia wt-bos, L-105/L-107) LEI-AKITA: origem=ponto/turnos.py::dia_encerrado (nasce) + ponto/services/flip_auto.py::a ...` |
-| 09:47:15 | Bash |  | `cd /home/ronald/saas-hasner && git diff 2cb57138 cb1ccd16 -- app/docs/TICKETS.md \| head -40 \| cut -c1-300` |
-| 09:46:57 | Bash |  | `cd /home/ronald/saas-hasner && echo "== diff main..cb1ccd16 (name-status):"; git diff --name-status 2cb57138 cb1ccd16; echo; echo "== conflito com sujo?"; for f in app/config/crons_duracao.json app/docs/HANDOFF-SESSAO.md bin/sonda_frota.sh; do if git diff --quiet 2cb57138 cb1ccd16 -- "$f"; then echo "OK (intocado pela raia): $f"; else echo "!! RAIA TOCA: $f"; fi; done` |
-| 09:46:47 | Bash |  | `cd /home/ronald/saas-hasner && echo "== main:"; git rev-parse HEAD; echo "== status:"; git status --porcelain; echo "== raia:"; git -C /home/ronald/wt-bos rev-parse HEAD 'HEAD^{tree}' 2>/dev/null; git -C /home/ronald/wt-bos status --porcelain 2>/dev/null; echo "== worktrees:"; git worktree list; echo "== crons_em_curso:"; ls -1 logs/crons_em_curso/ 2>/dev/null \| head; echo "(fim)"` |
-| 09:46:15 | Bash |  | `grep -nE '^\\| (escala\|batida\|familia\|chamado) ' docs/TICKETS.md \| cut -c1-400` |
-| 09:45:49 | Bash |  | `grep -E '^\\| ' docs/TICKETS.md \| awk -F'\|' '{gsub(/^ +\| +$/,"",$2); print $2}' \| grep -vE '^(ID\|-+\|—)?$' \| sort -u \| tr '\n' ' '; echo; echo "--- maior O:"; grep -E '^\\| ' docs/TICKETS.md \| awk -F'\|' '{gsub(/^ +\| +$/,"",$2); print $2}' \| grep -oE '^O[0-9]+$' \| sort -t O -k2 -n \| tail -3` |
