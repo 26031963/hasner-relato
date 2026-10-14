@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 13/10/2026 22:11:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (806.7 MB). Acoes na janela: **1130**.
+**Medido em 13/10/2026 22:17:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (806.7 MB). Acoes na janela: **1128**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1138,5 +1138,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 10:17:25 | Bash | Run full suite over the combo copy | `cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; C=$S/comboio2/copia; bash bin/suite.sh --dir "$C" --espera 7200 > logs/comboio2/suite_20261013.log 2>&1; echo "rc=$?"` |
 | 10:17:19 | Bash | Check test lock holder and running crons | `cd /home/ronald/saas-hasner && mkdir -p logs/comboio2 && bash bin/trava_teste.sh --quem 2>&1 \| head -3; ls -1 logs/crons_em_curso/ 2>/dev/null \| head` |
 | 10:17:07 | Bash | Compare derived docs in copy vs HEAD | `cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; C=$S/comboio2/copia; for f in docs/ARQUITETURA.mmd docs/MAPA.md docs/MAPA-JUIZES.md; do a=$(git show f1249fa8:app/$f \| md5sum \| cut -c1-8); b=$(md5sum < $C/app/$f \| cut -c1-8); if [ "$a" = "$b" ]; then echo "IGUAL $f $a"; else echo "DIFERE $f HEAD=$a copia=$b"; fi; don ...` |
-| 10:11:52 | Bash | Regenerate MAPA-JUIZES in the copy | `cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; C=$S/comboio2/copia; python3 - "$C" <<'PY' import collections, importlib.util, sys, re C = sys.argv[1] spec = importlib.util.spec_from_file_location('juizes_copia', C + '/app/core/juizes.py') J = importlib.util.module_from_spec(spec); spec.loader.exec_module(J) src = open ...` |
-| 10:11:38 | Bash | Check whether core/juizes.py imports Django | `grep -n "^import\\|^from" core/juizes.py \| head -20; echo "--- tamanho"; wc -l core/juizes.py` |
