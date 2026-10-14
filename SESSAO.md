@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 14/10/2026 07:24:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (806.7 MB). Acoes na janela: **177**.
+**Medido em 14/10/2026 07:29:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (806.7 MB). Acoes na janela: **174**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -184,6 +184,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 19:35:51 | Bash | Trim the RELATO section and check the TICKETS row | `cd /home/ronald/saas-hasner/app; python3 - <<'PY' p='docs/RELATO.md'; s=open(p,encoding='utf-8').read() i=s.index('### BUG-LINHA-X-BADGE parte B'); j=s.index('\n### ', i) sec=s[i:j].split('\n') cortes=['- contadores:',' dona O269',' `nao_medido`'] out=[l for l in sec if not any(l.strip().startswith(c.strip()) for c in ('- contadores:',))] # recompor enxuto novo=[l for l in out if l.strip()!=''] s2 ...` |
 | 19:35:37 | Bash | Write the RELATO marco section with the measured numbers and run the cheap host guards | `cd /home/ronald/saas-hasner/app; python3 - <<'PY' S='/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/parteB/relato_marco.md' sec=open(S,encoding='utf-8').read() sec=sec.replace('Suite cheia: <veredito>. Contador real na sombra: <arquivo>.', 'Suite cheia na arvore: `Ran 10916 tests` / 1 FAILED -- e o vermelho era MEU: `linha_x_badge` passou a LER\n' '`f ...` |
 | 19:35:21 | Bash | Register the three new avais as obras O271 and O272 | `cd /home/ronald/saas-hasner/app; python3 - <<'PY' import re p='docs/PROMPTS.md'; s=open(p,encoding='utf-8').read() anc='\| 13/10 ~19:2x \| **aval** (`INTRA-4H-A-6H-NUMERO-CORRIGIDO`' i=s.index(anc); j=s.index('\n',i)+1 rows=''.join([ ('\| 13/10 ~19:3x \| **aval** (`BUG-COMERCIAL-SEM-PONTUALIDADE`, bug PROVADO -- P7.1) \| ' '*"aval Ronald: BUG-COMERCIAL-SEM-PONTUALIDADE -- MotorComercial.calcular_p ...` |
-| 19:24:51 | Bash | Wait for the sombra counter to reach comp 10 | `cd /home/ronald/saas-hasner; until grep -qE "comp10 \|Error\|Traceback" logs/parteB_sombra.out; do sleep 45; done; date +%H:%M; grep -E "comp(09\|10) \|Error" logs/parteB_sombra.out \| tail -8` |
-| 19:24:38 | Bash | Esmeril: confirm every new function has a production caller and nothing was orphaned | `cd /home/ronald/saas-hasner/app; for f in impressao_da_regua linha_x_badge regua_das_linhas PARES_LINHA_X_BADGE; do printf "%-22s chamadores=%s\n" $f "$(grep -rn "$f" --include=*.py . \| grep -v "def $f\\|^./folha/tests/\\|$f = " \| wc -l)"; done; echo "--- orfao deixado pela parte B (L-111):"; grep -rn "def soma_da_competencia" --include=*.py . \| head -1 \| cut -c1-70; cd /home/ronald/saas-hasne ...` |
-| 19:24:20 | Bash | Check the sombra run's progress | `cd /home/ronald/saas-hasner; wc -l logs/parteB_sombra.out; tail -3 logs/parteB_sombra.out \| cut -c1-160` |
