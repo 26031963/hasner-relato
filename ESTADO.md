@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 14/10/2026 19:55:46.**
+**Medido em 14/10/2026 20:00:47.**
 
 | | |
 |---|---|
@@ -35,22 +35,22 @@ RELATO, com a lista de nomes do banco como autoridade._
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **226.6 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **226.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **39.9 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **40.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
   - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **342.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **246.9 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **247.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **364.6 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **364.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -80,8 +80,11 @@ eee94960 [BUG-LINHA-X-BADGE] o rodape do TICKETS volta a dizer o push de verdade
  M app/docs/PROMPTS.md
  M app/docs/RELATO.md
  M app/docs/TICKETS.md
+ M app/ponto/calculador/alimentacao.py
+ M app/ponto/motor_calculo_v2.py
  M bin/sonda_leitura.sh
 ?? app/GREEN
+?? app/ponto/tests/test_o272_intra_fora_da_janela.py
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -171,42 +174,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-    col788 são fora/furo_espelho, col512 entra; o recorte do col512 não vira linha porque o TXT emite evento e horas_trabalhadas não é evento. A expectativa da
-    PROVA ("só os dois campos do col788 na 10") é o que o DIFF mediu — e se 382/512 se moverem no apply, o script os imprime e é PAREI com tabela.
-  - Escrevi $SP/o272_portao_do_pouso.sh: pergunta as quatro condições de pista num ato (veredito+Ran+rc do processo · carimbo igual ao de antes · escopo = os 3
-    arquivos · cmp byte a byte). Erro já cometido nesta fatia, agora com portão.
-  - O pre-push vai rodar a régua inteira de novo (~25 min): o atalho "régua JÁ VERDE" depende de .regua_stamp, que bin/suite.sh --dir não escreve.
+● Background command "Block on the signal file, then read the verdict" completed (exit code 0)
 
-  O273 — construído e limpo, esperando a vez da pista: cópia de HEAD em $SP/o273_copia, três âncoras únicas, injeção aplicada, AST OK e ruff All checks passed! nos
-  quatro arquivos. O desenho mudou num ponto por medição: apurar não sabe a regra (não lê origem, não recebe limite, não compara minuto) — o limite mora na
-  closure do lavrador, que fecha sobre e.limite_decisao_he_min, e a porta re-pergunta; _origem_sistema() nem existia, a autoridade é DecisaoHE.ORIGEM_SISTEMA
-  (ponto/models.py:1218). O contador recusas_revogadas nasce dado via MetricaSnapshot.detalhe, sem escritor novo. Corrigi também os dois defeitos do meu RED
-  (modelo= em vez de entidade=; permissão rbac_autorizar_he no ct colaboradores/setor — conferido que decidir_he:140 exige mesmo tem_acao) e a citação he.py:115 →
-  :101.
+  Ran 1 shell command
 
-  O274 — censo fechado, nada construído: 18 de 18 forms do parcial apontam para #fio-conteudo, o id nasce num sítio só (painel_gestao.html:260), os dois includes
-  têm 0 forms, e os forms não estão mudos no drawer (_drawer_generico.html:30 chama htmx.process) — é htmx:targetError, alvo pendurado. Achei o que a cura ingênua
-  quebraria: painel_gestao.html:559 compara e.detail.target.id === 'fio-conteudo' e pararia de mover o cabeçalho na Central; o vizinho 17 linhas acima (:345) já
-  usa closest — é "qual leitor não migrou", não regra nova.
+● Suite CHEIA verde sobre a árvore estável: OK (skipped=42) / Ran 10920 tests in 1470.036s / rc=0, 0 FAIL|ERROR, carimbo idêntico antes e depois (53f28a6e). Portão
+  do pouso:
 
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: O272 -- BUG-INTRA-FORA-DA-JANELA (aval dele 13/10 19:3x -- bug PROVADO, P7.1; DINHEIRO). MotorBase._intra_real soma os
+  Ran 2 shell commands
 
-  Adding the race history to the commit body
-  ⎿  $ SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
-     python3 - <<'PY'
-     p = '/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/o272_msg_commit.txt'
-     s = open(p, encoding='utf-8').read()
-     a = "Docs no commit do MAR…
+● Condição 3 mediu nada: git status numa cópia de git archive (sem .git) — a classe de erro que a memória já registra ("regua_tickets nao ve a copia"). Troco por
+  censo honesto: sha de blob da cópia contra as blobs do HEAD.
 
-· Compacting conversation… (1h 54m 34s · ↓ 283.2k tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱ 86%
+  Ran 1 shell command
+
+● Os 408 FALTA são todos fora de app/ (a cópia é app/ só, que é o que a suite monta). Confirmo isso por medição e troco a condição 3:
+
+  Ran 4 shell commands
+
+● Uma correção antes: backtick dentro de string com aspas duplas na linha 32 executa cd (a lição que a memória guarda para mensagem de commit). Troco e pouso:
+
+  Ran 2 shell commands
+
+● Ambos em linha de comentário # — inertes. Pouso:
+
+● Land the O272 fatia: copy, host seals, regua_tickets, commit · 2m 0s
+  ⎿  $ cd /home/ronald/saas-hasner; bash /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/o272_pouso.sh 2>&1 | tail
+     -60; echo "=== POUSO rc=${PIPESTATUS[0]}" (1m 59s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✶ Propagating… (1h 59m 36s · ↓ 291.0k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                                            0% until auto-compact
+                                                                                                                           ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                                         1h 3m 8s · ↓ 428.9k tokens
