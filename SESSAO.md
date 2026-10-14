@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 13/10/2026 21:40:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (806.7 MB). Acoes na janela: **1186**.
+**Medido em 13/10/2026 21:45:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (806.7 MB). Acoes na janela: **1180**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1190,9 +1190,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 09:46:47 | Bash |  | `cd /home/ronald/saas-hasner && echo "== main:"; git rev-parse HEAD; echo "== status:"; git status --porcelain; echo "== raia:"; git -C /home/ronald/wt-bos rev-parse HEAD 'HEAD^{tree}' 2>/dev/null; git -C /home/ronald/wt-bos status --porcelain 2>/dev/null; echo "== worktrees:"; git worktree list; echo "== crons_em_curso:"; ls -1 logs/crons_em_curso/ 2>/dev/null \| head; echo "(fim)"` |
 | 09:46:15 | Bash |  | `grep -nE '^\\| (escala\|batida\|familia\|chamado) ' docs/TICKETS.md \| cut -c1-400` |
 | 09:45:49 | Bash |  | `grep -E '^\\| ' docs/TICKETS.md \| awk -F'\|' '{gsub(/^ +\| +$/,"",$2); print $2}' \| grep -vE '^(ID\|-+\|—)?$' \| sort -u \| tr '\n' ' '; echo; echo "--- maior O:"; grep -E '^\\| ' docs/TICKETS.md \| awk -F'\|' '{gsub(/^ +\| +$/,"",$2); print $2}' \| grep -oE '^O[0-9]+$' \| sort -t O -k2 -n \| tail -3` |
-| 09:45:32 | Bash |  | `git log --oneline -12 -- core/contratos_estruturais.py \| cat; echo ---; grep -n "O254" docs/TICKETS.md \| head -5` |
-| 09:45:26 | Bash |  | `grep -n "O254\\|um juiz por pergunta\\|S-ESCALA\\|S-BATIDA" docs/TICKETS.md \| head -20; echo ---; grep -n "O254" docs/BACKLOG.md \| head; echo ---BACKLOG-OBRAS-escala---; grep -n "escala x um juiz\\|S-ESCALA" docs/BACKLOG.md` |
-| 09:45:19 | Bash |  | `cd /home/ronald/saas-hasner && tail -60 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/aa14fd1a6ffa27253.output` |
-| 09:45:09 | Bash |  | `cd /home/ronald/saas-hasner && sed -n '70,95p' bin/regua_tickets.sh` |
-| 09:45:02 | Bash |  | `cd /home/ronald/saas-hasner && grep -n "F\[0-9\]\\|\[A-Z\]\\|grep -oE\\|fatia" bin/regua_tickets.sh \| head -40` |
-| 09:44:54 | Bash | Locate bracket in nota | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/s-escala; cd /home/ronald/saas-hasner/app && python3 - <<PY import sys, importlib.util, re sys.path.insert(0,'.') spec = importlib.util.spec_from_file_location('ce', '$S/copia/core/contratos_estruturais.py') ce = importlib.util.module_from_spec(spec); spec.loader.exec_module(ce) n = ce.MATRIZ[('escala', ...` |
