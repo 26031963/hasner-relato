@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 14/10/2026 20:00:47.**
+**Medido em 14/10/2026 20:06:02.**
 
 | | |
 |---|---|
-| `HEAD` local | `3d644aa8 [O263-FT] o derivado do marco: o placar do topo do TICKETS volta a bater com o mundo e os alarmes do vigia entram` |
+| `HEAD` local | `375a5c1b [O272] o intervalo conta so a parte DENTRO da janela: um recorte, antes do carimbo, nos tres calcular_periodo` |
 | `origin/main` | `3d644aa8 [O263-FT] o derivado do marco: o placar do topo do TICKETS volta a bater com o mundo e os alarmes do vigia entram` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,28 +29,28 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2458.2 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2458.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **226.7 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **226.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
   - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **40.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **342.8 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **342.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **247.0 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **247.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **364.7 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **364.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -64,27 +64,19 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+375a5c1b [O272] o intervalo conta so a parte DENTRO da janela: um recorte, antes do carimbo, nos tres calcular_periodo
 3d644aa8 [O263-FT] o derivado do marco: o placar do topo do TICKETS volta a bater com o mundo e os alarmes do vigia entram
 8c851906 [O263-FT] a folga trabalhada volta a ser medida pelo relogio: a janela nao recorta um dia que nao tem marco
 eee94960 [BUG-LINHA-X-BADGE] o rodape do TICKETS volta a dizer o push de verdade (derivado de bin/tickets_rodape.sh), e o sitio da O263-FT fica registrado onde a obra o espera
 38b855f6 [BUG-LINHA-X-BADGE] o 7o par do R4 recebe o NUMERO MEDIDO e a fatia FECHA: zero divergentes nas seis empresa x competencia, e os 72 da 09 ficam nomeados com dono
-861100a1 [BUG-LINHA-X-BADGE] parte B: a ORIGEM -- a lavra carimba a REGUA que julgou cada dia, e a porta do export passa a medir linha x badge por par
 ```
 
 ## `git status --short`
 
 ```
  M app/config/crons_duracao.json
- M app/docs/BACKLOG.md
- M app/docs/HANDOFF-SESSAO.md
- M app/docs/PROMPTS.md
- M app/docs/RELATO.md
- M app/docs/TICKETS.md
- M app/ponto/calculador/alimentacao.py
- M app/ponto/motor_calculo_v2.py
  M bin/sonda_leitura.sh
 ?? app/GREEN
-?? app/ponto/tests/test_o272_intra_fora_da_janela.py
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -174,36 +166,36 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Background command "Block on the signal file, then read the verdict" completed (exit code 0)
-
-  Ran 1 shell command
-
-● Suite CHEIA verde sobre a árvore estável: OK (skipped=42) / Ran 10920 tests in 1470.036s / rc=0, 0 FAIL|ERROR, carimbo idêntico antes e depois (53f28a6e). Portão
-  do pouso:
-
-  Ran 2 shell commands
-
-● Condição 3 mediu nada: git status numa cópia de git archive (sem .git) — a classe de erro que a memória já registra ("regua_tickets nao ve a copia"). Troco por
-  censo honesto: sha de blob da cópia contra as blobs do HEAD.
-
-  Ran 1 shell command
-
-● Os 408 FALTA são todos fora de app/ (a cópia é app/ só, que é o que a suite monta). Confirmo isso por medição e troco a condição 3:
 
   Ran 4 shell commands
 
-● Uma correção antes: backtick dentro de string com aspas duplas na linha 32 executa cd (a lição que a memória guarda para mensagem de commit). Troco e pouso:
+● Minha sonda errou a chave — 595 de 595 como "NOVO" é artefato, não fato. Olho a estrutura real do snapshot:
 
   Ran 2 shell commands
 
-● Ambos em linha de comentário # — inertes. Pouso:
+● Snapshot é indexado por colaborador_id (27–991, igual ao vivo; pk vive em 5033–5677). Corrijo a chave e o e_vigente:
 
-● Land the O272 fatia: copy, host seals, regua_tickets, commit · 2m 0s
-  ⎿  $ cd /home/ronald/saas-hasner; bash /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/o272_pouso.sh 2>&1 | tail
-     -60; echo "=== POUSO rc=${PIPESTATUS[0]}" (1m 59s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Ran 1 shell command
 
-✶ Propagating… (1h 59m 36s · ↓ 291.0k tokens)
+● Dois fatos a apurar: colabs fora do escopo escritos às 20:01:53/56, e o snapshot das 19:02 pode já estar velho (há movers de 19:00 e 20:00). Corrijo a formatação
+  e peço o quadro inteiro:
+
+  Ran 1 shell command
+
+● Quadro legível. Antes de escrever a PROVA, duas medições a fechar — e_vigente (3 "mudou" com hash idêntico é sonda minha, não fato) e quem escreve comp 10 a
+  noite toda:
+
+  Ran 2 shell commands
+
+● e_vigente é @property — então os 3 são fato, não artefato: hash idêntico mas a vigência mudou. Vou ver o que apareceu:
+
+● Measuring the export vigência divergence
+  ⎿  $ cd /home/ronald/saas-hasner; SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
+     cat > "$SP/o272_vigencia.py" <<'PY'
+     # SO LE. Os 3 pks com vigencia divergente do snapshot: hash IGUAL, vigencia mudou. A pergunta e se
+     # nasceu TXT novo para a mesma (empr…
+
+✢ Propagating… (2h 4m 50s · ↓ 307.2k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
