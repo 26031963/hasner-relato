@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 14/10/2026 04:54:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (806.7 MB). Acoes na janela: **356**.
+**Medido em 14/10/2026 04:59:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (806.7 MB). Acoes na janela: **351**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -361,8 +361,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 17:02:41 | Bash | Read the top of RELATO.md | `sed -n '1,45p' docs/RELATO.md; echo "=== total linhas: $(wc -l < docs/RELATO.md)"` |
 | 17:02:36 | Bash | Refresh sombra post-apply, run the selo, then the morning block | `cd /home/ronald/saas-hasner && { echo "=== REFAZER --dump-agora (pos-apply) $(date +%H:%M:%S)"; bin/sombra.sh --refazer --dump-agora; echo "rc_refazer=$?"; echo "=== SELO linha_x_badge POS-APPLY $(date +%H:%M:%S)"; bin/sombra.sh --rodar logs/sombra/selo_linha_x_badge.py pos_apply_badge_linha; echo "rc_selo=$?"; echo "=== BLOCO (portao do deploy) $(date +%H:%M:%S)"; bin/sombra.sh --bloco; echo "rc_ ...` |
 | 17:02:24 | Bash | Check background BACKLOG edit and sombra state | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bf47yy4ew.output 2>/dev/null \| tail -20; echo "--- crons_em_curso:"; ls -1 /home/ronald/saas-hasner/logs/crons_em_curso/ 2>/dev/null \| head; echo "--- carimbo:"; cd /home/ronald/saas-hasner && bin/sombra.sh --conferir 2>&1 \| tail -6` |
-| 16:57:27 | Bash | Read the sombra selo script | `cd /home/ronald/saas-hasner && sed -n '1,200p' logs/sombra/selo_linha_x_badge.py` |
-| 16:56:59 | Bash | Check the sombra stamp and available flags | `cd /home/ronald/saas-hasner; echo "=== carimbo atual da sombra ==="; bin/sombra.sh --conferir 2>&1 \| head -12; echo; echo "=== flags que existem ==="; grep -oE '\-\-(refazer\|dump-agora\|incremental\|bloco\|conferir\|rodar\|cobre\|janela\|dias)' bin/sombra.sh \| sort -u; echo; echo "=== crons em curso ==="; ls -A logs/crons_em_curso/ 2>/dev/null \|\| echo vazio` |
-| 16:56:22 | Bash | Read fechamento_lido to see its authority | `grep -rn "def fechamento_lido" --include='*.py' . && echo "===" && sed -n "$(grep -rn 'def fechamento_lido' relatorios/*.py ponto/**/*.py core/*.py folha/*.py 2>/dev/null \| head -1 \| cut -d: -f2),+45p" $(grep -rln 'def fechamento_lido' relatorios/*.py ponto/*.py ponto/services/*.py core/*.py folha/*.py 2>/dev/null \| head -1)` |
-| 16:55:07 | Bash | Inspect the two O263 rodada outputs for the three colabs | `cd /home/ronald/saas-hasner/logs/o263 && ls -la && echo "=== estrutura da saida VELHO ===" && head -25 diff_frota_comp10_VELHO.out && echo "=== col366 / col697 / col900 nas duas rodadas ===" && for C in 366 697 900 467; do echo "-- col$C:"; grep -n "\b$C\b" diff_frota_comp10_VELHO.out \| head -4; grep -n "\b$C\b" diff_frota_comp10.out \| head -4; done` |
-| 16:54:26 | Bash | Check whether any .py changed in the live tree during the apply | `cd /home/ronald/saas-hasner; echo "=== .py modificados na ARVORE VIVA (o bind-mount do container) ==="; git status --porcelain -- app/ \| grep -E '\.py$'; echo "rc_grep=$?"; echo; echo "=== status completo da arvore viva ==="; git status --porcelain \| head -30; echo; echo "=== HEAD ==="; git rev-parse --short HEAD; echo; echo "=== worktrees ==="; git worktree list` |
