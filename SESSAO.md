@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 14/10/2026 05:36:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (806.7 MB). Acoes na janela: **279**.
+**Medido em 14/10/2026 05:41:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (806.7 MB). Acoes na janela: **273**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -283,9 +283,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 17:43:02 | Bash | Read the overlay function and its callers | `sed -n '286,340p' relatorios/cartao_pela_celula.py; echo "=== quem chama essa funcao"; grep -rn "$(sed -n '286,300p' relatorios/cartao_pela_celula.py \| grep -o 'def [a-z_]*' \| head -1 \| cut -d' ' -f2)" --include=*.py . \| grep -v 'cartao_pela_celula.py' \| head` |
 | 17:42:55 | Bash | Check gate state and badge overlay callers | `cd /home/ronald/saas-hasner && tail -6 logs/sombra_pos_apply_badge_linha.out; echo "=== conferir"; bin/sombra.sh --conferir 2>&1 \| tail -8; echo "=== callers de aplicar_nos_totais"; cd app && grep -rn 'aplicar_nos_totais(' --include=*.py . \| grep -v 'def aplicar' \| head` |
 | 17:42:46 | Bash | Find where the badge overlay happens | `grep -n 'aplicar_nos_totais\\|totais_da_folha\\|fonte_dos_totais' -r --include=*.py . \| grep -v '/tests/' \| head -20` |
-| 17:37:23 | Bash | Read R4 declaration in the placar | `sed -n '200,300p' core/placar_estrutural.py` |
-| 17:37:05 | Bash | Read lavrar signature and body | `sed -n '135,160p' ponto/services/dia_pago.py; echo "...... 255-320 ......"; sed -n '255,320p' ponto/services/dia_pago.py` |
-| 17:36:46 | Bash | Read the fatia loop and the lavra call site | `sed -n '295,330p' ponto/services/fechamento.py; echo "..... 690-760 ....."; sed -n '690,760p' ponto/services/fechamento.py` |
-| 17:36:23 | Bash | Check motor stores the regua params as attributes | `grep -n 'self.regua_excedente\\|self.prorrogacao_noturna_pos5h\\|self.hora_reduzida_afastada\\|self.feriado_em_dobra\\|self.parametros *=' ponto/motor_calculo_v2.py \| head` |
-| 17:36:18 | Bash | Read rest of get_motor to see motor attributes | `sed -n '3160,3230p' ponto/motor_calculo_v2.py` |
-| 17:36:12 | Bash | Read get_motor signature | `grep -n 'def get_motor' -A 40 ponto/motor_calculo_v2.py \| head -70` |
