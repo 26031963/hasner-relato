@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 14/10/2026 02:25:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (806.7 MB). Acoes na janela: **651**.
+**Medido em 14/10/2026 02:30:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (806.7 MB). Acoes na janela: **648**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -658,6 +658,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 14:34:38 | Bash | Watch the three containers for 500s for five minutes | `cd /home/ronald/saas-hasner; mkdir -p logs/o48p6; S=$(date '+%Y-%m-%dT%H:%M:%S'); echo "janela desde $S" > logs/o48p6/watch_5min_o48_pouso.log; sleep 300; for c in saas_ui saas_core saas_caddy; do L=$(docker logs --since "$S" "$c" 2>&1); printf '%s: linhas=%s 5xx=%s traceback=%s best_effort=%s\n' "$c" "$(printf '%s' "$L" \| grep -c . )" "$(printf '%s' "$L" \| grep -cE ' 50[0-9] \|" 5[0-9][0-9]')"  ...` |
 | 14:34:26 | Bash | Get current hour and locate the 500-watch script | `cd /home/ronald/saas-hasner; date '+%d/%m %H:%M'; ls bin/ \| grep -iE 'watch\|vigia_500\|smoke_prod\|watch_5' ; grep -rln '5xx=' bin/ 2>/dev/null \| head` |
 | 14:33:56 | Bash | Commit the merge and deploy without migrate | `cd /home/ronald/saas-hasner; git commit -F /tmp/msg_o48_pouso.txt; rc=$?; echo "rc_commit=$rc"; test $rc -eq 0 \|\| exit $rc; git log --oneline -1; echo "=== DEPLOY ==="; bin/deploy.sh --sem-migrate; echo "rc_deploy=$?"` |
-| 14:28:56 | Bash | Merge raia-ui without commit and verify the tree census | `cd /home/ronald/saas-hasner; cat > /tmp/msg_o48_pouso.txt <<'EOF' [O48] pouso da raia wt-ui: o link ORIGINAL de fechamento do menu do admin abre o RETRATO, e o botao de PDF da barra volta para o partial UNICO da casa (merge --no-ff, L-105/L-107) Aval PUBLICAR-RETRATO (13/10 12:1x), literal: "o link ORIGINAL de fechamento no menu do admin passa a abrir /folha/exportar/retrato/ (passo 6 da O48, troc ...` |
-| 14:28:19 | Bash | Check the sombra ensaio gate | `cd /home/ronald/saas-hasner; bin/sombra.sh --conferir; echo "rc=$?"` |
-| 14:28:02 | Bash | Inspect raia-ui diff and preflight state | `cd /home/ronald/saas-hasner; git log --oneline main..raia-ui; echo "--- arquivos ---"; git diff --name-status main...raia-ui; echo "--- dirty ---"; git status --porcelain \| head -20; echo "--- crons em curso ---"; ls -la logs/crons_em_curso/ 2>/dev/null \| tail -5; echo "--- sombra lock ---"; ls -l logs/sombra.lock 2>/dev/null; docker ps --format '{{.Names}}' \| head -20` |
