@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 14/10/2026 07:02:03.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (806.7 MB). Acoes na janela: **183**.
+**Medido em 14/10/2026 07:07:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (806.7 MB). Acoes na janela: **179**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -189,7 +189,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 19:24:20 | Bash | Check the sombra run's progress | `cd /home/ronald/saas-hasner; wc -l logs/parteB_sombra.out; tail -3 logs/parteB_sombra.out \| cut -c1-160` |
 | 19:14:16 | Bash | Wait for the sombra counter output | `cd /home/ronald/saas-hasner; until grep -qE "comp10\|Error\|Traceback" logs/parteB_sombra.out; do sleep 30; done; grep -E "comp(09\|10)\|Error" logs/parteB_sombra.out \| tail -8` |
 | 19:13:57 | Bash | Log the correction and fix O270's universe in the BACKLOG | `cd /home/ronald/saas-hasner/app; python3 - <<'PY' p='docs/PROMPTS.md'; s=open(p,encoding='utf-8').read() anc='\| 13/10 ~19:1x \| **aval** (`INTRA-4H-A-6H-INDENIZA`' i=s.index(anc); j=s.index('\n',i)+1 row=('\| 13/10 ~19:2x \| **aval** (`INTRA-4H-A-6H-NUMERO-CORRIGIDO`, CORRIGE o numero do de 19:1x; a REGRA nao muda) \| ' '*"aval Ronald: CORRIGE o numero do aval da faixa 4h-6h (o de 19:0x): medido  ...` |
-| 19:03:34 | Bash | Re-run the sombra counter with the right import | `cd /home/ronald/saas-hasner; sed -i 's/^from core.models import Empresa$/from colaboradores.models import Empresa/' logs/sombra/parteB_contador.py; bin/sombra.sh --rodar logs/sombra/parteB_contador.py parteB_lxb > logs/parteB_sombra.out 2>&1; echo rc=$?; grep -E "comp(09\|10)\|Error" logs/parteB_sombra.out \| tail -8` |
-| 19:03:29 | Bash | Find the right import path for Empresa | `cd /home/ronald/saas-hasner; grep -rn "^from .* import Empresa\\|^ from .* import Empresa" app/folha/porta_export.py app/ponto/janelas.py 2>/dev/null \| head -2` |
-| 19:02:47 | Bash | Run the real counter on the sombra for comps 09 and 10 | `cd /home/ronald/saas-hasner; cat > logs/sombra/parteB_contador.py <<'PY' from django.db import connection assert connection.settings_dict['NAME'] == 'sombra', connection.settings_dict['NAME'] from core.models import Empresa from folha.porta_export import medir for mes in (9, 10): for emp in Empresa.objects.filter(id__in=(2, 3, 4)).order_by('id'): r = medir(emp, mes, 2026) print('emp%s comp%02d div ...` |
-| 19:02:40 | Bash | Register the 4h-6h interval aval as obra O270 | `cd /home/ronald/saas-hasner/app; python3 - <<'PY' p='docs/PROMPTS.md'; s=open(p,encoding='utf-8').read() anc='\| 13/10 ~19:0x \| **aval** (`O263-FT-SEM-MARCO`' i=s.index(anc); j=s.index('\n',i)+1 row=('\| 13/10 ~19:1x \| **aval** (`INTRA-4H-A-6H-INDENIZA`, **LEI NOVA dele** -- regra de negocio, so dele) \| ' '*"aval Ronald: jornada entre 4h e 6h sem pausa indeniza o suprimido do minimo (Art.71 §1  ...` |
