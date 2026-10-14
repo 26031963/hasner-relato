@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 13/10/2026 23:05:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (806.7 MB). Acoes na janela: **1016**.
+**Medido em 13/10/2026 23:10:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (806.7 MB). Acoes na janela: **1012**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1022,7 +1022,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 11:11:42 | Bash | Read the portas in chamados/juizes.py | `echo "=== chamados/juizes.py 830-875 (as portas):"; sed -n '830,875p' chamados/juizes.py; echo; echo "=== 1520-1535 disputa_viva_do_chamado:"; sed -n '1518,1535p' chamados/juizes.py` |
 | 11:11:14 | Bash | Read the scanner used by the contract test | `echo "=== _fontes e fora_da_autoridade (quem e varrido):"; sed -n "$(grep -n 'def _fontes' ponto/tests/test_contract_juiz_celula.py \| cut -d: -f1),+22p" ponto/tests/test_contract_juiz_celula.py; echo "=== fora_da_autoridade:"; sed -n "$(grep -n 'def fora_da_autoridade' ponto/tests/test_contract_juiz_celula.py \| cut -d: -f1),+24p" ponto/tests/test_contract_juiz_celula.py` |
 | 11:11:11 | Bash | Re-run AST censo with shapes and source lines | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; python3 - "$PWD" <<'PY' import ast, os, sys raiz = sys.argv[1] hits = [] class V(ast.NodeVisitor): def __init__(s, rel, src): s.rel, s.src = rel, src def _chama_pv(s, node): return any(isinstance(n, ast.Call) and isinstance(n.func, ast.Name) and n.func.id == 'pergunta_viva' for n in ast.walk(node)) def ...` |
-| 11:09:55 | Bash | Grep the chamado contract test structure | `echo "=== contrato test (quem conta chave/autoridade):"; grep -nE "_C1\|def test\|len\(\|assert\|SEM_JUIZ\|PERGUNTAS\|autoridade" chamados/tests/test_contract_juiz_chamado.py \| head -40` |
-| 11:09:53 | Bash | Read PENDENTES_CHAMADO in juizes.py | `echo "=== PENDENTES_CHAMADO:"; grep -n "PENDENTES_CHAMADO" core/juizes.py \| head; echo "---"; sed -n "$(grep -n 'PENDENTES_CHAMADO = ' core/juizes.py \| cut -d: -f1),+28p" core/juizes.py` |
-| 11:09:45 | Bash | Check trava base list and the chamado contract cell | `cd /home/ronald/saas-hasner && echo "=== base da trava tem fio_vivo/pergunta_viva?"; grep -nE "fio_vivo\|pergunta_viva\|catalogo/motor" bin/tests/juizes_antes_da_trava.txt; echo "(total $(grep -c . bin/tests/juizes_antes_da_trava.txt) entradas)"; echo; echo "=== contrato chamado x um juiz por pergunta:"; sed -n '253,270p' app/core/contratos_estruturais.py` |
-| 11:09:43 | Bash | Read the juizes.py keys and authorities region | `echo "=== juizes.py :90-130 (as chaves):"; sed -n '88,132p' core/juizes.py; echo; echo "=== :190-215 (as autoridades):"; sed -n '190,215p' core/juizes.py` |
