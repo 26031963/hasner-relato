@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 14/10/2026 02:08:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (806.7 MB). Acoes na janela: **688**.
+**Medido em 14/10/2026 02:14:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (806.7 MB). Acoes na janela: **683**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -693,8 +693,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 14:14:48 | Bash | Check merge suite progress and trava | `cd /home/ronald/saas-hasner; grep -nE '^(OK\|FAILED)($\| \()\|^Ran [0-9]+ test' logs/o48p6/suite_full_merge_49f8081b.log \| tail -3; echo "--- ultimas 5 linhas ---"; tail -5 logs/o48p6/suite_full_merge_49f8081b.log; echo "--- trava ---"; bin/trava_teste.sh --quem` |
 | 14:14:17 | Bash | Read the comp10 DIFF output | `cd /home/ronald/saas-hasner; cat logs/o263/diff_frota_comp10.out` |
 | 14:14:11 | Bash | Check both in-flight jobs | `cd /home/ronald/saas-hasner; echo "=== diff comp10 ==="; wc -l logs/o263/diff_frota_comp10.out 2>/dev/null; grep -c '^FIM$' logs/o263/diff_frota_comp10.out 2>/dev/null; echo "=== suite merge ==="; wc -l logs/o48p6/suite_full_merge_49f8081b.log 2>/dev/null; tail -3 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bjrg3yeo3.output` |
-| 14:09:04 | Bash | Read the rest of the oracle | `cd /home/ronald/saas-hasner; sed -n '60,140p' logs/audit_holerite_09/oraculo_an2.py` |
-| 14:09:00 | Bash | Read the oracle script the aval requires reproducing | `cd /home/ronald/saas-hasner; ls -la logs/audit_holerite_09/ \| head; echo "=== cabeca do oraculo ==="; sed -n '1,60p' logs/audit_holerite_09/oraculo_an2.py` |
-| 14:08:52 | Bash | Check both background jobs | `cd /home/ronald/saas-hasner; echo "=== sonda DIFF ==="; grep -c '^FIM$' logs/o263/diff_frota_comp10.out 2>/dev/null; tail -6 logs/o263/diff_frota_comp10.out 2>/dev/null; echo; echo "=== suite do merge ==="; tail -2 logs/o48p6/suite_full_merge_49f8081b.log` |
-| 14:08:47 | Bash | Update the O263 state cell in the BACKLOG | `cd /home/ronald/saas-hasner; python3 - app/docs/BACKLOG.md <<'PY' import sys p = sys.argv[1]; s = open(p).read() old = ("\| ABERTA, **em curso**. Censo do VIVO FECHADO (3 escritores, 1 com desconto; HE noturna " "com o mesmo furo; `intervalos_do_motor` ja disponivel no periodo). Falta: RED x3, cura, " "selo AST, suite, DIFF da 10, apply. Pista de teste TOMADA pela `raia-ui` desde 12:52 -- " "suite ...` |
-| 14:08:33 | Bash | Find the O263 row in the BACKLOG | `cd /home/ronald/saas-hasner; grep -n "O263" app/docs/BACKLOG.md \| head` |
