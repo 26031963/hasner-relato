@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:361 AFIRMA ato sem PROVA ao lado -- ## MARCO 13/10 14:3x — pouso da **`wt-ui`**: o link ORIGINAL de fechamento do menu do admin passa a abrir o **RETRATO** (`[O48]` passo 6, av
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:387 AFIRMA ato sem PROVA ao lado -- ## MARCO 13/10 14:3x — pouso da **`wt-ui`**: o link ORIGINAL de fechamento do menu do admin passa a abrir o **RETRATO** (`[O48]` passo 6, av
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 14/10/2026 18:19:02.**
+**Medido em 14/10/2026 18:24:32.**
 
 | | |
 |---|---|
 | `HEAD` local | `3d644aa8 [O263-FT] o derivado do marco: o placar do topo do TICKETS volta a bater com o mundo e os alarmes do vigia entram` |
-| `origin/main` | `eee94960 [BUG-LINHA-X-BADGE] o rodape do TICKETS volta a dizer o push de verdade (derivado de bin/tickets_rodape.sh), e o sitio da O263-FT fica registrado onde a obra o espera` |
-| commits a subir (`ahead`) | **2** |
+| `origin/main` | `3d644aa8 [O263-FT] o derivado do marco: o placar do topo do TICKETS volta a bater com o mundo e os alarmes do vigia entram` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -35,22 +35,22 @@ RELATO, com a lista de nomes do banco como autoridade._
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **225.0 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **225.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **38.3 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **38.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **341.1 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **341.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **245.3 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **245.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **363.0 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **363.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -75,6 +75,9 @@ eee94960 [BUG-LINHA-X-BADGE] o rodape do TICKETS volta a dizer o push de verdade
 
 ```
  M app/config/crons_duracao.json
+ M app/docs/BACKLOG.md
+ M app/docs/PROMPTS.md
+ M app/docs/RELATO.md
  M bin/sonda_leitura.sh
 ?? app/GREEN
 ?? esteira.pausada
@@ -166,42 +169,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 1 shell command
-
-● Cópia não reverte o marco: 40 linhas só de adição, 0 remoção contra HEAD — ela nasceu já com a cura FT dentro. Conferindo que as 40 são os sítios do O272:
-
-  Ran 1 shell command
-
-● Cura do O272 íntegra e em dia com HEAD: um helper novo + 3 chamadas antes do carimbo, 0 remoção. Corrigindo agora os rascunhos com a atribuição medida e o
-  enquadramento do 18-vs-5:
-
-  Ran 2 shell commands
-
-● Rascunho da seção de pouso, com a cond.3/cond.4 no registro medido (teto 25 linhas, L-116):
-
-  Ran 1 shell command
-
-● 27 — fura o teto. Compactando para 25 sem perder número nem prova:
+  os dois avais na mesma volta (PROMPT-NAO-SE-REPETE):
 
   Ran 3 shell commands
 
-● 25/25. Push ainda na suite. Enquanto ela segura o cpuset de teste, preparo o terreno do O272 sem tocar nele — estado da sombra (o advisor avisou que o carimbo
-  tem de dizer hoje):
+● A tabela certa é OBRAS PEDIDAS POR PROMPT (5 colunas). Convertendo os rascunhos em linha única, com · dentro das células para não deslocar as colunas:
 
-● Checking the sombra stamp and running crons
-  ⎿  $ cd /home/ronald/saas-hasner
-     echo "=== sombra --conferir:"
-     bash bin/sombra.sh --conferir 2>&1 | tail -12
-     echo
-     echo "=== crons em curso (deploy/sombra nao podem ir se nao estiver vazio):"
-     ls -1 logs/crons_em_curso/ 2>/dev/null | head -5 || echo " (vazio)"
+  Ran 3 shell commands
 
-✢ Propagating… (17m 50s · ↓ 46.1k tokens · thinking)
-                                                                                                                           ✔ Update installed · Restart to update
+● Idioma capturado (6 células). Escrevendo na árvore agora — PROMPTS, as duas obras O273/O274 e a seção de pouso:
+
+  Ran 3 shell commands
+
+● RELATO entrou (25/25). O helper errou: as linhas do PROMPTS são linhas de tabela — os pipes ali são separadores. Conferindo as colunas e anexando:
+
+  Ran 2 shell commands
+
+● Convenção recente são 5 células, e a terceira é o aval LITERAL. Reconstruindo as duas linhas nesse formato:
+
+  Ran 1 shell command
+
+● Agora as duas obras no bloco OBRAS, como O273 e O274, no idioma de 6 células da tabela:
+
+● Inserting the two obras into the BACKLOG OBRAS table
+  ⎿  $ cd /home/ronald/saas-hasner/app
+     python3 - <<'PY'
+     p = 'docs/BACKLOG.md'
+     s = open(p, encoding='utf-8').read()
+     o273 = ('| O273 | **BUG-RECUSA-SISTEMA-ENVELHECE** (aval dele 14/10 18:1x -- **bug PROVADO, P7.1**; relato do '
+     'Fernando, HE-01). A RECUSA DO SISTEMA ENVELHECE E NINGUEM A REVE: `ponto/por…
+
+✢ Propagating… (23m 20s · ↓ 68.2k tokens)
+                                                                                                                                           12% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                                         1h 3m 8s · ↓ 428.9k tokens
