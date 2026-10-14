@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 14/10/2026 03:12:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (806.7 MB). Acoes na janela: **539**.
+**Medido em 14/10/2026 03:18:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (806.7 MB). Acoes na janela: **527**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -537,15 +537,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 15:19:22 | Bash | Read versao_para, the rule-version authority | `cd /home/ronald/saas-hasner/app; echo "=== versao_para"; grep -rn "def versao_para" -A 30 --include='*.py' . \| head -45` |
 | 15:19:08 | Bash | Read impressao_insumos | `cd /home/ronald/saas-hasner/app; grep -n "def impressao_insumos" -A 45 ponto/services/cartorio.py \| head -60` |
 | 15:19:03 | Bash | Confirm the BACKLOG edit landed | `cd /home/ronald/saas-hasner/app; ls -la docs/BACKLOG.md; grep -c "BUG-LINHA-X-BADGE" docs/BACKLOG.md; grep -n "ORDEM-VIVA-TOPO:" docs/BACKLOG.md \| head -2` |
-| 15:16:49 | Bash | Insert the new obra and move the live-order marker | `cd /home/ronald/saas-hasner/app; python3 - docs/BACKLOG.md <<'PY' import sys p = sys.argv[1] s = open(p, encoding='utf-8').read() col2 = ("**BUG-LINHA-X-BADGE** (aval dele 13/10 15:1x em partes, **P7.1 -- fura a fila**; id dado por ELE). " "ACHADO MEDIDO POR ELE (`logs/audit_holerite_09/`): espelho col418 comp 09 -- badge " "(`relatorios/cartao_pela_celula.py::totais_da_folha`, on-line desde a O48 ...` |
-| 15:16:03 | Bash | Dump the O261 row column by column | `cd /home/ronald/saas-hasner/app; awk -F'\|' '/^\\| O261 \\|/{for(i=2;i<NF;i++) printf "COL%d: %s\n---\n", i-1, substr($i,1,150); exit}' docs/BACKLOG.md` |
-| 15:15:55 | Bash | Match the O261 row shape | `cd /home/ronald/saas-hasner/app; grep -n "^\| O261 \|" docs/BACKLOG.md \| cut -c1-120; echo "=== colunas dessa linha"; awk -F'\|' '/^\\| O261 \\|/{print NF; exit}' docs/BACKLOG.md; echo "=== header acima"; sed -n '525,540p' docs/BACKLOG.md \| cut -c1-100` |
-| 15:15:39 | Bash | Find both table headers and the live-order marker | `cd /home/ronald/saas-hasner/app; grep -n "^\| # \|" docs/BACKLOG.md; echo "=== marcador"; grep -n "ORDEM-VIVA-TOPO" docs/BACKLOG.md \| head -3` |
-| 15:15:32 | Bash | Locate the OBRAS block in the BACKLOG | `cd /home/ronald/saas-hasner/app; grep -n "^## OBRAS\\|^### OBRAS\\|bloco OBRAS" docs/BACKLOG.md \| head -5; echo "=== primeiras linhas do bloco"; sed -n "$(grep -n '^## OBRAS' docs/BACKLOG.md \| head -1 \| cut -d: -f1),+8p" docs/BACKLOG.md \| cut -c1-240` |
-| 15:14:51 | Bash | Append both PROMPTS lines | `cd /home/ronald/saas-hasner/app; python3 - docs/PROMPTS.md <<'PY' import sys p = sys.argv[1] s = open(p, encoding='utf-8').read() linhas = [ "\| 13/10 15:1x \| **corte** (`VOLTA-DA-PAUSA-NA-TOLERANCIA`, titulo NOVO -- **pergunta de LEI com alternativa NAO resolvida**: dinheiro, e nenhuma lei escrita responde) " "\| *\"corte Ronald: volta da pausa dentro da tolerancia de conformidade (10 min por ma ...` |
-| 15:14:25 | Bash | Read the PROMPTS format and the clock | `cd /home/ronald/saas-hasner/app; tail -3 docs/PROMPTS.md \| cut -c1-300; echo "=== header"; grep -n "^\|" docs/PROMPTS.md \| head -3 \| cut -c1-200; echo "=== data/hora agora"; date '+%d/%m %H:%M'` |
-| 15:14:11 | Bash | Find the linha-x-badge evidence | `cd /home/ronald/saas-hasner/app; grep -n "linha\b.*badge\\|badge.*linha" docs/RELATO.md \| head -10; echo "=== O27/O33 estado no BACKLOG"; grep -n "O27\b\\|O33\b" docs/BACKLOG.md \| head -10` |
-| 15:13:51 | Bash | Search for the badge divergence and relavra mentions | `cd /home/ronald/saas-hasner/app; grep -rn "badge" docs/RELATO.md docs/BACKLOG.md docs/PENDENTES_RONALD.json 2>/dev/null \| head -20; echo "=== DiaPago 09 / relavra"; grep -rn "relavra\\|relavrar" docs/RELATO.md docs/BACKLOG.md \| head -15` |
-| 15:13:44 | Bash | Find BUG-LINHA-X-BADGE in the docs | `cd /home/ronald/saas-hasner/app; grep -rn "LINHA-X-BADGE\\|linha x badge\\|LINHA X BADGE" docs/*.md \| head -20` |
-| 15:12:42 | Bash | Read the conformance tolerance and its readers | `cd /home/ronald/saas-hasner/app; sed -n '50,80p' ponto/motor_calculo_v2.py; echo "=== quem le TOLERANCIA_CONFORMIDADE_MIN"; grep -rn "TOLERANCIA_CONFORMIDADE_MIN" --include='*.py' . \| grep -v '/tests/'` |
-| 15:12:33 | Bash | Find the conformance judge | `cd /home/ronald/saas-hasner/app; grep -rln "conformidade\\|CONFORMIDADE" --include='*.py' . \| grep -v '/tests/' \| head -20; echo "=== validacao.py:595-640"; sed -n '595,640p' chamados/services/validacao.py` |
