@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 14/10/2026 18:13:32.**
+**Medido em 14/10/2026 18:19:02.**
 
 | | |
 |---|---|
@@ -29,28 +29,28 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2456.5 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2456.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **224.9 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **225.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **38.2 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **38.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
   - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **341.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **245.2 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **245.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **362.9 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **363.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -166,38 +166,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  registrar (número do relato não se copia):
+  Ran 1 shell command
+
+● Cópia não reverte o marco: 40 linhas só de adição, 0 remoção contra HEAD — ela nasceu já com a cura FT dentro. Conferindo que as 40 são os sítios do O272:
+
+  Ran 1 shell command
+
+● Cura do O272 íntegra e em dia com HEAD: um helper novo + 3 chamadas antes do carimbo, 0 remoção. Corrigindo agora os rascunhos com a atribuição medida e o
+  enquadramento do 18-vs-5:
 
   Ran 2 shell commands
 
-● Medido, e maior que o relato: 18 hx-target="#fio-conteudo" em templates/chamados/partials/modal_fio.html (o relato diz 5 forms), e o id só existe em
-  painel_gestao.html:260 — o drawer oferece #drawer-geral-corpo. Separando forms de não-forms:
+● Rascunho da seção de pouso, com a cond.3/cond.4 no registro medido (teto 25 linhas, L-116):
 
   Ran 1 shell command
 
-● 18 forms (de 23 no arquivo) apontam para #fio-conteudo, não 5 — o raio é ~3,6x o do relato. Registrando os dois avais com os números medidos:
+● 27 — fura o teto. Compactando para 25 sem perder número nem prova:
 
-  Ran 1 shell command
+  Ran 3 shell commands
 
-● Rascunhos duráveis. O push ainda corre a suite — momento certo de submeter o julgamento (o commit-seguinte em vez de amend, a atribuição do digest da 09, e a
-  ordem dos dois avais novos) a revisão:
+● 25/25. Push ainda na suite. Enquanto ela segura o cpuset de teste, preparo o terreno do O272 sem tocar nele — estado da sombra (o advisor avisou que o carimbo
+  tem de dizer hoje):
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-● Aceito em tudo. Fechando a atribuição que medi pela metade — os movedores da 09, por id, e quem de fato escreve FechamentoMensal na corrente:
-
-● Identifying which comp-09 and comp-10 rows were relavrated after the reload
+● Checking the sombra stamp and running crons
   ⎿  $ cd /home/ronald/saas-hasner
-     SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
-     cat > "$SP/movedores.py" <<'PY'
-     from django.db import connection
-     assert connection.settings_dict['NAME'] == 'saas_hasner', connection.settings_dict['NAME']
-     assert 'saas_has…
+     echo "=== sombra --conferir:"
+     bash bin/sombra.sh --conferir 2>&1 | tail -12
+     echo
+     echo "=== crons em curso (deploy/sombra nao podem ir se nao estiver vazio):"
+     ls -1 logs/crons_em_curso/ 2>/dev/null | head -5 || echo " (vazio)"
 
-· Compacting conversation… (12m 20s · ↓ 32.1k tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 51%
-                                                                                                                                            0% until auto-compact
+✢ Propagating… (17m 50s · ↓ 46.1k tokens · thinking)
+                                                                                                                           ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
