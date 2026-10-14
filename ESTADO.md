@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 14/10/2026 18:24:32.**
+**Medido em 14/10/2026 18:30:02.**
 
 | | |
 |---|---|
@@ -29,28 +29,28 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2456.6 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2456.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **225.1 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **225.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
   - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **38.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **341.2 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **341.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **245.4 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **245.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **363.1 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **363.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -76,6 +76,7 @@ eee94960 [BUG-LINHA-X-BADGE] o rodape do TICKETS volta a dizer o push de verdade
 ```
  M app/config/crons_duracao.json
  M app/docs/BACKLOG.md
+ M app/docs/HANDOFF-SESSAO.md
  M app/docs/PROMPTS.md
  M app/docs/RELATO.md
  M bin/sonda_leitura.sh
@@ -169,38 +170,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  os dois avais na mesma volta (PROMPT-NAO-SE-REPETE):
-
-  Ran 3 shell commands
-
-● A tabela certa é OBRAS PEDIDAS POR PROMPT (5 colunas). Convertendo os rascunhos em linha única, com · dentro das células para não deslocar as colunas:
-
-  Ran 3 shell commands
-
-● Idioma capturado (6 células). Escrevendo na árvore agora — PROMPTS, as duas obras O273/O274 e a seção de pouso:
-
-  Ran 3 shell commands
-
-● RELATO entrou (25/25). O helper errou: as linhas do PROMPTS são linhas de tabela — os pipes ali são separadores. Conferindo as colunas e anexando:
-
-  Ran 2 shell commands
-
-● Convenção recente são 5 células, e a terceira é o aval LITERAL. Reconstruindo as duas linhas nesse formato:
+● Entrada real é get_motor_cct(...).calcular_mes, mas o que o sistema usa para julgar o dia na tela é o espelho. Conferindo a assinatura para não reconstruir a
+  chamada:
 
   Ran 1 shell command
 
-● Agora as duas obras no bloco OBRAS, como O273 e O274, no idioma de 6 células da tabela:
+● Escrevendo a sonda da sombra — no scratchpad, montado como volume, sem tocar app/ nem bin/:
 
-● Inserting the two obras into the BACKLOG OBRAS table
-  ⎿  $ cd /home/ronald/saas-hasner/app
-     python3 - <<'PY'
-     p = 'docs/BACKLOG.md'
-     s = open(p, encoding='utf-8').read()
-     o273 = ('| O273 | **BUG-RECUSA-SISTEMA-ENVELHECE** (aval dele 14/10 18:1x -- **bug PROVADO, P7.1**; relato do '
-     'Fernando, HE-01). A RECUSA DO SISTEMA ENVELHECE E NINGUEM A REVE: `ponto/por…
+  Ran 1 shell command
 
-✢ Propagating… (23m 20s · ↓ 68.2k tokens)
-                                                                                                                                           12% until auto-compact
+● RED literal reproduzido na sombra, idêntico ao aval: e=15:09 s=22:00 (janela 410,2 min), intervalo carimbado 16:09→23:00 — termina 60 min fora da janela —,
+  intra_descontada=410,95, trab=0. Agora o GREEN, montando só o arquivo curado sobre a árvore viva (evita cópia incompleta):
+
+  Ran 1 shell command
+
+● GREEN na sombra, pelo dado real: intra_descontada 410,95 → 350,85, trab 0 → 59,36, e o carimbo passa a terminar em 22:00, na janela — conta e carimbo dizendo o
+  mesmo. Os dois arquivos estão em logs/o272/. Agora o DIFF da 10 que o aval exige antes; vendo o instrumento da casa:
+
+  Ran 1 shell command
+
+● O instrumento é simular_folha.sh par <rotulo> <arvore_antes> <arvore_depois>. Pela LEI-AKITA 10 a cópia nasce de HEAD na hora — e assim a árvore "depois" é HEAD
+  + só a cura, não uma cópia de ontem:
+
+● Checking the yesterday copy's completeness against HEAD
+  ⎿  $ cd /home/ronald/saas-hasner
+     SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
+     df -h /tmp /home | tail -2
+     echo "=== a copia de ontem esta completa? (contra HEAD, so o nome dos arquivos)"
+     git ls-tree -r --name-only HEAD -- app/ | sed 's|^app/||' | sort…
+
+✢ Compacting conversation… (28m 50s · ↓ 78.8k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱ 81%
+                                                                                                                                            0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
