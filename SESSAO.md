@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 14/10/2026 05:41:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (806.7 MB). Acoes na janela: **273**.
+**Medido em 14/10/2026 05:47:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (806.7 MB). Acoes na janela: **264**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -274,12 +274,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 17:54:14 | Bash | Read tol002 selo script | `cd /home/ronald/saas-hasner && sed -n '1,90p' logs/sombra/selo_linha_x_badge_tol002.py` |
 | 17:51:28 | Bash | Read autoridade_do_periodo | `grep -rn "def autoridade_do_periodo" --include=*.py . \| head; echo "---"; f=$(grep -rln "def autoridade_do_periodo" --include=*.py . \| head -1); echo "FILE=$f"; sed -n "$(grep -n 'def autoridade_do_periodo' $f \| head -1 \| cut -d: -f1),+45p" $f` |
 | 17:50:40 | Bash | Check sombra run and backlog insertion | `cd /home/ronald/saas-hasner && echo "=== parteB_tol002.out ==="; tail -40 logs/parteB_tol002.out 2>/dev/null \|\| echo "(sem arquivo)"; echo; echo "=== bf47yy4ew.output ==="; tail -5 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bf47yy4ew.output 2>/dev/null; echo; echo "=== git status docs ==="; git status --porcelain app/docs/ \| head` |
-| 17:45:18 | Bash | Read PROMPTS.md structure | `head -14 docs/PROMPTS.md; echo "....... TAIL ......."; tail -6 docs/PROMPTS.md; echo "=== wc"; wc -l docs/PROMPTS.md` |
-| 17:45:11 | Bash | Run the tolerance and tripwire measurement on the sombra | `cd /home/ronald/saas-hasner && { echo "=== TOL 0.02 + tripwire do entra $(date +%H:%M:%S)"; bin/sombra.sh --rodar logs/sombra/selo_linha_x_badge_tol002.py parteB_tol002; echo "rc=$?"; echo "=== FIM $(date +%H:%M:%S)"; } > logs/parteB_tol002.out 2>&1` |
-| 17:44:47 | Bash | Write the two decisive sombra measurements | `cd /home/ronald/saas-hasner && cat > logs/sombra/selo_linha_x_badge_tol002.py <<'PY' """PARTE B, as DUAS medicoes que decidem o codigo -- na SOMBRA, leitura pura. 1. A TOLERANCIA: o par linha x badge com TOL **0,02 h** (a da casa no par irmao `espelho_x_dia_pago`), e nao os 0,05 do primeiro selo. Declarar "esperado 0" com uma tolerancia mais larga do que a do vizinho seria afrouxar para o numero c ...` |
-| 17:43:28 | Bash | Read the badge totals mapping and the trabalhadas convention | `sed -n '100,160p' relatorios/cartao_pela_celula.py` |
-| 17:43:16 | Bash | Exact call sites of folha_manda | `grep -rn 'folha_manda(' --include=*.py . \| grep -v '/tests/' \| grep -v 'def folha_manda'` |
-| 17:43:11 | Bash | Identify the overlay function and its production callers | `awk 'NR<=326 && /^def /{n=$0; l=NR} END{}' relatorios/cartao_pela_celula.py; grep -n '^def ' relatorios/cartao_pela_celula.py \| awk -F: '$1<=326' \| tail -2; echo "=== callers"; grep -rn 'folha_manda' --include=*.py . \| grep -v '/tests/' \| head` |
-| 17:43:02 | Bash | Read the overlay function and its callers | `sed -n '286,340p' relatorios/cartao_pela_celula.py; echo "=== quem chama essa funcao"; grep -rn "$(sed -n '286,300p' relatorios/cartao_pela_celula.py \| grep -o 'def [a-z_]*' \| head -1 \| cut -d' ' -f2)" --include=*.py . \| grep -v 'cartao_pela_celula.py' \| head` |
-| 17:42:55 | Bash | Check gate state and badge overlay callers | `cd /home/ronald/saas-hasner && tail -6 logs/sombra_pos_apply_badge_linha.out; echo "=== conferir"; bin/sombra.sh --conferir 2>&1 \| tail -8; echo "=== callers de aplicar_nos_totais"; cd app && grep -rn 'aplicar_nos_totais(' --include=*.py . \| grep -v 'def aplicar' \| head` |
-| 17:42:46 | Bash | Find where the badge overlay happens | `grep -n 'aplicar_nos_totais\\|totais_da_folha\\|fonte_dos_totais' -r --include=*.py . \| grep -v '/tests/' \| head -20` |
