@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 14/10/2026 01:20:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (806.7 MB). Acoes na janela: **782**.
+**Medido em 14/10/2026 01:25:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (806.7 MB). Acoes na janela: **777**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -787,8 +787,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 13:26:40 | Bash | Read the tail of _noturno_dos_intervalos | `cd /home/ronald/saas-hasner/app; sed -n '1524,1545p' ponto/motor_calculo_v2.py` |
 | 13:26:34 | Bash | Read _noturno_dos_intervalos and the calculador sites | `cd /home/ronald/saas-hasner/app; sed -n '1486,1535p' ponto/motor_calculo_v2.py; echo "=== regras.py 55-95"; sed -n '55,95p' ponto/calculador/regras.py; echo "=== regras.py 690-715"; sed -n '688,715p' ponto/calculador/regras.py` |
 | 13:26:06 | Bash | Read minutos_noturnos and he_noturna | `cd /home/ronald/saas-hasner/app; echo "=== minutos_noturnos"; grep -n "^def minutos_noturnos" -B2 -A 60 ponto/motor_calculo_v2.py; echo "=== he_noturna 290-340"; sed -n '290,340p' ponto/motor_calculo_v2.py` |
-| 13:25:43 | Bash | Census of the noturno writers and HE-noturna call sites | `cd /home/ronald/saas-hasner/app; echo "=== call sites _aplicar_he_noturna"; grep -n "_aplicar_he_noturna" ponto/motor_calculo_v2.py; echo; echo "=== minutos_noturnos_relogio writers"; grep -n "minutos_noturnos_relogio *=" ponto/motor_calculo_v2.py; echo; echo "=== calcular_noturnas callers (tree-wide)"; grep -rn "calcular_noturnas" --include=*.py . \| grep -v "/tests/"; echo; echo "=== MotorComerc ...` |
-| 13:25:35 | Bash | Read MotorTurnoPartido.calcular_periodo | `cd /home/ronald/saas-hasner/app; sed -n '2100,2185p' ponto/motor_calculo_v2.py` |
-| 13:25:27 | Bash | Read the rest of the motor factory and the partido judge | `cd /home/ronald/saas-hasner/app; echo "=== rest of get_motor"; sed -n '3100,3160p' ponto/motor_calculo_v2.py; echo "=== MOTOR_POR_BASE"; grep -n "MOTOR_POR_BASE *=" -A 12 ponto/motor_calculo_v2.py; echo "=== eh_turno_partido"; grep -n "def eh_turno_partido" -A 40 escala/servico_jornada.py \| head -60` |
-| 13:25:13 | Bash | Read the existing noturno characterization test and the get_motor signature | `cd /home/ronald/saas-hasner/app; echo "=== test_noturno_desconta_intervalo.py"; cat -n ponto/tests/test_noturno_desconta_intervalo.py; echo; echo "=== get_motor def"; grep -n "^def get_motor" -A 60 ponto/motor_calculo_v2.py \| head -80` |
-| 13:24:45 | Bash | Show the head of the probe output and the test lock holder | `cd /home/ronald/saas-hasner; sed -n '1,20p' logs/o263/red_geometria.out; echo "=== trava:"; bin/trava_teste.sh --quem` |
