@@ -10,11 +10,11 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 14/10/2026 20:17:02.**
+**Medido em 14/10/2026 20:22:32.**
 
 | | |
 |---|---|
-| `HEAD` local | `b71b3a79 [O272] o intervalo conta so a parte DENTRO da janela: um recorte, antes do carimbo, nos tres calcular_periodo` |
+| `HEAD` local | `aad64415 [O272] o intervalo conta so a parte DENTRO da janela: um recorte, antes do carimbo, nos tres calcular_periodo` |
 | `origin/main` | `3d644aa8 [O263-FT] o derivado do marco: o placar do topo do TICKETS volta a bater com o mundo e os alarmes do vigia entram` |
 | commits a subir (`ahead`) | **1** |
 
@@ -29,28 +29,28 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2458.5 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2458.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **227.0 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **227.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **40.2 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **40.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **343.1 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **343.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **247.2 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **247.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **364.9 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **365.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -64,7 +64,7 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
-b71b3a79 [O272] o intervalo conta so a parte DENTRO da janela: um recorte, antes do carimbo, nos tres calcular_periodo
+aad64415 [O272] o intervalo conta so a parte DENTRO da janela: um recorte, antes do carimbo, nos tres calcular_periodo
 3d644aa8 [O263-FT] o derivado do marco: o placar do topo do TICKETS volta a bater com o mundo e os alarmes do vigia entram
 8c851906 [O263-FT] a folga trabalhada volta a ser medida pelo relogio: a janela nao recorta um dia que nao tem marco
 eee94960 [BUG-LINHA-X-BADGE] o rodape do TICKETS volta a dizer o push de verdade (derivado de bin/tickets_rodape.sh), e o sitio da O263-FT fica registrado onde a obra o espera
@@ -75,7 +75,7 @@ eee94960 [BUG-LINHA-X-BADGE] o rodape do TICKETS volta a dizer o push de verdade
 
 ```
  M app/config/crons_duracao.json
- M app/docs/RELATO.md
+ M app/docs/HANDOFF-SESSAO.md
  M bin/sonda_leitura.sh
 ?? app/GREEN
 ?? esteira.pausada
@@ -168,41 +168,41 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-● Confirmado, e é mais do que o advisor supôs: o CAMPOS canônico da casa (aplicar_09_corte_b.py:67) tem minutos_realizados e mais 10 campos que meu snapshot não
-  capturou — meu snapshot criou uma segunda lista de "o que a reversão cobre". Curo os três pontos:
+● Background command "Rerun all host seals and the tickets ruler" completed (exit code 0)
+
+  Read 1 file, ran 3 shell commands
+
+● Selos 0 vermelhos, régua OK (o parado_citado_em_commit_posterior=1 é o TROCA-DE-PLANTAO dele, citado por commits de 23-27/09 — anterior a mim, não fatal). Push
+  do marco:
+
+  Ran 1 shell command
+
+● Enquanto o push corre (arsenal, ~25 min, com a trava), o esmeril DESTE marco (não abre achado de fora): o que a cura do O272 deixou órfão.
 
   Ran 2 shell commands
 
-● linhas=1 idêntico nos três não é medição — é provável erro do --since. Confiro:
+● Órfão do marco: zero. Os três sítios consomem a lista recortada (MotorTurnoPartido:2327/2331 a passa a _carimbar_segmento e _escrever_noturnas, mesmo sem somar
+  intra), _intra_real mantém seus 2 chamadores e nenhuma função perdeu o último leitor. Enquanto o arsenal roda, confiro o estado da O273 sem tocar na árvore:
 
-  Ran 2 shell commands
+  Ran 1 shell command
 
-● Logs fluem; o idioma da casa é duração, não hora de relógio, e o 5xx tem padrão próprio (bin/selo_paginas_500.sh:16). Uso o selo da casa em vez de reinventar:
+● A cópia da O273 nasceu do HEAD anterior; como ela não cruza arquivo com a O272, reconstruo-a sobre aad64415 agora e reinjeto os quatro arquivos, para a suite
+  dela sair no instante em que a trava liberar:
 
-  Ran 3 shell commands
+  Ran 5 shell commands
 
-● Agora o RELATO recebe as três correções (reversão completa, lei existente citada, smoke):
+● O código no ar carrega o recorte nas três subclasses (prova no objeto importado, não no arquivo em disco — BUG 128). O commit está durável; consulto o advisor
+  enquanto o arsenal roda.
 
-● Showing the tail of the commit message
-  ⎿  $ cd /home/ronald/saas-hasner; SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; sed -n '60,91p'
-     $SP/o272_msg_commit.txt
-  ⎿  Read docs/AVAIS.md (23 lines)
-  ⎿  Referenced file ponto/motor_calculo_v2.py
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bff1doauu.output (9 lines)
-  ⎿  Referenced file core/juizes.py
-  ⎿  Read ../logs/o261b/watch_5min_o256.log (6 lines)
+● Advising using Fable 5.1
 
-● Task "RED e construção do segundo intervalo" completed in background
-
-● Task "Insert the new obra and move the live-order marker" still running in background
-
-✢ Propagating… (2h 15m 50s · ↓ 326.2k tokens)
+· Propagating… (2h 21m 20s · ↓ 337.7k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                                         1h 3m 8s · ↓ 428.9k tokens
