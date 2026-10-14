@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 14/10/2026 00:53:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (806.7 MB). Acoes na janela: **832**.
+**Medido em 14/10/2026 00:58:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (806.7 MB). Acoes na janela: **829**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -839,6 +839,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 13:01:37 | Bash | Generate the session handoff | `cd /home/ronald/saas-hasner; bin/handoff_sessao.sh 2>&1 \| tail -6; echo "---"; head -30 app/docs/HANDOFF-SESSAO.md` |
 | 13:01:33 | Bash | Join the NO AR bullet to the list | `cd /home/ronald/saas-hasner; python3 - app/docs/RELATO.md <<'PY' import sys p = sys.argv[1] s = open(p, encoding='utf-8').read() bad = "\n\n- **NO AR 13/10 12:5x**" assert s.count(bad) == 1, s.count(bad) open(p, 'w', encoding='utf-8').write(s.replace(bad, "\n- **NO AR 13/10 12:5x**")) print('OK') PY sed -n '241,246p' app/docs/RELATO.md \| cut -c1-60 \| cat -n` |
 | 13:01:26 | Bash | Append the NO AR bullet to the O261 section | `cd /home/ronald/saas-hasner; S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cat > "$S/o261msg/no_ar_item3.md" <<'EOF' - **NO AR 13/10 12:5x** (`logs/deploy.stamp`: `QUANDO=1791906937`, `COMMIT=7856486d`): `bin/deploy.sh --sem-migrate` sobre os TRES commits do marco (`bceab5ba` a porta, `220f5317` a declaracao, `7856486d` o instrumento, que nao prec ...` |
-| 12:55:48 | Bash | Five-minute 500 watch after the deploy | `cd /home/ronald/saas-hasner; cat logs/deploy.stamp; INI=$(date -u +%s); INIS=$(date -u -d "@$INI" +%Y-%m-%dT%H:%M:%SZ); FIM=$((INI+300)); echo "watch: $INIS -> $(date -u -d "@$FIM" +%Y-%m-%dT%H:%M:%SZ)"; until [ "$(date -u +%s)" -ge "$FIM" ]; do sleep 20; done; { echo "O261 item 3 -- janela de 5 min MEDIDA (deploy $(grep COMMIT logs/deploy.stamp))"; echo "janela $INIS -> $(date -u +%Y-%m-%dT%H:%M: ...` |
-| 12:55:23 | Bash | Deploy the O261 item 3 commits | `cd /home/ronald/saas-hasner; mkdir -p logs/o261b; bin/deploy.sh --sem-migrate > logs/o261b/deploy_item3.log 2>&1; echo "rc=$?"; tail -24 logs/o261b/deploy_item3.log` |
-| 12:55:09 | Bash | Read what the two RED selos name | `cd /home/ronald/saas-hasner; echo "=== lei_akita ==="; bash bin/tests/test_lei_akita.sh 2>&1 \| tail -14; echo; echo "=== leis_indice ==="; bash bin/tests/test_leis_indice.sh 2>&1 \| tail -10` |
