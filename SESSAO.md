@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 14/10/2026 06:51:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (806.7 MB). Acoes na janela: **193**.
+**Medido em 14/10/2026 06:56:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (806.7 MB). Acoes na janela: **192**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -202,4 +202,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 18:56:55 | Bash | Print the OBRAS header and the O263 row cell by cell | `cd /home/ronald/saas-hasner/app; awk 'NR>=820 && NR<=828 && /^\\|/' docs/BACKLOG.md \| head -3 \| cut -c1-160; python3 - <<'PY' s=open('docs/BACKLOG.md',encoding='utf-8').read().split('\n') for l in s: if l.startswith('\| O263 \|'): for k,c in enumerate(l.split('\|')): print(k, repr(c[:60])) break PY` |
 | 18:56:46 | Bash | Insert the complemento row into the BACKLOG obras table | `cd /home/ronald/saas-hasner/app; python3 - <<'PY' p='docs/BACKLOG.md'; s=open(p,encoding='utf-8').read() L=s.split('\n') for n,l in enumerate(L): if l.startswith('\| O263 \|'): c=l.split('\|'); break print('celulas:', len(c)) novo=('\| O263-FT \| **FT-SEM-MARCO-NAO-SE-RECORTA** (aval dele 13/10 ~19:0x, **COMPLEMENTO da O263**: mesmo sitio, ' 'mesma familia de dinheiro, nao abre obra nova). Na FOLG ...` |
 | 18:56:33 | Bash | Add the aval row to PROMPTS and locate the O263 obra row | `cd /home/ronald/saas-hasner/app; python3 - <<'PY' p='docs/PROMPTS.md'; s=open(p,encoding='utf-8').read() anc='\| 13/10 ~18:1x \| **aval** (`PUSH-CURA-AS-DUAS-CAUSAS`' i=s.index(anc); j=s.index('\n', i)+1 row=('\| 13/10 ~19:0x \| **aval** (`O263-FT-SEM-MARCO`, COMPLEMENTO da O263) \| ' '*"aval Ronald: complemento da O263 -- na folga trabalhada nao ha marco (aval 30/09, L-084), entao a janela da ' ' ...` |
-| 18:56:24 | Bash | Locate the janela/periodos_ft sítio and the PROMPTS row shape | `cd /home/ronald/saas-hasner/app; grep -n "_janela_do_par\\|periodos_ft" ponto/services/*.py ponto/*.py 2>/dev/null \| head -8; echo ---; grep -n "^\| " docs/PROMPTS.md \| tail -1 \| cut -c1-200` |
