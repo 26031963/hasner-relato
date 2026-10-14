@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 14/10/2026 02:45:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (806.7 MB). Acoes na janela: **613**.
+**Medido em 14/10/2026 02:50:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (806.7 MB). Acoes na janela: **603**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -613,13 +613,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 14:53:10 | Bash | Find tipo_base field | `cd /home/ronald/saas-hasner/app; grep -n "tipo_base\\|tipo_ciclo" escala/models.py \| head -40; echo "=== TipoEscala class"; grep -n "^class " escala/models.py \| head -30` |
 | 14:53:04 | Bash | Read sonda_leitura.sh | `cd /home/ronald/saas-hasner; sed -n '1,80p' bin/sonda_leitura.sh` |
 | 14:52:57 | Bash | Check suite progress | `cd /home/ronald/saas-hasner; tail -c 600 logs/o263/suite_full_o263b.log; echo "---"; grep -cE '^(OK\|FAILED)($\| \()' logs/o263/suite_full_o263b.log 2>/dev/null; echo "rc_grep=$?"` |
-| 14:47:36 | Bash | Read MotorIntermitente | `cd /home/ronald/saas-hasner/app; sed -n '2983,3060p' ponto/motor_calculo_v2.py` |
-| 14:47:32 | Bash | Locate MotorIntermitente and the feriado mentions | `cd /home/ronald/saas-hasner/app; grep -rn 'class MotorIntermitente' ponto/motor_calculo_v2.py; grep -n 'feriado' ponto/motor_calculo_v2.py \| sed -n '1,60p' \| cut -c1-160` |
-| 14:47:15 | Bash | Review the uncommitted docs deltas | `cd /home/ronald/saas-hasner; git diff --stat -- app/docs/; echo "=== LEIS.md ==="; git diff -- app/docs/LEIS.md \| head -40` |
-| 14:47:00 | Bash | Read the declared-paths commit guard | `cd /home/ronald/saas-hasner; sed -n '1,60p' bin/commit_so_o_declarado.sh` |
-| 14:46:54 | Bash | Inspect the git hooks | `cd /home/ronald/saas-hasner; ls .git/hooks/ \| grep -v sample; echo "=== pre-commit ==="; grep -nE 'regua_tickets\|lei_akita\|bash \|sh ' .git/hooks/pre-commit 2>/dev/null \| head -20` |
-| 14:46:35 | Bash | Read the regua pattern and placeholders | `cd /home/ronald/saas-hasner; sed -n '40,110p' bin/regua_tickets.sh` |
-| 14:46:20 | Bash | Read the FIO-RESSUSCITA account in the RELATO | `cd /home/ronald/saas-hasner/app; sed -n '348,356p' docs/RELATO.md \| cut -c1-700` |
-| 14:46:09 | Bash | Find FIO-RESSUSCITA in the docs | `cd /home/ronald/saas-hasner; grep -rn 'FIO-RESSUSCITA' app/docs/*.md \| cut -c1-300 \| head -10` |
-| 14:46:00 | Bash | Read the FIO-RESSUSCITA context in that commit | `cd /home/ronald/saas-hasner; git log -1 2cb57138 --format='%b' \| grep -n -B4 -A8 'FIO-RESSUSCITA'` |
-| 14:45:56 | Bash | Find the commit citing FIO-RESSUSCITA | `cd /home/ronald/saas-hasner; git log origin/main..HEAD --format='%h %s' \| grep -n 'FIO-RESSUSCITA' \| head; echo "---"; git log origin/main..HEAD --format='%h%x09%s%x09%b' \| grep -c FIO-RESSUSCITA; git log origin/main..HEAD --format='COMMIT %h %s' --grep='FIO-RESSUSCITA' \| head` |
