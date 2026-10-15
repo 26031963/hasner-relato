@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 15/10/2026 09:36:32.**
+**Medido em 15/10/2026 09:42:02.**
 
 | | |
 |---|---|
@@ -29,28 +29,28 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2471.8 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2471.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **240.3 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **240.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
   - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **53.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **356.4 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **356.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **260.6 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **260.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **378.3 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **378.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -75,6 +75,8 @@ d9a32f55 [O273] a recusa do sistema que perde a premissa NAO se apaga: a linha f
 
 ```
  M app/config/crons_duracao.json
+ M app/docs/BACKLOG.md
+ M app/docs/PROMPTS.md
  M app/docs/RELATO.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -165,19 +167,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  pede cron. A medição que explica as 6 h:
-
-  Ran 1 shell command
-
-● O vigia estava vivo e rodou 10 em 10 min — e disse "parado-legitimo" 37 vezes seguidas por 6 h. O defeito não é que morreu: é o JUIZ. A guarda dele casa a palavra PAREI por token no
-  texto do pane, e o pane contém a própria frase do Stop hook (PAREI so em lei ou !) — a prosa que explica o alarme virou o alarme. Seu aval já nomeia a autoridade certa: o topo do RELATO,
-  não o pane. E esse juiz já existe:
-
-  Ran 2 shell commands
-
-● O quadro completo, medido: o alarme (alarme_sessao_ociosa.py, juiz certo — lê o topo do RELATO) funcionou e é por isso que o seu aval chegou às 09:30; quem religa (keepalive.sh, juiz
-  errado — regex no pane) ficou cego. 37 ticks, 6 h.
-
   Construo o instrumento no scratchpad e aplico no commit (bin/ não é bind-mount, logo sem deploy):
 
   Ran 1 shell command
@@ -185,18 +174,31 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● O classificador barrou a escrita: [Tmux Self Drive] — eu não posso autorar código que digita no meu próprio painel. Não vou contornar. Registro a obra com o diagnóstico medido e sigo a
   fila (O271), como o aval manda.
 
-● Register the aval in PROMPTS and BACKLOG
-  ⎿  $ python3 - <<'PY'
-     import io, os
-     B = 'docs/BACKLOG.md'
-     P = 'docs/PROMPTS.md'
-     linha_backlog = (
-     "| O279 | **VIGIA-CONEXAO** (aval dele 15/10 ~09:3x -- instrumento, pouso PROPRIO pela L-105, e `bin/` "
-     "nao e bind-mount, logo sem deploy). Cron de 10 min que religa a sessao quando a conexao cai: fim d…
+  Ran 1 shell command
+  ⎿  Read docs/AVAIS.md (23 lines)
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bsyn3e0ux.output (5 lines)
+  ⎿  Referenced file ponto/management/commands/tripwire_celulas.py
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bzx8wto03.output (4 lines)
 
-✢ Compacting conversation… (12m 10s · ↓ 26.9k tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱ 71%
-                                                                                                                                                                     0% until auto-compact
+● Task "RED e construção do segundo intervalo" completed in background
+
+● O assert que falhou foi uma guarda minha mal escrita (não o conteúdo) — nada foi gravado. Refaço sem ela:
+
+  Ran 4 shell commands
+
+● A raia CELULA-SEGUNDO-INTERVALO fechou com um INCOMPLETO que é meu: a suíte cheia dos 5 apps depois de d36ae038. Pela L-105 o pouso dela vem antes de fatia nova, e a pista é minha.
+  Levanto o estado dela e da trava:
+
+  Ran 3 shell commands
+
+● A raia era notificação atrasada: 10832b45/d36ae038 já estão no main desde 02/10 (a2e903e1 [O114] A CELULA CARREGA AS DUAS PAUSAS: merge da raia de nucleo, deploy no mesmo ato) — o
+  INCOMPLETO dela foi pago há treze dias. Nada devido ali. Volto ao O271, que é a fila 1.
+
+● Reading calcular_mes head and the pares loop opening
+  ⎿  $ cd /home/ronald/copia-o271/app && sed -n '1836,1930p' ponto/motor_calculo_v2.py
+
+✢ Flambéing… (17m 40s · ↓ 40.2k tokens · thinking)
+                                                                                                                                                    ✔ Update installed · Restart to update
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
