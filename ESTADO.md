@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 15/10/2026 09:20:46.**
+**Medido em 15/10/2026 09:25:46.**
 
 | | |
 |---|---|
@@ -29,7 +29,7 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2471.6 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2471.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
@@ -38,19 +38,19 @@ RELATO, com a lista de nomes do banco como autoridade._
   - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **240.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **53.3 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **53.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **356.2 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **356.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **260.3 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **260.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **378.0 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **378.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -165,42 +165,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+✻ Sautéed for 9h 20m 17s · done 3:21 AM · 1 shell still running
 
-● 09: zero — the cure moves nothing in the exported competência (4046/1242/185 dias, all pendentes, 0 revogações). Now registering the one corte that is genuinely new (the dobra reverses
-  O264's lei), and checking the other four against PROMPTS:
+❯ code C-End; sleep 2; ver 60
 
-  Ran 1 shell command
+● Não entendi a linha — ela parece ter caído aqui de outro terminal (ver é comando de Windows, e sleep/C-End não casam com nada da esteira). Não rodei nada.
 
-● Five of the six are already registered — only the dobra corte is new, and it reverses the lei of O264 (the DP reading that the 13/10 aval gated on). Registering it now, in the same turn:
+  Se "ver 60" é o col60, o que eu acabei de medir (leitura em prod pela autoridade_do_periodo, zero escrita):
 
-  Ran 5 shell commands
+  col60 01/09/2026 | motor=Motor12x36ComEscala
+    CADASTRO te#177 PAI-12x36.2  marcos 07:00-19:00  itv template None-None  jornada 720
+    MARCOS DO DIA (celula/EC): 07:00-19:00, intervalo 12:00-13:00   <- a celula DECLARA o intervalo
+    BATIDAS do dia (2): 12:00E 19:06S
+    PERIODO 12:00 -> 19:06 | trab=419,56  atr=0,0  ant=0,0  aberto=False
+    CADASTRO x REALIDADE no dia: nenhuma linha
+    _previsto_do_dia = 660 | teto L-093 = 660 - 419,56 = 240,44
+    entrada 12:00 vs marco 07:00 -> _de = 300,44 ; saida vs 19:00 -> _ds = -6,86
 
-● The decisive orientation: CICLOS_FERIADO_SIMPLES = frozenset({'12x36'}) (motor_calculo_v2.py:3198) is already the declared juiz of this exact question (core/juizes.py:218, família F3).
-  One more grep to name the cycles, then I register:
+  Ou seja: a entrada das 12:00 cai dentro do raio de 90 min do marco de volta do intervalo (13:00), o _volta_do_intervalo a trata como fragmento, prevista_entrada vira None e o dia sai sem
+  pontualidade e sem alerta — o defeito do seu complemento, confirmado no dado real. Pela regra (L-084 uma ponta + teto L-093) o dia vale 240,44 min de atraso, não os 234 do aval — a
+  diferença é o teto, que eu medi em vez de supor.
 
-  Ran 7 shell commands
+  Estado: push do marco anterior pousou (origin/main = 49ac61c4), trava livre, os dois casos do O271 medidos (col406 27/08 = 73,9 min pelo teto, não 77). Ia escrever o RED agora.
 
-● The 27/09 corte in that docstring closes the obvious shortcut: "FERIADO NAO entra na L-086: segue a regra de feriado que ja existe no cadastro do ciclo" — generalizing "previsto ⇒ sem
-  dobra" once cost −642,43 h in 64 colabs. So the new corte has to act on the cycle cadastro. Registering with that measured:
+  Me diz em uma linha o que você quis (ver outro colaborador? parar? seguir?) e eu sigo.
 
-  Ran 2 shell commands
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: O271 -- BUG-COMERCIAL-SEM-PONTUALIDADE (aval dele 13/10 19:3x -- bug PROVADO, P7.1 fura a fila; DINHEIRO). MotorComerc
 
-❯ aval Ronald: RAIA-NAO-FICA-PARADA -- enquanto a fila 1 cura os bugs da auditoria (motor_calculo_v2.py / turnos.py / export.py / portas/he.py), abre AGENTE PROPRIO ao lado para a celula
-  escala x um juiz pela O142 (escala/utils.py::_esc_vigente_do_dia + ponto/nucleo.py "quem vige neste dia", ja avalizada): medir antes se cruza arquivo com a fila 1 -- cruzou, nao abre e
-  diz em UMA linha; pouso um por vez (L-105/L-107); juizes novos so pela AUTONOMIA-DE-CODIGO item 3; nenhuma lei nova. Segue a fila; PAREI so em lei ou !
+● Advising using Fable 5.1
 
-● Fixing the path and, in the same batch, measuring the gate the new aval sets (does O142 cross files with fila 1?):
-
-  Ran 1 shell command
-
-● Zero crossing on both files with every open fila-1 item (O264–O277), and neither is among O273's 11. One reader census to hand the agent, plus O142's literal:
-
-                                                                                144 new messages (ctrl+End) ↓
-                                                                                                                                                      new task? /clear to save 121k tokens
+* Flambéing… (1m 25s · ↓ 1.8k tokens)
+                                                                                                                                                    ✔ Update installed · Restart to update
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                                                                  1h 3m 8s · ↓ 428.9k tokens
