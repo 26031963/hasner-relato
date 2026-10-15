@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 15/10/2026 17:02:32.**
+**Medido em 15/10/2026 17:08:02.**
 
 | | |
 |---|---|
@@ -29,7 +29,7 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2479.3 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2479.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
@@ -38,28 +38,28 @@ RELATO, com a lista de nomes do banco como autoridade._
   - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **247.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **61.0 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **61.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **363.9 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **364.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lote** (`raia-lote`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **3.3 h**
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **3.4 h**
   - sem declaracao em `logs/raias/wt-lote.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **268.0 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **268.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **385.7 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **385.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
 - **wt-v3** (`raia-v3`) -- **SEM AGENTE**
-  - 6 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **0.1 h**
+  - 6 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **0.2 h**
   - sem declaracao em `logs/raias/wt-v3.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **21 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
@@ -170,44 +170,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  Ran 2 shell commands
+
+● Push na suite do hook (~25 min). Armo a espera por ARQUIVO e preparo o ! fora da árvore carimbada:
 
   Ran 3 shell commands
 
-● (a) verde. O (b) é o portão do deploy, que já correu às 16:56 com crons_em_curso=0 — os 4 crons nasceram depois, e a emenda só mexeu numa linha derivada de docs,
-  que não vai ao ar. Empurro:
+● O topo já carrega a pergunta, mas com o número da sombra e com filtro tipo=TIPO_DIA — o meu não filtrou tipo. Universos diferentes; medindo igual antes de
+  afirmar divergência:
 
   Ran 1 shell command
 
-● Enquanto o push corre, fecho a fronteira da sombra com o agente da O280 — ela virou real com o deploy das 16:56:
-  ⎿  Message queued for delivery to a0e94d563a20a5e65 at its next tool round.
-  ⎿  Allowed by auto mode classifier
+● Mesmo universo (tipo=DIA é 100%). Prod: 10.891 / 557 na 09; a sombra dizia 10.893 — delta de 2 linhas numa competência FECHADA, que declaro e não persigo agora.
+  Ajusto o ! e preparo o adendo do topo:
+
+  Ran 2 shell commands
+
+● Push na suite (desde 17:00, ~25 min). Enquanto isso, só leitura: qual é o próximo item da fila 1 que não depende da O275:
+
+  Ran 2 shell commands
+
+● O meu uso do _item_fechado está errado (ele não recebe a linha inteira) — não vou re-derivar o juízo do hook. A ordem mora declarada no adendo do BACKLOG:
 
   Ran 1 shell command
 
-● O ! do backfill da 09 não está na mesa — tenho de arquivá-lo. Lendo a porta canônica enquanto o push corre:
+● Ordem declarada dele: O271 → O276 → O275 → O277 — e os três que restam estão todos travados em lei/!. O próprio adendo nomeia o que anda ao lado: O284-A, raia
+  VERDE, pousa pela L-105 antes de abrir fatia nova. Junto o conserto do número no comentário da ORDEM VIVA (ele diz 10.893):
 
-  Ran 3 shell commands
+● Running 1 shell command…
 
-● Vou medir o número do ! do backfill na fonte (contagem simples, sem motor):
-
-  Ran 3 shell commands
-
-● Medido em prod com a coluna no ar — e o número carregado estava em 10.893, o real é 10.891. Mais: a comp 10 já tem 816 linhas lavradas desde as 16:56, ou seja o
-  escritor novo já está gravando. Conferindo os três estados:
-
-● Checking push progress
-  ⎿  $ cd /home/ronald/saas-hasner && if grep -q PUSH_FIM logs/o140b/push2.log 2>/dev/null; then tail -6 logs/o140b/push2.log; else echo "push em curso: $(wc -l <
-     logs/o140b/push2.log) linhas"; tail -3 logs/o140b/push2.log; fi
-
-· Flambéing… (7h 38m 10s · ↓ 954.8k tokens · thought for 5s)
+✢ Flambéing… (7h 43m 40s · ↓ 966.7k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                           ✔ Update installed · Restart to update
+                                                                                                                                            7% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ general-purpose  Committing periodo.py and V3Familia1Test                                                                         3h 11m 58s · ↓ 80.4k tokens
+  ◯ general-purpose  Reading A8 case in test_o280_bateria_da_lei.py                                                                  3h 17m 29s · ↓ 121.7k tokens
   ⧉  index
 ```
