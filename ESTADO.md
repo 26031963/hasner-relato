@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 15/10/2026 17:55:46.**
+**Medido em 15/10/2026 18:01:02.**
 
 | | |
 |---|---|
@@ -29,37 +29,37 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2480.2 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2480.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **248.6 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **248.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **61.9 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **62.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
   - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **364.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lote** (`raia-lote`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **4.2 h**
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **4.3 h**
   - sem declaracao em `logs/raias/wt-lote.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **268.9 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **269.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **386.6 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **386.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
 - **wt-v3** (`raia-v3`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **0.1 h**
+  - 7 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **0.2 h**
   - sem declaracao em `logs/raias/wt-v3.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **21 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
@@ -104,6 +104,7 @@ M  app/relatorios/views.py
 A  app/templates/relatorios/_lote_espelho_progresso.html
 M  app/templates/relatorios/espelho_lote.html
 A  app/templates/relatorios/espelho_lote_job.html
+ M bin/sombra_regras_pessoais.py
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -194,36 +195,36 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+      141 +    # `relatorios/lote_espelho.py:239-247`, ate 50 nomes por chave. Vai para JSON porque `json_()` ja
+      142 +    # mascara toda string recursiva e deixa a CHAVE (a tela le `msg`, `tipo`, `gerados`, `falharam`).
+      143 +    # O irmao `alvo` fica FORA de proposito: ele guarda PKs (int), e `json_()` so mexe em string.
+      144 +    # O mesmo placar ja ia mascarado por outra porta -- `observ.evento(..., depois=placar)` cai em
+      145 +    # `core_logauditoria.valor_depois`, logo acima --, e era so essa a razao de ninguem notar.
+      146 +    ('relatorios', 'LoteEspelho'): ('placar',),
+      147  }
+      148
+      149  # O selo acha colunas por NOME; o que casar e nao estiver nas regras acima tem de estar aqui, com motivo.
+  ⎿  Allowed by auto mode classifier
 
-● Task "Read the live order of fila 1" still running in background
+● Update(~/saas-hasner/bin/sombra_regras_pessoais.py)
+  ⎿  Added 5 lines
+      192      'escala_tipoescala.he_extra_depois_min': 'minutos declarados no template de escala (O146); casa com o '
+      193                                               'padrao por "depois" -- nao e foto de antes/depois, e parametro',
+      194      'folha_exportacaodominio.nome_arquivo': 'nome de arquivo por competencia', 'folha_rubricacatalogo.descricao': 'catalogo',
+      195 +    # MEDIDO no sitio (`relatorios/lote_espelho.py::nome_do_arquivo`, linhas 176-184): o nome e
+      196 +    # `cartoes_<razao_social[:12]|sel_Ncolabs>_<AAAAMM>.pdf` -- empresa (PJ) ou a CONTAGEM da selecao,
+      197 +    # nunca o nome de um colaborador, mesmo quando o lote e de um colab so. Mesma classe dos dois
+      198 +    # `nome_arquivo` ja inventariados (`folha_exportacaodominio`, `ponto_importacaoaej`).
+      199 +    'relatorios_loteespelho.nome_arquivo': 'nome de arquivo por empresa/competencia (sem nome de pessoa)',
+      200      'holerite_envioholerite.titulo': 'lote de envio', 'ponto_fechamentomensal.motivos_espelho': 'codigos',
+      201      'ponto_fechamentomensal.saldo_banco_horas': 'numero', 'ponto_importacaoaej.nome_arquivo': 'arquivo de importacao',
+      202      # DUAS COLUNAS MINHAS, de 28/09, que o selo pegou por SUBSTRING no primeiro dump fresco -- e pegou certo,
+  ⎿  Allowed by auto mode classifier
 
-● Task "Wait for the certification suite to finish" still running in background
+● Reading suite.sh to run a single module
+  ⎿  $ cd /home/ronald/saas-hasner && sed -n '1,80p' bin/suite.sh
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-  Ran 7 shell commands
-
-● Agent "O280 MOTOR-V3 passos 1 e 2" finished · 3h 53m 9s
-
-  Ran 8 shell commands
-
-● Background command "Wait for the certification suite to finish" completed (exit code 0)
-
-  Listing the rule classes and the JSON block
-  ⎿  $ cd /home/ronald/saas-hasner && grep -n "^JSON\|^TEXTO\|^ISENTOS\|^NULO\|^MARCADOR\|^VAZIO\|^[A-Z_]* = {" bin/sombra_regras_pessoais.py; echo "=== bloco
-     JSON:"; sed -n '/^JSON/,/^}/p' bin/sombra_regras_pessoais.py | head -20
-  ⎿  Read docs/AVAIS.md (26 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b5duwgtxq.output (12 lines)
-  ⎿  Referenced file escala/utils.py
-  ⎿  Read ../logs/o271_diff_runner.log (20 lines)
-  ⎿  Referenced file docs/RELATO-ARQUIVO.md
-
-● Task "O280 MOTOR-V3 passos 1 e 2" still running in background
-
-● Task "Read the live order of fila 1" still running in background
-
-· Flambéing… (8h 31m 24s · ↓ 1.1m tokens · thinking)
+✢ Flambéing… (8h 36m 40s · ↓ 1.1m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -232,6 +233,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
   ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ general-purpose  Reading pontualidade gate in do_dia                                                                              4h 5m 12s · ↓ 104.4k tokens
+  ◯ general-purpose  Grepping intervalo_marcos producer in alimentacao.py                                                            4h 10m 29s · ↓ 125.7k tokens
   ⧉  index
 ```
