@@ -6,10 +6,19 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 15/10/2026 02:11:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (831.8 MB). Acoes na janela: **1069**.
+**Medido em 15/10/2026 02:16:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (832.3 MB). Acoes na janela: **1078**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 02:16:30 | Bash | Read what writes FechamentoMensal.minutos_realizados | `grep -rn "minutos_realizados" ponto/services/fechamento.py \| head -20` |
+| 02:13:11 | Bash | Run the idempotence diff on the sombra | `cd /home/ronald/saas-hasner && bin/sombra.sh --rodar idem_sobra_col190.py idem_sobra_col190 2>&1 \| tail -20` |
+| 02:13:03 | Bash | Build a trimmed idempotence script that prints the differing keys | `cd /home/ronald/saas-hasner && cp logs/sombra/apply_sobra_col190.py logs/sombra/idem_sobra_col190.py && L=$(grep -n "2a corrida: batidas iguais" logs/sombra/idem_sobra_col190.py \| cut -d: -f1) && echo "linha do print = $L" && sed -i "${L},$((L+1))d" logs/sombra/idem_sobra_col190.py && sed -i "$((L-1))r /dev/stdin" logs/sombra/idem_sobra_col190.py <<'PATCH' print('2a corrida: batidas iguais = %s \ ...` |
+| 02:12:43 | Bash | Read the main block and the _diff helper | `cd /home/ronald/saas-hasner && sed -n '225,260p' logs/sombra/apply_sobra_col190.py && echo "=== _diff:" && sed -n "$(grep -n 'def _diff' logs/sombra/apply_sobra_col190.py \| cut -d: -f1),+12p" logs/sombra/apply_sobra_col190.py` |
+| 02:12:36 | Bash | Read the comparison and ciclo structure of the sombra script | `cd /home/ronald/saas-hasner && sed -n '80,120p;150,225p' logs/sombra/apply_sobra_col190.py` |
+| 02:12:16 | Bash | Find the comparison code in the sombra apply script | `cd /home/ronald/saas-hasner && grep -n "igual\\|_hash_dia_pago\\|_frota\\|def foto\\|CAMPOS" logs/sombra/apply_sobra_col190.py \| head -40` |
+| 02:12:07 | Bash | Read the rest of the sombra apply DIFF output | `cd /home/ronald/saas-hasner && sed -n '120,209p' logs/apply_sobra_col190.out \| grep -vE "^S160 _derivar_chamado_destino"` |
+| 02:11:43 | Bash | Read first part of the sombra apply DIFF output | `cd /home/ronald/saas-hasner && sed -n '1,120p' logs/apply_sobra_col190.out` |
+| 02:11:39 | Bash | Check whether the sombra apply output file exists yet | `cd /home/ronald/saas-hasner && date '+%d/%m %H:%M:%S' && ls -la logs/apply_sobra_col190.out 2>/dev/null && echo "--- linhas:" && wc -l logs/apply_sobra_col190.out 2>/dev/null; ls logs/crons_em_curso/ 2>/dev/null \| head` |
 | 02:07:43 | Bash | Locate the BUG-SOBRA rows in BACKLOG and TICKETS | `grep -n "BUG-SOBRA" docs/BACKLOG.md \| head -5 && echo "=== === TICKETS:" && grep -n "BUG-SOBRA" docs/TICKETS.md \| head -5` |
 | 02:07:16 | Bash | Run the apply DIFF against the sombra | `cd /home/ronald/saas-hasner && date '+%d/%m %H:%M:%S inicio do DIFF do apply na sombra' && bin/sombra.sh --rodar apply_sobra_col190.py apply_sobra_col190 2>&1 \| tail -20 && echo "=== rc acima e do tail; o veredito esta no .out:" && date '+%d/%m %H:%M:%S fim'` |
 | 02:07:11 | Bash | Check the --rodar usage | `cd /home/ronald/saas-hasner && grep -n "rodar" bin/sombra.sh \| head -12` |
