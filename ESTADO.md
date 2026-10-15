@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 14/10/2026 21:37:41.**
+**Medido em 14/10/2026 21:43:02.**
 
 | | |
 |---|---|
@@ -29,28 +29,28 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2459.9 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2460.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **228.3 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **228.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **41.6 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **41.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
   - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **344.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **248.6 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **248.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **366.3 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **366.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -172,37 +172,37 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-● LogAuditoria isn't there — finding the real trilha model instead of guessing:
+  Searched for 2 patterns, ran 1 shell command
+
+● DRY = 17 = APPLY, and the dry wrote nothing. Writing the comp-09 probe (number only, per the aval) to run once the sombra frees up:
 
   Ran 1 shell command
 
-● LogAuditoria lives in core/models.py. Fixing the import and re-running:
+● Starting the full suite on the certified tree — but first the POUSO-EM-COMBOIO question must be measured, not supposed:
 
   Ran 1 shell command
 
-● psycopg3 doesn't adapt a tuple to an IN list — switching to = any(%s):
+● Comboio question measured: no raia is suite-ready — the ones ahead of main are old or instrument raias (and raia-pdf is forbidden to merge). So this one runs
+  alone. Starting the full suite on the certified tree:
 
-  Ran 1 shell command
+  Running the full suite on the certified tree
+  ⎿  $ SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cd /home/ronald/saas-hasner && bash bin/suite.sh --dir
+     $SP/o273_copia_v2 > logs/o273/suite_cheia.out 2>&1; rc=$?; echo "rc=$rc"; grep -E '^(OK|FAILED)($| \()' logs/o273/suite_cheia.out | tail -1; gre…
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bd6l98fqu.output (10 lines)
+  ⎿  Read docs/AVAIS.md (23 lines)
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b6lodilhp.output (8 lines)
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bto17ew1j.output (8 lines)
+  ⎿  Referenced file ponto/motor_calculo_v2.py
 
-● current_schema() is public after the migrate — the migrate resets the connection's search_path, which would have sent every later read to the wrong schema. The
-  assertion earned its place. Probing the restore:
+● Task "RED e construção do segundo intervalo" completed in background
 
-  Ran 1 shell command
+● Task "Insert the new obra and move the live-order marker" still running in background
 
-● set_schema restores it and vigentes() answers 3572. Patching the DIFF and running it:
+● Task "Run the full suite on the certified tree" still running in background
 
-  Ran 1 shell command
-
-● Running long (the lavrador over the whole frota). While it runs, ruff on the changed files — memory says a dead import found only by the suite costs 9 minutes:
-
-  Running ruff on the changed files in the container
-  ⎿  $ SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cd /home/ronald/saas-hasner; source bin/recursos.sh
-     >/dev/null 2>&1; ls app/ruff.toml >/dev/null && echo "ruff.toml presente"; docker run --rm --cpuset-cpus "$TESTE_CPUSET" --cpus 1 --network none \
-     …
-
-✽ Propagating… (3h 36m 29s · ↓ 472.5k tokens)
+✢ Propagating… (3h 41m 50s · ↓ 478.9k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                                            7% until auto-compact
+                                                                                                                           ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
