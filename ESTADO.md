@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 15/10/2026 10:20:02.**
+**Medido em 15/10/2026 10:25:32.**
 
 | | |
 |---|---|
@@ -29,28 +29,28 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2472.6 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2472.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **241.0 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **241.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **54.3 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **54.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **357.2 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **357.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **261.3 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **261.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **379.0 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **379.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -167,35 +167,35 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● Medição decisiva — e ela confirma o risco que o advisor nomeou, com número:
-
-  ┌──────────────┬────────────────────────┬──────────────┬────────────────────────────────────────┐
-  │     caso     │     marco ocupado      │    status    │                leitura                 │
-  ├──────────────┼────────────────────────┼──────────────┼────────────────────────────────────────┤
-  │ col60 12:00  │ hii (d=0), hfi MISSING │ ok           │ não é volta do intervalo → julga → 300 │
-  ├──────────────┼────────────────────────┼──────────────┼────────────────────────────────────────┤
-  │ col345 15:00 │ hfi (d=0)              │ ok           │ volta → 0 ✓                            │
-  ├──────────────┼────────────────────────┼──────────────┼────────────────────────────────────────┤
-  │ selo 13:05   │ hfi (d=5)              │ ok           │ volta → 0 ✓                            │
-  ├──────────────┼────────────────────────┼──────────────┼────────────────────────────────────────┤
-  │ L-084 14:32  │ hfi (d=92)             │ atraso_grave │ ocupação pura zeraria os 452 ✗         │
-  ├──────────────┼────────────────────────┼──────────────┼────────────────────────────────────────┤
-  │ col406 08:17 │ hi (d=77)              │ atraso       │ a própria autoridade diz "atraso 77"   │
-  └──────────────┴────────────────────────┴──────────────┴────────────────────────────────────────┘
-
-  A ocupação sozinha não é o predicado. Leio os limiares de status antes de escolher:
+● Sítio e forma estão claros. Rodo as três linhas que faltam (a banda que a cura abre) e leio a porta da tolerância, que o predicado vai consultar:
 
   Ran 1 shell command
 
-● status se autodeclara "a palavra que pinta a lâmpada, não a tolerância que desconta em folha" (escala/utils.py:304) — logo ele está fora de qualquer predicado de dinheiro. Guardo a
-  medição e reconcilio, porque a evidência derruba o caso que o advisor esperava:
+● A porta aplicar_tolerancia escreve em _cadastro_x_realidade como efeito colateral — então o predicado não pode consultá-la para fazer uma pergunta. Uso o delta que a própria autoridade
+  devolve contra a constante única (o precedente é o status_do_delta, que a importa tardiamente). Rodo a banda:
 
   Ran 1 shell command
 
-● Advising using Fable 5.1
+● A banda está medida: hfi com d entre 11 e 90 é o que muda de 0 para julgado (13:30 → teto L-093 de 330; 14:00 → 360), e o lado adiantado segue perdoado. Agora os três sítios, texto
+  exato:
 
-✢ Flambéing… (55m 40s · ↓ 112.8k tokens)
+  Ran 2 shell commands
+
+● Os quatro marcos aqui são time, não datetime — o DP exige absolutos com a virada resolvida. Antes de escrever o 5º resolvedor, procuro quem já resolve o dia em absolutos:
+
+  Ran 1 shell command
+
+● O DP ganha o lugar: 12:00 está 60 min ANTES do hfi e exatamente em cima do hii — raio nenhum distingue isso de 12:30. Então preciso dos marcos absolutos. Vejo como a autoridade já os
+  monta nos dois sítios dela:
+
+  Ran 1 shell command
+
+● Dois sítios já têm a mesma cadeia de encadeamento copiada (_aware + while dt <= prev) — levanto para uma função só em escala/utils.py em vez de nascer a terceira. Falta o tipo do
+  intervalo_marcos no calculador:
+
+● Running 1 shell command…
+
+✢ Flambéing… (1h 1m 10s · ↓ 123.6k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                                     ✔ Update installed · Restart to update
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -205,6 +205,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                                                                  1h 3m 8s · ↓ 428.9k tokens
-  ◯ fork  Composing CATALOGO-PERIODO.md in scratchpad                                                                                                            28m 51s · ↓ 111.2k tokens
+  ◯ fork  Committing CATALOGO-PERIODO.md with heredoc message                                                                                                    34m 20s · ↓ 135.5k tokens
   ⧉  index
 ```
