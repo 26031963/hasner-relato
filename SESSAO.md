@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 15/10/2026 17:50:39.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (862.0 MB). Acoes na janela: **1110**.
+**Medido em 15/10/2026 17:55:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (862.3 MB). Acoes na janela: **1115**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 17:52:00 | Bash | List the rule classes and the JSON block | `cd /home/ronald/saas-hasner && grep -n "^JSON\\|^TEXTO\\|^ISENTOS\\|^NULO\\|^MARCADOR\\|^VAZIO\\|^[A-Z_]* = {" bin/sombra_regras_pessoais.py; echo "=== bloco JSON:"; sed -n '/^JSON/,/^}/p' bin/sombra_regras_pessoais.py \| head -20` |
+| 17:51:54 | Bash | Read the masking rules header and VAZIO block | `cd /home/ronald/saas-hasner && sed -n '1,60p' bin/sombra_regras_pessoais.py` |
+| 17:51:27 | Bash | Read nome_do_arquivo | `cd /home/ronald/saas-hasner && grep -n "def nome_do_arquivo" -A 20 app/relatorios/lote_espelho.py` |
+| 17:51:22 | Bash | Read the filename construction and the masking rules file | `cd /home/ronald/saas-hasner && echo "== quem monta 'nome' em lote_espelho.py:"; sed -n '235,258p' app/relatorios/lote_espelho.py; echo; echo "== como o inventario classifica (regras):"; grep -n "ISENTOS\\|^TEXTO\\|^NULO\\|^VAZIO\\|nome_arquivo\\|arquivo" bin/sombra_regras_pessoais.py \| head -25` |
+| 17:51:17 | Bash | Measure what nome_arquivo holds | `cd /home/ronald/saas-hasner && echo "== como nasce nome_arquivo (raia):"; grep -n "nome_arquivo" app/relatorios/lote_espelho.py app/relatorios/models.py app/relatorios/views.py \| head -20; echo; echo "== campo no modelo:"; sed -n '/class LoteEspelho/,/def /p' app/relatorios/models.py \| grep -n "nome_arquivo"` |
 | 17:50:36 | Bash | Read the three red host selos | `cd /home/ronald/saas-hasner && for t in test_avais_na_mesa test_inventario_pessoal_no_commit test_import_tardio_contra_o_ar; do echo "=============== $t"; bash bin/tests/$t.sh 2>&1 \| tail -14; echo "rc=$?"; done` |
 | 17:48:15 | Bash | Fix the wording and resume the pouso | `cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && python3 - <<'PYX' import io p='/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/docs_o284.py' s=io.open(p,encoding='utf-8').read() # "NO AR" no ato do COMMIT seria afirmar o que so o deploy prova (ele vem depois, no mesmo ato ...` |
 | 17:48:02 | Bash | Rewrite the estado cell builder within the 300 teto | `cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && python3 - <<'PYX' import io p='/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/docs_o284.py' s=io.open(p,encoding='utf-8').read() OLD = """VELHO = ' aberta. **A** em construcao na raia `wt-lote`.' assert b.count(VELHO) == 1, ...` |
