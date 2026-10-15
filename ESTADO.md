@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 14/10/2026 21:11:32.**
+**Medido em 14/10/2026 21:16:51.**
 
 | | |
 |---|---|
@@ -29,19 +29,19 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2459.4 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2459.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **227.9 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **228.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **41.1 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **41.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **344.0 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **344.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
   - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **248.2 h** (passou das 6 h da L-105)
@@ -79,6 +79,7 @@ eee94960 [BUG-LINHA-X-BADGE] o rodape do TICKETS volta a dizer o push de verdade
  M app/docs/HANDOFF-SESSAO.md
  M app/docs/PROMPTS.md
  M app/docs/RELATO.md
+ M app/docs/TICKETS.md
  M bin/sonda_leitura.sh
 ?? app/GREEN
 ?? esteira.pausada
@@ -170,36 +171,36 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 1 shell command
-
-● Measured, and it found more than I inferred. Updating the O276 cell with the fact:
-
-  Ran 1 shell command
-
-● Background command "Re-run the esteira: RED, GREEN, neighbours" failed with exit code 1
-
-  Searched for 1 pattern, ran 1 shell command
-
-● ast.get_docstring cleans by default, so the comparison never matched. Excluding by node identity instead of by value:
-
-  Ran 1 shell command
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b6lodilhp.output (8 lines)
-  ⎿  Read docs/AVAIS.md (23 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bto17ew1j.output (8 lines)
-  ⎿  Referenced file ponto/motor_calculo_v2.py
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bff1doauu.output (9 lines)
-
-● Task "RED e construção do segundo intervalo" completed in background
-
-● Task "Insert the new obra and move the live-order marker" still running in background
 
 ● Seal bites correctly now: the prose passes, a real literal in the code bites. Syncing to the RED copy and re-running the esteira:
 
-● Syncing the test to the RED copy and verify it stays pristine HEAD · 6m 44s
-  ⎿  $ SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; bash $SP/o273_esteira.sh tudo 2>&1 | tail -40 (6m 43s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Ran 2 shell commands
 
-· Propagating… (3h 10m 20s · ↓ 430.9k tokens)
+● While the esteira runs, preparing the remaining pieces of the marco. Checking the stale background shell and the TICKETS gap:
+
+  Searched for 1 pattern
+
+● O276 insert landed (col3 = 281 chars, within the L-109 ceiling). Now the TICKETS row O273 needs — reading the table's column contract:
+
+  Read 1 file, ran 3 shell commands
+
+● GREEN is OK / Ran 23 tests — all 23 seals pass with the cure; RED stays FAILED (failures=3, errors=17). Vizinhos still running. Collecting the RED evidence for
+  the TICKETS row:
+
+  Ran 1 shell command
+
+● RED is honest and by assertion: at HEAD the command prints 0 pendente(s) — the day recused with 12 min stays recused after growing to 40 min. Writing the O273
+  row the regua_tickets will demand:
+
+  Ran 2 shell commands
+
+● Vizinhos still running. Building the sombra DIFF the aval requires. First reading what I already have and the sombra's migration state:
+
+● Reading the existing sombra DIFF script and the sombra migration branch
+  ⎿  $ SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; ls -la $SP/o273_diff_sombra.py 2>/dev/null && { echo "===
+     atual:"; cat $SP/o273_diff_sombra.py; } || echo "NAO EXISTE"; echo "=== o q_mig do sombra.sh (migra ou so compara?):"; sed -n '228,252p' /hom…
+
+✽ Propagating… (3h 15m 39s · ↓ 437.7k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
