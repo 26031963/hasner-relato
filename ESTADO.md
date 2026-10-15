@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 15/10/2026 12:55:44.**
+**Medido em 15/10/2026 13:01:02.**
 
 | | |
 |---|---|
@@ -29,28 +29,28 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2475.2 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2475.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **243.6 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **243.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **56.9 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **57.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
   - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **359.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **263.9 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **264.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **381.6 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **381.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -77,6 +77,7 @@ RELATO, com a lista de nomes do banco como autoridade._
  M CLAUDE.md
  M app/config/crons_duracao.json
  M app/config/settings/sombra.py
+ M app/docs/HANDOFF-SESSAO.md
  M bin/diff_janela_he_total.sh
  M bin/r5_idempotencia_frota.sh
  M bin/recursos.sh
@@ -176,44 +177,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ⎿  Referenced file ponto/management/commands/tripwire_celulas.py
 
-● Task "RED e construção do segundo intervalo" completed in background
+  Searched for 3 patterns, ran 3 shell commands
 
-● Task "O284-A job do lote do espelho" completed in background
-
-● Task "O286 sombra fora do postgres de prod" still running in background
-
-● Task "Wait by file for the ensaio carimbo to turn OK" still running in background
-
-● Task "Wait by file for the bloco to reach a terminal state" still running in background
-
-● Agent "O284-A job do lote do espelho" finished · 1h 58m 54s
-
-● Background command "Wait by file for the bloco to reach a terminal state" completed (exit code 0)
+● Cura no ar em prod, medida pela função real, só leitura: col406 MotorComercial 27/08 08:17 → atraso 71 min (antes o comercial não tinha pontualidade nenhuma: zero por construção) · col60
+  Motor12x36ComEscala 01/09 12:00 → atraso 234 min (cabeça do turno pelo juiz). Agora o push do marco:
 
   Ran 1 shell command
+  ⎿  Message queued for delivery to a67f3c5ed27d0a551 at its next tool round.
+  ⎿  Allowed by auto mode classifier
 
-● Background command "Wait by file for the ensaio carimbo to turn OK" completed (exit code 0)
+● Push correndo. Continuo o O140 (o siga do hook), medindo antes de escrever — primeiro quem grava a falta hoje no DiaPago e quem são os leitores:
 
-  Ran 2 shell commands
+  Searched for 3 patterns, ran 4 shell commands
 
-● Portão verde (status=OK, bloco 75 comandos, erros 0, diverge 0) e logs/crons_em_curso/ vazio. Deploy do O271:
+● Divergência zero hoje em col643 (09: 3 dias iguais; 10: 21/09 e 23/09 iguais) — o BUG-8792 é estrutural (segundo derivador), não de valor. Mas antes de trocar o leitor eu preciso do
+  número da frota, porque o lavrado é FOTO e a Ausencia é VIVA:
 
-● Deploying O271 without migrate · 9s
-  ⎿  $ cd /home/ronald/saas-hasner && bash bin/deploy.sh --sem-migrate 2>&1 | tail -40; echo "rc_pipe_ultimo=$?"
+  Searched for 1 pattern, ran 2 shell commands
 
-· Flambéing… (3h 31m 22s · ↓ 468.7k tokens)
+● 33 dia-colab onde o lavrado tem a linha do dia mas horas_falta=0 enquanto a Ausencia viva diz falta. Preciso da CAUSA antes de qualquer desenho:
+
+● Classify the cause of the 33 divergent days
+  ⎿  $ cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/causa_8792.py <<'PY'
+     # CAUSA dos 33: minutos da Ausencia x lavrado_em x criacao. SO LEITURA.
+     from django.db import connection
+     assert connection.settings_dict['NAME'] == 'saas_hasner', connection.se…
+
+✢ Flambéing… (3h 36m 40s · ↓ 485.9k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                                     ✔ Update installed · Restart to update
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 5 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 7 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                                                                       1h 3m 8s · ↓ 428.9k tokens
   ◯ general-purpose  Awaiting green8 verdict on test_selo_job_lote_espelho.py                                                                                 1h 58m 54s · ↓ 139.0k tokens
-  ◯ general-purpose  Polling resultado.tsv for bloco progress                                                                                       1h 4m 56s · ↓ 158.9k tokens · 1 queued
+  ◯ general-purpose  Dropping ensaio databases from saas_db                                                                                                   1h 10m 15s · ↓ 163.2k tokens
   ⧉  index
 ```
