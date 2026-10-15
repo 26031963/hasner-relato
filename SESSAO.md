@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 14/10/2026 23:57:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (825.4 MB). Acoes na janela: **800**.
+**Medido em 15/10/2026 00:03:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (825.8 MB). Acoes na janela: **805**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 00:02:45 | Bash | Read the vigia's exact day window | `cd /home/ronald/saas-hasner/app; sed -n '60,85p' ponto/management/commands/detectar_par_relampago.py; echo "=== e a janela do _alvo_retratavel"; grep -n "timedelta\\|dias" ponto/management/commands/detectar_par_relampago.py \| sed -n '1,25p'` |
+| 00:02:04 | Bash | Read the device-hour authority | `cd /home/ronald/saas-hasner/app; wc -l api/hora_do_aparelho.py; cat api/hora_do_aparelho.py` |
+| 00:01:55 | Bash | Find the offline-queue timestamp tolerance | `cd /home/ronald/saas-hasner/app; echo "=== quem traduz o timestamp do aparelho"; grep -rn "def .*dispositivo\\|def hora_que_vale\\|def _ts_valido\\|def resolver_ts" api/ ponto/ --include=*.py \| head; echo; echo "=== o sitio 517-535"; sed -n '512,545p' api/views_core.py` |
+| 23:58:13 | Bash | Check whether a floor punch can describe an old day | `cd /home/ronald/saas-hasner/app; echo "=== a porta da batida de chao: de onde vem o timestamp"; grep -n "timestamp_dispositivo\\|timestamp=\\|_agora\\|now()" api/views_core.py \| sed -n '1,30p'; echo; echo "=== e o chokepoint recusa timestamp antigo?"; sed -n '53,100p' ponto/registro_batida.py` |
+| 23:57:34 | Bash | Measure the gate, its cost and the residue | `SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cat > "$SP/sonda_sobra7.py" <<'PY' # SOMENTE LEITURA. Pergunta as FUNCOES REAIS. Nada escreve. import datetime from django.db import connection, reset_queries from django.conf import settings assert connection.settings_dict['NAME'] == 'saas_hasner', connection.settings_dict['NAME'] from django.utils i ...` |
 | 23:56:55 | Bash | Read the existing instant-based authority in turnos.py | `cd /home/ronald/saas-hasner/app; sed -n '1790,1860p' ponto/turnos.py` |
 | 23:56:28 | Bash | Pay LEI-ANTES-DO-PATCH for the three sites | `cd /home/ronald/saas-hasner/app; echo "=== LEI-PROTEGE-SITIO: leis que protegem os sitios que vou tocar"; for s in "ponto/signals.py" "ponto/services/cartorio.py" "detectar_par_relampago"; do echo "--- $s"; grep -n "$s" docs/LEIS.md docs/DOSSIES.md docs/CORTES.md 2>/dev/null \| head -6; done` |
 | 23:55:56 | Bash | Check whether fato_de_chao is persisted and read the procedencia authority | `cd /home/ronald/saas-hasner/app; echo "=== fato_de_chao e campo?"; grep -n "fato_de_chao" ponto/models.py \| head; grep -n "fato_de_chao" ponto/registro_batida.py \| head; echo; echo "=== a autoridade de procedencia:"; sed -n '1,60p' ponto/services/procedencia_batida.py` |
