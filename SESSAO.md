@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 14/10/2026 22:15:19.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (819.8 MB). Acoes na janela: **582**.
+**Medido em 14/10/2026 22:20:42.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (820.2 MB). Acoes na janela: **584**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 22:20:39 | Bash | Read the inventory seal | `cd /home/ronald/saas-hasner; cat bin/tests/test_inventario_pessoal_no_commit.sh` |
+| 22:15:28 | Bash | Re-run the seal and the whole folder cleanly | `cd /home/ronald/saas-hasner; bash bin/tests/test_inventario_pessoal_no_commit.sh > /tmp/selo_inv.out 2>&1 </dev/null; echo "rc_REAL_do_selo=$?"; tail -2 /tmp/selo_inv.out; echo "=== pasta inteira de novo"; for t in bin/tests/test_*.sh; do bash "$t" >/tmp/s.out 2>&1 </dev/null \|\| echo "VERMELHO $t -> $(tail -1 /tmp/s.out)"; done; echo "(fim)"; date '+%H:%M'` |
 | 22:15:16 | Bash | Declare the new column and re-run the seal | `cd /home/ronald/saas-hasner; python3 - <<'PY' p='bin/sombra_regras_pessoais.py' s=open(p,encoding='utf-8').read() velho=" ('ponto', 'DecisaoHE'): ('motivo',)," novo = (" # `revogada_motivo` NASCE INVENTARIADO (O273, 14/10): e o POR QUE a recusa do sistema perdeu\n" " # efeito, e ao contrario do `motivo` acima quem o escreve e a PORTA\n" " # (`ponto/portas/he.py::revogar_recusa_do_sistema`), com o  ...` |
 | 22:14:53 | Bash | Read TEXTO/ISENTOS declarations | `cd /home/ronald/saas-hasner; sed -n '81,145p' bin/sombra_regras_pessoais.py` |
 | 22:14:47 | Bash | Read the personal-data inventory structure | `cd /home/ronald/saas-hasner; echo "=== como o irmao 'motivo' da DecisaoHE esta declarado"; grep -n 'decisaohe\\|decisao_he' bin/sombra_regras_pessoais.py; echo "=== estrutura das classes do arquivo"; grep -n '^[A-Z_]* = \\|^ISENTOS\\|^TEXTO\\|^NULO\\|^VAZIO' bin/sombra_regras_pessoais.py \| head -20` |
