@@ -6,10 +6,21 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 15/10/2026 03:05:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (835.3 MB). Acoes na janela: **1220**.
+**Medido em 15/10/2026 03:10:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (835.5 MB). Acoes na janela: **1231**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 03:09:08 | Bash | Read MotorTurnoPartido zone 5 tolerancia call | `cd /home/ronald/copia-o271/app && sed -n '2490,2530p' ponto/motor_calculo_v2.py` |
+| 03:08:36 | Bash | Read test_l084_vence_o_t8.py | `cd /home/ronald/copia-o271/app && sed -n '1,120p' ponto/tests/test_l084_vence_o_t8.py` |
+| 03:08:20 | Bash | Read _previsto_do_dia | `cd /home/ronald/copia-o271/app && grep -n 'def _previsto_do_dia' -A 40 ponto/motor_calculo_v2.py \| head -50` |
+| 03:08:09 | Bash | Read tolerancia constant and the teto implementation | `cd /home/ronald/copia-o271/app && grep -n 'TOLERANCIA_CONFORMIDADE_MIN *=\\|TOLERANCIA_INTRA_MIN *=' ponto/motor_calculo_v2.py ponto/*.py core/*.py 2>/dev/null \| head; echo "=== _previsto_do_dia ==="; sed -n '951,1010p' ponto/motor_calculo_v2.py` |
+| 03:07:37 | Bash | Read an existing MotorComercial test for the fixture idiom | `cd /home/ronald/copia-o271/app && sed -n '1,90p' ponto/tests/test_comercial_he_marcos.py` |
+| 03:07:33 | Bash | Find tests using MotorComercial | `cd /home/ronald/copia-o271/app && grep -rln 'MotorComercial' ponto/tests/*.py \| head -20` |
+| 03:07:26 | Bash | Read the rest of MotorComercial.calcular_periodo | `cd /home/ronald/copia-o271/app && sed -n '2660,2726p' ponto/motor_calculo_v2.py` |
+| 03:06:50 | Bash | Read calcular_mes between montar_periodos and the loop | `cd /home/ronald/copia-o271/app && sed -n '1860,1990p' ponto/motor_calculo_v2.py` |
+| 03:06:34 | Bash | Find horas_atraso aggregation and read the O73 block | `cd /home/ronald/copia-o271/app && grep -n 'horas_atraso\\|horas_saida_antecipada' ponto/motor_calculo_v2.py \| head -20; echo "=== O73 bloco ==="; sed -n '2128,2165p' ponto/motor_calculo_v2.py` |
+| 03:06:28 | Bash | Check aggregation of atraso in MotorBase and the comercial override | `cd /home/ronald/copia-o271/app && awk 'NR>=1960 && NR<=2170 && (/minutos_atraso/ \|\| /minutos_saida_antecipada/ \|\| /_cadastro_x_realidade/ \|\| /dias_cadastro_x_realidade/ \|\| /horas_atraso/ \|\| /horas_saida_antecipada/){print NR": "$0}' ponto/motor_calculo_v2.py; echo "=== no override do comercial (2727-2919) ==="; awk 'NR>=2727 && NR<=2919 && (/minutos_atraso/ \|\| /antecipada/ \|\| /horas_ ...` |
+| 03:06:15 | Bash | Check teto callers and ordering in calcular_mes | `cd /home/ronald/copia-o271/app && grep -n '_aplicar_teto_pontualidade' ponto/motor_calculo_v2.py ponto/calculador/*.py 2>/dev/null; echo "=== ordem no calcular_mes: _ec x montar_periodos ==="; awk 'NR>=1801 && NR<=1960 && (/self\._ec *=/ \|\| /montar_periodos/ \|\| /calcular_periodo/ \|\| /_aplicar_teto/ )' ponto/motor_calculo_v2.py \| head; echo "=== linhas ==="; awk 'NR>=1801 && NR<=2170 && (/se ...` |
 | 03:03:24 | Bash | Check push progress | `cd /home/ronald/saas-hasner && date '+%H:%M:%S' && tail -3 logs/push_marco_15out.log; echo "--- origin ---"; git rev-parse origin/main 2>/dev/null \| cut -c1-8` |
 | 03:02:40 | Bash | Locate the literal avais in PROMPTS.md | `grep -n 'BUG-COMERCIAL' docs/PROMPTS.md \| head` |
 | 03:02:36 | Bash | Locate the O271 row | `grep -n 'BUG-COMERCIAL-SEM-PONTUALIDADE' docs/BACKLOG.md \| head` |
