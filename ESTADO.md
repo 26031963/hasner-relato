@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 15/10/2026 09:31:02.**
+**Medido em 15/10/2026 09:36:32.**
 
 | | |
 |---|---|
@@ -35,22 +35,22 @@ RELATO, com a lista de nomes do banco como autoridade._
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **240.2 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **240.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **53.5 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **53.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **356.3 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **356.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **260.5 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **260.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **378.2 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **378.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -165,38 +165,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ⎿  Stop hook error: siga: O271 -- BUG-COMERCIAL-SEM-PONTUALIDADE (aval dele 13/10 19:3x -- bug PROVADO, P7.1 fura a fila; DINHEIRO). MotorComerc
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-  Ran 1 shell command
-
-❯ aval Ronald: VIGIA-CONEXAO -- cron de 10 min na VM: se o fim do tmux 'code' mostra "API Error: Connection lost" e nao ha spinner ativo, envia "siga a fila; PAREI so em lei ou !" (tmux
-  send-keys) e loga em logs/vigia_conexao.log; nunca envia se ha spinner ou se o topo do RELATO tem PAREI de lei/!; instrumento em pouso proprio (L-105). Segue a fila; PAREI so em lei ou
-  !
-
-● Aval VIGIA-CONEXAO recebido — registro agora (PROMPT-NAO-SE-REPETE: prompt que pede obra vira item no MESMO turno) e sigo a fila, que é O271; o instrumento pousa próprio (L-105), depois
-  do produto.
-
-  E o grep do item 1 mudou o desenho: turnos.py não tem predicado "cabeça" — mas a casa já tem o juiz da pergunta, e é o que a Zona 5 do partido lê.
-
-  Searched for 2 patterns, read 1 file, ran 5 shell commands
-
-● 09:30 — não 03:2x. A queda de conexão me deixou parado de ~03:13 até agora (6 h), que é exatamente o que o seu aval cura. E a casa já tem dois leitores de tmux — LEI-AKITA 4 manda olhar
-  antes:
-
-  Ran 1 shell command
-
-● bin/keepalive.sh já é o vigia — mesma captura, mesmas duas guardas, mesma frase, mesmos 10 min. O que não migrou é a FORMA: while true morre com a sessão (GATE TEMPORAL, 16/09), e o aval
   pede cron. A medição que explica as 6 h:
 
-● Measuring whether the keepalive watcher is alive
-  ⎿  $ cd /home/ronald/saas-hasner && echo "=== keepalive vivo?" && (pgrep -af "keepalive.sh" || echo "NENHUM processo keepalive.sh") && echo "=== switch:" && ls -l keepalive.off
-     2>/dev/null || echo "sem keepalive.off" ; echo "=== ultimas 12 linhas do log:" && tail -12 logs/keepalive.log 2>/dev/null; ec…
+  Ran 1 shell command
 
-✢ Flambéing… (6m 40s · ↓ 15.0k tokens)
-                                                                                                                                                                     8% until auto-compact
+● O vigia estava vivo e rodou 10 em 10 min — e disse "parado-legitimo" 37 vezes seguidas por 6 h. O defeito não é que morreu: é o JUIZ. A guarda dele casa a palavra PAREI por token no
+  texto do pane, e o pane contém a própria frase do Stop hook (PAREI so em lei ou !) — a prosa que explica o alarme virou o alarme. Seu aval já nomeia a autoridade certa: o topo do RELATO,
+  não o pane. E esse juiz já existe:
+
+  Ran 2 shell commands
+
+● O quadro completo, medido: o alarme (alarme_sessao_ociosa.py, juiz certo — lê o topo do RELATO) funcionou e é por isso que o seu aval chegou às 09:30; quem religa (keepalive.sh, juiz
+  errado — regex no pane) ficou cego. 37 ticks, 6 h.
+
+  Construo o instrumento no scratchpad e aplico no commit (bin/ não é bind-mount, logo sem deploy):
+
+  Ran 1 shell command
+
+● O classificador barrou a escrita: [Tmux Self Drive] — eu não posso autorar código que digita no meu próprio painel. Não vou contornar. Registro a obra com o diagnóstico medido e sigo a
+  fila (O271), como o aval manda.
+
+● Register the aval in PROMPTS and BACKLOG
+  ⎿  $ python3 - <<'PY'
+     import io, os
+     B = 'docs/BACKLOG.md'
+     P = 'docs/PROMPTS.md'
+     linha_backlog = (
+     "| O279 | **VIGIA-CONEXAO** (aval dele 15/10 ~09:3x -- instrumento, pouso PROPRIO pela L-105, e `bin/` "
+     "nao e bind-mount, logo sem deploy). Cron de 10 min que religa a sessao quando a conexao cai: fim d…
+
+✢ Compacting conversation… (12m 10s · ↓ 26.9k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱ 71%
+                                                                                                                                                                     0% until auto-compact
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
