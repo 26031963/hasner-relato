@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 15/10/2026 16:35:46.**
+**Medido em 15/10/2026 16:41:02.**
 
 | | |
 |---|---|
@@ -29,22 +29,22 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2478.8 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2478.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **247.3 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **247.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **60.5 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **60.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **363.4 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **363.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lote** (`raia-lote`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2.9 h**
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **3.0 h**
   - sem declaracao em `logs/raias/wt-lote.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
   - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **267.6 h** (passou das 6 h da L-105)
@@ -59,7 +59,7 @@ RELATO, com a lista de nomes do banco como autoridade._
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
 - **wt-v3** (`raia-v3`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **0.5 h**
+  - 4 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **0.6 h**
   - sem declaracao em `logs/raias/wt-v3.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **21 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
@@ -171,44 +171,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 1 shell command
 
-● 24/24. E o ponto que mais importa foi MEDIDO, não suposto: o próprio hook (_item_fechado/_item_parado) diz que a O275 é destino legal do marcador. Registro o
-  ensaio no POUSO e a lição na memória:
-
-  Ran 6 shell commands
-
-● Suite ainda correndo (round 1 levou ~25 min; largou 16:16). As linhas 450/979 são OK: e OK — — a fronteira da L-074 ($| \() as exclui de propósito. Enquanto
-  espera, confiro os portões do deploy em leitura, para a janela pós-commit não trazer surpresa:
+● Nada foi gravado (a exceção veio antes do open(p,'w')) — o arquivo segue o antigo. A segunda âncora não casou; meço em vez de adivinhar:
 
   Ran 1 shell command
 
-● Portões verdes: crons_em_curso vazio, carimbo da sombra de hoje (20261015, completa, diverge=0), e a última migration da árvore viva é a 0072 — a 0073 não
-  colide. Antes da parte irreversível (commit + deploy com migration em prod), consulto o revisor:
+● Background command "Baseline the host selo folder against the live tree" completed (exit code 0)
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-● Ambos são reais e baratos. Faço os dois agora:
+● Minha própria asserção estava errada ('import subprocess' não é substring de import io, re, subprocess, sys) — o arquivo está intacto. Refaço, e leio o baseline
+  que acabou:
 
   Ran 1 shell command
 
-● O avisador está certo: o pos_verdito.sh não escreve censo_depois.txt, e o fechar_commit.py:23-27 o exige. Lacuna real, e ela quebraria depois de a árvore viva já
-  estar tocada. Vejo onde a cópia acontece:
+● 72 selos, zero vermelho na árvore viva. Baseline limpo: qualquer vermelho no passo (4) do commitar.sh será causado pela minha cópia, não preexistente (e o
+  test_lei_akita.sh/test_hook_nao_cobra_congelado.sh que minhas notas davam como vermelhos estão verdes). Agora o patch, com a asserção certa:
 
-● Reading the commit script to find where files are copied
-  ⎿  $ cd /home/ronald/saas-hasner && cat -n logs/o140b/commitar.sh
+  Ran 1 shell command
 
-· Flambéing… (7h 11m 24s · ↓ 907.5k tokens)
+● Background command "Launch the full suite on the cured copy" completed (exit code 0)
+
+● Monitor "O140 suite verdict (three L-074 signals)" stream ended
+
+● Suite VERDE: Ran 11001 tests in 1481.818s / OK (skipped=42) / rc_suite=0 / 0 linhas FAIL:/ERROR: — os três sinais da L-074. Mas meu patch quebrou a sintaxe do
+  fechar_commit.py; leio o sítio antes de mexer:
+
+  Ran 3 shell commands
+
+› Message from @a68744724b9656d1e (ctrl+o to expand)
+
+· Flambéing… (7h 16m 40s · ↓ 920.4k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells, 1 monitor · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ general-purpose  Checking trava_teste.sh queue status                                                                            2h 45m 12s · ↓ 155.7k tokens
-  ◯ general-purpose  Verifying git status after censo.md write                                                                           11m 3s · ↓ 150.0k tokens
+  ◯ general-purpose  Drafting msg_f7b.txt commit message                                                                             2h 50m 29s · ↓ 171.4k tokens
+  ◯ general-purpose  Rewording section 4b heading in censo.md                                                                           16m 19s · ↓ 166.5k tokens
   ⧉  index
 ```
