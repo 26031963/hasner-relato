@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 15/10/2026 19:00:03.**
+**Medido em 15/10/2026 19:05:09.**
 
 | | |
 |---|---|
 | `HEAD` local | `8c545a89 [O284] o caderno de cartoes sai do request e vira JOB: o pedido vivo e DEVOLVIDO em vez de duplicado, e o pouso foi UM ato -- merge, commit e deploy sem nada no meio` |
-| `origin/main` | `8be3814b [O140] o FURO do dia nasce LAVRADO: `DiaPago.furo_apurado` passa a ser DADO com tres estados, e a lavratura e o escritor unico -- nenhum leitor precisa mais pagar uma volta de motor para saber se o dia furou` |
-| commits a subir (`ahead`) | **2** |
+| `origin/main` | `8c545a89 [O284] o caderno de cartoes sai do request e vira JOB: o pedido vivo e DEVOLVIDO em vez de duplicado, e o pouso foi UM ato -- merge, commit e deploy sem nada no meio` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -29,19 +29,19 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2481.2 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2481.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **249.7 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **249.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **62.9 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **63.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **365.8 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **365.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
   - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **270.0 h** (passou das 6 h da L-105)
@@ -56,7 +56,7 @@ RELATO, com a lista de nomes do banco como autoridade._
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
 - **wt-v3** (`raia-v3`) -- **SEM AGENTE**
-  - 9 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **0.2 h**
+  - 9 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **0.3 h**
   - sem declaracao em `logs/raias/wt-v3.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **22 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o275, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
@@ -171,44 +171,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ⎿  Referenced file ../bin/sombra_regras_pessoais.py
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b5duwgtxq.output (12 lines)
-  ⎿  Referenced file escala/utils.py
-  ⎿  Referenced file escala/models.py
 
-● Task "O280 MOTOR-V3 passos 1 e 2" still running in background
+  Searched for 1 pattern
 
-● Task "Read the live order of fila 1" still running in background
-
-● Task "Push O284 through the full pre-push gate" still running in background
-
-● O censo é decisivo e contradiz um caso que eu mesmo escrevi: para 12x36 o dias_trabalho_semana não é lido (eh_dia_trabalho devolve None), 12x36 não está em
-  CICLOS_FERIADO_VIRA_FOLGA, e o SDF real da frota é 12x36+'5,6' — nunca semanal (0 de 361). Lendo o veredito do push e o caso que pinça o 12x36:
+● O marcador aponta O275 — o item que está travado. Então a esteira segue pelo próximo que não depende dele, e quem diz isso é o hook, não minha leitura da prosa:
 
   Ran 1 shell command
 
-● O push ainda está na suíte (segura a trava) e o remoto segue em 8be3814b. Antes de tocar o módulo, levo o conflito ao advisor — tenho evidência primária de que
-  escrevi um selo que responde a pergunta de lei que eu mesmo publiquei em aberto:
+● Minha varredura é larga demais para ser autoridade — o juiz do hook é _proximo_da_fila. Perguntando a ele:
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+  Ran 1 shell command
 
-● O advisor confirma o que a evidência dizia: o portão fica, o caso do 12x36 se relabela (não se apaga), e a pergunta ganha o número que discrimina. Primeiro a
-  medição desse número e o irmão 24x48 que falta — mais a mensagem ao agente da O280, que não depende de nada disto:
+● O hook confirma: a ORDEM VIVA é O275 e ela está ok (anda) — a construção, que está feita; o que espera é só o pouso. Todo o resto da fila precisa da trava de
+  teste ou da árvore viva, e as duas estão com o push. Espero o veredito por arquivo:
 
-● Running 1 shell command…
-  ⎿  $ echo "=== TipoEscala.marcos_do_dia ===" && grep -n "def marcos_do_dia" -A 28 escala/models.py | head -70; echo "=== CICLOS_FERIADO_VIRA_FOLGA (linha 32)
-     ==="; sed -n '28,36p' escala/models.py; echo "=== 24x48 ancora ==="; sed -n '1250,1270p' escala/models.py
+● Background command "Push O284 through the full pre-push gate" completed (exit code 0)
 
-✻ Flambéing… (9h 35m 40s · ↓ 1.2m tokens)
+● O push terminou. Veredito por arquivo e pelo remoto, nunca pela ausência de saída:
+
+  Ran 1 shell command
+
+● Push pousou: 8be3814b..8c545a89 main -> main, rc 0, negócio Ran 11020 / OK (skipped=42), control-plane Ran 22 / OK, nada mais a empurrar. A trava passou para a
+  bateria da O280 (o280-fam5:45308), então os vizinhos da O275 esperam a vez — rc 75 não é vermelho. Com a árvore viva livre, afio a pergunta no topo do RELATO:
+
+  Ran 1 shell command
+
+● O topo é a própria pergunta da O275. Reescrevo essa seção somando o que foi medido — sem perder nenhum fato já publicado:
+
+  Running 1 shell command…
+
+✽ Flambéing… (9h 40m 47s · ↓ 1.2m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ general-purpose  Reading F7f docstring in test_o280_bateria_da_lei.py                                                             5h 9m 27s · ↓ 176.6k tokens
+  ◯ general-purpose  Grepping logs/o280 for stale 04:17                                                                               5h 14m 35s · ↓ 83.1k tokens
   ⧉  index
 ```
