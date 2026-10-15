@@ -6,10 +6,27 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 15/10/2026 02:27:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (832.7 MB). Acoes na janela: **1107**.
+**Medido em 15/10/2026 02:32:57.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (833.3 MB). Acoes na janela: **1124**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 02:32:54 | Bash | Run the PROVA probe read-only in prod | `SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cat > "$SP/prova_col190_prod.py" <<'PY' # PROVA (condicao 4 da DINHEIRO-EM-COMPETENCIA-ABERTA) -- LEITURA PURA em PROD. # Testemunha LE a autoridade: `ponto/services/espelho.py::espelho_do_colab` (o mesmo que a tela # chama) e `colaboradores/services/calendario.py::contexto_calendario`. Nenhuma deriva ...` |
+| 02:32:32 | Bash | Find the espelho builder and realizado_aberto source | `grep -rn "def espelho_do_colab\\|realizado_aberto" --include=*.py \| grep -v tests \| head -12` |
+| 02:32:23 | Bash | Read the espelho template around the day word | `sed -n '160,185p' templates/ponto/espelho.html` |
+| 02:32:15 | Bash | Read the status label map | `grep -rn "ROTULO_STATUS" --include=*.py \| head -5; echo "---"; grep -rn "ROTULO_STATUS = \\|^ROTULO_STATUS" -A 14 colaboradores/services/calendario.py \| head -20; echo "=== 'Em aberto' em templates do calendario/grade:"; grep -rln "Em aberto" templates/ \| head` |
+| 02:32:05 | Bash | Read contexto_calendario signature and GET parsing | `sed -n '206,250p' colaboradores/services/calendario.py` |
+| 02:31:58 | Bash | Read the calendar day payload and the Em aberto template | `sed -n '770,815p' colaboradores/services/calendario.py; echo "=== funcao que devolve isso:"; awk 'NR<810 && /^def \|^ def /{l=NR": "$0} END{}' colaboradores/services/calendario.py >/dev/null; grep -n "^def \\|^ def " colaboradores/services/calendario.py \| awk -F: '$1<810' \| tail -3; echo "=== quem mostra 'Em aberto':"; grep -rn "Em aberto" --include=*.html templates/ \| head -10` |
+| 02:31:52 | Bash | Find who reads em_aberto_perguntado | `grep -rn "em_aberto_perguntado" --include=*.py --include=*.html \| grep -v tests \| head -20` |
+| 02:31:30 | Bash | Compare the 14/10 cell state in the sombra | `SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cat > "$SP/cel1410_sombra.py" <<'PY' from django.db import connection assert connection.settings_dict['NAME'] == 'sombra', connection.settings_dict['NAME'] import datetime as dt from escala.models import CelulaDia for c in CelulaDia.objects.filter(colaborador_id=190, data__gte=dt.date(2026,10,12), dat ...` |
+| 02:31:09 | Bash | Read the espelho retention judge | `sed -n '985,1085p' folha/export.py` |
+| 02:30:01 | Bash | Fix the field name and rerun the prod probe | `SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; sed -i "s/'origem', 'eh_trabalho', 'gerada_em', 'editada_em'/'origem', 'trabalha', 'veredito', 'julgada_em'/" "$SP/delta_prod_col190.py"; grep -n "trabalha" "$SP/delta_prod_col190.py"; cd /home/ronald/saas-hasner && bin/sonda_leitura.sh "$SP/delta_prod_col190.py" > logs/sobra_tipo_trocado/delta_prod_c ...` |
+| 02:29:48 | Bash | Probe prod read-only for the 14/10 and sem_celula deltas | `SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cat > "$SP/delta_prod_col190.py" <<'PY' # LEITURA PURA em PROD (porta bin/sonda_leitura.sh, role `leitor` sem GRANT de escrita). # Pergunta UNICA: por que o APPLY em prod moveu +714 (so o 26/09) onde a SOMBRA moveu +1434 # (26/09 + 14/10), e de onde sai o `sem_celula` que prod gravou em `motivos_espel ...` |
+| 02:29:10 | Bash | Read how the grade is built in fechamento | `sed -n '540,600p' ponto/services/fechamento.py` |
+| 02:28:54 | Bash | Read the fechamento writer around motivos_espelho | `sed -n '600,650p' ponto/services/fechamento.py` |
+| 02:28:50 | Bash | Find the writer of motivos_espelho | `grep -rn "motivos_espelho\\|causa_espelho" --include=*.py ponto/ core/ folha/ \| grep -v tests \| head -30` |
+| 02:28:46 | Bash | Find who writes the sem_celula motive | `grep -rn "sem_celula" --include=*.py \| head -30` |
+| 02:28:37 | Bash | Read the read-only prod probe door | `cd /home/ronald/saas-hasner && sed -n '1,60p' bin/sonda_leitura.sh` |
+| 02:24:29 | Bash | Check the tail of the apply output | `cd /home/ronald/saas-hasner && sed -n '60,75p' logs/sobra_tipo_trocado/apply_col190_prod.out \| head -3; echo "=== fim do arquivo:"; tail -5 logs/sobra_tipo_trocado/apply_col190_prod.out; echo "=== tamanho:"; wc -l logs/sobra_tipo_trocado/apply_col190_prod.out` |
 | 02:23:21 | Bash | Read the apply output in full | `cd /home/ronald/saas-hasner && sed -n '1,60p' logs/sobra_tipo_trocado/apply_col190_prod.out` |
 | 02:23:01 | Bash | Run the apply in production for col190 26/09 | `cd /home/ronald/saas-hasner && docker cp logs/sobra_tipo_trocado/aplicar_col190_prod.py saas_core:/tmp/aplicar_col190_prod.py && docker exec saas_core python manage.py tenant_command shell --schema=juliani --command "DRY=False; exec(open('/tmp/aplicar_col190_prod.py').read())" > logs/sobra_tipo_trocado/apply_col190_prod.out 2>&1; echo "rc=$?"; grep -n "Traceback\\|AssertionError\\|PORTAO\\|passo 2 ...` |
 | 02:22:42 | Bash | Read the oraculo write inside the fechamento transaction | `sed -n '765,820p' ponto/services/fechamento.py` |
