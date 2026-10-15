@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 15/10/2026 03:16:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (836.0 MB). Acoes na janela: **1244**.
+**Medido em 15/10/2026 03:21:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (836.0 MB). Acoes na janela: **1246**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 03:17:35 | Bash | Census neighbour seals exercising the branch | `cd /home/ronald/copia-o271/app && for f in ponto/tests/test_12x36_atraso_pela_autoridade.py ponto/tests/test_antecipada_intervalo_12x36.py ponto/tests/test_motor_escala_marcos_do_dia.py ponto/tests/test_a6_12x36_tolerancia.py; do echo "=== $f"; grep -nE "def test_\|hora_inicio_intervalo\|assertEqual\|assertAlmostEqual" $f \| head -22; done` |
+| 03:17:07 | Bash | Census calcular_periodo callers and _dia_do_turno | `cd /home/ronald/copia-o271/app && echo "=== quem chama calcular_periodo (producao + teste):" && grep -rn "calcular_periodo(" --include=*.py . \| grep -v "def calcular_periodo" \| sed 's/:.*calcular_periodo/ ::calcular_periodo/' \| head -20; echo; echo "=== _dia_do_turno:" && grep -n "_dia_do_turno" ponto/motor_calculo_v2.py \| head` |
 | 03:15:40 | Bash | Read previsto and teto from the judging motor | `cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/sonda_o271_teto.py <<'PY' # O271 -- o PREVISTO do dia e o TETO da L-093, LIDOS do motor que julgou (nunca recalculados). import datetime as dt from django.utils import timezone from colaboradores.models import Colaborador from ponto.services.espelho import autoridade_do_periodo L = timezone.localtim ...` |
 | 03:14:56 | Bash | Rerun the probe with staticfiles mountpoint present | `mkdir -p /home/ronald/copia-o271/app/staticfiles && cd /home/ronald/saas-hasner && SONDA_ARVORE=/home/ronald/copia-o271/app bin/sonda_frota.sh /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/sonda_o271_casos.py 2>&1 \| tail -40` |
 | 03:14:51 | Bash | Rerun the probe after creating mount points | `mkdir -p /home/ronald/copia-o271/app/logs /home/ronald/copia-o271/app/media && cd /home/ronald/saas-hasner && SONDA_ARVORE=/home/ronald/copia-o271/app bin/sonda_frota.sh /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/sonda_o271_casos.py 2>&1 \| tail -40` |
