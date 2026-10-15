@@ -6,10 +6,20 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 15/10/2026 01:40:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (830.5 MB). Acoes na janela: **1004**.
+**Medido em 15/10/2026 01:45:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (830.7 MB). Acoes na janela: **1014**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 01:42:58 | Bash | Remove the dead helper and check bloco progress | `cd /home/ronald/saas-hasner python3 - <<'PY' p = 'logs/sombra/apply_sobra_col190.py' s = open(p).read() dead = '''def _trilha_do_colab(): return LogAuditoria.objects.filter(descricao__icontains='relampago').count() ''' assert s.count(dead) == 1 open(p, 'w').write(s.replace(dead, '')) print('funcao morta removida') PY python3 -c "import py_compile; py_compile.compile('logs/sombra/apply_sobra_col190 ...` |
+| 01:42:49 | Bash | Verify turnos_do_colab signature | `cd /home/ronald/saas-hasner/app grep -n "def turnos_do_colab" -A 12 ponto/turnos.py \| head -18` |
+| 01:42:42 | Bash | Write the sombra apply-DIFF script | `cd /home/ronald/saas-hasner && cat > logs/sombra/apply_sobra_col190.py <<'PYEOF' # -*- coding: utf-8 -*- """DIFF DO APPLY do BUG-SOBRA-TIPO-TROCADO, na SOMBRA, com ROLLBACK. bin/sombra.sh --rodar apply_sobra_col190.py apply_sobra_col190 O que ele mede, e por que cada numero existe: - a CONDICAO 1 da DINHEIRO-EM-COMPETENCIA-ABERTA (DIFF de frota ANTES do apply) para a cadeia que o memo declara (`lo ...` |
+| 01:41:51 | Bash | Read the exact flag dests of the relampago command | `cd /home/ronald/saas-hasner/app sed -n 262,290p ponto/management/commands/detectar_par_relampago.py` |
+| 01:41:44 | Bash | Find the chamado retratação porta | `cd /home/ronald/saas-hasner/app grep -n "def reconciliar_chamados_colab" -A 40 chamados/reconciliador.py \| grep -nE "retratar\|porta\|status\|def \|premissa" \| head -20 echo "=== a porta de retratacao de chamado:" grep -rn "def retratar" chamados/portas/*.py chamados/models.py 2>/dev/null \| head` |
+| 01:41:36 | Bash | Read the reconciliador premissa and chamado state fields | `cd /home/ronald/saas-hasner/app sed -n 200,235p chamados/reconciliador.py echo "=== campos de estado do ChamadoColaborador:" grep -nE "^\s+(status\|retratad\|encerrad\|fechad\|resolvid)" chamados/models.py \| head -15` |
+| 01:41:21 | Bash | Read hash_do_gravado | `cd /home/ronald/saas-hasner/app sed -n 55,100p ponto/portas/regen_exportada.py` |
+| 01:41:16 | Bash | Find a canonical DiaPago hash helper and CAMPOS | `cd /home/ronald/saas-hasner/app grep -rn "def _hash\\|def hash_" --include=*.py ponto/ folha/ core/ \| grep -v tests \| head echo "=== CAMPOS do DiaPago:" grep -n "^CAMPOS" -A 12 ponto/services/dia_pago.py \| head -20` |
+| 01:41:02 | Bash | Read the --rodar porta and bloco progress | `cd /home/ronald/saas-hasner grep -n -- "--rodar" bin/sombra.sh \| head -10 echo "=== bloco:"; date '+%H:%M:%S'; tail -4 logs/sobra_tipo_trocado/ensaio_bloco_15-10.log 2>/dev/null; echo "(rc ainda nao)"` |
+| 01:40:49 | Bash | Find which function fires recalcular_por_evento | `cd /home/ronald/saas-hasner/app awk 'NR>=100 && NR<=150' ponto/registro_batida.py \| grep -n "" \| head -55 echo "=== qual def contem a linha 136:" awk 'NR<=137 && /^def /{l=NR": "$0} END{}' ponto/registro_batida.py grep -n "^def " ponto/registro_batida.py \| awk -F: '$1<=137' \| tail -2` |
 | 01:40:44 | Bash | Read retratar_batida to see whether it fires recalculation | `cd /home/ronald/saas-hasner/app grep -n "def retratar_batida" -A 45 ponto/registro_batida.py \| head -60` |
 | 01:40:40 | Bash | Read the retratar path of the relampago vigia | `cd /home/ronald/saas-hasner/app grep -n "retrat" ponto/management/commands/detectar_par_relampago.py \| head -30` |
 | 01:40:35 | Bash | Read the declared roles of lavrar_dias_pagos and recalcular_fechamento | `cd /home/ronald/saas-hasner/app sed -n 835,852p config/crons.py echo "---- 940..950:"; sed -n 940,950p config/crons.py echo "=== recalcular_por_evento: quem o dispara:" grep -rn "recalcular_por_evento" --include=*.py . \| grep -v "/tests/" \| head` |
