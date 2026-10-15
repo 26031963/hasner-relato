@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:332 AFIRMA ato sem PROVA ao lado -- ## MARCO 15/10 ~02:3x -- BUG-SOBRA-TIPO-TROCADO **APLICADO em PROD**: o col190 26/09 sai de "Em aberto" com `minutos_realizados 1 -> 715`, o
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:340 AFIRMA ato sem PROVA ao lado -- ## MARCO 15/10 ~02:3x -- BUG-SOBRA-TIPO-TROCADO **APLICADO em PROD**: o col190 26/09 sai de "Em aberto" com `minutos_realizados 1 -> 715`, o
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 15/10/2026 14:54:02.**
+**Medido em 15/10/2026 14:59:16.**
 
 | | |
 |---|---|
@@ -29,22 +29,22 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2477.1 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2477.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **245.6 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **245.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **58.8 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **58.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **361.7 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **361.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lote** (`raia-lote`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **1.2 h**
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **1.3 h**
   - sem declaracao em `logs/raias/wt-lote.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
   - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **265.9 h** (passou das 6 h da L-105)
@@ -53,13 +53,13 @@ RELATO, com a lista de nomes do banco como autoridade._
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **383.6 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **383.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
 - **wt-v3** (`raia-v3`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **0.0 h**
+  - 1 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **0.1 h**
   - sem declaracao em `logs/raias/wt-v3.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **21 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
@@ -175,44 +175,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Section is 14 lines (under the L-116 cap of 25); it needs one bullet for the suite verdict, which I'll write with the real numbers. Checking how far the run is:
+
+  Ran 6 shell commands
+
+● Hook parses and still names O140 as fila 1. All artifacts durable. Calling advisor before the landing, since the commit+deploy is the irreversible part:
+
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+
+● All four stand. Fixing the attachment error first — that paragraph is the one that answers two obras:
 
   Ran 1 shell command
 
-● ~17 min elapsed of a ~25 min run. Note the trap in my own monitoring grep: OK:   31 and OK — nenhuma divergencia are prose, not verdicts — the L-074 criterion (^(OK|FAILED)($| \() + tail
-  -1) rejects both, and pos_verdito.sh uses the full form. Waiting on the condition rather than polling:
-
-● No monitor needed — the suite's own background shell wakes me. Using the wait for the O280 side that costs no test-cpuset CPU: the fork that finished has a deliverable I never received.
-  ⎿  Resuming agent aa14fd1
-  ⎿  Allowed by auto mode classifier
+● Now hardening the gate to all three L-074 signals and reordering per the advisor (placar and RELATO before the recorte, TICKETS in the sync list):
 
   Ran 1 shell command
 
-› Message from @a2cd34dafbbc8a4bd (ctrl+o to expand)
+● Writing the landing sequence down so a compaction can't lose the order:
 
-● The esmeril landed with 22 open items — and its I16b is the same open pergunta as the O276, which the construtor must not harden either way. Relaying before it builds further on the
-  wrong premise:
-  ⎿  Message queued for delivery to a0e94d563a20a5e65 at its next tool round.
-  ⎿  Allowed by auto mode classifier
+  Ran 1 shell command
 
-● Agent "ESMERIL-V3 fecho adversarial O280" finished · 42m 50s
+● Agent "RED e construção do segundo intervalo" finished · 12d 23h 6m
 
-● Writing the esmeril's lei question at the RELATO topo (PAREI-DE-LEI-NAO-DEVOLVE-TURNO — the fila does not stop):
+  Ran 1 shell command
 
-  Draft the RELATO top-of-file question block
-  ⎿  $ cd /home/ronald/saas-hasner && cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/topo.txt <<'TXT'
-     **O ESMERIL-V3 (seu aval de 15/10 14:1x) PUBLICOU, E A CONDICAO LITERAL DELE NAO FECHOU: 22 ITENS ABERTOS, ENTAO A TROCA NAO VAI AO SEU `!` (15/10 14…
+● Still running at 27 min — the second-interval fork's own docker suites were competing for the same test cpuset. Registering that fork's result, which needs his ! (escala data):
 
-✢ Flambéing… (5h 29m 40s · ↓ 745.2k tokens · thought for 3s)
+  Running 1 shell command…
+
+* Flambéing… (5h 34m 54s · ↓ 755.3k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                                                    ✔ Update installed · Restart to update
+                                                                                                                                                                     4% until auto-compact
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ fork             Reporting montar_dna pausa findings                                                                                                      12d 23h 2m · ↓ 428.9k tokens
-  ◯ general-purpose  Measuring the fluxo gate in `ponto/turnos.py::_teto_s_da_jornada` and the 26 h envelope at `:1250`                                        1h 3m 29s · ↓ 138.0k tokens
+  ◯ fork             Checking verdicts in viz_ponto.log                                                                                                        12d 23h 6m · ↓ 92.5k tokens
+  ◯ general-purpose  Appending ContratoDaTrocaTest to test_o280_bateria_da_lei.py                                                                              1h 8m 42s · ↓ 164.3k tokens
   ⧉  index
 ```
