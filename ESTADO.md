@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 15/10/2026 19:10:18.**
+**Medido em 15/10/2026 19:15:42.**
 
 | | |
 |---|---|
@@ -29,37 +29,37 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2481.4 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2481.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **249.9 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **250.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **63.1 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **63.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **366.0 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **366.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **270.1 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **270.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o275** (`raia-o275`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **0.0 h**
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **0.1 h**
   - sem declaracao em `logs/raias/wt-o275.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **387.8 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **387.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
 - **wt-v3** (`raia-v3`) -- **SEM AGENTE**
-  - 9 commit(s) a frente do `main`, 2 arquivo(s) sujo(s), commit a frente ha **0.4 h**
+  - 10 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **0.0 h**
   - sem declaracao em `logs/raias/wt-v3.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **21 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
@@ -175,43 +175,43 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-● Commit 9e853a34 na raia, árvore limpa. Agora enfileiro a corrida dos vizinhos para começar sozinha quando a bateria da O280 soltar a trava — vendo a porta antes:
+● Background command "Queue the O275 neighbor run behind the test lock" completed (exit code 0)
 
   Ran 1 shell command
 
-● O default da trava é esperar uma hora pela flock — então a corrida pode ser enfileirada e começa sozinha. Vendo como --only e o -- se combinam, para não rodar
-  três apps inteiros sem precisar:
+● Vizinhos VERMELHO: Ran 201 / FAILED (errors=21) / rc_vizinhos=1. Lendo a classe de erro antes de qualquer conclusão:
 
   Ran 1 shell command
 
-● --only substitui as labels e é word-split, então aceita os módulos exatos. Conferindo quais existem de fato na raia antes de gastar a vez na trava:
+● Os 21 erros são todos no meu próprio módulo, nenhum nos 21 vizinhos. Lendo o traceback real:
 
   Ran 1 shell command
 
-● Dois nomes da minha lista não existem — procurando os reais em vez de rodar com label inventada:
+● RED real e é meu fixture, não o vizinho: posto_id é NOT NULL e o helper _ec nasceu com posto=None. Lendo o helper e os 2 AttributeError:
 
   Ran 1 shell command
 
-● Faltava o vizinho que mais importa para um command novo: o contrato que varre o diretório de comandos. Localizando-o antes de enfileirar:
+● Dois defeitos reais e distintos no meu módulo, nenhum nos vizinhos. Lendo as duas autoridades antes de corrigir — o campo posto do EC e a assinatura real da
+  porta:
 
-  Ran 1 shell command
+  Ran 2 shell commands
 
-● Achei: test_contract_juiz_escala.py mora em escala/, não em ponto/, e o command novo responde a test_aus_sem_fim e ao contrato de crons. Enfileirando os 20
-  vizinhos reais — a corrida espera a flock e começa sozinha quando a O280 soltar:
+● O leitor lê lugar_do_colab(self.colaborador), então o posto do EC é só o NOT NULL. Antes de corrigir, leio a forma do payload que os testes existentes da porta
+  já usam, em vez de inventar:
 
-  Queuing the O275 neighbor run behind the test lock
-  ⎿  $ cd /home/ronald/saas-hasner && mkdir -p logs/o275 && MODS="escala.tests.test_o275_sdf_feriado_e_dia escala.tests.test_feriado_padrao_por_escala
-     escala.tests.test_foto_vence_ancora escala.tests.test_foto_nao_apaga_o_ciclo escala.tests.test_foto_folga_continua escala.tests.test_o37_foto_parcial esc…
+  Finding existing tests of salvar_tipo and their payload shape
+  ⎿  $ cd /home/ronald/wt-o275/app && echo "=== quem mais testa salvar_tipo ===" && grep -rln 'salvar_tipo' --include='test_*.py' . && echo && echo "=== payload de
+     edicao num teste existente ===" && grep -rn -A12 'salvar_tipo(' --include='test_*.py' escala/tests/ | grep -v test_o275 | head -40
 
-· Flambéing… (9h 45m 56s · ↓ 1.2m tokens)
+✢ Flambéing… (9h 51m 20s · ↓ 1.2m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                                            1% until auto-compact
+                                                                                                                           ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ general-purpose  Finding duplicate CASOS keys in test_o280_bateria_da_lei.py                                                     5h 19m 44s · ↓ 136.6k tokens
+  ◯ general-purpose  Reading julgar_o_dia and _BaseBateria costura                                                                    5h 25m 9s · ↓ 164.6k tokens
   ⧉  index
 ```
