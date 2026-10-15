@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 14/10/2026 21:48:32.**
+**Medido em 14/10/2026 21:54:02.**
 
 | | |
 |---|---|
@@ -29,28 +29,28 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2460.0 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2460.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **228.5 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **228.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
   - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **41.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **344.6 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **344.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **248.8 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **248.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **366.5 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **366.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -171,44 +171,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-❯ corte Ronald: SDF-FERIADO-E-DIA -- TipoEscala ganha cadastro "feriado e dia de trabalho" (sem default ligado), lido so por EscalaColaborador.eh_dia_trabalho_calculado: feriado do lugar
-  do colab vira dia previsto para quem tem o flag; sem plano SDF paralelo; RED: SDF sab/dom com feriado na quarta -> quarta prevista; intermitente intocado. Segue a fila; PAREI so em lei
-  ou !
+  diz em UMA linha; pouso um por vez (L-105/L-107); juizes novos so pela AUTONOMIA-DE-CODIGO item 3; nenhuma lei nova. Segue a fila; PAREI so em lei ou !
 
-❯ aval Ronald: O273 -- a recusa do sistema que perde efeito NAO se apaga: a linha fica, marcada como revogada (quando, por que, minutos antes/depois), e sai do calculo; decisao do admin
-  intocada. Segue a fila; PAREI so em lei ou !
-
-● Six avais/cortes arrived. Five are already registered (I answer those in one line each, per PROMPT-NAO-SE-REPETE); one — the dobra — looks new. Measuring that plus the advisor's blocking
-  question together:
-
-  Ran 2 shell commands
-
-● Background command "Run the comp-09 DRY count on the sombra" completed (exit code 0)
-
-● Advisor's blocking question answered: the only caller of apurar(…, revogar=…) is lavrar_he_pendente.py:59, the cron elo passes no --mes/--ano, and no view calls apurar/lavrar (views only
-  ler). The deploy cannot reach 09 on its own. Now the 09 number:
-
-  Read 1 file
-
-● 09: zero — the cure moves nothing in the exported competência (4046/1242/185 dias, all pendentes, 0 revogações). Now registering the one corte that is genuinely new (the dobra reverses
-  O264's lei), and checking the other four against PROMPTS:
+● Fixing the path and, in the same batch, measuring the gate the new aval sets (does O142 cross files with fila 1?):
 
   Ran 1 shell command
 
-● Five of the six are already registered — only the dobra corte is new, and it reverses the lei of O264 (the DP reading that the 13/10 aval gated on). Registering it now, in the same turn:
+● Zero crossing on both files with every open fila-1 item (O264–O277), and neither is among O273's 11. One reader census to hand the agent, plus O142's literal:
 
-● Reading the OBRAS column header
-  ⎿  $ cd /home/ronald/saas-hasner/app; sed -n '455,460p' docs/BACKLOG.md | cut -c1-250
+  Ran 1 shell command
 
-✢ Propagating… (3h 47m 20s · ↓ 493.0k tokens · thought for 5s)
+● Gate cleared and measured at the import level too: the only production readers of _esc_vigente_do_dia are escala/utils.py itself and escala/services/previsto_cego.py — nothing in
+  turnos.py, motor_calculo_v2.py, portas/he.py or export.py. Opening the parallel agent:
+
+● Agent(O142 escala x um juiz)
+  ⎿  Backgrounded agent (↓ to manage · ctrl+o to expand)
+
+● Back to the O273 pouso. Checking the suite and appending what's now measured to the commit message:
+
+  Ran 2 shell commands
+
+● Drafting the RELATO section (L-116, ≤25 lines) while the suite runs — the frozen tree stays untouched:
+
+  Ran 2 shell commands
+
+● The 13/10 question at the top of the RELATO is exactly what the DP reading just answered. Writing the top block now (independent of the suite):
+
+  Running 1 shell command…
+
+· Propagating… (3h 52m 50s · ↓ 513.7k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                                                    ✔ Update installed · Restart to update
+                                                                                                                                                                     2% until auto-compact
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ fork  Confirming commit hashes in worktree                                                                                                                  1h 3m 8s · ↓ 428.9k tokens
+  ◯ fork             Confirming commit hashes in worktree                                                                                                       1h 3m 8s · ↓ 428.9k tokens
+  ◯ general-purpose  Grepping O142 in BACKLOG.md                                                                                                                  1m 29s · ↓ 109.9k tokens
   ⧉  index
 ```
