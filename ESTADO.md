@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 15/10/2026 09:25:46.**
+**Medido em 15/10/2026 09:31:02.**
 
 | | |
 |---|---|
@@ -29,28 +29,28 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2471.7 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2471.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **240.1 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **240.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **53.4 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **53.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
   - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **356.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **260.4 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **260.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **378.1 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **378.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -165,38 +165,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-✻ Sautéed for 9h 20m 17s · done 3:21 AM · 1 shell still running
-
-❯ code C-End; sleep 2; ver 60
-
-● Não entendi a linha — ela parece ter caído aqui de outro terminal (ver é comando de Windows, e sleep/C-End não casam com nada da esteira). Não rodei nada.
-
-  Se "ver 60" é o col60, o que eu acabei de medir (leitura em prod pela autoridade_do_periodo, zero escrita):
-
-  col60 01/09/2026 | motor=Motor12x36ComEscala
-    CADASTRO te#177 PAI-12x36.2  marcos 07:00-19:00  itv template None-None  jornada 720
-    MARCOS DO DIA (celula/EC): 07:00-19:00, intervalo 12:00-13:00   <- a celula DECLARA o intervalo
-    BATIDAS do dia (2): 12:00E 19:06S
-    PERIODO 12:00 -> 19:06 | trab=419,56  atr=0,0  ant=0,0  aberto=False
-    CADASTRO x REALIDADE no dia: nenhuma linha
-    _previsto_do_dia = 660 | teto L-093 = 660 - 419,56 = 240,44
-    entrada 12:00 vs marco 07:00 -> _de = 300,44 ; saida vs 19:00 -> _ds = -6,86
-
-  Ou seja: a entrada das 12:00 cai dentro do raio de 90 min do marco de volta do intervalo (13:00), o _volta_do_intervalo a trata como fragmento, prevista_entrada vira None e o dia sai sem
-  pontualidade e sem alerta — o defeito do seu complemento, confirmado no dado real. Pela regra (L-084 uma ponta + teto L-093) o dia vale 240,44 min de atraso, não os 234 do aval — a
-  diferença é o teto, que eu medi em vez de supor.
-
-  Estado: push do marco anterior pousou (origin/main = 49ac61c4), trava livre, os dois casos do O271 medidos (col406 27/08 = 73,9 min pelo teto, não 77). Ia escrever o RED agora.
-
-  Me diz em uma linha o que você quis (ver outro colaborador? parar? seguir?) e eu sigo.
-
-● Ran 1 stop hook
   ⎿  Stop hook error: siga: O271 -- BUG-COMERCIAL-SEM-PONTUALIDADE (aval dele 13/10 19:3x -- bug PROVADO, P7.1 fura a fila; DINHEIRO). MotorComerc
 
 ● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-* Flambéing… (1m 25s · ↓ 1.8k tokens)
-                                                                                                                                                    ✔ Update installed · Restart to update
+  Ran 1 shell command
+
+❯ aval Ronald: VIGIA-CONEXAO -- cron de 10 min na VM: se o fim do tmux 'code' mostra "API Error: Connection lost" e nao ha spinner ativo, envia "siga a fila; PAREI so em lei ou !" (tmux
+  send-keys) e loga em logs/vigia_conexao.log; nunca envia se ha spinner ou se o topo do RELATO tem PAREI de lei/!; instrumento em pouso proprio (L-105). Segue a fila; PAREI so em lei ou
+  !
+
+● Aval VIGIA-CONEXAO recebido — registro agora (PROMPT-NAO-SE-REPETE: prompt que pede obra vira item no MESMO turno) e sigo a fila, que é O271; o instrumento pousa próprio (L-105), depois
+  do produto.
+
+  E o grep do item 1 mudou o desenho: turnos.py não tem predicado "cabeça" — mas a casa já tem o juiz da pergunta, e é o que a Zona 5 do partido lê.
+
+  Searched for 2 patterns, read 1 file, ran 5 shell commands
+
+● 09:30 — não 03:2x. A queda de conexão me deixou parado de ~03:13 até agora (6 h), que é exatamente o que o seu aval cura. E a casa já tem dois leitores de tmux — LEI-AKITA 4 manda olhar
+  antes:
+
+  Ran 1 shell command
+
+● bin/keepalive.sh já é o vigia — mesma captura, mesmas duas guardas, mesma frase, mesmos 10 min. O que não migrou é a FORMA: while true morre com a sessão (GATE TEMPORAL, 16/09), e o aval
+  pede cron. A medição que explica as 6 h:
+
+● Measuring whether the keepalive watcher is alive
+  ⎿  $ cd /home/ronald/saas-hasner && echo "=== keepalive vivo?" && (pgrep -af "keepalive.sh" || echo "NENHUM processo keepalive.sh") && echo "=== switch:" && ls -l keepalive.off
+     2>/dev/null || echo "sem keepalive.off" ; echo "=== ultimas 12 linhas do log:" && tail -12 logs/keepalive.log 2>/dev/null; ec…
+
+✢ Flambéing… (6m 40s · ↓ 15.0k tokens)
+                                                                                                                                                                     8% until auto-compact
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
