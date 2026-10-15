@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 15/10/2026 10:25:32.**
+**Medido em 15/10/2026 10:30:46.**
 
 | | |
 |---|---|
@@ -35,22 +35,22 @@ RELATO, com a lista de nomes do banco como autoridade._
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **241.1 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **241.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **54.4 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **54.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
   - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **357.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **261.4 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **261.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **379.1 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **379.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -167,37 +167,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Sítio e forma estão claros. Rodo as três linhas que faltam (a banda que a cura abre) e leio a porta da tolerância, que o predicado vai consultar:
+
+● Tudo medido. Escrevo a origem — o encadeamento levantado para um escritor só, a ocupação como transcrição da autoridade, e o predicado nomeado ao lado do perto_do_marco:
 
   Ran 1 shell command
 
-● A porta aplicar_tolerancia escreve em _cadastro_x_realidade como efeito colateral — então o predicado não pode consultá-la para fazer uma pergunta. Uso o delta que a própria autoridade
-  devolve contra a constante única (o precedente é o status_do_delta, que a importa tardiamente). Rodo a banda:
+● Agora o predicado, ao lado do raio que ele substitui:
 
   Ran 1 shell command
 
-● A banda está medida: hfi com d entre 11 e 90 é o que muda de 0 para julgado (13:30 → teto L-093 de 330; 14:00 → 360), e o lado adiantado segue perdoado. Agora os três sítios, texto
-  exato:
+● Agora o sítio do motor, passando a batida já localizada (o contrato do módulo admite naive):
 
   Ran 2 shell commands
 
-● Os quatro marcos aqui são time, não datetime — o DP exige absolutos com a virada resolvida. Antes de escrever o 5º resolvedor, procuro quem já resolve o dia em absolutos:
+● Os dois REDs do col60 passaram e os selos da casa seguem verdes — test_l084_vence_o_t8 (452), test_calculador_portoes_de_marco (col345 zero) e test_12x36_atraso_pela_autoridade. Os 7
+  vermelhos que restam são todos da classe comercial, que ainda não construí. Leio o sítio dela:
 
-  Ran 1 shell command
+  Ran 4 shell commands
 
-● O DP ganha o lugar: 12:00 está 60 min ANTES do hfi e exatamente em cima do hii — raio nenhum distingue isso de 12:30. Então preciso dos marcos absolutos. Vejo como a autoridade já os
-  monta nos dois sítios dela:
+● _janela_do_dia devolve None quando a empresa não tem janela de HE — é porta de HE, não leitor de marcos. Vejo quem é o leitor único de marcos do motor:
 
-  Ran 1 shell command
+  Ran 2 shell commands
 
-● Dois sítios já têm a mesma cadeia de encadeamento copiada (_aware + while dt <= prev) — levanto para uma função só em escala/utils.py em vez de nascer a terceira. Falta o tipo do
-  intervalo_marcos no calculador:
+● O L-097 declara que a pontualidade segue a entrada da janela, não a crua — e o sítio do 12x36 julga por e. Então não há "RAW" a inventar: a régua é a mesma e vai ser levantada, não
+  espelhada. Leio o bloco inteiro para levantá-lo fiel:
 
-● Running 1 shell command…
+  Reading the full 12x36ComEscala pontualidade block
+  ⎿  $ cd /home/ronald/copia-o271/app && sed -n '3048,3135p' ponto/motor_calculo_v2.py
 
-✢ Flambéing… (1h 1m 10s · ↓ 123.6k tokens)
+· Compacting conversation… (1h 6m 24s · ↓ 141.2k tokens)
+  ▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 16%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                                                    ✔ Update installed · Restart to update
+                                                                                                                                                                     0% until auto-compact
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -205,6 +206,5 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                                                                  1h 3m 8s · ↓ 428.9k tokens
-  ◯ fork  Committing CATALOGO-PERIODO.md with heredoc message                                                                                                    34m 20s · ↓ 135.5k tokens
   ⧉  index
 ```
