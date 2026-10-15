@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 15/10/2026 15:31:02.**
+**Medido em 15/10/2026 15:36:32.**
 
 | | |
 |---|---|
@@ -35,31 +35,31 @@ RELATO, com a lista de nomes do banco como autoridade._
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **246.2 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **246.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **59.5 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **59.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **362.3 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **362.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lote** (`raia-lote`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **1.8 h**
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **1.9 h**
   - sem declaracao em `logs/raias/wt-lote.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **266.5 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **266.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **384.2 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **384.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
 - **wt-v3** (`raia-v3`) -- **SEM AGENTE**
-  - 2 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **0.3 h**
+  - 2 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **0.4 h**
   - sem declaracao em `logs/raias/wt-v3.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **21 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
@@ -171,44 +171,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Push pousou: remoto 4da7b51f == HEAD local, suíte do pre-push verde sobre o commit empurrado (Ran 10990 tests in 820.576s / OK (skipped=42) + control-plane Ran
-  22 / OK).
+  Ran 2 shell commands
+
+● O lançador do O271 era inline — escrevo um durável. Lendo a forma canônica de rodar contra a sombra sem rede:
+
+  Ran 2 shell commands
+
+● Existe trava PRÓPRIA da sombra (bin/sombra_trava.sh), separada da pista de teste — mas as duas moram nos mesmos 4 threads. Decido pela dependência de código
+  (AUTONOMIA-DE-CODIGO item 1): o runner nasce agora em disco e roda depois que a bateria do O280 soltar a pista, porque atrasar aquela bateria custa mais ao prazo
+  de 19/10 do que os 20 min que eu ganharia:
 
   Ran 1 shell command
 
-● Background command "Wait for the push to finish and read the remote head" completed (exit code 0)
+● A pista ficou livre às 15:30:17 — a bateria do O280 soltou. Então rodo na ordem certa: RED/GREEN (segundos), DIFF, suíte. Reusando a forma do RED/GREEN que já
+  funcionou:
 
-● MARCO FECHADO — pode compactar. Handoff em 45 linhas (teto 60).
+  Ran 3 shell commands
 
-  A pista foi tomada pelo o280-bateria no mesmo minuto, então o RED/GREEN do Marco B espera a vez. O passo que não precisa de pista é o rebase da cópia sobre o
-  HEAD novo — e ele não é opcional, porque o BUG-8792 mexeu em fechamento.py a poucas linhas do que o Marco B toca:
+● RED/GREEN contra o HEAD novo, os três sinais em cada lado e em disco: Ran 11 / FAILED (failures=2, errors=8) / rc 1 → Ran 11 / OK / rc 0. Passo 3 — o DIFF de
+  frota da 10, que o corte O140 exige ANTES:
 
-  Ran 1 shell command
+  Ran 2 shell commands
 
-● A cópia do Marco B já carrega o BUG-8792 dentro (ela nasceu sobre a cópia dele). Então o "rebase" se mede contra o HEAD NOVO — e o que sobrar é exatamente o
-  Marco B:
+● Rodando (a medição "antes" abriu 15:34:23; o O271 levou ~4 min por árvore). Esperando pelo arquivo:
 
-  Ran 1 shell command
+  Waiting for the fleet diff to finish and read its measurements · 1m 12s
+  ⎿  $ cd /home/ronald/saas-hasner && for i in $(seq 1 110); do grep -q O140B_DIFF_RUNNER_FIM logs/o140b/diff/runner.log 2>/dev/null && break; grep -q 'FALHOU'
+     logs/o140b/diff/runner.log 2>/dev/null && break; sleep 5; done; grep -aE 'medidos|determinismo|classes=|MEDIR_OK|FALHOU|rotulo=|RUNNER_FIM' logs… (1m 11s)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-● O rebase está essencialmente feito: 3 dos 4 arquivos do BUG-8792 estão idênticos ao que pousou, e fechamento.py difere por 9 linhas. Confirmando que essas 9 são
-  só as adições do Marco B, e não um pedaço revertido do BUG-8792:
-
-  Ran 1 shell command
-
-● Adições puras (> só), nos dois call sites — nenhum pedaço do BUG-8792 revertido. A cópia está corretamente rebaseada por construção, mas os offsets andaram
-  (740→757, 812→824), então o censo AST tem de ser remedido:
-
-● Running 1 shell command…
-
-✢ Flambéing… (6h 6m 40s · ↓ 785.4k tokens)
+✢ Flambéing… (6h 12m 10s · ↓ 796.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                           ✔ Update installed · Restart to update
+                                                                                                                                           10% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ general-purpose  Listing failures in run_bateria_v5.log                                                                          1h 40m 28s · ↓ 165.8k tokens
+  ◯ general-purpose  Patching F9 and C6b in test_o280_bateria_da_lei.py                                                              1h 45m 59s · ↓ 101.6k tokens
   ⧉  index
 ```
