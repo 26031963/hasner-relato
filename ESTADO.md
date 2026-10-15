@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 15/10/2026 18:49:14.**
+**Medido em 15/10/2026 18:54:42.**
 
 | | |
 |---|---|
@@ -35,28 +35,28 @@ RELATO, com a lista de nomes do banco como autoridade._
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **249.5 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **249.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **62.8 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **62.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **365.6 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **365.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **269.8 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **269.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **387.5 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **387.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
 - **wt-v3** (`raia-v3`) -- **SEM AGENTE**
-  - 9 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **0.0 h**
+  - 9 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **0.1 h**
   - sem declaracao em `logs/raias/wt-v3.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **22 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o275, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
@@ -171,44 +171,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● Background command "Rebuild the sombra with a fresh dump and run the morning bloco" completed (exit code 0)
-
-● A sombra terminou — e a ordem é essa: veredito dela, push do O284, depois a suíte do O275.
-
-  Ran 1 shell command
-
-● Sombra verde (diverge=0, bloco 75/75, erro=0, carimbo de hoje) — o portão do deploy está aberto. Corrigindo a assinatura que o teste errou:
-
-  Ran 1 shell command
-
-● Agora o push do O284, que é o que estava esperando a sombra (origin/main..HEAD = 2 commits meus):
-
-  Ran 1 shell command
-
-● Antes de queimar 20 min de pre-push, as guardas de host baratas (régua de tickets cobra a tabela da árvore do PUSH):
-
-  Ran 2 shell commands
-
-● Push correndo com a suíte cheia dentro. Enquanto ela corre, o trabalho do O275 que não toca banco — a coluna PROTEGE que o selo do pre-push cobra no diff:
-
-  Ran 2 shell commands
-
 ● Enquanto o push corre eu não toco a árvore viva (a suíte está medindo ela) — o trabalho segue na raia. Ruff com a lei da casa:
 
-● Running ruff against the raia's changed files
-  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; docker run --rm $TESTE_DOCKER -v /home/ronald/wt-o275/app:/app:ro -w /app
-     saas-hasner-core:latest sh -c "ruff check --no-cache --output-format concise escala/models.py escala/services/cadastro_tipo.py escala/views_wizard.py es…
+  Ran 9 shell commands
 
-· Flambéing… (9h 24m 52s · ↓ 1.2m tokens)
+● Migration certificada (No changes detected — a escrita à mão casa o estado do modelo). Agora os três templates que editei: compilar não é renderizar, mas o {% if
+  %} novo tem de ao menos fechar:
+
+  Ran 4 shell commands
+
+● Isso é importante — APP_DIRS: True sem DIRS significa que o template em uso pode não ser o arquivo que eu editei:
+
+  Ran 5 shell commands
+
+● Templates compilam e o fragmento novo renderiza nos dois estados (a falha anterior era o settings da minha sonda, config.settings é pacote vazio — o real é
+  config.settings.ci/.saas). Status do push:
+
+  Ran 1 shell command
+
+● Enquanto a suíte corre, preparo os docs do O275 no scratchpad (sem tocar a árvore que ela está medindo). Lendo os formatos vivos:
+
+  Ran 1 shell command
+
+● O topo do RELATO tem uma pergunta de lei minha, aberta, sobre esta própria obra — e ela muda o que eu posso afirmar nos testes. Lendo o censo que a sustenta, que
+  é fonte primária:
+
+● Reading the O275 census on semanal vs 12x36
+  ⎿  $ cd /home/ronald/saas-hasner && ls logs/o275/ && grep -niE "semanal|12x36|alvo|1 vinculo|361" logs/o275/censo.md | head -24
+
+✢ Compacting conversation… (9h 30m 20s · ↓ 1.2m tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱ 72%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                                            9% until auto-compact
+                                                                                                                                            0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ general-purpose  Reading FT classification in calcular_mes                                                                       4h 58m 41s · ↓ 116.1k tokens
+  ◯ general-purpose  Reading F3/F4 helpers in test_o280_bateria_da_lei.py                                                              5h 4m 9s · ↓ 145.1k tokens
   ⧉  index
 ```
