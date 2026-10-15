@@ -6,10 +6,17 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 15/10/2026 02:22:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (832.6 MB). Acoes na janela: **1100**.
+**Medido em 15/10/2026 02:27:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (832.7 MB). Acoes na janela: **1107**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 02:23:21 | Bash | Read the apply output in full | `cd /home/ronald/saas-hasner && sed -n '1,60p' logs/sobra_tipo_trocado/apply_col190_prod.out` |
+| 02:23:01 | Bash | Run the apply in production for col190 26/09 | `cd /home/ronald/saas-hasner && docker cp logs/sobra_tipo_trocado/aplicar_col190_prod.py saas_core:/tmp/aplicar_col190_prod.py && docker exec saas_core python manage.py tenant_command shell --schema=juliani --command "DRY=False; exec(open('/tmp/aplicar_col190_prod.py').read())" > logs/sobra_tipo_trocado/apply_col190_prod.out 2>&1; echo "rc=$?"; grep -n "Traceback\\|AssertionError\\|PORTAO\\|passo 2 ...` |
+| 02:22:42 | Bash | Read the oraculo write inside the fechamento transaction | `sed -n '765,820p' ponto/services/fechamento.py` |
+| 02:22:38 | Bash | Find who writes the oraculo version of DiaPago | `grep -rn "versao='oraculo'\\|versao=\"oraculo\"\\|'oraculo'" --include=*.py ponto/ core/ \| grep -v tests \| head -15` |
+| 02:22:27 | Bash | Fix the DEPOIS diff key to include versao | `cd /home/ronald/saas-hasner && python3 - <<'PY' import re p = '/home/ronald/saas-hasner/logs/sobra_tipo_trocado/aplicar_col190_prod.py' s = open(p).read() velho = """ _a = {(r['mes'], r['data']): r for r in antes['dia_pago']} _d = {(r['mes'], r['data']): r for r in depois['dia_pago']} print('DEPOIS DiaPago, campo a campo (so o que se move):') for k in sorted(set(_a) \| set(_d), key=str): ra, rb =  ...` |
+| 02:22:14 | Bash | Read the DEPOIS diff block | `cd /home/ronald/saas-hasner && sed -n '155,185p' logs/sobra_tipo_trocado/aplicar_col190_prod.py` |
+| 02:21:58 | Bash | Inspect the DEPOIS diff keying in the prod script | `cd /home/ronald/saas-hasner && grep -n "r\['mes'\], r\['data'\]\\|_a\b\\|_d\b" logs/sobra_tipo_trocado/aplicar_col190_prod.py \| sed -n '1,20p' && echo "=== contexto:" && sed -n "$(grep -n "_a = {" logs/sobra_tipo_trocado/aplicar_col190_prod.py \| cut -d: -f1),+14p" logs/sobra_tipo_trocado/aplicar_col190_prod.py` |
 | 02:21:48 | Bash | Inspect the two DiaPago rows for 26/09 in the reversal JSON | `cd /home/ronald/saas-hasner && grep -n '"2026-09-26"' logs/sobra_tipo_trocado/reversao_ANTES_col190.json \| head && for L in $(grep -n '"data": "2026-09-26"' logs/sobra_tipo_trocado/reversao_ANTES_col190.json \| cut -d: -f1); do echo "--- linha $L:"; sed -n "$((L-2)),$((L+4))p" logs/sobra_tipo_trocado/reversao_ANTES_col190.json; done` |
 | 02:21:41 | Bash | Extract and validate the reversal JSON file | `cd /home/ronald/saas-hasner && sed -n '10,1399p' logs/sobra_tipo_trocado/dry_col190_prod.out > logs/sobra_tipo_trocado/reversao_ANTES_col190.json && python3 -m json.tool logs/sobra_tipo_trocado/reversao_ANTES_col190.json > /dev/null && echo "JSON VALIDO -- $(wc -c < logs/sobra_tipo_trocado/reversao_ANTES_col190.json) bytes, $(wc -l < logs/sobra_tipo_trocado/reversao_ANTES_col190.json) linhas"` |
 | 02:21:29 | Bash | Read the ANTES summary lines of the DRY output | `cd /home/ronald/saas-hasner && sed -n '1,8p' logs/sobra_tipo_trocado/dry_col190_prod.out` |
