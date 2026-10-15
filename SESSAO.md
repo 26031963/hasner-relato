@@ -6,10 +6,23 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 15/10/2026 18:22:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (863.5 MB). Acoes na janela: **1183**.
+**Medido em 15/10/2026 18:27:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (863.7 MB). Acoes na janela: **1196**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 18:24:49 | Bash | List TipoEscala fields and the posto declaration | `echo "=== campos de TipoEscala:" && sed -n '20,120p' escala/models.py \| grep -nE "^\s+[a-z_]+ = models\." \| sed 's/^/TE /' \| head -40; echo "=== opera_em_feriado:" && grep -rn "opera_em_feriado" --include='*.py' . \| grep -v '/tests/' \| sed 's/^\.\///'` |
+| 18:24:18 | Bash | Read padrao_trabalha_em_feriado | `grep -rn "def padrao_trabalha_em_feriado" -A 40 escala/models.py \| head -55` |
+| 18:24:02 | Bash | Read the corte column of O275 | `cd /home/ronald/saas-hasner && sed -n '893p' app/docs/BACKLOG.md \| tr '\|' '\n' \| sed -n '5,7p' \| fold -w 165 -s` |
+| 18:23:54 | Bash | Read the SDF mentions in the motor and the BACKLOG | `cd /home/ronald/saas-hasner && grep -n "SDF" app/ponto/motor_calculo_v2.py \| head && echo "=== docs:" && grep -rno "SDF[^\|]\{0,180\}" app/docs/BACKLOG.md \| head -8` |
+| 18:23:50 | Bash | Find what SDF denotes in code and docs | `cd /home/ronald/saas-hasner && echo "=== SDF no codigo:" && grep -rln "SDF\\|sem_dia_fixo" app --include='*.py' --include='*.html' \| head -20; echo "=== SDF nos docs (contagem por arquivo):" && grep -rc "SDF" app/docs/*.md 2>/dev/null \| grep -v ':0'` |
+| 18:23:40 | Bash | List the tipo_ciclo constants | `echo "=== tipo_ciclo choices:" && sed -n '1,60p' escala/models.py \| grep -nE "CICLO_\|TIPO_CICLO\|choices" \| head -30` |
+| 18:23:27 | Bash | Read the feriado branch and the ciclo constants | `sed -n '1340,1375p' escala/models.py && echo "=== CICLOS_FERIADO_VIRA_FOLGA + SDF:" && grep -n "CICLOS_FERIADO_VIRA_FOLGA\\|SEM_DIA_FIXO\\|SDF\b" escala/models.py \| head -20` |
+| 18:23:22 | Bash | Read the rest of eh_dia_trabalho_calculado | `sed -n '1290,1340p' escala/models.py` |
+| 18:23:18 | Bash | Read eh_dia_trabalho_calculado | `echo "=== eh_dia_trabalho_calculado (escala/models.py)" && sed -n '1200,1290p' escala/models.py` |
+| 18:23:09 | Bash | Census of the existing vinculo flag | `echo "=== 1. trabalha_em_feriado existe?" && grep -rn "trabalha_em_feriado" --include='*.py' --include='*.html' . \| sed 's/^\.\///' \| head -30` |
+| 18:22:51 | Bash | Read the full O275 row text | `cd /home/ronald/saas-hasner && sed -n '893p' app/docs/BACKLOG.md \| tr '\|' '\n' \| sed -n '1,4p' \| fold -w 170 -s` |
+| 18:22:41 | Bash | Read the live order marker and the four fila-1 rows | `cd /home/ronald/saas-hasner && grep -n "ORDEM-VIVA" app/docs/BACKLOG.md \| head && echo "=== linhas O271 O276 O275 O277:" && grep -nE '^\\| O(271\|276\|275\|277) ' app/docs/BACKLOG.md \| cut -c1-320` |
+| 18:22:36 | Bash | Read the live fila-1 order from the hook | `cd /home/ronald/saas-hasner && python3 bin/hook_stop_fila1.py --ordem 2>&1 \| head -40` |
 | 18:21:57 | ToolSearch |  | `-` |
 | 18:21:48 | Bash | Check the lote routes and views after the marco | `grep -n "lote" relatorios/urls.py && echo "=== views que casam lote:" && grep -nE '^def .*lote\|^@\|^def ' relatorios/views.py \| grep -i lote` |
 | 18:21:41 | Bash | Count production callers of the four candidate functions | `for f in colaboradores_do_lote gerar_pdf_espelho_lote_bytes gerar_pdf_espelho_informacional_bytes gerar_pdf_espelho; do echo "=== $f"; grep -rn "\b$f\b" --include='*.py' --include='*.html' . \| grep -v '/tests/' \| grep -v 'test_' \| sed 's/^\.\///'; done` |
