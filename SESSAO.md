@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 14/10/2026 23:46:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (825.1 MB). Acoes na janela: **787**.
+**Medido em 14/10/2026 23:52:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (825.2 MB). Acoes na janela: **791**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 23:50:35 | Bash | Check the contract's file universe | `cd /home/ronald/saas-hasner/app; echo "=== universo do contrato do teto (como ele escolhe arquivos):"; sed -n '60,200p' ponto/tests/test_contract_teto_temporal.py \| grep -n "signals\\|def test\\|walk\\|glob\\|ARQUIVOS\\|for .* in \\|codigo_de" \| head -25; echo; echo "=== signals.py aparece no contrato?"; grep -n "signals" ponto/tests/test_contract_teto_temporal.py \| head` |
+| 23:49:46 | Bash | Confirm the ORM save and read the temporal-ceiling contract | `cd /home/ronald/saas-hasner/app; echo "=== registro_batida: save unico?"; grep -n "\.save(\\|bulk_create\\|\.update(" ponto/registro_batida.py \| head -12; echo; echo "=== o selo do teto temporal: quem ele declara AUTORIDADE"; sed -n '1,60p' ponto/tests/test_contract_teto_temporal.py` |
+| 23:49:37 | Bash | Read the plant site | `cd /home/ronald/saas-hasner/app; sed -n '680,745p' chamados/services/materializacao.py` |
+| 23:49:33 | Bash | Find the site that writes the retroactive batida | `cd /home/ronald/saas-hasner/app; echo "=== quem CONSTROI a origem (escrita, nao leitura):"; grep -rn "origem=.disputa\\|origem = .disputa\\|ORIGEM_RETRO\\|_retro'" --include=*.py . \| grep -v "/tests/\\|detectar_par_relampago\\|passivo_\\|procedencia_batida\\|veredito_celula\\|vigia_plantio\\|marcar_foto\\|auditar_disputas\\|diff_passivo" \| head -20; echo; echo "=== materializacao de disputa:"; g ...` |
 | 23:45:14 | Bash | Read the par lastro | `cd /home/ronald/saas-hasner/app; sed -n '181,220p' chamados/reconciliador.py` |
 | 23:45:09 | Bash | Check whether the chamado has a lastro for this module | `cd /home/ronald/saas-hasner/app; echo "=== lastro de par_relampago no reconciliador:"; grep -rn "par_relampago\\|batida_espuria" --include=*.py chamados/ \| grep -v tests \| head -20; echo; echo "=== MODULO_ORIGEM do vigia:"; grep -n "MODULO_ORIGEM" ponto/management/commands/detectar_par_relampago.py \| head -3; echo; echo "=== como o reconciliador escolhe o lastro:"; grep -n "def \\|LASTRO\\|modu ...` |
 | 23:44:48 | Bash | Read the command's universe and handle | `cd /home/ronald/saas-hasner/app; sed -n '265,400p' ponto/management/commands/detectar_par_relampago.py` |
