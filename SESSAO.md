@@ -6,10 +6,22 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 15/10/2026 19:52:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (868.5 MB). Acoes na janela: **1404**.
+**Medido em 15/10/2026 19:57:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (868.7 MB). Acoes na janela: **1416**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 19:57:16 | Bash | Find insertion point in RELATO | `cd /home/ronald/saas-hasner && grep -n "^\*\*O BACKFILL DOS 10.893" app/docs/RELATO.md \| head -2` |
+| 19:57:00 | Bash | Check sombra readiness | `cd /home/ronald/saas-hasner && bin/sombra.sh --conferir 2>&1 \| head -25; echo "rc=$?"` |
+| 19:56:59 | Bash | Read RELATO top | `cd /home/ronald/saas-hasner && sed -n '1,16p' app/docs/RELATO.md` |
+| 19:56:45 | Bash | Locate A6/A6b cells in the bateria | `cd /home/ronald/wt-v3/app && echo "=== A6 / A6b na bateria ===" && grep -n "'A6'\\|\"A6\"\\|'A6b'\\|\"A6b\"\\|1120\\|expectedFailure" ponto/tests/test_o280_bateria_da_lei.py \| head -30` |
+| 19:56:43 | SendMessage |  | `-` |
+| 19:53:00 | Bash | Read the reler entry point | `cd /home/ronald/wt-v3/app && sed -n '505,575p' ponto/calculador/periodo.py` |
+| 19:52:59 | Bash | List o280 logs and read impact file | `cd /home/ronald/saas-hasner && ls -la logs/o280/ && echo "=== impacto_v2_bateria.txt ===" && head -40 logs/o280/impacto_v2_bateria.txt 2>/dev/null` |
+| 19:52:49 | Bash | Read v3 periodo.py public surface | `cd /home/ronald/wt-v3/app && echo "=== assinaturas publicas de periodo.py ===" && grep -n "^def \\|^class \\|^ def \\|^__all__" ponto/calculador/periodo.py \| head -40 && echo && echo "=== docstring do topo ===" && sed -n '1,40p' ponto/calculador/periodo.py` |
+| 19:52:36 | Bash | List v3 changed files vs base | `cd /home/ronald/wt-v3/app && echo "=== arquivos novos da v3 ===" && git diff --stat ba289219..HEAD -- . \| tail -25` |
+| 19:52:34 | Bash | Inspect the 5 instrument commands for motor coupling | `for f in vigiar_motor_autoridade diff_espelho_alimentacao diff_reclassificar_partido plano_b_no_dinheiro diff_extrato_parcial; do p=$(find . -name "$f.py" -not -path "*/node_modules/*" \| head -1); echo "=== $p"; grep -n "calcular_mes\\|get_motor_cct\\|calcular_periodo" "$p" 2>/dev/null \| head -12; done` |
+| 19:52:07 | Bash | Check worktrees and raia-v3 state | `cd /home/ronald/saas-hasner && git worktree list && echo "--- raia-v3 ---" && git -C /home/ronald/wt-v3 status --porcelain 2>&1 \| head -20 && git -C /home/ronald/wt-v3 log --oneline -3 2>&1` |
+| 19:52:05 | Bash | Read remainder of esmeril report | `cd /home/ronald/saas-hasner && sed -n '100,250p' logs/o280/esmeril/ESMERIL.md` |
 | 19:51:51 | Bash | Read the esmeril open-items table | `sed -n '40,100p' /home/ronald/saas-hasner/logs/o280/esmeril/ESMERIL.md` |
 | 19:51:49 | ListAgents |  | `-` |
 | 19:48:22 | ToolSearch |  | `-` |

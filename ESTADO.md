@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 15/10/2026 19:52:02.**
+**Medido em 15/10/2026 19:57:32.**
 
 | | |
 |---|---|
@@ -29,37 +29,37 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2482.1 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2482.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **250.6 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **250.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **63.8 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **63.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **366.7 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **366.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **270.8 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **270.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o275** (`raia-o275`) -- **SEM AGENTE**
-  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **0.1 h**
+  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **0.2 h**
   - sem declaracao em `logs/raias/wt-o275.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **388.5 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **388.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
 - **wt-v3** (`raia-v3`) -- **SEM AGENTE**
-  - 11 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **0.3 h**
+  - 11 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **0.4 h**
   - sem declaracao em `logs/raias/wt-v3.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **21 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
@@ -174,44 +174,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Committed 32c8c259
-
-● Commit 32c8c259 (194+, raia limpa). Agora os docs na árvore principal, com a célula dentro do teto:
-
-  Ran 2 shell commands
-
-● Agora a linha do RELATO — acrescentada, nunca reescrita (L-116):
-
-  Ran 3 shell commands
-
-● MARCO FECHADO — pode compactar. Orientando antes de abrir o ESMERIL-V3 (parte 3, a única que não depende do construtor):
+● O ponto de entrada do DIFF já existe por desenho: reler(resultado, regua_de, …) relê o resultado do v2 — então o passo 4 não precisa de troca de assinatura
+  nenhuma. Vendo o que já está medido antes de construir:
 
   Ran 2 shell commands
 
-● O ESMERIL-V3 já está publicado — os três itens do aval, com 22 itens abertos (logs/o280/esmeril/ESMERIL.md). Não vou duplicar agente. Lendo o que os 22 pedem:
+● O desenho do passo 4 já está preparado pelo construtor: reler é leitura de ensaio, compara RUBRICA (nunca alerta), e Censo.sem_dia/pontualidade_medida/cct_medida
+  são os tripwires que o leitor do DIFF consulta antes de comparar. Antes de construir a frota:
+
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+
+● Agindo na ordem do mais barato: tento retomar o construtor (a quem o aval aloca as 17 curas), e em paralelo meço o I16a e as pré-condições da sombra.
+  ⎿  Resuming agent a0e94d5
+  ⎿  Allowed by auto mode classifier
 
   Ran 1 shell command
 
-› Message from @a0e94d563a20a5e65 (ctrl+o to expand)
+● O construtor retomou. E o I16a já está curado na árvore dele: :1180 escreve 720 + 240 = 960, nunca 1120, A6b passou a esperar abertos: 0, trab: 840.0 e o lastro
+  em :345 agora cita o envelope de 26 h como o portão MEDIDO — o esmeril mediu uma árvore de 15:04 e o fecho do passo 3 veio às 19:2x. Ele vai reconciliar.
 
-● Agent "O280 MOTOR-V3 passos 1 e 2" finished · 5h 57m 9s
+  Minha obrigação de lei primeiro (a pergunta do §4 está em logs/, não no topo do RELATO):
 
-● O construtor da v3 fechou passos 1-3 e deixou o passo 4 sem começar, com a sombra LIVRE — isso é medição na sombra, que o item 1 da AUTORIZACAO PREVIA autoriza,
-  e tem data (troca antes de 19/10). Retomando o agente que tem o contexto, em vez de abrir outro:
-  ⎿  Read docs/AVAIS.md (26 lines)
-  ⎿  Referenced file ../bin/sombra_regras_pessoais.py
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b5duwgtxq.output (12 lines)
-  ⎿  Referenced file escala/utils.py
+  Ran 2 shell commands
 
-● Reading the esmeril open-items table
-  ⎿  $ sed -n '40,100p' /home/ronald/saas-hasner/logs/o280/esmeril/ESMERIL.md
+● Sombra pronta (carimbo de hoje, completa, diverge=0). Agora a pergunta do §4 vai ao topo do RELATO com os números — é lei, e estava só em logs/:
 
-✢ Flambéing… (10h 27m 40s · ↓ 1.3m tokens · thinking)
+● Finding insertion point in RELATO
+  ⎿  $ cd /home/ronald/saas-hasner && grep -n "^\*\*O BACKFILL DOS 10.893" app/docs/RELATO.md | head -2
+
+✢ Flambéing… (10h 33m 10s · ↓ 1.3m tokens · thought for 12s)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt · ← for agents
+  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt · ← for agents · ↓ to manage
+
+  ● main
+  ◯ general-purpose  Reading ESMERIL.md item tables                                                                                         45s · ↓ 146.0k tokens
   ⧉  index
 ```
