@@ -4,7 +4,7 @@
 >
 > **livre** = pode virar fatia agora, sem humano. **corte/aval/smoke/dinheiro-ate-export** = tem dono humano e espera.
 
-<!-- ORDEM-VIVA-TOPO: O273 -->
+<!-- ORDEM-VIVA-TOPO: O276 -->
 <!-- ORDEM decidida pelo Code em 13/10 ~19:5x, pela AUTONOMIA-DE-CODIGO item 1 (ordem e encaixe na fila quando
      quem decide e DEPENDENCIA DE CODIGO -- nunca foi pergunta de lei): BUG-LINHA-X-BADGE FECHOU (861100a1 +
      c66ccafa), e das quatro obras de dinheiro que ele avalizou as ~19:0x-19:4x a vez e da `O263-FT`, porque ela
