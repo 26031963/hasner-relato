@@ -6,10 +6,23 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 15/10/2026 03:10:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (835.5 MB). Acoes na janela: **1231**.
+**Medido em 15/10/2026 03:16:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (836.0 MB). Acoes na janela: **1244**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 03:15:40 | Bash | Read previsto and teto from the judging motor | `cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/sonda_o271_teto.py <<'PY' # O271 -- o PREVISTO do dia e o TETO da L-093, LIDOS do motor que julgou (nunca recalculados). import datetime as dt from django.utils import timezone from colaboradores.models import Colaborador from ponto.services.espelho import autoridade_do_periodo L = timezone.localtim ...` |
+| 03:14:56 | Bash | Rerun the probe with staticfiles mountpoint present | `mkdir -p /home/ronald/copia-o271/app/staticfiles && cd /home/ronald/saas-hasner && SONDA_ARVORE=/home/ronald/copia-o271/app bin/sonda_frota.sh /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/sonda_o271_casos.py 2>&1 \| tail -40` |
+| 03:14:51 | Bash | Rerun the probe after creating mount points | `mkdir -p /home/ronald/copia-o271/app/logs /home/ronald/copia-o271/app/media && cd /home/ronald/saas-hasner && SONDA_ARVORE=/home/ronald/copia-o271/app bin/sonda_frota.sh /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/sonda_o271_casos.py 2>&1 \| tail -40` |
+| 03:14:46 | Bash | Read the two real cases through the real judging function | `cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/sonda_o271_casos.py <<'PY' # O271 -- LEITURA do caso REAL (L-110: o CASO nasce da regra sobre o cadastro e as batidas). # Funcao REAL que o sistema usa para julgar: ponto/services/espelho.py::autoridade_do_periodo. # SEM NOME: so colXXX (lei do RELATO). import datetime as dt from django.utils import ...` |
+| 03:14:26 | Bash | Read Autoridade namedtuple fields | `cd /home/ronald/copia-o271/app && sed -n '917,933p' ponto/services/espelho.py` |
+| 03:14:22 | Bash | Find Autoridade return shape | `cd /home/ronald/copia-o271/app && sed -n '1000,1067p' ponto/services/espelho.py \| grep -nE "return\|Autoridade\(\|^\s*[a-z_]+=" \| head -30; echo "=== classe Autoridade:"; grep -rn "class Autoridade" --include=*.py . \| head` |
+| 03:14:12 | Bash | Read autoridade_do_periodo signature and body | `cd /home/ronald/copia-o271/app && sed -n '933,1000p' ponto/services/espelho.py` |
+| 03:14:08 | Bash | Locate canonical motor entry points | `cd /home/ronald/copia-o271/app && grep -rn "def autoridade_do_periodo\\|def espelho_do_colab\\|def get_motor" --include=*.py . \| head` |
+| 03:14:00 | Bash | Find colXXX label convention | `cd /home/ronald/saas-hasner && grep -rn "col%s\\|col%d\\|'col' *+\\|f\"col{" --include=*.py app/ponto app/core app/escala bin 2>/dev/null \| head -12` |
+| 03:13:50 | Bash | Read sonda_frota header | `cd /home/ronald/saas-hasner && sed -n '1,60p' bin/sonda_frota.sh` |
+| 03:13:45 | Bash | List sombra/sonda scripts and check shadow stamp | `cd /home/ronald/saas-hasner && ls bin/ \| grep -iE 'sombra\|sonda' && echo "--- carimbo:" && bin/sombra.sh --conferir 2>&1 \| tail -12` |
+| 03:13:13 | Bash | Read remainder of neighbour seal file | `cd /home/ronald/copia-o271/app && wc -l ponto/tests/test_l084_vence_o_t8.py && sed -n '110,220p' ponto/tests/test_l084_vence_o_t8.py` |
+| 03:13:04 | Bash | Check push verdict on remote and test lock | `cd /home/ronald/saas-hasner && date '+%H:%M:%S' && git fetch -q origin 2>&1 \| tail -3; git rev-parse origin/main HEAD; echo "--- trava:"; bin/trava_teste.sh --quem; echo "--- rc do push:"; tail -6 logs/push_marco_15out.log` |
 | 03:09:08 | Bash | Read MotorTurnoPartido zone 5 tolerancia call | `cd /home/ronald/copia-o271/app && sed -n '2490,2530p' ponto/motor_calculo_v2.py` |
 | 03:08:36 | Bash | Read test_l084_vence_o_t8.py | `cd /home/ronald/copia-o271/app && sed -n '1,120p' ponto/tests/test_l084_vence_o_t8.py` |
 | 03:08:20 | Bash | Read _previsto_do_dia | `cd /home/ronald/copia-o271/app && grep -n 'def _previsto_do_dia' -A 40 ponto/motor_calculo_v2.py \| head -50` |
