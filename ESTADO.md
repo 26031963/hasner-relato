@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:337 AFIRMA ato sem PROVA ao lado -- - **NO AR, e o ato fechou inteiro**: commit `8c545a89` (merge `--no-ff`) e `bin/deploy.sh` **sem** `--sem-migrate` rc **0** as 18:12 -- `rel
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:338 AFIRMA ato sem PROVA ao lado -- - **NO AR, e o ato fechou inteiro**: commit `8c545a89` (merge `--no-ff`) e `bin/deploy.sh` **sem** `--sem-migrate` rc **0** as 18:12 -- `rel
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 15/10/2026 19:20:46.**
+**Medido em 15/10/2026 19:25:46.**
 
 | | |
 |---|---|
@@ -29,7 +29,7 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2481.6 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2481.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
@@ -38,28 +38,28 @@ RELATO, com a lista de nomes do banco como autoridade._
   - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **250.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **63.3 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **63.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **366.2 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **366.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **270.3 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **270.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o275** (`raia-o275`) -- **SEM AGENTE**
-  - 2 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **0.0 h**
+  - 2 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **0.1 h**
   - sem declaracao em `logs/raias/wt-o275.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **388.0 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **388.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
 - **wt-v3** (`raia-v3`) -- **SEM AGENTE**
-  - 10 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **0.1 h**
+  - 10 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **0.2 h**
   - sem declaracao em `logs/raias/wt-v3.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **21 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
@@ -175,43 +175,43 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-● Confirmando que o juiz do hook ainda lê a ordem viva depois da edição (a célula é o que ele parseia):
+  Curado em 1418eec3, só teste (8+/5−): leitor, campo, migration 0043, contador e UI intactos. Verde pelos três sinais da L-074, duas vezes — módulo sozinho Ran 23
+  / OK / rc 0 com os 23 nomes um a um, e 56 módulos escolhidos pelos símbolos que o diff tocou Ran 457 / OK / rc 0, 0 FAIL e 0 ERROR. Ruff: All checks passed!.
 
-  Ran 1 shell command
+  Três coisas que eu havia afirmado sem medir, e as três estão corrigidas:
 
-● Advising using Fable 5.1
+  - O commit 9e853a34 disse "23 testes" com o módulo nunca tendo passado por banco — está dito no corpo do commit da cura.
+  - O corpo da cura, na primeira redação, dizia "os 55 vizinhos VERDES" enquanto a bateria ainda corria — o mesmo defeito que o commit retrata. Amendado para os
+    números medidos.
+  - A célula do BACKLOG dizia "PRONTA" no hash em que o módulo estava 21/23 vermelho; agora diz 1418eec3, 281 chars, zero pipes, e o juiz do hook segue devolvendo
+    ('ok', 'O275', …).
 
-● Stop Task
-  ⎿  cd /home/ronald/saas-hasner && python3 bin/hook_stop_fila1.py --ordem 2>/dev/null | head -20 || python3 - <<'PY'
-     import importlib.util as iu, io, re… · stopped
+  O esmeril deste marco: 452+/0− na construção, 8+/5− na cura — puramente aditivo, zero órfãos pela L-111.
 
-● A correção está na árvore da raia mas ainda não é durável. Commitando antes de qualquer outra coisa (o conteúdo não muda, só o .git — a bateria mede o mesmo
-  texto):
+  O pouso segue retido na pergunta publicada no topo do RELATO, e o verde não a decide: FORMA A (literal, o leitor alcança 12x36/24x48) e FORMA B (escopada aos
+  ciclos que leem padrão semanal) são código diferente, e o número que discrimina é 12,0 h x 36,0 h de descanso entre plantões. A O277 espera atrás dela por ordem
+  sua. A O276 tem pergunta própria publicada, também com números.
 
-  Committed c4947bb2
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: O275 -- SDF-FERIADO-E-DIA (corte dele 14/10 20:4x -- regra de negocio NOVA, e por isso corte e nao aval). TipoEscala g
 
-● Background command "Re-run the 56 neighbor modules against the raia" completed (exit code 0)
+● O hook está certo em bloquear: pergunta de lei não devolve turno. Então sigo na O275 pelo que é independente da forma. Verificando se o "lido só por" do corte
+  tem selo:
 
-  Ran 1 shell command
+  Census the field's production readers and check for a single-reader selo
+  ⎿  $ cd /home/ronald/wt-o275/app && echo "=== quem LE o campo no codigo de producao ===" && grep -rn 'feriado_e_dia_trabalho' --include='*.py' --include='*.html'
+     . | grep -v '/tests/' | grep -v migrations && echo && echo "=== selo de leitor unico no meu modulo? ===" && grep -n 'def test_' escala/tests…
 
-● OK / Ran 457 / rc 0, zero FAIL ou ERROR nos 56 módulos. Mas acabei de retratar o número "23 testes" — então confirmo que eles correram, nome por nome, em vez de
-  inferir do OK agregado:
-
-  Ran 1 shell command
-
-● Verde medido: Ran 23 / OK / rc 0, os 23 nomes um a um. O número que eu havia retratado está agora medido. Antes de escrever a correção no RELATO publicado:
-
-  Advising using Fable 5.1
-
-· Flambéing… (9h 56m 24s · ↓ 1.2m tokens)
+· Compacting conversation… (10h 1m 24s · ↓ 1.3m tokens)
+  ▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 20%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                           ✔ Update installed · Restart to update
+                                                                                                                                            0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ general-purpose  Reading AbsurdoTest A1-A16 cases                                                                                 5h 30m 13s · ↓ 92.0k tokens
+  ◯ general-purpose  Writing patch script for test_o280_bateria_da_lei.py                                                            5h 35m 13s · ↓ 144.5k tokens
   ⧉  index
 ```
