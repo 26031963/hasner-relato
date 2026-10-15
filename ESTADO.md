@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 15/10/2026 18:06:10.**
+**Medido em 15/10/2026 18:11:32.**
 
 | | |
 |---|---|
-| `HEAD` local | `8be3814b [O140] o FURO do dia nasce LAVRADO: `DiaPago.furo_apurado` passa a ser DADO com tres estados, e a lavratura e o escritor unico -- nenhum leitor precisa mais pagar uma volta de motor para saber se o dia furou` |
+| `HEAD` local | `8c545a89 [O284] o caderno de cartoes sai do request e vira JOB: o pedido vivo e DEVOLVIDO em vez de duplicado, e o pouso foi UM ato -- merge, commit e deploy sem nada no meio` |
 | `origin/main` | `8be3814b [O140] o FURO do dia nasce LAVRADO: `DiaPago.furo_apurado` passa a ser DADO com tres estados, e a lavratura e o escritor unico -- nenhum leitor precisa mais pagar uma volta de motor para saber se o dia furou` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -29,82 +29,55 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2480.3 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2480.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **248.8 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **248.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **62.0 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **62.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **364.9 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **365.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
-- **wt-lote** (`raia-lote`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **4.4 h**
-  - sem declaracao em `logs/raias/wt-lote.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **269.1 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **269.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **386.8 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **386.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
 - **wt-v3** (`raia-v3`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 2 arquivo(s) sujo(s), commit a frente ha **0.3 h**
+  - 7 commit(s) a frente do `main`, 2 arquivo(s) sujo(s), commit a frente ha **0.4 h**
   - sem declaracao em `logs/raias/wt-v3.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **21 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
-**sem agente: 8** (raia com commit a frente e sem declaracao, esperado 0) -- **a frente do main ha mais de 6 h: 6** -- uniao medida: 32
+**sem agente: 7** (raia com commit a frente e sem declaracao, esperado 0) -- **a frente do main ha mais de 6 h: 6** -- uniao medida: 31
 
 > Raia sem agente por mais de um marco pede linha de motivo no RELATO -- lei, `!` ou pista (item 4 do aval).
 
 ## `git log --oneline -5`
 
 ```
+8c545a89 [O284] o caderno de cartoes sai do request e vira JOB: o pedido vivo e DEVOLVIDO em vez de duplicado, e o pouso foi UM ato -- merge, commit e deploy sem nada no meio
 8be3814b [O140] o FURO do dia nasce LAVRADO: `DiaPago.furo_apurado` passa a ser DADO com tres estados, e a lavratura e o escritor unico -- nenhum leitor precisa mais pagar uma volta de motor para saber se o dia furou
 4da7b51f [BUG-8792] o range de falta se RATEIA pelos dias dele: o escritor da lavratura tinha regra propria e punha os minutos de N dias no PRIMEIRO, deixando os outros em branco
+21e9206a O284 parte A: o caderno de cartoes sai do request e vira JOB, com o pedido vivo devolvido em vez de duplicado
 ba289219 [O286] o POSTGRES do ensaio sai dos nucleos do cliente: a sombra passa a morar em container PROPRIO `sombra_db`, e o host do banco de ensaio passa a ter UM sitio
-7ea7d402 [O271] o comercial nao tinha pontualidade PROPRIA -- nao tinha pontualidade NENHUMA: passa pela MESMA regua, e a CABECA do turno quem diz e o JUIZ, nao a proximidade
-49ac61c4 [BUG-SOBRA-TIPO-TROCADO] o dia julgado de novo em PROD fecha o item: o col190 26/09 sai de "Em aberto" com minutos_realizados 1 -> 715, o chamado 26219 morre por LASTRO no passo 2 e a classe da comp 10 fica em ZERO
 ```
 
 ## `git status --short`
 
 ```
-M  app/config/crons.py
  M app/config/crons_duracao.json
- M app/docs/AVAIS.md
- M app/docs/BACKLOG.md
- M app/docs/HANDOFF-SESSAO.md
- M app/docs/PENDENTES_RONALD.json
- M app/docs/RELATO-ARQUIVO.md
- M app/docs/RELATO.md
- M app/docs/TICKETS.md
-M  app/ponto/tests/test_contract_espelho_sem_emoji.py
-A  app/relatorios/lote_espelho.py
-A  app/relatorios/management/commands/gerar_cartoes_em_lote.py
-A  app/relatorios/migrations/0002_loteespelho.py
-M  app/relatorios/models.py
-M  app/relatorios/services.py
-M  app/relatorios/tests/test_cauda_trilha_do_cartao.py
-M  app/relatorios/tests/test_filtro_coerente_data_final.py
-M  app/relatorios/tests/test_lote_erro_diz_que_e_erro.py
-A  app/relatorios/tests/test_selo_job_lote_espelho.py
-M  app/relatorios/urls.py
-M  app/relatorios/views.py
-A  app/templates/relatorios/_lote_espelho_progresso.html
-M  app/templates/relatorios/espelho_lote.html
-A  app/templates/relatorios/espelho_lote_job.html
- M bin/sombra_regras_pessoais.py
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -195,12 +168,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-      148
-      149  # O selo acha colunas por NOME; o que casar e nao estiver nas regras acima tem de estar aqui, com motivo.
-  ⎿  Allowed by auto mode classifier
-
-● Update(~/saas-hasner/bin/sombra_regras_pessoais.py)
-  ⎿  Added 5 lines
       192      'escala_tipoescala.he_extra_depois_min': 'minutos declarados no template de escala (O146); casa com o '
       193                                               'padrao por "depois" -- nao e foto de antes/depois, e parametro',
       194      'folha_exportacaodominio.nome_arquivo': 'nome de arquivo por competencia', 'folha_rubricacatalogo.descricao': 'catalogo',
@@ -218,21 +185,27 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Background command "Run the pendentes selo module against the live tree" completed (exit code 0)
 
-● Running the whole host selo pasture with the declared exception · 1m 59s
-  ⎿  $ cd /home/ronald/saas-hasner && VERM=0; EXC=bin/tests/test_import_tardio_contra_o_ar.sh; for t in bin/tests/test_*.sh; do bash "$t" >/dev/null 2>&1 &&
-     continue; if [ "$t" = "$EXC" ]; then echo " VERMELHO DECLARADO $t"; continue; fi; echo " VERMELHO $t"; VERM=$((VERM+1)); done; echo "nao-declarados… (1m 58s ·
-     2 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Ran 10 shell commands
 
-✶ Flambéing… (8h 41m 49s · ↓ 1.1m tokens)
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+
+  Ran 1 shell command
+
+● Background command "Run the whole host selo pasture with the declared exception" completed (exit code 0)
+
+  Running the pouso resume script to the commit
+  ⎿  $ cd /home/ronald/saas-hasner && bin/deploy.sh 2>&1 | tail -30; echo "rc_deploy=${PIPESTATUS[0]}"
+
+✢ Flambéing… (8h 47m 10s · ↓ 1.1m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                           ✔ Update installed · Restart to update
+                                                                                                                                           11% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ general-purpose  Locating ContratoDaTrocaTest insertion point                                                                    4h 15m 36s · ↓ 160.8k tokens
+  ◯ general-purpose  Grepping TETO_RETRATACAO_SEG in detectar_par_relampago.py                                                        4h 20m 59s · ↓ 73.6k tokens
   ⧉  index
 ```

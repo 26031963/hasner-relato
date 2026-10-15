@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 15/10/2026 18:06:10.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (862.9 MB). Acoes na janela: **1159**.
+**Medido em 15/10/2026 18:11:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (863.0 MB). Acoes na janela: **1162**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 18:09:01 | Bash | Run the pouso resume script to the commit | `cd /home/ronald/saas-hasner && bash logs/o284/pousar_resume.sh 11020 'OK (skipped=42)' 1491 2>&1 \| tail -25` |
+| 18:08:55 | Bash | Read the pasture result and check the sombra gate | `cd /home/ronald/saas-hasner && cat /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bfx1rz1pf.output; echo "=== sombra --conferir:"; bash bin/sombra.sh --conferir 2>&1 \| tail -8; echo "rc=${PIPESTATUS[0]}"` |
+| 18:08:49 | Bash | Check running crons and the LEIS PROTEGE rows | `cd /home/ronald/saas-hasner && echo "=== crons_em_curso:" && ls -la logs/crons_em_curso/ 2>&1 \| tail -5; echo "=== LEIS.md PROTEGE:"; grep -n "sombra_regras_pessoais\\|gerar_avais\\|PENDENTES_RONALD\\|sombra_selo_pessoal" app/docs/LEIS.md \| head` |
 | 18:04:10 | Bash | Run the whole host selo pasture with the declared exception | `cd /home/ronald/saas-hasner && VERM=0; EXC=bin/tests/test_import_tardio_contra_o_ar.sh; for t in bin/tests/test_*.sh; do bash "$t" >/dev/null 2>&1 && continue; if [ "$t" = "$EXC" ]; then echo " VERMELHO DECLARADO $t"; continue; fi; echo " VERMELHO $t"; VERM=$((VERM+1)); done; echo "nao-declarados=$VERM de $(ls bin/tests/test_*.sh \| wc -l)"` |
 | 18:03:55 | Bash | Make step 4 of the resume script confirm instead of regenerate | `cd /home/ronald/saas-hasner && python3 - <<'PY' import io P = 'logs/o284/pousar_resume.sh' t = io.open(P, encoding='utf-8').read() VELHO = """python3 "$S/docs_o284.py" "$RAN" "$VER" "$SEG" \|\| { echo "PAROU: docs_o284"; exit 1; } python3 "$S/relato_o284.py" "$RAN" "$VER" "$SEG" \|\| { echo "PAROU: relato_o284"; exit 1; }""" NOVO = """# OS DOIS GERADORES JA RODARAM -- o pousar.sh parou no portao 3 ...` |
 | 18:03:46 | Bash | Write and run the applied-docs checker | `cd /home/ronald/saas-hasner && cat > logs/o284/conferir_docs.py <<'PY' # -*- coding: utf-8 -*- """Os DOCS do marco JA estao no disco: aqui se CONFERE, nao se reescreve. O `pousar.sh` chama os dois geradores no passo 4; o `pousar_resume.sh` nao pode, porque eles pararam no portao 3b DEPOIS de ja terem escrito, e os dois tem guarda de dupla aplicacao (`assert 'em construcao na raia' in VELHO`, `asse ...` |
