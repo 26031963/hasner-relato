@@ -4,14 +4,16 @@
 >
 > **livre** = pode virar fatia agora, sem humano. **corte/aval/smoke/dinheiro-ate-export** = tem dono humano e espera.
 
-<!-- ORDEM-VIVA-TOPO: O277 -->
-<!-- MOVIDO em 15/10 ~02:4x pelo Code, AUTONOMIA-DE-CODIGO item 1 (ordem e encaixe quando quem decide e
+<!-- ORDEM-VIVA-TOPO: O271 -->
+<!-- MOVIDO em 15/10 ~02:5x pelo Code, AUTONOMIA-DE-CODIGO item 1 (ordem e encaixe quando quem decide e
      DEPENDENCIA DE CODIGO): o BUG-SOBRA-TIPO-TROCADO FECHOU -- cura em 5f915ff4, no ar desde 02:06, e o apply
-     do dado as 02:23 com a PROVA no RELATO (classe da frota 10 = 0, o #26219 morto por lastro, o 26/09 sem
-     "Em aberto"). A vez e da O277 SDF-FERIADO-SEM-DOBRA, corte LITERAL dele de 14/10 21:4x, aberta e nao
-     comecada. A O276 BUG-PAR-ATRAVESSA-O-DIA esta construida e certificada em COPIA e NAO pousa: o DIFF
-     medido ANTES surpreendeu (32 flips, 29 custando hora trabalhada, colisao com a L-084) e a pergunta de LEI
-     esta no topo do RELATO -- pela PAREI-DE-LEI-NAO-DEVOLVE-TURNO a fila segue no item que nao depende dela. -->
+     do dado as 02:23 com a PROVA no RELATO (classe da frota 10 = 0, o 26219 morto por lastro, o 26/09 sem
+     "Em aberto"). A vez e da O271 BUG-COMERCIAL-SEM-PONTUALIDADE, aval dele de 13/10 19:3x, bug PROVADO e
+     P7.1: e a obra de dinheiro que pode CORRER hoje, porque nao espera resposta dele. AS DUAS VIZINHAS
+     ESPERAM LEI, e por isso nao sao o topo: a O276 BUG-PAR-ATRAVESSA-O-DIA esta construida e certificada em
+     COPIA e para na pergunta do topo do RELATO (32 flips, 29 custando hora trabalhada, colisao com a L-084);
+     e a O277 SDF-FERIADO-SEM-DOBRA para na PERGUNTA DE LEI 1 do mesmo topo -- quem CARREGA o lado SDF --, e o
+     portador candidato e o cadastro da O275, que vem antes dela. -->
 <!-- ORDEM decidida pelo Code em 13/10 ~19:5x, pela AUTONOMIA-DE-CODIGO item 1 (ordem e encaixe na fila quando
      quem decide e DEPENDENCIA DE CODIGO -- nunca foi pergunta de lei): BUG-LINHA-X-BADGE FECHOU (861100a1 +
      c66ccafa), e das quatro obras de dinheiro que ele avalizou as ~19:0x-19:4x a vez e da `O263-FT`, porque ela
