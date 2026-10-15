@@ -6,10 +6,18 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 15/10/2026 20:35:13.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (870.8 MB). Acoes na janela: **1520**.
+**Medido em 15/10/2026 20:40:25.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (871.3 MB). Acoes na janela: **1528**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 20:40:22 | Bash | Run the duplicate-par frota census on the sombra | `cd /home/ronald/saas-hasner/logs/o280/passo4 && P4_SCRIPT=probe_dup_pares.py bash rodar.sh dup_pares_frota 2>&1 \| tail -60` |
+| 20:40:18 | Bash | Point the JSON at the writable mount and check the test lock | `cd /home/ronald/saas-hasner/logs/o280/passo4 && sed -i "s#/app/logs/o280/passo4/saida/dup_pares.json#/p4/saida/dup_pares.json#" probe_dup_pares.py && grep -n "dup_pares.json" probe_dup_pares.py && python3 -m py_compile probe_dup_pares.py && echo "py_compile OK" && bash /home/ronald/saas-hasner/bin/trava_teste.sh --quem` |
+| 20:40:11 | Bash | Read the sombra runner | `cd /home/ronald/saas-hasner/logs/o280/passo4 && cat rodar.sh` |
+| 20:40:04 | Bash | Build the frota duplicate-par census probe | `cd /home/ronald/saas-hasner/logs/o280/passo4 && head -75 probe_invertidos.py > probe_dup_pares.py && cat >> probe_dup_pares.py <<'PYEOF' for rot, lista in (('periodos', list(getattr(r, 'periodos', ()) or ())), ('periodos_ft', list(getattr(r, 'periodos_ft', ()) or ()))): grupos = collections.OrderedDict() for p in lista: e, s = getattr(p, 'entrada', None), getattr(p, 'saida', None) if e is None or  ...` |
+| 20:39:34 | Bash | Read the census probe header and mapa construction | `cd /home/ronald/saas-hasner/logs/o280/passo4 && sed -n '1,75p' probe_invertidos.py` |
+| 20:35:44 | Bash | Read the census detection block to adapt | `cd /home/ronald/saas-hasner/logs/o280/passo4 && sed -n '76,118p' probe_invertidos.py` |
+| 20:35:22 | Bash | Fix the field name and re-run | `cd /home/ronald/saas-hasner/logs/o280/passo4 && sed -i 's/b\.data_hora/b.timestamp/g; s/x\.data_hora/x.timestamp/g' probe_col382_batidas.py && grep -n "timestamp" probe_col382_batidas.py && python3 -m py_compile probe_col382_batidas.py && cd /home/ronald/saas-hasner && P4_SCRIPT=probe_col382_batidas.py bash logs/o280/passo4/rodar.sh col382_batidas 2>&1 \| tail -14` |
+| 20:35:17 | Bash | Read the Batida model field names | `cd /home/ronald/saas-hasner && grep -n "class Batida" -A30 app/ponto/models.py \| grep -nE "Field\|= models\." \| head -20` |
 | 20:35:10 | Bash | Measure whether col382 has duplicated batidas on 01/10 | `cd /home/ronald/saas-hasner/logs/o280/passo4 && { head -47 probe_invertidos.py; cat <<'PY' # DE ONDE NASCEM OS DOIS PARES IDENTICOS? Hipotese a medir: batidas DUPLICADAS no minuto (o v2 tem # `DUPLICATA_MINUTOS = 3` em motor_calculo_v2.py:70, e a matriz tem a celula `A3` para isso). Se as # batidas vierem em dobro, o pareador faz dois pares e o filtro de duplicata nao os colapsou. from ponto.turno ...` |
 | 20:34:44 | Bash | Print the raw pair of both collapsed periods | `cd /home/ronald/saas-hasner/logs/o280/passo4 && python3 - <<'PY' import io p='probe_col382.py'; s=io.open(p,encoding='utf-8').read() a = """ if ee and es and es < ee: print(' %-12s id=%s %s -> %s trab=%s dia_jornada=%s' % ( rotulo, id(p), timezone.localtime(ee).strftime('%d/%m %H:%M'), timezone.localtime(es).strftime('%d/%m %H:%M'), getattr(p, 'minutos_trabalhados', None), getattr(p, 'dia_jornada' ...` |
 | 20:34:21 | Bash | Run the col382 duplicate probe on the sombra | `cd /home/ronald/saas-hasner && P4_SCRIPT=probe_col382.py bash logs/o280/passo4/rodar.sh col382 2>&1 \| tail -15` |
