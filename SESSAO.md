@@ -6,10 +6,16 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 15/10/2026 20:19:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (869.8 MB). Acoes na janela: **1472**.
+**Medido em 15/10/2026 20:24:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (870.3 MB). Acoes na janela: **1478**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 20:24:32 | Bash | Confirm empresa env default and reconcile both colabs against the frota census | `cd /home/ronald/saas-hasner/logs/o280/passo4 && grep -n "P4_EMPRESAS\\|EMPRESAS =" rodar.sh diff_v2_v3.py \| head && echo "=== col174/col37 no censo da FROTA ===" && grep -nE "^col(174\|37) " saida/censo_invertidos.log && echo "=== totais do censo ===" && grep -nE "MEDIDOS\|invertido\|pares com efetivo\|CLASSE" saida/censo_invertidos.log \| head -20` |
+| 20:24:19 | Bash | Compare the two smoke log headers | `cd /home/ronald/saas-hasner/logs/o280/passo4/saida && head -20 smoke30.log && echo "=== GUARDAS ===" && head -20 smoke30_guardas.log && echo "=== JSON heads ===" && ls -la *.json 2>/dev/null \| head` |
+| 20:20:19 | Bash | Declare the measured universe and re-run | `cd /home/ronald/saas-hasner/logs/o280/passo4 && python3 - <<'PY' import io p='diff_v2_v3.py' s=io.open(p,encoding='utf-8').read() # O UNIVERSO SE DECLARA, nao se supoe: duas rodadas com o mesmo P4_LIMITE deram 24 e 20 medidos # (`saida/smoke30.log` x `saida/smoke30_guardas.log`), e numero que muda sem causa nomeada nao vai # ao `!` de ninguem. Agora a rodada imprime QUEM mediu e QUEM pulou, com o  ...` |
+| 20:19:44 | Bash | Compare the two smoke runs | `cd /home/ronald/saas-hasner/logs/o280/passo4/saida && echo "=== smoke30 (antes) ===" && grep -n "universo pedido\\|MEDIDOS\\|^trab\\|RUBRICAS QUE MOVEM\\|CENSO da releitura" smoke30.log && echo "=== smoke30_guardas (agora) ===" && grep -n "universo pedido\\|MEDIDOS\\|^trab\\|RUBRICAS QUE MOVEM\\|CENSO da releitura" smoke30_guardas.log` |
+| 20:19:23 | Bash | Re-run the smoke to prove the new guards bite | `cd /home/ronald/saas-hasner && P4_LIMITE=30 P4_SCRIPT=diff_v2_v3.py bash logs/o280/passo4/rodar.sh smoke30_guardas 2>&1 \| tail -45` |
+| 20:19:14 | Bash | Add the three anti-silence guards to the DIFF payload | `cd /home/ronald/saas-hasner/logs/o280/passo4 && python3 - <<'PY' import io p='diff_v2_v3.py' s=io.open(p,encoding='utf-8').read() # 1) importar a lista de rubricas de periodo da BATERIA (nao copiar) -- e o `_RUBRICAS_DO_PERIODO` a="from ponto.tests.test_o280_bateria_da_lei import leitura # noqa: E402\n" assert s.count(a)==1 s=s.replace(a, "from ponto.tests.test_o280_bateria_da_lei import _RUBRICAS ...` |
 | 20:18:40 | Bash | Read the non-negativity property and its rubrica list | `cd /home/ronald/saas-hasner/logs/o280/passo4/arvore/app && sed -n '3095,3130p' ponto/tests/test_o280_bateria_da_lei.py` |
 | 20:18:24 | Bash | Read the rest of the DIFF payload | `cd /home/ronald/saas-hasner/logs/o280/passo4 && sed -n '110,200p' diff_v2_v3.py` |
 | 20:18:12 | Bash | Fix the hour stamp to the measured time | `cd /home/ronald/saas-hasner && sed -i 's\|QUE O v2 PAGA COMO ZERO (15/10 20:5x;\|QUE O v2 PAGA COMO ZERO (15/10 20:1x;\|' app/docs/RELATO.md && grep -c "15/10 20:1x; a fila NAO parou" app/docs/RELATO.md` |
