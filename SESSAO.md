@@ -6,10 +6,17 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 15/10/2026 00:03:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (825.8 MB). Acoes na janela: **805**.
+**Medido em 15/10/2026 00:08:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (826.0 MB). Acoes na janela: **812**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 00:07:36 | Bash | Read Command.handle loop body | `cd /home/ronald/saas-hasner/app; sed -n '266,345p' ponto/management/commands/detectar_par_relampago.py` |
+| 00:07:30 | Bash | Read the rest of _alvo_retratavel and _retratar | `cd /home/ronald/saas-hasner/app; sed -n '160,232p' ponto/management/commands/detectar_par_relampago.py` |
+| 00:07:26 | Bash | Read _alvo_retratavel and _retratar | `cd /home/ronald/saas-hasner/app; sed -n '85,160p' ponto/management/commands/detectar_par_relampago.py` |
+| 00:07:21 | Bash | Read the cartorio receiver and the tail of signals.py | `cd /home/ronald/saas-hasner/app; sed -n '80,135p' ponto/signals.py; echo "=== 188-219"; sed -n '188,219p' ponto/signals.py` |
+| 00:07:15 | Bash | Map ponto/signals.py | `cd /home/ronald/saas-hasner/app; wc -l ponto/signals.py; grep -n "^def \\|^@receiver\\|^# \\|raw\\|_dias_batida\\|dispatch_uid" ponto/signals.py` |
+| 00:07:06 | Bash | Read the anotar writer | `cd /home/ronald/saas-hasner/app; grep -n "^def anotar" -A 32 ponto/registro_batida.py` |
+| 00:06:59 | Bash | Read clock and the retraction write mechanism | `date '+%d/%m/%Y %H:%M:%S %Z'; cd /home/ronald/saas-hasner/app; echo "=== (1) retratar_batida escreve por save ou update?"; grep -n "def retratar_batida" -A 40 ponto/registro_batida.py \| grep -n "save\\|update(\\|retratada_em\\|def \\|LogAuditoria\\|registrar_log" \| head -20` |
 | 00:02:45 | Bash | Read the vigia's exact day window | `cd /home/ronald/saas-hasner/app; sed -n '60,85p' ponto/management/commands/detectar_par_relampago.py; echo "=== e a janela do _alvo_retratavel"; grep -n "timedelta\\|dias" ponto/management/commands/detectar_par_relampago.py \| sed -n '1,25p'` |
 | 00:02:04 | Bash | Read the device-hour authority | `cd /home/ronald/saas-hasner/app; wc -l api/hora_do_aparelho.py; cat api/hora_do_aparelho.py` |
 | 00:01:55 | Bash | Find the offline-queue timestamp tolerance | `cd /home/ronald/saas-hasner/app; echo "=== quem traduz o timestamp do aparelho"; grep -rn "def .*dispositivo\\|def hora_que_vale\\|def _ts_valido\\|def resolver_ts" api/ ponto/ --include=*.py \| head; echo; echo "=== o sitio 517-535"; sed -n '512,545p' api/views_core.py` |
