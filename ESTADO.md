@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 15/10/2026 11:23:56.**
+**Medido em 15/10/2026 11:29:02.**
 
 | | |
 |---|---|
@@ -29,19 +29,19 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2473.6 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2473.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **242.1 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **242.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **55.3 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **55.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **358.2 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **358.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
   - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **262.4 h** (passou das 6 h da L-105)
@@ -168,43 +168,43 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-  Searched for 1 pattern, listed 2 directories, ran 9 shell commands
-  ⎿  Read ../logs/o271_diff_runner.log (20 lines)
-  ⎿  Read docs/AVAIS.md (23 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bsyn3e0ux.output (5 lines)
-  ⎿  Referenced file ponto/management/commands/tripwire_celulas.py
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bzx8wto03.output (4 lines)
-
-● Task "RED e construção do segundo intervalo" completed in background
-
-● Task "O284-A job do lote do espelho" still running in background
-
-● Background command "Wait for the first measurement runner to finish" completed (exit code 0)
-
-● Ambas as fotos existem. Comparando contra o critério fixado ANTES de abrir o JSON.
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
   Ran 1 shell command
 
-● Critério cumprido: no efeito só se movem os dois campos do alvo. Lançando a segunda medição (comp 09 + flips por dia/classe) antes de interpretar.
+● O filtro de acumulação é por-colab, mas o de exibição é soma — exatamente o buraco que o advisor apontou. Curando na origem: a linha sai quando ALGUM colab se move.
 
   Ran 4 shell commands
 
-● Enquanto roda, o snapshot de reversão (condição 2 da DINHEIRO-EM-COMPETENCIA-ABERTA) — e ele sai do gravado que já medi.
+● Idêntico sob o filtro estrito — nenhum campo estava escondido por cancelamento. Agora os complementos que o advisor pediu.
 
-  Ran 3 shell commands
+  Ran 6 shell commands
+
+● autoridade_do_periodo recalcula pelo motor — então a pergunta decisiva é se folha_manda cobre os dois campos do alvo na 09 exportada.
+
+  Searched for 1 pattern, ran 3 shell commands
+
+● Decisivo: totais_da_folha lê o ONLINE (fechamento_lido), não a foto — e mapeia horas_atraso/horas_saida_antecipada. O espelho da 09 vai mostrar o número novo contra o TXT já no Domínio.
+
+  Searched for 1 pattern
+
+● O achado é mais forte que divergência de tela: cartao_x_txt é portão do TXT. Lendo a recusa literal.
+
+  Searched for 1 pattern, ran 3 shell commands
 
 ● Advising using Fable 5.1
 
-✢ Flambéing… (1h 59m 34s · ↓ 251.5k tokens)
+✢ Flambéing… (2h 4m 40s · ↓ 263.9k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                                     ✔ Update installed · Restart to update
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                                                                       1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Rewriting _corpo_do_formatador to parse AST                                                                                                 30m 36s · ↓ 157.6k tokens
+  ◯ general-purpose  Checking migration drift for 0002_loteespelho                                                                                               35m 41s · ↓ 163.7k tokens
   ⧉  index
 ```
