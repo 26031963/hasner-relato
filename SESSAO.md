@@ -6,10 +6,17 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 14/10/2026 22:52:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (821.7 MB). Acoes na janela: **651**.
+**Medido em 14/10/2026 22:57:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (822.1 MB). Acoes na janela: **658**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 22:57:08 | Bash | Read the sombra sonda runner pattern | `cd /home/ronald/saas-hasner; sed -n '1,45p' bin/r5_idempotencia_frota.sh` |
+| 22:57:05 | Bash | Find the sombra runner scripts | `cd /home/ronald/saas-hasner; ls bin/ \| grep -i -E 'sombra\|sonda' ; echo "=== como roda script na sombra (grep do runner):"; grep -rn "settings.sombra\\|config.settings.sombra" bin/*.sh \| head -20` |
+| 22:56:52 | Bash | List O276 scratch files and read the frota sonda | `SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; ls -la "$SP"/o276_* 2>/dev/null; echo "=== frota_literal:"; cat "$SP/o276_frota_literal.py" 2>/dev/null` |
+| 22:56:45 | Bash | Check push progress and the test lock | `cd /home/ronald/saas-hasner; SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; date +%H:%M:%S; echo "=== push log:"; tail -20 "$SP/push_o273_v2.log" 2>/dev/null; echo "=== trava:"; bin/trava_teste.sh --quem; echo "=== origin/main:"; git log --oneline -1 origin/main` |
+| 22:53:25 | Bash | Read the reader signature and the frota universe | `cd /home/ronald/saas-hasner/app; grep -n "def turnos_do_colab" -A 12 ponto/turnos.py \| head -16; echo "=== colaboradores_em_uso:"; grep -rn "def colaboradores_em_uso" -A 8 --include=*.py . \| head -14` |
+| 22:53:02 | Bash | Check push progress and trava holder | `SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; tail -8 "$SP/push_o273_v2.log"; echo "=== trava:"; cat /tmp/juliani_db_test.lock.quem 2>/dev/null; echo "=== origin/main:"; cd /home/ronald/saas-hasner && git log --oneline -1 origin/main` |
+| 22:52:52 | Bash | Apply the cure to the copy | `SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cp -r "$SP/o276_copia" "$SP/o276_copia_RED"; python3 - "$SP/o276_copia/app/ponto/turnos.py" <<'PY' import io, sys p = sys.argv[1] t = io.open(p, encoding='utf-8').read() velho = """ # HX-TETO-ENVELOPE (20/08): S alem de 26h da E NAO fecha o # turno (26h preserva plantao 24x48 + selo saida-tardia 17h;  ...` |
 | 22:52:02 | Bash | Read both existing readers of the teto juiz | `cd /home/ronald/saas-hasner/app; echo "=== leitor :920 (O68b):"; sed -n '905,925p' ponto/turnos.py; echo; echo "=== leitor :1005 (O95):"; sed -n '995,1012p' ponto/turnos.py` |
 | 22:51:49 | Bash | Read the rest of the day authority | `cd /home/ronald/saas-hasner/app; sed -n '126,152p' ponto/turnos.py` |
 | 22:51:45 | Bash | Read the day-of-turno authority | `cd /home/ronald/saas-hasner/app; grep -n "def _data_do_turno" -A 40 ponto/turnos.py \| head -48` |
