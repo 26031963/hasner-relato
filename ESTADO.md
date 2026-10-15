@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 15/10/2026 16:25:32.**
+**Medido em 15/10/2026 16:30:46.**
 
 | | |
 |---|---|
@@ -35,31 +35,31 @@ RELATO, com a lista de nomes do banco como autoridade._
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **247.1 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **247.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **60.4 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **60.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
   - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **363.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lote** (`raia-lote`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2.7 h**
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2.8 h**
   - sem declaracao em `logs/raias/wt-lote.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **267.4 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **267.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **385.1 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **385.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
 - **wt-v3** (`raia-v3`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **0.3 h**
+  - 4 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **0.4 h**
   - sem declaracao em `logs/raias/wt-v3.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **21 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
@@ -171,44 +171,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ⎿  Stop hook error: siga: O140 -- O FURO DO DIA NAO E LAVRADO, E POR ISSO TODO LEITOR DA PALAVRA PAGA UMA VOLTA DE MOTOR (achado declarado no R3
+  ⎿  Read ../logs/o271_diff_runner.log (20 lines)
+  ⎿  Read pautas/tests/test_contract_vocabulario.py (55 lines)
+
+● Task "O280 MOTOR-V3 passos 1 e 2" still running in background
+
+● Task "O275 censo: tipo x vinculo" still running in background
+
+● Task "Launch the full suite on the cured copy" still running in background
+
+● Task "O140 suite verdict (three L-074 signals)" still running in background
+
+● The dry-run FALHA is my own predicate, not the file: lines 77/114/157/369/486/784/864/884 cite ORDEM-VIVA-TOPO em prosa. Só a linha 7 é o marcador. É a mesma
+  inversão que a O278 curou no hook — e o hook já tem a resposta certa (bin/hook_stop_fila1.py:196: regex do COMENTÁRIO, não substring).
 
   Ran 1 shell command
 
-● The hook is right — the turn doesn't end with O140 in curso. The O140 copy is frozen under its suite (no .py may be touched until the verdict), so the esteira
-  advances on the next fila-1 item that crosses no file with it, per RAIA-NAO-FICA-PARADA. The O275 row says what its first work is, literally: "A pergunta do
-  censo … segue em pe e se responde antes do campo … Responder isso antes de escrever campo e o que impede o segundo derivador." That is pure reading — zero .py,
-  zero suite — so it runs alongside safely.
+● aplicar_docs.py:98 já ancora na forma exata (s.count('<!-- ORDEM-VIVA-TOPO: O140 -->') == 1) — o script do pouso está certo. O errado é o meu ensaio a seco. Vou
+  achá-lo e corrigir o predicado para perguntar ao hook, não a um in meu.
 
-● Agent(O275 censo: tipo x vinculo)
-  ⎿  Backgrounded agent (↓ to manage · ctrl+o to expand)
+  Ran 1 shell command
 
-● Monitor(O140 suite verdict (three L-074 signals))
-  ⎿  Monitor started · task bpc5h5lss · timeout 1500s
-  ⎿  Allowed by auto mode classifier
+● O ensaio a seco não estava em arquivo — é o O182 de novo. Vou escrevê-lo como arquivo, com o predicado certo. Primeiro leio as âncoras que os scripts realmente
+  cobram, e a API do hook:
 
-● Dry-run the anchors of the landing scripts
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PY'
-     # ENSAIO A SECO das ancoras dos scripts de pouso, agora -- ancora que mudou se descobre AQUI,
-     # nao no meio do pouso. Nada e gravado.
-     import io, re
-     ok = True
-     def diz(c, t):
-     global ok
-     print((' ok ' if c else ' FALHA ') + t)
-     ok = ok and c
-     b = io.open(…
+  Reading the docs and commit-closing scripts in full
+  ⎿  $ cd /home/ronald/saas-hasner && echo "########## aplicar_docs.py"; cat -n logs/o140b/aplicar_docs.py; echo "########## fechar_commit.py"; cat -n
+     logs/o140b/fechar_commit.py
 
-· Flambéing… (7h 1m 10s · ↓ 895.8k tokens · thinking)
+· Flambéing… (7h 6m 24s · ↓ 898.6k tokens · thought for 5s)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                                            1% until auto-compact
+                                                                                                                           ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell, 1 monitor · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells, 1 monitor · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ general-purpose  Running ruff on test_o280_bateria_da_lei.py                                                                     2h 34m 58s · ↓ 119.9k tokens
-  ◯ general-purpose  Reading eh_dia_trabalho_calculado in escala/models.py                                                                   48s · ↓ 81.3k tokens
+  ◯ general-purpose  Grepping for enumerating contracts over calculador/                                                             2h 40m 12s · ↓ 126.6k tokens
+  ◯ general-purpose  Counting SDF tipos in escala_tipoescala on sombra                                                                    6m 3s · ↓ 122.0k tokens
   ⧉  index
 ```
