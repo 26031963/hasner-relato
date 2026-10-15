@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 15/10/2026 13:33:32.**
+**Medido em 15/10/2026 13:38:43.**
 
 | | |
 |---|---|
@@ -29,28 +29,28 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2475.8 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2475.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **244.3 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **244.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **57.5 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **57.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **360.4 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **360.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **264.5 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **264.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **382.2 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **382.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -166,34 +166,34 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-● Agent "O286 sombra fora do postgres de prod" finished · 1m 29s
-  ⎿  Read docs/AVAIS.md (24 lines)
-  ⎿  Referenced file escala/utils.py
-  ⎿  Read ../logs/o271_diff_runner.log (20 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bsyn3e0ux.output (5 lines)
-  ⎿  Referenced file ponto/management/commands/tripwire_celulas.py
+  Ran 1 shell command
 
-● Task "RED e construção do segundo intervalo" completed in background
+● Agent "O284-A job do lote do espelho" finished · 2h 43m 38s
 
-● Task "O284-A job do lote do espelho" completed in background
-
-● Task "Run RED on pure HEAD then GREEN on the cured copy" still running in background
-
-● Vizinhos candidatos a afirmar o comportamento ANTIGO — inspeção dirigida, mais o estado dos dois runs em voo:
+● O chave_8792.py era sonda inline, não arquivo — então os números "14/8" não têm fonte durável e eu os re-meço em vez de carregá-los. Assinatura do leitor vivo, para a sonda chamar a
+  função REAL:
 
   Ran 2 shell commands
 
-● Background command "Push the O271 marco" completed (exit code 0)
+● Resíduo REAL, e é exatamente o que eu precisava achar antes de trocar o leitor: so_fx=1 (col951, 10-04), so_lav=0. Perguntando ao dado por que esse dia não chegou ao lavrado:
 
-● Background command "Run the sombra folha DIFF between pure HEAD and the cured copy" completed (exit code 0)
+  Ran 1 shell command
 
-● DIFF_FOLHA=0 e o push voltou 0. Antes de ler isso como prova, preciso saber o que a foto do par mede — se ela só lê o GRAVADO, o 0 responde pela EXTRAÇÃO e não pela cura do escritor:
+● O resíduo não é furo do escritor — é predicado da minha sonda. Ausencia 4703 (col951, falta aprovada, min=0) tem a linha lavrada com detalhe={'falta_min': 0} e horas_falta=0.0: o dia
+  ESTÁ lavrado, com zero minuto. Eu perguntei horas_falta > 0, que é um predicado meu.
 
-● Reading the push verdict and the remote main
-  ⎿  $ cd /home/ronald/saas-hasner && echo "=== veredito do push ==="; tail -25 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b3l27m8rk.output;
-     echo "=== remoto de verdade ==="; git ls-remote origin refs/heads/main; echo "local HEAD:"; git rev-parse HEAD
+  Isso é achado de desenho para o leitor da O140: perguntar horas_falta > 0 perderia esse dia, e dia de falta é dinheiro por len(datas). O sinal honesto é a presença da chave ('não sei' =
+  sem linha; zero = chave em 0, a mesma lei do dia_pago.py). Re-medindo com o predicado certo:
 
-✢ Flambéing… (4h 9m 10s · ↓ 558.1k tokens · still thinking)
+● Re-measuring so_fx with the key-presence predicate
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
+     p = 'logs/o140/sonda_so_fx.py'
+     s = open(p).read()
+     velho = " lav = {r.data for r in linhas if (r.horas_falta or 0) > 0}"
+     novo = (" # O PREDICADO E A PRESENCA DA CHAVE, nao `horas_falta > 0` (medido: col951 10-04,\n"
+     " # `Ausencia 4703` falta APROV…
+
+✶ Flambéing… (4h 14m 21s · ↓ 578.6k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                                     ✔ Update installed · Restart to update
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -203,6 +203,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                                                                       1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Checking green8.log verdicts and trava_teste holder                                                                                      2h 23m 43s · ↓ 156.4k tokens
+  ◯ general-purpose  Checking green8.log verdicts and trava_teste holder                                                                                      2h 43m 38s · ↓ 158.3k tokens
   ⧉  index
 ```
