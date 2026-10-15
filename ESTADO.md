@@ -10,11 +10,11 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 15/10/2026 12:45:03.**
+**Medido em 15/10/2026 12:50:32.**
 
 | | |
 |---|---|
-| `HEAD` local | `bf4ea729 [O271] o comercial nao tinha pontualidade PROPRIA -- nao tinha pontualidade NENHUMA: passa pela MESMA regua, e a CABECA do turno quem diz e o JUIZ, nao a proximidade` |
+| `HEAD` local | `7ea7d402 [O271] o comercial nao tinha pontualidade PROPRIA -- nao tinha pontualidade NENHUMA: passa pela MESMA regua, e a CABECA do turno quem diz e o JUIZ, nao a proximidade` |
 | `origin/main` | `49ac61c4 [BUG-SOBRA-TIPO-TROCADO] o dia julgado de novo em PROD fecha o item: o col190 26/09 sai de "Em aberto" com minutos_realizados 1 -> 715, o chamado 26219 morre por LASTRO no passo 2 e a classe da comp 10 fica em ZERO` |
 | commits a subir (`ahead`) | **1** |
 
@@ -29,28 +29,28 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2475.0 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2475.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **243.5 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **243.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **56.7 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **56.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **359.6 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **359.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **263.7 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **263.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **381.4 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **381.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -64,7 +64,7 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
-bf4ea729 [O271] o comercial nao tinha pontualidade PROPRIA -- nao tinha pontualidade NENHUMA: passa pela MESMA regua, e a CABECA do turno quem diz e o JUIZ, nao a proximidade
+7ea7d402 [O271] o comercial nao tinha pontualidade PROPRIA -- nao tinha pontualidade NENHUMA: passa pela MESMA regua, e a CABECA do turno quem diz e o JUIZ, nao a proximidade
 49ac61c4 [BUG-SOBRA-TIPO-TROCADO] o dia julgado de novo em PROD fecha o item: o col190 26/09 sai de "Em aberto" com minutos_realizados 1 -> 715, o chamado 26219 morre por LASTRO no passo 2 e a classe da comp 10 fica em ZERO
 5f915ff4 [BUG-SOBRA-TIPO-TROCADO] a batida no raio de uma ponta nunca vira marco de intervalo: o par do col190 26/09 apagava a S 19:00 pela S155, e o turno ficava aberto com a ata lendo 18:55 como orfa
 587a55d5 [O278] quem diz o estado de um item e a COLUNA do estado: a prosa do bug fechava o item que descreve o bug
@@ -176,44 +176,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  - PENDENTES: O271-RECALCULO-DA-10-PELO-DP entrou como "aplicado, revise" (seção 7b item 4), pelo escritor canônico (bin/gerar_avais.py --escrever, indent=2): o diff do JSON tem 0 linha
+    removida e +14 do item novo. AVAIS na mesa: 6 → 7.
+  - Seu aval de 12:4x (BUG-8792) registrado no mesmo turno, como complemento da O140 — linha no PROMPTS e linha logo depois da O140 no BACKLOG, sem item novo. O sítio foi medido no ato em
+    vez de repetir o enunciado: folha/export.py:90::datas_falta_janela chama _datas_ausencia_tipo_janela(colaborador, descontam_vigentes(), ini, fim), que consulta o modelo Ausencia cru. É
+    o 6º leitor do furo, fora dos 5 que o corte da O140 nomeou, e está na folha (export.py:560 leva as datas ao Domínio; :824). Nada construído.
+  - O hook já lê o fechamento: estado da O271 em **FECHADA … NO AR** (300 chars, dentro da L-109) e ORDEM-VIVA-TOPO movido para O140 — medido pedindo ao próprio hook (veredito ok/O140,
+    O271 parado=True, O140 parado=False). A ordem é minha por dependência de código (AUTONOMIA-DE-CODIGO item 1): a O276 seria a próxima, mas espera a pergunta do topo do RELATO (17 dos 32
+    flips são par completo, 13 em domingo/sábado e 2 em feriado), e pela PAREI-DE-LEI-NAO-DEVOLVE-TURNO a esteira segue o item que não depende dela.
+  - Árvore viva x árvore certificada, medido antes de publicar: a viva tem UM .py que a cópia não tinha — app/config/settings/sombra.py, da raia do O286 — e nenhum .py de produção o
+    importa (nem settings/__init__.py nem base.py o mencionam). Declarado no corpo do commit.
 
-  Ran 2 shell commands
+  O portão: bin/sombra.sh --conferir devolve rc=1 (status=REFEITA). Pelas linhas 398-402, SOMBRA_STATUS=OK sai só do --bloco, com DIVERGE=0 e erros=0. O --bloco do O286 segura
+  logs/sombra.lock desde 12:24:27 ensaiando 75 comandos e carimba para nós dois; --sem-sombra está fora pelo PROIBIDO literal dele. Armei duas esperas por arquivo — STATUS=OK e BLOCO
+  saindo de nao_rodou —, a segunda porque esperar só por OK seria ficar cego a um ensaio vermelho. O286 avisado para não refazer antes de eu publicar.
 
-● Background command "Run the sombra bloco rehearsal to green the deploy gate" completed (exit code 0)
+  No verde: deploy.sh --sem-migrate → smoke de prod só leitura (sem cartao_x_txt_divergentes em prod: os 9 já estão medidos na sombra) → push do marco, respeitando a trava (suite:2975956
+  desde 12:39:30).
 
-  Amended commit 41f57c8f, ran 18 shell commands
-  ⎿  Read docs/AVAIS.md (23 lines)
-  ⎿  Read ../logs/o271_diff_runner.log (20 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bsyn3e0ux.output (5 lines)
-  ⎿  Referenced file ponto/management/commands/tripwire_celulas.py
-  ⎿  Referenced file escala/utils.py
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: O140 -- O FURO DO DIA NAO E LAVRADO, E POR ISSO TODO LEITOR DA PALAVRA PAGA UMA VOLTA DE MOTOR (achado declarado no R3
 
-● Task "RED e construção do segundo intervalo" completed in background
+● The hook is right — O140 is the ordem viva now, and the pouso is waiting on a portão, not on a decision. Começo a O140 em CÓPIA do HEAD (LEI-AKITA 10), sem tocar a árvore viva que está
+  prestes a publicar.
 
-● Task "O284-A job do lote do espelho" still running in background
+● Reading the DiaPago model
+  ⎿  $ sed -n '331,420p' ponto/models.py
 
-● Task "O286 sombra fora do postgres de prod" still running in background
-
-● Task "Wait by file for the ensaio carimbo to turn OK" still running in background
-
-❯ aval Ronald: BUG-8792 (fx.datas_falta lê Ausencia crua; col643, 2 dias) entra como COMPLEMENTO da O140 — a lei é a da célula soberana, e o leitor que está fora dela passa a ler o campo
-  lavrado no DiaPago; medir na frota pela função real, RED nomeado col643, nenhuma lei nova. Segue a fila; PAREI so em lei ou !
-
-  Amended commit bf4ea729, searched for 1 pattern, ran 8 shell commands
-
-● Advising using Fable 5.1
-
-✢ Flambéing… (3h 20m 40s · ↓ 450.1k tokens)
+✢ Flambéing… (3h 26m 10s · ↓ 464.7k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                                                    ✔ Update installed · Restart to update
+                                                                                                                                                                     6% until auto-compact
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 8 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                                                                       1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Writing achado_c2_contaminacao.txt findings note                                                                                         1h 51m 41s · ↓ 123.9k tokens
-  ◯ general-purpose  Trimming estado_o286.txt under 300 chars                                                                                                    54m 15s · ↓ 148.5k tokens
+  ◯ general-purpose  Awaiting green8 verdict on test_selo_job_lote_espelho.py                                                                                 1h 55m 15s · ↓ 137.1k tokens
+  ◯ general-purpose  Polling resultado.tsv for bloco progress                                                                                         59m 45s · ↓ 158.9k tokens · 1 queued
   ⧉  index
 ```

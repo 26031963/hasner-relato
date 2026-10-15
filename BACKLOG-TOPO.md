@@ -278,7 +278,7 @@ lista — ela e o que esta EM PE._
 | **O268** | TRES-JUIZES-DE-INSTANTE | espera corte |
 | **O269** | RELAVRA-09-MOTOR-DE-HOJE | espera corte |
 | **O270** | INTRA-4H-A-6H-INDENIZA | aberta, atras da O263-FT (mesma familia  |
-| **O271** | BUG-COMERCIAL-SEM-PONTUALIDADE | **SUITE CHEIA VERDE** na copia certifica |
+| **O271** | BUG-COMERCIAL-SEM-PONTUALIDADE | espera corte |
 | **O272** | BUG-INTRA-FORA-DA-JANELA | **FECHADA 14/10 20:3x, NO AR** -- commit |
 | **O273** | BUG-RECUSA-SISTEMA-ENVELHECE | **FECHADA 14/10 22:1x, NO AR e EMPURRADA |
 | **O274** | BUG-FIO-SEM-ALVO-NO-DRAWER | espera corte |
