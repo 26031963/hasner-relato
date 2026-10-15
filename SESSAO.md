@@ -6,10 +6,17 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 15/10/2026 02:05:52.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (831.7 MB). Acoes na janela: **1062**.
+**Medido em 15/10/2026 02:11:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (831.8 MB). Acoes na janela: **1069**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 02:07:43 | Bash | Locate the BUG-SOBRA rows in BACKLOG and TICKETS | `grep -n "BUG-SOBRA" docs/BACKLOG.md \| head -5 && echo "=== === TICKETS:" && grep -n "BUG-SOBRA" docs/TICKETS.md \| head -5` |
+| 02:07:16 | Bash | Run the apply DIFF against the sombra | `cd /home/ronald/saas-hasner && date '+%d/%m %H:%M:%S inicio do DIFF do apply na sombra' && bin/sombra.sh --rodar apply_sobra_col190.py apply_sobra_col190 2>&1 \| tail -20 && echo "=== rc acima e do tail; o veredito esta no .out:" && date '+%d/%m %H:%M:%S fim'` |
+| 02:07:11 | Bash | Check the --rodar usage | `cd /home/ronald/saas-hasner && grep -n "rodar" bin/sombra.sh \| head -12` |
+| 02:07:02 | Bash | Confirm the sombra reproduces the col190 case | `cd /home/ronald/saas-hasner && SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && bin/sonda_leitura.sh --sombra "$SP/palavra_col190.py" 2>&1 \| tee logs/sobra_tipo_trocado/palavra_col190_ANTES_sombra.txt \| grep -vE "^$" \| tail -22; grep -c Traceback logs/sobra_tipo_trocado/palavra_col190_ANTES_sombra.txt` |
+| 02:06:28 | Bash | Deploy the marco to production | `cd /home/ronald/saas-hasner && date '+%d/%m %H:%M:%S inicio do deploy' && bin/deploy.sh --sem-migrate 2>&1 \| tail -45; echo "rc_pipe_acima_e_do_tail -- o veredito se le nas linhas de prova"` |
+| 02:06:13 | Bash | Read the ensaio verdict and the live sombra stamp | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bky3jonjs.output; echo "=== carimbo vivo:"; cd /home/ronald/saas-hasner && bin/sombra.sh --conferir 2>&1 \| tail -8; echo "=== cron em curso (tem de estar vazio para o deploy):"; ls logs/crons_em_curso/ 2>/dev/null; echo "(vazio acima = nenhum)"` |
+| 02:05:59 | Bash | Read col190 26/09 state from prod through the read-only porta | `cd /home/ronald/saas-hasner && SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && bin/sonda_leitura.sh "$SP/palavra_col190.py" 2>&1 \| tee logs/sobra_tipo_trocado/palavra_col190_ANTES_prod.txt \| tail -40; echo "--- procurando Traceback (o rc vem de pipe, nao se le):"; grep -c Traceback logs/sobra_tipo_trocado/palavra_col190_ANTES_prod.txt` |
 | 02:05:38 | Bash | Confirm the command's option dest names | `sed -n '262,280p' ponto/management/commands/detectar_par_relampago.py` |
 | 02:05:31 | Bash | Write the prod apply script following the precedent form | `cat > /home/ronald/saas-hasner/logs/sobra_tipo_trocado/aplicar_col190_prod.py <<'PY' # -*- coding: utf-8 -*- """APPLY em PROD do que a cura BUG-SOBRA-TIPO-TROCADO move no col190 26/09 -- `DRY` default True. A FORMA E A DO PRECEDENTE (`bin/aplicar_o263_comp10.py`): dois asserts de `saas_hasner`, `DRY` por `globals()`, ANTES e DEPOIS campo a campo. O que muda aqui e o ESCOPO: um colaborador, um dia. ...` |
 | 02:04:18 | Bash | Read the precedent prod-apply script | `cd /home/ronald/saas-hasner && sed -n '1,55p' bin/aplicar_o263_comp10.py && echo "..." && grep -n "docker exec\\|saas_hasner\\|reversao\\|logs/" bin/aplicar_o263_comp10.py \| head -20` |
