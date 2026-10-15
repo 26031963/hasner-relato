@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 15/10/2026 00:47:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (828.4 MB). Acoes na janela: **898**.
+**Medido em 15/10/2026 00:52:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (828.5 MB). Acoes na janela: **901**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 00:47:48 | Bash | Wait for the full suite verdict | `cd /home/ronald/saas-hasner && SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad for i in $(seq 1 55); do if grep -qE '^(OK\|FAILED)($\| \()' "$SP/sobra_suite.log" 2>/dev/null; then break; fi sleep 20 done date '+%H:%M:%S' grep -E '^(OK\|FAILED)($\| \()' "$SP/sobra_suite.log" \| tail -1 grep -E '^Ran [0-9]+ test' "$SP/sobra_suite.log" \| tail -1 echo  ...` |
+| 00:47:38 | Bash | Draft the TICKETS row and check its shape | `cd /home/ronald/saas-hasner && SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad cat > "$SP/sobra_tickets_row.txt" <<'ROW' \| BUG-SOBRA-TIPO-TROCADO \| dinheiro (familia **turno/marcos**) -- ordem dele de 13/10 ("ORIGEM PRIMEIRO: qual dos tres -- pareamento, cluster, relampago -- esta fora da E3 neste caso, e por que os vigias nao pegaram" + "item de  ...` |
+| 00:47:11 | Bash | Check TICKETS table shape and existing row | `grep -n 'BUG-SOBRA' docs/TICKETS.md \| head; echo "--- header + 3 primeiras linhas da tabela:"; sed -n '118,122p' docs/TICKETS.md; echo "--- ultima linha da tabela:"; awk 'NR>118 && /^\\| [A-Z0-9]/ {l=NR": "$0} END{print l}' docs/TICKETS.md \| cut -c1-400` |
 | 00:46:58 | Bash | Relaunch the frota DIFF measurement in background | `cd /home/ronald/saas-hasner && SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad bash "$SP/run_diff_frota_15-10.sh" "$SP" > /home/ronald/saas-hasner/logs/sobra_tipo_trocado/DIFF_FROTA_15-10.txt 2>&1 echo "rc=$?"; wc -l /home/ronald/saas-hasner/logs/sobra_tipo_trocado/DIFF_FROTA_15-10.txt` |
 | 00:46:50 | Bash | Confirm the old runner is gone | `ps -p 2100244 -o pid= >/dev/null 2>&1 && echo "AINDA VIVO" \|\| echo "morto"; ls /home/ronald/saas-hasner/logs/sobra_tipo_trocado/grade4* 2>/dev/null \| wc -l` |
 | 00:46:44 | Bash | Stop the runner whose output went to /dev/null | `kill 2100244 2>/dev/null; sleep 1; pgrep -af run_diff_frota_15-10.sh \|\| echo "runner morto (nada se perdeu: estava na espera, 0 grade4 escrito)"` |
