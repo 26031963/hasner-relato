@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 15/10/2026 10:35:46.**
+**Medido em 15/10/2026 10:41:01.**
 
 | | |
 |---|---|
@@ -29,19 +29,19 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2472.8 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2472.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **241.3 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **241.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **54.5 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **54.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **357.4 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **357.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
   - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **261.6 h** (passou das 6 h da L-105)
@@ -168,19 +168,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-● Agora o sítio do motor, passando a batida já localizada (o contrato do módulo admite naive):
-
-  Ran 2 shell commands
-
-● Os dois REDs do col60 passaram e os selos da casa seguem verdes — test_l084_vence_o_t8 (452), test_calculador_portoes_de_marco (col345 zero) e test_12x36_atraso_pela_autoridade. Os 7
-  vermelhos que restam são todos da classe comercial, que ainda não construí. Leio o sítio dela:
-
-  Ran 4 shell commands
-
-● _janela_do_dia devolve None quando a empresa não tem janela de HE — é porta de HE, não leitor de marcos. Vejo quem é o leitor único de marcos do motor:
-
-  Ran 2 shell commands
-
 ● O L-097 declara que a pontualidade segue a entrada da janela, não a crua — e o sítio do 12x36 julga por e. Então não há "RAW" a inventar: a régua é a mesma e vai ser levantada, não
   espelhada. Leio o bloco inteiro para levantá-lo fiel:
 
@@ -194,9 +181,22 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Tenho os dois sítios na mão. Vou consultar antes de mexer em zona inviolável com um lift.
 
-  Advising using Fable 5.1
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-· Flambéing… (1h 11m 24s · ↓ 144.9k tokens)
+  Ran 13 shell commands
+
+● O move é byte-idêntico ao HEAD, com a única diferença sendo a cura já certificada. Agora a bateria de equivalência, antes de encostar no comercial:
+
+  Ran 6 shell commands
+
+● A equivalência está provada: Ran 36 / failures=7, os mesmos 7 nomes, nada do 12x36 se moveu. Agora ligo o comercial na mesma régua:
+
+● Re-running the battery with the comercial wired
+  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && bash bin/suite.sh --dir /home/ronald/copia-o271
+     --only "ponto.tests.test_o271_pontualidade_no_comercial ponto.tests.test_l084_vence_o_t8 ponto.tests.test_calculador_po…
+
+✽ Flambéing… (1h 16m 39s · ↓ 159.6k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                                     ✔ Update installed · Restart to update
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
