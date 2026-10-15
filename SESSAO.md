@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 15/10/2026 15:15:03.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (855.7 MB). Acoes na janela: **774**.
+**Medido em 15/10/2026 15:20:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (855.7 MB). Acoes na janela: **771**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -781,6 +781,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 09:29:26 | Bash | Read PROMPTS.md and BACKLOG OBRAS formats | `echo "=== PROMPTS.md tail:" && tail -6 docs/PROMPTS.md && echo "=== head (formato):" && sed -n '1,8p' docs/PROMPTS.md && echo "=== BACKLOG OBRAS: cabecalho e 2 ultimas linhas" && grep -n "^## \\|^\| *O2[0-9][0-9]" docs/BACKLOG.md \| tail -8` |
 | 09:28:31 | Bash | Read _match_marcos authority and its readers | `cd /home/ronald/copia-o271/app && echo "=== _match_marcos: assinatura e docstring" && sed -n "$(grep -n 'def _match_marcos' escala/utils.py \| cut -d: -f1),+34p" escala/utils.py; echo; echo "=== quem le _match_marcos:" && grep -rn "_match_marcos" --include=*.py . \| grep -v "def _match_marcos" \| head; echo; echo "=== lei que protege _match_marcos:" && grep -n "_match_marcos" docs/LEIS.md \| head` |
 | 09:27:31 | Bash | Look for a cabeça predicate in turnos.py | `cd /home/ronald/copia-o271/app && echo "=== classe Turno / campos:" && grep -nE "^class \|^\s+(def \|[a-z_]+:)" ponto/turnos.py \| head -40; echo; echo "=== cabeca\|principal\|primeiro\|indice\|ordem:" && grep -niE "cabeca\|principal\|primeiro\|indice\|ordem" ponto/turnos.py \| head -20` |
-| 03:17:35 | Bash | Census neighbour seals exercising the branch | `cd /home/ronald/copia-o271/app && for f in ponto/tests/test_12x36_atraso_pela_autoridade.py ponto/tests/test_antecipada_intervalo_12x36.py ponto/tests/test_motor_escala_marcos_do_dia.py ponto/tests/test_a6_12x36_tolerancia.py; do echo "=== $f"; grep -nE "def test_\|hora_inicio_intervalo\|assertEqual\|assertAlmostEqual" $f \| head -22; done` |
-| 03:17:07 | Bash | Census calcular_periodo callers and _dia_do_turno | `cd /home/ronald/copia-o271/app && echo "=== quem chama calcular_periodo (producao + teste):" && grep -rn "calcular_periodo(" --include=*.py . \| grep -v "def calcular_periodo" \| sed 's/:.*calcular_periodo/ ::calcular_periodo/' \| head -20; echo; echo "=== _dia_do_turno:" && grep -n "_dia_do_turno" ponto/motor_calculo_v2.py \| head` |
-| 03:15:40 | Bash | Read previsto and teto from the judging motor | `cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/sonda_o271_teto.py <<'PY' # O271 -- o PREVISTO do dia e o TETO da L-093, LIDOS do motor que julgou (nunca recalculados). import datetime as dt from django.utils import timezone from colaboradores.models import Colaborador from ponto.services.espelho import autoridade_do_periodo L = timezone.localtim ...` |
