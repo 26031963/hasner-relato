@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 15/10/2026 16:30:46.**
+**Medido em 15/10/2026 16:35:46.**
 
 | | |
 |---|---|
@@ -29,37 +29,37 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2478.7 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2478.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **247.2 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **247.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
   - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **60.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **363.3 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **363.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lote** (`raia-lote`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2.8 h**
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2.9 h**
   - sem declaracao em `logs/raias/wt-lote.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **267.5 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **267.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **385.2 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **385.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
 - **wt-v3** (`raia-v3`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **0.4 h**
+  - 4 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **0.5 h**
   - sem declaracao em `logs/raias/wt-v3.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **21 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
@@ -171,35 +171,35 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ⎿  Read ../logs/o271_diff_runner.log (20 lines)
-  ⎿  Read pautas/tests/test_contract_vocabulario.py (55 lines)
+  Ran 1 shell command
 
-● Task "O280 MOTOR-V3 passos 1 e 2" still running in background
+● 24/24. E o ponto que mais importa foi MEDIDO, não suposto: o próprio hook (_item_fechado/_item_parado) diz que a O275 é destino legal do marcador. Registro o
+  ensaio no POUSO e a lição na memória:
 
-● Task "O275 censo: tipo x vinculo" still running in background
+  Ran 6 shell commands
 
-● Task "Launch the full suite on the cured copy" still running in background
-
-● Task "O140 suite verdict (three L-074 signals)" still running in background
-
-● The dry-run FALHA is my own predicate, not the file: lines 77/114/157/369/486/784/864/884 cite ORDEM-VIVA-TOPO em prosa. Só a linha 7 é o marcador. É a mesma
-  inversão que a O278 curou no hook — e o hook já tem a resposta certa (bin/hook_stop_fila1.py:196: regex do COMENTÁRIO, não substring).
+● Suite ainda correndo (round 1 levou ~25 min; largou 16:16). As linhas 450/979 são OK: e OK — — a fronteira da L-074 ($| \() as exclui de propósito. Enquanto
+  espera, confiro os portões do deploy em leitura, para a janela pós-commit não trazer surpresa:
 
   Ran 1 shell command
 
-● aplicar_docs.py:98 já ancora na forma exata (s.count('<!-- ORDEM-VIVA-TOPO: O140 -->') == 1) — o script do pouso está certo. O errado é o meu ensaio a seco. Vou
-  achá-lo e corrigir o predicado para perguntar ao hook, não a um in meu.
+● Portões verdes: crons_em_curso vazio, carimbo da sombra de hoje (20261015, completa, diverge=0), e a última migration da árvore viva é a 0072 — a 0073 não
+  colide. Antes da parte irreversível (commit + deploy com migration em prod), consulto o revisor:
+
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+
+● Ambos são reais e baratos. Faço os dois agora:
 
   Ran 1 shell command
 
-● O ensaio a seco não estava em arquivo — é o O182 de novo. Vou escrevê-lo como arquivo, com o predicado certo. Primeiro leio as âncoras que os scripts realmente
-  cobram, e a API do hook:
+● O avisador está certo: o pos_verdito.sh não escreve censo_depois.txt, e o fechar_commit.py:23-27 o exige. Lacuna real, e ela quebraria depois de a árvore viva já
+  estar tocada. Vejo onde a cópia acontece:
 
-  Reading the docs and commit-closing scripts in full
-  ⎿  $ cd /home/ronald/saas-hasner && echo "########## aplicar_docs.py"; cat -n logs/o140b/aplicar_docs.py; echo "########## fechar_commit.py"; cat -n
-     logs/o140b/fechar_commit.py
+● Reading the commit script to find where files are copied
+  ⎿  $ cd /home/ronald/saas-hasner && cat -n logs/o140b/commitar.sh
 
-· Flambéing… (7h 6m 24s · ↓ 898.6k tokens · thought for 5s)
+· Flambéing… (7h 11m 24s · ↓ 907.5k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -208,7 +208,7 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
   ⏵⏵ auto mode on · 2 shells, 1 monitor · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ general-purpose  Grepping for enumerating contracts over calculador/                                                             2h 40m 12s · ↓ 126.6k tokens
-  ◯ general-purpose  Counting SDF tipos in escala_tipoescala on sombra                                                                    6m 3s · ↓ 122.0k tokens
+  ◯ general-purpose  Checking trava_teste.sh queue status                                                                            2h 45m 12s · ↓ 155.7k tokens
+  ◯ general-purpose  Verifying git status after censo.md write                                                                           11m 3s · ↓ 150.0k tokens
   ⧉  index
 ```
