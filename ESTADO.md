@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:382 AFIRMA ato sem PROVA ao lado -- ## MARCO 15/10 ~02:3x -- BUG-SOBRA-TIPO-TROCADO **APLICADO em PROD**: o col190 26/09 sai de "Em aberto" com `minutos_realizados 1 -> 715`, o
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:393 AFIRMA ato sem PROVA ao lado -- ## MARCO 15/10 ~02:3x -- BUG-SOBRA-TIPO-TROCADO **APLICADO em PROD**: o col190 26/09 sai de "Em aberto" com `minutos_realizados 1 -> 715`, o
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 15/10/2026 17:45:38.**
+**Medido em 15/10/2026 17:50:39.**
 
 | | |
 |---|---|
@@ -29,37 +29,37 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2480.0 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2480.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **248.5 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **248.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **61.7 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **61.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **364.6 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **364.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lote** (`raia-lote`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **4.0 h**
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **4.1 h**
   - sem declaracao em `logs/raias/wt-lote.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **268.7 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **268.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **386.4 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **386.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
 - **wt-v3** (`raia-v3`) -- **SEM AGENTE**
-  - 6 commit(s) a frente do `main`, 2 arquivo(s) sujo(s), commit a frente ha **0.8 h**
+  - 7 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **0.1 h**
   - sem declaracao em `logs/raias/wt-v3.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **21 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
@@ -80,6 +80,7 @@ ba289219 [O286] o POSTGRES do ensaio sai dos nucleos do cliente: a sombra passa 
 ## `git status --short`
 
 ```
+M  app/config/crons.py
  M app/config/crons_duracao.json
  M app/docs/AVAIS.md
  M app/docs/BACKLOG.md
@@ -87,6 +88,22 @@ ba289219 [O286] o POSTGRES do ensaio sai dos nucleos do cliente: a sombra passa 
  M app/docs/PENDENTES_RONALD.json
  M app/docs/RELATO-ARQUIVO.md
  M app/docs/RELATO.md
+ M app/docs/TICKETS.md
+M  app/ponto/tests/test_contract_espelho_sem_emoji.py
+A  app/relatorios/lote_espelho.py
+A  app/relatorios/management/commands/gerar_cartoes_em_lote.py
+A  app/relatorios/migrations/0002_loteespelho.py
+M  app/relatorios/models.py
+M  app/relatorios/services.py
+M  app/relatorios/tests/test_cauda_trilha_do_cartao.py
+M  app/relatorios/tests/test_filtro_coerente_data_final.py
+M  app/relatorios/tests/test_lote_erro_diz_que_e_erro.py
+A  app/relatorios/tests/test_selo_job_lote_espelho.py
+M  app/relatorios/urls.py
+M  app/relatorios/views.py
+A  app/templates/relatorios/_lote_espelho_progresso.html
+M  app/templates/relatorios/espelho_lote.html
+A  app/templates/relatorios/espelho_lote_job.html
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -202,19 +219,19 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Background command "Wait for the certification suite to finish" completed (exit code 0)
 
-● Reading the certification suite verdict
-  ⎿  $ cd /home/ronald/saas-hasner && echo "== molde L-074 (1) veredito:"; grep -E '^(OK|FAILED)($| \()' logs/o284/suite_cert.log; echo "== (2) Ran:"; grep -E
-     '^Ran [0-9]+ tests' logs/o284/suite_cert.log; echo "== (3) rc do processo:"; grep -E 'rc_suite=|SUITE_FIM' logs/o284/suite_cert.log; echo "== cau…
+  Reading the three red host selos
+  ⎿  $ cd /home/ronald/saas-hasner && for t in test_avais_na_mesa test_inventario_pessoal_no_commit test_import_tardio_contra_o_ar; do echo "=============== $t";
+     bash bin/tests/$t.sh 2>&1 | tail -14; echo "rc=$?"; done
 
-✢ Flambéing… (8h 21m 16s · ↓ 1.0m tokens · thinking)
+✽ Flambéing… (8h 26m 17s · ↓ 1.1m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                           ✔ Update installed · Restart to update
+                                                                                                                                            5% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ general-purpose  Waiting on trava_teste.sh to free                                                                                3h 55m 4s · ↓ 142.0k tokens
+  ◯ general-purpose  Inspecting pontualidade_por_dia and Regua fields                                                                  4h 0m 5s · ↓ 168.3k tokens
   ⧉  index
 ```
