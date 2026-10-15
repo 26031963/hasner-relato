@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 15/10/2026 15:09:52.**
+**Medido em 15/10/2026 15:15:03.**
 
 | | |
 |---|---|
-| `HEAD` local | `ba289219 [O286] o POSTGRES do ensaio sai dos nucleos do cliente: a sombra passa a morar em container PROPRIO `sombra_db`, e o host do banco de ensaio passa a ter UM sitio` |
+| `HEAD` local | `4da7b51f [BUG-8792] o range de falta se RATEIA pelos dias dele: o escritor da lavratura tinha regra propria e punha os minutos de N dias no PRIMEIRO, deixando os outros em branco` |
 | `origin/main` | `49ac61c4 [BUG-SOBRA-TIPO-TROCADO] o dia julgado de novo em PROD fecha o item: o col190 26/09 sai de "Em aberto" com minutos_realizados 1 -> 715, o chamado 26219 morre por LASTRO no passo 2 e a classe da comp 10 fica em ZERO` |
-| commits a subir (`ahead`) | **2** |
+| commits a subir (`ahead`) | **3** |
 
 ## Fabrica
 
@@ -29,37 +29,37 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2477.4 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2477.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **245.9 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **246.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **59.1 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **59.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **362.0 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **362.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lote** (`raia-lote`) -- **SEM AGENTE**
   - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **1.5 h**
   - sem declaracao em `logs/raias/wt-lote.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **266.1 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **266.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **383.8 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **383.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
 - **wt-v3** (`raia-v3`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **0.3 h**
+  - 2 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **0.1 h**
   - sem declaracao em `logs/raias/wt-v3.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **21 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
@@ -70,26 +70,17 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+4da7b51f [BUG-8792] o range de falta se RATEIA pelos dias dele: o escritor da lavratura tinha regra propria e punha os minutos de N dias no PRIMEIRO, deixando os outros em branco
 ba289219 [O286] o POSTGRES do ensaio sai dos nucleos do cliente: a sombra passa a morar em container PROPRIO `sombra_db`, e o host do banco de ensaio passa a ter UM sitio
 7ea7d402 [O271] o comercial nao tinha pontualidade PROPRIA -- nao tinha pontualidade NENHUMA: passa pela MESMA regua, e a CABECA do turno quem diz e o JUIZ, nao a proximidade
 49ac61c4 [BUG-SOBRA-TIPO-TROCADO] o dia julgado de novo em PROD fecha o item: o col190 26/09 sai de "Em aberto" com minutos_realizados 1 -> 715, o chamado 26219 morre por LASTRO no passo 2 e a classe da comp 10 fica em ZERO
 5f915ff4 [BUG-SOBRA-TIPO-TROCADO] a batida no raio de uma ponta nunca vira marco de intervalo: o par do col190 26/09 apagava a S 19:00 pela S155, e o turno ficava aberto com a ata lendo 18:55 como orfa
-587a55d5 [O278] quem diz o estado de um item e a COLUNA do estado: a prosa do bug fechava o item que descreve o bug
 ```
 
 ## `git status --short`
 
 ```
  M app/config/crons_duracao.json
- M app/docs/BACKLOG.md
- M app/docs/HANDOFF-SESSAO.md
- M app/docs/PROMPTS.md
- M app/docs/RELATO.md
- M app/docs/TICKETS.md
- M app/folha/export.py
- M app/folha/tests/test_aus_folha_pelo_juiz.py
- M app/ponto/services/fechamento.py
-?? app/folha/tests/test_bug8792_rateio_da_falta_por_dia.py
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -180,43 +171,43 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-● Estado exato esperado. Passo 5 — copio os 4 .py no ato do commit, e refaço o censo:
+● Agent "RED e construção do segundo intervalo" finished · 12d 23h 19m
+
+● import_tardio ficou OK e MORDE (no_ar=8e4c1d14, 0 acusados) — a premissa do deploy se confirmou. Mas o lei_protege_sitio está RED (o rc=0 ali é do tail, não do selo): o push toca sítio
+  protegido pela L-113 e nenhum commit do intervalo a cita. Lendo a lei antes de escrever a citação:
 
   Ran 1 shell command
 
-● A árvore viva É a certificada (IGUAL=9, DIFERE=0). Passo 6 — o censo entra no corpo do commit, e os selos de host sobre a árvore que pousa:
-
-  Ran 2 shell commands
-
-● Passo 7 — a pasta de selos de host sobre a árvore viva, antes de qualquer commit:
+● L-113 = "o sistema calcula o que tem" — ela REVOGA a recusa de recalcular competência exportada; não revoga a versão anterior do TXT, a trilha e o DIFF publicado antes. Conferindo se a
+  minha cura mexeu em alguma dessas três:
 
   Ran 1 shell command
 
-● O selo está certo e é exatamente a assimetria da seção 2: copiei fechamento.py para o bind-mount e o .py do folha/export.py novo não está na memória do worker. A cura que ele nomeia é o
-  próprio deploy. Preciso saber se ele morde no commit ou só no push:
+● Só o meu commit toca o sítio, e o diff dele não tem uma linha de WARNING/exportada/raise/permitir: nenhuma das três cláusulas que a L-113 preserva foi tocada, e a cláusula 1 (a recusa
+  que caiu) não ressuscitou. Escrevendo a citação com essa leitura e emendando a mensagem (a árvore não muda):
 
-  Ran 2 shell commands
+  Amended commit 4da7b51f
 
-● O selo de import tardio não morde no commit (pre-commit = index_vs_arvore + commit_so_o_declarado); ele mora na régua, que o push roda — e aí o deploy já terá alinhado disco e memória. A
-  ordem commit → deploy → push é a que o resolve. Conferindo o portão do deploy antes:
+● Mesma árvore, sha 4da7b51f. Os dois selos de novo — e agora lendo o rc sem pipe:
 
   Ran 1 shell command
 
-● Portão do deploy verde: nenhum cron em curso, ensaio da sombra carimbado hoje (completa, diverge=0), zero migration, trava livre. Antes do ato irreversível (commit + deploy em prod +
-  push):
+● Ambos verdes (tocados neste push: 1 (L-113, citados)). Passo 10 — o push, com 3 commits meus no intervalo; o veredito se lê no remoto, não na ausência de saída:
 
-● Advising using Fable 5.1
+● Waiting for the push to finish and read the remote head · 1m 6s
+  ⎿  $ cd /home/ronald/saas-hasner && for i in $(seq 1 200); do grep -q PUSH_FIM logs/o140/push.log 2>/dev/null && break; sleep 10; done; cat logs/o140/push.log 2>/dev/null | tail -20;
+     echo "=== remoto:"; git ls-remote origin refs/heads/main (1m 5s)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Flambéing… (5h 45m 30s · ↓ 766.4k tokens)
+✢ Flambéing… (5h 50m 40s · ↓ 774.6k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                                     ✔ Update installed · Restart to update
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ fork             Checking verdicts in viz_ponto.log                                                                                                        12d 23h 6m · ↓ 92.5k tokens
-  ◯ general-purpose  Grepping L-097 text in LEIS.md                                                                                                           1h 19m 18s · ↓ 148.7k tokens
+  ◯ general-purpose  Reviewing matriz_recebida.md and suite.sh                                                                                                 1h 24m 28s · ↓ 82.0k tokens
   ⧉  index
 ```
