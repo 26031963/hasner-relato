@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 15/10/2026 10:04:02.**
+**Medido em 15/10/2026 10:09:16.**
 
 | | |
 |---|---|
@@ -29,28 +29,28 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2472.3 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2472.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **240.8 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **240.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **54.0 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **54.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **356.9 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **357.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **261.0 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **261.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **378.7 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **378.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -167,44 +167,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● RED evidenciado na cópia: 7 de 8 vermelhos (Ran 8, FAILED (failures=7)), e o único verde é justamente a guarda que tem de ficar verde nos dois mundos (sem cadastro não julga e não
-  quebra). Antes de tocar a ZONA INVIOLÁVEL, reconcilio o desenho — ele mudou com a leitura do pareador:
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-● Item 1 primeiro — ele pode invalidar o desenho:
+  pontualidade tem de beber:
 
   Ran 1 shell command
 
-❯ aval Ronald: CENSO-14-15/10 (4 agentes, leitura, candidatos -- MEDIR antes de curar): (A) MEDIR JA na 10, P7.1 se provado: (1) regua_excedente 'legais' da CCT lida so no
-  MotorTurnoPartido (motor:2550) e ignorada em 12x36/Comercial; (2) intra suprimida = 0 no TurnoPartido de bloco unico sem pausa (motor:2414); (3) DiaPago/Fechamento sem
-  recalcular_por_evento apos anotar/retratar_batida (registro_batida.py:194-236) e aprovacao de ausencia; (4) MotorIntermitente pagando dobra via is_feriado (motor:894) contra o corte
-  14/10. (B) o catalogo da MOTOR-V3 absorve o censo inteiro: 4 gates de intra, 3 derivacoes de previsto da HE, DSR civil x jornada no Comercial (:2873), calculador com intervalos=()
-  (alimentacao.py:425), 4 tetos de turno, 3 juizes da cabeca do turno, tetos de intervalo 0/3h/8h x 3*3600. (C) obra nova ESTADO-DERIVADO-SEM-EVENTO: aprovado que sobrevive a recalculo
-  (fechamento.py:841), retracao relampago irreversivel, AlertaGeofence tipo congelado e dois postos (geofence.py:195 x models.py:255). (D) UI: selo hx-target-existe-no-host + os 3 hosts
-  quebrados (fio no retrato e na fila de beneficio, painel_vinculo no retrato) entram no UI-01. Nenhuma lei nova. Segue a fila; PAREI so em lei ou !
-
-● Novo aval registrado e endereçado neste turno. Primeiro fecho a leitura do item 1:
+● _marcos_do_dia_fn vem de EscalaColaborador.marcos_do_dia (:1824) — a autoridade que lê a célula. Agora o item 4 do conselho: quais selos codificam o portão de proximidade que o aval
+  manda matar:
 
   Ran 1 shell command
 
-● Item 1 fechado: todos os motores passam por _periodos_via_autoridade (o 12x36ComEscala herda o montar_periodos do Motor12x36 em :2182), e _periodos_pelo_marco é sub-caminho da própria
-  autoridade, não rival. O desenho se mantém.
+● Item 4 achou o que o conselho temia: selos que codificam o portão de proximidade com caso medido real (col345 28/09, 424 min). Leio as batidas de cada um — é isso que diz se há conflito
+  com o aval dele:
 
-  Endereço o aval novo agora — 4 agentes de leitura, como ele pediu:
+  Ran 1 shell command
 
-✢ Flambéing… (39m 40s · ↓ 78.1k tokens)
+● Conflito dissolvido, e a diferença é medível: o selo do col345 diz "a batida esta EM CIMA de um marco dele -- so nao e o marco de entrada" (15:00 = hfi exato), enquanto o col60 bate
+  12:00 = hii exato e só está perto do hfi (60 min, dentro do raio de 90). A pergunta certa não é proximidade nem cabeça: é qual marco esta batida ocupa. Procuro quem já responde isso:
+
+  Ran 1 shell command
+
+● O juiz existe e é declarado: ponto/juiz_batida.py responde "qual marco cada batida cumpriu", e o próprio motor já pergunta ao dono da grade na Zona 5 (:2500, "QUAL periodo e o P1 e qual
+  e o P2 e pergunta de escala/utils.py::_match_marcos"). Escrevo o RED do complemento com o trio que separa ocupação de proximidade:
+
+  Running 1 shell command…
+
+✢ Flambéing… (44m 54s · ↓ 98.9k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                                                    ✔ Update installed · Restart to update
+                                                                                                                                                                     4% until auto-compact
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ fork  Confirming commit hashes in worktree                                                                                                                  1h 3m 8s · ↓ 428.9k tokens
-  ◯ fork  Grepping TOLERANCIA_CONFORMIDADE_MIN readers                                                                                                           12m 51s · ↓ 103.4k tokens
+  ◯ fork             Confirming commit hashes in worktree                                                                                                       1h 3m 8s · ↓ 428.9k tokens
+  ◯ fork             Locating perto_do_marco and previsto derivations                                                                                             18m 3s · ↓ 147.8k tokens
+  ◯ general-purpose  Running censo_motor_comp10.py on sombra                                                                                                      4m 24s · ↓ 125.9k tokens
+  ◯ general-purpose  Inspecting _carimbar_segmento intervals carimbo                                                                                              4m 24s · ↓ 123.7k tokens
+  ◯ general-purpose  Grepping recalcular_fechamento in config/crons.py                                                                                            4m 24s · ↓ 113.4k tokens
+  ↓ 1 more
   ⧉  index
 ```
