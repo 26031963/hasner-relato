@@ -6,10 +6,21 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 15/10/2026 02:54:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (834.5 MB). Acoes na janela: **1196**.
+**Medido em 15/10/2026 03:00:04.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (835.0 MB). Acoes na janela: **1207**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 03:00:02 | Bash | Census of aplicar_tolerancia callers | `cd /home/ronald/copia-o271/app && grep -rn 'aplicar_tolerancia' --include=*.py . \| grep -v '/tests/'` |
+| 02:59:57 | Bash | Map motor classes and key methods in the copy | `cd /home/ronald/copia-o271/app && grep -n 'class Motor\\| def calcular_periodo\\| def calcular_mes\\| def aplicar_tolerancia\\|def _cadastro_nao_descreve\\|def _janela_do_par\\|def _aplicar_teto_pontualidade' ponto/motor_calculo_v2.py` |
+| 02:59:52 | Bash | Inspect the build copy and MotorComercial head | `cd /home/ronald/copia-o271 && ls && git log --oneline -1 2>/dev/null; echo "---"; sed -n '2629,2660p' app/ponto/motor_calculo_v2.py` |
+| 02:59:37 | Bash | Grep LEIS.md for motor sitios | `grep -n 'motor_calculo_v2' docs/LEIS.md \| head -40` |
+| 02:59:29 | Bash | Check push log and test lock holder | `cd /home/ronald/saas-hasner && date '+%d/%m %H:%M:%S' && tail -5 logs/push_marco_15out.log 2>/dev/null; echo "---trava---"; bin/trava_teste.sh --quem 2>/dev/null` |
+| 02:55:39 | Bash | List the laws protecting the motor sitios | `python3 - <<'PY' import io,re L=io.open('docs/LEIS.md',encoding='utf-8').read().split('\n') i=next(i for i,l in enumerate(L) if l.startswith('\| ID \| a lei em uma frase \|')) cab=[c.strip() for c in L[i].split('\|')] ip=next(k for k,c in enumerate(cab) if c.startswith('PROTEGE')) print('coluna PROTEGE =',ip, cab) for l in L[i+1:]: c=l.split('\|') if len(c)<=ip: continue prot=c[ip] if 'motor_calcu ...` |
+| 02:55:32 | Bash | Read how the PROTEGE seal decides which laws a file requires | `cd /home/ronald/saas-hasner && sed -n '1,60p' bin/tests/test_lei_protege_sitio.sh \| cut -c1-200` |
+| 02:55:24 | Bash | LEI ANTES DO PATCH: grep LEIS.md | `for t in MotorComercial aplicar_tolerancia 'motor_calculo_v2' pontualidade; do echo "=== $t"; grep -n "$t" docs/LEIS.md \| head -12 \| cut -c1-230; done` |
+| 02:55:18 | Bash | Create the build copy from HEAD | `cd /home/ronald/saas-hasner && D=/home/ronald/copia-o271 && rm -rf "$D" && mkdir -p "$D" && git archive HEAD \| tar -x -C "$D" && ls "$D" && echo "--- app:" && ls "$D/app" \| head -8 && git rev-parse HEAD` |
+| 02:55:13 | Bash | Read how suite.sh --dir expects the copy | `cd /home/ronald/saas-hasner && grep -n 'dir' bin/suite.sh \| head -30 \| cut -c1-200` |
+| 02:55:04 | Bash | Find the copy convention | `cd /home/ronald/saas-hasner && grep -rn 'git archive' bin/*.sh \| head -8 \| cut -c1-180; ls -d /home/ronald/copia* /home/ronald/saas-hasner-copia* 2>/dev/null; ls /home/ronald \| head -20` |
 | 02:54:15 | Bash | Confirm the suite holds the trava and is progressing | `cd /home/ronald/saas-hasner && ls -la logs/push_marco_15out.log; tail -2 logs/push_marco_15out.log; bash bin/trava_teste.sh --quem; date '+%H:%M:%S'` |
 | 02:54:05 | Bash | Read the cure hunks for orphan census | `cd /home/ronald/saas-hasner && git show 5f915ff4 -- app/escala/utils.py \| cat` |
 | 02:53:59 | Bash | List files changed by the cure commit | `cd /home/ronald/saas-hasner && git show --stat --format= 5f915ff4 \| cat` |
