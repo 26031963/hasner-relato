@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:291 AFIRMA ato sem PROVA ao lado -- ## MARCO 15/10 ~02:3x -- BUG-SOBRA-TIPO-TROCADO **APLICADO em PROD**: o col190 26/09 sai de "Em aberto" com `minutos_realizados 1 -> 715`, o
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:292 AFIRMA ato sem PROVA ao lado -- ## MARCO 15/10 ~02:3x -- BUG-SOBRA-TIPO-TROCADO **APLICADO em PROD**: o col190 26/09 sai de "Em aberto" com `minutos_realizados 1 -> 715`, o
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 15/10/2026 12:29:02.**
+**Medido em 15/10/2026 12:34:32.**
 
 | | |
 |---|---|
-| `HEAD` local | `49ac61c4 [BUG-SOBRA-TIPO-TROCADO] o dia julgado de novo em PROD fecha o item: o col190 26/09 sai de "Em aberto" com minutos_realizados 1 -> 715, o chamado 26219 morre por LASTRO no passo 2 e a classe da comp 10 fica em ZERO` |
+| `HEAD` local | `41f57c8f [O271] o comercial nao tinha pontualidade PROPRIA -- nao tinha pontualidade NENHUMA: passa pela MESMA regua, e a CABECA do turno quem diz e o JUIZ, nao a proximidade` |
 | `origin/main` | `49ac61c4 [BUG-SOBRA-TIPO-TROCADO] o dia julgado de novo em PROD fecha o item: o col190 26/09 sai de "Em aberto" com minutos_realizados 1 -> 715, o chamado 26219 morre por LASTRO no passo 2 e a classe da comp 10 fica em ZERO` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,28 +29,28 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2474.7 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2474.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **243.2 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **243.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **56.4 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **56.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **359.3 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **359.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **263.4 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **263.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **381.1 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **381.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -64,11 +64,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+41f57c8f [O271] o comercial nao tinha pontualidade PROPRIA -- nao tinha pontualidade NENHUMA: passa pela MESMA regua, e a CABECA do turno quem diz e o JUIZ, nao a proximidade
 49ac61c4 [BUG-SOBRA-TIPO-TROCADO] o dia julgado de novo em PROD fecha o item: o col190 26/09 sai de "Em aberto" com minutos_realizados 1 -> 715, o chamado 26219 morre por LASTRO no passo 2 e a classe da comp 10 fica em ZERO
 5f915ff4 [BUG-SOBRA-TIPO-TROCADO] a batida no raio de uma ponta nunca vira marco de intervalo: o par do col190 26/09 apagava a S 19:00 pela S155, e o turno ficava aberto com a ata lendo 18:55 como orfa
 587a55d5 [O278] quem diz o estado de um item e a COLUNA do estado: a prosa do bug fechava o item que descreve o bug
 75a5f4bf [O273] o inventario pessoal cobre a coluna da porta da revogacao, e a ancora do selo passa a ser a CHAVE
-d9a32f55 [O273] a recusa do sistema que perde a premissa NAO se apaga: a linha fica marcada como revogada e sai do calculo
 ```
 
 ## `git status --short`
@@ -77,10 +77,6 @@ d9a32f55 [O273] a recusa do sistema que perde a premissa NAO se apaga: a linha f
  M CLAUDE.md
  M app/config/crons_duracao.json
  M app/config/settings/sombra.py
- M app/docs/BACKLOG.md
- M app/docs/PROMPTS.md
- M app/docs/RELATO.md
- M app/docs/TICKETS.md
  M bin/diff_janela_he_total.sh
  M bin/r5_idempotencia_frota.sh
  M bin/recursos.sh
@@ -180,44 +176,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  lavratura; os 5 leitores (cartao, espelho, grade, dias_em_aberto, calendario do colab e relatorios/furos.py) passam a LER o campo e param de chamar o motor por geometria. Nenhum juiz
-  novo: a autoridade continua sendo resultado.datas_falta, gravada uma vez. DIFF de frota (10) antes, contador "leitor que ainda chama motor pela palavra" esperado 0. Entra como
-  complemento da O280 se cruzar arquivo; senao anda ao lado. Segue a fila; PAREI so em lei ou !.
-
-  Ran 5 shell commands
-
-● Background command "Run the full suite on the cured copy" completed (exit code 0)
-
-  Ran 13 shell commands
-  ⎿  Read docs/AVAIS.md (23 lines)
-  ⎿  Read ../logs/o271_diff_runner.log (20 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bsyn3e0ux.output (5 lines)
-  ⎿  Referenced file ponto/management/commands/tripwire_celulas.py
-  ⎿  Referenced file escala/utils.py
-
-● Task "RED e construção do segundo intervalo" completed in background
-
 ● Task "O284-A job do lote do espelho" completed in background
 
 ● Task "O286 sombra fora do postgres de prod" still running in background
 
 ● Agent "O284-A job do lote do espelho" finished · 1h 27m 36s
 
-● Derive the PROTEGE law citations per touched file from LEIS.md
-  ⎿  $ cd /home/ronald/saas-hasner && for f in chamados/detector_anomalias.py chamados/juizes.py chamados/rotulos.py escala/regua_defesa.py escala/utils.py ponto/calculador/regras.py
-     ponto/motor_calculo_v2.py; do echo "--- $f"; grep -oE '\bL-[0-9]{3}\b' <(grep -F "$f" app/docs/LEIS.md) 2>/dev/null | sor…
+  Committed adda9b11, ran 17 shell commands
+  ⎿  Message queued for delivery to a67f3c5ed27d0a551 at its next tool round.
+  ⎿  Allowed by auto mode classifier
 
-· Flambéing… (3h 4m 40s · ↓ 408.7k tokens)
+  Ran 4 shell commands
+
+› Message from @general-purpose (ctrl+o to expand)
+
+  Ran 2 shell commands
+
+● Background command "Run the sombra bloco rehearsal to green the deploy gate" completed (exit code 0)
+
+● Adding the esmeril line and amend the marco commit with the docs
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
+     import io
+     p = 'app/docs/RELATO.md'
+     s = io.open(p, encoding='utf-8').read()
+     alvo = "- **INCOMPLETO, nomeado**: (1) o recalculo da 10 pelo DP"
+     assert s.count(alvo) == 1
+     novo = ("- **ESMERIL DO MARCO (a espera do ensaio, nao trabalho novo): a O271 d…
+
+✢ Flambéing… (3h 10m 10s · ↓ 429.1k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                                                    ✔ Update installed · Restart to update
+                                                                                                                                                                     2% until auto-compact
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells, 1 monitor · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                                                                       1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Reviewing disparar and assumir in lote_espelho.py                                                                                        1h 27m 36s · ↓ 166.0k tokens
-  ◯ general-purpose  Checking garantir_sombra_db call sites in sombra.sh                                                                                          38m 15s · ↓ 97.0k tokens
+  ◯ general-purpose  Reading the green7 verdict in the recorte log                                                                                            1h 41m 12s · ↓ 166.0k tokens
+  ◯ general-purpose  Polling bj1fcr8ba.output for bloco verdict                                                                                                  43m 45s · ↓ 143.2k tokens
   ⧉  index
 ```
