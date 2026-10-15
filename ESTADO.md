@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:430 AFIRMA ato sem PROVA ao lado -- ## MARCO 13/10 14:3x — pouso da **`wt-ui`**: o link ORIGINAL de fechamento do menu do admin passa a abrir o **RETRATO** (`[O48]` passo 6, av
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:431 AFIRMA ato sem PROVA ao lado -- ## MARCO 13/10 14:3x — pouso da **`wt-ui`**: o link ORIGINAL de fechamento do menu do admin passa a abrir o **RETRATO** (`[O48]` passo 6, av
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 14/10/2026 22:10:08.**
+**Medido em 14/10/2026 22:15:19.**
 
 | | |
 |---|---|
-| `HEAD` local | `aad64415 [O272] o intervalo conta so a parte DENTRO da janela: um recorte, antes do carimbo, nos tres calcular_periodo` |
+| `HEAD` local | `d9a32f55 [O273] a recusa do sistema que perde a premissa NAO se apaga: a linha fica marcada como revogada e sai do calculo` |
 | `origin/main` | `aad64415 [O272] o intervalo conta so a parte DENTRO da janela: um recorte, antes do carimbo, nos tres calcular_periodo` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,28 +29,28 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2460.4 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2460.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **228.9 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **229.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **42.1 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **42.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **345.0 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **345.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **249.1 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **249.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **366.8 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **366.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -64,35 +64,22 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+d9a32f55 [O273] a recusa do sistema que perde a premissa NAO se apaga: a linha fica marcada como revogada e sai do calculo
 aad64415 [O272] o intervalo conta so a parte DENTRO da janela: um recorte, antes do carimbo, nos tres calcular_periodo
 3d644aa8 [O263-FT] o derivado do marco: o placar do topo do TICKETS volta a bater com o mundo e os alarmes do vigia entram
 8c851906 [O263-FT] a folga trabalhada volta a ser medida pelo relogio: a janela nao recorta um dia que nao tem marco
 eee94960 [BUG-LINHA-X-BADGE] o rodape do TICKETS volta a dizer o push de verdade (derivado de bin/tickets_rodape.sh), e o sitio da O263-FT fica registrado onde a obra o espera
-38b855f6 [BUG-LINHA-X-BADGE] o 7o par do R4 recebe o NUMERO MEDIDO e a fatia FECHA: zero divergentes nas seis empresa x competencia, e os 72 da 09 ficam nomeados com dono
 ```
 
 ## `git status --short`
 
 ```
- M app/colaboradores/mixins.py
  M app/config/crons_duracao.json
- M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
- M app/docs/PROMPTS.md
  M app/docs/RELATO.md
- M app/docs/TICKETS.md
- M app/ponto/management/commands/lavrar_he_pendente.py
- M app/ponto/management/commands/recusar_ponta_pequena.py
- M app/ponto/models.py
- M app/ponto/motor_calculo_v2.py
- M app/ponto/portas/he.py
- M app/ponto/services/gestao_he.py
- M app/ponto/services/he_pendente_lavrado.py
- M app/ponto/tests/test_o214_item4_dia_do_admin.py
+ M bin/sombra_regras_pessoais.py
  M bin/sonda_leitura.sh
 ?? app/GREEN
-?? app/ponto/migrations/0072_decisaohe_revogada.py
-?? app/ponto/tests/test_o273_recusa_do_sistema_envelhece.py
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -211,15 +198,15 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Tudo do pouso está durável (mensagem, script de cópia+cmp, script de commit, atualizador da célula do TICKETS). Consultando o revisor antes do ato irreversível:
 
 ● Advising using Fable 5.1
-                                                                                 5 new messages (ctrl+End) ↓
-                                                                                                                                                                     9% until auto-compact
+                                                                                12 new messages (ctrl+End) ↓
+                                                                                                                                                                     1% until auto-compact
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                                                                       1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Migrating verificar_nucleo.py to linhas_vivas                                                                                               17m 34s · ↓ 126.9k tokens
+  ◯ general-purpose  Running full suite against wt-escala2                                                                                                       22m 46s · ↓ 142.2k tokens
   ⧉  index
 ```
