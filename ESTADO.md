@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 15/10/2026 13:17:02.**
+**Medido em 15/10/2026 13:22:32.**
 
 | | |
 |---|---|
@@ -29,28 +29,28 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2475.5 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2475.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **244.0 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **244.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **57.2 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **57.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **360.1 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **360.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **264.2 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **264.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **381.9 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **382.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -165,35 +165,35 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ⎿  Referenced file escala/utils.py
-  ⎿  Read ../logs/o271_diff_runner.log (20 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bsyn3e0ux.output (5 lines)
-  ⎿  Referenced file ponto/management/commands/tripwire_celulas.py
-
-● Task "RED e construção do segundo intervalo" completed in background
-
-● Task "O284-A job do lote do espelho" completed in background
-
-● Task "Push the O271 marco" still running in background
-
-● Três medições fechadas, e uma delas me corrige. Registro no CASO antes de escrever código:
+  (relatorios/cartao_pela_celula.py:353). Falta o número que decide se o "não sei" é caminho vivo ou morto:
 
   Ran 1 shell command
 
-› Message from @general-purpose (ctrl+o to expand)
+● Dois números mudam o desenho, e para melhor:
 
-› Message from @a67f3c5ed27d0a551 (ctrl+o to expand)
-
-● Agent "O286 sombra fora do postgres de prod" finished · 1h 23m 12s
-
-● HEAD mudou durante o push: O286 commitou ba289219, e o sombra.py com o host novo já está em HEAD — minha cópia nasce sem ressalva. Registro as três medições (uma me corrige) e consulto
-  antes de escrever código:
+  - (c) fechado: 50 (09) e 34 (10) Fechamentos sem lavratura — e 0 deles tem falta pelo leitor vivo. O "não sei" é caminho estrutural real mas hoje VAZIO → vira contador de vigia
+    (esperado 0), não ramo no leitor. Isso resolve o conflito com o selo AST: o leitor fica puro, o vigia alarma (seção 4a: cron de varredura só alarma, NUNCA juiz).
+  - horas_falta não é dinheiro: folha/export.py:842 diz literalmente "horas_falta do FechamentoMensal NAO serve de numerador"; os 3 leitores são espelho/cartão/DIFF. O 8792 é dias
+    (len(datas)). Logo a cura do escritor move exibição; dinheiro só se move na troca do leitor.
 
   Ran 1 shell command
 
-● Advising using Fable 5.1
+● Cópia de HEAD pronta, com o host da sombra já dentro. Agora o RED — leio o sítio exato e a assinatura do juiz:
 
-✢ Flambéing… (3h 52m 40s · ↓ 515.7k tokens)
+  Ran 3 shell commands
+
+● Precedente resolve a camada: fechamento.py já faz from folha.export import ... deferido em 3 sítios — o escritor chama a autoridade sem módulo novo. Antes de escolher a primitiva, uma
+  medição que decide se a extração muda dinheiro:
+
+  Ran 1 shell command
+
+● Zero dia repetido nas duas janelas na frota inteira → a extração da query preserva o len() do 8792 byte a byte. Agora o RED: procuro o idioma de teste que já exercita este escritor:
+
+● Checking ausencias_mes reuse and finding the test idiom
+  ⎿  $ cd /home/ronald/copia-o140/app && echo "=== ausencias_mes usado mais abaixo? ==="; grep -n 'ausencias_mes\|total_falta\|_faltas_por_dia' ponto/services/fechamento.py; echo; echo
+     "=== testes que exercitam faltas_por_dia / falta_min ==="; grep -rln 'faltas_por_dia\|falta_min' --include=*.py */tests…
+
+✢ Flambéing… (3h 58m 10s · ↓ 529.5k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                                     ✔ Update installed · Restart to update
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -203,6 +203,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                                                                       1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Checking green8.log verdicts and trava_teste holder                                                                                      2h 23m 42s · ↓ 156.4k tokens
+  ◯ general-purpose  Checking green8.log verdicts and trava_teste holder                                                                                      2h 23m 43s · ↓ 156.4k tokens
   ⧉  index
 ```
