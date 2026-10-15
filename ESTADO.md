@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 15/10/2026 16:51:48.**
+**Medido em 15/10/2026 16:57:02.**
 
 | | |
 |---|---|
-| `HEAD` local | `4da7b51f [BUG-8792] o range de falta se RATEIA pelos dias dele: o escritor da lavratura tinha regra propria e punha os minutos de N dias no PRIMEIRO, deixando os outros em branco` |
+| `HEAD` local | `5b14363d [O140] o FURO do dia nasce LAVRADO: `DiaPago.furo_apurado` passa a ser DADO com tres estados, e a lavratura e o escritor unico -- nenhum leitor precisa mais pagar uma volta de motor para saber se o dia furou` |
 | `origin/main` | `4da7b51f [BUG-8792] o range de falta se RATEIA pelos dias dele: o escritor da lavratura tinha regra propria e punha os minutos de N dias no PRIMEIRO, deixando os outros em branco` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,37 +29,37 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2479.1 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2479.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **247.6 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **247.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **60.8 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **60.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **363.7 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **363.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lote** (`raia-lote`) -- **SEM AGENTE**
   - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **3.2 h**
   - sem declaracao em `logs/raias/wt-lote.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **267.8 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **267.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **385.5 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **385.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
 - **wt-v3** (`raia-v3`) -- **SEM AGENTE**
-  - 5 commit(s) a frente do `main`, 2 arquivo(s) sujo(s), commit a frente ha **0.1 h**
+  - 5 commit(s) a frente do `main`, 2 arquivo(s) sujo(s), commit a frente ha **0.2 h**
   - sem declaracao em `logs/raias/wt-v3.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **21 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
@@ -70,28 +70,17 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+5b14363d [O140] o FURO do dia nasce LAVRADO: `DiaPago.furo_apurado` passa a ser DADO com tres estados, e a lavratura e o escritor unico -- nenhum leitor precisa mais pagar uma volta de motor para saber se o dia furou
 4da7b51f [BUG-8792] o range de falta se RATEIA pelos dias dele: o escritor da lavratura tinha regra propria e punha os minutos de N dias no PRIMEIRO, deixando os outros em branco
 ba289219 [O286] o POSTGRES do ensaio sai dos nucleos do cliente: a sombra passa a morar em container PROPRIO `sombra_db`, e o host do banco de ensaio passa a ter UM sitio
 7ea7d402 [O271] o comercial nao tinha pontualidade PROPRIA -- nao tinha pontualidade NENHUMA: passa pela MESMA regua, e a CABECA do turno quem diz e o JUIZ, nao a proximidade
 49ac61c4 [BUG-SOBRA-TIPO-TROCADO] o dia julgado de novo em PROD fecha o item: o col190 26/09 sai de "Em aberto" com minutos_realizados 1 -> 715, o chamado 26219 morre por LASTRO no passo 2 e a classe da comp 10 fica em ZERO
-5f915ff4 [BUG-SOBRA-TIPO-TROCADO] a batida no raio de uma ponta nunca vira marco de intervalo: o par do col190 26/09 apagava a S 19:00 pela S155, e o turno ficava aberto com a ata lendo 18:55 como orfa
 ```
 
 ## `git status --short`
 
 ```
  M app/config/crons_duracao.json
- M app/docs/BACKLOG.md
- M app/docs/HANDOFF-SESSAO.md
- M app/docs/RELATO.md
- M app/docs/TICKETS.md
- M app/folha/porta_export.py
- M app/folha/tests/test_porta_do_export.py
- M app/ponto/models.py
- M app/ponto/services/dia_pago.py
- M app/ponto/services/fechamento.py
-?? app/ponto/migrations/0073_diapago_furo_apurado.py
-?? app/ponto/tests/test_o140_furo_lavrado.py
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -181,36 +170,36 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● O fora é apendado por sítio, então a duplicação nasce no _tardios. Leio a função:
-
-  Ran 1 shell command
-
-● Medido, e é defeito do checker, não do meu marco: ast.walk(arv) visita toda FunctionDef, inclusive as ANINHADAS, e _ver já desce a subárvore — então import
-  dentro de função aninhada é contado duas vezes. E o meu é exatamente esse caso: _medir_dia_pago está dentro de medir. Confirmo por AST:
-
-  Ran 1 shell command
-
-● Provado: 2 "donos" (medir + a aninhada _medir_dia_pago), 1 sítio distinto. O checker infla. Pela L-105 instrumento pousa sozinho, depois do produto — então não
-  toco bin/ agora; curo o meu predicado, que estava contando linha em vez de SÍTIO:
+  é o que o logs/ nunca é:
 
   Ran 2 shell commands
-  ⎿  Read docs/AVAIS.md (24 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b5duwgtxq.output (12 lines)
-  ⎿  Referenced file escala/utils.py
-  ⎿  Read ../logs/o271_diff_runner.log (20 lines)
-  ⎿  Read pautas/tests/test_contract_vocabulario.py (55 lines)
 
-● Task "O280 MOTOR-V3 passos 1 e 2" still running in background
+● 7 .py + 4 docs = os 11 do censo (o crons_duracao.json NUNCA se commita). Conferindo a mensagem antes:
 
-● Background command "Count distinct sites and re-run the gate" completed (exit code 0)
+  Ran 1 shell command
 
-● COMMITAR_PRONTO — 0 vermelho de 72, o vermelho esperado reconhecido como 1 sítio. Sigo o POUSO:
+● Antes de commitar, o achado de instrumento tem de virar linha de fila no corpo (ESMERIL-DO-MARCO + L-105):
 
-  Reading the landing checklist
-  ⎿  $ cd /home/ronald/saas-hasner && python3 logs/o140b/fechar_commit.py 2>&1 | tail -30
+  Committed 5b14363d, ran 1 shell command
 
-· Flambéing… (7h 27m 26s · ↓ 932.0k tokens · thinking)
+● Commit 5b14363d, 11 arquivos. Passo 4c — os dois portões do push que só medem depois do commit:
+
+  Ran 2 shell commands
+
+● Enquanto o deploy corre (não toco a árvore), registro a 8ª vez da prosa lida como fato na memória:
+
+  Ran 2 shell commands
+
+● Background command "Deploy with migration" completed (exit code 0)
+
+● Deploy verde. Conferindo que o selo do import tardio fechou (era o VERMELHO ESPERADO) e empurrando:
+
+● Verifying the late-import selo is now green · 25s
+  ⎿  $ cd /home/ronald/saas-hasner && grep -E 'rc_deploy|migrate|prova|rota' logs/o140b/deploy.log | tail -8; echo "---"; bash
+     bin/tests/test_import_tardio_contra_o_ar.sh 2>&1 | tail -3; echo "rc_selo=$?" (25s · 6 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+· Flambéing… (7h 32m 40s · ↓ 945.3k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -219,6 +208,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
   ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ general-purpose  Checking intervalo_cadastrado against B6 fixture                                                                 3h 1m 14s · ↓ 144.2k tokens
+  ◯ general-purpose  Gating intra_indenizada_do_dia in periodo.py                                                                     3h 6m 29s · ↓ 158.2k tokens
   ⧉  index
 ```
