@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 15/10/2026 14:48:32.**
+**Medido em 15/10/2026 14:54:02.**
 
 | | |
 |---|---|
@@ -29,38 +29,41 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2477.0 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2477.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **245.5 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **245.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
   - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **58.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **361.6 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **361.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lote** (`raia-lote`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **1.1 h**
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **1.2 h**
   - sem declaracao em `logs/raias/wt-lote.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **265.8 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **265.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **383.5 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **383.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
-- **22 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-v3, wt-vinculo
+- **wt-v3** (`raia-v3`) -- **SEM AGENTE**
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **0.0 h**
+  - sem declaracao em `logs/raias/wt-v3.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
+- **21 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
-**sem agente: 7** (raia com commit a frente e sem declaracao, esperado 0) -- **a frente do main ha mais de 6 h: 6** -- uniao medida: 32
+**sem agente: 8** (raia com commit a frente e sem declaracao, esperado 0) -- **a frente do main ha mais de 6 h: 6** -- uniao medida: 32
 
 > Raia sem agente por mais de um marco pede linha de motivo no RELATO -- lei, `!` ou pista (item 4 do aval).
 
@@ -172,34 +175,35 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Now the vigia's caso que MORDE, in the RED:
+● Section is 14 lines (under the L-116 cap of 25); it needs one bullet for the suite verdict, which I'll write with the real numbers. Checking how far the run is:
 
-  Ran 2 shell commands
+  Ran 1 shell command
 
-● Marco B built and ruff-clean. Registering the decisions taken by existing law while the suite runs:
+● ~17 min elapsed of a ~25 min run. Note the trap in my own monitoring grep: OK:   31 and OK — nenhuma divergencia are prose, not verdicts — the L-074 criterion (^(OK|FAILED)($| \() + tail
+  -1) rejects both, and pos_verdito.sh uses the full form. Waiting on the condition rather than polling:
 
-  Appending the construction addendum to the CASO
-  ⎿  $ cd /home/ronald/saas-hasner && cat >> logs/o140/CASO.md <<'MD'
-     ---
-     ## 9. ADENDO DE CONSTRUCAO -- MARCO B (15/10 ~14:4x)
-     Cinco decisoes TECNICAS tomadas pela lei que ja existe (PAREI-SO-LEI: decisao tecnica o Code decide,
-     registra e segue). Nenhuma e lei nova; nenhuma e juiz novo.
-     1. **A PORTA NAO…
-  ⎿  Read docs/AVAIS.md (24 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b5duwgtxq.output (12 lines)
-  ⎿  Referenced file escala/utils.py
-  ⎿  Read ../logs/o271_diff_runner.log (20 lines)
-  ⎿  Read pautas/tests/test_contract_vocabulario.py (55 lines)
+● No monitor needed — the suite's own background shell wakes me. Using the wait for the O280 side that costs no test-cpuset CPU: the fork that finished has a deliverable I never received.
+  ⎿  Resuming agent aa14fd1
+  ⎿  Allowed by auto mode classifier
 
-● Task "RED e construção do segundo intervalo" completed in background
+  Ran 1 shell command
 
-● Task "O280 MOTOR-V3 passos 1 e 2" still running in background
+› Message from @a2cd34dafbbc8a4bd (ctrl+o to expand)
 
-● Task "ESMERIL-V3 fecho adversarial O280" still running in background
+● The esmeril landed with 22 open items — and its I16b is the same open pergunta as the O276, which the construtor must not harden either way. Relaying before it builds further on the
+  wrong premise:
+  ⎿  Message queued for delivery to a0e94d563a20a5e65 at its next tool round.
+  ⎿  Allowed by auto mode classifier
 
-● Task "Run the full suite on the certified copy" still running in background
+● Agent "ESMERIL-V3 fecho adversarial O280" finished · 42m 50s
 
-✢ Flambéing… (5h 24m 10s · ↓ 725.3k tokens)
+● Writing the esmeril's lei question at the RELATO topo (PAREI-DE-LEI-NAO-DEVOLVE-TURNO — the fila does not stop):
+
+  Draft the RELATO top-of-file question block
+  ⎿  $ cd /home/ronald/saas-hasner && cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/topo.txt <<'TXT'
+     **O ESMERIL-V3 (seu aval de 15/10 14:1x) PUBLICOU, E A CONDICAO LITERAL DELE NAO FECHOU: 22 ITENS ABERTOS, ENTAO A TROCA NAO VAI AO SEU `!` (15/10 14…
+
+✢ Flambéing… (5h 29m 40s · ↓ 745.2k tokens · thought for 3s)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                                     ✔ Update installed · Restart to update
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -208,8 +212,7 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
   ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ fork             Confirming commit hashes in worktree                                                                                                       1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Reading setUpTestData fixture in test_o280_bateria_da_lei.py                                                                                 57m 58s · ↓ 95.7k tokens
-  ◯ general-purpose  Verifying law citations in LEIS.md                                                                                                           39m 0s · ↓ 136.5k tokens
+  ◯ fork             Reporting montar_dna pausa findings                                                                                                      12d 23h 2m · ↓ 428.9k tokens
+  ◯ general-purpose  Measuring the fluxo gate in `ponto/turnos.py::_teto_s_da_jornada` and the 26 h envelope at `:1250`                                        1h 3m 29s · ↓ 138.0k tokens
   ⧉  index
 ```
