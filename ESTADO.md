@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:393 AFIRMA ato sem PROVA ao lado -- ## MARCO 15/10 ~02:3x -- BUG-SOBRA-TIPO-TROCADO **APLICADO em PROD**: o col190 26/09 sai de "Em aberto" com `minutos_realizados 1 -> 715`, o
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:335 AFIRMA ato sem PROVA ao lado -- - **NO AR, e o ato fechou inteiro**: commit `8c545a89` (merge `--no-ff`) e `bin/deploy.sh` **sem** `--sem-migrate` rc **0** as 18:12 -- `rel
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 15/10/2026 18:11:32.**
+**Medido em 15/10/2026 18:16:32.**
 
 | | |
 |---|---|
@@ -29,19 +29,19 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2480.4 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2480.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **248.9 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **249.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **62.1 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **62.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **365.0 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **365.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
   - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **269.2 h** (passou das 6 h da L-105)
@@ -56,7 +56,7 @@ RELATO, com a lista de nomes do banco como autoridade._
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
 - **wt-v3** (`raia-v3`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 2 arquivo(s) sujo(s), commit a frente ha **0.4 h**
+  - 8 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **0.0 h**
   - sem declaracao em `logs/raias/wt-v3.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **21 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
@@ -78,6 +78,9 @@ ba289219 [O286] o POSTGRES do ensaio sai dos nucleos do cliente: a sombra passa 
 
 ```
  M app/config/crons_duracao.json
+ M app/docs/BACKLOG.md
+ M app/docs/HANDOFF-SESSAO.md
+ M app/docs/RELATO.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -168,15 +171,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-      192      'escala_tipoescala.he_extra_depois_min': 'minutos declarados no template de escala (O146); casa com o '
-      193                                               'padrao por "depois" -- nao e foto de antes/depois, e parametro',
-      194      'folha_exportacaodominio.nome_arquivo': 'nome de arquivo por competencia', 'folha_rubricacatalogo.descricao': 'catalogo',
-      195 +    # MEDIDO no sitio (`relatorios/lote_espelho.py::nome_do_arquivo`, linhas 176-184): o nome e
-      196 +    # `cartoes_<razao_social[:12]|sel_Ncolabs>_<AAAAMM>.pdf` -- empresa (PJ) ou a CONTAGEM da selecao,
-      197 +    # nunca o nome de um colaborador, mesmo quando o lote e de um colab so. Mesma classe dos dois
-      198 +    # `nome_arquivo` ja inventariados (`folha_exportacaodominio`, `ponto_importacaoaej`).
-      199 +    'relatorios_loteespelho.nome_arquivo': 'nome de arquivo por empresa/competencia (sem nome de pessoa)',
-      200      'holerite_envioholerite.titulo': 'lote de envio', 'ponto_fechamentomensal.motivos_espelho': 'codigos',
       201      'ponto_fechamentomensal.saldo_banco_horas': 'numero', 'ponto_importacaoaej.nome_arquivo': 'arquivo de importacao',
       202      # DUAS COLUNAS MINHAS, de 28/09, que o selo pegou por SUBSTRING no primeiro dump fresco -- e pegou certo,
   ⎿  Allowed by auto mode classifier
@@ -194,18 +188,27 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Background command "Run the whole host selo pasture with the declared exception" completed (exit code 0)
 
-  Running the pouso resume script to the commit
-  ⎿  $ cd /home/ronald/saas-hasner && bin/deploy.sh 2>&1 | tail -30; echo "rc_deploy=${PIPESTATUS[0]}"
+● Updating the BACKLOG state cell and re-run the host selos · 2m 0s
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PY'
+     import io
+     P = 'app/docs/BACKLOG.md'
+     t = io.open(P, encoding='utf-8').read()
+     l = [x for x in t.split('\n') if x.startswith('| O284 |')]
+     assert len(l) == 1
+     velho = l[0].split('|')[3]
+     assert 'A POUSOU' in velho, velho[:80]
+     novo = (' **A NO AR** (commit… (1m 59s · 3 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Flambéing… (8h 47m 10s · ↓ 1.1m tokens)
+✢ Flambéing… (8h 52m 10s · ↓ 1.1m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                                           11% until auto-compact
+                                                                                                                                            1% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ general-purpose  Grepping TETO_RETRATACAO_SEG in detectar_par_relampago.py                                                        4h 20m 59s · ↓ 73.6k tokens
+  ◯ general-purpose  Listing module ports in regras.py                                                                               4h 25m 58s · ↓ 107.0k tokens
   ⧉  index
 ```

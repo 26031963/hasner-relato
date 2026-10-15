@@ -6,10 +6,23 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 15/10/2026 18:11:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (863.0 MB). Acoes na janela: **1162**.
+**Medido em 15/10/2026 18:16:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (863.1 MB). Acoes na janela: **1175**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 18:14:31 | Bash | Update the BACKLOG state cell and re-run the host selos | `cd /home/ronald/saas-hasner && python3 - <<'PY' import io P = 'app/docs/BACKLOG.md' t = io.open(P, encoding='utf-8').read() l = [x for x in t.split('\n') if x.startswith('\| O284 \|')] assert len(l) == 1 velho = l[0].split('\|')[3] assert 'A POUSOU' in velho, velho[:80] novo = (' **A NO AR** (commit 8c545a89, deploy rc 0 as 18:12, migration `relatorios.0002`; import tardio' ' de 8 acusados para 0; ...` |
+| 18:14:21 | Bash | Add the deploy addendum to the marco section | `cd /home/ronald/saas-hasner && python3 - <<'PY' import io P = 'app/docs/RELATO.md' t = io.open(P, encoding='utf-8').read() ANC = '\n## MARCO 15/10 16:4x -- O140 MARCO B' assert t.count(ANC) == 1 ADENDO = """- **NO AR, e o ato fechou inteiro**: commit `8c545a89` (merge `--no-ff`) e `bin/deploy.sh` **sem** `--sem-migrate` rc **0** as 18:12 -- `relatorios.0002_loteespelho` aplicada, `janela_auth` OK, ...` |
+| 18:13:48 | Bash | Read the marco section in the RELATO | `cd /home/ronald/saas-hasner && sed -n '320,340p' app/docs/RELATO.md` |
+| 18:13:34 | Bash | Read-only smoke of the lote routes in prod | `cd /home/ronald/saas-hasner && for u in /relatorios/espelho/lote/ /relatorios/espelho/lote/999999/estado/ /relatorios/espelho/dinamico/; do printf "%s -> " "$u"; curl -s -o /dev/null -w "%{http_code}\n" --max-time 15 "https://juliani.hasner.com.br$u"; done` |
+| 18:13:29 | Bash | Find the lote routes | `cd /home/ronald/saas-hasner && grep -n "lote" app/relatorios/urls.py` |
+| 18:13:20 | Bash | Rebuild the sombra with a fresh dump and run the morning bloco | `cd /home/ronald/saas-hasner && (bash bin/sombra.sh --refazer --dump-agora && bash bin/sombra.sh --bloco) > logs/o284/sombra_pos_deploy.log 2>&1; echo "rc_sombra=$?" >> logs/o284/sombra_pos_deploy.log; bash bin/sombra.sh --conferir >> logs/o284/sombra_pos_deploy.log 2>&1; tail -3 logs/o284/sombra_pos_deploy.log` |
+| 18:13:08 | Bash | Install the rendered crontab and re-check | `cd /home/ronald/saas-hasner && bash bin/crons.sh install 2>&1 \| tail -10; echo "rc_install=${PIPESTATUS[0]}"; echo "=== check depois:"; bash bin/crons.sh check 2>&1 \| tail -4; echo "rc_check=${PIPESTATUS[0]}"; crontab -l \| grep -E "sombra.sh\|noturno.py"` |
+| 18:12:52 | Bash | See the crons.py change the raia brought | `cd /home/ronald/saas-hasner && git diff 8be3814b HEAD -- app/config/crons.py` |
+| 18:12:49 | Bash | List files changed by the merge commit | `cd /home/ronald/saas-hasner && git diff --name-only 8be3814b HEAD \| sed 's/^/ /' && echo "=== crons.py no commit?"; git diff --name-only 8be3814b HEAD \| grep -c crons` |
+| 18:12:44 | Bash | List the files in the commit | `cd /home/ronald/saas-hasner && git show --stat HEAD \| head -40` |
+| 18:12:40 | Bash | See what the marco changed in crons.py | `cd /home/ronald/saas-hasner && git show --stat HEAD -- config/crons.py && git show HEAD -- config/crons.py \| head -40` |
+| 18:11:53 | Bash | Re-run the import-tardio selo after the deploy and check crons | `cd /home/ronald/saas-hasner && echo "=== import tardio (a cura declarada):" && bash bin/tests/test_import_tardio_contra_o_ar.sh 2>&1 \| tail -4; echo "rc_import_tardio=${PIPESTATUS[0]}"; echo "=== crons check:"; bash bin/crons.sh check 2>&1 \| tail -8; echo "rc_crons=${PIPESTATUS[0]}"` |
+| 18:11:27 | Bash | Deploy the commit with migrations | `cd /home/ronald/saas-hasner && bin/deploy.sh 2>&1 \| tail -30; echo "rc_deploy=${PIPESTATUS[0]}"` |
 | 18:09:01 | Bash | Run the pouso resume script to the commit | `cd /home/ronald/saas-hasner && bash logs/o284/pousar_resume.sh 11020 'OK (skipped=42)' 1491 2>&1 \| tail -25` |
 | 18:08:55 | Bash | Read the pasture result and check the sombra gate | `cd /home/ronald/saas-hasner && cat /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bfx1rz1pf.output; echo "=== sombra --conferir:"; bash bin/sombra.sh --conferir 2>&1 \| tail -8; echo "rc=${PIPESTATUS[0]}"` |
 | 18:08:49 | Bash | Check running crons and the LEIS PROTEGE rows | `cd /home/ronald/saas-hasner && echo "=== crons_em_curso:" && ls -la logs/crons_em_curso/ 2>&1 \| tail -5; echo "=== LEIS.md PROTEGE:"; grep -n "sombra_regras_pessoais\\|gerar_avais\\|PENDENTES_RONALD\\|sombra_selo_pessoal" app/docs/LEIS.md \| head` |

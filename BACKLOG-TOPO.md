@@ -291,7 +291,7 @@ lista — ela e o que esta EM PE._
 | **O281** | CENSO-14-15/10 bloco A | espera corte |
 | **O282** | ESTADO-DERIVADO-SEM-EVENTO | **aberta, NAO comecada** -- registrada n |
 | **O283** | SELO-HX-TARGET-EXISTE-NO-HOST | **aberta, NAO comecada, FILA 2.** Nasce  |
-| **O284** | BUG-LOTE-ESPELHO-14MIN | **A POUSOU** (L-107, um ato; suite CHEIA |
+| **O284** | BUG-LOTE-ESPELHO-14MIN | **A NO AR** (commit 8c545a89, deploy rc  |
 | **O285** | SIMULAR-FOLHA-SH-SEM-LIDO | aberta, NAO comecada. Instrumento (`bin/ |
 | **O286** | BUG-SOMBRA-NO-POSTGRES-DE-PROD | espera corte |
 | **O287** | ESMERIL-V3 | PAREI |
