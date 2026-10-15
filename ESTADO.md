@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:292 AFIRMA ato sem PROVA ao lado -- ## MARCO 15/10 ~02:3x -- BUG-SOBRA-TIPO-TROCADO **APLICADO em PROD**: o col190 26/09 sai de "Em aberto" com `minutos_realizados 1 -> 715`, o
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:310 AFIRMA ato sem PROVA ao lado -- ## MARCO 15/10 ~02:3x -- BUG-SOBRA-TIPO-TROCADO **APLICADO em PROD**: o col190 26/09 sai de "Em aberto" com `minutos_realizados 1 -> 715`, o
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 15/10/2026 13:01:02.**
+**Medido em 15/10/2026 13:06:12.**
 
 | | |
 |---|---|
@@ -35,22 +35,22 @@ RELATO, com a lista de nomes do banco como autoridade._
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **243.7 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **243.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
   - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **57.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **359.8 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **359.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **264.0 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **264.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **381.7 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **381.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -77,7 +77,11 @@ RELATO, com a lista de nomes do banco como autoridade._
  M CLAUDE.md
  M app/config/crons_duracao.json
  M app/config/settings/sombra.py
+ M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/PROMPTS.md
+ M app/docs/RELATO.md
+ M app/docs/TICKETS.md
  M bin/diff_janela_he_total.sh
  M bin/r5_idempotencia_frota.sh
  M bin/recursos.sh
@@ -178,33 +182,33 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-  Searched for 3 patterns, ran 3 shell commands
-
-● Cura no ar em prod, medida pela função real, só leitura: col406 MotorComercial 27/08 08:17 → atraso 71 min (antes o comercial não tinha pontualidade nenhuma: zero por construção) · col60
-  Motor12x36ComEscala 01/09 12:00 → atraso 234 min (cabeça do turno pelo juiz). Agora o push do marco:
-
-  Ran 1 shell command
-  ⎿  Message queued for delivery to a67f3c5ed27d0a551 at its next tool round.
-  ⎿  Allowed by auto mode classifier
-
-● Push correndo. Continuo o O140 (o siga do hook), medindo antes de escrever — primeiro quem grava a falta hoje no DiaPago e quem são os leitores:
-
-  Searched for 3 patterns, ran 4 shell commands
-
-● Divergência zero hoje em col643 (09: 3 dias iguais; 10: 21/09 e 23/09 iguais) — o BUG-8792 é estrutural (segundo derivador), não de valor. Mas antes de trocar o leitor eu preciso do
-  número da frota, porque o lavrado é FOTO e a Ausencia é VIVA:
-
-  Searched for 1 pattern, ran 2 shell commands
-
 ● 33 dia-colab onde o lavrado tem a linha do dia mas horas_falta=0 enquanto a Ausencia viva diz falta. Preciso da CAUSA antes de qualquer desenho:
 
-● Classify the cause of the 33 divergent days
-  ⎿  $ cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/causa_8792.py <<'PY'
-     # CAUSA dos 33: minutos da Ausencia x lavrado_em x criacao. SO LEITURA.
-     from django.db import connection
-     assert connection.settings_dict['NAME'] == 'saas_hasner', connection.se…
+  Ran 1 shell command
 
-✢ Flambéing… (3h 36m 40s · ↓ 485.9k tokens · thinking)
+● O achado é outro e muda o desenho: 28 dos 33 são Ausencia.minutos = 0 (falta decidida que não vale hora nenhuma — dias x horas, unidade diferente), e só 5 são ausência tocada depois da
+  lavratura (uma delas o col954 18/09, que já é PAUTA DP declarada). Então horas_falta > 0 não é o predicado — e a lavratura talvez já carregue a chave do dia:
+
+  Ran 2 shell commands
+
+● A chave já existe no lavrado e o predicado é a PRESENÇA dela: 'falta_min' in detalhe (escrita mesmo com 0 min, dia_pago.py:247). Medido na frota pela função real — 09: 165 iguais / 8 só
+  no fx / 0 só na chave; 10: 36 iguais / 14 só no fx / 0 só na chave. Último dado antes de desenhar — quem chama a lavratura sem o mapa:
+
+  Searched for 1 pattern
+
+● Medido: os únicos dois chamadores de produção da lavratura (fechamento.py:738 e :804) sempre passam o mapa — logo a ausência da chave é "não é falta", sem ambiguidade. Antes de escrever
+  o CASO e qualquer código, consulta:
+
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+
+● Seguindo o conselho, na ordem. Veredito do push pelo remoto, a fonte do valor do 8792, e o estado da sombra com o O286:
+
+  Reading where the 8792 reg 10 value comes from
+  ⎿  $ cd /home/ronald/saas-hasner && git fetch origin -q 2>&1 | tail -2; echo "origin/main=$(git rev-parse --short origin/main) HEAD=$(git rev-parse --short HEAD)"; git log --oneline
+     origin/main..HEAD | head -5; echo "--- log do push (ultimas linhas) ---"; tail -5 logs/o271_push.log 2>/dev/null
+
+* Flambéing… (3h 41m 51s · ↓ 492.2k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                                     ✔ Update installed · Restart to update
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -214,7 +218,7 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                                                                       1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Awaiting green8 verdict on test_selo_job_lote_espelho.py                                                                                 1h 58m 54s · ↓ 139.0k tokens
-  ◯ general-purpose  Dropping ensaio databases from saas_db                                                                                                   1h 10m 15s · ↓ 163.2k tokens
+  ◯ general-purpose  Writing green9.sh certification script                                                                                                   2h 12m 52s · ↓ 148.6k tokens
+  ◯ general-purpose  Updating O286 state cell in PROMPTS.md                                                                                                    1h 15m 25s · ↓ 96.0k tokens
   ⧉  index
 ```
