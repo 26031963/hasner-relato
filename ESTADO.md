@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 15/10/2026 14:32:02.**
+**Medido em 15/10/2026 14:37:32.**
 
 | | |
 |---|---|
@@ -29,31 +29,31 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2476.8 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2476.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **245.2 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **245.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **58.5 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **58.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **361.4 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **361.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lote** (`raia-lote`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **0.8 h**
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **0.9 h**
   - sem declaracao em `logs/raias/wt-lote.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **265.5 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **265.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **383.2 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **383.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -172,25 +172,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● Task "Run the full suite on the certified copy" still running in background
-
-  Searched for 1 pattern, ran 5 shell commands
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-  Searched for 1 pattern, ran 15 shell commands
-  ⎿  Read docs/AVAIS.md (24 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b5duwgtxq.output (12 lines)
-  ⎿  Referenced file escala/utils.py
-  ⎿  Read ../logs/o271_diff_runner.log (20 lines)
-  ⎿  Read pautas/tests/test_contract_vocabulario.py (55 lines)
-
-● Task "RED e construção do segundo intervalo" completed in background
-
-● Task "O280 MOTOR-V3 passos 1 e 2" still running in background
-
 ● Task "ESMERIL-V3 fecho adversarial O280" still running in background
 
 ● Background command "Run the full suite on the certified copy" completed (exit code 0)
@@ -198,18 +179,37 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
   Ran 7 shell commands
 
 ● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-✢ Flambéing… (5h 7m 40s · ↓ 687.4k tokens)
+● The suite closed FAILED (failures=1) — the launcher's exit 0 was only lancada. The single FAIL is a text selo biting my own cure:
+
+  Ran 8 shell commands
+
+● Ruff limpo. Now the cheap recorte before the 24-minute relaunch:
+
+  Ran 2 shell commands
+
+● Inverted selo discriminates (HEAD: 0/1 → red; cure: 1/0 → green). Relaunching the full suite — the RED run certified nothing, and a test-only delta is still a different tree under L-117:
+
+  Ran 6 shell commands
+
+● RED written (176 lines, 9 casos). Now the cure in the same copy — the trava is held by the running suite, so RED/GREEN gets evidenced against the new HEAD once BUG-8792 lands:
+
+  Ran 7 shell commands
+
+● Advising using Fable 5.1
+
+✢ Flambéing… (5h 13m 10s · ↓ 706.8k tokens · thought for 27s)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                                     ✔ Update installed · Restart to update
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                                                                       1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Counting lines in test_o280_bateria_da_lei.py                                                                                               41m 28s · ↓ 169.8k tokens
-  ◯ general-purpose  Correcting F01-F04 in casos_absurdos_esmeril.md                                                                                             22m 30s · ↓ 154.4k tokens
+  ◯ general-purpose  Checking trava_teste.sh and suite.sh usage                                                                                                  46m 58s · ↓ 124.0k tokens
+  ◯ general-purpose  Publishing ESMERIL.md with 18 open items                                                                                                     27m 59s · ↓ 82.7k tokens
   ⧉  index
 ```
