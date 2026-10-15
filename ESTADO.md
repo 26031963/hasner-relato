@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 15/10/2026 11:40:04.**
+**Medido em 15/10/2026 11:45:32.**
 
 | | |
 |---|---|
@@ -29,28 +29,28 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2473.9 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2474.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **242.4 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **242.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **55.6 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **55.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **358.5 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **358.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **262.6 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **262.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **380.3 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **380.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -167,44 +167,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  Ran 1 shell command
 
-● perto_do_marco (escala/regua_defesa.py:431) já é o dono único do raio, e os dois outros sítios perguntam a ele — não há terceiro derivador para migrar. A fronteira da cura é a
-  tolerância, outra pergunta.
+❯ BUG-SOMBRA-NO-POSTGRES-DE-PROD (bug PROVADO, P7.1 -- instrumento: pouso PROPRIO pela L-105, sem tocar fila 1 nem O280; anda em agente ao lado, nao cruza arquivo com O271/O284/O280)
 
-  Searched for 2 patterns, ran 4 shell commands
+❯ MEDIDO 15/10 11:42-11:43 (chat, leitura): pg_stat_activity datname='sombra' presente em 9 de 10 amostras (1/s), queries ORM trocando (core_feriado, escala_celuladia,
+  escala_escalacolaborador, colaboradores_colaborador), client 172.18.0.9; saas_db 22-54% CPU com saas_ui 0,07% e saas_core 0,04% (prod ociosa); na amostra sem sombra, 1%. Painel
+  situacional no mesmo minuto: o MESMO lote de 100 linhas variou 0,12s a 1,88s (6h antes, max 0,63s).
 
-● Runner2 fechou. O passe do universo caiu no import — vendo como o medir.py o fez (ele funcionou):
+❯ LEI EXISTENTE (nenhuma lei nova): corte Ronald 22/09 "teste nunca rouba CPU do cliente" (CLAUDE.md secao 2, bin/recursos.sh fonte unica, vCPU 4-7 = TESTE "juliani_db_test + todo docker
+  run de ... sombra"). O defeito esta DECLARADO em bin/sombra.sh:47: "o lado POSTGRES do ensaio segue nos nucleos do cliente". A lei cobriu o lado python e nao o postgres.
 
-  Ran 6 shell commands
-  ⎿  Read docs/AVAIS.md (23 lines)
-  ⎿  Read ../logs/o271_diff_runner.log (20 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bsyn3e0ux.output (5 lines)
-  ⎿  Referenced file ponto/management/commands/tripwire_celulas.py
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bzx8wto03.output (4 lines)
+❯ FONTE: bin/sombra.sh (PG=saas_db :57; pg_dump/createdb/pg_restore :210-225) · config/settings/sombra.py (host do banco) · bin/recursos.sh.
 
-● Task "RED e construção do segundo intervalo" completed in background
+❯ MUDA: o banco sombra (e todo juliani_ref_*) passa a morar num postgres NO CPUSET DE TESTE -- container proprio sombra_db (postgres 17, --cpuset-cpus do $TESTE_CPUSET via recursos.sh,
+  memory limitada), nunca no juliani_db_test (a trava UM-run-por-vez da suite nao pode passar a disputar com o ensaio). O dump SAI do saas_db (pg_dump e leitura) e o restore ENTRA no
+  sombra_db.
 
-● Task "O284-A job do lote do espelho" still running in background
+❯ PRIMEIRO: (1) identificar quem e 172.18.0.9 (docker network inspect) e qual agente segura a conexao agora; (2) CENSO fechado de quem conecta no banco sombra/juliani_ref_* (sombra.sh,
+  simular_folha.sh, settings.sombra, deploy.sh --conferir via sombra.sh, cron 04:17, scripts de agente) -- quem nao migrar fica conectando no prod.
 
-● Task "Wait for runner2 then run the third pass" still running in background
+❯ RED: selo de host que falha se pg_database do saas_db tiver datname sombra ou juliani_ref_* (caso que MORDE: criar um juliani_ref_x no saas_db -> VERMELHO); bin/recursos.sh --conferir
+  cobra o cpuset do sombra_db.
 
-● Background command "Wait for runner2 then run the third pass" completed (exit code 0)
+❯ PROIBIDO: renice/limitar a conexao no saas_db (band-aid: o cache compartilhado segue); pular o ensaio do deploy durante a troca; sombra dentro do juliani_db_test; dropar a sombra do
+  saas_db antes de a nova estar provada (refazer + --conferir verde na nova).
 
-● Writing runner4
-  ⎿  $ export S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
-     nohup bash $S/o271_runner4.sh > /home/ronald/saas-hasner/logs/o271_diff4_runner.log 2>&1 &
-     echo "lancado pid=$! $(date +%H:%M:%S)"
+❯ Segue a fila; PAREI so em lei ou !.
 
-✶ Flambéing… (2h 15m 41s · ↓ 290.8k tokens)
+✢ Flambéing… (2h 21m 10s · ↓ 298.1k tokens · thinking more)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                                     ✔ Update installed · Restart to update
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                                                                       1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Counting lines in msg_commit.txt                                                                                                            46m 42s · ↓ 110.1k tokens
+  ◯ general-purpose  Spotting a failure dot in green4.log                                                                                                        52m 11s · ↓ 111.4k tokens
   ⧉  index
 ```
