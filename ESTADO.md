@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 15/10/2026 15:42:02.**
+**Medido em 15/10/2026 15:47:32.**
 
 | | |
 |---|---|
@@ -29,37 +29,37 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2477.9 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2478.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **246.4 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **246.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **59.6 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **59.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **362.5 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **362.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lote** (`raia-lote`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2.0 h**
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2.1 h**
   - sem declaracao em `logs/raias/wt-lote.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **266.7 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **266.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **384.4 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **384.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
 - **wt-v3** (`raia-v3`) -- **SEM AGENTE**
-  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **0.0 h**
+  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **0.1 h**
   - sem declaracao em `logs/raias/wt-v3.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **21 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
@@ -171,44 +171,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 2 shell commands
+  TICKETS, que a régua cobra:
 
-● O lançador do O271 era inline — escrevo um durável. Lendo a forma canônica de rodar contra a sombra sem rede:
+  Ran 5 shell commands
 
-  Ran 2 shell commands
-
-● Existe trava PRÓPRIA da sombra (bin/sombra_trava.sh), separada da pista de teste — mas as duas moram nos mesmos 4 threads. Decido pela dependência de código
-  (AUTONOMIA-DE-CODIGO item 1): o runner nasce agora em disco e roda depois que a bateria do O280 soltar a pista, porque atrasar aquela bateria custa mais ao prazo
-  de 19/10 do que os 20 min que eu ganharia:
+● Tabela certa: | ID | frente | fatia | estado | commit | data | selo | linha Haiku | nota |, mais novo no topo. Escrevendo a mensagem do commit do Marco B com os
+  números medidos:
 
   Ran 1 shell command
 
-● A pista ficou livre às 15:30:17 — a bateria do O280 soltou. Então rodo na ordem certa: RED/GREEN (segundos), DIFF, suíte. Reusando a forma do RED/GREEN que já
-  funcionou:
-
-  Ran 3 shell commands
-
-● RED/GREEN contra o HEAD novo, os três sinais em cada lado e em disco: Ran 11 / FAILED (failures=2, errors=8) / rc 1 → Ran 11 / OK / rc 0. Passo 3 — o DIFF de
-  frota da 10, que o corte O140 exige ANTES:
+● O · é não-ASCII; normalizando (a mensagem anterior pousou em ASCII puro):
 
   Ran 2 shell commands
 
-● Rodando (a medição "antes" abriu 15:34:23; o O271 levou ~4 min por árvore). Esperando pelo arquivo:
+● ASCII limpo. Preparando as edições de docs do Marco B como script atômico, para aplicar no vivo só depois do veredito. Primeiro vejo onde o O140 já mora:
 
-● Waiting for the fleet diff to finish and read its measurements · 6m 41s
-  ⎿  $ cd /home/ronald/saas-hasner && for i in $(seq 1 110); do grep -q O140B_DIFF_RUNNER_FIM logs/o140b/diff/runner.log 2>/dev/null && break; grep -q 'FALHOU'
-     logs/o140b/diff/runner.log 2>/dev/null && break; sleep 5; done; grep -aE 'medidos|determinismo|classes=|MEDIR_OK|FALHOU|rotulo=|RUNNER_FIM' logs… (6m 41s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Ran 2 shell commands
 
-✢ Flambéing… (6h 17m 40s · ↓ 796.1k tokens)
+● A suíte segue (o "boom no followup" é exceção intencional de teste). Preparando o script de docs do Marco B — primeiro leio as colunas da linha do O140 no
+  BACKLOG:
+
+● Writing the idempotent doc-edit script for Marco B
+  ⎿  $ cd /home/ronald/saas-hasner && cat > logs/o140b/aplicar_docs.py <<'PY'
+     # Edicoes de DOCS do Marco B, aplicadas no VIVO so DEPOIS do veredito da suite (a copia e quem a
+     # suite certifica; docs vao no commit do MARCO pela L-106). Idempotente por marcador.
+     import io, sys
+     def ler(p):
+     return io.open(p…
+
+* Compacting conversation… (6h 23m 10s · ↓ 811.2k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 43%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                                           10% until auto-compact
+                                                                                                                                            0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ general-purpose  Running test_o280_bateria_da_lei suite                                                                          1h 51m 29s · ↓ 132.5k tokens
+  ◯ general-purpose  Planning periodo_do_dia in ponto/calculador                                                                     1h 56m 59s · ↓ 158.3k tokens
   ⧉  index
 ```
