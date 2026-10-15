@@ -6,10 +6,18 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 15/10/2026 14:26:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (853.0 MB). Acoes na janela: **795**.
+**Medido em 15/10/2026 14:32:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (853.5 MB). Acoes na janela: **792**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 14:30:15 | Bash | Census of Ausencia refs in cured vs HEAD fechamento.py | `cd /home/ronald/copia-o140b/app && echo "=== Ausencia em fechamento.py:"; grep -n "Ausencia" ponto/services/fechamento.py \| cut -c1-160; echo "=== tipo__in na arvore HEAD de fechamento.py (o que a cura tirou):"; cd /home/ronald/saas-hasner && git show HEAD:app/ponto/services/fechamento.py \| grep -n "tipo__in\\|_descontam\\|Ausencia.objects" \| cut -c1-160` |
+| 14:29:51 | Bash | Check tipo__in hits and read cured block | `cd /home/ronald/copia-o140b/app && echo "=== tipo__in em fechamento.py:"; grep -n "tipo__in" ponto/services/fechamento.py; echo "rc=$?"; echo "=== o bloco curado 440-470:"; sed -n '440,470p' ponto/services/fechamento.py` |
+| 14:29:43 | Bash | Census of the cured region in fechamento.py | `cd /home/ronald/copia-o140b/app && echo "=== _descontam / Ausencia.objects em fechamento.py:"; grep -n "_descontam\\|descontam_vigentes\\|Ausencia.objects\\|minutos_de_falta_por_dia\\|_faltas_por_dia\\|total_falta" ponto/services/fechamento.py \| head -40` |
+| 14:29:33 | Bash | Read the selo that failed | `cd /home/ronald/copia-o140b/app && cat folha/tests/test_aus_folha_pelo_juiz.py` |
+| 14:29:26 | Bash | Read FAIL traceback truncated | `cd /home/ronald/saas-hasner && awk 'NR>=1970 && NR<=1995' logs/o140/suite_certifica.log \| cut -c1-300` |
+| 14:29:21 | Bash | Read the FAIL block | `cd /home/ronald/saas-hasner && sed -n '1965,2020p' logs/o140/suite_certifica.log` |
+| 14:29:15 | Bash | Read suite verdict with L-074 triple | `cd /home/ronald/saas-hasner && echo "=== runner out:"; cat /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bm713pmju.output \| tail -20; echo "=== veredito L-074:"; grep -E '^(OK\|FAILED)($\| \()' logs/o140/suite_certifica.log \| tail -1; grep -E '^Ran [0-9]+ tests' logs/o140/suite_certifica.log \| tail -1; echo "=== FAIL/ERROR blocks:"; grep -n -E "^(FAIL\ ...` |
+| 14:29:05 | Bash | Inspect fixture helpers in copia-o140b | `cd /home/ronald/copia-o140b/app && ls -la ponto/tests/ \| grep -i -E "dia_pago\|furo" ; echo "--- head do test_dia_pago_soma:"; sed -n '1,30p' ponto/tests/test_dia_pago_soma.py; echo "--- _periodo:"; grep -n "_periodo\\|def _recalcula\\|SimpleNamespace" ponto/tests/test_dia_pago_soma.py \| head -30` |
 | 14:24:30 | Bash | Check suite verdict | `cd /home/ronald/saas-hasner && echo "agora $(date +%H:%M:%S)"; grep -n -E "^(FAIL\|ERROR):\|^(OK\|FAILED)($\| \()\|^Ran " logs/o140/suite_certifica.log \| tail -20; echo "--- tail:"; tail -c 200 logs/o140/suite_certifica.log` |
 | 14:24:24 | Bash | Read the dia_pago test fixture style | `cd /home/ronald/copia-o140b/app && sed -n '1,70p' ponto/tests/test_dia_pago_soma.py; echo "......"; sed -n '195,280p' ponto/tests/test_dia_pago_soma.py` |
 | 14:23:32 | Bash | Read both lavrar call sites | `cd /home/ronald/copia-o140b/app && sed -n '700,830p' ponto/services/fechamento.py` |
@@ -794,14 +802,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 02:32:23 | Bash | Read the espelho template around the day word | `sed -n '160,185p' templates/ponto/espelho.html` |
 | 02:32:15 | Bash | Read the status label map | `grep -rn "ROTULO_STATUS" --include=*.py \| head -5; echo "---"; grep -rn "ROTULO_STATUS = \\|^ROTULO_STATUS" -A 14 colaboradores/services/calendario.py \| head -20; echo "=== 'Em aberto' em templates do calendario/grade:"; grep -rln "Em aberto" templates/ \| head` |
 | 02:32:05 | Bash | Read contexto_calendario signature and GET parsing | `sed -n '206,250p' colaboradores/services/calendario.py` |
-| 02:31:58 | Bash | Read the calendar day payload and the Em aberto template | `sed -n '770,815p' colaboradores/services/calendario.py; echo "=== funcao que devolve isso:"; awk 'NR<810 && /^def \|^ def /{l=NR": "$0} END{}' colaboradores/services/calendario.py >/dev/null; grep -n "^def \\|^ def " colaboradores/services/calendario.py \| awk -F: '$1<810' \| tail -3; echo "=== quem mostra 'Em aberto':"; grep -rn "Em aberto" --include=*.html templates/ \| head -10` |
-| 02:31:52 | Bash | Find who reads em_aberto_perguntado | `grep -rn "em_aberto_perguntado" --include=*.py --include=*.html \| grep -v tests \| head -20` |
-| 02:31:30 | Bash | Compare the 14/10 cell state in the sombra | `SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cat > "$SP/cel1410_sombra.py" <<'PY' from django.db import connection assert connection.settings_dict['NAME'] == 'sombra', connection.settings_dict['NAME'] import datetime as dt from escala.models import CelulaDia for c in CelulaDia.objects.filter(colaborador_id=190, data__gte=dt.date(2026,10,12), dat ...` |
-| 02:31:09 | Bash | Read the espelho retention judge | `sed -n '985,1085p' folha/export.py` |
-| 02:30:01 | Bash | Fix the field name and rerun the prod probe | `SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; sed -i "s/'origem', 'eh_trabalho', 'gerada_em', 'editada_em'/'origem', 'trabalha', 'veredito', 'julgada_em'/" "$SP/delta_prod_col190.py"; grep -n "trabalha" "$SP/delta_prod_col190.py"; cd /home/ronald/saas-hasner && bin/sonda_leitura.sh "$SP/delta_prod_col190.py" > logs/sobra_tipo_trocado/delta_prod_c ...` |
-| 02:29:48 | Bash | Probe prod read-only for the 14/10 and sem_celula deltas | `SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cat > "$SP/delta_prod_col190.py" <<'PY' # LEITURA PURA em PROD (porta bin/sonda_leitura.sh, role `leitor` sem GRANT de escrita). # Pergunta UNICA: por que o APPLY em prod moveu +714 (so o 26/09) onde a SOMBRA moveu +1434 # (26/09 + 14/10), e de onde sai o `sem_celula` que prod gravou em `motivos_espel ...` |
-| 02:29:10 | Bash | Read how the grade is built in fechamento | `sed -n '540,600p' ponto/services/fechamento.py` |
-| 02:28:54 | Bash | Read the fechamento writer around motivos_espelho | `sed -n '600,650p' ponto/services/fechamento.py` |
-| 02:28:50 | Bash | Find the writer of motivos_espelho | `grep -rn "motivos_espelho\\|causa_espelho" --include=*.py ponto/ core/ folha/ \| grep -v tests \| head -30` |
-| 02:28:46 | Bash | Find who writes the sem_celula motive | `grep -rn "sem_celula" --include=*.py \| head -30` |
-| 02:28:37 | Bash | Read the read-only prod probe door | `cd /home/ronald/saas-hasner && sed -n '1,60p' bin/sonda_leitura.sh` |
