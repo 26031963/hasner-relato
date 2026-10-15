@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 14/10/2026 21:16:51.**
+**Medido em 14/10/2026 21:22:02.**
 
 | | |
 |---|---|
@@ -29,28 +29,28 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2459.5 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2459.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **228.0 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **228.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **41.2 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **41.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **344.1 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **344.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **248.2 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **248.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **365.9 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **366.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -171,36 +171,36 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● Seal bites correctly now: the prose passes, a real literal in the code bites. Syncing to the RED copy and re-running the esteira:
-
   Ran 2 shell commands
 
-● While the esteira runs, preparing the remaining pieces of the marco. Checking the stale background shell and the TICKETS gap:
-
-  Searched for 1 pattern
-
-● O276 insert landed (col3 = 281 chars, within the L-109 ceiling). Now the TICKETS row O273 needs — reading the table's column contract:
-
-  Read 1 file, ran 3 shell commands
-
-● GREEN is OK / Ran 23 tests — all 23 seals pass with the cure; RED stays FAILED (failures=3, errors=17). Vizinhos still running. Collecting the RED evidence for
-  the TICKETS row:
+● Two failures: one is mine (my new door legitimately calls acima_do_limite a third time, and the seal counts), the other needs measuring at HEAD before I own it:
 
   Ran 1 shell command
 
-● RED is honest and by assertion: at HEAD the command prints 0 pendente(s) — the day recused with 12 min stays recused after growing to 40 min. Writing the O273
-  row the regua_tickets will demand:
+● The seal counts calls; my cure adds a legitimate third guard that calls the juiz. Naming the callers is stricter than counting (CURA-MAIS-RESTRITIVA). Measuring
+  the enclosing functions and mypy at HEAD:
 
-  Ran 2 shell commands
+  Ran 1 shell command
 
-● Vizinhos still running. Building the sombra DIFF the aval requires. First reading what I already have and the sombra's migration state:
+● Three named callers now. Before touching the seal, measuring whether the mypy error exists at HEAD too:
 
-● Reading the existing sombra DIFF script and the sombra migration branch
-  ⎿  $ SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; ls -la $SP/o273_diff_sombra.py 2>/dev/null && { echo "===
-     atual:"; cat $SP/o273_diff_sombra.py; } || echo "NAO EXISTE"; echo "=== o q_mig do sombra.sh (migra ou so compara?):"; sed -n '228,252p' /hom…
+  Ran 3 shell commands
 
-✽ Propagating… (3h 15m 39s · ↓ 437.7k tokens · thinking)
+● mypy is green at HEAD — so the error is mine. Finding what my change did to the inference:
+
+  Ran 1 shell command
+
+● No new module-level imports — all mine are function-local. The error is a latent mypy fragility my change reshuffled. Confirming on the cured copy and looking at
+  the origin:
+
+  Ran 1 shell command
+
+● Reproduced: green at HEAD, red with the cure — my change reshuffled mypy's SCC and exposed a class-body import at colaboradores/models.py:602. Two decisions now
+  touch files outside the fatia, so let me get a second read before editing:
+
+● Advising using Fable 5.1
+
+· Propagating… (3h 20m 50s · ↓ 453.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
