@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 15/10/2026 13:28:02.**
+**Medido em 15/10/2026 13:33:32.**
 
 | | |
 |---|---|
@@ -29,28 +29,28 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2475.7 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2475.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **244.2 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **244.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **57.4 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **57.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **360.3 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **360.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **264.4 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **264.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **382.1 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **382.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -166,43 +166,43 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
+● Agent "O286 sombra fora do postgres de prod" finished · 1m 29s
+  ⎿  Read docs/AVAIS.md (24 lines)
+  ⎿  Referenced file escala/utils.py
+  ⎿  Read ../logs/o271_diff_runner.log (20 lines)
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bsyn3e0ux.output (5 lines)
+  ⎿  Referenced file ponto/management/commands/tripwire_celulas.py
+
+● Task "RED e construção do segundo intervalo" completed in background
+
+● Task "O284-A job do lote do espelho" completed in background
+
+● Task "Run RED on pure HEAD then GREEN on the cured copy" still running in background
+
+● Vizinhos candidatos a afirmar o comportamento ANTIGO — inspeção dirigida, mais o estado dos dois runs em voo:
+
   Ran 2 shell commands
 
-● Enquanto a trava libera, preparo o DIFF — e ele sai da ferramenta que já existe, não de sonda nova:
+● Background command "Push the O271 marco" completed (exit code 0)
 
-  Ran 1 shell command
+● Background command "Run the sombra folha DIFF between pure HEAD and the cured copy" completed (exit code 0)
 
-● par é exatamente o meu caso: uma trava de sombra, duas árvores, sem escrita no meio. Lanço o DIFF (sombra é minha, carimbo de hoje, cobre a competência):
+● DIFF_FOLHA=0 e o push voltou 0. Antes de ler isso como prova, preciso saber o que a foto do par mede — se ela só lê o GRAVADO, o 0 responde pela EXTRAÇÃO e não pela cura do escritor:
 
-  Ran 1 shell command
-  ⎿  Resuming agent a67f3c5
-  ⎿  Allowed by auto mode classifier
+● Reading the push verdict and the remote main
+  ⎿  $ cd /home/ronald/saas-hasner && echo "=== veredito do push ==="; tail -25 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b3l27m8rk.output;
+     echo "=== remoto de verdade ==="; git ls-remote origin refs/heads/main; echo "local HEAD:"; git rev-parse HEAD
 
-  Ran 1 shell command
-
-● O DIFF está correndo (as linhas "lavratura falhou" são condição declarada pré-existente, idêntica nas duas árvores, logo se cancelam). Enquanto isso, o censo que a MEIA-CORRECAO exige —
-  quem mais escreve horas_falta:
-
-  Ran 1 shell command
-
-● Censo fechado: um escritor de horas_falta (fechamento.py:568) e um montador do mapa por dia (:463, agora pela autoridade) — LEI-AKITA 7 satisfeita, com o _DONOS_DECLARADOS como tripwire
-  que já existia. Rascunho o commit e os docs:
-
-  Running 1 shell command…
-
-✢ Flambéing… (4h 3m 40s · ↓ 551.3k tokens)
+✢ Flambéing… (4h 9m 10s · ↓ 558.1k tokens · still thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-
-› Message from @general-purpose (ctrl+o to expand)
-                                                                                                                                                                     4% until auto-compact
+                                                                                                                                                    ✔ Update installed · Restart to update
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 6 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                                                                       1h 3m 8s · ↓ 428.9k tokens
   ◯ general-purpose  Checking green8.log verdicts and trava_teste holder                                                                                      2h 23m 43s · ↓ 156.4k tokens
-  ◯ general-purpose  Checking sombra.lock state after commit                                                                                                         52s · ↓ 159.6k tokens
   ⧉  index
 ```
