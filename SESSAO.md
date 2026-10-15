@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 15/10/2026 20:02:35.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (868.9 MB). Acoes na janela: **1434**.
+**Medido em 15/10/2026 20:08:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (869.4 MB). Acoes na janela: **1439**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 20:07:49 | Bash | Find where reler sources intervalos | `cd /home/ronald/saas-hasner/logs/o280/passo4/arvore/app && sed -n '512,620p' ponto/calculador/periodo.py \| grep -n "interval\\|periodo_do_dia\\|for \\|dia\b" \| head -40` |
+| 20:07:35 | Bash | Read segmentos_do_par and periodo_do_dia in full | `cd /home/ronald/saas-hasner/logs/o280/passo4/arvore/app && echo "=== segmentos_do_par (225-270) ===" && sed -n '225,268p' ponto/calculador/periodo.py && echo "=== periodo_do_dia (268,316) ===" && sed -n '268,316p' ponto/calculador/periodo.py` |
+| 20:03:37 | Bash | Read minutos_do_oraculo pares path | `cd /home/ronald/saas-hasner/logs/o280/passo4/arvore/app && sed -n '39,130p' ponto/calculador/nucleo.py \| grep -n "def \\|pares\\|minutos\\|dia\\|clip\\|limite\\|max(\\|min(\\|total_seconds" \| head -30` |
+| 20:03:27 | Bash | Read segmentos_do_par to pin the mechanism | `cd /home/ronald/saas-hasner/logs/o280/passo4/arvore/app && sed -n '225,268p' ponto/calculador/periodo.py && echo "=== e o contrato do nucleo que ele chama ===" && grep -n "def minutos_do_oraculo" -A 30 ponto/calculador/nucleo.py \| grep -n "minutos\[\\|envelope\\|str(dia)\\|data_do_turno\\|key\\|k =" \| head -12` |
+| 20:03:13 | Bash | Check for non-negativity property and read periodo_do_dia | `cd /home/ronald/saas-hasner/logs/o280/passo4/arvore/app && echo "=== propriedade de nao-negatividade na bateria? ===" && grep -cn "assertGreaterEqual\\|>= 0\\|nao_negativ\\|negativ" ponto/tests/test_o280_bateria_da_lei.py && grep -n "assertGreaterEqual\\|nao_negativ\\|negativ" ponto/tests/test_o280_bateria_da_lei.py \| head && echo && echo "=== periodo_do_dia (o corpo que faz trab) ===" && sed -n  ...` |
 | 20:02:32 | Bash | Characterize the single col174 delta | `cat > /home/ronald/saas-hasner/logs/o280/passo4/probe_col174.py <<'PAYLOAD' # -*- coding: utf-8 -*- """Caracteriza o UNICO delta do smoke do passo 4: col174, `trab` -960 min. SO LEITURA.""" import datetime as _dt from django.db import connection from django.db.models import Q from django.utils import timezone assert connection.settings_dict['NAME'] == 'sombra' from colaboradores.models import Cola ...` |
 | 20:01:45 | Bash | Create mountpoints and rerun smoke | `cd /home/ronald/saas-hasner/logs/o280/passo4/arvore/app && mkdir -p logs media staticfiles && ls -d logs media staticfiles && cd /home/ronald/saas-hasner && P4_LIMITE=30 P4_EMPRESAS=2 P4_MES=10 P4_ANO=2026 bash logs/o280/passo4/rodar.sh smoke30 2>&1 \| tail -70` |
 | 20:01:36 | Bash | Run instrument smoke on 30 colabs | `cd /home/ronald/saas-hasner && P4_LIMITE=30 P4_EMPRESAS=2 P4_MES=10 P4_ANO=2026 bash logs/o280/passo4/rodar.sh smoke30 2>&1 \| tail -70` |
