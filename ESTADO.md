@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 15/10/2026 18:27:32.**
+**Medido em 15/10/2026 18:33:03.**
 
 | | |
 |---|---|
@@ -29,38 +29,38 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2480.7 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2480.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **249.2 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **249.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **62.4 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **62.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **365.3 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **365.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **269.4 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **269.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **387.1 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **387.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
 - **wt-v3** (`raia-v3`) -- **SEM AGENTE**
-  - 8 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **0.2 h**
+  - 8 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **0.3 h**
   - sem declaracao em `logs/raias/wt-v3.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
-- **21 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
+- **22 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o275, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
-**sem agente: 7** (raia com commit a frente e sem declaracao, esperado 0) -- **a frente do main ha mais de 6 h: 6** -- uniao medida: 31
+**sem agente: 7** (raia com commit a frente e sem declaracao, esperado 0) -- **a frente do main ha mais de 6 h: 6** -- uniao medida: 32
 
 > Raia sem agente por mais de um marco pede linha de motivo no RELATO -- lei, `!` ou pista (item 4 do aval).
 
@@ -171,44 +171,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  está usando, e essa colisão é achado DESTE marco (database "test_juliani" already exists, 48 vermelhos que não reproduzem). Espero o arquivo/linha do
-  --conferir, nunca pgrep. Depois: push (um por marco, 8c545a89 + 21e9206a), bin/handoff_sessao.sh + "MARCO FECHADO -- pode compactar", e o carimbo prometido ao
-  agente da O280.
 
-  Duas coisas para você saber, não são perguntas:
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-  1. Uma ação minha foi recusada pelo classificador do modo automático: sed -i em app/docs/PENDENTES_RONALD.json levou [Modify Shared Resources]. Não contornei por
-     shell — fui pela ferramenta de edição, que o próprio texto da recusa permite. O conserto era de uma chave: o item da O140 tinha frase_pronta onde o selo lê
-     frase (131 itens com frase, 1 com a errada), e com a chave errada o seu ! do backfill da 09 chegaria sem frase para colar. bin/gerar_avais.py --escrever
-     regerou o AVAIS: avais_na_mesa: OK, 9 abertos, todos com frase.
-  2. LoteEspelho.placar guarda até 50 nomes de colaborador por chave e o selo de inventário jamais o pegaria — ele acha coluna por NOME e PADRAO_PESSOAL não tem
-     placar nem alvo. Quem o acusou foi a medição do sítio (lote_espelho.py:239-253). Declarei as três colunas (erro, placar em JSON, nome_arquivo como isento) em
-     bin/sombra_regras_pessoais.py, no mesmo commit do produto que criou a tabela: colunas_pessoais=149 cobertas=155 achadas_fora=0, "OK e MORDE".
+  Ran 2 shell commands
 
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: O275 -- SDF-FERIADO-E-DIA (corte dele 14/10 20:4x -- regra de negocio NOVA, e por isso corte e nao aval). TipoEscala g
+● O corte literal diz "lido so por eh_dia_trabalho_calculado" — e é aí que mora a dificuldade real da fatia. Medindo o consumidor:
 
-  Ran 3 shell commands
+  Searched for 1 pattern
 
-● O marco O284 está no último passo (push) e travado por uma porta nomeada — o ensaio da sombra no mesmo cpuset. Pela RAIA-NAO-FICA-PARADA, pego o próximo da fila
-  1 ao lado. O marcador aponta O275, e a própria célula diz que o censo se responde antes do campo. Censo (só leitura):
+● Isso muda a conclusão: semanal não está em CICLOS_COMERCIAIS_QUE_FOLGAM_NO_FERIADO (('5x2','6x1')), então o vínculo de um SDF nasce com trabalha_em_feriado=True
+  — e o efeito do flag do corte sobrevive à precedência no universo do próprio RED dele. Fica um caso de contradição (tipo ON + vínculo False) que é CADASTRO, não
+  estrutura. Monto a raia:
 
-  Searched for 1 pattern, ran 9 shell commands
+  Ran 2 shell commands
 
-● Censo de código fechado. Antes de desenhar o campo, consulto o revisor — a pergunta do corte ("mesma pergunta ou outra?") tem uma interseção medida que decide o
-  desenho inteiro:
+● LEI ANTES DO PATCH (L-NNN citado no diff, cobrado pelo test_lei_protege_sitio.sh):
 
-  Advising using Fable 5.1
+  Ran 1 shell command
 
-✢ Flambéing… (9h 3m 10s · ↓ 1.1m tokens)
+● Leis que protegem o sítio: L-022 e L-023 (a foto do dia é cadastro e vence). Agora o sítio da UI:
+
+● Adding the cadastro checkbox and read the preview partial
+  ⎿  $ cd /home/ronald/wt-o275/app && python3 - <<'PY'
+     import io
+     p = 'templates/escala/wizard_tipo_escala.html'
+     s = io.open(p, encoding='utf-8').read()
+     anc = """ <span style="display:block;font-size:11px;color:var(--hx-slate-500);font-weight:400;">Desmarcado: batida alem do horario da escala gera chamad…
+
+✢ Flambéing… (9h 8m 40s · ↓ 1.1m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                           ✔ Update installed · Restart to update
+                                                                                                                                            6% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ general-purpose  Reading rodar in test_o280_bateria_da_lei                                                                       4h 36m 58s · ↓ 168.8k tokens
+  ◯ general-purpose  Reading reler() in periodo.py                                                                                   4h 42m 29s · ↓ 126.2k tokens
   ⧉  index
 ```
