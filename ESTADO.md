@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 15/10/2026 17:29:32.**
+**Medido em 15/10/2026 17:35:03.**
 
 | | |
 |---|---|
@@ -29,22 +29,22 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2479.7 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2479.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **248.2 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **248.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **61.4 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **61.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **364.3 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **364.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lote** (`raia-lote`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **3.8 h**
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **3.9 h**
   - sem declaracao em `logs/raias/wt-lote.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
   - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **268.5 h** (passou das 6 h da L-105)
@@ -59,7 +59,7 @@ RELATO, com a lista de nomes do banco como autoridade._
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
 - **wt-v3** (`raia-v3`) -- **SEM AGENTE**
-  - 6 commit(s) a frente do `main`, 2 arquivo(s) sujo(s), commit a frente ha **0.5 h**
+  - 6 commit(s) a frente do `main`, 2 arquivo(s) sujo(s), commit a frente ha **0.6 h**
   - sem declaracao em `logs/raias/wt-v3.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **21 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
@@ -176,22 +176,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-● Esmeril do marco (L-111 / ESMERIL-DO-MARCO) — census of what this marco left orphan, run on the copy with the house's own esmeril command:
-
-  Ran 5 shell commands
-
-● Measured: the crons_em_curso marker is written by bin/cron_run.sh (cron only, not a manual refazer) and sombra.sh never takes trava_teste — so neither blocks.
-  But Marco B's migration may have reddened the deploy portal, which the O284 deploy needs. Checking before the merge:
-
-  Ran 1 shell command
-
-● Deploy portal green (dia=20261015 diverge=0) — it reads today's carimbo, so the O284 deploy won't be blocked. And the post-deploy --refazer --dump-agora will
-  carry both migrations in one fresh dump, so one carimbo covers Marco B and O284 — the single refazer is the right encaixe (AUTONOMIA-DE-CODIGO item 1).
-
-  Ran 2 shell commands
-  ⎿  Message queued for delivery to a0e94d563a20a5e65 at its next tool round.
-  ⎿  Allowed by auto mode classifier
-
   Ran 1 shell command
 
 ● Filing the marco's own smoke pendente (INCOMPLETO item 3) through the canonical writer, so it rides this commit:
@@ -200,19 +184,35 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Measuring the L-109 DIETA debt — it's due in this marco (RELATO sections older than 3 days move to the archive):
 
-● Measuring RELATO section ages
-  ⎿  $ cd /home/ronald/saas-hasner && grep -nE '^## ' app/docs/RELATO.md | sed -E 's/^([0-9]+):## .*?([0-9]{2}\/[0-9]{2}).*/\1 \2/' | awk '{print $2}' | sort |
-     uniq -c | sort -k2; echo "---"; echo "total de secoes: $(grep -cE '^## ' app/docs/RELATO.md)"; echo "linhas: $(wc -l < app/docs/RELATO.md)"; ech…
+  Inventory RELATO sections: dated vs registry
+  ⎿  $ python3 - <<'PY'
+     import io, re
+     t = io.open('RELATO.md', encoding='utf-8').read().split('\n')
+     heads = [(i, l) for i, l in enumerate(t, 1) if l.startswith('## ')]
+     print('total linhas', len(t), 'secoes', len(heads))
+     DATA = re.compile(r'^##\s+(?:MARCO\s+)?(\d{2})/(\d{2})')
+     sem = [h for h in heads if …
+  ⎿  Read docs/AVAIS.md (26 lines)
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b5duwgtxq.output (12 lines)
+  ⎿  Referenced file escala/utils.py
+  ⎿  Read ../logs/o271_diff_runner.log (20 lines)
+  ⎿  Read pautas/tests/test_contract_vocabulario.py (55 lines)
 
-✢ Flambéing… (8h 5m 10s · ↓ 1.0m tokens · thinking)
+● Task "O280 MOTOR-V3 passos 1 e 2" still running in background
+
+● Task "Read the live order of fila 1" still running in background
+
+● Task "Wait for the certification suite to finish" still running in background
+
+✶ Flambéing… (8h 10m 41s · ↓ 1.0m tokens · still thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                                            1% until auto-compact
+                                                                                                                           ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ general-purpose  Moving F7d geometry to 14:40/15:10                                                                   3h 38m 58s · ↓ 102.0k tokens · 1 queued
+  ◯ general-purpose  Moving F7d geometry to 14:40/15:10                                                                              3h 44m 29s · ↓ 103.5k tokens
   ⧉  index
 ```
