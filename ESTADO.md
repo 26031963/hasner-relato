@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 15/10/2026 15:25:46.**
+**Medido em 15/10/2026 15:31:02.**
 
 | | |
 |---|---|
 | `HEAD` local | `4da7b51f [BUG-8792] o range de falta se RATEIA pelos dias dele: o escritor da lavratura tinha regra propria e punha os minutos de N dias no PRIMEIRO, deixando os outros em branco` |
-| `origin/main` | `49ac61c4 [BUG-SOBRA-TIPO-TROCADO] o dia julgado de novo em PROD fecha o item: o col190 26/09 sai de "Em aberto" com minutos_realizados 1 -> 715, o chamado 26219 morre por LASTRO no passo 2 e a classe da comp 10 fica em ZERO` |
-| commits a subir (`ahead`) | **3** |
+| `origin/main` | `4da7b51f [BUG-8792] o range de falta se RATEIA pelos dias dele: o escritor da lavratura tinha regra propria e punha os minutos de N dias no PRIMEIRO, deixando os outros em branco` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -29,37 +29,37 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2477.7 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2477.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **246.1 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **246.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **59.4 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **59.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
   - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **362.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lote** (`raia-lote`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **1.7 h**
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **1.8 h**
   - sem declaracao em `logs/raias/wt-lote.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **266.4 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **266.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **384.1 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **384.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
 - **wt-v3** (`raia-v3`) -- **SEM AGENTE**
-  - 2 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **0.2 h**
+  - 2 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **0.3 h**
   - sem declaracao em `logs/raias/wt-v3.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **21 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
@@ -81,6 +81,7 @@ ba289219 [O286] o POSTGRES do ensaio sai dos nucleos do cliente: a sombra passa 
 
 ```
  M app/config/crons_duracao.json
+ M app/docs/HANDOFF-SESSAO.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -170,44 +171,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● Ambos verdes (tocados neste push: 1 (L-113, citados)). Passo 10 — o push, com 3 commits meus no intervalo; o veredito se lê no remoto, não na ausência de saída:
-
-  Ran 2 shell commands
-
-● O pre-push está rodando a régua (suíte cheia, ~25 min). Enquanto ela corre, o esmeril deste marco já está fechado — os dois achados viraram linha de fila no
-  corpo do commit. Acompanhando:
+● Push pousou: remoto 4da7b51f == HEAD local, suíte do pre-push verde sobre o commit empurrado (Ran 10990 tests in 820.576s / OK (skipped=42) + control-plane Ran
+  22 / OK).
 
   Ran 1 shell command
 
-● Todas as guardas de host passaram (inclusive regua_tickets: 3 citações com linha na tabela) e a suíte do pre-push corre contra 4da7b51f50 em cópia. Enquanto ela
-  corre não toco a árvore nem a pista — preparo o pouso do Marco B em logs/, que é escrita livre:
+● Background command "Wait for the push to finish and read the remote head" completed (exit code 0)
+
+● MARCO FECHADO — pode compactar. Handoff em 45 linhas (teto 60).
+
+  A pista foi tomada pelo o280-bateria no mesmo minuto, então o RED/GREEN do Marco B espera a vez. O passo que não precisa de pista é o rebase da cópia sobre o
+  HEAD novo — e ele não é opcional, porque o BUG-8792 mexeu em fechamento.py a poucas linhas do que o Marco B toca:
 
   Ran 1 shell command
 
-● Vou usar a espera para medir o número que a pergunta do Marco B exige (quantos dia-colab da 09 ficariam com furo_apurado NULL para sempre). É contagem indexada
-  na sombra, não corrida de motor:
+● A cópia do Marco B já carrega o BUG-8792 dentro (ela nasceu sobre a cópia dele). Então o "rebase" se mede contra o HEAD NOVO — e o que sobrar é exatamente o
+  Marco B:
 
   Ran 1 shell command
 
-● O assert de banco passou (sombra), mas eu errei o nome da coluna. Lendo o modelo em vez de adivinhar:
+● O rebase está essencialmente feito: 3 dos 4 arquivos do BUG-8792 estão idênticos ao que pousou, e fechamento.py difere por 9 linhas. Confirmando que essas 9 são
+  só as adições do Marco B, e não um pedaço revertido do BUG-8792:
 
-  Ran 2 shell commands
+  Ran 1 shell command
 
-● O número da pergunta do Marco B está medido: a 09 (exportada) tem 10.893 linhas tipo=DIA em 557 colabs que ficariam com furo_apurado NULL para sempre sem
-  backfill — e backfill de competência exportada é ! dele. A 10 (19.898 / 561) se preenche sozinha na próxima lavratura.
+● Adições puras (> só), nos dois call sites — nenhum pedaço do BUG-8792 revertido. A cópia está corretamente rebaseada por construção, mas os offsets andaram
+  (740→757, 812→824), então o censo AST tem de ser remedido:
 
-  Running 1 shell command…
+● Running 1 shell command…
 
-· Flambéing… (6h 1m 24s · ↓ 780.8k tokens)
+✢ Flambéing… (6h 6m 40s · ↓ 785.4k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ general-purpose  Adding cobra_a_lei helper to test_o280_bateria_da_lei.py                                                        1h 35m 12s · ↓ 141.0k tokens
+  ◯ general-purpose  Listing failures in run_bateria_v5.log                                                                          1h 40m 28s · ↓ 165.8k tokens
   ⧉  index
 ```
