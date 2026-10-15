@@ -148,7 +148,7 @@ lista — ela e o que esta EM PE._
 | **O137** | ESMERIL-NO-RASTRO | espera aval |
 | **O138** | DADO DERIVADO DO GIT NAO SE GRAVA EM ARQUIVO QUE VAI NO PUSH | fila 2, raia `wt-ui` nao serve (e `bin/` |
 | **O139** | PAPEL-PRAZO | espera corte |
-| **O140** | O FURO DO DIA NAO E LAVRADO, E POR ISSO TODO LEITOR DA PALAVRA PAGA UMA VOLTA DE MOTOR | espera corte |
+| **O140** | O FURO DO DIA NAO E LAVRADO, E POR ISSO TODO LEITOR DA PALAVRA PAGA UMA VOLTA DE MOTOR | espera `!` |
 | **O141** | K4 BAIXA CONFORME, K1 GANHA O CRIVO, K6 GANHA DEFINICAO | espera corte |
 | **O142** | `turnos_do_colab` RESPONDE DIFERENTE CONFORME A JANELA, e os 33 dia-colab sao isso | espera corte |
 | **O143** | DIA COM BATIDA REAL E SEM VINCULO QUE O CUBRA E DONO CADASTRO, nao ESTRUTURA | ABERTA. Falta o censo de frota (dia-cola |
