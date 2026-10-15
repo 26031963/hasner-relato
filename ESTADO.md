@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:335 AFIRMA ato sem PROVA ao lado -- - **NO AR, e o ato fechou inteiro**: commit `8c545a89` (merge `--no-ff`) e `bin/deploy.sh` **sem** `--sem-migrate` rc **0** as 18:12 -- `rel
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:337 AFIRMA ato sem PROVA ao lado -- - **NO AR, e o ato fechou inteiro**: commit `8c545a89` (merge `--no-ff`) e `bin/deploy.sh` **sem** `--sem-migrate` rc **0** as 18:12 -- `rel
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 15/10/2026 19:05:09.**
+**Medido em 15/10/2026 19:10:18.**
 
 | | |
 |---|---|
@@ -29,38 +29,41 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2481.3 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2481.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **249.8 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **249.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **63.0 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **63.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **365.9 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **366.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **270.0 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **270.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
+- **wt-o275** (`raia-o275`) -- **SEM AGENTE**
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **0.0 h**
+  - sem declaracao em `logs/raias/wt-o275.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **387.7 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **387.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
 - **wt-v3** (`raia-v3`) -- **SEM AGENTE**
-  - 9 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **0.3 h**
+  - 9 commit(s) a frente do `main`, 2 arquivo(s) sujo(s), commit a frente ha **0.4 h**
   - sem declaracao em `logs/raias/wt-v3.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
-- **22 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o275, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
+- **21 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
-**sem agente: 7** (raia com commit a frente e sem declaracao, esperado 0) -- **a frente do main ha mais de 6 h: 6** -- uniao medida: 32
+**sem agente: 8** (raia com commit a frente e sem declaracao, esperado 0) -- **a frente do main ha mais de 6 h: 6** -- uniao medida: 32
 
 > Raia sem agente por mais de um marco pede linha de motivo no RELATO -- lei, `!` ou pista (item 4 do aval).
 
@@ -172,43 +175,43 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-  Searched for 1 pattern
-
-● O marcador aponta O275 — o item que está travado. Então a esteira segue pelo próximo que não depende dele, e quem diz isso é o hook, não minha leitura da prosa:
+● Commit 9e853a34 na raia, árvore limpa. Agora enfileiro a corrida dos vizinhos para começar sozinha quando a bateria da O280 soltar a trava — vendo a porta antes:
 
   Ran 1 shell command
 
-● Minha varredura é larga demais para ser autoridade — o juiz do hook é _proximo_da_fila. Perguntando a ele:
+● O default da trava é esperar uma hora pela flock — então a corrida pode ser enfileirada e começa sozinha. Vendo como --only e o -- se combinam, para não rodar
+  três apps inteiros sem precisar:
 
   Ran 1 shell command
 
-● O hook confirma: a ORDEM VIVA é O275 e ela está ok (anda) — a construção, que está feita; o que espera é só o pouso. Todo o resto da fila precisa da trava de
-  teste ou da árvore viva, e as duas estão com o push. Espero o veredito por arquivo:
-
-● Background command "Push O284 through the full pre-push gate" completed (exit code 0)
-
-● O push terminou. Veredito por arquivo e pelo remoto, nunca pela ausência de saída:
+● --only substitui as labels e é word-split, então aceita os módulos exatos. Conferindo quais existem de fato na raia antes de gastar a vez na trava:
 
   Ran 1 shell command
 
-● Push pousou: 8be3814b..8c545a89 main -> main, rc 0, negócio Ran 11020 / OK (skipped=42), control-plane Ran 22 / OK, nada mais a empurrar. A trava passou para a
-  bateria da O280 (o280-fam5:45308), então os vizinhos da O275 esperam a vez — rc 75 não é vermelho. Com a árvore viva livre, afio a pergunta no topo do RELATO:
+● Dois nomes da minha lista não existem — procurando os reais em vez de rodar com label inventada:
 
   Ran 1 shell command
 
-● O topo é a própria pergunta da O275. Reescrevo essa seção somando o que foi medido — sem perder nenhum fato já publicado:
+● Faltava o vizinho que mais importa para um command novo: o contrato que varre o diretório de comandos. Localizando-o antes de enfileirar:
 
-  Running 1 shell command…
+  Ran 1 shell command
 
-✽ Flambéing… (9h 40m 47s · ↓ 1.2m tokens)
+● Achei: test_contract_juiz_escala.py mora em escala/, não em ponto/, e o command novo responde a test_aus_sem_fim e ao contrato de crons. Enfileirando os 20
+  vizinhos reais — a corrida espera a flock e começa sozinha quando a O280 soltar:
+
+  Queuing the O275 neighbor run behind the test lock
+  ⎿  $ cd /home/ronald/saas-hasner && mkdir -p logs/o275 && MODS="escala.tests.test_o275_sdf_feriado_e_dia escala.tests.test_feriado_padrao_por_escala
+     escala.tests.test_foto_vence_ancora escala.tests.test_foto_nao_apaga_o_ciclo escala.tests.test_foto_folga_continua escala.tests.test_o37_foto_parcial esc…
+
+· Flambéing… (9h 45m 56s · ↓ 1.2m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                           ✔ Update installed · Restart to update
+                                                                                                                                            1% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ general-purpose  Grepping logs/o280 for stale 04:17                                                                               5h 14m 35s · ↓ 83.1k tokens
+  ◯ general-purpose  Finding duplicate CASOS keys in test_o280_bateria_da_lei.py                                                     5h 19m 44s · ↓ 136.6k tokens
   ⧉  index
 ```
