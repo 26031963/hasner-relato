@@ -8,7 +8,9 @@
 <!-- MOVIDO em 15/10 ~16:0x pelo Code, AUTONOMIA-DE-CODIGO item 1 (ordem e encaixe na fila
      quando quem decide e DEPENDENCIA -- nunca foi pergunta de lei): o O140 pousou o CAMPO
      (Marco B) e o que RESTA dele sao os 5 LEITORES, que esperam o `!` do backfill da 09
-     (10.893 linhas `tipo=DIA` de 557 colabs, numero no topo do RELATO). Pela
+     (10.891 dia-colab de 557 colabs, MEDIDO em prod as 17:0x com a coluna no
+     ar; a sombra dizia 10.893 -- fontes e momentos diferentes, delta de 2
+     declarado no topo do RELATO). Pela
      PAREI-DE-LEI-NAO-DEVOLVE-TURNO a fila segue o proximo item que NAO depende da
      resposta. Pela ordem DELE (adendo de 11:5x: O271 -> O276 -> O275 -> O277) a O276 para
      na pergunta dos 17 flips de 1 a 59 min, e a O275 nao para em nada -- e ainda e

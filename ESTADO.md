@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:371 AFIRMA ato sem PROVA ao lado -- ## MARCO 15/10 ~02:3x -- BUG-SOBRA-TIPO-TROCADO **APLICADO em PROD**: o col190 26/09 sai de "Em aberto" com `minutos_realizados 1 -> 715`, o
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:382 AFIRMA ato sem PROVA ao lado -- ## MARCO 15/10 ~02:3x -- BUG-SOBRA-TIPO-TROCADO **APLICADO em PROD**: o col190 26/09 sai de "Em aberto" com `minutos_realizados 1 -> 715`, o
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 15/10/2026 17:18:38.**
+**Medido em 15/10/2026 17:24:02.**
 
 | | |
 |---|---|
@@ -29,37 +29,37 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2479.5 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2479.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **248.0 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **248.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
   - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **61.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **364.1 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **364.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lote** (`raia-lote`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **3.6 h**
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **3.7 h**
   - sem declaracao em `logs/raias/wt-lote.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **268.3 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **268.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **386.0 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **386.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
 - **wt-v3** (`raia-v3`) -- **SEM AGENTE**
-  - 6 commit(s) a frente do `main`, 3 arquivo(s) sujo(s), commit a frente ha **0.3 h**
+  - 6 commit(s) a frente do `main`, 2 arquivo(s) sujo(s), commit a frente ha **0.4 h**
   - sem declaracao em `logs/raias/wt-v3.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **21 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
@@ -81,6 +81,11 @@ ba289219 [O286] o POSTGRES do ensaio sai dos nucleos do cliente: a sombra passa 
 
 ```
  M app/config/crons_duracao.json
+ M app/docs/AVAIS.md
+ M app/docs/BACKLOG.md
+ M app/docs/HANDOFF-SESSAO.md
+ M app/docs/PENDENTES_RONALD.json
+ M app/docs/RELATO.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -170,36 +175,36 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ⎿  Referenced file escala/utils.py
-  ⎿  Read ../logs/o271_diff_runner.log (20 lines)
-  ⎿  Read pautas/tests/test_contract_vocabulario.py (55 lines)
+  Ran 1 shell command
 
-● Task "O280 MOTOR-V3 passos 1 e 2" still running in background
+● Marco B is pushed: origin/main = 8be3814b, rc_push=0, negócio Ran 11001 / OK (skipped=42), control-plane Ran 22 / OK. Starting the long pole — O284-A
+  certification suite on the proven copy (it will wait for the trava the O280 agent holds):
 
-● Task "Push the marco, second attempt" still running in background
+  Ran 3 shell commands
 
-● Task "Wait for the push to finish" still running in background
-
-● Task "Read the live order of fila 1" still running in background
-
-● Push is in the suite phase of the hook (launched 17:00:42, ~25 min). Nothing may touch app/ until PUSH_FIM, so the wait is read-only prep for the next pouso —
-  O284-A, named by the BACKLOG's own ORDEM-VIVA comment.
+● Suite on the copy is running (Found 11023 test(s) — +22 from the raia's new selos; trava taken at 17:19:44). Now the docs work, starting with the two prepared
+  scripts:
 
   Ran 7 shell commands
 
-● Push's negócio suite is green (Ran 11001 / OK (skipped=42)); it's in the last phase (control-plane). The trava is held by the O280 agent since 17:14:42, so the
-  O284-A certification suite will wait its turn. Building the copy now so it's ready the moment the trava frees:
+● MARCO FECHADO — pode compactar. O140 está no origin/main (8be3814b), no ar desde 16:56, com o ! do backfill na mesa pela porta. Agora a cega 1 que o advisor
+  apontou — import tardio medido na cópia antes de qualquer deploy:
 
-  Ran 2 shell commands
+  Ran 1 shell command
 
-● Copy proven byte-identical to the real merge tree (e1d1fda6, 3687 files, 0 DIFERE / 0 FALTA) — that's the POUSO-EM-COMBOIO proof made before the suite. Now the
-  cheap gates on the copy:
+● The 6 modulo-nao-e-arquivo lines are my resolver's gap (package-form from <pkg> import <modulo>), not missing symbols — confirming each as a file:
 
   Ran 6 shell commands
 
-● Advising using Fable 5.1
+● Preparing the O284 marco docs while the suite runs — they'll be applied after the verdict:
 
-✢ Flambéing… (7h 54m 16s · ↓ 984.6k tokens)
+● Writing the RELATO section script
+  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && cat > $S/relato_o284.py
+     <<'PY'
+     """SECAO DO MARCO O284-A no RELATO -- teto de 25 linhas (L-116). Entra no commit do MARCO (L-106).
+     O que o deploy e o smoke so dizem DEP…
+
+✢ Flambéing… (7h 59m 40s · ↓ 999.5k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -208,6 +213,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
   ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ general-purpose  Reading F7d failure in run_v3_fam2.log                                                                           3h 28m 4s · ↓ 172.3k tokens
+  ◯ general-purpose  Reading PAUSA-DESLOCADA branch in parear_turnos                                                                  3h 33m 29s · ↓ 93.7k tokens
   ⧉  index
 ```
