@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 15/10/2026 13:38:43.**
+**Medido em 15/10/2026 13:44:02.**
 
 | | |
 |---|---|
@@ -29,7 +29,7 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2475.9 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2476.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
@@ -38,26 +38,29 @@ RELATO, com a lista de nomes do banco como autoridade._
   - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **244.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **57.6 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **57.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **360.5 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **360.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
+- **wt-lote** (`raia-lote`) -- **SEM AGENTE**
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **0.0 h**
+  - sem declaracao em `logs/raias/wt-lote.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **264.6 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **264.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **382.3 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **382.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
-- **22 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-lote, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
+- **21 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
-**sem agente: 6** (raia com commit a frente e sem declaracao, esperado 0) -- **a frente do main ha mais de 6 h: 6** -- uniao medida: 31
+**sem agente: 7** (raia com commit a frente e sem declaracao, esperado 0) -- **a frente do main ha mais de 6 h: 6** -- uniao medida: 31
 
 > Raia sem agente por mais de um marco pede linha de motivo no RELATO -- lei, `!` ou pista (item 4 do aval).
 
@@ -165,44 +168,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  Ran 1 shell command
-
-● Agent "O284-A job do lote do espelho" finished · 2h 43m 38s
-
-● O chave_8792.py era sonda inline, não arquivo — então os números "14/8" não têm fonte durável e eu os re-meço em vez de carregá-los. Assinatura do leitor vivo, para a sonda chamar a
-  função REAL:
+● A trava não era minha: é a suite da raia-lote (/home/ronald/wt-lote/app, do agente O284-A) desde 13:30 — meu RED estava na fila atrás dela, então parar não custou nada e não roubei a vez
+  de ninguém. Corrigindo o rótulo agora, com os números medidos:
 
   Ran 2 shell commands
 
-● Resíduo REAL, e é exatamente o que eu precisava achar antes de trocar o leitor: so_fx=1 (col951, 10-04), so_lav=0. Perguntando ao dado por que esse dia não chegou ao lavrado:
+● Corrigindo os rótulos com o que foi medido, e acrescentando o caso que o Ausencia 4703 acabou de ensinar:
+
+  Ran 2 shell commands
+
+● Agora o CASO e a mensagem do commit recebem o que foi medido — e meço a disjunção com a raia-lote, que decide comboio ou pouso sozinho:
+
+  Ran 2 shell commands
+
+● A raia-lote não tem commit à frente do main por esse nome — medindo a worktree de verdade:
 
   Ran 1 shell command
 
-● O resíduo não é furo do escritor — é predicado da minha sonda. Ausencia 4703 (col951, falta aprovada, min=0) tem a linha lavrada com detalhe={'falta_min': 0} e horas_falta=0.0: o dia
-  ESTÁ lavrado, com zero minuto. Eu perguntei horas_falta > 0, que é um predicado meu.
+● Intersecção com a raia-lote: zero arquivo em comum (ela é relatorios/* + config/crons.py), então as duas andam ao lado pela RAIA-NAO-FICA-PARADA. E ela não pousa em 30 min — está em
+  49ac61c4, com trabalho não commitado e uma suite parcial de verificação —, então meu marco roda sozinho (L-117). Corrigindo a mensagem do commit:
 
-  Isso é achado de desenho para o leitor da O140: perguntar horas_falta > 0 perderia esse dia, e dia de falta é dinheiro por len(datas). O sinal honesto é a presença da chave ('não sei' =
-  sem linha; zero = chave em 0, a mesma lei do dia_pago.py). Re-medindo com o predicado certo:
+  Rewriting the commit message with the measured facts
+  ⎿  $ cd /home/ronald/saas-hasner && cat > logs/o140/msg_commit.txt <<'EOF'
+     [BUG-8792] o range de falta se RATEIA pelos dias dele: o escritor da lavratura tinha regra propria e punha os minutos de N dias no PRIMEIRO, deixando os outros em branco
+     LEI-AKITA: origem=ponto/services/fechamento.py:451-464 (o…
 
-● Re-measuring so_fx with the key-presence predicate
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
-     p = 'logs/o140/sonda_so_fx.py'
-     s = open(p).read()
-     velho = " lav = {r.data for r in linhas if (r.horas_falta or 0) > 0}"
-     novo = (" # O PREDICADO E A PRESENCA DA CHAVE, nao `horas_falta > 0` (medido: col951 10-04,\n"
-     " # `Ausencia 4703` falta APROV…
-
-✶ Flambéing… (4h 14m 21s · ↓ 578.6k tokens)
+✢ Compacting conversation… (4h 19m 40s · ↓ 597.4k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 40%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                                                    ✔ Update installed · Restart to update
+
+› Message from @ab4a3961f14906dd0 (ctrl+o to expand)
+                                                                                                                                                                     1% until auto-compact
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                                                                       1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Checking green8.log verdicts and trava_teste holder                                                                                      2h 43m 38s · ↓ 158.3k tokens
+  ◯ general-purpose  Composing the handback report for O284-A                                                                                                 2h 50m 41s · ↓ 165.1k tokens
   ⧉  index
 ```
