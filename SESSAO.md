@@ -6,10 +6,23 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 15/10/2026 03:00:04.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (835.0 MB). Acoes na janela: **1207**.
+**Medido em 15/10/2026 03:05:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (835.3 MB). Acoes na janela: **1220**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 03:03:24 | Bash | Check push progress | `cd /home/ronald/saas-hasner && date '+%H:%M:%S' && tail -3 logs/push_marco_15out.log; echo "--- origin ---"; git rev-parse origin/main 2>/dev/null \| cut -c1-8` |
+| 03:02:40 | Bash | Locate the literal avais in PROMPTS.md | `grep -n 'BUG-COMERCIAL' docs/PROMPTS.md \| head` |
+| 03:02:36 | Bash | Locate the O271 row | `grep -n 'BUG-COMERCIAL-SEM-PONTUALIDADE' docs/BACKLOG.md \| head` |
+| 03:02:32 | Bash | Read the O271 backlog row columns | `awk 'NR==855' docs/BACKLOG.md \| tr '\|' '\n' \| sed -n '1,8p'` |
+| 03:01:56 | Bash | Read _periodos_pelo_marco body | `cd /home/ronald/copia-o271/app && sed -n '517,640p' ponto/motor_calculo_v2.py` |
+| 03:01:46 | Bash | Read adaptador_motor head | `cd /home/ronald/copia-o271/app && sed -n '1,80p' ponto/adaptador_motor.py` |
+| 03:01:19 | Bash | Read MotorComercial.calcular_mes head | `cd /home/ronald/copia-o271/app && sed -n '2727,2800p' ponto/motor_calculo_v2.py` |
+| 03:01:14 | Bash | Find who sets escala and _ec | `cd /home/ronald/copia-o271/app && grep -n 'self\.escala *=\\|self\._ec *=\\|_ec *=' ponto/motor_calculo_v2.py \| head -20; echo "=== quem seta _ec de fora ==="; grep -rn "\._ec *=" --include=*.py . \| grep -v '/tests/' \| head -20` |
+| 03:01:09 | Bash | Read MotorBase init | `cd /home/ronald/copia-o271/app && sed -n '669,700p' ponto/motor_calculo_v2.py; echo "=== def __init__ ==="; awk 'NR>=669 && NR<=960 && /def __init__/{print NR": "$0; f=1; next} f && NR<1000 {print NR": "$0; if (++c>45) exit}' ponto/motor_calculo_v2.py` |
+| 03:00:50 | Bash | Read _periodos_via_autoridade | `cd /home/ronald/copia-o271/app && grep -n '_periodos_via_autoridade' -A 60 ponto/motor_calculo_v2.py \| sed -n '1,90p'` |
+| 03:00:34 | Bash | Read Motor12x36ComEscala.calcular_periodo in full | `cd /home/ronald/copia-o271/app && sed -n '2954,3142p' ponto/motor_calculo_v2.py` |
+| 03:00:28 | Bash | Read aplicar_tolerancia and _cadastro_nao_descreve | `cd /home/ronald/copia-o271/app && sed -n '1690,1800p' ponto/motor_calculo_v2.py` |
+| 03:00:08 | Bash | Read the declared censo in regras.py | `cd /home/ronald/copia-o271/app && sed -n '400,440p' ponto/calculador/regras.py` |
 | 03:00:02 | Bash | Census of aplicar_tolerancia callers | `cd /home/ronald/copia-o271/app && grep -rn 'aplicar_tolerancia' --include=*.py . \| grep -v '/tests/'` |
 | 02:59:57 | Bash | Map motor classes and key methods in the copy | `cd /home/ronald/copia-o271/app && grep -n 'class Motor\\| def calcular_periodo\\| def calcular_mes\\| def aplicar_tolerancia\\|def _cadastro_nao_descreve\\|def _janela_do_par\\|def _aplicar_teto_pontualidade' ponto/motor_calculo_v2.py` |
 | 02:59:52 | Bash | Inspect the build copy and MotorComercial head | `cd /home/ronald/copia-o271 && ls && git log --oneline -1 2>/dev/null; echo "---"; sed -n '2629,2660p' app/ponto/motor_calculo_v2.py` |
