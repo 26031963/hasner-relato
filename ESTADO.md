@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 15/10/2026 09:47:32.**
+**Medido em 15/10/2026 09:53:02.**
 
 | | |
 |---|---|
@@ -29,19 +29,19 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2472.0 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2472.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **240.5 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **240.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **53.7 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **53.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **356.6 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **356.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
   - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **260.8 h** (passou das 6 h da L-105)
@@ -167,38 +167,37 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  (L-110) regra x escala canonica, caso com a resposta escrita antes, incluindo os 9 bugs de 13-14/10; (3) periodo_do_dia UNICO em modulo NOVO sem leitor de prod -- motores viram
+  geometria+regua; (4) sombra: frota 09 e 10 + os 7 oraculos de logs/audit_holerite_09/; DIFF novo x gravado so como IMPACTO; (5) troca UNICA por versao nova (L-095) com DIFF por rubrica
+  para o meu !, na virada de competencia. A fila 1 segue curando o motor atual ate a troca. Nenhuma lei nova. Segue a fila; PAREI so em lei ou !
 
-● O classificador barrou a escrita: [Tmux Self Drive] — eu não posso autorar código que digita no meu próprio painel. Não vou contornar. Registro a obra com o diagnóstico medido e sigo a
-  fila (O271), como o aval manda.
+● Mesma obra com a cláusula nova (paralelo, só arquivo NOVO, só leitura do motor): já registrada às 09:5x — anoto a cláusula na própria linha e lanço a raia com ela.
+
+  Searched for 1 pattern, ran 2 shell commands
+
+● Registrado. Agora lanço a raia da v3 (agente próprio, só arquivo novo, só leitura do motor) e sigo no O271 em paralelo:
+
+● fork(Catalogo e bateria do motor v3) Opus 5 (1M context)
+  ⎿  Backgrounded agent (↓ to manage · ctrl+o to expand)
+
+● Volto ao O271. O col60 depende de quem responde "cabeça do turno" — o aval nomeia ponto/turnos.py. Meço se o pareador expõe isso:
 
   Ran 1 shell command
-  ⎿  Read docs/AVAIS.md (23 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bsyn3e0ux.output (5 lines)
-  ⎿  Referenced file ponto/management/commands/tripwire_celulas.py
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bzx8wto03.output (4 lines)
 
-● Task "RED e construção do segundo intervalo" completed in background
+● O pareador já produz os turnos e o motor os descarta ao achatar em períodos — a mesma forma do BUG 100 (intervalos) e do O76 (dia). Leio a estrutura:
 
-● O assert que falhou foi uma guarda minha mal escrita (não o conteúdo) — nada foi gravado. Refaço sem ela:
+  Ran 1 shell command
 
-  Ran 4 shell commands
+● Decisivo: Turno é namedtuple (data_turno, entrada, saida, batidas, aberto, cross_meianoite) e periodos_de_turnos faz um período por TURNO — a entrada que o calcular_periodo recebe já é a
+  cabeça do turno pela resposta do pareador, e a estrutura é jogada fora na mesma linha. Meço o custo da migração antes de escrever:
 
-● A raia CELULA-SEGUNDO-INTERVALO fechou com um INCOMPLETO que é meu: a suíte cheia dos 5 apps depois de d36ae038. Pela L-105 o pouso dela vem antes de fatia nova, e a pista é minha.
-  Levanto o estado dela e da trava:
+● Size the test migration and read the tolerance constant
+  ⎿  $ cd /home/ronald/copia-o271/app && echo "=== TOLERANCIA"; grep -rn "^TOLERANCIA_CONFORMIDADE_MIN\|^TOLERANCIA_INTRA_MIN" ponto/motor_calculo_v2.py
+     echo "=== testes que chamam calcular_periodo direto E afirmam pontualidade/suspeita"; for f in $(grep -rln "calcular_periodo(" --include=test_*.py . );…
 
-  Ran 3 shell commands
-
-● A raia era notificação atrasada: 10832b45/d36ae038 já estão no main desde 02/10 (a2e903e1 [O114] A CELULA CARREGA AS DUAS PAUSAS: merge da raia de nucleo, deploy no mesmo ato) — o
-  INCOMPLETO dela foi pago há treze dias. Nada devido ali. Volto ao O271, que é a fila 1.
-
-  Ran 9 shell commands
-
-● Tenho o sítio inteiro lido no vivo. Antes de escrever, consulto o revisor sobre o encaixe:
-
-● Advising using Fable 5.1
-
-· Flambéing… (23m 10s · ↓ 41.3k tokens)
-                                                                                                                                                    ✔ Update installed · Restart to update
+✢ Compacting conversation… (28m 40s · ↓ 62.1k tokens)
+  ▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 14%
+                                                                                                                                                                     0% until auto-compact
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -206,5 +205,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                                                                  1h 3m 8s · ↓ 428.9k tokens
+  ◯ fork  Mapping calcular_periodo bodies in motor_calculo_v2.py                                                                                                  1m 50s · ↓ 168.2k tokens
   ⧉  index
 ```
