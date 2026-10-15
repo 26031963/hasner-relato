@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 15/10/2026 18:54:42.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (865.2 MB). Acoes na janela: **1284**.
+**Medido em 15/10/2026 19:00:03.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (865.6 MB). Acoes na janela: **1287**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 19:00:01 | ToolSearch |  | `-` |
+| 19:00:00 | Bash | Read marcos_do_dia and the ancora branch | `echo "=== TipoEscala.marcos_do_dia ===" && grep -n "def marcos_do_dia" -A 28 escala/models.py \| head -70; echo "=== CICLOS_FERIADO_VIRA_FOLGA (linha 32) ==="; sed -n '28,36p' escala/models.py; echo "=== 24x48 ancora ==="; sed -n '1250,1270p' escala/models.py` |
+| 18:56:27 | Bash | Check push verdict, trava and the 12x36 test class | `cd /home/ronald/saas-hasner && echo "=== push.log ===" && tail -8 logs/o284/push.log 2>/dev/null; echo "=== trava ==="; bin/trava_teste.sh --quem 2>/dev/null; echo "=== remoto ==="; git log --oneline -1 origin/main 2>/dev/null; echo "=== classe 12x36 no modulo novo ==="; grep -n "class OFlagAlcancaOCicloComAncora" -A 30 /home/ronald/wt-o275/app/escala/tests/test_o275_sdf_feriado_e_dia.py \| head - ...` |
 | 18:52:44 | Bash | Read the O275 census on semanal vs 12x36 | `cd /home/ronald/saas-hasner && ls logs/o275/ && grep -niE "semanal\|12x36\|alvo\|1 vinculo\|361" logs/o275/censo.md \| head -24` |
 | 18:51:39 | Bash | Read the O275 backlog row, the live order marker and the RELATO top | `grep -n "O275" docs/BACKLOG.md \| head -6 && echo "=== marcador vivo:" && sed -n '5,9p' docs/BACKLOG.md && echo "=== topo do RELATO:" && sed -n '1,22p' docs/RELATO.md` |
 | 18:51:29 | Bash | Check push progress and the test lock holder | `cd /home/ronald/saas-hasner && tail -3 logs/o284/push.log; echo "=== trava:"; bash bin/trava_teste.sh --quem 2>/dev/null` |
