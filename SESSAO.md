@@ -6,10 +6,22 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 14/10/2026 22:25:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (820.3 MB). Acoes na janela: **594**.
+**Medido em 14/10/2026 22:30:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (820.5 MB). Acoes na janela: **606**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 22:28:37 | Bash | Write the measured O276 gate finding | `cd /home/ronald/saas-hasner; SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cat > "$SP/o276_gate_medido.md" <<'EOF' # O276 BUG-PAR-ATRAVESSA-O-DIA -- o GATE esta MEDIDO (14/10 ~22:5x) ## 1. A guarda dele: col570 22/08 sao DOIS pares, nao um de ~16 h Medido pela FUNCAO REAL (`ponto/turnos.py::turnos_do_colab`), prod, leitura pela role `leitor`: bat ...` |
+| 22:27:45 | Bash | Read the motor registry and the 26h literal | `cd /home/ronald/saas-hasner/app; sed -n '3170,3200p' ponto/motor_calculo_v2.py; echo "=== o literal de 26 h em turnos.py:"; sed -n '1240,1258p' ponto/turnos.py` |
+| 22:27:41 | Bash | Find the motor envelope and the chooser | `cd /home/ronald/saas-hasner/app; grep -n "AUT_CONT_MAX_S" ponto/motor_calculo_v2.py; echo "=== quem escolhe o motor:"; grep -rn "MotorPlantao\b" --include=*.py \| grep -v "tests/" \| head -10` |
+| 22:27:12 | Bash | Measure col570 22/08 through the real reader, read-only | `cd /home/ronald/saas-hasner; SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cat > "$SP/o276_col570.py" <<'PY' # O276 (BUG-PAR-ATRAVESSA-O-DIA) -- PERGUNTA UNICA, read-only: o dia 22/08 do col570 (a GUARDA dele, # "dobra real col570 22/08 INTACTA") e UM par de ~16 h ou DOIS pares? A resposta decide se o teto novo # o atinge. Pergunta-se a FUNCAO RE ...` |
+| 22:26:55 | Bash | Read turnos_do_colab signature | `cd /home/ronald/saas-hasner/app; grep -n "^def turnos_do_colab" -A 12 ponto/turnos.py` |
+| 22:26:47 | Bash | Identify the public wrapper | `cd /home/ronald/saas-hasner/app; awk 'NR>=1295 && NR<=1326' ponto/turnos.py; echo "=== nome da def que contem 1324:"; awk 'NR<=1324 && /^def /{n=$0; l=NR} END{}' ponto/turnos.py; grep -n "^def " ponto/turnos.py \| awk -F: '$1<1324' \| tail -2` |
+| 22:26:39 | Bash | Find production callers of the pareador | `cd /home/ronald/saas-hasner/app; grep -rn "parear_turnos(" --include=*.py \| grep -v "tests/\\|def parear_turnos" \| head -20` |
+| 22:26:26 | Bash | Read the two migrated leitores | `cd /home/ronald/saas-hasner/app; sed -n '900,935p' ponto/turnos.py; echo "=== :995,1014"; sed -n '995,1014p' ponto/turnos.py` |
+| 22:26:16 | Bash | Read the porta and pareador signatures | `cd /home/ronald/saas-hasner/app; grep -n "^def batidas_apuraveis" -A 14 ponto/turnos.py \| head -30; echo "===="; grep -n "^def parear_turnos" -A 20 ponto/turnos.py \| head -34` |
+| 22:26:00 | Bash | Read the leitor sonda usage | `cd /home/ronald/saas-hasner; sed -n '1,60p' bin/sonda_leitura.sh` |
+| 22:25:53 | Bash | Wait for the test trava to be released | `until grep -q '^livre' /tmp/juliani_db_test.lock.quem 2>/dev/null; do sleep 20; done; echo "TRAVA LIVRE em $(date '+%H:%M:%S') -- $(cat /tmp/juliani_db_test.lock.quem)"` |
+| 22:25:47 | Bash | Find the trava's lock file | `cd /home/ronald/saas-hasner; grep -n "ARQ\\|LOCK\\|flock\\|^TRAVA\\|quem" bin/trava_teste.sh \| head -25` |
 | 22:25:32 | SendMessage |  | `-` |
 | 22:25:16 | ToolSearch |  | `-` |
 | 22:25:01 | Bash | Check trava, crons and what is ahead of the remote | `cd /home/ronald/saas-hasner; echo "=== trava:"; bin/trava_teste.sh --quem; echo "=== crons em curso:"; ls -1 logs/crons_em_curso/ 2>/dev/null \| head; echo "(vazio = nada rodando)"; echo "=== remoto:"; git fetch -q origin 2>&1 \| tail -2; git log --oneline origin/main..HEAD; echo "=== autor de cada um:"; git log --format='%h %an %s' origin/main..HEAD; date '+%H:%M'` |
