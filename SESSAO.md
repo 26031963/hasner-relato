@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 15/10/2026 19:25:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (867.0 MB). Acoes na janela: **1354**.
+**Medido em 15/10/2026 19:30:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (867.4 MB). Acoes na janela: **1356**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 19:29:10 | Bash | Ask the queue hook for the live order | `cd /home/ronald/saas-hasner && timeout 60 python3 bin/hook_stop_fila1.py --ordem 2>&1 \| head -20; echo "rc=$?"; echo "=== marcador vivo ==="; sed -n '1,12p' app/docs/BACKLOG.md \| grep -n 'ORDEM-VIVA'` |
+| 19:28:43 | Bash | Read the wizard view around the direct field write | `cd /home/ronald/wt-o275/app && sed -n '200,275p' escala/views_wizard.py` |
 | 19:25:23 | Bash | Census the field's production readers and check for a single-reader selo | `cd /home/ronald/wt-o275/app && echo "=== quem LE o campo no codigo de producao ===" && grep -rn 'feriado_e_dia_trabalho' --include='*.py' --include='*.html' . \| grep -v '/tests/' \| grep -v migrations && echo && echo "=== selo de leitor unico no meu modulo? ===" && grep -n 'def test_' escala/tests/test_o275_sdf_feriado_e_dia.py \| grep -i 'leitor\\|unico\\|so_por\\|um_leit' \|\| echo "NAO EXISTE"` |
 | 19:24:31 | Bash | Run the handoff and confirm tree state | `cd /home/ronald/saas-hasner && bin/handoff_sessao.sh 2>&1 \| tail -5 && echo "=== tamanho (teto 60) ===" && wc -l < app/docs/HANDOFF-SESSAO.md && echo "=== estado da arvore viva ===" && git -C /home/ronald/saas-hasner status --porcelain -- app/docs/ && echo "=== raia ===" && git -C /home/ronald/wt-o275 log --oneline -2 && git -C /home/ronald/wt-o275 status --porcelain` |
 | 19:24:12 | Bash | List the open, unblocked OBRAS items in order | `cd /home/ronald/saas-hasner && timeout 60 python3 - <<'PY' import importlib.util as iu, io sp = iu.spec_from_file_location('h', 'bin/hook_stop_fila1.py') h = iu.module_from_spec(sp); sp.loader.exec_module(h) b = io.open('app/docs/BACKLOG.md', encoding='utf-8').read().split('\n') n = 0 for l in b: if not l.startswith('\|') or l.count('\|') < 8: continue c = l.split('\|') ident = c[1].strip() if not ...` |

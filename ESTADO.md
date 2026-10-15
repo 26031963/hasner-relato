@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 15/10/2026 19:25:46.**
+**Medido em 15/10/2026 19:30:46.**
 
 | | |
 |---|---|
@@ -35,16 +35,16 @@ RELATO, com a lista de nomes do banco como autoridade._
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **250.1 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **250.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **63.4 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **63.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
   - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **366.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **270.4 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **270.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o275** (`raia-o275`) -- **SEM AGENTE**
   - 2 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **0.1 h**
@@ -53,13 +53,13 @@ RELATO, com a lista de nomes do banco como autoridade._
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **388.1 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **388.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
 - **wt-v3** (`raia-v3`) -- **SEM AGENTE**
-  - 10 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **0.2 h**
+  - 10 commit(s) a frente do `main`, 2 arquivo(s) sujo(s), commit a frente ha **0.3 h**
   - sem declaracao em `logs/raias/wt-v3.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **21 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
@@ -174,18 +174,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  Curado em 1418eec3, só teste (8+/5−): leitor, campo, migration 0043, contador e UI intactos. Verde pelos três sinais da L-074, duas vezes — módulo sozinho Ran 23
-  / OK / rc 0 com os 23 nomes um a um, e 56 módulos escolhidos pelos símbolos que o diff tocou Ran 457 / OK / rc 0, 0 FAIL e 0 ERROR. Ruff: All checks passed!.
-
-  Três coisas que eu havia afirmado sem medir, e as três estão corrigidas:
-
-  - O commit 9e853a34 disse "23 testes" com o módulo nunca tendo passado por banco — está dito no corpo do commit da cura.
-  - O corpo da cura, na primeira redação, dizia "os 55 vizinhos VERDES" enquanto a bateria ainda corria — o mesmo defeito que o commit retrata. Amendado para os
-    números medidos.
-  - A célula do BACKLOG dizia "PRONTA" no hash em que o módulo estava 21/23 vermelho; agora diz 1418eec3, 281 chars, zero pipes, e o juiz do hook segue devolvendo
-    ('ok', 'O275', …).
-
   O esmeril deste marco: 452+/0− na construção, 8+/5− na cura — puramente aditivo, zero órfãos pela L-111.
 
   O pouso segue retido na pergunta publicada no topo do RELATO, e o verde não a decide: FORMA A (literal, o leitor alcança 12x36/24x48) e FORMA B (escopada aos
@@ -198,20 +186,32 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● O hook está certo em bloquear: pergunta de lei não devolve turno. Então sigo na O275 pelo que é independente da forma. Verificando se o "lido só por" do corte
   tem selo:
 
-  Census the field's production readers and check for a single-reader selo
-  ⎿  $ cd /home/ronald/wt-o275/app && echo "=== quem LE o campo no codigo de producao ===" && grep -rn 'feriado_e_dia_trabalho' --include='*.py' --include='*.html'
-     . | grep -v '/tests/' | grep -v migrations && echo && echo "=== selo de leitor unico no meu modulo? ===" && grep -n 'def test_' escala/tests…
+  Ran 2 shell commands
+  ⎿  Read docs/AVAIS.md (26 lines)
+  ⎿  Referenced file ../bin/sombra_regras_pessoais.py
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b5duwgtxq.output (12 lines)
+  ⎿  Referenced file escala/utils.py
 
-· Compacting conversation… (10h 1m 24s · ↓ 1.3m tokens)
-  ▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 20%
+● Task "O280 MOTOR-V3 passos 1 e 2" still running in background
+
+● views_wizard.py:238 é preview em memória (ZERO save, docstring :219) — não é segundo escritor. A porta segue única. Mas o corte diz literalmente "lido so por
+  ..." e não há selo que defenda isso. Perguntando à autoridade da fila antes de decidir onde gastar o turno:
+
+  Ran 1 shell command
+
+● A autoridade mantém O275 no topo. Consultando antes de construir:
+
+  Advising using Fable 5.1
+
+· Flambéing… (10h 6m 24s · ↓ 1.3m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                                            0% until auto-compact
+                                                                                                                           ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ general-purpose  Writing patch script for test_o280_bateria_da_lei.py                                                            5h 35m 13s · ↓ 144.5k tokens
+  ◯ general-purpose  Checking git status in wt-v3                                                                                    5h 40m 12s · ↓ 166.7k tokens
   ⧉  index
 ```
