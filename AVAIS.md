@@ -1,4 +1,4 @@
-# AVAIS NA MESA — 8
+# AVAIS NA MESA — 9
 
 > Gerado por `bin/gerar_avais.py` a partir de `app/docs/PENDENTES_RONALD.json`.
 > **So itens ABERTOS.** Item respondido SOME daqui na proxima geracao -- a historia dele fica
@@ -14,10 +14,11 @@
 | 6 | `O256-E4-SMOKE-UNICO-DO-RETRATO` | **smoke** | 2026-10-12T20:50 | os TRES que ele tirou estavam na mesa desde 11/10 20:17, 12/10 01:17 e 12/10 19:00 -- o mais antigo esperava **~24 h** sobre uma tela que mudou DUAS vezes no meio (etapa 2 e E1). O AVAIS cai de **8 para 6** itens abertos | `smoke Ronald: abri a tela final do retrato da folha e o fluxo inteiro funciona num clique so -- <a frase se ESCREVE quando a E4 pousar, lendo a tela que existir naquele dia; escreve-la agora seria descrever uma tela que ainda vai mudar tres vezes>` |
 | 7 | `O271-RECALCULO-DA-10-PELO-DP` | **ok-desenho** | 2026-10-15T12:45 | cartao_x_txt_divergentes --mes 10 vai de 0 para 9 colabs, TODOS na chave total_atraso: col142 6,75 h · col905 9,61 · col259 2,92 · col864 2,00 · col327 0,58 · col214 0,36 · col919 0,32 · col248 0,13 · col549 0,04. EFEITO | `ok Ronald: recalcula a competencia 10 agora e o portao do TXT volta de 9 para 0   OU   o portao fica em 9 ate o DP rodar o recalculo no fechamento -- nenhum dos dois toca a 09.` |
 | 8 | `O140-BACKFILL-DO-FURO-NA-09` | **!** | 2026-10-15T17:10 | PAREI, e e o UNICO pedaco da O140 que para. O Marco B pousou (commit 8be3814b -- a emenda; a arvore que subiu as 16:56 era a de 5b14363d, e elas diferem em UMA linha de docs e zero `.py` --, deploy 16:56, migration 0073) | `` |
+| 9 | `O284A-LOTE-VIRA-JOB-SMOKE` | **smoke** | 2026-10-15T17:40 | O284-A POUSOU: o caderno de cartoes saiu do request e virou JOB (parte A do seu aval de 10:5x, `BUG-LOTE-ESPELHO-14MIN`). Suite CHEIA sobre a arvore MERGEADA, nao sobre a raia, numa copia provada IDENTICA ao resultado do | `smoke Ronald: abri Relatorios -> espelho em lote, pedi o caderno da frota e a tela voltou NA HORA com a barra andando (nao os 14 min de antes); cliquei DE NOVO no mesmo pedido e ele me devolveu o MESMO job em vez de abrir um segundo; quando acabou, o botao baixou o PDF -- pode fechar a O284 parte A` |
 
 ---
 
-Total no JSON: **237** · aberto **8** · respondido **68** · sem-motivo **161**.
+Total no JSON: **238** · aberto **9** · respondido **68** · sem-motivo **161**.
 
 > `sem-motivo` nao e "resolvido": e *"ninguem julgou este item"*. A ordem de 18:4x proibe
 > triar os 163 antigos, entao eles ficam ai, nomeados, em vez de serem chutados para um lado.
