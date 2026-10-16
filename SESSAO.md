@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 16/10/2026 06:20:03.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (896.0 MB). Acoes na janela: **1459**.
+**Medido em 16/10/2026 06:25:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (896.0 MB). Acoes na janela: **1442**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 06:24:23 | Bash | Wait for the control-plane run and the push to land | `cd /home/ronald/saas-hasner && for i in $(seq 1 40); do git fetch -q 2>/dev/null; o=$(git rev-parse --short=8 origin/main); if [ "$o" = "2613da74" ] \|\| [ "$(git rev-list --count origin/main..HEAD)" = "0" ]; then echo "POUSOU volta $i: origin/main=$o"; break; fi; if /bin/grep -qE 'rejected\|error:\|FAILED' logs/o292/push.log 2>/dev/null; then echo "VERMELHO volta $i"; tail -4 logs/o292/push.log;  ...` |
+| 06:24:16 | Bash | Read the push log head and tail for the verdict | `cd /home/ronald/saas-hasner && wc -l logs/o292/push.log; sed -n '1,30p' logs/o292/push.log \| cut -c1-160; echo '=== TAIL ==='; tail -8 logs/o292/push.log \| cut -c1-160` |
 | 06:19:30 | Bash | Wait up to ten minutes for the push verdict | `cd /home/ronald/saas-hasner && for i in $(seq 1 55); do git fetch -q 2>/dev/null; o=$(git rev-parse --short=8 origin/main); if [ "$o" = "2613da74" ]; then echo "POUSOU: origin/main=$o (volta $i)"; break; fi; if /bin/grep -qE 'OK \(\|FAILED\|rejected\|error:' logs/o292/push.log 2>/dev/null; then echo "veredito no log (volta $i):"; /bin/grep -nE 'OK \(\|^OK$\|FAILED\|rejected\|error:' logs/o292/push ...` |
 | 06:19:15 | Bash | Check the push verdict and cron gate | `cd /home/ronald/saas-hasner && git fetch -q; echo "origin/main=$(git rev-parse --short=8 origin/main)"; tail -2 logs/o292/push.log; echo "--- crons:"; ls -1 logs/crons_em_curso/ 2>/dev/null \| wc -l` |
 | 06:19:11 | SendMessage |  | `-` |
@@ -1450,22 +1452,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 18:29:15 | Bash | Read the precedence order and the comercial ciclos constant | `echo "=== PRECEDENCIA (ordem):" && grep -n "^PRECEDENCIA\\|PRECEDENCIA = " -A 12 ponto/precedencia.py \| head -20; echo "=== CICLOS_COMERCIAIS_QUE_FOLGAM_NO_FERIADO:" && grep -rn "CICLOS_COMERCIAIS_QUE_FOLGAM_NO_FERIADO = " escala/models.py` |
 | 18:28:28 | Bash | Read the feriado branch of precedencia | `sed -n '262,310p' ponto/precedencia.py` |
 | 18:28:09 | Bash | Locate the literal corte in PROMPTS.md | `cd /home/ronald/saas-hasner && echo "=== corte LITERAL em PROMPTS.md:" && grep -n "SDF-FERIADO-E-DIA" app/docs/PROMPTS.md \| head` |
-| 18:24:49 | Bash | List TipoEscala fields and the posto declaration | `echo "=== campos de TipoEscala:" && sed -n '20,120p' escala/models.py \| grep -nE "^\s+[a-z_]+ = models\." \| sed 's/^/TE /' \| head -40; echo "=== opera_em_feriado:" && grep -rn "opera_em_feriado" --include='*.py' . \| grep -v '/tests/' \| sed 's/^\.\///'` |
-| 18:24:18 | Bash | Read padrao_trabalha_em_feriado | `grep -rn "def padrao_trabalha_em_feriado" -A 40 escala/models.py \| head -55` |
-| 18:24:02 | Bash | Read the corte column of O275 | `cd /home/ronald/saas-hasner && sed -n '893p' app/docs/BACKLOG.md \| tr '\|' '\n' \| sed -n '5,7p' \| fold -w 165 -s` |
-| 18:23:54 | Bash | Read the SDF mentions in the motor and the BACKLOG | `cd /home/ronald/saas-hasner && grep -n "SDF" app/ponto/motor_calculo_v2.py \| head && echo "=== docs:" && grep -rno "SDF[^\|]\{0,180\}" app/docs/BACKLOG.md \| head -8` |
-| 18:23:50 | Bash | Find what SDF denotes in code and docs | `cd /home/ronald/saas-hasner && echo "=== SDF no codigo:" && grep -rln "SDF\\|sem_dia_fixo" app --include='*.py' --include='*.html' \| head -20; echo "=== SDF nos docs (contagem por arquivo):" && grep -rc "SDF" app/docs/*.md 2>/dev/null \| grep -v ':0'` |
-| 18:23:40 | Bash | List the tipo_ciclo constants | `echo "=== tipo_ciclo choices:" && sed -n '1,60p' escala/models.py \| grep -nE "CICLO_\|TIPO_CICLO\|choices" \| head -30` |
-| 18:23:27 | Bash | Read the feriado branch and the ciclo constants | `sed -n '1340,1375p' escala/models.py && echo "=== CICLOS_FERIADO_VIRA_FOLGA + SDF:" && grep -n "CICLOS_FERIADO_VIRA_FOLGA\\|SEM_DIA_FIXO\\|SDF\b" escala/models.py \| head -20` |
-| 18:23:22 | Bash | Read the rest of eh_dia_trabalho_calculado | `sed -n '1290,1340p' escala/models.py` |
-| 18:23:18 | Bash | Read eh_dia_trabalho_calculado | `echo "=== eh_dia_trabalho_calculado (escala/models.py)" && sed -n '1200,1290p' escala/models.py` |
-| 18:23:09 | Bash | Census of the existing vinculo flag | `echo "=== 1. trabalha_em_feriado existe?" && grep -rn "trabalha_em_feriado" --include='*.py' --include='*.html' . \| sed 's/^\.\///' \| head -30` |
-| 18:22:51 | Bash | Read the full O275 row text | `cd /home/ronald/saas-hasner && sed -n '893p' app/docs/BACKLOG.md \| tr '\|' '\n' \| sed -n '1,4p' \| fold -w 170 -s` |
-| 18:22:41 | Bash | Read the live order marker and the four fila-1 rows | `cd /home/ronald/saas-hasner && grep -n "ORDEM-VIVA" app/docs/BACKLOG.md \| head && echo "=== linhas O271 O276 O275 O277:" && grep -nE '^\\| O(271\|276\|275\|277) ' app/docs/BACKLOG.md \| cut -c1-320` |
-| 18:22:36 | Bash | Read the live fila-1 order from the hook | `cd /home/ronald/saas-hasner && python3 bin/hook_stop_fila1.py --ordem 2>&1 \| head -40` |
-| 18:21:57 | ToolSearch |  | `-` |
-| 18:21:48 | Bash | Check the lote routes and views after the marco | `grep -n "lote" relatorios/urls.py && echo "=== views que casam lote:" && grep -nE '^def .*lote\|^@\|^def ' relatorios/views.py \| grep -i lote` |
-| 18:21:41 | Bash | Count production callers of the four candidate functions | `for f in colaboradores_do_lote gerar_pdf_espelho_lote_bytes gerar_pdf_espelho_informacional_bytes gerar_pdf_espelho; do echo "=== $f"; grep -rn "\b$f\b" --include='*.py' --include='*.html' . \| grep -v '/tests/' \| grep -v 'test_' \| sed 's/^\.\///'; done` |
-| 18:21:35 | Bash | List call names removed from the two touched modules | `cd /home/ronald/saas-hasner && git diff 49ac61c4..21e9206a -- app/relatorios/views.py app/relatorios/services.py \| grep -E '^-' \| grep -vE '^---' \| grep -oE '\b[a-z_][a-z0-9_]{3,}\(' \| sort -u \| tr -d '(' > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/chamadas_removidas.txt; wc -l < /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40 ...` |
-| 18:21:27 | Bash | List files changed by the raia commit | `cd /home/ronald/saas-hasner && git show --stat 21e9206a \| head -25` |
-| 18:21:12 | Bash | Check sombra bloco progress | `cd /home/ronald/saas-hasner && date '+%H:%M:%S' && tail -4 logs/o284/sombra_pos_deploy.log && echo "--- crons_em_curso:" && ls logs/crons_em_curso/ 2>/dev/null \| head` |
