@@ -294,5 +294,5 @@ lista — ela e o que esta EM PE._
 | **O284** | BUG-LOTE-ESPELHO-14MIN | **A NO AR** (commit 8c545a89, deploy rc  |
 | **O285** | SIMULAR-FOLHA-SH-SEM-LIDO | aberta, NAO comecada. Instrumento (`bin/ |
 | **O286** | BUG-SOMBRA-NO-POSTGRES-DE-PROD | espera corte |
-| **O287** | ESMERIL-V3 | PAREI |
+| **O287** | ESMERIL-V3 | espera `!` |
 | **O288** | PORTAO-COMPARA-METADE-DA-8069 | **FECHADA 15/10 22:30 neste commit, NO A |
