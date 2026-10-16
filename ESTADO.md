@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 16/10/2026 09:40:47.**
+**Medido em 16/10/2026 09:46:02.**
 
 | | |
 |---|---|
@@ -29,37 +29,37 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2495.9 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2496.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **264.4 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **264.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **77.6 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **77.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **380.5 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **380.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **284.6 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **284.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o275** (`raia-o275`) -- **SEM AGENTE**
-  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **13.9 h** (passou das 6 h da L-105)
+  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **14.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-o275.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **402.3 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **402.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
 - **wt-v3** (`raia-v3`) -- **SEM AGENTE**
-  - 21 commit(s) a frente do `main`, 2 arquivo(s) sujo(s), commit a frente ha **1.1 h**
+  - 21 commit(s) a frente do `main`, 2 arquivo(s) sujo(s), commit a frente ha **1.2 h**
   - sem declaracao em `logs/raias/wt-v3.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **21 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
@@ -174,44 +174,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  Ran 1 shell command
 
-  Ran 2 shell commands
-
-● O gate tem três estados, não dois, e o placar não existe. Levanto-o mecanicamente da própria §6 antes de julgar item a item:
+● Universo real: 83 casos, 70 exercidos no mês, 13 fora dele (8 fora + 5 sombra) e nenhum dos 13 aparece na seção exercida — a única guarda sobre eles é o mínimo
+  de 40 caracteres de prosa (o menor tem 82). Leio literal as duas notas que sustentam I11 e I12:
 
   Ran 1 shell command
 
-● O varredor por forma já me engana aqui — ele marcou nao reabre (que preserva o fechamento) como se fosse nao fecha. Julgo item a item, e o que salta é outra
-  coisa: 11 rótulos sem nenhuma linha na §6. Pergunto ao fecho do construtor quem deles ele fechou:
+● C8 é honesta e diz ela mesma que um caso de teste ali "seria selo vazio" — fecha pelo raciocínio certo. C7 é outra coisa: a nota remete à medição do passo 4 e
+  levanta uma pergunta de LEI ("a v3 lê o DiaPago lavrado ou recalcula?"). Antes do placar, re-derivo o universo — o número que eu carregava diz 11 rótulos sem
+  linha mas lista 12 nomes:
 
   Ran 1 shell command
 
-● O construtor declara seis deles como "FECHADO (já estava)" — e o fecho adversarial existe exatamente para não aceitar isso da prosa dele. Nenhum tem linha minha.
-  Confiro os seis no commit:
+● O §5 não tem o rótulo na primeira coluna — minha extração devolveu 0. Leio a forma da tabela:
 
   Ran 1 shell command
 
-● Campo 2 da tupla é o lastro. Agora a pergunta adversarial não é "cita a lei?" mas "existe célula que exercita, com número que morde?" — confiro as duas coisas
-  nos oito casos:
+● O §5 se intitula "OS 25 ROTULOS" mas a tabela nomeia 26 (o I16 está partido em I16a/I16b) — era daí a contradição 11 x 12 que eu carregava: são 12 de 26 sem
+  linha. Extraio a coluna "quem fecha" dos 12 para o placar não inventar dono:
 
-● Verifying each case cites its law and has a biting assertion
-  ⎿  $ cd /home/ronald/wt-v3 && python3 - <<'PYEOF'
+● Extracting the owner column for the twelve unlogged labels
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
      import io,re
-     t=io.open('/tmp/bat.py',encoding='utf-8').read()
-     L=t.split('\n')
-     alvos={'I8':['C6','C6b','C6c'],'I10':['A9'],'I11':['C7'],'I12':['C8'],'I13':['A12'],'I15':['A10']}
-     leis={'I8':['L-115'],'I10':['L-073'],'I11':['L-095'],'I12':['L-092','L-113'…
+     L=io.open('/home/ronald/saas-hasner/logs/o280/esmeril/ESMERIL.md',encoding='utf-8').read().split('\n')
+     alvo=['I8','I9','I10','I11','I12','I13','I14','I15','I16b','I17','I19','I25']
+     for i in range(267,324):
+     l=L[i]
+     if not l.startswith(…
 
-✽ Compacting conversation… (37m 53s · ↓ 76.2k tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱ 81%
+✢ Levitating… (43m 8s · ↓ 86.4k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                                            0% until auto-compact
+                                                                                                                           ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells, 1 monitor · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ general-purpose  Reading test_contract_juiz_turno.py's scan universe                                                              5h 50m 3s · ↓ 113.7k tokens
+  ◯ general-purpose  Reading C6b fixture helpers in test_o280_bateria_da_lei                                                         5h 55m 18s · ↓ 152.6k tokens
   ⧉  index
 ```
