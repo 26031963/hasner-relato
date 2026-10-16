@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:389 AFIRMA ato sem PROVA ao lado -- - **NO AR, e o ato fechou inteiro**: commit `8c545a89` (merge `--no-ff`) e `bin/deploy.sh` **sem** `--sem-migrate` rc **0** as 18:12 -- `rel
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:400 AFIRMA ato sem PROVA ao lado -- - **NO AR, e o ato fechou inteiro**: commit `8c545a89` (merge `--no-ff`) e `bin/deploy.sh` **sem** `--sem-migrate` rc **0** as 18:12 -- `rel
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 15/10/2026 23:55:02.**
+**Medido em 16/10/2026 00:00:32.**
 
 | | |
 |---|---|
@@ -35,31 +35,31 @@ RELATO, com a lista de nomes do banco como autoridade._
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **254.6 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **254.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **67.9 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **68.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **370.7 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **370.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **274.9 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **275.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o275** (`raia-o275`) -- **SEM AGENTE**
-  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **4.1 h**
+  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **4.2 h**
   - sem declaracao em `logs/raias/wt-o275.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **392.6 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **392.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
 - **wt-v3** (`raia-v3`) -- **SEM AGENTE**
-  - 15 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2.8 h**
+  - 15 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2.9 h**
   - sem declaracao em `logs/raias/wt-v3.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **21 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
@@ -103,7 +103,7 @@ bb3e47f2 [O288] o portao do TXT comparava METADE de uma rubrica que o arquivo pa
 
 > O estrutural se separa do dado. Escala errada e batida furada sempre vao existir. O sistema tem de ser 100% coerente, deterministico e idempotente com o cadastro que TEM: se aparece errado no espelho, esta errado em todo lugar do sistema; se aparece certo, esta certo em todo lugar.
 
-**placar_estrutural: 3 fechado(s), 4 parcial(is), 0 pendente(s) de 7 · VERDE (termometro em dia)**
+**placar_estrutural: 3 fechado(s), 4 parcial(is), 0 pendente(s) de 7 · AMARELO (termometro vencido (7 dias ou mais sem medir): R1)**
 
 | | resultado | numero de hoje | meta | prova |
 |---|---|---|---|---|
@@ -117,11 +117,11 @@ bb3e47f2 [O288] o portao do TXT comparava METADE de uma rubrica que o arquivo pa
 
 ### TERMOMETRO (L-114) -- pergunta de VALOR, com cadencia de 7 dias
 
-**veredito do placar: VERDE** -- termometro em dia
+**veredito do placar: AMARELO** -- termometro vencido (7 dias ou mais sem medir): R1
 
 | | resultado | numero de hoje | medido em | prazo | cadencia |
 |---|---|---|---|---|---|
-| **R1** | todo dia-colab divergente do E6 recebe UM dono -- ESTRUTURA, CADASTRO ou BATIDA -- pelas autoridades que ja existem, e as tres somam o total | 10/2026 medida em 09/10 na sombra: ESTRUTURA 110 (487,8 h, 42 colabs) · CADASTRO 11 (84,2 h, 7) · BATIDA 146 (706,4 h, 102) = 267, com BATE 93,9% de 4411 dias comparados. 09/2026, de 02/10: 197 (747,4 h, 60) · 29 (68,6 h, 12) · 208 (867,9 h, 118) = 434. A soma fecha nas duas, e o proprio comando a cobra. O movimento da semana se le por TAXA, nao por contagem: o denominador da 10 cresceu de 2694 para 4411 dias comparados enquanto o BATE subiu de 92,4% para 93,9%, entao ESTRUTURA 95 -> 110 e universo novo entrando, nao regressao -- e um csv so de DIVERGENCIA nao distingue "passou a bater" de "deixou de ser comparado". Os 19 dias de ESTRUTURA sem batida nenhuma estao TODOS com destino medido (5 BATIDA por entrada ausente em jornada noturna, 10 CADASTRO x REALIDADE por cadastro deslocado, 3 que fecham com o dia anterior, 1 que e limite nomeado da chave do proprio oraculo). E destino medido NA CASA, nao categoria atribuida: os 5 de BATIDA tem chamado batida_ausente carimbado NO DIA (#28873, #25155, #27445, #27070, #28011) e os 3 colaboradores de CADASTRO estao na lista Cadastro x Realidade (col788 A2/A3/A5/A8/A10, col868 A8, col949 A5/A7/A10) -- nenhum sem destino | 2026-10-09 | EM DIA | e6_oraculo por competencia ABERTA 1x por semana E depois de cada pouso de obra de calculo; cada dia de dono ESTRUTURA novo vira cenario na BATERIA ou linha na lista do admin, nunca fica sem destino |
+| **R1** | todo dia-colab divergente do E6 recebe UM dono -- ESTRUTURA, CADASTRO ou BATIDA -- pelas autoridades que ja existem, e as tres somam o total | 10/2026 medida em 09/10 na sombra: ESTRUTURA 110 (487,8 h, 42 colabs) · CADASTRO 11 (84,2 h, 7) · BATIDA 146 (706,4 h, 102) = 267, com BATE 93,9% de 4411 dias comparados. 09/2026, de 02/10: 197 (747,4 h, 60) · 29 (68,6 h, 12) · 208 (867,9 h, 118) = 434. A soma fecha nas duas, e o proprio comando a cobra. O movimento da semana se le por TAXA, nao por contagem: o denominador da 10 cresceu de 2694 para 4411 dias comparados enquanto o BATE subiu de 92,4% para 93,9%, entao ESTRUTURA 95 -> 110 e universo novo entrando, nao regressao -- e um csv so de DIVERGENCIA nao distingue "passou a bater" de "deixou de ser comparado". Os 19 dias de ESTRUTURA sem batida nenhuma estao TODOS com destino medido (5 BATIDA por entrada ausente em jornada noturna, 10 CADASTRO x REALIDADE por cadastro deslocado, 3 que fecham com o dia anterior, 1 que e limite nomeado da chave do proprio oraculo). E destino medido NA CASA, nao categoria atribuida: os 5 de BATIDA tem chamado batida_ausente carimbado NO DIA (#28873, #25155, #27445, #27070, #28011) e os 3 colaboradores de CADASTRO estao na lista Cadastro x Realidade (col788 A2/A3/A5/A8/A10, col868 A8, col949 A5/A7/A10) -- nenhum sem destino | 2026-10-09 | **VENCIDO** | e6_oraculo por competencia ABERTA 1x por semana E depois de cada pouso de obra de calculo; cada dia de dono ESTRUTURA novo vira cenario na BATERIA ou linha na lista do admin, nunca fica sem destino |
 
 _A data sai do NOME do arquivo da fonte declarada em `fonte_do_medido` (`bin/gerar_estado.py::_medido_em`), nunca do mtime e nunca do proprio placar -- o modulo e puro e data literal nele e PROIBIDA (SELO-SEM-DATA-CRAVADA)._
 
@@ -174,16 +174,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  Reverti uma cautela minha, por medição. /tmp/prepush-arvore.4D6LNa estava na minha lista de não-apagar porque eu acreditava que guardava obra única. Medido pelo
-  CONTEÚDO: 2.776 de 2.779 .py da cópia têm blob no repo, e os 3 restantes diferem do HEAD só na linha do import. Zero obra perdida — apaguei ela e a .SLWYt9. No
-  mesmo caminho caiu uma afirmação falsa que eu já publiquei em app/docs/RELATO.md:374 (que o git não conhecia ponto/hora_do_aparelho.py em nenhum ramo): git
-  hash-object dá b1a5a201, o mesmo blob de HEAD:app/api/hora_do_aparelho.py — o módulo mudou de lugar na O204. A seção já está commitada, então a correção anda no
-  próximo marco (L-116, seção escrita não se reescreve), nos artefatos da O275.
-
-  Duas escritas negadas pelo classificador ([Modify Shared Resources], em app/docs/PENDENTES_RONALD.json, não burlei):
-  - o item O275-SDF-CADASTRO-SMOKE — e isso é um segundo travamento da O275: a minha própria porta P10 do o275_pousar.sh exige esse item aberto, então nem com a
-    resposta da lei o pouso passa;
   - a correção do AVAIS #7, que hoje te pede decisão com número errado: lê "9 colabs, TODOS na chave total_atraso" (medido 12:4x com a chave que comparava METADE
     da rubrica 8069); medido pela rubrica INTEIRA dá 4 de 212, todos na chave atraso_diurno. O script está pronto (o271_corrige_numero_do_aval.py, py_compile OK,
     não rodado).
@@ -204,9 +194,19 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
   ⎿  Read ../../.claude/projects/-home-ronald-saas-hasner/memory/censo-de-periodos-nao-conta-turno.md (24 lines)
   ⎿  Referenced file ../bin/sombra_regras_pessoais.py
 
-  Advising using Fable 5.1
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-✢ Flambéing… (14h 30m 40s · ↓ 1.8m tokens)
+● Inserting the O277 lei question at the RELATO top
+  ⎿  $ python3 - <<'PY'
+     import io
+     p='docs/RELATO.md'
+     s=open(p, encoding='utf-8').read()
+     cab='# RELATO — esteira saas-hasner\n\n'
+     assert s.startswith(cab), repr(s[:60])
+     novo = """**POR QUAL CADASTRO O SDF SE IDENTIFICA PARA NAO RECEBER A DOBRA? O CASO DO O277 ESTA ESCRITO PELA LEI ANTES DO CODIGO, E O CO…
+
+✢ Flambéing… (14h 36m 10s · ↓ 1.8m tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
