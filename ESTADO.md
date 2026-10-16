@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 16/10/2026 15:42:19.**
+**Medido em 16/10/2026 15:47:42.**
 
 | | |
 |---|---|
 | `HEAD` local | `6f7533f2 [O280] a celula C7 da matriz prometia uma medicao no passo 4 que o instrumento NOMEADO nao faz em hash nenhum de antes da troca` |
-| `origin/main` | `33f23177 O topo do TICKETS fechado no ato do push (O112)` |
-| commits a subir (`ahead`) | **2** |
+| `origin/main` | `6f7533f2 [O280] a celula C7 da matriz prometia uma medicao no passo 4 que o instrumento NOMEADO nao faz em hash nenhum de antes da troca` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -29,37 +29,37 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2501.9 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2502.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **270.4 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **270.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **83.6 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **83.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **386.5 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **386.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **290.7 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **290.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o275** (`raia-o275`) -- **SEM AGENTE**
-  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **19.9 h** (passou das 6 h da L-105)
+  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **20.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-o275.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **408.4 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **408.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
 - **wt-v3-pouso** (`pouso-v3-20261016`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 4 arquivo(s) sujo(s), commit a frente ha **3.3 h**
+  - 1 commit(s) a frente do `main`, 4 arquivo(s) sujo(s), commit a frente ha **3.4 h**
   - sem declaracao em `logs/raias/wt-v3-pouso.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **21 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
@@ -172,44 +172,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ⎿  Read docs/AVAIS.md (27 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bwk5ooyv8.output (4 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/copia/bin/tests/test_publicacao_sem_nome.sh (120
-     lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/copia/bin/raspar_publico.py (51 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/copia/bin/relato.sh (133 lines)
+  │ tipos_distintos_na_janela                          │ 32                                                           │
+  ├────────────────────────────────────────────────────┼──────────────────────────────────────────────────────────────┤
+  │ sem_escala_ativa                                   │ 15 (todos com vínculo na janela; 14 com um, col954 com dois) │
+  ├────────────────────────────────────────────────────┼──────────────────────────────────────────────────────────────┤
+  │ escolhida_fora_da_janela / escolhida_de_outro_tipo │ 1 (col489)                                                   │
+  ├────────────────────────────────────────────────────┼──────────────────────────────────────────────────────────────┤
+  │ ativas_2_ou_mais                                   │ 0 — hipótese minha FALSA, e fica escrita                     │
+  └────────────────────────────────────────────────────┴──────────────────────────────────────────────────────────────┘
 
-● Task "Measure the whole public history with the cured predicate" still running in background
+  O instrumento (diff_v2_v3.py:153-154) escolhe o DNA por filter(ativa=True).first(), sem filtro de data, e dá um tipo_escala à janela inteira. A produção faz o
+  oposto no caminho do dinheiro: fechamento.py:202-207 monta escalas_periodo só por sobreposição, sem ativa=True, e corta uma fatia por vínculo (:272-339), com o
+  tipo_escala adiante vindo de escalas_periodo[-1] (:448) — diferença de critério, não só de granularidade.
 
-● Commit landed as 6f7533f2 (pre-commit green), and the push is in flight in the background (bse6wd5kx) — pre-push runs the host selo folder plus both runners, so
-  the output only lands at exit; empty output is not failure, the verdict gets read on the remote.
+  E o join virou isso de forma em número: dos 10 campos de mexe, dois têm o quem dentro dos 44 — he50 = col489, exatamente o colab cujo DNA veio de fora da
+  competência, e ft_min = col964. O maior he50 do DIFF inteiro foi calculado com uma escala que a produção nunca escolheria. Nos 15 sem DNA, nenhum quem cai:
+  silencioso no extremo, que não é "0,00 no total" — mexe guarda agregado e o quem, e esse é o teto do join.
 
-  While it runs I'm not touching the tree (bin/handoff_sessao.sh writes app/docs/HANDOFF-SESSAO.md, and "não commitar durante o push" covers writing to the
-  carimbed árvore). ESMERIL-DO-MARCO has nothing to sweep here: this marco removed no function, so there is no orphan to measure — it moved one matrix cell, five
-  pointers and three fila rows.
+  Duas coisas minhas corrigidas nas próprias linhas (§6 é append-only): rotulei "15:3x" o que o stat diz 15:28:25, e eu havia citado o laço de fatias sem ter lido
+  o cabeçalho dele — li, e a afirmação central confere (se houvesse ativa=True em :202, com ativas_2_ou_mais=0, ela estaria invertida). Furei a ESMERIL-DO-MARCO ao
+  rodar o passo 1 da O298 na espera em vez de esperar no arquivo do push; está carimbado na linha 397.
 
-  Standing after the push goes green: bin/handoff_sessao.sh + "MARCO FECHADO -- pode compactar", and bdsjkea9e (public-history sweep with the cured predicate)
-  keeps running at 0 bytes — $SCRATCHPAD/nomes.json stays until it exits.
+  Próximo na fila 1, e não é o seu !: as duas lacunas de exercício que o portão do passo 5 já declara — L-021 (data_fim, segundo vínculo: a bateria não tem nenhum
+  dos dois) e L-023 (zero fixture de FolgaDia/FolgaCalendario) —, cujo canal no seu aval é "o caso entra na matriz". O 44 de 571 de hoje é o tamanho real do B20,
+  então começo pelo vínculo sobreposto.
 
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: O280 -- MOTOR-V3-UM-PERIODO (aval dele 15/10 09:5x). O que a obra ataca, e o diagnostico e o do proprio aval: hoje a m
 
-  Ran 15 shell commands
+  Reading L-021 in the law book
+  ⎿  $ cd /home/ronald/saas-hasner/app; /bin/grep -n "L-021" docs/LEIS.md | cut -c1-400
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-● Waiting on the push output file · 7m 56s
-  ⎿  $ T=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bse6wd5kx.output; i=0; until [ -s "$T" ] || [ $i -ge 110 ]; do
-     sleep 5; i=$((i+1)); done; date '+%H:%M:%S'; echo "bytes=$(wc -c < $T)"; tail -20 "$T" (7m 55s)
-     (ctrl+b ctrl+b (twice) to run in background)
-
-✽ Crafting… (5h 16m 58s · ↓ 513.6k tokens)
+✢ Compacting conversation… (5h 22m 21s · ↓ 523.7k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱ 76%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                           ✔ Update installed · Restart to update
+                                                                                                                                            0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
