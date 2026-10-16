@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:464 AFIRMA ato sem PROVA ao lado -- - **NO AR, e o ato fechou inteiro**: commit `8c545a89` (merge `--no-ff`) e `bin/deploy.sh` **sem** `--sem-migrate` rc **0** as 18:12 -- `rel
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:465 AFIRMA ato sem PROVA ao lado -- - **NO AR, e o ato fechou inteiro**: commit `8c545a89` (merge `--no-ff`) e `bin/deploy.sh` **sem** `--sem-migrate` rc **0** as 18:12 -- `rel
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 16/10/2026 09:14:52.**
+**Medido em 16/10/2026 09:20:04.**
 
 | | |
 |---|---|
@@ -29,7 +29,7 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2495.5 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2495.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
@@ -38,28 +38,28 @@ RELATO, com a lista de nomes do banco como autoridade._
   - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **264.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **77.2 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **77.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **380.1 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **380.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **284.2 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **284.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o275** (`raia-o275`) -- **SEM AGENTE**
-  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **13.5 h** (passou das 6 h da L-105)
+  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **13.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-o275.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **401.9 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **402.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
 - **wt-v3** (`raia-v3`) -- **SEM AGENTE**
-  - 21 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **0.7 h**
+  - 21 commit(s) a frente do `main`, 2 arquivo(s) sujo(s), commit a frente ha **0.8 h**
   - sem declaracao em `logs/raias/wt-v3.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **21 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
@@ -174,44 +174,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+    preparada punha ABERTA. na célula seguinte, deixando prosa de portão na célula do estado — o hook ainda responderia aberto, mas por ausência de FECHADA, não
+    por sinal. A convenção viva confirma a coluna, medida no próprio bloco OBRAS: ABERTA 16x na f4 contra 5x na f5, **FECHADA 46x contra 2x. Gravada com o estado
+    na f4 (259 chars, teto 300 da L-109), 6 pipes, zero pipe dentro de célula, hook perguntado no ato (reconhecido, ABERTO, não parado), 4 selos de host da família
+    do hook rc=0 depois da edição.
+  - app/docs/RELATO.md — 4 bullets: a correção dono (aplica) × PROTEGE (re-medida na árvore viva: campo 5 das três leis contém porta_export.py::medir = SIM nas
+    três, campo 6 vazio = SIM nas três; L-094:112, L-095:113, L-097:115, header na 57); a entrada da O293 com a correção acima; a linha de fila do PROTEGE vazio da
+    L-097 (1 lei com sítio no texto e célula vazia — não toco a coluna, é ! dele); e uma fila nova que o próprio ato revelou.
+  - logs/o292/ESMERIL-DO-MARCO.md §7 — registro da entrega, para que uma sessão seguinte não entregue de novo.
 
-✻ Waiting for 1 background agent to finish
+  A fila nova, e ela nasceu de uma afirmação minha errada: eu publiquei que o contador vazio do test_hook_estado_e_a_coluna.sh "já estava na fila". grep no
+  BACKLOG.md e no RELATO.md diz que não estava — a lista era da minha sessão, não da árvore. Corrigi a frase e escrevi a linha: o selo imprime 0 item(ns) do
+  BACKLOG real, a docstring dele declara "hoje o universo e 1 (nao vazio)", e aquele 1 era o BUG-SOBRA-TIPO-TROCADO, fechado desde 14/10 — contador passando por
+  ausência de sinal. Não foi meu edit que esvaziou (a descrição da O293 não tem palavra de fechamento) e não abri nada.
 
-❯ segue a fila; PAREI so em lei ou !
+  O280, I5: mandei ao construtor uma pergunta de forma antes de construir, com os números do ANTES — a deleção pela L-111 alcança só turno_previsto_em (0 chamador
+  de produção no repo inteiro), e o defeito que o item nomeia mora em janela_turno_de, que fica (9 chamadores de produção pela contagem dele, 8 pela minha). As
+  três formas possíveis estão nomeadas; se a resposta for "a porta nasce", a TRAVA JUIZ-NOVO se mede antes, a AUTONOMIA item 3 não cobre (a função não existe), e
+  isso vira pergunta no topo do RELATO com o I20 passando na frente.
 
-  Read 2 files, ran 18 shell commands
-  ⎿  Read docs/AVAIS.md (26 lines)
-  ⎿  Referenced file ../logs/o280/esmeril/ESMERIL.md
-  ⎿  Read ../../.claude/projects/-home-ronald-saas-hasner/memory/rotulo-de-hora-le-date-no-ato.md (31 lines)
-  ⎿  Referenced file ../../../../tmp/i5_motor.py
-  ⎿  Referenced file relatorios/management/commands/selo_leitores_no_mesmo_numero.py
+  Estado: raia em 1cf1c0c4, o construtor editando agora (test_s5b_porta_unica.py + diff_reclassificar_partido.py, mtime 09:15) — I2/I6 em curso. Monitor re-armado
+  por 30 min; o evento do monitor vencido era só a mudança de md5 do FECHO_CONSTRUTOR.md que eu já havia lido, então não há lacuna. A conferência do I2/I6 está
+  escrita e espera o hash (logs/o280/esmeril/i2i6_checklist_da_conferencia.md). Nada está PAREI: não apareceu pergunta de lei nem !.
 
-● Task "Construtor da v3: fechar os 8 itens do esmeril" still running in background
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: O280 -- MOTOR-V3-UM-PERIODO (aval dele 15/10 09:5x). O que a obra ataca, e o diagnostico e o do proprio aval: hoje a m
 
-● Task "Move the ORDEM-VIVA marker and check the hook selos" still running in background
+● Reading the two mock.patch sites in context
+  ⎿  $ cd /home/ronald/wt-v3 && echo "=== test_o280_bateria_da_lei.py:2050-2075 ===" && git show 1cf1c0c4:app/ponto/tests/test_o280_bateria_da_lei.py | sed -n
+     '2050,2075p' && echo && echo "=== test_retrato_exportada.py:120,145 ===" && git show 1cf1c0c4:app/ponto/tests/test_retrato_exportada.py | sed -n …
 
-● Task "commits novos na raia v3 e mudanca no FECHO_CONSTRUTOR.md (itens I2/I6, I5, I20 do esmeril fechando)" still running in background
-
-● Monitor event: "commits novos na raia v3 e mudanca no FECHO_CONSTRUTOR.md (itens I2/I6, I5, I20 do esmeril fechando)"
-
-  Read 1 file
-
-● Monitor(commits novos na raia v3 e mudanca no FECHO_CONSTRUTOR.md (itens I2/I6, I5, I20 do esmeril fechando))
-  ⎿  Monitor started · task behlvn80u · timeout 1800s
-  ⎿  Allowed by auto mode classifier
-
-  Ran 1 shell command
-
-  Advising using Fable 5.1
-
-✢ Levitating… (11m 58s · ↓ 19.3k tokens)
-                                                                                                                           ✔ Update installed · Restart to update
+✶ Levitating… (17m 9s · ↓ 33.3k tokens · still thinking)
+                                                                                                                                            6% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 1 shell, 1 monitor · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ general-purpose  Reading argument parsing in suite.sh                                                                             5h 24m 8s · ↓ 139.5k tokens
+  ◯ general-purpose  Fixing planted line numbers in test_MORDE_as_formas_do_restauro                                                 5h 29m 19s · ↓ 162.5k tokens
   ⧉  index
 ```
