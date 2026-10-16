@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:418 AFIRMA ato sem PROVA ao lado -- - **NO AR, e o ato fechou inteiro**: commit `8c545a89` (merge `--no-ff`) e `bin/deploy.sh` **sem** `--sem-migrate` rc **0** as 18:12 -- `rel
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:433 AFIRMA ato sem PROVA ao lado -- - **NO AR, e o ato fechou inteiro**: commit `8c545a89` (merge `--no-ff`) e `bin/deploy.sh` **sem** `--sem-migrate` rc **0** as 18:12 -- `rel
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 16/10/2026 03:23:32.**
+**Medido em 16/10/2026 03:28:39.**
 
 | | |
 |---|---|
-| `HEAD` local | `7048a76c O topo do TICKETS fechado no ato do push (O112)` |
+| `HEAD` local | `53872a00 [O290] o leitor de producao do portao do TXT media 24 contadores e dizia 13: a lista deixa de se digitar e passa a se perguntar ao retorno` |
 | `origin/main` | `691f1a35 [O289] a 7a testemunha do portao do TXT devolvia a MESMA resposta para "nao medi" e "medi zero", debaixo do comentario que proibia isso` |
-| commits a subir (`ahead`) | **1** |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -29,25 +29,25 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2489.6 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2489.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **258.1 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **258.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **71.3 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **71.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **374.2 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **374.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
   - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **278.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o275** (`raia-o275`) -- **SEM AGENTE**
-  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **7.6 h** (passou das 6 h da L-105)
+  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **7.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-o275.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -59,7 +59,7 @@ RELATO, com a lista de nomes do banco como autoridade._
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
 - **wt-v3** (`raia-v3`) -- **SEM AGENTE**
-  - 15 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **6.2 h** (passou das 6 h da L-105)
+  - 15 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **6.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-v3.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **21 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
@@ -70,20 +70,18 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+53872a00 [O290] o leitor de producao do portao do TXT media 24 contadores e dizia 13: a lista deixa de se digitar e passa a se perguntar ao retorno
 7048a76c O topo do TICKETS fechado no ato do push (O112)
 691f1a35 [O289] a 7a testemunha do portao do TXT devolvia a MESMA resposta para "nao medi" e "medi zero", debaixo do comentario que proibia isso
 f00d1f62 O topo do TICKETS fechado no ato do push (O112)
 bb3e47f2 [O288] o portao do TXT comparava METADE de uma rubrica que o arquivo paga INTEIRA: a soma da 8069 ganha NOME, e quem EMITE e quem CONFERE passam a chamar a mesma funcao
-8c545a89 [O284] o caderno de cartoes sai do request e vira JOB: o pedido vivo e DEVOLVIDO em vez de duplicado, e o pouso foi UM ato -- merge, commit e deploy sem nada no meio
 ```
 
 ## `git status --short`
 
 ```
  M app/config/crons_duracao.json
- M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
- M app/docs/TICKETS.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -174,12 +172,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● Agora o RED — behavioural, porque os quatro de hoje são todos sobre texto-fonte.
-
-  Ran 6 shell commands
-
-● Um defeito à vista na própria cura: universo_dos_contadores saiu com UMA entrada — declarado[k] = v sobrescreve por empresa, e esse dict varia
   (campos_de_fechamento_x_soma muda quando há exportada no escopo). Caso que morde primeiro, depois a cura.
 
   Ran 6 shell commands
@@ -190,9 +182,7 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Suite cheia na cópia, com os docs do commit já dentro dela (selo que lê docs tem de ver o que vai pousar):
 
-  Waiting up to 9 min for the suite verdict · 7m 49s
-  ⎿  $ cd /home/ronald/saas-hasner && n=0; until grep -q "^RC_SUITE=" logs/o290/suite.out 2>/dev/null || [ $n -ge 18 ]; do n=$((n+1)); sleep 30; done; if grep -q
-     "^RC_SUITE=" logs/o290/suite.out; then echo "=== FIM"; grep -E '^(OK|FAILED)($| \()' logs/o290/suite.out | tail -1; grep -E '^Ran [0-9]+ tests… (7m 48s)
+  Searched for 1 pattern, ran 11 shell commands
   ⎿  Read docs/AVAIS.md (26 lines)
   ⎿  Referenced file ../logs/o280/esmeril/ESMERIL.md
   ⎿  Referenced file docs/TICKETS.md
@@ -204,14 +194,22 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Task "Run the full suite against the copy in background" still running in background
 
 ● Task "Wait for the suite verdict" still running in background
-     (ctrl+b ctrl+b (twice) to run in background)
 
-· Flambéing… (17h 59m 10s · ↓ 2.0m tokens)
+● Background command "Run the full suite against the copy in background" completed (exit code 0)
+
+  Ran 1 shell command
+
+● Background command "Wait for the suite verdict" completed (exit code 0)
+
+● Checking the deploy gate: running crons and migrations · 3s
+  ⎿  $ cd /home/ronald/saas-hasner && bin/deploy.sh --sem-migrate 2>&1 | tail -30; echo "=== rc_pipe=${PIPESTATUS[0]}"
+
+✽ Flambéing… (18h 4m 17s · ↓ 2.1m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
