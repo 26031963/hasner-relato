@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 16/10/2026 10:56:42.**
+**Medido em 16/10/2026 11:02:02.**
 
 | | |
 |---|---|
@@ -29,7 +29,7 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2497.2 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2497.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
@@ -38,28 +38,28 @@ RELATO, com a lista de nomes do banco como autoridade._
   - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **265.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **78.9 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **79.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **381.8 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **381.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **285.9 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **286.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o275** (`raia-o275`) -- **SEM AGENTE**
-  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **15.2 h** (passou das 6 h da L-105)
+  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **15.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-o275.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **403.6 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **403.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
 - **wt-v3** (`raia-v3`) -- **SEM AGENTE**
-  - 22 commit(s) a frente do `main`, 4 arquivo(s) sujo(s), commit a frente ha **1.1 h**
+  - 22 commit(s) a frente do `main`, 4 arquivo(s) sujo(s), commit a frente ha **1.2 h**
   - sem declaracao em `logs/raias/wt-v3.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **21 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
@@ -174,44 +174,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+● Esteira em siga: O280. Fechei as três correções pendentes e, com elas de pé, fiz a conferência que faltava — a leg 1 do aval O287 — enquanto o construtor roda a
+  suíte do I5.
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+  As três correções (todas in-place, zero linha inserida acima do fim):
+  - ESMERIL.md 387 ponto (4) agora aponta a própria reversão: "esse 6 virou 7 na linha 388, minutos depois (10:32 → 10:3x, pelos rótulos das duas linhas)" — o "20
+    min" que eu tinha escrito saiu de cabeça, os rótulos não o sustentam.
+  - rótulo da 388: 10:4x → 10:3x (o date dizia 10:39 no mesmo comando).
+  - BACKLOG.md:909 deixou de carregar os números de 15/10.
 
-  Ran 1 shell command
+  A conferência dos 6 fechos do construtor (§6 linhas 389 e 390, passoC_fecho_dos_seis.py rodável de qualquer cwd, blob pinado em 99c43c5e porque a bateria está
+  suja):
 
-● Monitor event: "commits novos na raia v3 (I5, I20) e mudanca no FECHO_CONSTRUTOR.md"
+  - Predicado escrito antes do número — foi exatamente o que faltou às linhas 383/385: aberto = lei que o item cobra sem célula que a EXERCE, ou medição declarada
+    que não rodou. Universo: só estes seis.
+  - Citação 6/6 presente. Exercício: 4 mordem, 2 são declaração. Mordem por confere() (= assertEqual, lido no fonte — meu primeiro censo procurou self.assert* e
+    deu "ZERO asserts" em 5 de 6, que era critério pela forma). C7 (onde='sombra') espera o passo 4, que não rodou no hash final; C8 (onde='fora') declara que um
+    caso de teste ali seria selo vazio — e é honesto.
+  - Proveniência: as nove citações entram num commit só, e008f333 15/10 15:11, intitulado "o ESMERIL morde a bateria" — 19 min depois do meu §4. Os seis itens eram
+    verdadeiros quando os escrevi. O (ja estava) do fecho dele não é erro: a base dele é posterior e o preâmbulo declara os dois retratos. O que corrigi é a
+    leitura, não a palavra dele.
+  - Duas lacunas de exercício, medidas por FIXTURE: a bateria inteira tem zero FolgaDia/FolgaCalendario/foto (a L-023 fica com 1 de 3 cláusulas) e zero data_fim ou
+    segundo vínculo (a L-021 não é exercida por A10, que mede outro predicado).
+  - O número não mexe: segue 7, todos dele. As duas lacunas já estão no livro-caixa do passo B (B20 entre os 3 casos de DONO: NENHUM, B30 entre os 11 [PERGUNTA]),
+    e o canal do aval para elas é "entra na matriz" — reabrir I13/I15 contaria a mesma dívida duas vezes.
 
-● Agent "Construtor da v3: fechar os 8 itens do esmeril" finished · 7h 0m 28s
+  Selos verdes depois de cada escrita (test_hook_estado_e_a_coluna, regua_tickets); bunf1362g parado por TaskStop (já tinha terminado). Monitor bfqujt7a9 rearmado
+  por 30 min — a raia andou para 4 arquivos sujos (regua_defesa.py apareceu e saiu), ainda em 99c43c5e. Nada é PAREI: o próximo ato é conferir o commit do I5 pelo
+  checklist já escrito, e o arvorar.sh do passo 4 só no hash final.
 
-  Ran 3 shell commands
-
-● Stop Task
-  ⎿  python3 - <<'PYEOF'
-     import io… · stopped
-
-● Monitor(commits novos na raia v3, mudanca no FECHO_CONSTRUTOR.md, e o fim da suite do construtor)
-  ⎿  Monitor started · task bfqujt7a9 · timeout 1800s
-  ⎿  Allowed by auto mode classifier
-
-  Ran 1 shell command
-
-● Monitor event: "commits novos na raia v3, mudanca no FECHO_CONSTRUTOR.md, e o fim da suite do construtor"
-
-  Checking A10's body, C6c's pin, and whether B20/B30 exist
-  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/bateria_99c43c5e.py; echo "=== A10 corpo ==="; sed -n
-     '1409,1423p' $S; echo "=== C6c esperado ==="; sed -n '2219,2229p' $S; echo "=== B20 / B30 existem? ==="; python3 - "$S" <<'PYEOF'
-     import ast, sys, …
-
-✶ Crafting… (31m 21s · ↓ 60.7k tokens · thinking more)
+* Crafting… (running Stop hook · 36m 41s · ↓ 76.0k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                           ✔ Update installed · Restart to update
+                                                                                                                                            5% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 monitor · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell, 1 monitor · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ general-purpose  Updating citations in test_s5b_porta_unica.py                                                                    7h 5m 58s · ↓ 167.0k tokens
+  ◯ general-purpose  Diffing citation fix in test_s5b_porta_unica.py                                                                  7h 11m 17s · ↓ 81.3k tokens
   ⧉  index
 ```
