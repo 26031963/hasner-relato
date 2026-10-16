@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 16/10/2026 01:35:47.**
+**Medido em 16/10/2026 01:41:02.**
 
 | | |
 |---|---|
-| `HEAD` local | `f00d1f62 O topo do TICKETS fechado no ato do push (O112)` |
+| `HEAD` local | `691f1a35 [O289] a 7a testemunha do portao do TXT devolvia a MESMA resposta para "nao medi" e "medi zero", debaixo do comentario que proibia isso` |
 | `origin/main` | `bb3e47f2 [O288] o portao do TXT comparava METADE de uma rubrica que o arquivo paga INTEIRA: a soma da 8069 ganha NOME, e quem EMITE e quem CONFERE passam a chamar a mesma funcao` |
-| commits a subir (`ahead`) | **1** |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -29,25 +29,25 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2487.8 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2487.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **256.3 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **256.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **69.5 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **69.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **372.4 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **372.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
   - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **276.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o275** (`raia-o275`) -- **SEM AGENTE**
-  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **5.8 h**
+  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **5.9 h**
   - sem declaracao em `logs/raias/wt-o275.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -70,23 +70,18 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+691f1a35 [O289] a 7a testemunha do portao do TXT devolvia a MESMA resposta para "nao medi" e "medi zero", debaixo do comentario que proibia isso
 f00d1f62 O topo do TICKETS fechado no ato do push (O112)
 bb3e47f2 [O288] o portao do TXT comparava METADE de uma rubrica que o arquivo paga INTEIRA: a soma da 8069 ganha NOME, e quem EMITE e quem CONFERE passam a chamar a mesma funcao
 8c545a89 [O284] o caderno de cartoes sai do request e vira JOB: o pedido vivo e DEVOLVIDO em vez de duplicado, e o pouso foi UM ato -- merge, commit e deploy sem nada no meio
 8be3814b [O140] o FURO do dia nasce LAVRADO: `DiaPago.furo_apurado` passa a ser DADO com tres estados, e a lavratura e o escritor unico -- nenhum leitor precisa mais pagar uma volta de motor para saber se o dia furou
-4da7b51f [BUG-8792] o range de falta se RATEIA pelos dias dele: o escritor da lavratura tinha regra propria e punha os minutos de N dias no PRIMEIRO, deixando os outros em branco
 ```
 
 ## `git status --short`
 
 ```
  M app/config/crons_duracao.json
- M app/docs/AVAIS.md
- M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
- M app/docs/PENDENTES_RONALD.json
- M app/docs/RELATO.md
- M app/docs/TICKETS.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -177,44 +172,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Assim que o carimbo virar OK: copiar os dois arquivos, cmp cada um, git add por PATH, commit -F logs/o289/msg_commit.txt, bin/deploy.sh --sem-migrate sem nada no
-  meio (L-107), smoke só-leitura, sha no ESMERIL.md §6, handoff_sessao.sh.
+  │ árvore           │ 2 diferenças em 3053 .py contra git show HEAD:, re-medido depois da suite; test_i1_red* = 0                                             │
+  │ certificada      │                                                                                                                                         │
+  ├──────────────────┼─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ portão da sombra │ --refazer --dump-agora rc 0 · --bloco 75/75 · erro=0 · alarme=8 · fora_do_ensaio=1 · carimbo dia=20261016 status=OK diverge=0           │
+  ├──────────────────┼─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ deploy           │ 16 estáticos, 5 páginas, 615 rotas, 3 cascas, 3 rotas provadas, selo BUG 128 verde, importerror_500=0                                   │
+  ├──────────────────┼─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ smoke só-leitura │ autoridade_levantou presente no /app/folha/porta_export.py de saas_core e saas_ui; return out, None em :101 e :259; py_compile OK no    │
+  │                  │ interpretador da casca                                                                                                                  │
+  └──────────────────┴─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+
+  Nenhum número de portão se move — a chave espelho_x_dia_pago segue fora de falhas de propósito (O-DIA-PAGO S2). O gate 3(i) do esmeril fechou por medição: os 4
+  de 212 do AVAIS #7 saem de cartao_pela_celula.py::divergencia e nunca chamam esta função; os 4 colabs / 7 dias da PERNA 2 são da comp 09. Três números com o
+  dígito 4, nenhum é o outro, nada se republicou na mesa.
+
+  O que esta cura NÃO faz, dito no commit e no dossiê: não fecha o item I1 — os 15 sítios de getattr(res,'periodos'|'periodos_ft',…) são do construtor, e a
+  derivada foi re-derivada e segue 14 de 26. ESMERIL.md §6 agora carrega o sha real (logs/ é ignorado, então não há auto-citação).
+
+  A ORDEM-VIVA-TOPO andou de O275 para O280 por decisão minha registrada em uma linha (AUTONOMIA-DE-CODIGO item 1): a O275 está dupla-travada — a pergunta de LEI
+  do topo e o meu portão P10 em o275_pousar.sh —, e os dois selos do hook passaram depois do movimento.
+
+  Próximo, depois que origin/main ler 691f1a35: o Gate 3(ii) — selo_leitores_no_mesmo_numero contra config.settings.sombra no cpuset de teste, que é a resposta
+  honesta ao "não medi se a exceção dispara para alguém hoje". Não roda junto com a régua do push (mesmo cpuset). A O280 passo 4 segue na raia wt-v3 com agente
+  próprio — diff_v2_v3.py e MEDIDO-frota-da50482b.md já escritos lá —, e a sombra ficou com carimbo fresco de hoje, que é exatamente o que aquele DIFF precisa.
 
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: O280 -- MOTOR-V3-UM-PERIODO (aval dele 15/10 09:5x). O que a obra ataca, e o diagnostico e o do proprio aval: hoje a m
 
-  Ran 3 shell commands
+  Checking the push progress
+  ⎿  $ cd /home/ronald/saas-hasner && date '+%H:%M:%S'; echo "=== push ==="; tail -5 logs/o289/push.out 2>/dev/null || echo "(sem saida ainda)"; echo "=== trava
+     ==="; bash bin/trava_teste.sh --quem
 
-● O280 não está parada nem é minha agora: ela corre na raia wt-v3 com agente próprio e o passo 4 já está em curso lá — logs/o280/passo4/diff_v2_v3.py, a árvore
-  arquivada arvore_da50482b/ e MEDIDO-frota-da50482b.md escrito às 23:38. O que me cabe na O280 é o fecho adversarial (O287), e ele está publicado com 14 de 26
-  itens abertos (8 do construtor, 6 dele) — a troca só sobe ao ! em zero item aberto, e nenhum dos 14 é meu para fechar.
-
-  Abrir trabalho novo agora é o que a ESMERIL-DO-MARCO proíbe no meio de um marco, e o marco O289 está a um portão de pousar:
-
-  - bin/sombra.sh --bloco segue ensaiando os 75 comandos (01:07 → agora 01:20, lavra_de_prod=OK md5=1c0ee5e… data_ref_prod=2026-10-15). O carimbo lê
-    status=REFEITA, e bin/deploy.sh:125-190 exige status=OK de hoje — portão declarado, não espera minha.
-  - Não adianto a cópia dos dois .py para a árvore viva: a árvore é o bind-mount, e commit sem o ensaio deixa o HUP das 03:30 publicar sem guarda.
-  - O resto está medido e durável: suite Ran 11023 / OK (skipped=42) / rc 0, 72 selos rc 0, cópia re-certificada pós-suite em 2 de 3053, test_i1_red* = 0, HEAD =
-    f00d1f62, mensagem em logs/o289/msg_commit.txt com o veredito dentro.
-
-  O waiter b8pcn236e avisa no fim do bloco e já roda o --conferir. Quando o carimbo virar OK, o pouso é um ato só: copiar os dois arquivos, cmp, git add por PATH,
-  commit -F, bin/deploy.sh --sem-migrate, smoke só-leitura, sha no ESMERIL.md §6 e handoff_sessao.sh. Depois disso o siga: O280 passa a ter pista livre — a sombra
-  fica com carimbo fresco de hoje, que é exatamente o que o DIFF por rubrica do passo 4 precisa.
-
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: O280 -- MOTOR-V3-UM-PERIODO (aval dele 15/10 09:5x). O que a obra ataca, e o diagnostico e o do proprio aval: hoje a m
-
-● Waiting for the sombra bloco verdict · 4m 19s
-  ⎿  $ cd /home/ronald/saas-hasner && until grep -q '^RC_BLOCO=' logs/o289/sombra_bloco.out 2>/dev/null; do sleep 20; done; date '+%H:%M:%S'; grep '^RC_BLOCO='
-     logs/o289/sombra_bloco.out; tail -8 logs/o289/sombra_bloco.out; echo "---conferir---"; bash bin/sombra.sh --conferir 2>&1 | tail -2 (4m 18s)
-     (ctrl+b ctrl+b (twice) to run in background)
-
-✶ Flambéing… (16h 11m 25s · ↓ 1.9m tokens)
+✢ Flambéing… (16h 16m 40s · ↓ 2.0m tokens · thought for 9s)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
