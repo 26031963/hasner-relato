@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 15/10/2026 22:18:02.**
+**Medido em 15/10/2026 22:23:32.**
 
 | | |
 |---|---|
@@ -29,31 +29,31 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2484.5 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2484.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **253.0 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **253.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **66.2 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **66.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **369.1 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **369.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **273.3 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **273.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o275** (`raia-o275`) -- **SEM AGENTE**
-  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2.5 h**
+  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2.6 h**
   - sem declaracao em `logs/raias/wt-o275.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **391.0 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **391.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -177,20 +177,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  O ato do pouso está escrito antes do veredito, em scratchpad/o288_pousar.sh — com os pré-voos (só leitura) acima da primeira escrita, porque falhar depois do
-  patch deixaria a cura na árvore viva sem commit e o HUP das 03:30 a publicaria. Ele também re-roda os 72 selos de host depois dos textos novos do marco: os 16
-  que leem RELATO/BACKLOG nunca os viram, e o "0 de 72" foi medido sem eles.
-
-  Dois achados fora do marco, virados LINHA (não trabalho agora):
-  1. /tmp/prepush-arvore.4D6LNa (08/10) carrega app/ponto/hora_do_aparelho.py, arquivo que git log --all não conhece em nenhum ramo. Não apaguei — cópia com
-     conteúdo que nunca pousou não é lixo provado. Apaguei só a do nome errado (5XSKIk, 42 M, ninguém montava).
-  2. O contador de bin/tests/test_hook_estado_e_a_coluna.sh declara "hoje o universo e 1 (nao vazio)" e hoje lê 0 — os 4 casos A–D seguem mordendo, mas o contador
-     sobre o BACKLOG real passou a passar por ausência de sinal.
-
-  Suite cheia correndo sobre a cópia certificada (elated_maxwell, 1461 linhas de log). O órfão nice_faraday saiu sozinho — o pedido de docker kill caiu, não
-  preciso mais dele. Quando o veredito chegar: cmp dos derivados que a suite regera (ARQUITETURA.mmd, MAPA.md, base_app.html) contra o main → bash o288_pousar.sh
-  "<veredito>" num ato só → handoff, push único, smoke de leitura.
-
   O pouso da O275 segue retido na pergunta de lei do topo do RELATO (FORMA A × FORMA B, 12,0 h × 36,0 h).
 
 ● Ran 1 stop hook
@@ -205,13 +191,27 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
   .py novo lá custa a certificação — se a resposta for FORMA A, o pouso é imediato com o que já existe. Então sigo pelo que a resposta não decide: o pouso em si.
   Preparo a linha do TICKETS e a seção, nos dois ramos.
 
-● Reading the TICKETS fatia table columns
-  ⎿  $ cd /home/ronald/saas-hasner && sed -n '118,120p' app/docs/TICKETS.md | cut -c1-300; echo "=== quantas colunas a linha O288 tem? ==="; awk -F'|' '/^\| O288
-     /{print NF-2" colunas"; for(i=2;i<NF;i++){s=substr($i,1,60); print " ["i-1"] "s}}' app/docs/TICKETS.md
+  Ran 3 shell commands
 
-✢ Flambéing… (12h 53m 40s · ↓ 1.6m tokens)
+● Conferindo ao vivo as duas afirmações do rascunho que decidem o custo da troca (LER ANTES DE AFIRMAR):
+
+  Ran 2 shell commands
+
+● Rascunho conferido ao vivo: a docstring diz literalmente "os dois assertIs(..., True) daqui viram False … Nenhuma outra linha do modulo se move", e são de fato 2
+  (:181, :189); CICLOS_FERIADO_VIRA_FOLGA está na :32 com o comentário que é o próprio argumento da simetria. A O275 fica pronta para pousar em minutos na forma
+  A, e com a recertificação declarada na forma B.
+
+  Ran 1 shell command
+
+● q Enquanto a suite corre, a última pergunta do esmeril deste marco: a afirmação "zero órfão criado" está no commit e precisa ser medida, não afirmada (L-111).
+
+● Reading the placar pattern and the O275 counter's real name
+  ⎿  $ cd /home/ronald/wt-o275 && sed -n '1,30p' app/escala/management/commands/vinculos_tipo_feriado_contra_vinculo.py
+
+✢ Compacting conversation… (12h 59m 10s · ↓ 1.6m tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱ 92%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                                            8% until auto-compact
+                                                                                                                                            0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
