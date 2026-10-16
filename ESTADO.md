@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 16/10/2026 06:25:32.**
+**Medido em 16/10/2026 06:30:46.**
 
 | | |
 |---|---|
 | `HEAD` local | `2613da74 [O292] a soma do portao do TXT misturava EMPRESA com COMPETENCIA e publicava 16 divergencias onde ha 4` |
-| `origin/main` | `53872a00 [O290] o leitor de producao do portao do TXT media 24 contadores e dizia 13: a lista deixa de se digitar e passa a se perguntar ao retorno` |
-| commits a subir (`ahead`) | **1** |
+| `origin/main` | `2613da74 [O292] a soma do portao do TXT misturava EMPRESA com COMPETENCIA e publicava 16 divergencias onde ha 4` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -35,16 +35,16 @@ RELATO, com a lista de nomes do banco como autoridade._
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **261.1 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **261.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **74.4 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **74.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
   - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **377.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **281.4 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **281.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o275** (`raia-o275`) -- **SEM AGENTE**
   - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **10.7 h** (passou das 6 h da L-105)
@@ -53,13 +53,13 @@ RELATO, com a lista de nomes do banco como autoridade._
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **399.1 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **399.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
 - **wt-v3** (`raia-v3`) -- **SEM AGENTE**
-  - 18 commit(s) a frente do `main`, 11 arquivo(s) sujo(s), commit a frente ha **1.0 h**
+  - 18 commit(s) a frente do `main`, 13 arquivo(s) sujo(s), commit a frente ha **1.1 h**
   - sem declaracao em `logs/raias/wt-v3.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **21 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
@@ -172,11 +172,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● Task "Construtor da v3: fechar os 8 itens do esmeril" still running in background
-
-● Task "Move the ORDEM-VIVA marker and check the hook selos" still running in background
-
 ● Task "Push the marco (runs the pre-push regua)" still running in background
 
 ● Task "commits novos na raia v3 (itens do esmeril fechando)" still running in background
@@ -196,20 +191,25 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
   ⎿  Message queued for delivery to a6d0eabb49e4f5ff0 at its next tool round.
   ⎿  Allowed by auto mode classifier
 
-● Waiting for the control-plane run and the push to land · 1m 7s
-  ⎿  $ cd /home/ronald/saas-hasner && for i in $(seq 1 40); do git fetch -q 2>/dev/null; o=$(git rev-parse --short=8 origin/main); if [ "$o" = "2613da74" ] || [
-     "$(git rev-list --count origin/main..HEAD)" = "0" ]; then echo "POUSOU volta $i: origin/main=$o"; break; fi; if /bin/grep -qE 'rejected|error:|… (1m 7s)
+  Ran 4 shell commands
+
+● Background command "Push the marco (runs the pre-push regua)" completed (exit code 0)
+
+  Running the read-only production smoke of the gate · 3m 6s
+  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; mkdir -p $S; cat > $S/smoke_o292_prod.py <<'PYEOF'
+     # SMOKE DE LEITURA do marco O292 em PROD -- chama a FUNCAO REAL do portao (`medir`), nunca `lavrar`
+     # (que escreve MetricaSnapshot) e nunca a porta d… (3m 5s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Flambéing… (21h 1m 10s · ↓ 2.4m tokens)
+· Flambéing… (21h 6m 24s · ↓ 2.4m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                                           12% until auto-compact
+                                                                                                                                            9% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells, 1 monitor · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ general-purpose  Locating CCT dataclass in periodo.py                                                                            2h 34m 48s · ↓ 103.2k tokens
+  ◯ general-purpose  Counting production importers of periodo.py                                                                      2h 40m 2s · ↓ 145.5k tokens
   ⧉  index
 ```
