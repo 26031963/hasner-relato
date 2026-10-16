@@ -31,7 +31,7 @@
      ESTE PARAGRAFO ESTAVA VELHO e dizia "O TOPO SEGUE SENDO A O271 ... ela e a que esta EM POUSO": a O271
      FECHOU e esta NO AR desde 15/10 12:2x (marco no RELATO), e desde entao pousaram a O286 (12:4x), o
      BUG-8792 (13:5x), a O140 marco B (16:4x) e a O284-A (17:4x, commit 8c545a89). O TOPO DE HOJE e a
-     O275, como diz o ORDEM-VIVA-TOPO acima -- e ela esta com o POUSO RETIDO na pergunta de lei do topo do
+     O280 na raia `wt-v3`, como diz o ORDEM-VIVA-TOPO acima -- **e esta frase dizia `O275`, contradizendo o marcador que ela mesma CITA (LEI-AKITA 2: leitor nao tem regra propria), corrigida 16/10 10:22**. A O275 NAO desce de fila: ela segue com o POUSO RETIDO na pergunta de lei do topo do
      RELATO (FORMA A x FORMA B, 12,0 h x 36,0 h), nao em construcao: o codigo, a migration 0043 e o cadastro
      pela UI estao prontos na raia wt-o275. Pela ordem dele, o dinheiro vem depois: a O276 segue parada pela
      regra DELE (o DIFF surpreendeu), e o MAX_TURNO_MIN cavalga o commit da troca da O280 em vez de pouso

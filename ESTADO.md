@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:467 AFIRMA ato sem PROVA ao lado -- - **NO AR, e o ato fechou inteiro**: commit `8c545a89` (merge `--no-ff`) e `bin/deploy.sh` **sem** `--sem-migrate` rc **0** as 18:12 -- `rel
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:466 AFIRMA ato sem PROVA ao lado -- - **NO AR, e o ato fechou inteiro**: commit `8c545a89` (merge `--no-ff`) e `bin/deploy.sh` **sem** `--sem-migrate` rc **0** as 18:12 -- `rel
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 16/10/2026 10:19:02.**
+**Medido em 16/10/2026 10:24:32.**
 
 | | |
 |---|---|
@@ -35,31 +35,31 @@ RELATO, com a lista de nomes do banco como autoridade._
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **265.0 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **265.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **78.3 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **78.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **381.1 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **381.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **285.3 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **285.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o275** (`raia-o275`) -- **SEM AGENTE**
-  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **14.5 h** (passou das 6 h da L-105)
+  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **14.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-o275.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **403.0 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **403.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
 - **wt-v3** (`raia-v3`) -- **SEM AGENTE**
-  - 22 commit(s) a frente do `main`, 2 arquivo(s) sujo(s), commit a frente ha **0.4 h**
+  - 22 commit(s) a frente do `main`, 3 arquivo(s) sujo(s), commit a frente ha **0.5 h**
   - sem declaracao em `logs/raias/wt-v3.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **21 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
@@ -174,29 +174,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  I2 — os dois números são dele e conferem na função dele. Rodei _producao_que_chama_a_fabrica() extraída por AST (o NameError era RAIZ derivando de __file__;
-  injetei o caminho real), 718 arquivos varridos: 11 sítios literais em 10 arquivos · 20 em 17 com apelido · diferença 9 — o par publicado, exato. Os 9 são os
-  nomeados: 4 de import … as (ponto/services/fechamento.py:316 e :418, o caminho do dinheiro; diff_extrato_parcial.py:63; relatorios/pdf_espelho.py:372) e 5 de
-  nome nascido de captura. _producao_que_alimenta_motor() devolve 23 escritas · 9 arquivos · 6 nomes, e a duplicação que ele declara aparece no retorno:
-  calcular_mes sai 10 vezes para 5 sítios distintos.
-
-  I6 — a geometria fecha por aritmética, não por prosa. ast.Try em :134 (logo após o espião em :133) com finalbody em :258, envolvendo o Try interno de
-  :197/handler :229 — os dois números da lápide. As 12 inserções do git diff -w --stat decompõem-se em try:(1) + lápide da 2ª captura :173-178(6) + finally:(1) +
-  lápide do restauro :254-257(4), e o deslocamento +7 entre as lápides explica cada número pré-cura da prosa dele (:172→179, :175→182, :185→192, :187→194) e o +12
-  do restauro (:246→258). Nenhum número órfão. As duas mensagens que eu tinha na fila para ele estão respondidas no arquivo: os pontos 1 e 2 do fecho são a 3ª
-  forma de acoplamento, e o número certo da instalação é :133 (meu :132 estava um a menos).
-
-  Uma correção minha, e foi o conselho que a forçou. O ponto (7) da linha 385 explicava a diferença entre o meu censo de texto e os 11 dele com quatro baldes que
-  eu não medi. Medido por nó pai: dos 58, a AST vê 33 (11 import, 9 alvo de atribuição, 7 chamada, 5 valor de captura, 1 def) e 25 estão só em comentário; zero
-  argumento de chamada. E a causa real era outra: FABRICAS_DO_MOTOR tem dois nomes — 4 dos 11 são get_motor (core/regua_cct.py:423/:445,
-  vigiar_motor_autoridade.py:54, ponto/selecao_periodo.py:37) e 7 são get_motor_cct. 7+4=11; censo de um token nunca chega lá. O conjunto saiu impresso no stdout
-  da minha própria corrida e eu passei por cima. 8ª vez da mesma classe: número sem o predicado que o produz. Linha 386, append-only, NF conferido no escopo
-  NR>=344.
-
-  Também conferi o que o conselho levantou sobre a minha 379: o aval que dei lá era à retratação da tautologia, não aos números da docstring — nada retirado —, e a
-  exigência que eu escrevi nela ("receptor por PARÂMETRO ou declarar o buraco") foi cumprida, com sítio (test_o280_bateria_da_lei.py:2077).
-
   O que não medi, declarado: o lado de teste (44 escritas / 11 arquivos) depende de _classes_do_motor(), que importa o motor vivo — não roda no host sem Django, e
   não substituí a semente por derivação minha. O que sustenta esse número é o VocabularioDoDonoTest com allowlist zero, verde dentro da suíte do commit (Ran 11168
   / OK (skipped=42, expected failures=8), rc 0).
@@ -205,13 +182,36 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
   que já nomeei no 1cf1c0c4. Monitor armado. Zero item novo, zero arquivo da raia tocado, nada é PAREI.
 
 ✻ Waiting for 1 background agent to finish
-                                                                                                                           ✔ Update installed · Restart to update
+
+● Monitor event: "commits novos na raia v3 (I2/I6, I5, I20) e mudanca no FECHO_CONSTRUTOR.md"
+
+  Ran 1 shell command
+
+● Monitor(commits novos na raia v3 (I5, I20) e mudanca no FECHO_CONSTRUTOR.md)
+  ⎿  Monitor started · task bm2902fe3 · timeout 1800s
+  ⎿  Allowed by auto mode classifier
+
+● Monitor re-armed on 99c43c5e/c2490fd5. The raia is dirty (3 arquivos: ponto/selecao_periodo.py, a bateria, test_s125_janela_turno.py) — I5 em construção, o que
+  confirma que o passo 4 não pode arvorar agora. Enquanto isso, verifico um estado meu que ficou pela metade: o shell que movia a ORDEM-VIVA escreveu o BACKLOG
+  antes de a asserção do RELATO falhar.
+
+  Ran 2 shell commands
+
+● Dois defeitos no meu próprio estado de docs, os dois independentes da raia — curo agora:
+
+● Running the whole host selo folder · 1m 40s
+  ⎿  $ cd /home/ronald/saas-hasner && SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && ok=0; red=""; for s in
+     bin/tests/test_*.sh; do if bash "$s" >"$SP/s.out" 2>&1; then ok=$((ok+1)); else red="$red $(basename $s)"; fi; done; echo "host selos OK: $ok";… (1m 39s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✢ Symbioting… (3m 30s · ↓ 7.0k tokens)
+                                                                                                                                            5% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ segue o I5 quando ele commitar
+❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell, 1 monitor · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell, 1 monitor · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ general-purpose  Adding C10 cell to bateria.py                                                                                   6h 28m 17s · ↓ 173.0k tokens
+  ◯ general-purpose  Reading `_julgar_pontualidade` saída gate in motor_calculo_v2.py                                                6h 33m 48s · ↓ 111.5k tokens
   ⧉  index
 ```
