@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 15/10/2026 22:01:45.**
+**Medido em 15/10/2026 22:07:02.**
 
 | | |
 |---|---|
@@ -29,22 +29,22 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2484.3 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2484.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **252.7 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **252.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **66.0 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **66.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
   - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **368.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **273.0 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **273.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o275** (`raia-o275`) -- **SEM AGENTE**
   - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2.3 h**
@@ -53,13 +53,13 @@ RELATO, com a lista de nomes do banco como autoridade._
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **390.7 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **390.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
 - **wt-v3** (`raia-v3`) -- **SEM AGENTE**
-  - 15 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **0.9 h**
+  - 15 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **1.0 h**
   - sem declaracao em `logs/raias/wt-v3.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **21 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
@@ -177,24 +177,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Stop Task
-  ⎿  while true; do if [ -z "$(docker ps -q -f name=nice_faraday 2>/dev/null)" ]; then echo "ORFAO_SAIU $(date '+%H:%M:%S') -- juliani_db_test livre"; break;
-     fi; sle… · stopped
-
-● A pista está tomada: um comando só espera o órfão sair e, no mesmo ato, dispara a suíte cheia sobre a cópia certificada (b9yl7t669, veredito em
-  scratchpad/o288_cheia.log, com RC_SUITE= gravado para os três sinais da L-074 não ficarem só no stdout — foi assim que eu perdi o veredito da rodada anterior).
-
-  Fechado na espera, sem cruzar arquivo com o pouso:
-  - makemigrations --check --dry-run sobre a cópia: No changes detected — confirma --sem-migrate
-  - node_check: 12 arquivos próprios parseiam · regua_tickets: OK, 0 citação sem linha · tickets_placar: OK
-  - sha256 dos três .py da cópia gravados (o288_sha_copia.txt), para o commit provar por conteúdo que a árvore que pousa é a que a suíte certificou — mtime não
-    distingue reescrita idêntica
-  - I24 conferido na raia (não no relato dele) e registrado append-only no ESMERIL.md §6; instrumento do DIFF com par_duplicado na identidade _soma; prosa velha do
-    topo do BACKLOG corrigida
-
-  O hook me devolveu o turno com siga: O275 e ele está certo: só o ! devolve turno, pergunta de lei não — a O275 segue com o pouso retido na pergunta FORMA A ×
-  FORMA B que já está no topo do RELATO, e a esteira não parou, está no pouso da O288. Não escrevi linha PAREI: seria falso, e o próprio hook só libera no !.
-
   Resta o pedido de permissão que eu não contorno: docker kill nice_faraday foi negado ([Interfere With Workloads]). É container meu, da suíte que eu descartei
   pela colisão de ID, e ele ainda usa o juliani_db_test com a trava já lendo livre — então a trava não protege e uma suíte concorrente geraria errors falsos. Ele
   sai sozinho (24 min de uma suíte cheia, já em 23); se quiser cortar a espera, ! docker kill nice_faraday.
@@ -205,16 +187,34 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● O hook quer commit, e commit é o que falta. Enquanto a suíte corre, esmeril deste marco — e há uma pergunta real que eu ainda não respondi: os leitores de
   divergencia sabem desenhar a chave nova atraso_diurno?
 
-  Reading how the only caller renders the divergencia keys
-  ⎿  $ cd /home/ronald/saas-hasner && sed -n '20,70p' app/relatorios/management/commands/cartao_x_txt_divergentes.py
+  Ran 4 shell commands
+  ⎿  Read docs/AVAIS.md (26 lines)
+  ⎿  Referenced file ../logs/o280/esmeril/ESMERIL.md
+  ⎿  Read ../../.claude/projects/-home-ronald-saas-hasner/memory/censo-de-periodos-nao-conta-turno.md (24 lines)
+  ⎿  Referenced file ../bin/sombra_regras_pessoais.py
 
-✽ Compacting conversation… (12h 37m 23s · ↓ 1.6m tokens)
-  ▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 20%
+● Task "Wait for the orphan then run the full suite over the copy" still running in background
+
+● Background command "Wait with 20s interval for the orphaned container to exit" completed (exit code 0)
+
+  Ran 1 shell command
+
+● O órfão saiu e a suite cheia já está correndo sobre a cópia (elated_maxwell, 4 min). O esmeril do marco fechou com número:
+
+● Recording the measured key-reader census in the commit message
+  ⎿  $ cd /home/ronald/saas-hasner && SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && python3 -
+     "$SP/o288_msg.txt" <<'PY'
+     import sys
+     p = sys.argv[1]
+     s = open(p, encoding='utf-8').read()
+     ancora = "E NAO foi tocado -- achado de fora do marco nao e trabal…
+
+✢ Flambéing… (12h 42m 40s · ↓ 1.6m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                                            0% until auto-compact
+                                                                                                                           ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
