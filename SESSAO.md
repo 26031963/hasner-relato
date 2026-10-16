@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 16/10/2026 12:40:03.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (913.3 MB). Acoes na janela: **1276**.
+**Medido em 16/10/2026 12:45:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (913.3 MB). Acoes na janela: **1279**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 12:42:48 | Bash | Wait for the suite to finish and release the lock | `cd /home/ronald/saas-hasner && until ! bash bin/trava_teste.sh --quem \| /bin/grep -q "pouso-v3"; do sleep 20; done; date '+%H:%M:%S'; echo "trava: $(bash bin/trava_teste.sh --quem)"` |
+| 12:42:44 | Bash | Check the clock, the lock holder and the running test container | `cd /home/ronald/saas-hasner && date '+%H:%M:%S'; bash bin/trava_teste.sh --quem; docker ps --format '{{.Names}} {{.Status}}' \| /bin/grep -v "saas_\\|juliani_db_test\\|sombra_db" \| head` |
+| 12:42:29 | Bash | Write the measured comboio decision into the RELATO | `cd /home/ronald/saas-hasner && python3 - <<'PY' p='app/docs/RELATO.md' R=open(p).read().split('\n') j=69 assert R[j].startswith('- **CORRIJO A MINHA PROPRIA ATRIBUICAO DO `relidos`'), R[j][:50] assert R[j+1]=='' , repr(R[j+1]) linha=("- **O POUSO DA `wt-v3` CORRE SOZINHO, E A PERGUNTA DO COMBOIO FOI MEDIDA, NAO SUPOSTA (16/10 12:2x)**: " "POUSO-EM-COMBOIO manda PERGUNTAR se outra raia fica pronta  ...` |
 | 12:32:03 | Bash | Wait for the suite to release the test lock | `cd /home/ronald/saas-hasner && until [ "$(bash bin/trava_teste.sh --quem)" = "livre desde 16/10 12:29:40" ] \|\| ! bash bin/trava_teste.sh --quem \| /bin/grep -q "pouso-v3"; do sleep 20; done; echo "trava: $(bash bin/trava_teste.sh --quem)"; date '+%H:%M:%S'` |
 | 12:31:54 | Bash | Find whether the suite writes a log file | `cd /home/ronald/saas-hasner && sed -n '60,140p' bin/suite.sh \| /bin/grep -n "LOG\\|tee\\|docker run"` |
 | 12:31:40 | Bash | Measure the other raias ahead of main for the comboio decision | `cd /home/ronald/saas-hasner && for w in /home/ronald/wt-cert /home/ronald/wt-esmeril /home/ronald/wt-o275 /home/ronald/wt-pdf; do echo "=== $w ($(git -C $w rev-parse --abbrev-ref HEAD) @ $(git -C $w rev-parse --short HEAD))"; git -C $w log --oneline main..HEAD 2>/dev/null \| head -4 \| cut -c1-110; git -C $w log -1 --format=' ultimo commit: %ar' ; done` |
