@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:484 AFIRMA ato sem PROVA ao lado -- - **NO AR, e o ato fechou inteiro**: commit `8c545a89` (merge `--no-ff`) e `bin/deploy.sh` **sem** `--sem-migrate` rc **0** as 18:12 -- `rel
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:485 AFIRMA ato sem PROVA ao lado -- - **NO AR, e o ato fechou inteiro**: commit `8c545a89` (merge `--no-ff`) e `bin/deploy.sh` **sem** `--sem-migrate` rc **0** as 18:12 -- `rel
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 16/10/2026 12:55:46.**
+**Medido em 16/10/2026 13:00:50.**
 
 | | |
 |---|---|
-| `HEAD` local | `2613da74 [O292] a soma do portao do TXT misturava EMPRESA com COMPETENCIA e publicava 16 divergencias onde ha 4` |
+| `HEAD` local | `2d8bfd1f [O280] a v3 do periodo pousa sem leitor de producao, e as 4 portas de memo entram no caminho do dinheiro` |
 | `origin/main` | `2613da74 [O292] a soma do portao do TXT misturava EMPRESA com COMPETENCIA e publicava 16 divergencias onde ha 4` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **25** |
 
 ## Fabrica
 
@@ -35,16 +35,16 @@ RELATO, com a lista de nomes do banco como autoridade._
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **267.6 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **267.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **80.9 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **81.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
   - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **383.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **287.9 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **288.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o275** (`raia-o275`) -- **SEM AGENTE**
   - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **17.2 h** (passou das 6 h da L-105)
@@ -53,41 +53,35 @@ RELATO, com a lista de nomes do banco como autoridade._
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **405.6 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **405.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
-- **wt-v3** (`raia-v3`) -- **SEM AGENTE**
-  - 24 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **1.5 h**
-  - sem declaracao em `logs/raias/wt-v3.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-v3-pouso** (`pouso-v3-20261016`) -- **SEM AGENTE**
-  - 25 commit(s) a frente do `main`, 4 arquivo(s) sujo(s), commit a frente ha **0.5 h**
+  - 1 commit(s) a frente do `main`, 4 arquivo(s) sujo(s), commit a frente ha **0.6 h**
   - sem declaracao em `logs/raias/wt-v3-pouso.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **21 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
-**sem agente: 9** (raia com commit a frente e sem declaracao, esperado 0) -- **a frente do main ha mais de 6 h: 7** -- uniao medida: 33
+**sem agente: 8** (raia com commit a frente e sem declaracao, esperado 0) -- **a frente do main ha mais de 6 h: 7** -- uniao medida: 32
 
 > Raia sem agente por mais de um marco pede linha de motivo no RELATO -- lei, `!` ou pista (item 4 do aval).
 
 ## `git log --oneline -5`
 
 ```
-2613da74 [O292] a soma do portao do TXT misturava EMPRESA com COMPETENCIA e publicava 16 divergencias onde ha 4
-53872a00 [O290] o leitor de producao do portao do TXT media 24 contadores e dizia 13: a lista deixa de se digitar e passa a se perguntar ao retorno
-7048a76c O topo do TICKETS fechado no ato do push (O112)
-691f1a35 [O289] a 7a testemunha do portao do TXT devolvia a MESMA resposta para "nao medi" e "medi zero", debaixo do comentario que proibia isso
-f00d1f62 O topo do TICKETS fechado no ato do push (O112)
+2d8bfd1f [O280] a v3 do periodo pousa sem leitor de producao, e as 4 portas de memo entram no caminho do dinheiro
+af980808 [O280] as duas metades do MESMO intervalo decidem por metodos diferentes, e um minuto de batida move 170,62 min de rubrica
+cff600d2 [O280] a janela do turno previsto prometia espelhar um metodo do motor que nao compoe janela nenhuma, e a funcao que a copiava nao tinha chamador de producao nenhum
+99c43c5e [O280] duas das cinco trocas da fabrica de producao saiam do ar so no caminho feliz, e o censo de quem chama o motor contava 11 dos 20 sitios
+1cf1c0c4 [O280] alimentar memo do motor por fora nao falhava: nome que o objeto nao conhece cria atributo morto e o calculo sai menor em silencio (I7)
 ```
 
 ## `git status --short`
 
 ```
  M app/config/crons_duracao.json
- M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
- M app/docs/RELATO.md
- M app/docs/TICKETS.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -178,21 +172,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Now the host side of the stamp, in rodar.sh:
-
-  Ran 7 shell commands
-
-● Now the MEDIDO file, while the stamped run finishes:
-
-  Ran 3 shell commands
-
-● Background command "Re-run the DIFF on the af980808 tree with the new stamp" completed (exit code 0)
-
-  Ran 4 shell commands
-
-● Now the ESMERIL §6 row — append-only, checking the gate-B hash trap first:
-
-  Read 2 files, ran 16 shell commands
   ⎿  Read docs/AVAIS.md (26 lines)
   ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bib6jcn3e.output (31 lines)
   ⎿  Referenced file ../logs/o280/esmeril/ESMERIL.md
@@ -206,16 +185,31 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Background command "Run the host selos, node_check and ruff against the copy" completed (exit code 0)
 
-● Peek at the test container progress
-  ⎿  $ cd /home/ronald/saas-hasner && docker logs strange_hamilton --tail 3 2>&1 | tail -3 | cut -c1-200; date '+%H:%M:%S'
+  Read 1 file, ran 22 shell commands
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bzagksd96.output (24 lines)
+  ⎿  Read docs/AVAIS.md (26 lines)
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bib6jcn3e.output (31 lines)
+  ⎿  Referenced file ../logs/o280/esmeril/ESMERIL.md
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bleepjq5i.output (5 lines)
 
-· Compacting conversation… (2h 30m 24s · ↓ 256.8k tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱ 83%
+● Background command "Run the full suite against the merge copy" completed (exit code 0)
+
+● Background command "Wait for the suite to release the test lock" completed (exit code 0)
+
+● Background command "Wait for the suite to finish and release the lock" completed (exit code 0)
+
+● Suite verde na cópia: Ran 11167 tests in 1569.515s / OK (skipped=42, expected failures=8) / rc 0.
+
+● Deploying in the same act as the merge · 49s
+  ⎿  $ cd /home/ronald/saas-hasner && date '+%H:%M:%S' && bin/deploy.sh 2>&1 | tail -30; echo "=== rc=$?"; date '+%H:%M:%S' (49s · 2 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✶ Crafting… (2h 35m 28s · ↓ 265.2k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                                            0% until auto-compact
+                                                                                                                           ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt · ← for agents
   ⧉  index
 ```
