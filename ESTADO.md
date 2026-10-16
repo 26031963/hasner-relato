@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 16/10/2026 09:51:32.**
+**Medido em 16/10/2026 09:57:02.**
 
 | | |
 |---|---|
@@ -29,37 +29,37 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2496.1 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2496.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **264.6 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **264.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **77.8 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **77.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **380.7 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **380.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **284.8 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **284.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o275** (`raia-o275`) -- **SEM AGENTE**
-  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **14.1 h** (passou das 6 h da L-105)
+  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **14.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-o275.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **402.5 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **402.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
 - **wt-v3** (`raia-v3`) -- **SEM AGENTE**
-  - 21 commit(s) a frente do `main`, 2 arquivo(s) sujo(s), commit a frente ha **1.3 h**
+  - 22 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **0.1 h**
   - sem declaracao em `logs/raias/wt-v3.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **21 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
@@ -174,44 +174,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Pino confirmado: @unittest.expectedFailure em :2203, e a docstring diz ela mesma "NAO E PERGUNTA DE LEI: a lei existe, o dono esta nomeado (ESTRUTURA) e o
-  universo esta medido". Tenho tudo medido. Escrevo a linha §6 e o bullet:
+  diferença não se resolve por regex melhor (foi esse o erro 7 vezes): leio o predicado do censo dele, que é quem produz o número:
 
   Ran 1 shell command
 
-● O validador varrido no arquivo INTEIRO acusa §1 e outras tabelas com NF=7/8 — colunas diferentes, não defeito. Escopo é o §6 (foi exatamente essa a correção que
-  eu já tinha levado):
+● :1225 declara o predicado: o censo literal é ast.Name + atributo de módulo, não chamada — daí 11 contra os meus 8, que mediram só chamada. E :1368 é a peça
+  certa: test_o_censo_vivo_RODA_e_o_apelido_nunca_ve_menos afirma a relação, não o número. Confirmo os dois literais:
 
   Ran 1 shell command
 
-● Tudo NF=6 no §6, e a nova linha segue depois do rodapé itálico de 364-368 — a fragmentação pré-existente que já declarei e que o append-only me proíbe de mexer.
-  Agora o bullet, ao lado do :52, não no topo (não há PAREI nem pergunta de lei):
+● O caso plantado é exatamente o RED que eu exigia: literal vê [6,10], apelido vê [6,10,14,19,25], e prosa/comentário (29/30) ficam fora por asserção. Mas o
+  predicado é de CHAMADA, e meu texto achou 8 onde ele publica 11 — isso não se resolve com regex melhor. Chamo a função real dele sobre a produção:
 
-  Ran 3 shell commands
+  Ran 1 shell command
 
-● Os dois entregáveis estão duráveis. Re-armo o vigia do commit I2/I6 — o construtor já está em grep de I5 mas não commitou (HEAD da raia ainda 1cf1c0c4), então a
-  conferência fica viva:
+● Monitor event: "commits novos na raia v3 (I2/I6, I5, I20) e mudanca no FECHO_CONSTRUTOR.md"
 
-● Monitor(commits novos na raia v3 (I2/I6, I5, I20) e mudanca no FECHO_CONSTRUTOR.md)
-  ⎿  Monitor started · task b5xxgzfzt · timeout 1800s
-  ⎿  Allowed by auto mode classifier
+● O fecho mudou de novo (c2490fd5) — leio depois de fechar o número. A diferença está no universo: _producao_que_chama_a_fabrica exclui o DONO_DOS_NOMES
+  (core/regua_cct.py, 9 das minhas 58 ocorrências), tests, migrations. Rodo o mesmo código dele, extraído por AST, sem reimplementar nada:
 
-● Vigia armado (30 min, re-armo na expiração). O portão do passo 5 está publicado; a parte (1) do aval está servida. Vejo o que as partes (2) — casos absurdos
-  meus, escritos sem ver os dele — e (3) — censo de quem passa a ler a v3 — já têm:
+● Running the real census with file path resolved
+  ⎿  $ cd /home/ronald/wt-v3 && python3 - <<'PYEOF'
+     import ast,io,os
+     SRC=os.path.abspath('app/ponto/tests/test_s5b_porta_unica.py')
+     t=io.open(SRC,encoding='utf-8').read()
+     arv=ast.parse(t)
+     quero_def={'_aliases_da_fabrica','_eh_chamada_de_fabrica','_chamadas_da_fabrica',
+     '_producao_que_chama_a_fabrica','_…
 
-● Look for the part-3 census and read what resisted the esmeril
-  ⎿  $ cd /home/ronald/saas-hasner && echo "== parte (3) do aval: censo de quem le calcular_periodo e passa a ler a v3 ==" && /bin/grep -n "calcular_periodo"
-     logs/o280/esmeril/ESMERIL.md | cut -c1-160 && echo && echo "== §3 o que resistiu ==" && sed -n '196,219p' logs/o280/esmeril/ESMERIL.md | cut -c1-1…
-
-✢ Levitating… (48m 38s · ↓ 98.8k tokens · thinking)
+· Compacting conversation… (54m 8s · ↓ 114.1k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 66%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                           ✔ Update installed · Restart to update
+                                                                                                                                            1% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 1 shell, 1 monitor · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ general-purpose  Verifying insertion count in msg_i2i6.txt                                                                         6h 0m 47s · ↓ 77.9k tokens
+  ◯ general-purpose  Fixing drifted line citations in janela_turno_de                                                                 6h 6m 18s · ↓ 150.9k tokens
   ⧉  index
 ```
