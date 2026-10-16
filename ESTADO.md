@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 16/10/2026 18:10:46.**
+**Medido em 16/10/2026 18:15:46.**
 
 | | |
 |---|---|
@@ -29,31 +29,31 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2504.4 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2504.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **272.9 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **273.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **86.1 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **86.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **389.0 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **389.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **293.1 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **293.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o275** (`raia-o275`) -- **SEM AGENTE**
-  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **22.4 h** (passou das 6 h da L-105)
+  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **22.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-o275.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **410.8 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **410.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -200,12 +200,12 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-  Waiting on the suite output file for a verdict · 4m 38s
+  Waiting on the suite output file for a verdict · 9m 39s
   ⎿  $ O=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b7tol9bft.output; i=0; until [ -s "$O" ] && /bin/grep -qE
-     '^(OK|FAILED)($| \()' "$O"; do i=$((i+1)); [ $i -gt 110 ] || sleep 20; [ $i -gt 110 ] && break; done; echo "esperas=$i"; date '+%H:%M'; tail -12 "$O… (4m 38s)
+     '^(OK|FAILED)($| \()' "$O"; do i=$((i+1)); [ $i -gt 110 ] || sleep 20; [ $i -gt 110 ] && break; done; echo "esperas=$i"; date '+%H:%M'; tail -12 "$O… (9m 38s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Crafting… (7h 45m 24s · ↓ 714.1k tokens)
+· Crafting… (7h 50m 25s · ↓ 714.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
