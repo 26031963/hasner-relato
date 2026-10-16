@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:451 AFIRMA ato sem PROVA ao lado -- - **NO AR, e o ato fechou inteiro**: commit `8c545a89` (merge `--no-ff`) e `bin/deploy.sh` **sem** `--sem-migrate` rc **0** as 18:12 -- `rel
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:452 AFIRMA ato sem PROVA ao lado -- - **NO AR, e o ato fechou inteiro**: commit `8c545a89` (merge `--no-ff`) e `bin/deploy.sh` **sem** `--sem-migrate` rc **0** as 18:12 -- `rel
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 16/10/2026 07:50:32.**
+**Medido em 16/10/2026 07:55:46.**
 
 | | |
 |---|---|
@@ -29,7 +29,7 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2494.1 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2494.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
@@ -38,22 +38,22 @@ RELATO, com a lista de nomes do banco como autoridade._
   - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **262.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **75.8 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **75.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **378.7 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **378.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **282.8 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **282.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o275** (`raia-o275`) -- **SEM AGENTE**
-  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **12.1 h** (passou das 6 h da L-105)
+  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **12.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-o275.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **400.5 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **400.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -174,44 +174,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ressuscita linha. Nenhum default voltou. Os 2 itens de 07:4x seguem abertos nesse hash (medido: regras.py:297, test_s5b_porta_unica.py:248), então a condição
-  literal do aval ("zero item aberto") continua não cumprida.
+    uma. E a lista é completa, não um piso: 0 chamada por string (a única ocorrência é prosa em RELATO-ARQUIVO.md:13812) e 0 por __import__/importlib.
+  - Quase afiei o item para o lado errado, e a medição me virou: Motor12x36ComEscala.calcular_periodo:3188 tem 6 linhas e nenhuma janela — eu ia escrever que o
+    docstring aponta para outra pergunta. Ele chama _julgar_pontualidade em :3199, e a regra de meia-noite mora lá (MotorBase:1946-1960). O ponteiro era verdadeiro
+    quando escrito e envelheceu um salto, na O271 que desceu a pontualidade para a MotorBase. A palavra do item (espelha e reimplementa) estava certa.
+  - O duplicado não é o juízo "cruza?" — os dois importam turno_cruza_meia_noite, o predicado tem um dono. É a composição da janela, com insumos diferentes: o
+    motor deriva de que dia é o turno pela batida real, janela_turno_de recebe data_ref pronto.
+  - O default cru é 2+1, não 3: o else de :86-87 espelha o else do motor em :1814 — é a cópia, não band-aid; só os dois except Exception (:66-68, :82-84) não têm
+    contraparte, e só eles são LEI-AKITA 1.
+  - A v3 não criou a terceira cópia (confirma o campo 3 do item): 0 ocorrência de turno_cruza_meia_noite/combine/make_aware nos 5 arquivos e 0 leitura de
+    janela_turno_de.
+  - Pergunta para o construtor, não veredito meu: porta que responda "(dt_inicio, dt_fim) do turno previsto em data_ref" não existe no hash —
+    janela_he.py::marco_no_dia responde outra pergunta —, então "ler a porta" faz a porta nascer e a TRAVA JUIZ-NOVO se mede antes de construir. Nada trava a
+    migração: o selo antigo que proibia o nome em ponto/turnos.py não existe mais, e a cópia cresceu de 6 para 8 chamadores enquanto o item esperava.
+  - Complemento do fecho, 0 item novo: turno_previsto_em (:100) tem 0 chamador de produção no repo inteiro e sai pela L-111 no mesmo commit, com os 2 asserts; o
+    vizinho turnos_em_turno_stored não é órfão (chegado por colabs_em_turno_stored:171 → core/views.py:1163) — censo de texto classificaria os dois igual.
 
-  I2, ANTES certificado + correção de um número meu: censo com apelido resolvido (import-as, atributo, ponto fixo) dá 16 chamadas, 7 literais, 9 só por apelido — o
-  par 7 → 16 do item confere, o 11 do título dele era das ligações de import, não das chamadas; 16−7=9. Achado novo para a cura: só 4 dos 9 apelidos nascem de
-  import ... as; os outros 5 nascem de captura de monkeypatch, então selo que siga só o import perde 5 de 9.
+  RELATO +1 linha, 3 selos de hook OK, construtor avisado nos dois atos. Os 2 itens de 07:4x seguem abertos no hash, então a condição literal do aval continua não
+  cumprida por eles.
 
-  §6 linhas 369-371 · i1_censo_varredor.out, carimbo_hash_d604eb0a.out, i2_censo_apelido.out · RELATO +1 linha (seção em 12/25) · 3 selos de hook OK · monitor
-  re-armado · requisito do I2 enviado ao construtor.
-  ⎿  Read docs/AVAIS.md (26 lines)
-  ⎿  Referenced file ../logs/o280/esmeril/ESMERIL.md
-  ⎿  Referenced file relatorios/management/commands/selo_leitores_no_mesmo_numero.py
-  ⎿  Referenced file folha/tests/test_porta_do_export.py
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/o271_corrige_numero_do_aval.py (74 lines)
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: O280 -- MOTOR-V3-UM-PERIODO (aval dele 15/10 09:5x). O que a obra ataca, e o diagnostico e o do proprio aval: hoje a m
 
-● Task "Construtor da v3: fechar os 8 itens do esmeril" still running in background
+  Census of monkeypatch writes for the I6 instruments · 4s
+  ⎿  $ cd /home/ronald/wt-v3 && cat > /home/ronald/saas-hasner/logs/o280/esmeril/i6_censo_monkeypatch.py <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     """I6 ANTES: censo das ESCRITAS de monkeypatch nos instrumentos de IMPACTO, no COMMIT.
+     Pergunta: a lista do item (5 arquivos, com linha) ainda descreve o vivo? E ela… (4s)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-● Task "Move the ORDEM-VIVA marker and check the hook selos" still running in background
-
-● Task "commits novos na raia v3 (itens do esmeril fechando)" still running in background
-
-  Ran 13 shell commands
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-● Inspecting the §6 table header and last row
-  ⎿  $ cd /home/ronald/saas-hasner/logs/o280/esmeril && sed -n '/^## 6/,+6p' ESMERIL.md
-
-✢ Flambéing… (22h 26m 10s · ↓ 2.5m tokens · thinking)
+· Flambéing… (22h 31m 24s · ↓ 2.5m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                           ✔ Update installed · Restart to update
+                                                                                                                                            5% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 1 shell, 1 monitor · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ general-purpose  Re-measuring porta coverage in remede_i7.py                                                                     3h 59m 48s · ↓ 169.6k tokens
+  ◯ general-purpose  Reading imports in test_s5b_porta_unica.py                                                                        4h 5m 1s · ↓ 119.9k tokens
   ⧉  index
 ```
