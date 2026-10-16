@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 16/10/2026 00:05:46.**
+**Medido em 16/10/2026 00:10:46.**
 
 | | |
 |---|---|
@@ -29,25 +29,25 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2486.3 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2486.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **254.8 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **254.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **68.0 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **68.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **370.9 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **371.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
   - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **275.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o275** (`raia-o275`) -- **SEM AGENTE**
-  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **4.3 h**
+  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **4.4 h**
   - sem declaracao em `logs/raias/wt-o275.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -174,17 +174,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  O275 segue retida em duas coisas, nenhuma minha: a pergunta de lei FORMA A x FORMA B no topo do RELATO (12,0 h x 36,0 h; 337 vínculos x 1) e o item de smoke
-  negado acima. Mantive de propósito a igualdade de hash no reuso de worktree do o275_certificar.sh — worktree reusada carrega docs mais velhos que o main, e a
-  suite Django tem contratos que leem docs e os 72 selos de host não cobrem; o else-branch ganhou diagnóstico medido em vez de ficar frouxo.
-
-  Sigo pela PAREI-DE-LEI-NAO-DEVOLVE-TURNO no próximo item que não depende da lei: O287 ESMERIL-V3 parte 3 — censo de quem mais lê calcular_periodo e passa a ler a
-  v3. É leitura, não cruza arquivo com a raia da O275 nem com o lote 3 do construtor.
-
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: O275 -- SDF-FERIADO-E-DIA (corte dele 14/10 20:4x -- regra de negocio NOVA, e por isso corte e nao aval). TipoEscala g
-
-  Ran 44 shell commands
   ⎿  Read docs/AVAIS.md (26 lines)
   ⎿  Referenced file ../logs/o280/esmeril/ESMERIL.md
   ⎿  Read ../../.claude/projects/-home-ronald-saas-hasner/memory/censo-de-periodos-nao-conta-turno.md (24 lines)
@@ -198,17 +187,28 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-  Running the tripwire's real detector against candidate O277 plantas
-  ⎿  $ cd /home/ronald/saas-hasner
-     SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
-     mkdir -p $SP && git show 32c8c259:app/escala/tests/test_tripwire_o275_leitor_unico_do_flag.py > $SP/tw.py
-     python3 - <<'PY'
-     import sys, types, importlib.util
-     sys.path.insert…
+  Ran 5 shell commands
+  ⎿  Read docs/AVAIS.md (26 lines)
+  ⎿  Referenced file ../logs/o280/esmeril/ESMERIL.md
+  ⎿  Read ../../.claude/projects/-home-ronald-saas-hasner/memory/censo-de-periodos-nao-conta-turno.md (24 lines)
+  ⎿  Referenced file ../bin/sombra_regras_pessoais.py
 
-· Flambéing… (14h 41m 24s · ↓ 1.8m tokens)
+● Nada foi gravado (o open(...,'w') vem depois do assert). Vou ler o texto vivo do §4-§5 antes de montar as ancoras.
+
+  Ran 2 shell commands
+
+● Agora com o texto vivo. Monto as quatro trocas no CASO.md:
+
+  Ran 1 shell command
+
+● CASO.md reescrito. Agora o estado da O277 no BACKLOG — restaurar a frase do corte dele:
+
+  Inspecting the O277 backlog row fields
+  ⎿  $ awk -F'|' 'NR==899{print "CAMPOS:", NF; for(i=1;i<=NF;i++) printf " [%d] %s\n", i, $i}' docs/BACKLOG.md
+
+· Flambéing… (14h 46m 24s · ↓ 1.8m tokens · thought for 4s)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                                            1% until auto-compact
+                                                                                                                           ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
