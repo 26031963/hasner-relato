@@ -295,4 +295,4 @@ lista — ela e o que esta EM PE._
 | **O285** | SIMULAR-FOLHA-SH-SEM-LIDO | aberta, NAO comecada. Instrumento (`bin/ |
 | **O286** | BUG-SOMBRA-NO-POSTGRES-DE-PROD | espera corte |
 | **O287** | ESMERIL-V3 | PAREI |
-| **O288** | PORTAO-COMPARA-METADE-DA-8069 | construida e certificada em COPIA do HEA |
+| **O288** | PORTAO-COMPARA-METADE-DA-8069 | **FECHADA 15/10 22:30 neste commit, NO A |

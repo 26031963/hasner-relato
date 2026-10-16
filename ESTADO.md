@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:370 AFIRMA ato sem PROVA ao lado -- - **NO AR, e o ato fechou inteiro**: commit `8c545a89` (merge `--no-ff`) e `bin/deploy.sh` **sem** `--sem-migrate` rc **0** as 18:12 -- `rel
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:389 AFIRMA ato sem PROVA ao lado -- - **NO AR, e o ato fechou inteiro**: commit `8c545a89` (merge `--no-ff`) e `bin/deploy.sh` **sem** `--sem-migrate` rc **0** as 18:12 -- `rel
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 15/10/2026 22:29:02.**
+**Medido em 15/10/2026 22:34:25.**
 
 | | |
 |---|---|
-| `HEAD` local | `8c545a89 [O284] o caderno de cartoes sai do request e vira JOB: o pedido vivo e DEVOLVIDO em vez de duplicado, e o pouso foi UM ato -- merge, commit e deploy sem nada no meio` |
+| `HEAD` local | `bb3e47f2 [O288] o portao do TXT comparava METADE de uma rubrica que o arquivo paga INTEIRA: a soma da 8069 ganha NOME, e quem EMITE e quem CONFERE passam a chamar a mesma funcao` |
 | `origin/main` | `8c545a89 [O284] o caderno de cartoes sai do request e vira JOB: o pedido vivo e DEVOLVIDO em vez de duplicado, e o pouso foi UM ato -- merge, commit e deploy sem nada no meio` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,37 +29,37 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2484.7 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2484.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **253.2 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **253.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **66.4 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **66.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **369.3 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **369.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **273.4 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **273.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o275** (`raia-o275`) -- **SEM AGENTE**
-  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2.7 h**
+  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2.8 h**
   - sem declaracao em `logs/raias/wt-o275.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **391.1 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **391.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
 - **wt-v3** (`raia-v3`) -- **SEM AGENTE**
-  - 15 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **1.3 h**
+  - 15 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **1.4 h**
   - sem declaracao em `logs/raias/wt-v3.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **21 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
@@ -70,23 +70,18 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+bb3e47f2 [O288] o portao do TXT comparava METADE de uma rubrica que o arquivo paga INTEIRA: a soma da 8069 ganha NOME, e quem EMITE e quem CONFERE passam a chamar a mesma funcao
 8c545a89 [O284] o caderno de cartoes sai do request e vira JOB: o pedido vivo e DEVOLVIDO em vez de duplicado, e o pouso foi UM ato -- merge, commit e deploy sem nada no meio
 8be3814b [O140] o FURO do dia nasce LAVRADO: `DiaPago.furo_apurado` passa a ser DADO com tres estados, e a lavratura e o escritor unico -- nenhum leitor precisa mais pagar uma volta de motor para saber se o dia furou
 4da7b51f [BUG-8792] o range de falta se RATEIA pelos dias dele: o escritor da lavratura tinha regra propria e punha os minutos de N dias no PRIMEIRO, deixando os outros em branco
 21e9206a O284 parte A: o caderno de cartoes sai do request e vira JOB, com o pedido vivo devolvido em vez de duplicado
-ba289219 [O286] o POSTGRES do ensaio sai dos nucleos do cliente: a sombra passa a morar em container PROPRIO `sombra_db`, e o host do banco de ensaio passa a ter UM sitio
 ```
 
 ## `git status --short`
 
 ```
  M app/config/crons_duracao.json
- M app/docs/AVAIS.md
- M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
- M app/docs/PENDENTES_RONALD.json
- M app/docs/RELATO.md
- M app/docs/TICKETS.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -177,39 +172,39 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 2 shell commands
+  O pouso está em curso como um ato só (bst003gpg). O que já passou, na ordem em que o script o faz:
 
-● Rascunho conferido ao vivo: a docstring diz literalmente "os dois assertIs(..., True) daqui viram False … Nenhuma outra linha do modulo se move", e são de fato 2
-  (:181, :189); CICLOS_FERIADO_VIRA_FOLGA está na :32 com o comentário que é o próprio argumento da simetria. A O275 fica pronta para pousar em minutos na forma
-  A, e com a recertificação declarada na forma B.
+  - PRE-VOO (só leitura) — HEAD ainda 8c545a89; nenhum .py solto; logs/crons_em_curso/ vazio; patch --dry-run limpo; textos dentro dos tetos (RELATO 19/25 linhas,
+    célula de estado sem | e ≤300 chars).
+  - P6 novo (defeito que o advisor achou na minha própria adição): a lista de derivados agora PARA em vez de fazer git add de arquivo do main que não mudou — o
+    conteúdo regenerado mora na cópia, então o add seria no-op e o commit publicaria .py novo com desenho velho. Medido: ARQUITETURA.mmd, MAPA.md e base_app.html
+    idênticos, nada a decidir.
+  - P7 novo: o portão do push provado antes da primeira escrita — regua_tickets: OK -- 0 citacao(oes) com linha na tabela, 1 linha | O288  no TICKETS, O287 ausente
+    dele. E nenhum dos 7 parados (O140, TROCA-DE-PLANTAO, DOIS-HORARIOS, SAIDA-TARDIA-NOTURNO, S5-DISPUTA-FECHA, T4-MARCO-QUE-A-BATIDA-OCUPA, TURNO-F1-S3) é
+    citado pelos meus dois textos, então parado_citado_em_commit_posterior fica em 1 e o placar do topo não sai de sincronia.
+  - Escrita: cura na árvore viva, sha256sum -c + cmp 3/3 contra a cópia certificada, textos preenchidos. Agora corre o passo 4 — os 72 selos de host relidos sobre
+    os textos novos (o "0 de 72" anterior foi medido sem eles). Depois: commit por PATH e bin/deploy.sh --sem-migrate.
+
+  Corrigi também uma crase dentro de string de shell no P7 que teria executado | O288  como comando em runtime (bash -n não vê isso — é a mesma pegadinha da
+  mensagem de commit).
+
+  Em paralelo, já está pronto e parado de propósito o instrumento da O275 (scratchpad/o275_instrumento_placar.py): o contador vinculos_tipo_feriado_contra_vinculo
+  no bin/placar_code.sh, ancorado por grep, idempotente por marcador, dry-run provado numa cópia com bash -n limpo, dono CADASTRO e fora do TOTAL do Code (L-099).
+  Ele não pode entrar antes do produto — o command nasce no commit da O275, e no main o sed devolveria vazio, isto é, um contador que mente por ausência de sinal.
+
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: O275 -- SDF-FERIADO-E-DIA (corte dele 14/10 20:4x -- regra de negocio NOVA, e por isso corte e nao aval). TipoEscala g
 
   Ran 1 shell command
 
-● q Enquanto a suite corre, a última pergunta do esmeril deste marco: a afirmação "zero órfão criado" está no commit e precisa ser medida, não afirmada (L-111).
+● Background command "Land O288: cure, texts, host selos, commit and deploy in one act" completed (exit code 0)
 
-  Ran 21 shell commands
-  ⎿  Read docs/AVAIS.md (26 lines)
-  ⎿  Referenced file ../logs/o280/esmeril/ESMERIL.md
-  ⎿  Read ../../.claude/projects/-home-ronald-saas-hasner/memory/censo-de-periodos-nao-conta-turno.md (24 lines)
-  ⎿  Referenced file ../bin/sombra_regras_pessoais.py
-
-● Task "Wait for the orphan then run the full suite over the copy" still running in background
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-  Ran 1 shell command
-
-● Background command "Wait for the orphan then run the full suite over the copy" completed (exit code 0)
-
-● Reading the full-suite verdict by the three signals
+● Handoff, one push per marco, and the read-only prod smoke · 16s
   ⎿  $ SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
-     echo "=== veredito (L-074, tres sinais) ==="
-     grep -E '^(OK|FAILED)($| \()' $SP/o288_cheia.log | tail -1
-     grep -E '^Ran [0-9]+ tests' $SP/o288_cheia.log | tail -1
-     grep -E '^RC_SUITE=' $SP/o288_cheia.log…
+     bash "$SP/o288_pos_pouso.sh" > "$SP/o288_pos_pouso.log" 2>&1; echo "rc=$?"; cat "$SP/o288_pos_pouso.log" (6s)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Flambéing… (13h 4m 40s · ↓ 1.6m tokens)
+✻ Flambéing… (13h 10m 3s · ↓ 1.7m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
