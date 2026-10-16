@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 16/10/2026 15:37:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (920.5 MB). Acoes na janela: **1404**.
+**Medido em 16/10/2026 15:42:19.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (920.5 MB). Acoes na janela: **1403**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1413,4 +1413,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 03:46:27 | Bash | Measure the state of the O280 passo 4 work and the v3 raia | `cd /home/ronald/saas-hasner && echo "=== logs/o280/passo4:"; ls -lt logs/o280/passo4/ 2>/dev/null \| head -20; echo "=== saida:"; ls -lt logs/o280/passo4/saida/ 2>/dev/null \| head -20; echo "=== worktrees:"; git worktree list; echo "=== wt-v3 ahead/dirty:"; git -C ../wt-v3 log --oneline -1 2>/dev/null; git -C ../wt-v3 status --porcelain 2>/dev/null \| head -5; git -C ../wt-v3 rev-list --count mai ...` |
 | 03:45:52 | Bash | See what the post-push wrote into the RELATO | `cd /home/ronald/saas-hasner && git diff --stat app/docs/RELATO.md; git diff app/docs/RELATO.md \| head -30 \| cut -c1-180` |
 | 03:45:47 | Bash | Confirm post-push state | `cd /home/ronald/saas-hasner && git log --oneline -2; echo "=== origin/main..HEAD:"; git log --oneline origin/main..HEAD; echo "=== status:"; git status --porcelain app \| head; echo "=== ORDEM VIVA:"; grep -n 'ORDEM-VIVA-TOPO:' app/docs/BACKLOG.md \| head -1` |
-| 03:38:37 | Bash | Keep waiting for the push verdict | `cd /home/ronald/saas-hasner && n=0; until grep -q "^RC_PUSH=" logs/o290/push.out 2>/dev/null \|\| [ $n -ge 18 ]; do n=$((n+1)); sleep 30; done; if grep -q "^RC_PUSH=" logs/o290/push.out; then echo "=== FIM"; tail -10 logs/o290/push.out; else echo "AINDA CORRENDO"; tail -c 300 logs/o290/push.out; fi` |
