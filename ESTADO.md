@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 16/10/2026 01:15:32.**
+**Medido em 16/10/2026 01:20:46.**
 
 | | |
 |---|---|
@@ -29,37 +29,37 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2487.5 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2487.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **256.0 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **256.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **69.2 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **69.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **372.1 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **372.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **276.2 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **276.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o275** (`raia-o275`) -- **SEM AGENTE**
-  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **5.5 h**
+  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **5.6 h**
   - sem declaracao em `logs/raias/wt-o275.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **393.9 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **394.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
 - **wt-v3** (`raia-v3`) -- **SEM AGENTE**
-  - 15 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **4.1 h**
+  - 15 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **4.2 h**
   - sem declaracao em `logs/raias/wt-v3.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **21 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
@@ -178,38 +178,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-● Background command "Rebuild the sombra with a fresh dump" completed (exit code 0)
+  Ran 2 shell commands
 
-  Ran 3 shell commands
-  ⎿  Referenced file ../../logs/o280/esmeril/ESMERIL.md
-  ⎿  Read AVAIS.md (26 lines)
-  ⎿  Read ../../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/o271_corrige_numero_do_aval.py (74 lines)
-  ⎿  Referenced file ../relatorios/cartao_pela_celula.py
-  ⎿  Read ../../../.claude/projects/-home-ronald-saas-hasner/memory/censo-de-periodos-nao-conta-turno.md (24 lines)
+● Suite verde pelos três sinais, selos re-rodados sobre os docs finais, cópia re-certificada depois da suite. Falta só o portão da sombra.
 
-● Task "Run the sombra bloco once the rebuild finishes" still running in background
+  Medido agora:
+  - Suite CHEIA: Ran 11023 tests in 1491.271s / OK (skipped=42) / RC=0 — gravado em app/docs/RELATO.md:378 e em logs/o289/msg_commit.txt:34 (o placeholder
+    <VEREDITO_SUITE> não existe mais em nenhum dos dois).
+  - 72 selos de host, 0 vermelho — sobre os docs FINAIS, e o número bate o que a mensagem de commit afirma.
+  - Cópia re-certificada DEPOIS da suite (a suite regenera arquivos na cópia): py_na_copia=3053 diferentes=2 — exatamente app/folha/porta_export.py e
+    app/folha/tests/test_porta_do_export.py —, test_i1_red* = 0, e HEAD segue f00d1f62 = .HASH_DA_COPIA. A árvore que a suite certificou é a que pousa.
+  - Colchetes da mensagem: [], ['atraso_diurno'], [dict], [O289] — nenhum com forma de ID além do [O289], então o regua_tickets não tem o que cobrar.
+  - PENDENTES_RONALD.json 3/3 linhas, AVAIS.md 1/1, HANDOFF-SESSAO.md 10/10 — delta pequeno, forma canônica do gerar_avais.py --escrever; entram no marco sem
+    churn.
+  - logs/crons_em_curso/ vazio, e app/config/crons_duracao.json fica fora do git add.
+  - A linha do movimento da ORDEM-VIVA-TOPO foi gravada (a âncora anterior aparecia 6 vezes no arquivo; ancorei no texto único do INCOMPLETO). Seção do marco: 14
+    linhas, teto da L-116 é 25.
 
-● Task "Wait for the suite and the sombra bloco together" still running in background
+  O único portão aberto: bin/sombra.sh --conferir lê dia=20261016 status=REFEITA tipo=completa diverge=0 erros=0. REFEITA não é OK — o --bloco está ensaiando os 75
+  comandos (começou 01:07, lavra_de_prod=OK data_ref_prod=2026-10-15), e bin/deploy.sh só passa com status=OK. Não copio os dois .py para a árvore viva antes
+  disso: commit põe o arquivo no bind-mount e o HUP das 03:30 o publicaria sem o ensaio. O waiter b8pcn236e avisa e já roda o --conferir no fim.
 
-● Task "Move the ORDEM-VIVA marker and check the hook selos" still running in background
+  Assim que o carimbo virar OK: copiar os dois arquivos, cmp cada um, git add por PATH, commit -F logs/o289/msg_commit.txt, bin/deploy.sh --sem-migrate sem nada no
+  meio (L-107), smoke só-leitura, sha no ESMERIL.md §6, handoff_sessao.sh.
 
-● Background command "Run the full suite against the cured copy" completed (exit code 0)
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: O280 -- MOTOR-V3-UM-PERIODO (aval dele 15/10 09:5x). O que a obra ataca, e o diagnostico e o do proprio aval: hoje a m
 
-● Background command "Wait for the suite verdict by file" failed with exit code 1
+  Checking the O280 passo 4 dir and the bloco
+  ⎿  $ cd /home/ronald/saas-hasner && ls -lt logs/o280/passo4/ 2>/dev/null | head -8; echo "=== bloco ==="; date '+%H:%M:%S'; tail -2 logs/o289/sombra_bloco.out;
+     grep -c '' logs/o289/sombra_bloco.out
 
-● Background command "Wait for the suite to finish" completed (exit code 0)
-
-● Background command "Wait for both the suite and the sombra rebuild" completed (exit code 0)
-
-● Background command "Wait for and read the suite verdict" completed (exit code 0)
-
-● Re-running the host selos over the final docs · 1m 12s
-  ⎿  $ cd /home/ronald/saas-hasner && V=0; N=0; for t in bin/tests/test_*.sh; do N=$((N+1)); if ! bash "$t"
-     >/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/selo.out 2>&1; then V=$((V+1)); echo "VERMELHO: $t"; tail -5
-     /tmp/claude-1001/-home-ronald-saas-hasne… (1m 12s)
-     (ctrl+b ctrl+b (twice) to run in background)
-
-· Flambéing… (15h 51m 10s · ↓ 1.9m tokens)
+· Flambéing… (15h 56m 24s · ↓ 1.9m tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
