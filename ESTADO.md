@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 16/10/2026 07:39:32.**
+**Medido em 16/10/2026 07:45:02.**
 
 | | |
 |---|---|
@@ -29,37 +29,37 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2493.9 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2494.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **262.4 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **262.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **75.6 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **75.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **378.5 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **378.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **282.6 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **282.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o275** (`raia-o275`) -- **SEM AGENTE**
-  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **11.9 h** (passou das 6 h da L-105)
+  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **12.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-o275.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **400.3 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **400.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
 - **wt-v3** (`raia-v3`) -- **SEM AGENTE**
-  - 20 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **0.1 h**
+  - 20 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **0.2 h**
   - sem declaracao em `logs/raias/wt-v3.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **21 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
@@ -174,44 +174,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ⎿  Referenced file ../logs/o280/esmeril/ESMERIL.md
-  ⎿  Referenced file relatorios/management/commands/selo_leitores_no_mesmo_numero.py
-  ⎿  Referenced file folha/tests/test_porta_do_export.py
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/o271_corrige_numero_do_aval.py (74 lines)
 
-● Task "Construtor da v3: fechar os 8 itens do esmeril" still running in background
+  I1 (leitor único dos períodos) — é o primeiro fecho em que 8 de 8 arquivos de produção passaram a usar a porta (o oposto do I4, onde só um importava):
+  - varredor REAL do selo (_producao_com_default, exec'ado do arquivo, LEI-AKITA 8): main 13 chamadas em 12 linhas de 8 arquivos → raia 0, guarda de vacuidade
+    mordendo as três formas ([2, 3, 4]) e getattr de 2 args ficando fora;
+  - universo preservado sítio a sítio (4 concatenavam os dois → sem ft; 3 liam só periodos → ft=False; folga_que_sumiu.py:58 só periodos_ft → ft=True;
+    vigiar_motor_autoridade.py:56, que era metade, → os dois);
+  - a cura eu rodei, não li: nucleo.py é stdlib-only, então o caso behavioral do construtor correu contra a porta viva com unittest.TestCase — Ran 1 test ... OK,
+    rc 0;
+  - caso que MORDE no dinheiro (test_porta_do_export.py:331-350, ([], None) x ([], 'resultado_sem_periodos'), ausente no main); contador provado genérico
+    (porta_export.py:571 → espelho_x_dia_pago_nao_medido);
+  - o "o que este selo não vê" re-medido por critério independente (AST Load): 17 linhas em 7 arquivos — o declarado confere exatamente; a 4ª forma (hasattr) dá 0
+    e periodos=None dá 0. Uma correção de número: a docstring diz "15 em 14 linhas de 9 arquivos" contando periodo.py:648-649, arquivo que o main não tem. Zero
+    item novo.
 
-● Task "Move the ORDEM-VIVA marker and check the hook selos" still running in background
+  Carimbo do hash (d604eb0a, raia limpa, main já ancestral): re-medi os dois censos contra o commit — obrigatório porque o do I4 correu antes do merge e merge
+  ressuscita linha. Nenhum default voltou. Os 2 itens de 07:4x seguem abertos nesse hash (medido: regras.py:297, test_s5b_porta_unica.py:248), então a condição
+  literal do aval ("zero item aberto") continua não cumprida.
 
-● Task "commits novos na raia v3 (itens do esmeril fechando)" still running in background
+  I2, ANTES certificado + correção de um número meu: censo com apelido resolvido (import-as, atributo, ponto fixo) dá 16 chamadas, 7 literais, 9 só por apelido — o
+  par 7 → 16 do item confere, o 11 do título dele era das ligações de import, não das chamadas; 16−7=9. Achado novo para a cura: só 4 dos 9 apelidos nascem de
+  import ... as; os outros 5 nascem de captura de monkeypatch, então selo que siga só o import perde 5 de 9.
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+  §6 linhas 369-371 · i1_censo_varredor.out, carimbo_hash_d604eb0a.out, i2_censo_apelido.out · RELATO +1 linha (seção em 12/25) · 3 selos de hook OK · monitor
+  re-armado · requisito do I2 enviado ao construtor.
 
-  Ran 4 shell commands
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: O280 -- MOTOR-V3-UM-PERIODO (aval dele 15/10 09:5x). O que a obra ataca, e o diagnostico e o do proprio aval: hoje a m
 
-● Monitor event: "commits novos na raia v3 (itens do esmeril fechando)"
-
-  Ran 10 shell commands
-
-● Monitor event: "commits novos na raia v3 (itens do esmeril fechando)"
-
-● Census the non-call forms to reconcile the item's number
-  ⎿  $ cd /home/ronald/saas-hasner && SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && cat > $SP/i2_escritas.py
-     <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     """COMPLEMENTO do censo do I2: o que NAO e chamada. Serve para reconciliar o `11` do item.
-     Tres categorias,…
-
-✢ Flambéing… (22h 15m 10s · ↓ 2.5m tokens)
+✢ Compacting conversation… (22h 20m 40s · ↓ 2.5m tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱ 93%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                                            7% until auto-compact
+                                                                                                                                            0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell, 1 monitor · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ general-purpose  Censusing NOMES_DA_CCT getattr defaults                                                                         3h 48m 47s · ↓ 121.9k tokens
+  ◯ general-purpose  Writing MemosDoMotorTest into i7_selo_testes.py                                                                 3h 54m 17s · ↓ 153.2k tokens
   ⧉  index
 ```
