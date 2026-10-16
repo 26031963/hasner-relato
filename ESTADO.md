@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 16/10/2026 01:52:02.**
+**Medido em 16/10/2026 01:57:32.**
 
 | | |
 |---|---|
-| `HEAD` local | `691f1a35 [O289] a 7a testemunha do portao do TXT devolvia a MESMA resposta para "nao medi" e "medi zero", debaixo do comentario que proibia isso` |
-| `origin/main` | `bb3e47f2 [O288] o portao do TXT comparava METADE de uma rubrica que o arquivo paga INTEIRA: a soma da 8069 ganha NOME, e quem EMITE e quem CONFERE passam a chamar a mesma funcao` |
-| commits a subir (`ahead`) | **2** |
+| `HEAD` local | `7048a76c O topo do TICKETS fechado no ato do push (O112)` |
+| `origin/main` | `691f1a35 [O289] a 7a testemunha do portao do TXT devolvia a MESMA resposta para "nao medi" e "medi zero", debaixo do comentario que proibia isso` |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,37 +29,37 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2488.1 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2488.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **256.6 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **256.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **69.8 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **69.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **372.7 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **372.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **276.8 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **276.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o275** (`raia-o275`) -- **SEM AGENTE**
-  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **6.1 h** (passou das 6 h da L-105)
+  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **6.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-o275.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **394.5 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **394.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
 - **wt-v3** (`raia-v3`) -- **SEM AGENTE**
-  - 15 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **4.7 h**
+  - 15 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **4.8 h**
   - sem declaracao em `logs/raias/wt-v3.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **21 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
@@ -70,11 +70,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+7048a76c O topo do TICKETS fechado no ato do push (O112)
 691f1a35 [O289] a 7a testemunha do portao do TXT devolvia a MESMA resposta para "nao medi" e "medi zero", debaixo do comentario que proibia isso
 f00d1f62 O topo do TICKETS fechado no ato do push (O112)
 bb3e47f2 [O288] o portao do TXT comparava METADE de uma rubrica que o arquivo paga INTEIRA: a soma da 8069 ganha NOME, e quem EMITE e quem CONFERE passam a chamar a mesma funcao
 8c545a89 [O284] o caderno de cartoes sai do request e vira JOB: o pedido vivo e DEVOLVIDO em vez de duplicado, e o pouso foi UM ato -- merge, commit e deploy sem nada no meio
-8be3814b [O140] o FURO do dia nasce LAVRADO: `DiaPago.furo_apurado` passa a ser DADO com tres estados, e a lavratura e o escritor unico -- nenhum leitor precisa mais pagar uma volta de motor para saber se o dia furou
 ```
 
 ## `git status --short`
@@ -172,22 +172,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  └──────────────────┴─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
-
-  Nenhum número de portão se move — a chave espelho_x_dia_pago segue fora de falhas de propósito (O-DIA-PAGO S2). O gate 3(i) do esmeril fechou por medição: os 4
-  de 212 do AVAIS #7 saem de cartao_pela_celula.py::divergencia e nunca chamam esta função; os 4 colabs / 7 dias da PERNA 2 são da comp 09. Três números com o
-  dígito 4, nenhum é o outro, nada se republicou na mesa.
-
-  O que esta cura NÃO faz, dito no commit e no dossiê: não fecha o item I1 — os 15 sítios de getattr(res,'periodos'|'periodos_ft',…) são do construtor, e a
-  derivada foi re-derivada e segue 14 de 26. ESMERIL.md §6 agora carrega o sha real (logs/ é ignorado, então não há auto-citação).
-
-  A ORDEM-VIVA-TOPO andou de O275 para O280 por decisão minha registrada em uma linha (AUTONOMIA-DE-CODIGO item 1): a O275 está dupla-travada — a pergunta de LEI
-  do topo e o meu portão P10 em o275_pousar.sh —, e os dois selos do hook passaram depois do movimento.
-
-  Próximo, depois que origin/main ler 691f1a35: o Gate 3(ii) — selo_leitores_no_mesmo_numero contra config.settings.sombra no cpuset de teste, que é a resposta
-  honesta ao "não medi se a exceção dispara para alguém hoje". Não roda junto com a régua do push (mesmo cpuset). A O280 passo 4 segue na raia wt-v3 com agente
-  próprio — diff_v2_v3.py e MEDIDO-frota-da50482b.md já escritos lá —, e a sombra ficou com carimbo fresco de hoje, que é exatamente o que aquele DIFF precisa.
-
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: O280 -- MOTOR-V3-UM-PERIODO (aval dele 15/10 09:5x). O que a obra ataca, e o diagnostico e o do proprio aval: hoje a m
 
@@ -201,15 +185,31 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
   Enquanto isso, uma divergência medida contra o CLAUDE.md, que a seção 8 manda corrigir no mesmo commit — e este commit já fechou, então ela fica registrada em
   arquivo em vez de virar escrita na árvore durante o push:
 
-● Checking the push progress
-  ⎿  $ cd /home/ronald/saas-hasner && date '+%H:%M:%S'; tail -4 logs/o289/push.out; echo "=== trava ==="; bash bin/trava_teste.sh --quem
+  Ran 4 shell commands
 
-✢ Flambéing… (16h 27m 40s · ↓ 2.0m tokens · thinking)
+● Background command "Push the marco through the normal regua" completed (exit code 0)
+
+● Push pousou: bb3e47f2..691f1a35  main -> main, e o veredito lido do remoto, não da ausência de saída: git rev-parse --short origin/main = 691f1a35. Régua com os
+  três sinais — Ran 11023 tests in 811.937s / OK (skipped=42), control-plane Ran 22 / OK, RC_PUSH=0. Pista livre.
+
+  Ran 2 shell commands
+
+● Background command "Wait for the push verdict" completed (exit code 0)
+
+  Ran 1 shell command
+
+● Gate 3(ii) agora, que a pista está livre — e pela forma da casa, não por invocação inventada:
+
+● Reading the medir signature
+  ⎿  $ cd /home/ronald/saas-hasner && grep -n '^def medir\|^def lavrar\|^def ' app/folha/porta_export.py | head -20; echo "=== assinatura de medir ==="; sed -n
+     '/^def medir/,/^ /p' app/folha/porta_export.py | head -20
+
+✢ Flambéing… (16h 33m 10s · ↓ 2.0m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                           ✔ Update installed · Restart to update
+                                                                                                                                            7% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
