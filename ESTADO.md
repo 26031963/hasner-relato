@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:448 AFIRMA ato sem PROVA ao lado -- - **NO AR, e o ato fechou inteiro**: commit `8c545a89` (merge `--no-ff`) e `bin/deploy.sh` **sem** `--sem-migrate` rc **0** as 18:12 -- `rel
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:449 AFIRMA ato sem PROVA ao lado -- - **NO AR, e o ato fechou inteiro**: commit `8c545a89` (merge `--no-ff`) e `bin/deploy.sh` **sem** `--sem-migrate` rc **0** as 18:12 -- `rel
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 16/10/2026 07:07:48.**
+**Medido em 16/10/2026 07:13:02.**
 
 | | |
 |---|---|
@@ -29,22 +29,22 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2493.4 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2493.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **261.8 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **261.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **75.1 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **75.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
   - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **378.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **282.1 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **282.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o275** (`raia-o275`) -- **SEM AGENTE**
   - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **11.4 h** (passou das 6 h da L-105)
@@ -53,13 +53,13 @@ RELATO, com a lista de nomes do banco como autoridade._
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **399.8 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **399.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
 - **wt-v3** (`raia-v3`) -- **SEM AGENTE**
-  - 19 commit(s) a frente do `main`, 7 arquivo(s) sujo(s), commit a frente ha **0.0 h**
+  - 19 commit(s) a frente do `main`, 7 arquivo(s) sujo(s), commit a frente ha **0.1 h**
   - sem declaracao em `logs/raias/wt-v3.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **21 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
@@ -174,44 +174,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Task "Construtor da v3: fechar os 8 itens do esmeril" still running in background
+    marco, medido no número que a tela recebe.
+  - O tripwire dois numeros para uma quantidade não mordeu em nenhuma das quatro.
+  - rc=2 é o vermelho que o selo já tinha (fechamento_x_soma=57, he_pendente_trava_dias=114, linha_x_badge=5, espelho_x_dia_pago=1): a cura muda a magnitude, nunca
+    o veredito.
+  - Na sombra porque o comando chama lavrar, que escreve MetricaSnapshot — contra saas_hasner seria escrita, não smoke. Trava tomada, cpuset 4-7, --cpus 1.
+  - Corrijo um número meu: a leitura de 06:4x usou só emp1, e emp1 universo=0 — número sem universo não afirma nada. Fica declarada ao lado da medição, não
+    apagada.
 
-● Task "Move the ORDEM-VIVA marker and check the hook selos" still running in background
+  Duas coisas que a seção do marco não carregava e agora carregam (ela foi escrita 05:5x, antes do push): a linha de 2613da74 + push + deploy, e a linha do smoke.
+  E o estado da linha O292 no BACKLOG passou de portao: ... para FECHADA 16/10, NO AR (264 chars, sem pipe). Os três selos do hook seguem OK e o hook aponta O280.
 
-● Task "commits novos na raia v3 (itens do esmeril fechando)" still running in background
+  No esmeril da O280 (fila 1, raia do construtor): o declarado que eu havia pendurado no I4 saiu pela condição que eu mesmo escrevi — CCT/NOMES_DA_CCT/cct_do_motor
+  agora moram em nucleo.py:254/:289/:292, o único leitor de produção lê dali (alimentacao.py:307), e o censo devolve zero importador de ponto.calculador.periodo:
+  o módulo novo segue sem leitor de prod, que é a letra do aval. Achado de pista no caminho, dito ao construtor: o main está 1 commit à frente da raia e toca o
+  mesmo arquivo (porta_export.py, hunks 642-725 contra os 66-96 dele — faixas disjuntas), então ele commita o I1 e merga 2613da74 antes da bateria, ou certifica
+  outra árvore (L-117).
 
-● Background command "Run the gate smoke on the sombra for one empresa" completed (exit code 0)
+  Em pé na árvore, sem commit: app/docs/RELATO.md, BACKLOG.md, HANDOFF-SESSAO.md (derivado) e crons_duracao.json (nunca se commita). Monitor da raia re-armado por
+  30 min.
 
-  Ran 9 shell commands
-  ⎿  Not sent — no agent named 'Construtor da v3: fechar os 8 itens do esmeril' is reachable.
-  ⎿  Allowed by auto mode classifier
-  ⎿  Message queued for delivery to a6d0eabb49e4f5ff0 at its next tool round.
-  ⎿  Allowed by auto mode classifier
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: O280 -- MOTOR-V3-UM-PERIODO (aval dele 15/10 09:5x). O que a obra ataca, e o diagnostico e o do proprio aval: hoje a m
 
-  Ran 1 shell command
+● Checking in the raia whether all three readers now read the single porta
+  ⎿  $ cd /home/ronald/wt-v3 && echo "=== RAIA (arvore de trabalho): os mesmos getattr ainda existem? ==="; /bin/grep -nE
+     "getattr\([^)]*(feriado_em_dobra|hora_reduzida_afastada|prorrogacao_noturna_pos5h)" app/core/regua_cct.py app/ponto/calculador/alimentacao.py
+     app/ponto/management/commands/diff_calcu…
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-  Ran 4 shell commands
-  ⎿  Message queued for delivery to a6d0eabb49e4f5ff0 at its next tool round.
-  ⎿  Allowed by auto mode classifier
-
-  Ran 7 shell commands
-
-● Background command "Run the real somador command on the sombra under the trava" completed (exit code 0)
-
-● Running 1 shell command…
-
-✶ Flambéing… (21h 43m 26s · ↓ 2.4m tokens)
+✢ Compacting conversation… (21h 48m 40s · ↓ 2.4m tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱ 86%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                                           11% until auto-compact
+                                                                                                                                            0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell, 1 monitor · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells, 1 monitor · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ general-purpose  Committing I1 cure to porta_export.py                                                                            3h 17m 3s · ↓ 135.3k tokens
+  ◯ general-purpose  Measuring MotorBase.__init__ memo declarations                                                                  3h 22m 17s · ↓ 167.5k tokens
   ⧉  index
 ```
