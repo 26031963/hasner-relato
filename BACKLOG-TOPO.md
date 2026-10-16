@@ -5,7 +5,7 @@ a raspagem usa a lista de nomes do banco como autoridade, nunca regex adivinhada
 `colNNN`/`ecNNN` ficam, porque nao identificam ninguem fora desta casa. Obra FEITA sai desta
 lista — ela e o que esta EM PE._
 
-**300 obras abertas.**
+**301 obras abertas.**
 
 | ID | obra | estado |
 |---|---|---|
@@ -309,3 +309,4 @@ lista — ela e o que esta EM PE._
 | **O299** | O TOPO DO BACKLOG LE MARCA EM PROSA | registrada |
 | **O300** | REGUA E FERIADO NAO CHEGAM ALIMENTADOS AO CALCULADOR | registrada |
 | **O301** | ID REPETIDO EM `CASOS` SUBSTITUI O CASO ANTIGO EM SILENCIO | registrada |
+| **O302** | SUITE ORFA NAO TEM NOME NEM DONO | registrada |
