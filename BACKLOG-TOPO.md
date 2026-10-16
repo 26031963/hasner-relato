@@ -296,4 +296,4 @@ lista — ela e o que esta EM PE._
 | **O286** | BUG-SOMBRA-NO-POSTGRES-DE-PROD | espera corte |
 | **O287** | ESMERIL-V3 | espera `!` |
 | **O288** | PORTAO-COMPARA-METADE-DA-8069 | **FECHADA 15/10 22:30 neste commit, NO A |
-| **O289** | PORTA-EXPORT-NAO-MEDI-E-MEDI-ZERO | **FECHADA, NO AR.** commit `<sha>`, depl |
+| **O289** | PORTA-EXPORT-NAO-MEDI-E-MEDI-ZERO | **FECHADA, NO AR.** commit neste marco,  |
