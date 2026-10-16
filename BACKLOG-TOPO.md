@@ -5,7 +5,7 @@ a raspagem usa a lista de nomes do banco como autoridade, nunca regex adivinhada
 `colNNN`/`ecNNN` ficam, porque nao identificam ninguem fora desta casa. Obra FEITA sai desta
 lista — ela e o que esta EM PE._
 
-**295 obras abertas.**
+**297 obras abertas.**
 
 | ID | obra | estado |
 |---|---|---|
@@ -304,3 +304,5 @@ lista — ela e o que esta EM PE._
 | **O294** | VIGIA-TXT-09-EMP4 | ABERTA. **NAO e do pouso da v3**, e isso |
 | **O295** | PORTAO-DE-PRIVACIDADE-CEGO-A-TITLE-CASE | **FECHADA 16/10 14:1x, no ar** -- instru |
 | **O296** | NOME DE COLABORADOR EM COMENTARIO DE `.py` | espera `!` |
+| **O297** | RETENCAO DO RELATO PUBLICO NAO TEM VIGIA | registrada |
+| **O298** | MEDICAO DECLARADA CUJO INSTRUMENTO NOMEADO NAO A FAZ | registrada |
