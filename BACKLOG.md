@@ -28,13 +28,17 @@
      (2) O277: quem carrega o lado SDF e o CADASTRO DA O275 (tudo tem cadastro, nada de lista paralela), e a
      ORDEM e dele: "O275 pousa, depois O277 le o flag" -- intermitente segue pela docstring do
      MotorIntermitente, sem feriado-100 automatico.
-     O TOPO SEGUE SENDO A O271, e isso nao e escolha minha: ela e a que esta EM POUSO (suite da copia na fila
-     da trava desde 11:38) e a L-105 manda pousar o que esta verde antes de abrir fatia nova. Pela ordem dele, o
-     dinheiro depois dela e a O276, que o aval dele poe depois do DIFF e das 2
-     listas -- e ela tambem espera a suite CHEIA (a copia correu so os 5 casos do RED) e o MAX_TURNO_MIN, que
-     CRUZA motor_calculo_v2.py com a O271 e por isso nao pode pousar antes dela. Depois a O275 e so
-     entao a O277. AO LADO, sem cruzar arquivo com nenhuma das tres: O286 BUG-SOMBRA-NO-POSTGRES-DE-PROD
-     (instrumento, P7.1, pouso PROPRIO pela L-105) e a O284-A. -->
+     ESTE PARAGRAFO ESTAVA VELHO e dizia "O TOPO SEGUE SENDO A O271 ... ela e a que esta EM POUSO": a O271
+     FECHOU e esta NO AR desde 15/10 12:2x (marco no RELATO), e desde entao pousaram a O286 (12:4x), o
+     BUG-8792 (13:5x), a O140 marco B (16:4x) e a O284-A (17:4x, commit 8c545a89). O TOPO DE HOJE e a
+     O275, como diz o ORDEM-VIVA-TOPO acima -- e ela esta com o POUSO RETIDO na pergunta de lei do topo do
+     RELATO (FORMA A x FORMA B, 12,0 h x 36,0 h), nao em construcao: o codigo, a migration 0043 e o cadastro
+     pela UI estao prontos na raia wt-o275. Pela ordem dele, o dinheiro vem depois: a O276 segue parada pela
+     regra DELE (o DIFF surpreendeu), e o MAX_TURNO_MIN cavalga o commit da troca da O280 em vez de pouso
+     proprio. Depois a O277. EM POUSO AGORA, e e a unica: a O288 PORTAO-COMPARA-METADE-DA-8069 (bug PROVADO
+     no esmeril do marco da O271, P7.1, pouso PRE-APROVADO pela L-105). AO LADO, sem cruzar arquivo com
+     nenhuma delas: a O280 na raia wt-v3, cuja TROCA nao vai ao `!` dele enquanto houver item do ESMERIL-V3
+     (O287) aberto -- 8 de 25 abertos, condicao LITERAL do aval dele de 14:1x. -->
 <!-- MOVIDO em 15/10 ~02:5x pelo Code, AUTONOMIA-DE-CODIGO item 1 (ordem e encaixe quando quem decide e
      DEPENDENCIA DE CODIGO): o BUG-SOBRA-TIPO-TROCADO FECHOU -- cura em 5f915ff4, no ar desde 02:06, e o apply
      do dado as 02:23 com a PROVA no RELATO (classe da frota 10 = 0, o 26219 morto por lastro, o 26/09 sem
