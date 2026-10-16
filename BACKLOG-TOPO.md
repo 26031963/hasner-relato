@@ -299,4 +299,4 @@ lista — ela e o que esta EM PE._
 | **O289** | PORTA-EXPORT-NAO-MEDI-E-MEDI-ZERO | **FECHADA, NO AR.** commit neste marco,  |
 | **O290** | SELO-LEITORES-NAO-IMPRIME-NAO-MEDIDO | livre -- toca so um command de selo, nao |
 | **O291** | CLAUDE-MD-GUARDA-O-NUMERO-DO-BLOCO | livre -- o diagnostico e LEITURA. A cura |
-| **O292** | FALHAS-SOMA-NUMERO-DA-COMPETENCIA | portao: toca a funcao do portao do TXT,  |
+| **O292** | FALHAS-SOMA-NUMERO-DA-COMPETENCIA | **FECHADA 16/10 06:5x, NO AR** -- commit |
