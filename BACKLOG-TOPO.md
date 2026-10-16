@@ -5,7 +5,7 @@ a raspagem usa a lista de nomes do banco como autoridade, nunca regex adivinhada
 `colNNN`/`ecNNN` ficam, porque nao identificam ninguem fora desta casa. Obra FEITA sai desta
 lista — ela e o que esta EM PE._
 
-**288 obras abertas.**
+**290 obras abertas.**
 
 | ID | obra | estado |
 |---|---|---|
@@ -297,3 +297,5 @@ lista — ela e o que esta EM PE._
 | **O287** | ESMERIL-V3 | espera `!` |
 | **O288** | PORTAO-COMPARA-METADE-DA-8069 | **FECHADA 15/10 22:30 neste commit, NO A |
 | **O289** | PORTA-EXPORT-NAO-MEDI-E-MEDI-ZERO | **FECHADA, NO AR.** commit neste marco,  |
+| **O290** | SELO-LEITORES-NAO-IMPRIME-NAO-MEDIDO | livre -- toca so um command de selo, nao |
+| **O291** | CLAUDE-MD-GUARDA-O-NUMERO-DO-BLOCO | livre -- o diagnostico e LEITURA. A cura |
