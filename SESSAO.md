@@ -6,10 +6,16 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 15/10/2026 21:07:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (872.7 MB). Acoes na janela: **1598**.
+**Medido em 15/10/2026 21:13:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (872.8 MB). Acoes na janela: **1604**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 21:12:37 | Bash | Resolve the stamp file path | `cd /home/ronald/saas-hasner && grep -n '^STAMP=\\|STAMP=' bin/sombra.sh \| head -3; S=$(grep -m1 -oP 'STAMP="?\K[^"]+' bin/sombra.sh); echo "STAMP expr: $S"; eval "RAIZ=/home/ronald/saas-hasner; echo CAMINHO=$S";` |
+| 21:12:32 | Bash | Read how --conferir reads the stamp | `cd /home/ronald/saas-hasner && grep -n 'conferir' -A 12 bin/sombra.sh \| sed -n '1,40p'` |
+| 21:12:29 | Bash | Locate the stamp file path | `cd /home/ronald/saas-hasner && grep -n 'CARIMBO=\\|carimbo=\\|^CARIMBO' bin/sombra.sh \| head; echo "=== arquivo do carimbo ==="; grep -nE 'logs/[a-z_]*carimbo[a-z_]*' bin/sombra.sh \| head -5` |
+| 21:12:24 | Bash | Find the stamp file and its timestamp | `cd /home/ronald/saas-hasner && grep -n 'carimbo' bin/sombra.sh \| head -8; echo ===; ls -la --time-style=full-iso logs/sombra* logs/*sombra* 2>/dev/null \| head -20` |
+| 21:12:19 | Bash | Read the shadow stamp | `cd /home/ronald/saas-hasner && bash bin/sombra.sh --conferir 2>&1 \| head -25` |
+| 21:08:45 | Bash | Make the measurement durable | `cd /home/ronald/saas-hasner/logs/o287 && cat > MEDIDO.md <<'EOF' # O287 -- O PORTAO DO TXT COMPARA METADE DE UMA RUBRICA QUE E PAGA INTEIRA > Fecha o INCOMPLETO (3) nomeado no marco da O271 (`app/docs/RELATO.md`): *"os consumidores de > `horas_saida_antecipada` em `folha/`, `holerite/` e `relatorios/` ficam por censar -- > `total_saida_antecipada` nao esta entre as seis chaves de `divergencia()`"* ...` |
 | 21:05:29 | Bash | Run the probe on the shadow for competence 10 | `cd /home/ronald/saas-hasner && ESTEIRA_QUEM=o287-sonda-antecipada O287_MES=10 bash bin/trava_teste.sh --espera 1800 -- bash logs/o287/rodar.sh antecipada_10 2>&1 \| tail -60` |
 | 21:05:25 | Bash | Write the sombra runner for the probe | `cd /home/ronald/saas-hasner && cat > logs/o287/rodar.sh <<'EOF' #!/usr/bin/env bash # O287: sonda de LEITURA na SOMBRA (forma do `logs/o280/passo4/rodar.sh`): $TESTE_DOCKER pela fonte # unica, assert de banco com exit 90, proxy na porta 9, tmpfs em /app/logs e /app/media. # A ARVORE MEDIDA e a VIVA, montada `:ro` -- a sonda nao escreve nada no banco nem na arvore. set -euo pipefail RAIZ="${RAIZ:-/ ...` |
 | 21:05:08 | Bash | Write the read-only probe for the blind rubric half | `cd /home/ronald/saas-hasner && mkdir -p logs/o287 && cat > logs/o287/sonda_antecipada.py <<'PYEOF' """O287 -- O PORTAO DO TXT COMPARA UMA PARTE DE UMA RUBRICA QUE E PAGA INTEIRA. SO LEITURA. A rubrica 8069 do TXT (`atraso_diurno`) e, LITERALMENTE, `horas_atraso + horas_saida_antecipada` (`folha/export.py:411`, lapide de 30/07). Os DOIS comparadores da casa comparam so a primeira metade: `relatorio ...` |
