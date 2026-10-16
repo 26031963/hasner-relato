@@ -6,10 +6,20 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 15/10/2026 21:02:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (872.5 MB). Acoes na janela: **1588**.
+**Medido em 15/10/2026 21:07:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (872.7 MB). Acoes na janela: **1598**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 21:05:29 | Bash | Run the probe on the shadow for competence 10 | `cd /home/ronald/saas-hasner && ESTEIRA_QUEM=o287-sonda-antecipada O287_MES=10 bash bin/trava_teste.sh --espera 1800 -- bash logs/o287/rodar.sh antecipada_10 2>&1 \| tail -60` |
+| 21:05:25 | Bash | Write the sombra runner for the probe | `cd /home/ronald/saas-hasner && cat > logs/o287/rodar.sh <<'EOF' #!/usr/bin/env bash # O287: sonda de LEITURA na SOMBRA (forma do `logs/o280/passo4/rodar.sh`): $TESTE_DOCKER pela fonte # unica, assert de banco com exit 90, proxy na porta 9, tmpfs em /app/logs e /app/media. # A ARVORE MEDIDA e a VIVA, montada `:ro` -- a sonda nao escreve nada no banco nem na arvore. set -euo pipefail RAIZ="${RAIZ:-/ ...` |
+| 21:05:08 | Bash | Write the read-only probe for the blind rubric half | `cd /home/ronald/saas-hasner && mkdir -p logs/o287 && cat > logs/o287/sonda_antecipada.py <<'PYEOF' """O287 -- O PORTAO DO TXT COMPARA UMA PARTE DE UMA RUBRICA QUE E PAGA INTEIRA. SO LEITURA. A rubrica 8069 do TXT (`atraso_diurno`) e, LITERALMENTE, `horas_atraso + horas_saida_antecipada` (`folha/export.py:411`, lapide de 30/07). Os DOIS comparadores da casa comparam so a primeira metade: `relatorio ...` |
+| 21:04:18 | Bash | Locate the TXT gate command | `find . -name 'cartao_x_txt*' ; echo ===; sed -n '1,60p' relatorios/management/commands/cartao_x_txt_divergentes.py 2>/dev/null \|\| true` |
+| 21:03:34 | Bash | Read the rubric mapping in the export porta | `sed -n '185,240p' folha/porta_export.py; echo "=== export.py 395-425 ==="; sed -n '395,425p' folha/export.py` |
+| 21:03:21 | Bash | Census the saida_antecipada consumers | `echo "=== CENSO horas_saida_antecipada / total_saida_antecipada (producao, sem tests) ==="; grep -rn 'saida_antecipada' --include=*.py . \| grep -v '/tests/\\|test_' \| sort; echo; echo "=== templates ==="; grep -rn 'saida_antecipada' --include=*.html templates/ \| sort` |
+| 21:03:10 | Bash | Read the divergence function and its key list | `sed -n '200,265p' relatorios/cartao_pela_celula.py` |
+| 21:03:07 | Bash | Find the divergence authority and its keys | `grep -rn 'def divergencia' --include=*.py . \| head; echo "=== chaves ==="; grep -rn 'total_atraso' --include=*.py . \| head -20` |
+| 21:02:38 | Bash | Survey the esmeril document structure | `cd /home/ronald/saas-hasner/logs/o280/esmeril && grep -n '^#\\|^> \*\*' ESMERIL.md \| head -40; echo "=== arquivos ==="; ls -la` |
+| 21:02:21 | Bash | Locate the O276 question in the relato | `cd /home/ronald/saas-hasner && grep -n 'O276\\|17 de 32\\|17 flips' app/docs/RELATO.md \| head -30` |
 | 21:01:57 | Bash | Read the top of the live RELATO | `cd /home/ronald/saas-hasner && sed -n '1,80p' app/docs/RELATO.md` |
 | 21:01:50 | Bash | Survey the worktrees and their state | `cd /home/ronald/saas-hasner && git worktree list && echo "=== status por raia ===" && for w in $(git worktree list --porcelain \| awk '/^worktree /{print $2}'); do printf '%s ' "$w"; git -C "$w" rev-parse --short HEAD; git -C "$w" status --porcelain \| head -8; echo '--'; done` |
 | 21:01:43 | Bash | Read the live ORDEM VIVA at the top of the backlog | `cd /home/ronald/saas-hasner && sed -n '1,40p' app/docs/BACKLOG.md` |
