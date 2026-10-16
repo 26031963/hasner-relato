@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 16/10/2026 09:35:46.**
+**Medido em 16/10/2026 09:40:47.**
 
 | | |
 |---|---|
@@ -29,25 +29,25 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2495.8 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2495.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **264.3 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **264.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **77.5 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **77.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **380.4 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **380.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
   - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **284.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o275** (`raia-o275`) -- **SEM AGENTE**
-  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **13.8 h** (passou das 6 h da L-105)
+  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **13.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-o275.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -59,7 +59,7 @@ RELATO, com a lista de nomes do banco como autoridade._
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
 - **wt-v3** (`raia-v3`) -- **SEM AGENTE**
-  - 21 commit(s) a frente do `main`, 2 arquivo(s) sujo(s), commit a frente ha **1.0 h**
+  - 21 commit(s) a frente do `main`, 2 arquivo(s) sujo(s), commit a frente ha **1.1 h**
   - sem declaracao em `logs/raias/wt-v3.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **21 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
@@ -174,44 +174,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  selo está certo; vai para o fecho do I6 e para a decisão aberta do I25, sem item novo.
 
-  Duas correções minhas, medidas e não de cabeça: o sítio do patch é :132, não :133 (:133 é a chamada de retratar_exportada) — corrigido na §6, no RELATO e mandado
-  em uma linha ao construtor, porque mensagem não se desfaz; e o meu "NF=6 conferido" vale por linha, não pela tabela — a §6 já tinha um --- e rodapé em itálico
-  nas linhas 364-368 desde que nasceu, e tudo de 369 em diante fica fora da tabela renderizada. A linha em branco a mais era minha (split sobre arquivo terminado
-  em \n) e saiu; a fragmentação de 364-368 não é minha e não a mexi — a §6 é append-only.
+  Ran 2 shell commands
 
-  Mandei o achado ao construtor antes do commit do lote I2+I6, com o pedido explícito de não editar nada se a suite dele já tiver veredito (L-117 proíbe .py entre
-  veredito e pouso). Li também o fecho novo dele (md5 ee678afa): as 20 escritas em 5 arquivos pelas formas HELPER/ATRIBUTO/PARÂMETRO estão conferidas, o PARÂMETRO
-  ficar buraco declarado com o sítio me serve, e o _escritas_de_fora devolvendo 0 em test_passe_turno_aberto_retroativo.py responde meu ponto 2 com medida —
-  aceito. O que ainda cobro na conferência é o caso plantado que fica vermelho: verde nos 8 não prova que morde.
+● O gate tem três estados, não dois, e o placar não existe. Levanto-o mecanicamente da própria §6 antes de julgar item a item:
 
-  Não há PAREI. A raia está em 1cf1c0c4 com 2 arquivos em construção, monitor behlvn80u armado, e a conferência dos dois próximos itens (I2+I6, depois I5) está
-  escrita e esperando o commit.
+  Ran 1 shell command
 
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: O280 -- MOTOR-V3-UM-PERIODO (aval dele 15/10 09:5x). O que a obra ataca, e o diagnostico e o do proprio aval: hoje a m
+● O varredor por forma já me engana aqui — ele marcou nao reabre (que preserva o fechamento) como se fosse nao fecha. Julgo item a item, e o que salta é outra
+  coisa: 11 rótulos sem nenhuma linha na §6. Pergunto ao fecho do construtor quem deles ele fechou:
 
-  Ran 4 shell commands
+  Ran 1 shell command
 
-● The conference is blocked on his commit, so I turn the same anti-vacuity question I'm cobrando dele onto my own finding: if retratar_exportada has no path that
-  could reach get_motor_cct, then that assertEqual(0, …) já não prova nada hoje — não só depois da troca.
+● O construtor declara seis deles como "FECHADO (já estava)" — e o fecho adversarial existe exatamente para não aceitar isso da prosa dele. Nenhum tem linha minha.
+  Confiro os seis no commit:
 
-  Ran 3 shell commands
+  Ran 1 shell command
 
-● The anti-vacuity question turned on my own finding and it both strengthened and tempered it. Measured at the commit:
+● Campo 2 da tupla é o lastro. Agora a pergunta adversarial não é "cita a lei?" mas "existe célula que exercita, com número que morde?" — confiro as duas coisas
+  nos oito casos:
 
-● Running 1 shell command…
+● Verifying each case cites its law and has a biting assertion
+  ⎿  $ cd /home/ronald/wt-v3 && python3 - <<'PYEOF'
+     import io,re
+     t=io.open('/tmp/bat.py',encoding='utf-8').read()
+     L=t.split('\n')
+     alvos={'I8':['C6','C6b','C6c'],'I10':['A9'],'I11':['C7'],'I12':['C8'],'I13':['A12'],'I15':['A10']}
+     leis={'I8':['L-115'],'I10':['L-073'],'I11':['L-095'],'I12':['L-092','L-113'…
 
-· Levitating… (32m 52s · ↓ 65.8k tokens)
+✽ Compacting conversation… (37m 53s · ↓ 76.2k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱ 81%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                                           10% until auto-compact
+                                                                                                                                            0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 2 shells, 1 monitor · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ general-purpose  Checking bracket tokens in msg_i2i6.txt                                                                           5h 45m 2s · ↓ 79.1k tokens
+  ◯ general-purpose  Reading test_contract_juiz_turno.py's scan universe                                                              5h 50m 3s · ↓ 113.7k tokens
   ⧉  index
 ```
