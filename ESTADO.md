@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 15/10/2026 23:38:32.**
+**Medido em 15/10/2026 23:44:02.**
 
 | | |
 |---|---|
@@ -29,7 +29,7 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2485.9 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2486.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
@@ -38,28 +38,28 @@ RELATO, com a lista de nomes do banco como autoridade._
   - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **254.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **67.6 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **67.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **370.5 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **370.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **274.6 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **274.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o275** (`raia-o275`) -- **SEM AGENTE**
-  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **3.9 h**
+  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **4.0 h**
   - sem declaracao em `logs/raias/wt-o275.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **392.3 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **392.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
 - **wt-v3** (`raia-v3`) -- **SEM AGENTE**
-  - 15 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2.5 h**
+  - 15 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2.6 h**
   - sem declaracao em `logs/raias/wt-v3.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **21 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
@@ -173,39 +173,39 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ⎿  Referenced file ../bin/sombra_regras_pessoais.py
+  relidos+abertos+sem_carimbo+sem_dia+efetivo_invertido+par_duplicado por colab e compara com len(periodos). Medido fura_universo = [] em 571/571, e a prova é a
+  chave do json (:319 persiste sempre) — o :281 só imprime quando não-vazia, e silêncio no log não é zero. Denominador também medido: o único continue (:119) é
+  antes, medidos += 1 está em :206, depois da identidade. Fica como linha de fila do meu instrumento (não da v3): o DIFF que for ao ! deve imprimir
+  efetivo_invertido e par_duplicado — hoje imprime 5 campos de censo.
 
-● Background command "Handoff, one push per marco, and the read-only prod smoke" completed (exit code 0)
+  Reverti uma cautela minha, por medição. /tmp/prepush-arvore.4D6LNa estava na minha lista de não-apagar porque eu acreditava que guardava obra única. Medido pelo
+  CONTEÚDO: 2.776 de 2.779 .py da cópia têm blob no repo, e os 3 restantes diferem do HEAD só na linha do import. Zero obra perdida — apaguei ela e a .SLWYt9. No
+  mesmo caminho caiu uma afirmação falsa que eu já publiquei em app/docs/RELATO.md:374 (que o git não conhecia ponto/hora_do_aparelho.py em nenhum ramo): git
+  hash-object dá b1a5a201, o mesmo blob de HEAD:app/api/hora_do_aparelho.py — o módulo mudou de lugar na O204. A seção já está commitada, então a correção anda no
+  próximo marco (L-116, seção escrita não se reescreve), nos artefatos da O275.
 
-  Ran 12 shell commands
+  Duas escritas negadas pelo classificador ([Modify Shared Resources], em app/docs/PENDENTES_RONALD.json, não burlei):
+  - o item O275-SDF-CADASTRO-SMOKE — e isso é um segundo travamento da O275: a minha própria porta P10 do o275_pousar.sh exige esse item aberto, então nem com a
+    resposta da lei o pouso passa;
+  - a correção do AVAIS #7, que hoje te pede decisão com número errado: lê "9 colabs, TODOS na chave total_atraso" (medido 12:4x com a chave que comparava METADE
+    da rubrica 8069); medido pela rubrica INTEIRA dá 4 de 212, todos na chave atraso_diurno. O script está pronto (o271_corrige_numero_do_aval.py, py_compile OK,
+    não rodado).
 
-● Background command "Read-only prod: list the divergent ids for competence 10" completed (exit code 0)
+  O275 segue retida em duas coisas, nenhuma minha: a pergunta de lei FORMA A x FORMA B no topo do RELATO (12,0 h x 36,0 h; 337 vínculos x 1) e o item de smoke
+  negado acima. Mantive de propósito a igualdade de hash no reuso de worktree do o275_certificar.sh — worktree reusada carrega docs mais velhos que o main, e a
+  suite Django tem contratos que leem docs e os 72 selos de host não cobrem; o else-branch ganhou diagnóstico medido em vez de ficar frouxo.
 
-  Read 1 file, ran 37 shell commands
-  ⎿  Read docs/AVAIS.md (26 lines)
-  ⎿  Referenced file ../logs/o280/esmeril/ESMERIL.md
-  ⎿  Read ../../.claude/projects/-home-ronald-saas-hasner/memory/censo-de-periodos-nao-conta-turno.md (24 lines)
-  ⎿  Referenced file ../bin/sombra_regras_pessoais.py
+  Sigo pela PAREI-DE-LEI-NAO-DEVOLVE-TURNO no próximo item que não depende da lei: O287 ESMERIL-V3 parte 3 — censo de quem mais lê calcular_periodo e passa a ler a
+  v3. É leitura, não cruza arquivo com a raia da O275 nem com o lote 3 do construtor.
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: O275 -- SDF-FERIADO-E-DIA (corte dele 14/10 20:4x -- regra de negocio NOVA, e por isso corte e nao aval). TipoEscala g
 
-  Ran 13 shell commands
-  ⎿  Read docs/AVAIS.md (26 lines)
-  ⎿  Referenced file ../logs/o280/esmeril/ESMERIL.md
-  ⎿  Read ../../.claude/projects/-home-ronald-saas-hasner/memory/censo-de-periodos-nao-conta-turno.md (24 lines)
-  ⎿  Referenced file ../bin/sombra_regras_pessoais.py
+● Adding item I25 to the esmeril with the measured numbers
+  ⎿  $ cd /home/ronald/saas-hasner/logs/o280/esmeril
+     sed -n '11,20p' ESMERIL.md | cat -A | sed 's/\$$//' | cut -c1-200 | head -12
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-● Locating o271 correction script and its numbers
-  ⎿  $ SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
-     ls -la $SP/o271_* $SP/o275_* 2>/dev/null
-     echo "=== numeros no corretor ==="
-     grep -nE "atraso_diurno|total_atraso|' 9|=9|de 9|para 4|\b4 colab" $SP/o271_corrige_numero_do_aval.py 2>/dev/null | head -20
-
-✢ Flambéing… (14h 14m 10s · ↓ 1.8m tokens · thought for 5s)
+✢ Flambéing… (14h 19m 40s · ↓ 1.8m tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
