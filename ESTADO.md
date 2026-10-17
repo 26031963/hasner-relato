@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 17/10/2026 06:34:32.**
+**Medido em 17/10/2026 06:40:03.**
 
 | | |
 |---|---|
@@ -29,31 +29,31 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2516.8 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2516.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **285.3 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **285.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **98.5 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **98.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **401.4 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **401.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **305.5 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **305.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o275** (`raia-o275`) -- **SEM AGENTE**
-  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **34.8 h** (passou das 6 h da L-105)
+  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **34.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-o275.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **423.2 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **423.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -172,39 +172,39 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Committed fcba2390, ran 30 shell commands
-  ⎿  Read docs/AVAIS.md (28 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b3cpxnlj1.output (16 lines)
-  ⎿  Referenced file ../../../../tmp/prepush-arvore.6Vi57A/app/ponto/tests/test_bateria_lavratura.py
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b0atkqtox.output (4 lines)
-  ⎿  Referenced file ponto/calculador/regras.py
+● Push landed: b92cbc7f..fcba2390 main -> main, rc=0, main...origin/main sem ahead. Árvore livre.
 
-● Task "Measure the whole public history with the cured predicate" still running in background
+  Ran 9 shell commands
 
-● Task "Push the marco commit to the remote" still running in background
+● Achado da releitura, antes de escrever a errata — a geometria do bloco N12X não distingue o que ela promete:
+
+  O teto da L-093 limita a SOMA mantendo a proporção (motor_calculo_v2.py:951, "O CORTE LIMITA A SOMA, e o rateio ... se mantem a PROPORCAO"), com teto max(0,
+  previsto − trabalhado). Nos cinco casos G* o valor afirmado senta em cima ou abaixo do teto:
+
+  ┌──────┬───────────────┬──────────┬──────┬────────────────┬──────────────────────────────┐
+  │ caso │  trabalhado   │ previsto │ teto │    afirmado    │    com os gates APAGADOS     │
+  ├──────┼───────────────┼──────────┼──────┼────────────────┼──────────────────────────────┤
+  │ G1   │ 240+420 = 660 │ 660      │ 0    │ (0,0)          │ raw 1920 → clamp 0 = igual   │
+  ├──────┼───────────────┼──────────┼──────┼────────────────┼──────────────────────────────┤
+  │ G2   │ 240+423 = 663 │ 660      │ 0    │ (0,0)          │ raw → clamp 0 = igual        │
+  ├──────┼───────────────┼──────────┼──────┼────────────────┼──────────────────────────────┤
+  │ G3   │ 240+300 = 540 │ 660      │ 120  │ 120            │ raw 1560 → clamp 120 = igual │
+  ├──────┼───────────────┼──────────┼──────┼────────────────┼──────────────────────────────┤
+  │ G4   │ 210+420 = 630 │ 660      │ 30   │ atraso 30      │ raw 330 → clamp 30 = igual   │
+  ├──────┼───────────────┼──────────┼──────┼────────────────┼──────────────────────────────┤
+  │ G5   │ 240           │ 720      │ 480  │ lei 0 · v3 480 │ 0 ≠ 480 → distingue          │
+  └──────┴───────────────┴──────────┴──────┴────────────────┴──────────────────────────────┘
+
+  Quatro dos cinco passam com os dois gates deletados — vacuidade pela regra do CLAUDE.md §6 ("selo que MORDE"), e a coluna de teto da §3b consertou o número sem
+  perguntar se o caso ainda morde.
 
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-  Ran 27 shell commands
-  ⎿  Read docs/AVAIS.md (28 lines)
-  ⎿  Referenced file ponto/calculador/alimentacao.py
-  ⎿  Referenced file ponto/calculador/regras.py
-  ⎿  Referenced file ponto/calculador/periodo.py
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b3cpxnlj1.output (16 lines)
+● Reading the L-084 predicate
+  ⎿  $ /bin/grep -n 'def _cadastro_nao_descreve' -A 18 ponto/motor_calculo_v2.py | /bin/grep -n 'abs\|return\|if \|CADASTRO_NAO'
 
-● Task "Measure the whole public history with the cured predicate" still running in background
-
-● Background command "Push the marco commit to the remote" completed (exit code 0)
-
-● Background command "Wait by file for the push verdict" completed (exit code 0)
-
-● Push landed: b92cbc7f..fcba2390 main -> main, rc=0, main...origin/main sem ahead. Árvore livre.
-
-● Reading the landed pontualidade_por_dia
-  ⎿  $ sed -n '176,270p' ponto/calculador/alimentacao.py
-
-✢ Crafting… (20h 9m 11s · ↓ 1.9m tokens · thinking)
+✶ Crafting… (20h 14m 41s · ↓ 1.9m tokens · thinking more)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

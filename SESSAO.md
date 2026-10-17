@@ -6,10 +6,19 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 17/10/2026 06:34:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (957.9 MB). Acoes na janela: **1249**.
+**Medido em 17/10/2026 06:40:03.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (958.1 MB). Acoes na janela: **1258**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 06:39:38 | Bash | Read the L-084 predicate | `/bin/grep -n 'def _cadastro_nao_descreve' -A 18 ponto/motor_calculo_v2.py \| /bin/grep -n 'abs\\|return\\|if \\|CADASTRO_NAO'` |
+| 06:39:28 | Bash | Read aplicar_tolerancia body selectively | `sed -n '1715,1795p' ponto/motor_calculo_v2.py \| /bin/grep -n 'cadastro_nao_descreve\\|if \\|return\\|atraso\\|antecip' \| head -24` |
+| 06:39:24 | Bash | Check where the L-084 gate is applied | `/bin/grep -n 'def aplicar_tolerancia' -A 30 ponto/motor_calculo_v2.py \| /bin/grep -n 'cadastro_nao_descreve\\|def \\|return\\|_prev' \| head -20` |
+| 06:39:19 | Bash | Locate the L-084 both-pontas gate | `/bin/grep -rn '_cadastro_nao_descreve\\|cadastro_nao_descreve' ponto/calculador/*.py \| head -20` |
+| 06:36:44 | Bash | Verify two cited offsets after the marco | `/bin/grep -n 'intervalo_cadastrado' ponto/calculador/periodo.py; /bin/grep -n 'AUT_INTRA_MAX_S' ponto/motor_calculo_v2.py` |
+| 06:36:20 | Bash | Read the lower door of pontualidade | `/bin/grep -n 'def pontualidade_no_dia' -A 28 ponto/calculador/periodo.py` |
+| 06:35:24 | Bash | Read the teto to confirm clamp vs zero | `sed -n '951,1015p' ponto/motor_calculo_v2.py` |
+| 06:35:20 | Bash | Read the two gates and locate the teto | `sed -n '240,262p' ponto/calculador/regras.py; echo "=== teto no v2"; /bin/grep -n '_aplicar_teto_pontualidade' ponto/motor_calculo_v2.py \| head -3` |
+| 06:35:14 | Bash | Get current line numbers for cited sites | `/bin/grep -n 'UMA TUPLA POR PERIODO\\|_anc = _no_dia_da_jornada\\|_me = _jm\\|_ms = _jm\\|_cruza(_hi, _hf)' ponto/calculador/alimentacao.py; echo "=== regras"; /bin/grep -n '_declara_intervalo = \\|cumpriu_a_volta_do_intervalo\\|_perto(_hii\\|for _t in \\|turno_aberto=_s is None\\|_aplicar_teto_pontualidade\\|_atraso = sum\\|_antecipada = sum' ponto/calculador/regras.py` |
 | 06:34:21 | Bash | Read the landed pontualidade_por_dia | `sed -n '176,270p' ponto/calculador/alimentacao.py` |
 | 06:34:15 | Bash | Read N12X block and section 5 | `cd /home/ronald/saas-hasner/logs/o280/esmeril && sed -n '390,478p' I26-CASOS-33-ESPEC.md` |
 | 06:34:10 | Bash | Read sections 3c and 3d | `cd /home/ronald/saas-hasner/logs/o280/esmeril && sed -n '168,232p' I26-CASOS-33-ESPEC.md` |
