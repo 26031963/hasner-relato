@@ -6,10 +6,17 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 17/10/2026 00:50:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (939.8 MB). Acoes na janela: **1160**.
+**Medido em 17/10/2026 00:55:47.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (940.4 MB). Acoes na janela: **1166**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 00:55:43 | Bash | Anchor every line the cure touches | `cd /home/ronald/saas-hasner/app /bin/grep -n "vivos = \[x for x in lista\\|_com_fio = \[x\\| imp = impressao_insumos\\|if cel.julgada_em and cel.impressao == imp\\|cods = \[cod for cod, _ in classificar_dia\\|out\['julgadas'\] += 1\\|out.setdefault('cods', {})\[data\]\\|_vd = None\\|if not cods and vivos:\\|if _com_fio:\\|_vd = 'cobrado'\\|_contar_emissao(out\\|out.setdefault('rejulgar', \[\])\\|_ ...` |
+| 00:55:31 | Bash | Read the chamado-by-day porta | `cd /home/ronald/saas-hasner/app /bin/grep -rn "def chamados_que_falam_de_batida" --include=*.py . ; echo '---'; f=$(/bin/grep -rln "def chamados_que_falam_de_batida" --include=*.py .); sed -n "$(/bin/grep -n 'def chamados_que_falam_de_batida' $f \| cut -d: -f1),+40p" $f` |
+| 00:54:19 | Bash | Read the window and day-building head of the judging body | `cd /home/ronald/saas-hasner/app sed -n '642,740p' ponto/services/cartorio.py` |
+| 00:53:57 | Bash | Read julgar_colab and the emission counter | `cd /home/ronald/saas-hasner/app sed -n '585,645p' ponto/services/cartorio.py; echo '--- _contar_emissao ---'; sed -n '1085,1115p' ponto/services/cartorio.py` |
+| 00:53:53 | Bash | Read the emission sites and the lavra | `cd /home/ronald/saas-hasner/app sed -n '930,1035p' ponto/services/cartorio.py` |
+| 00:53:44 | Bash | Read the judging body: live chamados, impressao, codes, veredito | `cd /home/ronald/saas-hasner/app sed -n '740,860p' ponto/services/cartorio.py` |
+| 00:53:33 | Bash | Read the classification body around the furo codes | `cd /home/ronald/saas-hasner/app sed -n '160,260p' ponto/supra_juiz.py` |
 | 00:48:48 | Bash | How supra_juiz gates codes by live chamados | `cd /home/ronald/saas-hasner/app /bin/grep -n "chamados_vivos\\|cobrancas_vivas\\|FURO_SEM_COBRANCA\\|FURO_PARCIAL\\|FURO_COM_COBRANCA_MORTA\\|COBRANCA_SEM_FURO\\|PREVISTO_COM_DIA_INDEFINIDO" ponto/supra_juiz.py \| head -40` |
 | 00:48:35 | Bash | Read non-chargeable codes and pause exemption | `cd /home/ronald/saas-hasner/app /bin/grep -n "NAO_COBRAVEIS_DO_COLABORADOR" -A 14 ponto/supra_juiz.py \| head -25 echo "=== nao_retem_pela_pausa ===" /bin/grep -n "def nao_retem_pela_pausa" -A 25 folha/export.py \| head -30` |
 | 00:48:25 | Bash | Read retention loop | `cd /home/ronald/saas-hasner/app sed -n '1120,1175p' folha/export.py` |
@@ -1169,4 +1176,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 12:57:59 | Bash | Inspect the O280 backlog row | `cd /home/ronald/saas-hasner && sed -n '902p' app/docs/BACKLOG.md \| cat -A \| head -1 \| cut -c1-80; echo "==="; sed -n '902p' app/docs/BACKLOG.md \| awk -F'\|' '{print "NF="NF; for(i=1;i<=NF;i++) printf "[%d] %s\n", i, substr($i,1,120)}'` |
 | 12:57:53 | Bash | Check gates before landing | `cd /home/ronald/saas-hasner && date '+%H:%M:%S' && echo "--- crons em curso:" && ls -1 logs/crons_em_curso/ 2>/dev/null \| wc -l && echo "--- trava:" && bash bin/trava_teste.sh --quem 2>&1 \| head -2 && echo "--- sombra:" && bash bin/sombra.sh --conferir 2>&1 \| tail -3 && echo "--- status main:" && git status --porcelain \| head -20 && echo "--- HEAD:" && git rev-parse --short HEAD && echo "--- r ...` |
 | 12:57:38 | Bash | Wait for the suite verdict on the certification copy | `cd /home/ronald/saas-hasner && L=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/ba06jly2t.output i=0; until grep -qE '^(OK\|FAILED)($\| \()' "$L" 2>/dev/null \|\| [ $i -ge 50 ]; do sleep 20; i=$((i+1)); done echo "--- esperas=$i $(date '+%H:%M:%S')"; tail -c 2000 "$L"` |
-| 12:53:02 | Bash | Peek at the test container progress | `cd /home/ronald/saas-hasner && docker logs strange_hamilton --tail 3 2>&1 \| tail -3 \| cut -c1-200; date '+%H:%M:%S'` |
