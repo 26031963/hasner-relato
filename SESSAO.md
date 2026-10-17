@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 17/10/2026 13:05:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (968.4 MB). Acoes na janela: **1046**.
+**Medido em 17/10/2026 13:10:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (968.4 MB). Acoes na janela: **1034**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1044,15 +1044,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 01:12:18 | Bash | Read the gate that abstains without a lavra | `cd /tmp/prepush-arvore.6Vi57A/app; sed -n '25,80p' chamados/services/declaracao_texto.py` |
 | 01:12:13 | Bash | Locate the abstention that gates the fio | `cd /tmp/prepush-arvore.6Vi57A/app /bin/grep -rn "ata nao lavrada" --include=*.py . \| head echo "=== o guarda ==="; /bin/grep -rn "sem_celula" --include=*.py chamados/ ponto/ escala/ \| head` |
 | 01:11:33 | Bash | Find the abstention site and the window derivation | `cd /tmp/prepush-arvore.6Vi57A/app echo "=== quem abstem por ata nao lavrada ==="; git -C /tmp/prepush-arvore.6Vi57A grep -n "ata nao lavrada" -- app \| head echo; echo "=== corpo: janela ==="; sed -n '/^def _julgar_colab_corpo/,/for cel in cels:/p' ponto/services/cartorio.py \| /bin/grep -n "d0\\|d1\\|j_ini\\|j_fim\\|n_dias\\|ref =\\|montar_grade" \| head -20 echo; echo "=== o que o corpo devolve  ...` |
-| 01:09:52 | Bash | Run the inverted class in the copy | `cd ~/saas-hasner && ESTEIRA_QUEM=o222-classe bin/suite.sh --dir /tmp/prepush-arvore.6Vi57A --espera 900 --only "ponto.tests.test_bateria_lavratura.VereditoDoFuroFechaNaPrimeiraPassadaTest" 2>&1 \| tail -40; echo "RC_PIPE=${PIPESTATUS[0]}"` |
-| 01:09:45 | Bash | Read the rest of the suite script | `cd ~/saas-hasner; sed -n '70,140p' bin/suite.sh` |
-| 01:09:40 | Bash | Read the suite entry script header | `cd ~/saas-hasner; sed -n '1,70p' bin/suite.sh` |
-| 01:09:34 | Bash | Harden the stub emitter and list the new cases | `cd /tmp/prepush-arvore.6Vi57A/app python3 - <<'PY' import io, py_compile P='ponto/tests/test_bateria_lavratura.py' s=io.open(P,encoding='utf-8').read() old=""" class _E: def _abrir_chamado(_s, *a, **k): out.setdefault('rejulgar', []).append(_cel) return 'VETO_REGUA' return _E()""" new=""" class _E: def _abrir_chamado(_s, *a, **k): out.setdefault('rejulgar', []).append(_cel) return 'VETO_REGUA' # V ...` |
-| 01:09:20 | Bash | Check the per-cell scope of the emission flag | `cd /tmp/prepush-arvore.6Vi57A/app; /bin/grep -n "_abriu\\|_fora_do_piso =\\|for cel in cels" ponto/services/cartorio.py` |
-| 01:09:10 | Bash | Read the two skip sites and the stamping call | `cd /tmp/prepush-arvore.6Vi57A/app; sed -n '700,740p;826,860p' ponto/services/cartorio.py; echo "=== carimbar ==="; /bin/grep -n "carimbar(\\|imp)" ponto/services/cartorio.py \| sed -n '1,20p'` |
-| 01:08:59 | Bash | Full census of cods in the cartorio | `cd /tmp/prepush-arvore.6Vi57A/app; /bin/grep -n "cods" ponto/services/cartorio.py` |
-| 01:08:53 | Bash | Census the cods/julgadas/pulados writers | `cd /tmp/prepush-arvore.6Vi57A/app; /bin/grep -n "out\['cods'\]\\|out\['julgadas'\]\\|out\['pulados'\]" ponto/services/cartorio.py` |
-| 01:08:45 | Bash | Read the two emission sites and the re-read block | `cd /tmp/prepush-arvore.6Vi57A/app; sed -n '1000,1075p' ponto/services/cartorio.py` |
-| 01:08:38 | Bash | Check emissor usage and disputa fields | `cd /tmp/prepush-arvore.6Vi57A/app echo "=== emissor. usados ==="; /bin/grep -n "emissor\." ponto/services/cartorio.py echo "=== DisputaSupervisao campos ==="; python3 - <<'PY' import io s=io.open('chamados/models.py',encoding='utf-8').read() i=s.find('class DisputaSupervisao') import re for m in re.finditer(r'^\s{4}(\w+)\s*=\s*models\.', s[i:i+3000], re.M): print(m.group(1)) PY` |
-| 01:08:27 | Bash | Read the lavra entry point and the disputa model link | `cd /tmp/prepush-arvore.6Vi57A/app sed -n "/^def julgar_colab/,/^def [a-z_]*(/p" ponto/services/cartorio.py \| head -80 echo "=== DisputaSupervisao.colaborador? ===" /bin/grep -n "class DisputaSupervisao" -A 20 chamados/models.py \| /bin/grep -n "colaborador\\|class "` |
-| 01:08:11 | Bash | Check counters, emission decoder and the pergunta model fields | `cd /tmp/prepush-arvore.6Vi57A/app echo "=== contadores() ==="; sed -n "/^def contadores/,/^)/p" ponto/services/cartorio.py \| head -40 echo "=== _contar_emissao ==="; sed -n "/def _contar_emissao/,/return False/p" ponto/services/cartorio.py echo "=== PerguntaDisputa fields ==="; python3 - <<'PY' import re,io s=io.open('chamados/models.py',encoding='utf-8').read() i=s.find('class PerguntaDisputa')  ...` |
