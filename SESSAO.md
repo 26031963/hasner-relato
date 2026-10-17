@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 17/10/2026 12:21:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (968.4 MB). Acoes na janela: **1107**.
+**Medido em 17/10/2026 12:27:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (968.4 MB). Acoes na janela: **1106**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1116,4 +1116,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 00:34:17 | Bash | Read the esmeril law-vs-cell table | `cd /home/ronald/saas-hasner sed -n '70,130p' logs/o280/esmeril/ESMERIL.md \| cut -c1-230` |
 | 00:34:12 | Bash | List the open esmeril items | `cd /home/ronald/saas-hasner /bin/grep -n 'ABERTO\\|^### I\\|^## ' logs/o280/esmeril/ESMERIL.md \| tail -40 \| cut -c1-160` |
 | 00:34:07 | Bash | Generate the session handoff after the marco | `cd /home/ronald/saas-hasner bash bin/handoff_sessao.sh 2>&1 \| tail -4 echo "=== handoff:"; wc -l app/docs/HANDOFF-SESSAO.md; head -14 app/docs/HANDOFF-SESSAO.md \| cut -c1-140` |
-| 00:26:26 | Bash | Keep waiting for the push verdict | `cd /home/ronald/saas-hasner O=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bgzbjc465.output i=0 until [ -s "$O" ] \|\| [ $i -ge 115 ]; do sleep 5; i=$((i+1)); done echo "esperei ${i}x5s"; tail -15 "$O" echo "--- remoto:"; git fetch -q; git rev-parse --short origin/main echo "--- logs do pre-push mais novos:"; ls -t logs/*.log 2>/dev/null \| head -3` |
