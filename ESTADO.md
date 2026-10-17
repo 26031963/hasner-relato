@@ -10,11 +10,11 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 17/10/2026 09:35:47.**
+**Medido em 17/10/2026 09:41:02.**
 
 | | |
 |---|---|
-| `HEAD` local | `cae59304 [O280] os 33 casos da bateria pela LEI estao ESCRITOS e verdes -- e o unico VERMELHO que a escrita produziu era MEU: o caso foi invertido, nenhuma linha da v3 tocada` |
+| `HEAD` local | `6e2c06ec [O280] os 33 casos da bateria pela LEI estao ESCRITOS e verdes -- e o unico VERMELHO que a escrita produziu era MEU: o caso foi invertido, nenhuma linha da v3 tocada` |
 | `origin/main` | `fcba2390 [O280] a ancora do marco de ENTRADA da v3 sai da data da BATIDA e passa ao DIA DA JORNADA -- e a cura destampou um buraco que o proprio defeito cobria: o dia cujo par a releitura recusa recebia 0,00 de pontualidade como se fosse medicao` |
 | commits a subir (`ahead`) | **1** |
 
@@ -29,25 +29,25 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2519.8 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2519.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **288.3 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **288.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **101.5 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **101.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **404.4 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **404.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
   - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **308.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o275** (`raia-o275`) -- **SEM AGENTE**
-  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **37.8 h** (passou das 6 h da L-105)
+  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **37.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-o275.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -59,7 +59,7 @@ RELATO, com a lista de nomes do banco como autoridade._
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
 - **wt-v3-pouso** (`pouso-v3-20261016`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 4 arquivo(s) sujo(s), commit a frente ha **21.2 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 4 arquivo(s) sujo(s), commit a frente ha **21.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-v3-pouso.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **21 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
@@ -70,7 +70,7 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
-cae59304 [O280] os 33 casos da bateria pela LEI estao ESCRITOS e verdes -- e o unico VERMELHO que a escrita produziu era MEU: o caso foi invertido, nenhuma linha da v3 tocada
+6e2c06ec [O280] os 33 casos da bateria pela LEI estao ESCRITOS e verdes -- e o unico VERMELHO que a escrita produziu era MEU: o caso foi invertido, nenhuma linha da v3 tocada
 fcba2390 [O280] a ancora do marco de ENTRADA da v3 sai da data da BATIDA e passa ao DIA DA JORNADA -- e a cura destampou um buraco que o proprio defeito cobria: o dia cujo par a releitura recusa recebia 0,00 de pontualidade como se fosse medicao
 b92cbc7f [O222] o ato do cartorio passa a FECHAR lendo o que ele mesmo escreveu: o veredito do furo era ponto fixo em DUAS passadas e agora e em UMA, e o caminho do LOTE tinha um segundo bug que atravessava para o colab seguinte
 002fd806 [O280] a leg 2 do esmeril corre e o que ela acha nao e bug da v3: e um defeito do motor de HOJE que APAGA BATIDA e MOVE DINHEIRO -- 300, 540 ou 600 min pelo mesmo dia
@@ -81,7 +81,6 @@ b92cbc7f [O222] o ato do cartorio passa a FECHAR lendo o que ele mesmo escreveu:
 
 ```
  M app/config/crons_duracao.json
- M app/docs/RELATO.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -172,7 +171,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
   Read 1 file, ran 13 shell commands
 
@@ -200,16 +198,17 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-● Waiting for the name partition result
-  ⎿  $ F=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bvwgl5adx.output; until /bin/grep -q 'achados em linha NOVA' "$F"
-     2>/dev/null; do sleep 10; done; cat "$F"
+● Waiting for the push verdict · 1m 43s
+  ⎿  $ F=/home/ronald/saas-hasner/logs/o280/esmeril/i26-escrita/push_0925.log; until /bin/grep -q 'rc_push=' "$F" 2>/dev/null; do sleep 20; done; /bin/grep -E
+     '^(FAIL|ERROR):|^Ran [0-9]+|^(OK|FAILED)|rc_push=|remote:|main ->' "$F" | tail -12 (1m 42s)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-✶ Crafting… (23h 10m 25s · ↓ 2.2m tokens · thought for 4s)
+· Crafting… (23h 15m 41s · ↓ 2.2m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                                            8% until auto-compact
+                                                                                                                                            4% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
