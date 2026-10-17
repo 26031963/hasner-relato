@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:792 AFIRMA ato sem PROVA ao lado -- - **NO AR, e o ato fechou inteiro**: commit `8c545a89` (merge `--no-ff`) e `bin/deploy.sh` **sem** `--sem-migrate` rc **0** as 18:12 -- `rel
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:814 AFIRMA ato sem PROVA ao lado -- - **NO AR, e o ato fechou inteiro**: commit `8c545a89` (merge `--no-ff`) e `bin/deploy.sh` **sem** `--sem-migrate` rc **0** as 18:12 -- `rel
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 17/10/2026 16:55:32.**
+**Medido em 17/10/2026 17:00:46.**
 
 | | |
 |---|---|
@@ -35,16 +35,16 @@ RELATO, com a lista de nomes do banco como autoridade._
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **295.6 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **295.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **108.9 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **109.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
   - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **411.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **315.9 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **316.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o275** (`raia-o275`) -- **SEM AGENTE**
   - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **45.2 h** (passou das 6 h da L-105)
@@ -53,13 +53,13 @@ RELATO, com a lista de nomes do banco como autoridade._
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **433.6 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **433.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
 - **wt-v3-pouso** (`pouso-v3-20261016`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 4 arquivo(s) sujo(s), commit a frente ha **28.5 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 4 arquivo(s) sujo(s), commit a frente ha **28.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-v3-pouso.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **21 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
@@ -81,9 +81,10 @@ b92cbc7f [O222] o ato do cartorio passa a FECHAR lendo o que ele mesmo escreveu:
 
 ```
  M app/config/crons_duracao.json
- M app/docs/AVAIS.md
  M app/docs/HANDOFF-SESSAO.md
  M app/docs/PENDENTES_RONALD.json
+ M app/docs/PROMPTS.md
+ M app/docs/RELATO.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -174,41 +175,41 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-     /tasks/bouwd5ggq.output (6 lines)
-  ⎿  Referenced file ponto/calculador/alimentacao.py
+● Frota IMPACT pronto (erros 0 nas duas), e cinco smokes dele chegaram. Primeiro o registro canônico,
+  que é o durável.
 
-● Task "Measure the whole public history with the cured predicate" still running in background
+  Ran 9 shell commands
+
+● Registro fechado (AVAIS 10 → 7). Agora o RELATO: a pergunta do APP-DESENHA no topo e o marco com os
+  números de frota.
+
+  Ran 5 shell commands
+
+● Nenhuma afirmação nova sem prova (as 3 são as pré-existentes, já na linha de base). Agora a cura do
+  alimentacao.py:154, em cópia do HEAD.
 
   Ran 1 shell command
 
-● Background command "Run the fleet impact for both competences" completed (exit code 0)
+❯ aval Ronald: NAO fecha nada com os 5 smokes que colei -- eu nao rodei nenhum deles na tela, foi
+  lista colada por engano. Desfaz o que ja tiver carimbado com eles, mantem O214/O206/O207/O223/O284A
+  ABERTOS no PENDENTES_RONALD.json com a data original, e nao conta smoke que nao aconteceu. Segue a
+  fila; PAREI so em lei ou !
 
-❯ smokes — 7 (dependem da sua mão na tela; os dois mais antigos esperam desde 09/10)
+● Aval registrado: desfazer. Nenhum dos cinco aconteceu na tela — reabro os cinco com a data original e
+  tiro o que carimbei com eles.
 
-❯ O214 item 2 — smoke Ronald: abri a Gestao de HE, autorizei o periodo de um colaborador, a previa me
-  mostrou as horas por rubrica antes de confirmar e os dias sairam de SEM DECISAO -- pode fechar o
-  O214 item 2
+  Reopening the five items, restoring the backlog, regenerating the board
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PY'
+     import json
+     P='app/docs/PENDENTES_RONALD.json'
+     d=json.load(open(P))
+     itens=d['itens'] if isinstance(d,dict) else d
+     ix={x['id']:x for x in itens}
+     MOT=("REVOGADO por aval dele 17/10 17:0x, LITERAL: *\"NAO fecha nada com os 5 smokes que colei --
+     eu nao …
 
-❯ O206 — smoke Ronald: o Fernando abriu o painel do chamado #28304 nas duas cascas -- o aviso de
-  pergunta sem resposta manda em "Cobrar resposta (nao apaga nada)", o clique abriu a janela de
-  confirmacao mostrando a PREVIA LEGIVEL (titulo e corpo em TEXTO, nenhuma tag de HTML na tela), o
-  push chegou ao colaborador com esse mesmo texto, o Reabrir ficou abaixo dizendo quantas respostas
-  apaga e a casca do colaborador nao mostra acao de gestor -- pode fechar a O206
-
-❯ O207 — smoke Ronald: abri o assistente de fase de um colab de TESTE, o Inicio da apuracao me mostrou
-  as tres opcoes com a previa de cada uma, declarei a data e ela foi a gravada -- pode fechar o O207
-
-❯ O223 pouso A — smoke Ronald: abri Configuracoes -> Aplicacao de convencao, cadastrei uma linha com
-  motivo, a lista me mostrou ela ativa e o empate dito, desativei e ela ficou la como inativa com a
-  trilha; e na edicao de uma empresa o Regime trabalhista salvou -- pode fechar a O223 pouso A
-
-❯ O256-E4 — sem frase ainda: a E4 não pousou, e escrever a frase agora descreveria uma tela que ainda
-  vai mudar.
-
-● Running 1 shell command…
-
-· Synthesizing… (4m 50s · ↓ 1.4k tokens · thought for 4s)
-                                                               ✔ Update installed · Restart to update
+· Synthesizing… (10m 4s · ↓ 22.1k tokens)
+                                                                               12% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────
