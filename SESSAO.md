@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 17/10/2026 07:44:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (961.7 MB). Acoes na janela: **1275**.
+**Medido em 17/10/2026 07:50:04.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (961.8 MB). Acoes na janela: **1272**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 07:47:39 | Bash | Check onde values and the cct construction | `python3 - <<'PY' import re src = open('ponto/tests/test_o280_bateria_da_lei.py').read() blk = src.split('CASOS = {',1)[1].split('\nclass CoberturaDaMatrizTest',1)[0] print('ondes:', sorted(set(re.findall(r"'(mes\|sombra\|fora\|periodo)'", blk)))) print('n casos:', len(re.findall(r"^ '([A-Za-z0-9-]+)':", blk, re.M))) PY echo "=== cct no H1 (3760-3785)"; sed -n '3755,3785p' ponto/tests/test_o280_bat ...` |
+| 07:45:35 | Bash | Read intra discount gate and teto formula in v2 | `sed -n '2425,2460p' ponto/motor_calculo_v2.py; echo "=== teto"; sed -n '1075,1100p' ponto/motor_calculo_v2.py` |
+| 07:45:08 | Bash | Read minutos_previstos_do_dia | `sed -n '1773,1830p' escala/utils.py` |
+| 07:44:36 | Bash | Read the C1, D12 and E blocks | `cd /home/ronald/saas-hasner/logs/o280/esmeril && sed -n '300,372p' I26-CASOS-33-ESPEC.md` |
 | 07:44:14 | Bash | Read N12S, N12X and sem-fixture blocks | `cd /home/ronald/saas-hasner/logs/o280/esmeril && sed -n '372,455p' I26-CASOS-33-ESPEC.md` |
 | 07:44:02 | Bash | Generate and verify spare CPFs by the house algorithm | `cd /home/ronald/saas-hasner && python3 - <<'PY' usados = {'[cpf]','[cpf]','[cpf]','[cpf]','[cpf]', '[cpf]','[cpf]','[cpf]','[cpf]','[cpf]', '[cpf]','[cpf]'} def dig(b): s = sum(int(b[i])*(10-i) for i in range(9)); d1 = (s*10 % 11) % 10 b2 = b + str(d1) s = sum(int(b2[i])*(11-i) for i in range(10)); d2 = (s*10 % 11) % 10 return ...` |
 | 07:43:49 | Bash | Read the CPF validator body | `sed -n '12,45p' colaboradores/models.py` |
@@ -1278,10 +1282,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 19:50:59 | Bash | Check how the host diagram script resolves the app root | `cd /home/ronald/saas-hasner; SC=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad echo "=== bin/gerar_diagrama.py resolve APP como?"; sed -n '1,25p' bin/gerar_diagrama.py \| /bin/grep -nE 'APP\|dirname\|path\|sys\.path\|import'` |
 | 19:50:38 | Bash | Read the MORDE test and find the injected edge | `cd /home/ronald/saas-hasner; sed -n '62,105p' app/core/tests/test_selo_diagrama_do_codigo.py; echo "=== o edge no mmd da copia:"; SC=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; /bin/grep -n 'health_crawl' $SC/cp-l023/app/docs/ARQUITETURA.mmd; echo "=== no vivo:"; /bin/grep -c 'health_crawl' app/docs/ARQUITETURA.mmd` |
 | 19:50:13 | Bash | Compare the live tree and the copy for the files that feed the diagram | `cd /home/ronald/saas-hasner; SC=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad echo "=== git status porcelain (vivo)"; git status --porcelain echo "=== mmd vivo vs HEAD:"; git diff --stat -- app/docs/ARQUITETURA.mmd app/docs/MAPA.md echo "=== crons_duracao.json: copia vs vivo"; diff $SC/cp-l023/app/config/crons_duracao.json app/config/crons_duracao.js ...` |
-| 19:49:37 | Bash | Check the diagram inside the certified copy and diff against the live tree | `SC=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad cd $SC/cp-l023 && python3 bin/gerar_diagrama.py --check; echo "rc_copia=$?" echo "--- diff do mmd copia vs vivo:" diff $SC/cp-l023/app/docs/ARQUITETURA.mmd /home/ronald/saas-hasner/app/docs/ARQUITETURA.mmd \| head -30 echo "--- diff do MAPA.md:" diff $SC/cp-l023/app/docs/MAPA.md /home/ronald/saas-hasne ...` |
-| 19:49:20 | Bash | Check the diagram against the live tree | `cd /home/ronald/saas-hasner; python3 bin/gerar_diagrama.py --check; echo "rc_vivo=$?"` |
-| 19:49:14 | Bash | Read the generator's directory walk | `cd /home/ronald/saas-hasner; sed -n '112,148p' app/core/management/commands/gerar_diagrama.py` |
-| 19:49:06 | Bash | Check whether the diagram generator scans test files | `cd /home/ronald/saas-hasner; ls app/core/management/commands/gerar_diagrama.py bin/gerar_diagrama.py 2>&1; echo "---"; /bin/grep -nE "tests\|glob\|walk\|rglob\|listdir" app/core/management/commands/gerar_diagrama.py \| head -40` |
-| 19:48:50 | Bash | Read the diagram selo test | `cd /home/ronald/saas-hasner; sed -n '1,60p' app/core/tests/test_selo_diagrama_do_codigo.py` |
-| 19:48:41 | Bash | Read the diagram selo failures | `SC=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad sed -n '1998,2060p' $SC/suite_l023c.log` |
-| 19:48:37 | Bash | List the suite failures | `SC=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad /bin/grep -nE '^(FAIL\|ERROR):' $SC/suite_l023c.log` |
