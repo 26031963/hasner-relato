@@ -6,10 +6,27 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 17/10/2026 19:30:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (978.6 MB). Acoes na janela: **675**.
+**Medido em 17/10/2026 19:35:47.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (979.3 MB). Acoes na janela: **688**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 19:35:16 | Bash | Read reler's day grouping | `sed -n '530,600p' ponto/calculador/periodo.py` |
+| 19:35:12 | Bash | Check whether reler groups folga-trabalhada periods into the day | `sed -n '1,60p' ponto/calculador/periodo.py \| /bin/grep -n "dia_da_jornada" ; /bin/grep -n "def reler" -A 40 ponto/calculador/periodo.py \| /bin/grep -n "periodos_ft\\|dia_da_jornada\\|for p in" \| head -20` |
+| 19:34:23 | Bash | Search for hard-coded pin counts | `cd /home/ronald/saas-hasner && git grep -n "expected failures=10\\|expectedFailure" -- app/bin app/core/tests app/ponto/tests/test_o287* app/docs 2>/dev/null \| head -20; echo === ; git grep -rn "expected failures" -- app bin \| /bin/grep -v "test_o280_bateria\\|RELATO" \| head -20` |
+| 19:34:15 | Bash | Verify the snapshot matches HEAD | `cd /home/ronald/saas-hasner && git rev-parse --short HEAD; A=logs/o280/passo4/arvore_603600d8/app; ls -d $A/logs $A/media $A/staticfiles 2>&1 \| head; echo ---; git show HEAD:app/ponto/tests/test_o280_bateria_da_lei.py \| md5sum; md5sum $A/ponto/tests/test_o280_bateria_da_lei.py; echo ---; find $A -name '*.orig' -o -name '*.rej' \| head; echo ---; git status --porcelain -- app/ \| head` |
+| 19:34:06 | Bash | Check the existing tree snapshots | `cd /home/ronald/saas-hasner && ls -d logs/o280/passo4/arvore* 2>/dev/null; echo ---; ls logs/o280/passo4/arvore_603600d8 2>/dev/null \| head; echo ---; cat logs/o280/passo4/arvore_603600d8/.TREE 2>/dev/null` |
+| 19:33:39 | Bash | Read the v3 excess functions | `sed -n '374,425p' ponto/calculador/periodo.py` |
+| 19:33:35 | Bash | Locate the HE tolerance and the v3 excess functions | `/bin/grep -n "TOLERANCIA_HE_MIN_DIA\\|def excesso_do_dia\\|def reparticao_do_excesso" ponto/calculador/*.py ponto/motor_calculo_v2.py \| head` |
+| 19:33:18 | Bash | Read the I27 CASOS entries in full | `sed -n '745,800p' ponto/tests/test_o280_bateria_da_lei.py` |
+| 19:33:14 | Bash | Find all I27 anchor cases | `/bin/grep -n "'B-I27" ponto/tests/test_o280_bateria_da_lei.py` |
+| 19:33:09 | Bash | Read the matriz-coverage test | `sed -n '961,1000p' ponto/tests/test_o280_bateria_da_lei.py` |
+| 19:33:00 | Bash | Read leitura() and the CASOS preamble | `sed -n '150,240p' ponto/tests/test_o280_bateria_da_lei.py` |
+| 19:32:17 | Bash | Read the complete-costura helper | `sed -n '4175,4240p' ponto/tests/test_o280_bateria_da_lei.py` |
+| 19:32:13 | Bash | List classes and v3 helpers | `/bin/grep -n "def v3c\\|def v3\b\\|def v3(\\|^class \\|_RUBRICAS_DO_PERIODO =" ponto/tests/test_o280_bateria_da_lei.py` |
+| 19:32:08 | Bash | Read the bateria header and pin contract | `sed -n '1,120p' ponto/tests/test_o280_bateria_da_lei.py` |
+| 19:31:50 | Bash | Read the janela-ON helper and the pinned case that uses it | `sed -n '4430,4600p' ponto/tests/test_o280_bateria_da_lei.py` |
+| 19:31:46 | Bash | Locate the janela-ON empresa and its users in the bateria | `/bin/grep -n "ec=self\\|_ec_janela\\|janela_he\\|emp_j\\|Empresa.objects" ponto/tests/test_o280_bateria_da_lei.py \| head -30` |
+| 19:31:39 | Bash | Read the fixture and runner helpers of the bateria | `sed -n '1100,1250p' ponto/tests/test_o280_bateria_da_lei.py` |
 | 19:27:40 | Bash | Find how the bateria turns the janela on | `/bin/grep -n "janela_he_ativa\\|janela_he_desde\\|_emp_janela\\|def _ec_janela\\|janela" ponto/tests/test_o280_bateria_da_lei.py \| head -40` |
 | 19:27:28 | Bash | Read the base test class with fixtures | `sed -n '992,1188p' ponto/tests/test_o280_bateria_da_lei.py` |
 | 19:27:24 | Bash | Read the helpers and the costura | `sed -n '85,200p' ponto/tests/test_o280_bateria_da_lei.py` |
@@ -681,7 +698,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 07:36:54 | Bash | Locate class and helper definitions | `grep -n "def confere\\|def _confere\\|def setUpTestData\\|^class \\|def _fix\\|def _cad" ponto/tests/test_o280_bateria_da_lei.py \| head -60` |
 | 07:36:48 | Bash | Read MATRIZ and CASOS tables | `sed -n '200,330p' ponto/tests/test_o280_bateria_da_lei.py` |
 | 07:36:41 | Bash | Read bateria helper bodies | `sed -n '80,200p' ponto/tests/test_o280_bateria_da_lei.py` |
-| 07:31:23 | Bash | Read the errata section | `cd /home/ronald/saas-hasner/logs/o280/esmeril && sed -n '482,581p' I26-CASOS-33-ESPEC.md` |
-| 07:31:19 | Bash | Read the teto/porta sections of the spec | `cd /home/ronald/saas-hasner/logs/o280/esmeril && sed -n '94,233p' I26-CASOS-33-ESPEC.md` |
-| 07:31:12 | Bash | Read the remaining case blocks | `cd /home/ronald/saas-hasner/logs/o280/esmeril && sed -n '340,465p' I26-CASOS-33-ESPEC.md` |
-| 07:31:07 | Bash | Read the first case blocks of the spec | `cd /home/ronald/saas-hasner/logs/o280/esmeril && sed -n '233,340p' I26-CASOS-33-ESPEC.md` |
