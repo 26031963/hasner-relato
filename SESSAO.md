@@ -6,10 +6,18 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 17/10/2026 07:33:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (961.0 MB). Acoes na janela: **1260**.
+**Medido em 17/10/2026 07:39:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (961.5 MB). Acoes na janela: **1268**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 07:37:47 | Bash | Read the three gate helpers | `grep -n "def perto_do_marco" -A 25 escala/regua_defesa.py; echo ===; grep -n "def entrada_fora_do_inicio" -A 12 escala/regua_defesa.py; echo ===; grep -n "def cumpriu_a_volta_do_intervalo" -A 30 escala/regua_defesa.py` |
+| 07:37:17 | Bash | Read pontualidade_do_dia | `grep -n "def pontualidade_do_dia" -A 90 ponto/calculador/regras.py` |
+| 07:37:10 | Bash | Read pontualidade_no_dia | `sed -n '420,520p' ponto/calculador/periodo.py` |
+| 07:37:05 | Bash | Find porta-de-baixo call sites and Regua fields | `grep -n "Regua(\\|pontualidade_no_dia(\\|periodo_do_dia(\\|excesso_do_dia(\\|noturno_no_par(" ponto/tests/test_o280_bateria_da_lei.py \| head -40; echo ---; grep -n "class Regua" -A 60 ponto/calculador/periodo.py \| head -80` |
+| 07:36:58 | Bash | Read cobertura test and base fixtures | `sed -n '760,960p' ponto/tests/test_o280_bateria_da_lei.py` |
+| 07:36:54 | Bash | Locate class and helper definitions | `grep -n "def confere\\|def _confere\\|def setUpTestData\\|^class \\|def _fix\\|def _cad" ponto/tests/test_o280_bateria_da_lei.py \| head -60` |
+| 07:36:48 | Bash | Read MATRIZ and CASOS tables | `sed -n '200,330p' ponto/tests/test_o280_bateria_da_lei.py` |
+| 07:36:41 | Bash | Read bateria helper bodies | `sed -n '80,200p' ponto/tests/test_o280_bateria_da_lei.py` |
 | 07:31:23 | Bash | Read the errata section | `cd /home/ronald/saas-hasner/logs/o280/esmeril && sed -n '482,581p' I26-CASOS-33-ESPEC.md` |
 | 07:31:19 | Bash | Read the teto/porta sections of the spec | `cd /home/ronald/saas-hasner/logs/o280/esmeril && sed -n '94,233p' I26-CASOS-33-ESPEC.md` |
 | 07:31:12 | Bash | Read the remaining case blocks | `cd /home/ronald/saas-hasner/logs/o280/esmeril && sed -n '340,465p' I26-CASOS-33-ESPEC.md` |
