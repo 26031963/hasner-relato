@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 16/10/2026 22:44:02.**
+**Medido em 16/10/2026 22:49:32.**
 
 | | |
 |---|---|
@@ -29,37 +29,37 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2509.0 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2509.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **277.4 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **277.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **90.7 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **90.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **393.6 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **393.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **297.7 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **297.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o275** (`raia-o275`) -- **SEM AGENTE**
-  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **27.0 h** (passou das 6 h da L-105)
+  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **27.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-o275.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **415.4 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **415.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
 - **wt-v3-pouso** (`pouso-v3-20261016`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 4 arquivo(s) sujo(s), commit a frente ha **10.3 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 4 arquivo(s) sujo(s), commit a frente ha **10.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-v3-pouso.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **21 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
@@ -174,41 +174,41 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Seção do marco está em disco (app/docs/RELATO.md:431, 22 linhas — teto L-116 respeitado), e as guardas de host passaram:
 
-  - relato_afirma_com_prova.py na seção isolada: 0 afirmação sem prova; no RELATO inteiro segue em 6, as mesmas pré-existentes (6 antes = 6 depois).
-  - regua_tickets.sh: OK, 0 citação sem linha na tabela; placar do topo bate com o git.
-  - Base da cópia conferida com git fetch: HEAD = origin/main = 4f084e47, o mesmo hash de que cp-nota nasceu — a árvore certificada é a que pousa.
+● Censo da leg 2 refeito por insumo, e ele mexeu em dois dos meus números — não nos dele.
 
-  Duas coisas registradas antes do commit:
+  O que o censo por forma escondia. A linha 410 publicou os 18 novos com a ressalva escrita de que o mapa era por NOME. Refiz por INSUMO (padrão de cadastro/batida
+  de cada caso, python3 re sobre o blob de main@4f084e47, nunca o grep da sessão): 7 batidas de forma, abertas uma por uma —
 
-  1. O rc do processo ficou mascarado pelo pipe — a suíte foi lançada como bin/suite.sh --dir … | tail -40, e bin/suite.sh não escreve carimbo de rc em logs/
-     (/bin/grep -n -E 'rc|carimbo|logs/|tee' bin/suite.sh: nenhuma linha que grave o veredito). Então o veredito L-074 vai valer pelas duas partes legíveis
-     (^(OK|FAILED) + ^Ran N, com tail -1) e o corpo do commit vai dizer isso em uma linha, sem alegar a terceira. Guarda contra o falso verde: Ran 0/ausência de
-     linha OK = rc 75 (a vez não chegou), não aprovação.
-  2. O censo de conteúdo terá mais de um diff esperado: app/docs/RELATO.md (meu), app/config/crons_duracao.json e app/docs/HANDOFF-SESSAO.md ( M pré-existentes,
-     nunca se commitam) e os derivados que a suíte regera na cópia (ARQUITETURA.mmd/MAPA.md/base_app.html) — nenhum deles volta para a árvore viva. O único arquivo
-     que se move cópia → viva é app/ponto/tests/test_o280_bateria_da_lei.py, com o md5 citado (09966695… antes da edição).
+  - 6 são colisão ou vizinho, com file:line: B20 (a bateria tem dois vínculos, mas sequenciais, :1269), B21 (:2406 são três leitores do mesmo feriado, sem atestado
+    sobre par fechado), B22 (o impar de :369 é paridade de folga, não número ímpar de batidas), B26 (1440 em :804 é minutos_jornada; o par exercido é de 27 h),
+    B29, B33.
+  - 1 é equivalente de verdade: B34 ≡ F1b — test_F1_previsto_do_mes… (:897-925) roda a competência 03/2028 pelo motor real e exige tamanhos == {28, 29, 30, 31}. A
+    janela de 29 dias era a minha pergunta inteira. Duplicata, sai: 18 → 17.
 
-  Esmeril deste marco está vazio por medida, não por omissão: as duas mudanças são uma string de nota e uma docstring — não deixam órfão nenhum.
+  E o censo achou erro meu. O insumo do B31 (hora_inicio == hora_fim) existe e é cadastro legítimo: te['PL'], tipo_ciclo='24x48', hora_inicio=t(7), hora_fim=t(7),
+  minutos_jornada=1440, "bordas coincidentes (O276)", exercido em :2079-2080. Minha resposta de lei dizia "cadastro inválido" em seco — cobrada assim, fabricaria
+  RED falso contra o plantão que a O276 declara intacto. O caso não sai; a resposta se estreita antes de correr. Achado contra mim, não contra a v3.
 
-  Aguardando o veredito da suíte cheia sobre /home/ronald/cp-nota (a sessão é re-invocada quando ela sai; não vou enquetar o arquivo). Na verde: cmp arquivo a
-  arquivo contra a cópia, commit por PATH dos dois arquivos via heredoc com o trailer, pre-push e push. Sem deploy — zero .py de produção neste marco.
+  Durável: ESMERIL.md 410 → 413 (append puro, linhas 1-410 diff idêntico, as 9 citadas por número verificadas); RELATO.md:431 segue em 25 linhas (L-116) e o guard
+  segue nas mesmas 6 afirmações pré-existentes (minha seção: 0); BACKLOG.md com 17/B17-B33; regua_tickets rc 0. Novo logs/o280/esmeril/LEG2_PLANO.md (34 linhas,
+  gitignored) — especificação da corrida, sem copiar resposta nenhuma: as respostas ficam no arquivo md5-carimbado de 15/10.
+
+  O portão não mudou: 8 abertos (7 dele + 1 meu). Mudou o tamanho do que a corrida deve cobrar.
+
+  Árvore conferida: .py da bateria na árvore viva == HEAD (09966695), a edição só na cópia (1123f6b8), zero .py modificado vivo — a certificação de cp-nota segue
+  valendo. Suite ainda correndo (log 0 bytes, bufferizado atrás do | tail -40); o commit por path e o push esperam o veredito pela forma da casa, tratando ausência
+  de OK/Ran N como o caso rc 75 da trava, não como verde.
 
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: O280 -- MOTOR-V3-UM-PERIODO (aval dele 15/10 09:5x). O que a obra ataca, e o diagnostico e o do proprio aval: hoje a m
 
-● Census of each new absurd case input inside the battery
-  ⎿  $ cd /home/ronald/saas-hasner && SC=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && python3 - <<'PY'
-     import re
-     src=open('/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/bat_main.py').read()
-     alvos = {
-     'B17…
+● Reading the two driver tests of the v3 absurd class
+  ⎿  $ cd /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && sed -n '3865,3908p' bat_main.py | cut -c1-170
 
-✢ Compacting conversation… (12h 18m 41s · ↓ 1.0m tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱ 92%
+✢ Crafting… (12h 24m 11s · ↓ 1.0m tokens · still thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                                            0% until auto-compact
+                                                                                                                           ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

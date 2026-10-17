@@ -40,8 +40,9 @@
      nenhuma delas: a O280, cuja raia wt-v3 JA POUSOU no main (`4f084e47`), e cuja TROCA nao vai ao `!` dele
      enquanto houver item do ESMERIL-V3 (O287) aberto -- medido 16/10 22:4x: **8 abertos**, sendo **7 dele**
      (I9 I14 I16b I17 I19 I24 I25) e **1 MEU**, `LEG2-NAO-CORRIDA` (as 49 celulas do passo B escritas pela lei
-     em 15/10 14:22 nunca foram cobradas da v3: 0 citacao na bateria, 0 runner na pasta, e os 18 novos
-     `B17`-`B34` sem celula equivalente nos 89 casos). Condicao LITERAL do aval dele de 14:1x. -->
+     em 15/10 14:22 nunca foram cobradas da v3: 0 citacao na bateria, 0 runner na pasta, e os 17 novos
+     `B17`-`B33` sem celula equivalente nos 89 casos, censo por INSUMO -- `B34` caiu como duplicata
+     de `F1b`). Condicao LITERAL do aval dele de 14:1x. -->
 <!-- MOVIDO em 15/10 ~02:5x pelo Code, AUTONOMIA-DE-CODIGO item 1 (ordem e encaixe quando quem decide e
      DEPENDENCIA DE CODIGO): o BUG-SOBRA-TIPO-TROCADO FECHOU -- cura em 5f915ff4, no ar desde 02:06, e o apply
      do dado as 02:23 com a PROVA no RELATO (classe da frota 10 = 0, o 26219 morto por lastro, o 26/09 sem
