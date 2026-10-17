@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 17/10/2026 03:05:03.**
+**Medido em 17/10/2026 03:10:32.**
 
 | | |
 |---|---|
@@ -29,37 +29,37 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2513.3 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2513.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **281.8 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **281.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **95.0 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **95.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **397.9 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **398.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **302.0 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **302.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o275** (`raia-o275`) -- **SEM AGENTE**
-  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **31.3 h** (passou das 6 h da L-105)
+  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **31.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-o275.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **419.7 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **419.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
 - **wt-v3-pouso** (`pouso-v3-20261016`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 4 arquivo(s) sujo(s), commit a frente ha **14.7 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 4 arquivo(s) sujo(s), commit a frente ha **14.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-v3-pouso.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **21 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
@@ -171,41 +171,41 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  Commit b92cbc7f, 8 arquivos, 970/781: os 3 .py + TICKETS.md, BACKLOG.md, RELATO.md, RELATO-ARQUIVO.md, HANDOFF-SESSAO.md. app/config/crons_duracao.json ficou
-  fora, como manda a lei.
-
-  Três números que corrigi antes de assinar, porque tinham derivado:
-  - a linha da dieta dizia 1.419 vivas e 41.754 mortas — medido no ato: 1.420 e 41.753, com git diff --numstat do arquivo-morto em 737 adicionadas / 0 removidas
-    (727 + 9 da nota + 1 separador), que é a prova aritmética de mover, nunca apagar;
-  - a nota do arquivo-morto dizia 1418, agora diz a mesma medida;
-  - o INCOMPLETO afirmava que "as três cascas seguem com o velho" — falso a partir das 03:30: o cp entrou no bind-mount às 02:52:12 e o 30 3 * * * deploy.sh
-    --reload-agendado (lido do crontab -l no ato) recarrega as três. O bin/deploy.sh --sem-migrate segue devido pelo que o HUP não dá: prova de rota e
-    collectstatic.
-
-  Guardas pagas antes do push: 72 selos de host, 0 vermelho; as citações do corpo pela regex do regua_tickets dão só [O222] (os códigos furo[FURO_SEM_COBRANCA] não
-  casam porque vêm precedidos de caractere de palavra — é a regra de forma do próprio script); esmeril deste marco com 0 órfão; e o SyntaxWarning: invalid escape
-  sequence '\d' do log é pré-existente, de ponto/tests/test_tela_gestao_he_calendario.py:659 — os meus três arquivos não têm \d.
-
-  MARCO FECHADO — pode compactar.
-
-  O push roda a segunda suite cheia sobre a árvore do commit (bin/suite.sh --dir não escreve .regua_stamp), ~26 min, e não escrevo nada na árvore enquanto ele
-  corre. Depois dele: bin/deploy.sh --sem-migrate, que abre quando o ensaio das 04:13 carimbar o .sombra_stamp de hoje com logs/crons_em_curso/ vazio — por volta
   das 05:00. A ordem viva depois disso segue O280 — MOTOR-V3-UM-PERIODO, com a troca travada nos 8 itens abertos do ESMERIL-V3 (7 dele, mais o
   B27-ORDEM-APAGA-BATIDA-E-MOVE-DINHEIRO, que está no ! dele como AVAIS #11).
 
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: O280 -- MOTOR-V3-UM-PERIODO (aval dele 15/10 09:5x). O que a obra ataca, e o diagnostico e o do proprio aval: hoje a m
 
-● Searching the bateria for the predicates of the uncovered test modules
-  ⎿  $ for k in '8a hora' 'oitava' 'he50\|he_50\|extra_50' 'extra_100' 'plantao' 'override' 'marcos_do_dia' 'noturnos_relogio' 'turno
-     partido\|TurnoPartido\|turno_partido'; do echo "=== $k"; /bin/grep -cE "$k" ponto/tests/test_o280_bateria_da_lei.py; /bin/grep -nE "$k"
-     ponto/tests/test_o280_bateria_da_l…
+  Ran 18 shell commands
+  ⎿  Read docs/AVAIS.md (28 lines)
+  ⎿  Referenced file ../../../../tmp/prepush-arvore.6Vi57A/app/ponto/tests/test_bateria_lavratura.py
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b0atkqtox.output (4 lines)
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bv9c1c7tl.output (10 lines)
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bwk5ooyv8.output (4 lines)
 
-✢ Compacting conversation… (16h 39m 41s · ↓ 1.4m tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱ 93%
+● Task "Measure the whole public history with the cured predicate" still running in background
+
+● Task "Push the marco commit, logging to file" still running in background
+
+● The two alternation patterns I just ran were written with \| under -E, so they searched for a literal pipe — those two zeros are mine, not the file's.
+  Re-measuring:
+
+  Ran 6 shell commands
+
+● The case matcher over-matched by substring (F1 catching F10, A1 catching A10–A16). Fixing it with a token boundary:
+
+  Ran 2 shell commands
+
+● The real registration is self.confere('<id>', …), not the method name. Re-measuring by call site:
+
+  Ran 5 shell commands
+
+  Advising using Fable 5.1
+
+✢ Crafting… (16h 45m 11s · ↓ 1.4m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                                            0% until auto-compact
+                                                                                                                           ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
