@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 17/10/2026 05:14:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (953.5 MB). Acoes na janela: **1202**.
+**Medido em 17/10/2026 05:19:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (953.6 MB). Acoes na janela: **1206**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 05:17:22 | Bash | Write the measurement document | `cd /home/ronald/saas-hasner && cat > logs/o280/esmeril/I27-ANCORA-DO-MARCO.md <<'MD' # I27 — A ANCORA DO MARCO DE ENTRADA SAI DA DATA DA BATIDA, NAO DO DIA DA JORNADA > Esmeril da O287 (aval 15/10 ~14:1x, item 2: *"casos ABSURDOS novos ... o que quebrar e bug da v3, > cura pela lei e o caso entra na matriz"*). **Nenhum numero deste arquivo sai de rodar o v2 para > certificar o v3** (L-110): o v2 a ...` |
+| 05:15:52 | Bash | Read how the motor builds prevista_entrada | `sed -n '1838,1896p' ponto/motor_calculo_v2.py` |
+| 05:15:47 | Bash | Read the motor's own marco anchoring | `sed -n '1895,1990p' ponto/motor_calculo_v2.py` |
+| 05:14:58 | Bash | Probe night entry after midnight and the 24h plantao | `cd /home/ronald/saas-hasner && CP=$(cat /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/cp_g4.txt) && python3 - "$CP" <<'PY' import sys p = sys.argv[1] + '/app/ponto/tests/test_o280_bateria_da_lei.py' s = open(p).read() s = s.replace(""" def test_sonda_geometrias_do_bloco_G(self):""", """ def test_sonda_entrada_depois_da_meia_noite(self): self.sonda('N ...` |
 | 05:13:57 | Bash | Read marco_no_dia | `/bin/grep -n "def marco_no_dia" -A 30 ponto/janela_he.py` |
 | 05:13:36 | Bash | Read the marcos/pontualidade builders | `sed -n '130,236p' ponto/calculador/alimentacao.py` |
 | 05:12:31 | Bash | Run the geometry probe on the HEAD copy | `cd /home/ronald/saas-hasner && CP=$(cat /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/cp_g4.txt) && echo "CP=$CP" && ESTEIRA_QUEM=sonda-g bash bin/suite.sh --dir "$CP" --espera 300 --only "ponto.tests.test_o280_bateria_da_lei.SONDA_G.test_sonda_geometrias_do_bloco_G" 2>&1 \| tail -70; echo "rc_pipe=${PIPESTATUS[0]}"` |
