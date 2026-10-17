@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 17/10/2026 18:15:47.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (975.9 MB). Acoes na janela: **748**.
+**Medido em 17/10/2026 18:20:47.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (975.9 MB). Acoes na janela: **733**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -743,18 +743,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 06:21:59 | Bash | Append the sibling-gates census to the esmeril log | `cd /home/ronald/saas-hasner && cat >> logs/o280/esmeril/ESMERIL.md <<'FIM' 420. **O CENSO DOS IRMAOS DO BURACO DO I27, MEDIDO NO CODIGO E NA FROTA: dos QUATRO portoes que RECUSAM periodo em `ponto/calculador/periodo.py`, um e' o MESMO buraco (`sem_carimbo`, e esta LATENTE -- frota 0), um acabou de ser curado (`efetivo_invertido`) e DOIS sao SEGUROS -- e o que separa um do outro NAO e' o portao: e' ...` |
 | 06:21:10 | Bash | Inspect entry numbering format | `cd /home/ronald/saas-hasner && /bin/grep -n '^### 41[5-9]\\|^## 41[5-9]\\|^41[5-9]\.' logs/o280/esmeril/ESMERIL.md \| cut -c1-180` |
 | 06:21:06 | Bash | Confirm the esmeril log is ignored and read its tail | `cd /home/ronald/saas-hasner && git check-ignore -v logs/o280/esmeril/ESMERIL.md; echo "rc=$?"; wc -l logs/o280/esmeril/ESMERIL.md; tail -4 logs/o280/esmeril/ESMERIL.md \| cut -c1-200` |
-| 06:20:45 | Bash | Read the PeriodoPontualidade construction and teto call | `sed -n '258,285p' ponto/calculador/regras.py` |
-| 06:20:41 | Bash | Find how the tupla becomes a PeriodoPontualidade | `sed -n '168,265p' ponto/calculador/regras.py \| /bin/grep -n 'turno_aberto\\|_PeriodoPontualidade\\|def \\|teto'` |
-| 06:20:37 | Bash | Check the regras side of the aberto invariant | `/bin/grep -n 'turno_aberto\\|_aplicar_teto_pontualidade' ponto/calculador/regras.py \| head` |
-| 06:20:19 | Bash | Read the three turno_aberto assignment sites | `for l in 2419 2546 2871; do echo "=== :$l"; sed -n "$((l-14)),$((l+4))p" ponto/motor_calculo_v2.py; done` |
-| 06:20:14 | Bash | Find turno_aberto in the motor | `/bin/grep -n 'turno_aberto' ponto/motor_calculo_v2.py \| head -30` |
-| 06:20:02 | Bash | Search measured sem_carimbo numbers in the obra logs | `cd /home/ronald/saas-hasner && /bin/grep -rn 'sem_carimbo' logs/o280/ 2>/dev/null \| /bin/grep -v '\.py:' \| sed 's/\(.\{200\}\).*/\1/' \| head -20` |
-| 06:19:57 | Bash | Check the push log tail and branch status | `cd /home/ronald/saas-hasner && tail -3 logs/o280/esmeril/i27_push.log 2>/dev/null; echo "--- status:"; git status -sb \| head -3` |
-| 06:19:27 | Bash | Read pontualidade_por_dia body | `sed -n '188,268p' ponto/calculador/alimentacao.py` |
-| 06:19:24 | Bash | List alimentacao functions | `/bin/grep -n '^def \\|^ def ' ponto/calculador/alimentacao.py \| head -40` |
-| 06:19:18 | Bash | Read pontualidade_por_dia | `sed -n '330,430p' ponto/calculador/alimentacao.py` |
-| 06:19:12 | Bash | Read alimentacao sem_carimbo region | `sed -n '40,120p' ponto/calculador/alimentacao.py` |
-| 06:19:06 | Bash | Read pontualidade_no_dia | `sed -n '432,520p' ponto/calculador/periodo.py` |
-| 06:19:03 | Bash | Locate the pontualidade functions | `/bin/grep -n 'def pontualidade_no_dia\\|def _aplicar_teto_pontualidade\\|def pontualidade_do_dia' ponto/calculador/*.py` |
-| 06:18:54 | Bash | Read the day judgment region | `sed -n '700,800p' ponto/calculador/periodo.py` |
-| 06:18:48 | Bash | Read the sem_carimbo gate region | `sed -n '600,700p' ponto/calculador/periodo.py` |
