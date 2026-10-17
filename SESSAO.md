@@ -6,10 +6,16 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 17/10/2026 19:57:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (980.3 MB). Acoes na janela: **702**.
+**Medido em 17/10/2026 20:03:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (980.8 MB). Acoes na janela: **705**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 20:02:51 | Bash | Read newest MARCO section | `cd /home/ronald/saas-hasner && sed -n '460,500p' app/docs/RELATO.md` |
+| 20:02:45 | Bash | Draft col570 lei question block | `cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && cat > "$S/bloco_col570.md" <<'EOF' **A DOBRA REAL DE 23 h50 NUM SO DIA PAGA **0,00** DE HORA EXTRA NO MOTOR QUE PAGA E **710,54 min** NO QUE VAI SUBSTITUI-LO -- A DIFERENCA NAO E BUG DE NENHUM DOS DOIS, E A UNIDADE DE JULGAMENTO (PAR x JORNADA): PERGUNTA DE LEI COM OS D ...` |
+| 20:01:59 | Bash | Re-read col570 measured day-by-day | `cd /home/ronald/saas-hasner && sed -n '28,78p' logs/o280/passo4/saida/janela_639_570_1926.log` |
+| 20:01:50 | Bash | Read RELATO top | `cd /home/ronald/saas-hasner && sed -n '1,70p' app/docs/RELATO.md` |
+| 19:57:43 | Bash | Check suite progress | `cd /home/ronald/saas-hasner && tail -c 400 logs/o280/passo4/saida/b_i28_suite_cheia.log; echo; bash bin/trava_teste.sh --quem` |
+| 19:57:38 | Bash | Read the tail of the esmeril log | `cd /home/ronald/saas-hasner && tail -14 logs/o280/esmeril/ESMERIL.md` |
 | 19:57:20 | Bash | Find the marco section boundary in the RELATO | `/bin/grep -n "^## \\|^---$" docs/RELATO.md \| head -20` |
 | 19:57:14 | Bash | Read the PROVA guard contract | `cd /home/ronald/saas-hasner && sed -n '1,60p' bin/relato_afirma_com_prova.py` |
 | 19:56:32 | Bash | Read the col570 day-by-day measurement | `cd /home/ronald/saas-hasner && sed -n '30,75p' logs/o280/passo4/saida/janela_639_570_1926.log; echo "=== 175,200"; sed -n '175,205p' logs/o280/passo4/saida/janela_639_570_1926.log` |
@@ -709,6 +715,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 08:07:19 | Bash | Find the ABERTO precedent and the pinos | `/bin/grep -n -i "aberto" ponto/tests/test_o280_bateria_da_lei.py \| head -40; echo "=== pinos ==="; /bin/grep -n "expectedFailure" ponto/tests/test_o280_bateria_da_lei.py` |
 | 08:04:02 | Bash | Read the pino doctrine and the costura | `sed -n '60,195p' ponto/tests/test_o280_bateria_da_lei.py` |
 | 08:03:36 | Bash | Locate the bateria's leitor function | `/bin/grep -rn "def julgar_o_dia" --include=*.py . ; echo ---; sed -n '1,60p' ponto/tests/test_o280_bateria_da_lei.py` |
-| 07:58:51 | Bash | Re-read the intra discount block of the comercial | `sed -n '2425,2462p' ponto/motor_calculo_v2.py` |
-| 07:58:03 | Bash | Get the T8 threshold constant | `/bin/grep -rn "ENTRADA_FORA_DO_INICIO_MIN\s*=" escala/ ponto/ core/ \| head; /bin/grep -n "RAIO_DO_MARCO_MIN\s*=" escala/regua_defesa.py` |
-| 07:57:51 | Bash | Read entrada_fora_do_inicio and cumpriu_a_volta | `sed -n '480,500p' escala/regua_defesa.py; echo "=== marco_ocupado / cumpriu 445-480"; sed -n '445,480p' escala/regua_defesa.py` |
