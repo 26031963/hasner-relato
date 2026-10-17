@@ -6,10 +6,26 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 17/10/2026 04:46:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (951.3 MB). Acoes na janela: **1154**.
+**Medido em 17/10/2026 04:52:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (951.9 MB). Acoes na janela: **1170**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 04:52:03 | Bash | Read spec blocks D12F and COM7 | `cd /home/ronald/saas-hasner && sed -n '233,332p' logs/o280/esmeril/I26-CASOS-33-ESPEC.md` |
+| 04:51:59 | Bash | Outline the spec file | `cd /home/ronald/saas-hasner && /bin/grep -n "^#\\|^### \\|^\*\*I26-\\|^- \*\*I26-" logs/o280/esmeril/I26-CASOS-33-ESPEC.md \| head -80` |
+| 04:51:53 | Bash | Add the measured universe to the PL section | `python3 - <<'PY' p='docs/RELATO.md' s=open(p).read() anc = "- **O QUE A CASA AFIRMA AO LADO**: `MotorPlantao` declara" assert s.count(anc)==1 novo = """- **O UNIVERSO, MEDIDO NA SOMBRA 17/10 04:5x** (`bin/sombra.sh --rodar pl_universo_24h.py`, leitura pura, cpuset de teste; o previsto sai da FUNCAO REAL `minutos_previstos_do_dia`, nunca de aritmetica minha): de **362** TipoEscala com os dois marco ...` |
+| 04:51:35 | Bash | Read the PL section body | `sed -n '22,52p' docs/RELATO.md` |
+| 04:51:31 | Bash | Locate the PL section in the RELATO | `/bin/grep -n "PLANTAO DE 24 h" docs/RELATO.md \| head` |
+| 04:51:16 | Bash | Measure which escala carries the two colabs | `cd /home/ronald/saas-hasner && cat >> logs/sombra/pl_universo_24h.py <<'PY' # ADENDO (17/10 04:5x): QUAL das 4 carrega os 2 colabs -- a pergunta de lei muda de # forma se o span 24h vier de um `plantao` 24x48 (cadastro coerente com a escala) ou # de um `12x36` cujos marcos se enrolam (cadastro ERRADO, dono CADASTRO pela L-099). if ids: from collections import Counter cnt = Counter() for e in ecs:  ...` |
+| 04:51:01 | Bash | Read the sombra probe output | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b3cpxnlj1.output` |
+| 04:50:57 | Bash | Read the CASOS registry header | `sed -n '200,260p' ponto/tests/test_o280_bateria_da_lei.py` |
+| 04:50:52 | Bash | Measure the 24h-span universe on the sombra | `cd /home/ronald/saas-hasner && bash bin/sombra.sh --rodar pl_universo_24h.py pl_universo_24h 2>&1 \| tail -40` |
+| 04:50:47 | Bash | Simplify the queryset line in the probe | `cd /home/ronald/saas-hasner && python3 - <<'PY' p='logs/sombra/pl_universo_24h.py' s=open(p).read() ruim = """ ecs = (EscalaColaborador.objects .filter(tipo_escala_id__in=ids, ativa=True) .filter(models_q := None) if False else EscalaColaborador.objects.filter(tipo_escala_id__in=ids, ativa=True)) """ bom = """ ecs = EscalaColaborador.objects.filter(tipo_escala_id__in=ids, ativa=True) """ assert s. ...` |
+| 04:50:40 | Bash | Write the sombra probe for the 24h plantao universe | `mkdir -p /home/ronald/saas-hasner/logs/sombra && cat > /home/ronald/saas-hasner/logs/sombra/pl_universo_24h.py <<'PY' # O280/I26 -- UNIVERSO DA PERGUNTA DE LEI DO PLANTAO DE 24 h (17/10). # Pergunta: quantas TipoEscala tem `hora_inicio == hora_fim` (span que a # `escala/utils.py::minutos_previstos_do_dia:1812-1814` enrola em 1440) e quantos # colaboradores estao nelas HOJE. O numero do previsto sa ...` |
+| 04:50:24 | Bash | Inspect EscalaColaborador fields | `/bin/grep -n "class EscalaColaborador" -A 40 escala/models.py \| /bin/grep -n "tipo_escala\\|colaborador\\|data_inicio\\|data_fim\\|ativ" \| head -20` |
+| 04:50:15 | Bash | Read the sombra --rodar door | `cd /home/ronald/saas-hasner && sed -n '465,520p' bin/sombra.sh` |
+| 04:50:11 | Bash | Find the sombra docker run pattern | `cd /home/ronald/saas-hasner && /bin/grep -n "settings.sombra\\|docker run" bin/sombra.sh \| head -30` |
+| 04:50:07 | Bash | List sombra helper scripts | `cd /home/ronald/saas-hasner && ls bin/ \| /bin/grep -i -E 'sombra\|sonda' ; echo "---"; sed -n '1,40p' bin/sonda_sombra.sh 2>/dev/null` |
+| 04:49:58 | Bash | Check ensaio state and current time | `ls /home/ronald/saas-hasner/logs/crons_em_curso/ 2>/dev/null; echo "---stamp---"; cat /home/ronald/saas-hasner/.sombra_stamp 2>/dev/null; echo "---date---"; date '+%d/%m %H:%M:%S %z'` |
 | 04:44:53 | Bash | Read the fixture creation and confere helper | `sed -n '760,800p;840,905p' ponto/tests/test_o280_bateria_da_lei.py` |
 | 04:44:49 | Bash | Locate the fixture registry in the bateria | `/bin/grep -n "D12SI\\|'D12'\\|GEOMETRIA\\|def _fix\\|FIXTURES\\|def confere" ponto/tests/test_o280_bateria_da_lei.py \| head -30` |
 | 04:44:43 | Bash | Read the bateria fixture and door | `sed -n '100,170p' ponto/tests/test_o280_bateria_da_lei.py` |
