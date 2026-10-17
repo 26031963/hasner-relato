@@ -6,10 +6,19 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 17/10/2026 19:35:47.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (979.3 MB). Acoes na janela: **688**.
+**Medido em 17/10/2026 19:41:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (979.4 MB). Acoes na janela: **689**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 19:39:07 | Bash | Read the rest of the suite runner | `cd /home/ronald/saas-hasner && sed -n '80,140p' bin/suite.sh` |
+| 19:38:57 | Bash | Read the suite runner's --dir contract | `cd /home/ronald/saas-hasner && sed -n '1,80p' bin/suite.sh` |
+| 19:38:51 | Bash | Run ruff in the container against the new test | `cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; A=/home/ronald/saas-hasner/logs/o280/passo4/arvore_603600d8/app; docker run --rm $TESTE_DOCKER -v "$A:/app:ro" -w /app saas-hasner-core:latest ruff check --no-cache --output-format concise ponto/tests/test_o280_bateria_da_lei.py 2>&1 \| tail -10` |
+| 19:38:46 | Bash | Read the copy-esmeril runner | `cd /home/ronald/saas-hasner && sed -n '1,40p' bin/esmeril_da_copia.sh` |
+| 19:38:43 | Bash | Find how the house runs ruff | `cd /home/ronald/saas-hasner && /bin/grep -rn "ruff check" bin/*.sh \| head -10` |
+| 19:38:38 | Bash | Run ruff on the new test in the copy | `cd /home/ronald/saas-hasner/logs/o280/passo4/arvore_603600d8 && ls app/ruff.toml && (command -v ruff && ruff check --config app/ruff.toml app/ponto/tests/test_o280_bateria_da_lei.py) 2>&1 \| tail -20` |
+| 19:38:30 | Bash | Write the B-I28 case into the HEAD copy | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad cat > "$S/patch_b_i28.py" <<'PY' # -*- coding: utf-8 -*- """O caso B-I28 (col639) na bateria pela LEI. Patch ancorado, idempotente, em COPIA do HEAD.""" import py_compile, sys ALVO = '/home/ronald/saas-hasner/logs/o280/passo4/arvore_603600d8/app/ponto/tests/test_o280_bateria_da_lei.py' src = open(ALVO,  ...` |
+| 19:37:12 | Bash | Confirm the scratchpad path | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; ls -d "$S" && echo "SCRATCHPAD=$S"` |
+| 19:37:06 | Bash | Write the B-I28 case into the HEAD copy | `cat > "$SCRATCHPAD/patch_b_i28.py" <<'PY' # -*- coding: utf-8 -*- """O caso B-I28 (col639) na bateria pela LEI. Patch ancorado, idempotente, em COPIA do HEAD.""" import py_compile, sys ALVO = '/home/ronald/saas-hasner/logs/o280/passo4/arvore_603600d8/app/ponto/tests/test_o280_bateria_da_lei.py' src = open(ALVO, encoding='utf-8').read() if 'B-I28' in src: print('JA APLICADO'); sys.exit(0) # ------- ...` |
 | 19:35:16 | Bash | Read reler's day grouping | `sed -n '530,600p' ponto/calculador/periodo.py` |
 | 19:35:12 | Bash | Check whether reler groups folga-trabalhada periods into the day | `sed -n '1,60p' ponto/calculador/periodo.py \| /bin/grep -n "dia_da_jornada" ; /bin/grep -n "def reler" -A 40 ponto/calculador/periodo.py \| /bin/grep -n "periodos_ft\\|dia_da_jornada\\|for p in" \| head -20` |
 | 19:34:23 | Bash | Search for hard-coded pin counts | `cd /home/ronald/saas-hasner && git grep -n "expected failures=10\\|expectedFailure" -- app/bin app/core/tests app/ponto/tests/test_o287* app/docs 2>/dev/null \| head -20; echo === ; git grep -rn "expected failures" -- app bin \| /bin/grep -v "test_o280_bateria\\|RELATO" \| head -20` |
@@ -690,11 +699,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 07:43:06 | Bash | Read the O271 origin module header | `sed -n '1,80p' ponto/tests/test_o271_pontualidade_no_comercial.py` |
 | 07:42:56 | Bash | Read D12F and COM7 case blocks | `cd /home/ronald/saas-hasner/logs/o280/esmeril && sed -n '233,300p' I26-CASOS-33-ESPEC.md` |
 | 07:42:40 | Bash | Inventory fixtures named in the spec | `cd /home/ronald/saas-hasner/logs/o280/esmeril && grep -n "D12SI\\|D12F\\|COM7\\|N12S\\|N12X\\|NPART\\|fixture\\|FIXTURE\\|cadastro novo\\|escala nova" I26-CASOS-33-ESPEC.md \| head -50` |
-| 07:37:47 | Bash | Read the three gate helpers | `grep -n "def perto_do_marco" -A 25 escala/regua_defesa.py; echo ===; grep -n "def entrada_fora_do_inicio" -A 12 escala/regua_defesa.py; echo ===; grep -n "def cumpriu_a_volta_do_intervalo" -A 30 escala/regua_defesa.py` |
-| 07:37:17 | Bash | Read pontualidade_do_dia | `grep -n "def pontualidade_do_dia" -A 90 ponto/calculador/regras.py` |
-| 07:37:10 | Bash | Read pontualidade_no_dia | `sed -n '420,520p' ponto/calculador/periodo.py` |
-| 07:37:05 | Bash | Find porta-de-baixo call sites and Regua fields | `grep -n "Regua(\\|pontualidade_no_dia(\\|periodo_do_dia(\\|excesso_do_dia(\\|noturno_no_par(" ponto/tests/test_o280_bateria_da_lei.py \| head -40; echo ---; grep -n "class Regua" -A 60 ponto/calculador/periodo.py \| head -80` |
-| 07:36:58 | Bash | Read cobertura test and base fixtures | `sed -n '760,960p' ponto/tests/test_o280_bateria_da_lei.py` |
-| 07:36:54 | Bash | Locate class and helper definitions | `grep -n "def confere\\|def _confere\\|def setUpTestData\\|^class \\|def _fix\\|def _cad" ponto/tests/test_o280_bateria_da_lei.py \| head -60` |
-| 07:36:48 | Bash | Read MATRIZ and CASOS tables | `sed -n '200,330p' ponto/tests/test_o280_bateria_da_lei.py` |
-| 07:36:41 | Bash | Read bateria helper bodies | `sed -n '80,200p' ponto/tests/test_o280_bateria_da_lei.py` |
