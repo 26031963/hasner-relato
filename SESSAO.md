@@ -6,10 +6,18 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 17/10/2026 07:55:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (962.4 MB). Acoes na janela: **1256**.
+**Medido em 17/10/2026 08:00:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (962.5 MB). Acoes na janela: **1264**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 07:58:51 | Bash | Re-read the intra discount block of the comercial | `sed -n '2425,2462p' ponto/motor_calculo_v2.py` |
+| 07:58:03 | Bash | Get the T8 threshold constant | `/bin/grep -rn "ENTRADA_FORA_DO_INICIO_MIN\s*=" escala/ ponto/ core/ \| head; /bin/grep -n "RAIO_DO_MARCO_MIN\s*=" escala/regua_defesa.py` |
+| 07:57:51 | Bash | Read entrada_fora_do_inicio and cumpriu_a_volta | `sed -n '480,500p' escala/regua_defesa.py; echo "=== marco_ocupado / cumpriu 445-480"; sed -n '445,480p' escala/regua_defesa.py` |
+| 07:57:05 | Bash | Check CASOS/MATRIZ readers and families | `/bin/grep -n "MATRIZ\\|CASOS\[" ponto/tests/test_o280_bateria_da_lei.py \| /bin/grep -v "^2[0-4][0-9]:" ; echo "=== outros leitores no repo"; git grep -ln "test_o280_bateria_da_lei\\|MATRIZ" -- '*.py' '*.sh' \| head; echo "=== familias usadas"; python3 -c " import re;s=open('ponto/tests/test_o280_bateria_da_lei.py').read() b=s.split('CASOS = {',1)[1].split('\nclass CoberturaDaMatrizTest',1)[0] pri ...` |
+| 07:56:38 | Bash | Read CoberturaDaMatrizTest | `sed -n '740,795p' ponto/tests/test_o280_bateria_da_lei.py` |
+| 07:56:33 | Bash | Read MATRIZ and the head of CASOS | `sed -n '195,260p' ponto/tests/test_o280_bateria_da_lei.py` |
+| 07:56:26 | Bash | Read the house porta-de-baixo call forms | `sed -n '3050,3090p' ponto/tests/test_o280_bateria_da_lei.py; echo "===== 3285,3310"; sed -n '3285,3310p' ponto/tests/test_o280_bateria_da_lei.py` |
+| 07:55:52 | Bash | Read the two pontualidade bodies in full | `sed -n '418,472p' ponto/calculador/periodo.py; echo "===== regras.pontualidade_do_dia"; sed -n '168,270p' ponto/calculador/regras.py` |
 | 07:55:01 | Bash | Read spec blocks D through H and section 5 | `cd /home/ronald/saas-hasner && sed -n '330,482p' logs/o280/esmeril/I26-CASOS-33-ESPEC.md` |
 | 07:54:57 | Bash | Read spec sections 3c and 4 | `cd /home/ronald/saas-hasner && sed -n '170,330p' logs/o280/esmeril/I26-CASOS-33-ESPEC.md` |
 | 07:54:30 | Bash | Re-read the spec sections 1-3 | `cd /home/ronald/saas-hasner && sed -n '1,170p' logs/o280/esmeril/I26-CASOS-33-ESPEC.md` |
