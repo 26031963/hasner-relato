@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 17/10/2026 12:49:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (968.4 MB). Acoes na janela: **1069**.
+**Medido em 17/10/2026 12:54:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (968.4 MB). Acoes na janela: **1064**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1074,8 +1074,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 00:56:19 | Bash | Census of counter readers | `cd /home/ronald/saas-hasner/app git grep -n "contadores()" -- '*.py' \| head -20; echo '=== quem le out[...] do cartorio ==='; git grep -n "\['pulados'\]\\|\['julgadas'\]\\|\['emitidos'\]\\|rejulgar" -- '*.py' \| /bin/grep -v "^ponto/services/cartorio.py" \| head -30` |
 | 00:55:43 | Bash | Anchor every line the cure touches | `cd /home/ronald/saas-hasner/app /bin/grep -n "vivos = \[x for x in lista\\|_com_fio = \[x\\| imp = impressao_insumos\\|if cel.julgada_em and cel.impressao == imp\\|cods = \[cod for cod, _ in classificar_dia\\|out\['julgadas'\] += 1\\|out.setdefault('cods', {})\[data\]\\|_vd = None\\|if not cods and vivos:\\|if _com_fio:\\|_vd = 'cobrado'\\|_contar_emissao(out\\|out.setdefault('rejulgar', \[\])\\|_ ...` |
 | 00:55:31 | Bash | Read the chamado-by-day porta | `cd /home/ronald/saas-hasner/app /bin/grep -rn "def chamados_que_falam_de_batida" --include=*.py . ; echo '---'; f=$(/bin/grep -rln "def chamados_que_falam_de_batida" --include=*.py .); sed -n "$(/bin/grep -n 'def chamados_que_falam_de_batida' $f \| cut -d: -f1),+40p" $f` |
-| 00:54:19 | Bash | Read the window and day-building head of the judging body | `cd /home/ronald/saas-hasner/app sed -n '642,740p' ponto/services/cartorio.py` |
-| 00:53:57 | Bash | Read julgar_colab and the emission counter | `cd /home/ronald/saas-hasner/app sed -n '585,645p' ponto/services/cartorio.py; echo '--- _contar_emissao ---'; sed -n '1085,1115p' ponto/services/cartorio.py` |
-| 00:53:53 | Bash | Read the emission sites and the lavra | `cd /home/ronald/saas-hasner/app sed -n '930,1035p' ponto/services/cartorio.py` |
-| 00:53:44 | Bash | Read the judging body: live chamados, impressao, codes, veredito | `cd /home/ronald/saas-hasner/app sed -n '740,860p' ponto/services/cartorio.py` |
-| 00:53:33 | Bash | Read the classification body around the furo codes | `cd /home/ronald/saas-hasner/app sed -n '160,260p' ponto/supra_juiz.py` |
