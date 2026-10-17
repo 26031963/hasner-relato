@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:832 AFIRMA ato sem PROVA ao lado -- - **NO AR, e o ato fechou inteiro**: commit `8c545a89` (merge `--no-ff`) e `bin/deploy.sh` **sem** `--sem-migrate` rc **0** as 18:12 -- `rel
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:864 AFIRMA ato sem PROVA ao lado -- - **NO AR, e o ato fechou inteiro**: commit `8c545a89` (merge `--no-ff`) e `bin/deploy.sh` **sem** `--sem-migrate` rc **0** as 18:12 -- `rel
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 17/10/2026 20:25:03.**
+**Medido em 17/10/2026 20:30:32.**
 
 | | |
 |---|---|
-| `HEAD` local | `603600d8 [O280] o lote de celulas da frota entregava a celula de OUTRO colaborador e o dia descia SEM MARCO em ~99,5% dos casos -- a segunda forma morreu em vez de ganhar conversor, e o ponteiro errado do meu proprio docstring custou a segunda suite` |
+| `HEAD` local | `e118c5ba [O280] o caso B-I28 da bateria pela LEI nasce PINADO: o par da CAUDA que a janela da L-097 nao alcanca paga +10,80 min de HE50 na v3 -- e a previsao que eu tinha do campo de producao era ERRADA, medi, e o que a medicao devolveu esta DENTRO do ! que ja esta na mesa` |
 | `origin/main` | `603600d8 [O280] o lote de celulas da frota entregava a celula de OUTRO colaborador e o dia descia SEM MARCO em ~99,5% dos casos -- a segunda forma morreu em vez de ganhar conversor, e o ponteiro errado do meu proprio docstring custou a segunda suite` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -35,31 +35,31 @@ RELATO, com a lista de nomes do banco como autoridade._
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **299.1 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **299.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **112.4 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **112.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **415.2 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **415.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **319.4 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **319.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o275** (`raia-o275`) -- **SEM AGENTE**
-  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **48.6 h** (passou das 6 h da L-105)
+  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **48.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-o275.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **437.1 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **437.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
 - **wt-v3-pouso** (`pouso-v3-20261016`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 4 arquivo(s) sujo(s), commit a frente ha **32.0 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 4 arquivo(s) sujo(s), commit a frente ha **32.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-v3-pouso.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **21 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
@@ -70,11 +70,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+e118c5ba [O280] o caso B-I28 da bateria pela LEI nasce PINADO: o par da CAUDA que a janela da L-097 nao alcanca paga +10,80 min de HE50 na v3 -- e a previsao que eu tinha do campo de producao era ERRADA, medi, e o que a medicao devolveu esta DENTRO do ! que ja esta na mesa
 603600d8 [O280] o lote de celulas da frota entregava a celula de OUTRO colaborador e o dia descia SEM MARCO em ~99,5% dos casos -- a segunda forma morreu em vez de ganhar conversor, e o ponteiro errado do meu proprio docstring custou a segunda suite
 6bfee91d [O280] o passo 4 refeito no topo: o DIFF de frota passa a guardar os DOIS LADOS e o dia-a-dia, e a primeira coisa que a auto-certificacao pegou foi o meu proprio arredondamento -- as frotas 10 e 09 discordam em sentidos OPOSTOS
 97588a2b O topo do TICKETS fechado no ato do push (O112)
 6e2c06ec [O280] os 33 casos da bateria pela LEI estao ESCRITOS e verdes -- e o unico VERMELHO que a escrita produziu era MEU: o caso foi invertido, nenhuma linha da v3 tocada
-fcba2390 [O280] a ancora do marco de ENTRADA da v3 sai da data da BATIDA e passa ao DIA DA JORNADA -- e a cura destampou um buraco que o proprio defeito cobria: o dia cujo par a releitura recusa recebia 0,00 de pontualidade como se fosse medicao
 ```
 
 ## `git status --short`
@@ -82,7 +82,6 @@ fcba2390 [O280] a ancora do marco de ENTRADA da v3 sai da data da BATIDA e passa
 ```
  M app/config/crons_duracao.json
  M app/docs/HANDOFF-SESSAO.md
- M app/ponto/tests/test_o280_bateria_da_lei.py
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -173,6 +172,8 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb
+     /scratchpad/linha_i28_b27.md (2 lines)
   ⎿  Read docs/HANDOFF-SESSAO.md (47 lines)
   ⎿  Referenced file docs/RELATO.md
   ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb
@@ -199,13 +200,11 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Background command "Run the full suite over the certified tree" completed (exit code 0)
 
-● Checking first and last lines of the drafts
-  ⎿  $ cd /home/ronald/saas-hasner &&
-     S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad &&
-     for f in bloco_col570.md marco_b_i28.md; do echo "=== $f"; cat -A "$S/$f" | sed -n '1p;$p' | cut
-     -c1-40; echo " [1]=$(sed -n '1p' $S/$f | cut -c1-30)"; echo " [last]=$…
+● Committing the marco by path
+  ⎿  $ cd /home/ronald/saas-hasner && bash bin/regua_tickets.sh 2>&1 | tail -12; echo
+     "rc_tickets=${PIPESTATUS[0]}"
 
-✢ Synthesizing… (3h 34m 20s · ↓ 274.2k tokens)
+· Synthesizing… (3h 39m 50s · ↓ 284.0k tokens · thought for 4s)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────
