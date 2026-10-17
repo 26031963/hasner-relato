@@ -37,8 +37,11 @@
      regra DELE (o DIFF surpreendeu), e o MAX_TURNO_MIN cavalga o commit da troca da O280 em vez de pouso
      proprio. Depois a O277. EM POUSO AGORA, e e a unica: a O288 PORTAO-COMPARA-METADE-DA-8069 (bug PROVADO
      no esmeril do marco da O271, P7.1, pouso PRE-APROVADO pela L-105). AO LADO, sem cruzar arquivo com
-     nenhuma delas: a O280 na raia wt-v3, cuja TROCA nao vai ao `!` dele enquanto houver item do ESMERIL-V3
-     (O287) aberto -- 8 de 25 abertos, condicao LITERAL do aval dele de 14:1x. -->
+     nenhuma delas: a O280, cuja raia wt-v3 JA POUSOU no main (`4f084e47`), e cuja TROCA nao vai ao `!` dele
+     enquanto houver item do ESMERIL-V3 (O287) aberto -- medido 16/10 22:4x: **8 abertos**, sendo **7 dele**
+     (I9 I14 I16b I17 I19 I24 I25) e **1 MEU**, `LEG2-NAO-CORRIDA` (as 49 celulas do passo B escritas pela lei
+     em 15/10 14:22 nunca foram cobradas da v3: 0 citacao na bateria, 0 runner na pasta, e os 18 novos
+     `B17`-`B34` sem celula equivalente nos 89 casos). Condicao LITERAL do aval dele de 14:1x. -->
 <!-- MOVIDO em 15/10 ~02:5x pelo Code, AUTONOMIA-DE-CODIGO item 1 (ordem e encaixe quando quem decide e
      DEPENDENCIA DE CODIGO): o BUG-SOBRA-TIPO-TROCADO FECHOU -- cura em 5f915ff4, no ar desde 02:06, e o apply
      do dado as 02:23 com a PROVA no RELATO (classe da frota 10 = 0, o 26219 morto por lastro, o 26/09 sem
