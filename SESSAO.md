@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 17/10/2026 11:24:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (968.4 MB). Acoes na janela: **1224**.
+**Medido em 17/10/2026 11:29:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (968.4 MB). Acoes na janela: **1216**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1226,11 +1226,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 23:30:50 | Bash | Locate the case ids in the draft | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cd $S && /bin/grep -n "B17\\|B19\\|B22\\|B23\\|B26\\|B27\\|B28\\|B32" test_o287_leg2_absurdos_do_esmeril.py` |
 | 23:30:41 | Bash | Check insumo ordering in the three production readers | `for f in ponto/services/espelho.py ponto/services/fechamento.py relatorios/pdf_espelho.py; do echo "=== $f"; /bin/grep -nE "batidas_apuraveis\|order_by\|batidas *=\|bats *=" $f \| /bin/grep -nE "batidas_apuraveis\|order_by" \| head -6; done` |
 | 23:30:35 | Bash | Census of calcular_mes callers and their insumo order | `echo "=== quem passa batidas a calcular_mes (ordem do insumo):"; git grep -nE "calcular_mes\(" -- '*.py' \| /bin/grep -v tests \| head -30` |
-| 23:26:34 | Bash | Check whether production hands sorted batidas | `sed -n "/^class Batida/,/^class /p" ponto/models.py \| /bin/grep -nE "class Meta\|ordering" \| head; echo "==== a porta:"; sed -n "$(/bin/grep -n 'def batidas_apuraveis' ponto/turnos.py \| cut -d: -f1),+25p" ponto/turnos.py \| /bin/grep -nE "order_by\|return\|filter" \| head` |
-| 23:25:45 | Bash | Re-run the probe with the right attribute | `cd /home/ronald/cp-leg2/app && sed -i 's/x\.pk) for x in b\]/x.id) for x in b]/' ponto/tests/test_tmp_probe_b27.py && /bin/grep -n 'x.id' ponto/tests/test_tmp_probe_b27.py; cd /home/ronald/saas-hasner && L=logs/leg2_probe.log && : > $L && bash bin/suite.sh --dir /home/ronald/cp-leg2 --only "ponto.tests.test_tmp_probe_b27" >> $L 2>&1; echo "exit=$?" >> $L; sed -n "$(/bin/grep -an '^====' $L \| head ...` |
-| 23:25:38 | Bash | Locate and read _B | `/bin/grep -n "_B\b" ponto/tests/test_o280_bateria_da_lei.py \| head -5; echo ====; sed -n '70,109p' ponto/tests/test_o280_bateria_da_lei.py` |
-| 23:25:34 | Bash | Read the _B batida stub | `sed -n "$(/bin/grep -n '^class _B' ponto/tests/test_o280_bateria_da_lei.py \| cut -d: -f1),+25p" ponto/tests/test_o280_bateria_da_lei.py` |
-| 23:25:29 | Bash | Read the probe traceback | `cd /home/ronald/saas-hasner && /bin/grep -an 'ERROR: test_probe' logs/leg2_probe.log \| head -1; sed -n "$(/bin/grep -an 'ERROR: test_probe' logs/leg2_probe.log \| head -1 \| cut -d: -f1),+25p" logs/leg2_probe.log` |
-| 23:25:24 | Bash | Read the probe error | `cd /home/ronald/saas-hasner && sed -n '1,60p' logs/leg2_probe.log` |
-| 23:25:04 | Bash | Probe where input order enters the result | `cd /home/ronald/cp-leg2/app && cat > ponto/tests/test_tmp_probe_b27.py <<'PY' """SONDA TEMPORARIA (nao vai para arvore): onde a ORDEM da lista de batidas entra no resultado.""" import datetime from ponto.tests.test_o280_bateria_da_lei import (_BaseBateria, _CosturaCompleta, _bats, estado_dos_periodos, julgar_o_dia, leitura) class ProbeB27(_CosturaCompleta, _BaseBateria): def test_probe(self): from ...` |
-| 23:24:23 | Bash | Check whether parear_turnos sorts its input | `sed -n "$(/bin/grep -n 'def parear_turnos' ponto/turnos.py \| cut -d: -f1),+40p" ponto/turnos.py \| /bin/grep -nE "sort\|order\|def \|timestamp\|for b" \| head -20` |
