@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 17/10/2026 10:40:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (968.4 MB). Acoes na janela: **1284**.
+**Medido em 17/10/2026 10:45:47.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (968.4 MB). Acoes na janela: **1280**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1290,7 +1290,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 22:46:40 | Bash | Read the leg-2 bullet in full | `cd /home/ronald/saas-hasner && sed -n '449p' app/docs/RELATO.md` |
 | 22:46:35 | Bash | Append the by-input census row and verify the cited lines are untouched | `cd /home/ronald/saas-hasner && cp logs/o280/esmeril/ESMERIL.md /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/esmeril_pre411.md && cat >> logs/o280/esmeril/ESMERIL.md <<'EOF' 411. **O MAPA DA LEG 2 REFEITO POR INSUMO, E ELE DERRUBA UM DOS MEUS CASOS E CORRIGE OUTRO: 18 -> 17 NOVOS SEM CELULA** (balde `declarado`, 16/10 ~23:0x). A linha 410 publicou os ...` |
 | 22:45:51 | Bash | Read the leap-year window assertion and its test | `cd /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && awk 'NR>=895 && NR<=935' bat_main.py \| cut -c1-170 echo "=== F1b citado em teste?"; /bin/grep -n "F1b" bat_main.py \| cut -c1-170` |
-| 22:45:44 | Bash | Locate the published 18 in the three documents | `cd /home/ronald/saas-hasner && echo "=== RELATO 431-456" && sed -n '431,456p' app/docs/RELATO.md \| /bin/grep -n "18\\|novos\\|celula" \| cut -c1-300 echo; echo "=== BACKLOG 39-45" && sed -n '39,45p' app/docs/BACKLOG.md \| cut -c1-300 echo; echo "=== ESMERIL tail" && wc -l logs/o280/esmeril/ESMERIL.md && sed -n '410p' logs/o280/esmeril/ESMERIL.md \| /bin/grep -o "18 NEW[^·]*\\|18 novos[^·]*\\|18[^ ...` |
-| 22:45:13 | Bash | Read own case entries for the six ambiguous ids | `cd /home/ronald/saas-hasner && for ID in B20 B21 B26 B31 B33 B34; do echo "######## $ID"; awk -v id="$ID" '$0 ~ ("^#+.*"id"[^0-9]") {f=1} f{print; n++} f && n>14 {exit}' logs/o280/esmeril/casos_absurdos_esmeril.md \| cut -c1-170; done` |
-| 22:45:03 | Bash | Find which cases use the coincident-border plantao cadastro | `cd /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && echo "=== quem usa te['PL'] / ec['PL']" && /bin/grep -n "'PL'" bat_main.py \| cut -c1-150 echo; echo "=== def test que contem PL" && awk "/def test_/{n=NR;name=\$0} /'PL'/{print n\": \"name}" bat_main.py \| sort -u \| cut -c1-140` |
-| 22:44:30 | Bash | Inspect context of each form-census hit | `cd /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && for L in 310 1350 1269 2406 369 1501 1525 804 1896 647 1681 1742 245 246 923; do echo "---- :$L"; sed -n "$((L-2)),$((L+2))p" bat_main.py \| cut -c1-160; done` |
