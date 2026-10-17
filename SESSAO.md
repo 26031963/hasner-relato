@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 17/10/2026 16:44:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (972.9 MB). Acoes na janela: **799**.
+**Medido em 17/10/2026 16:50:03.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (973.0 MB). Acoes na janela: **794**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -804,8 +804,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 04:50:15 | Bash | Read the sombra --rodar door | `cd /home/ronald/saas-hasner && sed -n '465,520p' bin/sombra.sh` |
 | 04:50:11 | Bash | Find the sombra docker run pattern | `cd /home/ronald/saas-hasner && /bin/grep -n "settings.sombra\\|docker run" bin/sombra.sh \| head -30` |
 | 04:50:07 | Bash | List sombra helper scripts | `cd /home/ronald/saas-hasner && ls bin/ \| /bin/grep -i -E 'sombra\|sonda' ; echo "---"; sed -n '1,40p' bin/sonda_sombra.sh 2>/dev/null` |
-| 04:49:58 | Bash | Check ensaio state and current time | `ls /home/ronald/saas-hasner/logs/crons_em_curso/ 2>/dev/null; echo "---stamp---"; cat /home/ronald/saas-hasner/.sombra_stamp 2>/dev/null; echo "---date---"; date '+%d/%m %H:%M:%S %z'` |
-| 04:44:53 | Bash | Read the fixture creation and confere helper | `sed -n '760,800p;840,905p' ponto/tests/test_o280_bateria_da_lei.py` |
-| 04:44:49 | Bash | Locate the fixture registry in the bateria | `/bin/grep -n "D12SI\\|'D12'\\|GEOMETRIA\\|def _fix\\|FIXTURES\\|def confere" ponto/tests/test_o280_bateria_da_lei.py \| head -30` |
-| 04:44:43 | Bash | Read the bateria fixture and door | `sed -n '100,170p' ponto/tests/test_o280_bateria_da_lei.py` |
-| 04:44:35 | Bash | Check the ensaio duration and progress | `cd /home/ronald/saas-hasner && python3 -c " import json;d=json.load(open('app/config/crons_duracao.json'));print({k:v for k,v in (d.get('dur_s') or {}).items() if 'sombra' in k})" 2>&1; ls -l --time-style=+%H:%M logs/crons_em_curso/ 2>/dev/null; tail -3 logs/sombra.log 2>/dev/null \| cut -c1-160` |
