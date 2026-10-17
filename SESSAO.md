@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 17/10/2026 13:26:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (968.4 MB). Acoes na janela: **1009**.
+**Medido em 17/10/2026 13:31:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (968.4 MB). Acoes na janela: **1000**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1010,12 +1010,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 01:32:02 | Bash | List the O218 logs and scripts | `ls ~/saas-hasner/logs/ \| /bin/grep "o218" ; echo "=== o218 sombra diff script? ==="; ls -la ~/saas-hasner/logs/o218_*.py` |
 | 01:31:58 | Bash | Look for the O218 frota diff prior art | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; ls -la $S/ \| /bin/grep -i "o218\\|frota_lavra\\|diff_frota" \| head -20; echo "=== repo ==="; ls ~/saas-hasner/logs/o218* 2>/dev/null \| head; ls ~/saas-hasner/logs/o218/ 2>/dev/null \| head` |
 | 01:31:49 | Bash | Write the protestos-delta correction script to the scratchpad | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cat > $S/o222_cura2_protestos.py <<'PY' # O222, correcao da CONTABILIDADE do `protestos` na releitura: o netting por # `_conv['julgadas']` assumia que TODA celula re-julgada tinha protesto na 1a lavra. # Nao e verdade e nao se deduz: celula com `cods` VAZIO e veredito `cobrado` (ja havia # cobranca viv ...` |
-| 01:31:20 | Bash | Find tests outside the three labels that drive the real cartorio | `cd /tmp/prepush-arvore.6Vi57A/app && /bin/grep -rln "julgar_colab\\|processar_cartorio\\|detectar_ausencias" folha/tests relatorios/tests colaboradores/tests core/tests api/tests inteligencia/tests clientes/tests comunicados/tests ferias/tests holerite/tests tenants/tests 2>/dev/null` |
-| 01:31:13 | Bash | List tests mentioning furo outside the three labels | `cd /tmp/prepush-arvore.6Vi57A/app && /bin/grep -rln "furo" folha/tests relatorios/tests colaboradores/tests core/tests api/tests 2>/dev/null` |
-| 01:31:08 | Bash | Find furo-label tests outside the three labels | `cd /tmp/prepush-arvore.6Vi57A/app && git grep -ln "veredito='furo'\\|veredito=\"furo\"\\|'furo'" -- folha/tests relatorios/tests colaboradores/tests core/tests api/tests 2>/dev/null \| head -20` |
-| 01:31:02 | Bash | Check the battery test base class and any on_commit in the path | `cd /tmp/prepush-arvore.6Vi57A/app && /bin/grep -n "class VereditoDoFuroFechaNaPrimeira\\|^class \\|TransactionTestCase" ponto/tests/test_bateria_lavratura.py \| head -20; echo "=== on_commit no caminho ==="; /bin/grep -rn "on_commit" chamados/services/fabrica_da_celula.py chamados/services/declaracao_texto.py chamados/models.py ponto/services/cartorio.py \| head` |
-| 01:29:54 | Bash | Read the fabrica head | `cd /tmp/prepush-arvore.6Vi57A/app && sed -n '1,80p' chamados/services/fabrica_da_celula.py` |
-| 01:29:45 | Bash | Census every use of cods in the cartorio | `C=/tmp/prepush-arvore.6Vi57A/app/ponto/services/cartorio.py; /bin/grep -n "cods" $C \| sed -n '1,60p'` |
-| 01:29:33 | Bash | Read julgar_colab around the fabrica loop and the cure | `C=/tmp/prepush-arvore.6Vi57A/app/ponto/services/cartorio.py; sed -n '620,700p' $C` |
-| 01:29:28 | Bash | Read the protestos increment site | `C=/tmp/prepush-arvore.6Vi57A/app/ponto/services/cartorio.py; sed -n '965,985p' $C` |
-| 01:29:25 | Bash | Census how the protestos counter is incremented | `C=/tmp/prepush-arvore.6Vi57A/app/ponto/services/cartorio.py; /bin/grep -n "protestos" $C` |
