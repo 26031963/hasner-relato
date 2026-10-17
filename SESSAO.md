@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 17/10/2026 18:20:47.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (975.9 MB). Acoes na janela: **733**.
+**Medido em 17/10/2026 18:25:47.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (975.9 MB). Acoes na janela: **717**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -727,19 +727,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 06:26:17 | Bash | Read gerar_avais usage header | `cd /home/ronald/saas-hasner && sed -n '1,60p' bin/gerar_avais.py` |
 | 06:26:09 | Bash | Wait by file for the push verdict | `cd /home/ronald/saas-hasner && until /bin/grep -q '^rc=' logs/o280/esmeril/i27_push.log; do sleep 20; done; echo "=== veredito do push:"; tail -6 logs/o280/esmeril/i27_push.log` |
 | 06:26:02 | Bash | Append the closing census entry and check the push | `cd /home/ronald/saas-hasner && cat >> logs/o280/esmeril/ESMERIL.md <<'FIM' 422. **A LINHA 421 FECHA COM NUMERO -- o censo que faltava nela nao era o dos CORPOS de `calcular_periodo`, era o das INSTANCIACOES, e agora esta feito: 3 de 3 dentro dos corpos que carimbam, 1 produtor, 2 sitios de `append`, 0 copias.** A frase que a 421 afirmava (*"nenhum outro sitio cria ou copia periodo para dentro do r ...` |
-| 06:25:27 | Bash | Find who calls calcular_periodo inside the motor | `/bin/grep -n 'calcular_periodo(' ponto/motor_calculo_v2.py \| /bin/grep -v 'def \\|Motor12x36.calcular\\|super()'` |
-| 06:25:21 | Bash | Read the ft append site and all periodos appends | `sed -n '2215,2235p' ponto/motor_calculo_v2.py; echo '=== periodos.append:'; /bin/grep -n 'periodos\.append\\|periodos +=' ponto/motor_calculo_v2.py` |
-| 06:25:16 | Bash | Check how periodos_ft is populated and whether periods are copied | `cd /home/ronald/saas-hasner && git grep -n 'periodos_ft' -- app/ponto/motor_calculo_v2.py \| cut -c1-150; echo '=== copias:'; git grep -n 'copy.copy\\|deepcopy\\|dataclasses.replace\\|replace(periodo' -- app/ponto/motor_calculo_v2.py \| cut -c1-130` |
-| 06:25:10 | Bash | Census of PeriodoCalculo instantiations | `cd /home/ronald/saas-hasner && git grep -n 'PeriodoCalculo(' -- app/ponto/ \| cut -c1-140` |
-| 06:23:25 | Bash | Append the correction entry and check the push | `cd /home/ronald/saas-hasner && cat >> logs/o280/esmeril/ESMERIL.md <<'FIM' 421. **CORRECAO DA MINHA LINHA 420, E ELA ERRA PARA O LADO DO ALARME: o `sem_carimbo` nao e' "buraco latente com frota 0" -- ele e' **INALCANCAVEL** pelos motores de hoje, e isso se MEDE no censo dos ramos, nao no numero da frota.** O que a linha 420 tinha era o universo (`sem_carimbo=0` em 6.330 relidos) sem a razao; a raz ...` |
-| 06:22:55 | Bash | Check for early returns before the carimbo in two motors | `sed -n '2543,2559p' ponto/motor_calculo_v2.py \| /bin/grep -n 'return\\|_carimbar\\|def '; echo '--- comercial'; sed -n '2868,2892p' ponto/motor_calculo_v2.py \| /bin/grep -n 'return\\|_carimbar\\|def '` |
-| 06:22:39 | Bash | Read MotorBase, Plantao and ComEscala calcular_periodo | `sed -n '2386,2396p;3176,3202p' ponto/motor_calculo_v2.py` |
-| 06:22:35 | Bash | List motor classes and their calcular_periodo overrides | `/bin/grep -n '^class \\| def calcular_periodo' ponto/motor_calculo_v2.py` |
-| 06:22:27 | Bash | Read between creation and carimbo in motor 12x36 | `sed -n '2421,2445p' ponto/motor_calculo_v2.py` |
-| 06:22:23 | Bash | Find the carimbar_segmento call sites | `/bin/grep -n '_carimbar_segmento' ponto/motor_calculo_v2.py` |
-| 06:22:16 | Bash | Read the janela do par that writes efetivo pontas | `sed -n '1560,1625p' ponto/motor_calculo_v2.py` |
-| 06:22:12 | Bash | Find where efetivo_entrada is written in the motor | `/bin/grep -n 'efetivo_entrada' ponto/motor_calculo_v2.py \| head -20` |
-| 06:22:03 | Bash | Check the push log tail again | `cd /home/ronald/saas-hasner && tail -4 logs/o280/esmeril/i27_push.log` |
-| 06:21:59 | Bash | Append the sibling-gates census to the esmeril log | `cd /home/ronald/saas-hasner && cat >> logs/o280/esmeril/ESMERIL.md <<'FIM' 420. **O CENSO DOS IRMAOS DO BURACO DO I27, MEDIDO NO CODIGO E NA FROTA: dos QUATRO portoes que RECUSAM periodo em `ponto/calculador/periodo.py`, um e' o MESMO buraco (`sem_carimbo`, e esta LATENTE -- frota 0), um acabou de ser curado (`efetivo_invertido`) e DOIS sao SEGUROS -- e o que separa um do outro NAO e' o portao: e' ...` |
-| 06:21:10 | Bash | Inspect entry numbering format | `cd /home/ronald/saas-hasner && /bin/grep -n '^### 41[5-9]\\|^## 41[5-9]\\|^41[5-9]\.' logs/o280/esmeril/ESMERIL.md \| cut -c1-180` |
-| 06:21:06 | Bash | Confirm the esmeril log is ignored and read its tail | `cd /home/ronald/saas-hasner && git check-ignore -v logs/o280/esmeril/ESMERIL.md; echo "rc=$?"; wc -l logs/o280/esmeril/ESMERIL.md; tail -4 logs/o280/esmeril/ESMERIL.md \| cut -c1-200` |
