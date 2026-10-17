@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 16/10/2026 21:55:46.**
+**Medido em 16/10/2026 22:00:47.**
 
 | | |
 |---|---|
 | `HEAD` local | `4f084e47 [O280] a promessa de DESEMPENHO da matriz nao tinha caso: o tempo v2 x v3 passa a ter numero, e ele diz que o custo da v3 e alimentacao, nao calculo` |
-| `origin/main` | `10ee05be [O280] a L-023 ganha as celulas que a EXERCEM: a foto do mes COMPLEMENTA onde o ciclo responde e SUBSTITUI onde ele nao sabe` |
-| commits a subir (`ahead`) | **1** |
+| `origin/main` | `4f084e47 [O280] a promessa de DESEMPENHO da matriz nao tinha caso: o tempo v2 x v3 passa a ter numero, e ele diz que o custo da v3 e alimentacao, nao calculo` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -35,16 +35,16 @@ RELATO, com a lista de nomes do banco como autoridade._
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **276.6 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **276.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **89.9 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **90.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
   - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **392.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **296.9 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **297.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o275** (`raia-o275`) -- **SEM AGENTE**
   - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **26.2 h** (passou das 6 h da L-105)
@@ -53,13 +53,13 @@ RELATO, com a lista de nomes do banco como autoridade._
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **414.6 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **414.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
 - **wt-v3-pouso** (`pouso-v3-20261016`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 4 arquivo(s) sujo(s), commit a frente ha **9.5 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 4 arquivo(s) sujo(s), commit a frente ha **9.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-v3-pouso.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **21 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
@@ -172,44 +172,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+  Um bug no meu próprio caminho, curado na hora (LEI-AKITA 6): a varredura da história pública era um python3 do HOST com afinidade 0-7 e foi vista no PSR 2 —
+  núcleo de produção. A lei do CPUSET cobra o cpuset do docker run; processo do host nunca passa por ela. Não matei: taskset -pc 4-7 às ~21:04:10 — está no PSR 6
+  agora, com as 7 h 51 min de trabalho intactas. O pin caiu 55 s dentro da corrida, então ela cobre dois regimes de carga (antes n=202, p50 98,8 ms; depois n=369,
+  p50 105,1 ms, razão move ~5 %) — publicado no MEDIDO como limite, não escondido.
 
-  Ran 15 shell commands
+  Uma premissa minha que era falsa morre aqui: eu carregava "28 CASOS sem linha de MATRIZ" como dívida. A MATRIZ é o seu documento literal, não um índice derivado,
+  e caso extra é legítimo pela sua própria cláusula de crescimento. A frase nunca chegou aos docs (grep: 0 ocorrência) — não havia o que apagar.
 
-● Background command "Run the timing measurement over the whole frota on the sombra" completed (exit code 0)
+  Na sua mesa, sem travar a fila
 
-  Ran 26 shell commands
-  ⎿  Read docs/AVAIS.md (27 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bv9c1c7tl.output (10 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bwk5ooyv8.output (4 lines)
+  - ! O295-HISTORIA-PUBLICA-REESCRITA — o ar está limpo, o commit antigo segue alcançável por SHA.
+  - Pergunta de LEI da L-022 (no topo do RELATO, com os números: 18 vínculos, 37 mês-vínculo) — leitura (A) ou (B).
+  - Portão da O280: 7 itens de esmeril abertos (I9 I14 I16b I17 I19 I24 I25). Pela letra do seu aval, a troca não vai ao seu ! enquanto houver um.
+  - Fila nova registrada (não é lei, L-117): "processo python do HOST sem cpuset rouba núcleo do cliente".
 
-● Task "Measure the whole public history with the cured predicate" still running in background
-
-● Task "Run the full suite against the copy in the background" still running in background
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-  Ran 2 shell commands
-
-● Background command "Run the full suite against the copy in the background" completed (exit code 0)
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: O280 -- MOTOR-V3-UM-PERIODO (aval dele 15/10 09:5x). O que a obra ataca, e o diagnostico e o do proprio aval: hoje a m
 
   Ran 1 shell command
 
-● Background command "Wait by file for the suite verdict" completed (exit code 0)
+● Background command "Wait by file for the push verdict" completed (exit code 0)
 
-  Keeping waiting by file for the push verdict · 5m 11s
-  ⎿  $ T=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bba21pifs.output
-     until /bin/grep -q 'PUSH_RC=' "$T" 2>/dev/null; do sleep 25; done
-     echo "=== $(date '+%d/%m %H:%M:%S')"; cat "$T" (5m 11s)
-     (ctrl+b ctrl+b (twice) to run in background)
+● Printing the test bodies of the cases under confer
+  ⎿  $ cd /home/ronald/saas-hasner/app; python3 - <<'PY'
+     import ast
+     p='ponto/tests/test_o280_bateria_da_lei.py'
+     src=open(p).read(); lines=src.split('\n'); t=ast.parse(src)
+     alvo=('A9','C6','C6b','C6c','C7','C8')
+     for n in ast.walk(t):
+     if isinstance(n,ast.FunctionDef) and n.name.startswith('test_'):
+     # casa…
 
-· Crafting… (11h 30m 25s · ↓ 920.0k tokens)
+* Crafting… (11h 35m 25s · ↓ 929.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                           ✔ Update installed · Restart to update
+                                                                                                                                            5% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
