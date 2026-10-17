@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:814 AFIRMA ato sem PROVA ao lado -- - **NO AR, e o ato fechou inteiro**: commit `8c545a89` (merge `--no-ff`) e `bin/deploy.sh` **sem** `--sem-migrate` rc **0** as 18:12 -- `rel
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:832 AFIRMA ato sem PROVA ao lado -- - **NO AR, e o ato fechou inteiro**: commit `8c545a89` (merge `--no-ff`) e `bin/deploy.sh` **sem** `--sem-migrate` rc **0** as 18:12 -- `rel
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 17/10/2026 18:10:46.**
+**Medido em 17/10/2026 18:15:47.**
 
 | | |
 |---|---|
-| `HEAD` local | `6bfee91d [O280] o passo 4 refeito no topo: o DIFF de frota passa a guardar os DOIS LADOS e o dia-a-dia, e a primeira coisa que a auto-certificacao pegou foi o meu proprio arredondamento -- as frotas 10 e 09 discordam em sentidos OPOSTOS` |
+| `HEAD` local | `603600d8 [O280] o lote de celulas da frota entregava a celula de OUTRO colaborador e o dia descia SEM MARCO em ~99,5% dos casos -- a segunda forma morreu em vez de ganhar conversor, e o ponteiro errado do meu proprio docstring custou a segunda suite` |
 | `origin/main` | `6bfee91d [O280] o passo 4 refeito no topo: o DIFF de frota passa a guardar os DOIS LADOS e o dia-a-dia, e a primeira coisa que a auto-certificacao pegou foi o meu proprio arredondamento -- as frotas 10 e 09 discordam em sentidos OPOSTOS` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,31 +29,31 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2528.4 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2528.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **296.9 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **297.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **110.1 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **110.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **413.0 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **413.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **317.1 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **317.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o275** (`raia-o275`) -- **SEM AGENTE**
-  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **46.4 h** (passou das 6 h da L-105)
+  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **46.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-o275.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **434.8 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **434.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -70,11 +70,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+603600d8 [O280] o lote de celulas da frota entregava a celula de OUTRO colaborador e o dia descia SEM MARCO em ~99,5% dos casos -- a segunda forma morreu em vez de ganhar conversor, e o ponteiro errado do meu proprio docstring custou a segunda suite
 6bfee91d [O280] o passo 4 refeito no topo: o DIFF de frota passa a guardar os DOIS LADOS e o dia-a-dia, e a primeira coisa que a auto-certificacao pegou foi o meu proprio arredondamento -- as frotas 10 e 09 discordam em sentidos OPOSTOS
 97588a2b O topo do TICKETS fechado no ato do push (O112)
 6e2c06ec [O280] os 33 casos da bateria pela LEI estao ESCRITOS e verdes -- e o unico VERMELHO que a escrita produziu era MEU: o caso foi invertido, nenhuma linha da v3 tocada
 fcba2390 [O280] a ancora do marco de ENTRADA da v3 sai da data da BATIDA e passa ao DIA DA JORNADA -- e a cura destampou um buraco que o proprio defeito cobria: o dia cujo par a releitura recusa recebia 0,00 de pontualidade como se fosse medicao
-b92cbc7f [O222] o ato do cartorio passa a FECHAR lendo o que ele mesmo escreveu: o veredito do furo era ponto fixo em DUAS passadas e agora e em UMA, e o caminho do LOTE tinha um segundo bug que atravessava para o colab seguinte
 ```
 
 ## `git status --short`
@@ -82,11 +82,6 @@ b92cbc7f [O222] o ato do cartorio passa a FECHAR lendo o que ele mesmo escreveu:
 ```
  M app/config/crons_duracao.json
  M app/docs/HANDOFF-SESSAO.md
- M app/docs/PENDENTES_RONALD.json
- M app/docs/PROMPTS.md
- M app/docs/RELATO.md
- M app/ponto/calculador/alimentacao.py
-?? app/ponto/tests/test_lote_de_celulas_nao_troca_de_colaborador.py
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -202,19 +197,19 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Background command "Relaunch the full suite over the corrected copy" completed (exit code 0)
 
-  Running every host selo before the push · 1m 23s
-  ⎿  $ cd /home/ronald/saas-hasner && ls bin/tests/test_*.sh | wc -l && fails=0; for t in
-     bin/tests/test_*.sh; do out=$(bash "$t" 2>&1); rc=$?; if [ $rc -ne 0 ]; then fails=$((fails+1));
-     echo "VERMELHO $t (rc=$rc)"; echo "$out" | tail -3; fi; done; echo "selos vermelhos: $fails" (1m
-     22s · 2 lines)
+● Waiting on the push log for its outcome · 46s
+  ⎿  $ cd /home/ronald/saas-hasner && L=logs/o280/passo4/push_lote_1815.log; i=0; until [ -s "$L" ] &&
+     /bin/grep -qE 'main -> main|rejected|VERMELHO|FAILED|Everything up-to-date' "$L" 2>/dev/null || [
+     $i -ge 28 ]; do sleep 20; i=$((i+1)); done; echo "voltas=$i $(date '+%H:%M:%S')"; tail -6 "$L"
+     2>/dev/n… (46s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Synthesizing… (1h 20m 4s · ↓ 84.9k tokens)
+✶ Synthesizing… (1h 25m 5s · ↓ 93.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                9% until auto-compact
+                                                                                0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
