@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 17/10/2026 11:18:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (968.4 MB). Acoes na janela: **1236**.
+**Medido em 17/10/2026 11:24:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (968.4 MB). Acoes na janela: **1224**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1234,15 +1234,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 23:25:24 | Bash | Read the probe error | `cd /home/ronald/saas-hasner && sed -n '1,60p' logs/leg2_probe.log` |
 | 23:25:04 | Bash | Probe where input order enters the result | `cd /home/ronald/cp-leg2/app && cat > ponto/tests/test_tmp_probe_b27.py <<'PY' """SONDA TEMPORARIA (nao vai para arvore): onde a ORDEM da lista de batidas entra no resultado.""" import datetime from ponto.tests.test_o280_bateria_da_lei import (_BaseBateria, _CosturaCompleta, _bats, estado_dos_periodos, julgar_o_dia, leitura) class ProbeB27(_CosturaCompleta, _BaseBateria): def test_probe(self): from ...` |
 | 23:24:23 | Bash | Check whether parear_turnos sorts its input | `sed -n "$(/bin/grep -n 'def parear_turnos' ponto/turnos.py \| cut -d: -f1),+40p" ponto/turnos.py \| /bin/grep -nE "sort\|order\|def \|timestamp\|for b" \| head -20` |
-| 23:24:01 | Bash | Read the six clauses of L-115 | `sed -n "$(/bin/grep -n 'def _borda_posicional' ponto/turnos.py \| cut -d: -f1),+70p" ponto/turnos.py` |
-| 23:23:49 | Bash | Read L-115 literally from LEIS.md | `/bin/grep -n "L-115" docs/LEIS.md \| head; echo "=========="; sed -n "$(/bin/grep -n '^\| *L-115' docs/LEIS.md \| head -1 \| cut -d: -f1),+2p" docs/LEIS.md` |
-| 23:23:27 | Bash | Read the battery's law citation for the 12x36 indemnified interval | `sed -n '1900,1930p' ponto/tests/test_o280_bateria_da_lei.py; echo "===== 2070-2100:"; sed -n '2070,2100p' ponto/tests/test_o280_bateria_da_lei.py` |
-| 23:23:20 | Bash | Find the battery's own expectation for the 12x36 interval | `F=ponto/tests/test_o280_bateria_da_lei.py && /bin/grep -n "intra_indenizada" $F \| head -20; echo "==== um caso limpo de N12/D12 na bateria:"; /bin/grep -n "'trab': 720" $F \| head -10` |
-| 23:22:51 | Bash | Read the first failures of the run | `cd /home/ronald/saas-hasner && /bin/grep -aE '^(FAIL\|ERROR\|ok\|Ran \|FAILED\|OK)' logs/leg2_run1.log \| head -20; echo "====== primeiras falhas, cru:"; sed -n '1,90p' logs/leg2_run1.log` |
-| 23:22:03 | Bash | Wait for and read the leg-2 run | `cd /home/ronald/saas-hasner && L=logs/leg2_run1.log; i=0; until /bin/grep -qaE '^exit=' $L \|\| [ $i -ge 36 ]; do sleep 10; i=$((i+1)); done; tail -80 $L` |
-| 23:21:59 | Bash | Re-run the leg-2 module with the label as --only | `cd /home/ronald/saas-hasner && L=logs/leg2_run1.log && : > $L && bash bin/suite.sh --dir /home/ronald/cp-leg2 --only "ponto.tests.test_o287_leg2_absurdos_do_esmeril" >> $L 2>&1; echo "exit=$?" >> $L; tail -3 $L` |
-| 23:21:50 | Bash | Read how suite.sh composes the manage.py command | `cd /home/ronald/saas-hasner && sed -n '45,200p' bin/suite.sh \| /bin/grep -nE 'LABELS\|EXTRA\|manage.py\|ONLY\|docker run\|--' \| head -40` |
-| 23:21:42 | Bash | Wait for and read the first leg-2 run | `cd /home/ronald/saas-hasner && L=logs/leg2_run1.log; i=0; until /bin/grep -qaE '^exit=' $L \|\| [ $i -ge 30 ]; do sleep 10; i=$((i+1)); done; cat $L \| tail -60` |
-| 23:21:38 | Bash | Run the leg-2 module in the copy under the one-run lock | `cd /home/ronald/saas-hasner && L=logs/leg2_run1.log && : > $L && bash bin/suite.sh --dir /home/ronald/cp-leg2 -- ponto.tests.test_o287_leg2_absurdos_do_esmeril >> $L 2>&1; echo "exit=$?" >> $L; tail -5 $L` |
-| 23:21:31 | Bash | Build the test copy with the draft inside | `cd /home/ronald/saas-hasner && CP=/home/ronald/cp-leg2 && rm -rf $CP && mkdir -p $CP && git archive HEAD \| tar -x -C $CP && mkdir -p $CP/app/logs $CP/app/media $CP/app/staticfiles && SC=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && cp $SC/test_o287_leg2_absurdos_do_esmeril.py $CP/app/ponto/tests/ && ls -la $CP/app/ponto/tests/test_o287_leg2_absur ...` |
-| 23:21:13 | Bash | Confirm the remote moved and read suite.sh usage | `cd /home/ronald/saas-hasner && git fetch -q origin && git log --oneline -2 origin/main; echo "---- status:"; git status --porcelain \| head -4; echo "==== suite.sh uso:"; sed -n '1,45p' bin/suite.sh` |
