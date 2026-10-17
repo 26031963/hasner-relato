@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 17/10/2026 17:44:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (975.6 MB). Acoes na janela: **802**.
+**Medido em 17/10/2026 17:49:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (975.6 MB). Acoes na janela: **801**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -811,4 +811,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 05:50:11 | Bash | Read the rest of the reler loop and the pontualidade block | `cd /home/ronald/saas-hasner && sed -n '700,800p' app/ponto/calculador/periodo.py` |
 | 05:50:07 | Bash | Read the reler loop partition | `cd /home/ronald/saas-hasner && sed -n '590,700p' app/ponto/calculador/periodo.py` |
 | 05:50:02 | Bash | Read the censo dataclass counters | `cd /home/ronald/saas-hasner && sed -n '215,260p' app/ponto/calculador/periodo.py` |
-| 05:45:44 | Bash | Census of the sem_carimbo counter and its cases | `cd /home/ronald/saas-hasner && /bin/grep -n "sem_carimbo" app/ponto/calculador/periodo.py \| head && echo "=== na bateria ===" && /bin/grep -n "sem_carimbo" /tmp/prepush-arvore.yi6BEf/app/ponto/tests/test_o280_bateria_da_lei.py \| head -20` |
