@@ -6,10 +6,17 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 17/10/2026 03:58:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (948.7 MB). Acoes na janela: **1143**.
+**Medido em 17/10/2026 04:04:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (948.8 MB). Acoes na janela: **1146**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 04:02:16 | Bash | Measure how the battery exercises the engine and which onde values exist | `git grep -n -w "calcular_periodo\\|calcular_mes\\|espelho_do_colab\\|autoridade_do_periodo" -- ponto/tests/test_o280_bateria_da_lei.py \| head -20; echo "=== onde declarados ==="; python3 -c " import re t=open('ponto/tests/test_o280_bateria_da_lei.py').read() blk=t[t.index('CASOS = {'):t.index('\nclass ')] print(sorted(set(re.findall(r\"', '(\w+)',\", blk)))) "` |
+| 04:02:04 | Bash | Read how the battery dispatches a caso by onde | `/bin/grep -n "def confere" -A45 ponto/tests/test_o280_bateria_da_lei.py \| head -60` |
+| 03:59:39 | Bash | Fix the geometry count and update the backlog cell | `cd /home/ronald/saas-hasner && sed -i 's\|sao \*\*8 geometrias\*\* (3 fixtures que existem, 5 que nascem e UMA sem cadastro nenhum)\|sao **9 geometrias** (3 fixtures que existem, 5 que nascem e UMA sem cadastro nenhum)\|' logs/o280/esmeril/I26-CASOS-33-ESPEC.md && /bin/grep -n "geometrias" logs/o280/esmeril/I26-CASOS-33-ESPEC.md \| head -3; sed -i 's\|a espec dos 33 (resposta da LEI antes do codig ...` |
+| 03:59:30 | Bash | Add the M5 block and reconcile the fixture arithmetic | `cd /home/ronald/saas-hasner && python3 - <<'PY' p='logs/o280/esmeril/I26-CASOS-33-ESPEC.md' t=open(p).read() # 1. tabela de fixtures: D12 cai para 9 e nasce o D12SI (medido no par do col473) t=t.replace("\| `D12` \| **sim** (`O280-D12`, 07-19, int 12-13, previsto 660) \| identica ao M5 **e a 2a classe do M8** (`O271-12x36`: os mesmos tres numeros) \| M5, M8b \| **10** \|", "\| `D12` \| **sim** (`O ...` |
+| 03:58:58 | Bash | Confirm the M5 fixture geometry | `/bin/grep -n "_te_12x36" -A8 ponto/tests/test_l084_vence_o_t8.py \| head -14` |
+| 03:58:43 | Bash | Read the col473 pair in M5 | `sed -n '160,200p' ponto/tests/test_l084_vence_o_t8.py` |
+| 03:58:40 | Bash | Read the first M5 methods | `sed -n '55,110p' ponto/tests/test_l084_vence_o_t8.py` |
 | 03:58:27 | Bash | Update the O280 state cell and check the fila hook verdict | `python3 - <<'PY' p='docs/BACKLOG.md' L=open(p).read().split('\n') l=L[907]; c=l.split('\|') novo=(" **I25 FECHADO + I26 EM CURSO** 17/10 03:5x: mapa 51x matriz da **COBERTO 0** e **33** casos; " "a espec dos 33 (resposta da LEI antes do codigo, L-110) esta em **18 de 33**, 4 fixtures nascem. " "Passo 4: 10 de 21 rubricas movem (`af980808`). Portao do O287 em **8 abertos**; motor atual so LEITURA " ...` |
 | 03:58:19 | Bash | Read the current O280 state cell | `awk -F'\|' 'NR==908{print length($4); print $4}' docs/BACKLOG.md` |
 | 03:58:12 | Bash | Replace the closing block with the conferred remainder | `cd /home/ronald/saas-hasner && python3 - <<'PY' p='logs/o280/esmeril/I26-CASOS-33-ESPEC.md' t=open(p).read() i=t.index('### Os quatro blocos que faltam (12 casos)') j=t.index('## 5. O QUE ESTE ARQUIVO') novo = """### O QUE FALTA, conferido pela soma (15 casos) **18 especificados** -- `D12F` 7 (`I26-A*`), `COM7` 5 (`B*`), sem cadastro 1 (`C1`), `D12`/M8b 5 (`D*`). **33 - 18 = 15**, e eles sao: \| b ...` |
@@ -1149,7 +1156,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 16:04:22 | Bash | Re-read the fatia loop | `cd /home/ronald/saas-hasner/app; sed -n '240,350p' ponto/services/fechamento.py` |
 | 16:04:14 | Bash | Re-read recalcular_fechamento_mes head | `cd /home/ronald/saas-hasner/app; sed -n '99,215p' ponto/services/fechamento.py` |
 | 16:04:04 | Bash | Read F5 cell, MATRIZ row, and insertion point | `cd /home/ronald/saas-hasner/app; sed -n '280,292p' ponto/tests/test_o280_bateria_da_lei.py; echo '=== MATRIZ row'; /bin/grep -n "troca-escala-vinculo-empresa" ponto/tests/test_o280_bateria_da_lei.py; echo '=== around F6'; sed -n '1120,1200p' ponto/tests/test_o280_bateria_da_lei.py` |
-| 16:03:55 | Bash | Re-read the bateria fixture base | `cd /home/ronald/saas-hasner/app; sed -n '664,800p' ponto/tests/test_o280_bateria_da_lei.py` |
-| 16:03:49 | Bash | Re-read the bateria helpers | `cd /home/ronald/saas-hasner/app; sed -n '85,151p' ponto/tests/test_o280_bateria_da_lei.py` |
-| 15:59:02 | Bash | Check Batida creation idiom and batidas_apuraveis | `cd /home/ronald/saas-hasner/app; /bin/grep -rn "Batida.objects.create" ponto/tests/*.py \| head -5; echo ====; sed -n "$(/bin/grep -n 'def batidas_apuraveis' ponto/turnos.py \| cut -d: -f1),+25p" ponto/turnos.py` |
-| 15:58:54 | Bash | Read the _B batida stub and _bats | `cd /home/ronald/saas-hasner/app; sed -n '85,127p' ponto/tests/test_o280_bateria_da_lei.py` |
