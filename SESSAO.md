@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 17/10/2026 12:43:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (968.4 MB). Acoes na janela: **1082**.
+**Medido em 17/10/2026 12:49:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (968.4 MB). Acoes na janela: **1069**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1079,16 +1079,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 00:53:53 | Bash | Read the emission sites and the lavra | `cd /home/ronald/saas-hasner/app sed -n '930,1035p' ponto/services/cartorio.py` |
 | 00:53:44 | Bash | Read the judging body: live chamados, impressao, codes, veredito | `cd /home/ronald/saas-hasner/app sed -n '740,860p' ponto/services/cartorio.py` |
 | 00:53:33 | Bash | Read the classification body around the furo codes | `cd /home/ronald/saas-hasner/app sed -n '160,260p' ponto/supra_juiz.py` |
-| 00:48:48 | Bash | How supra_juiz gates codes by live chamados | `cd /home/ronald/saas-hasner/app /bin/grep -n "chamados_vivos\\|cobrancas_vivas\\|FURO_SEM_COBRANCA\\|FURO_PARCIAL\\|FURO_COM_COBRANCA_MORTA\\|COBRANCA_SEM_FURO\\|PREVISTO_COM_DIA_INDEFINIDO" ponto/supra_juiz.py \| head -40` |
-| 00:48:35 | Bash | Read non-chargeable codes and pause exemption | `cd /home/ronald/saas-hasner/app /bin/grep -n "NAO_COBRAVEIS_DO_COLABORADOR" -A 14 ponto/supra_juiz.py \| head -25 echo "=== nao_retem_pela_pausa ===" /bin/grep -n "def nao_retem_pela_pausa" -A 25 folha/export.py \| head -30` |
-| 00:48:25 | Bash | Read retention loop | `cd /home/ronald/saas-hasner/app sed -n '1120,1175p' folha/export.py` |
-| 00:48:21 | Bash | Read retention motives function | `cd /home/ronald/saas-hasner/app /bin/grep -n "def motivos_retencao_celula" -A 45 folha/export.py \| sed -n '1,60p'` |
-| 00:48:10 | Bash | Census of furo/cobrado readers | `cd /home/ronald/saas-hasner/app echo "=== quem le veredito == furo / cobrado (prod) ===" git grep -n "'furo'\\|\"furo\"\\|'cobrado'\\|\"cobrado\"" -- '*.py' '*.html' \| /bin/grep -v '/tests/\\|/migrations/' \| /bin/grep -v '^ponto/services/cartorio.py' \| head -40` |
-| 00:47:30 | Bash | Verify out is shared across colabs | `cd /home/ronald/saas-hasner/app /bin/grep -n "out = contadores()\\|out=contadores()" ponto/management/commands/processar_cartorio.py escala/regua_defesa.py ponto/management/commands/celula_veredito_velho.py ponto/services/cartorio.py echo "--- contexto no cron ---" sed -n '30,44p' ponto/management/commands/processar_cartorio.py` |
-| 00:47:15 | Bash | Read chamado writer-contract cell | `cd /home/ronald/saas-hasner/app python3 - <<'PY' s=open('core/contratos_estruturais.py',encoding='utf-8').read() i=s.index("('chamado', 'um escritor por entidade')") print(s[i:i+2600]) PY` |
-| 00:47:05 | Bash | List structural contract cells | `cd /home/ronald/saas-hasner/app python3 - <<'PY' import re s=open('core/contratos_estruturais.py',encoding='utf-8').read() for m in re.finditer(r"\(\s*'([^']+)'\s*,\s*'([^']+)'\s*\)\s*:\s*C\(", s): fam,con=m.group(1),m.group(2) seg=s[m.end():m.end()+2500] v=re.search(r'verde=(True\|False)',seg) t=re.search(r"teste='([^']+)'",seg) i=re.search(r"idempotencia='([^']+)'",seg) print('%-22s %-26s verde= ...` |
-| 00:46:53 | Bash | Read contract cell and cron loop | `cd /home/ronald/saas-hasner/app echo "=== contratos_estruturais 150-200 ===" sed -n '150,200p' core/contratos_estruturais.py echo; echo "=== processar_cartorio 45-70 ===" sed -n '45,70p' ponto/management/commands/processar_cartorio.py echo; echo "=== cartorio 738-752 ===" sed -n '738,752p' ponto/services/cartorio.py` |
-| 00:46:44 | Bash | Census of julgar_colab callers and counter readers | `cd /home/ronald/saas-hasner/app echo "=== quem chama julgar_colab (prod) ===" git grep -n "julgar_colab" -- '*.py' \| /bin/grep -v '^ponto/tests/\\|/tests/' echo; echo "=== quem chama _contar_emissao fora do arquivo ===" git grep -n "_contar_emissao" -- '*.py' echo; echo "=== quem le out['julgadas'] / carimbadas / emitidos ===" git grep -n "\['julgadas'\]\\|\['carimbadas'\]\\|\['emitidos'\]\\|julg ...` |
-| 00:46:08 | Bash | Read _contar_emissao and reconciliation branches | `cd /home/ronald/saas-hasner/app echo "=== _contar_emissao ===" sed -n '1087,1105p' ponto/services/cartorio.py echo "=== ramos de reconciliacao 855-930 ===" sed -n '855,930p' ponto/services/cartorio.py` |
-| 00:45:56 | Bash | Find rejulgar setters and chs build | `cd /home/ronald/saas-hasner/app /bin/grep -n "rejulgar\\|chs *=\\|chamados_que_falam_de_batida" ponto/services/cartorio.py` |
-| 00:45:51 | Bash | Read julgar_colab wrapper | `cd /home/ronald/saas-hasner/app echo "=== julgar_colab wrapper 591-645 ===" sed -n '591,645p' ponto/services/cartorio.py` |
