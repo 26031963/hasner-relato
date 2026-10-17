@@ -6,10 +6,28 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 17/10/2026 06:50:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (958.8 MB). Acoes na janela: **1278**.
+**Medido em 17/10/2026 06:55:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (959.1 MB). Acoes na janela: **1283**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 06:55:25 | Bash | Compare previous passo-4 json runs | `cd /home/ronald/saas-hasner/logs/o280/passo4/saida && ls -la *.json 2>/dev/null \| tail -12; echo "=== md5 do v2 e mexe por json"; for f in *.json; do python3 - "$f" <<'PY' import json,sys f=sys.argv[1] try: d=json.load(open(f)) except Exception as e: print(f,"ILEGIVEL",e); raise SystemExit m=d.get('mexe') or {} print("%-34s med=%-5s v2md5=%s v3md5=%s pont=%s" % (f, d.get('medidos'), str(d.get('ar ...` |
+| 06:55:10 | Bash | Read the tail of _janela_do_dia | `sed -n '1340,1400p' ponto/motor_calculo_v2.py` |
+| 06:53:08 | Bash | Confirm the first .TREE line is the repo tree | `cd /home/ronald/saas-hasner && git rev-parse da50482b^{tree}; echo "--- esperado dc399ef9b741666cc892a8658dc49860a0ec8a70"` |
+| 06:53:03 | Bash | Inspect the .TREE carimbo format and HEAD hashes | `cd /home/ronald/saas-hasner && cat logs/o280/passo4/arvore_da50482b/.TREE; echo "=== HEAD"; git rev-parse HEAD; git rev-parse HEAD:app; echo "=== arvore_da50482b conteudo topo"; ls logs/o280/passo4/arvore_da50482b \| head; echo "=== du"; du -sh logs/o280/passo4/arvore_da50482b` |
+| 06:52:54 | Bash | Read reler and the pontualidade builder call | `/bin/grep -n "pontualidade_por_dia\\|_pont =\\|def reler" ponto/calculador/periodo.py \| head; echo "---"; sed -n "$(/bin/grep -n 'def reler' ponto/calculador/periodo.py \| cut -d: -f1),+20p" ponto/calculador/periodo.py; echo "=== onde _pont nasce"; sed -n "$(/bin/grep -n '_pont = ' ponto/calculador/periodo.py \| head -1 \| cut -d: -f1),+8p" ponto/calculador/periodo.py; echo "=== assinatura pontua ...` |
+| 06:52:29 | Bash | Read marcos_por_dia | `sed -n "$(/bin/grep -n 'def marcos_por_dia' ponto/calculador/alimentacao.py \| cut -d: -f1),+30p" ponto/calculador/alimentacao.py` |
+| 06:52:22 | Bash | Read the declared-interval predicate | `sed -n '185,215p' ponto/calculador/regras.py; echo "=== periodo.py 505,525"; sed -n '505,525p' ponto/calculador/periodo.py` |
+| 06:52:17 | Bash | Read intervalo_cadastrado in juiz_batida | `sed -n "$(/bin/grep -n 'def intervalo_cadastrado' ponto/juiz_batida.py \| cut -d: -f1),+25p" ponto/juiz_batida.py` |
+| 06:52:13 | Bash | Locate intervalo_cadastrado | `/bin/grep -n "intervalo_cadastrado" ponto/calculador/*.py escala/models.py \| head; echo "---def---"; n=$(/bin/grep -n "def intervalo_cadastrado" ponto/calculador/nucleo.py ponto/calculador/periodo.py escala/models.py 2>/dev/null \| head -1); echo "$n"` |
+| 06:52:08 | Bash | Read intervalo_cadastrado and the tree-copy convention | `echo "=== intervalo_cadastrado"; sed -n "$(/bin/grep -n 'def intervalo_cadastrado' ponto/calculador/periodo.py \| cut -d: -f1),+22p" ponto/calculador/periodo.py; echo "=== arvores existentes"; ls -d /home/ronald/saas-hasner/logs/o280/passo4/arvore* 2>/dev/null; for d in /home/ronald/saas-hasner/logs/o280/passo4/arvore*; do echo "-- $d"; cat "$d/.TREE" 2>/dev/null \| head -6; done` |
+| 06:51:52 | Bash | Read _janela_do_dia | `/bin/grep -n "_janela_do_dia" ponto/motor_calculo_v2.py \| head; echo "---"; sed -n "$(/bin/grep -n 'def _janela_do_dia' ponto/motor_calculo_v2.py \| cut -d: -f1),+60p" ponto/motor_calculo_v2.py` |
+| 06:51:45 | Bash | Read the HE window reader | `echo "=== _entrada_efetiva"; sed -n '1430,1470p' ponto/motor_calculo_v2.py; echo "=== janela_he.py 1-60"; sed -n '1,60p' ponto/janela_he.py` |
+| 06:51:20 | Bash | Read the diff payload body part 2 | `cd /home/ronald/saas-hasner/logs/o280/passo4 && sed -n '200,387p' diff_v2_v3.py` |
+| 06:51:15 | Bash | Read the diff payload body part 1 | `cd /home/ronald/saas-hasner/logs/o280/passo4 && wc -l diff_v2_v3.py && sed -n '45,200p' diff_v2_v3.py` |
+| 06:51:05 | Bash | Read the committed INCOMPLETO of the marco | `cd /home/ronald/saas-hasner && git log -1 --format=%B fcba2390 \| /bin/grep -n -A14 "INCOMPLETO"` |
+| 06:50:57 | Bash | Read the inverted gate body | `sed -n '640,700p' ponto/calculador/periodo.py` |
+| 06:50:53 | Bash | Find the inverted-par gate | `/bin/grep -n "_par_nao_lido\\|efetivo_invertido\\|invertidos" ponto/calculador/periodo.py \| head -30` |
+| 06:50:48 | Bash | Read the counter site and the censo dataclass | `echo "=== periodo.py 760-815"; sed -n '760,815p' ponto/calculador/periodo.py; echo; echo "=== censo fields 255-300"; sed -n '255,300p' ponto/calculador/periodo.py` |
 | 06:50:38 | Bash | Locate the new counter and the HE window field | `cd /home/ronald/saas-hasner && echo "=== counter novo"; /bin/grep -rn "dias_sem_pontualidade_por_par_nao_lido" app/ --include=*.py \| head -20; echo; echo "=== campos de janela HE no EscalaColaborador"; /bin/grep -n "he_\\|janela" app/escala/models.py \| /bin/grep -in "janela\\|he_" \| head -40` |
 | 06:46:02 | Bash | Inventory the passo-4 payloads | `cd /home/ronald/saas-hasner/logs/o280/passo4 && wc -l diff_v2_v3.py *.py 2>/dev/null \| tail -8; echo "=== cabeca do diff"; sed -n '1,45p' diff_v2_v3.py` |
 | 06:45:44 | Bash | Read the passo-4 runner | `cd /home/ronald/saas-hasner/logs/o280/passo4 && cat rodar.sh \| head -60` |
@@ -1275,16 +1293,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 18:56:21 | Bash | Find the exercised-cases marker and the cobertura rules | `/bin/grep -n "CASOS EXERCIDOS" ponto/tests/test_o280_bateria_da_lei.py && sed -n '702,726p' ponto/tests/test_o280_bateria_da_lei.py` |
 | 18:56:16 | Bash | List the bateria classes | `/bin/grep -n "^class \\|^ # ------- CASOS EXERCIDOS" ponto/tests/test_o280_bateria_da_lei.py \| head -30` |
 | 18:56:08 | Bash | Make a fresh copy of HEAD and check for memoization | `cd /home/ronald/saas-hasner && SC=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && rm -rf $SC/cp-l023 && mkdir -p $SC/cp-l023 && git archive HEAD \| tar -x -C $SC/cp-l023 && mkdir -p $SC/cp-l023/app/logs $SC/cp-l023/app/media $SC/cp-l023/logs && git log --oneline -1 && echo "--- copia:" && ls $SC/cp-l023 && echo "--- memo em eh_dia_trabalho/previstas ...` |
-| 18:54:28 | Bash | Read the feriado judge | `sed -n '1,60p' core/feriados.py` |
-| 18:54:18 | Bash | Check weekdays, holiday-cycle set and FolgaDia signals | `python3 - <<'PY' import datetime for d in range(14,21): x=datetime.date(2026,9,d); print(x, x.strftime('%a'), 'delta_ancora=%d'%((x-datetime.date(2026,8,1)).days), 'ancora12x36_trab=%s'%(((x-datetime.date(2026,8,1)).days)%2==0)) PY echo "=== signals sobre FolgaDia:"; /bin/grep -rn "FolgaDia" --include=*.py escala/signals.py core/signals.py ponto/signals.py 2>/dev/null \| head; /bin/grep -rln "send ...` |
-| 18:53:29 | Bash | Read the tail of eh_dia_trabalho_calculado | `sed -n '1320,1400p' escala/models.py` |
-| 18:53:28 | Bash | Read TipoEscala.eh_dia_trabalho | `sed -n '816,880p' escala/models.py` |
-| 18:52:54 | Bash | Check for photo cases and read the MATRIZ | `echo "=== FolgaDia/foto na bateria:" && /bin/grep -n "FolgaDia\\|FolgaCalendario\\|L-023\\|foto" ponto/tests/test_o280_bateria_da_lei.py; echo "=== MATRIZ linhas de escala:"; sed -n '/^MATRIZ = {/,/^}/p' ponto/tests/test_o280_bateria_da_lei.py` |
-| 18:52:52 | Bash | Read the full fixture block | `sed -n '728,836p' ponto/tests/test_o280_bateria_da_lei.py` |
-| 18:52:44 | Bash | Census of the bateria fixture shape | `/bin/grep -n "folga_dia_semana\\|tipo_ciclo=\\|_vinc\\|def previsto\\|def dia_de\\|def rodar\\|setUpTestData\\|self.c\[" ponto/tests/test_o280_bateria_da_lei.py \| sed -n '1,80p'` |
-| 18:52:43 | Bash | Read the bateria porta and leitura | `sed -n '100,200p' ponto/tests/test_o280_bateria_da_lei.py` |
-| 18:52:33 | Bash | Read eh_dia_trabalho_calculado | `sed -n '1223,1320p' escala/models.py` |
-| 18:52:32 | Bash | Read EC.eh_dia_trabalho | `sed -n '1040,1110p' escala/models.py` |
-| 18:52:24 | Bash | Re-read A12 and how faltas are read | `sed -n '1630,1660p' ponto/tests/test_o280_bateria_da_lei.py && echo "=== leitura/ft ===" && /bin/grep -n "'ft'\\|ft_min\\|faltas" ponto/tests/test_o280_bateria_da_lei.py \| head -30` |
-| 18:52:22 | Bash | Locate the two day-is-work functions | `/bin/grep -n "def eh_dia_trabalho\b\\|def eh_dia_trabalho_calculado\\|def eh_dia_trabalho(" escala/models.py` |
-| 18:51:56 | Bash | Confirm the push at the remote and regenerate the handoff | `cd /home/ronald/saas-hasner && git fetch -q origin && echo "--- origin/main..HEAD (vazio = pousou):" && git log --oneline origin/main..HEAD && echo "--- HEAD:" && git log --oneline -1 && bash bin/handoff_sessao.sh >/dev/null 2>&1 && wc -l app/docs/HANDOFF-SESSAO.md && git status --porcelain app/docs/HANDOFF-SESSAO.md` |
