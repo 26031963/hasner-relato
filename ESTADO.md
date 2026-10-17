@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 17/10/2026 07:28:02.**
+**Medido em 17/10/2026 07:33:32.**
 
 | | |
 |---|---|
@@ -29,37 +29,37 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2517.7 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2517.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **286.2 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **286.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **99.4 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **99.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **402.3 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **402.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **306.4 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **306.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o275** (`raia-o275`) -- **SEM AGENTE**
-  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **35.7 h** (passou das 6 h da L-105)
+  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **35.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-o275.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **424.1 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **424.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
 - **wt-v3-pouso** (`pouso-v3-20261016`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 4 arquivo(s) sujo(s), commit a frente ha **19.0 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 4 arquivo(s) sujo(s), commit a frente ha **19.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-v3-pouso.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **21 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
@@ -176,41 +176,41 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 11 shell commands
+  - a baseline de 16/10 media a sombra trocando de dia, nao a cura. v2 igual (md5 ec45bf90), dado nao (relidos 6330→6594, medidos 571→573; a sombra refez as
+    04:00). A antecipada da baseline (+215.37, PRE) coincide com a de hoje POS (+215.35): a subtracao entre dias publicaria −0,02 onde a cura moveu 181,42 min.
+    Troquei por duas arvores carimbadas contra o MESMO snapshot (arvore_fcba2390 / arvore_b92cbc7f), com o leitor provado identico (leitura(), md5 9dc4fff1) antes
+    de subtrair — universo medidos_pks 573 = 573, erros 0.
+  - o que a cura moveu: das 21 rubricas, 10 nao divergem do v2 em corrida nenhuma e, das 11 que divergem, 9 tem soma/n/max/quem identicos. Mudam atraso −660,00 e
+    antecipada −181,42, em dois colabs de 573.
+  - col109 e o numero do seu ! do I28: impacto +10.68 → −649,32; a v3 curada nao afirma atraso negativo, logo o v2 cobra ao menos 649,32 min (10h49) nesse colab na
+    comp 10 — piso, nao estimativa. PRE-cura a v3 divergia +10,68: o defeito esta nos DOIS motores. O unico dia recusado ali e uma inversao de 41 s (4 das 20 sao
+    sub-minuto: 41/29/18/6 s — o %H:%M imprimia 22:00 -> 22:00 contra um gate s_ < e estrito). A reparticao por dia pede corrida nova.
+  - col865 inverteu a leitura que eu esperava: era a v3 que afirmava 3h01 de antecipada a mais, e a cura a trouxe a zero. Cura do instrumento — e impacto zero nao
+    absolve o v2: diz que os dois passaram a dizer o mesmo numero, nunca que o numero esta certo.
+  - a particao pedida, com o balde previsto VAZIO: 20 pares-objeto = 19 dias = 16 colabs, todos com janela de HE ligada/vigente/aplicada, l084=False, batida crua
+    lida (14 declara intervalo, 6 nao). Nao existe par invertido com a janela desligada — nenhum minuto de invertido virou dinheiro. As pontas impressas sao o
+    efetivo do v2, nao batida: dono ESTRUTURA (L-099).
+  - contador novo com numero de frota: 19 dia-colab em 6.345 dias; dias_pontualidade 728→723. 15 dos 16 afirmavam 0,00 antes — um DIFF de soma chamaria a cura de
+    invisivel.
+  - sem_carimbo = 0 nas duas corridas: a coexistencia fica estrutural, nao empirica; "nao coexiste" nao se publica de universo vazio (O303 na fila).
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+  Escrito em: secao nova do RELATO.md (15 linhas, L-116), ESMERIL.md item 424 (append, o portao segue 8), numero do O287-I28-ANCORA-DO-MARCO-NO-V2 no
+  PENDENTES_RONALD.json + gerar_avais.py --escrever (AVAIS 12, 0 item churnado), celula de ESTADO da O287 em 282/300 chars. Portao do RELATO: as mesmas 3
+  afirmacoes antigas sem PROVA:, nenhuma minha. /tmp/prepush-arvore.puPcW8 removido; a varredura da historia publica segue viva, entao nomes.json fica.
 
-  Ran 1 shell command
+  Proximo da O280: a ESCRITA dos 33 casos do I26-CASOS-33-ESPEC.md (fixtures D12F/COM7/N12S + cadastro intervalo_modo='duracao' para o G5, criterio da §6d em cada
+  linha G*, CoberturaDaMatrizTest exigindo onde='periodo' literal) — em copia, nunca direto em app/ponto/tests/.
 
-● Background command "Launch the pre-cure comparator run on the sombra" completed (exit code 0)
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: O280 -- MOTOR-V3-UM-PERIODO (aval dele 15/10 09:5x). O que a obra ataca, e o diagnostico e o do proprio aval: hoje a m
 
-  Ran 18 shell commands
-  ⎿  Read docs/AVAIS.md (29 lines)
-  ⎿  Referenced file ponto/calculador/alimentacao.py
-  ⎿  Referenced file ponto/calculador/regras.py
-  ⎿  Referenced file ponto/calculador/periodo.py
+  Reading the teto/porta sections of the spec
+  ⎿  $ cd /home/ronald/saas-hasner/logs/o280/esmeril && sed -n '482,581p' I26-CASOS-33-ESPEC.md
 
-● Task "Measure the whole public history with the cured predicate" still running in background
-
-● Background command "Run the detailed payload on both trees" completed (exit code 0)
-
-  Read 1 file, ran 6 shell commands
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-● Setting the numero field on the I28 pending item
-  ⎿  $ cp docs/PENDENTES_RONALD.json /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/PENDENTES.antes.json && python3
-     - <<'PY'
-     import json
-     p='docs/PENDENTES_RONALD.json'
-     itens=json.load(open(p))
-     alvo=[x for x in itens if x.get('id')=='O287-I28-ANCORA-DO-MARCO…
-
-✢ Crafting… (21h 2m 41s · ↓ 2.0m tokens · thinking)
+✢ Compacting conversation… (21h 8m 11s · ↓ 2.0m tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱ 76%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                           ✔ Update installed · Restart to update
+                                                                                                                                            0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
