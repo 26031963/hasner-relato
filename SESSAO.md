@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 17/10/2026 11:13:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (968.4 MB). Acoes na janela: **1237**.
+**Medido em 17/10/2026 11:18:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (968.4 MB). Acoes na janela: **1236**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1246,4 +1246,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 23:21:38 | Bash | Run the leg-2 module in the copy under the one-run lock | `cd /home/ronald/saas-hasner && L=logs/leg2_run1.log && : > $L && bash bin/suite.sh --dir /home/ronald/cp-leg2 -- ponto.tests.test_o287_leg2_absurdos_do_esmeril >> $L 2>&1; echo "exit=$?" >> $L; tail -5 $L` |
 | 23:21:31 | Bash | Build the test copy with the draft inside | `cd /home/ronald/saas-hasner && CP=/home/ronald/cp-leg2 && rm -rf $CP && mkdir -p $CP && git archive HEAD \| tar -x -C $CP && mkdir -p $CP/app/logs $CP/app/media $CP/app/staticfiles && SC=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && cp $SC/test_o287_leg2_absurdos_do_esmeril.py $CP/app/ponto/tests/ && ls -la $CP/app/ponto/tests/test_o287_leg2_absur ...` |
 | 23:21:13 | Bash | Confirm the remote moved and read suite.sh usage | `cd /home/ronald/saas-hasner && git fetch -q origin && git log --oneline -2 origin/main; echo "---- status:"; git status --porcelain \| head -4; echo "==== suite.sh uso:"; sed -n '1,45p' bin/suite.sh` |
-| 23:14:31 | Bash | Keep waiting on the push verdict | `cd /home/ronald/saas-hasner && L=logs/push_o280_esmeril_legs.log; i=0; until /bin/grep -qaE '^exit=' $L \|\| [ $i -ge 36 ]; do sleep 15; i=$((i+1)); done; /bin/grep -aE '^(OK\|FAILED)($\| \()\|^Ran \|^exit=\|To https\|error:' $L \| tail -6; echo "(i=$i)"; date '+%H:%M:%S'` |
