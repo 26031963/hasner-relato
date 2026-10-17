@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 16/10/2026 22:49:32.**
+**Medido em 16/10/2026 22:55:03.**
 
 | | |
 |---|---|
-| `HEAD` local | `4f084e47 [O280] a promessa de DESEMPENHO da matriz nao tinha caso: o tempo v2 x v3 passa a ter numero, e ele diz que o custo da v3 e alimentacao, nao calculo` |
+| `HEAD` local | `d904b1ae [O280] as TRES legs do aval do esmeril medidas num turno: os seis fechos do construtor passam a ter NUMERO, dois dos numeros errados eram MEUS, e a leg 2 nunca correu` |
 | `origin/main` | `4f084e47 [O280] a promessa de DESEMPENHO da matriz nao tinha caso: o tempo v2 x v3 passa a ter numero, e ele diz que o custo da v3 e alimentacao, nao calculo` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,22 +29,22 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2509.1 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2509.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **277.5 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **277.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **90.8 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **90.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
   - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **393.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **297.8 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **297.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o275** (`raia-o275`) -- **SEM AGENTE**
   - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **27.1 h** (passou das 6 h da L-105)
@@ -53,13 +53,13 @@ RELATO, com a lista de nomes do banco como autoridade._
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **415.5 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **415.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
 - **wt-v3-pouso** (`pouso-v3-20261016`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 4 arquivo(s) sujo(s), commit a frente ha **10.4 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 4 arquivo(s) sujo(s), commit a frente ha **10.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-v3-pouso.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **21 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
@@ -70,20 +70,18 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+d904b1ae [O280] as TRES legs do aval do esmeril medidas num turno: os seis fechos do construtor passam a ter NUMERO, dois dos numeros errados eram MEUS, e a leg 2 nunca correu
 4f084e47 [O280] a promessa de DESEMPENHO da matriz nao tinha caso: o tempo v2 x v3 passa a ter numero, e ele diz que o custo da v3 e alimentacao, nao calculo
 10ee05be [O280] a L-023 ganha as celulas que a EXERCEM: a foto do mes COMPLEMENTA onde o ciclo responde e SUBSTITUI onde ele nao sabe
 01762a67 [O280] as tres celulas `onde='sombra'` que sobravam: cada promessa MEDE ou vira `fora` com o numero escrito, e a bateria fecha com `sombra` ZERO
 29ea38da [O280] a celula F5 prometia medir a troca de vinculo no passo 4, e o instrumento nomeado nao corta fatia nenhuma
-6f7533f2 [O280] a celula C7 da matriz prometia uma medicao no passo 4 que o instrumento NOMEADO nao faz em hash nenhum de antes da troca
 ```
 
 ## `git status --short`
 
 ```
  M app/config/crons_duracao.json
- M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
- M app/docs/RELATO.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -174,13 +172,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● Censo da leg 2 refeito por insumo, e ele mexeu em dois dos meus números — não nos dele.
-
-  O que o censo por forma escondia. A linha 410 publicou os 18 novos com a ressalva escrita de que o mapa era por NOME. Refiz por INSUMO (padrão de cadastro/batida
-  de cada caso, python3 re sobre o blob de main@4f084e47, nunca o grep da sessão): 7 batidas de forma, abertas uma por uma —
-
-  - 6 são colisão ou vizinho, com file:line: B20 (a bateria tem dois vínculos, mas sequenciais, :1269), B21 (:2406 são três leitores do mesmo feriado, sem atestado
     sobre par fechado), B22 (o impar de :369 é paridade de folga, não número ímpar de batidas), B26 (1440 em :804 é minutos_jornada; o par exercido é de 27 h),
     B29, B33.
   - 1 é equivalente de verdade: B34 ≡ F1b — test_F1_previsto_do_mes… (:897-925) roda a competência 03/2028 pelo motor real e exige tamanhos == {28, 29, 30, 31}. A
@@ -203,15 +194,22 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: O280 -- MOTOR-V3-UM-PERIODO (aval dele 15/10 09:5x). O que a obra ataca, e o diagnostico e o do proprio aval: hoje a m
 
-● Reading the two driver tests of the v3 absurd class
-  ⎿  $ cd /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && sed -n '3865,3908p' bat_main.py | cut -c1-170
+  Ran 9 shell commands
 
-✢ Crafting… (12h 24m 11s · ↓ 1.0m tokens · still thinking)
+● Background command "Run the full suite against the copy in the background" completed (exit code 0)
+
+● Running the whole host selo folder before pushing · 1m 48s
+  ⎿  $ cd /home/ronald/saas-hasner && ok=0; bad=0
+     for s in bin/tests/test_*.sh; do if bash "$s" >/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/selo.out 2>&1;
+     then ok=$((ok+1)); else bad=$((bad+1)); echo "VERMELHO: $s"; tail -4 /tmp/claude-1001/-home-ronald… (1m 47s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✢ Crafting… (12h 29m 41s · ↓ 1.1m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                           ✔ Update installed · Restart to update
+                                                                                                                                            6% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
