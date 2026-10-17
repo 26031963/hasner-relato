@@ -229,7 +229,7 @@ lista — ela e o que esta EM PE._
 | **O219** | REGRA-NA-IMPRESSAO | **NO AR 10/10 -- a VIRADA pousou JUNTO d |
 | **O220** | DIETA-DE-CARGA | **paralela**, sem portao -- nao toca pro |
 | **O221** | POUSO DAS DUAS RAIAS AVALIZADAS | espera `!` |
-| **O222** | O VEREDITO DO DIA LE O CHAMADO QUE A PROPRIA PASSADA CRIA | **livre** |
+| **O222** | O VEREDITO DO DIA LIA O CHAMADO QUE A PROPRIA PASSADA CRIA | espera `!` |
 | **O223** | A APLICACAO DE CONVENCAO SE EDITA PELA UI | espera aval |
 | **O224** | DIETA-DO-CLAUDE-MD | **FECHADA 10/10 11:3x.** 3a fatia (aval  |
 | **O225** | UM ROTULO DE EFEITO SEM NENHUM LEITOR DE TEMPLATE | livre -- e tela e tag, nao numero. Fila  |
