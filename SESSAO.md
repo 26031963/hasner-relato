@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 17/10/2026 17:55:03.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (975.7 MB). Acoes na janela: **786**.
+**Medido em 17/10/2026 18:00:33.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (975.7 MB). Acoes na janela: **772**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -782,17 +782,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 06:02:20 | Bash | Read the head of the I27 doc | `cd /home/ronald/saas-hasner && sed -n '1,40p' logs/o280/esmeril/I27-ANCORA-DO-MARCO.md` |
 | 06:02:14 | Bash | Check the esmeril log end | `cd /home/ronald/saas-hasner && wc -l logs/o280/esmeril/ESMERIL.md && tail -c 300 logs/o280/esmeril/ESMERIL.md \| cat -A \| tail -3` |
 | 06:02:06 | Bash | Check neighbour suite verdict and cron state | `cd /home/ronald/saas-hasner && /bin/grep -E "^(OK\|FAILED)($\| \()\|^Ran " logs/o280/esmeril/i27_vizinhos_ponto.log \| tail -3; echo "--- tail:"; tail -4 logs/o280/esmeril/i27_vizinhos_ponto.log; echo "--- em curso:"; ls logs/crons_em_curso/ 2>/dev/null \| head` |
-| 05:58:01 | Bash | Read the last ESMERIL.md lines truncated | `cd /home/ronald/saas-hasner && awk 'NR>=415 && NR<=440 {printf "%d: %.180s\n", NR, $0}' logs/o280/esmeril/ESMERIL.md` |
-| 05:57:56 | Bash | Read the ESMERIL.md tail | `cd /home/ronald/saas-hasner && wc -l logs/o280/esmeril/ESMERIL.md && sed -n '410,418p' logs/o280/esmeril/ESMERIL.md` |
-| 05:57:39 | Bash | Run ruff over the landing copy | `cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; docker run --rm $TESTE_DOCKER -v /tmp/prepush-arvore.yi6BEf/app:/app:ro -w /app saas-hasner-core:latest sh -c "ruff check . --output-format concise --no-cache" 2>&1 \| tail -5` |
-| 05:57:32 | Bash | Check the ponto suite progress | `cd /home/ronald/saas-hasner && tail -5 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b3o5x8mzb.output 2>/dev/null; echo "---"; /bin/grep -E "^(OK\|FAILED)($\| \()\|^Ran " logs/o280/esmeril/i27_vizinhos_ponto.log \| tail -3` |
-| 05:57:25 | Bash | Read the leg-2 marco section as a shape model | `cd /home/ronald/saas-hasner && sed -n '499,520p' app/docs/RELATO.md` |
-| 05:57:22 | Bash | List the RELATO marco sections | `cd /home/ronald/saas-hasner && /bin/grep -n "^## " app/docs/RELATO.md \| head -12` |
-| 05:57:16 | Bash | Read the RELATO top | `cd /home/ronald/saas-hasner && sed -n '1,40p' app/docs/RELATO.md` |
-| 05:57:06 | Bash | Read the copy esmeril script | `cd /home/ronald/saas-hasner && sed -n '1,30p' bin/esmeril_da_copia.sh` |
-| 05:57:02 | Bash | Find the house ruff invocation and config | `cd /home/ronald/saas-hasner && /bin/grep -rn "ruff" bin/*.sh bin/pre-push.sh 2>/dev/null \| /bin/grep -v "^bin/tests" \| head -15; echo "=== ruff.toml ==="; ls -la ruff.toml app/ruff.toml 2>&1 \| head` |
-| 05:56:57 | Bash | Run the ponto app suite against the landing copy | `cd /home/ronald/saas-hasner && ESTEIRA_QUEM=i27-vizinhos bash bin/suite.sh --dir /tmp/prepush-arvore.yi6BEf --espera 900 --only "ponto" > logs/o280/esmeril/i27_vizinhos_ponto.log 2>&1; echo "rc=$?"; /bin/grep -E "^(OK\|FAILED)($\| \()\|^Ran " logs/o280/esmeril/i27_vizinhos_ponto.log \| tail -3` |
-| 05:56:42 | Bash | Record the two new findings in the published I27 doc | `cd /home/ronald/saas-hasner && python3 - <<'PY' import io P='logs/o280/esmeril/I27-ANCORA-DO-MARCO.md' s=io.open(P,encoding='utf-8').read() def troca(v,n,c=1): global s assert s.count(v)==c,(s.count(v),v[:70]); s=s.replace(v,n) # (a) a 5a linha da tabela da secao 3 -- o caso em que o T8 ja zera o atraso e a lista MENTE troca("""\| PARTIDO-ATRAVESSA com atraso \| idem \| `21:30E 00:00S 03:00E 07:00 ...` |
-| 05:55:48 | Bash | Read sections 5 and 6 of the doc | `cd /home/ronald/saas-hasner && sed -n '88,115p' logs/o280/esmeril/I27-ANCORA-DO-MARCO.md` |
-| 05:55:39 | Bash | Read the doc headings and section 3 | `cd /home/ronald/saas-hasner && /bin/grep -n "^#\\|^##" logs/o280/esmeril/I27-ANCORA-DO-MARCO.md && wc -l logs/o280/esmeril/I27-ANCORA-DO-MARCO.md && sed -n '/^## 3/,/^## 4/p' logs/o280/esmeril/I27-ANCORA-DO-MARCO.md` |
-| 05:55:16 | Bash | Capture the behavioural RED number for the gate | `cd /home/ronald/saas-hasner && python3 - <<'PY' import io # so na COPIA-TESTEMUNHA (puPcW8): o campo existe, o PORTAO nao, e o assert do contador sai de # cena para que o numero do desconto apareca. A copia de pouso e a yi6BEf, intocada aqui. T='/tmp/prepush-arvore.puPcW8/app/ponto/tests/test_o280_bateria_da_lei.py' s=io.open(T,encoding='utf-8').read() alvo=""" self.assertEqual((censo.dias_sem_pon ...` |
