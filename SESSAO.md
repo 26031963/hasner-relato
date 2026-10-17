@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 17/10/2026 13:20:47.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (968.4 MB). Acoes na janela: **1017**.
+**Medido em 17/10/2026 13:26:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (968.4 MB). Acoes na janela: **1009**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1019,11 +1019,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 01:29:33 | Bash | Read julgar_colab around the fabrica loop and the cure | `C=/tmp/prepush-arvore.6Vi57A/app/ponto/services/cartorio.py; sed -n '620,700p' $C` |
 | 01:29:28 | Bash | Read the protestos increment site | `C=/tmp/prepush-arvore.6Vi57A/app/ponto/services/cartorio.py; sed -n '965,985p' $C` |
 | 01:29:25 | Bash | Census how the protestos counter is incremented | `C=/tmp/prepush-arvore.6Vi57A/app/ponto/services/cartorio.py; /bin/grep -n "protestos" $C` |
-| 01:25:59 | Bash | Read the contracts nota paragraph around O222 | `cd ~/saas-hasner/app && sed -n '175,205p' core/contratos_estruturais.py` |
-| 01:25:56 | Bash | Find O222 mentions in BACKLOG and the contracts module | `cd ~/saas-hasner/app && /bin/grep -n "O222" docs/BACKLOG.md \| head -20; echo "=== contratos ==="; /bin/grep -n "O222" core/contratos_estruturais.py` |
-| 01:25:50 | Bash | Check progress of the neighbour suite run | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; tail -c 1200 $S/o222_vizinhos.log; echo; echo "=== bytes: $(stat -c%s $S/o222_vizinhos.log)"` |
-| 01:25:36 | Bash | Read the O222 row of TICKETS | `cd ~/saas-hasner/app && sed -n '178,182p' docs/TICKETS.md` |
-| 01:25:20 | Bash | List O222 scratchpad artifacts | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; ls -la $S/o222* 2>/dev/null; echo "=== logs do repo ==="; ls -la ~/saas-hasner/logs/o222* 2>/dev/null \| head` |
-| 01:25:14 | Bash | List scratchpad files, looking for the RED run log | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; ls -la $S/ \| head -40; echo "---- RED logs ----"; ls -la $S/*red* $S/*RED* 2>/dev/null` |
-| 01:21:20 | Bash | Run the three neighbouring app suites in the copy | `cd ~/saas-hasner && ESTEIRA_QUEM=o222-vizinhos bin/suite.sh --dir /tmp/prepush-arvore.6Vi57A --espera 3600 --only "ponto chamados escala" > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/o222_vizinhos.log 2>&1; echo "RC=$?"; tail -5 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/o222_vizinhos.log` |
-| 01:20:47 | Bash | Prove the inverted battery is red on the uncured code | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad cp /tmp/prepush-arvore.6Vi57A/app/ponto/services/cartorio.py $S/o222_cartorio_curado.py md5sum $S/o222_cartorio_curado.py cd /home/ronald/saas-hasner && git show HEAD:app/ponto/services/cartorio.py > /tmp/prepush-arvore.6Vi57A/app/ponto/services/cartorio.py echo "--- RED contra o cartorio de HEAD (002fd ...` |
