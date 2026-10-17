@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 17/10/2026 09:20:46.**
+**Medido em 17/10/2026 09:25:46.**
 
 | | |
 |---|---|
-| `HEAD` local | `fcba2390 [O280] a ancora do marco de ENTRADA da v3 sai da data da BATIDA e passa ao DIA DA JORNADA -- e a cura destampou um buraco que o proprio defeito cobria: o dia cujo par a releitura recusa recebia 0,00 de pontualidade como se fosse medicao` |
+| `HEAD` local | `cae59304 [O280] os 33 casos da bateria pela LEI estao ESCRITOS e verdes -- e o unico VERMELHO que a escrita produziu era MEU: o caso foi invertido, nenhuma linha da v3 tocada` |
 | `origin/main` | `fcba2390 [O280] a ancora do marco de ENTRADA da v3 sai da data da BATIDA e passa ao DIA DA JORNADA -- e a cura destampou um buraco que o proprio defeito cobria: o dia cujo par a releitura recusa recebia 0,00 de pontualidade como se fosse medicao` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,7 +29,7 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2519.6 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2519.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
@@ -38,28 +38,28 @@ RELATO, com a lista de nomes do banco como autoridade._
   - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **288.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **101.3 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **101.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **404.2 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **404.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **308.3 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **308.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o275** (`raia-o275`) -- **SEM AGENTE**
-  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **37.6 h** (passou das 6 h da L-105)
+  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **37.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-o275.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **426.0 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **426.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
 - **wt-v3-pouso** (`pouso-v3-20261016`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 4 arquivo(s) sujo(s), commit a frente ha **20.9 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 4 arquivo(s) sujo(s), commit a frente ha **21.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-v3-pouso.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **21 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
@@ -70,23 +70,17 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+cae59304 [O280] os 33 casos da bateria pela LEI estao ESCRITOS e verdes -- e o unico VERMELHO que a escrita produziu era MEU: o caso foi invertido, nenhuma linha da v3 tocada
 fcba2390 [O280] a ancora do marco de ENTRADA da v3 sai da data da BATIDA e passa ao DIA DA JORNADA -- e a cura destampou um buraco que o proprio defeito cobria: o dia cujo par a releitura recusa recebia 0,00 de pontualidade como se fosse medicao
 b92cbc7f [O222] o ato do cartorio passa a FECHAR lendo o que ele mesmo escreveu: o veredito do furo era ponto fixo em DUAS passadas e agora e em UMA, e o caminho do LOTE tinha um segundo bug que atravessava para o colab seguinte
 002fd806 [O280] a leg 2 do esmeril corre e o que ela acha nao e bug da v3: e um defeito do motor de HOJE que APAGA BATIDA e MOVE DINHEIRO -- 300, 540 ou 600 min pelo mesmo dia
 1052849e [O280] o rodape derivado do TICKETS reescrito pelo escritor dele, que o portao do push cobrou: 6 commits atras, teto 5
-d904b1ae [O280] as TRES legs do aval do esmeril medidas num turno: os seis fechos do construtor passam a ter NUMERO, dois dos numeros errados eram MEUS, e a leg 2 nunca correu
 ```
 
 ## `git status --short`
 
 ```
  M app/config/crons_duracao.json
- M app/docs/AVAIS.md
- M app/docs/BACKLOG.md
- M app/docs/HANDOFF-SESSAO.md
- M app/docs/PENDENTES_RONALD.json
- M app/docs/RELATO.md
- M app/docs/TICKETS.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -178,14 +172,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-● Background command "Run the battery module against the fresh copy" completed (exit code 0)
-
-  Read 1 file, ran 4 shell commands
-
-● Background command "Run the battery module with the recorte flag" completed (exit code 0)
-
-  Ran 6 shell commands
-
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
@@ -204,17 +190,25 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Background command "Run the whole host selo folder" completed (exit code 0)
 
-● Checking the vizinhos suite progress · 9m 46s
-  ⎿  $ F=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b65f13uzh.output; until /bin/grep -q '^rc=' "$F" 2>/dev/null; do
-     sleep 10; done; cat "$F" (9m 45s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Read 1 file, ran 6 shell commands
 
-· Crafting… (22h 55m 24s · ↓ 2.2m tokens)
+● Background command "Run the ponto and core labels on the certification copy" completed (exit code 0)
+
+● Background command "Wait for the vizinhos suite verdict" completed (exit code 0)
+
+  Committed cae59304, ran 5 shell commands
+
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+
+  Running 1 shell command…
+
+· Crafting… (23h 0m 25s · ↓ 2.2m tokens · thought for 2s)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                           ✔ Update installed · Restart to update
+                                                                                                                                           11% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
