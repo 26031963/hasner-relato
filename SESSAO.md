@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 17/10/2026 06:45:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (958.4 MB). Acoes na janela: **1274**.
+**Medido em 17/10/2026 06:50:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (958.8 MB). Acoes na janela: **1278**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 06:50:38 | Bash | Locate the new counter and the HE window field | `cd /home/ronald/saas-hasner && echo "=== counter novo"; /bin/grep -rn "dias_sem_pontualidade_por_par_nao_lido" app/ --include=*.py \| head -20; echo; echo "=== campos de janela HE no EscalaColaborador"; /bin/grep -n "he_\\|janela" app/escala/models.py \| /bin/grep -in "janela\\|he_" \| head -40` |
+| 06:46:02 | Bash | Inventory the passo-4 payloads | `cd /home/ronald/saas-hasner/logs/o280/passo4 && wc -l diff_v2_v3.py *.py 2>/dev/null \| tail -8; echo "=== cabeca do diff"; sed -n '1,45p' diff_v2_v3.py` |
+| 06:45:44 | Bash | Read the passo-4 runner | `cd /home/ronald/saas-hasner/logs/o280/passo4 && cat rodar.sh \| head -60` |
+| 06:45:37 | Bash | Confirm the sombra ensaio state | `cd /home/ronald/saas-hasner && bash bin/sombra.sh --conferir 2>&1 \| tail -6; ls -la .sombra_stamp logs/.sombra_stamp 2>/dev/null \| head` |
 | 06:45:33 | Bash | Check sombra availability and stamp | `cd /home/ronald/saas-hasner && ls logs/crons_em_curso/ 2>/dev/null; echo "--- trava sombra"; cat logs/sombra.lock 2>/dev/null \| head -2; echo "--- carimbo"; /bin/grep -E 'SOMBRA_(CARIMBO\|BLOCO\|COMANDOS)\|DIVERGE\|COBERTURA\|MODO' logs/.sombra_stamp 2>/dev/null \| head -8` |
 | 06:45:18 | Bash | Insert the new bang block into the RELATO top and re-run the proof selo | `cd /home/ronald/saas-hasner && python3 - <<'PY' import io p = 'app/docs/RELATO.md' t = io.open(p, encoding='utf-8').read() bloco = """**`!` NA MESA, E ELE E O GEMEO DO QUE A v3 ACABOU DE CURAR: O MOTOR QUE PAGA ANCORA O MARCO NA DATA DA BATIDA, E SAO DOIS SITIOS DENTRO DA ZONA INVIOLAVEL (17/10 06:4x; a fila NAO parou, PAREI-DE-LEI-NAO-DEVOLVE-TURNO)** - **A PERGUNTA E UMA SO**: *"de que DIA e o m ...` |
 | 06:44:54 | Bash | Read the case that holds the 390 | `sed -n '728,744p' ponto/tests/test_o280_bateria_da_lei.py \| cut -c1-110` |
