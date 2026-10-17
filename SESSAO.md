@@ -6,10 +6,19 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 17/10/2026 08:21:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (964.1 MB). Acoes na janela: **1300**.
+**Medido em 17/10/2026 08:26:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (964.7 MB). Acoes na janela: **1305**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 08:25:59 | Bash | Read periodo_do_dia body | `grep -n "^def periodo_do_dia" ponto/calculador/periodo.py && sed -n '/^def periodo_do_dia/,/^@dataclasses\\|^def reparticao/p' ponto/calculador/periodo.py \| sed -n '1,140p'` |
+| 08:25:41 | Bash | Re-read spec section 4 case tables, part 2 | `cd /home/ronald/saas-hasner/logs/o280/esmeril && sed -n '350,470p' I26-CASOS-33-ESPEC.md` |
+| 08:25:37 | Bash | Re-read spec section 4 case tables, part 1 | `cd /home/ronald/saas-hasner/logs/o280/esmeril && sed -n '233,350p' I26-CASOS-33-ESPEC.md` |
+| 08:24:57 | Bash | Dump pontualidade_no_dia and regua_do_dia | `sed -n '420,525p' ponto/calculador/periodo.py` |
+| 08:24:52 | Bash | Dump porta-de-baixo house forms | `cd /home/ronald/saas-hasner/logs/o280/esmeril/i26-escrita && sed -n '3040,3086p' test_o280_bateria_da_lei.py; echo "=====3285"; sed -n '3285,3310p' test_o280_bateria_da_lei.py; echo "=====3750"; sed -n '3750,3800p' test_o280_bateria_da_lei.py` |
+| 08:24:47 | Bash | Dump V3Familia3Test header and v3 helper | `cd /home/ronald/saas-hasner/logs/o280/esmeril/i26-escrita && sed -n '3309,3400p' test_o280_bateria_da_lei.py` |
+| 08:24:42 | Bash | Dump setUpTestData and helpers | `cd /home/ronald/saas-hasner/logs/o280/esmeril/i26-escrita && sed -n '796,960p' test_o280_bateria_da_lei.py` |
+| 08:24:37 | Bash | Dump MATRIZ tail and CASOS boundaries | `cd /home/ronald/saas-hasner/logs/o280/esmeril/i26-escrita && sed -n '225,260p' test_o280_bateria_da_lei.py && echo "=====760" && sed -n '758,800p' test_o280_bateria_da_lei.py` |
+| 08:24:31 | Bash | Re-check splice anchors in the build copy | `cd /home/ronald/saas-hasner/logs/o280/esmeril/i26-escrita && wc -l test_o280_bateria_da_lei.py && grep -n "^cpfs\\|cpfs = iter\\|^ # propriedades\\|^MATRIZ\\|^CASOS\\|^}" test_o280_bateria_da_lei.py \| head -40` |
 | 08:20:12 | Bash | Locate the ruff configuration | `cd /home/ronald/saas-hasner && ls -la ruff.toml 2>/dev/null; find . -maxdepth 3 -name "ruff.toml" -o -maxdepth 3 -name ".ruff.toml" -o -maxdepth 2 -name "pyproject.toml" -o -maxdepth 2 -name "setup.cfg" 2>/dev/null \| head; echo "---"; cat app/ruff.toml 2>/dev/null \| head -30` |
 | 08:19:31 | Bash | Read the helper block | `cd /home/ronald/saas-hasner/logs/o280/esmeril/i26-escrita && sed -n '85,194p' test_o280_bateria_da_lei.py` |
 | 08:19:25 | Bash | Read the final tuple lines | `sed -n '250,275p' ponto/calculador/alimentacao.py` |
@@ -1306,7 +1315,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 20:26:55 | Bash | Regenerate the session handoff and show the working tree state | `cd /home/ronald/saas-hasner; bash bin/handoff_sessao.sh >/dev/null 2>&1; echo "handoff rc=$?"; git status --porcelain \| head -20; echo "--- head do handoff ---"; head -12 app/docs/HANDOFF-SESSAO.md; echo "linhas:"; wc -l < app/docs/HANDOFF-SESSAO.md` |
 | 20:26:43 | Bash | Run the RELATO proof guard against the RELATO | `cd /home/ronald/saas-hasner; out=$(python3 bin/relato_afirma_com_prova.py app/docs/RELATO.md 2>&1); rc=$?; echo "rc=$rc"; echo "$out" \| tail -8` |
 | 20:26:38 | Bash | Count the marco section lines and run the RELATO proof guard | `cd /home/ronald/saas-hasner; awk 'NR>=422 && /^## MARCO 16\/10 18:3x/{exit} NR>=422{n++} END{print "linhas da secao:", n}' app/docs/RELATO.md awk 'NR>=422 && /^## MARCO 16\/10 18:3x/{exit} NR>=422 && NF{n++} END{print "linhas com conteudo:", n}' app/docs/RELATO.md echo "--- afirma_com_prova ---"; python3 bin/relato_afirma_com_prova.py 2>&1 \| tail -5; echo "rc=${PIPESTATUS[0]}"` |
-| 20:26:30 | Bash | Show the marco section and the md5 lines of the commit message | `cd /home/ronald/saas-hasner; SC=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad echo "--- RELATO (linhas da secao do marco) ---"; sed -n '422,446p' app/docs/RELATO.md echo "--- md5 no msg_l023.txt ---"; /bin/grep -n '6241\\|1b2fd87\\|md5' $SC/msg_l023.txt` |
-| 20:22:15 | Bash | Replace the garbled md5 sentence in the RELATO with the measured value | `cd /home/ronald/saas-hasner; MD=$(md5sum app/ponto/tests/test_o280_bateria_da_lei.py \| cut -d' ' -f1); MM=$(md5sum app/docs/ARQUITETURA.mmd \| cut -d' ' -f1); echo "py=$MD"; echo "mmd=$MM" python3 - <<PY p='app/docs/RELATO.md' s=open(p).read() old="copia x arvore viva: **UM** difere, este modulo; md5 **\`6241945...\`** nao -- **\`6241665...\`** nao: o md5 e \`6241685d...\` -- ver a linha do commi ...` |
-| 20:22:02 | Bash | Update the commit message and the RELATO proof with the full-suite verdict | `cd /home/ronald/saas-hasner; SC=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad python3 - <<'PY' SC='/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad' # 1. mensagem de commit: a linha da arvore certificada passa a ser a 4a rodada p=SC+'/msg_l023.txt' s=open(p).read() old="""- arvore certificada = arvore que  ...` |
-| 20:21:43 | Bash | Check which files the previous marco commit carried | `cd /home/ronald/saas-hasner; git show --stat --format='' 01762a67 \| tail -8` |
