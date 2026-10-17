@@ -1,4 +1,4 @@
-# AVAIS NA MESA — 10
+# AVAIS NA MESA — 11
 
 > Gerado por `bin/gerar_avais.py` a partir de `app/docs/PENDENTES_RONALD.json`.
 > **So itens ABERTOS.** Item respondido SOME daqui na proxima geracao -- a historia dele fica
@@ -16,10 +16,11 @@
 | 8 | `O140-BACKFILL-DO-FURO-NA-09` | **!** | 2026-10-15T17:10 | PAREI, e e o UNICO pedaco da O140 que para. O Marco B pousou (commit 8be3814b -- a emenda; a arvore que subiu as 16:56 era a de 5b14363d, e elas diferem em UMA linha de docs e zero `.py` --, deploy 16:56, migration 0073) | `! Ronald: faz o backfill de `furo_apurado` na competencia 09 (10.891 dia-colab, 557 colabs, SO esse campo, dinheiro e hash do FechamentoMensal intactos e provados)   OU   a 09 fica NULL para sempre e os 5 leitores seguem chamando o motor nela.` |
 | 9 | `O284A-LOTE-VIRA-JOB-SMOKE` | **smoke** | 2026-10-15T17:40 | O284-A POUSOU: o caderno de cartoes saiu do request e virou JOB (parte A do seu aval de 10:5x, `BUG-LOTE-ESPELHO-14MIN`). Suite CHEIA sobre a arvore MERGEADA, nao sobre a raia, numa copia provada IDENTICA ao resultado do | `smoke Ronald: abri Relatorios -> espelho em lote, pedi o caderno da frota e a tela voltou NA HORA com a barra andando (nao os 14 min de antes); cliquei DE NOVO no mesmo pedido e ele me devolveu o MESMO job em vez de abrir um segundo; quando acabou, o botao baixou o PDF -- pode fechar a O284 parte A` |
 | 10 | `O295-HISTORIA-PUBLICA-REESCRITA` | **!** | 2026-10-16T14:15 | VAZAMENTO CURADO NO AR, HISTORIA PUBLICADA AINDA NAO -- e o caso e MEU. Um comando meu das 13:32:24 levou o PRIMEIRO NOME de um colaborador em Title Case no `argv`; `bin/gerar_sessao.py` publica o comando de cada tool_us | `! Ronald: reescreve o historico do repo publico `hasner-relato` (filter-repo + push --force) para o `SESSAO.md` daquele ciclo deixar de carregar o primeiro nome, sabendo que o commit antigo fica alcancavel por SHA ate o GitHub purgar   OU   a historia fica como esta -- o arquivo no ar JA esta limpo ` |
+| 11 | `O287-B27-ORDEM-APAGA-BATIDA-E-MOVE-DINHEIRO` | **!** | 2026-10-17T00:05 | DEFEITO MEDIDO DO MOTOR, LATENTE E NAO VIVO, NO SITIO QUE EU NAO PODE TOCAR. `ponto/motor_calculo_v2.py::MotorBase.remover_duplicatas:840-845` compara cada batida com a ULTIMA QUE MANTEVE (`ant = limpas[-1]`) e descarta  | `! Ronald: cura `remover_duplicatas` agora (UMA linha -- ordenar antes de comparar, ou `abs(gap)` -- mais um contador de batida descartada), abrindo a ZONA INVIOLAVEL so nessa linha, porque a mesma lista em outra ordem paga 300, 540 ou 600 min pelo mesmo dia   OU   fica PINADO ate a troca da v3, sabe` |
 
 ---
 
-Total no JSON: **239** · aberto **10** · respondido **68** · sem-motivo **161**.
+Total no JSON: **240** · aberto **11** · respondido **68** · sem-motivo **161**.
 
 > `sem-motivo` nao e "resolvido": e *"ninguem julgou este item"*. A ordem de 18:4x proibe
 > triar os 163 antigos, entao eles ficam ai, nomeados, em vez de serem chutados para um lado.
