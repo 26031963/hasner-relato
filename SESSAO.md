@@ -6,10 +6,25 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 17/10/2026 04:52:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (951.9 MB). Acoes na janela: **1170**.
+**Medido em 17/10/2026 04:57:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (952.2 MB). Acoes na janela: **1184**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 04:54:26 | Bash | Read aplicar_tolerancia | `/bin/grep -n "class _ContextoPontualidade" -A 40 ponto/calculador/regras.py \| head -60; echo "=== motor aplicar_tolerancia ==="; /bin/grep -n "def aplicar_tolerancia" -A 40 ponto/motor_calculo_v2.py \| head -60` |
+| 04:54:18 | Bash | Read the rest of pontualidade_do_dia and perto_do_marco | `sed -n '250,300p' ponto/calculador/regras.py; echo "=== perto_do_marco / cumpriu ==="; /bin/grep -n "def perto_do_marco" -A 18 escala/regua_defesa.py` |
+| 04:53:53 | Bash | Read marco_no_dia | `/bin/grep -n "def marco_no_dia" -A 25 ponto/janela_he.py` |
+| 04:53:46 | Bash | Read pontualidade_por_dia and marco_no_dia | `sed -n '150,236p' ponto/calculador/alimentacao.py` |
+| 04:53:35 | Bash | Read pontualidade_do_dia | `sed -n '168,250p' ponto/calculador/regras.py` |
+| 04:53:28 | Bash | Read the v3 result dataclasses and bodies | `sed -n '400,418p;440,472p' ponto/calculador/periodo.py; echo "=== dataclasses ==="; /bin/grep -n "class ExcessoV3\\|class PontualidadeV3\\|class NoturnoV3" -A 14 ponto/calculador/periodo.py \| /bin/grep -v "^--$"` |
+| 04:53:22 | Bash | Read the four v3 function signatures | `sed -n '324,340p;375,400p;418,440p;472,500p' ponto/calculador/periodo.py` |
+| 04:53:17 | Bash | Read the Regua dataclass | `sed -n '180,275p' ponto/calculador/periodo.py` |
+| 04:53:13 | Bash | Read periodo.py head | `sed -n '1,60p' ponto/calculador/periodo.py` |
+| 04:52:45 | Bash | Read _CosturaCompleta and the V3Familia3 idiom | `sed -n '3788,3830p' ponto/tests/test_o280_bateria_da_lei.py; echo "=== V3Familia3 head ==="; sed -n '3243,3340p' ponto/tests/test_o280_bateria_da_lei.py` |
+| 04:52:39 | Bash | Search for a reapontar registry and list the bateria classes | `/bin/grep -rn "re-apontar\\|reapontar\\|REAPONTAR" --include=*.py ponto/ core/ \| head -20; echo "=== classes na bateria ==="; /bin/grep -n "^class \\|^ def test_" ponto/tests/test_o280_bateria_da_lei.py \| tail -70` |
+| 04:52:25 | Bash | Read the rest of leitura and the fixture setup head | `sed -n '180,200p' ponto/tests/test_o280_bateria_da_lei.py; echo "=== fixtures ==="; sed -n '700,760p' ponto/tests/test_o280_bateria_da_lei.py` |
+| 04:52:20 | Bash | Read the bateria helpers and door | `sed -n '60,180p' ponto/tests/test_o280_bateria_da_lei.py` |
+| 04:52:16 | Bash | Read the bateria header | `sed -n '1,60p' ponto/tests/test_o280_bateria_da_lei.py` |
+| 04:52:08 | Bash | Read spec blocks D12, D12SI, N12S, N12X and sem-fixture | `cd /home/ronald/saas-hasner && sed -n '332,452p' logs/o280/esmeril/I26-CASOS-33-ESPEC.md` |
 | 04:52:03 | Bash | Read spec blocks D12F and COM7 | `cd /home/ronald/saas-hasner && sed -n '233,332p' logs/o280/esmeril/I26-CASOS-33-ESPEC.md` |
 | 04:51:59 | Bash | Outline the spec file | `cd /home/ronald/saas-hasner && /bin/grep -n "^#\\|^### \\|^\*\*I26-\\|^- \*\*I26-" logs/o280/esmeril/I26-CASOS-33-ESPEC.md \| head -80` |
 | 04:51:53 | Bash | Add the measured universe to the PL section | `python3 - <<'PY' p='docs/RELATO.md' s=open(p).read() anc = "- **O QUE A CASA AFIRMA AO LADO**: `MotorPlantao` declara" assert s.count(anc)==1 novo = """- **O UNIVERSO, MEDIDO NA SOMBRA 17/10 04:5x** (`bin/sombra.sh --rodar pl_universo_24h.py`, leitura pura, cpuset de teste; o previsto sai da FUNCAO REAL `minutos_previstos_do_dia`, nunca de aritmetica minha): de **362** TipoEscala com os dois marco ...` |
@@ -1179,4 +1194,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 16:59:39 | Bash | Fill the suite proof in the message and copy the certified files into the live tree | `cd /home/ronald/saas-hasner; SC=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad python3 - "$SC/msg_f5.txt" <<'PY' import io, sys p = sys.argv[1] s = io.open(p, encoding='utf-8').read() novo = ("PROVA DA ARVORE INTEIRA, a copia que este commit transporta (SUITE-UMA-VEZ-POR-ARVORE,\n" "bin/suite.sh --dir, um run por vez pela trava, tomada 16:32:25): Ran  ...` |
 | 16:59:28 | Bash | Verify the live tree is still at HEAD for the four paths | `cd /home/ronald/saas-hasner; SC=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; git status --porcelain \| cat; echo "=== vivo x HEAD nos 4 ==="; for f in app/docs/BACKLOG.md app/docs/TICKETS.md app/docs/RELATO.md app/ponto/tests/test_o280_bateria_da_lei.py; do git diff --quiet HEAD -- "$f" && echo "igual-ao-HEAD $f" \|\| echo "MODIFICADO-NO-VIVO $f";  ...` |
 | 16:59:18 | Bash | Check whether the suite rewrote any of the four files in the copy | `SC=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cd "$SC/cp-f5"; ls -l --time-style=+%H:%M:%S app/docs/BACKLOG.md app/docs/TICKETS.md app/docs/RELATO.md app/ponto/tests/test_o280_bateria_da_lei.py; echo "=== regenerados pela suite na copia ==="; find . -newermt '16:32' -type f \( -name '*.md' -o -name '*.mmd' -o -name '*.py' -o -name '*.html' \) 2>/ ...` |
-| 16:54:30 | Bash | Keep waiting for the suite veredito | `O=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/byrnwpvad.output; i=0; until [ -s "$O" ] \|\| [ $i -ge 52 ]; do sleep 10; i=$((i+1)); done; date '+%H:%M:%S'; wc -c "$O"; tail -12 "$O"; docker ps --format '{{.Names}} {{.Status}}' \| /bin/grep -v saas_ \| head -4` |
