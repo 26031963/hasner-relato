@@ -6,10 +6,16 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 17/10/2026 06:29:03.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (957.4 MB). Acoes na janela: **1255**.
+**Medido em 17/10/2026 06:34:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (957.9 MB). Acoes na janela: **1249**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 06:34:21 | Bash | Read the landed pontualidade_por_dia | `sed -n '176,270p' ponto/calculador/alimentacao.py` |
+| 06:34:15 | Bash | Read N12X block and section 5 | `cd /home/ronald/saas-hasner/logs/o280/esmeril && sed -n '390,478p' I26-CASOS-33-ESPEC.md` |
+| 06:34:10 | Bash | Read sections 3c and 3d | `cd /home/ronald/saas-hasner/logs/o280/esmeril && sed -n '168,232p' I26-CASOS-33-ESPEC.md` |
+| 06:34:07 | Bash | List spec section headers | `cd /home/ronald/saas-hasner/logs/o280/esmeril && /bin/grep -n '^## \\|^### ' I26-CASOS-33-ESPEC.md` |
+| 06:33:56 | Bash | Check push verdict and spec file size | `cd /home/ronald/saas-hasner && tail -4 logs/o280/esmeril/i27_push.log; echo "--- fetch/status"; git fetch -q 2>&1 \| tail -2; git status -sb \| head -3; echo "--- wc espec"; wc -l logs/o280/esmeril/I26-CASOS-33-ESPEC.md` |
+| 06:29:41 | Bash | Read the two new fixtures as landed | `/bin/grep -n 'O280-NPART\\|O280-N12X' -A 9 ponto/tests/test_o280_bateria_da_lei.py \| sed -n '1,46p'` |
 | 06:28:58 | Bash | Read the N12X block of the spec | `cd /home/ronald/saas-hasner && sed -n '390,435p' logs/o280/esmeril/I26-CASOS-33-ESPEC.md` |
 | 06:28:50 | Bash | Read section 3c of the spec | `cd /home/ronald/saas-hasner && sed -n '168,207p' logs/o280/esmeril/I26-CASOS-33-ESPEC.md` |
 | 06:28:46 | Bash | List the esmeril dir and the spec sections | `cd /home/ronald/saas-hasner && ls -la logs/o280/esmeril/ \| head -20; echo '==='; /bin/grep -n '^## \\|^### ' logs/o280/esmeril/I26-CASOS-33-ESPEC.md \| head -30` |
@@ -1253,15 +1259,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 18:40:48 | Bash | Read L-022 and the A12 case declaration | `/bin/grep -n "L-022" docs/LEIS.md \| head -3; echo "=== A12 na bateria"; /bin/grep -n "'A12'" ponto/tests/test_o280_bateria_da_lei.py \| cut -c1-300` |
 | 18:40:36 | Bash | Locate L-023 in the laws file | `/bin/grep -n "L-023" docs/LEIS.md \| head -5` |
 | 18:40:30 | Bash | Check whether the push regua holds the lane | `cd /home/ronald/saas-hasner && bash bin/trava_teste.sh --quem; ls -t logs/*.log 2>/dev/null \| head -3; ls -t logs/regua* 2>/dev/null \| head -3` |
-| 18:31:06 | Bash | Wait on the push output | `O=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bsh7b9an5.output; i=0; until [ -s "$O" ]; do i=$((i+1)); [ $i -gt 28 ] && break; sleep 20; done; date '+%H:%M'; wc -c "$O"; tail -8 "$O" 2>/dev/null` |
-| 18:30:55 | Bash | Name the five fora cases with no matrix row | `python3 - <<'PY' import ast s=open('ponto/tests/test_o280_bateria_da_lei.py',encoding='utf-8').read() m=ast.parse(s) casos={}; refs=set() for n in ast.walk(m): if isinstance(n,ast.Assign): t=n.targets[0] if isinstance(t,ast.Name) and t.id=='CASOS' and isinstance(n.value,ast.Dict): for k,v in zip(n.value.keys,n.value.values): casos[k.value]=(v.elts[2].value, v.elts[0].value) if isinstance(t,ast.Nam ...` |
-| 18:30:41 | Bash | Census of declared cases with no matrix row | `python3 - <<'PY' import ast s=open('ponto/tests/test_o280_bateria_da_lei.py',encoding='utf-8').read() m=ast.parse(s) casos={}; refs=set() for n in ast.walk(m): if isinstance(n,ast.Assign): t=n.targets[0] if isinstance(t,ast.Name) and t.id=='CASOS' and isinstance(n.value,ast.Dict): for k,v in zip(n.value.keys,n.value.values): casos[k.value]=v.elts[2].value if isinstance(t,ast.Name) and t.id=='MATRI ...` |
-| 18:30:20 | Bash | Push the marco through the regua | `cd /home/ronald/saas-hasner && git push origin main 2>&1 \| tail -30` |
-| 18:30:16 | Bash | Check what is ahead of the remote before pushing | `cd /home/ronald/saas-hasner && git fetch -q origin && git log --oneline origin/main..HEAD \| cat` |
-| 18:30:10 | Bash | Commit the marco by path | `SC=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cd /home/ronald/saas-hasner && printf '\nCo-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>\n' >> $SC/msg_commit_sombra0.txt && git add app/ponto/tests/test_o280_bateria_da_lei.py app/docs/BACKLOG.md app/docs/RELATO.md app/docs/HANDOFF-SESSAO.md && git commit -F $SC/msg_commit_sombra0. ...` |
-| 18:30:02 | Bash | Regenerate the session handoff | `cd /home/ronald/saas-hasner && bash bin/handoff_sessao.sh 2>&1 \| tail -4; git status --porcelain app/docs app/ponto \| head` |
-| 18:29:55 | Bash | Read how relato.sh gates on the prova guard | `cd /home/ronald/saas-hasner && sed -n 66,82p bin/relato.sh` |
-| 18:29:52 | Bash | Find where the prova guard is wired in | `cd /home/ronald/saas-hasner && /bin/grep -n "relato_afirma_com_prova" bin/pre-push.sh bin/regua.sh bin/*.sh 2>/dev/null \| head` |
-| 18:29:44 | Bash | Run the prova guard against the relato | `cd /home/ronald/saas-hasner && python3 bin/relato_afirma_com_prova.py app/docs/RELATO.md 2>&1 \| tail -8; echo "rc=${PIPESTATUS[0]}"` |
-| 18:29:40 | Bash | Run the prova guard with python | `cd /home/ronald/saas-hasner && python3 bin/relato_afirma_com_prova.py 2>&1 \| tail -6; echo "rc=$?"` |
-| 18:29:36 | Bash | Check the tickets line and the prova guard | `cd /home/ronald/saas-hasner && /bin/grep -c "^\| O280 " app/docs/TICKETS.md; ls bin/tests/ \| /bin/grep -c "test_"; ls bin/tests/*.sh \| wc -l; bash bin/relato_afirma_com_prova.py 2>&1 \| tail -3` |
