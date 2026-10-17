@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 17/10/2026 03:47:32.**
+**Medido em 17/10/2026 03:53:02.**
 
 | | |
 |---|---|
@@ -29,25 +29,25 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2514.0 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2514.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **282.5 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **282.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **95.7 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **95.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **398.6 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **398.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
   - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **302.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o275** (`raia-o275`) -- **SEM AGENTE**
-  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **32.0 h** (passou das 6 h da L-105)
+  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **32.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-o275.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -59,7 +59,7 @@ RELATO, com a lista de nomes do banco como autoridade._
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
 - **wt-v3-pouso** (`pouso-v3-20261016`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 4 arquivo(s) sujo(s), commit a frente ha **15.4 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 4 arquivo(s) sujo(s), commit a frente ha **15.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-v3-pouso.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **21 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
@@ -174,41 +174,41 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  ├───────────────────┼──────────────────────────────────────────┼─────────────────────────────────────────────────────────────────────────────────────────────┤
+  │                   │ o reload agendado 30 3 * * *, que é o    │ logs/reload_diario.log: janela_auth OK, manifest em dia, casca (16 estáticos, 5 páginas,    │
+  │ quem publicou?    │ mesmo bin/deploy.sh e publica a árvore   │ 615 rotas), HUP nas 3, /health/→200 /colaboradores/→302 mensageria→200, BUG 128 verde,      │
+  │                   │ viva                                     │ importerror_500=0                                                                           │
+  ├───────────────────┼──────────────────────────────────────────┼─────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ o E2 de hoje      │                                          │ :169 só cobra sombra.sh --conferir quando AGENDADO != 1; :56 diz em palavras                │
+  │ correu sobre ele? │ não, e é por desenho                     │ "--reload-copia EXIGE o ensaio de hoje, ao contrário dele"; .sombra_stamp =                 │
+  │                   │                                          │ SOMBRA_DIA=20261016 às 03:52 pelo date                                                      │
+  └───────────────────┴──────────────────────────────────────────┴─────────────────────────────────────────────────────────────────────────────────────────────┘
 
-  Read 1 file, ran 12 shell commands
+  Então o fato real não é "deploy devido" nem "nada devido": é cartorio.py, um .py que escreve veredito, no ar sem o ensaio do dia — o portão é o arquivo
+  (SOMBRA_DIA=20261017 + DIVERGE=0 + ERROS=0), que o cron das 13 4 * * * escreve em ~21 min. Não forcei --refazer agora: entre 00:00 e 04:00 o portão é cego
+  (sombra.sh:203 soma +1 quando o dump não é do dia) e eu colidiria com o cron. Se ele voltar DIVERGE>0, a cura é na hora (LEI-AKITA 6) e o vigia_arvore tem o
+  QUANDO acima para decidir o auto-revert.
 
-● Background command "Push the marco commit, logging to file" completed (exit code 0)
+  Também corrigi, na seção nova e não na de lá (L-116), a frase do INCOMPLETO do O222 que dizia "o que o HUP NÃO dá é prova de rota e collectstatic": o agendado
+  roda collectstatic quando static//templates/ estão mais novos que o manifest (:196-199) e prova as três rotas (:300-332).
 
-  Ran 1 shell command
+  Estado: seção de 23 linhas (teto 25), relato_afirma_com_prova.py com os mesmos 3 achados pré-existentes do HEAD (693, 755, 1420) e zero meu, BACKLOG.md em 294
+  chars, HANDOFF-SESSAO.md regenerado (46/60). Nada commitado por desenho — docs sobem no commit do próximo marco (L-106).
 
-● Push landed: 002fd806..b92cbc7f, RC_PUSH=0, origin/main == HEAD, 0 pending. Now the pairing crux — the matriz's own pontualidade cases:
+  Nota para o corpo do próximo commit: o título da seção do O222 diz ~06:xx mas o corpo dela diz .py na árvore às 02:52 e commit carimbado até 03:30 — rótulo de
+  hora fora do conteúdo, não reescrito por L-116.
 
-  Read 1 file, ran 28 shell commands
-  ⎿  Read docs/AVAIS.md (28 lines)
-  ⎿  Referenced file ../../../../tmp/prepush-arvore.6Vi57A/app/ponto/tests/test_bateria_lavratura.py
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b0atkqtox.output (4 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bv9c1c7tl.output (10 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bwk5ooyv8.output (4 lines)
+  MARCO FECHADO — pode compactar.
 
-● Task "Measure the whole public history with the cured predicate" still running in background
-  ⎿  Read AVAIS.md (28 lines)
-  ⎿  Referenced file ../../../../../tmp/prepush-arvore.6Vi57A/app/ponto/tests/test_bateria_lavratura.py
-  ⎿  Read ../../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b0atkqtox.output (4 lines)
-  ⎿  Referenced file ../ponto/tests/test_o280_bateria_da_lei.py
-  ⎿  Read ../../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bv9c1c7tl.output (10 lines)
+  O próximo da ORDEM VIVA é O280: os 33 casos RE-APONTAR, cada um nascendo com a resposta da lei escrita antes (L-110), nunca por DIFF contra o v2 — em agente
+  próprio (RAIA-NAO-FICA-PARADA). A varredura da história pública segue viva e imprime só no fim; o número dela sobe nesse marco.
 
-● Task "Measure the whole public history with the cured predicate" still running in background
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: O280 -- MOTOR-V3-UM-PERIODO (aval dele 15/10 09:5x). O que a obra ataca, e o diagnostico e o do proprio aval: hoje a m
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-● Checking whether collectstatic runs in the agendado mode
-  ⎿  $ cd /home/ronald/saas-hasner && /bin/grep -n "collectstatic" -B3 bin/deploy.sh | head -20
-
-✢ Compacting conversation… (17h 22m 11s · ↓ 1.5m tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱ 93%
+✢ Crafting… (17h 27m 41s · ↓ 1.5m tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                                            0% until auto-compact
+                                                                                                                           ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
