@@ -38,11 +38,13 @@
      proprio. Depois a O277. EM POUSO AGORA, e e a unica: a O288 PORTAO-COMPARA-METADE-DA-8069 (bug PROVADO
      no esmeril do marco da O271, P7.1, pouso PRE-APROVADO pela L-105). AO LADO, sem cruzar arquivo com
      nenhuma delas: a O280, cuja raia wt-v3 JA POUSOU no main (`4f084e47`), e cuja TROCA nao vai ao `!` dele
-     enquanto houver item do ESMERIL-V3 (O287) aberto -- medido 16/10 22:4x: **8 abertos**, sendo **7 dele**
-     (I9 I14 I16b I17 I19 I24 I25) e **1 MEU**, `LEG2-NAO-CORRIDA` (as 49 celulas do passo B escritas pela lei
-     em 15/10 14:22 nunca foram cobradas da v3: 0 citacao na bateria, 0 runner na pasta, e os 17 novos
-     `B17`-`B33` sem celula equivalente nos 89 casos, censo por INSUMO -- `B34` caiu como duplicata
-     de `F1b`). Condicao LITERAL do aval dele de 14:1x. -->
+     enquanto houver item do ESMERIL-V3 (O287) aberto -- medido 17/10 00:0x: **8 abertos**, sendo **7 dele**
+     (I9 I14 I16b I17 I19 I24 I25) e **1 MEU** -- e o MEU TROCOU de nome sem trocar de numero: a leg 2
+     CORREU em 17/10 00:0x e fechou o `LEG2-NAO-CORRIDA`, e o que ela achou abriu
+     `B27-ORDEM-APAGA-BATIDA-E-MOVE-DINHEIRO`, que NAO e bug da v3:
+     `ponto/motor_calculo_v2.py::MotorBase.remover_duplicatas:840-845` compara cada batida com a ULTIMA
+     QUE MANTEVE e, conforme a ORDEM da lista, paga 300, 540 ou 600 min pelo MESMO dia -- defeito do motor
+     de HOJE, dentro da ZONA INVIOLAVEL, no `!` dele como AVAIS #11. Condicao LITERAL do aval dele de 14:1x. -->
 <!-- MOVIDO em 15/10 ~02:5x pelo Code, AUTONOMIA-DE-CODIGO item 1 (ordem e encaixe quando quem decide e
      DEPENDENCIA DE CODIGO): o BUG-SOBRA-TIPO-TROCADO FECHOU -- cura em 5f915ff4, no ar desde 02:06, e o apply
      do dado as 02:23 com a PROVA no RELATO (classe da frota 10 = 0, o 26219 morto por lastro, o 26/09 sem
