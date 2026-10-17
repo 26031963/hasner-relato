@@ -6,10 +6,22 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 17/10/2026 15:50:47.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (970.1 MB). Acoes na janela: **812**.
+**Medido em 17/10/2026 15:55:47.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (970.3 MB). Acoes na janela: **807**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 15:53:43 | Bash | Read the marks feeder body | `cd /home/ronald/saas-hasner && sed -n '142,205p' app/ponto/calculador/alimentacao.py` |
+| 15:53:12 | Bash | Read the two engine invocations in the closing service | `cd /home/ronald/saas-hasner && sed -n '300,341p' app/ponto/services/fechamento.py; echo "=== orfao 417-430"; sed -n '415,432p' app/ponto/services/fechamento.py` |
+| 15:53:06 | Bash | Check whether the engine stores the colaborador | `cd /home/ronald/saas-hasner && /bin/grep -n "self.colaborador\b" app/ponto/motor_calculo_v2.py \| head -5; echo "=== def __init__ do MotorBase"; sed -n '669,700p' app/ponto/motor_calculo_v2.py \| /bin/grep -n "def __init__" -A 22` |
+| 15:52:09 | Bash | Read the census dataclass and the marks feeder signature | `cd /home/ronald/saas-hasner && /bin/grep -n "class Censo" -A 40 app/ponto/calculador/periodo.py \| head -55; echo "=== marcos_por_dia"; /bin/grep -n "def marcos_por_dia" -A 12 app/ponto/calculador/alimentacao.py \| head -18` |
+| 15:52:03 | Bash | Read the day-rule builder signature and behavior | `cd /home/ronald/saas-hasner && /bin/grep -n "def regua_do_dia" -A 40 app/ponto/calculador/periodo.py \| head -55` |
+| 15:51:54 | Bash | Inspect the engine class hierarchy in the archived tree | `cd /home/ronald/saas-hasner && /bin/grep -n "def calcular_mes" logs/o280/passo4/arvore_6e2c06ec/app/ponto/motor_calculo_v2.py; echo "---"; /bin/grep -n "def calcular_mes" -A 12 logs/o280/passo4/arvore_6e2c06ec/app/ponto/motor_calculo_v2.py \| head -20; echo "=== classes"; /bin/grep -n "^class " logs/o280/passo4/arvore_6e2c06ec/app/ponto/motor_calculo_v2.py` |
+| 15:51:43 | Bash | Read how the payload builds the v3 re-read arguments | `cd /home/ronald/saas-hasner && sed -n '190,250p' logs/o280/passo4/diff_v2_v3.py` |
+| 15:51:29 | Bash | Read the passo-4 launcher in full | `cd /home/ronald/saas-hasner && cat -n logs/o280/passo4/rodar.sh` |
+| 15:51:19 | Bash | Read the --rodar door of the shadow script | `cd /home/ronald/saas-hasner && sed -n '170,230p' bin/sombra.sh` |
+| 15:51:08 | Bash | Check the lavra option of the shadow script | `cd /home/ronald/saas-hasner && /bin/grep -n "lavra" bin/sombra.sh \| head -30` |
+| 15:51:01 | Bash | Check how the closing service consults the lavra | `/bin/grep -rn "ler_lavra\\|escala_certa_no_dia\\|SemLavra" ponto/services/fechamento.py \| head; echo "=== escala_certa_no_dia assinatura"; /bin/grep -n "def escala_certa_no_dia" -A 12 escala/services/escala_certa.py \| head -20` |
+| 15:50:51 | Bash | Read the sombra guard on the lavra snapshot | `/bin/grep -n "_exigir_lavra_de_prod_na_sombra" -A 30 ponto/services/esmeril_espelho.py \| head -45` |
 | 15:50:45 | Bash | Read what the lavra reader consults | `echo "=== ler_lavra"; /bin/grep -n "def ler_lavra" -A 25 ponto/services/esmeril_espelho.py \| head -40` |
 | 15:50:30 | Bash | Identify which logs carry oracle output | `cd /home/ronald/saas-hasner && /bin/grep -l "ZERO ESCRITA" logs/*.out logs/audit_holerite_09/*.out 2>/dev/null \| head -20; echo "=== quais tem 'oraculo' no corpo e sao de 13/10 noite"; for f in logs/dono3_HEAD.out logs/dono3_CURA.out logs/grade3_HEAD.out logs/gradeF_HEAD.out logs/sobra_achados_autopsia.out; do echo "--- $f"; head -3 "$f"; done` |
 | 15:50:16 | Bash | Find log files written in the late 13/10 window | `cd /home/ronald/saas-hasner && find logs -maxdepth 2 -newermt "2026-10-13 18:00" ! -newermt "2026-10-14 06:00" -type f 2>/dev/null \| head -40` |
@@ -805,20 +817,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 03:56:54 | Bash | Fix the hour label to what the clock said | `cd /home/ronald/saas-hasner && sed -i 's\|CORRECAO MEDIDA AO ESPECIFICAR OS CASOS (17/10 04:0x pelo `date`)\|CORRECAO MEDIDA AO ESPECIFICAR OS CASOS (17/10 03:5x pelo `date`)\|' logs/o280/esmeril/I25-MAPA-51-TESTES-X-MATRIZ.md && /bin/grep -n "CORRECAO MEDIDA" logs/o280/esmeril/I25-MAPA-51-TESTES-X-MATRIZ.md` |
 | 03:56:48 | Bash | Append the measured correction to the map | `cd /home/ronald/saas-hasner && date '+%d/%m %H:%M' && cat >> logs/o280/esmeril/I25-MAPA-51-TESTES-X-MATRIZ.md <<'MD' --- ## 10. CORRECAO MEDIDA AO ESPECIFICAR OS CASOS (17/10 04:0x pelo `date`) -- O M8 TEM **DUAS** GEOMETRIAS, E A SEGUNDA E O `D12` EXATO A secao 3 descreve o `M8` por **uma** geometria (*"comercial 07-17, intervalo 12:00-13:15, 600"*) e conclui *"nenhum: COM e 08-17 com 12:00-13:00 ...` |
 | 03:56:10 | Bash | Read the second test class fixture | `sed -n '148,172p' ponto/tests/test_o271_pontualidade_no_comercial.py` |
-| 03:55:46 | Bash | Read the second batch of commercial test methods | `sed -n '170,250p' ponto/tests/test_o271_pontualidade_no_comercial.py` |
-| 03:55:42 | Bash | Read the first batch of commercial test methods | `sed -n '60,130p' ponto/tests/test_o271_pontualidade_no_comercial.py` |
-| 03:55:36 | Bash | Read the head of the commercial pontualidade test module | `sed -n '1,60p' ponto/tests/test_o271_pontualidade_no_comercial.py` |
-| 03:55:23 | Bash | Correct the block count wording in the spec | `cd /home/ronald/saas-hasner && python3 - <<'PY' p='logs/o280/esmeril/I26-CASOS-33-ESPEC.md' t=open(p).read() t=t.replace('### Os outros cinco blocos','### Os outros SETE blocos (26 casos)') open(p,'w').write(t) PY /bin/grep -n "SETE blocos" logs/o280/esmeril/I26-CASOS-33-ESPEC.md` |
-| 03:55:13 | Bash | Write the specification file for the 33 cases | `cd /home/ronald/saas-hasner && cat > logs/o280/esmeril/I26-CASOS-33-ESPEC.md <<'MD' # I26 — OS 33 CASOS RE-APONTAR: A ESPECIFICACAO, COM A RESPOSTA DA LEI ANTES DO CODIGO > **Por que este arquivo existe antes de qualquer caso novo na bateria.** A **L-110** diz, literal: > *"escreve-se o CASO com a resposta da regra ANTES do codigo -- cadastro tal, batidas tais, o dia > vale tanto"*. O balde **RE-A ...` |
-| 03:54:04 | Bash | Read the declared tolerance constants and their readers | `sed -n '50,66p' ponto/motor_calculo_v2.py; echo "=== quem le cada um ==="; git grep -n -w "TOLERANCIA_MARCACAO\\|TOLERANCIA_CONFORMIDADE_DIA" -- '*.py' \| head` |
-| 03:53:40 | Bash | Read the fixtures block of the battery | `sed -n '766,812p' ponto/tests/test_o280_bateria_da_lei.py` |
-| 03:53:32 | Bash | Read the geometry table with module to file mapping | `cd /home/ronald/saas-hasner && awk '/^## 3\./,/^## 4\./' logs/o280/esmeril/I25-MAPA-51-TESTES-X-MATRIZ.md` |
-| 03:53:24 | Bash | Read the module list of the map | `cd /home/ronald/saas-hasner && awk '/^## 5\./,/^## 6\./' logs/o280/esmeril/I25-MAPA-51-TESTES-X-MATRIZ.md \| head -24` |
-| 03:53:18 | Bash | Find the CASOS declaration in the battery | `/bin/grep -n "^CASOS\\|^ 'F9" -A2 ponto/tests/test_o280_bateria_da_lei.py \| head -40` |
-| 03:53:08 | Bash | Read the pairing table of the map | `cd /home/ronald/saas-hasner && awk '/^## 4\./,/^## 5\./' logs/o280/esmeril/I25-MAPA-51-TESTES-X-MATRIZ.md \| head -70` |
-| 03:53:04 | Bash | Read the head of the I25 map | `cd /home/ronald/saas-hasner && sed -n '1,40p' logs/o280/esmeril/I25-MAPA-51-TESTES-X-MATRIZ.md` |
-| 03:52:28 | Bash | Regenerate the handoff after the relato edit | `cd /home/ronald/saas-hasner && bash bin/handoff_sessao.sh >/dev/null 2>&1; wc -l app/docs/HANDOFF-SESSAO.md; git diff --stat app/docs/RELATO.md app/docs/BACKLOG.md app/docs/HANDOFF-SESSAO.md` |
-| 03:52:21 | Bash | Rewrite the bullet carrying both the publication and the missing ensaio | `python3 - <<'PY' p='docs/RELATO.md' t=open(p).read() i=t.index('- o deploy do O222 **NAO segue devido**') j=t.index('\n',i)+1 novo=("- o O222 **JA ESTA NO AR desde 17/10 03:30:21, e o E2 de hoje sobre ele NAO correu** -- as duas coisas se medem no " "mesmo arquivo. Quem publicou nao fui eu: foi o reload agendado (`30 3 * * * bin/cron_run.sh deploy.sh - " "'bin/deploy.sh --reload-agendado'`), que e ...` |
-| 03:52:01 | Bash | Read the clock, the ensaio cron and the current stamp | `cd /home/ronald/saas-hasner && date '+%d/%m %H:%M:%S'; crontab -l \| /bin/grep sombra.sh; /bin/grep -E "SOMBRA_DIA\|SOMBRA_DIVERGE\|SOMBRA_ERROS" .sombra_stamp; ls logs/crons_em_curso/ \| head` |
-| 03:51:54 | Bash | Read the ensaio gate condition | `cd /home/ronald/saas-hasner && sed -n '160,185p' bin/deploy.sh` |
-| 03:51:50 | Bash | Check how the deploy script gates the ensaio per mode | `cd /home/ronald/saas-hasner && /bin/grep -n "sombra" bin/deploy.sh \| head -20` |
