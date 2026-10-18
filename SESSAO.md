@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 18/10/2026 13:35:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1031.2 MB). Acoes na janela: **1447**.
+**Medido em 18/10/2026 13:40:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1031.2 MB). Acoes na janela: **1441**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1451,9 +1451,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 01:43:07 | Bash | Lint the new test and the two cured files | `cd /home/ronald/wt-o306 && docker run --rm --cpuset-cpus 4-7 --cpus 4 --memory 2g -v /home/ronald/wt-o306/app:/app:ro -w /app --tmpfs /app/.ruff_cache saas-hasner-core:latest ruff check chamados/tests/test_o306_marco_do_motivo_nao_e_do_vizinho.py chamados/juizes.py chamados/services/declaracao_texto.py 2>&1 \| tail -15` |
 | 01:43:03 | Bash | Find the image name the suite uses | `cd /home/ronald/saas-hasner && /bin/grep -nE 'IMG\|image\|saas-hasner' bin/suite.sh \| head -20` |
 | 01:42:57 | Bash | Check suite progress, test lane lock, and lint the new files | `cd /home/ronald/saas-hasner && tail -5 logs/comboio18_suite.log 2>/dev/null; echo "--- trava:"; bash bin/trava_teste.sh --quem 2>&1 \| head -3; echo "--- ruff na raia:"; cd /home/ronald/wt-o306 && docker run --rm --cpuset-cpus 4-7 --cpus 4 --memory 2g -v /home/ronald/wt-o306/app:/app:ro -w /app --tmpfs /app/.ruff_cache saas_core ruff check chamados/tests/test_o306_marco_do_motivo_nao_e_do_vizinho. ...` |
-| 01:38:39 | Bash | Write the biting test battery for the two judge cures | `cd /home/ronald/wt-o306/app && cat > chamados/tests/test_o306_marco_do_motivo_nao_e_do_vizinho.py <<'PY' """O306 (BUG-RESPOSTA-NAO-PERSISTE, caso 1805 -- aval Ronald 17/10): a hora que o colaborador declara nao pode ser trocada pelo marco de OUTRO motivo. A ORIGEM, medida na trilha de producao (06/10 05:56:22, leitura pura): materializar_batida ts=2026-10-01T08:00:00-03:00 pergunta_pk=40209 respos ...` |
-| 01:37:29 | Bash | Read the neighbouring test for the fixture idiom | `cd /home/ronald/wt-o306/app && sed -n '1,80p' chamados/tests/test_declaracao_texto.py` |
-| 01:37:17 | Bash | Apply the colab-porta cure in the lane | `cd /home/ronald/wt-o306/app && python3 - <<'PY' import io, py_compile, tempfile, os CAM = 'chamados/services/declaracao_texto.py' src = io.open(CAM, encoding='utf-8').read() velho = """ if perg.validada_em is not None: return {'ok': True, 'estado': 'ja_validada', 'msg': 'Este horario ja foi validado.', 'pergunta_id': perg.pk} """ novo = """ if perg.validada_em is not None: # O CARIMBO SO VALE QUAN ...` |
-| 01:36:50 | Bash | Apply the two judge cures in the lane | `cd /home/ronald/wt-o306/app && python3 - <<'PY' import io, py_compile, tempfile, os CAM = 'chamados/juizes.py' src = io.open(CAM, encoding='utf-8').read() # ---------- CURA 1: entrada_de_marco -- a cascata por TIPO nao entrega marco de OUTRO motivo velho = """ mf = (getattr(ch, 'contexto_json', None) or {}).get('marcos_faltantes') or [] for _mk in mf: if _mk.get('motivo') == motivo and _mk.get('ho ...` |
-| 01:36:04 | Bash | Re-read the colab declaration porta in the cure lane | `cd /home/ronald/wt-o306/app && sed -n '197,272p' chamados/services/declaracao_texto.py` |
-| 01:35:41 | Bash | Read the window helper | `cd /home/ronald/wt-o306/app && /bin/grep -n "def _batida_existente_na_janela" -A 45 chamados/juizes.py` |
