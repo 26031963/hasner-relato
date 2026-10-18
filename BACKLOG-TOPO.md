@@ -5,7 +5,7 @@ a raspagem usa a lista de nomes do banco como autoridade, nunca regex adivinhada
 `colNNN`/`ecNNN` ficam, porque nao identificam ninguem fora desta casa. Obra FEITA sai desta
 lista — ela e o que esta EM PE._
 
-**312 obras abertas.**
+**315 obras abertas.**
 
 | ID | obra | estado |
 |---|---|---|
@@ -321,3 +321,6 @@ lista — ela e o que esta EM PE._
 | **O311** | O206-PUSH-NATIVO-E-COBRANCA-DE-DISPUTA | ABERTA -- fila 2 (UI). O painel de cobra |
 | **O312** | O214-COLAB-SINTETICO-COM-HE | ABERTA -- insumo. O codigo do item 2 da  |
 | **O313** | OBRA-INTERROMPIDA-VOLTA-SOZINHA -- o medidor | **FECHADA** 18/10 00:4x. `bin/interrompi |
+| **O314** | COL427-O-DIA-CUSTA-UMA-VEZ-SO | ABERTO |
+| **O315** | ABSURDO-E-REGRA-SO-DA-CLASSE-P | espera corte |
+| **O316** | AS-CINCO-MENORES-DO-ESMERIL | espera corte |
