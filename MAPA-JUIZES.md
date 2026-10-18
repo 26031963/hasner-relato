@@ -95,7 +95,7 @@ _nenhum juiz declarado nesta familia._
 | a premissa do chamado morreu (pode fechar)? | `chamados/catalogo/premissa.py::premissa_morta` |
 | alguma pergunta desta colecao esta viva? | `chamados/juizes.py::fio_vivo` |
 | o chamado e duplicado (mesmo fato)? | `chamados/models.py::ChamadoColaborador.abrir` |
-| o chamado esta vivo (ou cobra alguem)? | `chamados/catalogo/motor.py::VIVOS` |
+| o chamado esta vivo? | `chamados/catalogo/motor.py::VIVOS` |
 | o prazo (SLA) do chamado estourou? | `chamados/catalogo/motor.py::prazo_estourou` |
 | pode transitar de um estado a outro? | `chamados/catalogo/motor.py::decidir` |
 | por que o chamado vivo de furo nao tem pergunta no app? | `chamados/services/pergunta_no_app.py::retencao` |
