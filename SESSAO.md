@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 18/10/2026 00:25:03.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (993.2 MB). Acoes na janela: **1004**.
+**Medido em 18/10/2026 00:30:33.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (993.6 MB). Acoes na janela: **1009**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 00:30:23 | Bash | Write the interrupted-works measurer in the scratchpad and compile it | `cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/interrompidas_estado.py <<'PYEOF' #!/usr/bin/env python3 """QUAL OBRA UM BUG INTERROMPEU, DESDE QUANDO, E QUAL JA DEVIA TER VOLTADO -- o medidor da L-119. Nasce do corte dele de 17/10 23:4x-5x (`OBRA-INTERROMPIDA-VOLTA-SOZINHA`, **L-119**), literal: *"quando um bug P7.1 fura a fila e interrompe uma  ...` |
+| 00:29:26 | Bash | Read item-line regex and module tail | `cd /home/ronald/saas-hasner && sed -n '92,135p' bin/hook_stop_fila1.py && echo '=== tail ===' && tail -20 bin/hook_stop_fila1.py` |
+| 00:29:17 | Bash | Read the hook's header constants and item-line regex | `cd /home/ronald/saas-hasner && sed -n '1,60p' bin/hook_stop_fila1.py && echo '=== re ===' && /bin/grep -n '_linha_de_item_re\\|^BACKLOG\\|^RAIZ\\|_FECHADO =\\|_NAO_ANDA =' bin/hook_stop_fila1.py \| head -30` |
+| 00:28:58 | Bash | Read the measurer template and its read-only consumer block | `cd /home/ronald/saas-hasner && cat bin/raias_estado.py && echo ===== && sed -n '195,235p' bin/gerar_estado.py` |
+| 00:25:04 | Bash | Read the queue hook's marker and state readers | `cd /home/ronald/saas-hasner && sed -n '150,245p' bin/hook_stop_fila1.py` |
 | 00:24:49 | Bash | Register the law corte and regenerate the cortes ledger | `python3 - <<'PY' import json p='docs/CORTES.json' d=json.load(open(p,encoding='utf-8')) assert not any(x['id']=='OBRA-INTERROMPIDA-VOLTA-SOZINHA' for x in d) d.append({ "id": "OBRA-INTERROMPIDA-VOLTA-SOZINHA", "quando": "2026-10-17 23:5x", "frase": ("aval Ronald: LEI NOVA, corte meu -- OBRA INTERROMPIDA VOLTA SOZINHA: quando um bug P7.1 fura a fila e " "interrompe uma obra, a obra interrompida e r ...` |
 | 00:24:21 | Bash | Read the cortes state predicates | `cd /home/ronald/saas-hasner && sed -n '31,75p' bin/gerar_cortes.py` |
 | 00:24:15 | Bash | Write the L-119 row into the laws index | `python3 - <<'PY' p='docs/LEIS.md'; t=open(p,encoding='utf-8').read() lei = ("\| **L-119** \| **OBRA INTERROMPIDA VOLTA SOZINHA**: quando um bug **P7.1** fura a fila e interrompe uma obra, a obra " "interrompida e **registrada no BACKLOG** com *\"INTERROMPIDA por `<id>`, falta `<o que>`\"* e **volta AUTOMATICAMENTE ao topo " "da ORDEM-VIVA assim que o bug pousa**, sem esperar pedido dele; o **ESTAD ...` |
