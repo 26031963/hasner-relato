@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 17/10/2026 22:53:33.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (988.3 MB). Acoes na janela: **799**.
+**Medido em 17/10/2026 22:59:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (988.4 MB). Acoes na janela: **802**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 22:57:29 | Bash | Compare the prod HE-pending days against the sombra prevision set | `cd /home/ronald/saas-hasner && python3 - <<'PY' import ast, json, re log = open('logs/o271p/antes.log', encoding='utf-8').read() prod = {} for m in re.finditer(r"portao ANTES emp(\d+) .*?he_trava_dias=(\[.*?\]) universo=(\d+)", log, re.S): prod[m.group(1)] = (set(map(tuple, ast.literal_eval(m.group(2)))), int(m.group(3))) som = json.load(open('logs/o271c/o271c_previsao.json'))['portao_antes'] for  ...` |
+| 22:55:58 | Bash | Wait for the last empresa and read the summary | `cd /home/ronald/saas-hasner && until /bin/grep -q 'O271P_ANTES_OK\\|Traceback' logs/o271p/antes.log; do sleep 15; done; date +'%H:%M:%S'; /bin/grep -E 'portao ANTES emp4\|SOMA\|O271P_ANTES_OK' logs/o271p/antes.log \| cut -c1-400` |
+| 22:55:17 | Bash | Check probe progress and container CPU | `cd /home/ronald/saas-hasner && tail -6 logs/o271p/antes.log; date +'%H:%M:%S'; docker stats --no-stream --format '{{.Name}} {{.CPUPerc}} {{.MemUsage}}' 2>/dev/null \| head -8` |
 | 22:45:13 | Bash | Wait for the ANTES probe to finish | `cd /home/ronald/saas-hasner && i=0; until /bin/grep -q 'O271P_ANTES_OK\\|Traceback' logs/o271p/antes.log \|\| [ $i -ge 36 ]; do sleep 20; i=$((i+1)); done; echo "voltas=$i $(date +'%H:%M:%S')"; tail -12 logs/o271p/antes.log` |
 | 22:45:03 | Bash | Write the idempotent pauta script for the two named colabs | `cd /home/ronald/saas-hasner && cat > logs/o271p/pauta_conferir.py <<'PY' # O271P -- AS DUAS LINHAS QUE O `!` NOMEIA ENTRAM NA LISTA DO ADMIN. # Ordem dele (17/10 ~22:2x): *"as 96,00 h de falta do col699 e as 45,00 h do col697 podem gravar; os dois # entram na lista do admin para conferir no espelho antes do export de 21/10"*. # # ESCRITOR UNICO, NAO LISTA NOVA (LEI-AKITA 1 e 12): a lista do admin  ...` |
 | 22:44:33 | Bash | Check probe progress and read the esmeril pauta emitter | `cd /home/ronald/saas-hasner && tail -5 logs/o271p/antes.log; echo "--- $(date +'%H:%M:%S') ---"; cd app && sed -n '1,45p' ponto/services/pautas_do_esmeril.py` |
