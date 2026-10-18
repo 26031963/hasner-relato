@@ -5,7 +5,7 @@ a raspagem usa a lista de nomes do banco como autoridade, nunca regex adivinhada
 `colNNN`/`ecNNN` ficam, porque nao identificam ninguem fora desta casa. Obra FEITA sai desta
 lista — ela e o que esta EM PE._
 
-**315 obras abertas.**
+**316 obras abertas.**
 
 | ID | obra | estado |
 |---|---|---|
@@ -313,7 +313,7 @@ lista — ela e o que esta EM PE._
 | **O303** | NENHUM SELO DIZ O INVARIANTE QUE FAZ O PORTAO `sem_carimbo` SER SEGURO | registrada |
 | **O304** | A COPIA DO PAR DUPLICADO CHEGA DUAS VEZES A PONTUALIDADE, E O TETO LIMITA MAS NAO COLAPSA | espera `!` |
 | **O305** | CITACAO DE OFFSET MINHA APONTANDO PARA OUTRA FUNCAO | registrada |
-| **O306** | BUG-RESPOSTA-NAO-PERSISTE | **NO AR** 18/10 (neste push): cura na OR |
+| **O306** | BUG-RESPOSTA-NAO-PERSISTE | espera corte |
 | **O307** | O284A-PEDIDO-DEPOIS-DE-CONCLUIDO | **FECHADA -- NO AR** (comboio 18/10 03:3 |
 | **O308** | O207-TELA-LE-O-VINCULO | ABERTA -- fila 2 (UI), e em 18/10 a ORIG |
 | **O309** | O223-AVISO-DO-EMPATE | **FECHADA -- NO AR** (comboio 18/10 03:3 |
@@ -324,3 +324,4 @@ lista — ela e o que esta EM PE._
 | **O314** | COL427-O-DIA-CUSTA-UMA-VEZ-SO | ABERTO |
 | **O315** | ABSURDO-E-REGRA-SO-DA-CLASSE-P | espera corte |
 | **O316** | AS-CINCO-MENORES-DO-ESMERIL | espera corte |
+| **O317** | O306-PASSIVO-ENTRA-PELA-PORTA | espera corte |
