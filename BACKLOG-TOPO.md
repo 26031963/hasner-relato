@@ -320,4 +320,4 @@ lista — ela e o que esta EM PE._
 | **O310** | O256-E4-FALTA-O-RAIO-X | ABERTA -- fila 2 (UI). A E4 volta para c |
 | **O311** | O206-PUSH-NATIVO-E-COBRANCA-DE-DISPUTA | ABERTA -- fila 2 (UI). O painel de cobra |
 | **O312** | O214-COLAB-SINTETICO-COM-HE | ABERTA -- insumo. O codigo do item 2 da  |
-| **O313** | OBRA-INTERROMPIDA-VOLTA-SOZINHA -- o medidor | **ABERTA** -- a lei esta numerada e as 2 |
+| **O313** | OBRA-INTERROMPIDA-VOLTA-SOZINHA -- o medidor | **FECHADA** 18/10 00:4x. `bin/interrompi |
