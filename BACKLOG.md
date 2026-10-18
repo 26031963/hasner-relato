@@ -4,7 +4,14 @@
 >
 > **livre** = pode virar fatia agora, sem humano. **corte/aval/smoke/dinheiro-ate-export** = tem dono humano e espera.
 
-<!-- ORDEM-VIVA-TOPO: O318 -->
+<!-- ORDEM-VIVA-TOPO: O317 -->
+<!-- MOVIDO em 18/10 ~13:3x pelo Code, AUTONOMIA-DE-CODIGO item 1 (ordem e encaixe na fila
+     quando quem decide e DEPENDENCIA DE CODIGO -- nunca foi pergunta de lei): a O318 esta NO AR
+     neste push, e o proximo do aval dele e o SMOKE DAS RESPOSTAS NOVAS (O319). Mas a O319 nao
+     e o topo porque a propria celula dela declara a dependencia, e o aval tambem: *"O plantio
+     dos 1.019 roda ANTES do novo smoke"*. Entao o marcador vai para a **O317**, que e esse
+     plantio -- ABERTA, nada construido, e nao espera resposta de ninguem. A O319 anda atras
+     dela, e o aviso ao Fernando sai quando as duas pousarem (palavras dele, complemento 11:3x). -->
 <!-- MOVIDO em 15/10 ~16:0x pelo Code, AUTONOMIA-DE-CODIGO item 1 (ordem e encaixe na fila
      quando quem decide e DEPENDENCIA -- nunca foi pergunta de lei): o O140 pousou o CAMPO
      (Marco B) e o que RESTA dele sao os 5 LEITORES, que esperam o `!` do backfill da 09
