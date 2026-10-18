@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 18/10/2026 08:00:46.**
+**Medido em 18/10/2026 08:05:46.**
 
 | | |
 |---|---|
@@ -29,37 +29,37 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2542.2 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2542.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **310.7 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **310.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
   - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **124.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio18** (`comboio-20261018`) -- **SEM AGENTE**
-  - 2 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **6.4 h** (passou das 6 h da L-105)
+  - 2 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **6.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio18.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **426.8 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **426.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-folha10** (`raia-folha10`) -- **agente vivo**: O140 backfill do furo na 09 (preparo do apply, sem aplicar) + selo do carimbo que o esmeril registrou + conferencia da O271, por agente-raia-C, desde 2026-10-18T00:05:14-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: VERDE e PRONTA PARA POUSO: arvore certificada bcf58258 -- suite --dir wt-folha10 --only 'folha ponto' deu OK (skipped=7, expected failures=12) / Ran 4355 em 421s / rc 0 (logs/o140c_suite_folha_ponto.log, 18/10 01:01-01:08); nenhum .py tocado depois do veredito. Falta SO o POUSO (do dono da sessao) + as linhas de app/docs em logs/o140c/LINHAS_PARA_DOCS.txt. O apply da 09 NAO entra no pouso: bloqueado por bug provado em fechamento.py:354-378 (arquivo da raia wt-o48p3)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **331.0 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **331.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o275** (`raia-o275`) -- **SEM AGENTE**
-  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **60.2 h** (passou das 6 h da L-105)
+  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **60.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-o275.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **448.7 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **448.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-serie** (`raia-serie`) -- **agente vivo**: O263 + O276 (serie: motor_calculo_v2.py), por agente-raia-E, desde 2026-10-17T23:58:00-03:00
   - 2 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **7.8 h** (passou das 6 h da L-105)
@@ -68,7 +68,7 @@ RELATO, com a lista de nomes do banco como autoridade._
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: 4 commits (O307 5b37100b, O309 dd7beaad+6bd163b3, O310 14a34256); suite core/folha/colaboradores/relatorios VERDE em 6bd163b3 (Ran 3020, OK skipped=21, rc 0); falta POUSO (dono) + linhas de TICKETS/fila que eu nao escrevo (L-106)
 - **wt-v3-pouso** (`pouso-v3-20261016`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 4 arquivo(s) sujo(s), commit a frente ha **43.6 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 4 arquivo(s) sujo(s), commit a frente ha **43.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-v3-pouso.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **22 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o306, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
@@ -78,8 +78,8 @@ RELATO, com a lista de nomes do banco como autoridade._
 
 ## Obras interrompidas (L-119)
 
-- **O261** -- interrompida por `BUG-LINHA-X-BADGE`, desde **13/10 15:37** (112.4 h) -- **VOLTOU**: e o topo da ORDEM VIVA
-- **O280** -- interrompida por `O306`, desde **17/10 23:36** (8.4 h) -- **AINDA FORA DA ORDEM VIVA**
+- **O261** -- interrompida por `BUG-LINHA-X-BADGE`, desde **13/10 15:37** (112.5 h) -- **VOLTOU**: e o topo da ORDEM VIVA
+- **O280** -- interrompida por `O306`, desde **17/10 23:36** (8.5 h) -- **AINDA FORA DA ORDEM VIVA**
   - falta: 7 oraculos da 09, 5 perguntas de lei.
 
 **interrompidas_mais_de_24h: 0** (esperado 0) -- abertas: 1 de 2 registradas; topo da ORDEM VIVA: `O261`
@@ -189,41 +189,41 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  ┌────────────────────────────────────┬─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+  │                ato                 │                                                                prova                                                                │
+  ├────────────────────────────────────┼─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ commit                             │ 17299781 — 7 arquivos, 324 insercoes                                                                                                │
+  ├────────────────────────────────────┼─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ suite da arvore certificada        │ Ran 11284 tests in 919.312s / OK (skipped=42, expected failures=12) / rc 0                                                          │
+  ├────────────────────────────────────┼─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ selos de host na arvore VIVA       │ 73 VERDE / 0 VERMELHO ($S/o261_selos_pos.log)                                                                                       │
+  ├────────────────────────────────────┼─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ cmp copia x arvore no ato do       │ 5/5 IGUAL, HEAD da copia == HEAD vivo (f8af6aae)                                                                                    │
+  │ commit                             │                                                                                                                                     │
+  ├────────────────────────────────────┼─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ deploy                             │ bin/deploy.sh --sem-migrate rc 0 — 3 cascas reiniciadas juntas, 3 rotas provadas, importerror_500=0, selo BUG 128 verde             │
+  ├────────────────────────────────────┼─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ push (um por MARCO)                │ fc390635..17299781  main -> main, exit=0; suite do pre-push Ran 11284 / OK + control-plane Ran 22 / OK; origin/main == HEAD, 0 a    │
+  │                                    │ frente                                                                                                                              │
+  ├────────────────────────────────────┼─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ handoff (L-108)                    │ app/docs/HANDOFF-SESSAO.md reescrito, 42 linhas (teto 60)                                                                           │
+  └────────────────────────────────────┴─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 
-● Task "Run the full suite against the build copy" still running in background
+  Esmeril deste marco (ESMERIL-DO-MARCO): 0 orfaos. Todo helper do bloco movido segue com chamador de producao (_fio_vivo 3 sitios, ressuscitar_perguntas 14 arquivos,
+  perguntas_que_resolvem 16); a redacao velha do _C1 sobrevive so como lapide/prosa (core/juizes.py:101, docstring do teste, celula do BACKLOG) — nenhuma segunda copia do
+  predicado.
 
-● Background command "Re-run host selos with output to a log" completed (exit code 0)
+  Achado FORA do marco, nao perseguido agora: parado_citado_em_commit_posterior=1 no topo do TICKETS e pre-existente — e o parado TROCA-DE-PLANTAO (O10, 21/09) citado por 7
+  commits de 23-27/09 que explicam o corte. Medido com a janela REAL do gerador (--since='60 days ago', 2.950 commits): nenhum commit meu entra. Vira uma linha de fila no commit
+  do proximo marco (L-106), nao trabalho agora.
 
-  Ran 12 shell commands
+● O261 ESCRITA: 11284 tests OK, 73 selos verde, deployed, pushed
+  ⎿  $ /bin/grep -n 'data_turno' chamados/models.py | head -3; echo "=== como o cartorio monta a lista de chamados do dia:"; /bin/grep -n -B2 -A6 'lista = '
+     ponto/services/cartorio.py | sed -n '1,30p'
 
-● Background command "Run the full suite against the build copy" completed (exit code 0)
-
-● Background command "Wait for the suite verdict" completed (exit code 0)
-
-  Ran 27 shell commands
-  ⎿  Read docs/AVAIS.md (21 lines)
-  ⎿  Referenced file ../../wt-o306/app/config/crons.py
-  ⎿  Read ../../wt-o306/app/chamados/management/commands/vigiar_carimbo_sem_registro.py (79 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bp2mojk94.output (3 lines)
-  ⎿  Referenced file ../../wt-o306/app/core/contratos_estruturais.py
-
-● Task "Measure the whole public history with the cured predicate" still running in background
-
-● Background command "Run the host selo folder on the live tree" failed with exit code 1
-
-  Committed 17299781, ran 24 shell commands
-
-● Background command "Push the marco to the remote through the pre-push gate" completed (exit code 0)
-
-● Background command "Wait for the push verdict in its log" completed (exit code 0)
-
-  Ran 4 shell commands
-
-  Advising using Fable 5.1
-
-· Synthesizing… (15h 10m 4s · ↓ 1.5m tokens)
+· Synthesizing… (15h 15m 4s · ↓ 1.5m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                                         ✔ Update installed · Restart to update
+                                                                                                                                                          4% until auto-compact
 ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
