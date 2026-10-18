@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 18/10/2026 16:00:46.**
+**Medido em 18/10/2026 16:05:46.**
 
 | | |
 |---|---|
@@ -29,40 +29,40 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2550.2 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2550.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **318.7 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **318.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
   - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **132.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio-v3** (`comboio-v3-20261018`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **0.8 h**
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **0.9 h**
   - sem declaracao em `logs/raias/wt-comboio-v3.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio18** (`comboio-20261018`) -- **SEM AGENTE**
-  - 2 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **14.4 h** (passou das 6 h da L-105)
+  - 2 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **14.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio18.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **434.8 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **434.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-folha10** (`raia-folha10`) -- **agente vivo**: O140 backfill do furo na 09 (preparo do apply, sem aplicar) + selo do carimbo que o esmeril registrou + conferencia da O271, por agente-raia-C, desde 2026-10-18T00:05:14-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: VERDE e PRONTA PARA POUSO: arvore certificada bcf58258 -- suite --dir wt-folha10 --only 'folha ponto' deu OK (skipped=7, expected failures=12) / Ran 4355 em 421s / rc 0 (logs/o140c_suite_folha_ponto.log, 18/10 01:01-01:08); nenhum .py tocado depois do veredito. Falta SO o POUSO (do dono da sessao) + as linhas de app/docs em logs/o140c/LINHAS_PARA_DOCS.txt. O apply da 09 NAO entra no pouso: bloqueado por bug provado em fechamento.py:354-378 (arquivo da raia wt-o48p3)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **339.0 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **339.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o275** (`raia-o275`) -- **SEM AGENTE**
-  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **68.2 h** (passou das 6 h da L-105)
+  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **68.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-o275.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **456.7 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **456.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-serie** (`raia-serie`) -- **agente vivo**: O263 + O276 (serie: motor_calculo_v2.py), por agente-raia-E, desde 2026-10-17T23:58:00-03:00
   - 2 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **15.8 h** (passou das 6 h da L-105)
@@ -71,7 +71,7 @@ RELATO, com a lista de nomes do banco como autoridade._
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: 4 commits (O307 5b37100b, O309 dd7beaad+6bd163b3, O310 14a34256); suite core/folha/colaboradores/relatorios VERDE em 6bd163b3 (Ran 3020, OK skipped=21, rc 0); falta POUSO (dono) + linhas de TICKETS/fila que eu nao escrevo (L-106)
 - **wt-v3-pouso** (`pouso-v3-20261016`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 4 arquivo(s) sujo(s), commit a frente ha **51.6 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 4 arquivo(s) sujo(s), commit a frente ha **51.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-v3-pouso.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **23 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o306, wt-o37, wt-orfa, wt-regua, wt-sj, wt-v3, wt-vinculo
 
@@ -187,19 +187,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● The push was rejected — the régua blocked it (exit 0 was the launcher's rc, not the push's; the remote is still at 825e9b2f). Reading the full veredito and the named cure:
-
-  Ran 1 shell command
-
-● One alarm, with its own declared cure. Running it:
-
-  Committed c36d0d48, ran 7 shell commands
-
-● Everything the service needs is now read from the live code — notably that _materializar_uma overwrites materializada_em/via_resolucao on success, so the lote never has to
-  touch the false carimbo itself. Before writing it:
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
   Ran 4 shell commands
 
@@ -214,17 +201,30 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Now the command half, with the TXT-de-retificação decision recorded in the code itself:
 
-● Running 1 shell command…
+  Read 1 file, ran 5 shell commands
 
-· Synthesizing… (23h 10m 4s · ↓ 2.3m tokens)
+● Ruff clean on all four files. Drafting the RELATO marco section into the scratchpad (no writes to the main tree while the push's régua measures it):
+
+  Ran 1 shell command
+
+● 25 is the teto (L-116) and I drafted 39 — the history belongs in the commit bodies, which already carry it. Cutting:
+
+  Reading 1 file, running 3 shell commands · 2m 24s…
+  ⎿  $ O=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b5d7256mm.output
+     until /bin/grep -q "=== REMOTO depois ===" "$O" 2>/dev/null; do sleep 30; done
+     echo "=== fim do push ==="; tail -22 "$O"
+     cd /home/ronald/saas-hasner; echo "remoto AGORA: $(git ls-remote ori… (2m 24s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+· Synthesizing… (23h 15m 4s · ↓ 2.3m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                                         ✔ Update installed · Restart to update
+                                                                                                                                                          1% until auto-compact
 ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ general-purpose  Inspecting commit stats for e3285b37 and bed515b7                                                                                33m 55s · ↓ 159.9k tokens
+  ◯ general-purpose  Inspecting commit stats for e3285b37 and bed515b7                                                                                38m 56s · ↓ 159.9k tokens
   ⧉  index
 ```
