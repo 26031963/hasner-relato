@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 18/10/2026 13:24:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1031.2 MB). Acoes na janela: **1472**.
+**Medido em 18/10/2026 13:30:04.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1031.2 MB). Acoes na janela: **1468**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 13:24:41 | Bash | Run the doc-reading Django selos on the live tree | `cd /home/ronald/saas-hasner && bash bin/suite.sh --espera 900 --only "core.tests.test_no_relato_tem_secao_pinada ponto.tests.test_tela_gestao_he_fatia2_lote_limite core.tests.test_selo_pendentes_so_decisao chamados.tests.test_contract_crons core.tests.test_selo_teste_sem_relogio" > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/o318/logs/docreaders.lo ...` |
 | 13:24:32 | Bash | Read the suite entrypoint usage | `cd /home/ronald/saas-hasner && sed -n '1,60p' bin/suite.sh` |
 | 13:21:45 | Bash | Re-run the host selo folder | `cd /home/ronald/saas-hasner && fail=0; for t in bin/tests/test_*.sh; do out=$(bash $t 2>&1); rc=$?; [ $rc -ne 0 ] && { echo "VERMELHO rc=$rc $t"; fail=$((fail+1)); }; done; echo "host selos: vermelhos=$fail"` |
 | 13:21:37 | Bash | Move the ordem-viva marker and re-run its selo | `cd /home/ronald/saas-hasner && cp -p app/docs/BACKLOG.md /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/BACKLOG.md.pre_marcador && python3 - <<'PY' import io p='app/docs/BACKLOG.md' s=open(p,encoding='utf-8').read() old='<!-- ORDEM-VIVA-TOPO: O318 -->\n' assert s.count(old)==1, s.count(old) novo=('<!-- ORDEM-VIVA-TOPO: O317 -->\n' '<!-- MOVIDO em 18/1 ...` |
@@ -1477,8 +1478,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 01:30:31 | Bash | Locate the planting writer | `ls chamados/services/ \| head -40; echo "=== quem escreve 'nasce da pergunta' ==="; git grep -n "nasce da pergunta" -- chamados/ ponto/ \| head` |
 | 01:30:24 | Bash | Push the closed marco to the remote | `cd /home/ronald/saas-hasner && git push origin main > /home/ronald/saas-hasner/logs/push_077ffaa4.log 2>&1; echo "rc=$?"; tail -5 logs/push_077ffaa4.log` |
 | 01:30:17 | Bash | Check what is ahead of the remote and whether scheduled jobs are running | `cd /home/ronald/saas-hasner && git fetch -q origin 2>&1 \| tail -2; echo "origin/main..HEAD:"; git log --oneline origin/main..HEAD; echo "=== crons em curso ==="; ls -1 logs/crons_em_curso/ 2>/dev/null \| head; echo "(fim)"` |
-| 01:29:11 | Bash | Re-run the protected-site seal now | `cd /home/ronald/saas-hasner && bash bin/tests/test_lei_protege_sitio.sh 2>&1 \| tail -20; echo "rc=$?"` |
-| 01:28:58 | Bash | Read the rest of the protected-site seal | `cd /home/ronald/saas-hasner && sed -n '60,200p' bin/tests/test_lei_protege_sitio.sh` |
-| 01:28:49 | Bash | Check the measurer across HEAD and remote | `cd /home/ronald/saas-hasner && for r in HEAD origin/main; do echo "== $r"; git show $r:bin/interrompidas_estado.py 2>&1 \| /bin/grep -n "^def ler" \|\| echo " (sem def ler / sem arquivo)"; done; echo "=== diff index x HEAD ==="; git diff --cached --stat; git diff --stat -- bin/interrompidas_estado.py` |
-| 01:28:42 | Bash | Check whether the measurer file is tracked and what function names it defines | `cd /home/ronald/saas-hasner && git ls-files bin/interrompidas_estado.py bin/tests/test_interrompidas_estado.sh; echo "--- rc=$? ---"; echo "=== funcoes def no arquivo ==="; /bin/grep -n "^def \\|^ def " bin/interrompidas_estado.py; echo "=== o que o selo cobra ==="; sed -n '1,60p' bin/tests/test_lei_protege_sitio.sh` |
-| 01:28:35 | Bash | Inspect the red host seal about the new law's protected site | `cd /home/ronald/saas-hasner && /bin/grep -n "L-119" app/docs/LEIS.md \| head -5; echo "=== bin/interrompidas* ==="; ls -la bin/ \| /bin/grep -i interromp; echo "=== quem tem 'interrompidas' ==="; git grep -ln "interrompidas" -- bin/ app/ \| head -20` |
