@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:113 AFIRMA ato sem PROVA ao lado -- **O MARCO DA O261 FECHOU E ESTA NO AR E NO REMOTO** -- `9a45149c`, `c52ad20a..9a45149c`, `push_rc=0`, pre-push `Ran 11293 / OK (skipped=42, 
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:119 AFIRMA ato sem PROVA ao lado -- **O MARCO DA O261 FECHOU E ESTA NO AR E NO REMOTO** -- `9a45149c`, `c52ad20a..9a45149c`, `push_rc=0`, pre-push `Ran 11293 / OK (skipped=42, 
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 18/10/2026 19:25:46.**
+**Medido em 18/10/2026 19:30:46.**
 
 | | |
 |---|---|
@@ -35,16 +35,16 @@ RELATO, com a lista de nomes do banco como autoridade._
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **322.1 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **322.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **135.4 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **135.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio-v3** (`comboio-v3-20261018`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **4.2 h**
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **4.3 h**
   - sem declaracao em `logs/raias/wt-comboio-v3.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio18** (`comboio-20261018`) -- **SEM AGENTE**
-  - 2 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **17.8 h** (passou das 6 h da L-105)
+  - 2 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **17.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio18.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
   - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **438.3 h** (passou das 6 h da L-105)
@@ -53,7 +53,7 @@ RELATO, com a lista de nomes do banco como autoridade._
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: VERDE e PRONTA PARA POUSO: arvore certificada bcf58258 -- suite --dir wt-folha10 --only 'folha ponto' deu OK (skipped=7, expected failures=12) / Ran 4355 em 421s / rc 0 (logs/o140c_suite_folha_ponto.log, 18/10 01:01-01:08); nenhum .py tocado depois do veredito. Falta SO o POUSO (do dono da sessao) + as linhas de app/docs em logs/o140c/LINHAS_PARA_DOCS.txt. O apply da 09 NAO entra no pouso: bloqueado por bug provado em fechamento.py:354-378 (arquivo da raia wt-o48p3)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **342.4 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **342.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o275** (`raia-o275`) -- **SEM AGENTE**
   - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **71.7 h** (passou das 6 h da L-105)
@@ -62,19 +62,19 @@ RELATO, com a lista de nomes do banco como autoridade._
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **460.1 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **460.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-serie** (`raia-serie`) -- **agente vivo**: O263 + O276 (serie: motor_calculo_v2.py), por agente-raia-E, desde 2026-10-17T23:58:00-03:00
-  - 2 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **19.2 h** (passou das 6 h da L-105)
+  - 2 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **19.3 h** (passou das 6 h da L-105)
   - falta para pousar: medir O276 pela funcao real; motor em LEITURA (aval O280)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI do smoke do Fernando: O307 texto do lote, O308 fase 12x36, O309 empate->piso, O310 'O que fazer' na aba Espelho, por raia D (agente de sessao), desde 2026-10-18T00:09:33-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: 4 commits (O307 5b37100b, O309 dd7beaad+6bd163b3, O310 14a34256); suite core/folha/colaboradores/relatorios VERDE em 6bd163b3 (Ran 3020, OK skipped=21, rc 0); falta POUSO (dono) + linhas de TICKETS/fila que eu nao escrevo (L-106)
 - **wt-v3** (`raia-v3`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2.7 h**
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2.8 h**
   - sem declaracao em `logs/raias/wt-v3.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-v3-pouso** (`pouso-v3-20261016`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 4 arquivo(s) sujo(s), commit a frente ha **55.0 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 4 arquivo(s) sujo(s), commit a frente ha **55.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-v3-pouso.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **23 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o306, wt-o316, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
@@ -197,41 +197,41 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+  │ canônica (8 tokens)                 │ sem_lampada=8 │ sem_lampada=8 ← a cura invisível │
+  ├─────────────────────────────────────┼───────────────┼──────────────────────────────────┤
+  │ canônica + fato_do_marco_no_espelho │ 8             │ 7                                │
+  └─────────────────────────────────────┴───────────────┴──────────────────────────────────┘
 
-  Ran 14 shell commands
+  O token novo não afrouxa nada: no HEAD não absolve um único sítio, e na cópia absolve exatamente o curado (_materializar_resposta_hora). pergunta_viva e
+  _pergunta_materializada_de_fato ficaram fora da lista com o motivo escrito (retornam antes de chegar à célula para justamente estas perguntas).
 
-● Background command "Run the full suite against the O317 copy" completed (exit code 0)
+  2. A recusa Security Test Removal está declarada, não escondida — parágrafo novo em logs/o317/CURA_DO_RED_18-10.md e no corpo do commit, com a prova por AST de que foi
+  endereço movido (cobertura líquida igual, isenções vivas no mesmo número) e a frase de reversão: duas linhas de allowlist, sem tocar produção. Escrevi Security Test Removal
+  sem colchetes de propósito — o regex do regua_tickets casaria [Security Test Removal] como citação de fatia.
 
-  Ran 53 shell commands
-  ⎿  Read docs/AVAIS.md (18 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bh0e5jovk.output (43 lines)
-  ⎿  Referenced file ../logs/o261/MEDIDA_noite_18-10.md
-  ⎿  Referenced file ponto/tests/test_a2_precedencia.py
-  ⎿  Read ../../.claude/projects/-home-ronald-saas-hasner/memory/vizinho-de-arquivo-novo-e-o-contrato-que-enumera.md (40 lines)
+  3. O escopo do pouso não se digita mais. A lista a mão tinha 10 caminhos; a derivação (escopo_o317.sh, cópia × blob do HEAD) devolve 12 — os dois testes curados pelo RED
+  entraram. pouso_o317.sh agora chama a derivação e PARA se algum alvo na árvore viva estiver diferente do HEAD.
 
-● Task "Measure the whole public history with the cured predicate" still running in background
+  4. msg_o317.txt reescrito: origem= nomeia os dois sítios, RED= cita os três logs (incluindo INVERSAO_guarda_paridade_18-10.log, que faltava para a segunda inversão),
+  quem-mais-le= cobre os consumidores de classificar(). Corrigi uma aritmética errada minha: os que não têm marco aceso são 53 (37 apagados + 16 sem dizer), não 53+16.
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+  5. Decisão de pista escrita ANTES de copiar arquivo — e a primeira redação dela estava ao contrário, então ficou o fato medido: os chamadores de produção da porta são caminho
+  de request (validacao.py:312, fio.py:654, acoes_disputa.py:112, mais o receiver de disputa fechada), logo até o HUP das 03:30 a validação do admin segue carimbando a via cega
+  enquanto os comandos da corrente da manhã, em docker exec novo, já recusam. Estado misto existe, é limitado, e tem medida marcada para depois do HUP.
 
-  Ran 29 shell commands
-  ⎿  Read docs/AVAIS.md (18 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bh0e5jovk.output (43 lines)
-  ⎿  Referenced file ../logs/o261/MEDIDA_noite_18-10.md
-  ⎿  Referenced file ponto/tests/test_a2_precedencia.py
-  ⎿  Read ../../.claude/projects/-home-ronald-saas-hasner/memory/vizinho-de-arquivo-novo-e-o-contrato-que-enumera.md (40 lines)
+  Seção do RELATO em 25 linhas (teto da L-116), com os três placeholders de veredito. Suíte em curso: 1.808 linhas, grep -cE '^(FAIL|ERROR):' = 0 até agora. Nenhum .py foi
+  editado desde o lançamento.
 
-● Task "Measure the whole public history with the cured predicate" still running in background
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: O261 -- BUG-FIO-MORTO-CHAMADO (aval dele 12/10 20:2x, P7.1 -- bug PROVADO POR ELE, fura a fila; id novo por ordem lite
 
-● Task "Launch the full suite on the corrected copy" still running in background
+  Seeing how the ESTADO generator gets its numbers
+  ⎿  $ cd /home/ronald/saas-hasner && grep -n -E 'json|placar|open\(|docker|manage.py' bin/gerar_estado.py | head -40
 
-  Advising using Fable 5.1
-
-· Synthesizing… (1d 2h 35m · ↓ 2.7m tokens)
+· Compacting conversation… (1d 2h 40m · ↓ 2.7m tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 54%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                                                          9% until auto-compact
+                                                                                                                                                          0% until auto-compact
 ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
