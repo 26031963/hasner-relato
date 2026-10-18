@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:957 AFIRMA ato sem PROVA ao lado -- - **NO AR, e o ato fechou inteiro**: commit `8c545a89` (merge `--no-ff`) e `bin/deploy.sh` **sem** `--sem-migrate` rc **0** as 18:12 -- `rel
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:1562 AFIRMA ato sem PROVA ao lado -- | **LEITURA-LITERAL-DO-CARIMBO** | 2026-10-12 19:5x | 124 h | CUMPRIDO SEM UMA LINHA DE CODIGO, e isso se MEDE: ele carimba exatamente o que
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 18/10/2026 00:50:57.**
+**Medido em 18/10/2026 00:56:02.**
 
 | | |
 |---|---|
@@ -29,7 +29,7 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2535.1 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2535.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
@@ -38,34 +38,34 @@ RELATO, com a lista de nomes do banco como autoridade._
   - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **303.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **116.8 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **116.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **419.7 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **419.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-folha10** (`raia-folha10`) -- **agente vivo**: O140 backfill do furo na 09 (preparo do apply, sem aplicar) + selo do carimbo que o esmeril registrou + conferencia da O271, por agente-raia-C, desde 2026-10-18T00:05:14-03:00
-  - 0 commit(s) a frente do `main`, 4 arquivo(s) sujo(s)
+  - 1 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **0.1 h**
   - falta para pousar: ANTES de prod com o predicado novo, DRY na sombra, selo RED+cura, suite verde; o POUSO e do dono da sessao (L-105/L-107)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **323.8 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **323.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o275** (`raia-o275`) -- **SEM AGENTE**
-  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **53.1 h** (passou das 6 h da L-105)
+  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **53.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-o275.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **441.5 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **441.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-serie** (`raia-serie`) -- **agente vivo**: O263 + O276 (serie: motor_calculo_v2.py), por agente-raia-E, desde 2026-10-17T23:58:00-03:00
-  - 2 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **0.6 h**
+  - 2 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **0.7 h**
   - falta para pousar: medir O276 pela funcao real; motor em LEITURA (aval O280)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI do smoke do Fernando: O307 texto do lote, O308 fase 12x36, O309 empate->piso, O310 'O que fazer' na aba Espelho, por raia D (agente de sessao), desde 2026-10-18T00:09:33-03:00
-  - 3 commit(s) a frente do `main`, 4 arquivo(s) sujo(s), commit a frente ha **0.2 h**
-  - falta para pousar: RED por item + suite core/folha/colaboradores/relatorios; pouso e do dono da sessao
+  - 4 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **0.1 h**
+  - falta para pousar: 4 commits em raia-ui (O307 5b37100b, O309 dd7beaad + 6bd163b3, O310 14a34256); suite core/folha/colaboradores/relatorios VERDE em 14a34256 (3019 OK) e rodando de novo em 6bd163b3; falta o POUSO (do dono) + linhas de TICKETS e de FILA que eu nao escrevo (L-106)
 - **wt-v3-pouso** (`pouso-v3-20261016`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 4 arquivo(s) sujo(s), commit a frente ha **36.4 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 4 arquivo(s) sujo(s), commit a frente ha **36.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-v3-pouso.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **21 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
@@ -75,9 +75,9 @@ RELATO, com a lista de nomes do banco como autoridade._
 
 ## Obras interrompidas (L-119)
 
-- **O261** -- interrompida por `BUG-LINHA-X-BADGE`, desde **13/10 15:37** (105.2 h) -- **VOLTOU**: FUNDIDA com o topo `O306`
+- **O261** -- interrompida por `BUG-LINHA-X-BADGE`, desde **13/10 15:37** (105.3 h) -- **VOLTOU**: FUNDIDA com o topo `O306`
   - falta: cartorio.py:1012/:1066/:1072 + _C1, allowlist 0.
-- **O280** -- interrompida por `O306`, desde **17/10 23:36** (1.2 h) -- **AINDA FORA DA ORDEM VIVA**
+- **O280** -- interrompida por `O306`, desde **17/10 23:36** (1.3 h) -- **AINDA FORA DA ORDEM VIVA**
   - falta: 7 oraculos da 09, 5 perguntas de lei.
 
 **interrompidas_mais_de_24h: 0** (esperado 0) -- abertas: 1 de 2 registradas; topo da ORDEM VIVA: `O306`
@@ -96,7 +96,11 @@ e118c5ba [O280] o caso B-I28 da bateria pela LEI nasce PINADO: o par da CAUDA qu
 
 ```
  M app/config/crons_duracao.json
+ M app/docs/AVAIS.md
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/PENDENTES_RONALD.json
+ M app/docs/RELATO-ARQUIVO.md
+ M app/docs/RELATO.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -187,11 +191,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Task "Measure the whole public history with the cured predicate" still running in background
-
-● Background command "Run the whole host-selo folder" completed (exit code 0)
-
-  Read 1 file, ran 12 shell commands
 
 › Message from @a0dedbb918eebbf93 (ctrl+o to expand)
   ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bdhj68bhp.output (7 lines)
@@ -210,21 +209,26 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Agent "Raia E — O263 e O276 em serie" finished · 44m 56s
 
-● Committed 077ffaa4, running 16 shell commands · 2m 40s…
-  ⎿  $ cd /home/ronald/saas-hasner && vermelhos=0; for s in bin/tests/test_*.sh; do if ! out=$(bash "$s" 2>&1); then vermelhos=$((vermelhos+1)); echo "=== VERMELHO: $s"; echo
-     "$out" | tail -4 | sed 's/^/ /'; fi; done; echo "selos vermelhos: $vermelhos de $(ls bin/tests/test_*.sh | wc -l)" (2m 39s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Committed 077ffaa4, ran 33 shell commands
+  ⎿  Resuming agent a0dedbb
+  ⎿  Allowed by auto mode classifier
 
-✽ Synthesizing… (8h 0m 15s · ↓ 769.0k tokens)
+  Ran 1 shell command
+
+● Advising using Fable 5.1
+
+✢ Synthesizing… (8h 5m 20s · ↓ 784.9k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                                         ✔ Update installed · Restart to update
+
+› Message from @a0dedbb918eebbf93 (ctrl+o to expand)
+                                                                                                                                                          4% until auto-compact
 ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell, 1 monitor · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells, 1 monitor · /tasks to see subagents · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ general-purpose  Checking pauta 1067 in Pauta model                                                                                                55m 0s · ↓ 151.4k tokens
-  ◯ general-purpose  Fixing overclaim in test_o223_porta_humana_da_aplicacao.py                                                                        55m 0s · ↓ 124.5k tokens
+  ◯ general-purpose  Checking staticfiles mount from arvore_do_push.sh                                                                               1h 0m 5s · ↓ 161.6k tokens
+  ◯ general-purpose  Polling suite_raia_ui_final.log progress                                                                                        1h 0m 5s · ↓ 145.7k tokens
   ⧉  index
 ```
