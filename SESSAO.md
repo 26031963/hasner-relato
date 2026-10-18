@@ -6,10 +6,21 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 18/10/2026 08:32:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1018.7 MB). Acoes na janela: **1539**.
+**Medido em 18/10/2026 08:38:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1019.2 MB). Acoes na janela: **1550**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 08:38:02 | Bash | Census of writers that clear the materialization stamp | `echo "=== CENSO: quem escreve materializada_em=None (ou limpa o carimbo) ===" && git grep -n "materializada_em=None\\|materializada_em = None\\|materializada_em': None" -- '*.py' \| /bin/grep -v '/tests/'` |
+| 08:37:49 | Bash | Find every caller of the resurrection porta | `echo "=== CHAMADORES de .ressuscitar_perguntas( ===" && git grep -n '\.ressuscitar_perguntas(' -- '*.py' && echo && echo "=== relavra_via contexto ===" && /bin/grep -n -B4 -A6 'ressuscitar_perguntas' chamados/services/relavra_via.py && echo && echo "=== portas.py / censo_escritas / contratos ===" && git grep -n 'ressuscitar_perguntas' -- core/portas.py core/censo_escritas.py core/contratos_estrutu ...` |
+| 08:37:42 | Bash | Census of every site that names the resurrection | `git grep -ln 'ressuscitar_perguntas\\|CARTORIO-RESSUSCITA\\|REABRIR-RESSUSCITA\\|fio_ressuscitadas\\|FIO-RESSUSCITA' -- '*.py' \| sed 's/^/ /'` |
+| 08:37:33 | Bash | Confirm whether the marker reached the ata in main | `/bin/grep -c 'realizado_sem_turno' ponto/services/cartorio.py; echo "cartorio_rc=$?"; echo "--- o que main tem na linha 257-275 (ata_do_dia return):" && sed -n '255,272p' ponto/services/cartorio.py` |
+| 08:37:24 | Bash | Check whether that stale work already landed in main | `echo "--- main tem realizado_sem_turno no cartorio?" && /bin/grep -n 'realizado_sem_turno' ponto/services/cartorio.py \| head -5; echo "rc=$?"; echo "--- e em escala/utils.py?" && /bin/grep -c 'realizado_sem_turno' escala/utils.py; echo "--- commits que mencionam CELULA-TURNO-FECHA em main:" && cd /home/ronald/saas-hasner && git log --oneline --format='%h %ad %s' --date=format:'%d/%m' --grep='CELU ...` |
+| 08:37:07 | Bash | See the stale hunk content | `cd /home/ronald/wt-ct && git diff -- app/ponto/services/cartorio.py \| head -30` |
+| 08:36:59 | Bash | Inspect the modified file in the other worktree | `cd /home/ronald/wt-ct && git diff --stat -- app/ponto/services/cartorio.py && echo "--- mtime:" && stat -c '%y' app/ponto/services/cartorio.py && echo "--- HEAD da raia:" && git log -1 --format='%h %ad %s' --date=format:'%d/%m %H:%M' && echo "--- o arquivo esta igual ao HEAD DELA?" && git diff --numstat -- app/ponto/services/cartorio.py` |
+| 08:36:47 | Bash | Check worktrees for file collision on the two target files | `cd /home/ronald/saas-hasner && git worktree list && echo "=== STATUS POR WORKTREE ===" && for d in $(git worktree list --porcelain \| /bin/grep '^worktree ' \| cut -d' ' -f2); do echo "--- $d"; git -C "$d" status --porcelain \| /bin/grep -E 'chamados/\|ponto/services/cartorio' \|\| echo " (nada em chamados/ ou cartorio)"; done` |
+| 08:34:23 | Bash | Read the marco-in-mirror judge | `sed -n '805,832p' chamados/juizes.py` |
+| 08:34:17 | Bash | Read the tail of the porta and the religador block | `sed -n '800,830p' chamados/models.py && echo "=== CARTORIO RELIGADOR ===" && sed -n '990,1035p' ponto/services/cartorio.py` |
+| 08:34:12 | Bash | Read the resurrection porta live | `sed -n '745,800p' chamados/models.py` |
 | 08:30:13 | Bash | Record the degrau census, the idempotence result and the proven bug | `cd /home/ronald/saas-hasner && cat >> logs/o261/MEDIDA_noite_18-10.md <<'MD' --- # A TERCEIRA RODADA (sombra, 18/10 08:4x) -- `logs/o261_degraus.out` Script `logs/sombra/o261_degraus.py`. Sujeira declarada na 1a linha da saida (4 perguntas do fixture da rodada A + col467 ja relavrado). Censo pela funcao REAL do vigia (`chamados/services/vigia_fio.py::censo`, limite aberto), **210** celulas de fio  ...` |
 | 08:28:33 | Bash | Wait for and read the degrau census output | `cd /home/ronald/saas-hasner && i=0; until [ -s logs/o261_degraus.out ] \|\| [ $i -ge 60 ]; do i=$((i+1)); sleep 15; done; echo "esperas=$i"; cat logs/o261_degraus.out 2>/dev/null \| head -70` |
 | 08:28:25 | Bash | Run the degrau census on the sombra | `cd /home/ronald/saas-hasner && bash bin/sombra.sh --rodar o261_degraus.py o261_degraus` |
