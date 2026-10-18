@@ -314,10 +314,10 @@ lista — ela e o que esta EM PE._
 | **O304** | A COPIA DO PAR DUPLICADO CHEGA DUAS VEZES A PONTUALIDADE, E O TETO LIMITA MAS NAO COLAPSA | espera `!` |
 | **O305** | CITACAO DE OFFSET MINHA APONTANDO PARA OUTRA FUNCAO | registrada |
 | **O306** | BUG-RESPOSTA-NAO-PERSISTE | **ABERTA -- ORDEM VIVA** desde 17/10 23: |
-| **O307** | O284A-PEDIDO-DEPOIS-DE-CONCLUIDO | ABERTA -- fila 2 (UI). A idempotencia do |
+| **O307** | O284A-PEDIDO-DEPOIS-DE-CONCLUIDO | **FECHADA -- NO AR** (comboio 18/10 03:3 |
 | **O308** | O207-TELA-LE-O-VINCULO | ABERTA -- fila 2 (UI), e em 18/10 a ORIG |
-| **O309** | O223-AVISO-DO-EMPATE | ABERTA -- fila 2 (UI). Zero efeito de ca |
-| **O310** | O256-E4-FALTA-O-RAIO-X | ABERTA -- fila 2 (UI). A E4 volta para c |
+| **O309** | O223-AVISO-DO-EMPATE | **FECHADA -- NO AR** (comboio 18/10 03:3 |
+| **O310** | O256-E4-FALTA-O-RAIO-X | **FECHADA -- NO AR** (comboio 18/10 03:3 |
 | **O311** | O206-PUSH-NATIVO-E-COBRANCA-DE-DISPUTA | ABERTA -- fila 2 (UI). O painel de cobra |
 | **O312** | O214-COLAB-SINTETICO-COM-HE | ABERTA -- insumo. O codigo do item 2 da  |
 | **O313** | OBRA-INTERROMPIDA-VOLTA-SOZINHA -- o medidor | **FECHADA** 18/10 00:4x. `bin/interrompi |
