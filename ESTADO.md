@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 18/10/2026 11:47:02.**
+**Medido em 18/10/2026 11:52:32.**
 
 | | |
 |---|---|
@@ -29,46 +29,46 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2546.0 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2546.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **314.5 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **314.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **127.7 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **127.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio18** (`comboio-20261018`) -- **SEM AGENTE**
-  - 2 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **10.2 h** (passou das 6 h da L-105)
+  - 2 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **10.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio18.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **430.6 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **430.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-folha10** (`raia-folha10`) -- **agente vivo**: O140 backfill do furo na 09 (preparo do apply, sem aplicar) + selo do carimbo que o esmeril registrou + conferencia da O271, por agente-raia-C, desde 2026-10-18T00:05:14-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: VERDE e PRONTA PARA POUSO: arvore certificada bcf58258 -- suite --dir wt-folha10 --only 'folha ponto' deu OK (skipped=7, expected failures=12) / Ran 4355 em 421s / rc 0 (logs/o140c_suite_folha_ponto.log, 18/10 01:01-01:08); nenhum .py tocado depois do veredito. Falta SO o POUSO (do dono da sessao) + as linhas de app/docs em logs/o140c/LINHAS_PARA_DOCS.txt. O apply da 09 NAO entra no pouso: bloqueado por bug provado em fechamento.py:354-378 (arquivo da raia wt-o48p3)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **334.7 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **334.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o275** (`raia-o275`) -- **SEM AGENTE**
-  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **64.0 h** (passou das 6 h da L-105)
+  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **64.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-o275.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **452.4 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **452.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-serie** (`raia-serie`) -- **agente vivo**: O263 + O276 (serie: motor_calculo_v2.py), por agente-raia-E, desde 2026-10-17T23:58:00-03:00
-  - 2 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **11.5 h** (passou das 6 h da L-105)
+  - 2 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **11.6 h** (passou das 6 h da L-105)
   - falta para pousar: medir O276 pela funcao real; motor em LEITURA (aval O280)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI do smoke do Fernando: O307 texto do lote, O308 fase 12x36, O309 empate->piso, O310 'O que fazer' na aba Espelho, por raia D (agente de sessao), desde 2026-10-18T00:09:33-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: 4 commits (O307 5b37100b, O309 dd7beaad+6bd163b3, O310 14a34256); suite core/folha/colaboradores/relatorios VERDE em 6bd163b3 (Ran 3020, OK skipped=21, rc 0); falta POUSO (dono) + linhas de TICKETS/fila que eu nao escrevo (L-106)
 - **wt-v3-pouso** (`pouso-v3-20261016`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 4 arquivo(s) sujo(s), commit a frente ha **47.4 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 4 arquivo(s) sujo(s), commit a frente ha **47.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-v3-pouso.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **23 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o306, wt-o37, wt-orfa, wt-regua, wt-sj, wt-v3, wt-vinculo
 
@@ -78,7 +78,7 @@ RELATO, com a lista de nomes do banco como autoridade._
 
 ## Obras interrompidas (L-119)
 
-- **O261** -- interrompida por `BUG-LINHA-X-BADGE`, desde **13/10 15:37** (116.2 h) -- **VOLTOU**: e o topo da ORDEM VIVA
+- **O261** -- interrompida por `BUG-LINHA-X-BADGE`, desde **13/10 15:37** (116.3 h) -- **VOLTOU**: e o topo da ORDEM VIVA
 
 **interrompidas_mais_de_24h: 0** (esperado 0) -- abertas: 0 de 1 registradas; topo da ORDEM VIVA: `O261`
 
@@ -187,44 +187,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● O juiz do "sem plantio" já existe — chamados/juizes.py::_pergunta_materializada_de_fato, 5 chamadores de produção. Medindo o #28850 pela função real:
+  Ran 3 shell commands
 
-  Ran 2 shell commands
+● "Enviar hora" existe em um sítio no repo inteiro: o template server-rendered. O iOS do Fernando desenhou o template — logo o "mesmo leitor no iOS, Android e PWA" é
+  literalmente um arquivo. Medindo o RED pela função real do fio:
 
-● O RED dele é literal — eu que tinha julgado pelo carimbo cru em vez do juiz:
+  Ran 1 shell command
 
-  ┌────────────────────────────────┬────────────────────────────────────────────┬───────────────────────────────────────┐
-  │                                │                                            │                                       │
-  ├────────────────────────────────┼────────────────────────────────────────────┼───────────────────────────────────────┤
-  │ pk=40213 intervalo_volta 02/10 │ validada=True · materializada_em carimbado │ JUIZ_de_fato=False, plantadas_vivas=0 │
-  └────────────────────────────────┴────────────────────────────────────────────┴───────────────────────────────────────┘
+● RED confirmado — e ele derruba o predicado barato que eu tinha em mente:
 
-  As outras três do #28850 plantaram (JUIZ=True). Minha leitura anterior (estado=resolvida, "não é a classe") media materializada_em, que não prova plantio — a classe se mede
-  pela função real. Classe na frota: 1.479 de 13.282 validadas (967 sem_plantio_nenhum + 75 plantio_fora_do_slot + 437 slot_nao_derivavel); o "125" que eu tinha anotado era
-  outro predicado. Não há pergunta a levar a ele.
+  ┌──────────────────────────────────────────────┬────────────────────────────────────────────────────────────────────────┐
+  │ medida (função real fio.montar_chamados_fio) │                                                                        │
+  ├──────────────────────────────────────────────┼────────────────────────────────────────────────────────────────────────┤
+  │ O TEMPLATE OFERECE form-declara-hora HOJE?   │ True                                                                   │
+  ├──────────────────────────────────────────────┼────────────────────────────────────────────────────────────────────────┤
+  │ perguntas_no_card de #28850                  │ 0 — a disputa fechou 06/10, o fio só indexa pergunta de disputa ABERTA │
+  └──────────────────────────────────────────────┴────────────────────────────────────────────────────────────────────────┘
 
-  Ran 12 shell commands
+  Logo o card não enxerga as quatro validadas: o predicado tem de perguntar pelo dia/marco, como a porta faz.
 
-● O defeito não está na pergunta — está no card do chamado:
+  Ran 1 shell command
 
-  - pk=40213 não é servida por nenhum leitor do colab (perguntas_do_app: não viva; lista do app: disputa fechada 06/10). O {% else %} do template já dá a linha honesta.
-  - O formulário que o Fernando viu é o form-declara-hora do chamado, oferecido em _card_atendimento.html:205 por {% if not chamado.tem_pergunta_viva %} — e #28850 está
-    em_analise, eh_furo, sem pergunta viva porque as quatro já foram validadas. A tela pergunta "não há pergunta viva?" quando a pergunta certa é "a porta aceitaria esta
-    declaração?".
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-● Running 6 shell commands…
-  ⎿  $ /bin/grep -n "def responder_chamado_colaborador" chamados/views.py && L=$(/bin/grep -n "def responder_chamado_colaborador" chamados/views.py | cut -d: -f1) && sed -n
-     "${L},$((L+120))p" chamados/views.py
+● O advisor confirma a direção e corrige três coisas. Primeiro o que está devendo (L-108 + docs na árvore), depois as quatro medições.
 
-✢ Synthesizing… (18h 56m 20s · ↓ 1.9m tokens · thought for 4s)
+● Traced form-declara-hora bug: template offers it when disputa closed; portal gate requires specific date logic
+  ⎿  $ cd /home/ronald/saas-hasner && /bin/grep -n "300" bin/backlog_estado.py | head; echo "=== cabeca ==="; sed -n '1,30p' bin/backlog_estado.py
+
+✢ Synthesizing… (19h 1m 50s · ↓ 1.9m tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                                         ✔ Update installed · Restart to update
+                                                                                                                                                          4% until auto-compact
 ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ general-purpose  Reading Veredito anchors in nucleo.py                                                                                            20m 54s · ↓ 153.6k tokens
+  ◯ general-purpose  Reading palavra_do_dia in dia_decidido.py                                                                                         26m 25s · ↓ 88.2k tokens
   ⧉  index
 ```
