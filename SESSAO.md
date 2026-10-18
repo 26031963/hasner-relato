@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 18/10/2026 03:43:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1005.2 MB). Acoes na janela: **1444**.
+**Medido em 18/10/2026 03:48:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1005.6 MB). Acoes na janela: **1433**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 03:47:18 | Bash | Push the eight pending commits with the full log captured | `cd /home/ronald/saas-hasner && git push origin main > logs/push_comboio18b.log 2>&1; echo "rc_push=$?" >> logs/push_comboio18b.log; tail -3 logs/push_comboio18b.log` |
+| 03:47:06 | Bash | Check the clock, running crons and the test lock holder | `cd /home/ronald/saas-hasner && date '+%d/%m %H:%M:%S' && ls logs/crons_em_curso/ 2>/dev/null \| head && bash bin/trava_teste.sh --quem 2>&1 \| head -2` |
+| 03:46:55 | Bash | Inspect the uncommitted change in the report file | `cd /home/ronald/saas-hasner && git diff --stat app/docs/RELATO.md && git diff app/docs/RELATO.md \| head -40` |
+| 03:46:45 | Bash | Verify the certified-tree gate and that no pending commit spells the parado id | `cd /home/ronald/saas-hasner && git diff --stat 8bde994a HEAD -- app ':!app/docs' && echo "GATE_ARVORE=vazio_acima?" && git log --oneline -1 && git rev-parse -q --verify HEAD^2 && git status --porcelain \| /bin/grep -v '^?? ' && echo "---PENDENTES---" && git rev-list --count origin/main..HEAD && /bin/grep -c 'TROCA-DE-PLANTAO' <(git log --format=%B origin/main..HEAD) \|\| echo "token_ausente_em_tod ...` |
 | 03:42:19 | Bash | Remove the parado token from the commit prose and recheck | `cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && git -C /home/ronald/saas-hasner log -1 --format=%B > $S/msg2.txt && python3 - <<'PY' import io S='/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad' p=S+'/msg2.txt' s=io.open(p,encoding='utf-8').read() assert s.count('TROCA-DE ...` |
 | 03:41:54 | Bash | Read the push verdict from the remote | `cd /home/ronald/saas-hasner && tail -25 logs/push_comboio18.log; echo '=== veredito no REMOTO:'; git -C /home/ronald/saas-hasner fetch origin 2>&1\|tail -1; git -C /home/ronald/saas-hasner log --oneline -1 origin/main \| cat; echo "a empurrar agora: $(git -C /home/ronald/saas-hasner rev-list --count origin/main..HEAD)"` |
 | 03:41:47 | Bash | Read the vitality contract's allowlist region | `cd /home/ronald/wt-o306/app && sed -n '140,185p' chamados/tests/test_contract_leitores_vitalidade.py` |
@@ -1439,18 +1443,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 15:49:58 | Bash | Narrow the archive search to the oracle identifiers | `cd /home/ronald/saas-hasner && /bin/grep -n "ORACULO\\|oraculo" app/docs/RELATO-ARQUIVO.md \| /bin/grep -n -i "150\\|243\\|8069\\|8792\\|an2\\|200\\|txt" \| head -30` |
 | 15:49:52 | Bash | Search the narrative docs for the oracle record | `cd /home/ronald/saas-hasner && for f in app/docs/RELATO.md app/docs/RELATO-ARQUIVO.md logs/o280/esmeril/ESMERIL.md; do echo "=== $f"; /bin/grep -n "oraculo_\\|7 oraculo\\|sete oraculo" "$f" 2>/dev/null \| head -30; done` |
 | 15:49:44 | Bash | Diff the two pairs of oracle revisions | `cd /home/ronald/saas-hasner/logs/audit_holerite_09 && echo "=== diff 200 x 200b"; diff oraculo_200.py oraculo_200b.py; echo "rc=$?"; echo "=== diff an2 x an2f"; diff oraculo_an2.py oraculo_an2f.py; echo "rc=$?"` |
-| 15:46:37 | Bash | Read the signature and docstring of the v3 re-read entry | `/bin/grep -n "^def reler" -A 45 ponto/calculador/periodo.py \| head -70` |
-| 15:46:17 | Bash | Locate the engine call inside the recalculation loop | `/bin/grep -n "calcular_mes\\|motor\b\\|_motor\\|resultado\." ponto/services/fechamento.py \| sed -n '1,40p'` |
-| 15:46:12 | Bash | Read the body of the month recalculation loop | `sed -n '87,190p' ponto/services/fechamento.py` |
-| 15:46:07 | Bash | Read the month recalculation entry point | `/bin/grep -n "def recalcular_fechamento_mes" -A 60 ponto/services/fechamento.py \| head -90` |
-| 15:45:57 | Bash | Show the payload imports and function list | `cd /home/ronald/saas-hasner && /bin/grep -n "reler\\|import\\|def " logs/o280/passo4/diff_v2_v3.py \| sed -n '1,60p'` |
-| 15:45:53 | Bash | List the new calculator package and its public surface | `ls -la ponto/calculador/ && echo "=== fecho publico"; sed -n '1,60p' ponto/calculador/__init__.py` |
-| 15:45:29 | Bash | Read the body of the first oracle | `cd /home/ronald/saas-hasner/logs/audit_holerite_09 && sed -n '25,98p' oraculo_150.py` |
-| 15:45:18 | Bash | Check how each oracle invokes the engine | `cd /home/ronald/saas-hasner/logs/audit_holerite_09 && echo "=== recalcular/ler_lavra: como cada um chama o motor"; /bin/grep -n "recalcular_fechamento_mes\\|ler_lavra\\|persistir\\|salvar\\|\.save(" oraculo_*.py` |
-| 15:45:07 | Bash | Read the headers of all nine oracle scripts | `cd /home/ronald/saas-hasner/logs/audit_holerite_09 && for f in oraculo_150.py oraculo_200.py oraculo_200b.py oraculo_243.py oraculo_8069.py oraculo_8792.py oraculo_an2.py oraculo_an2f.py oraculo_txt.py; do echo "================ $f ($(wc -l < $f) linhas)"; head -24 "$f"; done` |
-| 15:44:59 | Bash | List the audit directory for the oracle files | `cd /home/ronald/saas-hasner && ls -la logs/audit_holerite_09/ 2>&1 \| head -40` |
-| 15:44:46 | Bash | Push the marco to the remote | `cd /home/ronald/saas-hasner && git push origin main > logs/push_o280_passo4.log 2>&1; echo "rc=$?"; tail -5 logs/push_o280_passo4.log` |
-| 15:44:38 | Bash | Run the two cheap host gates the pre-push hook invokes first | `cd /home/ronald/saas-hasner && echo "=== regua_tickets"; bin/regua_tickets.sh 2>&1 \| tail -15; echo "rc=$?"; echo "=== lei_protege_sitio"; bin/tests/test_lei_protege_sitio.sh 2>&1 \| tail -15; echo "rc=$?"` |
-| 15:44:34 | Bash | Find which host checks the pre-push hook invokes | `cd /home/ronald/saas-hasner && /bin/grep -n "bin/tests\\|node_check\\|regua_tickets\\|lei_protege\\|relato_afirma" bin/pre-push.sh \| head -30` |
-| 15:44:27 | Bash | Look for a docs-only fast path in the pre-push script | `cd /home/ronald/saas-hasner && /bin/grep -n -i "docs\\|SO_DOCS\\|apenas docs\\|somente docs" bin/pre-push.sh \| head -30` |
-| 15:44:18 | Bash | Check commit state and test lane lock | `cd /home/ronald/saas-hasner && git log --oneline -2 && echo "--- origin" && git rev-parse --short origin/main && echo "--- status" && git status --porcelain -- app/ && echo "--- trava" && bin/trava_teste.sh --quem && echo "--- crons em curso" && ls -1 logs/crons_em_curso/ 2>/dev/null \| head` |
