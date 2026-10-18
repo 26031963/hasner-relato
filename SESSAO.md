@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 18/10/2026 01:55:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (998.5 MB). Acoes na janela: **1193**.
+**Medido em 18/10/2026 02:00:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (998.6 MB). Acoes na janela: **1197**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 01:57:04 | Bash | Fix the measured number and drop the non-biting counter | `cd /home/ronald/wt-o306/app && python3 - <<'PY' p='chamados/services/vigia_carimbo.py' s=open(p).read() # 1) o numero MEDIDO (sombra de 17/10, as duas arvores, universo identico) old="a pergunta de HORA ja VALIDADA (2.704 na frota em 18/10 00:xx)" new="a pergunta de HORA ja VALIDADA (13.276 na frota, medido na sombra de 17/10 em 18/10 ~02:0x)" assert s.count(old)==1; s=s.replace(old,new) # 2) A SO ...` |
+| 01:56:30 | Bash | Check whether swallowed-error logs are alarmed anywhere | `cd /home/ronald/wt-o306/app && sed -n '1,40p' core/observ.py; echo "=== quem conta engolidos (esperado 0)?"; /bin/grep -rn "engolido" --include=*.py core/ chamados/ ponto/ \| /bin/grep -iE "esperado\|alarme\|vigi\|conta" \| head` |
+| 01:56:23 | Bash | Read the cured entrada_de_marco in full | `cd /home/ronald/wt-o306/app && sed -n '/^def entrada_de_marco/,/^def /p' chamados/juizes.py \| head -60` |
+| 01:55:48 | Bash | Read the tipo derivation that logs the divergence | `cd /home/ronald/wt-o306/app && sed -n '190,260p' chamados/services/materializacao.py` |
 | 01:55:39 | Bash | Run the three cheap checks the advisor named | `cd /home/ronald/wt-o306/app && echo "=== _batida_existente_na_janela em models:"; /bin/grep -n "_batida_existente_na_janela" chamados/models.py \| head -3; echo "=== assinatura:"; sed -n '225,236p' chamados/juizes.py; echo "=== engolidos nos dois .out:"; /bin/grep -c "tipo_marco_divergente" /home/ronald/saas-hasner/logs/o306_carimbo.out /home/ronald/saas-hasner/logs/o306_carimbo_base.out; echo "== ...` |
 | 01:50:51 | Bash | Record the impact measurement durably and check the suite | `cd /home/ronald/saas-hasner && cat >> logs/o306/DIAGNOSTICO_1805.md <<'MD' ## 8. A MEDIDA DO IMPACTO -- O MESMO INSTRUMENTO NAS DUAS ARVORES (18/10, sombra de 17/10) O contador do aval (*"resposta enviada sem gravacao"*, esperado 0) nasceu como codigo (`chamados/services/vigia_carimbo.py::censo`, comando `vigiar_carimbo_sem_registro`) e foi rodado DUAS vezes na sombra, pela porta unica (`SOMBRA_AR ...` |
 | 01:49:41 | Bash | Measure the same counter against the uncured tree | `cd /home/ronald/saas-hasner && SOMBRA_ARVORE=/home/ronald/base-o306-med/app timeout 1800 bash bin/sombra.sh --rodar o306_carimbo.py o306_carimbo_base 2>&1 \| /bin/grep -E "^(VCR\|O306)"` |
