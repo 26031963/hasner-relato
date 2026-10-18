@@ -6,10 +6,21 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 17/10/2026 22:21:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (986.7 MB). Acoes na janela: **740**.
+**Medido em 17/10/2026 22:26:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (987.3 MB). Acoes na janela: **751**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 22:26:15 | Bash | Apply the two mechanical contract cures in the build copy | `C=/tmp/prepush-arvore.Le4QkM; python3 - <<'PY' import io, py_compile C = '/tmp/prepush-arvore.Le4QkM/app' # ---- CURA 1: casa declarada para o command novo (B6.1) ---- p = C + '/config/crons.py' s = io.open(p, encoding='utf-8').read() anc = 'FORA_DE_PIPELINE = {\n' assert s.count(anc) == 1, s.count(anc) novo = """ # BACKFILL DE UMA VEZ, nao pipeline (17/10, O140): `apurar_furo_da_exportada` respon ...` |
+| 22:25:09 | Bash | Read the except-pass contract | `sed -n '1,200p' ponto/tests/test_contract_no_except_pass.py` |
+| 22:24:57 | Bash | Read the dry/apply block of the new command | `C=/tmp/prepush-arvore.Le4QkM; sed -n '108,190p' $C/app/ponto/management/commands/apurar_furo_da_exportada.py` |
+| 22:24:51 | Bash | Read the declaration dict and what the contract demands of an entry | `sed -n '629,660p' config/crons.py; echo "---- fim do dict ----"; sed -n '660,680p' config/crons.py \| /bin/grep -n "}" \| head -3; echo; echo "=== o contrato cobra motivo como? ==="; sed -n '196,230p' chamados/tests/test_contract_crons.py` |
+| 22:24:46 | Bash | Locate the pipeline declaration list and the silent except | `C=/tmp/prepush-arvore.Le4QkM; cd /home/ronald/saas-hasner/app && echo "=== FORA_DE_PIPELINE: onde mora ==="; git grep -n "FORA_DE_PIPELINE" -- '*.py' \| head -20; echo; echo "=== o except-pass do comando novo ==="; /bin/grep -n "except\\|pass\\|logger\\|logging" $C/app/ponto/management/commands/apurar_furo_da_exportada.py` |
+| 22:24:38 | Bash | Read the new door body in the build copy | `C=/tmp/prepush-arvore.Le4QkM; echo "copia existe: $(test -d $C && echo SIM \|\| echo NAO)"; sed -n '560,625p' $C/app/ponto/services/dia_pago.py` |
+| 22:24:29 | Bash | Read how the cause column enters the portao result | `sed -n '405,435p' folha/porta_export.py` |
+| 22:24:25 | Bash | Census of the readers of the cause column | `echo "=== quem chama regua_das_linhas ==="; git grep -n "regua_das_linhas" -- '*.py' '*.html'; echo; echo "=== 'lavra_regua'/'lavrado_em' usados em veredito? ==="; git grep -n "lavra_regua" -- '*.py' '*.html' \| head -20` |
+| 22:24:12 | Bash | Read the carimbo contract in full | `echo "=== contrato do carimbo (inteiro) ==="; cat ponto/tests/test_carimbo_acompanha_a_escrita.py` |
+| 22:23:45 | Bash | Read the molde function that narrows an update on the same model | `sed -n '376,500p' ponto/services/dia_pago.py` |
+| 22:23:32 | Bash | List functions and update calls in the dia_pago service | `echo "=== updates em dia_pago.py (vivo, HEAD) ==="; /bin/grep -n "\.update(\\|def \\|lavrado_em" ponto/services/dia_pago.py \| sed -n '1,120p'` |
 | 22:19:13 | Bash | Check whether the neighbor door stamps lavrado_em and how the portao uses it | `echo "=== o update do retratar_exportada ==="; sed -n "$(/bin/grep -n 'def retratar_exportada' ponto/services/dia_pago.py \| tail -1 \| cut -d: -f1),+70p" ponto/services/dia_pago.py \| /bin/grep -n "update(\\|lavrado_em\\|timezone" ; echo; echo "=== porta_export.py:275-290 ==="; sed -n '275,292p' folha/porta_export.py` |
 | 22:18:59 | Bash | Census the lavrado_em stamp readers and the neighbor door | `echo "=== (a) lavrado_em e auto_now? ==="; /bin/grep -n "lavrado_em" ponto/models.py; echo; echo "=== (b) quem LE lavrado_em (fora de teste) ==="; git grep -nw "lavrado_em" -- '*.py' \| /bin/grep -v "/tests/" \| /bin/grep -v "^ponto/models.py"; echo; echo "=== (c) o molde: retratar_exportada ==="; sed -n "$(/bin/grep -n 'def retratar_exportada' ponto/services/dia_pago.py \| cut -d: -f1),+8p" ponto ...` |
 | 22:18:38 | Bash | Read the carimbo contract test | `cd /tmp/prepush-arvore.Le4QkM/app && echo "=== (1) o contrato do carimbo ==="; sed -n '1,90p' ponto/tests/test_carimbo_acompanha_a_escrita.py` |
