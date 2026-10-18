@@ -5,7 +5,7 @@ a raspagem usa a lista de nomes do banco como autoridade, nunca regex adivinhada
 `colNNN`/`ecNNN` ficam, porque nao identificam ninguem fora desta casa. Obra FEITA sai desta
 lista — ela e o que esta EM PE._
 
-**311 obras abertas.**
+**312 obras abertas.**
 
 | ID | obra | estado |
 |---|---|---|
@@ -313,10 +313,11 @@ lista — ela e o que esta EM PE._
 | **O303** | NENHUM SELO DIZ O INVARIANTE QUE FAZ O PORTAO `sem_carimbo` SER SEGURO | registrada |
 | **O304** | A COPIA DO PAR DUPLICADO CHEGA DUAS VEZES A PONTUALIDADE, E O TETO LIMITA MAS NAO COLAPSA | espera `!` |
 | **O305** | CITACAO DE OFFSET MINHA APONTANDO PARA OUTRA FUNCAO | registrada |
-| **O306** | BUG-RESPOSTA-NAO-PERSISTE | ABERTA -- **ORDEM VIVA**, em curso desde |
+| **O306** | BUG-RESPOSTA-NAO-PERSISTE | **ABERTA -- ORDEM VIVA** desde 17/10 23: |
 | **O307** | O284A-PEDIDO-DEPOIS-DE-CONCLUIDO | ABERTA -- fila 2 (UI). A idempotencia do |
 | **O308** | O207-TELA-LE-O-VINCULO | ABERTA -- fila 2 (UI). O escritor esta c |
 | **O309** | O223-AVISO-DO-EMPATE | ABERTA -- fila 2 (UI). Zero efeito de ca |
 | **O310** | O256-E4-FALTA-O-RAIO-X | ABERTA -- fila 2 (UI). A E4 volta para c |
 | **O311** | O206-PUSH-NATIVO-E-COBRANCA-DE-DISPUTA | ABERTA -- fila 2 (UI). O painel de cobra |
 | **O312** | O214-COLAB-SINTETICO-COM-HE | ABERTA -- insumo. O codigo do item 2 da  |
+| **O313** | OBRA-INTERROMPIDA-VOLTA-SOZINHA -- o medidor | **ABERTA** -- a lei esta numerada e as 2 |
