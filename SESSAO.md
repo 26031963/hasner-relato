@@ -6,10 +6,17 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 18/10/2026 19:52:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1050.7 MB). Acoes na janela: **1375**.
+**Medido em 18/10/2026 19:57:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1050.8 MB). Acoes na janela: **1381**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 19:56:36 | Bash | Check who asserts on the VFM log text | `grep -rn "VFM" --include=*.py . \| grep -v "services/vigia_fio\\|commands/vigiar_fio_morto" \| head; echo "--- (vazio = ninguem afirma sobre o texto)"; grep -rn "VFM" --include=*.sh /home/ronald/saas-hasner/bin/ \| head` |
+| 19:55:48 | Bash | Read the ENC entry and its comment | `sed -n 1470,1500p config/crons.py` |
+| 19:55:41 | Bash | Check host timezone and the medido_em helper | `cd /home/ronald/saas-hasner && date; echo "TZ=$TZ"; cat /etc/timezone 2>/dev/null; echo "=== _medido_em ==="; sed -n 1,60p bin/gerar_estado.py` |
+| 19:55:31 | Bash | Read the zero-escrita and AST section of the vigia selo | `sed -n 280,375p chamados/tests/test_o261_vigia_fio.py` |
+| 19:55:27 | Bash | Read the atomic-copy contract head | `sed -n 1,40p core/tests/test_copia_atomica.py` |
+| 19:55:21 | Bash | Check writability, enumerating contracts and the existing selo | `cd /home/ronald/saas-hasner && ls -la app/logs/placar.jsonl; echo "--- fim dir"; ls -ld logs/fim 2>/dev/null; echo "=== 7: enumeradores ==="; grep -rln "esmeril_espelho\\|os.replace" --include=test_*.py app/ \| head; echo "=== o261 vigia fio: escreve? ==="; grep -n "open(\\|escrit\\|ast\\|replace" app/chamados/tests/test_o261_vigia_fio.py \| head` |
+| 19:52:10 | Bash | Read the lavra-fora-da-regua selo in full | `cat -n ponto/tests/test_lavra_fora_da_regua.py` |
 | 19:52:03 | Bash | Confirm the settings module the suite uses | `cd /home/ronald/saas-hasner && grep -n "DJANGO_SETTINGS\\|settings\." bin/suite.sh \| head -20; echo "=== ci.py topo ==="; sed -n 1,40p app/config/settings/ci.py` |
 | 19:51:51 | Bash | Check the settings override pattern and test callers | `grep -rn "ESMERIL_LAVRA" --include=*.py . \| head; echo "=== LAVRA const ==="; grep -n "^LAVRA" ponto/services/esmeril_espelho.py; echo "=== quem chama o command vigiar_fio_morto nos testes ==="; grep -rn "vigiar_fio_morto" --include=*.py . \| grep -v "management/commands" \| head` |
 | 19:51:40 | Bash | Read the esmeril lavra path and write | `grep -n "caminho_da_lavra" -A14 ponto/services/esmeril_espelho.py \| head -40; echo "=== o write ==="; sed -n 252,275p ponto/services/esmeril_espelho.py` |
@@ -1384,4 +1391,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 07:58:49 | Bash | Re-read the writers census for the blind sites | `cd /home/ronald/saas-hasner && echo "=== censo de escritores (os 7 cegos):"; cat logs/o261/censo_escritores_18-10.out 2>&1 \| tail -45` |
 | 07:58:31 | Bash | Write the handoff and ask the hook for the next fila-1 item | `cd /home/ronald/saas-hasner && bash bin/handoff_sessao.sh 2>&1 \| tail -5; echo "=== ordem viva / proximo da fila 1:"; python3 - <<'PY' import sys sys.path.insert(0,'/home/ronald/saas-hasner/bin') import importlib.util spec=importlib.util.spec_from_file_location('h','/home/ronald/saas-hasner/bin/hook_stop_fila1.py') m=importlib.util.module_from_spec(spec); spec.loader.exec_module(m) for fn in ('_o ...` |
 | 07:58:19 | Bash | Confirm the remote stamp after the push | `cd /home/ronald/saas-hasner && git fetch -q origin && echo "HEAD=$(git rev-parse --short HEAD) origin/main=$(git rev-parse --short origin/main)"; echo "a frente: $(git rev-list --count origin/main..HEAD)"; /bin/grep -aE 'main -> main\|pos_push' logs/push_o261_1810.log \| tail -5; echo "=== arvore depois do push:"; git status --porcelain \| /bin/grep -v '^??'` |
-| 07:53:37 | Bash | Wait for the push to finish | `cd /home/ronald/saas-hasner && until /bin/grep -qaE 'To https\|error:\|rejected\|^exit=' logs/push_o261_1810.log; do sleep 25; done; echo "=== veredito:"; /bin/grep -aE '^(OK$\|OK \(\|FAILED\|Ran \|To https\|error:\|FAIL:\|exit=)' logs/push_o261_1810.log \| tail -10` |
