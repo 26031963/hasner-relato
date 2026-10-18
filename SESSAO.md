@@ -6,10 +6,22 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 18/10/2026 02:22:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1000.5 MB). Acoes na janela: **1275**.
+**Medido em 18/10/2026 02:27:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1001.0 MB). Acoes na janela: **1287**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 02:27:26 | Bash | Read the plant/reuse branch of the materializer | `cd /home/ronald/wt-o306/app && sed -n '660,740p' chamados/services/materializacao.py` |
+| 02:27:22 | Bash | Read the reuse stamping function | `cd /home/ronald/wt-o306/app && git grep -n "vincular_pergunta_origem" -- . \| head; echo '=== def ==='; sed -n "/def vincular_pergunta_origem/,/^def /p" chamados/services/materializacao.py \| head -50` |
+| 02:26:45 | Bash | Read the cured judge body | `cd /home/ronald/wt-o306/app && sed -n '505,530p' chamados/juizes.py; echo '........'; sed -n '560,680p' chamados/juizes.py` |
+| 02:26:24 | Bash | Read the failing overnight selo in full | `cd /home/ronald/wt-o306/app && cat -n chamados/tests/test_selo_batida_com_origem.py \| sed -n '1,120p'` |
+| 02:26:16 | Bash | Read the overnight adjust and window helper | `cd /home/ronald/wt-o306/app && sed -n '200,300p' chamados/juizes.py` |
+| 02:26:13 | Bash | Locate the overnight adjust definition | `cd /home/ronald/wt-o306/app && git grep -n "def _ajustar_saida_overnight\\|def _ajuste_overnight" -- . \| head` |
+| 02:26:07 | Bash | Read the overnight adjustment function | `cd /home/ronald/wt-o306/app && sed -n '/^def _ajustar_saida_overnight/,/^def [a-z_]/p' chamados/services/materializacao.py \| head -80` |
+| 02:26:06 | Bash | Run the protected-site host selo in the main repo | `cd /home/ronald/saas-hasner && bash bin/tests/test_lei_protege_sitio.sh 2>&1 \| tail -5` |
+| 02:25:56 | Bash | Read how the selo resolves protected file paths | `cd /home/ronald/saas-hasner && sed -n '80,190p' bin/tests/test_lei_protege_sitio.sh` |
+| 02:25:50 | Bash | Check whether the measurer file and function are committed | `cd /home/ronald/saas-hasner && git show HEAD --stat \| /bin/grep -n 'interrompidas'; echo "--- funcoes no arquivo ---"; /bin/grep -n '^def \\|^ def ' bin/interrompidas_estado.py; echo "--- em HEAD? ---"; git show HEAD:bin/interrompidas_estado.py >/dev/null 2>&1 && echo "existe em HEAD" \|\| echo "NAO em HEAD"; echo "--- o selo ---"; sed -n '1,80p' bin/tests/test_lei_protege_sitio.sh` |
+| 02:25:34 | Bash | Inspect the red host selo about a decayed law cell | `cd /home/ronald/saas-hasner && /bin/grep -n 'L-119' app/docs/LEIS.md \| head; echo '=== arquivo ==='; ls -la bin/interrompidas_estado.py 2>&1; echo '=== git show HEAD ==='; git show --stat HEAD \| head -30` |
+| 02:25:32 | Bash | Read the rest of the plantio slot derivation | `cd /home/ronald/wt-o306/app && sed -n '/^def _ts_tipo_do_plantio/,/^def [a-z_]*(/p' chamados/services/materializacao.py \| sed -n '70,200p'` |
 | 02:21:26 | Bash | Read the slot derivation chain | `cd /home/ronald/wt-o306/app && sed -n '/^def _slot_esperado/,/^def /p' chamados/juizes.py \| head -60; echo '=== _ts_tipo_do_plantio ==='; sed -n '/^def _ts_tipo_do_plantio/,/^def /p' chamados/services/materializacao.py \| head -70` |
 | 02:21:12 | Bash | Read the overnight plantio selo | `cd /home/ronald/wt-o306/app && sed -n '1,90p' chamados/tests/test_selo_batida_com_origem.py` |
 | 02:21:07 | Bash | Read cure 1 in the judge | `cd /home/ronald/wt-o306/app && sed -n '/^def _marco_faltante/,/^def entrada_de_marco/p' chamados/juizes.py; echo '=== entrada_de_marco ==='; sed -n '/^def entrada_de_marco/,/^def /p' chamados/juizes.py \| head -45` |
