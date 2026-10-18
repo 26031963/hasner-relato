@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 18/10/2026 09:05:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1020.4 MB). Acoes na janela: **1550**.
+**Medido em 18/10/2026 09:10:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1020.4 MB). Acoes na janela: **1540**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1550,13 +1550,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 21:13:19 | Bash | Check tipo spelling and imports | `cd /tmp/prepush-arvore.Le4QkM/app && /bin/grep -n "_bats(" ponto/tests/test_o280_bateria_da_lei.py \| head -8 && echo '=== itertools?' && /bin/grep -n "^import\\|^from" ponto/tests/test_o280_bateria_da_lei.py` |
 | 21:13:13 | Bash | Read the dedup and the working copy in the copy of HEAD | `cd /tmp/prepush-arvore.Le4QkM/app && sed -n '830,850p;1990,2000p' ponto/motor_calculo_v2.py && echo '=== chamada' && sed -n '2090,2105p' ponto/motor_calculo_v2.py` |
 | 21:13:00 | Bash | Read the v3 costura and the frota class head | `cd /tmp/prepush-arvore.Le4QkM/app && sed -n '4211,4266p' ponto/tests/test_o280_bateria_da_lei.py && echo '=== V3FrotaTest head' && sed -n '4450,4500p' ponto/tests/test_o280_bateria_da_lei.py` |
-| 21:09:11 | Bash | Read _B, julgar_o_dia and leitura | `cd /tmp/prepush-arvore.Le4QkM/app && sed -n '85,192p' ponto/tests/test_o280_bateria_da_lei.py` |
-| 21:09:07 | Bash | Locate module-level helpers and classes | `cd /tmp/prepush-arvore.Le4QkM/app && /bin/grep -n "^def leitura\\|^def _B\\|def _B(\\|def _universo\\|^def estado_dos_periodos\\|^def julgar_o_dia\\|^class " ponto/tests/test_o280_bateria_da_lei.py` |
-| 21:09:00 | Bash | Read the P3 order property test | `cd /tmp/prepush-arvore.Le4QkM/app && sed -n '2440,2560p' ponto/tests/test_o280_bateria_da_lei.py` |
-| 21:08:55 | Bash | Read the coverage selos of the bateria | `cd /tmp/prepush-arvore.Le4QkM/app && sed -n '975,1026p' ponto/tests/test_o280_bateria_da_lei.py` |
-| 21:08:40 | Bash | Read the bateria docstring header | `cd /tmp/prepush-arvore.Le4QkM/app && sed -n '1,60p' ponto/tests/test_o280_bateria_da_lei.py` |
-| 21:08:30 | Bash | Read the twin+pinned pair of B-I28 as the model | `cd /tmp/prepush-arvore.Le4QkM/app && sed -n '4630,4770p' ponto/tests/test_o280_bateria_da_lei.py` |
-| 21:08:26 | Bash | Locate the pinned case and the order-related cases | `cd /tmp/prepush-arvore.Le4QkM/app && /bin/grep -n "B-I28\\|B-P4a\\|A4'" ponto/tests/test_o280_bateria_da_lei.py` |
-| 21:08:21 | Bash | Read the MATRIZ and the head of CASOS | `cd /tmp/prepush-arvore.Le4QkM/app && sed -n '193,280p' ponto/tests/test_o280_bateria_da_lei.py` |
-| 21:08:16 | Bash | Read the fixtures and the two assertion helpers | `cd /tmp/prepush-arvore.Le4QkM/app && sed -n '1028,1060p;1130,1215p' ponto/tests/test_o280_bateria_da_lei.py` |
-| 21:08:10 | Bash | Locate the bateria's fixtures and helpers | `cd /tmp/prepush-arvore.Le4QkM/app && wc -l ponto/tests/test_o280_bateria_da_lei.py && /bin/grep -n "def cobra_a_lei\\|def confere\\|def setUpTestData\\|self.te\b\\|TipoEscala\\|MATRIZ\\|CASOS" ponto/tests/test_o280_bateria_da_lei.py \| head -60` |
