@@ -10,11 +10,11 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 17/10/2026 23:41:32.**
+**Medido em 17/10/2026 23:47:02.**
 
 | | |
 |---|---|
-| `HEAD` local | `171704ea O140 na esteira: a linha RE-DATADA pelo caso (b) do tripwire da ORDEM-19 (parte do mesmo marco, o portao do push cobrou)` |
+| `HEAD` local | `219da74f O140 na esteira: a linha RE-DATADA pelo caso (b) do tripwire da ORDEM-19 (parte do mesmo marco, o portao do push cobrou)` |
 | `origin/main` | `e118c5ba [O280] o caso B-I28 da bateria pela LEI nasce PINADO: o par da CAUDA que a janela da L-097 nao alcanca paga +10,80 min de HE50 na v3 -- e a previsao que eu tinha do campo de producao era ERRADA, medi, e o que a medicao devolveu esta DENTRO do ! que ja esta na mesa` |
 | commits a subir (`ahead`) | **3** |
 
@@ -29,25 +29,25 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2533.9 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2534.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **302.4 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **302.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **115.6 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **115.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **418.5 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **418.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
   - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **322.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o275** (`raia-o275`) -- **SEM AGENTE**
-  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **51.9 h** (passou das 6 h da L-105)
+  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **52.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-o275.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -59,7 +59,7 @@ RELATO, com a lista de nomes do banco como autoridade._
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
 - **wt-v3-pouso** (`pouso-v3-20261016`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 4 arquivo(s) sujo(s), commit a frente ha **35.3 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 4 arquivo(s) sujo(s), commit a frente ha **35.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-v3-pouso.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **21 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
@@ -70,7 +70,7 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
-171704ea O140 na esteira: a linha RE-DATADA pelo caso (b) do tripwire da ORDEM-19 (parte do mesmo marco, o portao do push cobrou)
+219da74f O140 na esteira: a linha RE-DATADA pelo caso (b) do tripwire da ORDEM-19 (parte do mesmo marco, o portao do push cobrou)
 32ab503c [O140] a competencia exportada ganha a TERCEIRA porta de escrita do DiaPago -- UMA coluna, nas linhas que JA existem -- e a medicao do universo desmentiu o numero que o pendente carregava
 da695716 [O280] o caso B-B27 da bateria pela LEI nasce com o numero MEDIDO, e a previsao que eu tinha era errada: 20 ordens sem anomalia, nao 24
 e118c5ba [O280] o caso B-I28 da bateria pela LEI nasce PINADO: o par da CAUDA que a janela da L-097 nao alcanca paga +10,80 min de HE50 na v3 -- e a previsao que eu tinha do campo de producao era ERRADA, medi, e o que a medicao devolveu esta DENTRO do ! que ja esta na mesa
@@ -171,23 +171,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  (7) O214: sem caso autorizavel nao ha smoke. Preparar um colab sintetico
-  com HE autorizavel na competencia aberta para o Fernando testar.
-
-  Cada item volta com: ajuste feito, evidencia e condicao para o novo smoke.
-  Ordem: (1) na frente; depois O271, O140 e O280 seguem; (2) a (7) em raia
-  de UI. LINHA HAIKU: a classe do (1) entra no copiloto como contador de
-  "resposta enviada sem gravacao" (esperado 0). Segue a fila; PAREI so em
-  lei ou !
-
-● New aval received — I'll place it after the act in flight, for a code reason I can state in one line,
-  and start (1) immediately after the deploy.
-
-  Read 1 file, ran 7 shell commands
-
-● Background command "Run the host selo pack and the JS check" completed (exit code 0)
-
-  Committed da695716, 32ab503c, read 1 file, ran 16 shell commands
 
 ● Background command "Push the marco" completed (exit code 0)
 
@@ -195,20 +178,37 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Background command "Push the marco again" completed (exit code 0)
 
-● Running 3 shell commands…
-  ⎿  $ PYTHONPATH=. python3 -c "
-     import io
-     from core import placar_tickets as pt
-     t=io.open('docs/TICKETS.md',encoding='utf-8').read()
-     for p in pt.parados(t): print(p['id'],'|',p['data'])
-     "
+  Amended commit 219da74f, ran 5 shell commands
+  ⎿  Read docs/AVAIS.md (19 lines)
+  ⎿  Read docs/HANDOFF-SESSAO.md (41 lines)
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb
+     /tasks/blx5lav9g.output (6 lines)
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb
+     /scratchpad/linha_i28_b27.md (2 lines)
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb
+     /tasks/bcvacbfz1.output (6 lines)
 
-· Synthesizing… (6h 50m 50s · ↓ 620.6k tokens)
+● Task "Measure the whole public history with the cured predicate" still running in background
+
+● Task "Push the marco (third attempt)" still running in background
+
+❯ aval Ronald: o BUG-RESPOSTA-NAO-PERSISTE (caso 1805) e a O261 BUG-FIO-MORTO-CHAMADO andam JUNTOS
+  como uma obra so: fecha o lado de ESCRITA que ficou aberto (cartorio.py:826, fora_da_fabrica:670,
+  supra_juiz.py:165-169, _C1) para o fio ter UM escritor pela lampada (CLAUDE.md 4a), allowlist 0; se
+  a medicao do 1805 mostrar causa fora desses sitios, ela entra na mesma obra. PRONTO so com o smoke
+  real do colab ao supervisor (7 respostas gravadas e visiveis). Fura a fila, a frente da O280.
+  Nenhuma lei nova. Segue a fila; PAREI so em lei ou !
+
+● Running 5 shell commands…
+  ⎿  $ echo "===== blame do bloco curado em fora_da_fabrica ====="; git blame -L 670,676
+     --date=format:'%d/%m %H:%M' -- chamados/services/disputa_emissao.py 2>/dev/null | sed -n '1,8p'
+
+✢ Synthesizing… (6h 56m 20s · ↓ 626.4k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                1% until auto-compact
+                                                               ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
