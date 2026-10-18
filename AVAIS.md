@@ -1,4 +1,4 @@
-# AVAIS NA MESA — 7
+# AVAIS NA MESA — 8
 
 > Gerado por `bin/gerar_avais.py` a partir de `app/docs/PENDENTES_RONALD.json`.
 > **So itens ABERTOS.** Item respondido SOME daqui na proxima geracao -- a historia dele fica
@@ -13,10 +13,11 @@
 | 5 | `O223-PORTA-DA-APLICACAO-SMOKE` | **smoke** | 2026-10-10T08:55 | 2 commits: codigo em ae775a7b (com o deploy --sem-migrate) e o link do hub no commit SEGUINTE do marco (sem sha: um commit nao pode citar o proprio, e este foi emendado uma vez), de proposito DEPOIS do reload -- template | `smoke Ronald: abri Configuracoes -> Aplicacao de convencao, cadastrei uma linha com motivo, a lista me mostrou ela ativa e o empate dito, desativei e ela ficou la como inativa com a trilha; e na edicao de uma empresa o Regime trabalhista salvou -- pode fechar a O223 pouso A` |
 | 6 | `O256-E4-SMOKE-UNICO-DO-RETRATO` | **smoke** | 2026-10-12T20:50 | os TRES que ele tirou estavam na mesa desde 11/10 20:17, 12/10 01:17 e 12/10 19:00 -- o mais antigo esperava **~24 h** sobre uma tela que mudou DUAS vezes no meio (etapa 2 e E1). O AVAIS cai de **8 para 6** itens abertos | `smoke Ronald: abri a tela final do retrato da folha e o fluxo inteiro funciona num clique so -- <a frase se ESCREVE quando a E4 pousar, lendo a tela que existir naquele dia; escreve-la agora seria descrever uma tela que ainda vai mudar tres vezes>` |
 | 7 | `O284A-LOTE-VIRA-JOB-SMOKE` | **smoke** | 2026-10-15T17:40 | O284-A POUSOU: o caderno de cartoes saiu do request e virou JOB (parte A do seu aval de 10:5x, `BUG-LOTE-ESPELHO-14MIN`). Suite CHEIA sobre a arvore MERGEADA, nao sobre a raia, numa copia provada IDENTICA ao resultado do | `smoke Ronald: abri Relatorios -> espelho em lote, pedi o caderno da frota e a tela voltou NA HORA com a barra andando (nao os 14 min de antes); cliquei DE NOVO no mesmo pedido e ele me devolveu o MESMO job em vez de abrir um segundo; quando acabou, o botao baixou o PDF -- pode fechar a O284 parte A` |
+| 8 | `O271-PORTAO-NAO-ZERA-E-A-FALTA-DO-COL699` | **!** | 2026-10-17T21:55 | O SEU AVAL ITEM (2) NAO FECHA NA CONDICAO, e o numero esta medido (LEI-AKITA 9). Voce disse "recalcula a competencia 10 agora e o portao do TXT volta a 0". A previa INTEIRA rodou na SOMBRA (rc 0, logs/o271c/lancador.out; | `! Ronald: aplica o recalculo da 10 assim mesmo -- o portao fica em 108 (97/9/2 dias de HE sem decisao, a trava que eu liguei em 29/09) e as 96,00 h de falta do col699 e as 45,00 h do col697 podem gravar.   OU   decide a HE desses 97/9/2 dias primeiro e o apply sai com o portao em 0/0/0/0.   OU   nao` |
 
 ---
 
-Total no JSON: **241** · aberto **7** · respondido **73** · sem-motivo **161**.
+Total no JSON: **242** · aberto **8** · respondido **73** · sem-motivo **161**.
 
 > `sem-motivo` nao e "resolvido": e *"ninguem julgou este item"*. A ordem de 18:4x proibe
 > triar os 163 antigos, entao eles ficam ai, nomeados, em vez de serem chutados para um lado.
