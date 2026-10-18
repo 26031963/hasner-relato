@@ -6,10 +6,26 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 18/10/2026 02:49:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1002.3 MB). Acoes na janela: **1351**.
+**Medido em 18/10/2026 02:55:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1002.9 MB). Acoes na janela: **1367**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 02:53:30 | Bash | Check whether a structural cell requires this contract's allowlist to be empty | `cd /home/ronald/wt-o306/app && sed -n '560,582p' core/contratos_estruturais.py` |
+| 02:53:25 | Bash | Check whether the allowlist size is itself policed | `cd /home/ronald/wt-o306/app && /bin/grep -rn "ALLOWLIST" chamados/tests/test_contract_leitores_vitalidade.py \| head; echo "--- len(ALLOWLIST) cobrado em algum lugar? ---"; git grep -n "test_contract_leitores_vitalidade\\|leitores_vitalidade" -- '*.py' '*.sh' '*.md' \| /bin/grep -v "^chamados/tests/test_contract_leitores_vitalidade.py" \| head` |
+| 02:53:16 | Bash | Read the vitality contract allowlist and failing assertion | `cd /home/ronald/wt-o306/app && sed -n '140,165p' chamados/tests/test_contract_leitores_vitalidade.py; echo '--- 215,245 ---'; sed -n '215,245p' chamados/tests/test_contract_leitores_vitalidade.py` |
+| 02:53:09 | Bash | Read the swallow-count selo assertion | `cd /home/ronald/wt-o306/app && sed -n '55,95p' ponto/tests/test_selo_engolir_conta.py` |
+| 02:53:04 | Bash | Read the swallow registrar body | `cd /home/ronald/wt-o306/app && n=$(/bin/grep -n "^def registrar_engolido" core/observ.py \| cut -d: -f1); sed -n "${n},$((n+40))p" core/observ.py` |
+| 02:53:00 | Bash | Read registrar_engolido to see where it writes | `cd /home/ronald/wt-o306/app && sed -n '1,60p' core/observ.py \| /bin/grep -n "def registrar_engolido" ; awk '/^def registrar_engolido/,/^def [a-z]/' core/observ.py \| head -45` |
+| 02:52:51 | Bash | Count distinct perguntas and find the slot call chain | `cd /home/ronald/saas-hasner && for f in curada base; do echo "=== $f ==="; /bin/grep -o 'pergunta_id=[0-9]*' logs/o306_carimbo_18_$f.out \| sort -u \| wc -l; done; echo '--- quem chama _tipo_pelo_marco ---'; cd /home/ronald/wt-o306/app && git grep -n "_tipo_pelo_marco\\|_ts_tipo_do_plantio" -- '*.py' \| /bin/grep -v tests` |
+| 02:52:35 | Bash | Read the cured judge body | `cd /home/ronald/wt-o306/app && sed -n '441,520p' chamados/juizes.py` |
+| 02:52:31 | Bash | Read the cured entrada_de_marco judge | `cd /home/ronald/wt-o306/app && awk '/^def entrada_de_marco/,/^def [a-z_]+\(/{print NR": "$0}' chamados/juizes.py \| head -70` |
+| 02:52:24 | Bash | Read the start of the tipo-do-marco judge | `cd /home/ronald/wt-o306/app && sed -n '185,218p' chamados/services/materializacao.py` |
+| 02:52:18 | Bash | Read the divergence emitter in context | `cd /home/ronald/wt-o306/app && sed -n '215,265p' chamados/services/materializacao.py` |
+| 02:52:15 | Bash | Find who emits the divergent-marco registration | `cd /home/ronald/wt-o306/app && git grep -n "tipo_marco_divergente" -- . \| head -20` |
+| 02:52:07 | Bash | Count the swallowed divergences in both runs | `cd /home/ronald/saas-hasner && echo "engolidos curada: $(/bin/grep -c 'tipo_marco_divergente' logs/o306_carimbo_18_curada.out)"; echo "engolidos base: $(/bin/grep -c 'tipo_marco_divergente' logs/o306_carimbo_18_base.out)"; echo '--- classes ---'; /bin/grep -o "marcos_faltantes=. x ata=." logs/o306_carimbo_18_curada.out \| sort \| uniq -c; echo '--- base ---'; /bin/grep -o "marcos_faltantes=. x ata ...` |
+| 02:52:00 | Bash | Read the neighbour entry and the papel vigia block | `cd /home/ronald/wt-o306/app && sed -n '1455,1495p' config/crons.py; echo '--- papel ---'; sed -n '1795,1820p' config/crons.py` |
+| 02:51:56 | Bash | Locate the neighbour cron entry and its papel line | `cd /home/ronald/wt-o306/app && /bin/grep -n "vigiar_fio_morto" config/crons.py` |
+| 02:51:38 | Bash | Extract the labelled census lines from both outputs | `cd /home/ronald/saas-hasner && for f in logs/o306_carimbo_18_curada.out logs/o306_carimbo_18_base.out; do echo "=== $f ($(wc -l < $f) linhas) ==="; /bin/grep -E '^(O306\\|\|VCR\\|\|RC\\|\|CEGO\\|)' "$f"; echo; done` |
 | 02:47:28 | Bash | Read both census measurements | `cd /home/ronald/saas-hasner && echo '=== CURADA ==='; cat logs/o306_carimbo_18_curada.out 2>/dev/null; echo; echo '=== BASE ==='; cat logs/o306_carimbo_18_base.out 2>/dev/null; echo; echo '=== rc ==='; cat /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bubg134qx.output` |
 | 02:47:22 | Bash | Verify the vitality judge's first step | `cd /home/ronald/wt-o306/app && /bin/grep -n "def _pergunta_viva_calc" -A 25 chamados/juizes.py \| head -40; echo '=== pergunta_sem_lastro_ou_viva ==='; /bin/grep -n "def pergunta_sem_lastro_ou_viva" -A 18 chamados/juizes.py` |
 | 02:46:57 | Bash | Read the SQL prefilter for live questions | `cd /home/ronald/wt-o306/app && /bin/grep -n "def q_vivas" -A 60 chamados/models.py \| head -80` |
