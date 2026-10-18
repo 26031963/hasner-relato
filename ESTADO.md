@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 18/10/2026 00:03:02.**
+**Medido em 18/10/2026 00:08:32.**
 
 | | |
 |---|---|
@@ -29,44 +29,47 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2534.3 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2534.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bos** (`raia-bos`) -- **agente vivo**: O44 itens 2-8 (depois: pouso da O207, resto da O148), por agente de sessao do Code (fila 1, raia wt-bos), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + cmp arquivo a arquivo + commit na raia-bos; o POUSO e meu (um por vez, L-105/L-107)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **302.8 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **302.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **116.0 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **116.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **418.9 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **419.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
+- **wt-folha10** (`raia-folha10`) -- **agente vivo**: O140 backfill do furo na 09 (preparo do apply, sem aplicar) + selo do carimbo que o esmeril registrou + conferencia da O271, por agente-raia-C, desde 2026-10-18T00:05:14-03:00
+  - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
+  - falta para pousar: ANTES de prod com o predicado novo, DRY na sombra, selo RED+cura, suite verde; o POUSO e do dono da sessao (L-105/L-107)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **323.0 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **323.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o275** (`raia-o275`) -- **SEM AGENTE**
-  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **52.3 h** (passou das 6 h da L-105)
+  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **52.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-o275.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p3** (`raia-o48p3`) -- **agente vivo**: O48 passo 3: cura do fechamento.py:604 (zero vira sem resposta) com RED + pouso (aval O48-PASSO3-SEPARA-DO-5), por sessao principal do Code, desde 2026-10-11T17:55:40-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: RED evidenciado, cura, DIFF gravado x lido na 10, suite verde na copia, pouso por L-107
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **440.7 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **440.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-serie** (`raia-serie`) -- **agente vivo**: O263 + O276 (serie: motor_calculo_v2.py), por agente-raia-E, desde 2026-10-17T23:58:00-03:00
-  - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **0.0 h**
   - falta para pousar: medir O276 pela funcao real; motor em LEITURA (aval O280)
 - **wt-ui** (`raia-ui`) -- **agente vivo**: UI-FECHAMENTO-NOVA etapa 1 (badge de fechamento, so templates/static/teste de tela), por agente de sessao do Code (fila 2 de UI, raia wt-ui), desde 2026-10-11T17:11:52-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: suite verde na copia + smoke headless nas 3 larguras + commit na raia-ui; smoke de clique do Ronald antes do push (FRONT SEM SMOKE NAO SOBE)
 - **wt-v3-pouso** (`pouso-v3-20261016`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 4 arquivo(s) sujo(s), commit a frente ha **35.6 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 4 arquivo(s) sujo(s), commit a frente ha **35.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-v3-pouso.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **21 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o37, wt-orfa, wt-regua, wt-sj, wt-vinculo
 
-**sem agente: 8** (raia com commit a frente e sem declaracao, esperado 0) -- **a frente do main ha mais de 6 h: 8** -- uniao medida: 33
+**sem agente: 8** (raia com commit a frente e sem declaracao, esperado 0) -- **a frente do main ha mais de 6 h: 8** -- uniao medida: 34
 
 > Raia sem agente por mais de um marco pede linha de motivo no RELATO -- lei, `!` ou pista (item 4 do aval).
 
@@ -174,44 +177,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  cura na ORIGEM com RED nomeado col427, censo de quem mais esta na mesma classe na 10, e o recalculo
-  roda de novo pela cura -- nao reverte por foto. Se as ausencias NAO estao aprovadas, a falta fica e
-  vai para a lista do admin com o col674. Nenhuma lei nova. Segue a fila; PAREI so em lei ou !
+  é de canal. Primeiro fecho o col427:
 
-● Background command "Push the marco (third attempt)" completed (exit code 0)
+  Ran 1 shell command
 
-● Push pousou: origin/main = 219da74f, a_empurrar=0. Árvore liberada para escrita. Agora o seu aval do
-  col427 — a medição decide, e ela é só leitura.
+● Explicado: as quatro faltas foram cadastradas e aprovadas por humano em 17/10 15:04-15:05, onze horas
+  depois do dump do ensaio (04:00) — a prévia não podia tê-las visto. Dado novo, não falha da prévia.
+  Agora a correção da pauta, que é dívida minha:
 
   Ran 3 shell commands
 
-● Ele responde exatamente a pergunta que a pauta #1067 deixou escrita. Antes de medir, preciso da
-  autoridade de "aprovada" e da família BUG-8792.
+● O responder inverteria o destinatário para o próprio sistema; o complemento tem de chegar ao DP. Uso
+  a porta escrever com pai, mantendo o fio da #1067:
 
-  Ran 6 shell commands
+  Ran 1 shell command
 
-● ausencias_na_janela (folha/export.py:60) já filtra status='aprovada' — então "crua" aqui é ler o
-  modelo Ausencia em vez da célula, a família do 6º leitor. A medição tem de dizer o tipo e o status
-  dos 4 dias:
+● O assert fez o trabalho: 593 > 500, nada foi escrito. Encurto e meço antes:
 
-  Reading 1 file, running 4 shell commands…
-  ⎿  $ cd /home/ronald/saas-hasner && docker cp logs/o271p/aprovadas_col427.py
-     saas_core:/tmp/aprovadas_col427.py >/dev/null 2>&1 && docker exec saas_core python manage.py
-     tenant_command shell --schema=juliani --command "exec(open('/tmp/aprovadas_col427.py').read())"
-     2>&1 | tail -60
+  Ran 1 shell command
 
-✢ Synthesizing… (7h 12m 20s · ↓ 663.7k tokens · thinking more)
+● Pauta #1068 escrita sob a #1067, para o DP, prazo 20/10. Agora o registro dos quatro avais — a sua
+  regra exige a linha no mesmo turno:
+
+● Reading 1 file, running 1 shell command…
+  ⎿  $ sed -n '1,12p' docs/PROMPTS.md | cut -c1-300; echo "--- colunas da ultima linha:"; tail -1
+     docs/PROMPTS.md | awk -F'|' '{print NF-2}'
+
+✢ Compacting conversation… (7h 17m 50s · ↓ 679.7k tokens)
+  ▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 12%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                               ✔ Update installed · Restart to update
+                                                                                0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ general-purpose  Counting portao ids in PENDENTES_RONALD.json             7m 6s · ↓ 128.7k tokens
-  ◯ general-purpose  Reading raia_agente.sh usage block                        7m 6s · ↓ 73.0k tokens
-  ◯ general-purpose  Consulting advisor on four-item scope                    7m 6s · ↓ 168.5k tokens
-  ◯ general-purpose  Running RED in test_o276_par_atravessa_o_dia.py          7m 6s · ↓ 167.0k tokens
+  ◯ general-purpose  Censusing auto_now models via apps.get_models          12m 36s · ↓ 114.7k tokens
+  ◯ general-purpose  Checking baixar_lote_espelho and suite LABELS          12m 36s · ↓ 169.2k tokens
+  ◯ general-purpose  Reading turnos_abertos_de in turnos.py                  12m 36s · ↓ 97.5k tokens
   ⧉  index
 ```
