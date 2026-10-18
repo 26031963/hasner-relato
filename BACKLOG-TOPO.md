@@ -5,7 +5,7 @@ a raspagem usa a lista de nomes do banco como autoridade, nunca regex adivinhada
 `colNNN`/`ecNNN` ficam, porque nao identificam ninguem fora desta casa. Obra FEITA sai desta
 lista — ela e o que esta EM PE._
 
-**316 obras abertas.**
+**318 obras abertas.**
 
 | ID | obra | estado |
 |---|---|---|
@@ -325,3 +325,5 @@ lista — ela e o que esta EM PE._
 | **O315** | ABSURDO-E-REGRA-SO-DA-CLASSE-P | espera corte |
 | **O316** | AS-CINCO-MENORES-DO-ESMERIL | espera corte |
 | **O317** | O306-PASSIVO-ENTRA-PELA-PORTA | espera corte |
+| **O318** | CARD DE PERGUNTA VALIDADA SEM PLANTIO NAO OFERECE FORMULARIO | espera corte |
+| **O319** | SMOKE DAS RESPOSTAS NOVAS E SEPARADO | ABERTO 18/10. Nao e o mesmo smoke do car |

@@ -4,7 +4,7 @@
 >
 > **livre** = pode virar fatia agora, sem humano. **corte/aval/smoke/dinheiro-ate-export** = tem dono humano e espera.
 
-<!-- ORDEM-VIVA-TOPO: O261 -->
+<!-- ORDEM-VIVA-TOPO: O318 -->
 <!-- MOVIDO em 15/10 ~16:0x pelo Code, AUTONOMIA-DE-CODIGO item 1 (ordem e encaixe na fila
      quando quem decide e DEPENDENCIA -- nunca foi pergunta de lei): o O140 pousou o CAMPO
      (Marco B) e o que RESTA dele sao os 5 LEITORES, que esperam o `!` do backfill da 09
