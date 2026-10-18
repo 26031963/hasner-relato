@@ -7,11 +7,11 @@
 | # | id | tipo | desde | o numero | frase PRONTA para colar |
 |---|---|---|---|---|---|
 | 1 | `APP-DESENHA-A-PALAVRA-DO-DIA` | **!** | 02/10 10:2x | O SERVIDOR JA ENTREGA, o app nativo ainda nao desenha (O21 ROTULO-DO-DIA-DECIDIDO, seu corte de 24/09 10:xx). `api_espelho_v2` passou a levar em cada dia `veredito_dia`, `palavra_dia`, `cor_dia`, `decidido_por` e `decidi | `smoke Ronald: o app nativo passa a desenhar `palavra_dia`/`cor_dia` no release (as chaves ja saem de `api_espelho_v2`, aditivas -- app velho ignora) -- sao 615 dia-colab com decisao humana na competencia e 117 deles NAO-abonados, que hoje chegam ao celular iguais a um abono.   OU   fica com o tick g` |
-| 2 | `O271-APLICADO-REVISE-COL427-E-COL674` | **ok-desenho** | 2026-10-17T23:25 | APLICADO, REVISE (7b.4). O recalculo da 10 do seu `!` moveu DOIS numeros que a previa publicada nao previu, e nenhum dos dois estava no seu aval -- os dois ficam aqui porque sao INFORMACAO NOVA, nao porque travem alguma  | `ok Ronald: o col427 fica com as 48,00 h de falta e eu confiro no espelho junto dos outros dois (a pauta #1067 ja esta na lista com prazo 20/10).   OU   olha o col427 primeiro: se os 4 dias de ausencia estao aprovados, reverte a falta dele pelas fotos de reversao e deixa os outros como estao.   OU   ` |
+| 2 | `COL427-CONDICAO-OU-MECANISMO` | **lei** | 2026-10-18T00:40 | O seu aval do col427 tem CONDICAO e MECANISMO, e os dois nao apontam para o mesmo conjunto -- medido, nao lido. Voce escreveu "se os 4 dias de ausencia estao APROVADOS e o recalculo deu falta, e BUG (familia do BUG-8792, | `ok Ronald: foi isso -- falta com ausencia de falta aprovada atras e cadastro, nao bug; segue como esta.   OU   eu quis a leitura literal: as 28 linhas da 10 sao fatia, abre o RED e cura na origem.   OU   nenhum dos dois: o que me incomoda e o mesmo dia sair de previsto (-660 min) e entrar em falta (` |
 
 ---
 
-Total no JSON: **243** · aberto **2** · respondido **80** · sem-motivo **161**.
+Total no JSON: **244** · aberto **2** · respondido **81** · sem-motivo **161**.
 
 > `sem-motivo` nao e "resolvido": e *"ninguem julgou este item"*. A ordem de 18:4x proibe
 > triar os 163 antigos, entao eles ficam ai, nomeados, em vez de serem chutados para um lado.
