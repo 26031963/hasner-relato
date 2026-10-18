@@ -6,10 +6,18 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 17/10/2026 22:37:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (987.6 MB). Acoes na janela: **777**.
+**Medido em 17/10/2026 22:42:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (988.2 MB). Acoes na janela: **785**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 22:42:15 | Bash | Census of callers of the event recalculator | `git grep -n "recalcular_por_evento" -- '*.py' \| /bin/grep -v tests \| head -30` |
+| 22:42:02 | Bash | Read the canonical field tuple and the crontab | `/bin/grep -n "^CAMPOS\\|^_CAMPOS" -A 12 ponto/management/commands/aplicar_09_corte_b.py \| head -30; echo "=== cron window ==="; crontab -l 2>/dev/null \| /bin/grep -vE '^\s*#' \| /bin/grep -vE '^\s*$' \| awk '{print}' \| head -60` |
+| 22:39:41 | Bash | Write the prod read-only ANTES probe | `cd /home/ronald/saas-hasner && mkdir -p logs/o271p && cat > logs/o271p/antes.py <<'PY' # O271P -- O ANTES DE PROD do recalculo da competencia 10, sob o `!` dele de 17/10 ~22:2x # ("aplica o recalculo da 10 assim mesmo -- o portao fica em 108 ... as 96,00 h de falta do col699 e as # 45,00 h do col697 podem gravar"). # # LEITURA PURA: nenhuma escrita, nenhum atomic. Tres perguntas, todas pela funcao ...` |
+| 22:39:02 | Bash | Read the sombra runner to copy the invocation form | `cd /home/ronald/saas-hasner && cat logs/o271c/runner.sh` |
+| 22:38:26 | Bash | Check whether the portao reader calls the motor | `/bin/grep -n "^def medir\\|^def \\|motor_calculo\\|espelho_do_colab\\|autoridade_do_periodo" folha/porta_export.py \| head -40` |
+| 22:38:17 | Bash | Read the published prevision json: empresas, portao, totals | `cd /home/ronald/saas-hasner && python3 - <<'PY' import json d=json.load(open('logs/o271c/o271c_previsao.json')) print('empresas', d['empresas']) print('campos', len(d['campos'])) print('comp09', d['comp09']) for k in sorted(d['portao_antes']): a=d['portao_antes'][k]; b=d['portao_depois'].get(k,{}) print('emp%s falhas %s -> %s \| proprias %s -> %s \| comp %s -> %s' % ( k, a.get('falhas'), b.get('fa ...` |
+| 22:37:50 | Bash | Read the portao witness table and the sombra snippet | `cd /home/ronald/saas-hasner && cat logs/o271c/portao_decomposto.txt && echo "=== snip ===" && cat logs/o271c/_snip.py` |
+| 22:37:43 | Bash | List the O271 instrument dir and check running crons | `cd /home/ronald/saas-hasner && ls -la logs/o271c/ 2>/dev/null && echo "--- crons em curso ---" && ls -la logs/crons_em_curso/ 2>/dev/null && echo "--- trava ---" && bash bin/trava_teste.sh --quem 2>&1 \| head -3` |
 | 22:33:23 | Bash | Read the command's handle and flags | `sed -n '70,200p' ponto/management/commands/recalcular_fechamento.py` |
 | 22:33:18 | Bash | Read the recalculation command header | `sed -n '1,70p' ponto/management/commands/recalcular_fechamento.py` |
 | 22:33:12 | Bash | Read the top of the live RELATO | `cd /home/ronald/saas-hasner && sed -n '1,16p' app/docs/RELATO.md \| cut -c1-420` |
