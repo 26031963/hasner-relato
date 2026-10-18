@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 18/10/2026 01:23:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (996.8 MB). Acoes na janela: **1127**.
+**Medido em 18/10/2026 01:28:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (997.0 MB). Acoes na janela: **1128**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 01:23:38 | Bash | Check the test lane and the lanes ready to land | `cd /home/ronald/saas-hasner && bin/trava_teste.sh --quem 2>&1; echo "---git---"; git -C /home/ronald/saas-hasner log --oneline -1; git worktree list; echo "--- status por raia ---"; for w in /home/ronald/saas-hasner /home/ronald/wt-ui /home/ronald/wt-folha10; do [ -d "$w" ] && echo "== $w"; git -C "$w" status --porcelain 2>/dev/null \| head -8; done` |
 | 01:20:52 | Bash | Write the measured diagnosis to a durable log | `mkdir -p /home/ronald/saas-hasner/logs/o306 && cat > /home/ronald/saas-hasner/logs/o306/DIAGNOSTICO_1805.md <<'MD' # O306 / BUG-RESPOSTA-NAO-PERSISTE — DIAGNOSTICO MEDIDO EM PROD (18/10) Leitura PURA em `saas_hasner` (assert do banco em todo script), scripts em `<scratchpad>/a1805_*.py`. Nenhuma escrita. Nenhum nome: so `colXXX`. ## 1. O QUE O SMOKE DO 17/10 FEZ CHEGAR AO SERVIDOR As respostas CHE ...` |
 | 01:19:37 | Bash | Read the first census predicate cleanly | `cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command shell --schema=juliani --command "exec(open('/tmp/a1805_censo.py').read())" 2>/dev/null \| sed -n '/=== P1/,/=== P2/p' \| head -25` |
 | 01:19:10 | Bash | Run the frota census of the class | `cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/a1805_censo.py <<'PY' # LEITURA PURA. CENSO DE FROTA da classe do 1805, por DOIS predicados independentes. # Sem nome: so colXXX. Universo declarado em cada numero. from django.db import connection assert connection.settings_dict['NAME'] == 'saas_hasner', connection.settings_dict['NAME'] from django ...` |
