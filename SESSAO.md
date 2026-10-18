@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 18/10/2026 00:56:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (995.0 MB). Acoes na janela: **1079**.
+**Medido em 18/10/2026 01:01:19.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (995.1 MB). Acoes na janela: **1083**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 00:58:59 | Bash | Measure the raias and look for a live suite container | `cd /home/ronald/saas-hasner && git worktree list && echo "=== sujeira por raia ===" && for w in $(git worktree list --porcelain \| /bin/grep '^worktree ' \| cut -d' ' -f2); do n=$(git -C "$w" rev-parse --abbrev-ref HEAD 2>/dev/null); s=$(git -C "$w" status --porcelain 2>/dev/null \| wc -l); a=$(git -C "$w" rev-list --count origin/main..HEAD 2>/dev/null); echo "$n sujos=$s a_frente=$a ($w)"; done;  ...` |
+| 00:58:51 | Bash | Correct the esmeril citations in the new RELATO section | `cd /home/ronald/saas-hasner && python3 - <<'PY' p='app/docs/RELATO.md' t=open(p,encoding='utf-8').read() subs=[ ('PROVA: `logs/o280/esmeril/ESMERIL.md` linha 426 e o corpo de `da695716`.', 'PROVA: o corpo de `da695716` e o item **415** do `logs/o280/esmeril/ESMERIL.md` (os numeros do defeito; o item **426** registra os itens de lei que foram para a mesa).'), ('`B27-ORDEM-PERDE-A-ACUSACAO` passa a  ...` |
+| 00:58:40 | Bash | Read the full B27 rename passage | `cd /home/ronald/saas-hasner && sed -n '426p' logs/o280/esmeril/ESMERIL.md \| cut -c1-600; echo; echo "=== item 415 cabeca ==="; /bin/grep -n '^415\. ' logs/o280/esmeril/ESMERIL.md \| cut -c1-200` |
+| 00:58:32 | Bash | Map the B27 passages to their esmeril item numbers | `cd /home/ronald/saas-hasner && /bin/grep -n 'B27-ORDEM-APAGA\\|PORTAO SEGUE 8' logs/o280/esmeril/ESMERIL.md \| cut -c1-120; echo "=== itens numerados ao redor ==="; awk 'match($0,/^([0-9]+)\. /,m){n=m[1]; ln=NR} /B27-ORDEM-APAGA\|PORTAO SEGUE 8\|ZERO CONTATO/{print "linha",NR,"-> item",n}' logs/o280/esmeril/ESMERIL.md \| head` |
 | 00:55:33 | Bash | Locate the answer-posting routes and writers | `git grep -n "responder" -- 'chamados/urls*.py' 'core/urls*.py' 'config/urls*.py' 2>/dev/null \| head -20; echo "=== views que gravam resposta ==="; git grep -ln "def responder\\|responder_pergunta\\|RespostaPergunta" -- '*.py' \| head -20` |
 | 00:55:24 | SendMessage |  | `-` |
 | 00:55:03 | ToolSearch |  | `-` |
