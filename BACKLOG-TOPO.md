@@ -278,7 +278,7 @@ lista — ela e o que esta EM PE._
 | **O268** | TRES-JUIZES-DE-INSTANTE | espera corte |
 | **O269** | RELAVRA-09-MOTOR-DE-HOJE | espera corte |
 | **O270** | INTRA-4H-A-6H-INDENIZA | aberta, atras da O263-FT (mesma familia  |
-| **O271** | BUG-COMERCIAL-SEM-PONTUALIDADE | espera corte |
+| **O271** | BUG-COMERCIAL-SEM-PONTUALIDADE | **O DP DECIDIU 17/10 20:4x**: recalcula  |
 | **O272** | BUG-INTRA-FORA-DA-JANELA | **FECHADA 14/10 20:3x, NO AR** -- commit |
 | **O273** | BUG-RECUSA-SISTEMA-ENVELHECE | **FECHADA 14/10 22:1x, NO AR e EMPURRADA |
 | **O274** | BUG-FIO-SEM-ALVO-NO-DRAWER | espera corte |
@@ -302,7 +302,7 @@ lista — ela e o que esta EM PE._
 | **O292** | FALHAS-SOMA-NUMERO-DA-COMPETENCIA | **FECHADA 16/10 06:5x, NO AR** -- commit |
 | **O293** | SNAPSHOT-DO-PORTAO-GUARDA-A-SOMA-MISTURADA | ABERTA, e o portao e livre -- toca so o  |
 | **O294** | VIGIA-TXT-09-EMP4 | ABERTA. **NAO e do pouso da v3**, e isso |
-| **O295** | PORTAO-DE-PRIVACIDADE-CEGO-A-TITLE-CASE | **FECHADA 16/10 14:1x, no ar** -- instru |
+| **O295** | PORTAO-DE-PRIVACIDADE-CEGO-A-TITLE-CASE | espera `!` |
 | **O296** | NOME DE COLABORADOR EM COMENTARIO DE `.py` | espera `!` |
 | **O297** | RETENCAO DO RELATO PUBLICO NAO TEM VIGIA | registrada |
 | **O298** | MEDICAO DECLARADA CUJO INSTRUMENTO NOMEADO NAO A FAZ | registrada |
