@@ -22,7 +22,16 @@
      `logs/o261/censo_lampada.py` contra o HEAD 825e9b2f devolve
      `CENSO|sitios=18 sem_lampada=8` (saida em `logs/o261/censo_lampada_18-10_pos_5c72bd73.out`;
      o `censo_lampada_18-10.out` ao lado e a rodada ANTES da cura, com 9). Eram 9 antes da cura de hoje (5c72bd73, que tirou
-     `ressuscitar_perguntas` da lista). O numero 7 nao aparece em nenhuma medicao. -->
+     `ressuscitar_perguntas` da lista). O numero 7 nao aparece em nenhuma medicao.
+     RE-MEDIDO 19/10 10:4x contra o HEAD de hoje (`2af35da3`, nenhum `.py` modificado na arvore):
+     `CENSO|sitios=18 sem_lampada=8` de novo -- lastro `logs/o261/censo_lampada_19-10.out`. E o
+     7 ENTAO tem sentido, mas como PROJECAO, nunca como medida: `_materializar_resposta_hora:713`
+     e um dos 8, e e o sitio do item (1) -- curado ele, o censo passa a 8-1=7. Enquanto o item (1)
+     nao pousa, o numero MEDIDO e 8.
+     O censo so voltou a rodar porque a dependencia dele (`o261_censo_escritores.py`) nao estava
+     na arvore: `censo_lampada.py` a importa por `sys.path.insert` do proprio diretorio e ela
+     vivia so no scratchpad da sessao -- agora esta em `logs/o261/` ao lado, e o censo se refaz
+     sem arqueologia (LEI-AKITA 11). -->
 <!-- MOVIDO em 15/10 ~16:0x pelo Code, AUTONOMIA-DE-CODIGO item 1 (ordem e encaixe na fila
      quando quem decide e DEPENDENCIA -- nunca foi pergunta de lei): o O140 pousou o CAMPO
      (Marco B) e o que RESTA dele sao os 5 LEITORES, que esperam o `!` do backfill da 09
