@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 19/10/2026 12:05:46.**
+**Medido em 19/10/2026 12:10:47.**
 
 | | |
 |---|---|
@@ -22,31 +22,31 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2570.3 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2570.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **338.8 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **338.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **152.0 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **152.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio-v3** (`comboio-v3-20261018`) -- **SEM AGENTE**
   - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **20.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio-v3.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio18** (`comboio-20261018`) -- **SEM AGENTE**
-  - 2 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **34.5 h** (passou das 6 h da L-105)
+  - 2 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **34.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio18.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **454.9 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **455.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-fio** (`raia-fio`) -- **agente vivo**: O261 item 2 (contador de emissao) + O322 afastado nao se cobra, por sessao app-77 (sem subagente), desde 2026-10-19T00:11:29-03:00
-  - 2 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **2.3 h**
+  - 2 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **2.4 h**
   - falta para pousar: VERDE e COMMITADA (0c3d0eb9 + 8f6ef771): falta so o POUSO -- merge --no-ff + bin/deploy.sh --sem-migrate, em fila atras do ensaio do dia na sombra (bloco em curso)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
   - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **359.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o275** (`raia-o275`) -- **SEM AGENTE**
-  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **88.3 h** (passou das 6 h da L-105)
+  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **88.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-o275.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o320** (`raia-o320`) -- **agente vivo**: O320 forma nova: os 36 dias discordante viram PAUTA DP por dono, por agente de sessao (O320 pauta por dono), desde 2026-10-19T00:11:29-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -61,13 +61,13 @@ RELATO, com a lista de nomes do banco como autoridade._
   - 0 commit(s) a frente do `main`, 7 arquivo(s) sujo(s)
   - falta para pousar: (nao dito)
 - **wt-serie** (`raia-serie`) -- **SEM AGENTE**
-  - 2 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **35.8 h** (passou das 6 h da L-105)
+  - 2 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **35.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-serie.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-v3** (`raia-v3`) -- **agente vivo**: O280 v3 / O287 portao do esmeril -- POUSO pendente, por sessao app-77 (sem subagente), desde 2026-10-19T00:11:29-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: comboio se mede quando a trava liberar (hoje o48p4); suite na arvore MERGEADA, L-107 num ato so
 - **wt-v3-pouso** (`pouso-v3-20261016`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 4 arquivo(s) sujo(s), commit a frente ha **71.7 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 4 arquivo(s) sujo(s), commit a frente ha **71.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-v3-pouso.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **26 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-bos, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-folha10, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o306, wt-o316, wt-o37, wt-orfa, wt-regua, wt-sj, wt-ui, wt-vinculo
 
@@ -84,7 +84,7 @@ _nenhuma obra interrompida registrada no bloco OBRAS._
 **fio morto: 211** (esperado 0) -- `fio_morto_cobrando` 211, e de **hoje pra frente** 0, que nao conta (o teto e do `cartorio.julgar_celula`, nao deste leitor)
 
 - **FORA DO ESPERADO**: `fio_morto` mediu 211 e o carimbo espera 0, `fio_morto_cobrando` mediu 211 e o carimbo espera 0
-- medido em **2026-10-19T06:39:59.373120-03:00** (5.4 h), dia julgado **2026-10-19**, banco `saas_hasner`
+- medido em **2026-10-19T06:39:59.373120-03:00** (5.5 h), dia julgado **2026-10-19**, banco `saas_hasner`
 
 ## `git log --oneline -5`
 
@@ -193,44 +193,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ┌────────┬──────────┬────────────────────────┬─────────────────┐
-  │ colab  │ restrito │ controle (par inteiro) │ publicado 05:40 │
-  ├────────┼──────────┼────────────────────────┼─────────────────┤
-  │ col226 │ +25,82   │ +25,82 ✓               │ −5,00           │
-  ├────────┼──────────┼────────────────────────┼─────────────────┤
-  │ col250 │ +2,06    │ +2,06 ✓                │ −11,13          │
-  ├────────┼──────────┼────────────────────────┼─────────────────┤
-  │ col455 │ −17,96   │ −17,96 ✓               │ −45,63          │
-  ├────────┼──────────┼────────────────────────┼─────────────────┤
-  │ col584 │ −1,59    │ −1,59 ✓                │ −1,59           │
-  ├────────┼──────────┼────────────────────────┼─────────────────┤
-  │ col634 │ −3,72    │ −3,72 ✓                │ −3,72           │
-  ├────────┼──────────┼────────────────────────┼─────────────────┤
-  │ col834 │ −8,85    │ −8,85 ✓                │ −41,06          │
-  └────────┴──────────┴────────────────────────┴─────────────────┘
 
-  O recorte não mudou a conta — a identidade (a) vale. Quem não reproduz é o DIFF publicado às 05:40, medido como 4º de sete pares na mesma trava. Em col226 ele imprimiu −5,00 h
-  onde a medição isolada diz +25,82 h: inversão de sinal de 30,82 h em competência PAGA. Vou ler as duas lentes inteiras antes de nomear a causa:
+● As duas lentes agora são coerentes e nenhuma é cega: no recorte, 3 colabs ENTRAM no TXT e ninguém sai (+8 linhas); no par inteiro, 4 entram e 3 saem por furo_espelho
+  (340→340). E o gravado por colab é idêntico nas duas corridas de hoje. Resta nomear por que o publicado às 05:40 diverge — e a candidata agora é a origem daquele número:
 
-  Shadow control matched; col371 debt identified; reading full lenses before root cause
+  Ran 1 shell command
+
+● Todas as corridas leram o mesmo carimbo (dia=20261019 completa diverge=0), e o antes do gravado é idêntico nas três. Isso elimina "dia diferente" e deixa uma candidata que é
+  grave e se mede sem prod: ensaio que não desfez. O dump da sombra é das 04:00, então qualquer linha criada depois é artefato de ensaio:
+
+  Ran 1 shell command
+
+› Message from @fork (ctrl+o to expand)
+
+● CelulaDia mora em escala/models.py, não em ponto — corrijo o import e re-rodo:
+
+  Ran 1 shell command
+
+● Achei, e inverte a minha leitura anterior. A sombra tem 286 batidas e 246 fechamentos escritos depois do dump das 04:00 — entre 06:55 e 10:54. As minhas duas corridas de hoje
+  (11:52 e 12:02) concordam entre si porque leram o mesmo estado sujo; a publicada às 05:18 é a que rodou em banco limpo. Preciso nomear quem escreveu e confirmar a hora do dump
+  antes de afirmar:
+
+  Running 1 shell command…
   ⎿  $ cd /home/ronald/saas-hasner
-     S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
-     O="$S/o317_controle_par_inteiro_19-10.out"
-     echo "=== LENTE 1: gravado (controle) ==="
-     sed -n '10117,10130p' "$O"
-     echo
-     echo "=== LENTE 2: TXT (controle) -- inteira ==="
-     sed -…
+     echo "=== 1) a HORA do dump que a sombra restaurou (fato, nao suposicao) ==="
+     ls -l --time-style='+%F %T' backups/juliani/*.dump 2>/dev/null | tail -4
+     ls -l --time-style='+%F %T' backups/public/*.dump 2>/dev/null | tail -2
+     echo "--- carimbo inteiro:"; cat logs/.sombra_…
 
-· Tomfoolering… (9h 40m 58s · ↓ 1.1m tokens · thinking)
+· Compacting conversation… (9h 45m 58s · ↓ 1.1m tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱ 85%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                                                          9% until auto-compact
+                                                                                                                                                          0% until auto-compact
 ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ fork  Verifying my sections survived in RELATO.md                                                                                              2h 58m 25s · ↓ 162.3k tokens
+  ◯ fork  Checking publication state of RELATO.md                                                                                                   3h 3m 26s · ↓ 169.8k tokens
   ⧉  index
 ```
