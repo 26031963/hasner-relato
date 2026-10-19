@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 19/10/2026 08:47:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1088.8 MB). Acoes na janela: **1412**.
+**Medido em 19/10/2026 08:52:35.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1089.3 MB). Acoes na janela: **1416**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 08:52:32 | Bash | Lint the new test file in the container | `cd /home/ronald/saas-hasner && ls -la ruff.toml app/ruff.toml app/pyproject.toml 2>&1 \| head; source bin/recursos.sh >/dev/null 2>&1; docker run --rm $TESTE_DOCKER -v "/home/ronald/wt-raiox/app:/app:ro" -w /app saas-hasner-core:latest sh -c "ruff check folha/tests/test_retrato_raiox.py --output-format concise --no-cache" 2>&1 \| tail -20` |
+| 08:52:24 | Bash | Find how the ruler invokes the linter | `cd /home/ronald/saas-hasner && /bin/grep -rn "ruff check" bin/ 2>/dev/null \| head -5` |
+| 08:52:18 | Bash | Lint the new test file with the repo config | `cd /home/ronald/wt-raiox && ls ruff.toml 2>/dev/null; ruff check --config ruff.toml app/folha/tests/test_retrato_raiox.py 2>&1 \| tail -20` |
+| 08:52:11 | Bash | Clean up one test case and verify fixture names | `cd /home/ronald/wt-raiox/app && python3 - <<'PYEOF' import io p='folha/tests/test_retrato_raiox.py' s=io.open(p,encoding='utf-8').read() velho = """ _g = agrupar_vazio = [x for x in __import__( 'folha.retrato_folha', fromlist=['agrupar']).agrupar(LINHAS, 'tipo') if x['chave'] == ''] self.assertEqual(1, len(agrupar_vazio), 'o grupo de quem nao tem tipo nao nasceu') self.assertEqual(len(LINHAS) - BL ...` |
+| 08:47:53 | Bash | Write the failing test file for the lens | `cd /home/ronald/wt-raiox/app && cat > folha/tests/test_retrato_raiox.py <<'PYEOF' # -*- coding: utf-8 -*- """O310 -- A LENTE "RAIO-X" DA BARRA DO RETRATO: TERCEIRO LEITOR DO MESMO RECORTE. A ordem e' literal (adendo Ronald 13/10 00:1x, dentro da O256): *"(1) botao Raio-X na barra abre a LENTE do filtro ativo (dono/praca/empresa), grupos por Tipo com contagem, linha clicavel abrindo o drawer do col ...` |
 | 08:45:26 | Bash | Check the travessao idiom and dono_da_linha | `cd /home/ronald/wt-raiox/app && sed -n '28,70p' templates/folha/_retrato_o_que_fazer.html; echo "=== dono_da_linha"; /bin/grep -n "def dono_da_linha" -A 12 folha/retrato_folha.py` |
 | 08:44:49 | Bash | Read tipo_da_linha | `cd /home/ronald/wt-raiox/app && /bin/grep -n "def tipo_da_linha" -A 40 folha/retrato_folha.py \| sed -n '1,48p'` |
 | 08:44:45 | Bash | Read tipo_da_linha and its tables | `cd /home/ronald/wt-raiox/app && sed -n '196,300p' folha/retrato_folha.py` |
@@ -1421,4 +1426,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 20:54:00 | Bash | Check the sombra lock and cron schedule | `cd /home/ronald/saas-hasner ls -l logs/sombra.lock 2>&1 \| head -2 echo "--- quem segura a trava de teste" bash bin/trava_teste.sh --quem 2>&1 \| head -3 echo "--- o cron da sombra: horario derivado de hoje" crontab -l 2>/dev/null \| grep -i sombra` |
 | 20:53:37 | Bash | Read the sombra rehearsal duration and current verdict | `cd /home/ronald/saas-hasner python3 -c " import json d=json.load(open('app/config/crons_duracao.json')) k=[x for x in d.get('dur_s',d) if 'sombra' in x] print({x: (d.get('dur_s') or d)[x] for x in k})" echo "=== o que o --conferir diz hoje" bash bin/sombra.sh --conferir 2>&1 \| tail -12` |
 | 20:53:24 | Bash | Measure the deploy delta, cron state and sombra stamp | `cd /home/ronald/saas-hasner echo "=== 1a. migrations no delta que o deploy vai publicar (302e38db..HEAD)" git diff --name-only 302e38db..HEAD -- '*/migrations/*' \| sed 's/^/ /'; echo " (vazio acima = nenhuma)" echo "=== 1b. delta inteiro, por commit" git log --oneline 302e38db..HEAD echo "=== 1c. crons em curso AGORA" ls -1 logs/crons_em_curso/ 2>&1 \| sed 's/^/ /'; echo " n=$(ls -1 logs/crons_em ...` |
-| 20:47:42 | Bash | Generate the session handoff and check push distance | `cd /home/ronald/saas-hasner bash bin/handoff_sessao.sh 2>&1 \| tail -8 echo "=== HEAD e distancia do remoto" git log --oneline -3 git fetch -q origin 2>/dev/null; git rev-list --count origin/main..HEAD` |
