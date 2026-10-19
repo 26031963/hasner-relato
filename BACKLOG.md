@@ -25,9 +25,14 @@
      `ressuscitar_perguntas` da lista). O numero 7 nao aparece em nenhuma medicao.
      RE-MEDIDO 19/10 10:4x contra o HEAD de hoje (`2af35da3`, nenhum `.py` modificado na arvore):
      `CENSO|sitios=18 sem_lampada=8` de novo -- lastro `logs/o261/censo_lampada_19-10.out`. E o
-     7 ENTAO tem sentido, mas como PROJECAO, nunca como medida: `_materializar_resposta_hora:713`
-     e um dos 8, e e o sitio do item (1) -- curado ele, o censo passa a 8-1=7. Enquanto o item (1)
-     nao pousa, o numero MEDIDO e 8.
+     7 segue sem medicao, e a PROJECAO tambem nao o entrega de graca -- isto e correcao minha, do
+     proprio ato: `_materializar_resposta_hora:713` e um dos 8 e e o sitio do item (1), mas a cura
+     que a sua LISTA das 07:3x manda (migrar a ponte PARCIAL, `_plantio_preenche_furo_na_data`)
+     mora numa FUNCAO AUXILIAR, e o censo pergunta ao corpo da funcao ESCRITORA. Curada a ponte no
+     auxiliar, `_materializar_resposta_hora` segue sem token de lampada no corpo e o censo segue
+     dizendo **8**. O 8 so vira 7 se a leitura da lampada entrar no CORPO do escritor -- desenho
+     que ninguem pediu. Enquanto isso, o numero MEDIDO e 8 e o 7 nao aparece em medida nenhuma
+     nem em projecao honesta.
      O censo so voltou a rodar porque a dependencia dele (`o261_censo_escritores.py`) nao estava
      na arvore: `censo_lampada.py` a importa por `sys.path.insert` do proprio diretorio e ela
      vivia so no scratchpad da sessao -- agora esta em `logs/o261/` ao lado, e o censo se refaz
