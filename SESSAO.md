@@ -6,10 +6,17 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 19/10/2026 09:45:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1092.2 MB). Acoes na janela: **1411**.
+**Medido em 19/10/2026 09:51:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1092.3 MB). Acoes na janela: **1418**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 09:47:18 | Bash | Read the existing O48 p6 test file head | `cd /home/ronald/wt-o48p4 sed -n '1,70p' app/ponto/tests/test_o48p6_projecao_carimbada.py` |
+| 09:47:01 | Bash | Read STATUS_NO_TXT and its use | `cd /home/ronald/wt-o48p4 /bin/grep -rn "STATUS_NO_TXT" --include=*.py app/ \| head echo "--- definicao ---" /bin/grep -rn "STATUS_NO_TXT *=" -A 12 --include=*.py app/ echo "--- export.py 615,635 ---" sed -n '615,635p' app/folha/export.py` |
+| 09:46:50 | Bash | Census the readers of FechamentoMensal.status | `cd /home/ronald/wt-o48p4 echo "=== STATUS_CHOICES e o campo ===" /bin/grep -n "STATUS_CHOICES" -A 8 app/ponto/models.py \| head -20 echo echo "=== CENSO: leitores de FechamentoMensal.status (producao, fora de tests) ===" /bin/grep -rn "status='aberto'\\|status=\"aberto\"\\|status='aprovado'\\|status=\"aprovado\"\\|status='exportado'\\|status=\"exportado\"\\|\.status\b" --include=*.py app/ \ \| /bi ...` |
+| 09:46:27 | Bash | Read the per-empresa competência helper | `cd /home/ronald/wt-o48p4 echo "=== fechamentos_da_competencia_corrente ===" /bin/grep -n "def fechamentos_da_competencia_corrente" -A 45 app/ponto/janelas.py` |
+| 09:46:08 | Bash | Launch the ruler grid probe on the sombra | `cd /home/ronald/saas-hasner S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad export RAIZ=/home/ronald/saas-hasner export COPIA="$S/cp-o317dia" export SONDA="$S" export SONDA_PY=o317_grade_da_regua.py nohup bash "$S/rodar_sonda_sombra.sh" "$RAIZ/logs/o317/grade_da_regua_19-10.out" > "$S/grade_lanc.out" 2>&1 & echo "lancado pid=$!"` |
+| 09:46:02 | Bash | Check the existing HEAD copy for the probe | `cd /home/ronald/saas-hasner S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad ls -d $S/cp-o317dia 2>/dev/null && (cd $S/cp-o317dia && git log --oneline -1 2>/dev/null; ls app/manage.py)` |
+| 09:45:57 | Bash | Read the sombra probe runner | `cd /home/ronald/saas-hasner cat /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/rodar_sonda_sombra.sh` |
 | 09:45:43 | Bash | Read the gravado dates/ratio probe output | `cd /home/ronald/saas-hasner cat logs/o317/datas_do_gravado_19-10.out` |
 | 09:45:34 | Bash | Read the ruler-stamp probe output | `cd /home/ronald/saas-hasner echo "################ carimbo_da_regua_19-10.out ################" cat logs/o317/carimbo_da_regua_19-10.out` |
 | 09:45:24 | Bash | Look for the two later o317 probe outputs | `cd /home/ronald/saas-hasner echo "=== saidas em logs/o317 (mais novas) ===" ls -lat logs/o317/ \| head -20 echo echo "=== scripts no scratchpad ===" ls -lat /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/o317_*.py 2>/dev/null` |
