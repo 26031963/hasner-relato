@@ -6,10 +6,18 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 19/10/2026 11:07:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1097.3 MB). Acoes na janela: **1443**.
+**Medido em 19/10/2026 11:12:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1097.9 MB). Acoes na janela: **1451**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 11:12:31 | Bash | Read folha urls around retrato | `cd /home/ronald/wt-raiox/app && sed -n '18,30p' folha/urls.py` |
+| 11:12:21 | Bash | Read recorte porta return, both readers and imports | `cd /home/ronald/wt-raiox/app sed -n '120,140p' folha/views_retrato.py echo "..."; sed -n "$(/bin/grep -n \"return {'emps'\" folha/views_retrato.py \| cut -d: -f1),+14p" folha/views_retrato.py echo "=== retrato_folha head ==="; sed -n '230,250p' folha/views_retrato.py echo "=== retrato_pdf head/tail ==="; sed -n '320,345p' folha/views_retrato.py; echo "---"; sed -n "$(/bin/grep -n 'pdf_href' folha/ ...` |
+| 11:12:07 | Bash | Check drawer include, _tabela projection and list row idiom | `cd /home/ronald/wt-raiox/app echo "=== drawer no base ==="; /bin/grep -rn '_drawer_generico' templates/ \| head echo "=== _tabela em views_retrato ==="; sed -n "$(/bin/grep -n '_tabela' folha/views_retrato.py \| head -1 \| cut -d: -f1),+30p" folha/views_retrato.py echo "=== _retrato_lista linhas 40-80 ==="; sed -n '40,80p' templates/folha/_retrato_lista.html` |
+| 11:12:00 | Bash | Check drawer helper and led/motivo readers | `cd /home/ronald/wt-raiox/app echo "=== abrirDrawer definido ==="; /bin/grep -rn 'function abrirDrawer\\|abrirDrawer *=' templates/ static/ \| head echo "=== desenho_do_led ==="; sed -n "$(/bin/grep -n 'def desenho_do_led' folha/retrato_folha.py \| cut -d: -f1),+28p" folha/retrato_folha.py echo "=== rotulo_do_motivo ==="; sed -n "$(/bin/grep -n 'def rotulo_do_motivo' folha/retrato_folha.py \| cut - ...` |
+| 11:11:33 | Bash | Read the barra template head and the PDF include | `cd /home/ronald/wt-raiox/app && sed -n '1,75p' templates/folha/_retrato_barra.html \| cat -n \| sed 's/^/ /' echo "=== include da linha 47 ==="; sed -n '45,50p' templates/folha/_retrato_barra.html` |
+| 11:11:19 | Bash | Re-read button and AST contract sections | `cd /home/ronald/wt-raiox/app && sed -n '300,421p' folha/tests/test_retrato_raiox.py` |
+| 11:11:08 | Bash | Re-read lens and button contract sections | `cd /home/ronald/wt-raiox/app && sed -n '120,300p' folha/tests/test_retrato_raiox.py` |
+| 11:07:06 | Bash | Check placar_aceite return and the drawer querystring idiom | `cd /home/ronald/wt-raiox/app echo "=== fim de placar_aceite ==="; sed -n '310,340p' chamados/services/verbos.py echo "=== &amp; nos testes/templates do retrato ==="; /bin/grep -rn 'ano={{ ano }}\\|&amp;ano' templates/folha/ folha/tests/*.py \| head echo "=== core/_led.html ==="; cat templates/core/_led.html` |
 | 11:06:11 | Bash | Read _afirma body | `cd /home/ronald/wt-raiox/app sed -n '/def _afirma/,/^ def test_1920_a_barra/p' folha/tests/test_retrato_folha_smoke_chromium.py \| head -40 echo "---- grep _afirma def ----" grep -n '_afirma' folha/tests/test_retrato_folha_smoke_chromium.py \| head sed -n '320,420p' folha/tests/test_retrato_folha_smoke_chromium.py` |
 | 11:06:06 | Bash | Read _afirma of the chromium smoke | `cd /home/ronald/wt-raiox/app sed -n '205,266p' folha/tests/test_retrato_folha_smoke_chromium.py` |
 | 11:05:59 | Bash | Check PDF selo CSS assertions and chromium smoke | `cd /home/ronald/wt-raiox/app grep -rn 'CSS\\|style' folha/tests/test_retrato_pdf.py \| head -20 echo "=== chromium smoke: o que conta ==="; grep -n 'def test_\\|hx-stat-fx\\|fileiras\\|alto\\|95\\|131' folha/tests/test_retrato_folha_smoke_chromium.py \| head -40` |
