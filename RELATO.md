@@ -118,6 +118,49 @@ NUMERO VENCIDO NO BACKLOG, e vai no commit do proximo marco pela L-106 (nao abro
 
 ---
 
+## PERGUNTA DE LEI NO TOPO, COM O NUMERO (19/10 01:1x, O48 passo 6, raia `wt-o48p4` VERDE) -- a fila NAO parou
+
+**Quem re-deriva, ou APOSENTA, linha gravada de colaborador DESLIGADO fora da janela?** Medido na sombra:
+**4 de 609** linhas gravadas de 10/2026 pertencem a `situacao=desligado` com `data_demissao` ANTERIOR a janela
+21/09-20/10 (`col316`, `col846`, `col870`, `col927`; empresa 2, `status=aberto`, `horas=0.00`). Elas ficam com
+`derivado_em` **NULO para sempre**, porque o universo de derivacao as exclui pelo proprio predicado
+(`ponto/services/fechamento.py:122-124`). O contador do vigia novo fica **4, nao 0**, e esta DECLARADO assim --
+a L-099 proibe estreitar universo para o numero cair. Nenhuma lei nova proposta (L-117).
+
+## CENSO DAS RAIAS 19/10 01:1x -- QUATRO AGENTES VIVOS, E O POUSO E QUE ESTA EM FILA, NAO A CONSTRUCAO
+
+Medido agora por `bin/raia_agente.sh listar` (confronto das declaracoes de `logs/raias/*.agente` com os agentes
+vivos): **uniao=41 · sem_agente=11 · velhas=11** (teto de 6 h da L-105).
+
+| raia | agente vivo | o que faz | commits a frente |
+|---|---|---|---|
+| `wt-fio` | **sim** (esta sessao) | O261 item 2 (contador de emissao) + **O322 afastado nao se cobra** | 0 (3 sujos) |
+| `wt-o320` | **sim** (agente) | corte (9): os 36 `discordante` viram PAUTA DP por dono | 0 (3 sujos) |
+| `wt-o48p4` | **sim** (agente, fechou) | O48 passo 6 -- **VERDE e COMMITADA** (`e241fb45`) | 1 |
+| `wt-v3` | **sim** (esta sessao) | O280 v3 / O287 -- POUSO pendente | 2 |
+
+**OS TRES POUSOS ESTAO NA MESMA FILA SERIAL, e a fila nao e minha**: a trava de teste esta com
+`o320-vizinhos2:3405396` desde 01:06:51 e o RED2 do O322 esta atras dela (`--espera 3600`). O pouso da `wt-o48p4`
+tem UMA condicao que nao e de trava e vai dita porque muda a ordem: ele exige **migrate** (0074), e migrate entre
+o dump do dia (04:00) e o fim do cron da sombra deixa o portao do deploy VERMELHO no refazer seguinte
+(lap-35/36) -- entao ele **nao se faz nesta faixa de hora** sem `--refazer --dump-agora` + `--bloco` por cima.
+Nao e lei nem `!`: e janela, e esta a uma linha de distancia de ser cumprida depois das 04:00.
+
+**UM `!` DEVIDO, e nao e meu**: preencher os carimbos de `derivado_em` em prod exige
+`recalcular_fechamento_mes` em ESCRITA sobre 10/2026 (competencia ABERTA) e **move 72 linhas de dinheiro**. O DIFF
+de frota existe (a lista de 72 medida na sombra serve como o DIFF previo da DINHEIRO-EM-COMPETENCIA-ABERTA), mas
+o **arquivo de reversao em `logs/` NAO foi gerado**: enquanto nao for, o apply nao acontece. Nada rodou em prod.
+
+**AS 11 SEM AGENTE, motivo em uma linha cada (item 4 do `RAIAS-ANDAM-JA`)**: `recon_onprem` (1053 commits,
+2559 h) e importacao on-prem, fora da esteira; `wt-cert` (7, 328 h), `wt-comboio` (1, 141 h), `wt-comboio-v3`
+(1, 10 h), `wt-comboio18` (2, 23.7 h) e `wt-v3-pouso` (1, 61 h) sao **copias de certificacao** -- nascem para a
+suite e nao pousam por desenho; `wt-esmeril` (12, 444 h) e `wt-lps` (1, 348 h) esperam pergunta de lei aberta;
+`wt-o275` (3, 77.5 h) espera o cadastro do `TipoEscala` (pergunta de lei 1 do SDF); `wt-serie` (2, 25 h) espera
+a pergunta de lei 4; **`wt-pdf` (4, 466 h) tem sua ordem de NAO MERGEAR** e e a unica cuja idade e por decisao
+sua, nao por fila.
+
+---
+
 ## CENSO DAS RAIAS 18/10 22:3x -- TRES AGENTES VIVOS, UM POR OBRA, E A LINHA DE MOTIVO QUE O ITEM 4 DO `RAIAS-ANDAM-JA` COBRA
 
 **O que eu media errado antes, e e a razao deste censo existir**: as cinco declaracoes que o ESTADO publicava
