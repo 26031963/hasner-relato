@@ -118,6 +118,34 @@ NUMERO VENCIDO NO BACKLOG, e vai no commit do proximo marco pela L-106 (nao abro
 
 ---
 
+## MARCO 19/10 02:xx -- O DIA DISCORDANTE SEM FIO GANHA DONO NA PAUTA DO DP (O320, POUSO EM SEQUENCIA)
+
+**[O320]** -- item (9) do corte. LEI-AKITA: origem=`ponto/services/pautas_dos_discordantes.py` +
+`ponto/management/commands/pautas_discordantes.py`, testemunha=`CelulaDia.veredito` + `_fio_do_dia` +
+`e6_oraculo.py::dono_da_divergencia`, RED=`app/logs/o320/RED_o320.log`, quem-mais-le=os leitores de
+`discordante` (nenhum emite pauta por dia), juizes novos=0.
+O dia vira PAUTA DP por DONO (CADASTRO/BATIDA), veredito nomeado, **sem chamado ao colaborador**.
+ESTRUTURA nao vira pauta -- sai como contador de esperado 0, que e o lado da L-099. Molde MEDIDO no par
+pousado na O317, nao escolhido: destinatario `dp`, ancora `competencia`, idempotencia pela cabeca do texto.
+**PROVA da obra** (conferida nos logs dela, nao relatada): RED `FAILED (errors=6)` / `Ran 6`; MORDE
+`FAILED (failures=2)` / `Ran 6` com 2 mutacoes pegando os 2 testes exatos; GREEN `OK` / `Ran 10`; vizinhos
+`OK (skipped=9, expected failures=12)` / `Ran 4749`. `rc=` NAO existe em nenhum dos 7 logs dela (medido):
+o 3o termo do tripe da L-074 quem mede e a suite da arvore mergeada, e copiar um `rc=0` seria inventa-lo.
+**PROVA do pouso**: `06432514` = a obra (`95ffaf5a`) com o HEAD `170c6696` mergeado DENTRO da raia, para que
+UMA suite medisse a combinacao -- `Ran 11381 tests in 873.106s` / `OK (skipped=42, expected failures=12)` / `rc=0`. Nao foi comboio: interseccao vazia prova que o merge COMECA
+limpo, nao e suite -- e o GREEN do fio tinha certificado main+fio, nao esta arvore.
+**A CERTIFICACAO ACHOU UM 2o VERMELHO, REAL**: `test_todo_command_tem_casa` (B6.1, allowlist zero) ->
+`['pautas_discordantes'] != []`, comando novo sem CASA. Curado na ORIGEM como **ATO SOB ORDEM** em
+`config/crons.py::FORA_DE_PIPELINE` -- cron seria escritor automatico de pauta sem ordem dele, e pela
+L-099 este universo nao se extingue sozinho --, com docstring `CASA DECLARADA` e o caso que MORDE
+`OComandoTemCasaTest` (a entrada existe, o motivo e prosa real, e o comando NAO esta em `todas_as_entradas()` -- as duas casas ao mesmo tempo deixariam a celula PODRE no contrato vizinho). Recorte `OK` / `Ran 36` / rc=0; decisao tecnica minha pela PAREI-SO-LEI (`d932bcd0`).
+**JANELA DE FECHAMENTO DE 19/10 EM VIGOR**, e este pouso passa por ela e nao por cima: o criterio do
+adendo (*"DIFF de frota ZERO na 10 anda"*) se cumpre MEDIDO -- um escritor pela porta
+`pautas/services.escrever`, DRY por default, sem cron, zero folha, zero dinheiro, zero celula.
+**INCOMPLETO**: `handle()` sem teste de ponta a ponta; o texto da pauta nao se refaz quando um dos dias ganha fio (comportamento do molde, declarado); 36 (corte) x 34 (juiz) x 22 (censo) nao reconciliados -- leitura de prod negada.
+
+---
+
 ## MARCO 19/10 01:xx -- O AFASTADO DEIXA DE SER COBRADO, E O FIO MORTO DEIXA DE CONTAR COMO EMISSAO (dois commits, UMA arvore certificada em `wt-fio`, pouso pela L-105/L-107)
 
 **[O261] item 2** -- LEI-AKITA: origem=`ponto/management/commands/detectar_ausencias.py::_abrir_chamado`,
