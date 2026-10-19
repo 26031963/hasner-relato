@@ -118,8 +118,7 @@ NUMERO VENCIDO NO BACKLOG, e vai no commit do proximo marco pela L-106 (nao abro
 
 ---
 
-## MARCO 19/10 01:xx -- O AFASTADO DEIXA DE SER COBRADO, E O FIO MORTO DEIXA DE CONTAR COMO EMISSAO
-(dois commits, UMA arvore certificada em `wt-fio`, pouso pela L-105/L-107)
+## MARCO 19/10 01:xx -- O AFASTADO DEIXA DE SER COBRADO, E O FIO MORTO DEIXA DE CONTAR COMO EMISSAO (dois commits, UMA arvore certificada em `wt-fio`, pouso pela L-105/L-107)
 
 **[O261] item 2** -- LEI-AKITA: origem=`ponto/management/commands/detectar_ausencias.py::_abrir_chamado`,
 testemunha=`status_local in VIVOS`, RED=`ponto/tests/test_o261_fio_morto_nao_e_emissao.py`,
@@ -136,12 +135,14 @@ no vigia e assinatura **C4** na lista do admin. Contadores `calado_afastado` e `
 DECLARADOS em `contadores()`. O instante se mediu: nos **2 de 2** dia-colab do horizonte a ausencia que afasta
 hoje NAO cobre o dia do furo, entao vale AGORA -- a outra leitura nao curaria caso medido.
 
-**PROVA**: RED1 `Ran 14` / `FAILED (failures=7, errors=3)` / `rc=1`, com 4 vermelhos que eram da fixture
-(`cobrado != furo`, explicado em `cartorio.py:884-906`); RED2 limpo, os 7 TODOS da cura; GREEN `Ran 7853` / `OK (skipped=11, expected failures=12)` / `rc=0`
-em `logs/o322/GREEN_o322_fio_19-10.log` (`ponto chamados escala colaboradores`, censo dos leitores).
+**PROVA**: RED1 `Ran 14` / `FAILED (failures=7, errors=3)` / `rc=1` (4 vermelhos eram da fixture, `cobrado
+!= furo`, `cartorio.py:884-906`); RED2 limpo, os 7 TODOS da cura; GREEN `Ran 7853` / `OK (skipped=11,
+expected failures=12)` / `rc=0` em `logs/o322/GREEN_o322_fio_19-10.log` (os 4 labels do censo dos leitores).
 **ACHADO NO CAMINHO, nao introduzido**: o 2o chamado e `disputa_supervisao/saida_sem_entrada`, da 1a passada
 (`chamados/services/fabrica_da_celula.py:70`) -- a idempotencia virou comparacao do CONJUNTO, nao da contagem.
-**INCOMPLETO**: o deploy e `--sem-migrate` e espera `logs/crons_em_curso/` vazio.
+**ORDEM DO POUSO**: ensaio do dia na sombra ANTES do merge (carimbo era de 18/10, e 50 min entre merge e
+deploy e o que a L-107 proibe); merge + `--sem-migrate` num ato. **INCOMPLETO**: `app/logs/fio_morto.json`
+so nasce na 1a corrida do vigia no ar, e o ensaio do codigo novo e o cron das 04:05.
 
 ---
 
