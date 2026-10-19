@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 19/10/2026 02:45:32.**
+**Medido em 19/10/2026 02:50:46.**
 
 | | |
 |---|---|
-| `HEAD` local | `f2375ab0 pouso da raia do fio: o afastado deixa de ser cobrado e o fio morto deixa de contar como emissao [O261] [O322]` |
+| `HEAD` local | `6bcdc281 o rodape derivado do TICKETS volta ao mundo -- a excecao que a L-106 nomeia` |
 | `origin/main` | `1d532dcd o painel passa a repetir o numero do vigia do fio, e o limiar viaja no carimbo [O261]` |
-| commits a subir (`ahead`) | **3** |
+| commits a subir (`ahead`) | **6** |
 
 ## Fabrica
 
@@ -22,49 +22,49 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2561.0 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2561.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **329.5 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **329.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **142.7 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **142.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio-v3** (`comboio-v3-20261018`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **11.5 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **11.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio-v3.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio18** (`comboio-20261018`) -- **SEM AGENTE**
-  - 2 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **25.2 h** (passou das 6 h da L-105)
+  - 2 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **25.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio18.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **445.6 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **445.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-fio** (`raia-fio`) -- **agente vivo**: O261 item 2 (contador de emissao) + O322 afastado nao se cobra, por sessao app-77 (sem subagente), desde 2026-10-19T00:11:29-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: VERDE e COMMITADA (0c3d0eb9 + 8f6ef771): falta so o POUSO -- merge --no-ff + bin/deploy.sh --sem-migrate, em fila atras do ensaio do dia na sombra (bloco em curso)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **349.7 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **349.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o275** (`raia-o275`) -- **SEM AGENTE**
-  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **79.0 h** (passou das 6 h da L-105)
+  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **79.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-o275.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o320** (`raia-o320`) -- **agente vivo**: O320 forma nova: os 36 dias discordante viram PAUTA DP por dono, por agente de sessao (O320 pauta por dono), desde 2026-10-19T00:11:29-03:00
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **1.2 h**
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **1.3 h**
   - falta para pousar: achar o molde da O306 de 10/10, RED antes, pauta idempotente por assunto, DRY + ensaio na sombra
 - **wt-o48p4** (`raia-o48p4`) -- **agente vivo**: O48 passo 6 (cache de frota com invalidacao), por agente de sessao (O48 passo 6), desde 2026-10-18T22:28:42-03:00
-  - 1 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **1.9 h**
+  - 1 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **2.0 h**
   - falta para pousar: VERDE e COMMITADA (e241fb45, 1 commit a frente do main). Pousar: merge --no-ff + bin/deploy.sh COM migrate (0074). DIA-1 EM PROD: o carimbo nasce NULO na frota inteira (migration sem backfill, de proposito); quem o preenche e ponto/services/fechamento.py::recalcular_fechamento_mes (os dois ramos de escrita, :718 e :764) e NAO ha cron -- ate alguem re-derivar, projecoes_vencidas(10,2026) le 609 e o vigia ALARMA, e isso esta CORRETO. Nenhum leitor de frota ramifica no carimbo: carimbo nulo NAO manda ninguem para online. ATENCAO: re-derivar 10/2026 em prod move 72 linhas de competencia ABERTA = apply de dinheiro (o DIFF da sombra serve como o DIFF previo; FALTA o arquivo de reversao em logs/). Pendencias do chamador: linha do contador em bin/placar_code.sh (INSTRUMENTO, pouso separado, L-105); TICKETS/BACKLOG/RELATO nao tocados; tickets_placar ALARME pre-existente (cura bin/tickets_placar.sh --escrever); pergunta de lei: 4 de 609 sao de desligado fora da janela (fechamento.py:122-124).
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **467.4 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **467.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-serie** (`raia-serie`) -- **SEM AGENTE**
-  - 2 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **26.5 h** (passou das 6 h da L-105)
+  - 2 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **26.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-serie.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-v3** (`raia-v3`) -- **agente vivo**: O280 v3 / O287 portao do esmeril -- POUSO pendente, por sessao app-77 (sem subagente), desde 2026-10-19T00:11:29-03:00
-  - 2 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **4.4 h**
+  - 2 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **4.5 h**
   - falta para pousar: comboio se mede quando a trava liberar (hoje o48p4); suite na arvore MERGEADA, L-107 num ato so
 - **wt-v3-pouso** (`pouso-v3-20261016`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 4 arquivo(s) sujo(s), commit a frente ha **62.3 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 4 arquivo(s) sujo(s), commit a frente ha **62.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-v3-pouso.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **26 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-bos, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-folha10, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o306, wt-o316, wt-o37, wt-orfa, wt-regua, wt-sj, wt-ui, wt-vinculo
 
@@ -83,11 +83,11 @@ _nenhuma obra interrompida registrada no bloco OBRAS._
 ## `git log --oneline -5`
 
 ```
+6bcdc281 o rodape derivado do TICKETS volta ao mundo -- a excecao que a L-106 nomeia
+f8a9aaed o placar do topo volta ao mundo de novo, agora sem que a mensagem que o explica o mova
+16c0e012 o placar derivado do topo do TICKETS volta ao mundo, dentro do marco que o desatualizou
 f2375ab0 pouso da raia do fio: o afastado deixa de ser cobrado e o fio morto deixa de contar como emissao [O261] [O322]
 8f6ef771 o afastado deixa de ser cobrado no portao, e o dia calado passa a ter dono [O322]
-0c3d0eb9 a cobranca morta que nao renasce deixa de contar como emissao, e o funil passa a dizer que nada nasceu [O261]
-1d532dcd o painel passa a repetir o numero do vigia do fio, e o limiar viaja no carimbo [O261]
-b778a4af o numero do vigia do fio ganha onde parar, e o esperado viaja dentro do arquivo [O261]
 ```
 
 ## `git status --short`
@@ -97,7 +97,6 @@ b778a4af o numero do vigia do fio ganha onde parar, e o esperado viaja dentro do
  M app/docs/AVAIS.md
  M app/docs/HANDOFF-SESSAO.md
  M app/docs/PENDENTES_RONALD.json
- M app/docs/TICKETS.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -188,44 +187,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  A combinação main+fio+o320 não tinha suite nenhuma por trás. O GREEN do fio certificou main+fio; o do O320 certificou main+o320. A POUSO-EM-COMBOIO pede uma cópia com main +
+  as duas e uma suite, e a SUITE-UMA-VEZ-POR-ARVORE fecha: "suite que certificou outra arvore nao certificou esta". Interseção vazia de arquivos prova que o merge começa sem
+  conflito — não é certificação. Deployar a combinação com a prova prometida para o pre-push seria certificar depois de prod já estar rodando. Então o fio pousou sozinho e o
+  O320 ganha suite própria sobre o HEAD novo.
 
-  Não abro obra nova nesta janela de propósito: a SUITE-UMA-VEZ-POR-ARVORE proíbe editar .py entre o veredito e o merge, e o pouso está a minutos. Assim que sair
-  rc_bloco/rc_conferir, vai o comboio na forma já escrita na mensagem de merge — raia-fio com os docs do marco no mesmo commit, raia-o320 com o passo 4 do patcher, bin/deploy.sh
-  --sem-migrate imediatamente, pasta de selos de host na principal, um push por marco.
+  Fio NO AR. f2375ab0 (merge --no-ff, MERGE_HEAD=8f6ef771, docs do marco no mesmo commit), e o censo que a lei pede: git diff --stat raia-fio HEAD em *.py e em todo não-docs =
+  vazio — a árvore que pousou é byte a byte a árvore certificada. bin/deploy.sh --sem-migrate rc=0: arvore_sem_conflito OK, migrations pendentes 0, janela_auth OK (10
+  declarados), sombra: carimbo dia=20261019 status=OK diverge=0 erros=0, prova de casca 16 estaticos / 5 paginas / 615 rotas em 2 urlconf, as três rotas 200/302/200, selo BUG
+  128 verde, importerror_500=0. 74 selos de host verdes, 0 vermelhos.
 
-✻ Sautéed for 11m 0s · done 2:23 AM
+  Ensaio na sombra, medido: rc_refazer=0 rc_bloco=0 rc_conferir=0, bloco 76/76 · erro=0 · alarme=8 · fora_do_ensaio=1, 01:49:46→02:24:46. Os 8 alarmes são exit 2 — alarme de
+  negócio, não erro (sombra.sh:388-392): 2 de grade e 6 de auditoria, estado de dado da cópia de prod, de antes desta cura.
 
-● Background command "Wait in a bounded loop for the rehearsal verdict" completed (exit code 0)
+  O push custou quatro tentativas, e as três primeiras recusas foram minhas:
+  1. tickets_placar: ALARME (placar derivado defasado em 8 linhas) — curado por bin/tickets_placar.sh --escrever.
+  2. A mensagem que explicava o alarme virou o alarme: meu commit do placar nomeava em prosa duas linhas paradas, e o contador casa por token no texto, subindo de 1 para 2. É a
+     segunda vez que isso morde — reescrevi o placar e o commit seguinte sem nenhum identificador de parado.
+  3. tickets_rodape_vs_git: ALARME (rodapé 9 commits atrás, teto 5) — curado por bin/tickets_rodape.sh --escrever, que é a única exceção que a L-106 nomeia.
 
-  Read 1 file, ran 2 shell commands
+  Antes da 4ª tentativa rodei localmente os cinco portões de host do pre-push — todos rc=0. A suite do push está correndo agora sobre 6bcdc281 (trava com pre-push:3568110).
 
-● Background command "Wait for the rehearsal to finish and read its verdict" completed (exit code 0)
+  Duas coisas que preciso dizer sem enfeite: git commit --amend foi negado pelo classificador do ambiente ("Git Destructive"), e eu não contorno negação — por isso os dois
+  derivados viraram commits próprios em vez de entrarem no commit do marco; está escrito no corpo de cada um. E o deploy esperou 600 s pelo noturno.py em curso e reiniciou assim
+  mesmo (é o comportamento declarado do DEPLOY-ESPERA-CRON): conferi, o processo sobreviveu (roda no host, não dentro do saas_core) e segue vivo.
 
-  Ran 9 shell commands
+  Quando a suite do push voltar verde, o O320 vai assim: git merge main dentro de wt-o320, bin/suite.sh --dir /home/ronald/wt-o320 com o label core incluído (o INCOMPLETO dele
+  dizia que esse label só havia sido lido), e só então merge + deploy em um ato. A mensagem dele já está reescrita para pouso em sequência, e as duas âncoras do passo 4 do
+  patcher foram ensaiadas a seco: ×1 cada.
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: O261 -- BUG-FIO-MORTO-CHAMADO (aval dele 12/10 20:2x, P7.1 -- bug PROVADO POR ELE, fura a fila; id novo por ordem lite
 
-  Committed f2375ab0, read 1 file, ran 10 shell commands
-
-● Background command "Deploy the landed code to the three shells" completed (exit code 0)
-
-  Ran 5 shell commands
-
-● Background command "Push the fio marco to the remote" completed (exit code 0)
-
-● Running 3 shell commands…
-  ⎿  $ cd /home/ronald/saas-hasner
-     git add app/docs/TICKETS.md
-     echo "=== o que o amend vai levar (so TICKETS a mais)"; git diff --cached --name-only
-     git commit --amend --no-edit 2>&1 | tail -6
-     echo "=== HEAD e pais (merge preservado?)"; git log -1 --format='%h pais=%p %s'
-
-· Tomfoolering… (20m 44s · ↓ 19.9k tokens · thinking)
-                                                                                                                    bash denied by auto mode · [Git Destructive] · /permissions
+· Compacting conversation… (25m 58s · ↓ 34.4k tokens)
+  ▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 4%
+                                                                                                                                       Stop hook error occurred · ctrl+o to see
 ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt · ← for agents
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
