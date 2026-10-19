@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 19/10/2026 02:18:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1069.0 MB). Acoes na janela: **1447**.
+**Medido em 19/10/2026 02:24:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1069.0 MB). Acoes na janela: **1434**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 02:23:41 | Bash | Confirm the rehearsal block is still alive | `cd /home/ronald/saas-hasner echo "=== trava da sombra"; ls -la logs/sombra.lock 2>/dev/null \|\| echo "(sem lock)" echo "=== atividade no sombra_db" docker exec sombra_db psql -U postgres -d sombra -tAc "select count(*), coalesce(max(now()-query_start)::text,'-') from pg_stat_activity where datname='sombra' and state='active'" 2>&1 \| head -3 echo "=== filhos do lancador 3463117" ps --ppid 3463117 ...` |
+| 02:23:33 | Bash | Check whether the rehearsal has finished | `cd /home/ronald/saas-hasner L=logs/o322/ENSAIO_19-10.log echo "agora $(date '+%T'); mtime $(stat -c%y $L \| cut -d. -f1)" /bin/grep -E '^rc_(bloco\|conferir)=\|^fim ' "$L" \|\| echo "bloco ainda em curso" tail -3 "$L"` |
 | 02:13:26 | Bash | Wait in a bounded loop for the rehearsal verdict | `cd /home/ronald/saas-hasner L=logs/o322/ENSAIO_19-10.log for i in $(seq 1 56); do if /bin/grep -q '^fim ' "$L"; then echo "TERMINOU (i=$i) em $(date '+%T')"; break; fi command sleep 20 done echo "=== veredito do ensaio" /bin/grep -E '^rc_(refazer\|bloco\|conferir)=' "$L" echo "--- carimbo / status" /bin/grep -E '^(sombra: \|SOMBRA_\|sombra_diverge)' "$L" \| tail -8 echo "--- inicio/fim"; /bin/grep ...` |
 | 02:13:12 | Bash | Check the rehearsal progress again | `cd /home/ronald/saas-hasner L=logs/o322/ENSAIO_19-10.log echo "=== agora $(date '+%F %T'); mtime $(stat -c%y $L)" echo "=== rc"; /bin/grep -E '^rc_(refazer\|bloco\|conferir)=' "$L" \|\| echo "(so refazer)" echo "=== ultimas 6"; tail -6 "$L" echo "=== lancador"; ps -o pid=,etime= -p 3463117 2>/dev/null \|\| echo morto` |
 | 02:06:40 | Bash | Re-measure the merge intersections before the pouso | `cd /home/ronald/saas-hasner echo "=== main status"; git status --porcelain echo "=== main dirty x raia-fio"; comm -12 <(git status --porcelain \| awk '{print $2}' \| sed 's#^#app/#;s#^app/app/#app/#' \| sort -u) <(git diff --name-only 1d532dcd..raia-fio \| sort -u) echo "=== main dirty x raia-o320"; comm -12 <(git status --porcelain \| awk '{print $2}' \| sed 's#^#app/#;s#^app/app/#app/#' \| sort  ...` |
@@ -1442,18 +1444,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 14:24:35 | Bash | Read the esmeril pauta emitter | `wc -l ponto/services/pautas_do_esmeril.py && sed -n '1,80p' ponto/services/pautas_do_esmeril.py` |
 | 14:24:28 | Bash | Find the O306 selos covering the cured judge | `ls chamados/tests/ \| /bin/grep -i 'o306\\|carimbo' && echo '=== MORDE sobre entrada_de_marco ===' && /bin/grep -rn 'entrada_de_marco' chamados/tests/*.py \| head -20` |
 | 14:24:26 | Bash | Look for a lote backfill command from the O306 marco | `cd /home/ronald/saas-hasner && git log --oneline -S 'backfill' -- app/chamados/management/commands/ \| head -10 && echo '=== O306 commands touched ===' && git log --oneline -3 --name-only -- app/chamados/management/commands/ \| head -30` |
-| 14:22:12 | Bash | Read the anchor helpers and anchor list | `sed -n '277,300p' pautas/services.py && sed -n '324,345p' pautas/services.py && echo '=== ANCORAS list ===' && sed -n '1,45p' pautas/models.py \| /bin/grep -n 'ANCORAS' -A 12` |
-| 14:22:06 | Bash | Read the pauta writer and valid anchors | `sed -n '70,135p' pautas/services.py && echo '=== ANCORAS ===' && /bin/grep -n 'ANCORAS_VALIDAS' -A 20 pautas/models.py \| head -40` |
-| 14:22:00 | Bash | Read the pautas service header and functions | `sed -n '1,60p' pautas/services.py && echo '=== defs ===' && /bin/grep -n '^def \\|^class ' pautas/services.py` |
-| 14:21:56 | Bash | Find modules mentioning the DP pauta | `/bin/grep -rln 'PautaDP\\|pauta_dp' --include=*.py . \| head -20` |
-| 14:21:55 | Bash | Find the DP pauta port | `/bin/grep -rn 'def push_dp\\|class Pauta\\|def abrir_pauta\\|def criar_pauta' --include=*.py . \| head -20` |
-| 14:21:31 | Bash | List chamados commands and read the vigia census | `ls chamados/management/commands/ && echo '=== vigia censo ===' && sed -n '1,120p' chamados/services/vigia_carimbo.py` |
-| 14:21:19 | Bash | Read the official validation port | `sed -n '889,1000p' chamados/services/materializacao.py` |
-| 14:21:02 | Bash | Read the plant timestamp/type derivation | `sed -n '271,365p' chamados/services/materializacao.py` |
-| 14:21:01 | Bash | Read the expected-slot judge | `/bin/grep -n '_slot_esperado' chamados/*.py chamados/services/*.py \| head && echo '=== def ===' && sed -n "$(/bin/grep -n 'def _slot_esperado' chamados/juizes.py \| cut -d: -f1),+60p" chamados/juizes.py` |
-| 14:20:50 | Bash | Read the marco-type derivation in the materialization service | `sed -n '185,270p' chamados/services/materializacao.py` |
-| 14:20:49 | Bash | Read the cured marco-entry judge | `sed -n '420,480p' chamados/juizes.py` |
-| 14:20:43 | Bash | Find the readers of the cured marco entry | `/bin/grep -rn 'entrada_de_marco' --include=*.py . \| /bin/grep -v '/tests/' \| head -30` |
-| 14:20:42 | Bash | List the top-level functions of the materialization service | `wc -l chamados/services/materializacao.py && /bin/grep -n '^def \\|^class \\|^ def ' chamados/services/materializacao.py` |
-| 14:20:32 | Bash | Re-read the measure (a) output | `cd /home/ronald/saas-hasner && cat /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/o317/medida_a.out 2>/dev/null \| tail -40` |
-| 14:20:30 | Bash | Check repo state and locate the O317 cell | `cd /home/ronald/saas-hasner && git log --oneline -1 && git status --porcelain && echo '--- O317 cell ---' && /bin/grep -n 'O317' app/docs/BACKLOG.md \| head -20` |
