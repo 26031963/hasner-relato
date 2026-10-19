@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 18/10/2026 22:54:32.**
+**Medido em 18/10/2026 23:00:02.**
 
 | | |
 |---|---|
@@ -22,46 +22,46 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2557.1 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2557.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **325.6 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **325.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
   - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **138.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio-v3** (`comboio-v3-20261018`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **7.7 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **7.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio-v3.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio18** (`comboio-20261018`) -- **SEM AGENTE**
-  - 2 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **21.3 h** (passou das 6 h da L-105)
+  - 2 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **21.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio18.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **441.7 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **441.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-fio** (`raia-fio`) -- **agente vivo**: O261 itens pendentes: o que detem a emissao dos 13 FURO_COM_COBRANCA_MORTA, por agente de sessao (O261 itens pendentes), desde 2026-10-18T22:29:17-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: medir julgar_colab forcar=True nos 13 na sombra; cura na origem; 8 escritores cegos pela lampada; contador no ESTADO
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **345.9 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **346.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o275** (`raia-o275`) -- **SEM AGENTE**
-  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **75.1 h** (passou das 6 h da L-105)
+  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **75.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-o275.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p4** (`raia-o48p4`) -- **agente vivo**: O48 passo 6 (cache de frota com invalidacao), por agente de sessao (O48 passo 6), desde 2026-10-18T22:28:42-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: medir os ~65s dos leitores de FROTA e nascer o cache no molde previsto_em/invalidar_previsto
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **463.6 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **463.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-serie** (`raia-serie`) -- **SEM AGENTE**
   - 2 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **22.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-serie.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-v3** (`raia-v3`) -- **agente vivo**: O280 v3 / O287 portao do esmeril, por agente de sessao (Opus 5), desde 2026-10-18T22:38:54-03:00
-  - 2 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **0.6 h**
+  - 2 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **0.7 h**
   - falta para pousar: suite cheia correndo contra a arvore cb23e5b1 (HEAD a867325a); depois: carimbo item 443 e pouso pendente, do chamador
 - **wt-v3-pouso** (`pouso-v3-20261016`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 4 arquivo(s) sujo(s), commit a frente ha **58.5 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 4 arquivo(s) sujo(s), commit a frente ha **58.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-v3-pouso.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **26 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-bos, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-folha10, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o306, wt-o316, wt-o37, wt-orfa, wt-regua, wt-sj, wt-ui, wt-vinculo
 
@@ -187,24 +187,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  As cinco declarações velhas (wt-bos, wt-folha10, wt-o48p3, wt-serie, wt-ui) foram baixadas pelo escritor único, corpo preservado em logs/raias/historico.log — e os dois
-  "pousos verdes" do seu aval já tinham pousado: raia-ui 6bd163b3 e raia-folha10 bcf58258 são ancestrais do main. Das 11 sem agente com commit à frente, quatro não são raia
-  (wt-comboio, wt-comboio-v3, wt-comboio18, wt-v3-pouso são cópias de certificação — a própria mensagem delas diz "NAO POUSA: so para a suite"), wt-lps se declara ensaio
-  descartável, e as de obra têm motivo nomeado: wt-serie (pergunta de lei 4), wt-o275 (pergunta de lei do topo), wt-pdf (seu !: proibido mergear), wt-cert (instrumento, pouso
-  próprio pela L-105). Duas ficam sem motivo escrito e eu registrei isso em vez de inventar: wt-esmeril (12 commits, 441 h) e recon_onprem (1.053 commits, nem é raia desta
-  esteira).
-
-  O corte das 34: pendente GRUPO-D-DISCORDANTE-SEM-DONO respondido pelo escritor canônico (diff de 28 linhas, zero churn), obra O320 no bloco OBRAS, e o corte relido ao agente
-  de wt-fio com a leitura que mantém a L-099 inteira — o dono ESTRUTURA é do fio que falta, não do mérito do dia; o mérito segue no R1 e o caso de BATIDA ou CADASTRO chega a
-  quem responde pelo fio. RED antes, juizes novos=0.
-
-  Uma correção minha, e é aritmética que eu quase publiquei fechada: eu havia escrito plantada 364 + via:paridade_recusada 53 (= os 421 que saem). 364 + 53 = 417, não 421 —
-  sobram 4 sem via nomeada, e deixei os 4 nomeados como faltantes em vez de somar bonito. As contas que de fato fecham são outras, e essas eu publiquei: com_registro +427 = 421
-  + slot_nao_derivavel 16 − plantio_fora_do_slot 10, e as 16 corridas por competência somam exatamente a corrida 0 nos cinco contadores. O RELATO publicado (7ebd236a no remoto)
-  carrega o medido: SAI 421 / FICA 599 do universo de 1.020, e o plantio_fora_do_slot +10 (6 na emp2 09, 4 na emp2 10) como número, porque é defeito que o apply cria.
-
-  Uma coisa que não é minha e está num repo público: CENSO_NARNIA.md aparece untracked em /home/ronald/hasner-relato. Não foi publicado (o publicador adiciona por path
   explícito), mas está na árvore de trabalho de um repo público.
 
   Fica para o instante em que o push devolver veredito (não escrevo na árvore antes): tirar a linha PAREI do topo, e regenerar PENDENTES_RONALD.json:2766 pelo escritor canônico
@@ -213,18 +195,36 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ✻ Waiting for 3 background agents to finish
 
 ● Agent "v3 esmeril gate O280/O287" finished · 14m 48s
+  ⎿  Read docs/AVAIS.md (19 lines)
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/ensaiar_o317.sh (39 lines)
+  ⎿  Referenced file config/crons.py
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bh0e5jovk.output (43 lines)
+  ⎿  Referenced file ../logs/o261/MEDIDA_noite_18-10.md
 
-· Compacting conversation… (1m 6s)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 52%
-                                                                                                                                                          0% until auto-compact
+● Task "O48 passo 6 ate a prova da folha" still running in background
+
+● Task "O261 itens pendentes do fio morto" still running in background
+
+● Task "v3 esmeril gate O280/O287" completed in background
+
+● Task "Measure the whole public history with the cured predicate" still running in background
+
+● Task "Push the pending commits through the regular gate" still running in background
+
+● O261 battery data merged; RED/MORDE running on cp-grupod; wt-v3 agent relaunched
+  ⎿  $ cd /home/ronald/saas-hasner
+     sed -n '2740,2790p' app/docs/PENDENTES_RONALD.json
+
+✢ Creating… (6m 36s · ↓ 5.7k tokens)
+                                                                                                                                         ✔ Update installed · Restart to update
 ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ general-purpose  Inspecting atualizado_em timestamps in FechamentoMensal                                                                            26m 3s · ↓ 74.6k tokens
-  ◯ general-purpose  Writing test_o261_fio_morto_nao_e_emissao.py                                                                                      26m 3s · ↓ 166.5k tokens
+  ◯ general-purpose  Checking turnos.py drift in a94e8a48                                                                                              31m 34s · ↓ 87.0k tokens
+  ◯ general-purpose  Reading _MAPA_VEREDITO in escala/models.py                                                                                       31m 34s · ↓ 108.8k tokens
   ◯ general-purpose  Updating falta via raia_agente.sh                                                                                                 14m 48s · ↓ 73.2k tokens
   ⧉  index
 ```
