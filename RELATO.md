@@ -1372,6 +1372,8 @@ LEI-AKITA: origem=`bin/nome_no_texto.py` (o predicado de *"ha nome de colaborado
 
 ## ALARMES DA ESTEIRA
 
+**19/10 03:40 vigia da esteira** -- esteira em espera de janela: 8 fatias prontas, reabre 04:45.
+
 **18/10 22:40 vigia da esteira** -- esteira em espera de janela: 8 fatias prontas, reabre 00:00.
 
 **18/10 03:40 vigia da esteira** -- esteira em espera de janela: 8 fatias prontas, reabre 04:45.
