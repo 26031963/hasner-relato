@@ -137,6 +137,24 @@ PARA VOCE, UMA LINHA SO, e nao e pergunta de lei nem `!`: **quatro obras citadas
 
 NUMERO VENCIDO NO BACKLOG -- **PAGO no marco de 07:1x desta sessao**, pela L-106 (a celula viajou no commit do pouso da v3, nao em commit de doc): a celula da **O280** dizia *"Fecha os **13 abertos** do portao do esmeril"* e o portao vivo tem **10**, derivado da propria fonte (`logs/o280/esmeril/portao_derivado_1810.py`: 8 do paragrafo 5 + 2 do 6). Fica VENCIDO o da mesma familia: o `21 FURO_SEM_COBRANCA` da celula da O261, que a raia `wt-fio` corrige no commit da cura dela.
 
+## MARCO 19/10 14:2x-14:3x -- O CARD DE FURO OFERECE O MARCO QUE A PORTA ACEITA, E O JUIZ POR DIA LE A PROJECAO EM VEZ DE RECALCULAR (O318 complemento -- pouso da raia `wt-o318` pela L-105/L-107)
+
+LEI-AKITA: origem=`chamados/services/declaracao_texto.py::projecao_por_marco`, testemunha=`_marcos_faltantes` + `_porta_recusaria_por_carimbo` (as MESMAS duas autoridades que a porta usa), RED=`test_o318_dia_misto_projecao_por_marco` (`FAILED (failures=4, errors=11)`, rc=1, em `/home/ronald/cp-o318misto`), quem-mais-le=`_card_atendimento.html` + `modal_fio.html` + `chamados/services/fio.py` + `api/views.py::api_chamados_v2`, juizes novos=0
+
+A FATIA e o commit `4311acbc` da raia e a historia dela esta no CORPO dele (L-116); esta secao e o **POUSO**. O que mudou: o card lia `chamado.contexto_json.marcos_faltantes.0` -- o marco que o EMISSOR escreveu no dia em que o chamado nasceu -- e no #27329 esse `0` e justamente a entrada que a porta RECUSA por carimbo; agora o template LE `chamado.marcos_projetados` e `chamado.marco_unico_aceito`, e o marco recusado ganha aviso proprio (`hx-marco-em-regularizacao`) em vez de levar o dia inteiro para o bloco da supervisao.
+
+A ARVORE CERTIFICADA E A ARVORE QUE POUSOU, e a prova aqui e mais forte que o `cmp` arquivo a arquivo da forma: **identidade de TREE**. `git merge-tree --write-tree main raia-o318` devolveu `d29079bc2034f8d1bfb647c264f5b0325bf4ee33` sem conflito, e esse e exatamente o tree de onde a copia `cp-o318cert` nasceu -- o conjunto inteiro e o mesmo objeto, nao ha arquivo a conferir um por um. Nenhum `.py` foi escrito entre o veredito e o merge: a arvore viva tinha **0** `.py` modificado, porque a fatia da Pauta DP que corre em paralelo vive em copia.
+
+PROVA, com as TRES metades da L-074 desta vez: suite INTEIRA em `cp-o318cert` -> rc **0**, `OK (skipped=42, expected failures=14)`, `Ran 11445 tests in 1641.704s` (14:29:49, `$SP/suite_cert_o318.log`). Merge `bcc8a8ba` (`--no-ff`, `parents=a5242596 4311acbc`, `MERGE_HEAD` conferido NAO vazio) e `bin/deploy.sh --sem-migrate` rc=**0** no MESMO ato -- 0 migration pendente, sombra `dia=20261019 status=OK diverge=0`, `collectstatic`, prova de casca (16 estaticos, 5 paginas, 616 rotas em 2 urlconf), tres rotas provadas (core 200, ui 302, mensageria 200), selo BUG 128 verde, `importerror_500=0`.
+
+POUSOU SOZINHA, e a pergunta se MEDIU (`git worktree list` + `.agente` vivos), nao se supos: as duas raias vivas no instante do veredito -- `wt-regua10`, que ainda esta com a trava da suite desde 14:01:43, e `wt-v3` -- nao ficam prontas em 30 min, e ninguem espera mais que isso (POUSO-EM-COMBOIO).
+
+MIGRATION: **0** no diff, entao `--sem-migrate` e nao ha nada a reverter no banco. TICKETS: a linha do O318 passou a dizer que o complemento esta no ar (a de 18/10 descrevia so a primeira metade); os dois blocos DERIVADOS do arquivo seguem com o valor de `a5242596`, porque a raia nunca os tocou e quem os fecha e o `pos_push`.
+
+A declaracao de agente da `wt-o318` foi BAIXADA pelo escritor unico (`bin/raia_agente.sh fechar`), e as raias vivas caem para **3**.
+
+INCOMPLETO, nomeado: (1) o **smoke de clique** no card do colaborador segue com o Ronald na 1805 -- suite verde nao ve tela, e a linha do O318 no TICKETS ja declara isso; (2) o **aviso ao Fernando** segue gateado pela O319 (ABERTA), que ele separou das duas; (3) o **PUSH** deste marco esta DEVIDO e nao foi feito agora por PISTA, nao por lei: o pre-push roda os dois runners e a trava da suite esta com a raia `wt-regua10` desde 14:01:43 -- push com a trava presa volta rc 75 ("a vez nao chegou", nao e vermelho). Ele sai quando a trava liberar, UM push pelo marco.
+
 ## MARCO 19/10 13:1x -- A PORTA DO FIO MORTO RECORTA POR CELULA E O PAINEL ALARMA NA CLASSE QUE TEM ALVO (O261 item 3 -- pouso da raia `wt-fio` pela L-105/L-107, em COPIA DE CERTIFICACAO)
 
 LEI-AKITA: origem=`chamados/services/vigia_carimbo.py::classificar` (a PORTA ganha o recorte) + `chamados/management/commands/vigiar_fio_morto.py` (`ESPERADO`/`ALARMA_EM_0`), testemunha=`vigia_carimbo.classificar` como unica autoridade de CLASSE e `passivo_validado.FORA_DO_ESCOPO` como unica autoridade de ALCANCE, RED=`test_MORDE_sem_dia_de_fio_morto_a_PORTA_nao_e_varrida`, quem-mais-le=1 chamador de producao (`chamados/services/passivo_validado.py:199`, POSICIONAL) + o painel do ESTADO (`bin/gerar_estado.py:250`), juizes novos=0
