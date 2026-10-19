@@ -135,6 +135,19 @@ NUMERO VENCIDO NO BACKLOG -- **PAGO no marco de 07:1x desta sessao**, pela L-106
 
 
 ---
+## POUSO 19/10 12:4x -- COMBOIO DE DUAS OBRAS, E A REGUA DO GRAVADO MEDIDA PELA AUTORIDADE [O317] [O310]
+
+LEI-AKITA: origem=`passivo_validado.py::_pauta` (Pauta DP sem hora) e `folha/views_retrato.py`; testemunha=`regen_exportada.py` (`antes`/`depois`) e `folha/porta_export.py::regua_das_linhas`; RED=`test_o317_passivo_pela_porta.py` (18) + `test_retrato_raiox.py`; quem-mais-le=10 arquivos, `comm -12` com a raia vizinha VAZIO; juizes novos=0.
+
+**POUSA** (UMA copia, UMA suite -- POUSO-EM-COMBOIO): cura do O317 (3 arquivos: a Pauta DP passa a dizer `pago -> devido` por campo em vez de hash, e `reparar` ganha o recorte `colaboradores`) + Raio-X do retrato (7 arquivos, O310). **PROVA:** `OK (skipped=42, expected failures=14)` + `Ran 11423 tests in 1645.834s`, teardown limpo, trava liberada 12:32:04, contra `cp-comboio19` (`git archive baad2875` + os 10); censo = **10 entradas, 8 MUDOU + 2 NOVO**, os 10 batendo por `git hash-object` copia x arvore no ato do commit. **A 3a metade da L-074 falta**: o lancador de fundo nao gravou o rc -- fila `LANCADOR-DA-SUITE-GRAVA-O-RC`; nao afirmo rc que nao medi. Deploy no MESMO ato (L-107).
+
+**O ACHADO, e ele corrige a MINHA linha de fila.** Antes de escrever o rotulo de regua que o `!` das 12:2x pede na Pauta DP, perguntei a quem nomeia regua nesta casa -- o carimbo `DiaPago.versao_motor`, que ja tem leitor. Nos 17 retidos, `lavra_regua` vem **VAZIO em 17 de 17**, e vazio de verdade: ZERO linha de `DiaPago`, com `FechamentoMensal` existindo nos 17. Minha fila dizia *"os dez sao o caso"* -- **sao os DEZESSETE**, e os 7 "nomeaveis" o sao por REPRODUCAO (inferencia economica), nunca por carimbo. A Pauta DP dira as DUAS metades com a fonte de cada uma, em vez de vender inferencia como carimbo (LEI-AKITA 2). **PROVA:** `logs/o317/REGUA_NOMEAVEL_PELA_AUTORIDADE_19-10.md`, sonda `logs/sombra/o317_regua_nomeavel.py` (so leitura).
+
+**AVAL DAS 12:3x, cumprido nesta arvore:** o portao `PAUSA pela JANELA DE FECHAMENTO` caiu da celula `REGUA-DO-PERIODO-VEM-DA-ESCALA-DE-HOJE`, que anda agora. Obra nova: `GRAVADO-NAO-CARIMBA-A-REGUA`.
+
+**INCOMPLETO:** (a) rc do processo da suite (fila); (b) o DIFF do O317 em HEAD nos quatro pares vem AGORA -- condicao 1 do `!`, porque o publicado mede codigo de 11/10 (item 16 do topo); (c) censo da frota 10 da `REGUA-DO-PERIODO` nao comecou; (d) o instrumento `--diff-folha` pousa sozinho (L-105).
+
+---
 ## MEDIDO 19/10 11:4x -- A REGUA DO GRAVADO DOS DEZ RETIDOS: TRES CAMINHOS DE NOMEACAO, TRES "NAO" (O317)
 
 LEI-AKITA: origem=nenhuma (medicao read-only), testemunha=`DiaPago.versao_motor` + `recalcular_fechamento_mes(somente_leitura=True)` + `autoridade_do_periodo`, RED=n/a (nao e cura), quem-mais-le=os 10 pares retidos, juizes novos=0
