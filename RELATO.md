@@ -144,7 +144,7 @@ PARA VOCE, UMA LINHA SO, e nao e pergunta de lei nem `!`: **quatro obras citadas
 
 NUMERO VENCIDO NO BACKLOG -- **PAGO no marco de 07:1x desta sessao**, pela L-106 (a celula viajou no commit do pouso da v3, nao em commit de doc): a celula da **O280** dizia *"Fecha os **13 abertos** do portao do esmeril"* e o portao vivo tem **10**, derivado da propria fonte (`logs/o280/esmeril/portao_derivado_1810.py`: 8 do paragrafo 5 + 2 do 6). Fica VENCIDO o da mesma familia: o `21 FURO_SEM_COBRANCA` da celula da O261, que a raia `wt-fio` corrige no commit da cura dela.
 
-## MARCO 19/10 15:5x -- A PAUTA DO DP DIZ SOB QUAL REGUA O GRAVADO FOI PAGO, COM A CAUSA MEDIDA, E O QUE NAO CABE DESCE EM FILHA (O317, pouso SOZINHO)
+## MARCO 19/10 16:0x -- A PAUTA DO DP DIZ SOB QUAL REGUA O GRAVADO FOI PAGO, COM A CAUSA MEDIDA, E O QUE NAO CABE DESCE EM FILHA (O317, pouso SOZINHO)
 `LEI-AKITA: origem=folha/porta_export.py::regua_em_palavras + ponto/portas/regen_exportada.py::regenerar_em_exportada + pautas/services.py::partir_em_pautas, testemunha=DiaPago.versao_motor contado por regua_das_linhas e Pauta._meta.get_field('texto').max_length para o teto, RED=chamados/tests/test_o317_passivo_pela_porta.py (3 selos novos), quem-mais-le=os 22 chamadores de pautas.services::escrever (nenhum muda) + o painel do DP, juizes novos=0`
 **A pergunta dos dois `!` (12:2x "regua nomeada onde houver", 14:0x "pago x devido e a causa por colab") nao cabia na Pauta: `Pauta.texto` e CharField(500) e `pautas/services.py:128` faz `texto[:500]`.** No RED a frase da regua morreu no meio da palavra. Alargar o campo esta fora (o 500 e corte dele, PAUTA-TEXTO 11/09); cortar com ponteiro mostraria **1 de 26** campos. O idioma da casa ja existia -- cabeca com a decisao, filhas com o corpo (`pautas/management/commands/pauta_dia_em_aberto.py:19-23`).
 O que mudou (5 sitios + 1 selo):
@@ -158,6 +158,7 @@ O que mudou (5 sitios + 1 selo):
 PROVA: RED `FAILED (failures=1, errors=3)` / Ran 21, rc=1 (os 3 selos novos mais o pivot da idempotencia) · GREEN `OK` / Ran 21, rc=0 · vizinhos (`chamados ponto folha`) `OK (skipped=9, expected failures=14)` / Ran 7006, rc=0 · suite INTEIRA da copia que pousa suite INTEIRA na copia certificada `OK (skipped=42, expected failures=14)` / `Ran 11448 tests in 1643.048s` / rc=0 (15:11:49-15:45:51) · ruff `All checks passed!` · censo de LINHAGEM da copia pelo git, blob a blob: **3306 blobs, DIFERE=6** (exatamente os arquivos desta fatia), FALTA=0, EXTRA=0 · censo de IDENTIDADE sha256 copia x arvore viva **6 de 6 iguais** (o pouso PARA no primeiro que diferir) · commit **este** · deploy `bin/deploy.sh --sem-migrate` no MESMO ato, logo depois deste commit e sem nada no meio (L-107/DEPLOY JA), com `logs/crons_em_curso/` VAZIO conferido as 15:0x -- a prova das tres cascas entra na linha seguinte desta secao.
 DECLARADO, nao curado: as filhas aparecem na aba do DP como linha propria **E** aninhadas na cabeca (`pautas/services.py::listar_por_aba` nao filtra `pai__isnull=True`, `pautas/views.py:46-48` aninha) -- 3 linhas por colab no caso real, que e como as filhas desta casa sempre apareceram.
 INCOMPLETO: (a) a obra `GRAVADO-NAO-CARIMBA-A-REGUA` segue ABERTA e nasce com PERGUNTA de desenho -- esta fatia responde a metade da PAUTA e passa a guardar a regua na trilha da porta, nao a do carimbo; (b) `escrever` corta em silencio para os 22 chamadores (`3ea519d7`, ja no ar, tem o mesmo transbordo em caso de muitos campos) -- linha de fila; (c) o laco de `pauta_dia_em_aberto` migra para `partir_em_pautas` -- linha de fila.
+
 
 ## MARCO 19/10 14:2x-14:3x -- O CARD DE FURO OFERECE O MARCO QUE A PORTA ACEITA, E O JUIZ POR DIA LE A PROJECAO EM VEZ DE RECALCULAR (O318 complemento -- pouso da raia `wt-o318` pela L-105/L-107)
 
@@ -826,7 +827,7 @@ no vigia e assinatura **C4** na lista do admin. Contadores `calado_afastado` e `
 DECLARADOS em `contadores()`. O instante se mediu: nos **2 de 2** dia-colab do horizonte a ausencia que afasta
 hoje NAO cobre o dia do furo, entao vale AGORA -- a outra leitura nao curaria caso medido.
 
-**PROVA**: RED1 `Ran 14` / `FAILED (failures=7, errors=3)` / `rc=1` (4 vermelhos eram da fixture, `cobrado
+**PROVA**: RED1 `Ran 14` / `FAILED (failures=7, errors=3)` / `rc=1` (4 vermelhos eram da fixture, `cobrado · **DEPLOY no MESMO ato 16:04** -- `bin/deploy.sh --sem-migrate` com `logs/crons_em_curso/` VAZIO conferido no ato, prova de casca e as tres rotas das tres cascas provadas (esta linha viaja no commit seguinte, pelo precedente medido da O318).
 != furo`, `cartorio.py:884-906`); RED2 limpo, os 7 TODOS da cura; GREEN `Ran 7853` / `OK (skipped=11,
 expected failures=12)` / `rc=0` em `logs/o322/GREEN_o322_fio_19-10.log` (os 4 labels do censo dos leitores).
 **ACHADO NO CAMINHO, nao introduzido**: o 2o chamado e `disputa_supervisao/saida_sem_entrada`, da 1a passada
