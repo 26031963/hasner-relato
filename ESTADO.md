@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 19/10/2026 08:52:35.**
+**Medido em 19/10/2026 08:58:02.**
 
 | | |
 |---|---|
@@ -29,46 +29,46 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2567.1 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2567.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **335.6 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **335.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **148.8 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **148.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio-v3** (`comboio-v3-20261018`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **17.6 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **17.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio-v3.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio18** (`comboio-20261018`) -- **SEM AGENTE**
-  - 2 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **31.3 h** (passou das 6 h da L-105)
+  - 2 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **31.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio18.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **451.7 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **451.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-fio** (`raia-fio`) -- **agente vivo**: O261 item 2 (contador de emissao) + O322 afastado nao se cobra, por sessao app-77 (sem subagente), desde 2026-10-19T00:11:29-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: VERDE e COMMITADA (0c3d0eb9 + 8f6ef771): falta so o POUSO -- merge --no-ff + bin/deploy.sh --sem-migrate, em fila atras do ensaio do dia na sombra (bloco em curso)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **355.8 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **355.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o275** (`raia-o275`) -- **SEM AGENTE**
-  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **85.1 h** (passou das 6 h da L-105)
+  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **85.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-o275.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o320** (`raia-o320`) -- **agente vivo**: O320 forma nova: os 36 dias discordante viram PAUTA DP por dono, por agente de sessao (O320 pauta por dono), desde 2026-10-19T00:11:29-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: achar o molde da O306 de 10/10, RED antes, pauta idempotente por assunto, DRY + ensaio na sombra
 - **wt-o48p4** (`raia-o48p4`) -- **agente vivo**: O48 passo 6 (cache de frota com invalidacao), por agente de sessao (O48 passo 6), desde 2026-10-18T22:28:42-03:00
-  - 1 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **8.0 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **8.1 h** (passou das 6 h da L-105)
   - falta para pousar: VERDE e COMMITADA (e241fb45, 1 commit a frente do main). Pousar: merge --no-ff + bin/deploy.sh COM migrate (0074). DIA-1 EM PROD: o carimbo nasce NULO na frota inteira (migration sem backfill, de proposito); quem o preenche e ponto/services/fechamento.py::recalcular_fechamento_mes (os dois ramos de escrita, :718 e :764) e NAO ha cron -- ate alguem re-derivar, projecoes_vencidas(10,2026) le 609 e o vigia ALARMA, e isso esta CORRETO. Nenhum leitor de frota ramifica no carimbo: carimbo nulo NAO manda ninguem para online. ATENCAO: re-derivar 10/2026 em prod move 72 linhas de competencia ABERTA = apply de dinheiro (o DIFF da sombra serve como o DIFF previo; FALTA o arquivo de reversao em logs/). Pendencias do chamador: linha do contador em bin/placar_code.sh (INSTRUMENTO, pouso separado, L-105); TICKETS/BACKLOG/RELATO nao tocados; tickets_placar ALARME pre-existente (cura bin/tickets_placar.sh --escrever); pergunta de lei: 4 de 609 sao de desligado fora da janela (fechamento.py:122-124).
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **473.5 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **473.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-raiox** (`raia-raiox`) -- **agente vivo**: O310-RAIOX (A LENTE 'Raio-X' do adendo de 13/10 -- aval O256-RAIO-X-DO-RETRATO, 13/10 00:1x), por (agente sem nome declarado), desde ?
-  - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
+  - 0 commit(s) a frente do `main`, 2 arquivo(s) sujo(s)
   - falta para pousar: (nao dito)
 - **wt-serie** (`raia-serie`) -- **SEM AGENTE**
-  - 2 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **32.6 h** (passou das 6 h da L-105)
+  - 2 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **32.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-serie.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-v3** (`raia-v3`) -- **agente vivo**: O280 v3 / O287 portao do esmeril -- POUSO pendente, por sessao app-77 (sem subagente), desde 2026-10-19T00:11:29-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
@@ -91,7 +91,7 @@ _nenhuma obra interrompida registrada no bloco OBRAS._
 **fio morto: 211** (esperado 0) -- `fio_morto_cobrando` 211, e de **hoje pra frente** 0, que nao conta (o teto e do `cartorio.julgar_celula`, nao deste leitor)
 
 - **FORA DO ESPERADO**: `fio_morto` mediu 211 e o carimbo espera 0, `fio_morto_cobrando` mediu 211 e o carimbo espera 0
-- medido em **2026-10-19T06:39:59.373120-03:00** (2.2 h), dia julgado **2026-10-19**, banco `saas_hasner`
+- medido em **2026-10-19T06:39:59.373120-03:00** (2.3 h), dia julgado **2026-10-19**, banco `saas_hasner`
 
 ## `git log --oneline -5`
 
@@ -205,41 +205,41 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b31lnpby1.output (26 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b38602mzt.output (5 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/ensaiar_o317_difffolha.sh (94 lines)
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+  Ran 6 shell commands
 
-  Ran 19 shell commands
+❯ aval Ronald: O317 segue PARADO. Antes do meu !, publica no RELATO e no AVAIS: qual regra (L-NNN/CCT) faz o noturno mover em cada um dos 38, a lista por colab com horas
+  antes/depois e rubrica, e se a FORMA A (-293,92 h em 12) e correcao de calculo ou efeito do par que nao fecha. Enquanto isso, item 1 e item 3 da O261 e o pouso da O48 p6
+  seguem. Nenhuma lei nova. Segue a fila; PAREI so em lei ou !.
 
-● Background command "Register the control-measurement obra as a queue line in the backlog" completed (exit code 0)
+● Novo aval do Ronald recebido mid-turn. Ele não cita a O310; o que ele nomeia é a publicação que destrava o ! do O317, mais O261 i1/i3 e o pouso da O48 p6. Paro a O310 onde
+  está (worktree wt-raiox, nada no ar — não é o bind-mount; RED evidenciado em 24/25 e agrupar/placar_ontem_hoje escritos, não commitados) e vou à publicação do O317, que é o
+  que gateia dinheiro.
 
-  Ran 21 shell commands
-  ⎿  Read docs/AVAIS.md (19 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b31lnpby1.output (26 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b38602mzt.output (5 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/ensaiar_o317_difffolha.sh (94 lines)
+  Ran 3 shell commands
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+● O pedido 2 dele (lista por colab com antes/depois e rubrica) já está medido — está nas sete DIFF_emp*.txt, seção "HORAS POR COLABORADOR x EVENTO|RUBRICA". O que falta é a
+  regra por colab e o veredito da FORMA A. Primeiro extraio a tabela dos 38 (durável), depois meço.
 
-  Ran 5 shell commands
+  Ran 2 shell commands
 
-● Agora o RED, antes de qualquer linha de produção.
+● Recontei da fonte e não bate com o que eu publiquei às 08:2x. Preciso fechar isso antes de escrever uma linha.
 
-  Unclear state after 387m; garbled user input
-  ⎿  $ cd /home/ronald/saas-hasner && ls -la ruff.toml app/ruff.toml app/pyproject.toml 2>&1 | head; source bin/recursos.sh >/dev/null 2>&1; docker run --rm $TESTE_DOCKER -v
-     "/home/ronald/wt-raiox/app:/app:ro" -w /app saas-hasner-core:latest sh -c "ruff check folha/tests/test_retrato_raiox.py --output-f…
-  ⎿  Read docs/AVAIS.md (19 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b31lnpby1.output (26 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b38602mzt.output (5 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/ensaiar_o317_difffolha.sh (94 lines)
+  Ran 3 shell commands
 
-✽ Tomfoolering… (6h 27m 47s · ↓ 668.7k tokens)
+● Confirmado contra a fonte crua: FORMA A é 7 colabs / −159,74 h, não 12 / −293,92 h. Publiquei errado às 08:2x. Vou extrair o plantada= por colab — é o que separa "a hora
+  plantada" da "relavratura".
+
+● Running 1 shell command…
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
+     import io,re,json,collections
+     texto=io.open('logs/o317/diff_19-10_v2.out',encoding='utf-8',errors='replace').read().splitlines()
+     # a linha de cabecalho por colab do ensaio
+     RX=re.compile(r'^\s*emp(\d+) (col\d+) (\d{4}-\d{2}) exportada=(\d+) alvo=(…
+
+✢ Tomfoolering… (6h 33m 14s · ↓ 688.0k tokens · still thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                                         ✔ Update installed · Restart to update
+                                                                                                                                                          3% until auto-compact
 ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
