@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 18/10/2026 23:15:46.**
+**Medido em 18/10/2026 23:20:46.**
 
 | | |
 |---|---|
@@ -22,46 +22,46 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2557.5 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2557.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **326.0 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **326.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **139.2 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **139.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio-v3** (`comboio-v3-20261018`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **8.0 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **8.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio-v3.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio18** (`comboio-20261018`) -- **SEM AGENTE**
-  - 2 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **21.7 h** (passou das 6 h da L-105)
+  - 2 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **21.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio18.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **442.1 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **442.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-fio** (`raia-fio`) -- **agente vivo**: O261 itens pendentes: o que detem a emissao dos 13 FURO_COM_COBRANCA_MORTA, por agente de sessao (O261 itens pendentes), desde 2026-10-18T22:29:17-03:00
   - 0 commit(s) a frente do `main`, 1 arquivo(s) sujo(s)
   - falta para pousar: medir julgar_colab forcar=True nos 13 na sombra; cura na origem; 8 escritores cegos pela lampada; contador no ESTADO
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **346.2 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **346.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o275** (`raia-o275`) -- **SEM AGENTE**
-  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **75.5 h** (passou das 6 h da L-105)
+  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **75.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-o275.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o48p4** (`raia-o48p4`) -- **agente vivo**: O48 passo 6 (cache de frota com invalidacao), por agente de sessao (O48 passo 6), desde 2026-10-18T22:28:42-03:00
   - 0 commit(s) a frente do `main`, 10 arquivo(s) sujo(s)
   - falta para pousar: medir os ~65s dos leitores de FROTA e nascer o cache no molde previsto_em/invalidar_previsto
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **463.9 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **464.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-serie** (`raia-serie`) -- **SEM AGENTE**
-  - 2 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **23.0 h** (passou das 6 h da L-105)
+  - 2 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **23.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-serie.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-v3** (`raia-v3`) -- **agente vivo**: O280 v3 / O287 portao do esmeril, por agente de sessao (Opus 5), desde 2026-10-18T22:38:54-03:00
-  - 2 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **0.9 h**
-  - falta para pousar: pouso pendente, do chamador: 6a4f74d2 + a867325a, suite cheia VERDE na arvore cb23e5b1 (Ran 11307, OK skipped=42 expected failures=14, rc 0) -- so teste, zero producao
+  - 2 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **1.0 h**
+  - falta para pousar: pouso pendente, do chamador: 6a4f74d2 + a867325a (so teste). Certidao da raia SOZINHA: arvore cb23e5b1, Ran 11307, OK skipped=42 expected failures=14, rc 0. ATENCAO: main andou 9 commits (a94e8a48 toca o mesmo test_o280_bateria_da_lei.py), merge-tree = 69c5625a SEM certidao -- suite na arvore mergeada antes do merge (L-107). ESMERIL itens 442-444.
 - **wt-v3-pouso** (`pouso-v3-20261016`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 4 arquivo(s) sujo(s), commit a frente ha **58.8 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 4 arquivo(s) sujo(s), commit a frente ha **58.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-v3-pouso.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **26 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-an12x36, wt-antes, wt-b1t, wt-bos, wt-busca, wt-cal, wt-cat, wt-celula, wt-chamado2, wt-ct, wt-folha10, wt-he2, wt-l113, wt-lampada, wt-lavra, wt-merge-ui, wt-o137j, wt-o139, wt-o306, wt-o316, wt-o37, wt-orfa, wt-regua, wt-sj, wt-ui, wt-vinculo
 
@@ -187,44 +187,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  O que o número diz: o RELATO vivo está limpo, a história dele não. E o que ele não diz, porque a lápide criterio-pela-forma-conta-errado vale aqui também: "achado" é candidato
-  do predicado, não nome provado — é piso de exposição, não censo de pessoas. A decisão sobre a história já é sua e já está tomada: ela fica como está. Isto é registro, não
-  gatilho.
+  BATIDA_ORFA_FORA_TOLERANCIA); a prod de 13/10 contou 34. Janela de dias diferente, mesmo predicado — registra-se o 36, não se apaga o 34.
 
-  O resíduo saiu: nomes.json (25.413 bytes, 895 nomes reais) apagado do scratchpad agora que a varredura liberou o arquivo. E achei o mesmo arquivo dentro do container de
-  produção — saas_core:/tmp/nomes_medicao.json, root, 25.413 bytes, parado lá desde 16/10 16:41, mais o sonda_token.py; os dois removidos e a ausência conferida depois. O reload
-  do deploy não recria o container, então aquilo ia continuar lá.
+  O que eu mandei construir no lugar, porque não depende de lei nenhuma — e aqui eu fui ao código vivo conferir, em vez de aceitar a medida: _abrir_chamado devolve None tanto
+  quando o chamado nasce quanto quando o encerrado recusa renascer, e cartorio.py:1235-1236 faz if not isinstance(res, str): out['emitidos'] += 1. O defeito está confessado no
+  docstring da própria função (:1231): "o colab 109 em 07/09 saiu emitidos=1 com a cobrança vetada pela régua". Foi visto em 07/09, escrito ao lado da linha, e a linha nunca
+  mudou — dívida declarada com 41 dias. A prova de que isso quebra o contrato 2 não depende de história: duas passadas no mesmo atomic() dão 19 alvo / 44 emitidos na primeira e
+  os mesmos 8 re-tentados e re-contados na segunda, com zero chamado nascido e zero linha de trilha. RED primeiro, juizes novos=0.
 
-  Push segue na régua — a saída ainda é só a linha de partida (origin/main: c36d0d48 · HEAD: 1d532dcd · a_frente: 4), a suite inteira roda debaixo dele. Os três scripts do
-  pós-push estão compilados e esperando, e não encosto na árvore até o veredito.
+  Uma contradição entre dois sítios da casa, que é pergunta de lei de verdade (2 dias, 1 colab): o portão emite para quem não é desligado (cartorio.py:1093) e o renascimento
+  exige ativo (chamados/models.py:625) — o sistema emite e não renasce. Não escolho entre duas leis escritas por você.
 
-✻ Waiting for 2 background agents to finish
+  E a linha mais importante para quem vier depois: --forcar na frota reabre 24 chamados por baixo de perguntas que já estavam de pé, porque _cala_emissao lê chamado em VIVOS e
+  nunca "pergunta viva". Mandei declarar isso no commit da cura.
 
-❯ segue a fila; PAREI so em lei ou !
+  Dois detalhes de mecânica que evitei: a linha que vai substituir o PAREI: do topo não pode começar com PAREI: — o hook casa startswith('PAREI:') e depois qualquer !, então
+  "PAREI: nada, o ! foi cumprido" travaria o Stop afirmando uma parada que não existe. E conferi os cinco arquivo:linha que vou publicar um por um antes de colá-los.
 
-  Ran 6 shell commands
-  ⎿  Not sent — no agent named 'O261 itens pendentes do fio morto' is reachable.
-  ⎿  Allowed by auto mode classifier
-  ⎿  Message queued for delivery to af28e92e807506ef9 at its next tool round.
-  ⎿  Allowed by auto mode classifier
+  Push: a régua pegou a trava às 23:14:39 (pre-push:3152995), então a suite começou agora e os 22 min anteriores foram o arsenal de host. origin/main ainda em c36d0d48. Não
+  encosto na árvore até o veredito; os três scripts e os dois blocos do RELATO estão prontos no scratchpad.
 
-  Running 1 shell command…
-  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
-     cat > "$S/relato_pos_push.md" <<'MD'
-     PAREI: nada -- o `!` das 22:4x foi CUMPRIDO e o push dos 4 commits saiu pela regua (veredito abaixo) | nenhuma trava de fila 1 em pe
-     MD
-     cat >> "$S/relato_pos_push.m…
+✻ Waiting for 3 background agents to finish
 
-· Considering… (2m 49s · ↓ 9.7k tokens · thinking)
-                                                                                                                                         ✔ Update installed · Restart to update
+› Message from @adb274ddc7cfdccde (ctrl+o to expand)
+
+  Ran 1 shell command
+
+● Agent "v3 esmeril gate O280/O287" finished · 40m 57s
+
+· Compacting conversation… (1m 21s · ↓ 1.7k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 46%
+                                                                                                                                                          3% until auto-compact
 ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 1 shell, 1 monitor · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ general-purpose  Reading RetratoFolha fields in folha/models.py                                                                                   47m 17s · ↓ 114.5k tokens
-  ◯ general-purpose  Appending forcar caveat to msg_o261_item2.txt                                                                                    47m 17s · ↓ 134.8k tokens
-  ◯ general-purpose  Updating falta in raia_agente.sh                                                                                                   37m 9s · ↓ 88.6k tokens
+  ◯ general-purpose  Grepping tests for restaurar_fechamento callers                                                                                  52m 17s · ↓ 129.9k tokens
+  ◯ general-purpose  Polling trava_teste.sh for red1.out                                                                                              52m 17s · ↓ 149.9k tokens
   ⧉  index
 ```
