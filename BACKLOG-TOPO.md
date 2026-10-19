@@ -324,7 +324,7 @@ lista — ela e o que esta EM PE._
 | **O314** | COL427-O-DIA-CUSTA-UMA-VEZ-SO | ABERTO |
 | **O315** | ABSURDO-E-REGRA-SO-DA-CLASSE-P | espera corte |
 | **O316** | AS-CINCO-MENORES-DO-ESMERIL | espera `!` |
-| **O317** | O306-PASSIVO-ENTRA-PELA-PORTA | espera `!` |
+| **O317** | O306-PASSIVO-ENTRA-PELA-PORTA | espera corte |
 | **O318** | CARD DE PERGUNTA VALIDADA SEM PLANTIO NAO OFERECE FORMULARIO | espera corte |
 | **O319** | SMOKE DAS RESPOSTAS NOVAS E SEPARADO | ABERTO 18/10. Nao e o mesmo smoke do car |
 | **O320** | A FORMA MUDOU PELO CORTE DE 19/10 00:0x, O ASSUNTO E O MESMO: os 36 dias `discordante` vir | espera corte |
