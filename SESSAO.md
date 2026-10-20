@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 20/10/2026 07:40:03.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1150.3 MB). Acoes na janela: **1108**.
+**Medido em 20/10/2026 07:45:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1150.3 MB). Acoes na janela: **1103**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1113,8 +1113,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 19:46:10 | ToolSearch |  | `-` |
 | 19:45:49 | Bash | Check suite verdict and ruff availability | `cd /home/ronald/saas-hasner echo "=== agora $(date '+%H:%M:%S') trava: $(bash bin/trava_teste.sh --quem 2>&1 \| head -1)" echo "=== veredito regua10b"; /bin/grep -E '^(OK\|FAILED)($\| \()' logs/regua10/suite_cura_19-10.out 2>/dev/null \| tail -1; /bin/grep -E '^Ran ' logs/regua10/suite_cura_19-10.out 2>/dev/null \| tail -1 echo "=== ruff.toml na copia"; ls -1 /home/ronald/cp-o261vespera/ruff.toml  ...` |
 | 19:45:40 | Bash | Apply the cura in the build copy | `cd /home/ronald/cp-o261vespera/app python3 - <<'PYEOF' import re p = 'chamados/services/materializacao.py' s = open(p).read() old = """ for cel in _Cel.objects.filter(colaborador=colaborador, data__range=(loc.date() - _dt.timedelta(days=1), loc.date())).order_by('-data'):""" assert s.count(old) == 1, ('ancora do range: %d' % s.count(old)) new = """ # O261-FURO-DE-HOJE-SO-ABSOLVE-PLANTIO-DE-HOJE (1 ...` |
-| 19:45:23 | Bash | Write the RED test in the build copy | `cd /home/ronald/cp-o261vespera/app cat > chamados/tests/test_o261_vespera_nao_absolve.py <<'PYEOF' """O261 item (1), 3a frase do corte de 19/10 07:3x -- LITERAL: *"a absolvicao da vespera em `_plantio_preenche_furo_na_data` NAO vale"*, isto e: FURO DE HOJE SO ABSOLVE PLANTIO DE HOJE. CASO (a regra ANTES do codigo, L-110): Cadastro: 5x2, dna `hi 08:00 / hf 17:00`. VESPERA (D-1): dia de TRABALHO com ...` |
-| 19:44:16 | Bash | Check whether CNPJ has a validator | `cd /home/ronald/saas-hasner/app /bin/grep -n 'cnpj' colaboradores/models.py \| head -8` |
-| 19:44:01 | Bash | Create build copy from HEAD | `cd /home/ronald/saas-hasner test -e /home/ronald/cp-o261vespera && { echo "JA EXISTE -- parando"; exit 1; } mkdir -p /home/ronald/cp-o261vespera git archive HEAD \| tar -x -C /home/ronald/cp-o261vespera echo "rc_archive=$?" echo "HEAD=$(git rev-parse --short HEAD)" mkdir -p /home/ronald/cp-o261vespera/app/logs /home/ronald/cp-o261vespera/app/media echo "=== o sitio na copia (nasceu do HEAD)"; sed  ...` |
-| 19:43:48 | Bash | Read the absolution primitive | `cd /home/ronald/saas-hasner/app echo "=== plantio_preenche_furo"; /bin/grep -n 'def plantio_preenche_furo' -A 45 ponto/propositor.py` |
-| 19:43:27 | Bash | Confirm suite PID and read slot tolerance boundary | `cd /home/ronald/saas-hasner echo "=== PID 1384681"; ps -o pid,ppid,etime,cmd -p 1384681 2>&1 \| cut -c1-240 echo; echo "=== veredito (forma da casa)"; /bin/grep -E '^(OK\|FAILED)($\| \()' logs/regua10/suite_cura_19-10.out 2>/dev/null \| tail -1; /bin/grep -E '^Ran ' logs/regua10/suite_cura_19-10.out 2>/dev/null \| tail -1 echo "(vazio acima = ainda correndo)" echo; echo "=== propositor.py toleranc ...` |
