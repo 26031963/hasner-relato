@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 20/10/2026 05:57:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1150.3 MB). Acoes na janela: **1286**.
+**Medido em 20/10/2026 06:02:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1150.3 MB). Acoes na janela: **1280**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1290,9 +1290,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 18:03:05 | Bash | Read the rest of par mode | `cd /home/ronald/saas-hasner && sed -n '95,140p' bin/simular_folha.sh` |
 | 18:03:00 | Bash | Read the simulator's par and antes handling | `cd /home/ronald/saas-hasner && sed -n '20,95p' bin/simular_folha.sh` |
 | 18:02:44 | Bash | Confirm the excedente derivation and locate the DIFF generator | `cd /home/ronald/saas-hasner && sed -n '360,380p' app/core/regua_cct.py && echo "=== quem gerou os DIFF_emp*.txt ===" && ls -la logs/o317/ \| /bin/grep -i 'diff\\|previa' \| head -12 && echo "=== scripts de diff de folha ===" && head -20 bin/simular_folha.sh` |
-| 18:02:24 | Bash | Check for caching, the excedente source, and the existing DIFF runner | `cd /home/ronald/saas-hasner && echo "=== CACHE? ===" && /bin/grep -n 'lru_cache\\|cache\\|_MEMO\\|functools' app/core/regua_cct.py \| head && echo "=== regua_excedente: de onde sai ===" && /bin/grep -n 'regua_excedente' app/core/regua_cct.py \| head && echo "=== campo no Sindicato? ===" && /bin/grep -n 'regua_excedente\\|excedente' app/core/models.py \| head && echo "=== runner do DIFF O317 ===" & ...` |
-| 18:00:13 | Bash | See what the parser keeps from the CBO match | `cd /home/ronald/saas-hasner && sed -n '115,150p' app/holerite/motor.py && echo "=== campos do HoleritePagina / modelo ===" && git grep -n 'class HoleritePagina' -A 14 -- 'app/holerite/*.py' \| head -22` |
-| 18:00:05 | Bash | Trace whether the parsed CBO is persisted anywhere | `cd /home/ronald/saas-hasner && sed -n '90,115p' app/holerite/motor.py && echo "=== onde o CBO parado vai parar ===" && git grep -n -i 'cbo' -- 'app/holerite/*.py' 'app/*/models.py' \| head -12` |
-| 17:59:54 | Bash | Write the two findings docs and check whether CBO exists as a field | `cd /home/ronald/saas-hasner && cat > logs/aplicacao_convencao/ACHADO_P5H_CADASTRO_X_CLAUSULA_19-10.md <<'MD' # ACHADO (3): o cadastro do sind=3 se contradiz DENTRO DA PROPRIA LINHA > 19/10, obra APLICACAO-CONVENCAO-SEM-VIGENCIA item (3). SO LEITURA, nada aplicado. > Medido na sombra (`censo_5perguntas_19-10.out`, `censo_atingidos_19-10.out`). Nenhuma lei nova. ## O achado nao precisa do PDF: a cla ...` |
-| 17:58:27 | Bash | Measure the universe behind each of the five questions | `cd /home/ronald/saas-hasner && cat > logs/aplicacao_convencao/censo_5perguntas_19-10.py <<'PY' # As 5 perguntas ao DP, medidas pela FUNCAO REAL. SO LEITURA. Sem nome de pessoa. import re, unicodedata from collections import defaultdict from datetime import date from django.db import connection assert connection.settings_dict['NAME'] == 'sombra', 'NAO E A SOMBRA' from core.models import Sindicato f ...` |
-| 17:57:24 | Bash | Measure territorial spread and the cargo vocabulary | `cd /home/ronald/saas-hasner && cat > logs/aplicacao_convencao/censo_territorio_19-10.py <<'PY' # ITEM (3), parte TERRITORIAL. SO LEITURA. Lugar e cargo NAO sao nome de pessoa. import unicodedata from collections import defaultdict from django.db import connection assert connection.settings_dict['NAME'] == 'sombra', 'NAO E A SOMBRA' from colaboradores.models import Colaborador, Posto from escala.mo ...` |
