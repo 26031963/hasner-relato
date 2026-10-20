@@ -206,7 +206,7 @@ lista — ela e o que esta EM PE._
 | **O195** | A GUARDA L-085 MANDA O TURNO PARA O DIA DE FOLGA, E O SELO DA O76 NAO MORDE | espera `!` |
 | **O196** | A FOTO DA PORTA DE RELAVRATURA COBRE UMA TABELA DE DUAS, E A CASA JA TINHA ESCRITO ISSO | **registrado, nao construido** -- a orde |
 | **O197** | FUTURO-NAO-E-EM-ABERTO | espera `!` |
-| **O198** | FALTA-EM-DIA-SEM-JORNADA | espera `!` |
+| **O198** | FALTA-EM-DIA-SEM-JORNADA | **CENSO PUBLICADO 20/10 10:3x, PARADO pe |
 | **O199** | ACEITE-DE-FOLGA-DECIDE-O-DIA | **NO AR 10/10 (neste commit)**, pela L-1 |
 | **O200** | PINO-GEO-LE-O-JUIZ | **NO AR** (pouso + deploy 08/10 23:1x).  |
 | **O201** | A REGRA 2 DO CONTRATO NAO PODE PASSAR A VARRER COMENTARIO | **fila 2** -- e INSTRUMENTO (selo), e a  |
