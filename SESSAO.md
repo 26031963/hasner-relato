@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 20/10/2026 07:50:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1150.3 MB). Acoes na janela: **1085**.
+**Medido em 20/10/2026 07:55:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1150.3 MB). Acoes na janela: **1073**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1083,15 +1083,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 19:56:32 | Bash | Read the test helpers and failing cases | `cd /home/ronald/wt-regua10b/app sed -n '177,206p;240,275p' relatorios/tests/test_o197_futuro_nao_e_em_aberto.py` |
 | 19:56:05 | Bash | Run one case with debug prints | `cd /home/ronald/saas-hasner L=/home/ronald/saas-hasner/logs/regua10/iso_dbg_19-10.out bash bin/suite.sh --dir /home/ronald/wt-regua10b --only "relatorios.tests.test_o197_futuro_nao_e_em_aberto.O197FuturoNaoEEmAbertoTest.test_03_MORDE_o_furo_do_PASSADO_continua_com_a_palavra" > "$L" 2>&1 echo "rc=$?"; /bin/grep 'DBG' "$L" \| head -30; echo "---"; /bin/grep -E '^(OK\|FAILED)' "$L" \| tail -1` |
 | 19:55:58 | Bash | Insert temporary debug prints in the porta | `cd /home/ronald/wt-regua10b/app python3 - <<'PY' p='ponto/services/fechamento.py' s=open(p).read() a=" _dias_cobertos = set()\n" assert s.count(a)==1 s=s.replace(a, a+" import sys as _dbg; print('DBG escalas=%r ini=%s fim=%s dono=%d' % ([(e.pk,e.data_inicio,e.data_fim) for e in escalas], ini, fim, len({d for d in _dono_do_dia})), file=_dbg.stderr) # DBG-REGUA10\n") b=" _julgados = {d for d in _don ...` |
-| 19:55:31 | Bash | Read the isolated run verdict | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bssduihtc.output echo "=== log"; L=/home/ronald/saas-hasner/logs/regua10/iso_o197_19-10.out; tail -30 "$L"` |
-| 19:55:26 | Bash | Read the espelho.py diff in the raia | `cd /home/ronald/wt-regua10b git diff --stat echo "=== espelho.py diff"; git diff app/ponto/services/espelho.py \| head -200` |
-| 19:55:12 | Bash | Read the fixture setup dates | `cd /home/ronald/wt-regua10b/app sed -n '85,170p' relatorios/tests/test_o197_futuro_nao_e_em_aberto.py` |
-| 19:55:08 | Bash | Read the failing fixture for celulas and escala window | `cd /home/ronald/wt-regua10b/app F=relatorios/tests/test_o197_futuro_nao_e_em_aberto.py /bin/grep -n 'CelulaDia\\|celula\\|escala_geradora\\|data_inicio\\|data_fim\\|not found in set' $F \| head -30 echo "=== premissa + set"; /bin/grep -n 'premissa' -B 8 $F \| head -40` |
-| 19:55:02 | Bash | Run the single failing module against the raia | `cd /home/ronald/saas-hasner L=/home/ronald/saas-hasner/logs/regua10/iso_o197_19-10.out { date '+=== ini %H:%M:%S'; bash bin/suite.sh --dir /home/ronald/wt-regua10b --only "relatorios.tests.test_o197_futuro_nao_e_em_aberto" 2>&1; echo "rc=$?"; date '+=== fim %H:%M:%S'; } > "$L" 2>&1 echo "--- veredito"; /bin/grep -E '^(OK\|FAILED)($\| \()' "$L" \| tail -1; /bin/grep -E '^Ran [0-9]+ test' "$L" \| ta ...` |
-| 19:54:54 | Bash | Check suite.sh argument handling | `cd /home/ronald/saas-hasner sed -n '1,60p' bin/suite.sh \| /bin/grep -n 'only\\|dir\\|--\s'` |
-| 19:54:20 | Bash | Compare escritor escalas query with leitor escalas_do_periodo | `cd /home/ronald/wt-regua10b/app sed -n '350,365p' ponto/services/fechamento.py echo "=== escalas_do_periodo (leitor)"; /bin/grep -n 'def escalas_do_periodo' -A 40 escala/alimentacao.py \| sed -n '1,45p'` |
-| 19:54:16 | Bash | Find escritor alimentation sources | `cd /home/ronald/wt-regua10b/app /bin/grep -n 'escalas_periodo\s*=\\|_cels_lote\s*=' ponto/services/fechamento.py echo "---"; /bin/grep -n 'def celulas_do_periodo' -A 30 ../app/escala/alimentacao.py 2>/dev/null \| head -40` |
-| 19:54:10 | Bash | Read the escritor call to the porta | `cd /home/ronald/wt-regua10b/app sed -n '440,470p' ponto/services/fechamento.py echo "=== como o escritor obtem escalas/celulas (acima)" sed -n '360,400p' ponto/services/fechamento.py \| /bin/grep -n 'escalas\\|celulas'` |
-| 19:54:05 | Bash | Compare leitor and escritor alimentation of the porta | `cd /home/ronald/wt-regua10b/app sed -n '995,1035p' ponto/services/espelho.py echo "=== o mesmo no ESCRITOR (recalcular_fechamento_mes), celulas/escalas passadas a porta" /bin/grep -n 'apurar_por_fatia\\|_cels_per\\|celulas_por\\|escalas_por' ponto/services/fechamento.py \| head -20` |
-| 19:54:00 | Bash | Find how the leitor builds celulas and escalas | `cd /home/ronald/wt-regua10b/app echo "=== LEITOR espelho.py: _celulas e _escalas"; /bin/grep -n '_celulas\s*=\\|_escalas\s*=\\|_escalas_todas\s*=\\|_folgas\s*=' ponto/services/espelho.py \| head -40` |
-| 19:53:47 | Bash | Read the full new porta in the escritor | `cd /home/ronald/wt-regua10b/app sed -n '39,175p' ponto/services/fechamento.py` |
