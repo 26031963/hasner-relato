@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 20/10/2026 06:08:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1150.3 MB). Acoes na janela: **1267**.
+**Medido em 20/10/2026 06:13:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1150.3 MB). Acoes na janela: **1262**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1272,8 +1272,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 18:13:47 | Bash | Read the comparison function body | `cd /home/ronald/saas-hasner && sed -n '160,226p' app/folha/management/commands/simular_folha.py` |
 | 18:13:43 | Bash | Inspect one line and one retained record, and read the comparison counters | `cd /home/ronald/saas-hasner && python3 - <<'PY' import json a=json.load(open('logs/simular_folha/previa10p5h_antes.json')) print('LINHA[0] emp2:', json.dumps(a['2']['linhas'][0], ensure_ascii=False)[:400]) k=list(a['2']['retidos'])[0] print('RETIDO emp2 %s:'%k, json.dumps(a['2']['retidos'][k], ensure_ascii=False)[:500]) PY echo "=== como o comparar conta ===" grep -n "so_antes\\|so_depois\\|mudara ...` |
 | 18:13:37 | Bash | Inspect the structure of the simulation snapshots | `cd /home/ronald/saas-hasner && python3 - <<'PY' import json a=json.load(open('logs/simular_folha/previa10p5h_antes.json')) print('top keys:', list(a.keys())[:12]) def shape(o,d=0): if isinstance(o,dict): ks=list(o.keys())[:8] return '{'+','.join('%s:%s'%(k,shape(o[k],d+1) if d<2 else type(o[k]).__name__) for k in ks)+'}' if isinstance(o,list): return '[%d x %s]'%(len(o), shape(o[0],d+1) if o and d ...` |
-| 18:13:27 | Bash | Restore the flipped cadastro field on the shadow database | `set -euo pipefail cd /home/ronald/saas-hasner CP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/cp-previa10/app cat > "$CP/core/management/commands/previa_p5h_restaura.py" <<'PY' from django.core.management.base import BaseCommand from django.db import connection from core.models import Sindicato class Command(BaseCommand): help = "Devolve o p5h do si ...` |
-| 18:13:12 | Bash | Read the container launch block verbatim | `cd /home/ronald/saas-hasner && sed -n '40,62p' bin/simular_folha.sh` |
-| 18:13:06 | Bash | Read how the simulation script runs a command on the sombra | `cd /home/ronald/saas-hasner && grep -n 'ANTES\\|docker run\\|tenant_command\\|sombra' bin/simular_folha.sh \| sed -n '1,60p'` |
-| 18:12:39 | Bash | Check prévia output file and sombra lock holder | `cd /home/ronald/saas-hasner && ls -la logs/aplicacao_convencao/previa10_p5h_19-10.out 2>/dev/null; echo "--- tail do .out ---"; tail -40 logs/aplicacao_convencao/previa10_p5h_19-10.out 2>/dev/null; echo "--- trava sombra ---"; bash bin/sombra_trava.sh --quem 2>/dev/null \|\| echo "(sem --quem)"; echo "--- fotos ---"; ls -la logs/simular_folha/ 2>/dev/null \| grep -i previa10 \| head` |
-| 18:08:04 | Bash | Append the three prompt records and check the prévia | `cat >> docs/PROMPTS.md <<'EOF' \| 19/10 17:4x \| **CORTE QUE SUBSTITUI O DAS 17:27 E AMPLIA A OBRA DA APLICACAO, literal**: *"SUBSTITUI o meu corte das 17:27 (que NAO vale). REGUA10 respondida pelo DP ([nome], via [nome] 19/10 17:4x): emp1, emp2 e emp4 = CCT SINEEPRES/SINDEPRESTEM-PR (sind=3, a linha de 19/10 09:25 FICA); emp3 JSP = CLT. Duas excecoes do DP: bombeiros civis da J.A. e colaborado ...` |
