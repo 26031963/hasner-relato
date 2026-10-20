@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 20/10/2026 05:40:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1150.3 MB). Acoes na janela: **1308**.
+**Medido em 20/10/2026 05:46:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1150.3 MB). Acoes na janela: **1303**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1313,8 +1313,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 17:46:19 | Bash | Re-run the sombra state check with the import fixed | `cd /home/ronald/saas-hasner && sed -i 's/^from core.models import AplicacaoConvencao, Empresa$/from core.models import AplicacaoConvencao/; s/^from colaboradores.models import Colaborador$/from colaboradores.models import Colaborador, Empresa/' logs/regua10/estado_da_sombra_19-10.py && /bin/grep -n "^from" logs/regua10/estado_da_sombra_19-10.py source bin/recursos.sh >/dev/null 2>&1 && docker run  ...` |
 | 17:46:06 | Bash | Locate the Empresa model | `/bin/grep -rn "^class Empresa" --include=models.py . \| head; echo "=== como regua_cct importa ==="; /bin/grep -n "^from\\|^import" core/regua_cct.py \| head -12` |
 | 17:46:05 | Bash | Confirm the push landed on the remote | `cd /home/ronald/saas-hasner && git fetch -q; echo "a_frente=$(git rev-list --count origin/main..HEAD) origin=$(git rev-parse --short origin/main)"; echo "=== veredito do push ==="; tail -14 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bz7rcaofp.output` |
-| 17:45:57 | Bash | Check sombra cadastro state and the two scope edges | `cd /home/ronald/saas-hasner && cat > logs/regua10/estado_da_sombra_19-10.py <<'PY' # TRES PERGUNTAS, SO LEITURA. Sem nome, sem CPF, sem reais. # 1. A sombra carrega o cadastro RESTAURADO (sind=2) ou ainda o sind=3? # Perguntado a FUNCAO REAL que o sistema usa para julgar (LEI-AKITA 8). # 2. As 118 linhas sem carimbo da emp2 sao dos MESMOS 28 colabs do p5h=1? # 3. A troca das 09:25 alcancou linha F ...` |
-| 17:45:19 | Bash | Read the hr ciclo gate in context | `sed -n '455,470p' core/regua_cct.py` |
-| 17:45:19 | Bash | Ask the declared reader about the sombra dump state | `cd /home/ronald/saas-hasner && echo "=== --conferir (leitura) ==="; timeout 90 bash bin/sombra.sh --conferir 2>&1 \| tail -15; echo "=== onde mora o stamp ==="; ls -l --time-style=+"%d/%m %H:%M" $(find . -maxdepth 3 -name ".sombra_stamp" 2>/dev/null \| head -3) 2>/dev/null` |
-| 17:45:08 | Bash | Read the sombra stamp and find the hr ciclo gate | `cd /home/ronald/saas-hasner && echo "=== carimbo do dump da sombra ==="; cat logs/.sombra_stamp 2>/dev/null; echo; echo "=== sombra rodando agora? ==="; ls logs/crons_em_curso/ 2>/dev/null \| head; ls -l logs/sombra.lock 2>/dev/null; echo "=== hr gated por ciclo em get_motor? ==="; cd app && /bin/grep -rn "hora_reduzida_afastada_12x36" --include=*.py . \| /bin/grep -v test \| head` |
-| 17:40:49 | Bash | Write the scope finding durably | `cd /home/ronald/saas-hasner && cat > logs/regua10/ESCOPO_DA_RELAVRA_19-10.md <<'MD' # O ESCOPO DA RE-LAVRA DA 10: 28, NAO 58 -- 19/10 17:4x > Corte Ronald 19/10 ~17:3x: *"Re-lavra so quem foi lavrado sob sind=3 na competencia 10 > (os 28 da emp2 e o que mais tiver carimbo p5h=1) ... e confirma depois 0 empresa com > duas reguas na 10."* > A clausula que GOVERNA e "lavrado sob sind=3". O parentese  ...` |
