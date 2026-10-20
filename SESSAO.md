@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 20/10/2026 17:25:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1179.1 MB). Acoes na janela: **1117**.
+**Medido em 20/10/2026 17:31:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1179.1 MB). Acoes na janela: **1119**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 17:28:21 | Bash | Read the proibidos helper and its checker | `cd /home/ronald/saas-hasner/app sed -n '265,300p' core/juizes.py echo "=== quem le a impressao dos _p ===" git grep -ln 'impressao' -- '*/tests/*' core \| head` |
+| 17:28:03 | Bash | Verify the advisor's three measurable points | `cd /home/ronald/saas-hasner echo "=== (1) o pipe cru JA estava no HEAD empurrado? ===" git show HEAD:app/docs/BACKLOG.md \| /bin/grep -c 'aberto\|aprovado\|exportado' git show b81181ea:app/docs/BACKLOG.md \| /bin/grep -c 'aberto\|aprovado\|exportado' echo "--- o que a col3 daquela linha era para o hook ---" git show HEAD:app/docs/BACKLOG.md \| /bin/grep 'STATUS-ENCERRADO-DA-COMPETENCIA' \| awk -F' ...` |
 | 17:25:20 | Bash | Measure which days the live report still holds | `cd /home/ronald/saas-hasner/app /bin/grep -oE '^## [A-Z, ]*[0-9]{2}/10' docs/RELATO.md \| /bin/grep -oE '[0-9]{2}/10' \| sort \| uniq -c echo "--- secoes sem data no heading ---"; /bin/grep -cE '^## ' docs/RELATO.md` |
 | 17:25:13 | Bash | Measure the live report structure | `cd /home/ronald/saas-hasner/app echo "=== headings de dia no RELATO vivo ==="; /bin/grep -nE '^#{1,3} ' docs/RELATO.md \| head -20 echo "=== total linhas ==="; wc -l docs/RELATO.md docs/RELATO-ARQUIVO.md` |
 | 17:25:05 | Bash | Find who measures the report three-day cap | `cd /home/ronald/saas-hasner git grep -ln 'RELATO-ARQUIVO' -- bin app/core app/docs \| cat echo "=== quem mede os 3 dias ===" git grep -nE 'RELATO-ARQUIVO\|tres dias\|3 dias' -- bin \| head -12` |
