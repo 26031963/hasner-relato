@@ -4,7 +4,16 @@
 >
 > **livre** = pode virar fatia agora, sem humano. **corte/aval/smoke/dinheiro-ate-export** = tem dono humano e espera.
 
-<!-- ORDEM-VIVA-TOPO: O261 -->
+<!-- ORDEM-VIVA-TOPO: O48 -->
+<!-- ANDOU 20/10 11:0x, de `O261` para `O48`, e quem decidiu foi ORDEM LITERAL dele, nao eu: o adendo
+     da PRINCIPAL (linha ~288) diz *"substituindo a ordem viva DEPOIS do item em curso: (1) O48 passos 3
+     e 4"*, e o item em curso ACABOU DE PARAR -- a O261 ficou com os tres itens do aval de 18/10 ~14:5x
+     resolvidos ou retidos: (1) FECHADO, (3) MEDIDO hoje (`fio_morto_com_alvo` 99, teto do lote 45 de 64),
+     (2) = O317 parado nas exportadas ate o Gabriel. O `interrompidas_estado.py` diz `interrompidas: []`,
+     entao nao ha obra esperando volta pela L-119, e o `hook_stop_fila1` dizia `proximo: O261 -> -` com 230
+     itens abertos: fila 1 NAO esta vazia, o marcador e que apontava um parado. A linha de 18/10 abaixo
+     (*"o marcador nao se move: ele ja aponta O261, que e o item (1)"*) valia ENQUANTO o item (1) andava.
+     A O261 volta ao topo no ato do seu `!` do lote (AVAIS #1). -->
 <!-- VOLTOU as 17:0x, e a volta vale escrita. As 16:5x eu movi este marcador para O261 pela
      ordem literal dele de 18/10 ~14:5x (FIO MORTO em PRIORIDADE 1) -- premissado em que a
      REGUA tinha FECHADO. Ela nao fechou: o item (1) do complemento das 15:3x esta ABERTO e
