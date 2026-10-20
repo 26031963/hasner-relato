@@ -268,7 +268,7 @@ lista — ela e o que esta EM PE._
 | **O258** | CHAMADO-X-JUIZ-EM-PARALELO | espera `!` |
 | **O259** | JUIZ-DO-PAR-DECLARADO | espera `!` |
 | **O260** | COM-DIAS-HONRA-O-CONTRATO | **EM CURSO 12/10 20:3x** -- RED primeiro |
-| **O261** | BUG-FIO-MORTO-CHAMADO | espera `!` |
+| **O261** | BUG-FIO-MORTO-CHAMADO | PAREI |
 | **O262** | ESCALA X UM JUIZ POR PERGUNTA | espera `!` |
 | **O263** | NOTURNO-NO-SITIO-UNICO | espera `!` |
 | **O264** | INTERMITENTE-EM-FERIADO | espera `!` |
