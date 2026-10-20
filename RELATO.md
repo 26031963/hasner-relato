@@ -212,14 +212,40 @@ PARA VOCE, UMA LINHA SO, e nao e pergunta de lei nem `!`: **quatro obras citadas
 
 NUMERO VENCIDO NO BACKLOG -- **PAGO no marco de 07:1x desta sessao**, pela L-106 (a celula viajou no commit do pouso da v3, nao em commit de doc): a celula da **O280** dizia *"Fecha os **13 abertos** do portao do esmeril"* e o portao vivo tem **10**, derivado da propria fonte (`logs/o280/esmeril/portao_derivado_1810.py`: 8 do paragrafo 5 + 2 do 6). Fica VENCIDO o da mesma familia: o `21 FURO_SEM_COBRANCA` da celula da O261, que a raia `wt-fio` corrige no commit da cura dela.
 
+## MEDIDO 20/10 03:3x -- A PROVA DO AR DAS DUAS CASCAS, A CITACAO DA L-113 QUE O SELO DE HOST COBROU, E O PUSH ENTREGUE (REGUA-DO-PERIODO-VEM-DA-ESCALA-DE-HOJE fatia 2, complemento da secao de 03:0x) -- nao e marco: 0 linha de codigo, o amend mexeu so no corpo do commit
+
+**LEI-AKITA: origem=o commit nao citava a lei do sitio que tocou (`recalcular_fechamento_mes`, PROTEGE da L-113), testemunha=`bin/tests/test_lei_protege_sitio.sh` sobre o diff do push, RED=esse selo VERMELHO antes do amend, quem-mais-le=as tres clausulas da L-113 medidas uma a uma, juizes novos=0.**
+
+**PROVA DO AR — pouso da fatia 2 da REGUA-DO-PERIODO (20/10 03:0x).** O par atomico correu numa
+chamada so, pela L-107: `merge --no-ff --no-commit` -> resolucao -> commit -> `bin/deploy.sh
+--sem-migrate`, nada no meio. Janela escolhida pelo juiz unico da janela (crons LONGOS derivados de
+`dur_s >= 120`, 9 de 97; faixas 03:20-03:45 com margem de 10 min e 03:57-04:07 literal): liberou
+03:00:48 quando o `noturno.py` terminou, e o ato comecou 03:03 com `cron longo em curso: nenhum`.
+Portao E2 lido pela SAIDA, nao pelo rc: `dia=20261020 status=OK tipo=completa diverge=0 erros=0`.
+Censo da arvore certificada por CONTEUDO: `iguais=13 difere=0 universo=13`.
+AR: as duas cascas carregaram o codigo do merge — `apurar_por_fatia`, `_furos_encerrados` e
+`_Apuracao` presentes em saas_core E saas_ui, assinatura `(colab, ini, fim, batidas, escalas,
+celulas, montar_motor)`; workers de 34-37 s, tres rotas provadas, selo BUG 128 verde,
+`importerror_500=0`. Selos de HOST na principal: 74 rodados, 74 verdes (o `test_lei_protege_sitio`
+estava vermelho e a cura foi CITAR a L-113 no corpo do commit, com as tres clausulas medidas — a
+trilha da clausula 1 e byte a byte identica, md5 07a83e5e69b4, e as duas travas da clausula 2 tem
+zero arquivo no diff do push).
+ESMERIL do marco: 0 orfao criado. Tres orfaos PRE-EXISTENTES ficam nomeados como divida da L-111 e
+viram linha de fila, nao trabalho agora: `fechamento.py::marco_da_competencia`,
+`espelho.py::montar_semanas`, `espelho.py::resumo_escala`.
+Reversao: `git revert <commit do pouso>` + `bin/deploy.sh --sem-migrate`; a raia fica intacta em
+`raia-regua10b` e o backup dos docs sujos em `pre_pouso/`.
+PUSH ENTREGUE: `origin/main = 0752101f` (o commit do marco), pre-push `OK` com `Ran 22 tests` e `push liberado`, zero `^FAILED` no log inteiro.
+O `f00f5a51` fica um commit a frente do remoto de PROPOSITO: e o derivado do `bin/pos_push.sh`, a excecao NOMEADA da L-106, que nasce DEPOIS do push.
+
 ## MARCO 20/10 03:0x -- O POUSO DA FATIA 2 DA REGUA POR FATIA ACONTECE, E A ARVORE QUE POUSA E CERTIFICADA DE NOVO PORQUE O MAIN ANDOU TRES COMMITS (REGUA-DO-PERIODO-VEM-DA-ESCALA-DE-HOJE fatia 2 -- L-105/L-107)
 
 **LEI-AKITA: origem=pouso da raia `wt-regua10b` (`9632cdbd`), testemunha=suite sobre a arvore do merge + `bin/sombra.sh --conferir`, RED=os 5 modulos que a raia carimbou (`test_regua_por_fatia_na_janela.py`, `test_composicao_de_fatias_e_total.py`, `test_o140_furo_lavrado.py` e `test_o197_futuro_nao_e_em_aberto.py` invertidos), quem-mais-le=censo de `furo_apurado` e da cadeia de retencao do export (abaixo), juizes novos=0.**
 
 - **A ULTIMA CLAUSULA DO FOCO SE RESPONDEU POR MEDICAO, e a resposta e POUSO, nao PAUSA.** O `!` diz *"a REGUA-DO-PERIODO so termina se estiver a um pouso"*. Estava: a suite da raia ja era verde, a dirtiness que a travava era MINHA (docs deste marco, L-106) e o `materializacao.py` descommitado virou `a98cc2c5`. **Zero intersecao de codigo**: `comm -12` dos dois `git diff --name-only` contra a merge-base `50392fe9` da **so** `app/docs/BACKLOG.md` e `app/docs/RELATO.md`.
 - **POR QUE UMA SUITE NOVA, e nao a da raia:** POUSO-EM-COMBOIO 2a clausula -- *"a arvore que a suite certificou e a arvore que POUSA"*. A da raia certificou `main@50392fe9` + raia; o main andou **3** commits (`f7173600`, `e876a6e2`, `f284b197`, `50392fe9`->`a98cc2c5`), e **cinco** modulos de teste leem `app/docs/`, entao a resolucao dos dois docs tinha de vir ANTES da suite. Feita **uma vez** e usada nas DUAS pontas (a copia e o pouso). Arvore: `merge-tree(a98cc2c5, 9632cdbd)` = `4605661321d7`, copia `cp-comboio-regua10b`, carimbo em `logs/regua10/TREE_CERT_comboio_20-10.txt`.
-- **VEREDITO (L-074, os tres sinais):** VEREDITO_SUITE
-- **ARVORE CERTIFICADA == ARVORE QUE POUSA:** CENSO_CMP, por CONTEUDO (`cmp`) nos **13** `.py` do universo do merge -- nunca por mtime, que nao distingue reescrita identica (a suite regenera `.html`/`.mmd`/`MAPA.md` na copia).
+- **VEREDITO (L-074, os tres sinais):** `Ran 11481 tests in 1655.637s` + `OK (skipped=42, expected failures=14)` + `rc_suite=0`, os tres lidos com `tail -1`; ancorados `^FAIL:`/`^ERROR:` = **0** (lastro `logs/regua10/TREE_CERT_comboio_20-10.txt`, suite lancada 01:40:26 e veredito lido 02:14:34)
+- **ARVORE CERTIFICADA == ARVORE QUE POUSA:** `iguais=13 difere=0 universo=13`, por CONTEUDO (`cmp`) nos **13** `.py` do universo do merge -- nunca por mtime, que nao distingue reescrita identica (a suite regenera `.html`/`.mmd`/`MAPA.md` na copia).
 - **POR QUE ANDA NA JANELA DE FECHAMENTO** (o recesso de 13/10 deixa passar tela e bug PROVADO; o que PAUSA e cura que muda quem entra ou o valor da 10). As tres perguntas, cada uma com numero: **(1) VALOR** -- o gravado nao se move, `CAMPOS MOVIDOS = 0` nos 605 colabs x 26 campos e a 2a leitura do portao no universo inteiro da `MULTI_REGUA 0` (era 6 de 14), `BORDA 0`, `UNI 0`, `PDF 0`, `campo_ausente 0`; a folha nunca teve o defeito (ela ja fatiava por vigencia), quem errava era o LEITOR. **(2) QUEM ENTRA** -- a cadeia foi lida ate o fim: `folha/export.py:882` chama `motivos_retencao_espelho(..., fech=fech)`, cujo corpo (`:1183-1190`) IGNORA os tres primeiros parametros desde a HX-BORDA-CELULA e delega a `motivos_retencao_celula`, que julga por `CelulaDia.veredito` -- a LAMPADA, que esta fatia nao escreve; `folha/export.py` nomeia `DiaPago` **ZERO** vezes. **(3) CELULA** -- a fatia nao escreve celula. `TXT MUDA 0` nos 41 medidos.
 - **O CARIMBO QUE A CURA PASSA A PRODUZIR NAO E LIDO POR DECISAO NENHUMA, e isso se mediu em vez de se supor:** `coletar_furos` devolve **0** furo-dia no main e **2227** em 485 colabs na raia (`logs/regua10/cmp_escritor_19-10.out`), o que no dia seguinte carimba `DiaPago.furo_apurado=True` onde hoje e NULL. O censo de `furo_apurado` fora de `tests/` da **4** sitios e nenhum deles decide: a definicao (`ponto/models.py:359`), o ESCRITOR (`ponto/services/dia_pago.py`), o comando de backfill da O140 e o VIGIA `folha/porta_export.py:420-436` (contador `lavratura_sem_furo_apurado`, saltado na exportada por construcao). **Isto DESTRAVA o item (3) do foco** -- o re-carimbo da 09 na coluna `furo_apurado` (AVAIS #3) -- e NAO o executa: e escrita em competencia EXPORTADA, entao vai com DRY na sombra, DIFF, reversao em disco e hash antes/depois.
 - **O PORTAO E2 DO DEPLOY ESTAVA VERMELHO, E A CURA FOI RODAR O ENSAIO, NAO CONTORNA-LO.** `bin/sombra.sh --conferir` devolvia **rc=1** por `SOMBRA_BLOCO=nao_rodou`: o `--refazer` das 00:06 zera o bloco e nenhum bloco correu depois. Rodou-se `--bloco` (nao `--sem-sombra`, LEI-AKITA 3 -- *custo de tempo nunca e argumento*), e ele carimba VALIDAMENTE agora porque o dump **E do dia** (`SOMBRA_DUMP=20261020`, `tipo=completa`, `DIVERGE=0`): a faixa cega 00:00-04:00 ja tinha sido paga pelo `--dump-agora` do refazer. O encadeamento esperou a linha `rc_suite=` **no ARQUIVO** do log da suite, nunca `pgrep`, porque suite e bloco disputam o mesmo cpuset de teste (vCPU 4-7). **E a nota "nao rodar `--bloco` agora" era MINHA**, da janela do DIFF, quando o `lote10_diff.sh` segurava a trava da sombra -- nao ha `!` dele sobre isso; levantada aqui com os dois numeros do carimbo, como a conduta manda. PROVA: `logs/regua10/bloco_20-10.out`.
@@ -2279,6 +2305,8 @@ LEI-AKITA: origem=`bin/nome_no_texto.py` (o predicado de *"ha nome de colaborado
 - **INCOMPLETO, nomeado**: (a) nenhum dos dois dicionarios `*_nao_medido` e IMPRESSO pelo `selo_leitores_no_mesmo_numero` -- linha de FILA pela ESMERIL-DO-MARCO, nao trabalho agora; (b) o irmao `except Exception: _dp_por_dia = {}` (`:528-532`) **nao** foi tocado: ele **super-reporta** (faz a testemunha acusar quem esta certo), que e barulho, nao silencio -- e barulho nao mata o colaborador pela falta; (c) o `getattr(res,'periodos',[]) or []` de `:70` fica como esta -- com o `or []` as duas formas dao a MESMA saida, e o sitio e do caso I1(A) do construtor.
 
 ## ALARMES DA ESTEIRA
+
+**20/10 03:40 vigia da esteira** -- esteira em espera de janela: 8 fatias prontas, reabre 04:45.
 
 **19/10 22:40 vigia da esteira** -- esteira em espera de janela: 8 fatias prontas, reabre 00:00.
 
