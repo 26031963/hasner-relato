@@ -215,7 +215,7 @@ lista — ela e o que esta EM PE._
 | **O204** | HORA-DO-APARELHO-LIDA-COMO-DATA | **NO AR 08/10 20:02** (`d2cf6606`, ff +  |
 | **O205** | O GATE TEMPORAL REVERTE POR ARQUIVO E NAO OLHA A ARVORE DEPOIS | **fila 2 -- e INSTRUMENTO**, e a L-105 m |
 | **O206** | PAINEL-OFERECE-COBRAR-NAO-REABRIR | espera `!` |
-| **O207** | VINCULO-INICIO-DECLARADO | **POUSOU 13/10: NO AR por `353818c5` ([O |
+| **O207** | VINCULO-INICIO-DECLARADO | **POUSOU 10/10: NO AR por `353818c5`** ( |
 | **O209** | A ATA DA FROTA ESTA STALE CONTRA O JUIZ DE HOJE | espera `!` |
 | **O210** | A DERIVA DA COMPETENCIA 10: 174 de 572 fechamentos | **portao aberto** -- comp 10 aberta, app |
 | **O211** | REGUA-PELA-EMPRESA | **fila 1, logo ATRAS da O209** (ordem li |
