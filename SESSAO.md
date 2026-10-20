@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 20/10/2026 15:17:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1173.4 MB). Acoes na janela: **990**.
+**Medido em 20/10/2026 15:23:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1173.4 MB). Acoes na janela: **994**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 15:22:13 | Bash | Keep waiting for the suite verdict | `SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad for i in $(seq 1 6); do if [ -s "$SP/espera_suite.out" ]; then break; fi python3 -c "import time;time.sleep(18)" done cat "$SP/espera_suite.out"; echo "---"; date '+%H:%M:%S'` |
+| 15:22:07 | Bash | Check today's sombra stamp for the deploy gate | `cd /home/ronald/saas-hasner bash bin/sombra.sh --conferir 2>&1 \| tail -12` |
+| 15:20:11 | Bash | Keep waiting for the suite verdict | `SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad for i in $(seq 1 6); do if [ -s "$SP/espera_suite.out" ]; then break; fi python3 -c "import time;time.sleep(18)" done cat "$SP/espera_suite.out"; echo "---"; date '+%H:%M:%S'` |
+| 15:18:17 | Bash | Keep waiting for the suite verdict | `SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad for i in $(seq 1 6); do if [ -s "$SP/espera_suite.out" ]; then break; fi python3 -c "import time;time.sleep(18)" done cat "$SP/espera_suite.out"; echo "---"; tail -c 200 "$SP/bo_suite_inteira.out"; date '+%H:%M:%S'` |
 | 15:16:24 | Bash | Wait up to two minutes for the suite verdict | `SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad for i in 1 2 3 4 5 6; do if [ -s "$SP/espera_suite.out" ]; then break; fi python3 -c "import time;time.sleep(18)" done cat "$SP/espera_suite.out"; echo "--- (vazio = ainda correndo)"; date '+%H:%M:%S'` |
 | 15:16:18 | Bash | Write the landing census script and poll | `SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad cat > "$SP/pousa_bo.sh" <<'SH' #!/usr/bin/env bash # Censo largo + copia + cmp: a arvore que a suite certificou e a arvore que pousa (L-117). set -uo pipefail R=/home/ronald/saas-hasner SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad C="$SP/cp-boat/app"  ...` |
 | 15:16:04 | Bash | Check if the waiter process is alive | `ps -o pid,etime,cmd -p 2874248 2>/dev/null \| tail -1 \|\| echo "esperador morto"` |
