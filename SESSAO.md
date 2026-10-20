@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 20/10/2026 07:34:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1150.3 MB). Acoes na janela: **1113**.
+**Medido em 20/10/2026 07:40:03.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1150.3 MB). Acoes na janela: **1108**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1118,8 +1118,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 19:44:01 | Bash | Create build copy from HEAD | `cd /home/ronald/saas-hasner test -e /home/ronald/cp-o261vespera && { echo "JA EXISTE -- parando"; exit 1; } mkdir -p /home/ronald/cp-o261vespera git archive HEAD \| tar -x -C /home/ronald/cp-o261vespera echo "rc_archive=$?" echo "HEAD=$(git rev-parse --short HEAD)" mkdir -p /home/ronald/cp-o261vespera/app/logs /home/ronald/cp-o261vespera/app/media echo "=== o sitio na copia (nasceu do HEAD)"; sed  ...` |
 | 19:43:48 | Bash | Read the absolution primitive | `cd /home/ronald/saas-hasner/app echo "=== plantio_preenche_furo"; /bin/grep -n 'def plantio_preenche_furo' -A 45 ponto/propositor.py` |
 | 19:43:27 | Bash | Confirm suite PID and read slot tolerance boundary | `cd /home/ronald/saas-hasner echo "=== PID 1384681"; ps -o pid,ppid,etime,cmd -p 1384681 2>&1 \| cut -c1-240 echo; echo "=== veredito (forma da casa)"; /bin/grep -E '^(OK\|FAILED)($\| \()' logs/regua10/suite_cura_19-10.out 2>/dev/null \| tail -1; /bin/grep -E '^Ran ' logs/regua10/suite_cura_19-10.out 2>/dev/null \| tail -1 echo "(vazio acima = ainda correndo)" echo; echo "=== propositor.py toleranc ...` |
-| 19:39:39 | Bash | Read the O261 lampada selo assertion | `cd /home/ronald/saas-hasner/app sed -n '130,170p' chamados/tests/test_o261_paridade_respeita_a_lampada.py` |
-| 19:39:30 | Bash | Read existing tests of the absolution helper | `cd /home/ronald/saas-hasner/app echo "=== test_plantio_adapter.py (inteiro)"; cat -n ponto/tests/test_plantio_adapter.py echo; echo "=== test_hx_plantio_celula.py (inteiro)"; cat -n chamados/tests/test_hx_plantio_celula.py` |
-| 19:39:05 | Bash | Read the existing selo that documents the date range | `cd /home/ronald/saas-hasner/app echo "=== o317_passivo :60,100"; sed -n '60,100p' chamados/tests/test_o317_passivo_pela_porta.py echo; echo "=== o317_passivo :305,340"; sed -n '305,340p' chamados/tests/test_o317_passivo_pela_porta.py` |
-| 19:38:57 | Bash | Census callers of the plantio absolution helper | `cd /home/ronald/saas-hasner/app echo "=== chamadores"; /bin/grep -n '_plantio_preenche_furo_na_data' -r chamados/ ponto/ escala/ core/ folha/ relatorios/ 2>/dev/null echo; echo "=== caller :385-400"; sed -n '385,400p' chamados/services/materializacao.py echo; echo "=== caller :660,700"; sed -n '660,700p' chamados/services/materializacao.py` |
-| 19:38:27 | Bash | Check suite status and lock state | `cd /home/ronald/saas-hasner echo "=== agora: $(date '+%Y-%m-%d %H:%M:%S')" echo "=== trava"; bash bin/trava_teste.sh --quem 2>&1 \| head -5 echo "=== tail suite regua10b"; tail -6 logs/regua10/suite_cura_19-10.out 2>&1 echo "=== wt-regua10b status"; git -C /home/ronald/wt-regua10b status --porcelain 2>&1 echo "=== crons em curso"; ls -1 logs/crons_em_curso/ 2>/dev/null \| head` |
