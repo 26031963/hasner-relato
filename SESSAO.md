@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 20/10/2026 08:00:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1150.3 MB). Acoes na janela: **1062**.
+**Medido em 20/10/2026 08:05:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1150.3 MB). Acoes na janela: **1050**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1060,15 +1060,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 20:08:22 | ToolSearch |  | `-` |
 | 20:08:05 | Bash | Measure who wrote the cure files and when | `cd /home/ronald/saas-hasner T=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks echo "=== mtimes raia"; stat -c '%y %n' /home/ronald/wt-regua10b/app/ponto/services/fechamento.py /home/ronald/wt-regua10b/app/ponto/tests/test_composicao_de_fatias_e_total.py 2>&1 echo "=== logs/regua10"; ls -la --time-style=+%H:%M:%S logs/regua10/ 2>&1 \| tail -20 echo "=== acha ...` |
 | 20:07:54 | ListAgents |  | `-` |
-| 20:04:25 | Bash | Check for residual debug lines and read the new selo | `cd /home/ronald/wt-regua10b echo "=== DBG residual"; /bin/grep -c 'DBG-REGUA10' app/ponto/services/fechamento.py; echo "=== compila"; cd app && python3 -m py_compile ponto/services/fechamento.py ponto/tests/test_composicao_de_fatias_e_total.py && echo OK echo "=== selo novo, cabeca"; sed -n '1,40p' ponto/tests/test_composicao_de_fatias_e_total.py` |
-| 20:04:13 | Bash | Read the current declared lists and raia status | `cd /home/ronald/wt-regua10b; date '+agora %H:%M:%S'; git status --porcelain; echo "=== topo"; sed -n '28,72p' app/ponto/services/fechamento.py` |
-| 20:03:59 | Bash | Check mtimes and current raia state | `cd /home/ronald/wt-regua10b stat -c '%y %n' app/ponto/services/fechamento.py app/ponto/services/espelho.py app/relatorios/pdf_espelho.py app/ponto/tests/*.py 2>/dev/null echo "=== status"; git status --porcelain echo "=== date"; date '+%H:%M:%S' echo "=== as listas"; sed -n '30,70p' app/ponto/services/fechamento.py` |
-| 20:03:48 | Bash | Inspect exact bytes of the composition lines | `cd /home/ronald/wt-regua10b/app /bin/grep -n 'resultado.periodos\\|resultado.anomalias\\|semanas_dsr_ok' ponto/services/fechamento.py \| head sed -n '164,172p' ponto/services/fechamento.py \| cat -A \| head -12` |
-| 20:03:41 | Bash | Apply the composition cure | `cd /home/ronald/wt-regua10b/app python3 - <<'PY' p='ponto/services/fechamento.py' s=open(p).read() # 1) as tres listas DECLARADAS, antes da porta anc = "def apurar_por_fatia(colab, ini, fim, batidas, escalas, celulas, montar_motor):\n" assert s.count(anc)==1 decl = '''# A COMPOSICAO DE `ResultadoMes` E DECLARADA CAMPO A CAMPO, e ela nasce destas tres listas porque a # composicao a mao MENTIU por u ...` |
-| 20:03:09 | Bash | Read the exact composition block to patch | `cd /home/ronald/wt-regua10b/app sed -n '130,165p' ponto/services/fechamento.py` |
-| 20:02:59 | Bash | Check readers of mes/ano on ResultadoMes | `cd /home/ronald/saas-hasner/app echo "=== quem le .mes/.ano de um ResultadoMes"; git grep -n 'resultado\.mes\\|resultado\.ano\\|resultado_v2\.mes\\|resultado_v2\.ano\\|\.resultado\.mes\\|\.resultado\.ano' -- '*.py' \| head echo "=== fim (vazio = ninguem)"` |
-| 20:02:30 | Bash | Read the o197 header and constants as a fixture model | `cd /home/ronald/wt-regua10b/app sed -n '1,90p' relatorios/tests/test_o197_futuro_nao_e_em_aberto.py` |
-| 20:02:00 | Bash | Measure the lavrado furo state on the sombra | `SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad cat > "$SP/sonda_furo_apurado.py" <<'PY' # SONDA DE LEITURA (sombra): o estado de `DiaPago.furo_apurado` por competencia. # Pergunta UNICA: a lavratura do escritor ja respondeu True em algum dia-colab? from django.db import connection from collections import Counter from ponto.models import DiaPago k = ...` |
-| 20:01:42 | Bash | Read a sombra sonda launcher as the model | `cd /home/ronald/saas-hasner sed -n '1,45p' bin/r5_idempotencia_frota.sh` |
-| 20:01:38 | Bash | Find the canonical sombra invocation | `cd /home/ronald/saas-hasner /bin/grep -rn 'settings.sombra' bin/*.sh \| head -10` |
-| 20:01:25 | Bash | Census of the dropped-field readers | `cd /home/ronald/saas-hasner/app echo "=== quem le dias_cadastro_x_realidade (prod)"; git grep -n 'dias_cadastro_x_realidade' -- '*.py' \| /bin/grep -v '/tests/' echo; echo "=== quem le furo_apurado (prod, nao-teste)"; git grep -n 'furo_apurado' -- '*.py' \| /bin/grep -v '/tests/' \| head -20` |
