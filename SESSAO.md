@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 20/10/2026 16:27:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1176.3 MB). Acoes na janela: **1016**.
+**Medido em 20/10/2026 16:33:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1176.3 MB). Acoes na janela: **1013**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1023,6 +1023,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 04:33:24 | Bash | Confirm the hook predicate and refresh the handoff file | `cd /home/ronald/saas-hasner timeout 60 python3 - <<'PY' import importlib.util spec=importlib.util.spec_from_file_location('h','bin/hook_stop_fila1.py') m=importlib.util.module_from_spec(spec); spec.loader.exec_module(m) print('relato_parou =', m._relato_parou()) PY bash bin/handoff_sessao.sh 2>&1 \| tail -2` |
 | 04:33:19 | Bash | Publish the push verdict in the report and re-run the proof guard | `cd /home/ronald/saas-hasner/app python3 - <<'PY' p='docs/RELATO.md' s=open(p,encoding='utf-8').read() alvo='**A MEDIDA QUE SUSTENTA O PAREI ACIMA.**' novo=('**PUSH DO MARCO DA REGUA-DO-PERIODO: NO REMOTO, e o veredito se leu NO REMOTO e nao na ausencia de saida.** ' '`0752101f..f00f5a51 main -> main` as **04:3x**, confirmado por `git fetch` + `git rev-parse origin/main` = `f00f5a5184dc`. ' 'Os cin ...` |
 | 04:33:04 | Bash | Correct the hour label in the state cell | `cd /home/ronald/saas-hasner/app NOVO='**NO AR 20/10 03:03** -- pouso + deploy num ato (L-107), commit 0752101f. E2 diverge=0; censo da arvore certificada iguais=13 difere=0; as duas cascas carregam apurar_por_fatia. Selos de host 74/74. Esmeril: 0 orfao novo. **EMPURRADO 04:3x**: f00f5a51, suite 11481 OK + 22 OK, rc 0.' python3 ../bin/backlog_estado.py "REGUA-DO-PERIODO-VEM-DA-ESCALA-DE-HOJE" "$NO ...` |
-| 04:32:58 | Bash | Record the push verdict in the ruler work state | `cd /home/ronald/saas-hasner/app date '+%F %T' NOVO='**NO AR 20/10 03:03** -- pouso + deploy num ato (L-107), commit 0752101f. E2 diverge=0; censo da arvore certificada iguais=13 difere=0; as duas cascas carregam apurar_por_fatia. Selos de host 74/74. Esmeril: 0 orfao novo. **EMPURRADO 04:4x**: f00f5a51, suite 11481 OK + 22 OK, rc 0.' printf 'chars=%s\n' "${#NOVO}" python3 ../bin/backlog_estado.py  ...` |
-| 04:32:45 | Bash | Read all suite verdicts and check the derived commit's scope | `cd /home/ronald/saas-hasner /bin/grep -nE '^(OK\|FAILED)($\| \()\|^Ran [0-9]+ test' logs/push_f00f5a51_20-10.log \| tail -8 echo "=== o derivado tocou o que?" git show --stat --oneline affa98a7 \| head -8 echo "=== minhas edicoes seguem fora do commit?" git status --porcelain \| head -8` |
-| 04:32:32 | Bash | Read the push verdict from the remote | `cd /home/ronald/saas-hasner tail -6 logs/push_f00f5a51_20-10.log echo "=== remoto:" timeout 120 git fetch origin 2>&1 \| tail -2 git rev-parse origin/main HEAD \| sed 's/^/ /' git rev-list --count origin/main..HEAD` |
