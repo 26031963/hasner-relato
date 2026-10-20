@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 20/10/2026 20:06:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1179.1 MB). Acoes na janela: **1119**.
+**Medido em 20/10/2026 20:11:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1179.1 MB). Acoes na janela: **1117**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1127,5 +1127,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 08:13:15 | Bash | Read the union form view around the field writer | `cd /home/ronald/saas-hasner/app echo "=== form_sindicato: do def ate o fim ===" awk 'NR>=215 && NR<=400' core/views_config.py \| /bin/grep -n -E 'def \|piso\|POST\|prorrogacao\|_trilha\|registrar_log\|messages\|return\|save\|erro\|legal' \| head -60` |
 | 08:12:49 | Bash | Find the writer of the field and whether that screen landed | `cd /home/ronald/saas-hasner echo "=== quem ESCREVE o campo (git grep -w na arvore) ===" git grep -n -w 'prorrogacao_noturna_pos5h' -- app/ \| /bin/grep -v -E '/tests/\|/migrations/' \| head -30 echo echo "=== HEAD e o que esta NO AR ===" git log --oneline -1 echo "deploy mais recente:"; ls -1t logs/deploy_*.log logs/deploy/*.log 2>/dev/null \| head -3 echo echo "=== a O323 pousou? ===" git log --o ...` |
 | 08:12:12 | Bash | Measure every union row, its stamps and the recent audit trail | `cd /home/ronald/saas-hasner S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/p5h_confere_prod2.py cat > "$S" <<'PY' from django.db import connection as _c _k = _c.cursor(); _k.execute("select current_database()") assert _k.fetchone()[0] == 'saas_hasner', 'NAO E PROD' from django.utils import timezone from core.models import Sindicato, LogAuditoria pri ...` |
-| 08:07:55 | Bash | Measure the sindicato field and its audit trail in production | `cd /home/ronald/saas-hasner S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/p5h_confere_prod.py cat > "$S" <<'PY' # LEITURA PURA em PROD: o campo do sind=3 e a trilha do save. Nenhum nome impresso. from django.db import connection as _c _k = _c.cursor(); _k.execute("select current_database()") assert _k.fetchone()[0] == 'saas_hasner', 'NAO E PROD' fr ...` |
-| 08:07:42 | Bash | Check the read-probe port usage | `cd /home/ronald/saas-hasner sed -n '1,20p' bin/sonda_leitura.sh \| /bin/grep -nE 'uso\|usage\|SOMBRA\|--sombra\|settings' \| head` |
