@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 20/10/2026 20:55:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1179.1 MB). Acoes na janela: **1041**.
+**Medido em 20/10/2026 21:00:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1179.1 MB). Acoes na janela: **1033**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1043,11 +1043,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 09:02:11 | Bash | Look for col723 in the earlier probe output | `D=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks; ls $D \| head; echo '--- col723'; /bin/grep -n "col723" -A 30 $D/bbjesdtyj.output \| head -40` |
 | 09:01:54 | Bash | Find marcos reader class and plantio authority signature | `/bin/grep -rn "marcos_do_dia\\|eh_dia_trabalho" --include=*.py escala/ core/ ponto/services/ \| /bin/grep -v tests \| /bin/grep "def \\|import " \| head -20; echo '--- ts_tipo'; /bin/grep -n "def _ts_tipo_do_plantio" -A 20 chamados/services/materializacao.py` |
 | 09:01:44 | Bash | Locate plantio authority, marcos reader and feriado reader | `sed -n '2260,2300p' chamados/models.py; echo '--- EC'; /bin/grep -rn "def marcos_do_dia" --include=*.py . \| head; echo '--- import EC'; /bin/grep -rn "marcos_do_dia" --include=*.py ponto/motor_calculo_v2.py \| head -5; echo '--- feriado'; /bin/grep -rn "def .*feriado" --include=*.py escala/ core/ ponto/ \| head -20` |
-| 08:57:37 | Bash | Read the command handle | `sed -n '67,113p' chamados/management/commands/materializar_passivo_validado.py` |
-| 08:57:31 | Bash | Find the lot's selector and the per-colab detail | `cd /home/ronald/saas-hasner && sed -n '2630,2650p' logs/o261/lote10_diff_20-10_head.out; echo "=== quem seleciona o universo no comando:"; cd app && /bin/grep -nE 'def \|alvo\|queryset\|filter\(' chamados/management/commands/materializar_passivo_validado.py \| head -40` |
-| 08:57:19 | Bash | Read the planting path for an answered hour | `cd /home/ronald/saas-hasner/app echo "=== o que _materializar_resposta_hora usa como instante/tipo:" sed -n '700,760p' chamados/services/materializacao.py echo "=== campos de hora na pergunta:" git grep -nE 'resposta_hora\|hora_informada\|resposta_time' -- chamados/models.py \| head` |
-| 08:56:54 | Bash | Read the real motor factory for a colab | `sed -n '400,475p' core/regua_cct.py` |
-| 08:56:47 | Bash | Find the motor-resolution call site | `cd /home/ronald/saas-hasner/app git grep -n 'get_motor(' -- '*.py' \| /bin/grep -v tests \| head echo "=== quem resolve tipo_escala do colab:" git grep -nE 'tipo_escala' -- ponto/services/*.py ponto/motor_calculo_v2.py \| /bin/grep -vE '^\S+:\s*#' \| head -20` |
-| 08:56:40 | Bash | Find where the plantão motor is selected | `cd /home/ronald/saas-hasner/app git grep -n 'MotorPlantao' -- '*.py' \| /bin/grep -v tests echo "=== como se escolhe o motor (fabrica):" git grep -nE 'def .*motor\|MOTORES\|_FABRICA\|motor =' -- ponto/motor_calculo_v2.py \| head -20` |
-| 08:56:14 | Bash | Find the motor selector | `cd /home/ronald/saas-hasner/app echo "=== classe MotorPlantao e o SELETOR de motor:" sed -n '3140,3160p' ponto/motor_calculo_v2.py echo "---" git grep -nE 'def (escolher_motor\|motor_do\|_motor_para\|motor_de)' -- '*.py' \| /bin/grep -v tests \| head` |
-| 08:55:48 | Bash | Read the per-motor caps and the open-turn closer | `cd /home/ronald/saas-hasner/app echo "=== AUT_CONT_MAX_S / AUT_INTRA_MAX_S por motor:" git grep -n 'AUT_CONT_MAX_S\\|AUT_INTRA_MAX_S' -- '*.py' \| /bin/grep -v tests echo; echo "=== _fechar_aberto_na_pausa_sem_volta (1020-1105):" sed -n '1020,1105p' ponto/turnos.py` |
