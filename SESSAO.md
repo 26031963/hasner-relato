@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 20/10/2026 22:41:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1179.1 MB). Acoes na janela: **814**.
+**Medido em 20/10/2026 22:46:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1179.1 MB). Acoes na janela: **810**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -820,7 +820,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 10:47:10 | Bash | Inspect the hook module API | `cd /home/ronald/saas-hasner && python3 - <<'PY' import importlib.util,sys spec=importlib.util.spec_from_file_location("h","bin/hook_stop_fila1.py") m=importlib.util.module_from_spec(spec); spec.loader.exec_module(m) cands=[n for n in dir(m) if not n.startswith('__')] print([c for c in cands if 'fila' in c.lower() or 'ordem' in c.lower() or 'prox' in c.lower() or 'item' in c.lower()]) PY` |
 | 10:46:55 | Bash | Correct the falsified clause in the header line | `python3 - <<'PY' p='docs/RELATO.md' s=open(p,encoding='utf-8').read() velho="**O que ANDA sem o seu `!`: o re-carimbo da 09 na coluna `furo_apurado`** (precondicao medida como cumprida)." novo=("**CORRIJO ESTA PROPRIA LINHA (11:2x), e quem a corrigiu foi medicao minha das 09:3x:** ela prometia " "*\"o que ANDA sem o seu `!`: o re-carimbo da 09 na coluna `furo_apurado`\"* -- **nao anda**: o comando ...` |
 | 10:46:34 | Bash | Ask the queue hook for the next item | `cd /home/ronald/saas-hasner && echo '{}' \| python3 bin/hook_stop_fila1.py 2>&1 \| tail -20` |
-| 10:46:28 | Bash | Check queue hook verdict and report header | `cd /home/ronald/saas-hasner && python3 bin/hook_stop_fila1.py </dev/null 2>&1 \| head -30; echo "---topo do RELATO---"; sed -n '1,30p' app/docs/RELATO.md` |
-| 10:46:19 | Bash | Add the measurement section to the report | `python3 - <<'PY' p='docs/RELATO.md' L=open(p,encoding='utf-8').read().split('\n') i=next(k for k,x in enumerate(L) if x.startswith('## MEDIDO 20/10 10:4x -- A O197')) sec = """## MEDIDO 20/10 11:1x -- O CONTADOR DO FIO MORTO MEDIDO NA MAO: **99** COM ALVO, E A ABERTURA DIZ QUE **35** DELES NAO SAO MEUS (O261, item (3) do seu `!` das 23:3x) -- nao e marco: 0 linha de codigo LEI-AKITA: origem=nenhum ...` |
-| 10:45:40 | Bash | List report section headings | `/bin/grep -n '^## \\|^### ' docs/RELATO.md \| head -40` |
-| 10:45:32 | Bash | Publish the trimmed split in the queue state | `cd /home/ronald/saas-hasner && T='**PRIORIDADE 1**. Cura em prod (`a98cc2c5`). ALVO `fio_morto_com_alvo` na sombra de hoje 11:1x: **99 = 64 na comp 10 + 35 na 09 exportada**, `sem_plantio_nenhum` nas duas, contador==universo (88 em prod 03:28 era outra base). Os 64 saem com o lote, RETIDO no `!`; os 35 sao do [nome].'; python3 -c "import sys;print('chars=%d'%len(sys.argv[1]))" "$T"; python3 bin/b ...` |
