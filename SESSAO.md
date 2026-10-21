@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 20/10/2026 22:20:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1179.1 MB). Acoes na janela: **854**.
+**Medido em 20/10/2026 22:25:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1179.1 MB). Acoes na janela: **849**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -859,8 +859,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 10:29:31 | Bash | Append the measured correction to the published section | `python3 - <<'PY' p='docs/RELATO.md' L=open(p,encoding='utf-8').read().split('\n') assert L[274].startswith('## MEDIDO 20/10 10:3x -- O CENSO DO O198'), L[274][:60] novo=[ "**CORRIGIDO 20/10 11:0x, no que esta secao afirmou sem medir** (duas coisas, e as duas eram minhas):", "**(1) o `ok` vem da ATA -- agora MEDIDO, nao inferido** (`logs/o197/caso5b_20-10.out`, rc 0). Eu havia lido a origem no codi ...` |
 | 10:28:55 | Bash | Locate the end of the published section | `/bin/grep -n '^## ' docs/RELATO.md \| head -6; echo "=== tail da secao O197"; sed -n '248,276p' docs/RELATO.md` |
 | 10:28:45 | Bash | Read the export gate block around the count | `sed -n '608,620p' folha/porta_export.py; echo "---- 724,745"; sed -n '724,745p' folha/porta_export.py` |
-| 10:23:55 | Bash | Check the export gate and the full reader census | `sed -n '466,486p' folha/porta_export.py; echo "=== quem mais le dias_em_aberto/datas_em_aberto"; /bin/grep -rn "dias_em_aberto\\|datas_em_aberto" --include=*.py . \| /bin/grep -v tests/ \| /bin/grep -v '\.pyc' \| head -20` |
-| 10:23:26 | Bash | Measure which of the two ok paths produced the four | `cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/o197_caso5b.py <<'PY' """O197 CASO 5 -- QUAL dos dois caminhos de `ok` pariu os 4. Medido, nao inferido. `_classificar` (calendario.py:136-162) devolve `ok` com batida por DOIS caminhos, e eles levam a cura para sitios DIFERENTES: (A) `_VER_STATUS[f['veredito']]` -- o veredito PERSISTIDO da CelulaDi ...` |
-| 10:23:05 | Bash | Find the grade and veredito keys feeding the judge | `/bin/grep -n "'celula':\\|'veredito':\\|'desvio':" colaboradores/services/calendario.py \| head` |
-| 10:22:52 | Bash | Read the veredito map source and the decided-faltas query | `/bin/grep -n '_ver_map' colaboradores/services/calendario.py \| head; echo "=== e a origem"; /bin/grep -n '_ver_map = ' -B4 -A8 colaboradores/services/calendario.py echo; echo "=== datas_falta_janela"; /bin/grep -n 'def datas_falta_janela' -A18 folha/export.py` |
-| 10:22:44 | Bash | Read the facts dict and the veredito mapping | `echo "=== o dict que vai ao juiz (linha 722)"; sed -n '700,726p' colaboradores/services/calendario.py echo; echo "=== _VER_STATUS"; /bin/grep -n '_VER_STATUS = ' -A12 colaboradores/services/calendario.py echo; echo "=== _fx_falta_janela: o que ele consulta"; /bin/grep -n '_fx_falta_janela' relatorios/cartao_pela_celula.py \| head -3` |
