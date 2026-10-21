@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 20/10/2026 23:45:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1179.1 MB). Acoes na janela: **667**.
+**Medido em 20/10/2026 23:51:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1179.1 MB). Acoes na janela: **665**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -675,5 +675,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 11:52:55 | Bash | Find the Dominio TXT line layout | `cd /home/ronald/saas-hasner/app /bin/grep -rn "def linha_dominio\\|def _linha\\|zfill\\|rjust" folha/*.py \| /bin/grep -i "rubrica\\|linha\\|codigo" \| head -20` |
 | 11:52:49 | Bash | Inspect foto JSON structure | `cd /home/ronald/saas-hasner python3 - <<'PY' import json a=json.load(open('logs/simular_folha/relavra10_antes.json')) print('keys', list(a.keys())) e=a['2'] print('emp2 campos', sorted(e.keys())) print('n_linhas', e['n_linhas'], 'len linhas', len(e['linhas'])) print('LINHA[0]', json.dumps(e['linhas'][0], ensure_ascii=False)[:400]) r=e['retidos'] print('tipo retidos', type(r).__name__, 'len', len(r ...` |
 | 11:52:37 | Bash | Check foto JSON readability and host python | `cd /home/ronald/saas-hasner ls -l logs/simular_folha/relavra10_*.json 2>&1 which python3 2>&1 \| head -2 head -c 300 logs/simular_folha/relavra10_antes.json 2>&1 \| tr -d '\n' \| head -c 300; echo` |
-| 11:46:11 | Bash | Look for the prior analysis script | `cd /home/ronald/saas-hasner ls logs/aplicacao_convencao/ 2>/dev/null \| head -20` |
-| 11:46:06 | Bash | Inspect the photo JSON structure | `cd /home/ronald/saas-hasner ls -l --time-style=+%H:%M logs/simular_folha/relavra10_*.json python3 - <<'PY' import json a=json.load(open('logs/simular_folha/relavra10_antes.json')) print('chaves de topo:', list(a)[:12] if isinstance(a,dict) else type(a)) if isinstance(a,dict): for k,v in list(a.items())[:4]: print(' ',k,'->',type(v).__name__, (list(v)[:8] if isinstance(v,dict) else (v[:2] if isinst ...` |
