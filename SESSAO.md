@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 20/10/2026 21:20:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1179.1 MB). Acoes na janela: **985**.
+**Medido em 20/10/2026 21:25:47.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1179.1 MB). Acoes na janela: **977**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -987,11 +987,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 09:26:57 | Bash | Find the queue table shape | `/bin/grep -n "SELO-DO-PLANTIO-AFIRMA-MAIS-FORTE-QUE-A-LEI" docs/BACKLOG.md \| head -3; echo ===; awk 'NR>=1388 && NR<=1396 {printf "%d: %s\n", NR, substr($0,1,180)}' docs/BACKLOG.md` |
 | 09:26:49 | Bash | Add the new approval item and regenerate the table | `python3 - <<'PY' import json p='docs/PENDENTES_RONALD.json' d=json.load(open(p,encoding='utf-8')) assert not [x for x in d if x.get('id')=='RE-CARIMBO-DA-09-RECUSADO-EM-27-DIAS-SEM-LINHA'] alvo=[x for x in d if x.get('id')=='FURO-APURADO-DA-09-FICA-NULL-OU-SE-CARIMBA'][0] alvo['resultado_do_dry']=( 'DRY RODADO 20/10 09:2x-09:3x na sombra (`logs/o140c/dry_09_20-10.out`), DEPOIS de provar a cura: '  ...` |
 | 09:26:04 | Bash | Insert the new report sections | `python3 - <<'PY' p='docs/RELATO.md' L=open(p,encoding='utf-8').read().split('\n') assert L[3]=='' and L[2].startswith('PAREI:'), (L[2][:30], L[3]) A = """**CORRIJO UMA FRASE MINHA SOBRE O (B), E A CORRECAO VEIO DE MEDICAO, NAO DE REVISAO DE TEXTO (09:2x).** Eu publiquei, no topo e na secao do marco, que o par de **1490 min** de col723 tinha um instante de fim *"sem batida nenhuma"*. **Errado**, e  ...` |
-| 09:25:16 | Bash | Check the blank line position | `sed -n '4p' docs/RELATO.md \| cat -A \| head -2; date '+%F %T'` |
-| 09:24:50 | Bash | List the report's section headings | `awk 'NR<=40 && /^\*\*/ {printf "%d: %s\n", NR, substr($0,1,110)}' docs/RELATO.md` |
-| 09:24:32 | Bash | List per-colab line counts from the probe | `cd /home/ronald/saas-hasner && /bin/grep -E '^col' logs/o140c/sem_linha_09_20-10.out` |
-| 09:24:19 | Bash | Run the read-only probe on the shadow database | `cd /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && python3 - <<'PY' p='sem_linha_09.py' s=open(p,encoding='utf-8').read() s=s.replace("from ponto.services.escala_vigente import escala_vigente # noqa: E402", "from escala.servico_jornada import escala_vigente # noqa: E402") s=s.replace(""" if cel is None: placar['sem_celula'] += 1 elif getattr(cel, 'e ...` |
-| 09:24:03 | Bash | Locate the authority import for vigencia and cell fields | `/bin/grep -rn "^def escala_vigente\\|^ def escala_vigente" --include=*.py . 2>/dev/null \| head -5; echo ===; /bin/grep -rn "import escala_vigente\\|from .* import .*escala_vigente" --include=*.py ponto/services/fechamento.py core/juizes.py 2>/dev/null \| head -5; echo "=== campos de CelulaDia (trabalho):"; /bin/grep -n "eh_trabalho\\|trabalho = \\|dia_trabalho" escala/models.py \| head -8` |
-| 09:23:57 | Bash | Write a read-only probe for the missing lines | `cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/sem_linha_09.py <<'PY' # -*- coding: utf-8 -*- """POR QUE 24 PARES DE FURO DA 09 NAO TEM LINHA DE `DiaPago` -- SO LEITURA, na SOMBRA. Nenhuma regra replicada: le `DiaPago` cru (a tabela que o carimbo escreveria), a `CelulaDia` e `escala_vigente`, que e a autoridade do vinculo. NAO chama motor: a lis ...` |
-| 09:23:23 | Bash | Read the stamp port implementation | `sed -n '548,640p' ponto/services/dia_pago.py` |
-| 09:22:37 | Bash | Read the dry run verdict | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bozvwsgp5.output` |
