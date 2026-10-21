@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 21/10/2026 00:55:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1179.1 MB). Acoes na janela: **553**.
+**Medido em 21/10/2026 01:00:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1179.1 MB). Acoes na janela: **552**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -562,4 +562,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 13:02:11 | Bash | Register today's three prompts | `python3 - <<'PY' p = 'docs/PROMPTS.md' L = open(p, encoding='utf-8').read().split('\n') while L and not L[-1].strip(): L.pop() assert L[-1].startswith('\| 19/10 21:0x'), L[-1][:40] r1 = ('\| 20/10 11:17 \| **O `!` QUE RECORTA O LOTE DA O261 NA 10 E ESTACIONA DUAS COISAS, literal**: ' '*"(1) LOTE DA O261 NA 10 -- aplica com o recorte de 50 ids do ensaio, EXCLUINDO col723 ' '(pergunta 43631: par de  ...` |
 | 13:01:31 | Bash | Show field layout of last prompts row | `tail -1 docs/PROMPTS.md \| awk -F'\|' '{for(i=1;i<=NF;i++) printf "[%d] %.150s\n", i, $i}'` |
 | 13:01:23 | Bash | Inspect prompts table column shape | `/bin/grep -n '^\|' docs/PROMPTS.md \| head -4 \| cut -c1-220 && echo '--- ultima linha, campos:' && tail -1 docs/PROMPTS.md \| awk -F'\|' '{print NF}' && echo '--- cabecalho mais proximo do fim:' && awk '/^\\| *#? *[Dd]ata\|^\\|---/{n=NR; l=$0} END{}' docs/PROMPTS.md >/dev/null; /bin/grep -n '^\|---' docs/PROMPTS.md \| tail -3` |
-| 12:56:15 | Bash | Register today's three prompts | `python3 - <<'PY' p = 'docs/PROMPTS.md' L = open(p, encoding='utf-8').read().split('\n') while L and not L[-1].strip(): L.pop() assert L[-1].startswith('\| 19/10 21:0x'), L[-1][:40] r1 = ('\| 20/10 11:17 \| **O `!` QUE RECORTA O LOTE DA O261 NA 10 E ESTACIONA DUAS COISAS, literal**: ' '*"(1) LOTE DA O261 NA 10 -- aplica com o recorte de 50 ids do ensaio, EXCLUINDO col723 ' '(pergunta 43631: par de  ...` |
