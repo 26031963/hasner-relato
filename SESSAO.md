@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 20/10/2026 22:25:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1179.1 MB). Acoes na janela: **849**.
+**Medido em 20/10/2026 22:30:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1179.1 MB). Acoes na janela: **842**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -852,10 +852,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 10:31:13 | Bash | Read the marcos_apagados authority | `sed -n '110,150p' ponto/services/lastro.py` |
 | 10:31:04 | Bash | Check the celula census for this predicate | `cd /home/ronald/saas-hasner && /bin/grep -n "concorde\\|marco" bin/esmeril_celula_censo.py \| head -20; echo "=== ha contador no codigo da casa?"; cd app && /bin/grep -rn "marco_faltando\\|marcos_apagados\\|marco_sem_batida" --include=*.py . \| head -10` |
 | 10:30:58 | Bash | Locate the original probe for the counter | `cd /home/ronald/saas-hasner && ls logs/ \| /bin/grep -i -E "concorde\|marco" \| head; echo "=== grep em logs (nomes de arquivo)"; find logs -maxdepth 2 -name "*.py" 2>/dev/null \| xargs /bin/grep -ln "concorde_com_marco_faltando" 2>/dev/null \| head; echo "=== sonda frota?"; ls bin/ \| /bin/grep -i -E "sonda\|censo" \| head -20` |
-| 10:30:29 | Bash | Find the counter and any corte for the parada | `echo "=== contador"; /bin/grep -rn "concorde_com_marco_faltando" --include=*.py --include=*.md . \| head -20` |
-| 10:30:13 | Bash | Read the parada note and the override block | `sed -n '470,500p' colaboradores/services/calendario.py; echo "=== 148,172"; sed -n '148,172p' colaboradores/services/calendario.py` |
-| 10:30:03 | Bash | Find the existing authority on the concorde veredito | `echo "=== _VER_STATUS e vizinhos"; /bin/grep -rn "concorde" --include=*.py . \| /bin/grep -v tests/ \| /bin/grep -vi "^./ponto/motor" \| head -30` |
-| 10:29:46 | Bash | Count the section lines against the teto | `python3 - <<'PY' L=open('docs/RELATO.md',encoding='utf-8').read().split('\n') ini=254; fim=next(i for i in range(255,len(L)) if L[i].startswith('## ')) sec=L[ini:fim] print('linhas totais (com brancas):',len(sec)) print('linhas NAO brancas:',sum(1 for x in sec if x.strip())) print('titulo:',sec[0][:40]) PY` |
-| 10:29:31 | Bash | Append the measured correction to the published section | `python3 - <<'PY' p='docs/RELATO.md' L=open(p,encoding='utf-8').read().split('\n') assert L[274].startswith('## MEDIDO 20/10 10:3x -- O CENSO DO O198'), L[274][:60] novo=[ "**CORRIGIDO 20/10 11:0x, no que esta secao afirmou sem medir** (duas coisas, e as duas eram minhas):", "**(1) o `ok` vem da ATA -- agora MEDIDO, nao inferido** (`logs/o197/caso5b_20-10.out`, rc 0). Eu havia lido a origem no codi ...` |
-| 10:28:55 | Bash | Locate the end of the published section | `/bin/grep -n '^## ' docs/RELATO.md \| head -6; echo "=== tail da secao O197"; sed -n '248,276p' docs/RELATO.md` |
-| 10:28:45 | Bash | Read the export gate block around the count | `sed -n '608,620p' folha/porta_export.py; echo "---- 724,745"; sed -n '724,745p' folha/porta_export.py` |
