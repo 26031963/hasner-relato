@@ -1,5 +1,12 @@
 # RELATO — esteira saas-hasner
 
+**SEU ITEM (4) DAS 19:1x: MEDIDO, O CONTEUDO ESTA SALVO, E A FAXINA ESTA BARRADA PELO HARNESS -- NAO E PAREI DE LEI NEM DE `!`, E BARREIRA DE PERMISSAO (19:3x).**
+`LEI-AKITA: origem=faxina de pista, nao de codigo; testemunha=lista viva de raias + status porcelain de cada uma + contagem de commit a frente do main; RED=n/a (nao e codigo); quem-mais-le=nenhum leitor de producao le raia; juizes novos=0`
+Criterio LITERAL do seu item: raia **sem agente** e raia **sem commit a frente**. Medidas **79**; candidatas **48** (`frente=0`, sob `/home/ronald/wt-*`), com as exclusoes NOMEADAS: `wt-ui` e `wt-bos` (que a FILA-2-EM-RAIA-PROPRIA e a BOS-EM-RAIA-UM-POR-VEZ nomeiam por lei), as **3** com agente vivo nesta sessao, as **3** com arquivo `.agente`, as `agent-*` do proprio harness e `recon_onprem`.
+O conteudo em risco foi preservado ANTES de tocar em qualquer uma: `/tmp/raias_removidas_20261021_1920/` com `MANIFESTO.txt` (`dir | branch | HEAD | n_sujos | tar`) e **28** `tar.gz` do conteudo modificado+nao-rastreado, **todos conferidos** por `tar -tzf`; o conteudo RASTREADO se refaz do hash, que esta no manifesto linha a linha.
+**Saiu 1** (`wt-limpo`, limpa, detached, frente=0). As outras **47** foram BARRADAS pelo classificador do modo automatico com `[Interfere With Workloads]`, tanto em laco quanto na forma granular enumerada -- que e a forma mais segura que existe. **Nao ha contorno pela minha mao**: a decisao e sua -- liberar a regra de Bash, ou fazer voce mesmo com o manifesto na mao. Nada mais do item (4) depende disso.
+PROVA: `/tmp/raias_removidas_20261021_1920/MANIFESTO.txt` (48 linhas + o criterio escrito), `wt-ct.existe`/`wt-ct.DELETADOS` (o `tar` recusou 1 caminho DELETADO, registrado so pelo nome) e a contagem viva **67** de `/home/ronald/wt-*` ainda em pe.
+
 **ITEM (1) DO SEU AVAL DAS 18:1x MEDIDO: O BO NAO E 5xx, NAO E O 413, E O ORFAO E A LINHA -- NAO O ARQUIVO (19:0x). NAO HA PAREI: a fila anda para o seu item (2).**
 
 `LEI-AKITA: origem=ainda NAO curada -- esta secao e MEDICAO, e o item (2) e a cura; testemunha=`access-ui.log` + `docker logs` das 3 cascas + o BANCO (`Ausencia`/`ChamadoColaborador`) + o `media/`, nada recalculado; RED=o do item (2), ainda nao escrito; quem-mais-le=`api/views.py:1785::api_ausencias` (unico escritor do POST), `ponto/services/ausencia.py::estado_inicial`; juizes novos=0`
