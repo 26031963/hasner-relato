@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 21/10/2026 00:02:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1179.1 MB). Acoes na janela: **640**.
+**Medido em 21/10/2026 00:07:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1179.1 MB). Acoes na janela: **639**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -649,4 +649,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 12:08:43 | Bash | Check whether the apply porta writes DiaPago | `cd /home/ronald/saas-hasner/app echo "===== recalcular_fechamento passa lavrar_dias_pagos?" /bin/grep -n "lavrar_dias_pagos\\|somente_leitura\\|recalcular_fechamento_mes" ponto/management/commands/recalcular_fechamento.py echo echo "===== assinatura do servico" sed -n '295,300p' ponto/services/fechamento.py echo echo "===== quem lavra DiaPago e de QUAL periodo" /bin/grep -n "lavrar_dias_pagos" pon ...` |
 | 12:08:28 | Bash | Read the exported-competence guard body | `cd /home/ronald/saas-hasner/app sed -n '330,405p' ponto/services/fechamento.py` |
 | 12:08:20 | Bash | Check the exported-competence guard in the apply porta | `cd /home/ronald/saas-hasner/app echo "===== o que a porta faz com competencia exportada" /bin/grep -n "exportad\\|motivo_exportada\\|L-092\\|status" ponto/management/commands/recalcular_fechamento.py \| head -30 echo echo "===== no servico" /bin/grep -rn "motivo_exportada" --include=*.py . \| /bin/grep -v tests \| head -20` |
-| 12:02:43 | Bash | Write the re-lavra DIFF document | `cd /home/ronald/saas-hasner cat > logs/o323/DIFF_RELAVRA_10_CL10_20-10.md <<'MD' # DIFF DA RE-LAVRA DA 10 PELA cl.10 — publicado ANTES do apply (20/10, ~12:0x) Condicao (1) da **DINHEIRO-EM-COMPETENCIA-ABERTA**, para a ordem dele de 20/10: *"(1) re-lavra a 10 pelas quatro condicoes da DINHEIRO-EM-COMPETENCIA-ABERTA, com o DIFF publicado ANTES e a base nomeada"*, depois do smoke de clique APROVADO  ...` |
