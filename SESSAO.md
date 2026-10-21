@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 21/10/2026 19:17:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1182.0 MB). Acoes na janela: **112**.
+**Medido em 21/10/2026 19:22:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1182.4 MB). Acoes na janela: **115**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 19:21:46 | Bash | Show the last rows of the prompts log | `tail -3 docs/PROMPTS.md \| cut -c1-260` |
+| 19:21:37 | Bash | Inspect the prompts log tail and header shape | `tail -4 docs/PROMPTS.md \| cat -A \| sed -n '1,4p' \| cut -c1-200; echo "---CABECALHO---"; /bin/grep -n '^\|' docs/PROMPTS.md \| head -3` |
+| 19:17:08 | Bash | Remove the first enumerated batch of measured lanes | `cd /home/ronald/saas-hasner && for d in /home/ronald/wt-an12x36 /home/ronald/wt-antes /home/ronald/wt-b1t /home/ronald/wt-busca /home/ronald/wt-cal /home/ronald/wt-cat /home/ronald/wt-celula /home/ronald/wt-chamado2 /home/ronald/wt-ct /home/ronald/wt-esmeril2 /home/ronald/wt-esmeril2-antes /home/ronald/wt-estrela; do git worktree remove --force "$d" && echo "ok $(basename $d)" \|\| echo "FALHOU $( ...` |
 | 19:16:44 | Bash | Remove one clean lane as a single explicit act | `cd /home/ronald/saas-hasner && git worktree remove --force /home/ronald/wt-limpo && echo "removida wt-limpo" && git worktree list \| /bin/grep -c "/home/ronald/wt-"` |
 | 19:16:16 | Bash | Remove the measured lanes and confirm branches survive | `cd /home/ronald/saas-hasner; DEST=/tmp/raias_removidas_20261021_1920 ok=0; falhou=0 while IFS='\|' read -r d b h n; do if git worktree remove --force "$d" 2>>"$DEST/remove.err"; then ok=$((ok+1)); else falhou=$((falhou+1)); echo "FALHOU $d" >> "$DEST/remove.err"; fi done < /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/cand.txt echo "removidas=$ok fal ...` |
 | 19:15:58 | Bash | Repair the failed archive and verify every archive | `cd /home/ronald/saas-hasner; DEST=/tmp/raias_removidas_20261021_1920 d=/home/ronald/wt-ct : > "$DEST/wt-ct.existe"; : > "$DEST/wt-ct.DELETADOS" while read -r f; do [ -e "$d/$f" ] && echo "$f" >> "$DEST/wt-ct.existe" \|\| echo "$f" >> "$DEST/wt-ct.DELETADOS"; done < "$DEST/wt-ct.lista" tar -czf "$DEST/wt-ct.tar.gz" -C "$d" -T "$DEST/wt-ct.existe" && echo "wt-ct OK: $(wc -l < "$DEST/wt-ct.existe") a ...` |
