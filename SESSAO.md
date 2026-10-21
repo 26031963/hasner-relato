@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 21/10/2026 01:27:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1179.2 MB). Acoes na janela: **501**.
+**Medido em 21/10/2026 01:33:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1179.2 MB). Acoes na janela: **494**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -504,10 +504,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 13:34:59 | Bash | Diff the judge files between the deployed blob and HEAD | `cd /home/ronald/saas-hasner && for f in app/ponto/precedencia.py app/ponto/turnos.py app/ponto/models.py app/api/views.py app/ponto/catalogo/ausencias.py; do echo "=== $f"; git diff --stat 31ad7449 HEAD -- "$f"; done` |
 | 13:34:31 | Bash | Read the deployed porta without comments | `cd /home/ronald/saas-hasner && git show 31ad7449:app/ponto/services/ausencia.py \| sed -n '104,315p' \| /bin/grep -vn '^\s*#' \| sed -n '1,170p'` |
 | 13:34:09 | Bash | Probe the tie hypothesis on the shadow database | `cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/bo_atestado_empate.py <<'PY' # SOMBRA, LEITURA. Pergunta: em 2026-08-25 col857 teve MAIS DE UMA linha viva # (uma delas 'falta'), de modo que o empate do `order_by('-data')` pudesse # devolver a falta e a absolvicao do BUG 107 liberar o insert? # Imprime SO pk/tipo/status/datas/instantes -- nenhum n ...` |
-| 13:32:53 | Bash | Check whether the upload instrument line exists in any log | `cd /home/ronald/saas-hasner && for f in app/logs/errors.log app/logs/errors.log.1 app/logs/errors.log.2 app/logs/errors.log.3; do [ -f "$f" ] && echo "$f: $(/bin/grep -c 'ausencia_upload' "$f" 2>/dev/null) linhas ausencia_upload"; done; echo "==== docker logs ui 18/10 07:00-07:10 (qualquer ausencia_upload)"; docker logs saas_ui --since 2026-10-18T07:00:00 --until 2026-10-18T07:10:00 2>&1 \| /bin/g ...` |
-| 13:32:43 | Bash | Read LOGGING of the live settings | `sed -n '119,200p' config/settings/saas.py` |
-| 13:32:39 | Bash | Inspect logging configuration | `/bin/grep -rn "LOGGING" config/settings/*.py \| head; echo "===="; sed -n '/^LOGGING/,/^[A-Z_]* =/p' config/settings/base.py \| head -70` |
-| 13:32:32 | Bash | Find where the upload logger writes | `/bin/grep -n "ausencia_upload" -A12 config/settings/base.py \| head -40; echo "---- arquivos de log"; ls -la logs/ 2>/dev/null \| /bin/grep -i -E "ausencia\|upload"` |
-| 13:28:18 | Bash | Read the endpoint in full | `sed -n '1785,1882p' api/views.py` |
-| 13:27:58 | Bash | Read the model save chokepoint | `sed -n '840,900p' ponto/models.py` |
-| 13:27:36 | Bash | Reproduce the failure against the real row on the shadow | `cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/bo_atestado_repro.py <<'PY' # REPRODUCAO NA SOMBRA, chamando a FUNCAO REAL da porta com os dados REAIS do caso # de 18/10 07:06 (colab 857, atestado, 2026-08-25, ja existe a #3558 aguardando_decisao). # Tudo dentro de atomic() com raise no fim: NADA fica escrito. from django.db import connection as  ...` |
