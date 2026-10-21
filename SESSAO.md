@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 20/10/2026 22:04:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1179.1 MB). Acoes na janela: **885**.
+**Medido em 20/10/2026 22:09:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1179.1 MB). Acoes na janela: **883**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -893,5 +893,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 10:11:09 | Bash | Verify the cure is in the live tree and whether the completion condition was paid | `cd /home/ronald/saas-hasner && echo "=== 5ecebd95 e ancestral de HEAD?"; git merge-base --is-ancestor 5ecebd95 HEAD && echo "SIM -- esta na arvore que prod roda (affa98a7)" \|\| echo "NAO" echo; echo "=== a assinatura da cura no arquivo VIVO do bind-mount" /bin/grep -n 'def datas_em_aberto_de' -A3 app/ponto/services/dia_decidido.py echo; echo "=== o chamador de producao" /bin/grep -n 'datas_em_abe ...` |
 | 10:10:45 | Bash | Read the cure commit in full | `cd /home/ronald/saas-hasner && git log -1 --format='%h %ad%n%n%B' --date=short 5ecebd95 \| head -60; echo "=== arquivos"; git show --stat --format='' 5ecebd95` |
 | 10:10:37 | Bash | Read the full incident cell and the history of its three readers | `echo "=== O197 coluna 2 INTEIRA" && python3 - <<'PY' L=open('docs/BACKLOG.md',encoding='utf-8').read().split('\n') for l in L: if l.startswith('\| O197 '): print(l.split('\|')[2].strip()); break PY echo; echo "=== quem tocou os tres leitores desde o aval (05/10)" cd /home/ronald/saas-hasner && git log --oneline --since=2026-10-05 -- app/colaboradores/services/calendario.py app/ponto/services/dia_d ...` |
-| 10:04:16 | Bash | Read the next incident row | `python3 - <<'PY' L=open('docs/BACKLOG.md',encoding='utf-8').read().split('\n') for l in L: if l.startswith('\| O197 '): c=l.split('\|') for j,x in enumerate(c): if x.strip(): print('--- [%d] %d chars:\n%s\n'%(j,len(x),x.strip()[:900])) break PY` |
-| 10:04:08 | Bash | Verify whether the state cell was written | `cd /home/ronald/saas-hasner && python3 - <<'PY' L=open('app/docs/BACKLOG.md',encoding='utf-8').read().split('\n') for l in L: if l.startswith('\| O198 '): c=l.split('\|'); print('ESTADO (%d chars):'%len(c[3])); print(c[3].strip()[:400]); break PY` |
