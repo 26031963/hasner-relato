@@ -82,12 +82,27 @@
 > **TRES LINHAS DE FILA REGISTRADAS** no bloco OBRAS (L-106, entram no commit do marco): **O325** -- `FechamentoMensal`
 > da 09 com `derivado_em IS NULL` = **601 de 607** e ninguem os re-deriva (dono ESTRUTURA, L-099); **O326** --
 > `PerguntaDisputa` (`chamados/models.py:1423-2143`) nasce **sem carimbo**, entao censo dela e PISO; **O327** -- o
-> oraculo da 10 nao julga **107 de 608** (`lavratura falhou ... 11 campo(s) de dia sem dono declarado`,
-> `logs/gate10_full.out` 05:03), cobertura **501 de 608**, e essa falha **nao tem dono** pela L-099 porque o
+> oraculo da 10 nao julga **107 de 608** no ENSAIO da SOMBRA -- 102 com 11 campos e 5 com 2 --,
+> prova `logs/gate10_full.out` 05:03-05:07; cobertura **501 de 608**, e essa falha **nao tem dono** pela L-099 porque o
 > medidor nao chega a julgar -- ela entra no item (2) do GATE como COBERTURA publicada, nunca como verde.
 > **SOMBRA VERDE AGORA** (`bin/sombra.sh --conferir`: `dia=20261022 status=OK tipo=completa diverge=0 erros=0`),
 > logo o deploy de hoje **nao precisa de `--sem-sombra`** -- o item (3) do aval das 23:3x esta cumprido para o
 > pouso de hoje.
+> **05:5x -- A CERTIFICACAO DAS 05:39 ESTAVA CERTIFICANDO A ARVORE ERRADA, e quem mostrou foi `git`:**
+> `wt-cert-corpo6` nasceu de `7981d589` e o main JA ERA **`5d1857a1`** -- os dois commits da cura do
+> passivo (`chamados/catalogo/recusa.py`, `chamados/services/materializacao.py`,
+> `chamados/services/passivo_validado.py` + teste), **zero arquivo em comum** com a fatia do item (6),
+> que e so `app/api/*`. Arquivo em comum nao e o teste: "a arvore que a suite certificou e a arvore que
+> POUSA" (L-117), e ninguem nunca rodou suite em `main 5d1857a1 + item (6)`. **Copia nova feita as 05:56**:
+> `wt-cert-corpo7` de `5d1857a1` + `git merge --no-ff --no-commit bo-corpo-truncado`, `MERGE_HEAD 0000822a`
+> **nao vazio** e `git status --porcelain` com **exatamente os 4 arquivos de `app/api/`**; suite cheia
+> **ENFILEIRADA** nela pela trava (`logs/bo2/suite_cert7.log`), que entra sozinha quando a de 05:39 sair.
+> **`docker stop` da suite velha BARRADO pelo harness** (`[Interfere With Workloads]`, 05:56) -- nao
+> insisti: ela termina por si (~06:2x) e a nova pega a vez pelo `flock`, entao o custo e espera, nao
+> retrabalho. **O vao 06:00-06:20 esta morto** por isso, e o pouso do item (6) desce para depois das
+> **08:40**, junto do ato, como a clausula de reserva da linha acima ja previa. `logs/bo2/pouso_item6.sh`
+> ganhou caminho de **REUSO**: se a copia ainda for do main daquela hora e o log estiver verde COM o
+> rastro dos juizes novos, o PORTAO 3 nao refaz 40 min de pista; se o main andar, ele refaz inteiro.
 
 **A CAUSA DOS 6 CURADA NA ORIGEM: O REPARO DO PASSIVO JULGA A GEOMETRIA DO DIA, E O JUIZO E DO ATO (22/10 05:xx).**
 LEI-AKITA: origem=chamados/services/passivo_validado.py::_plantar_o_dia (o ATO que planta sem humano por item), testemunha=ponto/turnos.py::turnos_do_colab (lida por materializacao.py::turnos_sem_par), RED=chamados/tests/test_o330_plantio_nao_abre_turno.py, quem-mais-le=a porta do admin NAO migrou (pergunta de lei no topo, com os 21 contratos), juizes novos=0
