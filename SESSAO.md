@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 22/10/2026 03:11:14.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1202.4 MB). Acoes na janela: **956**.
+**Medido em 22/10/2026 03:15:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1202.4 MB). Acoes na janela: **961**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 03:13:56 | Bash | Read _trabalhar_o_par regen step | `cd /home/ronald/saas-hasner && sed -n '430,500p' app/chamados/services/passivo_validado.py` |
+| 03:13:48 | Bash | Read the rest of reparar: regen and writes | `cd /home/ronald/saas-hasner && sed -n '349,430p' app/chamados/services/passivo_validado.py` |
+| 03:13:44 | Bash | Read reparar to see what it writes | `cd /home/ronald/saas-hasner && /bin/grep -n 'def reparar' -A 60 app/chamados/services/passivo_validado.py \| head -75` |
+| 03:13:28 | Bash | Summarize the ensaio JSON structure and counts | `cd /home/ronald/saas-hasner && python3 - <<'PY' import io, json, re t = io.open('logs/o330_lote10_fio_ensaio.out', encoding='utf-8', errors='replace').read() i = t.index('--- RESULTADO INTEGRAL DO ENSAIO (json) ---') j = t[i:].split('\n', 1)[1] # o json termina na linha do placar k = j.index('\n --- OS DOIS JUIZES') r = json.loads(j[:k]) print('chaves do resultado:', sorted(r)) comps = r['competen ...` |
+| 03:12:54 | Bash | Read the two judges before and after inside the atomic | `cd /home/ronald/saas-hasner && /bin/grep -v 'best-effort falhou\\|^NoneType: None' logs/o330_lote10_fio_ensaio.out \| sed -n '/OS DOIS JUIZES/,/FIM DO ENSAIO/p' \| head -40` |
 | 03:11:11 | Bash | Publish the RELATO and check the ensaio | `cd /home/ronald/saas-hasner && bash bin/relato.sh 2>&1 \| tail -6; echo '=== ensaio da sombra, por onde vai:'; /bin/grep -v 'best-effort falhou\\|^NoneType: None' logs/o330_lote10_fio_ensaio.out \| tail -12` |
 | 03:11:06 | Bash | Commit the item 3 marco section | `cd /home/ronald/saas-hasner && git add -- app/docs/RELATO.md && git commit -F - <<'MSG' o retrato que o DP abre as 07h passa a ser de hoje: 8 relavrados pela via homologada e a 09 exportada intacta por medida ATO de 0 linha de codigo (item 3 do aval 22/10 01:1x), pela via homologada `folha/management/commands/lavrar_retrato_folha.py` -- escritor UNICO do `folha.RetratoFolha` (P13). Nada de shell t ...` |
 | 03:10:49 | Bash | Look for a BACKLOG cell about the Retrato | `cd /home/ronald/saas-hasner && /bin/grep -n -i 'retrato' app/docs/BACKLOG.md \| head -8` |
