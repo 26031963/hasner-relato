@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 22/10/2026 13:41:23.** Transcript: `6a1437b4-fa68-4fb8-ba22-cffc0db8ee01.jsonl` (3.9 MB). Acoes na janela: **226**.
+**Medido em 22/10/2026 13:42:32.** Transcript: `6a1437b4-fa68-4fb8-ba22-cffc0db8ee01.jsonl` (3.9 MB). Acoes na janela: **227**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 13:41:21 | Bash | Publish RELATO via relato.sh | `cd /home/ronald/saas-hasner && timeout 300 bin/relato.sh 2>&1 \| tail -8; echo "rc=$?"` |
 | 13:41:17 | Bash | Read relato.sh usage | `cd /home/ronald/saas-hasner && sed -n 1,30p bin/relato.sh \| grep -v "^$" \| head -30` |
 | 13:41:13 | Bash | Insert PROVA line and re-run checker | `python3 - <<'EOF' p='docs/RELATO.md' s=open(p).read() t='## 22/10 12:1x -- APLICADO, REVISE: FERIADO 12/10 (`!` de VINCULO, aval 12:0x item b) -- E O DIFF ACHOU 6 QUE TRABALHARAM\n' assert s.count(t)==1 s=s.replace(t, t+'\n**PROVA:** gravado medido em prod 22/10 13:41: `trabalha_em_feriado=False` em **35/35** vinculos; `opera_em_feriado=False` em **15/15** postos e `True` em **47/47**; celula 12/1 ...` |
 | 13:41:06 | Bash | Measure gravado state of feriado act for PROVA line | `cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command shell --schema=juliani --command " import datetime as dt, json from django.utils import timezone from escala.models import EscalaColaborador, CelulaDia from colaboradores.models import Posto from core.models import LogAuditoria rev=json.load(open('/app/logs/feriado1210/reversao_apply_20261022_1208.json')) V=[int(k ...` |
