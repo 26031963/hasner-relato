@@ -6,10 +6,17 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 22/10/2026 01:37:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1197.7 MB). Acoes na janela: **758**.
+**Medido em 22/10/2026 01:42:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1197.8 MB). Acoes na janela: **765**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 01:39:20 | Bash | Write the prod reversal snapshot script | `cd /home/ronald/saas-hasner && cat > logs/boinss/cond2_snapshot_prod.py <<'PY' # -*- coding: utf-8 -*- """CONDICAO 2 da DINHEIRO-EM-COMPETENCIA-ABERTA: a FOTO DE REVERSAO, em PROD, SO LEITURA. Roda num exec PROPRIO, segundos antes do apply -- nunca aninhado (dois arquivos no mesmo exec escreveriam nos MESMOS nomes de modulo, e um mediria o outro). O apply recusa foto com mais de 300 s, pela razao  ...` |
+| 01:38:43 | Bash | Read the apply template body | `cd /home/ronald/saas-hasner && sed -n '60,200p' logs/o195_apply_3_prod.py` |
+| 01:38:39 | Bash | Extract the apply template mechanics | `cd /home/ronald/saas-hasner && /bin/grep -n "Emissor\\|julgar_colab\\|cels =\\|contadores\\|periodo_apuracao\\|INI10\\|def foto\\|recalcular" logs/o195_apply_3_prod.py \| sed -n '1,60p'` |
+| 01:38:16 | Bash | Re-read the prod apply template header | `cd /home/ronald/saas-hasner && sed -n '1,60p' logs/o195_apply_3_prod.py` |
+| 01:38:05 | Bash | Check the full-suite verdict | `cd /home/ronald/saas-hasner && date '+%H:%M:%S'; /bin/grep -E '^(OK\|FAILED)($\| \()' logs/boinss/suite_cheia.log \| tail -1; /bin/grep -E '^Ran [0-9]+ test' logs/boinss/suite_cheia.log \| tail -1; tail -c 200 logs/boinss/suite_cheia.log; echo; bash bin/trava_teste.sh --quem` |
+| 01:37:56 | Bash | Register the four fila lines and close the BO-INSS estado cell | `python3 - <<'PY' p='docs/BACKLOG.md' L=open(p).read().split('\n') idx=[i for i,l in enumerate(L) if l.startswith('\| BO-INSS-NUNCA-BATEU \|')] assert len(idx)==1 i=idx[0] cel=L[i].split('\|'); assert len(cel)==8 novo=("**FECHADA na raia 22/10 01:4x** (`3d545367`, certificada em `/home/ronald/wt-cert-inss` = main + a raia): " "a GRADE carimba `cobertura_parcial` e os TRES leitores so LEEM; RED com  ...` |
+| 01:37:28 | Bash | Register the four fila lines in the BACKLOG and close the BO-INSS estado cell | `python3 - <<'PY' p='docs/BACKLOG.md' L=open(p).read().split('\n') # localizar a linha do BO-INSS idx=[i for i,l in enumerate(L) if l.startswith('\| BO-INSS-NUNCA-BATEU \|')] assert len(idx)==1, idx i=idx[0] cel=L[i].split('\|') assert len(cel)==8, len(cel) novo_estado=(" **FECHADA na raia 22/10 01:4x** (`3d545367` em `bo-inss-nunca-bateu`, certificada em " "`/home/ronald/wt-cert-inss` = main + a r ...` |
 | 01:34:51 | Bash | Publish the RELATO to the public relato repo | `cd /home/ronald/saas-hasner && timeout 300 bash bin/relato.sh 2>&1 \| tail -15; echo "relato rc=${PIPESTATUS[0]}"` |
 | 01:34:44 | Bash | Read the relato publish script header | `cd /home/ronald/saas-hasner && sed -n '1,30p' bin/relato.sh` |
 | 01:34:37 | Bash | Run the RELATO publication gate | `cd /home/ronald/saas-hasner && python3 bin/relato_afirma_com_prova.py app/docs/RELATO.md; echo "gate rc=$?"; bash bin/relato_celula_tem_forma.sh 2>/dev/null \| tail -3; date '+%H:%M:%S'; /bin/grep -E '^(OK\|FAILED)($\| \()' logs/boinss/suite_cheia.log \| tail -1; /bin/grep -c . logs/boinss/suite_cheia.log` |
