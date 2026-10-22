@@ -1,14 +1,47 @@
 # RELATO — esteira saas-hasner
 
-PAREI: ! O261 e o export da 10, as tres travas DELE juntas | espera Ronald: (a) o TXT da 10 esta BARRADO pela porta -- 184 dias de HE acima do limite SEM decisao (emp2 169 / emp3 12 / emp4 3; 58 colabs; 7.467 min = 124,45 h; lista sem nome `logs/gate10/lista_he_trava_20261022.out`; todas as testemunhas de leitor = 0): o DP decide na tela OU ele desliga a trava de HE do cadastro -- passar por cima seria CONTORNO. Ato pronto e NAO rodado `logs/gate10/ato_export10.py`; o carimbo da porta e DE HOJE: no dia do ato, re-rodar ANTES `selo_leitores_no_mesmo_numero --mes 10 --ano 2026` (22 min hoje, 11:25-11:47), desacoplado (`docker exec -d` + FIM no arquivo). (b) a saida do O261 (`fio_morto_com_alvo` 98) depende do passivo: 09 EXPORTADA (`!` com o Gabriel) e a 10, onde a porta `reparar` (dry, sem recorte) ve **39 colabs / 112 casos** -- 8/44 sao o residuo que ele mandou ao DP e **31/68 nao estao em lista nenhuma**; planta-los seria pre-aprovado (competencia aberta), mas mudaria o "sai assim" do export que ele ordenou ANTES do O261 (LEI-AKITA 9): ficam para DEPOIS do TXT, cura mais restritiva (`logs/o261/comp10_alvo_x_residuo.out`). (c) a pergunta de lei abaixo (99 dias, "acao de admin nomeada"). Item (1) FECHADO 20/10: os 6 sem lampada = 5 vias do `_ABSOLVEM_SEMPRE` (lei dele 19/10) + 1 falso positivo medido (RELATO, PERGUNTA DE LEI 8). Item (3) contador no ar.
+PAREI: ! O261 e o export da 10 | espera o DP e o Ronald: (a) o TXT da 10 esta BARRADO pela porta -- 184 dias de HE acima do limite SEM decisao (emp2 169 / emp3 12 / emp4 3; 58 colabs; 124,45 h; `logs/gate10/lista_he_trava_20261022.out`); por aval dele 12:0x o DP decide pela Gestao de HE ("Nao" em lote = L-097) e entao roda `logs/gate10/ato_export10.py` (re-lavrar o carimbo da porta ANTES, ~22 min, desacoplado). (b) ACOPLADO A (a): o `!` da VOLTA dos 6 que trabalharam em 12/10 (v382 v1282 v321 v1276 v1209 v229; postos 596/431/621) tem de pousar ANTES do TXT -- hoje eles levam 38,04 h de folga trabalhada onde tinham 30,43 h de HE 100% feriado, e TXT antes da volta vira retificacao. A volta foi NEGADA pela permissao da sessao (secao 12:1x). (c) 2a lei 13:3x: cura dos 99 DEPOIS do TXT; o vigia espera a frase de juiz (linha abaixo). (d) 09 com o Gabriel (AVAIS #2).
 
-> `!` de VINCULO tambem na mesa (complemento da O261, secao 11:5x): gravar 68 postos declarados + 35 vinculos `trabalha_em_feriado=False`; medido, nada gravado.
+> (o `!` da volta do feriado esta no item (b) da linha acima)
 
-> lei: O261 `acao-de-admin-nomeada` -- **99 dias** de fio morto nascidos da reabertura do gate (43 ALVO + 56 sem alvo) tem a pergunta RESPONDIDA e validada e o furo de pe; o aval de 12/10 diz *"fio vivo = pergunta viva OU acao de admin NOMEADA"* e o vigia so conta pergunta. Qual e a acao nomeada? (secao 11:3x). A fila SEGUE.
+> lei: O261 `juiz-resolver-dia-oferecido` -- a 2a lei (13:3x) define fio vivo por "decisao do dia PENDENTE na celula" = o dia em que a tela oferece o Resolver dia. MEDIDO: 208 dos 295 dias de fio morto, 87 ficam mortos (33 com alvo). Essa condicao mora so no template (`_calendario_grade.html:125`, pendente de TELA em `core/juizes.py:744`); o vigia so a le se ela virar funcao: pede a frase `corte Ronald: juiz resolver_dia_oferecido nasce` (TRAVA JUIZ-NOVO). Ate la a copia `wt-o261c` nao pousa. A fila SEGUE.
 
 > OS QUATRO ITENS DA ORDEM, FEITOS: deploy `d01210d2` **no ar 10:26** (`--sem-migrate` rc=0, 3 rotas provadas, selo BUG 128 verde, portao fechado pelo PASSO 5 do gate -- nunca `--sem-sombra`); push **pousou** (`fa5cd145..eebe2cce`, rc=0, `Ran 11566 tests · OK (skipped=51, expected failures=14)` mais control-plane `Ran 22 tests · OK`, veredito lido no REMOTO); `bin/handoff_sessao.sh` gerado (42/60 linhas, selo verde); e esta linha. O 1 commit que sobrou a frente (`6d469ed2`) e do proprio `pos_push` -- a excecao nomeada da L-106 --, e o push dele e do proximo push, nao deste.
 > O MARCADOR ANDOU no mesmo ato: `ORDEM-VIVA-TOPO` saiu de `BO-HE-RECUSAR-LOTE-500` (fechado) para `O261`, que o hook cobrou.
 > SEM COMMIT DE PROPOSITO: `RELATO.md` e `BACKLOG.md` ficam sujos na arvore porque a L-106 nao deixa commit so de docs fora de marco. Eles entram no commit do proximo marco.
+
+## 22/10 13:4x -- O261: A 2a LEI (13:3x) PEDE "DECISAO PENDENTE NA CELULA", E ELA NAO TEM JUIZ -- A COPIA NAO POUSA
+
+0 linha de producao (a copia `wt-o261c` fica parada). A lei dele, literal: *"fio vivo = pergunta viva OU decisao do dia
+PENDENTE na celula (... O256 'Resolver dia'). Chamado em_analise sem pergunta e sem decisao pendente NAO e acao nomeada: e
+fio morto. Cura dos 99: plantio pela porta reparar + RED/cura do renascimento sem pergunta (cartorio.py
+HX-CARTORIO-RESSUSCITA), DEPOIS do TXT da 10"*.
+- **O que eu tinha construido e ERA OUTRA COISA:** o vigia da copia lia a FILA (`qs_na_fila`), nao a celula -- 288 de 297
+  "pendentes". Pela lei, errado. E a nota `decidir_o_dia` no `_renascer_por_premissa_viva` sai do caminho: a cura do
+  renascimento e no cartorio, e depois do TXT. Suite da copia: 1 vermelho meu (relogio solto no fixture), curado, re-rodada.
+- **A definicao dele MEDIDA** (sombra 22/10, `logs/o261/resolver_dia_nos_mortos.out`, pelo MESMO caminho da tela --
+  `colaboradores/services/calendario.py::contexto_calendario` de 1 dia): dos **295** dias de fio morto, **208 OFERECEM o
+  Resolver dia** (decisao pendente -> fio vivo) e **87 NAO** (status ausencia / irregular fora de dia de trabalho / escala
+  suspeita) -- o fio morto que sobra, **33 com alvo**.
+- **Por que nao curo agora:** "Resolver dia oferecido" NAO e funcao -- e a condicao do template `_calendario_grade.html:125`
+  (`pode_ultimo_recurso` + `eh_trabalho` + passado + status falta/irregular/aberto/sem_certidao), ja registrada como pendente
+  de TELA em `core/juizes.py:744` ("deveria ler juiz do servico"). Para o vigia LER (e nao recalcular, LEI-AKITA 2) ela tem de
+  virar funcao que o template e o vigia leem -- **juiz novo**, e a TRAVA JUIZ-NOVO pede a frase dele; a AUTONOMIA item 3 nao
+  cobre (a funcao nao existe). Pergunta no topo.
+
+## 22/10 12:1x -- APLICADO, REVISE: FERIADO 12/10 (`!` de VINCULO, aval 12:0x item b) -- E O DIFF ACHOU 6 QUE TRABALHARAM
+
+**PROVA:** gravado medido em prod 22/10 13:41: `trabalha_em_feriado=False` em **35/35** vinculos; `opera_em_feriado=False` em **15/15** postos e `True` em **47/47**; celula 12/10 `trabalha=False` em **35/35** colabs; trilha `marcar_trabalha_em_feriado` **35**, `marcar_feriado_do_posto` **62**, `regenerar_celulas_vinculo` **35**. DIFF da 10 em `logs/o261/diff10_feriado.out`.
+
+LEI-AKITA: origem=cadastro (`Posto.opera_em_feriado` + copia `EscalaColaborador.trabalha_em_feriado`), testemunha=`fatos_do_dia` + FechamentoMensal 10 recalculado pela porta, RED=sem codigo (ato de cadastro), quem-mais-le=emissao (`cobra_no_dia`), celula, folha, juizes novos=0
+- **Portas:** `marcar_feriado_do_posto` (trilha + reconcilia chamado do feriado do posto); `marcar_trabalha_em_feriado` + `evento` (trilha no chamador); `regenerar_celulas_vinculo` (celula, cobranca orfa, recalculo). DRY 12:07 = APPLY 12:08.
+- **Risco medido ANTES e escopo REDUZIDO:** dos 21 postos "so cobrados", **6 (453 455 498 505 533 581) tem OUTRO colab que TRABALHOU em 12/10** (5 de 12x36) -- `--fecha` vetaria o feriado deles para sempre. Marcados: **15 fecha + 47 opera**; os 6 + os 11 mistos vao ao DP.
+- **Feito:** 35 vinculos -> False, 111 celulas regeneradas (12/10 + feriados futuros), 33 chamados retratados pelo posto, 0 barrados. Reversao: `app/logs/feriado1210/reversao_apply_20261022_1208.json`.
+- **09 INTACTA EM VALOR:** FM e DiaPago 09 diferem da sombra das 04:00 (que bate o hash `1497...` das 09:15) **so no col250**, movido 11:47 por ato humano na tela (`pos_vinculo`), antes do meu. Meu ato tocou so o carimbo `atualizado_em` de 34 linhas da 09 (recalculo de valor identico). `logs/o261/{diff09_feriado.out,dp09_por_colab_prod.json}`.
+- **DIFF da 10 por rubrica, 35 colabs, 21 movidos** (`logs/o261/diff10_feriado.out`): 15 recuperam DSR (`semanas_dsr_ok` +15, `perdido` -15) -- SOBE; `horas_falta` NAO mudou em ninguem.
+- **A SURPRESA: 6 colabs TRABALHARAM em 12/10** (celula `furo`, faltou marco): -30,43 h de HE 100% feriado / horas trabalhadas, +38,04 h de folga trabalhada (col833 p596, col941 p431, col444 p498, col263 p621, col923 p581, col368 p455). A regra dele diz "posto que opera fica": para eles a cura certa e VOLTAR.
+- **A VOLTA FOI NEGADA pelo classificador de permissao da sessao** (escrita de cadastro), e eu nao contorno: **`!` dele** -- voltar os 6 vinculos (v382 v1282 v321 v1276 v1209 v229) a True e os postos 596/431/621 a "nao declarado", pelas mesmas portas, com trilha; script descrito, nao gravado.
+- Lista para o DP: 11 mistos + 6 postos com gente trabalhando + os 3 da volta. Nominal do Fernando: `logs/dp/feriado_1210_nominal_FERNANDO_20261022.txt`.
 
 ## 22/10 11:55 -- A LISTA DOS 8 DO RESIDUO, RE-MEDIDA PARA O DP (pedido do aval de 11:1x)
 
