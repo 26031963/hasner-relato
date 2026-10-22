@@ -1,5 +1,38 @@
 # RELATO — esteira saas-hasner
 
+> **22/10 06:4x -- ITEM 1: O ARSENAL DO PUSH FECHOU VERDE, O PUSH NAO POUSOU AINDA -- ele esta na FILA da
+> pista, atras da copia 7, e a fila agora tem um pedinte a MENOS porque eu tirei o meu.** O arsenal de
+> negocio certificou a arvore do commit empurrado `5d1857a108` e fechou pela forma da L-074. O que falta e
+> o **control-plane**, e aqui uma coisa que eu carregava esta ERRADA: eu vinha dizendo que o control-plane
+> **nao** pega a trava do `juliani_db_test`. PEGA. `bin/pre-push.sh` nao tem duas chamadas de `docker run`:
+> tem UMA funcao, `_teste_irmao`, que embrulha o run em `bin/trava_teste.sh` na linha **135** e e chamada
+> **DUAS** vezes -- `:180` (arsenal, `config.settings.ci`) e `:192` (control-plane, `teste_motor`, que
+> aponta para o MESMO banco. E por isso que o push pede a vez duas vezes, e por isso que ele esta parado:
+> a copia 7 pegou a trava as **06:24:16** (nao saiu com `rc 75`, como o paragrafo de 06:1x abaixo previa) e
+> o control-plane do push espera desde o mesmo minuto. **O que eu decidi e fiz**: a minha corrida dos
+> dez selos de doc estava TAMBEM na fila, disputando com o push a vez seguinte -- `flock` nao e FIFO --,
+> entao eu a **tirei da fila** (nada de container orfao: ela nem tinha chegado a abrir um). A fila ficou
+> com UM pedinte, o push. A corrida dos selos de doc volta **depois** da minha ultima edicao de RELATO,
+> porque ela certifica os docs como eles VAO SER COMMITADOS -- edicao depois dela a descertifica.
+> **PROVA:** `Ran 11550 tests in 920.471s` / `OK (skipped=51, expected failures=14)`, 0 FAIL e 0 ERROR
+> (`logs/o330/push.log`); `bin/pre-push.sh:135` dentro de `_teste_irmao`, chamada em `:180` e `:192`;
+> `bin/trava_teste.sh --quem` = `suite:1351135 desde 22/10 06:24:16`; `ps -eo pid,ppid` mostra o pedinte
+> do control-plane (`1402810`, pai `1333410` = o proprio `pre-push.sh`) esperando desde 06:24. **O push
+> ainda NAO esta no remoto**: `git log origin/main..HEAD` = **5 commits**, `origin/main` = `4f2d7ef9`. O
+> hash do remoto entra NESTA secao quando sair, nao numa secao nova.
+>
+> **06:4x -- E UM SEGUNDO BURACO, no script do pouso das 08:40, que o PROPRIO PUSH ia abrir:**
+> `bin/pos_push.sh:29-30` da `git add app/docs/TICKETS.md` + `git commit` assim que o push passa -- a
+> excecao NOMEADA da L-106. O `logs/bo2/pouso_item6.sh` comparava a base da copia certificada com o main
+> por **HASH**, entao esse commit do fabricante, que nao toca um `.py`, derrubaria uma certificacao
+> **valida** e pediria 28 min de suite nova dentro da janela das 08:40 -- que tem UMA chance. Curado pela
+> regra que o proprio script ja usa no fim do ato: iguais em todo `.py` **fora de `app/docs`**.
+> **PROVA:** exercitado com DADO REAL, nao com `bash -n` -- `dadad7cd` e um commit so-de-docs do
+> `pos_push` (`app/docs/TICKETS.md`, 1 arquivo): o predicado novo da **VERDADEIRO** nele (reusa segue
+> valendo) e o teste velho de hash dava **FALSO** (pedia a suite). E ele **MORDE**: no par
+> `7981d589 -> 5d1857a1`, que mexe em 4 arquivos de codigo, o predicado novo da **FALSO** e recusa a
+> reusa. Backup em `$SP/pouso_item6_backup_0645.sh`, `bash -n` OK.
+>
 > **22/10 06:1x -- A VEZ DA PISTA NAO FOI PARA A COPIA 7, FOI PARA O PUSH, e isso corrige a previsao
 > das 05:5x:** o paragrafo abaixo dizia que a suite de 05:39 terminava "~06:2x" e que a nova "pega a vez
 > pelo `flock`". Ela terminou as **06:08** -- e **VERDE**, nao abortada: `Ran 11556 tests in 1705.018s` /
