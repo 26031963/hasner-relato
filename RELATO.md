@@ -1,5 +1,31 @@
 # RELATO — esteira saas-hasner
 
+> **22/10 07:1x -- ITEM 6 EMPURRADO, E A ARVORE DE PROD LIMPA DE `.py` NAO PROVADO.**
+> LEI-AKITA: origem=a RAIA (arquivo novo nasce no worktree da raia, nunca na arvore viva, que E o
+> bind-mount de prod); testemunha=`git status --porcelain` da arvore viva e `bin/pre-push.sh:30-33`;
+> RED=nenhum codigo de negocio mudou -- isto e conduta e instrumento; quem-mais-le=os dois agentes
+> da raia v3, corrigidos por mensagem; juizes novos=0.
+> **O PUSH.** `fa5cd145a3` fechou o arsenal na arvore do COMMIT: `Ran 11562 tests in 926.249s` /
+> `OK (skipped=51, expected failures=14)`, e os **11562** sao o MESMO numero da copia certificada
+> `wt-cert-corpo7` -- confirmacao independente de que o `git archive` do sha empurrado e a arvore que
+> a suite certificou. Control-plane em curso no ato de escrever (`logs/bo2/push_item6.out`).
+> **A ARVORE VIVA TINHA DOIS `.py` NAO PROVADOS** -- dois arquivos de teste da raia v3, **454** e
+> **177** linhas, untracked em `app/ponto/tests/`. Isso nao e ruido: a arvore viva E o bind-mount, e
+> o que esta nela sobe no proximo reload (o HUP das 03:30 publica a ARVORE, nao o commit). Curado
+> com o conteudo preservado ANTES de remover, em `logs/raiav3/*.arvore_viva` -- o de 454 por mim as
+> 07:17, o de 177 pelo proprio agente as 07:13, depois da correcao. Arvore viva agora: **0** `.py`
+> untracked e **0** modificado.
+> **E UMA COISA QUE EU CARREGAVA ESTAVA ERRADA:** eu vinha tratando como risco AO PUSH os meus
+> toques em `app/docs/` das 07:10 e esses dois arquivos. Nao eram. `bin/pre-push.sh` monta
+> `$ARVORE_PUSH` por `git archive` do sha (`:30-33`) e monta ELE no container (`:137`; o comentario
+> de `:161` diz literalmente *nao a arvore viva*): o push nunca ve untracked nem doc nao commitado.
+> O risco era real, mas era do PROD, nao do push -- e e esse que eu curei.
+> **A RAIA v3 DERIVOU.** Os dois agentes estavam em arqueologia (citacao no `ESMERIL.md`, placar do
+> MANIFESTO) e em `dono_oraculos.py`, que nao e arquivo de teste novo: fora do contrato literal do
+> seu aval (item d -- bateria pela REGRA, so arquivos de teste novos, na raia). Corrigidos.
+> **INCOMPLETO:** a bateria da v3 nao tem veredito -- os 631 linhas sao lastro, nao rodados (a trava
+> e do push); `ponto/views.py:2339`/`:2450` seguem sem cura.
+>
 > **22/10 07:0x -- ITEM 6 DO AVAL DE 18/10 18:1x, O POUSO: o corpo que chegou pela METADE para de
 > virar ausencia, e a casa para de culpar o colaborador pelo engano dela.**
 > LEI-AKITA: origem=`api/corpo_recebido.py::corpo_chegou_inteiro`, chamado nas DUAS portas de
