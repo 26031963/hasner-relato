@@ -6,10 +6,23 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 22/10/2026 06:00:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1211.3 MB). Acoes na janela: **1296**.
+**Medido em 22/10/2026 06:05:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1211.5 MB). Acoes na janela: **1309**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 06:05:42 | Bash | Confirm the new waiter does not burn CPU | `cd /home/ronald/saas-hasner && /usr/bin/sleep 25; ps -o pid,pcpu,etime,args -C bash 2>/dev/null \| /bin/grep 'rc_push' \| /bin/grep -v 'push.sh origin' \| head -3 \| cut -c1-90` |
+| 06:05:36 | Bash | Re-arm the push wait without busy-spinning | `cd /home/ronald/saas-hasner && i=0; while [ $i -lt 90 ]; do /bin/grep -q '^rc_push=' logs/o330/push.log 2>/dev/null && break; /usr/bin/sleep 20; i=$((i+1)); done; echo "=== esperei ${i} x 20s"; /bin/grep -nE '^(OK\|FAILED)($\| \()\|^Ran \|^rc_push=' logs/o330/push.log \| tail -8; echo "--- tail:"; tail -6 logs/o330/push.log` |
+| 06:05:24 | Bash | Kill the spinning waiter and check for inotifywait | `kill 1351060 2>&1; echo "kill rc=$?"; command -v inotifywait \|\| echo "SEM inotifywait"; command -v sleep; echo "--- confere que morreu:"; ps -o pid,pcpu,args -p 1351060 2>&1 \| tail -2` |
+| 06:05:14 | Bash | Check CPU of running shells | `top -b -n1 \| head -12; echo "=== o waiter:"; ps -o pid,pcpu,etime,args -C bash 2>/dev/null \| /bin/grep -i 'rc_push\\|push.log' \| head -5` |
+| 06:02:25 | Bash | Check push and suite container state | `cd /home/ronald/saas-hasner && tail -3 logs/o330/push.log; bash bin/trava_teste.sh --quem 2>&1\|head -1; date +%H:%M:%S; docker ps --format '{{.Names}} {{.Status}}' \| /bin/grep -v 'saas_\\|juliani_db_test\\|sombra_db\\|mensageria'` |
+| 06:02:16 | Bash | Find the gate row and how the hook parses it | `cd /home/ronald/saas-hasner && /bin/grep -n 'GATE-EXPORT-10' app/docs/BACKLOG.md \| head -5; echo "=== como o hook le:"; /bin/sed -n '40,80p' bin/hook_stop_fila1.py` |
+| 06:02:07 | Bash | Run host selos that read docs | `cd /home/ronald/saas-hasner && for s in bin/tests/test_selo_pendentes_so_decisao.sh bin/tests/test_relato*.sh bin/tests/test_backlog*.sh; do [ -f "$s" ] \|\| continue; printf '%-60s' "$(basename $s)"; bash "$s" >/dev/null 2>&1 && echo OK \|\| echo "rc=$?"; done; echo "=== pendentes so decisao (django):"; ls app/core/tests/test_selo_pendentes_so_decisao.py 2>/dev/null; echo "=== hook stop le o BACK ...` |
+| 06:01:58 | Bash | Insert the post-cure correction line at the report top | `cd /home/ronald/saas-hasner && SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && python3 - <<'PY' import io P = 'app/docs/RELATO.md' s = io.open(P, encoding='utf-8').read() MARCA = 'O ITEM 4 NA SUA MESA MUDOU DE NUMERO' if MARCA in s: print('IDEMPOTENTE: a linha ja esta no topo') raise SystemExit(0) ANC = ('> rastro dos juizes novos, o PORTAO 3 nao ...` |
+| 06:01:41 | Bash | Find the end of the report header block | `cd /home/ronald/saas-hasner && awk 'NR<=200 && /^>/ {last=NR} END{}' app/docs/RELATO.md; python3 - <<'PY' import io s = io.open('app/docs/RELATO.md', encoding='utf-8').read().split('\n') ult = max(i for i, l in enumerate(s[:200]) if l.startswith('>')) print('ultima linha do bloco >:', ult + 1) print('\n'.join('%d: %s' % (i + 1, s[i]) for i in range(ult - 3, ult + 4))) PY` |
+| 06:01:33 | SendMessage |  | `-` |
+| 06:01:21 | ToolSearch |  | `-` |
+| 06:01:12 | Bash | Check push and lock state | `cd /home/ronald/saas-hasner && tail -3 logs/o330/push.log; bash bin/trava_teste.sh --quem 2>&1\|head -2; date +%H:%M:%S; cat /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b792u1199.output 2>/dev/null \| tail -5` |
+| 06:01:03 | Bash | Read the scheduled-deploy script header | `cd /home/ronald/saas-hasner && /bin/sed -n '1,50p' bin/deploy_agendado.sh` |
 | 06:00:45 | Bash | Read the gate launcher and its first gate | `cd /home/ronald/saas-hasner && cat logs/gate10/lancar.sh; echo "=== PORTAO A do gate:"; /bin/sed -n '1,60p' logs/gate10/gate10_condicao1.sh` |
 | 06:00:35 | Bash | Check whether the gate launcher is armed | `cd /home/ronald/saas-hasner && ls -la logs/gate10/ 2>/dev/null \| head -20; echo "=== cron.d:"; ls /etc/cron.d/ 2>/dev/null \| head -20; echo "=== deploy_agendado:"; bash bin/deploy_agendado.sh listar 2>&1 \| head -15` |
 | 06:00:23 | Bash | Read the rest of the report header | `cd /home/ronald/saas-hasner && /bin/sed -n '45,70p' app/docs/RELATO.md` |
