@@ -6,10 +6,17 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 22/10/2026 00:33:52.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1194.2 MB). Acoes na janela: **633**.
+**Medido em 22/10/2026 00:39:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1194.3 MB). Acoes na janela: **640**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 00:37:53 | Bash | Get exact anchors in _marcar_ausencias | `cd /home/ronald/wt-inss/app && sed -n '951,956p;974,990p' escala/utils.py \| cat -A \| sed -n '1,40p' \| cut -c1-200 \| head -5; echo "---- texto cru:"; sed -n '951,956p' escala/utils.py; echo "----"; sed -n '972,992p' escala/utils.py` |
+| 00:36:56 | Bash | Read _dia_ate_o_teto and dispensar_por_ausencia | `cd /home/ronald/wt-inss/app && grep -n "def _dia_ate_o_teto" -A 25 ponto/services/cartorio.py; echo "=== dispensar_por_ausencia:"; grep -n "def dispensar_por_ausencia" -A 30 ponto/services/cartorio.py` |
+| 00:36:17 | Bash | Find characterizations of the wipe | `cd /home/ronald/wt-inss/app && /bin/grep -rln "tipo_dia.*ausencia\\|'ausencia'" --include=test_*.py escala/tests ponto/tests folha/tests \| head -20; echo "=== quem afirma celulas vazias em dia de ausencia:"; /bin/grep -rn "ausencia" --include=test_*.py escala/tests \| /bin/grep -i "celulas\\|orfas" \| cut -c1-180` |
+| 00:36:09 | Bash | Read L-089 in full | `cd /home/ronald/wt-inss/app && sed -n '121p;168p' docs/LEIS.md \| fold -w 160 \| head -40` |
+| 00:36:02 | Bash | LEI ANTES DO PATCH for the grade sites | `cd /home/ronald/wt-inss/app && echo "=== LEIS/CORTES/DOSSIES x _marcar_ausencias \| cobre_parte_do_dia \| AUS-CELULA:"; for f in docs/LEIS.md docs/CORTES.md docs/DOSSIES.md; do echo "--- $f"; /bin/grep -n "_marcar_ausencias\\|cobre_parte_do_dia\\|AUS-CELULA\\|PRECEDENCIA-X-GRADE" $f \| cut -c1-220; done` |
+| 00:35:12 | Bash | Read the nb branch as patched | `cd /home/ronald/wt-inss/app && sed -n '760,840p' ponto/services/cartorio.py` |
+| 00:34:31 | Bash | Measure the three advisor points | `cd /home/ronald/wt-inss/app && rm -f ponto/tests/test_zz_diag_boinss.py && echo "diag removido: $(ls ponto/tests/test_zz_diag_boinss.py 2>&1 \| tail -1)"; echo "=== _pelo_efeito:"; grep -n "def _pelo_efeito" -A 30 ponto/turnos.py; echo "=== _dia_nb:"; /bin/grep -n "_dia_nb" ponto/services/cartorio.py; echo "=== _ac_nb no ramo:"; /bin/grep -c "_ac_nb(c, cel.data, para='cobranca')" ponto/services/ca ...` |
 | 00:31:43 | Bash | Record the measured finding | `cd /home/ronald/saas-hasner && mkdir -p logs/boinss && cat > logs/boinss/achado_grade.md <<'MD' # BO-INSS: o terceiro leitor da cobertura e a GRADE (medido 22/10 00:3x) RED+GREEN de `ponto/tests/test_bo_inss_nunca_bateu_le_a_precedencia`: RED (copia de HEAD, /home/ronald/red_inss_head): FAILED (failures=3, errors=4) \| Ran 9 \| rc 1 GREEN(arvore curada, /home/ronald/wt-inss) : FAILED (failures=2)  ...` |
 | 00:31:16 | Bash | Read parciais_vigentes | `cd /home/ronald/wt-inss/app && grep -n "def parciais_vigentes" -B5 -A 25 ponto/catalogo/ausencias.py` |
 | 00:31:11 | Bash | Read cobre_parte_do_dia | `cd /home/ronald/wt-inss/app && grep -n "def cobre_parte_do_dia" -A 40 ponto/turnos.py` |
