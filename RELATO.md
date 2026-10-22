@@ -1,5 +1,26 @@
 # RELATO — esteira saas-hasner
 
+> **22/10 08:1x -- `!` NA MESA, ITEM 3 DA SUA ORDEM (o export da 10): O LOTE ENTROU PELA METADE E O
+> QUE FICOU DE FORA SAI NA EXPORTACAO ASSIM.** Nao e PAREI de turno -- a fila segue no item 4 (O261),
+> que nao depende disto; e o item **3** que espera voce.
+> **O NUMERO:** seu `!` das 07:4x autorizou **14 plantadas / 51 recusadas / 4 perdendo 0,58-1,27 h**.
+> Esse lote era da base do dump das **04:00**; em prod, as **07:55**, o dado ja tinha andado e o alvo
+> era outro (**158** casos na sombra x **107** em prod, mesmo codigo -- medida no RELATO abaixo).
+> Apliquei so a **INTERSECAO MEDIDA**: 32 colabs / 67 casos -> **2 plantadas**, as duas de ganho puro
+> (`col476 +7,35 h`, `col696 +6,70 h`), **0 campo de ninguem para baixo**, 09 intacta por hash.
+> **O RESIDUO E 8 COLABS / 40 CASOS** -- entre eles os **4** que perderiam hora (`col516 -1,27`,
+> `col857 -1,02`, `col814 -0,91`, `col618 -0,58`) e `col723` (`dias_falta -1`, `horas_falta -7,33`,
+> `+6,34 h`), que em prod tem 21 casos e nao os 29 que o DIFF mediu. Eles seguem no alvo da 10 sobre
+> dado que **nenhum DIFF mediu**. Se o export sai agora, o Dominio recebe `col723` com um `dia_falta`
+> que o proprio sistema tira no dia que o lote rodar, e os outros 7 idem -- e depois da exportacao
+> cada um deles custa retificacao pela porta, com `!`, um por um.
+> **AS DUAS SAIDAS (a frase esta pronta em `AVAIS.md`):** (a) **exporta assim** -- o residuo de 8/40
+> vira retificacao pela porta depois, ciente de que e 1 `!` agora contra 8 depois; ou (b) **segura o
+> export** -- eu refaco o DIFF sobre base de prod-de-agora (sombra `--refazer --incremental` da
+> janela), aplico o lote completo medido e o export sai com a 10 inteira.
+> **O que NAO espera:** o gate das 08:40 dispara igual (os atos dele sao todos na 10 ABERTA, nenhuma
+> porta fecha), o esperador esta destacado (`PID 1577120`, `PPID 1`), e o item 4 (O261 a-d) anda.
+>
 > **22/10 07:4x -- DOIS ITENS DA MINHA LISTA MORRERAM MEDIDOS, e o terceiro mudou de endereco.**
 > LEI-AKITA: origem=nenhuma cura (medi antes de construir);
 > testemunha=`hook_stop_fila1::_item_parado` e `git grep -nw`; RED=n/a; quem-mais-le=BACKLOG e hook
@@ -735,6 +756,18 @@ e o agente da raia B entregou o relatorio no mesmo minuto. `TaskStop` no id dele
 A LICAO que fica (sua regra de sempre, e ela pegou de novo): **espera se le no ARQUIVO, nao no rotulo**. O rotulo
 "Waiting for suite_certifica.log to start" sobreviveu ao fato por 2 h porque ninguem leu o arquivo -- que estava
 pronto. PROVA: as quatro medidas acima, todas de 21:2x, e `ls -l logs/raiaB/suite_certifica.log` (176478 bytes, 21:04).
+
+## O LOTE QUE O SEU `!` AUTORIZOU JA NAO EXISTIA EM PROD: APLIQUEI A INTERSECAO MEDIDA -- 2 PLANTADAS, E OS 4 QUE PERDIAM HORA NAO ENTRARAM (22/10 08:0x)
+LEI-AKITA: origem=nenhuma cura (o codigo e o de `5d1857a1`, no ar); testemunha=o PROPRIO comando em modo CONTA (`materializar_passivo_validado` sem `--apply`, que nao chama a unidade) rodado nos DOIS lados + `Batida.pergunta_origem` (S128) + `gate10_hash09.py`; RED=n/a (medida de impacto, nao cura); quem-mais-le=os 56 colabs do recorte da 10; juizes novos=0
+- **O DISCRIMINADOR.** O mesmo CONTA, mesmo codigo, nos dois lados: **sombra** (base do dump das 04:00) `universo=13535 alvo=1235 fora={752,243,82}` -> **158** chegam a porta, que e o numero do ensaio publicado as 03:3x; **prod as 07:55** `universo=13558 alvo=1195 fora={713,294,81}` -> **107**. Codigo igual nos dois ⇒ a diferenca e **DADO**, nao codigo: o dado andou entre as 04:00 e as 07:55 (**qual escritor andou eu NAO medi** -- linha de fila).
+- **A INTERSECAO, feita das linhas `emp<id> col<id> ... alvo=N` dos dois CONTA:** IGUAIS **32 colabs / 67 casos**; MUDOU de alvo em prod **8 colabs / 40 casos**; SAIRAM do alvo **16 colabs / 23 casos**; **ENTRARAM no alvo: 0** -- nenhum colaborador que o DIFF nao mediu apareceu em prod.
+- **O ATO foi so a intersecao (32 ids, lidos de ARQUIVO dentro do container, nunca do argv):** `plantada=2`, `recusada={NAO_GERA_BATIDA:35, PARIDADE:23, via:paridade_recusada:2, DATA_EM_DISPUTA:3, ABRE_TURNO:2}`, `fora={colaborador_fora_do_recorte:678, slot_nao_derivavel:294, plantio_fora_do_slot:81, competencia_fora_do_recorte:77}`, `pauta=0`, `particoes ......... universo=OK reparo=OK`, `rc=0`. Reversao do proprio comando em `app/logs/o317/2026-10-22_0808_apply.json` (38.687 bytes).
+- **PROVA DO PLANTIO PELA BATIDA, nao pelo contador** (`pergunta_origem` nao nula, a autoridade do S128 -- batida de chao a tem NULA por lei): plantadas hoje **na frota inteira = 2**, **fora do recorte = 0**; `col476` 1 batida tipo S no dia 19/10, `col696` 1 tipo E no dia 23/09 -- os dois dias caem na competencia **10** (21/09-20/10).
+- **PROVA DA 09 INTACTA (L-092):** as 3 camadas fotografadas antes e depois do ato, `diff` **vazio** -- TXT `emp2 361d0f96…/210 linhas`, `emp3 5c503b95…/86`, `emp4 84c78cd0…/9`; `FechamentoMensal` `1497214528dda173be29feadd49fd502` / 607 linhas / 31 campos; `DiaPago` `898dc7e70667c7217601523501df5673` / 11.501 linhas. `n=3` antes (foto vazia seria portao VERMELHO, e e o que o portao cobra).
+- **O QUE NAO ENTROU, e e o ponto que muda a sua conta.** Seu `!` autorizou *"14 plantadas, 51 recusadas, ciente de que 4 pessoas perdem de 0,58 a 1,27 h"*. Os **4 perdedores sao `col516` (-1,27 h), `col857` (-1,02), `col814` (-0,91), `col618` (-0,58)** -- e os quatro cairam nos baldes excluidos (`col516` MUDOU 6->4 casos; `col857`/`col814`/`col618` SAIRAM do alvo). **Nenhum deles foi aplicado: ninguem perdeu hora.** Fora tambem `col723` (o maior movimento do DIFF: `dias_falta -1`, `horas_falta -7,33`, `+6,34 h` trabalhadas), que MUDOU 29->21 casos.
+- **O QUE ENTROU move so para CIMA:** `col476` `{horas_trabalhadas +7,35, saldo_banco_horas +7,35, turnos_abertos -1}` e `col696` `{horas_trabalhadas +6,70}` -- os dois unicos do DIFF classificados como ganho puro. Total aplicado: **+14,05 h** trabalhadas, **+7,35** de saldo, **1** turno aberto fechado, **0** campo de ninguem para baixo.
+- **O RESIDUO, com numero:** **8 colabs / 40 casos** seguem no alvo da 10 em prod sobre dado que **nenhum DIFF mediu** (incluindo os 4 perdedores e `col723`). Eles **nao** foram ao DP como pauta: nada aconteceu com eles, e pauta dizendo que perderam hora seria falsa. Vai como `!` na mesa (abaixo), porque o item 3 da sua ORDEM fecha a porta da 10.
+- **INCOMPLETO:** (a) o escritor que moveu o dado entre 04:00 e 07:55 nao foi medido -- `com_registro` subiu **12300 -> 12363** (+63) com universo **+23**, entao ~40 perguntas se materializaram na janela; (b) os 16 colabs que SAIRAM do alvo sairam por que? nao medido.
 
 ## O LOTE DA 10 PLANTA 61 BATIDAS VALIDADAS E NAO MOVE UM CENTAVO DO GRAVADO -- MAS MOVE A APURACAO NOS DOIS SENTIDOS: 7 PESSOAS GANHAM, 6 PERDEM. APPLY EM PROD = PAREI (22/10 03:3x)
 LEI-AKITA: origem=chamados/services/passivo_validado.py::reparar pela via HOMOLOGADA (`materializar_passivo_validado`, nenhum caminho novo), testemunha=os dois vigias reais (`vigia_carimbo.censo`, `vigia_fio.censo`) lidos DENTRO do atomic + o MOTOR DA FOLHA por `ponto/services/espelho.py::autoridade_do_periodo` (sitio unico) + `FechamentoMensal` por hash de TODO campo concreto, RED=n/a (isto e medida de impacto, nao cura), quem-mais-le=os 55 pares (colab, competencia) do recorte da 10, juizes novos=0
