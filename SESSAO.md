@@ -6,10 +6,17 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 22/10/2026 05:34:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1209.7 MB). Acoes na janela: **1233**.
+**Medido em 22/10/2026 05:39:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1210.2 MB). Acoes na janela: **1240**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 05:39:36 | Bash | Rewrite the closed BACKLOG state cell and relax the placeholder guard | `SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad cat > $SP/o330_estado_celula.txt <<'TXT' **FECHADA, pousando 22/10 __HH__:xx** (merge da raia `raia-lote-par`, arvore certificada `80e23d14`, CHEIA __CHEIA__): `_plantar_o_dia` julga a geometria do dia e o juizo e do ATO. A/B na sombra: planta 61 -> 14, `turnos_abertos` +19 -> -1, abono -11 -> 0; dos 6 ...` |
+| 05:39:17 | Bash | Review the two RELATO patch scripts | `SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; echo "===== sec_insere.py"; cat $SP/o330_sec_insere.py; echo "===== topo_relato.py"; cat $SP/o330_topo_relato.py` |
+| 05:38:20 | Bash | Check whether the previous pouso commit carried a closed ESTADO cell | `cd /home/ronald/saas-hasner && git show --stat --format='%h %s' 09955e50 \| head -15; echo "=== a celula do BACKLOG NAQUELE commit:"; git show 09955e50:app/docs/BACKLOG.md \| /bin/grep -n "^\| BO-INSS-NUNCA-BATEU" \| sed -E 's/^(.{0,40}).*\\| (\*\*[^\|]{0,260}).*/\1 ... ESTADO=\2/'` |
+| 05:37:56 | Bash | See how the previous pouso wrote its closed BACKLOG cell | `/bin/grep -nE "INSS\|NUNCA-BATEU" docs/BACKLOG.md \| head -8` |
+| 05:37:44 | Bash | Review the prepared RELATO section and docs patches | `SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; echo "=== sec_relato.md ($(wc -l < $SP/o330_sec_relato.md) linhas)"; cat $SP/o330_sec_relato.md; echo; echo "=== estado_celula.txt ($(wc -c < $SP/o330_estado_celula.txt) chars)"; cat $SP/o330_estado_celula.txt; echo; echo "=== ls"; ls -la $SP/o330_*` |
+| 05:37:36 | Bash | Re-read the previous pouso script as template | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/pouso_inss.sh` |
+| 05:37:28 | Bash | Check full-suite log progress and lock holder | `cd /home/ronald/saas-hasner && wc -l logs/o330/cheia.log && /bin/grep -nE '^(OK\|FAILED)($\| \()\|^Ran \|^rc=' logs/o330/cheia.log \| tail -5; echo "--- trava:"; bash bin/trava_teste.sh --quem; date +%H:%M` |
 | 05:33:11 | Bash | See how the Stop hook reads the estado cell | `cd /home/ronald/saas-hasner && /bin/grep -nE "ABERTA\|FECHADA\|estado\|NO AR" bin/hook_stop_fila1.py \| head -30` |
 | 05:32:58 | Bash | Check the sombra gate for the deploy | `cd /home/ronald/saas-hasner && bash bin/sombra.sh --conferir 2>&1 \| tail -8` |
 | 05:32:41 | Bash | Read the lane commit message | `cd /home/ronald/saas-hasner && git log -1 --format=%B 80e23d14 \| cat` |
