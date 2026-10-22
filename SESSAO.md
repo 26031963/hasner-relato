@@ -6,10 +6,16 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 22/10/2026 17:31:32.** Transcript: `a7fb7a66-28ef-4b66-8c48-a4aa9df4fce4.jsonl` (3.7 MB). Acoes na janela: **189**.
+**Medido em 22/10/2026 17:37:02.** Transcript: `a7fb7a66-28ef-4b66-8c48-a4aa9df4fce4.jsonl` (3.8 MB). Acoes na janela: **195**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 17:34:19 | Bash |  | `cd /home/ronald/saas-hasner; (bin/sombra.sh --refazer --dump-agora && bin/sombra.sh --bloco) > /tmp/claude-1001/-home-ronald-saas-hasner-app/a7fb7a66-28ef-4b66-8c48-a4aa9df4fce4/scratchpad/sombra_refazer2.log 2>&1; echo rc=$?; bin/sombra.sh --conferir 2>&1 \| tail -1` |
+| 17:34:14 | Bash |  | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='bin/sombra_regras_pessoais.py' s=open(p,encoding='utf-8').read() a=" 'chamados_disputasupervisao.motivos': 'codigos do catalogo', 'chamados_perguntadisputa.motivo': 'codigo do catalogo',\n" assert s.count(a)==1 s=s.replace(a,a+" # C7 (22/10, pouso c5b8c7ac) criou a coluna e NAO a inventariou; o selo mordeu no 1o dump fresco depois do\n # deploy --  ...` |
+| 17:34:02 | Bash |  | `cd /home/ronald/saas-hasner; grep -n "^ISENTOS" -A30 bin/sombra_regras_pessoais.py \| head -40` |
+| 17:34:00 | Bash |  | `cd /home/ronald/saas-hasner; sed -n 1,40p bin/sombra_selo_pessoal.py \| grep -v "^$" \| head -30; grep -n "motivo\\|ISENT\\|isenta" bin/sombra_regras_pessoais.py \| head -20` |
+| 17:33:57 | Bash |  | `cd /home/ronald/saas-hasner; grep -rln "SELO_PESSOAL\\|colunas_pessoais" bin/ app/ --include=*.sh --include=*.py --include=*.json --include=*.txt 2>/dev/null \| head;` |
+| 17:33:50 | Bash |  | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/6a1437b4-fa68-4fb8-ba22-cffc0db8ee01/tasks/bf667c9o0.output; tail -5 /tmp/claude-1001/-home-ronald-saas-hasner-app/a7fb7a66-28ef-4b66-8c48-a4aa9df4fce4/scratchpad/sombra_refazer.log; date +%H:%M; tail -3 /tmp/claude-1001/-home-ronald-saas-hasner-app/a7fb7a66-28ef-4b66-8c48-a4aa9df4fce4/scratchpad/c7_push.log; /home/ronald/saas-hasner/bin/trava_test ...` |
 | 17:29:26 | Bash |  | `cd /home/ronald/saas-hasner/app; python3 - <<'EOF' p='docs/PROMPTS.md' s=open(p,encoding='utf-8').read().rstrip('\n')+'\n' s+=('\| 22/10 ~17:2x \| **aval `JUIZ-PODE-FECHAR-E-TRANCA-LIDA`**: (1) *"corte Ronald: juiz pode_fechar nasce"* -- registra em core/juizes.py e tira o SEM_JUIZ[chamado][_C7]; ' '(2) C7 item 8 x L-051: o C6 LE a tranca por `periodo_trancado`, sem carimbo e sem estado novo; dest ...` |
 | 17:29:14 | Bash |  | `cd /home/ronald/saas-hasner; (bin/sombra.sh --refazer --dump-agora && bin/sombra.sh --bloco) > /tmp/claude-1001/-home-ronald-saas-hasner-app/a7fb7a66-28ef-4b66-8c48-a4aa9df4fce4/scratchpad/sombra_refazer.log 2>&1; echo rc=$?; bin/sombra.sh --conferir 2>&1 \| tail -2` |
 | 17:29:09 | Bash |  | `cd /home/ronald/saas-hasner; python3 -c " import json;d=json.load(open('app/config/crons_duracao.json'));ds=d.get('dur_s',d);print({k:v for k,v in ds.items() if 'sombra' in k})"; ls logs/sombra.lock 2>/dev/null; grep -n "SOMBRA_COMANDOS" app/.sombra_stamp logs/.sombra_stamp 2>/dev/null \| head -2` |
