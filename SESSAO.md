@@ -6,10 +6,19 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 22/10/2026 03:09:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1202.3 MB). Acoes na janela: **947**.
+**Medido em 22/10/2026 03:11:14.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1202.4 MB). Acoes na janela: **956**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 03:11:11 | Bash | Publish the RELATO and check the ensaio | `cd /home/ronald/saas-hasner && bash bin/relato.sh 2>&1 \| tail -6; echo '=== ensaio da sombra, por onde vai:'; /bin/grep -v 'best-effort falhou\\|^NoneType: None' logs/o330_lote10_fio_ensaio.out \| tail -12` |
+| 03:11:06 | Bash | Commit the item 3 marco section | `cd /home/ronald/saas-hasner && git add -- app/docs/RELATO.md && git commit -F - <<'MSG' o retrato que o DP abre as 07h passa a ser de hoje: 8 relavrados pela via homologada e a 09 exportada intacta por medida ATO de 0 linha de codigo (item 3 do aval 22/10 01:1x), pela via homologada `folha/management/commands/lavrar_retrato_folha.py` -- escritor UNICO do `folha.RetratoFolha` (P13). Nada de shell t ...` |
+| 03:10:49 | Bash | Look for a BACKLOG cell about the Retrato | `cd /home/ronald/saas-hasner && /bin/grep -n -i 'retrato' app/docs/BACKLOG.md \| head -8` |
+| 03:10:41 | Bash | Check precedent for 0-code docs commit | `cd /home/ronald/saas-hasner && git show --stat --oneline 4f2d7ef9 \| head -8; echo '--- status (nunca commitar crons_duracao.json):'; git status --porcelain \| head` |
+| 03:10:29 | Bash | Insert item 3 section and refresh the top | `cd /home/ronald/saas-hasner && python3 - <<'PY' import io p = 'app/docs/RELATO.md' s = io.open(p, encoding='utf-8').read() sec = io.open('logs/retrato2210/sec_retrato.md', encoding='utf-8').read().rstrip('\n') anc = '## O RAIO DE IMPACTO DA CURA DO INSS NA FROTA INTEIRA' assert s.count(anc) == 1, 'ancora nao unica: %d' % s.count(anc) s = s.replace(anc, sec + '\n\n' + anc, 1) velho = """> **22/10 0 ...` |
+| 03:10:02 | Bash | Read the ensaio result | `cd /home/ronald/saas-hasner && cat logs/fio2210/ensaio_lancador.out \| head -5; echo '=== placar do ensaio:'; /bin/grep -v 'best-effort falhou\\|^NoneType: None' logs/o330_lote10_fio_ensaio.out \| tail -45` |
+| 03:09:54 | Bash | Find insertion point and review the draft section | `cd /home/ronald/saas-hasner && sed -n '256,266p' app/docs/RELATO.md; echo '=== minha secao:'; cat logs/retrato2210/sec_retrato.md` |
+| 03:09:48 | Bash | Relaunch the sombra ensaio | `cd /home/ronald/saas-hasner && nohup bash bin/sombra.sh --rodar o330_lote10_fio_ensaio.py o330_lote10_fio_ensaio > logs/fio2210/ensaio_lancador.out 2>&1 & echo "relancado; o veredito se le em logs/o330_lote10_fio_ensaio.out"` |
+| 03:09:42 | Bash | Fix the probe form in the sombra script | `cd /home/ronald/saas-hasner && python3 - <<'PY' import io p = 'logs/sombra/o330_lote10_fio_ensaio.py' s = io.open(p, encoding='utf-8').read() velho_ini = s.index("emp_de = {e.pk: e for e in empresas_visiveis()}") velho_fim = s.index("# ---- O ENSAIO") novo = '''# A LISTA E [pk, classes], nao dict -- e a forma do proprio censo (`vigia_fio.py:268`). Errei # isto na primeira corrida chutando `d.get(' ...` |
 | 03:09:26 | Bash | Re-read the working prod probe | `cd /home/ronald/saas-hasner && sed -n '1,80p' logs/fio2210/alvo_por_competencia.py` |
 | 03:09:14 | Bash | Read the real structure of classes_do_fio_morto | `cd /home/ronald/saas-hasner && /bin/grep -n 'classes_do_fio_morto' app/chamados/services/vigia_fio.py \| head; echo '---'; /bin/grep -n 'classes_do_fio_morto' -B 22 app/chamados/services/vigia_fio.py \| sed -n '1,60p'` |
 | 03:09:03 | Bash | Read sombra ensaio result, filtering noise | `cd /home/ronald/saas-hasner && /bin/grep -v 'best-effort falhou\\|^NoneType: None' logs/o330_lote10_fio_ensaio.out \| tail -40` |

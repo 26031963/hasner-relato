@@ -1,9 +1,12 @@
 # RELATO — esteira saas-hasner
 
-> **22/10 01:1x -- O QUE MUDOU DESDE OS DOIS BLOCOS ABAIXO:** o **push POUSOU** as 01:06
-> (`origin/main = a127492a7a`, 11.535 testes OK); a bateria pela REGRA (L-110) **EXISTE, 131 casos**;
-> e a **corrente da manha de 21/10 nasceu VAZIA** -- um `raise` no import de `config/crons.py` matou os
-> 11 elos e o alarme junto. As tres secoes estao em **22/10 01:1x**, logo abaixo do topo.
+> **22/10 03:1x -- ONDE A ORDEM DAS 01:1x ESTA:** **item 1 e 2 FECHADOS** -- o push do marco pousou no
+> REMOTO as 03:0x (`origin/main = 4f2d7ef964`, arsenal inteiro: `Ran 11544 tests` / `OK (skipped=51,
+> expected failures=14)` + control-plane `Ran 22 tests / OK`), com a cura do INSS no ar desde 02:36 e as
+> 123 celulas da 10 rejulgadas pela porta as 02:39. **Item 3 FECHADO** as 02:52: o Retrato que o DP abre
+> as 07h e de HOJE (8 retratos gravados; a 09 exportada intacta por hash). **Item 4 em curso**: o DIFF do
+> lote na sombra, recortado na competencia 10. Ordem anterior (push das 01:06, `a127492a7a`, bateria de
+> 131 casos pela REGRA, corrente de 21/10 nascida vazia) segue nas secoes abaixo.
 
 **ITEM (3) DO SEU AVAL DAS 23:3x -- O BLOCO DE HOJE NAO TEM A CURA DENTRO, E A MEDIDA DIZ POR QUE (22/10 01:4x).**
 - O `--bloco` carimbado e **22/10 00:38** (`SOMBRA_COMANDOS=76`, completa, OK) e o deploy da cura entrou em
@@ -260,6 +263,18 @@ e o agente da raia B entregou o relatorio no mesmo minuto. `TaskStop` no id dele
 A LICAO que fica (sua regra de sempre, e ela pegou de novo): **espera se le no ARQUIVO, nao no rotulo**. O rotulo
 "Waiting for suite_certifica.log to start" sobreviveu ao fato por 2 h porque ninguem leu o arquivo -- que estava
 pronto. PROVA: as quatro medidas acima, todas de 21:2x, e `ls -l logs/raiaB/suite_certifica.log` (176478 bytes, 21:04).
+
+## O RETRATO QUE O DP ABRE AS 07h PASSA A SER DE HOJE, E O DELTA DA 10 E EXATAMENTE OS DOIS QUE A CURA SOLTOU (22/10 02:52)
+LEI-AKITA: origem=via homologada `folha/management/commands/lavrar_retrato_folha.py` (escritor UNICO do `folha.RetratoFolha`, P13), testemunha=`folha/retrato_folha.py::linhas_do_retrato`/`contadores` -- a MESMA porta que a tela le, zero derivacao minha, RED=n/a (0 linha de codigo: e ATO por comando declarado, nao cura), quem-mais-le=a tela de fechamento, que LE a lista gravada e nao recalcula (o aval de 11/10 proibe segundo derivador na tela), juizes novos=0
+- **O PORQUE do ato, medido antes de agir:** o retrato gravado da **10** era de **21/10 18:49** -- anterior a cura do INSS (no ar 02:36) e ao apply das 123 celulas (02:39) --, e `carimbo de HOJE em 0 dos 12`. O DP abriria as 07h a foto de ontem, acusando duas pessoas que o sistema ja nao acusa.
+- **DRY ANTES do apply** (o comando nao escreve sem `--apply`, e foi assim que o DIFF se mediu): na competencia **10**, `emp2` vai de `entram 148 / bloq 279` para `entram 150 / bloq 277`; **emp1, emp3 e emp4 identicos, delta 0**. Os `+2` sao os MESMOS dois que sairam da retencao as 02:39 (`col318`, `col647`) -- o Retrato reconcilia com o apply sem que nenhum numero tenha sido digitado duas vezes.
+- **APLICADO as 02:52, `GRAVADO: 8 retrato(s)` em 12 s** (o custo declarado na docstring era 17,8 s para 8). Alcance: competencia **ATUAL (11) e ANTERIOR (10)** por empresa, que e o que o comando faz sem `--mes/--ano` -- a competencia e do JUIZ (`ponto/janelas.py`), nunca de `now().month`.
+- **A 09 EXPORTADA NAO FOI TOCADA, e a prova esta no proprio censo depois:** os tres retratos da 09 seguem com `carimbo 20/10 06:39` e com os quatro motivos iguais linha a linha (`furo_espelho 213+45+8`, `cadastro_zero 3`, `ferias_com_batida 2`, `sem_codigo_dominio 1+1+1`). L-092 intacta por MEDIDA, nao por promessa.
+- **BLOQUEADOS POR MOTIVO, antes -> depois, competencia 10:** `furo_espelho` **346 -> 344** (-2, toda a diferenca em emp2), `sem_codigo_dominio` 4 -> 4, `ferias_com_batida` 1 -> 1. Nenhum motivo novo apareceu e nenhum sumiu.
+- **O que mudou na 11 NAO e a cura, e eu nao a credito por isso:** `furo_espelho` 37 -> 164 porque a janela 21/10-20/11 andou um dia desde a lavra de ontem 18:49. A cura age sobre dia COM cobertura integral aprovada, e na 11 nao ha nenhum.
+- **Reversao:** nao ha arquivo de reversao e nao falta um -- `RetratoFolha` e FOTO DERIVADA com `update_or_create` por (empresa, mes, ano), e o ultimo elo da corrente da manha reescreve os mesmos 8 por ARQUIVO todo dia. Reverter e rodar o comando; o dado-fonte nao foi tocado neste ato.
+PROVA: `logs/retrato2210/censo_antes.json` + `logs/retrato2210/censo_depois.json` (censo pela porta de leitura, antes e depois), `logs/retrato2210/censo_retrato.py` (a sonda, que assert `current_database()=='saas_hasner'` e nao imprime nome nem id).
+INCOMPLETO: (a) os 344 `furo_espelho` da 10 seguem retidos e o dono deles e CADASTRO/BATIDA pela L-099 -- lista do admin, nunca cura por codigo; (b) a corrente da manha vai relavrar estes 8 de novo no horario dela, e isso e redundancia esperada, nao divergencia.
 
 ## O RAIO DE IMPACTO DA CURA DO INSS NA FROTA INTEIRA: LIMITE SUPERIOR 9 DIA-COLAB, E DISPARA EM 0 (22/10 02:3x) -- 0 linha de codigo, logo sem linha LEI-AKITA: e MEDIDA, nao cura
 Isto mede o **INCOMPLETO (b) da secao abaixo** e o que o DIFF do ALVO nao podia ver: o DIFF olhou as 757 celulas
