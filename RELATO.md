@@ -1,5 +1,21 @@
 # RELATO — esteira saas-hasner
 
+> **22/10 06:1x -- O QUE ESTA EM VOO NESTE MINUTO** (o bloco de 03:1x abaixo segue valendo, menos o
+> numero do item 4, corrigido mais adiante nesta mesma caixa): **o push do marco O330 esta NA PISTA** --
+> o arsenal do pre-push pegou a trava as 06:08:35 e roda a suite do commit empurrado `5d1857a108`. Nao ha
+> veredito ainda; ele se le pela L-074 (`^OK|^FAILED` + `^Ran N` + rc), nunca por ausencia de saida.
+> **O item 6 mudou de trava: saiu da JANELA e entrou na PISTA.** A certificacao de 05:39 fechou VERDE,
+> mas na base VELHA (`7981d589`): como o main andou para `5d1857a1` (a cura do passivo), a arvore que
+> aquela suite certificou **nao e** a arvore que pousaria -- 2a clausula do POUSO-EM-COMBOIO, e e por isso
+> que ela nao vale como aval de pouso. A copia nova `wt-cert-corpo7` ja nasceu do main NOVO com o merge
+> no indice, e a suite dela esta **na fila da trava desde 05:56** atras do arsenal (`rc 75` = a vez nao
+> chegou, nao e vermelho). A ordem das 08:40 **nao muda**: pouso do item (6) primeiro, depois o ato do
+> GATE-EXPORT-10, que tem UMA chance so (`logs/gate10/lancar.sh` se recusa a relancar por cima).
+> PROVA: `bin/trava_teste.sh --quem` = `pre-push:1333726 desde 22/10 06:08:35`; `logs/bo2/suite_cert6.log`
+> com `Ran 11556 tests in 1705.018s` / `OK (skipped=51, expected failures=14)` e `git -C /home/ronald/wt-cert-corpo6
+> rev-parse HEAD^1` = `7981d589`; `git -C /home/ronald/wt-cert-corpo7 rev-parse HEAD` = `5d1857a1`;
+> `ps -eo pid,etime,args` com o `trava_teste.sh` da copia 7 em espera (pid 1351135, 17 min na fila).
+
 > **22/10 03:1x -- ONDE A ORDEM DAS 01:1x ESTA:** **item 1 e 2 FECHADOS** -- o push do marco pousou no
 > REMOTO as 03:0x (`origin/main = 4f2d7ef964`, arsenal inteiro: `Ran 11544 tests` / `OK (skipped=51,
 > expected failures=14)` + control-plane `Ran 22 tests / OK`), com a cura do INSS no ar desde 02:36 e as
@@ -129,12 +145,13 @@
 > `rodar.sh:4-6`): a condicao (2) certifica a regra que esta no ar hoje, entao `P4_ARVORE` tera de sair de
 > `bash logs/o280/passo4/arvorar.sh <hash no ar>` e as passadas sao **`gravado,v2`** -- `v3` nao esta no ar
 > e DIFF v2 x v3 saiu do portao (**L-110**).
-> **(b) cartao x TXT NAO e sombra, e isso corrige o que eu ia fazer:** `relatorios/cartao_pela_celula.py:216-233`
+> **(b) cartao x TXT nao depende do TXT GERADO, e o lado dele e o GRAVADO:** `relatorios/cartao_pela_celula.py:216-233`
 > le o **GRAVADO como lado do TXT** (`folha/export.py` escreve o arquivo do proprio `FechamentoMensal`, pelo
-> mesmo `_totais_do_fechamento`), entao `cartao_x_txt_divergentes --mes 10 --ano 2026` mede em **PROD** e
-> **nao precisa do TXT gerado** -- ele roda ANTES do export, que e exatamente o que o aval pede. O mesmo
-> comando imprime `dias_em_aberto` (`cartao_x_txt_divergentes.py:70`), e esse **nao e esperado 0**: e o
-> passivo do DP (FALTA-UM-SIGNIFICADO).
+> mesmo `_totais_do_fechamento`), entao `cartao_x_txt_divergentes --mes 10 --ano 2026` **nao precisa do TXT**
+> -- ele roda ANTES do export, que e exatamente o que o aval pede. E por ler o GRAVADO ele mede na **SOMBRA**
+> depois do `--dump-agora`, que carrega o gravado de prod bit a bit: mesmo numero, zero risco de escrita em
+> prod. O mesmo comando imprime `dias_em_aberto` (`cartao_x_txt_divergentes.py:70`), e esse **nao e esperado 0**:
+> e o passivo do DP (FALTA-UM-SIGNIFICADO).
 > **TRAVA (coordenacao, nao escopo):** o push do marco O330 esta enfileirado no `flock` desde 05:5x
 > (`bin/trava_teste.sh --quem` = `suite:1286452 desde 22/10 05:39:44`). A minha `suite_cert7` fica na fila
 > **sem ceder a vez**, porque ela e o PORTAO do pouso do item (6), que e fila 1 -- e o `flock` espera 3600 s
