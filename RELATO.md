@@ -12,7 +12,10 @@
 > --, e nao vira cura antes disso. Obra registrada: **`RETIFICACAO-DA-10-8069-PRIMEIRO`** no BACKLOG,
 > com a L-110/13 escrita nela (o CASO contra o texto da regra ANTES do codigo; o oraculo e
 > **instrumento**, nao autoridade). Os **13 dia-colab de BATIDA / 10 colab(s)** vao na **lista do DP,
-> SEM NOME**, pelo canal do DP em `logs/`, nunca em `app/docs/` com nome.
+> SEM NOME**, pelo canal do DP: **`logs/dp/batida_da_10_20261022.txt`** (colXXX, dia, rubrica que
+> acusou e a CONTAGEM de batidas do dia -- zero nome, zero CPF, zero instante), derivado do lastro do
+> gate por `logs/dp/lista_batida_da_10.py`, que reencontrou SOZINHO o numero declarado: **13 dia-colab
+> / 10 colab(s)**, de **16** marcas brutas (3 dia-colab vistos por mais de uma rubrica).
 > **O QUE ESTE AVAL NAO DESTRAVA, e e o aval ANTERIOR dele que amarra**: *"o export da 10 espera esta
 > cura + o admin decidir a HE pendente"*. Entao o export **nao sai agora**: o deploy da cura da HE
 > esta esperando o **PASSO 5 do gate** (`bin/sombra.sh --bloco`, em curso desde 09:48; `--conferir`
