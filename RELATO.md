@@ -20,6 +20,11 @@
 > do control-plane (`1402810`, pai `1333410` = o proprio `pre-push.sh`) esperando desde 06:24. **O push
 > ainda NAO esta no remoto**: `git log origin/main..HEAD` = **5 commits**, `origin/main` = `4f2d7ef9`. O
 > hash do remoto entra NESTA secao quando sair, nao numa secao nova.
+> **POUSOU as 06:5x, e o hash e este -- a promessa de cima cumprida na PROPRIA secao:** `origin/main`
+> = **`5d1857a1`** (`4f2d7ef9..5d1857a1  main -> main`), os cinco commits no remoto, `rc_push=0`. As
+> DUAS travas sairam verdes, e e isso que fecha com numero a correcao do paragrafo acima: arsenal
+> `Ran 11550 tests in 920.471s / OK` **e** control-plane `Ran 22 tests in 117.794s / OK`, seguidos de
+> `pre-push: OK -- push liberado` (`logs/o330/push.log`). **Item 1 da sua ordem: FECHADO.**
 >
 > **06:4x -- E UM SEGUNDO BURACO, no script do pouso das 08:40, que o PROPRIO PUSH ia abrir:**
 > `bin/pos_push.sh:29-30` da `git add app/docs/TICKETS.md` + `git commit` assim que o push passa -- a
@@ -32,6 +37,19 @@
 > valendo) e o teste velho de hash dava **FALSO** (pedia a suite). E ele **MORDE**: no par
 > `7981d589 -> 5d1857a1`, que mexe em 4 arquivos de codigo, o predicado novo da **FALSO** e recusa a
 > reusa. Backup em `logs/bo2/pouso_item6_backup_0645.sh`, `bash -n` OK.
+> **E O BURACO ABRIU DE VERDADE DEZ MINUTOS DEPOIS, com o dado de hoje:** o `pos_push` criou
+> `dc4d9e2e` (`app/docs/TICKETS.md`, 1 arquivo) e o main saiu de `5d1857a1` para ele. Medido agora
+> contra o main VIVO: o predicado novo diz **IGUAIS em todo `.py` fora de `app/docs`** -- a
+> certificacao de 28 min **SERVE** -- e o teste de hash diria **NAO SERVE**. **A COPIA 7 fechou
+> VERDE** e e ela que certifica o item (6): `Ran 11562 tests in 1684.821s` /
+> `OK (skipped=51, expected failures=14)`, 0 FAIL e 0 ERROR, rastro do juiz novo **2x**
+> (`logs/bo2/suite_cert7.log`). **Fechei tambem a 2a clausula da L-117 no mesmo script**, que estava
+> em pe: o censo `cmp` passa a contar os DOIS sentidos (difere / existe so na arvore viva), recusa
+> universo VAZIO, e agora **entra no CORPO do commit** -- preenchimento de placeholder numa COPIA
+> (`msg_commit_item6.pronto.txt`), a forma que o pouso do INSS ja usou, entao o template fica intacto
+> e o script roda 2x. **PROVA:** preenchimento exercitado com o log REAL (veredito, rastro 2 e censo
+> entraram), 0 placeholder sobrando pela guarda `__[A-Z]+__`; `bash -n` OK; backup
+> `logs/bo2/pouso_item6_backup_0658.sh`.
 >
 > **22/10 06:1x -- A VEZ DA PISTA NAO FOI PARA A COPIA 7, FOI PARA O PUSH, e isso corrige a previsao
 > das 05:5x:** o paragrafo abaixo dizia que a suite de 05:39 terminava "~06:2x" e que a nova "pega a vez
