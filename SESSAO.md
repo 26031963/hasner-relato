@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 22/10/2026 19:30:32.** Transcript: `a7fb7a66-28ef-4b66-8c48-a4aa9df4fce4.jsonl` (5.9 MB). Acoes na janela: **329**.
+**Medido em 22/10/2026 19:35:46.** Transcript: `a7fb7a66-28ef-4b66-8c48-a4aa9df4fce4.jsonl` (5.9 MB). Acoes na janela: **332**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 19:31:17 | Bash |  | `cd /home/ronald/saas-hasner/app; H=$(date +%H:%M \| sed 's/.$/x/'); python3 - "$H" <<'EOF' import sys H=sys.argv[1] p='docs/PROMPTS.md'; s=open(p,encoding='utf-8').read().rstrip('\n')+'\n' s+=('\| 22/10 ~19:3x \| **aval `DSS-INDEFINIDA-E-CALENDARIO-LE-O-C6`**: os 13 indefinida so sao CADASTRO se cada dia ESTA na lista Cadastro x Realidade (mesma fonte); pergunta viva sem carro e sem chamado = ESTR ...` |
+| 19:31:07 | Bash |  | `cd /home/ronald/saas-hasner; bin/suite.sh --dir /home/ronald/wt-cal > /tmp/claude-1001/-home-ronald-saas-hasner-app/a7fb7a66-28ef-4b66-8c48-a4aa9df4fce4/scratchpad/cal_suite.log 2>&1; echo rc=$?` |
+| 19:31:02 | Bash |  | `cd /home/ronald/wt-cal/app; /bin/grep -n " resposta_colab = " -A2 chamados/models.py \| head -4` |
 | 19:23:48 | Bash |  | `cd /home/ronald/wt-cal/app; python3 - <<'EOF' p='colaboradores/services/calendario.py'; s=open(p,encoding='utf-8').read() a=""" from chamados.models import PerguntaDisputa as _PD for _dt, _resp in _PD.objects.filter(_PD.q_vivas(), disputa__colaborador=colaborador, data_evento__range=(data_ini, data_fim)).values_list('data_evento', 'resposta_colab'): _perg_viva[_dt] = _perg_viva.get(_dt, False) or  ...` |
 | 19:23:21 | Bash |  | `cd /home/ronald/wt-cal/app; cat > colaboradores/tests/test_calendario_ultimo_recurso_le_o_c6.py <<'EOF' """DIA-SEM-SAIDA (aval Ronald 22/10 ~19:3x): o calendario para de ler `q_vivas` (`calendario.py`, ULTIMO RECURSO) e le `pergunta_viva` do C6, *"como a C7 mandou"*. A regra do ultimo recurso nao muda (corte 16/08): o "Resolver dia" so some quando o colab tem pergunta VIVA COM RESPOSTA no dia; o q ...` |
 | 19:22:58 | Bash |  | `cd /home/ronald/wt-cal/app; sed -n 29,103p chamados/tests/test_o261_vigia_fio.py` |
