@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 22/10/2026 18:04:32.**
+**Medido em 22/10/2026 18:10:03.**
 
 | | |
 |---|---|
@@ -22,61 +22,61 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2648.3 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2648.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-cct** (`raia-cct`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **72.1 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **72.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cct.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **416.8 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **416.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-cert-corpo** (`(detached)`) -- **SEM AGENTE**
   - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **14.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert-corpo.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-cert-corpo7** (`(detached)`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **11.1 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **11.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert-corpo7.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-cert-inss** (`(detached)`) -- **SEM AGENTE**
-  - 2 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **16.3 h** (passou das 6 h da L-105)
+  - 2 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **16.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert-inss.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **230.0 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **230.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio-r10** (`comboio-r10-20261019`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **74.8 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **74.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio-r10.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio-v3** (`comboio-v3-20261018`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **98.8 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **98.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio-v3.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio18** (`comboio-20261018`) -- **SEM AGENTE**
-  - 2 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **112.5 h** (passou das 6 h da L-105)
+  - 2 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **112.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio18.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio2110** (`comboio-20261021`) -- **SEM AGENTE**
-  - 2 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **20.6 h** (passou das 6 h da L-105)
+  - 2 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **20.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio2110.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **532.9 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **533.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-janela** (`janela-sombra`) -- **SEM AGENTE**
-  - 2 commit(s) a frente do `main`, 6 arquivo(s) sujo(s), commit a frente ha **20.6 h** (passou das 6 h da L-105)
+  - 2 commit(s) a frente do `main`, 6 arquivo(s) sujo(s), commit a frente ha **20.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-janela.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **437.0 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **437.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o275** (`raia-o275`) -- **SEM AGENTE**
-  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **166.3 h** (passou das 6 h da L-105)
+  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **166.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-o275.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o320** (`raia-o320`) -- **agente vivo**: O320 forma nova: os 36 dias discordante viram PAUTA DP por dono, por agente de sessao (O320 pauta por dono), desde 2026-10-19T00:11:29-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: achar o molde da O306 de 10/10, RED antes, pauta idempotente por assunto, DRY + ensaio na sombra
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **554.7 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **554.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-regua10** (`raia-regua10`) -- **agente vivo**: REGUA-DO-PERIODO-VEM-DA-ESCALA-DE-HOJE (censo frota 10 + cura dos 9 leitores), por subagente da sessao app-77, desde 2026-10-19T13:11:42-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: tip 53d4b2b0 (3 commits), SUJOS=0. Suite CHEIA sobre o tree do merge b63b73f4 (que eu reconferi por merge-tree agora), LIDA POR MIM em scratchpad/suite_cert_r10b.out+.rc: OK (skipped=42, expected failures=14) / Ran 11457 tests in 1683.103s / rc=0 / FAIL-ERROR=0. Censo da frota 09+10 FEITO (logs/regua10/CENSO_FROTA_09_10_19-10.md). FALTA: o POUSO, que nao e meu (a tarefa me proibe merge e deploy), e o item 1 do complemento -- 4 leitores de data fixa, impacto medido 84 colabs na 09 e 38 na 10.
 - **wt-serie** (`raia-serie`) -- **SEM AGENTE**
-  - 2 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **113.8 h** (passou das 6 h da L-105)
+  - 2 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **113.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-serie.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-v3** (`raia-v3`) -- **agente vivo**: O280 v3 / O287 portao do esmeril -- POUSO pendente, por sessao app-77 (sem subagente), desde 2026-10-19T00:11:29-03:00
   - 0 commit(s) a frente do `main`, 3 arquivo(s) sujo(s)
@@ -99,7 +99,7 @@ _nenhuma obra interrompida registrada no bloco OBRAS._
 **fio morto: 210** (esperado 0) -- `fio_morto_cobrando` 210, e de **hoje pra frente** 0, que nao conta (o teto e do `cartorio.julgar_celula`, nao deste leitor)
 
 - **FORA DO ESPERADO**: `fio_morto` mediu 210 e o carimbo espera 0, `fio_morto_cobrando` mediu 210 e o carimbo espera 0, `fio_morto_com_alvo` mediu 55 e o carimbo espera 0
-- medido em **2026-10-22T06:43:35.508462-03:00** (11.3 h), dia julgado **2026-10-22**, banco `saas_hasner`
+- medido em **2026-10-22T06:43:35.508462-03:00** (11.4 h), dia julgado **2026-10-22**, banco `saas_hasner`
 
 ## `git log --oneline -5`
 
@@ -210,44 +210,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-       7  > lei: O261 `juiz-resolver-dia-oferecido` -- **RESPONDIDA 22/10 ~13:5x** (frase no CORTES); marco em construcao na `wt-o261c` (secao 14:3x).
-       8
-       9 +> lei: **C7 item 8 (corte 22/10 ~17:2x (2)) x O44 "a tranca nao barra o toque"** -- o C6 lendo a tranca SEM excecao cala o "Cobrar este dia" em dia trancado, que a O44
-         +manda COBRAR (caso 1: nasce chamado E pergunta que vai ao app; lei (b): o toque do admin desarquiva so aquele (colab, dia); selo `test_quem_le_a_tranca_em_producao` pro
-         +ibe leitor novo da tranca). MEDIDO em prod 22/10 18:0x (so leitura, juizes reais): 5 trancas vivas, **6.788** perguntas sem veredito em dia trancado, **2.010** vivas ho
-         +je (153 colabs), das quais **1.544** (118 colabs) tem chamado criado ou RESGATADO depois da tranca -- o caminho do toque/emissao da O44. A pergunta: (A) o C6 le a tranc
-         +a MENOS o (colab, dia) tocado depois dela (estado que JA existe: `criado_em`/`resgatado_em` do chamado x `PeriodoFechado.fechado_em` -- e o "reversivel por toque" da L-
-         +051), ou (B) le sem excecao e o "Cobrar este dia" em dia trancado deixa de cobrar (revoga O44 caso 1)? A `wt-c7b` NAO pousa o item (2); o item (1) (juiz `pode_fechar`)
-         +pousa sozinho.
-      10 +
-      11  > lei: **C7 item 8 x L-051** -- **RESPONDIDA 22/10 ~17:2x** (o C6 LE a tranca por `periodo_trancado`, sem carimbo; em construcao na `wt-c7b`) -- a tranca fecha a disput
-          a pela porta e NAO carimba (L-051), mas o C6 so conhece a tranca PELO CARIMBO (`_pergunta_viva_calc`, degrau 0b) e nao le `disputa.fechada_em`: a pergunta do dia tranca
-          do fica VIVA dentro da disputa fechada (alarme F2) e segue cobrando no app. MEDIDO na sombra 22/10 16:0x pela funcao real `competencia_trancada.medir` (`logs/sombra/c7_
-          item8_vivas_trancadas.py`): **2.014** perguntas vivas em dia trancado, **151** colabs (emp2 08/2026 **1.810**, emp3 08 **195**, emp3 07 **4**, emp4 08 **5**), **15** di
-          sputas que fechariam, **3** com resposta sem veredito; **1.994** ja com a via (historia). A pergunta: o que tira do app a pergunta VIVA de dia trancado sem a via -- o C
-          6 passa a ler a tranca (`periodo_trancado`) ou o "estado arquivado reversivel" da L-051 (LEIS.md:185, SO-NO-PAPEL)? O RED 8 esta escrito LITERAL (fecha, trilha, zero ca
-          rimbo) e o lote L0 segue sem ele.
-      12
-      13  > lei: **C7 no `core/juizes.py`** -- **RESPONDIDA 22/10 ~17:2x** (*"corte Ronald: juiz pode_fechar nasce"*, linha no CORTES) -- nao ha frase `corte Ronald: juiz <nome>
-          nasce` para o C7 no CORTES.md, e o predicado MUDA (13 regras -> `fio_vivo`), entao a AUTONOMIA item 3 nao me deixa escreve-la. O `SEM_JUIZ['chamado'][_C7]` fica onde es
-          ta ate a frase; o L0 anda em `chamados/models.py` + `chamados/juizes.py`.
-  ⎿  Allowed by auto mode classifier
-
-● Agora a cópia só com o item (1), a partir do HEAD atual do main.
 
   Ran 1 shell command
 
-● A linha do CORTES dizia que o item (2) estava em construção. Corrijo para "parado em pergunta de lei (O44)" e procuro outros leitores de SEM_JUIZ['chamado'].
+● Enquanto a suíte corre: o (d) do retrato. Os 5 colaboradores do feriado de 12/10 estão entre os 35 vínculos virados no ato de hoje? A lista dos 35 está na reversão em
+  logs/feriado1210/.
 
-● Running cd /home/ronald/wt-c7j/app; python3 - <<'EOF' p='d… · 2m 16s
-  ⎿  $ cd /home/ronald/saas-hasner; L=/tmp/claude-1001/-home-ronald-saas-hasner-app/a7fb7a66-28ef-4b66-8c48-a4aa9df4fce4/scratchpad/c7j_viz.log; timeout 3500 bin/suite.sh --dir
-     /home/ronald/wt-c7j --only "chamados core" -- --parallel 4 > $L 2>&1; echo rc=$?; grep -E '^(OK|FAILED)($| \()' $L | tail -1; g… (2m 15s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Ran 3 shell commands
 
-* Orchestrating… (10m 34s · ↓ 9.9k tokens)
+● vinculo_do_dia não recebeu os argumentos na forma que espera. Leio o vínculo pelo que ele mesmo lê, CelulaDia.escala_geradora, e cruzo os vínculos de cada um com os 35 e com os 6.
+
+  Ran 1 shell command
+
+● Na checagem soberana: col222, col256 e col133 têm o vínculo gerador entre os 35 virados com trabalha=False mas cobrança mantida — são bug da 4ª e entram na cura dos 99; col239 e
+  col152 ficam fora dos 35, têm trabalha=True e vão para a lista do DP, com achado extra de que o vínculo gerador do col152 em 12/10 é o inativo 1229, não o ativo 1438. Agora vou
+  analisar col255 e col673 pelo dono_da_divergencia.
+
+  Ran 1 shell command
+
+● Identifico que dono_da_divergencia classifica cada dia-colab divergente do oráculo E6 em BATIDA, CADASTRO ou ESTRUTURA. Vou checar como e6_oraculo filtra por colaborador para rodar
+  apenas os dois registros na competência 10.
+
+  Ran 1 shell command
+
+● O e6_oraculo não filtra por colaborador e executa o motor na frota toda, então, pela regra de que medição com motor vai na sombra, ele depende do ensaio da sombra que está sendo
+  refeito. Enquanto isso, vou ler frescor_dos_retratos e identificar onde a tela do retrato monta o contexto.
+
+  Ran 4 shell commands
+
+● Confirmei que o rótulo "atualizado HH:MM" vem incorretamente do min(lavrado_em), e a correção é exibir o rotulo_admin do frescor_dos_retratos na barra, mostrando o aviso quando o
+  rótulo não for "atualizado". Agora vou procurar um teste de tela existente para reutilizar a fixture.
+
+● Running cd /home/ronald/saas-hasner/app; sed -n 32,75p fo…
+  ⎿  $ cd /home/ronald/saas-hasner/app; f=folha/tests/test_o48_passo6_menu_abre_o_retrato.py; sed -n 300,335p $f
+
+✢ Orchestrating… (16m 4s · ↓ 19.9k tokens · thinking)
 
 ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ↓ to manage
 ```
