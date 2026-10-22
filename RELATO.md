@@ -1,5 +1,65 @@
 # RELATO — esteira saas-hasner
 
+## 22/10 10:4x -- A LISTA DO DP: os 8 colabs / 40 casos do residuo da 10, COM O DIA (`!` de 08:5x cumprido)
+
+O `!` dele pedia **`colXXX, dia, motivo`**, e o `dia` nao estava em lastro nenhum -- nem nos dois CONTA,
+nem nos dois JSON de reversao (`app/logs/o317/2026-10-22_0755_dry.json`, `..._0808_apply.json`), nem no
+`causas_19-10.json`: todos param no nivel colab-competencia. Medido agora pela PORTA REAL
+(`chamados/services/passivo_validado.py::reparar`, modo **dry** -- dry nao chama a unidade, `:366-370`),
+com `_dia_do_plantio` **interceptado** em vez de reconstruido: 22/10 10:42:09-10:42:46, `universo=13509
+com_registro=12299 alvo=1210 plantada=0`, **captura == alvo (44 == 44)**, `ERROS=[]`. Lista cheia em
+`logs/dp/residuo_da_10_20261022.txt`; a sonda fica em `logs/dp/dias_do_residuo.py`.
+
+| colab | alvo 07:55 | alvo no DIFF (04:00) | alvo 10:42 | dias (10:42) |
+|---|---|---|---|---|
+| col204 | 1 | 4 | 1 | 27/09 |
+| col373 | 1 | 8 | 1 | 16/10 |
+| col516 | 4 | 6 | 4 | 02/10 06/10 10/10 18/10 |
+| col569 | 2 | 6 | 6 | 21/09(n=3) 25/09(n=3) |
+| col634 | 1 | 2 | 1 | 16/10 |
+| col723 | 21 | 29 | 21 | 23/09 24/09 01/10 03/10 06/10 07/10 10/10 13/10 14/10 16/10 |
+| col926 | 9 | 10 | 9 | 21/09 28/09 02/10 05/10 06/10 07/10 08/10 09/10 13/10 |
+| col944 | 1 | 3 | 1 | 24/09 |
+
+**MOTIVO, um so para os oito:** o alvo de prod ja nao era o que o DIFF publicado mediu, entao aplicar
+neles cairia **fora do escopo literal do aval** (condicao 1 da DINHEIRO-EM-COMPETENCIA-ABERTA; LEI-AKITA 9).
+O lote aplicou a INTERSECAO exata das duas leituras (32 colabs / 67 casos): o residuo e o preco de nao
+aplicar o que nenhum DIFF cobriu, nao defeito do lote.
+**col723: o DP nao desconta no Dominio** (ordem dele).
+**O dado nao parou:** 40 as 07:55, **44 as 10:42** -- quem andou foi col569 (2 -> 6). O dia vale "as 10:42".
+**As duas listas nao se misturam:** os 7 do DIFF com movimento de motor (col476, col516, col618, col696,
+col723, col814, col857) nao sao estes 8 -- 476/696 foram PLANTADOS, 618/814/857 sairam do alvo, e so
+col516 e col723 estao nas duas.
+
+## 22/10 10:44 -- o DEPOIS do `fio_morto_com_alvo`: **54 -> 98**, e a condicao de saida do O261 ANDOU PARA TRAS
+
+Medido pelo MESMO script do ANTES (`logs/o261/rodar_depois_do_gate.sh`, que chama
+`logs/o261/censo_com_alvo_ANTES_do_gate.py` -> `vigia_fio::censo`, a funcao real; SO leitura, nao
+carimba `logs/fio_morto.json`), depois que o ato do gate chegou na PROVA 4. Saida em
+`logs/o261/censo_DEPOIS_do_gate.out`. (O `rotulo=ANTES_do_gate` da linha SONDA e o literal do arquivo
+reaproveitado, nao o momento: `agora=10:44:40`.)
+
+| contador | ANTES 08:38 | DEPOIS 10:44 |
+|---|---|---|
+| `com_alvo` (**a condicao de saida: esperado 0**) | 54 | **98** |
+| `sem_alvo` | 155 | 197 |
+| `FIO_MORTO` | 210 | 296 |
+| `chamados_vivos_com_celula` | 3148 | 3706 |
+| `fio_vivo` | 2079 | 2543 |
+| `universo_nos_dias_mortos` | 521 | 720 |
+| por competencia (dias/colabs) | 08: 1/1 · 09: 23/16 · 10: 30/13 | 08: 1/1 · 09: **56/28** · 10: **41/14** |
+
+`com_alvo_contador == com_alvo_listados == 98` e `abertura_fecha=98 de 98` -- as particoes fecham, o
+numero nao e miragem de leitor.
+
+**O QUE ISSO DIZ, e o que NAO diz.** O universo cresceu +558 chamados vivos com celula na janela, e o
+unico escritor da janela e o ato do gate: o `forcar_cartorio` das tres empresas declarou, no proprio
+log, `emitidos=375` (emp2) + `24` (emp3) + `5` (emp4) = **404** chamados emitidos. Varredura que acende
+lampada faz o fio morto crescer com ela -- isso e o tabuleiro funcionando, nao defeito. O que NAO esta
+medido e qual parcela dos +44 `com_alvo` nasceu desses 404 e qual ja estava la: ligar cada um ao seu
+emissor e leitura de `criado_em` na frota, e e trabalho do O261, nao desta linha.
+**A condicao de saida do O261 (`fio_morto_com_alvo = 0`) segue ABERTA, agora em 98.**
+
 > **22/10 10:40 -- O CASO DA 8069 ESTA ESCRITO, E ELE DIZ QUE A 8069 NAO E CURA NENHUMA: 83% DO DESCONTO DO
 > ORACULO E DONO BATIDA, PELO JUIZ DO PROPRIO GATE.** `logs/gate10/CASO_8069_20261022.md` (88 linhas), escrito
 > ANTES de codigo (L-110/13), contra o Art.58 par.1, o mandato `TOL=10` dele de 11/08, a L-084 e a L-093.
