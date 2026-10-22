@@ -2,42 +2,29 @@
 
 > **22/10 07:0x -- ITEM 6 DO AVAL DE 18/10 18:1x, O POUSO: o corpo que chegou pela METADE para de
 > virar ausencia, e a casa para de culpar o colaborador pelo engano dela.**
-> LEI-AKITA: origem=`api/corpo_recebido.py::corpo_chegou_inteiro`, chamado nas DUAS portas
-> (`api/views.py::api_ausencias` e `::api_ausencia_documento`); testemunha=as duas pontas que JA
-> existem em toda requisicao -- `CONTENT_LENGTH` DECLARADO x os bytes que o `LimitedStream`
-> ENTREGOU ao parser (`_pos`), nenhuma medida nova e o corpo nao se le duas vezes;
-> RED=`api/tests/test_bo_corpo_truncado.py` + `test_corpo_chegou_inteiro.py`; quem-mais-le=as 2
-> rotas de ausencia de `api/urls.py` (o `urls_core.py` nao tem nenhuma); juizes novos=1,
-> `corpo_chegou_inteiro`, pelo seu aval de 18/10 18:1x item 2.
+> LEI-AKITA: origem=`api/corpo_recebido.py::corpo_chegou_inteiro`, chamado nas DUAS portas de
+> ausencia (`api/views.py::api_ausencias` e `::api_ausencia_documento`); testemunha=as duas pontas que
+> JA existem em toda requisicao -- `CONTENT_LENGTH` DECLARADO x os bytes que o `LimitedStream`
+> ENTREGOU ao parser (`_pos`), sem medida nova e sem ler o corpo duas vezes; RED=os dois modulos
+> abaixo; quem-mais-le=as 2 rotas de ausencia de `api/urls.py` (`urls_core.py` nao tem nenhuma);
+> juizes novos=1, pelo seu aval de 18/10 18:1x item 2.
 > **A MEDIDA DESMENTIU A MINHA PROPRIA PROSA DO RED** (`logs/bo2/mede_corpo_truncado.out`): o
-> `MultiPartParser` **nao levanta nada** no corpo cortado -- ele DESCARTA o arquivo em silencio e
-> deixa os campos passarem. A ausencia nascia **sem anexo nenhum**, nao "com meio atestado". Meio
-> arquivo o DP ve; um anexo que nunca chegou, nada no banco denuncia. E a segunda tentativa -- a que
-> a pessoa faz justamente porque a primeira "deu erro" -- batia na `uniq_ausencia_viva_por_tipo_e_dia`
-> e ouvia *"Ja existe Atestado medico em DD/MM"*. A frase nova diz o contrario: **"NADA foi salvo:
-> mande de novo"**. Tri-estado porque `None` e *"nao ha como saber"* e **nao barra nada**; a leitura
-> desce para `_request` porque no DRF `request._stream` E o proprio WSGIRequest e **nao tem `_pos`**
-> -- ler ali devolveria `None` SEMPRE, guarda que nunca guarda.
-> **PROVA, cada ato com a sua:** RED evidenciado sem a cura = `FAILED (failures=2)` de `Ran 3`, com o
-> caso que MORDE (corpo inteiro) passando (`logs/bo2/red_evidenciado.log`); com a cura os dois modulos
-> `Ran 12 OK`; LABEL `api` inteiro `Ran 432 OK`; `ruff` All checks passed; **suite CHEIA na arvore que
-> POUSA** (copia `wt-cert-corpo7`) = `Ran 11562 tests in 1684.821s` / `OK (skipped=51, expected
-> failures=14)`, 0 FAIL e 0 ERROR, rastro do juiz novo 2x (`logs/bo2/suite_cert7.log`). Pouso num ato
-> so pela L-107, com o censo `cmp` citado no corpo do commit (L-117).
-> **ATO FECHADO as 07:01, e a PROVA e a do portao, nao a minha palavra:** commit `1f1ae342` com o
-> censo **`0 de 3100 .py diferem | 0 so na arvore viva`** contra a arvore certificada
-> `f4e258be`; `bin/deploy.sh --sem-migrate` fechou `OK -- migrations em dia, tres cascas reiniciadas
-> juntas, tres rotas provadas` (core `/health/` 200, ui `/colaboradores/` 302, mensageria `/health/`
-> 200), prova de casca `16 estaticos, 5 paginas, 616 rotas em 2 urlconf(s)`, selo BUG 128 verde,
-> `importerror_500=0` na janela 06:01-07:01. E o fecho da identidade:
-> `git diff --stat f4e258be main -- app ':!app/docs'` saiu **VAZIO**. Saida inteira em
-> `logs/bo2/pouso_item6.out`, rc 0.
-> **ESMERIL DESTE MARCO (L-ESMERIL, uma linha):** a fatia e ADICAO pura -- um arquivo novo
-> (`api/corpo_recebido.py`), duas chamadas acrescentadas em `api/views.py` e dois modulos de teste
-> novos --, entao nao ha sitio que perdeu chamador: **0 orfao**, nada a apagar pela L-111.
-> **INCOMPLETO, declarado:** (a) `ponto/views.py:2339` e `:2450` criam ausencia com corpo de request e
-> **nao** estao curados -- fora do universo literal do aval ("portas de ausencia da api"); censo feito,
-> nao ampliado. (b) o smoke do reenvio segue na sua mesa (AVAIS #3).
+> `MultiPartParser` **nao levanta nada** no corpo cortado -- DESCARTA o arquivo em silencio e deixa os
+> campos passarem. A ausencia nascia **sem anexo nenhum**, nao "com meio atestado": meio arquivo o DP
+> ve, um anexo que nunca chegou nada no banco denuncia. E a segunda tentativa -- a que a pessoa faz
+> porque a primeira "deu erro" -- batia na `uniq_ausencia_viva_por_tipo_e_dia` e ouvia *"Ja existe
+> Atestado medico em DD/MM"*. A frase nova diz o contrario: **"NADA foi salvo: mande de novo"**.
+> Tri-estado porque `None` e *"nao ha como saber"* e **nao barra nada**; e a leitura desce para
+> `_request` porque no DRF `request._stream` E o WSGIRequest e **nao tem `_pos`** -- ali ela devolveria
+> `None` SEMPRE: guarda que nunca guarda.
+> **PROVA, cada ato com a sua:** RED sem a cura = `FAILED (failures=2)` de `Ran 3`, com o caso que
+> MORDE (corpo inteiro) passando (`logs/bo2/red_evidenciado.log`); com a cura, os dois modulos
+> (`test_bo_corpo_truncado.py` + `test_corpo_chegou_inteiro.py`) dao `Ran 12 OK`; LABEL `api` inteiro
+> `Ran 432 OK`; `ruff` All checks passed; **suite CHEIA na arvore que POUSA** (`wt-cert-corpo7`) =
+> `Ran 11562 tests in 1684.821s` / `OK (skipped=51, expected failures=14)`, 0 FAIL e 0 ERROR, rastro
+> do juiz novo 2x (`logs/bo2/suite_cert7.log`). Ato unico pela L-107, censo `cmp` no corpo do commit
+> (L-117). **INCOMPLETO:** `ponto/views.py:2339` e `:2450` criam ausencia com corpo de request e
+> **nao** estao curados -- fora do universo literal do aval; censo feito, nao ampliado.
 >
 > **22/10 06:4x -- ITEM 1: O ARSENAL DO PUSH FECHOU VERDE, O PUSH NAO POUSOU AINDA -- ele esta na FILA da
 > pista, atras da copia 7, e a fila agora tem um pedinte a MENOS porque eu tirei o meu.** O arsenal de
