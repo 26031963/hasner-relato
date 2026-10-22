@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 21/10/2026 20:54:31.**
+**Medido em 21/10/2026 21:00:02.**
 
 | | |
 |---|---|
@@ -22,40 +22,40 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **recon_onprem** (`(detached)`) -- **SEM AGENTE**
-  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2627.1 h** (passou das 6 h da L-105)
+  - 1053 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2627.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/recon_onprem.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-cct** (`raia-cct`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **51.0 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **51.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cct.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-cert** (`cert-ast`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **395.6 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **395.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cert.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio** (`comboio-20261013b`) -- **SEM AGENTE**
   - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **208.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio-r10** (`comboio-r10-20261019`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **53.6 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **53.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio-r10.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio-v3** (`comboio-v3-20261018`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **77.7 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **77.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio-v3.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio18** (`comboio-20261018`) -- **SEM AGENTE**
-  - 2 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **91.3 h** (passou das 6 h da L-105)
+  - 2 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **91.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio18.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-esmeril** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **511.7 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **511.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-esmeril.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lps** (`lps-prova`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **415.9 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **416.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lps.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o275** (`raia-o275`) -- **SEM AGENTE**
-  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **145.1 h** (passou das 6 h da L-105)
+  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **145.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-o275.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o320** (`raia-o320`) -- **agente vivo**: O320 forma nova: os 36 dias discordante viram PAUTA DP por dono, por agente de sessao (O320 pauta por dono), desde 2026-10-19T00:11:29-03:00
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: achar o molde da O306 de 10/10, RED antes, pauta idempotente por assunto, DRY + ensaio na sombra
 - **wt-pdf** (`raia-pdf`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **533.6 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **533.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pdf.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-raiac** (`raia-c-orfa`) -- **SEM AGENTE**
   - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **0.3 h**
@@ -70,7 +70,7 @@ RELATO, com a lista de nomes do banco como autoridade._
   - 0 commit(s) a frente do `main`, 0 arquivo(s) sujo(s)
   - falta para pousar: ff para main bb3a588d (base de 31 commits vencida); B27 MEDIDO em motor_calculo_v2.py:843 = zona inviolavel, nao turnos.py:2388; falta run de sombra no hash de hoje (frota 09+10 por rubrica + 5 oraculos + dono)
 - **wt-v3-pouso** (`pouso-v3-20261016`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 4 arquivo(s) sujo(s), commit a frente ha **128.5 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 4 arquivo(s) sujo(s), commit a frente ha **128.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-v3-pouso.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **3 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-bos, wt-raiab, wt-ui
 
@@ -87,7 +87,7 @@ _nenhuma obra interrompida registrada no bloco OBRAS._
 **fio morto: 205** (esperado 0) -- `fio_morto_cobrando` 205, e de **hoje pra frente** 49, que nao conta (o teto e do `cartorio.julgar_celula`, nao deste leitor)
 
 - **FORA DO ESPERADO**: `fio_morto` mediu 205 e o carimbo espera 0, `fio_morto_cobrando` mediu 205 e o carimbo espera 0, `fio_morto_com_alvo` mediu 60 e o carimbo espera 0
-- medido em **2026-10-20T15:48:49.347932-03:00** (29.1 h), dia julgado **2026-10-20**, banco `saas_hasner` -- **passou das 26 h**, o painel esta lendo medida VELHA
+- medido em **2026-10-20T15:48:49.347932-03:00** (29.2 h), dia julgado **2026-10-20**, banco `saas_hasner` -- **passou das 26 h**, o painel esta lendo medida VELHA
 
 ## `git log --oneline -5`
 
@@ -199,36 +199,36 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-› Message from @a31c7b694e4785021 (ctrl+o to expand)
-
-● Agent "Raia C saida valida orfa" finished · 2h 6m 2s
-
-● Update(docs/RELATO.md)
-  ⎿  Added 1 line, removed 1 line
-      17  **O ORFAO E A LINHA, e isso muda o seu item (4).** `Ausencia 5073` (col266, atestado, `data=2026-10-20`, `minutos=0`, `chamado_origem=None` -> nasceu do POST do app, na
-          o de chamado) foi criada **07:28:03 em `aguardando_documento` com `documento=None`**, e **nenhum arquivo foi escrito** em 07:15 nem em 07:28. Os **8** arquivos novos de
-           `media/ausencias/documentos/` desde 20/10 15:36 tem **exatamente 1 linha de `Ausencia` cada**: **anexo orfao = ZERO**. O `request.FILES` chegou **VAZIO** ao servidor.
-      18  PROVA: sonda de LEITURA `logs/raiaA_sonda4.py` no `saas_core` (assert `NAME=='saas_hasner'`), arquivo por arquivo contra `Ausencia.objects.filter(documento__endswith=..
-          .)`.
-      19
-      20 -**O DISCRIMINADOR MATOU A HIPOTESE DO APP, e por isso a fila vai para o seu item (2) e nao para o (3).** Os **8** POSTs de hoje sao `okhttp/4.12.0` e **6 deles gravaram
-         - .jpg**: a MESMA build do app acertou seis vezes, logo nome/ordem de campo do multipart **nao e a causa**. O que sobra e **corpo que termina antes do `Content-Length`**
-         - -- cura do SERVIDOR, que e o seu item (2), e a recusa dela **E** o seu item (4) (*"arquivo e linha no mesmo ato, ou nenhum dos dois"*).
-      20 +**O DISCRIMINADOR MATOU A HIPOTESE DO APP, e por isso a fila vai para o seu item (2) e nao para o (3).** Os **8** POSTs de hoje sao `okhttp/4.12.0` e **6 deles gravaram
-         + .jpg**: a mesma **versao de `okhttp`** acertou seis vezes, logo nome/ordem de campo do multipart **nao e a causa** (preciso: `okhttp/4.12.0` e a versao da BIBLIOTECA,
-         +nao a build do app -- o que o `User-Agent` prova e a biblioteca, nao o APK). O que sobra e **corpo que termina antes do `Content-Length`** -- cura do SERVIDOR, que e o
-         +seu item (2), e a recusa dela **E** o seu item (4) (*"arquivo e linha no mesmo ato, ou nenhum dos dois"*).
+         +f7f82d`, suite INTEIRA contra a arvore dela (`Ran 11509 tests`, `FAILED (failures=2)`) com o **CONJUNTO dos 2 vermelhos IDENTICO ao do main sem cura** -- nenhum vermelh
+         +o dela.
+      16 +- **D -- SEM AGENTE, e por desenho: o seu aval dela proibiu qualquer ato antes da proposta de desenho publicada.** O mapa do destruidor ja esta lido e mora na celula de
+         + aval da `REABRIR-NAO-DESTROI` no BACKLOG. Nao e raia parada por falta de agente; e raia que ainda nao pode comecar.
+      17 +**O QUE SEGURA O POUSO DA C NAO E AVAL, E BUG NO MAIN -- e por isso ele vira o proximo item e nao uma linha de espera.** O `main` esta VERMELHO HOJE em **2** testes de
+         +`chamados`, reproduzidos sem cura nenhuma, e o pre-push nao libera push com suite vermelha. Pela **LEI-AKITA 6** esses 2 furam a fila: estou neles agora, e a C pousa at
+         +ras da cura, no mesmo turno.
+      18 +PROVA: `logs/raiaC/baseline_main_8.log` (os 2 vermelhos do main nomeados: `test_hx_fallback_sem_lei::test_lei_ainda_acusa_furo_nao_absolve` e `test_selo_lavrado_orfaos:
+         +:test_expira_em_devolve_FIM_DE_COMPETENCIA_nao_prazo_fixo`, `Ran 78 tests`, `FAILED (failures=2)`), `logs/raiaC/suite_curada2.log` e `git rev-list --count main..9b2ac76
+         +e = 1`.
+      19 +
+      20  **ITEM (1) DO SEU AVAL DAS 18:1x MEDIDO: O BO NAO E 5xx, NAO E O 413, E O ORFAO E A LINHA -- NAO O ARQUIVO (19:0x). NAO HA PAREI: a fila anda para o seu item (2).**
       21
-      22  **POR QUE O CELULAR DISSE "erro ao enviar" com o servidor respondendo 200:** nada mata requisicao longa do lado de ca -- `Caddyfile` nao tem **uma** diretiva de timeout
-           de proxy, o `timeout=30` do gunicorn e **gthread** (mata worker travado, nao requisicao longa) e o 200 mais longo em 7 dias foi **671 s** em 240.378 requisicoes. O rea
-          d timeout do `okhttp` e de segundos: **o cliente desiste em 169 s e em 935 s e o servidor termina depois, gravando a linha**.
-      23  PROVA: medicao de `app/folha/views.py:178-205` sobre `access-ui.log`+`access-core.log` (7 dias) e `/bin/grep` de `timeout` no `Caddyfile` = 0 ocorrencia de proxy.
+      22  `LEI-AKITA: origem=ainda NAO curada -- esta secao e MEDICAO, e o item (2) e a cura; testemunha=`access-ui.log` + `docker logs` das 3 cascas + o BANCO (`Ausencia`/`Chama
+          doColaborador`) + o `media/`, nada recalculado; RED=o do item (2), ainda nao escrito; quem-mais-le=`api/views.py:1785::api_ausencias` (unico escritor do POST), `ponto/s
+          ervices/ausencia.py::estado_inicial`; juizes novos=0`
 
-  Running 2 shell commands…
-  ⎿  $ git grep -ln 'expira_em' -- 'chamados/tests/*' 'core/tests/*' 'ponto/tests/*'
+  Ran 4 shell commands
 
-✢ Kerfuffling… (1h 1m 24s · ↓ 134.0k tokens)
+● Both reds are date-rot in selos, not product bugs. Building the cure in a copy (LEI-AKITA 10).
+
+  Running 3 shell commands…
+  ⎿  $ cd /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/red2110 && python3 - <<'PY'
+     import re
+     p='test_hx_fallback_sem_lei.py'
+     s=open(p,encoding='utf-8').read()
+     velho = """ via_resolucao='chamado_encerrado', chamado_destino=self.ch,
+     materializada_em=timezon…
+
+✢ Kerfuffling… (1h 6m 55s · ↓ 154.6k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                                  ✔ Update installed · Restart to update
 ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
