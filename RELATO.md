@@ -103,6 +103,49 @@
 > **08:40**, junto do ato, como a clausula de reserva da linha acima ja previa. `logs/bo2/pouso_item6.sh`
 > ganhou caminho de **REUSO**: se a copia ainda for do main daquela hora e o log estiver verde COM o
 > rastro dos juizes novos, o PORTAO 3 nao refaz 40 min de pista; se o main andar, ele refaz inteiro.
+> **06:0x -- O ITEM 4 NA SUA MESA MUDOU DE NUMERO, e o topo acima estava velho:** ele dizia "planta 61
+> batidas... 6 PERDEM hora e abono". **A causa foi curada como fatia e esta NO AR** (commit `5d1857a1`,
+> RED de 6 casos, suite CHEIA `Ran 11550` / `OK` / rc 0 na arvore exata, `deploy.sh --sem-migrate` rc 0 --
+> secao abaixo).
+> PROVA: `git log -1 --format=%H` = `5d1857a1...` no main; `logs/o330/cheia.log` `Ran 11550 tests` /
+> `OK (skipped=51, expected failures=14)` / rc 0 com 0 FAIL e 0 ERROR; `logs/o330/pouso.log` com
+> `censo: 0 de 3097 .py diferem | 0 ausentes`, `rc do deploy=0`, 3 rotas provadas e `importerror_500=0`.
+> Re-medido na SOMBRA com rollback, A/B: **planta 14 em vez de 61**, 51 recusadas pela
+> guarda de geometria, `horas_abono` **-11,00 -> 0**, `turnos_abertos` **+19 -> -1**, gravado intacto
+> (**0 de 110** FechamentoMensal). **Dos 6 sobram 4 e nenhum perde abono** (-1,27 a -0,58 h trabalhadas).
+> O `AVAIS.md` item 4 ja esta com ESTES numeros e a frase nova; **o apply segue em PAREI esperando o seu `!`**.
+> Os dois arquivos (`AVAIS.md`, `PENDENTES_RONALD.json`) estao na ARVORE e nao em commit proprio: docs fora
+> de marco nao viram commit (**L-106**), entao eles pegam carona no proximo marco.
+> **06:1x -- A CONDICAO (2) DO GATE TEM FORMA MEDIDA, e ela se parte em DOIS lugares, nao um.**
+> **(a) "os 5 oraculos" sao os cinco de MOTOR**, e isso nao e leitura minha: `logs/o280/passo4/oraculos_v3.py:59-65`
+> rotula `oraculo_150` / `200b` / `243` / `8069` / `an2f` como `'motor'` e `8792` / `txt` como `'sem-motor'`.
+> O runner e `logs/o280/passo4/rodar.sh`, **SOMBRA-ONLY por portao** (`assert current_database()=='sombra'`,
+> `exit 90`), parametrizado por `P4_MES=10 P4_ANO=2026`, com os `.py` montados de `logs/audit_holerite_09`
+> em `/oraculos`. **Logo "DEPOIS dessa lavra" cobra dump novo**: o da sombra e das 04:00 e a lavra e das
+> ~09:3x, entao entra `bin/sombra.sh --refazer --dump-agora` + `--bloco`, que custa
+> `dur_s['sombra.sh']=`**3135 s** (~52 min, `app/config/crons_duracao.json`) -- e esse e o preco da palavra
+> "DEPOIS", nao uma escolha minha.
+> **A arvore medida nao e a `arvore/` arquivada** (ela PROMETE ser bit a bit `c2cde4c3` da raia v3,
+> `rodar.sh:4-6`): a condicao (2) certifica a regra que esta no ar hoje, entao `P4_ARVORE` tera de sair de
+> `bash logs/o280/passo4/arvorar.sh <hash no ar>` e as passadas sao **`gravado,v2`** -- `v3` nao esta no ar
+> e DIFF v2 x v3 saiu do portao (**L-110**).
+> **(b) cartao x TXT NAO e sombra, e isso corrige o que eu ia fazer:** `relatorios/cartao_pela_celula.py:216-233`
+> le o **GRAVADO como lado do TXT** (`folha/export.py` escreve o arquivo do proprio `FechamentoMensal`, pelo
+> mesmo `_totais_do_fechamento`), entao `cartao_x_txt_divergentes --mes 10 --ano 2026` mede em **PROD** e
+> **nao precisa do TXT gerado** -- ele roda ANTES do export, que e exatamente o que o aval pede. O mesmo
+> comando imprime `dias_em_aberto` (`cartao_x_txt_divergentes.py:70`), e esse **nao e esperado 0**: e o
+> passivo do DP (FALTA-UM-SIGNIFICADO).
+> **TRAVA (coordenacao, nao escopo):** o push do marco O330 esta enfileirado no `flock` desde 05:5x
+> (`bin/trava_teste.sh --quem` = `suite:1286452 desde 22/10 05:39:44`). A minha `suite_cert7` fica na fila
+> **sem ceder a vez**, porque ela e o PORTAO do pouso do item (6), que e fila 1 -- e o `flock` espera 3600 s
+> por default (`bin/trava_teste.sh:ESPERA`), entao nenhum dos dois morre de esperar.
+> **06:0x -- a corrida VAZIA terminou VERDE, e isso nao a torna certificacao:** `logs/bo2/suite_cert6.log`
+> fechou `Ran 11556 tests in 1705.018s` / `OK (skipped=51, expected failures=14)` / rc 0 -- sobre
+> `7981d589 + item (6)`, arvore que **ninguem pousa**. Vale como sinal (a fatia nao deixa vermelho em
+> lugar nenhum da suite), nao como portao: o portao e `suite_cert7.log` sobre `5d1857a1 + item (6)`.
+> **A trava passou sozinha para o push do O330** as **06:08:35** (`bin/trava_teste.sh --quem` =
+> `pre-push:1333726`), que e exatamente a ordem que a coordenacao pediu -- a minha fica atras dele no
+> `flock`, sem eu ceder nada e sem relancar nada.
 
 **A CAUSA DOS 6 CURADA NA ORIGEM: O REPARO DO PASSIVO JULGA A GEOMETRIA DO DIA, E O JUIZO E DO ATO (22/10 05:xx).**
 LEI-AKITA: origem=chamados/services/passivo_validado.py::_plantar_o_dia (o ATO que planta sem humano por item), testemunha=ponto/turnos.py::turnos_do_colab (lida por materializacao.py::turnos_sem_par), RED=chamados/tests/test_o330_plantio_nao_abre_turno.py, quem-mais-le=a porta do admin NAO migrou (pergunta de lei no topo, com os 21 contratos), juizes novos=0
