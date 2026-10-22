@@ -6,10 +6,19 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 22/10/2026 04:03:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1205.0 MB). Acoes na janela: **1046**.
+**Medido em 22/10/2026 04:09:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1205.1 MB). Acoes na janela: **1055**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 04:08:59 | Bash | Read the existing readers of open turnos in the authority module | `cd /home/ronald/wt-lotepar/app && sed -n '1850,1900p' ponto/turnos.py && echo "=== 2570-2610" && sed -n '2570,2615p' ponto/turnos.py` |
+| 04:08:53 | Bash | Census of readers that count open turnos | `cd /home/ronald/wt-lotepar/app && echo "### quem conta t.aberto / entrada is None" && /bin/grep -rn "\.aberto\b" --include=*.py ponto/ chamados/ escala/ relatorios/ core/ \| /bin/grep -v tests/ \| head -25` |
+| 04:08:21 | Bash | Read the plant unit in full | `cd /home/ronald/wt-lotepar/app && sed -n '926,1082p' chamados/services/materializacao.py` |
+| 04:08:14 | Bash | Read the realtime publisher to see if it leaves the database | `sed -n '1,60p' ponto/realtime.py` |
+| 04:08:10 | Bash | Read the realtime receiver on Batida | `sed -n '34,72p' ponto/signals.py` |
+| 04:08:03 | Bash | Create the build lane from the published commit | `cd /home/ronald/saas-hasner && git worktree add /home/ronald/wt-lotepar -b raia-lote-par 7981d589 2>&1 \| tail -3 && cd /home/ronald/wt-lotepar && git log --oneline -1 && git status --porcelain \| head` |
+| 04:08:01 | Bash | Check signal receivers on Batida for HTTP or push side effects | `echo "### receivers de post_save em Batida / Chamado" && /bin/grep -rn "post_save\\|on_commit" --include=*.py ponto/signals.py chamados/signals.py escala/signals.py 2>/dev/null \| head -40` |
+| 04:04:04 | Bash | Read the structure of the losers lastro | `cd /home/ronald/saas-hasner && python3 -c " import json,collections d=json.load(open('logs/sombra/o330_perdedores_lastro.json')) p=d['plant'] print('plant tipo:',type(p)) if isinstance(p,dict): for k in list(p)[:3]: print(' key',k,'->',str(p[k])[:200]) print(' n keys',len(p)) else: print(' len',len(p)); print(' amostra',str(p[:3])[:300]) print('ant_seq amostra:',str(list(d['ant_seq'].items())[:3]) ...` |
+| 04:03:57 | Bash | Inspect the lastro files of the earlier measurement | `cd /home/ronald/saas-hasner && ls -la logs/sombra/o330_* logs/o330_* 2>/dev/null && echo "---" && for f in logs/sombra/o330_*lastro.json; do echo "== $f"; python3 -c " import json,sys d=json.load(open('$f')) print(type(d), list(d)[:20] if isinstance(d,dict) else len(d)) " 2>&1 \| head -5; done` |
 | 04:03:11 | Bash | Read the function that derives instant and type of the plant | `sed -n '280,375p' chamados/services/materializacao.py` |
 | 04:02:48 | Bash | Read how the lote groups its items | `sed -n '300,380p' chamados/services/passivo_validado.py` |
 | 04:02:44 | Bash | Locate where the lote builds its item list | `/bin/grep -n "itens" chamados/services/passivo_validado.py \| head -30` |

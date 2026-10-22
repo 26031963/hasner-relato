@@ -94,6 +94,25 @@ DERIVACAO deixa a impressao byte-identica -- a frota seria PULADA.
   fez o que devia -- parou o numero antes de eu publicar.**
 - **ESTE NUMERO E C-ONLY.** O *"quanto cai com as curas C e INSS"* do seu BO das 23:4x exige **segunda rodada**
   com `SOMBRA_ARVORE=/home/ronald/wt-inss/app` (a cura do INSS esta na raia, nao no ar): nao leia 3 como os dois.
+- **A UNIAO DAS DUAS CURAS, e ela e PROJECAO -- nao apaga o "exige segunda rodada" acima (22/10 04:0x):** os
+  conjuntos sao **DISJUNTOS** -- a C solta `col253`/`col303`/`col866` (para motivo VAZIO) e o INSS solta
+  `col318`/`col647` ("saem de vez", `logs/boinss/RELATO_edicao_descartada_0239.md:272`) --, e as DUAS rodadas de
+  sombra correram **ANTES** do apply do INSS em prod das 02:39 (`4f2d7ef9`), logo os dois deltas partem do MESMO
+  gravado pre-INSS: **5 saem de retido, 1 entra** (`col962`, dono ESTRUTURA), **liquido 4**. **O `entram`/`fora`
+  da uniao segue NAO MEDIDO**: ninguem chamou `fora_da_folha` num estado com as DUAS curas, e somar lastro e
+  recalculo de leitor (LEI-AKITA 8) -- por isso 5 e **id medido**, e 225 seria numero sem fonte, que eu nao
+  escrevo. Escopo do lado INSS, dito para nao inflar: `espelho_nunca_bateu` **3 -> 1** e do ALVO (5 colabs); na
+  **FROTA** e **23 -> 21**. E a uniao so fecha porque cada cura mediu soltura REAL (motivo VAZIO / "saem de vez"):
+  com **128 dos 345** carregando dois ou mais motivos, somar curas nao e aditivo em geral.
+- **A SEGUNDA RODADA MUDOU DE FORMA, e isso se MEDIU, nao se supos:** `SOMBRA_ARVORE=/home/ronald/wt-inss/app`
+  ficou **OBSOLETO**, e nao por um lado so: `git rev-list --count main..` da **0** para `raia-c-orfa` **e** para
+  `bo-inss-nunca-bateu` -- a C pousou em `3bcabf1c` (21/10 22:00) e o INSS em `e3f0f726`, com o apply em prod as
+  02:39 (`4f2d7ef9`). **As DUAS curas estao no CODIGO do main**, entao a medida honesta nao pede arvore de raia
+  nenhuma: `bin/sombra.sh --rodar` sobre a sombra refeita das 04:11, lendo `folha/fora_da_folha.py::fora_da_folha`
+  -- mesma porta do item (4), UMA rodada. E o que separa a sombra de PROD agora **nao e codigo, e LAVRA**: o INSS
+  ja relavrou 123 celulas em prod, a **C ainda nao** -- e e exatamente isso que a condicao (1) do `GATE-EXPORT-10`
+  ("lavra da frota INTEIRA da 10 na regra de hoje") e o seu *"Retrato relavrado com a cura C"* mandam fazer. Espera
+  por **ARQUIVO** (`logs/crons_em_curso/sombra.sh_-.*` ausente), nunca por pgrep.
 INCOMPLETO nomeado: o universo do corte mediu **287 dia-colab / 82 colabs (108/39 curados)** contra os
 **282/81 (107/38)** que eu publiquei a 01:0x; mesmo dump (`SOMBRA_DIA=20261022`) mas `--rodar` repoe a janela de
 prod a cada chamada (`lavra_de_prod` md5 `c30b20f8`, `data_ref_prod=2026-10-21`). **A CAUSA NAO ESTA MEDIDA** e
