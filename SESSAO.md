@@ -6,10 +6,18 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 22/10/2026 03:52:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1204.3 MB). Acoes na janela: **1031**.
+**Medido em 22/10/2026 03:58:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1204.5 MB). Acoes na janela: **1039**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 03:57:01 | Bash | LEI ANTES DO PATCH: grep the law docs for the sites I will touch | `for t in materializacao.py passivo_validado.py _vizinha_mesmo_tipo _plantio_preenche_furo_na_data parear_turnos turnos_do_colab; do echo "### $t"; /bin/grep -n "$t" docs/LEIS.md docs/DOSSIES.md docs/CORTES.md 2>/dev/null \| head -6; done` |
+| 03:56:11 | Bash | Read the pair-working loop of the reparador | `sed -n '400,470p' chamados/services/passivo_validado.py` |
+| 03:55:46 | Bash | Read the head of turnos_do_colab | `sed -n '1739,1830p' ponto/turnos.py` |
+| 03:55:36 | Bash | See how the motor and turnos_do_colab assemble the pareador inputs | `sed -n '430,455p' ponto/motor_calculo_v2.py && echo '=== turnos_do_colab ===' && /bin/grep -n 'def turnos_do_colab' ponto/turnos.py && sed -n '1830,1875p' ponto/turnos.py` |
+| 03:55:28 | Bash | List the real pareador callers in the app tree | `/bin/grep -rn 'parear_turnos(' --include=*.py . \| /bin/grep -v '/tests/' && echo '=== turnos_do_colab ===' && sed -n '1400,1430p' ponto/turnos.py` |
+| 03:55:17 | Bash | Run the handoff, read the fila head and the pareador callers | `cd /home/ronald/saas-hasner && bash bin/handoff_sessao.sh 2>&1 \| tail -5; echo '=== GATE head ==='; python3 bin/hook_stop_fila1.py </dev/null 2>&1 \| python3 -c "import json,sys;print(json.load(sys.stdin)['reason'][:700])"; echo '=== dur regua ==='; python3 -c " import json;d=json.load(open('app/config/crons_duracao.json'));print({k:v for k,v in d.get('dur_s',d).items() if 'sombra' in k or 'regua ...` |
+| 03:55:11 | TaskStop |  | `-` |
+| 03:55:06 | ToolSearch |  | `-` |
 | 03:51:15 | Bash | Read the pareador signature and how it reports open turns | `sed -n '1106,1130p' ponto/turnos.py && echo '=== aberto/orfa no retorno ===' && /bin/grep -n 'aberto\\|orfa' ponto/turnos.py \| sed -n '1,30p'` |
 | 03:50:53 | Bash | Read the plant decision region of the materializador | `sed -n '630,720p' chamados/services/materializacao.py` |
 | 03:50:47 | Bash | Read the paridade guard in the materializador | `sed -n '110,200p' chamados/services/materializacao.py` |
