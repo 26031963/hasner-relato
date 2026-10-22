@@ -6,10 +6,18 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 22/10/2026 07:25:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1215.2 MB). Acoes na janela: **1336**.
+**Medido em 22/10/2026 07:30:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1215.4 MB). Acoes na janela: **1339**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 07:29:20 | Bash | Find the sanctioned sombra sonda launcher | `cd /home/ronald/saas-hasner && ls bin/ \| /bin/grep -iE 'sombra\|sonda' \| cat; echo "=== como se roda sonda na sombra (quem declara) ==="; /bin/grep -rn 'settings.sombra\\|config.settings.sombra' bin/*.sh \| head -8` |
+| 07:29:01 | Bash | Read the current sombra stamp and gate state | `cd /home/ronald/saas-hasner && echo "=== o carimbo VIVO da sombra ===" && cat .sombra_stamp 2>/dev/null; echo; echo "=== e o que o portao diz ==="; bash bin/sombra.sh --conferir 2>&1 \| tail -8` |
+| 07:28:22 | Bash | Read the census declared universe and motive table | `cd /home/ronald/saas-hasner && sed -n '1,40p' logs/censo_retidos/censo.txt; echo "....."; sed -n '60,90p' logs/censo_retidos/censo.txt` |
+| 07:27:21 | Bash | Read the before-snapshot taken by the authority | `cd /home/ronald/saas-hasner && echo "=== antes_fora_da_folha_10.txt (o snapshot ANTES, pela autoridade) ===" && cat logs/censo_retidos/antes_fora_da_folha_10.txt` |
+| 07:27:13 | Bash | Locate the census sonda scripts | `cd /home/ronald/saas-hasner && echo "=== sondas do censo (onde moram) ===" && ls -lt logs/censo_retidos/ \| cat; echo; find logs -maxdepth 2 -name '*.py' -newermt '2026-10-22 00:00' -printf '%TH:%TM %p\n' 2>/dev/null \| sort \| /bin/grep -iE 'censo\|fio\|retid' \| cat` |
+| 07:26:39 | Bash | Read the census sections on the fio groups and their incomplete lines | `cd /home/ronald/saas-hasner && sed -n '88,120p;150,196p' logs/censo_retidos/censo.txt` |
+| 07:26:26 | Bash | Read the retained-cells census lastro for the 66 and 39 groups | `cd /home/ronald/saas-hasner && echo "=== grupo_c_modulos_10.txt ===" && cat logs/censo_retidos/grupo_c_modulos_10.txt; echo; echo "=== s5/s6 ==="; cat logs/censo_retidos/s5.out logs/censo_retidos/s6.out; echo; echo "=== censo.txt: onde estao os 66 e os 39 ==="; /bin/grep -nE '66\|39\|sem fluxo\|sem_fluxo\|sem pergunta\|sem_pergunta\|351' logs/censo_retidos/censo.txt \| head -25` |
+| 07:26:07 | Bash | Read the Retrato section and check the retained-cells census | `cd /home/ronald/saas-hasner && echo "=== item 3: a prova literal que ele pediu (carimbo de hoje + bloqueados por motivo antes/depois) ===" && cat logs/retrato2210/sec_retrato.md; echo; echo "=== item (a): censo dos 351 retidos ==="; ls -lt logs/censo_retidos/ 2>/dev/null \| head -10` |
 | 07:25:43 | Bash | Check the status of item 3, the Retrato relavra | `cd /home/ronald/saas-hasner && date +%H:%M:%S && echo "=== lastro do item 3 (Retrato) ===" && ls -lt logs/retrato2210/ 2>/dev/null \| head -15; echo; echo "=== o RELATO ja tem secao de item 3? ==="; /bin/grep -nE 'ITEM 3\|RETRATO\|retrato' app/docs/RELATO.md \| head -12` |
 | 07:25:27 | Bash | Check whether the INSS apply already happened | `cd /home/ronald/saas-hasner && echo "=== sec_apply.md (o que ja foi aplicado) ===" && head -30 logs/boinss/sec_apply.md 2>/dev/null; echo; echo "=== reversao ja escrita? ==="; ls -l logs/boinss/reversao*.json \| cat; python3 -c " import json for p in ['logs/boinss/reversao_cond2_antes_do_apply.json','logs/boinss/reversao_cond2_0222.json']: d=json.load(open(p)) print(p, '->', type(d).__name__, (len ...` |
 | 07:25:06 | Bash | Measure where the INSS item actually stands | `cd /home/ronald/saas-hasner && echo "=== o marco do INSS no git ===" && git log --oneline -3 -- app/ponto/services/cartorio.py \| cat; echo; echo "=== esta no ar? (o deploy das 07:01 publicou a arvore viva) ==="; git log --oneline -1 --format='%h %cd' --date=format:'%d/%m %H:%M' -- app/ponto/services/cartorio.py \| cat; echo; echo "=== o que o pouso do BO-INSS registrou ==="; tail -20 logs/boinss/ ...` |
@@ -1341,8 +1349,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 20:54:28 | Bash | Find tests referencing the expiry function | `git grep -ln 'expira_em' -- 'chamados/tests/*' 'core/tests/*' 'ponto/tests/*'` |
 | 20:54:22 | Bash | Read the expiry function in the chamados module | `sed -n '85,140p' chamados/veredito_lavrado.py` |
 | 20:54:18 | Edit |  | `/home/ronald/saas-hasner/app/docs/RELATO.md` |
-| 19:28:36 | Bash | Locate the imprecise sentence in the report | `/bin/grep -n 'MESMA build do app' docs/RELATO.md` |
-| 19:28:30 | Edit |  | `/home/ronald/saas-hasner/app/docs/RELATO.md` |
-| 19:28:17 | Read |  | `/home/ronald/saas-hasner/app/docs/RELATO.md` |
-| 19:26:00 | Bash | Insert the prepared block at the top of the report | `python3 - <<'PY' p='docs/RELATO.md' b='/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/bloco_item4.md' L=open(p,encoding='utf-8').read().split('\n') assert L[0].startswith('# RELATO'), L[0][:40] bloco=open(b,encoding='utf-8').read().rstrip('\n').split('\n') L[1:1]=bloco open(p,'w',encoding='utf-8').write('\n'.join(L)) print('ok', len(bloco)) PY` |
-| 19:25:47 | Write |  | `/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/bloco_item4.md` |
