@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 22/10/2026 19:56:02.** Transcript: `a7fb7a66-28ef-4b66-8c48-a4aa9df4fce4.jsonl` (6.1 MB). Acoes na janela: **344**.
+**Medido em 22/10/2026 20:01:32.** Transcript: `a7fb7a66-28ef-4b66-8c48-a4aa9df4fce4.jsonl` (6.2 MB). Acoes na janela: **348**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 19:59:27 | Bash |  | `cd /home/ronald/saas-hasner; bin/push.sh > /tmp/claude-1001/-home-ronald-saas-hasner-app/a7fb7a66-28ef-4b66-8c48-a4aa9df4fce4/scratchpad/push4.log 2>&1; echo rc=$?; grep -E "^Ran \|^OK\|^FAILED\|push liberado\|->\|^FAIL:\|^ERROR:" /tmp/claude-1001/-home-ronald-saas-hasner-app/a7fb7a66-28ef-4b66-8c48-a4aa9df4fce4/scratchpad/push4.log \| tail -8` |
+| 19:59:23 | Bash |  | `cd /home/ronald/wt-anx && git add -- app/ponto/tests/test_anexo_nao_sobrevive_a_linha_que_nao_nasceu.py && git commit -q -F - <<'EOF' o selo do anexo orfao olha um storage so dele: a listagem compartilhada corria com os outros workers em --parallel 4 Bug no caminho (LEI-AKITA 6), RED evidenciado: o pre-push de d9e38684 caiu em ponto.tests.test_anexo_nao_sobrevive_a_linha_que_nao_nasceu::test_RED_i ...` |
+| 19:59:07 | Bash |  | `cd /home/ronald/wt-anx/app; for f in ponto/tests/test_porta_batida.py ponto/tests/test_carimbo_gravado.py ponto/tests/test_s5b_porta_unica.py relatorios/tests/test_pdf_nao_calcula.py relatorios/tests/test_pdf_sem_regra_propria.py core/tests/test_copia_atomica.py; do echo "== $f"; /bin/grep -n "listdir" $f \| head -3; done` |
+| 19:59:04 | Bash |  | `cd /home/ronald/wt-anx/app; /bin/grep -rln "storage.listdir\\|\.listdir(\\|os.listdir(settings.MEDIA" --include=test_*.py . \| while read f; do echo "$f $(/bin/grep -c 'override_settings(MEDIA_ROOT' $f)"; done` |
 | 19:52:02 | Bash |  | `cd /home/ronald/wt-anx/app; python3 - <<'EOF' p='ponto/tests/test_anexo_nao_sobrevive_a_linha_que_nao_nasceu.py'; s=open(p,encoding='utf-8').read() a=""" def _upload(self, nome='atest.jpg'):""" b=""" def test_MORDE_o_storage_do_campo_e_o_DESTA_classe(self): \"\"\"Sem isto o override seria enfeite: um `storage=` proprio no campo ignoraria o MEDIA_ROOT da classe.\"\"\" storage = Ausencia._meta.get_f ...` |
 | 19:51:52 | Bash |  | `cd /home/ronald/saas-hasner && git log --oneline -1 && git worktree add -q --detach /home/ronald/wt-anx HEAD && cd /home/ronald/wt-anx/app && python3 - <<'EOF' p='ponto/tests/test_anexo_nao_sobrevive_a_linha_que_nao_nasceu.py'; s=open(p,encoding='utf-8').read() a="""import datetime from unittest import mock """ b="""import datetime import shutil import tempfile from unittest import mock """ assert ...` |
 | 19:51:34 | Bash |  | `cd /home/ronald/saas-hasner/app; sed -n 30,76p ponto/tests/test_anexo_nao_sobrevive_a_linha_que_nao_nasceu.py` |
