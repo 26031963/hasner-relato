@@ -18,7 +18,7 @@ LEI-AKITA: origem=o predicado do Resolver dia morava SO no template (`_calendari
 - **O que mudou:** `calendario.py::resolver_dia_oferecido(dia, hoje)` (ultimo recurso + dia de trabalho + passado + status falta/irregular/aberto/sem_certidao) e a porta curta `resolver_dia_oferecido_na_data`; `contexto_calendario` carimba `dia['resolver_dia_oferecido']`; o template le SO esse campo (as 4 pernas sairam das tags). `core/juizes.py`: `_TT11` registrado na familia tela, o pendente de TELA saiu com lapide. `vigia_fio::censo`: classe `decisao_do_dia_pendente` (+ `_com_alvo`, o passivo nao some), partição com CINCO termos.
 - **O que NAO entrou, por ordem dele:** a cura do renascimento sem pergunta (`cartorio.py` HX-CARTORIO-RESSUSCITA) e o plantio dos 99 -- DEPOIS do TXT. A 1a versao da copia (vigia pela FILA + nota no renascer) foi descartada pela 2a lei.
 - **Medido antes (sombra 22/10, mesmo caminho da tela):** 295 dias de fio morto, 208 oferecem o Resolver dia, 87 seguem mortos (33 com alvo).
-- PROVA de suite e de ar: no commit.
+**PROVA:** suite inteira na copia `Ran 11572 tests, OK (skipped=51, expected failures=14)`, rc=0; `cmp` dos 7 arquivos do merge = IGUAIS a copia; commit `3088eac6` NO AR por `bin/deploy.sh --sem-migrate` (3 cascas, 3 rotas, BUG 128 verde, importerror_500=0). Smoke em prod no `saas_ui` (`logs/o261/smoke_resolver_dia.out`): col723, 21 dias, o juiz oferece **5**, o HTML desenha **5** botoes, sem permissao **0**; o vigia em prod: `decisao_do_dia_pendente=209`, `fio_morto=88` (sombra: 208/87).
 
 ## 22/10 14:12 -- APLICADO: A VOLTA DOS 6 QUE TRABALHARAM EM 12/10 (`!` dele ~13:5x, item 2) -- O DIFF DA 10 FICA SO NOS 15 DSR
 
