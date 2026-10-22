@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 22/10/2026 08:08:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1217.2 MB). Acoes na janela: **1408**.
+**Medido em 22/10/2026 08:14:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1217.2 MB). Acoes na janela: **1410**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 08:09:46 | Bash | Read the tail of the apply log and the exact recorte size | `cd /home/ronald/saas-hasner && sed -n 60,120p logs/o330/APPLY_0809.out; echo "=== ids no recorte (contagem exata):"; python3 -c "print(len(open('logs/o330/colabs_seguros.txt').read().strip().split(',')),'ids')"` |
+| 08:08:33 | Bash | Read the apply result | `cd /home/ronald/saas-hasner && for i in $(seq 1 11); do /usr/bin/sleep 10; /bin/grep -q '=== fim\\|PAROU' logs/o330/APPLY_0809.out 2>/dev/null && break; done; date '+%H:%M:%S'; sed -n 1,60p logs/o330/APPLY_0809.out` |
 | 08:08:12 | Bash | Run the restricted apply again after the fix | `cd /home/ronald/saas-hasner && nohup bash logs/o330/aplicar_lote10.sh > logs/o330/APPLY_0809.out 2>&1 & echo lancado; date '+%H:%M:%S'` |
 | 08:08:04 | Bash | Replace the failing python flag in the gate and the wrapper | `cd /home/ronald/saas-hasner && echo "=== quem usa 'python -P manage.py' (todos morreriam com ModuleNotFoundError):"; /bin/grep -c 'python -P manage.py' logs/gate10/gate10_condicao1.sh logs/gate10/cond2.sh logs/o330/aplicar_lote10.sh; ls logs/crons_em_curso/ \| wc -l; for f in logs/gate10/gate10_condicao1.sh logs/gate10/cond2.sh logs/o330/aplicar_lote10.sh; do cp -p "$f" "$f.pre_sysapth"; sed -i 's ...` |
 | 08:07:44 | Bash | Check how the working hash09 run was launched | `cd /home/ronald/saas-hasner && echo "=== o ensaio das 05:36 (que FUNCIONOU) foi lancado como?"; head -3 logs/gate10_hash09_ensaio.out; echo "---"; /bin/grep -rn 'gate10_hash09' logs/*.sh logs/gate10/*.sh 2>/dev/null \| /bin/grep -v condicao1 \| head` |
