@@ -1,10 +1,41 @@
 # RELATO — esteira saas-hasner
 
-PAREI: ! export-da-10-barrado-pela-porta: 184 dias de HE acima do limite SEM decisao (emp2 169 / emp3 12 / emp4 3; 58 colabs; 7.467 min = 124,45 h) | espera Ronald: o DP decide os 184 na tela (decisao de HE, lote existe desde a cura de hoje) OU ele desliga a trava de HE do cadastro -- as duas sao dele/do DP, nao minhas. O `!` do export (AVAIS #5) cobriu o residuo de ESTRUTURA e o smoke de 1 HE, nao 184 decisoes; passar por cima da porta seria CONTORNO (NUNCA pre-aprovado). Carimbo lavrado 11:47 (`selo_leitores_no_mesmo_numero` rc=2), TODAS as testemunhas de leitor = 0: falhas_proprias 184 == he_pendente_trava_dias 184. Lista sem nome: `logs/gate10/lista_he_trava_20261022.out`. Ato pronto e nao rodado: `logs/gate10/ato_export10.py` (porta real, atomico por empresa, 09 por hash). A fila SEGUE: O261 e BO-FERIADO-VINCULO-ANTIGO nao dependem disto.
+PAREI: ! O261 e o export da 10, as tres travas DELE juntas | espera Ronald: (a) o TXT da 10 esta BARRADO pela porta -- 184 dias de HE acima do limite SEM decisao (emp2 169 / emp3 12 / emp4 3; 58 colabs; 7.467 min = 124,45 h; lista sem nome `logs/gate10/lista_he_trava_20261022.out`; todas as testemunhas de leitor = 0): o DP decide na tela OU ele desliga a trava de HE do cadastro -- passar por cima seria CONTORNO; ato pronto e nao rodado `logs/gate10/ato_export10.py`. (b) a saida do O261 (`fio_morto_com_alvo` 98) depende do passivo: 09 EXPORTADA (`!` com o Gabriel) e o residuo da 10 (lista ao DP, 11:55). (c) a pergunta de lei abaixo (99 dias, "acao de admin nomeada"). Item (1) da O261 FECHADO em 20/10, item (3) contador no ar: nada da O261 anda sem (a)-(c).
+
+> `!` de VINCULO tambem na mesa (complemento da O261, secao 11:5x): gravar 68 postos declarados + 35 vinculos `trabalha_em_feriado=False`; medido, nada gravado.
+
+> lei: O261 `acao-de-admin-nomeada` -- **99 dias** de fio morto nascidos da reabertura do gate (43 ALVO + 56 sem alvo) tem a pergunta RESPONDIDA e validada e o furo de pe; o aval de 12/10 diz *"fio vivo = pergunta viva OU acao de admin NOMEADA"* e o vigia so conta pergunta. Qual e a acao nomeada? (secao 11:3x). A fila SEGUE.
 
 > OS QUATRO ITENS DA ORDEM, FEITOS: deploy `d01210d2` **no ar 10:26** (`--sem-migrate` rc=0, 3 rotas provadas, selo BUG 128 verde, portao fechado pelo PASSO 5 do gate -- nunca `--sem-sombra`); push **pousou** (`fa5cd145..eebe2cce`, rc=0, `Ran 11566 tests · OK (skipped=51, expected failures=14)` mais control-plane `Ran 22 tests · OK`, veredito lido no REMOTO); `bin/handoff_sessao.sh` gerado (42/60 linhas, selo verde); e esta linha. O 1 commit que sobrou a frente (`6d469ed2`) e do proprio `pos_push` -- a excecao nomeada da L-106 --, e o push dele e do proximo push, nao deste.
 > O MARCADOR ANDOU no mesmo ato: `ORDEM-VIVA-TOPO` saiu de `BO-HE-RECUSAR-LOTE-500` (fechado) para `O261`, que o hook cobrou.
 > SEM COMMIT DE PROPOSITO: `RELATO.md` e `BACKLOG.md` ficam sujos na arvore porque a L-106 nao deixa commit so de docs fora de marco. Eles entram no commit do proximo marco.
+
+## 22/10 11:55 -- A LISTA DOS 8 DO RESIDUO, RE-MEDIDA PARA O DP (pedido do aval de 11:1x)
+
+Mesma sonda das 10:42 (`logs/dp/dias_do_residuo.py`, porta real `reparar` em dry, `_dia_do_plantio` interceptado):
+**identica** -- 8 colabs, 44 casos, `soma_alvo=44 soma_capturado=44`, `ERROS=[]`. Lista sem nome, col723 MARCADO
+(*o DP nao desconta no Dominio*): `logs/dp/residuo_da_10_DP_20261022_1155.txt`. A tabela por colab e a da secao 10:4x, sem mudanca.
+O TXT ainda NAO saiu (PAREI do topo): a lista vale para o instante 11:55, e se refaz no ato do export.
+
+## 22/10 11:5x -- BO-FERIADO-VINCULO-ANTIGO (complemento O261): MEDIDO, e a proposta PARA no `!` de VINCULO
+
+0 linha de codigo (MEDIDA). Sondas READ-ONLY em prod pela funcao real (`fatos_do_dia`, `vinculos_5x2_6x1_trabalha_feriado`):
+`logs/o261/{feriado_1210,feriado_por_posto}.out`. Lista NOMINAL dos 46 so para o Fernando: `logs/dp/feriado_1210_nominal_FERNANDO_20261022.txt`.
+- **Contador do placar:** 145 vinculos vigentes 5x2/6x1 com `trabalha_em_feriado=True`; **declarados 0** -- NENHUM posto tem `opera_em_feriado` preenchido (todos `None`).
+- **12/10, vinculo que COBRIA o dia:** 202 em 5x2/6x1; **46** com a copia em True cairam em `tipo_do_dia=trabalho` e tem chamado `batida_ausente` VIVO (celula `cobrado`/`furo`; emp2 39, emp3 6, emp4 1) -- a classe dos 11 do Fernando.
+- **Por que `reavaliar_ausencias_feriado` nao fechou:** ele le `fatos_do_dia`, que pela lei de 13/09 suprime o feriado *SALVO `trabalha_em_feriado`*; com a copia em True o dia e PREVISTO e o chamado e legitimo para o juiz. Nao e defeito do cron: e o CADASTRO.
+- **O ACHADO QUE MUDA A PROPOSTA:** no mesmo grupo, **58 TRABALHARAM em 12/10** (celula `concorde`). "Posto que nao opera" pressupoe o cadastro do POSTO, e ele esta VAZIO -- virar os 145 em bloco tiraria a previsao de quem trabalhou.
+
+| posto, pelo que 12/10 mostrou | postos | vinculos | proposta |
+|---|---|---|---|
+| so cobrados (ninguem trabalhou) | 21 | 35 | posto `opera_em_feriado=False` + vinculos -> `trabalha_em_feriado=False`, pela porta de cadastro com trilha |
+| so trabalharam | 47 | 66 | posto `opera_em_feriado=True`; vinculo fica (cobranca legitima) |
+| misto | 11 | 35 | lista para o DP declarar o posto; nada se grava |
+| nenhum dos dois | 9 | 9 | nada se grava |
+
+**`!` PEDIDO (dado de VINCULO, so dele):** gravar as duas primeiras linhas (68 postos declarados, 35 vinculos virados). Depois do `!`:
+reconciliar celula/chamado/Retrato de 12/10 pela porta + RED com os 5 casos dele. Linha (4) -- a copia por vinculo como 2a fonte -- fica na fila como dossie.
+**Impacto em dinheiro dos 35, nao medido ainda:** o dia deixa de ser falta (sobe pagamento); o DIFF por rubrica vai junto do apply.
 
 ## 22/10 11:3x -- O261: OS +44 DO `fio_morto_com_alvo` SAO 43 RENASCIMENTOS DO ATO DO GATE (chamado FECHADO reaberto sem pergunta) + 1 REJULGAMENTO
 
@@ -34,6 +65,12 @@ MEDIDO 11:30 (`logs/o261/os_145.out`): dos **145** reabertos sem pergunta religa
 viraram fio morto, 41 nao sao fio morto, 5 ja resolvidos. A reabertura sem fio explica os +44 E os +42 do
 `sem_alvo` (155 -> 197): **99 dias**. Origem candidata: `ponto/services/cartorio.py` (bloco HX-CARTORIO-RESSUSCITA)
 reabre o chamado ANTES de saber se alguma pergunta volta. RED + cura depois do export (aval dele: export primeiro).
+**OS 56 SEM ALVO, MEDIDOS 11:5x** (`logs/o261/{os_56,os_41_marcos}.out`): 56/56 celula `furo`, e em **56/56 toda lampada
+apagada da ata TEM pergunta que a cobre** -- todas VALIDADAS com texto (via `declaracao`, `paridade_recusada`, `chamado_encerrado`...).
+Nao e emissao partida: o colab respondeu, o materializador nao plantou ou RECUSOU, o furo segue, e o chamado renasce sem ter o que
+perguntar. **PERGUNTA (nao devolve turno), com numero:** o aval do O261 diz *"fio vivo = pergunta viva OU acao de admin NOMEADA"*,
+e `vigia_fio::censo` so conta pergunta. Esses 56 (+ os 43 ALVO) sao "acao de admin" pendente -- qual e a acao NOMEADA que o vigia
+deve ler como fio vivo (o proprio chamado `em_analise`? uma decisao do dia na celula?) e lei DELE, nao predicado que eu escolha.
 
 ## 22/10 11:01 -- A PRE-CONDICAO DO GATE DA 8069 PASSOU DE INFERIDA A MEDIDA, E ELA EXCLUI O RAMO VIZINHO
 
