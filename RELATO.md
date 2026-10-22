@@ -4,30 +4,19 @@ PAREI: ! O261 e o export da 10 | espera o DP e o Ronald: (a) o TXT da 10 esta BA
 
 > (o `!` da volta do feriado esta no item (b) da linha acima)
 
-> lei: O261 `juiz-resolver-dia-oferecido` -- a 2a lei (13:3x) define fio vivo por "decisao do dia PENDENTE na celula" = o dia em que a tela oferece o Resolver dia. MEDIDO: 208 dos 295 dias de fio morto, 87 ficam mortos (33 com alvo). Essa condicao mora so no template (`_calendario_grade.html:125`, pendente de TELA em `core/juizes.py:744`); o vigia so a le se ela virar funcao: pede a frase `corte Ronald: juiz resolver_dia_oferecido nasce` (TRAVA JUIZ-NOVO). Ate la a copia `wt-o261c` nao pousa. A fila SEGUE.
+> lei: O261 `juiz-resolver-dia-oferecido` -- **RESPONDIDA 22/10 ~13:5x** (frase no CORTES); marco em construcao na `wt-o261c` (secao 14:3x).
 
 > OS QUATRO ITENS DA ORDEM, FEITOS: deploy `d01210d2` **no ar 10:26** (`--sem-migrate` rc=0, 3 rotas provadas, selo BUG 128 verde, portao fechado pelo PASSO 5 do gate -- nunca `--sem-sombra`); push **pousou** (`fa5cd145..eebe2cce`, rc=0, `Ran 11566 tests · OK (skipped=51, expected failures=14)` mais control-plane `Ran 22 tests · OK`, veredito lido no REMOTO); `bin/handoff_sessao.sh` gerado (42/60 linhas, selo verde); e esta linha. O 1 commit que sobrou a frente (`6d469ed2`) e do proprio `pos_push` -- a excecao nomeada da L-106 --, e o push dele e do proximo push, nao deste.
 > O MARCADOR ANDOU no mesmo ato: `ORDEM-VIVA-TOPO` saiu de `BO-HE-RECUSAR-LOTE-500` (fechado) para `O261`, que o hook cobrou.
 > SEM COMMIT DE PROPOSITO: `RELATO.md` e `BACKLOG.md` ficam sujos na arvore porque a L-106 nao deixa commit so de docs fora de marco. Eles entram no commit do proximo marco.
 
-## 22/10 13:4x -- O261: A 2a LEI (13:3x) PEDE "DECISAO PENDENTE NA CELULA", E ELA NAO TEM JUIZ -- A COPIA NAO POUSA
+## 22/10 14:3x -- MARCO O261: O JUIZ `resolver_dia_oferecido` NASCE, O TEMPLATE O LE E O VIGIA CONTA A DECISAO PENDENTE PELA CELULA
 
-0 linha de producao (a copia `wt-o261c` fica parada). A lei dele, literal: *"fio vivo = pergunta viva OU decisao do dia
-PENDENTE na celula (... O256 'Resolver dia'). Chamado em_analise sem pergunta e sem decisao pendente NAO e acao nomeada: e
-fio morto. Cura dos 99: plantio pela porta reparar + RED/cura do renascimento sem pergunta (cartorio.py
-HX-CARTORIO-RESSUSCITA), DEPOIS do TXT da 10"*.
-- **O que eu tinha construido e ERA OUTRA COISA:** o vigia da copia lia a FILA (`qs_na_fila`), nao a celula -- 288 de 297
-  "pendentes". Pela lei, errado. E a nota `decidir_o_dia` no `_renascer_por_premissa_viva` sai do caminho: a cura do
-  renascimento e no cartorio, e depois do TXT. Suite da copia: 1 vermelho meu (relogio solto no fixture), curado, re-rodada.
-- **A definicao dele MEDIDA** (sombra 22/10, `logs/o261/resolver_dia_nos_mortos.out`, pelo MESMO caminho da tela --
-  `colaboradores/services/calendario.py::contexto_calendario` de 1 dia): dos **295** dias de fio morto, **208 OFERECEM o
-  Resolver dia** (decisao pendente -> fio vivo) e **87 NAO** (status ausencia / irregular fora de dia de trabalho / escala
-  suspeita) -- o fio morto que sobra, **33 com alvo**.
-- **Por que nao curo agora:** "Resolver dia oferecido" NAO e funcao -- e a condicao do template `_calendario_grade.html:125`
-  (`pode_ultimo_recurso` + `eh_trabalho` + passado + status falta/irregular/aberto/sem_certidao), ja registrada como pendente
-  de TELA em `core/juizes.py:744` ("deveria ler juiz do servico"). Para o vigia LER (e nao recalcular, LEI-AKITA 2) ela tem de
-  virar funcao que o template e o vigia leem -- **juiz novo**, e a TRAVA JUIZ-NOVO pede a frase dele; a AUTONOMIA item 3 nao
-  cobre (a funcao nao existe). Pergunta no topo.
+LEI-AKITA: origem=o predicado do Resolver dia morava SO no template (`_calendario_grade.html:125`) e o vigia (`chamados/services/vigia_fio.py::censo`) so contava pergunta, testemunha=`colaboradores/services/calendario.py::resolver_dia_oferecido` (o predicado literal, promovido), RED=`chamados/tests/test_o261_vigia_fio.py` (1 FAIL + 6 ERROR contra o HEAD), quem-mais-le=os 3 chamadores de `contexto_calendario` (calendario do perfil, drawer de diagnostico, furos -- este sem `pode_veredito`), `vigiar_fio_morto` (carimbo/alarme), juizes novos=`resolver_dia_oferecido` (corte Ronald 22/10 ~13:5x, CORTES `JUIZ-RESOLVER-DIA-OFERECIDO-NASCE`)
+- **O que mudou:** `calendario.py::resolver_dia_oferecido(dia, hoje)` (ultimo recurso + dia de trabalho + passado + status falta/irregular/aberto/sem_certidao) e a porta curta `resolver_dia_oferecido_na_data`; `contexto_calendario` carimba `dia['resolver_dia_oferecido']`; o template le SO esse campo (as 4 pernas sairam das tags). `core/juizes.py`: `_TT11` registrado na familia tela, o pendente de TELA saiu com lapide. `vigia_fio::censo`: classe `decisao_do_dia_pendente` (+ `_com_alvo`, o passivo nao some), partição com CINCO termos.
+- **O que NAO entrou, por ordem dele:** a cura do renascimento sem pergunta (`cartorio.py` HX-CARTORIO-RESSUSCITA) e o plantio dos 99 -- DEPOIS do TXT. A 1a versao da copia (vigia pela FILA + nota no renascer) foi descartada pela 2a lei.
+- **Medido antes (sombra 22/10, mesmo caminho da tela):** 295 dias de fio morto, 208 oferecem o Resolver dia, 87 seguem mortos (33 com alvo).
+- PROVA de suite e de ar: no commit.
 
 ## 22/10 14:12 -- APLICADO: A VOLTA DOS 6 QUE TRABALHARAM EM 12/10 (`!` dele ~13:5x, item 2) -- O DIFF DA 10 FICA SO NOS 15 DSR
 
