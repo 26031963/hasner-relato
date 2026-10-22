@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 22/10/2026 13:20:46.** Transcript: `6a1437b4-fa68-4fb8-ba22-cffc0db8ee01.jsonl` (3.8 MB). Acoes na janela: **220**.
+**Medido em 22/10/2026 13:26:02.** Transcript: `6a1437b4-fa68-4fb8-ba22-cffc0db8ee01.jsonl` (3.8 MB). Acoes na janela: **221**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 13:22:29 | Bash | Read rerun suite verdict | `grep -E "^Ran \|^(OK\|FAILED)( \|$)\|^rc=" /home/ronald/saas-hasner/logs/o261/suite_o261c_20261022_r2.log \| tail -3` |
 | 13:15:35 | Bash | Register prompt, update O261 cell, check hook and suite | `python3 - <<'EOF' p='docs/PROMPTS.md' s=open(p).read().rstrip('\n')+'\n' s+=('\| 22/10 ~13:3x \| **aval `LEI-O261-ACAO-NOMEADA-2a`**: fio vivo = pergunta viva OU decisao do dia PENDENTE na CELULA (o Resolver dia); ' 'em_analise sem pergunta e sem decisao pendente = fio morto; cura dos 99 (plantio pela porta + RED do renascimento no cartorio) DEPOIS do TXT \| ' 'RECEBIDO. **Estado:** copia `wt-o261 ...` |
 | 13:15:25 | Bash | Rewrite marco section and top lei question | `python3 - <<'EOF' p='docs/RELATO.md' s=open(p).read() i=s.find('## 22/10 13:xx -- MARCO O261 (lei 12:0x item c)') j=s.find('## 22/10 12:1x -- APLICADO, REVISE: FERIADO 12/10') assert 0<i<j novo='''## 22/10 13:4x -- O261: A 2a LEI (13:3x) PEDE "DECISAO PENDENTE NA CELULA", E ELA NAO TEM JUIZ -- A COPIA NAO POUSA 0 linha de producao (a copia `wt-o261c` fica parada). A lei dele, literal: *"fio vivo = ...` |
 | 13:14:30 | Bash | Measure Resolver-dia offered on dead days in sombra | `cd /home/ronald/saas-hasner && cat > logs/sombra/resolver_dia_nos_mortos.py <<'EOF' # SOMBRA: a definicao da lei 22/10 (2a): dia de fio morto com "decisao do dia PENDENTE na celula" = o dia em que a # tela OFERECE o Resolver dia (`_calendario_grade.html:125`), lido pelo MESMO caminho da tela (contexto_calendario). from collections import Counter from django.utils import timezone from chamados.serv ...` |
