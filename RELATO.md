@@ -1,5 +1,31 @@
 # RELATO — esteira saas-hasner
 
+> **22/10 10:1x -- AVAL #5 RESPONDIDO: O EXPORT DA 10 SAI ASSIM, E A ESTRUTURA VIRA RETIFICACAO
+> PELA PORTA.** Nas palavras dele: *"o export da 10 SAI ASSIM e os 109 dia-colab de ESTRUTURA viram
+> retificacao pela porta depois (lei 30/09, o TXT e fotografia)"*. REGISTRADO pela porta: o item
+> `EXPORT-DA-10-COM-109-DIA-COLAB-DE-ESTRUTURA` foi para `respondido` e `python3 bin/gerar_avais.py
+> --escrever` fechou **AVAIS NA MESA 5 -> 4** (respondido 102 -> 103, 12 insercoes / 11 remocoes, sem
+> churn). **A ORDEM DA RETIFICACAO E DELE, e e a ordem do RISCO, nao a do tamanho**: **PRIMEIRO a
+> 8069**, onde o sistema paga **ABAIXO** da regra em **9/9** -- passivo trabalhista --, e **DEPOIS a
+> 243**, onde paga **ACIMA** em **20/20**; a 243 ganha **TRAVA NOMEADA** (*corte dele com o juridico*)
+> porque pode ser pergunta de lei do **art.71 par.4** -- so o intervalo **SUPRIMIDO** x o **INTEGRAL**
+> --, e nao vira cura antes disso. Obra registrada: **`RETIFICACAO-DA-10-8069-PRIMEIRO`** no BACKLOG,
+> com a L-110/13 escrita nela (o CASO contra o texto da regra ANTES do codigo; o oraculo e
+> **instrumento**, nao autoridade). Os **13 dia-colab de BATIDA / 10 colab(s)** vao na **lista do DP,
+> SEM NOME**, pelo canal do DP em `logs/`, nunca em `app/docs/` com nome.
+> **O QUE ESTE AVAL NAO DESTRAVA, e e o aval ANTERIOR dele que amarra**: *"o export da 10 espera esta
+> cura + o admin decidir a HE pendente"*. Entao o export **nao sai agora**: o deploy da cura da HE
+> esta esperando o **PASSO 5 do gate** (`bin/sombra.sh --bloco`, em curso desde 09:48; `--conferir`
+> **rc=1** enquanto `SOMBRA_BLOCO=nao_rodou` -- nunca `--sem-sombra` em porta de dinheiro), e a
+> decisao da HE pela tela e **dele**. Nada de dinheiro se moveu neste turno: **0 TXT gerado, 0 gravado
+> tocado**. **PRE-VOO DO DEPLOY MEDIDO**: de `8359ce6e` a `HEAD` sao **0 migrations** e **0
+> `models.py`** -- a forma e `--sem-migrate` --, e a arvore segue com **0 `.py`** fora do HEAD, que e a
+> arvore que a suite cheia certificou. **A contagem dos 500 ficou PRONTA e MEDIDA no ANTES**:
+> `logs/he/recount_500.sh` le o `errors.log` por **timestamp** (nunca `docker logs --since`) e imprime
+> **contagem, nunca linha** -- desde `041fd2ac` (09/10 03:58:48): **2 ocorrencias, as duas em
+> `/recusar-lote/`**, `autorizar-lote` **0**, `/decidir/` **0**. O DEPOIS se mede com o mesmo script.
+>
+
 > **22/10 ~10:0x -- GATE-EXPORT-10 CONDICAO (2): MEDIDA, NAO VERDE -- e um `!` NA MESA com os numeros
 > (nao e PAREI: a fila segue).** Os TRES atos que o seu aval das 21/10 18:5x pede estao provados.
 > **cartao x TXT = 0** em **230** colaboradores da 10 (`dias_em_aberto=42`). **Os 5 oraculos rodados
