@@ -83,7 +83,7 @@ LEI-AKITA: origem=chamados/services/passivo_validado.py::_plantar_o_dia (o ATO q
 - **RED -> GREEN** 6 casos pela REGRA (L-110), por `reparar(apply=True)`: `E`/`S` avulsa RECUSADA, MORDE o plantio que
   FECHA turno, MORDE as DUAS PONTAS no MESMO ato, MORDE 12x36 com ponta em D+1, idempotencia -- `logs/o330/red3.log`
   (`Ran 6` / `OK` / rc 0). **Vizinho** `chamados core`: `Ran 3859` / `OK (skipped=23)` / rc 0 (`logs/o330/viz2.log`),
-  os 21 verdes sem allowlist. **CHEIA** em `80e23d14`: `Ran 11550 tests in 1682.549s` / `OK (skipped=51, expected failures=14)` / rc 0 / 0 FAIL e 0 ERROR (`logs/o330/cheia.log`). `cmp`: __CMP__.
+  os 21 verdes sem allowlist. **CHEIA** em `80e23d14`: `Ran 11550 tests in 1682.549s` / `OK (skipped=51, expected failures=14)` / rc 0 / 0 FAIL e 0 ERROR (`logs/o330/cheia.log`). `cmp`: 0 de 3097 .py diferem da arvore certificada.
 - **A/B na sombra**, lado escolhido pela ARVORE montada, rollback nos dois: `plantada` 61 -> 14, `recusa:ABRE_TURNO` 0
   -> 51 (os 4 que faltam para 47 sao `NAO_GERA_BATIDA` 49 -> 45: o carimbo do dia cobre os deles); frota
   `turnos_abertos` +19.00 -> **-1.00**, `horas_trabalhadas` -9.65 -> **+16.61**, `horas_abono` -11.00 -> **0**,
