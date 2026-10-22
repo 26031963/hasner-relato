@@ -1,5 +1,11 @@
 # RELATO — esteira saas-hasner
 
+PAREI: ! ponto-seguro-e-reinicio-da-sessao (ordem dele 22/10 ~10:4x, literal: *"antes de qualquer outra coisa: deploy da cura do HE (d01210d2), push dos commits a frente pela regua, bin/handoff_sessao.sh e MARCO FECHADO -- pode compactar. Vou reiniciar a sessao (3,8 GB de memoria) logo depois; o export da 10 e o O261 seguem na sessao nova. Nao abrir nada novo antes disso."*) | espera Ronald reiniciar a sessao | TRAVA o O261, que e a ORDEM VIVA e esta ANDAVEL -- nao e lei que falta, e ordem dele de nao abrir nada antes do reinicio.
+
+> OS QUATRO ITENS DA ORDEM, FEITOS: deploy `d01210d2` **no ar 10:26** (`--sem-migrate` rc=0, 3 rotas provadas, selo BUG 128 verde, portao fechado pelo PASSO 5 do gate -- nunca `--sem-sombra`); push **pousou** (`fa5cd145..eebe2cce`, rc=0, `Ran 11566 tests · OK (skipped=51, expected failures=14)` mais control-plane `Ran 22 tests · OK`, veredito lido no REMOTO); `bin/handoff_sessao.sh` gerado (42/60 linhas, selo verde); e esta linha. O 1 commit que sobrou a frente (`6d469ed2`) e do proprio `pos_push` -- a excecao nomeada da L-106 --, e o push dele e do proximo push, nao deste.
+> O MARCADOR ANDOU no mesmo ato: `ORDEM-VIVA-TOPO` saiu de `BO-HE-RECUSAR-LOTE-500` (fechado) para `O261`, que o hook cobrou.
+> SEM COMMIT DE PROPOSITO: `RELATO.md` e `BACKLOG.md` ficam sujos na arvore porque a L-106 nao deixa commit so de docs fora de marco. Eles entram no commit do proximo marco.
+
 ## 22/10 10:4x -- A LISTA DO DP: os 8 colabs / 40 casos do residuo da 10, COM O DIA (`!` de 08:5x cumprido)
 
 O `!` dele pedia **`colXXX, dia, motivo`**, e o `dia` nao estava em lastro nenhum -- nem nos dois CONTA,
