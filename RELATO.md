@@ -294,26 +294,58 @@ LEI-AKITA: origem=ponto/supra_juiz.py::classificar_dia + ponto/services/cartorio
   **13 colabs / 390 dias** ("INSS aprovado nos 30 dias"); a funcao real acha **5 colabs / 123 celulas** de
   cobertura **INTEGRAL**, dentro de **32 colabs / 757 celulas** de `nunca_bateu` na 10. Nao e contradicao, e
   **criterio**: o DIFF exclui `falta` e exclui cobertura PARCIAL de proposito, e o caso 4 do seu proprio RED
-  ("abono parcial = cobra o resto") diz que parcial **nao** solta o dia. **A decomposicao 13 -> 5 ainda NAO esta
-  medida**; ela sai da rodada de universo cheio abaixo.
-- **PAREI DE DENTRO: o meu DIFF rodou a porta em 5 colabs de 32, e por isso NAO autoriza o deploy.** As **634
-  celulas dos 27 colabs de cobertura NAO integral** nunca foram rejulgadas -- e sao exatamente elas que a cura do
-  `supra_juiz` passa a **ACUSAR** (dia de cobertura parcial deixa de ser mudo e sai `FURO_SEM_COBRANCA` com o
-  rotulo honesto). `emitidos=0` foi medido onde **nada e cobravel**; sobre parcial ele nao diz nada, e emissao e
-  a classe do incidente de 27/08. **Condicao de saida, escrita:** mesma rodada com a porta no universo CHEIO (as
-  32 chaves de `por_colab`, nao as 5 do alvo), rollback igual, imprimindo as 757 decompostas em
-  integral/parcial/falta/sem cobertura, moves por par, `emitidos`, chamado novo e fechamento 0. **So entao** o
-  merge e o `bin/deploy.sh`.
-- Suite **CHEIA** correndo na arvore EXATA que pousa -- `7b1a4dd8` = main `bd624514` + raia `e3f0f726`, arvore
-  limpa, merge de **5 arquivos, todos `.py`, zero doc e zero config** -- desde 01:48:53, trava
-  `suite-cheia-inss2`. O pouso espera o veredito dela (aval 19:1x, literal), nao o recorte de 52 testes.
+  ("abono parcial = cobra o resto") diz que parcial **nao** solta o dia. **MEDIDO agora:** dos 32 colabs de
+  `nunca_bateu`, so **5** tem cobertura aprovada que a autoridade da folha ve
+  (`cobertura_ausencia_periodo(para='folha')`); os outros **27 nao tem cobertura nenhuma** (630 celulas
+  `sem_cobertura`, 4 `integral_falta`, **0 parcial**). Dia sem cobertura que aparece como INSS aprovado e
+  divergencia de **dono CADASTRO** (L-099): vai para a lista do admin, **nao se cura por codigo**.
+- **O MEU PROPRIO PORTAO FECHOU, e fechou com numero -- o `PAREI DE DENTRO` das 02:0x sai MEDIDO, nao relido.**
+  Porta no universo **CHEIO** (as 32 chaves de `por_colab`, 785 celulas), rollback igual: as 757 decompostas =
+  **123 integral / 4 integral_falta / 0 parcial / 630 sem cobertura**; moves `nunca_bateu` -> `concorde` **123**
+  e `None` -> `nunca_bateu` **28**; **`emitidos=0`, `protestos=0`, `emitiria_furo_parcial=0` nos 32**;
+  **CHAMADO novo 0** (691/691); **FECHAMENTO 0**.
+- **As 28 do `None` -> `nunca_bateu` NAO sao delta da cura, e isso se mede:** as 28 sao **`sem_cobertura`**, e
+  **14 delas sao POS-DEMISSAO** (col955, saida 29/09, com celula gerada ate 20/10). No ramo `adesao is None` o
+  codigo VELHO gravava `nunca_bateu` **FIXO**; o novo grava `nunca_bateu` porque **nao ha cobertura** -- mesmo
+  valor, logo **primeira lavratura**, nao acusacao nova. **Consequencia que eu aplico:** o apply fica no **ALVO
+  (5 colabs / 123 celulas)**, onde a cura muda valor; alargar para os 32 lavraria celula fora do BO -- e isso nao
+  e a cura (CURA-MAIS-RESTRITIVA). `IMPRESSAO` 60 de 785 no universo cheio contra **0 de 150** no alvo: o apply
+  de 5 colabs nao toca nenhuma delas.
+- **CENSO DO RAIO DE IMPACTO -- CORRIJO O MEU: sao TRES consumidores, nao seis.** `relatorios/furos.py:55`
+  **define outra** `classificar_dia` (assinatura `cel, marcos`) e `inteligencia/calculadores.py:26` importa
+  **dela**: homonimas, nao leitoras. Os reais de `ponto/supra_juiz.py::classificar_dia` sao
+  `ponto/services/cartorio.py:817/:954`, `ponto/management/commands/supra_juiz.py:195` e
+  `ponto/management/commands/emitir_furo_retroativo.py:87`. **Dos tres, dois leem `grade_da_celula`**, que
+  **nunca** escreve `cobertura_parcial` -- nesses o predicado e **identico ao de antes por CONSTRUCAO**. O flag
+  so chega pelo cartorio: `cartorio.py:731` -> `montar_grade_prevista_periodo:1765` -> (GRADE_POR_TURNO, default
+  True em `config/settings/base.py:160`) -> `..._por_turno:1031` -> `_marcar_ausencias:1563` -> `:1004`.
+- **LIMITE SUPERIOR EXATO DA ACUSACAO NOVA NA FROTA: 9 dia-colab, e dispara em 0.** Frota de **595 colabs**,
+  **1133 dias cobertos** na 10 = **1053 integral / 9 parcial / 71 falta**; os 9 parciais sao todos da **emp 2** e
+  **0 deles esta sem batida no dia**. A cura abre o portao do furo em 9 dias e **nao acusa nenhum**. Medido pela
+  autoridade da PROPRIA grade, sem derivador paralelo: `escala/utils.py:953-964` importa
+  `cobertura_ausencia_periodo as _cob` e `cobre_parte_do_dia as _parte`, e sao essas as funcoes chamadas.
+- **Placar do `supra_juiz` em DRY-RUN, duas arvores, mesmo banco: delta 0 nos 11 codigos**, sobre **15.240
+  dias-colab** (emp2 11400 + emp3 3240 + emp4 600). `FURO_SEM_COBRANCA` fica em **12** e `COBRANCA_SEM_FURO` em
+  **1** nas DUAS -- os crons `--alarme` de 07:25 e 07:33 veem hoje o que veriam amanha; **nada novo nasce ali**.
+  E o zero **nao e vacuo**: esse consumidor le `grade_da_celula`, que nao carrega o flag, entao delta 0 e o que a
+  construcao exige -- e quem mede o lado que MUDA e o par de numeros acima (9 e 0).
+- **Suite CHEIA VERDE na arvore EXATA que pousa** -- `7b1a4dd8` = main `bd624514` + raia `e3f0f726`, arvore
+  limpa, merge de **5 arquivos (4 M + 1 A), todos `.py`, zero doc, zero config, zero delecao e zero migration**.
+  L-074 nas tres partes: `OK (skipped=51, expected failures=14)` / `Ran 11544 tests in 1709.109s` / `RC_SUITE=0`.
+  Portao do deploy conferido: `carimbo dia=20261022 status=OK tipo=completa diverge=0 erros=0`.
 PROVA: `logs/boinss_diff_rejulgar.out` (DIFF completo), `logs/boinss/diff_rejulgar_sombra.py:37-59` (criterio do
 alvo, com o porque de `falta` ficar fora), `logs/boinss/alvo_red2.log` (recorte verde, `Ran 52 tests` / `OK` / rc 0),
 `git diff bd624514 7b1a4dd8` (5 arquivos), `logs/boinss/suite_cheia2.log` (a CHEIA, em curso).
-INCOMPLETO: (a) a rodada de universo CHEIO acima, que e o portao do deploy; (b) decomposicao 13 -> 5 por criterio;
-(c) o DIFF leu um banco que carrega as 184 celulas da relavratura C -- `lavrar_veredito` so re-carimba celula que
-MUDA, entao celula que era `nunca_bateu` e saiu do universo enviesa o 757 **para baixo**; o re-ensaio na sombra
-limpa de depois das 04:11 resolve, e a evidencia do vies morre ali.
+PROVA do fecho: `logs/boinss/rodar_universo_cheio.out` (porta nos 32, decomposicao, rollback),
+`logs/boinss/as28.out` (as 28 classificadas, com admissao/demissao), `logs/boinss/universo_cura_frota.out`
+(595 colabs, 9 parciais, 0 sem batida), `logs/boinss/sj_antes.out` e `logs/boinss/sj_depois.out` (placar das duas
+arvores), `logs/boinss/suite_cheia2.log` (a CHEIA verde), `bin/sombra.sh --conferir` (carimbo de hoje).
+INCOMPLETO: (a) o banco do ensaio carrega as 184 celulas da relavratura C -- `lavrar_veredito` so re-carimba
+celula que MUDA, entao celula que era `nunca_bateu` e saiu do universo enviesa o 757 **para baixo**; o re-ensaio
+na sombra limpa de depois das 04:11 resolve, e a evidencia do vies morre ali; (b) **fila, nao trabalho agora**
+(ESMERIL-DO-MARCO): col955 tem **14 celulas depois da demissao de 29/09** -- o gerador passou do vinculo -- e
+col969 tem **14 celulas com veredito `None`**, 9 delas `trabalha=True` sem batida, que ninguem julgou; as duas
+cortam **exatamente em 07/10**, e a data igual para dois colabs sem relacao e a pista.
 
 ## O PUSH DOS 12 POUSOU NO REMOTO, E A BATERIA DA REGRA JA EXISTE: 131 CASOS (22/10 01:1x) -- nao e marco: 0 linha de codigo
 
