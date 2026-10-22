@@ -6,10 +6,19 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 22/10/2026 19:19:32.** Transcript: `a7fb7a66-28ef-4b66-8c48-a4aa9df4fce4.jsonl` (5.7 MB). Acoes na janela: **320**.
+**Medido em 22/10/2026 19:25:03.** Transcript: `a7fb7a66-28ef-4b66-8c48-a4aa9df4fce4.jsonl` (5.9 MB). Acoes na janela: **329**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 19:23:48 | Bash |  | `cd /home/ronald/wt-cal/app; python3 - <<'EOF' p='colaboradores/services/calendario.py'; s=open(p,encoding='utf-8').read() a=""" from chamados.models import PerguntaDisputa as _PD for _dt, _resp in _PD.objects.filter(_PD.q_vivas(), disputa__colaborador=colaborador, data_evento__range=(data_ini, data_fim)).values_list('data_evento', 'resposta_colab'): _perg_viva[_dt] = _perg_viva.get(_dt, False) or  ...` |
+| 19:23:21 | Bash |  | `cd /home/ronald/wt-cal/app; cat > colaboradores/tests/test_calendario_ultimo_recurso_le_o_c6.py <<'EOF' """DIA-SEM-SAIDA (aval Ronald 22/10 ~19:3x): o calendario para de ler `q_vivas` (`calendario.py`, ULTIMO RECURSO) e le `pergunta_viva` do C6, *"como a C7 mandou"*. A regra do ultimo recurso nao muda (corte 16/08): o "Resolver dia" so some quando o colab tem pergunta VIVA COM RESPOSTA no dia; o q ...` |
+| 19:22:58 | Bash |  | `cd /home/ronald/wt-cal/app; sed -n 29,103p chamados/tests/test_o261_vigia_fio.py` |
+| 19:22:56 | Bash |  | `cd /home/ronald/wt-cal/app; /bin/grep -rln "pode_ultimo_recurso" --include=test_*.py . \| head -4; f=$(/bin/grep -rln "pode_ultimo_recurso" --include=test_*.py . \| head -1); /bin/grep -n "class \\|def setUp\\|def _\\|def test\\|contexto_calendario\\|freeze\\|PerguntaDisputa.objects.create\\|Escala\\|CelulaDia" $f \| head -30` |
+| 19:22:51 | Bash |  | `cd /home/ronald/saas-hasner && git worktree add -q --detach /home/ronald/wt-cal HEAD && cd /home/ronald/wt-cal/app && sed -n 555,575p colaboradores/services/calendario.py; /bin/grep -n "^def contexto_calendario" colaboradores/services/calendario.py; ls colaboradores/tests \| /bin/grep -i "calendario\\|ultimo_recurso" \| head` |
+| 19:21:52 | Bash |  | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='logs/sombra/dss_indef_cxr.py'; s=open(p).read() s=s.replace("print('CXRTOT cadastro=%d estrutura=%d' % (cad, est))","""print('CXRTOT cadastro=%d estrutura=%d' % (cad, est)) for cid, dias in memo.items(): print('TAM col%s lista_cxr=%d' % (cid, len(dias))) from ponto.models import FechamentoMensal tot = 0; com = 0 for c in Colaborador.objects.filter( ...` |
+| 19:21:31 | Bash |  | `cd /home/ronald/saas-hasner; cat > logs/sombra/dss_indef_cxr.py <<'EOF' # DIA-SEM-SAIDA, os 13 'indefinida': o dia ESTA na lista Cadastro x Realidade? MESMA fonte da tela/oraculo: # espelho_do_colab(...)['resultado'].dias_cadastro_x_realidade (motor). So leitura (sombra). import datetime from django.utils import timezone from colaboradores.models import Colaborador from ponto.services.espelho impo ...` |
+| 19:21:20 | Bash |  | `cd /home/ronald/saas-hasner/app; sed -n 172,195p ponto/management/commands/e6_oraculo.py; /bin/grep -rln "cadastro_x_realidade\\|Cadastro x Realidade" --include=*.py ponto/views*.py ponto/services/*.py relatorios/ 2>/dev/null \| head -5` |
+| 19:21:17 | Bash |  | `cd /home/ronald/saas-hasner/app; /bin/grep -rn "def .*cadastro_x_realidade\\|dias_cadastro_x_realidade" --include=*.py . \| /bin/grep -v "/tests/" \| head -10` |
 | 19:18:46 | Bash |  | `cd /home/ronald/.claude/projects/-home-ronald-saas-hasner/memory && echo '- [auto_now_add no setUpTestData le relogio real](auto-now-add-no-setuptestdata-le-relogio-real.md) — freeze na subclasse nao cobre a base; "depois de X" compara dois relogios' >> MEMORY.md && tail -1 MEMORY.md` |
 | 19:18:45 | Write |  | `/home/ronald/.claude/projects/-home-ronald-saas-hasner/memory/auto-now-add-no-setuptestdata-le-relogio-real.md` |
 | 19:18:35 | Bash |  | `cd /home/ronald/saas-hasner; bin/handoff_sessao.sh >/dev/null 2>&1; echo rc=$?; sed -n 1,40p app/docs/HANDOFF-SESSAO.md \| cut -c1-220` |
