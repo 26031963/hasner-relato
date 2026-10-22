@@ -1,5 +1,10 @@
 # RELATO — esteira saas-hasner
 
+> **22/10 01:1x -- O QUE MUDOU DESDE OS DOIS BLOCOS ABAIXO:** o **push POUSOU** as 01:06
+> (`origin/main = a127492a7a`, 11.535 testes OK); a bateria pela REGRA (L-110) **EXISTE, 131 casos**;
+> e a **corrente da manha de 21/10 nasceu VAZIA** -- um `raise` no import de `config/crons.py` matou os
+> 11 elos e o alarme junto. As tres secoes estao em **22/10 01:1x**, logo abaixo do topo.
+
 **AS TRES PERGUNTAS DE LEI DO TOPO ESTAO RESPONDIDAS -- SEU AVAL DE 21/10 21:3x. NADA DEVOLVEU TURNO.**
 1. **JANELA DA SOMBRA: DECIDIDA POR MIM, pela PAREI-SO-LEI** (*"horario de cron = decisao tecnica do
    Code"*). Movi o **`health_crawl` das 05:00 para as 05:30** e o `VIZINHO_SOMBRA` para **`'05:10'`**
@@ -135,7 +140,7 @@ pronto. PROVA: as quatro medidas acima, todas de 21:2x, e `ls -l logs/raiaB/suit
 ## O PUSH DOS 12 POUSOU NO REMOTO, E A BATERIA DA REGRA JA EXISTE: 131 CASOS (22/10 01:1x) -- nao e marco: 0 linha de codigo
 
 **item (2) do seu aval de 23:3x -- FECHADO.** `origin/main = a127492a7a`, o MESMO commit que a suite
-certificou (`b81181ea..a127492a  main -> main`). Veredito pela L-074, do log do pre-push:
+certificou: **os 7 do seu aval vieram em 12 commits** (`b81181ea..a127492a  main -> main`). Veredito pela L-074, do log do pre-push:
 `Ran 11535 tests in 911.848s` / `OK (skipped=51, expected failures=14)`, control-plane `Ran 22 tests`
 / `OK`, linhas `^ERROR:/^FAIL:` = **0**, rc do processo **0**. Portoes de host antes: `tickets_placar`,
 `regua_tickets`, `tickets_rodape`, `test_lei_protege_sitio (tocados: 0)`, `index_vs_arvore`,
@@ -160,13 +165,7 @@ Contra o carimbo de prod de **20/10 15:48** (205 · 205 · 60 · 144, `de_hoje_p
 os 49 "de hoje pra frente" de 20/10 envelheceram para dentro do balde do alarme -- e os elos que os
 cobrariam estavam na corrente morta da secao abaixo. PROVA: `logs/fio/censo_2210_sombra.out`.
 
-## A CORRENTE DA MANHA DE 21/10 NASCEU VAZIA, E O ALARME MORREU NO MESMO IMPORT QUE A MATOU (achado 22/10 01:0x -- 0 linha de codigo ainda)
-
-`LEI-AKITA: origem=config/crons.py:174 (o raise acontece no IMPORT do modulo, dentro da derivacao);
-testemunha=logs/fim/<elo>.<emp>.<dia>, o ARQUIVO que cada elo carimba; RED=a construir (contador
-"correntes que nasceram vazias", esperado 0, com caso que MORDE);
-quem-mais-le=core/management/commands/crons.py:15 + bin/cron_run.sh (teto) + bin/encadeado.sh
---corrente + bin/placar_code.sh; juizes novos=0`
+## A CORRENTE DA MANHA DE 21/10 NASCEU VAZIA, E O ALARME MORREU NO MESMO IMPORT QUE A MATOU (achado 22/10 01:0x -- 0 linha de codigo, logo sem linha LEI-AKITA: nao ha cura ainda)
 
 **O FATO:** em 21/10 a corrente de `processar_cartorio` nao rodou **nenhum** dos seus 11 elos.
 `logs/fim/` cai de **103** arquivos (20/10) para **89** (21/10), e os ausentes sao exatamente os 11
@@ -177,7 +176,7 @@ ENC (`apurar_furos_diarios` ... `vigiar_carimbo_sem_registro`) mais o fim do pro
 
 **A CAUSA**, no log do proprio esperador (`logs/encadeado/_corrente.processar_cartorio.log`, 21/10
 06:32): `core/management/commands/crons.py:15` importa `config.crons`; `config/crons.py:246` chama
-`inicio_derivado('sombra.sh', vizinho=VIZINHO_SOMBRA)` **no import**; e ele levantou
+`inicio_derivado('sombra.sh', vizinho=VIZINHO_SOMBRA)` **no import do modulo**; e ele levantou
 `ValueError: CRON QUE NAO CABE: 'sombra.sh' mede 57 min e o vizinho comeca 05:00; ... teria de comecar
 04:01, antes do piso 04:05`. Entrada: `app/config/crons_duracao.json`, escrito 21/10 04:05:02 por
 `bin/crons.sh check --medir`, `sombra.sh = 3368 s` (**56,1 min**). Saida: `ALARME: corrente de
@@ -193,11 +192,10 @@ todos os elos. A janela de dano fecha SOZINHA no run 06:27->06:32 de hoje: todo 
 requisito (secao 7 do CLAUDE.md). **Nao rodei a corrente a mao a 01:00 de proposito**: ela contem
 `disparar_perguntas_competencia --apply`, que fala com ~750 colaboradores numa hora que ninguem espera.
 
-**O RESIDUO, e e ele que vira fatia:** ninguem LEU o alarme por um dia inteiro. O publicador do placar
-(`bin/placar_code.sh` -> `bin/crons.sh check`) e morto pelo MESMO import que gera o alarme -- o alarme
-derruba quem o anunciaria. Obra `CORRENTE-VAZIA-TEM-CONTADOR`: contador carimbado com esperado 0, caso
-que MORDE, e a impossibilidade da derivacao contida na SUA entrada, para as outras ~100 renderizarem.
-Instrumento pousa separado (L-105).
+**O RESIDUO, E E ELE QUE VIRA FATIA:** ninguem LEU o alarme por um dia inteiro -- o publicador do placar
+(`bin/placar_code.sh` -> `bin/crons.sh check`) e morto pelo MESMO import que gera o alarme. Obra
+`CORRENTE-VAZIA-TEM-CONTADOR`, registrada no BACKLOG. Instrumento pousa separado (L-105). **Primeiro
+teste vivo da cura: as 04:12 de hoje**, no log do proprio `cron_run.sh` da sombra.
 
 ## O ANEXO DEIXA DE SOBREVIVER A LINHA QUE NAO NASCEU, E TRES LOGGERS SAEM DO VAZIO (comboio 2110b)
 `LEI-AKITA: origem=as portas de escrita de ausencia (criar e reenviar) + a casca que nunca configurou os tres loggers; testemunha=a Ausencia gravada e o handler resolvido em runtime; RED=test_anexo_nao_sobrevive_a_linha_que_nao_nasceu.py + test_logger_ponto_vai_para_arquivo.py; quem-mais-le=censo no corpo de 3681965f (portas de escrita) e de b139562e (AST de todo getLogger); juizes novos=0`
