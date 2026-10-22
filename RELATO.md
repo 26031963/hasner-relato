@@ -31,7 +31,7 @@
 > `pos_push` (`app/docs/TICKETS.md`, 1 arquivo): o predicado novo da **VERDADEIRO** nele (reusa segue
 > valendo) e o teste velho de hash dava **FALSO** (pedia a suite). E ele **MORDE**: no par
 > `7981d589 -> 5d1857a1`, que mexe em 4 arquivos de codigo, o predicado novo da **FALSO** e recusa a
-> reusa. Backup em `$SP/pouso_item6_backup_0645.sh`, `bash -n` OK.
+> reusa. Backup em `logs/bo2/pouso_item6_backup_0645.sh`, `bash -n` OK.
 >
 > **22/10 06:1x -- A VEZ DA PISTA NAO FOI PARA A COPIA 7, FOI PARA O PUSH, e isso corrige a previsao
 > das 05:5x:** o paragrafo abaixo dizia que a suite de 05:39 terminava "~06:2x" e que a nova "pega a vez
