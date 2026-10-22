@@ -6,10 +6,19 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 22/10/2026 07:41:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1216.1 MB). Acoes na janela: **1363**.
+**Medido em 22/10/2026 07:46:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1216.3 MB). Acoes na janela: **1372**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 07:43:17 | Bash | Inspect the measured causa lastro and the deploy state | `cd /home/ronald/saas-hasner && echo "### perdedores.json (estrutura, sem valores de nome):"; python3 - <<'PY' import json d=json.load(open('logs/fio2210/perdedores.json',encoding='utf-8')) print('tipo', type(d).__name__, 'len', len(d) if hasattr(d,'__len__') else '-') if isinstance(d,dict): k=list(d)[:3]; print('chaves exemplo', k) for kk in k[:1]: print(' valor:', json.dumps(d[kk],ensure_ascii=Fa ...` |
+| 07:42:37 | Bash | Check the author used in previous applies, masked | `cd /home/ronald/saas-hasner && ls -la logs/o317/*.json 2>/dev/null \| tail -5; echo "=== autor usado nos atos anteriores (mascarado) ==="; python3 - <<'PY' import glob,json for p in sorted(glob.glob('/home/ronald/saas-hasner/logs/o317/*_apply.json'))[-3:]: d=json.load(open(p,encoding='utf-8')) a=d.get('autor') or '' print(p.split('/')[-1], '\| autor:', (a[:2]+'*'*max(0,len(a)-2)) if a else '(vazio ...` |
+| 07:42:19 | Bash | Read the apply path and reversal writing | `sed -n 62,190p chamados/management/commands/materializar_passivo_validado.py` |
+| 07:41:57 | Bash | Check the census output | `cd /home/ronald/saas-hasner && echo "### SONDA (rc/veredito):"; tail -c 1200 logs/censo_retidos/depois.txt; echo; echo "### linhas:"; wc -l < logs/censo_retidos/depois.txt` |
+| 07:41:49 | Bash | Read the command's declaration and guards | `sed -n 1,48p chamados/management/commands/materializar_passivo_validado.py` |
+| 07:41:45 | Bash | Find the homologated command for the lote | `/bin/grep -rln 'passivo_validado' --include='*.py' . \| /bin/grep -v tests \| head; echo "=== comando: argumentos ==="; /bin/grep -rn "add_argument" chamados/management/commands/*passivo* 2>/dev/null \| head -20` |
+| 07:41:38 | Bash | Read the DRY script's declaration | `cd /home/ronald/saas-hasner && echo "=== roteiro do DRY: docstring ==="; sed -n 1,45p logs/sombra/o330_lote10_dinheiro.py` |
+| 07:41:33 | Bash | Run the read-only census on the sombra | `cd /home/ronald/saas-hasner && bash logs/censo_retidos/lancar_depois.sh > logs/censo_retidos/depois.txt 2>&1; echo "rc=$?"; tail -3 logs/censo_retidos/depois.txt` |
+| 07:41:28 | Bash | Write the sombra sonda launcher | `cat > /home/ronald/saas-hasner/logs/censo_retidos/lancar_depois.sh <<'SH' #!/usr/bin/env bash # Lancador da sonda de LEITURA do item (a) -- metade DEPOIS. Sombra, cpuset de TESTE, proxy morto. set -euo pipefail RAIZ=/home/ronald/saas-hasner cd "$RAIZ" source bin/recursos.sh >/dev/null 2>&1 E_SOMBRA='python manage.py shell --command "from django.db import connection as c; k=c.cursor(); k.execute(\" ...` |
 | 07:40:53 | Bash | Write the read-only census sonda for the sombra | `cat > /home/ronald/saas-hasner/logs/censo_retidos/censo_depois.py <<'PY' # -*- coding: utf-8 -*- """LEITURA PURA, NA SOMBRA. A metade DEPOIS do par do item (a) do aval 22/10 01:1x. O PAR, e ele e a razao desta sonda existir: o censo de 01:31 (`censo.txt`) mediu a SOMBRA com base no dump de 00:05 -- ANTES da cura do INSS (prod 02:36) e do rejulgamento das 123 celulas (02:39). A sombra de hoje nasce ...` |
 | 07:39:54 | Bash | Read the full line schema | `sed -n 1155,1200p folha/retrato_folha.py` |
 | 07:39:50 | Bash | Read the line keys montar_linhas produces | `/bin/grep -n "def montar_linhas" -A 40 folha/retrato_folha.py \| /bin/grep -nE "'(colab\|id\|nome\|status\|motivo\|dono\|dias)'\|append\|def " \| head -20` |
