@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 22/10/2026 02:36:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1200.5 MB). Acoes na janela: **870**.
+**Medido em 22/10/2026 02:37:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1200.5 MB). Acoes na janela: **873**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 02:37:42 | Bash | Publish the report so the impact diff precedes the apply | `cd /home/ronald/saas-hasner && python3 bin/relato_afirma_com_prova.py app/docs/RELATO.md && bash bin/relato.sh 2>&1 \| tail -6` |
+| 02:37:25 | Bash | Check the nightly eval state and take the fresh reversal photo | `cd /home/ronald/saas-hasner && /bin/grep -n 'AVISO' logs/boinss/pouso.out \| cut -c1-140; echo "--- eval noturno ainda vivo? $(pgrep -c -f 'eval && /usr/bin/python3 noturno.py' 2>/dev/null \|\| echo 0) \| cron em curso: $(ls logs/crons_em_curso/ 2>/dev/null \| tr '\n' ' ')"; echo "=== foto de reversao FRESCA (condicao 2), exec proprio ==="; docker cp logs/boinss/alvo_boinss.py saas_core:/tmp/alvo_ ...` |
+| 02:36:35 | Bash | Keep watching for the deploy verdict | `cd /home/ronald/saas-hasner && for i in $(seq 1 23); do if /bin/grep -q '^=== FIM' logs/boinss/pouso.out 2>/dev/null; then break; fi; read -t 5 _ < /dev/zero 2>/dev/null \|\| true; done; echo "--- $(date +%H:%M:%S):"; tail -8 logs/boinss/pouso.out; echo "stamp: $(cat logs/deploy.stamp 2>/dev/null \| tr '\n' ' ' \| cut -c1-70)"` |
 | 02:34:33 | Bash | Keep watching for the deploy verdict | `cd /home/ronald/saas-hasner && for i in $(seq 1 23); do if /bin/grep -q '^=== FIM' logs/boinss/pouso.out 2>/dev/null; then break; fi; read -t 5 _ < /dev/zero 2>/dev/null \|\| true; done; echo "--- $(date +%H:%M:%S):"; tail -10 logs/boinss/pouso.out; cat logs/deploy.stamp 2>/dev/null \| tr '\n' ' '` |
 | 02:34:27 | Bash | Re-read the production apply script's guards | `cd /home/ronald/saas-hasner && /bin/grep -n -E 'DIFF_PUBLICADO\|assert\|APLICAR_BOINSS\|idade\|atomic\|current_database\|saas_hasner\|FOTO' logs/boinss/apply_rejulgar_10_prod.py \| head -30 \| cut -c1-165` |
 | 02:32:22 | Bash | Continue watching the deploy for its verdict | `cd /home/ronald/saas-hasner && for i in $(seq 1 23); do if /bin/grep -q '^=== FIM' logs/boinss/pouso.out 2>/dev/null; then break; fi; read -t 5 _ < /dev/zero 2>/dev/null \|\| true; done; echo "--- $(date +%H:%M:%S):"; tail -12 logs/boinss/pouso.out` |
