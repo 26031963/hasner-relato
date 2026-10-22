@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 21/10/2026 23:45:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1191.4 MB). Acoes na janela: **530**.
+**Medido em 21/10/2026 23:50:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1191.5 MB). Acoes na janela: **535**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 23:50:35 | Bash | Create the BO-INSS lane worktree | `cd /home/ronald/saas-hasner && git worktree add /home/ronald/wt-inss -b bo-inss-nunca-bateu bb7ed768 2>&1 \| tail -3; echo "---"; cd /home/ronald/wt-inss && git log --oneline -1 && mkdir -p app/logs app/media && echo "montagem ok"` |
+| 23:50:33 | Bash | Check comboio suite progress | `cd /home/ronald/saas-hasner && echo "=== suite $(date '+%H:%M:%S'):"; tail -c 200 logs/comboio2110b/suite.log; echo; /bin/grep -E '^(OK\|FAILED)($\| \()\|rc_suite=' logs/comboio2110b/suite.log \| tail -3; echo "(vazio = ainda correndo)"` |
+| 23:46:29 | Bash | Read the impression function | `cd /home/ronald/saas-hasner && /bin/grep -n "def impressao_insumos" -A 55 app/ponto/services/cartorio.py` |
+| 23:45:48 | Bash | Census the partial-coverage judge | `cd /home/ronald/saas-hasner && echo "=== chamadores de cobre_parte_do_dia:"; git grep -n "cobre_parte_do_dia" -- 'app/**/*.py' \| /bin/grep -v "/tests/"; echo; echo "=== MINUTOS_DIA_INTEIRO:"; git grep -n "MINUTOS_DIA_INTEIRO" -- 'app/**/*.py' \| /bin/grep -v tests; echo "=== corpo de cobre_parte_do_dia:"; sed -n '2328,2370p' app/ponto/turnos.py \| tail -28` |
+| 23:45:46 | Bash | Census the day-classifier callers | `cd /home/ronald/saas-hasner && echo "=== chamadores de classificar_dia (prod):"; git grep -n "classificar_dia" -- 'app/**/*.py' \| /bin/grep -v "/tests/" ; echo; echo "=== em tests (contagem por arquivo):"; git grep -c "classificar_dia" -- 'app/**/tests/*.py' \| head -20` |
 | 23:44:52 | Bash | Read the partial-furo rule | `cd /home/ronald/saas-hasner && sed -n '230,255p' app/ponto/supra_juiz.py` |
 | 23:44:51 | Agent | Raia v3: bateria de casos pela REGRA | `Voce e o AGENTE DA RAIA v3. Aval literal que acabou de chegar do Ronald, e e' o seu escopo INTEIRO: "aval Ronald: agente da raia v3, enquanto o pouso nao vem: diz em uma linha no RELATO se a bateria de casos pela REGRA (L-110: cadastro tal, batidas tais, o dia vale tanto, por CLT/CCT/L-NNN, sobre as escalas canonicas) existe e quantos casos tem; se nao existe ou e rasa, constroi agora em arquivos  ...` |
 | 23:43:32 | Bash | Find the FURO_PARCIAL emitter | `cd /home/ronald/saas-hasner && /bin/grep -rn "FURO_PARCIAL" app/ --include=*.py \| /bin/grep -v tests \| head` |
