@@ -6,10 +6,22 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 22/10/2026 04:57:16.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1207.8 MB). Acoes na janela: **1143**.
+**Medido em 22/10/2026 05:02:42.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1207.9 MB). Acoes na janela: **1155**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 04:59:10 | Bash | Read tripwire allowlists | `cd /home/ronald/wt-lotepar/app && sed -n '10,30p' ponto/tests/test_tripwire_bocais_apuracao.py; echo "=== B5J criterio:"; /bin/grep -n "parear_turnos\\|def test\\|FUNC\\|chamador" ponto/tests/test_tripwire_b5j_universo_de_apuracao.py \| head -20` |
+| 04:59:05 | Bash | Check the two tripwires for my files | `cd /home/ronald/wt-lotepar/app && /bin/grep -n "ARQUIVOS\\|materializacao\\|passivo_validado\\|ALLOW\\|allowlist" ponto/tests/test_tripwire_bocais_apuracao.py ponto/tests/test_tripwire_b5j_universo_de_apuracao.py \| head -30` |
+| 04:58:56 | Bash | Census of the reader's callers | `cd /home/ronald/wt-lotepar/app && /bin/grep -rn "_turnos_sem_par\\|turnos_sem_par" --include=*.py . \| /bin/grep -v __pycache__` |
+| 04:58:33 | Bash | Relaunch the A/B sombra DIFF | `cd /home/ronald/saas-hasner && (bash /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/o330_diff_ab.sh > logs/o330/ab.out 2>&1; echo "rc=$?" >> logs/o330/ab.out)` |
+| 04:58:28 | Bash | Read the A/B launcher | `cd /home/ronald/saas-hasner && cat /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/o330_diff_ab.sh` |
+| 04:58:16 | Bash | Add the tipo_resposta census and compile | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' p = '/home/ronald/saas-hasner/logs/sombra/o330_cura_diff.py' s = open(p).read() anc = """ # ---- (2) o mapa do que NASCEU""" assert s.count(anc) == 1 novo = """ # ---- (1b) O NUMERO DO INCOMPLETO DECLARADO: `data_hora` planta na data que vem dentro # da `resposta_colab`, e nao no `data_evento` -- a guarda recusa o dia quando a batida # nasce fora  ...` |
+| 04:58:01 | Bash | Read the DIFF script body | `cd /home/ronald/saas-hasner && sed -n '48,120p' logs/sombra/o330_cura_diff.py` |
+| 04:57:56 | Bash | Point the A/B probe at the new site | `cd /home/ronald/saas-hasner && cp -p logs/sombra/o330_cura_diff.py logs/sombra/o330_cura_diff.py.bak && python3 - <<'PYEOF' p = '/home/ronald/saas-hasner/logs/sombra/o330_cura_diff.py' s = open(p).read() velho = """from chamados.services import materializacao as _mat TEM_CURA = hasattr(_mat, '_turnos_sem_par')""" novo = """from chamados.services import passivo_validado as _pas TEM_CURA = hasattr(_ ...` |
+| 04:57:47 | Bash | Read the probe block | `cd /home/ronald/saas-hasner && sed -n '30,48p' logs/sombra/o330_cura_diff.py` |
+| 04:57:43 | Bash | Check the A/B label probe | `cd /home/ronald/saas-hasner && grep -n "LADO\\|_turnos_sem_par\\|_mat" logs/sombra/o330_cura_diff.py \| head -20` |
+| 04:57:34 | Bash | Run the chamados+core recorte on the lane | `cd /home/ronald/saas-hasner && (bash bin/suite.sh --dir /home/ronald/wt-lotepar --only "chamados core" > logs/o330/viz2.log 2>&1; echo "rc=$?" >> logs/o330/viz2.log)` |
+| 04:57:19 | Bash | Read the lote placar lines | `cd /home/ronald/saas-hasner && grep -n "O317 passivo" logs/o330/red3.log` |
 | 04:56:54 | Bash | Re-run the 6 tests after the field fix | `cd /home/ronald/saas-hasner && (bash bin/suite.sh --dir /home/ronald/wt-lotepar --only chamados.tests.test_o330_plantio_nao_abre_turno > logs/o330/red3.log 2>&1; echo "rc=$?" >> logs/o330/red3.log); for i in $(seq 1 60); do grep -qE '^rc=' logs/o330/red3.log 2>/dev/null && break; read -t 10 _ < /dev/zero \|\| true; done; grep -E '^(OK\|FAILED)($\| \()\|^Ran \|^rc=' logs/o330/red3.log \| tail -5` |
 | 04:56:48 | Bash | Fix the catalogue comment | `cd /home/ronald/wt-lotepar/app && python3 - <<'PYEOF' 2>/dev/null \|\| docker run --rm -u "$(id -u):$(id -g)" --cpuset-cpus 4-7 --cpus 1 -v /home/ronald/wt-lotepar/app:/app -w /app saas-hasner-core python - <<'PYEOF' p = '/app/chamados/catalogo/recusa.py' try: s = open(p).read() except FileNotFoundError: p = 'chamados/catalogo/recusa.py' s = open(p).read() velho = """ # P14 que este arquivo existe ...` |
 | 04:56:36 | Bash | Fix the Batida field name | `cd /home/ronald/wt-lotepar/app && sed -i 's/timezone\.localdate(b\.data_hora)/timezone.localdate(b.timestamp)/g' chamados/services/passivo_validado.py && grep -n "b.timestamp" chamados/services/passivo_validado.py` |
