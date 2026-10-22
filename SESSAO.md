@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 22/10/2026 15:35:02.** Transcript: `6a1437b4-fa68-4fb8-ba22-cffc0db8ee01.jsonl` (5.6 MB). Acoes na janela: **293**.
+**Medido em 22/10/2026 15:40:32.** Transcript: `6a1437b4-fa68-4fb8-ba22-cffc0db8ee01.jsonl` (5.6 MB). Acoes na janela: **295**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 15:39:40 | Bash | Confirm suite in push and generate handoff | `cd /home/ronald/saas-hasner && grep -E "^Ran \|^(OK\|FAILED)( \|$)" logs/o261/push_marco_20261022.log \| head -4; bin/handoff_sessao.sh 2>&1 \| tail -3; wc -l app/docs/HANDOFF-SESSAO.md; sed -n 1,60p app/docs/HANDOFF-SESSAO.md` |
+| 15:39:36 | Bash | Read push verdict and check remote | `cd /home/ronald/saas-hasner && tail -8 logs/o261/push_marco_20261022.log \| cut -c1-200; git fetch -q && echo "origin/main=$(git rev-parse --short origin/main) HEAD=$(git rev-parse --short HEAD)"; git log --oneline HEAD..origin/main \| head -3; git log --oneline origin/main..HEAD \| head -3` |
 | 15:21:41 | Bash | Push marco via regua in background | `cd /home/ronald/saas-hasner && bin/push.sh > logs/o261/push_marco_20261022.log 2>&1; echo "rc=$?" >> logs/o261/push_marco_20261022.log; tail -5 logs/o261/push_marco_20261022.log` |
 | 15:21:40 | Bash | Check push script and commits ahead | `cd /home/ronald/saas-hasner && ls bin/push.sh && git fetch -q && git log --oneline origin/main..HEAD \| head -5` |
 | 15:21:34 | Bash | Add PROVA to RELATO/BACKLOG and amend marco commit | `python3 - <<'EOF' p='docs/RELATO.md' s=open(p).read() old='- PROVA de suite e de ar: no commit.\n' assert s.count(old)==1 s=s.replace(old,'''**PROVA:** suite inteira na copia `Ran 11572 tests, OK (skipped=51, expected failures=14)`, rc=0; `cmp` dos 7 arquivos do merge = IGUAIS a copia; commit `3088eac6` NO AR por `bin/deploy.sh --sem-migrate` (3 cascas, 3 rotas, BUG 128 verde, importerror_500=0).  ...` |
