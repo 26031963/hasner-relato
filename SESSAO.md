@@ -6,10 +6,19 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 22/10/2026 03:47:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1204.1 MB). Acoes na janela: **1015**.
+**Medido em 22/10/2026 03:48:34.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1204.2 MB). Acoes na janela: **1024**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 03:48:32 | Bash | Publish the RELATO | `cd /home/ronald/saas-hasner && bash bin/relato.sh 2>&1 \| tail -15` |
+| 03:48:27 | Bash | Commit the measurement marco docs by path | `cd /home/ronald/saas-hasner && git add app/docs/RELATO.md app/docs/BACKLOG.md app/docs/PENDENTES_RONALD.json app/docs/AVAIS.md && git -c user.name=Ronald commit -F - <<'MSG' o lote da 10 planta 61 batidas e nao move um centavo do gravado, mas tira hora e abono de 6 pessoas de turno noturno: apply em PAREI com a causa medida Item 4 do aval das 01:1x, fechado como PAREI pela clausula literal dele (" ...` |
+| 03:47:45 | Bash | Record the recovered lavra md5 in the section | `cd /home/ronald/saas-hasner && python3 - <<'PY' import io p='app/docs/RELATO.md' s=io.open(p,encoding='utf-8').read() velho='(b) o md5 da lavra desta rodada foi para /dev/null no lancamento -- recuperado DEPOIS, rotulado como tal;' assert s.count(velho)==1 novo=('(b) o md5 da lavra foi para /dev/null no lancamento e esta RECUPERADO as 03:47, **nao reusado**: ' 'lido do proprio registro que o `--ro ...` |
+| 03:47:35 | Bash | Search the sombra scripts for the no-op with the system grep | `cd /home/ronald/saas-hasner && /bin/grep -rn 'set_rollback' logs/sombra/ 2>/dev/null; echo "rc=$?"; ls -la logs/sombra/o330_*.py` |
+| 03:47:30 | Bash | Locate the no-op line in the finished probe script | `cd /home/ronald/saas-hasner && grep -n 'set_rollback' logs/sombra/o330_perdedores.py` |
+| 03:47:22 | Bash | Read the imported lavra md5 using the configured database user | `cd /home/ronald/saas-hasner && U=$(grep -m1 '^POSTGRES_USER=' .env \| cut -d= -f2-) && docker exec -i sombra_db psql -U "$U" -d sombra -At <<'SQL' 2>&1 \| tail -5 SET search_path TO juliani; SELECT data_ref, detalhe->>'md5', detalhe->>'data_ref_em_prod' FROM inteligencia_metricasnapshot WHERE chave='esmeril_lavra_de_prod' AND escopo='frota' ORDER BY data_ref DESC LIMIT 2; SQL` |
+| 03:47:16 | Bash | Find the sombra database user | `cd /home/ronald/saas-hasner && grep -n 'POSTGRES_USER\\|psql -U\\|USER=' bin/sombra_db.sh \| head -8` |
+| 03:47:12 | Bash | Read the imported lavra md5 from the sombra database | `cd /home/ronald/saas-hasner && docker exec -i sombra_db psql -U postgres -d sombra -At <<'SQL' 2>&1 \| tail -5 SET search_path TO juliani; SELECT data_ref, detalhe->>'md5', detalhe->>'data_ref_em_prod' FROM inteligencia_metricasnapshot WHERE chave='esmeril_lavra_de_prod' AND escopo='frota' ORDER BY data_ref DESC LIMIT 2; SQL` |
+| 03:47:04 | Bash | Find where the imported lavra md5 is stored | `cd /home/ronald/saas-hasner && grep -n 'CHAVE_LAVRA_DE_PROD\\|def _md5_da_lavra\\|CHAVE_LAVRA *=' app/ponto/services/esmeril_espelho.py \| head && sed -n '150,167p' bin/sombra.sh` |
 | 03:46:51 | Bash | Check how the lavra subcommand is wired | `cd /home/ronald/saas-hasner && grep -n 'lavra' bin/sombra.sh \| sed -n '1,25p' && echo '--- hora ---' && date '+%H:%M:%S'` |
 | 03:46:40 | Bash | Insert two obras into the BACKLOG and check the fila hook reads them | `cd /home/ronald/saas-hasner && python3 - <<'PY' import io p='app/docs/BACKLOG.md' L=io.open(p,encoding='utf-8').read().split('\n') alvo=None for i,l in enumerate(L): if l.startswith('\| BO-INSS-LEITORES-QUE-NAO-MIGRARAM \|'): alvo=i;break assert alvo is not None o_que=('**O lote do passivo validado planta MARCO AVULSO e deixa o dia IMPAR ou INVERTIDO -- 6 pessoas de turno ' 'noturno PERDEM hora e  ...` |
 | 03:45:56 | Bash | List the next OBRAS rows after BO-INSS | `cd /home/ronald/saas-hasner && awk 'NR>586 && /^\\| /{c++; printf "%d: %.110s\n", NR, $0; if(c>6) exit}' app/docs/BACKLOG.md` |
