@@ -6,6 +6,8 @@ PAREI: ! O261 e o export da 10 | espera o DP e o Ronald: (a) o TXT da 10 esta BA
 
 > lei: O261 `juiz-resolver-dia-oferecido` -- **RESPONDIDA 22/10 ~13:5x** (frase no CORTES); marco em construcao na `wt-o261c` (secao 14:3x).
 
+> pedido (nao e lei, nao trava a fila): **a lista dos RED minimos 1-11 do dossie do C7 nao esta no repo** -- BACKLOG e PROMPTS guardam o desenho, nao a numeracao. Escritos na `wt-c7` (sem rodar, por ordem dele) os **6** que o texto registrado determina: `.update` da cascata de desligamento sai, os 4 apagaveis da L-111, a porta `admin_encerra` com motivo obrigatorio (`chamados/tests/test_c7_red_minimos.py`). Faltam os que dependem do inventario do dossie: contador `disputa_vazia`, fechamento por IDADE, os 20 sitios do juiz unico -- colar a lista do dossie destrava.
+
 > OS QUATRO ITENS DA ORDEM, FEITOS: deploy `d01210d2` **no ar 10:26** (`--sem-migrate` rc=0, 3 rotas provadas, selo BUG 128 verde, portao fechado pelo PASSO 5 do gate -- nunca `--sem-sombra`); push **pousou** (`fa5cd145..eebe2cce`, rc=0, `Ran 11566 tests · OK (skipped=51, expected failures=14)` mais control-plane `Ran 22 tests · OK`, veredito lido no REMOTO); `bin/handoff_sessao.sh` gerado (42/60 linhas, selo verde); e esta linha. O 1 commit que sobrou a frente (`6d469ed2`) e do proprio `pos_push` -- a excecao nomeada da L-106 --, e o push dele e do proximo push, nao deste.
 > O MARCADOR ANDOU no mesmo ato: `ORDEM-VIVA-TOPO` saiu de `BO-HE-RECUSAR-LOTE-500` (fechado) para `O261`, que o hook cobrou.
 > SEM COMMIT DE PROPOSITO: `RELATO.md` e `BACKLOG.md` ficam sujos na arvore porque a L-106 nao deixa commit so de docs fora de marco. Eles entram no commit do proximo marco.
