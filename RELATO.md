@@ -12,6 +12,25 @@
 > publicado as 01:23 e nao se refez). **Item 6 CERTIFICADO e com POUSO RETIDO na janela de
 > auth** (`api/views.py` e sitio declarado; 23:20-06:00) -- pousa depois das 06:00, secao abaixo. Ordem anterior (push das 01:06, `a127492a7a`, bateria de
 > 131 casos pela REGRA, corrente de 21/10 nascida vazia) segue nas secoes abaixo.
+> **04:1x -- ONDE A ESTEIRA ESTA AGORA, e as duas esperas sao UMA:** o aval das 23:3x esta **todo fechado**
+> menos o `--bloco` da sombra (item 3), que o cron das **04:11** refaz sozinho, e o POUSO do item (6). O item
+> **(4) FECHOU com o numero da uniao**, dito como PROJECAO e nao como medida: conjuntos **DISJUNTOS**, **5 saem
+> de retido** (3 pela C + 2 pelo INSS) e **1 entra**, liquido **4** -- o `entram`/`fora` da uniao segue NAO
+> MEDIDO, porque ninguem chamou `fora_da_folha` com as duas curas no gravado. O **fila 1 passou a ser o
+> `GATE-EXPORT-10`** e a condicao (1) dele **nao precisa de uma linha de codigo nova** (secao de 04:1x): o
+> que falta e a JANELA -- a corrente da manha e outro escritor do mesmo estado --, e o GATE e o pouso esperam
+> o MESMO arquivo, `logs/fim/lavrar_retrato_folha.*.20261022`. **POUSO RETIDO** segue sendo trava NOMEADA com
+> portao declarado (janela de auth + corrente), nao PAREI.
+
+**O FILA 1 DE AGORA E O `GATE-EXPORT-10`, E A CONDICAO (1) DELE JA TEM JUIZ, CONTADOR E REVERSAO: NAO FALTA CODIGO, FALTA JANELA (22/10 04:1x).**
+LEI-AKITA: origem=nenhuma (medicao de FONTE, **0 linha de codigo**), testemunha=`ponto/services/fechamento.py::projecoes_vencidas` + a FOTO que o proprio comando grava, RED=n/a (nada mudou), quem-mais-le=o vigia de `config/crons.py:1066`, que JA consome este contador, juizes novos=**0**.
+CONTRATO DE ENTRADA em quatro linhas, cada uma lida de sitio que JA existe -- pergunta zero: *"de qual fonte existente isso sai?"*
+- **FONTE** = `ponto/management/commands/recalcular_fechamento.py`, que **so CHAMA** `ponto/services/fechamento.py::recalcular_fechamento_mes` -- a MESMA funcao do botao do DP (corte 24/09) --, e e ela que carimba `derivado_em` nos DOIS escritores (`:980` e `:1026`). **Nao ha comando novo a escrever**, e eu ia escrever um.
+- **A REVERSAO JA NASCE DO ATO**, e era o outro pedaco que eu ia fazer a mao: o comando fotografa as rubricas canonicas (`RUBRICAS`, importadas de `aplicar_09_corte_b::CAMPOS`, **nunca digitadas** -- O208) **antes e depois, por colaborador**, um arquivo por execucao em `/app/logs/recalculo`. A condicao 1 da DINHEIRO-EM-COMPETENCIA-ABERTA se cumpre pelo proprio ato, nao por script meu.
+- **CONTADOR == UNIVERSO** = `projecoes_vencidas(mes=10, ano=2026)`, **esperado 0**, universo em `universo_da_competencia` do mesmo modulo -- **FILTRO, nao derivacao**: le o carimbo que o escritor canonico grava. A letra miuda esta MEDIDA e escrita no proprio docstring: sombra 18/10, frota da 10 re-derivada (**605 processados, 176,7 s**), sobraram **4 de 609**, e as quatro sao `situacao='desligado'` com demissao ANTERIOR a 21/09 -- fora do universo **pelo predicado dele mesmo**. PROIBIDO estreitar universo para o numero cair (L-099): elas se IMPRIMEM.
+- **UNIDADE** = linha de `FechamentoMensal` da competencia (nao dia, nao rubrica); **EXCLUSOES** = so as declaradas acima.
+**O QUE FALTA NAO E PROVA, E JANELA, e eu nao a atravesso por pressa:** a corrente da manha corre 04:0x->~06:4x e o **elo 8 de 11 e `lavrar_retrato_folha --apply`** -- outro ESCRITOR do mesmo estado, no UNICO nucleo fisico que a producao tem (CPUSET, vCPU 0-1). Re-derivar a frota por cima dela seria dois escritores (LEI-AKITA 7) e CPU do cliente. Entao o ato espera o MESMO arquivo que o pouso do item (6): `logs/fim/lavrar_retrato_folha.*.20261022` presente e `logs/crons_em_curso/` vazio -- espera por **ARQUIVO**, nunca por pgrep.
+**A ORDEM DO MARCO, ja que as duas esperas sao a mesma:** (a) pouso do item (6), re-certificado contra o main daquela hora (L-117); (b) condicao (1) -- hash da **09** exportada ANTES, `recalcular_fechamento --mes 10 --ano 2026 --apply`, depois `projecoes_vencidas` = 0 **e** o hash da 09 de novo, com PROVA DE FROTA no mesmo marco; (c) condicao (2) -- os 5 oraculos **DEPOIS** da lavra, cartao x TXT = 0, divergencia aberta por **DONO** (L-099). E a **cura C ja esta no CODIGO** (`3bcabf1c`, 21/10 22:00, `ahead=0`): o seu *"Retrato relavrado com a cura C"* se cumpre DENTRO da condicao (1) -- nao e um ato a parte, e e a lavra que falta, nao a cura.
 
 **ITEM (6) DO SEU AVAL DAS 23:3x -- O ATESTADO QUE CHEGOU PELA METADE PARA DE VIRAR AUSENCIA (22/10 03:2x). CERTIFICADO; POUSO RETIDO NA JANELA DE AUTH.**
 LEI-AKITA: origem=`api/corpo_recebido.py::corpo_chegou_inteiro`, chamado nas DUAS portas de ausencia da api (`api/views.py::api_ausencias`

@@ -6,10 +6,16 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 22/10/2026 04:09:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1205.1 MB). Acoes na janela: **1055**.
+**Medido em 22/10/2026 04:14:21.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1205.3 MB). Acoes na janela: **1061**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 04:10:18 | Bash | Find consumers of the recusa catalogue and its selo | `cd /home/ronald/wt-lotepar/app && /bin/grep -rn "_REGRAS\\|traduzir_recusa" --include=*.py . \| /bin/grep -v "catalogo/recusa.py" \| head -20 && echo "=== test_recusa_legivel" && cat chamados/tests/test_recusa_legivel.py` |
+| 04:10:01 | Bash | Read the recusa stamp and the recusa catalogue | `cd /home/ronald/wt-lotepar/app && sed -n '891,926p' chamados/services/materializacao.py && echo "=== recusa.py" && cat chamados/catalogo/recusa.py` |
+| 04:09:37 | Bash | Read the clock selo that enumerates test modules | `cd /home/ronald/wt-lotepar/app && echo "### selo teste sem relogio: o que ele lista" && sed -n '1,50p' core/tests/test_selo_teste_sem_relogio.py 2>/dev/null \| head -50` |
+| 04:09:36 | Bash | Read the fixture idiom of the porta test | `cd /home/ronald/wt-lotepar/app && sed -n '42,180p' chamados/tests/test_o317_passivo_pela_porta.py` |
+| 04:09:23 | Bash | Read the passivo porta test skeleton | `cd /home/ronald/wt-lotepar/app && wc -l chamados/tests/test_o317_passivo_pela_porta.py && sed -n '1,40p' chamados/tests/test_o317_passivo_pela_porta.py && echo "..." && /bin/grep -n "def \\|DisputaSupervisao.objects.create\\|PerguntaDisputa.objects.create\\|ChamadoColaborador.objects.create" chamados/tests/test_o317_passivo_pela_porta.py \| head -40` |
+| 04:09:15 | Bash | Read an existing RED on the same plant site | `cd /home/ronald/wt-lotepar/app && wc -l chamados/tests/test_o261_paridade_respeita_a_lampada.py chamados/tests/test_o261_vespera_nao_absolve.py && sed -n '1,120p' chamados/tests/test_o261_vespera_nao_absolve.py` |
 | 04:08:59 | Bash | Read the existing readers of open turnos in the authority module | `cd /home/ronald/wt-lotepar/app && sed -n '1850,1900p' ponto/turnos.py && echo "=== 2570-2610" && sed -n '2570,2615p' ponto/turnos.py` |
 | 04:08:53 | Bash | Census of readers that count open turnos | `cd /home/ronald/wt-lotepar/app && echo "### quem conta t.aberto / entrada is None" && /bin/grep -rn "\.aberto\b" --include=*.py ponto/ chamados/ escala/ relatorios/ core/ \| /bin/grep -v tests/ \| head -25` |
 | 04:08:21 | Bash | Read the plant unit in full | `cd /home/ronald/wt-lotepar/app && sed -n '926,1082p' chamados/services/materializacao.py` |
