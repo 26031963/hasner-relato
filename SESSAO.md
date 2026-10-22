@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 21/10/2026 21:05:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1183.0 MB). Acoes na janela: **164**.
+**Medido em 21/10/2026 21:10:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1183.1 MB). Acoes na janela: **167**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 21:06:17 | Bash | Re-run the lane cases after perturbing the fixture | `cd /home/ronald/saas-hasner && bin/suite.sh --dir /home/ronald/wt-raiac --espera 60 --only "escala.tests.test_saida_valida_vira_orfa" > logs/raiaC/fixture_perturbado.log 2>&1; echo "rc=$?"; tail -6 logs/raiaC/fixture_perturbado.log` |
+| 21:05:50 | Bash | Run the two cured selos on the main tree | `cd /home/ronald/saas-hasner && bin/suite.sh --espera 60 --only "chamados.tests.test_hx_fallback_sem_lei chamados.tests.test_selo_lavrado_orfaos" > logs/raiaA/selos_calendario_main.log 2>&1; echo "rc=$?"; tail -6 logs/raiaA/selos_calendario_main.log` |
+| 21:05:44 | Bash | Apply the two selo cures to the main tree | `cd /home/ronald/saas-hasner && cp -p /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/red2110/test_hx_fallback_sem_lei.py app/chamados/tests/test_hx_fallback_sem_lei.py && cp -p /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/red2110/test_selo_lavrado_orfaos.py app/chamados/tests/test_selo_lavrado_orfaos.py  ...` |
 | 21:05:21 | Bash | Re-check the test lock holder | `cd /home/ronald/saas-hasner && bin/trava_teste.sh --quem` |
 | 21:05:13 | Bash | Drop the real instant from the lane source comment | `cd /home/ronald/wt-raiac && python3 - <<'PY' p='app/escala/utils.py' s=open(p,encoding='utf-8').read() a="no caso golden (jornada 07:00-16:00, saida 17:58:36) o" b="no caso golden (jornada 07:00-16:00, saida ~17:58) o" assert s.count(a)==1 s=s.replace(a,b) open(p,'w',encoding='utf-8').write(s) import py_compile; py_compile.compile(p, doraise=True) print('ok') PY` |
 | 21:05:07 | Bash | Confirm no real instant remains in the lane diff | `cd /home/ronald/wt-raiac && /bin/grep -rn '17:58:36\\|07:01:53\\|13:00:33\\|12:00:07' app/escala/tests/test_saida_valida_vira_orfa.py app/escala/utils.py \| head` |
