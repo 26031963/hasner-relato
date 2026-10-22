@@ -1,28 +1,123 @@
 # RELATO — esteira saas-hasner
 
-**TRES PERGUNTAS DE LEI NO TOPO, COM NUMERO -- NENHUMA DEVOLVE TURNO (21/10 21:1x).**
-1. **A JANELA DA SOMBRA (da raia B, e e a que para um cron de producao).** Em 21/10 04:05 a medida do
-   placar subiu `dur_s['sombra.sh']` para **3368 s** (56,1 min) -- p95 de 7 dias x a folga 1,5 de
-   `bin/crons_duracao.py:76` sobre corridas REAIS de **2090 s** (19/10) e **2245 s** (20/10). A janela
-   tem **53 min** (piso 04:05, vizinho `health_crawl` 05:00, tolerancia 120 s), entao `inicio_derivado`
-   levanta -- CERTO -- e derrubou a corrente da manha inteira. As corridas reais CABEM; o ORCAMENTO nao.
-   As duas saidas sao suas: **mover o `health_crawl`** para mais tarde ou **encurtar o processo**. Mexer na
-   folga 1,5 e o band-aid que a LEI-AKITA 1 proibe. Ate a decisao, `bin/crons.sh check|install` fica
-   VERMELHO POR DESENHO (nao e regressao; nenhum portao de push o chama -- medido).
-2. **A VESPERA DA JANELA VIVA DA UMA COMPETENCIA EXTRA AO ULTIMO DIA DE CADA UMA.** `chamados/juizes.py:486`
-   e literal (seu corte de 25/08): a janela vale `(inicio da ANTERIOR - 1 dia) ... fim da corrente`. Essa
-   vespera cai SEMPRE no ultimo dia da anterior, entao com hoje=21/10: `expira_em(20/10)=2026-12-21` e
-   `expira_em(19/10)=2026-11-21` -- **62 dias contra 33** para dois dias vizinhos da MESMA competencia. O
-   proprio docstring de `expira_em` ja declara "vida util real: 34 a 62 dias", e o 62 **e exatamente este
-   dia**. Nao inventei lei: congelei as duas formas em selo (abaixo) e pergunto qual cede.
-3. **O PASSIVO ANTIGO NUNCA VIROU LOTE, e o seu corte de 25/08 previu que viraria.** `juizes.py:675-678`
-   diz, por escrito: *"a regra nova vale SO na competencia corrente + a VESPERA do inicio ... Passivo antigo
-   nao volta a cobrar sozinho -- vira lote com ordem dele"*. Consequencia MEDIDA no codigo (nao na frota):
-   fora da janela viva o juiz absolve em `:590` antes de ouvir a lei, e em `:679` o fallback CIRCULAR que a
-   HX-FALLBACK matou volta a valer sozinho -- isto e, **toda pergunta envelhece ate a absolvicao por
-   relogio** em ~2 competencias. O numero da frota **NAO ESTA MEDIDO** (uma consulta na sombra:
-   `via_resolucao='chamado_encerrado'`, `materializada_em` nao nula, `data_evento < ini_ant-1d`). Pergunto: o
-   lote nasce agora, ou a absolvicao por idade e o desenho que fica?
+**AS TRES PERGUNTAS DE LEI DO TOPO ESTAO RESPONDIDAS -- SEU AVAL DE 21/10 21:3x. NADA DEVOLVEU TURNO.**
+1. **JANELA DA SOMBRA: DECIDIDA POR MIM, pela PAREI-SO-LEI** (*"horario de cron = decisao tecnica do
+   Code"*). Movi o **`health_crawl` das 05:00 para as 05:30** e o `VIZINHO_SOMBRA` para **`'05:10'`**
+   (o `pre_fechamento`): o corredor vai de 53 para **65 min**, a derivacao devolve **04:11** (fim 05:08,
+   2 min antes do vizinho) e o teto do raise sobe para **63 min**. **A folga 1,5 nao foi tocada.**
+   MEDIDO na copia com a duracao VIVA (3368 s): `inicio_derivado('sombra.sh', vizinho=VIZINHO_SOMBRA)`
+   = `11 4`. Secao propria abaixo com o RED literal e o censo dos leitores.
+2. **VESPERA: FICA COMO ESTA**, por sua palavra (*"62 dias ... e lei de 25/08 e nao move dinheiro"*).
+   Nada a fazer: o selo que morde as DUAS formas pousou em `59bda8a1` e continua de pe.
+3. **PASSIVO POR IDADE: MEDIDO NA SOMBRA AGORA, e o lote fica para depois do export da 10.** Pelos seus
+   tres criterios literais: universo **6418**, absolvidas pelo RELOGIO **3923** (**413** colaboradores,
+   a mais antiga de 21/05), julgadas pela LEI **2495** -- a soma fecha o universo. As 3923 foram
+   reconferidas pela FUNCAO REAL (`_dentro_da_janela_viva` diz FORA em **3923 de 3923**), nao pelo meu SQL.
+   PROVA: `logs/o261/passivo_idade_2110.txt`. Registrado como `O261-b`, com portao no export da 10.
+
+**SEU AVAL DE 00:4x -- AS TRES RESPOSTAS, MEDIDAS AGORA (22/10 00:4x). NADA BARRA O PUSH.**
+- **O que barra o push dos 7: NADA. Ele esta EM CURSO desde 00:43**, e o que voce viu parado era a
+  espera da suite, nao um selo. `bin/trava_teste.sh --quem` responde `pre-push:822191 desde 22/10
+  00:45:45`, e o log dele JA passou os portoes de host -- os **tres de TICKETS** inclusive:
+  `tickets_placar: OK`, `regua_tickets: OK -- 0 citacao(oes) com linha na tabela`,
+  `tickets_rodape: OK -- rodape bate com origin/main, .regua_stamp e SERIE_T.md`, mais
+  `test_lei_protege_sitio: OK (tocados neste push: 0)`, `index_vs_arvore: costura OK`,
+  `regua_rotas: OK -- 44 rota(s)`. Agora corre o `arsenal negocio (ci)` sobre o commit
+  `a127492a7a`, que e o HEAD. **Cura: nenhuma** -- o veredito se le no REMOTO (`git fetch` e
+  `origin/main..HEAD` vazio), nunca no rc do lancador.
+- **O fork de 1h nao esta na rota do push.** E o da **raia v3** (bateria de casos pela REGRA,
+  L-110): ele so escreve arquivo de teste NOVO, nao pega a trava, nao commita e nao toca TICKETS --
+  inspecionar o derivado do `pos_push.sh` era leitura, nao obra. Pedi a ele a UMA linha que voce
+  mandou (a bateria existe? quantos casos?) e ela entra aqui quando chegar.
+- **`saas_core` nao esta em 238%: esta em 0,03%.** `docker stats` de agora: `saas_core 0.03% ·
+  123 MiB`, `saas_ui 0.08%`, `saas_db 0.00%`, `mensageria 0.01%`. Quem consome e o container
+  ANONIMO da suite deste push -- `cpuset=4-7`, `--memory 2g`,
+  `manage.py test <13 labels> --settings=config.settings.ci --parallel 2`, **172,8%** -- mais o
+  `juliani_db_test` em **27,6%**: os dois no lado de TESTE (core2+core3), pela CPUSET. O nucleo do
+  cliente (vCPU 0-3) esta livre, e por isso a conta de 238% nao e do cliente: e minha, na metade
+  que e minha.
+
+**BO-INSS -- O NUMERO QUE MUDA DE DIRECAO, MEDIDO NA SOMBRA DE HOJE, ANTES DO EXPORT (22/10 01:0x).**
+`LEI-AKITA: origem=escala/utils.py::_marcar_ausencias (a grade apagava a PERGUNTA);
+testemunha=ponto/turnos.py::cobre_parte_do_dia + ausencia_cobre + batidas_apuraveis, chamadas na
+sombra; RED=ponto/tests/test_bo_inss_nunca_bateu_le_a_precedencia.py (9 casos, os 4 do seu aval);
+quem-mais-le=supra_juiz.classificar_dia + os DOIS ramos do cartorio + 2 commands (os 4 kwargs de
+chamador viraram 0: a grade CARIMBA, o leitor LE); juizes novos=0`
+- janela = competencias 09 e 10 (21/08 a 20/10): **1617** `Ausencia status='aprovada'`, das quais
+  **47** sao PARCIAIS pelo juiz (`cobre_parte_do_dia`; 5 tipos em `parciais_vigentes`).
+- **A CURA LIBERA (A1)** -- `nunca_bateu` com cobertura aprovada **INTEGRAL**: comp **10 = 127**,
+  comp 09 = 130, e **573** em toda a historia (por mes: 07=111 · 08=252 · 09=109 · 10=101). As
+  outras **1229** das 1488 `nunca_bateu` da janela **nao tem cobertura aprovada** e seguem retendo.
+- **A CURA PASSA A ACUSAR (A3) NA COMPETENCIA 10: ZERO.** Dia de trabalho + cobertura aprovada
+  PARCIAL + ZERO batida apuravel: comp **10 = 0**, comp 09 = **9** (hoje 7 `concorde` + 2
+  `nunca_bateu`, 6 colabs), dos quais **8 acima do `PISO_EMISSAO '2026-09'`** (emitiriam chamado) e
+  1 abaixo. Os MESMOS dias COM batida -- portao fechado por `batidas_no_dia` -- sao 9 na 10, 28 na 09.
+- **Logo o rejulgamento da 10 pela porta nao cria furo nenhum: so SOLTA 127.** Os 9 da 09 estao em
+  competencia EXPORTADA (L-092) e nao se tocam por aqui: viram linha de fila com os 8 nomeados.
+- **o 390 do seu aval nao se reproduz** em nenhum dos dois universos de hoje (573 na historia, 257
+  na janela): era outro corte. O numero do ATO e **127**, e e esse que vou rejulgar, na 10.
+- aproximacao DECLARADA: "tem batida no dia" sai de `timestamp__date` dentro de `batidas_apuraveis`
+  -- cruzar a meia-noite SUPERESTIMA o flip, nunca o esconde, e na 10 o flip e 0.
+- PROVA: `logs/boinss/a3_sombra.txt` -- `config.settings.sombra`, `current_database()=='sombra'` assertado, `--cpuset-cpus 4-7 --cpus 1 --memory 2g`, proxy morto, `/app` read-only.
+- INCOMPLETO: a cura esta escrita em `wt-inss` e **ruff-limpa**, a bateria RED/GREEN **ainda nao
+  rodou** (trava do push, `pre-push:822191`); roda quando o push devolver, com os 11 vizinhos, e
+  BO-INSS pousa em pouso PROPRIO depois dele (L-105).
+
+**O CENSO JUNTO DO SEU AVAL -- QUEM SEGURA A COMPETENCIA 10, PELO MOTIVO DO RETRATO (22/10 01:1x).**
+`LEI-AKITA: origem=n/a (medicao); testemunha=RetratoFolha LAVRADO (escritor unico
+lavrar_retrato_folha) lido por retrato_folha.py::linhas_do_retrato + export.py::
+motivos_retencao_celula(com_dias=True) + janelas.py::janela_fechamento; RED=n/a;
+quem-mais-le=a tela do Retrato le a MESMA lista; juizes novos=0`
+- 4 retratos lavrados da 10, **612** linhas: **221 entram**, **391 fora** (391 pessoas -- o **351**
+  do seu aval era o retrato anterior). Motivo: **furo_espelho 345** · rescisao 41 ·
+  sem_codigo_dominio 4 · ferias_com_batida 1.
+- **A CURA BO-INSS NAO E O QUE DESTRAVA A 10, e e melhor saber agora:** dos **2446** dia-pessoa que
+  retem, ela derruba **87** e **SOLTA 2 das 345 pessoas** -- as outras 343 tem pelo menos um dia que
+  fica. Ela segue necessaria (corrige 127 vereditos na 10 e acusa 0 novo), mas **o export da 10 nao
+  depende dela**.
+- **O QUE REALMENTE SEGURA, por dia-pessoa:** `cobrado` **752** · `furo` **552** · `sem_celula`
+  **355** · `nunca_bateu` SEM cobertura aprovada **354** · `indefinida` **262** ·
+  `fato_em_ausencia` 45 · `discordante` 39. Os dois primeiros sao fio vivo (pergunta/chamado em pe);
+  o terceiro e CEGO e e o unico cujo dono e **ESTRUTURA** pela L-099.
+- **os 355 `sem_celula`** sao dia PASSADO, com vinculo, sem celula ou sem veredito (*"nunca aprova
+  mudo"*, da propria porta). Em 21/09-20/10, com o cartorio adotado, nao e pre-adocao: e a maior
+  suspeita estrutural do export. Anatomia em medicao (celula ausente x veredito NULO x `trabalha`).
+- **C11/lampada 4a, remedida:** por DONO os 391 sao `colab` **226**, **`ninguem` 64**, `chamado`
+  **40**, `admin` 20, mais 41 de rescisao (sem eixo, por desenho). Os 64 sem fio e os 40 de chamado
+  sao os "66" e os "39" do seu aval; qual ESCRITOR deixou cada um sem caminho sai na sonda seguinte,
+  pelos grupos A/B/C/D de `folha/fora_da_folha.py`.
+- TIPO: falta 186 · folga 114 · escala 19 · `sem_causa` 17 · nao_bate 8 · cadastro 4 · ferias 1. SALDO: `6mais` 128 · `2a5` 125 · `1` 93 -- **93 pessoas estao a UM dia** de entrar.
+- PROVA: `logs/boinss/junto_10.txt` -- `config.settings.sombra`, `current_database()` assertado, `--cpus 1` no cpuset de teste, `/app` read-only, nenhum nome e nenhum id na saida.
+
+**ITEM (1) DO SEU AVAL DAS 23:3x -- A LINHA PROVA: O COMBOIO 2110b POUSOU E ESTA NO AR (22/10 00:42).**
+Hash no ar = **`a127492a`** (nao `bb7ed768`: o marco pousou EM CIMA dele, merge `--no-ff` + docs do
+marco + commit + `bin/deploy.sh --sem-migrate` num ato so, pela L-107). Portao do ensaio VERDE no ato
+(`dia=20261022 status=OK diverge=0 erros=0`, `--conferir` rc 0 lido sem pipe) -- **nao houve
+`--sem-sombra`**. ROTAS, as tres cascas que o deploy reinicia juntas: `saas_core /health/` **200**,
+`saas_ui /colaboradores/` **302**, `mensageria /health/` **200**; prova de casca 16 estaticos, 5
+paginas, 616 rotas em 2 urlconf; migrations pendentes **0**; `importerror_500=0` na janela 23:42-00:42;
+selo BUG 128 verde nas tres. O `saas_caddy` nao reinicia e nao devia: ele e o roteador, nao casca de
+codigo (de pe desde 25/09). ITEM (5) DO AVAL DAS 18:1x PROVADO NO AR, perguntando ao processo com o
+Django JA configurado (sonda propria mente: sem `django.setup()` a cadeia vem VAZIA): em `saas_ui` E
+em `saas_core`, `ponto.signals` e `ponto.realtime` resolvem para
+`RotatingFileHandler -> /app/logs/ponto.log` + `StreamHandler`, nivel INFO; o arquivo existe
+(`app/logs/ponto.log`, 00:42). Ele esta com **0 byte**, e isso e o esperado, nao sinal bom: estes
+loggers so falam em excecao e em evento de nucleo, e a esteira esta pausada.
+
+**O POUSO E O DEPLOY DESTA FATIA, decididos pela lei existente (horario e ordem de ato = decisao
+tecnica, PAREI-SO-LEI) -- nada aqui devolve turno.** O portao do ensaio estava VERMELHO as 23:4x
+(`SOMBRA_BLOCO=nao_rodou`, `bin/sombra.sh --conferir` rc 1), e `--sem-sombra` e' *pular teste*, que
+esta na lista NUNCA PRE-APROVADO: nao o tomo. A ordem, entao: commit -> `bin/crons.sh install` ->
+re-`check` **VERDE antes da meia-noite** (sua condicao LITERAL: *"crons.sh check verde antes de
+04:05"*) -> `bin/sombra.sh --refazer --dump-agora --bloco` **depois das 00:00**, que e a forma da
+faixa cega 00:00-04:00 (o dump do dia so nasce as 04:00, e sem `--dump-agora` o carimbo sai
+DIVERGE=1 e o `--bloco` em cima dele e trabalho perdido) -> veredito lido do **carimbo**, nunca do
+rc -> `bin/deploy.sh` so com o carimbo verde. O cron da sombra passa a rodar **04:11**, entao a
+conferencia de pista e pelo ARQUIVO (`logs/sombra.lock` e `logs/crons_em_curso/`), nunca por pgrep.
+E O QUE ESSE PORTAO **NAO** PROTEGE, dito antes que voce descubra: no instante em que o `cp -p` poe
+o `.py` novo na arvore, ele esta no **bind-mount** -- e o **reload gracioso das 03:30 publica o DISCO**,
+tenha o `deploy.sh` rodado ou nao. O portao do carimbo garante a ORDEM dos atos e a prova de casca,
+nao se o codigo vai ao ar. O deploy sai `--sem-migrate`: nenhum modelo foi tocado.
 
 **SEU AVAL DAS 21:2x -- MEDI A TRAVA E NAO HA O QUE ENCERRAR: O SUBAGENTE JA TINHA ACABADO (21:2x).**
 `LEI-AKITA: origem=estado de pista; testemunha=bin/trava_teste.sh --quem + docker ps + ps -eo args + o proprio log; RED=n/a; quem-mais-le=0; juizes novos=0`
@@ -36,6 +131,209 @@ e o agente da raia B entregou o relatorio no mesmo minuto. `TaskStop` no id dele
 A LICAO que fica (sua regra de sempre, e ela pegou de novo): **espera se le no ARQUIVO, nao no rotulo**. O rotulo
 "Waiting for suite_certifica.log to start" sobreviveu ao fato por 2 h porque ninguem leu o arquivo -- que estava
 pronto. PROVA: as quatro medidas acima, todas de 21:2x, e `ls -l logs/raiaB/suite_certifica.log` (176478 bytes, 21:04).
+
+## O PUSH DOS 12 POUSOU NO REMOTO, E A BATERIA DA REGRA JA EXISTE: 131 CASOS (22/10 01:1x) -- nao e marco: 0 linha de codigo
+
+**item (2) do seu aval de 23:3x -- FECHADO.** `origin/main = a127492a7a`, o MESMO commit que a suite
+certificou (`b81181ea..a127492a  main -> main`). Veredito pela L-074, do log do pre-push:
+`Ran 11535 tests in 911.848s` / `OK (skipped=51, expected failures=14)`, control-plane `Ran 22 tests`
+/ `OK`, linhas `^ERROR:/^FAIL:` = **0**, rc do processo **0**. Portoes de host antes: `tickets_placar`,
+`regua_tickets`, `tickets_rodape`, `test_lei_protege_sitio (tocados: 0)`, `index_vs_arvore`,
+`regua_rotas: 44 rota(s)`. `pos_push` fechou e commitou o topo do TICKETS em `bd624514` -- a excecao
+NOMEADA da L-106 --, e ele e o unico commit a frente do remoto.
+
+**A LINHA DA RAIA v3 (seu aval: "diz em UMA linha se a bateria pela REGRA existe e quantos casos
+tem"): EXISTE, 131 casos** -- `ponto/tests/test_o280_bateria_da_lei.py`, 5734 linhas. CRITERIO da
+contagem: as **chaves de primeiro nivel do dict `CASOS`** (:272), lidas por AST, porque cada chave e
+UM caso (cadastro + batidas + a resposta da REGRA com a norma citada). Os **157 `def test_`** em 19
+classes NAO sao o numero: incluem guardas e propriedades fixas. Logo o ramo *"se nao existe ou e rasa,
+constroi agora"* **nao dispara**. Duas ressalvas, as duas da ERRATA do proprio arquivo: (a) a costura
+`julgar_o_dia` chama a porta de producao do **v2** e nao se re-aponta, porque
+`ponto/calculador/periodo.py:24` nao pareia batida -- um portao de v3 precisa de **costura** nova, nao
+de bateria nova; (b) `ponto/tests/test_bateria_lavratura.py` (52 defs) e a bateria da **ATA**, outra pergunta.
+
+**item (5) -- FIO MORTO RE-MEDIDO PELA FUNCAO DO CRON, NA SOMBRA.** `chamados/services/vigia_fio.py::censo`
+chamada DIRETO (nao o command: assim o `_carimbar` nao toca o `logs/fio_morto.json` de prod), por
+`bin/sonda_leitura.sh --sombra`, rc 0, banco `sombra`, 22/10 01:02: `fio_morto=210 · cobrando=210 ·
+com_alvo=70` (esperado 0) `· sem_alvo=139 · de_hoje_pra_frente=0 · lampadas=2351 · fio_vivo=2013`.
+Contra o carimbo de prod de **20/10 15:48** (205 · 205 · 60 · 144, `de_hoje_pra_frente=49`) ele **SUBIU**:
+os 49 "de hoje pra frente" de 20/10 envelheceram para dentro do balde do alarme -- e os elos que os
+cobrariam estavam na corrente morta da secao abaixo. PROVA: `logs/fio/censo_2210_sombra.out`.
+
+## A CORRENTE DA MANHA DE 21/10 NASCEU VAZIA, E O ALARME MORREU NO MESMO IMPORT QUE A MATOU (achado 22/10 01:0x -- 0 linha de codigo ainda)
+
+`LEI-AKITA: origem=config/crons.py:174 (o raise acontece no IMPORT do modulo, dentro da derivacao);
+testemunha=logs/fim/<elo>.<emp>.<dia>, o ARQUIVO que cada elo carimba; RED=a construir (contador
+"correntes que nasceram vazias", esperado 0, com caso que MORDE);
+quem-mais-le=core/management/commands/crons.py:15 + bin/cron_run.sh (teto) + bin/encadeado.sh
+--corrente + bin/placar_code.sh; juizes novos=0`
+
+**O FATO:** em 21/10 a corrente de `processar_cartorio` nao rodou **nenhum** dos seus 11 elos.
+`logs/fim/` cai de **103** arquivos (20/10) para **89** (21/10), e os ausentes sao exatamente os 11
+ENC (`apurar_furos_diarios` ... `vigiar_carimbo_sem_registro`) mais o fim do proprio
+`processar_cartorio`, `pipeline_placar` e `sombra.sh`. O binario do cartorio **rodou**
+(`fim: julgadas=358 carimbadas=373 pulados=108509`); quem nao rodou foi tudo DEPOIS dele --
+`vigiar_txt_dominio` e `lavrar_retrato_folha` inclusive, na vespera do export da 10.
+
+**A CAUSA**, no log do proprio esperador (`logs/encadeado/_corrente.processar_cartorio.log`, 21/10
+06:32): `core/management/commands/crons.py:15` importa `config.crons`; `config/crons.py:246` chama
+`inicio_derivado('sombra.sh', vizinho=VIZINHO_SOMBRA)` **no import**; e ele levantou
+`ValueError: CRON QUE NAO CABE: 'sombra.sh' mede 57 min e o vizinho comeca 05:00; ... teria de comecar
+04:01, antes do piso 04:05`. Entrada: `app/config/crons_duracao.json`, escrito 21/10 04:05:02 por
+`bin/crons.sh check --medir`, `sombra.sh = 3368 s` (**56,1 min**). Saida: `ALARME: corrente de
+processar_cartorio vazia -- rc=1 elos=0`.
+
+**UM defeito explica OS DOIS vermelhos de 21/10** -- a corrente morta E o portao do deploy --, porque o
+`cron_run.sh` das 04:11 importa o MESMO modulo. Foi ele que forcou o `--bloco` a mao desta noite.
+
+**A REINCIDENCIA JA ESTA CURADA** pelo item 1 do seu aval de 21:3x: `VIZINHO_SOMBRA = '05:10'`, e
+05:10 - 2 min - 57 min = **04:11** >= piso. MEDIDO ao vivo: `manage.py crons render` rc 0 com a linha
+da sombra em `11 4 * * *` (igual a do crontab instalado) e `crons corrente processar_cartorio` listando
+todos os elos. A janela de dano fecha SOZINHA no run 06:27->06:32 de hoje: todo elo e idempotente por
+requisito (secao 7 do CLAUDE.md). **Nao rodei a corrente a mao a 01:00 de proposito**: ela contem
+`disparar_perguntas_competencia --apply`, que fala com ~750 colaboradores numa hora que ninguem espera.
+
+**O RESIDUO, e e ele que vira fatia:** ninguem LEU o alarme por um dia inteiro. O publicador do placar
+(`bin/placar_code.sh` -> `bin/crons.sh check`) e morto pelo MESMO import que gera o alarme -- o alarme
+derruba quem o anunciaria. Obra `CORRENTE-VAZIA-TEM-CONTADOR`: contador carimbado com esperado 0, caso
+que MORDE, e a impossibilidade da derivacao contida na SUA entrada, para as outras ~100 renderizarem.
+Instrumento pousa separado (L-105).
+
+## O ANEXO DEIXA DE SOBREVIVER A LINHA QUE NAO NASCEU, E TRES LOGGERS SAEM DO VAZIO (comboio 2110b)
+`LEI-AKITA: origem=as portas de escrita de ausencia (criar e reenviar) + a casca que nunca configurou os tres loggers; testemunha=a Ausencia gravada e o handler resolvido em runtime; RED=test_anexo_nao_sobrevive_a_linha_que_nao_nasceu.py + test_logger_ponto_vai_para_arquivo.py; quem-mais-le=censo no corpo de 3681965f (portas de escrita) e de b139562e (AST de todo getLogger); juizes novos=0`
+O QUE MUDOU: `ponto/services/ausencia.py` (as portas que anexam passam a nascer e a morrer COM a
+linha), `ponto/signals.py::_log` e `ponto/realtime.py::_log` (nomes -- `"nucleo"`, `"realtime"` -- que
+`config/` nao configurava em lugar nenhum, agora `__name__` debaixo de `ponto`) e
+`config/settings/saas.py` (o logger `ponto` ganha handler de ARQUIVO). DEFEITO MEDIDO: em 18/10 07:06,
+4 POSTs deram 500 por `IntegrityError` na `uniq_ausencia_viva_por_tipo_e_dia`, com 0 Ausencia criada e
+4 anexos ORFAOS -- o anexo nascia antes da linha e sobrevivia a ela. Os 4 seguem sem apagar (e o seu `!`).
+PROVA da arvore: suite CHEIA na arvore exata que pousa -- `OK (skipped=51, expected failures=14)`,
+`Ran 11535 tests in 1649.142s`, rc 0, 0 linha `^ERROR:`/`^FAIL:`; manifesto de 2907 `.py` com md5
+IDENTICO antes e depois (`logs/comboio2110b/manifesto_py_antes.txt` e `..._depois.txt`), nenhum `.py`
+editado entre o veredito e o merge, identidade conferida no INDICE antes de existir commit.
+PROVA do portao (E2) no ato do pouso: SOMBRA_BLOCO="22/10 00:38" · SOMBRA_COMANDOS=76 · SOMBRA_ERROS=0 · SOMBRA_ALARMES=5 · SOMBRA_DIVERGE=0 · status=OK · `--conferir` rc 0 (lido SEM pipe)
+DIETA L-109 NO MESMO COMMIT (L-106): 1.162 linhas em 42 secoes (19/10, 18/10 e 17/10) foram para o
+`RELATO-ARQUIVO.md` inteiras -- md5 `050a6dfe269e54d02fc667273f042106` conferido ANTES de extrair e
+DEPOIS de colar, vivo 2.641 -> 1.487 linhas, arquivo 42.781 -> 43.954. O corte PAROU em
+`## ALARMES DA ESTEIRA` (secao pinada do vigia e `PEDIDOS DE PATCH ABERTOS` nao se movem), e os 4
+contratos de NOME da fatia 2 de Gestao de HE foram conferidos AUSENTES do bloco ANTES de mover (0
+ocorrencia cada) -- a classe que ja deixou este push vermelho em 02/10, 05/10 e 11/10. CONFERIDO
+DEPOIS: `test_relato_guarda_pedido_de_patch.sh` rc 0, mais 10 selos de host rc 0, e os 3 testes Django
+que leem o arquivo VIVO (`Ran 20 tests`, rc 0) -- os 7 skips, enumerados a `-v 2` um por um, sao todos
+do `MOTIVO_SKIP` antigo da fatia 2, e todo caso que LE o arquivo vivo rodou `... ok`.
+BARREIRA DE HARNESS (sua regra das 20:5x): `ReadNotifications` bloqueado **3x seguidas** -- fica a
+linha e segui outro item. INCOMPLETO: o `RotatingFileHandler` nao e seguro entre PROCESSOS (5 workers
+x 4 threads girando o mesmo arquivo); cura = `WatchedFileHandler` + logrotate, 81 sitios censados.
+
+## O COMBOIO POUSOU E ESTA NO AR: DUAS RAIAS, UMA SUITE, UMA ARVORE (21/10 22:0x)
+`LEI-AKITA: origem=cada raia curou o seu sitio (o escritor da recusa; a celula que recalculava a borda); testemunha=a corrente do cartorio e o pareador; RED=test_frescor_do_retrato.py + test_saida_valida_vira_orfa.py; quem-mais-le=censo no corpo de cada commit de raia; juizes novos=0`
+PROVA: rota das 3 cascas e hash no ar -- o ato esta registrado pelo proprio `deploy.sh` em
+`logs/deploy_sem_sombra.log` -- `2026-10-21 22:00:36  SEM-SOMBRA  por=ronald` --, com as **3 rotas
+das 3 cascas em 200/302/200** (`saas_core /health/`, `saas_ui /colaboradores/`, `mensageria
+/health/`), migrations pendentes **0**, prova de casca 16 estaticos / 5 paginas / 616 rotas e selo
+BUG 128 verde. **Hash que subiu: `3bcabf1c`**; hash no ar AGORA: **`a127492a`** (`logs/deploy.stamp`,
+22/10 00:42), que o substituiu no marco seguinte. Suite: `logs/comboio2110/suite_comboio.log`.
+A FORMA, pela POUSO-EM-COMBOIO e pela L-107: UMA copia de certificacao
+(`/home/ronald/wt-comboio2110`, `main + 8959d592 + 450456a8`), UMA suite CHEIA nela, e os dois
+merges em sequencia com **nada no meio**. Veredito literal, lido como a L-074 manda
+(`OK|FAILED` + `Ran N` + rc do processo): **`OK (skipped=51, expected failures=14)`** ·
+**`Ran 11524 tests in 1675.943s`** · `rc_suite=0` · **0** linha `^ERROR:` ou `^FAIL:`.
+PROVA de que a arvore que pousou e a arvore que a suite certificou, que e a clausula que morde:
+`git -C /home/ronald/wt-comboio2110 status --porcelain` **VAZIO** depois do veredito (nada foi
+editado na copia), e `git diff --name-only main comboio-20261021` **VAZIO** depois dos dois
+merges -- com UMA excecao DECLARADA, `app/config/crons_duracao.json`, que nunca se commita (vivo
+3368 s, HEAD 2457 s). Os dois `--no-ff` nasceram commit de verdade:
+`MERGE_HEAD` = `8959d592` e `450456a8`, nenhum fast-forward.
+NO AR: `bin/deploy.sh --sem-sombra "<o circulo do portao>"` -- `3cdd49a7` (raia B) e `3bcabf1c`
+(raia C). Prova do proprio deploy: migrations pendentes no schema do cliente **0**, prova de casca
+**16 estaticos / 5 paginas / 616 rotas em 2 urlconf**, as **3** rotas das 3 cascas respondendo
+(200/302/200), selo BUG 128 verde, `importerror_500=0` na hora seguinte ao reload.
+POR QUE `--sem-sombra`, e nao e atalho: o portao do ensaio esta em CIRCULO medido -- `config.crons`
+levanta `CRON QUE NAO CABE`, entao `manage.py crons sombra` nao roda, o `--bloco` nao carimba e o
+`--conferir` devolve rc 1. O motivo foi escrito no proprio deploy, e a cura do corredor e a fatia
+seguinte DESTE turno (secao da janela, abaixo).
+INCOMPLETO, nomeado: o **banco 6 da raia B** (`logs/fim/lavrar_retrato_folha.-.20261022`) nao fecha
+com o merge -- ele depende da corrente da manha, que importa `config.crons`. Com a duracao viva em
+3368 s ela segue levantando ate a fatia da janela estar na ARVORE VIVA; o prazo real do banco 6 e
+**merge + janela no ar antes das 06:27 de 22/10**, nao o merge sozinho.
+
+
+## O CORREDOR DA SOMBRA DECIDIDO, E O VERMELHO QUE NENHUM SELO PODIA VER (item 1 do aval de 21/10 21:3x)
+`LEI-AKITA: origem=config/crons.py (o corredor, nao a medida); testemunha=o placar de duracao (`dur_s`) e a propria `inicio_derivado`, que e quem o cron le; RED=`bin/crons.sh check` VERMELHO na arvore viva (`config.crons` inimportavel) -- evidencia em logs/comboio2110/crons_check_red.log; quem-mais-le=censo `git grep -w health_crawl` = 4 leitores, os 3 que carregam o horario migraram no mesmo ato; juizes novos=0`
+DECIDIDO pela lei existente e sem devolver turno (horario de cron e decisao tecnica, PAREI-SO-LEI, e seu
+aval das 21:3x diz isso com estas palavras). **Sai o `health_crawl`**, nao o ensaio:
+ * o corredor 04:05-05:00 tem **55 min** crus -- **53** uteis, descontada a tolerancia B6 de 120 s -- e a sombra
+   mede **3368 s = 57**: `inicio_derivado` LEVANTA, e e esse raise que deixa `config.crons` inimportavel,
+   `SOMBRA_BLOCO=nao_rodou` no carimbo e o portao do `deploy.sh` vermelho -- nao ha minuto a escolher aqui dentro.
+ * sai quem nao tem motivo de estar ali -- **o MESMO criterio de 03/10**, quando quem saiu foi o eval:
+   `health_crawl` mede **30 s**, declara `depende=()` e tem **zero** citadores (`git grep -w`). A sombra
+   nao pode sair (restaura o dump das 04:00 e o `deploy.sh` do dia exige o carimbo dela); o
+   `pre_fechamento` das 05:10 e `--apply` de negocio, tambem com `depende=()` e **0 cron dependendo
+   dele** (medido) -- e vizinho por ser o primeiro horario FIXO depois da sombra, nada mais.
+ * **health_crawl 05:00 -> 05:30** (o pre_fechamento acaba 05:11 e nada ha ate o rodape das 05:45) e
+   `VIZINHO_SOMBRA` passa a ser **05:10**: corredor de 65 min, sombra derivada para **04:11**, fim
+   **05:08**, 2 min de folga -- a tolerancia do B6, por construcao da funcao. **A folga 1,5 do placar
+   NAO foi tocada** (sua ordem): 3368 s segue sendo p95 de 7 dias x 1,5 sobre 2090 s e 2245 s reais.
+ * TETO ESCRITO NO CODIGO para a sexta vez: em **63 min** (3780 s) ela levanta de novo, e ai **nao ha
+   vizinho para mover** -- a saida sera encurtar o bloco do ensaio, a outra saida do raise.
+ * MEIA-CORRECAO: os 2 outros leitores do literal migraram no MESMO commit (`core/rotas_publicas.py`,
+   `docs/CRONS.md`); o 3o, `docs/ARQUITETURA.mmd`, e DERIVADO -- refeito por `gerar_diagrama`, nao a mao.
+NENHUM SELO PODIA PEGAR ISSO, e esse e o achado de verdade: a medida que dispara o raise mora em
+`config/crons_duracao.json`, que **nunca se commita** -- HEAD tem **2457 s** (cabe) e o vivo **3368** (nao
+cabe). Toda copia de teste e verde por construcao; quem ve e `bin/crons.sh check` na arvore VIVA, e **nenhum
+portao de push o chama** (medido 21/10). Fica como pouso de INSTRUMENTO (L-105), nao aqui.
+
+
+## OS DOIS VERMELHOS DA MESMA SUITE: UM SELO QUE ACUSA O CODIGO CERTO E A SEXTA COLISAO DO BLOCO DAS 07h
+`LEI-AKITA: origem=o selo que fabrica numero calibrado contra o vizinho de UM dia + o minuto 07:21; testemunha=`VIZINHO_SOMBRA`/`PISO_DEPOIS_DO_DUMP`/`TOLERANCIA_B6_S` e o placar `dur_s`, as mesmas que `inicio_derivado` e o B6 leem; RED=FAILED (failures=2, skipped=51, expected failures=14) / Ran 11524 tests in 1691.412s na copia, as duas failures nomeadas abaixo; quem-mais-le=censo do minuto por `git grep -w` = 3 leitores de prosa + 1 derivado, todos migrados no mesmo commit; juizes novos=0`
+A suite CHEIA da copia voltou **FAILED (failures=2, skipped=51, expected failures=14) / Ran 11524 tests in 1691.412s** e a janela **nao pousou** assim (sua ordem das 19:1x); os dois vermelhos tem DONOS diferentes, e nenhuma das curas foi band-aid.
+ * **(1) O SELO ESTAVA ERRADO, NAO O CODIGO.** `test_MORDE_render_segue_VERMELHO_quando_a_sombra_NAO_CABE`
+   FABRICAVA a duracao (`3368`) e LIA o vizinho REAL -- numero calibrado contra o corredor de 53 uteis do
+   vizinho 05:00. Minha propria cura abriu o corredor para 63, **3368 passou a CABER**, o raise nao veio e o
+   `assertRaises` caiu; pior, o irmao `test_RED_...NAO_CABE` passou **VAZIO** no mesmo run, provando nada
+   (SELO ANTI-VACUIDADE). CURA na origem: a constante vira DERIVADA da autoridade que o selo ja importa --
+   "duracao que nao cabe" = **uteis+1 min**, o MENOR numero que ainda levanta --, entao ele morde no LIMITE e
+   sobrevive a qualquer movimento do vizinho, inclusive o que minha prosa preve em 63 min. Nada se apagou nem
+   se afrouxou: mudou so a FONTE do numero.
+ * **(2) A SEXTA COLISAO DA CLASSE, e ela e a PROVA do paragrafo do marco acima.** B6:
+   `auditar_invariantes_chamados@07:18 invade tripwire_tipo_batida@07:21`, porque a duracao do auditor subiu
+   **134 s (HEAD) -> 200 s (vivo)** e 07:18+200 s = 07:21:20. **Nao e efeito da minha cura**: aparece so porque
+   esta copia carrega o json VIVO -- nenhum selo ve, ja que `crons_duracao.json` nunca se commita e toda copia
+   nasce verde com o json do HEAD. LEI-AKITA 6: curei na hora. QUEM ANDA E A VITIMA, medido: o auditor tem
+   dependente (`pipeline_placar@07:40`), depende de `flip_automatico@07:12` e entre 07:13 e 07:40 **nao existe
+   buraco de 4 min contiguos** -- entao **tripwire_tipo_batida 07:21 -> 07:25** (30 s, ninguem depende dele,
+   livre com o json do HEAD **e** com o vivo). No MESMO commit migraram a prosa de 134 s/07:21 (`crons.py:455`
+   e `:475`) e a linha do `docs/CRONS.md`, velha nos **dois** minutos; o `.mmd` e DERIVADO (`gerar_diagrama`).
+PROVA: `--only` dos 3 selos alvo OK (skipped=1) / Ran 51 tests in 51.457s (`logs/janela2110/only3.log`), suite CHEIA OK (skipped=51, expected failures=14) / Ran 11524 tests in 1675.716s (`logs/janela2110/suite_janela2.log`), ruff verde nos 2 `.py`, `cmp` contra a copia certificada arquivo a arquivo.
+INCOMPLETO, para a fila: 07:18-07:24 e uma TRELICA DE 1 MINUTO sem folga -- com o auditor em 200 s o proximo
+invadido e `vigia_b5_ausencia@07:22`, bastando passar de 240 s. A resposta da lei existente nao e minuto, e a
+**corrente por ARQUIVO** (CLAUDE.md 7: horario e aposta sobre duracao, arquivo e FATO).
+
+
+## O PASSIVO QUE MORREU POR RELOGIO ESTA MEDIDO: 3.923 PERGUNTAS, 413 COLABORADORES (item 3 do aval de 21/10 21:3x)
+`LEI-AKITA: origem=chamados/juizes.py:590 (absolvicao antes da lei), nao o leitor; testemunha=a propria funcao do juiz (`_dentro_da_janela_viva`) chamada linha a linha, mais ponto/janelas.py para a fronteira; RED=n/a (medicao, nao cura); quem-mais-le=a medicao nao muda codigo nenhum; juizes novos=0`
+Seu criterio, LITERAL, na sombra de hoje (`bin/sonda_leitura.sh --sombra`, LEITURA por GRANT, cpuset 4-7):
+`via_resolucao='chamado_encerrado'` + `materializada_em` nao nula + `data_evento < ini_ant-1d`.
+Fronteira do dia: `janela_anterior(21/10)=(21/09,20/10)`, `corte_vespera=20/09`.
+ * UNIVERSO da via com `materializada_em`: **6.418**. Fora da janela pela IDADE: **3.923**. Dentro, e
+   portanto julgadas pela LEI: **2.495**. `data_evento` futura: 0. `data_evento` nula: 0. A soma fecha o
+   universo (3923+2495+0+0 = 6418) -- contador == universo, nao amostra.
+ * CONFERIDO PELA FUNCAO REAL, nao pelo SQL que eu escrevi: `_dentro_da_janela_viva` diz FORA em
+   **3.923 de 3.923**. O SQL e a funcao respondem o mesmo numero, e e o da funcao que vale.
+ * IDADE: a mais antiga e de **21/05** (153 dias); a mais nova, 19/09 (32 dias). Por competencia:
+   06/2026 **17**, 07/2026 **143**, 08/2026 **1.444**, 09/2026 **2.319** -- o acervo nao e cauda antiga,
+   e o mes passado. **413 colaboradores distintos** (distinct com `order_by()` limpo: `Meta.ordering`
+   anula o distinct e teria inflado este numero).
+ * O QUE **NAO** E LOTE, para ninguem ler 24 mil: as outras vias com `materializada_em` e a mesma idade
+   somam 24.037, mas a maioria **absolve por si** (`duplicata` 4.689, `admin_decidiu` 1.430,
+   `competencia_trancada` 1.994, `paridade_recusada` 214, `fato_ocupado` 24 estao em `_ABSOLVEM_SEMPRE`;
+   `declaracao`, `completude_turno`, `celula_absolveu` e as demais absolvem por testemunha propria, em
+   degrau anterior ao relogio). A unica outra via que o comentario do codigo declara como "NAO absolve"
+   e `legado_sem_lastro`, com **24** -- e a propria linha dela diz "nao se refaz".
+   Entao o lote que o seu corte de 25/08 prometeu tem o tamanho de **3.923**, nao de 24.037.
+PROVA: a saida inteira da sonda em `logs/o261/passivo_idade_2110.txt` (sem um unico id, nome ou CPF --
+so contagem, data e competencia). O lote NASCE DEPOIS DO EXPORT DA 10, como complemento da O261: item
+`LOTE-DO-PASSIVO-ABSOLVIDO-POR-IDADE` no BACKLOG, com estes numeros como universo de partida.
 
 ## OS DOIS VERMELHOS QUE SEGURAVAM TODO POUSO DE HOJE: SELO QUE GUARDOU CALENDARIO, NAO LEI (raia A, 21/10 20:4x)
 `LEI-AKITA: origem=os dois selos (data LITERAL e par de dias vizinho de borda), nao o produto; testemunha=ponto/janelas.py::janela_atual/janela_anterior e chamados/juizes.py::_dentro_da_janela_viva, as mesmas autoridades que o codigo julgado le; RED=logs/raiaC/baseline_main_8.log (os dois no main, arvore sem cura nenhuma, assercao literal); quem-mais-le=ninguem -- os dois arquivos sao selo, zero chamador de producao (git grep); juizes novos=0`
@@ -694,1172 +992,18 @@ O `f00f5a51` fica um commit a frente do remoto de PROPOSITO: e o derivado do `bi
 - **INCOMPLETO, em lista** (nada disto entra agora): `folha/export.py:354` (pergunta de LEI + recesso, nomeia `folha/export`); `ponto/services/esmeril_espelho.py:121`; `vigiar_motor_autoridade.py:51` (instrumento, pouso proprio pela L-105); a linha nova `TELA-MENOR-QUE-O-GRAVADO` (269,57 h em 9 colabs da 10/2026, defeito PRE-EXISTENTE ao marco).
 - **ESMERIL DO MARCO** (ESMERIL-DO-MARCO, so o que ESTE marco deixou orfao): a unica candidata de nivel de modulo na `fechamento.py` da raia e `_so_a_data` (`:1375`), e ela tem chamadores no proprio modulo (`:1412`, `:1413`) -- **nao e orfa**. Nada a apagar, e nenhum achado de fora do marco aberto.
 
-## MARCO 19/10 23:2x -- A TELA E O CARTAO LEEM O LACO DE FATIAS DO ESCRITOR PELA PORTA UNICA, E TRES DEFEITOS DE BORDA MORREM NA ORIGEM (REGUA-DO-PERIODO-VEM-DA-ESCALA-DE-HOJE fatia 2 -- pouso da raia `wt-regua10b` pela L-105/L-107)
-LEI-AKITA: origem=ponto/services/fechamento.py::apurar_por_fatia (dono unico do laco) + as tres curas de borda no proprio sitio;
-testemunha=a MESMA fatiagem que grava `regua_por_dia`, e `ponto/turnos.py::dia_encerrado` (core/juizes.py:188) no teto do furo;
-RED=test_regua_por_fatia_na_janela.py, test_composicao_de_fatias_e_total.py, test_o140_furo_lavrado.py e
-test_o197_futuro_nao_e_em_aberto.py -- sem teto 7 fails, com teto por DATA 4 fails (logs/regua10/RED_do_teto_19-10.md); quem-mais-le=`Autoridade.motor` 0 leitor de producao + os 3 sitios de `resultado.datas_falta`, os tres curados; juizes novos=0.
-- MUDOU: `fechamento.py::apurar_por_fatia` (+ `_Apuracao`, 6 campos) e `fechamento.py::_furos_encerrados`; `espelho.py::
-  autoridade_do_periodo` e `relatorios/pdf_espelho.py::_coletar_dados_espelho` chamam o dono unico, cada um com a alimentacao que sabe montar (L-038 para o cartao).
-- DEFEITO DO PEDIDO: `get_motor_cct` pedido UMA vez na primeira data da janela. Frota 10/2026, 594 colabs, sombra completa, as
-  duas autoridades REAIS: 14 colabs com DUAS impressoes na janela, 6 com dinheiro diferente do gravado (14,35 h de `horas_noturnas`
-  mais 6,00+6,00+2,99+2,99 de HE), 75 de controle TODOS iguais; a janela das duas vale 18,29 h e o leitor de ontem pagava 16,00 h
-  (logs/regua10/sondaE_b2_dinheiro_19-10.out, e a regra pelo motor real no corpo do commit).
-- OS TRES DEFEITOS DA BORDA, curados na ORIGEM, com lapide no sitio e selo que morde: (1) composicao parcial -- 8 `+=` a mao e 6
-  campos do `ResultadoMes` para tras e 25 selos caindo na suite cheia, hoje as 4 tuplas `COMPOR_*` varridas por
-  `dataclasses.fields` com allowlist 0; (2) clamp da celula -- dia sem celula NENHUMA depois do ultimo dia atribuido ficava fora
-  de TODA fatia (na tela, o furo de 27-30/07), curado pela VIGENCIA e pela mais RESTRITIVA; (3) furo sem TETO TEMPORAL, que so
-  existe por causa de (1): os 3 sitios gravariam HOJE como furo, e o teto e por FATO ENCERRADO, nunca `data < hoje` (secao 6).
-- MEDIDA do teto na sombra, criterio escrito ANTES (AGORA=19/10 04:00 cravado do dump, as duas arvores sob freeze_time --
-  logs/regua10/CRITERIO_do_teto_19-10.md, MEDIDA_do_teto_19-10.md): 2.227 dia-colab em 485 colabs -> 1.447 em 292, e os 780 fora
-  abrem EXATO (533 janela do turno correndo, 247 isento Art.62, 0 turno vivo, 0 sem tipo, 0 inexplicado, 0 erro). PORTOES: campos
-  movidos 0 em 605 x 26 campos, 0 colabs divergem do que o juiz afirma sozinho com `celulas=None`, ZERO dia afirmado com
-  `fim_turno` > AGORA, e 19/10 183->0, 20/10 350->0, 18/10 87->66, 17/10 65->61.
-- PROVA: bateria alvo OK / Ran 45 / rc=0; custo da frota CRUA x RAIA volta 2 x volta 2 149,2 s x 146,1 s (RAIA 3,1 s mais rapida; dispersao do proprio lado cru 3,4 s), `os.times().elapsed` porque freeze_time congela monotonic; SUITE CHEIA sobre a arvore que POUSA (o `--dir` montou a propria raia, `bind /home/ronald/wt-regua10b/app -> /app`): **OK (skipped=42, expected failures=14) / Ran 11475 tests in 1667.277s / rc_suite=0** (`logs/regua10/suite_pouso2_19-10.out`); 11.474 + 1 caso novo, e os dois testes do O140 trocados 2 por 2 -- contagem conferida, nenhum teste perdido; POS-CURA na sombra, criterio escrito ANTES e com a linha de base da sonda F ao lado (`logs/regua10/CRITERIO_pos_cura_H_19-10.md`): a PRIMEIRA leitura deu **VERMELHO** -- MULTI_REGUA 6 de 14 e BORDA 3 de 30, tudo num UNICO campo, `horas_trabalhadas`, leitor sempre ABAIXO -- e o defeito era do INSTRUMENTO: o par violava a regra escrita da propria sonda (so campo que o escritor escreve como RENOMEACAO PURA), porque `fechamento.py:734` e `:792` somam `_min_orfaos/60` (O85) e `_min_sem/60` (corte 27/09) ao gravado, e a linha `:749` ja dizia isso por escrito. A decomposicao contra o LOG DO ESCRITOR fecha ao centavo nos nove (residuo absoluto somado **0,0500 h**, tolerancia 0,0167 porque os dois logs imprimem `round(min)` inteiro; `min_o85` AUSENTE nos nove -- `sondaI_decompor_horas_19-10.out`): a cura nao tirou hora nenhuma da tela. Correcao e motivo escritos ANTES de rodar de novo (`CORRECAO_DO_INSTRUMENTO_H2_19-10.md`), campo MANTIDO na comparacao e diferenca BRUTA publicada em contador proprio -- o lado do escritor passa a ser LIQUIDO das duas adicoes lidas do log dele. H2 sobre o universo INTEIRO (`sondaH2_pos_cura_corrigida_19-10.out`): portao DESTE marco `MULTI_REGUA` **0 de 14**, controle `UNI` **0 de 40**, e `BORDA` **0 de 30** -- a sonda F tinha 2 (col821, col949) e a leitura de entao era que a borda fosse um SEGUNDO defeito: ela caiu com as MESMAS tres curas, e isso nao estava previsto. `PDF_DIFERE` **0** nos tres estratos, `SEM_LINHA_E_COM_DELTA` **0** e `campo_ausente` **0** (o bloco CLASSES imprime o dict inteiro, logo chave ausente e zero MEDIDO). O que a correcao publica em vez de esconder: `TELA_MENOR_QUE_A_FOLHA` **9 colabs, 269,57 h** -- achado PRE-EXISTENTE, no topo.
-- INCOMPLETO: folha/export.py:354 = pergunta de LEI abaixo; esmeril_espelho.py:121 = leitor de ASSINATURA sem RED (LEI-AKITA 5); vigiar_motor_autoridade.py:51 = INSTRUMENTO, pouso proprio (L-105); as outras grafias de teto por data e supra_juiz.py:154 (contador proprio, ESPERADO=1) = linha de fila.
-- TRES SELOS INVERTIDOS, nenhum afrouxado: a cheia de 21:5x deu FAILED (failures=3) e os tres eram caracterizacao ancorada na GRAFIA substituida (`_furos_afirmaveis` no lugar da expressao literal; as tuplas `COMPOR_*` no lugar do `=` a mao) -- zero campo de dinheiro movido. Cada um passou a cobrar MAIS: 1 derivacao e 3 leitores dela; politica declarada com `Assign` nominal = []; e o par comportamental (mapas disjuntos -> UNIAO). Recorte dos 5 modulos: OK / Ran 46 (logs/regua10/RED_DA_SUITE_CHEIA_19-10.md, only_invertidos_19-10.OK.out). Censo de citacao (`git grep` dos 2 nomes de teste trocados e dos 2 arquivos): 0 em LEIS/DOSSIES/CORTES -- nenhum entra na coluna PROTEGE --, e UMA citacao de nome velho, em `RELATO.md:39`, que e HISTORIA e nao se reescreve (L-116).
-- ARVORE CERTIFICADA = a PROPRIA raia, porque o `--dir` a montou: nao existe copia para `cmp`, e a prova e o PAR de leituras de CONTEUDO dos 9 caminhos -- uma no minuto do veredito, outra no minuto do `git add`, `sha256` iguais (`censo_arvore_veredito.txt` x `censo_arvore_add.txt`) --, nunca mtime: a suite regenera ARQUITETURA.mmd/MAPA.md/base_app.html IDENTICOS. Pai `50392fe9`; docs no mesmo commit (L-106); pouso por L-107 e o pouso e do main. COMBOIO MEDIDO agora, `git worktree list` + `git status --porcelain` por raia: roda SOZINHA -- `main` tem 15 modificados e **0 `.py`** (docs/json) e `wt-bos` 1 modificado e **0 `.py`**, e raia so com docs em pe nao fica pronta para a suite em 30 min; `wt-regua10b` tem 9 modificados, **9 `.py`**, exatamente os 9 caminhos desta fatia.
-## MEDIDO 19/10 17:4x -- A TERCEIRA CERTIFICACAO DO POUSO DA 10 FECHOU VERDE, E O PUSH DO COORDENADOR LEVOU O MARCO (promessa da secao de 17:0x) -- nao e marco: 0 linha de codigo
-
-A secao de 17:0x deixou UMA promessa escrita -- *"o resultado dela entra na proxima secao"* --, e esta e a secao. Os 24 modulos que leem `app/docs/` rodaram sobre a arvore POUSADA (`50392fe9`, codigo novo E prosa nova juntos, `ESTEIRA_QUEM=docspousado`): **`OK (skipped=10, expected failures=11)` / `Ran 400 tests in 103.468s` / rc=0**, 0 linha `^FAIL:` ou `^ERROR:` no log. Largada 17:26:52, fim 17:43:23 -- os 16 min sao fila atras do `pre-push` do coordenador, nao corrida: a fase de teste sao os 103 s finais.
-
-A PROSA ESTAVA PARADA QUANDO ELA FOI LIDA, e isso se mede no `mtime`, nao se promete: o mais recente dos quatro docs e `HANDOFF-SESSAO.md` as **17:34:01**, e a fase de teste comecou as ~17:41:35 (fim 17:43:23 menos 103,468 s) -- sete minutos de arvore estavel antes da primeira assercao. O QUE ELA NAO MEDIU E ESTA SECAO, que nasceu as 17:49, nem o `HANDOFF-SESSAO.md` regerado junto (`a empurrar: 0`): por isso ha uma QUARTA rodada dos mesmos 24 modulos sobre a prosa de agora, e o veredito dela vai na linha de baixo -- certificacao que nao cobre o paragrafo que a declara nao certifica nada. O veredito dela nao entra AQUI de proposito, e a razao e um laco: escrever o numero na prosa move a prosa que a rodada acabou de medir, e a rodada seguinte teria de medir a frase que a descreve, sem fim. Ele fica em `logs/regua10/QUARTA_RODADA_DOCS.md` (fora do git, como todo `logs/`), com largada, fim, as tres leituras da L-074 e o md5 dos quatro docs antes e depois; a prosa, aqui, para de andar nesta linha. As tres certificacoes do pouso, cada uma com o seu universo dito por extenso: 11457 testes sobre o tree do merge (codigo novo, docs do HEAD), 400 sobre a arvore viva (prosa nova, codigo de antes) e estes 400 sobre a pousada (as duas coisas).
-
-O PUSH DO COORDENADOR LEVOU O MARCO: `git ls-remote origin main` devolve `50392fe94dfc5b6dc88537dc0830e6c8d9720234` -- `origin/main` == `HEAD`, **0 a empurrar**, e os 8 commits do intervalo (os quatro do main mais os meus) estao no remoto num push so, como manda o um-por-marco da L-108. A trava de teste voltou a **livre as 17:45:50**. Eu nao empurrei: o push era dele, e os commits dele sao ancestrais do meu.
-
-A `raia-cct` FICOU COMMITADA, e segue sem pousar: `6c147c76` em `wt-cct` (5 arquivos, 286 insercoes, arvore limpa depois), com a linha do RELATO de 16:5x intacta -- a JANELA DE FECHAMENTO so deixa subir TELA e bug PROVADO que muda o valor da 10, e cartorio de cadastro nao e nenhum dos dois; ela pousa depois do export de 21/10, com suite INTEIRA sobre `main + raia` pela L-107. DUAS coisas eu corrigi antes de commitar, e as duas eram minhas: um comentario que um reflow deixou na coluna 0 dentro do dict `FORA_DE_PIPELINE` de `config/crons.py` (formatacao quebrada no meio de um literal), e a frase da mensagem que dizia `diff -rq ... UM arquivo diferente` -- com o realinhamento sao DOIS, e os dois com AST IGUAL ao da copia que correu verde (`ceb9308b...` na porta, `00389ff4...` no crons), que e a prova de que a corrida verde certifica o programa deste commit.
-
-## MARCO 19/10 23:5x -- FURO DE HOJE SO ABSOLVE PLANTIO DE HOJE: A VESPERA SAI DO PERIODO DA 2a OPINIAO POSICIONAL (O261, corte dele das 07:3x)
-
-LEI-AKITA: origem=`chamados/services/materializacao.py::_plantio_preenche_furo_na_data`, testemunha=CelulaDia do DIA do plantio (ata.lampadas + ata.orfas, lavradas pelo cartorio), RED=`chamados/tests/test_o261_vespera_nao_absolve.py`, quem-mais-le=2 de producao (`materializacao.py:402` leitor da tela do fio, `:670` o escritor) + 4 selos, nenhum deles monta vespera, juizes novos=0.
-
-O QUE MUDOU: a funcao varria `data__range=(D-1, D)` com `.order_by('-data')` e devolvia no PRIMEIRO dia que absolvesse -- a vespera inteira em furo absolvia QUALQUER plantio dentro do `TOL_SLOT_MIN` (240 min, `ponto/propositor.py:78`), e a guarda de paridade de 01/08 ficava DESARMADA com a ata do dia do caso COMPLETA. Agora o periodo e o DIA DO PLANTIO e nada mais. Corte dele, LITERAL: *"a absolvicao da vespera em `_plantio_preenche_furo_na_data` NAO vale -- furo de hoje so absolve plantio de hoje"*. Nao e lei nova (L-117): e a L-061 -- o consumidor le a lampada do dia que esta julgando -- chegando ao leitor que faltava.
-
-NAO E HIPOTESE: o selo vizinho curou a propria FIXTURE duas vezes para fugir deste sitio (`chamados/tests/test_o317_passivo_pela_porta.py`, O317-A-VESPERA-FANTASMA e O317-VIZINHA-OCUPA-O-SLOT), e o docstring dele ja dizia *"entao o periodo e o DIA, e nada mais"*. O sitio e que cura agora.
-
-IMPACTO (L-094/L-110 -- o caminho velho se le UMA vez, na troca, nunca para validar), `logs/o261/IMPACTO_vespera_19-10.md`: funcao REAL `estado_aplicacao_pergunta`, sombra carimbada `dia=20261019 tipo=completa diverge=0 erros=0`, porta de LEITURA sem GRANT de escrita, MESMO universo nas duas rodadas -- 254 perguntas de hora respondidas e nao materializadas, ERROS=0. HEAD `aplicavel 92 | bloqueada_paridade 24 | invalida 123 | ja_satisfeita 15`; curada `91 | 25 | 123 | 15`. **UMA pergunta em 254 muda de veredito (pk 27807), e para MAIS RESTRITIVA**: deixa de fabricar batida e sai pela porta que tem dono. **Competencia 10, a que exporta em 21/10: ZERO mudanca** -- criterio (4) do RECESSO-PISTA-DO-ADMIN medido, nao suposto. A unica mexida esta na 09 (EXPORTADA) e e de LEITOR: nada se escreve, gravado e hash intactos, e a cura passa a IMPEDIR que uma validacao futura plante batida dentro da competencia exportada -- reforca a L-092.
-
-CONTRA-EXEMPLO ALEM DO GOLDEN (LEI-AKITA 5), e e o cross-meia-noite, `logs/o261/cruza_meia_noite_19-10.out`: das 254, **37** chegam a guarda; **10** tem plantio entre 00:00 e 05:59; **9** dessas tem vespera cujo DNA cruza a meia-noite -- e **as DEZ ja estao `bloqueada_paridade` TAMBEM no HEAD: ZERO caso de cross-meia-noite muda de veredito**. O por que se MEDIU em vez de se inferir (`logs/o261/por_que_a_vespera_nao_absolvia.out`; a 1a redacao desta linha estava errada): em 9 das 10 o dia do relogio nem entra no laco, e na vespera o predicado posicional recusa nas dez -- 6 com a ata da vespera COMPLETA e 4 com furo, e nessas 4 o unico a segurar era o PREDICADO, nao o periodo. Fica DECLARADO: se um dia um plantio de madrugada precisar da celula da vespera, quem responde e o DIA DO TURNO (instante na janela do turno), nunca D-1 por data -- e isso e fatia com corte dele, nao efeito colateral desta.
-
-PROVA (L-074 nos tres pedacos; copia nascida de `f284b197` = HEAD, e `f284b197` toca so `app/docs/TICKETS.md`, nenhum `.py`): RED `logs/o261/red_vespera_19-10.out` **FAILED (failures=1) | Ran 2 tests in 0.068s | rc 1**, e o vermelho e do TIPO certo, nao ERROR de fixture -- `FAIL:` em `test_RED_vespera_em_furo_NAO_absolve_plantio_de_hoje` com `AssertionError: True is not false` (linha 80) -- e o irmao `test_MORDE_furo_do_PROPRIO_dia_segue_absolvendo` PASSA no HEAD, entao a costura morde nos DOIS sentidos. GREEN `logs/o261/green_vespera_19-10.out` **OK | Ran 2 tests in 0.066s | rc 0 | 0 FAIL/ERROR**. VIZINHOS `logs/o261/vizinhos_vespera_19-10.out`, `--only "chamados ponto"` sobre a copia `cp-o261b`: **OK (skipped=9, expected failures=14) | Ran 6234 tests in 707.547s | rc 0 | 0 linha `^FAIL:`/`^ERROR:`**.
-
-INCOMPLETO, em lista: (a) o item (1) do corte das 07:3x migra so `_materializar_resposta_hora:685`, e isso NAO entrou nesta fatia; (b) os dois contornos de fixture da O317 ficam simplificaveis, mas o `_ch` e PROIBIDO tocar -- viram linha de fila; (c) o PRONTO da O261 segue sendo 0 na classe ALVO (os 56) + smoke do Fernando.
-
-## MARCO 19/10 21:3x -- O PARAMETRO QUE DECIDE A SUMULA 60 II DA FROTA EM CCT GANHA ESCRITOR PELA TELA, COM TRILHA ANTES/DEPOIS LIDA DO BANCO (O323, `!` dele das 20:5x)
-
-LEI-AKITA: origem=`core/views_config.py::form_sindicato` (o dict da regua CCT, unico escritor da tela), testemunha=o campo gravado no banco e a linha de `LogAuditoria` lida pela porta, RED=`core/tests/test_smoke_clique_sindicato_p5h.py` (4 de 4 vermelhos em copia do HEAD), quem-mais-le=`core/regua_cct.py::_regua_legal` / `::get_motor_cct` / `ponto/motor_calculo_v2.py::MotorBase.__init__` (os tres seguem lendo o MESMO campo, por `CHEGAM_AO_MOTOR`), juizes novos=0
-
-O QUE MUDOU:
-- `core/views_config.py::form_sindicato` -- `prorrogacao_noturna_pos5h` entra no dict da regua (o POST da tela passa a ser a fonte) e os dois saves lavram UMA linha de `LogAuditoria` pela porta canonica `core/auditoria.py::registrar_log`, com `valor_antes`/`valor_depois`.
-- `core/views_config.py::_retrato` (nova) -- LE, nao recalcula: os DOIS lados saem do banco. Sem isso o DEPOIS carregaria a string do POST contra o tipo do campo no ANTES (`Decimal('20.00')` x `'20.00'`) e a trilha listaria alterado um campo que ninguem tocou.
-- `core/views_config.py::_trilha` (nova) -- a chamada da porta, sem escritor novo.
-- `templates/core/config/sindicato_form.html` -- a caixa com o rotulo da Sumula 60 II e o quando-desmarcar, nascendo MARCADA no cadastro novo (piso legal).
-- `core/regua_cct.py::prorrogacao_pos5h_legal` NAO muda (L-035): o juiz legal segue decidindo pelo tipo de ciclo.
-
-OS NUMEROS: `LogAuditoria` tinha **9.979** linhas desde 18/10 e **ZERO** do modelo `Sindicato`, e a tabela nao tem `atualizado_em` -- ninguem podia dizer quem mexeu na regua CCT (PROVA: sonda de leitura em prod, `connection` afirmada em `saas_hasner`). `Sindicato pk=3.prorrogacao_noturna_pos5h` media **True** as 20:44:35, com o `!` dizendo "desliguei na tela" -- LEI-AKITA 9, nao executado, e a causa era esta: LEITOR sem ESCRITOR (`Sindicato` nao tem `ModelAdmin` registrado).
-
-AS PROVAS: RED `FAILED (failures=4)` / `Ran 4` em copia do HEAD `50392fe9` (`logs/o323/red_19-10.out`) · GREEN `OK` / `Ran 4` (`logs/o323/green2_19-10.out`) · vizinhos `OK` / `Ran 70 tests in 12.595s` rc 0 (`logs/o323/vizinhos_19-10.out`) · ruff com o `app/ruff.toml` da casa limpo · suite INTEIRA na copia `cp-o323` VERDE -- `OK (skipped=42, expected failures=14)` / `Ran 11461 tests in 1665.212s` / `rc=0` (`logs/o323/suite_19-10.out`) · 74 selos de host, 0 vermelhos · pouso pela L-105/L-107 com `cmp` arquivo a arquivo, md5 no corpo do commit · deploy `--sem-migrate` no MESMO ato, pela DEPLOY JA -- a prova de casca e o smoke read-only de prod entram na linha PROVA DO AR abaixo, escrita depois do ato e sem reescrever esta secao (L-116).
-
-COMMIT: (neste commit)
-
-PROVA DO AR (escrita DEPOIS do ato, pela propria secao, sem reescrever nada acima): pouso em UM ato -- `cmp` dos tres arquivos IGUAL, commit deste marco (10 arquivos, +378/-22; o `85114cea` que o log do pouso carimba e ESTE commit antes do amend que trouxe esta propria linha de prova -- nada de codigo mudou no amend, so docs), `bin/deploy.sh --sem-migrate` no mesmo ato: `arvore_sem_conflito` OK, migrations pendentes **0**, `janela_auth` OK, carimbo da sombra `dia=20261019 tipo=completa diverge=0 erros=0`, collectstatic, prova de casca (16 estaticos, 5 paginas, 616 rotas em 2 urlconf), reload das tres cascas e **tres rotas provadas** (core 200, ui 302, mensageria 200), selo BUG 128 verde, `importerror_500=0` na janela 20:36-21:36, `rc_deploy=0` (`logs/o323/pouso_19-10.out`). NO AR, conferido por LEITURA em prod (`bin/sonda_leitura.sh`, papel `leitor`, `connection` afirmada em `saas_hasner`): o modulo que o worker carregou tem md5 `7356d88a1788fdc3c0a599b7d0df7ea8` -- o MESMO da arvore certificada --, `prorrogacao_noturna_pos5h` esta no dict da tela, e o valor de `sind=3` segue **True**: a cura deu ESCRITOR ao campo e **nao mexeu no dado**, que e dele.
-
-INCOMPLETO: o smoke de CLIQUE dele na tela segue devido -- headless nao ve rota, Caddy, CSP nem gesto, e e o piso, nao o teto. E e ele quem desmarca o sind=3, o que destrava a re-lavra da 10 pelas quatro condicoes da DINHEIRO-EM-COMPETENCIA-ABERTA, com o DIFF publicado ANTES e a base de comparacao nomeada.
-
-## MARCO 19/10 17:0x — MORRE A ESCALA ATIVA DE HOJE NOS NOVE LEITORES DO MOTOR, E CINCO DELES AINDA RESPONDEM O PERIODO NUMA DATA UNICA (REGUA-DO-PERIODO-VEM-DA-ESCALA-DE-HOJE — pouso da raia `raia-regua10` pela L-105/L-107; a obra NAO fecha)
-
-LEI-AKITA: origem=os LEITORES, nao o escritor (o escritor esta CERTO por aval dele das 13:0x e nao se toca); testemunha=a impressao de regua que `ponto/services/fechamento.py:215` resolve e grava em `regua_por_dia`; RED=`ponto/tests/test_regua_do_periodo_vem_da_janela.py`, um caso por leitor; quem-mais-le=os 9 do censo da obra, fechado; juizes novos=0.
-
-O QUE MUDOU — 13 paths, 542 insercoes, 43 remocoes, NENHUM doc, 0 migration (`git diff --stat f7173600 b63b73f4`): nos nove leitores morre a query propria de `ativa=True` e a resolucao de vinculo a mao por sobreposicao de datas, e a autoridade passa a ser UMA — `ponto/services/espelho.py:297` e `:1020`, `folha/export.py:354`, `ponto/services/esmeril_espelho.py:121`, `relatorios/pdf_espelho.py:303` e `:523`, `relatorios/cartao_pela_celula.py`, `ponto/services/triagem_batida.py:149` e `:402`, `escala/alimentacao.py:228`, `reconciliar_grade.py:196`, `vigiar_motor_autoridade.py:51`. Mais dois atos: `038c9737` poe em coerencia a fixture que batia ponto TRES MESES antes do proprio vinculo, e `53d4b2b0` INVERTE a caracterizacao do defeito em vez de apaga-la.
-
-**A FRASE QUE EU IA PUBLICAR ERA FORTE DEMAIS, e quem a mediu foi o coordenador.** Eu escrevi "os nove leitores passam a resolver a regua por FATIA". Falso para cinco: eles passam a ler a AUTORIDADE, mas perguntam a ela UMA data da janela. Classificados no tree do merge — por DIA, dentro do laco: `espelho.py:297`, `pdf_espelho.py:523`, `reconciliar_grade.py:196`. Por DATA UNICA: `export.py:354` (fim da competencia), `espelho.py:1020` (`autoridade_do_periodo` pergunta em `fim` e entrega esse `tipo_escala` ao motor para o periodo INTEIRO, `:1026` — o leitor mais lido da casa), `pdf_espelho.py:303`, `esmeril_espelho.py:121`, `vigiar_motor_autoridade.py:51`. Os dois da triagem perguntam em `agora` e estao CERTOS: a triagem julga a batida no instante em que ela chega, entao "hoje" e o dia do FATO.
-
-AS QUATRO CONDICOES DO AVAL DAS 12:3x, CUMPRIDAS COM NUMERO (lastro `logs/regua10/CENSO_FROTA_10.md`): censo da frota 10 pela FUNCAO REAL, universo **594** colabs; DIFF publicado ANTES — e o DIFF **E** o censo, porque a cura nao faz apply de banco nenhum: 609 `FechamentoMensal`, ciclo IGUAL 568, DIFERE **41**, **TXT MUDA 0**, delta por evento nenhum, **dinheiro movido 0,00**, cura ESTRITAMENTE ADITIVA (**37 de 594** ganham regua onde o leitor de hoje julga `None`); reversao = `git revert -m 1` do commit do marco (o `-m 1` porque e commit de MERGE, e sem ele o revert RECUSA em vez de reverter), porque a fatia e codigo e nao ha estado a reverter; deploy pela regua (`--sem-migrate`).
-
-A ARVORE QUE A SUITE CERTIFICOU E A QUE POUSOU, **por CONSTRUCAO e nao por diff**: `git merge-tree --write-tree f7173600 53d4b2b0` = `b63b73f45a7402fa29e88a644c24ee4ba216106e`, a copia nasceu de `git archive` DESSE tree, e depois do merge o `git write-tree` devolveu o MESMO hash antes de os docs entrarem. Veredito, as tres leituras da L-074: `OK (skipped=42, expected failures=14)` / `Ran 11457 tests in 1683.103s` / **rc=0**, 0 linha `^FAIL:`/`^ERROR:`. O "failed with exit code 1" do harness e o rc de um `grep` que nao achou nada, nao o da suite — o rc foi gravado em arquivo PROPRIO para a terceira leitura nao herdar rc de vizinho.
-
-`bin/tests/test_lei_protege_sitio.sh` sobre o range REAL do push (8 commits) = **tocados: 0**, medido fabricando o commit do pouso como OBJETO SOLTO (`git commit-tree`, nenhuma ref movida) e rodando o selo com a ponta trocada para ele. Cinco dos 13 paths aparecem no LEIS.md, mas em OUTRAS funcoes: o selo responde por span de AST e os hunks nao cruzam. Nenhum `L-NNN` e devido.
-
-PERGUNTA DE LEI, no topo e sem devolver turno: o aval das 12:3x cita `folha/services/fechamento.py:328`, caminho que **nao existe**; o escritor real e `ponto/services/fechamento.py:215`, com o laco em `:262-302`. E a pergunta de 16/09 segue: `fechamento.py:215` nao filtra `ativa` enquanto a porta declarada filtra — 13 colaboradores diferem. Nao se mexeu no escritor.
-
-INCOMPLETO, nomeado: (a) os CINCO sitios de data unica acima — medido pela raia com `escala/alimentacao.py::vinculo_do_dia`, 17 colabs por competencia com impressao divergente entre fatias (09 = 572/91/84, 10 = 576/49/38); numero DELA, **nao remedido por mim**, e a remedicao e o RED da fatia seguinte; (b) o vigia "competencia ABERTA com mais de UMA impressao de regua por empresa, esperado 0" nao existe e hoje acenderia **1** (emp2) — INSTRUMENTO, pouso proprio; (c) `REVERSAO-DA-10-NAO-COBRE-O-CARIMBO-DO-ESPELHO` e `LAVRA-REGUA-VAZIA-NO-GRAVADO-DA-09` seguem como linha de fila.
-
-O ATO, COM A PROVA AO LADO: commit **`50392fe9`** (merge de `f7173600` + `53d4b2b0`), `git write-tree` = `b63b73f4` ANTES dos docs e delta SO nos quatro docs depois deles; `bin/deploy.sh --sem-migrate` **rc=0** as 17:24:23 — 0 migration pendente, prova de casca com 16 estaticos / 5 paginas / 616 rotas em 2 urlconf, tres rotas provadas (core /health/ 200, ui /colaboradores/ 302, mensageria /health/ 200), selo BUG 128 verde, `importerror_500=0`. Depois do reload: **0** linha de 500/502/traceback nas tres cascas na janela de 6 min (`docker logs --since 6m`, que e a forma que aceita duracao e nao hora), e **74 selos de host verdes, 0 vermelhos** sobre a arvore pousada. O pouso correu DENTRO da trava de teste (`ESTEIRA_QUEM=pouso_r10`): o `docker restart` roda `collectstatic`, que escreve o `app/staticfiles` que toda suite desta casa monta `:ro` da arvore viva — conferir "livre" e so depois deployar deixaria a janela aberta.
-
-OS PORTOES DO PUSH FORAM MEDIDOS ANTES DO MERGE, no commit fabricado como objeto solto: `regua_tickets` OK (2 citacoes com linha), `parado_citado_em_commit_posterior` **estavel em 2** com o meu commit dentro da historia (ele entra no bloco que o `conferir` compara, entao subir para 3 teria BLOQUEADO o push depois do deploy, sem `--amend` para corrigir), `tickets_rodape` OK e `index_vs_arvore` OK. A segunda certificacao, a de PROSA — os 24 modulos que leem `app/docs/` contra a arvore VIVA, porque a copia de 11457 testes nasceu do tree do merge e tem os docs do HEAD: `OK (skipped=10, expected failures=11)` / `Ran 400 tests in 102.655s` / **rc=0**, com o md5 dos quatro docs medido antes e depois e IGUAL. A terceira — codigo novo e prosa nova juntos — esta enfileirada atras do `pre-push` do coordenador (trava presa por ele desde 17:26:12), que roda a suite sobre a arvore do push; o resultado dela entra na proxima secao.
-
-Nenhum PAREI. A obra SEGUE: o marcador `ORDEM-VIVA-TOPO` fica nela, e nao em O261 — as 16:5x eu o movi premissado em FECHADA, e marcador que declara fechado o que a medicao diz aberto e a mesma falha pelo outro lado. O push e do coordenador, um por marco (L-108).
-
-## MEDIDO 19/10 16:2x -- A REVERSAO DA 10 NAO COBRE O CARIMBO DO ESPELHO, E O PUSH FICA SEGURO DE PROPOSITO (item (5) do complemento das 15:3x) -- nao e marco: 0 linha de codigo
-
-LEI-AKITA: origem=`bin/snapshot_relavratura_10_2026.py` (lista de campos emprestada), testemunha=`ponto/models.py::FechamentoMensal` e o escritor `ponto/services/fechamento.py`, RED=nao escrito (ver TAMANHO REAL), quem-mais-le=`bin/restore_relavratura_10_2026.py` (mesma lista), juizes novos=0.
-
-**O instrumento do item (5) JA EXISTE e nao se duplicou.** A condicao 2 da DINHEIRO-EM-COMPETENCIA-ABERTA pede reversao em `logs/`, e o par `bin/snapshot_relavratura_10_2026.py` + `bin/restore_relavratura_10_2026.py` ja cobre a 10/2026, com o restore ja provado EXECUTAVEL em `--dry`. O que eu fiz foi perguntar se ele guarda o campo que ESTA fatia move -- e o carimbo de regua esta coberto, porque `lavra_regua` **nao e campo gravado**: e derivado em `folha/porta_export.py:281` agrupando `DiaPago.versao_motor`, e o lado `DiaPago` da foto sai do MODELO (`_meta.fields`).
-
-**O DEFEITO esta no outro lado da MESMA foto.** O `FechamentoMensal` nao pergunta ao modelo: copia a tupla `aplicar_09_corte_b::CAMPOS`, com **26** nomes, contra **37** campos declarados no modelo. Ficam **11** fora, e **quatro** o proprio escritor do apply GRAVA -- `motivos_espelho` (`ponto/services/fechamento.py:653`), `causa_espelho` (`:665`/`:667`), `previsto_em` (`:671`/`:684`), `derivado_em` (`:718`). Os outros 7 estao fora com razao, medido um a um: FK, dois automaticos, `observacao` com **0** sitio de escrita, e `status`/`aprovado_por`/`aprovado_em` so tocados pelas portas de aprovar/reabrir (`:898`, `:906-908`, `:920-922`), que nao sao o recalculo. Restaurar devolveria o numero VELHO com o carimbo NOVO de causa/motivo no mesmo registro: a reversao criaria, ela mesma, a divergencia que existe para desfazer, e os quatro campos sao o que o ESPELHO le. Nunca custou nada porque a reversao nunca foi EXECUTADA -- estava esperando o dia em que fosse. Prova: `logs/regua10/REVERSAO_PARCIAL_19-10.md`.
-
-**TAMANHO REAL, e e por isso que isto e linha de fila e nao trabalho agora.** Nao basta alongar a lista: o lado `FechamentoMensal` serializa tudo com `str()`, e `str(list)` num JSONField volta como TEXTO -- o restore faz `setattr` + `save(update_fields=VALOR)` com a MESMA lista emprestada, entao a foto pareceria completa e restauraria lixo, pior que hoje. A cura e a ORIGEM da assimetria (um serializador por TIPO, unico, importavel pelos dois scripts, com os EXCLUIDOS nomeados e caso que MORDE em campo novo do modelo) mais round-trip no banco de TESTE, porque os dois scripts aserem `saas_hasner` e nao se provam onde rodam. Isso e INSTRUMENTO (pouso proprio, L-105) e pede a trava para o RED/GREEN -- a mesma trava da certificacao do comboio, que e a raia que VOCE pos primeiro. Fila: `REVERSAO-DA-10-NAO-COBRE-O-CARIMBO-DO-ESPELHO`, com o GATE escrito. **PROIBIDO alargar o `aplicar_09_corte_b::CAMPOS`**, que e a declaracao de ESCOPO do apply da 09 lida pelo `diff_frota`.
-
-**A foto REAL da 10 nao se tira hoje, e isso nao e omissao:** foto tirada agora envelhece e restauraria um estado que nao e o de antes do apply. O apply da 10 segue parado em `REGUA10-DUAS-CCT-NA-MESMA-COMPETENCIA`, e o gatilho da re-lavra e a TROCA DE CADASTRO dessa pergunta, nao a cura dos leitores.
-
-**O PUSH ESTA SEGURO POR MEDIDA, nao por lei, e a razao mudou desde 16:1x.** A trava estava livre as 16:20:54 e o portao que faltava ficou verde -- os 24 modulos que LEEM `app/docs/` (a prosa nova nunca passou por um selo Django, porque a copia de certificacao do `f7173600` carregava os docs do HEAD) deram `OK (skipped=10, expected failures=11)` / `Ran 400 tests in 108.198s` / `rc=0` (`logs/docs_prosa_nova.out`). Mesmo assim eu nao empurrei: o pre-push roda a suite inteira e gastaria ~30 min da trava re-certificando uma arvore que o `cp-pauta` ja certificou as 15:11-15:45 e que esta NO AR desde 16:04, atrasando o pouso da REGUA-DO-PERIODO. Os 4 commits (`a5242596`, `4311acbc`, `bcc8a8ba`, `f7173600`) sao ancestrais desse pouso e vao no push DELE -- um push por marco (L-108). Decisao minha por dependencia de codigo (AUTONOMIA item 1); reversao: se o pouso do comboio nao fechar hoje, o push sai sozinho.
-
-**DUAS CORRECOES DE REGISTRO, nenhuma delas pergunta.** (1) O complemento das 15:3x cita `folha/services/fechamento.py:328` e **esse caminho nao existe**: o escritor real da regua do periodo e `ponto/services/fechamento.py` (`:215` monta `escalas_periodo` por sobreposicao e SEM `ativa`; `:282-302` e o laco; `:795` persiste). Eu nao amplio o aval -- o sitio e unico e MEDIDO, entao isto e erro de caminho na citacao, nao escopo novo. (2) A raia mediu de carona que `linha_x_badge_na_exportada` da emp2 na **09** vem com `lavra_regua={'': 25}` -- **25 `DiaPago` da competencia EXPORTADA sem carimbo de regua nenhum**. Nao toquei: competencia paga pede o seu `!` e o retrato nao a conserta. E a obra `GRAVADO-NAO-CARIMBA-A-REGUA`, que ja esta registrada.
-
-## MARCO 19/10 16:0x -- A PAUTA DO DP DIZ SOB QUAL REGUA O GRAVADO FOI PAGO, COM A CAUSA MEDIDA, E O QUE NAO CABE DESCE EM FILHA (O317, pouso SOZINHO)
-`LEI-AKITA: origem=folha/porta_export.py::regua_em_palavras + ponto/portas/regen_exportada.py::regenerar_em_exportada + pautas/services.py::partir_em_pautas, testemunha=DiaPago.versao_motor contado por regua_das_linhas e Pauta._meta.get_field('texto').max_length para o teto, RED=chamados/tests/test_o317_passivo_pela_porta.py (3 selos novos), quem-mais-le=os 22 chamadores de pautas.services::escrever (nenhum muda) + o painel do DP, juizes novos=0`
-**A pergunta dos dois `!` (12:2x "regua nomeada onde houver", 14:0x "pago x devido e a causa por colab") nao cabia na Pauta: `Pauta.texto` e CharField(500) e `pautas/services.py:128` faz `texto[:500]`.** No RED a frase da regua morreu no meio da palavra. Alargar o campo esta fora (o 500 e corte dele, PAUTA-TEXTO 11/09); cortar com ponteiro mostraria **1 de 26** campos. O idioma da casa ja existia -- cabeca com a decisao, filhas com o corpo (`pautas/management/commands/pauta_dia_em_aberto.py:19-23`).
-O que mudou (5 sitios + 1 selo):
-- `folha/porta_export.py::regua_em_palavras` -- leitor novo, 0 derivacao, ao lado de `regua_das_linhas`: TRES estados da autoridade, TRES frases (`{}` = `nao nomeavel (zero linha de dia lavrada nesta competencia)`; `{'': N}` = `sem carimbo de regua em N dia(s)`; `{'vX': N}` = `vX em N dia(s)`). Colapsar os dois primeiros faria o rotulo mentir (LEI-AKITA 8), e a frota devolve `{}`, nao `{'': N}`.
-- `ponto/portas/regen_exportada.py::regenerar_em_exportada` -- `_regua_antes` lida no instante do `_antes` e `_regua_depois` no do `_depois`, as duas na TRILHA (`valor_antes['regua']` / `valor_depois['regua']`) e no retorno. Ler depois do ato nomearia a regua do ATO: a porta re-lavra por `recalcular_fechamento_mes` (`fechamento.py:802`).
-- `pautas/services.py::partir_em_pautas` -- o packer como funcao, no modulo que sabe o tamanho da coluna, com o teto LIDO do campo. **MEDIDO:** cabeca **375**; caso real de 7 campos = **2 filhas [480, 81]**; pior caso de 26 campos com regua longa nos dois lados e causa de 120 = **4 filhas [481, 484, 463, 219]**. Item que nao cabe levanta `ValueError` COM O NUMERO -- o laco velho emenda `(cont.)` sem olhar o tamanho e deixa o `escrever` cortar calado.
-- `chamados/services/passivo_validado.py` -- `_pauta_da_competencia` escreve cabeca + filhas e a idempotencia passa a ser `pai__isnull=True` (o texto da filha COMECA pela cabeca, entao `texto__startswith` deixou de responder "quantos atos"); `pauta_de_quem_saiu` + marcador PROPRIO `PASSIVO-VALIDADO-FORA` para quem entrou no ato e nao se moveu (a linha do col371 no `!` das 14:0x), autoridade `regen['mudou']` e os dois hashes; item que nao cabe vira `RegenRecusadaDoPar` e o par volta INTEIRO de dentro do `atomic`.
-- `chamados/management/commands/materializar_passivo_validado.py` -- `--causas <arquivo>` (a causa e DADO medido por bisseccao, nao dicionario no codigo: seria regra por pessoa sem cadastro, LEI-AKITA 12) e o placar com `pautas SEM movimento` ao lado de `pautas de DP`, dois contadores, nenhum somado no outro.
-**ADITIVO, para o DIFF publicado seguir valendo:** zero toque em `valores_do_gravado`, `hash_do_gravado`, `recalcular_fechamento_mes` e `retratar_exportada`.
-**POUSOU SOZINHA, e o comboio caiu por MEDIDA** (POUSO-EM-COMBOIO -- *"Vermelho no comboio = separa e roda cada uma"*): a outra frente (`raia-regua10`) ficou pronta no mesmo intervalo e a interseccao de arquivos e **VAZIA** (11 la, 6 aqui), entao o comboio era devido -- mas a suite INTEIRA dela fechou **`FAILED (failures=3)` / Ran 11438** e raia vermelha nao pousa (L-105). A regressao esta **BISECTADA sem rodada nova**: as duas pontas correram hoje na MESMA linhagem a um commit de distancia -- base `bb3a588d` **`OK` / Ran 11430** as 13:40 (o push dela) e base+cura **FAILED** as 15:04 --, e os tres vermelhos estao todos em `ponto/tests/test_f8_*` (dois de dedup cross-midnight, um de ancora de turno aberto), vizinhos do unico `.py` de producao que a cura move ali, `ponto/services/triagem_batida.py`. O achado voltou para a raia que o gerou (ela ja esta rodando os dois modulos isolados); aqui nao e fatia, e e a razao de o pouso ser de um.
-PROVA: RED `FAILED (failures=1, errors=3)` / Ran 21, rc=1 (os 3 selos novos mais o pivot da idempotencia) · GREEN `OK` / Ran 21, rc=0 · vizinhos (`chamados ponto folha`) `OK (skipped=9, expected failures=14)` / Ran 7006, rc=0 · suite INTEIRA da copia que pousa suite INTEIRA na copia certificada `OK (skipped=42, expected failures=14)` / `Ran 11448 tests in 1643.048s` / rc=0 (15:11:49-15:45:51) · ruff `All checks passed!` · censo de LINHAGEM da copia pelo git, blob a blob: **3306 blobs, DIFERE=6** (exatamente os arquivos desta fatia), FALTA=0, EXTRA=0 · censo de IDENTIDADE sha256 copia x arvore viva **6 de 6 iguais** (o pouso PARA no primeiro que diferir) · commit **este** · deploy `bin/deploy.sh --sem-migrate` no MESMO ato, logo depois deste commit e sem nada no meio (L-107/DEPLOY JA), com `logs/crons_em_curso/` VAZIO conferido as 15:0x -- a prova das tres cascas entra na linha seguinte desta secao.
-DECLARADO, nao curado: as filhas aparecem na aba do DP como linha propria **E** aninhadas na cabeca (`pautas/services.py::listar_por_aba` nao filtra `pai__isnull=True`, `pautas/views.py:46-48` aninha) -- 3 linhas por colab no caso real, que e como as filhas desta casa sempre apareceram.
-INCOMPLETO: (a) a obra `GRAVADO-NAO-CARIMBA-A-REGUA` segue ABERTA e nasce com PERGUNTA de desenho -- esta fatia responde a metade da PAUTA e passa a guardar a regua na trilha da porta, nao a do carimbo; (b) `escrever` corta em silencio para os 22 chamadores (`3ea519d7`, ja no ar, tem o mesmo transbordo em caso de muitos campos) -- linha de fila; (c) o laco de `pauta_dia_em_aberto` migra para `partir_em_pautas` -- linha de fila.
-- **TRES DEFEITOS DE INSTRUMENTO, achados pelas guardas MORDENDO e curados na origem (16:06).** (1) o censo de linhagem perguntava ao **disco** uma pergunta que e do **git** -- barrou o pouso por 28 residuos `.premig*` de 05-19/07 que o git IGNORA e que `git add` por PATH recusa; agora classifica por `git check-ignore` e NOMEIA os ignorados (`EXTRA-VIVO=0`), em vez de um padrao meu de nome, que casaria por FORMA e deixaria passar o residuo de amanha. (2) a guarda de idempotencia da secao casava o titulo **com o rotulo de hora**, e a hora andou de 15:5x para 16:0x entre a tentativa barrada e esta: a secao entrou DUAS vezes (corpo provado identico, duplicata removida, guarda agora ignora o rotulo). (3) o bloco que RE-EXIGE verde do `test_import_tardio_contra_o_ar.sh` depois do deploy nasceu **dentro do ramo de falha** do deploy -- so rodaria se o deploy quebrasse, o contrario do que afirma --, e **`bash -n` passou verde porque sintaxe nao responde por ALCANCE**. A excecao declarada no commit foi **PAGA a mao no ato**: `IMPORT_TARDIO no_ar=f7173600 imports_tardios=4478 acusados=0`, com o ar no MEU commit.
-
-## MARCO 19/10 14:2x-14:3x -- O CARD DE FURO OFERECE O MARCO QUE A PORTA ACEITA, E O JUIZ POR DIA LE A PROJECAO EM VEZ DE RECALCULAR (O318 complemento -- pouso da raia `wt-o318` pela L-105/L-107)
-
-LEI-AKITA: origem=`chamados/services/declaracao_texto.py::projecao_por_marco`, testemunha=`_marcos_faltantes` + `_porta_recusaria_por_carimbo` (as MESMAS duas autoridades que a porta usa), RED=`test_o318_dia_misto_projecao_por_marco` (`FAILED (failures=4, errors=11)`, rc=1, em `/home/ronald/cp-o318misto`), quem-mais-le=`_card_atendimento.html` + `modal_fio.html` + `chamados/services/fio.py` + `api/views.py::api_chamados_v2`, juizes novos=0
-
-A FATIA e o commit `4311acbc` da raia e a historia dela esta no CORPO dele (L-116); esta secao e o **POUSO**. O que mudou: o card lia `chamado.contexto_json.marcos_faltantes.0` -- o marco que o EMISSOR escreveu no dia em que o chamado nasceu -- e no #27329 esse `0` e justamente a entrada que a porta RECUSA por carimbo; agora o template LE `chamado.marcos_projetados` e `chamado.marco_unico_aceito`, e o marco recusado ganha aviso proprio (`hx-marco-em-regularizacao`) em vez de levar o dia inteiro para o bloco da supervisao.
-
-A ARVORE CERTIFICADA E A ARVORE QUE POUSOU, e a prova aqui e mais forte que o `cmp` arquivo a arquivo da forma: **identidade de TREE**. `git merge-tree --write-tree main raia-o318` devolveu `d29079bc2034f8d1bfb647c264f5b0325bf4ee33` sem conflito, e esse e exatamente o tree de onde a copia `cp-o318cert` nasceu -- o conjunto inteiro e o mesmo objeto, nao ha arquivo a conferir um por um. Nenhum `.py` foi escrito entre o veredito e o merge: a arvore viva tinha **0** `.py` modificado, porque a fatia da Pauta DP que corre em paralelo vive em copia.
-
-PROVA, com as TRES metades da L-074 desta vez: suite INTEIRA em `cp-o318cert` -> rc **0**, `OK (skipped=42, expected failures=14)`, `Ran 11445 tests in 1641.704s` (14:29:49, `$SP/suite_cert_o318.log`). Merge `bcc8a8ba` (`--no-ff`, `parents=a5242596 4311acbc`, `MERGE_HEAD` conferido NAO vazio) e `bin/deploy.sh --sem-migrate` rc=**0** no MESMO ato -- 0 migration pendente, sombra `dia=20261019 status=OK diverge=0`, `collectstatic`, prova de casca (16 estaticos, 5 paginas, 616 rotas em 2 urlconf), tres rotas provadas (core 200, ui 302, mensageria 200), selo BUG 128 verde, `importerror_500=0`.
-
-POUSOU SOZINHA, e a pergunta se MEDIU (`git worktree list` + `.agente` vivos), nao se supos: as duas raias vivas no instante do veredito -- `wt-regua10`, que ainda esta com a trava da suite desde 14:01:43, e `wt-v3` -- nao ficam prontas em 30 min, e ninguem espera mais que isso (POUSO-EM-COMBOIO).
-
-MIGRATION: **0** no diff, entao `--sem-migrate` e nao ha nada a reverter no banco. TICKETS: a linha do O318 passou a dizer que o complemento esta no ar (a de 18/10 descrevia so a primeira metade); os dois blocos DERIVADOS do arquivo seguem com o valor de `a5242596`, porque a raia nunca os tocou e quem os fecha e o `pos_push`.
-
-A declaracao de agente da `wt-o318` foi BAIXADA pelo escritor unico (`bin/raia_agente.sh fechar`), e as raias vivas caem para **3**.
-
-INCOMPLETO, nomeado: (1) o **smoke de clique** no card do colaborador segue com o Ronald na 1805 -- suite verde nao ve tela, e a linha do O318 no TICKETS ja declara isso; (2) o **aviso ao Fernando** segue gateado pela O319 (ABERTA), que ele separou das duas; (3) o **PUSH** deste marco esta DEVIDO e nao foi feito agora por PISTA, nao por lei: o pre-push roda os dois runners e a trava da suite esta com a raia `wt-regua10` desde 14:01:43 -- push com a trava presa volta rc 75 ("a vez nao chegou", nao e vermelho). Ele sai quando a trava liberar, UM push pelo marco.
-
-## MARCO 19/10 13:1x -- A PORTA DO FIO MORTO RECORTA POR CELULA E O PAINEL ALARMA NA CLASSE QUE TEM ALVO (O261 item 3 -- pouso da raia `wt-fio` pela L-105/L-107, em COPIA DE CERTIFICACAO)
-
-LEI-AKITA: origem=`chamados/services/vigia_carimbo.py::classificar` (a PORTA ganha o recorte) + `chamados/management/commands/vigiar_fio_morto.py` (`ESPERADO`/`ALARMA_EM_0`), testemunha=`vigia_carimbo.classificar` como unica autoridade de CLASSE e `passivo_validado.FORA_DO_ESCOPO` como unica autoridade de ALCANCE, RED=`test_MORDE_sem_dia_de_fio_morto_a_PORTA_nao_e_varrida`, quem-mais-le=1 chamador de producao (`chamados/services/passivo_validado.py:199`, POSICIONAL) + o painel do ESTADO (`bin/gerar_estado.py:250`), juizes novos=0
-
-**O que mudou** (4 arquivos, nenhum novo): `vigia_carimbo.py::classificar` aceita `celulas=None` e filtra por `celula_id__in` -- a MESMA chave que `vigia_fio.censo` usa --, com a guarda `is not None` para que lista vazia seja recorte vazio e nao universo inteiro; `vigia_fio.py` deriva `CLASSES_DA_PORTA` e `ALVO_DA_PORTA` das constantes das DUAS autoridades (`CLASSES_SEM_GRAVACAO` da porta menos `FORA_DO_ESCOPO` do reparo) em vez de listar classe a mao; o command abre o contador em tres buckets e **so** `fio_morto_com_alvo` entra no `ALARMA_EM_0`, porque e o unico que pode chegar a 0 por ato nosso -- os outros dois tem dono CADASTRO ou BATIDA e a L-099 PROIBE curar por codigo. O `fio_morto` cheio segue com o esperado 0 dele, intocado.
-
-**Os numeros, medidos na sombra em 19/10 06:0x** (`logs/o261/GAP_RESUMO_19-10.md`): **211** dias de fio morto, **91** com alvo. O alarme do `--alarme-passivo` segue DESLIGADO no cron ate o reparo correr.
-
-**A forma do pouso** (SUITE-UMA-VEZ-POR-ARVORE): a arvore certificada e a que pousou. O commit de certificacao `6ec3a492` nasceu em OBJETOS -- `git merge-tree --write-tree` + `git commit-tree -p 3ea519d7 -p 2b693359`, ref protetora `refs/heads/cert-fio19` --, sem tocar a arvore viva e sem worktree novo; `git diff --name-only HEAD 6ec3a492` deu exatamente os 4 arquivos do produto e os 4 blobs sao IGUAIS aos da raia (`git rev-parse <cert>:<f>` == `<raia>:<f>`, 4/4). Base `3ea519d7` esperada por ARQUIVO (`logs/deploy.stamp`, 12:48:39), nao por aposta: copia nascida antes do marco reverteria o marco.
-**PROVA do verde:** `logs/o261/SUITE_CERT_6ec3a492_19-10.log` -- `OK (skipped=42, expected failures=14)`, `Ran 11430 tests in 1675.108s`, `rc_suite=0`.
-**PROVA do ar:** ``logs/deploy.stamp COMMIT=6ec3a492821e35d5814b77ba520af1cb2f1ff089` as 13:1x, `bin/deploy.sh --sem-migrate` rc=0 -- 616 rotas em 2 urlconf, tres rotas provadas (core 200 / ui 302 / mensageria 200), selo BUG 128 verde nas tres cascas, `importerror_500=0`. O `git merge --ff-only 6ec3a492` deu fast-forward `3ea519d7..6ec3a492`, 4 arquivos / 278 insercoes -- a arvore que a suite certificou e a que esta no ar.`
-
-**Cruzamento, migration e janela, medidos antes de lancar:** main 22 commits / 42 arquivos desde a bifurcacao `8f6ef771`, raia 4, `comm -12` **vazio** -- nenhum arquivo em comum, entao o merge nao resolve nada. Migration: o main trouxe UMA (`0074`, do passo 6 da O48, ja migrada as 10:49) e a raia **ZERO**, por isso `--sem-migrate`. JANELA DE FECHAMENTO respeitada: `grep -cE "\.(save|update|create|delete)\(" ` nos tres modulos de producao da **0** no arquivo INTEIRO -- a fatia nao escreve, logo nao move quem entra nem o valor da competencia 10.
-
-**ESMERIL DO MARCO (zero orfao, medido):** o produto da raia removeu 4 linhas de codigo (`vigia_fio.py` 1, `vigia_carimbo.py` 1, `vigiar_fio_morto.py` 2, `passivo_validado.py` 0) e as QUATRO sao substituicao NO LUGAR -- assinatura aditiva, a mesma chave do dicionario, as duas constantes. Nenhuma funcao perdeu chamador neste marco, nada a apagar pela L-111. Nenhum achado de fora do marco foi aberto.
-
-**O INSTRUMENTO NAO POUSOU AQUI** (L-105): `22ec395b` (`bin/fio_estado.py`, so docstring -- 7 insercoes / 2 remocoes, **0** linha de codigo) vai em pouso PROPRIO, e o merge dele em cima do cert traz exatamente `bin/fio_estado.py` (medido por `merge-tree`).
-
-**INCOMPLETO, nomeado:** o `--alarme-passivo` fica desligado no cron ate o lote do reparo correr; `fio_morto` cheio segue em 211 e o dono dos outros 120 dias e CADASTRO ou BATIDA (L-099), nao fatia.
-
-
----
-## POUSO 19/10 12:4x -- COMBOIO DE DUAS OBRAS, E A REGUA DO GRAVADO MEDIDA PELA AUTORIDADE [O317] [O310]
-
-LEI-AKITA: origem=`passivo_validado.py::_pauta` (Pauta DP sem hora) e `folha/views_retrato.py`; testemunha=`regen_exportada.py` (`antes`/`depois`) e `folha/porta_export.py::regua_das_linhas`; RED=`test_o317_passivo_pela_porta.py` (18) + `test_retrato_raiox.py`; quem-mais-le=10 arquivos, `comm -12` com a raia vizinha VAZIO; juizes novos=0.
-
-**POUSA** (UMA copia, UMA suite -- POUSO-EM-COMBOIO): cura do O317 (3 arquivos: a Pauta DP passa a dizer `pago -> devido` por campo em vez de hash, e `reparar` ganha o recorte `colaboradores`) + Raio-X do retrato (7 arquivos, O310). **PROVA:** `OK (skipped=42, expected failures=14)` + `Ran 11423 tests in 1645.834s`, teardown limpo, trava liberada 12:32:04, contra `cp-comboio19` (`git archive baad2875` + os 10); censo = **10 entradas, 8 MUDOU + 2 NOVO**, os 10 batendo por `git hash-object` copia x arvore no ato do commit. **A 3a metade da L-074 falta**: o lancador de fundo nao gravou o rc -- fila `LANCADOR-DA-SUITE-GRAVA-O-RC`; nao afirmo rc que nao medi. **NO AR** pelo deploy do MESMO ato (L-107), 12:48, commit `3ea519d7`: `deploy: OK -- migrations em dia, tres cascas reiniciadas juntas, tres rotas provadas` (`saas_core /health/` 200, `saas_ui /colaboradores/` 302, mensageria 200), prova de casca com **616 rotas** em 2 urlconf (eram 615 -- a rota nova do Raio-X), selo BUG 128 verde, `importerror_500=0`, `logs/deploy.stamp COMMIT=3ea519d7`; pasta de selos de host **OK=74 VERMELHO=0** antes do deploy.
-
-**O ACHADO, e ele corrige a MINHA linha de fila.** Antes de escrever o rotulo de regua que o `!` das 12:2x pede na Pauta DP, perguntei a quem nomeia regua nesta casa -- o carimbo `DiaPago.versao_motor`, que ja tem leitor. Nos 17 retidos, `lavra_regua` vem **VAZIO em 17 de 17**, e vazio de verdade: ZERO linha de `DiaPago`, com `FechamentoMensal` existindo nos 17. Minha fila dizia *"os dez sao o caso"* -- **sao os DEZESSETE**, e os 7 "nomeaveis" o sao por REPRODUCAO (inferencia economica), nunca por carimbo. A Pauta DP dira as DUAS metades com a fonte de cada uma, em vez de vender inferencia como carimbo (LEI-AKITA 2). **PROVA:** `logs/o317/REGUA_NOMEAVEL_PELA_AUTORIDADE_19-10.md`, sonda `logs/sombra/o317_regua_nomeavel.py` (so leitura).
-
-**AVAL DAS 12:3x, cumprido nesta arvore:** o portao `PAUSA pela JANELA DE FECHAMENTO` caiu da celula `REGUA-DO-PERIODO-VEM-DA-ESCALA-DE-HOJE`, que anda agora. Obra nova: `GRAVADO-NAO-CARIMBA-A-REGUA`.
-
-**INCOMPLETO:** (a) rc do processo da suite (fila); (b) o DIFF do O317 em HEAD nos quatro pares vem AGORA -- condicao 1 do `!`, porque o publicado mede codigo de 11/10 (item 16 do topo); (c) censo da frota 10 da `REGUA-DO-PERIODO` nao comecou; (d) o instrumento `--diff-folha` pousa sozinho (L-105).
-
----
-## MEDIDO 19/10 11:4x -- A REGUA DO GRAVADO DOS DEZ RETIDOS: TRES CAMINHOS DE NOMEACAO, TRES "NAO" (O317)
-
-LEI-AKITA: origem=nenhuma (medicao read-only), testemunha=`DiaPago.versao_motor` + `recalcular_fechamento_mes(somente_leitura=True)` + `autoridade_do_periodo`, RED=n/a (nao e cura), quem-mais-le=os 10 pares retidos, juizes novos=0
-
-A condicao de saida pede a **regua do gravado NOMEADA**. Ha tres caminhos, e os tres deram NAO -- medidos, nao lidos por mim. Relatorio inteiro com a tabela: `logs/o317/REGUA_DO_GRAVADO_19-10.md`; corrida em `logs/sombra/o317_controle10.py` -> `logs/o317_controle10_19-10.out`.
-
-1. **LER o registro -- NAO EXISTE.** `DiaPago.versao_motor` e o UNICO sitio que guarda `core/regua_cct.py::impressao_da_regua`, e `FechamentoMensal` **nao tem campo de regua** (`ponto/models.py:396-469`). `logs/o317/carimbo_da_regua_19-10.out` (09:36) e a medida de agora direto no banco dao **`DiaPago(motor)=0` nos 10/10**. No universo de 47 colabs: **460 dias `(vazio)` x 17 com carimbo** -- o carimbo nasceu em 13/10 e estas competencias foram lavradas antes.
-2. **REPRODUZIR sob regua UNIFORME -- NAO REPRODUZ.** `logs/o317/VEREDITO_FORMA_A_19-10.md:119-142`: **0 de 10** nas 4 combinacoes; 3 FORA da faixa (col30 **-2,85 h**, col110 **-6,97 h**, col889 **+7,82 h**), e a faixa e monotona -- fora dela a diferenca **nao e regua**. Polaridade conferida na fonte (`core/regua_cct.py:462-464` e `:149`): **`hr=0` = hora reduzida APLICADA**, `hr=1` = AFASTADA.
-3. **REPRODUZIR pelo ESCRITOR, que resolve regua POR FATIA** (`ponto/services/fechamento.py:328`, dentro do laco) -- a lacuna que o proprio VEREDITO nomeou. A regua nao se recalculou: colheu-se interceptando `core.regua_cct.get_motor_cct`, chamando o REAL e carimbando `impressao_da_regua(motor)`. **W != G nos 10 de 10** (tol 0,011 h).
-
-**O que a medicao [nome], e e ganho mesmo com tres "nao":**
-- **A hipotese do UNIVERSO morreu: `W == E` em 10 de 10.** O docstring de `recalcular_fechamento_mes` avisa que a resposta depende do universo do CHAMADOR -- medido nos dois escopos REAIS (porta `colaborador_ids=[pk]` x `empresa_id`, com 33 / 146 / 523 colabs), **o escopo nao move um centavo**. O `resto` sem dono nao e escopo de chamador.
-- **A hipotese da REGUA morreu onde teria a melhor chance**: col110/col113/col121 recebem HOJE `hr=0` (a regua velha) e o escritor ainda da 80,29 / 97,58 / 100,00 contra gravado 63,28 / 95,44 / 90,43.
-- **DOIS LEITORES em 2 dos 10**, e isso nao tem a ver com o gravado: `col367` escritor **24,21** x espelho **21,19** (**-3,02 h**) e `col889` **0,36** x **0,45** (**+0,09 h**). Nos outros oito escritor e espelho dao o MESMO numero.
-- **O G desta sombra bate o G publicado nos dez** (`VEREDITO_FORMA_A_19-10.md:31-47`): nao e artefato de ensaio.
-
-**O que ela NAO diz, e o rotulo nao se amplia.** O rotulo pre-escrito para `W != G` com `E == W == L` e "gravado envelheceu (DRIFT), dono ESTRUTURA"; **a segunda metade nao e minha para afirmar** -- dono entre ESTRUTURA, CADASTRO e BATIDA e de `e6_oraculo.py::dono_da_divergencia` (L-099), e esta medicao nao o chamou. MEDIDO e: o estado de hoje da outro numero, e a diferenca **nao e regua** nem **escopo de chamador**.
-
-**VEREDITO: os DEZ seguem RETIDOS pela condicao LITERAL** -- nenhum teve a regua nomeada, e agora isso esta medido pelos tres caminhos em vez de presumido. Read-only PROVADO (`FechamentoMensal n=3834 max=5693` e `DiaPago n=33839 max=861575` identicos antes/depois, assert no fim). Nada aplicado, nada a reverter. `col371` nao entra nem e rotulado aqui (saiu por medida: 6x1).
-
-**FILA, nao cura (a janela de fechamento esta aberta ate 21/10):** `GRAVADO-NAO-CARIMBA-A-REGUA` -- `DiaPago.versao_motor` nomeia a regua por DIA e `FechamentoMensal` nao carimba nada, entao competencia lavrada sem `lavrar_dias_pagos` fica com a regua do proprio dinheiro **nao nomeavel para sempre**. ~~Os dez sao o caso.~~ **CORRIGIDO 19/10 12:4x, e a correcao e minha: sao os DEZESSETE.** Perguntei ao leitor REAL do carimbo (`folha/porta_export.py::regua_das_linhas`) com a competencia de cada um dos 17 retidos, e `lavra_regua` vem VAZIO em **17 de 17** -- zero linha de `DiaPago`, com `FechamentoMensal` existindo nos 17. Os 7 que eu vinha chamando de nomeaveis nao tem carimbo nenhum: eles REPRODUZEM ao centavo sob um par de parametros, e reproducao e inferencia sobre qual regua produziu o numero, nunca o registro dela. PROVA: `logs/o317/REGUA_NOMEAVEL_PELA_AUTORIDADE_19-10.md`.
-
-## ~~PAUSA~~ **PAUSA DERRUBADA PELO AVAL DAS 12:3x** 19/10 11:0x -- A CURA DO CORTE DAS 07:5x PARAVA NA JANELA, E A METADE QUE NAO TOCA O TXT SEGUE (O48 passo 6, continuacao) -- nao e marco: 0 linha de codigo
-
-LEI-AKITA: origem=o proprio corte (`DESLIGADO-FORA-DA-JANELA-APOSENTA-A-LINHA`), testemunha=`folha/export.py:594::STATUS_NO_TXT`, RED=nao escrito (a cura nao comecou), quem-mais-le=censo abaixo, juizes novos=0
-
-- **A CURA GRAVA `encerrado` E ISSO E LITERALMENTE "MUDA QUEM ENTRA NA 10".** O corte manda a linha se aposentar com `status` encerrado e sem `derivado_em`. Medido: `folha/export.py:594` declara `STATUS_NO_TXT = ('aberto', 'aprovado')` e os DOIS ramos do export o consultam (`:624` em Python, `:628` por queryset) -- entao linha carimbada `encerrado` **SAI do TXT**. Pela JANELA DE FECHAMENTO (sua, 19/10), cura que muda quem entra na 10 **PAUSA ate o export de 21/10 e vira linha no RELATO**. Esta e a linha.
-- **A JANELA CAIU as 12:3x, por frase dele, e esta secao fica como historia da pausa:** *"a JANELA DE FECHAMENTO nao segura bug PROVADO que muda o valor da 10 -- curar ANTES do export e o certo, exportar numero sabidamente errado nao"*. A cura do desligado anda **agora**, com as quatro condicoes que ele nomeou no mesmo aval: censo da frota 10 pela **funcao real**, DIFF publicado **antes**, reversao em `logs/`, deploy pela regua. E ele respondeu, sem eu perguntar, a duvida que esta secao levantava: *"Nao ha recalcular a folha: o TXT ja deriva da celula no ato de gerar"*. Estado: **FORA DA PAUSA, em curso**; o censo da frota 10 ainda NAO comecou.
-- **NAO E PAREI, e a distincao importa**: PAREI existe para lei sem lei escrita ou para o seu `!` (PAREI-SO-LEI). Aqui a lei existe e e a sua; a trava e a JANELA, nomeada, com condicao de saida DATADA -- o export de 21/10. A fila SEGUE.
-- **NAO CONSTRUO NEM EM RAIA.** O unico produto da cura e a escrita que a janela proibe; construi-la agora seria so adiantar a tentacao de pousa-la. O que fica pronto e barato e o CENSO de quem le `FechamentoMensal.status` -- ele e exigido antes de qualquer cura (MEIA-CORRECAO E PIOR QUE NENHUMA) e nao escreve nada.
-- **E A CURA PAUSA INTEIRA, NAO PELA METADE -- eu tinha escrito o contrario nesta mesma secao e a linha estava errada.** A tentacao era obvia: a metade que tira o desligado-fora-da-janela do UNIVERSO de derivacao e do contador mexe em `derivado_em` e em `projecoes_vencidas_qs` e **nunca em `status`** (medido: `git grep -c derivado_em -- app/folha` = **zero ocorrencia**, o export nao conhece a coluna; e `git show 3aa85f3e -- app/ponto app/folha | grep '^+.*status'` = zero linha), entao ela "nao muda quem entra na 10" e cabia na janela. **Cabia e seria MEIA-CORRECAO.** Com ela sozinha, o universo e o contador caem para **524** enquanto o `STATUS_NO_TXT` segue mandando os **605** para o TXT: ficam **81** linhas DENTRO do arquivo que ninguem re-deriva e que o vigia **deixou de olhar** -- exatamente o que o vigia existe para pegar, e `contador != universo`, que a LEI-AKITA 8 proibe pelo nome. O corte das 07:5x e coerente **porque** a aposentadoria tira a linha do TXT no MESMO ato em que a tira do vigia; separar as duas metades inventa um estado que o corte nao descreve. Entao: **PAUSA INTEIRA ate o export de 21/10**, censo feito, RED nao escrito. Sao dois dias, e nao se ganha nada partindo.
-- **O CONTADOR DO PASSO 6 FECHOU A PROVA QUE FALTAVA, e o numero e 605.** O instrumento pousou em `ec317b24` dizendo que o fim-a-fim estava vermelho porque a sombra era PRE-0074. Refeita as 10:54-10:59 (`bin/sombra.sh --refazer --dump-agora`, `dia=20261019 status=REFEITA tipo=completa diverge=0 erros=0`, `dump_de_hoje=sim`, `lavra_de_prod=OK data_ref_prod=2026-10-19`), a sonda pela PORTA (`bin/sombra.sh --rodar`) devolveu `projecoes_vencidas=605` em 45 linhas de saida. **605 e o esperado e nao um alarme**: a 0074 nasceu sem backfill de proposito, nada foi re-derivado ainda, e 605 e a frota da competencia corrente -- o mesmo 605 do `0 de 605` que o pouso publicou. O "esperado 0" do rotulo vale **depois da 1a re-derivacao**. PROVA: `logs/o48_placar_parse_19-10b.out`, `logs/o48/parse2_lancador.out`.
-- **DUAS LINHAS DE FILA, da mesma familia, e nenhuma cura inventada no caminho (ESMERIL-DO-MARCO)**: `LANCADOR-DA-SUITE-GRAVA-O-RC` (a 3a perna da L-074 ficou DERIVADA do `exec` neste marco, nao medida) e `SOMBRA-RODAR-DEVOLVE-RC-DO-ECHO` -- `bin/sombra.sh --rodar` devolveu **rc 0 com a sonda VERMELHA** as 10:54, porque o `echo` do rotulo (`sombra.sh:489`) corre depois do container e fica com o rc. Eu quase li esse 0 como sucesso.
-- **O CENSO DIZ QUE A CURA NAO E PEQUENA, e esse e o argumento mais forte da pausa.** `status` novo no enum nao e campo novo: ele e INVISIVEL para todo leitor que enumera os valores LITERAIS, e eles sao de producao, nao de teste -- `folha/export.py:624`/`:628` (sai do TXT), `ponto/services/fechamento.py:712` (`elif fechamento.status == 'aberto'`, a linha cai no `else`) e `:1103` (`status__in=('aprovado','exportado')`), `ponto/views.py:1135`/`:1174`/`:1179` (os contadores do painel), `ponto/services/fechamento_lista.py:32`, `ponto/models.py:487`, mais DOIS leitores de TELA que o `core/juizes.py` ja tem PENDENTES por ler `fechamento.status` direto no template (`templates/ponto/_fech_linha.html` e `templates/ponto/partials/painel_fechamento.html`, pendentes `_TT4`/`_TT6`). Censo por `git grep` (nao pelo `grep` da sessao, que e ugrep): **43** ocorrencias, excluidos testes e migrations. Nenhum deles ganha regra nova sem ser visitado -- MEIA-CORRECAO E PIOR QUE NENHUMA --, e visitar leitor de TELA que ja esta pendente e trabalho que a janela nao autoriza agora.
-- **O `--bloco` que o refazer zerou esta correndo desde 11:01:41** (`logs/o48/sombra_bloco_19-10.log`, rc em `.rc`), para o portao do deploy ficar verde para o pouso seguinte -- `--refazer` puro zera `SOMBRA_BLOCO`.
-
-## VEREDITO 19/10 10:3x -- SOB QUE REGUA O GRAVADO FOI LAVRADO: 7 DOS 17 REPRODUZEM COM HORA REDUZIDA APLICADA, E O ESCRITOR DA FOLHA NAO LE A MESMA REGUA QUE O ESPELHO (O317) -- nao e marco: 0 linha de codigo de produto
-
-LEI-AKITA: origem=`ponto/services/fechamento.py:215` (leitura; nenhum sitio tocado), testemunha=`core/regua_cct.py::get_motor_cct` + `::impressao_da_regua` + `ponto/services/espelho.py::autoridade_do_periodo` chamados REAIS, RED=n/a (medicao), quem-mais-le=censo de 9 leitores abaixo, juizes novos=0.
-
-Fecha a sub-pergunta aberta no item 5 das 09:3x (*"sob que regua o gravado foi lavrado"*). Sombra `completa`, carimbo `dia=20261019 diverge=0`, cpuset de teste, tudo dentro de `atomic` que levanta.
-
-1. **7 DOS 17 REPRODUZEM AO CENTAVO COM A HORA REDUZIDA APLICADA** (`hr=0`, fator `60/52,5`): col371, col455 (`143,63` contra gravado `143,63`), col834 por `p5h=1|hr=0`; col584 e col634 pelas duas de `hr=0`; col226 e col250 por `p5h=0|hr=0`. **ZERO reproduz sob a regua que o ESPELHO resolve hoje.** Carimbo certificado colab a colab: `celulas com carimbo DIVERGENTE do pedido: 0` em 17x4. Faixa: `dentro 14 · abaixo 2` (col30 -2,85; col110 -6,97) `· acima 1` (col889 +7,82, 16x).
-2. **OS TRES DE emp3 CAEM NO PISO LEGAL** (`fonte='legal (empresa...)'`, `hr12=False`, impressao `relogio|p5h=0|hr=0|fd=0`): para col110/col113/col121 a hora reduzida do Art.73 par.1 **nunca foi afastada** e segue valendo hoje -- ela **nao pode** ser dona do gap deles.
-3. **O TERCEIRO EIXO EXISTE E NAO FOI MEDIDO, e e NOMEADO**: o desconto do intervalo dentro da janela noturna, em tres commits DATADOS (`7b0f8798` 2026-09-09 [BUG 100], `aad64415` 2026-10-14 [O272], `5d157d1f` 2026-10-13 [O263]), todos POSTERIORES a todos os 17 gravados. A grade varre dois eixos, nao tres -- por isso "fora da faixa" nao autoriza rotular `universo`.
-4. **A HIPOTESE "CICLO MISTO NA JANELA" ESTA ELIMINADA, MEDIDA**: nos 17, `mesmo_TipoEscala_em_todas` so falha em col29 (1 dia de 31 sob tipo#238).
-5. **O ACHADO QUE NAO ESTAVA NO AVAL: O ESCRITOR DA FOLHA E O LEITOR DO ESPELHO RESOLVEM REGUAS DIFERENTES, e o ESCRITOR e quem esta CERTO.** `ponto/services/fechamento.py:215` monta `escalas_periodo` **sem filtro `ativa`**, por SOBREPOSICAO DE DATA, e tira a regua de cada fatia (`:327 tipo_escala=esc.tipo_escala` -> `:328 _gmc(...)` -> `:336 _impressao_da_regua`). Nove leitores resolvem `ativa=True` e perguntam a escala de HOJE por uma janela PASSADA: `ponto/services/espelho.py:988` (e `:1019`), `folha/export.py:339`, `ponto/services/esmeril_espelho.py:123`, `relatorios/pdf_espelho.py:371`, `ponto/services/triagem_batida.py:140` e `:391`, e os commands `diff_espelho_alimentacao.py:94`, `reconciliar_grade.py:183`, `vigiar_motor_autoridade.py:48`. Dono **ESTRUTURA** (L-099), e e **LEI-AKITA 2** -- leitor com regra propria de derivacao.
-6. **IMPACTO MEDIDO: 1 de 17 diverge -- col367.** ESPELHO `legais|p5h=0|hr=1|fd=0` (esc#1154/tipo#203 12x36, ativa hoje) contra ESCRITOR `legais|p5h=0|hr=0|fd=1` (esc#320/tipo#397 **6x1**, 2026-07-21..2026-08-27, cobrindo 31/31 dias da janela). **E ISSO FECHA UM DOS 5 "escritor != leitor" AO CENTAVO**: gravado `23,26` + `deltaDIFF -5,71` = **`17,55`**, e `17,55` e exatamente o que `autoridade_do_periodo` devolve quando recebe a escala do ESCRITOR (contra `15,35` com a de hoje). A diferenca `2,20 h` **E** o `X -2,20` da tabela. Mecanismo MEDIDO para **1** dos 5; para os outros 4 o `celulas=0` segue **sinal, nao mecanismo**. col584 tambem tem `ativa_dentro_da_janela=False` mas o **MESMO** TipoEscala (tipo#195), entao a celula dele vale; as celulas FORCADAS de col367 nao mudam com a troca de escala (identicas nas 4), so o DEFAULT muda, logo a faixa `[15,35 , 24,21]` e o "dentro, sem celula unica" dele SEGUEM.
-7. **`DiaPago DENTRO das 17 janelas: 0`** -- nao e "carimbo vazio", e **nenhuma linha de DiaPago** ali (os 353 carimbados dos 17 estao todos em competencias posteriores). A regua do gravado **nao se le** do carimbo nesses 17; reproduzir chamando a funcao real e o unico instrumento.
-8. **"12 dos 17 conferem AO CENTAVO" (09:3x) e "NENHUM reproduz sob a regua de hoje" NAO SE CONTRADIZEM**: a primeira mede `motor_DEPOIS == o "depois" do DIFF` (o DIFF descreve o ato), a segunda mede `motor_hoje == gravado` (a regua descreve o passado). Perguntas diferentes.
-9. **RESSALVAS DE COBERTURA, para nao superler a tabela**: col889 tem **11 de 31** dias cobertos por escala na janela (a linha `+7,82 ACIMA` e a menos confiavel das 17), col30 tem 29 de 31. col30 (`esc#550 2026-06-06..2026-05-22`) e col889 (`esc#1068 2026-08-12..2026-08-09`) carregam escala com `data_fim` ANTES do `data_inicio`, `dias_na_janela=0` -- inerte, lixo de cadastro, nao move numero (linha de fila `ESCALA-COM-FIM-ANTES-DO-INICIO`).
-10. **A CURA DO ITEM 5 PAUSA, e a lei que a pausa e a sua**: trocar `ativa=True` por resolucao por fatia muda a regua de QUALQUER colab que trocou de escala dentro de 21/09-20/10, logo pode mover **quem entra e quanto vale na competencia 10** -- a JANELA DE FECHAMENTO manda PAUSAR e virar linha no RELATO. Linha de fila `REGUA-DO-PERIODO-VEM-DA-ESCALA-DE-HOJE`, registrada no BACKLOG. **A frota NAO foi medida** -- `1 de 17` e amostra dos 17 do O317, nao censo.
-
-PROVA: `logs/o317/regua_escritor_x_espelho_19-10.out` (escritor x espelho nos 17, com o censo de escalas da janela), `logs/o317/col367_regua_do_escritor_19-10.out` (col367 sob as duas escalas x as 4 celulas), `logs/o317/carimbo_por_colab_19-10.out` (carimbo certificado 17x4), `logs/o317/VEREDITO_FORMA_A_19-10.md` (tabela dos 17, faixa, adendo do col367). **Nada aplicado, nada a reverter.**
-
----
-## LEITURA 19/10 10:1x-10:3x -- O AVAL DO DIA MISTO: A LEITURA PRE-CODIGO ESTA CUMPRIDA, E "QUEM RECUSOU O PLANTIO DAS 08h" TEM UMA RESPOSTA QUE NAO E UMA GUARDA (O318-DIA-MISTO) -- nao e marco: 0 linha de codigo de produto
-
-`LEI-AKITA: origem=<leitura, nenhum sitio tocado>, testemunha=_marcos_faltantes + _resposta_validada + _porta_recusaria_por_carimbo + batidas_apuraveis + CelulaDia, RED=o #27329 (ja medido, abaixo), quem-mais-le=<censo nao se aplica: nada mudou>, juizes novos=0`
-
-**O aval das 10:1x esta REGISTRADO** (`PROMPTS.md`, e `O318-DIA-MISTO` no bloco OBRAS, ATRAS do item em curso, como voce mandou) **e a leitura que ele exige ANTES do codigo foi feita no mesmo turno**, na sombra de hoje (`dia=20261019 tipo=completa diverge=0`), pelas guardas REAIS -- nenhuma copia de regra, nada escrito. Saidas: `logs/o318/dia_misto_1805_19-10.out`, `logs/o318/batida_dos_dois_dias_19-10.out`, `logs/o318/carimbo_x_veredito_19-10.out`.
-
-**O RED QUE VOCE NOMEOU EXISTE, e e mais nitido do que o aval supoe.** O #27329 (29/09) tem **4** marcos faltantes pelo leitor unico -- 08:00/E, 12:00/S, 13:00/E, 17:00/S -- em **DOIS** estados, nao um:
-
-| marco | pergunta | validada_em | a porta hoje |
-|---|---|---|---|
-| 08:00 entrada (`saida_sem_entrada`) | 38225 | **06/10 12:02:38** | **RECUSA** pelo degrau do carimbo |
-| 12:00 ida do intervalo | 38256 | -- | **GRAVA** |
-| 13:00 volta do intervalo | 38257 | -- | **GRAVA** |
-| 17:00 saida | 38258 | -- | **GRAVA** |
-
-O juiz por DIA devolve `False` exatamente por isso (`all(recusas)` com tres `False`), entao **o formulario fica** -- e o `contexto_json` do chamado traz **1** marco, que e **a propria 08h recusada**, e e esse o `[0]` que o `_card_atendimento.html:241` preenche. O card oferece o unico marco impossivel e nao menciona os tres possiveis. O vizinho **#28850** (02/10) tem **1** faltante (13:00, pergunta 40213, validada, via `chamado_encerrado`), a recusa e unanime, juiz `True`, formulario escondido: **a O318 funciona como desenhada, e o contraste entre os dois casos e precisamente DIA contra MARCO.** (Os outros tres chamados de 29/09 -- #27050, #27054, #27330 -- tem juiz `False` e `marcos_faltantes` **vazio**: nao oferecem nada.)
-
-**"QUAL GUARDA RECUSOU O PLANTIO DAS 08h": nenhuma, e e isso o que a medida diz.** `recusa_motivo` esta **vazio nas 8** perguntas dos dois dias. A 08h **nunca chegou aos degraus da porta**: ela saiu da fila em `materializada_em` **30/09 06:45:17** com `via_resolucao='celula_absolveu'`, e a fila do plantio seleciona por `materializada_em__isnull=True` -- a propria docstring de `chamados/services/passivo_validado.py:6` chama isso pelo nome, *"o carimbo falso tira a pergunta dessa fila para sempre"*. Entao a guarda nao e um juiz que disse nao: e o **universo**. O `PORTA_RECUSARIA=True` que eu medi e o que a porta faria **hoje** (`_resposta_validada` sobre a linha que `_segura_da_lista` segura), nao o que recusou em 30/09. E **plantio nao houve**: 29/09 tem **ZERO** batida apuravel pela porta do universo (`batidas_apuraveis`), celula `trabalha=True tem_entrada=False tem_saida=False veredito=cobrado origem=gerada`, dna 08:00/12:00/13:00/17:00 -- `materializada_em` diz "saiu da fila", nunca "virou batida". Em 02/10, por contraste, ha **3** batidas (08:00/E, 12:00/S, 17:00/S) e o faltante e so a volta das 13:00, coerente.
-
-**UM ACHADO QUE A LEITURA TROUXE DE BRINDE, E ELE NAO E DO APARELHO DE SMOKE.** O unico escritor de `celula_absolveu` (`chamados/reconciliador.py:522`) exige celula JULGADA cujo veredito **nao** esteja em `CelulaDia.VEREDITOS_ACUSAM` -- e a celula de 29/09 le `cobrado` **hoje**, que ESTA na tupla. Medido na frota: das **1420** perguntas com esse carimbo, **86 (6,1%)** tem celula que hoje ACUSA, em **41** colaboradores distintos -- `furo` 66, `fato_em_ausencia` 10, `cobrado` 4, `discordante` 4, `indefinida` 2 --, e **so 1 das 86** e o aparelho do smoke: **85 estao fora dele**. O carimbo nomeia uma autoridade que, relida hoje, diz o contrario. **Nao curei nada disso**: pela ESMERIL-DO-MARCO isso e linha de fila (`CARIMBO-QUE-A-CELULA-DESMENTE`), nao trabalho agora, e pela L-099 o dono de cada um dos 86 ainda nao esta medido.
-
-**O QUE A LEITURA NAO RESPONDE, e eu nao rotulo**: se os 86 sao re-julgamento da celula depois do carimbo ou carimbo escrito sob veredito ausente -- o `veredito_em` contra o `materializada_em` responde, e nao medi. E o achado 2 do Fernando fica como esta, por sua ordem: a inversao de datas na 38225 e desenho E5 de 27/09.
-
-## MARCO 19/10 10:3x -- A PROJECAO GRAVADA PASSA A DIZER SE AINDA E A LEITURA DA AUTORIDADE (O48 passo 6 -- pouso da raia `wt-o48p4` pela L-105/L-107, em COPIA DE CERTIFICACAO)
-
-**LEI-AKITA:** origem=`ponto/services/fechamento.py`, nos DOIS escritores de `FechamentoMensal`; testemunha=o carimbo `derivado_em` que o PROPRIO escritor grava -- **nenhum leitor ganhou regra de frescor**; RED=`ponto/tests/test_o48p6_projecao_carimbada.py` (10 casos) + a FROTA na sombra 18/10; quem-mais-le=5 escritores de autoridade + 4 enumeracoes de campo do gravado; juizes novos=0.
-
-**O QUE MUDOU** (`e241fb45`, 14 arquivos, migration **0074**, sem backfill de proposito):
-- `ponto/models.py::FechamentoMensal.derivado_em` -- CACHE, nao juiz: `previsto_em` responde *"o previsto foi materializado"* e `atualizado_em` responde ULTIMO TOQUE (o `invalidar_previsto` o avanca AO INVALIDAR), e nenhum dos dois podia responder *"este gravado ainda e a leitura da autoridade"*.
-- `fechamento.py` (os dois ramos de escrita) carimba; `fechamento.py::restaurar_fechamento` **mata** o carimbo (restaurar e gravar SEM derivar).
-- `fechamento.py::invalidar_fechamento` -- a porta, molde do `invalidar_previsto`: zera o carimbo das competencias que o fato toca, loga colab/competencias/motivo e **nunca levanta**.
-- 5 escritores de autoridade passam a chamar a porta: `ausencia.decidir`, `justificativa.aprovar_justificativa_dp`, `justificativa.materializar_saida_dp`, o lote de `ponto/views.py`, `cadastro_tipo._propagar_regeneracao_template`.
-- `fechamento.py::competencias_do_fato`/`competencia_do_fato`/`_so_a_data` -- **ADAPTADORES**: a derivacao fica em `ponto/services/dia_pago.py:658::competencias_do_intervalo`, que JA existia com o mesmo predicado (a 1a redacao a copiava -- era o SEGUNDO DERIVADOR da LEI-AKITA 1 e 2).
-- `fechamento.py::projecoes_vencidas_qs`/`projecoes_vencidas` + `ponto/management/commands/projecoes_vencidas.py` + `config/crons.py::FORA_DE_PIPELINE` -- universo em UM sitio, contador = `.count()` dele, vigia que nao julga (secao 4a). **Nao e cron**: o cron teria de escolher uma HORA e a resposta muda a cada ato do DP.
-
-**OS NUMEROS, com a PROVA ao lado**
-- RED de frota (sombra 18/10, `e241fb45` cita a corrida): **81 de 605** colabs de 10/2026 com gravado != lido e **81 de 81** com o unico carimbo que existia PREENCHIDO -- **100% de cegueira**.
-- *"pode calcular a folha"*: escrita 605 em **176,7 s**; leitura de frota do GRAVADO **0,026 s** contra **116,7 s** online = **4.493x**; **divergencia gravado x lido = 0 de 605**; carimbo 605 de 609.
-- **O POUSO NAO MOVE A COMPETENCIA 10** (JANELA DE FECHAMENTO): as 72 linhas com numero mudado sao a deriva do `a94e8a48` (O316, `ponto/turnos.py`) sobre a competencia ABERTA -- este patch nao toca linha de derivacao, e a migration e `AddField null=True`.
-- CERTIFICACAO (L-117 clausula 2): a raia estava **18 commits atras** (merge-base `1d532dcd`), entao a suite dela (5 labels, 9212 casos) **nao certificou a arvore que pousa**. Nasceu `/home/ronald/wt-o48-p19` = `main 2af35da3` + `e241fb45` (`merge --no-ff --no-commit`, **um** arquivo cruzado -- `app/config/crons.py` --, auto-merge limpo), e sobre ELA correu a suite CHEIA, UMA invocacao so (1 `Creating` / 1 `Ran` / 1 `Destroying`): **OK (skipped=42, expected failures=14)** / **Ran 11396 tests in 1631.995s**, 0 linha `^FAIL:`/`^ERROR:`, trava devolvida 10:37:08, tree `0126231c` (`logs/o48/suite_pouso_19-10.log`). **A 3a perna da L-074 -- o rc do PROCESSO -- eu NAO capturei**: lancei com `nohup` sem `echo $?`. Ela se DERIVA da estrutura (o `bin/suite.sh` termina em `exec`, a cadeia devolve o rc do `manage.py test`, nada corre depois dele), e o defeito e do meu lancador -- o proximo grava o rc em arquivo.
-- **POUSO SOZINHO, e aqui eu erro e corrijo**: o cruzamento de arquivos entre este pouso e a raia `wt-fio` e **ZERO** (os 14 paths daqui contra os 5 dela, por `comm -12`) -- e **nao** `app/config/crons.py`, como eu havia escrito mais cedo; os dois commits dela (`2b693359` 09:44 e `22ec395b` 09:47) tocam `app/chamados/*` e `bin/fio_estado.py`. Eles estavam EM PE quando eu lancei esta suite as **10:09**, entao o COMBOIO era possivel e **eu nao perguntei**: furo meu da POUSO-EM-COMBOIO, de RELOGIO e nao de correcao -- `wt-fio` paga uma segunda suite. A arvore certificada segue sendo a que pousa (L-117 clausula 2), e sem cruzamento de arquivo a ordem dos dois pousos e livre.
-
-**INCOMPLETO declarado, dois** -- (1) `projecoes_vencidas` ainda **fora do `bin/placar_code.sh`**, que o proprio `config/crons.py` declara como a casa de producao dele: vai em **pouso de INSTRUMENTO proprio** (L-105), depois deste; (2) a cura do seu corte das **07:5x** (`DESLIGADO-FORA-DA-JANELA-APOSENTA-A-LINHA`) **por construir** -- e por isso o contador nasce com **4** linhas que sobram (`col316 col846 col870 col927`, `situacao=desligado` com demissao anterior a 21/09-20/10) e nao com 0. O universo **nao se estreitou** para o numero cair (L-099): ele sobra NOMEADO.
-
-**ESMERIL DO MARCO**: zero orfao -- o commit nao remove `def` nenhum e as 6 funcoes novas tem chamador de producao; o unico achado e o INCOMPLETO (1), que e DESTE marco e por isso vira pouso, nao linha de fila.
-
-**ADENDO 19/10 10:5x -- A TRAVA DA JANELA QUE EU TINHA POSTO NA 0074 CAI, E A DECISAO E MINHA, NAO HERDADA DO POUSO.** A `wt-o48p4` estava retida por MIM *"pela janela, por causa da migration 0074"*, e a JANELA DE FECHAMENTO (ate o export de 21/10) so deixa subir tela e bug PROVADO, com a clausula literal *"cura com DIFF de frota ZERO na competencia 10 anda"*. O hold cai porque os TRES se medem, e eu os medi na arvore que pousou -- nao aceitei o argumento do pouso de graca:
-- a 0074 e **UM `AddField` anulavel e SEM backfill** (`app/ponto/migrations/0074_fechamentomensal_derivado_em.py`, operacao unica, `null=True blank=True`): nenhum valor de linha gravada muda no ato do migrate, logo **DIFF de frota = ZERO por construcao**, nao por amostra;
-- a coluna nova e **CACHE, nunca juiz** -- nenhum leitor ganhou regra de frescor --, e **quem entra no TXT se decide por `status`** (`folha/export.py:594::STATUS_NO_TXT`, consultado em `:624`/`:628`), campo que este pouso **nao toca**: o universo do TXT de 21/10 e o mesmo de antes do deploy;
-- as **72 linhas com numero mudado** que o ensaio de 18/10 viu na 10 **nao sao desta fatia** (deriva do `a94e8a48`, O316, sobre competencia ABERTA) e o patch nao toca linha de derivacao -- entao elas nao se tornam divida deste pouso nem desaparecem por ele.
-Pela **L-105** o pouso de raia verde e PRE-APROVADO e nada aqui esta na lista NUNCA PRE-APROVADO. Registro e SIGO (DECISAO TECNICA, secao 7b). **O que a janela segue segurando** e o INCOMPLETO (2) da secao acima: gravar `encerrado` em linha de 10/2026 move quem entra, e **isso espera o export**.
-
-**PISTA, e muda o comando do proximo ensaio**: o deploy migrou a 0074 **depois** do dump do dia (04:00), e `bin/sombra.sh:203` soma +1 a divergencia quando o dump nao e do DIA -- entao hoje o ensaio e `--refazer --dump-agora` (+ `--bloco`), nunca `--refazer` puro, ou o portao do proximo pouso nasce VERMELHO. O carimbo de agora segue bom (`dia=20261019 diverge=0 tipo=completa`) porque o deploy conferiu ANTES de migrar; e o portao do pouso SEGUINTE que paga.
-
-**A 3a PERNA DA L-074 NAO FOI CAPTURADA NESTE MARCO, e esta dito sem maquiagem**: o `rc` do processo da suite nao foi gravado (lancamento com `nohup` sem `echo $?`, e `bin/trava_teste.sh` nao grava rc em sitio nenhum). O veredito verde afirmado sao as DUAS primeiras pernas -- `OK (skipped=42, expected failures=14)` e `Ran 11396 tests in 1631.995s`, com 1 `Creating`/1 `Ran`/1 `Destroying` e 0 linha `^FAIL:`/`^ERROR:` --, mais a DERIVACAO estrutural de que `bin/suite.sh` termina em `exec` e nada corre depois do `manage.py test`. Derivacao nao e medida: fila `LANCADOR-DA-SUITE-GRAVA-O-RC`, e o deploy deste marco ja saiu pela forma nova (`logs/o48/deploy_o48p6_19-10.rc`).
-
-## RESPOSTA 19/10 09:5x -- AS TRES PERGUNTAS DO SEU AVAL, FECHADAS NO UNIVERSO DOS SETE PARES, E CINCO COISAS QUE EU JA TINHA PUBLICADO ERRADAS (O317) -- nao e marco: 0 linha de codigo de produto, e pela L-106 estas linhas viajam no commit do proximo marco
-
-> **Passa das 25 linhas da L-116 de proposito e a lei permite**: isto e o DETALHE DO DIFF DE FROTA
-> ANTES DO APPLY, que a L-116 nomeia como o que NAO se corta. Seu aval das 07:3x: *"Antes do meu !,
-> publica no RELATO e no AVAIS: qual regra (L-NNN/CCT) faz o noturno mover em cada um dos 38, a lista
-> por colab com horas antes/depois e rubrica, e se a FORMA A (-293,92 h em 12) e correcao de calculo
-> ou efeito do par que nao fecha."* **Esta e a publicacao que o seu `!` esperava. Nada foi aplicado.**
-
-LEI-AKITA: origem=`logs/o317/diff_19-10_v2.out` + `dia_dos_1[57]_19-10.out` + `datas_do_gravado_19-10.out` + `carimbo_da_regua_19-10.out` (medicao na sombra `completa`, 0 linha de codigo), testemunha=`folha/porta_export.py::montar_linhas_export`/`regua_das_linhas` e `ponto/services/espelho.py::autoridade_do_periodo` (as funcoes REAIS, nunca replicadas), RED=n/a (medicao), quem-mais-le=os 79 colabs do DIFF nos sete pares exportados, juizes novos=0.
-
-**0. CINCO RETRATACOES, antes dos numeros novos -- voce leu as duas secoes abaixo e elas tem erro meu.**
-  1. **"`entrou_na_l084 = 0`, hipotese (a) DESCARTADA"** (09:3x item 2) -> **NAO MEDIDO**, nao zero. O
-     campo que a sonda leu e `resultado.dias_cadastro_x_realidade`, que `ponto/calculador/periodo.py:281`
-     declara de PRODUCAO, escritor unico, carregando **so causas de janela de HE**. A lista da **L-084**
-     e `Censo.cxr` (`periodo.py:272`), que existe **so na v3** -- e o caminho medido e o de producao
-     (v2). Re-rodar le o mesmo campo: nao se conserta medindo de novo. No lugar dela, o que FOI medido:
-     **`celula_regenerada` = 7 dos 14 dias com delta** (o DNA do dia foi reescrito em metade deles).
-  2. **"12 dos 17 conferem ao centavo"** (09:3x item 3) -> o universo nao e 17, e o numero e **25 de 32**
-     (ver item 3 abaixo). O "12 de 17" era do recorte de quatro competencias.
-  3. **"O PLANTIO NUNCA TIRA NOTURNO"** (09:3x item 1) -> **FALSIFICADO**. Era verdade no lote 1 (os
-     17); no lote 2 o ato TIRA noturno em **tres dias** -- `col334` 08-28 `420 -> 360 min`, `col879`
-     09-17 `409,3 -> 340,7`, `col111` 08-21 `480 -> 424,3`, **-3,07 h** --, e `col879` (**-1,14 h**) e
-     `col111` (**-0,93 h**) ficam NEGATIVOS no total do colab. O liquido do ato segue POSITIVO
-     (**+50,98 h**), mas a frase absoluta sai de circulacao.
-  4. **"a regra e a mesma antes e depois"** (09:1x item 3) -> certa para a comparacao que eu fiz (as
-     DUAS fotos do motor de HOJE, dentro do mesmo `atomic`) e **errada** para a comparacao que voce
-     perguntou (**o que foi PAGO** x o que o motor diz hoje): ali a regra mudou muitas vezes -- item 1.
-  5. **"a diferenca vira Pauta DP com os dois numeros (L-113)"** (09:3x item 7) -> a L-113 **derrubou**
-     a pauta DP como PRE-CONDICAO (clausula 3, caiu no marco de 10/10 junto com o texto do `raise` que
-     era a unica expressao dela em codigo). Pauta DP segue sendo boa pratica; **nao e** exigencia da
-     lei. O que a L-113 NAO revoga e o que de fato me obriga: versao anterior do TXT intacta, trilha de
-     quem fez, e **DIFF de impacto publicado ANTES** -- que e esta secao.
-  6. **OS ROTULOS DE HORA DESTA SECAO E DAS TRES DO `RESUMO_PARA_AVAIS.md` SAIRAM NO FUTURO** e eu os
-     corrigi antes de qualquer outra coisa: eu havia escrito `10:0x`, `10:1x` e `10:2x`, e o `date`
-     desta maquina marcava **09:52-09:56** quando os arquivos foram gravados. E a MESMA deriva de
-     16/10 08:4x (a secao "CINCO ROTULOS DE HORA MEUS ERAM IMPOSSIVEIS", hoje no RELATO vivo), e a cura e a mesma: cada rotulo passa a ser DERIVADO do mtime do
-     produto que a propria linha anuncia -- `split_drift.py` 09:21 e `UNIVERSO_7PARES.txt` 09:21 -> a
-     secao dos 32 e **09:2x**; `grade_da_regua_19-10.out` 09:46 -> a secao por rubrica e **09:4x**; o
-     `RESUMO_PARA_AVAIS.md` 09:52 e o `RELATO.md` 09:54 -> a decomposicao e esta secao sao **09:5x**.
-     Nenhum numero muda; o que muda e que a linha do tempo volta a ser possivel.
-
-  E a unidade **"41 batidas"** das 08:3x segue nao reconciliada com as **231 horas plantadas / 97
-  colab-competencia** da porta: linha de fila `UNIDADE-DO-PLANTADA-NAO-E-BATIDA`, e **nenhum numero
-  desta secao depende dela** (todos saem de hora por colab).
-
-**0b. E O "38" DO SEU AVAL E MEU RECORTE, NAO O UNIVERSO.** Ele saiu de uma extracao que leu **quatro**
-das sete competencias -- faltaram `emp2 2026-09` (a maior: 40 colabs, 113 h plantadas) e `emp3 2026-09`.
-O universo MEDIDO dos sete pares exportados (`logs/o317/diff_19-10_v2.out`, as mesmas 208 linhas dos sete
-`DIFF_emp*.txt` publicados; os dois contam igual):
-
-```
-pares (colab,competencia) que movem alguma rubrica .. 85        (colabs distintos: 79)
-pares que movem adicional_noturno|0025 .............. 47        (colabs distintos: 44)
-   PERDEM noturno ................................... 32   -674,08 h
-      FORMA A (noturno cai, NADA sobe) .............. 17   -385,51 h
-      FORMA B (noturno cai e outra rubrica sobe) .... 15   -288,57 h
-   GANHAM noturno ................................... 15   +277,25 h
-   LIQUIDO do noturno nos sete pares ................       -396,83 h
-pares que movem SO outras rubricas .................. 38
-```
-**DUAS COINCIDENCIAS DE NUMERO, ditas de proposito para nao confundirem:** o universo tem **17 FORMA A**
-e o recorte tinha **17 PERDAS** -- conjuntos DIFERENTES; e o universo tem **38 pares sem linha de
-noturno**, que nao sao os **38** do seu aval. Os sete pares tem plantio (`MORDE OK` nos sete).
-
-**1. QUAL REGRA FAZ O NOTURNO MOVER: NAO HA "A REGRA".** A hipotese de uma regra so esta
-**FALSIFICADA pela aritmetica**: se fosse a hora ficta do Art.73 par.1 saindo (que a **CCT cl.38-d**
-afasta), a razao `depois/antes` seria **0,875** (= 52,5/60) em todos. Medido nos 47: **5** dao
-exatamente 0,875 (col250, col584, col450, col704, col824 = **-37,45 h**, **5,6%** do movimento), **3**
-tem antes=0, e os **39** restantes se espalham de **0,054 a 10,70**. E a data **parte os 5 em dois**
-(`datas_do_gravado_19-10.out`): col250/col584 foram lavrados em **31/08 14:5x**, um dia antes da cl.38-d
-entrar (01/09) -- candidata DATADA que fecha nas duas pontas; col450/col704/col824 foram lavrados em
-**30/09 16:5x**, **depois** da cl.38-d **e** depois do `c6467e3a 25/09 REGIME-POR-EMPRESA`: a razao esta
-la, exata, e a regra que a produziu mudou **depois** disso.
-  **A regua que julgou o gravado nao e recuperavel do dado**, e isso se mediu pela funcao da PORTA
-  (`folha/porta_export.py::regua_das_linhas`, a mesma do `linha_x_badge`): dos **477** dias lidos,
-  **460** tem carimbo `(vazio)` -- todos de 09/2026, lavrados 30/09 19:5x, antes de a lavra passar a
-  carimbar a regua (`861100a1`, 13/10) -- e os **26 colab-competencia de 2026-06/07/08 nao tem linha de
-  `DiaPago versao='motor'` nenhuma**. O unico carimbo que existe nos 47 e do **col515**, relavrado em
-  16/10 -- e ele **GANHA** (+2,28 h). Para os outros 43 a regua se recupera do CODIGO, por DATA.
-  **E o codigo andou muito.** Commits em `ponto/motor_calculo_v2.py` entre o export de cada par e o
-  HEAD: emp4 06/26 **~81** · emp3 07/26 **65** · emp4 07/26 **69** · emp2 08/26 **56** · emp2 09/26
-  **15** · emp3 09/26 **17** · emp4 09/26 **17**. Mais **7** em `core/regua_cct.py`, destes **movendo
-  noturno pelo proprio titulo**: `2206451b` 01/09 cl.38-d · `c6467e3a` 25/09 REGIME-POR-EMPRESA ·
-  `5d53bfd1` 25/09 ADICIONAL-NOTURNO-12X36 · `aad64415` 14/10 O272 · `037ae715` 08/10 O211 pouso B ·
-  `5d157d1f` 13/10 O263 (o intervalo batido deixa de pagar noturno) · `d7587502` 16/10 I4.
-  **RESPOSTA LITERAL: ha 56 a 81 commits de motor mais 7 de regua CCT entre o que foi PAGO e o que o
-  motor diz hoje.** O movimento e a soma datada dessas curas -- varias minhas, varias com DIFF
-  publicado e seu aval na epoca. **Atribuir commit a colab exige rodar o motor em cada commit** (bisect
-  de frota): **NAO medido**, e fica linha de fila (`BISECT-DE-FROTA-ATRIBUI-A-CURA-AO-COLAB`). Nao
-  afirmo por colab o que nao medi (LEI-AKITA 8).
-
-**2. A LISTA POR COLAB, COM HORAS ANTES->DEPOIS E RUBRICA.** Sem matricula: `app/docs/` e repo PUBLICO
-(os `DIFF_emp*.txt` com matricula ficam em `logs/`, gitignored). Primeiro o DIFF INTEIRO por rubrica --
-**SETE rubricas se movem, nao uma**:
-
-| evento \| rubrica | linhas | soma (h) | sobem / descem |
-|---|---|---|---|
-| `adicional_noturno\|0025` | 47 | **-396,83** | 15 / 32 |
-| `folga_trabalhada_diurna\|0200` | 24 | **+87,72** | 20 / 4 |
-| `atraso_diurno\|8069` | 54 | **+30,33** | 32 / 22 |
-| `hora_extra_100_diurna\|0200` | 8 | **+13,85** | 5 / 3 |
-| `intrajornada_diurna\|0243` | 49 | **-9,27** | 22 / 27 |
-| `hora_extra_feriado_diurna\|0200` | 2 | **+6,83** | 1 / 1 |
-| `hora_extra_diurna\|0150` | 24 | **-1,78** | 11 / 13 |
-
-Dentro dos **38 pares SEM linha de noturno**: `folga_trabalhada` **-191,63 h** (9 linhas), `atraso`
-**+55,47** (31), `intrajornada` **-30,48** (24), `he_diurna` **-6,62** (5), `he_feriado` **-1,17** (1),
-`he_100` **+0,04** (1). **Note o SINAL**: nesses 38 a `folga_trabalhada` CAI 191,63 h, enquanto no
-universo inteiro ela SOBE 87,72 h (nos 47 com noturno sobe +279,35 h) -- os dois saem do mesmo arquivo e
-nao se contradizem, mas publicar so um deles mentiria sobre a direcao. A lista por colab dos 38 esta em
-`logs/o317/UNIVERSO_7PARES.txt`.
-
-### Os 47 que movem adicional noturno (hora decimal; `colXXX`, sem matricula)
-
-| emp | comp | colab | classe | noturno antes -> depois | delta | outras rubricas |
-|---|---|---|---|---|---|---|
-| 2 | 09/26 | col879 | **A** | 231,25 -> 170,93 | **-60,32** | intrajornada -1,00 |
-| 2 | 09/26 | col491 | **A** | 203,12 -> 148,60 | **-54,52** | nenhuma |
-| 2 | 08/26 | col455 | **A** | 143,63 -> 98,00 | **-45,63** | atraso -0,89 · he_diurna -0,07 |
-| 3 | 07/26 | col110 | **A** | 63,28 -> 21,83 | **-41,45** | atraso -0,41 · he_diurna -0,09 |
-| 2 | 08/26 | col834 | **A** | 134,76 -> 93,70 | **-41,06** | atraso -0,20 |
-| 2 | 09/26 | col852 | **A** | 129,25 -> 91,31 | **-37,94** | nenhuma |
-| 2 | 09/26 | col612 | **A** | 86,83 -> 59,02 | **-27,81** | nenhuma |
-| 2 | 09/26 | col200 | **A** | 152,26 -> 130,54 | **-21,72** | nenhuma |
-| 4 | 06/26 | col29 | **A** | 97,15 -> 81,99 | **-15,16** | intrajornada -0,07 |
-| 2 | 09/26 | col450 | **A** | 89,22 -> 78,06 | **-11,16** | nenhuma |
-| 2 | 08/26 | col250 | **A** | 89,08 -> 77,95 | **-11,13** | nenhuma |
-| 2 | 09/26 | col441 | **A** | 31,75 -> 23,78 | **-7,97** | atraso -1,64 |
-| 2 | 08/26 | col634 | **A** | 69,75 -> 66,03 | **-3,72** | atraso -20,00 · intrajornada -1,00 · he_diurna -0,14 |
-| 2 | 09/26 | col174 | **A** | 126,31 -> 124,05 | **-2,26** | intrajornada -2,00 · atraso -0,02 |
-| 2 | 08/26 | col584 | **A** | 12,74 -> 11,15 | **-1,59** | atraso -5,49 · intrajornada -1,00 |
-| 2 | 09/26 | col704 | **A** | 9,15 -> 8,01 | **-1,14** | atraso -1,11 |
-| 3 | 09/26 | col111 | **A** | 104,10 -> 103,17 | **-0,93** | intrajornada -0,81 |
-| 2 | 09/26 | col334 | **B** | 140,02 -> 98,88 | **-41,14** | folga_trabalhada **+11,12** |
-| 2 | 08/26 | col334 | **B** | 137,26 -> 97,01 | **-40,25** | folga_trabalhada **+17,09** · intrajornada +1,00 |
-| 2 | 09/26 | col658 | **B** | 133,71 -> 98,00 | **-35,71** | intrajornada **+1,00** |
-| 2 | 08/26 | col852 | **B** | 119,58 -> 85,34 | **-34,24** | he_diurna **+0,38** |
-| 3 | 07/26 | col121 | **B** | 90,43 -> 57,71 | **-32,72** | he_diurna **+0,20** · folga_trabalhada +0,09 |
-| 2 | 09/26 | col331 | **B** | 77,09 -> 52,81 | **-24,28** | atraso **+4,36** |
-| 3 | 07/26 | col113 | **B** | 95,44 -> 76,49 | **-18,95** | he_diurna **+0,22** |
-| 4 | 06/26 | col30 | **B** | 89,23 -> 74,04 | **-15,19** | folga_trabalhada **+23,99** · intrajornada +1,91 |
-| 2 | 09/26 | col824 | **B** | 99,47 -> 87,04 | **-12,43** | folga_trabalhada **+0,90** |
-| 2 | 08/26 | col371 | **B** | 16,02 -> 8,00 | **-8,02** | intrajornada **+1,00** · atraso +0,17 |
-| 2 | 08/26 | col889 | **B** | 8,33 -> 0,45 | **-7,88** | folga_trabalhada **+8,08** |
-| 2 | 08/26 | col558 | **B** | 104,00 -> 98,00 | **-6,00** | folga_trabalhada **+12,00** · intrajornada +1,00 |
-| 2 | 08/26 | col367 | **B** | 23,26 -> 17,55 | **-5,71** | folga_trabalhada **+7,00** |
-| 2 | 08/26 | col226 | **B** | 96,03 -> 91,03 | **-5,00** | he_diurna **+1,57** · intrajornada +1,00 |
-| 2 | 09/26 | col435 | **B** | 16,42 -> 15,37 | **-1,05** | intrajornada **+1,00** |
-| 2 | 08/26 | col451 | GANHA | 0,00 -> 98,00 | **+98,00** | intrajornada +14,00 |
-| 2 | 08/26 | col193 | GANHA | 0,00 -> 79,82 | **+79,82** | folga_trabalhada +145,02 |
-| 2 | 09/26 | col923 | GANHA | 35,06 -> 69,92 | **+34,86** | -- |
-| 2 | 08/26 | col865 | GANHA | 104,16 -> 122,62 | **+18,46** | folga_trabalhada +16,32 · atraso -14,52 · he_diurna +2,23 · intrajornada +1,00 |
-| 2 | 08/26 | col439 | GANHA | 1,15 -> 12,31 | **+11,16** | folga_trabalhada +6,93 · atraso +4,17 · he_diurna +2,84 · he_100 +2,02 · intrajornada +1,65 |
-| 3 | 07/26 | col134 | GANHA | 112,00 -> 120,00 | **+8,00** | folga_trabalhada +12,03 · intrajornada +1,00 · atraso -0,66 · he_diurna -0,34 |
-| 3 | 07/26 | col643 | GANHA | 0,00 -> 8,00 | **+8,00** | he_100 +10,00 · intrajornada -6,00 · he_diurna +0,69 |
-| 3 | 07/26 | col165 | GANHA | 84,37 -> 91,39 | **+7,02** | he_diurna +1,96 · atraso -1,42 |
-| 2 | 08/26 | col263 | GANHA | 42,74 -> 47,09 | **+4,35** | he_100 +16,83 · he_diurna -1,18 · intrajornada +1,00 |
-| 3 | 09/26 | col515 | GANHA | 21,66 -> 23,94 | **+2,28** | -- |
-| 2 | 08/26 | col373 | GANHA | 12,28 -> 14,34 | **+2,06** | he_diurna -2,18 · intrajornada -1,00 · atraso +0,06 |
-| 2 | 09/26 | col592 | GANHA | 8,45 -> 9,60 | **+1,15** | -- |
-| 2 | 09/26 | col446 | GANHA | 24,00 -> 25,14 | **+1,14** | -- |
-| 2 | 09/26 | col468 | GANHA | 15,04 -> 15,79 | **+0,75** | -- |
-| 2 | 09/26 | col439 | GANHA | 24,11 -> 24,31 | **+0,20** | -- |
-
-> **`col468` esta nessa lista, e e o colab do seu `!` de 17/09** (competencia 09, EXPORTADA): o apply
-> mexe nele, **para cima**, +0,75 h. E `col515` e o unico dos 47 cujo gravado diz com que regua foi
-> julgado -- e tambem GANHA.
-
-**3. A "FORMA A" E CORRECAO DE CALCULO OU EFEITO DO PAR QUE NAO FECHA? NENHUMA DAS DUAS, E AGORA A CONTA
-FECHA AO CENTAVO.** A queda do noturno nos 32 se parte em TRES, e as tres partes somam o total do DIFF
-da porta -- sem sobra, o que e a propriedade fixa que a L-110 cobra (`partes somam o total`):
-
-```
-DRIFT  (motor de HOJE x o que foi PAGO) ......... -576,58 h    85,5%
-PLANTIO (efeito do ato, medido DIA A DIA) ....... + 50,98 h    (o ato SOBE o noturno)
-RESTO  (NAO explicado) .......................... -148,48 h    22,0%
-SOMA ............................................ -674,08 h
-delta do DIFF da porta .......................... -674,08 h    <- CONFERE
-```
-**25 de 32 fecham ao centavo**: **16** porque o plantio nao tocou o noturno deles, e **9** porque
-`motor_hoje + plantio == gravado_DEPOIS` exatamente (col226 +7,00 · col634 +5,00 · col834 +6,00 ·
-col334/09 +6,00 · col435 +1,00 · col658 +7,00 · col852/09 +6,06 · col879 **-1,14** · col111 **-0,93**).
-Isso **explica seis linhas que eu as 09:2x tinha rotulado "causa NAO MEDIDA"**: nao era unidade, era o
-plantio -- o `motor_hoje` e a foto de ANTES dele.
-  **OS 7 QUE SOBRAM, com o resto NOMEADO** (`resto = gravado_DEPOIS - motor_hoje - plantio`): `col110`
-  **-66,46** · `col121` **-42,29** · `col113` **-21,09** · `col30` **-18,04** · `col334/08` -2,87 ·
-  `col367` +2,20 · `col852/08` +0,08. Os quatro grandes sao **emp3 07/26 inteira** (os tres colabs com
-  noturno) **+ col30 de emp4 06/26**, e sao **-147,88 h dos -148,48 h**. Mas **nao e "o par todo"**:
-  `col29`, vizinho de col30 na MESMA empresa e competencia, fecha ao centavo. E colab, e a **CAUSA NAO
-  ESTA MEDIDA** -- e o unico pedaco da queda sem dono (L-099). Os quatro sao exatamente os que o achado
-  6 das 09:3x nomeia como **escritor != leitor** (`recalcular_fechamento_mes` x `autoridade_do_periodo`),
-  e o controle para a proxima medicao e o mesmo: `recalcular_fechamento_mes(somente_leitura=True)` nos 7,
-  **sem plantio**.
-  **O QUE ISSO RESPONDE, literalmente:** a queda **nao e** "efeito do par que nao fecha" (o ato FECHA
-  par: o unico `turno_aberto` que se move, se move para fechado) e **nao e** "correcao de calculo do
-  ato" (o ato soma +50,98 h). **85,5% dela e o gravado envelhecido** -- a distancia entre o que foi PAGO
-  e o que o motor de hoje diz, que o recalculo **REVELA** e nao causa; qualquer recalculo da competencia
-  faria o mesmo. E **22% nao tem dono medido**, concentrado em 4 colabs.
-
-**4. POR QUE ISTO NAO E PERGUNTA DE LEI.** Greppei antes de perguntar (LEI-AKITA 4): a **L-113** (*"o
-sistema calcula o que tem... Se o export ficou diferente, refaz"*, seu corte de 07/10 19:xx) e a
-**O TXT E FOTOGRAFIA** (*"correcao provada entra em QUALQUER competencia... nem exportada, nem trancada,
-nem paga"*) **ja respondem** "relavratura de competencia PAGA aplica a regra de hoje?". Ela aplica. Logo
-nao escrevo pergunta de lei nova aqui (e a **L-117** proibe eu propor lei por iniciativa propria ate
-20/20). **O que esta aberto e so o seu `!`**, e ele agora tem os numeros: `O317-APPLY-MOVE-MAIS-QUE-A-HORA`
-no `app/docs/AVAIS.md`.
-
-PROVA: `logs/o317/RESUMO_PARA_AVAIS.md` (667 linhas -- a decomposicao nas linhas finais, a tabela dos 47
-em 354-420, as datas do gravado em 458-529), `logs/o317/diff_19-10_v2.out`, `dia_dos_17_19-10.out`,
-`dia_dos_15_19-10.out`, `datas_do_gravado_19-10.out`, `carimbo_da_regua_19-10.out` (todos com
-`.conferir` = sombra `20261019 completa diverge=0`), e os sete `logs/o317/DIFF_emp*.txt`.
-**NADA APLICADO, NADA A REVERTER.** As quatro condicoes do seu `!` das 14:4x: a 1 (DIFF de frota ANTES)
-cumprida -- esta secao e ela --, as outras tres no ato.
-
----
-## VEREDITO 19/10 09:3x -- A FORMA A NAO E NENHUMA DAS DUAS: O PLANTIO SO SOMA NOTURNO, E O -333,70 h E O GRAVADO (O317)
-
-LEI-AKITA: origem=`logs/o317/dia_dos_17_19-10.out` (medicao, 0 linha de codigo), testemunha=`ponto/services/espelho.py::autoridade_do_periodo` + `resultado.dia_da_jornada`, RED=n/a (medicao), quem-mais-le=os 17 colabs que perdem noturno nos 3 pares, juizes novos=0.
-
-A 3a publicacao do seu aval das 08:4x. FORMA: motor x motor DENTRO do mesmo `atomic` desfeito, na sombra `completa` (carimbo `dia=20261019 diverge=0`), cpuset de teste, copia `git archive HEAD 2af35da3`. **ATO IDENTICO ao do DIFF**, conferido par a par pelo placar da porta: `universo=857 alvo=66 plantada=4` (emp4 06), `2440/265/12` (emp3 07), `9956/1168/77` (emp2 08) -- os mesmos tres numeros do `diff_19-10_v2.out`. **DOIS runs, PLACAR identico** (idempotente).
-
-1. **O PLANTIO NUNCA TIRA NOTURNO.** Dos **17** que perdem, **12 nao tem UM dia** com noturno movido pelo ato. Os outros 5 movem **7 dias**, e em TODOS o noturno **SOBE**: `col110` 2026-07-19 `0 -> 480 min`, `col226` 07-27 `0 -> 420`, `col334` 08-08 `0 -> 420`, `col634` 08-07 `0 -> 300`, `col834` 08-16 `0 -> 360`; mais um par cruzando a meia-noite que TROCA de dia em `col110` (`60,4 min` de 07-05 para 07-06, liquido ZERO). Efeito real do ato: **+33,00 h**, nenhuma hora perdida.
-2. **A HIPOTESE (a) ESTA DESCARTADA, MEDIDA.** `entrou_na_l084 = 0` nos 17 -- nenhum dia entrou em `dias_cadastro_x_realidade` pelo ato. E o unico `turno_aberto` que se move, se move para **FECHADO** (`col634`, `abertos 1 -> 0`). O ato **fecha** par; nao abre. Logo nao ha hora sumindo de quem trabalhou (L-084) **pelo plantio**.
-3. **DE ONDE VEM O -333,70 h: do GRAVADO.** Separando cada colab em `DRIFT = motor_hoje_ANTES - gravado` e `PLANTIO = motor_DEPOIS - motor_ANTES`: **DRIFT -221,02 h | PLANTIO +33,00 h**, e **12 dos 17 conferem AO CENTAVO** (`motor_DEPOIS` == o "depois" do DIFF). `col455` e o mais limpo: gravado **143,63 h**, o motor de hoje ja dizia **98,00 h** ANTES de qualquer plantio, e o ato nao moveu **um minuto** dele. Os `-45,63 h` existiam antes de o apply ser cogitado. Tabela dos 17 em `logs/o317/VEREDITO_FORMA_A_19-10.md`.
-4. **E O GRAVADO DE 3 DELES ESTA ACIMA DO TETO FISICO DA JANELA.** `cl.10` da a janela `22h-05h` = **7 h/noite** no maximo, e `cl.38-d` diz que no 12x36 a hora e NORMAL de 60 min -- entao o teto de um colab e `noites x 7,00 h`. O motor de hoje pousa EXATAMENTE nele (`col455` = `dias=14 abertos=0` x `420 min` = **98,00 h**; `col558` idem). O gravado nao: **`col455` 143,63 h**, **`col334` 137,26 h**, **`col834` 134,76 h** -- `143,63 / 14 = 10,26 h por noite`, que a janela de 7 h **nao pode produzir**. Isso nao e gravado "velho": e gravado que a regua da CCT de hoje **nao reproduz**.
-5. **O QUE EU NAO SEI, E NAO ROTULO (LEI-AKITA 8).** O **dono** desse gap (L-099) fica **ABERTO**, com duas candidatas NOMEADAS: (i) **correcao de regra** -- o gravado escrito sob hora reduzida e/ou prorrogacao do noturno, que `cl.38-d` e `cl.10` AFASTAM (`10,26 h/noite` e a assinatura aritmetica disso); (ii) **inflacao na origem** -- o mesmo turno contado 2x no gravado. As duas dao o mesmo sinal e **nao se escolhe uma por leitura**. Medicao que decide: para os 3, sob que regua o gravado foi lavrado (data do fechamento x data em que `HORA_REDUZIDA_12X36_EM_SECO` foi desligado).
-6. **5 DE 17 NAO FECHARAM, e e ACHADO, nao detalhe.** `col30`, `col110`, `col113`, `col121`, `col367`: o ESCRITOR (`recalcular_fechamento_mes`, que grava `FechamentoMensal.horas_noturnas` e alimenta a rubrica `0025`) e o LEITOR (`autoridade_do_periodo`, que e o que o espelho mostra) discordam sobre o MESMO colab, MESMA janela, MESMO estado pos-ato -- em `col110` em sentidos **OPOSTOS** (escritor grava `21,83 h`, leitor diz `88,29 h`). TRES hipoteses medidas e **DESCARTADAS** aqui: janela por empresa (`dia_inicio_competencia=21` nas 7, medido 04/10 em `folha/services/ranking_he.py:62`), mais de uma matricula (cada um tem **UMA** linha de `0025` no DIFF) e volume de celula regenerada (`col29` regenera **92** celulas e CONFERE; `col367` regenera **1** e NAO confere). Causa: **NAO SEI**. Controle existente para a proxima medicao: `recalcular_fechamento_mes(somente_leitura=True)` (E5 FATIA 1) nos 5, SEM plantio -- separa "escritor != leitor" de "o regen foi outro". Se confirmar, dono e **ESTRUTURA** (L-099) e sao **DOIS LEITORES** da mesma pergunta (LEI-AKITA 2).
-7. **O QUE ISSO MUDA NO SEU `!`.** O ato nao causa a perda -- ele a **REVELA**: qualquer recalculo da competencia faria o mesmo (previsao a partir de **12** pontos por UMA porta, nao lei). Continua sendo dinheiro de competencia **PAGA** mudando de valor, e a diferenca entre o PAGO e o que passa a valer e **Pauta DP com os dois numeros** (L-113). A unidade de "41 batidas" (08:3x) e a de `plantada` da porta (**93** nos 3 pares medidos, **231** nos 7) **nao estao reconciliadas** -- linha de fila `UNIDADE-DO-PLANTADA-NAO-E-BATIDA`, e nenhum numero deste veredito depende dela (todos saem de hora por colab).
-
-PROVA: `logs/o317/VEREDITO_FORMA_A_19-10.md` (85 linhas, com a tabela dos 17 e as hipoteses descartadas), `logs/o317/dia_dos_17_19-10.out` (2246 linhas, 2 runs). **Nada aplicado, nada a reverter.** O AVAIS foi reescrito: a frase "espera o veredito da FORMA A" saiu porque o veredito chegou.
-
----
-## RESPOSTA 19/10 09:1x -- AS TRES PERGUNTAS DO SEU AVAL, E A PRIMEIRA COISA QUE ELAS ACHARAM FOI UM ERRO MEU (O317) -- nao e marco: 0 linha de codigo de produto, e pela L-106 estas linhas viajam no commit do proximo marco
-
-> **Esta secao passa das 25 linhas da L-116 de proposito e a lei permite**: ela e o DETALHE DO DIFF DE
-> FROTA ANTES DO APPLY, que a L-116 nomeia como o que NAO se corta -- *"DIFF de frota antes de apply de
-> dinheiro"*. Seu aval: *"Antes do meu !, publica no RELATO e no AVAIS: qual regra (L-NNN/CCT) faz o
-> noturno mover em cada um dos 38, a lista por colab com horas antes/depois e rubrica, e se a FORMA A
-> (-293,92 h em 12) e correcao de calculo ou efeito do par que nao fecha."*
-
-**1. O NUMERO QUE VOCE ME CITOU DE VOLTA E MEU, E ESTA ERRADO.** A FORMA A nao e `-293,92 h em 12`:
-e **-159,74 h em 7**. Recontei da FONTE CRUA (`logs/o317/diff_19-10_v2.out`, as 97 linhas de cabecalho
-por colab mais as linhas `colNNN ... evento|rubrica: antes -> depois (delta)`) e, em separado, dos sete
-`logs/o317/DIFF_emp*.txt` publicados -- as duas contas dao o mesmo:
-
-| | publicado por mim 08:2x | MEDIDO da fonte 09:1x |
-|---|---|---|
-| perdem noturno | 17 · -333,70 h | **17 · -333,70 h** (confere) |
-| ganham noturno | 8 · +236,87 h | **9** · +236,87 h (a SOMA estava certa, a CONTAGEM nao) |
-| FORMA A | 12 · -293,92 h | **7 · -159,74 h** |
-| FORMA B | 5 · -39,78 h | **10 · -173,96 h** |
-
-A particao fecha nos DOIS casos (-293,92 + -39,78 = -333,70 = -159,74 + -173,96), e foi isso que deixou
-o erro passar por mim: o total estava certo e a REPARTICAO dele, nao. Testei tres criterios e **nenhum**
-reproduz 12/-293,92 -- "nenhuma outra rubrica sobe" da 7, "a soma das outras <= 0" da 10, "o total da
-competencia == o delta do noturno" da 1. O split de 08:2x nao saiu de medicao. **E `col334` nao e exemplo
-de FORMA A**, como meu texto de 07:4x deu a entender: ele tem `folga_trabalhada_diurna` SUBINDO, logo e
-FORMA B. A orfa medida nele segue valendo como fato do dia 2026-08-05; o que nao vale e usa-la como
-assinatura da FORMA A. Correcao tambem gravada em `logs/o317/RESUMO_PARA_AVAIS.md`.
-
-**2. "CADA UM DOS 38" SAO QUATRO CLASSES, NAO DUAS -- e so 26 movem noturno.** Os 38 que o ato move
-repartem-se em: **17 perdem** adicional noturno (FORMA A 7 + FORMA B 10), **9 ganham**, e **12 nao movem
-noturno nenhum** -- mexem so em outras rubricas. Os 12 nao apareciam em nenhuma das minhas tabelas
-anteriores, e eles sao parte da sua pergunta. A tabela dos 38 esta abaixo, com hora antes->depois por
-rubrica. Sem matricula: `app/docs/` e repo PUBLICO (os `DIFF_emp*.txt` com matricula ficam em `logs/`,
-que e gitignored).
-
-**3. QUAL REGRA FAZ O NOTURNO MOVER: NENHUMA. A REGRA E A MESMA ANTES E DEPOIS -- o que mudou foi a
-ENTRADA.** Isto nao e evasiva, e o que a medicao mostra. As tres autoridades do adicional noturno nao
-sao tocadas pelo ato e nao mudaram de valor entre as duas fotos:
-  - **CCT Vigilantes Londrina cl.38-d** -- no 12x36, ainda que noturno, a hora e NORMAL de 60 min, e o
-    adicional de 20% SEGUE DEVIDO (`HORA_REDUZIDA_12X36_EM_SECO=False` em prod desde 01/09). Fixa a
-    TAXA, nao a quantidade.
-  - **CCT cl.10** -- janela 22h-05h sem prorrogacao (aplicada por INTERPRETACAO, sem parecer proprio;
-    segue na fila). Fixa a JANELA, nao a quantidade.
-  - **CLT Art.73** -- o par.1 da hora reduzida esta afastado pela 38-d; o adicional fica.
-A quantidade de hora noturna e o CRUZAMENTO da janela da cl.10 com o TURNO PAREADO do dia. O ato do
-O317 nao mexe em nenhuma das tres: ele planta batida e **RELAVRA o trecho**. Entao a regra que faz o
-noturno mover em cada um dos 38 e, literalmente, a mesma de sempre lida sobre uma ENTRADA diferente --
-e **qual entrada mudou em cada colab e pergunta de DIA, nao de rubrica**: ou o par deixou de fechar
-(entao nao ha turno dentro da janela para medir), ou os MARCOS do dia mudaram com o cadastro de hoje
-(entao a janela cruza outro intervalo). Rubrica e SAIDA, nao mecanismo; dizer qual das duas foi, por
-colab, sem medir o dia, seria juiz novo (LEI-AKITA 8), e e por isso que isto fica declarado e nao
-afirmado.
-
-**4. A FORMA A E CORRECAO DE CALCULO OU EFEITO DO PAR QUE NAO FECHA? NAO SEI AINDA, E ESTA EM MEDICAO.**
-O que ja esta MEDIDO e aponta para a segunda hipotese, sem fecha-la: nos sete da FORMA A **nenhuma hora
-sobe** -- toda rubrica que se move, se move para baixo (tabela abaixo) --, e a desproporcao e grande:
-**`col455` perde 45,63 h de adicional noturno com UMA hora plantada** (`alvo=1 plantada=1`). Uma batida
-nao vale 45 h; esse delta e do trecho relavrado, nao da hora. Se o dia em que o noturno caiu passou a
-ter `realizado == 0` com `tipo_dia == 'trabalho'`, a forma e a do par que nao fecha, e pela **L-084** a
-hora desaparece de quem TRABALHOU -- o que seria BUG no caminho do plantio, nao correcao. A medicao que
-decide isso e por DIA, na sombra, pela funcao real: para cada (colab, dia) com delta de noturno, as
-batidas do dia antes/depois, o `realizado`, o `tipo_dia` e os MARCOS antes->depois, lado a lado. Ela
-cobre os **17 que perdem**, nao so os 7 -- deixar 10 sem causa nomeada seria repetir o erro do item 1.
-Esta lancada; o resultado entra aqui e no AVAIS quando sair. **A sombra e recurso unico** e as raias
-`wt-fio` e `wt-v3` serializam nela por `logs/sombra.lock`.
-
-**NADA FOI APLICADO E NADA HA PARA REVERTER.** O apply das 422 segue PARADO esperando o seu `!`, agora
-com os numeros certos no AVAIS (`O317-APPLY-MOVE-MAIS-QUE-A-HORA`). As quatro condicoes do `!` das
-14:4x seguem como estavam: a 1 (DIFF de frota ANTES) cumprida em `f6cf2077`, as outras tres a cumprir
-no ato.
-
-### A LISTA DOS 38, por competencia (hora decimal; `colXXX` sem matricula porque o repo e publico)
-
-| competencia | emp | colab | classe | noturno antes | depois | delta | as OUTRAS rubricas que se movem (antes->depois) |
-|---|---|---|---|---|---|---|---|
-| 2026-06 | 4 | col29 | **FORMA A** | 97.15 | 81.99 | **-15.16** | intrajornada_diurna 1.07->1.00 (-0.07) |
-| 2026-06 | 4 | col30 | **FORMA B** | 89.23 | 74.04 | **-15.19** | folga_trabalhada_diurna 0.00->23.99 (+23.99); intrajornada_diurna 0.09->2.00 (+1.91) |
-| 2026-07 | 3 | col98 | **so-outras** | -- | -- | **--** | atraso_diurno 11.98->0.00 (-11.98); intrajornada_diurna 1.00->2.00 (+1.00) |
-| 2026-07 | 3 | col110 | **FORMA A** | 63.28 | 21.83 | **-41.45** | atraso_diurno 0.41->0.00 (-0.41); hora_extra_diurna 0.09->0.00 (-0.09) |
-| 2026-07 | 3 | col113 | **FORMA B** | 95.44 | 76.49 | **-18.95** | atraso_diurno 0.83->0.00 (-0.83); intrajornada_diurna 1.47->1.00 (-0.47); hora_extra_diurna 0.00->0.22 (+0.22) |
-| 2026-07 | 3 | col121 | **FORMA B** | 90.43 | 57.71 | **-32.72** | hora_extra_diurna 0.01->0.21 (+0.20); atraso_diurno 0.09->0.00 (-0.09); folga_trabalhada_diurna 0.00->0.09 (+0.09) |
-| 2026-07 | 3 | col134 | **GANHA** | 112.00 | 120.00 | **+8.00** | folga_trabalhada_diurna 0.00->12.03 (+12.03); intrajornada_diurna 14.00->15.00 (+1.00); atraso_diurno 0.85->0.19 (-0.66); hora_extra_diurna 0.34->0.00 (-0.34) |
-| 2026-07 | 3 | col165 | **GANHA** | 84.37 | 91.39 | **+7.02** | hora_extra_diurna 0.00->1.96 (+1.96); atraso_diurno 1.42->0.00 (-1.42) |
-| 2026-07 | 3 | col643 | **GANHA** | 0.00 | 8.00 | **+8.00** | hora_extra_100_diurna 0.00->10.00 (+10.00); intrajornada_diurna 7.00->1.00 (-6.00); hora_extra_diurna 1.31->2.00 (+0.69) |
-| 2026-07 | 3 | col749 | **so-outras** | -- | -- | **--** | atraso_diurno 0.00->2.32 (+2.32); intrajornada_diurna 1.00->0.00 (-1.00) |
-| 2026-07 | 4 | col51 | **so-outras** | -- | -- | **--** | atraso_diurno 0.00->0.30 (+0.30) |
-| 2026-08 | 2 | col193 | **GANHA** | 0.00 | 79.82 | **+79.82** | folga_trabalhada_diurna 0.00->145.02 (+145.02) |
-| 2026-08 | 2 | col224 | **so-outras** | -- | -- | **--** | intrajornada_diurna 0.00->2.02 (+2.02); atraso_diurno 0.00->0.23 (+0.23) |
-| 2026-08 | 2 | col226 | **FORMA B** | 96.03 | 91.03 | **-5.00** | hora_extra_diurna 0.00->1.57 (+1.57); intrajornada_diurna 0.00->1.00 (+1.00) |
-| 2026-08 | 2 | col250 | **FORMA A** | 89.08 | 77.95 | **-11.13** | (nenhuma) |
-| 2026-08 | 2 | col263 | **GANHA** | 42.74 | 47.09 | **+4.35** | hora_extra_100_diurna 61.36->78.19 (+16.83); hora_extra_diurna 17.18->16.00 (-1.18); intrajornada_diurna 17.00->18.00 (+1.00) |
-| 2026-08 | 2 | col334 | **FORMA B** | 137.26 | 97.01 | **-40.25** | folga_trabalhada_diurna 0.00->17.09 (+17.09); hora_extra_100_diurna 9.19->0.00 (-9.19); hora_extra_diurna 2.00->0.44 (-1.56); intrajornada_diurna 0.39->1.39 (+1.00); atraso_diurno 0.48->0.32 (-0.16) |
-| 2026-08 | 2 | col367 | **FORMA B** | 23.26 | 17.55 | **-5.71** | folga_trabalhada_diurna 0.00->7.00 (+7.00) |
-| 2026-08 | 2 | col371 | **FORMA B** | 16.02 | 8.00 | **-8.02** | hora_extra_100_diurna 5.47->4.47 (-1.00); hora_extra_diurna 3.00->2.00 (-1.00); intrajornada_diurna 2.00->3.00 (+1.00); atraso_diurno 0.00->0.17 (+0.17) |
-| 2026-08 | 2 | col373 | **GANHA** | 12.28 | 14.34 | **+2.06** | hora_extra_diurna 2.66->0.48 (-2.18); intrajornada_diurna 2.17->1.17 (-1.00); atraso_diurno 0.00->0.06 (+0.06) |
-| 2026-08 | 2 | col406 | **so-outras** | -- | -- | **--** | atraso_diurno 0.00->7.49 (+7.49); hora_extra_diurna 3.88->1.05 (-2.83) |
-| 2026-08 | 2 | col439 | **GANHA** | 1.15 | 12.31 | **+11.16** | folga_trabalhada_diurna 0.00->6.93 (+6.93); atraso_diurno 0.00->4.17 (+4.17); hora_extra_diurna 0.00->2.84 (+2.84); hora_extra_100_diurna 0.00->2.02 (+2.02); intrajornada_diurna 0.00->1.65 (+1.65) |
-| 2026-08 | 2 | col444 | **so-outras** | -- | -- | **--** | atraso_diurno 0.00->4.38 (+4.38); hora_extra_diurna 0.86->2.00 (+1.14); intrajornada_diurna 1.00->2.00 (+1.00); hora_extra_100_diurna 0.00->0.04 (+0.04) |
-| 2026-08 | 2 | col451 | **GANHA** | 0.00 | 98.00 | **+98.00** | intrajornada_diurna 0.00->14.00 (+14.00) |
-| 2026-08 | 2 | col455 | **FORMA A** | 143.63 | 98.00 | **-45.63** | atraso_diurno 1.03->0.14 (-0.89); hora_extra_diurna 0.50->0.43 (-0.07) |
-| 2026-08 | 2 | col507 | **so-outras** | -- | -- | **--** | intrajornada_diurna 0.00->0.17 (+0.17) |
-| 2026-08 | 2 | col518 | **so-outras** | -- | -- | **--** | intrajornada_diurna 5.25->2.25 (-3.00); atraso_diurno 0.00->2.86 (+2.86); hora_extra_diurna 2.62->0.00 (-2.62) |
-| 2026-08 | 2 | col549 | **so-outras** | -- | -- | **--** | atraso_diurno 0.00->0.42 (+0.42) |
-| 2026-08 | 2 | col558 | **FORMA B** | 104.00 | 98.00 | **-6.00** | folga_trabalhada_diurna 0.00->12.00 (+12.00); intrajornada_diurna 13.00->14.00 (+1.00); hora_extra_diurna 0.32->0.00 (-0.32) |
-| 2026-08 | 2 | col569 | **so-outras** | -- | -- | **--** | atraso_diurno 0.00->2.55 (+2.55) |
-| 2026-08 | 2 | col584 | **FORMA A** | 12.74 | 11.15 | **-1.59** | atraso_diurno 19.56->14.07 (-5.49); intrajornada_diurna 3.00->2.00 (-1.00) |
-| 2026-08 | 2 | col634 | **FORMA A** | 69.75 | 66.03 | **-3.72** | atraso_diurno 23.14->3.14 (-20.00); intrajornada_diurna 3.48->2.48 (-1.00); hora_extra_diurna 0.14->0.00 (-0.14) |
-| 2026-08 | 2 | col723 | **so-outras** | -- | -- | **--** | atraso_diurno 0.00->4.52 (+4.52); intrajornada_diurna 5.88->1.88 (-4.00); hora_extra_diurna 3.13->0.46 (-2.67) |
-| 2026-08 | 2 | col726 | **so-outras** | -- | -- | **--** | hora_extra_diurna 0.00->0.36 (+0.36); atraso_diurno 0.22->0.11 (-0.11) |
-| 2026-08 | 2 | col834 | **FORMA A** | 134.76 | 93.70 | **-41.06** | atraso_diurno 0.22->0.02 (-0.20) |
-| 2026-08 | 2 | col852 | **FORMA B** | 119.58 | 85.34 | **-34.24** | hora_extra_diurna 0.00->0.38 (+0.38) |
-| 2026-08 | 2 | col865 | **GANHA** | 104.16 | 122.62 | **+18.46** | folga_trabalhada_diurna 0.00->16.32 (+16.32); atraso_diurno 14.52->0.00 (-14.52); hora_extra_diurna 15.79->18.02 (+2.23); intrajornada_diurna 0.00->1.00 (+1.00) |
-| 2026-08 | 2 | col889 | **FORMA B** | 8.33 | 0.45 | **-7.88** | hora_extra_100_diurna 9.93->0.00 (-9.93); folga_trabalhada_diurna 0.00->8.08 (+8.08); hora_extra_diurna 2.00->1.63 (-0.37) |
-
-**CLASSES**: `FORMA A` 7 (noturno cai e nada sobe) · `FORMA B` 10 (noturno cai e outra rubrica sobe) ·
-`GANHA` 9 (noturno sobe) · `so-outras` 12 (noturno nao se move; mexem outras rubricas) = **38**.
-Liquido do noturno: **+236,87 h - 333,70 h = -96,83 h** em competencia PAGA.
-
-
----
-
-## MEDIDA 19/10 06:5x-07:4x -- O "PARA" DO SEU AVAL CUMPRIDO: AS TRES CAUSAS DO `furo_espelho` ESTAO NOMEADAS, E UMA DELAS NAO E O PLANTIO (O317) -- NAO E MARCO: nao fechou item, e pela L-106 estas linhas viajam no commit do proximo marco
-
-LEI-AKITA: origem=o proprio ato do lote (plantio + REGEN de celula), testemunha=`motivos_retencao_celula` e o veredito da ata lidos ANTES e DEPOIS dentro do mesmo `atomic`, RED=n/a (medicao, 0 linha de codigo), quem-mais-le=o TXT do export (`classificar_export`) e o espelho, juizes novos=0.
-
-Sua ordem, LITERAL: *"mede primeiro por que o plantio abre furo_espelho em col334/col518/col889 (emp2 2026-08) -- ninguem sai do TXT sem causa nomeada"*. **A PREMISSA CONFERE**: os tres NAO retinham nada antes (`motivos=[]`, `dias_que_retem=0`; batidas na janela 64/84/19), entao os tres SAEM do TXT por causa do ato, nao por estado anterior. As causas sao **TRES e diferentes**:
-
-- **col334, 2026-08-05 -- a batida plantada.** Ela cai como `BATIDA_ORFA_FORA_TOLERANCIA` + `REALIZADO_ZERO_COM_TURNO` num dia que estava absolvido so por `FURO_PARCIAL`, e o dia passa a reter `espelho_furo`. Numeros: alvo 15 / plantada 11; hash da celula `4db9c3721807` -> `14a285655468`; horas 177.36 -> **158.04**; inconsistencias 4 -> **10**.
-- **col889, 2026-08-12 -- a batida plantada, por outra via.** O dia vai de `concorde` a `discordante` por `REALIZADO_ZERO_COM_TURNO`, batidas 1 -> 2, e retem `espelho_discordante`. Hash `af0243db7e04` -> `1221d013e3d4`; horas 69.56 -> **45.63**; inconsistencias 0 -> **2**.
-- **col518, 2026-07-21 -- NAO e a batida plantada, e este e o achado.** Nesse dia o plantio e **0 -> 0**. Quem move o dia e a **REGEN de 39 celulas** do mesmo ato: ela relavra o dia, o dia **perde o `FURO_PRE_ADOCAO`**, vai de `furo` a `cobrado` e retem `espelho_cobrado`. O MECANISMO esta localizado: `ponto/supra_juiz.py:160` calcula `pre_adocao`, e `:176` so emite o `FURO_PRE_ADOCAO` de `:186` com `not batidas_no_dia` **e** `not cobrancas_vivas` -- entao um dia perde a absolvicao tambem por ganhar FIO VIVO, nao so batida. **Efeito colateral na direcao oposta, no mesmo colab**: 2026-08-14 **CUROU** -- hash `8fe892f4a386` -> `8e04edfe45cc`, horas 118.57 -> **142.80**, turnos abertos 9 -> **5**, inconsistencias 13 -> **5**.
-
-**O QUE EU DIGO DE CARA, porque o numero contraria a intencao do ato:** em col334 e col889 o plantio **DERRUBA** horas trabalhadas (**-19,32 h** e **-23,93 h**) e **SOBE** inconsistencias -- a batida plantada ali **quebra par**, nao acrescenta hora. O ato nao esta errado (a hora era declarada e validada, e a porta e a oficial), mas o efeito na folha desses dois e para BAIXO, e isso vai no DIFF que voce leva ao DP, nomeado, nao escondido numa soma.
-
-**DONO (L-099): nao rotulei nenhum dos tres.** O juiz e `ponto/management/commands/e6_oraculo.py:43::dono_da_divergencia(horas_do_dia, em_cadastro_x_realidade)` e eu **nao medi** os dois argumentos por dia aqui -- rotular por vocabulario proprio seria juiz novo em prosa (LEI-AKITA 8: zero numero sem medicao na fonte). O col518 tem **pista** de ESTRUTURA (o sistema muda o veredito do dia sem que batida ou cadastro mudem), e a pista nao e o rotulo.
-
-**PROVA:** `logs/o317/por_que_furo_19-10.out` e `...19-10b.out` (crus, **NAO publicados**: levam pergunta_id e hora declarada). Placar do lote emp2 2026-08: `universo=9956 com_registro=8788 alvo=1168 plantada=77`. **A causa esta nomeada -> o `depois` do seu aval esta liberado**, e o apply vai nos QUATRO pares da pergunta 12.
-
-## MARCO 19/10 07:1x -- A 2a LEVA DA RAIA V3 POUSA, E O PORTAO DO ESMERIL DIZ QUE NAO HA MAIS NADA QUE O CODIGO MOVA (O280)
-
-LEI-AKITA: origem=os dois arquivos de TESTE da raia (o selo F0 que copiava VALOR em vez de medir
-consumo; o lastro da bateria que prometia o contrario do corte O316 (3)), testemunha=a suite da
-arvore certificada `092fd190` pelo tripe da L-074, RED=`logs/o280/i17/` e `logs/o280/i16b/`
-(`red_sem_pino.log`), quem-mais-le=a bateria e o censo por AST dos `.py`, juizes novos=0.
-
-POUSOU `app/ponto/tests/test_f0_conformidade.py` (+163) e `test_o280_bateria_da_lei.py` (+83/-16).
-**ZERO linha de producao**, logo DIFF de frota ZERO por construcao -- e a O280 v3 esta fora da
-janela de fechamento pelo aval dele de 18/10 ~15:1x de qualquer forma. Merge `--no-ff` de
-`092fd190` (main `f6cf2077` + `a867325a` + `6a4f74d2`), censo `cmp` no corpo do commit.
-
-PROVA (L-074, medido NESTA arvore): `OK (skipped=42, expected failures=14)` / `Ran 11386 tests in
-887.731s` / rc=0, `^(FAIL|ERROR): ` = 0 (`logs/v3/suite_pouso_19-10.log`, `bin/suite.sh --dir
-/home/ronald/wt-v3-p19 --parallel 2`). O que discrimina "os pinos entraram" nao e o OK: e
-`expected failures` **12 -> 14** contra o pouso de `06432514` (`Ran 11381`), com 5 testes novos.
-
-O NUMERO QUE A CELULA DEVIA (declarado no topo de hoje): o portao do esmeril e **10**, nao 13, pelo
-derivador da propria fonte (`logs/o280/esmeril/portao_derivado_1810.py`: 8 do §5 + 2 nascidos no
-§6). O segundo numero dele pesa mais: **MOVIVEL POR ESTA RAIA = 0** -- oito tem parte dele pela
-COLUNA do §5 e os dois novos (B13/B14, B27) moram na ZONA INVIOLAVEL, entao a condicao de saida do
-aval (*"zero item aberto"*) nao se alcanca por codigo. COMBOIO: correu SOZINHA (o48p4 retido pela
-janela, raiox com 0 commit a frente, as outras duas raias em pergunta de lei).
-
----
-## MEDIDA 19/10 05:5x-06:1x -- O PRONTO DA O261 SE MEDIU PELA CLASSE DA PORTA, E O LOTE NAO LEVA O CONTADOR A 0 (O261 item (3)) -- NAO E MARCO: nao fechou item, e pela L-106 estas linhas de doc viajam no commit do PROXIMO marco
-
-LEI-AKITA: origem=nenhuma -- marco de MEDIDA, **0 linha de codigo**, testemunha=`chamados/services/vigia_fio.py::censo` + `chamados/services/vigia_carimbo.py::classificar` + `chamados/services/passivo_validado.py::CLASSE_COM_REGISTRO`/`FORA_DO_ESCOPO` (as autoridades dos DOIS lados, LIDAS e nao recalculadas), RED=nao se aplica (nada muda de comportamento; as 4 sondas sao SO LEITURA, com `current_database()=='sombra'` asseverado e no cpuset de teste), quem-mais-le=`logs/o261/GAP_RESUMO_19-10.md`, o item `O261-O-QUE-E-ZERO-NA-10` no AVAIS e a pergunta 11 do topo, juizes novos=0.
-
-NUMEROS, na sombra carimbada de HOJE (`dia=20261019 tipo=completa diverge=0 erros=0`):
-- `fio_morto` = **211** (`pergunta_morreu` 211, `sem_pergunta_nenhuma` **0**, `fio_vivo` 1943, `lampadas_acesas` 2278, `cego=False`, `dias_futuros_no_universo=0`). A LISTA devolvida tem 211 itens, **asseverado contra o contador** para o `limite` nao truncar o universo.
-- pela classe da PROPRIA porta do lote, unidade DIA: **91** `sem_plantio_nenhum` (o ALVO) · **88** so `com_registro` · **21** `slot_nao_derivavel` · **10** `plantio_fora_do_slot` · **1** sem pergunta = 211. Competencia 09 = 110 (35/63/8/4); **competencia 10 = 101 (56 / 25 / 13 / 6 / 1)**.
-- universo de `classificar` por PERGUNTA: `com_registro` 11.780 · `sem_plantio_nenhum` **1.022** · `slot_nao_derivavel` 409 · `plantio_fora_do_slot` 75 = **13.286** -- reconcilia com o alvo **1.019** da DRY de 18/10 (plantou 381, recusou 638).
-- **O lote da O317 nao leva o contador a 0 na 10: o piso e 45**, mais o que a porta recusar dos 56 restantes.
-- o que sustenta os 88 `com_registro`, lido so como DADO: **42** tem batida plantada VIVA no slot e **38** nao tem batida nenhuma -- absolvidos por **CARIMBO** pelas vias de `_ABSOLVEM_SEMPRE` (`paridade_recusada` em 54 dos 88, `declaracao` 42, `fantasma` 17). O "registro" do rotulo e, em 38 casos, carimbo e nao batida.
-- predicado identico nos dois lados, medido e nao presumido: `chamados.juizes._pergunta_materializada_de_fato is chamados.models._pergunta_materializada_de_fato` -> **True**. `emp1` e visivel/ativa/nao-diagnostico (6 dias na 10); as tres de diagnostico (20/21/29, cnpj `11222333*`, inativas) dao **0** dias -- com a ressalva de que `censo` **nao** filtra por `empresas_visiveis`, entao isso e fato de hoje e nao garantia.
-
-ROTULO EMPRESTADO, RETRATADO NO ATO: a 1a versao deste resumo disse **75** dias alcancaveis na 10, usando a MINHA definicao de classe em vez da definicao da porta; a porta diz **56**. Sao **19 dias reivindicados a mais** -- numero certo, rotulo emprestado, a mesma classe do QUATRO/CINCO de ontem --, e nada disso chegou a doc versionado: a v1 ficou guardada em `logs/o261/GAP_RESUMO_19-10.md.v1_rotulo_meu` (mover, nunca apagar) e a v2 nomeia o erro na secao 7.
-
-SEM PASSAGEIRO DE CODIGO, e o motivo e lei, nao preguica: abrir o contador por DONO **nao e tela nem bug PROVADO**, e a JANELA DE FECHAMENTO ate o export de 21/10 so deixa subir esses dois. A abertura nao pede juiz novo -- o vigia LERIA `vigia_carimbo.classificar`, como o `vigia_carimbo.censo` ja faz -- e fica na fila, dependente da sua resposta a pergunta 11. Construir codigo para um commit de doc ter passageiro seria o motivo errado para a L-106 -- e como esta MEDIDA nao fechou item, ela **nao abre commit**: estas linhas ficam na arvore (o RELATO publicado le o vivo) e viajam no commit do proximo marco, como a linha do NUMERO VENCIDO acima ja declara. Decisao de ordem minha, registrada aqui em uma linha pela **AUTONOMIA-DE-CODIGO item 1**.
-
-FILA (registrada, nao curada agora -- ESMERIL-DO-MARCO): **35** linhas `NoneType: None` saindo de um `logger.exception` sem excecao no caminho do censo; e `paridade_recusada` em 54 dos 88 dias, que toca o item do `paridade_recusada` pos-HUP.
-
-PROVA: `logs/o261/GAP_RESUMO_19-10.md` (v2, 90 linhas, censurado -- 0 nome, 0 CPF, 0 hora declarada) e `logs/o261/GAP_FIO_MORTO{2,3,4}_19-10.out` (crus, com `pergunta_id` e hora declarada: **NAO se publicam**).
-
----
-
-## MEDIDA 19/10 06:1x-06:4x -- O MARCADOR ANDA PORQUE AS TRES RESPOSTAS DA O261 SAO DELE (nao e marco: 0 linha de codigo de produto)
-
-LEI-AKITA: origem=`app/docs/BACKLOG.md` (o marcador e as celulas de ESTADO), testemunha=`bin/hook_stop_fila1.py::_item_parado`/`_item_da_ordem_viva` chamados com o objeto REAL contra o BACKLOG vivo, RED=o proprio Stop do hook (`block`: *"o marcador aponta 'O261', que esta FECHADO ou PARADO"*), quem-mais-le=o `hook_stop_fila1` e o `bin/handoff_sessao.sh`, que leem a ORDEM VIVA do mesmo marcador, juizes novos=0.
-
-O BLOQUEIO NAO ERA FALSO-POSITIVO, e foi isso que a medida respondeu. `_NAO_ANDA` casou a frase `espera o !` na celula de ESTADO da O261 -- e a frase e **VERDADEIRA**: os TRES sub-itens esperam voce. (1) pergunta de lei 7; (2) o apply das 735 espera a sua frase em `O317-DIFF-DAS-SETE-EXPORTADAS`; (3) pergunta 11 + o smoke do Fernando, que por sua vez espera a O319, que espera o mesmo plantio. Reescrever a celula para fugir do `_NAO_ANDA` seria band-aid na TESTEMUNHA (LEI-AKITA 1 e 2) e alargar o regex enfraqueceria a guarda; o que a lei manda fazer esta escrito na PAREI-DE-LEI-NAO-DEVOLVE-TURNO: *"a esteira SEGUE o proximo item da ORDEM VIVA que nao depende dela"*.
-
-OS ITENS (2), (3) e (4) DA SUA ORDEM DE 13/10 JA FECHARAM, e a celula de 13/10 estava SEIS DIAS velha: `main..raia-ui` **VAZIO** (`wt-ui` com so `app/docs/HANDOFF-SESSAO.md` modificado); legenda dos LEDs (`fb5c8057` 13/10 08:44), PDF na barra (`0b750de2` 11:22) e `retrato_folha.py::DONOS = ('admin','colab','hoje')` (`114e3ecb` 09:52) estao NO AR -- a legenda se le viva em `folha/views_retrato.py:311,315`; item (3) = O259 FECHADA 13/10; item (4) = O262 NO AR 13/10.
-PROVA: os tres hashes sao ANCESTRAIS do commit que o `logs/deploy.stamp` carimba como o que esta rodando -- `COMMIT=3aa85f3e`, `QUANDO=1792417783` (19/10 10:49:43) --, medido com `git merge-base --is-ancestor <hash> 3aa85f3e` nos tres: `fb5c8057` SIM, `0b750de2` SIM, `114e3ecb` SIM. O mesmo teste da SIM para o `4abe38e2` do passo 5 do O48, citado mais abaixo. A linha dizia NO AR com o hash ao lado, que e' prova de EXISTENCIA do commit e nao de que ele esta no ar; o que prova "no ar" e' o carimbo do deploy mais a ancestralidade, e e' isso que esta medido aqui (achado as 11:5x, com o RELATO ja retido desde as 06:24 por esta linha).
-
-O DESTINO SE MEDIU ANTES DE SER ESCOLHIDO, e o 1o da sua lista **DEPOIS** nao cabe: o GRUPO-D tem o universo que sobra na competencia **09, EXPORTADA** (399 dias em 78 colabs) -- tocar o gravado dela e `!` seu pelo RECALC-09/O269 --, e pela **L-099** as 638 recusadas + 481 tem dono CADASTRO/BATIDA, logo viram PAUTA DP, canal que a O320 acabou de construir. O 2o da lista e o Raio-X: `O310-RAIOX`, TELA (`folha/views_retrato.py` + `folha/urls.py` + a lente que LE `folha/retrato_folha.py`), **DIFF de frota ZERO**, juizes novos 0, dentro da JANELA DE FECHAMENTO e **independente das suas tres respostas**.
-
-DUAS OBRAS NO AR CONTAVAM COMO FILA 1 ABERTA, e o defeito era de FORMA: as linhas da **O320** e da **O322** nasceram com QUATRO campos -- sem celula de ESTADO --, e o hook le estado em `celulas[3]`; as palavras de fechamento delas moravam na celula de DESCRICAO, onde `_item_fechado` so olha `~~`. As duas ganharam estado (`**FECHADA 19/10**` + commit + arvore certificada) e agora o hook responde `fechado=True` para as duas e `ok` para o marcador novo. Na mesma linha da O261 saiu um `|` CRU do stdout do censo (`CENSO|sitios=18`), que fazia a linha ter NOVE campos e a coluna `quando` ser lida como nota -- e a classe ja tinha memoria nesta casa.
-
-CENSO DAS RAIAS (seu aval permanente): **4** marcadores em `logs/raias/*.agente`, **0** agente vivo (`ListAgents`). POUSARAM: `wt-fio` (`f2375ab0`) e `wt-o320` (`fade91bd`, arvore certificada `06432514`, deploy carimbado em `logs/deploy.stamp`) -- o `POUSOU=` do `wt-o320` estava em falta e entrou agora. PENDENTES: `wt-o48p4` (`e241fb45`, VERDE) e `wt-v3` (`a867325a`). **O `wt-o48p4` ganhou uma trava NOVA e ela nao e o arquivo de reversao que falta** -- e a clausula da JANELA que diz *"de 19/10 ate o export so sobe tela e bug PROVADO"*: cache de frota nao e nem um nem outro. A re-derivacao de 10/2026, que move **72** linhas de competencia ABERTA, e um APPLY SEPARADO e posterior ao pouso -- o pouso sozinho tem DIFF de frota ZERO, porque a migration 0074 nasce com o carimbo NULO na frota inteira e nenhum leitor ramifica nele. Nomear a clausula certa importa: senao alguem escreve o arquivo de reversao e acha que destravou. O `wt-v3` segue fora da janela pela sua excecao NOMINAL das 15:1x.
-
-O 1o CARIMBO REAL DO VIGIA DO FIO MORTO EM PROD saiu as 06:39:59 (`app/logs/fio_morto.json`, banco `saas_hasner`, schema `juliani`): `fio_morto` = **211**, `fio_morto_cobrando` = **211**, `pergunta_morreu` 211, `sem_pergunta_nenhuma` **0**, `fio_vivo` 1944, `lampadas_acesas` 2277, `dias_futuros_no_universo` 0, `cego=False` -- contra `esperado` **0**. E `gritou` = **[]**, porque `alarme_passivo_ligado=False`: o contador ja mede, e o grito segue desligado por cadastro. Numero de PROD, confirmando os 211 que a sombra mediu as 05:5x.
-
-FILA (registrada, nao curada agora -- ESMERIL-DO-MARCO): a recorrencia de PROSA-LIDA-COMO-ESTADO no hook (a O278 fechou a versao dela de 14/10; esta e de FORMA da linha, nao de regex) e a FORMA das linhas do bloco OBRAS, medida por tabela porque o bloco tem DUAS: a de cima, 82 linhas, **5** fora da forma; a de baixo, cabecalho de CINCO colunas e **120** das 367 linhas fora dele (**113** escritas com seis). O DANO esta medido e e pequeno: dos **200** itens que o hook conta como fila 1 ABERTA, so **2** estao fechados na coluna [4] e contados abertos -- **O211** e **O131**.
-
----
-
-## MARCO 19/10 04:4x-05:4x -- O DIFF DAS SETE COMPETENCIAS EXPORTADAS, E O BALDE QUE ESCONDIA QUEM SAI (O317 = item (2) da O261)
-
-LEI-AKITA: origem=`materializar_passivo_validado.py::_foto_sem_portao`/`_diff_sem_portao` (instrumento, raia propria), testemunha=`ponto/portas/regen_exportada.py::hash_do_gravado` + `folha/export.py::eventos_do_fechamento`/`classificar_export` (as funcoes REAIS, dentro do atomic), RED=`logs/o317/diff_folha_19-10.TXT-CEGO.out` (a foto gated nao via o plantio) + a discordancia 83x86 que parti o balde, quem-mais-le=os 7 `logs/o317/DIFF_emp*.txt` + `RESUMO_PARA_AVAIS.md`, juizes novos=0.
-
-A 1a das quatro condicoes do seu `!` das 14:4x esta CUMPRIDA e no AVAIS (`O317-DIFF-DAS-SETE-EXPORTADAS`). Nada aplicado: ensaio em `atomic()` com raise, na sombra carimbada de hoje (`dia=20261019 tipo=completa diverge=0`, ensaio do cron terminado 04:47:52).
-- **Condicao (b) do AVAL-DE-CRITERIO MEDIDA pela 1a vez, e o veredito se diz na leitura que foi medida**: frota **1257** fechamentos (todos os status), plantados **97**, gravado que moveu **97**, `movidos_sem_plantio` **VAZIO** nos sete -- **nenhum colaborador FORA dos 97 plantados moveu um campo**, e o instrumento MORDE (OK 7/7). **Nao digo que (b) "passa"**: os 97 moveram outros campos (e deles que vem o -396,83 h), e o seu `!` das 14:4x nao nomeia campo-alvo -- entao o que esta medido e o universo DE FORA dar zero, nao a condicao literal. Universo = frota inteira, nunca o alvo.
-- **HORAS nos sete pares** (hora decimal): `adicional_noturno|0025` **-396,83 h** · `folga_trabalhada_diurna|0200` +87,72 h · `atraso_diurno|8069` +30,33 h · `hora_extra_100_diurna|0200` +13,85 h · `intrajornada_diurna|0243` -9,27 h · `hora_extra_feriado_diurna|0200` +6,83 h · `hora_extra_diurna|0150` -1,78 h. **Rotulo: O DELTA E DO ATO, NAO DA HORA** -- o apply e regen do trecho + `recalcular_fechamento_mes`, entao o numero e o efeito do ato inteiro, e a decomposicao hora-plantada x recalculo NAO esta medida (LEI-AKITA 8).
-- **A FOTO DO TXT NAO RESPONDIA A PERGUNTA DO `!`, e isso foi RED antes de ser cura**: `montar_linhas_export` tem DOIS portoes, e **83 dos 97 plantados estao `fora`** de um TXT gerado hoje, `furo_espelho` em todos, `sem_codigo_dominio`=0. A autoridade publicavel passou a ser o GRAVADO; a foto do TXT ficou como SEGUNDA LENTE, rotulada. (`logs/o317/ACHADO_TXT_CEGO_19-10.md`)
-- **O BALDE `segue_fora` NAO ERA UM BALDE** (e foi o unico vermelho desta medida): duas leituras da MESMA pergunta discordaram em 3 (sonda 83 fora / baldes 86). Antes de escolher numero perguntei se o BANCO tinha mudado -- nao tinha, `logs/o317/plantado_entra_RERUN.out` e IDENTICO ao de 05:03, sem refazer no meio. Era LEITURA: **col334, col518 e col889 (emp2 2026-08) ENTRAVAM no TXT e SAEM para `furo_espelho` depois do plantio**, e o balde os juntava com os que ja estavam fora. Numero certo, rotulo errado, e o rotulo errado escondia o unico efeito que TIRA linha do DP.
-- **Alcance do TXT de retificacao: 14 dos 97 ANTES, 19 DEPOIS** (entram 8, SAEM 3, seguiam fora 75, ja entravam 11 = 97, particao fechada). O TXT que o seu `!` manda gerar nao carrega a maioria de quem ele retifica -- fato do portao, nao do plantio.
-- **Linha de base, para nao se ler ao contrario**: `txt_vigente_x_gravado` ja dizia `divergente=True` nos SETE pares com o banco intocado (linhas vigente->hoje 12->0, 74->3, 15->0, 261->340, 210->272, 86->103, 9->9). No universo INTEIRO das 7 competencias o `fora` tem CINCO motivos, nao um: `furo_espelho` 571, `rescisao_modulo_proprio` 216, `ferias_com_batida` 11, `sem_codigo_dominio` 5, `cadastro_zero` 4 (`logs/o317/fora_da_competencia.out`).
-
-NO AVAIS, como PERGUNTA e nao conclusao: (1) por que a hora plantada abre `furo_espelho` nesses tres -- candidato e paridade do dia, e **nao esta medido**; (2) a reconciliacao RECALC-09/O269 x o `!` das 14:4x, porque 2026-09 e uma das sete (minha leitura esta escrita no item; se for outra, a 09 sai e as seis andam).
-
-CRONTAB RECONCILIADO (pendencia de 04:48, fechada por leitura): `bin/crons.sh install` ja havia dado `rc=0` com **103** linhas e `bin/crons.sh check` responde `crontab == config/crons.py`. As duas derivas eram de HORARIO DERIVADO, nao de celula: sombra `13 4` -> `7 4` (04:07) e noturno `26 2` -> `22 2`. Nada a aplicar.
-
-INCOMPLETO declarado: o instrumento (`--diff-folha` com as duas lentes) segue em `cp-o317b` e pousa em pouso PROPRIO de INSTRUMENTO (L-105), depois do produto; a decomposicao hora x recalculo nao esta medida; emp4 2026-06 tem `entra=5` e **0** linhas de TXT (mesma forma em emp4 07, `entra=2`) -- pergunta sobre `eventos_do_fechamento`, nao sobre o plantio, e esta na fila.
-
----
-
-## MARCO 19/10 02:xx -- O DIA DISCORDANTE SEM FIO GANHA DONO NA PAUTA DO DP (O320, POUSO EM SEQUENCIA)
-
-**[O320]** -- item (9) do corte. LEI-AKITA: origem=`ponto/services/pautas_dos_discordantes.py` +
-`ponto/management/commands/pautas_discordantes.py`, testemunha=`CelulaDia.veredito` + `_fio_do_dia` +
-`e6_oraculo.py::dono_da_divergencia`, RED=`app/logs/o320/RED_o320.log`, quem-mais-le=os leitores de
-`discordante` (nenhum emite pauta por dia), juizes novos=0.
-O dia vira PAUTA DP por DONO (CADASTRO/BATIDA), veredito nomeado, **sem chamado ao colaborador**.
-ESTRUTURA nao vira pauta -- sai como contador de esperado 0, que e o lado da L-099. Molde MEDIDO no par
-pousado na O317, nao escolhido: destinatario `dp`, ancora `competencia`, idempotencia pela cabeca do texto.
-**PROVA da obra** (conferida nos logs dela, nao relatada): RED `FAILED (errors=6)` / `Ran 6`; MORDE
-`FAILED (failures=2)` / `Ran 6` com 2 mutacoes pegando os 2 testes exatos; GREEN `OK` / `Ran 10`; vizinhos
-`OK (skipped=9, expected failures=12)` / `Ran 4749`. `rc=` NAO existe em nenhum dos 7 logs dela (medido):
-o 3o termo do tripe da L-074 quem mede e a suite da arvore mergeada, e copiar um `rc=0` seria inventa-lo.
-**PROVA do pouso**: `06432514` = a obra (`95ffaf5a`) com o HEAD `170c6696` mergeado DENTRO da raia, para que
-UMA suite medisse a combinacao -- `Ran 11381 tests in 873.106s` / `OK (skipped=42, expected failures=12)` / `rc=0`. Nao foi comboio: interseccao vazia prova que o merge COMECA
-limpo, nao e suite -- e o GREEN do fio tinha certificado main+fio, nao esta arvore.
-**A CERTIFICACAO ACHOU UM 2o VERMELHO, REAL**: `test_todo_command_tem_casa` (B6.1, allowlist zero) ->
-`['pautas_discordantes'] != []`, comando novo sem CASA. Curado na ORIGEM como **ATO SOB ORDEM** em
-`config/crons.py::FORA_DE_PIPELINE` -- cron seria escritor automatico de pauta sem ordem dele, e pela
-L-099 este universo nao se extingue sozinho --, com docstring `CASA DECLARADA` e o caso que MORDE
-`OComandoTemCasaTest` (a entrada existe, o motivo e prosa real, e o comando NAO esta em `todas_as_entradas()` -- as duas casas ao mesmo tempo deixariam a celula PODRE no contrato vizinho). Recorte `OK` / `Ran 36` / rc=0; decisao tecnica minha pela PAREI-SO-LEI (`d932bcd0`).
-**JANELA DE FECHAMENTO DE 19/10 EM VIGOR**, e este pouso passa por ela e nao por cima: o criterio do
-adendo (*"DIFF de frota ZERO na 10 anda"*) se cumpre MEDIDO -- um escritor pela porta
-`pautas/services.escrever`, DRY por default, sem cron, zero folha, zero dinheiro, zero celula.
-**INCOMPLETO**: `handle()` sem teste de ponta a ponta; o texto da pauta nao se refaz quando um dos dias ganha fio (comportamento do molde, declarado); 36 (corte) x 34 (juiz) x 22 (censo) nao reconciliados -- leitura de prod negada.
-
----
-
-## MARCO 19/10 01:xx -- O AFASTADO DEIXA DE SER COBRADO, E O FIO MORTO DEIXA DE CONTAR COMO EMISSAO (dois commits, UMA arvore certificada em `wt-fio`, pouso pela L-105/L-107)
-
-**[O261] item 2** -- LEI-AKITA: origem=`ponto/management/commands/detectar_ausencias.py::_abrir_chamado`,
-testemunha=`status_local in VIVOS`, RED=`ponto/tests/test_o261_fio_morto_nao_e_emissao.py`,
-quem-mais-le=os 4 consumidores do retorno do funil, juizes novos=0.
-A cobranca morta que RECUSA renascer deixa de contar como emissao: `VETO_ENCERRADO_NAO_RENASCEU` no funil,
-onde antes vinha `None` e o `emitidos` somava sem chamado nenhum (19/19 medidos na sombra em 18/10, 8 recusas
-declaradas). O balde `vetados_regua` virou dict por CHAVE -- veto novo aparece sozinho, sem lista a manter.
-
-**[O322]** -- LEI-AKITA: origem=`ponto/services/cartorio.py` (os DOIS portoes), testemunha=
-`ponto/services/afastado_avisa.py::afastado_na_batida`, RED=`ponto/tests/test_o322_afastado_nao_se_cobra.py`,
-quem-mais-le=`furos_sem_cobranca.medir` + `furos_vetados_por_regua` + `cadastro_realidade.lista`, juizes novos=0.
-Item (10) do corte: o afastado sai dos dois portoes como o desligado, e o dia calado ganha porta `afastado`
-no vigia e assinatura **C4** na lista do admin. Contadores `calado_afastado` e `calado_afastado_parcial`
-DECLARADOS em `contadores()`. O instante se mediu: nos **2 de 2** dia-colab do horizonte a ausencia que afasta
-hoje NAO cobre o dia do furo, entao vale AGORA -- a outra leitura nao curaria caso medido.
-
-**PROVA**: RED1 `Ran 14` / `FAILED (failures=7, errors=3)` / `rc=1` (4 vermelhos eram da fixture, `cobrado · **DEPLOY no MESMO ato 16:04** -- `bin/deploy.sh --sem-migrate` com `logs/crons_em_curso/` VAZIO conferido no ato, prova de casca e as tres rotas das tres cascas provadas (esta linha viaja no commit seguinte, pelo precedente medido da O318).
-!= furo`, `cartorio.py:884-906`); RED2 limpo, os 7 TODOS da cura; GREEN `Ran 7853` / `OK (skipped=11,
-expected failures=12)` / `rc=0` em `logs/o322/GREEN_o322_fio_19-10.log` (os 4 labels do censo dos leitores).
-**ACHADO NO CAMINHO, nao introduzido**: o 2o chamado e `disputa_supervisao/saida_sem_entrada`, da 1a passada
-(`chamados/services/fabrica_da_celula.py:70`) -- a idempotencia virou comparacao do CONJUNTO, nao da contagem.
-**ORDEM DO POUSO**: ensaio do dia na sombra ANTES do merge (carimbo era de 18/10, e 50 min entre merge e
-deploy e o que a L-107 proibe); merge + `--sem-migrate` num ato. **INCOMPLETO**: `app/logs/fio_morto.json`
-so nasce na 1a corrida do vigia no ar, e o ensaio do codigo novo e o cron das 04:05.
-
----
-
-## RESPONDIDA 19/10 07:5x -- PERGUNTA DE LEI DO TOPO (19/10 01:1x, O48 passo 6, raia `wt-o48p4` VERDE): O DESLIGADO FORA DA JANELA NAO E DIVIDA DO CONTADOR, E COLAB FORA DA COMPETENCIA
-
-**O corte, LITERAL:** *"desligado com data_demissao anterior a janela sai do universo de derivacao e da linha gravada da
-competencia -- a linha se aposenta (status encerrado, sem derivado_em), e o contador do vigia conta so quem esta no universo;
-nao e estreitar juiz, e colab fora da competencia. Nenhuma lei nova."* (`CORTES.json` ->
-`DESLIGADO-FORA-DA-JANELA-APOSENTA-A-LINHA`, 96 cortes). Ele responde a pergunta pela terceira porta, que eu nao tinha
-medido: eu oferecia *"re-derivar"* ou *"contador fica 4"*, e ele diz que a LINHA SE APOSENTA -- entao o universo nao
-estreita, o colab e que nao pertence a competencia, e a L-099 fica inteira.
-
-**O que a cura deve, MEDIDO no turno do corte (nao e estimativa):** (1) `FechamentoMensal.STATUS_CHOICES`
-(`ponto/models.py:389-393`) tem `aberto`/`aprovado`/`exportado` e **nao tem `encerrado`** -- choice nova + migration, e
-ANTES disso o censo de TODO leitor de `status`, porque valor que nenhum leitor conhece cai no balde errado em silencio
-(foi o balde da O317 de hoje); (2) o predicado do universo (`ponto/services/fechamento.py:122-124`, escrito pelo NEGATIVO
-de proposito no passo 3) passa a ter **UM sitio nomeado** lido pelo escritor E por `projecoes_vencidas_qs:1240` --
-filtro proprio dentro do vigia seria o 2o juiz de *"quem esta na competencia"* (LEI-AKITA 2); (3) a linha se aposenta por
-PORTA com trilha, `derivado_em` segue NULO por desenho. **Onde:** so na raia `wt-o48p4` -- `git grep -n derivado_em -- "*.py"`
-na arvore viva da **0**.
-
-**O que a cura NAO faz agora, e nao e PAREI:** gravar `encerrado` em linha de **10/2026** e escrita na competencia do export
-de 21/10. Pela JANELA DE FECHAMENTO (adendo de 13/10) o criterio e o DIFF de frota: se mover quem entra ou o valor da 10,
-PAUSA ate o export. Mede-se antes de gravar; e janela, nao trava.
-
-**Quem re-deriva, ou APOSENTA, linha gravada de colaborador DESLIGADO fora da janela?** Medido na sombra:
-**4 de 609** linhas gravadas de 10/2026 pertencem a `situacao=desligado` com `data_demissao` ANTERIOR a janela
-21/09-20/10 (`col316`, `col846`, `col870`, `col927`; empresa 2, `status=aberto`, `horas=0.00`). Elas ficam com
-`derivado_em` **NULO para sempre**, porque o universo de derivacao as exclui pelo proprio predicado
-(`ponto/services/fechamento.py:122-124`). O contador do vigia novo fica **4, nao 0**, e esta DECLARADO assim --
-a L-099 proibe estreitar universo para o numero cair. Nenhuma lei nova proposta (L-117).
-
-## CENSO DAS RAIAS 19/10 01:1x -- QUATRO AGENTES VIVOS, E O POUSO E QUE ESTA EM FILA, NAO A CONSTRUCAO
-
-Medido agora por `bin/raia_agente.sh listar` (confronto das declaracoes de `logs/raias/*.agente` com os agentes
-vivos): **uniao=41 · sem_agente=11 · velhas=11** (teto de 6 h da L-105).
-
-| raia | agente vivo | o que faz | commits a frente |
-|---|---|---|---|
-| `wt-fio` | **sim** (esta sessao) | O261 item 2 (contador de emissao) + **O322 afastado nao se cobra** | 0 (3 sujos) |
-| `wt-o320` | **sim** (agente) | corte (9): os 36 `discordante` viram PAUTA DP por dono | 0 (3 sujos) |
-| `wt-o48p4` | **sim** (agente, fechou) | O48 passo 6 -- **VERDE e COMMITADA** (`e241fb45`) | 1 |
-| `wt-v3` | **sim** (esta sessao) | O280 v3 / O287 -- POUSO pendente | 2 |
-
-**OS TRES POUSOS ESTAO NA MESMA FILA SERIAL, e a fila nao e minha**: a trava de teste esta com
-`o320-vizinhos2:3405396` desde 01:06:51 e o RED2 do O322 esta atras dela (`--espera 3600`). O pouso da `wt-o48p4`
-tem UMA condicao que nao e de trava e vai dita porque muda a ordem: ele exige **migrate** (0074), e migrate entre
-o dump do dia (04:00) e o fim do cron da sombra deixa o portao do deploy VERMELHO no refazer seguinte
-(lap-35/36) -- entao ele **nao se faz nesta faixa de hora** sem `--refazer --dump-agora` + `--bloco` por cima.
-Nao e lei nem `!`: e janela, e esta a uma linha de distancia de ser cumprida depois das 04:00.
-
-**UM `!` DEVIDO, e nao e meu**: preencher os carimbos de `derivado_em` em prod exige
-`recalcular_fechamento_mes` em ESCRITA sobre 10/2026 (competencia ABERTA) e **move 72 linhas de dinheiro**. O DIFF
-de frota existe (a lista de 72 medida na sombra serve como o DIFF previo da DINHEIRO-EM-COMPETENCIA-ABERTA), mas
-o **arquivo de reversao em `logs/` NAO foi gerado**: enquanto nao for, o apply nao acontece. Nada rodou em prod.
-
-**AS 11 SEM AGENTE, motivo em uma linha cada (item 4 do `RAIAS-ANDAM-JA`)**: `recon_onprem` (1053 commits,
-2559 h) e importacao on-prem, fora da esteira; `wt-cert` (7, 328 h), `wt-comboio` (1, 141 h), `wt-comboio-v3`
-(1, 10 h), `wt-comboio18` (2, 23.7 h) e `wt-v3-pouso` (1, 61 h) sao **copias de certificacao** -- nascem para a
-suite e nao pousam por desenho; `wt-esmeril` (12, 444 h) e `wt-lps` (1, 348 h) esperam pergunta de lei aberta;
-`wt-o275` (3, 77.5 h) espera o cadastro do `TipoEscala` (pergunta de lei 1 do SDF); `wt-serie` (2, 25 h) espera
-a pergunta de lei 4; **`wt-pdf` (4, 466 h) tem sua ordem de NAO MERGEAR** e e a unica cuja idade e por decisao
-sua, nao por fila.
-
----
-
-## CENSO DAS RAIAS 18/10 22:3x -- TRES AGENTES VIVOS, UM POR OBRA, E A LINHA DE MOTIVO QUE O ITEM 4 DO `RAIAS-ANDAM-JA` COBRA
-
-**O que eu media errado antes, e e a razao deste censo existir**: as cinco declaracoes que o ESTADO publicava
-(`wt-bos`, `wt-folha10`, `wt-o48p3`, `wt-serie`, `wt-ui`) estavam **VELHAS** -- `ListAgents` devolvia **1** agente vivo.
-As cinco foram baixadas pelo escritor unico (`bin/raia_agente.sh fechar`, corpo inteiro preservado em
-`logs/raias/historico.log`), e as tres de agora nasceram pela mesma porta. **E os dois "pousos verdes" do aval ja
-tinham pousado**: `git merge-base --is-ancestor` prova `raia-ui 6bd163b3` (comboio `5b52ff7f`) e `raia-folha10 bcf58258`
-(comboio `aa12ad69`) ANCESTRAIS do `main 1d532dcd` -- `git log main..raia-ui` **vazio**. Nao havia o que mergear, e eu
-so soube porque TESTEI a ancestralidade em vez de ler a direcao num `git diff` (os `D` do diff eram arquivos que o main
-criou DEPOIS do merge, nao exclusoes que a raia propunha).
-
-| raia | agente vivo | o que faz | a frente do main |
-|---|---|---|---|
-| `wt-fio` | **SIM** (desde 22:29) | O261: o que detem a emissao dos 13 `FURO_COM_COBRANCA_MORTA` + os 8 escritores cegos pela lampada + contador no ESTADO; recebeu o corte das 22:3x e a O320 | 0 |
-| `wt-o48p4` | **SIM** (desde 22:28) | O48 passo 6: medir os ~65 s dos leitores de FROTA e o cache nascer no molde `previsto_em`/`invalidar_previsto` | 0 |
-| `wt-v3` | **SIM** (desde 22:38) | O280 v3 / O287: derivar o portao do esmeril de hoje e fechar o que ainda tem lado de CONSTRUTOR | 2 (`6a4f74d2`, `a867325a`, so testes) |
-
-**AS 11 SEM AGENTE E COM COMMIT A FRENTE, com o motivo de cada uma -- e quatro delas nao sao raia**:
-`wt-comboio`, `wt-comboio-v3`, `wt-comboio18` e `wt-v3-pouso` sao **copias de certificacao**, e e a propria mensagem
-delas que diz (*"entra na copia de certificacao"*, *"NAO POUSA: so para a suite"*) -- o commit a frente e a MONTAGEM
-do comboio, nao obra; `wt-lps` se declara *"commit de ensaio, descartavel"*. **Raia de obra com pouso retido, uma linha
-cada**: `wt-serie` (2, O276) -- **pergunta de lei 4**, a cura contra um selo da L-084 sete dias mais velho; `wt-o275`
-(3, O275) -- pergunta de lei do topo, declarada em `BACKLOG.md:52`; `wt-pdf` (4) -- **`!` dele: PROIBIDO mergear**, e o
-proprio commit diz que a composicao de `total_trabalhadas` e pergunta de lei; `wt-cert` (7, O194) -- **INSTRUMENTO**, e
-pela L-105 instrumento tem pouso PROPRIO, depois do produto. **E duas ficam sem motivo escrito, o que esta linha
-REGISTRA em vez de alisar**: `wt-esmeril` (12 commits, 441 h) e `recon_onprem` (1.053 commits, 2.557 h, nem e raia desta
-esteira -- `WIP chamados: meu_atendimento pausado pre-resync`). Nao inventei motivo para nenhuma das duas.
-
-
-## MARCO -- o painel passa a repetir o numero do vigia do fio, e o LIMIAR viaja no carimbo em vez de morar no leitor (O261 item (3), metade INSTRUMENTO) · 18/10 20:47
-LEI-AKITA: origem=`bin/fio_estado.py::ler` -- leitor UNICO do carimbo que o `b778a4af` passou a gravar, no molde dos tres medidores de painel que ja existem (`fabrica_estado`/`raias_estado`/`interrompidas_estado`: `ler()`+`linha()`, `gerar_estado.py` SO le, L-114),
-testemunha=`app/logs/fio_morto.json` -- o censo e o `esperado` como o `censo()` os devolveu; o painel **nao tem limiar proprio**,
-RED=`logs/o261/MORDE_selo_fio_estado_18-10.md` -- 7 mutacoes, 7 VERMELHO rc=1, cada uma com a propria mensagem; o arranjo roda `py_compile` ANTES, porque mutacao que nao compila fica vermelha por SyntaxError e nao prova eixo nenhum,
-quem-mais-le=`bin/gerar_estado.py` e o unico consumidor (`grep -rl fio_morto.json bin/` = 2 arquivos, o leitor e o selo, 3 linhas; os 4 sitios do PRODUTO estao fora de `bin/`),
-juizes novos=**0** -- o numero continua saindo de `chamados/services/vigia_fio.py::censo`; aqui so se LE arquivo.
-- **O que entrou**: `bin/fio_estado.py` (129 linhas, `CARIMBO='app/logs/fio_morto.json'`, `TETO_H=26`), `bin/tests/test_fio_estado.sh` (7 casos) e 3 hunks em `bin/gerar_estado.py` -- import, secao `## Fio morto (O261)` e o argumento do `%s`.
-- **O LIMIAR NAO FOI DIGITADO DUAS VEZES**: o leitor faz `fora = {k: ... for k, v in esperado.items() if censo.get(k) != v}` sobre o `esperado` que veio NO arquivo. O dia em que o aval mudar o numero, o painel segue sozinho -- e e por isso que ha um caso que grava `esperado=7` e exige VERDE com `censo=7` e VERMELHO com `censo=0`: selo que copiasse o 0 estaria guardando a segunda verdade.
-- **A IDADE SAI DO CONTEUDO, NUNCA DO `mtime`**: `medido_em` do proprio registro, teto 26 h (a corrente e diaria), mesma lei que `bin/gerar_estado.py:25-49` ja escreve -- *"mtime muda em copia, rsync, touch e restore"*. Caso 3 grava o arquivo AGORA com `medido_em` de anteontem e exige `velho=True`.
-- **CARIMBO AUSENTE SAI AMARELO, DITO**: hoje a linha real do painel e `**fio morto: NUNCA MEDIDO** -- nao ha \`app/logs/fio_morto.json\` (FileNotFoundError)`, e ela esta CORRETA: o primeiro carimbo nasce na corrente de 19/10. Ausencia de sinal nao e sinal bom.
-- **O GERADOR REAL RODOU, e nao so o selo**: `python3 bin/gerar_estado.py <raiz> <dst>` -> rc **0**, 9 secoes, a nova entre `Obras interrompidas` e o `git log`. Era a conferencia que faltava: `bin/relato.sh:55` o dispara a cada 5 min e um `%s` a mais mataria o ESTADO INTEIRO no tique seguinte, nao a secao nova.
-- **A fiacao foi ENSAIADA em copia antes de tocar a arvore**: 3 ancoras com `assert count == 1`, `py_compile` do resultado antes de gravar, idempotente (2a rodada diz "JA aplicada"). A arvore viva so foi tocada DEPOIS do commit do produto, porque a L-107 proibia editar `.py` entre o veredito da suite e o merge -- e `bin/gerar_estado.py` e `.py` da arvore viva.
-- **Quatro guardas conferidas ANTES de fiar**: o mount e **bind** (`/home/ronald/saas-hasner/app -> /app`), entao escritor no container e leitor no host abrem o MESMO arquivo -- volume nomeado daria "NUNCA MEDIDO" para sempre com cara de corrente que nunca correu; `medido_em` usa `timezone.localtime()` com host `-0300` == `TIME_ZONE`, e carimbo em UTC daria idade NEGATIVA; a coluna PROTEGE do `LEIS.md` nao nomeia linha de `gerar_estado.py`, logo nenhum `L-NNN` e devido; e os padroes que os dois selos vizinhos PROIBEM no gerador (`worktree`, `logs.*raias`) nao aparecem no patch.
-- **Pasta de selos de host INTEIRA**: **74** selos, **1** vermelho -- `bin/tests/test_import_tardio_contra_o_ar.sh`, o declarado, que pergunta ao AR por `chamados.services.passivo_validado` e cuja cura e `bin/deploy.sh`. **O push dos dois commits espera esse deploy** (classificador do modo auto nega `bin/deploy.sh`: e dele).
-- **ISTO NAO E PRONTO**: o aval pede *"contador 0 na 10 e smoke real do Fernando"*. O lugar existe; o **0** so se mede depois da corrida de 19/10, e o item (1) segue esperando lei (pergunta 7 no topo).
-
-## MARCO -- o numero do vigia do fio ganha onde parar: `vigiar_fio_morto` CARIMBA, e o ESPERADO viaja como DADO dentro do arquivo (O261 item (3), metade PRODUTO) · 18/10 20:34
-LEI-AKITA: origem=`chamados/management/commands/vigiar_fio_morto.py::handle` -- o vigia JA corria na corrente da manha e **ja correu SEIS vezes** (`app/logs/placar.jsonl`, `exit 0` em **6 de 6**, a ultima hoje 06:39:57) sem deixar UM numero: o placar guarda nome/inicio/fim/exit e o `logs/fim/` guarda um timestamp -- contador, nenhum dos dois,
-testemunha=o dict que `chamados/services/vigia_fio.py::censo` devolveu, INTEIRO e sem selecao (foto recortada nao e foto), mais o `ESPERADO` gravado como DADO no proprio arquivo,
-RED=`logs/o261/RED_carimbo_18-10.log` (`Ran 18 tests` / `FAILED (failures=3, errors=1)` / rc 1, e os QUATRO vermelhos sao os quatro casos NOVOS com os 14 velhos VERDES no HEAD cru -- split por teste em `logs/o261/CARIMBO_item3_18-10.md`),
-quem-mais-le=**ZERO leitor hoje**, e vai declarado em vez de prometido: o leitor (`bin/fio_estado.py` + a fiacao em `bin/gerar_estado.py`) pousa em INSTRUMENTO proprio depois deste (L-105); na SOMBRA o carimbo morre no `--tmpfs /app/logs` (`bin/sombra.sh:189`) e na regua aponta para descartavel,
-juizes novos=**0** -- nenhum censo novo, nenhum universo novo, nenhum predicado novo: o item (3) e FIACAO, e censo que partisse da lampada seria um segundo derivador da mesma pergunta (LEI-AKITA 2/4).
-- **O que mudou**: `vigiar_fio_morto.py` 81->179 -- `ESPERADO`, `CARIMBO='logs/fio_morto.json'`, `caminho_do_carimbo()` (override `VIGIA_FIO_CARIMBO` ou `BASE_DIR/`) e `_carimbar()` (tmp + `os.replace`, molde `core/esteira_vigia.py`);
-  `handle` le o relogio **UMA vez** e passa `hoje` ao `censo`, de modo que o dia carimbado e literalmente o que julgou o teto temporal; `config/settings/ci.py` 44->48 (ponteiro descartavel, e `ESMERIL_LAVRA` so e declarado ali, entao o espelho esta COMPLETO -- os tres runners rodam `--settings=config.settings.ci`);
-  `config/crons.py` 1978->1982 **SO COMENTARIO** -- `diff` sem comentario e sem linha vazia da **IDENTICO**, o `ENC(...)` byte-a-byte o mesmo e `args='--alarme'` intacto; e a linha tocada (1485) esta FORA dos spans que a L-060 protege (`PAPEL_DO_CRON` 1829-1922, `papel` 1961-1966, `juizes_por_varredura` 1969-1978), medido por AST.
-- **E FOTOGRAFIA, NAO FONTE**, e o O63 foi lido ANTES de escrever arquivo: ele proibe codigo de NEGOCIO ler arquivo como autoridade (`fechamento.py` pagando folga trabalhada por um `.json`). Esta e a classe de `logs/e6_placar.json`, que o painel de host JA le em `bin/gerar_estado.py:139` -- foto de medicao lida por PAINEL. A autoridade segue sendo `censo()`.
-- **A rodada que ALARMA carimba ANTES de sair**: o `os.replace` vem antes do `SystemExit(2)`, porque a rodada mais vermelha e a que mais vale guardar.
-- **Recorte nao carimba, e DIZ que nao carimbou**: `--empresa` e RECORTE e o painel leria UMA empresa como frota, entao a rodada imprime `VFM|CARIMBO|NAO carimbado: ...`. Pular em silencio seria a mesma mentira, so sem testemunha.
-- **O erro de escrita NAO e engolido**, e esta e a UNICA diferenca deliberada contra o molde da lavra: la a autoridade ja esta no banco, aqui o arquivo e a unica saida duravel da rodada, logo `OSError` tem de virar corrida com erro no placar. Escrita PROVADA possivel antes de prometer: `app/logs` e `drwxr-xr-x 0 0` e o `saas_core` roda como **root** (`docker inspect --format '{{.Config.User}}'` vazio), que e quem o elo executa.
-- **O leitor nao vai ter limiar nenhum**: o `esperado` viaja no arquivo (`fio_morto=0`, `fio_morto_cobrando=0`, `dias_futuros_no_universo=0`) e a linha `VFM|ESPERADO|` passou a ser RENDERIZADA da constante -- texto provado byte-a-byte igual ao do HEAD.
-- **Quatro MORDE, e o primeiro nao guarda numero literal**: ele le `hoje` DO carimbo, chama `censo(hoje=...)` e exige `reg['censo'] ==` a resposta da funcao REAL -- numero literal ali seria o selo guardando uma segunda verdade. Os outros tres: recorte nao carimba; alarme carimba antes de sair (com `ALARMA_SEMPRE` **importado**, nunca copiado); e `CarimboDoFioForaDaReguaTest`, clone declarado de `ponto/tests/test_lavra_fora_da_regua.py`.
-- **Ruff** nos 4 arquivos, na lei da casa (`-w /app`): `All checks passed!` rc 0. **Vizinhos** (`test_o261_vigia_fio` + `test_contract_crons` + `test_selo_teste_sem_relogio` + `test_lavra_fora_da_regua` + `test_esmeril_espelho`): `Ran 50` / `OK` / rc 0 / `^(FAIL|ERROR):`=0.
-- **Comboio MEDIDO, e a resposta foi "roda sozinha"**: `git worktree list` + `git status --porcelain` por raia -- nenhuma outra tem produto pronto em 30 min, e a `wt-v3` tem colisao conhecida em `app/ponto/tests/test_o280_bateria_da_lei.py`, que fica FORA do comboio por regra.
-- **A arvore que a suite certificou e a que pousou**: suite CHEIA contra a copia: `Ran 11352 tests in 1622.345s` / `OK (skipped=42, expected failures=12)` / rc 0 / `^(FAIL|ERROR):` = 0. Escopo **DERIVADO** da copia (nao digitado) e censo `cmp` dos 4 no corpo do commit; entre o veredito e o merge nenhum `.py` foi tocado em nenhum dos dois lados.
-- **ISTO NAO E PRONTO**, e o aval diz a condicao: *"PRONTO so com contador 0 na 10 e smoke real do Fernando"*. Esta e a metade PRODUTO; faltam o leitor no ESTADO (INSTRUMENTO, proximo pouso) e os dois criterios dele.
-- **O PRIMEIRO carimbo de verdade nasce na corrente de 19/10, nao no deploy**: o elo roda `docker exec saas_core python manage.py`, interpretador NOVO lendo o disco -- o BUG 128 vale para as cascas de gunicorn, nao para o cron. O `bin/deploy.sh` do `78ee1d03` segue devido por OUTRA razao (`bin/tests/test_import_tardio_contra_o_ar.sh` pergunta ao AR e esta VERMELHO), e **o push deste marco espera esse deploy**.
-- **INCOMPLETO**: item (1) da O261 segue esperando lei (pergunta 7 no topo) e o carimbo fica sem leitor ate o pouso do instrumento.
-
-## MARCO -- o passivo de resposta validada entra pela PORTA, e a via que absolve passa a exigir marco aceso (O317 = item (2) da O261; O261 item 1) · 18/10 14:3x-19:4x
-LEI-AKITA: origem=`chamados/services/materializacao.py` nos DOIS sitios -- `_materializar_uma` (o ato que saiu da funcao que carregava fila e unidade) e `_materializar_resposta_hora` (a via que absolvia sem perguntar pelo marco) --,
-testemunha=resposta do colaborador (`declarar_hora_colab`) + lampada do marco (`chamados/juizes.py::fato_do_marco_no_espelho`),
-RED=`logs/o261/RED_lampada_18-10.log` (bateria O261 por classe, `Ran 7` / `FAILED (failures=5)` / rc 1, **0 errors**; os dois MORDE passam no HEAD cru -- split por teste em `logs/o261/CENSO_LAMPADA_18-10.md`) + `logs/o317/suite_cheia_18-10_1832_RED.log:2089` (a assercao VELHA de `test_via_paridade` sobre a arvore curada) + `logs/o261/INVERSAO_guarda_paridade_18-10.log` (a outra inversao, `test_guarda_paridade_materializador`) + `logs/o317/RED_18-10_1615.md` (so o modulo da O317),
-quem-mais-le=contrato da porta com allowlist ZERO (`chamados/tests/test_porta_desfecho_pergunta.py`, 6 sitios por ato) + `core/portas.py::porta_de('PerguntaDisputa')` + `gerar_diagrama.py::PORTAS` + os consumidores de `classificar()` + `test_contract_leitores_vitalidade` (AST da arvore inteira), juizes novos=0.
-- **O que mudou**: `chamados/services/passivo_validado.py` (NOVO, 322) e `.../commands/materializar_passivo_validado.py` (NOVO, 254) -- lote e boca;
-  `materializacao.py` 1137->1204 (`_materializar_uma` + `_fechar_disputa_se_quitada` EXTRAIDOS; e a guarda `fato_do_marco_no_espelho(p) is True` antes do carimbo de paridade);
-  `vigia_carimbo.py` 103->133 (`classificar()` gerador, `censo()` consumidor); `core/portas.py` + o contrato, com o 5o ato declarado nos DOIS censos.
-- **DRY pela unidade REAL**, sombra `completa` (`dia=20261018 diverge=0`), `atomic()` com rollback PROVADO (`Batida 85917->85917  Pauta 1072->1072`,
-  `SOMA=1019 == alvo=1019`): **381 plantam**, **638 a porta recusa por lei que JA existe** (234 sem texto do colaborador, 219 juiz pos-plantio da O306,
-  106 vizinha do mesmo tipo, 52 data em disputa, 21 fechamento aprovado, 6 colisao abaixo de 300 s); `carimbou_mas_juiz_nao_ve`=**0**. PROVA: `logs/o317/MEDIDA_A_COMPETENCIAS.txt`.
-- **A lampada na frota, pela funcao REAL**: dos **106** casos em que a porta escreveria a via cega, **True=53** (seguem absolvidos), **False=37**, **None=16** --
-  os 53 sem marco aceso eram a cegueira. PROVA: `logs/o261/LAMPADA_x_PARIDADE_18-10.out`.
-- **DUAS caracterizacoes INVERTEM em vez de a cura ceder** (`test_via_paridade`, `test_guarda_paridade_materializador`): nenhuma fixture tem celula, a lampada
-  responde `None`, a cura recusa SEM carimbar por desenho; o caso de 20/08 mudou de casa (`test_o261_paridade_respeita_a_lampada::test_MORDE_lampada_ACESA_segue_absolvendo_como_hoje`), nao caiu.
-- **O proxy CANONICO do item 2 nao enxergava a cura, e isso se mediu antes de publicar numero**: `logs/o261/censo_lampada.py` conta TOKENS e nenhum dos oito aparece
-  na chamada ao juiz. MESMA lista nas DUAS arvores, universo IGUAL de **18 sitios**: canonica = `sem_lampada=8` no HEAD **e** na copia; canonica+`fato_do_marco_no_espelho`
-  = **8** no HEAD e **7** na copia, e o sitio que sai e o curado. O token novo nao afrouxa (no HEAD nao absolve nenhum). PROVA: `logs/o261/CENSO_LAMPADA_18-10.md`.
-- **Honestidade do diff**: `_materializar_uma`, `_fechar_disputa_se_quitada` e `classificar` NASCEM aqui, como extracao de corpo que ja rodava. Predicado igual, universo
-  igual, escritas da porta SEIS. Na allowlist do contrato de vitalidade, dois enderecos NOVOS da mesma leitura ja isenta entram e a isencao SEM ofensor sai no mesmo ato.
-- **Recusa do classificador, declarada**: o edit que mexia na allowlist adicionando e removendo junto foi NEGADO; separei ADD e REMOVE e nao contornei -- razao nomeada e AST do antes/depois em `logs/o317/CURA_DO_RED_18-10.md`.
-- **A arvore que a suite certificou e a que pousou**: copia refrescada de `git show HEAD:` as 18:2x (conjunto DISJUNTO do meu) e mudada UMA vez depois, para curar o RED --
-  logo vale a suite NOVA. VEREDITO: `Ran 11348 tests in 1604.838s` / `OK (skipped=42, expected failures=12)` / rc 0 / `^(FAIL|ERROR):`=0 (log `suite_cheia_2.log` da copia certificada). Censo `cmp` de 12 arquivos no corpo do commit. Selos de host: **1 vermelho**, `test_import_tardio_contra_o_ar.sh`, que PERGUNTA AO AR -- o modulo novo esta em disco e nao na memoria do worker; cura e o `deploy.sh` deste mesmo ato, e ele se re-roda depois (excecao DECLARADA, nao ajustada). Commit: este.
-- **INCOMPLETO**: apply em prod espera o DIFF por competencia no AVAIS (`!` das 14:4x); `resposta_enviada_sem_gravacao` so cai de 1.479 a ordem de 1.098 (as 638 tem dono
-  CADASTRO/BATIDA, L-099); itens (1) e (3) da O261 abertos; um comentario da allowlist envelheceu no proprio commit (fila, nao se edita `.py` entre veredito e merge).
-
-## MARCO -- a raia v3 pousa com a arvore que a suite certificou (L-105/L-107) · 18/10 15:4x-16:1x
-LEI-AKITA: origem=raia `raia-v3` em `bed515b7`, testemunha=`logs/comboio_v3_18-10.log` (a suite da
-COPIA certificada), RED=as duas celulas da fatia ja vinham vermelhas na raia, quem-mais-le=censo
-`git diff --name-only aecd1a02` contra a arvore viva, juizes novos=0
-- **O que pousou:** `bed515b7` (O280 v3 / O316) -- duas das quatro menores do portao do esmeril
-  ganham codigo; a terceira saiu da raia pela medida de frota. Pousado **por HASH**: o agente da v3
-  segue vivo em `/home/ronald/wt-v3`, e `merge raia-v3` traria commit que a suite nao viu.
-- **Suite, tres pernas da L-074**, na copia `/home/ronald/wt-comboio-v3` em `aecd1a02`
-  (= main `825e9b2f` + `bed515b7`): `OK (skipped=42, expected failures=12)` ·
-  `Ran 11314 tests in 1604.925s` · `rc=0` · `grep -cE '^(FAIL|ERROR):'` = **0**.
-- **Censo da arvore certificada** (L-107, 2a clausula): `git diff --name-only aecd1a02` x arvore
-  viva = **0 `.py`, 0 `.html`, 0 `.js`**; so os seis docs e o `crons_duracao.json` (nunca commitado).
-- **Commits:** `0e8c7cda` escrituracao do aval das 15:1x · `302e38db` o merge (`MERGE_HEAD`
-  conferido, nao foi fast-forward) · `c36d0d48` o rodape do TICKETS.
-- **Docs antes do merge:** decisao minha sob AUTONOMIA-DE-CODIGO item 1 (dependencia de codigo:
-  `bed515b7` toca os cinco docs que a sessao tinha sujos e `git stash` e PROIBIDO). Precedente da
-  casa: `825e9b2f`, `c52ad20a`. O porque inteiro esta no corpo de `0e8c7cda`.
-- **Deploy no MESMO ato** (L-107): migrations em dia · janela_auth OK · sombra `dia=20261018
-  status=OK tipo=completa diverge=0 erros=0` · prova de casca (16 estaticos, 5 paginas, 615 rotas em
-  2 urlconfs) · tres cascas juntas · core `/health/` 200, ui `/colaboradores/` 302, mensageria
-  `/health/` 200 · selo BUG 128 verde · `importerror_500=0` · `deploy: OK`.
-- **INCOMPLETO:** o 1o push foi RECUSADO pela regua (`tickets_rodape_vs_git`: rodape 7 commits atras
-  do teto de 5) e refeito pela cura que ela imprime -- `exit code 0` de push em background e o rc do
-  LANCADOR, e o veredito se le no REMOTO (`git ls-remote`).
-
-## O318 A TELA PERGUNTA UMA COISA E A PORTA PERGUNTA OUTRA: O CARD PASSA A LER A PORTA (18/10 11:2x-13:2x)
-
-**O MARCO DA O261 FECHOU E ESTA NO AR E NO REMOTO** -- `9a45149c`, `c52ad20a..9a45149c`, `push_rc=0`, pre-push `Ran 11293 / OK (skipped=42, expected failures=12)` e control-plane `Ran 22 / OK`. **MARCO FECHADO -- pode compactar.**
-
-PROVA: `9a45149c` no remoto (`git ls-remote origin main`), faixa `c52ad20a..9a45149c`, `push_rc=0`; pre-push `Ran 11293` / `OK (skipped=42, expected failures=12)` e control-plane `Ran 22` / `OK` -- veredito pela L-074 (ultima linha + `^Ran N` + rc do processo).
-
-**O RED que ele nomeou e EXATO, e o meu primeiro sitio nao era.** Medido em prod, read-only, pelas funcoes REAIS: `#28850` pk **40213** `intervalo_volta` de 02/10 esta `validada=True`, **juiz de plantio `_pergunta_materializada_de_fato` = False**, **0** batida viva no slot (as outras tres perguntas do chamado plantaram). Eu havia publicado que a classe se lia por `materializada_em` e que eram **125** dias -- **predicado errado**: por `vigia_carimbo::censo`, a classe e **1.479** de **13.282** perguntas de hora validadas (967 sem plantio nenhum + 75 em outro marco + 437 sem slot derivavel), e "sem plantio" se mede pelo juiz, nunca pelo carimbo.
-
-**O DEFEITO, em uma linha: a tela pergunta *"ha pergunta viva?"* e a porta pergunta *"a hora casa um marco que falta e a pergunta desse marco ja esta validada?"*.** Sao duas perguntas sobre o mesmo dia, entao a tela oferece o que a porta recusa. Medido pelo FIO real: `ch=28850 status=em_analise eh_furo=True tem_pergunta_viva=False perguntas_no_card=0` -> **`O TEMPLATE OFERECE form-declara-hora HOJE? True`** (`templates/chamados/partials/_card_atendimento.html:205`, `{% if not chamado.tem_pergunta_viva %}`), enquanto `declaracao_texto.py:291` devolve `estado='validada_sem_registro'` para a MESMA declaracao. **Nao e o card da PERGUNTA**: nenhum leitor de colab serve a pk 40213 (o degrau 0 de vitalidade e `validada_em is None`) e o ramo `{% else %}` do template ja imprime a linha honesta. `git grep "Enviar hora"` = **1** sitio no repo inteiro, server-rendered: o iOS desenhou ELE, e "o mesmo leitor no iOS, Android e PWA" e **um arquivo**.
-
-**ORDEM DE FILA, decisao minha em uma linha (AUTONOMIA-DE-CODIGO item 1):** o `ORDEM-VIVA-TOPO` veio de `O261` para a `O318` -- REPROVA de smoke dele e tela que engana (P7.1) -- e, com a O318 NO AR neste push, segue para **`O317`**: o proximo do aval e o smoke das respostas novas (`O319`), mas o aval diz *"o plantio dos 1.019 roda ANTES do novo smoke"*, entao o topo e o PLANTIO, que nao espera resposta de ninguem. A O261 segue ABERTA abaixo, com a outra metade na `GRUPO-D-DIA-ACUSA-SEM-FIO`.
-
-`LEI-AKITA: origem=templates/chamados/partials/_card_atendimento.html:205 + chamados/services/fio.py (o card decidia por `tem_pergunta_viva`, que nao e a pergunta da porta); testemunha=a propria porta -- `_segura_da_lista` (degraus de `declarar_hora_colab`) + `_resposta_validada` (a guarda dela, agora em funcao) + `_marcos_faltantes` (celula pelo LEITOR UNICO); RED=chamados/tests/test_o318_card_nao_oferece_o_que_a_porta_recusa.py::test_MORDE_resposta_validada_sem_plantio_nao_oferece_formulario (VERMELHO no HEAD, com o caso do #28850); quem-mais-le=`git grep "Enviar hora"`=1 template, 2 inclusores medidos por teste (meu_atendimento.html:127,144); juizes novos=0`
-
-- **A CURA, por sitio.** `PerguntaDisputa.do_fato` (models.py) devolve as linhas do fato (COLABORADOR, motivo, data_evento) em ordem de pk -- a identidade A1.2, com UM dono --, e o `abrir` passa a usa-la no proprio dedup. `declaracao_texto.py` ganha os degraus da porta como funcao: `_candidata_reusavel` (degrau 1), `_segura_da_lista` (qual linha a porta segura), `_resposta_validada` (a guarda do carimbo) e o leitor `em_regularizacao_pela_supervisao`. O fio marca o flag em lote e o template troca o form pela frase "Em regularizacao pela supervisao".
-- **O FLAG E POSITIVO de proposito** (`em_regularizacao_pela_supervisao`, default **False** em todo card de furo): template le atributo e o Django renderiza ausente como falso -- se o `.html` subisse sozinho no bind-mount com flag NEGATIVO, o form desapareceria de **todo** chamado de furo. Com o flag positivo, a janela entre o `.html` e o `.py` degrada para o estado de hoje, nao para tela vazia.
-- **A GUARDA DO CARIMBO MUDOU DE CASA, e e dentro do aval** (LEI-AKITA 9): o leitor precisa da MESMA condicao da porta, e `test_contract_leitores_vitalidade` declara que *leitor de exibicao nao compara carimbo com None* -- escrever a condicao no leitor seria a linha que o contrato existe para proibir. Entao ela virou `_resposta_validada`, as **duas** portas (`declarar_hora_colab`, `aplicar_declaracao`) a CHAMAM e o leitor a LE. **Nao muda o que a porta faz**: e o mecanismo que torna "o mesmo leitor" verdadeiro. O par entra-e-sai no MESMO commit (doutrina Q4b do proprio contrato): as 2 entradas velhas de allowlist SAIRAM, 1 entrou -- sobra **1** comparacao de carimbo no arquivo, dentro da guarda.
-- **A porta do admin repetia o degrau 1 verbatim** e passa a chamar `_candidata_reusavel`: eram duas redacoes da mesma regra, e a extracao que o leitor exigiu nao estaria feita com uma copia em pe.
-- **O RECORTE POR DISPUTA DO DEGRAU 1 FICA DE FORA, MEDIDO**: a tela nao pode chamar o escritor (`disputa_para_declaracao`) para sabe-lo. Dos **2.787** fatos com mais de uma linha, em **0** a reusavel colab-wide discorda da que a porta segura (sombra 18/10).
-- **O CACHE NAO ENTRA**: `veredito_lavrado` discorda deste juiz nos DOIS sentidos (`sim` em **370** de 1.500 onde o juiz diz False, e o contrario em **2.787**), entao `raiox.pergunta_sem_acao_possivel` esta PROIBIDA no leitor -- e ha teste que le o corpo da funcao e morde se ela voltar.
-- **CUSTO**: `_marcos_faltantes` memoizado por DIA distinto e **UMA** query de pergunta por colaborador (`insumos_em_regularizacao`), nunca por card. Universo medido na sombra: **229** de 2.890 cards de furo entram na classe; **1.940** seguem com o formulario; **778** colabs, max **40** cards num colab.
-- **ESCOPO, literal**: 680 cards `sem_data`, 23 `sem_faltante`, 17 `sem_celula` e 1 `fora_vinculo` **continuam oferecendo** o formulario, porque a porta os recusa por OUTRO motivo e com OUTRA frase -- esconder ali seria segundo juiz. Viraram **fila**, nao fatia.
-- **PROVA:** vizinhos `Ran 96 / OK` (as duas portas, os dois contratos de vitalidade e de pergunta viva, o fio, a tela e o relogio); suite inteira na copia certificada: **`Ran 11305 / OK (skipped=42, expected failures=12)`**, md5 dos 6 arquivos em `logs/o318/arvore_certificada.md5` e `md5sum -c` na arvore viva no ato do commit -- nenhum `.py` editado entre o veredito e o merge (L-117); ruff `All checks passed`. **ESMERIL deste marco: zero orfao** -- nenhuma definicao perdeu o ultimo chamador (censo das 7 funcoes tocadas), e nenhum achado de fora do marco virou trabalho agora. **NO AR `7678542a`** (`deploy.sh --sem-migrate`, `makemigrations --check` = *No changes detected*, prova de casca 16 estaticos / 5 paginas / 615 rotas, tres rotas OK, `importerror_500=0`, e o selo `import_tardio` de VERMELHO para `acusados=0`). **SMOKE READ-ONLY em prod pela funcao REAL `montar_chamados_fio`**: `ch=28850 tem_pergunta_viva=False em_regularizacao_pela_supervisao=True` -> **`O TEMPLATE OFERECE form-declara-hora HOJE? False`** (era `True` na medida de 11:4x), e no fio desse colab **7** de **32** cards entraram na classe.
-- **FILA, nao fatia**: `CARD-SEM-DIA-OFERECE-FORMULARIO` (680) e `API-CHAMADOS-V2-SERVE-PERGUNTA-SEM-A-LEI` (`api/views.py:1159` serializa `perguntas_disputa` sem a lei, ao contrario da irma) -- as duas no BACKLOG.
-
-**O319** nasceu como obra PROPRIA porque ele separou: o smoke das respostas NOVAS (gravar · sobreviver a sair e voltar do app · aparecer na fila do supervisor). Quando as duas pousarem, o aviso vai com o commit para o Fernando repetir na 1805.
----
-
-## O261 A ATA TEM DOIS DONOS POR CHAVE, E O DONO MAIOR APAGAVA O DO OUTRO: A LAVRA DO LOTE DESTRUIA `ata['precedencia']` (18/10 10:0x-11:3x)
-
-`LEI-AKITA: origem=ponto/portas/celula.py::lavrar_veredito (cel.ata = dict(ata), SUBSTITUICAO, nos dois ramos); testemunha=cel.ata lida na porta, nenhum leitor com regra propria; RED=logs/o261/MEDIDA_noite_18-10.md secao RED (Ran 57 / FAILED (failures=3) contra o HEAD c52ad20a) -> Ran 57 / OK; quem-mais-le=as 2 lavras com ata= (cartorio.py:783 e :1153) + **0** leitores de producao da chave; juizes novos=0`
-
-Lastro: **LEI-AKITA 6** -- bug provado no meio da medida do item 5 do corte `FIO-MORTO-E-ESTRUTURAL`, cura na hora. **Nao e lei nova e nao ganha `L-NNN`** (L-117).
-
-- **DUAS AFIRMACOES MINHAS DE HOJE ESTAO ERRADAS, e as duas mudavam conclusao.** (a) o bullet *"o `ata_mudou=26` ERA CATCH-UP, NAO BUG"* da secao do BUG 117: as 26 atas do col467 eram **esta** destruicao, e o `PASSADA2=0` e convergencia **depois** de destruir -- eu havia tirado md5 da ata inteira sem abrir chave. (b) a minha propria frase *"acontece toda noite, em prod"*: `cartorio.py:775` e `:860` **pulam** celula de impressao igual e as tres linhas de `processar_cartorio` do crontab **nao levam `--forcar`** -- morde em passada FORCADA (2a do B5.3b, `--forcar`, `celula_veredito_velho`, `regua_defesa`) e no rejulgamento de celula cuja impressao mudou.
-- **O DEFEITO, por sitio.** A ata tem **dois donos por chave**: `cartorio.py:443::ata_do_dia` monta `tipo_dia/lampadas/minutos_*/...` e **nunca** a chave `precedencia`, que e da operacao `carimbar` (`carimbar_precedencia`, A2 09/09). `aplicar_precedencia_na_celula` so e chamada por `cartorio.py::julgar_celula` (:1306) -- a **UNIDADE**. O **LOTE** (`julgar_colab`) lavra pelos dois ramos (`:783` nunca_bateu, `:1153` normal) e a porta fazia `cel.ata = dict(ata)`: cada passada apagava o carimbo da unidade.
-- **A SEGUNDA CONSEQUENCIA ERA PIOR**: como a ata de entrada nunca trazia a chave, `cel.ata != dict(ata)` era **sempre** verdade nessas celulas -- a lavra reescrevia toda passada e o `carimbar` seguinte movia `julgada_em`, **contra o contrato 2** da familia `celula/precedencia`, cujo selo declarado (`PortaDaCelulaIdempotenteTest`) nunca morde porque lavra 2x em ISOLAMENTO, sem cruzar as duas operacoes.
-- **MEDIDO na sombra (18/10, carimbo `dia=20261018 tipo=completa diverge=0`)**, chamando a funcao REAL com a escrita na sombra: col515 **8 de 8** celulas carimbadas perderam a chave INTEIRA (`logs/o261_prec_sub.out`); col926/col415/col451 **30 de 30** com md5 `6adf97f8` = `md5(repr(None))` (`logs/o261_ata_chaves.out`). Censo de frota (somente leitura): **3.656** de **124.774** celulas tem a chave; na competencia 10 (piso 2026-09-21) **3.356** de **16.081**, e por dia 10-11..10-16 retem ~70% contra **191/591** em 10-17 -- o retrato de uma chave que nasce na unidade e morre no lote (`logs/o261_prec_censo.out`).
-- **A CURA, no destruidor**: `CHAVES_DA_ATA_DE_OUTRA_OPERACAO = ('precedencia',)` declarada em `ponto/portas/celula.py`, e o merge acontece **ANTES da comparacao** -- se entrasse depois, a ata de entrada seguiria "diferente" a cada passada e `julgada_em` continuaria andando. **Nao e merge generico**: chave do CARTORIO que ele deixou de mandar sai mesmo (ata velha nao se conserva), e o selo cobra isso (`assertNotIn('minutos_previstos')`). Curar no chamador (mandar a precedencia dentro de `_ata`) foi RECUSADO: moveria o escritor da chave, pagaria `fatos_do_dia` por celula julgada, orfanaria duas funcoes (L-111) e deixaria todo chamador futuro de `lavrar_veredito(ata=)` livre para apagar.
-- **RED evidenciado** em copia do HEAD com SO os dois testes: `Ran 57` / `FAILED (failures=3)` -- porta (2, um herdado) e **caminho real** (`julgar_colab` apos `aplicar_precedencia_na_celula`). O RED do caminho real **nao e vacuo por construcao**: antes da assercao que quebra, o selo cobra que a ata do lote entrou (`'lampadas' in cel.ata`, `veredito == 'nunca_bateu'`). GREEN: `Ran 57` / `OK`; vizinhos `Ran 108` / `OK` (chokepoint_celula_gate, hx_ata_celula, selo_teste_sem_relogio, bateria_lavratura, fabrica_por_evento, veto_que_cai_rejulga, cartorio_veto_nao_e_emitido, furo_parcial_emite, o44_tranca_nao_barra_o_toque e os 2 tripwires de universo); ruff `All checks passed`.
-- **QUEM MAIS LE A CHAVE: ninguem em producao.** `git grep` de `['precedencia']`/`get('precedencia')` em `app/`: `portas/celula.py:592,595` (a propria porta) e `ponto/tests/test_a2_precedencia.py:461`. Zero template, zero view -- **violacao estrutural, nao dano visivel ao cliente**, e e por isso que a cura e do estrutural (L-099) e nao tem DIFF de dinheiro.
-- **O QUE A CURA INTRODUZ, declarado antes de alguem descobrir**: a chave agora **SOBREVIVE** ao lote, logo pode ficar VELHA -- ausencia cancelada depois do carimbo so se corrige quando a UNIDADE rejulgar o dia. Antes isso nao aparecia porque o lote apagava tudo. Com 0 leitores de producao nada muda na tela hoje; a fila nomeia o resto.
-- **ESMERIL DESTE MARCO**: zero orfao -- o diff nao remove nenhuma definicao nem o ultimo uso de nome nenhum (3 linhas trocadas em `celula.py`, nenhuma delas um `def`); nenhum achado de fora do marco aberto (ESMERIL-DO-MARCO).
-- **FILA, nao fatia**: `A2-SO-CHEGA-PELA-UNIDADE` -- o lote segue **nunca escrevendo** a chave (79% das celulas da competencia 10 nao a tem) e a chave agora pode ficar velha. Se A2 queria *"toda celula julgada"*, falta o lote carimbar; e **corte dele**, nao leitura minha (L-117).
-- **POUSO**: comboio PERGUNTADO por medida (`git worktree list` + `git status --porcelain` por worktree) -- nenhuma raia minha fica pronta para a suite em 30 min, esta **roda sozinha**.
-- **PROVA DA ARVORE e DEPLOY**: suite inteira na copia certificada `cp-o261c` (nascida de `git archive HEAD`, LEI-AKITA 10), md5 dos 3 arquivos em `logs/o261/arvore_certificada.md5` e `cmp` arquivo a arquivo contra a copia no ato do commit -- **nenhum `.py` editado entre o veredito e o merge** (L-117). `bin/sombra.sh --conferir` = `dia=20261018 status=OK diverge=0 erros=0` e `logs/crons_em_curso/` vazio ANTES de escrever na arvore; DEPLOY JA por `bin/deploy.sh --sem-migrate`, um push por MARCO.
-
----
-
-## O306 O `!` DO BACKFILL CORREU EM PROD COM A REVERSAO ESCRITA ANTES, E A IDEMPOTENCIA SE PROVOU NO SEGUNDO PASSE (18/10 10:5x-11:0x)
-
-`LEI-AKITA: origem=chamados/management/commands/backfill_veredito_lavrado.py::handle (cache do veredito, nao juiz novo); testemunha=_pergunta_materializada_de_fato, a funcao REAL que o sistema usa para julgar; RED=n/a -- nao e cura de codigo, e lavra de cache pelo juiz vivo (o RED do juiz esta na secao da O306 de 03:4x); quem-mais-le=todo leitor de veredito_lavrado, que passa a ler o juiz real em vez de cache velho; juizes novos=0`
-
-- **A REVERSAO NASCEU ANTES DA ESCRITA, e e read-only**: `logs/o306/backfill_antes_20261018-1053.json` -- **37.152** linhas com os TRES campos de cache (`veredito_lavrado`, `julgado_em`, `janela_expira_em`), **4.619** delas com veredito VAZIO. Sonda sem replicar recorte nenhum: `values_list` + `iterator`, zero chamada de juiz, zero custo de motor.
-- **O APPLY**: 10:53:27 -> 10:56:06, rc **0**, `DIVERGENTES=10420 (28,05%)`, `sim=24814 nao=12338 indeterminado=0`, **1** linha de `LogAuditoria` (a re-lavra e UM ato). Trocas: `VAZIO->nao` **2.755** · `VAZIO->sim` **1.864** · `nao->sim` **5.363** · `sim->nao` **438**.
-- **A CONSISTENCIA INTERNA FECHA SOZINHA**: `2.755 + 1.864 = 4.619`, exatamente o numero de VAZIOs da reversao -- nenhuma linha sem lavra ficou sem lavra, e nenhuma lavra foi apagada por `indeterminado` (a guarda "NAO SEI NAO APAGA SEI" nao teve o que segurar: `indeterminado=0`).
-- **A IDEMPOTENCIA, no segundo passe READ-ONLY** (`logs/o306/dry_pos_apply_20261018.log`): universo **37.153** -- nasceu **1** pergunta entre o apply e o DRY --, `DIVERGENTES=1`, e essa 1 e justamente um `VAZIO->nao`. **Das 37.152 que o apply escreveu, ZERO divergem.** Nao e *"esperava 0 e deu 1"*: sao dois universos, e o numero diz qual.
-- **O RELOGIO FICOU FORA DO RECORTE DE PROPOSITO, e o numero disso tambem esta publicado**: `relogio velho FORA do recorte` **11.661**. `chamados/services/veredito_lavrado.py:112` faz `probe = max(date.today(), data_evento)`, entao reescrever `janela_expira_em` por si arrastaria linhas que o seu aval nao cobre -- ele diz *"so cache e trilha"*, e o recorte obedece a frase.
-- **FRASE DE REVERSAO**: reler `logs/o306/backfill_antes_20261018-1053.json` e devolver os tres campos por `pk` pela porta de sempre. **Nenhum centavo no caminho**: a porta nao toca dinheiro, so cache de veredito e trilha.
-- **O QUE NAO FOI FEITO, e e escolha minha registrada (AUTONOMIA-DE-CODIGO 1)**: nao houve DRY contra `saas_hasner` ANTES do apply, porque DRY de comando ESCRITOR vai na SOMBRA pela lei da casa -- o DIFF da sombra que o seu proprio aval cita (10.578) e a medida de antes, e o snapshot e a reversao completa. Prod mediu **10.420** porque o universo dele cresceu para 37.152.
-- **SEGUE ABERTO, e e o PRONTO literal do seu aval de 17/10**: o smoke do colab ao supervisor (7 respostas gravadas e visiveis), agora com dono declarado -- **Fernando na 1805** (sua ordem das 10:5x), `AVAIS` **#3**.
-
----
-
-## O261 BUG 117 DENTRO DA PORTA QUE EU ALARGUEI HOJE: A RESSUREICAO PASSA A RESPEITAR O MARCO ACESO, E O ITEM 5 GANHA DONO QUE NAO E CODIGO (18/10 08:0x-09:4x)
-
-`LEI-AKITA: origem=chamados/models.py::ressuscitar_perguntas (o UNICO dos tres escritores de materializada_em=None sem guarda de marco); testemunha=chamados/juizes.py::fato_do_marco_no_espelho, a MESMA funcao do degrau 4 de _pergunta_viva_calc, que le dna['marcos'] x ata['lampadas'] e nunca recalcula; RED=logs/o261/RED_bug117_18-10.log (Ran 6 / FAILED (failures=4) contra o HEAD 17299781) -> logs/o261/GREEN_bug117_18-10.log (Ran 6 / OK); quem-mais-le=censo FECHADO dos 3 escritores, lidos um por um no sitio; juizes novos=0`
-
-Lastro: o corte dele `FIO-MORTO-E-ESTRUTURAL` (12/10 20:4x) e a **LEI-AKITA 6** -- bug provado no meio da fatia cura na hora. **Nao e lei nova e nao ganha `L-NNN`** (L-117).
-
-- **O DEFEITO E MEU E NASCEU HOJE.** `ch16886` (col1136, 21/08) carrega DUAS perguntas: `perg#15651` (`orfao_14h`, marco `hf` **ACESO** no espelho) e `perg#15653` (`intervalo_saida`, apagado). O religador que pousou em `17299781` chama `ressuscitar_perguntas()`, que religava **as duas** -- e a #15651 e exatamente o que o degrau 4 (BUG 117) mata por FATO PROVADO. Antes do meu pouso o caso era INALCANCAVEL (o religador vivia dentro de `if not cods and vivos:`); foi mover o bloco para `if apply_ and vivos:` que o pos no caminho. PROVA: `logs/o261/MEDIDA_noite_18-10.md` secao 4.
-- **A GUARDA MORA NO ESCRITOR, e nao e preferencia: e a unica posicao em que ela funciona.** O `update()` zera `materializada_em`, que e a **UNICA entrada que o degrau 4 le** -- depois dele a pergunta sobre celula que ACUSA fica viva pelo degrau 5 para sempre, e nenhum leitor consegue desfazer. Curar num leitor seria o band-aid literal (LEI-AKITA 1).
-- **O que mudou**: `chamados/models.py::ressuscitar_perguntas` passa a separar a fila em Python por `fato_do_marco_no_espelho(p) is True`, religa so os `pk` apagados (`filter(pk__in=ids).update(...)`), nomeia os excluidos na trilha (`pulados_marco_aceso`) e devolve **0** sem escrever nada quando pula TODOS; `ponto/services/cartorio.py::julgar_celula` ganha o ramo `if not _n:` com o contador `out['fio_marco_aceso']` e a linha `[FIO-MARCO-ACESO]`, para que o silencio da porta seja LEGIVEL em vez de um 0 sem dono.
-- **`is True`, nao truthy**: `None` quer dizer *nao da para dizer* e tem de FALHAR A FAVOR da ressureicao -- a pergunta so morre por fato provado, que e a propria docstring do juiz. Caso que MORDE isso no selo: pergunta **sem celula** volta a ser pedida.
-- **CENSO DOS 3 ESCRITORES, fechado**: `chamados/models.py:782` (esta porta, a curada) · `chamados/services/relavra_via.py:204` (**imune por construcao**: `if not pergunta_viva(p): continue` -- so desfaz carimbo de quem o juiz JA diz vivo, e marco aceso morre no degrau 4) · `chamados/models.py:1692` (`reabrir_por_competencia`, inverso DECLARADO de uma via pelo corte TRANCA-DE-VERDADE de 17/09, sem medicao propria -- **nao tocado**).
-- **O ITEM 5 DO CORTE GANHOU DONO, E NAO E CODIGO -- medido, nao suposto.** Os 210 dias de fio morto abrem em **559** perguntas, e a pergunta *por que ela esta morta* foi feita pela funcao REAL (`_pergunta_viva_calc`), degrau por degrau: **549 (98,2%)** morrem no degrau 0 (`validada_em`), **10 (1,8%)** no degrau 4 (marco aceso) e **ZERO** nos degraus 3 e 6, com a guarda `perguntas_vivas_no_fio_morto=0`. Logo 549 das 559 sao o passivo da **pergunta de lei #2** do topo (O306, resposta validada sem gravacao): **religa-las por codigo escolheria a alternativa (a) por baixo**, sem corte. O item 5 **nao e fatia de codigo enquanto a lei nao vier**, e isso entrou no proprio aval (`AVAIS.md` #2 ganhou o numero neste commit). PROVA: `logs/o261/MEDIDA_noite_18-10.md` secao 2.
-- **O `PAROU: ata_mudou=26` de 07:5x MORRE AQUI, por medida e nao por ajuste**: a 2a passada forcada sobre o mesmo colab (col467, 27 celulas) move `julgada_em 0 / veredito 0 / impressao 0 / ata 0` -- o contrato *nenhum save sem mudanca* do `carimbar` vale, e os 26 eram **catch-up de uma vez**. O DIFF do item 5 volta a ser publicavel; o que ainda devo e abrir a ata chave-a-chave num colab **nao relavrado**.
-- **SELO**: `chamados/tests/test_o261_ressuscita_respeita_o_marco.py`, 6 casos, fixture SINTETICA (`O261M`), e a lampada acende pelo CAMINHO REAL -- `Batida` 08:00/17:00 + `julgar_celula(apply_=True, forcar=True)`. **A 1a versao pintava a testemunha** (`ata=` na mao em `objects.create`) e a lavra a sobrescrevia, dando 4 lampadas apagadas e GREEN identico ao RED: LEI-AKITA 2 cobrada em mim mesmo, com a sonda em `logs/o261/sonda_ata_do_selo_18-10.out`. Os **2 casos MORDE** (as duas apagadas voltam / sem celula volta) passam nos DOIS lados, logo nao sao tautologia da cura; os outros **4** sao a lei e ficam VERMELHOS no HEAD.
-- **ESMERIL DESTE MARCO**: zero orfao, e a prova e o diff -- `cartorio.py` **0** linhas removidas, `chamados/models.py` **10**, nenhuma delas uma definicao nem o ultimo uso de um nome; `fato_do_marco_no_espelho` GANHOU chamador -- **2 -> 3** sitios de producao (`chamados/juizes.py:888`, o proprio degrau 4, mais `encerrar_perguntas_com_fato.py:43`, e agora esta porta), e a 1a redacao desta linha dizia *1 -> 2* por eu ter contado o degrau 4 e esquecido o command: LER ANTES DE AFIRMAR, corrigido antes do commit. Nenhum achado de fora do marco foi aberto. PROVA: `logs/o261/MEDIDA_noite_18-10.md` secao ESMERIL.
-- **POUSO**: comboio PERGUNTADO e respondido por medida -- a unica raia com commit a frente e a `raia-serie` (2 commits, ultimo 18/10 00:15, **retida** pela pergunta de lei #4 do topo), entao esta **roda sozinha**. `wt-ct` tem um hunk de `cartorio.py` de 14 dias em OUTRA funcao, ausente do main, que **nao cruza** com o meu -- declarado aqui para nao se descobrir no merge.
-- **FILA, nao fatia (duas linhas novas no BACKLOG)**: `UNIVERSO-DE-PERGUNTA-DO-DIA-SAO-DOIS` (nos mesmos 210 dias, **559** pela FK `PerguntaDisputa.celula` contra **542** por `chamado.perguntas_que_resolvem`, 20 so na FK e 3 so no fio) e `PARADO-CITADO-E-PROSA-QUE-EXPLICA` (o `parado_citado_em_commit_posterior=1` do topo do TICKETS e falso-positivo de FORMA, 7 commits de 23-27/09 que EXPLICAM o parado `TROCA-DE-PLANTAO`).
-- **INCOMPLETO, nomeado**: item 5 do corte segue ABERTO e agora com dono declarado (espera a lei #2) · migracao dos 7 escritores cegos ABERTA, censo FEITO · `O261-GRUPO-D-E-A-OUTRA-METADE` ABERTO · a ata chave-a-chave num colab nao relavrado DEVIDA.
-- **O MARCO ANTERIOR FECHOU, e esta linha e a divida que ele declarou** (*"a prova de casca e o carimbo do remoto entram no marco seguinte"*): `17299781` esta **NO AR e no remoto** -- `logs/deploy.stamp` carrega `COMMIT=1729978160f1f667a681f17920521ef7296a4787` carimbado em **18/10 07:39:49**, e esse carimbo so se escreve DEPOIS das tres rotas (`saas_core /health/`, `saas_ui /colaboradores/`, `mensageria /health/`) e do selo do BUG 128 (`bin/deploy.sh:323-331`); `origin/main` = `17299781` (`git fetch` as 08:5x). Selos de host na arvore viva: **73 VERDE / 0 VERMELHO**.
-  **PROVA:** `logs/deploy.stamp` -> `COMMIT=1729978160f1f667a681f17920521ef7296a4787` `QUANDO=1792319989` (18/10 07:39:49 -03); `git rev-parse origin/main` = `17299781`; pasta `bin/tests/` inteira = **73 VERDE / 0 VERMELHO** as 09:4x; suite da copia certificada `rc=0` / `OK (skipped=42, expected failures=12)` / `Ran 11290 tests in 1600.683s`.
-- **PROVA DA ARVORE e DEPLOY**: suite inteira na copia certificada (`cp-o261b`, nascida de `git show HEAD:` pela LEI-AKITA 10) VERDE as 09:44 -- `rc=0`, `OK (skipped=42, expected failures=12)`, `Ran 11290 tests in 1600.683s`, os TRES sinais (L-074); ruff `All checks passed` na copia, `cmp` arquivo a arquivo contra a copia no ato do commit (L-117 -- nenhum `.py` editado entre o veredito e o merge). DEPLOY JA por `bin/deploy.sh --sem-migrate` com `logs/crons_em_curso/` vazio, e um push por MARCO.
-
----
-
-## O261 ESCRITA: O FIO RELIGA NO DIA QUE PROTESTA, E A MEIA-CORRECAO QUE EU MESMO ABRI EM 13/10 FECHA (18/10 06:4x-07:3x)
-
-`LEI-AKITA: origem=ponto/services/cartorio.py::julgar_celula (o religador HX-CARTORIO-RESSUSCITA preso dentro de `if not cods and vivos:`); testemunha=a LAMPADA da celula lida pela porta (chamados/juizes.py::fio_vivo), nenhum leitor com regra propria de fio; RED=logs/o261/RED_final_18-10.log (Ran 12 / FAILED (failures=3) contra o HEAD f8af6aae) -> logs/o261/GREEN_18-10.log (Ran 16 / OK / rc 0); quem-mais-le=censo por AST dos 18 escritores de via_resolucao (logs/o261/censo_escritores_18-10.out); juizes novos=0`
-
-Lastro: o corte dele `FIO-MORTO-E-ESTRUTURAL` (12/10 20:4x), itens 1 e 2 -- *"lampada acesa no marco = fio vivo obrigatorio"*. **Nao e lei nova e nao ganha `L-NNN`** (L-117).
-
-- **A ORIGEM E MINHA e e MEIA-CORRECAO.** Antes de 13/10 o `FURO_COM_COBRANCA_MORTA` implicava `not vivos`, entao *protesto do dia + chamado vivo* era INALCANCAVEL -- e o religador podia morar dentro de `if not cods and vivos:` sem mentir. Foi o MEU pouso de 13/10 que fez o juiz do dia ler `cobrancas_vivas`: a combinacao passou a existir e o religador ficou atras de um `not cods` que o dia agora nega.
-- **O que mudou**: `ponto/services/cartorio.py::julgar_celula` -- o bloco vira `if apply_ and vivos:` de primeiro nivel, DEPOIS dos tres blocos de reconciliacao e antes do `out['protestos'] += 1`; `vivos` **nao foi estreitado**, porque o MESMO `vivos` decide EMISSAO em `:907` e a condicao literal do corte e separar predicados. `core/juizes.py::_C1` passa de *'o chamado esta vivo (ou cobra alguem)?'* para *'o chamado esta vivo?'*, com lapide -- quem responde *ha cobranca viva* e `fio_vivo`. Juiz novo = 0.
-- **O caso que MORDE a POSICAO** (nao so a cura): dia CASADO com o mesmo chamado de fio morto, que o B5.3b reconcilia na propria passada -- na posicao curada `reconciliados>=1` e `fio_ressuscitadas==0`; com o bloco movido para cima do bloco BUG-115 numa copia descartavel, `FAILED (failures=1)` com `fio_ressuscitadas: 1` sobre um chamado que a mesma passada mata. PROVA: `logs/o261/morde_da_ordem.out` (a copia foi apagada no mesmo ato; a copia certificada nao foi editada para a prova). O protesto do dia se afirma na passada PURA (`apply_=False, forcar=True`): `out['cods'][data]` guarda a ULTIMA passada e a 2a do B5.3b devolve `[]` -- medido.
-- **CENSO DO ITEM 2, publicado**: 18 sitios em 8 arquivos · **13 MATAM** com via literal · 3 REABREM com via vazia · 2 via derivada. 9 nao consultam a lampada e, fora os 2 reabridores, **7 MATAM as cegas**: `fechar_por_competencia_trancada:1680`, `lavrar_sem_turno_aberto:394`, `retratar_duplicata:804`, `_carimbar_recusa:870`, `_materializar_ausencia_de_resposta:478`, `_materializar_resposta_hora:685`, `materializar_pendentes_aprovadas:1133`. PROVA: `logs/o261/censo_escritores_18-10.out`, `logs/o261/censo_lampada_18-10.out`. Migrar os 7 **nao** entra nesta fatia: sao 7 portas com predicado proprio, e faze-las no mesmo commit do religador seria a meia-correcao ao contrario.
-- **ALCANCE** (sombra `completa` 18/10, funcao REAL `chamados/services/vigia_fio.py::censo`): 2.199 lampadas acesas · 1.866 com fio vivo · **210** dias de fio morto · 221 chamados vivos · **4 celulas** no alcance do religador · tranca **0** (`VIA_COMPETENCIA_TRANCADA` 0 vezes, 0 dos 210 em `periodo_trancado`), por isso **nenhuma excecao nova e nenhum portao de piso**. 3 das 4 sao de 21/08 (comp 09/2026, exportacao VIGENTE): a porta religa PERGUNTA, nunca o gravado. **O deploy escreve 0**: o cron `processar_cartorio --apply` nao leva `--forcar` nem `--dias`, e as 4 celulas carimbadas saem `pulados` -- a cura protege o FLUXO, o estoque e o item 5. PROVA: `logs/o261_eixo4.out`.
-- **REVERSAO**: `logs/o261/antes_20261018-0712.json` -- snapshot READ-ONLY em PROD dos 8 pks dos 4 chamados (`faltando: []`, nenhuma com resposta escrita). Frase: repor os seis campos desses 8 pks pelo JSON e devolver o bloco para dentro do `if not cods and vivos:`.
-- **PROVA DA ARVORE**: suite inteira na copia certificada -- `Ran 11284 tests in 919.312s` / `OK (skipped=42, expected failures=12)` / rc 0 (`logs/o261/suite_18-10.log`); ruff na copia `All checks passed`; selos de host **73 VERDE / 0 VERMELHO** (`logs/o261/selos_host_18-10.out`); vizinhos `logs/o261/vizinhos_18-10.log`. Os 5 arquivos vieram dessa copia, `cmp` 5/5 IGUAL no ato do commit (L-117).
-- **INCOMPLETO, nomeado**: item 5 do corte (o PASSIVO dos 210 pela porta, com DIFF de frota e reversao) ABERTO · migracao dos 7 escritores cegos ABERTA, com o censo FEITO · corte `O261-GRUPO-D-E-A-OUTRA-METADE` (13/10 07:3x) ABERTO · padrao para a fila, nao perseguido aqui: as 3 celulas alcancaveis da 09/2026 sao TODAS de **21/08**, o primeiro dia da competencia, em 3 colabs e 2 empresas, por vias `adesao`/`fantasma`/`completude_turno`.
-- **DEPLOY e PUSH vao neste mesmo ato** (DEPLOY JA; um push por MARCO, levando tambem `f8af6aae`). A prova de casca e o carimbo do remoto entram no marco seguinte -- secao escrita nao se reescreve (L-116).
-
----
-
-## O306 (BUG-RESPOSTA-NAO-PERSISTE, CASO 1805): A PORTA PARA DE DIZER SUCESSO SEM GRAVAR, E O QUE O LIQUIDO ESCONDIA E QUE A CURA ENTRA EM 85 E SAI DE 21 (18/10 03:4x-05:4x)
-
-`LEI-AKITA: origem=chamados/juizes.py::entrada_de_marco (o marco de OUTRO motivo entregue a quem nao tem marco proprio) + chamados/services/declaracao_texto.py (o escritor que carimbava sem ler o carimbo); testemunha=chamados/juizes.py::_pergunta_materializada_de_fato, a MESMA funcao que a casa usa para julgar, sobre a sombra completa de 18/10 (dia=20261018 tipo=completa diverge=0); RED=logs/o306/RED_base_18.log (Ran 25 / FAILED (failures=8), zero errors, o ancora imprimindo plantio_fora_do_slot=0 -- o 0 que era a PROVA do defeito) -> logs/o306/GREEN_curada_18.log (Ran 25 / OK / rc 0); quem-mais-le=censo no proprio marco (disputa_emissao.py:1458/:1555, materializacao.py:488/:1129, fechar_becos_disputa, reconciliar_perguntas_orfas, explicador.py:93, o vigia novo e o cache veredito_lavrado); juizes novos=0`
-
-- **As quatro curas, por sitio**: `juizes.py::entrada_de_marco` nao empresta mais o marco do vizinho (a batida de 08:00 para a pergunta de 13:00 do 1805); `_pergunta_materializada_de_fato` exige batida VIVA no slot em vez de absolver pela EXISTENCIA do vinculo; `declaracao_texto.py::declarar_hora_colab` e `::aplicar_declaracao` (a porta IRMA, a do admin) devolvem `validada_sem_registro` em vez de `ok: True` com o marco faltando. Nenhuma delas escreve: as quatro sao recusa e leitura. Os quatro sitios do aval fecham com `90546b2f`, `ae7f08f3` e `220f5317`.
-- **A CURA NAO E UNIFORMEMENTE MAIS RESTRITIVA, e isso so apareceu por medir CONJUNTO de `pk` em vez de subtrair contador**: `+64` liquido = **85** perguntas que ENTRAM e **21** que SAEM; das 21, **3** eram acusacao falsa que a cura corrige (a batida estava na hora DECLARADA) e **18** caem no FAIL-OPEN declarado desde 25/08. O passivo (1.500) nao e tocado por uma linha e esta no TOPO como pergunta de lei.
-- **O quanto da re-lavra e da cura se mediu por A/B, nao por conta minha**: MESMO instrumento (`cmp` identico nos dois lados), MESMA foto (`lavra_de_prod=OK md5=904f89c0`, `data_ref_prod=2026-10-17`), DOIS juizes, 37.131 perguntas cada perna -- CURADA `DIVERGENTES=10578 (28,49%)` x BASE `10381 (27,96%)`: a cura responde por **197** linhas (0,53%), +121 `nao->sim` e +76 `sim->nao`; as outras 10.381 sao acervo anterior a ela. `lacuna_lavrada_sem_janela=0` e `sem_data_evento=0` provam que o recorte por VEREDITO nao perde linha; o relogio divergia em 20.339 linhas e ficou FORA do recorte por medida (fila `EXPIRA-EM-ANDA-COM-HOJE`). **O 22.286 da forma velha do recorte era o RELOGIO: nao se publica aquele numero como divida desta cura.**
-- **A guarda que o ESMERIL do marco achou no MEU proprio instrumento**: `backfill_veredito_lavrado` trocava lavra CHEIA por `indeterminado` quando o juiz levantava excecao -- "nao sei" apagando "sei". Cura mais RESTRITIVA (26/09), com RED literal numa COPIA sem a guarda (`logs/o306/RED_guarda.log`: `'sim'->'indeterminado'`, `julgado_em` movido, janela 15/10->21/10, Ran 1 / FAILED (failures=1)) e GREEN do modulo inteiro (`logs/o306/GREEN_guarda.log`, Ran 15 / OK / rc 0), as `2` escritas do gate do P13 intactas. Hoje `indeterminado=0` nas duas pernas: a guarda existe para o `--apply` em PROD, onde um soluco de banco nao pode apagar veredito.
-- **COMBOIO medido, nao suposto** (`git worktree list` + `git status --porcelain` por raia): nenhuma outra raia fica pronta em 30 min -- **a O306 roda sozinha**.
-- **A SUITE DA ARVORE CERTIFICADA MORDEU ESTE MARCO DUAS VEZES, e as duas sao a mesma classe: instrumento que o marco CRIA e nao DECLARA.** (1) os dois casos MORDE de `test_selo_diagrama_do_codigo` -- o cron novo e os seus dois `depende=` nao estavam no desenho; `docs/ARQUITETURA.mmd` sai do gerador (62->63 nos, 50->52 arestas, 23->24 vigias) e vai NESTE commit pela L-106, gerado DENTRO da copia certificada porque o selo compara o desenho com o codigo da arvore em que RODA (`MAPA.md` nao mudou, conferido por hash de blob). (2) `test_selo_teste_sem_relogio` -- os dois modulos novos liam `timezone.now()` com a fixture CRAVADA em `D = 2026-07-08`, a bomba de meia-noite de 19/09 em pessoa; cura na ORIGEM com `@freeze_time('2026-07-09 09:00:00', tick=True)` nas 4 classes que leem o relogio, e o instante nao e escolha minha: a fixture ja DECLARA o seu hoje em `gerar_celulas_periodo(..., hoje=D + 1 dia)`. A lista `core/tests/testes_sem_relogio.txt` NAO foi tocada -- ela so encurta. `logs/o306/freeze.log`: Ran 28 / OK / rc 0, nenhum veredito mudou por prender o relogio.
-- **ARVORE CERTIFICADA**: copia de `git archive 5b52ff7f` + os 12 arquivos (`cmp` 12/12 identicos), censo por hash de blob sobre os **3.698** caminhos rastreados = **9** divergentes (os 8 do marco + `docs/ARQUITETURA.mmd`) e 4 nao rastreados, nada mais; manifesto de CONTEUDO dos 3.702 arquivos em `logs/o306/arvore_certificada.txt` (sha256 `c2803a9d`). Os 4 commits que o main ganhou depois do nascimento da raia (`6bd163b3..5b52ff7f`) nao tocam nenhum dos 12. Suite: VERDE -- Ran 11278 / OK (skipped=42, expected failures=12) / rc 0 (1.596 s) (`logs/o306/suite_pouso2.log`).
-- **DOIS PENDENTES NOVOS na mesa** (`bin/gerar_avais.py --escrever`, +44 linhas no JSON, zero churn): `O306-SMOKE-DO-COLAB-AO-SUPERVISOR` (smoke) -- o PRONTO do seu aval de 17/10 e LITERAL, entao a celula do BACKLOG vai para **NO AR**, nao FECHADA; e `O306-BACKFILL-APPLY-EM-PROD` (`!`) -- 10.578 linhas de 37.131 mudariam de cache, 197 delas pela cura, zero centavo, com a frase de reversao exigindo o snapshot dos 3 campos por pk ANTES.
-- **ORDEM VIVA, decisao minha em UMA linha** (AUTONOMIA-DE-CODIGO item 1 -- quem decide e DEPENDENCIA DE CODIGO, nunca lei): o marcador sai de `O306` e vai para **`O261`**, a parte FUNDIDA que este marco deixa aberta (`cartorio.py:1012/:1066/:1072` + `_C1`, censo ja fechado e nada esperando humano). A **O280** volta a ordem viva pela **L-119** logo atras -- `bin/interrompidas_estado.py` a publica com **5,9 h** de idade contra o teto de 24 h, e a troca do motor segue gated no seu `!` --, e o medidor fecha `abertas=1`, `interrompidas_mais_de_24h=0`.
-- **INCOMPLETO, nomeado**: o smoke de tela (acima) e o `--apply` do backfill; a fila que o marco abriu e `CITACAO-POR-LINHA-DERIVA` (189 citacoes por LINHA de `chamados/juizes.py` fora do arquivo, 142 na faixa deslocada; 4 re-apontadas por CONTEUDO, e na amostra de 8 das 138 restantes **4 ja estavam erradas antes do meu insert** -- o defeito e a FORMA de citar, nao o numero).
-
-## DUAS RAIAS POUSAM EM COMBOIO NA ARVORE QUE A SUITE CERTIFICOU, E O QUE O MARCO DESCOBRIU FOI UM BUG ACIMA DA PORTA QUE JA ESTAVA MEDIDO (18/10 03:3x)
-
-`LEI-AKITA: origem=as cinco fatias das raias wt-folha10 e wt-ui, cada uma no seu sitio; testemunha=a arvore `8bde994a`, que e a arvore que POUSA; RED=logs/o140c_red_retrato.log (Ran 12 / FAILED (failures=2) / rc 1) e os tres REDs de tela das raias; quem-mais-le=censo no proprio marco (os 3 templates sao lidos pelas DUAS cascas, e o `dia_pago.py` pelos 2 call sites de `fechamento.py`); juizes novos=0`
-
-- **POUSO EM COMBOIO pela L-117**: UMA copia (`wt-comboio18`), UMA suite, as duas raias em sequencia pela L-107 (`--no-ff --no-commit` -> resolver -> commit -> `bin/deploy.sh` sem nada no meio). Suite da arvore certificada: `Ran 11249 tests in 1590.888s` / `OK (skipped=42, expected failures=12)` / rc 0 (`logs/comboio18_suite.log`), hash `8bde994a`. Carimbo do ensaio no ato: `dia=20261018 status=OK tipo=completa diverge=0 erros=0`. Migrations 0/0 -> `--sem-migrate`.
-- **O que mudou, por sitio.** `[O140]` `bcf58258`: `ponto/services/dia_pago.py` + `apurar_furo_da_exportada.py` -- o carimbo `lavrado_em` acompanha a escrita nas TRES formas (`queryset.update()` de 01/10, `bulk_update()` e `save(update_fields=...)`), e a terceira fica DECLARADA com numero (7 sitios resolviveis contra 98 cegos por construcao) em vez de virar verde vazio. `[O307]` `5b37100b`, `[O309]` `dd7beaad`+`6bd163b3`, `[O310]` `14a34256`: tres telas que PROMETIAM o que a porta nao faz -- a dedup do lote so vale com job VIVO, a caixa da CCT calava as DUAS saidas que levam ao piso legal, e "O que fazer" morava dentro de `#aba-dados` e sumia no primeiro clique em Espelho. Nenhum centavo se move nas tres.
-- **O achado do marco, e ele e de PRODUCAO**: `ponto/services/fechamento.py:354-378` nao soma `datas_falta` no resultado composto, entao `coletar_furos` devolve `[]` para a frota inteira -- motor **289** colabs / **1.574** dias contra coletor **0**/**0** (sombra, funcao real, escrita interceptada, 877 chamadas de `calcular_mes`), e em prod `furo_apurado=True` e **ZERO em toda a base**. Esta no topo como pergunta 1b, com a obra `O140-FURO-COMPOSTO` registrada; o arquivo e da raia `wt-o48p3`, entao o marco ESPERA por arquivo (nao e PAREI). **O backfill da 09 segue PRONTO e NAO aplicado**: aplicar hoje gravaria 10.863 `False` FALSOS numa competencia EXPORTADA.
-- **O selo de AST do O140 passou tres dias por nao perguntar se a autoridade tem CONTEUDO**: ele pergunta se o coletor LE `resultado.datas_falta`, e a resposta e sim. O caso que MORDE esta escrito na obra.
-- **Fila que o marco abriu, registrada e nao comecada**: `O140-FURO-COMPOSTO` (bloqueada por arquivo), `CARIMBO-POR-ORIGEM` (muda o desenho, espera o `!` dele), `O310-RAIOX`, `L7-AJUDA-DA-REGUA-CCT` e `EMPATES-SEM-VIGENCIA` -- este ultimo e achado NOVO medido na raia: `aplicacao_convencao.py::empates()` nao filtra vigencia e o juiz filtra, entao a tela grita empate onde o juiz paga a CCT vigente.
-- **INCOMPLETO, nomeado**: o smoke READ-ONLY das tres telas em prod depois do deploy -- o resultado entra no marco da O306, nao aqui (secao ja escrita nao se reescreve, L-116).
-
-**O MARCO ESTA NO REMOTO**: `219da74f..5b52ff7f  main -> main`, `rc_push=0`, `origin/main == HEAD == 5b52ff7f`, **0** commits a frente. O pre-push carimbou a suite LABELS inteira (`Ran 11249 tests in 915.336s` / `OK (skipped=42, expected failures=12)`) mais o control-plane. **O portao recusou a 1a tentativa e a causa era a PROSA desta mensagem**: `core/placar_tickets.py:174::citacao_indevida` casa o id de um parado como TOKEN no TEXTO do commit, entao o paragrafo que EXPLICAVA o alarme virou a citacao. O id saiu do corpo (o parado segue nomeado por descricao, nao por token) e o placar passou a bater com o mundo **sem regenerar nada** -- regenerar seria laco, porque a lista gerada nomeia o proprio hash. PROVA: `logs/push_comboio18b.log`, `bin/tickets_placar.sh` (`parado_citado_em_commit_posterior=1`, `tickets_placar: OK`) e `bin/regua_tickets.sh` (`OK -- 5 citacao(oes) com linha na tabela`).
-
-**MARCO FECHADO -- pode compactar** (L-108; `bin/handoff_sessao.sh` rodado, `app/docs/HANDOFF-SESSAO.md` 39 linhas, teto 60).
----
-
-## A L-119 NASCE COM MEDIDOR, E A DIVIDA QUE ELA MEDE TEM QUATRO DIAS: A `O261` SAIU DO TOPO EM 13/10 15:37 E O INTERRUPTOR DELA FECHOU AS 19:36 DO MESMO DIA (18/10 00:2x-00:4x)
-
-`LEI-AKITA: origem=bin/interrompidas_estado.py::ler (o medidor unico) + a celula de ESTADO do BACKLOG (autoridade declarativa de quem interrompeu e quando), testemunha=bin/hook_stop_fila1.py::_item_da_ordem_viva -- o juiz UNICO do marcador ORDEM-VIVA-TOPO, IMPORTADO e nao copiado, junto de _item_fechado e _linha_de_item_re, RED=bin/tests/test_interrompidas_estado.sh, vermelho literal antes da costura ("o ESTADO nao importa mais o medidor"), quem-mais-le=bin/gerar_estado.py (passou a LER o medidor; nao deriva lista nenhuma) -- censo de leitores do marcador: 2 antes (hook + selo do handoff), 2 depois, juizes novos=0`
-
-- **A LEI VIROU LINHA EM TODOS OS SITIOS QUE A CASA COBRA**, e no mesmo commit (L-106): `LEIS.md` (**L-119**, coluna PROTEGE = `bin/interrompidas_estado.py::ler`), `CORTES.json`/`CORTES.md` (`OBRA-INTERROMPIDA-VOLTA-SOZINHA`, 95 cortes), `PROMPTS.md`, `BACKLOG.md` (**O313**) e `TICKETS.md`. PROVA: `python3 bin/gerar_cortes.py` regenerou o CORTES.md e o bloco do RELATO; `cortes_recebidos_sem_fatia=0`.
-- **O MEDIDOR ALARMA, NAO MOVE -- e isso foi DESENHO, nao esquecimento.** A lei diz que a obra *"volta AUTOMATICAMENTE ao topo"*, e o atalho obvio era este arquivo reescrever o marcador. Seria um SEGUNDO escritor de estado (LEI-AKITA 7) numa linha que tem UM escritor (a mao) desde a O158 e UM juiz desde 12/10 -- e `bin/tests/test_handoff_sessao.sh:112` fica VERMELHO com um leitor novo. O automatico que a lei pede e de CONDUTA; o que o codigo faz e COBRAR.
-- **O NUMERO DE HOJE, medido na arvore viva**: `universo=2 abertas=1 interrompidas_mais_de_24h=0` (esperado 0), topo `O306`. A `O280` esta interrompida ha **0,9 h** e a `O261` **VOLTOU** -- `FUNDIDA com O306` pelo seu aval das 23:4x-5x. PROVA: `python3 bin/interrompidas_estado.py --linhas` e a secao `## Obras interrompidas (L-119)` do `ESTADO.md`.
-- **A DIVIDA QUE VOCE MANDOU REGISTRAR NASCEU MEDIDA POR GIT, nao de memoria**: a `O261` saiu do topo em **13/10 15:37** (`5d157d1f`, trocada por `BUG-LINHA-X-BADGE`) e o interruptor dela FECHOU em **13/10 19:36** (`861100a1`) -- **4 dias** sem voltar, e em nenhum contador. A `O280` saiu em **17/10 23:36** (`32ab503c`). PROVA: `git log -S'ORDEM-VIVA-TOPO: O306'` e as celulas de ESTADO das tres linhas.
-- **O QUE O SELO MORDE** (5 casos, allowlist 0): a MESMA linha conta **1** com 48 h e **0** com a data de agora (o contador responde a DATA, nao a palavra `INTERROMPIDA`); as tres formas de VOLTAR nao contam (ser o topo, `FUNDIDA com` o topo, ter FECHADO); interrompida sem data sai NOMEADA em `sem_data`, nunca como 0 silencioso; e o BACKLOG sai do medidor **byte a byte igual** (md5 antes/depois) mais `grep` de abertura para escrita.
-- **O BUG QUE O SELO JA PEGOU E MEU, e e a razao do caso do hifen**: a 1a forma do regex era lazy com a data opcional, e `INTERROMPIDA por BUG-LINHA-X-BADGE em 13/10 15:37` devolvia interruptor=**`B`** e data **nenhuma** -- numero errado com cara de medido. O caso (1a) do selo exige o id INTEIRO.
-- **INCOMPLETO** · o contador entra no `ESTADO.md` a cada 5 min pelo `bin/relato.sh`, mas **nao** no pre-push: cobrar la e fila 2, do mesmo tamanho do contador de raia da L-105, e nao foi pedido.
-
----
-
-## O `col427` NAO E ANOMALIA -- AS 28 LINHAS COM FALTA NA 10 TEM AUSENCIA APROVADA ATRAS, E A CLASSE DO DEFEITO QUE VOCE DESCREVEU TEM ZERO COLABORADOR (18/10 00:3x-00:4x)
-
-`LEI-AKITA: origem=nao ha cura (o dono da divergencia e CADASTRO, nao ESTRUTURA -- L-099), testemunha=folha/export.py::datas_falta, a MESMA funcao que o TXT do Dominio usa para contar dia de falta, chamada colab por colab em prod, RED=nao se aplica: nenhum .py tocado, e inventar RED para um defeito que a medicao nao achou seria fabricar bug (LEI-AKITA 1 e 5), quem-mais-le=censo de 26 sitios de horas_falta: 0 no caminho do dinheiro (folha/export.py:929 declara, desde 31/07, que horas_falta NAO serve de numerador), juizes novos=0`
-
-- **O QUE VOCE MANDOU OLHAR, respondido com o numero**: os 4 dias do `col427` (`Ausencia 4891-4894`, 10/12/14/16-10) estao **`tipo='falta'`** e **`status='aprovada'`**, 720 min cada = `dna.minutos_jornada` do 12x36 -- e `minutos_de_falta_por_dia` devolve exatamente esses 4 dias: 2.880 min = **48,00 h** gravadas. Nao e falta lendo ausencia crua: e falta lendo ausencia **de falta**, que e o que `ponto/calculador/regras.py:424` declara como fonte (*"falta sai da Ausencia aprovada, nao da batida"*).
-- **O CENSO DA CLASSE, que e o que decide**: **28** colabs com `horas_falta>0` na 10 e **28 de 28** com ausencia `tipo='falta'` aprovada na janela -- `sem_datas_falta=0`. A classe do mecanismo que voce nomeou (falta SEM ausencia aprovada atras) e **VAZIA**. Os seus dois estao na mesma classe: `col699` 96,00 h / 13 dias e `col697` 45,00 h / 5 dias. PROVA: `logs/o271p/CENSO_CLASSE_COL427.md`.
-- **POR QUE A PREVIA NAO VIU**: as 4 ausencias foram criadas **e aprovadas por humano** em 17/10 **15:04:02-15:05:02**, ~11 h DEPOIS do dump da sombra (`SOMBRA_DUMP=20261017`, 04:00). Previa de sombra nao ve cadastro que nasceu depois do dump -- nao e falha do DIFF, e a idade do dado.
-- **O DINHEIRO NAO SE MOVE POR AQUI**: o TXT conta **dia** (`datas_falta`, rubrica 8792, `len(datas)`), nunca `horas_falta` -- e `horas_falta` nao aparece em `folha/export*` nem em `folha/porta_export.py` como numerador. Entao as 48,00 h sao numero de ESPELHO/CARTAO, e a decisao de 21/10 sai dos 4 DIAS que o admin aprovou.
-- **A ASSIMETRIA QUE FICA COMO INFORMACAO, nao como pergunta**: o mesmo dia sai de `minutos_previstos` (**-2.640** min = 4 x 660, tempo efetivo) e entra em `horas_falta` (**+2.880** min = 4 x 720, jornada). Os dois numeros tem fonte declarada e nenhum leitor os SOMA; `h_por_dia` varia por colab no censo (12,0 / 8,8 / 7,38...) exatamente porque sai da jornada do dia dele.
-- **O `col674` segue sem pauta, pelo motivo MEDIDO que ja estava no pendente**: `saldo_banco_horas` nao chega ao arquivo do Dominio (`git grep -w` devolve so teste), entao ele e espelho/cartao -- e o seu ramo 2 (*"vai para a lista do admin com o col674"*) so dispara se as ausencias NAO estivessem aprovadas, e elas estao.
-- **INCOMPLETO** · a leitura LITERAL do seu aval (os 28 como bug) esta na pergunta **3** do topo, com os numeros; nada foi revertido e nada foi curado.
-
----
-
-## O SMOKE DO [nome] CHEGOU EM SETE ITENS, OS SEIS SMOKES DA MESA FORAM RESPONDIDOS DE UMA VEZ, E O (1) E O PROXIMO `.py` QUE EU TOCO (17/10 23:2x-23:3x)
-
-`LEI-AKITA: origem=app/docs/BACKLOG.md (bloco OBRAS) + app/docs/PENDENTES_RONALD.json (a fila de decisao dele), testemunha=o texto LITERAL do aval, citado item por item, RED=nao se aplica (ato de registro), quem-mais-le=bin/hook_stop_fila1.py (marcador ORDEM-VIVA-TOPO) e bin/gerar_avais.py (o AVAIS que ele le), juizes novos=0`
-
-- **OS SETE VIRARAM ITEM NO MESMO TURNO** (PROMPT-NAO-SE-REPETE): **O306** `BUG-RESPOSTA-NAO-PERSISTE` (fila 1, P7.1) e **O307**..**O312** na raia de UI, como ele mandou -- O307 pedido-apos-concluido da O284-A, O308 a tela do O207 que nao le o vinculo gravado, O309 o aviso de empate do O223, O310 a E4 que nao pousou, O311 push nativo + cobranca de disputa, O312 o colab sintetico com HE autorizavel. PROVA: `docs/BACKLOG.md` (7 linhas novas) e `docs/PROMPTS.md`.
-- **O MARCADOR DA ORDEM VIVA ANDOU PELA ORDEM DELE**: `ORDEM-VIVA-TOPO: O280` -> **`O306`**, porque *"(1) na frente"* e literal. PROVA: `docs/BACKLOG.md:7`.
-- **A MESA CAIU DE 8 PARA 2**: os 6 smokes abertos foram RESPONDIDOS por ele num ato -- O206 **aprovado em parte** (chamado #32184, ficam push nativo e cobranca de disputa), O284-A / O207 / O223 / O256-E4 **reprovados com defeito nomeado**, O214 **sem caso autorizavel**. Ficam na mesa so `APP-DESENHA-A-PALAVRA-DO-DIA` e o `O271-APLICADO-REVISE-COL427-E-COL674`. PROVA: `python3 bin/gerar_avais.py --escrever` -> `AVAIS NA MESA: 2`.
-- **A UMA INVERSAO DE MINUTOS, e ela e DEPENDENCIA DE CODIGO, nao fila** (AUTONOMIA-DE-CODIGO item 1): ele disse *"(1) na frente; depois O271, O140 e O280 seguem"*, e o (1) e o **proximo `.py` que eu toco**. O que andou antes foram os **minutos** do pouso de O140+O280 sobre a arvore **ja certificada** (`Ran 11237 tests` / `OK (skipped=42, expected failures=12)`, rc 0): essa certificacao **morre com o primeiro `.py` novo na arvore viva** (SUITE-UMA-VEZ-POR-ARVORE), e a cura do (1) e `.py`. Comecar o (1) antes jogaria 26 min de suite fora e deixaria a cura da O140 em disco **sem estar no ar**. O (1) comeca agora, no mesmo turno.
-- **O QUE EU AINDA NAO SEI DO (1), e por isso nao ha uma linha de diagnostico aqui**: nada foi medido ainda. A ordem dele e explicita -- *"antes de medir, dizer qual escritor ou leitor esta fora"* da lei do 4a --, e a medicao sai da **funcao real** (o POST de cada resposta), nao de leitura de codigo. O proximo ato e esse.
-
 ---
 
 > **DIETA L-109 de 21/10:** os blocos de **17/10 e 16/10** (886 linhas, 22 secoes) foram para
 > `app/docs/RELATO-ARQUIVO.md`, inteiros e sem uma palavra tocada, no commit deste marco.
+>
+> **DIETA L-109 de 22/10:** os blocos de **19/10, 18/10 e 17/10** (1.162 linhas, 42 secoes) foram
+> para `app/docs/RELATO-ARQUIVO.md`, inteiros e sem uma palavra tocada, no commit deste marco. O
+> corte parou em `## ALARMES DA ESTEIRA`: a secao PINADA do vigia e os `PEDIDOS DE PATCH ABERTOS`
+> nao se movem (o preambulo diz isso no proprio titulo), e os 4 contratos de NOME da fatia 2 de
+> Gestao de HE foram conferidos AUSENTES do bloco ANTES de mover -- `abaixo_limite`,
+> `autorizar_he_marcados`, `limite_decisao_rotulo`, `url_autorizar_marcados`, 0 ocorrencia cada --,
+> porque e exatamente essa a classe que ja voltou tres vezes (02/10, 05/10, 11/10).
 
 ## ALARMES DA ESTEIRA
 
