@@ -36,6 +36,67 @@
 > porta `bin/sombra.sh --rodar`, assim que o cron das 04:11 soltar a trava. Se a duracao nao couber na
 > manha do export, o escopo cai para os COLABS da 10 com a janela INTEIRA cada um (nunca recorte por
 > DATA: a janela inteira e a protecao HX-BORDA), e o numero vai no RELATO antes de qualquer ato em prod.
+> **PERGUNTA DE LEI, 05:xx, no topo porque a fila SEGUE (PAREI-DE-LEI-NAO-DEVOLVE-TURNO):** a guarda de
+> geometria do dia nasceu no ATO do lote (`chamados/services/passivo_validado.py::_plantar_o_dia`) e **a
+> porta do ADMIN nao migrou**: a validacao humana de UMA pergunta segue plantando o marco mesmo deixando o
+> dia sem par. Nao migrei por MEDIDA, nao por conveniencia -- medir por pergunta deixou `Ran 3859 tests` /
+> `FAILED (failures=21)` (`AssertionError: 0 not greater than 0`), e os 21 contratos dizem a mesma coisa,
+> decidida antes de mim: reparo de 2 marcos PASSA por um estado intermediario de turno aberto. A pergunta e
+> SUA: **o admin que valida UMA pergunta e dono do dia incompleto que ela deixa (fica como hoje), ou a porta
+> dele tambem recusa, com um caminho de "lanco o PAR completo" na tela?** Numeros de hoje: **51** perguntas
+> do lote recusadas em **32** dia-colab de **16** pessoas pela guarda do ATO; **0** recusa pela porta do
+> admin, que nao tem guarda nenhuma. Enquanto nao vier resposta, a guarda fica SO no lote.
+> **A JANELA DO ATO ERA CURTA DEMAIS E A MEDIDA MOSTROU -- 05:4x, e isto CORRIGE o arquivo que o topo
+> acima nomeia:** eu disse que o GATE e o pouso esperavam `logs/fim/lavrar_retrato_folha.*.20261022`
+> (~06:4x). **Nao basta.** O fecho TRANSITIVO de `depende=('processar_cartorio',)` sobre a FONTE UNICA
+> `config/crons.py::todas_as_entradas` tem **28 comandos**, e os do RELOGIO seguem **ESCREVENDO** depois do
+> retrato: 07:02 `reavaliar_ausencias_feriado --apply`, 07:05 `silenciar_chamados_isentos`, 07:10
+> `fechar_becos_disputa`, 07:12 `flip_automatico`, 07:26 `marcar_foto_ausente_retro`, 07:36
+> `lavrar_furo_sem_canal`, 08:30 `esmeril_espelho --apply` -- todos esperando um cartorio **TERMINADO**.
+> O ato leva ~45 min no UNICO nucleo fisico de prod (medido 16,3 min em 4 nucleos de teste), e o maior GAP
+> antes das 08:40 mede **25 min** (08:05->08:30): nao cabe. Entao o portao passa a ser a **ULTIMA entrada
+> diaria de horario fixo da casa**, `pautas_do_esmeril` (**08:40**) -- nenhuma depois dela; dali para frente
+> so correm os `continuo`, que correm sempre. PROVA: `logs/gate10/censo_janela.py` e
+> `logs/gate10/censo_dependentes.py`, os dois lendo `todas_as_entradas()` e nao lista minha.
+> **A ORDEM FICA: (a) pouso do item (6) e (b) o ato, os dois depois do carimbo das 08:40** -- `deploy.sh`
+> reinicia as cascas e mataria um `docker exec` de cron em curso, e o pouso vem antes porque mataria
+> tambem o ato. **POUSO RETIDO** segue trava NOMEADA com portao declarado, nao PAREI.
+> **E o ato ja esta ARMADO, com reversao ANTES e as duas provas que faltavam:** `logs/gate10/lancar.sh`
+> dispara `gate10_condicao1.sh` destacado (LICAO 16/09: processo do Code morre com a sessao e morte no meio
+> do ATO 1 e a meia-lavra que o proprio ato recusa), e o veredito se le no ARQUIVO. Novo no ato: **ATO 0**
+> grava a reversao das DUAS tabelas que ele reescreve antes de qualquer escrita (celula do ATO 1 --
+> que nao tinha foto propria -- e `FechamentoMensal` da 10, porque `recalcular_fechamento` fotografa antes
+> mas so grava o JSON depois) e **PARA se a foto vier vazia**; **PROVA 1b** mede a condicao LITERAL do aval
+> (`derivado_em` >= o corte do ATO 2, com o universo AO LADO), ancorada no CARIMBO porque `NOT NULL`
+> tambem e verdade para derivacao VELHA. Os dois probes novos rodaram na **SOMBRA** antes: 3 TXT da 09,
+> `FechamentoMensal` 607 linhas/31 campos, `DiaPago` 11.501/22 campos, e o contador **608 de 608 = 100,0%**
+> (`logs/gate10_hash09_ensaio.out`, `logs/gate10_contador_ensaio.out`).
+
+**A CAUSA DOS 6 CURADA NA ORIGEM: O REPARO DO PASSIVO JULGA A GEOMETRIA DO DIA, E O JUIZO E DO ATO (22/10 05:xx).**
+LEI-AKITA: origem=chamados/services/passivo_validado.py::_plantar_o_dia (o ATO que planta sem humano por item), testemunha=ponto/turnos.py::turnos_do_colab (lida por materializacao.py::turnos_sem_par), RED=chamados/tests/test_o330_plantio_nao_abre_turno.py, quem-mais-le=a porta do admin NAO migrou (pergunta de lei no topo, com os 21 contratos), juizes novos=0
+- **PREDICADO, nao paridade, e o juizo e do ATO.** Medir por pergunta em `_materializar_uma` deu `Ran 3859` / `FAILED
+  (failures=21)`: 21 contratos plantam o marco mesmo em dia incompleto. Predicado: *turno que o pareador nao fecha NAO
+  AUMENTA* -- "dia impar" reprovaria o `E` de 12x36 com `S` em D+1 (L-085).
+- **MUDOU** (historia em `80e23d14`): `materializacao.py::turnos_sem_par` publicado, raio 2;
+  `passivo_validado.py::_dias_do_par` + `::_plantar_o_dia` medem, plantam o grupo e devolvem o dia INTEIRO se `depois
+  > antes` ou se a Batida nasceu FORA da janela; `recusa.py` +1 regra `ABRE_TURNO`.
+- **RED -> GREEN** 6 casos pela REGRA (L-110), por `reparar(apply=True)`: `E`/`S` avulsa RECUSADA, MORDE o plantio que
+  FECHA turno, MORDE as DUAS PONTAS no MESMO ato, MORDE 12x36 com ponta em D+1, idempotencia -- `logs/o330/red3.log`
+  (`Ran 6` / `OK` / rc 0). **Vizinho** `chamados core`: `Ran 3859` / `OK (skipped=23)` / rc 0 (`logs/o330/viz2.log`),
+  os 21 verdes sem allowlist. **CHEIA** em `80e23d14`: `Ran 11550 tests in 1682.549s` / `OK (skipped=51, expected failures=14)` / rc 0 / 0 FAIL e 0 ERROR (`logs/o330/cheia.log`). `cmp`: __CMP__.
+- **A/B na sombra**, lado escolhido pela ARVORE montada, rollback nos dois: `plantada` 61 -> 14, `recusa:ABRE_TURNO` 0
+  -> 51 (os 4 que faltam para 47 sao `NAO_GERA_BATIDA` 49 -> 45: o carimbo do dia cobre os deles); frota
+  `turnos_abertos` +19.00 -> **-1.00**, `horas_trabalhadas` -9.65 -> **+16.61**, `horas_abono` -11.00 -> **0**,
+  `horas_noturnas` -15.50 -> -2.44; `FechamentoMensal` mudou **0 de 110** nos DOIS lados.
+- **RESPOSTA AO `!`:** dos 6 que perdiam hora/abono sobram **4** e NENHUM perde abono (col516 -1.27 h, col857 -1.02,
+  col814 -0.91, col618 -0.58); nos quatro a `horas_intrajornada_indenizada` cai ~1 h no mesmo ato -- intervalo
+  INDENIZADO virando intervalo REAL. O pior do lado cru (-14.03 h, -9.18 noturnas) desaparece.
+- **RECUSA DEMAIS? MEDIDO** (`logs/o330_recusa_anatomia.out`): 51 perguntas, 32 dia-colab, 16 pessoas; subida do turno
+  sem par 0->1 x16, 0->2 x8, 1->2 x6, 1->3 x2. Dos 32: **22 ISOLADOS**, **10 com vizinho recusado**, desses **4
+  singleton** = par RASGADO pelo agrupamento por dia. Excesso entre **4 e 10**.
+- **INCOMPLETO:** (a) agrupar por TURNO e DESENHO (linha de fila neste commit); a recusa e REVERSIVEL -- so
+  `recusa_motivo`, a pergunta fica no passivo; (b) 0 de 158 perguntas do alvo sao `data_hora`, logo esse ramo nao tem
+  RED; (c) a porta do admin ainda planta em dia pelado (lei no TOPO); (d) o apply da 10 segue em PAREI.
 
 **O ENSAIO CHEIO DOS TRES ATOS FECHOU NA SOMBRA: A CONDICAO (1) MEDE 608 DE 608 E A 09 NAO SE MOVEU (22/10 05:1x).**
 `LEI-AKITA: origem=nenhuma (ENSAIO na sombra, **0 linha de codigo**), testemunha=`ponto/services/fechamento.py::projecoes_vencidas_qs` e `universo_da_competencia`, o `fim:` do proprio `processar_cartorio` e o `hash_sha256`/`atualizado_em` do gravado da 09, RED=n/a (medicao), quem-mais-le=o vigia de `config/crons.py` e a condicao (2) do GATE, juizes novos=**0**.`
