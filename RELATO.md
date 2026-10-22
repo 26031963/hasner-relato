@@ -16,6 +16,17 @@ PAREI: ! O261 e o export da 10 | espera o DP e o Ronald: (a) o TXT da 10 esta BA
 > O MARCADOR ANDOU no mesmo ato: `ORDEM-VIVA-TOPO` saiu de `BO-HE-RECUSAR-LOTE-500` (fechado) para `O261`, que o hook cobrou.
 > SEM COMMIT DE PROPOSITO: `RELATO.md` e `BACKLOG.md` ficam sujos na arvore porque a L-106 nao deixa commit so de docs fora de marco. Eles entram no commit do proximo marco.
 
+## 22/10 18:2x -- MARCO: O JUIZ `pode_fechar` NASCE (aval ~17:2x item 1); ITEM 2 PARADO NA O44; RETRATO (a)(d)(e) MEDIDOS
+
+LEI-AKITA: origem=`core/juizes.py::SEM_JUIZ['chamado'][_C7]`, testemunha=`chamados/models.py::DisputaSupervisao.pode_fechar`, RED=`chamados/tests/test_disputa_fim.py::test_RED_o_juiz_esta_declarado` (vermelho contra `c5b8c7ac`), quem-mais-le=`test_contract_juiz_chamado` (1 -> 0 pergunta sem juiz), juizes novos=1 com o corte (`JUIZ-PODE-FECHAR-NASCE` no CORTES)
+- **Juiz:** registrado `_C7`; a chave `chamado` sai do SEM_JUIZ; diagrama regenerado. Suite `Ran 11583 OK` (701 s, `--parallel 4`), copia `wt-c7j`.
+- **Item (2) NAO pousa:** o C6 lendo a tranca sem excecao cala o "Cobrar este dia" que a O44 manda cobrar -- 1.544 vivas de toque (pergunta no topo). A copia `wt-c7b` guarda a cura e os RED (vermelhos pela razao certa) para quando a resposta vier.
+- **Bug no caminho (LEI-AKITA 6):** o refazer da sombra FALHOU no selo pessoal -- `motivo_fechamento` (C7, `c5b8c7ac`) nasceu fora do inventario. Curado em `bin/sombra_regras_pessoais.py` (ISENTOS, codigo de choices); ensaio refeito 18:15: bloco 76/76, erro 0, carimbo OK. FILA: o pre-push nao cobra campo novo de modelo contra o inventario -- so o refazer da sombra cobra.
+- **RETRATO (a)** relavrado 17:52 pela porta (4 retratos), conferido 17:53: 612 linhas, **0** divergencia gravado x `classificar_export`; os 6 entram, col204 1 dia.
+- **RETRATO (d)** pela celula soberana: col222/col256/col133 tem a geradora entre os 35 virados, `trabalha=False` e seguem `cobrado` com chamado vivo e 4 perguntas vivas cada -> bug da 4a, entra na cura dos 99. col239/col152 fora dos 35 e `trabalha=True` -> cobranca legitima, lista do DP com os mistos. Achado: a geradora do col152 em 12/10 e o vinculo 1229 (inativo; o ativo e o 1438).
+- **RETRATO (e)** pelo `e6_oraculo` (sombra de hoje, comp 10): col255 tem 1 dia divergente, 23/09, dono **BATIDA** (17:51 00:30 06:00) -> lista do admin; col673 **0** dia divergente.
+- **INCOMPLETO:** retrato (b) com RED na `wt-rf` e cura pronta (proximo); instrumento `--parallel 4` na `wt-par` (`df16b0b1`) + o inventario da sombra, em pouso PROPRIO depois deste.
+
 ## 22/10 16:5x -- ESCALA E2: "O VINCULO COBRE A DATA?" TEM UMA COPIA (aval CONTRATOS RESTANTES (2)); EM COMBOIO COM A C7
 
 LEI-AKITA: origem=`ponto/management/commands/gerar_celulas.py::_outro_vinculo_cobre` (predicado de vigencia reescrito em SQL), testemunha=`escala/folgas.py::_cobre`, RED=`ponto/tests/test_e2_uma_copia_so.py` (2 FAIL de AST contra `ec0e071e`; 4 casos pela regra verdes), quem-mais-le=`ponto/portas/celula.py:211` (unico chamador) + o contrato `escala/tests/test_contract_juiz_escala.py`, juizes novos=0
