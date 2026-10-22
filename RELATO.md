@@ -6,6 +6,35 @@
 > O MARCADOR ANDOU no mesmo ato: `ORDEM-VIVA-TOPO` saiu de `BO-HE-RECUSAR-LOTE-500` (fechado) para `O261`, que o hook cobrou.
 > SEM COMMIT DE PROPOSITO: `RELATO.md` e `BACKLOG.md` ficam sujos na arvore porque a L-106 nao deixa commit so de docs fora de marco. Eles entram no commit do proximo marco.
 
+## 22/10 11:3x -- O261: OS +44 DO `fio_morto_com_alvo` SAO 43 RENASCIMENTOS DO ATO DO GATE (chamado FECHADO reaberto sem pergunta) + 1 REJULGAMENTO
+
+0 linha de codigo (MEDIDA), logo sem LEI-AKITA. Quatro sondas READ-ONLY em prod, todas pela funcao real
+`vigia_fio::censo` (`logs/o261/{origem_dos_98,trilha_dos_98,chamado_dos_98,estado_dos_43,porta_dos_43}.py|.out`),
+universo `com_alvo=98` as 11:14 e as 11:28 (igual ao das 10:44), corte = a foto ANTES das 08:38.
+
+| pergunta | numero |
+|---|---|
+| dias com chamado vivo de furo NASCIDO depois das 08:38 | **0 de 98** |
+| lampada (veredito_em) depois das 08:38 | 1 de 98 (celula 29234, `veredito_celula` pelo cartorio) |
+| trilha de celula/pergunta depois das 08:38 | 2 de 98 |
+| chamado `atualizado_em` depois das 08:38 | **43 de 98**, todos `estado_chamado` por `sistema:processar_cartorio`, 08:4x-08:5x |
+| esses 43: transicao | `fechado -> em_analise` 41 + `resolvido -> em_analise` 2, via vazia |
+| na FROTA, mesmo ator e janela | **377 reabertos**, 232 com `perguntas_ressuscitadas` |
+
+**+44 = 43 reaberturas + 1 rejulgamento.** CORRIJO A MINHA 1a LEITURA (11:1x, "0 de 98 nasceram dos 404"): ela
+mediu `criado_em`, e o "emitido" do cartorio conta RENASCIMENTO -- `ChamadoColaborador.abrir` acha o encerrado do
+dia, chama `_renascer_por_premissa_viva` -> `reabrir`, e `cartorio.py::_contar_emissao` soma 1. Os 43 VIERAM do ato. Os 43 sao dias da classe ALVO (resposta de hora VALIDADA e nunca
+plantada); a reabertura (`ChamadoColaborador.reabrir` -> `ressuscitar_perguntas`) nao religa pergunta validada
+com resposta escrita, entao o chamado volta VIVO e o fio fica MORTO. O passivo ja existia: estava atras de
+chamado FECHADO, fora do universo do censo (`status_local__in=VIVOS`). O ato do gate nao criou o passivo; ele
+o tornou VISIVEL, e e o renascimento sem pergunta que o faz. A saida segue a mesma: o plantio da classe ALVO pela porta (`passivo_validado::reparar`).
+**A PERGUNTA QUE FICA (de codigo, nao de lei):** reabrir chamado sem nenhuma pergunta voltando e o escritor que
+fabrica "em analise sem acao" -- e da lista dos cegos do item (1) ou e o fio CERTO (celula acusa => chamado vivo)?
+MEDIDO 11:30 (`logs/o261/os_145.out`): dos **145** reabertos sem pergunta religada, **43 com_alvo + 56 sem_alvo**
+viraram fio morto, 41 nao sao fio morto, 5 ja resolvidos. A reabertura sem fio explica os +44 E os +42 do
+`sem_alvo` (155 -> 197): **99 dias**. Origem candidata: `ponto/services/cartorio.py` (bloco HX-CARTORIO-RESSUSCITA)
+reabre o chamado ANTES de saber se alguma pergunta volta. RED + cura depois do export (aval dele: export primeiro).
+
 ## 22/10 11:01 -- A PRE-CONDICAO DO GATE DA 8069 PASSOU DE INFERIDA A MEDIDA, E ELA EXCLUI O RAMO VIZINHO
 
 O bloco das 10:55 afirmou a origem em `:1881` tendo INFERIDO a pre-condicao `not (_hii_d or _hfi_d)` da contagem
