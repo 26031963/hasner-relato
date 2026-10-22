@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 22/10/2026 03:15:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1202.4 MB). Acoes na janela: **961**.
+**Medido em 22/10/2026 03:20:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1202.5 MB). Acoes na janela: **964**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 03:20:32 | Bash | Read the foto hash function | `cd /home/ronald/saas-hasner && sed -n '55,95p' logs/boinss/diff_rejulgar_sombra.py` |
+| 03:20:25 | Bash | Check clock, sombra cron hour and the motor function used tonight | `cd /home/ronald/saas-hasner && date '+agora %H:%M:%S'; crontab -l \| /bin/grep 'sombra.sh' ; echo '--- a funcao de motor que a noite usou:'; /bin/grep -n '^from\\|^import\\|def \\|hash' logs/boinss/diff_rejulgar_sombra.py \| head -30` |
+| 03:15:03 | Bash | Write the durable DIFF draft for item 4 | `cd /home/ronald/saas-hasner && cat > logs/fio2210/sec_fio_diff.md <<'MD' ## O DIFF DO ITEM 4 NA SOMBRA: O LOTE DA 10 PLANTA 61 BATIDAS EM 22 PESSOAS, NAO TOCA UM CENTAVO DO GRAVADO E DERRUBA O `com_alvo` DE 74 PARA 50 (22/10 03:3x) LEI-AKITA: origem=`chamados/services/passivo_validado.py::reparar` (a porta do lote, chamada pelo comando homologado `materializar_passivo_validado --competencia 2026-1 ...` |
 | 03:13:56 | Bash | Read _trabalhar_o_par regen step | `cd /home/ronald/saas-hasner && sed -n '430,500p' app/chamados/services/passivo_validado.py` |
 | 03:13:48 | Bash | Read the rest of reparar: regen and writes | `cd /home/ronald/saas-hasner && sed -n '349,430p' app/chamados/services/passivo_validado.py` |
 | 03:13:44 | Bash | Read reparar to see what it writes | `cd /home/ronald/saas-hasner && /bin/grep -n 'def reparar' -A 60 app/chamados/services/passivo_validado.py \| head -75` |
