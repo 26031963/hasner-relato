@@ -16,6 +16,15 @@ PAREI: ! O261 e o export da 10 | espera o DP e o Ronald: (a) o TXT da 10 esta BA
 > O MARCADOR ANDOU no mesmo ato: `ORDEM-VIVA-TOPO` saiu de `BO-HE-RECUSAR-LOTE-500` (fechado) para `O261`, que o hook cobrou.
 > SEM COMMIT DE PROPOSITO: `RELATO.md` e `BACKLOG.md` ficam sujos na arvore porque a L-106 nao deixa commit so de docs fora de marco. Eles entram no commit do proximo marco.
 
+## 22/10 19:xx -- MARCO: C7 ITEM 8 -- O C6 LE A TRANCA MENOS O TOQUE DO ADMIN (opcao A), EM COMBOIO COM O RETRATO (b)
+
+LEI-AKITA: origem=`chamados/juizes.py::_pergunta_viva_calc` (o C6 so conhecia a tranca pelo CARIMBO da via) + `chamados/services/competencia_trancada.py::encerrar` (carimbava), testemunha=`ponto/services/fechamento.py::periodo_trancado` (_K7) e a trilha dos 3 toques humanos que ja existem, RED=`chamados/tests/test_c7_red_minimos.py` (7 vermelhos contra `10ecf54b`) + `folha/tests/test_retrato_aviso_de_frescor.py` (3), quem-mais-le=`respostas_sem_veredito`, a vassoura S128, `medir`/`encerrar` da tranca, o "Cobrar este dia" e o selo `test_quem_le_a_tranca_em_producao` (leitor declarado), juizes novos=0
+- **C6:** `dia_da_pergunta_trancado` = tranca viva E nenhum ADMIN tocou o (colab, dia) depois dela (`cobrar_dia_manual` / `veredito_celula` / `desarquivar_chamado` com usuario humano). Memo no REQUEST (o modal ficou no teto).
+- **Nada se escreve:** a tranca nao carimba (L-051); a vassoura S128 nao age sobre chamado encerrado pela tranca (nao foi "resolvido pela realidade"); a disputa fecha pela porta `competencia_trancada`; o "Cobrar este dia" escreve a sua UNICA linha de trilha antes de perguntar se a pergunta foi ao app (O44 caso 1 e caso 4).
+- **Vizinhos:** fixture da O44 com a tranca ANTES do toque (o `setUpTestData` lia o relogio real); 5 caracterizacoes do carimbo invertidas citando o corte; a Pauta do DP pede a lista ao dono (`respostas_sem_veredito(ignorar_tranca=True)`), sai `_resposta_sem_veredito` (L-111).
+- **MEDIDO na sombra antes do pouso** (`logs/sombra/c7b_tranca_lida.py`, 25.879 perguntas, HEAD x copia): vivas em dia trancado **2.010 -> 10** (as 10 de toque humano medidas em prod); **2.000** sairam, TODAS em dia trancado; **0** em competencia aberta; **0** entraram.
+- **RETRATO (b):** a barra mostra a frase do juiz `frescor_dos_retratos` quando o fechamento mudou depois da lavra; em dia segue "atualizado HH:MM" (aval UI-RETRATO). Certificado sozinho sobre `4ab27198` e reaproveitado aqui por comboio: a arvore que pousa e a desta suite.
+
 ## 22/10 18:2x -- MARCO: O JUIZ `pode_fechar` NASCE (aval ~17:2x item 1); ITEM 2 PARADO NA O44; RETRATO (a)(d)(e) MEDIDOS
 
 LEI-AKITA: origem=`core/juizes.py::SEM_JUIZ['chamado'][_C7]`, testemunha=`chamados/models.py::DisputaSupervisao.pode_fechar`, RED=`chamados/tests/test_disputa_fim.py::test_RED_o_juiz_esta_declarado` (vermelho contra `c5b8c7ac`), quem-mais-le=`test_contract_juiz_chamado` (1 -> 0 pergunta sem juiz), juizes novos=1 com o corte (`JUIZ-PODE-FECHAR-NASCE` no CORTES)
