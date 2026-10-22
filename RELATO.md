@@ -1,5 +1,32 @@
 # RELATO — esteira saas-hasner
 
+> **22/10 10:40 -- O CASO DA 8069 ESTA ESCRITO, E ELE DIZ QUE A 8069 NAO E CURA NENHUMA: 83% DO DESCONTO DO
+> ORACULO E DONO BATIDA, PELO JUIZ DO PROPRIO GATE.** `logs/gate10/CASO_8069_20261022.md` (88 linhas), escrito
+> ANTES de codigo (L-110/13), contra o Art.58 par.1, o mandato `TOL=10` dele de 11/08, a L-084 e a L-093.
+> **A MEDICAO.** 18 dia-colab com desconto no oraculo, 3739 min (62.32 h). JOIN por **id+dia** contra a lista do
+> DP de hoje (`logs/dp/batida_da_10_20261022.txt`, dono BATIDA = contagem IMPAR, lei do BUG-144 citada em
+> `e6_oraculo.py:51-54`): **10 dia-colab / 51.65 h / 83% JA estavam na lista do DP**, e so **8 dia-colab / 10.67
+> h** ficam fora. O dinheiro esta em **8 dia-colab em que o DIA tem 3 batidas e o TURNO de que o oraculo calculou
+> tem 2**: 3071 min = **51.18 h**, contra um delta de frota de **51.04 h**. Nas 8 linhas o `min` e exatamente
+> `prev - trab`: o oraculo fechou UM par, mediu o trabalhado so nele e cobrou **todo o resto do previsto** como
+> atraso + saida antecipada.
+> **A RESPOSTA DA REGRA.** Dia de contagem impar **nao tem numero para discutir** (BUG-144) -- falta metade do
+> fato. Esses dia-colab tem dono **BATIDA**, e tinham ANTES de eu olhar. Pela L-099 **nao sao fatia**, e o GATE e
+> literal: *PROIBIDO curar por codigo divergencia de dono CADASTRO/BATIDA*. Logo **o sistema esta CERTO em nao
+> descontar essas 51 h**: descontar seria tirar ~5,7 h de pagamento de cada um de 9 colab(s) por **batida que
+> falta**, nao por trabalho que falta.
+> **O QUE ISSO FAZ COM A OBRA `RETIFICACAO-DA-10-8069-PRIMEIRO`:** o candidato a ESTRUTURA na 8069 e **<= 10.67 h
+> em 8 dia-colab**, nao 51.04 h -- **uma ordem de grandeza** abaixo do que a obra declara, e o maior resto e um
+> unico dia (12x36 29/09, 255 min, contagem PAR, residuo ESTRUTURA pelo juiz). Nao toquei na obra dele; a premissa
+> fica medida e a **ordem e dele**.
+> **FURO NOMEAVEL DO INSTRUMENTO** (lastro, nao fatia): o `oraculo_8069` nunca pergunta a contagem do DIA, so a do
+> turno que recebeu. Duas hipoteses para o 3 x 2, e o CASO **nao escolhe sem medir**: (i) o pareamento entregou
+> SUBCONJUNTO do dia; (ii) a 3a batida e do turno vizinho (12x36 cruza meia-noite). Em qualquer das duas o dono
+> segue BATIDA, porque o juiz le a contagem do DIA. **0 linha de codigo, 0 TXT, 0 gravado.** A pergunta de lei das
+> **27.00 h / 6 colab(s)** da faixa 4-6h segue no topo, intacta.
+> `LEI-AKITA: origem=CASO pela REGRA antes do codigo (L-110/13), testemunha=cond2_r2:176-190 + lista do DP + e6_oraculo.py:51-54, RED=sem codigo (medicao+caso), quem-mais-le=BACKLOG:1108 e :586, juizes novos=0`
+>
+
 > **22/10 10:33 -- A PREMISSA DA ORDEM DA RETIFICACAO NAO SOBREVIVE A FONTE: NA 8069 O SINAL ESTA INVERTIDO, E NAO
 > HA PASSIVO TRABALHISTA NENHUM.** Medido na autoridade do gate (`cond2_20261022_r2.out:114,116,176`), nao na
 > prosa. **8069 e DESCONTO** -- `folha/export.py:379` a nomeia **"HORAS FALTAS PARCIAL"** (atraso + saida
