@@ -1,5 +1,27 @@
 # RELATO — esteira saas-hasner
 
+> **22/10 08:4x -- PERGUNTA DE LEI NO TOPO, com os numeros (NAO e PAREI: a fila segue).** Seu `!` das
+> 07:4x item (3) mandou medir se os 11 colabs com `sem_celula` na janela inteira sao **CADASTRO** (sem
+> vinculo vigente) ou **o gerador `gerar_celulas` que nao rodou**. **Medido em prod: nenhum dos dois.**
+> **OS NUMEROS:** 11 colabs, **330 dias-colab** (30 cada), zero celula na janela; **11 de 11 tem EC com
+> `ativa=True` e `data_fim=None`**, com inicio ANTES da janela -- logo **nao e cadastro**. O gerador
+> RODOU todo dia (`logs/gerar_celulas.log`, cron 05:50: `criadas=0 atualizadas=0 puladas=14953` na
+> janela exata, e `criadas=14829` na janela seguinte) -- logo **nao e corrida perdida**. O que morde e
+> um terceiro: **11 de 11 tem `situacao='afastado'`** (emp2 7, emp3 2, emp4 2), e
+> `ponto/portas/celula.py:476-477` varre `ativa=True, colaborador__situacao='ativo'` -- o gerador
+> decide pelo **CAMPO**, enquanto o seu `!` de **03/10 14:1x** (`SITUACAO-E-LAMPADA`) diz que
+> `situacao` e **LAMPADA com juiz** (`ponto/turnos.py::afastado_hoje`); e `folha/export.py:1132-1136`,
+> que cobra a retencao, decide so por **DATA**. Dois leitores do mesmo predicado, discordando: pela
+> L-099 o dono e **ESTRUTURA**, nao lista do admin. Os 330 dias estao **cobertos**
+> (`cobertura_ausencia_periodo` para folha: **330 de 330**, tipo `afastamento_inss`), e o vigia **ja
+> esta vermelho ha 33 dias**: `ausencia_sem_celula_com_vinculo` = **330**, esperado 0 (era 294 em 19/09).
+> **A PERGUNTA, que eu nao escolho (L-117):** afastado-INSS com EC ativa **deve ter celula** -- e ai o
+> gerador passa a ler `afastado_hoje` --, ou **nao deve** -- e ai o `export.py` passa a ler a mesma
+> lampada e esses 330 dias deixam de reter a folha? **As duas zeram o contador e pagam dinheiro
+> DIFERENTE na comp 10.** Censo inteiro em `logs/censo_retidos/sem_celula_11_dono.out` (so leitura,
+> nada escrito). Enquanto isso a fila segue: item 4 (O261) e o preparo do C7.
+>
+
 > **22/10 08:1x -- `!` NA MESA, ITEM 3 DA SUA ORDEM (o export da 10): O LOTE ENTROU PELA METADE E O
 > QUE FICOU DE FORA SAI NA EXPORTACAO ASSIM.** Nao e PAREI de turno -- a fila segue no item 4 (O261),
 > que nao depende disto; e o item **3** que espera voce.
@@ -20,6 +42,12 @@
 > janela), aplico o lote completo medido e o export sai com a 10 inteira.
 > **O que NAO espera:** o gate das 08:40 dispara igual (os atos dele sao todos na 10 ABERTA, nenhuma
 > porta fecha), o esperador esta destacado (`PID 1577120`, `PPID 1`), e o item 4 (O261 a-d) anda.
+> **ADENDO 08:4x -- MEDIDO pela funcao real do vigia (`chamados/services/vigia_fio.py::censo`), ANTES
+> do gate:** `fio_morto_com_alvo` = **54**, e a abertura por competencia (juiz unico `janela_atual`) e
+> **30 dias / 13 colabs na 10** -- que **congelam no ato do export** --, **23 / 16 na 09** e **1 / 1 na
+> 08**, as duas **EXPORTADAS** (so com seu `!`), e **0 na 11**. Entao a condicao do seu item 4
+> (*"nao sai ate `fio_morto_com_alvo = 0`"*) **nao se fecha por ato meu**: 24 dos 54 estao em
+> competencia exportada. Isso entra na decisao do export -- exportar a 10 agora congela os 30 dela.
 >
 > **22/10 07:4x -- DOIS ITENS DA MINHA LISTA MORRERAM MEDIDOS, e o terceiro mudou de endereco.**
 > LEI-AKITA: origem=nenhuma cura (medi antes de construir);
