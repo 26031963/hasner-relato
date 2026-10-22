@@ -1,5 +1,32 @@
 # RELATO — esteira saas-hasner
 
+> **22/10 ~10:0x -- GATE-EXPORT-10 CONDICAO (2): MEDIDA, NAO VERDE -- e um `!` NA MESA com os numeros
+> (nao e PAREI: a fila segue).** Os TRES atos que o seu aval das 21/10 18:5x pede estao provados.
+> **cartao x TXT = 0** em **230** colaboradores da 10 (`dias_em_aberto=42`). **Os 5 oraculos rodados
+> DEPOIS da lavra** (`lavra_de_prod=OK md5=945cdd90 data_ref_prod=2026-10-22`, 5 arquivos, 5 declarando
+> 10/2026, 0 declarando 09/2026): `rc_oraculos=0`, 10 passadas, **erros v3 = 0** e **ZERO ESCRITA =
+> True** em todas. **Divergencia aberta por dono**: `rc_dono=0`. PROVA:
+> `logs/gate10/PROVA_COND2_20261022.md`, lastro em `logs/gate10/cond2_20261022_r2.out`.
+> **O QUE ELA RESERVA NAO ESTA CUMPRIDO** -- "ESTRUTURA e cura antes do export": **ESTRUTURA 109
+> dia-colab / 26 colab(s)**; **CADASTRO 0**; **BATIDA 13 dia-colab / 10 colab(s)** (a lista do DP, sem
+> nome). Sao **40 pares colab-rubrica, 34 colab(s) de 230** -- por oraculo: 150=**0**, 200b=**10**,
+> 243=**20**, 8069=**9**, an2f=**1**. O **110** do PASSO 4 dedupe para **109**: um dia-colab aparece
+> duas vezes na propria secao do an2f (dia-rubrica), e o **16** para **13** porque tres dia-colab sao
+> vistos por mais de um oraculo. **`gravado` x `v2` sao IDENTICOS linha a linha nos cinco** (10/10,
+> 20/20, 9/9, 1/1, 0/0): a divergencia e **sistema x leitura da REGRA**, nao gravado x motor.
+> **DIRECAO mista, e e dinheiro nos dois sentidos**: em 243 o **sistema paga ACIMA** da regra em
+> **20/20** (liq e bruto) e no FT da 200b em **9 de 10**; em 8069 a **REGRA paga acima** em **9/9** --
+> ali o sistema paga **ABAIXO**. **FURO DECLARADO**: "aberta por dono" vale para **33 dos 40** pares --
+> 7 linhas (todas do 243) sao divergencia de TOTAL sem dia nomeado e **5 dos 34 colabs ficam sem dono**;
+> e furo do **INSTRUMENTO** (lastro), nao do sistema. **O `!` das 08:5x NAO cobre isto** (LEI-AKITA 9):
+> o escopo literal dele era o residuo de **BATIDA** do lote O330 -- 8 colabs / 40 casos nao plantados --
+> e o "40" bate com os 40 pares daqui por **acidente de numero**; universos diferentes.
+> **`!` NA MESA** (`EXPORT-DA-10-COM-109-DIA-COLAB-DE-ESTRUTURA`, trava a fila 1): **o export da 10 sai
+> assim e a ESTRUTURA vira retificacao pela porta depois, ou espera a cura?** Enquanto nao chega, a fila
+> SEGUE pela cura de **UMA** rubrica -- **243** (75d/13c, 16 dos 20 em 12x36) -- e pela L-110/13 ela
+> comeca ESCREVENDO O CASO contra o texto da regra: o oraculo e **instrumento**, nao autoridade.
+>
+
 > **22/10 ~09:4x -- VEREDITO DA BATERIA PELA REGRA (raia v3), no recorte do seu aval das ~09:3x --
 > e 5 PERGUNTAS DE LEI COM OS NUMEROS (nao e PAREI: a fila segue).** O recorte que voce fechou -- so os
 > casos que passam pela CCT **cadastrada pela porta real** (`core/regua_cct.py::regua_para` /
@@ -844,6 +871,32 @@ e o agente da raia B entregou o relatorio no mesmo minuto. `TaskStop` no id dele
 A LICAO que fica (sua regra de sempre, e ela pegou de novo): **espera se le no ARQUIVO, nao no rotulo**. O rotulo
 "Waiting for suite_certifica.log to start" sobreviveu ao fato por 2 h porque ninguem leu o arquivo -- que estava
 pronto. PROVA: as quatro medidas acima, todas de 21:2x, e `ls -l logs/raiaB/suite_certifica.log` (176478 bytes, 21:04).
+
+## 10:0x -- MARCO: BO-HE-RECUSAR-LOTE-500 FECHADO (cura + guarda de classe). Lei do sitio: L-097
+
+`LEI-AKITA: origem=ponto/portas/he.py (o @transaction.atomic de :110 estava na funcao errada), testemunha=a propria porta decidir_he (transacao real em volta do select_for_update de :167), RED=ponto/tests/test_atomicidade_porta_he.py 4/4 ERROR com TransactionManagementError antes e OK depois (TransactionTestCase), quem-mais-le=censo AST de todo select_for_update de producao (16 sitios, 9 arquivos, 1 violador), juizes novos=0`
+
+**O QUE MUDOU.** `ponto/portas/he.py`: o decorador sai de `_exigir_motivo` -- que nao abre transacao
+nenhuma -- e volta para `decidir_he`, com lapide no sitio. `he.py::autorizar_em_lote`: a prosa que o
+chamava "mais restritivo que o irmao" era verdade **so porque o irmao nao tinha transacao NENHUMA**,
+e a frase comparativa fez o defeito parecer desenho. `ponto/tests/test_atomicidade_porta_he.py`
+(novo): 4 testes em `TransactionTestCase`, com o seu RED literal (chave `erros` vazia, `recusados` =
+1) e um caso que MORDE a idempotencia do dia fora de transacao.
+
+**OS NUMEROS.** 13 dias no ar sem transacao (`041fd2ac`, 09/10 03:58:48). **2** x 500 medidos em
+`/recusar-lote/` (22/10 07:37:57) e **0** tentativa em `/decidir/` -- a view de UM dia esta quebrada
+no CODIGO pelo mesmo caminho, e isso e estrutura, nao medida. **11.550** testes verdes nao viram
+nada: `TestCase` roda dentro de transacao e ali o `select_for_update` nunca reclama.
+
+**PROVA.** Suite CHEIA na arvore que pousa (`/home/ronald/wt-he`): `Ran 11566 tests in 1760.113s`,
+`OK (skipped=51, expected failures=14)`, rc=**0** (`logs/he_suite_cheia.out`) = 11.562 da base + os 4
+novos. Base `8359ce6e`, deriva do main = `CLAUDE.md` + `RELATO.md`, **0 `.py`**; produto por `cmp`.
+Varredor AST: `total=16 sob_atomic=16 arquivos=9 VIOLACAO=0`; instrumento pousa so depois (L-105).
+
+**INCOMPLETO.** (1) deploy espera o ato do gate: `sombra.sh --conferir` **rc=1** porque o `--refazer`
+do PASSO 1 zerou `SOMBRA_BLOCO` e o `--bloco` e o PASSO 5 -- nunca `--sem-sombra` em porta de
+dinheiro; (2) o smoke de 1 decisao pela tela e SEU (POST em prod nao e meu), em
+`SMOKE-DA-DECISAO-DE-HE-DEPOIS-DA-CURA` (AVAIS = 4); (3) recontagem dos 500 depois do deploy.
 
 ## 09:2x -- GATE-EXPORT-10 condicao (1): 608 de 608
 
