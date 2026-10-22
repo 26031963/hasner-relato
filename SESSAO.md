@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 22/10/2026 11:55:02.** Transcript: `6a1437b4-fa68-4fb8-ba22-cffc0db8ee01.jsonl` (2.1 MB). Acoes na janela: **116**.
+**Medido em 22/10/2026 12:00:32.** Transcript: `6a1437b4-fa68-4fb8-ba22-cffc0db8ee01.jsonl` (2.2 MB). Acoes na janela: **121**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 11:58:25 | Bash | Update PAREI, BO-FERIADO limits, GATE cell, PROMPTS row | `/bin/grep -c "^\| O140 " docs/BACKLOG.md; python3 - <<'EOF' p='docs/RELATO.md' L=open(p).read().split('\n') assert L[2].startswith('PAREI: ! O261 e o export da 10') L[2]=('PAREI: ! O261 e o export da 10, as tres travas DELE juntas \| espera Ronald: ' '(a) o TXT da 10 esta BARRADO pela porta -- 184 dias de HE acima do limite SEM decisao (emp2 169 / emp3 12 / emp4 3; 58 colabs; ' '7.467 min = 124,45 ...` |
+| 11:58:04 | Bash | Read pergunta de lei 8 on the 6 writers | `sed -n 1888,1893p docs/RELATO.md \| cut -c1-1500` |
+| 11:58:01 | Bash | Find item (1) closure evidence for 6 sem_lampada | `/bin/grep -n "sem_lampada=6" docs/*.md \| head -5 \| cut -c1-400; /bin/grep -n "excluidos por lei\\|4 excluidos" docs/RELATO*.md docs/CORTES.md \| head -5 \| cut -c1-300` |
+| 11:56:52 | Bash | Cross vigia comp10 com_alvo colabs with porta alvo | `cat > /home/ronald/saas-hasner/logs/o261/comp10_alvo_x_residuo.py <<'EOF' # READ-ONLY: comp 10 -- colabs com dia com_alvo no VIGIA x alvo da PORTA (reparar dry, SEM recorte de colab). from collections import Counter from django.db import connection assert connection.settings_dict['NAME'] == 'saas_hasner' import chamados.services.passivo_validado as S from chamados.services.vigia_fio import censo,  ...` |
+| 11:56:40 | Bash | Read residuo sonda body to reuse interception | `cd /home/ronald/saas-hasner && sed -n 12,60p logs/dp/dias_do_residuo.py` |
 | 11:54:06 | Bash | Rewrite top PAREI naming O261 and test hook | `python3 - <<'EOF' p='docs/RELATO.md' L=open(p).read().split('\n') assert L[2].startswith('PAREI: ! export-da-10') velho=L[2] L[2]=('PAREI: ! O261 e o export da 10, as tres travas DELE juntas \| espera Ronald: ' '(a) o TXT da 10 esta BARRADO pela porta -- 184 dias de HE acima do limite SEM decisao (emp2 169 / emp3 12 / emp4 3; 58 colabs; ' '7.467 min = 124,45 h; lista sem nome `logs/gate10/lista_he ...` |
 | 11:53:53 | Bash | Read PAREI-da-fila logic | `cd /home/ronald/saas-hasner && sed -n 392,440p bin/hook_stop_fila1.py` |
 | 11:53:51 | Bash | Read hook PAREI parsing | `cd /home/ronald/saas-hasner && grep -n "PAREI" bin/hook_stop_fila1.py \| head -30` |
