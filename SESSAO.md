@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 22/10/2026 05:13:13.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1208.7 MB). Acoes na janela: **1186**.
+**Medido em 22/10/2026 05:18:22.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1208.8 MB). Acoes na janela: **1189**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 05:14:57 | Bash | Write the refusal anatomy probe | `cd /home/ronald/saas-hasner && cat > logs/sombra/o330_recusa_anatomia.py <<'PYEOF' # O330 -- ANATOMIA DAS RECUSAS `ABRE_TURNO`: a guarda recusa DEMAIS? # # O A/B mediu que o lado COM cura planta 0 par que cruza a meia-noite, onde o lado SEM cura plantava # 4 pares (8 marcos). Duas causas sao possiveis e elas pedem CURAS DIFERENTES, entao nao se escolhe # por leitura: # (A) o par foi julgado JUNTO  ...` |
+| 05:14:21 | Bash | Read the A/B script header | `cd /home/ronald/saas-hasner && sed -n '1,60p' logs/sombra/o330_cura_diff.py` |
+| 05:13:22 | Bash | Read the with-cure side of the A/B | `cd /home/ronald/saas-hasner && /bin/grep -vE "best-effort falhou\|^NoneType" logs/o330_cura_com.out \| sed -n '1,60p'` |
 | 05:12:46 | Bash | Wait for the A/B to finish | `cd /home/ronald/saas-hasner && for i in $(seq 1 40); do if /bin/grep -q "FIM_AB" logs/o330/ab.out 2>/dev/null; then echo "AB PRONTO"; break; fi; read -t 30 _ < /dev/zero \|\| true; done; tail -4 logs/o330/ab.out; echo "=== cheia:"; tail -c 120 logs/o330/cheia.log 2>/dev/null \| tr -d '\n'; echo; date '+%H:%M:%S'` |
 | 05:12:24 | Bash | Read the numeric part of the no-cure side | `cd /home/ronald/saas-hasner && /bin/grep -vE "best-effort falhou\|^NoneType" logs/o330_cura_sem.out \| sed -n '1,80p'` |
 | 05:12:19 | Bash | Read the no-cure side of the A/B | `cd /home/ronald/saas-hasner && cat logs/o330_cura_sem.out \| sed -E 's/colab=[^ ]*/colab=<masc>/g' \| head -70` |
