@@ -5,8 +5,33 @@
 > expected failures=14)` + control-plane `Ran 22 tests / OK`), com a cura do INSS no ar desde 02:36 e as
 > 123 celulas da 10 rejulgadas pela porta as 02:39. **Item 3 FECHADO** as 02:52: o Retrato que o DP abre
 > as 07h e de HOJE (8 retratos gravados; a 09 exportada intacta por hash). **Item 4 em curso**: o DIFF do
-> lote na sombra, recortado na competencia 10. Ordem anterior (push das 01:06, `a127492a7a`, bateria de
+> lote na sombra, recortado na competencia 10. **Item 6 CERTIFICADO e com POUSO RETIDO na janela de
+> auth** (`api/views.py` e sitio declarado; 23:20-06:00) -- pousa depois das 06:00, secao abaixo. Ordem anterior (push das 01:06, `a127492a7a`, bateria de
 > 131 casos pela REGRA, corrente de 21/10 nascida vazia) segue nas secoes abaixo.
+
+**ITEM (6) DO SEU AVAL DAS 23:3x -- O ATESTADO QUE CHEGOU PELA METADE PARA DE VIRAR AUSENCIA (22/10 03:2x). CERTIFICADO; POUSO RETIDO NA JANELA DE AUTH.**
+LEI-AKITA: origem=`api/corpo_recebido.py::corpo_chegou_inteiro`, chamado nas DUAS portas de ausencia da api (`api/views.py::api_ausencias`
+e `::api_ausencia_documento`), testemunha=`CONTENT_LENGTH` declarado x os bytes que o `LimitedStream` entregou (`_pos`) -- as duas pontas que JA
+existem, RED=`api/tests/test_bo_corpo_truncado.py`, quem-mais-le=censo fechado: as 2 rotas de `api/urls.py` (`urls_core.py` nenhuma),
+juizes novos=`corpo_chegou_inteiro` (corte: seu aval 18/10 18:1x item 2).
+- O DANO MEDIDO desmentiu a minha prosa, e corrigi a frase que o RED IMPRIME: o `MultiPartParser` **nao levanta nada** no corpo cortado -- DESCARTA
+  o arquivo e deixa os campos passarem. A ausencia nascia **SEM anexo nenhum**, e nada no banco o denunciava; a 2a tentativa do colaborador batia na
+  `uniq_ausencia_viva_por_tipo_e_dia` e ouvia *"Ja existe Atestado medico em DD/MM"* -- a casa culpava ele pelo engano dela. Agora: *"NADA foi salvo"*.
+- TRI-ESTADO com `is False`, nunca `not`: `None` = "nao ha como saber" e **nao barra nada**. 5 bordas MEDIDAS, uma por ramo -- juiz antes do parse
+  (corpo INTEIRO tem `_pos=0 < limit`: por `_pos` sozinho ele RECUSARIA pedido inteiro), zero byte, sem `CONTENT_LENGTH`, GET, JSON (o DRF ja recusa).
+  A colisao que teria matado a guarda em silencio: no `Request` do DRF `_stream` **E** o WSGIRequest e nao tem `_pos` -- o juiz desce para `_request`.
+PROVA: RED sem a cura (copia do HEAD, arvore viva intocada) `FAILED (failures=2)` de `Ran 3`, imprimindo `anexo=False bytes=None` de dentro da porta
+real · com a cura, os 2 modulos nomeados `Ran 12 OK` e o logger diz `post_recusado_corpo_incompleto declarado=4394 entregue=2197` · label `api`
+inteiro `Ran 432 OK` · ruff verde · o vizinho que ENUMERA os codigos desta porta re-rodado pelo predicado dele por AST: 5/5 · commit `0000822a` na
+raia `bo-corpo-truncado` · arvore de certificacao `36ecc78e` (= main `e9ee2aee` + raia), suite CHEIA em curso.
+POUSO RETIDO -- trava NOMEADA, portao DECLARADO; nao e PAREI e nao devolve turno: `app/api/views.py` esta na lista `bin/auth_sitios.txt` e sao 03:2x,
+dentro da faixa 23:20-06:00 da ACESSO-NUNCA-EM-LOTE item 4. `bin/janela_auth.sh` responde OK agora **so porque a mudanca ainda nao esta na arvore do
+main**: mergear para colher esse OK seria ler a cegueira da guarda como permissao. Pousa depois das 06:00, re-certificando contra o main daquela hora
+(L-117); a travessia por ato (`SEM_JANELA_AUTH_MOTIVO`) e `!` seu, e eu nao a uso.
+COMBOIO (L-117): **roda sozinha** -- nenhuma outra raia esta verde-e-pronta (`raia-pdf` PROIBIDO mergear, `o275` retida em pergunta de lei, `cert-ast`
+e instrumento e pousa proprio pela L-105).
+INCOMPLETO: `ponto/views.py:2339` e `:2450` criam ausencia com corpo de request e **nao** estao curados -- fora do universo literal do aval ("portas
+de ausencia da **api**"). Censo feito, nao ampliado.
 
 **ITEM (3) DO SEU AVAL DAS 23:3x -- O BLOCO DE HOJE NAO TEM A CURA DENTRO, E A MEDIDA DIZ POR QUE (22/10 01:4x).**
 - O `--bloco` carimbado e **22/10 00:38** (`SOMBRA_COMANDOS=76`, completa, OK) e o deploy da cura entrou em
