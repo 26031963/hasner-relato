@@ -14,6 +14,15 @@ PAREI: ! O261 e o export da 10 | espera o DP e o Ronald: (a) o TXT da 10 esta BA
 > O MARCADOR ANDOU no mesmo ato: `ORDEM-VIVA-TOPO` saiu de `BO-HE-RECUSAR-LOTE-500` (fechado) para `O261`, que o hook cobrou.
 > SEM COMMIT DE PROPOSITO: `RELATO.md` e `BACKLOG.md` ficam sujos na arvore porque a L-106 nao deixa commit so de docs fora de marco. Eles entram no commit do proximo marco.
 
+## 22/10 16:5x -- ESCALA E2: "O VINCULO COBRE A DATA?" TEM UMA COPIA (aval CONTRATOS RESTANTES (2)); EM COMBOIO COM A C7
+
+LEI-AKITA: origem=`ponto/management/commands/gerar_celulas.py::_outro_vinculo_cobre` (predicado de vigencia reescrito em SQL), testemunha=`escala/folgas.py::_cobre`, RED=`ponto/tests/test_e2_uma_copia_so.py` (2 FAIL de AST contra `ec0e071e`; 4 casos pela regra verdes), quem-mais-le=`ponto/portas/celula.py:211` (unico chamador) + o contrato `escala/tests/test_contract_juiz_escala.py`, juizes novos=0
+- **Mudou:** `_outro_vinculo_cobre` chama `_cobre` sobre os outros vinculos do colaborador; sai o `from django.db import models` (morto). `core/juizes.py::SEM_JUIZ['escala'][_E2]` passa a dizer "uma copia; falta so a frase".
+- **Regra escrita antes do codigo:** vigencia fechada nas duas pontas, FIM nulo aberto (`data_inicio` e NOT NULL -- a 1a fixture assumiu o contrario e deu 2 ERROR de banco, nao de lei).
+- **IMPACTO (L-110, 1x na sombra, `logs/sombra/e2_impacto_cobre.py`):** 1.275 vinculos, 812 colabs, 39.463 pares vinculo x dia da competencia corrente das 4 empresas: **0** divergencia.
+- **Comboio (L-117 de pista):** raias disjuntas em arquivo de codigo; a cura entrou na `wt-c7` por copia de arquivo (`gerar_celulas.py` da `wt-c7` conferido igual ao HEAD antes). UMA suite.
+- **A 1a suite da C7** (`Ran 11577`) deu `FAILED (failures=1, errors=1)`, os dois meus: allowlist vazia virou `{}` (dict) e o teste novo lia o relogio sem congelar. Curados (`set()`, `freeze_time` nas 9 classes). Suite do comboio correndo.
+
 ## 22/10 16:2x -- C7 LOTE L0 + SITIOS: A DISPUTA FECHA POR UM JUIZ (`pode_fechar`), NA `wt-c7`, SUITE CORRENDO
 
 LEI-AKITA: origem=`chamados/models.py::DisputaSupervisao.fechar` (porta) + 11 sitios que decidiam fechamento por outro juiz, testemunha=`DisputaSupervisao.pode_fechar` (C6 `fio_vivo` + `respostas_sem_veredito`), RED=`chamados/tests/test_c7_red_minimos.py` (20 vermelhos contra `ec0e071e`), quem-mais-le=AST itens 10/11 (0 sitio na copia, 8+2 no HEAD) + tripwire de escritor de `fechada_em`/`motivo_fechamento`, juizes novos=0 (`pode_fechar` E a pergunta do C7, sem registro em `core/juizes.py` ate a frase)
