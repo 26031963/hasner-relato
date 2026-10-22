@@ -6,6 +6,32 @@ PAREI: ! ponto-seguro-e-reinicio-da-sessao (ordem dele 22/10 ~10:4x, literal: *"
 > O MARCADOR ANDOU no mesmo ato: `ORDEM-VIVA-TOPO` saiu de `BO-HE-RECUSAR-LOTE-500` (fechado) para `O261`, que o hook cobrou.
 > SEM COMMIT DE PROPOSITO: `RELATO.md` e `BACKLOG.md` ficam sujos na arvore porque a L-106 nao deixa commit so de docs fora de marco. Eles entram no commit do proximo marco.
 
+## 22/10 10:55 -- A ORIGEM DAS 4,25 h DE ESTRUTURA DA 8069, LIDA NO CODIGO: O GATE E MAIS LARGO QUE O SEU FUNDAMENTO
+
+LEI-AKITA: origem=`ponto/motor_calculo_v2.py:1881` (LEITURA, zona inviolavel -- 0 linha de codigo), testemunha=o
+TXT da 10 (`r2:176-177`) e os dois dias de col79, RED=nao se escreve (predicado, so dele), quem-mais-le=3
+chamadores de `entrada_fora_do_inicio`, juizes novos=0.
+
+**col79 29/09: 255 min (4,25 h)** e o unico dia-colab de dono ESTRUTURA com numero grande na 8069. Par FECHADO,
+entrada 254 min DEPOIS do marco, saida 1 min ANTES -- UMA ponta longe, nao duas: pela L-084 (`and`,
+`:1697-1712`) o atraso e REAL. O instrumento desconta; o sistema afirma 0.
+
+ORIGEM: `:1881` `elif entrada_fora_do_inicio(diff) and not (_hii_d or _hfi_d): prevista_entrada = None`, com
+`ENTRADA_FORA_DO_INICIO_MIN = 180` (`escala/regua_defesa.py:370`). PROVA sem motor: os dois dias de col79 so
+diferem na distancia -- diff=254 >= 180 -> **0**; diff=10 -> **9 min**, que e o total dele no TXT (0,15 h).
+
+PERGUNTA (nao devolve turno): o gate esta DECLARADO e os 2 casos que o fundamentam estao MEDIDOS no sitio
+(batida EM CIMA do marco de SAIDA; sem ele, +23,59 h de atraso falso em 2 pessoas) -- mas col79 29/09 nao e esse
+caso: saida cumprindo o marco, 465 min de 720. Dia com par fechado cuja SAIDA cumpriu o marco tem a entrada como
+cabeca do turno por eliminacao: o gate dos 180 devia ceder nele? PREDICADO em `motor_calculo_v2.py`, so dele.
+Numero: **+4,25 h em 1 colab** (reduz pagamento; nao e passivo, nao trava o export).
+
+CORRIJO O MEU CASO DAS 10:40: a propriedade 3 (`dia IMPAR nunca gera desconto no sistema`) **nao se afirma** --
+a BUG-144 tira a E solta, nao o dia. `col99` (+415 min, entrada ADIANTADA, fora do gate) e `col112 13/10`
+(nd=4/nt=3, instrumento derrubou batida) viram DEVIDOS na secao 7 de `logs/gate10/CASO_8069_20261022.md` (127
+linhas, 0 instante/nome/CPF). Defensavel: **"nao ha ESTRUTURA alem das 4,25 h"**, nunca "o sistema esta certo".
+0 codigo, 0 TXT, 0 gravado; nada novo aberto.
+
 ## 22/10 10:4x -- A LISTA DO DP: os 8 colabs / 40 casos do residuo da 10, COM O DIA (`!` de 08:5x cumprido)
 
 O `!` dele pedia **`colXXX, dia, motivo`**, e o `dia` nao estava em lastro nenhum -- nem nos dois CONTA,
