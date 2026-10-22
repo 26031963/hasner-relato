@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 21/10/2026 21:42:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1185.0 MB). Acoes na janela: **260**.
+**Medido em 21/10/2026 21:47:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1185.0 MB). Acoes na janela: **261**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 21:45:23 | Bash | Dry-run the anchors on the comboio tree and check the live crontab | `cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && git show comboio-20261021:app/config/crons.py > $S/crons_comboio.py && python3 - <<'PY' s=open('/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/crons_comboio.py').read() A="VIZINHO_SOMBRA = '05:00' # o proximo cron fixo REAL ...` |
 | 21:40:15 | Bash | Draft the works row for the lote | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && cat > $S/backlog_row_o261b.txt <<'TXT' \| O261-b \| **LOTE DO PASSIVO ABSOLVIDO POR IDADE** (complemento da O261 por ordem literal dele, 21/10 21:3x: *"o lote nasce depois do export da 10, como complemento da O261"*). O DEFEITO, MEDIDO na sombra em 21/10 (`logs/o261/passivo_idade_2110.txt`): **3.923* ...` |
 | 21:39:46 | Bash | Locate the O261 works row | `/bin/grep -n '^\| O261' docs/BACKLOG.md \| cut -c1-300` |
 | 21:39:38 | Bash | Capture the red gate evidence before the cure | `cd /home/ronald/saas-hasner && (bash bin/crons.sh check > logs/comboio2110/crons_check_red.log 2>&1; echo "rc=$?" >> logs/comboio2110/crons_check_red.log); tail -8 logs/comboio2110/crons_check_red.log` |
