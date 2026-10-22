@@ -6,10 +6,17 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 22/10/2026 05:50:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1210.5 MB). Acoes na janela: **1266**.
+**Medido em 22/10/2026 05:55:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1210.6 MB). Acoes na janela: **1273**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 05:51:47 | Bash | Read the pending-decisions generator | `cd /home/ronald/saas-hasner && /bin/sed -n '1,60p' bin/gerar_avais.py; echo ...; /bin/sed -n '94,130p' bin/gerar_avais.py` |
+| 05:51:43 | Bash | Inspect the canonical writer for the pending-decisions file | `cd /home/ronald/saas-hasner && /bin/grep -nE "^def \|add_argument\|--escrever\|--novo\|--responder" bin/gerar_avais.py \| head -30` |
+| 05:51:07 | Bash | Read the prepared gate runner script | `SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; /bin/sed -n '1,120p' $SP/gate10_condicao1.sh` |
+| 05:51:03 | Bash | Inspect the prepared prod hash probe for the gate | `SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; ls -la $SP/gate10* $SP/*gate10* 2>/dev/null; echo "=== hash09:"; /bin/sed -n '1,40p' $SP/gate10_hash09.py 2>/dev/null` |
+| 05:50:57 | Bash | List the prepared gate scripts in the scratchpad | `SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; ls -la $SP \| /bin/grep -iE "gate\|export10\|ato" \| tail -20` |
+| 05:50:50 | Bash | Check push progress and lock holder | `cd /home/ronald/saas-hasner && tail -6 logs/o330/push.log 2>/dev/null; echo "--- trava:"; bash bin/trava_teste.sh --quem; date +%H:%M:%S` |
+| 05:50:35 | Bash | Re-read the dry-run section for the three gate acts | `cd /home/ronald/saas-hasner && ls -la logs/ensaio2210/ 2>/dev/null \| tail -12; echo "=== o que a secao do RELATO diz do ensaio:"; python3 - <<'PY' import io s=io.open('app/docs/RELATO.md',encoding='utf-8').read() i=s.find('O ENSAIO CHEIO DOS TRES ATOS') print(s[i:i+2600]) PY` |
 | 05:50:25 | Bash | Check which parallel read items already have lastro | `cd /home/ronald/saas-hasner && for d in censo_retidos dp_atestado perguntas_idade fio2210 retrato2210; do echo "=== logs/$d:"; ls -la logs/$d 2>/dev/null \| tail -5; done; date +%H:%M:%S` |
 | 05:50:04 | Bash | Read the morning chain order from the cron docs | `cd /home/ronald/saas-hasner && /bin/grep -nE "corrente\|logs/fim\|encadead" app/docs/CRONS.md \| head -12; echo "=== ordem da corrente:"; python3 - <<'PY' import io,re s=io.open('app/docs/CRONS.md',encoding='utf-8').read() i=s.lower().find('corrente') print(s[i-200:i+1800]) PY` |
 | 05:49:42 | Bash | List the open backlog rows to pick the next item | `cd /home/ronald/saas-hasner && python3 - <<'PY' import io,re s=io.open('app/docs/BACKLOG.md',encoding='utf-8').read().split('\n') FECH=re.compile(r'\*\*(FECHADA\|FECHADO\|NO AR\|no ar)\b\|~~',re.I) PARA=re.compile(r'espera o `?!`?\|congelad\|fila 2\|REGISTRADA, NAO CONSTRUIR\|registrada ',re.I) n=0 for l in s: if not l.startswith('\| ') or l.startswith('\| id') or set(l.strip('\| '))<=set('- :'):  ...` |

@@ -5,7 +5,7 @@ a raspagem usa a lista de nomes do banco como autoridade, nunca regex adivinhada
 `colNNN`/`ecNNN` ficam, porque nao identificam ninguem fora desta casa. Obra FEITA sai desta
 lista — ela e o que esta EM PE._
 
-**322 obras abertas.**
+**325 obras abertas.**
 
 | ID | obra | estado |
 |---|---|---|
@@ -331,3 +331,6 @@ lista — ela e o que esta EM PE._
 | **O322** | AFASTADO NAO SE COBRA | espera corte |
 | **O323** | O PARAMETRO QUE MUDA DINHEIRO E NAO TINHA TELA | espera `!` |
 | **O324** | O PLACAR DO EVAL CONTA FALHA DO PROPRIO JUIZ COMO DEFEITO DO MEDIDO. | FILA 2 -- INSTRUMENTO, pousa separado (L |
+| **O325** | A COMPETENCIA 09 TEM 601 DE 607 FECHAMENTOS VENCIDOS E NINGUEM OS RE-DERIVA. | FILA 1 -- dono **ESTRUTURA** (L-099), fa |
+| **O326** | `PerguntaDisputa` NASCE SEM CARIMBO, ENTAO TODO CENSO DELA E PISO. | FILA 2 -- INSTRUMENTO, pousa separado (L |
+| **O327** | O ORACULO DA 10 NAO JULGA 107 DE 608 E ESSA FALHA NAO TEM DONO. | espera aval |

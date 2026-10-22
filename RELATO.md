@@ -71,6 +71,23 @@
 > tambem e verdade para derivacao VELHA. Os dois probes novos rodaram na **SOMBRA** antes: 3 TXT da 09,
 > `FechamentoMensal` 607 linhas/31 campos, `DiaPago` 11.501/22 campos, e o contador **608 de 608 = 100,0%**
 > (`logs/gate10_hash09_ensaio.out`, `logs/gate10_contador_ensaio.out`).
+> **05:5x -- A ORDEM SE PARTE EM DOIS PORTOES, e isto PRECISA a minha propria linha de 05:4x:** ela disse
+> "os dois depois do carimbo das 08:40", e sao **portoes diferentes**. O **ATO** espera as 08:40, porque 28
+> comandos dependentes do cartorio escrevem ate as 08:30. O **POUSO** nao: o portao dele e so **janela de auth
+> aberta** (`api/views.py` e sitio declarado; >= 06:00) **mais `logs/crons_em_curso/` VAZIO** -- o que o deploy
+> mata e `docker exec` em curso, e as 05:51 a pasta estava vazia. Entao o pouso cabe no vao **06:00-06:20**
+> (antes do `reconciliar_grade` das 06:20), se a suite cheia estiver VERDE ate la; se nao, ele desce para depois
+> das 08:40, junto. Suite da arvore de certificacao rodando desde **05:39:44** (`bin/trava_teste.sh --quem`:
+> `suite:1286452`), veredito por ARQUIVO em `logs/bo2/suite_cert6.log`.
+> **TRES LINHAS DE FILA REGISTRADAS** no bloco OBRAS (L-106, entram no commit do marco): **O325** -- `FechamentoMensal`
+> da 09 com `derivado_em IS NULL` = **601 de 607** e ninguem os re-deriva (dono ESTRUTURA, L-099); **O326** --
+> `PerguntaDisputa` (`chamados/models.py:1423-2143`) nasce **sem carimbo**, entao censo dela e PISO; **O327** -- o
+> oraculo da 10 nao julga **107 de 608** (`lavratura falhou ... 11 campo(s) de dia sem dono declarado`,
+> `logs/gate10_full.out` 05:03), cobertura **501 de 608**, e essa falha **nao tem dono** pela L-099 porque o
+> medidor nao chega a julgar -- ela entra no item (2) do GATE como COBERTURA publicada, nunca como verde.
+> **SOMBRA VERDE AGORA** (`bin/sombra.sh --conferir`: `dia=20261022 status=OK tipo=completa diverge=0 erros=0`),
+> logo o deploy de hoje **nao precisa de `--sem-sombra`** -- o item (3) do aval das 23:3x esta cumprido para o
+> pouso de hoje.
 
 **A CAUSA DOS 6 CURADA NA ORIGEM: O REPARO DO PASSIVO JULGA A GEOMETRIA DO DIA, E O JUIZO E DO ATO (22/10 05:xx).**
 LEI-AKITA: origem=chamados/services/passivo_validado.py::_plantar_o_dia (o ATO que planta sem humano por item), testemunha=ponto/turnos.py::turnos_do_colab (lida por materializacao.py::turnos_sem_par), RED=chamados/tests/test_o330_plantio_nao_abre_turno.py, quem-mais-le=a porta do admin NAO migrou (pergunta de lei no topo, com os 21 contratos), juizes novos=0
