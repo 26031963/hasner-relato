@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 22/10/2026 18:15:15.** Transcript: `a7fb7a66-28ef-4b66-8c48-a4aa9df4fce4.jsonl` (4.6 MB). Acoes na janela: **251**.
+**Medido em 22/10/2026 18:20:34.** Transcript: `a7fb7a66-28ef-4b66-8c48-a4aa9df4fce4.jsonl` (4.6 MB). Acoes na janela: **253**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 18:15:26 | Bash |  | `cd /home/ronald/saas-hasner; cat > logs/sombra/e6_dono_255_673.py <<'EOF' # RETRATO (e): de quem e a divergencia do col255 e do col673 na 10? Funcao REAL: e6_oraculo (motor x tela, com # dono_da_divergencia por dia). Roda o comando inteiro e filtra o CSV. So leitura (sombra). import csv, io from django.core.management import call_command out = io.StringIO() call_command('e6_oraculo', mes=10, ano=2 ...` |
+| 18:15:17 | Bash |  | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/6a1437b4-fa68-4fb8-ba22-cffc0db8ee01/tasks/bvbw029v8.output; tail -4 /tmp/claude-1001/-home-ronald-saas-hasner-app/a7fb7a66-28ef-4b66-8c48-a4aa9df4fce4/scratchpad/sombra_refazer2.log \| cut -c1-300; date +%H:%M` |
 | 18:11:30 | Bash |  | `cd /home/ronald/saas-hasner/app; python3 - <<'EOF' p='docs/PROMPTS.md' s=open(p,encoding='utf-8').read().rstrip('\n')+'\n' s+=('\| 22/10 ~18:0x \| **aval `INSTRUMENTO-PARALLEL-4`** (medido por ele: 719 s com 4 x 1683 s com 2): trocar `--parallel 2` por 4 em `bin/pre-push.sh:181`, `bin/regua.sh:169` e o default do `bin/suite.sh`; pouso PROPRIO depois do produto; conferir no 1o push \| ' 'RECEBIDO.  ...` |
 | 18:11:21 | Bash |  | `cd /home/ronald/wt-par && git add -- bin/pre-push.sh bin/regua.sh bin/suite.sh && git commit -q -F - <<'EOF' instrumento: a suite roda com --parallel 4 no pre-push, na regua e no default do bin/suite.sh Aval Ronald 22/10 ~18:0x, MEDIDO por ele: bin/suite.sh --parallel 4 = Ran 11583 in 719 s, OK, 0 falha; a base com --parallel 2 era 1683 s (19/10). Troca so o numero nos tres sitios: bin/pre-push.sh ...` |
 | 18:11:10 | Bash |  | `cd /home/ronald/wt-par && for t in bin/tests/test_suite_sh.sh bin/tests/test_trava_teste.sh bin/tests/test_recursos_sourced.sh bin/tests/test_cpuset_de_teste.sh; do [ -f $t ] && { bash $t >/dev/null 2>&1; echo "$t rc=$?"; }; done` |
