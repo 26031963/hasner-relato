@@ -6,10 +6,18 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 22/10/2026 00:23:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1193.5 MB). Acoes na janela: **614**.
+**Medido em 22/10/2026 00:28:28.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1194.0 MB). Acoes na janela: **622**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 00:28:20 | Bash | Read the B5-u selo | `cd /home/ronald/wt-inss/app && wc -l ponto/tests/test_selo_b5u_nunca_bateu_ve_ausencia.py && cat ponto/tests/test_selo_b5u_nunca_bateu_ve_ausencia.py` |
+| 00:28:13 | Bash | Find tests that drive the cartorio | `cd /home/ronald/wt-inss/app && /bin/grep -rln "julgar_colab\\|processar_cartorio" ponto/tests escala/tests folha/tests 2>/dev/null \| head -30` |
+| 00:27:57 | Bash | Read classificar_dia head | `cd /home/ronald/wt-inss/app && grep -n "def classificar_dia" -A 70 ponto/supra_juiz.py \| sed -n '1,100p'` |
+| 00:27:48 | Bash | Read the normal branch | `cd /home/ronald/wt-inss/app && sed -n '900,960p' ponto/services/cartorio.py` |
+| 00:27:39 | Bash | Read the judge body head | `cd /home/ronald/wt-inss/app && sed -n '700,760p' ponto/services/cartorio.py` |
+| 00:27:22 | Bash | Compare RED and GREEN failure sets | `cd /home/ronald/saas-hasner && echo "=== RED: nomes de FAIL/ERROR"; sed -n '1,424p' logs/boinss/red_green.log \| grep -E '^(FAIL\|ERROR): ' ; echo; echo "=== RED: tipos de erro"; sed -n '1,424p' logs/boinss/red_green.log \| grep -E '^[A-Za-z_.]*(Error\|Exception\|AssertionError):' \| cut -c1-160; echo; echo "=== GREEN: nomes de FAIL/ERROR"; sed -n '425,781p' logs/boinss/red_green.log \| grep -E '^ ...` |
+| 00:27:07 | Bash | Read the GREEN failures | `cd /home/ronald/saas-hasner && sed -n '740,780p' logs/boinss/red_green.log` |
+| 00:26:49 | Bash | Read RED and GREEN verdicts by L-074 | `cd /home/ronald/saas-hasner && echo "=== marcos:"; grep -nE '^(===\|rc_red=\|rc_green=)' logs/boinss/red_green.log; echo; echo "=== vereditos L-074:"; grep -nE '^(OK\|FAILED)($\| \()' logs/boinss/red_green.log; grep -nE '^Ran [0-9]+ tests' logs/boinss/red_green.log` |
 | 00:22:32 | Bash | Check the two running jobs | `cd /home/ronald/saas-hasner && tail -3 logs/ensaio2210/ensaio.log; echo "--- red_green:"; tail -4 logs/boinss/red_green.log 2>/dev/null; echo "--- trava:"; bin/trava_teste.sh --quem` |
 | 00:21:41 | Bash | Read a canonical sombra measurement script | `cd /home/ronald/saas-hasner && sed -n '1,40p' bin/r5_idempotencia_frota.sh` |
 | 00:21:36 | Bash | Find the canonical sombra invocation | `cd /home/ronald/saas-hasner && /bin/grep -rn "settings.sombra" bin/*.sh \| head -12` |
