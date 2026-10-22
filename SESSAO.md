@@ -6,10 +6,27 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 22/10/2026 12:00:32.** Transcript: `6a1437b4-fa68-4fb8-ba22-cffc0db8ee01.jsonl` (2.2 MB). Acoes na janela: **121**.
+**Medido em 22/10/2026 12:05:45.** Transcript: `6a1437b4-fa68-4fb8-ba22-cffc0db8ee01.jsonl` (2.5 MB). Acoes na janela: **138**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 12:05:35 | Bash | Read admin vinculo porta around regeneration | `sed -n 150,215p colaboradores/services/vinculo.py` |
+| 12:05:27 | Bash | Read regenerar porta tail (trilha, orfas, recalculo) | `sed -n 250,345p ponto/portas/celula.py` |
+| 12:05:25 | Bash | Scan regenerar porta for side effects | `sed -n 144,330p ponto/portas/celula.py \| grep -n "recalculo\\|_marcar_cobrancas_orfas\\|julgar\\|evento(\\|registrar_log\\|def \\|return n" \| head -30` |
+| 12:05:20 | Bash | Read regenerar_celulas_vinculo porta | `grep -n "def regenerar_celulas_vinculo" -A45 ponto/portas/celula.py \| head -60` |
+| 12:05:03 | Bash | List postos safe to mark fechado | `cat >> /home/ronald/saas-hasner/logs/o261/feriado_21_postos.py <<'EOF' trab = sorted({v.posto_id for v in outros if cel.get(v.colaborador_id) == 'concorde'}) print('P21\|POSTOS_COM_OUTRO_QUE_TRABALHOU=%s' % json.dumps(trab)) print('P21\|FECHA_SEGURO=%s' % json.dumps([p for p in so_c if p not in trab])) EOF cd /home/ronald/saas-hasner && docker cp logs/o261/feriado_21_postos.py saas_core:/tmp/p21.p ...` |
+| 12:04:44 | Bash | Measure risk of marking 21 postos fechados | `cat > /home/ronald/saas-hasner/logs/o261/feriado_21_postos.py <<'EOF' # READ-ONLY: as classes de posto do aval (b) + o risco do `--fecha`: quem MAIS esta nesses postos em 12/10. import datetime as dt, json from collections import defaultdict, Counter from django.db import connection assert connection.settings_dict['NAME'] == 'saas_hasner' from django.db.models import Q from escala.models import Es ...` |
+| 12:04:21 | Bash | Read emission veto by posto feriado | `sed -n 595,625p ponto/management/commands/detectar_ausencias.py` |
+| 12:04:19 | Bash | Find consumers of posto opera_em_feriado | `grep -rn "opera_em_feriado\\|cobra_no_dia\\|feriado_do_posto" --include=*.py . \| grep -v "/tests/\\|migrations\\|management/commands/marcar_feriado" \| head -20` |
+| 12:04:07 | Bash | Read vinculo post_save signal handlers | `sed -n 1,200p escala/signals.py \| grep -n "def \\|regenerar\\|gerar_celulas\\|update_fields\\|trabalha_em_feriado\\|data_inicio\\|hoje" \| head -50; sed -n 65,100p ponto/signals.py` |
+| 12:04:04 | Bash | Find UI porta and signals/regeneration for vinculo | `grep -rn "trabalha_em_feriado" --include=*.py colaboradores/views*.py escala/views*.py colaboradores/forms*.py escala/forms*.py 2>/dev/null \| head; grep -rn "post_save.*EscalaColaborador\\|sender=EscalaColaborador" --include=*.py . \| grep -v tests \| head; grep -n "def regenerar_celulas_vinculo" -A30 escala/*.py \| head -50` |
+| 12:03:56 | Bash | Read sincronizar_feriado_admin command | `f=$(grep -rl "marcar_trabalha_em_feriado" --include=*.py . \| grep management \| head -1); echo $f; sed -n 1,200p $f \| grep -v "^\s*$" \| head -150` |
+| 12:03:46 | Bash | Read existing posto feriado portas | `sed -n 1,140p colaboradores/management/commands/marcar_feriado_do_posto.py; sed -n 1,110p colaboradores/services/feriado_do_posto.py; sed -n 40,75p colaboradores/services/estrutura.py; sed -n 720,770p colaboradores/services/vinculo.py` |
+| 12:03:43 | Bash | Find writers of opera_em_feriado and trabalha_em_feriado | `grep -rn "opera_em_feriado\s*=\\|trabalha_em_feriado\s*=\\|\.trabalha_em_feriado = \\|'trabalha_em_feriado'\\|'opera_em_feriado'" --include=*.py . \| grep -v "/tests/\\|migrations" \| head -20` |
+| 12:03:32 | Bash | Read hook queue helper functions | `cd /home/ronald/saas-hasner && sed -n /dev/null; grep -n "def _proximo_da_fila" -A30 bin/hook_stop_fila1.py \| head -40; grep -n "def _abertos\\|def _linhas_da_fila\\|def _item_fechado" -A12 bin/hook_stop_fila1.py \| head -40` |
+| 12:03:32 | Bash | List hook helper functions | `cd /home/ronald/saas-hasner && grep -n "^def " bin/hook_stop_fila1.py \| head -30` |
+| 12:03:17 | Bash | Read rederive function, counter command and cron entry | `sed -n 1480,1580p ponto/services/fechamento.py; sed -n 1,80p ponto/management/commands/projecoes_vencidas.py; sed -n 1060,1075p config/crons.py; grep -n "projecoes_vencidas\\|rederivar" config/crons.py \| head` |
+| 12:03:13 | Bash | Census of derivado_em readers/writers | `grep -n "derivado_em" --include=*.py -r . \| grep -v "/tests/\\|migrations" \| head -30` |
 | 11:58:25 | Bash | Update PAREI, BO-FERIADO limits, GATE cell, PROMPTS row | `/bin/grep -c "^\| O140 " docs/BACKLOG.md; python3 - <<'EOF' p='docs/RELATO.md' L=open(p).read().split('\n') assert L[2].startswith('PAREI: ! O261 e o export da 10') L[2]=('PAREI: ! O261 e o export da 10, as tres travas DELE juntas \| espera Ronald: ' '(a) o TXT da 10 esta BARRADO pela porta -- 184 dias de HE acima do limite SEM decisao (emp2 169 / emp3 12 / emp4 3; 58 colabs; ' '7.467 min = 124,45 ...` |
 | 11:58:04 | Bash | Read pergunta de lei 8 on the 6 writers | `sed -n 1888,1893p docs/RELATO.md \| cut -c1-1500` |
 | 11:58:01 | Bash | Find item (1) closure evidence for 6 sem_lampada | `/bin/grep -n "sem_lampada=6" docs/*.md \| head -5 \| cut -c1-400; /bin/grep -n "excluidos por lei\\|4 excluidos" docs/RELATO*.md docs/CORTES.md \| head -5 \| cut -c1-300` |
