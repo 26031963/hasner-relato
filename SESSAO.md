@@ -6,10 +6,26 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 21/10/2026 23:40:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1190.8 MB). Acoes na janela: **514**.
+**Medido em 21/10/2026 23:45:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1191.4 MB). Acoes na janela: **530**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 23:44:52 | Bash | Read the partial-furo rule | `cd /home/ronald/saas-hasner && sed -n '230,255p' app/ponto/supra_juiz.py` |
+| 23:44:51 | Agent | Raia v3: bateria de casos pela REGRA | `Voce e o AGENTE DA RAIA v3. Aval literal que acabou de chegar do Ronald, e e' o seu escopo INTEIRO: "aval Ronald: agente da raia v3, enquanto o pouso nao vem: diz em uma linha no RELATO se a bateria de casos pela REGRA (L-110: cadastro tal, batidas tais, o dia vale tanto, por CLT/CCT/L-NNN, sobre as escalas canonicas) existe e quantos casos tem; se nao existe ou e rasa, constroi agora em arquivos  ...` |
+| 23:43:32 | Bash | Find the FURO_PARCIAL emitter | `cd /home/ronald/saas-hasner && /bin/grep -rn "FURO_PARCIAL" app/ --include=*.py \| /bin/grep -v tests \| head` |
+| 23:43:31 | Bash | Read the ausencia dispensation on the ata | `cd /home/ronald/saas-hasner && /bin/grep -rn "def dispensar_por_ausencia" -A 45 app/ \| head -55` |
+| 23:42:46 | Bash | Read the setup before the nunca-bateu branch | `cd /home/ronald/saas-hasner && sed -n '690,742p' app/ponto/services/cartorio.py` |
+| 23:42:46 | Bash | Read the rest of the nunca-bateu branch to its return | `cd /home/ronald/saas-hasner && sed -n '800,858p' app/ponto/services/cartorio.py` |
+| 23:42:15 | Bash | Read the covered-day rule and the classifier signature | `cd /home/ronald/saas-hasner && sed -n '285,320p' app/ponto/supra_juiz.py; echo "=== assinatura"; /bin/grep -n "def classificar_dia" -A 45 app/ponto/supra_juiz.py \| head -60` |
+| 23:42:14 | Bash | Read the day classifier pre-adocao and furo rules | `cd /home/ronald/saas-hasner && sed -n '160,230p' app/ponto/supra_juiz.py` |
+| 23:41:47 | Bash | Locate the code emitters | `cd /home/ronald/saas-hasner && /bin/grep -rn "COBRANCA_EM_DIA_COBERTO\\|FURO_SEM_COBRANCA\\|FURO_PRE_ADOCAO" app/ --include=*.py \| /bin/grep -v tests \| head -20` |
+| 23:41:45 | Bash | Read the normal branch veredito derivation | `cd /home/ronald/saas-hasner && sed -n '860,935p' app/ponto/services/cartorio.py` |
+| 23:41:38 | Bash | Read the nunca-bateu branch live | `cd /home/ronald/saas-hasner && sed -n '740,800p' app/ponto/services/cartorio.py` |
+| 23:41:37 | Bash | Read the comboio suite verdict | `cd /home/ronald/saas-hasner && tail -c 400 logs/comboio2110b/suite.log; echo; echo "=== rc_suite linha:"; /bin/grep "rc_suite=" logs/comboio2110b/suite.log; echo "=== OK/FAILED tail:"; /bin/grep -E '^(OK\|FAILED)($\| \()' logs/comboio2110b/suite.log \| tail -3; echo "=== Ran:"; /bin/grep -E '^Ran [0-9]+ tests' logs/comboio2110b/suite.log \| tail -3; echo "=== agora $(date '+%H:%M:%S')"` |
+| 23:41:26 | Bash | Read the effect filter that para= selects | `cd /home/ronald/saas-hasner && /bin/grep -n "def _pelo_efeito" -B 30 -A 40 app/ponto/turnos.py` |
+| 23:41:25 | Bash | Locate the comboio suite log | `ls -la /home/ronald/saas-hasner/logs/comboio2110b/ 2>&1 \| head -20; echo "=== wt:"; ls -la /home/ronald/wt-comboio2110b/logs/ 2>&1 \| head -20` |
+| 23:41:18 | Bash | Check comboio suite progress | `cd /home/ronald/wt-comboio2110b 2>/dev/null && { tail -c 600 logs/comboio2110b/suite.log; echo; echo "=== rc_suite:"; /bin/grep -c "rc_suite=" logs/comboio2110b/suite.log; /bin/grep "rc_suite=" logs/comboio2110b/suite.log; echo "=== agora: $(date '+%H:%M:%S')"; }` |
+| 23:41:16 | Bash | Read the coverage judge | `cd /home/ronald/saas-hasner && /bin/grep -n "def ausencia_cobre" -A 60 app/ponto/turnos.py` |
 | 23:37:13 | Bash | Read the full veredito vocabulary and the código map | `cd /home/ronald/saas-hasner && sed -n '1700,1725p' app/escala/models.py; echo "=== _MAPA_VEREDITO"; /bin/grep -n "_MAPA_VEREDITO" -B 3 -A 25 app/escala/models.py \| sed -n '1,45p'` |
 | 23:37:06 | Bash | Read derivar_veredito and the coverage status vocabulary | `cd /home/ronald/saas-hasner && /bin/grep -n "def derivar_veredito" -A 30 app/escala/models.py; echo "=== VEREDITOS"; /bin/grep -nE "VEREDITOS_CARTORIO\|VEREDITOS_ADMIN\|VIAS_VEREDITO" app/escala/models.py \| head; echo "=== ausencia_cobre: que status existem"; /bin/grep -n "def ausencia_cobre" -A 40 app/ponto/turnos.py \| /bin/grep -nE "status\|return\|para ==\|'cobranca'" \| head -25` |
 | 23:36:47 | Bash | Read the celula porta's veredito derivation | `cd /home/ronald/saas-hasner && /bin/grep -n "def lavrar_veredito" -A 60 app/ponto/portas/celula.py \| sed -n '1,75p'; echo "=== tail suite"; tail -1 logs/comboio2110b/suite.log; date '+%H:%M:%S'` |
