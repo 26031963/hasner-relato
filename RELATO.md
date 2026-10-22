@@ -9,13 +9,17 @@
 > A copia 7 segue **enfileirada ha 17 min**; a espera default da trava e 1 h a partir das 05:56, entao se
 > o arsenal passar das **06:56** ela sai com `rc 75` -- **a vez nao chegou, nao e vermelho** -- e se relanca.
 > Nada disso muda a ordem das 08:40: **pouso do item (6) primeiro, depois o ato do GATE-EXPORT-10**, que
-> tem UMA chance so.
+> tem UMA chance so. **ANTES DE LER O BLOCO DE 03:1x ABAIXO: o numero do item 4 no bloco de 03:1x esta VELHO**
+> ("6 PERDEM hora e abono"). A causa foi curada e esta no ar; os numeros novos estao no paragrafo de 06:0x,
+> na mesma caixa, e ja estao no `AVAIS.md` da sua mesa.
 > PROVA: `bin/trava_teste.sh --quem` = `pre-push:1333726 desde 22/10 06:08:35`; `logs/bo2/suite_cert6.log`
 > com as duas linhas acima; `git -C /home/ronald/wt-cert-corpo6 rev-parse HEAD` = `7981d589` e
 > `git -C /home/ronald/wt-cert-corpo7 rev-parse HEAD` = `5d1857a1`; `ps -eo pid,etime,args` com o
 > `trava_teste.sh` da copia 7 em espera (pid 1351135).
 
-> **06:2x -- BURACO FECHADO NO PROPRIO GATE, achado na espera do push (ESMERIL-DO-MARCO): o ATO do GATE
+> **06:2x -- BURACO FECHADO NO PROPRIO GATE, achado na espera do push, e o rotulo certo e LEI-AKITA 6, nao
+> ESMERIL-DO-MARCO -- este buraco nao e orfao do O330, e BUG PROVADO no instrumento do PROXIMO item da
+> ORDEM VIVA, curado antes de ele rodar: o ATO do GATE
 > nao se registrava como "em curso".** O PORTAO A exige `0 cron em curso`, isto e, ele LE
 > `logs/crons_em_curso/` -- mas o ato nunca escrevia nada la. Como o apply roda ~45 min dentro do
 > `saas_core`, um `bin/deploy.sh` de qualquer raia derrubaria a casca por cima dele (DEPLOY-ESPERA-CRON,
