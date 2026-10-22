@@ -1,6 +1,6 @@
 # RELATO — esteira saas-hasner
 
-PAREI: ! O261 e o export da 10 | espera o DP e o Ronald: (a) o TXT da 10 esta BARRADO pela porta -- 184 dias de HE acima do limite SEM decisao (emp2 169 / emp3 12 / emp4 3; 58 colabs; 124,45 h; `logs/gate10/lista_he_trava_20261022.out`); por aval dele 12:0x o DP decide pela Gestao de HE ("Nao" em lote = L-097) e entao roda `logs/gate10/ato_export10.py` (re-lavrar o carimbo da porta ANTES, ~22 min, desacoplado). (b) ACOPLADO A (a): o `!` da VOLTA dos 6 que trabalharam em 12/10 (v382 v1282 v321 v1276 v1209 v229; postos 596/431/621) tem de pousar ANTES do TXT -- hoje eles levam 38,04 h de folga trabalhada onde tinham 30,43 h de HE 100% feriado, e TXT antes da volta vira retificacao. A volta foi NEGADA pela permissao da sessao (secao 12:1x). (c) 2a lei 13:3x: cura dos 99 DEPOIS do TXT; o vigia espera a frase de juiz (linha abaixo). (d) 09 com o Gabriel (AVAIS #2).
+PAREI: ! O261 e o export da 10 | espera o DP e o Ronald: (a) o TXT da 10 esta BARRADO pela porta -- 184 dias de HE acima do limite SEM decisao (emp2 169 / emp3 12 / emp4 3; 58 colabs; 124,45 h; `logs/gate10/lista_he_trava_20261022.out`); por aval dele 12:0x o DP decide pela Gestao de HE ("Nao" em lote = L-097) e entao roda `logs/gate10/ato_export10.py` (re-lavrar o carimbo da porta ANTES, ~22 min, desacoplado). (b) FEITO 14:12: a volta dos 6 pousou ANTES do TXT (secao 14:12). (c) frase de juiz DADA 13:5x: `resolver_dia_oferecido` em construcao na wt-o261c; cura dos 99 DEPOIS do TXT. (d) 09 com o Gabriel (AVAIS #2).
 
 > (o `!` da volta do feriado esta no item (b) da linha acima)
 
@@ -28,6 +28,14 @@ HX-CARTORIO-RESSUSCITA), DEPOIS do TXT da 10"*.
   de TELA em `core/juizes.py:744` ("deveria ler juiz do servico"). Para o vigia LER (e nao recalcular, LEI-AKITA 2) ela tem de
   virar funcao que o template e o vigia leem -- **juiz novo**, e a TRAVA JUIZ-NOVO pede a frase dele; a AUTONOMIA item 3 nao
   cobre (a funcao nao existe). Pergunta no topo.
+
+## 22/10 14:12 -- APLICADO: A VOLTA DOS 6 QUE TRABALHARAM EM 12/10 (`!` dele ~13:5x, item 2) -- O DIFF DA 10 FICA SO NOS 15 DSR
+
+**PROVA:** gravado medido em prod 14:12: `trabalha_em_feriado=True` em **6/6** (v382 v1282 v321 v1276 v1209 v229); `opera_em_feriado=None` em **3/3** postos (596 431 621); celula 12/10 `trabalha=True` nos **6**; **21** celulas regeneradas. Reversao `app/logs/feriado1210/reversao_volta6_20261022_1412.json`.
+- Mesmas portas do ato das 12:08 (`marcar_opera_em_feriado` / `marcar_trabalha_em_feriado` + `evento`, `regenerar_celulas_vinculo`), com trilha e motivo.
+- **DIFF da 10 dos 35, contra a foto ANTERIOR ao ato das 12:08** (`logs/o261/diff10_feriado_pos_volta.out`): **15 movidos, so DSR** -- `semanas_dsr_ok` +15, `semanas_dsr_perdido` -15. HE 100% feriado e folga trabalhada dos 6 voltaram ao valor de antes (0 linha de diferenca).
+- **Feriado agora:** 12 postos fecha + 47 opera + 29 vinculos `False`; os 6 postos com outro colab trabalhando, os 3 da volta e os 11 mistos vao ao DP.
+- **09:** difere da sombra das 04:00 em **2** colabs, os dois por ATO HUMANO na tela e nenhum por estes atos -- col250 (11:47) e col204 (13:45-13:49, Resolver dia no 27/09 da lista do residuo). Lastro `logs/gate10/LASTRO_09_pos_22-10.md`.
 
 ## 22/10 12:1x -- APLICADO, REVISE: FERIADO 12/10 (`!` de VINCULO, aval 12:0x item b) -- E O DIFF ACHOU 6 QUE TRABALHARAM
 
