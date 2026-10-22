@@ -1,5 +1,32 @@
 # RELATO — esteira saas-hasner
 
+> **22/10 10:33 -- A PREMISSA DA ORDEM DA RETIFICACAO NAO SOBREVIVE A FONTE: NA 8069 O SINAL ESTA INVERTIDO, E NAO
+> HA PASSIVO TRABALHISTA NENHUM.** Medido na autoridade do gate (`cond2_20261022_r2.out:114,116,176`), nao na
+> prosa. **8069 e DESCONTO** -- `folha/export.py:379` a nomeia **"HORAS FALTAS PARCIAL"** (atraso + saida
+> antecipada). `oraculo 135.20 | sistema 84.16`, **oraculo>sistema 9/9**: a regra do instrumento pede **MAIS**
+> desconto que o TXT leva, e desconto MENOR e colaborador recebendo **MAIS**. **243 e PROVENTO** (intrajornada
+> indenizada): `sistema 1292.28 | oraculo 1264.29` -- acima tambem. **As duas curas REDUZEM pagamento, e a 8069 e
+> a MAIOR**: 51.04 h em 9 colab(s) (~5,7 h cada) contra 27.99 h em 20 (~1,4 h cada). Entao *"8069 primeiro, o
+> sistema paga ABAIXO -- passivo trabalhista"* esta invertido no SINAL da rubrica: a 8069 nao e a cura segura de
+> abrir, e a que tira mais dinheiro, e pede a MESMA trava nomeada da 243. **A ordem e DELE; o que eu tenho e a
+> premissa MEDIDA** -- nao toquei na obra dele (BACKLOG:1108) nem no bloco dele; so a MINHA linha (BACKLOG:586)
+> diz `ordem em aberto`.
+> **NAO repito o erro ao contrario**: pela L-110/13 o oraculo e **INSTRUMENTO, nao autoridade** -- medi a DIRECAO,
+> nao quem acerta nas 51.04 h. E o instrumento e suspeito: o `TOL = 10` por marcacao (mandato dele 11/08) e mais
+> generoso que o Art.58 par.1, logo devia descontar MENOS que a CLT -- e desconta MAIS que o sistema. Quem explica
+> e o **CASO**.
+> **PERGUNTA DE LEI, com numero** (nao e PAREI, a fila segue): a linha 116 diz **`faixa 4-6h sem pausa (nao paga
+> hoje): 27.00 h em 6 colabs`** -- o **UNICO** numero dos 5 oraculos em que o colaborador pode estar a RECEBER
+> (Art.71 par.1, 15 min na jornada de 4-6 h; par.4 manda indenizar). Daqui nao da para saber se "nao paga hoje" e
+> **corte seu** ou **lacuna**; se for lacuna, **o export da 10 leva embora 27.00 h devidas a 6 colab(s)**.
+> **O `!` #5 foi a `respondido` e daqui eu nao verifico isso**: nao houve turno dele nesta sessao e o
+> `respondido_em` ficou `2026-10-22T10:1x` -- o `1x` e da prosa, nao instante (o das 08:5x gravou `2026-10-22`,
+> `dono: Ronald`). **Nao virei o item** (viraria pendente falso se ele respondeu). O que ela ALTERA: a condicao
+> (2) do GATE diz *"ESTRUTURA e cura antes do export"*, e "sai assim" a dispensa. **Nada se moveu**: 0 TXT, 0
+> gravado; o export segue preso ao smoke de HE, que e dele.
+> `LEI-AKITA: origem=premissa da ordem (sinal da rubrica), testemunha=cond2_r2:114/116/176 + export.py:379, RED=sem codigo novo (medicao), quem-mais-le=BACKLOG:1108 e :586, juizes novos=0`
+>
+
 > **22/10 10:26 -- A CURA DA HE ESTA NO AR, E O PORTAO DO DEPLOY ABRIU PELO PASSO 5, NAO POR
 > ATALHO.** `bin/sombra.sh --bloco` (PASSO 5 do gate, em curso desde 09:48) fechou **10:23:47 com
 > `rc_bloco=0`**, e o carimbo passou a dizer `SOMBRA_BLOCO="22/10 10:23"` com `SOMBRA_DIVERGE=0` e
