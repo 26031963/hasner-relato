@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 22/10/2026 00:55:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1195.2 MB). Acoes na janela: **682**.
+**Medido em 22/10/2026 01:00:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1195.6 MB). Acoes na janela: **685**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 01:00:23 | Bash | Show RELATO top and section anchors | `cd /home/ronald/saas-hasner && sed -n '1,40p' app/docs/RELATO.md; echo "=== ancoras:"; /bin/grep -n "^\*\*" app/docs/RELATO.md \| head -14; echo "=== date:"; date '+%d/%m %H:%M'` |
+| 00:58:09 | Bash | Measure the emission slice and reconcile the release universe | `cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/sonda_boinss_a3b.py <<'PYEOF' # BO-INSS A3b: o recorte que EMITE (>= PISO_EMISSAO) e a reconciliacao do universo A1. import datetime as dt from django.db import connection k = connection.cursor(); k.execute('select current_database()') assert k.fetchone()[0] == 'sombra', 'SO NA SOMBRA' from escala.m ...` |
+| 00:57:29 | Bash | Check emission floor constant, test lock holder and remote push state | `cd /home/ronald/saas-hasner && /bin/grep -rn "PISO_EMISSAO" app/ --include=*.py \| head -8; echo "--- trava:"; bash bin/trava_teste.sh --quem 2>&1 \| head -3; echo "--- remoto:"; git fetch -q origin 2>&1 \| head -2; git log --oneline origin/main -1; echo "a frente:"; git log --oneline origin/main..HEAD \| head -12` |
 | 00:52:59 | Bash | Measure on the sombra how many days the cure moves, by competencia | `cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/sonda_boinss_a3.py <<'PYEOF' # BO-INSS A1/A3: quantos dias a cura MOVE, por competencia. SO LEITURA, so agregado. # Autoridades (zero regra propria): ponto.turnos.cobre_parte_do_dia (o dia foi inteiro?), # ponto.turnos.ausencia_cobre (quem cobre o dia), ponto.turnos.batidas_apuraveis (universo). imp ...` |
 | 00:52:09 | Bash | Read the sanctioned sombra sonda invocation | `cd /home/ronald/saas-hasner && sed -n '1,60p' bin/r5_idempotencia_frota.sh` |
 | 00:51:35 | SendMessage |  | `-` |
