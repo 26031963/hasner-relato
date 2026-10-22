@@ -261,6 +261,45 @@ A LICAO que fica (sua regra de sempre, e ela pegou de novo): **espera se le no A
 "Waiting for suite_certifica.log to start" sobreviveu ao fato por 2 h porque ninguem leu o arquivo -- que estava
 pronto. PROVA: as quatro medidas acima, todas de 21:2x, e `ls -l logs/raiaB/suite_certifica.log` (176478 bytes, 21:04).
 
+## O BO-INSS TEM CURA, DIFF E SUITE CORRENDO -- E EU ACHEI O FURO DA MINHA PROPRIA MEDIDA: ELA JULGOU 5 DE 32 (22/10 02:0x)
+LEI-AKITA: origem=ponto/supra_juiz.py::classificar_dia + ponto/services/cartorio.py (ramo `adesao is None`) + escala/utils.py::_marcar_ausencias, testemunha=GRADE (`dia['cobertura_parcial']`, escrita pelo juiz que JA responde -- ponto/turnos.py::cobre_parte_do_dia), RED=ponto/tests/test_bo_inss_nunca_bateu_le_a_precedencia.py (4 casos do aval), quem-mais-le=censo dos leitores de `coberto_aprovado` (FATO_EM_AUSENCIA e COBRANCA_EM_DIA_COBERTO seguem lendo o CRU, de proposito), juizes novos=0
+- **A CURA, em tres sitios e um so predicado:** "coberto" e "coberto o dia INTEIRO" eram a MESMA pergunta no portao
+  do furo, e uma ausencia aprovada de parte do dia calava o dia todo. A casa ja havia decidido isso em 18/09
+  (`cartorio.py::dispensar_por_ausencia` se recusa a dispensar marco quando a ausencia tem minutos): este era o
+  **leitor que nao migrou** (LEI-AKITA 4), nao regra nova. `classificar_dia` segue **PURA** (zero query), o flag
+  vem da GRADE, **um escritor so**. `falta` NAO entra -- falta aprovada ja desconta, e furo em cima seria
+  acusacao dobrada. A cura **ACRESCENTA** acusacao; nunca tira.
+- **DIFF de impacto na sombra, com ROLLBACK** (`bin/sombra.sh --rodar`, porta unica; DIFF e medida, nunca escrita):
+  ALVO de cobertura **INTEGRAL** = **123 celulas / 5 colabs**; moveram `nunca_bateu` -> `concorde` **123 de 123**,
+  e **0 celula FORA do alvo** se moveu. `FECHAMENTO que mudou = 0` (a 09 EXPORTADA inclusive, L-092),
+  `CHAMADO novo = 0` (68 antes, 68 depois), `IMPRESSAO que mudou = 0 de 150` -- confirmando que a cura e de
+  **DERIVACAO**: a impressao hasheia INSUMO, entao `--forcar` e a unica via. RETENCAO: 3 colabs com motivo
+  diferente, **2 SAEM da retencao por completo**, `espelho_nunca_bateu` 3 -> 1.
+- **O NUMERO DO AVAL E O DA FUNCAO REAL NAO SAO O MESMO, e eu nao forco nenhum dos dois:** o aval diz
+  **13 colabs / 390 dias** ("INSS aprovado nos 30 dias"); a funcao real acha **5 colabs / 123 celulas** de
+  cobertura **INTEGRAL**, dentro de **32 colabs / 757 celulas** de `nunca_bateu` na 10. Nao e contradicao, e
+  **criterio**: o DIFF exclui `falta` e exclui cobertura PARCIAL de proposito, e o caso 4 do seu proprio RED
+  ("abono parcial = cobra o resto") diz que parcial **nao** solta o dia. **A decomposicao 13 -> 5 ainda NAO esta
+  medida**; ela sai da rodada de universo cheio abaixo.
+- **PAREI DE DENTRO: o meu DIFF rodou a porta em 5 colabs de 32, e por isso NAO autoriza o deploy.** As **634
+  celulas dos 27 colabs de cobertura NAO integral** nunca foram rejulgadas -- e sao exatamente elas que a cura do
+  `supra_juiz` passa a **ACUSAR** (dia de cobertura parcial deixa de ser mudo e sai `FURO_SEM_COBRANCA` com o
+  rotulo honesto). `emitidos=0` foi medido onde **nada e cobravel**; sobre parcial ele nao diz nada, e emissao e
+  a classe do incidente de 27/08. **Condicao de saida, escrita:** mesma rodada com a porta no universo CHEIO (as
+  32 chaves de `por_colab`, nao as 5 do alvo), rollback igual, imprimindo as 757 decompostas em
+  integral/parcial/falta/sem cobertura, moves por par, `emitidos`, chamado novo e fechamento 0. **So entao** o
+  merge e o `bin/deploy.sh`.
+- Suite **CHEIA** correndo na arvore EXATA que pousa -- `7b1a4dd8` = main `bd624514` + raia `e3f0f726`, arvore
+  limpa, merge de **5 arquivos, todos `.py`, zero doc e zero config** -- desde 01:48:53, trava
+  `suite-cheia-inss2`. O pouso espera o veredito dela (aval 19:1x, literal), nao o recorte de 52 testes.
+PROVA: `logs/boinss_diff_rejulgar.out` (DIFF completo), `logs/boinss/diff_rejulgar_sombra.py:37-59` (criterio do
+alvo, com o porque de `falta` ficar fora), `logs/boinss/alvo_red2.log` (recorte verde, `Ran 52 tests` / `OK` / rc 0),
+`git diff bd624514 7b1a4dd8` (5 arquivos), `logs/boinss/suite_cheia2.log` (a CHEIA, em curso).
+INCOMPLETO: (a) a rodada de universo CHEIO acima, que e o portao do deploy; (b) decomposicao 13 -> 5 por criterio;
+(c) o DIFF leu um banco que carrega as 184 celulas da relavratura C -- `lavrar_veredito` so re-carimba celula que
+MUDA, entao celula que era `nunca_bateu` e saiu do universo enviesa o 757 **para baixo**; o re-ensaio na sombra
+limpa de depois das 04:11 resolve, e a evidencia do vies morre ali.
+
 ## O PUSH DOS 12 POUSOU NO REMOTO, E A BATERIA DA REGRA JA EXISTE: 131 CASOS (22/10 01:1x) -- nao e marco: 0 linha de codigo
 
 **item (2) do seu aval de 23:3x -- FECHADO.** `origin/main = a127492a7a`, o MESMO commit que a suite
