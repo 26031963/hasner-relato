@@ -1863,6 +1863,8 @@ Lastro: o corte dele `FIO-MORTO-E-ESTRUTURAL` (12/10 20:4x), itens 1 e 2 -- *"la
 
 ## ALARMES DA ESTEIRA
 
+**21/10 22:40 vigia da esteira** -- esteira em espera de janela: 8 fatias prontas, reabre 00:00.
+
 **21/10 03:40 vigia da esteira** -- esteira em espera de janela: 8 fatias prontas, reabre 04:45.
 
 **20/10 22:40 vigia da esteira** -- esteira em espera de janela: 8 fatias prontas, reabre 00:00.
