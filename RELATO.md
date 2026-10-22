@@ -1,20 +1,37 @@
 # RELATO — esteira saas-hasner
 
-> **22/10 06:1x -- O QUE ESTA EM VOO NESTE MINUTO** (o bloco de 03:1x abaixo segue valendo, menos o
-> numero do item 4, corrigido mais adiante nesta mesma caixa): **o push do marco O330 esta NA PISTA** --
-> o arsenal do pre-push pegou a trava as 06:08:35 e roda a suite do commit empurrado `5d1857a108`. Nao ha
-> veredito ainda; ele se le pela L-074 (`^OK|^FAILED` + `^Ran N` + rc), nunca por ausencia de saida.
-> **O item 6 mudou de trava: saiu da JANELA e entrou na PISTA.** A certificacao de 05:39 fechou VERDE,
-> mas na base VELHA (`7981d589`): como o main andou para `5d1857a1` (a cura do passivo), a arvore que
-> aquela suite certificou **nao e** a arvore que pousaria -- 2a clausula do POUSO-EM-COMBOIO, e e por isso
-> que ela nao vale como aval de pouso. A copia nova `wt-cert-corpo7` ja nasceu do main NOVO com o merge
-> no indice, e a suite dela esta **na fila da trava desde 05:56** atras do arsenal (`rc 75` = a vez nao
-> chegou, nao e vermelho). A ordem das 08:40 **nao muda**: pouso do item (6) primeiro, depois o ato do
-> GATE-EXPORT-10, que tem UMA chance so (`logs/gate10/lancar.sh` se recusa a relancar por cima).
+> **22/10 06:1x -- A VEZ DA PISTA NAO FOI PARA A COPIA 7, FOI PARA O PUSH, e isso corrige a previsao
+> das 05:5x:** o paragrafo abaixo dizia que a suite de 05:39 terminava "~06:2x" e que a nova "pega a vez
+> pelo `flock`". Ela terminou as **06:08** -- e **VERDE**, nao abortada: `Ran 11556 tests in 1705.018s` /
+> `OK (skipped=51, expected failures=14)` na base VELHA, o que confirma que o codigo do item (6) passa a
+> suite inteira e que o que falta e so a IDENTIDADE da arvore. **A vez seguinte foi do arsenal do push do
+> marco O330** (item 1 da sua ordem), que pegou a trava as **06:08:35** e roda a suite de `5d1857a108`.
+> A copia 7 segue **enfileirada ha 17 min**; a espera default da trava e 1 h a partir das 05:56, entao se
+> o arsenal passar das **06:56** ela sai com `rc 75` -- **a vez nao chegou, nao e vermelho** -- e se relanca.
+> Nada disso muda a ordem das 08:40: **pouso do item (6) primeiro, depois o ato do GATE-EXPORT-10**, que
+> tem UMA chance so.
 > PROVA: `bin/trava_teste.sh --quem` = `pre-push:1333726 desde 22/10 06:08:35`; `logs/bo2/suite_cert6.log`
-> com `Ran 11556 tests in 1705.018s` / `OK (skipped=51, expected failures=14)` e `git -C /home/ronald/wt-cert-corpo6
-> rev-parse HEAD^1` = `7981d589`; `git -C /home/ronald/wt-cert-corpo7 rev-parse HEAD` = `5d1857a1`;
-> `ps -eo pid,etime,args` com o `trava_teste.sh` da copia 7 em espera (pid 1351135, 17 min na fila).
+> com as duas linhas acima; `git -C /home/ronald/wt-cert-corpo6 rev-parse HEAD` = `7981d589` e
+> `git -C /home/ronald/wt-cert-corpo7 rev-parse HEAD` = `5d1857a1`; `ps -eo pid,etime,args` com o
+> `trava_teste.sh` da copia 7 em espera (pid 1351135).
+
+> **06:2x -- BURACO FECHADO NO PROPRIO GATE, achado na espera do push (ESMERIL-DO-MARCO): o ATO do GATE
+> nao se registrava como "em curso".** O PORTAO A exige `0 cron em curso`, isto e, ele LE
+> `logs/crons_em_curso/` -- mas o ato nunca escrevia nada la. Como o apply roda ~45 min dentro do
+> `saas_core`, um `bin/deploy.sh` de qualquer raia derrubaria a casca por cima dele (DEPLOY-ESPERA-CRON,
+> bug 17/09, exit 137), e apply de dinheiro morto no meio e o que a reversao do ATO 0 existe para nao
+> precisar. Curado com o DEVICE QUE JA EXISTE, nao um novo: mesmo nome, mesmo pid-na-extensao e mesmo
+> trap de `bin/cron_run.sh:9-10`, que `bin/deploy.sh:271` ja sabe ler. No mesmo ato entrou o REAPER de
+> marca de pid morto (a regra de `deploy.sh:272`), porque marca vazada por SIGKILL daria PAROU falso num
+> ato de UMA chance por dia. **O que ele NAO faz, declarado:** `ESPERA_CRON_S` default e 600 s e o ato
+> dura mais -- passados 10 min o deploy reinicia assim mesmo com AVISO. Isto troca morte silenciosa por
+> espera + linha de log; a protecao de verdade segue sendo a ORDEM (pouso do item 6 primeiro, ato depois),
+> e **`ESPERA_CRON_S` nao se mexeu**.
+> PROVA: os dois trechos novos de `logs/gate10/gate10_condicao1.sh` foram EXERCITADOS fora do device de
+> prod (copia em `$SP/t_gate`, nunca `logs/crons_em_curso/` vivo) -- o reaper apagou as 2 marcas de pid
+> morto e manteve a de pid vivo (`N=1`), e o registro fez a propria funcao `em_curso()` de `deploy.sh`
+> imprimir `gate10_-` durante o ato e `0 arquivo(s)` depois do trap. `bash -n` OK, e nao e ele que prova
+> alcance: as duas saidas acima sao de execucao.
 
 > **22/10 03:1x -- ONDE A ORDEM DAS 01:1x ESTA:** **item 1 e 2 FECHADOS** -- o push do marco pousou no
 > REMOTO as 03:0x (`origin/main = 4f2d7ef964`, arsenal inteiro: `Ran 11544 tests` / `OK (skipped=51,
