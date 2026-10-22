@@ -1,5 +1,34 @@
 # RELATO — esteira saas-hasner
 
+> **22/10 10:26 -- A CURA DA HE ESTA NO AR, E O PORTAO DO DEPLOY ABRIU PELO PASSO 5, NAO POR
+> ATALHO.** `bin/sombra.sh --bloco` (PASSO 5 do gate, em curso desde 09:48) fechou **10:23:47 com
+> `rc_bloco=0`**, e o carimbo passou a dizer `SOMBRA_BLOCO="22/10 10:23"` com `SOMBRA_DIVERGE=0` e
+> `SOMBRA_COMANDOS=76`. **Medi o portao por REDIRECIONAMENTO, nunca por pipe** (rc depois de pipe e do
+> ultimo comando): `bin/sombra.sh --conferir` -> **rc=0**, `dia=20261022 status=OK tipo=completa
+> diverge=0 erros=0`. **Nunca houve `--sem-sombra`** -- e porta de dinheiro.
+> **O DEPLOY:** `bin/deploy.sh --sem-migrate` **rc=0** (`logs/he/deploy_he.out`), com a forma provada
+> ANTES: de `8359ce6e` a `HEAD` sao **0 migrations** e **0 `models.py`**, e a arvore tinha **0 `.py`**
+> fora do `d01210d2` -- a arvore que a suite cheia certificou e a arvore que subiu. Provas do proprio
+> deploy: **migrations pendentes 0**, `janela_auth` OK, prova de casca (**16 estaticos, 5 paginas, 616
+> rotas em 2 urlconf**), **3 rotas provadas** (core `/health/` 200, ui `/colaboradores/` 302,
+> mensageria `/health/` 200), selo **BUG 128 verde** nas tres cascas e **`importerror_500=0`** na
+> janela 09:26-10:26. O reload trocou o processo: o master do `saas_ui` tinha **46 s** de vida 20 s
+> depois do deploy.
+> **OS 500 DEPOIS, com o caveat dito:** `logs/he/recount_500.sh` com a janela a partir de **10:26**
+> devolve **0 ocorrencias** em `/ponto/gestao-he/` -- mas **a janela nao teve tentativa**, entao isso
+> NAO e prova de cura, e sim ausencia de sinal. A prova que falta e o **smoke de tela, que e DELE**
+> (`SMOKE-DA-DECISAO-DE-HE-DEPOIS-DA-CURA`, AVAIS #4). O ANTES fica registrado: **2 ocorrencias desde
+> `041fd2ac`, as duas em `/recusar-lote/`, 0 em `/autorizar-lote/` e 0 em `/decidir/`**.
+> **ACHADO DE CARONA, e e linha de fila, nao trabalho agora (ESMERIL-DO-MARCO):** a contagem topou **4
+> blocos ERROR as 10:20:37**, todos `Service Unavailable` em `/live-cell/colab-status/<id>/` (2 ids,
+> cada um duas vezes). Nao e defeito: e o **breaker cosmetico** declarado -- `core/service_class.py:75`
+> devolve 503 com `Retry-After: 10` quando o INFLIGHT das rotas `cosmetic` estoura. O que ele nao tem e
+> **LEITOR**: o disparo nao vira contador em lugar nenhum, e quem o viu foi o `errors.log` por acidente.
+> O minuto cai DENTRO do bloco da sombra, com o `sombra_db` a 33% no cpuset 4-7 -- e CONCORRENCIA, nao
+> a CPU da O286. Obra **`BREAKER-COSMETICO-DISPARA-SEM-CONTADOR`** no BACKLOG, com a pergunta medida que
+> falta: quantos 503 cosmeticos o cliente levou em 30 dias? A conta de hoje e de UM minuto.
+>
+
 > **22/10 10:1x -- AVAL #5 RESPONDIDO: O EXPORT DA 10 SAI ASSIM, E A ESTRUTURA VIRA RETIFICACAO
 > PELA PORTA.** Nas palavras dele: *"o export da 10 SAI ASSIM e os 109 dia-colab de ESTRUTURA viram
 > retificacao pela porta depois (lei 30/09, o TXT e fotografia)"*. REGISTRADO pela porta: o item
@@ -7,7 +36,7 @@
 > --escrever` fechou **AVAIS NA MESA 5 -> 4** (respondido 102 -> 103, 12 insercoes / 11 remocoes, sem
 > churn). **A ORDEM DA RETIFICACAO E DELE, e e a ordem do RISCO, nao a do tamanho**: **PRIMEIRO a
 > 8069**, onde o sistema paga **ABAIXO** da regra em **9/9** -- passivo trabalhista --, e **DEPOIS a
-> 243**, onde paga **ACIMA** em **20/20**; a 243 ganha **TRAVA NOMEADA** (*corte dele com o juridico*)
+> 243**, onde paga **ACIMA** em **20/20**; a 243 ganha **TRAVA NOMEADA** (*corte dele*)
 > porque pode ser pergunta de lei do **art.71 par.4** -- so o intervalo **SUPRIMIDO** x o **INTEGRAL**
 > --, e nao vira cura antes disso. Obra registrada: **`RETIFICACAO-DA-10-8069-PRIMEIRO`** no BACKLOG,
 > com a L-110/13 escrita nela (o CASO contra o texto da regra ANTES do codigo; o oraculo e
