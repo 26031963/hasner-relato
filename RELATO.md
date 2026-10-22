@@ -5,6 +5,64 @@
 > e a **corrente da manha de 21/10 nasceu VAZIA** -- um `raise` no import de `config/crons.py` matou os
 > 11 elos e o alarme junto. As tres secoes estao em **22/10 01:1x**, logo abaixo do topo.
 
+**ITEM (3) DO SEU AVAL DAS 23:3x -- O BLOCO DE HOJE NAO TEM A CURA DENTRO, E A MEDIDA DIZ POR QUE (22/10 01:4x).**
+- O `--bloco` carimbado e **22/10 00:38** (`SOMBRA_COMANDOS=76`, completa, OK) e o deploy da cura entrou em
+  **22/10 00:42:55** (`logs/deploy.stamp COMMIT=a127492a7a`): o bloco rodou **4m55s ANTES** da cura ir ao ar.
+  A sua frase literal -- *"bloco refeito com a cura no ar"* -- **nao esta cumprida pelo bloco das 00:38**, e eu
+  **nao a declaro cumprida**. O aval tem escopo LITERAL (LEI-AKITA 9) e 4 minutos de diferenca nao o ampliam.
+- O QUE ISSO **NAO** QUEBRA, e por isso nao e PAREI: o portao do deploy de amanha **ja esta verde**, porque
+  `--conferir` compara **schema e `django_migrations`**, nunca codigo -- resposta de agora,
+  `sombra: carimbo dia=20261022 status=OK tipo=completa diverge=0 erros=0`. **Nenhum `--sem-sombra` sera
+  necessario por este motivo.**
+- **E EU NAO REFACO O BLOCO AGORA, de proposito:** a relavratura do item (4) esta **ESCREVENDO** na sombra
+  neste instante (`apply_=True forcar=True`, pela porta `bin/sombra.sh --rodar`), e um `--bloco` sobre base
+  poluida seria ensaio de mentira -- daria carimbo verde sem ter ensaiado nada. Quem cumpre a frase literal e
+  o **cron das 04:11** (`--refazer --dump-agora && --bloco`), que nasce de **dump limpo** com `a127492a` ja no
+  ar. Condicao de conferencia, para o senhor cobrar sem me perguntar: `.sombra_stamp` com `SOMBRA_BLOCO`
+  **posterior a 04:11** de hoje.
+PROVA: `.sombra_stamp` (`SOMBRA_BLOCO="22/10 00:38"`, `SOMBRA_COMANDOS=76`), `logs/deploy.stamp`
+(`QUANDO=1792640575` = 2026-10-22 00:42:55, `COMMIT=a127492a7a`), `bin/sombra.sh --conferir` respondendo
+`diverge=0 erros=0` em 22/10 01:44.
+
+**ITEM (4) DO SEU AVAL DAS 23:3x, SEGUNDA METADE -- A CURA C SOLTA 3 PESSOAS DE 345, E ISSO NAO E POUCO: E A RESPOSTA (22/10 01:5x).**
+Rota: relavratura REAL na sombra pela porta `bin/sombra.sh --rodar` (`apply_=True forcar=True`), nao DRY --
+`apply_=False` **nao pode** dar o numero, porque toda `cel.lavrar_veredito` de `_julgar_colab_corpo` mora sob
+`if apply_:`. Forma de PROD (`processar_cartorio.py:61-65`): a JANELA INTEIRA por colaborador, nunca
+`julgar_celula` dia a dia. `--forcar` e a UNICA via: `impressao_insumos` carimba so INSUMOS, e cura de
+DERIVACAO deixa a impressao byte-identica -- a frota seria PULADA.
+- **DENOMINADOR = o universo do Retrato, nao `ativo=True`** (LEI-AKITA 8): `folha/fora_da_folha.py::fora_da_folha`,
+  que le `classificar_export`. ANTES, pela funcao viva: **612 linhas · entram 221 · fora 391 · `furo_espelho` 345**
+  -- **bate NUMERO A NUMERO com o gravado** que o censo leu as 00:28 (612/221/350/41, `furo_espelho` 345). O
+  gravado e a funcao viva dizem o mesmo: nao ha segundo derivador entre eles.
+- **DEPOIS: `furo_espelho` 343 · entram 223.** **SAIRAM de retido 3** (`col253`, `col303`, `col866`), e os tres
+  foram para motivo VAZIO -- **entram no TXT**. **ENTROU 1** (`col962`). Aritmetica fecha: 221+3-1 = 223.
+- **ATRIBUICAO, em dois baldes, nao em um: 3 de 3 saem SO PELA CURA C** (todo dia que os retinha esta no
+  conjunto CURADO). "Saiu mas nao so pela C" = **0**; "saiu e nao esta no universo do corte" = **0**; e o
+  **CONTROLE**, colabs so da borda NAO curada, = **0** -- a borda nao soltou ninguem, entao o delta nao e efeito
+  do `--forcar` sobre lavra velha.
+- **POR QUE SO 3, e esta e a leitura que importa:** o censo de uma hora atras mediu que **so 217 dos 345 tem
+  motivo UNICO** -- as outras 128 tem dois ou mais. Curar UM derivador nao solta a pessoa: ela segue retida pelo
+  segundo motivo. A cura C esta certa e **o espelho de 108 dia-colab deixou de acusar**; o TXT so muda para quem
+  nao tinha outro motivo.
+- **O 1 QUE PIOROU E NOSSO, e vai com DONO (L-099), nao escondido:** `col962` passou a reter por **1 dia (27/09),
+  veredito `furo`, lavrado por ESTA rodada**. Nao e a cura C: e `--forcar` revelando que o **gravado de prod
+  estava VELHO** naquele dia. Dono ESTRUTURA. O mesmo ato escreveu **184 celulas / 56 colabs** -- muita lavra,
+  pouca soltura --, todas DENTRO de 21/09-20/10, **0 fora da janela**.
+- **A PRIMEIRA RODADA SE DECLAROU VOID E ESTAVA ERRADA A TESTEMUNHA, nao o ato** -- e eu publico isso porque foi
+  a minha propria guarda que mordeu: `ponto/portas/celula.py:581` grava `veredito_em = agora` **INJETADO** pelo
+  chamador, e no meu script o `AGORA` nasceu microssegundos ANTES do `T0`, entao `veredito_em >= T0` excluiu
+  exatamente as 184 que a rodada escreveu. Refeito por teste EXATO (`veredito_em == AGORA`): 184/56. **A guarda
+  fez o que devia -- parou o numero antes de eu publicar.**
+- **ESTE NUMERO E C-ONLY.** O *"quanto cai com as curas C e INSS"* do seu BO das 23:4x exige **segunda rodada**
+  com `SOMBRA_ARVORE=/home/ronald/wt-inss/app` (a cura do INSS esta na raia, nao no ar): nao leia 3 como os dois.
+INCOMPLETO nomeado: o universo do corte mediu **287 dia-colab / 82 colabs (108/39 curados)** contra os
+**282/81 (107/38)** que eu publiquei a 01:0x; mesmo dump (`SOMBRA_DIA=20261022`) mas `--rodar` repoe a janela de
+prod a cada chamada (`lavra_de_prod` md5 `c30b20f8`, `data_ref_prod=2026-10-21`), e batida nova de 21/10 cria
+dia-colab novo. **+5 dia-colab / +1 colab nao reconciliados** -- declarados com os dois numeros, sem forcar um.
+PROVA: `logs/item4_retencao_c.out` e `logs/item4_prova_escrita.out` (sondas em `logs/sombra/`), as duas com
+`assert NAME=='sombra'` na 1a linha, `0 falhas` em todas as fases, nenhum nome/CPF/matricula/valor; a sombra
+ficou com as 184 celulas e o cron das **04:11** a refaz do zero (item (3) acima).
+
 **SEU AVAL DAS 01:1x -- ITEM (1) ENCERRADO, E O QUE A CURA DO INSS LEVA PARA A 09 (22/10 01:2x).**
 - **NADA BARROU O PUSH.** Os 12 pousaram: `origin/main = a127492a`, trava `livre desde 01:06:34`, e os
   tres portoes de TICKETS mais os de host sairam verdes (a linha das 00:4x, abaixo, tem o censo deles).

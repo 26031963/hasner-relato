@@ -6,10 +6,31 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 22/10/2026 01:42:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1197.8 MB). Acoes na janela: **765**.
+**Medido em 22/10/2026 01:47:52.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1198.5 MB). Acoes na janela: **786**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 01:47:24 | Bash | Run the three targeted modules on the lane | `cd /home/ronald/saas-hasner && ESTEIRA_QUEM=suite-red2 bash bin/suite.sh --dir /home/ronald/wt-inss --espera 600 --only "core.tests.test_selo_teste_sem_relogio ponto.tests.test_a2_precedencia ponto.tests.test_bo_inss_nunca_bateu_le_a_precedencia" > logs/boinss/alvo_red2.log 2>&1; echo "RC=$?"; /bin/grep -E '^(OK\|FAILED)($\| \()' logs/boinss/alvo_red2.log \| tail -1; /bin/grep -E '^Ran [0-9]+ test ...` |
+| 01:47:16 | Bash | Read the rest of suite.sh | `cd /home/ronald/saas-hasner && sed -n '60,140p' bin/suite.sh` |
+| 01:47:09 | Bash | Ruff the two patched test files with cache tmpfs | `cd /home/ronald/saas-hasner && docker run --rm --cpuset-cpus 4-7 --cpus 2 --memory 1g -v /home/ronald/wt-inss/app:/app:ro --tmpfs /app/.ruff_cache -w /app --entrypoint ruff saas-hasner-core check --config /app/ruff.toml ponto/tests/test_bo_inss_nunca_bateu_le_a_precedencia.py ponto/tests/test_a2_precedencia.py 2>&1 \| tail -5` |
+| 01:47:03 | Bash | Ruff the two patched test files | `cd /home/ronald/saas-hasner && docker run --rm --cpuset-cpus 4-7 --cpus 2 --memory 1g -v /home/ronald/wt-inss/app:/app:ro -w /app --entrypoint ruff saas-hasner-core check --config /app/ruff.toml ponto/tests/test_bo_inss_nunca_bateu_le_a_precedencia.py ponto/tests/test_a2_precedencia.py 2>&1 \| tail -5` |
+| 01:46:57 | Bash | Read suite.sh usage | `cd /home/ronald/saas-hasner && sed -n '1,60p' bin/suite.sh` |
+| 01:46:48 | Bash | Patch the two reds in the lane | `cd /home/ronald/wt-inss && cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/patch_red2.py <<'PY' import io, py_compile, re, sys # ---------------------------------------------------------------- 1. a caracterizacao INVERTE P1 = '/home/ronald/wt-inss/app/ponto/tests/test_a2_precedencia.py' src = io.open(P1, encoding='utf-8').read() old = (" self.as ...` |
+| 01:46:18 | Bash | LEI-ANTES-DO-PATCH grep for the two sites | `for f in docs/LEIS.md docs/DOSSIES.md docs/CORTES.md; do echo "=== $f"; /bin/grep -n "test_a2_precedencia\\|precedencia_da_ata\\|testes_sem_relogio\\|TESTE-SEM-RELOGIO\\|test_selo_teste_sem_relogio" "$f" \| head -20; done` |
+| 01:45:33 | Bash | Read the DB test classes | `cd /home/ronald/wt-inss && sed -n '113,216p' app/ponto/tests/test_bo_inss_nunca_bateu_le_a_precedencia.py` |
+| 01:45:25 | Bash | List classes and tests of the new file | `cd /home/ronald/wt-inss && /bin/grep -nE "^class \|^ def test" app/ponto/tests/test_bo_inss_nunca_bateu_le_a_precedencia.py` |
+| 01:45:08 | Bash | Read the new test head | `cd /home/ronald/wt-inss && sed -n '1,110p' app/ponto/tests/test_bo_inss_nunca_bateu_le_a_precedencia.py` |
+| 01:45:04 | Bash | Find real clock reads in the new test | `cd /home/ronald/wt-inss && /bin/grep -nE "(timezone\|_tz\|datetime\|date)\.(now\|today\|localdate\|localtime)\(\)" app/ponto/tests/test_bo_inss_nunca_bateu_le_a_precedencia.py` |
+| 01:44:57 | Bash | Read the clock selo | `cd /home/ronald/wt-inss && sed -n '1,75p' app/core/tests/test_selo_teste_sem_relogio.py` |
+| 01:44:49 | Bash | Read _marcar_ausencias around the cure | `cd /home/ronald/wt-inss && sed -n '940,1010p' app/escala/utils.py` |
+| 01:44:23 | Bash | Read the nunca_bateu branch | `cd /home/ronald/wt-inss && sed -n '770,850p' app/ponto/services/cartorio.py` |
+| 01:44:17 | Bash | Find nunca_bateu sites in cartorio | `cd /home/ronald/wt-inss && /bin/grep -n "nunca_bateu" app/ponto/services/cartorio.py \| sed -n '1,40p'` |
+| 01:44:10 | Bash | Read the judge body around the cure | `cd /home/ronald/wt-inss && sed -n '150,250p' app/ponto/supra_juiz.py` |
+| 01:44:06 | Bash | Inspect the judge for the cured keys | `cd /home/ronald/wt-inss && /bin/grep -n "cobertura_parcial\\|coberto_o_dia_inteiro\\|dia_de_cobranca\\|nunca_bateu\\|concorde" app/ponto/supra_juiz.py \| sed -n '1,60p'` |
+| 01:43:41 | Bash | Read the failing precedencia test | `cd /home/ronald/wt-inss && sed -n '430,520p' app/ponto/tests/test_a2_precedencia.py` |
+| 01:43:23 | Bash | Read the two failure bodies | `cd /home/ronald/saas-hasner && sed -n '2105,2160p' logs/boinss/suite_cheia.log` |
+| 01:43:19 | Bash | List the suite failures | `cd /home/ronald/saas-hasner && /bin/grep -nE '^(FAIL\|ERROR):' logs/boinss/suite_cheia.log \| tail -20` |
+| 01:43:12 | Bash | Check full suite verdict and lock holder | `cd /home/ronald/saas-hasner && date '+%H:%M:%S' && ls -la logs/boinss/suite_cheia.log && tail -c 400 logs/boinss/suite_cheia.log \| tr -d '\0' && echo "--- veredito L-074:" && /bin/grep -E '^(OK\|FAILED)($\| \()' logs/boinss/suite_cheia.log \| tail -1 && echo "--- Ran:" && /bin/grep -E '^Ran [0-9]+ tests' logs/boinss/suite_cheia.log \| tail -1 && echo "--- trava:" && bash bin/trava_teste.sh --quem` |
 | 01:39:20 | Bash | Write the prod reversal snapshot script | `cd /home/ronald/saas-hasner && cat > logs/boinss/cond2_snapshot_prod.py <<'PY' # -*- coding: utf-8 -*- """CONDICAO 2 da DINHEIRO-EM-COMPETENCIA-ABERTA: a FOTO DE REVERSAO, em PROD, SO LEITURA. Roda num exec PROPRIO, segundos antes do apply -- nunca aninhado (dois arquivos no mesmo exec escreveriam nos MESMOS nomes de modulo, e um mediria o outro). O apply recusa foto com mais de 300 s, pela razao  ...` |
 | 01:38:43 | Bash | Read the apply template body | `cd /home/ronald/saas-hasner && sed -n '60,200p' logs/o195_apply_3_prod.py` |
 | 01:38:39 | Bash | Extract the apply template mechanics | `cd /home/ronald/saas-hasner && /bin/grep -n "Emissor\\|julgar_colab\\|cels =\\|contadores\\|periodo_apuracao\\|INI10\\|def foto\\|recalcular" logs/o195_apply_3_prod.py \| sed -n '1,60p'` |
