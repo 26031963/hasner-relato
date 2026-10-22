@@ -327,12 +327,12 @@ flowchart TD
     ja_folha_export_py(["folha/export.py"]) --- jf_fechamento
     ja_ponto_janelas_py(["ponto/janelas.py"]) --- jf_fechamento
     ja_ponto_services_fechamento_py(["ponto/services/fechamento.py"]) --- jf_fechamento
-    jf_tela["tela<br/>10 com juiz · 1 sem juiz<br/>registro: 113 sitio(s)"]
+    jf_tela["tela<br/>11 com juiz · 1 sem juiz<br/>registro: 112 sitio(s)"]
     ja_chamados_juizes_py(["chamados/juizes.py"]) --- jf_tela
+    ja_colaboradores_services_calendario_py(["colaboradores/services/calendario.py"]) --- jf_tela
     ja_escala_servico_jornada_py(["escala/servico_jornada.py"]) --- jf_tela
     ja_ferias_models_py(["ferias/models.py"]) --- jf_tela
-    ja_folha_export_py(["folha/export.py"]) --- jf_tela
-    jmais_tela["... +3 arquivos de juiz"] --- jf_tela
+    jmais_tela["... +4 arquivos de juiz"] --- jf_tela
     jf_portas["portas<br/>1 com juiz · 0 sem juiz<br/>registro: 124 sitio(s)"]
     ja_core_portas_da_tela_py(["core/portas_da_tela.py"]) --- jf_portas
     jf_batida["batida<br/>2 com juiz · 3 sem juiz<br/>registro: 0 sitio(s)"]
