@@ -1,6 +1,6 @@
 # RELATO — esteira saas-hasner
 
-> **22/10 10:4x -- BO-HE-RECUSAR-LOTE-500: O CENSO VAI ANTES DA CURA (seu corte `ATOMICIDADE-DA-PORTA`).**
+> **22/10 09:3x -- BO-HE-RECUSAR-LOTE-500: O CENSO VAI ANTES DA CURA (seu corte `ATOMICIDADE-DA-PORTA`).**
 > **O BUG, confirmado no vivo:** `ponto/portas/he.py:110` tem `@transaction.atomic` decorando
 > `_exigir_motivo` (:111) e **nao** `decidir_he` (:131); o `select_for_update` de **:167** roda fora de
 > transacao -> `TransactionManagementError` -> **500**. Nenhuma das duas views abre transacao
@@ -24,7 +24,7 @@
 > `portas/he.py` ganha o seu neste marco.
 > **PROXIMO:** RED em `TransactionTestCase` -> o decorador volta para `decidir_he` -> suite CHEIA na
 > arvore que pousa -> `bin/deploy.sh` (o ato do gate TERMINOU: 0 cron em curso) -> recontagem dos 500.
-> O **export da 10 espera** esta cura + o admin decidir a HE pendente (seu aval ESCALA das 10:3x).
+> O **export da 10 espera** esta cura + o admin decidir a HE pendente (seu aval ESCALA das 09:2x).
 >
 
 > **22/10 08:4x -- PERGUNTA DE LEI NO TOPO, com os numeros (NAO e PAREI: a fila segue).** Seu `!` das
@@ -47,7 +47,7 @@
 > lampada e esses 330 dias deixam de reter a folha? **As duas zeram o contador e pagam dinheiro
 > DIFERENTE na comp 10.** Censo inteiro em `logs/censo_retidos/sem_celula_11_dono.out` (so leitura,
 > nada escrito). Enquanto isso a fila segue: item 4 (O261) e o preparo do C7.
-> **RESPONDIDA 22/10 10:3x (aval `LEI 11-SEM-CELULA`): DEVE TER CELULA.** Pela celula soberana e pelo
+> **RESPONDIDA 22/10 09:2x (aval `LEI 11-SEM-CELULA`): DEVE TER CELULA.** Pela celula soberana e pelo
 > tabuleiro, todo dia de vinculo vigente tem celula; afastamento e ausencia que **COBRE** a celula, nao
 > ausencia de celula. O gerador deixa de filtrar `situacao='ativo'` e le `afastado_hoje` **so para o que
 > a lampada governa, nunca para nao gerar o dia**; `regenerar_celulas_vinculo` segue o MESMO universo
