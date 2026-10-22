@@ -6,10 +6,21 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 22/10/2026 00:28:28.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1194.0 MB). Acoes na janela: **622**.
+**Medido em 22/10/2026 00:33:52.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1194.2 MB). Acoes na janela: **633**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 00:31:43 | Bash | Record the measured finding | `cd /home/ronald/saas-hasner && mkdir -p logs/boinss && cat > logs/boinss/achado_grade.md <<'MD' # BO-INSS: o terceiro leitor da cobertura e a GRADE (medido 22/10 00:3x) RED+GREEN de `ponto/tests/test_bo_inss_nunca_bateu_le_a_precedencia`: RED (copia de HEAD, /home/ronald/red_inss_head): FAILED (failures=3, errors=4) \| Ran 9 \| rc 1 GREEN(arvore curada, /home/ronald/wt-inss) : FAILED (failures=2)  ...` |
+| 00:31:16 | Bash | Read parciais_vigentes | `cd /home/ronald/wt-inss/app && grep -n "def parciais_vigentes" -B5 -A 25 ponto/catalogo/ausencias.py` |
+| 00:31:11 | Bash | Read cobre_parte_do_dia | `cd /home/ronald/wt-inss/app && grep -n "def cobre_parte_do_dia" -A 40 ponto/turnos.py` |
+| 00:30:37 | Bash | Read the folha reader and the overlay callers | `cd /home/ronald/wt-inss/app && sed -n '1478,1500p' escala/utils.py; echo "=== quem chama _marcar_ausencias:"; /bin/grep -rn "_marcar_ausencias" --include=*.py . \| /bin/grep -v tests; echo "=== onde minutos_realizados se calcula na grade:"; /bin/grep -n "minutos_realizados" escala/utils.py \| head` |
+| 00:30:04 | Bash | Read the ausencia labelling in the grade | `cd /home/ronald/wt-inss/app && sed -n '930,1000p' escala/utils.py` |
+| 00:29:59 | Bash | Find where the grade labels a day as ausencia | `cd /home/ronald/wt-inss/app && /bin/grep -n "'ausencia'" escala/utils.py \| head -20` |
+| 00:29:28 | Bash | Run the diagnostic on the normal-branch fixture | `cd /home/ronald/wt-inss/app && cat > ponto/tests/test_zz_diag_boinss.py <<'PY' """DIAGNOSTICO TEMPORARIO -- nao commitar. Imprime o dia da grade do cenario do ramo normal.""" import datetime from django.utils import timezone from ponto.tests.test_bo_inss_nunca_bateu_le_a_precedencia import ( MINUTOS_PARCIAIS, RamoNormalTest) class DiagTest(RamoNormalTest): def test_diag(self): c, dia, cel, dp = se ...` |
+| 00:29:15 | Bash | Find the eu injection | `cd /home/ronald/wt-inss/app && grep -n "eu=\\|eu =\\|import.*utils as eu\\|def julgar_colab" ponto/services/cartorio.py \| head -20` |
+| 00:29:06 | Bash | Read RamoNormalTest | `cd /home/ronald/wt-inss/app && sed -n '130,215p' ponto/tests/test_bo_inss_nunca_bateu_le_a_precedencia.py` |
+| 00:28:50 | Bash | Read the furo and fato gates | `cd /home/ronald/wt-inss/app && sed -n '187,268p' ponto/supra_juiz.py` |
+| 00:28:36 | Bash | Read my test fixture | `cd /home/ronald/wt-inss/app && sed -n '1,130p' ponto/tests/test_bo_inss_nunca_bateu_le_a_precedencia.py` |
 | 00:28:20 | Bash | Read the B5-u selo | `cd /home/ronald/wt-inss/app && wc -l ponto/tests/test_selo_b5u_nunca_bateu_ve_ausencia.py && cat ponto/tests/test_selo_b5u_nunca_bateu_ve_ausencia.py` |
 | 00:28:13 | Bash | Find tests that drive the cartorio | `cd /home/ronald/wt-inss/app && /bin/grep -rln "julgar_colab\\|processar_cartorio" ponto/tests escala/tests folha/tests 2>/dev/null \| head -30` |
 | 00:27:57 | Bash | Read classificar_dia head | `cd /home/ronald/wt-inss/app && grep -n "def classificar_dia" -A 70 ponto/supra_juiz.py \| sed -n '1,100p'` |
