@@ -5,6 +5,26 @@
 > e a **corrente da manha de 21/10 nasceu VAZIA** -- um `raise` no import de `config/crons.py` matou os
 > 11 elos e o alarme junto. As tres secoes estao em **22/10 01:1x**, logo abaixo do topo.
 
+**SEU AVAL DAS 01:1x -- ITEM (1) ENCERRADO, E O QUE A CURA DO INSS LEVA PARA A 09 (22/10 01:2x).**
+- **NADA BARROU O PUSH.** Os 12 pousaram: `origin/main = a127492a`, trava `livre desde 01:06:34`, e os
+  tres portoes de TICKETS mais os de host sairam verdes (a linha das 00:4x, abaixo, tem o censo deles).
+  O HEAD esta **1 commit a frente** -- `bd624514`, o derivado que `bin/pos_push.sh` escreve no TICKETS,
+  **excecao NOMEADA da L-106** --, e ele sobe no push do MARCO do INSS (L-108: um push por marco).
+  Cura: nenhuma, porque nada barrou.
+- **A LINHA PROVA DA SECAO "O COMBOIO POUSOU" ESTA ESCRITA** (RELATO linha 161): rota das 3 cascas em
+  200/302/200, migrations pendentes 0, hash que subiu `3bcabf1c`, hash no ar agora `a127492a`. O portao
+  do publicado responde `afirma_com_prova: OK (1 arquivo, 0 afirmacao sem prova)`, rc 0 -- **o RELATO
+  publicado destravou**, e era isso que o retinha ha 3 h. A regra que eu nao sabia: o portao casa
+  `PROVA:` com dois-pontos COLADO, e eu havia escrito `PROVA (rota ...):`.
+- **NAO E PERGUNTA DE LEI, E CONSEQUENCIA MEDIDA: a cura do INSS alcanca a 09, e eu sigo pela L-113.**
+  `processar_cartorio` varre `data__lt=hoje` **sem piso nenhum** -- `ponto/services/cartorio.py:619` diz
+  isso por escrito --, entao o cron das 06:27 rejulga tambem as **9** celulas de cobertura PARCIAL da 09,
+  e **8** delas, acima do `PISO_EMISSAO='2026-09'`, EMITEM chamado. Nao e o gravado e nao e dinheiro: a
+  **L-113** responde literalmente que *chamado pode NASCER em competencia que o Dominio ja pagou*, e o
+  seu PARA de hoje e o GRAVADO da 09, que nenhum ato meu toca. Fica aqui com o numero, antes do deploy.
+  As **127** da 10 **nao se movem sozinhas** (impressao byte-identica, de proposito, para a frota nao ser
+  rejulgada por uma linha) -- elas sao exatamente o rejulgamento pela porta do seu item 2.
+
 **AS TRES PERGUNTAS DE LEI DO TOPO ESTAO RESPONDIDAS -- SEU AVAL DE 21/10 21:3x. NADA DEVOLVEU TURNO.**
 1. **JANELA DA SOMBRA: DECIDIDA POR MIM, pela PAREI-SO-LEI** (*"horario de cron = decisao tecnica do
    Code"*). Movi o **`health_crawl` das 05:00 para as 05:30** e o `VIZINHO_SOMBRA` para **`'05:10'`**
