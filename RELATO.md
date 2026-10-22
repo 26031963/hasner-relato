@@ -1,34 +1,29 @@
 # RELATO — esteira saas-hasner
 
-> **22/10 07:2x -- O PORTAO QUE ISOLA A ARVORE MEDIDA ESTAVA VERMELHO PARA TODO MUNDO, e a (2) do
-> GATE morreria nele antes de medir um numero.**
-> LEI-AKITA: origem=`logs/o280/passo4/arvorar.sh` portao B (perguntava o NOME do commit, nao o
-> CODIGO); testemunha=`<h>:app` no conjunto das arvores `app` de `rev-list <COMMIT>` -- a mesma
-> `tree_app` que o `.TREE` da copia ja confere; RED=`arvorar.sh c2cde4c3` -> `rc=5` nomeando 31
-> hashes; quem-mais-le=o outro chamador e a raia v3 (troca ATOMICA por `mv`); juizes novos=0.
+> **22/10 07:2x -- O PORTAO QUE ISOLA A ARVORE MEDIDA ESTAVA VERMELHO PARA TODO MUNDO, e a (2) do GATE
+> morreria nele antes de medir um numero.**
+> LEI-AKITA: origem=`arvorar.sh` portao B (perguntava o NOME do commit, nao o CODIGO); testemunha=`<h>:app`
+> no conjunto de arvores `app` de `rev-list <COMMIT>`; RED=`arvorar.sh c2cde4c3` -> `rc=5` nomeando 31
+> hashes; quem-mais-le=outro chamador + raia v3 (troca ATOMICA por `mv`); juizes novos=0.
 > **O NUMERO:** dos **49** tokens de 8 hex do §6 do ESMERIL, **2** falhavam `--is-ancestor` contra
-> `fa5cd145` **e contra `bb3a588d`, o HEAD da propria raia** -- nao recusava o meu proposito,
-> recusava qualquer um. Os dois sao codigo DA linhagem com outro nome, e o §6 e que o diz: `30fb27e5`
-> (item 438, amendado para `6a4f74d2`) e `fe1464bd` (copia de certificacao). **MEDIDO:**
-> `30fb27e5:app == 6a4f74d2:app`, `fe1464bd:app == af980808:app`. **PROVA:** `arvore_fa5cd145` nasceu
-> com **2912** `.py`, a 2a chamada disse `ja existe e CONFERE`, e a trilha nomeia os dois casos.
-> **A (2) PAROU DE SE AUTO-APROVAR EM TRES SITIOS** (`logs/gate10/cond2.sh`): (a) a competencia era
-> grepada no log, e aquela linha e do RUNNER (`oraculos_v3.py:74`, `% (MES, ANO)` de `P4_MES`) --
-> testemunha passa a ser a FONTE (**5/5** declaram `MES, ANO = 10, 2026`, **0** declaram 9) mais
-> `! grep 09/2026` no log (seguro: **0** janelas `dd/mm/aaaa` no log da 09); **PROVA:** a pasta da 09
-> no mesmo recorte da `PAROU` (9 arquivos, 0 declaram a 10); (b) a arvore do PASSO 4 vinha de
-> `ls | tail -1` -- agora sai do stdout do `arvorar.sh` para `arvore_<dia>.dir`, com `.TREE` conferido
-> contra `HASH:app`; (c) a janela sem pouso deixou de ser estimada: **3135 s** de `dur_s['sombra.sh']`.
-> **O EXTRATOR DEIXOU DE LER "0 DIVERGENTE" DE ORACULO QUE ESTOUROU** -- a pasta dos 5 e o universo
-> obrigatorio. **PROVA:** 1 verde e **4** mordidas (sem secao, secao sem `DIVERGENTES`, pasta vazia,
-> 4a mao esquecida). **OS 5 PROBES SAIRAM DO SCRATCHPAD** para `logs/gate10/` (o ato das 08:40 roda
-> DESTACADO): **PROVA:** `cmp` identico nos cinco e portao novo que da `PAROU` nomeando os 5.
-> **POUSO RECONFERIDO NO COMMIT AMENDADO:** `diff f4e258be fa5cd145 -- app ':!app/docs'` **VAZIO**,
-> **0** `.py`; no remoto `5d1857a1..fa5cd145`, `pos_push` fechou TICKETS em `8359ce6e` (L-106).
-> **ERRATA DO BLOCO DE 07:1x:** `P4_PARES` em `dono_oraculos.py` e a leitura do `ESMERIL.md` **nao
-> sao da raia v3** -- sao a condicao (2) do GATE (seu aval 21/10 18:5x), fila 1. **PROVA:** os dois
-> so entram em `cond2.sh` PASSO 3 e 4. A raia v3 escreveu os 2 testes, e eles estao NA raia: `wt-v3`
-> com os dois untracked, espelhados em `logs/raiav3/` (**28419** e **11425** bytes) -- nada perdido.
+> `fa5cd145` **e contra `bb3a588d`, o HEAD da propria raia**. Sao codigo DA linhagem com outro nome, e o §6
+> o diz: `30fb27e5` (item 438, amendado para `6a4f74d2`) e `fe1464bd` (copia de certificacao). **MEDIDO:**
+> `30fb27e5:app == 6a4f74d2:app`, `fe1464bd:app == af980808:app`. **PROVA:** `arvore_fa5cd145` nasceu com
+> **2912** `.py`, a 2a chamada disse `ja existe e CONFERE`.
+> **A (2) PAROU DE SE AUTO-APROVAR EM TRES SITIOS** (`cond2.sh`): (a) a competencia era grepada no log,
+> linha que e do RUNNER (`oraculos_v3.py:74`, de `P4_MES`) -- testemunha passa a ser a FONTE (**5/5**
+> declaram `MES, ANO = 10, 2026`, **0** declaram 9), **PROVA:** a pasta da 09 PAROU no mesmo recorte; (b) a
+> arvore do PASSO 4 vinha de `ls | tail -1`, agora sai do stdout do `arvorar.sh` para `arvore_<dia>.dir`,
+> com `.TREE` conferido contra `HASH:app`; (c) a janela sem pouso saiu do palpite: **3135 s** de
+> `dur_s['sombra.sh']`.
+> **O EXTRATOR DEIXOU DE LER "0 DIVERGENTE" DE ORACULO QUE ESTOUROU** (universo obrigatorio), **PROVA:** 1
+> verde e **4** mordidas; os **5** probes sairam do scratchpad para `logs/gate10/`, **PROVA:** `cmp`
+> identico nos cinco.
+> **POUSO RECONFERIDO NO COMMIT AMENDADO:** `diff f4e258be fa5cd145 -- app ':!app/docs'` **VAZIO**, **0**
+> `.py`; no remoto `5d1857a1..fa5cd145`, `pos_push` fechou TICKETS em `8359ce6e` (L-106).
+> **ERRATA DO BLOCO DE 07:1x:** `P4_PARES` em `dono_oraculos.py` e a leitura do `ESMERIL.md` sao a condicao
+> (2) do GATE (aval 21/10 18:5x), fila 1, **nao** da raia v3 -- os 2 testes dela estao na raia (`wt-v3`
+> untracked, espelho em `logs/raiav3/`, **28419** e **11425** bytes), nada perdido.
 >
 > **22/10 07:1x -- ITEM 6 EMPURRADO, E A ARVORE DE PROD LIMPA DE `.py` NAO PROVADO.**
 > LEI-AKITA: origem=a RAIA (arquivo novo nasce no worktree da raia, nunca na arvore viva, que E o
