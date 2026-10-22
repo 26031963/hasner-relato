@@ -16,7 +16,18 @@ PAREI: ! O261 e o export da 10 | espera o DP e o Ronald: (a) o TXT da 10 esta BA
 > O MARCADOR ANDOU no mesmo ato: `ORDEM-VIVA-TOPO` saiu de `BO-HE-RECUSAR-LOTE-500` (fechado) para `O261`, que o hook cobrou.
 > SEM COMMIT DE PROPOSITO: `RELATO.md` e `BACKLOG.md` ficam sujos na arvore porque a L-106 nao deixa commit so de docs fora de marco. Eles entram no commit do proximo marco.
 
-## 22/10 19:xx -- MARCO: C7 ITEM 8 -- O C6 LE A TRANCA MENOS O TOQUE DO ADMIN (opcao A), EM COMBOIO COM O RETRATO (b)
+## 22/10 19:0x -- BUG-DIA-SEM-SAIDA: MEDIDO OS 26 DIAS PELAS FUNCOES REAIS (sem codigo ainda)
+
+LEI-AKITA: origem=a medir por classe (abaixo), testemunha=`chamados/services/pergunta_no_app.py::do_dia` (a porta da tela) + `colaboradores/services/calendario.py::resolver_dia_oferecido` + `chamados/juizes.py::pergunta_viva`, RED=a escrever por classe, quem-mais-le=o calendario (`_perg_viva` por `q_vivas`, segundo leitor do C6 -- `calendario.py:566-573`), juizes novos=0
+- **Sondas:** `dia_sem_saida*.py` (scratchpad da sessao), so leitura em prod, 22/10 ~19:1x. As 26 celulas TEM veredito -- do CARTORIO (`furo`/`indefinida`, `via=cartorio`); falta o HUMANO.
+- **Ja no app (4):** col478 03/10, col297 21/09, col824 18/10, col33 03/10 -- a pergunta chega ao colab; o ultimo recurso fica bloqueado pela pergunta viva, como a lei manda. TEM saida.
+- **Ausencia cobre (3):** col281 30/09, col844 29/09, col814 26/09 -- `do_dia` diz `coberto_por_ausencia`, a tela diz `ausencia`, mas a CELULA segue `furo` com chamado vivo: dois juizes discordando do mesmo dia (ESTRUTURA).
+- **Pergunta viva sob outro chamado (3):** col489 01/10 e 03/10, col151 04/10 -- `eh_trabalho=None`/ultimo recurso na tela; falta medir se o outro chamado esta vivo.
+- **Encerrada, "o admin decide o dia" (3):** col245 22/09, col824 21/09, col859 23/09 -- o `do_dia` manda ao admin e a tela NAO oferece: `eh_trabalho=None` no calendario com `CelulaDia.trabalha=True` (leitor que nao le a celula soberana: ESTRUTURA).
+- **Indefinida (13):** veredito `indefinida`, status `escala_suspeita`, NENHUM chamado vivo e 2-4 perguntas vivas pelo C6 sem carro ate o app.
+- **Ordem pelo aval:** as curas de TELA (Resolver dia oferecido onde o `do_dia` ja manda ao admin) nao mudam valor de ninguem -- vem ANTES do TXT; a da ausencia x celula pode tirar gente da retencao (por DENTRO do TXT) e se mede antes de entrar; a indefinida e CADASTRO ate prova em contrario (L-099).
+
+## 22/10 19:0x -- MARCO: C7 ITEM 8 -- O C6 LE A TRANCA MENOS O TOQUE DO ADMIN (opcao A), EM COMBOIO COM O RETRATO (b)
 
 LEI-AKITA: origem=`chamados/juizes.py::_pergunta_viva_calc` (o C6 so conhecia a tranca pelo CARIMBO da via) + `chamados/services/competencia_trancada.py::encerrar` (carimbava), testemunha=`ponto/services/fechamento.py::periodo_trancado` (_K7) e a trilha dos 3 toques humanos que ja existem, RED=`chamados/tests/test_c7_red_minimos.py` (7 vermelhos contra `10ecf54b`) + `folha/tests/test_retrato_aviso_de_frescor.py` (3), quem-mais-le=`respostas_sem_veredito`, a vassoura S128, `medir`/`encerrar` da tranca, o "Cobrar este dia" e o selo `test_quem_le_a_tranca_em_producao` (leitor declarado), juizes novos=0
 - **C6:** `dia_da_pergunta_trancado` = tranca viva E nenhum ADMIN tocou o (colab, dia) depois dela (`cobrar_dia_manual` / `veredito_celula` / `desarquivar_chamado` com usuario humano). Memo no REQUEST (o modal ficou no teto).
