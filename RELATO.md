@@ -1,5 +1,32 @@
 # RELATO — esteira saas-hasner
 
+> **22/10 10:4x -- BO-HE-RECUSAR-LOTE-500: O CENSO VAI ANTES DA CURA (seu corte `ATOMICIDADE-DA-PORTA`).**
+> **O BUG, confirmado no vivo:** `ponto/portas/he.py:110` tem `@transaction.atomic` decorando
+> `_exigir_motivo` (:111) e **nao** `decidir_he` (:131); o `select_for_update` de **:167** roda fora de
+> transacao -> `TransactionManagementError` -> **500**. Nenhuma das duas views abre transacao
+> (`ponto/views.py:472`, `:522` -- so `@login_required`) e **`ATOMIC_REQUESTS` nao existe em settings
+> nenhum**: a porta era a unica trava possivel, e nao estava la.
+> **DESDE QUANDO:** `git log -L 108,132:app/ponto/portas/he.py` -> **`041fd2ac`, 09/10 03:58:48** (O214
+> item 2). No diff, `@transaction.atomic` e linha de **CONTEXTO** e `+def _exigir_motivo` entrou
+> **embaixo** dela: o decorador de `decidir_he` foi adotado pelo helper inserido -- a classe "decorador
+> engole funcao inserida", na direcao inversa. **13 dias no ar.**
+> **QUANTOS 500:** no `/app/logs/errors.log` do `saas_ui`, **2 registros**, os dois em
+> `/ponto/gestao-he/recusar-lote/` e os dois em **22/10 07:37:57**; `TransactionManagementError` = **4**
+> no arquivo inteiro (sem rotacao desde 09/09); **0** em `/ponto/gestao-he/decidir/` -- a rota de UM dia
+> esta igualmente quebrada no CODIGO, mas ninguem a exercitou no periodo.
+> **CENSO DOS VIOLADORES HOJE** (por AST, nunca por texto): `select_for_update` em producao =
+> **16 sitios em 9 arquivos**, **15 sob atomic**, **VIOLACAO = 1** -- e e `he.py:167::decidir_he`. Os
+> irmaos da propria porta estao cobertos (:311 e :438 por decorador, :544 por `with`). **Nao ha segundo
+> sitio para curar hoje.**
+> **ITEM (b) DO CORTE, o universo medido:** dos **9 arquivos**, **2** tem teste em `TransactionTestCase`
+> (`test_f9a1_race_rejeitar` -> justificativa; `test_c2_corrida_do_abrir` -> chamados) -- **7 sem**. Logo
+> (b) nasce como **contador com universo declarado**, nao como lote de 9 testes nesta fatia; a
+> `portas/he.py` ganha o seu neste marco.
+> **PROXIMO:** RED em `TransactionTestCase` -> o decorador volta para `decidir_he` -> suite CHEIA na
+> arvore que pousa -> `bin/deploy.sh` (o ato do gate TERMINOU: 0 cron em curso) -> recontagem dos 500.
+> O **export da 10 espera** esta cura + o admin decidir a HE pendente (seu aval ESCALA das 10:3x).
+>
+
 > **22/10 08:4x -- PERGUNTA DE LEI NO TOPO, com os numeros (NAO e PAREI: a fila segue).** Seu `!` das
 > 07:4x item (3) mandou medir se os 11 colabs com `sem_celula` na janela inteira sao **CADASTRO** (sem
 > vinculo vigente) ou **o gerador `gerar_celulas` que nao rodou**. **Medido em prod: nenhum dos dois.**
@@ -20,6 +47,12 @@
 > lampada e esses 330 dias deixam de reter a folha? **As duas zeram o contador e pagam dinheiro
 > DIFERENTE na comp 10.** Censo inteiro em `logs/censo_retidos/sem_celula_11_dono.out` (so leitura,
 > nada escrito). Enquanto isso a fila segue: item 4 (O261) e o preparo do C7.
+> **RESPONDIDA 22/10 10:3x (aval `LEI 11-SEM-CELULA`): DEVE TER CELULA.** Pela celula soberana e pelo
+> tabuleiro, todo dia de vinculo vigente tem celula; afastamento e ausencia que **COBRE** a celula, nao
+> ausencia de celula. O gerador deixa de filtrar `situacao='ativo'` e le `afastado_hoje` **so para o que
+> a lampada governa, nunca para nao gerar o dia**; `regenerar_celulas_vinculo` segue o MESMO universo
+> (fecha `REGENERAR-CELULAS-NAO-FILTRA-SITUACAO`); `export.py` **nao ganha leitor novo**. Impacto por
+> rubrica na 10 medido e publicado ANTES do apply. Obra no BACKLOG; entra depois da cura da HE.
 >
 
 > **22/10 08:1x -- `!` NA MESA, ITEM 3 DA SUA ORDEM (o export da 10): O LOTE ENTROU PELA METADE E O
@@ -784,6 +817,31 @@ e o agente da raia B entregou o relatorio no mesmo minuto. `TaskStop` no id dele
 A LICAO que fica (sua regra de sempre, e ela pegou de novo): **espera se le no ARQUIVO, nao no rotulo**. O rotulo
 "Waiting for suite_certifica.log to start" sobreviveu ao fato por 2 h porque ninguem leu o arquivo -- que estava
 pronto. PROVA: as quatro medidas acima, todas de 21:2x, e `ls -l logs/raiaB/suite_certifica.log` (176478 bytes, 21:04).
+
+## 09:2x -- GATE-EXPORT-10 condicao (1): 608 de 608
+
+**608 DE 608, E O QUE FALTAVA NAO ERA LAVRA: ERA O DP TRABALHANDO.** 1a passada
+(`logs/gate10/ato_20261022.out`): **606/608 = 99,7%**, sobrando col577 e col920. CAUSA MEDIDA:
+`app/logs/ponto.log` tem **7** `fechamento invalidado:` hoje e DUAS sao esses dois, DEPOIS do
+corte do ATO 2 (08:56:37) -- **08:57:49 col920 n=2**, **09:00:00 col577 n=1**; `n>=1` prova que o
+carimbo estava la, e col577 fecha a cadeia (ja invalidado as 07:28:46, so a lavra podia ter
+recarimbado). Lastro: `invalidacoes_20261022.txt`.
+
+DESENHO, NAO DEFEITO: `derivado_em` e CACHE (O48 p6) e ato de DP que move a autoridade sem re-
+derivar mata o carimbo pela porta `invalidar_fechamento`. Censo FECHADO: `git grep -nw
+derivado_em` = **4** escritores, todos em `fechamento.py`.
+
+2a PASSADA (`logs/gate10/passo2_recarimbo.sh`, 09:15, `--colabs 577,920`, corte NAO renovado):
+**608 == 608, 100,0%**. PROVA reversao: `recalculo/..._20261022_091529.json` (790.076 B), do
+proprio comando, ANTES do apply. PROVA retrato: `desatualizados=2` -> `lavrar_retrato_folha
+--apply` -> **0**. PROVA L-092: **09 INTACTA, hash identico**. Dinheiro movido = o do ato de DP
+(col920 `minutos_abonados 0.00->660.00`). PROVA 4, perdida hoje por defeito MEU (`clientes` nao
+existe): **entra_total=230**, `hash_no_ar=8359ce6e`, `py_sujo=0`.
+
+`derivado_em` em `folha/` = **0**: o export nao pergunta o carimbo -- familia da **O325** (FILA 1,
+ESTRUTURA), 2o caso vivo; nada construido. CLAUDE.md secao 2 corrigida. LEI-AKITA: origem=DP
+movendo a autoridade durante a lavra; testemunha=`invalidar_fechamento` + `gate10_contador` no
+corte do ATO 2; RED=606/608; quem-mais-le=4 escritores, 0 leitores em `folha/`; juizes novos=0.
 
 ## O LOTE QUE O SEU `!` AUTORIZOU JA NAO EXISTIA EM PROD: APLIQUEI A INTERSECAO MEDIDA -- 2 PLANTADAS, E OS 4 QUE PERDIAM HORA NAO ENTRARAM (22/10 08:0x)
 LEI-AKITA: origem=nenhuma cura (o codigo e o de `5d1857a1`, no ar); testemunha=o PROPRIO comando em modo CONTA (`materializar_passivo_validado` sem `--apply`, que nao chama a unidade) rodado nos DOIS lados + `Batida.pergunta_origem` (S128) + `gate10_hash09.py`; RED=n/a (medida de impacto, nao cura); quem-mais-le=os 56 colabs do recorte da 10; juizes novos=0
