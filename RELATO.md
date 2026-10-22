@@ -17,8 +17,11 @@
 - **E EU NAO REFACO O BLOCO AGORA, de proposito:** a relavratura do item (4) esta **ESCREVENDO** na sombra
   neste instante (`apply_=True forcar=True`, pela porta `bin/sombra.sh --rodar`), e um `--bloco` sobre base
   poluida seria ensaio de mentira -- daria carimbo verde sem ter ensaiado nada. Quem cumpre a frase literal e
-  o **cron das 04:11** (`--refazer --dump-agora && --bloco`), que nasce de **dump limpo** com `a127492a` ja no
-  ar. Condicao de conferencia, para o senhor cobrar sem me perguntar: `.sombra_stamp` com `SOMBRA_BLOCO`
+  o **cron das 04:11**, cujo argv eu LI em vez de supor (`crontab -l`): `sombra.sh --refazer && sombra.sh --bloco`
+  -- `--refazer` **puro**, logo **completa**, nao `--incremental`. E isso que importa aqui: a completa **apaga as
+  184 celulas** que a minha relavratura escreveu, entao o bloco das 04:11 nasce de **dump limpo** com
+  `a127492a` ja no ar. (Eu havia escrito `--refazer --dump-agora` neste paragrafo: errado, e o `--dump-agora`
+  so serve entre 00:00 e 04:00, quando o dump do dia ainda nao nasceu.) Condicao de conferencia, para o senhor cobrar sem me perguntar: `.sombra_stamp` com `SOMBRA_BLOCO`
   **posterior a 04:11** de hoje.
 PROVA: `.sombra_stamp` (`SOMBRA_BLOCO="22/10 00:38"`, `SOMBRA_COMANDOS=76`), `logs/deploy.stamp`
 (`QUANDO=1792640575` = 2026-10-22 00:42:55, `COMMIT=a127492a7a`), `bin/sombra.sh --conferir` respondendo
@@ -42,8 +45,11 @@ DERIVACAO deixa a impressao byte-identica -- a frota seria PULADA.
   do `--forcar` sobre lavra velha.
 - **POR QUE SO 3, e esta e a leitura que importa:** o censo de uma hora atras mediu que **so 217 dos 345 tem
   motivo UNICO** -- as outras 128 tem dois ou mais. Curar UM derivador nao solta a pessoa: ela segue retida pelo
-  segundo motivo. A cura C esta certa e **o espelho de 108 dia-colab deixou de acusar**; o TXT so muda para quem
-  nao tinha outro motivo.
+  segundo motivo. A cura C esta certa e **o espelho de 108 dia-colab deixou de ter a ORFA** -- e isso se mede na GRADE, **nao no
+  veredito**, e eu nao as confundo: destes, **82 dia-colab / 30 colabs** tinham veredito GRAVADO que RETEM o
+  export (`logs/raiaC/apos_cura_final.out`), e mesmo assim **so 3 colabs saem**. Das **184** celulas relavradas,
+  **96 SEGUEM acusando** (`furo` 52, `cobrado` 35, `discordante` 7, `indefinida` 1, `fato_em_ausencia` 1): o TXT
+  so muda para quem nao tinha um segundo motivo.
 - **O 1 QUE PIOROU E NOSSO, e vai com DONO (L-099), nao escondido:** `col962` passou a reter por **1 dia (27/09),
   veredito `furo`, lavrado por ESTA rodada**. Nao e a cura C: e `--forcar` revelando que o **gravado de prod
   estava VELHO** naquele dia. Dono ESTRUTURA. O mesmo ato escreveu **184 celulas / 56 colabs** -- muita lavra,
@@ -57,8 +63,10 @@ DERIVACAO deixa a impressao byte-identica -- a frota seria PULADA.
   com `SOMBRA_ARVORE=/home/ronald/wt-inss/app` (a cura do INSS esta na raia, nao no ar): nao leia 3 como os dois.
 INCOMPLETO nomeado: o universo do corte mediu **287 dia-colab / 82 colabs (108/39 curados)** contra os
 **282/81 (107/38)** que eu publiquei a 01:0x; mesmo dump (`SOMBRA_DIA=20261022`) mas `--rodar` repoe a janela de
-prod a cada chamada (`lavra_de_prod` md5 `c30b20f8`, `data_ref_prod=2026-10-21`), e batida nova de 21/10 cria
-dia-colab novo. **+5 dia-colab / +1 colab nao reconciliados** -- declarados com os dois numeros, sem forcar um.
+prod a cada chamada (`lavra_de_prod` md5 `c30b20f8`, `data_ref_prod=2026-10-21`). **A CAUSA NAO ESTA MEDIDA** e
+eu nao a invento: dois candidatos, o CRITERIO embutido no meu script contra o de `logs/raiaC/apos_cura.py`, ou a
+BASE que o `lavra_de_prod` repoe. **+5 dia-colab / +1 colab / +1 curado nao reconciliados** -- publicados com os
+DOIS numeros, sem forcar um nem fabricar a causa.
 PROVA: `logs/item4_retencao_c.out` e `logs/item4_prova_escrita.out` (sondas em `logs/sombra/`), as duas com
 `assert NAME=='sombra'` na 1a linha, `0 falhas` em todas as fases, nenhum nome/CPF/matricula/valor; a sombra
 ficou com as 184 celulas e o cron das **04:11** a refaz do zero (item (3) acima).
