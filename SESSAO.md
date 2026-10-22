@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 22/10/2026 13:00:32.** Transcript: `6a1437b4-fa68-4fb8-ba22-cffc0db8ee01.jsonl` (3.6 MB). Acoes na janela: **209**.
+**Medido em 22/10/2026 13:05:45.** Transcript: `6a1437b4-fa68-4fb8-ba22-cffc0db8ee01.jsonl` (3.6 MB). Acoes na janela: **210**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 13:03:50 | Bash | Continue waiting for suite verdict | `f=/home/ronald/saas-hasner/logs/o261/suite_o261c_20261022_r2.log; for i in $(seq 1 38); do /bin/grep -q '^rc=' $f 2>/dev/null && break; /usr/bin/sleep 15; done; grep -E "^Ran \|^(OK\|FAILED)( \|$)\|^rc=" $f \| tail -3` |
 | 12:54:16 | Bash | Wait for suite rerun verdict | `f=/home/ronald/saas-hasner/logs/o261/suite_o261c_20261022_r2.log; for i in $(seq 1 38); do /bin/grep -q '^rc=' $f 2>/dev/null && break; /usr/bin/sleep 15; done; grep -E "^Ran \|^(OK\|FAILED)( \|$)\|^rc=" $f \| tail -3` |
 | 12:54:10 | Bash | Count HE decisions made today | `cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command shell --schema=juliani --command " from django.utils import timezone from core.models import LogAuditoria from collections import Counter h=timezone.localtime().replace(hour=0,minute=0,second=0) q=LogAuditoria.objects.filter(modelo='DecisaoHE', criado_em__gte=h) print('HE_DEC\|hoje=%d\|ultima=%s\|acoes=%s' % (q.co ...` |
 | 12:54:06 | Bash | Find HE decision trail action name | `grep -n "evento(\\|registrar_log(" ponto/portas/he.py \| head -5` |
