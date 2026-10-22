@@ -6,6 +6,25 @@ PAREI: ! ponto-seguro-e-reinicio-da-sessao (ordem dele 22/10 ~10:4x, literal: *"
 > O MARCADOR ANDOU no mesmo ato: `ORDEM-VIVA-TOPO` saiu de `BO-HE-RECUSAR-LOTE-500` (fechado) para `O261`, que o hook cobrou.
 > SEM COMMIT DE PROPOSITO: `RELATO.md` e `BACKLOG.md` ficam sujos na arvore porque a L-106 nao deixa commit so de docs fora de marco. Eles entram no commit do proximo marco.
 
+## 22/10 11:01 -- A PRE-CONDICAO DO GATE DA 8069 PASSOU DE INFERIDA A MEDIDA, E ELA EXCLUI O RAMO VIZINHO
+
+O bloco das 10:55 afirmou a origem em `:1881` tendo INFERIDO a pre-condicao `not (_hii_d or _hfi_d)` da contagem
+de batidas (nd=2). Contagem de batida nao responde por marco de GRADE: a pergunta foi medida.
+
+LEITURA na sombra pela via homologada (`logs/sombra/rodar_na_sombra.sh`, cpuset 4-7,
+`current_database()=='sombra'`, /app read-only): col79 ec=768 12x36, nos DOIS dias a celula devolve tupla de 4
+com `hii`/`hfi` **None**, e a escala tambem nao os declara -- resolucao igual a do motor em `:1808-1830` (celula
+primeiro, campo da escala como fallback). `not (_hii_d or _hfi_d)` = **True** nos dois dias.
+
+ISSO EXCLUI O VIZINHO, que era a duvida real: `:1879` (`if _volta_do_intervalo: prevista_entrada = None`) nao
+pode ser a origem, porque `cumpriu_a_volta_do_intervalo` devolve False de saida sem `hfi`
+(`escala/regua_defesa.py`, `if not _hfi: return False`). Sobra UM ramo que zera a pontualidade nesse dia: o
+`:1881`. Confere tambem o sinal de `diff` (`:1856`, `(e - prevista)` em minutos, positivo = atrasado).
+
+A origem publicada as 10:55 e a pergunta de PREDICADO seguem como estao -- o que mudou e o lastro: de inferencia
+a medicao. `logs/gate10/CASO_8069_20261022.md` 137 linhas (secao 6 ampliada), sonda em
+`logs/sombra/marcos_col79_8069.py`. 0 codigo de producao, 0 TXT, 0 gravado.
+
 ## 22/10 10:55 -- A ORIGEM DAS 4,25 h DE ESTRUTURA DA 8069, LIDA NO CODIGO: O GATE E MAIS LARGO QUE O SEU FUNDAMENTO
 
 LEI-AKITA: origem=`ponto/motor_calculo_v2.py:1881` (LEITURA, zona inviolavel -- 0 linha de codigo), testemunha=o
