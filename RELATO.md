@@ -1,5 +1,32 @@
 # RELATO — esteira saas-hasner
 
+> **22/10 ~09:4x -- VEREDITO DA BATERIA PELA REGRA (raia v3), no recorte do seu aval das ~09:3x --
+> e 5 PERGUNTAS DE LEI COM OS NUMEROS (nao e PAREI: a fila segue).** O recorte que voce fechou -- so os
+> casos que passam pela CCT **cadastrada pela porta real** (`core/regua_cct.py::regua_para` /
+> `core.AplicacaoConvencao`) mais as duas propriedades -- esta **MEDIDO em `wt-v3`**: **174 tests OK**
+> (CASOS 151, MATRIZ 76). Os 5 casos de CCT: Vigilantes 12x36 **cl.38-d** (hora de 60 min, adicional de
+> 20% devido), empresa `cct` **sem linha de aplicacao** (cai no piso legal com o motivo em `r['fonte']`),
+> **empate** (piso legal), SINEEPRES **6x1 noturno** e `feriado_12x36_em_dobra`. As propriedades:
+> **previsto independe do realizado = VERDE**; **"todo leitor le o mesmo numero" = 2 de 4 pontas** -- a
+> ponta de fechamento/export nao fecha porque a porta exige cadastro que a bateria nao monta (obstaculo
+> declarado em `folha/tests/test_porta_do_export.py:216`), e isso e INCOMPLETO declarado, nao verde. O
+> caso que **MORDE**: dois cadastros de CCT dando **360,00 x 548,57 min** com as batidas **IGUAIS** --
+> tirar a regua do lugar fica vermelho. Nada de `wt-v3` mergeia agora; o resto dos 38 casos virou a obra
+> **`V3-BATERIA-O-RESTO-DOS-38`** no BACKLOG, para depois do `O261`.
+> **AS 5 PERGUNTAS QUE EU NAO ESCOLHO (L-117 -- a bateria achou, a lei e sua):**
+> **(1) B-B21:** atestado **aprovado** em dia **trabalhado** soma **660 + 660 = 1320 min** no mesmo dia
+> (abono + horas batidas). Paga os dois, ou o abono cede para o trabalhado?
+> **(2) B-B24:** dia em que chegaram **so as duas batidas da pausa** tem **tres leis candidatas e tres
+> rotulos** (falta, dia com par incompleto, dia sem apuracao) -- qual manda?
+> **(3) B-B30:** a **L-022** nao declara **distancia de extrapolacao**: sem ela, batida muito fora do
+> marco nao tem corte escrito -- qual e a distancia?
+> **(4) B-B31:** `TipoEscala` com `hora_inicio == hora_fim` hoje vale **1440 min** de previsto (dia
+> inteiro). E 1440, e **0**, ou e cadastro invalido que a porta recusa?
+> **(5) CCT-4b:** fora do 12x36, a prorrogacao noturna e **afastavel** -- aplicar o afastamento move
+> **-137,14 min por turno**. Afasta, ou segue a interpretacao de hoje?
+> Enquanto elas nao chegam, a fila segue: o marco da HE (suite cheia correndo) e depois o `O261`.
+>
+
 > **22/10 09:3x -- BO-HE-RECUSAR-LOTE-500: O CENSO VAI ANTES DA CURA (seu corte `ATOMICIDADE-DA-PORTA`).**
 > **O BUG, confirmado no vivo:** `ponto/portas/he.py:110` tem `@transaction.atomic` decorando
 > `_exigir_motivo` (:111) e **nao** `decidir_he` (:131); o `select_for_update` de **:167** roda fora de
