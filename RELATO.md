@@ -8,7 +8,7 @@
 > **O PUSH.** `fa5cd145a3` fechou o arsenal na arvore do COMMIT: `Ran 11562 tests in 926.249s` /
 > `OK (skipped=51, expected failures=14)`, e os **11562** sao o MESMO numero da copia certificada
 > `wt-cert-corpo7` -- confirmacao independente de que o `git archive` do sha empurrado e a arvore que
-> a suite certificou. Control-plane em curso no ato de escrever (`logs/bo2/push_item6.out`).
+> a suite certificou. Control-plane `Ran 22 OK`, e **POUSOU**: `5d1857a1..fa5cd145 main -> main`.
 > **A ARVORE VIVA TINHA DOIS `.py` NAO PROVADOS** -- dois arquivos de teste da raia v3, **454** e
 > **177** linhas, untracked em `app/ponto/tests/`. Isso nao e ruido: a arvore viva E o bind-mount, e
 > o que esta nela sobe no proximo reload (o HUP das 03:30 publica a ARVORE, nao o commit). Curado

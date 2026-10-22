@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 22/10/2026 07:20:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1215.0 MB). Acoes na janela: **1334**.
+**Medido em 22/10/2026 07:22:06.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1215.0 MB). Acoes na janela: **1335**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 07:22:03 | Bash | Publish the relato and indexes to the separate relato repo | `cd /home/ronald/saas-hasner && timeout 300 bash bin/relato.sh 2>&1 \| tail -25; echo "rc_pipe=${PIPESTATUS[0]}"` |
+| 07:21:47 | Bash | Read the relato publishing script | `cd /home/ronald/saas-hasner && echo "=== bin/relato.sh: o que ele publica ===" && sed -n '1,45p' bin/relato.sh` |
+| 07:21:40 | Bash | Fix the in-flight clause, prove the remote, and look for a publish path | `cd /home/ronald/saas-hasner && python3 - <<'PY' import io p='app/docs/RELATO.md'; s=io.open(p,encoding='utf-8').read() velho="> a suite certificou. Control-plane em curso no ato de escrever (`logs/bo2/push_item6.out`).\n" novo="> a suite certificou. Control-plane `Ran 22 OK`, e **POUSOU**: `5d1857a1..fa5cd145 main -> main`.\n" assert s.count(velho)==1, s.count(velho) s=s.replace(velho,novo) io.ope ...` |
+| 07:21:07 | Bash | Run the proof selo on the RELATO and check push status | `cd /home/ronald/saas-hasner && python3 bin/relato_afirma_com_prova.py app/docs/RELATO.md 2>&1 \| tail -3; echo "rc=$?"; echo "=== push ==="; date +%H:%M:%S; /bin/grep -nE '^Ran [0-9]+ test\|^(OK\|FAILED)($\| \()\|pre-push:\|rc_push=\|main -> main\|pos_push' logs/bo2/push_item6.out \| tail -8` |
 | 07:20:16 | Bash | Insert the new RELATO section and run the publication selos | `cd /home/ronald/saas-hasner && python3 - <<'PY' import io secao = """> **22/10 07:1x -- ITEM 6 EMPURRADO, E A ARVORE DE PROD LIMPA DE `.py` NAO PROVADO.** > LEI-AKITA: origem=a RAIA (arquivo novo nasce no worktree da raia, nunca na arvore viva, que E o > bind-mount de prod); testemunha=`git status --porcelain` da arvore viva e `bin/pre-push.sh:30-33`; > RED=nenhum codigo de negocio mudou -- isto e ...` |
 | 07:19:57 | Bash | Get real line counts and back up the RELATO | `cd /home/ronald/saas-hasner && wc -l logs/raiav3/*.arvore_viva \| cat && cp -p app/docs/RELATO.md /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/RELATO_backup_0719.md && echo backup_ok` |
 | 07:19:22 | Bash | Read the top of the RELATO to match format | `cd /home/ronald/saas-hasner && echo "=== topo do RELATO (primeiras 40 linhas) ===" && sed -n '1,40p' app/docs/RELATO.md` |
@@ -1341,6 +1345,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 19:24:33 | Bash | Show the top of the report file | `sed -n '1,40p' docs/RELATO.md \| cut -c1-200` |
 | 19:24:27 | Bash | Append the two newest avals to the prompts log | `python3 - <<'PY' p='docs/PROMPTS.md' s=open(p,encoding='utf-8').read() if not s.endswith('\n'): s+='\n' r1=('\| 21/10 19:1x \| **AVAL DE URGENCIA, 5 itens de VELOCIDADE ate segunda 26/10** ' '(*"ate segunda, raia roda suite --only dos apps tocados"*): **(1)** raia itera com `--only` dos apps tocados, suite cheia no pre-push; ' '**(2)** secao de RELATO "0 linha de codigo" so se dimensiona cura em c ...` |
 | 19:24:04 | Bash | Count columns in the last log row | `tail -1 docs/PROMPTS.md \| tr -cd '\|' \| wc -c` |
-| 19:21:56 | Bash | Find the table header and pipe count | `/bin/grep -n '^\| *quando\\|^\|---\\|^\| *data' docs/PROMPTS.md \| head -5; echo "--- pipes na ultima linha:"; tail -1 docs/PROMPTS.md \| tr -cd '\|' \| wc -c` |
-| 19:21:46 | Bash | Show the last rows of the prompts log | `tail -3 docs/PROMPTS.md \| cut -c1-260` |
-| 19:21:37 | Bash | Inspect the prompts log tail and header shape | `tail -4 docs/PROMPTS.md \| cat -A \| sed -n '1,4p' \| cut -c1-200; echo "---CABECALHO---"; /bin/grep -n '^\|' docs/PROMPTS.md \| head -3` |
