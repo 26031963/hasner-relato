@@ -6,10 +6,16 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 22/10/2026 07:30:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1215.4 MB). Acoes na janela: **1339**.
+**Medido em 22/10/2026 07:35:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (1215.9 MB). Acoes na janela: **1345**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 07:34:56 | Bash | Read census sections 2-3 (declared criteria) | `cd /home/ronald/saas-hasner && sed -n 60,135p logs/censo_retidos/censo.txt` |
+| 07:34:49 | Bash | Find the sonda scripts written around 01:1x | `SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; find $SP -maxdepth 1 -name '*.py' -newermt '2026-10-22 00:55' ! -newermt '2026-10-22 01:35' -printf '%T@ %TH:%TM %p\n' \| sort \| cat` |
+| 07:34:38 | Bash | Locate the census sonda scripts | `cd /home/ronald/saas-hasner && ls -la logs/sombra/*.py 2>/dev/null \| tail -20; echo "=== scratchpad do censo ==="; SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; ls -la $SP 2>/dev/null \| /bin/grep -iE 'censo\|retid\|s[1-6]\|fora_da_folha' \| cat` |
+| 07:34:02 | Bash | Read the census header and declared method | `cd /home/ronald/saas-hasner && sed -n 1,60p logs/censo_retidos/censo.txt` |
+| 07:33:57 | Bash | List the census lastro and its declared invocation | `cd /home/ronald/saas-hasner && ls -la logs/censo_retidos/ 2>/dev/null \| cat; echo "=== invocacao declarada no censo ==="; /bin/grep -n -iE 'invoca\|docker run\|cpus\|monta\|:ro' logs/censo_retidos/censo.txt \| head -20` |
+| 07:33:46 | Bash | Read the read-only sonda launcher | `cd /home/ronald/saas-hasner && sed -n 1,130p bin/sonda_leitura.sh` |
 | 07:29:20 | Bash | Find the sanctioned sombra sonda launcher | `cd /home/ronald/saas-hasner && ls bin/ \| /bin/grep -iE 'sombra\|sonda' \| cat; echo "=== como se roda sonda na sombra (quem declara) ==="; /bin/grep -rn 'settings.sombra\\|config.settings.sombra' bin/*.sh \| head -8` |
 | 07:29:01 | Bash | Read the current sombra stamp and gate state | `cd /home/ronald/saas-hasner && echo "=== o carimbo VIVO da sombra ===" && cat .sombra_stamp 2>/dev/null; echo; echo "=== e o que o portao diz ==="; bash bin/sombra.sh --conferir 2>&1 \| tail -8` |
 | 07:28:22 | Bash | Read the census declared universe and motive table | `cd /home/ronald/saas-hasner && sed -n '1,40p' logs/censo_retidos/censo.txt; echo "....."; sed -n '60,90p' logs/censo_retidos/censo.txt` |
