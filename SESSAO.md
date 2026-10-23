@@ -6,10 +6,16 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 22/10/2026 21:22:02.** Transcript: `da98832f-de75-4326-b54f-c50c792fa1ba.jsonl` (2.4 MB). Acoes na janela: **99**.
+**Medido em 22/10/2026 21:27:32.** Transcript: `da98832f-de75-4326-b54f-c50c792fa1ba.jsonl` (2.4 MB). Acoes na janela: **105**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 21:22:41 | Bash | Apply item 1 cure and run GREEN plus neighbors | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/da98832f-de75-4326-b54f-c50c792fa1ba/scratchpad; python3 $S/patch_item1.py /home/ronald/wt-dss1/app && cd /home/ronald/saas-hasner && L=$S/green1.log; bin/suite.sh --dir /home/ronald/wt-dss1 --only "chamados.tests.test_limbo_nao_fecha_com_filho_no_defeito ponto.tests.test_emissor_sem_previsao chamados.tests.test_t34_furo_sob_limbo chamados.tests.test ...` |
+| 21:22:18 | Bash | Run item 1 RED against HEAD code in wt-dss1 | `cd /home/ronald/saas-hasner && L=/tmp/claude-1001/-home-ronald-saas-hasner-app/da98832f-de75-4326-b54f-c50c792fa1ba/scratchpad/red1.log; bin/suite.sh --dir /home/ronald/wt-dss1 --only chamados.tests.test_limbo_nao_fecha_com_filho_no_defeito --parallel 1 > $L 2>&1; echo rc=$?; grep -E '^(FAIL\|ERROR):\|Error\|^Ran\|^(OK\|FAILED)' $L \| head -12` |
+| 21:22:16 | Bash | Push marco via push.sh | `cd /home/ronald/saas-hasner && bin/push.sh > logs/dss_push_item2.log 2>&1; echo rc=$? >> logs/dss_push_item2.log` |
+| 21:22:11 | Bash | Amend marco commit with regenerated map | `cd /home/ronald/saas-hasner && git diff -- app/docs/MAPA-JUIZES.md \| grep '^[-+]' \| grep -v '^[-+][-+]' \| cut -c1-140; git add app/docs/MAPA-JUIZES.md && git commit -q --amend --no-edit && git log --oneline -1 && git show --stat HEAD \| tail -6` |
+| 21:22:07 | Bash | Run generator in container and recheck | `cd /home/ronald/saas-hasner && tail -8 bin/gerar_mapa_juizes.py; docker cp bin/gerar_mapa_juizes.py saas_core:/tmp/g.py && docker exec saas_core python manage.py tenant_command shell --schema=juliani --command "exec(open('/tmp/g.py').read())" 2>&1 \| tail -3; git diff --stat -- app/docs/MAPA-JUIZES.md; bash bin/tests/test_mapa_juizes.sh 2>&1 \| tail -1` |
+| 21:22:03 | Bash | Read generator header | `cd /home/ronald/saas-hasner && sed -n 1,40p bin/gerar_mapa_juizes.py` |
 | 21:22:01 | Bash | Read generator usage | `cd /home/ronald/saas-hasner && sed -n 1,30p bin/gerar_mapa_juizes.py \| grep '^#' \| head -15; grep -n 'gerar_mapa_juizes' bin/relato.sh` |
 | 21:21:59 | Bash | Regenerate MAPA-JUIZES and recheck seal | `cd /home/ronald/saas-hasner && python3 bin/gerar_mapa_juizes.py 2>&1 \| tail -2; git diff --stat -- app/docs/MAPA-JUIZES.md; bash bin/tests/test_mapa_juizes.sh 2>&1 \| tail -1` |
 | 21:21:52 | Bash | Search for mapa generator script | `cd /home/ronald/saas-hasner && grep -rln 'mapa_juizes\\|MAPA-JUIZES\\|def gerar_mapa' bin app/core 2>/dev/null \| head; grep -n 'gerador\\|python' bin/tests/test_mapa_juizes.sh \| head` |
