@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 23/10/2026 08:58:02.** Transcript: `c6f2f4c7-d189-48e6-a5c1-0a8ca0afec80.jsonl` (1.9 MB). Acoes na janela: **75**.
+**Medido em 23/10/2026 09:03:33.** Transcript: `c6f2f4c7-d189-48e6-a5c1-0a8ca0afec80.jsonl` (2.0 MB). Acoes na janela: **80**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 09:03:28 | Bash | See files and crons.py diff of the 1a vigia | `cd /home/ronald/saas-hasner && git show 8a3c1d51 --stat --format= \| cat; git show 8a3c1d51 -- app/config/crons.py \| head -60` |
+| 09:03:25 | Bash | Read the classe A vigia pattern | `git show 8a3c1d51 --stat \| cat \| head -20; grep -n "alarme" ponto/management/commands/detectar_intervalo_ausente.py; cat ponto/tests/test_vigia_intervalo_ausente.py \| head -80` |
+| 09:03:17 | Bash | Read reconciliar_vinculo, the 1a vigia commit, and crons list | `cat ponto/management/commands/reconciliar_vinculo.py \| head -120; echo =====; wc -l ponto/management/commands/detectar_vinculo_divergente.py; git show da865492 --stat \| head; sed -n 1875,1970p config/crons.py` |
+| 09:03:14 | Bash | Locate the balde-1 crons and the vigia model | `grep -n "detectar_vinculo_divergente\\|reconciliar_vinculo\\|detectar_intervalo_ausente" config/crons.py; ls */management/commands/ \| grep -E 'vinculo\|intervalo_ausente'; find . -path ./logs -prune -o -name 'detectar_vinculo_divergente.py' -print -o -name 'reconciliar_vinculo.py' -print` |
+| 09:03:05 | Bash | Check suite progress and lock holder | `tail -3 /home/ronald/saas-hasner/logs/clb1b/suite_cura.out; /home/ronald/saas-hasner/bin/trava_teste.sh --quem 2>&1 \| head -3` |
 | 08:57:53 | Bash | Insert marco section into RELATO | `cd /home/ronald/saas-hasner && python3 - <<'EOF' f='app/docs/RELATO.md' s=open(f).read() anc='## 23/10 08:3x -- MARCO VARREDURA CLASSE B (1a)' assert s.count(anc)==1 sec='''## 23/10 09:3x -- MARCO VARREDURA CLASSE B (1b-i): O LACO HX-RESPOSTA-VISIVEL x BUG 31 MORRE; A RETENCAO GRAVA O FATO, NAO A PASSADA LEI-AKITA: origem=`chamados/juizes.py::irmas_respondidas_sem_consumo` (universo sem a regra de ...` |
 | 08:57:37 | Bash | Locate RELATO insertion point and BACKLOG state cell | `cd /home/ronald/saas-hasner && grep -n '^## 23/10 08:3x' app/docs/RELATO.md; sed -n 990p app/docs/BACKLOG.md \| awk -F'\|' '{print $4}' \| cut -c1-400` |
 | 08:57:28 | Bash | Measure retention-log noise by actor in prod | `cd /home/ronald/saas-hasner/logs/clb1b && cat > p_retidas.py <<'EOF' from collections import Counter from datetime import timedelta from django.utils import timezone from core.models import LogAuditoria q = LogAuditoria.objects.filter(criado_em__gte=timezone.now()-timedelta(days=30), acao__in=['retratacao_retida_irma_orfa', 'destino_retido_irma_orfa']) print('POR_ACAO_ATOR', Counter(q.values_list( ...` |
