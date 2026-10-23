@@ -18,6 +18,14 @@ PAREI: ! O261 e o export da 10 | espera o DP e o Ronald: (a) o TXT da 10 esta BA
 > O MARCADOR ANDOU no mesmo ato: `ORDEM-VIVA-TOPO` saiu de `BO-HE-RECUSAR-LOTE-500` (fechado) para `O261`, que o hook cobrou.
 > SEM COMMIT DE PROPOSITO: `RELATO.md` e `BACKLOG.md` ficam sujos na arvore porque a L-106 nao deixa commit so de docs fora de marco. Eles entram no commit do proximo marco.
 
+## 23/10 15:5x -- 1b-iv MEDIDA (sem codigo): O QUE O `reconciliar_chamados` AINDA ESCREVE, RAMO A RAMO
+
+- Sombra (dump 04:00, arvore viva com a 1b-iii-b), funcoes REAIS com rollback, universo do cron = **599** colabs (`logs/cb_1b4_ramos.out`, `logs/cb_1b4_split.out`):
+  - `reconciliar_perguntas_orfas_colab` (orfas, c1/c2): **100** escritas -- sai do cron com a parte 3 (`wt-1b3d`, suite na fila; segurada pelo O261 fio morto, aval 15:5x).
+  - retratacao por premissa morta (`reconciliar_chamados_colab` menos as orfas): **6** (1 `disputa_supervisao_manual` retratado).
+  - `rejuntar_celula_dos_vivos`: **0**. `retratar_chamados_absolvidos_por_celula`: **0**.
+- Leitura: hoje, fora as orfas, o cron e quase vigia (6 escritas). Os dois ramos de celula medem 0 nesta foto -- uma foto nao e 30 d; o vigia so nasce com a medida de frota do papel (molde da 1a), nao por esta.
+
 ## 23/10 15:3x -- MARCO BO-RESOLVER-DIA-MUDO (raia wt-rdm) -- item 1 NAO chegou; itens 2 e 3
 LEI-AKITA: origem=chamados/models.py::PerguntaDisputa.reabrir_por_resposta (+ escritor da resposta) e core/respostas.py (envelopes), testemunha=juiz _pergunta_materializada_de_fato / core/recusa_critica.py::contar, RED=chamados.tests.test_rdm_resposta_vence_carimbo_sem_lastro + core.tests.test_contrato_recusa_critica, quem-mais-le=131 portas que respondem por envelope (censo AST) + ESTADO + HAIKU, juizes novos=0
 - MEDIDO (prod, leitura): 127 POST /ponto/celula/veredito/ 16-23/10, 29 sem trilha (p1_posts.out).
