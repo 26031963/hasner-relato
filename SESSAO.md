@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 23/10/2026 10:06:32.** Transcript: `c6f2f4c7-d189-48e6-a5c1-0a8ca0afec80.jsonl` (3.3 MB). Acoes na janela: **170**.
+**Medido em 23/10/2026 10:12:02.** Transcript: `c6f2f4c7-d189-48e6-a5c1-0a8ca0afec80.jsonl` (3.4 MB). Acoes na janela: **171**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 10:07:56 | Bash | Probe 18 reversal truth and orphan buckets | `cd /home/ronald/saas-hasner && IDS=$(cat logs/clb1b/vd18.txt) && IDP=$(awk '{printf "%s,",$1}' logs/clb1b/ids110.txt) && cat > logs/clb1b/p_vd18_rev.py <<EOF from collections import Counter from django.utils import timezone from chamados.models import ChamadoColaborador, PerguntaDisputa from core.models import LogAuditoria ch = ChamadoColaborador.objects.filter(pk__in=[$IDS]) print('VD18_JUST', ch ...` |
 | 10:06:13 | Bash | Check push progress | `tail -5 /home/ronald/saas-hasner/logs/clb1b/push.out \| cut -c1-200` |
 | 10:06:03 | Bash | Read SET history comment and count readers | `sed -n 2118,2140p chamados/models.py; git grep -n "MOTIVOS_QUE_PRECISAM_CHAMADO_DESTINO_SET\\|_PRECISA\b" -- '*.py' \| grep -v '^logs' \| wc -l` |
 | 10:05:59 | Bash | Locate SET constant via git grep | `cd /home/ronald/saas-hasner && git grep -n "MOTIVOS_QUE_PRECISAM_CHAMADO_DESTINO_SET" -- 'app/*.py' \| grep -v tests \| grep -v 'import\\|in MOTIVOS\\|_PRECISA$' \| head` |
