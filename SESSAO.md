@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 23/10/2026 17:17:40.** Transcript: `c6f2f4c7-d189-48e6-a5c1-0a8ca0afec80.jsonl` (10.2 MB). Acoes na janela: **478**.
+**Medido em 23/10/2026 17:23:03.** Transcript: `c6f2f4c7-d189-48e6-a5c1-0a8ca0afec80.jsonl` (10.2 MB). Acoes na janela: **481**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 17:22:16 | Bash | Register FLUXO 2 aval | `cat >> docs/PROMPTS.md <<'EOF' \| 23/10 ~17:3x \| **aval `FLUXO-2-AGORA`**: pre-auditoria folha/export x juiz (os 10 pendentes + K6) em agente proprio, so LEITURA primeiro (pendente, funcao real, o que falta pra verde, dono), numero no RELATO antes de qualquer cura; depois cura por RED, uma por marco; zona inviolavel so leitura; cauda: escala x juiz (E1) espera o TXT da 10, nao se abre \| agente p ...` |
+| 17:22:13 | Agent | FLUXO 2: folha/export x juiz pre-audit | `Tarefa de PRÉ-AUDITORIA, só leitura nesta fase, no repo /home/ronald/saas-hasner (Django em app/, HASNER PONTO). Antes de qualquer ação, leia /home/ronald/saas-hasner/CLAUDE.md INTEIRO, em especial: seção 0 (LEI-AKITA, TRAVA JUIZ-NOVO), 4 (zonas invioláveis: `ponto/motor_calculo_v2.py` só leitura), 4b (contratos estruturais, L-099), 5 (`app/docs/JUIZES.md`), 7b (L-117, L-118, AUTONOMIA-DE-CODIGO i ...` |
+| 17:19:30 | Bash | Verify retried push on remote | `cd /home/ronald/saas-hasner && tail -4 logs/clb1b/push_noite2.out; git fetch -q; git log --oneline -1 origin/main; git log --oneline origin/main..HEAD` |
 | 17:05:49 | Bash | Retry the evening push | `cd /home/ronald/saas-hasner && (bin/push.sh > logs/clb1b/push_noite2.out 2>&1; echo FIM rc=$? >> logs/clb1b/push_noite2.out)` |
 | 17:05:43 | Bash | Commit marco docs citing L-112 and run selo locally | `cd /home/ronald/saas-hasner && git add app/docs/RELATO.md app/docs/PROMPTS.md && git commit -q -F - <<'EOF' marco BO-B + ORDEM-REGEN: prova do apply da competencia 10 e a leitura da L-112 Fecho do marco dos pousos 02bcfd97 (BO-B) e 6033ff19 (ORDEM-REGEN): RELATO com a PROVA do apply da 10 -- reversao app/logs/bob_antes_20261023_165630.json tirada antes do deploy; recalcular_fechamento --mes 10 --a ...` |
 | 17:05:24 | Bash | Read L-112 and the ORDEM diff in executar_vinculo | `cd /home/ronald/saas-hasner && /bin/grep -n "^\| \*\*L-112\*\*" app/docs/LEIS.md \| cut -d: -f1; /bin/grep "^\| \*\*L-112\*\*" app/docs/LEIS.md \| cut -c1-1600; echo; git diff 6033ff19^1 6033ff19 -- app/colaboradores/services/vinculo.py` |
