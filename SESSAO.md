@@ -6,10 +6,17 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 22/10/2026 22:00:02.** Transcript: `da98832f-de75-4326-b54f-c50c792fa1ba.jsonl` (2.9 MB). Acoes na janela: **135**.
+**Medido em 22/10/2026 22:05:32.** Transcript: `da98832f-de75-4326-b54f-c50c792fa1ba.jsonl` (3.0 MB). Acoes na janela: **142**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 22:03:28 | Bash | Run the real chamado gate census | `cd /home/ronald/saas-hasner && cat > logs/dss/censo_chamado.py <<'EOF' import os from django.conf import settings from core import censo_escritas, portas import importlib g = importlib.import_module('chamados.tests.test_chokepoint_chamado_gate') ruins = g.fora_da_porta(censo_escritas.varrer_arvore(g.APP)) for r in ruins: print('FORA', r) print('TOTAL', len(ruins), g._por_entidade(ruins)) EOF docke ...` |
+| 22:03:25 | Bash | Read how the gate computes its census | `sed -n 290,330p chamados/tests/test_chokepoint_chamado_gate.py; tail -3 ../logs/dss_push_item1.log 2>/dev/null` |
+| 22:03:17 | Bash | Read the declared ceiling and its 20 sites | `sed -n 56,290p chamados/tests/test_chokepoint_chamado_gate.py` |
+| 22:03:15 | Bash | Inspect chokepoint gate selo for the ceiling | `grep -n "TETO\\|teto\\|ALLOW\\|def test" chamados/tests/test_chokepoint_chamado_gate.py \| head -30; wc -l chamados/tests/test_chokepoint_chamado_gate.py` |
+| 22:03:10 | Bash | Find census of chamado writes outside the porta | `grep -rln "prazo_sla" --include=test_*.py . \| xargs grep -ln "escalonado_para_dp" 2>/dev/null \| head; grep -rn "escritor.*chamado\\|ESCRITOR-UNICO" core/contratos_estruturais.py \| head -5` |
+| 21:59:57 | Bash | Push item 1 marco | `cd /home/ronald/saas-hasner && bin/push.sh > logs/dss_push_item1.log 2>&1; echo rc=$? >> logs/dss_push_item1.log` |
+| 21:59:56 | Bash | Run host seals before push | `cd /home/ronald/saas-hasner && for t in bin/tests/test_*.sh; do bash "$t" >/dev/null 2>&1 \|\| echo "VERMELHO $t"; done; echo selos_ok` |
 | 21:59:52 | Bash | Record apply in RELATO, fix stale top item, handoff | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p,encoding='utf-8').read() old="(c) frase de juiz DADA 13:5x: `resolver_dia_oferecido` em construcao na wt-o261c; cura dos 99 DEPOIS do TXT." assert s.count(old)==1 s=s.replace(old,"(c) `resolver_dia_oferecido` NO AR (`3088eac6`); DIA-SEM-SAIDA (1)(2) NO AR 22/10 21:5x, (3) ao DP; cura dos 99 DEPOIS do TXT.") anc='- ** ...` |
 | 21:58:32 | Bash | Prove idempotence, 13 days, and vigia census | `cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command shell --schema=juliani --command "MODO='DRY'; exec(open('/tmp/r.py').read())" 2>&1 \| grep '^REPARO'; cat > logs/dss/prova13.py <<'EOF' import datetime from escala.models import CelulaDia from chamados.models import ChamadoColaborador C = [(263,'27/09'),(369,'28/09'),(985,'18/10'),(522,'25/09'),(349,'26/09'),(933, ...` |
 | 21:58:12 | Bash | Apply repair in prod and copy reversal file | `cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command shell --schema=juliani --command "MODO='APLICAR'; exec(open('/tmp/r.py').read())" 2>&1 \| grep -E '^(REPARO\|REVERSAO\|APLICADO\|POS\|RECUSOU\|Trace\|\w+Error)' \| tee logs/dss/reparo_limbo_APLICADO_20261022.out; f=$(docker exec saas_core sh -c 'ls -t /tmp/reversao_reparo_limbo_*.json \| head -1'); docker cp saas_ ...` |
