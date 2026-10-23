@@ -182,8 +182,9 @@ flowchart TD
     x_ponto_management_commands_reconciliar_fantasmas_py["ponto/management/commands/reconciliar_fantasmas.py"] --> p_retratar
     x_ponto_management_commands_reconciliar_geofence_py["ponto/management/commands/reconciliar_geofence.py"] --> p_retratar
     mais_retratar["... +4 chamadores"] --> p_retratar
-    p_reapontar_resolvedora(["reapontar_resolvedora()<br/>reapontar fio<br/>1 chamador(es)"])
+    p_reapontar_resolvedora(["reapontar_resolvedora()<br/>reapontar fio<br/>2 chamador(es)"])
     x_chamados_reconciliador_py["chamados/reconciliador.py"] --> p_reapontar_resolvedora
+    x_chamados_services_declaracao_texto_py["chamados/services/declaracao_texto.py"] --> p_reapontar_resolvedora
   end
 
   %% (d) TABULEIRO — fonte: config/crons.py (papel declarado de cada cron)
