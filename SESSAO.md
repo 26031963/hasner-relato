@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 23/10/2026 08:20:47.** Transcript: `da98832f-de75-4326-b54f-c50c792fa1ba.jsonl` (8.3 MB). Acoes na janela: **438**.
+**Medido em 23/10/2026 08:26:02.** Transcript: `da98832f-de75-4326-b54f-c50c792fa1ba.jsonl` (8.3 MB). Acoes na janela: **439**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 08:21:42 | Bash | Push via bin/push.sh | `cd /home/ronald/saas-hasner && bin/push.sh > /tmp/claude-1001/-home-ronald-saas-hasner-app/da98832f-de75-4326-b54f-c50c792fa1ba/scratchpad/red/push.log 2>&1; echo rc=$?; tail -5 /tmp/claude-1001/-home-ronald-saas-hasner-app/da98832f-de75-4326-b54f-c50c792fa1ba/scratchpad/red/push.log; git fetch -q && git log --oneline -1 origin/main` |
 | 08:18:32 | Bash | Run host seals before push | `cd /home/ronald/saas-hasner && f=0; for t in bin/tests/test_*.sh; do bash "$t" >/dev/null 2>&1 \|\| { echo "RED $t"; f=1; }; done; echo fim=$f` |
 | 08:18:16 | Bash | Install crontab and smoke the vigias in prod | `cd /home/ronald/saas-hasner && bin/crons.sh install 2>&1 \| tail -2; crontab -l \| grep -E "reavaliar_ausencias_lancadas\|fechar_chamados_ausencia" \| head -4; for e in 2 3 4; do docker exec saas_core python manage.py tenant_command reavaliar_ausencias_lancadas --schema=juliani --empresa $e --alarme >/dev/null 2>&1; echo "reav emp$e rc=$?"; done; docker exec saas_core python manage.py tenant_comma ...` |
 | 08:18:01 | Bash | Deploy without migrate | `cd /home/ronald/saas-hasner && bin/deploy.sh --sem-migrate > /tmp/claude-1001/-home-ronald-saas-hasner-app/da98832f-de75-4326-b54f-c50c792fa1ba/scratchpad/red/deploy.log 2>&1; echo rc=$?; tail -8 /tmp/claude-1001/-home-ronald-saas-hasner-app/da98832f-de75-4326-b54f-c50c792fa1ba/scratchpad/red/deploy.log` |
