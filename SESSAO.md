@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 23/10/2026 00:40:03.** Transcript: `da98832f-de75-4326-b54f-c50c792fa1ba.jsonl` (5.8 MB). Acoes na janela: **326**.
+**Medido em 23/10/2026 00:45:32.** Transcript: `da98832f-de75-4326-b54f-c50c792fa1ba.jsonl` (5.9 MB). Acoes na janela: **330**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 00:42:18 | Monitor | sombra ensaio 23/10 termino | `until grep -q '^rc=' /home/ronald/saas-hasner/logs/sombra_ensaio_2310_0015.log 2>/dev/null; do /usr/bin/sleep 30; done; sleep 5; tail -4 /home/ronald/saas-hasner/logs/sombra_ensaio_2310_0015.log` |
+| 00:42:17 | Bash | Draft RELATO for reconciliar cure | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/da98832f-de75-4326-b54f-c50c792fa1ba/scratchpad; cat > $S/relato_rec.md <<'EOF' ## 23/10 01:xx -- MARCO BUG NO CAMINHO: A PORTA `reconciliar` DECIDE PELO STATUS DO BANCO (7 de 12 fechamentos regravados) LEI-AKITA: origem=`chamados/models.py::ChamadoColaborador.reconciliar` (decidia pelo `status_local` da INSTANCIA), testemunha=`chamados/catalogo/moto ...` |
+| 00:42:06 | Bash | Commit reconciliar cure in wt-rec | `cd /home/ronald/wt-rec && git add app/chamados/models.py app/chamados/tests/test_reconciliar_le_o_banco.py app/ponto/tests/test_selo_chokepoint_escrita.py && git status --porcelain \| grep -v '^[AM] '; git commit -q -F - <<'EOF' a porta reconciliar decide pelo status do BANCO: instancia velha nao regrava o fechamento (bug no caminho, 7 de 12) LEI-AKITA 6, achado na medida da VARREDURA classe A. Ch ...` |
+| 00:41:56 | Bash | Read rec suite verdict and sombra progress | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/da98832f-de75-4326-b54f-c50c792fa1ba/tasks/b1u40pew2.output \| tail -5; tail -3 /home/ronald/saas-hasner/logs/sombra_ensaio_2310_0015.log` |
 | 00:29:46 | Bash | Full suite rerun on wt-rec | `cd /home/ronald/saas-hasner && bin/suite.sh --dir /home/ronald/wt-rec > logs/rec_suite2.log 2>&1; echo rc=$? >> logs/rec_suite2.log; grep -E '^Ran \|^(OK\|FAILED)($\| \()\|^rc=' logs/rec_suite2.log \| tail -3; grep -E '^(FAIL\|ERROR):' logs/rec_suite2.log \| head -6` |
 | 00:29:22 | Bash | Raise ceiling with justification; rerun targeted | `cd /home/ronald/wt-rec/app && python3 - <<'EOF' import py_compile, os p='ponto/tests/test_selo_chokepoint_escrita.py'; s=open(p,encoding='utf-8').read() old="TETOS = {\n" new=("TETOS = {\n" " # 75 -> 76 (23/10 00:2x, bug no caminho da VARREDURA classe A). JUSTIFICATIVA ESCRITA: a +1 e a query que\n" " # `ChamadoColaborador.reconciliar` faz para decidir pelo `status_local` do BANCO e nao pelo da in ...` |
 | 00:29:11 | Bash | Read PLANO_PISCADA before raising ceiling | `cd /home/ronald/wt-rec && sed -n 1,40p PLANO_PISCADA.md \| grep -v '^\s*$' \| head -25` |
