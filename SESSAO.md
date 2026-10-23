@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 23/10/2026 11:00:32.** Transcript: `c6f2f4c7-d189-48e6-a5c1-0a8ca0afec80.jsonl` (4.1 MB). Acoes na janela: **213**.
+**Medido em 23/10/2026 11:05:46.** Transcript: `c6f2f4c7-d189-48e6-a5c1-0a8ca0afec80.jsonl` (4.1 MB). Acoes na janela: **214**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 11:03:33 | Bash | Read push verdict and run handoff | `cd /home/ronald/saas-hasner && head -1 /tmp/claude-1001/-home-ronald-saas-hasner-app/da98832f-de75-4326-b54f-c50c792fa1ba/tasks/bpk9kmhd8.output; grep -E '^Ran [0-9]+ tests\|^(OK\|FAILED)($\| \()\|FIM rc\|main -> main\|rejected' logs/clb1b/push2.out \| tail -6; git fetch -q; git log --oneline origin/main..HEAD; bin/handoff_sessao.sh >/dev/null 2>&1; echo handoff rc=$?` |
 | 10:51:24 | Bash | Push BO and 1b-ii marcos | `cd /home/ronald/saas-hasner && git fetch -q && git log --oneline origin/main..HEAD \| wc -l && bin/push.sh > logs/clb1b/push2.out 2>&1; echo "FIM rc=$?" >> logs/clb1b/push2.out` |
 | 10:51:08 | Bash | Commit 1b-ii merge and deploy | `cd /home/ronald/saas-hasner && git add app/docs/RELATO.md && git commit -q -F - <<'EOF' pouso da wt-1b2: varredura classe B (1b-ii) -- a pergunta de intervalo nasce costurada ao chamado do dia Merge de 7841af6e pela L-107. cmp dos 2 arquivos do merge = IGUAIS a copia certificada (Ran 11668 tests, OK (skipped=51, expected failures=14), rc=0); sem intersecao com o pouso do BO. Docs do marco: secao 1 ...` |
 | 10:51:03 | Bash | Commit 1b-ii, RELATO, merge, cmp | `cd /home/ronald/wt-1b2 && git add app/chamados/services/disputa_emissao.py app/chamados/tests/test_emissao_costura_intervalo.py && git commit -q -F - <<'EOF' varredura classe B (1b-ii): a pergunta de intervalo nasce costurada ao chamado do dia LEI-AKITA: origem=chamados/services/disputa_emissao.py::gerar_perguntas_disputa (so derivava destino para MOTIVOS_QUE_PRECISAM_CHAMADO_DESTINO_SET -- leitor ...` |
