@@ -6,10 +6,23 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 23/10/2026 07:44:32.** Transcript: `da98832f-de75-4326-b54f-c50c792fa1ba.jsonl` (6.2 MB). Acoes na janela: **347**.
+**Medido em 23/10/2026 07:50:02.** Transcript: `da98832f-de75-4326-b54f-c50c792fa1ba.jsonl` (7.0 MB). Acoes na janela: **360**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 07:49:56 | Bash | Read mudar_estado and ausencia creation sites | `sed -n 735,830p ponto/services/ausencia.py; git grep -n "Ausencia.objects.create\\|Ausencia(\b\\|\.status = \\|status=.aprovada" -- 'ponto/*.py' 'ponto/**/*.py' \| grep -iv test \| grep -i ausenc \| head` |
+| 07:49:53 | Bash | Check event hook in mudar_estado | `git grep -n "reconciliar_colab\\|ausencia_colab" -- 'ponto/services/ausencia.py' 'ponto/signals*.py' 'chamados/signals*.py' \| head -30; grep -n "def mudar_estado" -A80 ponto/services/ausencia.py \| grep -n "reconcil\\|chamado\\|on_commit"` |
+| 07:49:50 | Bash | Read silencio_ausencia and fechar_chamados_ausencia_decidida | `cat chamados/services/silencio_ausencia.py && sed -n 630,720p ponto/services/ausencia.py` |
+| 07:49:48 | Bash | Find event callers of the two functions | `git grep -n "reconciliar_por_ausencia\\|fechar_chamados_ausencia_decidida\\|def universo" -- '*.py' \| grep -v "/tests/"` |
+| 07:49:46 | Bash | Read fechar_chamados_ausencia | `cat ponto/management/commands/fechar_chamados_ausencia.py` |
+| 07:49:45 | Bash | Read reavaliar_ausencias_lancadas | `cat ponto/management/commands/reavaliar_ausencias_lancadas.py` |
+| 07:49:45 | Bash | Locate the two commands | `wc -l ponto/management/commands/reavaliar_ausencias_lancadas.py ponto/management/commands/fechar_chamados_ausencia.py 2>/dev/null; ls */management/commands/reavaliar_ausencias_lancadas.py */management/commands/fechar_chamados_ausencia.py` |
+| 07:49:37 | Bash | Read classe A marco and locate classe B commands | `sed -n 27,45p docs/RELATO.md \| cut -c1-700; ls ponto/management/commands/ chamados/management/commands/ colaboradores/management/commands 2>/dev/null \| grep -n "reavaliar_ausencias\\|fechar_chamados_ausencia\\|reconciliar_chamados\\|reconciliar_perguntas_orfas\\|fechar_becos"` |
+| 07:49:33 | Bash | Read the VARREDURA obra line and RELATO mentions | `sed -n 990p docs/BACKLOG.md; grep -n "classe A\\|VARREDURA" docs/RELATO.md \| cut -c1-300 \| tail -15` |
+| 07:49:31 | Bash | Find VARREDURA obra in BACKLOG | `grep -n "VARREDURA\\|evento pronto\\|classe A" docs/BACKLOG.md \| cut -c1-900 \| head -20` |
+| 07:49:29 | Bash | Find classe B definition in docs | `grep -rn "classe B" docs/*.md config/crons.py \| cut -c1-500 \| head -30` |
+| 07:49:26 | Bash | See pending docs diff and RELATO/PROMPTS heads | `cd /home/ronald/saas-hasner && git diff --stat && git diff app/docs/RELATO.md \| head -30 && head -12 app/docs/RELATO.md && tail -4 app/docs/PROMPTS.md \| cut -c1-400` |
+| 07:49:22 | Bash | Orient: time, status, crons of the order | `cd /home/ronald/saas-hasner && date '+%d/%m %H:%M' && git status --short \| head -20 && git log --oneline -3 && grep -n "reavaliar_ausencias_lancadas\\|fechar_chamados_ausencia\\|reconciliar_chamados\\|reconciliar_perguntas_orfas\\|fechar_becos\\|reconciliar_fantasmas\\|disparar_perguntas_competencia" app/config/crons.py \| head -40` |
 | 01:15:32 | Bash | Confirm push landed on remote | `cd /home/ronald/saas-hasner && tail -3 logs/rec_push2.log; git fetch -q; git log --oneline -1 origin/main; git log --oneline origin/main..HEAD` |
 | 01:04:14 | Monitor | push classe A + reconciliar veredito | `until grep -q '^rc=' /home/ronald/saas-hasner/logs/rec_push2.log 2>/dev/null; do /usr/bin/sleep 15; done; tail -3 /home/ronald/saas-hasner/logs/rec_push2.log` |
 | 01:04:05 | Bash | Ask the hook for next item and blocked ids | `cd /home/ronald/saas-hasner && python3 -c " import sys; sys.path.insert(0,'bin') import importlib.util as u s=u.spec_from_file_location('h','bin/hook_stop_fila1.py'); h=u.module_from_spec(s); s.loader.exec_module(h) print('proximo', h._proximo_da_fila()) print('nao_andam', sorted(h._ids_que_nao_andam())[:30]) print('travas', h.travas_da_fila()) " 2>&1 \| tail -5 \| cut -c1-600` |
