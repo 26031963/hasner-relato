@@ -192,9 +192,9 @@ flowchart TD
     t_celula["CELULA / ATA por marco<br/>o que aconteceu (lampada)"]
     t_evento["EVENTO<br/>batida, ausencia, chamado -> cartorio julga na hora (signals B5.2)"]
     t_consumidor["CONSUMIDORES<br/>chamado, pergunta, tela, folha: leem a lampada, nunca re-julgam"]
-    t_vigia["CRON = VIGIA<br/>24 vigias; contador esperado 0, so alarma"]
+    t_vigia["CRON = VIGIA<br/>25 vigias; contador esperado 0, so alarma"]
     t_prazo["CRON = PRAZO (L-101)<br/>3 cron(s): a falta nao emite evento, o relogio e o unico sinal dela;<br/>julgam pela funcao do juiz da casa, sem regra propria (PRAZO_DELEGA_A)"]
-    t_juiz["JUIZ POR VARREDURA (divida)<br/>24 crons ainda julgam: esperado 0"]
+    t_juiz["JUIZ POR VARREDURA (divida)<br/>23 crons ainda julgam: esperado 0"]
     t_escala --> t_celula
     t_evento --> t_celula
     t_celula --> t_consumidor
@@ -205,7 +205,6 @@ flowchart TD
   j_apurar_furos_diarios["apurar_furos_diarios"] -.-> t_juiz
   j_detectar_ausencias["detectar_ausencias"] -.-> t_juiz
   j_detectar_cluster_espurio["detectar_cluster_espurio"] -.-> t_juiz
-  j_detectar_intervalo_ausente["detectar_intervalo_ausente"] -.-> t_juiz
   j_detectar_par_relampago["detectar_par_relampago"] -.-> t_juiz
   j_detectar_vinculo_divergente["detectar_vinculo_divergente"] -.-> t_juiz
   j_disparar_perguntas_competencia["disparar_perguntas_competencia"] -.-> t_juiz
@@ -357,6 +356,7 @@ flowchart TD
   %% (h) VIGIAS — fonte: config/crons.py (papel vigia, AGENDADOS_FORA_DO_CRON, linhas contador=)
   subgraph VIGIAS["vigias: contador esperado, dono; so alarmam"]
     vg_auditar_invariantes_chamados["auditar_invariantes_chamados"]
+    vg_detectar_intervalo_ausente["detectar_intervalo_ausente"]
     vg_esmeril_espelho["esmeril_espelho"]
     vg_mapa_divergencia["mapa_divergencia"]
     vg_negou_fogo_diario_sh["negou_fogo_diario.sh"]
