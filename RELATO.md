@@ -16,13 +16,21 @@ PAREI: ! O261 e o export da 10 | espera o DP e o Ronald: (a) o TXT da 10 esta BA
 > O MARCADOR ANDOU no mesmo ato: `ORDEM-VIVA-TOPO` saiu de `BO-HE-RECUSAR-LOTE-500` (fechado) para `O261`, que o hook cobrou.
 > SEM COMMIT DE PROPOSITO: `RELATO.md` e `BACKLOG.md` ficam sujos na arvore porque a L-106 nao deixa commit so de docs fora de marco. Eles entram no commit do proximo marco.
 
+## 23/10 01:2x -- MARCO BUG NO CAMINHO: A PORTA `reconciliar` DECIDE PELO STATUS DO BANCO (7 de 12 fechamentos regravados)
+
+LEI-AKITA: origem=`chamados/models.py::ChamadoColaborador.reconciliar` (decidia pelo `status_local` da INSTANCIA), testemunha=`chamados/catalogo/motor.py::decidir` sobre o estado do BANCO + a trilha `estado_chamado`, RED=`chamados/tests/test_reconciliar_le_o_banco.py` (1 FAIL contra `da865492`), quem-mais-le=todo chamador de `reconciliar` (crons de varredura e o evento), o contrato do nucleo (`test_contract_status_nucleo`) e o teto do chokepoint, juizes novos=0
+- **Medido (trilha de prod, 30 d):** 12 atos `reconciliar_fantasma`; **7** regravaram um fechamento que o EVENTO ja tinha feito (2 trilhas por fato). #33906 col869 22/10: saida 16:53 chegou por sync 18:30:12, evento fechou 18:30:13, cron regravou 18:30:15.
+- **Mudou:** 1 leitura de `status_local` antes de decidir; divergindo, `refresh_from_db` da instancia (a 1a versao atribuia o campo e o contrato do escritor unico a pegou). Teto `_gravar_estado (3 perguntas, CRUZANDO)` 75 -> **76** com a justificativa ao lado do numero.
+- **FILA (linha):** os outros gates do ciclo (`reabrir`, `cancelar`, `superar`) decidem pela instancia tambem; nao ha caso medido -- sem caso, sem cura (L-099/meia-correcao), fica a pergunta para o censo.
+- **PROVA:** suite da copia `Ran 11643, OK`; deploy junto com a classe A depois do ensaio de hoje.
+
 ## 23/10 00:3x -- MARCO VARREDURA CLASSE A: 1 DE 3 MEDE ZERO E VIRA VIGIA; 2 AINDA ESCREVEM (numeros abaixo)
 
 LEI-AKITA: origem=`config/crons.py` (papel do cron) + `ponto/management/commands/detectar_intervalo_ausente.py`, testemunha=a TRILHA de prod (`LogAuditoria` por ator) + o dry na sombra pelo command REAL, RED=`ponto/tests/test_vigia_intervalo_ausente.py` (2 FAIL, 2 ERROR contra `4fdca7bf`), quem-mais-le=`core/tests/test_contract_tabuleiro` (`JUIZES_POR_VARREDURA` so encolhe) e a celula (chamado, um juiz) que exige a lista vazia, juizes novos=0
 - **`detectar_intervalo_ausente` -> VIGIA:** dry na sombra `abertos=0 fechados=0` em 2 e em 30 dias; trilha de escrita em prod **0**; ultimo `intervalo_pendente` nascido **22/08** (emissao aposentada desde HX-DUP-INTERVALO, so restava fechar legado). Linha do cron com `--alarme` (forca o dry, `SystemExit(2)` se houver o que fechar); sai de `JUIZES_POR_VARREDURA`, entra nos vigias.
 - **`reconciliar_fantasmas` NAO mede zero, fica escritor:** atos `reconciliar_fantasma` em 30 d = **12** (a 1a conta, 141, eram TODAS as linhas de trilha do ator -- corrigida): **5** so o cron fechou; **7** o EVENTO ja tinha fechado e o cron REGRAVOU o mesmo fechamento sobre objeto velho (trilha dupla). O caso de hoje (#33906 col869) e desses: saida 16:53 ENVIADA as 18:30:12 (sync tardio), evento fechou 18:30:13, cron regravou 18:30:15. Os 7 sao bug provado da porta `reconciliar` (decide pelo `status_local` em memoria): cura logo abaixo (LEI-AKITA 6).
 - **`disparar_perguntas_competencia` NAO mede zero, fica escritor:** **268** `pergunta_emitida` em 30 d, a ultima **22/10 06:35**. E emissor vivo da corrente da manha.
-- **PROVA:** suite da copia (abaixo); deploy abaixo; o crontab se rerenderiza pela porta (`bin/crons.sh install`).
+- **PROVA:** suite da copia `Ran 11641, OK`; o deploy das 00:1x foi BARRADO pelo portao (dia virou, sem ensaio de 23/10) -- refeito o ensaio (`--refazer --dump-agora` + `--bloco`: 76/76, erro 0, diverge 0) e publicado junto com a cura do `reconciliar`; crontab rerenderizado por `bin/crons.sh install`.
 
 ## 22/10 23:5x -- MARCO ESCRITOR-UNICO-DE-CHAMADO, LOTE E3: A FAMILIA `chamado` EM ZERO FORA DE PORTA -- CELULA (chamado, um escritor) VERDE
 
