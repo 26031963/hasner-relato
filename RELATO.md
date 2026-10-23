@@ -22,6 +22,12 @@ PAREI: ! O261 e o export da 10 | espera o DP e o Ronald: (a) o TXT da 10 esta BA
 > O MARCADOR ANDOU no mesmo ato: `ORDEM-VIVA-TOPO` saiu de `BO-HE-RECUSAR-LOTE-500` (fechado) para `O261`, que o hook cobrou.
 > SEM COMMIT DE PROPOSITO: `RELATO.md` e `BACKLOG.md` ficam sujos na arvore porque a L-106 nao deixa commit so de docs fora de marco. Eles entram no commit do proximo marco.
 
+## 23/10 17:4x -- VARREDURA BALDE 2 MEDIDA (sem codigo): `fechar_cobranca_com_lastro` e `reconciliar_geofence` AINDA ESCREVEM
+
+- **`fechar_cobranca_com_lastro`** (`40 * * * *`, porta `ponto/services/lastro.py::fechar`): dry na sombra hoje = **0** com lastro (fila 2.773; 2.760 furo real, 13 sem marco) (`logs/cb_b2_lastro.out`). Prod 30 d: **4** fechamentos (`logs/clb1b/p_b2_lastro.out`) -- e em 3 deles a batida que o followup cita como lastro tem `criado_em` (auto_now_add) no MESMO tick :40 do cron (col277 20:40:06, col416 19:40:06, col438 07:40:12 `disputa_s84_retro`) (`logs/clb1b/p_b2_batidas.out`). Suspeita de cadeia circular (o fechamento dispara a materializacao que planta o "lastro"); em medida por agente so leitura (`logs/b2lastro/`). NAO vira vigia antes disso.
+- **`reconciliar_geofence`** (06:42, `--apply` por empresa; GEO -> medido em PROD pelo dry, sonda leitor): emp2 abertos 41 / **a_fechar 1** (ch 33221, 8/8 ocorrencias hoje DENTRO do geofence); emp3 14 / 0; emp4 2 / 0 (`logs/clb1b/p_b2_geofence.out`). O evento nao fechou este -- a causa (cadastro do geofence mudou? rejulgamento da ocorrencia?) e o proximo passo. NAO vira vigia.
+- JUIZES_POR_VARREDURA segue **21**.
+
 ## 23/10 16:5x -- MARCO BO-B DIAPAGO-SE-CONTRADIZ + ORDEM-REGEN (comboio) -- IMPACTO PUBLICADO ANTES DO APPLY DA 10
 
 LEI-AKITA (BO-B): origem=`ponto/motor_calculo_v2.py::MotorBase.calcular_mes` (a) + `::_janela_do_dia` (b) [`!` dele so nesses sitios] + `ponto/services/dia_pago.py::por_dia_da_grade` (abono, B-B21) + `escala/models.py::EscalaColaborador.feriado_vira_folga` (feriado, L-086) + `ponto/services/fechamento.py::GUARDA_COMPETENCIA` (09), testemunha=`ponto/turnos.py::realizado_do_dia` (juiz de turno) + `core/feriados.py::eh_feriado` + `empresas_exportadas_no_escopo`, RED=`ponto/tests/test_bob_dia_pago_se_contradiz.py` + `test_bob_b2_abono_feriado_guarda.py`, quem-mais-le=FechamentoMensal->TXT, DiaPago->calendario/porta_export, espelho/PDF/cartao (ja liam o juiz), juizes novos=0
