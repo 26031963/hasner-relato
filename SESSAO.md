@@ -6,10 +6,16 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 23/10/2026 09:19:40.** Transcript: `c6f2f4c7-d189-48e6-a5c1-0a8ca0afec80.jsonl` (2.4 MB). Acoes na janela: **105**.
+**Medido em 23/10/2026 09:25:03.** Transcript: `c6f2f4c7-d189-48e6-a5c1-0a8ca0afec80.jsonl` (2.5 MB). Acoes na janela: **111**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 09:21:02 | Bash | Smoke 1b in prod: retida/HX after deploy | `date '+%H:%M'; cd /home/ronald/saas-hasner && grep -E 'deploy\|reload' logs/clb1b/deploy.out \| head -2; cat > logs/clb1b/p_smoke1b.py <<'EOF' from collections import Counter from datetime import timedelta from django.utils import timezone from core.models import LogAuditoria from chamados.models import FollowupChamado for h in (3, 1): ini = timezone.now() - timedelta(hours=h) q = LogAuditoria.obj ...` |
+| 09:20:55 | Bash | Full suite on balde-1 copy | `cd /home/ronald/saas-hasner && bin/suite.sh --dir /home/ronald/wt-vig1 > logs/clb1b/suite_vig1.out 2>&1; echo "FIM rc=$?" >> logs/clb1b/suite_vig1.out` |
+| 09:20:16 | Bash | Update catalog selos, run RED on HEAD copy and GREEN on cure | `cd /home/ronald/wt-vig1/app && cp /home/ronald/wt-vig1red/app/ponto/tests/test_vigia_reconciliar_vinculo.py ponto/tests/ && python3 - <<'EOF' f='chamados/tests/test_premissa_vinculo.py' s=open(f).read() old=""" v = avaliar('vinculo_divergente', 'vinculo_divergente', fatos={FATO_VINCULO_DIVERGENTE: False}) self.assertTrue(v.escopo) self.assertFalse(v.viva) self.assertTrue(premissa_morta( 'vinculo_d ...` |
+| 09:20:01 | Bash | Reapply vigia changes and read catalog selos | `cd /home/ronald/wt-vig1/app && python3 - <<'EOF' f='ponto/management/commands/reconciliar_vinculo.py' s=open(f).read() for old,new in [(""" parser.add_argument('--apply', action='store_true') """,""" parser.add_argument('--apply', action='store_true') # VARREDURA (balde 1, aval Ronald 23/10 08:5x): VIGIA. Mediu ZERO -- dry na sombra de 23/10 com a # chave do catalogo CURADA (`premissa.py`, `('geof ...` |
+| 09:19:46 | Bash | Show sombra dry output | `cd /home/ronald/saas-hasner && tail -20 logs/clb1b/sombra_vd.out` |
+| 09:19:37 | Bash | Fix catalog key in copy, measure prod modulo, dry on sombra | `cd /home/ronald/wt-vig1 && git checkout -q -- app/config/crons.py app/ponto/management/commands/reconciliar_vinculo.py && rm -f app/ponto/tests/test_vigia_reconciliar_vinculo.py && git status --short; cd app && python3 - <<'EOF' f='chamados/catalogo/premissa.py' s=open(f).read() old=""" ('vinculo_divergente', None): FATO_VINCULO_DIVERGENTE, }""" new=""" # A CHAVE E A QUE O EMISSOR GRAVA (23/10, VA ...` |
 | 09:19:20 | Bash | Read geofence reader and other catalog key readers | `sed -n 20,45p ponto/services/geofence.py; grep -rn "FATO_VINCULO_DIVERGENTE\\|_CLASSES\b" --include=*.py . \| grep -v '^./logs' \| grep -v 'premissa.py' \| head` |
 | 09:19:06 | Bash | Check chave resolution for geofence/vinculo_divergente | `grep -n "def _resolver_chave" -A15 chamados/catalogo/premissa.py; grep -rn "modulo='geofence'\\|modulo_origem='geofence'\\|'vinculo_divergente'" --include=*.py . \| grep -v '/tests/\\|^./logs' \| head` |
 | 09:19:01 | Bash | Read catalog scope mapping | `sed -n 50,70p chamados/catalogo/premissa.py; grep -n "def avaliar" -A30 chamados/catalogo/premissa.py \| head -40` |
