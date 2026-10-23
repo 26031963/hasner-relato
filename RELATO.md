@@ -16,6 +16,14 @@ PAREI: ! O261 e o export da 10 | espera o DP e o Ronald: (a) o TXT da 10 esta BA
 > O MARCADOR ANDOU no mesmo ato: `ORDEM-VIVA-TOPO` saiu de `BO-HE-RECUSAR-LOTE-500` (fechado) para `O261`, que o hook cobrou.
 > SEM COMMIT DE PROPOSITO: `RELATO.md` e `BACKLOG.md` ficam sujos na arvore porque a L-106 nao deixa commit so de docs fora de marco. Eles entram no commit do proximo marco.
 
+## 22/10 22:4x -- MARCO ESCRITOR-UNICO-DE-CHAMADO, LOTE E1: OS SEIS CAMPOS NOMEADOS NO AVAL EM PORTA (teto 12 -> 6)
+
+LEI-AKITA: origem=os 6 `save()` de campo nomeado fora de porta (`api/views.py`, `limbo_folgas.py`, `abertura.py`, `escalonar_chamados_supervisao.py`, `cobranca.py`, `disputa_emissao.py`), testemunha=`core/censo_escritas.varrer_arvore` (a funcao REAL do gate) + `core/portas.py`, RED=`chamados/tests/test_porta_chamado_e1.py` + teto do gate (4 FAIL, 12 ERROR contra `fd58a37d`), quem-mais-le=o gate `test_chokepoint_chamado_gate` e as portas irmas (contexto, vinculos, ciclo), juizes novos=0
+- **Atos:** `ChamadoColaborador.definir_prazo_sla` (ultimo vale) e `marcar_escalonado_dp` (primeiro vale, trilha) no CICLO; `vinculos.apontar_ticket_glpi` (primeiro vale); porta NOVA do TEXTO `chamados/services/texto.py::reescrever_texto` (so o campo que difere). O `contexto_json` que 3 deles salvavam junto foi pela porta do CONTEXTO. Toda escrita anda `atualizado_em`; 2a chamada = zero query.
+- **Censo vivo antes:** 20 fora (o aval diz 21; a C7 tirou uma). Depois: **14** (ChamadoColaborador 6, PerguntaDisputa 5, DisputaSupervisao 3).
+- **PROVA:** suite da copia `Ran 11620, OK`; deploy abaixo.
+- **INCOMPLETO:** E2 = os 5 mecanicos do contexto (`retirar_contexto` nasce para a marca `orfa_regeneracao`, decisao tecnica: e o 4o gesto da porta, sem regra de negocio) + o `delete` de ensaio (lei do corte 13/09, forma `apagar_em_ensaio`); E3 = os 8 de pergunta/disputa.
+
 ## 22/10 21:4x -- MARCO DSS (1): O LIMBO-FOLGAS NAO MORRE COM [nome] NO DEFEITO; OS PAIS MORTOS VOLTAM PELA PORTA
 
 LEI-AKITA: origem=`ponto/management/commands/detectar_ausencias.py` (HX-LIMBO-RETRATA fechava o LIMBO quando HOJE deixava de ter o defeito; o defeito e por MES), testemunha=`escala/models.py::EscalaColaborador.defeito_folga_nao_definida` no dia do [nome] pelo vinculo que o cobre (`escala/folgas.py::_cobre`) + `chamados/juizes.py::pergunta_viva` (C6), RED=`chamados/tests/test_limbo_nao_fecha_com_filho_no_defeito.py` (2 FAIL contra `1d98f204`), quem-mais-le=`agrupado_sob_pai_vivo` (calendario 'cadastro', `abrir`, `reabrir`, `escala/utils.py`), `via_pelo_fato` (cadastro_folga), juizes novos=0
