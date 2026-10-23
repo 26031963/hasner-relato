@@ -16,6 +16,16 @@ PAREI: ! O261 e o export da 10 | espera o DP e o Ronald: (a) o TXT da 10 esta BA
 > O MARCADOR ANDOU no mesmo ato: `ORDEM-VIVA-TOPO` saiu de `BO-HE-RECUSAR-LOTE-500` (fechado) para `O261`, que o hook cobrou.
 > SEM COMMIT DE PROPOSITO: `RELATO.md` e `BACKLOG.md` ficam sujos na arvore porque a L-106 nao deixa commit so de docs fora de marco. Eles entram no commit do proximo marco.
 
+## 23/10 08:3x -- MARCO VARREDURA CLASSE B (1a): `reavaliar_ausencias_lancadas` + `fechar_chamados_ausencia` VIRAM VIGIA; O EVENTO DA AUSENCIA FAZ
+
+LEI-AKITA: origem=`ponto/signals.py::_consumidor_ausencia` (evento da Ausencia, depois do cartorio) + `chamados/services/silencio_ausencia.py::_premissa_morre` (bug no caminho), testemunha=a LAMPADA (`CelulaDia.VEREDITOS_ACUSAM`) + a trilha de prod por ator, RED=`ponto/tests/test_varredura_classe_b_ausencia.py` (5 FAIL, 3 ERROR contra `9c26e58b`), quem-mais-le=`mudar_estado` (o gancho desceu ao evento), os selos `test_reavaliar_catalogo_premissa`/`test_chamado_ausencia_fecha`, juizes novos=0
+- **Medido (prod, 30 d, por ator):** `reconciliar_ausencia_lancada` **83** so do cron x 25 do evento; dos 83, **50** eram UM chamado (#23109) e **33** ausencia que NASCEU aprovada (sem `mudar_estado`, sem evento). `ausencia_colab` fechados: **88** so do cron x 3 -- o evento de decisao nao fechava este chamado.
+- **Bug no caminho (LEI-AKITA 6), #23109 col584 17/09:** atestado PARCIAL (300 min) -- `ausencia_cobre(para='cobranca')` cobre o dia, a celula segue `furo` (`efeito_ausencia`: parcial conta pelas batidas). O fechamento acordava o cartorio, que reabria pelo emissor: **50 fecha/reabre em 30 d**, a cada `*/30`. Cura: a ausencia so mata a cobranca se a lampada do dia NAO acusa (o consumidor le a lampada). Universo hoje na sombra: **1** (o proprio #23109).
+- **Mudou:** `ponto/signals.py` (receivers post_save/post_delete de Ausencia no FIM do modulo, `on_commit`, engolir) -> `reconciliar_colab` + `fechar_chamados_ausencia_decidida(ausencia)`; `ponto/services/ausencia.py` (`fechar_chamado_da_ausencia`, `chamados_da_ausencia_decidida`; o gancho de `mudar_estado` saiu); os dois commands com `--alarme`; `config/crons.py` (linhas `--alarme`, fora de `JUIZES_POR_VARREDURA`, dentro dos vigias).
+- **Sombra (arvore da cura):** `reavaliar --alarme` emp 2/3/4 = **0/0/0** (2.393/467/86 vivas); `fechar_chamados_ausencia --alarme` = **0** (14 vivos).
+- **PROVA:** suite da copia (abaixo); deploy abaixo.
+- **Medido para os proximos (trilha 30 d por ator):** `reconciliar_chamados` 1.435 (169 retratacoes pela CELULA, que nao tem evento -- C3; 868 `retratacao_retida_irma_orfa` = 16 chamados regravados a cada 15 min), `reconciliar_perguntas_orfas` 292, `fechar_becos_disputa` 15.
+
 ## 23/10 01:2x -- MARCO BUG NO CAMINHO: A PORTA `reconciliar` DECIDE PELO STATUS DO BANCO (7 de 12 fechamentos regravados)
 
 LEI-AKITA: origem=`chamados/models.py::ChamadoColaborador.reconciliar` (decidia pelo `status_local` da INSTANCIA), testemunha=`chamados/catalogo/motor.py::decidir` sobre o estado do BANCO + a trilha `estado_chamado`, RED=`chamados/tests/test_reconciliar_le_o_banco.py` (1 FAIL contra `da865492`), quem-mais-le=todo chamador de `reconciliar` (crons de varredura e o evento), o contrato do nucleo (`test_contract_status_nucleo`) e o teto do chokepoint, juizes novos=0
