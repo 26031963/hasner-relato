@@ -192,9 +192,9 @@ flowchart TD
     t_celula["CELULA / ATA por marco<br/>o que aconteceu (lampada)"]
     t_evento["EVENTO<br/>batida, ausencia, chamado -> cartorio julga na hora (signals B5.2)"]
     t_consumidor["CONSUMIDORES<br/>chamado, pergunta, tela, folha: leem a lampada, nunca re-julgam"]
-    t_vigia["CRON = VIGIA<br/>27 vigias; contador esperado 0, so alarma"]
+    t_vigia["CRON = VIGIA<br/>28 vigias; contador esperado 0, so alarma"]
     t_prazo["CRON = PRAZO (L-101)<br/>3 cron(s): a falta nao emite evento, o relogio e o unico sinal dela;<br/>julgam pela funcao do juiz da casa, sem regra propria (PRAZO_DELEGA_A)"]
-    t_juiz["JUIZ POR VARREDURA (divida)<br/>21 crons ainda julgam: esperado 0"]
+    t_juiz["JUIZ POR VARREDURA (divida)<br/>20 crons ainda julgam: esperado 0"]
     t_escala --> t_celula
     t_evento --> t_celula
     t_celula --> t_consumidor
@@ -219,7 +219,6 @@ flowchart TD
   j_reconciliar_fantasmas["reconciliar_fantasmas"] -.-> t_juiz
   j_reconciliar_geofence["reconciliar_geofence"] -.-> t_juiz
   j_reconciliar_perguntas_orfas["reconciliar_perguntas_orfas"] -.-> t_juiz
-  j_reconciliar_vinculo["reconciliar_vinculo"] -.-> t_juiz
   j_silenciar_chamados_isentos["silenciar_chamados_isentos"] -.-> t_juiz
   j_supra_juiz["supra_juiz"] -.-> t_juiz
   j_termometro_regua["termometro_regua"] -.-> t_juiz
@@ -366,6 +365,7 @@ flowchart TD
     vg_pipeline_placar["pipeline_placar"]
     vg_reavaliar_ausencias_lancadas["reavaliar_ausencias_lancadas"]
     vg_reconciliar_grade["reconciliar_grade"]
+    vg_reconciliar_vinculo["reconciliar_vinculo"]
     vg_sentinela_diario_sh["sentinela_diario.sh"]
     vg_supra_juiz["supra_juiz"]
     vg_tripwire_celulas["tripwire_celulas"]

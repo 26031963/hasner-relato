@@ -16,6 +16,16 @@ PAREI: ! O261 e o export da 10 | espera o DP e o Ronald: (a) o TXT da 10 esta BA
 > O MARCADOR ANDOU no mesmo ato: `ORDEM-VIVA-TOPO` saiu de `BO-HE-RECUSAR-LOTE-500` (fechado) para `O261`, que o hook cobrou.
 > SEM COMMIT DE PROPOSITO: `RELATO.md` e `BACKLOG.md` ficam sujos na arvore porque a L-106 nao deixa commit so de docs fora de marco. Eles entram no commit do proximo marco.
 
+## 23/10 10:0x -- MARCO VARREDURA BALDE 1: A CHAVE DO CATALOGO DE `vinculo_divergente` ERA CEGA; `reconciliar_vinculo` MEDE ZERO E VIRA VIGIA (JUIZES_POR_VARREDURA 21 -> 20)
+
+LEI-AKITA: origem=`chamados/catalogo/premissa.py::_CLASSES` (chave por modulo `vinculo_divergente`; o emissor grava `geofence`) + `config/crons.py`, testemunha=os 204 chamados de prod (204 `geofence`, 0 `vinculo_divergente`) + dry do command real na sombra, RED=`ponto/tests/test_vigia_reconciliar_vinculo.py` + `chamados/tests/test_premissa_vinculo.py` + `test_premissa_catalogo` (4 FAIL, 2 ERROR contra `79f6d0db`), quem-mais-le=`reconciliar_vinculo` (unico coletor do fato), `_veredito_premissa` (nao coleta: conservador), juizes novos=0
+- **Os dois zeros do aval mentiam (censo por ator e cego):** `reconciliar_vinculo` -- 83 corridas `a_fechar=0` porque a classe caia FORA DO ESCOPO desde que nasceu (bug no caminho, LEI-AKITA 6); os selos usavam a forma do catalogo como modulo e passavam vazios. `detectar_vinculo_divergente` -- **63** chamados em 30 d (segundas 06:52), trilha `ator=None` (`abrir_chamado_local`): NAO e zero, fica escritor e vai ao balde 3.
+- **Mudou:** chave `('geofence', 'vinculo_divergente')`; `reconciliar_vinculo --alarme` (forca dry, `SystemExit(2)`); linha do cron `--alarme`; sai de `JUIZES_POR_VARREDURA`, entra nos vigias; diagrama regenerado do codigo da COPIA (28 vigias / 20 juizes).
+- **Sombra (chave curada):** 98 abertos, 0 a fechar -- o zero agora e medido.
+- **Contador:** `JUIZES_POR_VARREDURA` **21 -> 20**.
+- **Achado de instrumento (linha de fila):** `bin/gerar_diagrama.py` roda no `saas_core` (arvore VIVA): chamado de uma copia regera o `.mmd` de prod (conteudo igual hoje, mtime 09:31). Para a copia usei `gerar()` pela porta da sombra.
+- **PROVA:** suite da copia `Ran 11658 tests`, `OK (skipped=51, expected failures=14)`, rc=0 (`logs/clb1b/suite_vig1b.out`); deploy abaixo.
+
 ## 23/10 09:3x -- MARCO VARREDURA CLASSE B (1b-i): O LACO HX-RESPOSTA-VISIVEL x BUG 31 MORRE; A RETENCAO GRAVA O FATO, NAO A PASSADA
 
 LEI-AKITA: origem=`chamados/juizes.py::irmas_respondidas_sem_consumo` (universo sem a regra de credito) + `chamados/services/disputa_emissao.py` (HX com filtro proprio) + `chamados/reconciliador.py::_retratar` (trilha por passada), testemunha=`raiox.creditos_perguntas` (destino VIVO vence o pai) + trilha de prod por ator, RED=`chamados/tests/test_laco_hx_x_bug31.py` (5 FAIL contra `79f6d0db`), quem-mais-le=`reconciliador._retratar`, `materializacao._fecha`, auditor I12 (TURNO_MODS: universo igual), juizes novos=0
