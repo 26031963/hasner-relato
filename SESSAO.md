@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 23/10/2026 16:35:46.** Transcript: `c6f2f4c7-d189-48e6-a5c1-0a8ca0afec80.jsonl` (9.3 MB). Acoes na janela: **434**.
+**Medido em 23/10/2026 16:40:47.** Transcript: `c6f2f4c7-d189-48e6-a5c1-0a8ca0afec80.jsonl` (9.5 MB). Acoes na janela: **439**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 16:37:56 | Bash | Check file crossing between BO-B and ORDEM | `cd /home/ronald/saas-hasner && A=$(git -C /home/ronald/wt-bob diff --name-only b204cff1 879ff834 \| sort); B=$(git -C /home/ronald/wt-ordem diff --name-only $(git -C /home/ronald/wt-ordem merge-base HEAD c4081365) HEAD \| sort); echo "BOB:"; echo "$A"; echo "ORDEM:"; echo "$B"; echo "CRUZAM:"; comm -12 <(echo "$A") <(echo "$B")` |
+| 16:37:50 | Bash | Correct RELATO top and check BO-B copy state | `python3 - <<'EOF' f='docs/RELATO.md' s=open(f).read() o=" A guarda esta sendo estendida a TODA competencia exportada (07/08 tambem leem `por_dia_da_grade`) -- mais restritiva, sem dinheiro." assert s.count(o)==1 s=s.replace(o," **CORRECAO (16:5x): a guarda NAO se estende as outras exportadas** -- pedi isso e estava errado: a L-113 (`LEIS.md`, 07/10) REVOGA a recusa de recalculo em competencia expo ...` |
+| 16:37:40 | Bash | Read L-113 text | `sed -n 140,150p docs/LEIS.md \| cut -c1-900` |
+| 16:36:19 | Bash | Record changed 09 DIFF number at RELATO top | `python3 - <<'EOF' f='docs/RELATO.md' s=open(f).read() top="> **BO-B: AS TRES RESPONDIDAS 23/10 15:0x**" assert s.count(top)==1 i=s.index(top); j=s.index("\n\n",i) s=s[:j]+" **NUMERO MUDOU (16:4x):** com o abono (2) e o feriado (3) a cura alcanca MAIS da 09 -- DIFF da funcao: **96 colabs** (nao 64), horas_trabalhadas **+439,64 h** (nao +416,10), HE100 feriado +25,63 h, folga trabalhada -23,55 h, ab ...` |
+| 16:36:11 | SendMessage |  | `-` |
 | 16:25:00 | Bash | Write RELATO section for E1a + part 3 | `python3 - <<'EOF' f='docs/RELATO.md' s=open(f).read() anc="## 23/10 16:1x -- O261 -- os 16 fio_morto com dono" assert s.count(anc)==1 sec='''## 23/10 16:4x -- MARCO O261 E1a + VARREDURA 1b-iii PARTE 3 (comboio) LEI-AKITA (E1a): origem=`chamados/services/materializacao.py::_materializar_ausencia_de_resposta`, testemunha=`chamados/juizes.py::declarou_hora` (HX-ESCAPE-NAO-E-DECLARACAO 05/09), RED=`te ...` |
 | 16:24:49 | Bash | Run full suite on E1a + part 3 combo | `cd /home/ronald/saas-hasner && (bin/suite.sh --dir /home/ronald/wt-comb2310c --parallel 4 > /home/ronald/wt-comb2310c/app/logs/suite.out 2>&1; echo rc=$? >> /home/ronald/wt-comb2310c/app/logs/suite.out)` |
 | 16:24:44 | Bash | Commit E1a and part 3 copies, build combo | `cd /home/ronald/wt-e1a && git add app/chamados/services/materializacao.py app/chamados/tests/test_hx_via_ausencia_dia.py && git commit -q -F - <<'EOF' O261 E1a: a resposta de escape nao sai mais "Colaborador declarou hora" _materializar_ausencia_de_resposta decidia a via pelo teste "tem texto?" -- curou a irma MUDA (BUG 20, 31/08) e deixou de fora a PROPRIA pergunta respondida ATESTADO/FALTA_DIA,  ...` |
