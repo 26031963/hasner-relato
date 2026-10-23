@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 23/10/2026 15:42:43.** Transcript: `c6f2f4c7-d189-48e6-a5c1-0a8ca0afec80.jsonl` (8.4 MB). Acoes na janela: **388**.
+**Medido em 23/10/2026 15:48:02.** Transcript: `c6f2f4c7-d189-48e6-a5c1-0a8ca0afec80.jsonl` (8.4 MB). Acoes na janela: **389**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 15:43:10 | Bash | Insert RDM section into RELATO | `python3 - <<'EOF' f='docs/RELATO.md' s=open(f).read() anc="## 23/10 14:4x -- MARCO VARREDURA CLASSE B (1b-iii-b)" assert s.count(anc)==1 r=open('/home/ronald/wt-rdm/app/logs/rdm/relato.md').read() r=r.replace("## BO-RESOLVER-DIA-MUDO (raia wt-rdm) -- item 1 NAO chegou; itens 2 e 3","## 23/10 15:3x -- MARCO BO-RESOLVER-DIA-MUDO (raia wt-rdm) -- item 1 NAO chegou; itens 2 e 3",1) r=r.replace("- RED  ...` |
 | 15:39:15 | Bash | Run full suite on new combo copy | `cd /home/ronald/saas-hasner && (bin/suite.sh --dir /home/ronald/wt-comb2310b --parallel 4 > /home/ronald/wt-comb2310b/app/logs/suite.out 2>&1; echo rc=$? >> /home/ronald/wt-comb2310b/app/logs/suite.out)` |
 | 15:39:12 | Bash | Commit fixture fixes and build new combo copy | `cd /home/ronald/wt-1b3b && git add app/chamados/tests/test_reemissao_c2.py app/core/tests/testes_sem_relogio.txt && git commit -q -F - <<'EOF' 1b-iii-b: a fixture do c2 ganha a celula que cobra e o cadastro que a sustenta test_reemissao_c2 (vizinho que faltou no censo da primeira rodada; o comboio de 14:5x deu 2 FAIL nele): a celula do dia com FURO_PARCIAL vira precondicao de lei do c2, a entrada  ...` |
 | 15:38:39 | Bash | Freeze second class, shrink list, rerun | `cd /home/ronald/wt-1b3b/app && python3 - <<'EOF' f='chamados/tests/test_reemissao_c2.py' s=open(f).read() o="class ReemissaoC2AusenciaTest(TestCase):\n" assert s.count(o)==1 s=s.replace(o,"@freeze_time('2026-10-20 15:00:00', tick=True)\n"+o) open(f,'w').write(s) f='core/tests/testes_sem_relogio.txt' L=open(f).read().split('\n') assert L.count('chamados/tests/test_reemissao_c2.py')==1 L.remove('cha ...` |

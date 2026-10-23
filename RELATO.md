@@ -18,6 +18,24 @@ PAREI: ! O261 e o export da 10 | espera o DP e o Ronald: (a) o TXT da 10 esta BA
 > O MARCADOR ANDOU no mesmo ato: `ORDEM-VIVA-TOPO` saiu de `BO-HE-RECUSAR-LOTE-500` (fechado) para `O261`, que o hook cobrou.
 > SEM COMMIT DE PROPOSITO: `RELATO.md` e `BACKLOG.md` ficam sujos na arvore porque a L-106 nao deixa commit so de docs fora de marco. Eles entram no commit do proximo marco.
 
+## 23/10 15:3x -- MARCO BO-RESOLVER-DIA-MUDO (raia wt-rdm) -- item 1 NAO chegou; itens 2 e 3
+LEI-AKITA: origem=chamados/models.py::PerguntaDisputa.reabrir_por_resposta (+ escritor da resposta) e core/respostas.py (envelopes), testemunha=juiz _pergunta_materializada_de_fato / core/recusa_critica.py::contar, RED=chamados.tests.test_rdm_resposta_vence_carimbo_sem_lastro + core.tests.test_contrato_recusa_critica, quem-mais-le=131 portas que respondem por envelope (censo AST) + ESTADO + HAIKU, juizes novos=0
+- MEDIDO (prod, leitura): 127 POST /ponto/celula/veredito/ 16-23/10, 29 sem trilha (p1_posts.out).
+- Item 2: 161 celulas furo->cobrado->furo em 10 d (p2); todo veredito pela porta lavrar_veredito via cartorio (118 cron, 43 em request). Nao e escritor fora da lei de celula: e SINTOMA.
+- Causa provada (p5/p6): chamado fecha -> varredura carimba perguntas sem resposta via chamado_encerrado; colab responde depois; admin valida; fila da materializacao (materializada_em__isnull) nao ve; validar_pergunta diz "ponto gravado"; zero batida. col821 10/10 e 12/10, col723 14/10.
+- Frota (p7): 647 respondidas+validadas DEPOIS do carimbo; 200 sem gravacao de fato (63 colabs), 138 via chamado_encerrado.
+- Cura item 2: resposta nova torna obsoleto o carimbo SEM LASTRO (VIAS_SEM_LASTRO), como ja tornava a validacao. Restritiva.
+- Cura item 3: resposta_acao/resposta_render gravam toda recusa (erro/aviso) em ponto.recusa_critica -> ponto.log (pontofile INFO). Resolver dia grava 1 linha por dia recusado. 403 cru de chamados/views.py:88 grava.
+- PROVA: RED 50fdebbb 5 fail + 4 error (`wt-rdm/app/logs/rdm/red.log`); suite cheia da copia Ran 11688 OK rc 0; COMBOIO com a 1b-iii-b (`wt-comb2310b`): SUITE_COMBOIO_B. Commits 936ef924 (produto, pousa agora) + b073d993 (instrumento, pouso proprio L-105).
+- Contador: core/recusa_critica.py::resolver_dia_recusado; ESTADO (bin/recusa_estado.py) e HAIKU (/api/mensageria/resolver-dia-recusado/ + mensageria) leem a mesma funcao.
+INCOMPLETO:
+- item 1 nao chegou; "os outros dois" do item 2 nao identificaveis.
+- passivo: 200 perguntas ja perdidas seguem para o lote O317 (materializar_passivo_validado); 62 em vias com testemunha nao cobertas pela cura restritiva.
+- dia/colab so nas recusas do Resolver dia; nas demais 130 portas a linha leva usuario, porta, objeto da rota e motivo.
+- HAIKU-DENTES.md precisa ser regerado no pouso (bin/gerar_haiku_dentes.py); mensageria e stack separada (deploy proprio).
+- Ordem inversa (resposta ANTES do carimbo sem lastro, validada depois): 14 na frota, 11 sem gravacao (p8/p9), todas carimbadas ate 21/09; nao reproduz no HEAD (teste da vassoura passou sem cura) -> NAO curado, passivo O317.
+- Aviso tambem grava (TIPOS_RECUSA erro+aviso): volume no ponto.log nao medido; medir depois do deploy.
+
 ## 23/10 14:4x -- MARCO VARREDURA CLASSE B (1b-iii-b): O c2 SO COBRA O QUE A EMISSAO COBRA
 
 LEI-AKITA: origem=`chamados/reconciliador.py::reemitir_chamado_do_dia`, testemunha=`ponto/services/furos_sem_cobranca.py::PROTESTOS_QUE_COBRAM` (+ `supra_juiz.NAO_COBRAVEIS_DO_COLABORADOR`, lei 31/08), RED=`chamados/tests/test_c2_le_o_protesto_que_cobra.py` (3 FAIL contra HEAD, MORDE verde), quem-mais-le=`reconciliar_perguntas_orfas_colab` + acervo I8b, juizes novos=0
