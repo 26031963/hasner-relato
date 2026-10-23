@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 23/10/2026 18:32:33.** Transcript: `c6f2f4c7-d189-48e6-a5c1-0a8ca0afec80.jsonl` (11.5 MB). Acoes na janela: **540**.
+**Medido em 23/10/2026 18:38:03.** Transcript: `c6f2f4c7-d189-48e6-a5c1-0a8ca0afec80.jsonl` (11.6 MB). Acoes na janela: **544**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 18:33:49 | Bash | Write RED for dissolved par_relampago and run against HEAD | `cd /home/ronald/saas-hasner && git worktree add -q --detach /home/ronald/wt-parrel HEAD && mkdir -p /home/ronald/wt-parrel/app/logs /home/ronald/wt-parrel/app/media && cat > /home/ronald/wt-parrel/app/chamados/tests/test_par_relampago_dissolvido.py <<'EOF' """BUG-CONCORDE-SEM-ENTRADA item (b) (23/10): o par relampago DISSOLVIDO pelo flip mata a premissa. O detector define o par como E->S (ou S->E) ...` |
+| 18:33:25 | Bash | Read par_relampago detector definition | `sed -n 1,40p ponto/management/commands/detectar_par_relampago.py \| /bin/grep -v "^$" \| head -30; /bin/grep -n "tipo ==\\|\.tipo\b\\|'E'\\|'S'" ponto/management/commands/detectar_par_relampago.py \| head -15` |
+| 18:33:14 | Bash | Read FATO_PAR_INTEGRO premissa and its judge | `sed -n 25,60p chamados/catalogo/premissa.py; sed -n 170,230p chamados/reconciliador.py` |
+| 18:33:10 | Bash | Find par_relampago premissa handling | `git grep -n "par_relampago" -- 'chamados/catalogo/*.py' 'chamados/reconciliador.py' 'chamados/juizes.py' \| head -15` |
 | 18:27:45 | Bash | Write BUG-CONCORDE section in RELATO | `python3 - <<'EOF' f='docs/RELATO.md' s=open(f).read() anc="## 23/10 18:1x -- MARCO O261" assert s.count(anc)==1 sec='''## 23/10 18:3x -- BUG-CONCORDE-SEM-ENTRADA (P7.1): marco apagado + batida acesa + realizado 0 = FURO_PARCIAL, nao concorde LEI-AKITA: origem=`ponto/supra_juiz.py::classificar_dia` (vao entre REALIZADO_ZERO :170, FURO_* :194 e o RAMO 4 atras de `_tem_fato_dia` :248), testemunha=ata ...` |
 | 18:27:29 | Bash | Verify concorde suite is alive | `ps aux \| grep -c "[s]uite.sh --dir /home/ronald/wt-concorde"; cd /home/ronald/saas-hasner && bin/trava_teste.sh --quem 2>&1 \| tail -1` |
 | 18:27:24 | Bash | Commit concorde cure and launch full suite | `cd /home/ronald/wt-concorde && git add app/ponto/supra_juiz.py app/ponto/tests/test_concorde_sem_entrada.py && git commit -q -F - <<'EOF' BUG-CONCORDE-SEM-ENTRADA: marco apagado com batida acesa e realizado 0 e FURO_PARCIAL, nao concorde Caso col29 15/10 (plantao 19:00-07:00, so as saidas 16/10 07:01/07:02; a 07:01 nasceu E e foi virada para S por humano em 23/10 09:14): a ata apaga a E 19:00 e ac ...` |
