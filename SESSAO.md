@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 23/10/2026 00:08:02.** Transcript: `da98832f-de75-4326-b54f-c50c792fa1ba.jsonl` (5.5 MB). Acoes na janela: **303**.
+**Medido em 23/10/2026 00:13:32.** Transcript: `da98832f-de75-4326-b54f-c50c792fa1ba.jsonl` (5.6 MB). Acoes na janela: **305**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 00:13:26 | Bash | Measure how many fantasma cron writes were redundant to the event | `cd /home/ronald/saas-hasner && cat > logs/dss/fantasma_redundante.py <<'EOF' from datetime import timedelta from django.utils import timezone from core.models import LogAuditoria q = LogAuditoria.objects.filter(ator='sistema:reconciliar_fantasmas', acao='reconciliar_fantasma', criado_em__gte=timezone.now() - timedelta(days=30)) red = sola = 0 for lg in q: antes = LogAuditoria.objects.filter(objeto ...` |
+| 00:13:11 | Bash | Probe fantasma chamado 33906 timeline | `cd /home/ronald/saas-hasner && cat > logs/dss/fantasma_33906.py <<'EOF' from django.utils import timezone from chamados.models import ChamadoColaborador from ponto.models import Batida from core.models import LogAuditoria ch = ChamadoColaborador.objects.get(pk=33906) L = lambda t: timezone.localtime(t).strftime('%d/%m %H:%M:%S') if t else None print('CH', ch.pk, ch.modulo_origem, ch.status_local,  ...` |
 | 00:04:56 | Bash | Full suite rerun on wt-cla | `cd /home/ronald/saas-hasner && bin/suite.sh --dir /home/ronald/wt-cla > logs/cla_suite2.log 2>&1; echo rc=$? >> logs/cla_suite2.log; grep -E '^Ran \|^(OK\|FAILED)($\| \()\|^rc=' logs/cla_suite2.log \| tail -3; grep -E '^(FAIL\|ERROR):' logs/cla_suite2.log \| head -5` |
 | 00:04:39 | Bash | Run Django generator with suite env and mounts | `cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; EF=$(teste_envfile); MONT=$(bin/arvore_do_push.sh --montagem /home/ronald/wt-cla 2>/dev/null); IMG=$(docker inspect -f '{{.Config.Image}}' saas_ui); docker run --rm $TESTE_DOCKER --network none --env-file .env --env-file "$EF" -e PYTHONDONTWRITEBYTECODE=1 $MONT -v /home/ronald/wt-cla/app:/app -w /app $IMG python manage.py gerar ...` |
 | 00:04:35 | Bash | Read how suite.sh builds the test container env | `cd /home/ronald/saas-hasner && grep -n "docker run\\|DJANGO_SETTINGS\\|env-file\\|TESTE_DOCKER\\|-e " bin/suite.sh \| head -12; grep -n "TESTE_DOCKER=\\|teste_envfile()" -A6 bin/recursos.sh \| head -20` |
