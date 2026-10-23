@@ -16,6 +16,17 @@ PAREI: ! O261 e o export da 10 | espera o DP e o Ronald: (a) o TXT da 10 esta BA
 > O MARCADOR ANDOU no mesmo ato: `ORDEM-VIVA-TOPO` saiu de `BO-HE-RECUSAR-LOTE-500` (fechado) para `O261`, que o hook cobrou.
 > SEM COMMIT DE PROPOSITO: `RELATO.md` e `BACKLOG.md` ficam sujos na arvore porque a L-106 nao deixa commit so de docs fora de marco. Eles entram no commit do proximo marco.
 
+## 23/10 10:2x -- MARCO CORRECAO DO BALDE 1: `reconciliar_vinculo` VOLTA A JUIZ -- 18 A FECHAR EM PROD; A SOMBRA NAO TEM GPS (JUIZES_POR_VARREDURA 20 -> 21)
+
+LEI-AKITA: origem=`config/crons.py` (papel declarado pelo dry da SOMBRA) + `CLAUDE.md` sec. 6 (dizia que a geolocalizacao NAO e mascarada), testemunha=o command REAL em prod (`--alarme`, leitura: `abertos=98 | a_fechar=18`, rc=2) + `Batida.latitude` (sombra 0 de 90.623, prod 86.399), RED=`ponto/tests/test_vigia_reconciliar_vinculo.py::OPapelEJuiz` (2 FAIL contra `2c75650b`), quem-mais-le=o crontab (`bin/crons.sh install`), o diagrama, juizes novos=0
+- **O erro foi meu e o smoke o pegou:** o marco anterior pos o cron como VIGIA pelo dry da sombra (0 a fechar). A SOMBRA-MASCARA-2 apaga o GPS da batida (`bin/sombra_regras_pessoais.py:75`), entao cron de GEO da zero la por construcao. Em prod, com a chave curada, o mesmo command acha **18** a fechar (ids em `logs/clb1b/vd18.txt`).
+- **Efeito no ar entre os dois deploys:** nenhum -- a corrida dele e as 06:47, e antes da chave curada ele nunca fechava nada.
+- **Mudou:** linha do cron volta a `--apply`; volta a `JUIZES_POR_VARREDURA`; sai dos vigias; o `--alarme` fica no command como instrumento; diagrama regenerado (27 vigias / 21 juizes); CLAUDE.md sec. 6 corrigido ("cron de geo se mede em PROD pelo dry").
+- **O que acontece amanha 06:47 (efeito NOVO, lei existente E1(b) 31/07):** o cron retrata os 18 `vinculo_divergente` cuja divergencia caducou (>=80% das 10 ultimas batidas GPS dentro do posto). Reversao: `ChamadoColaborador.reabrir()` nos 18 ids de `logs/clb1b/vd18.txt`. Nao e dado de vinculo: e estado de chamado.
+- **Contador:** `JUIZES_POR_VARREDURA` **20 -> 21** (o 20 do marco anterior era falso).
+- **Para os proximos baldes:** `reconciliar_geofence`, `detectar_cluster_espurio` e `detectar_vinculo_divergente` se medem em PROD pelo dry, nunca pela sombra.
+- **PROVA:** SUITE_PENDENTE
+
 ## 23/10 10:0x -- MARCO VARREDURA BALDE 1: A CHAVE DO CATALOGO DE `vinculo_divergente` ERA CEGA; `reconciliar_vinculo` MEDE ZERO E VIRA VIGIA (JUIZES_POR_VARREDURA 21 -> 20)
 
 LEI-AKITA: origem=`chamados/catalogo/premissa.py::_CLASSES` (chave por modulo `vinculo_divergente`; o emissor grava `geofence`) + `config/crons.py`, testemunha=os 204 chamados de prod (204 `geofence`, 0 `vinculo_divergente`) + dry do command real na sombra, RED=`ponto/tests/test_vigia_reconciliar_vinculo.py` + `chamados/tests/test_premissa_vinculo.py` + `test_premissa_catalogo` (4 FAIL, 2 ERROR contra `79f6d0db`), quem-mais-le=`reconciliar_vinculo` (unico coletor do fato), `_veredito_premissa` (nao coleta: conservador), juizes novos=0
