@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 23/10/2026 19:15:33.** Transcript: `c6f2f4c7-d189-48e6-a5c1-0a8ca0afec80.jsonl` (12.3 MB). Acoes na janela: **586**.
+**Medido em 23/10/2026 19:20:39.** Transcript: `c6f2f4c7-d189-48e6-a5c1-0a8ca0afec80.jsonl` (12.3 MB). Acoes na janela: **588**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 19:20:22 | Bash | Land par_relampago per L-107 and deploy | `python3 - <<'EOF' f='docs/RELATO.md' s=open(f).read() o="- **(b) par_relampago #31967:** o emissor le o juiz do turno (`detectar_par_relampago.py:118,122`), o carimbo 16/10 era coerente com o tipo E gravado; o defeito e outro -- nada reconcilia o chamado quando o flip DISSOLVE o par: 7 de 21 da 10 assim, **3 vivos** (31967 col29, 27819 col278, 27519 col898). Cura seguinte, RED proprio." assert s.c ...` |
+| 19:18:50 | Bash | Read par_relampago landing suite verdict | `cd /home/ronald/wt-parrelp/app && grep -E "^(FAIL\|ERROR):" logs/suite.out \| head; grep -E "^Ran [0-9]+ tests" logs/suite.out \| tail -1; grep -E '^(OK\|FAILED)($\| \()' logs/suite.out \| tail -1; tail -1 logs/suite.out; git -C /home/ronald/wt-parrelp status --porcelain \| grep -v '^??'; git -C /home/ronald/saas-hasner log --oneline -1` |
 | 19:09:24 | Bash | Publish acervo proof in RELATO | `python3 - <<'EOF' f='docs/RELATO.md' s=open(f).read() o="- **INCOMPLETO:** acervo (78 dias) rejulgado so depois do pouso, com reversao do veredito; classe B sem dono; 730 dias concorde com ata previsto=0 excluidos sem investigar." assert s.count(o)==1 s=s.replace(o,"""- **ACERVO APLICADO 19:06** (depois do pouso `6b3ef750`, deploy rc=0): `julgar_celula(forcar)` pela porta real nas **1.166** celula ...` |
 | 19:09:10 | Bash | Prove col29 fixed and count remaining class A | `cd /home/ronald/saas-hasner && cat > logs/concorde/p_prova.py <<'EOF' import datetime from escala.models import CelulaDia c = CelulaDia.objects.get(colaborador_id=29, data=datetime.date(2026, 10, 15)) print('COL29', c.veredito, c.protestos) ini, fim = datetime.date(2026, 9, 21), datetime.date(2026, 10, 20) n = 0 for x in CelulaDia.objects.filter(data__gte=ini, data__lte=fim, trabalha=True, veredit ...` |
 | 19:09:00 | Bash | Read acervo concorde apply result | `cd /home/ronald/saas-hasner && grep -E "^CONC\\|\|^rc=\|Traceback\|Error" logs/concorde/acervo_apply.out \| head` |
