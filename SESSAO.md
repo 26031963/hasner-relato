@@ -6,10 +6,19 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 23/10/2026 19:51:33.** Transcript: `ed482694-44e4-4da5-bd42-07601a2a39b4.jsonl` (2.2 MB). Acoes na janela: **88**.
+**Medido em 23/10/2026 19:56:56.** Transcript: `ed482694-44e4-4da5-bd42-07601a2a39b4.jsonl` (2.3 MB). Acoes na janela: **97**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 19:53:00 | Bash | Commit regenerated mmd; rerun diagram selo | `cd /home/ronald/wt-m1 && git add app/docs/ARQUITETURA.mmd && git commit -q -F - <<'MSG' FLUXO 2 M1: ARQUITETURA.mmd regerado (familia fechamento, registro 10 -> 6 sitios) Derivado do proprio M1: o bloco de juizes do diagrama conta PENDENTES['fechamento']. Regerado por `manage.py gerar_diagrama` em container de teste montando a copia (o atalho bin/gerar_diagrama.py roda no saas_core = arvore viva,  ...` |
+| 19:52:35 | Bash | Regenerate diagram with suite-like container on copy | `cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null 2>&1; docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file .env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 -v /home/ronald/wt-m1/app:/app -w /app saas-hasner-core:latest python manage.py gerar_diagrama --settings=config.settings.ci 2>&1 \| tail -2; cd /home/ronald/wt-m1 & ...` |
+| 19:52:32 | Bash | Read suite.sh docker invocation | `cd /home/ronald/saas-hasner && /bin/grep -n 'docker run' -A8 bin/suite.sh \| head -30` |
+| 19:52:25 | Bash | Regenerate diagram inside test container on the copy | `cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null 2>&1; EF=$(ls logs/.env_teste); docker run --rm $TESTE_DOCKER --env-file $EF --network container:juliani_db_test -v /home/ronald/wt-m1/app:/app -w /app saas-hasner-core:latest python manage.py gerar_diagrama 2>&1 \| tail -3; cd /home/ronald/wt-m1 && git diff --stat; git diff app/docs/ \| head -30` |
+| 19:52:18 | Bash | Read gerar_diagrama header | `cd /home/ronald/saas-hasner && sed -n 1,60p bin/gerar_diagrama.py` |
+| 19:52:17 | Bash | Check whether generator touched live tree | `cd /home/ronald/saas-hasner && git status --short \| head; sed -n 1,40p bin/gerar_diagrama.py \| /bin/grep -n 'RAIZ\\|APP\\|path\\|docker' \| head` |
+| 19:51:58 | Bash | Regenerate diagram in copy and view diff | `cd /home/ronald/wt-m1 && python3 bin/gerar_diagrama.py 2>&1 \| tail -3; git diff --stat; git diff app/docs/ARQUITETURA.mmd \| head -30` |
+| 19:51:55 | Bash | Locate diagram generator | `cd /home/ronald/wt-m1 && ls bin/gerar_diagrama.py app/bin/gerar_diagrama.py 2>&1 \| head; /bin/grep -n 'gerar_diagrama' -r /home/ronald/saas-hasner/app/core/tests/test_selo_diagrama_do_codigo.py \| head -5` |
+| 19:51:49 | Bash | Read diagram selo failure detail | `/bin/grep -n -A25 'FAIL: test_MORDE_o_mmd_commitado_bate' /home/ronald/wt-m1/app/logs/suite.out \| /bin/grep -v '^\-\-$' \| head -40` |
 | 19:45:09 | Bash | Wait for M1 comboio suite verdict | `for i in $(seq 1 115); do /bin/grep -q '^FIM rc=' /home/ronald/wt-m1/app/logs/suite.out 2>/dev/null && break; /usr/bin/sleep 5; done; /bin/grep -E '^(FAIL\|ERROR):\|^Ran \|^(OK\|FAILED)($\| \()\|^FIM rc=' /home/ronald/wt-m1/app/logs/suite.out \| tail -8` |
 | 19:45:02 | Bash | Find the cell still with dark lamp after cure | `cd /home/ronald/saas-hasner/logs/concorde && /bin/grep -v 'apagadas=0' ata_just_cura.out \| /bin/grep '^C ';` |
 | 19:44:52 | Bash | Diff ata probe HEAD vs cure per cell | `cd /home/ronald/saas-hasner/logs/concorde && python3 - <<'PY' import re,collections def ld(f): return {m.group(1):m.group(2) for m in (re.match(r'C (col\d+ \S+) (.*)',l) for l in open(f)) if m} h,c=ld('ata_just_head.out'),ld('ata_just_cura.out') assert h.keys()==c.keys(); print('celulas',len(h)) def p(s): return dict(re.findall(r'(\w+)=(\[[^\]]*\]\|\S+)',s)) mud=collections.Counter(); ex=[] for k  ...` |
