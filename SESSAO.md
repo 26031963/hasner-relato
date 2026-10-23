@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 23/10/2026 18:11:02.** Transcript: `c6f2f4c7-d189-48e6-a5c1-0a8ca0afec80.jsonl` (11.1 MB). Acoes na janela: **522**.
+**Medido em 23/10/2026 18:16:29.** Transcript: `c6f2f4c7-d189-48e6-a5c1-0a8ca0afec80.jsonl` (11.2 MB). Acoes na janela: **525**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 18:15:30 | Bash | Register BUG-CONCORDE prompt row | `cat >> docs/PROMPTS.md <<'EOF' \| 23/10 ~18:0x \| **aval `BUG-CONCORDE-SEM-ENTRADA`** (P7.1, complemento do O261): col29 15/10 plantao 19-07 so com saidas 16/10 07:01/07:02 -> celula 15 `concorde` x turno EM ABERTO; (a) por que `julgar_celula` lavra concorde com marco de entrada sem batida (L-099 ESTRUTURA); (b) chamado #31967 par_relampago com data_turno 16/10 (L-085: pertence ao turno de 15); ce ...` |
+| 18:15:27 | Agent | BUG-CONCORDE-SEM-ENTRADA measure (cheap) | `MEDIÇÃO, só leitura, no repo /home/ronald/saas-hasner (Django em app/, HASNER PONTO). Antes de começar, leia /home/ronald/saas-hasner/CLAUDE.md, em especial as seções 4 (CELULA-DIA, universo de apuração), 4a (lâmpada), 4b (L-099: dois juízes do mesmo dia = ESTRUTURA) e 6 (TETO TEMPORAL; "NÃO reconstruir em sonda própria", chamar a função REAL). Leia também a L-085 em app/docs/LEIS.md (grep "L-085" ...` |
+| 18:12:25 | Bash | Verify push on remote | `cd /home/ronald/saas-hasner && tail -4 logs/clb1b/push_o261.out; git fetch -q; git log --oneline -1 origin/main; git log --oneline origin/main..HEAD` |
 | 17:59:48 | Bash | Push the O261 + lastro marco | `cd /home/ronald/saas-hasner && (bin/push.sh > logs/clb1b/push_o261.out 2>&1; echo FIM rc=$? >> logs/clb1b/push_o261.out)` |
 | 17:59:44 | Bash | Publish apply proof, commit marco docs, handoff, check selo | `python3 - <<'EOF' f='docs/RELATO.md' s=open(f).read() o="- **APPLY do acervo E1 (comp aberta, 56 perguntas / 18 colabs):** kit `logs/o261d/acervo_e1.py` (dry por padrao; reversao antes) -- APLICA depois do pouso, prova no RELATO. Exportadas (27) ficam na lista `logs/o261d/acervo_e1_exportadas.txt`." assert s.count(o)==1 s=s.replace(o,"""- **APLICADO o acervo E1 (comp aberta) 17:58**, depois dos po ...` |
 | 17:58:28 | Bash | Prove idempotence and recount vigia in prod | `cd /home/ronald/saas-hasner && docker exec -e O261_APLICAR=0 saas_core python manage.py tenant_command shell --schema=juliani --command "exec(open('/tmp/acervo_e1.py').read())" > logs/o261d/acervo_dry2.out 2>&1; grep -E "^O261E1\\|ABERTA" logs/o261d/acervo_dry2.out; grep -c "^O261E1\|ALVO\|" logs/o261d/acervo_dry2.out; cat > logs/o261d/p_vigia_depois.py <<'EOF' from chamados.services.vigia_fio imp ...` |
