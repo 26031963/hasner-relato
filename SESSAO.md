@@ -6,10 +6,20 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 23/10/2026 01:00:46.** Transcript: `da98832f-de75-4326-b54f-c50c792fa1ba.jsonl` (6.0 MB). Acoes na janela: **336**.
+**Medido em 23/10/2026 01:05:47.** Transcript: `da98832f-de75-4326-b54f-c50c792fa1ba.jsonl` (6.1 MB). Acoes na janela: **346**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 01:04:14 | Monitor | push classe A + reconciliar veredito | `until grep -q '^rc=' /home/ronald/saas-hasner/logs/rec_push2.log 2>/dev/null; do /usr/bin/sleep 15; done; tail -3 /home/ronald/saas-hasner/logs/rec_push2.log` |
+| 01:04:05 | Bash | Ask the hook for next item and blocked ids | `cd /home/ronald/saas-hasner && python3 -c " import sys; sys.path.insert(0,'bin') import importlib.util as u s=u.spec_from_file_location('h','bin/hook_stop_fila1.py'); h=u.module_from_spec(s); s.loader.exec_module(h) print('proximo', h._proximo_da_fila()) print('nao_andam', sorted(h._ids_que_nao_andam())[:30]) print('travas', h.travas_da_fila()) " 2>&1 \| tail -5 \| cut -c1-600` |
+| 01:04:02 | Bash | Inspect hook module names | `cd /home/ronald/saas-hasner && python3 -c " import sys; sys.path.insert(0,'bin') import importlib.util as u s=u.spec_from_file_location('h','bin/hook_stop_fila1.py'); h=u.module_from_spec(s); s.loader.exec_module(h) print([n for n in dir(h) if not n.startswith('__')][:40]) " 2>&1 \| tail -3` |
+| 01:04:01 | Bash | List hook functions | `cd /home/ronald/saas-hasner && grep -n "^def \\|proximo" bin/hook_stop_fila1.py \| head -20` |
+| 01:03:59 | Bash | Check hook_stop_fila1 modes | `cd /home/ronald/saas-hasner && grep -n "argparse\\|add_argument\\|--proximo\\|sys.argv" bin/hook_stop_fila1.py \| head; python3 bin/hook_stop_fila1.py --help 2>&1 \| head -8` |
+| 01:03:51 | Bash | Update memory and read backlog order header | `cd /home/ronald/.claude/projects/-home-ronald-saas-hasner/memory && python3 - <<'EOF' p='celula-verde-reescreve-placar.md'; s=open(p).read() s=s.replace("**How to apply:**","A VIRADA DO DIA tambem barra: o cabecalho `## PLACAR (dd/mm)` envelhece a meia-noite (23/10 01:0x, push rc=1 so pela data).\n\n**How to apply:**") open(p,'w').write(s) EOF cd /home/ronald/saas-hasner && sed -n 7,40p app/docs/B ...` |
+| 01:03:44 | Bash | Push again after placar fix | `cd /home/ronald/saas-hasner && bin/push.sh > logs/rec_push2.log 2>&1; echo rc=$? >> logs/rec_push2.log; tail -3 logs/rec_push2.log` |
+| 01:03:43 | Bash | Rewrite placar and amend marco commit | `cd /home/ronald/saas-hasner && bash bin/tickets_placar.sh --escrever 2>&1 \| tail -1; git diff -- app/docs/TICKETS.md \| grep '^[-+]' \| grep -v '^[-+][-+]' \| cut -c1-160 \| head -6; git add app/docs/TICKETS.md && git commit -q --amend --no-edit && git log --oneline -1` |
+| 01:03:37 | Bash | Check push result | `cd /home/ronald/saas-hasner && tail -4 logs/rec_push.log; git fetch -q; git log --oneline -1 origin/main` |
+| 01:03:35 | Bash | Read next fila 1 item from handoff and backlog | `cd /home/ronald/saas-hasner && sed -n '/## FILA 1/,/## RECURSOS/p' app/docs/HANDOFF-SESSAO.md \| head -12; sed -n 1,30p app/docs/BACKLOG.md \| grep -n -i 'ORDEM\\|fila 1\\|OBRAS' \| head -10 \| cut -c1-250` |
 | 01:00:22 | Bash | Push classe A and reconciliar marcos | `cd /home/ronald/saas-hasner && bin/push.sh > logs/rec_push.log 2>&1; echo rc=$? >> logs/rec_push.log; tail -3 logs/rec_push.log` |
 | 01:00:21 | Bash | Handoff and host seals before push | `cd /home/ronald/saas-hasner && bin/handoff_sessao.sh >/dev/null 2>&1; for t in bin/tests/test_*.sh; do bash "$t" >/dev/null 2>&1 \|\| echo "VERMELHO $t"; done; echo selos_ok; git status --porcelain \| grep -v '^??'` |
 | 00:59:54 | Bash | Smoke vigia rc and next fantasmas run | `cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command detectar_intervalo_ausente --schema=juliani --alarme 2>&1 \| tail -2; echo "rc_vigia=${PIPESTATUS[0]}"; until [ "$(tail -1 logs/reconciliar_fantasmas.log \| grep -c '^\[APPLY\]')" -ge 1 ] && [ $(( $(date +%s) - $(stat -c %Y logs/reconciliar_fantasmas.log) )) -lt 600 ]; do /usr/bin/sleep 20; done; tail -1 logs/reco ...` |
