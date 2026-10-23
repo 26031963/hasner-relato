@@ -24,7 +24,7 @@ LEI-AKITA: origem=`chamados/juizes.py::irmas_respondidas_sem_consumo` (universo 
 - **Mudou:** `juizes.irmas_respondidas_sem_consumo` (Q destino=ch OU disputa.chamado=ch com destino nao-VIVO; predicado igual); HX le o juiz (filtro proprio saiu); `_retratar` so grava a retencao quando a lista de pendentes MUDA.
 - **Sombra (arvore da cura, `logs/clb1b/`):** juiz novo x velho em 159 chamados: **20** mudam, todos pai de disputa (14 vivos, 6 mortos); 0 destino muda. `reconciliar_chamados` 3x: HEAD grava 1 retencao por passada; cura 0 nas passadas 2/3; retratacoes iguais (1 e 0 e 0).
 - **INCOMPLETO (proximo marco, mesma 1b):** o cron ainda ESCREVE -- reatar orfa (atraso da corrente), `veredito_celula` 167 (C3, celula sem evento), retratacao por premissa morta (386). Nao vira vigia neste marco.
-- **PROVA:** suite da copia `Ran 11659 tests`, `OK (skipped=51, expected failures=14)`, rc=0 (`logs/clb1b/suite_cura2.out`; a 1a rodada pegou meu teste sem relogio no `test_selo_teste_sem_relogio` -- congelado, refeita); deploy abaixo.
+- **PROVA:** suite da copia `Ran 11659 tests`, `OK (skipped=51, expected failures=14)`, rc=0 (`logs/clb1b/suite_cura2.out`; a 1a rodada pegou meu teste sem relogio no `test_selo_teste_sem_relogio` -- congelado, refeita). **NO AR** `aa36219d` (deploy 09:18, 3 rotas, BUG 128 verde). **Smoke prod 09:31:** o tick das 09:30 rodou e NAO gravou retencao do #28571 (antes: 08:45, 09:00, 09:15 -- uma por tick).
 
 ## 23/10 08:3x -- MARCO VARREDURA CLASSE B (1a): `reavaliar_ausencias_lancadas` + `fechar_chamados_ausencia` VIRAM VIGIA; O EVENTO DA AUSENCIA FAZ
 
