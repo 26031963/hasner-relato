@@ -6,10 +6,16 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 23/10/2026 15:26:35.** Transcript: `c6f2f4c7-d189-48e6-a5c1-0a8ca0afec80.jsonl` (8.2 MB). Acoes na janela: **376**.
+**Medido em 23/10/2026 15:32:03.** Transcript: `c6f2f4c7-d189-48e6-a5c1-0a8ca0afec80.jsonl` (8.3 MB). Acoes na janela: **382**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 15:27:49 | Bash | Add escala vinculo to fixture and rerun | `cd /home/ronald/wt-1b3b/app && python3 - <<'EOF' f='chamados/tests/test_reemissao_c2.py' s=open(f).read() o=""" from escala.models import CelulaDia CelulaDia.objects.create(colaborador=self.colab, data=self.data, trabalha=True, origem='gerada', dna={'dna_versao': 1, 'marcos': {'hi': '08:00', 'hf': '17:00'}}, veredito='furo', protestos=['FURO_PARCIAL']) """ assert s.count(o)==1 s=s.replace(o,""" #  ...` |
+| 15:27:35 | Bash | Detail reemissao failure | `grep -B2 -A3 "AssertionError" /home/ronald/wt-1b3b/app/logs/reem.out \| head; grep -n "line [0-9]*, in test_premissa" /home/ronald/wt-1b3b/app/logs/reem.out` |
+| 15:27:13 | Bash | Make fixture coherent and rerun reemissao test | `cd /home/ronald/wt-1b3b/app && python3 - <<'EOF' f='chamados/tests/test_reemissao_c2.py' s=open(f).read() o=""" CelulaDia.objects.create(colaborador=self.colab, data=self.data, trabalha=True, origem='gerada', dna={'dna_versao': 1, 'marcos': {'hi': '08:00', 'hf': '17:00'}}, veredito='furo', protestos=['FURO_SEM_COBRANCA']) pai = ChamadoColaborador.objects.create( colaborador=self.colab, assunto='_c ...` |
+| 15:26:52 | Bash | Read cartorio site that reconciles the chamado | `cd /home/ronald/wt-1b3b/app && sed -n 1005,1035p ponto/services/cartorio.py` |
+| 15:26:48 | Bash | Read captured stack of who resolves chamado | `grep -A20 "DBG STACK" /home/ronald/wt-1b3b/app/logs/dbgc2b.out \| grep -E 'File "/app' \| head -14` |
+| 15:26:44 | Bash | Register 500 closure, [nome] law, and prompt rows | `python3 - <<'EOF' f='docs/RELATO.md' s=open(f).read() o="- FILA (achado fora do escopo, com numero): **4 x 500** em POST /api/ausencias/ de 16 a 23/10 -- erro de servidor na porta do atestado; medir causa no log de erro antes de qualquer outra coisa da familia.\n" assert s.count(o)==1 s=s.replace(o,"- Os **4 x 500** em POST /api/ausencias/ de 16-23/10 sao os de 18/10 07:06 (col857, IntegrityError  ...` |
 | 15:25:02 | Bash | Republish RELATO | `cd /home/ronald/saas-hasner && sed -n 1,30p bin/relato.sh \| grep -E "^#\|uso\|usage" \| head -8; bin/relato.sh > logs/clb1b/relato_pub.out 2>&1; echo rc=$?; tail -4 logs/clb1b/relato_pub.out` |
 | 15:24:57 | Bash | Add PROVA line and rerun checker | `python3 - <<'EOF' f='docs/RELATO.md' L=open(f).read().split('\n') i=115 assert L[i].startswith('**NO AR** `8fddf887`'), L[i][:40] L.insert(i+1,"PROVA: `logs/o137/deploy.out` -- `deploy: OK -- migrations em dia, tres cascas reiniciadas juntas, tres rotas provadas.`; merge `8fddf887` no `git log` do main.") open(f,'w').write('\n'.join(L)) EOF cd /home/ronald/saas-hasner && python3 bin/relato_afirma_ ...` |
 | 15:24:51 | Bash | Find O137 deploy proof log | `cd /home/ronald/saas-hasner && ls logs/o137/ \| grep -i -E "deploy\|pouso\|smoke"; grep -h -E "^deploy:\|rc=" logs/o137/*deploy* 2>/dev/null \| tail -3` |
