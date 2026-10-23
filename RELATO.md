@@ -16,6 +16,15 @@ PAREI: ! O261 e o export da 10 | espera o DP e o Ronald: (a) o TXT da 10 esta BA
 > O MARCADOR ANDOU no mesmo ato: `ORDEM-VIVA-TOPO` saiu de `BO-HE-RECUSAR-LOTE-500` (fechado) para `O261`, que o hook cobrou.
 > SEM COMMIT DE PROPOSITO: `RELATO.md` e `BACKLOG.md` ficam sujos na arvore porque a L-106 nao deixa commit so de docs fora de marco. Eles entram no commit do proximo marco.
 
+## 22/10 23:5x -- MARCO ESCRITOR-UNICO-DE-CHAMADO, LOTE E3: A FAMILIA `chamado` EM ZERO FORA DE PORTA -- CELULA (chamado, um escritor) VERDE
+
+LEI-AKITA: origem=os 8 sitios de `PerguntaDisputa`/`DisputaSupervisao` fora de porta (`api/foto_recebida.py` x2, `backfill_veredito_lavrado` x2, `encerrar_perguntas_com_fato`, `reconciliar_perguntas_orfas`, `reconciliar_grade::_disputa`, `smoke_chamados`), testemunha=`core/censo_escritas.varrer_arvore` + `core/portas.py` + a matriz `core/contratos_estruturais.py`, RED=`chamados/tests/test_porta_chamado_e3.py` + gate em ZERO (5 FAIL, 7 ERROR contra `f7c6a62a`), quem-mais-le=os selos das portas (identidade, resposta, ciclo da disputa, veredito), o P13 e o `test_sla_pelo_juiz`, juizes novos=0
+- **Atos:** `responder_automaticamente` (porta da RESPOSTA; a voz do colab nunca se sobrescreve); `DisputaSupervisao.aparar_motivo_respondido` (NAO e o `remover_motivo`: nao apaga pergunta); `PerguntaDisputa.encerrar_por_fato_no_espelho` e `encerrar_fantasma` (identidade); `veredito_lavrado.gravar_lavras_em_lote`. O nascimento da disputa em `reconciliar_grade` e `smoke_chamados` foi para o NUCLEO da D2 (era a 3a copia).
+- **Matriz:** gate com `ruins == []` e `TETO_POR_ENTIDADE` vazio; celula `('chamado','um escritor por entidade')` verde com `teste=` o gate e `idempotencia=` `test_porta_chamado_e3.IdempotenciaDaFamiliaChamado`.
+- **Selos que se inverteram, com a razao no proprio teste:** o backfill deixou de ser divida que escreve (0 `bulk_update`); o P13 tirou `reconciliar_perguntas_orfas` de `materializada_em/_por`; `test_MORDE_a_grade` pergunta a DELEGACAO ao nucleo (o prazo e provado pelo dado no selo do E3).
+- **PROVA:** suite da copia (abaixo); deploy abaixo.
+- **O243 (c), MEDIDO -- NAO e bug (`logs/o243c_defeito_curado.out`, sombra, atomic+rollback):** os 30 `indefinida` "com defeito curado" da minha sonda das 21:3x estavam com o ROTULO ERRADO -- tem `trabalha=None` (dia sem previsao), nao o defeito de folga do 6x1; o juiz real (`julgar_celula` forcar) relavra `indefinida` em **30/30** e o export nao muda (0/608). Dono CADASTRO; fica na O243 com o gatilho dela.
+
 ## 22/10 23:1x -- MARCO ESCRITOR-UNICO-DE-CHAMADO, LOTE E2: `ChamadoColaborador` CHEGA A ZERO FORA DE PORTA (6 -> 0)
 
 LEI-AKITA: origem=os 5 mecanicos do contexto (`reconciliar_grade` x2, `gerar_celulas`, `nomear_marco_por_lampada`, `ponto/views.py`) + o `delete` de `zerar_dados_operacionais`, testemunha=`core/censo_escritas.varrer_arvore` (gate) + a lei do apagar EM ENSAIO (corte 13/09), RED=`chamados/tests/test_porta_chamado_e2.py` + teto (3 FAIL, 4 ERROR contra `9ffa5e68`), quem-mais-le=o gate e a porta do contexto, juizes novos=0
