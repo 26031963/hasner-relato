@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 22/10/2026 22:10:46.** Transcript: `da98832f-de75-4326-b54f-c50c792fa1ba.jsonl` (3.4 MB). Acoes na janela: **166**.
+**Medido em 22/10/2026 22:15:46.** Transcript: `da98832f-de75-4326-b54f-c50c792fa1ba.jsonl` (3.4 MB). Acoes na janela: **167**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 22:13:52 | Bash | Run E1 RED against pristine HEAD copy | `cd /home/ronald/saas-hasner && git worktree add --detach /home/ronald/wt-esc-red fd58a37d >/dev/null 2>&1; cp /home/ronald/wt-esc/app/chamados/tests/test_porta_chamado_e1.py /home/ronald/wt-esc-red/app/chamados/tests/; cp /home/ronald/wt-esc/app/chamados/tests/test_chokepoint_chamado_gate.py /home/ronald/wt-esc-red/app/chamados/tests/; L=/tmp/claude-1001/-home-ronald-saas-hasner-app/da98832f-de75- ...` |
 | 22:09:27 | Bash | Run E1 selo, gate, and porta neighbors on copy | `cd /home/ronald/saas-hasner && L=/tmp/claude-1001/-home-ronald-saas-hasner-app/da98832f-de75-4326-b54f-c50c792fa1ba/scratchpad/e1.log; tail -2 logs/dss_push_item1.log; bin/suite.sh --dir /home/ronald/wt-esc --only "chamados.tests.test_porta_chamado_e1 chamados.tests.test_chokepoint_chamado_gate chamados.tests.test_porta_vinculos chamados.tests.test_porta_contexto chamados.tests.test_porta_chamado_ ...` |
 | 22:09:24 | Write |  | `/home/ronald/wt-esc/app/chamados/tests/test_porta_chamado_e1.py` |
 | 22:09:00 | Bash | Lower chamado gate ceiling to 6 | `cd /home/ronald/wt-esc/app && python3 - <<'EOF' p='chamados/tests/test_chokepoint_chamado_gate.py'; s=open(p,encoding='utf-8').read() old=" 'ChamadoColaborador': 12,\n" new=(" # E1 (22/10, ESCRITOR-UNICO-DE-CHAMADO, ORDEM-DA-NOITE): 12 -> **6**, os SEIS de campo nomeado no aval.\n" " # `titulo`/`assunto` (api/views.py) e `descricao` (limbo_folgas.py) -> porta do TEXTO, nova\n" " # (`chamados/servi ...` |
