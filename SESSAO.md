@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 22/10/2026 23:19:32.** Transcript: `da98832f-de75-4326-b54f-c50c792fa1ba.jsonl` (4.7 MB). Acoes na janela: **246**.
+**Medido em 22/10/2026 23:25:03.** Transcript: `da98832f-de75-4326-b54f-c50c792fa1ba.jsonl` (4.7 MB). Acoes na janela: **247**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 23:23:17 | Monitor | suite wt-esc3 E3 veredito | `until grep -q '^rc=' /home/ronald/saas-hasner/logs/esc_suite_e3.log 2>/dev/null; do /usr/bin/sleep 15; done; grep -E '^Ran \|^(OK\|FAILED)($\| \()\|^rc=' /home/ronald/saas-hasner/logs/esc_suite_e3.log \| tail -3; grep -E '^(FAIL\|ERROR):' /home/ronald/saas-hasner/logs/esc_suite_e3.log \| head -5` |
 | 23:18:14 | Monitor | suite wt-esc3 E3 veredito | `until grep -q '^rc=' /home/ronald/saas-hasner/logs/esc_suite_e3.log 2>/dev/null; do /usr/bin/sleep 15; done; grep -E '^Ran \|^(OK\|FAILED)($\| \()\|^rc=' /home/ronald/saas-hasner/logs/esc_suite_e3.log \| tail -3; grep -E '^(FAIL\|ERROR):' /home/ronald/saas-hasner/logs/esc_suite_e3.log \| head -5` |
 | 23:17:53 | Bash | Measure the 30 cured-defect cells via real judge in sombra | `cd /home/ronald/saas-hasner && cat > logs/sombra/o243c_defeito_curado.py <<'EOF' # O243 complemento (c), os 30 'indefinida' com o defeito de folga JA curado: o juiz REAL (julgar_celula forcar) lavraria o # que hoje? E isso muda quem entra no TXT da 10 (classificar_export)? Sombra, atomic + rollback. import datetime from collections import Counter from django.db import transaction, connection from  ...` |
 | 23:17:31 | Bash | Read julgar_celula and its callers | `sed -n 1366,1420p ponto/services/cartorio.py \| grep -v '^\s*#' \| head -45; grep -rn "julgar_celula(" --include=*.py . \| grep -v tests \| grep -v "def julgar_celula" \| cut -c1-140 \| head -15` |
