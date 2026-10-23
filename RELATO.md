@@ -2363,6 +2363,8 @@ O `f00f5a51` fica um commit a frente do remoto de PROPOSITO: e o derivado do `bi
 
 ## ALARMES DA ESTEIRA
 
+**22/10 22:40 vigia da esteira** -- esteira em espera de janela: 8 fatias prontas, reabre 00:00.
+
 **22/10 17:50 vigia da esteira** -- docs/MAPA.md modificado fora do git depois de fatia no ar (lembrete, prepush_commit, zumbido_quarentena): a cadeia commitou o diagrama e nao o MAPA -- incluir no proximo commit (python3 bin/gerar_diagrama.py e git add app/docs/MAPA.md).
 
 **22/10 03:40 vigia da esteira** -- esteira em espera de janela: 8 fatias prontas, reabre 04:45.
