@@ -6,10 +6,20 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 23/10/2026 14:12:32.** Transcript: `c6f2f4c7-d189-48e6-a5c1-0a8ca0afec80.jsonl` (6.7 MB). Acoes na janela: **306**.
+**Medido em 23/10/2026 14:18:03.** Transcript: `c6f2f4c7-d189-48e6-a5c1-0a8ca0afec80.jsonl` (6.9 MB). Acoes na janela: **316**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 14:16:45 | Bash | Add protesto gate to c2 and run GREEN plus neighbors | `cd /home/ronald/wt-1b3b/app && python3 - <<'EOF' f='chamados/reconciliador.py' s=open(f).read() o=""" _vc = _cvc(colab.pk, data_ctx) if _vc: """ assert s.count(o)==1 n=""" # O c2 SO COBRA O QUE A EMISSAO COBRA (23/10, VARREDURA 1b-iii-b). Ele e um SEGUNDO emissor do chamado do # dia e julgava so pelos vetos de `celula_veta_cobranca` -- predicado mais fraco que o do cartorio. Medido # na sombra de  ...` |
+| 14:16:34 | Bash | Check push result against remote | `cd /home/ronald/saas-hasner && tail -4 logs/clb1b/push_1b3.out; git fetch -q && git log --oneline origin/main -1; git log --oneline origin/main..HEAD` |
+| 14:14:26 | Bash | Run RED for c2 protesto gate against HEAD | `cd /home/ronald/saas-hasner && bin/suite.sh --dir /home/ronald/wt-1b3b --only "chamados.tests.test_c2_le_o_protesto_que_cobra" > /home/ronald/wt-1b3b/app/logs/red.out 2>&1; echo rc=$?; grep -E "^(FAIL\|ERROR):\|^Ran\|^(OK\|FAILED)" /home/ronald/wt-1b3b/app/logs/red.out` |
+| 14:14:24 | Write |  | `/home/ronald/wt-1b3b/app/chamados/tests/test_c2_le_o_protesto_que_cobra.py` |
+| 14:14:07 | Bash | Create wt-1b3b worktree and census PROTESTOS_QUE_COBRAM readers | `cd /home/ronald/saas-hasner && git worktree add -q --detach /home/ronald/wt-1b3b 50fdebbb && mkdir -p /home/ronald/wt-1b3b/app/logs /home/ronald/wt-1b3b/app/media && /bin/grep -rn "PROTESTOS_QUE_COBRAM" --include=*.py app \| grep -v "/tests/" \| head` |
+| 14:13:43 | Bash | Read FURO_PRE_ADOCAO definition and export treatment | `sed -n 12,40p ponto/supra_juiz.py; sed -n 1150,1165p folha/export.py` |
+| 14:13:41 | Bash | Find FURO_PRE_ADOCAO law | `/bin/grep -rn "FURO_PRE_ADOCAO" --include=*.py . \| grep -v "/tests/" \| head -10` |
+| 14:13:23 | Bash | Run c2 on sombra with rollback, by celula state | `cd /home/ronald/saas-hasner && cat > logs/sombra/cb_1b3b_estado.py <<'EOF' # 1b-iii-b: estado da celula NO INSTANTE em que o c2 decide, sobre as orfas c1 de hoje dentro do piso. # Roda o c2 REAL (reatar_pergunta_orfa) dentro de atomic com rollback. from collections import Counter from django.db import transaction from chamados.models import PerguntaDisputa, ChamadoColaborador, MOTIVOS_DO_DIA_SEM_F ...` |
+| 14:13:13 | Bash | Look at an existing sombra probe pattern | `cd /home/ronald/saas-hasner && ls logs/sombra/ \| grep "^cb_" \| head -3 && head -30 logs/sombra/$(ls logs/sombra/ \| grep "^cb_" \| head -1)` |
+| 14:13:04 | Bash | Check push outcome and repo state | `cd /home/ronald/saas-hasner && tail -5 logs/clb1b/push_1b3.out; git log --oneline -3; git status --porcelain \| grep -v '^??'` |
 | 14:08:09 | Bash | Register complement prompt row | `cat >> docs/PROMPTS.md <<'EOF' \| 23/10 ~14:1x \| **aval `BO-RESOLVER-DIA-MUDO` COMPLEMENTO** (LEI-AKITA 7 aplicada a RECUSA, nenhuma lei nova): o item 3 vira CONTRATO da classe -- toda recusa de acao critica grava usuario e motivo; no mesmo agente, depois dos itens 1-2 \| repassado ao agente `wt-rdm`: mecanismo unico de trilha, selo de classe por AST com allowlist zero e caso que morde; o que nao ...` |
 | 14:08:02 | SendMessage |  | `-` |
 | 14:06:00 | Bash | Register BO-RESOLVER-DIA-MUDO prompt row | `cat >> docs/PROMPTS.md <<'EOF' \| 23/10 ~14:1x \| **aval `BO-RESOLVER-DIA-MUDO`** (agente proprio; nenhuma lei nova: juiz resolver_dia_oferecido 22/10, O261, tela que engana): (2) trilha furo -> cobrado -> furo -- quem escreveu cobrado, quem desfez, resposta perdida?; escritor fora da lei = cura com RED; (3) recusa do Resolver dia persiste no log (dia, colab, motivo, usuario) + contador "resolver  ...` |
