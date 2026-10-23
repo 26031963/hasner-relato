@@ -4,6 +4,8 @@ PAREI: ! O261 e o export da 10 | espera o DP e o Ronald: (a) o TXT da 10 esta BA
 
 > (o `!` da volta do feriado esta no item (b) da linha acima)
 
+> lei: **O261 -- acao nomeada fora da pergunta e do Resolver dia conta como fio vivo?** O vigia so le pergunta viva ou Resolver dia (predicado do juiz `resolver_dia_oferecido`, corte 22/10). Dos 16 `fio_morto` de hoje: **12** tem atestado pendente na celula (22-63 d esperando o DP), **1** pergunta validada sem gravar, **1** escala suspeita. Contra-prova: col814 26/09 e col844 29/09, mesma classe, NAO estao nos 16 porque ainda tem pergunta viva. Mudar isso e predicado novo de juiz -- e dele. A fila segue (E1 e codigo, nao depende disto).
+
 > **BO-B: AS TRES RESPONDIDAS 23/10 15:0x** (corte dele): (1) a cura pousa; a 09 NAO recalcula por evento ate o DIFF de frota da 09 (64 colabs, +416,10 h) publicado aqui, com reversao em logs/ e a Pauta DP dos 64 com os dois numeros; `!` so para a GUARDA temporaria da 09 e o DIFF dela, NAO para o apply na 09; TXT novo da 09 so quando o DP pedir. (2) vale o B-B21 -- abono cobre so o previsto que as batidas nao cobriram, os 3 dias entram no apply. (3) feriado trabalhado em escala que nao trabalha feriado sai em HE 100% feriado; folga trabalhada so para FOLGA; rubrica do Dominio e cadastro do DP. Em construcao no `wt-bob` (guarda + (2) + (3)), suite de novo antes do pouso.
 
 > lei: O261 `juiz-resolver-dia-oferecido` -- **RESPONDIDA 22/10 ~13:5x** (frase no CORTES); marco em construcao na `wt-o261c` (secao 14:3x).
@@ -17,6 +19,18 @@ PAREI: ! O261 e o export da 10 | espera o DP e o Ronald: (a) o TXT da 10 esta BA
 > OS QUATRO ITENS DA ORDEM, FEITOS: deploy `d01210d2` **no ar 10:26** (`--sem-migrate` rc=0, 3 rotas provadas, selo BUG 128 verde, portao fechado pelo PASSO 5 do gate -- nunca `--sem-sombra`); push **pousou** (`fa5cd145..eebe2cce`, rc=0, `Ran 11566 tests · OK (skipped=51, expected failures=14)` mais control-plane `Ran 22 tests · OK`, veredito lido no REMOTO); `bin/handoff_sessao.sh` gerado (42/60 linhas, selo verde); e esta linha. O 1 commit que sobrou a frente (`6d469ed2`) e do proprio `pos_push` -- a excecao nomeada da L-106 --, e o push dele e do proximo push, nao deste.
 > O MARCADOR ANDOU no mesmo ato: `ORDEM-VIVA-TOPO` saiu de `BO-HE-RECUSAR-LOTE-500` (fechado) para `O261`, que o hook cobrou.
 > SEM COMMIT DE PROPOSITO: `RELATO.md` e `BACKLOG.md` ficam sujos na arvore porque a L-106 nao deixa commit so de docs fora de marco. Eles entram no commit do proximo marco.
+
+## 23/10 16:1x -- O261 -- os 16 fio_morto com dono (medicao, sem codigo)
+
+LEI-AKITA: origem=a medir por grupo (abaixo), testemunha=`chamados/services/vigia_fio.py::censo` + `ponto/management/commands/e6_oraculo.py::dono_da_divergencia` (lista do MOTOR na sombra) + `colaboradores/services/calendario.py::resolver_dia_oferecido`, RED=E1 a escrever, quem-mais-le=lista do DP, lote O317, explicador, juizes novos=0
+- **Censo prod 15:57:** fio_morto=16 (cobrando 16, pergunta_morreu 16; com_alvo 5, sem_alvo 11). Na lista do motor (sombra 04:00): 0 dos 16. DONO pela funcao: 14 ESTRUTURA, 2 BATIDA -- mas 13 dos 14 tem ZERO batida (padrao declarado no docstring do juiz, nao defeito achado); pela FONTE de cada fio, a abertura e esta:
+- **G1 (12) -- ausencia pendente cobre o dia:** col496 23/08, col327 21/08, col723 24/08 23/09 26/09, col200 31/08, col455 20/09, col373 27/09 28/09, col138 26/09, col281 30/09 (atestado `aguardando_decisao`, 22-63 d) + col354 30/09 (aguardando documento, prazo 30/10). Status `ausencia` -> sem Resolver dia (`calendario.py:186`). Fecha: o DP decide (`ausencia.py::decidir`), nao codigo. 6 ja na lista do DP de 22/10; 5 na comp 09 EXPORTADA (L-092). #col723 24/08 e 23/09 e col354: hora declarada E atestado -- o DP decide qual fato vale antes de qualquer plantio.
+- **G2 (3) -- comp aberta, `pode_ultimo_recurso` falso (`calendario.py:868`):** col549 21/10 BATIDA -> lote O317 planta a saida 14:20 declarada; col516 22/10 (BATIDA na sombra, provisorio) -> paridade recusou o 18:51/00:00 declarados (validada sem gravar), admin corrige a 22:59 E; col940 21/10 -> **E1**.
+- **G3 (1) -- CADASTRO:** col666 27/09 `indefinida`/escala suspeita (11 `batida_ausente` abertos 13-23/10) -> cadastro da folga/escala.
+- **E1 ESTRUTURA -> fila 1, na frente da parte 3:** `ponto/signals.py::_consumidor_ausencia` nao reabre a pergunta absorvida por resposta de escape quando a Ausencia e REJEITADA. Prova: col940, 4 perguntas ATESTADO validadas como `via=declaracao` 22/10 14:12, atestado 5096 rejeitado 14:57, dia furo + chamado 33124 vivo sem pergunta e sem porta ate 21/11.
+- **E2 achado (dono BATIDA):** pergunta 46480 (col549) carimbada `celula_absolveu` 21/10 14:45 (`reconciliador.py:531`), celula `furo` 14:50 -> a resposta 14:20 nunca virou batida. Teto temporal (CLAUDE.md 6) a medir.
+- **PROVA:** `logs/fio16/p1_censo.out`, `p2_ausencia.out`, `p3_perguntas.out`, `p4_contraprova.out`, `logs/fio16_dono.out`.
+- **INCOMPLETO:** col516 e col354 remedir apos o dump de 24/10; E2 sem medida do veredito intermediario.
 
 ## 23/10 15:5x -- 1b-iv MEDIDA (sem codigo): O QUE O `reconciliar_chamados` AINDA ESCREVE, RAMO A RAMO
 

@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 23/10/2026 16:04:03.** Transcript: `c6f2f4c7-d189-48e6-a5c1-0a8ca0afec80.jsonl` (8.8 MB). Acoes na janela: **414**.
+**Medido em 23/10/2026 16:09:32.** Transcript: `c6f2f4c7-d189-48e6-a5c1-0a8ca0afec80.jsonl` (9.0 MB). Acoes na janela: **417**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 16:09:21 | Bash | Read ATESTADO escape handling and juiz note | `sed -n 1225,1330p chamados/services/disputa_emissao.py; sed -n 1050,1085p chamados/juizes.py` |
+| 16:09:18 | Bash | Find ATESTADO escape answer handling | `git grep -n -e "'ATESTADO'" -e '"ATESTADO"' -- '*.py' ':!*/tests/*' \| head -12` |
+| 16:09:14 | Bash | Publish O261 section and lei question; search escape law | `python3 - <<'EOF' f='docs/RELATO.md' s=open(f).read() anc="## 23/10 15:5x -- 1b-iv MEDIDA" assert s.count(anc)==1 sec='''## 23/10 16:1x -- O261 -- os 16 fio_morto com dono (medicao, sem codigo) LEI-AKITA: origem=a medir por grupo (abaixo), testemunha=`chamados/services/vigia_fio.py::censo` + `ponto/management/commands/e6_oraculo.py::dono_da_divergencia` (lista do MOTOR na sombra) + `colaboradores/ ...` |
 | 15:56:53 | Bash | Record 1b-iv measure and schedule proof reread after 16:15 tick | `python3 - <<'EOF' f='docs/RELATO.md' s=open(f).read() anc="## 23/10 15:3x -- MARCO BO-RESOLVER-DIA-MUDO" assert s.count(anc)==1 sec='''## 23/10 15:5x -- 1b-iv MEDIDA (sem codigo): O QUE O `reconciliar_chamados` AINDA ESCREVE, RAMO A RAMO - Sombra (dump 04:00, arvore viva com a 1b-iii-b), funcoes REAIS com rollback, universo do cron = **599** colabs (`logs/cb_1b4_ramos.out`, `logs/cb_1b4_split.out` ...` |
 | 15:56:41 | Bash | Register the two avals | `cat >> docs/PROMPTS.md <<'EOF' \| 23/10 ~15:5x \| **aval `PROVA-1B3B-HOJE`**: prova de frota da 1b-iii-b HOJE, pelo c2 real em prod (cron idempotente), sem esperar o tick de 06h \| os ticks */15 do cron em prod JA rodam o c2 real desde o deploy 15:49; leitura do que ele emitiu desde entao (`logs/clb1b/p_prova_1b3b.py`); 15:55 = 0 (janela curta), relida apos 16:00/16:15 \| \| 23/10 ~15:5x \| **aval ...` |
 | 15:56:38 | Agent | O261 fio morto 16 by owner | `Tarefa de MEDIÇÃO, só leitura, no repo /home/ronald/saas-hasner (Django em app/, HASNER PONTO). Antes de qualquer ação, leia /home/ronald/saas-hasner/CLAUDE.md INTEIRO, com atenção à L-099 (seção 4b: toda divergência tem UM dono, ESTRUTURA, CADASTRO ou BATIDA; o juiz é `ponto/management/commands/e6_oraculo.py::dono_da_divergencia`; só ESTRUTURA é fatia; CADASTRO e BATIDA vão para a lista do admin  ...` |
