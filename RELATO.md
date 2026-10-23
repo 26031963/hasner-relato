@@ -16,6 +16,15 @@ PAREI: ! O261 e o export da 10 | espera o DP e o Ronald: (a) o TXT da 10 esta BA
 > O MARCADOR ANDOU no mesmo ato: `ORDEM-VIVA-TOPO` saiu de `BO-HE-RECUSAR-LOTE-500` (fechado) para `O261`, que o hook cobrou.
 > SEM COMMIT DE PROPOSITO: `RELATO.md` e `BACKLOG.md` ficam sujos na arvore porque a L-106 nao deixa commit so de docs fora de marco. Eles entram no commit do proximo marco.
 
+## 22/10 23:1x -- MARCO ESCRITOR-UNICO-DE-CHAMADO, LOTE E2: `ChamadoColaborador` CHEGA A ZERO FORA DE PORTA (6 -> 0)
+
+LEI-AKITA: origem=os 5 mecanicos do contexto (`reconciliar_grade` x2, `gerar_celulas`, `nomear_marco_por_lampada`, `ponto/views.py`) + o `delete` de `zerar_dados_operacionais`, testemunha=`core/censo_escritas.varrer_arvore` (gate) + a lei do apagar EM ENSAIO (corte 13/09), RED=`chamados/tests/test_porta_chamado_e2.py` + teto (3 FAIL, 4 ERROR contra `9ffa5e68`), quem-mais-le=o gate e a porta do contexto, juizes novos=0
+- **Mudou:** `contexto.py::retirar_contexto` (4o gesto, decisao TECNICA de encaixe: retira so a chave NOMEADA, ausente = zero query); `renovar_contexto` nos outros 3; `ChamadoColaborador.apagar_em_ensaio` atras de `exigir_banco_de_ensaio`.
+- **O cuidado que o patch exigiu:** os 3 sitios faziam `ctx = ch.contexto_json` e MUTAVAM o mesmo objeto antes do save -- a porta compararia contra o ja escrito e nao gravaria. A migracao calcula sem mutar; o selo de `reconciliar_grade` le o BANCO (guarda da migracao, verde tambem no HEAD).
+- **Diferenca de comportamento declarada:** `nomear_marco` deixa de gravar e de trilhar o marco IGUAL ao guardado (2a rodada = no-op); `ponto/views.py` preserva chave de outro escritor em vez de apaga-la; `atualizado_em` passa a andar nos 5.
+- **Censo:** fora de porta **8** (PerguntaDisputa 5, DisputaSupervisao 3). **PROVA:** suite da copia `Ran 11627, OK`; deploy abaixo.
+- **INCOMPLETO:** E3 = os 8 de pergunta/disputa; depois a celula (chamado, um escritor) com `teste=` e `idempotencia=`.
+
 ## 22/10 22:4x -- MARCO ESCRITOR-UNICO-DE-CHAMADO, LOTE E1: OS SEIS CAMPOS NOMEADOS NO AVAL EM PORTA (teto 12 -> 6)
 
 LEI-AKITA: origem=os 6 `save()` de campo nomeado fora de porta (`api/views.py`, `limbo_folgas.py`, `abertura.py`, `escalonar_chamados_supervisao.py`, `cobranca.py`, `disputa_emissao.py`), testemunha=`core/censo_escritas.varrer_arvore` (a funcao REAL do gate) + `core/portas.py`, RED=`chamados/tests/test_porta_chamado_e1.py` + teto do gate (4 FAIL, 12 ERROR contra `fd58a37d`), quem-mais-le=o gate `test_chokepoint_chamado_gate` e as portas irmas (contexto, vinculos, ciclo), juizes novos=0
