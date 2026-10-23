@@ -6,10 +6,17 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 23/10/2026 14:50:46.** Transcript: `c6f2f4c7-d189-48e6-a5c1-0a8ca0afec80.jsonl` (7.3 MB). Acoes na janela: **339**.
+**Medido em 23/10/2026 14:55:46.** Transcript: `c6f2f4c7-d189-48e6-a5c1-0a8ca0afec80.jsonl` (7.5 MB). Acoes na janela: **346**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 14:54:38 | Bash | Register col784 complement in PROMPTS | `cat >> docs/PROMPTS.md <<'EOF' \| 23/10 ~14:5x \| **aval `BO-B-CASO-COL784`** (complemento do BO-B, nao e id novo): (a) SEGUNDO JUIZ DE PREVISTO (S133) -- celula 03/10 regenerada com 480, DiaPago gravado 2,3 s depois com 240 (sabados 26/09, 10/10, 17/10): nomear a fonte do 240 e por que o motor nao leu a celula; (b) FERIADO 12/10 -- celula trabalha=False sem marca de feriado, DiaPago previsto 480  ...` |
+| 14:54:33 | SendMessage |  | `-` |
+| 14:54:19 | SendMessage |  | `-` |
+| 14:53:05 | Bash | Check test lock holder and combo suite progress | `cd /home/ronald/saas-hasner && bin/trava_teste.sh --quem 2>&1 \| tail -2; date '+%H:%M'; tail -2 /home/ronald/wt-comb2310/app/logs/suite.out` |
+| 14:51:08 | Bash | Register limpeza item 5 | `cat >> docs/PROMPTS.md <<'EOF' \| 23/10 ~14:5x \| **aval `LIMPEZA-DE-WORKTREES` (5)**: FICAM por decisao ja escrita -- recon_onprem, wt-cct, wt-o275, wt-pdf, wt-serie, wt-cert*, wt-v3, wt-ui, wt-bos \| registrado; (1)-(3) seguem sem texto \| EOF` |
+| 14:51:05 | Bash | Read rest of census and register limpeza aval | `sed -n 41,73p /tmp/wt_censo.txt; cd /home/ronald/saas-hasner/app && cat >> docs/PROMPTS.md <<'EOF' \| 23/10 ~14:5x \| **aval `LIMPEZA-DE-WORKTREES`** (depois do pouso dos BOs em curso, nunca com agente vivo; censo dele em /tmp/wt_censo.txt, 73 linhas, git cherry por conteudo): (4) NAO REMOVER wt-esmeril -- os 12 commits do censo ESMERIL-MECANICO de 01/10 viram linhas da O243 ESMERIL-3 e da PORTA-C ...` |
+| 14:50:58 | Bash | Read the worktree census file | `ls -la /tmp/wt_censo.txt 2>&1 && wc -l /tmp/wt_censo.txt && head -40 /tmp/wt_censo.txt` |
 | 14:43:33 | Bash | Run part-3 RED against combo tree without wiring | `cd /home/ronald/saas-hasner && git worktree add -q --detach /home/ronald/wt-1b3c-red 40b7f127 && mkdir -p /home/ronald/wt-1b3c-red/app/logs /home/ronald/wt-1b3c-red/app/media && cp /home/ronald/wt-1b3c/app/chamados/tests/test_emissao_reata_orfa.py /home/ronald/wt-1b3c-red/app/chamados/tests/ && (bin/suite.sh --dir /home/ronald/wt-1b3c-red --only "chamados.tests.test_emissao_reata_orfa" > /home/ron ...` |
 | 14:43:27 | Bash | Write part-3 RED test file | `cd /home/ronald/wt-1b3c/app && python3 - <<'EOF' src=open('/home/ronald/wt-1b3/app/logs/test_emissao_reemite_c2_FULL.py').read() a=src.index("@freeze_time('2026-10-23 06:30:00', tick=True)\nclass EmissaoReemiteC2Test") b=src.index("@freeze_time('2026-10-23 06:30:00', tick=True)\nclass C2LeOPisoDaEmissaoTest") body=src[a:b].rstrip()+'\n' body=body.replace("class EmissaoReemiteC2Test(TestCase):","cl ...` |
 | 14:43:14 | Bash | Create part-3 worktree and wire emission to porta | `cd /home/ronald/saas-hasner && git worktree add -q --detach /home/ronald/wt-1b3c 40b7f127 && mkdir -p /home/ronald/wt-1b3c/app/logs /home/ronald/wt-1b3c/app/media && cd /home/ronald/wt-1b3c/app && python3 - <<'EOF' f='chamados/services/disputa_emissao.py' s=open(f).read() old=""" data_evento=_data_ev if _data_ev is not None else _data_fallback, ) criadas.append(p) return criadas """ assert s.count ...` |
