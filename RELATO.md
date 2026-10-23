@@ -26,6 +26,16 @@ PAREI: ! GATE-EXPORT-10 (so o export da 10) | espera o DP na Gestao de HE e o Ro
 > O MARCADOR ANDOU no mesmo ato: `ORDEM-VIVA-TOPO` saiu de `BO-HE-RECUSAR-LOTE-500` (fechado) para `O261`, que o hook cobrou.
 > SEM COMMIT DE PROPOSITO: `RELATO.md` e `BACKLOG.md` ficam sujos na arvore porque a L-106 nao deixa commit so de docs fora de marco. Eles entram no commit do proximo marco.
 
+## 23/10 20:2x -- MARCO ATA-NAO-DISPENSA-JUSTIFICADA (NO AR `44e268a8`) + FLUXO 2 M1 (NO AR `ea035793`)
+
+LEI-AKITA: origem=`ponto/services/cartorio.py::dispensar_por_ausencia`, testemunha=grade `dia['justificado']` (`escala/utils.py::_marcar_ausencias`), RED=`ponto/tests/test_ausencia_ata_dispensa.py::DispensaPorJustificativa` (6 errors + 1 FAIL contra HEAD), quem-mais-le=3 sitios do cartorio (:802 :991 :1242), previa/sem_furo/export (`acesa is False`), emissao/retratacao por marco, juizes novos=0
+- **ATA:** a ata so dispensava marco por Ausencia; a metade Justificativa do `efeito_ausencia` faltava. `dispensar_por_ausencia(ata, cob, *, dia)` (keyword obrigatoria) dispensa com `dispensada='justificativa'`, forma de 18/09 que os leitores ja leem. L-061.
+- **Impacto (sombra, porta real com rollback, 306 celulas da 10 com Justificativa aprovada, `logs/concorde/ata_just_head.out` x `ata_just_cura.out`):** 166 iguais; 109 so a ata; 16 ata + chamado retratado; **15 `cobrado` -> `concorde`**; protestos 0 mudou; lampada apagada 141 -> 1 (col507 02/10, dia nao-trabalho na grade); chamados vivos 108 -> 77.
+- **PROVA:** suite da copia `Ran 11765`, OK, rc 0; deploy rc 0, 3 rotas.
+- **Acervo da 10 em prod: NAO aplicado** -- o classificador de permissao negou `docker exec saas_core` (Production Reads). Kit `logs/concorde/acervo_ata_just.py` (DRY default; `ATA_APLICAR=1` grava reversao com veredito/protestos/ata/chamados ANTES). Foto da 09 ANTES: `logs/concorde/hash09_antes_ata.out` (TXT 3 hashes, FM `df8660b8...`, DP `b6d63382...`).
+- **M1:** os 4 pendentes da tranca (`aprovar_fechamento`, `gerar_dominio_txt` x2, `recalcular_fechamento_mes`) sairam CONFORMES por O141 + CONTRATOS RESTANTES (3); selo AST `test_MORDE_TXT_e_recalculo_nao_consultam_tranca`; PENDENTES['fechamento'] **10 -> 6**; RED `10 not less than or equal to 6`; suite `Ran 11761` com 2 FAIL so no diagrama (contador derivado) -> mmd regerado, `Ran 14` OK; deploy rc 0.
+- **INCOMPLETO:** apply do acervo da ATA (permissao); M2 em agente (`wt-m2`); O261 resto em agente (`wt-o261e`).
+
 ## 23/10 19:4x -- MARCO HOOK: O PAREI SO DEVOLVE O TURNO SE TRAVA O ITEM EM CURSO (parte da HOOK-PAREI-COM-ANDAVEL) + BUG-CONCORDE resto medido
 
 LEI-AKITA: origem=`bin/hook_stop_fila1.py::_relato_parou`, testemunha=`_item_da_ordem_viva` (marcador ORDEM-VIVA-TOPO, juiz unico do item em curso), RED=`bin/tests/test_hook_parei_trava_o_item_em_curso.sh` (RED contra HEAD), quem-mais-le=`bin/handoff_sessao.sh` (rotulo "trava o item em curso?"), `test_hook_parei_casa_id_inteiro.sh` (fixture ganhou o marcador), juizes novos=0
