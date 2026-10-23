@@ -41,7 +41,7 @@ LEI-AKITA: origem=api/views.py::_recusa_ausencia (porta de saida de todo 4xx de 
 INCOMPLETO:
 - 401/405/415 nascem no DRF antes da view: fora do censo (o access log os tem).
 - RISCO (nao curado, nao medido como perda): RotatingFileHandler com varios workers gunicorn nao e seguro para rotacao multi-processo; ponto.log chega a 5 MB em ~13 dias. Linha de fila.
-- FILA (achado fora do escopo, com numero): **4 x 500** em POST /api/ausencias/ de 16 a 23/10 -- erro de servidor na porta do atestado; medir causa no log de erro antes de qualquer outra coisa da familia.
+- Os **4 x 500** em POST /api/ausencias/ de 16-23/10 sao os de 18/10 07:06 (col857, IntegrityError `uniq_ausencia_viva`, RELATO 22/10 01:3x), curados em `64f9a4b2` (20/10 15:35): caso FECHADO por aval dele 15:1x, sem raia (a raia aberta por engano foi cancelada sem codigo).
 - Copia `e2caf9cf` (`wt-at5`). Comboio com a 1b-iii-b deu vermelho na 1b-iii-b; o (5) pousou SOZINHO, certificado em `wt-at5p` (main + `e2caf9cf`): `Ran 11690 tests`, `OK (skipped=51, expected failures=14)`, rc 0.
 
 ## 23/10 14:xx -- 1b-iii-b MEDIDA (sem codigo): O VEREDITO DE HOJE NAO SERVE DE GATE PARA O c2
