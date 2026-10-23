@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 22/10/2026 22:31:02.** Transcript: `da98832f-de75-4326-b54f-c50c792fa1ba.jsonl` (3.8 MB). Acoes na janela: **186**.
+**Medido em 22/10/2026 22:36:32.** Transcript: `da98832f-de75-4326-b54f-c50c792fa1ba.jsonl` (3.8 MB). Acoes na janela: **190**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 22:34:16 | Bash | GREEN on wt-esc2 and RED on pristine copy for E2 | `cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/da98832f-de75-4326-b54f-c50c792fa1ba/scratchpad; bin/suite.sh --dir /home/ronald/wt-esc2 --only "chamados.tests.test_porta_chamado_e2 chamados.tests.test_chokepoint_chamado_gate chamados.tests.test_porta_contexto chamados.tests.test_porta_chamado_e1 ponto.tests.test_reconciliar_grade" --parallel 1 > $S/e2g.log 2>&1; gre ...` |
+| 22:34:08 | Write |  | `/home/ronald/wt-esc2/app/chamados/tests/test_porta_chamado_e2.py` |
+| 22:33:46 | Bash | Lower gate ceiling for ChamadoColaborador to 0 | `cd /home/ronald/wt-esc2/app && python3 - <<'EOF' p='chamados/tests/test_chokepoint_chamado_gate.py'; s=open(p,encoding='utf-8').read() old=" 'ChamadoColaborador': 6,\n" new=(" # E2 (22/10): 6 -> **0**. Os 5 mecanicos do contexto pela porta do CONTEXTO: `retirar_contexto` nasce (o\n" " # 4o gesto: retirar a MARCA nomeada, `orfa_regeneracao`, nos dois sitios de `reconciliar_grade`);\n" " # `gerar_ce ...` |
+| 22:33:40 | Bash | Push E1 marco | `cd /home/ronald/saas-hasner && bin/push.sh > logs/esc_push_e1.log 2>&1; echo rc=$? >> logs/esc_push_e1.log` |
 | 22:30:32 | Bash | Handoff, host seals, create wt-esc2 and apply E2 patch | `cd /home/ronald/saas-hasner && bin/handoff_sessao.sh >/dev/null 2>&1; for t in bin/tests/test_*.sh; do bash "$t" >/dev/null 2>&1 \|\| echo "VERMELHO $t"; done; echo selos_ok; git worktree add --detach /home/ronald/wt-esc2 9ffa5e68 >/dev/null 2>&1 && python3 /tmp/claude-1001/-home-ronald-saas-hasner-app/da98832f-de75-4326-b54f-c50c792fa1ba/scratchpad/patch_e2.py /home/ronald/wt-esc2/app` |
 | 22:30:26 | Bash | Confirm tracebacks are old lines | `cd /home/ronald/saas-hasner && wc -l < logs/escalonamento.log` |
 | 22:30:20 | Bash | Check escalonamento log and ui errors after deploy | `cd /home/ronald/saas-hasner && tail -5 logs/escalonamento.log; grep -n -E 'Traceback\|Error' logs/escalonamento.log \| tail -3; docker logs --since 10m saas_ui 2>&1 \| grep -c -E 'Traceback\|AttributeError\|NameError'` |
