@@ -16,6 +16,16 @@ PAREI: ! O261 e o export da 10 | espera o DP e o Ronald: (a) o TXT da 10 esta BA
 > O MARCADOR ANDOU no mesmo ato: `ORDEM-VIVA-TOPO` saiu de `BO-HE-RECUSAR-LOTE-500` (fechado) para `O261`, que o hook cobrou.
 > SEM COMMIT DE PROPOSITO: `RELATO.md` e `BACKLOG.md` ficam sujos na arvore porque a L-106 nao deixa commit so de docs fora de marco. Eles entram no commit do proximo marco.
 
+## 23/10 09:3x -- MARCO VARREDURA CLASSE B (1b-i): O LACO HX-RESPOSTA-VISIVEL x BUG 31 MORRE; A RETENCAO GRAVA O FATO, NAO A PASSADA
+
+LEI-AKITA: origem=`chamados/juizes.py::irmas_respondidas_sem_consumo` (universo sem a regra de credito) + `chamados/services/disputa_emissao.py` (HX com filtro proprio) + `chamados/reconciliador.py::_retratar` (trilha por passada), testemunha=`raiox.creditos_perguntas` (destino VIVO vence o pai) + trilha de prod por ator, RED=`chamados/tests/test_laco_hx_x_bug31.py` (5 FAIL contra `79f6d0db`), quem-mais-le=`reconciliador._retratar`, `materializacao._fecha`, auditor I12 (TURNO_MODS: universo igual), juizes novos=0
+- **Medido (prod, 30 d, por ator) -- o `reconciliar_chamados` sao TRES classes, nao "110 orfas":** (1) as **110** do dry sao ATRASO da corrente da manha, nao laco: 108 nascem do `processar_cartorio` ~06h, 101 de 114 ja tinham destino em prod as 08:42 (julgado 06-08h), 2a/3a passada = 0; (2) **LACO** fecha/reabre: 93 `HX-RESPOSTA-VISIVEL` em **37** pais (23 em 7 d) desfeitos pelo cron no */15 seguinte (CH 17211 9 voltas, 14296 10, 5163 8); (3) **1.465** `retratacao_retida_irma_orfa` em 30 d (cron 872, alertas_turno 364, request 114, fantasmas 113) -- todas de `_retratar:426`, mesmo fato regravado (#28571: 382).
+- **Causa do laco:** dois leitores da MESMA pergunta. O HX contava resposta JA VALIDADA (do materializador); a guarda BUG 31 so via `chamado_destino=ch`, nunca a resposta creditada ao PAI. Nenhuma lei nova: o juiz do BUG 31 passa a ler o universo da regra de credito que ja existe, e o HX le o juiz.
+- **Mudou:** `juizes.irmas_respondidas_sem_consumo` (Q destino=ch OU disputa.chamado=ch com destino nao-VIVO; predicado igual); HX le o juiz (filtro proprio saiu); `_retratar` so grava a retencao quando a lista de pendentes MUDA.
+- **Sombra (arvore da cura, `logs/clb1b/`):** juiz novo x velho em 159 chamados: **20** mudam, todos pai de disputa (14 vivos, 6 mortos); 0 destino muda. `reconciliar_chamados` 3x: HEAD grava 1 retencao por passada; cura 0 nas passadas 2/3; retratacoes iguais (1 e 0 e 0).
+- **INCOMPLETO (proximo marco, mesma 1b):** o cron ainda ESCREVE -- reatar orfa (atraso da corrente), `veredito_celula` 167 (C3, celula sem evento), retratacao por premissa morta (386). Nao vira vigia neste marco.
+- **PROVA:** SUITE_PENDENTE
+
 ## 23/10 08:3x -- MARCO VARREDURA CLASSE B (1a): `reavaliar_ausencias_lancadas` + `fechar_chamados_ausencia` VIRAM VIGIA; O EVENTO DA AUSENCIA FAZ
 
 LEI-AKITA: origem=`ponto/signals.py::_consumidor_ausencia` (evento da Ausencia, depois do cartorio) + `chamados/services/silencio_ausencia.py::_premissa_morre` (bug no caminho), testemunha=a LAMPADA (`CelulaDia.VEREDITOS_ACUSAM`) + a trilha de prod por ator, RED=`ponto/tests/test_varredura_classe_b_ausencia.py` (5 FAIL, 3 ERROR contra `9c26e58b`), quem-mais-le=`mudar_estado` (o gancho desceu ao evento), os selos `test_reavaliar_catalogo_premissa`/`test_chamado_ausencia_fecha`, juizes novos=0
