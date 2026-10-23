@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 22/10/2026 21:27:32.** Transcript: `da98832f-de75-4326-b54f-c50c792fa1ba.jsonl` (2.4 MB). Acoes na janela: **105**.
+**Medido em 22/10/2026 21:32:36.** Transcript: `da98832f-de75-4326-b54f-c50c792fa1ba.jsonl` (2.5 MB). Acoes na janela: **106**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 21:32:32 | Bash | Run repair+impact probe in sombra with rollback | `cd /home/ronald/saas-hasner && SOMBRA_ARVORE=/home/ronald/wt-dss1/app bin/sombra.sh --rodar dss_item1_reparo.py dss_item1_reparo 2>&1 \| grep -E '^(REPARO\|IMPACTO\|ROLLBACK\|POS\|Trace\|\w+Error\|AssertionError)' \| cut -c1-400` |
 | 21:22:41 | Bash | Apply item 1 cure and run GREEN plus neighbors | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/da98832f-de75-4326-b54f-c50c792fa1ba/scratchpad; python3 $S/patch_item1.py /home/ronald/wt-dss1/app && cd /home/ronald/saas-hasner && L=$S/green1.log; bin/suite.sh --dir /home/ronald/wt-dss1 --only "chamados.tests.test_limbo_nao_fecha_com_filho_no_defeito ponto.tests.test_emissor_sem_previsao chamados.tests.test_t34_furo_sob_limbo chamados.tests.test ...` |
 | 21:22:18 | Bash | Run item 1 RED against HEAD code in wt-dss1 | `cd /home/ronald/saas-hasner && L=/tmp/claude-1001/-home-ronald-saas-hasner-app/da98832f-de75-4326-b54f-c50c792fa1ba/scratchpad/red1.log; bin/suite.sh --dir /home/ronald/wt-dss1 --only chamados.tests.test_limbo_nao_fecha_com_filho_no_defeito --parallel 1 > $L 2>&1; echo rc=$?; grep -E '^(FAIL\|ERROR):\|Error\|^Ran\|^(OK\|FAILED)' $L \| head -12` |
 | 21:22:16 | Bash | Push marco via push.sh | `cd /home/ronald/saas-hasner && bin/push.sh > logs/dss_push_item2.log 2>&1; echo rc=$? >> logs/dss_push_item2.log` |
