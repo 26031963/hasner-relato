@@ -28,7 +28,7 @@ LEI-AKITA (E1a): origem=`chamados/services/materializacao.py::_materializar_ause
 LEI-AKITA (parte 3): origem=`chamados/services/disputa_emissao.py::gerar_perguntas_disputa`, testemunha=`chamados/reconciliador.py::reatar_pergunta_orfa` (porta do cron), RED=`chamados/tests/test_emissao_reata_orfa.py` (3 FAIL sem a ligacao), quem-mais-le=`reconciliar_perguntas_orfas_colab` (cron), juizes novos=0
 - **E1a:** a pergunta respondida ATESTADO/FALTA_DIA deixa de sair `via=declaracao` ('Colaborador declarou hora'): **271** assim em prod (`logs/fio16/p5_rejeitada_absorvida.out`). Vale dali em diante; o acervo e linha de fila (rotulo, sem dinheiro). A outra metade do E1 (perguntas absorvidas quando o DP REJEITA a ausencia) e pergunta de LEI no topo.
 - **Parte 3:** a pergunta orfa/saida nasce com o chamado do dia na emissao, pela porta do cron. O ramo das orfas era **100 das 106** escritas do `reconciliar_chamados` hoje (1b-iv). Destravada pela parte 1 (piso O44) e pela 1b-iii-b (protesto que cobra).
-- **PROVA:** suite da parte 3 sozinha `Ran 11712`, OK, rc 0 (`wt-1b3d`); E1a GREEN 47 OK; COMBOIO (`wt-comb2310c`): SUITE_COMBOIO_C. Copias `8acbc7d6` (E1a) e `2263122b` (parte 3). Prova de frota da parte 3: orfas c1 no dump de 24/10 (esperado so as que o c2 recusa por lei).
+- **PROVA:** suite da parte 3 sozinha `Ran 11712`, OK, rc 0 (`wt-1b3d`); E1a GREEN 47 OK; COMBOIO (`wt-comb2310c`): `Ran 11713 tests`, `OK (skipped=51, expected failures=14)`, rc 0 (`wt-comb2310c/app/logs/suite.out`). Copias `8acbc7d6` (E1a) e `2263122b` (parte 3). Prova de frota da parte 3: orfas c1 no dump de 24/10 (esperado so as que o c2 recusa por lei).
 
 ## 23/10 16:1x -- O261 -- os 16 fio_morto com dono (medicao, sem codigo)
 
