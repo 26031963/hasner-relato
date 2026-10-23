@@ -146,13 +146,13 @@ flowchart TD
 
   %% (c) PORTAS CANONICAS — fonte: AST sobre app/ (nome usado, nunca string)
   subgraph PORTAS["escritores unicos / portas canonicas"]
-    p_julgar_celula(["julgar_celula()<br/>celula julgada<br/>9 chamador(es)"])
+    p_julgar_celula(["julgar_celula()<br/>celula julgada<br/>10 chamador(es)"])
     x_chamados_reconciliador_py["chamados/reconciliador.py"] --> p_julgar_celula
     x_chamados_services_cobrar_dia_py["chamados/services/cobrar_dia.py"] --> p_julgar_celula
     x_chamados_signals_py["chamados/signals.py"] --> p_julgar_celula
     x_colaboradores_services_pos_vinculo_py["colaboradores/services/pos_vinculo.py"] --> p_julgar_celula
     x_ponto_management_commands_curar_residuo_bug115_py["ponto/management/commands/curar_residuo_bug115.py"] --> p_julgar_celula
-    mais_julgar_celula["... +4 chamadores"] --> p_julgar_celula
+    mais_julgar_celula["... +5 chamadores"] --> p_julgar_celula
     p_criar_ausencia(["criar_ausencia()<br/>ausencia<br/>5 chamador(es)"])
     x_api_views_py["api/views.py"] --> p_criar_ausencia
     x_chamados_services_materializacao_py["chamados/services/materializacao.py"] --> p_criar_ausencia
