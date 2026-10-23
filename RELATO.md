@@ -26,7 +26,7 @@ LEI-AKITA: origem=chamados/models.py::PerguntaDisputa.reabrir_por_resposta (+ es
 - Frota (p7): 647 respondidas+validadas DEPOIS do carimbo; 200 sem gravacao de fato (63 colabs), 138 via chamado_encerrado.
 - Cura item 2: resposta nova torna obsoleto o carimbo SEM LASTRO (VIAS_SEM_LASTRO), como ja tornava a validacao. Restritiva.
 - Cura item 3: resposta_acao/resposta_render gravam toda recusa (erro/aviso) em ponto.recusa_critica -> ponto.log (pontofile INFO). Resolver dia grava 1 linha por dia recusado. 403 cru de chamados/views.py:88 grava.
-- PROVA: RED 50fdebbb 5 fail + 4 error (`wt-rdm/app/logs/rdm/red.log`); suite cheia da copia Ran 11688 OK rc 0; COMBOIO com a 1b-iii-b (`wt-comb2310b`): SUITE_COMBOIO_B. Commits 936ef924 (produto, pousa agora) + b073d993 (instrumento, pouso proprio L-105).
+- PROVA: RED 50fdebbb 5 fail + 4 error (`wt-rdm/app/logs/rdm/red.log`); suite cheia da copia Ran 11688 OK rc 0; COMBOIO com a 1b-iii-b (`wt-comb2310b`): `Ran 11706 tests`, `OK (skipped=51, expected failures=14)`, rc 0 (`wt-comb2310b/app/logs/suite.out`). Commits 936ef924 (produto, pousa agora) + b073d993 (instrumento, pouso proprio L-105).
 - Contador: core/recusa_critica.py::resolver_dia_recusado; ESTADO (bin/recusa_estado.py) e HAIKU (/api/mensageria/resolver-dia-recusado/ + mensageria) leem a mesma funcao.
 INCOMPLETO:
 - item 1 nao chegou; "os outros dois" do item 2 nao identificaveis.
@@ -43,7 +43,7 @@ LEI-AKITA: origem=`chamados/reconciliador.py::reemitir_chamado_do_dia`, testemun
 - **Mudou:** o c2 le `PROTESTOS_QUE_COBRAM`; sem celula ou sem esse protesto nao emite (sem celula, corte 10/09). Gates de emissao (piso + protesto) julgam nascer/renascer; costura no chamado do dia VIVO passa.
 - **Impacto (mesma sonda, copia curada):** c2 **10 -> 2**; as 8 pre-adocao saem; 1 renascimento em dia `concorde` deixa de acontecer; nada mais se move (`logs/cb_1b3b_depois.out`).
 - **Fixtures:** celula `FURO_SEM_COBRANCA` vira precondicao em `test_orfa_sem_candidato` e nos MORDE do piso; `test_bateria_lavratura` perde o c2 de 22/09 (`FURO_PRE_ADOCAO`) -- a assercao morde a volta.
-- **PROVA:** GREEN 95 vizinhos OK; suite do COMBOIO (main + 1b-iii-b + BO-409 (5)) VERMELHA: 2 FAIL em `test_reemissao_c2` (fixture do c2 sem celula que cobra; vizinho que faltou no censo) -- comboio SEPARADO, o (5) pousou sozinho; 1b-iii-b EM CURSO, nao pousada. Copia `0ede5b7f`. Prova de frota: amanha, c2 em dia sem protesto que cobra = 0.
+- **PROVA:** GREEN 95 vizinhos OK; 1o comboio VERMELHO (2 FAIL `test_reemissao_c2`: fixture sem celula, batida em outro dia, colab sem vinculo -- o cartorio retratava o chamado recem-nascido), separado; fixture coerente + relogio fixo (`40382806`, censo dos 29 modulos do c2); 2o COMBOIO (main + 1b-iii-b + BO-RESOLVER-DIA produto, `wt-comb2310b`): `Ran 11706 tests`, `OK (skipped=51, expected failures=14)`, rc 0. Copia `0ede5b7f`. Prova de frota: amanha, c2 em dia sem protesto que cobra = 0.
 - **INCOMPLETO:** a emissao (`gerar_perguntas_disputa`) chamar a porta `reatar_pergunta_orfa` -- agora o c2 le o predicado do cartorio, e isso destrava a parte 3; ela vai com RED proprio (o `test_emissao_reemite_c2` da 1a copia, guardado em `wt-1b3/app/logs/`).
 
 ## 23/10 14:4x -- MARCO BO-ATESTADO-409-MUDO complemento (5): o MOTIVO de todo 4xx da porta de ausencia persiste
