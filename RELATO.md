@@ -1,6 +1,8 @@
 # RELATO — esteira saas-hasner
 
-PAREI: ! O261 e o export da 10 | espera o DP e o Ronald: (a) o TXT da 10 esta BARRADO pela porta -- 184 dias de HE acima do limite SEM decisao (emp2 169 / emp3 12 / emp4 3; 58 colabs; 124,45 h; `logs/gate10/lista_he_trava_20261022.out`); por aval dele 12:0x o DP decide pela Gestao de HE ("Nao" em lote = L-097) e entao roda `logs/gate10/ato_export10.py` (re-lavrar o carimbo da porta ANTES, ~22 min, desacoplado). (b) FEITO 14:12: a volta dos 6 pousou ANTES do TXT (secao 14:12). (c) `resolver_dia_oferecido` NO AR (`3088eac6`); DIA-SEM-SAIDA (1)(2) NO AR 22/10 21:5x, (3) ao DP; cura dos 99 DEPOIS do TXT. (d) 09 com o Gabriel (AVAIS #2).
+PAREI: ! GATE-EXPORT-10 (so o export da 10) | espera o DP na Gestao de HE e o Ronald: (a) o TXT da 10 esta BARRADO pela porta -- 184 dias de HE acima do limite SEM decisao (emp2 169 / emp3 12 / emp4 3; 58 colabs; 124,45 h; `logs/gate10/lista_he_trava_20261022.out`); por aval dele 12:0x o DP decide pela Gestao de HE ("Nao" em lote = L-097) e entao roda `logs/gate10/ato_export10.py` (re-lavrar o carimbo da porta ANTES, ~22 min, desacoplado). (b) FEITO 14:12: a volta dos 6 pousou ANTES do TXT (secao 14:12). (c) `resolver_dia_oferecido` NO AR (`3088eac6`); DIA-SEM-SAIDA (1)(2) NO AR 22/10 21:5x, (3) ao DP; cura dos 99 DEPOIS do TXT. (d) 09 com o Gabriel (AVAIS #2).
+
+> **O O261 NAO esta parado** (aval Ronald 23/10 19:4x): e o item EM CURSO da fila 1 e anda sem ele ate `fio_morto = 0`. O PAREI acima trava SO o export da 10 -- e o hook passou a ler assim (`_relato_parou`: PAREI so devolve o turno se nomeia o item em curso).
 
 > (o `!` da volta do feriado esta no item (b) da linha acima)
 
@@ -23,6 +25,17 @@ PAREI: ! O261 e o export da 10 | espera o DP e o Ronald: (a) o TXT da 10 esta BA
 > OS QUATRO ITENS DA ORDEM, FEITOS: deploy `d01210d2` **no ar 10:26** (`--sem-migrate` rc=0, 3 rotas provadas, selo BUG 128 verde, portao fechado pelo PASSO 5 do gate -- nunca `--sem-sombra`); push **pousou** (`fa5cd145..eebe2cce`, rc=0, `Ran 11566 tests · OK (skipped=51, expected failures=14)` mais control-plane `Ran 22 tests · OK`, veredito lido no REMOTO); `bin/handoff_sessao.sh` gerado (42/60 linhas, selo verde); e esta linha. O 1 commit que sobrou a frente (`6d469ed2`) e do proprio `pos_push` -- a excecao nomeada da L-106 --, e o push dele e do proximo push, nao deste.
 > O MARCADOR ANDOU no mesmo ato: `ORDEM-VIVA-TOPO` saiu de `BO-HE-RECUSAR-LOTE-500` (fechado) para `O261`, que o hook cobrou.
 > SEM COMMIT DE PROPOSITO: `RELATO.md` e `BACKLOG.md` ficam sujos na arvore porque a L-106 nao deixa commit so de docs fora de marco. Eles entram no commit do proximo marco.
+
+## 23/10 19:4x -- MARCO HOOK: O PAREI SO DEVOLVE O TURNO SE TRAVA O ITEM EM CURSO (parte da HOOK-PAREI-COM-ANDAVEL) + BUG-CONCORDE resto medido
+
+LEI-AKITA: origem=`bin/hook_stop_fila1.py::_relato_parou`, testemunha=`_item_da_ordem_viva` (marcador ORDEM-VIVA-TOPO, juiz unico do item em curso), RED=`bin/tests/test_hook_parei_trava_o_item_em_curso.sh` (RED contra HEAD), quem-mais-le=`bin/handoff_sessao.sh` (rotulo "trava o item em curso?"), `test_hook_parei_casa_id_inteiro.sh` (fixture ganhou o marcador), juizes novos=0
+- **Defeito:** `PAREI: ! O261 e o export da 10` liberava o Stop (id que anda) e o handoff dizia "trava a fila 1? SIM"; a sessao nova concluia que o O261 dependia do DP. Aval dele 19:4x: PAREI e so o export da 10.
+- **Cura:** PAREI de `!` so devolve o turno se nomeia o item EM CURSO; topo do RELATO reescrito (GATE-EXPORT-10). Vivo: `_relato_parou()=False` com O261 em curso.
+- **PROVA:** RED contra HEAD (`PAREI do GATE-EXPORT-10 liberou o turno com o O261 EM CURSO`); os 12 selos `test_hook_*.sh` rc 0 na copia.
+- **Push do concorde:** 1a tentativa caiu em `test_lei_protege_sitio` (L-103 sem citacao); 2a com `035af0de` no range: `Ran 11760`, OK, `6926637a..035af0de`, FIM rc=0 (`logs/clb1b/push_concorde2.out`).
+- **BUG-CONCORDE resto (as 29, medido na sombra, `logs/concorde/r29_classifica.out`, `r30_just.out`, `r31_split.out`):** sombra reproduz 34. 2 cobertas por ausencia; **26** `folga_nao_definida` (6x1 sem folga, `sem_ancora` vindo do chamador -- dono CADASTRO, lista do admin); **6** sem Ausencia mas com **Justificativa aprovada** (9 de 9 incluindo 3 vizinhas) -> `concorde` e a resposta da lei (grade `just_dias`, `efeito_ausencia`, `VEREDITOS_QUE_VETAM`); `classificar_dia` NAO muda.
+- **Achado:** a ATA nao dispensa a lampada do dia justificado (`cartorio.py::dispensar_por_ausencia` le so Ausencia): 79 celulas da 10 com ata "em aberto" e juiz `concorde`. Linha de fila `ATA-NAO-DISPENSA-JUSTIFICADA` (cruza `cartorio.py` com a O261 em voo -> um por vez).
+- **INCOMPLETO:** resto da HOOK-PAREI-COM-ANDAVEL (PAREI com TODOS os restantes em lei ou `!`); ATA-NAO-DISPENSA-JUSTIFICADA; classe B (255) e 730 com previsto=0 = linhas de fila.
 
 ## 23/10 18:3x -- BUG-CONCORDE-SEM-ENTRADA (P7.1): marco apagado + batida acesa + realizado 0 = FURO_PARCIAL, nao concorde
 
