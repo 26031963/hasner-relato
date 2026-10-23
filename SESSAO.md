@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 23/10/2026 17:28:25.** Transcript: `c6f2f4c7-d189-48e6-a5c1-0a8ca0afec80.jsonl` (10.5 MB). Acoes na janela: **494**.
+**Medido em 23/10/2026 17:33:53.** Transcript: `c6f2f4c7-d189-48e6-a5c1-0a8ca0afec80.jsonl` (10.5 MB). Acoes na janela: **499**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 17:33:22 | Bash | Register COTA aval | `cat >> docs/PROMPTS.md <<'EOF' \| 23/10 ~17:4x \| **aval `COTA-36PCT`**: cota 36% as 17:30 (1,14%/h na tarde; teto 0,53%/h ate qua 18h); maximo 2 agentes vivos; subagente de LEITURA em modelo mais barato, cura/RED no atual; FLUXO 2 so apos o comboio E1a+parte 3 (ja pousou 16:5x) e como LEITURA em subagente barato; v3 fechado ate terca; /clear no proximo MARCO FECHADO; medir /usage a cada marco e g ...` |
+| 17:33:18 | Agent | FLUXO 2 pre-audit (cheap, read-only) | `Tarefa de PRÉ-AUDITORIA, só LEITURA, no repo /home/ronald/saas-hasner (Django em app/, HASNER PONTO). Leia /home/ronald/saas-hasner/CLAUDE.md, em especial: seção 0 (LEI-AKITA, TRAVA JUIZ-NOVO), 4 (`ponto/motor_calculo_v2.py` é zona inviolável, só leitura), 4b (contratos estruturais, L-099), 7b (L-117, L-118, AUTONOMIA-DE-CODIGO item 3). Você NÃO escreve código, NÃO edita nada fora de /home/ronald/ ...` |
+| 17:33:07 | Bash | List partial outputs of stopped agents | `ls /home/ronald/saas-hasner/logs/fluxo2/ 2>/dev/null \| head -20; ls /home/ronald/saas-hasner/logs/b2lastro/ 2>/dev/null \| head` |
+| 17:33:02 | TaskStop |  | `-` |
+| 17:33:02 | TaskStop |  | `-` |
 | 17:25:53 | Bash | Record balde 2 measurements in RELATO | `python3 - <<'EOF' f='docs/RELATO.md' s=open(f).read() anc="## 23/10 16:5x -- MARCO BO-B DIAPAGO-SE-CONTRADIZ" assert s.count(anc)==1 sec='''## 23/10 17:4x -- VARREDURA BALDE 2 MEDIDA (sem codigo): `fechar_cobranca_com_lastro` e `reconciliar_geofence` AINDA ESCREVEM - **`fechar_cobranca_com_lastro`** (`40 * * * *`, porta `ponto/services/lastro.py::fechar`): dry na sombra hoje = **0** com lastro (fi ...` |
 | 17:25:35 | Bash | Dry-run reconciliar_geofence in prod via read-only probe | `cd /home/ronald/saas-hasner && cat > logs/clb1b/p_b2_geofence.py <<'EOF' from django.core.management import call_command for emp in (2, 3, 4): print('== EMPRESA', emp) try: call_command('reconciliar_geofence', '--empresa', str(emp)) except Exception as e: print('ERRO', type(e).__name__, str(e)[:200]) EOF bin/sonda_leitura.sh logs/clb1b/p_b2_geofence.py > logs/clb1b/p_b2_geofence.out 2>&1; grep -vE ...` |
 | 17:25:29 | Bash | Check reconciliar_geofence flags and cron line | `f=$(git ls-files \| /bin/grep "management/commands/reconciliar_geofence.py"); /bin/grep -n "add_argument\\|DRY\\|dry" $f \| head; /bin/grep -n "reconciliar_geofence" config/crons.py \| head -3` |
