@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 23/10/2026 01:10:47.** Transcript: `da98832f-de75-4326-b54f-c50c792fa1ba.jsonl` (6.1 MB). Acoes na janela: **346**.
+**Medido em 23/10/2026 01:16:02.** Transcript: `da98832f-de75-4326-b54f-c50c792fa1ba.jsonl` (6.1 MB). Acoes na janela: **347**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 01:15:32 | Bash | Confirm push landed on remote | `cd /home/ronald/saas-hasner && tail -3 logs/rec_push2.log; git fetch -q; git log --oneline -1 origin/main; git log --oneline origin/main..HEAD` |
 | 01:04:14 | Monitor | push classe A + reconciliar veredito | `until grep -q '^rc=' /home/ronald/saas-hasner/logs/rec_push2.log 2>/dev/null; do /usr/bin/sleep 15; done; tail -3 /home/ronald/saas-hasner/logs/rec_push2.log` |
 | 01:04:05 | Bash | Ask the hook for next item and blocked ids | `cd /home/ronald/saas-hasner && python3 -c " import sys; sys.path.insert(0,'bin') import importlib.util as u s=u.spec_from_file_location('h','bin/hook_stop_fila1.py'); h=u.module_from_spec(s); s.loader.exec_module(h) print('proximo', h._proximo_da_fila()) print('nao_andam', sorted(h._ids_que_nao_andam())[:30]) print('travas', h.travas_da_fila()) " 2>&1 \| tail -5 \| cut -c1-600` |
 | 01:04:02 | Bash | Inspect hook module names | `cd /home/ronald/saas-hasner && python3 -c " import sys; sys.path.insert(0,'bin') import importlib.util as u s=u.spec_from_file_location('h','bin/hook_stop_fila1.py'); h=u.module_from_spec(s); s.loader.exec_module(h) print([n for n in dir(h) if not n.startswith('__')][:40]) " 2>&1 \| tail -3` |
