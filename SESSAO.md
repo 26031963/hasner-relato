@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 23/10/2026 13:08:30.** Transcript: `c6f2f4c7-d189-48e6-a5c1-0a8ca0afec80.jsonl` (5.5 MB). Acoes na janela: **243**.
+**Medido em 23/10/2026 13:13:32.** Transcript: `c6f2f4c7-d189-48e6-a5c1-0a8ca0afec80.jsonl` (5.5 MB). Acoes na janela: **246**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 13:08:55 | SendMessage |  | `-` |
+| 13:08:48 | Bash | Register O280 complement in BACKLOG and PROMPTS | `python3 - <<'EOF' f='docs/BACKLOG.md' s=open(f).read().split('\n') i=[k for k,l in enumerate(s) if l.startswith('\| O280 ')][0] c=s[i].split('\|') c[2]=c[2].rstrip()+" **COMPLEMENTO 23/10 13:1x (casos do BO-B na bateria, pela regra, antes do codigo):** (1) col349 07/10 aberto = 357 min rotulado, sem hora presumida; (2) col577 15/10 L-084 = 438 min, CADASTRO x REALIDADE, sem corte na janela; (3) no ...` |
+| 13:08:42 | Bash | Locate O280 row in BACKLOG | `/bin/grep -n "^\| O280 " docs/BACKLOG.md \| cut -c1-400; /bin/grep -n "^\| O280 " docs/BACKLOG.md \| awk -F'\|' '{print NF}'` |
 | 13:06:48 | SendMessage |  | `-` |
 | 13:06:23 | SendMessage |  | `-` |
 | 13:06:16 | Bash | Check BACKLOG column counts | `sed -n 990,992p docs/BACKLOG.md \| awk -F'\|' '{print NF}'` |
