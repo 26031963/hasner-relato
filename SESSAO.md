@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 23/10/2026 14:01:32.** Transcript: `c6f2f4c7-d189-48e6-a5c1-0a8ca0afec80.jsonl` (6.6 MB). Acoes na janela: **302**.
+**Medido em 23/10/2026 14:07:03.** Transcript: `c6f2f4c7-d189-48e6-a5c1-0a8ca0afec80.jsonl` (6.7 MB). Acoes na janela: **304**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 14:06:00 | Bash | Register BO-RESOLVER-DIA-MUDO prompt row | `cat >> docs/PROMPTS.md <<'EOF' \| 23/10 ~14:1x \| **aval `BO-RESOLVER-DIA-MUDO`** (agente proprio; nenhuma lei nova: juiz resolver_dia_oferecido 22/10, O261, tela que engana): (2) trilha furo -> cobrado -> furo -- quem escreveu cobrado, quem desfez, resposta perdida?; escritor fora da lei = cura com RED; (3) recusa do Resolver dia persiste no log (dia, colab, motivo, usuario) + contador "resolver  ...` |
+| 14:05:55 | Agent | BO-RESOLVER-DIA-MUDO items 2 and 3 | `Você é a raia do BO-RESOLVER-DIA-MUDO no repo /home/ronald/saas-hasner (Django em app/, HASNER PONTO). Antes de qualquer ação, leia /home/ronald/saas-hasner/CLAUDE.md INTEIRO: LEI-AKITA (origem, RED primeiro, um escritor por estado, zero número sem medição na fonte), L-107, seção 3 (testes) e seção 6 (condutas) valem literalmente. Trabalhe só no seu worktree. NUNCA edite a árvore viva /home/ronald ...` |
 | 13:55:10 | Bash | Register the miolo law in CORTES, BACKLOG, PROMPTS | `cat >> docs/CORTES.md <<'EOF' \| **LEI-DO-MIOLO-CEDE-A-LAMPADA** \| 2026-10-23 13:5x \| recebido e registrado no turno do corte; obra INTERVALO-DECLARADO no BACKLOG, DEPOIS dos BOs em curso, sem reordenar. Nada construido. \| INTERVALO-DECLARADO \| corte Ronald -- *"a LEI DO MIOLO cede a LAMPADA (CLAUDE.md 4a): a saida/retorno do intervalo sao lampadas do DNA da celula como qualquer outro marco; l ...` |
 | 13:55:01 | Bash | Show remaining columns of CORTES row | `sed -n 187p docs/CORTES.md \| awk -F'\|' '{for(i=4;i<=NF;i++) print i": "substr($i,1,200)}'` |
 | 13:54:59 | Bash | Read a CORTES row fully for column shape | `sed -n 187p docs/CORTES.md \| cut -c1-600` |
