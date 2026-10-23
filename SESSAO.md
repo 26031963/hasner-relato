@@ -6,10 +6,18 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 23/10/2026 15:21:32.** Transcript: `c6f2f4c7-d189-48e6-a5c1-0a8ca0afec80.jsonl` (8.0 MB). Acoes na janela: **368**.
+**Medido em 23/10/2026 15:25:06.** Transcript: `c6f2f4c7-d189-48e6-a5c1-0a8ca0afec80.jsonl` (8.2 MB). Acoes na janela: **376**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 15:25:02 | Bash | Republish RELATO | `cd /home/ronald/saas-hasner && sed -n 1,30p bin/relato.sh \| grep -E "^#\|uso\|usage" \| head -8; bin/relato.sh > logs/clb1b/relato_pub.out 2>&1; echo rc=$?; tail -4 logs/clb1b/relato_pub.out` |
+| 15:24:57 | Bash | Add PROVA line and rerun checker | `python3 - <<'EOF' f='docs/RELATO.md' L=open(f).read().split('\n') i=115 assert L[i].startswith('**NO AR** `8fddf887`'), L[i][:40] L.insert(i+1,"PROVA: `logs/o137/deploy.out` -- `deploy: OK -- migrations em dia, tres cascas reiniciadas juntas, tres rotas provadas.`; merge `8fddf887` no `git log` do main.") open(f,'w').write('\n'.join(L)) EOF cd /home/ronald/saas-hasner && python3 bin/relato_afirma_ ...` |
+| 15:24:51 | Bash | Find O137 deploy proof log | `cd /home/ronald/saas-hasner && ls logs/o137/ \| grep -i -E "deploy\|pouso\|smoke"; grep -h -E "^deploy:\|rc=" logs/o137/*deploy* 2>/dev/null \| tail -3` |
+| 15:24:46 | Bash | Read prova checker rules and run it | `cd /home/ronald/saas-hasner && sed -n 1,110p bin/relato_afirma_com_prova.py \| grep -v "^\s*#" \| head -80; python3 bin/relato_afirma_com_prova.py app/docs/RELATO.md 2>&1 \| head` |
+| 15:24:40 | Bash | Remove a500 worktree and find RELATO prova checker | `cd /home/ronald/saas-hasner && git worktree remove --force /home/ronald/wt-a500 && echo removido; /bin/grep -rn "afirma ato sem PROVA\\|ato sem PROVA" bin/*.py bin/*.sh 2>/dev/null \| head -3` |
+| 15:24:32 | Bash | Check a500 worktree state and read RELATO line 116 | `cd /home/ronald/saas-hasner && git worktree list \| grep a500; git -C /home/ronald/wt-a500 status --porcelain 2>/dev/null \| head; docker ps --format '{{.Names}} {{.Command}}' \| grep -i a500 \| head -3; sed -n 110,120p app/docs/RELATO.md \| cut -c1-300` |
+| 15:24:31 | TaskStop |  | `-` |
+| 15:24:27 | ToolSearch |  | `-` |
 | 15:14:16 | Bash | Capture stack of who resolves the c2 chamado | `cd /home/ronald/wt-1b3b/app && cat > chamados/tests/test_zz_dbg_c2.py <<'EOF' import traceback from django.db.models.signals import pre_save from chamados.models import ChamadoColaborador from chamados.tests.test_reemissao_c2 import ReemissaoC2Test as _B def _spy(sender, instance, **kw): if instance.pk and instance.status_local == 'resolvido': print('DBG STACK', ''.join(l for l in traceback.format ...` |
 | 15:14:01 | Bash | Register BO-ATESTADO-500 prompt row | `cat >> docs/PROMPTS.md <<'EOF' \| 23/10 ~15:1x \| **aval `BO-ATESTADO-500`** (fura a fila, LEI-AKITA 6; raia propria ao lado da wt-bob): os 4 x 500 em POST /api/ausencias/ 16-23/10 -- medir traceback, user, hora, tamanho/tipo do anexo; dizer se colab ficou sem atestado; cura na origem com RED, nunca try/except que engole \| agente proprio `wt-a500` \| EOF` |
 | 15:13:59 | Agent | BO 500 on POST /api/ausencias/ | `Você é a raia do bug "4 x 500 em POST /api/ausencias/" no repo /home/ronald/saas-hasner (Django em app/, HASNER PONTO). Antes de qualquer ação, leia /home/ronald/saas-hasner/CLAUDE.md INTEIRO: LEI-AKITA, L-107, seção 3 (testes) e seção 6 (condutas) valem literalmente. Trabalhe só no seu worktree. NUNCA edite a árvore viva /home/ronald/saas-hasner, que é o bind-mount de produção. Não faça merge, de ...` |

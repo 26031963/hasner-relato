@@ -4,6 +4,8 @@ PAREI: ! O261 e o export da 10 | espera o DP e o Ronald: (a) o TXT da 10 esta BA
 
 > (o `!` da volta do feriado esta no item (b) da linha acima)
 
+> **BO-B: AS TRES RESPONDIDAS 23/10 15:0x** (corte dele): (1) a cura pousa; a 09 NAO recalcula por evento ate o DIFF de frota da 09 (64 colabs, +416,10 h) publicado aqui, com reversao em logs/ e a Pauta DP dos 64 com os dois numeros; `!` so para a GUARDA temporaria da 09 e o DIFF dela, NAO para o apply na 09; TXT novo da 09 so quando o DP pedir. (2) vale o B-B21 -- abono cobre so o previsto que as batidas nao cobriram, os 3 dias entram no apply. (3) feriado trabalhado em escala que nao trabalha feriado sai em HE 100% feriado; folga trabalhada so para FOLGA; rubrica do Dominio e cadastro do DP. Em construcao no `wt-bob` (guarda + (2) + (3)), suite de novo antes do pouso.
+
 > lei: O261 `juiz-resolver-dia-oferecido` -- **RESPONDIDA 22/10 ~13:5x** (frase no CORTES); marco em construcao na `wt-o261c` (secao 14:3x).
 
 > lei: **C7 item 8 (corte 22/10 ~17:2x (2)) x O44 "a tranca nao barra o toque"** -- **RESPONDIDA 22/10 ~18:3x: opcao (A)**, toque = ato HUMANO com trilha; medido: das 1.544, **10** (3 colabs) humanas (todas `veredito_celula`), **1.534** (116) sistema; em construcao na `wt-c7t` -- o C6 lendo a tranca SEM excecao cala o "Cobrar este dia" em dia trancado, que a O44 manda COBRAR (caso 1: nasce chamado E pergunta que vai ao app; lei (b): o toque do admin desarquiva so aquele (colab, dia); selo `test_quem_le_a_tranca_em_producao` proibe leitor novo da tranca). MEDIDO em prod 22/10 18:0x (so leitura, juizes reais): 5 trancas vivas, **6.788** perguntas sem veredito em dia trancado, **2.010** vivas hoje (153 colabs), das quais **1.544** (118 colabs) tem chamado criado ou RESGATADO depois da tranca -- o caminho do toque/emissao da O44. A pergunta: (A) o C6 le a tranca MENOS o (colab, dia) tocado depois dela (estado que JA existe: `criado_em`/`resgatado_em` do chamado x `PeriodoFechado.fechado_em` -- e o "reversivel por toque" da L-051), ou (B) le sem excecao e o "Cobrar este dia" em dia trancado deixa de cobrar (revoga O44 caso 1)? A `wt-c7b` NAO pousa o item (2); o item (1) (juiz `pode_fechar`) pousa sozinho.
@@ -16,6 +18,111 @@ PAREI: ! O261 e o export da 10 | espera o DP e o Ronald: (a) o TXT da 10 esta BA
 > O MARCADOR ANDOU no mesmo ato: `ORDEM-VIVA-TOPO` saiu de `BO-HE-RECUSAR-LOTE-500` (fechado) para `O261`, que o hook cobrou.
 > SEM COMMIT DE PROPOSITO: `RELATO.md` e `BACKLOG.md` ficam sujos na arvore porque a L-106 nao deixa commit so de docs fora de marco. Eles entram no commit do proximo marco.
 
+## 23/10 14:4x -- MARCO VARREDURA CLASSE B (1b-iii-b): O c2 SO COBRA O QUE A EMISSAO COBRA
+
+LEI-AKITA: origem=`chamados/reconciliador.py::reemitir_chamado_do_dia`, testemunha=`ponto/services/furos_sem_cobranca.py::PROTESTOS_QUE_COBRAM` (+ `supra_juiz.NAO_COBRAVEIS_DO_COLABORADOR`, lei 31/08), RED=`chamados/tests/test_c2_le_o_protesto_que_cobra.py` (3 FAIL contra HEAD, MORDE verde), quem-mais-le=`reconciliar_perguntas_orfas_colab` + acervo I8b, juizes novos=0
+- **Medido no instante da decisao (sombra, c2 real com rollback sobre as 134 orfas c1 no piso):** 10 emissoes, todas `furo`; **8** em `FURO_PRE_ADOCAO` (lei 31/08: nao se cobra), 2 `FURO_SEM_COBRANCA` (`logs/cb_1b3b_estado.out`).
+- **Mudou:** o c2 le `PROTESTOS_QUE_COBRAM`; sem celula ou sem esse protesto nao emite (sem celula, corte 10/09). Gates de emissao (piso + protesto) julgam nascer/renascer; costura no chamado do dia VIVO passa.
+- **Impacto (mesma sonda, copia curada):** c2 **10 -> 2**; as 8 pre-adocao saem; 1 renascimento em dia `concorde` deixa de acontecer; nada mais se move (`logs/cb_1b3b_depois.out`).
+- **Fixtures:** celula `FURO_SEM_COBRANCA` vira precondicao em `test_orfa_sem_candidato` e nos MORDE do piso; `test_bateria_lavratura` perde o c2 de 22/09 (`FURO_PRE_ADOCAO`) -- a assercao morde a volta.
+- **PROVA:** GREEN 95 vizinhos OK; suite do COMBOIO (main + 1b-iii-b + BO-409 (5)) VERMELHA: 2 FAIL em `test_reemissao_c2` (fixture do c2 sem celula que cobra; vizinho que faltou no censo) -- comboio SEPARADO, o (5) pousou sozinho; 1b-iii-b EM CURSO, nao pousada. Copia `0ede5b7f`. Prova de frota: amanha, c2 em dia sem protesto que cobra = 0.
+- **INCOMPLETO:** a emissao (`gerar_perguntas_disputa`) chamar a porta `reatar_pergunta_orfa` -- agora o c2 le o predicado do cartorio, e isso destrava a parte 3; ela vai com RED proprio (o `test_emissao_reemite_c2` da 1a copia, guardado em `wt-1b3/app/logs/`).
+
+## 23/10 14:4x -- MARCO BO-ATESTADO-409-MUDO complemento (5): o MOTIVO de todo 4xx da porta de ausencia persiste
+LEI-AKITA: origem=api/views.py::_recusa_ausencia (porta de saida de todo 4xx de api_ausencias e api_ausencia_documento), testemunha=logger ponto.ausencia_upload -> handler pontofile (config/settings/saas.py:152-154,169; nivel INFO, /app/logs/ponto.log), RED=api/tests/test_ausencia_4xx_com_motivo.py (12 de 14 vermelhos no HEAD), quem-mais-le=test_bo_atestado_409_mudo (le o WARNING do 409, verde) + greps de forense pelos nomes antigos (preservados em evento=), juizes novos=0
+- HIPOTESE DO PROMPT MEDIDA FALSA: INFO ja persiste desde b139562e (21/10). Prod (settings = config.settings.saas, wsgi.py:14): ponto.log tem 4 `upload_ausencia` para os 4 POST /api/ausencias/ desde 22/10 01:00 (1:1 com access-ui.log). Settings NAO mudou.
+- O FURO REAL era o motivo: 9 das 13 saidas 4xx nao escreviam linha (HEAD api/views.py:1790,1894,1900,1920,1946[ramo 400],3159,3163,3171,3193); 4 escreviam sem codigo/motivo. Os 2 x 409 de u230 em 22/10 13:23 deixaram so `upload_ausencia` no arquivo.
+- Mudou: api/views.py::_recusa_ausencia (nova, loga WARNING `recusa_ausencia evento= status= codigo= user= ... motivo=<texto do corpo>` e devolve a Response); as 13 saidas passam por ela; os 4 warnings antigos foram FUNDIDOS (nome antigo no `evento=`); `_aviso_recusa_ausencia` perdeu o warning proprio (push + trilha iguais).
+- Sem dado medico pela FORMA: allowlist `_RECUSA_AUSENCIA_CAMPOS`; campo fora = ValueError. `arquivo=` segue bool (nome do arquivo nao entra: pode carregar CID).
+- Selos: AST (zero `Response(status=...)` direto nas 2 views, com caso que MORDE); runtime com sentinela em descricao, nome e conteudo do arquivo.
+- Volume: 66 POST /api/ausencias/ em 8 dias (16-23/10), 34 x 4xx (+4 x 500, fora do escopo) ~ 5 linhas/dia, < 1 KB/dia; ponto.log cresce ~375 KB/dia.
+- Vizinho que mordeu na 1a suite cheia: api/tests/test_o19_ausencia_diz_por_que_falhou.py::test_MORDE_o_413_NAO_e_200 le `status=413` no TEXTO da view; a porta passou a receber `status=` por keyword (o selo do O19 nao foi tocado).
+- PROVA: RED 11 FAIL + 1 ERROR / Ran 14; GREEN 99 testes (alvo + 14 vizinhos) OK, depois 30 (alvo + O19 + vizinhos) OK; suite cheia `Ran 11686` `OK (skipped=51, expected failures=14)` rc 0.
+INCOMPLETO:
+- 401/405/415 nascem no DRF antes da view: fora do censo (o access log os tem).
+- RISCO (nao curado, nao medido como perda): RotatingFileHandler com varios workers gunicorn nao e seguro para rotacao multi-processo; ponto.log chega a 5 MB em ~13 dias. Linha de fila.
+- FILA (achado fora do escopo, com numero): **4 x 500** em POST /api/ausencias/ de 16 a 23/10 -- erro de servidor na porta do atestado; medir causa no log de erro antes de qualquer outra coisa da familia.
+- Copia `e2caf9cf` (`wt-at5`). Comboio com a 1b-iii-b deu vermelho na 1b-iii-b; o (5) pousou SOZINHO, certificado em `wt-at5p` (main + `e2caf9cf`): `Ran 11690 tests`, `OK (skipped=51, expected failures=14)`, rc 0.
+
+## 23/10 14:xx -- 1b-iii-b MEDIDA (sem codigo): O VEREDITO DE HOJE NAO SERVE DE GATE PARA O c2
+
+- `furos_sem_cobranca.PROTESTOS_QUE_COBRAM` (os protestos que a emissao cobra) e o candidato a predicado do c2. Contra os 99 c2 de 30 d DENTRO do piso: casa so **6** (4 vivos); fora dele ficam **31 vivos em dia `cobrado`**, 4 `furo` e 3 `discordante` vivos, e os 47 mortos (33 `concorde`, 9 `indefinida`, 5 `discordante`) (`logs/clb1b/p_c2_protestos.out`).
+- O veredito `cobrado` e POSTERIOR ao c2 (a celula foi rejulgada com o chamado ja existindo): gate pelo veredito de hoje mede consequencia como causa. Proximo passo: na SOMBRA, o estado da celula no instante em que a pergunta nasce -- `reconciliar_chamados` com e sem o gate sobre o dump do dia, por veredito.
+
+## 23/10 14:xx -- HE100-POR-CAUSA (aval 23/10 13:3x item 1) -- MEDICAO SO LEITURA, sem codigo, sem apply
+
+LEI-AKITA: origem=n/a (medicao), testemunha=DiaPago versao='motor' (`ponto/models.py:312`) + `core/regua_cct.py::regua_para` + `EscalaColaborador.eh_dia_trabalho` + `core/feriados.py::eh_feriado(lugar)` + TXT vigente, RED=n/a, quem-mais-le=n/a, juizes novos=0
+- Universo: DiaPago versao=motor tipo=dia he100>0, comp 09 (21/08-20/09) e 10 (21/09-20/10). Regime pela empresa: emp3 **CLT**, emp2 **CCT** (SINEEPRES). Reconcilia EXATO com o chat: clt 09 10d/74,67h, 10 9d/67,04h; cct 09 99d/655,58h, 10 65d/439,23h.
+| comp | emp | (i) degrau >120 | (ii) folga/DSR | (iii) |
+|---|---|---|---|---|
+| 09 | emp3 clt | 0 | 0 | feriado 07/09: 10d 10c 74,67h |
+| 10 | emp3 clt | 0 | 0 | feriado 12/10: 9d 9c 67,04h |
+| 09 | emp2 cct | 11d 8c 55,31h | 0 | feriado 88d 64c 600,28h (07/09, 08/09 Curitiba, 20/09 POA) |
+| 10 | emp2 cct | 4d 3c 40,90h | 0 | feriado 61d 61c 398,33h (12/10) |
+- (iii) "outro" = 0. **(i)**: he50=2,00 e he100 = extra-120 nas 15 linhas; 14 no degrau gemeo do `MotorComercial` (`motor_calculo_v2.py:3059-3063`), so col556 (12x36) no 2515-2520 citado -- o degrau mora em QUATRO sitios (2515, 2807, 2941, 3059). Ex.: col243 24/08 960 min -> 14,00 h; col945 12/09 876 -> 12,59 h.
+- **(ii)=0 POR CONSTRUCAO:** folga trabalhada lavra em `horas_folga_trabalhada`, nao em he100 (`ponto/services/dia_pago.py:236-249`). Os 4 dias trab=False sao dobra de feriado (col146, col76 intermitentes).
+- **TXT da 09** (rubrica 0200 = he100 + feriado + folga, inseparaveis no arquivo): (i) da CLT que ENTROU = **0** (nao existe (i) na CLT). (i) da CCT no vigente pk27 = 0 de 55,31 h (7 `furo_espelho`, col840 rescisao).
+- **Fora da pergunta, com numero:** o HE100 de FERIADO da CLT quase nao chegou ao TXT vigente pk24 -- so col146 (12,96 h de 74,67 h); 9 colabs / 61,70 h retidos por `furo_espelho`. E `txt_vigente_x_gravado` = DIVERGENTE nas duas (emp3 86 -> 102 linhas, emp2 210 -> 271). Competencia EXPORTADA: so com `!`.
+- PROVA: `logs/he100/m1_censo.out` (linhas ROW), `m2_txt.out` (feriado por lugar, TXT x DP), `m3_txt_status.out`, `m4_classe_motor.out`.
+- INCOMPLETO: o porque dos `furo_espelho` da 09 vira linha de fila (nao e desta ordem).
+
+## 23/10 14:xx -- MARCO VARREDURA CLASSE B (1b-iii parte 1): O c2 LE O PISO DA EMISSAO (O44) E VIRA PORTA
+
+LEI-AKITA: origem=`chamados/reconciliador.py::reemitir_chamado_do_dia` (emissao automatica que nunca migrou para o piso da O44), testemunha=`ponto/services/cartorio.py::emissao_no_horizonte` (o leitor do `PISO_EMISSAO`), RED=`chamados/tests/test_emissao_reemite_c2.py::C2LeOPisoDaEmissaoTest` (FAIL contra HEAD limpo, `wt-c2red`), quem-mais-le=`reconciliar_perguntas_orfas_colab` (cron) e `acervo`/I8b (mesma porta), juizes novos=0
+- **Medido em prod (leitura):** o c2 emitiu **409** `batida_ausente` em 30 d; **310** de dia ABAIXO do piso (07/2026 198, 08/2026 107, 06+05 5), 75 colabs, **289 vivos** -- o lote de 22/10. O44: *"so o dia tocado pelo admin emite. Nenhum chamado nasce em lote"* (`logs/clb1b/p_c2_piso.out`).
+- **Mudou:** abaixo do piso o c2 nao faz NASCER nem RENASCER (`abrir` ressuscita encerrado); costura no chamado do dia JA VIVO segue (selo `C2NaoReusaCadaverTest`). Chave do chamado do dia numa linha so (`_chave_c2`). Corpo do laco virou a porta `reatar_pergunta_orfa` (so o cron a chama hoje).
+- **Por que a emissao NAO foi ligada (1b-iii-b):** a suite da primeira copia (emissao -> porta) deu 7 FAIL e mostrou o c2 como SEGUNDO emissor com predicado mais fraco que o cartorio: em 30 d, dentro do piso, **33** c2 em dia `concorde` e **9** em `indefinida` (HX-FOLGA-6X1: nunca furo), **0** vivos -- laco emite/retrata (`logs/clb1b/p_c2_veredito.out`). Ligar a emissao antes do c2 ler o predicado de cobranca do cartorio faria o laco girar mais rapido.
+- **Mascara anotada:** `test_fonte_destino` (2 candidatos nao chuta) fica verde porque as datas sao 06/2026, abaixo do piso; no horizonte o c2 abre `batida_ausente` (comportamento do HEAD, cron */15). Nao curado aqui.
+- **Orfas reataveis hoje (prod):** 1.376 (no piso: 803 intervalo + 106 c1; abaixo: 435 + 32) (`logs/clb1b/p_orfas_piso.out`).
+- **PROVA:** suite da copia `Ran 11676 tests`, `OK (skipped=51, expected failures=14)`, rc=0 (`wt-1b3` `logs/suite3.out`); copia `47433ba5`. Prova de frota: amanha, c2 abaixo do piso = 0.
+- **INCOMPLETO:** (i) 1b-iii-b -- c2 le o mesmo predicado do cartorio (`_cobraria_furo` em `_julgar_colab_corpo` e inline; extrair = mesmo predicado, mesmo universo), RED `concorde`/`indefinida` nao emite, MORDE `furo` emite, alvo 42 -> 0; so entao a emissao chama a porta. (ii) os **289** vivos abaixo do piso: decisao de acervo, nao cura em lote neste marco.
+
+## 23/10 11:5x -- MARCO VARREDURA CLASSE B (1b-ii): A PERGUNTA DE INTERVALO NASCE COSTURADA AO CHAMADO DO DIA
+
+LEI-AKITA: origem=`chamados/services/disputa_emissao.py::gerar_perguntas_disputa` (so derivava para `MOTIVOS_QUE_PRECISAM_CHAMADO_DESTINO_SET`), testemunha=`_derivar_chamado_destino` (`juizes.motivos_atendidos`) + `PerguntaDisputa.abrir` (`juizes.resolvedora_valida`, o mesmo juiz da costura do cron), RED=`chamados/tests/test_emissao_costura_intervalo.py` (1 FAIL contra HEAD, 2 que mordem), quem-mais-le=`reconciliar_perguntas_orfas_colab` (o reatador do cron, que passa a achar menos), juizes novos=0
+- **Medido:** 95 das 114 orfas do dump sao de intervalo; **86** derivam na hora para o `batida_ausente` do dia (sombra). Prod: 85 das 101 costuradas de manha tinham o chamado ANTES da pergunta. Leitor que nao migrou para a lei BUG-MAPA-UM-MOTIVO (06/09).
+- **Mudou:** no ramo do intervalo, a emissao chama o derivador (so o DESTINO; dedup e data seguem pelo dia).
+- **Fica no cron -> 1b-iii:** `orfao_14h`/`saida_sem_entrada` SEM chamado do dia (0 candidatos; ex. col989 13/10, col995 20/10) -- o ramo c2 EMITE o chamado: **409** em 30 d (121 colabs), **309** so em 22/10.
+- **PROVA:** suite da copia `Ran 11668 tests`, `OK (skipped=51, expected failures=14)`, rc=0 (`logs/clb1b/suite_1b2.out`); deploy abaixo. Prova de frota: amanha 06:4x, orfas de intervalo no dump do dia (esperado ~0 com chamado do dia vivo).
+
+## 23/10 11:2x -- MARCO BO-ATESTADO-409-MUDO: REENVIO DO MESMO ATESTADO = 200 `ja_recebido`; VETO REAL CHEGA AO COLAB POR PUSH
+
+LEI-AKITA: origem=`ponto/services/ausencia.py::criar_ausencia` (sem modo de idempotencia do reenvio) + `api/views.py::api_ausencias` (409 mudo no app nativo), testemunha=a linha VIVA do mesmo (colab, tipo, data) + o texto de recusa que ja existe, RED=`api/tests/test_bo_atestado_409_mudo.py` (4 FAIL contra HEAD), quem-mais-le=admin e PWA seguem `veto` (modo novo so no POST do app); `anexar_documento` ganha trilha para todos, juizes novos=0
+- **Medido (access-ui.log, 16-22/10):** **31** x 409 no `POST /api/ausencias/` (7/1/5/16/2 por dia), 6 colabs, rajadas de 4-10 reenvios; 23/10 ate 11:1x: 0. O app (`AusenciaActivity.kt:299-310`) mostra "Erro ao enviar" para todo nao-2xx.
+- **Mudou:** `criar_ausencia(se_existir='devolver_mesmo_fato')`; API: `_criada=False` -> 200 `{status: ja_recebido, id}` sem 2a linha nem 2o chamado ao DP, anexo faltante entra na existente por `anexar_documento` (trilha `documento_anexado`); 409 real -> `logger.warning` + push FCM com o MESMO texto, 1x por (colab, data, codigo) por dia (memoria = trilha `ausencia_recusa_avisada`).
+- **Raia:** construido na `wt-at409` (o adendo das 10:3x pediu agente proprio; o BO ja estava com RED e GREEN quando ele chegou -- tratei a worktree como a raia dele e a principal seguiu a 1b-ii; arquivos sem intersecao).
+- **PROVA:** suite da copia `Ran 11669 tests`, `OK (skipped=51, expected failures=14)`, rc=0; deploy abaixo.
+- **PRONTO pendente (48 h):** recontagem de 409 no access-ui.log ate 25/10 ~11:00 + 1 reenvio real respondido 200 (`ja_recebido` no log). Fila do app (carona no proximo release): dialogo com `errorBody()['erro']`. Linha HAIKU "recusas de ausencia pelo app hoje": a construir (contador = trilha `ausencia_recusa_avisada` do dia).
+
+## 23/10 10:5x -- 1b-ii MEDIDA (sem codigo ainda): AS ORFAS NASCEM DE DOIS DERIVADORES DE DESTINO
+
+- **Baldes (prod, leitura, as 101 costuradas hoje de manha):** chamado de destino ja existia quando a pergunta nasceu em **85** (intervalo 46, orfao/saida 39); nasceu depois em **16**; seguem sem destino **13** (residual S160, dono L-099).
+- **Causa:** a emissao (`disputa_emissao.py:~372`) so deriva destino para `MOTIVOS_QUE_PRECISAM_CHAMADO_DESTINO_SET` (sem intervalo -- leitor que nao migrou para a lei BUG-MAPA-UM-MOTIVO de 06/09, `models.py:2165`) e, quando deriva, usa `motivos_atendidos` (nao casa o `batida_ausente` do dia); o cron costura pelo ramo c2 (`abrir` deduplica por `data_turno`). Dois leitores de "que chamado responde esta pergunta".
+- **Proximo:** RED da emissao contra a fixture do dia com `batida_ausente` vivo; cura na ORIGEM (um derivador); medir na sombra quantas das 110 nascem costuradas; so entao o ramo do cron vira vigia. Restam depois: `veredito_celula` 167 (C3) e retratacao por premissa (386).
+- Reversao dos 18 de amanha (balde 1) CONFERIDA: 0 justificativa pendente, 0 pergunta pendurada -- `reabrir()` desfaz inteiro.
+
+## 23/10 10:4x -- MARCO O137 ESMERIL-NO-RASTRO, familia CHAMADO (aval 23/10 09:2x; agente proprio na `wt-esm-ch`) -- PRODUTO POUSADO, instrumento em pouso proprio
+LEI-AKITA: origem=chamados/services/acoes_disputa.py::acao_reabrir_disputa_admin + chamados/services/verbos.py::rotulo_para_pessoa, testemunha=rotulo_para_pessoa lida por chamados_tags|espera, RED=chamados/tests/test_o137_esmeril_chamado.py, quem-mais-le=censo AST app/ inteiro + 7 templates de chamados, juizes novos=0
+- (A) `services/fio.py::processar_post_fio` DELEGA a `acoes_disputa.py::acao_reabrir_disputa_admin` (era a copia com 0 chamador); a canonica troca 2x `except: pass` pelo `logger.warning` do F9.A7. -57 linhas no fio.
+- (B) filtro `chamados_tags|espera` = `rotulo_para_pessoa`; 5 templates vivos (modal_fio, painel_chamado_turno, fio_colaborador = gestor; detalhe_local, detalhe = gestor+colab) leem o juiz; selects de status idem. Muda so o que a mao errava: `registrado` "Encerrado"/"Fechado" -> "Registrado"; title de `superado`/`cancelado`. Admin NAO virou VERBO (o FATIA 2 declara a pilula de ESPERA; verbo ja na linha de desenlace) -- ver INCOMPLETO.
+- (B/L-111) sem renderizador, sairam: `chamados/lista.html`, `partials/_painel_gestao_swap.html`, `partials/tbody_chamados.html`, `partials/_paginacao_oob.html`, e o ramo `chamados_locais` de `tabela_chamados.html`.
+- (C) L-111, lapide no sitio: push_fcm_dp, _urgencia_glpi, setup_categorias_dp (+criar_categoria, CATEGORIAS_DP), encerrar_pais_lote, _resposta_sem_veredito, tipo_resposta_por_id (+_RESPOSTAS_POR_ID), motivos_com_pergunta, motivo_por_id, perguntas_com_texto_sem_carimbo, disputa_so_de_falta (+MOTIVOS_SO_DE_FALTA). Testes que so os sustentavam: 10 casos fora, 3 selos de paridade passam a ler PERGUNTAS.
+- (D) ficam: com_dia_sem_celula (tripwire), divergencia_entre (instrumento E0).
+- (E) instrumento em commit proprio: `bin/esmeril_chamado_censo.py` pergunta a L-111; `esmeril_comum` vira escritor unico de HOOKS/nomes_usados.
+NUMEROS: censo L-111 da familia: antes (aa36219d) 20 em zero / **12 SEM DONO**; depois 8 / **0**. app/: +123 -512 linhas. contratos_estruturais 17/20 -> 17/20 (funcao real).
+PROVA: RED no HEAD `logs/o137/o137_red_head.log` Ran 11 / FAILED (failures=7, errors=2) / rc 1 -> vizinhos `chamados` Ran 2637 / OK (skipped=2) / rc 0 -> SUITE CHEIA `logs/o137/o137_suite_cheia.log` Ran 11660 / OK (skipped=51, expected failures=14) / rc 0. Selos de host: os 2 censos OK + MORDE; 7 vermelhos da pasta = os mesmos 7 na copia do HEAD (worktree).
+MAPA: `bin/gerar_mapa.py` regerado inteiro (nasceu `MAPA/chamado.md`). GLOSSARIO: nao ha artefato por familia (`core/glossario.html` e trabalhista estatico).
+Commits: 9e12489c (produto, POUSADO -- cmp e deploy no commit do pouso) e 143e9ca6 (instrumento, pouso proprio L-105).
+**NO AR** `8fddf887` (deploy 10:03, 3 rotas, BUG 128 verde). **Smoke:** os 5 templates compilam no `saas_ui` recarregado; telas de chamado so 200 depois do reload. **1 request com 500** (`/chamados/local/19683/`, u911, 10:03:40, `Invalid filter: 'espera'`) DENTRO da janela merge -> reload: o template caiu na arvore no merge e o worker so conheceu o filtro no HUP (~30 s depois, atras do collectstatic e da prova de casca). Seguiu a L-107 ao pe da letra e a janela existe mesmo assim. **Linha de fila (instrumento):** fatia que traz template + filtro/tag NOVO tem de recarregar ANTES de o template entrar (ou o filtro pousar num deploy anterior ao template).
+PROVA: `logs/o137/deploy.out` -- `deploy: OK -- migrations em dia, tres cascas reiniciadas juntas, tres rotas provadas.`; merge `8fddf887` no `git log` do main.
+INCOMPLETO:
+- PERGUNTA (nao lei, tela): pilula das telas so-de-gestor deve dizer VERBO (`rotulo_de_linha`)? Hoje le a ESPERA, como o FATIA 2 desenhou.
+- fila: `relavrar_dia` (0 chamador desde 05/09) e as portas sem chamador `superar`, `fechar_por_competencia_trancada` -- declaradas no censo com dono, corte e decisao de desenho.
+- fila: `chamados/views.py::partial_lista_chamados` + rota `partial/lista/` + `tabela_chamados.html` sem caller em template/JS (rota viva por registro; nao cortei).
+- fila: o par `{'orfao_14h','saida_sem_entrada'}` segue em 3 copias (`reconciliar_perguntas_orfas.MOTIVOS_ALVO`, `servico_jornada.MOTIVOS_DA_LEI`, `reconciliador.MOTIVOS_C1`).
+- NAO VARRIDO: "nome que mente"; e MAPA so REGERADO, nao inscrito -- `core/mapa_passivo.txt` tem 10 modulos de `chamados/`.
+- wt-esmeril (12 commits, 30/09): censo GENERICO superado pelos censos por familia + esmeril_comum; o achado "template sem rota" entrou aqui como insumo de (B).
+
 ## 23/10 10:2x -- MARCO CORRECAO DO BALDE 1: `reconciliar_vinculo` VOLTA A JUIZ -- 18 A FECHAR EM PROD; A SOMBRA NAO TEM GPS (JUIZES_POR_VARREDURA 20 -> 21)
 
 LEI-AKITA: origem=`config/crons.py` (papel declarado pelo dry da SOMBRA) + `CLAUDE.md` sec. 6 (dizia que a geolocalizacao NAO e mascarada), testemunha=o command REAL em prod (`--alarme`, leitura: `abertos=98 | a_fechar=18`, rc=2) + `Batida.latitude` (sombra 0 de 90.623, prod 86.399), RED=`ponto/tests/test_vigia_reconciliar_vinculo.py::OPapelEJuiz` (2 FAIL contra `2c75650b`), quem-mais-le=o crontab (`bin/crons.sh install`), o diagrama, juizes novos=0
@@ -25,7 +132,7 @@ LEI-AKITA: origem=`config/crons.py` (papel declarado pelo dry da SOMBRA) + `CLAU
 - **O que acontece amanha 06:47 (efeito NOVO, lei existente E1(b) 31/07):** o cron retrata os 18 `vinculo_divergente` cuja divergencia caducou (>=80% das 10 ultimas batidas GPS dentro do posto). Reversao: `ChamadoColaborador.reabrir()` nos 18 ids de `logs/clb1b/vd18.txt`. Nao e dado de vinculo: e estado de chamado.
 - **Contador:** `JUIZES_POR_VARREDURA` **20 -> 21** (o 20 do marco anterior era falso).
 - **Para os proximos baldes:** `reconciliar_geofence`, `detectar_cluster_espurio` e `detectar_vinculo_divergente` se medem em PROD pelo dry, nunca pela sombra.
-- **PROVA:** SUITE_PENDENTE
+- **PROVA:** suite da copia `Ran 11664 tests`, `OK (skipped=51, expected failures=14)`, rc=0 (`logs/clb1b/suite_vig1c.out`); deploy e crontab abaixo.
 
 ## 23/10 10:0x -- MARCO VARREDURA BALDE 1: A CHAVE DO CATALOGO DE `vinculo_divergente` ERA CEGA; `reconciliar_vinculo` MEDE ZERO E VIRA VIGIA (JUIZES_POR_VARREDURA 21 -> 20)
 
