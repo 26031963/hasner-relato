@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 23/10/2026 14:55:46.** Transcript: `c6f2f4c7-d189-48e6-a5c1-0a8ca0afec80.jsonl` (7.5 MB). Acoes na janela: **346**.
+**Medido em 23/10/2026 15:00:46.** Transcript: `c6f2f4c7-d189-48e6-a5c1-0a8ca0afec80.jsonl` (7.6 MB). Acoes na janela: **349**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 14:58:36 | Bash | Record conduct row and check combo suite | `cat >> docs/PROMPTS.md <<'EOF' \| 23/10 ~15:0x \| (conduta) BO-B pronto na copia `0b16dc0a` e SEGURADO: `!` da 09 exportada (+416,10 h se recalculada por evento) + 2 perguntas de lei (abono do dia inteiro x pares fechados; rubrica do feriado trabalhado) no topo do RELATO. Bug de ORDEM achado no col784 (DiaPago lavrado antes do re-julgamento da celula, 147 dias na 10) vai em agente proprio (`wt-ord ...` |
+| 14:58:31 | SendMessage |  | `-` |
+| 14:58:15 | Bash | Put BO-B ! and lei questions at RELATO top | `python3 - <<'EOF' f='docs/RELATO.md' s=open(f).read() anc="> (o `!` da volta do feriado esta no item (b) da linha acima)\n" assert s.count(anc)==1 add=anc+''' > ! **BO-B DIAPAGO-SE-CONTRADIZ -- a 09 exportada** (cura pronta na copia `0b16dc0a`, `wt-bob`, suite `Ran 11682` OK rc 0; NAO pousada): a funcao nova muda a comp **09** em **+416,10 h trabalhadas / 64 colabs** (+232,52 h banco, +3,18 h HE,  ...` |
 | 14:54:38 | Bash | Register col784 complement in PROMPTS | `cat >> docs/PROMPTS.md <<'EOF' \| 23/10 ~14:5x \| **aval `BO-B-CASO-COL784`** (complemento do BO-B, nao e id novo): (a) SEGUNDO JUIZ DE PREVISTO (S133) -- celula 03/10 regenerada com 480, DiaPago gravado 2,3 s depois com 240 (sabados 26/09, 10/10, 17/10): nomear a fonte do 240 e por que o motor nao leu a celula; (b) FERIADO 12/10 -- celula trabalha=False sem marca de feriado, DiaPago previsto 480  ...` |
 | 14:54:33 | SendMessage |  | `-` |
 | 14:54:19 | SendMessage |  | `-` |
