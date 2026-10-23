@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 23/10/2026 20:35:04.** Transcript: `ed482694-44e4-4da5-bd42-07601a2a39b4.jsonl` (2.7 MB). Acoes na janela: **125**.
+**Medido em 23/10/2026 20:40:33.** Transcript: `ed482694-44e4-4da5-bd42-07601a2a39b4.jsonl` (2.8 MB). Acoes na janela: **126**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 20:37:43 | Bash | Wait for push to finish | `for i in $(seq 1 115); do /bin/grep -q '^FIM rc=' /home/ronald/saas-hasner/logs/clb1b/push_ata.out 2>/dev/null && break; /usr/bin/sleep 5; done; tail -4 /home/ronald/saas-hasner/logs/clb1b/push_ata.out` |
 | 20:27:57 | Bash | Keep waiting for push verdict | `for i in $(seq 1 115); do /bin/grep -q '^FIM rc=' /home/ronald/saas-hasner/logs/clb1b/push_ata.out 2>/dev/null && break; /usr/bin/sleep 5; done; tail -4 /home/ronald/saas-hasner/logs/clb1b/push_ata.out` |
 | 20:18:18 | Bash | Wait for push verdict | `for i in $(seq 1 115); do /bin/grep -q '^FIM rc=' /home/ronald/saas-hasner/logs/clb1b/push_ata.out 2>/dev/null && break; /usr/bin/sleep 5; done; tail -4 /home/ronald/saas-hasner/logs/clb1b/push_ata.out` |
 | 20:18:06 | Bash | Push hook, M1 and ata marcos | `cd /home/ronald/saas-hasner && { bin/push.sh origin main; echo "FIM rc=$?"; } > logs/clb1b/push_ata.out 2>&1` |
