@@ -24,6 +24,17 @@ PAREI: ! O261 e o export da 10 | espera o DP e o Ronald: (a) o TXT da 10 esta BA
 > O MARCADOR ANDOU no mesmo ato: `ORDEM-VIVA-TOPO` saiu de `BO-HE-RECUSAR-LOTE-500` (fechado) para `O261`, que o hook cobrou.
 > SEM COMMIT DE PROPOSITO: `RELATO.md` e `BACKLOG.md` ficam sujos na arvore porque a L-106 nao deixa commit so de docs fora de marco. Eles entram no commit do proximo marco.
 
+## 23/10 18:3x -- BUG-CONCORDE-SEM-ENTRADA (P7.1): marco apagado + batida acesa + realizado 0 = FURO_PARCIAL, nao concorde
+
+LEI-AKITA: origem=`ponto/supra_juiz.py::classificar_dia` (vao entre REALIZADO_ZERO :170, FURO_* :194 e o RAMO 4 atras de `_tem_fato_dia` :248), testemunha=ata da celula (lampadas) + `dia_decidido` do calendario, RED=`ponto/tests/test_concorde_sem_entrada.py` (FAIL contra HEAD, 4 MORDE), quem-mais-le=cartorio (veredito/emissao), `folha/export` retencao, vigia do fio, calendario, juizes novos=0
+- **Medido (agente so leitura, `logs/concorde/`):** col29 15/10 -- a batida 16/10 07:01 nasceu E e um humano a virou para S em 23/10 09:14 (`flip_tipo_batida`); antes o dia era `discordante`, depois `concorde` com a E 19:00 apagada, a S acesa, realizado 0, `cods=[]` (reproduzido na sombra com o flip injetado). Calendario: "Em aberto (falta entrada 19:00)" -- dois juizes do mesmo dia (L-099).
+- **Censo comp 10 (antes):** classe A (esta) **78 dias / 57 colabs / 19 noturnos**; DiaPago motor deles: previsto 714,5 h, realizado 0, falta 0 (nem pago nem faltoso). Vizinha B (marco apagado com realizado > 0, concorde): 255 dias / 66 colabs -- sem dono, nao curada (`c_censo3.out`).
+- **Cura:** ramo proprio so para o caso medido, com o codigo que ja existe (FURO_PARCIAL = "marco apagado COM hora batida"); `_tem_fato_dia` NAO se alarga (abre os [nome] 1 e 2).
+- **Impacto (sombra, `julgar_celula` real com rollback, 1.155 celulas concorde com marco apagado):** HEAD 2 viram FURO_PARCIAL, cura **51**; chamados que nasceriam 0 -> **13** (`logs/cb_concorde_imp_*.out`). O motor nao le o veredito; o efeito de folha e a RETENCAO do colab no TXT (`furo_espelho`) -- vale para o TXT da 10 quando for gerado.
+- **(b) par_relampago #31967:** o emissor le o juiz do turno (`detectar_par_relampago.py:118,122`), o carimbo 16/10 era coerente com o tipo E gravado; o defeito e outro -- nada reconcilia o chamado quando o flip DISSOLVE o par: 7 de 21 da 10 assim, **3 vivos** (31967 col29, 27819 col278, 27519 col898). Cura seguinte, RED proprio.
+- **PROVA:** GREEN 764 OK (71 modulos vizinhos); suite cheia: SUITE_CONCORDE. Copia `a96d9d13`.
+- **INCOMPLETO:** acervo (78 dias) rejulgado so depois do pouso, com reversao do veredito; classe B sem dono; 730 dias concorde com ata previsto=0 excluidos sem investigar.
+
 ## 23/10 18:1x -- MARCO O261 "SO BUG NOSSO" (E1 + vigia + E2) + VARREDURA BALDE 2 (lastro rele o chamado) -- comboio
 
 ## 23/10 17:4x -- MARCO O261 "so bug nosso": E1 cura + vigia da ausencia em decisao + E2 cura (raia wt-o261d)
