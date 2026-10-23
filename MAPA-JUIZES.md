@@ -60,7 +60,7 @@ _nenhum juiz declarado nesta familia._
 
 **SEM JUIZ declarado** (2):
 
-- **o vinculo cobre a data?** -- nao migrada, e nao ha autoridade declarada: `escala/folgas.py::vinculo_que_cobre` (com o `_cobre`) responde para 3 chamadores, e `ponto/management/commands/gerar_celulas.py::_outro_vinculo_cobre` e a SEGUNDA copia, no caminho da GERACAO (chamada por `ponto/portas/celula.py:190`). Duas copias, zero d
+- **o vinculo cobre a data?** -- UMA copia desde 22/10 (aval CONTRATOS RESTANTES (2)): `escala/folgas.py::_cobre`; `gerar_celulas.py::_outro_vinculo_cobre` passou a CHAMA-la (impacto medido na sombra: 0 em 39.463 pares vinculo x dia). Falta so a frase da TRAVA JUIZ-NOVO para declarar aqui
 - **qual vinculo vale neste dia?** -- a LEI existe (O69, prompt dele de 27/09 00:xx): a resposta e `CelulaDia.escala_geradora`, lida por `escala/alimentacao.py::vinculo_do_dia`. Falta a FRASE da TRAVA JUIZ-NOVO pelo nome da funcao, e eu nao posso escreve-la: a autonomia de 11/10 exige autoridade unica MEDIDA, e sao 8 arquivos (9 linhas)
 
 **PENDENTES nesta familia**: 1 leitor(es) com regra propria, esperando migrar.
@@ -90,6 +90,7 @@ _nenhum juiz declarado nesta familia._
 |---|---|
 | a ausencia do dia suspende, fecha ou levanta a cobranca viva? | `chamados/services/silencio_ausencia.py::reconciliar_por_ausencia` |
 | a cobranca ficou orfa depois da regeneracao? | `escala/services/regeneracao.py::cobranca_orfa` |
+| a disputa pode fechar? | `chamados/models.py::DisputaSupervisao.pode_fechar` |
 | a fabrica de perguntas alcanca o chamado (e se nao, por que)? | `chamados/services/disputa_emissao.py::motivo_fora_da_fabrica` |
 | a pergunta da disputa esta viva? | `chamados/juizes.py::pergunta_viva` |
 | a premissa do chamado morreu (pode fechar)? | `chamados/catalogo/premissa.py::premissa_morta` |
@@ -102,10 +103,6 @@ _nenhum juiz declarado nesta familia._
 | qual a competencia do chamado? | `chamados/juizes.py::competencia_do_chamado` |
 | qual o dia do chamado? | `chamados/catalogo/modulos.py::data_do_chamado` |
 | quem pode agir no chamado? | `chamados/utils.py::pode_agir_chamado` |
-
-**SEM JUIZ declarado** (1):
-
-- **a disputa pode fechar?** -- quatro regras: DisputaSupervisao.fechar (respostas sem veredito), S127 em _gravar_estado (pergunta respondida E validada), explicador (nada nao-resolvido) e desligamento (lote) -- pergunta de negocio. As regras 1, 3 e 4 ja estao DECLARADAS em chamados/juizes.py (disputa_so_de_falta, veredito_do_expl
 
 ## Familia `fechamento`
 
@@ -151,6 +148,7 @@ _nenhum juiz declarado nesta familia._
 | o chamado ou a pergunta esta vivo na fila? | `chamados/juizes.py::pergunta_viva` |
 | o colaborador entra na folha (e por que nao)? | `folha/export.py::classificar_export` |
 | o dia acusa (falta, furo, ok) -- o que a celula julgou? | `escala/servico_jornada.py::classificar_falta` |
+| o dia oferece "Resolver dia" (a decisao do dia esta pendente na celula)? | `colaboradores/services/calendario.py::resolver_dia_oferecido` |
 | o periodo de ferias esta vencido ou vencendo? | `ferias/models.py::status_de_periodo` |
 | quais os totais da competencia (horas, HE, noturno, faltas)? | `folha/export.py::eventos_do_fechamento` |
 | quais sao os turnos do colaborador (pares de batida)? | `ponto/turnos.py::turnos_do_colab` |
@@ -162,7 +160,7 @@ _nenhum juiz declarado nesta familia._
 
 - **numero de tela sem autoridade declarada (score, faixa de horario, atraso de sincronizacao)?** -- score (produtor inteiro por conta propria, pendentes A1/C1), faixa manha/tarde/noite e atraso de sincronizacao -- pergunta de negocio de cada tela, vem na fatia dela
 
-**PENDENTES nesta familia**: 113 leitor(es) com regra propria, esperando migrar.
+**PENDENTES nesta familia**: 112 leitor(es) com regra propria, esperando migrar.
 
 ## Familia `portas`
 
@@ -181,9 +179,9 @@ _nenhum juiz declarado nesta familia._
 | `celula/precedencia` | 8 | 0 | 0 |
 | `escala` | 0 | 2 | 1 |
 | `ausencia/ferias` | 14 | 0 | 0 |
-| `chamado` | 14 | 1 | 0 |
+| `chamado` | 15 | 0 | 0 |
 | `fechamento` | 7 | 1 | 10 |
 | `feriado/prazo` | 6 | 2 | 13 |
-| `tela` | 10 | 1 | 113 |
+| `tela` | 11 | 1 | 112 |
 | `portas` | 1 | 0 | 124 |
-| **total** | **74** | **10** | **261** |
+| **total** | **76** | **9** | **260** |

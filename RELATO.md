@@ -16,6 +16,16 @@ PAREI: ! O261 e o export da 10 | espera o DP e o Ronald: (a) o TXT da 10 esta BA
 > O MARCADOR ANDOU no mesmo ato: `ORDEM-VIVA-TOPO` saiu de `BO-HE-RECUSAR-LOTE-500` (fechado) para `O261`, que o hook cobrou.
 > SEM COMMIT DE PROPOSITO: `RELATO.md` e `BACKLOG.md` ficam sujos na arvore porque a L-106 nao deixa commit so de docs fora de marco. Eles entram no commit do proximo marco.
 
+## 22/10 21:2x -- MARCO DSS (2): O CALENDARIO LE A CELULA ANTES DA VIGENCIA DO VINCULO ATIVO; (3) MEDIDO E VAI AO DP
+
+LEI-AKITA: origem=`colaboradores/services/calendario.py` (guarda HX-FORA-DA-VIGENCIA julgava a vigencia do vinculo ATIVO na frente do juiz), testemunha=`escala/models.py::EscalaColaborador.eh_dia_trabalho` (le a CelulaDia primeiro), RED=`colaboradores/tests/test_calendario_eh_trabalho_le_a_celula.py` (3 FAIL contra `1d98f204`), quem-mais-le=os 3 chamadores de `contexto_calendario` + `resolver_dia_oferecido_na_data` (vigia_fio, status_do_dia/contar_por_status), juizes novos=0
+- **Mudou:** a guarda vale so quando NAO ha celula no dia (`(colab, data) not in _cels_mes`). Contra-exemplo selado: sem celula, fora da vigencia, segue `None`.
+- **Medido antes (prod, so leitura):** os 5 dias do aval (col245 22/09, col824 21/09, col859 23/09, col489 01/10 e 03/10) caem sob vinculo ANTERIOR inativo; celula `trabalha=True`.
+- **IMPACTO 1x na sombra (L-110, `logs/dss_item2_{HEAD,COPIA}.out`):** vigia `decisao_do_dia_pendente` **381 -> 573**, `fio_morto` **207 -> 15**; comp 10: 333 celulas `trabalha=True` fora da vigencia do ativo, **105** passam a oferecer o Resolver dia. Nenhum valor muda (tela).
+- **Contra-exemplo medido (`logs/dss_item2_orfa.out`):** das 333, 322 a geradora cobre; **11** sao CADASTRO (col499: 10 celulas antes da admissao 02/10; 6 que nenhum vinculo cobre) -> lista do admin, nao codigo (L-099).
+- **Item (3), MEDIDO e SEM codigo:** as 3 ausencias (col281 30/09, col844 29/09, col814 26/09) estao `aguardando_decisao`; a celula `furo` e a lei (pendente nao absolve; S4-PENDENTE-[nome]-COBRANCA suspende a cobranca na porta `mudar_estado`). Curar a celula tiraria **2** da retencao (col281, col844) sem decisao. Lista do DP: **14** dias na 10, paradas 21-30 d (`logs/dp/dss_item3_ausencia_pendente_20261022.txt`).
+- **Linha de base do prod 21:01** (`logs/dss_censo_base_20261022.out`): `decisao_do_dia_pendente=383`, `fio_morto=207` (o "186" do aval nao e um contador deste vigia).
+
 ## 22/10 19:0x -- BUG-DIA-SEM-SAIDA: MEDIDO OS 26 DIAS PELAS FUNCOES REAIS (sem codigo ainda)
 
 LEI-AKITA: origem=a medir por classe (abaixo), testemunha=`chamados/services/pergunta_no_app.py::do_dia` (a porta da tela) + `colaboradores/services/calendario.py::resolver_dia_oferecido` + `chamados/juizes.py::pergunta_viva`, RED=a escrever por classe, quem-mais-le=o calendario (`_perg_viva` por `q_vivas`, segundo leitor do C6 -- `calendario.py:566-573`), juizes novos=0
