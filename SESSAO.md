@@ -6,10 +6,16 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 23/10/2026 19:56:56.** Transcript: `ed482694-44e4-4da5-bd42-07601a2a39b4.jsonl` (2.3 MB). Acoes na janela: **97**.
+**Medido em 23/10/2026 20:02:03.** Transcript: `ed482694-44e4-4da5-bd42-07601a2a39b4.jsonl` (2.4 MB). Acoes na janela: **103**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 19:58:40 | Bash | Wait for diagram selo rerun | `for i in $(seq 1 115); do /bin/grep -qE '^(OK\|FAILED)' /home/ronald/wt-m1/app/logs/diag.out 2>/dev/null && break; /usr/bin/sleep 5; done; /bin/grep -E '^(FAIL\|ERROR):\|^Ran\|^(OK\|FAILED)' /home/ronald/wt-m1/app/logs/diag.out \| tail -4` |
+| 19:58:37 | Bash | Write ata acervo kit in host logs | `cd /home/ronald/saas-hasner && cat > logs/concorde/acervo_ata_just.py <<'PY' # ATA-NAO-DISPENSA-JUSTIFICADA: re-julga pela porta real as celulas da comp 10 (ABERTA) com Justificativa aprovada. # DRY por default; ATA_APLICAR=1 grava a reversao ANTES (veredito, protestos, ata, chamados vivos) e aplica. # Comp 09/08 (exportadas) NAO entram: universo e so a janela 21/09-20/10. import os, json, datetim ...` |
+| 19:58:25 | Bash | Check permissions of app/logs/concorde | `ls -ld /home/ronald/saas-hasner/app/logs/concorde /home/ronald/saas-hasner/app/logs/o261d; ls /home/ronald/saas-hasner/app/logs/concorde \| head` |
+| 19:58:23 | Bash | Write ata acervo kit (dry default, reversal first) | `mkdir -p /home/ronald/saas-hasner/app/logs/concorde; cat > /home/ronald/saas-hasner/app/logs/concorde/acervo_ata_just.py <<'PY' # ATA-NAO-DISPENSA-JUSTIFICADA: re-julga pela porta real as celulas da comp 10 (ABERTA) com Justificativa aprovada. # DRY por default; ATA_APLICAR=1 grava a reversao ANTES (veredito, protestos, ata, chamados vivos) e aplica. # Comp 09/08 (exportadas) NAO entram: universo  ...` |
+| 19:58:08 | Bash | Read concorde acervo kit as template | `cd /home/ronald/saas-hasner && cat logs/concorde/acervo_concorde.py \| head -80` |
+| 19:58:04 | Bash | Check lane holder and agent progress | `cd /home/ronald/saas-hasner && bin/trava_teste.sh --quem 2>&1 \| head -3; git -C /home/ronald/wt-o261e log --oneline -2; git -C /home/ronald/wt-m2 log --oneline -1 2>&1` |
 | 19:53:00 | Bash | Commit regenerated mmd; rerun diagram selo | `cd /home/ronald/wt-m1 && git add app/docs/ARQUITETURA.mmd && git commit -q -F - <<'MSG' FLUXO 2 M1: ARQUITETURA.mmd regerado (familia fechamento, registro 10 -> 6 sitios) Derivado do proprio M1: o bloco de juizes do diagrama conta PENDENTES['fechamento']. Regerado por `manage.py gerar_diagrama` em container de teste montando a copia (o atalho bin/gerar_diagrama.py roda no saas_core = arvore viva,  ...` |
 | 19:52:35 | Bash | Regenerate diagram with suite-like container on copy | `cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null 2>&1; docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file .env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 -v /home/ronald/wt-m1/app:/app -w /app saas-hasner-core:latest python manage.py gerar_diagrama --settings=config.settings.ci 2>&1 \| tail -2; cd /home/ronald/wt-m1 & ...` |
 | 19:52:32 | Bash | Read suite.sh docker invocation | `cd /home/ronald/saas-hasner && /bin/grep -n 'docker run' -A8 bin/suite.sh \| head -30` |
