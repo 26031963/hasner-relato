@@ -1,6 +1,6 @@
 # RELATO — esteira saas-hasner
 
-PAREI: ! O261 e o export da 10 | espera o DP e o Ronald: (a) o TXT da 10 esta BARRADO pela porta -- 184 dias de HE acima do limite SEM decisao (emp2 169 / emp3 12 / emp4 3; 58 colabs; 124,45 h; `logs/gate10/lista_he_trava_20261022.out`); por aval dele 12:0x o DP decide pela Gestao de HE ("Nao" em lote = L-097) e entao roda `logs/gate10/ato_export10.py` (re-lavrar o carimbo da porta ANTES, ~22 min, desacoplado). (b) FEITO 14:12: a volta dos 6 pousou ANTES do TXT (secao 14:12). (c) frase de juiz DADA 13:5x: `resolver_dia_oferecido` em construcao na wt-o261c; cura dos 99 DEPOIS do TXT. (d) 09 com o Gabriel (AVAIS #2).
+PAREI: ! O261 e o export da 10 | espera o DP e o Ronald: (a) o TXT da 10 esta BARRADO pela porta -- 184 dias de HE acima do limite SEM decisao (emp2 169 / emp3 12 / emp4 3; 58 colabs; 124,45 h; `logs/gate10/lista_he_trava_20261022.out`); por aval dele 12:0x o DP decide pela Gestao de HE ("Nao" em lote = L-097) e entao roda `logs/gate10/ato_export10.py` (re-lavrar o carimbo da porta ANTES, ~22 min, desacoplado). (b) FEITO 14:12: a volta dos 6 pousou ANTES do TXT (secao 14:12). (c) `resolver_dia_oferecido` NO AR (`3088eac6`); DIA-SEM-SAIDA (1)(2) NO AR 22/10 21:5x, (3) ao DP; cura dos 99 DEPOIS do TXT. (d) 09 com o Gabriel (AVAIS #2).
 
 > (o `!` da volta do feriado esta no item (b) da linha acima)
 
@@ -15,6 +15,15 @@ PAREI: ! O261 e o export da 10 | espera o DP e o Ronald: (a) o TXT da 10 esta BA
 > OS QUATRO ITENS DA ORDEM, FEITOS: deploy `d01210d2` **no ar 10:26** (`--sem-migrate` rc=0, 3 rotas provadas, selo BUG 128 verde, portao fechado pelo PASSO 5 do gate -- nunca `--sem-sombra`); push **pousou** (`fa5cd145..eebe2cce`, rc=0, `Ran 11566 tests · OK (skipped=51, expected failures=14)` mais control-plane `Ran 22 tests · OK`, veredito lido no REMOTO); `bin/handoff_sessao.sh` gerado (42/60 linhas, selo verde); e esta linha. O 1 commit que sobrou a frente (`6d469ed2`) e do proprio `pos_push` -- a excecao nomeada da L-106 --, e o push dele e do proximo push, nao deste.
 > O MARCADOR ANDOU no mesmo ato: `ORDEM-VIVA-TOPO` saiu de `BO-HE-RECUSAR-LOTE-500` (fechado) para `O261`, que o hook cobrou.
 > SEM COMMIT DE PROPOSITO: `RELATO.md` e `BACKLOG.md` ficam sujos na arvore porque a L-106 nao deixa commit so de docs fora de marco. Eles entram no commit do proximo marco.
+
+## 22/10 21:4x -- MARCO DSS (1): O LIMBO-FOLGAS NAO MORRE COM [nome] NO DEFEITO; OS PAIS MORTOS VOLTAM PELA PORTA
+
+LEI-AKITA: origem=`ponto/management/commands/detectar_ausencias.py` (HX-LIMBO-RETRATA fechava o LIMBO quando HOJE deixava de ter o defeito; o defeito e por MES), testemunha=`escala/models.py::EscalaColaborador.defeito_folga_nao_definida` no dia do [nome] pelo vinculo que o cobre (`escala/folgas.py::_cobre`) + `chamados/juizes.py::pergunta_viva` (C6), RED=`chamados/tests/test_limbo_nao_fecha_com_filho_no_defeito.py` (2 FAIL contra `1d98f204`), quem-mais-le=`agrupado_sob_pai_vivo` (calendario 'cadastro', `abrir`, `reabrir`, `escala/utils.py`), `via_pelo_fato` (cadastro_folga), juizes novos=0
+- **Mudou:** `chamados/services/limbo_folgas.py::filhos_no_defeito` (le, nao julga) e o fechador pula o pai que ainda segura filho no defeito com fio vivo (porta `fio_vivo`). Casos selados: filho no mes sem folga SEGURA; mes do filho com folga FECHA; sem filho FECHA; filho com pergunta morta (C6) FECHA; 2a rodada = mesmo estado.
+- **Medido antes (prod, so leitura):** os 13 do aval -- defeito vivo nos 13 (6x1 sem folga no mes); 9 com o pai fechado por `sistema:detectar_ausencias` em 02/10 e 22/10, 4 com pai vivo. Frota da 10 (sombra): 266 `indefinida`, 33 nessa forma sob 24 pais; 168 com pai vivo.
+- **REPARO, frota inteira, medido 1x na sombra em atomic() com rollback (`logs/dss_item1_reparo2.out`):** 56 pais, 122 filhos, 44 colabs -> 40 reabertos pela porta `reabrir()`, 22 filhos reagrupados pela `agrupar_furo` sob o LIMBO VIVO do colab (UM por colab); `classificar_export` 10: **0 de 608** mudam; dois LIMBO vivos **0**; filho sem pai vivo **0**.
+- **APLICADO EM PROD 21:58, revise** (`logs/dss/reparo_limbo_APLICADO_20261022.out`): DRY 21:57 = APPLY = sombra (56 pais, 122 filhos, 44 colabs); 40 reabertos + 22 reagrupados; dois LIMBO vivos 0; filho sem pai vivo 0; 2a rodada 0 candidato; os 13 do aval com pai vivo **13/13** (`logs/dss/prova13.out`). **Reversao:** `logs/dss/reversao_reparo_limbo_20261022_2158.json` (status e `agrupado_em` de antes, por pai e filho).
+- **FILA (fora do aval, linha):** 25 `indefinida` com chamado morto sem pai e 30 com o defeito JA curado e a celula ainda `indefinida` (rejulgamento que nao veio).
 
 ## 22/10 21:2x -- MARCO DSS (2): O CALENDARIO LE A CELULA ANTES DA VIGENCIA DO VINCULO ATIVO; (3) MEDIDO E VAI AO DP
 
