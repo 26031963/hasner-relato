@@ -79,6 +79,8 @@ Escritas de 30 dias por ATOR em prod pelo campo `LogAuditoria.ator` (`sistema:<c
 
 **CONTAGEM: PRAZO 6 · VIGIA 3 · EVENTO-A-NASCER 12 = 21.** Lote PRAZO primeiro (um RED por cron, um pouso por lote); os 3 que ja delegam (`apurar_furos_diarios`, `escalonar_documentos_ausencia`) so precisam do papel declarado em `PRAZO_DELEGA_A`. `marcar_foto_ausente_retro` nao tem autoridade da casa para "foto ausente": fica juiz ate ela existir. Postos ativos SEM coordenada: 10 (o dry do `detectar_vinculo_divergente`).
 
+**LOTE PRAZO 1 NO AR** (`23146e4e`): `escalonar_documentos_ausencia` e `apurar_furos_diarios` -> `PRAZO_DELEGA_A`, 21 -> 19. Os 4 PRAZO que sobram ESPERAM: `detectar_ausencias` (vinculo por `ativa=True`, :109) e `processar_alertas_avancados`/`_turno` (idem + 3 comparacoes contra o relogio) dependem da lei do E1 no topo; `marcar_foto_ausente_retro` nao tem autoridade. **LOTE VIGIA, resíduo medido antes de desligar a escrita:** `reconciliar_chamados` na sombra 24/10 = **7 chamados retratados (7 colabs) numa rodada** -- nao e 0, nao vira vigia; os 7 sao a fila dele (por que o caminho reativo nao os pega). `detectar_vinculo_divergente` roda `--apply` toda segunda (dry 82 sugestoes, 78 chamados vivos) e `termometro_regua` roda `--avaliar --avisar --retratar`: os dois mudam comportamento ao virar vigia e seguem medidos antes.
+
 ## 24/10 11:5x -- MARCO ESPELHO-VERDADE (aval 10:1x): provas do chat + termometro R1 da 10 na sombra
 
 LEI-AKITA: origem=core/espelho_verdade.py::ETAPAS, testemunha=e6_oraculo (termometro R1, L-114) + escala/services/previsto_cego.py::medir, RED=placar() rebaixa FEITO sem prova (contrato do proprio modulo), quem-mais-le=bin/gerar_estado.py (ESTADO), juizes novos=0
