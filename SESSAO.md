@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 24/10/2026 08:50:03.** Transcript: `ed482694-44e4-4da5-bd42-07601a2a39b4.jsonl` (6.7 MB). Acoes na janela: **213**.
+**Medido em 24/10/2026 08:55:33.** Transcript: `ed482694-44e4-4da5-bd42-07601a2a39b4.jsonl` (6.7 MB). Acoes na janela: **211**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -221,5 +221,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 21:01:31 | Bash | Build M2 combo copy on new main | `cd /home/ronald/saas-hasner && git worktree add -q --detach /home/ronald/wt-m2p 9dff1904 && cd /home/ronald/wt-m2p && git merge --no-ff --no-commit 6076b393 2>&1 \| tail -3; git status --short \| head; mkdir -p app/logs app/media` |
 | 21:01:16 | Bash | Merge O261 resto, commit, deploy | `cd /home/ronald/saas-hasner && git log --oneline -1 && git merge --no-ff --no-commit c88dcc8d >/dev/null 2>&1; echo merge_head=$(git rev-parse -q --verify MERGE_HEAD \| cut -c1-8); echo "censo:"; git diff --cached 0add4122 --stat \| tail -1; git commit -q -F - <<'MSG' pouso da wt-o261e: O261 resto B -- pergunta_viva degrau 3 com a guarda do teto (+ .viva e q_vivas) Arvore certificada = 0add4122 (c ...` |
 | 21:00:03 | Bash | Wait for O261 combo suite | `for i in $(seq 1 115); do /bin/grep -q '^FIM rc=' /home/ronald/wt-o261p/app/logs/suite.out 2>/dev/null && break; /usr/bin/sleep 5; done; /bin/grep -E '^(FAIL\|ERROR):\|^Ran \|^(OK\|FAILED)($\| \()\|^FIM rc=' /home/ronald/wt-o261p/app/logs/suite.out \| tail -6` |
-| 20:50:17 | Bash | Wait for O261 combo suite | `for i in $(seq 1 115); do /bin/grep -q '^FIM rc=' /home/ronald/wt-o261p/app/logs/suite.out 2>/dev/null && break; /usr/bin/sleep 5; done; /bin/grep -E '^(FAIL\|ERROR):\|^Ran \|^(OK\|FAILED)($\| \()\|^FIM rc=' /home/ronald/wt-o261p/app/logs/suite.out \| tail -6` |
-| 20:50:14 | Bash | Draft law question for RELATO top | `cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/ed482694-44e4-4da5-bd42-07601a2a39b4/scratchpad/lei_o261a.txt <<'TXT' > **lei: O261 peca A (aval O261-RESTO 18:2x) -- "col666 e col516 saem do fio_morto por contador proprio lendo a lista do admin" nao tem fonte por DIA.** `escala/services/cadastro_realidade.py::lista` e por COLABORADOR (320 listados; A11 lista col666, C2 lista col549 e col516) e ...` |
