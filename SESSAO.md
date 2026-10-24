@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 24/10/2026 10:52:21.** Transcript: `f4eb628a-9fcf-4c05-ae6a-9f32279f7575.jsonl` (3.5 MB). Acoes na janela: **166**.
+**Medido em 24/10/2026 10:54:03.** Transcript: `f4eb628a-9fcf-4c05-ae6a-9f32279f7575.jsonl` (3.5 MB). Acoes na janela: **170**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 10:53:59 | Bash | Single-query juiz alimentation in rival | `cd /home/ronald/wt-e1/app && python3 - <<'PY' import py_compile p='escala/utils.py'; s=open(p,encoding='utf-8').read() a=''' from escala.alimentacao import vinculo_do_dia from escala.models import CelulaDia, EscalaColaborador rows = list(EscalaColaborador.objects.filter( colaborador=colab).select_related('tipo_escala')) if escalas is None else list(escalas) if celulas is None: _cel = CelulaDia.obj ...` |
+| 10:53:41 | Bash | Read the two failing alimentacao tests | `cd /home/ronald/wt-e1/app && grep -n "def test_03_MORDE\\|def test_04_sem" -A14 escala/tests/test_escalas_alimentadas_do_dia.py \| head -34` |
+| 10:53:34 | Bash | Confirm RELATO not retained | `cd /home/ronald/saas-hasner && grep -i "retido\\|RETIDO" logs/relato_pub_20261024.log \| head -3; grep -c "" logs/relato_pub_20261024.log` |
+| 10:52:18 | Bash | Mark K6 pousada and republish RELATO | `cd /home/ronald/saas-hasner && python3 - <<'PY' R='app/docs/RELATO.md'; t=open(R,encoding='utf-8').read() a='> **RESPONDIDA 24/10 09:3x: K6 = (a)** --' b='> **RESPONDIDA 24/10 09:2x, POUSADA em `c4b3449b` (no ar 10:3x, deploy rc 0): K6 = (a)** --' assert t.count(a)==1; open(R,'w',encoding='utf-8').write(t.replace(a,b)) PY bash bin/tests/test_cortes_registrados.sh 2>&1 \| tail -1; bin/relato.sh > l ...` |
 | 10:52:10 | Bash | Retry move using first SEUS CORTES heading | `sed -n 3401,3402p docs/RELATO.md \| cut -c1-80; python3 - <<'PY' R='docs/RELATO.md'; A='docs/RELATO-ARQUIVO.md' L=open(R,encoding='utf-8').read().split('\n') def idx(pred, n=1): x=[i for i,l in enumerate(L) if pred(l)]; assert len(x)>=n, x; return x a1=idx(lambda l:l.startswith('## MARCO 20/10 16:2x'))[0] b1=idx(lambda l:l=='## ALARMES DA ESTEIRA')[0] a2=idx(lambda l:l.startswith('## O146 '))[0] b ...` |
 | 10:52:03 | Bash | Move >3-day sections to RELATO-ARQUIVO verbatim | `python3 - <<'PY' R='docs/RELATO.md'; A='docs/RELATO-ARQUIVO.md' L=open(R,encoding='utf-8').read().split('\n') def idx(pred): x=[i for i,l in enumerate(L) if pred(l)]; assert len(x)==1, x; return x[0] a1=idx(lambda l:l.startswith('## MARCO 20/10 16:2x')) b1=idx(lambda l:l=='## ALARMES DA ESTEIRA') a2=idx(lambda l:l.startswith('## O146 ')) b2=idx(lambda l:l.startswith('### SEUS CORTES')) assert a1<b ...` |
 | 10:51:52 | Bash | Check exact lines before the note | `sed -n 3388,3393p docs/RELATO.md \| cut -c1-120` |
