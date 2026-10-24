@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 24/10/2026 20:28:33.** Transcript: `c87029f4-ea97-4fea-b6af-47ee2e204958.jsonl` (10.7 MB). Acoes na janela: **517**.
+**Medido em 24/10/2026 20:34:03.** Transcript: `c87029f4-ea97-4fea-b6af-47ee2e204958.jsonl` (10.8 MB). Acoes na janela: **518**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 20:29:32 | Bash | Prove tela fix and R4 emp2 in prod | `cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/c87029f4-ea97-4fea-b6af-47ee2e204958/scratchpad/smoke_fer.py <<'EOF' import datetime from colaboradores.models import Empresa from folha.porta_export import medir from ponto.models import DiaPago from ponto.services.dia_pago import pago_do_dia for cid in (43, 242, 384, 864, 784): x = DiaPago.objects.filter(colaborador_id=cid, mes=10, ano=2026, ve ...` |
 | 20:24:54 | Bash | Re-run comp 10 apply to write folga_feriado detail | `cd /home/ronald/saas-hasner; rm -f logs/escerta_apply.fim; docker cp /tmp/claude-1001/-home-ronald-saas-hasner-app/c87029f4-ea97-4fea-b6af-47ee2e204958/scratchpad/escerta_apply.py saas_core:/tmp/escerta_apply.py && docker exec saas_core python manage.py tenant_command shell --schema=juliani --command "exec(open('/tmp/escerta_apply.py').read())" > logs/espfer_apply_$(date +%Y%m%d_%H%M).out 2>&1; ec ...` |
 | 20:24:32 | Bash | Cmp census live vs certified copy; deploy | `cd /home/ronald/saas-hasner; W=/home/ronald/wt-espfer4; for f in $(git -C $W diff --name-only); do cmp -s $f $W/$f && echo "igual: $f" \|\| echo "DIFERE: $f ($(diff $f $W/$f \| grep -c '^[<>]') linhas)"; done; cmp -s app/api/views.py <(git show 5c715284:app/api/views.py) && echo "api/views.py = o que esta no ar"; bin/deploy.sh --sem-migrate > logs/deploy_espfer2.out 2>&1; echo "deploy rc=$?"; tail ...` |
 | 20:24:19 | Bash | Read live suite crons error cause | `cd /home/ronald/saas-hasner; awk '/^ERROR: test_sem_duplicata/{f=1} f{print; n++} n>40{exit}' logs/espfer_live_suite.out \| grep -E "Error\|File \"/app/[a-z]" \| tail -5 \| cut -c1-220; grep -E "^(ERROR):" logs/espfer_live_suite.out \| sed 's/ (.*//' \| sort \| uniq -c \| sort -rn \| head` |
