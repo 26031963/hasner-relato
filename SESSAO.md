@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 23/10/2026 22:42:33.** Transcript: `ed482694-44e4-4da5-bd42-07601a2a39b4.jsonl` (3.6 MB). Acoes na janela: **175**.
+**Medido em 23/10/2026 22:48:03.** Transcript: `ed482694-44e4-4da5-bd42-07601a2a39b4.jsonl` (3.6 MB). Acoes na janela: **176**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 22:46:15 | Bash | Keep waiting for M4 commit | `B=abc33bca; for i in $(seq 1 118); do H=$(git -C /home/ronald/wt-m4 rev-parse --short HEAD 2>/dev/null); [ "$H" != "$B" ] && break; /usr/bin/sleep 5; done; git -C /home/ronald/wt-m4 log --oneline -1; ls -l --time-style=+%H:%M:%S /home/ronald/saas-hasner/logs/fluxo2m4/ 2>/dev/null` |
 | 22:36:18 | Bash | Wait for M4 commit | `B=abc33bca; for i in $(seq 1 118); do H=$(git -C /home/ronald/wt-m4 rev-parse --short HEAD 2>/dev/null); [ "$H" != "$B" ] && break; /usr/bin/sleep 5; done; git -C /home/ronald/wt-m4 log --oneline -1` |
 | 22:26:21 | Bash | Wait for M4 commit; check partial includers | `B=abc33bca; for i in $(seq 1 118); do H=$(git -C /home/ronald/wt-m4 rev-parse --short HEAD 2>/dev/null); [ "$H" != "$B" ] && break; /usr/bin/sleep 5; done; git -C /home/ronald/wt-m4 log --oneline -1; cd /home/ronald/saas-hasner/app && /bin/grep -rln 'painel_fechamento' templates/ \| head` |
 | 22:16:23 | Bash | Wait for M4 commit | `B=$(git -C /home/ronald/saas-hasner rev-parse --short HEAD); for i in $(seq 1 118); do H=$(git -C /home/ronald/wt-m4 rev-parse --short HEAD 2>/dev/null); [ -n "$H" ] && [ "$H" != "$B" ] && break; /usr/bin/sleep 5; done; git -C /home/ronald/wt-m4 log --oneline -1 2>&1; git -C /home/ronald/wt-m4 status --short 2>&1 \| head -8` |
