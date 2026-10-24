@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 24/10/2026 12:41:33.** Transcript: `f4eb628a-9fcf-4c05-ae6a-9f32279f7575.jsonl` (5.7 MB). Acoes na janela: **308**.
+**Medido em 24/10/2026 12:45:25.** Transcript: `f4eb628a-9fcf-4c05-ae6a-9f32279f7575.jsonl` (5.7 MB). Acoes na janela: **309**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 12:44:05 | Bash | Confirm push, handoff, republish RELATO | `cd /home/ronald/saas-hasner && timeout 400 bash -c 'until grep -aq "^rc=" logs/push_20261024_pil.log; do /usr/bin/sleep 15; done'; tail -3 logs/push_20261024_pil.log \| cut -c1-120; bin/handoff_sessao.sh >/dev/null 2>&1; bin/relato.sh > logs/relato_pub_20261024d.log 2>&1; grep -iE "retido\|publicado em" logs/relato_pub_20261024d.log \| head -2 \| cut -c1-160` |
 | 12:34:10 | Bash | Wait for UI push verdict | `cd /home/ronald/saas-hasner && timeout 590 bash -c 'until grep -aq "^rc=" logs/push_20261024_pil.log; do /usr/bin/sleep 20; done'; tail -4 logs/push_20261024_pil.log \| cut -c1-120; grep -aE "^Ran [0-9]+ tests\|^(OK\|FAILED)( \(\|$)" logs/push_20261024_pil.log \| tail -2` |
 | 12:33:52 | Bash | Identify the 7 retracted chamados in sombra | `cd /home/ronald/saas-hasner && cat > logs/sombra/vt_reconciliar_quem_20261024.py <<'PY' import datetime as d from django.utils import timezone from core.models import LogAuditoria from chamados.models import ChamadoColaborador ini = timezone.now() - d.timedelta(minutes=30) ids = [] for l in LogAuditoria.objects.filter(criado_em__gte=ini, modelo__icontains='chamado').order_by('criado_em'): ids.appe ...` |
 | 12:33:42 | Bash | Record PRAZO/VIGIA lote state in RELATO | `cd /home/ronald/saas-hasner && python3 - <<'PY' R='app/docs/RELATO.md'; t=open(R,encoding='utf-8').read() a='Postos ativos SEM coordenada: 10 (o dry do `detectar_vinculo_divergente`).\n' assert t.count(a)==1 b=a+('\n**LOTE PRAZO 1 NO AR** (`23146e4e`): `escalonar_documentos_ausencia` e `apurar_furos_diarios` -> `PRAZO_DELEGA_A`, 21 -> 19. ' 'Os 4 PRAZO que sobram ESPERAM: `detectar_ausencias` (vin ...` |
