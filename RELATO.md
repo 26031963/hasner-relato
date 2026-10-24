@@ -44,6 +44,16 @@ PAREI: ! GATE-EXPORT-10 (so o export da 10) | espera o DP na Gestao de HE e o Ro
 > O MARCADOR ANDOU no mesmo ato: `ORDEM-VIVA-TOPO` saiu de `BO-HE-RECUSAR-LOTE-500` (fechado) para `O261`, que o hook cobrou.
 > SEM COMMIT DE PROPOSITO: `RELATO.md` e `BACKLOG.md` ficam sujos na arvore porque a L-106 nao deixa commit so de docs fora de marco. Eles entram no commit do proximo marco.
 
+## 24/10 14:1x -- MARCO EVENTO 1 (lote dos 12): a Justificativa decidida rejulga o dia; o lastro so anota o que encerrou
+
+LEI-AKITA: origem=ponto/signals.py::_cartorio_post_save_justificativa (novo) + ponto/services/lastro.py::fechar, testemunha=cartorio.julgar_celula pela porta `_julgar_dias` (a mesma da Ausencia) + `ChamadoColaborador.reconciliar` (juiz do fechamento), RED=ponto/tests/test_evento_justificativa_rejulga_o_dia.py (3 de 3 no HEAD, `logs/evjust_red.out`) + test_bug114_fechador_de_dois_dias.py::NotaSoQuandoFechaTest (1 no HEAD, `logs/evjust_red2.out`), quem-mais-le=aprovar/rejeitar/lote de justificativa (todos pelo `save`), cron fechar_cobranca_com_lastro, juizes novos=0
+
+- Furo do evento: `aprovar_justificativa_dp` encerra so o `entrada_bloqueada_turno_aberto`; nada rejulgava a celula, e a ata dispensada (`44e268a8`) ficava com veredito `furo` e o `batida_ausente` vivo ate a varredura.
+- BUG NO CAMINHO (LEI-AKITA 6), medido em prod 24/10 (`logs/evjust_lastro30_*.out`): 19 notas `lastro_encontrado` em 30 d, **15 do #29292**, uma por hora desde 23/10 23:40 -- a nota "Encerrado pelo sistema" nascia ANTES do `reconciliar()`, que recusava. Cura: a nota so nasce se o juiz encerrou.
+- O CRON NAO VIRA VIGIA neste marco: dos 19, 3 foram por lampada acesa por BATIDA e 1 por ABONO, que o evento da Justificativa nao cobre. Fica em `JUIZES_POR_VARREDURA` (19) com o resto nomeado: por que o cartorio no `post_save` da batida/ausencia nao fechou esses 4.
+- #29292 so fecha com o acervo da ATA (kit `logs/concorde/acervo_ata_just.py`, execucao do Ronald) ou nova decisao da justificativa; o laco de notas para no deploy.
+- SUITE: (pendente, comboio com o E1 passo B 3+4)
+
 ## 24/10 14:1x -- MARCO E1 passo B (3 e 4 de 9): `dia_da_frota` e `precedencia` perguntam o vinculo a juiza
 
 LEI-AKITA: origem=relatorios/dia_da_frota.py::dia_da_frota + ponto/precedencia.py::fatos_do_periodo, testemunha=escala/alimentacao.py::vinculo_do_dia (via `escala_vigente` no relatorio; direto, com a lista completada pela porta do periodo, na precedencia), RED=relatorios/tests/test_dia_da_frota.py::GeradoraForaDaVigencia (3) + ponto/tests/test_precedencia_vinculo_encerrado.py::GeradoraForaDaVigenciaNoFeriado (2) + escala/tests/test_contract_juiz_escala.py (censo 8 -> 6), 6 falhas no HEAD `4ee73bb4` (`logs/e1frota_red.out`), quem-mais-le=api_mensageria_dia_da_frota, pautas_dos_discordantes (so ROTULOS), calendario, sem_furo, fatos_do_dia, reavaliar_ausencias_feriado, juizes novos=0
