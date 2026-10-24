@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 24/10/2026 17:11:03.** Transcript: `c87029f4-ea97-4fea-b6af-47ee2e204958.jsonl` (7.2 MB). Acoes na janela: **309**.
+**Medido em 24/10/2026 17:16:33.** Transcript: `c87029f4-ea97-4fea-b6af-47ee2e204958.jsonl` (7.3 MB). Acoes na janela: **311**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 17:11:11 | Bash | Wait for push verdict | `cd /home/ronald/saas-hasner; for i in $(seq 1 38); do grep -q '^rc=' logs/push_tarde.out 2>/dev/null && break; /usr/bin/sleep 15; done; tail -3 logs/push_tarde.out` |
+| 17:11:06 | Agent | Verificador ESCALA-CERTA 4a | `Siga EXATAMENTE as instrucoes do arquivo /home/ronald/saas-hasner/.claude/agents/verificador.md (leia-o primeiro; somente leitura, nenhuma escrita, nenhum git que grave, nenhum docker exec, nenhuma suite). CLAUDE.md em /home/ronald/saas-hasner/CLAUDE.md; LEIS.md e CORTES.md em /home/ronald/saas-hasner/app/docs/. Obra: ESCALA-CERTA-DETERMINISTICA. 4a VERIFICACAO. A 3a REPROVOU por: prosa em app/pon ...` |
 | 17:10:53 | Bash | Record verificador rounds and discordance in RELATO | `cd /home/ronald/saas-hasner; python3 - <<'PY' p='app/docs/RELATO.md' s=open(p).read() old='- CUSTO (sombra, 80 colabs, recalculo da 10 em atomic+rollback): HEAD 28,8 s, cura 30,4 s (+5%; `logs/escerta/custo_*.out`).' assert s.count(old)==1 s=s.replace(old,'''- VERIFICADOR 2a: **REPROVADO** -- numero ainda no docstring do teste; prosa velha em `SemLavra`, `fechamento.py:835/845`, `folga_que_sumiu.p ...` |
 | 17:10:44 | Bash | Queue suites; ruff; refresh diff | `cd /home/ronald/saas-hasner; (bin/suite.sh --dir /home/ronald/wt-escerta --parallel 2 --only "ponto.tests.test_ensaio_de_dinheiro_exige_lavra_de_prod escala.tests.test_escala_certa_deterministica ponto.tests.test_esmeril_espelho ponto.tests.test_lavra_fora_da_regua" > logs/escerta_green5.out 2>&1; echo "rc=$?" >> logs/escerta_green5.out; bin/suite.sh --dir /home/ronald/wt-escerta > logs/escerta_su ...` |
 | 17:10:35 | Bash | Fix prose and apply script per 3rd verificador | `cd /home/ronald/wt-escerta/app; python3 - <<'PY' import py_compile def rep(p, pares): s=open(p).read() for a,b in pares: assert s.count(a)==1, (p,a[:70]); s=s.replace(a,b) open(p,'w').write(s); py_compile.compile(p,doraise=True) rep('ponto/tests/test_ensaio_de_dinheiro_exige_lavra_de_prod.py',[ ('"""SELO: ensaio de dinheiro na SOMBRA sem a lavra de PROD = RECUSA com aviso (ordem Ronald 27/09 ~15:x ...` |
