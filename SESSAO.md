@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 24/10/2026 01:46:11.** Transcript: `ed482694-44e4-4da5-bd42-07601a2a39b4.jsonl` (6.4 MB). Acoes na janela: **329**.
+**Medido em 24/10/2026 01:51:33.** Transcript: `ed482694-44e4-4da5-bd42-07601a2a39b4.jsonl` (6.4 MB). Acoes na janela: **331**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 01:46:55 | Bash | Full suite on K6 combo | `cd /home/ronald/saas-hasner && bash bin/suite.sh --dir /home/ronald/wt-k6p > /home/ronald/wt-k6p/app/logs/suite.out 2>&1; echo "VEREDITO_FIM rc=$?" >> /home/ronald/wt-k6p/app/logs/suite.out` |
+| 01:46:50 | Bash | Build K6 combo copy on current main | `cd /home/ronald/saas-hasner && git worktree add -q --detach /home/ronald/wt-k6p HEAD && cd /home/ronald/wt-k6p && git merge -q --no-ff -m "comboio: main $(git -C /home/ronald/saas-hasner rev-parse --short HEAD) + K6 parcial b7dcfad7" b7dcfad7 2>&1 \| tail -2; git diff --name-only --diff-filter=U; git log --oneline -1; mkdir -p app/logs app/media` |
 | 01:28:58 | Bash | Declare O261 PAREI on the blocked prod apply | `cd /home/ronald/saas-hasner && python3 - <<'PY' p='app/docs/RELATO.md'; s=open(p).read() old="# RELATO — esteira saas-hasner\n\n" assert s.startswith(old) s=old+"PAREI: ! O261 -- apply do acervo RECUSA-FALA em prod (19 alvos, comp 10+11, inclui 49125/49126 da cel 137166 do col516) negado pelo classificador: o comando esta na secao 24/10 01:4x (`RF_SO_COMP=10/2026,11/2026 RF_APLICAR=1`, reversao an ...` |
 | 01:28:40 | Bash | Record RECUSA pouso and blocked apply in RELATO; commit | `cd /home/ronald/saas-hasner && python3 - <<'PY' p='app/docs/RELATO.md'; s=open(p).read() anc="## 24/10 00:3x -- O261 col666" assert s.count(anc)==1 sec='''## 24/10 01:4x -- O261 RECUSA-FALA (NO AR `f810e889`) + col666 (NO AR, deploy 01:1x) -- acervo da RECUSA pronto, apply NEGADO pelo classificador PROVA: RECUSA-FALA comboio `wt-rfp` (main 5b12bb38 + 07c3448b) `Ran 11821` OK rc 0, censo `git diff  ...` |
 | 01:28:19 | Bash | Apply RECUSA acervo in prod for comps 10 and 11 | `cd /home/ronald/saas-hasner && docker exec -e RF_SO_COMP=10/2026,11/2026 -e RF_APLICAR=1 saas_core python manage.py tenant_command shell --schema=juliani --command "exec(open('/tmp/rf_acervo.py').read())" > logs/recusa_fala/acervo_apply_prod.out 2>&1; echo rc=$?; /bin/grep -E '^RF\\|(REVERSAO\|HASH09\|APLICADO\|DEVOLV\|PROVA\|RESTAM\|ESPERADO)\|Traceback\|Error' logs/recusa_fala/acervo_apply_prod. ...` |
