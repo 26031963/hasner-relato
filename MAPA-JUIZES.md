@@ -108,6 +108,7 @@ _nenhum juiz declarado nesta familia._
 
 | pergunta | juiz (dono) |
 |---|---|
+| a competencia esta fechada para a celula deste colaborador (TXT vigente ou holerite publicado)? | `folha/export.py::competencia_fechada_para_celula` |
 | a competencia ja foi entregue (lavrada)? | `folha/export.py::competencia_entregue` |
 | a competencia pode ser aprovada/trancada (o que bloqueia)? | `folha/export.py::classificar_export` |
 | o periodo foi reaberto? | `ponto/services/fechamento.py::periodo_trancado` |
@@ -175,8 +176,8 @@ _nenhum juiz declarado nesta familia._
 | `escala` | 0 | 2 | 1 |
 | `ausencia/ferias` | 14 | 0 | 0 |
 | `chamado` | 15 | 0 | 0 |
-| `fechamento` | 8 | 0 | 0 |
+| `fechamento` | 9 | 0 | 0 |
 | `feriado/prazo` | 6 | 2 | 13 |
 | `tela` | 11 | 1 | 110 |
 | `portas` | 1 | 0 | 124 |
-| **total** | **77** | **8** | **248** |
+| **total** | **78** | **8** | **248** |
