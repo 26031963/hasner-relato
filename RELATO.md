@@ -34,6 +34,14 @@ PAREI: ! GATE-EXPORT-10 (so o export da 10) | espera o DP na Gestao de HE e o Ro
 > O MARCADOR ANDOU no mesmo ato: `ORDEM-VIVA-TOPO` saiu de `BO-HE-RECUSAR-LOTE-500` (fechado) para `O261`, que o hook cobrou.
 > SEM COMMIT DE PROPOSITO: `RELATO.md` e `BACKLOG.md` ficam sujos na arvore porque a L-106 nao deixa commit so de docs fora de marco. Eles entram no commit do proximo marco.
 
+## 23/10 23:5x -- MARCO VIVA-DELEGA-AO-JUIZ (NO AR `051c3370`) + instrumentos SONDA-PARA-O-RONALD (`93667e8f`) e SONDA-NUNCA-PARA (`cec1cee3`)
+PROVA: copia `wt-viva` `Ran 11813` OK rc 0 (`logs/viva/suite.out`, veredito 23:47:14, commit 23:47:37, todos os arquivos com mtime antes de 23:37:04); 5 .py staged `cmp` iguais a d3dcdb3d; `logs/deploy_viva.out` deploy rc 0, 3 rotas. Sombra (`logs/viva/paridade_frota_*.out`): `.viva` x juiz na FROTA **1.401 -> 0** (todas tranca por leitura), comp 10+11 0 -> 0; queries `_fio_do_dia` 115 -> 115.
+LEI-AKITA: origem=`chamados/models.py::PerguntaDisputa.viva`, testemunha=`chamados/juizes.py::pergunta_viva`, RED=`chamados.tests.test_viva_delega_ao_juiz` (5 de 13 FAIL contra HEAD), quem-mais-le=`fora_da_folha._fio_do_dia`, `fio.py:259`, `arquivar_competencia_encerrada._disputa_viva`, `_card_atendimento.html:77`, juizes novos=0
+- `.viva` = `return pergunta_viva(self)` (selo AST que morde); `q_vivas` fica como PRE-FILTRO que CONTEM o juiz (HX-QS-LE-A-ORDEM: juiz contido em q_vivas, nao igualdade).
+- Erro meu no pouso, curado em `09ddf68f`: a resolucao do conflito do BACKLOG abortou no assert e o add levou o arquivo com marcadores; resolvido pelas linhas, hook volta a ler o marcador.
+- SONDA-PARA-O-RONALD: o canario provou o envelope em prod (3 tentadas, 0 mudadas). SONDA-NUNCA-PARA: PAREI citando SONDA = block (RED + 12 selos do hook).
+- **INCOMPLETO:** 4 leitores de `q_vivas` que nao refinam pelo juiz (linha de fila `Q-VIVAS-LEITORES-SEM-JUIZ`), um deles ESCRITOR; impacto das 1.401 em `fio.py:259` nao medido.
+
 ## 23/10 23:4x -- APLICADOS: acervo E2 na 10 (aval 18:2x + 23:3x) e col549 pela porta O317 (! 23:4x)
 PROVA: E2 `logs/o261e/e2_apply_prod.out` -- reversao ANTES `/app/logs/o261e/reversao_acervo_e2_20261023_233116.json` (70 perguntas, 39 disputas); `APLICADO carimbos_desfeitos=70 (esperado 70)`; `HASH_EXPORTADA antes=4b73856e... depois=4b73856e...|IGUAL` (227 perguntas, 26 TXT); `alvos_que_seguem_carimbados=0`; 2a passada dry `alvos=0` (`e2_dry2_prod.out`). O317 col549 `logs/o317/col549_apply.out` -- contagem antes `alvo=1` (`col549_conta.out`), apply `--autor ronald_ti`: `emp2 col549 2026-11 exportada=0 alvo=1 plantada=1`, `particoes universo=OK reparo=OK`, reversao e placar `logs/o317/2026-10-23_2340_apply.json`.
 - E2 em prod: 70 alvos (sombra 04:00: 57); 09 exportada so listada (227). O E2 NAO alcanca o col549: 46480 e `FORA_VALIDADA` (validada 14:20 sem batida, 21/10 = comp 11) -> porta O317, pelo `!` dele.
