@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 24/10/2026 18:25:59.** Transcript: `c87029f4-ea97-4fea-b6af-47ee2e204958.jsonl` (9.0 MB). Acoes na janela: **417**.
+**Medido em 24/10/2026 18:30:59.** Transcript: `c87029f4-ea97-4fea-b6af-47ee2e204958.jsonl` (9.1 MB). Acoes na janela: **419**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 18:26:10 | Bash | Wait for geofence GREEN2 | `cd /home/ronald/saas-hasner; for i in $(seq 1 39); do grep -q '^rc=' logs/geo_green2.out 2>/dev/null && break; /usr/bin/sleep 15; done; grep -E '^(OK\|FAILED)($\| \()\|^Ran \|^rc=' logs/geo_green2.out \| tail -3; grep -E "^(FAIL\|ERROR):" logs/geo_green2.out \| head` |
+| 18:26:03 | Bash | Record GREEN findings; refresh handoff | `cd /home/ronald/saas-hasner; python3 - <<'PY' p='app/docs/RELATO.md' s=open(p).read() old='- Diagrama regerado contra a copia (aresta Posto -> geofence).\n' assert s.count(old)==1 s=s.replace(old, old+'''- RED do selo novo no HEAD: 7 FAIL (`logs/geo_red2.out`). GREEN 1a (2253): 4 FAIL + 1 ERROR, todos curados -- mock do `premissa_morta` no modulo antigo; asserçao errada no caso do evento (a ocorre ...` |
 | 18:25:43 | Bash | Regen diagram; queue valid GREEN and full suite | `cd /home/ronald/saas-hasner; IMG=$(docker inspect saas_core --format '{{.Config.Image}}'); docker run --rm --network none --cpuset-cpus 4-7 -v /home/ronald/wt-geo/app:/app -w /app -e DJANGO_SETTINGS_MODULE=config.settings.ci $IMG python manage.py gerar_diagrama 2>&1 \| tail -1; VIZ="ponto.tests.test_juiz_classificar_posicao_nasce ponto.tests.test_reconciliar_geofence ponto.tests.test_geofence_cata ...` |
 | 18:25:32 | Bash | Check running suite; ruff edited files | `cd /home/ronald/saas-hasner; bin/trava_teste.sh --quem; tail -c 200 logs/geo_suite.out \| tail -2; cd /home/ronald/wt-geo/app; tar cf - ruff.toml ponto/services/geofence.py ponto/tests/test_geofence_catalogo_premissa.py ponto/tests/test_reconciliar_geofence.py ponto/tests/test_contract_juiz_batida.py ponto/tests/test_juiz_classificar_posicao_nasce.py \| docker exec -i saas_core sh -c 'rm -rf /tmp/ ...` |
 | 18:25:22 | Bash | Fix inscription and four tests | `cd /home/ronald/wt-geo/app; python3 - <<'PY' import py_compile def rep(p, pares): s=open(p).read() for a,b in pares: assert s.count(a)==1, (p,a[:60]); s=s.replace(a,b) open(p,'w').write(s); py_compile.compile(p,doraise=True) rep('ponto/services/geofence.py',[('''"""Geofence de batida — dominio puro (F9-B2: movido LITERAL de ponto/views.py, unica aresta service->view do sistema morta junto; except- ...` |
