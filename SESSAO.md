@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 24/10/2026 18:36:04.** Transcript: `c87029f4-ea97-4fea-b6af-47ee2e204958.jsonl` (9.1 MB). Acoes na janela: **421**.
+**Medido em 24/10/2026 18:41:22.** Transcript: `c87029f4-ea97-4fea-b6af-47ee2e204958.jsonl` (9.2 MB). Acoes na janela: **422**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 18:41:21 | Bash | Census wt-escerta2 base vs main and live | `cd /home/ronald/saas-hasner; W=/home/ronald/wt-escerta2; B=$(git -C $W rev-parse HEAD); F="$(git -C $W diff --name-only) app/escala/tests/test_escala_certa_deterministica.py"; echo "base $B"; for f in $F; do cmp -s <(git show $B:$f 2>/dev/null) <(git show HEAD:$f 2>/dev/null) \|\| echo "MAIN MUDOU DESDE A BASE: $f"; cmp -s <(git show HEAD:$f 2>/dev/null) $f 2>/dev/null \|\| [ ! -e $f ] \|\| echo " ...` |
 | 18:31:19 | Bash | Wait geofence full suite | `cd /home/ronald/saas-hasner; for i in $(seq 1 39); do grep -q '^rc=' logs/geo_suite2.out 2>/dev/null && break; /usr/bin/sleep 15; done; grep -E '^(OK\|FAILED)($\| \()\|^Ran \|^rc=' logs/geo_suite2.out \| tail -3; grep -E "^(FAIL\|ERROR):" logs/geo_suite2.out \| head` |
 | 18:31:09 | Agent | Verificador GEOFENCE | `Siga EXATAMENTE as instrucoes do arquivo /home/ronald/saas-hasner/.claude/agents/verificador.md (leia-o primeiro; somente leitura, nenhuma escrita, nenhum git que grave, nenhum docker exec, nenhuma suite). CLAUDE.md em /home/ronald/saas-hasner/CLAUDE.md; LEIS.md e CORTES.md em /home/ronald/saas-hasner/app/docs/ (a entrada JUIZ-CLASSIFICAR-POSICAO-NASCE do CORTES.md esta no arquivo VIVO e na copia) ...` |
 | 18:26:10 | Bash | Wait for geofence GREEN2 | `cd /home/ronald/saas-hasner; for i in $(seq 1 39); do grep -q '^rc=' logs/geo_green2.out 2>/dev/null && break; /usr/bin/sleep 15; done; grep -E '^(OK\|FAILED)($\| \()\|^Ran \|^rc=' logs/geo_green2.out \| tail -3; grep -E "^(FAIL\|ERROR):" logs/geo_green2.out \| head` |
