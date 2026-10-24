@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 24/10/2026 08:11:33.** Transcript: `ed482694-44e4-4da5-bd42-07601a2a39b4.jsonl` (6.7 MB). Acoes na janela: **231**.
+**Medido em 24/10/2026 08:17:03.** Transcript: `ed482694-44e4-4da5-bd42-07601a2a39b4.jsonl` (6.7 MB). Acoes na janela: **225**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -235,9 +235,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 20:17:16 | Bash | Snapshot hash of exported 09 before apply | `cd /home/ronald/saas-hasner && bin/sonda_frota.sh logs/gate10/gate10_hash09.py > logs/concorde/hash09_antes_ata.out 2>&1; echo rc=$?; cat logs/concorde/hash09_antes_ata.out \| tail -12` |
 | 20:17:07 | Bash | Read sonda_frota usage | `cd /home/ronald/saas-hasner && sed -n 1,40p bin/sonda_frota.sh \| /bin/grep -n '^#' \| head -30` |
 | 20:17:04 | Bash | Find how prior acervos were run in prod | `cd /home/ronald/saas-hasner && /bin/grep -rn 'acervo_concorde\\|acervo_e1.py' app/docs/RELATO.md logs/concorde/*.out logs/o261d/*.out 2>/dev/null \| head -5 \| cut -c1-300; ls bin \| /bin/grep -i 'prod\\|porta\\|sonda' \| head` |
-| 20:16:57 | Bash | Read the 09 hash probe | `cd /home/ronald/saas-hasner && cat logs/gate10/gate10_hash09.py; ls logs/gate10/ \| /bin/grep -i hash` |
-| 20:16:52 | Bash | Find exported-competency hash pattern in prior kits | `cd /home/ronald/saas-hasner && /bin/grep -ln 'sha256\\|hash' logs/o261d/*.py logs/o261b/*.py logs/gate10/*.py 2>/dev/null \| head; /bin/grep -n 'sha256\\|hashlib' logs/o261d/acervo_e1.py \| head` |
-| 20:16:47 | Bash | Read concorde proof probe for hash pattern | `cd /home/ronald/saas-hasner && cat logs/concorde/p_prova.py \| head -40; /bin/grep -n 'hash\\|09' logs/concorde/acervo_apply.out \| head` |
-| 20:16:30 | Bash | Merge ata cure, commit, deploy | `cd /home/ronald/saas-hasner && git log --oneline -1 && git merge --no-ff --no-commit 74db91a6 >/dev/null 2>&1; echo merge_head=$(git rev-parse -q --verify MERGE_HEAD \| cut -c1-8); echo "censo:"; git diff --cached 74db91a6 --stat \| tail -1; git commit -q -F - <<'MSG' pouso da wt-ata: ATA-NAO-DISPENSA-JUSTIFICADA -- a ata dispensa o marco do dia justificado Arvore certificada = 74db91a6 (copia `wt ...` |
-| 20:13:46 | Bash | Keep waiting for ata suite verdict | `for i in $(seq 1 115); do /bin/grep -q '^FIM rc=' /home/ronald/wt-ata/app/logs/suite.out 2>/dev/null && break; /usr/bin/sleep 5; done; /bin/grep -E '^(FAIL\|ERROR):\|^Ran \|^(OK\|FAILED)($\| \()\|^FIM rc=' /home/ronald/wt-ata/app/logs/suite.out \| tail -8` |
-| 20:13:43 | Bash | Check ata suite state and lane holder | `tail -c 400 /home/ronald/wt-ata/app/logs/suite.out; echo; cd /home/ronald/saas-hasner && bin/trava_teste.sh --quem; date +%H:%M` |
