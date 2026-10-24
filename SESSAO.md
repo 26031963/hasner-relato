@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 24/10/2026 16:12:04.** Transcript: `c87029f4-ea97-4fea-b6af-47ee2e204958.jsonl` (4.9 MB). Acoes na janela: **253**.
+**Medido em 24/10/2026 16:17:33.** Transcript: `c87029f4-ea97-4fea-b6af-47ee2e204958.jsonl` (5.0 MB). Acoes na janela: **256**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 16:12:20 | Bash | Close UI-GRADE cell, register aval, wait ESCALA-CERTA suite | `cd /home/ronald/saas-hasner; python3 - <<'PY' p='app/docs/BACKLOG.md' s=open(p).read() old="**CONGELADA (L-096), fila 2** -- construida, selada e **commitada sem push**: aguarda o smoke de clique dele nas duas cascas, ou o `git checkout` do template" assert s.count(old)==1 s=s.replace(old,"**FECHADA 24/10**: smoke de clique dele OK nas duas cascas (aval ~16:1x). A cura ja estava no main e no remot ...` |
+| 16:12:09 | Bash | Confirm UI-GRADE change is in main and pushed | `cd /home/ronald/saas-hasner; grep -c "height:132px\\|data-celula-dia\\|-webkit-line-clamp:2" app/templates/colaboradores/partials/_calendario_grade.html; git log --oneline -3 -- app/colaboradores/tests/test_ui_grade_calendario.py; git log -1 --format=%h origin/main` |
+| 16:12:04 | Bash | Check if UI-GRADE change already in main | `cd /home/ronald/saas-hasner; ls app/colaboradores/tests/test_ui_grade_calendario.py 2>&1; git log --oneline 1b1db218..main -- app/templates/colaboradores/partials/_calendario_grade.html \| wc -l; git show 98243991 -- app/templates/colaboradores/partials/_calendario_grade.html \| grep "^[-+]" \| grep -v "^+++\\|^---" \| head -30` |
 | 16:11:58 | Bash | Inspect unpushed UI-GRADE commit | `cd /home/ronald/saas-hasner; git branch -a --contains 98243991 \| head; git show --stat --format='%h %ad %s' --date=short 98243991 \| head -12; git log --oneline 98243991 -1 --format=%P` |
 | 16:11:55 | Bash | Locate UI-GRADE-CALENDARIO commits and whether pushed | `cd /home/ronald/saas-hasner; git log --all --oneline --grep="UI-GRADE-CALENDARIO" \| head -5; for c in $(git log --all --format=%h --grep="UI-GRADE-CALENDARIO" \| head -3); do echo "$c main?: $(git merge-base --is-ancestor $c main && echo sim \|\| echo nao) remoto?: $(git merge-base --is-ancestor $c origin/main && echo sim \|\| echo nao)"; done` |
 | 16:11:50 | Bash | Read UI-GRADE-CALENDARIO state and raia-ui commits | `cd /home/ronald/saas-hasner; sed -n 631p app/docs/BACKLOG.md \| awk -F' \\\| ' '{print $3; print $4}' \| cut -c1-500; git -C /home/ronald/wt-ui log --oneline -3; git log --oneline main..raia-ui 2>/dev/null \| head -5` |
