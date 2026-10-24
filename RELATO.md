@@ -40,6 +40,54 @@ PAREI: ! GATE-EXPORT-10 (so o export da 10) | espera o DP na Gestao de HE e o Ro
 > O MARCADOR ANDOU no mesmo ato: `ORDEM-VIVA-TOPO` saiu de `BO-HE-RECUSAR-LOTE-500` (fechado) para `O261`, que o hook cobrou.
 > SEM COMMIT DE PROPOSITO: `RELATO.md` e `BACKLOG.md` ficam sujos na arvore porque a L-106 nao deixa commit so de docs fora de marco. Eles entram no commit do proximo marco.
 
+## 24/10 12:1x -- VARREDURA-TRIAGEM: os 21 de `JUIZES_POR_VARREDURA`, uma linha cada (so leitura)
+
+Escritas de 30 dias por ATOR em prod pelo campo `LogAuditoria.ator` (`sistema:<cron>`; `logs/varredura_triagem_por_cron_30d_20261024.out`); regra pelo codigo (agente de leitura); GEO pelo dry em prod (`logs/varredura_triagem_geo_dry_20261024.out`).
+
+| cron | escritas 30 d | julga | regra | saida (lei existente) |
+|---|---|---|---|---|
+| `apurar_furos_diarios` | 425 | FALTA | delega furos_diarios.apurar (+ adesao fecha chamado) | PRAZO |
+| `detectar_ausencias` | 2533 | FALTA | PROPRIA: janela `dt_min<=agora<=dt_max` (:317) | PRAZO (janela vai a janela_turno_de) |
+| `escalonar_documentos_ausencia` | 250 | FALTA | delega ausencia.escalonar_aguardando_documento | PRAZO |
+| `marcar_foto_ausente_retro` | 55 | FALTA | PROPRIA: 90 min sem foto; sem autoridade da casa | PRAZO (falta a autoridade) |
+| `processar_alertas_avancados` | 3076 | FALTA | PROPRIA: 24 h/72 h sem saida | PRAZO |
+| `processar_alertas_turno` | 3248 | FALTA | PROPRIA: `agora<=dt_fim`, 240 s | PRAZO |
+| `detectar_vinculo_divergente` | 0 | FATO agregado | delega vinculo_evidencia (+ centroide proprio) | VIGIA (dry: 82, 0 chamado) |
+| `reconciliar_chamados` | 1439 | FATO | delega reconciliador | VIGIA |
+| `termometro_regua` | 1444 | FATO agregado | delega regua_defesa.diagnostico_regua | VIGIA (escrita sai do cron) |
+| `detectar_cluster_espurio` | 4 | FATO+FALTA | PROPRIA: >=2 orfas + rajada 15 min | EVENTO (sinal da ata) |
+| `detectar_par_relampago` | 40 | FATO | PROPRIA: 0<=dur<=MAX | EVENTO (batida) |
+| `disparar_perguntas_competencia` | 271 | FATO+FALTA | delega fabrica_da_celula.motivos_pela_ata | EVENTO (sinal da celula) |
+| `fechar_becos_disputa` | 15 | FATO | PROPRIA + pode_fechar | EVENTO (chamado resolvido) |
+| `fechar_cobranca_com_lastro` | 52 | FATO | delega lastro.fechar | EVENTO (batida tardia) |
+| `reavaliar_ausencias_feriado` | 749 | FATO | delega precedencia.fatos_do_dia | EVENTO (como reavaliar_ausencias_lancadas) |
+| `reconciliar_fantasmas` | 141 | FATO | PROPRIA: `_completude` | EVENTO (turno fecha) |
+| `reconciliar_geofence` | 12 | FATO | PROPRIA: dentro < validos | EVENTO (dry: 3 abertos, 0 a fechar) |
+| `reconciliar_perguntas_orfas` | 293 | FATO | PROPRIA: `_bem_formado`/`_eh_fantasma` | EVENTO |
+| `reconciliar_vinculo` | 34 | FATO | PROPRIA: 80% de 10 batidas no raio | EVENTO (dry: 78 abertos, 0 a fechar) |
+| `silenciar_chamados_isentos` | 17 | FATO | PROPRIA: isento_ponto | EVENTO (ou VIGIA se F4 cobre) |
+| `supra_juiz` | 4 | FATO | delega supra_juiz.classificar_dia | EVENTO (so o --executar sai) |
+
+**CONTAGEM: PRAZO 6 · VIGIA 3 · EVENTO-A-NASCER 12 = 21.** Lote PRAZO primeiro (um RED por cron, um pouso por lote); os 3 que ja delegam (`apurar_furos_diarios`, `escalonar_documentos_ausencia`) so precisam do papel declarado em `PRAZO_DELEGA_A`. `marcar_foto_ausente_retro` nao tem autoridade da casa para "foto ausente": fica juiz ate ela existir. Postos ativos SEM coordenada: 10 (o dry do `detectar_vinculo_divergente`).
+
+## 24/10 11:5x -- MARCO ESPELHO-VERDADE (aval 10:1x): provas do chat + termometro R1 da 10 na sombra
+
+LEI-AKITA: origem=core/espelho_verdade.py::ETAPAS, testemunha=e6_oraculo (termometro R1, L-114) + escala/services/previsto_cego.py::medir, RED=placar() rebaixa FEITO sem prova (contrato do proprio modulo), quem-mais-le=bin/gerar_estado.py (ESTADO), juizes novos=0
+
+- PROVAS DO CHAT (sem reler, aval literal): FEITO E3-volta-do-intervalo, E4-colunas-atraso, E6-impar-em-aberto, E6-espelho-nao-degradado; EM_CURSO E5-le-da-celula, E4-rotulo-do-desenho; ESPERA_RONALD E3-separados-30.
+- TERMOMETRO R1 (cadencia vencida, L-114): `e6_oraculo --mes 10 --ano 2026` na sombra, codigo no ar `c4b3449b` (`logs/sombra/e6_termometro_r1_10_20261024.out`): **95,8%** batem ate 10 min (7.126 / 7.438), 0 erro; dono ESTRUTURA 92 dia-colab / 449,2 h / 39 colabs, CADASTRO 74 / 342,7 h / 32, BATIDA 146 / 661,5 h / 96; soma 312 = 312. Impares: 333 comparados, 139 batem, 194 divergem, todos com dono.
+- COM ELE: E6-sistema-bate, E6-exportavel, E6-piso-185, E1-sem-previsao (+ `previsto_cego` 0 de 545), E3-turno-aberto atualizados (EM_CURSO com numero); E6-batida-impar **FEITO** pela particao de dono.
+  PROVA: `core/espelho_verdade.py` no commit `c2a12ff4` (no ar no deploy de 11:5x, push `23146e4e`); `placar()` rodado na arvore viva: E6 2 -> 5 de 8 itens FEITOS.
+- PLACAR: E3 70 -> 80%, E4 60 -> 80%, E6 25 -> 62%; E1 50%, E5 50%.
+- OS 92 DE ESTRUTURA (39 colabs) sao a fila 1 que o termometro manda: viram cenario na bateria ou linha de fila (L-114 correcao 2) -- `/tmp/e6_10_20261024.csv` na sombra.
+
+## 24/10 11:5x -- MARCO E1 passo B (1 de 9): `cartorio.marcos_vencidos` pergunta o vinculo a juiza
+
+LEI-AKITA: origem=ponto/services/cartorio.py::marcos_vencidos, testemunha=escala/servico_jornada.py::escala_vigente -> escala/alimentacao.py::vinculo_do_dia, RED=escala/tests/test_contract_juiz_escala.py (censo TOMADORES cartorio 2 -> 1, total 10 -> 9), quem-mais-le=ponto/services/vigia_de_hora.py, recusar_ponta_pequena, _julgar_colab_corpo, juizes novos=0
+
+- Antes: busca da geradora a mao + `escala_vigente` de reserva -- duas respostas que concordam por construcao (com geradora a juiza devolve a geradora). Agora so `escala_vigente(c, data, celulas={(c, data): cel})`; o parametro `EscalaColaborador` saiu com os 3 chamadores (L-111).
+- O resto dos 9 (censo do agente de leitura, 24/10): 2 trocas mecanicas (vigia_de_hora, dia_da_frota, mudam so na celula SEM geradora); `servico_jornada` e o carregador da juiza (falso positivo do TOMA); precedencia e o `_fnd` do cartorio mudam resultado; `fechamento.apurar_por_fatia`, `folgas.reparentar_folga` e `auditar_invariantes` respondem OUTRA pergunta (cobertura / vigencia do carimbo). Tudo depois da lei do topo.
+
 ## 24/10 10:4x -- MARCO K6 + CONCORDE-CLASSE-B (comboio): juiz `competencia_fechada_para_celula` nasce e o `gerar_celulas` le; folga nao definida e CADASTRO
 
 LEI-AKITA: origem=folha/export.py::competencia_fechada_para_celula + ponto/management/commands/e6_oraculo.py::dono_da_divergencia, testemunha=_K6 competencia_entregue + EscalaColaborador.defeito_folga_nao_definida, RED=folha/tests/test_k6_fechada_para_celula.py + ponto/tests/test_e6_janela_declarada_nao_e_divergencia.py::DonoDaFolgaNaoDefinida, quem-mais-le=portas/celula.py, vigencia_impossivel, auditar_invariantes, tripwire_celulas, corrigir_escala_retroativa (pela guarda), pautas_discordantes (pelo dono), juizes novos=1 (_K9, corte Ronald: juiz competencia_fechada_para_celula nasce)
@@ -2351,6 +2399,539 @@ Tambem **nao** chamo `aguardando_documento` de defeito: ele e PROJETADO para `TI
 
 **11/10 22:40 vigia da esteira** -- esteira em espera de janela: 8 fatias prontas, reabre 00:00.
 
+## O146 — **FECHADA, NO AR**: a extra declarada da escala desloca o limite, e o limite
+tem UM sitio (09/10 00:4x · `cfd4ff83`+`ce212bb8`, deploy 01:35, smoke OK)
+
+**PROVA:** gravado medido em prod 09/10 10:0x (so leitura, agregado): `TipoEscala` **353**, com extra declarada (`he_extra_antes_min>0 | he_extra_depois_min>0`) **0**; `CelulaDia` **124.358**, com `dna['extra_declarada']` **0**; `dna_versao` gravado **1: 20.785 · 2: 103.573** (nenhuma 3 -- a impressao digital do cartorio nao andou, como o item 4 prometeu). O sitio unico esta NO AR e o IMPACTO de hoje e **zero cadastro**: o limite se desloca quando alguem declarar a extra, e ninguem declarou ainda.
+
+Fatia da fila 1, pela ordem de 08/10 19:5x (`O145 -> O146 -> item 2 da O214 -> itens 3 e 4`), contra o
+dossie que mora em `app/docs/DOSSIES.md` secao 7. A lei que a governa e a resposta dele de 08/10 21:5x
+(`O146-EXTRA-E-SO-HE`): **a extra alarga o que se PODE ganhar, nunca o que se DEVE cumprir.**
+
+**OS 4 ITENS DE `MUDA`, cada um com o sitio:**
+
+1. **CADASTRO.** `escala/models.py:78` `he_extra_antes_min` e `:83` `he_extra_depois_min` —
+   `PositiveSmallIntegerField`, **default 0**, migration `escala/0042_o146_he_extra_declarada.py`. Entram
+   **pelo WIZARD** (`escala/views_wizard.py:40-41` e `:240`, `escala/services/cadastro_tipo.py:255`,
+   `templates/escala/wizard_tipo_escala.html` + `_wizard_preview.html`). **`permite_hora_extra` nao foi
+   reusado** — e booleano e tem outro uso (`ponto/triagem_batida.py:293`,
+   `ponto/management/commands/processar_alertas_turno.py:129`), os dois intactos.
+2. **DNA.** `gerar_celulas.py::montar_dna:123` congela `dna['extra_declarada'] = {'antes': N, 'depois': M}`
+   — chave de **topo** e emitida **so quando declarada**, para que a impressao digital do cartorio
+   (`ponto/services/cartorio.py:85::impressao_insumos`, que digere `dna_versao` + `marcos`) e as duas
+   comparacoes de dict inteiro (`tripwire_celulas.py:30`, `ponto/portas/celula.py:496`) **nao se movam em
+   dia que nao declara nada**. `DNA_VERSAO` segue **2**.
+3. **UMA FUNCAO DESLOCA O LIMITE.** `ponto/janela_he.py:54::minutos_fora_da_extra` — uma subtracao, um
+   sitio. Lida por `entrada_efetiva:76`, `saida_efetiva:117` e `marcar_pontas_fora:156`, e por cima dela
+   o motor (`motor_calculo_v2.py:1363` e `:1401`, pelo `j['extra_antes']`/`j['extra_depois']` de
+   `_janela_do_dia:1303`). **Nenhum leitor com conta propria** — e por isso que a comparacao `> piso` ja
+   havia virado `dentro_da_janela:41` em 29/09.
+4. **MINUTO DENTRO DA EXTRA = HE AUTORIZADA PELA ESCALA**, sem `DecisaoHE`. Fora dela, **ponta**, e a
+   L-097 segue inteira: o miudo que sobra continua bloqueado e cai no item 1 da O214.
+
+**QUEM PERGUNTA A EXTRA, e por que nao e o motor que le o cadastro:** o juiz e
+`EscalaColaborador.extra_declarada_do_dia` (`escala/models.py:1183`), **irmao do `intervalo_do_dia`** e com
+o contrato dele palavra por palavra — `celulas` e ALIMENTACAO, **chave ausente = "nao ha celula nesse dia",
+e dia sem celula le o template vivo** (`TipoEscala.extra_declarada_do_dia:310`). O motor **pergunta**
+(`motor_calculo_v2.py:1154::_extra_declarada`, memoizado por dia, injetado em `:1677`); ler
+`te.he_extra_antes_min` de dentro do motor seria o motor com cadastro proprio, e o passado reescrito por
+troca de template.
+
+**OS CASOS, pela regra ANTES do codigo (L-110).** `ponto/tests/test_o146_extra_declarada_da_escala.py` —
+**26 casos, `Ran 26 tests` / `OK`**. A **suite INTEIRA na copia**, pela porta unica
+(`bin/suite.sh --dir`): **`Ran 10105 tests in 1363.127s`** / **`OK (skipped=42)`** — mais os 143
+vizinhos do modulo e `ruff` limpo nos 10 `.py` tocados.
+
+| caso | o que a regra manda | teste |
+|---|---|---|
+| **a** | saida em marco+127 com extra 120 → **120 de HE, ponta de 7** | `test_a_...127_com_extra_120_da_120_de_HE_e_ponta_de_7` (+ 2 do teto: dentro nao acusa, acima **ainda** acusa CADASTRO x REALIDADE) |
+| **b** | saida em marco+60 com extra 120 → **60 de HE, ponta 0** | `test_b_...da_60_de_HE_e_ponta_zero` |
+| **c** | saida **no marco** com extra 120 → 0 de HE e **NAO e saida antecipada** | `test_c_...nao_da_HE_e_NAO_e_saida_antecipada` |
+| **d** | entrada 10 min antes **sem** extra → ponta de 10, **como hoje** | `test_d_...e_ponta_de_10_como_hoje` |
+| **e** | extra antes 60: entrada em marco−60 → 60 de HE; marco−70 → 60 **+ ponta de 10** | `test_e_...` e `test_e2_...` |
+| **f** | escala **sem** declaracao → **identica a hoje** | `test_f_escala_SEM_declaracao_e_IDENTICA_a_hoje` |
+| **g** | dia com `DecisaoHE` autorizado → tudo conta, como hoje | `test_g_...conta_TUDO_como_hoje` |
+| **h** | turno que **cruza a meia-noite** com extra depois | `test_h_extra_depois_no_turno_que_cruza_a_meia_noite` |
+| **i** | rodar 2x = **mesmo estado** | `test_i_...` e `test_i2_marcar_pontas_fora_2x_...nao_duplica_pendencia` |
+| **j** | **MORDE**: motor e `marcar_pontas_fora` dao o **MESMO** numero no caso **a** | `test_j_MORDE_motor_e_marcar_pontas_fora_dao_o_MESMO_numero` |
+| **k** | *(meu, do contrato do irmao)* celula que EXISTE e nao declara → **ZERO, nunca o template vivo**; dia **sem** celula → template vivo; e a alimentacao com **0 query** no laco | `test_k_...`, `test_k2_...`, `test_k3_a_alimentacao_tem_o_contrato_do_irmao` |
+
+Mais os selos do dossie: **previsto NAO cresce** com a extra (a clausula 1 da lei, com caso que morde a
+volta), a extra entra **pela PORTA do wizard** e **nao reusa** `permite_hora_extra`, o default e **ZERO**,
+a chave do DNA **nasce so quando declarada**, a impressao do cartorio **nao muda sem declaracao**, **a
+conta mora em UM sitio so** e **os dois leitores IMPORTAM a funcao do dono** (por AST).
+
+**O RED que vale mais do que os outros**, porque e o que distingue cura de silencio: o montador do espelho
+ficou **`AssertionError: 7 != 67`** com o CONTROLE verde ao lado (dia sem declaracao segue riscando os 67).
+Vermelho com controle verde quer dizer *"falta uma subtracao"*; vermelho sozinho quer dizer *"o montador
+esta mudo"*, e e esse o engano que a familia de vacuidade de 01/09 cobra.
+
+**IMPACTO DE FROTA = 0 h, por UNIVERSO VAZIO — e medido na fonte, nao por amostra.** Sonda
+`logs/sombra/universo_o146.py` pela porta `bin/sombra.sh --rodar` (`logs/o146/universo.out`, 09/10 00:48):
+
+```
+colunas novas presentes no esquema de prod: []     (nascem na 0042)
+TipoEscala cadastrados: 350                        (o denominador de quem PODERIA declarar)
+emp2 12.990 celulas / 8.327 de trabalho  |  emp3 3.434 / 1.901  |  emp4 600 / 352
+TOTAL 17.024 celulas, 10.580 dia-colab de TRABALHO, com a chave `extra_declarada` = 0
+```
+
+As duas fontes do juiz dao vazio ao mesmo tempo: **0 celulas** carregam a chave e as **duas colunas nao
+existem** no esquema de prod, logo nenhuma linha pode ter numero nelas — o unico escritor delas e o wizard,
+que **nasce nesta fatia**. Entao o deslocamento vale **0 min em 10.580 de 10.580** dia-colab da competencia
+10, e `minutos_fora_da_extra(x, 0) == x` e a **identidade** (auditada linha a linha nas duas efetivas: com
+`extra_min=0`, `sobra == bruto`, `marco − timedelta(0) == marco`, e o `max(0.0, …)` sobre bruto **negativo**
+— chegada atrasada, saida antecipada — cai no **mesmo ramo** de antes, porque `dentro_da_janela` compara
+`<= piso` e `piso >= 0`). **Nao ha apply de dinheiro nesta fatia.** Os 10.580 contra os 10.578 medidos em
+08/10 sao a diferenca de FONTE (sombra do dia x prod naquele dia), nao de regra.
+
+**POR QUE O DIFF NAO SE MEDE NA SOMBRA COM O CODIGO NOVO, e isso e lei da casa:** `bin/sombra.sh` **nunca
+migra a sombra** — ele so COMPARA `django_migrations` prod x sombra. A sombra tem o esquema de PROD, sem as
+duas colunas, e qualquer consulta a `TipoEscala` com o codigo novo quebraria ali. A pergunta certa para o
+esquema de hoje e a que a sonda faz: *as colunas existem?* Nao existem — e e isso que fecha o universo.
+
+**QUEM MAIS LE, censo fechado (o `quem-mais-le` do LEI-AKITA do aval):**
+- `ponto/services/espelho.py:728-736` — montador, **passa a extra** pelo mesmo juiz;
+- `colaboradores/services/calendario.py:434-437` — idem, com a carga de celulas **icada** para servir os
+  dois consumidores do mes numa consulta so;
+- `ponto/services/he_pendente_lavrado.py:53-98` — chama `espelho_do_colab` e le `d['he_fora_da_janela']`:
+  **herda**, sem linha nova;
+- `recusar_ponta_pequena` — documenta que le `marcar_pontas_fora` *"pelo montador do espelho"*: **herda**;
+- `ponto/services/espelho.py::pontas_do_relato` — **deliberadamente NAO recebe a extra**: ele TRADUZ a
+  linha publicada pelo motor, cujo `minutos_fora` ja e a sobra. Passar a extra ali subtrairia duas vezes;
+- `motor_calculo_v2.py:2725` (`Motor12x36ComEscala._entrada_efetiva`) — **herda** pelo `_janela_do_dia`,
+  sem copia;
+- `_acusa_cadastro_x_realidade` — **nao muda**: o `cadastrado` segue sendo o marco **CRU**, porque
+  `pontas_do_relato` casa por `it['cadastrado'] != marco_da_celula`; deslocar ali deixaria a cura da O145
+  **muda exatamente nos dias que declaram extra**. O `minutos_fora` ja chega como sobra.
+- **O pre-julgamento da L-084 fica nos marcos CRUS**, e isso e da propria L-084: ela pergunta se o
+  **cadastro descreve o dia** (3 h nas duas pontas). Deslocar o marco antes dela deixaria a extra decidir
+  se a L-084 se aplica.
+
+**TRES COISAS QUE EU VI E NAO CUREI, porque curar aqui seria regra de negocio fora do pedido:**
+1. declarar extra num template torna as celulas existentes **STALE** sob `tripwire_celulas.py:30` ate o
+   `regenerar_celulas_vinculo` — **igual a editar `hora_fim`**, e e o desenho (a celula e soberana);
+2. com `piso > 0`, o minuto que fica no piso **alem** da extra vira HE — mas a L-097 fixou **piso 0** nas
+   tres empresas, entao hoje isso nao alcanca ninguem;
+3. os dois leitores de `permite_hora_extra` ("batida tardia") seguem inalterados.
+
+`LEI-AKITA: origem=ponto/janela_he.py:54 (o limite da janela) + TipoEscala/DNA (cadastro), testemunha=a
+celula (dna.extra_declarada) lida pelo motor E por marcar_pontas_fora, RED=casos a-k + 10 selos,
+quem-mais-le=censo fechado acima (7 leitores, 2 herdam, 1 recusado com motivo), juizes novos=0`
+
+**FALTA, nomeado e nao escondido:** a **LINHA HAIKU** do dossie — contador *"extra da escala"* no payload
+do copiloto com rotulo de admin e o golden *"quanto de HE da escala o colab X tem no dia Y"*, degrau
+**leitura**. Ela mora na stack `mensageria/nucleo/ferramentas.py`, que tem deploy proprio, e **nao esta no
+`PRONTO` do dossie**; fica na celula da O146 como a PORTA-RETRATAR-BATIDA ficou com a dela.
+
+---
+# PEDIDOS DE PATCH **ABERTOS** — A DIETA NAO MOVE ISTO
+
+> **A LEI E DA PROPRIA DIETA DE PROSA**, escrita em 02/10 23:5x: *"a dieta move o que ja aconteceu,
+> nao o que ainda tem de acontecer"*. Pedido de patch ABERTO e' **contrato entre duas metades de uma
+> fatia**, nao historia: a metade de TELA ja esta na arvore, atras de um gate, e a metade de NUCLEO
+> le **aqui** o nome das chaves de contexto. Nome diferente nao reprova -- so **CALA** (o `{% if %}`
+> nao abre e a tela sai byte a byte igual), e e' por isso que o nome e' cobrado por selo.
+>
+> **ESTA SECAO JA FOI QUEBRADA DUAS VEZES PELO MESMO ATO**, as duas descobertas pela suite inteira:
+> 02/10 (push 94, levou `competencia_rotulo`) e **05/10 `fdd6f42c`, que e' meu** -- a dieta do marco
+> O191 moveu 5.548 linhas do vivo e levou o pedido INTEIRO da fatia 2 junto, e o push do marco voltou
+> VERMELHO em 2 selos **depois de 619 s de suite**. Na primeira vez a cura foi restaurar a palavra, e
+> so isso: **nenhuma guarda nasceu**, entao a classe sobreviveu para reaparecer tres dias depois.
+> Agora existe o tripwire: **`bin/tests/test_relato_guarda_pedido_de_patch.sh`**, que le por AST dos
+> PROPRIOS selos quais nomes o vivo tem de carregar (nunca uma lista digitada: a lista repetida foi o
+> buraco dos LABELS em quatro lugares) e fica VERMELHO **em menos de 1 s**, na regua, antes da suite.
+>
+> **Ao arquivar pela dieta: esta secao fica.** Quando a metade de nucleo pousar, o pedido vira
+> historia e vai para o `RELATO-ARQUIVO.md` **no mesmo commit** que religa os selos pulados -- e a
+> assercao do selo **inverte** para a autoridade de codigo, como a da UI-CAL-COMPETENCIA inverteu
+> hoje (ela passou a cobrar `competencia_rotulo` em `colaboradores/services/calendario.py`, porque as
+> duas metades dela pousaram: `:225` o modo, `:857` o rotulo). Selo nao se apaga; a pergunta troca.
+>
+> Copia integral da historia deste pedido, com a conversa em volta: `app/docs/RELATO-ARQUIVO.md`
+> (a partir de `# PEDIDO DE PATCH DA RAIA UI -> MAIN`, linha ~23.954). **Mover, nunca apagar.**
+
+## O QUE A TELA JA FAZ SEM PATCH NENHUM, e por que isso e seguro
+
+Com o contexto de hoje o HTML servido muda de FORMA (celula com `▲19`/`▼5`, tres estados por led + risco +
+fundo, dia clicavel que marca, tabela recolhida) e **nao muda de PODER**: a barra nao tem `method` nem
+`action`, o `<button>` dela nasce `disabled` e o motivo esta em texto visivel ao lado -- nunca num `title`,
+que e o que a LEI-UI **L4** proibe (`app/docs/LEIS-UI.md:39`). `{% url %}` de rota inexistente **nao entra**:
+`NoReverseMatch` nao desabilita um botao, derruba a tela -- foi o apagao de 23/09 (cinco 500 em
+`/colaboradores/<id>/calendario/`).
+
+> **ATENCAO NA ORDEM DO MERGE, e isto e medido, nao suposto.** Template e bind-mount: ele muda a tela NA HORA
+> (secao 2 do CLAUDE.md). O calendario novo **nao tem botao Autorizar por linha** -- o desenho aprovado pede
+> *"tabela recolhida e sem botao por linha"* --, e a barra que o substitui so liga com o patch 1. Entao, entre
+> o merge e o `deploy.sh` do patch 1, **a tela nao tem caminho de AUTORIZAR** (a CIENCIA em lote continua
+> inteira: ela e `recusar_he_em_lote`, que ja existe). Merge e deploy sao **UM ato** (MERGE DE RAIA CAI E
+> RECARREGA NO MESMO ATO, corte 30/09 17:4x): aplicar o patch 1, `bin/deploy.sh`, e so entao mergear a tela --
+> ou mergear e deployar sem nada no meio. Nunca a tela primeiro.
+
+## PATCH 1 -- a view de laco e o contrato de NOME `url_autorizar_marcados`
+
+**L-081 nao cai, e nao nasce porta de lote** (decisao de 01/10 20:1x, item 3): um clique na barra = **N ATOS,
+um por dia marcado**, cada um pela porta `decidir_he`, com a propria trilha, a propria idempotencia e a
+propria relavratura. `ponto/portas/he.py:175::autorizar_em_lote` **continua levantando** -- e a funcao que
+existe para explicar por que nao existe --, e o laco mora na VIEW, exatamente como
+`ponto/views.py:512::recusar_he_em_lote` ja faz com `recusar_em_lote`.
+
+**(a) `app/ponto/views.py`** -- view nova, logo depois de `decidir_he` (que termina em `:508`):
+
+```python
+@login_required
+def autorizar_he_marcados(request):
+    """A BARRA UNICA DO CALENDARIO: N dias marcados, UM motivo, N ATOS (desenho Ronald 01/10 18:3x). POST.
+
+    NAO E LOTE E NAO E PORTA NOVA: cada `item` vira UMA chamada de `ponto/portas/he.py::decidir_he`, com a
+    propria trilha e a propria idempotencia -- o mesmo desenho de `recusar_he_em_lote`, e pela mesma razao
+    escrita la (um "modo lote" dentro da porta criaria um caminho de escrita que nenhum selo de idempotencia
+    cobre). O que a barra economiza e o GESTO do admin, nunca o ato.
+
+    O MOTIVO E UM E VALE PARA OS N DIAS: a tela mostrou os N dias e a conta antes do clique, e a porta grava
+    o mesmo porque em cada um. Motivo por dia eram treze campos abertos -- a poluicao de 01/10 11:1x.
+
+    OS MINUTOS VEM DA TELA, por dia, como na `decidir_he`: a porta nao os recalcula (a lapide dela conta por
+    que). `item` = `colab:data:minutos`, o MESMO formato que `recusar_he_em_lote` ja le -- nao nasce
+    vocabulario de transporte novo.
+    """
+    import datetime as _dt
+
+    from django.urls import reverse
+
+    from core.respostas import resposta_acao
+    from ponto.portas.he import DecisaoHERecusada, decidir_he as _porta
+    if request.method != 'POST':
+        from django.http import Http404
+        raise Http404
+    _volta = request.POST.get('voltar') or reverse('ponto:gestao_he')
+    _motivo = (request.POST.get('motivo') or '').strip()
+    brutos = request.POST.getlist('item')
+    if not brutos:
+        return resposta_acao(request, ok=False, redirect_url=_volta,
+                             msg='Nenhum dia marcado. Clique nos dias do calendario e confirme de novo.')
+    _ids = set()
+    for b in brutos:
+        _p = (b or '').split(':')
+        if len(_p) == 3 and _p[0].isdigit():
+            _ids.add(int(_p[0]))
+    _colabs = {c.pk: c for c in Colaborador.objects.filter(pk__in=_ids)}
+    ok, no_op, erros, malformados = 0, 0, [], 0
+    for b in brutos:
+        _p = (b or '').split(':')
+        if len(_p) != 3:
+            malformados += 1
+            continue
+        try:
+            _c, _d, _m = _colabs[int(_p[0])], _dt.date.fromisoformat(_p[1]), int(_p[2])
+        except (KeyError, ValueError, TypeError):
+            malformados += 1
+            continue
+        try:
+            r = _porta(_c, _d, 'autorizado', minutos=_m, autor=request.user,
+                       motivo=_motivo, request=request)
+        except DecisaoHERecusada as e:
+            # CADA DIA E UM ATO INDEPENDENTE: um dia que a porta recusa nao desfaz os outros, e volta
+            # NOMEADO -- nunca contado em silencio.
+            erros.append((getattr(_c, 'pk', _c), _d, str(e)))
+            continue
+        no_op += 1 if r['no_op'] else 0
+        ok += 0 if r['no_op'] else 1
+    _partes = ['%d dia(s) autorizados, com trilha por dia. O fechamento deles foi posto na fila de '
+               'recalculo.' % ok]
+    if no_op:
+        _partes.append('%d ja estavam autorizados (nada mudou).' % no_op)
+    if erros:
+        _partes.append('%d recusados pela porta: %s' % (
+            len(erros), '; '.join('col%s %s -- %s' % x for x in erros[:5])))
+    if malformados:
+        _partes.append('%d item(ns) ilegiveis foram ignorados.' % malformados)
+    return resposta_acao(request, ok=not (erros or malformados), msg=' '.join(_partes),
+                         redirect_url=_volta)
+```
+
+**(b) `app/ponto/urls.py:19`** -- depois da linha do `decidir_he`:
+
+```python
+    # A BARRA UNICA DO CALENDARIO: N dias marcados num gesto, N ATOS na porta `decidir_he` (18:3x).
+    # NAO e porta de lote -- `autorizar_em_lote` segue levantando, e o laco mora na view (L-081).
+    path('gestao-he/autorizar-marcados/', views.autorizar_he_marcados, name='autorizar_he_marcados'),
+```
+
+**(c) `app/ponto/views.py:768`** -- no dict do `render` de `gestao_he`, ao lado de `'pode_autorizar'`:
+
+```python
+        # O CONTRATO DE NOME com a metade de TELA: sem esta chave o `{% if %}` nao abre, a barra nasce sem
+        # `method`/`action` e diz por que. Mandar OUTRO nome nao reprova -- so cala (a barra nunca liga).
+        # Selo: `ponto/tests/test_tela_gestao_he_calendario.py` (constante `VAR`).
+        'url_autorizar_marcados': reverse('ponto:autorizar_he_marcados') if tem_acao(
+            request.user, 'autorizar_he') else '',
+```
+(a view ja tem `from django.urls import reverse`? **nao**: `gestao_he` nao importa `reverse` -- incluir
+`from django.urls import reverse` no corpo dela, como as irmas fazem.)
+
+**O selo da metade de tela que fica VERMELHO se o nome divergir** ja esta escrito:
+`test_MORDE_o_contrato_de_NOME_e_a_MESMA_palavra_nos_QUATRO_sitios` e
+`test_MORDE_o_contrato_de_NOME_esta_escrito_no_RELATO`.
+
+**RED a escrever no MESMO commit do patch** (o que a tela nao pode provar): marcar 3 dias + 1 confirmacao =
+**3 `DecisaoHE` autorizadas e 3 linhas de `LogAuditoria` com `acao='decidir_he'`**, e a segunda confirmacao
+com os mesmos 3 itens = **0 trilha nova** (idempotencia herdada da porta, contrato 2 de 13/09). Mais o caso
+que MORDE: um item com `minutos=0` volta em `erros` e **nao derruba** os outros dois.
+
+## PATCH 2 -- os dois selos que a L-081 trava e que o desenho de 18:3x SUPERA
+
+Estes dois ficam VERMELHOS no instante em que a barra ligar, e **isso e correto**: eles guardam a redacao
+antiga da L-081 no nivel de TELA, e o desenho aprovado em 01/10 18:3x a alterou (a porta segue um dia por
+ato; o que passou a poder ser multiplo e o GESTO). Quem aplicar o patch 1 ajusta os dois no mesmo commit:
+
+* `app/ponto/tests/test_tela_gestao_he.py:122::test_MORDE_AUTORIZAR_e_um_dia_por_ato_e_RECUSAR_pode_ser_em_LOTE`
+  -- ele proibe controle de lote dentro de form que autoriza. Hoje ele passa **por vacuidade** (nao ha mais
+  form com `decidir` na tag de abertura), e isso ja esta registrado aqui para nao passar por cura. A pergunta
+  dele muda de *"ha controle de lote num form que autoriza?"* para *"o form que autoriza manda UM `item` por
+  DIA, e nao uma lista de dias num campo?"* -- o que prende a lei que sobrou: **N atos, nunca 1 ato com
+  lista**.
+* `app/ponto/tests/test_tela_gestao_he.py:384::test_MORDE_AUTORIZAR_em_lote_NAO_EXISTE` -- **NAO muda**.
+  `ponto/portas/he.py:175::autorizar_em_lote` continua levantando, porque **nao nasce porta de lote**. Ele e o
+  selo que prova que o laco ficou na view.
+
+## PATCH 3 -- o LIMITE DE DECISAO e cadastro da empresa (default 10 min, SO DE TELA)
+
+Dois contratos de NOME, e os dois estao cravados na metade de tela: a chave por dia **`abaixo_limite`** e o
+rotulo pronto **`limite_decisao_rotulo`**. O template **nao compara minuto com nada** -- sem a chave, nenhuma
+celula aparece apagada, e sem o rotulo a legenda do limite nem se escreve (explicar um estado que a tela nao
+produz e a testemunha afirmando sobre o que nao mediu). Selo:
+`test_MORDE_o_template_NAO_compara_minuto_com_LIMITE_nenhum`.
+
+**(a) `app/colaboradores/models.py:46`** -- ao lado de `dia_inicio_competencia`, que e o vizinho certo (as
+duas sao regra que varia por EMPRESA, LEI-AKITA 12):
+
+```python
+    limite_decisao_he_min = models.PositiveSmallIntegerField(
+        default=10,
+        help_text='SO DE TELA: dia com menos minutos de HE fora do marco que isto nao e CHAMADO a decisao na '
+                  'Gestao de HE (aparece apagado, sem led). NAO muda dinheiro e NAO muda a L-097 -- o minuto '
+                  'segue bloqueado do mesmo jeito; o que o limite decide e se o admin e chamado a olhar.')
+```
+
+**(b) migration** `app/colaboradores/migrations/0056_limite_decisao_he_min.py` (`AddField`, default 10, sem
+`RunPython`). **Ela segura o deploy** (migration pendente trava o `deploy.sh`, DEPLOY JA), entao sobe junto.
+
+**(c) `app/colaboradores/admin.py:6`** -- o cadastro E a UI do django admin, como e para o
+`dia_inicio_competencia`; o campo ganha LEITOR visivel em `list_display`:
+
+```python
+    list_display = ["nome", "cnpj", "ativa", "dia_inicio_competencia", "limite_decisao_he_min"]
+```
+
+**(d) `app/ponto/services/gestao_he.py:121`** -- em `_tira`, no dict de `por_data`, UMA chave nova. O leitor
+COMPARA (e e o unico que compara), e o limite chega por argumento -- nunca por `getattr(empresa, ...)` dentro
+da funcao, que seria o juiz lido duas vezes:
+
+```python
+            'abaixo_limite': bool(limite) and _m <= limite,
+```
+`_tira(dias, ini, fim, limite=0)` ganha o parametro, `enriquecer(..., limite=0)` o repassa nas TRES chamadas
+(`:271`, `:296` e `:306`), e `ponto/views.py` o le do cadastro: `getattr(empresa, 'limite_decisao_he_min', 0)`.
+
+**(e) o CONTADOR muda de universo, e e aqui que mora o observavel dele** (*"col616 comp 09 com o 'sem
+decisao' caindo de 13 para os acima do limite, numero publicado"*). Em
+`app/ponto/services/gestao_he.py:246` e `:302`, `sem_decisao` passa a contar **so o que PEDE decisao**:
+
+```python
+        linha['sem_decisao'] = sum(1 for d in linha['dias']
+                                   if d['estado'] == 'sem_decisao' and not d.get('abaixo_limite'))
+```
+**CUIDADO, e isto e L1 (CONTADOR == UNIVERSO):** o mesmo `sem_decisao` alimenta (i) o chip da linha, (ii) o
+total do topo, (iii) o botao *"Dar ciencia em tudo que esta sem decisao -- N dia(s)"* e (iv) o universo que
+`ponto/views.py:538::recusar_he_em_lote` relê com `todos_sem_decisao=1`. Se o contador encolher e o ATO nao,
+o botao promete 4 e faz 13 -- **o numero e a lista tem de sair do mesmo lugar**, e saem: os quatro leem a
+MESMA `enriquecer`. O que o patch precisa decidir **por escrito** e se a ciencia em lote tambem passa a
+ignorar os dias abaixo do limite (o `brutos` de `:558` filtra por `d.get('estado') == 'sem_decisao'`, hoje
+sobre a lista COMPLETA). **Pergunta de LEI no topo deste RELATO, nao decidida aqui.**
+
+**(f) `app/ponto/views.py:768`** -- o ROTULO vai PRONTO para a tela (L7/L2: o texto sai de onde a decisao
+mora; o NUMERO nunca entra no template):
+
+```python
+        'limite_decisao_rotulo': ('abaixo do limite de decisao (%d min ou menos, cadastro da empresa)'
+                                  % _lim) if _lim else '',
+```
+com `_lim = getattr(empresa, 'limite_decisao_he_min', 0) if empresa is not None else 0`.
+
+**RED do patch 3, no mesmo commit:** empresa com limite **7** -> dia de 7 min tem `abaixo_limite=True` e dia
+de 8 min **nao** (o caso que MORDE: com o default 10 cravado em qualquer sitio, 8 cairia abaixo e o selo
+passaria por coincidencia de numero -- e o gemeo exato do `21` cravado que `ponto/janelas.py` nasceu para
+matar); e empresa com limite **0/None** -> **nenhum** dia abaixo, que e o estado de hoje.
+
+---
+
+**L-110 `REFERENCIA-E-A-LEI` NASCEU HOJE, E REVOGOU UMA LEI DE MINUTOS ANTES DELA** (secao de 00:3x): a
+referencia de um numero e a **REGRA** aplicada ao cadastro e as batidas; o codigo de hoje **nao e gabarito**
+do codigo novo. `FROTA-PROVA-AMOSTRA-EXPLICA` foi desfeita nos quatro sitios no mesmo marco.
+
+**AS DUAS LEIS DE ESTEIRA DAS 19:2x JA VALEM NESTE POUSO** (`RAIA-VERDE-POUSA` = **L-105**,
+`DOCS-NO-MARCO` = **L-106**; `MERGE DE RAIA` = **L-107**, `MARCO FECHADO / PUSH UM POR MARCO` = **L-108**,
+`DIETA DE PROSA` = **L-109**). O pacote que estava em voo **se separou no mesmo turno**: K8 e K5 pousam
+como PRODUTO, o CERT-AST vai a pouso proprio. Por **L-105c**, em uma linha: *`cert-ast` (`cb84a4ac`) nao
+pousa aqui porque e INSTRUMENTO (`bin/suite_nucleo.sh`, selo de host, paragrafo da CLAUDE.md 3) -- pouso
+proprio, logo atras, levando `8ffcd44d`.*
+
+**MARCO ANTERIOR, NO AR E NO REMOTO -- `5d31530f..024608c7`.** O pacote de PRODUTO (K8 + K5) pousou com o deploy num
+ato so (L-107) e o range inteiro chegou ao remoto na **terceira** tentativa.
+PROVA: `HEAD` = `024608c7` == `origin/main`, **0 commit a frente**; `pre-push: OK -- push liberado`; a suite
+do commit empurrado deu **9.625 testes OK (skipped=42)** e o control-plane **22 OK**.
+PROVA: o sha DEPLOYADO (`8c3035bc`) nao e a ponta (`024608c7`), e isso esta certo --
+`git diff --stat 8c3035bc..024608c7 -- '*.py'` devolve **saida vazia**; no range sobraram so
+`app/docs/LEIS.md` e `app/docs/TICKETS.md` (4 linhas). **Nenhum `.py` se moveu depois do deploy**, entao a
+prova de casca e o smoke do K8 seguem valendo para o codigo que esta no ar.
+AS TRES TENTATIVAS, a causa de cada uma em UMA linha:
+1. `tickets_placar: ALARME` -- o topo derivado do TICKETS nasceu dentro da copia `wt-pousos`, onde nao havia
+   carimbo de regua, e saiu sem o prefixo `regua OK (04/10 17:26)`. Curado pelo escritor CANONICO
+   (`bin/pos_push.sh` -> `77eafa5f`), nunca a mao.
+2. `test_lei_protege_sitio: RED` em **3 leis, todas minhas** -- as celulas PROTEGE da L-104 e da L-108
+   carregavam PROSA, e a coluna cobra `arquivo.py::funcao` (gramatica em
+   `bin/tests/test_lei_protege_sitio.sh:83`). A L-102 ja estava conforme: **o leitor que nao havia migrado
+   era eu**. Curado em `024608c7`; a celula da L-108 fica VAZIA de proposito, com o motivo na coluna do
+   leitor, porque o alvo dela e um `.md` e a coluna so aceita `.py`.
+3. verde.
+CONDUTA NOVA, e ela e barata: **a pasta `bin/tests/` INTEIRA roda na arvore viva ANTES do push** -- 61
+selos, menos de 1 min, contra ~10 min de suite por rejeicao. As duas rejeicoes de hoje foram selo de HOST;
+**nenhuma foi a suite**. (Memoria `pasta-de-selos-antes-do-push`.)
+**A L-106 teve o primeiro caso MEDIDO no mesmo dia em que nasceu, e e meu**: a correcao do item (2) e um
+commit que toca SO `app/docs/`. Nao e excecao e nao abre allowlist -- ela caiu DENTRO do range aberto do
+push, e a **L-108 define o marco pelo PUSH**, nao pelo commit. O texto da L-106 nao se tocou.
+
+**O191 PASSO 5 -- A CONDICAO DE ENTRADA ESTA MEDIDA, e ela LIBERA o passo.** Ele pediu que a O191 comecasse
+provando que o dia sem par e REAL e nao defeito do juiz de geometria. Medido na SOMBRA, 6 dia-colab
+(`logs/o134/o191_condicao_entrada_20261004.out`):
+
+| colab | dia | celula casada | previsto | turnos com esse `data_turno` | `sem_turno` | ABERTO | soma propria |
+|---|---|---|---|---|---|---|---|
+| col200 | 2026-08-25 | sim | 420 | **0** | True | False | 60 |
+| col235 | 2026-09-30 | sim | 420 | **0** | True | False | 61 |
+| col250 | 2026-09-29 | sim | 660 | **0** | True | False | 240 |
+| col277 | 2026-08-31 | sim | 660 | **0** | True | False | 280 |
+| col302 | 2026-09-09 | sim | 660 | **0** | True | False | 300 |
+| col852 | 2026-08-21 | sim | 660 | **0** | True | False | 305 |
+
+Os seis tem celula casada com **4 marcos congelados** e previsto (420 ou 660 min), `eh_dia_trabalho=True`, e
+**ZERO turno** com aquele `data_turno`. As batidas EXISTEM -- sao 11 no col200 -- e pertencem aos turnos
+**VIZINHOS**: no noturno a entrada e 22:00 de d-1 e a saida 06:00 de d, entao o par cai em
+`data_turno=24/08` e o dia 25/08 nao tem turno proprio. Contradicao do juiz (turno na janela E
+`sem_turno=True`): **0 de 6**. Dia que a propria autoridade marca ABERTO: **0 de 6**. Veredito:
+`ponto/turnos.py::realizado_do_dia` **nao erra** -- ele devolve `minutos=None sem_turno=True`, que e "nao
+sei", e e a resposta certa. O passo 5 segue.
+A SONDA ANTERIOR NAO SE PUBLICA, e o erro era meu: ela passava **DATAS** a `batidas_apuraveis`, cuja janela
+e de **INSTANTES** (`ponto/turnos.py:1865`), e o censo truncava na meia-noite do ultimo dia com
+`RuntimeWarning: naive datetime`. Corrigida em `logs/sombra/o191_condicao_entrada_20261004.py:68-71`, a
+janela impressa agora le `24/08 00:00:00 -> 26/08 23:59:59`.
+
+**ITEM (b): O `or 0` QUE EU IA CURAR ESTA MORTO -- a origem e outra linha.** O aval nomeava
+`ponto/supra_juiz.py:131` (`real = dia.get('minutos_realizados') or 0`) como o ZERO a declarar. Censo dos
+**tres** chamadores reais (`ponto/services/cartorio.py:585`, `ponto/management/commands/supra_juiz.py:190`,
+`ponto/management/commands/emitir_furo_retroativo.py:82` -- o `classificar_dia` de `relatorios/furos.py` e
+outra funcao com o mesmo nome e nao conta): **nenhum entrega `None` ali**, porque os dois produtores ja
+colapsaram antes --
+- `escala/services/leitor_celula.py:364` faz `int(ata.get('minutos_realizados') or 0)`, e o `base` da
+  linha 337 ja nasce com `'minutos_realizados': 0`;
+- `escala/utils.py:1334`, quando a autoridade devolve `sem_turno`, **nao colapsa para zero: ela FABRICA um
+  numero** pelas celulas (`minutos_realizados_do_dia({'celulas': cel_por_data[d]}, marcos_out)`). Sao
+  exatamente os `60, 61, 240, 280, 300, 305` da ultima coluna da tabela acima.
+O comentario da propria linha confessa: *"ali o numero nao e da autoridade, o dia leva
+`realizado_sem_turno`"*. **E essa e a SOMA PROPRIA que o passo 5 manda sair** -- S133 e LEI-AKITA 2, a
+testemunha recalculando em vez de ler. Curar a 131 seria band-aid sobre um colapso que ja aconteceu
+(LEI-AKITA 1): a origem e a **1334**, e a 131 so passa a precisar distinguir `None` DEPOIS que ela sair.
+MEDIR ANTES DE TOCAR, e o motivo tem numero: esse `minutos_realizados` desce para `folha/export.py:698` e
+`ponto/services/dia_pago.py:341`, os dois com `min(..., previsto)` -- **tirar a soma propria MOVE
+DINHEIRO**. Entra por DINHEIRO-EM-COMPETENCIA-ABERTA: DIFF de frota publicado ANTES, reversao em `logs/`,
+competencia exportada intacta com hash, PROVA depois. O precedente diz para esperar numero longe de zero:
+o `e6_oraculo` curou o MESMO `or 0` no leitor dele em 02/10 e mediu que, dos 247 dia-colab de
+`esp_zero_e6_trabalho` da competencia 09, **so 67 eram zero de verdade** -- 170 (1.681,0 h) tinham valor
+positivo no `DiaPago`.
+
+**LEI RESPONDIDA as ~14:xx -- (a), E ELA ALTERA A PROPRIA L-102.** O que segue e a pergunta como ela foi para a mesa, com os numeros que a decidiram; a resposta esta logo depois dela. (Nasceu sob PAREI-DE-LEI-NAO-DEVOLVE-TURNO; o adendo dele de 12:xx nomeia este
+caso: *"Se a ata precisar guardar o numero por outro caminho, isso e pergunta de LEI: topo do RELATO com o
+numero, e segue o proximo item"*). **DE QUAL AUTORIDADE SAI O NUMERO QUE A L-102 MANDA ROTULAR** --
+`Sem turno pareado (ata Xh)`, *"nem se grava 0, nem se cala"* -- quando a soma propria de
+`escala/utils.py` sair? A autoridade do pareamento **declina o numero**: `ponto/turnos.py:398` devolve
+`RealizadoDoDia(minutos=None, sem_turno=True, ...)` quando nenhum turno tem `data_turno` naquele dia, e
+nao ha campo nela que carregue "quanto havia". OS NUMEROS: **88 dia-colab** sem par na 09+10 (emp2+3+4),
+**15 deles com numero hoje** (45,2 h) e **73 com zero**; dos 15, **2 sao a classe A** -- o numero e o turno
+do dia VIZINHO -- e **13 a classe B**, onde o numero e o intervalo entre batidas orfas DAQUELE dia. Os tres
+caminhos que eu enxergo estao **todos barrados por lei existente**, e por isso nao escolho: (a) a palavra
+fica SEM numero -- contraria a L-102 literal, e as horas so restam visiveis nas BATIDAS da linha (Portaria
+671); (b) nasce autoridade para *"quanto tempo ha entre as batidas deste dia, sem julgar turno"* -- **juiz
+novo**, que o aval PROIBE e a TRAVA JUIZ-NOVO condiciona a `corte Ronald: juiz <nome> nasce` no CORTES.md;
+(c) a soma propria fica **so para a ata** -- o pendente de `celula/precedencia` continua aberto, o passo 6
+nao fecha (`tirar pendente com a impressao ainda no codigo` e PROIBIDO) e o placar nao vai a 15/20
+(o teto virou **20** hoje as 14:1x, por lei dele -- L-100, secao O135 abaixo).
+**O QUE A RESPOSTA ARRASTA, agora MEDIDO nos dois sentidos** (aval dele de 13:0x, secao O189 abaixo): se
+for (a), o leitor que migra junto e `ponto/supra_juiz.py:131` (`real = dia.get('minutos_realizados') or 0`,
+que colapsa `None` em 0). Com a linha distinguindo `None` de 0, na sombra (emp2+3+4, 09 e 10): **73 de 73**
+dias de ata ZERO trocam de veredito e **6 dos 15** com numero; relavrando pela porta, **2 colaboradores
+ENTRAM no TXT** (col302 emp2 09, col250 emp2 10, os dois do grupo dos **15**) e **0 SAEM** -- nenhum dos 73
+move o TXT. E o preco aparece inteiro: os **73 perdem o protesto `BATIDA_ORFA_FORA_TOLERANCIA`**, porque o
+ramo de `supra_juiz.py:~290` esta preso a `real == 0` -- com `None` troca-se um zero falso por **silencio
+sobre uma orfa que existe**, exatamente nos dias definidos por ter uma. O numero antigo desta linha ("15
+trocam, col454 sai do TXT") nao sai de cena: e o DIFF das 11:07, que mede o mundo **com** o `or 0`, e os
+dois sentidos estao lado a lado na secao do O189.
+
+**A RESPOSTA, literal:** *"(a). O dia sem par diz 'Sem turno pareado' SEM numero; as horas ficam nas
+batidas da linha, e a L-102 passa a valer assim. O supra_juiz NAO passa a tratar None como 'nao sei': dia
+sem turno conta como realizado ZERO DECLARADO (escrito, nao por acidente do `or 0`), para os 88 dias terem
+o MESMO protesto de batida orfa."* Ela fecha os dois lados de uma vez e nenhum dos tres caminhos barrados
+foi o escolhido inteiro: a TELA vai pelo (a) -- palavra sem numero, horas nas batidas da linha, Portaria
+671 --, e o FECHAMENTO **nao** recebe o terceiro valor que eu media como consequencia do (a). O `None` nao
+sobe ate o juiz como "nao sei": ele se escreve **ZERO por decisao** em `ponto/supra_juiz.py:131`, e e isso
+que mantem os **88** dias protestando `BATIDA_ORFA_FORA_TOLERANCIA` pelo mesmo ramo -- o preco que eu havia
+medido as 13:3x (os **73 perdendo o protesto**) **nao se paga**, porque a cura nao e distinguir `None`, e
+declarar o zero. Nenhuma lei nova de juiz: a L-102 muda de rodape e nasce a **L-103** (as duas em
+`app/docs/LEIS.md`). Registro em `app/docs/PROMPTS.md`. **Efeito aceito por ele**: 15 dia-colab trocam de
+veredito, os 73 nao mudam, col454 sai do TXT da 09 na relavratura.
+**A CONDICAO DE ENTRADA e DELE e e LITERAL** (LEI-AKITA 9), e **nada se aplica antes dela**: dos **15**,
+listar os que tem **celula casada E previsto** (o exemplo dele e col250 29/09) e dizer se aquilo e **turno
+ABERTO que o juiz da geometria devia ter achado** -- *"se for, e bug do juiz, cura na origem primeiro"*.
+Entao a ordem da fatia (**O191**) nasce invertida de como eu a teria escrito: primeiro a autopsia dos 15,
+depois a palavra e o zero; e a relavratura vai **dentro** do apply, com reversao em `logs/`.
+**A ESTEIRA SEGUE:** passos 1-4 fechados com prova (secao das 12:xx); o passo 5 **nao espera mais** --
+a lei chegou e ele vira a **O191**, que comeca pela CONDICAO DE ENTRADA dele, nao pela cura. O item
+que andou em vez dele foi o **O135 TETO-20** (secao abaixo) -- nao por escolha de ordem, mas porque a
+REGUA estava VERMELHA: as 13:45 o tripwire do `test_cortes_registrados.sh` mordeu o corte
+`TETO-20-SEM-FAMILIA-SEM-CADASTRO` com **29 h em `recebido`** e FORA da pausa declarada (a `SAIDA` da
+pausa e o export da 09, que nao o cobre), entao a suite nem rodava e NENHUM push saia -- nem o
+`1cde743a` do LEI-PROTEGE-SITIO. As duas curas rapidas eram band-aid que a propria lapide do selo
+nomeia (engordar o `COBRE=`, ou derivar o TOTAL das celulas ausentes), e a cura de ORIGEM era construir
+a obra que o corte pede.
+**`!` CUMPRIDO -- O135 TETO-20 ESTA NO AR** (`fb1c78ac`, ff + `deploy.sh --sem-migrate` num ato so as
+**16:59**, 3 cascas provadas, `importerror_500=0`; secao das 16:59 abaixo).
+PROVA: `logs/deploy.stamp::COMMIT` = `8c3035bc`; `fb1c78ac` (ponta do ff) e `48805bbf` (a fatia) sao os DOIS
+ancestrais dele -- `git merge-base --is-ancestor` rc=0 nos dois --, e no ar
+`app/core/contratos_estruturais.py:351` diz *"Nao ha constante `TOTAL`: o teto e uma"*.
+O portao que o segurava era de
+**ACESSO, nao de dinheiro** -- `bin/janela_auth.sh` recusando por `dow=7` sobre o UNICO sitio declarado que
+a fatia tocava (`app/api/urls.py`, um `path()` read-only, **+2 linhas**, zero logica de auth) --, e eu nao
+o havia forcado porque forcar portao e ATALHO e atalho esta na lista NUNCA PRE-APROVADO (L-009), e porque o
+aval da manha era LITERAL sobre O142+O130+R4. O `!` dele das 14:4x resolveu o QUANDO e o aval das 16:4x
+resolveu o COMO: **pela saida que JA EXISTE** (`SEM_JANELA_AUTH_MOTIVO`, `bin/deploy.sh:147`), nao por uma
+segunda. A GUARDA 3 da esteira mede antes de atravessar e **recusa fora do escopo do aval** (se a guarda
+falhou por ESTRUTURA, ou se nomear outro sitio de auth). O `--forcar` que o `bin/janela_auth.sh` **anuncia
+e nao implementa** -- e que, lido como ref de git, sairia 1 de novo -- fica como fatia propria: **O185**,
+por ordem do mesmo aval. O agendado de segunda 06:05 foi **desarmado com trilha**
+(`logs/deploy_agendado/o135-teto20.desarmado`): com `teto20 == main` as quatro guardas passariam VACUAS e
+ele publicaria a arvore viva daquele minuto, sem ninguem olhando. `deploys_agendados=0`.
+E com isso a REGUA destravou: o corte `TETO-20-SEM-FAMILIA-SEM-CADASTRO` saiu de `recebido` (`no ar
+fb1c78ac`) e `test_cortes_registrados.sh` responde `OK (63 cortes; 0 sem fatia)` -- a cura foi a obra que o
+corte pedia, nao o `COBRE=` engordado.
+**O PROXIMO que nao depende desta lei:** **PLACAR-ESTRUTURAL R6 item 3**.
+O marco anterior esta NO AR: o `!` das 09:3x cumprido as **10:02:41** (`d1689254`).
+PROVA: `d1689254` e ancestral de `logs/deploy.stamp::COMMIT` (`8c3035bc`) -- `git merge-base
+--is-ancestor d1689254 8c3035bc` rc=0.
+**FORA DO ATO, por LEI-AKITA 9 (escopo do aval e' LITERAL):** `raia-chamado` (`142238fc`) e
+`raia-pdf` (`584265a9`) seguem sem merge -- o aval nomeia O142 + O130 + R4 e nada mais. O item O183
+do BACKLOG previa a `raia-chamado` neste mesmo `!`, e eu NAO a estendi por conta propria: **uma
+linha dele** ("inclui a chamado e a pdf") e elas entram no proximo ato.
+
 ### SEUS CORTES -- o que voce mandou e ainda nao esta no ar
 
 > **Esta tabela e REGISTRO, nao cronologia**, e por isso ela nao vai para o `RELATO-ARQUIVO.md`: o
@@ -2361,87 +2942,92 @@ Tambem **nao** chamo `aguardando_documento` de defeito: ele e PROJETADO para `TI
 > **calado**; agora o lugar e declarado (acima da 1a secao) e o motivo sai no stderr.
 
 <!-- SEUS-CORTES:INICIO -->
-### SEUS CORTES -- o que voce mandou e ainda nao esta no ar (75)
+### SEUS CORTES -- o que voce mandou e ainda nao esta no ar (80)
 
-> **ALARME: 12 corte(s) com mais de 24 h em "recebido"** -- TROCA-DE-PLANTAO (736 h), FECHAMENTO-UI-PORTAS (717 h), CATALOGO-SAIDA-ANTECIPADA-DESCONTA (715 h), ESTEIRA-RETA-FINAL (713 h), ZUMBIDO (710 h), CARTAO-TOTAL-IGUAL-SOMA (708 h), CERT-VIGIA (697 h), CHAMADO-GANHA-CADASTRO (695 h), JUIZ-BATIDA-NASCE (695 h), JUIZ-ESCALA-NASCE (695 h), PERTO-DO-MOTOR-ESPERA-O-EXPORT (695 h), E3-CHAMADO-APOS-ARQUIVO-SIMPLES (695 h). Cada um vira Pauta de sistema para o DP ate sair de "recebido".
+> **ALARME: 12 corte(s) com mais de 24 h em "recebido"** -- TROCA-DE-PLANTAO (737 h), FECHAMENTO-UI-PORTAS (718 h), CATALOGO-SAIDA-ANTECIPADA-DESCONTA (715 h), ESTEIRA-RETA-FINAL (714 h), ZUMBIDO (711 h), CARTAO-TOTAL-IGUAL-SOMA (709 h), CERT-VIGIA (698 h), CHAMADO-GANHA-CADASTRO (696 h), JUIZ-BATIDA-NASCE (696 h), JUIZ-ESCALA-NASCE (696 h), PERTO-DO-MOTOR-ESPERA-O-EXPORT (696 h), E3-CHAMADO-APOS-ARQUIVO-SIMPLES (696 h). Cada um vira Pauta de sistema para o DP ate sair de "recebido".
 
 | corte | hora | idade | estado | fatia que consome |
 |---|---|---|---|---|
-| **ACESSO-NUNCA-EM-LOTE** | 2026-09-23 08:4x | 746 h | construindo | O4 + CREDENCIAL-POR-ESTADO |
-| **COL200-DIA-DO-TURNO** | 2026-09-23 17:xx | 737 h | construindo | O9 PDF-E-O-ESPELHO |
-| **TROCA-DE-PLANTAO** | 2026-09-23 18:3x | 736 h | recebido | O10 TROCA-DE-PLANTAO (porta no Resolver dia) |
-| **CORTES-REGISTRADOS** | 2026-09-23 18:xx | 736 h | construindo | CORTES-REGISTRADOS |
-| **NOITE-23-09** | 2026-09-23 18:4x | 736 h | construindo | NOITE-23-09 (infra) |
-| **FABRICANTE-LE-O-BACKLOG** | 2026-09-23 20:1x | 734 h | construindo | FABRICANTE-LE-O-BACKLOG |
-| **FECHAMENTO-UI-PORTAS** | 2026-09-24 13:xx | 717 h | recebido | O24 FECHAMENTO-UI-PORTAS |
-| **JANELA-EXATA** | 2026-09-24 15:xx | 715 h | construindo | O27 JANELA-EXATA |
+| **ACESSO-NUNCA-EM-LOTE** | 2026-09-23 08:4x | 747 h | construindo | O4 + CREDENCIAL-POR-ESTADO |
+| **COL200-DIA-DO-TURNO** | 2026-09-23 17:xx | 738 h | construindo | O9 PDF-E-O-ESPELHO |
+| **TROCA-DE-PLANTAO** | 2026-09-23 18:3x | 737 h | recebido | O10 TROCA-DE-PLANTAO (porta no Resolver dia) |
+| **CORTES-REGISTRADOS** | 2026-09-23 18:xx | 737 h | construindo | CORTES-REGISTRADOS |
+| **NOITE-23-09** | 2026-09-23 18:4x | 737 h | construindo | NOITE-23-09 (infra) |
+| **FABRICANTE-LE-O-BACKLOG** | 2026-09-23 20:1x | 735 h | construindo | FABRICANTE-LE-O-BACKLOG |
+| **FECHAMENTO-UI-PORTAS** | 2026-09-24 13:xx | 718 h | recebido | O24 FECHAMENTO-UI-PORTAS |
+| **JANELA-EXATA** | 2026-09-24 15:xx | 716 h | construindo | O27 JANELA-EXATA |
 | **CATALOGO-SAIDA-ANTECIPADA-DESCONTA** | 2026-09-24 15:5x | 715 h | recebido | CATALOGO-SAIDA-ANTECIPADA-DESCONTA |
 | **FILA-24-09-16-5X** | 2026-09-24 16:5x | 714 h | construindo | FILA-24-09-16-5X |
 | **RELATORIO-ATESTADOS-FOTOS** | 2026-09-24 16:5x | 714 h | construindo | O29 RELATORIO-ATESTADOS-FOTOS |
-| **AUSENCIAS-DRAWER-E-LOTE** | 2026-09-24 17:xx | 713 h | construindo | O30 AUSENCIAS-DRAWER-E-LOTE |
-| **ESTEIRA-RETA-FINAL** | 2026-09-24 17:xx | 713 h | recebido | O31 ESTEIRA-RETA-FINAL |
-| **ZUMBIDO** | 2026-09-24 20:xx | 710 h | recebido | O32 ZUMBIDO |
-| **SUSPENSAO-DESCONTA-JORNADA** | 2026-09-24 22:3x | 708 h | construindo | SUSPENSAO-DESCONTA-JORNADA |
-| **CARTAO-TOTAL-IGUAL-SOMA** | 2026-09-24 22:3x | 708 h | recebido | O33 CARTAO-TOTAL-IGUAL-SOMA |
-| **CONTRATO-3-SEM-CONSUMIDOR-SAI** | 2026-09-25 00:xx | 706 h | esperando "!" | O35 CONTRATOS-14 |
-| **CHAMADO-VARREDURA-NAO-JULGA** | 2026-09-25 00:xx | 706 h | RESPONDIDO 03/10 09:5x pelo PAPEL-PRAZO-NASCE (4a opcao: nasce o papel prazo) | O35 CONTRATOS-14 |
-| **TETO-DA-MATRIZ-E-21** | 2026-09-25 00:xx | 706 h | esperando "!" | O35 CONTRATOS-14 |
-| **JUIZ-DE-BATIDA-E-DE-ESCALA** | 2026-09-25 00:xx | 706 h | esperando "!" | O35 CONTRATOS-14 |
-| **PERTO-DO-MOTOR-E-DO-JUIZ-DE-TURNO** | 2026-09-25 00:xx | 706 h | esperando "!" | O35 CONTRATOS-14 |
-| **CERT-VIGIA** | 2026-09-25 09:4x | 697 h | recebido | CERT-VIGIA |
-| **K8-COMPETENCIA-NAO-E-MES-CIVIL** | 2026-09-25 09:2x | 697 h | construindo | O40 K8-COMPETENCIA-NAO-E-MES-CIVIL |
-| **ESTEIRA-SECA-1-E-2-AGORA** | 2026-09-25 10:3x | 696 h | construindo | O42 ESTEIRA-SECA-25-09 |
-| **EXPORTADO-SEM-FRONTEIRA** | 2026-09-25 10:3x | 696 h | construindo | O44 ARQUIVO-SIMPLES v2 |
-| **PASSIVO-TRANCADA-E-HISTORIA** | 2026-09-25 10:3x | 696 h | construindo | O44 ARQUIVO-SIMPLES v2 item 7 |
-| **CHAMADO-GANHA-CADASTRO** | 2026-09-25 11:0x | 695 h | recebido | O35 CONTRATOS-14 |
-| **JUIZ-BATIDA-NASCE** | 2026-09-25 11:0x | 695 h | recebido | S-BATIDA |
-| **JUIZ-ESCALA-NASCE** | 2026-09-25 11:0x | 695 h | recebido | S-ESCALA |
-| **PERTO-DO-MOTOR-ESPERA-O-EXPORT** | 2026-09-25 11:0x | 695 h | recebido | O35 CONTRATOS-14 |
-| **E3-CHAMADO-APOS-ARQUIVO-SIMPLES** | 2026-09-25 11:0x | 695 h | recebido | E3-CHAMADO |
-| **JUIZES-TRES-ASSINATURAS** | 2026-10-03 05:30 | 509 h | construindo | registro em `app/docs/CORTES.json` (03/10 08:4x) -- a TRAVA cai de 2 para 1 FALHA. O `batidas_apuraveis` e o `escala_vigente` entram em `app/core/juizes.py` nos itens 6 e 3 da ordem de 08:13, cada um com o censo do seu ponto |
-| **ESPINHA-ANTES-DA-UI** | 2026-10-03 08:13 | 506 h | construindo | O134 ESPINHA-ANTES-DA-UI (ordem da fila 1) + O133 CLEAR-NO-MARCO na fila 2 |
+| **AUSENCIAS-DRAWER-E-LOTE** | 2026-09-24 17:xx | 714 h | construindo | O30 AUSENCIAS-DRAWER-E-LOTE |
+| **ESTEIRA-RETA-FINAL** | 2026-09-24 17:xx | 714 h | recebido | O31 ESTEIRA-RETA-FINAL |
+| **ZUMBIDO** | 2026-09-24 20:xx | 711 h | recebido | O32 ZUMBIDO |
+| **SUSPENSAO-DESCONTA-JORNADA** | 2026-09-24 22:3x | 709 h | construindo | SUSPENSAO-DESCONTA-JORNADA |
+| **CARTAO-TOTAL-IGUAL-SOMA** | 2026-09-24 22:3x | 709 h | recebido | O33 CARTAO-TOTAL-IGUAL-SOMA |
+| **CONTRATO-3-SEM-CONSUMIDOR-SAI** | 2026-09-25 00:xx | 707 h | esperando "!" | O35 CONTRATOS-14 |
+| **CHAMADO-VARREDURA-NAO-JULGA** | 2026-09-25 00:xx | 707 h | RESPONDIDO 03/10 09:5x pelo PAPEL-PRAZO-NASCE (4a opcao: nasce o papel prazo) | O35 CONTRATOS-14 |
+| **TETO-DA-MATRIZ-E-21** | 2026-09-25 00:xx | 707 h | esperando "!" | O35 CONTRATOS-14 |
+| **JUIZ-DE-BATIDA-E-DE-ESCALA** | 2026-09-25 00:xx | 707 h | esperando "!" | O35 CONTRATOS-14 |
+| **PERTO-DO-MOTOR-E-DO-JUIZ-DE-TURNO** | 2026-09-25 00:xx | 707 h | esperando "!" | O35 CONTRATOS-14 |
+| **CERT-VIGIA** | 2026-09-25 09:4x | 698 h | recebido | CERT-VIGIA |
+| **K8-COMPETENCIA-NAO-E-MES-CIVIL** | 2026-09-25 09:2x | 698 h | construindo | O40 K8-COMPETENCIA-NAO-E-MES-CIVIL |
+| **ESTEIRA-SECA-1-E-2-AGORA** | 2026-09-25 10:3x | 697 h | construindo | O42 ESTEIRA-SECA-25-09 |
+| **EXPORTADO-SEM-FRONTEIRA** | 2026-09-25 10:3x | 697 h | construindo | O44 ARQUIVO-SIMPLES v2 |
+| **PASSIVO-TRANCADA-E-HISTORIA** | 2026-09-25 10:3x | 697 h | construindo | O44 ARQUIVO-SIMPLES v2 item 7 |
+| **CHAMADO-GANHA-CADASTRO** | 2026-09-25 11:0x | 696 h | recebido | O35 CONTRATOS-14 |
+| **JUIZ-BATIDA-NASCE** | 2026-09-25 11:0x | 696 h | recebido | S-BATIDA |
+| **JUIZ-ESCALA-NASCE** | 2026-09-25 11:0x | 696 h | recebido | S-ESCALA |
+| **PERTO-DO-MOTOR-ESPERA-O-EXPORT** | 2026-09-25 11:0x | 696 h | recebido | O35 CONTRATOS-14 |
+| **E3-CHAMADO-APOS-ARQUIVO-SIMPLES** | 2026-09-25 11:0x | 696 h | recebido | E3-CHAMADO |
+| **JUIZES-TRES-ASSINATURAS** | 2026-10-03 05:30 | 510 h | construindo | registro em `app/docs/CORTES.json` (03/10 08:4x) -- a TRAVA cai de 2 para 1 FALHA. O `batidas_apuraveis` e o `escala_vigente` entram em `app/core/juizes.py` nos itens 6 e 3 da ordem de 08:13, cada um com o censo do seu ponto |
+| **ESPINHA-ANTES-DA-UI** | 2026-10-03 08:13 | 507 h | construindo | O134 ESPINHA-ANTES-DA-UI (ordem da fila 1) + O133 CLEAR-NO-MARCO na fila 2 |
 | **PAPEL-PRAZO-NASCE** | 2026-10-03 09:5x | 505 h | registrado -- lei L-101, obra O139; censo dos 27 a medir antes de mover um nome | O139 PAPEL-PRAZO |
 | **HOLERITE-MES-CIVIL** | 2026-10-04 17:5x | 473 h | construindo na raia `k5-encerrada` -- o corte RATIFICA `6a350aa9`, que ja tirou os dois sitios com nota MEDIDA (08/2026, a unica competencia com holerite publicado: 16 de 19 admitidos 21-31/08 TEM holerite de 08, contra 1 de 17 demitidos 21-31/07). Falta a segunda frase dele -- a CONDICAO de que cada conforme depende, na forma do `_A14 CURADO` -- e o teto dos dois contratos, que as duas raias deixaram no numero do main. | PLACAR-ESTRUTURAL R6 item 3, raia `k5-encerrada` (`6a350aa9`) |
-| **RAIA-VERDE-POUSA** | 2026-10-04 19:2x | 471 h | lei L-105 escrita e a conduta vale DESDE JA: o pacote de pouso em curso se separou no mesmo turno -- K8 e K5 pousam como PRODUTO (`02391558`), o CERT-AST sai para pouso proprio porque e INSTRUMENTO (cria `bin/suite_nucleo.sh` e o selo `test_nucleo_tem_porta.sh`). Os itens (3) contador no ESTADO, (4) selo de host no pre-push e (5) veredito das raias velhas ficam na FILA 2, depois da CELULA-TURNO-FECHA e da O145, por ordem dele | o pouso de produto de 04/10 19:3x (K8+K5) e a lei no LEIS.md, no commit do marco |
-| **DOCS-NO-MARCO** | 2026-10-04 19:2x | 471 h | lei L-106 escrita; conduta desde ja. O selo que a cobra no pre-push (push com commit so de app/docs/ alem do derivado = VERMELHO, com RED nos DOIS sentidos) e o item (4) e fica na fila 2. PROIBIDO allowlist de commit de docs, e PROIBIDO contar como marco o que nao fechou item | a lei no LEIS.md + a linha na CLAUDE.md 7b, no commit do marco de 04/10 19:3x |
-| **REFERENCIA-E-A-LEI** | 2026-10-05 00:3x | 466 h | lei L-110 escrita, no marco da O191 (L-106: docs viajam com o codigo). A lei REVOGADA foi desfeita no mesmo marco e nos quatro sitios em que ja havia entrado: linha do LEIS.md, mapeamento CORTES-que-viraram-lei, entrada do CORTES.json e a LEI-AKITA 13 do CLAUDE.md. O contador cravado do test_lei_akita.sh FICA em 13, porque a lei nova ocupa a mesma linha 13 -- e o rotulo dele, que dizia 12 em texto fixo, passou a derivar do $N medido | a lei no LEIS.md + a LEI-AKITA 13 na CLAUDE.md (com o contador do selo junto) + esta linha, no commit do marco da O191 |
-| **SITIO-SEM-CHAMADOR-AINDA-RESPONDE** | 2026-10-05 09:0x | 457 h | lei L-111 escrita e APLICADA no mesmo marco (CELULA-TURNO-FECHA): a funcao de 03/08 foi apagada com lapide, os 6 testes de test_realizado_intervalo.py foram com ela, PENDENTES['turno/marcos'] ficou () com a vaga nomeada e a celula (turno/marcos x um juiz por pergunta) ficou verde -- contratos_estruturais 13/20 -> 14/20, medido por verdes(). O RED veio do selo da casa (test_MORDE_pendente_curado_sai_da_lista), e nasceu um selo de EXISTENCIA por AST ao lado do de CHAMADA | CELULA-TURNO-FECHA (item 1 da ordem dele de 05/10 09:0x) -- a lei no LEIS.md e esta linha viajam no commit do marco (L-106) |
-| **VINCULO-INICIO-DECLARADO** | 2026-10-05 10:4x | 456 h | lei L-112 escrita; vale como CONDUTA desde ja. A obra e a O207 e entra ATRAS da O204 e A FRENTE dos BOs de tela (posicao literal do aval). PRONTO = RED com os 6 casos + commit + deploy + print da tela com a terceira opcao num colab de teste; sem isso = INCOMPLETO com lista. PROIBIDO: segunda porta; regra de data propria na tela; tirar o piso ou a trava de competencia da porta; fallback; mexer em vigencia ja gravada | O207 (a terceira opcao na tela) -- a lei no LEIS.md + as linhas no PROMPTS.md + o item no BACKLOG |
-| **JUIZ-DIA-ENCERRADO-NASCE** | 2026-10-10 18:0x | 328 h | recebido -- a autoridade esta AUTORIZADA, nao encomendada: o aval termina em 'Segue a fila', entao a ORDEM VIVA segue O48/O219 e o juiz nasce quando a vez dele chegar. O que este registro faz AGORA e deixar a assinatura em caixa: a TRAVA JUIZ-NOVO (bin/tests/test_juiz_novo_tem_corte.sh) exige a frase literal no CORTES.md no momento em que o nome entrar em app/core/juizes.py, e sem ela a fatia nao pousa. PRONTO = um escritor so do predicado, flip_automatico e supra_juiz LENDO dele (nenhum recalcula 'dia < hoje' por conta), universo do cron medido ANTES e DEPOIS com o mesmo numero, e o registro em core/juizes.py no mesmo commit. PROIBIDO: teto por DATA em sitio novo; segundo predicado; mudar o universo do cron a pretexto da troca **ALTERADO POR ELE 12/10 17:0x** (`CHAMADO-X-JUIZ-EM-PARALELO`): o juiz NAO nasce -- *"NAO nasce juiz dia_encerrado"*, literal. O predicado `dia < hoje` que este corte mandava declarar e teto por DATA, e a secao 6 do CLAUDE.md o proibe em sitio novo; o criterio passa a ser TURNO FECHADO perguntado a `turnos_do_colab` (`t.aberto`). `supra_juiz.py:149` migra para a mesma pergunta, com DIFF do universo do cron publicado ANTES -- ele nomeia o porque: `supra_juiz` RETRATA em prod. A obra passa a ser COMPLEMENTO da O258, na raia `wt-bos`, com `juizes novos = 0`. **CORRIGIDO POR ELE 12/10 20:0x** (`CHAMADO-X-JUIZ-CORRIGIDO`): a revogacao das 17:0x cai e **o juiz NASCE** -- *"valem os cortes de 10/10"*, literal. Mas nao volta inteiro: volta o NOME (e com ele a frase que a TRAVA cobra) e cai o PREDICADO deste corte -- *"nunca por data < hoje"*. O criterio e FATO ENCERRADO (turno fechado), a forma (b) da secao 6, e e por isso que o PROIBIDO 'teto por DATA em sitio novo' deste mesmo corte passa a ser a guarda central em vez de contradicao. Os dois leitores que ele nomeia agora o CHAMAM: `ponto/services/flip_auto.py:274` e `ponto/supra_juiz.py:149`. | O248 JUIZ-DIA-ENCERRADO (item de OBRAS neste turno) -- atras de O48/O219 |
-| **JUIZ-PAR-COMPLETO-NASCE** | 2026-10-10 18:0x | 328 h | recebido -- AUTORIZADA e nao encomendada, igual a irma: 'Segue a fila' mantem a ORDEM VIVA em O48/O219. A assinatura fica em caixa para a TRAVA JUIZ-NOVO, que so morde no commit em que o nome entrar em app/core/juizes.py. A ordem interna e DELE e e literal: o juiz nasce ANTES, e so DEPOIS o detectar_par_relampago muda de papel -- nao se encosta no emissor que RETRATA batida (cron 06:26, --apply --retratar) antes de a autoridade existir. PRONTO = um juiz so de 'o par esta completo?', o relampago LENDO dele, universo do cron igual antes e depois, registro em core/juizes.py no mesmo commit. PROIBIDO: juiz do par dentro do emissor; mudar o que o relampago retrata nesta fatia; universo novo **ALTERADO POR ELE 12/10 17:0x** (`CHAMADO-X-JUIZ-EM-PARALELO`): o juiz do par tambem NAO nasce como autoridade nova: `varrer_pares_embutidos` (`detectar_par_relampago.py:232`) passa a CHAMAR `turnos_do_colab`, que e a funcao que ja responde pelo par. A ordem interna do corte de 10/10 (*o juiz nasce ANTES, o relampago muda de papel DEPOIS*) perde o objeto, porque nao ha autoridade a criar -- o que fica de pe e a cautela: nao se encosta no emissor que RETRATA batida (cron 06:26, `--apply --retratar`) sem o DIFF do universo. Ele acrescenta o que faltava: o selo do papel prazo DEIXA DE SER CEGO para a 2a porta. A obra passa a ser COMPLEMENTO da O258, na raia `wt-bos`, com `juizes novos = 0`. **CORRIGIDO POR ELE 12/10 20:0x** (`CHAMADO-X-JUIZ-CORRIGIDO`): **o juiz do par NASCE**, e a clausula das 17:0x que o dispensava (*'varrer_pares_embutidos chama turnos_do_colab'*) esta ANULADA por nome. Volta inteira a ordem interna DESTE corte, que havia 'perdido o objeto': o juiz nasce ANTES, o relampago muda de papel DEPOIS e passa a LER a autoridade -- nao a chamar `turnos_do_colab` direto. O que o aval das 17:0x acrescentou e SOBREVIVE: o selo do papel prazo deixa de ser cego para a 2a porta. | O249 JUIZ-PAR-COMPLETO (item de OBRAS neste turno) -- atras de O48/O219 |
-| **O198-ABRE-NA-RAIA** | 2026-10-10 18:1x | 328 h | recebido e ABERTO no mesmo turno -- este e o unico dos tres avais de 18:0x/18:1x que manda COMECAR, e o que ele abre e a raia, nao a principal. RATIFICA a ordem que o BACKLOG ja declarava nas linhas 32-37 (O206 -> O207 -> O199 -> O198 -> GEO-SILENCIO-DE-PING -> O197 -> O44 itens 2-8): a O199 pousou e a O198 e a vez. O QUE A O198 FAZ E PARA: publica quantas faltas aprovadas em dia sem jornada existem na frota (09 e 10) e PARA ai -- a cura da porta vem depois do censo. O ! dele continua literal e NAO foi alargado por este aval: a Ausencia ja aprovada nao se apaga nem se altera. 'A principal nao para' e a clausula que impede este aval de virar troca de vez: a ORDEM VIVA segue O48/O219 e a raia anda ao lado | O198 FALTA-EM-DIA-SEM-JORNADA na raia wt-bos (c44c6c80, raia-bos), depois GEO-SILENCIO-DE-PING, O197 e O44 itens 2-8 |
-| **JUIZ-COMPETENCIA-LAVRADA-NASCE** | 2026-10-12 17:0x | 281 h | recebido -- e O ENDERECO SE MEDIU ANTES DE SER USADO, porque ele nao e o que parece: `gerar_celulas.py` mora em `ponto/management/commands/`, NAO em `escala/`, e as linhas 147-194 atravessam DUAS funcoes, nao uma -- o fim de `_competencias_exportadas` (def em `:127`, que le `ExportacaoDominio` por empresa E `Holerite` com `lote__publicado_em__isnull=False` por pessoa) e o comeco de `fonte_da_lavra` (`:177`, que responde QUEM lavrou e nasceu de um BO meu de 26/09: a mensagem dizia 'exportada no TXT' para janela lavrada por HOLERITE e eu diagnostiquei um off-by-one que nao existia). A terceira vizinha, `autoridade_da_lavra` (`:205`), LE a lista das outras duas. O corte REVOGA a linha de fila que este bloco carregava ('sole undeclared reader -- do not touch'): ele deixa de ser leitor nao-declarado e passa a ser a AUTORIDADE. autorizada, nao encomendada -- 'Segue a fila' mantem a ORDEM VIVA na fila 1 (O252 + O48 passo 5). | O257 JUIZ-COMPETENCIA-LAVRADA (item de OBRAS neste turno) |
-| **CHAMADO-X-JUIZ-EM-PARALELO** | 2026-10-12 17:0x | 281 h | recebido -- e ele REVOGA DOIS CORTES DELE MESMO de 10/10 18:0x no ato de dar a ordem: `JUIZ-DIA-ENCERRADO-NASCE` cai inteiro (`juizes novos = 0`) e `JUIZ-PAR-COMPLETO-NASCE` muda de forma. O que entra no lugar nao e regra nova: e a forma (b) do TETO TEMPORAL da secao 6 do CLAUDE.md -- FATO ENCERRADO --, que a propria secao chama de mais forte (*nao erra por fuso, hora do cron nem virada*), contra a forma (a) que o corte de 10/10 tinha escolhido. O alvo MEDIDO e `ponto/supra_juiz.py:149` `dia_encerrado = not (hoje and data and data >= hoje)`, que e teto por DATA -- exatamente o que a secao 6 proibe --, e ele pede `t.aberto` de `ponto/turnos.py::turnos_do_colab:1639`, funcao que JA existe. A celula que isto fecha e `('chamado','um juiz por pergunta')` de `core/contratos_estruturais.py:254`, cuja allowlist tem DUAS chaves (`config.crons::JUIZES_POR_VARREDURA` e `core.juizes::PENDENTES_CHAMADO`): por 4b ela so fica verde com as DUAS vazias, entao os 25 crons sao condicao NECESSARIA e nao suficiente. PARALELO, nao na frente: fila 1 (O252 + O48 passo 5) segue comigo. **CORRIGIDO POR ELE 12/10 20:0x** (`CHAMADO-X-JUIZ-CORRIGIDO`): **a revogacao deste aval foi ela mesma revogada**, e so em DOIS pedacos, nomeados por ele: *'nao nasce juiz dia_encerrado'* e *'varrer_pares_embutidos chama turnos_do_colab'*. Com isso `juizes novos = 0` **cai para esta obra** -- a O258 passa a ter **2** (`dia_encerrado`, `par_completo`). TUDO O MAIS DESTE AVAL FICA: raia `wt-bos`, censo dos outros 23, selo do papel prazo, DIFF do universo publicado ANTES porque `supra_juiz` retrata em prod, e o PREDICADO de fato encerrado que este aval trouxe -- ele e o que o juiz leva para dentro. | O258 CHAMADO-X-JUIZ-EM-PARALELO -- raia `wt-bos`; ABSORVE O248 e O249 como complementos (AUTONOMIA-DE-CODIGO item 2) |
+| **RAIA-VERDE-POUSA** | 2026-10-04 19:2x | 472 h | lei L-105 escrita e a conduta vale DESDE JA: o pacote de pouso em curso se separou no mesmo turno -- K8 e K5 pousam como PRODUTO (`02391558`), o CERT-AST sai para pouso proprio porque e INSTRUMENTO (cria `bin/suite_nucleo.sh` e o selo `test_nucleo_tem_porta.sh`). Os itens (3) contador no ESTADO, (4) selo de host no pre-push e (5) veredito das raias velhas ficam na FILA 2, depois da CELULA-TURNO-FECHA e da O145, por ordem dele | o pouso de produto de 04/10 19:3x (K8+K5) e a lei no LEIS.md, no commit do marco |
+| **DOCS-NO-MARCO** | 2026-10-04 19:2x | 472 h | lei L-106 escrita; conduta desde ja. O selo que a cobra no pre-push (push com commit so de app/docs/ alem do derivado = VERMELHO, com RED nos DOIS sentidos) e o item (4) e fica na fila 2. PROIBIDO allowlist de commit de docs, e PROIBIDO contar como marco o que nao fechou item | a lei no LEIS.md + a linha na CLAUDE.md 7b, no commit do marco de 04/10 19:3x |
+| **REFERENCIA-E-A-LEI** | 2026-10-05 00:3x | 467 h | lei L-110 escrita, no marco da O191 (L-106: docs viajam com o codigo). A lei REVOGADA foi desfeita no mesmo marco e nos quatro sitios em que ja havia entrado: linha do LEIS.md, mapeamento CORTES-que-viraram-lei, entrada do CORTES.json e a LEI-AKITA 13 do CLAUDE.md. O contador cravado do test_lei_akita.sh FICA em 13, porque a lei nova ocupa a mesma linha 13 -- e o rotulo dele, que dizia 12 em texto fixo, passou a derivar do $N medido | a lei no LEIS.md + a LEI-AKITA 13 na CLAUDE.md (com o contador do selo junto) + esta linha, no commit do marco da O191 |
+| **SITIO-SEM-CHAMADOR-AINDA-RESPONDE** | 2026-10-05 09:0x | 458 h | lei L-111 escrita e APLICADA no mesmo marco (CELULA-TURNO-FECHA): a funcao de 03/08 foi apagada com lapide, os 6 testes de test_realizado_intervalo.py foram com ela, PENDENTES['turno/marcos'] ficou () com a vaga nomeada e a celula (turno/marcos x um juiz por pergunta) ficou verde -- contratos_estruturais 13/20 -> 14/20, medido por verdes(). O RED veio do selo da casa (test_MORDE_pendente_curado_sai_da_lista), e nasceu um selo de EXISTENCIA por AST ao lado do de CHAMADA | CELULA-TURNO-FECHA (item 1 da ordem dele de 05/10 09:0x) -- a lei no LEIS.md e esta linha viajam no commit do marco (L-106) |
+| **VINCULO-INICIO-DECLARADO** | 2026-10-05 10:4x | 457 h | lei L-112 escrita; vale como CONDUTA desde ja. A obra e a O207 e entra ATRAS da O204 e A FRENTE dos BOs de tela (posicao literal do aval). PRONTO = RED com os 6 casos + commit + deploy + print da tela com a terceira opcao num colab de teste; sem isso = INCOMPLETO com lista. PROIBIDO: segunda porta; regra de data propria na tela; tirar o piso ou a trava de competencia da porta; fallback; mexer em vigencia ja gravada | O207 (a terceira opcao na tela) -- a lei no LEIS.md + as linhas no PROMPTS.md + o item no BACKLOG |
+| **JUIZ-DIA-ENCERRADO-NASCE** | 2026-10-10 18:0x | 329 h | recebido -- a autoridade esta AUTORIZADA, nao encomendada: o aval termina em 'Segue a fila', entao a ORDEM VIVA segue O48/O219 e o juiz nasce quando a vez dele chegar. O que este registro faz AGORA e deixar a assinatura em caixa: a TRAVA JUIZ-NOVO (bin/tests/test_juiz_novo_tem_corte.sh) exige a frase literal no CORTES.md no momento em que o nome entrar em app/core/juizes.py, e sem ela a fatia nao pousa. PRONTO = um escritor so do predicado, flip_automatico e supra_juiz LENDO dele (nenhum recalcula 'dia < hoje' por conta), universo do cron medido ANTES e DEPOIS com o mesmo numero, e o registro em core/juizes.py no mesmo commit. PROIBIDO: teto por DATA em sitio novo; segundo predicado; mudar o universo do cron a pretexto da troca **ALTERADO POR ELE 12/10 17:0x** (`CHAMADO-X-JUIZ-EM-PARALELO`): o juiz NAO nasce -- *"NAO nasce juiz dia_encerrado"*, literal. O predicado `dia < hoje` que este corte mandava declarar e teto por DATA, e a secao 6 do CLAUDE.md o proibe em sitio novo; o criterio passa a ser TURNO FECHADO perguntado a `turnos_do_colab` (`t.aberto`). `supra_juiz.py:149` migra para a mesma pergunta, com DIFF do universo do cron publicado ANTES -- ele nomeia o porque: `supra_juiz` RETRATA em prod. A obra passa a ser COMPLEMENTO da O258, na raia `wt-bos`, com `juizes novos = 0`. **CORRIGIDO POR ELE 12/10 20:0x** (`CHAMADO-X-JUIZ-CORRIGIDO`): a revogacao das 17:0x cai e **o juiz NASCE** -- *"valem os cortes de 10/10"*, literal. Mas nao volta inteiro: volta o NOME (e com ele a frase que a TRAVA cobra) e cai o PREDICADO deste corte -- *"nunca por data < hoje"*. O criterio e FATO ENCERRADO (turno fechado), a forma (b) da secao 6, e e por isso que o PROIBIDO 'teto por DATA em sitio novo' deste mesmo corte passa a ser a guarda central em vez de contradicao. Os dois leitores que ele nomeia agora o CHAMAM: `ponto/services/flip_auto.py:274` e `ponto/supra_juiz.py:149`. | O248 JUIZ-DIA-ENCERRADO (item de OBRAS neste turno) -- atras de O48/O219 |
+| **JUIZ-PAR-COMPLETO-NASCE** | 2026-10-10 18:0x | 329 h | recebido -- AUTORIZADA e nao encomendada, igual a irma: 'Segue a fila' mantem a ORDEM VIVA em O48/O219. A assinatura fica em caixa para a TRAVA JUIZ-NOVO, que so morde no commit em que o nome entrar em app/core/juizes.py. A ordem interna e DELE e e literal: o juiz nasce ANTES, e so DEPOIS o detectar_par_relampago muda de papel -- nao se encosta no emissor que RETRATA batida (cron 06:26, --apply --retratar) antes de a autoridade existir. PRONTO = um juiz so de 'o par esta completo?', o relampago LENDO dele, universo do cron igual antes e depois, registro em core/juizes.py no mesmo commit. PROIBIDO: juiz do par dentro do emissor; mudar o que o relampago retrata nesta fatia; universo novo **ALTERADO POR ELE 12/10 17:0x** (`CHAMADO-X-JUIZ-EM-PARALELO`): o juiz do par tambem NAO nasce como autoridade nova: `varrer_pares_embutidos` (`detectar_par_relampago.py:232`) passa a CHAMAR `turnos_do_colab`, que e a funcao que ja responde pelo par. A ordem interna do corte de 10/10 (*o juiz nasce ANTES, o relampago muda de papel DEPOIS*) perde o objeto, porque nao ha autoridade a criar -- o que fica de pe e a cautela: nao se encosta no emissor que RETRATA batida (cron 06:26, `--apply --retratar`) sem o DIFF do universo. Ele acrescenta o que faltava: o selo do papel prazo DEIXA DE SER CEGO para a 2a porta. A obra passa a ser COMPLEMENTO da O258, na raia `wt-bos`, com `juizes novos = 0`. **CORRIGIDO POR ELE 12/10 20:0x** (`CHAMADO-X-JUIZ-CORRIGIDO`): **o juiz do par NASCE**, e a clausula das 17:0x que o dispensava (*'varrer_pares_embutidos chama turnos_do_colab'*) esta ANULADA por nome. Volta inteira a ordem interna DESTE corte, que havia 'perdido o objeto': o juiz nasce ANTES, o relampago muda de papel DEPOIS e passa a LER a autoridade -- nao a chamar `turnos_do_colab` direto. O que o aval das 17:0x acrescentou e SOBREVIVE: o selo do papel prazo deixa de ser cego para a 2a porta. | O249 JUIZ-PAR-COMPLETO (item de OBRAS neste turno) -- atras de O48/O219 |
+| **O198-ABRE-NA-RAIA** | 2026-10-10 18:1x | 329 h | recebido e ABERTO no mesmo turno -- este e o unico dos tres avais de 18:0x/18:1x que manda COMECAR, e o que ele abre e a raia, nao a principal. RATIFICA a ordem que o BACKLOG ja declarava nas linhas 32-37 (O206 -> O207 -> O199 -> O198 -> GEO-SILENCIO-DE-PING -> O197 -> O44 itens 2-8): a O199 pousou e a O198 e a vez. O QUE A O198 FAZ E PARA: publica quantas faltas aprovadas em dia sem jornada existem na frota (09 e 10) e PARA ai -- a cura da porta vem depois do censo. O ! dele continua literal e NAO foi alargado por este aval: a Ausencia ja aprovada nao se apaga nem se altera. 'A principal nao para' e a clausula que impede este aval de virar troca de vez: a ORDEM VIVA segue O48/O219 e a raia anda ao lado | O198 FALTA-EM-DIA-SEM-JORNADA na raia wt-bos (c44c6c80, raia-bos), depois GEO-SILENCIO-DE-PING, O197 e O44 itens 2-8 |
+| **JUIZ-COMPETENCIA-LAVRADA-NASCE** | 2026-10-12 17:0x | 282 h | recebido -- e O ENDERECO SE MEDIU ANTES DE SER USADO, porque ele nao e o que parece: `gerar_celulas.py` mora em `ponto/management/commands/`, NAO em `escala/`, e as linhas 147-194 atravessam DUAS funcoes, nao uma -- o fim de `_competencias_exportadas` (def em `:127`, que le `ExportacaoDominio` por empresa E `Holerite` com `lote__publicado_em__isnull=False` por pessoa) e o comeco de `fonte_da_lavra` (`:177`, que responde QUEM lavrou e nasceu de um BO meu de 26/09: a mensagem dizia 'exportada no TXT' para janela lavrada por HOLERITE e eu diagnostiquei um off-by-one que nao existia). A terceira vizinha, `autoridade_da_lavra` (`:205`), LE a lista das outras duas. O corte REVOGA a linha de fila que este bloco carregava ('sole undeclared reader -- do not touch'): ele deixa de ser leitor nao-declarado e passa a ser a AUTORIDADE. autorizada, nao encomendada -- 'Segue a fila' mantem a ORDEM VIVA na fila 1 (O252 + O48 passo 5). | O257 JUIZ-COMPETENCIA-LAVRADA (item de OBRAS neste turno) |
+| **CHAMADO-X-JUIZ-EM-PARALELO** | 2026-10-12 17:0x | 282 h | recebido -- e ele REVOGA DOIS CORTES DELE MESMO de 10/10 18:0x no ato de dar a ordem: `JUIZ-DIA-ENCERRADO-NASCE` cai inteiro (`juizes novos = 0`) e `JUIZ-PAR-COMPLETO-NASCE` muda de forma. O que entra no lugar nao e regra nova: e a forma (b) do TETO TEMPORAL da secao 6 do CLAUDE.md -- FATO ENCERRADO --, que a propria secao chama de mais forte (*nao erra por fuso, hora do cron nem virada*), contra a forma (a) que o corte de 10/10 tinha escolhido. O alvo MEDIDO e `ponto/supra_juiz.py:149` `dia_encerrado = not (hoje and data and data >= hoje)`, que e teto por DATA -- exatamente o que a secao 6 proibe --, e ele pede `t.aberto` de `ponto/turnos.py::turnos_do_colab:1639`, funcao que JA existe. A celula que isto fecha e `('chamado','um juiz por pergunta')` de `core/contratos_estruturais.py:254`, cuja allowlist tem DUAS chaves (`config.crons::JUIZES_POR_VARREDURA` e `core.juizes::PENDENTES_CHAMADO`): por 4b ela so fica verde com as DUAS vazias, entao os 25 crons sao condicao NECESSARIA e nao suficiente. PARALELO, nao na frente: fila 1 (O252 + O48 passo 5) segue comigo. **CORRIGIDO POR ELE 12/10 20:0x** (`CHAMADO-X-JUIZ-CORRIGIDO`): **a revogacao deste aval foi ela mesma revogada**, e so em DOIS pedacos, nomeados por ele: *'nao nasce juiz dia_encerrado'* e *'varrer_pares_embutidos chama turnos_do_colab'*. Com isso `juizes novos = 0` **cai para esta obra** -- a O258 passa a ter **2** (`dia_encerrado`, `par_completo`). TUDO O MAIS DESTE AVAL FICA: raia `wt-bos`, censo dos outros 23, selo do papel prazo, DIFF do universo publicado ANTES porque `supra_juiz` retrata em prod, e o PREDICADO de fato encerrado que este aval trouxe -- ele e o que o juiz leva para dentro. | O258 CHAMADO-X-JUIZ-EM-PARALELO -- raia `wt-bos`; ABSORVE O248 e O249 como complementos (AUTONOMIA-DE-CODIGO item 2) |
 | **CONTA-VAZIA-NAO-BARRA-O-CARIMBO** | 2026-10-12 18:5x | 280 h | CUMPRIDO NO MESMO TURNO, e ele RESPONDE a pergunta de lei (A) que estava no TOPO do RELATO: eu tinha escrito o CONTRARIO sob a CURA-MAIS-RESTRITIVA porque o grep em LEIS.md/CORTES.md/DOSSIES.md por conta vazia / carimbo / porta cega devolvia ZERO linha. Nasce `folha/export.py::TRAVAS_FORA_DO_CARIMBO_DO_TXT = ('conta_vazia',)`, uma lista com UM leitor -- 0 trava nova, 0 juiz novo: `travas_aprovacao` segue respondendo as TRES e o botao de aprovacao nao mudou em nada. NUMERO: a porta carimba 202 hoje, com o crivo carimbaria 131, com o corte carimba 157 (os 26 de `so_conta_vazia` voltam; logs/o48p5/frota_porta_txt.log, autoridade LIDO, 131+45+26=202 fecha). FICA EM PE no TOPO do RELATO: se a 2a metade da frase cobrir tambem `turno_aberto`, a porta volta aos 202 e o crivo cai inteiro -- entrou a leitura LITERAL do titulo, que e tambem a mais restritiva | O48 passo 5 (a fatia que ja estava em voo) -- pouso em comboio com a raia-ui neste turno |
 | **SALDO-GANHA-O-BOTAO-CADASTRO** | 2026-10-12 18:5x | 280 h | recebido e REGISTRADO como COMPLEMENTO da O256, nao como obra nova -- encaixe decidido por mim pela AUTONOMIA-DE-CODIGO item 2, porque e o MESMO contrato do item (4) do complemento das 16:4x (o numero dele: Saldo 268 contra Bloqueados 272 na 10). RESPONDE a pergunta de lei (B) do TOPO do RELATO. SO TELA: fila 2, raia `wt-ui`, juizes novos = 0, nenhuma regra nova, CSS novo proibido na barra. NAO bloqueia o pouso do O48 passo 5, e por isso nao ha linha PAREI por ele. O selo da E1 troca de PERGUNTA: de 'as faixas somam o universo?' para Saldo == Bloqueados, que e o contador == universo da L1 || ORDEM DE POUSO em 13/10 01:2x (mensagem nova dele sobre ESTE corte, nao corte novo): o complemento entra no MESMO pouso da O256 **E3**, *"antes do Raio-X ser dado por pronto"* -- deixa de ser E1 solta e passa a ser condicao de pouso da E3. Ele chegou COM A MEDIDA, no retrato GRAVADO da J.A comp 10 (pk 4, 445 linhas): Saldo 1+2a5+6mais = **267** contra Bloqueados **271**, gap **4** = `cadastro_zero` 3 + `sem_codigo_dominio` 1 -- e o gap e exatamente a linha SEM FORMA DE DIA, que faixa de dias nao descreve. O numero MOVEU desde 12/10 (era 268 contra 272): o retrato foi regravado no meio, e e' por isso que o selo afirma pela FONTE e nao pelo literal. Selo: Saldo == Bloqueados nos **8 retratos** (L1) + caso que MORDE com a linha sem forma de dia. ENCAMINHADO a raia `wt-ui` no ato (SendMessage ao agente a2232824976ef506b); a principal nao constroi nada disto -- so integra e pousa (aval das 00:4x). | O256 UI-RETRATO-TRIAGEM, etapa E1 -- complemento, na raia `wt-ui` (fila 2) |
-| **CHAMADO-X-JUIZ-CORRIGIDO** | 2026-10-12 20:0x | 278 h | recebido -- ele REVOGA A PROPRIA REVOGACAO, e o que volta NAO e o corte de 10/10 inteiro: volta o NOME e cai o PREDICADO. `JUIZ-DIA-ENCERRADO-NASCE` (10/10 18:0x) mandava declarar `mesmo predicado de hoje (dia < hoje)`; a correcao de agora manda FATO ENCERRADO (turno fechado), *"nunca por data < hoje"*, literal -- isto e, o NOME e a frase de 10/10 (que e o que a TRAVA JUIZ-NOVO cobra em CORTES.md) com a forma (b) do TETO TEMPORAL que o aval das 17:0x trouxe. ANULADO, literal, sao DOIS pedacos do aval das 17:0x e nada mais: *'nao nasce juiz dia_encerrado'* e *'varrer_pares_embutidos chama turnos_do_colab'* -- entao `par_completo` tambem nasce como AUTORIDADE (corte 70), e o relampago passa a LER o juiz em vez de chamar `turnos_do_colab` direto. SOBREVIVE do aval das 17:0x: a raia `wt-bos`, o censo dos outros 23 de `JUIZES_POR_VARREDURA` um a um, o selo do papel prazo deixando de ser cego para a 2a porta, e o DIFF do universo do cron publicado ANTES -- ele repete o porque na propria frase: `supra_juiz` RETRATA em prod. O QUE ISSO MUDA NA O258 e tem de ser lido antes de se construir: ela nasceu com `juizes novos = 0` e passa a ter **juizes novos = 2** (`dia_encerrado`, `par_completo`), os dois com frase de corte em caixa desde 10/10; o PROIBIDO 'juiz novo' da obra sai, o PROIBIDO 'teto por DATA em sitio novo' FICA e passa a ser a guarda central, porque o predicado que o juiz leva e justamente o que substitui `data >= hoje`. SEQUENCIA MEDIDA, nao suposta: os dois juizes se registram em `app/core/juizes.py`, o MESMO arquivo que o item 3 da fila 1 (`batida x um juiz por pergunta`) toca neste turno -- pela RAIA-NAO-FICA-PARADA isso e cruzamento de ARQUIVO, entao e um por vez: o item 3 pousa primeiro no main e a O258 registra depois do pouso. | O258 CHAMADO-X-JUIZ-EM-PARALELO (raia `wt-bos`), que ABSORVE O248 e O249 como complementos -- agora com juizes novos = 2 |
-| **JUIZ-CALCULAR-PERIODO-NASCE** | 2026-10-12 20:0x | 278 h | recebido -- e e a RESPOSTA a pergunta que o proprio selo da celula guardava. A nota de `core/contratos_estruturais.py:357` (celula `('batida','um juiz por pergunta')`) tinha MEDIDO em 12/10 que o corte `CORTES-DOS-CONTRATOS` mandava declarar *'quantas horas este dia vale?'* e que **nenhuma** das 19 portas publicas do motor tem o DIA como universo: `calcular_periodo` responde pelo PAR (`PeriodoCalculo` = par entrada/saida, 6 definicoes com a base ABSTRATA em `MotorBase:2000 raise NotImplementedError`), `calcular_mes` responde pelo MES e `calcular_dia` NAO EXISTE (AST). Duas candidatas com universo diferente do da pergunta = pergunta no topo do RELATO pela AUTONOMIA-DE-CODIGO item 3, nunca frase escrita pelo Code -- e ele responde trocando a PERGUNTA, nao inventando funcao: a familia passa a perguntar pelo PAR, que e o universo que a funcao JA tem, e o DIA deixa de ser autoridade porque ja tem uma (`ponto/turnos.py::turnos_do_colab`, juiz de *a que turno (data_turno) pertence a batida?* desde `core/juizes.py:151`). PRONTO = a chave nova em `JUIZES['batida']` com `ponto/motor_calculo_v2.py::calcular_periodo`, o pendente do DIA baixado com motivo e ponteiro para este corte (nunca `del` calado, O141), a caracterizacao do selo `test_o_dinheiro_do_DIA_nao_tem_funcao_cujo_universo_seja_o_DIA` INVERTIDA em vez de apagada, e o contrato `ponto.tests.test_contract_juiz_batida.JuizBatidaContratoTest` mordendo a volta. PROIBIDO: tocar `ponto/motor_calculo_v2.py` -- ele o diz na propria frase e e ZONA INVIOLAVEL da secao 4; segundo derivador de horas do par; declarar a chave sem o pendente sair no MESMO commit. O QUE A TRAVA NAO ALCANCA, declarado: `bin/tests/test_juiz_novo_tem_corte.sh` nao casa caminho com DIGITO (auditoria da L-011, `docs/LEIS.md:151`), entao `ponto/motor_calculo_v2.py::calcular_periodo` fica fora da base da trava -- a frase esta aqui de qualquer forma, e o charclass do selo segue na fila de INSTRUMENTO. | item 3 da ORDEM DA PRINCIPAL (`batida x um juiz por pergunta`), corte `CORTES-DOS-CONTRATOS` (3) -- fila 1, neste turno |
-| **FIO-MORTO-E-ESTRUTURAL** | 2026-10-12 20:4x | 278 h | recebido -- e ele SOBE A O261 DE CASO PARA DESENHO, o que a propria regra 5 da AUTORIZACAO PREVIA previa (*classe de bug NOVA que muda o DESENHO do sistema*): a FASE 2 deixa de ser *curar tres classes* e passa a ser *um estado deriva de outro*. **NAO E LEI NOVA e NAO SE NUMERA** -- ele mesmo ancora em lei existente (`CLAUDE.md` 4a, a LAMPADA, + contrato 2 do 4b, um escritor por entidade) e escreve *Nenhum juiz novo: a LAMPADA ja e o juiz*. Pela **L-117** (moratoria de lei ate 20/20) a cura nao pode ganhar `L-NNN`: o lastro e este corte. **OS TRES LEITORES DO ITEM 3 CONFERIDOS NA ARVORE VIVA no turno do corte** (LER-ANTES-DE-AFIRMAR): (i) `chamados/services/disputa_emissao.py:670-671` -- `if chamado.perguntas_que_resolvem.filter(materializada_em__isnull=False).exists(): return 'pergunta_do_chamado_ja_encerrada'`, e o predicado e `materializada_em`, que pela memoria `materializada-em-nao-prova-plantio` diz *saiu da fila*, nunca *o fato se resolveu* -- a celula NAO e consultada em nenhuma das 9 linhas do corpo, e e por isso que a fabrica se cala sobre a classe (c); (ii) `ponto/supra_juiz.py:165-169`, o `not chamados_vivos` do branch que cala `FURO_SEM_COBRANCA` (:205), com a `HX-COBRANCA-MORTA` de 30/08 comentada ACIMA dele, que ja o estreitou uma vez; (iii) `core/juizes.py:100` -- `_C1 = 'o chamado esta vivo (ou cobra alguem)?'` com autoridade `chamados/catalogo/motor.py::VIVOS` (:24, `('aberto','em_analise','registrado')`), e **um conjunto de status nao sabe responder a segunda metade da propria pergunta**: o parentese *(ou cobra alguem)* e exatamente o fio que ele manda separar, declarado como se fosse a mesma coisa desde que a chave nasceu. A ORDEM que isso impoe e dependencia de CODIGO (AUTONOMIA-DE-CODIGO item 1): o censo de ESCRITORES do item 2 vem ANTES de tocar qualquer leitor do item 3, pela MEIA-CORRECAO-E-PIOR-QUE-NENHUMA -- campo de estado com 2 escritores mente mesmo com cada escritor certo. A armadilha do censo anterior segue valendo e agora tem nome: no `cartorio.py:907` o MESMO `vivos` decide EMISSAO, logo a cura separa predicados (*ha chamado vivo* x *ha cobranca viva*) e nao estreita `vivos`. PROIBIDO (dele, herdado da O261 e mantido): fallback; filtro na tela escondendo os dias; juiz novo sem corte; curar so o golden; mexer em competencia exportada. **corte Ronald: juiz fio_vivo nasce** -- escrito pelo CODE sob a AUTONOMIA-DE-CODIGO item 3 (aval Ronald 11/10 ~12:0x), que o autoriza quando as TRES condicoes se MEDEM na sessao, e as tres foram medidas na arvore do pouso 914fba40: (i) a funcao JA EXISTE desde 12/10 -- `chamados/juizes.py:844::fio_vivo`, nascida com o vigia do fio, nao nesta fatia; (ii) e a UNICA autoridade MEDIDA -- censo por AST depois da migracao: **1 reducao de `pergunta_viva` a bool no app inteiro, DENTRO da porta (`:853`), e 0 fora**, contra 6 fora antes da fatia (`chamados/juizes.py::disputa_viva_do_chamado`, `encerrar_perguntas_com_fato`, `disputa_emissao::_ja_perguntou`, `competencia_trancada::medir`, `reconciliar_grade::_relavrar_orfa`, `folha/previa.py::_material`); (iii) o PREDICADO e o MESMO e o universo e IGUAL antes e depois -- o corpo da porta e literalmente `any(pergunta_viva(p) for p in perguntas)`, entao cada migracao e IDENTIDADE de expressao, nunca equivalencia a medir (L-110). **O que nasce e a DECLARACAO, nao o juiz.** A chave nova (`_C15`, *alguma pergunta desta colecao esta viva?*) declara a REDUCAO DA COLECAO; o juiz um-a-um segue sendo o `_C6::pergunta_viva`, intocado. E o `_C1` do item 3 deste mesmo corte **NAO se parte nesta fatia**: ele e LEITOR do item 3, e a ordem que o proprio `estado` acima impoe (AUTONOMIA item 1 + MEIA-CORRECAO) poe o censo de ESCRITORES do item 2 ANTES de tocar qualquer leitor -- partir a chave agora seria declarar a separacao com `supra_juiz.py:165-169` ainda confundindo os dois predicados. | O261 (`BUG-FIO-MORTO-CHAMADO`), P7.1 -- ALTERA as FASES 2 e 3 de obra JA REGISTRADA, nao abre obra nova |
+| **CHAMADO-X-JUIZ-CORRIGIDO** | 2026-10-12 20:0x | 279 h | recebido -- ele REVOGA A PROPRIA REVOGACAO, e o que volta NAO e o corte de 10/10 inteiro: volta o NOME e cai o PREDICADO. `JUIZ-DIA-ENCERRADO-NASCE` (10/10 18:0x) mandava declarar `mesmo predicado de hoje (dia < hoje)`; a correcao de agora manda FATO ENCERRADO (turno fechado), *"nunca por data < hoje"*, literal -- isto e, o NOME e a frase de 10/10 (que e o que a TRAVA JUIZ-NOVO cobra em CORTES.md) com a forma (b) do TETO TEMPORAL que o aval das 17:0x trouxe. ANULADO, literal, sao DOIS pedacos do aval das 17:0x e nada mais: *'nao nasce juiz dia_encerrado'* e *'varrer_pares_embutidos chama turnos_do_colab'* -- entao `par_completo` tambem nasce como AUTORIDADE (corte 70), e o relampago passa a LER o juiz em vez de chamar `turnos_do_colab` direto. SOBREVIVE do aval das 17:0x: a raia `wt-bos`, o censo dos outros 23 de `JUIZES_POR_VARREDURA` um a um, o selo do papel prazo deixando de ser cego para a 2a porta, e o DIFF do universo do cron publicado ANTES -- ele repete o porque na propria frase: `supra_juiz` RETRATA em prod. O QUE ISSO MUDA NA O258 e tem de ser lido antes de se construir: ela nasceu com `juizes novos = 0` e passa a ter **juizes novos = 2** (`dia_encerrado`, `par_completo`), os dois com frase de corte em caixa desde 10/10; o PROIBIDO 'juiz novo' da obra sai, o PROIBIDO 'teto por DATA em sitio novo' FICA e passa a ser a guarda central, porque o predicado que o juiz leva e justamente o que substitui `data >= hoje`. SEQUENCIA MEDIDA, nao suposta: os dois juizes se registram em `app/core/juizes.py`, o MESMO arquivo que o item 3 da fila 1 (`batida x um juiz por pergunta`) toca neste turno -- pela RAIA-NAO-FICA-PARADA isso e cruzamento de ARQUIVO, entao e um por vez: o item 3 pousa primeiro no main e a O258 registra depois do pouso. | O258 CHAMADO-X-JUIZ-EM-PARALELO (raia `wt-bos`), que ABSORVE O248 e O249 como complementos -- agora com juizes novos = 2 |
+| **JUIZ-CALCULAR-PERIODO-NASCE** | 2026-10-12 20:0x | 279 h | recebido -- e e a RESPOSTA a pergunta que o proprio selo da celula guardava. A nota de `core/contratos_estruturais.py:357` (celula `('batida','um juiz por pergunta')`) tinha MEDIDO em 12/10 que o corte `CORTES-DOS-CONTRATOS` mandava declarar *'quantas horas este dia vale?'* e que **nenhuma** das 19 portas publicas do motor tem o DIA como universo: `calcular_periodo` responde pelo PAR (`PeriodoCalculo` = par entrada/saida, 6 definicoes com a base ABSTRATA em `MotorBase:2000 raise NotImplementedError`), `calcular_mes` responde pelo MES e `calcular_dia` NAO EXISTE (AST). Duas candidatas com universo diferente do da pergunta = pergunta no topo do RELATO pela AUTONOMIA-DE-CODIGO item 3, nunca frase escrita pelo Code -- e ele responde trocando a PERGUNTA, nao inventando funcao: a familia passa a perguntar pelo PAR, que e o universo que a funcao JA tem, e o DIA deixa de ser autoridade porque ja tem uma (`ponto/turnos.py::turnos_do_colab`, juiz de *a que turno (data_turno) pertence a batida?* desde `core/juizes.py:151`). PRONTO = a chave nova em `JUIZES['batida']` com `ponto/motor_calculo_v2.py::calcular_periodo`, o pendente do DIA baixado com motivo e ponteiro para este corte (nunca `del` calado, O141), a caracterizacao do selo `test_o_dinheiro_do_DIA_nao_tem_funcao_cujo_universo_seja_o_DIA` INVERTIDA em vez de apagada, e o contrato `ponto.tests.test_contract_juiz_batida.JuizBatidaContratoTest` mordendo a volta. PROIBIDO: tocar `ponto/motor_calculo_v2.py` -- ele o diz na propria frase e e ZONA INVIOLAVEL da secao 4; segundo derivador de horas do par; declarar a chave sem o pendente sair no MESMO commit. O QUE A TRAVA NAO ALCANCA, declarado: `bin/tests/test_juiz_novo_tem_corte.sh` nao casa caminho com DIGITO (auditoria da L-011, `docs/LEIS.md:151`), entao `ponto/motor_calculo_v2.py::calcular_periodo` fica fora da base da trava -- a frase esta aqui de qualquer forma, e o charclass do selo segue na fila de INSTRUMENTO. | item 3 da ORDEM DA PRINCIPAL (`batida x um juiz por pergunta`), corte `CORTES-DOS-CONTRATOS` (3) -- fila 1, neste turno |
+| **FIO-MORTO-E-ESTRUTURAL** | 2026-10-12 20:4x | 279 h | recebido -- e ele SOBE A O261 DE CASO PARA DESENHO, o que a propria regra 5 da AUTORIZACAO PREVIA previa (*classe de bug NOVA que muda o DESENHO do sistema*): a FASE 2 deixa de ser *curar tres classes* e passa a ser *um estado deriva de outro*. **NAO E LEI NOVA e NAO SE NUMERA** -- ele mesmo ancora em lei existente (`CLAUDE.md` 4a, a LAMPADA, + contrato 2 do 4b, um escritor por entidade) e escreve *Nenhum juiz novo: a LAMPADA ja e o juiz*. Pela **L-117** (moratoria de lei ate 20/20) a cura nao pode ganhar `L-NNN`: o lastro e este corte. **OS TRES LEITORES DO ITEM 3 CONFERIDOS NA ARVORE VIVA no turno do corte** (LER-ANTES-DE-AFIRMAR): (i) `chamados/services/disputa_emissao.py:670-671` -- `if chamado.perguntas_que_resolvem.filter(materializada_em__isnull=False).exists(): return 'pergunta_do_chamado_ja_encerrada'`, e o predicado e `materializada_em`, que pela memoria `materializada-em-nao-prova-plantio` diz *saiu da fila*, nunca *o fato se resolveu* -- a celula NAO e consultada em nenhuma das 9 linhas do corpo, e e por isso que a fabrica se cala sobre a classe (c); (ii) `ponto/supra_juiz.py:165-169`, o `not chamados_vivos` do branch que cala `FURO_SEM_COBRANCA` (:205), com a `HX-COBRANCA-MORTA` de 30/08 comentada ACIMA dele, que ja o estreitou uma vez; (iii) `core/juizes.py:100` -- `_C1 = 'o chamado esta vivo (ou cobra alguem)?'` com autoridade `chamados/catalogo/motor.py::VIVOS` (:24, `('aberto','em_analise','registrado')`), e **um conjunto de status nao sabe responder a segunda metade da propria pergunta**: o parentese *(ou cobra alguem)* e exatamente o fio que ele manda separar, declarado como se fosse a mesma coisa desde que a chave nasceu. A ORDEM que isso impoe e dependencia de CODIGO (AUTONOMIA-DE-CODIGO item 1): o censo de ESCRITORES do item 2 vem ANTES de tocar qualquer leitor do item 3, pela MEIA-CORRECAO-E-PIOR-QUE-NENHUMA -- campo de estado com 2 escritores mente mesmo com cada escritor certo. A armadilha do censo anterior segue valendo e agora tem nome: no `cartorio.py:907` o MESMO `vivos` decide EMISSAO, logo a cura separa predicados (*ha chamado vivo* x *ha cobranca viva*) e nao estreita `vivos`. PROIBIDO (dele, herdado da O261 e mantido): fallback; filtro na tela escondendo os dias; juiz novo sem corte; curar so o golden; mexer em competencia exportada. **corte Ronald: juiz fio_vivo nasce** -- escrito pelo CODE sob a AUTONOMIA-DE-CODIGO item 3 (aval Ronald 11/10 ~12:0x), que o autoriza quando as TRES condicoes se MEDEM na sessao, e as tres foram medidas na arvore do pouso 914fba40: (i) a funcao JA EXISTE desde 12/10 -- `chamados/juizes.py:844::fio_vivo`, nascida com o vigia do fio, nao nesta fatia; (ii) e a UNICA autoridade MEDIDA -- censo por AST depois da migracao: **1 reducao de `pergunta_viva` a bool no app inteiro, DENTRO da porta (`:853`), e 0 fora**, contra 6 fora antes da fatia (`chamados/juizes.py::disputa_viva_do_chamado`, `encerrar_perguntas_com_fato`, `disputa_emissao::_ja_perguntou`, `competencia_trancada::medir`, `reconciliar_grade::_relavrar_orfa`, `folha/previa.py::_material`); (iii) o PREDICADO e o MESMO e o universo e IGUAL antes e depois -- o corpo da porta e literalmente `any(pergunta_viva(p) for p in perguntas)`, entao cada migracao e IDENTIDADE de expressao, nunca equivalencia a medir (L-110). **O que nasce e a DECLARACAO, nao o juiz.** A chave nova (`_C15`, *alguma pergunta desta colecao esta viva?*) declara a REDUCAO DA COLECAO; o juiz um-a-um segue sendo o `_C6::pergunta_viva`, intocado. E o `_C1` do item 3 deste mesmo corte **NAO se parte nesta fatia**: ele e LEITOR do item 3, e a ordem que o proprio `estado` acima impoe (AUTONOMIA item 1 + MEIA-CORRECAO) poe o censo de ESCRITORES do item 2 ANTES de tocar qualquer leitor -- partir a chave agora seria declarar a separacao com `supra_juiz.py:165-169` ainda confundindo os dois predicados. | O261 (`BUG-FIO-MORTO-CHAMADO`), P7.1 -- ALTERA as FASES 2 e 3 de obra JA REGISTRADA, nao abre obra nova |
 | **SMOKE-DO-RETRATO-E-UM-NO-FIM** | 2026-10-12 20:5x | 278 h | APLICADO no mesmo turno, pela porta declarada: `bin/gerar_avais.py --escrever` depois de marcar os TRES itens como `respondido` em `docs/PENDENTES_RONALD.json` com a `resposta` carregando a frase dele -- **AVAIS NA MESA cai de 8 para 6**, e dos 6 restantes **5 sao os do Fernando** que ele manda manter, mais o substituto novo (`O256-E4-SMOKE-UNICO-DO-RETRATO`, aberto). **O QUE A RETIRADA NAO E**: nao e smoke dado por feito -- o clique continua devendo; muda QUANTOS e QUANDO (um, no fim, sobre a tela FINAL, em vez de tres sobre tres estados intermediarios da MESMA tela). A razao que ele escreve ja era lei e nao estava sendo lida: **template nao precisa de deploy** (`CLAUDE.md` secao 2, nao ha `cached.Loader`), entao a tela de cada etapa JA ESTAVA no ar quando o smoke entrou na mesa -- *"a tela ja esta em producao e o push e copia"* --, e smoke que nao decide se o codigo sobe nao e portao, e revisao. **O QUE ISSO DESTRAVA, e e o efeito pratico maior**: a linha do `TICKETS` da O256 dizia *"ESPERA o smoke de clique dele (O256-UI-RETRATO-TRIAGEM-E1-SMOKE, FRONT SEM SMOKE NAO SOBE -- segura o PUSH, nao o deploy)"*, e essa trava **CAI** por ordem dele. **O QUE NAO CAI**: o FRONT-SEM-SMOKE-NAO-SOBE segue inteiro para `static/js/`, service worker e template BASE -- o aval fala da TELA DO RETRATO, nao da casca. | O256 (`UI-RETRATO-TRIAGEM`) e O48 (retrato) -- nao abre obra: altera a MESA de avais |
-| **O256-E2-A-E4-ANDAM-JA** | 2026-10-12 21:0x | 277 h | recebido -- e e ORDEM DE PISTA com DATA: *"a UI e a ferramenta para fechar a folha da 10 no dia 21"*. Isto nao e preferencia de ordem: a competencia 10 fecha no **dia 20** (`Empresa.dia_inicio_competencia`, a competencia corre do 21 ao 20) e o admin fecha a folha **no dia 21** -- faltam **9 dias**, e a E2/E3/E4 sao a ferramenta com que ele faz isso. Pela **RAIA-NAO-FICA-PARADA** a O256 nao cruza ARQUIVO com a O261 (so `templates/`, `static/` e teste de TELA contra `chamados/`+`ponto/`+`escala/`), entao as duas andam LADO A LADO na mesma sessao e o que se enfileira e so o POUSO (L-105/L-107, um por vez). **A PAUTA DE 12/10 ENTRA NOMEADA, sete itens**: (1) palavra UNICA por linha; (2) LED com LEGENDA; (3) **Dias no lugar de Saldo**, contado da CELULA, com de/ate no filtro universal; (4) PDF na barra RESPEITANDO os filtros; (5) drawer = o espelho do perfil; (6) texto do drawer so com numeros do JUIZ (nenhum numero que nao saia de juiz -- o PROIBIDO da `UI-RETRATO-TRIAGEM` segue); (7) dia de HOJE = *Hoje*, sem dono. O item (3) e o que merece cuidado e e o unico que toca contagem: *contado da CELULA* quer dizer que o numero sai da lampada, nao de aritmetica de tela -- mesmo desenho do corte `FIO-MORTO-E-ESTRUTURAL` das 20:4x. **O QUE ESPERA**: o complemento *"dono Chamado so outro tipo"* fica para depois da cura da **O261**, porque hoje o dono C mostra fio morto e esconder isso na tela e o PROIBIDO literal da O261 (*filtro na tela escondendo os dias*). Smoke: **UM** ao fim da E4 (`O256-E4-SMOKE-UNICO-DO-RETRATO`, criado pelo aval das 20:5x) -- e ele NAO segura push. *"Nenhuma lei nova."* | O256 (`UI-RETRATO-TRIAGEM`) etapas E2, E3 e E4 -- fila 2, raia `wt-ui`, EM PARALELO com a O261 |
-| **O261-RAIA-PROPRIA-E-CENSO-DE-CODIGO** | 2026-10-12 22:3x | 276 h | recebido no meio do pouso da E2 da O256 (suite cheia em voo). **Ele desarma a dependencia que eu havia declarado**: ao trocar a FASE 1 de censo de FROTA por censo de CODIGO, a O261 deixa de passar pelo `/tmp/audit_c.py` -- logo deixa de depender da cura da **O260** e do guard de forma que eu montei para ela. Censo de codigo nao abre banco. **OS SEIS SITIOS FORAM LIDOS NA ARVORE VIVA no mesmo turno** (LER-ANTES-DE-AFIRMAR) e os seis existem: `chamados/services/disputa_emissao.py:670` (o `if` de `materializada_em__isnull=False`, `return` em :671), `ponto/supra_juiz.py:166-169` (o gate `not chamados_vivos`, dentro da faixa 163-168 que ele cita), `core/juizes.py:100::_C1`, e os TRES que NASCEM o parametro, cada um com a MESMA list-comprehension copiada a mao (`vivos = [x for x in lista if x.status_local in VIVOS]`): `ponto/services/cartorio.py:780`, `ponto/management/commands/supra_juiz.py:182` e `ponto/management/commands/emitir_furo_retroativo.py:79`. **A lista dele e EXATAMENTE o censo das 20:3x**, com os 3 alimentadores promovidos a leitores -- e e o lugar certo, porque e neles que `chamados_vivos` NASCE. A armadilha do censo segue de pe e agora tem lugar na ordem: no `cartorio.py:907` o MESMO `vivos` decide EMISSAO, entao a FASE 2 separa os predicados em vez de estreitar `vivos`. | O261 BUG-FIO-MORTO-CHAMADO -- FASE 1 em `wt-fio`; complemento de tela na O256 |
+| **O256-E2-A-E4-ANDAM-JA** | 2026-10-12 21:0x | 278 h | recebido -- e e ORDEM DE PISTA com DATA: *"a UI e a ferramenta para fechar a folha da 10 no dia 21"*. Isto nao e preferencia de ordem: a competencia 10 fecha no **dia 20** (`Empresa.dia_inicio_competencia`, a competencia corre do 21 ao 20) e o admin fecha a folha **no dia 21** -- faltam **9 dias**, e a E2/E3/E4 sao a ferramenta com que ele faz isso. Pela **RAIA-NAO-FICA-PARADA** a O256 nao cruza ARQUIVO com a O261 (so `templates/`, `static/` e teste de TELA contra `chamados/`+`ponto/`+`escala/`), entao as duas andam LADO A LADO na mesma sessao e o que se enfileira e so o POUSO (L-105/L-107, um por vez). **A PAUTA DE 12/10 ENTRA NOMEADA, sete itens**: (1) palavra UNICA por linha; (2) LED com LEGENDA; (3) **Dias no lugar de Saldo**, contado da CELULA, com de/ate no filtro universal; (4) PDF na barra RESPEITANDO os filtros; (5) drawer = o espelho do perfil; (6) texto do drawer so com numeros do JUIZ (nenhum numero que nao saia de juiz -- o PROIBIDO da `UI-RETRATO-TRIAGEM` segue); (7) dia de HOJE = *Hoje*, sem dono. O item (3) e o que merece cuidado e e o unico que toca contagem: *contado da CELULA* quer dizer que o numero sai da lampada, nao de aritmetica de tela -- mesmo desenho do corte `FIO-MORTO-E-ESTRUTURAL` das 20:4x. **O QUE ESPERA**: o complemento *"dono Chamado so outro tipo"* fica para depois da cura da **O261**, porque hoje o dono C mostra fio morto e esconder isso na tela e o PROIBIDO literal da O261 (*filtro na tela escondendo os dias*). Smoke: **UM** ao fim da E4 (`O256-E4-SMOKE-UNICO-DO-RETRATO`, criado pelo aval das 20:5x) -- e ele NAO segura push. *"Nenhuma lei nova."* | O256 (`UI-RETRATO-TRIAGEM`) etapas E2, E3 e E4 -- fila 2, raia `wt-ui`, EM PARALELO com a O261 |
+| **O261-RAIA-PROPRIA-E-CENSO-DE-CODIGO** | 2026-10-12 22:3x | 277 h | recebido no meio do pouso da E2 da O256 (suite cheia em voo). **Ele desarma a dependencia que eu havia declarado**: ao trocar a FASE 1 de censo de FROTA por censo de CODIGO, a O261 deixa de passar pelo `/tmp/audit_c.py` -- logo deixa de depender da cura da **O260** e do guard de forma que eu montei para ela. Censo de codigo nao abre banco. **OS SEIS SITIOS FORAM LIDOS NA ARVORE VIVA no mesmo turno** (LER-ANTES-DE-AFIRMAR) e os seis existem: `chamados/services/disputa_emissao.py:670` (o `if` de `materializada_em__isnull=False`, `return` em :671), `ponto/supra_juiz.py:166-169` (o gate `not chamados_vivos`, dentro da faixa 163-168 que ele cita), `core/juizes.py:100::_C1`, e os TRES que NASCEM o parametro, cada um com a MESMA list-comprehension copiada a mao (`vivos = [x for x in lista if x.status_local in VIVOS]`): `ponto/services/cartorio.py:780`, `ponto/management/commands/supra_juiz.py:182` e `ponto/management/commands/emitir_furo_retroativo.py:79`. **A lista dele e EXATAMENTE o censo das 20:3x**, com os 3 alimentadores promovidos a leitores -- e e o lugar certo, porque e neles que `chamados_vivos` NASCE. A armadilha do censo segue de pe e agora tem lugar na ordem: no `cartorio.py:907` o MESMO `vivos` decide EMISSAO, entao a FASE 2 separa os predicados em vez de estreitar `vivos`. | O261 BUG-FIO-MORTO-CHAMADO -- FASE 1 em `wt-fio`; complemento de tela na O256 |
 | **O206-PREVIA-DO-PUSH-MOSTRA-HTML-BRUTO** | 2026-10-12 23:5x | 275 h | MEDIDO no mesmo turno, as duas pontas, e o HTML **nao chega ao colaborador**: o push leva `titulo`/`corpo` como TEXTO PURO por `push_fcm_colaborador(colab, *_texto_cobranca(), ...)` (`chamados/views_cobrar.py:53-59`, truncado `[:60]`/`[:400]`) e a mensagem gravada e a trilha `'[COBRANCA] Push de cobranca enviado por <user>.'` (`:64`) -- nenhuma das duas tem markup. O HTML existe SO na previa: `hxPreviewCobranca()` (`templates/chamados/partials/_js_cobranca.html:26-35`) devolve uma STRING de `div`/`span` com `style`, e `hxConfirm` insere por **`textContent`** de proposito -- cura de seguranca declarada em `static/js/hasner-ui.js:13-15` (*'montava a caixa com innerHTML e a mensagem vem do ... era caminho de injecao'*). Logo a ORIGEM e a previa, nao o `hxConfirm`: voltar para `innerHTML` reabriria o caminho de injecao e e atalho PROIBIDO. SEGUNDO achado, que e o que a frase dele cobra: a previa **hand-copia** o texto -- repete hoje os dois defaults (`COBRANCA_TITULO_DEFAULT`/`COBRANCA_CORPO_DEFAULT`) dentro do JS, enquanto a autoridade do enviado e `_texto_cobranca()` -> `TemplatePush(chave='cobranca')` do console de comunicados. Admin que editar o template no console passa a ver na previa um texto que o colaborador NAO recebe (LEI-AKITA 2: testemunha le, nao recalcula). | O206 complemento PREVIA-LE-A-AUTORIDADE -- arvore principal |
-| **O256-RAIO-X-DO-RETRATO** | 2026-10-13 00:1x | 274 h | OS QUATRO MOLDES QUE ELE NOMEIA EXISTEM, conferidos na arvore viva no turno em que o aval chegou: `chamados/views.py:1458::raiox_lente`, `templates/chamados/partials/_raiox_lente.html`, `chamados/services/verbos.py:250::placar_aceite` e `abrirDrawer` (em uso em `meu_atendimento.html:45` e `painel_gestao.html:14`, sempre com largura no 3o argumento). **O item (5) tem DEPENDENCIA EXPLICITA e ela esta em construcao no mesmo turno**: o conserto do HTML bruto da previa do push e o complemento da O206 que ele avalizou as 23:5x, e a medicao ja esta feita -- a origem e a previa (`hxPreviewCobranca` devolve markup e `hxConfirm` insere por `textContent` por cura de seguranca), nao o `hxConfirm`. **O item (2) e o unico que pede DADO que pode nao existir**: ele quer DOIS retratos gravados da MESMA competencia (ontem x hoje), e isso se mede antes de desenhar a tela -- retrato lavrado por `lavrar_retrato_folha --apply`; sem o de ontem, o placar diz 'sem retrato de ontem', nunca recalcula para preencher (o proprio aval manda: *a tela nao recalcula*). | O256 UI-RETRATO-TRIAGEM E3/E4 -- raia `wt-ui`; item (5) depende do complemento da O206 |
-| **DOIS-AGENTES-E-A-PRINCIPAL-SO-INTEGRA** | 2026-10-13 00:4x | 274 h | A CONDICAO DE PARTIDA ESTA CUMPRIDA: a cura da O206 ficou VERDE no turno em que o aval chegou -- `Ran 21 tests` / `OK` / rc 0 nos dois selos (`chamados.tests.test_sininho_template` + `chamados.tests.test_selo_painel_oferece_cobrar`), com RED evidenciado antes (4 failures, uma por copiador). A previa passou a ser TEXTO lido da autoridade (`comunicados/services.py::texto_cobranca`), custo medido de **1 query** por pagina do admin. O censo que a raia `wt-fio` vai consumir tambem esta PRONTO e publicado no RELATO das 23:3x: 21 escritores de estado de `PerguntaDisputa` -- 17 fecham, 4 reabrem --, A=2 / B=7 / C=8->7, e o RED nomeado e `chamados/reconciliador.py:328::lavrar_sem_turno_aberto` (motivos `orfao_14h` e `saida_sem_entrada`, 279 carimbos sem lastro medidos pela propria casa em `relavra_via.py:44`). A `wt-ui` esta LIMPA (porcelain vazio) e 1 commit atras do main. | O261 FASE 2 em `wt-fio` + O256 E3 em `wt-ui`, em paralelo; principal integra |
-| **PORTA-EXTRA-E-CONTADOR** | 2026-10-13 01:1x | 273 h | RESPONDE a pergunta que estava no TOPO do RELATO desde 12/10 20:3x (BACKLOG O259, coluna nota) e DESBLOQUEIA o item 3 da ORDEM DA PRINCIPAL: com `PENDENTES['batida']` vazio a celula ('batida','um juiz por pergunta') de `core/contratos_estruturais.py:357` fica VERDE pelo criterio 4b e `contratos_estruturais` vai de 15 para 16 de 20. CORRECAO DE NUMERO, no topo do RELATO: os numeros que o corte cita NAO ESTAO EM LOG NENHUM -- o unico medido em `logs/o259/porta_furo_pausa.log` e UMA linha (CNPJ 82218652, 09/2026, n_fech=3, barrados=1, BARRADOS_SO_POR_PAUSA=0, dias_so_pausa=0), precedida de um traceback (`ValueError: not enough values to unpack`) da 1a tentativa; 8/8 universos, 664 barrados, 580 dias e 58 colabs nao tem lastro de arquivo. Isso NAO muda a ordem: o contador que ele manda nascer e exatamente quem produz o numero com PROVA propria, e o pendente sai se, e so se, ele medir 0 na frota. | O259 2o pendente da batida -- CONTADOR-DA-PORTA-EXTRA, arvore principal (item 3 da ORDEM DA PRINCIPAL) |
-| **PENDENTE-SAI-PELA-CONDICAO-ESCRITA** | 2026-10-13 01:3x | 273 h | A LEI DESTRAVA O QUE A O141 TRANCAVA ("nao se baixa pendente por leitura minha"), mas ela mesma nao da o numero: a condicao (1) exige a frota INTEIRA pela funcao REAL, e a medicao que existe hoje NAO cumpre isso -- logs/o259/porta_furo_pausa.log tem um traceback (ValueError: not enough values to unpack) e UMA linha de universo, n_fech=3, barrados=1, BARRADOS_SO_POR_PAUSA=0, dias_so_pausa=0; os 8 de 8 universos, 580 dias e 58 colabs do corte nao tem arquivo. Entao a ordem pratica nao muda: o contador nasce, RODA na frota pelo bin/sonda_frota.sh com o universo declarado ao lado, e o pendente sai se, e so se, ele medir 0 com universo NAO vazio (dias_so_pausa > 0). Numero fora = pergunta no topo do RELATO, pela propria lei. | LEI NOVA, numerada L-118 -- ALTERA a O141. Primeiro uso: O259 2o pendente da batida (CONTADOR-DA-PORTA-EXTRA), arvore principal, item 3 da ORDEM DA PRINCIPAL |
-| **O256-ORDEM-DRAWER-PRIMEIRO** | 2026-10-13 01:3x | 273 h | REPASSADO a raia wt-ui no mesmo turno (agente a2232824976ef506b), junto do complemento do saldo das 01:2x. A principal SO integra e pousa (aval 00:4x), entao a ordem nao muda nada aqui. O bloco "o que fazer" SO das chaves GRAVADAS na linha do retrato e a mesma lei da L-002 (testemunha le, nao recalcula) e repete o aviso que vale para toda sonda sobre RetratoFolha.linhas: a linha carrega `nome` -- nunca em RELATO nem em log, so colXXX/contagem/FORM. | O256 E3/E4 na raia wt-ui -- itens (1) DRAWER e (2) SALDO-GANHA-O-BOTAO-CADASTRO no MESMO pouso; (3) Raio-X e (4) Haiku depois |
-| **O261-GRUPO-D-E-A-OUTRA-METADE** | 2026-10-13 07:3x | 267 h | CENSO DE FROTA FEITO no turno do corte (leitura, `bin/sonda_frota.sh`, janela 21/07 a 12/10, 46.708 celulas): 7.571 lampadas ACESAS, 1.884 delas com 0 chamado E 0 pergunta em 136 colabs -- `nunca_bateu` 1.461 / `furo` 269 / `indefinida` 76 / `fato_em_ausencia` 56 / `discordante` 22. 1.461 tem a lampada com protestos VAZIOS. Abaixo do PISO_EMISSAO (2026-09): 983. NUCLEO com os tres guardas do emissor passando (codigo de emissao na lampada + no horizonte + colab nao desligado): 71 dias em 3 colabs. | O261 BUG-FIO-MORTO-CHAMADO -- metade D (lampada acesa sem fio NENHUM), ao lado da metade C (chamado vivo sem pergunta) que pousou em ae7f08f3 |
-| **O256-LEGENDA-E-PDF-ANTES-DO-RAIO-X** | 2026-10-13 07:3x | 267 h | REPASSADO a raia wt-ui no mesmo turno, com o corte RETRATO-DONO-SAO-TRES por cima: a legenda que ele pede e a de TRES donos, nao de quatro. | O256 UI-RETRATO-TRIAGEM -- itens 2 e 4 da pauta de 12/10, no pouso ANTES do Raio-X (que o aval das 01:3x deixou em terceiro) |
-| **RETRATO-DONO-SAO-TRES** | 2026-10-13 07:4x | 267 h | REPARTIDO no turno do corte. O JUIZ NAO MUDA e e isso que sustenta o 'juizes novos = 0': `folha/fora_da_folha.py:62::_fio_do_dia` segue devolvendo os quatro fios `admin|colab|chamado|nada` e `:38::DESTRAVA` segue nomeando a acao de cada um -- o que muda e o AGRUPAMENTO na tela (chamado e nada caem no balde Admin) e o lugar do ALARME (placar da casa, nunca a tela do admin). | O256 (barra/drawer/selo, raia wt-ui) + O261 (o contador esperado 0, arvore principal) -- o MESMO corte reparte nas duas raias |
-| **RECESSO-PISTA-DO-ADMIN** | 2026-10-13 08:2x | 266 h | RECEBIDO e aplicado a pista no mesmo turno. O QUE ELE MUDA NO QUE JA ESTAVA EM CURSO, e e por isso que o registro vem antes de qualquer outro ato: o GRUPO-D sai da frente e vai para DEPOIS dos quatro itens -- o censo que o corte das 07:3x pediu estava FEITO no ato deste aval e fica registrado em logs/o261/censo_grupod_13-10.txt (4.311 dias sem fio em 405 colabs pelo juiz REAL `_fio_do_dia`, nao os 1.884 do predicado largo; nucleo 210 em 55 colabs; e so 13 dias com a porta de cartorio.py:957 ABERTA e todos os guardas passando), e a CURA pelo emissor passa a esperar a vez. As raias nao param de construir (RAIA-NAO-FICA-PARADA: o que se enfileira e o POUSO), mas o pouso da wt-o48p3 (O48 passo 3) e da wt-bos (chamado x juiz) desce para o fim da ordem. O item (4) e um CRITERIO de pista, nao uma obra: ele poe um portao de DIFF de frota ZERO na competencia 10 em cada contrato que andar daqui ao export. | ORDEM VIVA inteira -- reordena a pista ate o export da competencia 10; nao abre obra, REPRIORIZA as abertas (O261 passivo primeiro, GRUPO-D depois) |
-| **PUBLICAR-RETRATO** | 2026-10-13 08:1x | 266 h | RECEBIDO 08:1x e registrado no mesmo turno. MEDIDO NO ATO, e e por isso que o menu NAO sobe hoje de tarde por tabela: das tres condicoes, so a (c) esta em curso. (a) 3fbe73a7 na raia-ui entrega o MARKUP da legenda (templates/folha/_retrato_legenda.html + o include na barra) e NAO toca folha/views_retrato.py -- o proprio partial guarda `if retrato_legenda` dentro, entao sem a chave de contexto a legenda fica INERTE no ar: pousar 3fbe73a7 sozinho nao cumpre (a). O PDF na barra (item 4 da pauta de 12/10) nao esta construido em raia nenhuma que possa pousar (raia-pdf segue sem aval de merge). (b) RETRATO-DONO-SAO-TRES e .py de folha (retrato_folha.py::DONOS tem quatro -- admin, colab, chamado, ninguem -- e nao existe dono `hoje` na arvore) e tambem nao esta construido. (c) a relavratura passou o portao na sombra as 08:0x (competencia 09 EXPORTADA intacta, fech da 10 sem mexer) e o apply em prod e o ato seguinte. A ORDEM que ele ja deu continua valendo: o menu e o ULTIMO ato, depois de (a), (b) e (c) PROVADOS no ar -- e aval condicional que nao fecha na condicao e PAROU com o numero, nao 'sobe e depois completa'. || ALTERADO pelo aval dele de 13/10 12:1x, LITERAL: "o link ORIGINAL de fechamento no menu do admin passa a abrir /folha/exportar/retrato/ (passo 6 da O48, troca da tela). A tela antiga NAO some: ganha um atalho 'Tela anterior' dentro da barra do retrato, porque gerar o TXT e as acoes de fechar/reabrir ainda moram nela; ela sai de vez so quando essas acoes estiverem no retrato. Smoke de clique: o meu de 13/10 12:0x vale para o que esta no ar ('assim esta otimo'). Pouso so de tela/url, smoke headless nas 3 larguras antes, deploy --sem-migrate, 500 em saas_ui nos 5 min seguintes = reverter o proprio commit pela porta e PAREI. Linha no RELATO com a hora da troca. Nenhuma lei nova." O QUE MUDA, e nenhum dos tres e detalhe: (1) nao e mais entrada AO LADO -- e TROCA do destino do link que ja existe, e por isso ela e o passo 6 da O48 e nao um item de menu novo; (2) nasce um atalho de VOLTA na barra, com o motivo NOMEADO por ele (o TXT e o fechar/reabrir ainda moram na tela velha) e com a condicao de MORTE escrita (sai quando essas acoes estiverem no retrato) -- atalho com dono e prazo, nao enfeite; (3) as TRES condicoes de escopo das 08:1x CAEM: o smoke de clique dele das 12:0x ("assim esta otimo") vale para o que esta no ar, e o que esta no ar e 914fba40 -- legenda dos LEDs e PDF na barra pousados (10f67c49 e 914fba40), RETRATO-DONO-SAO-TRES com os tres baldes, e a relavratura dos 124 aplicada. Entao o que me barrava as 08:1x nao me barra mais, e a razao nao e tempo passado: e CONDICAO CUMPRIDA mais smoke dele por cima. CONSTRUCAO em raia propria wt-ui (so templates + teste de TELA, CSS novo PROIBIDO na barra pela UI-RETRATO-TRIAGEM); o POUSO, o deploy --sem-migrate, a vigilia de 5 min e a linha no RELATO com a hora da troca sao da principal. | O256 -- a ENTRADA NO MENU da tela do retrato, com TRES condicoes de escopo literal (ESCOPO DO AVAL E LITERAL): (a) legenda dos LEDs E PDF na barra no ar, (b) RETRATO-DONO-SAO-TRES no ar, (c) os 124 relavrados e o retrato lido depois da relavratura -- REESCOPADO pelo aval das 12:1x: deixa de ser ENTRADA NOVA no menu e passa a ser a TROCA do destino do link que JA existe (passo 6 da O48), mais um atalho de VOLTA na barra do retrato. As TRES condicoes de escopo cairam. |
+| **O256-RAIO-X-DO-RETRATO** | 2026-10-13 00:1x | 275 h | OS QUATRO MOLDES QUE ELE NOMEIA EXISTEM, conferidos na arvore viva no turno em que o aval chegou: `chamados/views.py:1458::raiox_lente`, `templates/chamados/partials/_raiox_lente.html`, `chamados/services/verbos.py:250::placar_aceite` e `abrirDrawer` (em uso em `meu_atendimento.html:45` e `painel_gestao.html:14`, sempre com largura no 3o argumento). **O item (5) tem DEPENDENCIA EXPLICITA e ela esta em construcao no mesmo turno**: o conserto do HTML bruto da previa do push e o complemento da O206 que ele avalizou as 23:5x, e a medicao ja esta feita -- a origem e a previa (`hxPreviewCobranca` devolve markup e `hxConfirm` insere por `textContent` por cura de seguranca), nao o `hxConfirm`. **O item (2) e o unico que pede DADO que pode nao existir**: ele quer DOIS retratos gravados da MESMA competencia (ontem x hoje), e isso se mede antes de desenhar a tela -- retrato lavrado por `lavrar_retrato_folha --apply`; sem o de ontem, o placar diz 'sem retrato de ontem', nunca recalcula para preencher (o proprio aval manda: *a tela nao recalcula*). | O256 UI-RETRATO-TRIAGEM E3/E4 -- raia `wt-ui`; item (5) depende do complemento da O206 |
+| **DOIS-AGENTES-E-A-PRINCIPAL-SO-INTEGRA** | 2026-10-13 00:4x | 275 h | A CONDICAO DE PARTIDA ESTA CUMPRIDA: a cura da O206 ficou VERDE no turno em que o aval chegou -- `Ran 21 tests` / `OK` / rc 0 nos dois selos (`chamados.tests.test_sininho_template` + `chamados.tests.test_selo_painel_oferece_cobrar`), com RED evidenciado antes (4 failures, uma por copiador). A previa passou a ser TEXTO lido da autoridade (`comunicados/services.py::texto_cobranca`), custo medido de **1 query** por pagina do admin. O censo que a raia `wt-fio` vai consumir tambem esta PRONTO e publicado no RELATO das 23:3x: 21 escritores de estado de `PerguntaDisputa` -- 17 fecham, 4 reabrem --, A=2 / B=7 / C=8->7, e o RED nomeado e `chamados/reconciliador.py:328::lavrar_sem_turno_aberto` (motivos `orfao_14h` e `saida_sem_entrada`, 279 carimbos sem lastro medidos pela propria casa em `relavra_via.py:44`). A `wt-ui` esta LIMPA (porcelain vazio) e 1 commit atras do main. | O261 FASE 2 em `wt-fio` + O256 E3 em `wt-ui`, em paralelo; principal integra |
+| **PORTA-EXTRA-E-CONTADOR** | 2026-10-13 01:1x | 274 h | RESPONDE a pergunta que estava no TOPO do RELATO desde 12/10 20:3x (BACKLOG O259, coluna nota) e DESBLOQUEIA o item 3 da ORDEM DA PRINCIPAL: com `PENDENTES['batida']` vazio a celula ('batida','um juiz por pergunta') de `core/contratos_estruturais.py:357` fica VERDE pelo criterio 4b e `contratos_estruturais` vai de 15 para 16 de 20. CORRECAO DE NUMERO, no topo do RELATO: os numeros que o corte cita NAO ESTAO EM LOG NENHUM -- o unico medido em `logs/o259/porta_furo_pausa.log` e UMA linha (CNPJ 82218652, 09/2026, n_fech=3, barrados=1, BARRADOS_SO_POR_PAUSA=0, dias_so_pausa=0), precedida de um traceback (`ValueError: not enough values to unpack`) da 1a tentativa; 8/8 universos, 664 barrados, 580 dias e 58 colabs nao tem lastro de arquivo. Isso NAO muda a ordem: o contador que ele manda nascer e exatamente quem produz o numero com PROVA propria, e o pendente sai se, e so se, ele medir 0 na frota. | O259 2o pendente da batida -- CONTADOR-DA-PORTA-EXTRA, arvore principal (item 3 da ORDEM DA PRINCIPAL) |
+| **PENDENTE-SAI-PELA-CONDICAO-ESCRITA** | 2026-10-13 01:3x | 274 h | A LEI DESTRAVA O QUE A O141 TRANCAVA ("nao se baixa pendente por leitura minha"), mas ela mesma nao da o numero: a condicao (1) exige a frota INTEIRA pela funcao REAL, e a medicao que existe hoje NAO cumpre isso -- logs/o259/porta_furo_pausa.log tem um traceback (ValueError: not enough values to unpack) e UMA linha de universo, n_fech=3, barrados=1, BARRADOS_SO_POR_PAUSA=0, dias_so_pausa=0; os 8 de 8 universos, 580 dias e 58 colabs do corte nao tem arquivo. Entao a ordem pratica nao muda: o contador nasce, RODA na frota pelo bin/sonda_frota.sh com o universo declarado ao lado, e o pendente sai se, e so se, ele medir 0 com universo NAO vazio (dias_so_pausa > 0). Numero fora = pergunta no topo do RELATO, pela propria lei. | LEI NOVA, numerada L-118 -- ALTERA a O141. Primeiro uso: O259 2o pendente da batida (CONTADOR-DA-PORTA-EXTRA), arvore principal, item 3 da ORDEM DA PRINCIPAL |
+| **O256-ORDEM-DRAWER-PRIMEIRO** | 2026-10-13 01:3x | 274 h | REPASSADO a raia wt-ui no mesmo turno (agente a2232824976ef506b), junto do complemento do saldo das 01:2x. A principal SO integra e pousa (aval 00:4x), entao a ordem nao muda nada aqui. O bloco "o que fazer" SO das chaves GRAVADAS na linha do retrato e a mesma lei da L-002 (testemunha le, nao recalcula) e repete o aviso que vale para toda sonda sobre RetratoFolha.linhas: a linha carrega `nome` -- nunca em RELATO nem em log, so colXXX/contagem/FORM. | O256 E3/E4 na raia wt-ui -- itens (1) DRAWER e (2) SALDO-GANHA-O-BOTAO-CADASTRO no MESMO pouso; (3) Raio-X e (4) Haiku depois |
+| **O261-GRUPO-D-E-A-OUTRA-METADE** | 2026-10-13 07:3x | 268 h | CENSO DE FROTA FEITO no turno do corte (leitura, `bin/sonda_frota.sh`, janela 21/07 a 12/10, 46.708 celulas): 7.571 lampadas ACESAS, 1.884 delas com 0 chamado E 0 pergunta em 136 colabs -- `nunca_bateu` 1.461 / `furo` 269 / `indefinida` 76 / `fato_em_ausencia` 56 / `discordante` 22. 1.461 tem a lampada com protestos VAZIOS. Abaixo do PISO_EMISSAO (2026-09): 983. NUCLEO com os tres guardas do emissor passando (codigo de emissao na lampada + no horizonte + colab nao desligado): 71 dias em 3 colabs. | O261 BUG-FIO-MORTO-CHAMADO -- metade D (lampada acesa sem fio NENHUM), ao lado da metade C (chamado vivo sem pergunta) que pousou em ae7f08f3 |
+| **O256-LEGENDA-E-PDF-ANTES-DO-RAIO-X** | 2026-10-13 07:3x | 268 h | REPASSADO a raia wt-ui no mesmo turno, com o corte RETRATO-DONO-SAO-TRES por cima: a legenda que ele pede e a de TRES donos, nao de quatro. | O256 UI-RETRATO-TRIAGEM -- itens 2 e 4 da pauta de 12/10, no pouso ANTES do Raio-X (que o aval das 01:3x deixou em terceiro) |
+| **RETRATO-DONO-SAO-TRES** | 2026-10-13 07:4x | 268 h | REPARTIDO no turno do corte. O JUIZ NAO MUDA e e isso que sustenta o 'juizes novos = 0': `folha/fora_da_folha.py:62::_fio_do_dia` segue devolvendo os quatro fios `admin|colab|chamado|nada` e `:38::DESTRAVA` segue nomeando a acao de cada um -- o que muda e o AGRUPAMENTO na tela (chamado e nada caem no balde Admin) e o lugar do ALARME (placar da casa, nunca a tela do admin). | O256 (barra/drawer/selo, raia wt-ui) + O261 (o contador esperado 0, arvore principal) -- o MESMO corte reparte nas duas raias |
+| **RECESSO-PISTA-DO-ADMIN** | 2026-10-13 08:2x | 267 h | RECEBIDO e aplicado a pista no mesmo turno. O QUE ELE MUDA NO QUE JA ESTAVA EM CURSO, e e por isso que o registro vem antes de qualquer outro ato: o GRUPO-D sai da frente e vai para DEPOIS dos quatro itens -- o censo que o corte das 07:3x pediu estava FEITO no ato deste aval e fica registrado em logs/o261/censo_grupod_13-10.txt (4.311 dias sem fio em 405 colabs pelo juiz REAL `_fio_do_dia`, nao os 1.884 do predicado largo; nucleo 210 em 55 colabs; e so 13 dias com a porta de cartorio.py:957 ABERTA e todos os guardas passando), e a CURA pelo emissor passa a esperar a vez. As raias nao param de construir (RAIA-NAO-FICA-PARADA: o que se enfileira e o POUSO), mas o pouso da wt-o48p3 (O48 passo 3) e da wt-bos (chamado x juiz) desce para o fim da ordem. O item (4) e um CRITERIO de pista, nao uma obra: ele poe um portao de DIFF de frota ZERO na competencia 10 em cada contrato que andar daqui ao export. | ORDEM VIVA inteira -- reordena a pista ate o export da competencia 10; nao abre obra, REPRIORIZA as abertas (O261 passivo primeiro, GRUPO-D depois) |
+| **PUBLICAR-RETRATO** | 2026-10-13 08:1x | 267 h | RECEBIDO 08:1x e registrado no mesmo turno. MEDIDO NO ATO, e e por isso que o menu NAO sobe hoje de tarde por tabela: das tres condicoes, so a (c) esta em curso. (a) 3fbe73a7 na raia-ui entrega o MARKUP da legenda (templates/folha/_retrato_legenda.html + o include na barra) e NAO toca folha/views_retrato.py -- o proprio partial guarda `if retrato_legenda` dentro, entao sem a chave de contexto a legenda fica INERTE no ar: pousar 3fbe73a7 sozinho nao cumpre (a). O PDF na barra (item 4 da pauta de 12/10) nao esta construido em raia nenhuma que possa pousar (raia-pdf segue sem aval de merge). (b) RETRATO-DONO-SAO-TRES e .py de folha (retrato_folha.py::DONOS tem quatro -- admin, colab, chamado, ninguem -- e nao existe dono `hoje` na arvore) e tambem nao esta construido. (c) a relavratura passou o portao na sombra as 08:0x (competencia 09 EXPORTADA intacta, fech da 10 sem mexer) e o apply em prod e o ato seguinte. A ORDEM que ele ja deu continua valendo: o menu e o ULTIMO ato, depois de (a), (b) e (c) PROVADOS no ar -- e aval condicional que nao fecha na condicao e PAROU com o numero, nao 'sobe e depois completa'. || ALTERADO pelo aval dele de 13/10 12:1x, LITERAL: "o link ORIGINAL de fechamento no menu do admin passa a abrir /folha/exportar/retrato/ (passo 6 da O48, troca da tela). A tela antiga NAO some: ganha um atalho 'Tela anterior' dentro da barra do retrato, porque gerar o TXT e as acoes de fechar/reabrir ainda moram nela; ela sai de vez so quando essas acoes estiverem no retrato. Smoke de clique: o meu de 13/10 12:0x vale para o que esta no ar ('assim esta otimo'). Pouso so de tela/url, smoke headless nas 3 larguras antes, deploy --sem-migrate, 500 em saas_ui nos 5 min seguintes = reverter o proprio commit pela porta e PAREI. Linha no RELATO com a hora da troca. Nenhuma lei nova." O QUE MUDA, e nenhum dos tres e detalhe: (1) nao e mais entrada AO LADO -- e TROCA do destino do link que ja existe, e por isso ela e o passo 6 da O48 e nao um item de menu novo; (2) nasce um atalho de VOLTA na barra, com o motivo NOMEADO por ele (o TXT e o fechar/reabrir ainda moram na tela velha) e com a condicao de MORTE escrita (sai quando essas acoes estiverem no retrato) -- atalho com dono e prazo, nao enfeite; (3) as TRES condicoes de escopo das 08:1x CAEM: o smoke de clique dele das 12:0x ("assim esta otimo") vale para o que esta no ar, e o que esta no ar e 914fba40 -- legenda dos LEDs e PDF na barra pousados (10f67c49 e 914fba40), RETRATO-DONO-SAO-TRES com os tres baldes, e a relavratura dos 124 aplicada. Entao o que me barrava as 08:1x nao me barra mais, e a razao nao e tempo passado: e CONDICAO CUMPRIDA mais smoke dele por cima. CONSTRUCAO em raia propria wt-ui (so templates + teste de TELA, CSS novo PROIBIDO na barra pela UI-RETRATO-TRIAGEM); o POUSO, o deploy --sem-migrate, a vigilia de 5 min e a linha no RELATO com a hora da troca sao da principal. | O256 -- a ENTRADA NO MENU da tela do retrato, com TRES condicoes de escopo literal (ESCOPO DO AVAL E LITERAL): (a) legenda dos LEDs E PDF na barra no ar, (b) RETRATO-DONO-SAO-TRES no ar, (c) os 124 relavrados e o retrato lido depois da relavratura -- REESCOPADO pelo aval das 12:1x: deixa de ser ENTRADA NOVA no menu e passa a ser a TROCA do destino do link que JA existe (passo 6 da O48), mais um atalho de VOLTA na barra do retrato. As TRES condicoes de escopo cairam. |
 | **OBRA-INTERROMPIDA-VOLTA-SOZINHA** | 2026-10-17 23:5x | 155 h | NUMERADA E APLICADA no turno do corte, com a divida MEDIDA em vez de prometida. A hora do corte e BRACKET medido no log da sessao (depois de 23:45, antes de 23:59), nao carimbo -- o minuto nao existe e nao se inventa. O QUE A LEI PEGA NO ATO, e o numero e meu: a O261 saiu do topo em 13/10 15:37 (5d157d1f) empurrada pelo BUG-LINHA-X-BADGE, que FECHOU em 13/10 19:36 (861100a1) -- e ela nao voltou por 4 DIAS, porque nada na casa fazia essa pergunta; o marcador ORDEM-VIVA-TOPO andou duas vezes nesse meio (O280 em 13/10, O306 em 17/10 23:36, 32ab503c). Ela volta HOJE pela ordem literal dele ("a O261 entra na lista hoje") e pela FUSAO com a O306 do aval das 23:4x-5x, que e o topo. A segunda interrompida e a O280, desde 17/10 23:36, medida pelo mesmo marcador. O MEDIDOR NAO MOVE O MARCADOR: ele ALARMA. O marcador segue escrito a mao e lido por bin/hook_stop_fila1.py -- 2o escritor da fila 1 e o que a casa proibe desde 01/10, e seria juiz novo para uma pergunta que ja tem juiz. | O313 OBRA-INTERROMPIDA-VOLTA-SOZINHA -- o medidor (`bin/interrompidas_estado.py`), a linha no ESTADO e o selo de host. A lei em si e numerada L-119 em docs/LEIS.md; as duas interrompidas de hoje (O261 e O280) entram pela celula de ESTADO do BACKLOG, que e a fonte que o medidor le. |
+| **FURO-DE-HOJE-SO-ABSOLVE-PLANTIO-DE-HOJE** | 2026-10-19 07:3x | 124 h | recebido -- resposta as TRES perguntas do topo do RELATO de 06:1x-07:0x, e a 3a frase e a que vira codigo. O endereco se mediu antes de ser usado: a absolvicao nao morava num juiz, morava no PERIODO de uma 2a opiniao posicional -- `chamados/services/materializacao.py::_plantio_preenche_furo_na_data` varria `data__range=(D-1, D)` com `.order_by('-data')` e devolvia no PRIMEIRO dia que absolvesse. A outra metade do corte (`_ABSOLVEM_SEMPRE` fica com 5, migra so a ponte parcial de `_materializar_resposta_hora`) e CONFIRMACAO: as 5 vias ja estavam em `chamados/juizes.py:578-589` e a ponte da paridade pousou em 18/10 (`chamados/tests/test_o261_paridade_respeita_a_lampada.py`). Nenhuma lei nova (L-117): e a **L-061** -- o consumidor le a lampada do dia que esta julgando -- chegando ao leitor que faltava. | O261 item (1), 3a frase (fatia deste turno) |
 | **DESLIGADO-FORA-DA-JANELA-APOSENTA-A-LINHA** | 2026-10-19 07:5x | 123 h | RECEBIDO e registrado no turno do corte. O QUE ELE RESPONDE: a pergunta de lei que estava no TOPO do RELATO desde 19/10 01:1x -- *"quem re-deriva, ou APOSENTA, linha gravada de colaborador DESLIGADO fora da janela?"* --, medida na sombra em 4 de 609 linhas de 10/2026 (col316, col846, col870, col927; emp2, status=aberto, horas=0.00). A DOCSTRING DO VIGIA JA DECLARAVA OS 4 e dizia que a pergunta era de outra familia (`ponto/services/fechamento.py:1273::projecoes_vencidas`), entao o corte nao muda o que o contador mede: ele diz QUEM ESTA NO UNIVERSO. O QUE A CURA EXIGE, MEDIDO NO ATO -- e e por isso que ela nao sobe hoje por tabela: (a) `FechamentoMensal.STATUS_CHOICES` tem TRES valores (`aberto`, `aprovado`, `exportado`) e nenhum `encerrado` (`ponto/models.py:389-393`), logo status novo = migration + censo de TODO leitor de `status`, porque valor novo que nenhum leitor conhece cai no balde errado em silencio; (b) o predicado do universo mora em `fechamento.py:122-124` e o contador NAO o copia -- a cura e UM sitio lido pelos dois escritores (LEI-AKITA 2), nunca um filtro novo dentro do vigia, que seria o segundo juiz de "quem esta na competencia"; (c) gravar `encerrado` em linha de 10/2026 e escrita na competencia do export de 21/10: a JANELA DE FECHAMENTO manda medir o DIFF de frota e, se mudar quem entra ou o valor da 10, PAUSAR ate o export com linha no RELATO. RED primeiro, na raia que ja e dona do carimbo. | O48 passo 6 -- o universo do vigia passa a ser o MESMO do escritor (um sitio para o predicado) e a linha de desligado fora da janela se APOSENTA: status novo, porta com trilha, `derivado_em` segue NULO por desenho. O contador cai a 0 por ESTAR CERTO, nao por estreitar. |
-| **FURO-DE-HOJE-SO-ABSOLVE-PLANTIO-DE-HOJE** | 2026-10-19 07:3x | 123 h | recebido -- resposta as TRES perguntas do topo do RELATO de 06:1x-07:0x, e a 3a frase e a que vira codigo. O endereco se mediu antes de ser usado: a absolvicao nao morava num juiz, morava no PERIODO de uma 2a opiniao posicional -- `chamados/services/materializacao.py::_plantio_preenche_furo_na_data` varria `data__range=(D-1, D)` com `.order_by('-data')` e devolvia no PRIMEIRO dia que absolvesse. A outra metade do corte (`_ABSOLVEM_SEMPRE` fica com 5, migra so a ponte parcial de `_materializar_resposta_hora`) e CONFIRMACAO: as 5 vias ja estavam em `chamados/juizes.py:578-589` e a ponte da paridade pousou em 18/10 (`chamados/tests/test_o261_paridade_respeita_a_lampada.py`). Nenhuma lei nova (L-117): e a **L-061** -- o consumidor le a lampada do dia que esta julgando -- chegando ao leitor que faltava. | O261 item (1), 3a frase (fatia deste turno) |
 | **JUIZ-RESOLVER-DIA-OFERECIDO-NASCE** | 2026-10-22 13:5x | 45 h | recebido -- endereco `colaboradores/services/calendario.py::resolver_dia_oferecido` (+ porta curta `resolver_dia_oferecido_na_data`), registrado em `core/juizes.py` como `_TT11` da familia tela; o template `_calendario_grade.html` passa a LER `dia.resolver_dia_oferecido`; sai o pendente de TELA. E a "decisao do dia PENDENTE na celula" da lei O261 de 22/10 ~13:3x. Medido antes (sombra 22/10): 208 dos 295 dias de fio morto oferecem o Resolver dia | O261 (vigia do fio) |
-| **JUIZ-PODE-FECHAR-NASCE** | 2026-10-22 17:2x | 41 h | recebido -- endereco `chamados/models.py::DisputaSupervisao.pode_fechar` (fio_vivo/C6 vazio + nenhuma resposta sem veredito), registrado em `core/juizes.py` como `_C7` da familia chamado; sai `SEM_JUIZ['chamado'][_C7]`. Mesmo corte, item (2) (o C6 LE a tranca por `periodo_trancado`): resolvido pela OPCAO (A) do aval de ~18:3x -- MENOS o (colab, dia) que o ADMIN tocou depois da tranca (toque humano com trilha: Cobrar este dia / Resolver dia / desarquivar); medido em prod: das 1.544 vivas de chamado pos-tranca, 10 (3 colabs) tem toque humano e 1.534 sao do sistema | C7-DISPUTA-FECHA-POR-UM-JUIZ |
+| **JUIZ-PODE-FECHAR-NASCE** | 2026-10-22 17:2x | 42 h | recebido -- endereco `chamados/models.py::DisputaSupervisao.pode_fechar` (fio_vivo/C6 vazio + nenhuma resposta sem veredito), registrado em `core/juizes.py` como `_C7` da familia chamado; sai `SEM_JUIZ['chamado'][_C7]`. Mesmo corte, item (2) (o C6 LE a tranca por `periodo_trancado`): resolvido pela OPCAO (A) do aval de ~18:3x -- MENOS o (colab, dia) que o ADMIN tocou depois da tranca (toque humano com trilha: Cobrar este dia / Resolver dia / desarquivar); medido em prod: das 1.544 vivas de chamado pos-tranca, 10 (3 colabs) tem toque humano e 1.534 sao do sistema | C7-DISPUTA-FECHA-POR-UM-JUIZ |
 | **LEI-DO-MIOLO-CEDE-A-LAMPADA** | 2026-10-23 13:5x | 21 h | recebido e registrado no turno do corte; obra INTERVALO-DECLARADO no BACKLOG, DEPOIS dos BOs em curso, sem reordenar. Nada construido. | INTERVALO-DECLARADO |
-| **[nome]-NAO-COBRE-OS-MINUTOS-DA-TRILHA** | 2026-10-23 15:1x | 19 h | recebido e registrado; obra [nome]-HE-NAO-POR-MINUTO no BACKLOG. So de TELA, dinheiro igual (zero). Nada construido. | L-097 |
-| **JUIZ-COMPETENCIA-ENTREGUE-NASCE** | 2026-10-23 18:2x | 16 h | recebido; obra K6 no FLUXO 2 (M5): antes do pouso, medir os 6 leitores nas 2 triplas / 142 colabs (emp3 e emp4 08/2026) que mudam de lado; leitor que passar a ESCREVER em 08 = PAROU com o numero; leitura/tela que so muda rotulo pousa; depois os leitores migram e o ranking_he (item 8). Nada construido. | K6 |
-| **JUIZ-COMPETENCIA-FECHADA-PARA-CELULA-NASCE** | 2026-10-24 09:3x | 1 h | construindo -- RED evidenciado contra o HEAD (9 vermelhos; o que separa: TXT revogado sem substituta deixava a janela barrada); universo medido em prod 24/10 09:5x: 7 triplas com ED, 0 deixam de valer -> as janelas barradas sao as MESMAS, 0 celula muda. | K6 (CONTRATOS-RESTANTES-E1-E2-FOLHA-K6): `folha/export.py::competencia_fechada_para_celula` (_K9) compoe o _K6 com o holerite publicado; `gerar_celulas.py::_competencias_exportadas` e `::fonte_da_lavra` LEEM o juiz; celula ('folha/export', 'um juiz por pergunta') verde. |
+| **[nome]-NAO-COBRE-OS-MINUTOS-DA-TRILHA** | 2026-10-23 15:1x | 20 h | recebido e registrado; obra [nome]-HE-NAO-POR-MINUTO no BACKLOG. So de TELA, dinheiro igual (zero). Nada construido. | L-097 |
+| **JUIZ-COMPETENCIA-ENTREGUE-NASCE** | 2026-10-23 18:2x | 17 h | recebido; obra K6 no FLUXO 2 (M5): antes do pouso, medir os 6 leitores nas 2 triplas / 142 colabs (emp3 e emp4 08/2026) que mudam de lado; leitor que passar a ESCREVER em 08 = PAROU com o numero; leitura/tela que so muda rotulo pousa; depois os leitores migram e o ranking_he (item 8). Nada construido. | K6 |
+| **JUIZ-COMPETENCIA-FECHADA-PARA-CELULA-NASCE** | 2026-10-24 09:3x | 2 h | construindo -- RED evidenciado contra o HEAD (9 vermelhos; o que separa: TXT revogado sem substituta deixava a janela barrada); universo medido em prod 24/10 09:5x: 7 triplas com ED, 0 deixam de valer -> as janelas barradas sao as MESMAS, 0 celula muda. | K6 (CONTRATOS-RESTANTES-E1-E2-FOLHA-K6): `folha/export.py::competencia_fechada_para_celula` (_K9) compoe o _K6 com o holerite publicado; `gerar_celulas.py::_competencias_exportadas` e `::fonte_da_lavra` LEEM o juiz; celula ('folha/export', 'um juiz por pergunta') verde. |
 | **W12X36-HPD** | 2026-09-24 14:xx / 16:5x | 0 h | construindo | O26 W12X36-HPD |
 | **FECHAMENTO-ONLINE** | 2026-09-20 21:0x (corte original, NAO registrado na epoca) / reafirmado 2026-09-25 12:0x | 0 h | recebido | O48 FECHAMENTO-ONLINE |
+| **V3-B-B21-DECIDIDO** | 2026-10-24 12:0x | 0 h | confirmado -- ja aplicado pelo corte de 23/10 15:0x (BO-B item (2): abono cobre so o previsto que as batidas nao cobriram); entra como caso da bateria | V3-BATERIA-O-RESTO-DOS-38 (bateria da v3 pela regra, L-110) |
+| **V3-B-B24-E-A-LEI-DO-R3** | 2026-10-24 12:0x | 0 h | confirmado -- a lei do R3 (dia de batida impar EM ABERTO, sem numero); entra como caso da bateria | V3-BATERIA-O-RESTO-DOS-38 (bateria da v3 pela regra, L-110) |
+| **V3-CCT-4B-E-CADASTRO-DO-SINDICATO** | 2026-10-24 12:0x | 0 h | recebido -- o caso le o cadastro do sindicato (prorrogacao pos-05h desmarcada no SINEEPRES em 19/10); entra como caso da bateria | V3-BATERIA-O-RESTO-DOS-38 (bateria da v3 pela regra, L-110) |
+| **V3-B-B30-DISTANCIA-E-CADASTRO** | 2026-10-24 12:0x | 0 h | recebido -- obra: campo de cadastro por TipoEscala (padrao 180 min, regua da L-084) com leitor; caso da bateria escrito pela regra antes do codigo | V3-BATERIA-O-RESTO-DOS-38 (bateria da v3 pela regra, L-110) |
+| **V3-B-B31-INICIO-IGUAL-FIM-E-CADASTRO-INVALIDO** | 2026-10-24 12:0x | 0 h | recebido -- obra: a porta do TipoEscala recusa hora_inicio == hora_fim e o caso vai a lista do admin; caso da bateria | V3-BATERIA-O-RESTO-DOS-38 (bateria da v3 pela regra, L-110) |
 <!-- SEUS-CORTES:FIM -->
 
 ## DEPLOYS AGENDADOS
