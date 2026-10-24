@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 24/10/2026 02:13:33.** Transcript: `ed482694-44e4-4da5-bd42-07601a2a39b4.jsonl` (6.6 MB). Acoes na janela: **340**.
+**Medido em 24/10/2026 02:19:03.** Transcript: `ed482694-44e4-4da5-bd42-07601a2a39b4.jsonl` (6.6 MB). Acoes na janela: **342**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 02:13:51 | Bash | Regenerate handoff and show fila/PAREI | `cd /home/ronald/saas-hasner && bash bin/handoff_sessao.sh >/dev/null 2>&1; sed -n '/## FILA 1/,/## AVAIS NA MESA/p' app/docs/HANDOFF-SESSAO.md \| cut -c1-170` |
+| 02:13:46 | Bash | Read retried push result | `tail -4 /home/ronald/saas-hasner/logs/clb1b/push_madrugada2.out` |
 | 01:59:42 | Bash | Retry push with placar rewritten | `cd /home/ronald/saas-hasner && { bin/push.sh origin main; echo "FIM_PUSH rc=$?"; bash bin/relato.sh 2>&1 \| tail -1; } > logs/clb1b/push_madrugada2.out 2>&1` |
 | 01:59:40 | Bash | Commit pending VARREDURA-TRIAGEM docs | `cd /home/ronald/saas-hasner && git diff --stat app/docs/BACKLOG.md app/docs/PROMPTS.md \| tail -1; git add app/docs/BACKLOG.md app/docs/PROMPTS.md && git commit -q -m "docs: aval VARREDURA-TRIAGEM registrado (fila 1 depois do O261 e do K6) Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>" && git log --oneline -1` |
 | 01:59:33 | Bash | Rewrite TICKETS placar and commit | `cd /home/ronald/saas-hasner && bash bin/tickets_placar.sh --escrever 2>&1 \| tail -2; git status --short \| /bin/grep -v '^??' ; git add app/docs/TICKETS.md && git commit -q -m "TICKETS: placar do topo reescrito pelo escritor (a nota da celula folha/export mudou com o K6 parcial) Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>" && git log --oneline -1` |
