@@ -1,8 +1,10 @@
 # RELATO — esteira saas-hasner
 
-> **OS 4 PRAZO QUE ESPERAVAM A LEI DO E1, medidos 24/10 14:5x (decisao pela L-101, nao pergunta):** o vinculo de `detectar_ausencias` por `ativa=True` = o da juiza em **1.090 de 1.090** dia-colab de hoje e ontem (prod, so leitura). Comparacoes contra o relogio por AST (regra do selo do papel `prazo`): `detectar_ausencias` **6** (5 "e o dia de hoje?" + a janela), `processar_alertas_avancados` **2** (escada 8/24/72 h), `processar_alertas_turno` **1** (lembrete por minuto antes do fim), `marcar_foto_ausente_retro` **0** mas sem autoridade de "foto ausente". Mover cada regra para uma funcao so do proprio cron seria trocar de lugar para o selo passar (LEI-AKITA 1); pela L-101 quem nao pode delegar FICA juiz ate a autoridade do dominio existir. A fila segue: lote EVENTO (12).
+> **pergunta (aval PRAZO (1) de 13:5x, medido antes de aplicar): as 5 comparacoes `data_ref == hoje` do `detectar_ausencias` NAO perguntam "o dia esta em curso?"** -- elas escolhem em qual das duas passadas (hoje/ontem) o CADASTRO e tratado UMA vez por rodada: LIMBO-FOLGAS e `ancora_limbo` sao "idempotente por colab (nao por dia)" (`detectar_ausencias.py:140,154,169,232,259`), e `_dias.insert(1, hoje)` faz a 2a passada pela cobranca. MEDIDO em prod 24/10 13:53 (so leitura, `logs/prazo_detectar_ausencias_dia_encerrado_20261024.out`): trocar por `not dia_encerrado(...)` muda **21 de 1.090** dia-colab -- **11** com o turno de hoje ja fechado ficariam SEM tratamento de LIMBO na rodada, **10** com o turno de ontem ainda aberto seriam tratados DUAS vezes. (a) as 5 viram a IDENTIDADE da passada (`for data_ref, corrente in ((hoje, True), (ontem, False))`), sem comparacao e sem mudar comportamento, e so a janela (`:317`) vai a autoridade; ou (b) o `dia_encerrado` como voce escreveu, com os 21 mudando de lado. NAO apliquei. A fila segue: selo das horas do RELATO.
 
-> **RESPONDIDA 24/10 13:5x: E1 = (a)**, construida 14:3x (secao abaixo). -- a geradora so vale DENTRO da vigencia; fora dela None, dono CADASTRO; vigencia, nao o flag ativo. ~~lei: E1 -- a geradora da celula vale FORA da vigencia do vinculo que a gerou? A juiza `escala/alimentacao.py::vinculo_do_dia` (O69) devolve a geradora SEM checar vigencia; o rival `escala/utils.py::_esc_vigente_do_dia` exige vigencia. Migrando o rival para a juiza (raia `wt-e1`, suite 11853 com 1 vermelho): `folha/tests/test_cadastro_zero_com_batida.py::test_RED_celula_de_vinculo_ENCERRADO_antes_da_janela_e_retida` (caso col882: celula `trabalha=True` de vinculo morto antes da competencia -> hoje RETIDO `cadastro_zero`; com a juiza ENTRARIA no TXT com 0,00). Medido na sombra 24/10: comp 10, vinculo difere em 1.276 dia-colab / 49 colabs (1.251 de desligado), previsto por dia muda em 809 / 44 colabs, total do MOTOR muda em **0 de 49**; comp 11 `DIFF_FOLHA=0`; `previsto_cego` identico; empates sem geradora = **0**. (a) a juiza passa a exigir vigencia da geradora (fora dela = None, dono CADASTRO -- L-021, bateria A10; muda o predicado da juiza para todos os leitores dela), ou (b) a geradora vale sempre (O69 literal) e o portao do TXT ganha outra forma de reter o col882. A fila segue: ESPELHO-VERDADE.
+> **OS 4 PRAZO QUE ESPERAVAM A LEI DO E1, medidos 24/10 13:4x (decisao pela L-101, nao pergunta):** o vinculo de `detectar_ausencias` por `ativa=True` = o da juiza em **1.090 de 1.090** dia-colab de hoje e ontem (prod, so leitura). Comparacoes contra o relogio por AST (regra do selo do papel `prazo`): `detectar_ausencias` **6** (5 "e o dia de hoje?" + a janela), `processar_alertas_avancados` **2** (escada 8/24/72 h), `processar_alertas_turno` **1** (lembrete por minuto antes do fim), `marcar_foto_ausente_retro` **0** mas sem autoridade de "foto ausente". Mover cada regra para uma funcao so do proprio cron seria trocar de lugar para o selo passar (LEI-AKITA 1); pela L-101 quem nao pode delegar FICA juiz ate a autoridade do dominio existir. A fila segue: lote EVENTO (12). (Rotulos de hora de 24/10 corrigidos as 13:51 contra a hora do commit de cada marco: eu os escrevia antes do commit e eles se adiantaram ate 1 h.)
+
+> **RESPONDIDA 24/10 12:5x: E1 = (a)**, construida 13:3x (secao abaixo). -- a geradora so vale DENTRO da vigencia; fora dela None, dono CADASTRO; vigencia, nao o flag ativo. ~~lei: E1 -- a geradora da celula vale FORA da vigencia do vinculo que a gerou? A juiza `escala/alimentacao.py::vinculo_do_dia` (O69) devolve a geradora SEM checar vigencia; o rival `escala/utils.py::_esc_vigente_do_dia` exige vigencia. Migrando o rival para a juiza (raia `wt-e1`, suite 11853 com 1 vermelho): `folha/tests/test_cadastro_zero_com_batida.py::test_RED_celula_de_vinculo_ENCERRADO_antes_da_janela_e_retida` (caso col882: celula `trabalha=True` de vinculo morto antes da competencia -> hoje RETIDO `cadastro_zero`; com a juiza ENTRARIA no TXT com 0,00). Medido na sombra 24/10: comp 10, vinculo difere em 1.276 dia-colab / 49 colabs (1.251 de desligado), previsto por dia muda em 809 / 44 colabs, total do MOTOR muda em **0 de 49**; comp 11 `DIFF_FOLHA=0`; `previsto_cego` identico; empates sem geradora = **0**. (a) a juiza passa a exigir vigencia da geradora (fora dela = None, dono CADASTRO -- L-021, bateria A10; muda o predicado da juiza para todos os leitores dela), ou (b) a geradora vale sempre (O69 literal) e o portao do TXT ganha outra forma de reter o col882. A fila segue: ESPELHO-VERDADE.
 
 O261 FECHADA (marco 09:5x): acervo RECUSA-FALA APLICADO pelo Ronald 24/10 09:26 (19 devolvidas, reversao `logs/recusa_fala/reversao_recusa_fala_20261024_092649.json`, HASH09 igual, 0 validadas sem gravar). Vigia recarimbado em prod 09:34:50: **fio_morto = 0** (cobrando 0, com_alvo 0, lampadas_acesas 3.006, cego False, futuros 0; `logs/fio_morto.json`). O fechamento (crons `--alarme-passivo`) e o marco seguinte.
 
@@ -42,7 +44,7 @@ PAREI: ! GATE-EXPORT-10 (so o export da 10) | espera o DP na Gestao de HE e o Ro
 > O MARCADOR ANDOU no mesmo ato: `ORDEM-VIVA-TOPO` saiu de `BO-HE-RECUSAR-LOTE-500` (fechado) para `O261`, que o hook cobrou.
 > SEM COMMIT DE PROPOSITO: `RELATO.md` e `BACKLOG.md` ficam sujos na arvore porque a L-106 nao deixa commit so de docs fora de marco. Eles entram no commit do proximo marco.
 
-## 24/10 14:3x -- MARCO E1 LEI (a): a geradora so vale dentro da vigencia, e o rival `_esc_vigente_do_dia` delega a juiza
+## 24/10 13:3x -- MARCO E1 LEI (a): a geradora so vale dentro da vigencia, e o rival `_esc_vigente_do_dia` delega a juiza
 
 LEI-AKITA: origem=escala/alimentacao.py::vinculo_do_dia + escala/utils.py::_esc_vigente_do_dia, testemunha=CelulaDia.escala_geradora julgada pela vigencia do vinculo (L-021, A10, L-099), RED=ponto/tests/test_vinculo_do_dia_pela_celula.py::GeradoraSoValeNaVigenciaTest (2 falhas no HEAD) + folha/tests/test_cadastro_zero_com_batida (col882), quem-mais-le=escala_vigente, espelho, motor, previsto, cartorio, vigia_de_hora, juizes novos=0
 
@@ -50,10 +52,10 @@ LEI-AKITA: origem=escala/alimentacao.py::vinculo_do_dia + escala/utils.py::_esc_
 - Rival: `_esc_vigente_do_dia` so alimenta (lista inteira + celula, 1 query sem alimentacao) e chama a juiza; o pendente DINHEIRO de PENDENTES['escala'] sai.
 - IMPACTO (sombra 24/10, motor da comp 10 pela funcao real): 1.234 dia-colab / 45 colabs com geradora fora da vigencia; **1 de 45 muda** -- col890 `horas_falta` -11,00 h no motor ao vivo. O GRAVADO dele ja diz 0,00: a cura leva o motor ao gravado (delta contra o gravado = 0). Comp 11: `DIFF_FOLHA=0` (rival). Empates sem geradora: 0.
 - DINHEIRO EM COMPETENCIA ABERTA (pre-aprovado): reversao ANTES em `logs/e1lei/reversao_col890_10_20261024.json` (1 fechamento, 4 DiaPago, hashes das 26 exportadas); exportadas por hash e prova de frota DEPOIS do deploy, nesta secao.
-- PROVA DEPOIS (deploy `460ee92b`, 14:4x): exportadas **26 de 26 com hash igual** ao da reversao (`logs/e1lei/prova_depois_20261024.json`); gravado col890 comp 10 igual (horas_falta 0,00 / trabalhadas 0,34 / aberto); frota na sombra com o codigo no ar = a medida da raia (so col890 muda no motor ao vivo).
+- PROVA DEPOIS (deploy `460ee92b`, 13:3x): exportadas **26 de 26 com hash igual** ao da reversao (`logs/e1lei/prova_depois_20261024.json`); gravado col890 comp 10 igual (horas_falta 0,00 / trabalhadas 0,34 / aberto); frota na sombra com o codigo no ar = a medida da raia (so col890 muda no motor ao vivo).
 - 4 caracterizacoes INVERTIDAS (o selo nao se apaga): col515, col882, "velho encerrado na vespera" -> None; "celula vence o mais recente" refeito DENTRO da vigencia; o131 julga a geradora carregada pela vigencia.
 
-## 24/10 13:5x -- MARCO E1 passo B (2 de 9): `vigia_de_hora` deixa de ter dois juizes do vinculo
+## 24/10 12:5x -- MARCO E1 passo B (2 de 9): `vigia_de_hora` deixa de ter dois juizes do vinculo
 
 LEI-AKITA: origem=ponto/services/vigia_de_hora.py::_acesas_de_sobra, testemunha=escala/servico_jornada.py::escala_vigente -> vinculo_do_dia (a mesma de `cartorio.marcos_vencidos`), RED=escala/tests/test_contract_juiz_escala.py (TOMADORES sem vigia_de_hora, total 9 -> 8; vermelho no HEAD), quem-mais-le=vigia_de_hora.rodar, juizes novos=0
 
@@ -61,7 +63,7 @@ LEI-AKITA: origem=ponto/services/vigia_de_hora.py::_acesas_de_sobra, testemunha=
 - Universo que muda, medido em prod (so leitura): celulas `trabalha=True` SEM geradora nos ultimos 30 dias = **0 de 10.667** -> resultado identico na frota de hoje; a cura e de coerencia (LEI-AKITA 2).
 - Sobra no censo: `dia_da_frota` (o filtro SQL por ciclo e o desenho do relatorio sao a geradora; trocar so a exibicao faria filtro e linha discordarem), `precedencia`, `_fnd` do cartorio, `servico_jornada` (carregador), e os 3 de outra pergunta -- depois da lei do E1 no topo.
 
-## 24/10 13:2x -- MARCO UI-PILULAS-QUEBRAM-LINHA (fila 2, so template): as pilulas do dia descem em vez de sair da caixa
+## 24/10 12:3x -- MARCO UI-PILULAS-QUEBRAM-LINHA (fila 2, so template): as pilulas do dia descem em vez de sair da caixa
 
 LEI-AKITA: origem=templates/colaboradores/partials/_calendario_grade.html (fileira de acoes + fileira da pilula do chamado), testemunha=getBoundingClientRect no chromium (harness do test_smoke_chromium), RED=colaboradores/tests/test_ui_pilulas_quebram_linha.py, quem-mais-le=calendario do perfil + drawer (mesma celula, layout mes/fita), juizes novos=0
 
@@ -70,7 +72,7 @@ LEI-AKITA: origem=templates/colaboradores/partials/_calendario_grade.html (filei
 - O selo mede so as duas fileiras que o aval nomeia; o PAINEL do popover do Resolver dia fica fora de proposito (na tela real o CSS da casca o esconde; mediu 4 falsos "fora" na pagina isolada).
 - Dinheiro zero, nenhuma lei nova. Template entra no ar ao gravar (sem `cached.Loader`); o deploy `--sem-migrate` vem no mesmo ato pela L-105.
 
-## 24/10 12:1x -- VARREDURA-TRIAGEM: os 21 de `JUIZES_POR_VARREDURA`, uma linha cada (so leitura)
+## 24/10 12:0x -- VARREDURA-TRIAGEM: os 21 de `JUIZES_POR_VARREDURA`, uma linha cada (so leitura)
 
 Escritas de 30 dias por ATOR em prod pelo campo `LogAuditoria.ator` (`sistema:<cron>`; `logs/varredura_triagem_por_cron_30d_20261024.out`); regra pelo codigo (agente de leitura); GEO pelo dry em prod (`logs/varredura_triagem_geo_dry_20261024.out`).
 
@@ -102,7 +104,7 @@ Escritas de 30 dias por ATOR em prod pelo campo `LogAuditoria.ator` (`sistema:<c
 
 **LOTE PRAZO 1 NO AR** (`23146e4e`): `escalonar_documentos_ausencia` e `apurar_furos_diarios` -> `PRAZO_DELEGA_A`, 21 -> 19. Os 4 PRAZO que sobram ESPERAM: `detectar_ausencias` (vinculo por `ativa=True`, :109) e `processar_alertas_avancados`/`_turno` (idem + 3 comparacoes contra o relogio) dependem da lei do E1 no topo; `marcar_foto_ausente_retro` nao tem autoridade. **LOTE VIGIA, resíduo medido antes de desligar a escrita:** `reconciliar_chamados` na sombra 24/10 = **7 chamados retratados (7 colabs) numa rodada** -- nao e 0, nao vira vigia; os 7 sao a fila dele (por que o caminho reativo nao os pega). `detectar_vinculo_divergente` roda `--apply` toda segunda (dry 82 sugestoes, 78 chamados vivos) e `termometro_regua` roda `--avaliar --avisar --retratar`: os dois mudam comportamento ao virar vigia e seguem medidos antes.
 
-## 24/10 11:5x -- MARCO ESPELHO-VERDADE (aval 10:1x): provas do chat + termometro R1 da 10 na sombra
+## 24/10 11:3x -- MARCO ESPELHO-VERDADE (aval 10:1x): provas do chat + termometro R1 da 10 na sombra
 
 LEI-AKITA: origem=core/espelho_verdade.py::ETAPAS, testemunha=e6_oraculo (termometro R1, L-114) + escala/services/previsto_cego.py::medir, RED=placar() rebaixa FEITO sem prova (contrato do proprio modulo), quem-mais-le=bin/gerar_estado.py (ESTADO), juizes novos=0
 
@@ -113,14 +115,14 @@ LEI-AKITA: origem=core/espelho_verdade.py::ETAPAS, testemunha=e6_oraculo (termom
 - PLACAR: E3 70 -> 80%, E4 60 -> 80%, E6 25 -> 62%; E1 50%, E5 50%.
 - OS 92 DE ESTRUTURA (39 colabs) sao a fila 1 que o termometro manda: viram cenario na bateria ou linha de fila (L-114 correcao 2) -- `/tmp/e6_10_20261024.csv` na sombra.
 
-## 24/10 11:5x -- MARCO E1 passo B (1 de 9): `cartorio.marcos_vencidos` pergunta o vinculo a juiza
+## 24/10 11:3x -- MARCO E1 passo B (1 de 9): `cartorio.marcos_vencidos` pergunta o vinculo a juiza
 
 LEI-AKITA: origem=ponto/services/cartorio.py::marcos_vencidos, testemunha=escala/servico_jornada.py::escala_vigente -> escala/alimentacao.py::vinculo_do_dia, RED=escala/tests/test_contract_juiz_escala.py (censo TOMADORES cartorio 2 -> 1, total 10 -> 9), quem-mais-le=ponto/services/vigia_de_hora.py, recusar_ponta_pequena, _julgar_colab_corpo, juizes novos=0
 
 - Antes: busca da geradora a mao + `escala_vigente` de reserva -- duas respostas que concordam por construcao (com geradora a juiza devolve a geradora). Agora so `escala_vigente(c, data, celulas={(c, data): cel})`; o parametro `EscalaColaborador` saiu com os 3 chamadores (L-111).
 - O resto dos 9 (censo do agente de leitura, 24/10): 2 trocas mecanicas (vigia_de_hora, dia_da_frota, mudam so na celula SEM geradora); `servico_jornada` e o carregador da juiza (falso positivo do TOMA); precedencia e o `_fnd` do cartorio mudam resultado; `fechamento.apurar_por_fatia`, `folgas.reparentar_folga` e `auditar_invariantes` respondem OUTRA pergunta (cobertura / vigencia do carimbo). Tudo depois da lei do topo.
 
-## 24/10 10:4x -- MARCO K6 + CONCORDE-CLASSE-B (comboio): juiz `competencia_fechada_para_celula` nasce e o `gerar_celulas` le; folga nao definida e CADASTRO
+## 24/10 10:3x -- MARCO K6 + CONCORDE-CLASSE-B (comboio): juiz `competencia_fechada_para_celula` nasce e o `gerar_celulas` le; folga nao definida e CADASTRO
 
 LEI-AKITA: origem=folha/export.py::competencia_fechada_para_celula + ponto/management/commands/e6_oraculo.py::dono_da_divergencia, testemunha=_K6 competencia_entregue + EscalaColaborador.defeito_folga_nao_definida, RED=folha/tests/test_k6_fechada_para_celula.py + ponto/tests/test_e6_janela_declarada_nao_e_divergencia.py::DonoDaFolgaNaoDefinida, quem-mais-le=portas/celula.py, vigencia_impossivel, auditar_invariantes, tripwire_celulas, corrigir_escala_retroativa (pela guarda), pautas_discordantes (pelo dono), juizes novos=1 (_K9, corte Ronald: juiz competencia_fechada_para_celula nasce)
 
@@ -159,13 +161,13 @@ LEI-AKITA: origem=bin/hook_stop_fila1.py::_relato_parou, testemunha=_item_parado
 - `/usage`: comando do CLI, esta sessao nao o invoca -- fica para ele no marco.
 - ACHADO FORA DO MARCO (linha de fila, ESMERIL): o vigia imprime `best-effort falhou: tipo_marco_divergente ... marcos_faltantes=E x ata=S` (perguntas 43630, 43631, 43672, 44046, 44550, 45567) em stderr.
 
-## 24/10 02:1x -- MARCO K6 parcial (NO AR `5dee1afd`): juiz `competencia_entregue` nasce com R3/R4/R5 e `ranking_he`; PENDENTES['fechamento'] 1 -> 0
+## 24/10 01:5x -- MARCO K6 parcial (NO AR `5dee1afd`): juiz `competencia_entregue` nasce com R3/R4/R5 e `ranking_he`; PENDENTES['fechamento'] 1 -> 0
 PROVA: comboio `wt-k6p` (main 258bb7ef + b7dcfad7) `Ran 11839` OK rc 0; censo `git diff --cached 0f57be55` vazio; `logs/deploy_k6.out` rc 0, 3 rotas. Sombra (`logs/k6/k6_invalidada.out`): 26 ED, 7 triplas, 0 vigente revogada sem substituta -- R3/R4/R5 so trocam de autoridade (0 valor muda na frota de hoje); R6 so rotulo (09/2026 parcial -> lavrado).
 LEI-AKITA: origem=`folha/export.py::competencia_entregue` (corte CORTES.md:190), testemunha=`anotar_vigencia` + `so_vigentes`, RED=`folha/tests/test_k6_competencia_entregue.py` (6F+7E antes da cura), quem-mais-le=`marcos_da_competencia['exportada']`, `preview_exportacao`, `txt_vigente_x_gravado`, `ranking_he._carimbo`, juizes novos=1 (corte literal)
 - `_K6` sai de SEM_JUIZ e entra em JUIZES; `LAVRADOS` apagada (lapide); 4 testes que caracterizavam "lavrado = status" invertidos.
 - **gerar_celulas intocado** (pergunta de lei no topo): migra-lo escreveria 2.965 celulas / 98 colabs em 08. A celula da matriz fica vermelha de proposito; `GerarCelulasSegueForaTest` cobra a reavaliacao. Placar `total()`=20, `verdes()`=17 antes e depois.
 
-## 24/10 01:4x -- O261 RECUSA-FALA (NO AR `f810e889`) + col666 (NO AR, deploy 01:1x) -- acervo da RECUSA pronto, apply NEGADO pelo classificador
+## 24/10 01:2x -- O261 RECUSA-FALA (NO AR `f810e889`) + col666 (NO AR, deploy 01:1x) -- acervo da RECUSA pronto, apply NEGADO pelo classificador
 PROVA: RECUSA-FALA comboio `wt-rfp` (main 5b12bb38 + 07c3448b) `Ran 11821` OK rc 0, censo `git diff --cached b31384bd` vazio, `logs/deploy_rf.out` rc 0 com 3 rotas. col666: ensaio de 24/10 `sombra: OK` (bloco 76/76, erro 0, `logs/sombra_ensaio_0024.out`), `logs/deploy_c666.out` rc 0; vigia em prod 01:18 (`logs/o261e/vigia_pos_c666.out`): `ESCALA_NAO_DESCREVE_O_DIA=1 celulas=[117269]`.
 LEI-AKITA: origem=`chamados/services/validacao.py::validar_pergunta` (o carimbo sobrevivia a recusa), testemunha=`chamados/juizes.py::pergunta_viva` + `materializacao.py::_materializar_uma` (a porta real), RED=`chamados/tests/test_o261_recusa_fala.py` (3F+3E contra cec1cee3), quem-mais-le=`acoes_disputa.py`, `validar_lote_classe_a`, juizes novos=0
 - Escritor unico novo `devolver_validacao_recusada` (dois chamadores: (b) a validacao daqui pra frente, antes do laco da disputa; (a) o acervo). `recusa_motivo` segue com `_carimbar_recusa`. A tela NAO mostra o motivo (`_pergunta_card.html`, `modal_fio.html:210`, `explicador.py` ramo RESPONDIDA) -> linha de fila de UI.
