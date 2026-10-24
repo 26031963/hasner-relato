@@ -6,10 +6,19 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 24/10/2026 13:48:42.** Transcript: `f4eb628a-9fcf-4c05-ae6a-9f32279f7575.jsonl` (6.5 MB). Acoes na janela: **358**.
+**Medido em 24/10/2026 13:51:33.** Transcript: `f4eb628a-9fcf-4c05-ae6a-9f32279f7575.jsonl` (6.6 MB). Acoes na janela: **367**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 13:51:28 | Bash | Commit times of today's marcos vs section labels | `cd /home/ronald/saas-hasner && git log --since='2026-10-24 09:00' --format='%h %ad %s' --date=format:'%H:%M' \| grep -E "marco" \| cut -c1-70; grep -n "^## 24/10 " app/docs/RELATO.md \| cut -c1-70 \| head -16` |
+| 13:51:17 | Bash | Check real clock vs my labels | `date '+%d/%m %H:%M'; cd /home/ronald/saas-hasner && git log -3 --format='%h %ad %s' --date=format:'%H:%M' \| cut -c1-80; grep -n "^## 24/10 1[34]:\\|^> \*\*OS 4 PRAZO\\|construida 14:3x\\|14:4x" app/docs/RELATO.md \| cut -c1-90 \| head` |
+| 13:51:05 | Bash | Read handoff file | `cd /home/ronald/saas-hasner && cat app/docs/HANDOFF-SESSAO.md` |
+| 13:50:58 | Bash | Measure ausencia aprovada x veredito discordance comp 10 | `cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/f4eb628a-9fcf-4c05-ae6a-9f32279f7575/scratchpad/aus.py && cat > $S <<'PY' import datetime as d, collections from escala.models import CelulaDia from ponto.turnos import ausencia_cobre INI, FIM = d.date(2026, 9, 21), d.date(2026, 10, 20) ac = [v for v in CelulaDia.VEREDITOS_ACUSAM if v != 'fato_em_ausencia'] T = collecti ...` |
+| 13:50:46 | Bash | Read _pelo_efeito para semantics | `grep -n "^def _pelo_efeito" -A25 ponto/turnos.py \| head -30` |
+| 13:50:40 | Bash | Read the para= values and status rule | `sed -n 2294,2330p ponto/turnos.py \| grep -n "para\b\\|'cobranca'\\|'folha'\\|aprovad\\|status" \| head -12; sed -n 1735,1738p escala/models.py` |
+| 13:50:36 | Bash | Read ausencia_cobre contract and VEREDITOS_ACUSAM | `grep -n "^def ausencia_cobre" -A12 ponto/turnos.py \| head -16; grep -n "VEREDITOS_ACUSAM\s*=" escala/models.py` |
+| 13:50:24 | Bash | Read item (5) literal text | `grep "^\| CONTRATOS-RESTANTES-E1-E2-FOLHA-K6 \|" docs/BACKLOG.md \| awk -F'\|' '{print $3}' \| grep -o "(5) SELO POR EFEITO.*" \| cut -c1-900` |
+| 13:50:03 | Bash | List running suites/pushes/containers | `ps -eo pid,etime,args \| grep -E "manage.py test\|git push\|suite.sh\|sombra.sh\|push.sh" \| grep -v grep \| cut -c1-150; docker ps --format '{{.Names}} {{.Status}}' \| grep -vE "saas_(db\|core\|ui\|caddy)\|juliani_db_test\|sombra_db\|mensageria" \| head` |
 | 13:48:37 | Bash | Record decision, handoff, republish, check nothing running | `cd /home/ronald/saas-hasner && python3 - <<'PY' R='app/docs/RELATO.md'; t=open(R,encoding='utf-8').read() lin=('> **OS 4 PRAZO QUE ESPERAVAM A LEI DO E1, medidos 24/10 14:5x (decisao pela L-101, nao pergunta):** o vinculo de ' '`detectar_ausencias` por `ativa=True` = o da juiza em **1.090 de 1.090** dia-colab de hoje e ontem (prod, so leitura). ' 'Comparacoes contra o relogio por AST (regra do sel ...` |
 | 13:46:52 | Bash | Wait for push rc | `cd /home/ronald/saas-hasner && timeout 400 bash -c 'until grep -aq "^rc=" logs/push_20261024_e1lei2.log; do /usr/bin/sleep 15; done'; tail -3 logs/push_20261024_e1lei2.log \| cut -c1-120` |
 | 13:36:57 | Bash | Wait for E1 lei push verdict | `cd /home/ronald/saas-hasner && timeout 590 bash -c 'until grep -aq "^rc=" logs/push_20261024_e1lei2.log; do /usr/bin/sleep 20; done'; grep -aE "^rc=\|[0-9a-f]{8}\.\.[0-9a-f]{8} +main -> main" logs/push_20261024_e1lei2.log \| tail -2; grep -aE "^Ran [0-9]+ tests\|^(OK\|FAILED)( \(\|$)" logs/push_20261024_e1lei2.log \| tail -2` |
