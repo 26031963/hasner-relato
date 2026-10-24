@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 24/10/2026 12:20:47.** Transcript: `f4eb628a-9fcf-4c05-ae6a-9f32279f7575.jsonl` (5.5 MB). Acoes na janela: **294**.
+**Medido em 24/10/2026 12:25:48.** Transcript: `f4eb628a-9fcf-4c05-ae6a-9f32279f7575.jsonl` (5.6 MB). Acoes na janela: **299**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 12:21:51 | Bash | Wait for pil suite verdict | `cd /home/ronald/saas-hasner && timeout 590 bash -c 'until grep -q "^rc=" logs/pil_suite.log; do /usr/bin/sleep 20; done'; grep -E "^(FAIL\|ERROR):\|^Ran [0-9]+ tests\|^(OK\|FAILED)($\| \()\|^rc=" logs/pil_suite.log \| tail -6` |
+| 12:21:45 | Bash | Write RELATO section and close UI backlog row | `cd /home/ronald/saas-hasner && python3 - <<'PY' R='app/docs/RELATO.md'; t=open(R,encoding='utf-8').read() sec='''## 24/10 13:2x -- MARCO UI-PILULAS-QUEBRAM-LINHA (fila 2, so template): as pilulas do dia descem em vez de sair da caixa LEI-AKITA: origem=templates/colaboradores/partials/_calendario_grade.html (fileira de acoes + fileira da pilula do chamado), testemunha=getBoundingClientRect no chrom ...` |
+| 12:21:33 | Bash | Full suite on pil raia | `cd /home/ronald/saas-hasner && bin/suite.sh --dir /home/ronald/wt-pil > logs/pil_suite.log 2>&1; echo "rc=$?" >> logs/pil_suite.log` |
+| 12:21:16 | Bash | Narrow sonda; GREEN on raia, RED on HEAD | `cd /home/ronald/wt-pil/app && python3 - <<'PY' p='colaboradores/tests/test_ui_pilulas_quebram_linha.py'; s=open(p,encoding='utf-8').read() a=""" cel.querySelectorAll('button, a, input, summary').forEach(function (el) {""" b=""" // SO as duas fileiras que o aval nomeia: os itens da fileira de acoes (lote + Resolver dia + DP) e a // pilula do chamado. O PAINEL do popover do Resolver dia fica de fora ...` |
+| 12:20:56 | Bash | Diagnose which items overflow | `cd /home/ronald/saas-hasner && cat > /home/ronald/wt-pil/app/colaboradores/tests/test_tmp_diag_pil.py <<'PY' import shutil, tempfile from django.test import SimpleTestCase from core.tests.test_smoke_chromium import abre, renderiza from colaboradores.tests.test_ui_pilulas_quebram_linha import PilulasQuebramLinhaTest as P S = """<script>window.addEventListener('load', function () { var v = document. ...` |
 | 12:20:42 | Bash | Apply flex-wrap; rerun selo (expect GREEN) | `cd /home/ronald/wt-pil/app && python3 - <<'PY' p='templates/colaboradores/partials/_calendario_grade.html'; s=open(p,encoding='utf-8').read() a='<div style="margin-top:3px;text-align:center;display:flex;align-items:center;justify-content:center;gap:2px;"><input type="checkbox" name="datas"' b='<div style="margin-top:3px;text-align:center;display:flex;flex-wrap:wrap;align-items:center;justify-conte ...` |
 | 12:20:32 | Bash | Run the new selo against HEAD template (expect RED) | `cd /home/ronald/saas-hasner && bin/suite.sh --dir /home/ronald/wt-pil --only "colaboradores.tests.test_ui_pilulas_quebram_linha" > logs/pil_red.log 2>&1; grep -E "^(FAIL\|ERROR):\|AssertionError\|Error:\|^Ran \|^(OK\|FAILED)" logs/pil_red.log \| tail -6 \| cut -c1-220` |
 | 12:20:30 | Write |  | `/home/ronald/wt-pil/app/colaboradores/tests/test_ui_pilulas_quebram_linha.py` |

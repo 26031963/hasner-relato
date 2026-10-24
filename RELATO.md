@@ -40,6 +40,15 @@ PAREI: ! GATE-EXPORT-10 (so o export da 10) | espera o DP na Gestao de HE e o Ro
 > O MARCADOR ANDOU no mesmo ato: `ORDEM-VIVA-TOPO` saiu de `BO-HE-RECUSAR-LOTE-500` (fechado) para `O261`, que o hook cobrou.
 > SEM COMMIT DE PROPOSITO: `RELATO.md` e `BACKLOG.md` ficam sujos na arvore porque a L-106 nao deixa commit so de docs fora de marco. Eles entram no commit do proximo marco.
 
+## 24/10 13:2x -- MARCO UI-PILULAS-QUEBRAM-LINHA (fila 2, so template): as pilulas do dia descem em vez de sair da caixa
+
+LEI-AKITA: origem=templates/colaboradores/partials/_calendario_grade.html (fileira de acoes + fileira da pilula do chamado), testemunha=getBoundingClientRect no chromium (harness do test_smoke_chromium), RED=colaboradores/tests/test_ui_pilulas_quebram_linha.py, quem-mais-le=calendario do perfil + drawer (mesma celula, layout mes/fita), juizes novos=0
+
+- `flex-wrap:wrap` na fileira de acoes (lote + Resolver dia + DP) e no grupo da pilula do chamado do cabecalho; a celula nao muda de tamanho.
+- RED contra o HEAD: celula com chamado + Resolver dia + DP numa grade de 700 px = 4 itens vistos, **2 fora da caixa**; na raia, 0 fora. Caso do aval: col29 15/10 (mesma forma).
+- O selo mede so as duas fileiras que o aval nomeia; o PAINEL do popover do Resolver dia fica fora de proposito (na tela real o CSS da casca o esconde; mediu 4 falsos "fora" na pagina isolada).
+- Dinheiro zero, nenhuma lei nova. Template entra no ar ao gravar (sem `cached.Loader`); o deploy `--sem-migrate` vem no mesmo ato pela L-105.
+
 ## 24/10 12:1x -- VARREDURA-TRIAGEM: os 21 de `JUIZES_POR_VARREDURA`, uma linha cada (so leitura)
 
 Escritas de 30 dias por ATOR em prod pelo campo `LogAuditoria.ator` (`sistema:<cron>`; `logs/varredura_triagem_por_cron_30d_20261024.out`); regra pelo codigo (agente de leitura); GEO pelo dry em prod (`logs/varredura_triagem_geo_dry_20261024.out`).
