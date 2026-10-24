@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 24/10/2026 00:12:33.** Transcript: `ed482694-44e4-4da5-bd42-07601a2a39b4.jsonl` (5.7 MB). Acoes na janela: **290**.
+**Medido em 24/10/2026 00:18:03.** Transcript: `ed482694-44e4-4da5-bd42-07601a2a39b4.jsonl` (5.7 MB). Acoes na janela: **292**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 00:15:13 | Bash | Wait for real suite verdict line | `for i in $(seq 1 115); do /bin/grep -qE '^Ran [0-9]+ tests' /home/ronald/wt-c666/app/logs/suite.out 2>/dev/null && /bin/grep -qE '^(OK\|FAILED)($\| \()' /home/ronald/wt-c666/app/logs/suite.out && break; /usr/bin/sleep 5; done; /bin/grep -E '^(FAIL\|ERROR):\|^Ran \|^(OK\|FAILED)($\| \()' /home/ronald/wt-c666/app/logs/suite.out \| tail -5; tail -1 /home/ronald/wt-c666/app/logs/suite.out` |
+| 00:15:05 | Bash | Inspect col666 suite log tail and push result | `tail -c 600 /home/ronald/wt-c666/app/logs/suite.out; echo; tail -4 /home/ronald/saas-hasner/logs/clb1b/push_viva.out` |
 | 00:05:24 | Bash | Wait for col666 suite verdict | `for i in $(seq 1 115); do /bin/grep -q '^FIM rc=' /home/ronald/wt-c666/app/logs/suite.out 2>/dev/null && break; /usr/bin/sleep 5; done; /bin/grep -E '^(FAIL\|ERROR):\|^Ran \|^(OK\|FAILED)($\| \()\|^FIM rc=' /home/ronald/wt-c666/app/logs/suite.out \| tail -5; tail -2 /home/ronald/saas-hasner/logs/clb1b/push_viva.out` |
 | 00:05:09 | Bash | Register E1 aval in PROMPTS and BACKLOG | `cd /home/ronald/saas-hasner && python3 - <<'PY' q='app/docs/PROMPTS.md'; u=open(q).read().rstrip('\n')+'\n' u+="\| 24/10 ~00:0x \| **aval `E1-NAO-ESPERA-O-TXT`**: escala x juiz (E1) nao espera o TXT da 10 (TXT e producao, portao he_pendente, L-097 cl.2; o contrato e estrutural e fecha com o cadastro que tem, L-099); se o E1 lia o TXT como insumo, troca pelo juiz da celula; se tinha outro motivo, u ...` |
 | 00:05:01 | Bash | Full suite on col666 counter copy | `cd /home/ronald/saas-hasner && bash bin/suite.sh --dir /home/ronald/wt-c666 > /home/ronald/wt-c666/app/logs/suite.out 2>&1; echo "FIM rc=$?" >> /home/ronald/wt-c666/app/logs/suite.out` |
