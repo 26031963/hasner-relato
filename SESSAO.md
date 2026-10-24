@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 24/10/2026 17:32:54.** Transcript: `c87029f4-ea97-4fea-b6af-47ee2e204958.jsonl` (7.8 MB). Acoes na janela: **342**.
+**Medido em 24/10/2026 17:38:04.** Transcript: `c87029f4-ea97-4fea-b6af-47ee2e204958.jsonl` (7.8 MB). Acoes na janela: **344**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 17:35:47 | Bash | Wait for combined full suite | `cd /home/ronald/saas-hasner; cp logs/comb/impacto_head.out logs/comb/impacto_head_$(date +%H%M).out; for i in $(seq 1 39); do grep -q '^rc=' logs/comb_suite.out 2>/dev/null && break; /usr/bin/sleep 15; done; grep -E '^(OK\|FAILED)($\| \()\|^Ran \|^rc=' logs/comb_suite.out \| tail -3; grep -E "^(FAIL\|ERROR):" logs/comb_suite.out \| head` |
+| 17:35:34 | Bash | Confirm which tree each impact file measured | `cd /home/ronald/saas-hasner; grep -H "ARVORE=" logs/comb/impacto_head.out logs/comb/impacto_cura.out; grep -c "PARTICAO DE" app/ponto/services/fechamento.py /home/ronald/wt-escerta2/app/ponto/services/fechamento.py` |
 | 17:31:54 | Bash | Compute impact per rubric HEAD vs cura | `cd /home/ronald/saas-hasner; for i in $(seq 1 30); do [ -f logs/comb/impacto.fim ] && break; /usr/bin/sleep 10; done; grep -h "ARVORE=" logs/comb/impacto_head.out logs/comb/impacto_cura.out; python3 - <<'PY' import json, collections from decimal import Decimal def ld(f): for ln in open(f): if ln.startswith('JSON '): return json.loads(ln[5:]) h, c = ld('logs/comb/impacto_head.out'), ld('logs/comb/i ...` |
 | 17:30:30 | Bash | Wait for combined GREEN | `cd /home/ronald/saas-hasner; for i in $(seq 1 38); do grep -q '^rc=' logs/comb_green.out 2>/dev/null && break; /usr/bin/sleep 15; done; grep -E '^(OK\|FAILED)($\| \()\|^Ran \|^rc=' logs/comb_green.out \| tail -3; grep -E "^(FAIL\|ERROR):" logs/comb_green.out \| head; ls logs/comb/` |
 | 17:27:53 | Bash | Wait for combined RED on HEAD | `cd /home/ronald/saas-hasner; for i in $(seq 1 38); do grep -q '^rc=' logs/comb_red.out 2>/dev/null && break; /usr/bin/sleep 15; done; grep -E '^(OK\|FAILED)($\| \()\|^Ran \|^rc=' logs/escerta_suite4.out logs/comb_red.out \| tail -4; grep -E "^(FAIL\|ERROR):" logs/comb_red.out; grep -E "AssertionError" logs/comb_red.out \| head -8` |
