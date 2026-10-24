@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 24/10/2026 09:54:34.** Transcript: `f4eb628a-9fcf-4c05-ae6a-9f32279f7575.jsonl` (2.1 MB). Acoes na janela: **92**.
+**Medido em 24/10/2026 10:00:04.** Transcript: `f4eb628a-9fcf-4c05-ae6a-9f32279f7575.jsonl` (2.2 MB). Acoes na janela: **93**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 09:54:31 | Bash | Wait for push log to report rc | `cd /home/ronald/saas-hasner && timeout 590 bash -c 'until grep -q "^rc=" logs/push_20261024_hook_o261.log; do /usr/bin/sleep 20; done'; tail -6 logs/push_20261024_hook_o261.log \| cut -c1-200` |
 | 09:54:24 | Bash | Read classe B measurement output | `cd /home/ronald/saas-hasner && grep -v "^$" logs/concorde/cb_classe_b.out \| head -40 \| cut -c1-220; wc -l logs/concorde/cb_classe_b.out` |
 | 09:54:20 | Bash | Find cb_classe_b output in repo root logs | `cd /home/ronald/saas-hasner && ls logs/concorde/ 2>/dev/null \| head; find . -name "cb_classe_b*" -not -path "./.git/*" 2>/dev/null \| head` |
 | 09:54:17 | Bash | Look for a concrete case among the 183 | `ls logs/concorde/ \| head -20; head -30 logs/concorde/cb_classe_b.out 2>/dev/null \| cut -c1-200` |
