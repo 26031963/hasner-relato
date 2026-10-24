@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 23/10/2026 21:54:03.** Transcript: `ed482694-44e4-4da5-bd42-07601a2a39b4.jsonl` (3.3 MB). Acoes na janela: **160**.
+**Medido em 23/10/2026 21:59:33.** Transcript: `ed482694-44e4-4da5-bd42-07601a2a39b4.jsonl` (3.4 MB). Acoes na janela: **163**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 21:54:37 | Bash | Wait for M3 commit in worktree | `B=$(git -C /home/ronald/saas-hasner rev-parse HEAD); for i in $(seq 1 118); do H=$(git -C /home/ronald/wt-m3 rev-parse HEAD 2>/dev/null); [ -n "$H" ] && [ "$H" != "$B" ] && break; /usr/bin/sleep 5; done; git -C /home/ronald/wt-m3 log --oneline -2 2>&1; git -C /home/ronald/wt-m3 status --short 2>&1 \| head` |
+| 21:54:22 | Bash | Measure open andavel items as seen by hook | `cd /home/ronald/saas-hasner && python3 - <<'PY' import importlib.util,re s=importlib.util.spec_from_file_location('h','bin/hook_stop_fila1.py');m=importlib.util.module_from_spec(s);s.loader.exec_module(m) t=m._backlog_texto(); i=t.find('<!-- OBRAS:INICIO -->'); j=t.find('<!-- OBRAS:FIM -->',i) ab=[] for ln in t[i:j].splitlines(): if not m._linha_de_item_re().match(ln) or ln.lower().startswith('\|  ...` |
+| 21:54:09 | Bash | Fix stale vigia_fio docstring in copy | `D=/tmp/claude-1001/-home-ronald-saas-hasner-app/ed482694-44e4-4da5-bd42-07601a2a39b4/scratchpad/vigia; mkdir -p $D; cd /home/ronald/saas-hasner && git show HEAD:app/chamados/services/vigia_fio.py > $D/vigia_fio.py && python3 - $D/vigia_fio.py <<'PY' import sys p=sys.argv[1]; s=open(p).read() old='''`PerguntaDisputa.viva` -- e `.viva` NAO e um segundo predicado. Ela le `estado` (`chamados/models.py ...` |
 | 21:53:51 | Bash | Show models.py diff of O261 B | `cd /home/ronald/saas-hasner && git diff 035af0de c88dcc8d -- app/chamados/models.py` |
 | 21:53:48 | Bash | Read O261 B diff to models.py | `git show 9dff1904^2 --stat \| tail -5; git log --oneline -3 c88dcc8d; git diff 035af0de c88dcc8d -- app/chamados/models.py \| head -60` |
 | 21:53:45 | Bash | Read docstring and the .viva cure diff | `sed -n 115,135p chamados/services/vigia_fio.py; git show 9dff1904 -- app/chamados/models.py \| head -60` |
