@@ -48,6 +48,7 @@ LEI-AKITA: origem=escala/alimentacao.py::vinculo_do_dia + escala/utils.py::_esc_
 - Rival: `_esc_vigente_do_dia` so alimenta (lista inteira + celula, 1 query sem alimentacao) e chama a juiza; o pendente DINHEIRO de PENDENTES['escala'] sai.
 - IMPACTO (sombra 24/10, motor da comp 10 pela funcao real): 1.234 dia-colab / 45 colabs com geradora fora da vigencia; **1 de 45 muda** -- col890 `horas_falta` -11,00 h no motor ao vivo. O GRAVADO dele ja diz 0,00: a cura leva o motor ao gravado (delta contra o gravado = 0). Comp 11: `DIFF_FOLHA=0` (rival). Empates sem geradora: 0.
 - DINHEIRO EM COMPETENCIA ABERTA (pre-aprovado): reversao ANTES em `logs/e1lei/reversao_col890_10_20261024.json` (1 fechamento, 4 DiaPago, hashes das 26 exportadas); exportadas por hash e prova de frota DEPOIS do deploy, nesta secao.
+- PROVA DEPOIS (deploy `460ee92b`, 14:4x): exportadas **26 de 26 com hash igual** ao da reversao (`logs/e1lei/prova_depois_20261024.json`); gravado col890 comp 10 igual (horas_falta 0,00 / trabalhadas 0,34 / aberto); frota na sombra com o codigo no ar = a medida da raia (so col890 muda no motor ao vivo).
 - 4 caracterizacoes INVERTIDAS (o selo nao se apaga): col515, col882, "velho encerrado na vespera" -> None; "celula vence o mais recente" refeito DENTRO da vigencia; o131 julga a geradora carregada pela vigencia.
 
 ## 24/10 13:5x -- MARCO E1 passo B (2 de 9): `vigia_de_hora` deixa de ter dois juizes do vinculo

@@ -63,8 +63,6 @@ _nenhum juiz declarado nesta familia._
 - **o vinculo cobre a data?** -- UMA copia desde 22/10 (aval CONTRATOS RESTANTES (2)): `escala/folgas.py::_cobre`; `gerar_celulas.py::_outro_vinculo_cobre` passou a CHAMA-la (impacto medido na sombra: 0 em 39.463 pares vinculo x dia). Falta so a frase da TRAVA JUIZ-NOVO para declarar aqui
 - **qual vinculo vale neste dia?** -- a LEI existe (O69, prompt dele de 27/09 00:xx): a resposta e `CelulaDia.escala_geradora`, lida por `escala/alimentacao.py::vinculo_do_dia`. Falta a FRASE da TRAVA JUIZ-NOVO pelo nome da funcao, e eu nao posso escreve-la: a autonomia de 11/10 exige autoridade unica MEDIDA, e sao 8 arquivos (9 linhas)
 
-**PENDENTES nesta familia**: 1 leitor(es) com regra propria, esperando migrar.
-
 ## Familia `ausencia/ferias`
 
 | pergunta | juiz (dono) |
@@ -173,11 +171,11 @@ _nenhum juiz declarado nesta familia._
 | `batida` | 2 | 3 | 0 |
 | `turno/marcos` | 12 | 0 | 0 |
 | `celula/precedencia` | 8 | 0 | 0 |
-| `escala` | 0 | 2 | 1 |
+| `escala` | 0 | 2 | 0 |
 | `ausencia/ferias` | 14 | 0 | 0 |
 | `chamado` | 15 | 0 | 0 |
 | `fechamento` | 9 | 0 | 0 |
 | `feriado/prazo` | 6 | 2 | 13 |
 | `tela` | 11 | 1 | 110 |
 | `portas` | 1 | 0 | 124 |
-| **total** | **78** | **8** | **248** |
+| **total** | **78** | **8** | **247** |
