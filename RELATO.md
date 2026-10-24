@@ -2,6 +2,12 @@
 
 PAREI: ! GATE-EXPORT-10 (so o export da 10) | espera o DP na Gestao de HE e o Ronald: (a) o TXT da 10 esta BARRADO pela porta -- 184 dias de HE acima do limite SEM decisao (emp2 169 / emp3 12 / emp4 3; 58 colabs; 124,45 h; `logs/gate10/lista_he_trava_20261022.out`); por aval dele 12:0x o DP decide pela Gestao de HE ("Nao" em lote = L-097) e entao roda `logs/gate10/ato_export10.py` (re-lavrar o carimbo da porta ANTES, ~22 min, desacoplado). (b) FEITO 14:12: a volta dos 6 pousou ANTES do TXT (secao 14:12). (c) `resolver_dia_oferecido` NO AR (`3088eac6`); DIA-SEM-SAIDA (1)(2) NO AR 22/10 21:5x, (3) ao DP; cura dos 99 DEPOIS do TXT. (d) 09 com o Gabriel (AVAIS #2).
 
+> **lei: O261 peca A (aval O261-RESTO 18:2x) -- "col666 e col516 saem do fio_morto por contador proprio lendo a lista do admin" nao tem fonte por DIA.** `escala/services/cadastro_realidade.py::lista` e por COLABORADOR (320 listados; A11 lista col666, C2 lista col549 e col516) e `dias_cadastro_x_realidade` do motor traz so a L-084 (col666 27/09 = `[]`). Os 3 do fio_morto em prod: 117269 col666 27/09 (`indefinida`, `PREVISTO_COM_DIA_INDEFINIDO` -- "folga nao cadastrada"), 137166 col516 22/10 (`furo FURO_PARCIAL`, 2 perguntas `sem_plantio_nenhum` = alvo O317; o 129962 era do col940 e saiu 17:58), 122438 col549 (E2/O317). Opcoes: (i) colab na tela -> dia sai: predicado novo e tira tambem o col549, que e bug nosso; (ii) contador proprio por DIA lendo `indefinida`/`PREVISTO_COM_DIA_INDEFINIDO` (julgamento que o cartorio ja faz, nao literalmente "a lista do admin"); (iii) o dia fica. Com (ii), fio_morto = 2 e os dois restantes sao O317. A fila segue.
+
+> **lei: CONCORDE-CLASSE-B -- quem e o dono quando `folga_nao_definida` bloqueia o FURO_PARCIAL?** Medido na sombra (`logs/concorde/cb_classe_b.out`, rejulgado com as curas de hoje): dos 254 dias, 2 viram furo, 69 saem por dispensa (63 justificativa), **183 (44 colabs) seguem `concorde` com lampada apagada** -- todos com `folga_nao_definida=True`, que poe `sem_ancora` e fecha o ramo FURO_PARCIAL (`supra_juiz.py:149,276`). O juiz da L-099 (`e6_oraculo.py::dono_da_divergencia`) nao ve a folga: devolve ESTRUTURA 79 / BATIDA 57 / CADASTRO 47. O precedente das 26 de hoje (BUG-CONCORDE resto) chamou `folga_nao_definida` de CADASTRO. (a) os 183 sao CADASTRO (lista do admin, proibido curar por codigo); (b) vale o que a funcao devolve e os 79 viram fatia de ESTRUTURA. A fila segue.
+
+> **Escrita em prod negada a esta sessao** (`docker exec saas_core`, classificador): kits E2 `logs/o261e/acervo_e2.py`, ATA `logs/concorde/acervo_ata_just.py` e lote O317 esperam execucao -- nao e lei nem `!`, a fila segue.
+
 > **O O261 NAO esta parado** (aval Ronald 23/10 19:4x): e o item EM CURSO da fila 1 e anda sem ele ate `fio_morto = 0`. O PAREI acima trava SO o export da 10 -- e o hook passou a ler assim (`_relato_parou`: PAREI so devolve o turno se nomeia o item em curso).
 
 > (o `!` da volta do feriado esta no item (b) da linha acima)
@@ -25,6 +31,43 @@ PAREI: ! GATE-EXPORT-10 (so o export da 10) | espera o DP na Gestao de HE e o Ro
 > OS QUATRO ITENS DA ORDEM, FEITOS: deploy `d01210d2` **no ar 10:26** (`--sem-migrate` rc=0, 3 rotas provadas, selo BUG 128 verde, portao fechado pelo PASSO 5 do gate -- nunca `--sem-sombra`); push **pousou** (`fa5cd145..eebe2cce`, rc=0, `Ran 11566 tests · OK (skipped=51, expected failures=14)` mais control-plane `Ran 22 tests · OK`, veredito lido no REMOTO); `bin/handoff_sessao.sh` gerado (42/60 linhas, selo verde); e esta linha. O 1 commit que sobrou a frente (`6d469ed2`) e do proprio `pos_push` -- a excecao nomeada da L-106 --, e o push dele e do proximo push, nao deste.
 > O MARCADOR ANDOU no mesmo ato: `ORDEM-VIVA-TOPO` saiu de `BO-HE-RECUSAR-LOTE-500` (fechado) para `O261`, que o hook cobrou.
 > SEM COMMIT DE PROPOSITO: `RELATO.md` e `BACKLOG.md` ficam sujos na arvore porque a L-106 nao deixa commit so de docs fora de marco. Eles entram no commit do proximo marco.
+
+## 23/10 23:2x -- APLICADO o acervo da ATA-NAO-DISPENSA-JUSTIFICADA na comp 10 (aval Ronald 23:1x)
+PROVA: `logs/concorde/acervo_ata_apply.out` -- reversao ANTES `/app/logs/concorde/reversao_ata_just_20261023_231711.json` (306 celulas: veredito, protestos, ata, chamados vivos); `ATAJ|MUDARAM cobrado->concorde 15, fato_sem_previsao->concorde 2`; lampada apagada **143 -> 2**; chamados vivos **104 -> 72**. 09 intacta: `hash09_antes_ata.out` x `hash09_depois_ata.out` IGUAIS (3 TXT, FM `df8660b8...`, DP `b6d63382...`).
+- DRY em prod antes: 306 alvos / 143 com lampada apagada (sombra 04:00: 141). Os 15 `cobrado -> concorde` batem com a sombra.
+- Os 2 `fato_sem_previsao -> concorde` (col980 08/10 e 10/10, cel 124222/124224) NAO sao da cura: a ata deles nao tem lampada nem antes nem depois -- gravado envelhecido (julgado 22/10 13:07) que o rejulgamento pela porta atualizou, mesma classe dos 2 `indefinida` do acervo do concorde.
+- Reverter: `reversao_ata_just_20261023_231711.json` (relavrar veredito/protestos/ata por celula e reabrir os chamados listados).
+- **/usage**: e comando do terminal dele; o Code nao o executa -- medida de cota fica com ele (aval COTA 40% 23:17).
+
+## 23/10 22:5x -- MARCO FLUXO 2 M3 (NO AR `abc33bca`) + M4 (NO AR `8730e310`): PENDENTES['fechamento'] 4 -> 1
+PROVA: `abc33bca` suite `Ran 11792` OK (`logs/fluxo2m3/suite_cheia.log`), `logs/deploy_m3.out` rc 0, 3 rotas; `8730e310` suite `Ran 11800` OK (`logs/fluxo2m4/suite_cheia2.log`), `logs/deploy_m4.out` rc 0, 3 rotas; arvore pousada = certificada (`git diff --cached` vazio; tree `faf48a6d` = 09225281).
+
+LEI-AKITA: origem=`ponto/views.py::fechamento_mensal` + `::painel_fechamento` + `::reavaliar_vazios`, testemunha=`folha/export.py::classificar_export` (`travas_aprovacao`, `conta_vazia`) + `ponto/services/fechamento.py::periodo_trancado` (predicado do juiz _K4), RED=`ponto.tests.test_tela_fechamento_le_o_juiz` (5F contra 099e5395) + `ponto.tests.test_m4_painel_e_reavaliar_leem_o_juiz` (5F contra abc33bca), quem-mais-le=aprovar_fechamento (le `ORDEM_TRAVA`/`trava_do_grupo` do modulo), fechamento_linhas, painel_fechamento.html, aprovar_colaborador, juizes novos=0
+- **M3:** a tela le `r['travas']` do veredito ja pedido (0 query nova); `pode_aprovar` = existe aberto que a porta aprovaria (09/2026: o botao sumia com 205 abertos aprovaveis); query `_ids_anc_tela` saiu; `n_limpos_pend`/`n_vazios` sem leitor apagados (L-111). Fechamento 4 -> 2, tela 112 -> 111. Responde o corte aberto de 22/09 em `PENDENTES_RONALD.json` (`total_aprovados == 0` = BUG) -- fechar pelo `gerar_avais.py --escrever`.
+- **M4:** o painel le a tranca viva (`periodo_trancado(...) is not None`, mesma chave da tela principal; o ATO "foi aprovada?" fica em `fechamento.status`, O141); guarda `fechamento and` no partial AJAX (fora de base/base_app); `reavaliar_vazios` le `conta_vazia` do juiz (muda de lado so emp4 09/2026, exportada, e so por clique). O latente acordou e foi curado: `ponto/views.py` 0 pendente, 0 casamento. Fechamento 2 -> 1 (fica `ranking_he` = K6), tela 111 -> 110. Docstring de `vigia_fio.py` corrigido (`.viva` e copia alinhada por selo).
+- **PROVA:** M3 suite `Ran 11792` OK (`logs/fluxo2m3/suite_cheia.log`); M4 1a suite caiu no selo O44 (allowlist so conhece `periodo_trancado` em views) -> painel passou a ler `periodo_trancado`, 2a suite `Ran 11800` OK (`logs/fluxo2m4/suite_cheia2.log`), md5 da arvore igual antes/depois; deploys rc 0.
+- **INCOMPLETO:** M5 = K6 (aval dele); prosa velha `core/placar_estrutural.py:499` ("PENDENTES_FECHAMENTO = 13") e `docs/CENSO_NARNIA.md:106`; impacto de frota do M3/M4 nao remedido na sombra (numeros da pre-auditoria).
+
+## 23/10 21:4x -- POUSO CALENDARIO-MOSTRA-O-CARRO (NO AR `4bd622f7`, fila 2, L-105)
+
+LEI-AKITA: origem=`templates/colaboradores/partials/_calendario_grade.html`, testemunha=`dia.veredito_dia`/`palavra_dia` + `dia.resolver_dia_oferecido` + `dia.ticket_falta`, RED=`colaboradores/tests/test_calendario_mostra_o_carro.py` (3 FAIL contra HEAD), quem-mais-le=PDF/cartao/app/espelho (intocados), juizes novos=0
+- **PROVA:** comboio `wt-uip` (main b9e73bb8 + 879fc7a2) `Ran 11786`, OK, rc 0; deploy rc 0. Partial fora de base.html/base_app.html (o selo prova pelo grafo de includes que so a casca do admin o alcanca).
+- **ORDEM DA NOITE, estado:** (1) O261 resto: B NO AR, C kit pronto sem apply, A em pergunta de lei; (2) concorde resto: medido, a cura foi na ATA (NO AR); (3) M1 + M2 NO AR; (4) K6: aval nao chegou; (5) tela NO AR.
+- **O que segura fio_morto = 3:** 117269 col666 (lei, topo); 137166 col516 e 122438 col549 (lote O317 e kit E2, os dois escrevem em prod por `docker exec saas_core`, negado pelo classificador de permissao nesta sessao).
+
+## 23/10 21:1x -- MARCO O261 resto B (NO AR `9dff1904`) + FLUXO 2 M2 (NO AR `7a1b0c34`)
+PROVA: `9dff1904` comboio `wt-o261p` `Ran 11771` OK rc 0, `logs/deploy_o261.out` deploy rc 0 com 3 rotas provadas; `7a1b0c34` comboio `wt-m2p` `Ran 11775` OK rc 0, `logs/deploy_m2.out` rc 0; vigia em PROD recarimbado 23:19 (`app/logs/fio_morto.json`, `medido_em 2026-10-23T23:19:18`): `fio_morto=3` [122438, 137166, 117269], `fio_vivo=2247`, `lampadas_acesas=2970` (nao cego).
+
+LEI-AKITA: origem=`chamados/juizes.py::_pergunta_viva_calc` (degrau 3) + `chamados/models.py::PerguntaDisputa.viva`/`q_vivas`, testemunha=`ponto/services/lastro.py::marcos_pendentes` (guarda do E2 af07a284), RED=`chamados.tests.test_o261_pergunta_viva_teto` (2 FAIL contra HEAD, col549 14:40-14:50), quem-mais-le=perguntas_vivas_de, vigia_fio.censo, fora_da_folha, arquivar_competencia_encerrada, desfazer_carimbo_sem_lastro, juizes novos=0
+- **B:** o degrau 3 so le o veredito com fato encerrado; bug no caminho: `.viva` e `q_vivas` reliam o veredito com regra propria -- curados com a mesma testemunha (`.viva` vermelho na 1a suite cheia; `q_vivas` FAIL revertido).
+- **PROVA B:** comboio `wt-o261p` (main 2d806054 + c88dcc8d) `Ran 11771`, OK, rc 0; deploy rc 0.
+- **fio_morto segue 3** (sombra, `vigia_fio.censo` antes/depois: morto 3, vivo 2290): B e C limpam o lado do escritor, nao a meta. Os 3: 117269 col666, 137166 col516, 122438 col549 -- pergunta de lei no topo (peca A).
+- **Kit E2 (C)** `logs/o261e/acervo_e2.py` + `reverter_acervo_e2.py`: dry sombra 57 alvos / 27 colabs na 10 (`O261_SO_COMP=10/2026`), 10 na 11; 09 exportada 228 so listadas; ensaio com rollback: reversao 67, desfez 67, hash da exportada igual (26 TXTs). **NAO aplicado**: escrita em prod pede `docker exec saas_core`, negado pelo classificador.
+LEI-AKITA: origem=`ponto/services/fechamento.py::universo_da_competencia`, testemunha=`ponto/janelas.py::janela_fechamento` (juiz do _K8), RED=`ponto.tests.test_fechamento_tela_escopo` (7 failures contra aa209dff), quem-mais-le=recalcular_fechamento_mes, telas fechamento_mensal/linhas, classificar_export (le o gravado, 0 muda), juizes novos=0
+- **M2:** universo pela janela da empresa (uniao das janelas sem empresa); os 2 pendentes do _K8 sairam "curado na origem"; PENDENTES['fechamento'] **6 -> 4**.
+- **DRY sombra:** universo 10/2026 609 -> 586 (**-23**: emp2 20, emp3 3, = prod); 09 648 -> 624; 11 574 -> 573; as 27 FM fora do universo da 10 tem 0,00 h e saem `rescisao_modulo_proprio` -> 0 no TXT; hash da 09 igual. As linhas gravadas NAO se tocam: aposentar e a O48 passo 6 (depois do export, ordem dele).
+- **PROVA M2:** comboio `wt-m2p` (main 9dff1904 + 6076b393, mmd regerado no conflito) `Ran 11775`, OK, rc 0; deploy rc 0.
+- **INCOMPLETO:** peca A (lei, topo); kit E2 e kit ATA esperam execucao em prod; docstring de `vigia_fio.py` sobre `.viva`; M3 (#1+#4) e o proximo do FLUXO 2.
 
 ## 23/10 20:2x -- MARCO ATA-NAO-DISPENSA-JUSTIFICADA (NO AR `44e268a8`) + FLUXO 2 M1 (NO AR `ea035793`)
 
@@ -2679,6 +2722,8 @@ O `f00f5a51` fica um commit a frente do remoto de PROPOSITO: e o derivado do `bi
 > porque e exatamente essa a classe que ja voltou tres vezes (02/10, 05/10, 11/10).
 
 ## ALARMES DA ESTEIRA
+
+**23/10 22:40 vigia da esteira** -- esteira em espera de janela: 8 fatias prontas, reabre 00:00.
 
 **23/10 03:40 vigia da esteira** -- esteira em espera de janela: 8 fatias prontas, reabre 04:45.
 
