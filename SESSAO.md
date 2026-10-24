@@ -6,10 +6,27 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 24/10/2026 20:50:23.** Transcript: `c87029f4-ea97-4fea-b6af-47ee2e204958.jsonl` (10.9 MB). Acoes na janela: **523**.
+**Medido em 24/10/2026 20:55:43.** Transcript: `c87029f4-ea97-4fea-b6af-47ee2e204958.jsonl` (11.8 MB). Acoes na janela: **540**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 20:55:43 | Bash | Find the day classifier used by the cartorio body | `cd /home/ronald/saas-hasner/app; sed -n 722,800p ponto/services/cartorio.py \| grep -n "classificar_dia\\|grade\\|marcos\\|tipo_dia" ; grep -rn "def grade_dia\\|def classificar_dia" ponto/ \| grep -v tests` |
+| 20:55:38 | Bash | Check the cartorio julgar_colab signature used by the probe | `cd /home/ronald/saas-hasner/app; grep -n "^def julgar_colab\\|^def julgar_celula\\|^def _julgar" -A6 ponto/services/cartorio.py \| head -40` |
+| 20:55:34 | Bash | Find the earlier measurement script to see how furo was read | `cd /home/ronald/saas-hasner; cat app/logs/sombra/../../logs/folga_marcos_20261024_2040.out 2>/dev/null \| head; ls logs/sombra/ \| grep -i folga; cat logs/sombra/folga_marcos*.py 2>/dev/null \| head -50` |
+| 20:55:29 | Bash | Check progress of the sombra probe | `cd /home/ronald/saas-hasner; date '+%H:%M'; grep -c 'lavratura falhou' logs/folga/lancador.out; grep -vE 'lavratura falhou' logs/folga/lancador.out \| tail -15 \| cut -c1-300` |
+| 20:55:22 | Bash | Read the veredito_celula marcos reader | `cd /home/ronald/saas-hasner/app; sed -n 15,60p ponto/services/veredito_celula.py; sed -n 190,260p ponto/services/veredito_celula.py` |
+| 20:55:18 | Bash | Census of marcos_do_dia callers in production code | `cd /home/ronald/saas-hasner/app; git grep -n "marcos_do_dia(" -- '*.py' ':!*tests*' \| grep -v "def marcos_do_dia" \| cut -c1-200` |
+| 20:55:09 | Bash | Read the two marcos_do_dia call sites in cartorio | `cd /home/ronald/saas-hasner/app; sed -n 1180,1215p ponto/services/cartorio.py; echo ----; sed -n 1280,1330p ponto/services/cartorio.py` |
+| 20:55:06 | Bash | Find marcos/tipo_dia readers in cartorio | `cd /home/ronald/saas-hasner/app; grep -n "marcos_do_dia\\|tipo_dia\\|trabalha" ponto/services/cartorio.py \| head -60` |
+| 20:55:00 | Bash | Read earlier folga-marcos measurement and backlog row | `cd /home/ronald/saas-hasner; ls logs/folga_marcos_* ; tail -30 logs/folga_marcos_*.out \| cut -c1-300; grep -n "BUG-FOLGA-COM-MARCOS" app/docs/BACKLOG.md \| cut -c1-900` |
+| 20:54:55 | Bash | Read the rest of the docstring and the folga-template test | `cd /home/ronald/saas-hasner/app; sed -n 1130,1175p escala/models.py; grep -n "test_folga_cai_no_template" -A25 escala/tests/test_celula_dia.py \| head -40` |
+| 20:54:46 | Bash | Read rest of marcos_do_dia and TipoEscala version | `cd /home/ronald/saas-hasner/app; sed -n 1090,1130p escala/models.py; sed -n 320,360p escala/models.py` |
+| 20:54:42 | Bash | Read EscalaColaborador.marcos_do_dia and find other definitions | `cd /home/ronald/saas-hasner/app; sed -n 1035,1090p escala/models.py; grep -rn "def marcos_do_dia" --include=*.py . \| grep -v tests` |
+| 20:54:36 | Bash | Wait for the sombra impact probe to finish, then show its result | `cd /home/ronald/saas-hasner; until grep -q '^rc=' logs/folga/lancador.out; do /usr/bin/sleep 20; done; date '+%H:%M'; grep -vE 'lavratura falhou' logs/folga/lancador.out \| tail -40` |
+| 20:54:33 | ToolSearch |  | `-` |
+| 20:54:27 | Bash | Check probe launcher output so far | `cd /home/ronald/saas-hasner; date '+%H:%M'; cat logs/folga/lancador.out 2>/dev/null \| tail -20; ls -la logs/folga/` |
+| 20:53:07 | Bash | Write and launch folga-marcos impact probe on sombra | `cat > /home/ronald/saas-hasner/logs/sombra/folga_marcos_impacto.py <<'EOF' # BUG-FOLGA-COM-MARCOS: IMPACTO da cura (celula de folga sem marcos -> sem marcos, nunca o template vivo). So leitura. import collections, datetime from django.db import transaction from escala.models import CelulaDia, EscalaColaborador as EC from ponto.management.commands.aplicar_09_corte_b import CAMPOS from ponto.models  ...` |
+| 20:50:21 | Bash | Wait push verdict | `cd /home/ronald/saas-hasner; for i in $(seq 1 38); do grep -q '^rc=' logs/push_espfer.out && break; /usr/bin/sleep 15; done; tail -4 logs/push_espfer.out \| cut -c1-200` |
 | 20:40:45 | Bash | Record confirmed origin; handoff; wait push | `cd /home/ronald/saas-hasner; python3 - <<'PY' p='app/docs/BACKLOG.md' s=open(p).read() i=s.index('\| BUG-FOLGA-COM-MARCOS \|'); j=s.index('\n',i) cols=s[i:j].split(' \| ') cols[2]='MEDIDO: as 52 tem dna SEM marcos (47 concorde, 5 furo). ORIGEM CONFIRMADA no codigo: `escala/models.py::EscalaColaborador.marcos_do_dia` (:1075) cai em `tipo_escala.marcos_do_dia` (template vivo) quando a celula de folg ...` |
 | 20:40:33 | Bash | Read EC.marcos_do_dia fallback behavior | `cd /home/ronald/saas-hasner/app; grep -n "def marcos_do_dia" escala/models.py \| head -3; sed -n "$(grep -n 'def marcos_do_dia' escala/models.py \| tail -1 \| cut -d: -f1),+40p" escala/models.py \| grep -n "celula\\|dna\\|trabalha\\|return\\|template\\|tipo_escala" \| head -20` |
 | 20:40:28 | Bash | Record folga-marcos finding; check push | `cd /home/ronald/saas-hasner; python3 - <<'PY' p='app/docs/BACKLOG.md' s=open(p).read() i=s.index('\| BUG-FOLGA-COM-MARCOS \|'); j=s.index('\n',i) cols=s[i:j].split(' \| ') cols[2]='MEDIDO 24/10 20:3x (prod, so leitura, `logs/folga_marcos_*.out`): as 52 tem dna SEM marcos (47 concorde, 5 furo) -- o gerador NAO escreveu dois previstos. Suspeita a provar: `EC.marcos_do_dia` cai no template vivo quand ...` |
