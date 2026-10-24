@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 24/10/2026 11:15:42.** Transcript: `f4eb628a-9fcf-4c05-ae6a-9f32279f7575.jsonl` (4.1 MB). Acoes na janela: **211**.
+**Medido em 24/10/2026 11:21:03.** Transcript: `f4eb628a-9fcf-4c05-ae6a-9f32279f7575.jsonl` (4.2 MB). Acoes na janela: **214**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 11:20:41 | Bash | Full thermometer counters and the two E1/E3 items | `cd /home/ronald/saas-hasner && grep -m1 "^{'dia_sem_lavratura" logs/sombra/e6_termometro_r1_10_20261024.out \| tr ',' '\n' \| sed 's/^ //' ; sed -n 1,30p app/core/espelho_verdade.py >/dev/null; grep -n "E1-sem-previsao\\|E3-turno-aberto" -A4 app/core/espelho_verdade.py \| cut -c1-200 \| head -14` |
+| 11:16:05 | Bash | Wait for thermometer and read output | `cd /home/ronald/saas-hasner && timeout 590 bash -c 'until grep -q "^rc=" logs/sombra/e6_termometro_r1_10_20261024.out; do /usr/bin/sleep 20; done'; grep -vE "ERROR ponto\|^\s*$\|Traceback\|^ File" logs/sombra/e6_termometro_r1_10_20261024.out \| tail -45 \| cut -c1-170` |
+| 11:15:45 | Bash | Verify combo2 suite is alive | `cd /home/ronald/saas-hasner && /usr/bin/sleep 15; tail -2 logs/combo2_suite.log \| cut -c1-120; bin/trava_teste.sh --quem 2>&1 \| head -1; docker ps --format '{{.Names}} {{.Command}}' \| grep -c "manage.py test"` |
 | 11:15:37 | Bash | Build combo2 and launch its suite | `cd /home/ronald/saas-hasner && C=/home/ronald/wt-combo2 && git worktree add -q --detach $C HEAD && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/f4eb628a-9fcf-4c05-ae6a-9f32279f7575/scratchpad && (cd /home/ronald/wt-ev && git diff HEAD) > $S/ev.patch && (cd /home/ronald/wt-e1b && git diff HEAD) > $S/e1b.patch && cd $C && git apply $S/ev.patch && git apply $S/e1b.patch && git status --short && cd ...` |
 | 11:15:29 | Bash | Update census catalog; check thermometer progress | `cd /home/ronald/wt-e1b/app && python3 - <<'PY' p='escala/tests/test_contract_juiz_escala.py'; s=open(p,encoding='utf-8').read() a=" 'ponto/services/cartorio.py': 2,\n" b=" # cartorio 2 -> 1 em 24/10 (E1 passo B): `marcos_vencidos` passou a perguntar a `escala_vigente` (a\n # juiza, carregada) em vez de buscar a geradora a mao; sobra o `_fnd` de `_julgar_colab_corpo`.\n 'ponto/services/cartorio.py' ...` |
 | 11:15:24 | Bash | Read TOMADORES catalog | `cd /home/ronald/wt-e1b/app && grep -n "TOMADORES" -A14 escala/tests/test_contract_juiz_escala.py \| head -24` |
