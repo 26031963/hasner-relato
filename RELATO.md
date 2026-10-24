@@ -1,6 +1,6 @@
 # RELATO — esteira saas-hasner
 
-PAREI: ! O261 -- apply do kit E2 na 10 (57 alvos, `logs/o261e/acervo_e2.py`, `O261_SO_COMP=10/2026`) fora do escopo do aval 23:1x (que cobre apply so da ATA) + lei da peca A (col666, opcoes i/ii/iii abaixo) | espera Ronald
+PAREI: ! O261 -- col549 (cel 122438, 21/10 = comp 11) so sai pela porta O317 `materializar_passivo_validado --colaboradores 549 --competencia 11/2026 --apply --autor <staff>` (o E2 nao a alcanca: 46480 FORA_VALIDADA), fora do escopo literal do aval 23:3x; cel 137166 espera a sonda `o261_celulas_mortas` (`bin/sondas.sh`); col666 entra depois do pouso da VIVA (mesmo arquivo) | espera Ronald
 
 SONDA o261_celulas_mortas: as 3 celulas do fio_morto (122438, 137166, 117269) -- de quem e cada uma (o aval diz col940 na 137166; o agente mediu col516), veredito/ata, e cada pergunta com o veredito do juiz `pergunta_viva`, a via que a matou e se estava entre as 56 do acervo E1. Rodar: `bin/sondas.sh`; saida `logs/sondas/o261_celulas_mortas.out`.
 
