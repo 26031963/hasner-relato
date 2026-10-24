@@ -34,6 +34,13 @@ PAREI: ! GATE-EXPORT-10 (so o export da 10) | espera o DP na Gestao de HE e o Ro
 > O MARCADOR ANDOU no mesmo ato: `ORDEM-VIVA-TOPO` saiu de `BO-HE-RECUSAR-LOTE-500` (fechado) para `O261`, que o hook cobrou.
 > SEM COMMIT DE PROPOSITO: `RELATO.md` e `BACKLOG.md` ficam sujos na arvore porque a L-106 nao deixa commit so de docs fora de marco. Eles entram no commit do proximo marco.
 
+## 24/10 00:3x -- O261 col666 + FOLGA_CONTESTA validada: contador `escala_nao_descreve_o_dia` POUSADO no main (`cf148a45`), deploy esperando o ensaio de hoje
+
+LEI-AKITA: origem=`chamados/services/vigia_fio.py::censo`, testemunha=`chamados/services/validacao.py::_e_aceite_de_folga` + `PerguntaDisputa.estado == VALIDADA` (leitor declarado), RED=`chamados.tests.test_o261_vigia_fio::test_MORDE_folga_CONTESTADA_e_validada_...` + `test_as_PARTES_SOMAM` (FAIL/ERROR contra HEAD), quem-mais-le=`vigiar_fio_morto` (carimbo), `bin/fio_estado.py`, juizes novos=0
+- Lei dele 23:5x: FOLGA_CONTESTA validada = "escala nao descreve o dia" -> lista do admin, sai do fio_morto. Partes somam o universo em sete (L-110).
+- Suite da copia: 1a `Ran 11814` FAILED 1 (`test_contract_leitores_vitalidade`: eu lia `validada_em` cru) -> passou a ler `estado == VALIDADA`; 2a `Ran 11814`, OK, rc 0. `cmp` dos 2 .py staged contra d676525d: iguais.
+- **Deploy recusado 00:3x** (`logs/deploy_c666.out`): o dia virou e nao ha ensaio de 24/10. Disparado `sombra.sh --refazer --dump-agora && --bloco` (secao 2: faixa 00-04h), destacado, `logs/sombra_ensaio_0024.out` (~52 min). Deploy depois do carimbo verde; se a sessao cair, o reload das 03:30 publica a arvore e o ensaio das 04:15 a confere.
+
 ## 23/10 23:5x -- MARCO VIVA-DELEGA-AO-JUIZ (NO AR `051c3370`) + instrumentos SONDA-PARA-O-RONALD (`93667e8f`) e SONDA-NUNCA-PARA (`cec1cee3`)
 PROVA: copia `wt-viva` `Ran 11813` OK rc 0 (`logs/viva/suite.out`, veredito 23:47:14, commit 23:47:37, todos os arquivos com mtime antes de 23:37:04); 5 .py staged `cmp` iguais a d3dcdb3d; `logs/deploy_viva.out` deploy rc 0, 3 rotas. Sombra (`logs/viva/paridade_frota_*.out`): `.viva` x juiz na FROTA **1.401 -> 0** (todas tranca por leitura), comp 10+11 0 -> 0; queries `_fio_do_dia` 115 -> 115.
 LEI-AKITA: origem=`chamados/models.py::PerguntaDisputa.viva`, testemunha=`chamados/juizes.py::pergunta_viva`, RED=`chamados.tests.test_viva_delega_ao_juiz` (5 de 13 FAIL contra HEAD), quem-mais-le=`fora_da_folha._fio_do_dia`, `fio.py:259`, `arquivar_competencia_encerrada._disputa_viva`, `_card_atendimento.html:77`, juizes novos=0
