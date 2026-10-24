@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 24/10/2026 08:22:33.** Transcript: `ed482694-44e4-4da5-bd42-07601a2a39b4.jsonl` (6.7 MB). Acoes na janela: **218**.
+**Medido em 24/10/2026 08:28:03.** Transcript: `ed482694-44e4-4da5-bd42-07601a2a39b4.jsonl` (6.7 MB). Acoes na janela: **217**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -227,4 +227,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 20:49:54 | Bash | Build combo copy: main + O261 resto | `cd /home/ronald/saas-hasner && git worktree add -q --detach /home/ronald/wt-o261p 2d806054 && cd /home/ronald/wt-o261p && git merge -q --no-ff -m "comboio: main 2d806054 + O261 resto c88dcc8d" c88dcc8d 2>&1 \| tail -2; git log --oneline -1; git show --stat HEAD \| tail -6; mkdir -p app/logs app/media` |
 | 20:47:29 | Bash | Keep waiting for push | `for i in $(seq 1 115); do /bin/grep -q '^FIM rc=' /home/ronald/saas-hasner/logs/clb1b/push_ata.out 2>/dev/null && break; /usr/bin/sleep 5; done; tail -4 /home/ronald/saas-hasner/logs/clb1b/push_ata.out` |
 | 20:37:43 | Bash | Wait for push to finish | `for i in $(seq 1 115); do /bin/grep -q '^FIM rc=' /home/ronald/saas-hasner/logs/clb1b/push_ata.out 2>/dev/null && break; /usr/bin/sleep 5; done; tail -4 /home/ronald/saas-hasner/logs/clb1b/push_ata.out` |
-| 20:27:57 | Bash | Keep waiting for push verdict | `for i in $(seq 1 115); do /bin/grep -q '^FIM rc=' /home/ronald/saas-hasner/logs/clb1b/push_ata.out 2>/dev/null && break; /usr/bin/sleep 5; done; tail -4 /home/ronald/saas-hasner/logs/clb1b/push_ata.out` |
