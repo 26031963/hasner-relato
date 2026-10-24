@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 24/10/2026 19:13:03.** Transcript: `c87029f4-ea97-4fea-b6af-47ee2e204958.jsonl` (9.4 MB). Acoes na janela: **436**.
+**Medido em 24/10/2026 19:18:33.** Transcript: `c87029f4-ea97-4fea-b6af-47ee2e204958.jsonl` (9.4 MB). Acoes na janela: **437**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 19:17:16 | Bash | Wait emp4 R4 and check push | `cd /home/ronald/saas-hasner; for i in $(seq 1 38); do grep -q '^fim' logs/escerta/r4_depois_emp34.out 2>/dev/null && break; /usr/bin/sleep 15; done; cat logs/escerta/r4_depois_emp34.out \| cut -c1-400; tail -2 logs/push_escerta.out` |
 | 19:07:42 | Bash | Launch push; wait R4 emp3-4 | `cd /home/ronald/saas-hasner; (bash bin/push.sh origin main > logs/push_escerta.out 2>&1; echo "rc=$?" >> logs/push_escerta.out) >/dev/null 2>&1 & disown; for i in $(seq 1 38); do grep -q '^fim' logs/escerta/r4_depois_emp34.out 2>/dev/null && break; /usr/bin/sleep 15; done; cat logs/escerta/r4_depois_emp34.out \| cut -c1-400` |
 | 19:07:35 | Bash | Record apply PROVA, R4 and espelho finding | `cd /home/ronald/saas-hasner; python3 - <<'PY' p='app/docs/RELATO.md' s=open(p).read() anc='> EM CURSO 24/10 17:3x: a arvore que pousa e `/home/ronald/wt-escerta2`' i=s.index(anc); j=s.index('\n',i)+1 s=s[:i]+'''- NO AR `5c715284` (deploy `--sem-migrate` rc 0, lei (b) respondida 18:4x). - PROVA (apply da 10 em prod, `logs/escerta_apply_*.out` + `app/logs/escerta/prova_depois_10_20261024_1842.json`) ...` |
 | 19:07:20 | Bash | Save emp1-2 R4; relaunch R4 for emp3-4 | `cd /home/ronald/saas-hasner; grep "^emp" /tmp/claude-1001/-home-ronald-saas-hasner-app/f4eb628a-9fcf-4c05-ae6a-9f32279f7575/tasks/b9vzwqohz.output > logs/escerta/r4_depois_emp12_$(date +%H%M).out; sed -i "s/for e in Empresa.objects.filter(ativa=True).order_by('pk'):/for e in Empresa.objects.filter(ativa=True, pk__in=(3, 4)).order_by('pk'):/" /tmp/claude-1001/-home-ronald-saas-hasner-app/c87029f4-e ...` |
