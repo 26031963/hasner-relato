@@ -6,10 +6,17 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 23/10/2026 21:10:47.** Transcript: `ed482694-44e4-4da5-bd42-07601a2a39b4.jsonl` (3.0 MB). Acoes na janela: **138**.
+**Medido em 23/10/2026 21:16:03.** Transcript: `ed482694-44e4-4da5-bd42-07601a2a39b4.jsonl` (3.1 MB). Acoes na janela: **145**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 21:13:19 | Bash | Wait for push | `for i in $(seq 1 118); do /bin/grep -q '^FIM rc=' /home/ronald/saas-hasner/logs/clb1b/push_o261m2.out 2>/dev/null && break; /usr/bin/sleep 5; done; tail -3 /home/ronald/saas-hasner/logs/clb1b/push_o261m2.out` |
+| 21:13:12 | Bash | Build calendar UI combo copy | `cd /home/ronald/saas-hasner && git worktree add -q --detach /home/ronald/wt-uip 4bb38882 && cd /home/ronald/wt-uip && git merge -q --no-ff -m "comboio: main 4bb38882 + CALENDARIO-MOSTRA-O-CARRO 879fc7a2" 879fc7a2 2>&1 \| tail -2; git log --oneline -1; git show --stat HEAD \| tail -3; mkdir -p app/logs app/media` |
+| 21:13:05 | Bash | Inspect calendar UI commit | `cd /home/ronald/saas-hasner && git show --stat --format='%h %s%n%b' 879fc7a2 \| head -30; git merge-base --is-ancestor 879fc7a2 HEAD && echo JA_NO_MAIN; git log --oneline -1 $(git merge-base 879fc7a2 HEAD)` |
+| 21:13:00 | Bash | Push O261 B and M2 marcos | `cd /home/ronald/saas-hasner && { bin/push.sh origin main; echo "FIM rc=$?"; } > logs/clb1b/push_o261m2.out 2>&1` |
+| 21:12:56 | Bash | Write docs for O261 B and M2, law question at top | `cd /home/ronald/saas-hasner && python3 - <<'PY' p='app/docs/RELATO.md'; s=open(p).read() lei=open('/tmp/claude-1001/-home-ronald-saas-hasner-app/ed482694-44e4-4da5-bd42-07601a2a39b4/scratchpad/lei_o261a.txt').read() anc="\n> **O O261 NAO esta parado**" assert s.count(anc)==1 s=s.replace(anc,"\n"+lei.rstrip('\n')+"\n"+anc,1) anc2="## 23/10 20:2x -- MARCO ATA-NAO-DISPENSA-JUSTIFICADA" assert s.count ...` |
+| 21:12:23 | Bash | Merge M2 combo, commit, deploy | `cd /home/ronald/saas-hasner && git log --oneline -1 && git merge --no-ff --no-commit b3674303 >/dev/null 2>&1; echo merge_head=$(git rev-parse -q --verify MERGE_HEAD \| cut -c1-8); echo "censo:"; git diff --cached b3674303 --stat \| tail -1; git commit -q -F - <<'MSG' pouso da wt-m2: FLUXO 2 M2 -- universo_da_competencia pelo corte da empresa (PENDENTES fechamento 6 -> 4) Arvore certificada = b367 ...` |
+| 21:11:42 | Bash | Keep waiting for M2 suite | `for i in $(seq 1 115); do /bin/grep -q '^FIM rc=' /home/ronald/wt-m2p/app/logs/suite.out 2>/dev/null && break; /usr/bin/sleep 5; done; /bin/grep -E '^(FAIL\|ERROR):\|^Ran \|^(OK\|FAILED)($\| \()\|^FIM rc=' /home/ronald/wt-m2p/app/logs/suite.out \| tail -6` |
 | 21:02:03 | Bash | Wait for M2 combo suite | `for i in $(seq 1 115); do /bin/grep -q '^FIM rc=' /home/ronald/wt-m2p/app/logs/suite.out 2>/dev/null && break; /usr/bin/sleep 5; done; /bin/grep -E '^(FAIL\|ERROR):\|^Ran \|^(OK\|FAILED)($\| \()\|^FIM rc=' /home/ronald/wt-m2p/app/logs/suite.out \| tail -6` |
 | 21:01:55 | Bash | Full suite on M2 combo copy | `cd /home/ronald/saas-hasner && bash bin/suite.sh --dir /home/ronald/wt-m2p > /home/ronald/wt-m2p/app/logs/suite.out 2>&1; echo "FIM rc=$?" >> /home/ronald/wt-m2p/app/logs/suite.out` |
 | 21:01:52 | Bash | Verify regenerated mmd content | `cd /home/ronald/wt-m2p && /bin/grep -n 'jf_fechamento\["' app/docs/ARQUITETURA.mmd; /bin/grep -c '<<<<<<<\\|>>>>>>>' app/docs/ARQUITETURA.mmd` |
