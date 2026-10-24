@@ -44,6 +44,16 @@ PAREI: ! GATE-EXPORT-10 (so o export da 10) | espera o DP na Gestao de HE e o Ro
 > O MARCADOR ANDOU no mesmo ato: `ORDEM-VIVA-TOPO` saiu de `BO-HE-RECUSAR-LOTE-500` (fechado) para `O261`, que o hook cobrou.
 > SEM COMMIT DE PROPOSITO: `RELATO.md` e `BACKLOG.md` ficam sujos na arvore porque a L-106 nao deixa commit so de docs fora de marco. Eles entram no commit do proximo marco.
 
+## 24/10 13:5x -- MARCO HORA-DA-TRILHA (instrumento): a hora da secao nao pode ser posterior ao instante em que ela entrou
+
+LEI-AKITA: origem=bin/tests/test_hora_da_secao_nao_e_futura.sh (novo), testemunha=`git blame --line-porcelain` (author-time de cada titulo) + `date` TZ America/Sao_Paulo para linha nao commitada, RED=o mesmo selo contra um clone do HEAD `038c357d`, quem-mais-le=bin/regua.sh (pasta inteira de selos), juizes novos=0
+
+- RED no HEAD: **9 titulos no futuro**, de 13 a 60 min (24/10 01:4x..14:3x; `scratchpad/red_head.out` da sessao). Verde na arvore com as horas corrigidas (as secoes de hoje voltaram a hora do commit de cada marco): **63 titulos, 0 no futuro**.
+- Casos que MORDEM, num repo de mentira: titulo 2 h no passado = verde, 2 h no futuro = VERMELHO; nenhum titulo visto = VERMELHO (recorte cego).
+- Recorte `DESDE 24/10`: 20 titulos de 22/10 a 23/10 tambem adiantados ficam como estao (L-116, secao ja escrita nao se reescreve); o selo impede, nao reescreve.
+- A versao de `~/saas-hasner/scratchpad/` (71 linhas) era a de antes do recorte; a que pousa e a de `bin/tests/` (77).
+- Pouso de INSTRUMENTO (L-105): so `bin/tests/` + docs do marco, sem deploy (selo de host).
+
 ## 24/10 13:3x -- MARCO E1 LEI (a): a geradora so vale dentro da vigencia, e o rival `_esc_vigente_do_dia` delega a juiza
 
 LEI-AKITA: origem=escala/alimentacao.py::vinculo_do_dia + escala/utils.py::_esc_vigente_do_dia, testemunha=CelulaDia.escala_geradora julgada pela vigencia do vinculo (L-021, A10, L-099), RED=ponto/tests/test_vinculo_do_dia_pela_celula.py::GeradoraSoValeNaVigenciaTest (2 falhas no HEAD) + folha/tests/test_cadastro_zero_com_batida (col882), quem-mais-le=escala_vigente, espelho, motor, previsto, cartorio, vigia_de_hora, juizes novos=0
