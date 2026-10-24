@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 24/10/2026 13:35:52.** Transcript: `f4eb628a-9fcf-4c05-ae6a-9f32279f7575.jsonl` (6.4 MB). Acoes na janela: **351**.
+**Medido em 24/10/2026 13:41:03.** Transcript: `f4eb628a-9fcf-4c05-ae6a-9f32279f7575.jsonl` (6.5 MB). Acoes na janela: **356**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 13:36:57 | Bash | Wait for E1 lei push verdict | `cd /home/ronald/saas-hasner && timeout 590 bash -c 'until grep -aq "^rc=" logs/push_20261024_e1lei2.log; do /usr/bin/sleep 20; done'; grep -aE "^rc=\|[0-9a-f]{8}\.\.[0-9a-f]{8} +main -> main" logs/push_20261024_e1lei2.log \| tail -2; grep -aE "^Ran [0-9]+ tests\|^(OK\|FAILED)( \(\|$)" logs/push_20261024_e1lei2.log \| tail -2` |
+| 13:36:36 | Bash | Read alertas_turno window and candidate authorities | `sed -n 85,125p ponto/management/commands/processar_alertas_turno.py; grep -n "^def dia_encerrado\\|^def turno_encerrado\\|^def fim_turno" -A8 ponto/turnos.py ponto/services/cartorio.py \| head -30` |
+| 13:36:23 | Bash | Count clock compares in the 4 PRAZO crons | `cd /home/ronald/saas-hasner && python3 - <<'PY' import ast R=('now','agora','hoje','today','localdate') def nm(n): if isinstance(n,ast.Name): return n.id if isinstance(n,ast.Attribute): return n.attr def rel(n): if isinstance(n,ast.BinOp): return rel(n.left) or rel(n.right) if isinstance(n,ast.Call): x=nm(n.func); return x if x in R else None x=nm(n); return x if x in R else None for f in ('app/po ...` |
+| 13:36:14 | Bash | Check what the selo treats as clock | `cd /home/ronald/saas-hasner && grep -n "_RELOGIO\s*=" -A6 bin/tests/test_papel_prazo_nao_deriva.sh \| head -10; grep -n "def expr_do_relogio" -A16 bin/tests/test_papel_prazo_nao_deriva.sh \| head -20` |
+| 13:35:58 | Bash | Measure vinculo diff for detectar_ausencias in prod | `cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/f4eb628a-9fcf-4c05-ae6a-9f32279f7575/scratchpad/da.py && cat > $S <<'PY' import datetime as d, collections from django.utils import timezone from colaboradores.models import Colaborador from escala.models import EscalaColaborador from escala.servico_jornada import escala_vigente from core.constants import isento_ponto h ...` |
 | 13:35:43 | Bash | Push again after placar rewrite | `cd /home/ronald/saas-hasner && bin/push.sh > logs/push_20261024_e1lei2.log 2>&1; echo "rc=$?" >> logs/push_20261024_e1lei2.log` |
 | 13:35:42 | Bash | Rewrite TICKETS placar and commit | `cd /home/ronald/saas-hasner && bash bin/tickets_placar.sh --escrever 2>&1 \| tail -1; git status --short app/docs/TICKETS.md; git add app/docs/TICKETS.md && git commit -q -F - <<'EOF' TICKETS: placar do topo reescrito pelo escritor (a nota da celula escala x um juiz por pergunta mudou com o E1 lei (a)) Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com> EOF git log --oneline -1` |
 | 13:35:33 | Bash | Read push failure tail | `cd /home/ronald/saas-hasner && grep -av "^\s*$" logs/push_20261024_e1lei.log \| tail -15 \| cut -c1-220` |
