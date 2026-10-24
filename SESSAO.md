@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 24/10/2026 00:39:33.** Transcript: `ed482694-44e4-4da5-bd42-07601a2a39b4.jsonl` (5.9 MB). Acoes na janela: **306**.
+**Medido em 24/10/2026 00:44:44.** Transcript: `ed482694-44e4-4da5-bd42-07601a2a39b4.jsonl` (5.9 MB). Acoes na janela: **308**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 00:41:02 | Bash | Wait for RECUSA commit or ensaio end | `for i in $(seq 1 115); do /bin/grep -q '^ENSAIO_FIM' /home/ronald/saas-hasner/logs/sombra_ensaio_0024.out 2>/dev/null && break; H=$(git -C /home/ronald/wt-rf log -1 --format=%h 2>/dev/null); [ -n "$H" ] && [ "$H" != "cec1cee3" ] && break; /usr/bin/sleep 5; done; git -C /home/ronald/wt-rf log --oneline -1 2>&1; tail -2 /home/ronald/saas-hasner/logs/sombra_ensaio_0024.out` |
+| 00:40:52 | Bash | Register VARREDURA-TRIAGEM in PROMPTS and BACKLOG | `cd /home/ronald/saas-hasner && python3 - <<'PY' q='app/docs/PROMPTS.md'; u=open(q).read().rstrip('\n')+'\n' u+="\| 24/10 ~00:4x \| **aval `VARREDURA-TRIAGEM`** (depois do O261 e do K6, so leitura, modelo barato): para os 21 de JUIZES_POR_VARREDURA, uma linha cada -- escritas 30 d por ator em prod (cron x evento), julga FATO ou FALTA de fato, regra propria (AST) ou delega, saida pela lei existente: ...` |
 | 00:31:05 | Bash | Wait for RECUSA commit or ensaio end | `B=$(git -C /home/ronald/saas-hasner rev-parse --short 1088b8b2); for i in $(seq 1 115); do /bin/grep -q '^ENSAIO_FIM' /home/ronald/saas-hasner/logs/sombra_ensaio_0024.out 2>/dev/null && break; H=$(git -C /home/ronald/wt-rf log -1 --format=%h 2>/dev/null); [ -n "$H" ] && ! git -C /home/ronald/saas-hasner merge-base --is-ancestor $H HEAD 2>/dev/null && break; /usr/bin/sleep 5; done; git -C /home/ron ...` |
 | 00:30:51 | Bash | Write col666 status section and commit docs | `cd /home/ronald/saas-hasner && python3 - <<'PY' p='app/docs/RELATO.md'; s=open(p).read() anc="## 23/10 23:5x -- MARCO VIVA-DELEGA-AO-JUIZ" assert s.count(anc)==1 sec='''## 24/10 00:3x -- O261 col666 + FOLGA_CONTESTA validada: contador `escala_nao_descreve_o_dia` POUSADO no main (`cf148a45`), deploy esperando o ensaio de hoje LEI-AKITA: origem=`chamados/services/vigia_fio.py::censo`, testemunha=`ch ...` |
 | 00:30:32 | Bash | Verify detached ensaio started | `sleep 3; ls -l /home/ronald/saas-hasner/logs/sombra_ensaio_0024.out 2>&1; pgrep -af 'sombra.sh --refazer' \| head -2; head -3 /home/ronald/saas-hasner/logs/sombra_ensaio_0024.out 2>/dev/null` |
