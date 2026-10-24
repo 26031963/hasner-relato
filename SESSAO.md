@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 24/10/2026 12:05:06.** Transcript: `f4eb628a-9fcf-4c05-ae6a-9f32279f7575.jsonl` (5.2 MB). Acoes na janela: **273**.
+**Medido em 24/10/2026 12:10:33.** Transcript: `f4eb628a-9fcf-4c05-ae6a-9f32279f7575.jsonl` (5.2 MB). Acoes na janela: **274**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 12:05:13 | Bash | Wait for push verdict | `cd /home/ronald/saas-hasner && timeout 590 bash -c 'until grep -aq "^rc=" logs/push_20261024_vt.log; do /usr/bin/sleep 20; done'; grep -aoE "^rc=[0-9]+\|[0-9a-f]{8}\.\.[0-9a-f]{8} +main -> main\|^Ran [0-9]+ tests.*\|^(OK\|FAILED)( \(.*)?$" logs/push_20261024_vt.log \| tail -5; grep -a -E "^(FAIL\|ERROR): " logs/push_20261024_vt.log \| head -3 \| cut -c1-160` |
 | 12:05:01 | Bash | Find the retained RELATO line | `cd /home/ronald/saas-hasner && grep -A4 "RELATO RETIDO" logs/relato_pub_20261024b.log \| head -8 \| cut -c1-250` |
 | 12:03:41 | Bash | Republish RELATO and read the memory to update | `cd /home/ronald/saas-hasner && bin/relato.sh > logs/relato_pub_20261024b.log 2>&1; echo rc=$?; grep -iE "retido\|publicado em" logs/relato_pub_20261024b.log \| head -3; cat /home/ronald/.claude/projects/-home-ronald-saas-hasner/memory/contrato-nao-mora-em-arquivo-com-teto.md` |
 | 12:03:32 | Bash | Push 3 marcos (ESPELHO, E1b, VT) | `cd /home/ronald/saas-hasner && bin/push.sh > logs/push_20261024_vt.log 2>&1; echo "rc=$?" >> logs/push_20261024_vt.log` |
