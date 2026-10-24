@@ -52,6 +52,13 @@ PAREI: ! GATE-EXPORT-10 (so o export da 10) | espera o DP na Gestao de HE e o Ro
 > O MARCADOR ANDOU no mesmo ato: `ORDEM-VIVA-TOPO` saiu de `BO-HE-RECUSAR-LOTE-500` (fechado) para `O261`, que o hook cobrou.
 > SEM COMMIT DE PROPOSITO: `RELATO.md` e `BACKLOG.md` ficam sujos na arvore porque a L-106 nao deixa commit so de docs fora de marco. Eles entram no commit do proximo marco.
 
+## 24/10 19:3x -- MARCO ESPELHO-FERIADO-DOBRA (P7.1, achado do R4 remedido): o dia registra a folga-feriado e a testemunha a le
+
+LEI-AKITA: origem=ponto/services/dia_pago.py::lavrar (laco `ft_feriado`) + folha/porta_export.py::dias_fora_do_dia_pago (equacao da testemunha), testemunha=DiaPago.detalhe['folga_feriado_min'] (o fato no dia, L-095), RED=ponto/tests/test_bob_b2_abono_feriado_guarda.py::test_MORDE_a_testemunha_espelho_x_dia_pago_conhece_o_feriado (`[{'dia': '2026-10-12', 'espelho_h': 4.0, 'dia_pago_h': 0.0}] != []` no HEAD, `logs/espfer_red.out`), quem-mais-le=porta_export.medir (R4 par 6), cartao/TXT (nao leem o detalhe), juizes novos=0
+
+- Nao e o espelho que dobra (diagnostico corrigido as 19:1x): depois do BUG-FERIADO a hora do feriado trabalhado mora SO em HE100 feriado, e a equacao da testemunha (`trabalhadas + folga_trabalhada`) nao a via. O dia passa a dizer quanto do HE100 feriado e folga-feriado (como `folga_sem_escala_min`), e a testemunha soma esse fato. Dinheiro: nenhum campo de valor muda.
+- Depois do pouso: os DiaPago da 10 ganham o detalhe no proximo recalculo; o R4 se remede.
+
 ## 24/10 18:1x -- MARCO JUIZ-CLASSIFICAR-POSICAO-NASCE (lote EVENTO): o geofence tem um juiz; o vigia e o ping perguntam a ele
 
 LEI-AKITA: origem=ponto/management/commands/reconciliar_geofence.py (conta propria `calcular_distancia <= raio_do_posto`) + as tres copias do ping-geo (`api/views_core.py`, `api/views.py`, `ponto/views.py`), testemunha=ponto/services/geofence.py::classificar_posicao (com a accuracy da batida), RED=ponto/tests/test_reconciliar_geofence.py::test_MORDE_sinal_ruim_nao_sustenta_o_chamado (`'aberto' != 'resolvido'` no HEAD, `logs/geo_red.out`) + test_MORDE_o_cadastro_do_posto_e_o_evento + ponto/tests/test_juiz_classificar_posicao_nasce.py, quem-mais-le=verificar_geofence (ja lia), pino do painel (ja lia), `alerta_caducou` (migrou: era o ramo `dentro`), `acao_recusar_geofence` (so mostra o contexto), `reconciliar_vinculo` (outra pergunta), juizes novos=classificar_posicao (corte Ronald, frase no CORTES.md)
