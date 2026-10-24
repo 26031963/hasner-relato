@@ -291,6 +291,10 @@ flowchart TD
     evs_EscalaColaborador --> evr_ec_vigencia_regenera_celulas
     evr_nucleo_post_save_escala["_nucleo_post_save_escala<br/>post_save"]
     evs_EscalaColaborador --> evr_nucleo_post_save_escala
+    evs_Justificativa[/"Justificativa<br/>1 receiver(s)"/]
+    evr_cartorio_post_save_justificativa["_cartorio_post_save_justificativa<br/>post_save"]
+    evs_Justificativa --> evr_cartorio_post_save_justificativa
+    evr_cartorio_post_save_justificativa ==>|julga| ev_juiz
   end
 
   %% (f) JUIZES — fonte: core/juizes.py (JUIZES, SEM_JUIZ, PENDENTES)

@@ -52,7 +52,8 @@ LEI-AKITA: origem=ponto/signals.py::_cartorio_post_save_justificativa (novo) + p
 - BUG NO CAMINHO (LEI-AKITA 6), medido em prod 24/10 (`logs/evjust_lastro30_*.out`): 19 notas `lastro_encontrado` em 30 d, **15 do #29292**, uma por hora desde 23/10 23:40 -- a nota "Encerrado pelo sistema" nascia ANTES do `reconciliar()`, que recusava. Cura: a nota so nasce se o juiz encerrou.
 - O CRON NAO VIRA VIGIA neste marco: dos 19, 3 foram por lampada acesa por BATIDA e 1 por ABONO, que o evento da Justificativa nao cobre. Fica em `JUIZES_POR_VARREDURA` (19) com o resto nomeado: por que o cartorio no `post_save` da batida/ausencia nao fechou esses 4.
 - #29292 so fecha com o acervo da ATA (kit `logs/concorde/acervo_ata_just.py`, execucao do Ronald) ou nova decisao da justificativa; o laco de notas para no deploy.
-- SUITE: (pendente, comboio com o E1 passo B 3+4)
+- SUITE (comboio com o E1 passo B 3+4, copia `wt-comb2410`): `Ran 11870 tests`, 2 falhas so no selo do diagrama (aresta nova Justificativa -> cartorio); `ARQUITETURA.mmd`/`MAPA.md` regerados CONTRA A COPIA (o `bin/gerar_diagrama.py` faz `docker exec saas_core`, que e a arvore VIVA) e o selo re-rodado: `Ran 10 tests`, OK (`logs/comb2410_*.out`).
+- NO AR `00e5279f` (deploy `--sem-migrate` rc 0, tres rotas, BUG 128 verde). SMOKE prod (`logs/comb2410_smoke.out`): receiver no ar; col499 12/10 = `feriado`; `dia_da_frota` 23/10 552 com celula / 98 acusam, 12x36 344 / 39. Nenhum apply de dinheiro (o motor ja le a juiza desde `460ee92b`).
 
 ## 24/10 14:1x -- MARCO E1 passo B (3 e 4 de 9): `dia_da_frota` e `precedencia` perguntam o vinculo a juiza
 
@@ -62,7 +63,7 @@ LEI-AKITA: origem=relatorios/dia_da_frota.py::dia_da_frota + ponto/precedencia.p
 - `precedencia`: a escolha propria (geradora crua; sem ela a linha do tempo) virou `vinculo_do_dia`. A lista do chamador que traz `vinculos` (calendario, so o ativo) e COMPLETADA pela porta do periodo com a geradora que falta -- medido em prod: 211 celulas / 13 colabs com ativo cobrindo e geradora OUTRA (`logs/e1prec/calendario_geradora_outra_*.out`).
 - IMPACTO na sombra, funcao REAL dos dois jeitos, comp 10, 595 colabs, 0 erros (`logs/e1prec/impacto2_comp10.out`): default **27 dia-colab / 27 colabs**, todos 12/10 feriado, `trabalho -> feriado` (26 desligados + col499, sem vinculo de 03/10 a 15/10 e sem batida de 11 a 13/10 -- dono CADASTRO); modo calendario **0**. Dinheiro: o motor ja le a juiza desde `460ee92b`; a precedencia passa a concordar com ele.
 - FICA no censo (6 linhas): `_fnd` do cartorio (muda a lavra em 490 celulas / 15 colabs, 14 desligados -- `logs/e1frota/fnd_impacto_prod_*.out`; custo de query no chokepoint a medir), `servico_jornada` (carregador), `fechamento`, `folgas`, `auditar_invariantes` (outra pergunta) e a juiza.
-- SUITE: (pendente)
+- GREEN dos vizinhos (56 modulos que leem precedencia/dia_da_frota): `Ran 626 tests`, OK (`logs/e1frota_green.out`). SUITE no comboio com o EVENTO 1 (secao acima).
 
 ## 24/10 13:5x -- MARCO HORA-DA-TRILHA (instrumento): a hora da secao nao pode ser posterior ao instante em que ela entrou
 
