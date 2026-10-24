@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 24/10/2026 14:35:05.** Transcript: `c87029f4-ea97-4fea-b6af-47ee2e204958.jsonl` (3.0 MB). Acoes na janela: **144**.
+**Medido em 24/10/2026 14:40:33.** Transcript: `c87029f4-ea97-4fea-b6af-47ee2e204958.jsonl` (3.1 MB). Acoes na janela: **148**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 14:39:45 | Bash | Wait for push verdict and check remote | `cd /home/ronald/saas-hasner; for i in $(seq 1 30); do grep -q '^rc=' logs/push_comb2410.out 2>/dev/null && break; /usr/bin/sleep 10; done; tail -4 logs/push_comb2410.out; git fetch -q; git log -1 --format=%h origin/main; git log origin/main..HEAD --format='%h %s' \| cut -c1-80` |
+| 14:39:25 | Bash | Find dia_encerrado authority and PRAZO_DELEGA_A shape | `cd /home/ronald/saas-hasner/app; grep -rn "def dia_encerrado" --include=*.py . ; grep -n "detectar_ausencias" config/crons.py \| head -5; sed -n 1928,1960p config/crons.py` |
+| 14:39:19 | Bash | Read the 5 comparisons and the janela in detectar_ausencias | `cd /home/ronald/saas-hasner/app; sed -n 130,175p ponto/management/commands/detectar_ausencias.py; sed -n 225,262p ponto/management/commands/detectar_ausencias.py; sed -n 300,325p ponto/management/commands/detectar_ausencias.py; sed -n 455,472p ponto/management/commands/detectar_ausencias.py` |
+| 14:39:15 | Bash | Locate comparisons in detectar_ausencias | `cd /home/ronald/saas-hasner/app; grep -n "hoje\b\\|data_ref ==\\|_dias\\|dt_min\\|dt_max\\|agora" ponto/management/commands/detectar_ausencias.py \| sed -n 1,80p` |
 | 14:29:23 | Bash | Wait for push verdict by file | `cd /home/ronald/saas-hasner; for i in $(seq 1 39); do grep -q '^rc=' logs/push_comb2410.out 2>/dev/null && break; /usr/bin/sleep 15; done; tail -5 logs/push_comb2410.out` |
 | 14:29:19 | Bash | Update BACKLOG cell with _fnd finding | `cd /home/ronald/saas-hasner; python3 - <<'PY' p='app/docs/BACKLOG.md' s=open(p).read() old="Proximo: `_fnd` do cartorio (490 celulas, teto de query a medir). Falta: (5) selo por efeito." assert s.count(old)==1 new="Proximo: `_fnd` do cartorio -- dia sem vinculo e CADASTRO antes da folga (troca mecanica faria furo). Falta: (5)." s=s.replace(old,new) i=s.index('\| CONTRATOS-RESTANTES-E1-E2-FOLHA-K6  ...` |
 | 14:29:13 | Bash | Check push progress | `cd /home/ronald/saas-hasner; tail -3 logs/push_comb2410.out` |
