@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 23/10/2026 21:21:33.** Transcript: `ed482694-44e4-4da5-bd42-07601a2a39b4.jsonl` (3.1 MB). Acoes na janela: **145**.
+**Medido em 23/10/2026 21:27:03.** Transcript: `ed482694-44e4-4da5-bd42-07601a2a39b4.jsonl` (3.1 MB). Acoes na janela: **147**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 21:25:33 | Bash | Rebase UI combo on new main and run suite | `cd /home/ronald/wt-uip && git checkout -q --detach b9e73bb8 && git merge -q --no-ff -m "comboio: main b9e73bb8 + CALENDARIO-MOSTRA-O-CARRO 879fc7a2" 879fc7a2 && git log --oneline -1 && cd /home/ronald/saas-hasner && bash bin/suite.sh --dir /home/ronald/wt-uip > /home/ronald/wt-uip/app/logs/suite.out 2>&1; echo "FIM rc=$?" >> /home/ronald/wt-uip/app/logs/suite.out; /bin/grep -E '^(FAIL\|ERROR):\|^R ...` |
+| 21:23:13 | Bash | Keep waiting for push | `for i in $(seq 1 118); do /bin/grep -q '^FIM rc=' /home/ronald/saas-hasner/logs/clb1b/push_o261m2.out 2>/dev/null && break; /usr/bin/sleep 5; done; tail -3 /home/ronald/saas-hasner/logs/clb1b/push_o261m2.out` |
 | 21:13:19 | Bash | Wait for push | `for i in $(seq 1 118); do /bin/grep -q '^FIM rc=' /home/ronald/saas-hasner/logs/clb1b/push_o261m2.out 2>/dev/null && break; /usr/bin/sleep 5; done; tail -3 /home/ronald/saas-hasner/logs/clb1b/push_o261m2.out` |
 | 21:13:12 | Bash | Build calendar UI combo copy | `cd /home/ronald/saas-hasner && git worktree add -q --detach /home/ronald/wt-uip 4bb38882 && cd /home/ronald/wt-uip && git merge -q --no-ff -m "comboio: main 4bb38882 + CALENDARIO-MOSTRA-O-CARRO 879fc7a2" 879fc7a2 2>&1 \| tail -2; git log --oneline -1; git show --stat HEAD \| tail -3; mkdir -p app/logs app/media` |
 | 21:13:05 | Bash | Inspect calendar UI commit | `cd /home/ronald/saas-hasner && git show --stat --format='%h %s%n%b' 879fc7a2 \| head -30; git merge-base --is-ancestor 879fc7a2 HEAD && echo JA_NO_MAIN; git log --oneline -1 $(git merge-base 879fc7a2 HEAD)` |
