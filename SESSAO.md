@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 24/10/2026 11:59:33.** Transcript: `f4eb628a-9fcf-4c05-ae6a-9f32279f7575.jsonl` (5.1 MB). Acoes na janela: **269**.
+**Medido em 24/10/2026 12:03:45.** Transcript: `f4eb628a-9fcf-4c05-ae6a-9f32279f7575.jsonl` (5.1 MB). Acoes na janela: **272**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 12:03:41 | Bash | Republish RELATO and read the memory to update | `cd /home/ronald/saas-hasner && bin/relato.sh > logs/relato_pub_20261024b.log 2>&1; echo rc=$?; grep -iE "retido\|publicado em" logs/relato_pub_20261024b.log \| head -3; cat /home/ronald/.claude/projects/-home-ronald-saas-hasner/memory/contrato-nao-mora-em-arquivo-com-teto.md` |
+| 12:03:32 | Bash | Push 3 marcos (ESPELHO, E1b, VT) | `cd /home/ronald/saas-hasner && bin/push.sh > logs/push_20261024_vt.log 2>&1; echo "rc=$?" >> logs/push_20261024_vt.log` |
+| 12:03:14 | Bash | Land VT marco, commit, deploy | `cd /home/ronald/saas-hasner && FILES=$(cd /home/ronald/wt-vt && git status --short \| awk '{print $2}'); for f in app/config/crons.py app/docs/ARQUITETURA.mmd app/ponto/tests/test_varredura_lote_prazo.py; do cp /home/ronald/wt-vt/$f $f; done; for f in $FILES; do cmp -s /home/ronald/wt-vt/$f $f \|\| echo "DIFERE $f"; done; echo cmp-ok; git add $FILES && git commit -q -F - <<'EOF' marco VARREDURA-TR ...` |
 | 11:55:58 | Bash | Wait for VT suite verdict | `cd /home/ronald/saas-hasner && timeout 590 bash -c 'until grep -q "^rc=" logs/vt_suite.log; do /usr/bin/sleep 20; done'; grep -E "^(FAIL\|ERROR):\|^Ran [0-9]+ tests\|^(OK\|FAILED)($\| \()\|^rc=" logs/vt_suite.log \| tail -8` |
 | 11:52:33 | Bash | Run host selo folder on main tree | `cd /home/ronald/saas-hasner && for f in bin/tests/test_*.sh; do timeout 120 bash $f >/dev/null 2>&1 \|\| echo "RED $f"; done 2>&1 \| tail -6` |
 | 11:52:22 | Bash | Full suite on VT raia with docs | `cd /home/ronald/saas-hasner && bin/suite.sh --dir /home/ronald/wt-vt > logs/vt_suite.log 2>&1; echo "rc=$?" >> logs/vt_suite.log` |

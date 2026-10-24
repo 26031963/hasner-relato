@@ -194,8 +194,8 @@ flowchart TD
     t_evento["EVENTO<br/>batida, ausencia, chamado -> cartorio julga na hora (signals B5.2)"]
     t_consumidor["CONSUMIDORES<br/>chamado, pergunta, tela, folha: leem a lampada, nunca re-julgam"]
     t_vigia["CRON = VIGIA<br/>27 vigias; contador esperado 0, so alarma"]
-    t_prazo["CRON = PRAZO (L-101)<br/>3 cron(s): a falta nao emite evento, o relogio e o unico sinal dela;<br/>julgam pela funcao do juiz da casa, sem regra propria (PRAZO_DELEGA_A)"]
-    t_juiz["JUIZ POR VARREDURA (divida)<br/>21 crons ainda julgam: esperado 0"]
+    t_prazo["CRON = PRAZO (L-101)<br/>5 cron(s): a falta nao emite evento, o relogio e o unico sinal dela;<br/>julgam pela funcao do juiz da casa, sem regra propria (PRAZO_DELEGA_A)"]
+    t_juiz["JUIZ POR VARREDURA (divida)<br/>19 crons ainda julgam: esperado 0"]
     t_escala --> t_celula
     t_evento --> t_celula
     t_celula --> t_consumidor
@@ -203,13 +203,11 @@ flowchart TD
     t_prazo -.->|le o juiz do prazo, nao deriva| t_celula
     t_juiz ==>|re-julga, a sair| t_consumidor
   end
-  j_apurar_furos_diarios["apurar_furos_diarios"] -.-> t_juiz
   j_detectar_ausencias["detectar_ausencias"] -.-> t_juiz
   j_detectar_cluster_espurio["detectar_cluster_espurio"] -.-> t_juiz
   j_detectar_par_relampago["detectar_par_relampago"] -.-> t_juiz
   j_detectar_vinculo_divergente["detectar_vinculo_divergente"] -.-> t_juiz
   j_disparar_perguntas_competencia["disparar_perguntas_competencia"] -.-> t_juiz
-  j_escalonar_documentos_ausencia["escalonar_documentos_ausencia"] -.-> t_juiz
   j_fechar_becos_disputa["fechar_becos_disputa"] -.-> t_juiz
   j_fechar_cobranca_com_lastro["fechar_cobranca_com_lastro"] -.-> t_juiz
   j_marcar_foto_ausente_retro["marcar_foto_ausente_retro"] -.-> t_juiz
@@ -224,6 +222,8 @@ flowchart TD
   j_silenciar_chamados_isentos["silenciar_chamados_isentos"] -.-> t_juiz
   j_supra_juiz["supra_juiz"] -.-> t_juiz
   j_termometro_regua["termometro_regua"] -.-> t_juiz
+  pz_apurar_furos_diarios["apurar_furos_diarios<br/>escala.services.furos_diarios::apurar"] -.-> t_prazo
+  pz_escalonar_documentos_ausencia["escalonar_documentos_ausencia<br/>ponto.services.ausencia::escalonar_aguardando_documento"] -.-> t_prazo
   pz_flip_automatico["flip_automatico<br/>ponto.turnos::dia_encerrado"] -.-> t_prazo
   pz_processar_cartorio["processar_cartorio<br/>ponto.services.cartorio::julgar_colab"] -.-> t_prazo
   pz_vigia_de_hora["vigia_de_hora<br/>ponto.services.cartorio::marcos_vencidos"] -.-> t_prazo
