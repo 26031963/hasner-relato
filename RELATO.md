@@ -40,6 +40,14 @@ PAREI: ! GATE-EXPORT-10 (so o export da 10) | espera o DP na Gestao de HE e o Ro
 > O MARCADOR ANDOU no mesmo ato: `ORDEM-VIVA-TOPO` saiu de `BO-HE-RECUSAR-LOTE-500` (fechado) para `O261`, que o hook cobrou.
 > SEM COMMIT DE PROPOSITO: `RELATO.md` e `BACKLOG.md` ficam sujos na arvore porque a L-106 nao deixa commit so de docs fora de marco. Eles entram no commit do proximo marco.
 
+## 24/10 13:5x -- MARCO E1 passo B (2 de 9): `vigia_de_hora` deixa de ter dois juizes do vinculo
+
+LEI-AKITA: origem=ponto/services/vigia_de_hora.py::_acesas_de_sobra, testemunha=escala/servico_jornada.py::escala_vigente -> vinculo_do_dia (a mesma de `cartorio.marcos_vencidos`), RED=escala/tests/test_contract_juiz_escala.py (TOMADORES sem vigia_de_hora, total 9 -> 8; vermelho no HEAD), quem-mais-le=vigia_de_hora.rodar, juizes novos=0
+
+- Os `vencidos` da passada ja vinham de `marcos_vencidos` (juiza); `_acesas_de_sobra` tomava a geradora a mao. Agora os dois perguntam a `escala_vigente(c, hoje, celulas={(c, hoje): cel})`.
+- Universo que muda, medido em prod (so leitura): celulas `trabalha=True` SEM geradora nos ultimos 30 dias = **0 de 10.667** -> resultado identico na frota de hoje; a cura e de coerencia (LEI-AKITA 2).
+- Sobra no censo: `dia_da_frota` (o filtro SQL por ciclo e o desenho do relatorio sao a geradora; trocar so a exibicao faria filtro e linha discordarem), `precedencia`, `_fnd` do cartorio, `servico_jornada` (carregador), e os 3 de outra pergunta -- depois da lei do E1 no topo.
+
 ## 24/10 13:2x -- MARCO UI-PILULAS-QUEBRAM-LINHA (fila 2, so template): as pilulas do dia descem em vez de sair da caixa
 
 LEI-AKITA: origem=templates/colaboradores/partials/_calendario_grade.html (fileira de acoes + fileira da pilula do chamado), testemunha=getBoundingClientRect no chromium (harness do test_smoke_chromium), RED=colaboradores/tests/test_ui_pilulas_quebram_linha.py, quem-mais-le=calendario do perfil + drawer (mesma celula, layout mes/fita), juizes novos=0
