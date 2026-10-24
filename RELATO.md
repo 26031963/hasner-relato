@@ -1,6 +1,6 @@
 # RELATO — esteira saas-hasner
 
-O261: acervo RECUSA-FALA APLICADO pelo Ronald 24/10 09:26 (19 devolvidas, reversao `logs/recusa_fala/reversao_recusa_fala_20261024_092649.json`, HASH09 igual, 0 validadas sem gravar). Vigia recarimbado em prod 09:34:50: **fio_morto = 0** (cobrando 0, com_alvo 0, lampadas_acesas 3.006, cego False, futuros 0; `logs/fio_morto.json`). O fechamento (crons `--alarme-passivo`) e o marco seguinte.
+O261 FECHADA (marco 09:5x): acervo RECUSA-FALA APLICADO pelo Ronald 24/10 09:26 (19 devolvidas, reversao `logs/recusa_fala/reversao_recusa_fala_20261024_092649.json`, HASH09 igual, 0 validadas sem gravar). Vigia recarimbado em prod 09:34:50: **fio_morto = 0** (cobrando 0, com_alvo 0, lampadas_acesas 3.006, cego False, futuros 0; `logs/fio_morto.json`). O fechamento (crons `--alarme-passivo`) e o marco seguinte.
 
 SONDA o261_lista_folga_contesta_10: JA RODOU 24/10 00:17 (aval Ronald 09:3x) -- 11 dias / 10 colabs / 37 perguntas, saida em `logs/sondas/` da RAIZ do repo (nao `app/logs`); a lista ja foi ao admin.
 
@@ -37,6 +37,18 @@ PAREI: ! GATE-EXPORT-10 (so o export da 10) | espera o DP na Gestao de HE e o Ro
 > OS QUATRO ITENS DA ORDEM, FEITOS: deploy `d01210d2` **no ar 10:26** (`--sem-migrate` rc=0, 3 rotas provadas, selo BUG 128 verde, portao fechado pelo PASSO 5 do gate -- nunca `--sem-sombra`); push **pousou** (`fa5cd145..eebe2cce`, rc=0, `Ran 11566 tests · OK (skipped=51, expected failures=14)` mais control-plane `Ran 22 tests · OK`, veredito lido no REMOTO); `bin/handoff_sessao.sh` gerado (42/60 linhas, selo verde); e esta linha. O 1 commit que sobrou a frente (`6d469ed2`) e do proprio `pos_push` -- a excecao nomeada da L-106 --, e o push dele e do proximo push, nao deste.
 > O MARCADOR ANDOU no mesmo ato: `ORDEM-VIVA-TOPO` saiu de `BO-HE-RECUSAR-LOTE-500` (fechado) para `O261`, que o hook cobrou.
 > SEM COMMIT DE PROPOSITO: `RELATO.md` e `BACKLOG.md` ficam sujos na arvore porque a L-106 nao deixa commit so de docs fora de marco. Eles entram no commit do proximo marco.
+
+## 24/10 09:5x -- MARCO O261 FECHADA: fio_morto = 0 em prod, `--alarme-passivo` ligado no elo
+
+LEI-AKITA: origem=config/crons.py::ENC('vigiar_fio_morto'), testemunha=chamados/services/vigia_fio.py::censo, RED=--alarme --alarme-passivo rc 2 pelo passivo (13/10) -> rc 0 hoje, quem-mais-le=bin/encadeado.sh (manage.py crons corrente), bin/fio_estado.py, bin/gerar_estado.py, juizes novos=0
+
+- FATO: apply do acervo RECUSA-FALA feito pelo Ronald 09:26 (19 devolvidas, reversao `logs/recusa_fala/reversao_recusa_fala_20261024_092649.json`, HASH09 igual).
+- MEDIDO em prod pela funcao real, so leitura: 09:34:50 `fio_morto=0`, `cobrando=0`, `com_alvo=0`, `lampadas_acesas=3006`, `cego=False`, `futuros=0`; 09:47:44 `--alarme --alarme-passivo` **rc 0**, `gritou=[]`. Carimbo `app/logs/fio_morto.json`; `bin/fio_estado.py` le `velho=false`.
+- `config/crons.py`: elo `vigiar_fio_morto` passa a `--alarme --alarme-passivo` (condicao escrita la desde 13/10). `manage.py crons corrente processar_cartorio` ja devolve o elo novo -- o disco e o portao.
+- REVERSAO: o elo volta a `--alarme` so com passivo NOVO aceso e item de fila; nunca para o cron ficar verde.
+- MARCADOR: `O261` -> `CONTRATOS-RESTANTES-E1-E2-FOLHA-K6` (K6 + E1), ordem literal dele.
+- Ficam de fora e seguem como estao: `fio_morto_de_hoje_pra_frente=23` (nao alarma por desenho), `escala_nao_descreve_o_dia=1` (col666, CADASTRO), `decisao_do_dia_pendente=545`.
+- ACHADO NO CAMINHO, linha de fila `CRON-SOMBRA-NAO-CABE`: `crons.sh check` falha (sombra 3.856 s nao cabe 04:05-05:10); a corrente nao quebra.
 
 ## 24/10 09:4x -- MARCO HOOK-PAREI-COM-ANDAVEL (instrumento): PAREI do item em curso nao devolve o turno com fila andavel
 
