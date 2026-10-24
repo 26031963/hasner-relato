@@ -6,10 +6,16 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 23/10/2026 22:10:33.** Transcript: `ed482694-44e4-4da5-bd42-07601a2a39b4.jsonl` (3.4 MB). Acoes na janela: **164**.
+**Medido em 23/10/2026 22:15:40.** Transcript: `ed482694-44e4-4da5-bd42-07601a2a39b4.jsonl` (3.5 MB). Acoes na janela: **170**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 22:15:12 | Bash | Merge M3, commit, deploy | `cd /home/ronald/saas-hasner && git log --oneline -1 && git merge --no-ff --no-commit cd7ebe7e >/dev/null 2>&1; echo merge_head=$(git rev-parse -q --verify MERGE_HEAD \| cut -c1-8); echo censo:; git diff --cached cd7ebe7e --stat \| tail -1; git commit -q -F - <<'MSG' pouso da wt-m3: FLUXO 2 M3 -- a tela do fechamento le travas_aprovacao do juiz (fechamento 4 -> 2, tela 112 -> 111) Arvore certificad ...` |
+| 22:15:02 | Bash | Order of M3 logs vs commit time | `cd /home/ronald/saas-hasner/logs/fluxo2m3 && ls -l --time-style=+%H:%M:%S; /bin/grep -E '^(FAIL\|ERROR):' green_vizinhos2.log \| head; git -C /home/ronald/wt-m3 log -1 --format='%cd' --date=format:%H:%M:%S; git -C /home/ronald/wt-m3 status --short` |
+| 22:14:53 | Bash | Locate M3 suite verdict | `ls -t /home/ronald/saas-hasner/logs/fluxo2m3/ /home/ronald/wt-m3/app/logs 2>/dev/null \| head; /bin/grep -lE '^Ran ' /home/ronald/saas-hasner/logs/fluxo2m3/* 2>/dev/null \| while read f; do echo $f; /bin/grep -E '^Ran \|^(OK\|FAILED)($\| \()' $f \| tail -2; done` |
+| 22:14:50 | Bash | Wait for test lane to be free | `cd /home/ronald/saas-hasner && for i in $(seq 1 118); do bin/trava_teste.sh --quem 2>/dev/null \| /bin/grep -q livre && break; /usr/bin/sleep 5; done; bin/trava_teste.sh --quem` |
+| 22:14:44 | Bash | Check M3 suite logs in worktree | `sleep 1; ls /home/ronald/wt-m3/app/logs/ 2>/dev/null \| head; for f in /home/ronald/wt-m3/app/logs/*suite*; do echo $f; /bin/grep -E '^Ran \|^(OK\|FAILED)($\| \()\|^FIM' $f \| tail -3; done 2>/dev/null` |
+| 22:14:26 | Bash | Wait for M3 commit | `B=099e5395; for i in $(seq 1 118); do H=$(git -C /home/ronald/wt-m3 rev-parse --short HEAD 2>/dev/null); [ "$H" != "$B" ] && break; /usr/bin/sleep 5; done; git -C /home/ronald/wt-m3 log --oneline -2` |
 | 22:04:31 | Bash | Keep waiting for M3 commit | `B=099e5395; for i in $(seq 1 118); do H=$(git -C /home/ronald/wt-m3 rev-parse --short HEAD 2>/dev/null); [ "$H" != "$B" ] && break; /usr/bin/sleep 5; done; git -C /home/ronald/wt-m3 log --oneline -2` |
 | 21:54:37 | Bash | Wait for M3 commit in worktree | `B=$(git -C /home/ronald/saas-hasner rev-parse HEAD); for i in $(seq 1 118); do H=$(git -C /home/ronald/wt-m3 rev-parse HEAD 2>/dev/null); [ -n "$H" ] && [ "$H" != "$B" ] && break; /usr/bin/sleep 5; done; git -C /home/ronald/wt-m3 log --oneline -2 2>&1; git -C /home/ronald/wt-m3 status --short 2>&1 \| head` |
 | 21:54:22 | Bash | Measure open andavel items as seen by hook | `cd /home/ronald/saas-hasner && python3 - <<'PY' import importlib.util,re s=importlib.util.spec_from_file_location('h','bin/hook_stop_fila1.py');m=importlib.util.module_from_spec(s);s.loader.exec_module(m) t=m._backlog_texto(); i=t.find('<!-- OBRAS:INICIO -->'); j=t.find('<!-- OBRAS:FIM -->',i) ab=[] for ln in t[i:j].splitlines(): if not m._linha_de_item_re().match(ln) or ln.lower().startswith('\|  ...` |
