@@ -38,6 +38,12 @@ PAREI: ! GATE-EXPORT-10 (so o export da 10) | espera o DP na Gestao de HE e o Ro
 > O MARCADOR ANDOU no mesmo ato: `ORDEM-VIVA-TOPO` saiu de `BO-HE-RECUSAR-LOTE-500` (fechado) para `O261`, que o hook cobrou.
 > SEM COMMIT DE PROPOSITO: `RELATO.md` e `BACKLOG.md` ficam sujos na arvore porque a L-106 nao deixa commit so de docs fora de marco. Eles entram no commit do proximo marco.
 
+## 24/10 02:1x -- MARCO K6 parcial (NO AR `5dee1afd`): juiz `competencia_entregue` nasce com R3/R4/R5 e `ranking_he`; PENDENTES['fechamento'] 1 -> 0
+PROVA: comboio `wt-k6p` (main 258bb7ef + b7dcfad7) `Ran 11839` OK rc 0; censo `git diff --cached 0f57be55` vazio; `logs/deploy_k6.out` rc 0, 3 rotas. Sombra (`logs/k6/k6_invalidada.out`): 26 ED, 7 triplas, 0 vigente revogada sem substituta -- R3/R4/R5 so trocam de autoridade (0 valor muda na frota de hoje); R6 so rotulo (09/2026 parcial -> lavrado).
+LEI-AKITA: origem=`folha/export.py::competencia_entregue` (corte CORTES.md:190), testemunha=`anotar_vigencia` + `so_vigentes`, RED=`folha/tests/test_k6_competencia_entregue.py` (6F+7E antes da cura), quem-mais-le=`marcos_da_competencia['exportada']`, `preview_exportacao`, `txt_vigente_x_gravado`, `ranking_he._carimbo`, juizes novos=1 (corte literal)
+- `_K6` sai de SEM_JUIZ e entra em JUIZES; `LAVRADOS` apagada (lapide); 4 testes que caracterizavam "lavrado = status" invertidos.
+- **gerar_celulas intocado** (pergunta de lei no topo): migra-lo escreveria 2.965 celulas / 98 colabs em 08. A celula da matriz fica vermelha de proposito; `GerarCelulasSegueForaTest` cobra a reavaliacao. Placar `total()`=20, `verdes()`=17 antes e depois.
+
 ## 24/10 01:4x -- O261 RECUSA-FALA (NO AR `f810e889`) + col666 (NO AR, deploy 01:1x) -- acervo da RECUSA pronto, apply NEGADO pelo classificador
 PROVA: RECUSA-FALA comboio `wt-rfp` (main 5b12bb38 + 07c3448b) `Ran 11821` OK rc 0, censo `git diff --cached b31384bd` vazio, `logs/deploy_rf.out` rc 0 com 3 rotas. col666: ensaio de 24/10 `sombra: OK` (bloco 76/76, erro 0, `logs/sombra_ensaio_0024.out`), `logs/deploy_c666.out` rc 0; vigia em prod 01:18 (`logs/o261e/vigia_pos_c666.out`): `ESCALA_NAO_DESCREVE_O_DIA=1 celulas=[117269]`.
 LEI-AKITA: origem=`chamados/services/validacao.py::validar_pergunta` (o carimbo sobrevivia a recusa), testemunha=`chamados/juizes.py::pergunta_viva` + `materializacao.py::_materializar_uma` (a porta real), RED=`chamados/tests/test_o261_recusa_fala.py` (3F+3E contra cec1cee3), quem-mais-le=`acoes_disputa.py`, `validar_lote_classe_a`, juizes novos=0
