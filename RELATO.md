@@ -1,7 +1,5 @@
 # RELATO — esteira saas-hasner
 
-PAREI: ! O261 -- col549 (cel 122438, 21/10 = comp 11) so sai pela porta O317 `materializar_passivo_validado --colaboradores 549 --competencia 11/2026 --apply --autor <staff>` (o E2 nao a alcanca: 46480 FORA_VALIDADA), fora do escopo literal do aval 23:3x; cel 137166 espera a sonda `o261_celulas_mortas` (`bin/sondas.sh`); col666 entra depois do pouso da VIVA (mesmo arquivo) | espera Ronald
-
 SONDA o261_celulas_mortas: as 3 celulas do fio_morto (122438, 137166, 117269) -- de quem e cada uma (o aval diz col940 na 137166; o agente mediu col516), veredito/ata, e cada pergunta com o veredito do juiz `pergunta_viva`, a via que a matou e se estava entre as 56 do acervo E1. Rodar: `bin/sondas.sh`; saida `logs/sondas/o261_celulas_mortas.out`.
 
 PAREI: ! GATE-EXPORT-10 (so o export da 10) | espera o DP na Gestao de HE e o Ronald: (a) o TXT da 10 esta BARRADO pela porta -- 184 dias de HE acima do limite SEM decisao (emp2 169 / emp3 12 / emp4 3; 58 colabs; 124,45 h; `logs/gate10/lista_he_trava_20261022.out`); por aval dele 12:0x o DP decide pela Gestao de HE ("Nao" em lote = L-097) e entao roda `logs/gate10/ato_export10.py` (re-lavrar o carimbo da porta ANTES, ~22 min, desacoplado). (b) FEITO 14:12: a volta dos 6 pousou ANTES do TXT (secao 14:12). (c) `resolver_dia_oferecido` NO AR (`3088eac6`); DIA-SEM-SAIDA (1)(2) NO AR 22/10 21:5x, (3) ao DP; cura dos 99 DEPOIS do TXT. (d) 09 com o Gabriel (AVAIS #2).
