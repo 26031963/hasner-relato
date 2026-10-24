@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 24/10/2026 11:54:03.** Transcript: `f4eb628a-9fcf-4c05-ae6a-9f32279f7575.jsonl` (5.1 MB). Acoes na janela: **268**.
+**Medido em 24/10/2026 11:59:33.** Transcript: `f4eb628a-9fcf-4c05-ae6a-9f32279f7575.jsonl` (5.1 MB). Acoes na janela: **269**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 11:55:58 | Bash | Wait for VT suite verdict | `cd /home/ronald/saas-hasner && timeout 590 bash -c 'until grep -q "^rc=" logs/vt_suite.log; do /usr/bin/sleep 20; done'; grep -E "^(FAIL\|ERROR):\|^Ran [0-9]+ tests\|^(OK\|FAILED)($\| \()\|^rc=" logs/vt_suite.log \| tail -8` |
 | 11:52:33 | Bash | Run host selo folder on main tree | `cd /home/ronald/saas-hasner && for f in bin/tests/test_*.sh; do timeout 120 bash $f >/dev/null 2>&1 \|\| echo "RED $f"; done 2>&1 \| tail -6` |
 | 11:52:22 | Bash | Full suite on VT raia with docs | `cd /home/ronald/saas-hasner && bin/suite.sh --dir /home/ronald/wt-vt > logs/vt_suite.log 2>&1; echo "rc=$?" >> logs/vt_suite.log` |
 | 11:52:18 | Bash | Sync main docs into the VT raia | `cd /home/ronald/saas-hasner && for f in $(git status --short app/docs \| awk '{print $2}' \| grep -v HANDOFF); do cp $f /home/ronald/wt-vt/$f; done; git -C /home/ronald/wt-vt status --short` |
