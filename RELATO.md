@@ -50,6 +50,29 @@ PAREI: ! GATE-EXPORT-10 (so o export da 10) | espera o DP na Gestao de HE e o Ro
 > O MARCADOR ANDOU no mesmo ato: `ORDEM-VIVA-TOPO` saiu de `BO-HE-RECUSAR-LOTE-500` (fechado) para `O261`, que o hook cobrou.
 > SEM COMMIT DE PROPOSITO: `RELATO.md` e `BACKLOG.md` ficam sujos na arvore porque a L-106 nao deixa commit so de docs fora de marco. Eles entram no commit do proximo marco.
 
+## 24/10 16:5x -- MARCO FILA 2 UI (agente proprio, so templates e testes de tela): /relatorios/ sem o card do flip; tipos de escala com a barra da casa e a pilula pelo desenho
+
+LEI-AKITA: origem=templates/relatorios/index.html + templates/escala/tipos_lista.html, testemunha=`desenho_do_turno` -> escala/servico_jornada.py::rotulo_do_desenho e os `quadros_barra` que a view ja manda, RED=escala/tests/test_o74_pilula_le_desenho.py + escala/tests/test_o122_etapa1_barra_em_tipos.py + relatorios/tests/test_index_enxuto.py (14 testes: 5 FAIL + 5 ERROR antes), quem-mais-le=nenhum outro template usa o card do flip; `ponto/fechamento.html:75` (pilula "Quem cobrar") intocado, juizes novos=0
+
+- (a) "Fila do flip E/S" saiu de /relatorios/ (view e rota ficam, para o esmeril com certidao). "Quem cobrar" JA nao estava em /relatorios/ no HEAD (saiu na CATALOGO-RELATORIOS fatia 1); o unico que sobra e a pilula do fechamento, fora do escopo literal.
+- (b) `tipos_lista.html`: barra da casa de volta (`60a4a42d` sobre o HEAD, os 6 testes da O122 etapa 1 de volta sem mudanca: eram vermelhos so pelo template revertido) e a pilula le `desenho_do_turno`. Medido em prod antes: 166 tipos raiz, 0 sem horario.
+- Prints (chromium headless, casca admin, contra a copia): `logs/ui/escala_tipos.png` e `logs/ui/relatorios_index.png` (13 cards, sem flip).
+- Fica na fila: cor e legenda da pilula ainda pelo rotulo gravado; `core/espelho_verdade.py` E4-rotulo-do-desenho para FEITO (nucleo, fora da raia de tela); o bloco de comentario duplicado no `relatorios/index.html`.
+- Tela, nao cura de negocio: nao passou pelo verificador (aval AGENTE-VERIFICADOR item 2). SUITE CHEIA na copia do agente: `Ran 11885 tests`, `OK (skipped=42, expected failures=15)`.
+
+## 24/10 16:5x -- MARCO O137 ESMERIL-NO-RASTRO folha/export (agente em worktree proprio, pouso L-105)
+
+LEI-AKITA: origem=folha/export.py (2 funcoes sem chamador) + folha/views.py (1 nome), testemunha=classificar_export/_codigos_nao_homologados (_K1/_K2) e haiku_export.diferenca_entre_exportacoes, RED=nenhum (delecao com 0 chamador de producao + renome + prosa), quem-mais-le=`git grep -w` no repo inteiro, juizes novos=0
+
+- L-111: sairam `folha/export.py::nao_homologados` e `::diff_escopo_coerencia` (0 chamador de producao) com as classes de teste que so as sustentavam; lapide no sitio.
+- Nome que mente: `folha/views.py::exportar_dominio` -> `tela_exportar_dominio` (so desenha o formulario; rota `folha:exportar` igual). 4 docstrings que descreviam o codigo errado, corrigidas.
+- GLOSSARIO.md NAO existe no repo (e a O98, com contrato proprio); nao foi inventado. MAPA/ARQUITETURA regerados contra a copia: identicos ao HEAD.
+- Para o Ronald (topo do RELATO): cadeia 8932 e `passivo_validado._esta_exportada`.
+- VERIFICADOR: **APROVADO** (ressalva: comentarios citam `folha/export.py:NNN` por numero de linha, ja velhos antes).
+- SUITE CHEIA na copia do agente: `Ran 11871 tests`, `OK (skipped=42, expected failures=15)`.
+- NO AR `58e97e7d` (deploy `--sem-migrate` rc 0).
+- PROVA: no `saas_ui` de prod, `reverse('folha:exportar')` = `/folha/exportar/` -> `tela_exportar_dominio`; `nao_homologados` e `diff_escopo_coerencia` ausentes de `folha.export` (False/False).
+
 ## 24/10 16:4x -- MARCO ESCALA-CERTA-DETERMINISTICA: o 100% da folga trabalhada pergunta a competencia do dia, nao a lavra
 
 LEI-AKITA: origem=escala/services/escala_certa.py::motivo_escala_errada, testemunha=ponto/services/esmeril_espelho.py::assinaturas_do_colab sobre a competencia do dia (`janela_atual(dia, empresa)`), `com_motor=False`, RED=escala/tests/test_escala_certa_deterministica.py (4 de 5 no HEAD, inclusive pela porta do dinheiro: `24.0 != 0.0`; `logs/escerta_red2.out`), quem-mais-le=ponto/services/fechamento.py (100% da folga), ponto/calculador/alimentacao.py::rubricas_por_dia, ponto/management/commands/diff_calculador.py, juizes novos=0
