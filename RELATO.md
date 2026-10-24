@@ -60,6 +60,7 @@ LEI-AKITA: origem=ponto/management/commands/reconciliar_geofence.py (conta propr
 - `reavaliar_chamados_geofence` (um sitio) e chamado pelo EVENTO (`ponto/signals.py`, post_save de Posto, on_commit) e pelo VIGIA (`reconciliar_geofence --alarme`); saiu de `JUIZES_POR_VARREDURA` (19 -> 18).
 - A resposta do ping ao app segue so a geometria (contrato do app), lida do ramo `dentro` do MESMO juiz; o `dentro_geofence` gravado e o veredito inteiro.
 - Diagrama regerado contra a copia (aresta Posto -> geofence).
+- RED do selo novo no HEAD: 7 FAIL (`logs/geo_red2.out`). GREEN 1a (2253): 4 FAIL + 1 ERROR, todos curados -- mock do `premissa_morta` no modulo antigo; asserçao errada no caso do evento (a ocorrencia sem batida nao acusa, o chamado FECHA); contrato da familia batida (JUIZES ganha a pergunta, SEM_JUIZ 3 -> 2); inscricao `@bolha` do `ponto/services/geofence.py` (agora autoridade em JUIZES). Rodada valida: `logs/geo_green2.out` e `logs/geo_suite2.out`.
 
 ## 24/10 17:5x -- INSTRUMENTO O297 complemento: afirmacao sem PROVA barra o Stop do Code e o commit do RELATO (pouso proprio, L-105)
 
