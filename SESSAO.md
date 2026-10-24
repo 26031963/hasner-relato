@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 24/10/2026 01:57:52.** Transcript: `ed482694-44e4-4da5-bd42-07601a2a39b4.jsonl` (6.5 MB). Acoes na janela: **335**.
+**Medido em 24/10/2026 02:02:33.** Transcript: `ed482694-44e4-4da5-bd42-07601a2a39b4.jsonl` (6.6 MB). Acoes na janela: **340**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 01:59:42 | Bash | Retry push with placar rewritten | `cd /home/ronald/saas-hasner && { bin/push.sh origin main; echo "FIM_PUSH rc=$?"; bash bin/relato.sh 2>&1 \| tail -1; } > logs/clb1b/push_madrugada2.out 2>&1` |
+| 01:59:40 | Bash | Commit pending VARREDURA-TRIAGEM docs | `cd /home/ronald/saas-hasner && git diff --stat app/docs/BACKLOG.md app/docs/PROMPTS.md \| tail -1; git add app/docs/BACKLOG.md app/docs/PROMPTS.md && git commit -q -m "docs: aval VARREDURA-TRIAGEM registrado (fila 1 depois do O261 e do K6) Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>" && git log --oneline -1` |
+| 01:59:33 | Bash | Rewrite TICKETS placar and commit | `cd /home/ronald/saas-hasner && bash bin/tickets_placar.sh --escrever 2>&1 \| tail -2; git status --short \| /bin/grep -v '^??' ; git add app/docs/TICKETS.md && git commit -q -m "TICKETS: placar do topo reescrito pelo escritor (a nota da celula folha/export mudou com o K6 parcial) Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>" && git log --oneline -1` |
+| 01:59:23 | Bash | Read why tickets placar blocked the push | `/bin/grep -B12 'BLOQUEADO pelo placar' /home/ronald/saas-hasner/logs/clb1b/push_madrugada.out \| head -20 \| cut -c1-250` |
+| 01:59:18 | Bash | Read push and republish result | `tail -4 /home/ronald/saas-hasner/logs/clb1b/push_madrugada.out` |
 | 01:57:47 | Bash | Push dawn marcos and republish RELATO | `cd /home/ronald/saas-hasner && { bin/push.sh origin main; echo "FIM_PUSH rc=$?"; bash bin/relato.sh 2>&1 \| tail -1; } > logs/clb1b/push_madrugada.out 2>&1` |
 | 01:57:42 | Bash | Record K6 marco in RELATO and commit | `cd /home/ronald/saas-hasner && python3 - <<'PY' p='app/docs/RELATO.md'; s=open(p).read() anc="## 24/10 01:4x -- O261 RECUSA-FALA" assert s.count(anc)==1 sec='''## 24/10 02:1x -- MARCO K6 parcial (NO AR `5dee1afd`): juiz `competencia_entregue` nasce com R3/R4/R5 e `ranking_he`; PENDENTES['fechamento'] 1 -> 0 PROVA: comboio `wt-k6p` (main 258bb7ef + b7dcfad7) `Ran 11839` OK rc 0; censo `git diff --c ...` |
 | 01:57:21 | Bash | Merge K6 combo, commit, deploy | `cd /home/ronald/saas-hasner && git stash -q -- app/docs/RELATO.md; git log --oneline -1; git merge --no-ff --no-commit 0f57be55 >/dev/null 2>&1; echo merge_head=$(git rev-parse -q --verify MERGE_HEAD \| cut -c1-8); echo censo:; git diff --cached 0f57be55 --stat \| tail -1; git commit -q -F - <<'MSG' pouso da wt-k6: K6 parcial -- juiz competencia_entregue nasce com R3/R4/R5 e ranking_he (fechamento ...` |
