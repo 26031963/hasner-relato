@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 24/10/2026 08:55:33.** Transcript: `ed482694-44e4-4da5-bd42-07601a2a39b4.jsonl` (6.7 MB). Acoes na janela: **211**.
+**Medido em 24/10/2026 09:00:47.** Transcript: `ed482694-44e4-4da5-bd42-07601a2a39b4.jsonl` (6.7 MB). Acoes na janela: **210**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -220,4 +220,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 21:01:37 | Bash | Resolve mmd by regeneration and commit combo | `cd /home/ronald/wt-m2p && git checkout --ours app/docs/ARQUITETURA.mmd && cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null 2>&1; docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file .env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 -v /home/ronald/wt-m2p/app:/app -w /app saas-hasner-core:latest python manage.py gerar_diag ...` |
 | 21:01:31 | Bash | Build M2 combo copy on new main | `cd /home/ronald/saas-hasner && git worktree add -q --detach /home/ronald/wt-m2p 9dff1904 && cd /home/ronald/wt-m2p && git merge --no-ff --no-commit 6076b393 2>&1 \| tail -3; git status --short \| head; mkdir -p app/logs app/media` |
 | 21:01:16 | Bash | Merge O261 resto, commit, deploy | `cd /home/ronald/saas-hasner && git log --oneline -1 && git merge --no-ff --no-commit c88dcc8d >/dev/null 2>&1; echo merge_head=$(git rev-parse -q --verify MERGE_HEAD \| cut -c1-8); echo "censo:"; git diff --cached 0add4122 --stat \| tail -1; git commit -q -F - <<'MSG' pouso da wt-o261e: O261 resto B -- pergunta_viva degrau 3 com a guarda do teto (+ .viva e q_vivas) Arvore certificada = 0add4122 (c ...` |
-| 21:00:03 | Bash | Wait for O261 combo suite | `for i in $(seq 1 115); do /bin/grep -q '^FIM rc=' /home/ronald/wt-o261p/app/logs/suite.out 2>/dev/null && break; /usr/bin/sleep 5; done; /bin/grep -E '^(FAIL\|ERROR):\|^Ran \|^(OK\|FAILED)($\| \()\|^FIM rc=' /home/ronald/wt-o261p/app/logs/suite.out \| tail -6` |
