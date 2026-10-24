@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 24/10/2026 15:02:34.** Transcript: `c87029f4-ea97-4fea-b6af-47ee2e204958.jsonl` (3.5 MB). Acoes na janela: **175**.
+**Medido em 24/10/2026 15:07:50.** Transcript: `c87029f4-ea97-4fea-b6af-47ee2e204958.jsonl` (3.5 MB). Acoes na janela: **176**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 15:05:16 | Bash | Wait for PRAZO-1 push verdict | `cd /home/ronald/saas-hasner; for i in $(seq 1 39); do grep -q '^rc=' logs/push_prazo1.out 2>/dev/null && break; /usr/bin/sleep 15; done; tail -4 logs/push_prazo1.out; git fetch -q; git log -1 --format=%h origin/main` |
 | 14:55:12 | Bash | Note smoke and push PRAZO-1 marco | `cd /home/ronald/saas-hasner; python3 - <<'PY' p='app/docs/RELATO.md' s=open(p).read() old='- GREEN vizinhos (44 modulos que nomeiam o cron): `Ran 345 tests`, OK. SUITE cheia na copia `wt-prazo1`' assert s.count(old)==1 s=s.replace(old,'- NO AR `8d38f384` (deploy `--sem-migrate` rc 0); smoke prod `--dry-run`: avaliados=47, pulados_ancora=45, nada gravado (`logs/prazo1_smoke.out`).\n'+old) open(p,'w ...` |
 | 14:54:59 | Bash | Run detectar_ausencias dry-run smoke in prod | `cd /home/ronald/saas-hasner/app; sed -n 43,60p ponto/management/commands/detectar_ausencias.py \| grep "'--"; cd /home/ronald/saas-hasner; docker exec saas_core python manage.py tenant_command detectar_ausencias --schema=juliani --dry-run 2>&1 \| tail -4 \| tee logs/prazo1_smoke.out` |
 | 14:54:55 | Bash | Find dry-run flag of detectar_ausencias | `cd /home/ronald/saas-hasner/app; grep -n "add_argument" ponto/management/commands/detectar_ausencias.py \| head;` |
