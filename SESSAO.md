@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 23/10/2026 21:43:26.** Transcript: `ed482694-44e4-4da5-bd42-07601a2a39b4.jsonl` (3.2 MB). Acoes na janela: **151**.
+**Medido em 23/10/2026 21:48:53.** Transcript: `ed482694-44e4-4da5-bd42-07601a2a39b4.jsonl` (3.2 MB). Acoes na janela: **152**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 21:46:32 | Bash | Wait for UI push verdict | `for i in $(seq 1 118); do /bin/grep -q '^FIM rc=' /home/ronald/saas-hasner/logs/clb1b/push_ui.out 2>/dev/null && break; /usr/bin/sleep 5; done; tail -3 /home/ronald/saas-hasner/logs/clb1b/push_ui.out` |
 | 21:36:29 | Bash | Commit UI marco docs and push | `cd /home/ronald/saas-hasner && python3 - <<'PY' p='app/docs/RELATO.md'; s=open(p).read() anc="## 23/10 21:1x -- MARCO O261 resto B" assert s.count(anc)==1 sec='''## 23/10 21:4x -- POUSO CALENDARIO-MOSTRA-O-CARRO (NO AR `4bd622f7`, fila 2, L-105) LEI-AKITA: origem=`templates/colaboradores/partials/_calendario_grade.html`, testemunha=`dia.veredito_dia`/`palavra_dia` + `dia.resolver_dia_oferecido` +  ...` |
 | 21:36:15 | Bash | Read O317 backlog row | `cd /home/ronald/saas-hasner/app/docs && awk -F'\|' '/^\\| O317 /{print "ESTADO:",$4; print "AVAL:",$5}' BACKLOG.md \| cut -c1-900; awk -F'\|' '/^\\| O317 /{print $3}' BACKLOG.md \| cut -c1-900` |
 | 21:35:53 | Bash | Merge calendar UI, commit, deploy | `cd /home/ronald/saas-hasner && git log --oneline -1 && git merge --no-ff --no-commit 92dc76c9 >/dev/null 2>&1; echo merge_head=$(git rev-parse -q --verify MERGE_HEAD \| cut -c1-8); echo censo:; git diff --cached 92dc76c9 --stat \| tail -1; git commit -q -F - <<'MSG' pouso da wt-ui-carro: CALENDARIO-MOSTRA-O-CARRO -- dia em aberto mostra o carro, a frase vai no title (L-105) Arvore certificada = 92 ...` |
