@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 24/10/2026 13:46:10.** Transcript: `f4eb628a-9fcf-4c05-ae6a-9f32279f7575.jsonl` (6.5 MB). Acoes na janela: **356**.
+**Medido em 24/10/2026 13:48:42.** Transcript: `f4eb628a-9fcf-4c05-ae6a-9f32279f7575.jsonl` (6.5 MB). Acoes na janela: **358**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 13:48:37 | Bash | Record decision, handoff, republish, check nothing running | `cd /home/ronald/saas-hasner && python3 - <<'PY' R='app/docs/RELATO.md'; t=open(R,encoding='utf-8').read() lin=('> **OS 4 PRAZO QUE ESPERAVAM A LEI DO E1, medidos 24/10 14:5x (decisao pela L-101, nao pergunta):** o vinculo de ' '`detectar_ausencias` por `ativa=True` = o da juiza em **1.090 de 1.090** dia-colab de hoje e ontem (prod, so leitura). ' 'Comparacoes contra o relogio por AST (regra do sel ...` |
+| 13:46:52 | Bash | Wait for push rc | `cd /home/ronald/saas-hasner && timeout 400 bash -c 'until grep -aq "^rc=" logs/push_20261024_e1lei2.log; do /usr/bin/sleep 15; done'; tail -3 logs/push_20261024_e1lei2.log \| cut -c1-120` |
 | 13:36:57 | Bash | Wait for E1 lei push verdict | `cd /home/ronald/saas-hasner && timeout 590 bash -c 'until grep -aq "^rc=" logs/push_20261024_e1lei2.log; do /usr/bin/sleep 20; done'; grep -aE "^rc=\|[0-9a-f]{8}\.\.[0-9a-f]{8} +main -> main" logs/push_20261024_e1lei2.log \| tail -2; grep -aE "^Ran [0-9]+ tests\|^(OK\|FAILED)( \(\|$)" logs/push_20261024_e1lei2.log \| tail -2` |
 | 13:36:36 | Bash | Read alertas_turno window and candidate authorities | `sed -n 85,125p ponto/management/commands/processar_alertas_turno.py; grep -n "^def dia_encerrado\\|^def turno_encerrado\\|^def fim_turno" -A8 ponto/turnos.py ponto/services/cartorio.py \| head -30` |
 | 13:36:23 | Bash | Count clock compares in the 4 PRAZO crons | `cd /home/ronald/saas-hasner && python3 - <<'PY' import ast R=('now','agora','hoje','today','localdate') def nm(n): if isinstance(n,ast.Name): return n.id if isinstance(n,ast.Attribute): return n.attr def rel(n): if isinstance(n,ast.BinOp): return rel(n.left) or rel(n.right) if isinstance(n,ast.Call): x=nm(n.func); return x if x in R else None x=nm(n); return x if x in R else None for f in ('app/po ...` |
