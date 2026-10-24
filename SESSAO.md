@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 24/10/2026 15:18:16.** Transcript: `c87029f4-ea97-4fea-b6af-47ee2e204958.jsonl` (3.9 MB). Acoes na janela: **195**.
+**Medido em 24/10/2026 15:23:43.** Transcript: `c87029f4-ea97-4fea-b6af-47ee2e204958.jsonl` (3.9 MB). Acoes na janela: **197**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 15:22:56 | Bash | Wait for janlista suite; read impact probe | `cd /home/ronald/saas-hasner; for i in $(seq 1 39); do grep -q '^rc=' logs/janlista_suite.out 2>/dev/null && break; /usr/bin/sleep 15; done; grep -E '^(OK\|FAILED)($\| \()\|^Ran \|^rc=' logs/janlista_suite.out \| tail -3; grep -E "^(FAIL\|ERROR):" logs/janlista_suite.out \| head; echo ---; tail -1 logs/janlista/lancador.out; grep -v "^97 obj\\|^$" logs/janlista/impacto.out 2>/dev/null \| head -30` |
+| 15:22:52 | Bash | Register three avals in PROMPTS | `cd /home/ronald/saas-hasner; python3 - <<'PY' p='app/docs/PROMPTS.md' s=open(p).read().rstrip('\n') s+=''' \| 24/10 ~15:0x \| **aval `BUG-JANELA-DA-LISTA`** (pula na frente, substitui o BUG-A8-NOTURNO): `esmeril_espelho.py::janela` -- ini = competencia mais antiga NAO entregue (K6 `competencia_entregue`), fim = ontem; selo entregue sai / nao entregue entra; censo dos 94 chamadores de janela_atual  ...` |
 | 15:12:41 | Bash | Launch sombra impact probe and run full suite on worktree | `cd /home/ronald/saas-hasner; (timeout 2400 bin/sombra.sh --rodar janlista_impacto.py janlista/impacto > logs/janlista/lancador.out 2>&1; echo "rc=$?" >> logs/janlista/lancador.out) >/dev/null 2>&1 & disown; bin/suite.sh --dir /home/ronald/wt-janlista > logs/janlista_suite.out 2>&1; echo "rc=$?" >> logs/janlista_suite.out; grep -E '^(OK\|FAILED)($\| \()\|^Ran \|^rc=' logs/janlista_suite.out \| tail ...` |
 | 15:12:36 | Bash | Write sombra impact probe for janela da lista | `cd /home/ronald/saas-hasner; cp /home/ronald/wt-janlista/app/ponto/services/esmeril_espelho.py logs/sombra/janlista_novo_src.py.txt; cat > logs/sombra/janlista_impacto.py <<'EOF' # BUG-JANELA-DA-LISTA: IMPACTO. A lavra nova (janela pelo K6) calculada em memoria, cruzada com o gravado da 10. import collections, datetime, types from colaboradores.models import Colaborador from ponto.models import Fe ...` |
 | 15:12:13 | Bash | Read escala_certa header and rules | `cd /home/ronald/saas-hasner/app; sed -n 1,60p escala/services/escala_certa.py \| grep -n "def \\|ASSINATURAS_\\|A2\\|A8\\|lavra" \| head -20` |
