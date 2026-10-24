@@ -6,10 +6,18 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 24/10/2026 10:43:03.** Transcript: `f4eb628a-9fcf-4c05-ae6a-9f32279f7575.jsonl` (3.1 MB). Acoes na janela: **147**.
+**Medido em 24/10/2026 10:48:33.** Transcript: `f4eb628a-9fcf-4c05-ae6a-9f32279f7575.jsonl` (3.3 MB). Acoes na janela: **155**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 10:46:44 | Bash | Run escala+colaboradores tests on E1 raia | `cd /home/ronald/saas-hasner && bin/suite.sh --dir /home/ronald/wt-e1 --only "escala colaboradores" > logs/e1_vizinhos.log 2>&1; echo rc=$?; grep -E "^(FAIL\|ERROR):\|^Ran [0-9]+ tests\|^(OK\|FAILED)($\| \()" logs/e1_vizinhos.log \| tail -12` |
+| 10:46:37 | Bash | Run folha DIFF HEAD vs E1 raia in sombra | `cd /home/ronald/saas-hasner && bin/simular_folha.sh par e1_vinculo_20261024 /home/ronald/saas-hasner/app /home/ronald/wt-e1/app > logs/simular_folha_e1_20261024.out 2>&1; echo "rc=$?" >> logs/simular_folha_e1_20261024.out` |
+| 10:46:29 | Bash | Build E1 migration raia (rival delegates to juiz) | `cd /home/ronald/saas-hasner && grep -E "\.\.[0-9a-f]+ +main" logs/push_20261024_k6.log; git worktree add -q -b raia-e1 /home/ronald/wt-e1 HEAD && cd /home/ronald/wt-e1/app && python3 - <<'PY' import py_compile p='escala/utils.py'; s=open(p,encoding='utf-8').read() a=''' from escala.models import EscalaColaborador rows = list(EscalaColaborador.objects.filter( colaborador=colab).select_related('tipo ...` |
+| 10:46:12 | Bash | Read simular_folha usage | `cd /home/ronald/saas-hasner && sed -n 1,40p bin/simular_folha.sh \| grep "^#" \| head -25` |
+| 10:45:40 | Bash | Write and run E1 sombra probe | `cd /home/ronald/saas-hasner && cat > logs/sombra/e1_vinculo_x_rival_20261024.py <<'PY' # E1 -- vinculo_do_dia (juiza, O69) x _esc_vigente_do_dia (rival), comp 10/2026, SO LEITURA. # Mede: dias em que o vinculo difere, EMPATES (sem geradora e >=2 candidatos pela regra da juiza), # e o delta de minutos_previstos_do_dia com a selecao MIGRADA (o rival delegando a juiza). import collections, datetime a ...` |
+| 10:45:25 | Bash | Read loader signatures and juiz fallback body | `sed -n 147,147p escala/alimentacao.py; grep -n "^def celulas_do_periodo\\|^def escalas_do_periodo_por_colab\\|^def escalas_do_periodo" -A3 escala/alimentacao.py \| head -16; sed -n 177,197p escala/alimentacao.py` |
+| 10:45:12 | Bash | Find the 13/10 E1 diff script to reuse | `cd /home/ronald/saas-hasner && tail -4 logs/push_20261024_k6.log \| cut -c1-150; ls logs/s_escala/*.py logs/sombra/*vinculo* 2>/dev/null \| head; head -30 app/logs/s_escala/diff_juiz_vinculo_20261013T0854.out 2>/dev/null \| head -5; find logs app/logs -name "diff_juiz_vinculo*.py" 2>/dev/null \| head` |
+| 10:45:08 | Bash | Push result and sombra --rodar usage | `cd /home/ronald/saas-hasner && grep -E "^rc=\|->" logs/push_20261024_k6.log \| tail -2; grep -n "^#.*--rodar\\|--rodar)" bin/sombra.sh \| head -5; ls logs/s_escala/ \| head` |
 | 10:34:52 | Bash | Wait for K6 push verdict | `cd /home/ronald/saas-hasner && timeout 590 bash -c 'until grep -q "^rc=" logs/push_20261024_k6.log; do /usr/bin/sleep 20; done'; grep -E "^Ran [0-9]+ tests\|^(OK\|FAILED)($\| \()\|->\|^rc=" logs/push_20261024_k6.log \| tail -6` |
 | 10:34:46 | Bash | Check K6 push progress | `cd /home/ronald/saas-hasner && tail -3 logs/push_20261024_k6.log \| cut -c1-160` |
 | 10:34:40 | Bash | Review the espelho_verdade diff | `cd /home/ronald/wt-ev && git diff \| head -80` |
