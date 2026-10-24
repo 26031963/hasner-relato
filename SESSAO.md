@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 24/10/2026 01:51:33.** Transcript: `ed482694-44e4-4da5-bd42-07601a2a39b4.jsonl` (6.4 MB). Acoes na janela: **331**.
+**Medido em 24/10/2026 01:57:52.** Transcript: `ed482694-44e4-4da5-bd42-07601a2a39b4.jsonl` (6.5 MB). Acoes na janela: **335**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 01:57:47 | Bash | Push dawn marcos and republish RELATO | `cd /home/ronald/saas-hasner && { bin/push.sh origin main; echo "FIM_PUSH rc=$?"; bash bin/relato.sh 2>&1 \| tail -1; } > logs/clb1b/push_madrugada.out 2>&1` |
+| 01:57:42 | Bash | Record K6 marco in RELATO and commit | `cd /home/ronald/saas-hasner && python3 - <<'PY' p='app/docs/RELATO.md'; s=open(p).read() anc="## 24/10 01:4x -- O261 RECUSA-FALA" assert s.count(anc)==1 sec='''## 24/10 02:1x -- MARCO K6 parcial (NO AR `5dee1afd`): juiz `competencia_entregue` nasce com R3/R4/R5 e `ranking_he`; PENDENTES['fechamento'] 1 -> 0 PROVA: comboio `wt-k6p` (main 258bb7ef + b7dcfad7) `Ran 11839` OK rc 0; censo `git diff --c ...` |
+| 01:57:21 | Bash | Merge K6 combo, commit, deploy | `cd /home/ronald/saas-hasner && git stash -q -- app/docs/RELATO.md; git log --oneline -1; git merge --no-ff --no-commit 0f57be55 >/dev/null 2>&1; echo merge_head=$(git rev-parse -q --verify MERGE_HEAD \| cut -c1-8); echo censo:; git diff --cached 0f57be55 --stat \| tail -1; git commit -q -F - <<'MSG' pouso da wt-k6: K6 parcial -- juiz competencia_entregue nasce com R3/R4/R5 e ranking_he (fechamento ...` |
+| 01:57:14 | Bash | Read K6 combo suite verdict | `/bin/grep -E '^(FAIL\|ERROR):\|^Ran \|^(OK\|FAILED)($\| \()\|^VEREDITO_FIM' /home/ronald/wt-k6p/app/logs/suite.out \| tail -5` |
 | 01:46:55 | Bash | Full suite on K6 combo | `cd /home/ronald/saas-hasner && bash bin/suite.sh --dir /home/ronald/wt-k6p > /home/ronald/wt-k6p/app/logs/suite.out 2>&1; echo "VEREDITO_FIM rc=$?" >> /home/ronald/wt-k6p/app/logs/suite.out` |
 | 01:46:50 | Bash | Build K6 combo copy on current main | `cd /home/ronald/saas-hasner && git worktree add -q --detach /home/ronald/wt-k6p HEAD && cd /home/ronald/wt-k6p && git merge -q --no-ff -m "comboio: main $(git -C /home/ronald/saas-hasner rev-parse --short HEAD) + K6 parcial b7dcfad7" b7dcfad7 2>&1 \| tail -2; git diff --name-only --diff-filter=U; git log --oneline -1; mkdir -p app/logs app/media` |
 | 01:28:58 | Bash | Declare O261 PAREI on the blocked prod apply | `cd /home/ronald/saas-hasner && python3 - <<'PY' p='app/docs/RELATO.md'; s=open(p).read() old="# RELATO — esteira saas-hasner\n\n" assert s.startswith(old) s=old+"PAREI: ! O261 -- apply do acervo RECUSA-FALA em prod (19 alvos, comp 10+11, inclui 49125/49126 da cel 137166 do col516) negado pelo classificador: o comando esta na secao 24/10 01:4x (`RF_SO_COMP=10/2026,11/2026 RF_APLICAR=1`, reversao an ...` |
