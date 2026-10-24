@@ -108,6 +108,7 @@ _nenhum juiz declarado nesta familia._
 
 | pergunta | juiz (dono) |
 |---|---|
+| a competencia ja foi entregue (lavrada)? | `folha/export.py::competencia_entregue` |
 | a competencia pode ser aprovada/trancada (o que bloqueia)? | `folha/export.py::classificar_export` |
 | o periodo foi reaberto? | `ponto/services/fechamento.py::periodo_trancado` |
 | o que "fechado" quer dizer (qual fronteira barra a escrita)? | `ponto/services/fechamento.py::competencia_trancada` |
@@ -115,12 +116,6 @@ _nenhum juiz declarado nesta familia._
 | quanto da competencia esta cumprido (prontidao)? | `folha/export.py::prontidao` |
 | que FechamentoMensal e o da competencia de hoje? | `ponto/janelas.py::janela_atual` |
 | quem entra no TXT da folha? | `folha/export.py::classificar_export` |
-
-**SEM JUIZ declarado** (1):
-
-- **a competencia ja foi entregue (lavrada)?** -- uma leitora so, e ela NAO e declarada: gerar_celulas.py:147-194 le a lavra direto e conta TXT ou holerite publicado (BUG 85). Era dividida com chamados/juizes.dia_em_competencia_exportada (so TXT) ate 11/10, quando o O44 SEM FRONTEIRA matou essa metade (L-111). Declarar gerar_celulas como autoridade
-
-**PENDENTES nesta familia**: 10 leitor(es) com regra propria, esperando migrar.
 
 ## Familia `feriado/prazo`
 
@@ -160,7 +155,7 @@ _nenhum juiz declarado nesta familia._
 
 - **numero de tela sem autoridade declarada (score, faixa de horario, atraso de sincronizacao)?** -- score (produtor inteiro por conta propria, pendentes A1/C1), faixa manha/tarde/noite e atraso de sincronizacao -- pergunta de negocio de cada tela, vem na fatia dela
 
-**PENDENTES nesta familia**: 112 leitor(es) com regra propria, esperando migrar.
+**PENDENTES nesta familia**: 110 leitor(es) com regra propria, esperando migrar.
 
 ## Familia `portas`
 
@@ -180,8 +175,8 @@ _nenhum juiz declarado nesta familia._
 | `escala` | 0 | 2 | 1 |
 | `ausencia/ferias` | 14 | 0 | 0 |
 | `chamado` | 15 | 0 | 0 |
-| `fechamento` | 7 | 1 | 10 |
+| `fechamento` | 8 | 0 | 0 |
 | `feriado/prazo` | 6 | 2 | 13 |
-| `tela` | 11 | 1 | 112 |
+| `tela` | 11 | 1 | 110 |
 | `portas` | 1 | 0 | 124 |
-| **total** | **76** | **9** | **260** |
+| **total** | **77** | **8** | **248** |
