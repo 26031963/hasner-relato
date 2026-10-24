@@ -44,6 +44,16 @@ PAREI: ! GATE-EXPORT-10 (so o export da 10) | espera o DP na Gestao de HE e o Ro
 > O MARCADOR ANDOU no mesmo ato: `ORDEM-VIVA-TOPO` saiu de `BO-HE-RECUSAR-LOTE-500` (fechado) para `O261`, que o hook cobrou.
 > SEM COMMIT DE PROPOSITO: `RELATO.md` e `BACKLOG.md` ficam sujos na arvore porque a L-106 nao deixa commit so de docs fora de marco. Eles entram no commit do proximo marco.
 
+## 24/10 14:1x -- MARCO E1 passo B (3 e 4 de 9): `dia_da_frota` e `precedencia` perguntam o vinculo a juiza
+
+LEI-AKITA: origem=relatorios/dia_da_frota.py::dia_da_frota + ponto/precedencia.py::fatos_do_periodo, testemunha=escala/alimentacao.py::vinculo_do_dia (via `escala_vigente` no relatorio; direto, com a lista completada pela porta do periodo, na precedencia), RED=relatorios/tests/test_dia_da_frota.py::GeradoraForaDaVigencia (3) + ponto/tests/test_precedencia_vinculo_encerrado.py::GeradoraForaDaVigenciaNoFeriado (2) + escala/tests/test_contract_juiz_escala.py (censo 8 -> 6), 6 falhas no HEAD `4ee73bb4` (`logs/e1frota_red.out`), quem-mais-le=api_mensageria_dia_da_frota, pautas_dos_discordantes (so ROTULOS), calendario, sem_furo, fatos_do_dia, reavaliar_ausencias_feriado, juizes novos=0
+
+- `dia_da_frota`: filtro de ciclo saiu do SQL (filtrava pelo carimbo cru) e le a MESMA resposta da coluna `escala`; zero query a mais (geradora ja no `select_related`). IMPACTO prod 30 d: 13 dia-colab / 1 colab com geradora fora da vigencia, 0 na lista de quem acusa (`logs/e1frota/impacto_prod_*.out`).
+- `precedencia`: a escolha propria (geradora crua; sem ela a linha do tempo) virou `vinculo_do_dia`. A lista do chamador que traz `vinculos` (calendario, so o ativo) e COMPLETADA pela porta do periodo com a geradora que falta -- medido em prod: 211 celulas / 13 colabs com ativo cobrindo e geradora OUTRA (`logs/e1prec/calendario_geradora_outra_*.out`).
+- IMPACTO na sombra, funcao REAL dos dois jeitos, comp 10, 595 colabs, 0 erros (`logs/e1prec/impacto2_comp10.out`): default **27 dia-colab / 27 colabs**, todos 12/10 feriado, `trabalho -> feriado` (26 desligados + col499, sem vinculo de 03/10 a 15/10 e sem batida de 11 a 13/10 -- dono CADASTRO); modo calendario **0**. Dinheiro: o motor ja le a juiza desde `460ee92b`; a precedencia passa a concordar com ele.
+- FICA no censo (6 linhas): `_fnd` do cartorio (muda a lavra em 490 celulas / 15 colabs, 14 desligados -- `logs/e1frota/fnd_impacto_prod_*.out`; custo de query no chokepoint a medir), `servico_jornada` (carregador), `fechamento`, `folgas`, `auditar_invariantes` (outra pergunta) e a juiza.
+- SUITE: (pendente)
+
 ## 24/10 13:5x -- MARCO HORA-DA-TRILHA (instrumento): a hora da secao nao pode ser posterior ao instante em que ela entrou
 
 LEI-AKITA: origem=bin/tests/test_hora_da_secao_nao_e_futura.sh (novo), testemunha=`git blame --line-porcelain` (author-time de cada titulo) + `date` TZ America/Sao_Paulo para linha nao commitada, RED=o mesmo selo contra um clone do HEAD `038c357d`, quem-mais-le=bin/regua.sh (pasta inteira de selos), juizes novos=0
