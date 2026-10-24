@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 23/10/2026 22:59:03.** Transcript: `ed482694-44e4-4da5-bd42-07601a2a39b4.jsonl` (3.7 MB). Acoes na janela: **180**.
+**Medido em 23/10/2026 23:04:15.** Transcript: `ed482694-44e4-4da5-bd42-07601a2a39b4.jsonl` (3.7 MB). Acoes na janela: **181**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 23:01:41 | Bash | Wait for push verdict | `for i in $(seq 1 118); do /bin/grep -q '^FIM rc=' /home/ronald/saas-hasner/logs/clb1b/push_m3m4.out 2>/dev/null && break; /usr/bin/sleep 5; done; tail -3 /home/ronald/saas-hasner/logs/clb1b/push_m3m4.out` |
 | 22:51:36 | Bash | Docs commit for M3/M4 and push | `cd /home/ronald/saas-hasner && python3 - <<'PY' p='app/docs/RELATO.md'; s=open(p).read() anc="## 23/10 21:4x -- POUSO CALENDARIO-MOSTRA-O-CARRO" assert s.count(anc)==1 sec='''## 23/10 22:5x -- MARCO FLUXO 2 M3 (NO AR `abc33bca`) + M4 (NO AR `8730e310`): PENDENTES['fechamento'] 4 -> 1 LEI-AKITA: origem=`ponto/views.py::fechamento_mensal` + `::painel_fechamento` + `::reavaliar_vazios`, testemunha=`f ...` |
 | 22:51:16 | Bash | Compare trees of the two M4 commits | `cd /home/ronald/saas-hasner && git rev-parse 85251d85^{tree} 09225281^{tree} 2>&1; git -C /home/ronald/wt-m4 log --oneline -2` |
 | 22:50:58 | Bash | Merge M4, commit, deploy | `cd /home/ronald/saas-hasner && git log --oneline -1 && git merge --no-ff --no-commit 85251d85 >/dev/null 2>&1; echo merge_head=$(git rev-parse -q --verify MERGE_HEAD \| cut -c1-8); echo censo:; git diff --cached 85251d85 --stat \| tail -1; git commit -q -F - <<'MSG' pouso da wt-m4: FLUXO 2 M4 -- painel le competencia_trancada, reavaliar_vazios le conta_vazia do juiz (fechamento 2 -> 1) Arvore cert ...` |
