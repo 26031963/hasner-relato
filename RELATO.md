@@ -52,6 +52,15 @@ PAREI: ! GATE-EXPORT-10 (so o export da 10) | espera o DP na Gestao de HE e o Ro
 > O MARCADOR ANDOU no mesmo ato: `ORDEM-VIVA-TOPO` saiu de `BO-HE-RECUSAR-LOTE-500` (fechado) para `O261`, que o hook cobrou.
 > SEM COMMIT DE PROPOSITO: `RELATO.md` e `BACKLOG.md` ficam sujos na arvore porque a L-106 nao deixa commit so de docs fora de marco. Eles entram no commit do proximo marco.
 
+## 24/10 18:1x -- MARCO JUIZ-CLASSIFICAR-POSICAO-NASCE (lote EVENTO): o geofence tem um juiz; o vigia e o ping perguntam a ele
+
+LEI-AKITA: origem=ponto/management/commands/reconciliar_geofence.py (conta propria `calcular_distancia <= raio_do_posto`) + as tres copias do ping-geo (`api/views_core.py`, `api/views.py`, `ponto/views.py`), testemunha=ponto/services/geofence.py::classificar_posicao (com a accuracy da batida), RED=ponto/tests/test_reconciliar_geofence.py::test_MORDE_sinal_ruim_nao_sustenta_o_chamado (`'aberto' != 'resolvido'` no HEAD, `logs/geo_red.out`) + test_MORDE_o_cadastro_do_posto_e_o_evento + ponto/tests/test_juiz_classificar_posicao_nasce.py, quem-mais-le=verificar_geofence (ja lia), pino do painel (ja lia), `alerta_caducou` (migrou: era o ramo `dentro`), `acao_recusar_geofence` (so mostra o contexto), `reconciliar_vinculo` (outra pergunta), juizes novos=classificar_posicao (corte Ronald, frase no CORTES.md)
+
+- ANTES (prod, so leitura): 66 `gps_fora_geofence` vivos com coordenada, 261 ocorrencias, juiz = `fora` em todas, **0 mudam de lado** (`logs/geo_dry_*.out`). Pings 30 d: 120, 11 "fora", **5 com accuracy > 100** que o juiz chama `sinal_ruim` e deixam de acusar (`logs/geo_ping_*.out`).
+- `reavaliar_chamados_geofence` (um sitio) e chamado pelo EVENTO (`ponto/signals.py`, post_save de Posto, on_commit) e pelo VIGIA (`reconciliar_geofence --alarme`); saiu de `JUIZES_POR_VARREDURA` (19 -> 18).
+- A resposta do ping ao app segue so a geometria (contrato do app), lida do ramo `dentro` do MESMO juiz; o `dentro_geofence` gravado e o veredito inteiro.
+- Diagrama regerado contra a copia (aresta Posto -> geofence).
+
 ## 24/10 17:5x -- INSTRUMENTO O297 complemento: afirmacao sem PROVA barra o Stop do Code e o commit do RELATO (pouso proprio, L-105)
 
 - (1) A linha NO AR do BUG-JANELA-DA-LISTA ganhou PROVA medida na fonte (snapshot da lavra em prod, 16:5x).
