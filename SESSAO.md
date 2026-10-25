@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/10/2026 16:55:48.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (19.0 MB). Acoes na janela: **674**.
+**Medido em 25/10/2026 17:00:48.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (19.1 MB). Acoes na janela: **678**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 16:59:40 | Bash | Wait for push completion and confirm remote | `until grep -q '^rc=' /home/ronald/saas-hasner/logs/push_2510_17b.log 2>/dev/null; do /usr/bin/sleep 10; done; cd /home/ronald/saas-hasner && tail -3 logs/push_2510_17b.log; git fetch -q; git log --oneline origin/main -1; git log --oneline origin/main..HEAD \| wc -l` |
+| 16:59:31 | Bash | Record E4 first measurement and check push | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/BACKLOG.md'; L=open(p).read().split('\n') for k,l in enumerate(L): if l.startswith('\| CASA-ESCALA-E4 \|'): P=l.split('\|'); P[3]=(' ANDA 25/10 17:0x, 1a medida (prod, leitura): 22 vinculos desativados sem data_fim (18 colabs; o ec#965 do col305 entrou hoje) ' 'geraram 143 celulas; para `_cobre` eles cobrem PARA SEMPRE, pela juiza nada - ...` |
+| 16:59:16 | Bash | Measure where inactive no-end links touch cells and folgas | `docker exec saas_core python manage.py tenant_command shell --schema=juliani --command " from escala.models import EscalaColaborador as E, CelulaDia, FolgaDia q=E.objects.filter(ativa=False, data_fim__isnull=True) cids=set(q.values_list('colaborador_id',flat=True)) print('E4\|desativados_sem_fim=%d\|colabs=%d' % (q.count(), len(cids))) print('E4\|celulas_geradas_por_eles=%d' % CelulaDia.objects.fi ...` |
+| 16:58:59 | Bash | Move the marker to CASA-ESCALA-E4 | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/BACKLOG.md'; L=open(p).read().split('\n') for k,l in enumerate(L): if l=='<!-- ORDEM-VIVA-TOPO: CASA-CHAMADO-C1 -->': L[k]='<!-- ORDEM-VIVA-TOPO: CASA-ESCALA-E4 -->' L.insert(k+1,"<!-- ANDOU 25/10 17:0x, de `CASA-CHAMADO-C1` (NO AR 16:46) para `CASA-ESCALA-E4` pela ordem aprovada 10:4x (\"E4 com a\n resposta Q1 acima; E5 por ultimo\"). D ...` |
 | 16:47:59 | Bash | Wait for push and confirm remote | `until grep -q '^rc=' /home/ronald/saas-hasner/logs/push_2510_17b.log 2>/dev/null; do /usr/bin/sleep 15; done; cd /home/ronald/saas-hasner && tail -3 logs/push_2510_17b.log; git fetch -q; git log --oneline origin/main -1; git log --oneline origin/main..HEAD \| wc -l` |
 | 16:47:53 | Bash | Retry the push with L-103 cited | `cd /home/ronald/saas-hasner && bin/push.sh > logs/push_2510_17b.log 2>&1; echo rc=$? >> logs/push_2510_17b.log` |
 | 16:47:46 | Bash | Precheck law-site gate and tickets regua | `cd /home/ronald/saas-hasner && bash bin/tests/test_lei_protege_sitio.sh 2>&1 \| tail -3 \| cut -c1-250; bash bin/regua_tickets.sh 2>&1 \| tail -1` |
