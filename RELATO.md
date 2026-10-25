@@ -62,6 +62,13 @@ PAREI: ! GATE-EXPORT-10 (so o export da 10) | espera o DP na Gestao de HE e o Ro
 > O MARCADOR ANDOU no mesmo ato: `ORDEM-VIVA-TOPO` saiu de `BO-HE-RECUSAR-LOTE-500` (fechado) para `O261`, que o hook cobrou.
 > SEM COMMIT DE PROPOSITO: `RELATO.md` e `BACKLOG.md` ficam sujos na arvore porque a L-106 nao deixa commit so de docs fora de marco. Eles entram no commit do proximo marco.
 
+## 25/10 00:2x -- EM CURSO CONTADOR-PAREADOR-X-CELULA (CONTRATOS-RESTANTES (5) par 1)
+
+- Funcao na copia `wt-pxc`: `ponto/services/vigia_pareador_celula.py::bordas_orfas_de_par_fechado` -- ata `orfas` x borda (entrada/saida) de turno FECHADO por `turnos_do_colab` na JANELA da competencia (nunca fatia de 1 dia).
+- Frota da 10 (sombra, a funcao da copia): **551 bordas / 131 colabs** (saida 226, entrada 325). O censo da RAIA C deu 87 porque filtrava `n_missing>0` e `realizado>0` e perguntava ao pareador em FATIA de 1 dia. PROVA: `logs/fnd/pxc_lanc.out`, `logs/raiaC/restantes.out`.
+- CLASSES (sombra, `logs/fnd/pxc_cls.out`): **D 158 / 58 colabs** (borda orfa E marco do mesmo tipo apagado: a discordancia), D-outro 64 / 22 (apagado so de outro tipo), B 329 / 86 (nenhum marco apagado; 297 sao `fato_sem_previsao`, dia sem regua). O contador conta SO a classe D: **158 hoje, esperado 0** (`logs/fnd/pxc2_lanc.out`). Command `vigia_pareador_celula`, declarado em `config/crons.py`; selo com 4 casos (D conta; B, outro tipo e turno aberto nao).
+- INCOMPLETO: suite da `wt-pxc`, verificador, pouso; linha do placar em pouso de instrumento depois.
+
 ## 25/10 00:0x -- EM CURSO GRADE-ESC-DO-DIA-E1: a grade pergunta o vinculo do dia a juiza
 
 - EXPOSICAO (sombra, `vinculo_do_dia_divergentes --mes 10 --ano 2026`, a funcao real dos dois lados): **12 dia-colab / 3 colabs** em que a regra da grade `(ativa, data_inicio)` discorda da celula; **0** mudam o numero do dia; 7.136 sem geradora (a juiza cai na mesma aritmetica). PROVA: `logs/fnd/vdd10_lanc.out`.
