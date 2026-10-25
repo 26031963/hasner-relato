@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/10/2026 20:46:08.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (27.2 MB). Acoes na janela: **936**.
+**Medido em 25/10/2026 20:51:35.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (27.2 MB). Acoes na janela: **937**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 20:46:13 | Bash | Show the rule RED message; run the full suite | `cd /home/ronald/saas-hasner && grep -A6 "^FAIL: test_MORDE_o_escore_gravado" logs/termo2_red.log \| grep AssertionError; bash bin/suite.sh --dir /home/ronald/wt-termo2 > logs/termo2_suite.log 2>&1; echo "rc=$?"; grep -E '^(OK\|FAILED)($\| \()' logs/termo2_suite.log \| tail -1; grep -E '^Ran [0-9]+ tests' logs/termo2_suite.log \| tail -1; grep -E '^(FAIL\|ERROR):' logs/termo2_suite.log \| head` |
 | 20:43:13 | Bash | Biting test; RED on HEAD and GREEN with neighbors | `cd /home/ronald/wt-termo2/app && python3 - <<'EOF' import py_compile p='escala/tests/test_termometro_vira_lista.py'; s=open(p).read() s=s.replace(""" emp = Empresa.objects.create(razao_social='_TVL', cnpj='45987321000236', ativa=True)""",""" emp = Empresa.objects.create(razao_social='_TVL', cnpj='45987321000236', ativa=True, em_rollout=True)""") s=s.replace(""" * o ato de fechar os avisos antigos  ...` |
 | 20:42:58 | Bash | Read colaboradores_em_operacao filters | `cd /home/ronald/wt-termo2/app && n=$(grep -n "def colaboradores_em_operacao" colaboradores/queries.py \| cut -d: -f1); sed -n "$n,$((n+25))p" colaboradores/queries.py \| grep -v "^\s*#"` |
 | 20:42:52 | Bash | Lavra reads the stored score; check the command's universe filter | `cd /home/ronald/saas-hasner && git worktree add -q /home/ronald/wt-termo2 HEAD --detach && cd /home/ronald/wt-termo2/app && python3 - <<'EOF' import py_compile p='escala/management/commands/termometro_regua.py'; s=open(p).read() o=""" if v == 'suspeita': te = ec.tipo_escala por_tpl[(te.pk, te.codigo or te.descricao)].append((ec.colaborador.pk, ec.colaborador.nome[:28], diag['classe'], diag['declar ...` |
