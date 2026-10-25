@@ -58,6 +58,14 @@ PAREI: ! GATE-EXPORT-10 (so o export da 10) | espera o DP na Gestao de HE e o Ro
 > O MARCADOR ANDOU no mesmo ato: `ORDEM-VIVA-TOPO` saiu de `BO-HE-RECUSAR-LOTE-500` (fechado) para `O261`, que o hook cobrou.
 > SEM COMMIT DE PROPOSITO: `RELATO.md` e `BACKLOG.md` ficam sujos na arvore porque a L-106 nao deixa commit so de docs fora de marco. Eles entram no commit do proximo marco.
 
+## 24/10 23:2x -- MARCO E6-NONE-E-CADASTRO: o dono da divergencia sem vinculo e CADASTRO, pelo mesmo carregador
+
+LEI-AKITA: origem=ponto/management/commands/e6_oraculo.py::folga_nao_definida_do_dia (2a composicao juiza+defeito, None -> False), testemunha=escala/alimentacao.py::vinculo_do_dia via ponto/supra_juiz.py::cadastro_do_dia_carregado, RED=ponto/tests/test_e6_janela_declarada_nao_e_divergencia.py (2 ERROR no HEAD, `logs/fnd/e6_red.out`), quem-mais-le=dono_da_divergencia (e6_oraculo, pautas_discordantes), juizes novos=0
+
+- MUDOU: `ponto/supra_juiz.py::_insumos_do_vinculo` (passo unico) + `cadastro_do_dia_carregado` (1 dia, carregador da juiza); `folga_nao_definida_do_dia` APAGADA com lapide (L-111); `dono_da_divergencia(..., sem_vinculo_no_dia)` -> CADASTRO; e6 e pautas passam o carregador. o320: `_apurar` fixa "dia com cadastro" (o fixture nao tem vinculo; os casos medem paridade e lista do motor).
+- IMPACTO (sombra, `e6_oraculo --mes 10 --ano 2026 --hoje 2026-10-24`, HEAD x arvore da cura): R1 IDENTICO -- 312 dia-colab, ESTRUTURA 92 / CADASTRO 74 / BATIDA 146. Nenhum divergente da 10 tem juiza None hoje: a cura muda QUEM responde, nao o numero. PROVA: `logs/fnd/e6h_lanc.out` x `logs/fnd/e6c_lanc.out`.
+- INCOMPLETO: suite da `wt-e6`, verificador, pouso.
+
 ## 24/10 22:0x -- MARCO CONTRATOS-RESTANTES E1: o `_fnd` do cartorio pergunta QUAL VINCULO a juiza
 
 LEI-AKITA: origem=ponto/services/cartorio.py::_julgar_colab_corpo::_fnd (lia `cel.escala_geradora` cru), testemunha=escala/alimentacao.py::vinculo_do_dia (juiza E1, lei (a)), RED=ponto/tests/test_fnd_pergunta_a_juiza.py (FAIL no HEAD: `['FURO_SEM_COBRANCA']`), quem-mais-le=classificar_dia (1 chamador de producao) + e6_oraculo e esc_do_dia da grade (DECLARADOS, fila), juizes novos=0
