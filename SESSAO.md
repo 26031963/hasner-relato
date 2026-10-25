@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/10/2026 13:21:04.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (15.4 MB). Acoes na janela: **693**.
+**Medido em 25/10/2026 13:26:21.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (15.4 MB). Acoes na janela: **686**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -696,10 +696,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 01:30:41 | Bash | Check sombra ensaio duration and schedule | `cd /home/ronald/saas-hasner && python3 -c "import json;d=json.load(open('app/config/crons_duracao.json'));print({k:v for k,v in d.get('dur_s',{}).items() if 'sombra' in k})"; crontab -l \| grep sombra.sh; ls logs/crons_em_curso/ 2>/dev/null; date +%H:%M` |
 | 01:30:29 | Bash | Commit the marco and deploy immediately | `cd /home/ronald/saas-hasner && git add app/escala/utils.py app/ponto/management/commands/e6_oraculo.py app/ponto/management/commands/emitir_furo_retroativo.py app/ponto/management/commands/supra_juiz.py app/ponto/services/cartorio.py app/ponto/supra_juiz.py app/ponto/tests/test_e6_janela_declarada_nao_e_divergencia.py app/ponto/tests/test_fnd_pergunta_a_juiza.py app/docs/RELATO.md app/docs/BACKLOG ...` |
 | 01:30:17 | Bash | Copy certified files into main tree and cmp | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read() a="- Vizinhos: 683 OK (`logs/gesc/green.out`). Suite da copia `wt-grade`: em curso (`logs/gesc/suite.out`)." b="- Vizinhos: 683 OK (`logs/gesc/green.out`). Suite da copia `wt-grade` (a arvore que pousa): `OK (skipped=42, expected failures=15)`, Ran 11914, rc 0 (`logs/gesc/suite.out`). Pouso: `cmp` arquivo a a ...` |
-| 01:26:06 | Bash | Wait for suite verdict | `until grep -q "^rc=" /home/ronald/saas-hasner/logs/gesc/suite.out; do /usr/bin/sleep 30; done; grep -E "^(OK\|FAILED)($\| \()" /home/ronald/saas-hasner/logs/gesc/suite.out \| tail -1; grep "^Ran" /home/ronald/saas-hasner/logs/gesc/suite.out \| tail -1; tail -1 /home/ronald/saas-hasner/logs/gesc/suite.out; grep -n "^ERROR:\\|^FAIL:" /home/ronald/saas-hasner/logs/gesc/suite.out \| head` |
-| 01:22:05 | Bash | Run new vigia on sombra with competencia per case | `cd /home/ronald/saas-hasner && cat > logs/sombra/vav_censo.py <<'EOF' # CONTADOR-AUSENCIA-X-VEREDITO: o vigia novo na sombra (so leitura), com a competencia de cada caso. from django.core.management import call_command call_command('vigiar_ausencia_x_veredito', '--casos') from ponto.services.vigia_ausencia_veredito import censo from folha.models import ExportacaoDominio for cel_pk, colab, data in  ...` |
-| 01:21:49 | Bash | Check suite progress | `tail -c 600 /home/ronald/saas-hasner/logs/gesc/suite.out; grep -n "^ERROR:\\|^FAIL:" /home/ronald/saas-hasner/logs/gesc/suite.out \| head` |
-| 01:21:43 | Bash | Fix stdout sink and run ruff | `cd /home/ronald/wt-aus/app && sed -i "s#stdout=open('/dev/null', 'w')#stdout=io.StringIO()#g; s#^from django.core.management import call_command#import io\n\nfrom django.core.management import call_command#" ponto/tests/test_vigia_ausencia_veredito.py && (cd /home/ronald/wt-aus && ruff check --config ruff.toml app/ponto/services/vigia_ausencia_veredito.py app/ponto/management/commands/vigiar_ausen ...` |
-| 01:21:36 | Write |  | `/home/ronald/wt-aus/app/ponto/tests/test_vigia_ausencia_veredito.py` |
-| 01:21:22 | Write |  | `/home/ronald/wt-aus/app/ponto/management/commands/vigiar_ausencia_x_veredito.py` |
-| 01:21:13 | Write |  | `/home/ronald/wt-aus/app/ponto/services/vigia_ausencia_veredito.py` |
