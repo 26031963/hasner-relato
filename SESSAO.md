@@ -6,10 +6,25 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/10/2026 09:39:34.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (10.6 MB). Acoes na janela: **523**.
+**Medido em 25/10/2026 09:45:04.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (10.9 MB). Acoes na janela: **538**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 09:42:35 | Bash | Measure per-rubrica impact on sombra with cure tree | `cat > /home/ronald/saas-hasner/logs/sombra/semcel11_impacto.py <<'EOF' # SEM-CELULA-11: impacto por RUBRICA na 10 (e na 11) de gerar as celulas dos ECs ativos de colab nao-ativo, # pela arvore CURADA (SOMBRA_ARVORE). Foto antes -> gerar (porta) -> julgar (porta do cartorio) -> foto depois. # Tudo dentro de atomic com rollback: a sombra fica como estava. import collections, datetime from django.db  ...` |
+| 09:42:16 | Bash | Read montar_linha_10 layout | `sed -n 30,50p folha/export.py` |
+| 09:42:12 | Bash | Find TXT line layout in export | `grep -n "def _linha_dominio\\|def formatar_linha\\|'%s%s%s\\|zfill\\|ljust" folha/export.py \| head -10` |
+| 09:42:05 | Bash | Read instantaneo and comparar functions | `sed -n 94,230p folha/management/commands/simular_folha.py \| grep -v "^\s*#" \| head -120` |
+| 09:41:40 | Bash | Run GREEN test on cure copy | `cd /home/ronald/saas-hasner && bin/suite.sh --dir /home/ronald/wt-semcel --only ponto.tests.test_sem_celula_11_afastado_tem_celula > logs/semcel11_green.log 2>&1; echo rc=$?; grep -E '^(OK\|FAILED)($\| \()\|^Ran \|^FAIL:\|^ERROR:\|Error' logs/semcel11_green.log \| tail -12` |
+| 09:41:08 | Bash | Run RED test with module label | `cd /home/ronald/saas-hasner && bin/suite.sh --dir /home/ronald/wt-semcel-red --only ponto.tests.test_sem_celula_11_afastado_tem_celula > logs/semcel11_red.log 2>&1; echo rc=$?; grep -E '^(OK\|FAILED)($\| \()\|^Ran \|^FAIL:\|^ERROR:\|AssertionError' logs/semcel11_red.log \| tail -12` |
+| 09:41:01 | Bash | Show RED run log tail | `tail -25 /home/ronald/saas-hasner/logs/semcel11_red.log` |
+| 09:40:53 | Bash | Run RED test against HEAD copy | `cd /home/ronald/saas-hasner && git worktree add -f /home/ronald/wt-semcel-red HEAD >/dev/null 2>&1; mkdir -p /home/ronald/wt-semcel-red/app/logs /home/ronald/wt-semcel-red/app/media; cp /home/ronald/wt-semcel/app/ponto/tests/test_sem_celula_11_afastado_tem_celula.py /home/ronald/wt-semcel-red/app/ponto/tests/; bin/suite.sh --dir /home/ronald/wt-semcel-red --only ponto -- ponto.tests.test_sem_celul ...` |
+| 09:40:44 | Write |  | `/home/ronald/wt-semcel/app/ponto/tests/test_sem_celula_11_afastado_tem_celula.py` |
+| 09:40:20 | Bash | Read existing generator test fixture | `cd /home/ronald/wt-semcel/app && sed -n 1,70p colaboradores/tests/test_vinculo_regenera_celulas.py` |
+| 09:40:13 | Bash | Apply cure in worktree copy | `cd /home/ronald/wt-semcel/app && python3 - <<'EOF' p='ponto/portas/celula.py'; s=open(p).read() a1=""" if (ec.data_inicio and d < ec.data_inicio) or (ec.data_fim and d > ec.data_fim): # CELULA ALEM DO FIM DO VINCULO""" b1=""" if not _dia_na_vigencia(ec, d): # CELULA ALEM DO FIM DO VINCULO""" a2=""" qs = EscalaColaborador.objects.filter( ativa=True, colaborador__situacao='ativo').select_related('ti ...` |
+| 09:40:00 | Bash | Read tests that rely on situacao filter | `cd /home/ronald/wt-semcel/app && sed -n 45,90p escala/tests/test_bug135_furo_sem_premissa.py; sed -n 30,60p folha/tests/_celulas.py` |
+| 09:39:55 | Bash | Find tests touching generator and situacao | `cd /home/ronald/wt-semcel/app && git grep -ln "gerar_celulas_periodo\\|call_command('gerar_celulas'" -- '*tests*' \| head -20; git grep -n "situacao" -- $(git grep -ln "gerar_celulas_periodo" -- '*tests*') \| grep -i "afast\\|deslig" \| head` |
+| 09:39:49 | Bash | Create worktree copy for the cure | `cd /home/ronald/saas-hasner && git worktree list \| head; git worktree add -f /home/ronald/wt-semcel HEAD 2>&1 \| tail -1; mkdir -p /home/ronald/wt-semcel/app/logs /home/ronald/wt-semcel/app/media; grep -n "_outro_vinculo_cobre\\|def _competencias_exportadas" app/ponto/management/commands/gerar_celulas.py \| head -3` |
+| 09:39:36 | Bash | Find how simular_folha picks the competencia | `f=$(ls */management/commands/simular_folha.py); echo $f; grep -n "^def \\|janela_atual\\|hoje" $f \| head -30` |
 | 09:39:32 | Bash | List simular_folha arguments | `f=$(ls */management/commands/simular_folha.py); grep -n "add_argument" $f; grep -n "def handle" -A30 $f \| grep -n "janela\\|mes\\|ano" \| head` |
 | 09:39:27 | Bash | Read simular_folha command arguments | `sed -n 1,60p */management/commands/simular_folha.py \| grep -n "mes\\|ano\\|competencia\\|argument" \| head -20` |
 | 09:39:23 | Bash | Check whether simular_folha takes a competencia | `cd /home/ronald/saas-hasner && sed -n 40,140p bin/simular_folha.sh \| grep -n "competencia\\|COMP\\|mes\\|--comp" \| head -20` |
