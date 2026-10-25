@@ -74,6 +74,15 @@ PAREI: ! GATE-EXPORT-10 (so o export da 10) | espera o DP na Gestao de HE e o Ro
 > O MARCADOR ANDOU no mesmo ato: `ORDEM-VIVA-TOPO` saiu de `BO-HE-RECUSAR-LOTE-500` (fechado) para `O261`, que o hook cobrou.
 > SEM COMMIT DE PROPOSITO: `RELATO.md` e `BACKLOG.md` ficam sujos na arvore porque a L-106 nao deixa commit so de docs fora de marco. Eles entram no commit do proximo marco.
 
+## 25/10 05:2x -- MARCO BO-INSS-LEITORES-QUE-NAO-MIGRARAM: a grade da celula carimba a cobertura parcial pelo mesmo juiz
+
+LEI-AKITA: origem=escala/services/leitor_celula.py::grade_da_celula (nao escrevia `cobertura_parcial`), testemunha=ponto/turnos.py::cobre_parte_do_dia sobre `cobertura_ausencia_periodo(para='folha')` (o par que a grade de `escala/utils.py::_marcar_ausencias` ja usa), RED=ponto/tests/test_grade_da_celula_cobertura_parcial.py (HEAD: 3 FAIL, `logs/gesc/boi_red.out`), quem-mais-le=command `supra_juiz` e `emitir_furo_retroativo` (montam o dia por esta grade), juizes novos=0
+
+- ALCANCE MEDIDO (sombra, 60 d, `logs/bo_inss_alc2.out`): 48 ausencias aprovadas PARCIAIS; 9 em dia SEM batida -- o caso em que os leitores divergem.
+- IMPACTO (command `supra_juiz` em DRY, emp 2 e 3, 08/09..30/09, HEAD x cura, `logs/boi_sj.out` x `logs/boi_sj_c.out`): dos 9, **2 passam a concordar com o cartorio** (col369 28/09 -> `PREVISTO_COM_DIA_INDEFINIDO`; col584 17/09 -> `FURO_COM_COBRANCA_MORTA`); NENHUM dos codigos em que o command AGE (`COBRANCA_SEM_FURO`, `COBRANCA_EM_DIA_SEM_TRABALHO`) aparece -- retratacao nao muda. RESIDUO declarado: 6 dos 9 seguem sem codigo no dump do command; causa nao medida (fila).
+- MUDOU: `_carimbar_cobertura_parcial` no fim de `grade_da_celula`, so nos dias que a ata rotula `ausencia`, falta fora, zero query sem dia de ausencia. `emitir_furo_retroativo` (passe sob ordem, nao cron) passa a ver a cobertura parcial como o cartorio.
+- Vizinhos: 1050 OK (`logs/gesc/boi_green.out`). Suite da copia `wt-boi`: em curso (`logs/gesc/boi_suite.out`).
+
 ## 25/10 04:1x -- MARCO LOG-BEST-EFFORT-EM-DOBRO: o dobro era OUTRO, e o que faltava era a raiz
 
 LEI-AKITA: origem=config/settings/saas.py::LOGGING (sem raiz; `django.request` + `django` com os mesmos handlers e `propagate: True`), testemunha=o proprio dict por AST (`ponto/tests/test_logger_ponto_vai_para_arquivo.py::_logging_da_fonte`), RED=ponto/tests/test_logging_de_todo_app.py (HEAD: 3 FAIL, `logs/gesc/log_red.out`), quem-mais-le=todo logger de producao dos apps (censo por AST, com o nome que o `engolir` recebe por parametro), juizes novos=0
