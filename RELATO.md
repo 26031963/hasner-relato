@@ -107,22 +107,23 @@ LEI-AKITA: origem=ponto/services/cartorio.py::julgar_colab (a porta), testemunha
 - PROVA: discordancia 4 -> **1**; col715 22/07, col268 29/08 e 31/08 -> `concorde`; `EXPORTADAS_INTACTAS|True` (hash de todas as ExportacaoDominio), `FM_IGUAL|True` (todos os FechamentoMensal dos 2 colabs), chamados 238 -> 238.
 - RESIDUO 1, a porta MANTEM: col268 12/08 e FOLGA (`trabalha=False`, ata `folga`) com falta aprovada em cima, e o cartorio lavra `nunca_bateu` -- os vizinhos de folga sem falta sao `concorde`. Classe na sombra: 2.525 celulas de folga com `nunca_bateu` (40 colabs), quantas com falta NAO medido. Vigia x cartorio discordam do mesmo dia: linha de fila `FALTA-EM-FOLGA-VIRA-NUNCA-BATEU`.
 
-## CASA-ESCALA-E2 -- o auditor pergunta a juiza se a geradora vale no dia (25/10 12:3x)
+## CASA-ESCALA-E2 -- o auditor pergunta a juiza se a geradora vale no dia (25/10 12:3x, NO AR 12:39)
 LEI-AKITA: origem=chamados/management/commands/auditar_invariantes_chamados.py (piso I6e), testemunha=escala/alimentacao.py::vinculo_do_dia (lei (a) do E1), RED=escala.tests.test_contract_juiz_escala::test_o_censo_que_IMPEDE_a_declaracao_e_MEDIDO_a_cada_run, quem-mais-le=o placar do auditor, juizes novos=0
 - MUDOU (copia `wt-casa-e2`): o piso "fora de vigencia, EXPORTADA" deixa de refazer a vigencia da geradora na mao e pergunta a juiza alimentada SO com a geradora; TOMADORES 4 -> 3 (2 fora da juiza + a dela); prosa de `core/juizes.py` e `core/contratos_estruturais.py` com o numero do selo.
 - RED (HEAD): `FAILED (failures=1)` -- o censo ainda conta o auditor. PROVA: `logs/e2_red.log`.
 - EQUIVALENCIA (sombra, o command REAL nas duas arvores): saida identica linha a linha, menos as 2 linhas que dizem "lavrado ha N min" (relogio); piso I6e = 49 nos dois lados. PROVA: `logs/e2-head.out` x `logs/e2-cura.out`.
+- ESMERIL NA SUITE: a 1a suite cheia ficou VERMELHA no proprio censo -- eu importei a juiza com APELIDO (`_vdd`) e o `_so_alimenta` procura a chamada pelo nome `vinculo_do_dia`; eu so tinha rodado o RED, nao o GREEN alvo. Curado (sem apelido); o apelido erra para o lado SEGURO (conta tomada a mais, nunca esconde). GREEN alvo `Ran 2739` / OK; SUITE CHEIA recertificada `Ran 11964` / OK / rc 0. PROVA: `logs/e2_suite.log` (vermelha), `logs/e2_green.log`, `logs/e2_suite2.log`; cmp dos 4 arquivos.
 
-## PERGUNTA-RESPONDIDA-E-MARCO-ACESO -- construida, impacto medido, em suite (25/10 11:4x)
+## PERGUNTA-RESPONDIDA-E-MARCO-ACESO -- construida, impacto medido, em suite (25/10 11:1x)
 LEI-AKITA: origem=chamados/juizes.py::_pergunta_viva_calc (ramo HX-ADMIN-DECIDE-O-DIA), testemunha=lampada da celula (`luz`) + `classe_por_delta` + `CelulaDia.VEREDITOS_ACUSAM`, RED=chamados.tests.test_pergunta_respondida_e_marco_aceso, quem-mais-le=todo leitor de `pergunta_viva` (vigia do fio, telas, emissores), juizes novos=0
 - MUDOU (copia `wt-pram`): `_resposta_concorda_com_a_luz(p)` -- LEITOR que compoe `fato_do_marco_no_espelho`, a `luz` da ata, `distancia_do_marco` e `classe_por_delta`; None (pausa dupla, sem HH:MM, lampada nao provada) nunca mata. A respondida morre quando ele diz True.
 - CASOS PELA REGRA antes do codigo (L-110, no docstring do teste): 19:02 x luz 19:00 concorde = MORRE; 19:06 = viva (classe B); 19:02 com dia `furo` = viva; sem luz = viva.
 - RED (HEAD): `FAILED (failures=1)` -- o caso que morre. PROVA: `logs/pram_red.log`. GREEN com vizinhos (BUG 117, pergunta_viva, viva_delega, leitores_vitalidade): `Ran 37` / OK. PROVA: `logs/pram_green.log`.
 - IMPACTO (sombra, `pergunta_viva` REAL, HEAD x cura): respondidas sem validacao 896; vivas **670 -> 654** (16 morrem). Abertura no universo com marco aceso: 20 concordam (4 ja mortas por outro degrau), 78 discordam (classe B/C ou dia que acusa), 46 sem hora comparavel ficam vivas. PROVA: saidas `PRAM|` das sondas `logs/sombra/pram_impacto.py` e `logs/sombra/pram_abre.py` nesta sessao.
 - SUITE CHEIA da arvore que pousa (`wt-pram`): `Ran 11962` / `OK (skipped=42, expected failures=15)` / rc 0. PROVA: `logs/pram_suite.log`; cmp dos 2 arquivos.
-- NO AR 25/10 12:1x (este commit, `deploy.sh --sem-migrate` rc 0). PROVA em prod pela funcao real: respondidas sem validacao 900, vivas **657** (antes 671 de 897). PROVA: `logs/pram_deploy.log` + saida `PRAM|` da sonda `logs/sombra/pram_impacto.py` rodada em prod nesta sessao.
+- NO AR 25/10 11:40 (este commit, `deploy.sh --sem-migrate` rc 0). PROVA em prod pela funcao real: respondidas sem validacao 900, vivas **657** (antes 671 de 897). PROVA: `logs/pram_deploy.log` + saida `PRAM|` da sonda `logs/sombra/pram_impacto.py` rodada em prod nesta sessao.
 
-## COMBOIO DE INSTRUMENTO: B1 + (6) CITACAO + E1 + linha do placar_code (25/10 11:4x)
+## COMBOIO DE INSTRUMENTO: B1 + (6) CITACAO + E1 + linha do placar_code (25/10 11:1x, NO AR 11:29)
 LEI-AKITA: origem=core/placar_estrutural.py (R6), core/placar_tickets.py::citacao_indevida, escala/tests/test_contract_juiz_escala.py::_tomadores_da_geradora, testemunha=core/contratos_estruturais.py::linha_do_placar (B1), juizes novos=0
 - B1: selo `core/tests/test_selo_r6_frase_do_juiz.py` NASCE (o R6 o prometia); RED 15/20 x 18/20, cura pela funcao real. PROVA: `logs/r6_red.log`, `logs/placar_estrutural/contratos_20261025.txt`.
 - (6): citacao = `[ID]` no ASSUNTO (lei 09:3x item 6); 3 casos do selo INVERTIDOS. RED: `logs/tranca6_red.log`. A 1a suite do comboio pegou 1 caso que eu nao tinha rodado com a cura (`test_substituir...`, prosa 'ALFA') -- curado e recertificado. PROVA: `logs/instr_suite.log`, `logs/instr_fix.log`.
@@ -130,7 +131,7 @@ LEI-AKITA: origem=core/placar_estrutural.py (R6), core/placar_tickets.py::citaca
 - placar_code: a linha `competencias_pagas_sem_tranca` sai (o command saiu em `a7b8346a`).
 - SUITE CHEIA do comboio RECERTIFICADA: `Ran 11960` / `OK (skipped=42, expected failures=15)` / rc 0. PROVA: `logs/instr_suite2.log`; cmp dos 8 arquivos contra `wt-instr`.
 
-## ITEM-3-TRANCA-SAI-PELA-L111 -- o contador e o ramo `--trancar` saem (25/10 11:2x)
+## ITEM-3-TRANCA-SAI-PELA-L111 -- o contador e o ramo `--trancar` saem (25/10 10:5x, NO AR 11:04)
 LEI-AKITA: origem=ponto/services/fechamento.py::competencias_pagas_sem_tranca + folha/management/commands/pre_fechamento.py (ramo --trancar), testemunha=n/a (sai leitor, nao entra), RED=ponto.tests.test_tranca_sem_efeito_nao_e_defeito, quem-mais-le=bin/placar_code.sh (pouso de instrumento proprio), juizes novos=0
 - LEI: lei dele 25/10 09:4x item 9 -- a de 30/09 (TXT e fotografia) + L-113 revogam a regra de 16/09; L-111 apaga no ato.
 - SAEM (lapide no sitio): `competencias_pagas_sem_tranca` (funcao, command, teste, linha em `config/crons.py`, linha em `core/tests/testes_sem_relogio.txt`); o ramo `--trancar` do `pre_fechamento` (pauta "[TRANCAR]", `trancar_pendentes`) e a classe `PautaTrancarTest`. O marco e as violacoes da anterior seguem relatados.
@@ -145,7 +146,7 @@ LEI-AKITA: origem=escala/services/cadastro_realidade.py::colabs_nunca_bateu (a l
 - IMPACTO (sombra, arvore `wt-nb`): `retidos_calados` **57 -> 47**, `roteados` **10**; a lista ganha **19** linhas C5 (490 dias), e as 19 aparecem na lista (`por_assinatura['C5']`).
 - ESMERIL NA SUITE: o contrato `ponto.tests.test_contract_juiz_fechamento` pegou `janela_atual(ini - 1 dia)` montado a mao em `colabs_nunca_bateu` -- a autoridade e `ponto/janelas.py::janela_anterior`; curado e RECERTIFICADO.
 - SUITE CHEIA da arvore que pousa: `Ran 11960` / `OK (skipped=42, expected failures=15)` / rc 0 (`logs/nb_suite2.log`); cmp dos 3 arquivos.
-- SMOKE em prod (11:0x, `vigiar_retido_calado`): `ROTEADOS|10`, `retidos_calados=47`, universo 505 bloqueados -- igual a sombra. PROVA: saida do command no terminal desta sessao, 25/10 11:0x.
+- SMOKE em prod (10:5x, `vigiar_retido_calado`): `ROTEADOS|10`, `retidos_calados=47`, universo 505 bloqueados -- igual a sombra. PROVA: saida do command no terminal desta sessao, 25/10 10:5x.
 - FALHA DE PISTA (minha): o commit da C5 foi RECUSADO pelo pre-commit (`afirma_com_prova`, linha POUSO da SEM-CELULA-11 sem PROVA) e o `deploy.sh` encadeado rodou mesmo assim -- a arvore viva (com os 3 arquivos ja copiados e conferidos por cmp) foi ao ar SEM commit por ~1 min. Curado no ato: PROVA posta e a MESMA arvore commitada logo depois. PROVA: `logs/nb_deploy.log` (deploy rc 0), cmp dos 3 arquivos acima.
 
 ## SEM-CELULA-11-DEVE-TER-CELULA -- impacto por rubrica ANTES do apply (25/10 10:0x)
