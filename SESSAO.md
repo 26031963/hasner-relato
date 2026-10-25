@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/10/2026 06:25:48.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (7.4 MB). Acoes na janela: **393**.
+**Medido em 25/10/2026 06:31:04.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (7.4 MB). Acoes na janela: **394**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 06:29:36 | Bash | Wait for push result | `until grep -q "pos_push\\|error:\\|rejected" /home/ronald/saas-hasner/logs/gesc/push7.out 2>/dev/null; do /usr/bin/sleep 15; done; tail -3 /home/ronald/saas-hasner/logs/gesc/push7.out; cd /home/ronald/saas-hasner && git fetch -q && git log --oneline origin/main -1` |
 | 06:19:28 | Bash | Record smoke, close item, commit, push | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read() a="Pouso: `cmp` arquivo a arquivo, commit + `bin/deploy.sh --sem-migrate`.\n\n## 25/10 05:5x -- VIGIA-NAO-VE" assert s.count(a)==0 a="- Suite da copia `wt-rc` (a arvore que pousa): `OK (skipped=42, expected failures=15)`, Ran 11948, rc 0. PROVA: `logs/gesc/rc_suite2.out`. Pouso: `cmp` arquivo a arquivo, commi ...` |
 | 06:19:14 | Bash | Prod smoke of the retido-calado vigia | `cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command vigiar_retido_calado --schema=juliani > logs/gesc/vrc_prod.out 2>&1; echo rc=$?; grep "^VRC\|UNIVERSO\\|^VRC\|CONTADOR\\|comp=10" logs/gesc/vrc_prod.out` |
 | 06:18:57 | Bash | Land, commit and deploy the retido-calado vigia | `cd /home/ronald/saas-hasner && FILES=$(cd /home/ronald/wt-rc && { git diff --name-only; git ls-files --others --exclude-standard app/folha app/ponto; }) && echo "$FILES" && git diff --quiet HEAD -- app/config/crons.py app/docs/ARQUITETURA.mmd && for f in $FILES; do mkdir -p $(dirname $f); cp /home/ronald/wt-rc/$f $f; cmp $f /home/ronald/wt-rc/$f \|\| echo DIFERE $f; done && python3 - <<'EOF' p='ap ...` |
