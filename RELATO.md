@@ -113,6 +113,13 @@ LEI-AKITA: origem=ponto/services/cartorio.py::julgar_colab (a porta), testemunha
 - PROVA: discordancia 4 -> **1**; col715 22/07, col268 29/08 e 31/08 -> `concorde`; `EXPORTADAS_INTACTAS|True` (hash de todas as ExportacaoDominio), `FM_IGUAL|True` (todos os FechamentoMensal dos 2 colabs), chamados 238 -> 238.
 - RESIDUO 1, a porta MANTEM: col268 12/08 e FOLGA (`trabalha=False`, ata `folga`) com falta aprovada em cima, e o cartorio lavra `nunca_bateu` -- os vizinhos de folga sem falta sao `concorde`. Classe na sombra: 2.525 celulas de folga com `nunca_bateu` (40 colabs), quantas com falta NAO medido. Vigia x cartorio discordam do mesmo dia: linha de fila `FALTA-EM-FOLGA-VIRA-NUNCA-BATEU`.
 
+## BO-GESTAO-HE-ACESSO -- quem pode decidir a HE abre a tela onde se decide (25/10 15:3x)
+LEI-AKITA: origem=ponto/views.py::gestao_he (porta so `ver_folha`), testemunha=colaboradores/mixins.py::tem_acao, RED=ponto.tests.test_bo_gestao_he_acesso, quem-mais-le=o card HE da Central e do indice de relatorios (aparecem para todos e levavam ao 404), juizes novos=0
+- MUDOU (copia `wt-bo-he`): a tela abre com `ver_folha` OU `autorizar_he`; ela e a lista de HE e nao abre a folha -- o PDF da lista e as rotas de folha seguem pedindo `ver_folha`. A ancora existia DUAS vezes (tela e PDF): troquei so a da tela, ancorada na funcao.
+- MEDIDO em prod (so leitura, `tem_acao` real): **4** usuarios ativos com `autorizar_he` sem `ver_folha` (pks 973, 1014, 677, 679) -- os 4 do achado.
+- RED (HEAD): `FAILED (failures=1)` -- quem so decide leva 404. PROVA: `logs/he_red.log`. GREEN (selo + telas de HE): `Ran 65` / OK. PROVA: `logs/he_green.log`.
+- FALHA DE PISTA (minha): `/home/ronald/wt-he` ja existia (raia antiga da atomicidade da porta de HE) e o `| tail -1` escondeu o erro do `worktree add`; o patch NAO gravou (o assert parou antes) e o teste que caiu la foi copiado para /tmp e tirado -- a raia antiga segue intocada.
+
 ## CRON-NAO-CABE-SOMBRA-65-MIN -- o pre_fechamento vai a 05:15 e o render do crontab volta (25/10 15:0x)
 LEI-AKITA: origem=config/crons.py (`VIZINHO_SOMBRA` + a linha do `pre_fechamento`), testemunha=config/crons.py::inicio_derivado (o render), RED=o proprio render (`ValueError: CRON QUE NAO CABE`, `bin/crons.sh check` -> "render falhou"), quem-mais-le=bin/crons.sh, o selo B6, juizes novos=0
 - MEDIDO: o render FALHA desde 24/10 04:05 (mtime do `crons_duracao.json`): `sombra.sh` = p95 7 d x 1,5 = **3.856 s** (65 min) contra o corredor de 63 (piso 04:05 + 2 min ate 05:10). Corrida real de p95 ~2.571 s (43 min).
