@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/10/2026 18:27:05.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (24.4 MB). Acoes na janela: **871**.
+**Medido em 25/10/2026 18:32:34.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (24.4 MB). Acoes na janela: **869**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -879,5 +879,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 06:33:07 | Bash | Read the BO-ATESTADO pending detail | `grep -n "^\| BO-ATESTADO-ANDROID-ERRO-AO-ENVIAR \|" docs/BACKLOG.md \| python3 -c " import sys for l in sys.stdin: c=l.split('\|'); print(c[3].strip()[:1500]) "; grep -n "corpo_chegou_inteiro" -r --include=*.py . \| grep -v tests \| head` |
 | 06:33:01 | Bash | Read states of two candidate items | `for k in BO-ATESTADO-ANDROID-ERRO-AO-ENVIAR GRUPO-D-DIA-ACUSA-SEM-FIO; do grep -n "^\| $k \|" docs/BACKLOG.md \| python3 -c " import sys for l in sys.stdin: c=l.split('\|'); print(c[1].strip(),'::',c[3].strip()[:400]); print(' desc:',c[2].strip()[:400]); print(' pronto:',c[5].strip()[:250] if len(c)>5 else '') "; done` |
 | 06:32:51 | Bash | Write design question and mark item waiting | `date +%H:%M && python3 - <<'EOF' p='docs/RELATO.md'; s=open(p).read() anchor="> **lei: QUAL-RELACAO-E-O-FIO-DO-DIA" q="""> **lei (DESENHO, autorizacao item 5): LOTE-POR-TURNO (LOTE-AGRUPA-POR-DIA-E-RASGA-O-PAR-DA-MEIA-NOITE, 25/10 06:3x)** -- a guarda de geometria do ATO de lote julga por `data_evento`; o par que CRUZA A MEIA-NOITE cai em dois grupos e as duas pontas sao RECUSADAS (medido 22/10, ` ...` |
-| 06:32:34 | Bash | Read the midnight-pair batch item | `grep -n "^\| LOTE-AGRUPA-POR-DIA-E-RASGA-O-PAR-DA-MEIA-NOITE \|" docs/BACKLOG.md \| cut -c1-2500` |
-| 06:29:36 | Bash | Wait for push result | `until grep -q "pos_push\\|error:\\|rejected" /home/ronald/saas-hasner/logs/gesc/push7.out 2>/dev/null; do /usr/bin/sleep 15; done; tail -3 /home/ronald/saas-hasner/logs/gesc/push7.out; cd /home/ronald/saas-hasner && git fetch -q && git log --oneline origin/main -1` |
