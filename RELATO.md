@@ -74,6 +74,15 @@ PAREI: ! GATE-EXPORT-10 (so o export da 10) | espera o DP na Gestao de HE e o Ro
 > O MARCADOR ANDOU no mesmo ato: `ORDEM-VIVA-TOPO` saiu de `BO-HE-RECUSAR-LOTE-500` (fechado) para `O261`, que o hook cobrou.
 > SEM COMMIT DE PROPOSITO: `RELATO.md` e `BACKLOG.md` ficam sujos na arvore porque a L-106 nao deixa commit so de docs fora de marco. Eles entram no commit do proximo marco.
 
+## 25/10 04:1x -- MARCO LOG-BEST-EFFORT-EM-DOBRO: o dobro era OUTRO, e o que faltava era a raiz
+
+LEI-AKITA: origem=config/settings/saas.py::LOGGING (sem raiz; `django.request` + `django` com os mesmos handlers e `propagate: True`), testemunha=o proprio dict por AST (`ponto/tests/test_logger_ponto_vai_para_arquivo.py::_logging_da_fonte`), RED=ponto/tests/test_logging_de_todo_app.py (HEAD: 3 FAIL, `logs/gesc/log_red.out`), quem-mais-le=todo logger de producao dos apps (censo por AST, com o nome que o `engolir` recebe por parametro), juizes novos=0
+
+- O QUE A LINHA SUPUNHA E NAO ERA: handler em dobro no `ponto` -- o `ponto` esta certo (`propagate: False`). MEDIDO 25/10 04:1x: 122 linhas `best-effort falhou` no `docker logs saas_ui` em 24 h, TODAS sem hora/nivel/nome (assinatura do `logging.lastResort`), do logger `chamados.materializacao`, sem handler na cadeia; as repeticoes sao a MESMA pergunta falhando a cada passada (#45656 18x). O selo vizinho aceitava "1a parte e app instalado" (app nao e handler) e so varria `ponto`.
+- O DOBRO DE VERDADE: `django.request` -> `django`, mesmos handlers, `propagate: True` -- todo ERROR de request saia 2x no `errors.log` e no stdout.
+- MUDOU: handler `appconsole` (WARNING, formatter `full`: o lastResort com a linha inteira, MESMO nivel), `root` = `appconsole` + `errfile` em WARNING; `django.request` e `django` com `propagate: False` (os handlers do P0 de 21/09 ficam). EFEITO EM PROD declarado: WARNING de app segue no stdout (mesmo volume) agora COM hora/nivel/nome; ERROR de app passa a ir TAMBEM ao `errors.log` (rotacao 5 MB x 3).
+- Selo: censo de TODO app (getLogger literal + 1o argumento de `engolir`/`registrar_engolido`), `test_RED_todo_logger_de_producao_tem_handler`, `test_RED_nenhum_registro_sai_duas_vezes`, `test_MORDE_a_raiz_nao_cala_o_WARNING_que_o_lastResort_mostrava`. Verde com o vizinho: 8 OK (`logs/gesc/log_green.out`). Suite da copia `wt-log`: em curso (`logs/gesc/log_suite.out`).
+
 ## 25/10 04:1x -- VARREDURA-TRIAGEM lote VIGIA: o residuo do `reconciliar_chamados` mede 0 no dump de hoje (so leitura)
 
 - Medido na sombra (dump 25/10), a funcao REAL por colab (`reconciliar_chamados_colab` + `retratar_chamados_absolvidos_por_celula`) dentro de `atomic` + rollback, universo 615 colabs (vivo OU orfa reatavel): **0 retratados, 0 pergunta, 0 disputa, 0 chamado criados**. As linhas `S160 ... pergunta criada SEM destino` do log sao so log: a contagem antes/depois por colab da 0. PROVA: `logs/rch_residuo2.out` (o 1o passe, `logs/rch_residuo.out`, so contava status).
