@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 24/10/2026 23:59:34.** Transcript: `c87029f4-ea97-4fea-b6af-47ee2e204958.jsonl` (15.7 MB). Acoes na janela: **793**.
+**Medido em 25/10/2026 00:05:04.** Transcript: `c87029f4-ea97-4fea-b6af-47ee2e204958.jsonl` (15.8 MB). Acoes na janela: **795**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 00:04:40 | Bash | Register the correction, remove the copy, regenerate handoff | `cd /home/ronald/saas-hasner/app; date '+%d/%m %H:%M'; python3 - <<'EOF' f='docs/PROMPTS.md'; s=open(f).read().rstrip('\n') s+=('\n\| 25/10 ~00:0x \| **aval `COL309` = aplica** (os 3 chamados nascem, L-113) + **CORRECAO do `TURNO-ABERTO-UM-EMISSOR`** (substitui itens 1, 2, 5, 6): (1+2) a emissao de turno_aberto/24h NAO sai dos crons sem substituto -- UMA funcao de emissao (turnos_do_colab t.aberto  ...` |
+| 00:01:36 | Bash | Keep waiting for the push result | `cd /home/ronald/saas-hasner; for i in $(seq 1 58); do grep -q '^rc=' logs/fnd/push3.out 2>/dev/null && break; /usr/bin/sleep 10; done; date '+%H:%M'; tail -4 logs/fnd/push3.out \| cut -c1-200` |
 | 23:51:50 | Bash | Wait for the push result | `cd /home/ronald/saas-hasner; for i in $(seq 1 58); do grep -q '^rc=' logs/fnd/push3.out 2>/dev/null && break; /usr/bin/sleep 10; done; date '+%H:%M'; tail -4 logs/fnd/push3.out \| cut -c1-200` |
 | 23:51:45 | Bash | Record the col309 apply and push the E6 marco | `cd /home/ronald/saas-hasner; python3 - <<'EOF' f='app/docs/RELATO.md'; s=open(f).read(); L=s.split('\n') i=[k for k,l in enumerate(L) if l.startswith('> **! COL309-GERADORA-VENCIDA-EM-EXPORTADA -- PAREI')][0] L[i]=('> **RESPONDIDA E APLICADA 24/10 23:51: COL309-GERADORA-VENCIDA-EM-EXPORTADA** -- aval 23:5x: aplica, e os 3 chamados nascem (L-113: chamado pode nascer em competencia que o Dominio ja  ...` |
 | 23:51:25 | Bash | Apply the col309 regeneration in prod with guards | `cd /home/ronald/saas-hasner; docker cp logs/col309/apply.py saas_core:/tmp/col309_apply.py && docker exec saas_core python manage.py tenant_command shell --schema=juliani --command "exec(open('/tmp/col309_apply.py').read())" 2>&1 \| grep -v "objects imported\\|lavratura falhou" \| tee logs/col309/apply.out \| cut -c1-260; date '+%H:%M'` |
