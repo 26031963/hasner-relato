@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/10/2026 03:50:47.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (4.8 MB). Acoes na janela: **249**.
+**Medido em 25/10/2026 03:55:47.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (4.8 MB). Acoes na janela: **250**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 03:52:12 | Bash | Wait for push and confirm on remote | `until [ -f /home/ronald/saas-hasner/logs/gesc/push4.out ] && grep -q "pos_push\\|error:\\|RED" /home/ronald/saas-hasner/logs/gesc/push4.out && ! pgrep -f "bin/push.sh" >/dev/null; do /usr/bin/sleep 15; done; tail -3 /home/ronald/saas-hasner/logs/gesc/push4.out; cd /home/ronald/saas-hasner && git fetch -q && git log --oneline origin/main -1` |
 | 03:42:03 | Bash | Commit (C) marco and push | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/BACKLOG.md'; s=open(p).read() i=s.index('\| TURNO-ABERTO-UM-EMISSOR \|'); j=s.index('\n',i); cols=s[i:j].split('\|') cols[3]=' (B) item 3 NO AR 02d65a44; item 4 PARADO em lei (469 de 3.550). (A) diagnostico a..e no RELATO (7b051b0b). (C) pergunta do selfie com a assinatura medida no topo do RELATO 25/10 03:4x (12.484 com tsd x 13.146 sem ...` |
 | 03:41:52 | Bash | Write selfie question with measured signature | `date +%H:%M && python3 - <<'EOF' p='docs/RELATO.md'; s=open(p).read() anchor="> **lei: ITEM-4-QUEM-[nome]-A-PERGUNTA-ORFA" q="""> **lei: SELFIE-AUSENTE-REDACAO-NOVA ((C) do TURNO-ABERTO-UM-EMISSOR, 25/10 03:4x)** -- o corte `juiz selfie_ausente nasce` (prazo pelo CANAL: PWA no ato, APK 90 min) esta SUSPENSO porque a batida nao grava canal. ASSINATURA MEDIDA (sombra, 30 d, `logs/selfie_assin.out`, 26 ...` |
 | 03:41:38 | Bash | Find who sends device timestamp and the s84 origem | `git grep -n "timestamp_dispositivo" -- '*.py' '*.js' \| grep -v "/tests/\\|migrations/" \| cut -c1-170 \| head -12; git grep -n "disputa_s84_retro" -- '*.py' \| grep -v "/tests/" \| head -3` |
