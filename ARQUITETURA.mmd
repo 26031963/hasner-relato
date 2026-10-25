@@ -200,8 +200,8 @@ flowchart TD
     t_evento["EVENTO<br/>batida, ausencia, chamado -> cartorio julga na hora (signals B5.2)"]
     t_consumidor["CONSUMIDORES<br/>chamado, pergunta, tela, folha: leem a lampada, nunca re-julgam"]
     t_vigia["CRON = VIGIA<br/>31 vigias; contador esperado 0, so alarma"]
-    t_prazo["CRON = PRAZO (L-101)<br/>5 cron(s): a falta nao emite evento, o relogio e o unico sinal dela;<br/>julgam pela funcao do juiz da casa, sem regra propria (PRAZO_DELEGA_A)"]
-    t_juiz["JUIZ POR VARREDURA (divida)<br/>18 crons ainda julgam: esperado 0"]
+    t_prazo["CRON = PRAZO (L-101)<br/>6 cron(s): a falta nao emite evento, o relogio e o unico sinal dela;<br/>julgam pela funcao do juiz da casa, sem regra propria (PRAZO_DELEGA_A)"]
+    t_juiz["JUIZ POR VARREDURA (divida)<br/>17 crons ainda julgam: esperado 0"]
     t_escala --> t_celula
     t_evento --> t_celula
     t_celula --> t_consumidor
@@ -225,12 +225,12 @@ flowchart TD
   j_reconciliar_perguntas_orfas["reconciliar_perguntas_orfas"] -.-> t_juiz
   j_reconciliar_vinculo["reconciliar_vinculo"] -.-> t_juiz
   j_silenciar_chamados_isentos["silenciar_chamados_isentos"] -.-> t_juiz
-  j_supra_juiz["supra_juiz"] -.-> t_juiz
   j_termometro_regua["termometro_regua"] -.-> t_juiz
   pz_apurar_furos_diarios["apurar_furos_diarios<br/>escala.services.furos_diarios::apurar"] -.-> t_prazo
   pz_escalonar_documentos_ausencia["escalonar_documentos_ausencia<br/>ponto.services.ausencia::escalonar_aguardando_documento"] -.-> t_prazo
   pz_flip_automatico["flip_automatico<br/>ponto.turnos::dia_encerrado"] -.-> t_prazo
   pz_processar_cartorio["processar_cartorio<br/>ponto.services.cartorio::julgar_colab"] -.-> t_prazo
+  pz_supra_juiz["supra_juiz<br/>ponto.turnos::dias_encerrados"] -.-> t_prazo
   pz_vigia_de_hora["vigia_de_hora<br/>ponto.services.cartorio::marcos_vencidos"] -.-> t_prazo
 
   %% (e) EVENTO — fonte: @receiver em ponto/signals.py, chamados/signals.py, escala/signals.py (AST)
