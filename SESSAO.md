@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/10/2026 01:31:04.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (2.1 MB). Acoes na janela: **88**.
+**Medido em 25/10/2026 01:36:26.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (2.1 MB). Acoes na janela: **89**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 01:31:28 | Bash | Run neighbors and command contracts on wt-aus | `cd /home/ronald/wt-aus/app && { git grep -l "nunca_bateu\\|julgar_colab\\|VEREDITOS_ACUSAM" -- '*/tests/*.py'; git grep -l "management/commands\\|management.commands\\|os.listdir.*commands\\|services/\*\\|glob(.*commands" -- '*/tests/*.py'; } \| sort -u \| sed 's#/#.#g;s#\.py$##' \| tr '\n' ' ' > /tmp/claude-1001/-home-ronald-saas-hasner-app/9dc43c3d-971d-4cc9-b176-7008bbd353bb/scratchpad/viz2.txt ...` |
 | 01:31:00 | Bash | RED for falta cure on HEAD copy | `cd /home/ronald/wt-gred && git checkout -q -- . && git checkout -q --detach 825bb46a && cp /home/ronald/wt-aus/app/ponto/tests/test_bo_inss_nunca_bateu_le_a_precedencia.py app/ponto/tests/ && git status --short && /home/ronald/saas-hasner/bin/suite.sh --dir /home/ronald/wt-gred --only "ponto.tests.test_bo_inss_nunca_bateu_le_a_precedencia" > /home/ronald/saas-hasner/logs/gesc/aus_red.out 2>&1; ech ...` |
 | 01:30:52 | Bash | Rebase wt-aus copy onto the new commit | `cd /home/ronald/wt-aus && git stash -q && git checkout -q --detach 825bb46a && git stash pop -q && git status --short && git diff --stat \| tail -1` |
 | 01:30:51 | Bash | Rebuild today's sombra ensaio | `cd /home/ronald/saas-hasner && (bin/sombra.sh --refazer --dump-agora && bin/sombra.sh --bloco) > logs/gesc/ensaio.out 2>&1; echo rc=$? >> logs/gesc/ensaio.out` |
