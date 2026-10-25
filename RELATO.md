@@ -93,7 +93,8 @@ LEI-AKITA: origem=ponto/views.py::submeter_ausencia e ::lancar_ausencia (liam `r
 - O DEFEITO, provado no HEAD: corpo multipart CORTADO no meio do arquivo (CONTENT_LENGTH do corpo inteiro) -> as DUAS portas web criavam a ausencia SEM o anexo (`1 != 0`), a mesma armadilha do BO na api: a 2a tentativa ouve "ja existe". MORDE: o corpo INTEIRO segue criando.
 - A SIMULACAO SE ACERTOU DUAS VEZES, e fica escrito para o proximo: (1) `RequestFactory.generic` so poe `CONTENT_TYPE` quando `data` nao e vazio -- sem ele o POST vinha vazio e o RED passava por "tipo invalido"; (2) `FakePayload` LEVANTA ao ler alem do fim, e o socket real devolve MENOS bytes -- com ele o HEAD dava erro e nao criava nada, e o RED passava por excecao. Com `BytesIO` + `CONTENT_TYPE` o HEAD fica vermelho.
 - MUDOU: as duas portas perguntam `corpo_chegou_inteiro(request) is False` logo depois de ler o `FILES` e recusam dizendo que NADA foi salvo; `None` nunca barra.
-- Suite da copia `wt-anexo`: em curso (`logs/gesc/anexo_suite.out`). FALTA do item: o smoke do reenvio (AVAIS #3) e dele.
+- Suite da copia `wt-anexo`: a 1a FAILED (failures=1) no `core/tests/test_selo_teste_sem_relogio.py` -- o selo novo lia `date.today()`; congelado (`freeze_time`, dia fixo) e o RED segue vermelho no HEAD (`logs/gesc/anexo_red5.out`). A arvore que pousa: `OK (skipped=42, expected failures=15)`, Ran 11951, rc 0. PROVA: `logs/gesc/anexo_suite2.out`. Pouso: `cmp` arquivo a arquivo, commit + `bin/deploy.sh --sem-migrate`. FALTA do item: o smoke do reenvio (AVAIS #3) e dele.
+- NO AR `51cc4984` (deploy 07:02, rc 0, tres rotas). PROVA em prod, so leitura (POST em porta de prod e escrita -- CLAUDE.md sec.6): `inspect.getsource` no `saas_ui` vivo -> `submeter True lancar True` (as duas views com o juiz). O smoke de clique do reenvio segue dele (AVAIS #3).
 
 ## 25/10 06:0x -- MARCO VIGIA-NAO-VE-350-DOS-369-DIAS-CALADOS: o vigia do retido calado le o Retrato gravado
 
