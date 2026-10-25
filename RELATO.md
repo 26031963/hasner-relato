@@ -1,10 +1,12 @@
 # RELATO — esteira saas-hasner
 
+> **! COL305-VINCULO-ABERTO-APOS-DEMISSAO (SEM-CELULA-11, 25/10 10:0x)** -- 1 desligado (col305) com `EscalaColaborador` ATIVA e sem `data_fim` depois da demissao: residuo do BUG 95 (a porta de desligamento fecha por `data_fim`; os 104 legados foram fechados por `fechar_vinculo_de_desligado`). Com a SEM-CELULA-11 o gerador passa a ver o vinculo e, na 11, cria **31** celulas apos a demissao (5 ja passadas acusam `nunca_bateu`); folha **0** (desligado fora do universo do fechamento), emissao **0** (cartorio exclui desligado). Pergunta (`!` de VINCULO): fechar pela porta existente, `fechar_vinculo_de_desligado --apply` (data_fim = demissao; ele so toca col305)? A fila SEGUE.
+
 > **RESPONDIDA 25/10 09:3x: CITACAO-QUE-EXPLICA = (a)** -- so a ETIQUETA `[ID]` no assunto conta como citacao, o mesmo padrao que o `regua_tickets` ja cobra (um juiz de citacao). Item `PARADO-CITADO-E-PROSA-QUE-EXPLICA` volta a andar.
 
 > **RESPONDIDA 25/10 09:3x: FIO-DO-NUNCA-BATEU = pauta/lista do DP** (dono ADESAO/CADASTRO, a mesma lista do Cadastro x Realidade); pergunta ao colab que nunca usou o app nao chega a ninguem. O `vigiar_retido_calado` conta o dia como ROTEADO, com o motivo.
 
-> **RESPONDIDA 25/10 09:3x: PORTA-DE-ANEXAR = a premissa nao conferia** -- a porta EXISTE: `api/views.py::api_ausencia_documento` (rota `ausencias/<id>/documento/`, colab anexa na PROPRIA ausencia PENDENTE; decidida = 409, quem anexa e o DP por `ponto/views.py::anexar_documento_ausencia`), e o reenvio do mesmo fato anexa na existente se ainda sem documento. Nenhuma lei nova. Falta MEDIR: o app nativo chama `ausencias/<id>/documento/`? e a submissao de 18/10 e anterior a cura de 23/10. Os ~13 arquivos orfaos: nao apagar (`!`), nao atribuir por palpite.
+> **RESPONDIDA 25/10 09:3x: PORTA-DE-ANEXAR = a premissa nao conferia** -- a porta EXISTE: `api/views.py::api_ausencia_documento` (rota `ausencias/<id>/documento/`, colab anexa na PROPRIA ausencia PENDENTE; decidida = 409, quem anexa e o DP por `ponto/views.py::anexar_documento_ausencia`), e o reenvio do mesmo fato anexa na existente se ainda sem documento. Nenhuma lei nova. Falta MEDIR: o app nativo chama `ausencias/<id>/documento/`? e a submissao de 18/10 e anterior a cura de 23/10. Os ~13 arquivos orfaos: nao apagar (`!`), nao atribuir por palpite. **MEDIDO 25/10 10:0x** (log do `saas_ui`, horizonte 16/09-25/10): o app nativo (`okhttp`) chamou `/api/ausencias/<id>/documento/` **0** vezes; a rota teve **1** chamada, de navegador (200). O nativo cria e reenvia por `POST /api/ausencias/`: 155x200, 215x409 (`sobreposicao`, outra ausencia no dia -- nao e o reenvio do mesmo fato, que devolve 200 `ja_recebido`), 17x500 (os ultimos 4 em 18/10, ANTES da cura de 20-23/10; 0 desde). Logo o caminho de anexar do APK e o reenvio, e a porta de anexar nao tem cliente nativo: isso e do APK (outro repo), nao desta casa.
 
 > **RESPONDIDA 25/10 09:3x: LOTE-POR-TURNO = (a)** -- o lote agrupa pelo turno PREVISTO da celula (marcos do DNA existem antes da batida; celula soberana). Remedir os 51/32 de 22/10 antes; se pedir juiz novo, pergunta com numeros.
 
@@ -85,6 +87,23 @@ PAREI: ! GATE-EXPORT-10 (so o export da 10) | espera o DP na Gestao de HE e o Ro
 > OS QUATRO ITENS DA ORDEM, FEITOS: deploy `d01210d2` **no ar 10:26** (`--sem-migrate` rc=0, 3 rotas provadas, selo BUG 128 verde, portao fechado pelo PASSO 5 do gate -- nunca `--sem-sombra`); push **pousou** (`fa5cd145..eebe2cce`, rc=0, `Ran 11566 tests · OK (skipped=51, expected failures=14)` mais control-plane `Ran 22 tests · OK`, veredito lido no REMOTO); `bin/handoff_sessao.sh` gerado (42/60 linhas, selo verde); e esta linha. O 1 commit que sobrou a frente (`6d469ed2`) e do proprio `pos_push` -- a excecao nomeada da L-106 --, e o push dele e do proximo push, nao deste.
 > O MARCADOR ANDOU no mesmo ato: `ORDEM-VIVA-TOPO` saiu de `BO-HE-RECUSAR-LOTE-500` (fechado) para `O261`, que o hook cobrou.
 > SEM COMMIT DE PROPOSITO: `RELATO.md` e `BACKLOG.md` ficam sujos na arvore porque a L-106 nao deixa commit so de docs fora de marco. Eles entram no commit do proximo marco.
+
+## REJULGAR-4-EXPORTADAS -- APLICADO em prod 25/10 10:00 (`!` dele 09:4x, item 10)
+LEI-AKITA: origem=ponto/services/cartorio.py::julgar_colab (a porta), testemunha=CelulaDia.veredito, RED=n/a (ato, nao cura), quem-mais-le=vigiar_ausencia_x_veredito, juizes novos=0
+- ATO: `logs/sombra/rejulgar_4_exportadas.py` (dry na sombra igual) em prod, `APPLY=1`; saida + REVERSAO (todos os campos das 4 celulas, impressa ANTES do atomic) em `logs/gesc/rejulgar4_apply_20261025_1000.out`.
+- PROVA: discordancia 4 -> **1**; col715 22/07, col268 29/08 e 31/08 -> `concorde`; `EXPORTADAS_INTACTAS|True` (hash de todas as ExportacaoDominio), `FM_IGUAL|True` (todos os FechamentoMensal dos 2 colabs), chamados 238 -> 238.
+- RESIDUO 1, a porta MANTEM: col268 12/08 e FOLGA (`trabalha=False`, ata `folga`) com falta aprovada em cima, e o cartorio lavra `nunca_bateu` -- os vizinhos de folga sem falta sao `concorde`. Classe na sombra: 2.525 celulas de folga com `nunca_bateu` (40 colabs), quantas com falta NAO medido. Vigia x cartorio discordam do mesmo dia: linha de fila `FALTA-EM-FOLGA-VIRA-NUNCA-BATEU`.
+
+## SEM-CELULA-11-DEVE-TER-CELULA -- impacto por rubrica ANTES do apply (25/10 10:0x)
+LEI-AKITA: origem=ponto/portas/celula.py::gerar_celulas_periodo (universo), testemunha=CelulaDia + folha.export (lido pelo simular_folha), RED=ponto.tests.test_sem_celula_11_afastado_tem_celula, quem-mais-le=regenerar_celulas_vinculo (mesmo predicado `_dia_na_vigencia`), cartorio, export, juizes novos=0
+- MUDOU (copia `wt-semcel`): o gerador deixa de filtrar `colaborador__situacao='ativo'`; `_dia_na_vigencia(ec, d)` e o predicado UNICO de vigencia dos dois escritores do dna.
+- RED (HEAD): `FAILED (failures=2, errors=1)` -- afastado 0 de 10 dias; universos diferentes; desligado sem dia nenhum. GREEN (cura): `Ran 4` / OK.
+- UNIVERSO (sombra): 12 EC ativas de colab nao-ativo = 11 afastados + col305 desligado. Dias novos: 10 = **330** (11 x 30), 11 = **341** + 31 do col305 (todos apos a demissao).
+- IMPACTO (sombra, arvore curada, foto -> gerar -> `julgar_colab` -> foto, rollback; `logs/semcel11_impacto.out`):
+  - 10: celulas 30 -> 360, vereditos 330 `concorde` (o afastamento cobre); **TXT 0 linha em toda rubrica**; retidos 298->291, 53->51, 15->13 (emp 2/3/4) = os **11 saem**, 0 entram, 0 mudam.
+  - 11: celulas 0 -> 372; **TXT 0 linha**; retidos 200->193, 50->48, 9->7 = os mesmos **11 saem**.
+  - exportacoes vigentes da 10 e da 11: 0 e 0.
+- PROXIMO: suite cheia da copia; pouso (L-107); apply em prod so das celulas dos 12 (`gerar_celulas --colab`, 10 e 11) com reversao (pks criadas) ANTES, hash das exportadas antes/depois, e PROVA de frota depois (`ausencias_sem_efeito_na_celula`: `ausencia_sem_celula_com_vinculo` 330 -> 0).
 
 ## 25/10 05:5x -- VIGIA-NAO-VE-350-DOS-369-DIAS-CALADOS: remedido no dump de hoje (so leitura)
 
