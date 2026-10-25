@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/10/2026 01:47:04.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (2.6 MB). Acoes na janela: **126**.
+**Medido em 25/10/2026 01:52:34.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (2.6 MB). Acoes na janela: **128**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 01:47:15 | Bash | Wait for wt-aus suite verdict | `until grep -q "^rc=" /home/ronald/saas-hasner/logs/gesc/aus_suite.out; do /usr/bin/sleep 20; done; f=/home/ronald/saas-hasner/logs/gesc/aus_suite.out; grep -E "^(OK\|FAILED)($\| \()" $f \| tail -1; grep "^Ran" $f \| tail -1; tail -1 $f; grep "^ERROR:\\|^FAIL:" $f \| head` |
+| 01:47:09 | Bash | Check suite and ensaio progress | `tail -c 300 /home/ronald/saas-hasner/logs/gesc/aus_suite.out; echo; tail -5 /home/ronald/saas-hasner/logs/gesc/ensaio.out; date +%H:%M` |
 | 01:47:01 | Bash | Extend the pareador vigia selo | `cd /home/ronald/wt-pxc2/app && python3 - <<'EOF' p='ponto/tests/test_vigia_pareador_celula.py'; s=open(p).read() s=s.replace(""" def _dia(self, horas, ata): from escala.models import CelulaDia from ponto.models import Batida for tipo, h in horas: Batida.objects.create(colaborador=self.c, tipo=tipo, origem='app', aprovada=True, timestamp=timezone.make_aware(datetime.datetime.combine(D, h))) cel, _  ...` |
 | 01:46:39 | Write |  | `/home/ronald/wt-pxc2/app/ponto/management/commands/vigia_pareador_celula.py` |
 | 01:46:27 | Read |  | `/home/ronald/wt-pxc2/app/ponto/management/commands/vigia_pareador_celula.py` |
