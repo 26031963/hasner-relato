@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/10/2026 14:09:25.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (16.0 MB). Acoes na janela: **676**.
+**Medido em 25/10/2026 14:14:54.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (16.1 MB). Acoes na janela: **681**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 14:10:02 | Bash | Wait for B2 suite verdict | `until grep -q '^rc=' /home/ronald/saas-hasner/logs/geo2_suite.log 2>/dev/null; do /usr/bin/sleep 15; done; cd /home/ronald/saas-hasner && grep -E '^(OK\|FAILED)($\| \()' logs/geo2_suite.log \| tail -1; grep -E '^Ran ' logs/geo2_suite.log \| tail -1; tail -1 logs/geo2_suite.log; grep -E '^(FAIL\|ERROR):' logs/geo2_suite.log \| head -8` |
+| 14:09:56 | Bash | Write B2 section in RELATO | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md'; L=open(p).read().split('\n') j=next(k for k,l in enumerate(L) if l.startswith('## CASA-CHAMADO-C3 (1 de 7)')) sec='''## JUIZ-CLASSIFICAR-POSICAO-NAO-POUSOU (B2, obra INTERROMPIDA, L-119) -- a copia de 24/10 portada e posta na suite (25/10 14:1x) LEI-AKITA: origem=ponto/management/commands/reconciliar_geofence.py (conta propri ...` |
+| 14:09:43 | Bash | Run full suite on ported B2 copy | `cd /home/ronald/saas-hasner && bin/suite.sh --dir /home/ronald/wt-geo2 > logs/geo2_suite.log 2>&1; echo rc=$? >> logs/geo2_suite.log` |
+| 14:09:34 | Bash | Confirm push landed on remote | `cd /home/ronald/saas-hasner && tail -3 logs/push_2510_14b.log; git fetch -q; git log --oneline origin/main -1; git log --oneline origin/main..HEAD \| wc -l` |
+| 14:09:28 | Bash | Park C3 remainder and move marker to B2 | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/BACKLOG.md'; L=open(p).read().split('\n') for k,l in enumerate(L): if l.startswith('\| CASA-CHAMADO-C3 \|'): P=l.split('\|'); P[3]=' 4 de 7 NO AR 25/10 (13:27, 13:42, 13:55); os 3 restantes aguardando outra obra: fantasmas -> SETE-CRONS (PRAZO), perguntas_orfas -> ITEM-4-ORFA-PELAS-LAMPADAS, termometro -> censo dos leitores do escore (in ...` |
 | 13:58:26 | Bash | Wait for push and check remote | `until grep -q '^rc=' /home/ronald/saas-hasner/logs/push_2510_14b.log 2>/dev/null; do /usr/bin/sleep 15; done; cd /home/ronald/saas-hasner && tail -3 logs/push_2510_14b.log; git fetch -q; git log --oneline origin/main -1; git log --oneline origin/main..HEAD \| wc -l` |
 | 13:58:16 | Bash | Measure geofence cure impact in prod read-only | `cat > /home/ronald/saas-hasner/logs/gesc/geo_impacto.py <<'EOF' # B2 / JUIZ-CLASSIFICAR-POSICAO: impacto em PROD (so leitura). Velho = a conta do reconciliar_geofence do HEAD # (distancia <= raio); novo = a regra da copia wt-geo2 (so `fora` de classificar_posicao acusa), ambas com as # funcoes REAIS do HEAD. DECLARADO: a extracao das ocorrencias repete as 3 linhas de `ocorrencias_do_chamado`. from ...` |
 | 13:57:58 | Bash | Compare old and new occurrence extraction | `grep -n "def _ocorrencias" -A14 ponto/management/commands/reconciliar_geofence.py; grep -n "def ocorrencias_do_chamado" -A14 /home/ronald/wt-geo2/app/ponto/services/geofence.py` |
