@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/10/2026 11:49:04.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (14.4 MB). Acoes na janela: **715**.
+**Medido em 25/10/2026 11:54:34.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (14.4 MB). Acoes na janela: **716**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 11:52:34 | Bash | Show sombra output tail for the E2 probe | `cd /home/ronald/saas-hasner && bin/sombra.sh --rodar logs/sombra/e2_auditar.py e2-head 2>&1 \| tail -6` |
 | 11:43:28 | Bash | Update prose and compare vigia output HEAD vs cure | `cd /home/ronald/wt-casa-e2/app && python3 - <<'EOF' for p,a,b in (('core/juizes.py',"""'pelo USO desde 25/10) conta 3 arquivos (3 linhas) tomando a geradora por fora -- ' 'fechamento:160 (fatia E3), folgas:410 (fatia E5) e auditar_invariantes_chamados:388 (fatia E2). '""","""'pelo USO desde 25/10) conta 2 arquivos (2 linhas) tomando a geradora por fora -- ' 'fechamento:160 (fatia E3) e folgas:410  ...` |
 | 11:43:12 | Bash | Build E2 in a copy and update taker census | `cd /home/ronald/saas-hasner && git worktree add -f /home/ronald/wt-casa-e2 HEAD 2>&1 \| tail -1 && mkdir -p /home/ronald/wt-casa-e2/app/logs /home/ronald/wt-casa-e2/app/media && cd /home/ronald/wt-casa-e2/app && python3 - <<'EOF' p='chamados/management/commands/auditar_invariantes_chamados.py'; s=open(p).read() a=""" _ec = c.escala_geradora if _ec is not None and ( (_ec.data_inicio and c.data < _e ...` |
 | 11:42:54 | Bash | Retry push of the corrected batch | `cd /home/ronald/saas-hasner && bin/push.sh > logs/push_2510_12b.log 2>&1; echo rc=$? >> logs/push_2510_12b.log` |
