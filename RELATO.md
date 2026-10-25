@@ -58,6 +58,12 @@ PAREI: ! GATE-EXPORT-10 (so o export da 10) | espera o DP na Gestao de HE e o Ro
 > O MARCADOR ANDOU no mesmo ato: `ORDEM-VIVA-TOPO` saiu de `BO-HE-RECUSAR-LOTE-500` (fechado) para `O261`, que o hook cobrou.
 > SEM COMMIT DE PROPOSITO: `RELATO.md` e `BACKLOG.md` ficam sujos na arvore porque a L-106 nao deixa commit so de docs fora de marco. Eles entram no commit do proximo marco.
 
+## 25/10 00:0x -- EM CURSO GRADE-ESC-DO-DIA-E1: a grade pergunta o vinculo do dia a juiza
+
+- EXPOSICAO (sombra, `vinculo_do_dia_divergentes --mes 10 --ano 2026`, a funcao real dos dois lados): **12 dia-colab / 3 colabs** em que a regra da grade `(ativa, data_inicio)` discorda da celula; **0** mudam o numero do dia; 7.136 sem geradora (a juiza cai na mesma aritmetica). PROVA: `logs/fnd/vdd10_lanc.out`.
+- CURA na copia `wt-grade`: `escala/utils.py::montar_grade_prevista_periodo_por_turno::esc_do_dia` -> `vinculo_do_dia(colab, d, rows, celulas)`, com as celulas da janela do pareador carregadas UMA vez (a mesma query que a grade ja fazia, movida para cima). O builder legado (`:782`) e o rollback da flag GRADE_POR_TURNO: fica, declarado.
+- CONSEQUENCIA A MEDIR antes de qualquer pouso: dia sem vinculo valido PERDE o previsto na grade -- folha (falta/DSR) e o ramo INDEFINIDO do cartorio (que pede previsto). Medindo: FechamentoMensal da 10 inteiro (recalculo real, rollback) e codigos do cartorio na frota, HEAD x cura.
+
 ## 24/10 23:2x -- MARCO E6-NONE-E-CADASTRO: o dono da divergencia sem vinculo e CADASTRO, pelo mesmo carregador
 
 LEI-AKITA: origem=ponto/management/commands/e6_oraculo.py::folga_nao_definida_do_dia (2a composicao juiza+defeito, None -> False), testemunha=escala/alimentacao.py::vinculo_do_dia via ponto/supra_juiz.py::cadastro_do_dia_carregado, RED=ponto/tests/test_e6_janela_declarada_nao_e_divergencia.py (2 ERROR no HEAD, `logs/fnd/e6_red.out`), quem-mais-le=dono_da_divergencia (e6_oraculo, pautas_discordantes), juizes novos=0
