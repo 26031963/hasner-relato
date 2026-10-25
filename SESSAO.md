@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/10/2026 03:18:34.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (4.1 MB). Acoes na janela: **213**.
+**Medido em 25/10/2026 03:24:04.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (4.2 MB). Acoes na janela: **218**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 03:23:52 | Bash | Fix time label in diagnostic line | `sed -i 's/TURNO-ABERTO-UM-EMISSOR (25\/10 03:3x, censo de CODIGO/TURNO-ABERTO-UM-EMISSOR (25\/10 03:2x, censo de CODIGO/' docs/RELATO.md && grep -c "25/10 03:2x, censo de CODIGO" docs/RELATO.md; git -C /home/ronald/saas-hasner status --short \| head` |
+| 03:23:46 | Bash | Write diagnostics b/c and regenerate handoff | `date +%H:%M && python3 - <<'EOF' p='docs/RELATO.md'; s=open(p).read() anchor="> **DIAGNOSTICO (a) do TURNO-ABERTO-UM-EMISSOR" d="""> **DIAGNOSTICO (b) e (c) do TURNO-ABERTO-UM-EMISSOR (25/10 03:3x, censo de CODIGO, sem medida de banco)** -- (b) `turno_aberto` tem **TRES** fechadores, nao dois: o signal da batida (`ponto/signals.py:206`, `_reconciliador_post_save_batida` -> `reconciliar_chamados_co ...` |
+| 03:21:45 | Bash | Wait for push and confirm on remote | `until grep -q "^rc=" /home/ronald/saas-hasner/logs/gesc/push2.out; do /usr/bin/sleep 15; done; tail -3 /home/ronald/saas-hasner/logs/gesc/push2.out; cd /home/ronald/saas-hasner && git fetch -q && git log --oneline origin/main -1 && git log --oneline origin/main..HEAD \| wc -l` |
+| 03:21:28 | Bash | Find reminders and ladder in alert crons | `git grep -n -i "lembrete\\|escada\\|20 *min\\|72 *h" -- 'ponto/management/commands/processar_alertas_*.py' \| head -12` |
+| 03:21:24 | Bash | Census of escalation ladder constants | `git grep -n "72\b.*hora\\|timedelta(hours=72)\\|timedelta(hours=24)\\|minutes=20\b\\|timedelta(minutes=20)" -- 'ponto/management/commands/processar_alertas_turno.py' 'ponto/management/commands/processar_alertas_avancados.py' 'chamados/catalogo/*.py' \| head -12; grep -n "processar_alertas_turno\\|processar_alertas_avancados" ../bin/tests/test_papel_prazo_nao_deriva.sh \| head` |
 | 03:11:07 | Bash | Wait for push verdict, check remote | `until grep -q "^rc=" /home/ronald/saas-hasner/logs/gesc/push2.out; do /usr/bin/sleep 20; done; tail -4 /home/ronald/saas-hasner/logs/gesc/push2.out; cd /home/ronald/saas-hasner && git fetch -q && git log --oneline origin/main -1 && git log --oneline origin/main..HEAD \| wc -l` |
 | 03:10:50 | Bash | Read the cron-side turno closer | `sed -n 145,200p ponto/management/commands/processar_alertas_turno.py; grep -n "_resolver_chamado_do_turno(" ponto/management/commands/processar_alertas_turno.py` |
 | 03:10:43 | Bash | Retry push with L-103 cited | `cd /home/ronald/saas-hasner && bin/push.sh > logs/gesc/push2.out 2>&1; echo rc=$? >> logs/gesc/push2.out` |
