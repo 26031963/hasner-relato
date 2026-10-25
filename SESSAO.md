@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/10/2026 17:11:34.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (19.5 MB). Acoes na janela: **702**.
+**Medido em 25/10/2026 17:17:04.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (19.5 MB). Acoes na janela: **691**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -701,14 +701,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 05:17:41 | Bash | Read supra_juiz command options and output | `grep -n "add_argument" ponto/management/commands/supra_juiz.py \| cut -c1-160; grep -n "self.stdout.write" ponto/management/commands/supra_juiz.py \| head -8 \| cut -c1-170` |
 | 05:17:30 | Bash | List the 9 partial-coverage days without punches | `cd /home/ronald/saas-hasner && cat >> logs/sombra/bo_inss_alc.py <<'EOF' print('SEM_BATIDA:') for a in aus: j0 = tz.make_aware(datetime.datetime.combine(a.data, datetime.time.min)) if not batidas_apuraveis(a.colaborador_id).filter(timestamp__gte=j0, timestamp__lt=j0 + datetime.timedelta(days=1)).exists(): print('SB\|%s\|%s\|%s\|emp%s' % (a.colaborador_id, a.data, a.tipo, a.colaborador.empresa_id)) ...` |
 | 05:17:10 | Bash | Measure reach of partial-coverage reader gap | `cd /home/ronald/saas-hasner && cat > logs/sombra/bo_inss_alc.py <<'EOF' # BO-INSS-LEITORES-QUE-NAO-MIGRARAM: alcance -- dias com ausencia APROVADA que cobre so PARTE do dia (juiz real), 60 d. So leitura. import collections, datetime from django.utils import timezone as tz from ponto.models import Ausencia from ponto.turnos import cobre_parte_do_dia, batidas_apuraveis from ponto.catalogo.ausencias  ...` |
-| 05:16:51 | Bash | Check whether the ata records cobertura_parcial | `sed -n 448,475p ponto/services/cartorio.py; git grep -n "cobertura_parcial" -- ponto/services/cartorio.py escala/services/leitor_celula.py \| head` |
-| 05:16:44 | Bash | Read grade_da_celula | `sed -n 321,400p escala/services/leitor_celula.py` |
-| 05:16:36 | Bash | Move marker and read the next item | `date +%H:%M && python3 - <<'EOF' p='docs/BACKLOG.md'; s=open(p).read() a="<!-- ORDEM-VIVA-TOPO: LOG-BEST-EFFORT-EM-DOBRO -->\n" b="""<!-- ORDEM-VIVA-TOPO: BO-INSS-LEITORES-QUE-NAO-MIGRARAM --> <!-- ANDOU 25/10 05:0x, de `LOG-BEST-EFFORT-EM-DOBRO` (FECHADA, NO AR a86d0e1d) para `BO-INSS-LEITORES-QUE-NAO-MIGRARAM` (AUTONOMIA-DE-CODIGO item 1): o proximo andavel sem dinheiro, nucleo nem pergunta de l ...` |
-| 05:16:24 | Bash | Bold the closed state and re-ask hook | `sed -i '608s/\| FECHADA 25\/10 05:0x -- NO AR a86d0e1d/\| **FECHADA** 25\/10 05:0x -- NO AR a86d0e1d/' docs/BACKLOG.md && grep -c "\| \*\*FECHADA\*\* 25/10 05:0x -- NO AR a86d0e1d" docs/BACKLOG.md; echo '{}' \| timeout 60 python3 /home/ronald/saas-hasner/bin/hook_stop_fila1.py 2>&1 \| head -2` |
-| 05:16:19 | Bash | Read the _FECHADO regex | `cd /home/ronald/saas-hasner && grep -n "^_FECHADO" bin/hook_stop_fila1.py` |
-| 05:16:15 | Bash | Debug the hook's verdict on the item | `cd /home/ronald/saas-hasner/bin && python3 -c " import hook_stop_fila1 as h t=h._backlog_texto() print(h._item_da_ordem_viva(t)) import re l=[x for x in t.splitlines() if x.startswith('\| LOG-BEST-EFFORT-EM-DOBRO \|')][0] c=l.split('\|'); print(repr(c[3][:80])); print(h._item_fechado(c)) "` |
-| 05:16:09 | Bash | Read where the hook loads BACKLOG from | `cd /home/ronald/saas-hasner && sed -n 170,180p bin/hook_stop_fila1.py` |
-| 05:16:00 | Bash | Count rows for the item | `grep -n "LOG-BEST-EFFORT-EM-DOBRO" docs/BACKLOG.md \| cut -c1-140` |
-| 05:15:55 | Bash | Read how the hook decides an item is closed | `cd /home/ronald/saas-hasner && sed -n 136,170p bin/hook_stop_fila1.py` |
-| 05:15:50 | Bash | Close item state and re-ask the hook | `python3 - <<'EOF' p='docs/BACKLOG.md'; s=open(p).read() i=s.index('\| LOG-BEST-EFFORT-EM-DOBRO \|'); j=s.index('\n',i); cols=s[i:j].split('\|') cols[3]=' FECHADA 25/10 05:0x -- NO AR a86d0e1d (deploy 05:02, smoke com a linha formatada). O dobro real era django.request -> django; o resto era lastResort (chamados.* sem handler). LOGGING com raiz WARNING formatada; selo cobre todo app. ' assert '\|'  ...` |
-| 05:12:56 | Bash | Wait for push result and check remote | `until [ -s /home/ronald/saas-hasner/logs/gesc/push5.out ] && tail -1 /home/ronald/saas-hasner/logs/gesc/push5.out \| grep -q "pos_push\\|error\\|RED\\|rc="; do /usr/bin/sleep 15; done; tail -3 /home/ronald/saas-hasner/logs/gesc/push5.out; cd /home/ronald/saas-hasner && git fetch -q && git log --oneline origin/main -1` |
