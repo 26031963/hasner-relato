@@ -4,7 +4,9 @@
 >
 > **livre** = pode virar fatia agora, sem humano. **corte/aval/smoke/dinheiro-ate-export** = tem dono humano e espera.
 
-<!-- ORDEM-VIVA-TOPO: BO-GESTAO-HE-ACESSO -->
+<!-- ORDEM-VIVA-TOPO: CASA-CHAMADO-C1 -->
+<!-- ANDOU 25/10 15:4x, de `BO-GESTAO-HE-ACESSO` (pronta; pousa logo depois do smoke 3b do B2, para nao mexer no
+     disco de prod nem no alvo da reversao no meio dele) para `CASA-CHAMADO-C1` (lei 15:1x = (a)), construida em COPIA. -->
 <!-- ANDOU 25/10 15:2x, de `CRON-NAO-CABE-SOMBRA-65-MIN` (FECHADA, fdc74c25, crontab instalado) para `BO-GESTAO-HE-ACESSO`
      (BO PROVADO; o aval de 15:1x o pos atras da fatia em curso, que acabou de pousar). -->
 <!-- ANDOU 25/10 14:5x, de `JUIZ-CLASSIFICAR-POSICAO-NAO-POUSOU` (pousado c7147608; NO AR segunda 06:08 pelo
@@ -1248,7 +1250,7 @@
 | CRON-NAO-CABE-SOMBRA-65-MIN | **o render do crontab FALHA: `sombra.sh` mede 65 min e nao cabe antes do vizinho das 05:10 (o piso 04:05 e a tolerancia de 2 min)** -- `bin/crons.sh check` -> `ValueError: CRON QUE NAO CABE` (25/10 14:5x). O crontab instalado segue o render velho; nenhum cron novo se instala ate isto sair. | **FECHADA** 25/10 15:2x: pre_fechamento 05:15, sombra derivada 04:08, render volta (crons.sh install). Folga 1,5 intocada. | &mdash; (achado no pouso do B2) | bloqueia `crons.sh install` | 25/10 14:5x |
 | DEPLOY-AGENDADO-LISTAR-OCTAL | **`bin/deploy_agendado.sh listar` mostra 06:00 para um disparo das 06:08**: `printf` le '08' como octal invalido (linha 90). Exibicao so -- o cron.d tem a linha certa. | livre: instrumento, pouso proprio (L-105). | &mdash; | &mdash; | 25/10 14:5x |
 | CRONS-DURACAO-CRESCERAM | **com as duracoes MEDIDAS de hoje (`crons_duracao.json` do disco) o selo B6 acusa 4 sobreposicoes**: `auditar_invariantes_chamados@07:18` (134 -> 366 s) invade `vigia_b5_ausencia@07:22`, `negou_fogo_diario.sh@07:23` e `sentinela_diario.sh@07:24`; `supra_juiz@07:37` invade `censo_fase_12x36@07:38`. A suite nao ve (le o JSON versionado). | livre: decisao TECNICA de horario, medida; 1o passo e saber por que o auditor triplicou. | &mdash; (achado no CRON-NAO-CABE) | o crontab real segue rodando: sobreposicao e risco, nao erro | 25/10 15:0x |
-| BO-GESTAO-HE-ACESSO | **`/ponto/gestao-he/` exige `ver_folha` (`ponto/views.py`) e o botao de decidir exige `autorizar_he`: quem tem `autorizar_he` sem `ver_folha` (4 usuarios da supervisao da RA) tem a permissao de decidir e NAO abre a tela** -- trava sem saida, bug nosso (achado do Fernando 25/10, so leitura). | livre: BO PROVADO, entra ATRAS da fatia em curso (aval 15:1x). Cura: a tela abre com `ver_folha` OU `autorizar_he`, mostrando so a lista de HE, sem abrir a folha. Quem decide na RA e escolha do cliente. | aval Ronald 25/10 15:1x (2) | sitio de auth? conferir `bin/auth_sitios.txt` (ponto/views.py nao esta) | 25/10 15:1x |
+| BO-GESTAO-HE-ACESSO | **`/ponto/gestao-he/` exige `ver_folha` (`ponto/views.py`) e o botao de decidir exige `autorizar_he`: quem tem `autorizar_he` sem `ver_folha` (4 usuarios da supervisao da RA) tem a permissao de decidir e NAO abre a tela** -- trava sem saida, bug nosso (achado do Fernando 25/10, so leitura). | PRONTA (copia wt-bo-he, suite cheia verde) e aguardando o smoke 3b do B2: pousar agora mudaria o disco de prod e o alvo da reversao pre-autorizada (cbac2ccc) no meio do smoke. Pousa logo depois. | aval Ronald 25/10 15:1x (2) | sitio de auth? conferir `bin/auth_sitios.txt` (ponto/views.py nao esta) | 25/10 15:1x |
 <!-- OBRAS:FIM -->
 
 ## Contagem por portao
