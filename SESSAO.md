@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/10/2026 12:20:48.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (14.5 MB). Acoes na janela: **726**.
+**Medido em 25/10/2026 12:26:04.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (14.6 MB). Acoes na janela: **728**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 12:25:34 | Bash | Drop alias and run E2 targeted GREEN | `cd /home/ronald/wt-casa-e2/app && python3 - <<'EOF' p='chamados/management/commands/auditar_invariantes_chamados.py'; s=open(p).read() a=" from escala.alimentacao import vinculo_do_dia as _vdd\n" b=" from escala.alimentacao import vinculo_do_dia\n" assert s.count(a)==1; s=s.replace(a,b) a=" if _ger is not None and _vdd(_col.pk, c.data, [_ger], celulas={(_col.pk, c.data): c}) is None:" b=" if _ger  ...` |
+| 12:25:22 | Bash | Read E2 census failure details | `cd /home/ronald/saas-hasner && grep -n "test_o_censo_que_IMPEDE_a_declaracao_e_MEDIDO_a_cada_run" -A30 logs/e2_suite.log \| grep -E "AssertionError\|Hoje\|!=" \| head -5 \| cut -c1-300` |
 | 12:15:23 | Bash | Wait for E2 suite verdict | `until grep -q '^rc=' /home/ronald/saas-hasner/logs/e2_suite.log 2>/dev/null; do /usr/bin/sleep 15; done; cd /home/ronald/saas-hasner && grep -E '^(OK\|FAILED)($\| \()' logs/e2_suite.log \| tail -1; grep -E '^Ran ' logs/e2_suite.log \| tail -1; tail -1 logs/e2_suite.log; grep -E '^(FAIL\|ERROR):' logs/e2_suite.log \| head -3` |
 | 12:15:05 | Bash | Read dia_encerrado body for cost | `sed -n 1920,1975p ponto/turnos.py` |
 | 12:14:54 | Bash | Write E2 section and census classificar_dia callers | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md'; L=open(p).read().split('\n') j=next(k for k,l in enumerate(L) if l.startswith('## PERGUNTA-RESPONDIDA-E-MARCO-ACESO')) sec='''## CASA-ESCALA-E2 -- o auditor pergunta a juiza se a geradora vale no dia (25/10 12:3x) LEI-AKITA: origem=chamados/management/commands/auditar_invariantes_chamados.py (piso I6e), testemunha=escala/alim ...` |
