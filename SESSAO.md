@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/10/2026 04:39:04.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (6.0 MB). Acoes na janela: **315**.
+**Medido em 25/10/2026 04:44:34.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (6.1 MB). Acoes na janela: **317**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 04:43:50 | Bash | Wait for sombra cron by file, then check stamp | `until ! ls /home/ronald/saas-hasner/logs/crons_em_curso/sombra.sh_-.* >/dev/null 2>&1; do /usr/bin/sleep 20; done; date +%H:%M; cd /home/ronald/saas-hasner && bin/sombra.sh --conferir 2>&1 \| tail -1` |
+| 04:40:57 | Bash | Wait for re-certification verdict | `until grep -q "^rc=" /home/ronald/saas-hasner/logs/gesc/log_suite2.out; do /usr/bin/sleep 15; done; f=/home/ronald/saas-hasner/logs/gesc/log_suite2.out; grep -E "^(OK\|FAILED)($\| \()" $f \| tail -1; grep "^Ran" $f \| tail -1; tail -1 $f; ls /home/ronald/saas-hasner/logs/crons_em_curso/; date +%H:%M` |
 | 04:30:12 | Bash | Wait for re-certification verdict | `until grep -q "^rc=" /home/ronald/saas-hasner/logs/gesc/log_suite2.out; do /usr/bin/sleep 20; done; f=/home/ronald/saas-hasner/logs/gesc/log_suite2.out; grep -E "^(OK\|FAILED)($\| \()" $f \| tail -1; grep "^Ran" $f \| tail -1; tail -1 $f; ls /home/ronald/saas-hasner/logs/crons_em_curso/` |
 | 04:30:05 | Bash | Re-certify wt-log after docstring fix | `/home/ronald/saas-hasner/bin/suite.sh --dir /home/ronald/wt-log > /home/ronald/saas-hasner/logs/gesc/log_suite2.out 2>&1; echo rc=$? >> /home/ronald/saas-hasner/logs/gesc/log_suite2.out` |
 | 04:30:00 | Bash | Fix test docstring label, check sombra cron state | `cd /home/ronald/wt-log/app && sed -i '4s/em 24 h, 25\/10 04:2x)/em 24 h, 25\/10 04:1x)/' ponto/tests/test_logging_de_todo_app.py && grep -c "04:1x" ponto/tests/test_logging_de_todo_app.py && grep -c "04:2x" ponto/tests/test_logging_de_todo_app.py; ls /home/ronald/saas-hasner/logs/crons_em_curso/ 2>/dev/null` |
