@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/10/2026 09:28:34.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (9.5 MB). Acoes na janela: **496**.
+**Medido em 25/10/2026 09:34:04.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (10.2 MB). Acoes na janela: **500**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 09:34:02 | Bash | Read the six question lines in full | `sed -n '3p;5p;7p;9p;11p;13p' RELATO.md` |
+| 09:33:52 | Bash | Show truncated RELATO top lines and marker | `awk 'NR<=60{print NR": "substr($0,1,150)}' RELATO.md; echo ---; grep -n 'ORDEM-VIVA-TOPO' BACKLOG.md \| cut -c1-300; echo; tail -3 PROMPTS.md \| cut -c1-300` |
+| 09:33:47 | Bash | List RELATO top questions, marker and prompts tail | `cd /home/ronald/saas-hasner/app/docs && grep -n '^> \*\*' RELATO.md \| head -30; echo ---; grep -n 'ORDEM-VIVA-TOPO' BACKLOG.md \| head; tail -5 PROMPTS.md` |
+| 09:33:42 | Bash | Show repo state, time and RELATO top | `cd /home/ronald/saas-hasner && git status --short \| head -20; git log --oneline -3; date '+%d/%m %H:%M'; head -80 app/docs/RELATO.md` |
 | 08:07:06 | Bash | Read the hook's ceiling mechanism | `sed -n 1,30p /home/ronald/saas-hasner/bin/hook_stop_fila1.py` |
 | 08:06:37 | Bash | Park PLACAR on the exported-comp lock, ask hook | `date +%H:%M && python3 - <<'EOF' p='docs/BACKLOG.md'; s=open(p).read() i=s.index('\| PLACAR-ESTRUTURAL \|'); j=s.index('\n',i); cols=s[i:j].split('\|') cols[3]=' **L-099, PLACAR PRINCIPAL**: 3 fechados, 3 parciais de 6 (R3 R4 R6). espera o `!`: o proximo do R4 (col290 20/09 e os 6 casos de ESTRUTURA do par 6) e todo da comp 09 EXPORTADA e paga -- curar o DiaPago dela e PAREI (c); na 10 o par 6 med ...` |
 | 08:06:24 | Bash | Read R4 entry in the structural placar | `sed -n 210,300p core/placar_estrutural.py \| cut -c1-260` |
