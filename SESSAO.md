@@ -6,10 +6,38 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/10/2026 01:41:54.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (2.2 MB). Acoes na janela: **98**.
+**Medido em 25/10/2026 01:47:04.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (2.6 MB). Acoes na janela: **126**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 01:47:01 | Bash | Extend the pareador vigia selo | `cd /home/ronald/wt-pxc2/app && python3 - <<'EOF' p='ponto/tests/test_vigia_pareador_celula.py'; s=open(p).read() s=s.replace(""" def _dia(self, horas, ata): from escala.models import CelulaDia from ponto.models import Batida for tipo, h in horas: Batida.objects.create(colaborador=self.c, tipo=tipo, origem='app', aprovada=True, timestamp=timezone.make_aware(datetime.datetime.combine(D, h))) cel, _  ...` |
+| 01:46:39 | Write |  | `/home/ronald/wt-pxc2/app/ponto/management/commands/vigia_pareador_celula.py` |
+| 01:46:27 | Read |  | `/home/ronald/wt-pxc2/app/ponto/management/commands/vigia_pareador_celula.py` |
+| 01:46:24 | Write |  | `/home/ronald/wt-pxc2/app/ponto/management/commands/vigia_pareador_celula.py` |
+| 01:46:09 | Bash | Read periodo_apuracao_atual and janela_atual | `cd /home/ronald/wt-pxc2/app && sed -n 24,35p ponto/janelas.py; sed -n 60,66p ponto/janelas.py` |
+| 01:46:05 | Bash | Check canonical competencia helpers | `cd /home/ronald/wt-pxc2/app && grep -n "^def " ponto/janelas.py; grep -n "competencia_de_hoje\\|competencia_de(" core/juizes.py \| head` |
+| 01:46:00 | Bash | Remove wrapper, find competencia helper | `cd /home/ronald/wt-pxc2/app && python3 - <<'EOF' p='ponto/services/vigia_pareador_celula.py'; s=open(p).read() a=''' def bordas_orfas_de_par_fechado(mes, ano, empresas=None): """Os casos do censo (classe D) -> [(colab_id, data_turno, borda, hh:mm)].""" return censo(mes, ano, empresas)['casos'] ''' assert s.count(a)==1; open(p,'w').write(s.replace(a,'\n')) EOF git grep -n "^def competencia_\(corren ...` |
+| 01:45:52 | Write |  | `/home/ronald/wt-pxc2/app/ponto/services/vigia_pareador_celula.py` |
+| 01:45:27 | Bash | Create wt-pxc2 from current HEAD | `cd /home/ronald/saas-hasner && git worktree add --detach /home/ronald/wt-pxc2 825bb46a >/dev/null 2>&1; cd /home/ronald/wt-pxc2 && mkdir -p app/logs app/media && cp /home/ronald/wt-pxc/app/ponto/management/commands/vigia_pareador_celula.py app/ponto/management/commands/ && cp /home/ronald/wt-pxc/app/ponto/tests/test_vigia_pareador_celula.py app/ponto/tests/ && git log --oneline -1 && git status -- ...` |
+| 01:45:18 | Bash | Read pxc command, test and crons diff | `cd /home/ronald/wt-pxc && git diff app/config/crons.py; cat app/ponto/management/commands/vigia_pareador_celula.py; cat app/ponto/tests/test_vigia_pareador_celula.py` |
+| 01:45:10 | Bash | Read janela_competencia | `n=$(grep -n "^def janela_competencia" folha/export.py \| cut -d: -f1); sed -n "${n},$((n+30))p" folha/export.py \| grep -v "^\s*#" \| head -30` |
+| 01:45:01 | Bash | Read lampada fields | `sed -n 321,420p ponto/services/cartorio.py \| grep -n "'tipo'\\|'papel'\\|acesa\\|out.append\\|return" \| head -20` |
+| 01:44:56 | Bash | Read lampada dict keys | `grep -rn "def lampadas_do_dia" --include=*.py . \| grep -v tests; f=$(grep -rln "def lampadas_do_dia" --include=*.py . \| grep -v tests \| head -1); n=$(grep -n "def lampadas_do_dia" $f \| cut -d: -f1); sed -n "${n},$((n+60))p" $f \| grep -n "append\\|{'" \| head` |
+| 01:44:47 | Bash | Find lampada fields in ata_do_dia | `grep -n "def ata_do_dia" -A60 ponto/services/*.py escala/*.py 2>/dev/null \| grep -n "lampadas\\|'tipo'\\|'acesa'\\|'ordem'\\|'papel'\\|'pos'" \| head -20` |
+| 01:44:33 | Bash | Read the pareador x celula vigia in wt-pxc | `cd /home/ronald/wt-pxc && git log --oneline -1; git status --short; cat app/ponto/services/vigia_pareador_celula.py` |
+| 01:44:29 | Bash | Read pareador x celula state | `awk '/^## 25\/10 00:2x -- EM CURSO CONTADOR-PAREADOR-X-CELULA/,/^## 25\/10 00:0x/' docs/RELATO.md \| cut -c1-1500; grep -n "CONTADOR-PAREADOR-X-CELULA" docs/BACKLOG.md \| cut -c1-900` |
+| 01:44:12 | Write |  | `/home/ronald/saas-hasner/logs/gesc/rejulgar_col427.py` |
+| 01:43:49 | Bash | Check processar_cartorio options for a scoped rejudge | `sed -n 1,40p ponto/management/commands/processar_cartorio.py \| grep -n "forcar\\|colab\\|--" \| head -20` |
+| 01:43:44 | Bash | Find julgar_colab signature and FM hash helpers | `grep -n "def julgar_colab" -A6 ponto/services/cartorio.py \| head; grep -n "class FechamentoMensal" ponto/models.py; grep -n "def hash\\|hash_" ponto/models.py \| head -5; ls ponto/management/commands/ \| grep -i "rejulg\\|julgar"` |
+| 01:43:27 | Bash | Full suite on wt-aus | `/home/ronald/saas-hasner/bin/suite.sh --dir /home/ronald/wt-aus > /home/ronald/saas-hasner/logs/gesc/aus_suite.out 2>&1; echo rc=$? >> /home/ronald/saas-hasner/logs/gesc/aus_suite.out` |
+| 01:43:07 | Bash | Regenerate diagram against the copy in test container | `cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null && teste_envfile >/dev/null && _m=$(bash bin/arvore_do_push.sh --montagem /home/ronald/wt-aus) && read -r -a M <<< "$_m" && bash bin/trava_teste.sh -- docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file .env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 -v /home/ronald/wt-aus/app:/app "${M[@]}" saas-hasn ...` |
+| 01:43:01 | Bash | Read rest of docker run line | `sed -n 100,110p /home/ronald/saas-hasner/bin/suite.sh` |
+| 01:42:56 | Bash | Read suite.sh docker composition | `sed -n 55,100p /home/ronald/saas-hasner/bin/suite.sh` |
+| 01:42:44 | Bash | Read generator wrapper | `cd /home/ronald/wt-aus && cat bin/gerar_diagrama.py \| head -16; cd /home/ronald/saas-hasner && git status --short app/docs/ARQUITETURA.mmd app/docs/MAPA.md` |
+| 01:42:40 | Bash | Check where the generator reads and writes | `cd /home/ronald/wt-aus && grep -c vigiar_ausencia app/docs/ARQUITETURA.mmd /home/ronald/saas-hasner/app/docs/ARQUITETURA.mmd; head -30 bin/gerar_diagrama.py \| grep -n "RAIZ\\|BASE\\|path\\|argv"` |
+| 01:42:23 | Bash | Run the diagram generator from app dir | `cd /home/ronald/wt-aus/app && python3 ../bin/gerar_diagrama.py 2>&1 \| tail -3; git -C /home/ronald/wt-aus diff --stat -- app/docs/ARQUITETURA.mmd; git -C /home/ronald/wt-aus diff -- app/docs/ARQUITETURA.mmd \| grep "^[+-] "` |
+| 01:42:18 | Bash | Regenerate the architecture diagram in copy | `cd /home/ronald/wt-aus/app && ls bin/gerar_diagrama.py 2>/dev/null; ls ../bin/gerar_diagrama.py 2>/dev/null; python3 bin/gerar_diagrama.py 2>&1 \| tail -3 \|\| python3 ../bin/gerar_diagrama.py 2>&1 \| tail -3; git -C /home/ronald/wt-aus diff --stat app/docs/ARQUITETURA.mmd` |
+| 01:42:12 | Bash | Read diagram selo message | `cd /home/ronald/saas-hasner && grep -n -A6 "^AssertionError" logs/gesc/aus_green3.out \| head -20; git -C /home/ronald/wt-aus status --short app/docs/` |
 | 01:39:48 | Bash | Declare vigia role and rerun contracts | `cd /home/ronald/wt-aus/app && python3 - <<'EOF' p='config/crons.py'; s=open(p).read() a=""" # 18/10, e e por isso que este comando nao tem `--apply`. 'vigiar_carimbo_sem_registro',)},""" b=""" # 18/10, e e por isso que este comando nao tem `--apply`. 'vigiar_carimbo_sem_registro', # CONTADOR-AUSENCIA-X-VEREDITO (lei 25/10 00:4x): `vigia` pela secao 4a -- # CONTA e ALARMA, sem `--apply`. Quem diz q ...` |
 | 01:39:38 | Bash | Read vigia role listing | `cd /home/ronald/wt-aus/app && sed -n 1995,2020p config/crons.py` |
 | 01:39:34 | Bash | Find PAPEL_DO_CRON declaration | `cd /home/ronald/wt-aus/app && grep -n "'vigiar_carimbo_sem_registro'" config/crons.py \| head; grep -n "^PAPEL_DO_CRON\\|^PAPEIS\\|PAPEL_DO_CRON = " config/crons.py` |
