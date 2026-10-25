@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/10/2026 07:56:34.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (8.9 MB). Acoes na janela: **479**.
+**Medido em 25/10/2026 08:02:04.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (8.9 MB). Acoes na janela: **480**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 08:00:13 | Bash | Wait for push result | `until grep -q "pos_push\\|error:\\|rejected" /home/ronald/saas-hasner/logs/gesc/push9.out 2>/dev/null; do /usr/bin/sleep 15; done; tail -3 /home/ronald/saas-hasner/logs/gesc/push9.out; cd /home/ronald/saas-hasner && git fetch -q && git log --oneline origin/main -1` |
 | 07:49:52 | Bash | Record smoke, commit and push | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read() a="o proximo deploy de hoje deve o ensaio inteiro antes.\n" b=a+"- NO AR `0204513c` (deploy COM migrate 07:49, rc 0, tres rotas, importerror_500=0). PROVA em prod, so leitura: `RespostaAnterior` existe no schema `juliani` com 0 linhas (nenhuma reabertura depois do deploy), `reabrir_para_correcao` vivo escreve ...` |
 | 07:49:28 | Bash | Read-only prod check of table and code | `docker exec saas_core python manage.py tenant_command shell --schema=juliani --command "from chamados.models import RespostaAnterior; from chamados.services import disputa_emissao as d; import inspect; print('tabela_ok linhas=', RespostaAnterior.objects.count(), 'escritor', 'RespostaAnterior' in inspect.getsource(d.reabrir_para_correcao), 'leitor', hasattr(d, 'respostas_anteriores'))" 2>&1 \| tail ...` |
 | 07:48:59 | Bash | Land, commit and deploy with migrate | `cd /home/ronald/saas-hasner && FILES=$(cd /home/ronald/wt-reab && { git diff --name-only; git ls-files --others --exclude-standard app/chamados; }) && echo "$FILES" && git diff --quiet HEAD -- app/chamados/models.py app/chamados/services/disputa_emissao.py app/chamados/services/fio.py app/templates/chamados/partials/modal_fio.html app/chamados/tests/test_selo_painel_oferece_cobrar.py && for f in $ ...` |
