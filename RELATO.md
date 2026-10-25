@@ -66,7 +66,8 @@ LEI-AKITA: origem=ponto/management/commands/gerar_celulas.py::montar_dna (produt
 - Esmeril (fila, nao agora): INTERMITENTE-BATIDA-SOLTA (4 dias de E sem S = concorde, `supra_juiz.py:276` pede `prev`) e INTERMITENTE-K-FORA-DO-DNA. Sonda de `marcos_do_dia` na sombra MORTA no meio (hipotese refutada; `impacto.out` nao se cita).
 - VERIFICADOR 1a: **REPROVADO** (24/10 ~21:1x, so texto) -- (1) "esperado 0" sem o residuo 4 declarado no command e na entrada de `config/crons.py`; (2) docstring do teste rotulava o universo das 52 como se fosse o do contador. Curado na copia nova `wt-folga2` (a `wt-folga` estava montada pela suite: container morto, nao editada). O `bin/placar_code.sh` sai da copia de produto e pousa depois (L-105).
 - VERIFICADOR 2a: **APROVADO** (24/10 ~21:2x, copia `wt-folga2`): residuo declarado no command, no help e em `config/crons.py`; rotulo do teste separa acervo (4) das 52 (0); `bin/` fora da copia.
-- INCOMPLETO: suite da `wt-folga2` (`logs/folga/suite2.out`), pouso.
+- SUITE da `wt-folga2` (a arvore que pousa): `OK (skipped=42, expected failures=15)`, Ran 11896, rc 0 (`logs/folga/suite2.out`). Pouso: copia `cmp` = 3 arquivos, commit + `bin/deploy.sh --sem-migrate` no mesmo ato.
+- NO AR `f86afe0a` (deploy `--sem-migrate` rc 0, tres rotas provadas). Smoke em prod 21:20: `celulas_folga_com_marcos=4` (= residuo declarado). Instrumento: `bin/placar_code.sh` le a linha nova da MESMA chamada do command (pouso proprio, L-105).
 
 ## 24/10 19:3x -- MARCO ESPELHO-FERIADO-DOBRA (P7.1, achado do R4 remedido): o dia registra a folga-feriado e a testemunha a le
 
