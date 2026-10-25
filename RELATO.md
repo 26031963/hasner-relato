@@ -62,6 +62,18 @@ PAREI: ! GATE-EXPORT-10 (so o export da 10) | espera o DP na Gestao de HE e o Ro
 > O MARCADOR ANDOU no mesmo ato: `ORDEM-VIVA-TOPO` saiu de `BO-HE-RECUSAR-LOTE-500` (fechado) para `O261`, que o hook cobrou.
 > SEM COMMIT DE PROPOSITO: `RELATO.md` e `BACKLOG.md` ficam sujos na arvore porque a L-106 nao deixa commit so de docs fora de marco. Eles entram no commit do proximo marco.
 
+## 25/10 01:1x -- MARCO GRADE-ESC-DO-DIA-E1: a grade pergunta o vinculo do dia a juiza, e o dia sem vinculo acusa CADASTRO
+
+LEI-AKITA: origem=escala/utils.py::montar_grade_prevista_periodo_por_turno::esc_do_dia (+ o legado :782, rollback da flag) -- vigencia por aritmetica, testemunha=escala/alimentacao.py::vinculo_do_dia (juiza E1, lei (a)) + lei (b) 25/10 00:4x, RED=ponto/tests/test_fnd_pergunta_a_juiza.py (copia do HEAD: 4 ERROR + 2 FAIL, `logs/gesc/red.out`), quem-mais-le=cartorio (2 ramos), commands supra_juiz e emitir_furo_retroativo (julgam por `grade_da_celula`, NAO pela grade alterada), e6_oraculo/pautas (`dono_da_divergencia`), juizes novos=0
+
+- MUDOU: os dois `esc_do_dia` da grade -> `vinculo_do_dia(colab, d, rows, celulas)`; `ponto/supra_juiz.py::_insumos_do_vinculo` ganha `sem_vinculo_em_dia_de_trabalho` (juiza None E celula `trabalha` E dia nao posterior a `data_demissao`, a forma de `fechar_vinculo_de_desligado.py:47`); `cadastro_do_dia(..., *, data_demissao)` obrigatorio nos 3 chamadores; `classificar_dia`: ramo sem vinculo SEM previsto, com fato (antes do RAMO 1) e sem fato (portoes do furo).
+- ESCOPO = os 101 do aval: `data_demissao` coincide com `situacao` em TODOS os 2.408 dias de juiza None (1.040 trab desligado = 1.040 apos a demissao; 101 trab ativo = 101 sem demissao). PROVA: `logs/fnd/gesc_deslig_lanc.out`.
+- L-073 citada: o ramo sem fato usa o `dia_encerrado` do bloco do furo; cobra CADASTRO, nao batida, e sem vinculo nao ha turno a cruzar a meia-noite. L-024/L-033/L-103: sitios protegidos intocados.
+- CARTORIO (sombra, dry, 34.130 dia-colab / 60 d, HEAD x cura, `logs/gesc/cods_h.out` x `cods_c.out`): **93 mudam / 8 colabs**. 83 '' -> PREVISTO_COM_DIA_INDEFINIDO (76 que a grade sozinha levaria a FATO_SEM_PREVISAO + 7 do col309 sem batida). Os que a grade sozinha EMUDECIA: 10 de 11 voltam (col309 x4, col155 x4, col451 x2); col155 21/09 sai BATIDA_ORFA (celula do vinculo VALIDO; a cauda da noite de 20/09 sem vinculo).
+- 9 MUDAM PELA GRADE, fora do ramo (`logs/gesc_fora.out`): col107 x2 e col820 03/09 -> FURO_PARCIAL (a juiza escolhe a GERADORA -- ec1204 x ec1201, ec949 12x36 x ec1380 --, e os marcos dela tem buraco real); col155 x3 -> FATO_SEM_PREVISAO (folga, cauda da noite sem vinculo); col212 20/09 -> COBRANCA_EM_DIA_SEM_TRABALHO (o command supra_juiz, que RETRATA, julga por `grade_da_celula`: retratacao nao muda); **col820 14/09 FATO_SEM_PREVISAO -> '' (folga do 12x36 com 2 E soltas consumidas por turno vizinho)** -- nenhum dos dois retem; vai como achado do CONTADOR-PAREADOR-X-CELULA.
+- DINHEIRO (sombra, `recalcular_fechamento_mes` real + rollback, `logs/gesc/fm_h.out` x `fm_c.out`): comps 09/10/11 = 583/588/572 FechamentoMensal, **0 mudam** campo a campo. Comp 09 EXPORTADA (8 versoes): gravado intocado (L-092); a grade/espelho desses dias muda o CODIGO, nao o numero.
+- Vizinhos: 683 OK (`logs/gesc/green.out`). Suite da copia `wt-grade`: em curso (`logs/gesc/suite.out`).
+
 ## 25/10 00:2x -- EM CURSO CONTADOR-PAREADOR-X-CELULA (CONTRATOS-RESTANTES (5) par 1)
 
 - Funcao na copia `wt-pxc`: `ponto/services/vigia_pareador_celula.py::bordas_orfas_de_par_fechado` -- ata `orfas` x borda (entrada/saida) de turno FECHADO por `turnos_do_colab` na JANELA da competencia (nunca fatia de 1 dia).
