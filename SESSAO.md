@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/10/2026 00:59:03.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (1.4 MB). Acoes na janela: **51**.
+**Medido em 25/10/2026 01:04:33.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (1.5 MB). Acoes na janela: **56**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 01:03:56 | Bash | Wait chain end, probe the 9 grade-effect days | `cd /home/ronald/saas-hasner && cat > logs/sombra/gesc_fora.py <<'EOF' # GRADE-ESC-DO-DIA-E1: os 9 dia-colab que mudam pela GRADE (fora do ramo novo). Vinculo juiza x aritmetica, celula, batidas. So leitura. import datetime from django.utils import timezone as tz from escala.models import CelulaDia, EscalaColaborador from escala.alimentacao import vinculo_do_dia from ponto.turnos import batidas_apu ...` |
+| 01:03:40 | Bash | List the muted-then-restored and grade-only changes | `cd /home/ronald/saas-hasner/logs && python3 - <<'EOF' def load(p): return {tuple(l.split('\|')[1:3]): l.strip().split('\|')[3] for l in open(p) if l.startswith('COD\|')} h, c, g = load('gesc/cods_h.out'), load('gesc/cods_c.out'), load('fnd/gcod_c.out') print('emudecem grade-so:', [(k, h[k], g[k], c[k]) for k in h if 'INDEF' in h[k] and 'INDEF' not in g[k]]) print('fora do ramo:', [(k, h[k], c[k])  ...` |
+| 01:03:29 | Bash | Split changes into grade effect vs new branch | `cd /home/ronald/saas-hasner/logs && python3 - <<'EOF' import collections def load(p): return {tuple(l.split('\|')[1:3]): l.strip().split('\|')[3] for l in open(p) if l.startswith('COD\|')} h, c, g, gh = load('gesc/cods_h.out'), load('gesc/cods_c.out'), load('fnd/gcod_c.out'), load('fnd/gcod_h.out') print('HEAD hoje == HEAD 00:2x:', sum(h[k]!=gh.get(k) for k in h)) print('grade-so x HEAD:', sum(g[k ...` |
+| 01:03:14 | Bash | Diff cartorio codes HEAD x cure | `cd /home/ronald/saas-hasner/logs/gesc && python3 - <<'EOF' import collections def load(p): return {tuple(l.split('\|')[1:3]): l.strip().split('\|')[3] for l in open(p) if l.startswith('COD\|')} h, c = load('cods_h.out'), load('cods_c.out') print('universo', len(h), len(c), 'chaves iguais', set(h)==set(c)) mud = [(k, h[k], c[k]) for k in h if h[k] != c.get(k)] print('mudam', len(mud), 'colabs', len ...` |
+| 01:03:08 | Bash | Check sombra chain progress | `ls -la /home/ronald/saas-hasner/logs/gesc/; tail -3 /home/ronald/saas-hasner/logs/gesc/*_lanc.out` |
 | 00:56:32 | Bash | Find existing vigia counter patterns | `git grep -ln "esperado 0" -- '*.py' \| grep -v tests \| head -20; grep -n "AUSENCIA-X-VEREDITO\\|ausencia_x_veredito" -r docs/BACKLOG.md ponto core 2>/dev/null \| head` |
 | 00:56:23 | Bash | Read _marcar_ausencias falta handling | `sed -n 945,1000p escala/utils.py` |
 | 00:56:14 | Bash | Read cartorio nunca_bateu branch | `sed -n 790,900p ponto/services/cartorio.py` |
