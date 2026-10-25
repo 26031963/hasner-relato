@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/10/2026 03:35:05.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (4.7 MB). Acoes na janela: **242**.
+**Medido em 25/10/2026 03:40:34.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (4.7 MB). Acoes na janela: **243**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 03:38:12 | Bash | Wait for push and confirm on remote | `until grep -q "^rc=" /home/ronald/saas-hasner/logs/gesc/push3.out; do /usr/bin/sleep 15; done; tail -3 /home/ronald/saas-hasner/logs/gesc/push3.out; cd /home/ronald/saas-hasner && git fetch -q && git log --oneline origin/main -1` |
 | 03:27:56 | Bash | Push the diagnostic marco | `cd /home/ronald/saas-hasner && bin/push.sh > logs/gesc/push3.out 2>&1; echo rc=$? >> logs/gesc/push3.out; tail -3 logs/gesc/push3.out; git fetch -q; git log --oneline origin/main -1` |
 | 03:27:50 | Bash | Commit diagnostic marco | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/BACKLOG.md'; s=open(p).read() i=s.index('\| TURNO-ABERTO-UM-EMISSOR \|'); j=s.index('\n',i); cols=s[i:j].split('\|') cols[3]=' (B) item 3 NO AR 02d65a44 (2 de 132). Item 4 PARADO em lei (469 de 3.550; topo do RELATO). (A) diagnostico a..e no topo do RELATO 25/10 03:2x (censo de codigo; medidos a e b). Push \"Saida estimada\": sem enuncia ...` |
 | 03:27:31 | Bash | Record diagnostic (d) and refresh handoff | `python3 - <<'EOF' p='docs/RELATO.md'; s=open(p).read() a="(d): sem censo ainda." b="(d) censo de CODIGO 25/10 03:2x (`processar_alertas_turno.py`): a emissao do `turno_aberto` mora no degrau `pos_20` (`:139-144`) e carrega QUATRO coisas num ato -- o chamado pela porta `ChamadoColaborador.abrir` com dedupe por `contexto_json__data_turno` e urgencia `emergencia` (`:303-332`), o `push_supervisao` (`: ...` |
