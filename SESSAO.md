@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/10/2026 02:03:04.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (2.7 MB). Acoes na janela: **131**.
+**Medido em 25/10/2026 02:08:33.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (2.7 MB). Acoes na janela: **133**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 02:08:23 | Bash | Write RELATO top question, marco section, BACKLOG | `python3 - <<'EOF' p='docs/RELATO.md'; s=open(p).read() top = """# RELATO — esteira saas-hasner > **! REJULGAR-4-EXPORTADAS (CONTADOR-AUSENCIA-X-VEREDITO, 25/10 02:1x)** -- o vigia novo (`vigiar_ausencia_x_veredito`, sombra, frota SEM janela) acha **10** celulas `nunca_bateu` + falta APROVADA de dia inteiro (discordancia pela lei de 00:4x). **6** sao do col427 na comp 10 ABERTA (re-julgadas pela po ...` |
+| 02:08:03 | Bash | Check RELATO top and time | `date +%H:%M; sed -n 1,6p docs/RELATO.md \| cut -c1-200; grep -n "^## 25/10 01:1x -- MARCO GRADE" docs/RELATO.md` |
 | 01:57:53 | Bash | Wait for ensaio and confirm the stamp | `until grep -q "^rc=" /home/ronald/saas-hasner/logs/gesc/ensaio.out; do /usr/bin/sleep 30; done; tail -6 /home/ronald/saas-hasner/logs/gesc/ensaio.out; cd /home/ronald/saas-hasner && bin/sombra.sh --conferir 2>&1 \| tail -3` |
 | 01:57:30 | Bash | Mutation RED for the two reading rules | `cd /home/ronald/wt-gred && git checkout -q -- . && git clean -fdq app/ponto && git checkout -q --detach 825bb46a && mkdir -p app/logs app/media && for f in app/ponto/services/vigia_pareador_celula.py app/ponto/management/commands/vigia_pareador_celula.py app/ponto/tests/test_vigia_pareador_celula.py; do cp /home/ronald/wt-pxc2/$f $f; done && python3 - <<'EOF' p='app/ponto/services/vigia_pareador_c ...` |
 | 01:57:02 | Bash | Run pareador vigia selo on wt-pxc2 | `/home/ronald/saas-hasner/bin/suite.sh --dir /home/ronald/wt-pxc2 --only "ponto.tests.test_vigia_pareador_celula" > /home/ronald/saas-hasner/logs/gesc/pxc_t.out 2>&1; echo rc=$?; grep -E "^(FAIL\|ERROR):\|^Ran\|^(OK\|FAILED)\|Error:" /home/ronald/saas-hasner/logs/gesc/pxc_t.out \| tail` |
