@@ -6,10 +6,20 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/10/2026 01:20:34.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (1.8 MB). Acoes na janela: **71**.
+**Medido em 25/10/2026 01:25:48.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (2.0 MB). Acoes na janela: **81**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 01:22:05 | Bash | Run new vigia on sombra with competencia per case | `cd /home/ronald/saas-hasner && cat > logs/sombra/vav_censo.py <<'EOF' # CONTADOR-AUSENCIA-X-VEREDITO: o vigia novo na sombra (so leitura), com a competencia de cada caso. from django.core.management import call_command call_command('vigiar_ausencia_x_veredito', '--casos') from ponto.services.vigia_ausencia_veredito import censo from folha.models import ExportacaoDominio for cel_pk, colab, data in  ...` |
+| 01:21:49 | Bash | Check suite progress | `tail -c 600 /home/ronald/saas-hasner/logs/gesc/suite.out; grep -n "^ERROR:\\|^FAIL:" /home/ronald/saas-hasner/logs/gesc/suite.out \| head` |
+| 01:21:43 | Bash | Fix stdout sink and run ruff | `cd /home/ronald/wt-aus/app && sed -i "s#stdout=open('/dev/null', 'w')#stdout=io.StringIO()#g; s#^from django.core.management import call_command#import io\n\nfrom django.core.management import call_command#" ponto/tests/test_vigia_ausencia_veredito.py && (cd /home/ronald/wt-aus && ruff check --config ruff.toml app/ponto/services/vigia_ausencia_veredito.py app/ponto/management/commands/vigiar_ausen ...` |
+| 01:21:36 | Write |  | `/home/ronald/wt-aus/app/ponto/tests/test_vigia_ausencia_veredito.py` |
+| 01:21:22 | Write |  | `/home/ronald/wt-aus/app/ponto/management/commands/vigiar_ausencia_x_veredito.py` |
+| 01:21:13 | Write |  | `/home/ronald/wt-aus/app/ponto/services/vigia_ausencia_veredito.py` |
+| 01:20:58 | Bash | Add RED test for falta in nunca_bateu branch | `cd /home/ronald/wt-aus/app && python3 - <<'EOF' p='ponto/tests/test_bo_inss_nunca_bateu_le_a_precedencia.py'; s=open(p).read() a=""" def test_caso2_sem_batida_sem_ausencia_RETEM_e_na_classe_do_ramo(self):""" b=""" def test_RED_falta_aprovada_e_dia_decidido_nao_acusa(self): \"\"\"CONTADOR-AUSENCIA-X-VEREDITO (lei 25/10 00:4x, L-039 *"falta = decidida"*): a falta APROVADA de dia inteiro e DISCORDANC ...` |
+| 01:20:47 | Bash | Read nunca_bateu precedence test to extend | `cd /home/ronald/wt-aus/app && sed -n 1,200p ponto/tests/test_bo_inss_nunca_bateu_le_a_precedencia.py` |
+| 01:20:43 | Bash | Apply nunca_bateu falta cure | `cd /home/ronald/wt-aus/app && python3 - <<'EOF' p='ponto/services/cartorio.py'; s=open(p).read() a=""" _coberto_inteiro_nb = _dia_nb.get('tipo_dia') == 'ausencia' and not _parcial_nb """ b=""" # FALTA APROVADA E DIA DECIDIDO (CONTADOR-AUSENCIA-X-VEREDITO, lei 25/10 00:4x: L-039, *"falta = decidida"*): # a grade a rotula 'falta' (`escala/utils.py::_marcar_ausencias`, desconto no TXT, NAO furo) e o  ...` |
+| 01:20:35 | Bash | Create wt-aus copy stacked on grade patch | `cd /home/ronald/saas-hasner && git worktree add --detach /home/ronald/wt-aus HEAD >/dev/null 2>&1; cd /home/ronald/wt-grade && git diff > /tmp/claude-1001/-home-ronald-saas-hasner-app/9dc43c3d-971d-4cc9-b176-7008bbd353bb/scratchpad/grade.patch && cd /home/ronald/wt-aus && git apply /tmp/claude-1001/-home-ronald-saas-hasner-app/9dc43c3d-971d-4cc9-b176-7008bbd353bb/scratchpad/grade.patch && mkdir -p ...` |
 | 01:20:19 | Bash | Read a vigia command and its cron entry | `wc -l chamados/management/commands/vigiar_carimbo_sem_registro.py chamados/services/vigia_carimbo.py; cat chamados/management/commands/vigiar_carimbo_sem_registro.py \| head -80; sed -n 1650,1670p config/crons.py` |
 | 01:20:12 | Bash | Check whether KeyError is test noise | `cd /home/ronald/saas-hasner && grep -c "teste_falta" logs/gesc/suite.out; grep -n "^ERROR:\\|^FAIL:" logs/gesc/suite.out \| head; git -C /home/ronald/saas-hasner grep -ln "teste_falta" -- app \| head -3` |
 | 01:20:01 | Bash | Read ausencia x veredito measurement | `cd /home/ronald/saas-hasner && tail -2 logs/gesc/suite.out; cat logs/sombra/aus_x_ver.py; tail -15 logs/fnd/aus_x_ver.out` |
