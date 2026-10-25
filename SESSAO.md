@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/10/2026 11:11:34.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (13.9 MB). Acoes na janela: **687**.
+**Medido em 25/10/2026 11:16:56.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (13.9 MB). Acoes na janela: **688**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 11:16:50 | Bash | Measure live answered questions HEAD vs cure on sombra | `cat > /home/ronald/saas-hasner/logs/sombra/pram_impacto.py <<'EOF' import collections from chamados.models import PerguntaDisputa from chamados.juizes import pergunta_viva qs = (PerguntaDisputa.objects.filter(respondida_em__isnull=False, validada_em__isnull=True).exclude(resposta_colab='') .select_related('celula', 'disputa')) vivas = sorted(p.pk for p in qs.iterator() if pergunta_viva(p)) print(' ...` |
 | 11:07:39 | Bash | Run RED on HEAD and GREEN with neighbors | `cd /home/ronald/saas-hasner && grep -n "'orfao_14h'" app/chamados/juizes.py \| head -2; cp /home/ronald/wt-pram/app/chamados/tests/test_pergunta_respondida_e_marco_aceso.py /home/ronald/wt-semcel-red/app/chamados/tests/ && bin/suite.sh --dir /home/ronald/wt-semcel-red --only chamados.tests.test_pergunta_respondida_e_marco_aceso > logs/pram_red.log 2>&1; echo red rc=$?; grep -E '^(OK\|FAILED)($\| \ ...` |
 | 11:07:35 | Write |  | `/home/ronald/wt-pram/app/chamados/tests/test_pergunta_respondida_e_marco_aceso.py` |
 | 11:07:15 | Bash | Add concordance reader and hook into viva predicate | `cd /home/ronald/saas-hasner && git worktree add -f /home/ronald/wt-pram HEAD 2>&1 \| tail -1 && mkdir -p /home/ronald/wt-pram/app/logs /home/ronald/wt-pram/app/media && cd /home/ronald/wt-pram/app && python3 - <<'EOF' p='chamados/juizes.py'; s=open(p).read() a="def _pergunta_viva_calc(p):\n" b='''def _resposta_concorda_com_a_luz(p): """A resposta do colab CONCORDA com a batida que acendeu o marco  ...` |
