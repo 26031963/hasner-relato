@@ -82,7 +82,16 @@ PAREI: ! GATE-EXPORT-10 (so o export da 10) | espera o DP na Gestao de HE e o Ro
 
 - O MESMO censo de 22/10 (`logs/censo_retidos/censo_depois.py`, as portas reais do Retrato: `motivos_retencao_celula`, `_fio_do_dia`, `_grupo`), na sombra de hoje: comp 10, 1.768 celulas alimentadas -- DIAS por fio admin 99 | colab 1.382 | chamado 78 | **nada 539** (22/10: 600; antes das curas: 699); PESSOAS A 21 | B 212 | C 39 | D 49. PROVA: `logs/censo_retidos_2510.out`.
 - POR QUE O VIGIA NAO OS VE, agora pelo codigo (`ponto/services/furos_sem_cobranca.py::medir`): o universo dele e `veredito='furo'` com protesto em `PROTESTOS_QUE_COBRAM`, so na competencia CORRENTE (`janela_atual`, hoje = a 11, 4 dias) -- o do Retrato e TODO dia que retem (cobrado, nunca_bateu, sem_celula, indefinida...) da competencia que se exporta. Sao dois universos e duas janelas para "retido calado".
-- A cura que a linha ja escreve segue: um contador que pergunta ao universo do Retrato (`motivos_retencao_celula` + `_fio_do_dia == 'nada'`), contador == universo. NAO construida nesta passada.
+- A cura que a linha ja escreve segue: um contador que pergunta ao universo do Retrato, contador == universo.
+
+## 25/10 06:0x -- MARCO VIGIA-NAO-VE-350-DOS-369-DIAS-CALADOS: o vigia do retido calado le o Retrato gravado
+
+LEI-AKITA: origem=a falta de leitor (o vigia de furo `furos_sem_cobranca.medir` conta outra coisa), testemunha=folha/retrato_folha.py::linhas_do_retrato + ::fio_da_linha (a porta da tela e do badge), RED=folha/tests/test_vigia_retido_calado.py (5 casos que mordem: cego sem retrato, so o fio `ninguem` do bloqueado, a ultima lavra INTEIRA, cego sem bloqueado, alarme rc 2), quem-mais-le=o command e o ENC, juizes novos=0
+
+- MUDOU: `folha/vigia_retido_calado.py::censo` (TODO Retrato da ultima lavra de cada empresa; unidade PESSOA, a do Retrato) + command `vigiar_retido_calado` (`--alarme` = cego; o numero com `--alarme-passivo`) + ENC apos `vigiar_pausa_export`, papel `vigia`; ARQUITETURA.mmd regenerado.
+- NUMERO (sombra, `logs/vrc2.out`): **57** retidos calados -- comp 10: **49** (emp1 2, emp2 40, emp3 5, emp4 2; = o grupo D do censo, `logs/censo_retidos_2510.out`), comp 11: 8; universo 8 retratos, 515 bloqueados. A 1a versao lia so o Retrato mais recente e media a 11 (8): a lavra da manha escreve as DUAS competencias (`logs/vrc.out`).
+- O vigia de furo NAO muda: responde outra pergunta e tem escritor (`cobrar_furos_sem_cobranca`) que o le.
+- Suite da copia `wt-rc`: em curso (`logs/gesc/rc_suite2.out`).
 
 ## 25/10 05:2x -- MARCO BO-INSS-LEITORES-QUE-NAO-MIGRARAM: a grade da celula carimba a cobertura parcial pelo mesmo juiz
 
