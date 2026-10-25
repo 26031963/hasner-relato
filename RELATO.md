@@ -88,6 +88,14 @@ PAREI: ! GATE-EXPORT-10 (so o export da 10) | espera o DP na Gestao de HE e o Ro
 - POR QUE O VIGIA NAO OS VE, agora pelo codigo (`ponto/services/furos_sem_cobranca.py::medir`): o universo dele e `veredito='furo'` com protesto em `PROTESTOS_QUE_COBRAM`, so na competencia CORRENTE (`janela_atual`, hoje = a 11, 4 dias) -- o do Retrato e TODO dia que retem (cobrado, nunca_bateu, sem_celula, indefinida...) da competencia que se exporta. Sao dois universos e duas janelas para "retido calado".
 - A cura que a linha ja escreve segue: um contador que pergunta ao universo do Retrato, contador == universo.
 
+## 25/10 07:2x -- MARCO REABRIR-NAO-DESTROI (bancos 2 a 4): reabrir guarda a resposta como fato e a tela a mostra
+
+LEI-AKITA: origem=chamados/services/disputa_emissao.py::reabrir_para_correcao (o `update` zerava o par e a resposta sumia), testemunha=o modelo novo `chamados.RespostaAnterior` (ESCRITOR UNICO = a propria reabertura, antes do update, no mesmo atomic) lido por `respostas_anteriores` e pelo `modal_fio`, RED=chamados/tests/test_reabrir_nao_destroi.py (HEAD: ImportError -- a capacidade nao existia; a guarda "volta a pendente" passa nos dois), quem-mais-le=os 4 chamadores de `reabrir_para_correcao` (sem mudanca: `por`/`motivo` sao opcionais) e o `modal_fio`, juizes novos=0
+
+- CONFERIDO (banco 2, prod so leitura, `logs/gesc/reab_conta.py`): **166** notas de reabertura pelo botao, **140** chamados, 21 em outubro -- o relato do DP (166, "20 em outubro") bate.
+- MUDOU: modelo `RespostaAnterior` + migration `chamados/0050_resposta_anterior` (so tabela nova); `reabrir_para_correcao(..., por=None, motivo='')` grava uma versao por pergunta que TINHA resposta (texto ou carimbo) e so entao zera; reabrir pendente nao fabrica versao (idempotente: 2x = 1 versao). `modal_fio`: "Respostas anteriores" (so leitura, em qualquer estado da pergunta); o Reabrir deixa de dizer "APAGA" -- diz que tira a resposta e que ela fica guardada (o selo `test_selo_painel_oferece_cobrar` acompanha o verbo novo). "Cobrar resposta (nao apaga nada)" ja existia (O206).
+- Selo: 4 casos (fato guardado com quem/motivo, volta a pendente, pendente sem versao, 2x = 1) + render real do `modal_fio` com a resposta anterior na tela e sem `{#` vazado. Vizinhos de UI: 46 OK (`logs/gesc/reab_green2.out`). Suite da copia `wt-reab`: em curso.
+
 ## 25/10 07:1x -- REABRIR-NAO-DESTROI: a PROPOSTA de desenho (1o banco, antes do patch)
 
 - O QUE HOJE APAGA (lido no vivo): `chamados/services/disputa_emissao.py:1314::reabrir_para_correcao` e UM `qs.update(respondida_em=None, validada_em=None, validada_por=None, resposta_colab='')`. A resposta anterior sobrevive so na nota do fio (`FollowupChamado`, gravada no RESPONDER) e no `LogAuditoria` truncado; a tela do chamado nao a mostra depois de reabrir. Os chamadores: o botao do `modal_fio.html` (`views.py`), `fio.py` -> `acoes_disputa.py` (porta sem botao, candidata a L-111) e `models.py`.
