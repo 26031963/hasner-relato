@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/10/2026 01:52:34.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (2.6 MB). Acoes na janela: **128**.
+**Medido em 25/10/2026 01:57:34.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (2.6 MB). Acoes na janela: **130**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 01:57:30 | Bash | Mutation RED for the two reading rules | `cd /home/ronald/wt-gred && git checkout -q -- . && git clean -fdq app/ponto && git checkout -q --detach 825bb46a && mkdir -p app/logs app/media && for f in app/ponto/services/vigia_pareador_celula.py app/ponto/management/commands/vigia_pareador_celula.py app/ponto/tests/test_vigia_pareador_celula.py; do cp /home/ronald/wt-pxc2/$f $f; done && python3 - <<'EOF' p='app/ponto/services/vigia_pareador_c ...` |
+| 01:57:02 | Bash | Run pareador vigia selo on wt-pxc2 | `/home/ronald/saas-hasner/bin/suite.sh --dir /home/ronald/wt-pxc2 --only "ponto.tests.test_vigia_pareador_celula" > /home/ronald/saas-hasner/logs/gesc/pxc_t.out 2>&1; echo rc=$?; grep -E "^(FAIL\|ERROR):\|^Ran\|^(OK\|FAILED)\|Error:" /home/ronald/saas-hasner/logs/gesc/pxc_t.out \| tail` |
 | 01:47:15 | Bash | Wait for wt-aus suite verdict | `until grep -q "^rc=" /home/ronald/saas-hasner/logs/gesc/aus_suite.out; do /usr/bin/sleep 20; done; f=/home/ronald/saas-hasner/logs/gesc/aus_suite.out; grep -E "^(OK\|FAILED)($\| \()" $f \| tail -1; grep "^Ran" $f \| tail -1; tail -1 $f; grep "^ERROR:\\|^FAIL:" $f \| head` |
 | 01:47:09 | Bash | Check suite and ensaio progress | `tail -c 300 /home/ronald/saas-hasner/logs/gesc/aus_suite.out; echo; tail -5 /home/ronald/saas-hasner/logs/gesc/ensaio.out; date +%H:%M` |
 | 01:47:01 | Bash | Extend the pareador vigia selo | `cd /home/ronald/wt-pxc2/app && python3 - <<'EOF' p='ponto/tests/test_vigia_pareador_celula.py'; s=open(p).read() s=s.replace(""" def _dia(self, horas, ata): from escala.models import CelulaDia from ponto.models import Batida for tipo, h in horas: Batida.objects.create(colaborador=self.c, tipo=tipo, origem='app', aprovada=True, timestamp=timezone.make_aware(datetime.datetime.combine(D, h))) cel, _  ...` |
