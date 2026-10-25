@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 24/10/2026 23:21:04.** Transcript: `c87029f4-ea97-4fea-b6af-47ee2e204958.jsonl` (15.3 MB). Acoes na janela: **768**.
+**Medido em 24/10/2026 23:26:33.** Transcript: `c87029f4-ea97-4fea-b6af-47ee2e204958.jsonl` (15.3 MB). Acoes na janela: **769**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 23:24:53 | Bash | Wait for the cure-tree e6 run and compare the R1 block | `cd /home/ronald/saas-hasner; for i in $(seq 1 58); do [ -f logs/fnd/e6.fim ] && break; /usr/bin/sleep 10; done; date '+%H:%M'; for f in e6h e6c; do echo "== $f"; grep -A5 "=== R1 DONO" logs/fnd/${f}_lanc.out \| cut -c1-160; done` |
 | 23:15:08 | Bash | Wait for the e6 tally runs | `cd /home/ronald/saas-hasner; for i in $(seq 1 58); do [ -f logs/fnd/e6.fim ] && break; /usr/bin/sleep 10; done; date '+%H:%M'; ls logs/fnd/e6.fim 2>/dev/null; for f in e6h e6c; do echo "== $f"; grep -iE "dono" logs/fnd/${f}_lanc.out \| grep -v "lavratura falhou" \| head -10 \| cut -c1-200; done` |
 | 23:15:02 | Bash | Run the e6 owner tally HEAD vs cure in sombra | `cd /home/ronald/saas-hasner; cat > logs/sombra/e6_dono.py <<'EOF' # E6-NONE-E-CADASTRO: placar de donos do e6_oraculo na comp 10 (mesma data de referencia nas duas arvores). So leitura. from django.core.management import call_command call_command('e6_oraculo', mes=10, ano=2026, hoje='2026-10-24') EOF (timeout 3000 bin/sombra.sh --rodar e6_dono.py fnd/e6_head > logs/fnd/e6h_lanc.out 2>&1; SOMBRA_AR ...` |
 | 23:14:55 | Bash | Read e6_oraculo's arguments and dono output | `cd /home/ronald/wt-e6/app; grep -n "add_argument" ponto/management/commands/e6_oraculo.py \| cut -c1-160; grep -n "dono_\\|DONO_H" ponto/management/commands/e6_oraculo.py \| grep -i "write\\|print" \| head -5 \| cut -c1-160` |
