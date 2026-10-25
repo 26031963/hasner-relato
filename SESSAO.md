@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/10/2026 02:30:05.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (3.0 MB). Acoes na janela: **154**.
+**Medido em 25/10/2026 02:35:34.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (3.0 MB). Acoes na janela: **155**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 02:32:34 | Bash | Land and deploy the narrowed vigia | `cd /home/ronald/saas-hasner && FILES=$(git -C /home/ronald/wt-aus2 diff --name-only) && echo "$FILES" && git diff --quiet HEAD -- $FILES && for f in $FILES; do cp /home/ronald/wt-aus2/$f $f; cmp $f /home/ronald/wt-aus2/$f \|\| echo DIFERE; done && python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read() a="- Passivo da comp 10 (col427 x6): re-julgar pela porta depois do deploy, reversao antes, e ...` |
 | 02:29:01 | Bash | Wait for wt-aus2 suite verdict | `until grep -q "^rc=" /home/ronald/saas-hasner/logs/gesc/aus2_suite.out; do /usr/bin/sleep 20; done; f=/home/ronald/saas-hasner/logs/gesc/aus2_suite.out; grep -E "^(OK\|FAILED)($\| \()" $f \| tail -1; grep "^Ran" $f \| tail -1; tail -1 $f; grep "^ERROR:\\|^FAIL:" $f \| head` |
 | 02:28:55 | Bash | Rebase wt-pxc2 and declare cron and role | `cd /home/ronald/wt-pxc2 && git stash -u -q && git checkout -q --detach 123237b3 && git stash pop -q && git status --short && python3 - <<'EOF' p='app/config/crons.py'; s=open(p).read() a=""" ENC('vigiar_ausencia_x_veredito', gatilho='vigiar_carimbo_sem_registro', args='--alarme', estagio='auditoria', teto_s=900, depende=('processar_cartorio',)), """ b=a+""" # CONTADOR-PAREADOR-X-CELULA (CONTRATOS- ...` |
 | 02:28:27 | Bash | Split v1→v2 difference by rule | `cd /home/ronald/saas-hasner && SOMBRA_ARVORE=/home/ronald/wt-gred/app bin/sombra.sh --rodar pxc_v2.py pxc_v1m > logs/gesc/pxc_v1m_lanc.out 2>&1; grep CONTADOR logs/pxc_v1m.out; python3 - <<'EOF' def load(p, mes): s=set() for l in open(p): if l.startswith('VPC\|CASO\|'): x=l.strip().split('\|'); s.add((x[2],x[3],x[4],x[5])) return s def comp10(s): return {x for x in s if ('2026-09-21'<=x[1]<='2026- ...` |
