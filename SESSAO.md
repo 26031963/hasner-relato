@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/10/2026 04:22:34.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (6.0 MB). Acoes na janela: **311**.
+**Medido em 25/10/2026 04:28:04.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (6.0 MB). Acoes na janela: **312**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 04:27:38 | Bash | Wait for wt-log suite verdict | `until grep -q "^rc=" /home/ronald/saas-hasner/logs/gesc/log_suite.out; do /usr/bin/sleep 15; done; f=/home/ronald/saas-hasner/logs/gesc/log_suite.out; grep -E "^(OK\|FAILED)($\| \()" $f \| tail -1; grep "^Ran" $f \| tail -1; tail -1 $f; grep "^ERROR:\\|^FAIL:" $f \| head` |
 | 04:17:14 | Bash | Wait for wt-log suite verdict | `until grep -q "^rc=" /home/ronald/saas-hasner/logs/gesc/log_suite.out; do /usr/bin/sleep 20; done; f=/home/ronald/saas-hasner/logs/gesc/log_suite.out; grep -E "^(OK\|FAILED)($\| \()" $f \| tail -1; grep "^Ran" $f \| tail -1; tail -1 $f; grep "^ERROR:\\|^FAIL:" $f \| head` |
 | 04:17:08 | Bash | Fix the second label on line 81 | `sed -n 81p docs/RELATO.md \| grep -o "MEDIDO 25/10 [0-9:x]*"; sed -i '81s/MEDIDO 25\/10 04:2x:/MEDIDO 25\/10 04:1x:/' docs/RELATO.md; sed -n 81p docs/RELATO.md \| grep -o "MEDIDO 25/10 [0-9:x]*"` |
 | 04:16:55 | Bash | Check both label lines in RELATO | `grep -n "MARCO LOG-BEST-EFFORT-EM-DOBRO\\|MEDIDO 25/10 04:.x: 122" docs/RELATO.md \| cut -c1-120` |
