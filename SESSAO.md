@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/10/2026 14:04:04.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (16.0 MB). Acoes na janela: **678**.
+**Medido em 25/10/2026 14:09:25.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (16.0 MB). Acoes na janela: **676**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -686,5 +686,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 02:17:29 | Bash | Commit aus marco and deploy both commits | `cd /home/ronald/saas-hasner && git add app/config/crons.py app/docs/ARQUITETURA.mmd app/ponto/services/cartorio.py app/ponto/tests/test_bo_inss_nunca_bateu_le_a_precedencia.py app/ponto/management/commands/vigiar_ausencia_x_veredito.py app/ponto/services/vigia_ausencia_veredito.py app/ponto/tests/test_vigia_ausencia_veredito.py app/docs/RELATO.md app/docs/BACKLOG.md && git commit -q -F - <<'EOF' C ...` |
 | 02:17:18 | Bash | Copy certified aus files into main tree and cmp | `cd /home/ronald/saas-hasner && FILES=$(cd /home/ronald/wt-aus && { git diff --name-only; git ls-files --others --exclude-standard app/ponto; }) && echo "$FILES" && git diff --quiet HEAD -- $(echo "$FILES" \| grep -v "vigia_ausencia\\|vigiar_ausencia\\|test_vigia_ausencia") && echo main-limpo && for f in $FILES; do cp /home/ronald/wt-aus/$f $f; cmp $f /home/ronald/wt-aus/$f \|\| echo DIFERE $f; don ...` |
 | 02:17:12 | Bash | Confirm the ensaio stamp | `cd /home/ronald/saas-hasner && tail -4 logs/gesc/ensaio.out; bin/sombra.sh --conferir 2>&1 \| tail -2` |
-| 02:08:23 | Bash | Write RELATO top question, marco section, BACKLOG | `python3 - <<'EOF' p='docs/RELATO.md'; s=open(p).read() top = """# RELATO — esteira saas-hasner > **! REJULGAR-4-EXPORTADAS (CONTADOR-AUSENCIA-X-VEREDITO, 25/10 02:1x)** -- o vigia novo (`vigiar_ausencia_x_veredito`, sombra, frota SEM janela) acha **10** celulas `nunca_bateu` + falta APROVADA de dia inteiro (discordancia pela lei de 00:4x). **6** sao do col427 na comp 10 ABERTA (re-julgadas pela po ...` |
-| 02:08:03 | Bash | Check RELATO top and time | `date +%H:%M; sed -n 1,6p docs/RELATO.md \| cut -c1-200; grep -n "^## 25/10 01:1x -- MARCO GRADE" docs/RELATO.md` |
