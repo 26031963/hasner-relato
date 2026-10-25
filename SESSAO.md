@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/10/2026 14:46:04.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (16.3 MB). Acoes na janela: **662**.
+**Medido em 25/10/2026 14:51:34.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (16.3 MB). Acoes na janela: **654**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -664,11 +664,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 02:54:42 | Read |  | `/home/ronald/wt-pxc2/app/ponto/services/vigia_pareador_celula.py` |
 | 02:54:28 | Bash | Find civil-date authority for a batida | `grep -n -A8 "def test_nenhum_ofensor_novo" ponto/tests/test_contract_no_batida_date.py \| head -12; grep -rn "def dia_civil\\|def data_civil\\|def dia_da_batida\\|def data_da_batida" --include=*.py . \| grep -v tests \| head; sed -n 1540,1560p escala/utils.py` |
 | 02:54:20 | Bash | Read the batida-date contract failure | `cd /home/ronald/saas-hasner && grep -n -A12 "^FAIL: test_nenhum_ofensor_novo" logs/gesc/pxc_suite.out \| grep -E "Error\|vigia\|ofensor" \| head; sed -n 1,40p app/ponto/tests/test_contract_no_batida_date.py \| grep -v "^\s*$" \| head -30` |
-| 02:48:56 | Bash | Wait for wt-pxc2 suite verdict | `until grep -q "^rc=" /home/ronald/saas-hasner/logs/gesc/pxc_suite.out; do /usr/bin/sleep 20; done; f=/home/ronald/saas-hasner/logs/gesc/pxc_suite.out; grep -E "^(OK\|FAILED)($\| \()" $f \| tail -1; grep "^Ran" $f \| tail -1; tail -1 $f; grep "^ERROR:\\|^FAIL:" $f \| head` |
-| 02:48:39 | Bash | Run the afirma_com_prova checker | `cd /home/ronald/saas-hasner && ls bin \| grep -i afirma; f=$(ls bin \| grep -i afirma \| head -1); [ -n "$f" ] && (bash bin/$f app/docs/RELATO.md 2>&1 \|\| python3 bin/$f app/docs/RELATO.md 2>&1) \| tail -2` |
-| 02:48:35 | Bash | Add PROVA to the applied line and recheck | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read() a="REVERSAO: regravar os campos das 6 celulas do JSON pela porta `ponto/portas/celula.py`.\n" b="REVERSAO: regravar os campos das 6 celulas do JSON pela porta `ponto/portas/celula.py`. PROVA: `logs/gesc/rej427_prod.out` (DEPOIS cel110032..110042 = concorde, EXPORTADAS_INTACTAS=True, FM_IGUAL=True, CHAMADOS 14 ...` |
-| 02:48:20 | Bash | Read intermitente column construction | `sed -n 1138,1152p escala/utils.py` |
-| 02:48:13 | Bash | Fix retrato motive text and docstring | `cd /home/ronald/wt-fan/app && python3 - <<'EOF' p='ponto/management/commands/reconciliar_fantasmas.py'; s=open(p).read() old1=""" rec = retratar(c, conteudo=( f'Reconciliacao retroativa S141 ({origem}): {detalhe}. ' f'Chamado fantasma (PASSE 2 pre-S140) encerrado pelo sistema.' ))""" new1=""" # O MOTIVO E O DE HOJE, nao a etiologia de 2025: o texto vai para a trilha e a ocorrencia do chamado, e o  ...` |
-| 02:48:00 | Bash | RED on HEAD then GREEN on cure, queued | `/home/ronald/saas-hasner/bin/suite.sh --espera 1800 --dir /home/ronald/wt-gred --only "ponto.tests.test_reconciliar_fantasmas" > /home/ronald/saas-hasner/logs/gesc/fan_red.out 2>&1; echo rc=$? >> /home/ronald/saas-hasner/logs/gesc/fan_red.out; /home/ronald/saas-hasner/bin/suite.sh --espera 1800 --dir /home/ronald/wt-fan --only "ponto.tests.test_reconciliar_fantasmas" > /home/ronald/saas-hasner/log ...` |
-| 02:47:53 | Bash | Write fantasmas RED tests, stage HEAD copy | `cd /home/ronald/wt-fan/app && python3 - <<'EOF' p='ponto/tests/test_reconciliar_fantasmas.py'; s=open(p).read() s+=''' class FantasmaDecidePeloNucleoTest(ReconciliarFantasmasTest): """TURNO-ABERTO-UM-EMISSOR item 3 (aval 25/10 00:1x): quem decide se o turno fechou e o NUCLEO (`chamados/reconciliador.py::_tem_turno_aberto`) mais a premissa do catalogo; `_completude` so escreve o detalhe. Caso medid ...` |
-| 02:47:29 | Bash | Read the fantasmas test | `cd /home/ronald/wt-fan/app && cat ponto/tests/test_reconciliar_fantasmas.py` |
