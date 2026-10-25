@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 24/10/2026 21:55:34.** Transcript: `c87029f4-ea97-4fea-b6af-47ee2e204958.jsonl` (13.3 MB). Acoes na janela: **640**.
+**Medido em 24/10/2026 22:00:47.** Transcript: `c87029f4-ea97-4fea-b6af-47ee2e204958.jsonl` (13.4 MB). Acoes na janela: **645**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 22:00:44 | Bash | Look for an existing no-vinculo code and the impact log head | `cd /home/ronald/saas-hasner/app; grep -n "SEM_VINCULO\\|sem_vinculo\\|VINCULO_" ponto/supra_juiz.py ponto/services/cartorio.py escala/models.py \| head -15; head -12 /home/ronald/saas-hasner/logs/e1frota/fnd_impacto_prod_20261024_1403.out \| cut -c1-200` |
+| 22:00:33 | Bash | Read prior notes on the _fnd migration | `cd /home/ronald/saas-hasner/app; grep -n "_fnd" docs/RELATO.md docs/RELATO-ARQUIVO.md 2>/dev/null \| cut -c1-700 \| head -8` |
+| 22:00:09 | Bash | Regenerate the session handoff and drop the last copy | `cd /home/ronald/saas-hasner; bin/handoff_sessao.sh >/dev/null 2>&1; echo rc=$?; sed -n 5,8p app/docs/HANDOFF-SESSAO.md; git worktree remove --force /home/ronald/wt-folga3 2>&1 \| tail -1; git worktree list \| grep -c folga` |
+| 22:00:03 | Bash | Record the SEM-VEREDITO cancellation in PROMPTS and BACKLOG | `cd /home/ronald/saas-hasner/app; python3 - <<'EOF' f='docs/PROMPTS.md'; s=open(f).read().rstrip('\n') s+='\n\| 24/10 ~21:5x \| **aval `SEM-VEREDITO-CANCELADO`**: o BUG-CELULA-SEM-VEREDITO (prompt de 20:2x) sai -- col950/955/969 sao colab de TESTE empresa_id=1 (RELATO:2140), frota real 0 sem veredito; residuo ja e linha de SEM-CELULA-NA-JANELA-INTEIRA. C5 (27 dia-colab) segue como complemento da ca ...` |
+| 21:57:00 | Bash | Wait for the push result | `cd /home/ronald/saas-hasner; for i in $(seq 1 58); do grep -q '^rc=' logs/folga/push.out 2>/dev/null && break; /usr/bin/sleep 10; done; date '+%H:%M'; tail -4 logs/folga/push.out \| cut -c1-200` |
 | 21:47:13 | Bash | Wait for the push result | `cd /home/ronald/saas-hasner; for i in $(seq 1 58); do grep -q '^rc=' logs/folga/push.out 2>/dev/null && break; /usr/bin/sleep 10; done; date '+%H:%M'; tail -4 logs/folga/push.out \| cut -c1-200` |
 | 21:47:07 | Bash | Push the marco commits through the pre-push gates | `cd /home/ronald/saas-hasner; bin/push.sh > logs/folga/push.out 2>&1; echo "rc=$?" >> logs/folga/push.out; git fetch -q origin; git log --oneline origin/main -1; tail -3 logs/folga/push.out \| cut -c1-200` |
 | 21:46:55 | Bash | Commit the placar comment and smoke the counter | `cd /home/ronald/saas-hasner; git diff --quiet HEAD -- bin/placar_code.sh && cp /home/ronald/wt-folga3/bin/placar_code.sh bin/placar_code.sh && bash -n bin/placar_code.sh && git add bin/placar_code.sh && git commit -q -F - <<'EOF' COL655-DNA-V1-EM-EXPORTADA instrumento: o comentario do placar diz que o residuo de 4 foi regenerado (pouso proprio, L-105) LEI-AKITA: origem=bin/placar_code.sh (comentar ...` |
