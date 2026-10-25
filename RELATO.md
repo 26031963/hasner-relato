@@ -118,7 +118,8 @@ LEI-AKITA: origem=ponto/management/commands/detectar_ausencias.py (o `ec` de hoj
 - IMPACTO (sombra, antes): `ativa=True .first()` x juiza em hoje e ontem = **1.100 de 1.100** dia-colab iguais (550 colabs). PROVA: `logs/c3-da.out`.
 - RED (HEAD): `FAILED (failures=2)`. PROVA: `logs/c3_red.log`. GREEN alvo (selo + 44 modulos que tocam o detector): `Ran 366` / OK. PROVA: `logs/c3_green.log`.
 - SUITE CHEIA da arvore que pousa (`wt-c3`): `Ran 11967` / `OK (skipped=42, expected failures=15)` / rc 0. PROVA: `logs/c3_suite.log`; cmp dos 2 arquivos.
-- INCOMPLETO: os outros 6 crons (catraca em 2/1/1/1/1/1).
+- 2 de 7 (`processar_alertas_turno`, 2 sitios -> 0): o vinculo do dia do TURNO (`tm.data_turno`) pela juiza; import morto sai. IMPACTO (sombra, 1.908 turnos materializados de 7 d): 1.901 iguais, **7 diferem** -- todos troca de vinculo no meio da semana (o turno e do vinculo anterior; a juiza acerta). RED `FAILED (failures=1)`, GREEN alvo `Ran 168` / OK, SUITE CHEIA `Ran 11967` / OK / rc 0. PROVA: `logs/c3-pat.out`, `logs/c3b_red.log`, `logs/c3b_green.log`, `logs/c3b_suite.log`.
+- INCOMPLETO: os outros 5 crons (catraca em 1/1/1/1/1).
 
 ## CASA-ESCALA-E3 -- `apurar_por_fatia` pergunta a juiza quem responde pelo dia (25/10 13:0x)
 LEI-AKITA: origem=ponto/services/fechamento.py::apurar_por_fatia (`_dono_do_dia`), testemunha=escala/alimentacao.py::vinculo_do_dia, RED=escala.tests.test_contract_juiz_escala::test_o_censo_que_IMPEDE_a_declaracao_e_MEDIDO_a_cada_run, quem-mais-le=recalcular_fechamento_mes (escritor de dinheiro), espelho.py, pdf_espelho.py, juizes novos=0
