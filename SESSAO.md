@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/10/2026 10:45:06.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (13.2 MB). Acoes na janela: **650**.
+**Medido em 25/10/2026 10:50:18.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (13.2 MB). Acoes na janela: **652**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 10:50:12 | Bash | Land C5: copy, cmp, commit and deploy | `cd /home/ronald/saas-hasner && for f in app/escala/services/cadastro_realidade.py app/folha/vigia_retido_calado.py app/folha/tests/test_vigia_retido_calado.py; do cp /home/ronald/wt-nb/$f $f && cmp /home/ronald/wt-nb/$f $f && echo "cmp ok $f"; done; python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read() a="- PROXIMO: suite cheia da copia e pouso (L-107).\n" b=("- ESMERIL NA SUITE: o contrato ` ...` |
+| 10:49:51 | Bash | List C5 copy changes and check base drift | `cd /home/ronald/wt-nb && git status --porcelain; cd /home/ronald/saas-hasner && git diff --quiet e7f5511c HEAD -- app/escala/services/cadastro_realidade.py app/folha/vigia_retido_calado.py app/folha/tests/test_vigia_retido_calado.py && echo "main nao mexeu nesses 3 desde a base da copia"` |
 | 10:40:51 | Bash | Wait for C5 recertification suite | `until grep -q '^rc=' /home/ronald/saas-hasner/logs/nb_suite2.log; do /usr/bin/sleep 15; done; cd /home/ronald/saas-hasner && grep -E '^(OK\|FAILED)($\| \()' logs/nb_suite2.log \| tail -1; grep -E '^Ran ' logs/nb_suite2.log \| tail -1; tail -1 logs/nb_suite2.log; grep -E '^(FAIL\|ERROR):' logs/nb_suite2.log \| head` |
 | 10:40:34 | Bash | Read judge loaders and servico_jornada function header | `sed -n 140,240p escala/alimentacao.py; sed -n 1,34p escala/servico_jornada.py \| tail -20; git grep -n "vinculo_escala_do_dia\\|def .*(colaborador, data, celulas=None)" -- escala/servico_jornada.py \| head` |
 | 10:40:27 | Bash | Read servico_jornada site and escala contract selo | `cd /home/ronald/saas-hasner/app && sed -n 35,75p escala/servico_jornada.py; sed -n 50,80p escala/tests/test_contract_juiz_escala.py; sed -n 160,210p escala/tests/test_contract_juiz_escala.py` |
