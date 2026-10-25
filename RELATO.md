@@ -91,7 +91,8 @@ LEI-AKITA: origem=a falta de leitor (o vigia de furo `furos_sem_cobranca.medir` 
 - MUDOU: `folha/vigia_retido_calado.py::censo` (TODO Retrato da ultima lavra de cada empresa; unidade PESSOA, a do Retrato) + command `vigiar_retido_calado` (`--alarme` = cego; o numero com `--alarme-passivo`) + ENC apos `vigiar_pausa_export`, papel `vigia`; ARQUITETURA.mmd regenerado.
 - NUMERO (sombra, `logs/vrc2.out`): **57** retidos calados -- comp 10: **49** (emp1 2, emp2 40, emp3 5, emp4 2; = o grupo D do censo, `logs/censo_retidos_2510.out`), comp 11: 8; universo 8 retratos, 515 bloqueados. A 1a versao lia so o Retrato mais recente e media a 11 (8): a lavra da manha escreve as DUAS competencias (`logs/vrc.out`).
 - O vigia de furo NAO muda: responde outra pergunta e tem escritor (`cobrar_furos_sem_cobranca`) que o le.
-- Suite da copia `wt-rc`: em curso (`logs/gesc/rc_suite2.out`).
+- Suite da copia `wt-rc` (a arvore que pousa): `OK (skipped=42, expected failures=15)`, Ran 11948, rc 0. PROVA: `logs/gesc/rc_suite2.out`. Pouso: `cmp` arquivo a arquivo, commit + `bin/deploy.sh --sem-migrate`.
+- NO AR `d7ca74da` (deploy 06:19, rc 0, tres rotas). SMOKE em prod (so leitura): `vigiar_retido_calado` = **57** retidos calados, comp 10: 50 (emp1 2, emp2 41, emp3 5, emp4 2); universo 8 retratos / 467 bloqueados, cego 0. PROVA: `logs/gesc/vrc_prod.out`.
 
 ## 25/10 05:2x -- MARCO BO-INSS-LEITORES-QUE-NAO-MIGRARAM: a grade da celula carimba a cobertura parcial pelo mesmo juiz
 

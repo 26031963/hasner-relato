@@ -12,7 +12,7 @@ flowchart TD
     fr_chamados -.->|topo PROIBIDO, allowlist VAZIA| fr_ponto
   end
 
-  %% (b) PIPELINE DIARIO — fonte: config/crons.py (65 nos diarios)
+  %% (b) PIPELINE DIARIO — fonte: config/crons.py (66 nos diarios)
   subgraph e_infra["infra"]
     c_rotacionar_access_log["rotacionar_access_log<br/>00:12"]
   end
@@ -78,6 +78,7 @@ flowchart TD
     c_vigiar_carimbo_sem_registro["vigiar_carimbo_sem_registro<br/>apos vigiar_fio_morto"]
     c_vigiar_fio_morto["vigiar_fio_morto<br/>apos vigiar_pausa_export"]
     c_vigiar_pausa_export["vigiar_pausa_export<br/>apos lavrar_retrato_folha"]
+    c_vigiar_retido_calado["vigiar_retido_calado<br/>apos vigiar_pausa_export"]
     c_vigiar_txt_dominio["vigiar_txt_dominio<br/>apos recusar_ponta_pequena"]
   end
   subgraph e_alerta["alerta"]
@@ -144,9 +145,10 @@ flowchart TD
   c_reconciliar_perguntas_orfas --> c_vigiar_fio_morto
   c_lavrar_retrato_folha --> c_vigiar_pausa_export
   c_processar_cartorio --> c_vigiar_pausa_export
+  c_lavrar_retrato_folha --> c_vigiar_retido_calado
   c_recusar_ponta_pequena --> c_vigiar_txt_dominio
   c_processar_cartorio --> c_vigiar_txt_dominio
-  %% arestas `depende` declaradas: 54
+  %% arestas `depende` declaradas: 55
 
   %% (c) PORTAS CANONICAS — fonte: AST sobre app/ (nome usado, nunca string)
   subgraph PORTAS["escritores unicos / portas canonicas"]
@@ -197,7 +199,7 @@ flowchart TD
     t_celula["CELULA / ATA por marco<br/>o que aconteceu (lampada)"]
     t_evento["EVENTO<br/>batida, ausencia, chamado -> cartorio julga na hora (signals B5.2)"]
     t_consumidor["CONSUMIDORES<br/>chamado, pergunta, tela, folha: leem a lampada, nunca re-julgam"]
-    t_vigia["CRON = VIGIA<br/>29 vigias; contador esperado 0, so alarma"]
+    t_vigia["CRON = VIGIA<br/>30 vigias; contador esperado 0, so alarma"]
     t_prazo["CRON = PRAZO (L-101)<br/>5 cron(s): a falta nao emite evento, o relogio e o unico sinal dela;<br/>julgam pela funcao do juiz da casa, sem regra propria (PRAZO_DELEGA_A)"]
     t_juiz["JUIZ POR VARREDURA (divida)<br/>19 crons ainda julgam: esperado 0"]
     t_escala --> t_celula
