@@ -6,10 +6,17 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/10/2026 11:06:04.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (13.7 MB). Acoes na janela: **680**.
+**Medido em 25/10/2026 11:11:34.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (13.9 MB). Acoes na janela: **687**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 11:07:39 | Bash | Run RED on HEAD and GREEN with neighbors | `cd /home/ronald/saas-hasner && grep -n "'orfao_14h'" app/chamados/juizes.py \| head -2; cp /home/ronald/wt-pram/app/chamados/tests/test_pergunta_respondida_e_marco_aceso.py /home/ronald/wt-semcel-red/app/chamados/tests/ && bin/suite.sh --dir /home/ronald/wt-semcel-red --only chamados.tests.test_pergunta_respondida_e_marco_aceso > logs/pram_red.log 2>&1; echo red rc=$?; grep -E '^(OK\|FAILED)($\| \ ...` |
+| 11:07:35 | Write |  | `/home/ronald/wt-pram/app/chamados/tests/test_pergunta_respondida_e_marco_aceso.py` |
+| 11:07:15 | Bash | Add concordance reader and hook into viva predicate | `cd /home/ronald/saas-hasner && git worktree add -f /home/ronald/wt-pram HEAD 2>&1 \| tail -1 && mkdir -p /home/ronald/wt-pram/app/logs /home/ronald/wt-pram/app/media && cd /home/ronald/wt-pram/app && python3 - <<'EOF' p='chamados/juizes.py'; s=open(p).read() a="def _pergunta_viva_calc(p):\n" b='''def _resposta_concorda_com_a_luz(p): """A resposta do colab CONCORDA com a batida que acendeu o marco  ...` |
+| 11:06:56 | Bash | Read the BUG 117 test fixture | `sed -n 1,80p chamados/tests/test_bug117_marco_no_espelho.py` |
+| 11:06:49 | Bash | Find tests for the admin-decides rule and viva wrapper | `git grep -ln "HX-ADMIN-DECIDE-O-DIA\\|fato_do_marco_no_espelho" -- '*tests*' \| head; git grep -n "def pergunta_viva\b\\|def pergunta_viva(" chamados/juizes.py` |
+| 11:06:29 | Bash | Read delta_da_resposta parsing and accuse set | `cd /home/ronald/saas-hasner/app && sed -n "$(grep -n 'def delta_da_resposta' chamados/juizes.py \| cut -d: -f1),+40p" chamados/juizes.py; grep -n "VEREDITOS_ACUSAM" escala/models.py \| head -2` |
+| 11:06:07 | Bash | Record col305 apply and the law answer | `cd /home/ronald/saas-hasner/app/docs && python3 - <<'EOF' p='RELATO.md'; L=open(p).read().split('\n') i=next(k for k,l in enumerate(L) if l.startswith('> **! COL305-VINCULO-NASCEU-DEPOIS-DA-DEMISSAO')) L[i]=("> **RESPONDIDA E APLICADA 25/10 11:05: ! COL305 = (b)** -- ec#965 DESATIVADO sem `data_fim` pela porta `colaboradores/services/vinculo.py::absorver_vigencias_posteriores` (ativa True -> False ...` |
 | 11:05:43 | Bash | Deactivate col305 link in prod through the porta | `cd /home/ronald/saas-hasner && ts=$(date +%Y%m%d_%H%M) && cat > logs/gesc/col305_absorver.py <<'EOF' # ! COL305 = (b) (aval Ronald 25/10 11:3x): DESATIVAR o ec#965 sem data_fim pela porta # colaboradores/services/vinculo.py::absorver_vigencias_posteriores (ativa=False, data_fim intocada, trilha dupla). # REVERSAO: ec#965 ativa=True (data_fim segue None). Nada se apaga; as 92 celulas ficam. import  ...` |
 | 11:05:27 | Bash | Read absorver_vigencias_posteriores porta | `sed -n 646,720p colaboradores/services/vinculo.py` |
 | 11:05:21 | Bash | Read reabrir_vigencia_impossivel porta | `sed -n 566,645p colaboradores/services/vinculo.py` |
