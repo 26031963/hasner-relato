@@ -111,12 +111,20 @@ LEI-AKITA: origem=ponto/services/cartorio.py::julgar_colab (a porta), testemunha
 - PROVA: discordancia 4 -> **1**; col715 22/07, col268 29/08 e 31/08 -> `concorde`; `EXPORTADAS_INTACTAS|True` (hash de todas as ExportacaoDominio), `FM_IGUAL|True` (todos os FechamentoMensal dos 2 colabs), chamados 238 -> 238.
 - RESIDUO 1, a porta MANTEM: col268 12/08 e FOLGA (`trabalha=False`, ata `folga`) com falta aprovada em cima, e o cartorio lavra `nunca_bateu` -- os vizinhos de folga sem falta sao `concorde`. Classe na sombra: 2.525 celulas de folga com `nunca_bateu` (40 colabs), quantas com falta NAO medido. Vigia x cartorio discordam do mesmo dia: linha de fila `FALTA-EM-FOLGA-VIRA-NUNCA-BATEU`.
 
+## CASA-CHAMADO-C3 (1 de 7) -- o detector de ausencia pergunta a juiza o vinculo de CADA dia, e nasce a catraca dos sete (25/10 13:1x)
+LEI-AKITA: origem=ponto/management/commands/detectar_ausencias.py (o `ec` de hoje respondia tambem por ontem), testemunha=escala/servico_jornada.py::escala_vigente -> escala/alimentacao.py::vinculo_do_dia, RED=ponto.tests.test_c3_crons_perguntam_a_juiza, quem-mais-le=os chamados LIMBO/sem ancora/ausencia que ele abre, juizes novos=0
+- MUDOU (copia `wt-c3`): o `filter(ativa=True).first()` por colab sai; dentro do laco dos dois dias, `ec = escala_vigente(colab, data_ref)` e dia sem vinculo e pulado. Fica a `:185` (quem usa o mesmo template: universo da frota, outra pergunta).
+- SELO-CATRACA dos sete crons do censo (`ponto/tests/test_c3_crons_perguntam_a_juiza.py`): conta por AST, com apelido, `EscalaColaborador.objects.filter(ativa=True)` em cada arquivo e exige o mapa EXATO (hoje 1/2/1/1/1/1/1); cada cron que migrar desce o numero no mesmo commit.
+- IMPACTO (sombra, antes): `ativa=True .first()` x juiza em hoje e ontem = **1.100 de 1.100** dia-colab iguais (550 colabs). PROVA: `logs/c3-da.out`.
+- RED (HEAD): `FAILED (failures=2)`. PROVA: `logs/c3_red.log`. GREEN alvo (selo + 44 modulos que tocam o detector): `Ran 366` / OK. PROVA: `logs/c3_green.log`.
+
 ## CASA-ESCALA-E3 -- `apurar_por_fatia` pergunta a juiza quem responde pelo dia (25/10 13:0x)
 LEI-AKITA: origem=ponto/services/fechamento.py::apurar_por_fatia (`_dono_do_dia`), testemunha=escala/alimentacao.py::vinculo_do_dia, RED=escala.tests.test_contract_juiz_escala::test_o_censo_que_IMPEDE_a_declaracao_e_MEDIDO_a_cada_run, quem-mais-le=recalcular_fechamento_mes (escritor de dinheiro), espelho.py, pdf_espelho.py, juizes novos=0
 - MUDOU (copia `wt-casa-e3`): o dono do dia deixa de ser o carimbo cru `escala_geradora_id` e passa a ser a juiza alimentada com as `escalas` e `celulas` do chamador; geradora fora da vigencia (lei (a) do E1) vira dia sem dono e segue a regra da vigencia que ja existia. TOMADORES 3 -> 2 (fica `folgas:410`, fatia E5).
 - UNIVERSO onde a juiza difere do carimbo (sombra, 10+11): 13 celulas de 1 ativo (col499) + 1.314 de desligados (fora do universo do fechamento). PROVA: `logs/e3-universo.out`.
 - IMPACTO por campo (DINHEIRO-EM-COMPETENCIA-ABERTA; 10 e 11 abertas): `recalcular_fechamento_mes` da frota nas duas arvores, rollback, foto de todos os campos de `CAMPOS`: **1.190 fechamentos, 0 campo diferente, 0 fechamento a mais ou a menos** -- col499 incluido. Sem movimento, nao ha apply. PROVA: `logs/e3-head.out` x `logs/e3-cura.out` (linhas `FOTO|`).
 - RED (HEAD): `FAILED (failures=1)`. PROVA: `logs/e3_red.log`. GREEN alvo (`escala` contrato + selo de contratos + app `folha` + chokepoint): `Ran 857` / OK. PROVA: `logs/e3_green.log`.
+- SUITE CHEIA da arvore que pousa (`wt-casa-e3`): `Ran 11964` / `OK (skipped=42, expected failures=15)` / rc 0. PROVA: `logs/e3_suite.log`; cmp dos 4 arquivos.
 
 ## CASA-ESCALA-E2 -- o auditor pergunta a juiza se a geradora vale no dia (25/10 12:3x, NO AR 12:39)
 LEI-AKITA: origem=chamados/management/commands/auditar_invariantes_chamados.py (piso I6e), testemunha=escala/alimentacao.py::vinculo_do_dia (lei (a) do E1), RED=escala.tests.test_contract_juiz_escala::test_o_censo_que_IMPEDE_a_declaracao_e_MEDIDO_a_cada_run, quem-mais-le=o placar do auditor, juizes novos=0

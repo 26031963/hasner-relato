@@ -4,7 +4,9 @@
 >
 > **livre** = pode virar fatia agora, sem humano. **corte/aval/smoke/dinheiro-ate-export** = tem dono humano e espera.
 
-<!-- ORDEM-VIVA-TOPO: CASA-ESCALA-E3 -->
+<!-- ORDEM-VIVA-TOPO: CASA-CHAMADO-C3 -->
+<!-- ANDOU 25/10 13:1x, de `CASA-ESCALA-E3` (NO AR) para `CASA-CHAMADO-C3` (o par dela no paralelo aprovado):
+     1o cron (detectar_ausencias) e o selo-catraca dos sete construidos na copia `wt-c3`. -->
 <!-- ANDOU 25/10 12:4x, de `CASA-CHAMADO-C2` (pergunta de lei: os 78 chamados vivos) para `CASA-ESCALA-E3` (depois
      de E1+E2 NO AR; C1 e C2 em pergunta). E3 e dinheiro em comp aberta: as 3 condicoes. -->
 <!-- ANDOU 25/10 12:4x, de `CASA-CHAMADO-C1` (pergunta de lei no topo: a juiza calaria o sem_vinculo_trab) para
@@ -1227,7 +1229,7 @@
 | PERGUNTA-RESPONDIDA-E-MARCO-ACESO | **pergunta RESPONDIDA pelo colab cujo marco a batida ACENDE morre sozinha quando resposta e batida CONCORDAM pela regua da validacao automatica e o dia e coerente com escala/posto; discordando, segue viva para o admin** (lei nova, ALTERA o HX-ADMIN-DECIDE-O-DIA de 26/08, `chamados/juizes.py`). | **NO AR** 25/10 11:40: a respondida que concorda com a luz (classe A, 5 min) em dia que nao acusa morre sozinha; sombra 670 -> 654 vivas. | aval Ronald 25/10 10:3x | nenhuma tolerancia nova | 25/10 10:3x |
 | CASA-ESCALA-E2 | **`auditar_invariantes_chamados.py:388` pergunta a juiza `vinculo_do_dia`** (CENSO fatia E2; vigia, sem dinheiro). | **NO AR** 25/10 12:39: o piso I6e do auditor pergunta a juiza; TOMADORES 4 -> 3; saida do vigia identica na sombra. | aval Ronald 25/10 10:4x | &mdash; | 25/10 10:5x |
 | CASA-CHAMADO-C2 | **`detectar_vinculo_divergente` vira VIGIA** (CENSO fatia C2). | aguardando: lei no topo do RELATO 25/10 12:4x -- 78 chamados vivos de vinculo_divergente (204 total); destino deles antes de virar vigia. Dry de hoje: 82 colabs. | aval Ronald 25/10 10:4x | &mdash; | 25/10 10:5x |
-| CASA-ESCALA-E3 | **`ponto/services/fechamento.py:149-160` (`apurar_por_fatia`) pergunta a juiza** (CENSO fatia E3; ESCRITOR DE DINHEIRO). | livre depois de E1+E2/C1+C2: comp aberta pelas 3 condicoes (reversao, exportada intacta por hash, prova de frota depois); leva `fechamento.py:294` (citacao :154). | aval Ronald 25/10 10:4x | paralelo com C3 | 25/10 10:5x |
+| CASA-ESCALA-E3 | **`ponto/services/fechamento.py:149-160` (`apurar_por_fatia`) pergunta a juiza** (CENSO fatia E3; ESCRITOR DE DINHEIRO). | **NO AR** 25/10 13:1x: apurar_por_fatia pergunta a juiza quem responde pelo dia; 1.190 fechamentos da 10+11 com 0 campo diferente (sombra); TOMADORES 3 -> 2. | aval Ronald 25/10 10:4x | paralelo com C3 | 25/10 10:5x |
 | CASA-CHAMADO-C3 | **os 7 crons que cruzam a casa escala trocam `ativa=True` pela juiza** (`detectar_ausencias`, `processar_alertas_turno`, `processar_alertas_avancados`, `reconciliar_fantasmas`, `reconciliar_perguntas_orfas`, `termometro_regua`, `vigia_plantio_overnight`). | livre depois de C1+C2, paralelo com E3. | aval Ronald 25/10 10:4x | &mdash; | 25/10 10:5x |
 | CASA-ESCALA-E4 | **'o vinculo cobre a data?' vira UMA copia: `_cobre` e as outras 21 perguntam a juiza (`ativa or data_fim`, desempate `max(ativa, data_inicio)`)**; os 21 vinculos desativados sem `data_fim` vao para a lista do admin (CADASTRO). | livre: Q1 respondida 25/10 10:4x; ~14 arquivos, inverte `test_contract_juiz_escala.py:203-205`; mexe na geracao de celula (medir antes). | aval Ronald 25/10 10:4x (Q1) | depois de E3/C3 | 25/10 10:5x |
 | CASA-ESCALA-E5 | **declarar `vinculo_do_dia` juiz da familia escala** (frase da TRAVA pela AUTONOMIA item 3, medida). | livre por ultimo: depois de TOMADORES={} e do `reparentar_folga` (Q2: pre-aprovado so a FK, data e tipo iguais, trilha + reversao). | aval Ronald 25/10 10:4x | &mdash; | 25/10 10:5x |
