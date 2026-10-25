@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/10/2026 04:17:04.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (6.0 MB). Acoes na janela: **309**.
+**Medido em 25/10/2026 04:22:34.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (6.0 MB). Acoes na janela: **311**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 04:17:14 | Bash | Wait for wt-log suite verdict | `until grep -q "^rc=" /home/ronald/saas-hasner/logs/gesc/log_suite.out; do /usr/bin/sleep 20; done; f=/home/ronald/saas-hasner/logs/gesc/log_suite.out; grep -E "^(OK\|FAILED)($\| \()" $f \| tail -1; grep "^Ran" $f \| tail -1; tail -1 $f; grep "^ERROR:\\|^FAIL:" $f \| head` |
+| 04:17:08 | Bash | Fix the second label on line 81 | `sed -n 81p docs/RELATO.md \| grep -o "MEDIDO 25/10 [0-9:x]*"; sed -i '81s/MEDIDO 25\/10 04:2x:/MEDIDO 25\/10 04:1x:/' docs/RELATO.md; sed -n 81p docs/RELATO.md \| grep -o "MEDIDO 25/10 [0-9:x]*"` |
 | 04:16:55 | Bash | Check both label lines in RELATO | `grep -n "MARCO LOG-BEST-EFFORT-EM-DOBRO\\|MEDIDO 25/10 04:.x: 122" docs/RELATO.md \| cut -c1-120` |
 | 04:16:37 | Bash | Fix time labels in docs, list test docstring label | `sed -i 's/^## 25\/10 04:2x -- MARCO LOG-BEST-EFFORT-EM-DOBRO/## 25\/10 04:1x -- MARCO LOG-BEST-EFFORT-EM-DOBRO/; s/nao era. MEDIDO 25\/10 04:2x: 122 linhas/nao era. MEDIDO 25\/10 04:1x: 122 linhas/' docs/RELATO.md && sed -i 's/ CURADA 25\/10 04:2x (wt-log):/ CURADA 25\/10 04:1x (wt-log):/' docs/BACKLOG.md && grep -c "04:1x -- MARCO LOG-BEST\\|MEDIDO 25/10 04:1x: 122" docs/RELATO.md; grep -c "CURAD ...` |
 | 04:16:26 | Bash | Write logging marco section and backlog state | `date +%H:%M && python3 - <<'EOF' p='docs/RELATO.md'; s=open(p).read() sec="""## 25/10 04:2x -- MARCO LOG-BEST-EFFORT-EM-DOBRO: o dobro era OUTRO, e o que faltava era a raiz LEI-AKITA: origem=config/settings/saas.py::LOGGING (sem raiz; `django.request` + `django` com os mesmos handlers e `propagate: True`), testemunha=o proprio dict por AST (`ponto/tests/test_logger_ponto_vai_para_arquivo.py::_logg ...` |
