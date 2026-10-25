@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/10/2026 05:10:48.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (6.1 MB). Acoes na janela: **322**.
+**Medido em 25/10/2026 05:16:03.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (6.2 MB). Acoes na janela: **325**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 05:15:55 | Bash | Read how the hook decides an item is closed | `cd /home/ronald/saas-hasner && sed -n 136,170p bin/hook_stop_fila1.py` |
+| 05:15:50 | Bash | Close item state and re-ask the hook | `python3 - <<'EOF' p='docs/BACKLOG.md'; s=open(p).read() i=s.index('\| LOG-BEST-EFFORT-EM-DOBRO \|'); j=s.index('\n',i); cols=s[i:j].split('\|') cols[3]=' FECHADA 25/10 05:0x -- NO AR a86d0e1d (deploy 05:02, smoke com a linha formatada). O dobro real era django.request -> django; o resto era lastResort (chamados.* sem handler). LOGGING com raiz WARNING formatada; selo cobre todo app. ' assert '\|'  ...` |
+| 05:12:56 | Bash | Wait for push result and check remote | `until [ -s /home/ronald/saas-hasner/logs/gesc/push5.out ] && tail -1 /home/ronald/saas-hasner/logs/gesc/push5.out \| grep -q "pos_push\\|error\\|RED\\|rc="; do /usr/bin/sleep 15; done; tail -3 /home/ronald/saas-hasner/logs/gesc/push5.out; cd /home/ronald/saas-hasner && git fetch -q && git log --oneline origin/main -1` |
 | 05:02:43 | Bash | Record smoke, commit and push | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read() a="Pouso: `cmp` arquivo a arquivo, commit + `bin/deploy.sh --sem-migrate`.\n\n## 25/10 04:1x -- VARREDURA-TRIAGEM" b="Pouso: `cmp` arquivo a arquivo, commit + `bin/deploy.sh --sem-migrate`.\n- NO AR `a86d0e1d` (deploy 05:02, rc 0, tres rotas). SMOKE em prod (`saas_ui`, settings vivo): `logging.getLogger('cham ...` |
 | 05:02:31 | Bash | Prod smoke of formatted app WARNING | `docker exec saas_ui python manage.py shell -c "import logging; logging.getLogger('chamados.smoke_log').warning('smoke LOG-BEST-EFFORT 25/10')" 2>&1 \| grep -v "objects imported" \| tail -2` |
 | 05:02:13 | Bash | Deploy the logging commit | `cd /home/ronald/saas-hasner && bin/deploy.sh --sem-migrate > logs/gesc/deploy5.out 2>&1; echo rc=$?; tail -1 logs/gesc/deploy5.out; date +%H:%M` |
