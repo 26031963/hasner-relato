@@ -6,10 +6,19 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 24/10/2026 22:43:03.** Transcript: `c87029f4-ea97-4fea-b6af-47ee2e204958.jsonl` (14.7 MB). Acoes na janela: **721**.
+**Medido em 24/10/2026 22:48:34.** Transcript: `c87029f4-ea97-4fea-b6af-47ee2e204958.jsonl` (14.8 MB). Acoes na janela: **730**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 22:44:47 | Bash | Wait for the re-certification suite | `cd /home/ronald/saas-hasner; for i in $(seq 1 58); do grep -q '^rc=' logs/fnd/suite3.out 2>/dev/null && break; /usr/bin/sleep 10; done; date '+%H:%M'; grep -E '^(OK\|FAILED)($\| \()' logs/fnd/suite3.out \| tail -1; grep '^Ran ' logs/fnd/suite3.out \| tail -1; grep '^rc=' logs/fnd/suite3.out` |
+| 22:44:42 | Bash | Run the full suite again on the adjusted copy | `cd /home/ronald/saas-hasner; bin/suite.sh --dir /home/ronald/wt-fnd > logs/fnd/suite3.out 2>&1; echo "rc=$?" >> logs/fnd/suite3.out; grep -E '^(OK\|FAILED)($\| \()' logs/fnd/suite3.out \| tail -1; grep '^Ran ' logs/fnd/suite3.out \| tail -1` |
+| 22:44:14 | Bash | Check importers, ruff and run the updated selo file | `cd /home/ronald/wt-fnd/app; git grep -n "supra_juiz import" -- '*.py' ':!*tests*' \| grep classificar_dia \| cut -c1-140; docker run --rm --cpuset-cpus 4-7 -v "$PWD":/w -w /w -e RUFF_CACHE_DIR=/tmp/rc --entrypoint ruff $(docker inspect saas_core --format '{{.Config.Image}}') check --config ruff.toml ponto/tests/test_fnd_pergunta_a_juiza.py 2>&1 \| tail -1; cd /home/ronald/saas-hasner; bin/suite.sh ...` |
+| 22:44:06 | Edit |  | `/home/ronald/wt-fnd/app/ponto/tests/test_fnd_pergunta_a_juiza.py` |
+| 22:43:56 | Edit |  | `/home/ronald/wt-fnd/app/ponto/tests/test_fnd_pergunta_a_juiza.py` |
+| 22:43:47 | Read |  | `/home/ronald/wt-fnd/app/ponto/tests/test_fnd_pergunta_a_juiza.py` |
+| 22:43:47 | Read |  | `/home/ronald/wt-fnd/app/ponto/tests/test_fnd_pergunta_a_juiza.py` |
+| 22:43:16 | Bash | Wait for the copy's full suite verdict | `cd /home/ronald/saas-hasner; for i in $(seq 1 57); do grep -q '^rc=' logs/fnd/suite2.out 2>/dev/null && break; /usr/bin/sleep 10; done; date '+%H:%M'; grep -E '^(OK\|FAILED)($\| \()' logs/fnd/suite2.out \| tail -1; grep '^Ran ' logs/fnd/suite2.out \| tail -1; grep '^rc=' logs/fnd/suite2.out; grep -E "^(FAIL\|ERROR):" logs/fnd/suite2.out \| head -5 \| cut -c1-200` |
+| 22:43:09 | Bash | Correct fleet numbers and declare the commands in the RELATO | `cd /home/ronald/saas-hasner/app; python3 - <<'EOF' f='docs/RELATO.md'; s=open(f).read() old='**34.130 dia-colab, 6 mudam / 2 colabs** -- col155 (5 dias, 30/08-20/09) e col451 18/09, todos' assert s.count(old)==1 s=s.replace(old,'**34.130 dia-colab, 6 mudam / 2 colabs** -- col155 x4 (30/08, 06/09, 13/09, 20/09) e col451 x2 (18/09, 20/09), todos') old2='A vigencia segue fora da impressao do carimbo  ...` |
 | 22:33:25 | Bash | Wait for the copy's full suite verdict | `cd /home/ronald/saas-hasner; for i in $(seq 1 57); do grep -q '^rc=' logs/fnd/suite2.out 2>/dev/null && break; /usr/bin/sleep 10; done; date '+%H:%M'; grep -E '^(OK\|FAILED)($\| \()' logs/fnd/suite2.out \| tail -1; grep '^Ran ' logs/fnd/suite2.out \| tail -1; grep '^rc=' logs/fnd/suite2.out; grep -E "^(FAIL\|ERROR):" logs/fnd/suite2.out \| head -5 \| cut -c1-200` |
 | 22:33:19 | Bash | Record fleet numbers and the carimbo queue line | `cd /home/ronald/saas-hasner/app; python3 - <<'EOF' f='docs/RELATO.md'; s=open(f).read() old='Frota (cartorio dry, todos os colabs, 60 d) HEAD x cura: medindo.\n' assert s.count(old)==1 s=s.replace(old,'Frota (cartorio dry, TODOS os colabs com celula, 60 d, HEAD x arvore da cura): **34.130 dia-colab, 6 mudam / 2 colabs** -- col155 (5 dias, 30/08-20/09) e col451 18/09, todos FURO_PARCIAL -> PREVISTO ...` |
 | 22:33:05 | SendMessage |  | `-` |
