@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 24/10/2026 21:44:34.** Transcript: `c87029f4-ea97-4fea-b6af-47ee2e204958.jsonl` (13.3 MB). Acoes na janela: **635**.
+**Medido em 24/10/2026 21:50:06.** Transcript: `c87029f4-ea97-4fea-b6af-47ee2e204958.jsonl` (13.3 MB). Acoes na janela: **640**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 21:47:13 | Bash | Wait for the push result | `cd /home/ronald/saas-hasner; for i in $(seq 1 58); do grep -q '^rc=' logs/folga/push.out 2>/dev/null && break; /usr/bin/sleep 10; done; date '+%H:%M'; tail -4 logs/folga/push.out \| cut -c1-200` |
+| 21:47:07 | Bash | Push the marco commits through the pre-push gates | `cd /home/ronald/saas-hasner; bin/push.sh > logs/folga/push.out 2>&1; echo "rc=$?" >> logs/folga/push.out; git fetch -q origin; git log --oneline origin/main -1; tail -3 logs/folga/push.out \| cut -c1-200` |
+| 21:46:55 | Bash | Commit the placar comment and smoke the counter | `cd /home/ronald/saas-hasner; git diff --quiet HEAD -- bin/placar_code.sh && cp /home/ronald/wt-folga3/bin/placar_code.sh bin/placar_code.sh && bash -n bin/placar_code.sh && git add bin/placar_code.sh && git commit -q -F - <<'EOF' COL655-DNA-V1-EM-EXPORTADA instrumento: o comentario do placar diz que o residuo de 4 foi regenerado (pouso proprio, L-105) LEI-AKITA: origem=bin/placar_code.sh (comentar ...` |
+| 21:46:37 | Bash | Land the prose update with docs and deploy | `cd /home/ronald/saas-hasner; python3 - <<'EOF' f='app/docs/RELATO.md'; s=open(f).read() old='Instrumento: `bin/placar_code.sh` le a linha nova da MESMA chamada do command (pouso proprio, L-105).\n' assert s.count(old)==1 s=s.replace(old, old+'- Instrumento NO AR em `a40ba9a6`. Depois do aval das 21:2x (col655 regenerado, contador 4 -> 0) a prosa do residuo envelheceu: command, help, `config/crons. ...` |
+| 21:45:42 | Bash | Keep waiting for the suite verdict | `cd /home/ronald/saas-hasner; for i in $(seq 1 57); do grep -q '^rc=' logs/folga/suite3.out 2>/dev/null && break; /usr/bin/sleep 10; done; date '+%H:%M'; grep -E '^(OK\|FAILED)($\| \()' logs/folga/suite3.out \| tail -1; grep '^Ran ' logs/folga/suite3.out \| tail -1; grep '^rc=' logs/folga/suite3.out` |
 | 21:36:07 | Bash | Wait for the wt-folga3 suite verdict | `cd /home/ronald/saas-hasner; for i in $(seq 1 57); do grep -q '^rc=' logs/folga/suite3.out 2>/dev/null && break; /usr/bin/sleep 10; done; date '+%H:%M'; grep -E '^(OK\|FAILED)($\| \()' logs/folga/suite3.out \| tail -1; grep '^Ran ' logs/folga/suite3.out \| tail -1; grep '^rc=' logs/folga/suite3.out` |
 | 21:36:01 | Bash | Clear root-owned cache and remove the old copy | `docker run --rm --cpuset-cpus 4-7 -v /home/ronald/wt-folga/app:/w --entrypoint rm $(docker inspect saas_core --format '{{.Config.Image}}') -rf /w/.ruff_cache && rm -rf /home/ronald/wt-folga && cd /home/ronald/saas-hasner && git worktree prune && git worktree list \| grep -c folga` |
 | 21:35:56 | Bash | Find root-owned leftovers in the old copy | `ls -la /home/ronald/wt-folga 2>/dev/null \| head; find /home/ronald/wt-folga ! -user ronald 2>/dev/null \| head -5` |

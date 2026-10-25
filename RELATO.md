@@ -68,6 +68,7 @@ LEI-AKITA: origem=ponto/management/commands/gerar_celulas.py::montar_dna (produt
 - VERIFICADOR 2a: **APROVADO** (24/10 ~21:2x, copia `wt-folga2`): residuo declarado no command, no help e em `config/crons.py`; rotulo do teste separa acervo (4) das 52 (0); `bin/` fora da copia.
 - SUITE da `wt-folga2` (a arvore que pousa): `OK (skipped=42, expected failures=15)`, Ran 11896, rc 0 (`logs/folga/suite2.out`). Pouso: copia `cmp` = 3 arquivos, commit + `bin/deploy.sh --sem-migrate` no mesmo ato.
 - NO AR `f86afe0a` (deploy `--sem-migrate` rc 0, tres rotas provadas). Smoke em prod 21:20: `celulas_folga_com_marcos=4` (= residuo declarado). Instrumento: `bin/placar_code.sh` le a linha nova da MESMA chamada do command (pouso proprio, L-105).
+- Instrumento NO AR em `a40ba9a6`. Depois do aval das 21:2x (col655 regenerado, contador 4 -> 0) a prosa do residuo envelheceu: command, help, `config/crons.py`, docstring do teste e comentario do placar passam a dizer 0. Copia `wt-folga3`, suite `OK (skipped=42, expected failures=15)`, Ran 11896, rc 0 (`logs/folga/suite3.out`).
 
 ## 24/10 19:3x -- MARCO ESPELHO-FERIADO-DOBRA (P7.1, achado do R4 remedido): o dia registra a folga-feriado e a testemunha a le
 
