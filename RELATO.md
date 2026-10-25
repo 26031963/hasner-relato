@@ -81,7 +81,8 @@ LEI-AKITA: origem=escala/services/leitor_celula.py::grade_da_celula (nao escrevi
 - ALCANCE MEDIDO (sombra, 60 d, `logs/bo_inss_alc2.out`): 48 ausencias aprovadas PARCIAIS; 9 em dia SEM batida -- o caso em que os leitores divergem.
 - IMPACTO (command `supra_juiz` em DRY, emp 2 e 3, 08/09..30/09, HEAD x cura, `logs/boi_sj.out` x `logs/boi_sj_c.out`): dos 9, **2 passam a concordar com o cartorio** (col369 28/09 -> `PREVISTO_COM_DIA_INDEFINIDO`; col584 17/09 -> `FURO_COM_COBRANCA_MORTA`); NENHUM dos codigos em que o command AGE (`COBRANCA_SEM_FURO`, `COBRANCA_EM_DIA_SEM_TRABALHO`) aparece -- retratacao nao muda. RESIDUO declarado: 6 dos 9 seguem sem codigo no dump do command; causa nao medida (fila).
 - MUDOU: `_carimbar_cobertura_parcial` no fim de `grade_da_celula`, so nos dias que a ata rotula `ausencia`, falta fora, zero query sem dia de ausencia. `emitir_furo_retroativo` (passe sob ordem, nao cron) passa a ver a cobertura parcial como o cartorio.
-- Vizinhos: 1050 OK (`logs/gesc/boi_green.out`). Suite da copia `wt-boi`: em curso (`logs/gesc/boi_suite.out`).
+- Vizinhos: 1050 OK (`logs/gesc/boi_green.out`). Suite da copia `wt-boi` (a arvore que pousa): `OK (skipped=42, expected failures=15)`, Ran 11943, rc 0. PROVA: `logs/gesc/boi_suite.out`. Pouso: `cmp` arquivo a arquivo, commit + `bin/deploy.sh --sem-migrate`.
+- NO AR `9e0ce0f6` (deploy 05:34, rc 0, tres rotas). SMOKE em prod (command `supra_juiz` DRY, emp 2, 15/09..30/09): col369 28/09 = `PREVISTO_COM_DIA_INDEFINIDO`, col584 17/09 = `FURO_COM_COBRANCA_MORTA` + `COBRANCA_EM_DIA_COBERTO` -- o MESMO da sombra. PROVA: `logs/gesc/sj_prod_smoke.out`, `logs/gesc/deploy6.out`.
 
 ## 25/10 04:1x -- MARCO LOG-BEST-EFFORT-EM-DOBRO: o dobro era OUTRO, e o que faltava era a raiz
 
