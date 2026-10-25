@@ -74,6 +74,11 @@ PAREI: ! GATE-EXPORT-10 (so o export da 10) | espera o DP na Gestao de HE e o Ro
 > O MARCADOR ANDOU no mesmo ato: `ORDEM-VIVA-TOPO` saiu de `BO-HE-RECUSAR-LOTE-500` (fechado) para `O261`, que o hook cobrou.
 > SEM COMMIT DE PROPOSITO: `RELATO.md` e `BACKLOG.md` ficam sujos na arvore porque a L-106 nao deixa commit so de docs fora de marco. Eles entram no commit do proximo marco.
 
+## 25/10 04:1x -- VARREDURA-TRIAGEM lote VIGIA: o residuo do `reconciliar_chamados` mede 0 no dump de hoje (so leitura)
+
+- Medido na sombra (dump 25/10), a funcao REAL por colab (`reconciliar_chamados_colab` + `retratar_chamados_absolvidos_por_celula`) dentro de `atomic` + rollback, universo 615 colabs (vivo OU orfa reatavel): **0 retratados, 0 pergunta, 0 disputa, 0 chamado criados**. As linhas `S160 ... pergunta criada SEM destino` do log sao so log: a contagem antes/depois por colab da 0. PROVA: `logs/rch_residuo2.out` (o 1o passe, `logs/rch_residuo.out`, so contava status).
+- Em 24/10 o mesmo cron retratou **7** (RELATO 12:0x). 7 -> 0 em um dia nao prova que o caminho reativo cobre: virar VIGIA (desligar a escrita) muda comportamento em prod, e se mede de novo no dump de amanha antes. Ate la `reconciliar_chamados` segue `juiz` (aguardando a 2a medida). Os outros dois VIGIA (`detectar_vinculo_divergente`, `termometro_regua`) mudam comportamento ao virar vigia e seguem por medir.
+
 ## 25/10 02:5x -- MARCO CONTADOR-PAREADOR-X-CELULA (3a versao) + TURNO-ABERTO-UM-EMISSOR item 3, em comboio
 
 LEI-AKITA (pareador): origem=ponto/services/vigia_pareador_celula.py::censo (vigia novo; os 6 achados do verificador de 00:4x + 7 da revisao de 02:5x), testemunha=ponto/turnos.py::turnos_do_colab + CelulaDia.ata (orfas da data civil, lampadas em ordem), RED=ponto/tests/test_vigia_pareador_celula.py por MUTANTE (tipo, data_turno: `logs/gesc/pxc_red.out`; regra do turno: `logs/gesc/pxc3_red.out`), quem-mais-le=o command e o ENC, juizes novos=0

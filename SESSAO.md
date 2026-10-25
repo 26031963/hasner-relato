@@ -6,10 +6,25 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/10/2026 04:06:04.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (5.2 MB). Acoes na janela: **268**.
+**Medido em 25/10/2026 04:11:34.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (5.5 MB). Acoes na janela: **283**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 04:11:19 | Bash | Regenerate handoff and show state | `cd /home/ronald/saas-hasner && bin/handoff_sessao.sh >/dev/null 2>&1; echo handoff=$?; sed -n '/## FILA 1/,/## PAREI/p' app/docs/HANDOFF-SESSAO.md; git status --short app \| head; date +%H:%M` |
+| 04:11:06 | Bash | Check readers of the isento gate | `git grep -n "cala_para_isento\\|CALADOS_POR_ISENCAO\\|EMISSORES_DE_MODULO_CALADO" -- '*.py' \| cut -c1-170; git grep -n "isento_ponto" -- ponto/management/commands/detectar_ausencias.py ponto/management/commands/processar_alertas_turno.py chamados/reconciliador.py \| head -6` |
+| 04:10:52 | Bash | Read the isento emission gate and its callers | `sed -n 225,280p chamados/catalogo/modulos.py; git grep -n "cala_para_isento(" -- '*.py' \| grep -v "/tests/" \| head` |
+| 04:10:45 | Bash | Find isento handling at chamado emission | `git grep -n "isento_ponto\\|isento" -- chamados/models.py chamados/services/emissao*.py chamados/catalogo/*.py 2>/dev/null \| cut -c1-180 \| head -12` |
+| 04:10:36 | Bash | Read silenciar_chamados_isentos and F4 reference | `f=$(git ls-files \| grep "commands/silenciar_chamados_isentos.py$"); sed -n 1,40p $f \| cut -c1-200; git grep -n "F4" -- $f chamados/models.py \| head -5` |
+| 04:10:25 | Bash | Record residue measure in RELATO and BACKLOG | `date +%H:%M && python3 - <<'EOF' p='docs/RELATO.md'; s=open(p).read() sec="""## 25/10 04:1x -- VARREDURA-TRIAGEM lote VIGIA: o residuo do `reconciliar_chamados` mede 0 no dump de hoje (so leitura) - Medido na sombra (dump 25/10), a funcao REAL por colab (`reconciliar_chamados_colab` + `retratar_chamados_absolvidos_por_celula`) dentro de `atomic` + rollback, universo 615 colabs (vivo OU orfa reatav ...` |
+| 04:09:35 | Bash | Count all writes of reconciliar_chamados on sombra | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='logs/sombra/rch_residuo.py'; s=open(p).read() s=s.replace("from ponto.models import Batida\n","from ponto.models import Batida\nfrom chamados.models import PerguntaDisputa, DisputaSupervisao\nescr = collections.Counter()\n") s=s.replace(""" with transaction.atomic(): n1 = reconciliar_chamados_colab(c); n2 = retratar_chamados_absolvidos_por_celula ...` |
+| 04:08:56 | Bash | Measure reconciliar_chamados residue on sombra with rollback | `cd /home/ronald/saas-hasner && cat > logs/sombra/rch_residuo.py <<'EOF' # VARREDURA-TRIAGEM lote VIGIA: o RESIDUO do reconciliar_chamados -- quem ele retrata e por que o signal nao pegou. # Roda a funcao REAL por colab dentro de atomic + rollback (nada fica). So leitura no efeito. import collections from django.db import transaction from django.db.models import Exists, OuterRef, Q from django.util ...` |
+| 04:08:39 | Bash | Read the reconciliar_chamados command | `cat chamados/management/commands/reconciliar_chamados.py` |
+| 04:08:35 | Bash | Inspect reconciliar_chamados command | `f=ponto/management/commands/reconciliar_chamados.py; ls $f chamados/management/commands/reconciliar_chamados.py 2>/dev/null; f=$(git ls-files \| grep "commands/reconciliar_chamados.py$"); wc -l $f; grep -n "add_argument\\|def handle\\|reconciliar_chamados_colab\\|retratar" $f \| head` |
+| 04:08:27 | Bash | Read the rest of the PRAZO/VIGIA line | `sed -n 356p docs/RELATO.md \| cut -c400-2500` |
+| 04:08:19 | Bash | Read the triage table and its follow-ups | `sed -n 326,380p docs/RELATO.md \| cut -c1-400` |
+| 04:08:14 | Bash | Locate VARREDURA-TRIAGEM sections in RELATO | `grep -n "^## .*VARREDURA\\|^## .*TRIAGEM" docs/RELATO.md \| head; grep -n "reconciliar_chamados" docs/RELATO.md \| cut -c1-300 \| head -8` |
+| 04:08:08 | Bash | Confirm marker moved and re-ask hook with stdin | `grep -n "ORDEM-VIVA-TOPO: " docs/BACKLOG.md \| head -2; echo '{}' \| timeout 60 python3 /home/ronald/saas-hasner/bin/hook_stop_fila1.py 2>&1 \| head -2` |
+| 04:08:01 | TaskStop |  | `-` |
 | 04:05:50 | Bash | Move the ORDEM-VIVA-TOPO marker | `python3 - <<'EOF' p='docs/BACKLOG.md'; s=open(p).read() a="<!-- ORDEM-VIVA-TOPO: CONTRATOS-RESTANTES-E1-E2-FOLHA-K6 -->\n" b="""<!-- ORDEM-VIVA-TOPO: VARREDURA-TRIAGEM --> <!-- ANDOU 25/10 04:0x, de `CONTRATOS-RESTANTES-E1-E2-FOLHA-K6` para `VARREDURA-TRIAGEM`, pela ORDEM LITERAL de 24/10 09:3x (*"Ordem: hook, gerar_celulas (K6), E1, triagem dos 21"*) e pela nota do proprio marcador ("a VARREDURA- ...` |
 | 04:05:37 | Bash | Read the VARREDURA-TRIAGEM backlog row | `grep -n "^\| VARREDURA-TRIAGEM" docs/BACKLOG.md \| cut -c1-1500` |
 | 04:05:27 | Bash | Read the BACKLOG header and ORDEM VIVA | `sed -n 1,30p docs/BACKLOG.md \| cut -c1-600` |
