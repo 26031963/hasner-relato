@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/10/2026 19:30:49.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (25.7 MB). Acoes na janela: **884**.
+**Medido em 25/10/2026 19:32:11.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (25.7 MB). Acoes na janela: **887**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 19:32:06 | Bash | Add the PROVA line, check, republish | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read() o="- NO AR `bdfad18f` (suite da copia" i=s.index(o); j=s.index('\n', i) s=s[:j+1]+"- PROVA: `logs/reabrir_deploy.log` (`deploy: OK -- migrations em dia, tres cascas reiniciadas juntas, tres rotas provadas.`, rc 0, `importerror_500=0`) + `logs/reabrir2_suite2.log` (`Ran 12002 tests`, `OK (skipped=42, expected  ...` |
+| 19:31:58 | Bash | Read the publisher and the proof rule | `cd /home/ronald/saas-hasner && sed -n 1,25p bin/relato.sh \| grep -E "^#" \| head -15; grep -nE "PROVA" bin/relato_afirma_com_prova.py \| head -8` |
+| 19:31:53 | Bash | Locate the line and the publisher | `cd /home/ronald/saas-hasner && grep -n "^- NO AR \`bdfad18f\`" app/docs/RELATO.md \| head -2; ls bin \| grep -iE "publica\|relato\|raspa" ; grep -rln "afirma_com_prova" bin/*.sh bin/*.py 2>/dev/null \| head` |
 | 19:29:24 | Bash | Wait for the push to finish | `for i in $(seq 1 55); do grep -q "push rc=" /tmp/claude-1001/-home-ronald-saas-hasner-app/f4eb628a-9fcf-4c05-ae6a-9f32279f7575/tasks/biw1wyh1h.output 2>/dev/null && break; /usr/bin/sleep 10; done; date +%T; grep -E "push rc=\|bdfad\|a32c\|amend\|changed" /tmp/claude-1001/-home-ronald-saas-hasner-app/f4eb628a-9fcf-4c05-ae6a-9f32279f7575/tasks/biw1wyh1h.output \| head; tail -6 /home/ronald/saas-hasn ...` |
 | 19:29:14 | Bash | Review the CARIMBO diff (part 1) | `cd /home/ronald/wt-carimbo && git diff -- app/core/regua_cct.py app/ponto/services/fechamento.py app/ponto/views.py app/templates/ponto/espelho.html \| grep '^[+-]' \| grep -v '^+++\\|^---' \| cut -c1-170` |
 | 19:29:06 | Bash | Build the CARIMBO landing copy on current HEAD | `cd /home/ronald/saas-hasner && git worktree add -q /home/ronald/wt-carimbo HEAD --detach && for f in $(cat /tmp/claude-1001/-home-ronald-saas-hasner-app/9dc43c3d-971d-4cc9-b176-7008bbd353bb/scratchpad/carimbo_files.txt); do cp "/home/ronald/saas-hasner/.claude/worktrees/agent-aabb2ebdaab039711/$f" "/home/ronald/wt-carimbo/$f"; done; cd /home/ronald/wt-carimbo && git status --porcelain \| wc -l &&  ...` |
