@@ -107,6 +107,12 @@ LEI-AKITA: origem=ponto/services/cartorio.py::julgar_colab (a porta), testemunha
 - PROVA: discordancia 4 -> **1**; col715 22/07, col268 29/08 e 31/08 -> `concorde`; `EXPORTADAS_INTACTAS|True` (hash de todas as ExportacaoDominio), `FM_IGUAL|True` (todos os FechamentoMensal dos 2 colabs), chamados 238 -> 238.
 - RESIDUO 1, a porta MANTEM: col268 12/08 e FOLGA (`trabalha=False`, ata `folga`) com falta aprovada em cima, e o cartorio lavra `nunca_bateu` -- os vizinhos de folga sem falta sao `concorde`. Classe na sombra: 2.525 celulas de folga com `nunca_bateu` (40 colabs), quantas com falta NAO medido. Vigia x cartorio discordam do mesmo dia: linha de fila `FALTA-EM-FOLGA-VIRA-NUNCA-BATEU`.
 
+## CASA-ESCALA-E2 -- o auditor pergunta a juiza se a geradora vale no dia (25/10 12:3x)
+LEI-AKITA: origem=chamados/management/commands/auditar_invariantes_chamados.py (piso I6e), testemunha=escala/alimentacao.py::vinculo_do_dia (lei (a) do E1), RED=escala.tests.test_contract_juiz_escala::test_o_censo_que_IMPEDE_a_declaracao_e_MEDIDO_a_cada_run, quem-mais-le=o placar do auditor, juizes novos=0
+- MUDOU (copia `wt-casa-e2`): o piso "fora de vigencia, EXPORTADA" deixa de refazer a vigencia da geradora na mao e pergunta a juiza alimentada SO com a geradora; TOMADORES 4 -> 3 (2 fora da juiza + a dela); prosa de `core/juizes.py` e `core/contratos_estruturais.py` com o numero do selo.
+- RED (HEAD): `FAILED (failures=1)` -- o censo ainda conta o auditor. PROVA: `logs/e2_red.log`.
+- EQUIVALENCIA (sombra, o command REAL nas duas arvores): saida identica linha a linha, menos as 2 linhas que dizem "lavrado ha N min" (relogio); piso I6e = 49 nos dois lados. PROVA: `logs/e2-head.out` x `logs/e2-cura.out`.
+
 ## PERGUNTA-RESPONDIDA-E-MARCO-ACESO -- construida, impacto medido, em suite (25/10 11:4x)
 LEI-AKITA: origem=chamados/juizes.py::_pergunta_viva_calc (ramo HX-ADMIN-DECIDE-O-DIA), testemunha=lampada da celula (`luz`) + `classe_por_delta` + `CelulaDia.VEREDITOS_ACUSAM`, RED=chamados.tests.test_pergunta_respondida_e_marco_aceso, quem-mais-le=todo leitor de `pergunta_viva` (vigia do fio, telas, emissores), juizes novos=0
 - MUDOU (copia `wt-pram`): `_resposta_concorda_com_a_luz(p)` -- LEITOR que compoe `fato_do_marco_no_espelho`, a `luz` da ata, `distancia_do_marco` e `classe_por_delta`; None (pausa dupla, sem HH:MM, lampada nao provada) nunca mata. A respondida morre quando ele diz True.

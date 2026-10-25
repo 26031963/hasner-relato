@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/10/2026 12:10:48.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (14.5 MB). Acoes na janela: **721**.
+**Medido em 25/10/2026 12:15:48.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (14.5 MB). Acoes na janela: **726**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 12:15:23 | Bash | Wait for E2 suite verdict | `until grep -q '^rc=' /home/ronald/saas-hasner/logs/e2_suite.log 2>/dev/null; do /usr/bin/sleep 15; done; cd /home/ronald/saas-hasner && grep -E '^(OK\|FAILED)($\| \()' logs/e2_suite.log \| tail -1; grep -E '^Ran ' logs/e2_suite.log \| tail -1; tail -1 logs/e2_suite.log; grep -E '^(FAIL\|ERROR):' logs/e2_suite.log \| head -3` |
+| 12:15:05 | Bash | Read dia_encerrado body for cost | `sed -n 1920,1975p ponto/turnos.py` |
+| 12:14:54 | Bash | Write E2 section and census classificar_dia callers | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md'; L=open(p).read().split('\n') j=next(k for k,l in enumerate(L) if l.startswith('## PERGUNTA-RESPONDIDA-E-MARCO-ACESO')) sec='''## CASA-ESCALA-E2 -- o auditor pergunta a juiza se a geradora vale no dia (25/10 12:3x) LEI-AKITA: origem=chamados/management/commands/auditar_invariantes_chamados.py (piso I6e), testemunha=escala/alim ...` |
+| 12:14:39 | Bash | Run full suite on E2 copy | `cd /home/ronald/saas-hasner && bin/suite.sh --dir /home/ronald/wt-casa-e2 > logs/e2_suite.log 2>&1; echo rc=$? >> logs/e2_suite.log` |
+| 12:14:28 | Bash | Run E2 RED against HEAD-equivalent copy | `cd /home/ronald/saas-hasner && cp /home/ronald/wt-casa-e2/app/escala/tests/test_contract_juiz_escala.py /home/ronald/wt-instr/app/escala/tests/ && bin/suite.sh --dir /home/ronald/wt-instr --only escala.tests.test_contract_juiz_escala > logs/e2_red.log 2>&1; echo rc=$?; grep -E '^(OK\|FAILED)($\| \()\|^Ran \|^(FAIL\|ERROR):' logs/e2_red.log \| tail -4; git -C /home/ronald/wt-instr checkout -q -- ap ...` |
 | 12:05:40 | Bash | Diff full vigia output HEAD vs cure | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='logs/sombra/e2_auditar.py'; s=open(p).read() s=s.replace("for l in t.splitlines():\n if 'export' in l.lower() or 'vigencia' in l.lower():\n print('E2\|%s' % l[:160])","for l in t.splitlines():\n print('E2L\|%s' % l)") open(p,'w').write(s) EOF bin/sombra.sh --rodar logs/sombra/e2_auditar.py e2-head >/dev/null 2>&1; SOMBRA_ARVORE=/home/ronald/wt-ca ...` |
 | 12:05:30 | Bash | Check retried push result on remote | `cd /home/ronald/saas-hasner && tail -3 logs/push_2510_12b.log; git fetch -q; git log --oneline origin/main -1; git log --oneline origin/main..HEAD \| wc -l` |
 | 11:57:12 | Bash | Rerun E2 probe catching SystemExit on both trees | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='logs/sombra/e2_auditar.py'; s=open(p).read() s=s.replace("call_command('auditar_invariantes_chamados', stdout=out)","try:\n call_command('auditar_invariantes_chamados', stdout=out)\nexcept SystemExit as e:\n print('E2\|SystemExit=%s' % e.code)") open(p,'w').write(s) EOF bin/sombra.sh --rodar logs/sombra/e2_auditar.py e2-head >/dev/null 2>&1; grep ...` |
