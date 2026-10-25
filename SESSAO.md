@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/10/2026 11:54:34.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (14.4 MB). Acoes na janela: **716**.
+**Medido em 25/10/2026 12:00:05.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (14.4 MB). Acoes na janela: **719**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 11:57:12 | Bash | Rerun E2 probe catching SystemExit on both trees | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='logs/sombra/e2_auditar.py'; s=open(p).read() s=s.replace("call_command('auditar_invariantes_chamados', stdout=out)","try:\n call_command('auditar_invariantes_chamados', stdout=out)\nexcept SystemExit as e:\n print('E2\|SystemExit=%s' % e.code)") open(p,'w').write(s) EOF bin/sombra.sh --rodar logs/sombra/e2_auditar.py e2-head >/dev/null 2>&1; grep ...` |
+| 11:56:59 | Bash | Show non-noise tail of E2 probe output | `cd /home/ronald/saas-hasner && grep -vE "best-effort falhou\|^NoneType: None$" logs/e2-head.out \| tail -15 \| cut -c1-220` |
+| 11:56:53 | Bash | Read E2 probe output file and command options | `cd /home/ronald/saas-hasner && grep -E '^E2\\|\|Traceback\|Error:' logs/e2-head.out \| head -5; grep -n "add_argument\\|--apply\\|def handle" app/chamados/management/commands/auditar_invariantes_chamados.py \| head` |
 | 11:52:34 | Bash | Show sombra output tail for the E2 probe | `cd /home/ronald/saas-hasner && bin/sombra.sh --rodar logs/sombra/e2_auditar.py e2-head 2>&1 \| tail -6` |
 | 11:43:28 | Bash | Update prose and compare vigia output HEAD vs cure | `cd /home/ronald/wt-casa-e2/app && python3 - <<'EOF' for p,a,b in (('core/juizes.py',"""'pelo USO desde 25/10) conta 3 arquivos (3 linhas) tomando a geradora por fora -- ' 'fechamento:160 (fatia E3), folgas:410 (fatia E5) e auditar_invariantes_chamados:388 (fatia E2). '""","""'pelo USO desde 25/10) conta 2 arquivos (2 linhas) tomando a geradora por fora -- ' 'fechamento:160 (fatia E3) e folgas:410  ...` |
 | 11:43:12 | Bash | Build E2 in a copy and update taker census | `cd /home/ronald/saas-hasner && git worktree add -f /home/ronald/wt-casa-e2 HEAD 2>&1 \| tail -1 && mkdir -p /home/ronald/wt-casa-e2/app/logs /home/ronald/wt-casa-e2/app/media && cd /home/ronald/wt-casa-e2/app && python3 - <<'EOF' p='chamados/management/commands/auditar_invariantes_chamados.py'; s=open(p).read() a=""" _ec = c.escala_geradora if _ec is not None and ( (_ec.data_inicio and c.data < _e ...` |
