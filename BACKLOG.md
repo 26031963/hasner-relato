@@ -4,7 +4,10 @@
 >
 > **livre** = pode virar fatia agora, sem humano. **corte/aval/smoke/dinheiro-ate-export** = tem dono humano e espera.
 
-<!-- ORDEM-VIVA-TOPO: BO-INSS-LEITORES-QUE-NAO-MIGRARAM -->
+<!-- ORDEM-VIVA-TOPO: SEM-CELULA-NA-JANELA-INTEIRA -->
+<!-- ANDOU 25/10 05:4x, de `BO-INSS-LEITORES-QUE-NAO-MIGRARAM` (FECHADA, NO AR 9e0ce0f6) para `SEM-CELULA-NA-JANELA-INTEIRA`
+     (AUTONOMIA-DE-CODIGO item 1): o proximo andavel cujo 1o passo e LEITURA, e cuja pergunta (ESTRUTURA x CADASTRO)
+     as leis (a)/(b) do E1 desta noite ja respondem pelo vinculo. -->
 <!-- ANDOU 25/10 05:0x, de `LOG-BEST-EFFORT-EM-DOBRO` (FECHADA, NO AR a86d0e1d) para `BO-INSS-LEITORES-QUE-NAO-MIGRARAM`
      (AUTONOMIA-DE-CODIGO item 1): o proximo andavel sem dinheiro, nucleo nem pergunta de lei -- dois leitores da
      pergunta "a cobertura explica o dia inteiro?" que nao migraram para o carimbo da grade (LEI-AKITA 4). -->

@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/10/2026 05:43:34.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (6.6 MB). Acoes na janela: **351**.
+**Medido em 25/10/2026 05:49:01.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (6.7 MB). Acoes na janela: **354**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 05:48:55 | Bash | Move marker and measure vinculo coverage of cell-less colabs | `python3 - <<'EOF' p='docs/BACKLOG.md'; s=open(p).read() a="<!-- ORDEM-VIVA-TOPO: BO-INSS-LEITORES-QUE-NAO-MIGRARAM -->\n" b="""<!-- ORDEM-VIVA-TOPO: SEM-CELULA-NA-JANELA-INTEIRA --> <!-- ANDOU 25/10 05:4x, de `BO-INSS-LEITORES-QUE-NAO-MIGRARAM` (FECHADA, NO AR 9e0ce0f6) para `SEM-CELULA-NA-JANELA-INTEIRA` (AUTONOMIA-DE-CODIGO item 1): o proximo andavel cujo 1o passo e LEITURA, e cuja pergunta (EST ...` |
+| 05:48:38 | Bash | Read SEM-CELULA-NA-JANELA-INTEIRA row | `grep -n "^\| SEM-CELULA-NA-JANELA-INTEIRA \|" docs/BACKLOG.md \| cut -c1-1800` |
+| 05:45:44 | Bash | Wait for push result | `until grep -q "pos_push\\|error:\\|rejected" /home/ronald/saas-hasner/logs/gesc/push6.out 2>/dev/null; do /usr/bin/sleep 15; done; tail -3 /home/ronald/saas-hasner/logs/gesc/push6.out; cd /home/ronald/saas-hasner && git fetch -q && git log --oneline origin/main -1` |
 | 05:35:35 | Bash | Record smoke, close item, commit, push | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read() a="Pouso: `cmp` arquivo a arquivo, commit + `bin/deploy.sh --sem-migrate`.\n\n## 25/10 04:1x -- MARCO LOG-BEST-EFFORT-EM-DOBRO" b="Pouso: `cmp` arquivo a arquivo, commit + `bin/deploy.sh --sem-migrate`.\n- NO AR `9e0ce0f6` (deploy 05:34, rc 0, tres rotas). SMOKE em prod (command `supra_juiz` DRY, emp 2, 15/09 ...` |
 | 05:35:02 | Bash | Prod smoke of supra_juiz dry on changed days | `cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command supra_juiz --schema=juliani --empresa 2 --ini 2026-09-15 --fim 2026-09-30 --dump > logs/gesc/sj_prod_smoke.out 2>&1; echo rc=$?; grep -E "col369 .*2026-09-28\|col584 .*2026-09-17" logs/gesc/sj_prod_smoke.out \| cut -c1-90` |
 | 05:34:43 | Bash | Land, commit and deploy the BO-INSS reader cure | `cd /home/ronald/saas-hasner && FILES=$(cd /home/ronald/wt-boi && { git diff --name-only; git ls-files --others --exclude-standard app/ponto app/escala; }) && echo "$FILES" && git diff --quiet HEAD -- app/escala/services/leitor_celula.py && for f in $FILES; do cp /home/ronald/wt-boi/$f $f; cmp $f /home/ronald/wt-boi/$f \|\| echo DIFERE $f; done && python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p) ...` |
