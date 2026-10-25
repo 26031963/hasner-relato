@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/10/2026 19:10:07.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (25.5 MB). Acoes na janela: **904**.
+**Medido em 25/10/2026 19:15:35.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (25.5 MB). Acoes na janela: **903**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -913,4 +913,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 07:16:39 | Bash | Fix time labels | `sed -i 's/(API-NAO-TEM-PORTA-DE-ANEXAR-EM-AUSENCIA-EXISTENTE, 25\/10 07:0x)/(API-NAO-TEM-PORTA-DE-ANEXAR-EM-AUSENCIA-EXISTENTE, 25\/10 07:1x)/' docs/RELATO.md && sed -i 's/pergunta no topo do RELATO 25\/10 07:0x (quem anexa/pergunta no topo do RELATO 25\/10 07:1x (quem anexa/' docs/BACKLOG.md && grep -c "EXISTENTE, 25/10 07:1x" docs/RELATO.md; grep -c "RELATO 25/10 07:1x (quem anexa" docs/BACKLOG. ...` |
 | 07:16:32 | Bash | Write attach-door question and mark waiting | `date +%H:%M && python3 - <<'EOF' p='docs/RELATO.md'; s=open(p).read() anchor="> **lei (DESENHO, autorizacao item 5): LOTE-POR-TURNO" q="""> **lei: PORTA-DE-ANEXAR (API-NAO-TEM-PORTA-DE-ANEXAR-EM-AUSENCIA-EXISTENTE, 25/10 07:0x)** -- a api so tem porta de CRIAR ausencia, nao de ANEXAR documento a uma que ja existe. Medido 22/10: 1 submissao de 18/10 (4 POSTs) morreu na `uniq_ausencia_viva_por_tipo_ ...` |
 | 07:16:18 | Bash | Read the attach-to-existing-absence item | `grep -n "^\| API-NAO-TEM-PORTA-DE-ANEXAR-EM-AUSENCIA-EXISTENTE \|" docs/BACKLOG.md \| cut -c1-2200` |
-| 07:14:25 | Bash | Wait for push result | `until grep -q "pos_push\\|error:\\|rejected" /home/ronald/saas-hasner/logs/gesc/push8.out 2>/dev/null; do /usr/bin/sleep 15; done; tail -3 /home/ronald/saas-hasner/logs/gesc/push8.out; cd /home/ronald/saas-hasner && git fetch -q && git log --oneline origin/main -1` |
