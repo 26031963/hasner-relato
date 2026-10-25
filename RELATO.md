@@ -120,6 +120,7 @@ LEI-AKITA: origem=core/placar_estrutural.py (R6), core/placar_tickets.py::citaca
 - (6): citacao = `[ID]` no ASSUNTO (lei 09:3x item 6); 3 casos do selo INVERTIDOS. RED: `logs/tranca6_red.log`. A 1a suite do comboio pegou 1 caso que eu nao tinha rodado com a cura (`test_substituir...`, prosa 'ALFA') -- curado e recertificado. PROVA: `logs/instr_suite.log`, `logs/instr_fix.log`.
 - E1: o censo de tomadores julga pelo USO (AST, `_so_alimenta`), `servico_jornada` sai (5 -> 4), caso que MORDE nos dois sentidos; prosa falsa de `core/juizes.py` (_E1/_E2) e da nota escala de `core/contratos_estruturais.py` corrigida com o numero do selo. DECLARADO: o selo novo PASSA no HEAD porque a cura mora nele mesmo; a evidencia de antes e o censo velho (5 linhas, `servico_jornada` tomando). PROVA: `logs/e1_red.log`, `logs/e1_green.log`.
 - placar_code: a linha `competencias_pagas_sem_tranca` sai (o command saiu em `5e2a29e3`).
+- SUITE CHEIA do comboio RECERTIFICADA: `Ran 11960` / `OK (skipped=42, expected failures=15)` / rc 0. PROVA: `logs/instr_suite2.log`; cmp dos 8 arquivos contra `wt-instr`.
 
 ## ITEM-3-TRANCA-SAI-PELA-L111 -- o contador e o ramo `--trancar` saem (25/10 11:2x)
 LEI-AKITA: origem=ponto/services/fechamento.py::competencias_pagas_sem_tranca + folha/management/commands/pre_fechamento.py (ramo --trancar), testemunha=n/a (sai leitor, nao entra), RED=ponto.tests.test_tranca_sem_efeito_nao_e_defeito, quem-mais-le=bin/placar_code.sh (pouso de instrumento proprio), juizes novos=0

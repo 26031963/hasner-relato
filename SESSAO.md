@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/10/2026 11:27:34.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (14.0 MB). Acoes na janela: **696**.
+**Medido em 25/10/2026 11:33:04.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (14.1 MB). Acoes na janela: **699**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 11:29:21 | Bash | Deploy convoy and check placar_code no longer calls counter | `cd /home/ronald/saas-hasner && bin/deploy.sh --sem-migrate > logs/instr_deploy.log 2>&1; echo rc=$?; tail -1 logs/instr_deploy.log; bash bin/placar_code.sh 2>/dev/null \| grep -c "competencias_pagas_sem_tranca"` |
+| 11:29:15 | Bash | Land the instrument convoy commit | `cd /home/ronald/saas-hasner && F="app/core/placar_estrutural.py app/core/placar_tickets.py app/core/tests/test_selo_r6_frase_do_juiz.py app/core/tests/test_selo_placar_tickets.py app/core/juizes.py app/core/contratos_estruturais.py app/escala/tests/test_contract_juiz_escala.py bin/placar_code.sh"; git diff --quiet 5e2a29e3 HEAD -- $F && echo "sem deriva"; for f in $F; do cp /home/ronald/wt-instr/$ ...` |
+| 11:28:50 | Bash | Wait for convoy recertification verdict | `until grep -q '^rc=' /home/ronald/saas-hasner/logs/instr_suite2.log 2>/dev/null; do /usr/bin/sleep 15; done; cd /home/ronald/saas-hasner && grep -E '^(OK\|FAILED)($\| \()' logs/instr_suite2.log \| tail -1; grep -E '^Ran ' logs/instr_suite2.log \| tail -1; tail -1 logs/instr_suite2.log; grep -E '^(FAIL\|ERROR):' logs/instr_suite2.log \| head` |
 | 11:18:41 | Bash | Wait for convoy recertification verdict | `until grep -q '^rc=' /home/ronald/saas-hasner/logs/instr_suite2.log 2>/dev/null; do /usr/bin/sleep 15; done; cd /home/ronald/saas-hasner && grep -E '^(OK\|FAILED)($\| \()' logs/instr_suite2.log \| tail -1; grep -E '^Ran ' logs/instr_suite2.log \| tail -1; tail -1 logs/instr_suite2.log; grep -E '^(FAIL\|ERROR):' logs/instr_suite2.log \| head` |
 | 11:18:29 | Bash | Read supra_juiz teto, dia_encerrado and JUIZES_DO_PRAZO | `sed -n 238,256p ponto/supra_juiz.py; grep -n "def dia_encerrado" -A30 ponto/turnos.py \| head -40; sed -n 1880,1892p config/crons.py` |
 | 11:18:20 | Bash | Write PRAM and convoy sections in RELATO | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md'; L=open(p).read().split('\n') j=next(k for k,l in enumerate(L) if l.startswith('## ITEM-3-TRANCA-SAI-PELA-L111')) sec='''## PERGUNTA-RESPONDIDA-E-MARCO-ACESO -- construida, impacto medido, em suite (25/10 11:4x) LEI-AKITA: origem=chamados/juizes.py::_pergunta_viva_calc (ramo HX-ADMIN-DECIDE-O-DIA), testemunha=lampada da celula ...` |
