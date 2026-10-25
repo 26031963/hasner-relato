@@ -186,7 +186,7 @@ flowchart TD
     x_escala_regua_defesa_py["escala/regua_defesa.py"] --> p_retratar
     x_ponto_management_commands_processar_alertas_turno_py["ponto/management/commands/processar_alertas_turno.py"] --> p_retratar
     x_ponto_management_commands_reconciliar_fantasmas_py["ponto/management/commands/reconciliar_fantasmas.py"] --> p_retratar
-    x_ponto_management_commands_reconciliar_geofence_py["ponto/management/commands/reconciliar_geofence.py"] --> p_retratar
+    x_ponto_management_commands_reconciliar_grade_py["ponto/management/commands/reconciliar_grade.py"] --> p_retratar
     mais_retratar["... +4 chamadores"] --> p_retratar
     p_reapontar_resolvedora(["reapontar_resolvedora()<br/>reapontar fio<br/>2 chamador(es)"])
     x_chamados_reconciliador_py["chamados/reconciliador.py"] --> p_reapontar_resolvedora
@@ -199,9 +199,9 @@ flowchart TD
     t_celula["CELULA / ATA por marco<br/>o que aconteceu (lampada)"]
     t_evento["EVENTO<br/>batida, ausencia, chamado -> cartorio julga na hora (signals B5.2)"]
     t_consumidor["CONSUMIDORES<br/>chamado, pergunta, tela, folha: leem a lampada, nunca re-julgam"]
-    t_vigia["CRON = VIGIA<br/>30 vigias; contador esperado 0, so alarma"]
+    t_vigia["CRON = VIGIA<br/>31 vigias; contador esperado 0, so alarma"]
     t_prazo["CRON = PRAZO (L-101)<br/>5 cron(s): a falta nao emite evento, o relogio e o unico sinal dela;<br/>julgam pela funcao do juiz da casa, sem regra propria (PRAZO_DELEGA_A)"]
-    t_juiz["JUIZ POR VARREDURA (divida)<br/>19 crons ainda julgam: esperado 0"]
+    t_juiz["JUIZ POR VARREDURA (divida)<br/>18 crons ainda julgam: esperado 0"]
     t_escala --> t_celula
     t_evento --> t_celula
     t_celula --> t_consumidor
@@ -222,7 +222,6 @@ flowchart TD
   j_reavaliar_ausencias_feriado["reavaliar_ausencias_feriado"] -.-> t_juiz
   j_reconciliar_chamados["reconciliar_chamados"] -.-> t_juiz
   j_reconciliar_fantasmas["reconciliar_fantasmas"] -.-> t_juiz
-  j_reconciliar_geofence["reconciliar_geofence"] -.-> t_juiz
   j_reconciliar_perguntas_orfas["reconciliar_perguntas_orfas"] -.-> t_juiz
   j_reconciliar_vinculo["reconciliar_vinculo"] -.-> t_juiz
   j_silenciar_chamados_isentos["silenciar_chamados_isentos"] -.-> t_juiz
@@ -301,6 +300,9 @@ flowchart TD
     evr_cartorio_post_save_justificativa["_cartorio_post_save_justificativa<br/>post_save"]
     evs_Justificativa --> evr_cartorio_post_save_justificativa
     evr_cartorio_post_save_justificativa ==>|julga| ev_juiz
+    evs_Posto[/"Posto<br/>1 receiver(s)"/]
+    evr_geofence_post_save_posto["_geofence_post_save_posto<br/>post_save"]
+    evs_Posto --> evr_geofence_post_save_posto
   end
 
   %% (f) JUIZES — fonte: core/juizes.py (JUIZES, SEM_JUIZ, PENDENTES)
@@ -347,9 +349,10 @@ flowchart TD
     jmais_tela["... +4 arquivos de juiz"] --- jf_tela
     jf_portas["portas<br/>1 com juiz · 0 sem juiz<br/>registro: 124 sitio(s)"]
     ja_core_portas_da_tela_py(["core/portas_da_tela.py"]) --- jf_portas
-    jf_batida["batida<br/>2 com juiz · 3 sem juiz<br/>registro: 0 sitio(s)"]
+    jf_batida["batida<br/>3 com juiz · 2 sem juiz<br/>registro: 0 sitio(s)"]
     ja_ponto_juiz_batida_py(["ponto/juiz_batida.py"]) --- jf_batida
     ja_ponto_motor_calculo_v2_py(["ponto/motor_calculo_v2.py"]) --- jf_batida
+    ja_ponto_services_geofence_py(["ponto/services/geofence.py"]) --- jf_batida
   end
 
   %% (g) PORTAS DE ESCRITA — fonte: core/portas_da_tela.py (FAMILIAS; censo em prod: manage.py censo_portas)
@@ -376,6 +379,7 @@ flowchart TD
     vg_negou_fogo_diario_sh["negou_fogo_diario.sh"]
     vg_pipeline_placar["pipeline_placar"]
     vg_reavaliar_ausencias_lancadas["reavaliar_ausencias_lancadas"]
+    vg_reconciliar_geofence["reconciliar_geofence"]
     vg_reconciliar_grade["reconciliar_grade"]
     vg_sentinela_diario_sh["sentinela_diario.sh"]
     vg_supra_juiz["supra_juiz"]
