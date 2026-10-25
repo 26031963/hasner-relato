@@ -127,6 +127,8 @@ LEI-AKITA: origem=core/regua_cct.py::get_motor_cct (unico sitio que ve r['fonte'
 - MUDOU (agente em raia propria, sobre `fff2d262`; rebaseado em `bdfad18f`, 0 arquivo em comum): `get_motor_cct` guarda `r['fonte']` numa tabela FRACA por motor (atributo no motor mordia o I7 do s5b -- `motor_calculo_v2.py` e zona inviolavel); `fonte_da_regua(motor)` le; `apurar_por_fatia` expoe `regua_por_fatia` (fatia, fonte, impressao); `espelho.py::carimbo_da_convencao` formata UMA vez para tela e PDF ("fonte [impressao]", trecho por fatia quando a regua troca, vizinhas iguais fundem); complemento das 17:1x: a impressao e a MESMA `impressao_da_regua` do `DiaPago.versao_motor`.
 - RED (copia do HEAD): `Ran 7` / `FAILED (failures=7)`, o controle verde. GREEN 22 modulos vizinhos `Ran 144` OK (relato do agente).
 - PROVA: suite da copia `wt-carimbo` (main `bdfad18f` + 7 arquivos) `Ran 12009` / `OK (skipped=42, expected failures=15)`, rc 0 (`logs/carimbo_suite.log`).
+- NO AR `74ea4a1b` (deploy rc 0, 3 rotas, importerror_500=0). SMOKE na sombra (dump 04:00, ANTES do ato das 18:35), `espelho_do_colab` real: emp1/emp2/emp4 `SINEEPRES/SINDEPRESTEM-PR [legais|...]`, emp3 `legal (empresa em CLT: ...) [relogio|...]` -- o carimbo le a regua do calculo, nao um nome fixo; em prod a regua de hoje ja e a dos Vigilantes (`logs/rvv/ato_regua_volta.out`).
+- PROVA: `logs/carimbo_deploy.log` (`deploy: OK`, rc 0) + `logs/carimbo_smoke.out` (4 linhas `CAR|`) + `logs/carimbo_suite.log` (`Ran 12009`, OK).
 - INCOMPLETO: smoke de clique do Ronald na tela e no PDF; a tela do app (`api_espelho_v2`) e o calendario recebem a chave mas nao a desenham (linha de fila).
 
 ## REABRIR-PERGUNTA-A-PREMISSA -- nomeado, a porta (fase A) construida, e o DIFF ANTES do pouso (25/10 18:2x, sombra)
