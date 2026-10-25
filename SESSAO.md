@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/10/2026 05:00:47.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (6.1 MB). Acoes na janela: **317**.
+**Medido em 25/10/2026 05:05:48.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (6.1 MB). Acoes na janela: **322**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 05:02:43 | Bash | Record smoke, commit and push | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read() a="Pouso: `cmp` arquivo a arquivo, commit + `bin/deploy.sh --sem-migrate`.\n\n## 25/10 04:1x -- VARREDURA-TRIAGEM" b="Pouso: `cmp` arquivo a arquivo, commit + `bin/deploy.sh --sem-migrate`.\n- NO AR `a86d0e1d` (deploy 05:02, rc 0, tres rotas). SMOKE em prod (`saas_ui`, settings vivo): `logging.getLogger('cham ...` |
+| 05:02:31 | Bash | Prod smoke of formatted app WARNING | `docker exec saas_ui python manage.py shell -c "import logging; logging.getLogger('chamados.smoke_log').warning('smoke LOG-BEST-EFFORT 25/10')" 2>&1 \| grep -v "objects imported" \| tail -2` |
+| 05:02:13 | Bash | Deploy the logging commit | `cd /home/ronald/saas-hasner && bin/deploy.sh --sem-migrate > logs/gesc/deploy5.out 2>&1; echo rc=$?; tail -1 logs/gesc/deploy5.out; date +%H:%M` |
+| 05:02:08 | Bash | Land logging cure and commit | `cd /home/ronald/saas-hasner && FILES=$(cd /home/ronald/wt-log && { git diff --name-only; git ls-files --others --exclude-standard app/ponto app/config; }) && echo "$FILES" && git diff --quiet HEAD -- app/config/settings/saas.py && for f in $FILES; do cp /home/ronald/wt-log/$f $f; cmp $f /home/ronald/wt-log/$f \|\| echo DIFERE $f; done && python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read() a ...` |
+| 05:01:55 | Bash | Read sombra stamp result | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/f4eb628a-9fcf-4c05-ae6a-9f32279f7575/tasks/bdk7wpy75.output \| tail -3` |
 | 04:43:50 | Bash | Wait for sombra cron by file, then check stamp | `until ! ls /home/ronald/saas-hasner/logs/crons_em_curso/sombra.sh_-.* >/dev/null 2>&1; do /usr/bin/sleep 20; done; date +%H:%M; cd /home/ronald/saas-hasner && bin/sombra.sh --conferir 2>&1 \| tail -1` |
 | 04:40:57 | Bash | Wait for re-certification verdict | `until grep -q "^rc=" /home/ronald/saas-hasner/logs/gesc/log_suite2.out; do /usr/bin/sleep 15; done; f=/home/ronald/saas-hasner/logs/gesc/log_suite2.out; grep -E "^(OK\|FAILED)($\| \()" $f \| tail -1; grep "^Ran" $f \| tail -1; tail -1 $f; ls /home/ronald/saas-hasner/logs/crons_em_curso/; date +%H:%M` |
 | 04:30:12 | Bash | Wait for re-certification verdict | `until grep -q "^rc=" /home/ronald/saas-hasner/logs/gesc/log_suite2.out; do /usr/bin/sleep 20; done; f=/home/ronald/saas-hasner/logs/gesc/log_suite2.out; grep -E "^(OK\|FAILED)($\| \()" $f \| tail -1; grep "^Ran" $f \| tail -1; tail -1 $f; ls /home/ronald/saas-hasner/logs/crons_em_curso/` |
