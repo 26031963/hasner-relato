@@ -107,6 +107,20 @@ LEI-AKITA: origem=ponto/services/cartorio.py::julgar_colab (a porta), testemunha
 - PROVA: discordancia 4 -> **1**; col715 22/07, col268 29/08 e 31/08 -> `concorde`; `EXPORTADAS_INTACTAS|True` (hash de todas as ExportacaoDominio), `FM_IGUAL|True` (todos os FechamentoMensal dos 2 colabs), chamados 238 -> 238.
 - RESIDUO 1, a porta MANTEM: col268 12/08 e FOLGA (`trabalha=False`, ata `folga`) com falta aprovada em cima, e o cartorio lavra `nunca_bateu` -- os vizinhos de folga sem falta sao `concorde`. Classe na sombra: 2.525 celulas de folga com `nunca_bateu` (40 colabs), quantas com falta NAO medido. Vigia x cartorio discordam do mesmo dia: linha de fila `FALTA-EM-FOLGA-VIRA-NUNCA-BATEU`.
 
+## PERGUNTA-RESPONDIDA-E-MARCO-ACESO -- construida, impacto medido, em suite (25/10 11:4x)
+LEI-AKITA: origem=chamados/juizes.py::_pergunta_viva_calc (ramo HX-ADMIN-DECIDE-O-DIA), testemunha=lampada da celula (`luz`) + `classe_por_delta` + `CelulaDia.VEREDITOS_ACUSAM`, RED=chamados.tests.test_pergunta_respondida_e_marco_aceso, quem-mais-le=todo leitor de `pergunta_viva` (vigia do fio, telas, emissores), juizes novos=0
+- MUDOU (copia `wt-pram`): `_resposta_concorda_com_a_luz(p)` -- LEITOR que compoe `fato_do_marco_no_espelho`, a `luz` da ata, `distancia_do_marco` e `classe_por_delta`; None (pausa dupla, sem HH:MM, lampada nao provada) nunca mata. A respondida morre quando ele diz True.
+- CASOS PELA REGRA antes do codigo (L-110, no docstring do teste): 19:02 x luz 19:00 concorde = MORRE; 19:06 = viva (classe B); 19:02 com dia `furo` = viva; sem luz = viva.
+- RED (HEAD): `FAILED (failures=1)` -- o caso que morre. PROVA: `logs/pram_red.log`. GREEN com vizinhos (BUG 117, pergunta_viva, viva_delega, leitores_vitalidade): `Ran 37` / OK. PROVA: `logs/pram_green.log`.
+- IMPACTO (sombra, `pergunta_viva` REAL, HEAD x cura): respondidas sem validacao 896; vivas **670 -> 654** (16 morrem). Abertura no universo com marco aceso: 20 concordam (4 ja mortas por outro degrau), 78 discordam (classe B/C ou dia que acusa), 46 sem hora comparavel ficam vivas. PROVA: saidas `PRAM|` das sondas `logs/sombra/pram_impacto.py` e `logs/sombra/pram_abre.py` nesta sessao.
+
+## COMBOIO DE INSTRUMENTO: B1 + (6) CITACAO + E1 + linha do placar_code (25/10 11:4x)
+LEI-AKITA: origem=core/placar_estrutural.py (R6), core/placar_tickets.py::citacao_indevida, escala/tests/test_contract_juiz_escala.py::_tomadores_da_geradora, testemunha=core/contratos_estruturais.py::linha_do_placar (B1), juizes novos=0
+- B1: selo `core/tests/test_selo_r6_frase_do_juiz.py` NASCE (o R6 o prometia); RED 15/20 x 18/20, cura pela funcao real. PROVA: `logs/r6_red.log`, `logs/placar_estrutural/contratos_20261025.txt`.
+- (6): citacao = `[ID]` no ASSUNTO (lei 09:3x item 6); 3 casos do selo INVERTIDOS. RED: `logs/tranca6_red.log`. A 1a suite do comboio pegou 1 caso que eu nao tinha rodado com a cura (`test_substituir...`, prosa 'ALFA') -- curado e recertificado. PROVA: `logs/instr_suite.log`, `logs/instr_fix.log`.
+- E1: o censo de tomadores julga pelo USO (AST, `_so_alimenta`), `servico_jornada` sai (5 -> 4), caso que MORDE nos dois sentidos; prosa falsa de `core/juizes.py` (_E1/_E2) e da nota escala de `core/contratos_estruturais.py` corrigida com o numero do selo. DECLARADO: o selo novo PASSA no HEAD porque a cura mora nele mesmo; a evidencia de antes e o censo velho (5 linhas, `servico_jornada` tomando). PROVA: `logs/e1_red.log`, `logs/e1_green.log`.
+- placar_code: a linha `competencias_pagas_sem_tranca` sai (o command saiu em `5e2a29e3`).
+
 ## ITEM-3-TRANCA-SAI-PELA-L111 -- o contador e o ramo `--trancar` saem (25/10 11:2x)
 LEI-AKITA: origem=ponto/services/fechamento.py::competencias_pagas_sem_tranca + folha/management/commands/pre_fechamento.py (ramo --trancar), testemunha=n/a (sai leitor, nao entra), RED=ponto.tests.test_tranca_sem_efeito_nao_e_defeito, quem-mais-le=bin/placar_code.sh (pouso de instrumento proprio), juizes novos=0
 - LEI: lei dele 25/10 09:4x item 9 -- a de 30/09 (TXT e fotografia) + L-113 revogam a regra de 16/09; L-111 apaga no ato.
