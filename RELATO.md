@@ -86,6 +86,15 @@ PAREI: ! GATE-EXPORT-10 (so o export da 10) | espera o DP na Gestao de HE e o Ro
 - POR QUE O VIGIA NAO OS VE, agora pelo codigo (`ponto/services/furos_sem_cobranca.py::medir`): o universo dele e `veredito='furo'` com protesto em `PROTESTOS_QUE_COBRAM`, so na competencia CORRENTE (`janela_atual`, hoje = a 11, 4 dias) -- o do Retrato e TODO dia que retem (cobrado, nunca_bateu, sem_celula, indefinida...) da competencia que se exporta. Sao dois universos e duas janelas para "retido calado".
 - A cura que a linha ja escreve segue: um contador que pergunta ao universo do Retrato, contador == universo.
 
+## 25/10 06:3x -- MARCO BO-ATESTADO-ANDROID-ERRO-AO-ENVIAR (porta WEB): o corpo cortado nao cria mais ausencia sem anexo
+
+LEI-AKITA: origem=ponto/views.py::submeter_ausencia e ::lancar_ausencia (liam `request.FILES` sem o juiz), testemunha=api/corpo_recebido.py::corpo_chegou_inteiro (o juiz TRI-ESTADO das 2 portas da api, 20/10), RED=ponto/tests/test_porta_web_corpo_cortado.py (HEAD: 2 FAIL, `logs/gesc/anexo_red4.out`), quem-mais-le=17 modulos de teste das portas de ausencia (73 OK), juizes novos=0
+
+- O DEFEITO, provado no HEAD: corpo multipart CORTADO no meio do arquivo (CONTENT_LENGTH do corpo inteiro) -> as DUAS portas web criavam a ausencia SEM o anexo (`1 != 0`), a mesma armadilha do BO na api: a 2a tentativa ouve "ja existe". MORDE: o corpo INTEIRO segue criando.
+- A SIMULACAO SE ACERTOU DUAS VEZES, e fica escrito para o proximo: (1) `RequestFactory.generic` so poe `CONTENT_TYPE` quando `data` nao e vazio -- sem ele o POST vinha vazio e o RED passava por "tipo invalido"; (2) `FakePayload` LEVANTA ao ler alem do fim, e o socket real devolve MENOS bytes -- com ele o HEAD dava erro e nao criava nada, e o RED passava por excecao. Com `BytesIO` + `CONTENT_TYPE` o HEAD fica vermelho.
+- MUDOU: as duas portas perguntam `corpo_chegou_inteiro(request) is False` logo depois de ler o `FILES` e recusam dizendo que NADA foi salvo; `None` nunca barra.
+- Suite da copia `wt-anexo`: em curso (`logs/gesc/anexo_suite.out`). FALTA do item: o smoke do reenvio (AVAIS #3) e dele.
+
 ## 25/10 06:0x -- MARCO VIGIA-NAO-VE-350-DOS-369-DIAS-CALADOS: o vigia do retido calado le o Retrato gravado
 
 LEI-AKITA: origem=a falta de leitor (o vigia de furo `furos_sem_cobranca.medir` conta outra coisa), testemunha=folha/retrato_folha.py::linhas_do_retrato + ::fio_da_linha (a porta da tela e do badge), RED=folha/tests/test_vigia_retido_calado.py (5 casos que mordem: cego sem retrato, so o fio `ninguem` do bloqueado, a ultima lavra INTEIRA, cego sem bloqueado, alarme rc 2), quem-mais-le=o command e o ENC, juizes novos=0
