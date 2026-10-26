@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 26/10/2026 15:20:36.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (47.4 MB). Acoes na janela: **586**.
+**Medido em 26/10/2026 15:25:49.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (47.4 MB). Acoes na janela: **583**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -593,6 +593,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 03:33:11 | Bash | Check the real base of wt-rec | `git -C /home/ronald/wt-rec log --oneline -1; git -C /home/ronald/saas-hasner worktree list \| /bin/grep wt-rec` |
 | 03:33:01 | Bash | Trace the deleted test and the crons.py conflict | `cd /home/ronald/saas-hasner && git log --oneline --diff-filter=D -1 -- app/ponto/tests/test_varredura_lote_prazo.py; git cat-file -e 3b0a66c3:app/ponto/tests/test_varredura_lote_prazo.py 2>&1 && echo "existe no 3b0a66c3"; git cat-file -e HEAD:app/ponto/tests/test_varredura_lote_prazo.py 2>&1 \| head -1; git log --oneline 3b0a66c3..HEAD \| cat; cd /home/ronald/wt-rec && git diff app/config/crons.py ...` |
 | 03:32:51 | Bash | Build receivers landing copy on current HEAD | `cd /home/ronald/saas-hasner && git worktree add --detach /home/ronald/wt-rec HEAD >/dev/null 2>&1; cd /home/ronald/wt-rec && for c in e63dcce4 c02a5310 fed8bc4b; do git cherry-pick --no-commit $c 2>&1 \| tail -2; done; git status --porcelain \| head -30; git diff --name-only --diff-filter=U` |
-| 03:23:20 | Bash | Wait for the two raia agents | `timeout 540 /usr/bin/sleep 530; date +%H:%M` |
-| 03:23:10 | Agent | QUATRO-PRAZOS (4): gate do detectar | `Voce constroi UMA fatia numa worktree isolada do repo /home/ronald/saas-hasner (Django, app em `app/`). NAO pousa, NAO commita no main, NAO faz deploy/push, NAO escreve em producao. Leia antes `/home/ronald/saas-hasner/CLAUDE.md` INTEIRO (secao 0 LEI-AKITA, 3 TESTES, 6 TETO TEMPORAL, e a REGRA-DE-PRAZO na secao 7b). PRIMEIRO: `git -C <sua worktree> checkout --detach 9aead107` (HEAD do main agora)  ...` |
-| 03:22:22 | Bash | Regenerate handoff after the marco | `cd /home/ronald/saas-hasner && bash bin/handoff_sessao.sh >/dev/null 2>&1; echo rc=$?; git log --oneline -1; date +%H:%M` |
