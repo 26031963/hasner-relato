@@ -6,10 +6,20 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 26/10/2026 15:15:12.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (47.2 MB). Acoes na janela: **576**.
+**Medido em 26/10/2026 15:20:36.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (47.4 MB). Acoes na janela: **586**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 15:17:35 | Bash | Copy and RED test for jornada-day filter | `cd /home/ronald/saas-hasner && P=/home/ronald/wt-filtro-jornada-2610-1530; [ -e $P ] && echo JA EXISTE; git worktree add --detach $P HEAD 2>&1 \| tail -1; git -C $P log --oneline -1; git log --oneline -1 \| cat; mkdir -p $P/app/logs $P/app/media; cat > $P/app/ponto/tests/test_filtro_do_marco_pelo_dia_da_jornada.py <<'EOF' """R1-A-i-FILTRO-DATA-CIVIL (aval de ZONA INVIOLAVEL Ronald 26/10 15:1x). Em ...` |
+| 15:17:11 | Bash | Find callers of the period builders | `git grep -n "montar_periodos(\\|_periodos_via_autoridade(\\|_periodos_pelo_marco(" -- '*.py' \| /bin/grep -v "/tests/\\|def " \| cut -c1-140` |
+| 15:16:57 | Bash | Read behavioral part of motor seal | `sed -n 90,170p ponto/tests/test_selo_motor_nao_pareia_pelo_tipo_gravado.py \| /bin/grep -v "^\s*#"` |
+| 15:16:53 | Bash | Read fixture of motor-marco seal | `sed -n 1,90p ponto/tests/test_selo_motor_nao_pareia_pelo_tipo_gravado.py \| /bin/grep -v "^\s*#" \| head -80` |
+| 15:16:49 | Bash | Find tests exercising marco periods | `git grep -ln "_dias_pelo_marco\\|_periodos_pelo_marco\\|celulas_alimentadas" -- 'ponto/tests/*.py' \| head -8` |
+| 15:16:44 | Bash | Persist R1-A-i design in backlog | `python3 - <<'EOF' p='docs/BACKLOG.md'; L=open(p).read().split('\n') k=[j for j,l in enumerate(L) if l.startswith('\| R1-A-i-FILTRO-DATA-CIVIL \|')][0] c=L[k].split('\|') c[2]=c[2]+' DESENHO (26/10 15:2x): o filtro roda em `montar_periodos` (:2157) ANTES de o motor montar `_dia_turno_juiz_calc` (:2200); entao mover o calculo do mapa do juiz (`_turnos_do_juiz` + `_dia_do_turno`, so batidas cruas) pa ...` |
+| 15:16:24 | Bash | Read calcular_mes ordering around periods and day map | `sed -n 2150,2160p ponto/motor_calculo_v2.py; echo ...; sed -n 2196,2215p ponto/motor_calculo_v2.py; /bin/grep -n "def _dia_do_turno" -A4 ponto/motor_calculo_v2.py \| head -6` |
+| 15:16:08 | Bash | Read _periodos_via_autoridade and juiz day map build | `sed -n 440,547p ponto/motor_calculo_v2.py \| /bin/grep -v "^\s*#" \| head -70; sed -n 2190,2204p ponto/motor_calculo_v2.py` |
+| 15:15:57 | Bash | Read _periodos_pelo_marco filter | `sed -n 548,640p ponto/motor_calculo_v2.py` |
+| 15:15:31 | Bash | Land vigia with docs and deploy | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read() a='INCOMPLETO: a causa da divergencia do 23.676.' b='''- A DIVERGENCIA E UMA CLASSE (sonda so leitura 15:0x, `logs/trilha_x_banco_20261026.out`): **207 de 18.744** chamados com a ultima linha `estado_chamado` dizendo um status que o banco nao tem (resolvido x em_analise 113, fechado x em_analise 84, em_analis ...` |
 | 15:14:14 | Bash | Keep waiting for vigia suite | `timeout 590 bash -c 'until /bin/grep -q "^rc=" /tmp/claude-1001/-home-ronald-saas-hasner-app/9dc43c3d-971d-4cc9-b176-7008bbd353bb/scratchpad/txb_suite.out; do /usr/bin/sleep 20; done'; /bin/grep -E "^(FAIL\|ERROR):\|^Ran\|^(OK\|FAILED)( \|$)\|^rc=" /tmp/claude-1001/-home-ronald-saas-hasner-app/9dc43c3d-971d-4cc9-b176-7008bbd353bb/scratchpad/txb_suite.out \| tail -4; date +%H:%M` |
 | 15:04:18 | Bash | Wait for vigia full suite | `timeout 590 bash -c 'until /bin/grep -q "^rc=" /tmp/claude-1001/-home-ronald-saas-hasner-app/9dc43c3d-971d-4cc9-b176-7008bbd353bb/scratchpad/txb_suite.out; do /usr/bin/sleep 20; done'; /bin/grep -E "^(FAIL\|ERROR):\|^Ran\|^(OK\|FAILED)( \|$)\|^rc=" /tmp/claude-1001/-home-ronald-saas-hasner-app/9dc43c3d-971d-4cc9-b176-7008bbd353bb/scratchpad/txb_suite.out \| tail -4; date +%H:%M` |
 | 15:04:12 | SendMessage |  | `-` |
