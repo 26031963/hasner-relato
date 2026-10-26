@@ -6,10 +6,19 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 26/10/2026 19:20:48.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (51.1 MB). Acoes na janela: **616**.
+**Medido em 26/10/2026 19:25:48.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (51.3 MB). Acoes na janela: **625**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 19:25:27 | Bash | Read handoff seal | `cd /home/ronald/saas-hasner && sed -n 1,122p bin/tests/test_handoff_sessao.sh \| cut -c1-200` |
+| 19:25:12 | Bash | Read handoff head section | `cd /home/ronald/saas-hasner && sed -n 28,79p bin/handoff_sessao.sh; /bin/grep -n "contratos_estruturais: " app/core/placar_estrutural.py \| head -3` |
+| 19:25:00 | Bash | Find placar source and raia row | `cd /home/ronald/saas-hasner && /bin/grep -rn "contratos_estruturais:" app/docs/TICKETS.md \| head -3 \| cut -c1-160; /bin/grep -n "contratos_estruturais" bin/tickets_placar.sh \| head -5; /bin/grep -n "RAIA-DO-CONTRATO-20" app/docs/BACKLOG.md \| head -3 \| cut -c1-140; ls bin/tests/ \| /bin/grep handoff; /bin/grep -c "" bin/tests/test_handoff_sessao.sh` |
+| 19:24:55 | Bash | Locate placar line, RAIA rows, seal checks | `cd /home/ronald/saas-hasner && /bin/grep -n "contratos_estruturais: [0-9]*/20" app/docs/TICKETS.md app/docs/ESTADO.md 2>/dev/null \| head -5 \| cut -c1-200; /bin/grep -n "^\| RAIA" app/docs/BACKLOG.md \| cut -c1-120; sed -n 1,60p bin/tests/test_handoff_sessao.sh \| /bin/grep -n "PAREI\\|AVAIS\\|assert\\|grep -q" \| head -20` |
+| 19:24:46 | Bash | Find hook PAREI reader, placar line, worktrees | `cd /home/ronald/saas-hasner && /bin/grep -n "def _relato_parou\\|def _parei_do_em_curso\\|def _linhas_parei\\|PAREI\b.*re.compile\\|_PAREI_RE\\|startswith('PAREI" bin/hook_stop_fila1.py \| head; /bin/grep -n "contratos_estruturais:" app/docs/TICKETS.md \| head -3; git worktree list \| cat` |
+| 19:24:34 | Bash | Read PAREI and avais blocks | `cd /home/ronald/saas-hasner && sed -n 80,155p bin/handoff_sessao.sh` |
+| 19:24:31 | Bash | Survey handoff generator | `cd /home/ronald/saas-hasner && wc -l bin/handoff_sessao.sh && /bin/grep -n "PAREI\\|AVAIS DE HOJE\\|PROMPTS\\|^## \\|echo \"## \\|printf '## " bin/handoff_sessao.sh \| head -40` |
+| 19:24:16 | Bash | Read full handoff | `cd /home/ronald/saas-hasner && cat app/docs/HANDOFF-SESSAO.md \| cut -c1-220` |
+| 19:24:11 | Bash | Generate handoff and check contents | `cd /home/ronald/saas-hasner && bash bin/handoff_sessao.sh >/dev/null 2>&1; echo rc=$?; wc -l app/docs/HANDOFF-SESSAO.md; /bin/grep -n "18/20\\|CONTRATO-19\\|RAIA-DO-CONTRATO-20\\|aval" app/docs/HANDOFF-SESSAO.md \| cut -c1-160 \| head -20` |
 | 19:20:19 | Bash | Run host seal folder | `cd /home/ronald/saas-hasner && ok=0; bad=""; for t in bin/tests/test_*.sh; do if bash $t >/dev/null 2>&1; then ok=$((ok+1)); else bad="$bad $t"; fi; done; echo "verdes=$ok vermelhos:$bad"` |
 | 19:16:53 | Bash | Wait again for push verdict | `until [ -s /tmp/claude-1001/-home-ronald-saas-hasner-app/f4eb628a-9fcf-4c05-ae6a-9f32279f7575/tasks/b6zduv9on.output ]; do /usr/bin/sleep 20; done; cat /tmp/claude-1001/-home-ronald-saas-hasner-app/f4eb628a-9fcf-4c05-ae6a-9f32279f7575/tasks/b6zduv9on.output; cd /home/ronald/saas-hasner && git fetch -q && git log --oneline origin/main..HEAD \| cat` |
 | 19:06:47 | Bash | Wait for push verdict | `until [ -s /tmp/claude-1001/-home-ronald-saas-hasner-app/f4eb628a-9fcf-4c05-ae6a-9f32279f7575/tasks/b6zduv9on.output ]; do /usr/bin/sleep 20; done; cat /tmp/claude-1001/-home-ronald-saas-hasner-app/f4eb628a-9fcf-4c05-ae6a-9f32279f7575/tasks/b6zduv9on.output` |
