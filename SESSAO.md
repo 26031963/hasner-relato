@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/10/2026 21:13:24.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (27.4 MB). Acoes na janela: **953**.
+**Medido em 25/10/2026 21:18:55.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (27.5 MB). Acoes na janela: **957**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 21:13:59 | Bash | Record the named closer; wait for push | `python3 - <<'EOF' p='docs/RELATO.md'; s=open(p).read() a="- LADO DO FECHADOR, POR MODULO (prod 20:4x" i=s.index(a); j=s.index('\n', i) s=s[:j+1]+"""- FECHADOR NOMEADO (leitura, 21:1x): `ponto/management/commands/detectar_ausencias.py:411` fecha o `batida_ausente` quando ha QUALQUER entrada no dia (`if entrada and self._premissa_morta(...)`), e `_premissa_morta` (`:798`) passa `fatos={FATO_FALTA_DE ...` |
+| 21:13:40 | Bash | Read the 'batida atrasada' close path | `sed -n 398,425p ponto/management/commands/detectar_ausencias.py` |
+| 21:13:36 | Bash | Read the three close helpers and their call sites | `sed -n 816,850p ponto/management/commands/detectar_ausencias.py; grep -n "_fechar_chamado(\\|_fechar_por_cobertura(\\|_fechar_por_afastamento(" ponto/management/commands/detectar_ausencias.py \| head` |
+| 21:13:29 | Bash | Read the detectar_ausencias closing criterion | `sed -n 780,815p ponto/management/commands/detectar_ausencias.py; grep -n "_premissa_falta_morta\\|def _fechar\\|reconciliar()" ponto/management/commands/detectar_ausencias.py \| head` |
 | 21:13:14 | Bash | Push the lavra-cure marco | `cd /home/ronald/saas-hasner && bash bin/push.sh > logs/push_2510e.log 2>&1; echo "push rc=$?"; tail -3 logs/push_2510e.log` |
 | 21:13:13 | Bash | Record OS-56 proof and amend into the marco | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read() a="- RED DE REGRA (pedido 20:5x), contra o HEAD com o codigo de `645f5c4c`" i=s.index(a); j=s.index('\n', i) s=s[:j+1]+"""- NO AR `4d515d55` (suite da copia `Ran 12013` OK rc 0, `logs/termo2_suite2.log`; deploy rc 0). OS-56 EXECUTADO em prod: relavra sem `--avaliar` (faixas iguais: confiavel 451, incerta 81,  ...` |
 | 21:12:57 | Bash | Prove and cancel the remaining 50 by (a) | `cd /home/ronald/saas-hasner && sed -i "s/if not (len(vivos) == len(fora_c7) == len(fora_susp) == 56):/if not (len(vivos) == len(fora_c7) == len(fora_susp) == 50):/" logs/rvv/termo_56.py && grep -c "== 50" logs/rvv/termo_56.py && docker cp logs/rvv/termo_56.py saas_core:/tmp/t56.py && docker exec saas_core python manage.py tenant_command shell --schema=juliani --command "exec(open('/tmp/t56.py').re ...` |
