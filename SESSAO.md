@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 26/10/2026 10:37:35.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (42.4 MB). Acoes na janela: **683**.
+**Medido em 26/10/2026 10:43:05.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (42.4 MB). Acoes na janela: **681**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -691,5 +691,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 22:44:00 | Bash | Record the remaining closers and republish | `python3 - <<'EOF' p='docs/RELATO.md'; s=open(p).read() a="- FECHADOR NOMEADO (leitura, 21:1x)" i=s.index(a); j=s.index('\n', i) s=s[:j+1]+"""- OS OUTROS FECHADORES, pelo juiz por marco `lastro.marcos_acesos` (prod 22:4x, `logs/rvv/outros_fechadores.out`, 7 d de `batida_ausente`): `processar_cartorio` 65 mantem / 0 recusaria / 23 nao sei e `fechar_cobranca_com_lastro` 1/0/0 -- os dois ja perguntam  ...` |
 | 22:43:32 | Bash | Read the adesão closer that closes grouped furos | `grep -n "renascem sozinhos" -r chamados/ ponto/ escala/ \| head -3; f=$(grep -rln "renascem sozinhos" chamados/ ponto/ escala/ \| head -1); n=$(grep -n "renascem sozinhos" $f \| head -1 \| cut -d: -f1); sed -n "$((n-45)),$((n+8))p" $f` |
 | 22:43:16 | Bash | Read the trail around an apurar_furos_diarios close | `cat > /home/ronald/saas-hasner/logs/rvv/apurar_ex.py <<'EOF' import datetime from django.utils import timezone from core.models import LogAuditoria from chamados.models import FollowupChamado t0 = timezone.now() - datetime.timedelta(days=7) x = LogAuditoria.objects.filter(acao='estado_chamado', ator='sistema:apurar_furos_diarios', criado_em__gte=t0).order_by('-criado_em').first() print('AX\|ch=%s\ ...` |
-| 22:42:56 | Bash | Find the close criterion of apurar_furos_diarios | `f=$(git ls-files \| grep "commands/apurar_furos_diarios.py"); echo $f; grep -n "reconciliar()\\|premissa_morta\\|retratar\\|def \\|cancelar(" $f escala/services/furos_diarios.py 2>/dev/null \| head -20` |
-| 22:42:43 | Bash | Measure other system closers against marcos_acesos | `cd /home/ronald/saas-hasner && sed -e "s/ator='sistema:detectar_ausencias'/ator__in=['sistema:processar_cartorio', 'sistema:apurar_furos_diarios', 'sistema:vigia_de_hora', 'sistema:reconciliar_chamados', 'sistema:fechar_cobranca_com_lastro', 'sistema:reavaliar_ausencias_lancadas']/" logs/rvv/detectar_diff.py > logs/rvv/outros_fechadores.py && python3 - <<'EOF' p='/home/ronald/saas-hasner/logs/rvv/ ...` |
