@@ -161,6 +161,15 @@ PAREI: ! GATE-EXPORT-10 (so o export da 10) | espera o DP na Gestao de HE e o Ro
 > O MARCADOR ANDOU no mesmo ato: `ORDEM-VIVA-TOPO` saiu de `BO-HE-RECUSAR-LOTE-500` (fechado) para `O261`, que o hook cobrou.
 > SEM COMMIT DE PROPOSITO: `RELATO.md` e `BACKLOG.md` ficam sujos na arvore porque a L-106 nao deixa commit so de docs fora de marco. Eles entram no commit do proximo marco.
 
+## ATA-X-TURNO-ENTRADA = (a) + CHAMADO-NASCE-SEM-TRILHA em COMBOIO (26/10 19:0x, POUSADO; suite inteira Ran 12177 OK rc 0)
+LEI-AKITA: origem=escala/utils.py (reconciliacao ata x juiz do par), testemunha=ponto/turnos.py::turnos_do_colab, RED=escala/tests/test_ata_x_turno_entrada.py, quem-mais-le=cartorio/espelho/PDF/folha/export, juizes novos=0
+- `escala/utils.py` (builder por turno): para a ENTRADA, a [nome] cede so quando todo marco mais proximo tem batida REAL, POSTERIOR e do MESMO turno, e a entrada e a UNICA orfa do turno; saida intacta; cross-meia-noite fora.
+- RED 2 FAIL contra o HEAD (col288: a 13:41 orfa; o 11:00 nao acende) -> GREEN; MORDE por mutacao (sem "unica orfa", o cluster acende).
+- IMPACTO comp 10 na sombra, o MESMO builder HEAD x copia (`logs/ata_entrada_{head,copia}.out`): **12 dia-colab / 10 colabs**, cada um -1 orfa e -1 missing; **0 piora; minutos identicos** (hash `60fb87f8`). A estimativa de 18 retidos era da classe inteira (entrada+saida).
+- A ata gravada so muda no REJULGAMENTO (evento/cron do cartorio); nenhum apply de dinheiro (nenhum minuto move).
+- CHAMADO-NASCE-SEM-TRILHA (raia do 20, `58a16729`, ACHADO-POR chat): `criar`/`abrir` gravam `nascimento_chamado` so no nascimento real; PerguntaDisputa ja tinha trilha. Tabela dos 12 (prod, 7 d, ANTES): par_relampago 0, vinculo_divergente 0 -- e so se leem de novo 7 d (e uma segunda) depois deste deploy.
+- INCOMPLETO: detectar_cluster_espurio (WIP `96384f06`, 1 RED aberto) espera; CONTRATO-19-DE-VOLTA e o proximo (o aval 18:4x repete a condicao do PAROU do topo: segue a sombra).
+
 ## CELULA-CONCORDE-NO-MEIO-DO-TURNO (P7.1, LAUDO-[nome]) -- "o turno deste dia ja acabou?" entra na impressao do cartorio (26/10 18:1x, POUSADO; suite inteira Ran 12167 OK rc 0)
 LEI-AKITA: origem=ponto/services/cartorio.py::impressao_insumos (+ o laco de _julgar_colab_corpo), testemunha=ponto/turnos.py::dia_encerrado, RED=ponto/tests/test_celula_concorde_meio_turno.py (b: celula PULADA depois do fim do turno), quem-mais-le=processar_cartorio, signals de batida/chamado/ausencia (todos param no portao da impressao), juizes novos=0
 - A impressao ganha `enc=0` SO em dia passado com o turno ainda vivo (`dia_encerrado` False); dia encerrado guarda a impressao de hoje byte a byte. Quando o turno acaba, a impressao muda e a celula e REJULGADA (antes ficava pulada para sempre). `teto` e `vigia_de_hora` intactos.
