@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 26/10/2026 15:25:49.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (47.4 MB). Acoes na janela: **583**.
+**Medido em 26/10/2026 15:31:05.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (47.5 MB). Acoes na janela: **587**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 15:30:34 | Bash | Run motor neighbors for filter cure | `cd /home/ronald/wt-filtro-jornada-2610-1530/app && L=$(git grep -ln "_periodos_pelo_marco\\|celulas_alimentadas\\|_dia_turno_juiz_calc\\|calcular_mes\\|selecao_periodo" -- 'ponto/tests/*.py' 'escala/tests/*.py' \| sed 's/\.py$//; s#/#.#g' \| tr '\n' ' '); echo $L \| wc -w; cd /home/ronald/saas-hasner && bin/suite.sh --dir /home/ronald/wt-filtro-jornada-2610-1530 --only "$L ponto.tests.test_filtro_ ...` |
+| 15:30:24 | Bash | Apply jornada-day filter cure in motor | `cd /home/ronald/wt-filtro-jornada-2610-1530/app && python3 - <<'EOF' p='ponto/motor_calculo_v2.py'; s=open(p).read() def rep(a,b): global s assert s.count(a)==1, a[:70]; s=s.replace(a,b) rep(''' # montar todos os períodos primeiro batidas_limpas = self.remover_duplicatas(batidas) periodos, anomalias, intervalos_por_entrada = self.montar_periodos(batidas_limpas) ''',''' # O MAPA DO DIA DO JUIZ NASC ...` |
+| 15:30:09 | Bash | Read montar_periodos call site exactly | `cd /home/ronald/wt-filtro-jornada-2610-1530/app && sed -n 2160,2166p ponto/motor_calculo_v2.py` |
+| 15:27:42 | Bash | Wait for filter RED result | `timeout 590 bash -c 'until /bin/grep -qE "^(OK\|FAILED)" /tmp/claude-1001/-home-ronald-saas-hasner-app/9dc43c3d-971d-4cc9-b176-7008bbd353bb/scratchpad/fdj_red.out; do /usr/bin/sleep 20; done'; /bin/grep -E "^(FAIL\|ERROR):\|Error:\|^Ran\|^(OK\|FAILED)" /tmp/claude-1001/-home-ronald-saas-hasner-app/9dc43c3d-971d-4cc9-b176-7008bbd353bb/scratchpad/fdj_red.out \| tail -4; date +%H:%M` |
 | 15:17:35 | Bash | Copy and RED test for jornada-day filter | `cd /home/ronald/saas-hasner && P=/home/ronald/wt-filtro-jornada-2610-1530; [ -e $P ] && echo JA EXISTE; git worktree add --detach $P HEAD 2>&1 \| tail -1; git -C $P log --oneline -1; git log --oneline -1 \| cat; mkdir -p $P/app/logs $P/app/media; cat > $P/app/ponto/tests/test_filtro_do_marco_pelo_dia_da_jornada.py <<'EOF' """R1-A-i-FILTRO-DATA-CIVIL (aval de ZONA INVIOLAVEL Ronald 26/10 15:1x). Em ...` |
 | 15:17:11 | Bash | Find callers of the period builders | `git grep -n "montar_periodos(\\|_periodos_via_autoridade(\\|_periodos_pelo_marco(" -- '*.py' \| /bin/grep -v "/tests/\\|def " \| cut -c1-140` |
 | 15:16:57 | Bash | Read behavioral part of motor seal | `sed -n 90,170p ponto/tests/test_selo_motor_nao_pareia_pelo_tipo_gravado.py \| /bin/grep -v "^\s*#"` |
