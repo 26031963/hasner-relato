@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 26/10/2026 01:04:35.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (33.7 MB). Acoes na janela: **1029**.
+**Medido em 26/10/2026 01:10:06.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (33.8 MB). Acoes na janela: **1027**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1037,5 +1037,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 13:13:46 | Bash | Check law protection of fechamento.py and deploy E3 | `grep -n "fechamento.py" docs/LEIS.md \| cut -c1-200 \| head -6; cd .. && bin/deploy.sh --sem-migrate > logs/e3_deploy.log 2>&1; echo deploy rc=$?; tail -1 logs/e3_deploy.log; date '+%H:%M'` |
 | 13:13:39 | Bash | Land E3 commit | `cd /home/ronald/saas-hasner && F="app/ponto/services/fechamento.py app/escala/tests/test_contract_juiz_escala.py app/core/juizes.py app/core/contratos_estruturais.py"; git diff --quiet f4b27aac HEAD -- $F && echo "sem deriva"; for f in $F; do cp /home/ronald/wt-casa-e3/$f $f && cmp -s /home/ronald/wt-casa-e3/$f $f \|\| echo "CMP FALHOU $f"; done; git -C /home/ronald/wt-casa-e3 status --porcelain;  ...` |
 | 13:13:20 | Bash | Read E3 full suite verdict | `cd /home/ronald/saas-hasner && grep -E '^(OK\|FAILED)($\| \()' logs/e3_suite.log \| tail -1; grep -E '^Ran ' logs/e3_suite.log \| tail -1; tail -1 logs/e3_suite.log; grep -E '^(FAIL\|ERROR):' logs/e3_suite.log \| head -3` |
-| 13:04:54 | Bash | Finalize ratchet map and run C3 RED on HEAD copy | `cd /home/ronald/wt-c3/app && python3 - <<'EOF' p='ponto/tests/test_c3_crons_perguntam_a_juiza.py'; s=open(p).read() a=s[s.index("# arquivo -> quantas escolhas"):s.index("def escolhas_por_ativa")] b='''# arquivo -> quantas chamadas `filter(ativa=True)` sobre `EscalaColaborador` ele tem HOJE (censo de 25/10). A # migracao de cada cron DESCE o numero dele no mesmo commit; numero que muda sem o mapa m ...` |
-| 13:04:41 | Bash | Measure ativa=True choices per cron file | `cd /home/ronald/wt-c3/app && python3 - <<'EOF' import subprocess src = open('ponto/tests/test_c3_crons_perguntam_a_juiza.py').read() ns = {'__file__': 'ponto/tests/x.py'} exec(compile(src.split('class C3CronsPerguntamAJuizaTest')[0].replace('from django.test import SimpleTestCase',''), 'x', 'exec'), ns) for rel in ns['SETE']: print(rel, ns['escolhas_por_ativa'](open(rel).read())) print('HEAD detec ...` |
