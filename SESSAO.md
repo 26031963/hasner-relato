@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 26/10/2026 19:15:48.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (51.0 MB). Acoes na janela: **614**.
+**Medido em 26/10/2026 19:20:48.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (51.1 MB). Acoes na janela: **616**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 19:20:19 | Bash | Run host seal folder | `cd /home/ronald/saas-hasner && ok=0; bad=""; for t in bin/tests/test_*.sh; do if bash $t >/dev/null 2>&1; then ok=$((ok+1)); else bad="$bad $t"; fi; done; echo "verdes=$ok vermelhos:$bad"` |
+| 19:16:53 | Bash | Wait again for push verdict | `until [ -s /tmp/claude-1001/-home-ronald-saas-hasner-app/f4eb628a-9fcf-4c05-ae6a-9f32279f7575/tasks/b6zduv9on.output ]; do /usr/bin/sleep 20; done; cat /tmp/claude-1001/-home-ronald-saas-hasner-app/f4eb628a-9fcf-4c05-ae6a-9f32279f7575/tasks/b6zduv9on.output; cd /home/ronald/saas-hasner && git fetch -q && git log --oneline origin/main..HEAD \| cat` |
 | 19:06:47 | Bash | Wait for push verdict | `until [ -s /tmp/claude-1001/-home-ronald-saas-hasner-app/f4eb628a-9fcf-4c05-ae6a-9f32279f7575/tasks/b6zduv9on.output ]; do /usr/bin/sleep 20; done; cat /tmp/claude-1001/-home-ronald-saas-hasner-app/f4eb628a-9fcf-4c05-ae6a-9f32279f7575/tasks/b6zduv9on.output` |
 | 19:06:42 | Bash | Retry push | `cd /home/ronald/saas-hasner && bin/push.sh > logs/push_fc5cafc5.out 2>&1; tail -3 logs/push_fc5cafc5.out` |
 | 19:06:35 | Bash | Recreate commits with P7.1 token | `cd /home/ronald/saas-hasner && git fetch -q && git status --short \| /bin/grep -v '^??' \| cat; python3 - <<'EOF' import subprocess as sp g=lambda *a: sp.run(['git']+list(a),capture_output=True,text=True,check=True).stdout revs=g('rev-list','--topo-order','--reverse','origin/main..HEAD').split() print(len(revs)) m={} for r in revs: tree=g('rev-parse',r+'^{tree}').strip() parents=g('rev-list','--pa ...` |
