@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 26/10/2026 18:00:50.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (48.8 MB). Acoes na janela: **571**.
+**Medido em 26/10/2026 18:06:04.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (49.0 MB). Acoes na janela: **573**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 18:05:10 | Bash | Land CELULA cure with docs and deploy | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md'; L=open(p).read().split('\n') i=[k for k,l in enumerate(L) if l.startswith('## S-ORFA-E-DIA-EM-ABERTO = (a)')][0] sec='''## CELULA-CONCORDE-NO-MEIO-DO-TURNO (P7.1, LAUDO-[nome]) -- "o turno deste dia ja acabou?" entra na impressao do cartorio (26/10 18:1x, POUSADO; suite inteira Ran 12167 OK rc 0) LEI-AKITA: origem=ponto/ser ...` |
+| 18:04:46 | Bash | Register WIZARD complement; check bases | `cd /home/ronald/saas-hasner && cat >> app/docs/PROMPTS.md <<'EOF' \| 26/10 18:0x \| **aval: complemento da WIZARD-FASE-ALCANCA-A-NAO-EXPORTADA** (fila 2, congelada pela L-096, sem reordenar) -- (1) a confirmacao do salvar diz "fase nova vale de D em diante; os dias antes de D seguem no vinculo anterior"; (2) legenda do cinza na gradinha; (3) "esta opcao nao muda nenhum dia" quando a paridade e a m ...` |
 | 17:54:53 | Bash | Wait for agent's CELULA commit | `timeout 590 bash -c 'until git -C /home/ronald/wt-concorde-meio-turno-2610 log -1 --format=%s \| /bin/grep -qi "concorde\\|CELULA"; do /usr/bin/sleep 30; done'; git -C /home/ronald/wt-concorde-meio-turno-2610 log --oneline -1 \| cat; date +%H:%M` |
 | 17:54:48 | Bash | Register two avals in docs | `cat >> docs/PROMPTS.md <<'EOF' \| 26/10 17:5x \| **aval: ATA-X-TURNO-ENTRADA-FORA-DO-RAIO = (a)** -- L-084 (uma ponta longe e atraso REAL) + juiz unico do turno: a 1a batida do turno que o juiz fechou acende o marco de entrada como ATRASADA, simetrico da L-115; tol_min intacto, nenhum minuto novo; duas pontas > 3 h segue L-084. Estado: BACKLOG `ATA-X-TURNO-ENTRADA`. \| \| 26/10 17:5x \| **aval: HE ...` |
 | 17:44:42 | Bash | Keep waiting for agent commit | `timeout 590 bash -c 'until git -C /home/ronald/wt-concorde-meio-turno-2610 log -1 --format=%s \| /bin/grep -qi "concorde\\|CELULA"; do /usr/bin/sleep 30; done'; git -C /home/ronald/wt-concorde-meio-turno-2610 log --oneline -1 \| cat; cd /home/ronald/saas-hasner && bash bin/trava_teste.sh --quem 2>/dev/null \| head -1; date +%H:%M` |
