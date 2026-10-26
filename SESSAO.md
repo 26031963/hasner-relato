@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 26/10/2026 01:15:36.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (34.1 MB). Acoes na janela: **1030**.
+**Medido em 26/10/2026 01:20:49.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (34.1 MB). Acoes na janela: **1027**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1037,6 +1037,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 13:27:03 | Bash | Deploy C3 part 1 and dry-run the detector in prod | `cd /home/ronald/saas-hasner && bin/deploy.sh --sem-migrate > logs/c3_deploy.log 2>&1; echo rc=$?; tail -1 logs/c3_deploy.log; date '+%H:%M'; docker exec saas_core python manage.py tenant_command detectar_ausencias --schema=juliani --dry-run 2>&1 \| tail -2 \| cut -c1-200` |
 | 13:26:55 | Bash | Land C3 part 1 commit | `cd /home/ronald/saas-hasner && F="app/ponto/management/commands/detectar_ausencias.py app/ponto/tests/test_c3_crons_perguntam_a_juiza.py"; git diff --quiet f4b27aac HEAD -- $F && echo "sem deriva"; for f in $F; do cp /home/ronald/wt-c3/$f $f && cmp -s /home/ronald/wt-c3/$f $f \|\| echo "CMP FALHOU $f"; done; git -C /home/ronald/wt-c3 status --porcelain; python3 - <<'EOF' p='app/docs/RELATO.md'; s= ...` |
 | 13:26:40 | Bash | Wait for C3 suite verdict | `until grep -q '^rc=' /home/ronald/saas-hasner/logs/c3_suite.log 2>/dev/null; do /usr/bin/sleep 15; done; cd /home/ronald/saas-hasner && grep -E '^(OK\|FAILED)($\| \()' logs/c3_suite.log \| tail -1; grep -E '^Ran ' logs/c3_suite.log \| tail -1; tail -1 logs/c3_suite.log; grep -E '^(FAIL\|ERROR):' logs/c3_suite.log \| head -3` |
-| 13:15:59 | Bash | Wait for C3 suite verdict | `until grep -q '^rc=' /home/ronald/saas-hasner/logs/c3_suite.log 2>/dev/null; do /usr/bin/sleep 15; done; cd /home/ronald/saas-hasner && grep -E '^(OK\|FAILED)($\| \()' logs/c3_suite.log \| tail -1; grep -E '^Ran ' logs/c3_suite.log \| tail -1; tail -1 logs/c3_suite.log; grep -E '^(FAIL\|ERROR):' logs/c3_suite.log \| head -3` |
-| 13:15:48 | Bash | Read processar_alertas_turno vinculo choices | `sed -n 95,140p ponto/management/commands/processar_alertas_turno.py` |
-| 13:15:42 | Bash | Launch C3 suite and write its RELATO section | `cd /home/ronald/saas-hasner && (bin/suite.sh --dir /home/ronald/wt-c3 > logs/c3_suite.log 2>&1; echo rc=$? >> logs/c3_suite.log) > /dev/null 2>&1 & cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md'; L=open(p).read().split('\n') j=next(k for k,l in enumerate(L) if l.startswith('## CASA-ESCALA-E3')) sec='''## CASA-CHAMADO-C3 (1 de 7) -- o detector de ausencia pergunta a juiza o ...` |
