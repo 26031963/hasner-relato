@@ -6,10 +6,16 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 26/10/2026 16:04:06.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (47.8 MB). Acoes na janela: **573**.
+**Medido em 26/10/2026 16:09:35.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (47.9 MB). Acoes na janela: **579**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 16:07:43 | Bash | Wait for push16 | `timeout 590 bash -c 'until /bin/grep -q "^rc=" /tmp/claude-1001/-home-ronald-saas-hasner-app/9dc43c3d-971d-4cc9-b176-7008bbd353bb/scratchpad/push16.out; do /usr/bin/sleep 20; done'; /bin/grep -E "\-> main\|error: failed\|^rc=\|VERMELHO" /tmp/claude-1001/-home-ronald-saas-hasner-app/9dc43c3d-971d-4cc9-b176-7008bbd353bb/scratchpad/push16.out \| tail -3; date +%H:%M` |
+| 16:07:41 | SendMessage |  | `-` |
+| 16:07:25 | Bash | Read orphan S adapter and espelho producer | `sed -n 20,40p ponto/adaptador_motor.py; echo ----; sed -n 470,490p ponto/services/espelho.py` |
+| 16:07:19 | Bash | Find producers of datas_turno_aberto | `git grep -n "datas_turno_aberto" -- '*.py' \| /bin/grep -v "/tests/" \| cut -c1-170` |
+| 16:07:11 | Bash | Read datas_em_aberto_de | `sed -n 238,316p ponto/services/dia_decidido.py \| /bin/grep -v "^\s*#" \| head -60` |
+| 16:07:08 | Bash | Check push; record S-ORFA measured conditions | `cd /home/ronald/saas-hasner && /bin/grep -E "\-> main\|error: failed\|^rc=" /tmp/claude-1001/-home-ronald-saas-hasner-app/9dc43c3d-971d-4cc9-b176-7008bbd353bb/scratchpad/push16.out \| tail -3; tail -n 2 /tmp/claude-1001/-home-ronald-saas-hasner-app/9dc43c3d-971d-4cc9-b176-7008bbd353bb/scratchpad/push16.out \| cut -c1-120; python3 - <<'EOF' p='app/docs/BACKLOG.md'; L=open(p).read().split('\n') k=[j ...` |
 | 15:57:05 | Bash | Wait for push result | `cd /home/ronald/saas-hasner && timeout 590 bash -c 'until /bin/grep -q "^rc=" /tmp/claude-1001/-home-ronald-saas-hasner-app/9dc43c3d-971d-4cc9-b176-7008bbd353bb/scratchpad/push16.out; do /usr/bin/sleep 20; done'; /bin/grep -E "\-> main\|error: failed\|^rc=\|VERMELHO" /tmp/claude-1001/-home-ronald-saas-hasner-app/9dc43c3d-971d-4cc9-b176-7008bbd353bb/scratchpad/push16.out \| tail -3; date +%H:%M` |
 | 15:57:02 | SendMessage |  | `-` |
 | 15:56:45 | Bash | Fix RELATO trailer note; launch push | `cd /home/ronald/saas-hasner && sed -i 's/- R1-A-i (zona inviolavel, aval 15:1x, `ACHADO-POR: oraculo`):/- R1-A-i (zona inviolavel, aval 15:1x; nao e cura P7.1, entao SEM trailer -- o `ACHADO-POR: oraculo` que eu pus foi tirado antes do push pelo selo `test_achado_por`, recriando os commits sobre as MESMAS arvores):/' app/docs/RELATO.md && /bin/grep -c "nao e cura P7.1, entao SEM trailer" app/docs/ ...` |
