@@ -135,13 +135,13 @@ PAREI: ! GATE-EXPORT-10 (so o export da 10) | espera o DP na Gestao de HE e o Ro
 > O MARCADOR ANDOU no mesmo ato: `ORDEM-VIVA-TOPO` saiu de `BO-HE-RECUSAR-LOTE-500` (fechado) para `O261`, que o hook cobrou.
 > SEM COMMIT DE PROPOSITO: `RELATO.md` e `BACKLOG.md` ficam sujos na arvore porque a L-106 nao deixa commit so de docs fora de marco. Eles entram no commit do proximo marco.
 
-## CATRACA-DA-PERGUNTA-2 -- o censo por AST das copias de "o vinculo cobre a data?" vira selo e numero do placar (26/10 02:5x, em pouso)
+## CATRACA-DA-PERGUNTA-2 -- o censo por AST das copias de "o vinculo cobre a data?" vira selo e numero do placar (26/10 03:0x, POUSADO; suite inteira Ran 12053 OK)
 LEI-AKITA: origem=`core/censo_pergunta2.py::censo` (o MESMO para o selo e o placar), testemunha=a lista nominal congelada `COPIAS`, RED=copia PLANTADA em `escala/utils.py` -> `CatracaDaPergunta2Test` VERMELHO (`['escala/utils.py::_copia_plantada']`), quem-mais-le=`bin/placar_code.sh` (`copias_pergunta_2=`), juizes novos=0
 - Molde do `TOMADORES` da pergunta 1: funcao que refaz a contagem + lista nominal congelada; VERMELHO se nascer copia nova e se uma curada nao sair. Criterio por FUNCAO: instrucao cujo cabecalho junta limite de INICIO e de FIM (ORM, inclusive `.filter()`+`Q()` encadeados e iterador de `for`), ou o par `x.data_inicio`/`x.data_fim` sobre o mesmo nome (Python). O censo deu 29: 3 da juiza, **10 COPIAS** (as mesmas do agente da E4 parte 4), 1 BASELINE deliberado e 15 OUTRA PERGUNTA declaradas com motivo (`OrdemSubstituicao`, ferias, periodo aquisitivo, o escritor da sobreposicao). Lista x censo: 0 de diferenca nos dois sentidos.
 - LIMITE DECLARADO no proprio modulo: funcao classificada como OUTRA PERGUNTA que ganhar tambem uma copia do vinculo fica escondida (o selo acusa funcao nova, nao linha nova).
 - `core/juizes.py` (`SEM_JUIZ['escala']`, pergunta 2): o motivo deixa de dizer "faltam as copias da E4 parte 3" e passa a citar o censo -- o numero e da funcao.
 - Placar: `copias_pergunta_2=10` (instrumento, `bin/placar_code.sh`, pouso proprio L-105). As 3 do DINHEIRO (`fechamento` x2, `folha/export`, `folha/previa`) vao na proxima parte com DIFF de folha da comp 10 aberta (L-092 intacta).
-- GREEN: contrato escala + `core` 1314 OK; suite inteira em curso.
+- GREEN: contrato escala + `core` 1314 OK; suite inteira na `wt-cat` **Ran 12053, OK**; placar real `copias_pergunta_2=10`, `juizes_por_varredura=17`.
 
 ## CASA-ESCALA-E4 parte 4 -- 4 das 5 copias que sobraram perguntam a juiza; o censo NAO zerou e a celula de escala NAO vai a verde (26/10 02:4x, POUSADO; suite inteira Ran 12049 OK)
 LEI-AKITA: origem=`escala/alimentacao.py::vinculo_cobre_a_data` (+ `vinculo_do_dia` para o desempate), testemunha=a juiza em Python e SQL, RED=`escala/tests/test_e4_parte4_cinco_copias.py` (9 testes, 11 falhas com subtests no HEAD `b6d3fa90`), quem-mais-le=chamadores de `ficha_do_colab`, `_vigente`, `_vinculos` e o contador `vinculos_5x2_6x1_trabalha_feriado`, juizes novos=0
