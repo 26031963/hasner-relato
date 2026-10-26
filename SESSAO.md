@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 26/10/2026 12:07:24.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (44.1 MB). Acoes na janela: **601**.
+**Medido em 26/10/2026 12:12:45.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (44.1 MB). Acoes na janela: **604**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 12:11:35 | Bash | Wait for push of R1 marco | `cd /home/ronald/saas-hasner && timeout 500 bash -c 'until /bin/grep -q "^rc=" /tmp/claude-1001/-home-ronald-saas-hasner-app/9dc43c3d-971d-4cc9-b176-7008bbd353bb/scratchpad/push12.out; do /usr/bin/sleep 20; done'; /bin/grep -E "\-> main\|error: failed\|^rc=\|pos_push" /tmp/claude-1001/-home-ronald-saas-hasner-app/9dc43c3d-971d-4cc9-b176-7008bbd353bb/scratchpad/push12.out \| tail -3; date +%H:%M` |
+| 12:11:18 | SendMessage |  | `-` |
+| 12:11:14 | Bash | Run session handoff after marco | `cd /home/ronald/saas-hasner && bash bin/handoff_sessao.sh > /dev/null 2>&1; echo handoff rc=$?` |
 | 12:07:19 | Bash | Run host-seal folder after convoy landing | `cd /home/ronald/saas-hasner && r=0; for s in bin/tests/test_*.sh; do out=$(timeout 300 bash $s 2>&1); rc=$?; [ $rc -ne 0 ] && { echo "RED $s: $(echo "$out" \| tail -2 \| tr '\n' ' ' \| cut -c1-200)"; r=1; }; done; echo "pasta rc=$r"` |
 | 12:07:14 | Bash | Push the R1 convoy marco | `cd /home/ronald/saas-hasner && bin/push.sh > /tmp/claude-1001/-home-ronald-saas-hasner-app/9dc43c3d-971d-4cc9-b176-7008bbd353bb/scratchpad/push12.out 2>&1; echo "rc=$?" >> /tmp/claude-1001/-home-ronald-saas-hasner-app/9dc43c3d-971d-4cc9-b176-7008bbd353bb/scratchpad/push12.out` |
 | 12:07:08 | Bash | Close marco docs and commit | `python3 - <<'EOF' p='docs/RELATO.md'; s=open(p).read() a='INCOMPLETO: apply da comp 10 (col478, col510) + prova; remedicao do R1 com os tres no ar.' b='''- APPLY comp 10 em PROD (12:0x, pela porta `recalcular_fechamento_mes(10, 2026, colaborador_ids=[478, 510])`): col478 179,20 / folga 0 / DSR 5-0, col510 103,75 / saldo -89,85 -- o que o DIFF previu. PROVA: os **21 hashes** de exportacao vigentes  ...` |
