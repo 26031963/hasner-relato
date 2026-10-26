@@ -44,6 +44,10 @@ core/tests/test_selo_diagrama_do_codigo.py regenera os dois e compara.
 - chamados/signals.py::materializa_perguntas_ao_fechar_disputa (post_save DisputaSupervisao)
 - chamados/signals.py::_cartorio_pre_save_chamado (pre_save ChamadoColaborador)
 - chamados/signals.py::_cartorio_post_save_chamado (post_save ChamadoColaborador) -> julga
+- chamados/signals.py::_becos_post_save_pergunta (post_save PerguntaDisputa)
+- chamados/signals.py::_isentos_post_save_colaborador (post_save Colaborador)
+- chamados/signals.py::_isentos_post_save_chamado (post_save ChamadoColaborador)
+- chamados/signals.py::_feriado_post_save (post_save Feriado)
 - escala/signals.py::_ec_capturar_ancora_anterior (pre_save EscalaColaborador)
 - escala/signals.py::_ec_vigencia_regenera_celulas (post_save EscalaColaborador)
 - escala/signals.py::_ec_ancora_regenera_celulas (post_save EscalaColaborador)

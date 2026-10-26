@@ -199,9 +199,9 @@ flowchart TD
     t_celula["CELULA / ATA por marco<br/>o que aconteceu (lampada)"]
     t_evento["EVENTO<br/>batida, ausencia, chamado -> cartorio julga na hora (signals B5.2)"]
     t_consumidor["CONSUMIDORES<br/>chamado, pergunta, tela, folha: leem a lampada, nunca re-julgam"]
-    t_vigia["CRON = VIGIA<br/>31 vigias; contador esperado 0, so alarma"]
+    t_vigia["CRON = VIGIA<br/>33 vigias; contador esperado 0, so alarma"]
     t_prazo["CRON = PRAZO (L-101)<br/>6 cron(s): a falta nao emite evento, o relogio e o unico sinal dela;<br/>julgam pela funcao do juiz da casa, sem regra propria (PRAZO_DELEGA_A)"]
-    t_juiz["JUIZ POR VARREDURA (divida)<br/>17 crons ainda julgam: esperado 0"]
+    t_juiz["JUIZ POR VARREDURA (divida)<br/>15 crons ainda julgam: esperado 0"]
     t_escala --> t_celula
     t_evento --> t_celula
     t_celula --> t_consumidor
@@ -214,7 +214,6 @@ flowchart TD
   j_detectar_par_relampago["detectar_par_relampago"] -.-> t_juiz
   j_detectar_vinculo_divergente["detectar_vinculo_divergente"] -.-> t_juiz
   j_disparar_perguntas_competencia["disparar_perguntas_competencia"] -.-> t_juiz
-  j_fechar_becos_disputa["fechar_becos_disputa"] -.-> t_juiz
   j_fechar_cobranca_com_lastro["fechar_cobranca_com_lastro"] -.-> t_juiz
   j_marcar_foto_ausente_retro["marcar_foto_ausente_retro"] -.-> t_juiz
   j_processar_alertas_avancados["processar_alertas_avancados"] -.-> t_juiz
@@ -224,7 +223,6 @@ flowchart TD
   j_reconciliar_fantasmas["reconciliar_fantasmas"] -.-> t_juiz
   j_reconciliar_perguntas_orfas["reconciliar_perguntas_orfas"] -.-> t_juiz
   j_reconciliar_vinculo["reconciliar_vinculo"] -.-> t_juiz
-  j_silenciar_chamados_isentos["silenciar_chamados_isentos"] -.-> t_juiz
   j_termometro_regua["termometro_regua"] -.-> t_juiz
   pz_apurar_furos_diarios["apurar_furos_diarios<br/>escala.services.furos_diarios::apurar"] -.-> t_prazo
   pz_escalonar_documentos_ausencia["escalonar_documentos_ausencia<br/>ponto.services.ausencia::escalonar_aguardando_documento"] -.-> t_prazo
@@ -264,16 +262,21 @@ flowchart TD
     evs_Batida --> evr_realtime_post_save_batida
     evr_reconciliador_post_save_batida["_reconciliador_post_save_batida<br/>post_save"]
     evs_Batida --> evr_reconciliador_post_save_batida
-    evs_ChamadoColaborador[/"ChamadoColaborador<br/>4 receiver(s)"/]
+    evs_ChamadoColaborador[/"ChamadoColaborador<br/>5 receiver(s)"/]
     evr_cartorio_post_save_chamado["_cartorio_post_save_chamado<br/>post_save"]
     evs_ChamadoColaborador --> evr_cartorio_post_save_chamado
     evr_cartorio_post_save_chamado ==>|julga| ev_juiz
     evr_cartorio_pre_save_chamado["_cartorio_pre_save_chamado<br/>pre_save"]
     evs_ChamadoColaborador --> evr_cartorio_pre_save_chamado
+    evr_isentos_post_save_chamado["_isentos_post_save_chamado<br/>post_save"]
+    evs_ChamadoColaborador --> evr_isentos_post_save_chamado
     evr_rebaixa_urgencia_ao_resolver["rebaixa_urgencia_ao_resolver<br/>post_save"]
     evs_ChamadoColaborador --> evr_rebaixa_urgencia_ao_resolver
     evr_resolve_perguntas_ao_resolver["resolve_perguntas_ao_resolver<br/>post_save"]
     evs_ChamadoColaborador --> evr_resolve_perguntas_ao_resolver
+    evs_Colaborador[/"Colaborador<br/>1 receiver(s)"/]
+    evr_isentos_post_save_colaborador["_isentos_post_save_colaborador<br/>post_save"]
+    evs_Colaborador --> evr_isentos_post_save_colaborador
     evs_DisputaSupervisao[/"DisputaSupervisao<br/>3 receiver(s)"/]
     evr_disputa_fechada_fecha_chamado_pai["disputa_fechada_fecha_chamado_pai<br/>post_save"]
     evs_DisputaSupervisao --> evr_disputa_fechada_fecha_chamado_pai
@@ -296,10 +299,16 @@ flowchart TD
     evs_EscalaColaborador --> evr_ec_vigencia_regenera_celulas
     evr_nucleo_post_save_escala["_nucleo_post_save_escala<br/>post_save"]
     evs_EscalaColaborador --> evr_nucleo_post_save_escala
+    evs_Feriado[/"Feriado<br/>1 receiver(s)"/]
+    evr_feriado_post_save["_feriado_post_save<br/>post_save"]
+    evs_Feriado --> evr_feriado_post_save
     evs_Justificativa[/"Justificativa<br/>1 receiver(s)"/]
     evr_cartorio_post_save_justificativa["_cartorio_post_save_justificativa<br/>post_save"]
     evs_Justificativa --> evr_cartorio_post_save_justificativa
     evr_cartorio_post_save_justificativa ==>|julga| ev_juiz
+    evs_PerguntaDisputa[/"PerguntaDisputa<br/>1 receiver(s)"/]
+    evr_becos_post_save_pergunta["_becos_post_save_pergunta<br/>post_save"]
+    evs_PerguntaDisputa --> evr_becos_post_save_pergunta
     evs_Posto[/"Posto<br/>1 receiver(s)"/]
     evr_geofence_post_save_posto["_geofence_post_save_posto<br/>post_save"]
     evs_Posto --> evr_geofence_post_save_posto
@@ -376,6 +385,7 @@ flowchart TD
     vg_auditar_invariantes_chamados["auditar_invariantes_chamados"]
     vg_detectar_intervalo_ausente["detectar_intervalo_ausente"]
     vg_esmeril_espelho["esmeril_espelho"]
+    vg_fechar_becos_disputa["fechar_becos_disputa"]
     vg_fechar_chamados_ausencia["fechar_chamados_ausencia"]
     vg_mapa_divergencia["mapa_divergencia"]
     vg_negou_fogo_diario_sh["negou_fogo_diario.sh"]
@@ -384,6 +394,7 @@ flowchart TD
     vg_reconciliar_geofence["reconciliar_geofence"]
     vg_reconciliar_grade["reconciliar_grade"]
     vg_sentinela_diario_sh["sentinela_diario.sh"]
+    vg_silenciar_chamados_isentos["silenciar_chamados_isentos"]
     vg_supra_juiz["supra_juiz"]
     vg_tripwire_celulas["tripwire_celulas"]
     vg_tripwire_situacao_afastado["tripwire_situacao_afastado"]
