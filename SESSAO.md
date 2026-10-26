@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/10/2026 23:11:55.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (31.0 MB). Acoes na janela: **939**.
+**Medido em 25/10/2026 23:17:04.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (31.0 MB). Acoes na janela: **938**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -948,4 +948,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 11:17:39 | Bash | Read failing placar test and its error | `cd /home/ronald/saas-hasner && grep -n "def test_substituir_poe_no_topo_e_troca_o_que_estava" -A14 app/core/tests/test_selo_placar_tickets.py; grep -n "test_substituir_poe_no_topo_e_troca_o_que_estava" -A30 logs/instr_suite.log \| grep -E "Error\|assert\|File \"/app/core" \| head -5` |
 | 11:17:33 | Bash | Wait for instrument convoy suite verdict | `until grep -q '^rc=' /home/ronald/saas-hasner/logs/instr_suite.log; do /usr/bin/sleep 15; done; cd /home/ronald/saas-hasner && grep -E '^(OK\|FAILED)($\| \()' logs/instr_suite.log \| tail -1; grep -E '^Ran ' logs/instr_suite.log \| tail -1; tail -1 logs/instr_suite.log; grep -E '^(FAIL\|ERROR):' logs/instr_suite.log \| head` |
 | 11:17:18 | Bash | Break down concordance results by reason | `cat > /home/ronald/saas-hasner/logs/sombra/pram_abre.py <<'EOF' import collections from chamados.models import PerguntaDisputa from chamados.juizes import _pergunta_viva_calc, _resposta_concorda_com_a_luz, fato_do_marco_no_espelho from escala.models import CelulaDia n = collections.Counter() qs = (PerguntaDisputa.objects.filter(respondida_em__isnull=False, validada_em__isnull=True).exclude(respost ...` |
-| 11:16:50 | Bash | Measure live answered questions HEAD vs cure on sombra | `cat > /home/ronald/saas-hasner/logs/sombra/pram_impacto.py <<'EOF' import collections from chamados.models import PerguntaDisputa from chamados.juizes import pergunta_viva qs = (PerguntaDisputa.objects.filter(respondida_em__isnull=False, validada_em__isnull=True).exclude(resposta_colab='') .select_related('celula', 'disputa')) vivas = sorted(p.pk for p in qs.iterator() if pergunta_viva(p)) print(' ...` |
