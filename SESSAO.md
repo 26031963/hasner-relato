@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 26/10/2026 20:50:49.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (53.0 MB). Acoes na janela: **656**.
+**Medido em 26/10/2026 20:55:49.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (53.0 MB). Acoes na janela: **655**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -665,4 +665,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 09:01:37 | Bash | Read RELATO top and R1 backlog row | `cd /home/ronald/saas-hasner && sed -n 1,12p app/docs/RELATO.md \| cut -c1-900; /bin/grep -n "R1-ESTRUTURA-91" app/docs/BACKLOG.md \| cut -c1-120` |
 | 09:01:34 | Bash | Find whether avals are registered | `cd /home/ronald/saas-hasner && /bin/grep -n "CONTADOR-DE-ESCRITA\\|O137 ESMERIL\\|O137-ESCALA\\|DEDO-DUPLO" app/docs/PROMPTS.md app/docs/BACKLOG.md \| cut -c1-200; /bin/grep -n "DEDO" app/docs/RELATO.md \| head -5 \| cut -c1-300` |
 | 09:01:30 | Bash | Check repo state and prompt log tail | `cd /home/ronald/saas-hasner && git log --oneline -3 && git status --short \| head -20 && tail -5 app/docs/PROMPTS.md \| cut -c1-250 && date +%H:%M` |
-| 08:53:32 | Bash | Keep waiting for the push | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/9dc43c3d-971d-4cc9-b176-7008bbd353bb/scratchpad; timeout 590 bash -c "until /bin/grep -qE 'error: failed to push\|-> main\|Everything up-to-date\|BLOQUEADO' $S/push9.out 2>/dev/null; do /usr/bin/sleep 15; done"; tail -3 $S/push9.out \| cut -c1-200; date +%H:%M` |
