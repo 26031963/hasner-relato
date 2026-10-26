@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 26/10/2026 02:30:53.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (35.2 MB). Acoes na janela: **1025**.
+**Medido em 26/10/2026 02:35:49.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (35.2 MB). Acoes na janela: **1024**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1034,4 +1034,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 14:44:12 | Bash | Read B2 targeted GREEN result | `grep -E '^(OK\|FAILED)($\| \()\|^Ran \|^(FAIL\|ERROR):' /home/ronald/saas-hasner/logs/geo2_fix.log \| tail -4` |
 | 14:44:11 | TaskStop |  | `-` |
 | 14:44:08 | ToolSearch |  | `-` |
-| 14:34:01 | Bash | Wait for B2 targeted GREEN result | `until grep -qE '^(OK\|FAILED)' /home/ronald/saas-hasner/logs/geo2_fix.log 2>/dev/null && ! pgrep -f "geo2_fix" >/dev/null; do /usr/bin/sleep 15; done; grep -E '^(OK\|FAILED)($\| \()\|^Ran ' /home/ronald/saas-hasner/logs/geo2_fix.log \| tail -2` |
