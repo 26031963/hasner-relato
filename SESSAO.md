@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 26/10/2026 00:26:45.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (32.6 MB). Acoes na janela: **1000**.
+**Medido em 26/10/2026 00:32:05.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (32.6 MB). Acoes na janela: **997**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1007,6 +1007,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 12:40:00 | Bash | Read real times from deploy logs and file mtimes | `cd /home/ronald/saas-hasner && for f in semcel11_deploy nb_deploy tranca_deploy instr_deploy pram_deploy e2_deploy; do echo "$f $(grep -o 'a 2026-10-25 [0-9:]*' logs/$f.log \| tail -1)"; done; ls -l --time-style=+%H:%M logs/c1-medida.out logs/gesc/col305_absorver_*.out logs/pram_red.log \| awk '{print $6, $7}'` |
 | 12:39:36 | Bash | Deploy E2 landing | `cd /home/ronald/saas-hasner && bin/deploy.sh --sem-migrate > logs/e2_deploy.log 2>&1; echo rc=$?; tail -1 logs/e2_deploy.log; date '+%H:%M'` |
 | 12:39:24 | Bash | Land E2 commit | `cd /home/ronald/saas-hasner && F="app/chamados/management/commands/auditar_invariantes_chamados.py app/escala/tests/test_contract_juiz_escala.py app/core/juizes.py app/core/contratos_estruturais.py"; git diff --quiet 4b9addb3 HEAD -- $F && echo "sem deriva"; for f in $F; do cp /home/ronald/wt-casa-e2/$f $f && cmp -s /home/ronald/wt-casa-e2/$f $f \|\| echo "CMP FALHOU $f"; done; git -C /home/ronald ...` |
-| 12:28:44 | Bash | Record C1 measurement and wait for E2 suite | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/BACKLOG.md'; L=open(p).read().split('\n') for k,l in enumerate(L): if l.startswith('\| CASA-CHAMADO-C1 \|'): P=l.split('\|'); P[3]=' livre, MEDIDO 25/10 12:4x (sombra): velho x juiza divergem em 1 dia de hoje (juiza encerra) e 4/3/2/23 em hoje-1/-2/-3/-7 (juiza nao afirma: sem previsto). Proximo: juiza puro+carregador (custo no cartorio) ...` |
-| 12:28:00 | Bash | Run C1 divergence measurement on sombra | `cat > /home/ronald/saas-hasner/logs/sombra/c1_medida.py <<'EOF' # CASA-CHAMADO-C1 medida ANTES (so leitura): o teto por DATA de ponto/supra_juiz.py (`not (data >= hoje)`) x a juiza # ponto/turnos.py::dia_encerrado, nos dias que o portao do furo le (celula trabalha), por distancia de hoje. import collections, datetime from django.utils import timezone from escala.models import CelulaDia from ponto. ...` |
-| 12:27:49 | Bash | Recertify E2 and measure C1 divergence on sombra | `cd /home/ronald/saas-hasner && (bin/suite.sh --dir /home/ronald/wt-casa-e2 > logs/e2_suite2.log 2>&1; echo rc=$? >> logs/e2_suite2.log) >/dev/null 2>&1 & cat > logs/sombra/c1_medida.py <<'EOF' # CASA-CHAMADO-C1 medida ANTES (so leitura): o teto por DATA de ponto/supra_juiz.py (`not (data >= hoje)`) x a juiza # ponto/turnos.py::dia_encerrado, nos dias que o portao do furo le (celula trabalha, ontem ...` |
