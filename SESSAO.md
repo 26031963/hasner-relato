@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/10/2026 21:24:04.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (27.6 MB). Acoes na janela: **959**.
+**Medido em 25/10/2026 21:26:29.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (27.6 MB). Acoes na janela: **960**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 21:26:24 | Bash | Republish RELATO and refresh handoff | `cd /home/ronald/saas-hasner && python3 bin/relato_afirma_com_prova.py app/docs/RELATO.md 2>&1 \| tail -1; bash bin/relato.sh > logs/relato_pub3.log 2>&1; echo "relato rc=$?"; tail -2 logs/relato_pub3.log; bash bin/handoff_sessao.sh > /dev/null 2>&1; echo "handoff rc=$?"` |
 | 21:23:36 | Bash | Wait for the push to finish | `for i in $(seq 1 55); do grep -q "push rc=" /tmp/claude-1001/-home-ronald-saas-hasner-app/f4eb628a-9fcf-4c05-ae6a-9f32279f7575/tasks/b8vzx0n22.output 2>/dev/null && break; /usr/bin/sleep 10; done; date +%T; tail -3 /tmp/claude-1001/-home-ronald-saas-hasner-app/f4eb628a-9fcf-4c05-ae6a-9f32279f7575/tasks/b8vzx0n22.output` |
 | 21:23:28 | Bash | Register the C7 smoke and the fila-2 finding | `python3 - <<'EOF' p='docs/RELATO.md'; s=open(p).read() o="- INCOMPLETO: smoke de clique do Ronald nos dois botoes da C7 (\"Cadastro errado\", \"Realocar\") na tela da lista; os 56 (topo)." assert s.count(o)==1 s=s.replace(o,"- SMOKE-C7 VISUAL feito pelo Ronald em prod 25/10 21:1x: chip C7 58 = 58 colabs da lavra (a lavra de antes da cura das 21:1x; depois dela, 66), botoes presentes; CLIQUE NAO fe ...` |
 | 21:13:59 | Bash | Record the named closer; wait for push | `python3 - <<'EOF' p='docs/RELATO.md'; s=open(p).read() a="- LADO DO FECHADOR, POR MODULO (prod 20:4x" i=s.index(a); j=s.index('\n', i) s=s[:j+1]+"""- FECHADOR NOMEADO (leitura, 21:1x): `ponto/management/commands/detectar_ausencias.py:411` fecha o `batida_ausente` quando ha QUALQUER entrada no dia (`if entrada and self._premissa_morta(...)`), e `_premissa_morta` (`:798`) passa `fatos={FATO_FALTA_DE ...` |
