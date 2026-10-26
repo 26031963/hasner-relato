@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 26/10/2026 13:12:04.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (45.1 MB). Acoes na janela: **560**.
+**Medido em 26/10/2026 13:17:34.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (45.1 MB). Acoes na janela: **561**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 13:14:00 | Bash | Remeasure R1 after H | `cd /home/ronald/saas-hasner && bin/sombra.sh --rodar r1_e6_10_pos2.py r1_e6_10_pos2 >/dev/null 2>&1; cd logs/sombra && python3 - <<'EOF' import csv n={(r['colab'],r['dia']):r for r in csv.DictReader(open('r1_e6_10_pos2.csv'))} e=[k for k,r in n.items() if r['dono_da_divergencia']=='ESTRUTURA'] print('ESTRUTURA %d / %.1f h / %d colabs' % (len(e), sum(abs(float(n[k]['dif'])) for k in e)/60, len({k[0 ...` |
 | 13:11:17 | Bash | Fleet proof of H on sombra | `cd /home/ronald/saas-hasner && sed "s/os.environ.get('SAIDA', 'folha10')/'folha10_pos2'/" logs/sombra/folha10.py > logs/sombra/folha10_pos2.py; printf "from django.core.management import call_command\ncall_command('e6_oraculo', mes=10, ano=2026, csv='/sombra/r1_e6_10_pos2.csv')\n" > logs/sombra/r1_e6_10_pos2.py; bin/sombra.sh --rodar folha10_pos2.py folha10_pos2 >/dev/null 2>&1; cd logs/sombra &&  ...` |
 | 13:10:58 | Bash | Apply H for 8 colabs in prod; verify against DIFF | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/9dc43c3d-971d-4cc9-b176-7008bbd353bb/scratchpad; docker cp $S/apply_h.py saas_core:/tmp/apply_h.py && docker exec saas_core python manage.py tenant_command shell --schema=juliani --command "exec(open('/tmp/apply_h.py').read())" 2>&1 \| /bin/grep -E "^(APPLY\|HASHES\|EXPORTACOES)" > /home/ronald/saas-hasner/logs/apply_h_comp10_20261026.out; /bin/grep  ...` |
 | 13:10:17 | Bash | Land H with docs and deploy | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md'; L=open(p).read().split('\n') i=[k for k,l in enumerate(L) if l.startswith('## BUG-RETRATO-HE-DA-COMPETENCIA-ANTERIOR')][0] sec='''## R1-H-PORTAO-DE-26H com H=(a) -- o fecho em fluxo le o teto do DIA, a forma L-084 segue em 26 h (26/10 13:1x, POUSADO; suite inteira Ran 12138 OK rc 0; verificador APROVADO) LEI-AKITA: origem=pon ...` |
