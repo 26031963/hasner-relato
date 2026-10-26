@@ -137,7 +137,7 @@ PAREI: ! GATE-EXPORT-10 (so o export da 10) | espera o DP na Gestao de HE e o Ro
 > O MARCADOR ANDOU no mesmo ato: `ORDEM-VIVA-TOPO` saiu de `BO-HE-RECUSAR-LOTE-500` (fechado) para `O261`, que o hook cobrou.
 > SEM COMMIT DE PROPOSITO: `RELATO.md` e `BACKLOG.md` ficam sujos na arvore porque a L-106 nao deixa commit so de docs fora de marco. Eles entram no commit do proximo marco.
 
-## CASA-ESCALA-E4 parte 5 -- as 10 copias da pergunta 2 perguntam a juiza; a catraca chega a ZERO (26/10 05:4x, em pouso)
+## CASA-ESCALA-E4 parte 5 -- as 10 copias da pergunta 2 perguntam a juiza; a catraca chega a ZERO (26/10 05:5x, POUSADO; suite inteira Ran 12092 OK)
 LEI-AKITA: origem=`escala/alimentacao.py::vinculo_cobre_a_data` (+ `q_vinculo_cobre_a_data`, `escalas_do_periodo`, `escalas_do_periodo_por_colab`, `vinculo_do_dia`), testemunha=a juiza e o carregador dela, RED=`escala/tests/test_e4_parte5_copias.py` (12 falhas c/ subtests) + `folha/tests/test_e4_parte5_dinheiro.py` (5) + `ponto/tests/test_composicao_de_fatias_e_total.py` (1), quem-mais-le=crons de `colaboradores_em_operacao`, recompute de turnos, lavra de folgas, export, previa, espelho, juizes novos=0
 - Construida por agente (sonnet); pousada pela principal sobre `4978dabc` (copia `wt-e4p5-2610`). `core/censo_pergunta2.py::COPIAS = {}` -- `copias_pergunta_2=0`.
 - DIFF DE FOLHA na sombra (funcao REAL `recalcular_fechamento_mes`, somente leitura, arvore velha x nova por `SOMBRA_ARVORE`): comp 11 (corrente) 572 colabs, **0 mudam, 0,00 h**; comp 10 588, **0, 0,00 h**; comp 09 (EXPORTADA) 626, **0, 0,00 h**; `motivos_retencao_celula` 212 com motivo, 0 diferem; digest da previa identico nas 4 empresas. PROVA: `logs/e4p5_{velho,novo,09_velho,09_novo}.out`.
