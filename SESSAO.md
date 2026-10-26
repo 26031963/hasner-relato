@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 26/10/2026 20:35:35.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (52.9 MB). Acoes na janela: **659**.
+**Medido em 26/10/2026 20:40:49.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (52.9 MB). Acoes na janela: **656**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -666,6 +666,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 08:42:07 | SendMessage |  | `-` |
 | 08:41:43 | Bash | Register the O137 escala complement and the counter complement | `/bin/grep -n "^\| O137 " docs/BACKLOG.md \| cut -c1-200; python3 - <<'EOF' p='docs/BACKLOG.md'; L=open(p).read().split('\n') k=next(i for i,l in enumerate(L) if l.startswith('\| O137 ')) L.insert(k+1,"\| O137-ESCALA \| **complemento da O137 (ESMERIL-NO-RASTRO), familia ESCALA** (aval Ronald 26/10 08:3x): a familia fechou 26/10 06:4x (('escala','um escritor') verde desde 13/09 + ('escala','um juiz' ...` |
 | 08:41:24 | Bash | Push the judges marco | `cd /home/ronald/saas-hasner && bin/push.sh > /tmp/claude-1001/-home-ronald-saas-hasner-app/9dc43c3d-971d-4cc9-b176-7008bbd353bb/scratchpad/push9.out 2>&1; echo rc=$?` |
-| 08:37:30 | Bash | Regenerate MAPA-JUIZES, amend into the marco, rerun host seals | `cd /home/ronald/saas-hasner && docker cp bin/gerar_mapa_juizes.py saas_core:/tmp/g.py && docker exec saas_core python manage.py tenant_command shell --schema=juliani --command "exec(open('/tmp/g.py').read())" 2>&1 \| tail -2; git status --porcelain app/docs/MAPA-JUIZES.md; bash bin/tests/test_mapa_juizes.sh 2>&1 \| tail -1; T1=$(git rev-parse HEAD^{tree}); git add app/docs/MAPA-JUIZES.md && git co ...` |
-| 08:37:08 | Bash | Read how to run the mapa generator | `cd /home/ronald/saas-hasner && sed -n 1,30p bin/gerar_mapa_juizes.py` |
-| 08:37:02 | Bash | Read the mapa_juizes seal and its generator | `cd /home/ronald/saas-hasner && bash bin/tests/test_mapa_juizes.sh 2>&1 \| tail -6; head -20 bin/gerar_mapa_juizes.py \| /bin/grep -n "uso\\|escreve\\|--" \| head` |
