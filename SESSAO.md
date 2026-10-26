@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 26/10/2026 10:05:12.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (41.9 MB). Acoes na janela: **671**.
+**Medido em 26/10/2026 10:10:19.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (41.9 MB). Acoes na janela: **672**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 10:05:56 | Bash | Run host seals, placar line, regen map | `cd /home/ronald/saas-hasner && r=0; for s in bin/tests/test_*.sh; do out=$(bash $s 2>&1); rc=$?; [ $rc -ne 0 ] && { echo "RED $s: $(echo "$out" \| tail -2 \| tr '\n' ' ' \| cut -c1-200)"; r=1; }; done; echo "pasta rc=$r"; bash bin/placar_code.sh 2>/dev/null \| /bin/grep "^escritas_por_cron" \| head -3; python3 bin/gerar_mapa_juizes.py >/dev/null 2>&1; git status --short app/docs/MAPA-JUIZES.md app ...` |
 | 10:04:57 | Bash | Land instrument commit and deploy | `cd /home/ronald/saas-hasner && git merge --no-ff --no-commit c6bd63ab 2>&1 \| tail -1; git rev-parse -q --verify MERGE_HEAD >/dev/null && echo MERGE_HEAD-ok; git status --short \| /bin/grep -v "^??" \| /bin/grep -v "^ M"; sed -i 's/^INCOMPLETO: pouso do CONTADOR (instrumento, depois do produto); /- CONTADOR pousado em ato proprio (instrumento, L-105) depois do produto da95f6cb.\nINCOMPLETO: /' app ...` |
 | 10:04:30 | Bash | Commit product merge with docs and deploy | `cd /home/ronald/saas-hasner && sed -i 's/^## DEDO-DUPLO + CONTADOR-DE-ESCRITA-POR-CRON + O137-ESCALA + BUILDER-POR-POSTO -- comboio de 4 em UMA copia (26\/10 09:2x, suite inteira em curso)/## DEDO-DUPLO + CONTADOR-DE-ESCRITA-POR-CRON + O137-ESCALA + BUILDER-POR-POSTO -- comboio de 4 em UMA copia (26\/10 10:0x, produto POUSADO; suite inteira da copia Ran 12122 OK rc 0; verificador APROVADO)/; s/^IN ...` |
 | 10:04:09 | Bash | Merge product commits without committing | `cd /home/ronald/saas-hasner && git merge --no-ff --no-commit a16674cc 2>&1 \| tail -2; git rev-parse -q --verify MERGE_HEAD && echo MERGE_HEAD-ok; git status --short \| /bin/grep -v "^??" \| head -20` |
