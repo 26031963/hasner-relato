@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 26/10/2026 06:25:48.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (37.6 MB). Acoes na janela: **709**.
+**Medido em 26/10/2026 06:30:49.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (37.6 MB). Acoes na janela: **712**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 06:27:45 | Bash | Wait for the morning cartorio chain to finish | `timeout 590 bash -c 'until [ -z "$(ls /home/ronald/saas-hasner/logs/crons_em_curso/ 2>/dev/null \| /bin/grep -E "cartorio\|lavrar_retrato\|processar_cartorio\|apurar\|reconciliar_perguntas")" ] && [ "$(date +%H%M)" -ge 0645 ]; do /usr/bin/sleep 30; done'; date +%H:%M; ls /home/ronald/saas-hasner/logs/crons_em_curso/` |
+| 06:26:35 | Bash | Record the 06:26 result; wait for the suite | `python3 - <<'EOF' p='docs/RELATO.md'; s=open(p).read() o="Se o `detectar_par_relampago` das 06:26 retratar o par e abrir chamado, e EFEITO DO SMOKE (aval), nao achado: fecho pela porta com nota e registro aqui." assert s.count(o)==1 s=s.replace(o,"O `detectar_par_relampago` das 06:26 (rodou 06:26:01-06:26:07, exit 0) NAO retratou o par (#137229 e #137230 sem `retratada_em`) e NAO abriu chamado (co ...` |
+| 06:26:23 | Bash | Read what par_relampago did to the smoke pair (read-only) | `cd /home/ronald/saas-hasner && cat > logs/rvv/col677_relampago.py <<'EOF' import datetime from django.utils import timezone from ponto.models import Batida from chamados.models import ChamadoColaborador t0 = timezone.make_aware(datetime.datetime(2026, 10, 26, 6, 0)) for b in Batida.objects.filter(pk__in=[137229, 137230]): print('B\|#%s\|%s\|%s\|retratada_em=%s\|motivo=%s' % (b.pk, b.tipo, timezone ...` |
 | 06:16:42 | Bash | Wait past the 06:26 par_relampago run | `timeout 590 /usr/bin/sleep 570; date +%H:%M; /bin/grep '"nome":"detectar_par_relampago"' /home/ronald/saas-hasner/app/logs/placar.jsonl \| tail -1 \| cut -c1-140` |
 | 06:16:37 | Bash | Check the time and the par_relampago schedule | `date +%H:%M; crontab -l \| /bin/grep "detectar_par_relampago" \| cut -c1-60` |
 | 06:16:32 | Bash | Full suite on the judge-declaration copy | `cd /home/ronald/saas-hasner && date +%H:%M && bin/suite.sh --dir /home/ronald/wt-juiz-cobre-2610 > /tmp/claude-1001/-home-ronald-saas-hasner-app/9dc43c3d-971d-4cc9-b176-7008bbd353bb/scratchpad/suite_jc.out 2>&1; echo rc=$?` |
