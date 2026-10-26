@@ -15,13 +15,13 @@ esperam migrar -- a lista so encolhe).
 
 | pergunta | juiz (dono) |
 |---|---|
+| a batida esta dentro do geofence? | `ponto/services/geofence.py::classificar_posicao` |
 | quantas horas este PAR (turno) vale? | `ponto/motor_calculo_v2.py::MotorBase.calcular_periodo` |
 | que periodos e que intervalo teve este dia? | `ponto/juiz_batida.py::periodos_do_dia` |
 
-**SEM JUIZ declarado** (3):
+**SEM JUIZ declarado** (2):
 
 - **a batida e espuria (cluster)?** -- nao migrada: `detectar_cluster_espurio --apply` e o cluster-guard de `escala/utils.py` decidem em sitios diferentes
-- **a batida esta dentro do geofence?** -- nao migrada: `reconciliar_geofence` e `acao_recusar_geofence` respondem cada um por si -- candidata do corte de 25/09, sem censo
 - **o par e relampago?** -- nao migrada: `detectar_par_relampago` decide e RETRATA; nenhum outro leitor pergunta
 
 ## Familia `turno/marcos`
@@ -32,12 +32,14 @@ esperam migrar -- a lista so encolhe).
 | a proxima batida e entrada ou saida? | `ponto/turnos.py::proximo_tipo_de` |
 | a que turno (data_turno) pertence a batida? | `ponto/turnos.py::turnos_do_colab` |
 | este turno tem dois blocos (e partido)? | `escala/servico_jornada.py::eh_turno_partido` |
+| ha quanto tempo o turno esta aberto? | `ponto/turnos.py::turno_aberto_ha` |
 | ha turno aberto vivo agora? | `ponto/turnos.py::turno_aberto_de` |
 | o dia esta encerrado? | `ponto/turnos.py::dia_encerrado` |
 | o tipo gravado deve virar (flip)? | `ponto/turnos.py::decidir_tipo_estrito` |
 | o turno previsto cruza a meia-noite? | `escala/servico_jornada.py::turno_cruza_meia_noite` |
 | o vao entre batidas foi intervalo? | `ponto/turnos.py::intervalos_do_turno` |
 | quais sao os marcos previstos do dia? | `escala/models.py::EscalaColaborador.marcos_do_dia` |
+| que lembrete de fim de turno esta na hora? | `ponto/turnos.py::lembrete_fim_turno` |
 | que marco previsto a batida ocupa? | `escala/utils.py::_match_marcos` |
 | que status (ok, atraso, adianto, grave) tem a lampada do marco? | `escala/utils.py::status_do_delta` |
 
@@ -56,12 +58,10 @@ esperam migrar -- a lista so encolhe).
 
 ## Familia `escala`
 
-_nenhum juiz declarado nesta familia._
-
-**SEM JUIZ declarado** (2):
-
-- **o vinculo cobre a data?** -- UMA copia desde 22/10 (aval CONTRATOS RESTANTES (2)): `escala/folgas.py::_cobre`; `gerar_celulas.py::_outro_vinculo_cobre` passou a CHAMA-la (impacto medido na sombra: 0 em 39.463 pares vinculo x dia). Falta so a frase da TRAVA JUIZ-NOVO para declarar aqui
-- **qual vinculo vale neste dia?** -- a LEI existe (O69, prompt dele de 27/09 00:xx): a resposta e `CelulaDia.escala_geradora`, lida por `escala/alimentacao.py::vinculo_do_dia`. Falta a FRASE da TRAVA JUIZ-NOVO pelo nome da funcao, e eu nao posso escreve-la: a autonomia de 11/10 exige autoridade unica MEDIDA, e sao 8 arquivos (9 linhas)
+| pergunta | juiz (dono) |
+|---|---|
+| o vinculo cobre a data? | `escala/alimentacao.py::vinculo_cobre_a_data` |
+| qual vinculo vale neste dia? | `escala/alimentacao.py::vinculo_do_dia` |
 
 ## Familia `ausencia/ferias`
 
@@ -168,14 +168,14 @@ _nenhum juiz declarado nesta familia._
 
 | familia | juizes | sem juiz | pendentes |
 |---|---|---|---|
-| `batida` | 2 | 3 | 0 |
-| `turno/marcos` | 12 | 0 | 0 |
+| `batida` | 3 | 2 | 0 |
+| `turno/marcos` | 14 | 0 | 0 |
 | `celula/precedencia` | 8 | 0 | 0 |
-| `escala` | 0 | 2 | 0 |
+| `escala` | 2 | 0 | 0 |
 | `ausencia/ferias` | 14 | 0 | 0 |
 | `chamado` | 15 | 0 | 0 |
 | `fechamento` | 9 | 0 | 0 |
 | `feriado/prazo` | 6 | 2 | 13 |
 | `tela` | 11 | 1 | 110 |
 | `portas` | 1 | 0 | 124 |
-| **total** | **78** | **8** | **247** |
+| **total** | **83** | **5** | **247** |
