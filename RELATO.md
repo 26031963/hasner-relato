@@ -159,6 +159,11 @@ PAREI: ! GATE-EXPORT-10 (so o export da 10) | espera o DP na Gestao de HE e o Ro
 > O MARCADOR ANDOU no mesmo ato: `ORDEM-VIVA-TOPO` saiu de `BO-HE-RECUSAR-LOTE-500` (fechado) para `O261`, que o hook cobrou.
 > SEM COMMIT DE PROPOSITO: `RELATO.md` e `BACKLOG.md` ficam sujos na arvore porque a L-106 nao deixa commit so de docs fora de marco. Eles entram no commit do proximo marco.
 
+## S-ORFA-E-DIA-EM-ABERTO = (a) -- o dia com SAIDA ORFA do juiz do par e EM ABERTO (26/10 17:0x, POUSADO; suite inteira Ran 12163 OK rc 0)
+LEI-AKITA: origem=ponto/services/dia_decidido.py::datas_em_aberto_de (une `datas_saida_orfa`), testemunha=ponto/turnos.py::turnos_do_colab (Turno entrada=None e saida, `datas_saida_orfa`), RED=ponto/tests/test_saida_orfa_dia_em_aberto.py (5 FAIL no HEAD), quem-mais-le=espelho, pdf_espelho, calendario (os 3 produtores), diff_pdf_x_espelho, juizes novos=0
+- CONDICOES DO AVAL, MEDIDAS ANTES (sombra, comp 10): (1) RETENCAO: `classificar_export` HEAD x cura = **0 colabs** mudam entre `entra` e `fora` (615 itens, 256 / 359 iguais), e o censo confirma -- nenhum leitor de `datas_em_aberto` decide retencao/TXT (`folha/` 0, `fechamento.py` 0, `portas/` 0, `relatorios/` so palavra); (2) dos 191 do recorte, entrada nao casada (18 / 95,9 h, ATA metade ENTRADA) e volta de pausa apagada (135 / 1.046 h, dono BATIDA) FICAM FORA -- dois selos MORDE.
+- A lei alcanca TODO dia com S orfa do juiz: **74 dia-colab / 47 colabs / 388,0 h de parcial** ganham a palavra (o recorte de 38 / 25 era so o veredito `trabalhou`). Numero do dia nao muda (BUG-144). Dia ja abonado segue abonado. `diff_pdf_x_espelho`: `datas_saida_orfa` 0 divergencia em 893 colabs.
+
 ## DIAPAGO-ATRAS-DA-RETRATACAO (P7.1, LAUDO-[nome]) -- retratar a batida relavra o dia (26/10 16:4x, POUSADO; suite inteira Ran 12155 OK rc 0)
 LEI-AKITA: origem=ponto/registro_batida.py::retratar_batida, testemunha=recalcular_por_evento (a porta de evento que a batida ja usa), RED=ponto/tests/test_retratacao_relavra_o_dia.py (0 chamadas no HEAD), quem-mais-le=retratar_humano, detectar_par_relampago, DiaPago/fechamento, juizes novos=0
 - `_fechamento_por_evento` (-> `recalcular_por_evento`, L-113 clausula 1) era chamado so quando a batida NASCE; `retratar_batida` passa a chamar a MESMA porta (on_commit, engole tudo: a retratacao nunca e barrada, L-030). `ACHADO-POR: admin`.
