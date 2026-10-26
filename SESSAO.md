@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/10/2026 22:02:05.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (28.5 MB). Acoes na janela: **922**.
+**Medido em 25/10/2026 22:07:35.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (28.5 MB). Acoes na janela: **915**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -925,10 +925,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 10:08:01 | Bash | Read folgas._cobre and its caller | `sed -n 380,400p escala/folgas.py; sed -n 268,280p ponto/management/commands/gerar_celulas.py` |
 | 10:07:53 | Bash | List cure-copy changes and live tree state | `cd /home/ronald/wt-semcel && git status --porcelain; cd /home/ronald/saas-hasner && git status --porcelain app/ponto app/docs/ARQUITETURA.mmd \| head; date '+%H:%M'` |
 | 10:07:46 | Bash | Read full suite verdict for cure copy | `cd /home/ronald/saas-hasner && grep -E '^(OK\|FAILED)($\| \()' logs/semcel11_suite.log \| tail -1; grep -E '^Ran ' logs/semcel11_suite.log \| tail -1; tail -1 logs/semcel11_suite.log; grep -E '^(FAIL\|ERROR):' logs/semcel11_suite.log \| head` |
-| 10:03:37 | Bash | Write C5 tests and run RED against HEAD | `cd /home/ronald/wt-nb/app && python3 - <<'EOF' p='folha/tests/test_vigia_retido_calado.py'; s=open(p).read() s=s.replace("from django.utils import timezone\n","from django.utils import timezone\nfrom freezegun import freeze_time\n",1) s+=''' @freeze_time('2026-10-25 12:00') class RoteadoNaoECaladoTest(TestCase): """FIO-DO-NUNCA-BATEU (lei 25/10 09:3x item 5): quem nunca bateu ponto tem por fio a l ...` |
-| 10:03:18 | Bash | Build C5 assinatura and vigia routing in copy | `cd /home/ronald/saas-hasner && git worktree add -f /home/ronald/wt-nb HEAD 2>&1 \| tail -1 && mkdir -p /home/ronald/wt-nb/app/logs /home/ronald/wt-nb/app/media && cd /home/ronald/wt-nb/app && python3 - <<'EOF' p='escala/services/cadastro_realidade.py'; s=open(p).read() a="TELA_AUSENCIA = '/ponto/ausencias/?colaborador=%d&tipo=afastamento_inss'" assert s.count(a)==1 s=s.replace(a, a+"\nTELA_COLAB = ...` |
-| 10:02:40 | Bash | Read retention motives and grupo D census output | `grep -n "def motivos_retencao_celula" -A40 folha/export.py \| grep -n "nunca\\|veredito\\|motivo\\|'espelho" \| head -15; cat /home/ronald/saas-hasner/logs/grupo_d_dias.out 2>/dev/null \| head -15 \| cut -c1-200` |
-| 10:02:34 | Bash | Find how Retrato records cause for nunca-bateu | `sed -n 1100,1200p folha/retrato_folha.py \| grep -n "causa\\|motivo\\|nunca" \| head -20; git grep -n "nunca_bateu" -- folha/export.py \| head -5` |
-| 10:02:29 | Bash | Check Retrato line keys and nunca_bateu motivo | `grep -n "'colaborador_id'\\|'colab_id'\\|nunca_bateu" folha/retrato_folha.py \| head; git grep -n "espelho_nunca_bateu" -- '*.py' \| grep -v tests \| cut -c1-160 \| head -5` |
-| 10:02:17 | Bash | Read rest of vigia, its command and test | `sed -n 120,200p folha/vigia_retido_calado.py; cat folha/management/commands/vigiar_retido_calado.py \| sed -n 1,80p; sed -n 1,60p folha/tests/test_vigia_retido_calado.py` |
-| 10:02:12 | Bash | Find colaborador detail/edit route | `grep -n "path(" colaboradores/urls.py \| grep -i "editar\\|detalhe\\|<int:pk>/'\\|<int:pk>/$" \| head -5` |
