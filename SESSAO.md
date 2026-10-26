@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 26/10/2026 08:45:35.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (39.1 MB). Acoes na janela: **624**.
+**Medido em 26/10/2026 08:50:48.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (39.1 MB). Acoes na janela: **623**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -633,4 +633,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 20:57:26 | Bash | Read the failure and check the neighbor list | `cd /home/ronald/saas-hasner/logs && awk '/^FAIL: test_MORDE_o_escore_gravado/{f=1} f{print} /^-{60,}/{if(f&&++n==2){exit}}' termo2_suite.log \| grep -vE "unittest/case.py\|^\s*\^\|yield\|_callTestMethod\|testPartExecutor\|method\(\)\|assertion_func\|_baseAssert\|raise self.fail" \| head -12; grep -c "termometro_vira_lista" /tmp/claude-1001/-home-ronald-saas-hasner-app/9dc43c3d-971d-4cc9-b176-7008b ...` |
 | 20:57:16 | Bash | Read suite result | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/f4eb628a-9fcf-4c05-ae6a-9f32279f7575/tasks/b6nu7p4de.output \| tail -6` |
 | 20:57:08 | Bash | Mark the OS-56 question answered | `python3 - <<'EOF' p='docs/RELATO.md'; s=open(p).read() o="> **lei: OS-56-AVISOS-FORA-DA-LISTA -- a condicao da (a) NAO fechou" assert s.count(o)==1 s=s.replace(o,"> **RESPONDIDA 25/10 20:5x: OS-56 = sim, como proposto** -- depois da cura da lavra (escore GRAVADO por `deve_avisar_regua`, menos LIMBO) o #15479 entra na C7 e fecha pelo caminho dos 62; os 55 pela (a) com 55 = 55; vinculo novo que a cu ...` |
-| 20:46:13 | Bash | Show the rule RED message; run the full suite | `cd /home/ronald/saas-hasner && grep -A6 "^FAIL: test_MORDE_o_escore_gravado" logs/termo2_red.log \| grep AssertionError; bash bin/suite.sh --dir /home/ronald/wt-termo2 > logs/termo2_suite.log 2>&1; echo "rc=$?"; grep -E '^(OK\|FAILED)($\| \()' logs/termo2_suite.log \| tail -1; grep -E '^Ran [0-9]+ tests' logs/termo2_suite.log \| tail -1; grep -E '^(FAIL\|ERROR):' logs/termo2_suite.log \| head` |
