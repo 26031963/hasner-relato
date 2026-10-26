@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/10/2026 21:40:36.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (28.0 MB). Acoes na janela: **952**.
+**Medido em 25/10/2026 21:45:49.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (28.0 MB). Acoes na janela: **943**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -953,12 +953,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 09:53:22 | Bash | Inspect OBRAS table layout near its end | `grep -n 'OBRAS:FIM' BACKLOG.md; awk -F'\|' 'NR>=1190 && NR<=1206 {print NR": "NF" "substr($2,1,40)}' BACKLOG.md; grep -n '^\| ID\\|^\| id' BACKLOG.md \| head` |
 | 09:53:09 | Bash | Mark questions 7-10 answered and log prompt | `python3 - <<'EOF' p='RELATO.md'; L=open(p).read().split('\n') rep={ 'ITEM-3-PAGA-SEM-TRANCA':"> **RESPONDIDA 25/10 09:4x: ITEM-3-PAGA-SEM-TRANCA = a lei de 30/09 (TXT e fotografia; nada barra, nem trancada) + L-113 REVOGAM a regra de 16/09** -- tranca sem efeito nao e defeito do DP. O contador `competencias_pagas_sem_tranca` e o ramo `--trancar` do `pre_fechamento` saem pela L-111.", 'SELFIE-AUSEN ...` |
 | 09:52:53 | Bash | Read RELATO questions 7-10 | `cd /home/ronald/saas-hasner/app/docs && awk 'NR>=15 && NR<=26 {print NR": "substr($0,1,1500)}' RELATO.md` |
-| 09:42:35 | Bash | Measure per-rubrica impact on sombra with cure tree | `cat > /home/ronald/saas-hasner/logs/sombra/semcel11_impacto.py <<'EOF' # SEM-CELULA-11: impacto por RUBRICA na 10 (e na 11) de gerar as celulas dos ECs ativos de colab nao-ativo, # pela arvore CURADA (SOMBRA_ARVORE). Foto antes -> gerar (porta) -> julgar (porta do cartorio) -> foto depois. # Tudo dentro de atomic com rollback: a sombra fica como estava. import collections, datetime from django.db  ...` |
-| 09:42:16 | Bash | Read montar_linha_10 layout | `sed -n 30,50p folha/export.py` |
-| 09:42:12 | Bash | Find TXT line layout in export | `grep -n "def _linha_dominio\\|def formatar_linha\\|'%s%s%s\\|zfill\\|ljust" folha/export.py \| head -10` |
-| 09:42:05 | Bash | Read instantaneo and comparar functions | `sed -n 94,230p folha/management/commands/simular_folha.py \| grep -v "^\s*#" \| head -120` |
-| 09:41:40 | Bash | Run GREEN test on cure copy | `cd /home/ronald/saas-hasner && bin/suite.sh --dir /home/ronald/wt-semcel --only ponto.tests.test_sem_celula_11_afastado_tem_celula > logs/semcel11_green.log 2>&1; echo rc=$?; grep -E '^(OK\|FAILED)($\| \()\|^Ran \|^FAIL:\|^ERROR:\|Error' logs/semcel11_green.log \| tail -12` |
-| 09:41:08 | Bash | Run RED test with module label | `cd /home/ronald/saas-hasner && bin/suite.sh --dir /home/ronald/wt-semcel-red --only ponto.tests.test_sem_celula_11_afastado_tem_celula > logs/semcel11_red.log 2>&1; echo rc=$?; grep -E '^(OK\|FAILED)($\| \()\|^Ran \|^FAIL:\|^ERROR:\|AssertionError' logs/semcel11_red.log \| tail -12` |
-| 09:41:01 | Bash | Show RED run log tail | `tail -25 /home/ronald/saas-hasner/logs/semcel11_red.log` |
-| 09:40:53 | Bash | Run RED test against HEAD copy | `cd /home/ronald/saas-hasner && git worktree add -f /home/ronald/wt-semcel-red HEAD >/dev/null 2>&1; mkdir -p /home/ronald/wt-semcel-red/app/logs /home/ronald/wt-semcel-red/app/media; cp /home/ronald/wt-semcel/app/ponto/tests/test_sem_celula_11_afastado_tem_celula.py /home/ronald/wt-semcel-red/app/ponto/tests/; bin/suite.sh --dir /home/ronald/wt-semcel-red --only ponto -- ponto.tests.test_sem_celul ...` |
-| 09:40:44 | Write |  | `/home/ronald/wt-semcel/app/ponto/tests/test_sem_celula_11_afastado_tem_celula.py` |
