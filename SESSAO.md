@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 26/10/2026 09:43:35.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (41.5 MB). Acoes na janela: **674**.
+**Medido em 26/10/2026 09:49:04.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (41.5 MB). Acoes na janela: **673**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -683,4 +683,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 21:53:17 | Bash | Size the cell incoherence in open competências | `cat > /home/ronald/saas-hasner/logs/rvv/prec_x_trabalha.py <<'EOF' import collections, datetime from django.utils import timezone from escala.models import CelulaDia hoje = timezone.localdate() ini = datetime.date(2026, 9, 21) qs = CelulaDia.objects.filter(trabalha=True, data__gte=ini, data__lt=hoje, ata__precedencia__faixa__in=['folga', 'feriado']) c = collections.Counter(qs.values_list('ata__pre ...` |
 | 21:52:52 | Bash | Compare cell vs fatos_do_dia for the feriado loop chamados | `cat > /home/ronald/saas-hasner/logs/rvv/feriado_loop.py <<'EOF' import collections, datetime from django.utils import timezone from core.models import LogAuditoria from chamados.models import ChamadoColaborador from chamados.juizes import dia_do_fato from escala.models import CelulaDia from ponto.precedencia import fatos_do_dia t0 = timezone.now() - datetime.timedelta(days=7) pks = set(LogAuditori ...` |
 | 21:50:43 | Bash | Republish RELATO and refresh handoff | `cd /home/ronald/saas-hasner && python3 bin/relato_afirma_com_prova.py app/docs/RELATO.md 2>&1 \| tail -1; bash bin/relato.sh > logs/relato_pub5.log 2>&1; tail -1 logs/relato_pub5.log; bash bin/handoff_sessao.sh > /dev/null 2>&1; git status --porcelain app/docs \| head` |
-| 21:47:44 | Bash | Keep waiting for the push | `for i in $(seq 1 55); do grep -q "push rc=" /tmp/claude-1001/-home-ronald-saas-hasner-app/f4eb628a-9fcf-4c05-ae6a-9f32279f7575/tasks/bomz3rrm9.output 2>/dev/null && break; /usr/bin/sleep 10; done; date +%T; tail -3 /tmp/claude-1001/-home-ronald-saas-hasner-app/f4eb628a-9fcf-4c05-ae6a-9f32279f7575/tasks/bomz3rrm9.output` |
