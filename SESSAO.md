@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/10/2026 23:49:53.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (31.8 MB). Acoes na janela: **963**.
+**Medido em 25/10/2026 23:55:07.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (31.8 MB). Acoes na janela: **967**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 23:50:26 | Bash | Wait for E5 suite verdict | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/9dc43c3d-971d-4cc9-b176-7008bbd353bb/scratchpad; timeout 595 bash -c "until /bin/grep -qE '^(OK\|FAILED)($\| \()' $S/suite_e5b.out 2>/dev/null; do /usr/bin/sleep 15; done"; /bin/grep -E '^(OK\|FAILED)($\| \()' $S/suite_e5b.out \| tail -1` |
+| 23:50:20 | Bash | Second full suite on the E5 copy | `ls -l /home/ronald/wt-e5x/app/docs/ARQUITETURA.mmd \| cut -d' ' -f3,4; cd /home/ronald/saas-hasner && bin/suite.sh --dir /home/ronald/wt-e5x > /tmp/claude-1001/-home-ronald-saas-hasner-app/9dc43c3d-971d-4cc9-b176-7008bbd353bb/scratchpad/suite_e5b.out 2>&1; echo rc=$?` |
+| 23:50:01 | Bash | Generate diagram for the copy with CI settings | `source /home/ronald/saas-hasner/bin/recursos.sh; docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file /home/ronald/saas-hasner/.env --env-file /home/ronald/saas-hasner/logs/.env_teste -e PYTHONDONTWRITEBYTECODE=1 -v /home/ronald/wt-e5x/app:/app -w /app saas-hasner-core:latest python manage.py gerar_diagrama --settings=config.settings.ci 2>&1 \| tail -2; cd /home/ronald/wt-e5x &&  ...` |
+| 23:49:57 | Bash | Read the full suite docker run | `sed -n 95,110p /home/ronald/saas-hasner/bin/suite.sh` |
+| 23:49:53 | Bash | See how the suite container gets its env | `/bin/grep -n "docker run\\|-e \\|--env\\|DJANGO_SETTINGS" /home/ronald/saas-hasner/bin/suite.sh \| head` |
 | 23:49:48 | Bash | Generate the diagram against the E5 copy in a test container | `source /home/ronald/saas-hasner/bin/recursos.sh; teste_envfile >/dev/null 2>&1; ls -la /home/ronald/saas-hasner/logs/.env_teste \| cut -c1-60; docker run --rm $TESTE_DOCKER --env-file /home/ronald/saas-hasner/logs/.env_teste -v /home/ronald/wt-e5x/app:/app -w /app --network saas-hasner_default saas-hasner-core:latest python manage.py gerar_diagrama 2>&1 \| tail -3; cd /home/ronald/wt-e5x && git st ...` |
 | 23:49:41 | Bash | Check whether the main tree got rewritten | `cd /home/ronald/saas-hasner && git status --porcelain \| head;` |
 | 23:49:35 | Bash | Read the host wrapper of the diagram generator | `sed -n 1,40p /home/ronald/wt-e5x/bin/gerar_diagrama.py` |
@@ -972,4 +977,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 11:57:12 | Bash | Rerun E2 probe catching SystemExit on both trees | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='logs/sombra/e2_auditar.py'; s=open(p).read() s=s.replace("call_command('auditar_invariantes_chamados', stdout=out)","try:\n call_command('auditar_invariantes_chamados', stdout=out)\nexcept SystemExit as e:\n print('E2\|SystemExit=%s' % e.code)") open(p,'w').write(s) EOF bin/sombra.sh --rodar logs/sombra/e2_auditar.py e2-head >/dev/null 2>&1; grep ...` |
 | 11:56:59 | Bash | Show non-noise tail of E2 probe output | `cd /home/ronald/saas-hasner && grep -vE "best-effort falhou\|^NoneType: None$" logs/e2-head.out \| tail -15 \| cut -c1-220` |
 | 11:56:53 | Bash | Read E2 probe output file and command options | `cd /home/ronald/saas-hasner && grep -E '^E2\\|\|Traceback\|Error:' logs/e2-head.out \| head -5; grep -n "add_argument\\|--apply\\|def handle" app/chamados/management/commands/auditar_invariantes_chamados.py \| head` |
-| 11:52:34 | Bash | Show sombra output tail for the E2 probe | `cd /home/ronald/saas-hasner && bin/sombra.sh --rodar logs/sombra/e2_auditar.py e2-head 2>&1 \| tail -6` |
