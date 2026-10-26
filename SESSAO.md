@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 26/10/2026 20:24:35.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (52.8 MB). Acoes na janela: **652**.
+**Medido em 26/10/2026 20:30:06.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (52.8 MB). Acoes na janela: **653**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 20:29:55 | Bash | Keep waiting for suite verdict | `until /bin/grep -q "^rc=" /home/ronald/wt-trilha-ordem-2610-1957/app/logs/suite2.out 2>/dev/null; do /usr/bin/sleep 20; done; /bin/grep -E "^(FAIL\|ERROR):\|^Ran \|^(OK\|FAILED)($\| \()\|^rc=" /home/ronald/wt-trilha-ordem-2610-1957/app/logs/suite2.out \| tail -8` |
 | 20:19:49 | Bash | Wait for second suite verdict | `until /bin/grep -q "^rc=" /home/ronald/wt-trilha-ordem-2610-1957/app/logs/suite2.out 2>/dev/null; do /usr/bin/sleep 20; done; /bin/grep -E "^(FAIL\|ERROR):\|^Ran \|^(OK\|FAILED)($\| \()\|^rc=" /home/ronald/wt-trilha-ordem-2610-1957/app/logs/suite2.out \| tail -8` |
 | 20:19:28 | Bash | Read the loop vigia body | `sed -n 19,60p chamados/services/vigia_loop.py` |
 | 20:19:19 | Bash | Read the two vigias | `/bin/grep -n "^def trilha_x_banco" -A45 chamados/services/vigia_loop.py \| head -60; /bin/grep -n "^def trocas_de_estado_em_loop" -A25 chamados/services/vigia_loop.py \| /bin/grep -n "via\\|filter\\|acao" \| head` |
