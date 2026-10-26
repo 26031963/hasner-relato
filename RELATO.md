@@ -162,6 +162,15 @@ PAREI: ! GATE-EXPORT-10 (so o export da 10) | espera o DP na Gestao de HE e o Ro
 > O MARCADOR ANDOU no mesmo ato: `ORDEM-VIVA-TOPO` saiu de `BO-HE-RECUSAR-LOTE-500` (fechado) para `O261`, que o hook cobrou.
 > SEM COMMIT DE PROPOSITO: `RELATO.md` e `BACKLOG.md` ficam sujos na arvore porque a L-106 nao deixa commit so de docs fora de marco. Eles entram no commit do proximo marco.
 
+## CONTRATO-19-DE-VOLTA, metade 1 -- a CAUSA do trilha_x_banco, reproduzida na sombra (26/10 20:0x)
+LEI-AKITA: origem=chamados/models.py::_gravar_estado + chamados/signals.py::disputa_fechada_fecha_chamado_pai, testemunha=vigia_loop.trilha_x_banco + premissa_regularizada(para='folha'), RED=chamados/tests/test_trilha_na_ordem_da_escrita.py + test_laco_ausencia_aberta_nao_vai_e_volta.py, quem-mais-le=trilha_x_banco/trocas_de_estado_em_loop/historico/escritas_por_cron/reabrir, juizes novos=0
+- REPRODUZIDO na sombra (`logs/repro_flap_34127b.out`, o 2o clique do admin de 11:40 no #34127): `_gravar_estado` fazia `save()` e so DEPOIS a linha; o `save()` dispara o cartorio, que REABRE o mesmo chamado por outra instancia POR DENTRO dele. A linha da 1a escrita entrava depois da 2a. Nem lost update nem rollback: REENTRADA.
+- CORRIJO duas premissas minhas publicadas: o xmin "127 x 128/132" NAO refutava nada (savepoint ganha sub-xid depois do pai); e "182 com atualizado_em antes da ultima linha" nao discriminava (vale para TODO chamado bem gravado: o save carimba antes da linha).
+- FROTA pelo juiz REAL (prod, so leitura, `logs/sonda_207_reentrada.py`): trilha_x_banco = **210 / 18.832**; **207** com a assinatura da reentrada (linha ate 3 s antes com o destino = banco), **1** a mesma com 6 s (#28875), **2** legado sem trilha de 29/08 (#18298, #18299, antes do B7.2a).
+- Cura 1: a linha vai ANTES do save, no MESMO atomic. RED 2 FAIL no HEAD.
+- Cura 2 (BUG NO CAMINHO, LEI-AKITA 6): com a trilha honesta, `test_laco_ausencia_aberta_nao_vai_e_volta` (verde desde 07:39) fica VERMELHO -- estava verde PORQUE a ordem invertida escondia o vai-e-volta. Quem ainda fechava: a Defesa 1 (`disputa_fechada_fecha_chamado_pai`) reconciliava o chamado-pai sem perguntar a premissa. Agora pergunta o MESMO juiz e `para` do `reabrir()`; recusa deixa `fechamento_recusado`.
+- INCOMPLETO: (1) os 210 existentes seguem divergindo ate a reconciliacao pela porta, com trilha (proxima fatia); (2) `reconciliar()` sem premissa x S122 `para='cobranca'` x reabrir `para='folha'` -- assimetria de DESENHO em todos os fechadores, item proprio `FECHAR-PERGUNTA-A-PREMISSA`.
+
 ## HANDOFF-LE-AS-FORMAS-VIVAS (instrumento, pouso proprio L-105; achado no CLEAR-NO-MARCO 26/10 19:2x)
 LEI-AKITA: origem=bin/handoff_sessao.sh, testemunha=hook_stop_fila1 (fila/fechado) + frase do juiz em core/placar_estrutural.py, RED=bin/tests/test_handoff_sessao.sh caso 9, quem-mais-le=PreCompact/SessionStart, juizes novos=0
 - O handoff dizia "nenhuma linha PAREI" com 3 perguntas no topo (lia so `PAREI:` cru; o topo vivo e `> **lei:**`/`> **!:**`) e "nenhum aval" com o dia cheio (lia a lista antiga; o PROMPTS e TABELA). Nao trazia placar, raia do contrato nem cota.
