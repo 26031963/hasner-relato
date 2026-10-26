@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 26/10/2026 12:23:34.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (44.5 MB). Acoes na janela: **589**.
+**Medido em 26/10/2026 12:29:05.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (44.5 MB). Acoes na janela: **594**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 12:24:19 | Bash | Apply H=(a) L-084 exception; run seals | `cd /home/ronald/wt-h26-2610-1130/app && python3 - <<'EOF' p='ponto/turnos.py'; s=open(p).read() a=''' _teto_fecho = _teto_s_da_jornada( (marcos_por_dia or {}).get(timezone.localdate(cur["entrada"].timestamp)), 26 * 3600)''' b=''' _m_fecho = (marcos_por_dia or {}).get(timezone.localdate(cur["entrada"].timestamp)) _teto_fecho = _teto_s_da_jornada(_m_fecho, 26 * 3600) # A L-084 VENCE NA FORMA DELA (a ...` |
+| 12:24:02 | Bash | Read existing L-084 check in turnos.py | `sed -n 1580,1600p ponto/turnos.py` |
+| 12:23:57 | SendMessage |  | `-` |
+| 12:23:52 | Bash | Read the L-084 predicate in motor | `/bin/grep -n "def _cadastro_nao_descreve" -A14 ponto/motor_calculo_v2.py; /bin/grep -n "L084_\\|CADASTRO_NAO_DESCREVE\\|= 180" ponto/motor_calculo_v2.py ponto/turnos.py \| head` |
+| 12:23:43 | Bash | Launch sombra dry measure and full suite | `cd /home/ronald/saas-hasner && printf "from django.core.management import call_command\ncall_command('lavrar_he_pendente', mes=10, ano=2026, empresas='2,3,4')\n" > logs/sombra/retrato10_dry.py; (SOMBRA_ARVORE=/home/ronald/wt-retrato-2610-1222/app bin/sombra.sh --rodar retrato10_dry.py retrato10_dry >/dev/null 2>&1; touch logs/retrato10_dry.fim) >/dev/null 2>&1 & (bin/suite.sh --dir /home/ronald/wt ...` |
 | 12:23:27 | Bash | Read-only: screen path output for col33 03/10 | `cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/9dc43c3d-971d-4cc9-b176-7008bbd353bb/scratchpad/tela_c33.py <<'EOF' from colaboradores.models import Empresa from ponto.services import he_pendente_lavrado as L, gestao_he as G e = Empresa.objects.get(pk=4) ret, em = L.ler(e, 10, 2026) vis = G.enriquecer(ret, limite=int(e.limite_decisao_he_min or 0)) c = [x for x in vis['colabs'] if str(x.get('co ...` |
 | 12:23:16 | Bash | Read gestao_he view competencia and filters | `/bin/grep -n "^def gestao_he" ponto/views*.py; F=$(/bin/grep -ln "^def gestao_he(" ponto/views*.py); L=$(/bin/grep -n "^def gestao_he(" $F \| cut -d: -f1); sed -n "$L,$((L+60))p" $F \| /bin/grep -n "GET\\|mes\\|ano\\|competencia\\|estado\\|dono\\|enriquecer\\|empresa" \| head -30` |
 | 12:23:12 | Bash | Find views reading gestao_he | `git grep -n "gestao_he\b\\|from ponto.services import gestao_he\\|gestao_he import\\|gestao_he\." -- '*.py' \| /bin/grep -v tests \| /bin/grep -v "^ponto/services/gestao_he.py" \| head -8` |
