@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 26/10/2026 20:08:35.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (52.7 MB). Acoes na janela: **657**.
+**Medido em 26/10/2026 20:14:05.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (52.7 MB). Acoes na janela: **658**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 20:08:39 | Bash | Wait for full suite verdict | `until /bin/grep -q "^rc=" /home/ronald/wt-trilha-ordem-2610-1957/app/logs/suite.out 2>/dev/null; do /usr/bin/sleep 20; done; /bin/grep -E "^(FAIL\|ERROR):\|^Ran \|^(OK\|FAILED)($\| \()\|^rc=" /home/ronald/wt-trilha-ordem-2610-1957/app/logs/suite.out \| tail -10` |
 | 20:08:33 | Bash | Check remaining 20:xx are not mine | `/bin/grep -n "20:xx" docs/RELATO.md \| cut -c1-140; git diff docs/BACKLOG.md \| /bin/grep "^+" \| /bin/grep -c "20:xx"` |
 | 20:08:26 | Bash | Fix time labels to 20:0x | `sed -i 's/reproduzida na sombra (26\/10 20:xx)/reproduzida na sombra (26\/10 20:0x)/; ' docs/RELATO.md && sed -i 's/achado do CONTRATO-19-DE-VOLTA (26\/10 20:xx)/achado do CONTRATO-19-DE-VOLTA (26\/10 20:0x)/; s/\| depois do CONTRATO-19-DE-VOLTA \| 26\/10 20:xx \|/\| depois do CONTRATO-19-DE-VOLTA \| 26\/10 20:0x \|/' docs/BACKLOG.md; /bin/grep -c "20:xx" docs/RELATO.md docs/BACKLOG.md` |
 | 20:08:20 | Bash | Write RELATO, BACKLOG state and new item | `date +%H:%M && python3 - <<'EOF' p='docs/RELATO.md'; s=open(p).read() anc='## HANDOFF-LE-AS-FORMAS-VIVAS' assert s.count(anc)==1 sec='''## CONTRATO-19-DE-VOLTA, metade 1 -- a CAUSA do trilha_x_banco, reproduzida na sombra (26/10 20:xx) LEI-AKITA: origem=chamados/models.py::_gravar_estado + chamados/signals.py::disputa_fechada_fecha_chamado_pai, testemunha=vigia_loop.trilha_x_banco + premissa_regul ...` |
