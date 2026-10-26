@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 26/10/2026 13:28:35.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (45.1 MB). Acoes na janela: **554**.
+**Medido em 26/10/2026 13:34:04.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (45.2 MB). Acoes na janela: **557**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 13:32:07 | Bash | Fix fixture; rerun RED | `cd /home/ronald/wt-fotovivo-2610-1322/app && python3 - <<'EOF' p='ponto/tests/test_foto_x_vivo.py'; s=open(p).read() a=''' def _lavra(self, mes, quando): x = L.lavrar(self.emp, mes, 2026, {'colabs': [], 'dias': 0, 'pendentes': 0, 'erros': 0, 'competencia': '%02d/2026' % mes, 'recusas_revogadas': 0})''' b=''' def _lavra(self, mes, quando): from ponto import janelas ini, fim = janelas.janela_fechame ...` |
+| 13:31:59 | Bash | Read lavrar body | `sed -n 175,190p ponto/services/he_pendente_lavrado.py` |
+| 13:31:13 | Bash | Wait for RED result and push | `timeout 590 bash -c 'until /bin/grep -qE "^(OK\|FAILED)" /tmp/claude-1001/-home-ronald-saas-hasner-app/9dc43c3d-971d-4cc9-b176-7008bbd353bb/scratchpad/fxv_red.out; do /usr/bin/sleep 20; done'; /bin/grep -E "^(FAIL\|ERROR):\|Error:\|^Ran\|^(OK\|FAILED)" /tmp/claude-1001/-home-ronald-saas-hasner-app/9dc43c3d-971d-4cc9-b176-7008bbd353bb/scratchpad/fxv_red.out \| tail -4; /bin/grep -E "\-> main\|^rc=" ...` |
 | 13:21:06 | Bash | Create copy and RED test for fotos_paradas | `cd /home/ronald/saas-hasner && P=/home/ronald/wt-fotovivo-2610-1322; [ -e $P ] && echo JA EXISTE; git worktree add --detach $P 82c78fca 2>&1 \| tail -1; git -C $P log --oneline -1; mkdir -p $P/app/logs $P/app/media; cat > $P/app/ponto/tests/test_foto_x_vivo.py <<'EOF' """FOTO-X-VIVO (aval Ronald 26/10 ~12:2x, complemento do BUG-RETRATO-HE-DA-COMPETENCIA-ANTERIOR; invariante do portao de faturament ...` |
 | 13:20:28 | Bash | Close H marco docs, commit, push | `python3 - <<'EOF' p='docs/RELATO.md'; s=open(p).read() a='INCOMPLETO: apply da 10 para os 8 + prova.' b='''- APPLY comp 10 em PROD (13:1x, `recalcular_fechamento_mes(10, 2026, colaborador_ids=[os 8])`): os 8 IGUAIS ao DIFF (ex. col924 155,67 -> 135,84; col988 26,58 -> 13,30; col788 103,81 -> 105,68). PROVA: 21 hashes de exportacao iguais, 0 exportacoes da 10 (`logs/apply_h_comp10_20261026.out`); F ...` |
 | 13:14:00 | Bash | Remeasure R1 after H | `cd /home/ronald/saas-hasner && bin/sombra.sh --rodar r1_e6_10_pos2.py r1_e6_10_pos2 >/dev/null 2>&1; cd logs/sombra && python3 - <<'EOF' import csv n={(r['colab'],r['dia']):r for r in csv.DictReader(open('r1_e6_10_pos2.csv'))} e=[k for k,r in n.items() if r['dono_da_divergencia']=='ESTRUTURA'] print('ESTRUTURA %d / %.1f h / %d colabs' % (len(e), sum(abs(float(n[k]['dif'])) for k in e)/60, len({k[0 ...` |
