@@ -147,7 +147,7 @@ PAREI: ! GATE-EXPORT-10 (so o export da 10) | espera o DP na Gestao de HE e o Ro
 > O MARCADOR ANDOU no mesmo ato: `ORDEM-VIVA-TOPO` saiu de `BO-HE-RECUSAR-LOTE-500` (fechado) para `O261`, que o hook cobrou.
 > SEM COMMIT DE PROPOSITO: `RELATO.md` e `BACKLOG.md` ficam sujos na arvore porque a L-106 nao deixa commit so de docs fora de marco. Eles entram no commit do proximo marco.
 
-## DEDO-DUPLO + CONTADOR-DE-ESCRITA-POR-CRON + O137-ESCALA + BUILDER-POR-POSTO -- comboio de 4 em UMA copia (26/10 09:2x, suite inteira em curso)
+## DEDO-DUPLO + CONTADOR-DE-ESCRITA-POR-CRON + O137-ESCALA + BUILDER-POR-POSTO -- comboio de 4 em UMA copia (26/10 10:0x, produto POUSADO; suite inteira da copia Ran 12122 OK rc 0; verificador APROVADO)
 LEI-AKITA: origem=ponto/calculador/nucleo.py::minutos_do_oraculo + chamados/services/vigia_loop.py::escritas_por_cron + relatorios/views.py::relatorio_builder, testemunha=batidas_apuraveis / LogAuditoria / queryset do builder, RED=test_e6_oraculo_le_a_retratacao (4 FAIL no HEAD) + test_escritas_por_cron (ImportError no HEAD) + test_builder_por_posto (6 de 8 FAIL), quem-mais-le=e6_oraculo, pautas_discordantes (.horas), placar_code.sh, builder.html, juizes novos=0
 - DEDO-DUPLO (2a7061b2): `nucleo.py::minutos_do_oraculo` sem dedup proprio, `Veredito.descartadas` com lapide; `e6_oraculo` le `batidas_apuraveis`. Numero na resposta do topo: 91 -> 88.
 - CONTADOR (6deb6d8d, INSTRUMENTO, pousa por ultimo): `vigia_loop.py::escritas_por_cron` + linha por cron no `placar_code.sh` (fora do TOTAL) + item 9 do verificador. PRODUCAO 26/10 09:14, 7 d, so leitura (universo 1.528):
@@ -169,7 +169,9 @@ LEI-AKITA: origem=ponto/calculador/nucleo.py::minutos_do_oraculo + chamados/serv
 
 - O137-ESCALA (26cb6215, d292b93f, 41c46835, do agente): `_CICLO_TIPO` com lapide, 8 trechos de prosa, `JUIZES.md` ESCALA. ~25 sitios "vinculo de hoje" fora do censo viram linha.
 - BUILDER-POR-POSTO (bbddcc49, 23abb8a2, do agente): filtro posto, agrupar no PDF/CSV, rotulo da lotacao; bug no caminho: BOM a cada linha do CSV (um write so).
-INCOMPLETO: suite inteira do comboio; pouso em sequencia (produto, depois instrumento); PDF da tela com 1 posto e agrupado; reconciliar_chamados #28571 x385 e fechar_cobranca_com_lastro #29292 x173 viram linha da raia do 20.
+- BUILDER, achado do verificador: `posto=²` dava 500 (`isdigit`) -- curado no a16674cc com RED; o gemeo do `empresa_id` vira linha.
+- CONTADOR pousado em ato proprio (instrumento, L-105) depois do produto da95f6cb.
+INCOMPLETO: PDF da tela com 1 posto e agrupado; reconciliar_chamados #28571 x385 e fechar_cobranca_com_lastro #29292 x173 viram linha da raia do 20.
 
 ## QUATRO-PRAZOS (1)(2) -- juiz turno_aberto_ha e juiz lembrete_fim_turno nascem; `JUIZES_POR_VARREDURA` 14 -> 12 (26/10 08:3x, POUSADO; suite inteira Ran 12106 OK)
 LEI-AKITA: origem=`ponto/turnos.py::turno_aberto_ha` e `::lembrete_fim_turno` (a regra que morava dentro dos dois commands), testemunha=o `TurnoMaterializado` (fonte decidida 08:1x = (a)) e o fim previsto do turno, RED=`ponto/tests/test_quatro_prazos_turno_aberto_ha.py` + `test_quatro_prazos_lembrete_fim_turno.py` (funcao inexistente no HEAD), quem-mais-le=`processar_alertas_avancados` e `processar_alertas_turno` (unicos), juizes novos=turno_aberto_ha, lembrete_fim_turno (corte Ronald 01:5x)
