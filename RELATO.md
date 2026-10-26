@@ -151,6 +151,12 @@ PAREI: ! GATE-EXPORT-10 (so o export da 10) | espera o DP na Gestao de HE e o Ro
 > O MARCADOR ANDOU no mesmo ato: `ORDEM-VIVA-TOPO` saiu de `BO-HE-RECUSAR-LOTE-500` (fechado) para `O261`, que o hook cobrou.
 > SEM COMMIT DE PROPOSITO: `RELATO.md` e `BACKLOG.md` ficam sujos na arvore porque a L-106 nao deixa commit so de docs fora de marco. Eles entram no commit do proximo marco.
 
+## R1-H-PORTAO-DE-26H com H=(a) -- o fecho em fluxo le o teto do DIA, a forma L-084 segue em 26 h (26/10 13:1x, POUSADO; suite inteira Ran 12138 OK rc 0; verificador APROVADO)
+LEI-AKITA: origem=ponto/turnos.py::parear_turnos (portao HX-TETO-ENVELOPE), testemunha=_teto_s_da_jornada + MotorBase.CADASTRO_NAO_DESCREVE_MIN, RED=test_h_portao_teto_do_dia (col879 fecha 1287 min no HEAD), quem-mais-le=turnos_de_batidas (motor), turnos_do_colab, realizado_do_dia, juizes novos=0
+- DIFF de folha da 10 ANTES (sombra, contra a arvore no ar, ja com a excecao L-084): **8 colabs** (129, 155, 638, 788, 866, 879, 924, 988), `horas_extras` -24,57 h (HE100 -20,57, HE50 -4,00), trabalhadas -31,24 h, noturnas -14,10, `turnos_abertos` +3; col297 (forma L-084) sai. Reversao `logs/reversao_h_comp10_20261026.json` ANTES; comp 10 com 0 exportacoes.
+- VERIFICADOR, nota sem acao: o portao chaveia o dia por `localdate(entrada)` e as pos-passagens por `t.data_turno` -- so diferem no turno atribuido a vespera (entrada depois da meia-noite), e `_bm_de` ja usa a mesma chave; callers sem mapa do dia seguem em 26 h, byte a byte.
+INCOMPLETO: apply da 10 para os 8 + prova.
+
 ## BUG-RETRATO-HE-DA-COMPETENCIA-ANTERIOR (P7.1) -- o cron lavra a 10 enquanto ela nao for exportada (26/10 13:0x, POUSADO a51b5dd4, deploy 12:49)
 LEI-AKITA: origem=ponto/management/commands/lavrar_he_pendente.py (escolha da competencia), testemunha=folha/export.py::competencia_entregue, RED=test_retrato_he_competencia_anterior (a 10 sem retrato novo no HEAD), quem-mais-le=gestao_he (tela e PDF), porta_export (trava de HE), pendentes_na_central, recusar_ponta_pequena, juizes novos=0
 - `lavrar_he_pendente.py::competencias_a_lavrar`: a de hoje + a anterior enquanto `competencia_entregue` = False. Comp 10: **NAO exportada** (0 ExportacaoDominio), entao entra pelo cron; a exportada nao se relavra aqui (TXT FOTOGRAFIA).
