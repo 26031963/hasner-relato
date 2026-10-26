@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 26/10/2026 10:26:35.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (42.2 MB). Acoes na janela: **675**.
+**Medido em 26/10/2026 10:32:04.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (42.3 MB). Acoes na janela: **678**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 10:30:25 | Bash | Apply fix and run relatorios suite | `cd /home/ronald/wt-empid-2610-1025/app && sed -i '1529s/if f_empresa.isdigit() else None/if (f_empresa.isdecimal() and f_empresa.isascii()) else None/' relatorios/views.py && sed -n 1529p relatorios/views.py && cd /home/ronald/saas-hasner && bin/suite.sh --dir /home/ronald/wt-empid-2610-1025 --only "relatorios" > /tmp/claude-1001/-home-ronald-saas-hasner-app/9dc43c3d-971d-4cc9-b176-7008bbd353bb/sc ...` |
+| 10:30:18 | Bash | Record dono question, eco item; check push/RED | `python3 - <<'EOF' p='docs/RELATO.md'; L=open(p).read().split('\n') q=("> **lei: DONO-BATIDA-LE-O-ABERTO-DA-TELA** (pergunta de PREDICADO do juiz do dono -- e dele pela AUTONOMIA item 3; nao para a fila; " "R1-ESTRUTURA-91) -- `e6_oraculo.py::dono_da_divergencia` decide BATIDA pela PARIDADE do balde do ORACULO (`:89`), e o oraculo e cego " "de TIPO e de MARCO por construcao. MEDIDO (sombra, comp 10 ...` |
+| 10:29:54 | Bash | Read the eco-flush guard | `sed -n 240,295p ponto/turnos.py` |
 | 10:19:38 | Bash | Add RED test for empresa_id and run | `cd /home/ronald/wt-empid-2610-1025/app && python3 - <<'EOF' p='relatorios/tests/test_relatorio_janela_da_empresa.py'; s=open(p).read() s=s.rstrip('\n')+''' def test_empresa_id_com_digito_unicode_nao_da_500(self): """`'²'.isdigit()` e True e `int('²')` levanta: era 500 (gemeo do achado do verificador 26/10 09:5x).""" self.client.force_login(self.staff) r = self.client.get(reverse('relatorios:furos_ ...` |
 | 10:19:30 | Bash | Read existing furos test setup | `cd /home/ronald/wt-empid-2610-1025/app && sed -n 1,60p relatorios/tests/test_relatorio_janela_da_empresa.py \| /bin/grep -n "class\\|def \\|login\\|client\\|reverse\\|create" \| head -20; sed -n 1509,1528p relatorios/views.py \| /bin/grep -n "staff\\|perm\\|return"` |
 | 10:19:25 | Bash | Create copy and locate empresa_id view | `cd /home/ronald/saas-hasner && P=/home/ronald/wt-empid-2610-1025; [ -e $P ] && echo JA EXISTE; git worktree add --detach $P aa7fa4e8 2>&1 \| tail -1; git -C $P log --oneline -1; mkdir -p $P/app/logs $P/app/media; cd $P/app && /bin/grep -n "isdigit()" relatorios/views.py; sed -n 1500,1512p relatorios/views.py \| head -5; /bin/grep -n "^def \\|^@" relatorios/views.py \| awk -F: '$1<1530' \| tail -4; ...` |
