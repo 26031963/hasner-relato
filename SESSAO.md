@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 26/10/2026 18:27:35.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (50.3 MB). Acoes na janela: **596**.
+**Medido em 26/10/2026 18:33:05.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (50.3 MB). Acoes na janela: **595**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -605,4 +605,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 06:37:59 | Bash | Copy certified files, regenerate cortes and placar, stage | `cd /home/ronald/saas-hasner && git log --oneline -1 && P=/home/ronald/wt-juiz-cobre-2610 && ALL=$(git -C $P status --porcelain \| awk '{print $2}'); echo $ALL; for f in $ALL; do cp $P/$f $f; cmp -s $P/$f $f \|\| echo "DIFERE $f"; done; python3 bin/gerar_cortes.py >/dev/null; bash bin/tickets_placar.sh --escrever >/dev/null 2>&1; bash bin/tickets_placar.sh 2>&1 \| tail -1; python3 - <<'EOF' p='app/ ...` |
 | 06:37:44 | Bash | Check which chain links have finished today | `ls /home/ronald/saas-hasner/logs/fim/ \| /bin/grep "20261026" \| /bin/grep -E "cartorio\|apurar\|orfas\|lavrar\|retrato" ; date +%H:%M; ls /home/ronald/saas-hasner/logs/crons_em_curso/` |
 | 06:37:40 | Bash | See which chain links finished and the 06h schedule | `ls /home/ronald/saas-hasner/logs/fim/ 2>/dev/null \| /bin/grep "$(date +%Y%m%d)" \| tail -8; crontab -l \| /bin/grep -E "^[0-9]+ 6 " \| awk '{print $1,$2,$7}' \| head -30` |
-| 06:27:45 | Bash | Wait for the morning cartorio chain to finish | `timeout 590 bash -c 'until [ -z "$(ls /home/ronald/saas-hasner/logs/crons_em_curso/ 2>/dev/null \| /bin/grep -E "cartorio\|lavrar_retrato\|processar_cartorio\|apurar\|reconciliar_perguntas")" ] && [ "$(date +%H%M)" -ge 0645 ]; do /usr/bin/sleep 30; done'; date +%H:%M; ls /home/ronald/saas-hasner/logs/crons_em_curso/` |
