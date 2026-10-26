@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/10/2026 23:55:07.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (31.8 MB). Acoes na janela: **967**.
+**Medido em 26/10/2026 00:00:35.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (31.8 MB). Acoes na janela: **964**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -974,6 +974,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 12:14:28 | Bash | Run E2 RED against HEAD-equivalent copy | `cd /home/ronald/saas-hasner && cp /home/ronald/wt-casa-e2/app/escala/tests/test_contract_juiz_escala.py /home/ronald/wt-instr/app/escala/tests/ && bin/suite.sh --dir /home/ronald/wt-instr --only escala.tests.test_contract_juiz_escala > logs/e2_red.log 2>&1; echo rc=$?; grep -E '^(OK\|FAILED)($\| \()\|^Ran \|^(FAIL\|ERROR):' logs/e2_red.log \| tail -4; git -C /home/ronald/wt-instr checkout -q -- ap ...` |
 | 12:05:40 | Bash | Diff full vigia output HEAD vs cure | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='logs/sombra/e2_auditar.py'; s=open(p).read() s=s.replace("for l in t.splitlines():\n if 'export' in l.lower() or 'vigencia' in l.lower():\n print('E2\|%s' % l[:160])","for l in t.splitlines():\n print('E2L\|%s' % l)") open(p,'w').write(s) EOF bin/sombra.sh --rodar logs/sombra/e2_auditar.py e2-head >/dev/null 2>&1; SOMBRA_ARVORE=/home/ronald/wt-ca ...` |
 | 12:05:30 | Bash | Check retried push result on remote | `cd /home/ronald/saas-hasner && tail -3 logs/push_2510_12b.log; git fetch -q; git log --oneline origin/main -1; git log --oneline origin/main..HEAD \| wc -l` |
-| 11:57:12 | Bash | Rerun E2 probe catching SystemExit on both trees | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='logs/sombra/e2_auditar.py'; s=open(p).read() s=s.replace("call_command('auditar_invariantes_chamados', stdout=out)","try:\n call_command('auditar_invariantes_chamados', stdout=out)\nexcept SystemExit as e:\n print('E2\|SystemExit=%s' % e.code)") open(p,'w').write(s) EOF bin/sombra.sh --rodar logs/sombra/e2_auditar.py e2-head >/dev/null 2>&1; grep ...` |
-| 11:56:59 | Bash | Show non-noise tail of E2 probe output | `cd /home/ronald/saas-hasner && grep -vE "best-effort falhou\|^NoneType: None$" logs/e2-head.out \| tail -15 \| cut -c1-220` |
-| 11:56:53 | Bash | Read E2 probe output file and command options | `cd /home/ronald/saas-hasner && grep -E '^E2\\|\|Traceback\|Error:' logs/e2-head.out \| head -5; grep -n "add_argument\\|--apply\\|def handle" app/chamados/management/commands/auditar_invariantes_chamados.py \| head` |

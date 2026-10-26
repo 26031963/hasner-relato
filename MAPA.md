@@ -53,7 +53,7 @@ core/tests/test_selo_diagrama_do_codigo.py regenera os dois e compara.
 
 ## (f) JUIZES por familia
 - core/juizes.py: JUIZES (pergunta -> autoridade), SEM_JUIZ (motivo), PENDENTES (o registro), fora_de_autoridade(familia) -> contador
-- familias: celula/precedencia, turno/marcos, ausencia/ferias, chamado, feriado/prazo, fechamento, tela, portas, batida
+- familias: celula/precedencia, turno/marcos, ausencia/ferias, chamado, feriado/prazo, fechamento, tela, portas, batida, escala
 - contratos: */tests/test_contract_juiz_*.py (contagem e zonas do registro de cada familia)
 
 ## (g) PORTAS DE ESCRITA humanas

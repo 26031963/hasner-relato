@@ -353,6 +353,8 @@ flowchart TD
     ja_ponto_juiz_batida_py(["ponto/juiz_batida.py"]) --- jf_batida
     ja_ponto_motor_calculo_v2_py(["ponto/motor_calculo_v2.py"]) --- jf_batida
     ja_ponto_services_geofence_py(["ponto/services/geofence.py"]) --- jf_batida
+    jf_escala["escala<br/>1 com juiz · 1 sem juiz<br/>registro: 0 sitio(s)"]
+    ja_escala_alimentacao_py(["escala/alimentacao.py"]) --- jf_escala
   end
 
   %% (g) PORTAS DE ESCRITA — fonte: core/portas_da_tela.py (FAMILIAS; censo em prod: manage.py censo_portas)
