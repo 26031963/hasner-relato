@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 26/10/2026 18:54:45.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (50.8 MB). Acoes na janela: **619**.
+**Medido em 26/10/2026 19:00:07.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (50.8 MB). Acoes na janela: **618**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -628,4 +628,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 07:01:54 | Bash | Read the REABRIR row state and exit condition | `/bin/grep -n "^\| REABRIR-PERGUNTA-A-PREMISSA \|" docs/BACKLOG.md \| cut -d'\|' -f4,5 \| cut -c1-900` |
 | 07:01:32 | Bash | Record the measured cost; regenerate handoff | `python3 - <<'EOF' p='docs/RELATO.md'; s=open(p).read() o="A MEDIR depois do deploy (verificador): `dur_s['detectar_ausencias']` (30 s antes; estimativa de ~10 mil queries a mais por passada)." assert s.count(o)==1 s=s.replace(o,"CUSTO MEDIDO (`app/logs/placar.jsonl`, 26/10): as passadas de 06:50/06:55/07:00 levam **26/21/38 s**, contra **15/13/29 s** nos mesmos horarios de 24/10 e 25/10 -- cerca d ...` |
 | 07:01:23 | Bash | Compare morning detectar durations with previous days | `/bin/grep '"nome":"detectar_ausencias"' /home/ronald/saas-hasner/app/logs/placar.jsonl \| /bin/grep -E '2026-10-2[45]T0(6:5\|7:0)' \| cut -c60-140` |
-| 06:59:17 | Bash | Keep waiting for push; sample morning detectar durations | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/9dc43c3d-971d-4cc9-b176-7008bbd353bb/scratchpad; timeout 590 bash -c "until /bin/grep -qE 'error: failed to push\|-> main\|Everything up-to-date\|BLOQUEADO' $S/push7.out 2>/dev/null; do /usr/bin/sleep 20; done"; tail -3 $S/push7.out \| cut -c1-200; date +%H:%M; /bin/grep '"nome":"detectar_ausencias"' /home/ronald/saas-hasner/app/logs/placar.jsonl \|  ...` |
