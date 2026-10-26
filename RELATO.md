@@ -135,7 +135,8 @@ PAREI: ! GATE-EXPORT-10 (so o export da 10) | espera o DP na Gestao de HE e o Ro
 > O MARCADOR ANDOU no mesmo ato: `ORDEM-VIVA-TOPO` saiu de `BO-HE-RECUSAR-LOTE-500` (fechado) para `O261`, que o hook cobrou.
 > SEM COMMIT DE PROPOSITO: `RELATO.md` e `BACKLOG.md` ficam sujos na arvore porque a L-106 nao deixa commit so de docs fora de marco. Eles entram no commit do proximo marco.
 
-## HOUVE-FATO-NOVO-INCLUI-MARCO-QUE-VENCEU = (a) -- o marco que venceu apagado entre o fecho e a reabertura e fato novo (26/10 01:2x, em comboio)
+## HOUVE-FATO-NOVO-INCLUI-MARCO-QUE-VENCEU = (a) -- o marco que venceu apagado entre o fecho e a reabertura e fato novo (26/10 01:3x, NO AR 01:37:42, `311b6a48`)
+- PROVA: carimbo `logs/deploy.stamp` COMMIT=`b6d3fa90` (contem `311b6a48`), `logs/deploy_comboio_0126.log` (rc 0, `importerror_500=0`).
 LEI-AKITA: origem=`ponto/services/cartorio.py::houve_fato_novo` (o juiz que a porta `reabrir()` e o contador leem), testemunha=`marcos_vencidos` (o teto do cartorio) + a ata gravada, RED=`chamados/tests/test_reabertura_por_marco_novo_nao_e_laco.py`, quem-mais-le=`chamados/models.py::reabrir` (fecho do admin) e `chamados/services/vigia_loop.py::trocas_de_estado_em_loop`, juizes novos=0
 - `houve_fato_novo` ganha `_marco_venceu_apagado`: os marcos que `marcos_vencidos` da em `ate` e nao dava em `desde`, com a lampada APAGADA na ata. Nada se recalcula.
 - RED de regra no HEAD: 2 FAIL (fecha E/reabre S contava laco; a porta dizia sem fato novo). Os casos do aval mordem: fecha E/reabre S = 0; mesmo marco = 1; a S que venceu ACESA = 1 (nao e fato do furo).
@@ -143,14 +144,16 @@ LEI-AKITA: origem=`ponto/services/cartorio.py::houve_fato_novo` (o juiz que a po
 - Porta `reabrir()` do fecho do ADMIN le o mesmo juiz: o admin que fechou de manha e a S que vence apagada a tarde = fato novo, reabre.
 - Suite inteira na `wt-rfn`: **Ran 12031, OK**; pouso no comboio com a janela (i).
 
-## RAIA-DO-CONTRATO-20 -- a janela (i) do `detectar_ausencias`: a busca da entrada pergunta ao juiz do turno (26/10 01:2x, em comboio)
+## RAIA-DO-CONTRATO-20 -- a janela (i) do `detectar_ausencias`: a busca da entrada pergunta ao juiz do turno (26/10 01:3x, NO AR 01:37:42, `b6d3fa90`)
 LEI-AKITA: origem=`detectar_ausencias` (a busca da entrada), testemunha=`ponto/turnos.py::turnos_do_colab` (`data_turno`, `entrada`), RED=`ponto/tests/test_detectar_entrada_pelo_turno.py::test_E_entrada_6h10_antes_e_do_turno_de_hoje_pelo_juiz`, quem-mais-le=os 50 modulos de teste que citam o command e o `_fechar_chamado` a jusante (mesma Batida), juizes novos=0
 - Construida por agente (sonnet) na raia, lei do dono de 24/10 ~15:0x (opcao (i)); VERIFICADOR antes (sonnet, so leitura): equivalente ao juiz, o pad de dias e interno a `turnos_do_colab`, o objeto devolvido e a mesma `Batida`; pediu o caso do noturno que cruza a meia-noite -- escrito na copia de pouso (`test_G`, OK).
 - Sai a janela propria `-6 h .. +janela_horas` da busca. O GATE de instante (`_janela_deteccao`) fica -- e o item (4) da pergunta QUATRO-PRAZOS no topo.
 - MEDIDO (prod, so leitura, 14 d, agente): 4.574 dia-colab, muda **11 dia-colab / 7 colabs**, todos "velho nao via a entrada, novo ve" -- a cobranca some; cobranca nova 0.
 - `JUIZES_POR_VARREDURA` segue **17** (o gate fica juiz).
+- NO AR: `bin/deploy.sh --sem-migrate` 01:37:42 rc 0 (ensaio de HOJE verde, nenhum sitio de auth), tres rotas, `importerror_500=0`, carimbo `b6d3fa90`; sobem juntos `0d7df400` (E4 parte 3), `311b6a48` e `b6d3fa90`. PROVA: `logs/deploy_comboio_0126.log`.
 
-## CASA-ESCALA-E4 parte 3 -- `semana_do_posto` e o calendario perguntam a juiza "o vinculo cobre a data?" (26/10 00:5x, POUSADO; deploy depois do ensaio)
+## CASA-ESCALA-E4 parte 3 -- `semana_do_posto` e o calendario perguntam a juiza "o vinculo cobre a data?" (26/10 00:5x, POUSADO `0d7df400`; NO AR 01:37:42)
+- PROVA: carimbo `logs/deploy.stamp` COMMIT=`b6d3fa90` (contem `0d7df400`), `logs/deploy_comboio_0126.log` (rc 0, tres rotas).
 LEI-AKITA: origem=`escala/alimentacao.py::vinculo_cobre_a_data` (+ `q_vinculo_cobre_a_data`), testemunha=a juiza, RED=`escala/tests/test_e4_parte3_semana_e_calendario.py` (3 de 5 vermelhos no HEAD), quem-mais-le=`semana_do_posto.py:134` (so leitura) e os 5 chamadores de `contexto_calendario` (so `eh_trabalho`), juizes novos=0
 - Construida por agente proprio (sonnet, aval PARALELO-BARATO) em worktree; pousada pela principal sobre o HEAD `09d076a8` (copia `wt-e4p3`), VERIFICADOR antes (sonnet, so leitura): sem defeito que bloqueie; nao duplica colab (o retorno e dict por colab); a janela de 7 dias OR e equivalente a `inicio<=dom e (fim nulo ou fim>=seg)` menos o sem-vigencia.
 - `escala/services/semana_do_posto.py::_colabs_do_posto`: `ativa=True` + janela a mao -> OR dos 7 dias de `q_vinculo_cobre_a_data`. `colaboradores/services/calendario.py::contexto_calendario` (`_fora`): `data_inicio/data_fim` a mao -> `not vinculo_cobre_a_data(ec, data)`.
