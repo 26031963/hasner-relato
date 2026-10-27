@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/10/2026 15:37:07.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (5.6 MB). Acoes na janela: **204**.
+**Medido em 27/10/2026 15:42:37.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (5.7 MB). Acoes na janela: **209**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 15:41:10 | Bash | Wait for fechar3 progress | `W=/home/ronald/wt-fechar3-2710-1320; h0=$(git -C $W rev-parse HEAD); for i in $(seq 55); do [ "$(git -C $W rev-parse HEAD)" != "$h0" ] && break; /usr/bin/sleep 10; done; git -C $W log --oneline -2 \| cut -c1-150; ls -t /home/ronald/saas-hasner/logs \| grep fechar3 \| head -3; date +%H:%M` |
+| 15:40:56 | Bash | Post papel-prazo question at RELATO top | `cd /home/ronald/saas-hasner && python3 - <<'E' p='app/docs/RELATO.md';s=open(p).read() a='# RELATO — esteira saas-hasner\n\n' q=("> **lei: PAPEL-PRAZO-DISPARAR-PERGUNTAS** (pergunta, nao para a fila; o selo de host `test_papel_prazo_nao_deriva.sh` esta VERMELHO no main desde o 165fee20 e segura o PUSH) -- o sentido (2) do selo (L-101) diz: `disparar_perguntas_competencia` ja DELEGA o prazo ao juiz ...` |
+| 15:40:49 | SendMessage |  | `-` |
+| 15:40:30 | Bash | Add respondido_em and rerun avais seal | `cd /home/ronald/saas-hasner && python3 - <<'E' import json,io p='app/docs/PENDENTES_RONALD.json'; it=json.load(io.open(p,encoding='utf-8')) x=[i for i in it if i.get('id')=='SMOKE-IA-RBAC-DUAS-CASCAS'][0]; x['respondido_em']='2026-10-27T15:2x' r=[i for i in it if i.get('estado')=='respondido' and i.get('respondido_em')][:1]; print(r[0].get('respondido_em') if r else None) io.open(p,'w',encoding='u ...` |
+| 15:39:35 | Bash | Inspect two other red seals | `cd /home/ronald/saas-hasner && bash bin/tests/test_avais_na_mesa.sh 2>&1 \| tail -4; bash bin/tests/test_import_tardio_contra_o_ar.sh 2>&1 \| tail -4` |
 | 15:35:35 | Bash | Run all host seals on live tree | `cd /home/ronald/saas-hasner && n=0; for t in bin/tests/test_*.sh; do timeout 120 bash $t >/dev/null 2>&1 \|\| { echo "RED $t"; n=$((n+1)); }; done; echo "vermelhos=$n de $(ls bin/tests/test_*.sh \| wc -l)"` |
 | 15:35:27 | Bash | Regenerate MAPA-JUIZES and rerun seal | `cd /home/ronald/saas-hasner && docker cp bin/gerar_mapa_juizes.py saas_core:/tmp/g.py && docker exec saas_core python manage.py tenant_command shell --schema=juliani --command "exec(open('/tmp/g.py').read())" 2>&1 \| tail -1; git diff --stat -- app/docs/MAPA-JUIZES.md; bash bin/tests/test_mapa_juizes.sh 2>&1 \| tail -1` |
 | 15:35:22 | Bash | Fix id case; read MAPA generator usage | `cd /home/ronald/saas-hasner && sed -i 's/LAUDO-[nome]-COL94-1610-v2/LAUDO-[nome]-COL94-1610-V2/' app/docs/CORTES.json app/docs/LEIS.md && python3 bin/gerar_cortes.py >/dev/null && bash bin/tests/test_leis_indice.sh 2>&1 \| tail -1; sed -n 3,15p bin/gerar_mapa_juizes.py` |
