@@ -6,10 +6,20 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/10/2026 03:42:05.** Transcript: `68b80ae1-8c10-4eac-b412-ca643624b286.jsonl` (3.4 MB). Acoes na janela: **134**.
+**Medido em 27/10/2026 03:47:35.** Transcript: `68b80ae1-8c10-4eac-b412-ca643624b286.jsonl` (3.6 MB). Acoes na janela: **144**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 03:46:49 | Bash |  | `cd /home/ronald/saas-hasner; for i in $(seq 1 29); do grep -qE '^(OK\|FAILED)($\| \()' logs/suite_he100a3.log 2>/dev/null && break; /usr/bin/sleep 20; done; grep -E '^(OK\|FAILED)($\| \()' logs/suite_he100a3.log \| tail -1; grep -E '^Ran [0-9]+ tests' logs/suite_he100a3.log \| tail -1; date +%H:%M` |
+| 03:46:45 | Agent | Build ABONADO cure (sonnet) | `Construa a cura ABONADO-COM-SAIDA-ANTECIPADA no repo /home/ronald/saas-hasner (Django em app/). Leia antes /home/ronald/saas-hasner/CLAUDE.md secoes 0, 3, 4, 6, 7b. NUNCA edite /home/ronald/saas-hasner (arvore viva = bind-mount de prod); sem merge/push/deploy; sem escrita em prod. COPIA: crie `git -C /home/ronald/saas-hasner worktree add -b abono-2710 /home/ronald/wt-abono-2710-0350 he100a-2710` ( ...` |
+| 03:46:05 | Bash |  | `cd /home/ronald/saas-hasner && python3 -c "import json;print(json.load(open('app/config/crons_duracao.json'))['dur_s'].get('sombra.sh'))"; ls logs/crons_em_curso/ 2>/dev/null \| head` |
+| 03:46:00 | Bash |  | `sed -i 's/medido 27\/10 03:5x (sombra/medido 27\/10 03:4x (sombra/; s/\| 27\/10 03:5x \|$/\| 27\/10 03:4x \|/' docs/BACKLOG.md && grep -c "03:4x" docs/BACKLOG.md` |
+| 03:45:57 | Bash |  | `date +%H:%M && python3 - <<'EOF' p='docs/RELATO.md' s=open(p).read() a='- CADASTRO: os sem escala certa (col956/960/936 nominais)' assert s.count(a)==1 add='''- Verificador 2a vez NAO POUSA (universo do calculador via `fora_por_dia` pegava turno aberto/dia comum): restringido (`98bf1089`) a lista que o MOTOR publica (`dias_sem_previsto_fora_da_janela`); contador proprio `par_bloqueado_sem_previsto ...` |
+| 03:45:41 | SendMessage |  | `-` |
+| 03:45:29 | Bash |  | `sed -n 175p docs/CORTES.md \| grep -o "corte Ronald: juiz par_completo nasce[^\|]\{0,200\}"; sed -n 182p docs/CORTES.md \| cut -c300-1400` |
+| 03:45:24 | Bash |  | `grep -n "Q3" docs/PROMPTS.md \| sed -n 1,5p \| cut -c1-500; grep -n "corte Ronald: juiz" docs/CORTES.md \| grep -i "par" \| cut -c1-200` |
+| 03:45:21 | Bash |  | `grep -n "corte Ronald: juiz par_completo nasce\\|juiz par_completo" docs/CORTES.md \| head -5 \| cut -c1-300; sed -n 84p docs/RELATO.md \| cut -c1-600` |
+| 03:45:15 | Bash |  | `cd /home/ronald/saas-hasner && bash bin/suite.sh --dir /home/ronald/wt-he100a-2710-0145 --espera 1800 > logs/suite_he100a3.log 2>&1; echo rc=$?; grep -E '^(OK\|FAILED)($\| \()' logs/suite_he100a3.log \| tail -1; grep -E '^Ran [0-9]+ tests' logs/suite_he100a3.log \| tail -1` |
 | 03:40:50 | Bash |  | `cd /home/ronald/saas-hasner && sed "s/rot = 'antes_solo'/rot = 'depois_solo'/" logs/sombra/he100_diapago_frota_antes_solo.py > logs/sombra/he100_diapago_frota_depois_solo.py && SOMBRA_ARVORE=/home/ronald/wt-he100a-2710-0145/app bin/sombra.sh --rodar he100_diapago_frota_depois_solo.py he100_dp_depois_solo >/dev/null 2>&1; grep -E "^LINHAS\|Traceback" logs/he100_dp_depois_solo.out; python3 - <<'EOF' ...` |
 | 03:36:28 | Bash |  | `cd /home/ronald/saas-hasner && python3 - <<'EOF' s=open('logs/sombra/he100_diapago_frota_antes.py').read() s=s.replace("""for e in Emp.objects.filter(ativa=True).order_by('pk'): recalcular_fechamento_mes(10, 2026, empresa_id=e.pk, somente_leitura=True, lavrar_dias_pagos=True)""", """# UM COLAB POR CHAMADA (sem lote): a mesma frota, para comparar com a corrida em lote (vazamento entre colabs). from ...` |
 | 03:35:58 | Bash |  | `cd /home/ronald/saas-hasner && cat > logs/sombra/col922_emp.py <<'EOF' # col922: quantas empresas o processam na comp 10 (a sonda de frota guarda a ULTIMA gravacao por chave). SO LEITURA. from django.apps import apps from ponto.services import dia_pago as _dp from ponto.services.fechamento import recalcular_fechamento_mes Emp = apps.get_model('colaboradores', 'Empresa') cur = [None] def _l(*a, **k ...` |
