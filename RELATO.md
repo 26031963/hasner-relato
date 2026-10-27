@@ -180,6 +180,15 @@ PAREI: ! GATE-EXPORT-10 (so o export da 10) | espera o DP na Gestao de HE e o Ro
 > O MARCADOR ANDOU no mesmo ato: `ORDEM-VIVA-TOPO` saiu de `BO-HE-RECUSAR-LOTE-500` (fechado) para `O261`, que o hook cobrou.
 > SEM COMMIT DE PROPOSITO: `RELATO.md` e `BACKLOG.md` ficam sujos na arvore porque a L-106 nao deixa commit so de docs fora de marco. Eles entram no commit do proximo marco.
 
+## ABONADO NO AR + APPLY da 10 -- 3df9c01f (27/10 06:5x)
+LEI-AKITA: origem=ponto/motor_calculo_v2.py::_aplicar_teto_pontualidade + ponto/turnos.py::dias_com_ausencia_de_dia_inteiro, testemunha=cobertura_ausencia_periodo(para=folha) + efeito vigente ABONA, RED=test_abono_dia_inteiro_zera_pontualidade, quem-mais-le=FM, DiaPago motor/oraculo, espelho, pdf, diff_*, esmeril, juizes novos=0
+- Pouso L-107: copia de pouso (main 87b42b45 + abono-2710) suite inteira **Ran 12242 OK**; cmp 0 de 16; commit `3df9c01f`; deploy rc 0 (3 rotas, importerror_500=0).
+- Restricao a efeito ABONA (verificador, 2a rodada): mesmo criterio do fechamento para `datas_justificadas`; generaliza o "falta fora" da composicao. DIFF de frota IDENTICO com e sem ela. Reversao da escolha: tirar o `a.efeito == ABONA` de `dias_com_ausencia_de_dia_inteiro` volta ao predicado da grade.
+- APPLY comp 10 (7b): reversao ANTES `logs/reversao_abono_comp10_20261027.json` (8 FM + 322 DiaPago + 21 hashes); recalculo dos 8 (`logs/apply_abono_comp10_20261027.out`).
+- PROVA: 21 hashes iguais; 0 exportacoes da 10; PROD x sombra 27/10 com a arvore pousada (`abono_fm_depois2.json`): **8 colabs x 6 campos, 0 diferem**. col841 10/10 saida antecipada 7,32 -> 0; total -36,72 h saida antecipada + -2,58 h atraso.
+- Reversao: campos do FM pelo JSON de reversao + relavrar DiaPago com `87b42b45`; codigo por revert de `3df9c01f` + deploy.
+INCOMPLETO: `ESMERIL-EXIGE-MEMOS-NO-TRY` (fila 2: `esmeril_espelho.py:157-168` engole a excecao do exige_memos).
+
 ## RAIA-DO-CONTRATO-20-NOITE -- (1) e (2) NO AR, (3) espera o ABONADO (27/10 05:5x)
 PROVA: deploy rc 0 x2 (3 rotas OK, importerror_500=0); fechador --apply: 65 linhas `VINCULO|na_lista` em `logs/c2_fechador_apply_20261027.out`; re-dry `vivos=19|na_lista=0|fora_da_lista=19|linhas_C8=68`; `juizes_por_varredura()` no vivo = 7.
 LEI-AKITA: origem=detectar_vinculo_divergente (lavra C8) / ponto/turnos.py::par_completo / registro_batida.canal_da_batida, testemunha=lavra C8, turnos_do_colab+dias_encerrados, device_id, RED=c2 8/9, par 3, canal import, quem-mais-le=lista do admin + geofence / detectar_par_relampago / 3 portas origem=app, juizes novos=1 (par_completo, CORTES.md:175)
