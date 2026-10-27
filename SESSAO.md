@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/10/2026 07:00:51.** Transcript: `68b80ae1-8c10-4eac-b412-ca643624b286.jsonl` (5.4 MB). Acoes na janela: **229**.
+**Medido em 27/10/2026 07:05:50.** Transcript: `68b80ae1-8c10-4eac-b412-ca643624b286.jsonl` (5.4 MB). Acoes na janela: **230**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 07:03:00 | Bash |  | `cd /home/ronald/saas-hasner; for i in $(seq 1 29); do grep -q "^rc=" logs/suite_canal_pouso.log 2>/dev/null && break; /usr/bin/sleep 20; done; grep -E '^(OK\|FAILED)($\| \()' logs/suite_canal_pouso.log \| tail -1; grep -E '^Ran [0-9]+' logs/suite_canal_pouso.log \| tail -1; bin/trava_teste.sh --quem; date +%H:%M` |
 | 06:53:16 | Bash |  | `cd /home/ronald/saas-hasner; for i in $(seq 1 29); do grep -q "^rc=" logs/suite_canal_pouso.log 2>/dev/null && break; /usr/bin/sleep 20; done; grep -E '^(OK\|FAILED)($\| \()' logs/suite_canal_pouso.log \| tail -1; grep -E '^Ran [0-9]+' logs/suite_canal_pouso.log \| tail -1; bin/trava_teste.sh --quem; date +%H:%M` |
 | 06:53:11 | Bash |  | `cd /home/ronald/saas-hasner && git worktree add -q -b canal-pouso /home/ronald/wt-canal-pouso-2710-0655 main && cd /home/ronald/wt-canal-pouso-2710-0655 && git cherry-pick bf51aaa0 2>&1 \| tail -1; git status --short \| grep -E "^(UU\|AA)"; git log --oneline -2; mkdir -p app/logs app/media; cd /home/ronald/saas-hasner && (bash bin/suite.sh --dir /home/ronald/wt-canal-pouso-2710-0655 --espera 3600  ...` |
 | 06:53:00 | Bash |  | `date +%H:%M && python3 - <<'EOF' p='docs/RELATO.md' s=open(p).read() anc='## RAIA-DO-CONTRATO-20-NOITE -- (1) e (2) NO AR, (3) espera o ABONADO (27/10 05:5x)' assert s.count(anc)==1 sec='''## ABONADO NO AR + APPLY da 10 -- 3df9c01f (27/10 06:5x) LEI-AKITA: origem=ponto/motor_calculo_v2.py::_aplicar_teto_pontualidade + ponto/turnos.py::dias_com_ausencia_de_dia_inteiro, testemunha=cobertura_ausencia ...` |
