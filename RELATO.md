@@ -166,6 +166,14 @@ PAREI: ! GATE-EXPORT-10 (so o export da 10) | espera o DP na Gestao de HE e o Ro
 > O MARCADOR ANDOU no mesmo ato: `ORDEM-VIVA-TOPO` saiu de `BO-HE-RECUSAR-LOTE-500` (fechado) para `O261`, que o hook cobrou.
 > SEM COMMIT DE PROPOSITO: `RELATO.md` e `BACKLOG.md` ficam sujos na arvore porque a L-106 nao deixa commit so de docs fora de marco. Eles entram no commit do proximo marco.
 
+## FOTO-X-VIVO -- fotos_paradas 1/4 -> 0/4 em prod (26/10 21:5x)
+- O 1/4 (emp1, comp 10, foto de 20/10) nao era defeito: o cron da manha (09:36) rodou ANTES do deploy da cura (~13:00) e a minha rodada manual das 13:0x passou `--empresas 2,3,4`. Rodado o cron (idempotente, adiantado a mao pela secao 7) so para a emp1 (0 dias na foto): `fotos_paradas` = **0 de 4** pela funcao real.
+
+## R1-FLIP-NAO-VIROU -- os 12 pares tem dono fora da ESTRUTURA (26/10 21:5x, medido)
+LEI-AKITA: origem=(nenhuma: medido), testemunha=ponto/turnos.py::decidir_tipo_estrito + ponto/services/flip_auto.py::veredito_flip_auto (o flip REAL simulado, `logs/r1_flip_297.out`), RED=(nao ha), quem-mais-le=fila humana do flip, juizes novos=0
+- Dos 12 (censo 12:0x): 6 a 11-90 min do marco (o flip exige <= 10, regra do decisor) e 2 a > 90 -> BATIDA; 1 sem hii/hfi -> CADASTRO; 3 "o flip nao virou": col950 (colab de TESTE, origem `disputa_s84_retro` intocavel) e col297 22/09 e 13/10, onde o flip RODOU e recusou pela propria regra -- "decisor propoe 2 flips (ambiguo)": o mandato de 18/08 so vira sozinho flip UNICO; o resto vai a fila humana (botao <->) com o motivo. Dono BATIDA.
+- L-099: CADASTRO e BATIDA vao a lista do admin; proibido curar por codigo. Nada de estrutura.
+
 ## DIA-DA-DEMISSAO-FORA-DO-UNIVERSO -- MEDIDO na 10: o defeito da 09 NAO se reproduz; nada de ESTRUTURA a curar (26/10 21:4x)
 LEI-AKITA: origem=(nenhuma -- medido, sem defeito de estrutura na 10), testemunha=escala/alimentacao.py::vinculo_do_dia_carregado + ponto/supra_juiz.py::classificar_dia (espiado, nao replicado), RED=(nao ha: sem defeito), quem-mais-le=cartorio/DiaPago/folha, juizes novos=0
 - Sombra (04:00), comp 10, **16 desligados** com demissao na competencia (`logs/demissao_10.out`): vinculo com `data_fim == D` em **16/16**; todo D de trabalho TEM linha de DiaPago -- o "19 de 28 dias da 09 sem lavratura" nao existe da 10 em diante (aval (c): a 09 fica como esta).
