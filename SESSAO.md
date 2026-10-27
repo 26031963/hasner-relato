@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/10/2026 18:17:06.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (8.8 MB). Acoes na janela: **340**.
+**Medido em 27/10/2026 18:22:37.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (8.8 MB). Acoes na janela: **342**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 18:19:09 | Bash | Wait for push or cobertura progress | `W=/home/ronald/wt-cobertura-2710-1810; h0=$(git -C $W rev-parse HEAD); for i in $(seq 57); do [ "$(git -C $W rev-parse HEAD)" != "$h0" ] && break; grep -q '^push_rc' /home/ronald/saas-hasner/logs/push_2710_1805.log 2>/dev/null && break; /usr/bin/sleep 10; done; tail -3 /home/ronald/saas-hasner/logs/push_2710_1805.log \| cut -c1-120; git -C $W log --oneline -1 \| cut -c1-90; git -C /home/ronald/wt- ...` |
+| 18:19:00 | Bash | Register O245 coverage layer aval | `cd /home/ronald/saas-hasner && grep -n "^\| O245 " app/docs/BACKLOG.md \| cut -c1-80; python3 - <<'E' import json d='/home/ronald/saas-hasner/app/docs/' f="aval Ronald O245-CAMADA-COBERTURA: sai do gatilho 20/20 so a camada de cobertura do diagrama/MAPA, gerada do codigo (nunca a mao): por familia de core/juizes.py, cada PERGUNTA -> juiz -> contador fora_de_autoridade -> sitios que respondem a mes ...` |
 | 18:08:45 | Bash | Wait for push or cobertura commit | `W=/home/ronald/wt-cobertura-2710-1810; h0=$(git -C $W rev-parse HEAD); for i in $(seq 57); do [ "$(git -C $W rev-parse HEAD)" != "$h0" ] && break; grep -q '^push_rc' /home/ronald/saas-hasner/logs/push_2710_1805.log 2>/dev/null && break; /usr/bin/sleep 10; done; tail -3 /home/ronald/saas-hasner/logs/push_2710_1805.log \| cut -c1-120; git -C $W log --oneline -1 \| cut -c1-90; date +%H:%M` |
 | 18:08:32 | Agent | Construir COBERTURA-PARCIAL-UM-JUIZ | `Voce e o CONSTRUTOR da obra COBERTURA-PARCIAL-UM-JUIZ (BO-[nome] (A)) no repo /home/ronald/saas-hasner (ponto CLT, Django). Leia /home/ronald/saas-hasner/CLAUDE.md INTEIRO antes (secao 0 com a L-123 PADRAO-NA-CURA, 3, 4, 6, 7b). COPIA: /home/ronald/wt-cobertura-2710-1810 (branch cobertura-2710, do main 987640b7; tem app/logs e app/media). Nunca edite /home/ronald/saas-hasner (producao). Nada de  ...` |
 | 18:08:09 | Bash | Create copy for COBERTURA obra | `cd /home/ronald/saas-hasner && W=/home/ronald/wt-cobertura-2710-1810 && git worktree add -b cobertura-2710 $W HEAD 2>&1 \| tail -1; mkdir -p $W/app/logs $W/app/media; git -C $W log --oneline -1 \| cut -c1-60` |

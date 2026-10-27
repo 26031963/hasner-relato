@@ -320,6 +320,7 @@ Estavam no indice como vigentes e alguma clausula nao tem efeito. Gerada do ESTA
 - `BO-[nome]-NOMES`
 - `BO-ADMIN-2710-LEIS`
 - `FIO-LE-O-JUIZ-6984`
+- `O245-CAMADA-COBERTURA`
 
 ## CORTES que viraram lei
 
