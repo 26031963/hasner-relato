@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/10/2026 15:05:50.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (4.8 MB). Acoes na janela: **180**.
+**Medido em 27/10/2026 15:10:51.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (5.0 MB). Acoes na janela: **183**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 15:09:26 | Bash | Wait for fechar3 next commit | `W=/home/ronald/wt-fechar3-2710-1320; h0=$(git -C $W rev-parse HEAD); for i in $(seq 57); do [ "$(git -C $W rev-parse HEAD)" != "$h0" ] && break; /usr/bin/sleep 10; done; git -C $W log --oneline -3 \| cut -c1-150; git -C $W status --porcelain \| grep -v '^??' \| head -4; date +%H:%M` |
+| 15:09:10 | Agent | Origem dos +65 dias de HE | `Voce e MEDIDOR (so leitura, nenhum arquivo do repo editado, nenhuma escrita em banco) no repo /home/ronald/saas-hasner (ponto CLT, Django multi-tenant, prod no container saas_core, schema juliani). Leia /home/ronald/saas-hasner/CLAUDE.md secao 6 (SHELL, ZONA INVIOLAVEL) antes. PERGUNTA (aval Ronald 27/10 15:0x): "publicar no RELATO de onde vieram os +65 dias da lista_he_trava (184 -> 249) depois d ...` |
+| 15:08:54 | Bash | Mark TOL answered and locate lista files | `cd /home/ronald/saas-hasner && python3 - <<'E' import json p='app/docs/RELATO.md';L=open(p).read().split('\n') for i,l in enumerate(L[:6]): if l.startswith('> **lei: CONTRATO-20-TOL-DUAS-PONTAS**'): L[i]='> **RESPONDIDA 27/10 15:0x: CONTRATO-20-TOL-DUAS-PONTAS = (b)** -- a orfa com entrada no marco e saida muito antes do fim fica para INVESTIGAR; o TOL segue so pela saida; o (2.3) de 13:5x RETIRAD ...` |
 | 14:59:11 | Bash | Wait for fechar3 next commit | `W=/home/ronald/wt-fechar3-2710-1320; h0=$(git -C $W rev-parse HEAD); for i in $(seq 57); do [ "$(git -C $W rev-parse HEAD)" != "$h0" ] && break; /usr/bin/sleep 10; done; git -C $W log --oneline -3 \| cut -c1-150; date +%H:%M` |
 | 14:58:57 | Bash | Move misplaced lines; register 4 reverted | `cd /home/ronald/saas-hasner && python3 - <<'E' p='app/docs/RELATO.md';L=open(p).read().split('\n') g3=[i for i,l in enumerate(L) if l.startswith('- G3 col444 (aval 14:4x')] lh=[i for i,l in enumerate(L) if l.startswith('- `lista_he_trava` re-lavrada 14:48')] assert len(g3)==1 and len(lh)==1 and lh[0]==g3[0]+1 mv=[L[g3[0]],L[lh[0]]]; del L[g3[0]:lh[0]+1] k=[i for i,l in enumerate(L) if l.startswith ...` |
 | 14:58:44 | Bash | Read REJULGAR section written by agent | `cd /home/ronald/saas-hasner && sed -n 201,240p app/docs/RELATO.md \| cut -c1-220` |
