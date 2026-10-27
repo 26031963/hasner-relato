@@ -194,6 +194,12 @@ PAREI: ! GATE-EXPORT-10 (so o export da 10) | espera o DP na Gestao de HE e o Ro
 > O MARCADOR ANDOU no mesmo ato: `ORDEM-VIVA-TOPO` saiu de `BO-HE-RECUSAR-LOTE-500` (fechado) para `O261`, que o hook cobrou.
 > SEM COMMIT DE PROPOSITO: `RELATO.md` e `BACKLOG.md` ficam sujos na arvore porque a L-106 nao deixa commit so de docs fora de marco. Eles entram no commit do proximo marco.
 
+## PERGUNTA-DO-DIA-EM-CURSO (b) -- pouso (27/10 12:1x)
+LEI-AKITA: origem=chamados/services/fabrica_da_celula.py (teto por instante) + ponto/services/vigia_de_hora.py (candidatura de ontem) + cartorio._julgar_colab_corpo, testemunha=cartorio.marcos_vencidos + turnos.dia_encerrado (margem lida do juiz), RED=test_pergunta_do_dia_em_curso (`logs/pergunta_dia/red_aberto_vivo.log` e os RED por rodada), quem-mais-le=vigia_de_hora, cartorio, disparar_perguntas_competencia (segue emissor --apply ate o fio mudo), juizes novos=0
+- Comboio de 1 (so ela pronta): copia de pouso `wt-pergunta-pouso2-2710-1205` (main aec67e6c + pergunta-dia-2710): suite inteira **Ran 12299 OK**; cmp citado no commit.
+- DIFF do universo (prod, 30 d): futuro 48 e passado nao vencido 23 (noturnos) deixam de nascer cedo; hoje vencido 68 pelo evento; custo do vigia 07:40 2,1 -> ~4,8 s, 15:00 9,9 -> ~13,6 s antes da cura da chamada unica.
+CUSTO: verificador 6 voltas -- teto por DATA sobrevivente e turno que cruza a meia-noite (DESENHO), vigia por fim e nao por vencimento + juiz da meia-noite (DESENHO), guarda assimetrica (DESCUIDO), docstrings (DESCUIDO x2), janela do vigia x lei do turno aberto e impressao igual cartorio/vigia (DESENHO), chamada dupla da juiza (custo), testes enfraquecidos (DESCUIDO); construtor sonnet ~350 mil tokens.
+
 ## REJULGAR-COMP10 universo A NO AR (LAUDO-[nome] corrigido) -- 27/10 12:1x
 LEI-AKITA: origem=rejulgamento pendente das obras ATA-X-TURNO (saida) e CELULA-CONCORDE-NO-MEIO-DO-TURNO, testemunha=cartorio (`julgar_colab(forcar=True)`, porta), RED=sonda na sombra com rollback, quem-mais-le=chamados, retencao da folha, DiaPago, juizes novos=0
 - Universo A medido na sombra: 13 colabs (33, 80, 115, 221, 255, 288, 296, 325, 390, 562, 826, 869, 874), 20 celulas, so furo/fato_sem_previsao -> concorde; ata, fechamento e DiaPago 0.
