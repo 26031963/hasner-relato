@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/10/2026 07:10:50.** Transcript: `68b80ae1-8c10-4eac-b412-ca643624b286.jsonl` (5.4 MB). Acoes na janela: **230**.
+**Medido em 27/10/2026 07:15:50.** Transcript: `68b80ae1-8c10-4eac-b412-ca643624b286.jsonl` (5.4 MB). Acoes na janela: **231**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 07:12:44 | Bash |  | `cd /home/ronald/saas-hasner; for i in $(seq 1 29); do grep -q "^rc=" logs/suite_canal_pouso.log 2>/dev/null && break; /usr/bin/sleep 20; done; grep -E '^(OK\|FAILED)($\| \()' logs/suite_canal_pouso.log \| tail -1; grep -E '^Ran [0-9]+' logs/suite_canal_pouso.log \| tail -1; grep -E "^(FAIL\|ERROR):" logs/suite_canal_pouso.log \| head; date +%H:%M` |
 | 07:03:00 | Bash |  | `cd /home/ronald/saas-hasner; for i in $(seq 1 29); do grep -q "^rc=" logs/suite_canal_pouso.log 2>/dev/null && break; /usr/bin/sleep 20; done; grep -E '^(OK\|FAILED)($\| \()' logs/suite_canal_pouso.log \| tail -1; grep -E '^Ran [0-9]+' logs/suite_canal_pouso.log \| tail -1; bin/trava_teste.sh --quem; date +%H:%M` |
 | 06:53:16 | Bash |  | `cd /home/ronald/saas-hasner; for i in $(seq 1 29); do grep -q "^rc=" logs/suite_canal_pouso.log 2>/dev/null && break; /usr/bin/sleep 20; done; grep -E '^(OK\|FAILED)($\| \()' logs/suite_canal_pouso.log \| tail -1; grep -E '^Ran [0-9]+' logs/suite_canal_pouso.log \| tail -1; bin/trava_teste.sh --quem; date +%H:%M` |
 | 06:53:11 | Bash |  | `cd /home/ronald/saas-hasner && git worktree add -q -b canal-pouso /home/ronald/wt-canal-pouso-2710-0655 main && cd /home/ronald/wt-canal-pouso-2710-0655 && git cherry-pick bf51aaa0 2>&1 \| tail -1; git status --short \| grep -E "^(UU\|AA)"; git log --oneline -2; mkdir -p app/logs app/media; cd /home/ronald/saas-hasner && (bash bin/suite.sh --dir /home/ronald/wt-canal-pouso-2710-0655 --espera 3600  ...` |
