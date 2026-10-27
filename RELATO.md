@@ -162,6 +162,14 @@ PAREI: ! GATE-EXPORT-10 (so o export da 10) | espera o DP na Gestao de HE e o Ro
 > O MARCADOR ANDOU no mesmo ato: `ORDEM-VIVA-TOPO` saiu de `BO-HE-RECUSAR-LOTE-500` (fechado) para `O261`, que o hook cobrou.
 > SEM COMMIT DE PROPOSITO: `RELATO.md` e `BACKLOG.md` ficam sujos na arvore porque a L-106 nao deixa commit so de docs fora de marco. Eles entram no commit do proximo marco.
 
+## CONTRATO-19-DE-VOLTA, metade 2 -- a PORTA que reconcilia o legado (26/10 21:1x, POUSADO; suite inteira Ran 12185 OK rc 0)
+LEI-AKITA: origem=chamados/models.py::ChamadoColaborador.reconciliar_trilha_do_estado, testemunha=chamados/services/vigia_loop.py::trilha_x_banco, RED=chamados/tests/test_reconciliar_trilha_do_estado.py, quem-mais-le=trilha_x_banco, trocas_de_estado_em_loop, historico, escritas_por_cron, juizes novos=0
+- A porta acrescenta UMA linha `ultima linha -> banco`, `via='trilha_reconciliada'`; NAO reescreve linha velha, NAO toca o estado; idempotente. RED 3 ERROR no HEAD.
+- `_gravar_estado` ficou byte a byte o de b4bd51ad: a extracao para um helper derrubou `core/tests/test_contract_trilha.py` (o `evento()` tem de estar DENTRO do gate, por AST) -- o selo nao se mexeu, a extracao saiu.
+- APPLY em prod pela porta (`logs/apply_reconciliar_trilha_20261026.py`): `trilha_x_banco` **210 -> 0** (universo 18.834) pela funcao real; 210 linhas, **0 estado mudou**; reversao com os 210 ids em `logs/reconciliar_trilha_ids_20261026.json`.
+- CELULA (chamado, um escritor por entidade) VOLTA A VERDE -- as 3 condicoes escritas quando caiu; `linha_do_placar()` = **contratos_estruturais: 19/20 verdes** (`logs/placar_estrutural/contratos_20261026_2116.txt`). Volta a cair se `trilha_x_banco` sair de 0.
+- Topo do RELATO (aval 21:0x): 9 linhas mortas em forma aberta viraram RESPONDIDA (as 8 dele + a copia aberta do HOUVE-FATO-NOVO, respondida 01:1x); QUATRO-PRAZOS reduzida ao item (3), `FOTO-AUSENTE-SEM-JUIZ-DO-PRAZO`. ACHADO: o handoff le so 12 linhas do topo e perdia a pergunta aberta -- cura de instrumento em pouso proprio (L-105), `c1bb51e6` na copia.
+
 ## CONTRATO-19-DE-VOLTA, metade 1 -- a CAUSA do trilha_x_banco, reproduzida na sombra (26/10 20:0x)
 LEI-AKITA: origem=chamados/models.py::_gravar_estado + chamados/signals.py::disputa_fechada_fecha_chamado_pai, testemunha=vigia_loop.trilha_x_banco + premissa_regularizada(para='folha'), RED=chamados/tests/test_trilha_na_ordem_da_escrita.py + test_laco_ausencia_aberta_nao_vai_e_volta.py, quem-mais-le=trilha_x_banco/trocas_de_estado_em_loop/historico/escritas_por_cron/reabrir, juizes novos=0
 - REPRODUZIDO na sombra (`logs/repro_flap_34127b.out`, o 2o clique do admin de 11:40 no #34127): `_gravar_estado` fazia `save()` e so DEPOIS a linha; o `save()` dispara o cartorio, que REABRE o mesmo chamado por outra instancia POR DENTRO dele. A linha da 1a escrita entrava depois da 2a. Nem lost update nem rollback: REENTRADA.
