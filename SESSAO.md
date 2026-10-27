@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/10/2026 18:38:50.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (9.2 MB). Acoes na janela: **351**.
+**Medido em 27/10/2026 18:44:07.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (9.2 MB). Acoes na janela: **352**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 18:39:28 | Bash | Wait for next FIO commit | `W=/home/ronald/wt-fio-2710-1835; h0=$(git -C $W rev-parse HEAD); for i in $(seq 57); do [ "$(git -C $W rev-parse HEAD)" != "$h0" ] && break; /usr/bin/sleep 10; done; git -C $W log --oneline -2 \| cut -c1-110; date +%H:%M` |
 | 18:32:49 | Bash | Wait for FIO commit | `W=/home/ronald/wt-fio-2710-1835; h0=$(git -C $W rev-parse HEAD); for i in $(seq 57); do [ "$(git -C $W rev-parse HEAD)" != "$h0" ] && break; /usr/bin/sleep 10; done; git -C $W log --oneline -2 \| cut -c1-110; date +%H:%M` |
 | 18:32:35 | Agent | Construir FIO-LE-O-JUIZ | `Voce e o CONSTRUTOR da obra FIO-LE-O-JUIZ (BO-[nome] (C), complemento do FECHAR-PERGUNTA-A-PREMISSA, que pousou em 927d8a02) no repo /home/ronald/saas-hasner (ponto CLT, Django). Leia /home/ronald/saas-hasner/CLAUDE.md INTEIRO (secao 0 com a L-123 PADRAO-NA-CURA, 3, 4a, 6). COPIA: /home/ronald/wt-fio-2710-1835 (branch fio-le-o-juiz-2710, do main 0baf575f; tem app/logs e app/media). Nunca edite / ...` |
 | 18:32:17 | Bash | Move marker to FIO-LE-O-JUIZ; create copy | `cd /home/ronald/saas-hasner && python3 - <<'E' p='/home/ronald/saas-hasner/app/docs/BACKLOG.md';s=open(p).read() a='<!-- ORDEM-VIVA-TOPO: JUIZ-DO-PAR-DUAS-ENTRADAS -->\n' assert s.count(a)==1 s=s.replace(a,'<!-- ORDEM-VIVA-TOPO: FIO-LE-O-JUIZ -->\n<!-- ANDOU 27/10 18:3x, de `JUIZ-DO-PAR-DUAS-ENTRADAS` (PAREI ! no topo do RELATO: col457 07/09 move dinheiro na comp 09) para `FIO-LE-O-JUIZ` (BO-MAURI ...` |
