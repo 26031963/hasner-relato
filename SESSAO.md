@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/10/2026 16:30:47.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (6.8 MB). Acoes na janela: **253**.
+**Medido em 27/10/2026 16:35:50.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (6.9 MB). Acoes na janela: **257**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 16:35:39 | Bash | Check deploy stamp the seal compares to | `cd /home/ronald/saas-hasner && bash bin/tests/test_import_tardio_contra_o_ar.sh 2>&1 \| head -5; cat logs/deploy.stamp \| head -5` |
+| 16:34:53 | Bash | Inspect import_tardio red | `cd /home/ronald/saas-hasner && bash bin/tests/test_import_tardio_contra_o_ar.sh 2>&1 \| tail -4` |
+| 16:30:55 | Bash | Run all host seals on live tree | `cd /home/ronald/saas-hasner && n=0; for t in bin/tests/test_*.sh; do timeout 120 bash $t >/dev/null 2>&1 \|\| { echo "RED $t"; n=$((n+1)); }; done; echo "vermelhos=$n de $(ls bin/tests/test_*.sh \| wc -l)"` |
+| 16:30:45 | Bash | MORDE 2: AnnAssign alias red with new, green with old | `T=/home/ronald/wt-selomorde-2710-1640; S=$T/bin/tests/test_papel_prazo_nao_deriva.sh; F=$T/app/ponto/services/vigia_de_hora.py; python3 - "$F" <<'E' import sys p=sys.argv[1];s=open(p).read() a=' """Uma passada da vigia de hora numa empresa. -> dict de contadores"""\n' assert s.count(a)==1 s=s.replace(a,a+' from django.utils import timezone as _tzx\n _hv: object = _tzx.localdate()\n if agora.date() ...` |
 | 16:30:33 | Bash | MORDE 1: remove exception; prepare MORDE 2 | `T=/home/ronald/wt-selomorde-2710-1640; S=$T/bin/tests/test_papel_prazo_nao_deriva.sh; cp $S /tmp/claude-1001/-home-ronald-saas-hasner-app/bea8f2b7-21d4-4d42-afd2-993c9f814f8f/scratchpad/orig.sh # (1) excecao removida sed -i "s/ 'disparar_perguntas_competencia': {/ 'disparar_perguntas_competencia_X': {/" $S; bash $S 2>&1 \| tail -3; echo "rc1=$?" cp /tmp/claude-1001/-home-ronald-saas-hasner-app/bea ...` |
 | 16:30:25 | Bash | Temp worktree for MORDE proof; locate exception dict | `cd /home/ronald/saas-hasner && T=/home/ronald/wt-selomorde-2710-1640 && git worktree add --detach $T HEAD >/dev/null 2>&1; git -C $T log --oneline -1 \| cut -c1-40; cp bin/tests/test_papel_prazo_nao_deriva.sh $T/bin/tests/; python3 - "$T/bin/tests/test_papel_prazo_nao_deriva.sh" <<'E' import sys,re p=sys.argv[1];s=open(p).read() i=s.index('EXCECOES_DE_DELEGACAO') print(s[i:i+300]) E` |
 | 16:30:12 | Bash | Patch selo AnnAssign + declaration; run on live tree | `cd /home/ronald/wt-c20tol-2710-1405 && python3 - <<'E' p='bin/tests/test_papel_prazo_nao_deriva.sh';s=open(p).read() old=""" apelidos = {} for x in ast.walk(no): if isinstance(x, ast.Assign) and len(x.targets) == 1 and isinstance(x.targets[0], ast.Name): _r = expr_do_relogio(x.value) if _r: apelidos[x.targets[0].id] = _r """ new=""" # O QUE ELE NAO RESOLVE (declarado, verificador 27/10 16:2x): `fr ...` |
