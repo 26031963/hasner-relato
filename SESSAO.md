@@ -6,10 +6,20 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 26/10/2026 22:10:35.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (54.8 MB). Acoes na janela: **632**.
+**Medido em 26/10/2026 22:16:05.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (55.1 MB). Acoes na janela: **642**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 22:15:37 | Bash | How calcular_periodo uses the window | `/bin/grep -n "_janela_do_par(" ponto/motor_calculo_v2.py \| head; n=$(/bin/grep -n "_janela_do_par(" ponto/motor_calculo_v2.py \| sed -n 2p \| cut -d: -f1); sed -n "$((n-3)),$((n+30))p" ponto/motor_calculo_v2.py \| cut -c1-160` |
+| 22:15:22 | Bash | Read the O263-FT test | `sed -n 1,200p ponto/tests/test_o263ft_folga_nao_tem_marco.py \| cut -c1-170` |
+| 22:15:17 | Bash | Find O263-FT test fixtures | `cd /home/ronald/saas-hasner && tail -2 logs/push_marco_2200.out; cd app && git grep -ln "O263-FT" -- '*/tests/*.py' \| head -5` |
+| 22:14:55 | Bash | Measure previsto judge and col841 days | `cd /home/ronald/saas-hasner && cat > logs/sombra/he100_previsto.py <<'EOF' # HE100: o juiz do previsto nos dias-alvo + o espelho/DiaPago de col841 (17/10, 20/10, 10/10) e col43 12/10. SO LEITURA. import datetime as d from django.apps import apps from escala.utils import minutos_previstos_do_dia from ponto import janelas from ponto.services.espelho import espelho_do_colab C = apps.get_model('colabo ...` |
+| 22:14:31 | Bash | Pendência format, previsto memo, decisions load | `sed -n 290,320p ponto/janela_he.py; sed -n 1115,1135p ponto/motor_calculo_v2.py; sed -n 1445,1470p ponto/motor_calculo_v2.py` |
+| 22:14:25 | Bash | Previsto memo, decisions, ponta format | `/bin/grep -n "def _previsto_do_dia\\|_he_decisoes =\\|self._he_decisoes\b" ponto/motor_calculo_v2.py \| head -6; sed -n 234,290p ponto/janela_he.py \| cut -c1-170` |
+| 22:14:04 | Bash | Read per-pair classification loop | `sed -n 2255,2340p ponto/motor_calculo_v2.py \| cut -c1-170` |
+| 22:13:59 | Bash | Locate folga/feriado per-pair decision | `/bin/grep -n "_folga_do_par\[\\|_folga_do_par =\\|horas_extras_100_feriado\\|_eh_feriado\\|feriado_do_par\\|is_feriado" ponto/motor_calculo_v2.py \| head -20 \| cut -c1-160` |
+| 22:13:38 | Bash | Read _janela_do_dia | `/bin/grep -n "def _janela_do_dia" ponto/motor_calculo_v2.py; n=$(/bin/grep -n "def _janela_do_dia" ponto/motor_calculo_v2.py \| cut -d: -f1); sed -n "$n,$((n+75))p" ponto/motor_calculo_v2.py \| cut -c1-170` |
+| 22:13:33 | Bash | Read motor HE window cut | `sed -n 1480,1600p ponto/motor_calculo_v2.py \| cut -c1-170` |
 | 22:03:19 | Bash | Wait for push verdict | `until /bin/grep -q "main -> main\\|failed to push" /home/ronald/saas-hasner/logs/push_marco_2200.out 2>/dev/null; do /usr/bin/sleep 15; done; tail -3 /home/ronald/saas-hasner/logs/push_marco_2200.out` |
 | 22:03:00 | Bash | Commit marco and push | `cd /home/ronald/saas-hasner && git add app/docs/RELATO.md app/docs/BACKLOG.md && git commit -q -F - <<'EOF' R1-FLIP-NAO-VIROU e FOTO-X-VIVO FECHADAS; duas perguntas no topo (FECHAR-PERGUNTA-A-PREMISSA, REFERENCIA-SEM-VINCULO) - R1-FLIP-NAO-VIROU (medida): os 12 pares tem dono fora da ESTRUTURA -- 8 BATIDA por distancia ao marco (o flip exige <= 10 min), col297 x2 o flip RODOU e recusou por "2 flip ...` |
 | 21:55:30 | Bash | Wait for push | `until /bin/grep -q "main -> main\\|failed to push" /home/ronald/saas-hasner/logs/push_fa7b9d9f.out; do /usr/bin/sleep 15; done; tail -3 /home/ronald/saas-hasner/logs/push_fa7b9d9f.out` |
