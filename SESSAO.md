@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/10/2026 10:12:36.** Transcript: `68b80ae1-8c10-4eac-b412-ca643624b286.jsonl` (7.9 MB). Acoes na janela: **327**.
+**Medido em 27/10/2026 10:18:06.** Transcript: `68b80ae1-8c10-4eac-b412-ca643624b286.jsonl` (8.0 MB). Acoes na janela: **329**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 10:18:02 | Bash |  | `date +%H:%M && python3 - <<'EOF' p='docs/RELATO.md' s=open(p).read() a='CUSTO: verificador 1 volta barrada (docstrings que ficaram falsas = DESCUIDO; RED sem log = DESCUIDO); construtor sonnet ~70 mil tokens.\n' assert s.count(a)==1 s=s.replace(a,a+'PROVA (depois): deploy `edd79bde` rc 0 (3 rotas); alertas dos 19 desde 10:10 = **0** (10:17, janela curta: reconferir).\n',1) anc='## HOTFIX C2 -- pou ...` |
+| 10:17:51 | Agent | Rebuild FECHAR on single coletor | `Reconstrua a guarda FECHAR-PERGUNTA-A-PREMISSA no repo /home/ronald/saas-hasner (Django em app/), sobre o main atual. Leia CLAUDE.md secoes 0, 3, 4a, 4b (contrato 2 idempotencia), 6, 7b. NUNCA edite /home/ronald/saas-hasner; sem merge/push/deploy; sem escrita em prod. COPIA NOVA: `git -C /home/ronald/saas-hasner worktree add -b fechar2-2710 /home/ronald/wt-fechar2-2710-1015 main`; crie app/logs e  ...` |
 | 10:08:57 | Bash |  | `date +%H:%M:%S; /usr/bin/sleep 500; docker exec saas_core python manage.py tenant_command shell --schema=juliani --command " from ponto.models import AlertaGeofence as A import datetime as d, collections; from django.utils import timezone as tz ids=[489,829,131,188,649,727,911,115,926,110,60,370,502,938,325,951,511,697,961] t=tz.make_aware(d.datetime(2026,10,27,10,10)) q=A.objects.filter(colaborad ...` |
 | 10:08:32 | Bash |  | `cd /home/ronald/saas-hasner && bin/deploy.sh --sem-migrate > logs/deploy_c2fix_20261027.log 2>&1; echo rc=$?; grep -E "OK\|FAIL\|ERRO\|vermelho\|deploy:" logs/deploy_c2fix_20261027.log \| tail -5` |
 | 10:08:27 | Bash |  | `cd /home/ronald/saas-hasner && sed -i 's/^## HOTFIX C2 NO AR -- o geofence volta a poupar quem tem chamado de vinculo vivo (27\/10 10:0x)$/## HOTFIX C2 -- pouso: em revisao = lavra C8 OU chamado de vinculo vivo (27\/10 10:0x)/' app/docs/RELATO.md && git add app/docs/RELATO.md && git commit -q -F - <<'EOF' HOTFIX C2 pousa: o geofence volta a poupar a pessoa quando ha chamado vinculo_divergente VIVO ...` |

@@ -188,12 +188,19 @@ PAREI: ! GATE-EXPORT-10 (so o export da 10) | espera o DP na Gestao de HE e o Ro
 > O MARCADOR ANDOU no mesmo ato: `ORDEM-VIVA-TOPO` saiu de `BO-HE-RECUSAR-LOTE-500` (fechado) para `O261`, que o hook cobrou.
 > SEM COMMIT DE PROPOSITO: `RELATO.md` e `BACKLOG.md` ficam sujos na arvore porque a L-106 nao deixa commit so de docs fora de marco. Eles entram no commit do proximo marco.
 
+## FECHAR-PERGUNTA-A-PREMISSA -- verificador NAO POUSA, reconstrucao (27/10 10:1x)
+- Construtor anterior parou travado ("esperando trabalho de fundo", 4h09m, ~250 mil tokens) -- encerrado pelo aval 10:0x; a suite da copia de pouso (main + fechar-2710) roda so como informacao.
+- Verificador (1a leitura da obra): o gate fecha por (vii)/(viii)/(a1) que so ELE conhece e o `reabrir()` pergunta so o dia -> o vai-e-volta do #34127 volta = DESENHO; ata gravada em vez da ata deste julgamento = LEITOR QUE NAO MIGROU; trilha `fechamento_recusado` sem dedup (~96-288 linhas/dia por chamado) e teste de idempotencia aceitando 2 = DESCUIDO; Defesa 1 e "irmao vivo" como 2a/3a copia; notas de "encerrado" antes de um reconciliar que recusa; mocks escondendo a regressao.
+- Reconstrucao em `wt-fechar2-2710-1015` sobre o main: as regras moram no COLETOR UNICO `premissa_regularizada`/`_celula_furada` que gate, reabrir e Defesa 1 perguntam.
+CUSTO ate aqui: verificador 1 volta barrada (11 achados: desenho 2, leitor que nao migrou 3, descuido 4, copia 2); construtor 1 ~250 mil tokens (encerrado).
+
 ## HOTFIX C2 -- pouso: em revisao = lavra C8 OU chamado de vinculo vivo (27/10 10:0x)
 LEI-AKITA: origem=ponto/services/geofence.py::_cadastro_em_revisao, testemunha=lavra C8 OU chamado vinculo_divergente vivo, RED=test_c2fix_cadastro_em_revisao_uniao (2 FAIL por assercao no HEAD, `logs/c2fix_red_20261027.log`), quem-mais-le=geofence, cadastro_realidade.py:288 (lista do admin), vinculo_na_lista.py, juizes novos=0
 - Copia `wt-c2fix-2710-0930` (9dc7905e + 71db7e69): suite inteira **Ran 12251 OK** na arvore commitada; cmp 0 contra a copia.
 PROVA (antes da cura): desde 05:54, 2 `ponto_fora` com push para os 19 (col926, col961); nas 24 h anteriores, 22 `vinculo_divergente` e 0 `ponto_fora`.
 - Divergencia DECLARADA: para os 19 legados, a lista do admin diz "fora da C8" e o geofence diz "em revisao" (chamado vivo) -- item `C2-OS-19-SEM-PRAZO` (contador com dono no marco seguinte).
 CUSTO: verificador 1 volta barrada (docstrings que ficaram falsas = DESCUIDO; RED sem log = DESCUIDO); construtor sonnet ~70 mil tokens.
+PROVA (depois): deploy `edd79bde` rc 0 (3 rotas); alertas dos 19 desde 10:10 = **0** (10:17, janela curta: reconferir).
 
 ## VERIFICADOR RETROATIVO da raia 20-noite + BUG em prod no C2 (27/10 09:1x)
 - O verificador nao rodou antes dos 3 pousos (falha minha); rodou depois, no codigo no ar: ACHADOS nos 3, nenhum de dinheiro.
