@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/10/2026 20:51:36.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (10.5 MB). Acoes na janela: **394**.
+**Medido em 27/10/2026 20:57:06.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (10.7 MB). Acoes na janela: **397**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 20:56:16 | Bash | Register FIO answer, D deviation question, new item | `cd /home/ronald/saas-hasner && python3 - <<'E' import json d='app/docs/' p=d+'RELATO.md';s=open(p).read();L=s.split('\n') for i,l in enumerate(L[:30]): if l.startswith('> **lei: FIO-LE-O-JUIZ-OS-19**'): L[i]='> **RESPONDIDA 27/10 20:5x: FIO-LE-O-JUIZ-OS-19 e OS-19-E-O-VOLUME** -- (1) o \"dia agrupado sob ADESAO/LIMBO\" esta RETIRADO (agrupamento nao e dono; `agrupado_sob_pai_vivo` nao vira juiz):  ...` |
+| 20:55:56 | SendMessage |  | `-` |
+| 20:55:48 | Agent | Verify REGISTRADO-NAO-E-VIVO | `REGISTRADO-NAO-E-VIVO (BO-[nome] (D)), leitura antes do pouso. Copia /home/ronald/wt-registrado-2710-2035 (branch registrado-2710) sobre main 0baf575f; commit bdb253cf. Diff: `git -C /home/ronald/wt-registrado-2710-2035 diff 0baf575f..HEAD`. Aval (literal): "(D) REGISTRADO-NAO-E-VIVO = item 7 (col130 #28883, 535 na frota): registrado sai de VIVOS e de todo badge, padrao=maquina de estado com jui ...` |
 | 20:45:49 | Bash | Wait for REGISTRADO progress | `W=/home/ronald/wt-registrado-2710-2035; h0=$(git -C $W rev-parse HEAD); for i in $(seq 58); do [ "$(git -C $W rev-parse HEAD)" != "$h0" ] && break; /usr/bin/sleep 10; done; git -C $W log --oneline -2 \| cut -c1-110; date +%H:%M` |
 | 20:42:51 | Bash | Wait for REGISTRADO commit and FIO suite | `W=/home/ronald/wt-registrado-2710-2035; h0=$(git -C $W rev-parse HEAD); for i in $(seq 58); do [ "$(git -C $W rev-parse HEAD)" != "$h0" ] && break; /usr/bin/sleep 10; done; git -C $W log --oneline -1 \| cut -c1-110; grep -E '^(OK\|FAILED)($\| \()' /home/ronald/saas-hasner/logs/fio_suite_684a.log \| tail -1; date +%H:%M` |
 | 20:33:05 | Bash | Wait for REGISTRADO commit | `W=/home/ronald/wt-registrado-2710-2035; h0=$(git -C $W rev-parse HEAD); for i in $(seq 58); do [ "$(git -C $W rev-parse HEAD)" != "$h0" ] && break; /usr/bin/sleep 10; done; git -C $W log --oneline -1 \| cut -c1-110; date +%H:%M` |
