@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/10/2026 02:27:35.** Transcript: `68b80ae1-8c10-4eac-b412-ca643624b286.jsonl` (2.8 MB). Acoes na janela: **107**.
+**Medido em 27/10/2026 02:32:49.** Transcript: `68b80ae1-8c10-4eac-b412-ca643624b286.jsonl` (2.9 MB). Acoes na janela: **109**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 02:31:47 | Bash |  | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='logs/sombra/he100_diapago_frota.py' s=open(p).read() s=s.replace(""" for x in DP.objects.filter(colaborador=c, versao=v, mes_competencia=k.get('mes', a[1] if len(a) > 1 else None)) if hasattr(DP, 'mes_competencia') else DP.objects.filter(colaborador=c, versao=v):""", """ ini, fim = janelas.janela_fechamento(10, 2026, c.empresa) for x in DP.object ...` |
+| 02:31:36 | Bash |  | `cd /home/ronald/saas-hasner && cat > logs/sombra/he100_diapago_frota.py <<'EOF' # HE100 (a) + ORACULO-RECUSA: o DiaPago da FROTA da comp 10, linha a linha (motor e oraculo), pela `lavrar` REAL dentro # de atomic com ROLLBACK forcado -- le as linhas que ela produziria e desfaz. Rotulo de saida pelo ambiente SAIDA. SO LEITURA. import json, os from django.db import transaction from django.apps import ...` |
 | 02:25:00 | Bash |  | `cd /home/ronald/wt-he100a-2710-0145; for i in $(seq 1 29); do [ "$(git rev-parse --short HEAD)" != "06426075" ] && break; /usr/bin/sleep 20; done; git log --oneline -2` |
 | 02:24:51 | SendMessage |  | `-` |
 | 02:14:45 | Bash |  | `cd /home/ronald/wt-he100a-2710-0145; for i in $(seq 1 29); do [ "$(git rev-parse --short HEAD)" != "06426075" ] && break; /usr/bin/sleep 20; done; git log --oneline -3` |
