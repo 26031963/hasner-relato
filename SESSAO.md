@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/10/2026 08:41:54.** Transcript: `68b80ae1-8c10-4eac-b412-ca643624b286.jsonl` (6.4 MB). Acoes na janela: **277**.
+**Medido em 27/10/2026 08:47:06.** Transcript: `68b80ae1-8c10-4eac-b412-ca643624b286.jsonl` (6.5 MB). Acoes na janela: **279**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 08:47:00 | SendMessage |  | `-` |
+| 08:46:53 | Bash |  | `cd /home/ronald/saas-hasner && git show --stat --format=%s 917ef3c3 \| head; W=/home/ronald/saas-hasner/.claude/worktrees/agent-a7fb6f56030e4e5e9; git -C $W status --short \| head -3; git -C $W merge --ff-only 917ef3c3 2>&1 \| tail -1; git -C $W log --oneline -1` |
 | 08:37:29 | Bash |  | `/usr/bin/sleep 560; for d in wt-fechar-2710-0500 wt-pergunta-dia-2710-0630 wt-ata-pausa-2710-0820; do git -C /home/ronald/$d log --oneline -1 2>/dev/null; done; /home/ronald/saas-hasner/bin/trava_teste.sh --quem; date +%H:%M` |
 | 08:37:24 | Bash |  | `date +%H:%M && python3 - <<'EOF' p='docs/PROMPTS.md' s=open(p).read().rstrip('\n')+'\n' s+='\| 27/10 08:3x \| **aval: CONTRATO-20-DOIS-EVENTOS** -- complemento da RAIA-DO-CONTRATO-20, em paralelo; E2 (celula regenerada: relavrar_celulas_da_foto / regenerar_celulas_vinculo nao chamam reavaliar_dia nem a rejuncao) e E1 (batida pelo chokepoint); medir em prod por parte os 5 (reavaliar_ausencias_feria ...` |
 | 08:37:11 | Agent | CONTRATO-20-DOIS-EVENTOS (sonnet) | `Voce e a obra CONTRATO-20-DOIS-EVENTOS do repo /home/ronald/saas-hasner (Django em app/), complemento da RAIA-DO-CONTRATO-20, em PARALELO a fila principal. Leia antes, inteiros: /home/ronald/saas-hasner/CLAUDE.md secoes 0, 2, 3, 4, 4a, 6, 7, 7b. REGRAS DURAS: trabalhe SO no seu worktree isolado (confira `git log --oneline -1`; deve ser o main atual 917ef3c3 ou mais novo -- se for mais velho, `git  ...` |
