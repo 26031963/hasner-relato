@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/10/2026 18:49:37.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (9.2 MB). Acoes na janela: **353**.
+**Medido em 27/10/2026 18:55:08.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (9.4 MB). Acoes na janela: **355**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 18:54:50 | SendMessage |  | `-` |
+| 18:54:41 | Bash | Register both avals, corte, BACKLOG states | `cd /home/ronald/saas-hasner && python3 - <<'E' import json d='app/docs/' p=d+'RELATO.md';L=open(p).read().split('\n') n=0 for i,l in enumerate(L[:20]): if l.startswith('PAREI: ! JUIZ-DO-PAR-DUAS-ENTRADAS'): L[i]='> **RESPONDIDA 27/10 18:5x: JUIZ-DO-PAR-DUAS-ENTRADAS-DECISOES** -- (1) col457 07/09 = mudanca de dono BATIDA; o juiz unico 383adb81 FICA; a 09 exportada nao se regera (L-092), o dia vai  ...` |
 | 18:44:36 | Bash | Wait for next FIO commit | `W=/home/ronald/wt-fio-2710-1835; h0=$(git -C $W rev-parse HEAD); for i in $(seq 57); do [ "$(git -C $W rev-parse HEAD)" != "$h0" ] && break; /usr/bin/sleep 10; done; git -C $W log --oneline -2 \| cut -c1-110; date +%H:%M` |
 | 18:39:28 | Bash | Wait for next FIO commit | `W=/home/ronald/wt-fio-2710-1835; h0=$(git -C $W rev-parse HEAD); for i in $(seq 57); do [ "$(git -C $W rev-parse HEAD)" != "$h0" ] && break; /usr/bin/sleep 10; done; git -C $W log --oneline -2 \| cut -c1-110; date +%H:%M` |
 | 18:32:49 | Bash | Wait for FIO commit | `W=/home/ronald/wt-fio-2710-1835; h0=$(git -C $W rev-parse HEAD); for i in $(seq 57); do [ "$(git -C $W rev-parse HEAD)" != "$h0" ] && break; /usr/bin/sleep 10; done; git -C $W log --oneline -2 \| cut -c1-110; date +%H:%M` |

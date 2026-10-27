@@ -321,6 +321,9 @@ Estavam no indice como vigentes e alguma clausula nao tem efeito. Gerada do ESTA
 - `BO-ADMIN-2710-LEIS`
 - `FIO-LE-O-JUIZ-6984`
 - `O245-CAMADA-COBERTURA`
+- `JUIZ-DO-PAR-DUAS-ENTRADAS-DECISOES`
+- `COBERTURA-PARCIAL-PERIODO`
+- `JUIZ-MARCOS-COBERTOS-POR-JUSTIFICATIVA-NASCE`
 
 ## CORTES que viraram lei
 
