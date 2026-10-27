@@ -176,6 +176,12 @@ PAREI: ! GATE-EXPORT-10 (so o export da 10) | espera o DP na Gestao de HE e o Ro
 > O MARCADOR ANDOU no mesmo ato: `ORDEM-VIVA-TOPO` saiu de `BO-HE-RECUSAR-LOTE-500` (fechado) para `O261`, que o hook cobrou.
 > SEM COMMIT DE PROPOSITO: `RELATO.md` e `BACKLOG.md` ficam sujos na arvore porque a L-106 nao deixa commit so de docs fora de marco. Eles entram no commit do proximo marco.
 
+## HE100-32 medido / REFERENCIA (a) / RAIA-DO-CONTRATO-20 -- 26/10 23:4x
+- HE100-32 (aval 23:0x): nos dias de previsto 0 dos 32 o motor paga HORA NORMAL, nao HE -- nao e L-097 por outra porta. Intermitente 47 dias / 494,3 h: certo. 12x36 + 6x1: 124 dias / 1.181,6 h com a CELULA dizendo folga e o MOTOR pagando dia de trabalho -> ESTRUTURA, `FOLGA-DA-CELULA-X-DIA-DO-MOTOR` na fila 1.
+- REFERENCIA-SEM-VINCULO (a): `vinculo_de_referencia` pergunta a juiza; DIFF da 10 = **0 de 588** (nada a aplicar; o zero e a frota). O empate de `data_inicio` nao existe (unique no banco).
+- RAIA-DO-CONTRATO-20: `reconciliar_vinculo` vira VIGIA (10 -> 9, medido em PROD, 84 abertos, a_fechar 0). PARADOS pela lei, com numero: `marcar_foto_ausente_retro` (o prazo de 90 min e a pergunta FOTO-AUSENTE), `disparar_perguntas_competencia` (PERGUNTA-DO-DIA-EM-CURSO), `detectar_par_relampago` (fica CRON pelo corte de 04/10: o julgamento nao vai ao chokepoint; 10 retratacoes/30 d).
+- FECHAR-PERGUNTA-A-PREMISSA: PAROU pela condicao do aval (448 / 314, topo).
+
 ## HE100 / complementos do col841 / RAIA-DO-CONTRATO-20 -- 26/10 23:1x
 - HE100: construido em copia e PARADO pela 7b (DIFF surpreende, pergunta HE100-ALCANCE no topo). Dois selos da casa o pegaram antes do pouso: mypy (anotacao) e o censo de ajudantes do dia do motor (8 -> 10, relido).
 - col841 10/10 -> a CLASSE na 10 (sombra, juiz real `ausencia_cobre(para='folha')`): **11 dia-colab / 45,37 h / 8 colabs** com saida antecipada no DiaPago em dia que a ausencia cobre (todos `fato_em_ausencia`) -- dono ESTRUTURA, P7.1 `ABONADO-COM-SAIDA-ANTECIPADA`.
