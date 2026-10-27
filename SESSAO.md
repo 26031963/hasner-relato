@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/10/2026 10:23:36.** Transcript: `68b80ae1-8c10-4eac-b412-ca643624b286.jsonl` (8.0 MB). Acoes na janela: **331**.
+**Medido em 27/10/2026 10:29:06.** Transcript: `68b80ae1-8c10-4eac-b412-ca643624b286.jsonl` (8.0 MB). Acoes na janela: **333**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 10:28:14 | Bash |  | `cd /home/ronald/saas-hasner; for i in $(seq 1 29); do grep -q "^rc=" /tmp/claude-1001/-home-ronald-saas-hasner-app/68b80ae1-8c10-4eac-b412-ca643624b286/tasks/b1t31vnmr.output 2>/dev/null && break; /usr/bin/sleep 20; done; cat /tmp/claude-1001/-home-ronald-saas-hasner-app/68b80ae1-8c10-4eac-b412-ca643624b286/tasks/b1t31vnmr.output; date +%H:%M` |
+| 10:28:09 | Agent | Verify selfie_ausente | `Obra JUIZ-SELFIE-AUSENTE-NASCE (corte CORTES.md ~94/214, suspensao levantada 27/10 09:0x pelo aval FOTO-AUSENTE; literal: "foto ausente e COBRANCA (abre disputa, como hoje): batida de aparelho sem FotoBatida e sem Batida.foto passado o prazo do CANAL (PWA = no ato; APK = 90 min, MINUTOS_DE_PRAZO). Os 3 sitios passam a perguntar a ele: api/views_core.py:471, api/views.py:479, marcar_foto_ausente_re ...` |
 | 10:18:15 | Bash |  | `cd /home/ronald/saas-hasner; for i in $(seq 1 29); do grep -q "^rc=" /tmp/claude-1001/-home-ronald-saas-hasner-app/68b80ae1-8c10-4eac-b412-ca643624b286/tasks/b1t31vnmr.output 2>/dev/null && break; /usr/bin/sleep 20; done; cat /tmp/claude-1001/-home-ronald-saas-hasner-app/68b80ae1-8c10-4eac-b412-ca643624b286/tasks/b1t31vnmr.output; date +%H:%M` |
 | 10:18:08 | Bash |  | `cd /home/ronald/saas-hasner && bin/push.sh > logs/push_c2fix_20261027.log 2>&1; echo rc=$?; grep -E 'RED\|^(OK\|FAILED)($\| \()\|^Ran \|main -> main\|liberado' logs/push_c2fix_20261027.log \| tail -8; git fetch -q; git log --oneline -1 origin/main` |
 | 10:18:02 | Bash |  | `date +%H:%M && python3 - <<'EOF' p='docs/RELATO.md' s=open(p).read() a='CUSTO: verificador 1 volta barrada (docstrings que ficaram falsas = DESCUIDO; RED sem log = DESCUIDO); construtor sonnet ~70 mil tokens.\n' assert s.count(a)==1 s=s.replace(a,a+'PROVA (depois): deploy `edd79bde` rc 0 (3 rotas); alertas dos 19 desde 10:10 = **0** (10:17, janela curta: reconferir).\n',1) anc='## HOTFIX C2 -- pou ...` |
