@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/10/2026 20:03:48.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (10.3 MB). Acoes na janela: **381**.
+**Medido em 27/10/2026 20:09:06.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (10.4 MB). Acoes na janela: **384**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 20:08:59 | Bash | Convert FIO PAREI to non-blocking lei question | `cd /home/ronald/saas-hasner && python3 - <<'E' p='app/docs/RELATO.md';s=open(p).read() a='PAREI: ! FIO-LE-O-JUIZ-OS-19 (so o pouso da FIO-LE-O-JUIZ) \| espera Ronald -- ' assert s.count(a)==1 s=s.replace(a,'> **lei: FIO-LE-O-JUIZ-OS-19** (pergunta, nao para a fila: segura SO o pouso da FIO-LE-O-JUIZ; o construtor segue nos itens que nao dependem dela, PAZ-DO-ADMIN um por vez) -- ',1) open(p,'w').w ...` |
+| 20:08:44 | SendMessage |  | `-` |
+| 20:08:36 | Bash | Add PAREI for FIO 19/33 at RELATO top | `cd /home/ronald/saas-hasner && python3 - <<'E' p='app/docs/RELATO.md';s=open(p).read() a='> **lei: FIO-LE-O-JUIZ-OS-19-E-O-VOLUME** (pergunta, nao para a fila;' assert s.count(a)==1 s=s.replace(a,'PAREI: ! FIO-LE-O-JUIZ-OS-19 (so o pouso da FIO-LE-O-JUIZ) \| espera Ronald -- o seu aval EFEITOS (19:3x) manda os 33 dias agrupados sob ADESAO/LIMBO como dono CADASTRO na lista do admin; a cura cobre ** ...` |
 | 19:58:41 | Bash | Wait for FIO final suite | `cd /home/ronald/saas-hasner/logs; for i in $(seq 58); do grep -q '^rc=' fio_suite_final.log 2>/dev/null && break; /usr/bin/sleep 10; done; grep -E '^(OK\|FAILED)($\| \()' fio_suite_final.log \| tail -1; grep '^Ran ' fio_suite_final.log \| tail -1; tail -1 fio_suite_final.log \| cut -c1-20; grep -E '^(FAIL\|ERROR):' fio_suite_final.log \| head -5; date +%H:%M` |
 | 19:58:29 | Bash | Post FIO questions at RELATO top | `cd /home/ronald/saas-hasner && python3 - <<'E' p='app/docs/RELATO.md';s=open(p).read() a='# RELATO — esteira saas-hasner\n\n' q=("> **lei: FIO-LE-O-JUIZ-OS-19-E-O-VOLUME** (pergunta, nao para a fila; FIO-LE-O-JUIZ pronto em `wt-fio-2710-1835` @ 52ba48d8, verificador e suite em curso; o template do modal foi tocado -> espera o seu smoke) -- (1) dos 33 dias agrupados sob ADESAO/LIMBO (`logs/fio_le_o ...` |
 | 19:58:18 | Agent | Verify FIO-LE-O-JUIZ 2a leitura | `FIO-LE-O-JUIZ, 2a leitura. Copia /home/ronald/wt-fio-2710-1835 (branch fio-le-o-juiz-2710) sobre main 0baf575f; HEAD 52ba48d8. Diff: `git -C /home/ronald/wt-fio-2710-1835 diff 0baf575f..HEAD`; delta desde a sua 1a leitura: `git -C /home/ronald/wt-fio-2710-1835 diff 37225ca3..HEAD`. A 1a reprovou: (1) leitura exportada sem leitor na tela e sem porta para o admin resolver a viva; (2) `_competencia_e ...` |
