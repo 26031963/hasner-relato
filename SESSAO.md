@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/10/2026 14:23:06.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (3.9 MB). Acoes na janela: **156**.
+**Medido em 27/10/2026 14:28:37.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (3.9 MB). Acoes na janela: **158**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 14:27:21 | Bash | Wait for fechar3 progress commit | `W=/home/ronald/wt-fechar3-2710-1320; h0=$(git -C $W rev-parse HEAD); for i in $(seq 57); do [ "$(git -C $W rev-parse HEAD)" != "$h0" ] && break; /usr/bin/sleep 10; done; git -C $W log --oneline -5 \| cut -c1-150; git -C $W status --porcelain \| grep -v '^??' \| wc -l; date +%H:%M` |
+| 14:27:14 | SendMessage |  | `-` |
 | 14:17:35 | Bash | Wait for fechar3 commit | `W=/home/ronald/wt-fechar3-2710-1320; h0=$(git -C $W rev-parse HEAD); for i in $(seq 57); do [ "$(git -C $W rev-parse HEAD)" != "$h0" ] && break; /usr/bin/sleep 10; done; git -C $W log --oneline -4 \| cut -c1-150; date +%H:%M` |
 | 14:17:30 | Bash | Add PROVA line to pouso section | `cd /home/ronald/saas-hasner && python3 - <<'E' p='app/docs/RELATO.md';s=open(p).read() a='LEI-AKITA: origem=core/views_ia.py::ia_perguntar, testemunha=colaboradores/mixins.py::tem_acao (core/ia_acoes.py::pode_usar_a_ia), RED=logs/ia_rbac/red_main.log (6F+1E), quem-mais-le=base.html, _copiloto.html, context_processors_ia.py::estado_ia, core_client, pautas/test_selo_janela, juizes novos=0\n' b=a+'PR ...` |
 | 14:17:13 | Bash | Write pouso section in RELATO | `cd /home/ronald/saas-hasner && python3 - <<'E' p='app/docs/RELATO.md';s=open(p).read() anc='## RETOMADA POS-CLEAR (27/10 12:5x)\n' sec='''## IA-PERGUNTAR-SEM-RBAC -- NO AR (27/10 14:1x) LEI-AKITA: origem=core/views_ia.py::ia_perguntar, testemunha=colaboradores/mixins.py::tem_acao (core/ia_acoes.py::pode_usar_a_ia), RED=logs/ia_rbac/red_main.log (6F+1E), quem-mais-le=base.html, _copiloto.html, cont ...` |
