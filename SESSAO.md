@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/10/2026 05:18:35.** Transcript: `68b80ae1-8c10-4eac-b412-ca643624b286.jsonl` (4.1 MB). Acoes na janela: **168**.
+**Medido em 27/10/2026 05:24:05.** Transcript: `68b80ae1-8c10-4eac-b412-ca643624b286.jsonl` (4.1 MB). Acoes na janela: **169**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 05:21:21 | Bash |  | `cd /home/ronald/saas-hasner; for i in $(seq 1 29); do [ -s logs/sombra/he100_dp_abono_depois.json ] && [ logs/sombra/he100_dp_abono_depois.json -nt logs/sombra/abono_dp_depois.py ] && break; /usr/bin/sleep 20; done; /usr/bin/sleep 5; cat logs/abono_diff_lancador.out; ls -la --time-style=+%H:%M logs/sombra/abono_fm_*.json logs/sombra/he100_dp_abono_*.json \| awk '{print $6,$7}'; date +%H:%M` |
 | 05:11:36 | Bash |  | `cd /home/ronald/saas-hasner; for i in $(seq 1 29); do [ -s logs/sombra/he100_dp_abono_depois.json ] && [ logs/sombra/he100_dp_abono_depois.json -nt logs/sombra/abono_dp_depois.py ] && break; /usr/bin/sleep 20; done; cat logs/abono_diff_lancador.out; date +%H:%M` |
 | 05:11:30 | Bash |  | `cd /home/ronald/saas-hasner/logs/sombra && for r in antes depois; do sed "s/'he100_depois2'/'abono_fm_$r'/; s/he100_depois2/abono_fm_$r/" folha10_he100_depois2.py > abono_fm_$r.py; sed "s/rot = 'antes'/rot = 'abono_$r'/" he100_diapago_frota_antes.py > abono_dp_$r.py; done; grep -h "json.dump\\|rot =" abono_fm_*.py abono_dp_*.py \| head; cd /home/ronald/saas-hasner && (bin/sombra.sh --rodar abono_f ...` |
 | 05:11:17 | Bash |  | `cd /home/ronald/saas-hasner && bin/push.sh > logs/push_he100_20261027.log 2>&1; echo rc=$?; tail -5 logs/push_he100_20261027.log; git fetch -q; git log --oneline -1 origin/main` |
