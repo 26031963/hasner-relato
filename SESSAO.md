@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 26/10/2026 21:54:22.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (54.7 MB). Acoes na janela: **630**.
+**Medido em 26/10/2026 21:59:44.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (54.8 MB). Acoes na janela: **634**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 21:55:30 | Bash | Wait for push | `until /bin/grep -q "main -> main\\|failed to push" /home/ronald/saas-hasner/logs/push_fa7b9d9f.out; do /usr/bin/sleep 15; done; tail -3 /home/ronald/saas-hasner/logs/push_fa7b9d9f.out` |
+| 21:55:23 | SendMessage |  | `-` |
+| 21:55:11 | Bash | Fix labels; check push | `sed -i 's/predicado no topo, com numero) para `CONTADOR-DE-ESCRITA-POR-CRON`/predicado no topo, com numero) para `CONTADOR-DE-ESCRITA-POR-CRON`/; s/ANDOU 26\/10 22:0x, de `FECHAMENTO-REFERENCIA/ANDOU 26\/10 21:5x, de `FECHAMENTO-REFERENCIA/; s/PARADA em pergunta de predicado (topo 22:0x)/PARADA em pergunta de predicado (topo 21:5x)/' docs/BACKLOG.md; git diff docs/BACKLOG.md \| /bin/grep "^+" \| / ...` |
+| 21:55:04 | Bash | Write predicate question; move marker to raia 20 | `date +%H:%M && python3 - <<'EOF' p='docs/RELATO.md'; s=open(p).read() h='# RELATO — esteira saas-hasner\n' linha=('\n> **lei: REFERENCIA-SEM-VINCULO-NA-JANELA** (pergunta de PREDICADO, nao para a fila; FECHAMENTO-REFERENCIA-POR-POSICAO) -- ' '`ponto/services/fechamento.py:795` escolhe o vinculo de REFERENCIA (o default que a porta `rubricas_por_dia` usa onde a ' 'juiza do dia nao responde) por POS ...` |
 | 21:54:15 | Bash | Measure position vs judge reference impact | `cd /home/ronald/saas-hasner && cat > logs/sombra/ref_posicao.py <<'EOF' # FECHAMENTO-REFERENCIA-POR-POSICAO: impacto (L-110) -- a referencia por POSICAO (escalas_periodo[-1]) x a JUIZA # (vinculo_do_dia no ultimo dia da janela que ela responde), na MESMA alimentacao do fechamento. SO LEITURA. import datetime as d, collections from django.apps import apps from ponto import janelas from escala.alime ...` |
 | 21:54:04 | Bash | Read the escalas loader in fechamento | `sed -n 596,612p ponto/services/fechamento.py` |
 | 21:53:48 | Bash | Read the downstream call using esc | `sed -n 1195,1215p ponto/services/fechamento.py` |
