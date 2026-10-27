@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/10/2026 05:56:06.** Transcript: `68b80ae1-8c10-4eac-b412-ca643624b286.jsonl` (4.9 MB). Acoes na janela: **204**.
+**Medido em 27/10/2026 06:01:36.** Transcript: `68b80ae1-8c10-4eac-b412-ca643624b286.jsonl` (4.9 MB). Acoes na janela: **206**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 05:56:26 | Bash |  | `cd /home/ronald/saas-hasner; a0=0609d19f; f0=$(git -C /home/ronald/wt-fechar-2710-0500 rev-parse --short HEAD); for i in $(seq 1 28); do [ "$(git -C /home/ronald/wt-abono-2710-0350 rev-parse --short HEAD)" != "$a0" ] && break; [ "$(git -C /home/ronald/wt-fechar-2710-0500 rev-parse --short HEAD)" != "$f0" ] && break; /usr/bin/sleep 20; done; git -C /home/ronald/wt-abono-2710-0350 log --oneline -1;  ...` |
+| 05:56:20 | Bash |  | `python3 - <<'EOF' p='docs/RELATO.md' s=open(p).read() h='# RELATO — esteira saas-hasner\n\n' assert s.startswith(h) q=('> **lei: FECHAR-GUARDA-X-BUG115** (pergunta, nao para a fila; FECHAR-PERGUNTA-A-PREMISSA) -- a guarda do aval (a) pergunta a premissa do DIA ' '(`premissa_regularizada(para=folha)`, celula do dia), e o BUG 115 (corte 10/09, *"a lampada do marco manda, e o dia nao"*) fecha a cobra ...` |
 | 05:56:04 | Bash |  | `cat /home/ronald/saas-hasner/logs/fechar_classes_20261027.out` |
 | 05:56:02 | Bash |  | `cd /home/ronald/saas-hasner; a0=$(git -C /home/ronald/wt-abono-2710-0350 rev-parse --short HEAD); f0=$(git -C /home/ronald/wt-fechar-2710-0500 rev-parse --short HEAD); for i in $(seq 1 28); do [ "$(git -C /home/ronald/wt-abono-2710-0350 rev-parse --short HEAD)" != "$a0" ] && break; [ -s logs/fechar_classes_20261027.out ] && break; /usr/bin/sleep 20; done; git -C /home/ronald/wt-abono-2710-0350 log ...` |
 | 05:55:55 | Bash |  | `date +%H:%M && python3 - <<'EOF' p='docs/RELATO.md' s=open(p).read() anc='## ABONADO-COM-SAIDA-ANTECIPADA -- construida, DIFF de frota publicado (27/10 05:2x)' assert s.count(anc)==1 sec='''## RAIA-DO-CONTRATO-20-NOITE -- (1) e (2) NO AR, (3) espera o ABONADO (27/10 05:5x) LEI-AKITA: origem=detectar_vinculo_divergente (lavra C8) / ponto/turnos.py::par_completo / registro_batida.canal_da_batida, te ...` |
