@@ -310,6 +310,7 @@ Estavam no indice como vigentes e alguma clausula nao tem efeito. Gerada do ESTA
 - `ATA-PAUSA-NO-MOTOR`
 - `PAPEL-PRAZO-DISPARAR-PERGUNTAS`
 - `LISTA-HE-77-RESTO`
+- `JUIZ-AVALIAR-E-GRAVAR-REGUA-NASCE`
 
 ## CORTES que viraram lei
 
