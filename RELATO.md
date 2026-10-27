@@ -182,6 +182,14 @@ PAREI: ! GATE-EXPORT-10 (so o export da 10) | espera o DP na Gestao de HE e o Ro
 > O MARCADOR ANDOU no mesmo ato: `ORDEM-VIVA-TOPO` saiu de `BO-HE-RECUSAR-LOTE-500` (fechado) para `O261`, que o hook cobrou.
 > SEM COMMIT DE PROPOSITO: `RELATO.md` e `BACKLOG.md` ficam sujos na arvore porque a L-106 nao deixa commit so de docs fora de marco. Eles entram no commit do proximo marco.
 
+## CANAL-NA-BATIDA NO AR -- 83c9e1c6 (27/10 07:1x); RAIA-DO-CONTRATO-20-NOITE completa
+LEI-AKITA: origem=ponto/registro_batida.py::canal_da_batida, testemunha=device_id, RED=import vermelho no HEAD, quem-mais-le=api/views.py, api/views_core.py, triagem_batida.py, juizes novos=0
+- Recertificado sobre o main com o ABONADO (copia `/home/ronald/wt-canal-pouso-2710-0655`): suite inteira **Ran 12246 OK**; cmp 0 de 7; commit `83c9e1c6`; `bin/deploy.sh` (com migrate) rc 0: `Applying ponto.0075_batida_canal`, 3 rotas OK.
+PROVA: batidas `origem=app` depois de 07:17 em prod: **8, as 8 com `canal='apk'`** (smoke 07:31).
+- Migrate depois do dump do dia: ensaio refeito (`--refazer --dump-agora` + `--bloco`) em segundo plano para os proximos deploys.
+- PERGUNTA-DO-DIA (b): construida; verificador NAO POUSA (teto por DATA sobrevive no passado -- turno que cruza a meia-noite); em cura. Fio mudo: pergunta FIO-MUDO-SEM-EVENTO no topo.
+INCOMPLETO: JUIZ-SELFIE-AUSENTE-NASCE segue suspenso (o campo existe agora; a 2a parte e outro marco).
+
 ## ABONADO NO AR + APPLY da 10 -- 3df9c01f (27/10 06:5x)
 LEI-AKITA: origem=ponto/motor_calculo_v2.py::_aplicar_teto_pontualidade + ponto/turnos.py::dias_com_ausencia_de_dia_inteiro, testemunha=cobertura_ausencia_periodo(para=folha) + efeito vigente ABONA, RED=test_abono_dia_inteiro_zera_pontualidade, quem-mais-le=FM, DiaPago motor/oraculo, espelho, pdf, diff_*, esmeril, juizes novos=0
 - Pouso L-107: copia de pouso (main 87b42b45 + abono-2710) suite inteira **Ran 12242 OK**; cmp 0 de 16; commit `3df9c01f`; deploy rc 0 (3 rotas, importerror_500=0).

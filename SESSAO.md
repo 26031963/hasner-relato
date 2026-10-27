@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/10/2026 07:26:36.** Transcript: `68b80ae1-8c10-4eac-b412-ca643624b286.jsonl` (5.6 MB). Acoes na janela: **239**.
+**Medido em 27/10/2026 07:32:06.** Transcript: `68b80ae1-8c10-4eac-b412-ca643624b286.jsonl` (5.7 MB). Acoes na janela: **243**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 07:32:01 | Bash |  | `cd /home/ronald/saas-hasner; f0=$(git -C /home/ronald/wt-fechar-2710-0500 rev-parse --short HEAD); p0=$(git -C /home/ronald/wt-pergunta-dia-2710-0630 rev-parse --short HEAD); for i in $(seq 1 28); do [ "$(git -C /home/ronald/wt-fechar-2710-0500 rev-parse --short HEAD)" != "$f0" ] && break; [ "$(git -C /home/ronald/wt-pergunta-dia-2710-0630 rev-parse --short HEAD)" != "$p0" ] && break; /usr/bin/sle ...` |
+| 07:31:55 | Bash |  | `python3 - <<'EOF' p='docs/RELATO.md' s=open(p).read() anc='## ABONADO NO AR + APPLY da 10 -- 3df9c01f (27/10 06:5x)' assert s.count(anc)==1 sec='''## CANAL-NA-BATIDA NO AR -- 83c9e1c6 (27/10 07:1x); RAIA-DO-CONTRATO-20-NOITE completa LEI-AKITA: origem=ponto/registro_batida.py::canal_da_batida, testemunha=device_id, RED=import vermelho no HEAD, quem-mais-le=api/views.py, api/views_core.py, triagem_ ...` |
+| 07:27:44 | Bash |  | `/usr/bin/sleep 240; docker exec saas_core python manage.py tenant_command shell --schema=juliani --command "from ponto.models import Batida; import datetime as d; from django.utils import timezone as tz; q=Batida.objects.filter(timestamp__gte=tz.make_aware(d.datetime(2026,10,27,7,17)), origem='app'); import collections; print('APP_POS_DEPLOY', q.count(), 'CANAL', dict(collections.Counter(q.values_ ...` |
+| 07:27:36 | SendMessage |  | `-` |
 | 07:17:39 | Bash |  | `cd /home/ronald/saas-hasner; for i in $(seq 1 29); do grep -q "^rc=" logs/suite_pergunta_pouso.log 2>/dev/null && break; /usr/bin/sleep 20; done; grep -E '^(OK\|FAILED)($\| \()' logs/suite_pergunta_pouso.log \| tail -1; grep -E '^Ran [0-9]+' logs/suite_pergunta_pouso.log \| tail -1; bin/trava_teste.sh --quem; date +%H:%M` |
 | 07:17:31 | Bash |  | `cd /home/ronald/saas-hasner && (bash bin/suite.sh --dir /home/ronald/wt-pergunta-pouso-2710-0720 --espera 3600 > logs/suite_pergunta_pouso.log 2>&1; echo rc=$? >> logs/suite_pergunta_pouso.log) >/dev/null 2>&1 & sleep 1; echo lancado; docker exec saas_core python manage.py tenant_command shell --schema=juliani --command "from ponto.models import Batida; import datetime as d; from django.utils impo ...` |
 | 07:17:25 | Agent | Verify PERGUNTA-DO-DIA (b) | `Obra: PERGUNTA-DO-DIA-EM-CURSO, aval Ronald 27/10 00:2x resposta (b): "a pergunta do marco vencido do dia CORRENTE nasce do EVENTO (vigia de hora, teto por INSTANTE -- CLAUDE.md secao 6)". Copia /home/ronald/wt-pergunta-dia-2710-0630 (branch pergunta-dia-2710, commit 8c035df8, base 87b42b45). Diff: `git -C /home/ronald/wt-pergunta-dia-2710-0630 diff 87b42b45 HEAD`. O que mudou: `chamados/services/ ...` |
