@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/10/2026 07:32:06.** Transcript: `68b80ae1-8c10-4eac-b412-ca643624b286.jsonl` (5.7 MB). Acoes na janela: **243**.
+**Medido em 27/10/2026 07:37:35.** Transcript: `68b80ae1-8c10-4eac-b412-ca643624b286.jsonl` (5.7 MB). Acoes na janela: **245**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 07:33:51 | Bash |  | `cd /home/ronald/saas-hasner; for i in $(seq 1 29); do grep -q "^rc=" /tmp/claude-1001/-home-ronald-saas-hasner-app/68b80ae1-8c10-4eac-b412-ca643624b286/tasks/byae41uke.output 2>/dev/null && break; /usr/bin/sleep 20; done; cat /tmp/claude-1001/-home-ronald-saas-hasner-app/68b80ae1-8c10-4eac-b412-ca643624b286/tasks/byae41uke.output \| tail -3; date +%H:%M` |
+| 07:33:44 | Bash |  | `grep -E '^(OK\|FAILED)($\| \()\|^Ran ' /tmp/claude-1001/full3.log \| tail -2; grep -E "^(FAIL\|ERROR):" /tmp/claude-1001/full3.log \| sed 's/ (.*//' \| sort \| uniq -c \| head -20` |
 | 07:32:01 | Bash |  | `cd /home/ronald/saas-hasner; f0=$(git -C /home/ronald/wt-fechar-2710-0500 rev-parse --short HEAD); p0=$(git -C /home/ronald/wt-pergunta-dia-2710-0630 rev-parse --short HEAD); for i in $(seq 1 28); do [ "$(git -C /home/ronald/wt-fechar-2710-0500 rev-parse --short HEAD)" != "$f0" ] && break; [ "$(git -C /home/ronald/wt-pergunta-dia-2710-0630 rev-parse --short HEAD)" != "$p0" ] && break; /usr/bin/sle ...` |
 | 07:31:55 | Bash |  | `python3 - <<'EOF' p='docs/RELATO.md' s=open(p).read() anc='## ABONADO NO AR + APPLY da 10 -- 3df9c01f (27/10 06:5x)' assert s.count(anc)==1 sec='''## CANAL-NA-BATIDA NO AR -- 83c9e1c6 (27/10 07:1x); RAIA-DO-CONTRATO-20-NOITE completa LEI-AKITA: origem=ponto/registro_batida.py::canal_da_batida, testemunha=device_id, RED=import vermelho no HEAD, quem-mais-le=api/views.py, api/views_core.py, triagem_ ...` |
 | 07:27:44 | Bash |  | `/usr/bin/sleep 240; docker exec saas_core python manage.py tenant_command shell --schema=juliani --command "from ponto.models import Batida; import datetime as d; from django.utils import timezone as tz; q=Batida.objects.filter(timestamp__gte=tz.make_aware(d.datetime(2026,10,27,7,17)), origem='app'); import collections; print('APP_POS_DEPLOY', q.count(), 'CANAL', dict(collections.Counter(q.values_ ...` |
