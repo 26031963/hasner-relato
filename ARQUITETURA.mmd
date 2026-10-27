@@ -200,8 +200,8 @@ flowchart TD
     t_evento["EVENTO<br/>batida, ausencia, chamado -> cartorio julga na hora (signals B5.2)"]
     t_consumidor["CONSUMIDORES<br/>chamado, pergunta, tela, folha: leem a lampada, nunca re-julgam"]
     t_vigia["CRON = VIGIA<br/>36 vigias; contador esperado 0, so alarma"]
-    t_prazo["CRON = PRAZO (L-101)<br/>11 cron(s): a falta nao emite evento, o relogio e o unico sinal dela;<br/>julgam pela funcao do juiz da casa, sem regra propria (PRAZO_DELEGA_A)"]
-    t_juiz["JUIZ POR VARREDURA (divida)<br/>6 crons ainda julgam: esperado 0"]
+    t_prazo["CRON = PRAZO (L-101)<br/>12 cron(s): a falta nao emite evento, o relogio e o unico sinal dela;<br/>julgam pela funcao do juiz da casa, sem regra propria (PRAZO_DELEGA_A)"]
+    t_juiz["JUIZ POR VARREDURA (divida)<br/>5 crons ainda julgam: esperado 0"]
     t_escala --> t_celula
     t_evento --> t_celula
     t_celula --> t_consumidor
@@ -214,7 +214,6 @@ flowchart TD
   j_reavaliar_ausencias_feriado["reavaliar_ausencias_feriado"] -.-> t_juiz
   j_reconciliar_chamados["reconciliar_chamados"] -.-> t_juiz
   j_reconciliar_perguntas_orfas["reconciliar_perguntas_orfas"] -.-> t_juiz
-  j_termometro_regua["termometro_regua"] -.-> t_juiz
   pz_apurar_furos_diarios["apurar_furos_diarios<br/>escala.services.furos_diarios::apurar"] -.-> t_prazo
   pz_detectar_ausencias["detectar_ausencias<br/>ponto.services.cartorio::marcos_vencidos"] -.-> t_prazo
   pz_detectar_par_relampago["detectar_par_relampago<br/>ponto.turnos::par_completo"] -.-> t_prazo
@@ -225,6 +224,7 @@ flowchart TD
   pz_processar_alertas_turno["processar_alertas_turno<br/>ponto.turnos::lembrete_fim_turno"] -.-> t_prazo
   pz_processar_cartorio["processar_cartorio<br/>ponto.services.cartorio::julgar_colab"] -.-> t_prazo
   pz_supra_juiz["supra_juiz<br/>ponto.turnos::dias_encerrados"] -.-> t_prazo
+  pz_termometro_regua["termometro_regua<br/>escala.regua_defesa::avaliar_e_gravar_regua"] -.-> t_prazo
   pz_vigia_de_hora["vigia_de_hora<br/>ponto.services.cartorio::marcos_vencidos"] -.-> t_prazo
 
   %% (e) EVENTO — fonte: @receiver em ponto/signals.py, chamados/signals.py, escala/signals.py (AST)
