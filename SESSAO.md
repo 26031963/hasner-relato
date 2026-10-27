@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/10/2026 19:53:18.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (10.1 MB). Acoes na janela: **377**.
+**Medido em 27/10/2026 19:58:25.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (10.2 MB). Acoes na janela: **379**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 19:58:18 | Agent | Verify FIO-LE-O-JUIZ 2a leitura | `FIO-LE-O-JUIZ, 2a leitura. Copia /home/ronald/wt-fio-2710-1835 (branch fio-le-o-juiz-2710) sobre main 0baf575f; HEAD 52ba48d8. Diff: `git -C /home/ronald/wt-fio-2710-1835 diff 0baf575f..HEAD`; delta desde a sua 1a leitura: `git -C /home/ronald/wt-fio-2710-1835 diff 37225ca3..HEAD`. A 1a reprovou: (1) leitura exportada sem leitor na tela e sem porta para o admin resolver a viva; (2) `_competencia_e ...` |
+| 19:58:06 | Bash | Run full suite on FIO final HEAD | `cd /home/ronald/saas-hasner && git log --oneline 0baf575f..HEAD -- app ':!app/docs' \| head -3; L=logs/fio_suite_final.log; bin/suite.sh --dir /home/ronald/wt-fio-2710-1835 --espera 3600 > $L 2>&1; echo "rc=$?" >> $L` |
 | 19:48:04 | Bash | Long wait for FIO constructor | `/usr/bin/sleep 590; for w in wt-fio-2710-1835 wt-cobertura-2710-1810; do echo "$w $(git -C /home/ronald/$w log --oneline -1 \| cut -c1-90) sujos=$(git -C /home/ronald/$w status --porcelain \| grep -vc '^??')"; done; date +%H:%M` |
 | 19:47:54 | Bash | Register PAZ-DO-ADMIN and madrugada avals | `cd /home/ronald/saas-hasner && python3 - <<'E' import json d='app/docs/' av={'PAZ-DO-ADMIN':"aval Ronald PAZ-DO-ADMIN (substitui a ordem de hoje so na fila 1): primeiro os BOs do supervisor que pousam ate amanha cedo, UM por vez, um construtor e um verificador, SEM agentes em paralelo: (1) FIO-LE-O-JUIZ (C) com as correcoes do verificador; (2) REGISTRADO-NAO-E-VIVO (D); (3) COBERTURA-PARCIAL-UM-JU ...` |
 | 19:47:41 | SendMessage |  | `-` |
