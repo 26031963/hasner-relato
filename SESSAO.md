@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/10/2026 19:05:51.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (9.4 MB). Acoes na janela: **360**.
+**Medido em 27/10/2026 19:11:06.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (9.5 MB). Acoes na janela: **362**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 19:09:20 | Bash | Wait for FIO progress | `W=/home/ronald/wt-fio-2710-1835; h0=$(git -C $W rev-parse HEAD); for i in $(seq 58); do [ "$(git -C $W rev-parse HEAD)" != "$h0" ] && break; /usr/bin/sleep 10; done; git -C $W log --oneline -1 \| cut -c1-110; date +%H:%M` |
+| 19:09:09 | Bash | Post periodo_da_parcial question | `cd /home/ronald/saas-hasner && python3 - <<'E' p='app/docs/RELATO.md';s=open(p).read() a='# RELATO — esteira saas-hasner\n\n' q=("> **lei: JUIZ-PERIODO-DA-PARCIAL** (pergunta, nao para a fila; COBERTURA-PARCIAL-UM-JUIZ, letra (A)) -- para cumprir a sua (b) de 18:5x o construtor fez `ponto/turnos.py::periodo_da_parcial_no_dia` (responde `sem_periodo` / `dentro` / `fora` pela `Ausencia.hora_ini`/`ho ...` |
 | 18:59:21 | Bash | Wait for FIO progress | `W=/home/ronald/wt-fio-2710-1835; h0=$(git -C $W rev-parse HEAD); for i in $(seq 57); do [ "$(git -C $W rev-parse HEAD)" != "$h0" ] && break; /usr/bin/sleep 10; done; git -C $W log --oneline -1 \| cut -c1-110; git -C /home/ronald/wt-cobertura-2710-1810 log --oneline -1 \| cut -c1-90; date +%H:%M` |
 | 18:59:11 | Bash | Register laudo reenvio and annotate obras | `cd /home/ronald/saas-hasner && python3 - <<'E' import json d='app/docs/' f="aval Ronald LAUDO-[nome]-REENVIO-2710 (lote [nome], 11 itens; nenhuma obra nova, so complementos das letras do BO-[nome]-FECHA): RT-01 col42 -> (A) COBERTURA-PARCIAL-UM-JUIZ (08/15/22-10 fecham so com periodo cobrindo o intervalo; 01/09-10 #4673/#4816 decisao do admin, lista; #134289 E 13h29 segue pelo marco, nunca c ...` |
 | 18:58:56 | SendMessage |  | `-` |
