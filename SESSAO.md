@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/10/2026 08:36:36.** Transcript: `68b80ae1-8c10-4eac-b412-ca643624b286.jsonl` (6.3 MB). Acoes na janela: **273**.
+**Medido em 27/10/2026 08:41:54.** Transcript: `68b80ae1-8c10-4eac-b412-ca643624b286.jsonl` (6.4 MB). Acoes na janela: **277**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 08:37:29 | Bash |  | `/usr/bin/sleep 560; for d in wt-fechar-2710-0500 wt-pergunta-dia-2710-0630 wt-ata-pausa-2710-0820; do git -C /home/ronald/$d log --oneline -1 2>/dev/null; done; /home/ronald/saas-hasner/bin/trava_teste.sh --quem; date +%H:%M` |
+| 08:37:24 | Bash |  | `date +%H:%M && python3 - <<'EOF' p='docs/PROMPTS.md' s=open(p).read().rstrip('\n')+'\n' s+='\| 27/10 08:3x \| **aval: CONTRATO-20-DOIS-EVENTOS** -- complemento da RAIA-DO-CONTRATO-20, em paralelo; E2 (celula regenerada: relavrar_celulas_da_foto / regenerar_celulas_vinculo nao chamam reavaliar_dia nem a rejuncao) e E1 (batida pelo chokepoint); medir em prod por parte os 5 (reavaliar_ausencias_feria ...` |
+| 08:37:11 | Agent | CONTRATO-20-DOIS-EVENTOS (sonnet) | `Voce e a obra CONTRATO-20-DOIS-EVENTOS do repo /home/ronald/saas-hasner (Django em app/), complemento da RAIA-DO-CONTRATO-20, em PARALELO a fila principal. Leia antes, inteiros: /home/ronald/saas-hasner/CLAUDE.md secoes 0, 2, 3, 4, 4a, 6, 7, 7b. REGRAS DURAS: trabalhe SO no seu worktree isolado (confira `git log --oneline -1`; deve ser o main atual 917ef3c3 ou mais novo -- se for mais velho, `git  ...` |
+| 08:36:54 | SendMessage |  | `-` |
 | 08:27:38 | Bash |  | `/usr/bin/sleep 540; for d in wt-fechar-2710-0500 wt-pergunta-dia-2710-0630 wt-ata-pausa-2710-0820; do git -C /home/ronald/$d log --oneline -1 2>/dev/null; done; date +%H:%M` |
 | 08:27:33 | Bash |  | `date +%H:%M && python3 - <<'EOF' p='docs/PROMPTS.md' s=open(p).read().rstrip('\n')+'\n' s+='\| 27/10 08:2x \| **aval: FECHAR-A1-SEM-COBRANCA-DO-OUTRO-MARCO = (a)** -- defeito do EMISSOR (lei 4a), a (a1) pousa; os 3 (#34180, #34108, #33462) entram como COMPLEMENTO da PERGUNTA-DO-DIA/FIO-MUDO (por que o marco vencido nao emitiu), medir pela funcao real e curar o emissor na origem; (c1) #31900 ok. Es ...` |
 | 08:27:26 | Agent | Verify PERGUNTA delta (strong) | `Segunda verificacao da obra PERGUNTA-DO-DIA-EM-CURSO (b) (aval Ronald 27/10 00:2x: a pergunta do marco vencido do dia corrente nasce do EVENTO -- vigia de hora -- com teto por INSTANTE, CLAUDE.md secao 6). Voce (verificador) barrou 8c035df8 por: teto por DATA no passado (`fabrica_da_celula.py:20-21`), turno que cruza a meia-noite sem gate de instante, selo do fio mudo sem caso de hoje, docstrings  ...` |
