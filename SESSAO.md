@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 26/10/2026 22:05:08.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (54.8 MB). Acoes na janela: **633**.
+**Medido em 26/10/2026 22:10:35.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (54.8 MB). Acoes na janela: **632**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -642,4 +642,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 10:16:46 | Bash | Sum grouped totals from the PDF text | `cd /home/ronald/saas-hasner && docker run --rm -v $PWD/logs/sombra:/d:ro saas-hasner-core:latest python -c " import re from pypdf import PdfReader r=PdfReader('/d/builder_agrupado.pdf'); t='\n'.join(p.extract_text() for p in r.pages) tot=[int(x) for x in re.findall(r'Total do posto .*?: (\d+)', t)] print('paginas',len(r.pages),'grupos',len(tot),'soma',sum(tot), re.findall(r'Total geral: \d+', t),  ...` |
 | 10:16:41 | Read |  | `/home/ronald/saas-hasner/logs/sombra/builder_um_posto.pdf` |
 | 10:16:32 | Bash | Generate builder PDFs via the view on sombra | `cd /home/ronald/saas-hasner && cat > logs/sombra/builder_pdf.py <<'EOF' # BUILDER-POR-POSTO: o PDF pela TELA (GET da view real), um posto e todos agrupados. SO LEITURA, na sombra. from django.test import Client from django.contrib.auth.models import User from django.apps import apps from django.db.models import Count Colab = apps.get_model('colaboradores', 'Colaborador') u = User.objects.filter(is ...` |
-| 10:05:56 | Bash | Run host seals, placar line, regen map | `cd /home/ronald/saas-hasner && r=0; for s in bin/tests/test_*.sh; do out=$(bash $s 2>&1); rc=$?; [ $rc -ne 0 ] && { echo "RED $s: $(echo "$out" \| tail -2 \| tr '\n' ' ' \| cut -c1-200)"; r=1; }; done; echo "pasta rc=$r"; bash bin/placar_code.sh 2>/dev/null \| /bin/grep "^escritas_por_cron" \| head -3; python3 bin/gerar_mapa_juizes.py >/dev/null 2>&1; git status --short app/docs/MAPA-JUIZES.md app ...` |
