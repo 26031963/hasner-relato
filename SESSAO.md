@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/10/2026 00:14:35.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (57.3 MB). Acoes na janela: **628**.
+**Medido em 27/10/2026 00:20:08.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (57.3 MB). Acoes na janela: **626**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -636,5 +636,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 12:20:24 | Bash | Read export fixture creation | `sed -n 47,53p chamados/tests/test_cobrar_so_o_que_muda_a_folha.py` |
 | 12:20:21 | Bash | Find export fixture pattern and command tests | `git grep -n "ExportacaoDominio.objects.create" -- '*/tests/*.py' \| head -3; git grep -l "lavrar_he_pendente" -- '*/tests/*.py' \| head` |
 | 12:20:16 | Bash | Read snapshot key in he_pendente_lavrado | `/bin/grep -n "^def lavrar\\|^def apurar\\|^def ler\\|^def retrato\\|chave\b\\|chave=" ponto/services/he_pendente_lavrado.py \| head -15; /bin/grep -n "def lavrar" -A20 ponto/services/he_pendente_lavrado.py \| /bin/grep -n "MetricaSnapshot\\|chave\\|update_or_create\\|create" \| head` |
-| 12:20:07 | Bash | Read competencia_entregue and janela helpers | `/bin/grep -n "def competencia_entregue" -A20 folha/export.py \| head -26; /bin/grep -n "^def janela_anterior\\|^def janela_atual\\|^def janela_fechamento" -A3 ponto/janelas.py` |
-| 12:20:02 | Bash | Check push; read lavrar_he_pendente | `tail -n 4 /tmp/claude-1001/-home-ronald-saas-hasner-app/9dc43c3d-971d-4cc9-b176-7008bbd353bb/scratchpad/push12.out \| cut -c1-200; cd /home/ronald/saas-hasner/app && sed -n 1,80p ponto/management/commands/lavrar_he_pendente.py` |
