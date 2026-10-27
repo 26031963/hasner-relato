@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/10/2026 19:16:37.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (9.5 MB). Acoes na janela: **362**.
+**Medido em 27/10/2026 19:22:07.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (9.7 MB). Acoes na janela: **365**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 19:19:36 | Bash | Wait for verifier and cobertura suite | `/usr/bin/sleep 420; tail -2 /home/ronald/saas-hasner/logs/cobertura/suite_inteira.out 2>/dev/null \| cut -c1-80; /home/ronald/saas-hasner/bin/trava_teste.sh --quem; date +%H:%M` |
+| 19:19:23 | Bash | Post FIO effects question at RELATO top | `cd /home/ronald/saas-hasner && python3 - <<'E' p='app/docs/RELATO.md';s=open(p).read() a='# RELATO — esteira saas-hasner\n\n' q=("> **lei: FIO-LE-O-JUIZ-EFEITOS** (pergunta, nao para a fila; FIO-LE-O-JUIZ pronto, suite 12397 OK, verificador em curso) -- (1) mudanca que o aval nao previa: com `resolver_perguntas_por_chamado_resolvido` perguntando ao `pergunta_viva`, o furo agrupado sob ADESAO e sob ...` |
+| 19:19:18 | Agent | Verify FIO-LE-O-JUIZ antes do pouso | `FIO-LE-O-JUIZ (BO-[nome] (C), complemento do FECHAR-PERGUNTA-A-PREMISSA), leitura antes do pouso. Copia /home/ronald/wt-fio-2710-1835 (branch fio-le-o-juiz-2710) sobre main 0baf575f (o main nao ganhou codigo depois). Commits: 5b8655f8 (itens 1-3), b8f5560d (item 4 + fixtures legadas), 37225ca3 (fixtures de ponto + tetos do chokepoint). Diff: `git -C /home/ronald/wt-fio-2710-1835 diff 0baf575f..H ...` |
 | 19:09:20 | Bash | Wait for FIO progress | `W=/home/ronald/wt-fio-2710-1835; h0=$(git -C $W rev-parse HEAD); for i in $(seq 58); do [ "$(git -C $W rev-parse HEAD)" != "$h0" ] && break; /usr/bin/sleep 10; done; git -C $W log --oneline -1 \| cut -c1-110; date +%H:%M` |
 | 19:09:09 | Bash | Post periodo_da_parcial question | `cd /home/ronald/saas-hasner && python3 - <<'E' p='app/docs/RELATO.md';s=open(p).read() a='# RELATO — esteira saas-hasner\n\n' q=("> **lei: JUIZ-PERIODO-DA-PARCIAL** (pergunta, nao para a fila; COBERTURA-PARCIAL-UM-JUIZ, letra (A)) -- para cumprir a sua (b) de 18:5x o construtor fez `ponto/turnos.py::periodo_da_parcial_no_dia` (responde `sem_periodo` / `dentro` / `fora` pela `Ausencia.hora_ini`/`ho ...` |
 | 18:59:21 | Bash | Wait for FIO progress | `W=/home/ronald/wt-fio-2710-1835; h0=$(git -C $W rev-parse HEAD); for i in $(seq 57); do [ "$(git -C $W rev-parse HEAD)" != "$h0" ] && break; /usr/bin/sleep 10; done; git -C $W log --oneline -1 \| cut -c1-110; git -C /home/ronald/wt-cobertura-2710-1810 log --oneline -1 \| cut -c1-90; date +%H:%M` |
