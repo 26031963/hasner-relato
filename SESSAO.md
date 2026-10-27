@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/10/2026 11:42:36.** Transcript: `68b80ae1-8c10-4eac-b412-ca643624b286.jsonl` (9.2 MB). Acoes na janela: **373**.
+**Medido em 27/10/2026 11:47:51.** Transcript: `68b80ae1-8c10-4eac-b412-ca643624b286.jsonl` (9.3 MB). Acoes na janela: **376**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 11:43:02 | Bash |  | `/usr/bin/sleep 570; for d in wt-fechar2-2710-1015 wt-pergunta-dia-2710-0630 wt-ata-pausa-2710-0820 wt-contrato20-2710-0850 wt-ia-rbac-2710-1100 wt-leonardo-2710-1130; do echo "$d $(git -C /home/ronald/$d log --oneline -1 2>/dev/null \| cut -c1-80)"; done; /home/ronald/saas-hasner/bin/trava_teste.sh --quem; date +%H:%M` |
+| 11:42:57 | Bash |  | `python3 - <<'EOF' p='docs/PROMPTS.md' s=open(p).read().rstrip('\n')+'\n' s+='\| 27/10 11:4x \| **aval: LAUDO-[nome]-COL33-0310 CORRIGIDO** (substitui o de 11:2x/11:3x: caca ao teto de 14 h RETIRADA) -- a cura ja esta no ar (ATA-X-TURNO metade SAIDA 26/10 15:4x); falta o INCOMPLETO dela e da CELULA-CONCORDE-NO-MEIO-DO-TURNO: rejulgar as celulas ja carimbadas pela porta do cartorio, DIFF de celula ...` |
+| 11:42:51 | SendMessage |  | `-` |
 | 11:33:08 | Bash |  | `/usr/bin/sleep 570; for d in wt-fechar2-2710-1015 wt-pergunta-dia-2710-0630 wt-ata-pausa-2710-0820 wt-contrato20-2710-0850 wt-ia-rbac-2710-1100 wt-leonardo-2710-1130; do echo "$d $(git -C /home/ronald/$d log --oneline -1 2>/dev/null \| cut -c1-80)"; done; /home/ronald/saas-hasner/bin/trava_teste.sh --quem; date +%H:%M` |
 | 11:32:57 | SendMessage |  | `-` |
 | 11:32:44 | SendMessage |  | `-` |
