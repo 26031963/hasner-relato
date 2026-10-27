@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/10/2026 20:30:50.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (10.4 MB). Acoes na janela: **388**.
+**Medido em 27/10/2026 20:35:51.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (10.5 MB). Acoes na janela: **392**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 20:33:05 | Bash | Wait for REGISTRADO commit | `W=/home/ronald/wt-registrado-2710-2035; h0=$(git -C $W rev-parse HEAD); for i in $(seq 58); do [ "$(git -C $W rev-parse HEAD)" != "$h0" ] && break; /usr/bin/sleep 10; done; git -C $W log --oneline -1 \| cut -c1-110; date +%H:%M` |
+| 20:32:54 | Agent | Construir REGISTRADO-NAO-E-VIVO (D) | `Voce e o CONSTRUTOR da obra REGISTRADO-NAO-E-VIVO (BO-[nome] (D)) no repo /home/ronald/saas-hasner (ponto CLT, Django). Leia /home/ronald/saas-hasner/CLAUDE.md INTEIRO (secao 0 com a L-123 PADRAO-NA-CURA, 3, 4a, 6). COPIA: /home/ronald/wt-registrado-2710-2035 (branch registrado-2710, do main 0baf575f; tem app/logs e app/media). Nunca edite /home/ronald/saas-hasner (producao). Nada de merge/deplo ...` |
+| 20:32:34 | Bash | Full suite on FIO HEAD 684a55fd | `cd /home/ronald/saas-hasner && L=logs/fio_suite_684a.log; bin/suite.sh --dir /home/ronald/wt-fio-2710-1835 --espera 3600 > $L 2>&1; echo "rc=$?" >> $L` |
+| 20:32:32 | Bash | Record FIO state, move marker to (D), create copy | `cd /home/ronald/saas-hasner && python3 - <<'E' p='/home/ronald/saas-hasner/app/docs/BACKLOG.md';s=open(p).read();L=s.split('\n') k=[i for i,l in enumerate(L) if l.startswith('\| FIO-LE-O-JUIZ \|')][0]; c=L[k].split('\|') c[3]=' aguardando a lei FIO-LE-O-JUIZ-OS-19 (topo) e o smoke do modal (FRONT SEM SMOKE): copia wt-fio-2710-1835 @ 684a55fd, itens 1-4 da 2a leitura curados (4639 OK nos modulos);  ...` |
 | 20:22:32 | Bash | Wait for next FIO commit | `W=/home/ronald/wt-fio-2710-1835; h0=$(git -C $W rev-parse HEAD); for i in $(seq 58); do [ "$(git -C $W rev-parse HEAD)" != "$h0" ] && break; /usr/bin/sleep 10; done; git -C $W log --oneline -1 \| cut -c1-110; date +%H:%M` |
 | 20:18:56 | Bash | Wait for FIO commit | `W=/home/ronald/wt-fio-2710-1835; h0=$(git -C $W rev-parse HEAD); for i in $(seq 58); do [ "$(git -C $W rev-parse HEAD)" != "$h0" ] && break; /usr/bin/sleep 10; done; git -C $W log --oneline -1 \| cut -c1-110; date +%H:%M` |
 | 20:18:50 | Bash | Read FIO final suite verdict | `cd /home/ronald/saas-hasner/logs; grep -E '^(OK\|FAILED)($\| \()' fio_suite_final.log \| tail -1; grep '^Ran ' fio_suite_final.log \| tail -1; tail -1 fio_suite_final.log; grep -E '^(FAIL\|ERROR):' fio_suite_final.log \| head -5` |
