@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/10/2026 09:35:36.** Transcript: `68b80ae1-8c10-4eac-b412-ca643624b286.jsonl` (7.2 MB). Acoes na janela: **303**.
+**Medido em 27/10/2026 09:40:50.** Transcript: `68b80ae1-8c10-4eac-b412-ca643624b286.jsonl` (7.4 MB). Acoes na janela: **307**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 09:39:18 | Bash |  | `/usr/bin/sleep 240; date +%H:%M; git -C /home/ronald/wt-fechar-2710-0500 log --oneline -1` |
+| 09:39:14 | Bash |  | `python3 - <<'EOF' p='docs/BACKLOG.md' s=open(p).read() a='\| ATA-X-TURNO-PAUSA \|' s=s.replace(a,'\| ESMERIL-7-ACHADOS \| censos novos (27/10, `esmeril7-2710` 400b4876): zero chamador de producao -- ausencia: `vigia_ausencia._empresa_do_dp` (0 teste), `ausencia.contadores_do_dp`, `catalogo.ausencias.exige_data_final`; folha: `export.datas_abonadas`, `porta_export.lavrar_verde_para_teste` (ajudante ...` |
+| 09:39:01 | Bash |  | `git log --oneline -1 main && date +%H:%M && python3 - <<'EOF' p='docs/PROMPTS.md' s=open(p).read().rstrip('\n')+'\n' s+='\| 27/10 09:3x \| **aval: O122-ETAPA-2** -- raia wt-ui, fila 2, so templates/static/escala/views.py da tela, nucleo intocado (L-096): filtro universal (praca, posto, q) em /escala/tipos/; universo = colabs com vinculo HOJE pela juiza (vinculo_do_dia), o `uso` de escala/views.py: ...` |
+| 09:38:53 | Agent | Verify C2 hotfix | `HOTFIX urgente, verifique antes do pouso. Copia /home/ronald/wt-c2fix-2710-0930 (branch c2fix-2710, commit 9dc7905e, base 917ef3c3 = main). Diff: `git -C /home/ronald/wt-c2fix-2710-0930 diff 917ef3c3 HEAD`. Bug provado em prod: o pouso 15e3031d (CASA-CHAMADO-C2) fez `ponto/services/geofence.py::_cadastro_em_revisao` ler so a lavra C8 (`vinculo_na_lista.colabs_em_revisao`); os 19 chamados `vinculo_ ...` |
 | 09:29:10 | Bash |  | `/usr/bin/sleep 570; for d in wt-c2fix-2710-0930 wt-fechar-2710-0500 wt-pergunta-dia-2710-0630 wt-selfie-2710-0910 wt-esmeril7-2710-0930; do echo "$d $(git -C /home/ronald/$d log --oneline -1 2>/dev/null \| cut -c1-80)"; done; /home/ronald/saas-hasner/bin/trava_teste.sh --quem; date +%H:%M` |
 | 09:29:07 | Agent | Build esmeril ausencia+folha (sonnet) | `Construa o ESMERIL-PENDENTE ate 7/7 no repo /home/ronald/saas-hasner (aval Ronald 27/10 00:2x: "ausencia/ferias e folha/export pelo metodo de hoje"; ESMERIL-V2 so registrada: NADA se instala -- sem vulture/radon/import-linter/mutmut novos). Leia CLAUDE.md secoes 0, 3, 6 (L-111 SITIO SEM CHAMADOR), 7b (ESMERIL-DO-MARCO, L-105 instrumento em pouso proprio). NUNCA edite /home/ronald/saas-hasner; sem  ...` |
 | 09:28:46 | Bash |  | `grep -n "ESMERIL-PENDENTE" docs/PROMPTS.md docs/RELATO.md \| head -6 \| cut -c1-500; ls ../bin \| grep -i esmeril; grep -rn "familias esmerilhadas\\|esmerilhad" ../bin/placar_code.sh \| head -3` |
