@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/10/2026 14:28:37.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (3.9 MB). Acoes na janela: **158**.
+**Medido em 27/10/2026 14:34:07.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (4.0 MB). Acoes na janela: **159**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 14:31:40 | Bash | Wait for further progress across raias | `W=/home/ronald/wt-fechar3-2710-1320; h0=$(git -C $W rev-parse HEAD); for i in $(seq 57); do [ "$(git -C $W rev-parse HEAD)" != "$h0" ] && break; /usr/bin/sleep 10; done; git -C $W log --oneline -3 \| cut -c1-150; ls -t /home/ronald/saas-hasner/logs/ \| grep -E "fechar3\|rejulgar\|c20tol\|ata_pausa\|raia1" \| head -6; date +%H:%M` |
 | 14:27:21 | Bash | Wait for fechar3 progress commit | `W=/home/ronald/wt-fechar3-2710-1320; h0=$(git -C $W rev-parse HEAD); for i in $(seq 57); do [ "$(git -C $W rev-parse HEAD)" != "$h0" ] && break; /usr/bin/sleep 10; done; git -C $W log --oneline -5 \| cut -c1-150; git -C $W status --porcelain \| grep -v '^??' \| wc -l; date +%H:%M` |
 | 14:27:14 | SendMessage |  | `-` |
 | 14:17:35 | Bash | Wait for fechar3 commit | `W=/home/ronald/wt-fechar3-2710-1320; h0=$(git -C $W rev-parse HEAD); for i in $(seq 57); do [ "$(git -C $W rev-parse HEAD)" != "$h0" ] && break; /usr/bin/sleep 10; done; git -C $W log --oneline -4 \| cut -c1-150; date +%H:%M` |
