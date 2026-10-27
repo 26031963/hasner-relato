@@ -238,6 +238,19 @@ LEI-AKITA: origem=rejulgamento pendente das curas ja pousadas, testemunha=cartor
 - SMOKE-IA-RBAC-DUAS-CASCAS ok (15:2x): o push do front esta liberado; ele sai junto do proximo pouso, porque o selo de host `test_papel_prazo_nao_deriva.sh` esta VERMELHO no main (do 165fee20) e a cura dele e o `203fe2f6` do CONTRATO-20.
 - CENSO-PELA-REGRA-DO-20: REVOGADO por ele antes de comecar; nada executado.
 
+## LISTA-HE-77-RESTO: o que move cada um dos 77 (27/10 16:xx; so leitura, `logs/rejulgar_comp10/mais65_resto.out` + `mais65_codigo_x_dado.out`)
+LEI-AKITA: origem=nenhuma (medida), testemunha=`espelho_do_colab`->`pendencias_he_da_janela`->`dias_acima_do_limite_sem_decisao`+`folha.export.classificar_export`, RED=n/a, quem-mais-le=n/a, juizes novos=0
+- H1 REFUTADA: o codigo no ar em 22/10 11:37 e o do deploy de 10:26 (`logs/he/deploy_he.out`) = `d01210d2`; `git diff d01210d2 6d469ed2 -- app` so toca docs/tests. A base `6d469ed2` e o mesmo codigo.
+- O QUE NENHUM DOS DOIS MEDIDORES OLHOU: a lista so conta colab com `classificar_export` status `entra`. Universo no carimbo: 22/10 = 157/65/9 (emp2/3/4) -> 27/10 = 186/72/12, +39 colabs. A funcao da trava e a mesma; mudou QUEM e perguntado.
+- 21 dias (13.194 min): CODIGO `871ccd5b` (folga/sem previsto), sem outro commit mudar dia.
+- 10 SAEM (234 min, col43/238/741/857/981): DADO. Hoje `classificar_export` os da `fora/furo_espelho` e a funcao ainda poe os dias (prod vivo in_trava=1 nos 10); saem por saida do universo, nao pela trava.
+- 18 ENTRAM (1.176 min): DADO DE HOJE FORA DA SOMBRA. Na sombra 04:00 o colab e `fora/furo_espelho` (15 colabs); em prod 14:48 e `entra`: furo curado pelos atos de 12:11/14:08+.
+- 5 ENTRAM (129 min): DADO, colab novo no universo, com evento de celula/escala/ausencia na janela (col255 25/09, 438, 473, 562, 736/859 -- celula vizinha julgada 22-27/10; ver `mais65_resto_mexeu.out`).
+- 23 ENTRAM (1.022 min): NAO SEI por dia. Colab novo no universo (sem HE pendente em 22/10), `classificar_export` identico em `6d469ed2` e HEAD (0 de 42 muda), mas a sombra nao tem trilha do que curou o furo desse colab: DecisaoHE/Empresa/batida/celula +-1 dia sem evento auditado em 22/10 11:30..hoje.
+- "Nenhum outro candidato muda dia" e "nenhum dado do dia mudou" fecham juntos: a causa e dado do COLAB (entrada no universo), nao do dia.
+- Worktrees criados: removidos. Probes: `mais65_resto_probe*.py`.
+PROVA: 77 = 21 CODIGO + 10 SAI DADO + 46 ENTRA DADO (18 + 5 + 23); `d01210d2`==`6d469ed2` em app (so docs/tests); universo 231->270; classificar_export 0/42 flips base x HEAD; prod vivo reproduz 76/76 ENTRA e 10/10 SAI-in; 0 erro de sonda.
+
 ## LISTA_HE_TRAVA 184 -> 249: DE ONDE VIERAM OS +65 (27/10 15:2x; so leitura, `logs/rejulgar_comp10/mais65_resumo.out`)
 - Base: os dois numeros sao o TOTAL emp2+emp3+emp4 (22/10 11:37: 169+12+3; hoje 14:48: 224+19+6), conferidos contra o MetricaSnapshot. Entram **76** dia-colab (16.717 min), saem **11** (478 min), **173** mantidos com os MESMOS minutos.
 - Por causa PROVADA (dado do proprio dia mudou na janela): rejulgamento universo A de hoje 5 dias/637 min (col33, 80, 115, 255, 296); G1 de hoje 1/158 (col478); celulas regeneradas 23/10 14:28 (col784) 2/365; cartorio por evento 23/10 06:27 (col255) 1/36; SAI por cartorio hoje 08:46 (col866) 1/244.
