@@ -166,6 +166,11 @@ PAREI: ! GATE-EXPORT-10 (so o export da 10) | espera o DP na Gestao de HE e o Ro
 > O MARCADOR ANDOU no mesmo ato: `ORDEM-VIVA-TOPO` saiu de `BO-HE-RECUSAR-LOTE-500` (fechado) para `O261`, que o hook cobrou.
 > SEM COMMIT DE PROPOSITO: `RELATO.md` e `BACKLOG.md` ficam sujos na arvore porque a L-106 nao deixa commit so de docs fora de marco. Eles entram no commit do proximo marco.
 
+## DIA-DA-DEMISSAO-FORA-DO-UNIVERSO -- MEDIDO na 10: o defeito da 09 NAO se reproduz; nada de ESTRUTURA a curar (26/10 21:4x)
+LEI-AKITA: origem=(nenhuma -- medido, sem defeito de estrutura na 10), testemunha=escala/alimentacao.py::vinculo_do_dia_carregado + ponto/supra_juiz.py::classificar_dia (espiado, nao replicado), RED=(nao ha: sem defeito), quem-mais-le=cartorio/DiaPago/folha, juizes novos=0
+- Sombra (04:00), comp 10, **16 desligados** com demissao na competencia (`logs/demissao_10.out`): vinculo com `data_fim == D` em **16/16**; todo D de trabalho TEM linha de DiaPago -- o "19 de 28 dias da 09 sem lavratura" nao existe da 10 em diante (aval (c): a 09 fica como esta).
+- Veredito de D: 5 furo + 1 faltou sem batida (2 furos com batida) = honesto pelo cadastro (o vinculo cobre D), dono BATIDA; 3 `indefinida` (782, 786, 840): o `classificar_dia` REAL espiado (`logs/demissao_spy.out`) da `folga_nao_definida=True`, `sem_vinculo_no_dia=False` -> "folga nao cadastrada, cobrar o CADASTRO" -- dono CADASTRO (L-099: proibido curar por codigo), coincide com o dia da demissao e nao vem dele. Rejulgado na sombra: segue `indefinida` (nao e ata velha).
+
 ## CONTRATO-19-DE-VOLTA, metade 2 -- a PORTA que reconcilia o legado (26/10 21:1x, POUSADO; suite inteira Ran 12185 OK rc 0)
 LEI-AKITA: origem=chamados/models.py::ChamadoColaborador.reconciliar_trilha_do_estado, testemunha=chamados/services/vigia_loop.py::trilha_x_banco, RED=chamados/tests/test_reconciliar_trilha_do_estado.py, quem-mais-le=trilha_x_banco, trocas_de_estado_em_loop, historico, escritas_por_cron, juizes novos=0
 - A porta acrescenta UMA linha `ultima linha -> banco`, `via='trilha_reconciliada'`; NAO reescreve linha velha, NAO toca o estado; idempotente. RED 3 ERROR no HEAD.
