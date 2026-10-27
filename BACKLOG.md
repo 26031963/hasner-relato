@@ -4,7 +4,8 @@
 >
 > **livre** = pode virar fatia agora, sem humano. **corte/aval/smoke/dinheiro-ate-export** = tem dono humano e espera.
 
-<!-- ORDEM-VIVA-TOPO: PERGUNTA-DO-DIA-EM-CURSO -->
+<!-- ORDEM-VIVA-TOPO: FECHAR-PERGUNTA-A-PREMISSA -->
+<!-- ANDOU 27/10 12:4x, de `PERGUNTA-DO-DIA-EM-CURSO` (POUSADA 165fee20) para `FECHAR-PERGUNTA-A-PREMISSA` (reconstrucao em wt-fechar2-2710-1015: medir o chokepoint, suite, verificador). AUTONOMIA item 1. -->
 <!-- ANDOU 27/10 08:2x, de `FECHAR-PERGUNTA-A-PREMISSA` (PAROU pela pre-condicao do aval (a1): 0 de 3 com cobranca viva do outro marco, topo do RELATO) para `PERGUNTA-DO-DIA-EM-CURSO` (em construcao; ATA-X-TURNO-PAUSA ao lado, sem arquivo em comum). AUTONOMIA item 1. -->
 <!-- ANDOU 27/10 06:5x, de `ABONADO-COM-SAIDA-ANTECIPADA` (FECHADA, no ar 3df9c01f, apply provado) para `FECHAR-PERGUNTA-A-PREMISSA` (em construcao; pouso espera FECHAR-GUARDA-X-BUG115 (a)/(c) no topo). AUTONOMIA item 1. -->
 <!-- ANDOU 27/10 05:1x, de `HE100-SEM-PREVISTO-SOZINHA` (FECHADA, no ar 46b61163, apply da 10 provado) para `ABONADO-COM-SAIDA-ANTECIPADA` (ordem do aval RETOMAR-POS-CLEAR). AUTONOMIA item 1. -->
