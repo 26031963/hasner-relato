@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/10/2026 04:25:49.** Transcript: `68b80ae1-8c10-4eac-b412-ca643624b286.jsonl` (3.7 MB). Acoes na janela: **151**.
+**Medido em 27/10/2026 04:30:49.** Transcript: `68b80ae1-8c10-4eac-b412-ca643624b286.jsonl` (3.7 MB). Acoes na janela: **152**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 04:27:30 | Bash |  | `cd /home/ronald/saas-hasner; for i in $(seq 1 19); do ls logs/crons_em_curso/ 2>/dev/null \| grep -q sombra \|\| break; /usr/bin/sleep 30; done; date +%H:%M; ls logs/crons_em_curso/` |
 | 04:17:57 | Bash |  | `cd /home/ronald/saas-hasner; for i in $(seq 1 19); do ls logs/crons_em_curso/ 2>/dev/null \| grep -q sombra \|\| break; /usr/bin/sleep 30; done; date +%H:%M; ls logs/crons_em_curso/` |
 | 04:08:24 | Bash |  | `cd /home/ronald/saas-hasner; for i in $(seq 1 19); do ls logs/crons_em_curso/ 2>/dev/null \| grep -q sombra \|\| break; /usr/bin/sleep 30; done; date +%H:%M; ls logs/crons_em_curso/` |
 | 04:08:19 | Bash |  | `cd /home/ronald/saas-hasner; while ls logs/crons_em_curso/ 2>/dev/null \| grep -q sombra; do /usr/bin/sleep 30; done; date +%H:%M; bin/sombra.sh --conferir 2>&1 \| tail -2` |
