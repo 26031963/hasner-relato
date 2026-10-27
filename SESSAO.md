@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/10/2026 09:24:46.** Transcript: `68b80ae1-8c10-4eac-b412-ca643624b286.jsonl` (7.1 MB). Acoes na janela: **298**.
+**Medido em 27/10/2026 09:30:12.** Transcript: `68b80ae1-8c10-4eac-b412-ca643624b286.jsonl` (7.2 MB). Acoes na janela: **303**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 09:29:10 | Bash |  | `/usr/bin/sleep 570; for d in wt-c2fix-2710-0930 wt-fechar-2710-0500 wt-pergunta-dia-2710-0630 wt-selfie-2710-0910 wt-esmeril7-2710-0930; do echo "$d $(git -C /home/ronald/$d log --oneline -1 2>/dev/null \| cut -c1-80)"; done; /home/ronald/saas-hasner/bin/trava_teste.sh --quem; date +%H:%M` |
+| 09:29:07 | Agent | Build esmeril ausencia+folha (sonnet) | `Construa o ESMERIL-PENDENTE ate 7/7 no repo /home/ronald/saas-hasner (aval Ronald 27/10 00:2x: "ausencia/ferias e folha/export pelo metodo de hoje"; ESMERIL-V2 so registrada: NADA se instala -- sem vulture/radon/import-linter/mutmut novos). Leia CLAUDE.md secoes 0, 3, 6 (L-111 SITIO SEM CHAMADOR), 7b (ESMERIL-DO-MARCO, L-105 instrumento em pouso proprio). NUNCA edite /home/ronald/saas-hasner; sem  ...` |
+| 09:28:46 | Bash |  | `grep -n "ESMERIL-PENDENTE" docs/PROMPTS.md docs/RELATO.md \| head -6 \| cut -c1-500; ls ../bin \| grep -i esmeril; grep -rn "familias esmerilhadas\\|esmerilhad" ../bin/placar_code.sh \| head -3` |
+| 09:28:43 | Bash |  | `grep -n "^\| ESMERIL-PENDENTE\\|^\| ESMERIL-V2" docs/BACKLOG.md \| cut -c1-1200` |
+| 09:28:38 | Bash |  | `date +%H:%M && python3 - <<'EOF' p='docs/RELATO.md' s=open(p).read() h='# RELATO — esteira saas-hasner\n\n' q=('> **lei: ATA-PAUSA-ORDEM-X-[nome]** (pergunta, nao para a fila; ATA-X-TURNO-PAUSA, construida em `wt-ata-pausa-2710-0820` @ 936205ac, suite 12254 OK, verificador NAO POUSA) -- ' 'a cura acende os marcos de pausa (hii/hfi) pelas batidas do par de pausa que o juiz do par (`intervalos_do_t ...` |
 | 09:18:53 | Bash |  | `/usr/bin/sleep 570; for d in wt-c2fix-2710-0930 wt-fechar-2710-0500 wt-pergunta-dia-2710-0630 wt-selfie-2710-0910; do echo "$d $(git -C /home/ronald/$d log --oneline -1 2>/dev/null \| cut -c1-80)"; done; /home/ronald/saas-hasner/bin/trava_teste.sh --quem; date +%H:%M` |
 | 09:18:49 | Bash |  | `sed -i 's/BUG em prod no C2 (27\/10 09:2x)/BUG em prod no C2 (27\/10 09:1x)/' docs/RELATO.md && sed -i 's/\| 27\/10 09:2x \|$/\| 27\/10 09:1x \|/; s/a medir \| 27\/10 09:2x \|/a medir \| 27\/10 09:1x \|/' docs/BACKLOG.md && grep -c "27/10 09:2x" docs/BACKLOG.md docs/RELATO.md` |
 | 09:18:45 | Bash |  | `date +%H:%M && python3 - <<'EOF' p='docs/RELATO.md' s=open(p).read() anc='## CANAL-NA-BATIDA NO AR -- 83c9e1c6 (27/10 07:1x); RAIA-DO-CONTRATO-20-NOITE completa' assert s.count(anc)==1 sec='''## VERIFICADOR RETROATIVO da raia 20-noite + BUG em prod no C2 (27/10 09:2x) - O verificador nao rodou antes dos 3 pousos (falha minha); rodou depois, no codigo no ar: ACHADOS nos 3, nenhum de dinheiro. - **B ...` |
