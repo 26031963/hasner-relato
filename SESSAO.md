@@ -6,10 +6,20 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/10/2026 09:03:07.** Transcript: `68b80ae1-8c10-4eac-b412-ca643624b286.jsonl` (6.5 MB). Acoes na janela: **281**.
+**Medido em 27/10/2026 09:08:36.** Transcript: `68b80ae1-8c10-4eac-b412-ca643624b286.jsonl` (6.8 MB). Acoes na janela: **291**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 09:08:09 | Bash |  | `/usr/bin/sleep 560; for d in wt-fechar-2710-0500 wt-pergunta-dia-2710-0630 wt-ata-pausa-2710-0820 wt-contrato20-2710-0850 wt-selfie-2710-0910; do echo "$d $(git -C /home/ronald/$d log --oneline -1 2>/dev/null \| cut -c1-90)"; done; /home/ronald/saas-hasner/bin/trava_teste.sh --quem; date +%H:%M` |
+| 09:08:05 | Agent | Retro-verify raia 20-noite in prod | `Verificacao RETROATIVA (o codigo ja esta NO AR; o verificador nao rodou antes do pouso -- falha de conduta). Obra: RAIA-DO-CONTRATO-20-NOITE, aval Ronald 27/10 ~02:0x, 3 pousos no main de /home/ronald/saas-hasner: 15e3031d (CASA-CHAMADO-C2: detectar_vinculo_divergente LAVRA linha C8 da lista do admin e nao abre mais chamado; lei 25/10 15:1x (b); ponto/services/vinculo_na_lista.py novo; geofence._c ...` |
+| 09:07:53 | SendMessage |  | `-` |
+| 09:07:46 | Bash |  | `python3 - <<'EOF' p='docs/RELATO.md' s=open(p).read() adds={ '## HE100 NO AR + APPLY da 10 -- 46b61163 (27/10 05:0x)\n':'CUSTO (aval CUSTO-POR-OBRA 09:0x): verificador 2 voltas barradas -- (1) o DiaPago oraculo pagava o dia que o motor zerava = LEITOR QUE NAO MIGROU; (2) universo do calculador por `fora_por_dia` largo demais = DESENHO; construtor sonnet ~193 mil tokens (5 rodadas).\n', '## ABONADO ...` |
+| 09:07:27 | Agent | Build juiz selfie_ausente (sonnet) | `Construa o juiz `selfie_ausente` em raia propria no repo /home/ronald/saas-hasner (Django em app/). Leia antes /home/ronald/saas-hasner/CLAUDE.md secoes 0 (TRAVA JUIZ-NOVO), 3, 4, 6, 7, 7b. NUNCA edite /home/ronald/saas-hasner (bind-mount de prod); sem merge/push/deploy; sem escrita em prod. COPIA: `git -C /home/ronald/saas-hasner worktree add -b selfie-2710 /home/ronald/wt-selfie-2710-0910 main`  ...` |
+| 09:06:56 | Bash |  | `sed -n 1,80p ponto/management/commands/marcar_foto_ausente_retro.py \| grep -n "MINUTOS\\|90\\|def \\|filter\\|canal\\|apk\\|origem" \| head -20; git grep -n "marcar_foto_ausente_retro\\|foto_ausente" -- '*/tests/*.py' \| cut -d: -f1 \| sort -u \| head -15; sed -n 1935,1950p config/crons.py` |
+| 09:06:53 | Bash |  | `sed -n 460,485p api/views_core.py; echo ----; sed -n 470,490p api/views.py; echo ----; git grep -n "MINUTOS_DE_PRAZO\\|foto_ausente\\|FOTO_AUSENTE" -- '*.py' \| grep -v "/tests/\\|/migrations/" \| head -30` |
+| 09:06:46 | Bash |  | `grep -n "JUIZ-SELFIE-AUSENTE-NASCE" docs/CORTES.md \| cut -c1-120; python3 - <<'EOF' p='docs/CORTES.md' L=open(p).read().split('\n') n=0 for i,l in enumerate(L): if l.startswith('\| **JUIZ-SELFIE-AUSENTE-NASCE**') and 'SUSPENSO 25/10 00:1x' in l: L[i]=l.replace('SUSPENSO 25/10 00:1x ate redacao nova -- obra TURNO-ABERTO-UM-EMISSOR;','construindo -- SUSPENSAO LEVANTADA 27/10 09:0x (aval Ronald FOTO ...` |
+| 09:06:30 | Bash |  | `date +%H:%M && sed -n 94p docs/CORTES.md \| cut -c1-600` |
+| 09:06:17 | Bash |  | `cd /home/ronald/saas-hasner && crontab -l \| grep -i reavaliar_ausencias_feriado \| head; git log --format='%h %ad %s' --date=short -S"reavaliar_ausencias_feriado" -- app/config/crons.py \| head -5` |
 | 08:56:27 | Bash |  | `/usr/bin/sleep 570; for d in wt-fechar-2710-0500 wt-pergunta-dia-2710-0630 wt-ata-pausa-2710-0820 wt-contrato20-2710-0850; do git -C /home/ronald/$d log --oneline -1 2>/dev/null; done; /home/ronald/saas-hasner/bin/trava_teste.sh --quem; date +%H:%M` |
 | 08:47:03 | Bash |  | `/usr/bin/sleep 560; for d in wt-fechar-2710-0500 wt-pergunta-dia-2710-0630 wt-ata-pausa-2710-0820 wt-contrato20-2710-0850; do git -C /home/ronald/$d log --oneline -1 2>/dev/null; done; /home/ronald/saas-hasner/bin/trava_teste.sh --quem; date +%H:%M` |
 | 08:47:00 | SendMessage |  | `-` |
