@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/10/2026 20:40:51.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (10.5 MB). Acoes na janela: **392**.
+**Medido em 27/10/2026 20:46:06.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (10.5 MB). Acoes na janela: **394**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 20:45:49 | Bash | Wait for REGISTRADO progress | `W=/home/ronald/wt-registrado-2710-2035; h0=$(git -C $W rev-parse HEAD); for i in $(seq 58); do [ "$(git -C $W rev-parse HEAD)" != "$h0" ] && break; /usr/bin/sleep 10; done; git -C $W log --oneline -2 \| cut -c1-110; date +%H:%M` |
+| 20:42:51 | Bash | Wait for REGISTRADO commit and FIO suite | `W=/home/ronald/wt-registrado-2710-2035; h0=$(git -C $W rev-parse HEAD); for i in $(seq 58); do [ "$(git -C $W rev-parse HEAD)" != "$h0" ] && break; /usr/bin/sleep 10; done; git -C $W log --oneline -1 \| cut -c1-110; grep -E '^(OK\|FAILED)($\| \()' /home/ronald/saas-hasner/logs/fio_suite_684a.log \| tail -1; date +%H:%M` |
 | 20:33:05 | Bash | Wait for REGISTRADO commit | `W=/home/ronald/wt-registrado-2710-2035; h0=$(git -C $W rev-parse HEAD); for i in $(seq 58); do [ "$(git -C $W rev-parse HEAD)" != "$h0" ] && break; /usr/bin/sleep 10; done; git -C $W log --oneline -1 \| cut -c1-110; date +%H:%M` |
 | 20:32:54 | Agent | Construir REGISTRADO-NAO-E-VIVO (D) | `Voce e o CONSTRUTOR da obra REGISTRADO-NAO-E-VIVO (BO-[nome] (D)) no repo /home/ronald/saas-hasner (ponto CLT, Django). Leia /home/ronald/saas-hasner/CLAUDE.md INTEIRO (secao 0 com a L-123 PADRAO-NA-CURA, 3, 4a, 6). COPIA: /home/ronald/wt-registrado-2710-2035 (branch registrado-2710, do main 0baf575f; tem app/logs e app/media). Nunca edite /home/ronald/saas-hasner (producao). Nada de merge/deplo ...` |
 | 20:32:34 | Bash | Full suite on FIO HEAD 684a55fd | `cd /home/ronald/saas-hasner && L=logs/fio_suite_684a.log; bin/suite.sh --dir /home/ronald/wt-fio-2710-1835 --espera 3600 > $L 2>&1; echo "rc=$?" >> $L` |
