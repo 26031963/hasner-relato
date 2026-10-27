@@ -178,6 +178,15 @@ PAREI: ! GATE-EXPORT-10 (so o export da 10) | espera o DP na Gestao de HE e o Ro
 > O MARCADOR ANDOU no mesmo ato: `ORDEM-VIVA-TOPO` saiu de `BO-HE-RECUSAR-LOTE-500` (fechado) para `O261`, que o hook cobrou.
 > SEM COMMIT DE PROPOSITO: `RELATO.md` e `BACKLOG.md` ficam sujos na arvore porque a L-106 nao deixa commit so de docs fora de marco. Eles entram no commit do proximo marco.
 
+## HE100 NO AR + APPLY da 10 -- 46b61163 (27/10 05:0x)
+LEI-AKITA: origem=ponto/motor_calculo_v2.py::_dia_sem_previsto_fora_da_janela (+ calculador do_dia/rubricas_por_dia), testemunha=periodo do motor e `dias_sem_previsto_fora_da_janela`, RED=test_he100_dia_sem_previsto, quem-mais-le=FM, DiaPago motor/oraculo, Gestao de HE, pdf_espelho, diff_calculador, juizes novos=0
+- Pouso L-107: merge --no-ff (MERGE_HEAD 98bf1089), cmp 0 de 11 contra a copia certificada (suite 12222 OK), commit `46b61163`, `bin/deploy.sh --sem-migrate` rc 0 com o ensaio de HOJE (carimbo 27/10, diverge 0): 3 rotas OK, BUG 128 verde, importerror_500=0.
+- APPLY comp 10 (7b: aberta, 0 exportacoes): reversao ANTES `logs/reversao_he100_comp10_20261027.json` (68 FM + 2714 DiaPago + 21 hashes; e a de 03:57 `_pre`); `recalcular_fechamento_mes(10, 2026, colaborador_ids=<68>)` (64 do FM + 6 do oraculo), `logs/apply_he100_comp10_20261027.out`.
+- PROVA: 21 hashes de exportacao iguais aos da reversao; 0 exportacoes da 10; FROTA na sombra de HOJE (dump 27/10) com a arvore pousada x o gravado em prod: **68 colabs x 6 campos, 0 diferem** (`logs/folha10_he100_pos27.out`, `logs/sombra/he100_pos27.json`). Residuo no dump de hoje: 75 dia-colab, 627,77 h (57 folga com escala certa 474,37 h + 18 feriado 153,40 h), FORA 0, oraculo paga dia bloqueado 0.
+- Reversao: re-gravar os campos do FM pelos valores do JSON de reversao (por colab) e relavrar o DiaPago com a arvore anterior (`3b1fa3e2`); o codigo volta por revert de `46b61163` + deploy.
+- CADASTRO (aval): os sem escala certa estao na lista do admin pela lavra A2/A8 (col956/960/936 nominais em `logs/esmeril_espelho.json`).
+INCOMPLETO: push do marco; `LOTE-VAZA-ENTRE-COLABS` e `ORACULO-RECUSA` (79 colabs sem dia de calculador) na fila 1; feriado nao-folga sem teste proprio; os leitores `diff_espelho_alimentacao`/`aplicar_09_corte_b` (ABONADO) a decidir.
+
 ## HE100 (a) -- re-DIFF fecha o criterio; o verificador barra o pouso (27/10 01:5x)
 LEI-AKITA: origem=ponto/motor_calculo_v2.py::_dia_sem_previsto_fora_da_janela, testemunha=periodo do motor (minutos_* e efetivo_*), RED=test_he100_dia_sem_previsto::DiaSemPrevistoEscalaCertaTest (330.0 != 0.0), quem-mais-le=FechamentoMensal, DiaPago motor E oraculo, Gestao de HE, juizes novos=0
 - O que mudou (copia `/home/ronald/wt-he100a-2710-0145`, base 3b1fa3e2, `156aa1a6`+`4cd69860`): folga SEM escala certa (`escala_certa_no_dia`) fica fora do HE100; feriado fica na regra.
