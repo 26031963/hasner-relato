@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/10/2026 04:04:05.** Transcript: `68b80ae1-8c10-4eac-b412-ca643624b286.jsonl` (3.7 MB). Acoes na janela: **147**.
+**Medido em 27/10/2026 04:09:36.** Transcript: `68b80ae1-8c10-4eac-b412-ca643624b286.jsonl` (3.7 MB). Acoes na janela: **150**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 04:08:24 | Bash |  | `cd /home/ronald/saas-hasner; for i in $(seq 1 19); do ls logs/crons_em_curso/ 2>/dev/null \| grep -q sombra \|\| break; /usr/bin/sleep 30; done; date +%H:%M; ls logs/crons_em_curso/` |
+| 04:08:19 | Bash |  | `cd /home/ronald/saas-hasner; while ls logs/crons_em_curso/ 2>/dev/null \| grep -q sombra; do /usr/bin/sleep 30; done; date +%H:%M; bin/sombra.sh --conferir 2>&1 \| tail -2` |
+| 04:06:54 | Bash |  | `cd /home/ronald/saas-hasner; for i in $(seq 1 29); do ls logs/crons_em_curso/ 2>/dev/null \| grep -q sombra && break; /usr/bin/sleep 20; done; date +%H:%M; ls logs/crons_em_curso/` |
 | 03:57:10 | Bash |  | `cd /home/ronald/saas-hasner; for i in $(seq 1 29); do ls logs/crons_em_curso/ 2>/dev/null \| grep -q sombra && break; /usr/bin/sleep 20; done; date +%H:%M; ls logs/crons_em_curso/` |
 | 03:56:57 | Bash |  | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/68b80ae1-8c10-4eac-b412-ca643624b286/scratchpad; cat > $S/msg_he100.txt <<'EOF' HE100-SEM-PREVISTO + HE100-ALCANCE (a) + ORACULO-RECUSA pousam: dia sem previsto (folga com escala certa, feriado) vira pendencia da Gestao de HE; folga sem escala certa fica fora; o oraculo le o mesmo dia Avais Ronald: HE100-SEM-PREVISTO-NA-ZONA-INVIOLAVEL ! (26/10 22:1x ...` |
 | 03:56:37 | Bash |  | `cd /home/ronald/saas-hasner && git log --oneline -1 main && git fetch -q && git log --oneline main..origin/main \| head; git diff --stat 3b1fa3e2 he100a-2710 \| tail -15; git status --short \| head -20` |
