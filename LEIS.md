@@ -319,6 +319,7 @@ Estavam no indice como vigentes e alguma clausula nao tem efeito. Gerada do ESTA
 - `BO-[nome]-FECHA`
 - `BO-[nome]-NOMES`
 - `BO-ADMIN-2710-LEIS`
+- `FIO-LE-O-JUIZ-6984`
 
 ## CORTES que viraram lei
 
