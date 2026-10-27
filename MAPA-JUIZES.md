@@ -16,6 +16,7 @@ esperam migrar -- a lista so encolhe).
 | pergunta | juiz (dono) |
 |---|---|
 | a batida esta dentro do geofence? | `ponto/services/geofence.py::classificar_posicao` |
+| a foto da batida esta ausente? | `ponto/registro_batida.py::selfie_ausente` |
 | quantas horas este PAR (turno) vale? | `ponto/motor_calculo_v2.py::MotorBase.calcular_periodo` |
 | que periodos e que intervalo teve este dia? | `ponto/juiz_batida.py::periodos_do_dia` |
 
@@ -35,6 +36,7 @@ esperam migrar -- a lista so encolhe).
 | ha quanto tempo o turno esta aberto? | `ponto/turnos.py::turno_aberto_ha` |
 | ha turno aberto vivo agora? | `ponto/turnos.py::turno_aberto_de` |
 | o dia esta encerrado? | `ponto/turnos.py::dia_encerrado` |
+| o par esta completo? | `ponto/turnos.py::par_completo` |
 | o tipo gravado deve virar (flip)? | `ponto/turnos.py::decidir_tipo_estrito` |
 | o turno previsto cruza a meia-noite? | `escala/servico_jornada.py::turno_cruza_meia_noite` |
 | o vao entre batidas foi intervalo? | `ponto/turnos.py::intervalos_do_turno` |
@@ -168,8 +170,8 @@ esperam migrar -- a lista so encolhe).
 
 | familia | juizes | sem juiz | pendentes |
 |---|---|---|---|
-| `batida` | 3 | 2 | 0 |
-| `turno/marcos` | 14 | 0 | 0 |
+| `batida` | 4 | 2 | 0 |
+| `turno/marcos` | 15 | 0 | 0 |
 | `celula/precedencia` | 8 | 0 | 0 |
 | `escala` | 2 | 0 | 0 |
 | `ausencia/ferias` | 14 | 0 | 0 |
@@ -178,4 +180,4 @@ esperam migrar -- a lista so encolhe).
 | `feriado/prazo` | 6 | 2 | 13 |
 | `tela` | 11 | 1 | 110 |
 | `portas` | 1 | 0 | 124 |
-| **total** | **83** | **5** | **247** |
+| **total** | **85** | **5** | **247** |
