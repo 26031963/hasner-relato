@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/10/2026 18:01:06.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (8.7 MB). Acoes na janela: **330**.
+**Medido em 27/10/2026 18:06:07.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (8.7 MB). Acoes na janela: **331**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 18:02:08 | Bash | Fix padrao parser; rerun all host seals | `cd /home/ronald/saas-hasner && python3 - <<'E' p='bin/tests/test_lei_akita.sh';s=open(p).read() a=" m = re.search(r'padrao=([^,]+?)(?:,\\s*\\w[\\w -]*=\|$)', linhas[-1])\n if not m:\n return 'linha LEI-AKITA sem padrao='\n termo = m.group(1).strip()\n" assert s.count(a)==1, 'ancora' b=" # o ULTIMO `padrao=` da linha: a prosa de um campo anterior (RED=..., quem-mais-le=...) pode citar a palavra (fd ...` |
 | 18:00:49 | Bash | Deploy FECHAR3 and smoke logs | `cd /home/ronald/saas-hasner && git rev-parse -q --verify MERGE_HEAD; git show --stat --format= HEAD \| tail -1; bin/deploy.sh --sem-migrate > logs/fechar3_deploy_927d8a02.log 2>&1; echo deploy_rc=$?; tail -2 logs/fechar3_deploy_927d8a02.log; /usr/bin/sleep 45; docker logs --since 2m saas_ui 2>&1 \| grep -cE "Traceback\|Internal Server Error"; docker logs --since 2m saas_core 2>&1 \| grep -cE "Trac ...` |
 | 18:00:43 | Bash | Commit FECHAR3 pouso merge | `cd /home/ronald/saas-hasner && python3 - <<'E' p='app/docs/RELATO.md';s=open(p).read() anc='## SEM-SELO-CAUSA-ESPELHO-09 -- POUSO do 1052a448' sec=('## FECHAR-PERGUNTA-A-PREMISSA -- POUSO do produto (27/10 18:0x)\n' 'LEI-AKITA: origem=chamados/models.py::ChamadoColaborador.reconciliar (o fechamento do SISTEMA sem perguntar a premissa), testemunha=o coletor unico `premissa_regularizada`/`_celula_fu ...` |
 | 18:00:24 | Bash | Read L-113 text | `cd /home/ronald/saas-hasner && grep -E '^\\| \*\*L-113\*\*' app/docs/LEIS.md \| cut -c1-700` |
