@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/10/2026 14:44:55.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (4.1 MB). Acoes na janela: **166**.
+**Medido em 27/10/2026 14:50:12.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (4.3 MB). Acoes na janela: **171**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 14:47:35 | Bash | Wait for fechar3 next commit | `W=/home/ronald/wt-fechar3-2710-1320; h0=$(git -C $W rev-parse HEAD); for i in $(seq 57); do [ "$(git -C $W rev-parse HEAD)" != "$h0" ] && break; /usr/bin/sleep 10; done; git -C $W log --oneline -3 \| cut -c1-150; date +%H:%M` |
+| 14:47:22 | Bash | Record LAUDO results and raia1 state | `cd /home/ronald/saas-hasner && python3 - <<'E' p='app/docs/RELATO.md';s=open(p).read() anc='## IA-PERGUNTAR-SEM-RBAC -- NO AR (27/10 14:1x)\n' sec='''## LAUDO-[nome]-COL94-1610 -- resultado por item (27/10 14:5x; so leitura, `logs/laudo_fernando_col94/resultado.out`) - (1) TIPO -- NAO e divergencia de tipo no col94: a ata de 15-18/10 nao tem papel (FURO_PARCIAL), o juiz cai no tipo gravado (`pon ...` |
+| 14:47:05 | Agent | Re-verify SEM-SELO raia 1 | `2a leitura da raia (1) da PERGUNTA-SEM-SELO (classe [5], vinculo ATIVO x vinculo DO DIA, sitios de dinheiro). Copia /home/ronald/wt-semselo5-2710-1306 (branch semselo5-2710) sobre main 21ff5c49. A 1a leitura REPROVOU com 9 itens (A_CLASSIFICAR sem motivo; porta perguntava `vinculo_do_dia`, circular, e descartava dia calado contra a L-020; RED sem celula existente; `causa_espelho` do ativo dentro d ...` |
+| 14:46:54 | SendMessage |  | `-` |
+| 14:46:50 | SendMessage |  | `-` |
 | 14:42:23 | Bash | Wait for fechar3 next commit | `W=/home/ronald/wt-fechar3-2710-1320; h0=$(git -C $W rev-parse HEAD); for i in $(seq 57); do [ "$(git -C $W rev-parse HEAD)" != "$h0" ] && break; /usr/bin/sleep 10; done; git -C $W log --oneline -3 \| cut -c1-150; date +%H:%M` |
 | 14:42:11 | Bash | Register LAUDO-[nome] aval | `cd /home/ronald/saas-hasner && python3 - <<'E' import json d='app/docs/' f="aval Ronald: LAUDO-[nome]-COL94-1610 (achados do [nome], leitura; lei do desenho antes da medida). Caso: col94, celula 16/10 FURO_PARCIAL; batida #129417 E 17/10 06:54 pelo app; pergunta #44764 (entrada 16/10, resposta 19:01) nao valida por conflito de paridade; batida #130947 S 07:00 criada pela validacao da pergunta  ...` |
 | 14:42:01 | SendMessage |  | `-` |
