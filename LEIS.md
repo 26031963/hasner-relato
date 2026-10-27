@@ -327,6 +327,8 @@ Estavam no indice como vigentes e alguma clausula nao tem efeito. Gerada do ESTA
 - `LAUDO-[nome]-REENVIO-2710`
 - `FIO-LE-O-JUIZ-EFEITOS`
 - `JUIZ-PERIODO-DA-PARCIAL`
+- `PAZ-DO-ADMIN`
+- `MADRUGADA-COM-MODELO-SO-BOS`
 
 ## CORTES que viraram lei
 

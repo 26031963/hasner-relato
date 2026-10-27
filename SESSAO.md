@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/10/2026 19:43:08.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (9.9 MB). Acoes na janela: **374**.
+**Medido em 27/10/2026 19:48:11.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (10.1 MB). Acoes na janela: **377**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 19:48:04 | Bash | Long wait for FIO constructor | `/usr/bin/sleep 590; for w in wt-fio-2710-1835 wt-cobertura-2710-1810; do echo "$w $(git -C /home/ronald/$w log --oneline -1 \| cut -c1-90) sujos=$(git -C /home/ronald/$w status --porcelain \| grep -vc '^??')"; done; date +%H:%M` |
+| 19:47:54 | Bash | Register PAZ-DO-ADMIN and madrugada avals | `cd /home/ronald/saas-hasner && python3 - <<'E' import json d='app/docs/' av={'PAZ-DO-ADMIN':"aval Ronald PAZ-DO-ADMIN (substitui a ordem de hoje so na fila 1): primeiro os BOs do supervisor que pousam ate amanha cedo, UM por vez, um construtor e um verificador, SEM agentes em paralelo: (1) FIO-LE-O-JUIZ (C) com as correcoes do verificador; (2) REGISTRADO-NAO-E-VIVO (D); (3) COBERTURA-PARCIAL-UM-JU ...` |
+| 19:47:41 | SendMessage |  | `-` |
 | 19:37:40 | Bash | Long wait for constructors | `/usr/bin/sleep 590; for w in wt-fio-2710-1835 wt-cobertura-2710-1810; do echo "$w $(git -C /home/ronald/$w log --oneline -1 \| cut -c1-90)"; done; date +%H:%M` |
 | 19:37:27 | Bash | Register both avals and mark answered | `cd /home/ronald/saas-hasner && python3 - <<'E' import json d='app/docs/' p=d+'RELATO.md';L=open(p).read().split('\n'); n=0 for i,l in enumerate(L[:24]): if l.startswith('> **lei: FIO-LE-O-JUIZ-EFEITOS**'): L[i]='> **RESPONDIDA 27/10 19:3x: FIO-LE-O-JUIZ-EFEITOS** -- (1) a pergunta segue VIVA, mas o dia agrupado sob ADESAO/LIMBO tem dono CADASTRO (L-099): vai a lista do admin, NAO ao app do colab;  ...` |
 | 19:37:14 | SendMessage |  | `-` |
