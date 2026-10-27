@@ -324,6 +324,7 @@ Estavam no indice como vigentes e alguma clausula nao tem efeito. Gerada do ESTA
 - `JUIZ-DO-PAR-DUAS-ENTRADAS-DECISOES`
 - `COBERTURA-PARCIAL-PERIODO`
 - `JUIZ-MARCOS-COBERTOS-POR-JUSTIFICATIVA-NASCE`
+- `LAUDO-[nome]-REENVIO-2710`
 
 ## CORTES que viraram lei
 

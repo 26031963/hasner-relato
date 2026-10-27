@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/10/2026 18:55:08.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (9.4 MB). Acoes na janela: **355**.
+**Medido em 27/10/2026 19:00:43.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (9.4 MB). Acoes na janela: **360**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 18:59:21 | Bash | Wait for FIO progress | `W=/home/ronald/wt-fio-2710-1835; h0=$(git -C $W rev-parse HEAD); for i in $(seq 57); do [ "$(git -C $W rev-parse HEAD)" != "$h0" ] && break; /usr/bin/sleep 10; done; git -C $W log --oneline -1 \| cut -c1-110; git -C /home/ronald/wt-cobertura-2710-1810 log --oneline -1 \| cut -c1-90; date +%H:%M` |
+| 18:59:11 | Bash | Register laudo reenvio and annotate obras | `cd /home/ronald/saas-hasner && python3 - <<'E' import json d='app/docs/' f="aval Ronald LAUDO-[nome]-REENVIO-2710 (lote [nome], 11 itens; nenhuma obra nova, so complementos das letras do BO-[nome]-FECHA): RT-01 col42 -> (A) COBERTURA-PARCIAL-UM-JUIZ (08/15/22-10 fecham so com periodo cobrindo o intervalo; 01/09-10 #4673/#4816 decisao do admin, lista; #134289 E 13h29 segue pelo marco, nunca c ...` |
+| 18:58:56 | SendMessage |  | `-` |
+| 18:58:54 | SendMessage |  | `-` |
+| 18:55:04 | Bash | Wait for FIO progress | `for i in $(seq 57); do a=$(git -C /home/ronald/wt-fio-2710-1835 rev-parse --short HEAD); [ "$a" != "b8f5560d" ] && break; /usr/bin/sleep 10; done; git -C /home/ronald/wt-fio-2710-1835 log --oneline -1 \| cut -c1-110; git -C /home/ronald/wt-cobertura-2710-1810 log --oneline -1 \| cut -c1-90; date +%H:%M` |
 | 18:54:50 | SendMessage |  | `-` |
 | 18:54:41 | Bash | Register both avals, corte, BACKLOG states | `cd /home/ronald/saas-hasner && python3 - <<'E' import json d='app/docs/' p=d+'RELATO.md';L=open(p).read().split('\n') n=0 for i,l in enumerate(L[:20]): if l.startswith('PAREI: ! JUIZ-DO-PAR-DUAS-ENTRADAS'): L[i]='> **RESPONDIDA 27/10 18:5x: JUIZ-DO-PAR-DUAS-ENTRADAS-DECISOES** -- (1) col457 07/09 = mudanca de dono BATIDA; o juiz unico 383adb81 FICA; a 09 exportada nao se regera (L-092), o dia vai  ...` |
 | 18:44:36 | Bash | Wait for next FIO commit | `W=/home/ronald/wt-fio-2710-1835; h0=$(git -C $W rev-parse HEAD); for i in $(seq 57); do [ "$(git -C $W rev-parse HEAD)" != "$h0" ] && break; /usr/bin/sleep 10; done; git -C $W log --oneline -2 \| cut -c1-110; date +%H:%M` |

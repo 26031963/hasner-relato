@@ -4273,7 +4273,7 @@ linha dele** ("inclui a chamado e a pdf") e elas entram no proximo ato.
 > **calado**; agora o lugar e declarado (acima da 1a secao) e o motivo sai no stderr.
 
 <!-- SEUS-CORTES:INICIO -->
-### SEUS CORTES -- o que voce mandou e ainda nao esta no ar (118)
+### SEUS CORTES -- o que voce mandou e ainda nao esta no ar (119)
 
 > **ALARME: 12 corte(s) com mais de 24 h em "recebido"** -- TROCA-DE-PLANTAO (816 h), FECHAMENTO-UI-PORTAS (797 h), CATALOGO-SAIDA-ANTECIPADA-DESCONTA (795 h), ESTEIRA-RETA-FINAL (793 h), ZUMBIDO (790 h), CARTAO-TOTAL-IGUAL-SOMA (788 h), CERT-VIGIA (777 h), CHAMADO-GANHA-CADASTRO (775 h), JUIZ-BATIDA-NASCE (775 h), JUIZ-ESCALA-NASCE (775 h), PERTO-DO-MOTOR-ESPERA-O-EXPORT (775 h), E3-CHAMADO-APOS-ARQUIVO-SIMPLES (775 h). Cada um vira Pauta de sistema para o DP ate sair de "recebido".
 
@@ -4397,6 +4397,7 @@ linha dele** ("inclui a chamado e a pdf") e elas entram no proximo ato.
 | **JUIZ-DO-PAR-DUAS-ENTRADAS-DECISOES** | 2026-10-27 18:5x | 0 h | recebido | JUIZ-DO-PAR-DUAS-ENTRADAS-DECISOES |
 | **COBERTURA-PARCIAL-PERIODO** | 2026-10-27 18:5x | 0 h | recebido | COBERTURA-PARCIAL-PERIODO |
 | **JUIZ-MARCOS-COBERTOS-POR-JUSTIFICATIVA-NASCE** | 2026-10-27 18:5x | 0 h | construindo -- ponto/turnos.py::marcos_cobertos_por_justificativa na copia wt-cobertura-2710-1810 (1091a8a5) | COBERTURA-PARCIAL-UM-JUIZ |
+| **LAUDO-[nome]-REENVIO-2710** | 2026-10-27 18:5x | 0 h | recebido -- RT-01/04 na COBERTURA, RT-05 no FIO (construtores em voo); RT-02/03/06 anotados nas letras (B)/(E)/(D) | BO-[nome] |
 <!-- SEUS-CORTES:FIM -->
 
 ## DEPLOYS AGENDADOS
