@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/10/2026 09:40:50.** Transcript: `68b80ae1-8c10-4eac-b412-ca643624b286.jsonl` (7.4 MB). Acoes na janela: **307**.
+**Medido em 27/10/2026 09:45:50.** Transcript: `68b80ae1-8c10-4eac-b412-ca643624b286.jsonl` (7.5 MB). Acoes na janela: **310**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 09:43:37 | Bash |  | `/usr/bin/sleep 420; git -C /home/ronald/wt-c2fix-2710-0930 log --oneline -2; ls -la /home/ronald/saas-hasner/logs/c2fix_red_20261027.log 2>/dev/null; grep -E "^(FAIL\|OK\|FAILED)" /home/ronald/saas-hasner/logs/c2fix_red_20261027.log 2>/dev/null \| head -4; date +%H:%M` |
+| 09:43:32 | Bash |  | `python3 - <<'EOF' p='docs/BACKLOG.md' s=open(p).read() a='\| ATA-X-TURNO-PAUSA \|' s=s.replace(a,'\| C2-OS-19-SEM-PRAZO \| verificador do hotfix C2 (27/10): os 19 `vinculo_divergente` vivos fora da C8 so morrem por EVENTO (batida com GPS dentro do raio, `reconciliador.py:296-300`); `reconciliar_vinculo` e VIGIA, o fechador so fecha quem esta na C8; se forem itinerantes (que a lavra exclui), a unia ...` |
+| 09:43:29 | SendMessage |  | `-` |
 | 09:39:18 | Bash |  | `/usr/bin/sleep 240; date +%H:%M; git -C /home/ronald/wt-fechar-2710-0500 log --oneline -1` |
 | 09:39:14 | Bash |  | `python3 - <<'EOF' p='docs/BACKLOG.md' s=open(p).read() a='\| ATA-X-TURNO-PAUSA \|' s=s.replace(a,'\| ESMERIL-7-ACHADOS \| censos novos (27/10, `esmeril7-2710` 400b4876): zero chamador de producao -- ausencia: `vigia_ausencia._empresa_do_dp` (0 teste), `ausencia.contadores_do_dp`, `catalogo.ausencias.exige_data_final`; folha: `export.datas_abonadas`, `porta_export.lavrar_verde_para_teste` (ajudante ...` |
 | 09:39:01 | Bash |  | `git log --oneline -1 main && date +%H:%M && python3 - <<'EOF' p='docs/PROMPTS.md' s=open(p).read().rstrip('\n')+'\n' s+='\| 27/10 09:3x \| **aval: O122-ETAPA-2** -- raia wt-ui, fila 2, so templates/static/escala/views.py da tela, nucleo intocado (L-096): filtro universal (praca, posto, q) em /escala/tipos/; universo = colabs com vinculo HOJE pela juiza (vinculo_do_dia), o `uso` de escala/views.py: ...` |
