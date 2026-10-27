@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/10/2026 01:24:35.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (58.0 MB). Acoes na janela: **604**.
+**Medido em 27/10/2026 01:30:06.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (58.0 MB). Acoes na janela: **605**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 01:25:59 | Bash | Confirm push; run handoff | `until /bin/grep -q "main -> main\\|failed to push" /home/ronald/saas-hasner/logs/push_clear.out 2>/dev/null; do /usr/bin/sleep 15; done; tail -2 /home/ronald/saas-hasner/logs/push_clear.out \| cut -c1-120; cd /home/ronald/saas-hasner && bash bin/handoff_sessao.sh; /bin/grep -n "CLEAR-NO-MARCO\\|contratos_estruturais\\|ORDEM VIVA\\|a empurrar" app/docs/HANDOFF-SESSAO.md \| cut -c1-140` |
 | 01:15:04 | Bash | Wait for the last push | `until /bin/grep -q "main -> main\\|failed to push" /home/ronald/saas-hasner/logs/push_clear.out 2>/dev/null; do /usr/bin/sleep 15; done; head -3 /tmp/claude-1001/-home-ronald-saas-hasner-app/f4eb628a-9fcf-4c05-ae6a-9f32279f7575/tasks/b5pucej07.output \| cut -c1-120; tail -2 /home/ronald/saas-hasner/logs/push_clear.out \| cut -c1-120` |
 | 01:14:30 | Bash | Register INCOMPLETO; commit; push | `date +%H:%M && python3 - <<'EOF' p='docs/RELATO.md'; s=open(p).read() anc='## COTA-BORDA -- o que estava em curso' sec='''## CLEAR-AGORA -- parada (27/10 01:1x); nada comecado depois do aval INCOMPLETO: - HE100-SEM-PREVISTO: cura em copia `/home/ronald/wt-he100-sp-2610-2216` (`c80c3d5a`, estreitada a folga/feriado, selos verdes), NAO pousada; espera a resposta de HE100-ALCANCE-A-PREMISSA (topo). - ...` |
 | 01:10:52 | Bash | Wait for push to settle | `until /bin/grep -q "main -> main\\|failed to push" /home/ronald/saas-hasner/logs/push_final.out 2>/dev/null; do /usr/bin/sleep 15; done; tail -3 /home/ronald/saas-hasner/logs/push_final.out \| cut -c1-140` |
