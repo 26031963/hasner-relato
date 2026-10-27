@@ -4,7 +4,8 @@
 >
 > **livre** = pode virar fatia agora, sem humano. **corte/aval/smoke/dinheiro-ate-export** = tem dono humano e espera.
 
-<!-- ORDEM-VIVA-TOPO: ATA-X-TURNO-PAUSA -->
+<!-- ORDEM-VIVA-TOPO: HE100-SEM-PREVISTO-SOZINHA -->
+<!-- ANDOU 27/10 01:5x, de `ATA-X-TURNO-PAUSA` para `HE100-SEM-PREVISTO-SOZINHA` (aval RETOMAR-POS-CLEAR 01:4x: ordem HE100 -> ABONADO -> FECHAR -> PERGUNTA-DO-DIA -> ATA-X-TURNO-PAUSA -> ESMERIL; re-DIFF fecha o criterio, cura do oraculo em construcao). AUTONOMIA item 1. -->
 <!-- ANDOU 27/10 00:1x, de `FOLGA-DA-CELULA-X-DIA-DO-MOTOR` (FECHADA: dono CADASTRO pela regra de 27/09) para `ATA-X-TURNO-PAUSA` (fila 1, col841 20/10; medir a classe antes). AUTONOMIA item 1. -->
 <!-- ANDOU 26/10 23:5x, de `FECHAMENTO-REFERENCIA-POR-POSICAO` (FECHADA, no ar) para `FOLGA-DA-CELULA-X-DIA-DO-MOTOR` (ESTRUTURA, 124 dias / 1.181,6 h na 10; o resto da fila 1 espera lei ou `!` no topo do RELATO). AUTONOMIA item 1. -->
 <!-- ANDOU 26/10 23:1x, de `FECHAR-PERGUNTA-A-PREMISSA` (PAROU pela condicao, numero no topo) para `FECHAMENTO-REFERENCIA-POR-POSICAO` (aval (a) 22:1x, dinheiro da 10). AUTONOMIA item 1. -->
