@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/10/2026 20:20:12.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (10.4 MB). Acoes na janela: **387**.
+**Medido em 27/10/2026 20:25:36.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (10.4 MB). Acoes na janela: **388**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 20:22:32 | Bash | Wait for next FIO commit | `W=/home/ronald/wt-fio-2710-1835; h0=$(git -C $W rev-parse HEAD); for i in $(seq 58); do [ "$(git -C $W rev-parse HEAD)" != "$h0" ] && break; /usr/bin/sleep 10; done; git -C $W log --oneline -1 \| cut -c1-110; date +%H:%M` |
 | 20:18:56 | Bash | Wait for FIO commit | `W=/home/ronald/wt-fio-2710-1835; h0=$(git -C $W rev-parse HEAD); for i in $(seq 58); do [ "$(git -C $W rev-parse HEAD)" != "$h0" ] && break; /usr/bin/sleep 10; done; git -C $W log --oneline -1 \| cut -c1-110; date +%H:%M` |
 | 20:18:50 | Bash | Read FIO final suite verdict | `cd /home/ronald/saas-hasner/logs; grep -E '^(OK\|FAILED)($\| \()' fio_suite_final.log \| tail -1; grep '^Ran ' fio_suite_final.log \| tail -1; tail -1 fio_suite_final.log; grep -E '^(FAIL\|ERROR):' fio_suite_final.log \| head -5` |
 | 20:09:04 | Bash | Wait for FIO commit | `W=/home/ronald/wt-fio-2710-1835; h0=$(git -C $W rev-parse HEAD); for i in $(seq 58); do [ "$(git -C $W rev-parse HEAD)" != "$h0" ] && break; /usr/bin/sleep 10; done; git -C $W log --oneline -1 \| cut -c1-110; date +%H:%M` |
