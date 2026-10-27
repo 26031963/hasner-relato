@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/10/2026 00:40:49.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (57.7 MB). Acoes na janela: **610**.
+**Medido em 27/10/2026 00:46:05.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (57.7 MB). Acoes na janela: **611**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 00:42:21 | Bash | Host seals and handoff | `cd /home/ronald/saas-hasner && ok=0; bad=""; for t in bin/tests/test_*.sh; do if bash $t >/dev/null 2>&1; then ok=$((ok+1)); else bad="$bad $t"; fi; done; echo "selos verdes=$ok vermelhos:$bad"; bash bin/handoff_sessao.sh; /bin/grep -n "CLEAR-NO-MARCO\\|contratos_estruturais\\|HE100-ALCANCE\\|ORDEM VIVA" app/docs/HANDOFF-SESSAO.md \| cut -c1-150` |
 | 00:39:00 | Bash | Keep waiting for push verdict | `until /bin/grep -q "main -> main\\|failed to push" /home/ronald/saas-hasner/logs/push_cota.out 2>/dev/null; do /usr/bin/sleep 15; done; tail -3 /home/ronald/saas-hasner/logs/push_cota.out \| cut -c1-140; /bin/grep -E "^(FAIL\|ERROR):" /home/ronald/saas-hasner/logs/push_cota.out \| head -3` |
 | 00:28:53 | Bash | Wait for push verdict | `until /bin/grep -q "main -> main\\|failed to push" /home/ronald/saas-hasner/logs/push_cota.out 2>/dev/null; do /usr/bin/sleep 15; done; tail -3 /home/ronald/saas-hasner/logs/push_cota.out \| cut -c1-140` |
 | 00:28:46 | Bash | Fix labels; amend; push | `cd /home/ronald/saas-hasner && sed -i 's/fechado e publicado (27\/10 00:4x)/fechado e publicado (27\/10 00:2x)/; s/\(ORIGEM CORRIGIDA 27\/10\) 00:4x/\1 00:2x/' app/docs/RELATO.md app/docs/BACKLOG.md && sed -i 's/ medido 00:4x: dos 335/ medido 00:2x: dos 335/' app/docs/BACKLOG.md && /bin/grep -c "00:4x" app/docs/RELATO.md app/docs/BACKLOG.md; git add app/docs/RELATO.md app/docs/BACKLOG.md && git co ...` |
