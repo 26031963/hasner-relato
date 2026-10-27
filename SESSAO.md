@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/10/2026 06:39:36.** Transcript: `68b80ae1-8c10-4eac-b412-ca643624b286.jsonl` (5.2 MB). Acoes na janela: **218**.
+**Medido em 27/10/2026 06:45:09.** Transcript: `68b80ae1-8c10-4eac-b412-ca643624b286.jsonl` (5.2 MB). Acoes na janela: **222**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 06:41:44 | Bash |  | `cd /home/ronald/saas-hasner && bin/deploy.sh --sem-migrate 2>&1 \| grep -E "OK\|FAIL\|ERRO\|erro\|vermelho\|deploy:" \| tail -6` |
+| 06:41:38 | Bash |  | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md' s=open(p).read() a='## RAIA-DO-CONTRATO-20-NOITE -- (1) e (2) NO AR, (3) espera o ABONADO (27/10 05:5x)\n' assert s.count(a)==1 s=s.replace(a,a+'PROVA: deploy rc 0 x2 (3 rotas OK, importerror_500=0); fechador --apply: 65 linhas `VINCULO\|na_lista` em `logs/c2_fechador_apply_20261027.out`; re-dry `vivos=19\|na_lista=0\|fora_da_ ...` |
+| 06:41:32 | Bash |  | `cd /home/ronald/saas-hasner && cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/68b80ae1-8c10-4eac-b412-ca643624b286/scratchpad/msg_abono.txt <<'EOF' ABONADO-COM-SAIDA-ANTECIPADA pousa: ausencia APROVADA de dia inteiro (efeito ABONA) zera atraso e saida antecipada no motor e no oraculo, lendo o mesmo conjunto Aval Ronald 27/10 00:2x, `!` de zona inviolavel para UMA mudanca no motor ("ausencia q ...` |
+| 06:41:17 | Bash |  | `cd /home/ronald/saas-hasner && git log --oneline -1 main && git merge --no-ff --no-commit abono-2710 2>&1 \| tail -1; echo "MERGE_HEAD=$(git rev-parse -q --verify MERGE_HEAD)"; n=0; for f in $(git diff --cached --name-only); do cmp -s "$f" "/home/ronald/wt-abono-pouso-2710-0625/$f" \|\| { echo "DIFERE $f"; n=$((n+1)); }; done; echo "cmp diferem=$n de $(git diff --cached --name-only \| wc -l)"` |
 | 06:35:51 | Bash |  | `cd /home/ronald/saas-hasner; for i in $(seq 1 29); do grep -qE '^(OK\|FAILED)($\| \()' logs/suite_abono_pouso.log 2>/dev/null && break; /usr/bin/sleep 20; done; grep -E '^(OK\|FAILED)($\| \()' logs/suite_abono_pouso.log \| tail -1; grep -E '^Ran [0-9]+' logs/suite_abono_pouso.log \| tail -1; grep -E "^(FAIL\|ERROR):" logs/suite_abono_pouso.log \| head -5; date +%H:%M` |
 | 06:25:46 | Bash |  | `cd /home/ronald/saas-hasner; for i in $(seq 1 29); do grep -qE '^(OK\|FAILED)($\| \()' logs/suite_abono_pouso.log 2>/dev/null && break; /usr/bin/sleep 20; done; grep -E '^(OK\|FAILED)($\| \()' logs/suite_abono_pouso.log \| tail -1; grep -E '^Ran [0-9]+' logs/suite_abono_pouso.log \| tail -1; date +%H:%M` |
 | 06:25:43 | Bash |  | `cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/68b80ae1-8c10-4eac-b412-ca643624b286/scratchpad && IDS='[243, 252, 258, 570, 707, 841, 878, 889]' && sed "s/__IDS__/$IDS/" $S/rev_he100.py \| sed 's/REVERSAO ANTES do apply HE100 (a)/REVERSAO ANTES do apply ABONADO/' > logs/rev_abono_comp10_20261027.py && sed "s/HE100 (a) + ORACULO-RECUSA/ABONADO-COM-SAIDA-ANTECIPADA/;  ...` |
