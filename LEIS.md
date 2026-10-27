@@ -307,6 +307,9 @@ Estavam no indice como vigentes e alguma clausula nao tem efeito. Gerada do ESTA
 - `REJULGAR-COMP10-COL444-E-DERIVA`
 - `REJULGAR-COMP10-RESTO-DA-FROTA`
 - `SMOKE-IA-RBAC-DUAS-CASCAS`
+- `ATA-PAUSA-NO-MOTOR`
+- `PAPEL-PRAZO-DISPARAR-PERGUNTAS`
+- `LISTA-HE-77-RESTO`
 
 ## CORTES que viraram lei
 
