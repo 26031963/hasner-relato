@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/10/2026 11:05:50.** Transcript: `68b80ae1-8c10-4eac-b412-ca643624b286.jsonl` (8.6 MB). Acoes na janela: **353**.
+**Medido em 27/10/2026 11:10:51.** Transcript: `68b80ae1-8c10-4eac-b412-ca643624b286.jsonl` (8.6 MB). Acoes na janela: **355**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 11:07:17 | Bash |  | `python3 - <<'EOF' p='docs/RELATO.md' s=open(p).read() k='> **lei: IA-PERGUNTAR-QUAL-ACAO** (' i=s.index(k); j=s.index('\n',i) s=s[:i]+'> **RESPONDIDA 27/10 11:0x: IA-PERGUNTAR-QUAL-ACAO = `ver_painel_situacional`** (acao existente) -- so a LEITURA de views_ia ganha o portao; as escritas seguem com gate por intencao; antes do pouso, medir quem perde acesso (admin perdendo = PAROU com lista nominal) ...` |
+| 11:07:07 | SendMessage |  | `-` |
 | 10:57:13 | Bash |  | `/usr/bin/sleep 580; for d in wt-fechar2-2710-1015 wt-pergunta-dia-2710-0630 wt-ata-pausa-2710-0820 wt-contrato20-2710-0850 wt-ia-rbac-2710-1100; do echo "$d $(git -C /home/ronald/$d log --oneline -1 2>/dev/null \| cut -c1-80)"; done; grep -E '^(OK\|FAILED)($\| \()\|^rc=' /home/ronald/saas-hasner/logs/suite_fechar_pouso.log /home/ronald/saas-hasner/logs/suite_selfie_pouso.log \| tail -4; /home/rona ...` |
 | 10:57:04 | Bash |  | `cd /home/ronald/saas-hasner && git worktree add -q -b selfie-pouso /home/ronald/wt-selfie-pouso-2710-1100 main && cd /home/ronald/wt-selfie-pouso-2710-1100 && git merge --no-ff --no-edit selfie-2710 2>&1 \| tail -2; git status --short \| grep -E "^(UU\|AA)"; git log --oneline -1; mkdir -p app/logs app/media; cd /home/ronald/saas-hasner && (bash bin/suite.sh --dir /home/ronald/wt-selfie-pouso-2710- ...` |
 | 10:56:57 | Agent | RED for IA-PERGUNTAR-SEM-RBAC | `Construa SO O RED (sem cura) da obra IA-PERGUNTAR-SEM-RBAC no repo /home/ronald/saas-hasner (Django em app/). Leia CLAUDE.md secoes 0, 3, 6 (TODO SELO DE FRONT RENDERIZA AS DUAS CASCAS). NUNCA edite /home/ronald/saas-hasner; sem merge/push/deploy; NADA em prod (nem POST de verdade: zona inviolavel, CLAUDE.md secao 6, smoke de porta so em banco lateral). COPIA: `git -C /home/ronald/saas-hasner work ...` |
