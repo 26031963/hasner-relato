@@ -200,8 +200,8 @@ flowchart TD
     t_evento["EVENTO<br/>batida, ausencia, chamado -> cartorio julga na hora (signals B5.2)"]
     t_consumidor["CONSUMIDORES<br/>chamado, pergunta, tela, folha: leem a lampada, nunca re-julgam"]
     t_vigia["CRON = VIGIA<br/>36 vigias; contador esperado 0, so alarma"]
-    t_prazo["CRON = PRAZO (L-101)<br/>10 cron(s): a falta nao emite evento, o relogio e o unico sinal dela;<br/>julgam pela funcao do juiz da casa, sem regra propria (PRAZO_DELEGA_A)"]
-    t_juiz["JUIZ POR VARREDURA (divida)<br/>7 crons ainda julgam: esperado 0"]
+    t_prazo["CRON = PRAZO (L-101)<br/>11 cron(s): a falta nao emite evento, o relogio e o unico sinal dela;<br/>julgam pela funcao do juiz da casa, sem regra propria (PRAZO_DELEGA_A)"]
+    t_juiz["JUIZ POR VARREDURA (divida)<br/>6 crons ainda julgam: esperado 0"]
     t_escala --> t_celula
     t_evento --> t_celula
     t_celula --> t_consumidor
@@ -211,7 +211,6 @@ flowchart TD
   end
   j_disparar_perguntas_competencia["disparar_perguntas_competencia"] -.-> t_juiz
   j_fechar_cobranca_com_lastro["fechar_cobranca_com_lastro"] -.-> t_juiz
-  j_marcar_foto_ausente_retro["marcar_foto_ausente_retro"] -.-> t_juiz
   j_reavaliar_ausencias_feriado["reavaliar_ausencias_feriado"] -.-> t_juiz
   j_reconciliar_chamados["reconciliar_chamados"] -.-> t_juiz
   j_reconciliar_perguntas_orfas["reconciliar_perguntas_orfas"] -.-> t_juiz
@@ -221,6 +220,7 @@ flowchart TD
   pz_detectar_par_relampago["detectar_par_relampago<br/>ponto.turnos::par_completo"] -.-> t_prazo
   pz_escalonar_documentos_ausencia["escalonar_documentos_ausencia<br/>ponto.services.ausencia::escalonar_aguardando_documento"] -.-> t_prazo
   pz_flip_automatico["flip_automatico<br/>ponto.turnos::dia_encerrado"] -.-> t_prazo
+  pz_marcar_foto_ausente_retro["marcar_foto_ausente_retro<br/>ponto.registro_batida::selfie_ausente"] -.-> t_prazo
   pz_processar_alertas_avancados["processar_alertas_avancados<br/>ponto.turnos::turno_aberto_ha"] -.-> t_prazo
   pz_processar_alertas_turno["processar_alertas_turno<br/>ponto.turnos::lembrete_fim_turno"] -.-> t_prazo
   pz_processar_cartorio["processar_cartorio<br/>ponto.services.cartorio::julgar_colab"] -.-> t_prazo
@@ -354,9 +354,10 @@ flowchart TD
     jmais_tela["... +4 arquivos de juiz"] --- jf_tela
     jf_portas["portas<br/>1 com juiz · 0 sem juiz<br/>registro: 124 sitio(s)"]
     ja_core_portas_da_tela_py(["core/portas_da_tela.py"]) --- jf_portas
-    jf_batida["batida<br/>3 com juiz · 2 sem juiz<br/>registro: 0 sitio(s)"]
+    jf_batida["batida<br/>4 com juiz · 2 sem juiz<br/>registro: 0 sitio(s)"]
     ja_ponto_juiz_batida_py(["ponto/juiz_batida.py"]) --- jf_batida
     ja_ponto_motor_calculo_v2_py(["ponto/motor_calculo_v2.py"]) --- jf_batida
+    ja_ponto_registro_batida_py(["ponto/registro_batida.py"]) --- jf_batida
     ja_ponto_services_geofence_py(["ponto/services/geofence.py"]) --- jf_batida
     jf_escala["escala<br/>2 com juiz · 0 sem juiz<br/>registro: 0 sitio(s)"]
     ja_escala_alimentacao_py(["escala/alimentacao.py"]) --- jf_escala
