@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/10/2026 14:07:07.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (3.6 MB). Acoes na janela: **137**.
+**Medido em 27/10/2026 14:12:36.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (3.7 MB). Acoes na janela: **140**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 14:08:16 | Bash | Wait for IA-RBAC pouso suite verdict | `cd /home/ronald/saas-hasner/logs/ia_rbac; for i in $(seq 58); do grep -q '^rc=' pouso_suite.log 2>/dev/null && break; /usr/bin/sleep 10; done; grep -E '^(OK\|FAILED)($\| \()' pouso_suite.log \| tail -1; grep '^Ran ' pouso_suite.log \| tail -1; tail -1 pouso_suite.log \| cut -c1-60; grep -E '^(FAIL\|ERROR):' pouso_suite.log \| head; date +%H:%M` |
+| 14:08:10 | SendMessage |  | `-` |
+| 14:07:52 | Bash | Read vinculo_cobre_a_data signature | `git grep -n "^def vinculo_cobre_a_data" -- '*.py'; sed -n "$(git grep -n '^def vinculo_cobre_a_data' -- escala/alimentacao.py \| cut -d: -f2),+12p" escala/alimentacao.py` |
 | 13:57:53 | Bash | Wait for IA-RBAC pouso suite verdict | `cd /home/ronald/saas-hasner/logs/ia_rbac; for i in $(seq 58); do grep -q '^rc=' pouso_suite.log 2>/dev/null && break; /usr/bin/sleep 10; done; grep -E '^(OK\|FAILED)($\| \()' pouso_suite.log \| tail -1; grep '^Ran ' pouso_suite.log \| tail -1; tail -1 pouso_suite.log \| cut -c1-80; /home/ronald/saas-hasner/bin/trava_teste.sh --quem; date +%H:%M` |
 | 13:57:38 | Bash | Record progress in RELATO | `cd /home/ronald/saas-hasner && python3 - <<'E' p='app/docs/RELATO.md';s=open(p).read() a='- IA-RBAC verificador 3a leitura' b=('- RESPOSTAS 13:5x aplicadas na fila: IA-RBAC (a) -> copia de pouso `wt-iarbac-pouso-2710-1400` @ `4e877efa` (main + produto de 352948d6/2a26bece/c90f6137-sem-bin, cmp identico a raia; o `c90f6137` carregava produto -- JS do X e fixture de pautas), suite em `logs/ia_rbac/p ...` |
 | 13:57:28 | Agent | Verify SEM-SELO raia 1 | `Obra PERGUNTA-SEM-SELO, raia (1), classe [5] "vinculo ATIVO em vez do vinculo DO DIA" nos sitios de dinheiro. Copia /home/ronald/wt-semselo5-2710-1306 (branch semselo5-2710) sobre main 21ff5c49: `d143852d` cura `core/regua_cct.py::regua_para` (troca `filter(ativa=True).first()` por `escala.alimentacao.vinculo_do_dia_carregado`), `fcaf3c08` cura `ponto/portas/regen_exportada.py::regenerar_em_export ...` |
