@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/10/2026 11:21:06.** Transcript: `68b80ae1-8c10-4eac-b412-ca643624b286.jsonl` (8.7 MB). Acoes na janela: **358**.
+**Medido em 27/10/2026 11:26:37.** Transcript: `68b80ae1-8c10-4eac-b412-ca643624b286.jsonl` (8.9 MB). Acoes na janela: **361**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 11:26:13 | Bash |  | `tr '\0' ' ' < /proc/2856391/cmdline \| grep -o "manage.py.*\\|saas-hasner-core:latest.*" \| cut -c1-250` |
+| 11:26:09 | Bash |  | `for p in 2801860 2812212 2856391 2875018; do echo "== $p"; tr '\0' ' ' < /proc/$p/cmdline \| grep -o -- "-v /home/ronald/[^ ]*:/app \\|manage.py test.*" \| cut -c1-200; done` |
+| 11:26:02 | Bash |  | `cd /home/ronald/saas-hasner && bin/trava_teste.sh --quem; ps -eo pid,etimes,args \| grep -E "suite.sh\|trava_teste.sh" \| grep -v grep \| cut -c1-220; docker ps --format '{{.Names}} {{.RunningFor}}' \| grep -v -E "^(saas_\|juliani_db\|sombra_db\|mensageria)"` |
 | 11:16:11 | Bash |  | `cd /home/ronald/saas-hasner; for i in $(seq 1 29); do grep -q "^rc=" logs/suite_selfie_pouso.log 2>/dev/null && break; /usr/bin/sleep 20; done; grep -E '^(OK\|FAILED)($\| \()\|^Ran \|^rc=' logs/suite_selfie_pouso.log \| tail -3; grep -E "^(FAIL\|ERROR):" logs/suite_selfie_pouso.log \| head -5; bin/trava_teste.sh --quem; date +%H:%M` |
 | 11:16:05 | Bash |  | `python3 - <<'EOF' p='docs/RELATO.md' s=open(p).read() a='> **RESPONDIDA 27/10 11:0x: IA-PERGUNTAR-QUAL-ACAO = `ver_painel_situacional`** (acao existente) -- so a LEITURA de views_ia ganha o portao; as escritas seguem com gate por intencao; antes do pouso, medir quem perde acesso (admin perdendo = PAROU com lista nominal). ~~' assert s.count(a)==1 s=s.replace(a,'> **RESPONDIDA 27/10 11:1x (SUBSTITU ...` |
 | 11:15:59 | SendMessage |  | `-` |
