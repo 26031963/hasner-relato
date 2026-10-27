@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/10/2026 17:07:07.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (7.6 MB). Acoes na janela: **284**.
+**Medido em 27/10/2026 17:12:37.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (7.7 MB). Acoes na janela: **287**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 17:12:24 | Bash | Create copy for PADRAO instrument; read lei_akita seal | `cd /home/ronald/saas-hasner && W=/home/ronald/wt-padrao-2710-1715 && git worktree add -b padrao-na-cura-2710 $W HEAD 2>&1 \| tail -1; git -C $W log --oneline -1 \| cut -c1-50; sed -n 1,60p bin/tests/test_lei_akita.sh \| head -60` |
+| 17:12:23 | Agent | Verify FECHAR3 3a leitura | `FECHAR-PERGUNTA-A-PREMISSA, 3a leitura antes do pouso. Copia /home/ronald/wt-fechar3-2710-1320 (branch fechar3-2710), rebaseada sobre 44ae9d5f; HEAD 7e006c64 (cura da sua 2a leitura) sobre c7dd9d7a (WIP caso sem batida), f8136bc0, c11d5bf8 etc. Diff total: `git -C /home/ronald/wt-fechar3-2710-1320 diff 44ae9d5f..HEAD`; delta desde a 2a leitura: `git -C /home/ronald/wt-fechar3-2710-1320 diff f8136b ...` |
+| 17:12:03 | Bash | Check push and deploy_agendado usage | `cd /home/ronald/saas-hasner && tail -4 logs/push_2710_1705.log \| cut -c1-150; bin/trava_teste.sh --quem; sed -n 1,30p bin/deploy_agendado.sh \| grep -E "^#" \| head -20` |
 | 17:02:18 | Bash | Wait for push result | `for i in $(seq 57); do grep -q '^push_rc' /home/ronald/saas-hasner/logs/push_2710_1705.log && break; /usr/bin/sleep 10; done; tail -6 /home/ronald/saas-hasner/logs/push_2710_1705.log \| cut -c1-160; git -C /home/ronald/wt-fechar3-2710-1320 log --oneline -1 \| cut -c1-100; date +%H:%M` |
 | 17:02:05 | Bash | Check hook and push progress | `cd /home/ronald/saas-hasner && python3 bin/hook_stop_fila1.py </dev/null 2>&1 \| head -c 200; echo; tail -3 logs/push_2710_1705.log \| cut -c1-150` |
 | 17:02:04 | SendMessage |  | `-` |
