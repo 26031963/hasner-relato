@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/10/2026 04:56:35.** Transcript: `68b80ae1-8c10-4eac-b412-ca643624b286.jsonl` (3.9 MB). Acoes na janela: **154**.
+**Medido em 27/10/2026 05:02:06.** Transcript: `68b80ae1-8c10-4eac-b412-ca643624b286.jsonl` (3.9 MB). Acoes na janela: **156**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 04:56:43 | Bash |  | `cd /home/ronald/saas-hasner; for i in $(seq 1 19); do ls logs/crons_em_curso/ 2>/dev/null \| grep -q sombra \|\| break; /usr/bin/sleep 30; done; date +%H:%M; ls logs/crons_em_curso/; bin/sombra.sh --conferir 2>&1 \| tail -1` |
+| 04:56:39 | Agent | Build FECHAR guard (sonnet) | `Construa a guarda FECHAR-PERGUNTA-A-PREMISSA no repo /home/ronald/saas-hasner (Django em app/). Leia antes /home/ronald/saas-hasner/CLAUDE.md secoes 0, 3, 4, 6, 7b. NUNCA edite /home/ronald/saas-hasner (arvore viva = bind-mount de prod); sem merge/push/deploy; sem escrita em prod. COPIA: `git -C /home/ronald/saas-hasner worktree add -b fechar-2710 /home/ronald/wt-fechar-2710-0500 3b1fa3e2`; confir ...` |
 | 04:46:44 | Bash |  | `cd /home/ronald/saas-hasner; for i in $(seq 1 19); do ls logs/crons_em_curso/ 2>/dev/null \| grep -q sombra \|\| break; /usr/bin/sleep 30; done; date +%H:%M; ls logs/crons_em_curso/` |
 | 04:37:02 | Bash |  | `cd /home/ronald/saas-hasner; for i in $(seq 1 19); do ls logs/crons_em_curso/ 2>/dev/null \| grep -q sombra \|\| break; /usr/bin/sleep 30; done; date +%H:%M; ls logs/crons_em_curso/` |
 | 04:27:30 | Bash |  | `cd /home/ronald/saas-hasner; for i in $(seq 1 19); do ls logs/crons_em_curso/ 2>/dev/null \| grep -q sombra \|\| break; /usr/bin/sleep 30; done; date +%H:%M; ls logs/crons_em_curso/` |
