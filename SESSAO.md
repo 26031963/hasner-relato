@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/10/2026 17:50:51.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (8.5 MB). Acoes na janela: **323**.
+**Medido em 27/10/2026 17:56:00.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (8.6 MB). Acoes na janela: **325**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 17:55:53 | Bash | Fix selo to first-parent and commit | `cd /home/ronald/saas-hasner && python3 - <<'E' p='bin/tests/test_lei_akita.sh';s=open(p).read() a="for h in git('rev-list', '%s^..HEAD' % corte[0]).split():" assert s.count(a)==1 s=s.replace(a,"# --first-parent: o pouso por `merge --no-ff` traz os commits da RAIA, anteriores a lei; o julgado e o MERGE (L-107), nao a\n# historia da raia -- sem isto o selo retroagiria, o que a clausula (2) proibe.\n ...` |
+| 17:54:07 | Bash | Wait more for FECHAR pouso suite | `cd /home/ronald/saas-hasner/logs; for i in $(seq 58); do grep -q '^rc=' fechar3_pouso2_suite.log 2>/dev/null && break; /usr/bin/sleep 10; done; grep -E '^(OK\|FAILED)($\| \()' fechar3_pouso2_suite.log \| tail -1; grep '^Ran ' fechar3_pouso2_suite.log \| tail -1; tail -1 fechar3_pouso2_suite.log \| cut -c1-20; grep -E '^(FAIL\|ERROR):' fechar3_pouso2_suite.log \| head -4; date +%H:%M` |
 | 17:44:21 | Bash | Wait for FECHAR pouso suite | `cd /home/ronald/saas-hasner/logs; for i in $(seq 58); do grep -q '^rc=' fechar3_pouso2_suite.log 2>/dev/null && break; /usr/bin/sleep 10; done; grep -E '^(OK\|FAILED)($\| \()' fechar3_pouso2_suite.log \| tail -1; grep '^Ran ' fechar3_pouso2_suite.log \| tail -1; tail -1 fechar3_pouso2_suite.log; grep -E '^(FAIL\|ERROR):' fechar3_pouso2_suite.log \| head -4; date +%H:%M` |
 | 17:44:07 | Bash | Run suite on rebuilt FECHAR pouso copy | `cd /home/ronald/saas-hasner && L=logs/fechar3_pouso2_suite.log; bin/suite.sh --dir /home/ronald/wt-fechar-pouso2-2710-1750 --espera 3600 > $L 2>&1; echo "rc=$?" >> $L` |
 | 17:43:45 | Bash | Stop stale suite; rebuild FECHAR pouso copy on HEAD | `cd /home/ronald/saas-hasner && for c in $(docker ps -q --filter ancestor=saas-hasner-core); do docker inspect $c --format '{{.Name}} {{range .Mounts}}{{.Source}} {{end}}' \| grep -q wt-fechar-pouso && { docker stop $c >/dev/null; echo "parado $c"; }; done; /usr/bin/sleep 3; W=/home/ronald/wt-fechar-pouso2-2710-1750 && git worktree add -b fechar-pouso2-2710 $W HEAD 2>&1 \| tail -1 && cd $W && git m ...` |
