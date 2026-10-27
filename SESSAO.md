@@ -6,10 +6,16 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/10/2026 11:31:39.** Transcript: `68b80ae1-8c10-4eac-b412-ca643624b286.jsonl` (9.0 MB). Acoes na janela: **367**.
+**Medido em 27/10/2026 11:37:06.** Transcript: `68b80ae1-8c10-4eac-b412-ca643624b286.jsonl` (9.2 MB). Acoes na janela: **373**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 11:33:08 | Bash |  | `/usr/bin/sleep 570; for d in wt-fechar2-2710-1015 wt-pergunta-dia-2710-0630 wt-ata-pausa-2710-0820 wt-contrato20-2710-0850 wt-ia-rbac-2710-1100 wt-leonardo-2710-1130; do echo "$d $(git -C /home/ronald/$d log --oneline -1 2>/dev/null \| cut -c1-80)"; done; /home/ronald/saas-hasner/bin/trava_teste.sh --quem; date +%H:%M` |
+| 11:32:57 | SendMessage |  | `-` |
+| 11:32:44 | SendMessage |  | `-` |
+| 11:32:21 | Bash |  | `cd /home/ronald/saas-hasner && bin/deploy.sh --sem-migrate > logs/deploy_selfie_20261027.log 2>&1; echo rc=$?; grep -E "OK\|FAIL\|ERRO\|vermelho\|deploy:" logs/deploy_selfie_20261027.log \| tail -4; docker exec saas_core python manage.py shell --command "from config.crons import juizes_por_varredura as j; print('JPV', len(j()))" 2>/dev/null \| tail -1` |
+| 11:32:17 | Bash |  | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md' s=open(p).read() anc='## LAUDO-[nome] col841 10/10 (complemento ATA-X-TURNO-PAUSA) -- medido (27/10 10:3x)' sec='''## JUIZ-SELFIE-AUSENTE-NASCE -- pouso (27/10 11:3x) LEI-AKITA: origem=ponto/registro_batida.py::selfie_ausente (juiz puro), testemunha=Batida.canal + FotoBatida/Batida.foto, RED=test_selfie_ausente_juiz (`logs/s ...` |
+| 11:32:00 | Bash |  | `cd /home/ronald/saas-hasner && git log --oneline -1 main; git -C /home/ronald/wt-selfie-pouso-2710-1100 log --oneline -2 \| tail -1; git -C /home/ronald/wt-selfie-pouso-2710-1100 rev-parse HEAD^1; git rev-parse main; git merge --no-ff --no-commit selfie-2710 2>&1 \| tail -1; echo "MERGE_HEAD=$(git rev-parse -q --verify MERGE_HEAD)"; git status --short \| grep -E "^(UU\|AA)"; n=0; for f in $(git di ...` |
 | 11:27:09 | Bash |  | `cd /home/ronald/saas-hasner; for i in $(seq 1 29); do grep -q "^rc=" logs/suite_selfie_pouso.log 2>/dev/null && break; /usr/bin/sleep 20; done; grep -E '^(OK\|FAILED)($\| \()\|^Ran \|^rc=' logs/suite_selfie_pouso.log \| tail -3; grep -E "^(FAIL\|ERROR):" logs/suite_selfie_pouso.log \| head -5; date +%H:%M` |
 | 11:27:05 | Bash |  | `date +%H:%M && python3 - <<'EOF' p='docs/PROMPTS.md' s=open(p).read().rstrip('\n')+'\n' s+='\| 27/10 11:3x \| **aval: SUITE-EM-FILA = POUSO-EM-COMBOIO** -- com 2+ suites na trava: cancelar as da fila (a que roda termina), UMA copia = main + toda raia com construcao fechada e verificador NAO-BARRA, UMA suite inteira, pouso em sequencia pela L-107 com hash e cmp no commit; fora: raia sem verificador ...` |
 | 11:26:54 | Agent | LAUDO-[nome] col33 teto 14h | `Obra LAUDO-[nome]-COL33-0310 (aval Ronald 27/10 ~11:3x), repo /home/ronald/saas-hasner (Django em app/). Leia CLAUDE.md secoes 0, 3, 4 (ZONA INVIOLAVEL: ponto/motor_calculo_v2.py so com aval explicito -- este aval NOMEIA o sitio e manda a cura no leitor do teto), 6, 7b (DINHEIRO-EM-COMPETENCIA-ABERTA). NUNCA edite /home/ronald/saas-hasner; sem merge/push/deploy; prod so leitura. COPIA: `git -C / ...` |

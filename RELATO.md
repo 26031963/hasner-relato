@@ -190,6 +190,13 @@ PAREI: ! GATE-EXPORT-10 (so o export da 10) | espera o DP na Gestao de HE e o Ro
 > O MARCADOR ANDOU no mesmo ato: `ORDEM-VIVA-TOPO` saiu de `BO-HE-RECUSAR-LOTE-500` (fechado) para `O261`, que o hook cobrou.
 > SEM COMMIT DE PROPOSITO: `RELATO.md` e `BACKLOG.md` ficam sujos na arvore porque a L-106 nao deixa commit so de docs fora de marco. Eles entram no commit do proximo marco.
 
+## JUIZ-SELFIE-AUSENTE-NASCE -- pouso (27/10 11:3x)
+LEI-AKITA: origem=ponto/registro_batida.py::selfie_ausente (juiz puro), testemunha=Batida.canal + FotoBatida/Batida.foto, RED=test_selfie_ausente_juiz (`logs/selfie_red_20261027.log`: 7 errors + 4 FAIL contra 917ef3c3 -- juiz nao registrado, papel juiz != prazo, `_eh_apk` derivado nas duas cascas), quem-mais-le=api/views.py, api/views_core.py, marcar_foto_ausente_retro, api/foto_recebida.py, chamados/catalogo, juizes novos=1 (selfie_ausente, corte JUIZ-SELFIE-AUSENTE-NASCE)
+- Copia de pouso `wt-selfie-pouso-2710-1100` (main f424851e + selfie-2710 @ 1d5734b8): suite inteira **Ran 12265 OK**; cmp 0 de 10.
+- DIFF do universo (prod, 7 d): 6084 batidas app (6028 canal NULL, 54 apk, 2 pwa); regra velha 17 x juiz 17, divergencia 0. `juizes_por_varredura` 7 -> 6.
+- Fila: o retro grava a disputa sem `ultima_batida` e `api/foto_recebida.py:66-67` casa por ela (disputa do retro nao fecha com a selfie atrasada) -- pre-existente; literais 'apk'/'pwa' remanescentes; o retro reagrega PWA antes dos 90 min (sem dano, dedup por data).
+CUSTO: verificador 2 voltas -- (1) RED sem log, CORTES.md editado a mao (escritor fora da fonte), anti-vacuidade, rotulo = DESCUIDO; (2) POUSA; construtor sonnet ~163 mil tokens.
+
 ## LAUDO-[nome] col841 10/10 (complemento ATA-X-TURNO-PAUSA) -- medido (27/10 10:3x)
 - Sombra, ids de prod (#132934 E 19:00, #132935 S 22:41, #128953 S 11/10 07:00), funcoes reais (`logs/laudo_col841_1010.out`): `turnos_do_colab` fecha 10/10 em E 19:00 -> S 22:41 sem pausa (221 min = DiaPago 3h41) e o 07:00 vira saida orfa de 11/10; ata, juiz e DiaPago concordam entre si.
 - LEITOR: `ponto/turnos.py::parear_turnos`, fallback `papel_da_ata or tipo` -- as lampadas DISPENSADAS (fato_em_ausencia, troca #4896) tem `luz=null` e `papel_por_minuto_da_ata` so aceita `acesa and instante_luz`, entao o dia cai no TIPO gravado. Dono ESTRUTURA. RED pela regra (L-110) escrito sem cura: `cb162759` (`test_laudo_col841_1010_red.py`, turno unico 19:00-07:00 x HEAD [10/10, 11/10]).
