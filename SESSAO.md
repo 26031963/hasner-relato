@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/10/2026 19:22:07.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (9.7 MB). Acoes na janela: **365**.
+**Medido em 27/10/2026 19:27:15.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (9.8 MB). Acoes na janela: **369**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 19:27:08 | Bash | Record FIO and COBERTURA state in RELATO | `cd /home/ronald/saas-hasner && python3 - <<'E' p='app/docs/RELATO.md';s=open(p).read() anc='## FECHAR-PERGUNTA-A-PREMISSA -- POUSO do produto (27/10 18:0x)' sec=('## FIO-LE-O-JUIZ e COBERTURA -- estado (27/10 19:3x)\n' '- FIO-LE-O-JUIZ (copia `wt-fio-2710-1835` @ 37225ca3, suite 12397 OK na copia): verificador NAO POUSA -- leitura exportada sem leitor na tela e o admin sem porta para resolver a vi ...` |
+| 19:27:02 | SendMessage |  | `-` |
+| 19:26:54 | SendMessage |  | `-` |
+| 19:26:46 | Bash | Read cobertura suite failures | `cd /home/ronald/saas-hasner/logs/cobertura && grep -E '^(OK\|FAILED)($\| \()' suite_inteira.out \| tail -1; grep '^Ran ' suite_inteira.out \| tail -1; grep -E '^(FAIL\|ERROR):' suite_inteira.out \| head -10` |
 | 19:19:36 | Bash | Wait for verifier and cobertura suite | `/usr/bin/sleep 420; tail -2 /home/ronald/saas-hasner/logs/cobertura/suite_inteira.out 2>/dev/null \| cut -c1-80; /home/ronald/saas-hasner/bin/trava_teste.sh --quem; date +%H:%M` |
 | 19:19:23 | Bash | Post FIO effects question at RELATO top | `cd /home/ronald/saas-hasner && python3 - <<'E' p='app/docs/RELATO.md';s=open(p).read() a='# RELATO — esteira saas-hasner\n\n' q=("> **lei: FIO-LE-O-JUIZ-EFEITOS** (pergunta, nao para a fila; FIO-LE-O-JUIZ pronto, suite 12397 OK, verificador em curso) -- (1) mudanca que o aval nao previa: com `resolver_perguntas_por_chamado_resolvido` perguntando ao `pergunta_viva`, o furo agrupado sob ADESAO e sob ...` |
 | 19:19:18 | Agent | Verify FIO-LE-O-JUIZ antes do pouso | `FIO-LE-O-JUIZ (BO-[nome] (C), complemento do FECHAR-PERGUNTA-A-PREMISSA), leitura antes do pouso. Copia /home/ronald/wt-fio-2710-1835 (branch fio-le-o-juiz-2710) sobre main 0baf575f (o main nao ganhou codigo depois). Commits: 5b8655f8 (itens 1-3), b8f5560d (item 4 + fixtures legadas), 37225ca3 (fixtures de ponto + tetos do chokepoint). Diff: `git -C /home/ronald/wt-fio-2710-1835 diff 0baf575f..H ...` |
