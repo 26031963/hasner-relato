@@ -194,6 +194,11 @@ PAREI: ! GATE-EXPORT-10 (so o export da 10) | espera o DP na Gestao de HE e o Ro
 > O MARCADOR ANDOU no mesmo ato: `ORDEM-VIVA-TOPO` saiu de `BO-HE-RECUSAR-LOTE-500` (fechado) para `O261`, que o hook cobrou.
 > SEM COMMIT DE PROPOSITO: `RELATO.md` e `BACKLOG.md` ficam sujos na arvore porque a L-106 nao deixa commit so de docs fora de marco. Eles entram no commit do proximo marco.
 
+## RETOMADA POS-CLEAR (27/10 12:5x)
+- Push dos 12 (`edd79bde..165fee20`): JA POUSOU (origin/main = 165fee20). A frente so `9c89f48c` (pos_push) + `21ff5c49` (docs do clear): vao no push do proximo marco (L-108).
+- Em construcao, 2 BOs sem arquivo em comum (RAIA-NAO-FICA-PARADA): IA-RBAC (`wt-ia-rbac-2710-1100`, 7 itens da 2a leitura do verificador) e ATA-PAUSA (`wt-ata-pausa-2710-0820`, continua dos 2 sujos; aval (a); medida >3 h em `logs/ata_pausa/ata_pausa_3h.out` antes do pouso). Construtor sonnet; verificador forte antes do pouso.
+- Na vez (limite de 2 BOs): FECHAR2 (separar os vermelhos de `fechar2_full*.log`), depois PERGUNTA-SEM-SELO item (2) (P7.1 em `wt-fatia-utc`, rebase sobre 165fee20).
+
 ## CLEAR-NO-MARCO -- parada (27/10 12:4x); nada em voo
 PROVA: push `edd79bde..165fee20` rc 0 (pre-push: suite OK + control-plane OK; `logs/push_selfie_pergunta_20261027.log`). No ar hoje: 46b61163 HE100, 15e3031d C2, 87b42b45 par_completo, 3df9c01f ABONADO, 83c9e1c6 CANAL, edd79bde hotfix C2, aec67e6c selfie, 165fee20 PERGUNTA-DO-DIA; rejulgamento comp 10 universo A (dado, 12:11). `juizes_por_varredura` 9 -> 6.
 Agentes ENCERRADOS pelo aval (sem resultado ha 30 min ou obra nova proibida), e as rodadas que eles tinham na fila da trava canceladas antes de ter conteiner: FECHAR2, IA-RBAC, P7.1 fatia UTC, medicao classe (1).
