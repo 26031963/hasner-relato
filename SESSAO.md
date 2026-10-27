@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/10/2026 15:48:07.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (5.7 MB). Acoes na janela: **209**.
+**Medido em 27/10/2026 15:53:10.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (5.8 MB). Acoes na janela: **214**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 15:51:15 | Bash | Wait for real fechar3 suite verdict | `cd /home/ronald/saas-hasner/logs; for i in $(seq 57); do grep -qE '^(OK\|FAILED)($\| \()' fechar3_suite_inteira2.log 2>/dev/null && grep -q '^Ran ' fechar3_suite_inteira2.log && break; /usr/bin/sleep 10; done; grep -E '^(OK\|FAILED)($\| \()' fechar3_suite_inteira2.log \| tail -1; grep '^Ran ' fechar3_suite_inteira2.log \| tail -1; grep -E '^(FAIL\|ERROR):' fechar3_suite_inteira2.log \| head -4; da ...` |
+| 15:51:10 | Bash | Wait for fechar3 full suite 2 verdict | `cd /home/ronald/saas-hasner/logs; for i in $(seq 55); do grep -q '^rc=\\|^OK\\|^FAILED' fechar3_suite_inteira2.log 2>/dev/null && break; /usr/bin/sleep 10; done; grep -E '^(OK\|FAILED)($\| \()' fechar3_suite_inteira2.log \| tail -1; grep '^Ran ' fechar3_suite_inteira2.log \| tail -1; grep -E '^(FAIL\|ERROR):' fechar3_suite_inteira2.log \| head -4; git -C /home/ronald/wt-fechar3-2710-1320 log --one ...` |
+| 15:50:55 | SendMessage |  | `-` |
+| 15:50:49 | Bash | Post ATA-PAUSA motor ! and state in RELATO | `cd /home/ronald/saas-hasner && python3 - <<'E' p='app/docs/RELATO.md';s=open(p).read() a='# RELATO — esteira saas-hasner\n\n' q=("> **! ATA-PAUSA-NO-MOTOR** (ZONA INVIOLAVEL, CLAUDE.md secao 4: `ponto/motor_calculo_v2.py` so com aval explicito; segura SO o pouso da ATA-X-TURNO-PAUSA, a fila SEGUE) -- para cumprir o seu (a) de 10:3x (\"antes do pouso, as pausas a mais de 3 h do cadastro (L-084) vao ...` |
+| 15:50:35 | Bash | Inspect the motor edit in ATA-PAUSA | `cd /home/ronald/saas-hasner && git -C /home/ronald/wt-ata-pausa-2710-0820 diff main...HEAD --stat -- app/ponto/motor_calculo_v2.py \| tail -1; git -C /home/ronald/wt-ata-pausa-2710-0820 show 5b86ec13 -- app/ponto/motor_calculo_v2.py \| head -60` |
 | 15:41:10 | Bash | Wait for fechar3 progress | `W=/home/ronald/wt-fechar3-2710-1320; h0=$(git -C $W rev-parse HEAD); for i in $(seq 55); do [ "$(git -C $W rev-parse HEAD)" != "$h0" ] && break; /usr/bin/sleep 10; done; git -C $W log --oneline -2 \| cut -c1-150; ls -t /home/ronald/saas-hasner/logs \| grep fechar3 \| head -3; date +%H:%M` |
 | 15:40:56 | Bash | Post papel-prazo question at RELATO top | `cd /home/ronald/saas-hasner && python3 - <<'E' p='app/docs/RELATO.md';s=open(p).read() a='# RELATO — esteira saas-hasner\n\n' q=("> **lei: PAPEL-PRAZO-DISPARAR-PERGUNTAS** (pergunta, nao para a fila; o selo de host `test_papel_prazo_nao_deriva.sh` esta VERMELHO no main desde o 165fee20 e segura o PUSH) -- o sentido (2) do selo (L-101) diz: `disparar_perguntas_competencia` ja DELEGA o prazo ao juiz ...` |
 | 15:40:49 | SendMessage |  | `-` |
