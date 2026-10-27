@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/10/2026 19:58:25.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (10.2 MB). Acoes na janela: **379**.
+**Medido em 27/10/2026 20:03:48.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (10.3 MB). Acoes na janela: **381**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 19:58:41 | Bash | Wait for FIO final suite | `cd /home/ronald/saas-hasner/logs; for i in $(seq 58); do grep -q '^rc=' fio_suite_final.log 2>/dev/null && break; /usr/bin/sleep 10; done; grep -E '^(OK\|FAILED)($\| \()' fio_suite_final.log \| tail -1; grep '^Ran ' fio_suite_final.log \| tail -1; tail -1 fio_suite_final.log \| cut -c1-20; grep -E '^(FAIL\|ERROR):' fio_suite_final.log \| head -5; date +%H:%M` |
+| 19:58:29 | Bash | Post FIO questions at RELATO top | `cd /home/ronald/saas-hasner && python3 - <<'E' p='app/docs/RELATO.md';s=open(p).read() a='# RELATO — esteira saas-hasner\n\n' q=("> **lei: FIO-LE-O-JUIZ-OS-19-E-O-VOLUME** (pergunta, nao para a fila; FIO-LE-O-JUIZ pronto em `wt-fio-2710-1835` @ 52ba48d8, verificador e suite em curso; o template do modal foi tocado -> espera o seu smoke) -- (1) dos 33 dias agrupados sob ADESAO/LIMBO (`logs/fio_le_o ...` |
 | 19:58:18 | Agent | Verify FIO-LE-O-JUIZ 2a leitura | `FIO-LE-O-JUIZ, 2a leitura. Copia /home/ronald/wt-fio-2710-1835 (branch fio-le-o-juiz-2710) sobre main 0baf575f; HEAD 52ba48d8. Diff: `git -C /home/ronald/wt-fio-2710-1835 diff 0baf575f..HEAD`; delta desde a sua 1a leitura: `git -C /home/ronald/wt-fio-2710-1835 diff 37225ca3..HEAD`. A 1a reprovou: (1) leitura exportada sem leitor na tela e sem porta para o admin resolver a viva; (2) `_competencia_e ...` |
 | 19:58:06 | Bash | Run full suite on FIO final HEAD | `cd /home/ronald/saas-hasner && git log --oneline 0baf575f..HEAD -- app ':!app/docs' \| head -3; L=logs/fio_suite_final.log; bin/suite.sh --dir /home/ronald/wt-fio-2710-1835 --espera 3600 > $L 2>&1; echo "rc=$?" >> $L` |
 | 19:48:04 | Bash | Long wait for FIO constructor | `/usr/bin/sleep 590; for w in wt-fio-2710-1835 wt-cobertura-2710-1810; do echo "$w $(git -C /home/ronald/$w log --oneline -1 \| cut -c1-90) sujos=$(git -C /home/ronald/$w status --porcelain \| grep -vc '^??')"; done; date +%H:%M` |
