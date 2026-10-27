@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/10/2026 00:30:49.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (57.7 MB). Acoes na janela: **622**.
+**Medido em 27/10/2026 00:35:49.** Transcript: `9dc43c3d-971d-4cc9-b176-7008bbd353bb.jsonl` (57.7 MB). Acoes na janela: **619**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -629,6 +629,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 12:36:41 | Bash | Fix unused import, ruff, rerun suite | `cd /home/ronald/wt-retrato-2610-1222/app && sed -i '/^import datetime$/d' ponto/tests/test_retrato_he_competencia_anterior.py; source /home/ronald/saas-hasner/bin/recursos.sh; docker run --rm $TESTE_DOCKER -v "$PWD:/app:ro" -w /app saas-hasner-core:latest sh -c "ruff check ponto/tests/test_retrato_he_competencia_anterior.py ponto/management/commands/lavrar_he_pendente.py --no-cache --output-format ...` |
 | 12:36:34 | Bash | Read ruff failure detail | `/bin/grep -n -A30 "^FAIL: test_ruff_zero" /tmp/claude-1001/-home-ronald-saas-hasner-app/9dc43c3d-971d-4cc9-b176-7008bbd353bb/scratchpad/ret_suite.out \| tail -14 \| cut -c1-200` |
 | 12:36:30 | Bash | Read the ruff failure | `/bin/grep -A12 "^FAIL: test_ruff_zero" /tmp/claude-1001/-home-ronald-saas-hasner-app/9dc43c3d-971d-4cc9-b176-7008bbd353bb/scratchpad/ret_suite.out \| /bin/grep -E "\.py:[0-9]+" \| head -5` |
-| 12:34:45 | Bash | Wait for retrato full suite | `timeout 590 bash -c 'until /bin/grep -q "^rc=" /tmp/claude-1001/-home-ronald-saas-hasner-app/9dc43c3d-971d-4cc9-b176-7008bbd353bb/scratchpad/ret_suite.out; do /usr/bin/sleep 20; done'; /bin/grep -E "^(FAIL\|ERROR):\|^Ran\|^(OK\|FAILED)( \|$)\|^rc=" /tmp/claude-1001/-home-ronald-saas-hasner-app/9dc43c3d-971d-4cc9-b176-7008bbd353bb/scratchpad/ret_suite.out \| tail -5; date +%H:%M` |
-| 12:34:35 | Bash | Read sombra dry result vs snapshot before | `cd /home/ronald/saas-hasner && /bin/grep -E "^emp\|ATENCAO" logs/retrato10_dry.out; cat logs/retrato_he_comp10_antes_20261026.out \| cut -c1-120` |
-| 12:34:32 | Bash | Check retrato suite, H seals, sombra dry | `for f in ret_suite h2; do echo "== $f"; /bin/grep -E "^(FAIL\|ERROR):\|^Ran\|^(OK\|FAILED)( \|$)\|^rc=" /tmp/claude-1001/-home-ronald-saas-hasner-app/9dc43c3d-971d-4cc9-b176-7008bbd353bb/scratchpad/$f.out \| tail -5; done; ls /home/ronald/saas-hasner/logs/retrato10_dry.fim 2>&1; date +%H:%M` |
