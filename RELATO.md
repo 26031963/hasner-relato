@@ -192,6 +192,12 @@ PAREI: ! GATE-EXPORT-10 (so o export da 10) | espera o DP na Gestao de HE e o Ro
 > O MARCADOR ANDOU no mesmo ato: `ORDEM-VIVA-TOPO` saiu de `BO-HE-RECUSAR-LOTE-500` (fechado) para `O261`, que o hook cobrou.
 > SEM COMMIT DE PROPOSITO: `RELATO.md` e `BACKLOG.md` ficam sujos na arvore porque a L-106 nao deixa commit so de docs fora de marco. Eles entram no commit do proximo marco.
 
+## COMBOIO DOS VERIFICADORES + COTA 82% (27/10 12:0x)
+- Verificador (forte) nos candidatos ao comboio: PERGUNTA-DO-DIA **POUSA** (6a leitura; ressalvas: campo RED do commit impreciso, 2 assertGreaterEqual que cabiam Equal) -> copia de pouso `wt-pergunta-pouso2-2710-1205` (main + pergunta-dia-2710), suite inteira em curso (comboio de 1: so ela pronta); IA-RBAC **NAO POUSA** (2a: vizinho de pautas vermelho, X do painel de Pautas morto para staff sem acao = REGRESSAO de JS nascida aqui, RED de tela por fixture, MORDE do selo copia a logica) -> curas no construtor; CONTRATO-20 pouso 2.1 **NAO POUSA** (o on_commit roda DENTRO da pilha da batida de chao em autocommit -- custo que o selo do chokepoint nao ve, L-030/C8; e o rejulgamento diverge do cron) = DESENHO -> PARADO na fila, sem relancar (cota).
+- Aval COTA-82-ATE-QUA-18H: leitura/medicao em haiku, sonnet so constroi, verificador forte; agente sem resultado ha 30 min e encerrado; PERGUNTA-SEM-SELO so o item (2) ate qua 28/10 18h (salvo >0).
+- ENCERRADO pela regra dos 30 min: construtor do ATA-X-TURNO-PAUSA (sem commit desde 10:31, sem `ata_pausa_3h.out`). PELA METADE: 2 arquivos sujos na copia `wt-ata-pausa-2710-0820` (nao commitados); a obra segue com o aval (a) recebido e os descuidos do verificador a curar.
+- Item (2) do PERGUNTA-SEM-SELO (`fechamento.py:245-253`, data UTC no filtro de fatia por vinculo): medicao so leitura em haiku, em curso.
+
 ## JUIZ-SELFIE-AUSENTE-NASCE -- pouso (27/10 11:3x)
 LEI-AKITA: origem=ponto/registro_batida.py::selfie_ausente (juiz puro), testemunha=Batida.canal + FotoBatida/Batida.foto, RED=test_selfie_ausente_juiz (`logs/selfie_red_20261027.log`: 7 errors + 4 FAIL contra 917ef3c3 -- juiz nao registrado, papel juiz != prazo, `_eh_apk` derivado nas duas cascas), quem-mais-le=api/views.py, api/views_core.py, marcar_foto_ausente_retro, api/foto_recebida.py, chamados/catalogo, juizes novos=1 (selfie_ausente, corte JUIZ-SELFIE-AUSENTE-NASCE)
 - Copia de pouso `wt-selfie-pouso-2710-1100` (main f424851e + selfie-2710 @ 1d5734b8): suite inteira **Ran 12265 OK**; cmp 0 de 10.
