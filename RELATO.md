@@ -178,6 +178,12 @@ PAREI: ! GATE-EXPORT-10 (so o export da 10) | espera o DP na Gestao de HE e o Ro
 > O MARCADOR ANDOU no mesmo ato: `ORDEM-VIVA-TOPO` saiu de `BO-HE-RECUSAR-LOTE-500` (fechado) para `O261`, que o hook cobrou.
 > SEM COMMIT DE PROPOSITO: `RELATO.md` e `BACKLOG.md` ficam sujos na arvore porque a L-106 nao deixa commit so de docs fora de marco. Eles entram no commit do proximo marco.
 
+## ABONADO-COM-SAIDA-ANTECIPADA -- construida, DIFF de frota publicado (27/10 05:2x)
+LEI-AKITA: origem=ponto/motor_calculo_v2.py::_aplicar_teto_pontualidade (a UMA mudanca do `!`) + calculador do_dia via rubricas_por_dia, testemunha=ponto/turnos.py composicao da grade (cobertura_ausencia_periodo para=folha, falta fora, cobre_parte_do_dia False), RED=test_abono_dia_inteiro_zera_pontualidade (FM 8.32 != 0), quem-mais-le=FM, DiaPago motor/oraculo, espelho, pdf_espelho, diff_calculador, leitor_celula, juizes novos=0
+- Copia `/home/ronald/wt-abono-2710-0350` (`0609d19f` sobre 98bf1089). `periodo.py::reler` nao e producao (so testes): a origem de 00:2x estava errada de novo.
+- DIFF de frota (sombra 27/10, funcao real, arvore pousada x copia): FM **8 colabs**, saida antecipada **-36,72 h** (7) e atraso **-2,58 h** (col570), nada sobe; DiaPago **9 dia-colab**, motor e oraculo iguais (col889 tinha atraso 0,79 so no oraculo: some). Nominal pelo juiz real: os 9 com ausencia APROVADA de DIA INTEIRO (6 atestados, 1 troca de plantao, col570 declaracao sem minutos, col258 2 atestados); parciais de 150 min (col892, col258 28/09) intocadas. PROVA: `logs/sombra/abono_fm_{antes,depois}.json`, `he100_dp_abono_{antes,depois}.json`, `logs/abono_nominal.out`.
+INCOMPLETO: suite inteira, verificador, pouso e apply (7b); leitores `diff_espelho_alimentacao`/`aplicar_09_corte_b` sem a alimentacao (so diagnostico).
+
 ## HE100 NO AR + APPLY da 10 -- 46b61163 (27/10 05:0x)
 LEI-AKITA: origem=ponto/motor_calculo_v2.py::_dia_sem_previsto_fora_da_janela (+ calculador do_dia/rubricas_por_dia), testemunha=periodo do motor e `dias_sem_previsto_fora_da_janela`, RED=test_he100_dia_sem_previsto, quem-mais-le=FM, DiaPago motor/oraculo, Gestao de HE, pdf_espelho, diff_calculador, juizes novos=0
 - Pouso L-107: merge --no-ff (MERGE_HEAD 98bf1089), cmp 0 de 11 contra a copia certificada (suite 12222 OK), commit `46b61163`, `bin/deploy.sh --sem-migrate` rc 0 com o ensaio de HOJE (carimbo 27/10, diverge 0): 3 rotas OK, BUG 128 verde, importerror_500=0.
