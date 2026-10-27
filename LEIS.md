@@ -316,6 +316,9 @@ Estavam no indice como vigentes e alguma clausula nao tem efeito. Gerada do ESTA
 - `SEM-SELO-CAUSA-ESPELHO-09`
 - `BO-ADMIN-2710-VINCULO`
 - `RESPOSTAS-TOPO-2710-1720`
+- `BO-[nome]-FECHA`
+- `BO-[nome]-NOMES`
+- `BO-ADMIN-2710-LEIS`
 
 ## CORTES que viraram lei
 

@@ -6,10 +6,16 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/10/2026 17:23:37.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (8.0 MB). Acoes na janela: **298**.
+**Medido em 27/10/2026 17:29:07.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (8.2 MB). Acoes na janela: **304**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 17:25:56 | Bash | Wait for push completion | `for i in $(seq 57); do grep -q '^push_rc' /home/ronald/saas-hasner/logs/push_2710_1705.log && break; /usr/bin/sleep 10; done; tail -4 /home/ronald/saas-hasner/logs/push_2710_1705.log \| cut -c1-160; date +%H:%M` |
+| 17:25:45 | SendMessage |  | `-` |
+| 17:25:36 | Bash | Register BO-[nome] avals and #6984 question | `cd /home/ronald/saas-hasner && python3 - <<'E' import json d='app/docs/' p=d+'BACKLOG.md';s=open(p).read() s=s.replace('\| REGISTRADO-CONTA-COMO-VIVO \| **Chamado `registrado`','\| REGISTRADO-NAO-E-VIVO \| **(BO-[nome] (D), padrao=maquina de estado com juiz unico; renomeada pelo BO-[nome]-NOMES) Chamado `registrado`',1) s=s.replace('\| registrada -- ESTRUTURA \| aval BO-ADMIN-2710 16:5x \| col ...` |
+| 17:25:06 | Bash | Queue suite on FECHAR pouso copy | `cd /home/ronald/saas-hasner && mkdir -p /home/ronald/wt-fechar-pouso-2710-1745/app/logs /home/ronald/wt-fechar-pouso-2710-1745/app/media; L=logs/fechar3_pouso_suite.log; bin/suite.sh --dir /home/ronald/wt-fechar-pouso-2710-1745 --espera 7200 > $L 2>&1; echo "rc=$?" >> $L` |
+| 17:24:56 | Bash | Read chokepoint test assertions | `cd /home/ronald/wt-fechar-pouso-2710-1745 && sed -n 305,326p app/ponto/tests/test_selo_chokepoint_escrita.py` |
+| 17:24:51 | Bash | Create FECHAR pouso copy on current main | `cd /home/ronald/saas-hasner && W=/home/ronald/wt-fechar-pouso-2710-1745 && git worktree add -b fechar-pouso-2710 $W e86968e3 2>&1 \| tail -1 && cd $W && git merge --no-ff -m "pouso: main e86968e3 + fechar3-2710 @ 7e006c64" fechar3-2710 2>&1 \| tail -2; git status --porcelain \| head -3; grep -n "assertGreaterEqual(vivos" app/ponto/tests/test_selo_chokepoint_escrita.py` |
 | 17:15:10 | Bash | Wait for push completion | `for i in $(seq 57); do grep -q '^push_rc' /home/ronald/saas-hasner/logs/push_2710_1705.log && break; /usr/bin/sleep 10; done; tail -5 /home/ronald/saas-hasner/logs/push_2710_1705.log \| cut -c1-160; date +%H:%M` |
 | 17:14:56 | Bash | Queue suite on causa_espelho pouso copy | `cd /home/ronald/saas-hasner && L=logs/pergunta_sem_selo/causa_pouso_suite.log; bin/suite.sh --dir /home/ronald/wt-causa-pouso-2710-1735 --espera 7200 > $L 2>&1; echo "rc=$?" >> $L` |
 | 17:14:51 | Bash | Create causa_espelho pouso copy | `cd /home/ronald/saas-hasner && W=/home/ronald/wt-causa-pouso-2710-1735 && git worktree add -b causa-pouso-2710 $W e86968e3 2>&1 \| tail -1 && cd $W && git cherry-pick 1052a448 2>&1 \| tail -1; git log --oneline -2 \| cut -c1-90; git diff --name-only HEAD~1 HEAD; mkdir -p app/logs app/media` |
