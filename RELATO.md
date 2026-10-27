@@ -178,6 +178,16 @@ PAREI: ! GATE-EXPORT-10 (so o export da 10) | espera o DP na Gestao de HE e o Ro
 > O MARCADOR ANDOU no mesmo ato: `ORDEM-VIVA-TOPO` saiu de `BO-HE-RECUSAR-LOTE-500` (fechado) para `O261`, que o hook cobrou.
 > SEM COMMIT DE PROPOSITO: `RELATO.md` e `BACKLOG.md` ficam sujos na arvore porque a L-106 nao deixa commit so de docs fora de marco. Eles entram no commit do proximo marco.
 
+## HE100 (a) -- re-DIFF fecha o criterio; o verificador barra o pouso (27/10 01:5x)
+LEI-AKITA: origem=ponto/motor_calculo_v2.py::_dia_sem_previsto_fora_da_janela, testemunha=periodo do motor (minutos_* e efetivo_*), RED=test_he100_dia_sem_previsto::DiaSemPrevistoEscalaCertaTest (330.0 != 0.0), quem-mais-le=FechamentoMensal, DiaPago motor E oraculo, Gestao de HE, juizes novos=0
+- O que mudou (copia `/home/ronald/wt-he100a-2710-0145`, base 3b1fa3e2, `156aa1a6`+`4cd69860`): folga SEM escala certa (`escala_certa_no_dia`) fica fora do HE100; feriado fica na regra.
+- re-DIFF da 10 (sombra, carimbo 26/10, `recalcular_fechamento_mes` somente_leitura, HEAD x copia): **64 colabs, 75 dia-colab, 619,77 h** -- **57 folga COM escala certa (466,37 h) + 18 feriado (153,40 h); FORA_DO_CRITERIO 0**; colabs que mudam == colabs da lista de dias; queda por colab == soma dos dias. PROVA: `logs/folha10_he100_depois3.out`, `logs/sombra/he100_{antes3,depois3,depois3_dias}.json`.
+- NAO POUSA (verificador, CONFIRMADO na sombra `logs/he100_oraculo.out`): o DiaPago `oraculo` (comp>=10) paga o dia que o motor zerou -- col300 22/09 folga 12,0 h, col365 12/10 HE100 feriado 12,0, col784 5,03, col951 6,4. O motor zera so `minutos_*` depois do carimbo e o oraculo le `efetivo_*`. Cura na origem em construcao (o par bloqueado nao chega aos `pares`); re-DIFF e oraculo x motor depois.
+- CADASTRO: os sem escala certa (col956/960/936 nominais) ja estao na lista do admin pela lavra (A2/A8 em `logs/esmeril_espelho.json`); conferencia do conjunto inteiro depois do re-DIFF final.
+- ABONADO: caso nominal col841 10/10 (`troca_de_plantao` aprovada, dia inteiro) desconta 7,32 h de saida antecipada nas DUAS linhas do DiaPago (motor e oraculo) -- `logs/abono_col841.out`. Origem corrigida de novo: `periodo.py::reler` nao tem chamador de producao; os escritores vivos sao `regras.do_dia` (oraculo) e `MotorBase._julgar_pontualidade` (motor).
+- MODELO: o fable da sessao era o advisor (`~/.claude/settings.json` `advisorModel`), trocado para sonnet; verificador `inherit` -> `haiku`.
+INCOMPLETO: HE100 (cura do oraculo, suite, pouso, apply); ABONADO (RED e cura nos dois escritores); FECHAR, PERGUNTA-DO-DIA, ATA-X-TURNO-PAUSA, ESMERIL.
+
 ## CLEAR-AGORA -- parada (27/10 01:1x); nada comecado depois do aval
 INCOMPLETO:
 - HE100-SEM-PREVISTO: cura em copia `/home/ronald/wt-he100-sp-2610-2216` (`c80c3d5a`, estreitada a folga/feriado, selos verdes), NAO pousada; espera a resposta de HE100-ALCANCE-A-PREMISSA (topo).
