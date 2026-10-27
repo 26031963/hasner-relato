@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/10/2026 17:01:37.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (7.5 MB). Acoes na janela: **280**.
+**Medido em 27/10/2026 17:07:07.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (7.6 MB). Acoes na janela: **284**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 17:02:18 | Bash | Wait for push result | `for i in $(seq 57); do grep -q '^push_rc' /home/ronald/saas-hasner/logs/push_2710_1705.log && break; /usr/bin/sleep 10; done; tail -6 /home/ronald/saas-hasner/logs/push_2710_1705.log \| cut -c1-160; git -C /home/ronald/wt-fechar3-2710-1320 log --oneline -1 \| cut -c1-100; date +%H:%M` |
+| 17:02:05 | Bash | Check hook and push progress | `cd /home/ronald/saas-hasner && python3 bin/hook_stop_fila1.py </dev/null 2>&1 \| head -c 200; echo; tail -3 logs/push_2710_1705.log \| cut -c1-150` |
+| 17:02:04 | SendMessage |  | `-` |
+| 17:01:53 | Bash | Publish BO results, PAREI ! and law questions | `cd /home/ronald/saas-hasner && python3 - <<'E' p='app/docs/RELATO.md';s=open(p).read() a='# RELATO — esteira saas-hasner\n\n' q=("PAREI: ! SEM-SELO-CAUSA-ESPELHO-09 (so o pouso do 1052a448) \| espera Ronald -- a condicao literal do `!` NAO fecha nos 38: prova na sombra (recalculo real `recalcular_fechamento_mes` com `motivo_exportada`, 76 recalculos, 0 erros, rollback; `logs/pergunta_sem_selo/raia ...` |
 | 16:52:00 | Bash | Wait for fechar3 commit or push end | `W=/home/ronald/wt-fechar3-2710-1320; h0=$(git -C $W rev-parse HEAD); for i in $(seq 55); do [ "$(git -C $W rev-parse HEAD)" != "$h0" ] && break; grep -q '^push_rc' /home/ronald/saas-hasner/logs/push_2710_1705.log 2>/dev/null && break; /usr/bin/sleep 10; done; git -C $W log --oneline -3 \| cut -c1-140; tail -3 /home/ronald/saas-hasner/logs/push_2710_1705.log \| cut -c1-150; date +%H:%M` |
 | 16:51:45 | Bash | Push today's marcos via push.sh | `cd /home/ronald/saas-hasner && bin/push.sh > logs/push_2710_1705.log 2>&1; echo "push_rc=$?" >> logs/push_2710_1705.log; git fetch -q; echo "origin=$(git rev-parse --short origin/main) head=$(git rev-parse --short HEAD)" >> logs/push_2710_1705.log` |
 | 16:51:38 | Bash | List commits to push and push.sh usage | `cd /home/ronald/saas-hasner && git fetch -q && git log --oneline origin/main..HEAD \| cut -c1-90; ls bin/push.sh && sed -n 1,15p bin/push.sh \| grep -E "^#" \| head -8` |
