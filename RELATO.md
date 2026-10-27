@@ -180,6 +180,16 @@ PAREI: ! GATE-EXPORT-10 (so o export da 10) | espera o DP na Gestao de HE e o Ro
 > O MARCADOR ANDOU no mesmo ato: `ORDEM-VIVA-TOPO` saiu de `BO-HE-RECUSAR-LOTE-500` (fechado) para `O261`, que o hook cobrou.
 > SEM COMMIT DE PROPOSITO: `RELATO.md` e `BACKLOG.md` ficam sujos na arvore porque a L-106 nao deixa commit so de docs fora de marco. Eles entram no commit do proximo marco.
 
+## CLEAR-AGORA -- parada (27/10 01:1x); nada comecado depois do aval
+INCOMPLETO:
+- HE100-SEM-PREVISTO: cura em copia `/home/ronald/wt-he100-sp-2610-2216` (`c80c3d5a`, estreitada a folga/feriado, selos verdes), NAO pousada; espera a resposta de HE100-ALCANCE-A-PREMISSA (topo).
+- ABONADO-COM-SAIDA-ANTECIPADA: apply NAO comecou (nada construido, nada aplicado). Origem corrigida: o calculador (`ponto/calculador/periodo.py:808`), nao o motor. RED pelo motor em `/home/ronald/wt-abono-2610-0025`, nao commitado e que NAO reproduz o caso -- refazer pelo `rubricas_por_dia`.
+- FECHAR-PERGUNTA-A-PREMISSA (a) fechamento novo: medido (335 -> 65 com irmao vivo, 270 sem); a guarda (com a excecao do irmao vivo) NAO construida.
+- PERGUNTA-DO-DIA-EM-CURSO (b): classe das 48 medida (uma rodada 03/10, 12 datas futuras); a migracao para o evento NAO construida.
+- ESMERIL-PENDENTE: as familias ausencia/ferias e folha/export NAO rodadas (aval 00:2x).
+- DEPLOY-SEM-SOMBRA-SO-NO-1O-ARG: registrada na fila 2.
+NAO /clear pendente de nada: nenhum DIFF, apply, suite, push ou agente em voo.
+
 ## COTA-BORDA -- o que estava em curso, fechado e publicado (27/10 00:2x)
 - ABONADO-COM-SAIDA-ANTECIPADA: ORIGEM CORRIGIDA, e a correcao e minha. Da competencia 10 em diante a pontualidade do DiaPago NAO sai de `motor_calculo_v2` -- sai do CALCULADOR (`recalcular_fechamento_mes` -> `rubricas_por_dia` quando `(ano, mes) >= (2026, 10)`), o juiz do dia `ponto/calculador/periodo.py:808-810` (`_dono.minutos_saida_antecipada = _pt.antecipada_min`). O RED pelo motor (copia `/home/ronald/wt-abono-2610-0025`, nao commitado) NAO reproduziu o caso: o par 08-12/13-14 deu 0 de saida antecipada no motor. Entao a cura NAO precisa do `!` de zona inviolavel concedido: e o calculador (fora da zona) que nao le a ausencia que explica o dia inteiro. Proximo passo: o RED pelo `rubricas_por_dia`. Nada construido, nada aplicado.
 - FECHAR-PERGUNTA-A-PREMISSA (a) para fechamento NOVO, a medida pedida (prod, so leitura, `logs/sonda_314_irmao.py`, janela de 8 d): dos **335** fechados que a guarda recusaria, **65 tem chamado IRMAO vivo** no mesmo colab-dia (turno_aberto 53, batida_ausente 7, ausencia_colab 5) -- fechamento por DEDUP, legitimo: a guarda tem de deixar passar quando ha irmao vivo; **270 sem irmao** (batida_ausente 212). Os legados nao se reabrem.
