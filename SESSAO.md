@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/10/2026 16:50:52.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (7.3 MB). Acoes na janela: **277**.
+**Medido em 27/10/2026 16:56:07.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (7.4 MB). Acoes na janela: **280**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 16:52:00 | Bash | Wait for fechar3 commit or push end | `W=/home/ronald/wt-fechar3-2710-1320; h0=$(git -C $W rev-parse HEAD); for i in $(seq 55); do [ "$(git -C $W rev-parse HEAD)" != "$h0" ] && break; grep -q '^push_rc' /home/ronald/saas-hasner/logs/push_2710_1705.log 2>/dev/null && break; /usr/bin/sleep 10; done; git -C $W log --oneline -3 \| cut -c1-140; tail -3 /home/ronald/saas-hasner/logs/push_2710_1705.log \| cut -c1-150; date +%H:%M` |
+| 16:51:45 | Bash | Push today's marcos via push.sh | `cd /home/ronald/saas-hasner && bin/push.sh > logs/push_2710_1705.log 2>&1; echo "push_rc=$?" >> logs/push_2710_1705.log; git fetch -q; echo "origin=$(git rev-parse --short origin/main) head=$(git rev-parse --short HEAD)" >> logs/push_2710_1705.log` |
+| 16:51:38 | Bash | List commits to push and push.sh usage | `cd /home/ronald/saas-hasner && git fetch -q && git log --oneline origin/main..HEAD \| cut -c1-90; ls bin/push.sh && sed -n 1,15p bin/push.sh \| grep -E "^#" \| head -8` |
 | 16:50:27 | Bash | Deploy semselo ponta and smoke logs | `cd /home/ronald/saas-hasner && git rev-parse -q --verify MERGE_HEAD; bin/deploy.sh --sem-migrate > logs/pergunta_sem_selo/deploy_e86968e3.log 2>&1; echo deploy_rc=$?; tail -3 logs/pergunta_sem_selo/deploy_e86968e3.log; /usr/bin/sleep 40; docker logs --since 2m saas_ui 2>&1 \| grep -cE "Traceback\|Internal Server Error"; docker logs --since 2m saas_core 2>&1 \| grep -cE "Traceback\|Internal Server  ...` |
 | 16:50:19 | Bash | Commit semselo ponta pouso with docs | `cd /home/ronald/saas-hasner && python3 - <<'E' p='app/docs/RELATO.md';s=open(p).read() a='## SEM-SELO raia (1) [5] -- pouso da ponta em curso (27/10 16:3x)\n' b=('## SEM-SELO raia (1) [5] -- ponta POUSA (27/10 17:0x)\n' 'LEI-AKITA: origem=core/regua_cct.py::regua_para + ponto/portas/regen_exportada.py::regenerar_em_exportada, testemunha=escala/alimentacao.py::vinculo_do_dia_carregado (regua) e ::v ...` |
 | 16:49:58 | Bash | cmp code; reapply ATO lines; run seals | `cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/bea8f2b7-21d4-4d42-afd2-993c9f814f8f/scratchpad; W=/home/ronald/wt-semselo-pouso-2710-1630; n=0; for f in $(git -C $W diff --name-only 9269eae0 HEAD); do cmp -s $W/$f $f \|\| { echo "DIFERE $f"; n=$((n+1)); }; done; echo "cmp_diferem=$n"; python3 - "$S/atos_novos.txt" <<'E' import sys novos=[l.rstrip('\n') for l in open ...` |
