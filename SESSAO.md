@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/10/2026 02:11:46.** Transcript: `68b80ae1-8c10-4eac-b412-ca643624b286.jsonl` (2.7 MB). Acoes na janela: **104**.
+**Medido em 27/10/2026 02:17:05.** Transcript: `68b80ae1-8c10-4eac-b412-ca643624b286.jsonl` (2.7 MB). Acoes na janela: **105**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 02:14:45 | Bash |  | `cd /home/ronald/wt-he100a-2710-0145; for i in $(seq 1 29); do [ "$(git rev-parse --short HEAD)" != "06426075" ] && break; /usr/bin/sleep 20; done; git log --oneline -3` |
 | 02:10:59 | Bash |  | `cd /home/ronald/wt-he100a-2710-0145; for i in $(seq 1 29); do [ "$(git rev-parse --short HEAD)" != "39668e22" ] && break; /usr/bin/sleep 20; done; git log --oneline -2` |
 | 02:10:54 | Bash |  | `python3 - <<'EOF' p='docs/BACKLOG.md' s=open(p).read() a='\| fila 1 \| a medir \| 27/10 02:0x \|\n' assert s.count(a)==1 s=s.replace(a,'\| fila 1 \| MEDIDO 27/10 02:2x (sombra, lavrar real com rollback): 2 dos 64 do HE100 recusados no HEAD (col300, col978); col300 tem oraculo velho 11,0 h; col978 sem linha oraculo. Cura em construcao como complemento do HE100 (bug no caminho) \| 27/10 02:0x \|\n', ...` |
 | 02:10:42 | SendMessage |  | `-` |
