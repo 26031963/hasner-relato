@@ -188,6 +188,13 @@ PAREI: ! GATE-EXPORT-10 (so o export da 10) | espera o DP na Gestao de HE e o Ro
 > O MARCADOR ANDOU no mesmo ato: `ORDEM-VIVA-TOPO` saiu de `BO-HE-RECUSAR-LOTE-500` (fechado) para `O261`, que o hook cobrou.
 > SEM COMMIT DE PROPOSITO: `RELATO.md` e `BACKLOG.md` ficam sujos na arvore porque a L-106 nao deixa commit so de docs fora de marco. Eles entram no commit do proximo marco.
 
+## HOTFIX C2 -- pouso: em revisao = lavra C8 OU chamado de vinculo vivo (27/10 10:0x)
+LEI-AKITA: origem=ponto/services/geofence.py::_cadastro_em_revisao, testemunha=lavra C8 OU chamado vinculo_divergente vivo, RED=test_c2fix_cadastro_em_revisao_uniao (2 FAIL por assercao no HEAD, `logs/c2fix_red_20261027.log`), quem-mais-le=geofence, cadastro_realidade.py:288 (lista do admin), vinculo_na_lista.py, juizes novos=0
+- Copia `wt-c2fix-2710-0930` (9dc7905e + 71db7e69): suite inteira **Ran 12251 OK** na arvore commitada; cmp 0 contra a copia.
+PROVA (antes da cura): desde 05:54, 2 `ponto_fora` com push para os 19 (col926, col961); nas 24 h anteriores, 22 `vinculo_divergente` e 0 `ponto_fora`.
+- Divergencia DECLARADA: para os 19 legados, a lista do admin diz "fora da C8" e o geofence diz "em revisao" (chamado vivo) -- item `C2-OS-19-SEM-PRAZO` (contador com dono no marco seguinte).
+CUSTO: verificador 1 volta barrada (docstrings que ficaram falsas = DESCUIDO; RED sem log = DESCUIDO); construtor sonnet ~70 mil tokens.
+
 ## VERIFICADOR RETROATIVO da raia 20-noite + BUG em prod no C2 (27/10 09:1x)
 - O verificador nao rodou antes dos 3 pousos (falha minha); rodou depois, no codigo no ar: ACHADOS nos 3, nenhum de dinheiro.
 - **BUG PROVADO em prod (C2, 15e3031d)**: `_cadastro_em_revisao` passou a ler so a lavra C8 e largou o chamado vivo; os 19 vivos fora da lista voltaram a ser acusados de CONDUTA. PROVA: desde 05:54, **2 `ponto_fora` com push** (col926, col961); nas 24 h antes, 22 `vinculo_divergente` e 0 `ponto_fora` para os mesmos 19. Cura em construcao (hotfix `wt-c2fix-2710-0930`): em revisao = lavra C8 OU chamado vivo do modulo. Os 2 alertas ja emitidos ficam como estao (push ja saiu) -- a dizer ao Ronald.
