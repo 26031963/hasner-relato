@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/10/2026 13:13:46.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (1.9 MB). Acoes na janela: **75**.
+**Medido em 27/10/2026 13:19:06.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (2.0 MB). Acoes na janela: **76**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 13:18:59 | Bash | Find the fechar2 suite container | `docker ps --format '{{.ID}} {{.Names}} {{.Mounts}} {{.RunningFor}}' \| grep -i "fechar2\\|wt-" \| head; docker ps --format '{{.ID}} {{.Image}} {{.Names}} {{.RunningFor}}' \| head` |
 | 13:09:10 | Bash | Wait up to ~10 min for full3 verdict | `cd /home/ronald/saas-hasner/logs; for i in $(seq 58); do grep -q '^rc=' fechar2_full3.log 2>/dev/null && break; /usr/bin/sleep 10; done; tail -1 fechar2_full3.log; /home/ronald/saas-hasner/bin/trava_teste.sh --quem` |
 | 13:09:00 | Agent | Verify FECHAR2 reconstrucao | `Obra FECHAR-PERGUNTA-A-PREMISSA, reconstrucao na copia /home/ronald/wt-fechar2-2710-1015 (branch fechar2-2710), 3 commits sobre o main 165fee20: `fc99031f` (o gate `ChamadoColaborador.reconciliar()` pergunta o MESMO coletor que `reabrir()` e a Defesa 1: `premissa_regularizada`/`_celula_furada`), `1035e5a5` (selo de renascimento aceita `reabrir(marcos=)`), `5d63207f` (vazamento de relogio do teste  ...` |
 | 13:08:46 | Bash | Full suite on fechar2 copy | `cd /home/ronald/saas-hasner && L=logs/fechar2_full3.log; bin/suite.sh --dir /home/ronald/wt-fechar2-2710-1015 --espera 3600 > $L 2>&1; echo "rc=$?" >> $L; echo "full3: $(grep -E '^(OK\|FAILED)($\| \()' $L \| tail -1) $(grep '^Ran ' $L \| tail -1) $(tail -1 $L)"; grep -E '^(FAIL\|ERROR):' $L \| head` |
