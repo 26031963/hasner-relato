@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/10/2026 22:55:51.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (13.1 MB). Acoes na janela: **441**.
+**Medido em 27/10/2026 23:01:06.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (13.3 MB). Acoes na janela: **444**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 23:00:55 | Bash | Wait for verifier | `/usr/bin/sleep 240; date +%H:%M` |
+| 23:00:47 | Agent | Verify COBERTURA-PARCIAL-UM-JUIZ | `COBERTURA-PARCIAL-UM-JUIZ (BO-[nome] (A)), leitura antes do pouso. Copia /home/ronald/wt-cobertura-2710-1810 (branch cobertura-2710) sobre main 987640b7; HEAD 3735aff9. Diff: `git -C /home/ronald/wt-cobertura-2710-1810 diff 987640b7..HEAD`. Suite inteira: /home/ronald/saas-hasner/logs/cobertura/suite_inteira_3735.log (OK Ran 12435). RED: /home/ronald/saas-hasner/logs/cobertura/red_head.out (9 de ...` |
+| 23:00:28 | Bash | Record COBERTURA suite green | `cd /home/ronald/saas-hasner && python3 - <<'E' p='/home/ronald/saas-hasner/app/docs/RELATO.md';s=open(p).read() a='- Suite inteira da (A) @ 3735aff9 lancada 22:4x sem modelo: veredito em `logs/cobertura/suite_inteira_3735.log` (linha `rc=` no fim).' assert s.count(a)==1 s=s.replace(a,'- Suite inteira da (A) @ 3735aff9: **OK (skipped=42, expected failures=15) Ran 12435 rc 0** (`logs/cobertura/suite ...` |
 | 22:54:12 | Bash | Wait for COBERTURA suite verdict | `for i in $(seq 58); do grep -q '^rc=' /home/ronald/saas-hasner/logs/cobertura/suite_inteira_3735.log && break; /usr/bin/sleep 10; done; L=/home/ronald/saas-hasner/logs/cobertura/suite_inteira_3735.log; grep -E '^(OK\|FAILED)($\| \()' $L \| tail -1; grep '^Ran ' $L \| tail -1; tail -1 $L \| cut -c1-20; grep -E '^(FAIL\|ERROR):' $L \| head -5; date +%H:%M` |
 | 22:54:02 | Bash | Check COBERTURA suite progress | `tail -c 300 /home/ronald/saas-hasner/logs/cobertura/suite_inteira_3735.log; /home/ronald/saas-hasner/bin/trava_teste.sh --quem; date +%H:%M` |
 | 22:53:50 | Bash | Check how sombra settings pick the DB | `cd /home/ronald/saas-hasner && grep -nE "NAME\|HOST\|environ" app/config/settings/sombra.py \| head -10; grep -n "SOMBRA_DB\\|SOMBRA_BANCO\\|-e DB" bin/sombra.sh \| head -8` |
