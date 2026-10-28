@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/10/2026 13:13:37.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (23.5 MB). Acoes na janela: **327**.
+**Medido em 28/10/2026 13:19:07.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (23.5 MB). Acoes na janela: **326**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -336,4 +336,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 01:21:14 | Bash | Commit PV-MUDA merge with docs | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/BACKLOG.md'; s=open(p).read() a='<!-- ORDEM-VIVA-TOPO: JUIZ-PERGUNTA-VIVA-MUDA-SEM-FATO -->' assert s.count(a)==1 s=s.replace(a,'<!-- ORDEM-VIVA-TOPO: PASSIVO-VIVA-EM-DISPUTA-FECHADA -->\n<!-- ANDOU 28/10 01:2x, de `JUIZ-PERGUNTA-VIVA-MUDA-SEM-FATO` (NO AR, 2db04de4) para `PASSIVO-VIVA-EM-DISPUTA-FECHADA` (o passivo e a classe do user 65 ...` |
 | 01:21:00 | Bash | Write PV-MUDA pouso docs | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read() a='# RELATO — esteira saas-hasner\n\n' l='''> **JUIZ-PERGUNTA-VIVA-MUDA-SEM-FATO NO AR 28/10 01:2x** (pouso L-107, sem push: o push leva a FIO, que espera o smoke). Causa provada: num request so, `validar_pergunta` gravava `validada_em` fora de transacao; o sinal do beco (`chamados/signals.py::_becos_post_sav ...` |
 | 01:20:39 | Bash | Merge PV-MUDA into main and compare | `cd /home/ronald/saas-hasner && git rev-parse --short HEAD && bin/janela_auth.sh 2>&1 \| tail -1 && git merge --no-ff --no-commit 2db04de4 2>&1 \| tail -2; git rev-parse -q --verify MERGE_HEAD >/dev/null && echo MERGE_HEAD-ok; for f in $(git diff --cached --name-only); do cmp -s "$f" "/home/ronald/wt-pvmuda-2710-2310/$f" \|\| echo "DIFERE $f"; done; git diff --cached --name-only` |
-| 01:16:00 | Bash | Wait more for verifier | `/usr/bin/sleep 270; date +%H:%M` |
