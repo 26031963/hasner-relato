@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/10/2026 23:39:07.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (14.3 MB). Acoes na janela: **460**.
+**Medido em 27/10/2026 23:44:36.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (14.9 MB). Acoes na janela: **461**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 23:44:32 | Bash | Wait more for FIO suite verdict | `cd /home/ronald/saas-hasner/logs; for i in $(seq 58); do grep -q '^rc=' fio_pouso_suite.log 2>/dev/null && break; /usr/bin/sleep 10; done; grep -E '^(OK\|FAILED)($\| \()' fio_pouso_suite.log \| tail -1; grep '^Ran ' fio_pouso_suite.log \| tail -1; grep '^rc=' fio_pouso_suite.log; grep -E '^(FAIL\|ERROR):' fio_pouso_suite.log \| head -6; tail -c 300 cobertura/green_aus2.out 2>/dev/null; date +%H:%M` |
 | 23:33:32 | Bash | Wait for FIO pouso suite | `cd /home/ronald/saas-hasner/logs; for i in $(seq 58); do grep -q '^rc=' fio_pouso_suite.log 2>/dev/null && break; /usr/bin/sleep 10; done; grep -E '^(OK\|FAILED)($\| \()' fio_pouso_suite.log \| tail -1; grep '^Ran ' fio_pouso_suite.log \| tail -1; tail -1 fio_pouso_suite.log \| cut -c1-20; grep -E '^(FAIL\|ERROR):' fio_pouso_suite.log \| head -4; date +%H:%M` |
 | 23:33:20 | Bash | Register aval; check auth window now | `cd /home/ronald/saas-hasner && python3 - <<'E' import json d='/home/ronald/saas-hasner/app/docs/' f="aval Ronald SMOKE-FIO-NO-AR-ANTES: a (C) FIO-LE-O-JUIZ (wt-fio-2710-1835 @ 5d86c33b) pousa NO AR como a IA-RBAC de hoje -- suite inteira na copia de pouso, merge, bin/deploy.sh com as tres rotas provadas, respeitando a janela de auth; o PUSH e que espera o SMOKE-FIO-LE-O-JUIZ-MODAL (FRONT SEM SMOKE ...` |
 | 23:33:14 | Bash | Suite on FIO pouso copy | `cd /home/ronald/saas-hasner && L=logs/fio_pouso_suite.log; bin/suite.sh --dir /home/ronald/wt-fio-pouso-2710-2335 --espera 3600 > $L 2>&1; echo "rc=$?" >> $L` |
