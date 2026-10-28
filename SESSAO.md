@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/10/2026 15:43:37.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (23.5 MB). Acoes na janela: **261**.
+**Medido em 28/10/2026 15:49:07.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (23.5 MB). Acoes na janela: **259**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -269,5 +269,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 03:59:19 | Bash | Wait for verifier | `/usr/bin/sleep 280; date +%H:%M` |
 | 03:59:16 | Agent | Verificar TERMOMETRO 98853070 | `Obra TERMOMETRO-GRAVA-SEM-TRILHA, 1a leitura. Copia /home/ronald/wt-termometro-2810-0340, commit 98853070 sobre main 0bfbb7f6: `git -C /home/ronald/wt-termometro-2810-0340 show 98853070` (corpo + diff). Defeito: `termometro_regua --lavrar` gravava o escore do vinculo por `.update()` sem `registrar_log` (LEI-AKITA 7), chamado de `escala/regua_defesa.py::gravar_regua`. Escopo aprovado: SO a trilha ( ...` |
 | 03:56:58 | Bash | Keep waiting termometro suite | `L=/home/ronald/saas-hasner/logs/termometro/suite_1.out; for i in $(seq 58); do grep -aq '^rc=' $L 2>/dev/null && break; /usr/bin/sleep 10; done; tr -d '\0' < $L \| grep -aE '^(OK\|FAILED)($\| \()\|^Ran \|^rc=\|^(FAIL\|ERROR):\|porcelain' \| tail -5; date +%H:%M` |
-| 03:47:13 | Bash | Wait termometro suite | `L=/home/ronald/saas-hasner/logs/termometro/suite_1.out; for i in $(seq 58); do grep -aq '^rc=' $L 2>/dev/null && break; /usr/bin/sleep 10; done; head -1 $L; tr -d '\0' < $L \| grep -aE '^(OK\|FAILED)($\| \()\|^Ran \|^rc=\|^(FAIL\|ERROR):' \| tail -4; date +%H:%M` |
-| 03:45:30 | Bash | Keep waiting termometro | `for i in $(seq 58); do [ -f /home/ronald/saas-hasner/logs/termometro/suite_1.out ] && break; /usr/bin/sleep 10; done; git -C /home/ronald/wt-termometro-2810-0340 log --oneline -1; date +%H:%M` |
