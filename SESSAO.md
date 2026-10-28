@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/10/2026 08:46:37.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (21.8 MB). Acoes na janela: **411**.
+**Medido em 28/10/2026 08:52:07.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (21.8 MB). Acoes na janela: **413**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 08:51:15 | Bash | Keep waiting JUSTIFICATIVA (b) | `for i in $(seq 58); do ls /home/ronald/saas-hasner/logs/justificativa/diff_frota_b.out >/dev/null 2>&1 && break; /usr/bin/sleep 10; done; git -C /home/ronald/wt-justifb-2810-0830 log --oneline -2; ls -t /home/ronald/saas-hasner/logs/justificativa/ \| head -4; date +%H:%M` |
+| 08:51:08 | Bash | Register SMOKE-FIO-VISUAL-OK | `cd /home/ronald/saas-hasner && python3 - <<'EOF' import json F="aval Ronald SMOKE-FIO-VISUAL-OK: smoke visual do modal do fio APROVADO pelo [nome] 28/10 08:4x -- #31873 (col94) itens a-d SIM; #3227 (col129) p#50169 \"ENTRADA 25/10\" resposta 17:30 com Validar, vivas de 20/09 e 29/09 aguardando resposta com \"Cobrar resposta\", sem \"Regularizar disputa e fechar\"; print SMOKE_BOC_3227_CARTAO_202 ...` |
 | 08:41:14 | Bash | Wait for JUSTIFICATIVA (b) progress | `for i in $(seq 58); do ls /home/ronald/saas-hasner/logs/justificativa/diff_frota_b.out >/dev/null 2>&1 && break; /usr/bin/sleep 10; done; git -C /home/ronald/wt-justifb-2810-0830 log --oneline -3; ls -t /home/ronald/saas-hasner/logs/justificativa/ \| head -5; date +%H:%M` |
 | 08:41:07 | Bash | Docs and commit sombra instrument | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read() a='# RELATO — esteira saas-hasner\n\n' l='''> **SOMBRA-NAO-CABE (c)(1) -- medida 08:4x e instrumento POUSADO** (bin/sombra.sh, sem deploy). Fato medido: o placar guarda so o TOTAL do `sombra.sh` (3222 s hoje) e o `resultado.tsv` com a duracao por comando era REESCRITO a cada corrida -- **nao da para nomear qu ...` |
 | 08:40:51 | Bash | Commit instrument, merge, run host selo | `cd /home/ronald/wt-sombrahist-2810-0845 && git add bin/sombra.sh && cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/bea8f2b7-21d4-4d42-afd2-993c9f814f8f/scratchpad/msg_sh.txt <<'EOF' SOMBRA-NAO-CABE (c)(1): o bloco da sombra guarda a duracao POR COMANDO de cada dia Instrumento (L-105, pouso proprio; bin/ nao e servido, sem deploy). O aval SOMBRA-NAO-CABE-ENCURTAR-O-BLOCO = (c) (28/10 08:3x) ma ...` |
