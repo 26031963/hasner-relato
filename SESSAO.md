@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/10/2026 00:22:37.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (16.3 MB). Acoes na janela: **525**.
+**Medido em 28/10/2026 00:28:07.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (16.4 MB). Acoes na janela: **527**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 00:24:32 | Bash | Wait for suite on e2dbc4d8 | `L=/home/ronald/saas-hasner/logs/cobertura/suite_ausencia4.out; for i in $(seq 57); do grep -aq '^rc=' $L && break; /usr/bin/sleep 10; done; tr -d '\0' < $L \| grep -aE '^(OK\|FAILED)($\| \()\|^Ran \|^rc=\|^(FAIL\|ERROR):' \| tail -6; date +%H:%M` |
+| 00:24:28 | Bash | Check latest RED log of today path | `cd /home/ronald/saas-hasner/logs/cobertura && ls -t \| head -4; head -2 red_ausencia5.out 2>/dev/null \| cut -c1-200; grep -aE '^(OK\|FAILED)($\| \()\|^rc=' red_ausencia5.out 2>/dev/null \| tail -2; grep -a 'emitidos\\|AssertionError' red_ausencia5.out 2>/dev/null \| head -3` |
 | 00:20:34 | Bash | Wait for constructor next commit and suite | `cd /home/ronald/wt-cobertura-aus-2710 && for i in $(seq 57); do [ -f /home/ronald/saas-hasner/logs/cobertura/suite_ausencia4.out ] && break; /usr/bin/sleep 10; done; git log --oneline -1; date +%H:%M` |
 | 00:20:30 | Bash | Add lei question about nao_sei to RELATO top | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read() a='# RELATO — esteira saas-hasner\n\n' l='''> **lei: JUIZ-PERIODO-DA-PARCIAL-NAO-SEI** (pergunta, nao para a fila; segura SO o pouso da (A) COBERTURA-AUSENCIA) -- o seu corte de 27/10 deu ao juiz `ponto/turnos.py::periodo_da_parcial_no_dia` TRES respostas (sem_periodo / dentro / fora). O verificador achou que ...` |
 | 00:20:22 | Bash | Register ESMERIL-V2-PROPRIEDADES aval | `cd /home/ronald/saas-hasner && cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/bea8f2b7-21d4-4d42-afd2-993c9f814f8f/scratchpad/esmeril.txt <<'EOF' aval Ronald ESMERIL-V2-PROPRIEDADES: complemento da linha ESMERIL-V2 do BACKLOG (registrada, construir so no esmeril estrutural que dispara em 20/20; nada se instala agora) -- entram no escopo: (1) PROPERTY-BASED TESTING (Hypothesis) no calculo -- m ...` |
