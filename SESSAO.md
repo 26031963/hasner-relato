@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/10/2026 12:46:07.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (23.5 MB). Acoes na janela: **338**.
+**Medido em 28/10/2026 12:51:37.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (23.5 MB). Acoes na janela: **337**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -347,4 +347,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 00:53:16 | Bash | Read simular_folha usage and justificativa copy | `cd /home/ronald/saas-hasner && sed -n 1,40p bin/simular_folha.sh \| grep -E '^#' \| head -30; git -C /home/ronald/wt-cobertura-2710-1810 log --oneline -3; git -C /home/ronald/wt-cobertura-2710-1810 status --short \| grep -v '^??' \| head -3` |
 | 00:53:12 | Bash | Read JUSTIFICATIVA row | `cd /home/ronald/saas-hasner && grep -n '^\| JUSTIFICATIVA-PAGA-O-PERIODO' app/docs/BACKLOG.md \| cut -c1-1500` |
 | 00:52:28 | Bash | Record pouso-ready state in RELATO and BACKLOG | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read() a='''Aceita a 4a resposta `nao_sei` (e a declaracao em `core/juizes.py` passa a nomear as quatro)? A fila SEGUE. ''' assert s.count(a)==1 s=s.replace(a,a+'''> **(A) COBERTURA-AUSENCIA pronta para pousar, esperando so esta resposta:** verificador APROVOU e2dbc4d8 (4a leitura); copia de pouso `wt-cob-pouso-2810 ...` |
-| 00:51:19 | Bash | Keep waiting pouso suite | `L=/home/ronald/saas-hasner/logs/cobertura/suite_pouso.out; for i in $(seq 57); do grep -aq '^rc=' $L && break; /usr/bin/sleep 10; done; tr -d '\0' < $L \| grep -aE '^(OK\|FAILED)($\| \()\|^Ran \|^rc=\|^(FAIL\|ERROR):' \| tail -6; date +%H:%M` |
