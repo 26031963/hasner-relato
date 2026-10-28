@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/10/2026 03:39:07.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (18.2 MB). Acoes na janela: **414**.
+**Medido em 28/10/2026 03:44:37.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (18.2 MB). Acoes na janela: **409**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -419,8 +419,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 15:50:55 | SendMessage |  | `-` |
 | 15:50:49 | Bash | Post ATA-PAUSA motor ! and state in RELATO | `cd /home/ronald/saas-hasner && python3 - <<'E' p='app/docs/RELATO.md';s=open(p).read() a='# RELATO — esteira saas-hasner\n\n' q=("> **! ATA-PAUSA-NO-MOTOR** (ZONA INVIOLAVEL, CLAUDE.md secao 4: `ponto/motor_calculo_v2.py` so com aval explicito; segura SO o pouso da ATA-X-TURNO-PAUSA, a fila SEGUE) -- para cumprir o seu (a) de 10:3x (\"antes do pouso, as pausas a mais de 3 h do cadastro (L-084) vao ...` |
 | 15:50:35 | Bash | Inspect the motor edit in ATA-PAUSA | `cd /home/ronald/saas-hasner && git -C /home/ronald/wt-ata-pausa-2710-0820 diff main...HEAD --stat -- app/ponto/motor_calculo_v2.py \| tail -1; git -C /home/ronald/wt-ata-pausa-2710-0820 show 5b86ec13 -- app/ponto/motor_calculo_v2.py \| head -60` |
-| 15:41:10 | Bash | Wait for fechar3 progress | `W=/home/ronald/wt-fechar3-2710-1320; h0=$(git -C $W rev-parse HEAD); for i in $(seq 55); do [ "$(git -C $W rev-parse HEAD)" != "$h0" ] && break; /usr/bin/sleep 10; done; git -C $W log --oneline -2 \| cut -c1-150; ls -t /home/ronald/saas-hasner/logs \| grep fechar3 \| head -3; date +%H:%M` |
-| 15:40:56 | Bash | Post papel-prazo question at RELATO top | `cd /home/ronald/saas-hasner && python3 - <<'E' p='app/docs/RELATO.md';s=open(p).read() a='# RELATO — esteira saas-hasner\n\n' q=("> **lei: PAPEL-PRAZO-DISPARAR-PERGUNTAS** (pergunta, nao para a fila; o selo de host `test_papel_prazo_nao_deriva.sh` esta VERMELHO no main desde o 165fee20 e segura o PUSH) -- o sentido (2) do selo (L-101) diz: `disparar_perguntas_competencia` ja DELEGA o prazo ao juiz ...` |
-| 15:40:49 | SendMessage |  | `-` |
-| 15:40:30 | Bash | Add respondido_em and rerun avais seal | `cd /home/ronald/saas-hasner && python3 - <<'E' import json,io p='app/docs/PENDENTES_RONALD.json'; it=json.load(io.open(p,encoding='utf-8')) x=[i for i in it if i.get('id')=='SMOKE-IA-RBAC-DUAS-CASCAS'][0]; x['respondido_em']='2026-10-27T15:2x' r=[i for i in it if i.get('estado')=='respondido' and i.get('respondido_em')][:1]; print(r[0].get('respondido_em') if r else None) io.open(p,'w',encoding='u ...` |
-| 15:39:35 | Bash | Inspect two other red seals | `cd /home/ronald/saas-hasner && bash bin/tests/test_avais_na_mesa.sh 2>&1 \| tail -4; bash bin/tests/test_import_tardio_contra_o_ar.sh 2>&1 \| tail -4` |
