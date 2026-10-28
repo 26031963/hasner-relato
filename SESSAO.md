@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/10/2026 17:10:07.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (23.5 MB). Acoes na janela: **216**.
+**Medido em 28/10/2026 17:15:37.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (23.5 MB). Acoes na janela: **215**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -225,4 +225,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 05:17:33 | Bash | Run G4 proof script | `cd /home/ronald/saas-hasner/logs/rejulgar_comp10 && head -6 grupo_prova.py; docker exec saas_core python manage.py tenant_command shell --schema=juliani --command "GRUPO=4; exec(open('/tmp/grupo_prova.py').read())" > g4_prova.out 2>&1; echo rc=$?; grep -v '^\s*$' g4_prova.out \| tail -12 \| cut -c1-220; ls -la grupo4_reversao.json grupo4_prod_diff.json` |
 | 05:17:15 | Bash | Read divergence details | `cd /home/ronald/saas-hasner/logs/rejulgar_comp10 && grep -a -A6 'DIVERGE col991 fm.causa_espelho\\|DIVERGE col988' g4_ato.out \| cut -c1-300` |
 | 05:16:43 | Bash | Run G4 act in prod and copy reversal | `cd /home/ronald/saas-hasner/logs/rejulgar_comp10 && docker exec saas_core python manage.py tenant_command shell --schema=juliani --command "GRUPO=4; APLICAR=True; exec(open('/tmp/grupo_ato_prod.py').read())" > g4_ato.out 2>&1; echo rc=$?; docker cp saas_core:/tmp/rj_g4_foto.json grupo4_reversao.json 2>&1; docker cp saas_core:/tmp/rj_g4_prod_diff.json grupo4_prod_diff.json 2>&1; grep -aE 'DIVERGE\| ...` |
-| 05:14:36 | Bash | Check pre_fechamento state | `/usr/bin/sleep 120; cd /home/ronald/saas-hasner; date +%H:%M:%S; grep '"nome":"pre_fechamento"' app/logs/placar.jsonl \| tail -1 \| cut -c1-140; ls logs/crons_em_curso/` |
