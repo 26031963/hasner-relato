@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/10/2026 11:05:37.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (23.1 MB). Acoes na janela: **414**.
+**Medido em 28/10/2026 11:10:52.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (23.1 MB). Acoes na janela: **417**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 11:09:44 | Bash | Wait quarentena suite | `L=/home/ronald/saas-hasner/logs/quarentena/suite_1.out; for i in $(seq 58); do grep -aq '^rc=' $L 2>/dev/null && break; /usr/bin/sleep 10; done; head -1 $L; tr -d '\0' < $L \| grep -aE '^(OK\|FAILED)($\| \()\|^Ran \|^rc=\|^(FAIL\|ERROR):' \| tail -5; date +%H:%M` |
+| 11:09:38 | Bash | Keep waiting quarentena suite start | `for i in $(seq 58); do [ -f /home/ronald/saas-hasner/logs/quarentena/suite_1.out ] && break; /usr/bin/sleep 10; done; git -C /home/ronald/wt-silencio-2810-0915 log --oneline -2; ls -t /home/ronald/saas-hasner/logs/quarentena/ \| head -4; date +%H:%M` |
+| 11:08:03 | Bash | Record push; wait quarentena | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read() a='> **PUSH-AGORA-SEM-O-CLIQUE (10:5x)** -- 1a tentativa RECUSADA' assert s.count(a)==1 s=s.replace(a,'> **PUSH-AGORA-SEM-O-CLIQUE FEITO 28/10 11:07** -- `475318fa..9185652e main -> main` pela regua normal (pre-push com a suite sobre o commit 9185652e); pos_push fechou o topo do TICKETS (3c96bcfd). O clique e ...` |
 | 11:02:33 | Bash | Keep waiting push 2 | `L=/home/ronald/saas-hasner/logs/push_2810_1100.log; for i in $(seq 58); do grep -q '^rc=' $L && break; /usr/bin/sleep 10; done; tail -4 $L \| cut -c1-200; date +%H:%M` |
 | 10:52:48 | Bash | Wait push 2 | `L=/home/ronald/saas-hasner/logs/push_2810_1100.log; for i in $(seq 58); do grep -q '^rc=' $L && break; /usr/bin/sleep 10; done; tail -4 $L \| cut -c1-200; date +%H:%M` |
 | 10:52:41 | Bash | Re-launch push | `cd /home/ronald/saas-hasner && bin/trava_teste.sh --quem 2>&1 \| tail -1; bash bin/tests/test_lei_akita.sh 2>&1 \| tail -1; (bin/push.sh > logs/push_2810_1100.log 2>&1; echo "rc=$?" >> logs/push_2810_1100.log) & disown; echo lancado; date +%H:%M` |
