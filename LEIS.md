@@ -349,6 +349,8 @@ Estavam no indice como vigentes e alguma clausula nao tem efeito. Gerada do ESTA
 - `SOMBRA-NAO-CABE-ENCURTAR-O-BLOCO`
 - `SMOKE-FIO-VISUAL-OK`
 - `ISENTO-VENCIDO-VOLTA`
+- `ISENTO-NAO-NASCE`
+- `QUARENTENA-DO-COLAB`
 
 ## CORTES que viraram lei
 

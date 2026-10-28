@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/10/2026 10:22:52.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (22.5 MB). Acoes na janela: **420**.
+**Medido em 28/10/2026 10:28:09.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (22.6 MB). Acoes na janela: **422**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 10:24:19 | Bash | Wait FECHAR3 suite | `L=/home/ronald/saas-hasner/logs/fechar3inst/suite_1.out; for i in $(seq 58); do grep -aq '^rc=' $L 2>/dev/null && break; /usr/bin/sleep 10; done; head -1 $L; tr -d '\0' < $L \| grep -aE '^(OK\|FAILED)($\| \()\|^Ran \|^rc=\|^(FAIL\|ERROR):' \| tail -4; date +%H:%M` |
+| 10:24:12 | Bash | Register quarentena avals and obras | `cd /home/ronald/saas-hasner && cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/bea8f2b7-21d4-4d42-afd2-993c9f814f8f/scratchpad/quar.json <<'EOF' [ {"id":"ISENTO-NAO-NASCE","estado":"SUBSTITUIDO pelo QUARENTENA-DO-COLAB (28/10 10:2x) antes de construir","frase":"aval Ronald ISENTO-NAO-NASCE: substitui o ISENTO-VENCIDO-VOLTA (c) de 09:5x, que pedia uma porta de ARQUIVADO sem prazo que NAO existe ...` |
 | 10:14:24 | Bash | Wait FECHAR3 constructor | `for i in $(seq 58); do [ -f /home/ronald/saas-hasner/logs/fechar3inst/suite_1.out ] && break; /usr/bin/sleep 10; done; git -C /home/ronald/wt-fechar3inst-2810-0325 log --oneline -2; ls -t /home/ronald/saas-hasner/logs/fechar3inst/ \| head -5; date +%H:%M` |
 | 10:14:19 | Bash | Record SILENCIO verifier findings | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='/home/ronald/saas-hasner/app/docs/BACKLOG.md'; L=open(p).read().split('\n') k=[i for i,r in enumerate(L) if r.startswith('\| SILENCIO-VENCIDO-VOLTA \|')][0]; c=L[k].split('\|') c[3]=' aguardando a lei ARQUIVADO-SEM-PRAZO (pouso) e o proximo turno de construcao: verificador REPROVOU be70b8cb (2a): `_lista_chamados.html:85` e `_meus_arquivados.html ...` |
 | 10:09:30 | Bash | Wait for verifier/constructor | `/usr/bin/sleep 280; date +%H:%M` |
