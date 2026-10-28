@@ -6,10 +6,18 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/10/2026 23:50:08.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (15.3 MB). Acoes na janela: **481**.
+**Medido em 27/10/2026 23:55:37.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (15.6 MB). Acoes na janela: **489**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 23:51:07 | Bash | Wait for cobertura full suite verdict | `L=/home/ronald/saas-hasner/logs/cobertura/suite_ausencia2.out; for i in $(seq 58); do ps -p 1067824 >/dev/null \|\| break; /usr/bin/sleep 10; done; tr -d '\0' < $L \| grep -aE '^(OK\|FAILED)($\| \()\|^Ran \|^rc=\|^(FAIL\|ERROR):' \| tail -8; date +%H:%M` |
+| 23:51:03 | Bash | Confirm only agent suite remains | `ps -eo pid,args \| grep -E 'trava_teste.sh' \| grep -v grep \| cut -c1-90; ls -la /home/ronald/saas-hasner/logs/cobertura/suite_ausencia2.out` |
+| 23:51:00 | TaskStop |  | `-` |
+| 23:50:58 | ToolSearch |  | `-` |
+| 23:50:54 | Bash | Check for duplicate suite runs | `ps -eo pid,lstart,args \| grep -E 'suite.sh\|manage.py test' \| grep -v grep \| cut -c1-200; /home/ronald/saas-hasner/bin/trava_teste.sh --quem 2>&1 \| tail -2` |
+| 23:50:49 | Agent | Verificar COBERTURA-AUSENCIA 578f03c9 | `Obra COBERTURA-PARCIAL-UM-JUIZ / COBERTURA-AUSENCIA-PARCIAL (BO-[nome] A), 2a leitura. Copia: /home/ronald/wt-cobertura-aus-2710, commits f807ca81 (1a versao, voce reprovou com 5 itens) e 578f03c9 (cura). Diff: `git -C /home/ronald/wt-cobertura-aus-2710 diff 05fb3365..578f03c9` (ou contra o merge-base com main). Avais que mandam (leia em /home/ronald/saas-hasner/app/docs/CORTES.md, procure por C ...` |
+| 23:50:40 | Bash | Full suite on cobertura copy | `cd /home/ronald/saas-hasner && L=logs/cobertura/suite_ausencia2.out; bin/suite.sh --dir /home/ronald/wt-cobertura-aus-2710 --espera 3600 > $L 2>&1; echo "rc=$?" >> $L` |
+| 23:50:36 | Bash | Read green_aus3 verdict and copy state | `cd /home/ronald/saas-hasner/logs/cobertura; for i in $(seq 50); do grep -q '^rc=' green_aus3.out 2>/dev/null && break; /usr/bin/sleep 10; done; grep -E '^(OK\|FAILED)($\| \()\|^Ran \|^rc=\|^(FAIL\|ERROR):' green_aus3.out \| tail -6; cd /home/ronald/wt-cobertura-aus-2710; git log --oneline -1; git status --short \| grep -v '^??' \| head; git log -1 --format=%b \| grep LEI-AKITA \| cut -c1-400` |
 | 23:48:21 | Bash | Wait for constructor commit in cobertura copy | `cd /home/ronald/wt-cobertura-aus-2710 && for i in $(seq 57); do h=$(git rev-parse --short HEAD); [ "$h" != f807ca81 ] && break; /usr/bin/sleep 10; done; git log --oneline -2; git status --short \| head -12; ps -eo args \| grep -c 'manage.py test'` |
 | 23:48:16 | Bash | Read trabalho em curso logic | `cd /home/ronald/saas-hasner && sed -n 373,400p bin/hook_stop_fila1.py; sed -n 555,585p bin/hook_stop_fila1.py` |
 | 23:48:13 | Bash | Inspect hook stop rules | `cd /home/ronald/saas-hasner && grep -nE "aguardando\|em_curso\|agente\|NAO_ANDA\|def .*anda" bin/hook_stop_fila1.py \| head -30` |
