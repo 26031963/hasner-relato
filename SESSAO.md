@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/10/2026 14:06:37.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (23.5 MB). Acoes na janela: **294**.
+**Medido em 28/10/2026 14:12:07.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (23.5 MB). Acoes na janela: **293**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -303,4 +303,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 02:28:24 | Bash | Read mypy failure details | `grep -a -A25 '^FAIL: test_mypy_zero' /home/ronald/saas-hasner/logs/o245cob/suite_1.out \| grep -aE 'error:\|\.py:' \| head -8` |
 | 02:26:32 | Bash | Keep waiting O245 suite | `L=/home/ronald/saas-hasner/logs/o245cob/suite_1.out; for i in $(seq 58); do grep -aq '^rc=' $L 2>/dev/null && break; /usr/bin/sleep 10; done; tr -d '\0' < $L \| grep -aE '^(OK\|FAILED)($\| \()\|^Ran \|^rc=\|^(FAIL\|ERROR):' \| tail -6; date +%H:%M` |
 | 02:16:48 | Bash | Wait for O245 suite | `L=/home/ronald/saas-hasner/logs/o245cob/suite_1.out; for i in $(seq 58); do grep -aq '^rc=' $L 2>/dev/null && break; /usr/bin/sleep 10; done; head -1 $L; tr -d '\0' < $L \| grep -aE '^(OK\|FAILED)($\| \()\|^Ran \|^rc=\|^(FAIL\|ERROR):' \| tail -6; date +%H:%M` |
-| 02:09:43 | Bash | Keep waiting for O245 progress | `cd /home/ronald/saas-hasner && for i in $(seq 58); do [ -f logs/o245cob/suite_1.out ] && break; /usr/bin/sleep 10; done; git -C /home/ronald/wt-o245cob-2810-0200 log --oneline -2; date +%H:%M` |
