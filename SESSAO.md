@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/10/2026 15:00:51.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (23.5 MB). Acoes na janela: **277**.
+**Medido em 28/10/2026 15:05:50.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (23.5 MB). Acoes na janela: **276**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -286,4 +286,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 03:18:09 | Agent | Verificar O245 9d0cd974 (2a) | `Obra O245-CAMADA-COBERTURA (INSTRUMENTO, pouso proprio L-105), 2a leitura. Copia /home/ronald/wt-o245cob-2810-0200; voce reprovou 5e8a2fd4; a cura e 9d0cd974: `git -C /home/ronald/wt-o245cob-2810-0200 diff 5e8a2fd4..9d0cd974` (e o corpo do commit). Seus itens: (1) coluna selos contava por FORMA (`consts & fams`) -> agora ligada ao registro (fora_de_autoridade/PENDENTES[...]/JUIZES[...]/FAMILIA=/ap ...` |
 | 03:16:01 | Bash | Keep waiting suite 4 | `L=/home/ronald/saas-hasner/logs/o245cob/suite_4.out; for i in $(seq 58); do grep -aq '^rc=' $L 2>/dev/null && break; /usr/bin/sleep 10; done; tr -d '\0' < $L \| grep -aE '^(OK\|FAILED)($\| \()\|^Ran \|^rc=\|^(FAIL\|ERROR):' \| tail -4; date +%H:%M` |
 | 03:06:16 | Bash | Wait O245 suite 4 | `L=/home/ronald/saas-hasner/logs/o245cob/suite_4.out; for i in $(seq 58); do grep -aq '^rc=' $L 2>/dev/null && break; /usr/bin/sleep 10; done; head -1 $L 2>/dev/null; tr -d '\0' < $L 2>/dev/null \| grep -aE '^(OK\|FAILED)($\| \()\|^Ran \|^rc=\|^(FAIL\|ERROR):' \| tail -4; date +%H:%M` |
-| 03:05:42 | Bash | Keep waiting O245 rework | `cd /home/ronald/saas-hasner && for i in $(seq 58); do [ -f logs/o245cob/suite_4.out ] && break; /usr/bin/sleep 10; done; git -C /home/ronald/wt-o245cob-2810-0200 log --oneline -2; git -C /home/ronald/wt-o245cob-2810-0200 status --short \| head -5; date +%H:%M` |
