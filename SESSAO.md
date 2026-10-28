@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/10/2026 10:55:12.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (23.1 MB). Acoes na janela: **418**.
+**Medido em 28/10/2026 11:00:43.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (23.1 MB). Acoes na janela: **417**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -427,4 +427,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 23:05:11 | Bash | Record verifier verdict and law question for (A) | `cd /home/ronald/saas-hasner && python3 - <<'E' p='/home/ronald/saas-hasner/app/docs/RELATO.md';s=open(p).read() a='# RELATO — esteira saas-hasner\n\n' q=("> **lei: COBERTURA-ABONO-DO-PERIODO** (pergunta + possivel `!` de zona inviolavel; segura SO o pouso da (A); verificador 23:0x) -- (1) o seu (3) manda \"o trabalhou paga realizado + ABONADO desse periodo\". Hoje o motor (`ponto/motor_calculo_v2. ...` |
 | 23:00:55 | Bash | Wait for verifier | `/usr/bin/sleep 240; date +%H:%M` |
 | 23:00:47 | Agent | Verify COBERTURA-PARCIAL-UM-JUIZ | `COBERTURA-PARCIAL-UM-JUIZ (BO-[nome] (A)), leitura antes do pouso. Copia /home/ronald/wt-cobertura-2710-1810 (branch cobertura-2710) sobre main 987640b7; HEAD 3735aff9. Diff: `git -C /home/ronald/wt-cobertura-2710-1810 diff 987640b7..HEAD`. Suite inteira: /home/ronald/saas-hasner/logs/cobertura/suite_inteira_3735.log (OK Ran 12435). RED: /home/ronald/saas-hasner/logs/cobertura/red_head.out (9 de ...` |
-| 23:00:28 | Bash | Record COBERTURA suite green | `cd /home/ronald/saas-hasner && python3 - <<'E' p='/home/ronald/saas-hasner/app/docs/RELATO.md';s=open(p).read() a='- Suite inteira da (A) @ 3735aff9 lancada 22:4x sem modelo: veredito em `logs/cobertura/suite_inteira_3735.log` (linha `rc=` no fim).' assert s.count(a)==1 s=s.replace(a,'- Suite inteira da (A) @ 3735aff9: **OK (skipped=42, expected failures=15) Ran 12435 rc 0** (`logs/cobertura/suite ...` |
