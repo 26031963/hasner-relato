@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/10/2026 20:57:06.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (10.7 MB). Acoes na janela: **397**.
+**Medido em 27/10/2026 21:02:38.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (10.9 MB). Acoes na janela: **400**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 21:01:34 | Bash | Long wait for D and FIO constructors | `/usr/bin/sleep 590; for w in wt-registrado-2710-2035 wt-fio-2710-1835; do echo "$w $(git -C /home/ronald/$w log --oneline -1 \| cut -c1-90) sujos=$(git -C /home/ronald/$w status --porcelain \| grep -vc '^??')"; done; date +%H:%M` |
+| 21:01:15 | Bash | Update D question with verifier finding | `cd /home/ronald/saas-hasner && python3 - <<'E' p='app/docs/RELATO.md';s=open(p).read() a='> **lei: REGISTRADO-NAO-E-VIVO-DESVIO** (pergunta de escopo, LEI-AKITA 9; segura SO o pouso da (D)) -- ' assert s.count(a)==1 s=s.replace(a,a+'**ATUALIZADO 21:0x pelo verificador:** a fila ja tem juiz unico, `chamados/services/painel.py:158::qs_na_fila` (\"a UNICA definicao de fila\": vivos - silenciado - reg ...` |
+| 21:01:11 | SendMessage |  | `-` |
 | 20:56:16 | Bash | Register FIO answer, D deviation question, new item | `cd /home/ronald/saas-hasner && python3 - <<'E' import json d='app/docs/' p=d+'RELATO.md';s=open(p).read();L=s.split('\n') for i,l in enumerate(L[:30]): if l.startswith('> **lei: FIO-LE-O-JUIZ-OS-19**'): L[i]='> **RESPONDIDA 27/10 20:5x: FIO-LE-O-JUIZ-OS-19 e OS-19-E-O-VOLUME** -- (1) o \"dia agrupado sob ADESAO/LIMBO\" esta RETIRADO (agrupamento nao e dono; `agrupado_sob_pai_vivo` nao vira juiz):  ...` |
 | 20:55:56 | SendMessage |  | `-` |
 | 20:55:48 | Agent | Verify REGISTRADO-NAO-E-VIVO | `REGISTRADO-NAO-E-VIVO (BO-[nome] (D)), leitura antes do pouso. Copia /home/ronald/wt-registrado-2710-2035 (branch registrado-2710) sobre main 0baf575f; commit bdb253cf. Diff: `git -C /home/ronald/wt-registrado-2710-2035 diff 0baf575f..HEAD`. Aval (literal): "(D) REGISTRADO-NAO-E-VIVO = item 7 (col130 #28883, 535 na frota): registrado sai de VIVOS e de todo badge, padrao=maquina de estado com jui ...` |
