@@ -348,6 +348,7 @@ Estavam no indice como vigentes e alguma clausula nao tem efeito. Gerada do ESTA
 - `DESLIGAMENTO-ENCERRA-PERGUNTA-RESPONDIDA`
 - `SOMBRA-NAO-CABE-ENCURTAR-O-BLOCO`
 - `SMOKE-FIO-VISUAL-OK`
+- `ISENTO-VENCIDO-VOLTA`
 
 ## CORTES que viraram lei
 

@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/10/2026 09:56:39.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (22.3 MB). Acoes na janela: **413**.
+**Medido em 28/10/2026 10:01:48.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (22.3 MB). Acoes na janela: **416**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 09:58:46 | Bash | Wait SILENCIO isento rework | `for i in $(seq 58); do [ -f /home/ronald/saas-hasner/logs/silencio/suite_3.out ] && break; /usr/bin/sleep 10; done; git -C /home/ronald/wt-silencio-2810-0915 log --oneline -3; tr -d '\0' < /home/ronald/saas-hasner/logs/silencio/suite_2.out \| grep -aE '^(OK\|FAILED)($\| \()\|^Ran \|^rc=' \| tail -3; date +%H:%M` |
+| 09:58:41 | Bash | Register ISENTO aval | `cd /home/ronald/saas-hasner && python3 - <<'EOF' import json F="aval Ronald ISENTO-VENCIDO-VOLTA = (c): isento nao volta e nao se re-silencia com prazo -- o mandato de 06/08 (isento \"tao bom quanto se nao existisse\", art. 62) pede silencio SEM prazo, e o unico silencio sem prazo e o ARQUIVADO (O44 (a)); os 8 (#3403 #3057 #11935 #23036 #11658 #23049 #23037 #23030) vao para ARQUIVADO pela porta, c ...` |
+| 09:58:32 | SendMessage |  | `-` |
 | 09:48:38 | Bash | Wait SILENCIO suite 2 | `L=/home/ronald/saas-hasner/logs/silencio/suite_2.out; for i in $(seq 58); do grep -aq '^rc=' $L 2>/dev/null && break; /usr/bin/sleep 10; done; head -1 $L; tr -d '\0' < $L \| grep -aE '^(OK\|FAILED)($\| \()\|^Ran \|^rc=\|^(FAIL\|ERROR):' \| tail -4; date +%H:%M` |
 | 09:42:52 | Bash | Wait SILENCIO rework | `for i in $(seq 58); do [ -f /home/ronald/saas-hasner/logs/silencio/suite_2.out ] && break; /usr/bin/sleep 10; done; git -C /home/ronald/wt-silencio-2810-0915 log --oneline -2; date +%H:%M` |
 | 09:42:47 | Bash | Write ISENTO lei question; update state | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read() a='# RELATO — esteira saas-hasner\n\n' l='''> **lei: ISENTO-VENCIDO-VOLTA** (pergunta, nao para a fila; segura SO a trava de re-silencio dos isentos dentro da SILENCIO-VENCIDO-VOLTA) -- dos 12 chamados com silencio VENCIDO que voltam a fila pelo aval (a) de 07:4x, **8 sao de colaborador `isento_ponto=True`**: ...` |
