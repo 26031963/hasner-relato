@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/10/2026 12:40:51.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (23.5 MB). Acoes na janela: **344**.
+**Medido em 28/10/2026 12:46:07.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (23.5 MB). Acoes na janela: **338**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -348,9 +348,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 00:53:12 | Bash | Read JUSTIFICATIVA row | `cd /home/ronald/saas-hasner && grep -n '^\| JUSTIFICATIVA-PAGA-O-PERIODO' app/docs/BACKLOG.md \| cut -c1-1500` |
 | 00:52:28 | Bash | Record pouso-ready state in RELATO and BACKLOG | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read() a='''Aceita a 4a resposta `nao_sei` (e a declaracao em `core/juizes.py` passa a nomear as quatro)? A fila SEGUE. ''' assert s.count(a)==1 s=s.replace(a,a+'''> **(A) COBERTURA-AUSENCIA pronta para pousar, esperando so esta resposta:** verificador APROVOU e2dbc4d8 (4a leitura); copia de pouso `wt-cob-pouso-2810 ...` |
 | 00:51:19 | Bash | Keep waiting pouso suite | `L=/home/ronald/saas-hasner/logs/cobertura/suite_pouso.out; for i in $(seq 57); do grep -aq '^rc=' $L && break; /usr/bin/sleep 10; done; tr -d '\0' < $L \| grep -aE '^(OK\|FAILED)($\| \()\|^Ran \|^rc=\|^(FAIL\|ERROR):' \| tail -6; date +%H:%M` |
-| 00:41:45 | Bash | Wait for cobertura pouso suite | `L=/home/ronald/saas-hasner/logs/cobertura/suite_pouso.out; for i in $(seq 57); do grep -aq '^rc=' $L && break; /usr/bin/sleep 10; done; head -1 $L; tr -d '\0' < $L \| grep -aE '^(OK\|FAILED)($\| \()\|^Ran \|^rc=\|^(FAIL\|ERROR):' \| tail -6; date +%H:%M` |
-| 00:41:38 | Agent | Construir JUIZ-PERGUNTA-VIVA-MUDA-SEM-FATO | `Voce e o CONSTRUTOR unico (PAZ-DO-ADMIN: um construtor e um verificador por vez) da obra JUIZ-PERGUNTA-VIVA-MUDA-SEM-FATO do repo /home/ronald/saas-hasner (SaaS de ponto CLT, Django multi-tenant). Leia /home/ronald/saas-hasner/CLAUDE.md inteiro antes de qualquer acao (leis da casa: LEI-AKITA, RED primeiro, padrao= obrigatorio, nunca editar a arvore viva, suite so por bin/suite.sh). Linha da obra:  ...` |
-| 00:41:18 | Bash | Inspect PV-MUDA WIP worktree | `cd /home/ronald/wt-pvmuda-2710-2310 && git log --oneline -3 && git status --short \| grep -v '^??' \| head; git log -1 --format=%b \| head -30 \| cut -c1-200; git -C /home/ronald/saas-hasner merge-base --is-ancestor HEAD~1 7c9e4c27 && echo base-no-main` |
-| 00:41:10 | Bash | Fix BACKLOG columns and move marker | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/BACKLOG.md'; L=open(p).read().split('\n') def row(id_): return [k for k,r in enumerate(L) if r.startswith('\| %s \|'%id_)][0] # FIO: estado na coluna 3, aval volta para a 4 k=row('FIO-LE-O-JUIZ'); c=L[k].split('\|') assert c[4].strip().startswith('NO AR'), c[4][:40] c[3]=c[4]; c[4]=' aval 27/10 17:3x '; L[k]='\|'.join(c) # PV-MUDA: a exc ...` |
-| 00:40:59 | Bash | Inspect column layout | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/BACKLOG.md'; L=open(p).read().split('\n') for k in (716,720): c=L[k].split('\|'); print(k, len(c), [x[:80] for x in c[2:]]) print(L[0:4]); print(L[6]) EOF` |
-| 00:40:55 | Bash | Show states of COBERTURA and PV-MUDA rows | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/BACKLOG.md'; L=open(p).read().split('\n') for k,r in enumerate(L): if r.startswith('\| JUIZ-PERGUNTA-VIVA-MUDA-SEM-FATO \|') or r.startswith('\| COBERTURA-PARCIAL-UM-JUIZ \|'): c=r.split('\|'); print(k, c[1], '\|\|', c[4][:300]) EOF` |
