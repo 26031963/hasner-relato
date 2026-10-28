@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/10/2026 20:52:08.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (3.1 MB). Acoes na janela: **135**.
+**Medido em 28/10/2026 20:57:08.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (3.2 MB). Acoes na janela: **139**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 20:55:53 | Bash | Wait for motor DIFF result | `cd /home/ronald/saas-hasner && for i in $(seq 1 19); do grep -q '^rc=' logs/juizpar/ensaio_2.out 2>/dev/null && break; /usr/bin/sleep 30; done; grep -E '^(COLABS\|MOTOR\| MOTOR\|ERROS\|rc=\|Traceback)\|Error' logs/juizpar/ensaio_2.out \| tail -30 \| cut -c1-500; date +%H:%M` |
+| 20:55:49 | Bash | Fix file-overlap statement in docs | `sed -i 's/espera o pouso do O-OUTBOX (os dois tocam `ponto\/services\/cartorio.py`)/espera o pouso do O-OUTBOX (o evento do cartorio cruza `ponto\/portas\/celula.py`, que o O-OUTBOX reescreve)/' docs/PROMPTS.md && sed -i 's/depois do pouso do O-OUTBOX (cruzam `cartorio.py`)/depois do pouso do O-OUTBOX (cruzam `ponto\/portas\/celula.py`)/' docs/RELATO.md && /bin/grep -c "portas/celula.py\`, que o O ...` |
+| 20:55:40 | Bash | Register CODEX obra in BACKLOG and PROMPTS | `python3 - <<'EOF' p='docs/BACKLOG.md'; L=open(p).read().split('\n') i=next(k for k,l in enumerate(L) if l.startswith('\| CXR-TELA-LE-O-MOTOR \|')) row="\| CODEX-ESTADO-NO-RELATO \| **INSTRUMENTO, fila 2** (aval 28/10 20:5x): publicar no hasner-relato um `CODEX-ESTADO.md` com as respostas FINAIS do Codex. Obrigatorios: (1) schema REAL do JSONL do Codex medido antes do codigo, colado no RELATO; (2)  ...` |
+| 20:55:30 | Bash | Find anchor row in BACKLOG OBRAS | `/bin/grep -n "^\| CXR-TELA-LE-O-MOTOR" docs/BACKLOG.md \| head -1; /bin/grep -n "^\| [A-Z0-9-]* \| " docs/BACKLOG.md \| sed -n 1,3p \| cut -c1-120` |
 | 20:45:54 | Bash | Keep waiting for money ensaio | `cd /home/ronald/saas-hasner && for i in $(seq 1 19); do grep -q '^rc=' logs/juizpar/ensaio_2.out 2>/dev/null && break; /usr/bin/sleep 30; done; grep -E '^(COLABS\|MOTOR\| MOTOR\|celulas\|ERROS\|rc=\|Traceback)\|Error' logs/juizpar/ensaio_2.out \| tail -30 \| cut -c1-400; date +%H:%M` |
 | 20:36:20 | Bash | Wait for money ensaio | `cd /home/ronald/saas-hasner && for i in $(seq 1 19); do grep -q '^rc=' logs/juizpar/ensaio_2.out 2>/dev/null && break; /usr/bin/sleep 30; done; grep -E '^(COLABS\|MOTOR\| MOTOR\|celulas\|ERROS\|rc=\|Traceback)\|Error' logs/juizpar/ensaio_2.out \| tail -30 \| cut -c1-400 \|\| echo AINDA` |
 | 20:36:14 | Bash | Run ensaio with money DIFF | `cd /home/ronald/saas-hasner && SOMBRA_ARVORE=/home/ronald/wt-juizpar-2810-1850/app bin/sombra.sh --rodar juizpar_ensaio_relavra.py juizpar_ensaio > logs/juizpar/ensaio_2.out 2>&1; echo rc=$? >> logs/juizpar/ensaio_2.out` |
