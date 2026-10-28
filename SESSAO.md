@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/10/2026 16:42:37.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (23.5 MB). Acoes na janela: **240**.
+**Medido em 28/10/2026 16:48:07.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (23.5 MB). Acoes na janela: **236**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -246,7 +246,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 05:02:01 | Bash | Read how crons_duracao derives duration | `cd /home/ronald/saas-hasner && sed -n 1,40p bin/crons_duracao.py \| grep -E '^#\|"""\|placar\|max\|mediana\|ultim' \| head -20` |
 | 05:01:54 | Bash | Measure sombra duration and run cron check | `cd /home/ronald/saas-hasner && grep -n 'sombra' logs/cron_run*.log 2>/dev/null \| tail -3; ls logs \| grep -i 'placar\\|cron_run' \| head; python3 bin/crons_duracao.py 2>&1 \| tail -3; grep -o '"sombra.sh": [0-9]*' app/config/crons_duracao.json; bin/crons.sh check 2>&1 \| tail -4` |
 | 04:54:47 | Bash | Keep waiting sombra end | `cd /home/ronald/saas-hasner && for i in $(seq 58); do ls logs/crons_em_curso/sombra.sh_-.* >/dev/null 2>&1 \|\| break; /usr/bin/sleep 10; done; ls logs/crons_em_curso/; date +%H:%M; crontab -l \| grep -E 'sombra.sh\|pre_fechamento' \| head -3` |
-| 04:45:02 | Bash | Wait for sombra cron end | `cd /home/ronald/saas-hasner && for i in $(seq 58); do ls logs/crons_em_curso/sombra.sh_-.* >/dev/null 2>&1 \|\| break; /usr/bin/sleep 10; done; ls logs/crons_em_curso/; date +%H:%M; grep -o '"sombra.sh"[^,]*' app/config/crons_duracao.json \| head -2` |
-| 04:44:22 | Bash | Smoke logs and record deploy proof | `cd /home/ronald/saas-hasner && /usr/bin/sleep 30; docker logs --since 1m saas_ui 2>&1 \| grep -cE ' 500 \|Traceback'; docker logs --since 1m saas_core 2>&1 \| grep -cE ' 500 \|Traceback'; grep -n 'esperando cron\\|liberou\\|sombra' logs/deploy_term_2810.log \| tail -3; ls logs/crons_em_curso/ 2>/dev/null; python3 - <<'EOF' p='/home/ronald/saas-hasner/app/docs/RELATO.md'; s=open(p).read() a='cmp vi ...` |
-| 04:44:05 | Bash | Wait deploy to finish | `for i in $(seq 58); do grep -q '^deploy: OK\\|FALHOU' /home/ronald/saas-hasner/logs/deploy_term_2810.log && break; /usr/bin/sleep 10; done; tail -3 /home/ronald/saas-hasner/logs/deploy_term_2810.log; date +%H:%M` |
-| 04:43:57 | Bash | Peek deploy log | `tail -5 /home/ronald/saas-hasner/logs/deploy_term_2810.log` |
