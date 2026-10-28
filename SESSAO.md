@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/10/2026 09:03:07.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (21.8 MB). Acoes na janela: **409**.
+**Medido em 28/10/2026 09:08:37.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (21.9 MB). Acoes na janela: **411**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 09:05:44 | Bash | Wait for constructor report | `/usr/bin/sleep 240; git -C /home/ronald/wt-justifb-2810-0830 log --oneline -2; date +%H:%M` |
+| 09:05:22 | Bash | Keep waiting comp 9 DIFF | `for i in $(seq 58); do ls /home/ronald/saas-hasner/logs/justificativa/diff_frota_b_c9.out >/dev/null 2>&1 && break; /usr/bin/sleep 10; done; grep -vE '^\s+pk=' /home/ronald/saas-hasner/logs/justificativa/diff_frota_b_c9.out 2>/dev/null \| sed -n '/## (2)/,/top 15 por \|delta horas_falta/p' \| cut -c1-180; date +%H:%M` |
 | 08:55:36 | Bash | Wait and read comp 9 DIFF of (b) | `for i in $(seq 58); do ls /home/ronald/saas-hasner/logs/justificativa/diff_frota_b_c9.out >/dev/null 2>&1 && break; /usr/bin/sleep 10; done; grep -vE '^\s+pk=' /home/ronald/saas-hasner/logs/justificativa/diff_frota_b_c9.out 2>/dev/null \| sed -n '/## (2)/,/top 15 por \|delta horas_falta/p' \| cut -c1-180; date +%H:%M` |
 | 08:55:29 | Bash | Read the (b) fleet DIFF | `cd /home/ronald/saas-hasner/logs/justificativa && grep -vE '^\s+pk=' diff_frota_b.out \| sed -n 1,75p \| cut -c1-200` |
 | 08:51:15 | Bash | Keep waiting JUSTIFICATIVA (b) | `for i in $(seq 58); do ls /home/ronald/saas-hasner/logs/justificativa/diff_frota_b.out >/dev/null 2>&1 && break; /usr/bin/sleep 10; done; git -C /home/ronald/wt-justifb-2810-0830 log --oneline -2; ls -t /home/ronald/saas-hasner/logs/justificativa/ \| head -4; date +%H:%M` |
