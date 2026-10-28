@@ -81,7 +81,7 @@ core/tests/test_selo_diagrama_do_codigo.py regenera os dois e compara.
 |---|---|---|---|---|---|---|---|
 | celula/precedencia | 8/0 | 0 | 0 | 0 | 0 | 3 | 2 |
 | turno/marcos | 15/0 | 0 | 0 | 0 | 0 | 3 | 1 |
-| ausencia/ferias | 14/0 | 0 | 0 | 0 | 0 | 6 | 4 |
+| ausencia/ferias | 15/0 | 0 | 0 | 0 | 0 | 6 | 4 |
 | chamado | 15/0 | 0 | 0 | 0 | 0 | 3 | 10 |
 | feriado/prazo | 6/2 | 13 | 10 | 2 | 1 | 4 | 1 |
 | fechamento | 9/0 | 0 | 0 | 0 | 0 | 5 | 1 |
@@ -135,6 +135,7 @@ core/tests/test_selo_diagrama_do_codigo.py regenera os dois e compara.
   - o lancamento colide com outro fato (recusar)? -> `ponto/precedencia.py::veto_de_lancamento` · registro 0
   - a ausencia exige documento, e em que prazo? -> `ponto/services/ausencia.py::estado_inicial` · registro 0
   - a ausencia esta aberta ou decidida? -> `ponto/services/ausencia.py::ABERTAS` · registro 0
+  - a batida do dia esta dentro do periodo que a ausencia parcial declara? -> `ponto/turnos.py::periodo_da_parcial_no_dia` · registro 0
   - o colaborador esta de ferias hoje? -> `ferias/services.py::em_gozo_hoje` · registro 0
   - o colaborador esta afastado hoje? -> `ponto/turnos.py::afastado_hoje` · registro 0
   - qual o saldo do periodo aquisitivo? -> `ferias/models.py::PeriodoAquisitivo.dias_saldo` · registro 0
@@ -216,7 +217,7 @@ core/tests/test_selo_diagrama_do_codigo.py regenera os dois e compara.
 ### portas -- fora_de_autoridade('portas') = 124
 - pendentes: sem chamar 0 · chama e deriva 0 · nao sei 124 + sitio novo: nao sei (sem varredor) · [juiz = censo dos proprios sitios (NAO_SE_CHAMA): 124]
 - nao sei, por desenho: o juiz e o CENSO que mede a porta (core/portas_da_tela.py::censo) e a porta nao o chama por desenho; ela sai do registro pelo smoke de clique. A TRILHA vem da metade estatica do censo (logo abaixo); uso 14d e quem pode leem o banco e o log de acesso -- nao sei aqui
-- portas de escrita no codigo: 167 · portas sem trilha (sem registrar_log no fonte da view): 146 -- core/portas_da_tela.py::portas_do_codigo (a metade estatica do censo), urlconf config.urls_ci
+- portas de escrita no codigo: 168 · portas sem trilha (sem registrar_log no fonte da view): 147 -- core/portas_da_tela.py::portas_do_codigo (a metade estatica do censo), urlconf config.urls_ci
 - padroes proibidos: 0 -- sem varredor de sitio novo: nao sei
 - selos: chamados/tests/test_smoke_clique_regularizacao_add_item.py, chamados/tests/test_smoke_clique_regularizacao_criar.py, chamados/tests/test_smoke_clique_regularizacao_del_item.py, core/tests/test_contract_portas.py, core/tests/test_smoke_clique_comunicado_confirmar.py, core/tests/test_smoke_clique_comunicado_criar.py, core/tests/test_smoke_clique_comunicado_encerrar.py, core/tests/test_smoke_clique_console_sininho.py, core/tests/test_smoke_clique_criar_setor_ad.py, core/tests/test_smoke_clique_criar_usuario_ad.py, core/tests/test_smoke_clique_excluir_feriado.py, core/tests/test_smoke_clique_feriado_form.py, core/tests/test_smoke_clique_ficha_setor_acao.py, core/tests/test_smoke_clique_ficha_usuario_acao.py, core/tests/test_smoke_clique_grupo_criar.py, core/tests/test_smoke_clique_grupo_salvar.py, core/tests/test_smoke_clique_ia_perguntar.py, core/tests/test_smoke_clique_quadro_setores_api.py, core/tests/test_smoke_clique_vincular_setor_usuario.py, escala/tests/test_smoke_clique_folga_calendario.py, escala/tests/test_smoke_clique_wizard_preview.py, pautas/tests/test_smoke_clique_pauta_cancelar.py, pautas/tests/test_smoke_clique_pauta_escrever.py, pautas/tests/test_smoke_clique_pauta_feita.py, ponto/tests/test_smoke_clique_tipo_ausencia.py
 - perguntas:
