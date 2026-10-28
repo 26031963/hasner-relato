@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/10/2026 03:50:11.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (18.2 MB). Acoes na janela: **411**.
+**Medido em 28/10/2026 03:55:38.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (18.2 MB). Acoes na janela: **406**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -416,8 +416,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 15:59:34 | SendMessage |  | `-` |
 | 15:59:25 | SendMessage |  | `-` |
 | 15:59:21 | SendMessage |  | `-` |
-| 15:51:15 | Bash | Wait for real fechar3 suite verdict | `cd /home/ronald/saas-hasner/logs; for i in $(seq 57); do grep -qE '^(OK\|FAILED)($\| \()' fechar3_suite_inteira2.log 2>/dev/null && grep -q '^Ran ' fechar3_suite_inteira2.log && break; /usr/bin/sleep 10; done; grep -E '^(OK\|FAILED)($\| \()' fechar3_suite_inteira2.log \| tail -1; grep '^Ran ' fechar3_suite_inteira2.log \| tail -1; grep -E '^(FAIL\|ERROR):' fechar3_suite_inteira2.log \| head -4; da ...` |
-| 15:51:10 | Bash | Wait for fechar3 full suite 2 verdict | `cd /home/ronald/saas-hasner/logs; for i in $(seq 55); do grep -q '^rc=\\|^OK\\|^FAILED' fechar3_suite_inteira2.log 2>/dev/null && break; /usr/bin/sleep 10; done; grep -E '^(OK\|FAILED)($\| \()' fechar3_suite_inteira2.log \| tail -1; grep '^Ran ' fechar3_suite_inteira2.log \| tail -1; grep -E '^(FAIL\|ERROR):' fechar3_suite_inteira2.log \| head -4; git -C /home/ronald/wt-fechar3-2710-1320 log --one ...` |
-| 15:50:55 | SendMessage |  | `-` |
-| 15:50:49 | Bash | Post ATA-PAUSA motor ! and state in RELATO | `cd /home/ronald/saas-hasner && python3 - <<'E' p='app/docs/RELATO.md';s=open(p).read() a='# RELATO — esteira saas-hasner\n\n' q=("> **! ATA-PAUSA-NO-MOTOR** (ZONA INVIOLAVEL, CLAUDE.md secao 4: `ponto/motor_calculo_v2.py` so com aval explicito; segura SO o pouso da ATA-X-TURNO-PAUSA, a fila SEGUE) -- para cumprir o seu (a) de 10:3x (\"antes do pouso, as pausas a mais de 3 h do cadastro (L-084) vao ...` |
-| 15:50:35 | Bash | Inspect the motor edit in ATA-PAUSA | `cd /home/ronald/saas-hasner && git -C /home/ronald/wt-ata-pausa-2710-0820 diff main...HEAD --stat -- app/ponto/motor_calculo_v2.py \| tail -1; git -C /home/ronald/wt-ata-pausa-2710-0820 show 5b86ec13 -- app/ponto/motor_calculo_v2.py \| head -60` |
