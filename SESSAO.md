@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/10/2026 16:00:08.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (23.5 MB). Acoes na janela: **256**.
+**Medido em 28/10/2026 16:05:37.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (23.5 MB). Acoes na janela: **254**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -264,5 +264,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 04:13:28 | Bash | Verify IP ContextVar claim | `sed -n 1,40p core/auditoria.py \| grep -n "ContextVar\\|ip\\|META\\|def " \| head -15; grep -rn "ContextVar" core/*.py \| head -5` |
 | 04:13:23 | Bash | Check whether IP fix is in the rework commit | `cd /home/ronald/wt-termometro-2810-0340 && git show --stat 96c5225c \| tail -8; git show 96c5225c \| grep -n "META\\|request" \| head -10` |
 | 04:13:19 | Bash | Keep waiting termometro rework | `cd /home/ronald/saas-hasner && for i in $(seq 58); do [ -f logs/termometro/suite_2.out ] && break; /usr/bin/sleep 10; done; git -C /home/ronald/wt-termometro-2810-0340 log --oneline -3; head -1 logs/termometro/suite_2.out 2>/dev/null; date +%H:%M` |
-| 04:04:24 | Bash | Record IP regression; wait rework | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read() a='> INCOMPLETO: (1) 3 dos 7 RED caem pela assinatura nova (`autor`), nao pelo defeito;' assert s.count(a)==1 s=s.replace(a,'> INCOMPLETO: (0) **REGRESSAO no ar, achada 04:0x pelo verificador do TERMOMETRO:** as views passam `autor=request.user` e `_ReqDoAutor` tem `META={}` -> a trilha do vinculo editado pel ...` |
-| 04:04:16 | SendMessage |  | `-` |
