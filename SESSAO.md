@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/10/2026 21:19:06.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (11.0 MB). Acoes na janela: **402**.
+**Medido em 27/10/2026 21:24:38.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (11.2 MB). Acoes na janela: **407**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 21:22:19 | Bash | Wait for D suite | `cd /home/ronald/saas-hasner/logs; for i in $(seq 58); do grep -q '^rc=' registrado_suite.log 2>/dev/null && break; /usr/bin/sleep 10; done; grep -E '^(OK\|FAILED)($\| \()' registrado_suite.log \| tail -1; grep '^Ran ' registrado_suite.log \| tail -1; tail -1 registrado_suite.log \| cut -c1-20; grep -E '^(FAIL\|ERROR):' registrado_suite.log \| head -4; date +%H:%M` |
+| 21:22:06 | Bash | Register both avals and new item | `cd /home/ronald/saas-hasner && python3 - <<'E' import json d='app/docs/' p=d+'RELATO.md';L=open(p).read().split('\n'); n=0 for i,l in enumerate(L[:34]): if l.startswith('> **lei: FIO-EXPORTADA-X-O44**'): L[i]='> **RESPONDIDA 27/10 21:2x: FIO-EXPORTADA-X-O44** -- RETIRADA a regra \"exportada nunca vai ao app\" (contradiz O44 25/09 e o corte de 07/10); o test_o44 fica como esta; as 284 aparecem no f ...` |
+| 21:21:48 | SendMessage |  | `-` |
+| 21:21:42 | Agent | Verify REGISTRADO 2a leitura | `REGISTRADO-NAO-E-VIVO (BO-[nome] (D)), 2a leitura. Copia /home/ronald/wt-registrado-2710-2035 (branch registrado-2710) sobre main 0baf575f; commits bdb253cf + dafc4cf1. Delta desde a sua 1a leitura: `git -C /home/ronald/wt-registrado-2710-2035 diff bdb253cf..dafc4cf1`. A 1a reprovou: o leitor lia COBRANCA crua e nao o juiz da fila `chamados/services/painel.py:158::qs_na_fila`; o fallback do `bad ...` |
+| 21:21:34 | Bash | Full suite on (D) copy | `cd /home/ronald/saas-hasner && L=logs/registrado_suite.log; bin/suite.sh --dir /home/ronald/wt-registrado-2710-2035 --espera 3600 > $L 2>&1; echo "rc=$?" >> $L` |
 | 21:11:47 | Bash | Wait for D next commit | `W=/home/ronald/wt-registrado-2710-2035; h0=$(git -C $W rev-parse HEAD); for i in $(seq 58); do [ "$(git -C $W rev-parse HEAD)" != "$h0" ] && break; /usr/bin/sleep 10; done; git -C $W log --oneline -2 \| cut -c1-110; date +%H:%M` |
 | 21:11:34 | Bash | Post FIO vs O44 conflict question | `cd /home/ronald/saas-hasner && python3 - <<'E' p='app/docs/RELATO.md';s=open(p).read() a='# RELATO — esteira saas-hasner\n\n' q=("> **lei: FIO-EXPORTADA-X-O44** (pergunta, nao para a fila; segura SO o pouso da FIO-LE-O-JUIZ) -- a sua regra de 20:5x (\"pergunta de competencia EXPORTADA nunca vai ao app, so leitura no fio\") contradiz o aval de 25/09 (\"dia exportado segue EDITAVEL\") que o `ponto/t ...` |
 | 21:01:34 | Bash | Long wait for D and FIO constructors | `/usr/bin/sleep 590; for w in wt-registrado-2710-2035 wt-fio-2710-1835; do echo "$w $(git -C /home/ronald/$w log --oneline -1 \| cut -c1-90) sujos=$(git -C /home/ronald/$w status --porcelain \| grep -vc '^??')"; done; date +%H:%M` |

@@ -330,6 +330,8 @@ Estavam no indice como vigentes e alguma clausula nao tem efeito. Gerada do ESTA
 - `PAZ-DO-ADMIN`
 - `MADRUGADA-COM-MODELO-SO-BOS`
 - `FIO-LE-O-JUIZ-OS-19`
+- `FIO-EXPORTADA-X-O44`
+- `REGISTRADO-NAO-E-VIVO-DESVIO`
 
 ## CORTES que viraram lei
 
