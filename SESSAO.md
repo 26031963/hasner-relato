@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/10/2026 22:18:06.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (11.6 MB). Acoes na janela: **414**.
+**Medido em 27/10/2026 22:23:37.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (11.8 MB). Acoes na janela: **417**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 22:19:16 | Bash | Wait for FIO suite verdict | `cd /home/ronald/saas-hasner/logs; for i in $(seq 58); do grep -q '^rc=' fio_suite_1fcc.log 2>/dev/null && break; /usr/bin/sleep 10; done; grep -E '^(OK\|FAILED)($\| \()' fio_suite_1fcc.log \| tail -1; grep '^Ran ' fio_suite_1fcc.log \| tail -1; tail -1 fio_suite_1fcc.log \| cut -c1-20; grep -E '^(FAIL\|ERROR):' fio_suite_1fcc.log \| head -4; date +%H:%M` |
+| 22:19:07 | Agent | Verify FIO 3a leitura | `FIO-LE-O-JUIZ (BO-[nome] (C)), 3a leitura antes do pouso (o pouso so sai depois do smoke do Ronald no modal: FRONT SEM SMOKE). Copia /home/ronald/wt-fio-2710-1835 (branch fio-le-o-juiz-2710) sobre main 0baf575f; HEAD 1fcc61e0. Diff total: `git -C /home/ronald/wt-fio-2710-1835 diff 0baf575f..HEAD`; delta desde a sua 2a leitura: `git -C /home/ronald/wt-fio-2710-1835 diff 52ba48d8..HEAD`. Suite int ...` |
+| 22:18:59 | Bash | Full suite on FIO 1fcc61e0 | `cd /home/ronald/saas-hasner && L=logs/fio_suite_1fcc.log; bin/suite.sh --dir /home/ronald/wt-fio-2710-1835 --espera 3600 > $L 2>&1; echo "rc=$?" >> $L` |
 | 21:33:58 | Bash | Wait for FIO commit | `W=/home/ronald/wt-fio-2710-1835; h0=$(git -C $W rev-parse HEAD); for i in $(seq 58); do [ "$(git -C $W rev-parse HEAD)" != "$h0" ] && break; /usr/bin/sleep 10; done; git -C $W log --oneline -1 \| cut -c1-110; date +%H:%M` |
 | 21:33:53 | Bash | Move marker back to FIO under construction | `cd /home/ronald/saas-hasner && python3 - <<'E' p='/home/ronald/saas-hasner/app/docs/BACKLOG.md';s=open(p).read();L=s.split('\n') k=[i for i,l in enumerate(L) if l.startswith('\| FIO-LE-O-JUIZ \|')][0]; c=L[k].split('\|') c[3]=' construindo -- leis respondidas (OS-19 20:5x, EXPORTADA-X-O44 21:2x): construtor retira a regra de exportada na copia wt-fio-2710-1835 (8a3e5545 -> ...); depois suite, veri ...` |
 | 21:33:37 | Bash | Record D state in RELATO and BACKLOG | `cd /home/ronald/saas-hasner && python3 - <<'E' p='app/docs/BACKLOG.md';L=open(p).read().split('\n') k=[i for i,l in enumerate(L) if l.startswith('\| REGISTRADO-NAO-E-VIVO \|')][0]; c=L[k].split('\|') c[3]=' aguardando a resposta REGISTRADO-CARD-3524 (topo do RELATO): copia wt-registrado-2710-2035 @ dafc4cf1, suite inteira OK Ran 12395 (logs/registrado_suite.log); card pela funcao real = 3524 (aval ...` |
