@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/10/2026 08:08:38.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (21.1 MB). Acoes na janela: **393**.
+**Medido em 28/10/2026 08:14:09.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (21.1 MB). Acoes na janela: **391**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 08:09:50 | Bash | Keep waiting (A) suite 3 | `L=/home/ronald/saas-hasner/logs/cobertura/suite_pouso3.out; for i in $(seq 58); do grep -aq '^rc=' $L 2>/dev/null && break; /usr/bin/sleep 10; done; tr -d '\0' < $L \| grep -aE '^(OK\|FAILED)($\| \()\|^Ran \|^rc=\|^(FAIL\|ERROR):' \| tail -4; date +%H:%M` |
 | 08:00:05 | Bash | Wait (A) suite 3 | `L=/home/ronald/saas-hasner/logs/cobertura/suite_pouso3.out; for i in $(seq 58); do grep -aq '^rc=' $L 2>/dev/null && break; /usr/bin/sleep 10; done; head -1 $L; tr -d '\0' < $L \| grep -aE '^(OK\|FAILED)($\| \()\|^Ran \|^rc=\|^(FAIL\|ERROR):' \| tail -4; date +%H:%M` |
 | 07:59:58 | Bash | Register CONTRATO-20-E2-REBAIXA | `cd /home/ronald/saas-hasner && python3 - <<'EOF' import json F="aval Ronald CONTRATO-20-E2-REBAIXA: depois de 24 h do E2 no ar (06:5x de 28/10), medir em prod pela funcao real o a_fechar de reavaliar_ausencias_feriado e da rejuncao de reconciliar_chamados (dry, sem escrever); a_fechar 0 nos dois = rebaixar o papel para VIGIA em config/crons.py (contador \"esperado 0\", caso que morde), juizes_por_ ...` |
 | 07:59:38 | Bash | Schedule one-shot 24h measurement | `M=/home/ronald/saas-hasner/logs/c20e2_24h; mkdir -p $M && cp /home/ronald/saas-hasner/logs/c20e2/m1_a_fechar.py $M/m3_a_fechar_24h.py && cat > $M/run.sh <<'EOF' #!/usr/bin/env bash # CONTRATO-20-E2-REBAIXA (aval Ronald 28/10 07:5x): 24 h depois do E2 no ar (38f9fd00, 28/10 06:52), medir em PROD, # so leitura, pela funcao real, o a_fechar do reavaliar_ausencias_feriado e da rejuncao. Nada escreve;  ...` |
@@ -400,6 +401,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 20:22:32 | Bash | Wait for next FIO commit | `W=/home/ronald/wt-fio-2710-1835; h0=$(git -C $W rev-parse HEAD); for i in $(seq 58); do [ "$(git -C $W rev-parse HEAD)" != "$h0" ] && break; /usr/bin/sleep 10; done; git -C $W log --oneline -1 \| cut -c1-110; date +%H:%M` |
 | 20:18:56 | Bash | Wait for FIO commit | `W=/home/ronald/wt-fio-2710-1835; h0=$(git -C $W rev-parse HEAD); for i in $(seq 58); do [ "$(git -C $W rev-parse HEAD)" != "$h0" ] && break; /usr/bin/sleep 10; done; git -C $W log --oneline -1 \| cut -c1-110; date +%H:%M` |
 | 20:18:50 | Bash | Read FIO final suite verdict | `cd /home/ronald/saas-hasner/logs; grep -E '^(OK\|FAILED)($\| \()' fio_suite_final.log \| tail -1; grep '^Ran ' fio_suite_final.log \| tail -1; tail -1 fio_suite_final.log; grep -E '^(FAIL\|ERROR):' fio_suite_final.log \| head -5` |
-| 20:09:04 | Bash | Wait for FIO commit | `W=/home/ronald/wt-fio-2710-1835; h0=$(git -C $W rev-parse HEAD); for i in $(seq 58); do [ "$(git -C $W rev-parse HEAD)" != "$h0" ] && break; /usr/bin/sleep 10; done; git -C $W log --oneline -1 \| cut -c1-110; date +%H:%M` |
-| 20:08:59 | Bash | Convert FIO PAREI to non-blocking lei question | `cd /home/ronald/saas-hasner && python3 - <<'E' p='app/docs/RELATO.md';s=open(p).read() a='PAREI: ! FIO-LE-O-JUIZ-OS-19 (so o pouso da FIO-LE-O-JUIZ) \| espera Ronald -- ' assert s.count(a)==1 s=s.replace(a,'> **lei: FIO-LE-O-JUIZ-OS-19** (pergunta, nao para a fila: segura SO o pouso da FIO-LE-O-JUIZ; o construtor segue nos itens que nao dependem dela, PAZ-DO-ADMIN um por vez) -- ',1) open(p,'w').w ...` |
-| 20:08:44 | SendMessage |  | `-` |
