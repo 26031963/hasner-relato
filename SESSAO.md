@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/10/2026 13:35:37.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (23.5 MB). Acoes na janela: **307**.
+**Medido em 28/10/2026 13:40:51.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (23.5 MB). Acoes na janela: **306**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -316,4 +316,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 01:52:24 | Agent | Verificar TRILHA-DO-VINCULO 5e9a0a51 | `Obra TRILHA-DO-VINCULO-MENTE (BO-[nome] E), 1a leitura. Copia /home/ronald/wt-vinculo-2810-0135, commit 5e9a0a51 sobre main 4be784ff: `git -C /home/ronald/wt-vinculo-2810-0135 show 5e9a0a51` (leia o corpo). Defeito (LEI-AKITA 7): trocar tipo de vinculo EXISTENTE gravava `criar`; editar gravava antes/depois nulos (medido: 225 EC com `criar` repetido, 138 `editar` nulos; logs/bo2710/itens_5_8.out) ...` |
 | 01:52:15 | Bash | Inspect (E) commit | `cd /home/ronald/wt-vinculo-2810-0135 && git show --stat 5e9a0a51 \| tail -8; git log -1 --format=%b \| grep -E 'LEI-AKITA\|RED' \| cut -c1-400` |
 | 01:47:52 | Bash | Keep waiting (E) suite | `L=/home/ronald/saas-hasner/logs/vinculo/suite_1.out; for i in $(seq 58); do grep -aq '^rc=' $L 2>/dev/null && break; /usr/bin/sleep 10; done; tr -d '\0' < $L \| grep -aE '^(OK\|FAILED)($\| \()\|^Ran \|^rc=\|^(FAIL\|ERROR):' \| tail -6; date +%H:%M` |
-| 01:38:08 | Bash | Wait for (E) suite verdict | `L=/home/ronald/saas-hasner/logs/vinculo/suite_1.out; for i in $(seq 58); do grep -aq '^rc=' $L 2>/dev/null && break; /usr/bin/sleep 10; done; head -1 $L; tr -d '\0' < $L \| grep -aE '^(OK\|FAILED)($\| \()\|^Ran \|^rc=\|^(FAIL\|ERROR):' \| tail -6; date +%H:%M` |
