@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/10/2026 05:20:51.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (19.2 MB). Acoes na janela: **377**.
+**Medido em 28/10/2026 05:26:07.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (19.2 MB). Acoes na janela: **371**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -381,9 +381,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 17:36:23 | Bash | Find the sombra DIFF scripts for rejulgar groups | `cd /home/ronald/saas-hasner && ls logs/sombra/ \| grep -i rejulgar \| head; head -30 logs/rejulgar_comp10/rj_core.py \| grep -nE "def \|GRUPO\|import\|os.environ" ; grep -n "^def \\|os.environ" logs/rejulgar_comp10/rj_core.py \| head -20` |
 | 17:36:18 | Bash | Inspect cron.d mechanism and rejulgar scripts | `cd /home/ronald/saas-hasner && grep -n "cron.d\\|sudo\\|tee" bin/deploy_agendado.sh \| head -8; ls logs/rejulgar_comp10/*.py \| head; grep -n "argv\\|COLABS\\|colabs *=" logs/rejulgar_comp10/rj_core.py \| head -8` |
 | 17:36:06 | Bash | Register FIO-LE-O-JUIZ answer and obra | `cd /home/ronald/saas-hasner && python3 - <<'E' import json d='app/docs/' p=d+'RELATO.md';L=open(p).read().split('\n') for i,l in enumerate(L[:16]): if l.startswith('> **lei: FIO-LE-O-JUIZ-6984**'): L[i]='> **RESPONDIDA 27/10 17:3x: FIO-LE-O-JUIZ-6984** -- (1) `resolver_perguntas_por_chamado_resolvido` pergunta ao `pergunta_viva` (C6) e deixa de decidir pelo chamado (ja era a lei de 25/10 09:3x, QU ...` |
-| 17:25:56 | Bash | Wait for push completion | `for i in $(seq 57); do grep -q '^push_rc' /home/ronald/saas-hasner/logs/push_2710_1705.log && break; /usr/bin/sleep 10; done; tail -4 /home/ronald/saas-hasner/logs/push_2710_1705.log \| cut -c1-160; date +%H:%M` |
-| 17:25:45 | SendMessage |  | `-` |
-| 17:25:36 | Bash | Register BO-[nome] avals and #6984 question | `cd /home/ronald/saas-hasner && python3 - <<'E' import json d='app/docs/' p=d+'BACKLOG.md';s=open(p).read() s=s.replace('\| REGISTRADO-CONTA-COMO-VIVO \| **Chamado `registrado`','\| REGISTRADO-NAO-E-VIVO \| **(BO-[nome] (D), padrao=maquina de estado com juiz unico; renomeada pelo BO-[nome]-NOMES) Chamado `registrado`',1) s=s.replace('\| registrada -- ESTRUTURA \| aval BO-ADMIN-2710 16:5x \| col ...` |
-| 17:25:06 | Bash | Queue suite on FECHAR pouso copy | `cd /home/ronald/saas-hasner && mkdir -p /home/ronald/wt-fechar-pouso-2710-1745/app/logs /home/ronald/wt-fechar-pouso-2710-1745/app/media; L=logs/fechar3_pouso_suite.log; bin/suite.sh --dir /home/ronald/wt-fechar-pouso-2710-1745 --espera 7200 > $L 2>&1; echo "rc=$?" >> $L` |
-| 17:24:56 | Bash | Read chokepoint test assertions | `cd /home/ronald/wt-fechar-pouso-2710-1745 && sed -n 305,326p app/ponto/tests/test_selo_chokepoint_escrita.py` |
-| 17:24:51 | Bash | Create FECHAR pouso copy on current main | `cd /home/ronald/saas-hasner && W=/home/ronald/wt-fechar-pouso-2710-1745 && git worktree add -b fechar-pouso-2710 $W e86968e3 2>&1 \| tail -1 && cd $W && git merge --no-ff -m "pouso: main e86968e3 + fechar3-2710 @ 7e006c64" fechar3-2710 2>&1 \| tail -2; git status --porcelain \| head -3; grep -n "assertGreaterEqual(vivos" app/ponto/tests/test_selo_chokepoint_escrita.py` |
