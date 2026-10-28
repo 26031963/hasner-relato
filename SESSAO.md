@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/10/2026 15:32:37.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (23.5 MB). Acoes na janela: **266**.
+**Medido em 28/10/2026 15:38:07.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (23.5 MB). Acoes na janela: **261**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -271,8 +271,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 03:56:58 | Bash | Keep waiting termometro suite | `L=/home/ronald/saas-hasner/logs/termometro/suite_1.out; for i in $(seq 58); do grep -aq '^rc=' $L 2>/dev/null && break; /usr/bin/sleep 10; done; tr -d '\0' < $L \| grep -aE '^(OK\|FAILED)($\| \()\|^Ran \|^rc=\|^(FAIL\|ERROR):\|porcelain' \| tail -5; date +%H:%M` |
 | 03:47:13 | Bash | Wait termometro suite | `L=/home/ronald/saas-hasner/logs/termometro/suite_1.out; for i in $(seq 58); do grep -aq '^rc=' $L 2>/dev/null && break; /usr/bin/sleep 10; done; head -1 $L; tr -d '\0' < $L \| grep -aE '^(OK\|FAILED)($\| \()\|^Ran \|^rc=\|^(FAIL\|ERROR):' \| tail -4; date +%H:%M` |
 | 03:45:30 | Bash | Keep waiting termometro | `for i in $(seq 58); do [ -f /home/ronald/saas-hasner/logs/termometro/suite_1.out ] && break; /usr/bin/sleep 10; done; git -C /home/ronald/wt-termometro-2810-0340 log --oneline -1; date +%H:%M` |
-| 03:35:45 | Bash | Wait termometro constructor | `for i in $(seq 58); do [ -f /home/ronald/saas-hasner/logs/termometro/suite_1.out ] && break; /usr/bin/sleep 10; done; git -C /home/ronald/wt-termometro-2810-0340 log --oneline -1; date +%H:%M` |
-| 03:35:41 | Agent | Construir TERMOMETRO-GRAVA-SEM-TRILHA | `Voce e o CONSTRUTOR unico (PAZ-DO-ADMIN) da obra TERMOMETRO-GRAVA-SEM-TRILHA do repo /home/ronald/saas-hasner (SaaS de ponto CLT, Django). Leia /home/ronald/saas-hasner/CLAUDE.md inteiro antes de qualquer acao. Linha da obra: `\| TERMOMETRO-GRAVA-SEM-TRILHA \|` em /home/ronald/saas-hasner/app/docs/BACKLOG.md: "`termometro_regua --lavrar` grava o escore do vinculo SEM trilha: `colaboradores/service ...` |
-| 03:35:24 | Bash | Move marker; create termometro worktree | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/BACKLOG.md'; s=open(p).read() a='<!-- ORDEM-VIVA-TOPO: SELO-FECHAR3-INSTAVEL -->' assert s.count(a)==1 s=s.replace(a,'<!-- ORDEM-VIVA-TOPO: TERMOMETRO-GRAVA-SEM-TRILHA -->\n<!-- ANDOU 28/10 03:4x, de `SELO-FECHAR3-INSTAVEL` (aguardando a lei SELO-FECHAR3-QUEM-SOBREVIVE) para `TERMOMETRO-GRAVA-SEM-TRILHA` (mesma classe da (E), log imutave ...` |
-| 03:35:17 | Bash | Read candidate next rows | `cd /home/ronald/saas-hasner && for id in TENTATIVA-DO-ADMIN-VIRA-COBRANCA TERMOMETRO-GRAVA-SEM-TRILHA SOMBRA-NAO-CABE-ANTES-DO-VIZINHO; do grep -n "^\| $id " app/docs/BACKLOG.md \| cut -c1-600; done` |
-| 03:35:11 | Bash | Write lei question for FECHAR3 | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read() a='# RELATO — esteira saas-hasner\n\n' l='''> **lei: SELO-FECHAR3-QUEM-SOBREVIVE** (pergunta, nao para a fila; segura SO a cura do SELO-FECHAR3-INSTAVEL) -- quando a cobertura declarada (`ponto/services/cobertura.py::declarar_cobertura_passada`) explica um dia com 2+ chamados de furo vivos, ela chama `reconci ...` |
