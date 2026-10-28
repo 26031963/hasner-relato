@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/10/2026 17:58:07.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (23.5 MB). Acoes na janela: **185**.
+**Medido em 28/10/2026 18:03:37.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (23.5 MB). Acoes na janela: **182**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -192,6 +192,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 06:17:48 | Bash | Run lei-akita host selo | `cd /home/ronald/saas-hasner && bash bin/tests/test_lei_akita.sh 2>&1 \| tail -8` |
 | 06:15:09 | Bash | Read E2 commit body | `/usr/bin/sleep 150; git -C /home/ronald/wt-c20e2-2810-0600 log -1 --format=%b 1498dad8 \| head -40 \| cut -c1-230` |
 | 06:13:04 | Bash | Keep waiting c20 suite; read prod measure | `L=/home/ronald/saas-hasner/logs/c20e2/suite_1.out; for i in $(seq 58); do grep -aq '^rc=' $L 2>/dev/null && break; /usr/bin/sleep 10; done; tr -d '\0' < $L \| grep -aE '^(OK\|FAILED)($\| \()\|^Ran \|^rc=\|^(FAIL\|ERROR):' \| tail -4; date +%H:%M; cat /home/ronald/saas-hasner/logs/c20e2/m1_a_fechar.out \| tail -15 \| cut -c1-200` |
-| 06:03:19 | Bash | Wait c20 E2 suite | `L=/home/ronald/saas-hasner/logs/c20e2/suite_1.out; for i in $(seq 58); do grep -aq '^rc=' $L 2>/dev/null && break; /usr/bin/sleep 10; done; head -1 $L; tr -d '\0' < $L \| grep -aE '^(OK\|FAILED)($\| \()\|^Ran \|^rc=\|^(FAIL\|ERROR):' \| tail -4; date +%H:%M` |
-| 06:02:15 | Bash | Wait for c20 E2 progress | `for i in $(seq 58); do [ -f /home/ronald/saas-hasner/logs/c20e2/suite_1.out ] && break; /usr/bin/sleep 10; done; git -C /home/ronald/wt-c20e2-2810-0600 log --oneline -2; ls /home/ronald/saas-hasner/logs/c20e2/; date +%H:%M` |
-| 06:02:09 | Bash | Correct the justificativa question with comp split | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read() a='(total **+4 dias de falta, +31,8 h de falta, -31,8 h de abono, +2 semanas de DSR perdidas**). 79 dias-colab saem' assert s.count(a)==1 s=s.replace(a,'(total **+4 dias de falta, +31,8 h de falta, -31,8 h de abono, +2 semanas de DSR perdidas** -- **CORRIGIDO 06:0x:** a janela do `espelho_do_colab` passa da c ...` |
