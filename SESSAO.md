@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/10/2026 02:30:18.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (17.5 MB). Acoes na janela: **434**.
+**Medido em 28/10/2026 02:35:39.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (17.5 MB). Acoes na janela: **433**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -443,4 +443,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 14:41:39 | Bash | Mark col444 question answered | `cd /home/ronald/saas-hasner && python3 - <<'E' p='app/docs/RELATO.md';L=open(p).read().split('\n') for i,l in enumerate(L[:6]): if l.startswith('> **lei: REJULGAR-COMP10-COL444-E-DERIVA**'): L[i]='> **RESPONDIDA 27/10 14:4x: REJULGAR-COMP10-COL444-E-DERIVA = (a) so o col444 no mesmo ato (DIFF contra prod de agora, reversao antes, prova depois); a deriva de FM sem celula (col317, 736, 290) fica com ...` |
 | 14:41:30 | Bash | Register col444 aval and view RELATO top | `cd /home/ronald/saas-hasner && python3 - <<'E' import json d='app/docs/' f="aval Ronald: REJULGAR-COMP10-COL444-E-DERIVA = (a) so para o col444: a celula 113177 (25/09) e da mesma classe dos grupos (cura ja no ar, carimbo velho), furo->concorde com +420 min abonados e o dia previsto que faltava; entra pelo mesmo ato, com DIFF medido contra o estado de prod de agora, reversao antes e prova depois.  ...` |
 | 14:41:25 | SendMessage |  | `-` |
-| 14:31:40 | Bash | Wait for further progress across raias | `W=/home/ronald/wt-fechar3-2710-1320; h0=$(git -C $W rev-parse HEAD); for i in $(seq 57); do [ "$(git -C $W rev-parse HEAD)" != "$h0" ] && break; /usr/bin/sleep 10; done; git -C $W log --oneline -3 \| cut -c1-150; ls -t /home/ronald/saas-hasner/logs/ \| grep -E "fechar3\|rejulgar\|c20tol\|ata_pausa\|raia1" \| head -6; date +%H:%M` |
