@@ -359,6 +359,7 @@ Estavam no indice como vigentes e alguma clausula nao tem efeito. Gerada do ESTA
 - `JUSTIFICATIVA-B-NAO-FECHA`
 - `LAUDOS-[nome]-2810`
 - `RITMO-DA-SEMANA-2810`
+- `CLEAR-NO-PROXIMO-MARCO`
 
 ## CORTES que viraram lei
 
