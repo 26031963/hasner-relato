@@ -351,6 +351,8 @@ Estavam no indice como vigentes e alguma clausula nao tem efeito. Gerada do ESTA
 - `ISENTO-VENCIDO-VOLTA`
 - `ISENTO-NAO-NASCE`
 - `QUARENTENA-DO-COLAB`
+- `QUARENTENA-DO-COLAB-POR-PERIODO`
+- `QUARENTENA-E-A-O44`
 
 ## CORTES que viraram lei
 
