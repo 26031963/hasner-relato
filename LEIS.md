@@ -336,6 +336,7 @@ Estavam no indice como vigentes e alguma clausula nao tem efeito. Gerada do ESTA
 - `COBERTURA-ABONO-DO-PERIODO`
 - `SMOKE-FIO-NO-AR-ANTES`
 - `SMOKE-FIO-PARCIAL`
+- `ESMERIL-V2-PROPRIEDADES`
 
 ## CORTES que viraram lei
 
