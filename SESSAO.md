@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/10/2026 08:30:45.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (21.4 MB). Acoes na janela: **400**.
+**Medido em 28/10/2026 08:36:08.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (21.4 MB). Acoes na janela: **396**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -406,7 +406,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 20:55:48 | Agent | Verify REGISTRADO-NAO-E-VIVO | `REGISTRADO-NAO-E-VIVO (BO-[nome] (D)), leitura antes do pouso. Copia /home/ronald/wt-registrado-2710-2035 (branch registrado-2710) sobre main 0baf575f; commit bdb253cf. Diff: `git -C /home/ronald/wt-registrado-2710-2035 diff 0baf575f..HEAD`. Aval (literal): "(D) REGISTRADO-NAO-E-VIVO = item 7 (col130 #28883, 535 na frota): registrado sai de VIVOS e de todo badge, padrao=maquina de estado com jui ...` |
 | 20:45:49 | Bash | Wait for REGISTRADO progress | `W=/home/ronald/wt-registrado-2710-2035; h0=$(git -C $W rev-parse HEAD); for i in $(seq 58); do [ "$(git -C $W rev-parse HEAD)" != "$h0" ] && break; /usr/bin/sleep 10; done; git -C $W log --oneline -2 \| cut -c1-110; date +%H:%M` |
 | 20:42:51 | Bash | Wait for REGISTRADO commit and FIO suite | `W=/home/ronald/wt-registrado-2710-2035; h0=$(git -C $W rev-parse HEAD); for i in $(seq 58); do [ "$(git -C $W rev-parse HEAD)" != "$h0" ] && break; /usr/bin/sleep 10; done; git -C $W log --oneline -1 \| cut -c1-110; grep -E '^(OK\|FAILED)($\| \()' /home/ronald/saas-hasner/logs/fio_suite_684a.log \| tail -1; date +%H:%M` |
-| 20:33:05 | Bash | Wait for REGISTRADO commit | `W=/home/ronald/wt-registrado-2710-2035; h0=$(git -C $W rev-parse HEAD); for i in $(seq 58); do [ "$(git -C $W rev-parse HEAD)" != "$h0" ] && break; /usr/bin/sleep 10; done; git -C $W log --oneline -1 \| cut -c1-110; date +%H:%M` |
-| 20:32:54 | Agent | Construir REGISTRADO-NAO-E-VIVO (D) | `Voce e o CONSTRUTOR da obra REGISTRADO-NAO-E-VIVO (BO-[nome] (D)) no repo /home/ronald/saas-hasner (ponto CLT, Django). Leia /home/ronald/saas-hasner/CLAUDE.md INTEIRO (secao 0 com a L-123 PADRAO-NA-CURA, 3, 4a, 6). COPIA: /home/ronald/wt-registrado-2710-2035 (branch registrado-2710, do main 0baf575f; tem app/logs e app/media). Nunca edite /home/ronald/saas-hasner (producao). Nada de merge/deplo ...` |
-| 20:32:34 | Bash | Full suite on FIO HEAD 684a55fd | `cd /home/ronald/saas-hasner && L=logs/fio_suite_684a.log; bin/suite.sh --dir /home/ronald/wt-fio-2710-1835 --espera 3600 > $L 2>&1; echo "rc=$?" >> $L` |
-| 20:32:32 | Bash | Record FIO state, move marker to (D), create copy | `cd /home/ronald/saas-hasner && python3 - <<'E' p='/home/ronald/saas-hasner/app/docs/BACKLOG.md';s=open(p).read();L=s.split('\n') k=[i for i,l in enumerate(L) if l.startswith('\| FIO-LE-O-JUIZ \|')][0]; c=L[k].split('\|') c[3]=' aguardando a lei FIO-LE-O-JUIZ-OS-19 (topo) e o smoke do modal (FRONT SEM SMOKE): copia wt-fio-2710-1835 @ 684a55fd, itens 1-4 da 2a leitura curados (4639 OK nos modulos);  ...` |
