@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/10/2026 14:39:37.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (23.5 MB). Acoes na janela: **286**.
+**Medido em 28/10/2026 14:45:08.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (23.5 MB). Acoes na janela: **280**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -290,9 +290,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 02:55:56 | Bash | Update states and wait O245 rework | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/BACKLOG.md'; L=open(p).read().split('\n') k=[i for i,r in enumerate(L) if r.startswith('\| O245-CAMADA-COBERTURA \|')][0]; c=L[k].split('\|') c[3]=' construindo -- verificador REPROVOU 5e8a2fd4 (selos por forma, portas sem trilha nao entregue, zero sem varredor, churn de leitores no MAPA); construtor curando; suite_3 de 5e8a2fd4 12432 OK ...` |
 | 02:54:09 | Bash | Read 3rd suite verdict | `L=/home/ronald/saas-hasner/logs/o245cob/suite_3.out; for i in $(seq 30); do grep -aq '^rc=' $L 2>/dev/null && break; /usr/bin/sleep 10; done; tr -d '\0' < $L \| grep -aE '^(OK\|FAILED)($\| \()\|^Ran \|^rc=\|^(FAIL\|ERROR):' \| tail -4; date +%H:%M` |
 | 02:54:03 | SendMessage |  | `-` |
-| 02:44:06 | Bash | Wait 3rd O245 suite | `L=/home/ronald/saas-hasner/logs/o245cob/suite_3.out; for i in $(seq 58); do grep -aq '^rc=' $L 2>/dev/null && break; /usr/bin/sleep 10; done; head -1 $L; tr -d '\0' < $L \| grep -aE '^(OK\|FAILED)($\| \()\|^Ran \|^rc=\|^(FAIL\|ERROR):' \| tail -6; date +%H:%M` |
-| 02:44:03 | Agent | Verificar O245-CAMADA-COBERTURA | `Obra O245-CAMADA-COBERTURA (INSTRUMENTO, pouso proprio L-105), 1a leitura. Copia /home/ronald/wt-o245cob-2810-0200, commits a4f38d7f + 5e8a2fd4 sobre main ec00263b: `git -C /home/ronald/wt-o245cob-2810-0200 diff ec00263b..5e8a2fd4`. Aval (BACKLOG linha `\| O245-CAMADA-COBERTURA \|` em /home/ronald/saas-hasner/app/docs/BACKLOG.md): camada de COBERTURA do MAPA gerada do codigo; por familia de core/j ...` |
-| 02:43:53 | Bash | Launch 3rd suite and register flaky test item | `cd /home/ronald/saas-hasner && L=logs/o245cob/suite_3.out; (echo "HEAD=$(git -C /home/ronald/wt-o245cob-2810-0200 rev-parse --short HEAD) porcelain=$(git -C /home/ronald/wt-o245cob-2810-0200 status --porcelain \| wc -l)"; bin/suite.sh --dir /home/ronald/wt-o245cob-2810-0200 --espera 3600; echo "rc=$?") > $L 2>&1 & disown; python3 - <<'EOF' p='/home/ronald/saas-hasner/app/docs/BACKLOG.md'; L=open(p ...` |
-| 02:42:23 | Bash | Rerun flaky module 3 times in isolation | `cd /home/ronald/saas-hasner && for n in 1 2 3; do bin/suite.sh --dir /home/ronald/wt-o245cob-2810-0200 --only "chamados.tests.test_fechar3_retorno_do_gate" --espera 900 > logs/o245cob/fechar3_iso_$n.out 2>&1; echo "run$n rc=$? $(grep -aE '^(OK\|FAILED)($\| \()' logs/o245cob/fechar3_iso_$n.out \| tail -1)"; done` |
-| 02:42:15 | Bash | Read flaky test | `grep -n "def test_MORDE_cobertura_com_irmao_vivo" -B3 -A30 chamados/tests/test_fechar3_retorno_do_gate.py \| head -60; grep -n "freeze_time\\|^class\\|setUp" chamados/tests/test_fechar3_retorno_do_gate.py \| head` |
-| 02:42:12 | Bash | Read fechar3 failure detail | `grep -a -A30 '^FAIL: test_MORDE_cobertura_com_irmao_vivo' /home/ronald/saas-hasner/logs/o245cob/suite_2.out \| grep -avE '^\s+\^' \| tail -14` |
