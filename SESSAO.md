@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/10/2026 13:50:51.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (23.5 MB). Acoes na janela: **305**.
+**Medido em 28/10/2026 13:55:51.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (23.5 MB). Acoes na janela: **302**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -312,6 +312,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 01:57:50 | Bash | Read candidate next items | `cd /home/ronald/saas-hasner && grep -n '^\| CXR-TELA-LE-O-MOTOR\\|^\| JUIZ-DE-DONO-DO-DIA\\|^\| O245-CAMADA-COBERTURA' app/docs/BACKLOG.md \| cut -c1-700` |
 | 01:57:44 | Bash | Update docs for (E) pouso | `cd /home/ronald/saas-hasner && python3 - <<'EOF' def ed(p,a,b): s=open(p).read(); assert s.count(a)==1,(p,a[:50]); open(p,'w').write(s.replace(a,b,1)) ed('app/docs/LEIS.md','; a PORTA do vinculo nao grava trilha por pk do vinculo FECHADO, com antes e depois, quando colaboradores/services/vinculo.py::executar_vinculo e ::fechar_vinculos_ativos chamam ::fechar_vigencia sem autor; em ::encerrar_vincu ...` |
 | 01:57:27 | Bash | Merge (E) and compare; read L-007 line | `cd /home/ronald/saas-hasner && git rev-parse --short HEAD && bin/janela_auth.sh 2>&1 \| tail -1 && git merge --no-ff --no-commit 5e9a0a51 2>&1 \| tail -1; git rev-parse -q --verify MERGE_HEAD >/dev/null && echo MERGE_HEAD-ok; for f in $(git diff --cached --name-only); do cmp -s "$f" "/home/ronald/wt-vinculo-2810-0135/$f" \|\| echo "DIFERE $f"; done; git diff --cached --name-only \| wc -l; sed -n 1 ...` |
-| 01:52:27 | Bash | Wait for verifier | `/usr/bin/sleep 290; date +%H:%M` |
-| 01:52:24 | Agent | Verificar TRILHA-DO-VINCULO 5e9a0a51 | `Obra TRILHA-DO-VINCULO-MENTE (BO-[nome] E), 1a leitura. Copia /home/ronald/wt-vinculo-2810-0135, commit 5e9a0a51 sobre main 4be784ff: `git -C /home/ronald/wt-vinculo-2810-0135 show 5e9a0a51` (leia o corpo). Defeito (LEI-AKITA 7): trocar tipo de vinculo EXISTENTE gravava `criar`; editar gravava antes/depois nulos (medido: 225 EC com `criar` repetido, 138 `editar` nulos; logs/bo2710/itens_5_8.out) ...` |
-| 01:52:15 | Bash | Inspect (E) commit | `cd /home/ronald/wt-vinculo-2810-0135 && git show --stat 5e9a0a51 \| tail -8; git log -1 --format=%b \| grep -E 'LEI-AKITA\|RED' \| cut -c1-400` |
