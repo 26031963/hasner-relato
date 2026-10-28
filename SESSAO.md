@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/10/2026 06:31:38.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (19.8 MB). Acoes na janela: **363**.
+**Medido em 28/10/2026 06:37:09.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (19.8 MB). Acoes na janela: **360**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 06:33:33 | Bash | Wait for comp 9 depois run | `cd /home/ronald/saas-hasner && for i in $(seq 58); do [ -f logs/justificativa/run_c9.done ] && break; /usr/bin/sleep 10; done; grep -aE 'ERROS\|FIM-DA-SONDA\|ARVORE' logs/justificativa/run_c9_depois.log \| head -4; ls logs/sombra/justif_c9_* 2>/dev/null; date +%H:%M` |
 | 06:23:48 | Bash | Wait comp 9 measurement | `cd /home/ronald/saas-hasner && for i in $(seq 58); do [ -f logs/justificativa/run_c9.done ] && break; /usr/bin/sleep 10; done; for f in run_c9_antes run_c9_depois; do echo "== $f"; grep -aE 'ERROS\|FIM-DA-SONDA\|ARVORE' logs/justificativa/$f.log \| head -4; done; date +%H:%M` |
 | 06:23:47 | SendMessage |  | `-` |
 | 06:18:51 | Bash | Wait for verifier / comp9 | `/usr/bin/sleep 280; date +%H:%M; ls /home/ronald/saas-hasner/logs/justificativa/` |
@@ -369,7 +370,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 18:54:41 | Bash | Register both avals, corte, BACKLOG states | `cd /home/ronald/saas-hasner && python3 - <<'E' import json d='app/docs/' p=d+'RELATO.md';L=open(p).read().split('\n') n=0 for i,l in enumerate(L[:20]): if l.startswith('PAREI: ! JUIZ-DO-PAR-DUAS-ENTRADAS'): L[i]='> **RESPONDIDA 27/10 18:5x: JUIZ-DO-PAR-DUAS-ENTRADAS-DECISOES** -- (1) col457 07/09 = mudanca de dono BATIDA; o juiz unico 383adb81 FICA; a 09 exportada nao se regera (L-092), o dia vai  ...` |
 | 18:44:36 | Bash | Wait for next FIO commit | `W=/home/ronald/wt-fio-2710-1835; h0=$(git -C $W rev-parse HEAD); for i in $(seq 57); do [ "$(git -C $W rev-parse HEAD)" != "$h0" ] && break; /usr/bin/sleep 10; done; git -C $W log --oneline -2 \| cut -c1-110; date +%H:%M` |
 | 18:39:28 | Bash | Wait for next FIO commit | `W=/home/ronald/wt-fio-2710-1835; h0=$(git -C $W rev-parse HEAD); for i in $(seq 57); do [ "$(git -C $W rev-parse HEAD)" != "$h0" ] && break; /usr/bin/sleep 10; done; git -C $W log --oneline -2 \| cut -c1-110; date +%H:%M` |
-| 18:32:49 | Bash | Wait for FIO commit | `W=/home/ronald/wt-fio-2710-1835; h0=$(git -C $W rev-parse HEAD); for i in $(seq 57); do [ "$(git -C $W rev-parse HEAD)" != "$h0" ] && break; /usr/bin/sleep 10; done; git -C $W log --oneline -2 \| cut -c1-110; date +%H:%M` |
-| 18:32:35 | Agent | Construir FIO-LE-O-JUIZ | `Voce e o CONSTRUTOR da obra FIO-LE-O-JUIZ (BO-[nome] (C), complemento do FECHAR-PERGUNTA-A-PREMISSA, que pousou em 927d8a02) no repo /home/ronald/saas-hasner (ponto CLT, Django). Leia /home/ronald/saas-hasner/CLAUDE.md INTEIRO (secao 0 com a L-123 PADRAO-NA-CURA, 3, 4a, 6). COPIA: /home/ronald/wt-fio-2710-1835 (branch fio-le-o-juiz-2710, do main 0baf575f; tem app/logs e app/media). Nunca edite / ...` |
-| 18:32:17 | Bash | Move marker to FIO-LE-O-JUIZ; create copy | `cd /home/ronald/saas-hasner && python3 - <<'E' p='/home/ronald/saas-hasner/app/docs/BACKLOG.md';s=open(p).read() a='<!-- ORDEM-VIVA-TOPO: JUIZ-DO-PAR-DUAS-ENTRADAS -->\n' assert s.count(a)==1 s=s.replace(a,'<!-- ORDEM-VIVA-TOPO: FIO-LE-O-JUIZ -->\n<!-- ANDOU 27/10 18:3x, de `JUIZ-DO-PAR-DUAS-ENTRADAS` (PAREI ! no topo do RELATO: col457 07/09 move dinheiro na comp 09) para `FIO-LE-O-JUIZ` (BO-MAURI ...` |
-| 18:32:01 | Bash | Post ATA-PAUSA PAREI and mark obra waiting | `cd /home/ronald/saas-hasner && python3 - <<'E' p='app/docs/RELATO.md';s=open(p).read() a='# RELATO — esteira saas-hasner\n\n' q=("PAREI: ! JUIZ-DO-PAR-DUAS-ENTRADAS (so o pouso da ATA-X-TURNO-PAUSA) \| espera Ronald -- a condicao do seu (c) (\"DIFF de frota com dinheiro igual, qualquer dia com dinheiro diferente = PAROU com o numero\") NAO fecha: com o juiz unico do par (`383adb81`: `ponto/turnos. ...` |
