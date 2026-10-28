@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/10/2026 03:55:38.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (18.2 MB). Acoes na janela: **406**.
+**Medido em 28/10/2026 04:00:50.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (18.2 MB). Acoes na janela: **401**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 03:59:19 | Bash | Wait for verifier | `/usr/bin/sleep 280; date +%H:%M` |
+| 03:59:16 | Agent | Verificar TERMOMETRO 98853070 | `Obra TERMOMETRO-GRAVA-SEM-TRILHA, 1a leitura. Copia /home/ronald/wt-termometro-2810-0340, commit 98853070 sobre main 0bfbb7f6: `git -C /home/ronald/wt-termometro-2810-0340 show 98853070` (corpo + diff). Defeito: `termometro_regua --lavrar` gravava o escore do vinculo por `.update()` sem `registrar_log` (LEI-AKITA 7), chamado de `escala/regua_defesa.py::gravar_regua`. Escopo aprovado: SO a trilha ( ...` |
+| 03:56:58 | Bash | Keep waiting termometro suite | `L=/home/ronald/saas-hasner/logs/termometro/suite_1.out; for i in $(seq 58); do grep -aq '^rc=' $L 2>/dev/null && break; /usr/bin/sleep 10; done; tr -d '\0' < $L \| grep -aE '^(OK\|FAILED)($\| \()\|^Ran \|^rc=\|^(FAIL\|ERROR):\|porcelain' \| tail -5; date +%H:%M` |
 | 03:47:13 | Bash | Wait termometro suite | `L=/home/ronald/saas-hasner/logs/termometro/suite_1.out; for i in $(seq 58); do grep -aq '^rc=' $L 2>/dev/null && break; /usr/bin/sleep 10; done; head -1 $L; tr -d '\0' < $L \| grep -aE '^(OK\|FAILED)($\| \()\|^Ran \|^rc=\|^(FAIL\|ERROR):' \| tail -4; date +%H:%M` |
 | 03:45:30 | Bash | Keep waiting termometro | `for i in $(seq 58); do [ -f /home/ronald/saas-hasner/logs/termometro/suite_1.out ] && break; /usr/bin/sleep 10; done; git -C /home/ronald/wt-termometro-2810-0340 log --oneline -1; date +%H:%M` |
 | 03:35:45 | Bash | Wait termometro constructor | `for i in $(seq 58); do [ -f /home/ronald/saas-hasner/logs/termometro/suite_1.out ] && break; /usr/bin/sleep 10; done; git -C /home/ronald/wt-termometro-2810-0340 log --oneline -1; date +%H:%M` |
@@ -408,11 +411,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 16:05:58 | Bash | Find disputa fechar and perguntas_vivas computation | `git grep -n "perguntas_vivas" -- chamados/models.py \| head; git grep -n "porta veredito\\|fechar(.*veredito\\|motivo_fechamento='veredito'\\|'veredito')" -- '*.py' ':!*/tests/*' \| head -8` |
 | 16:01:52 | Bash | Wait briefly for agent reports | `/usr/bin/sleep 240; ls -t /home/ronald/saas-hasner/logs \| head -5; date +%H:%M` |
 | 16:01:44 | Bash | Read trilha_6984 conclusion | `tail -40 /home/ronald/saas-hasner/logs/laudo_fernando_col94/trilha_6984.out \| cut -c1-220` |
-| 16:00:47 | Bash | Wait for trilha_6984 output | `for i in $(seq 55); do [ -s /home/ronald/saas-hasner/logs/laudo_fernando_col94/trilha_6984.out ] && break; /usr/bin/sleep 10; done; ls -la --time-style=+%H:%M /home/ronald/saas-hasner/logs/laudo_fernando_col94/ \| tail -3; date +%H:%M` |
-| 16:00:35 | Bash | Record FECHAR3 state in RELATO | `cd /home/ronald/saas-hasner && python3 - <<'E' p='app/docs/RELATO.md';s=open(p).read() anc='## ATA-X-TURNO-PAUSA -- estado (27/10 15:5x)\n' sec=('## FECHAR-PERGUNTA-A-PREMISSA (FECHAR3) -- pronto para a 2a leitura (27/10 16:0x)\n' '- Copia `wt-fechar3-2710-1320` @ `9bf8fe2d` (main 21ff5c49 + 3b5ee9aa/e7542d74/f5951afa + 73997553/ec181904/9bf8fe2d). PROVA: suite inteira `logs/fechar3_suite_inteira2 ...` |
-| 16:00:16 | Agent | Trilha #31873 e #44764 em 26/10 | `MEDIDOR so leitura (nenhuma escrita em banco nem no repo) no repo /home/ronald/saas-hasner (ponto CLT, Django multi-tenant; prod no container saas_core, schema juliani). Leia /home/ronald/saas-hasner/CLAUDE.md secao 6 (SHELL, ZONA INVIOLAVEL). PROIBIDO tocar o col94: so SELECT. PERGUNTA: por que a disputa #6984 fechou em 26/10 14:54:53 (por `sistema`, motivo `veredito`, log com `perguntas_vivas=[] ...` |
-| 16:00:08 | Agent | Verify FECHAR3 2a leitura | `FECHAR-PERGUNTA-A-PREMISSA, 2a leitura. Copia /home/ronald/wt-fechar3-2710-1320 (branch fechar3-2710) = main 21ff5c49 + cherry-pick (3b5ee9aa gate reconciliar() pelo coletor unico premissa_regularizada/_celula_furada; e7542d74 selo renascimento; f5951afa vazamento de relogio do teste) + curas da sua 1a leitura (73997553 itens 2/3/6/9; 985bb9e1 WIP superado por ec181904 itens 4/5/7; 9bf8fe2d ruff e ...` |
-| 15:59:52 | Bash | Register three avals and mark answered | `cd /home/ronald/saas-hasner && python3 - <<'E' import json p='app/docs/RELATO.md';L=open(p).read().split('\n') rep={'> **! ATA-PAUSA-NO-MOTOR**':'> **RESPONDIDA 27/10 15:5x: ! ATA-PAUSA-NO-MOTOR autorizado** -- o acusador entra no motor (a lista CxR ja e do MOTOR, L-099, um escritor so); CONDICAO do pouso: os 10 turnos >3 h explicados 10 de 10 e dinheiro igual na frota provado no DIFF; fora disso  ...` |
-| 15:59:34 | SendMessage |  | `-` |
-| 15:59:25 | SendMessage |  | `-` |
-| 15:59:21 | SendMessage |  | `-` |
