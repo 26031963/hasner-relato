@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/10/2026 17:25:50.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (23.5 MB). Acoes na janela: **204**.
+**Medido em 28/10/2026 17:30:51.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (23.5 MB). Acoes na janela: **203**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -213,4 +213,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 05:49:52 | Bash | Read the justificativa fleet DIFF | `head -60 /home/ronald/saas-hasner/logs/justificativa/diff_frota.out \| cut -c1-200` |
 | 05:48:19 | Bash | Keep waiting for diff_frota | `for i in $(seq 58); do [ -f /home/ronald/saas-hasner/logs/justificativa/diff_frota.out ] && break; /usr/bin/sleep 10; done; ls -la /home/ronald/saas-hasner/logs/justificativa/ \| tail -6; date +%H:%M` |
 | 05:38:34 | Bash | Keep waiting for diff_frota | `for i in $(seq 58); do [ -f /home/ronald/saas-hasner/logs/justificativa/diff_frota.out ] && break; /usr/bin/sleep 10; done; ls -la /home/ronald/saas-hasner/logs/justificativa/ \| tail -6; date +%H:%M` |
-| 05:28:50 | Bash | Keep waiting for diff_frota | `for i in $(seq 58); do [ -f /home/ronald/saas-hasner/logs/justificativa/diff_frota.out ] && break; /usr/bin/sleep 10; done; ls -la /home/ronald/saas-hasner/logs/justificativa/ \| tail -6; date +%H:%M` |
