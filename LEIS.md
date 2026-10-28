@@ -342,6 +342,7 @@ Estavam no indice como vigentes e alguma clausula nao tem efeito. Gerada do ESTA
 - `JUSTIFICATIVA-PAGA-O-PERIODO-B`
 - `SMOKE-FIO-3227-P50169`
 - `RECUSA-DO-ADMIN-DIZ-O-QUE-FAZER`
+- `CONTRATO-20-E2-REBAIXA`
 
 ## CORTES que viraram lei
 
