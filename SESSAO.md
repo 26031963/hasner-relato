@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/10/2026 16:10:51.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (23.5 MB). Acoes na janela: **254**.
+**Medido em 28/10/2026 16:15:51.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (23.5 MB). Acoes na janela: **248**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -258,9 +258,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 04:28:30 | Bash | Wait for verifier | `/usr/bin/sleep 270; date +%H:%M` |
 | 04:28:27 | Agent | Verificar TERMOMETRO 96c5225c (2a) | `Obra TERMOMETRO-GRAVA-SEM-TRILHA, 2a leitura. Copia /home/ronald/wt-termometro-2810-0340; voce reprovou 706468af (tree = a de 98853070); cura 96c5225c: `git -C /home/ronald/wt-termometro-2810-0340 show 96c5225c`. Seus itens: (1) IP perdido -- o construtor diz REFUTADO por medicao: `core/observ.py::evento` (108-112) le ip/ator da request da vez pelo ContextVar `REQUISICAO_DA_TRILHA` quando o chamad ...` |
 | 04:23:28 | Bash | Keep waiting termometro suite 2 | `L=/home/ronald/saas-hasner/logs/termometro/suite_2.out; for i in $(seq 58); do grep -aq '^rc=' $L 2>/dev/null && break; /usr/bin/sleep 10; done; tr -d '\0' < $L \| grep -aE '^(OK\|FAILED)($\| \()\|^Ran \|^rc=\|^(FAIL\|ERROR):' \| tail -4; date +%H:%M` |
-| 04:13:42 | Bash | Correct note; wait termometro suite 2 | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read() a='(0) **REGRESSAO no ar, achada 04:0x pelo verificador do TERMOMETRO:** as views passam `autor=request.user` e `_ReqDoAutor` tem `META={}` -> a trilha do vinculo editado pelo admin sai com `ip` NULO (antes da obra a linha era nula mas tinha IP); cura na porta em curso na copia wt-termometro-2810-0340 (aceita ...` |
-| 04:13:35 | Bash | Read evento IP fallback logic | `sed -n 98,125p core/observ.py` |
-| 04:13:31 | Bash | Read registrar_log in full | `sed -n 8,30p core/auditoria.py; grep -n "REQUISICAO_DA_TRILHA" core/observ.py \| head` |
-| 04:13:28 | Bash | Verify IP ContextVar claim | `sed -n 1,40p core/auditoria.py \| grep -n "ContextVar\\|ip\\|META\\|def " \| head -15; grep -rn "ContextVar" core/*.py \| head -5` |
-| 04:13:23 | Bash | Check whether IP fix is in the rework commit | `cd /home/ronald/wt-termometro-2810-0340 && git show --stat 96c5225c \| tail -8; git show 96c5225c \| grep -n "META\\|request" \| head -10` |
-| 04:13:19 | Bash | Keep waiting termometro rework | `cd /home/ronald/saas-hasner && for i in $(seq 58); do [ -f logs/termometro/suite_2.out ] && break; /usr/bin/sleep 10; done; git -C /home/ronald/wt-termometro-2810-0340 log --oneline -3; head -1 logs/termometro/suite_2.out 2>/dev/null; date +%H:%M` |
