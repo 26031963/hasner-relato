@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/10/2026 22:40:11.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (12.2 MB). Acoes na janela: **425**.
+**Medido em 27/10/2026 22:45:11.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (12.3 MB). Acoes na janela: **427**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 22:43:07 | Bash | Wait for push; read FIO proof log | `for i in $(seq 58); do grep -q '^push_rc' /home/ronald/saas-hasner/logs/push_2710_2230.log && break; /usr/bin/sleep 10; done; tail -3 /home/ronald/saas-hasner/logs/push_2710_2230.log \| cut -c1-100; ls -la --time-style=+%H:%M /home/ronald/wt-fio-2710-1835/app/logs/fio_prova_post.log 2>&1; grep -E '^(OK\|FAILED)\|^Ran ' /home/ronald/wt-fio-2710-1835/app/logs/fio_prova_post.log 2>/dev/null \| tail - ...` |
+| 22:41:18 | Bash | Wait for FIO commit or push end | `W=/home/ronald/wt-fio-2710-1835; h0=$(git -C $W rev-parse HEAD); for i in $(seq 58); do [ "$(git -C $W rev-parse HEAD)" != "$h0" ] && break; grep -q '^push_rc' /home/ronald/saas-hasner/logs/push_2710_2230.log && break; /usr/bin/sleep 10; done; git -C $W log --oneline -1 \| cut -c1-110; tail -3 /home/ronald/saas-hasner/logs/push_2710_2230.log \| cut -c1-100; date +%H:%M` |
 | 22:31:30 | Bash | Wait for FIO proof commit | `W=/home/ronald/wt-fio-2710-1835; h0=$(git -C $W rev-parse HEAD); for i in $(seq 58); do [ "$(git -C $W rev-parse HEAD)" != "$h0" ] && break; /usr/bin/sleep 10; done; git -C $W log --oneline -1 \| cut -c1-110; tail -2 /home/ronald/saas-hasner/logs/push_2710_2230.log \| cut -c1-100; date +%H:%M` |
 | 22:31:18 | SendMessage |  | `-` |
 | 22:31:08 | Bash | Push the night marco | `cd /home/ronald/saas-hasner && bin/push.sh > logs/push_2710_2230.log 2>&1; echo "push_rc=$?" >> logs/push_2710_2230.log; git fetch -q; echo "origin=$(git rev-parse --short origin/main) head=$(git rev-parse --short HEAD)" >> logs/push_2710_2230.log` |
