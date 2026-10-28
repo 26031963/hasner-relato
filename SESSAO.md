@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/10/2026 10:44:38.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (23.0 MB). Acoes na janela: **420**.
+**Medido em 28/10/2026 10:49:49.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (23.0 MB). Acoes na janela: **414**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -424,9 +424,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 22:53:08 | Bash | Record DIFF blocker and final handoff | `cd /home/ronald/saas-hasner && python3 - <<'E' p='/home/ronald/saas-hasner/app/docs/RELATO.md';s=open(p).read() a='- Suite inteira da (A) @ 3735aff9 lancada 22:4x sem modelo:' assert s.count(a)==1 s=s.replace(a,'- DIFF de dinheiro da (A): o \"antes\" rodou na sombra (`logs/cobertura/cob_antes.out`: 669 FM, 9.004 DiaPago, 0 erros; `logs/sombra/cob_antes.json`); o \"depois\" (arvore da copia) deu 9  ...` |
 | 22:53:00 | Bash | Read after-run errors | `cd /home/ronald/saas-hasner && grep -m3 -iE "ERRO\|Error\|Traceback" -A3 logs/cobertura/cob_depois.out \| cut -c1-220 \| head -14` |
 | 22:52:45 | Bash | Run money DIFF sonda (after) on copy tree | `cd /home/ronald/saas-hasner && SOMBRA_ARVORE=/home/ronald/wt-cobertura-2710-1810/app timeout 280 bin/sombra.sh --rodar cob_diff.py cob_depois > logs/cobertura/cob_depois.out 2>&1; echo rc=$?; tail -3 logs/cobertura/cob_depois.out \| cut -c1-200; ls -la logs/cobertura/*.json 2>&1 \| head; ls logs/sombra/*.json \| grep cob \| head` |
-| 22:48:02 | Bash | Run money DIFF sonda (before) on sombra | `cd /home/ronald/saas-hasner && head -15 logs/sombra/cob_diff.py; timeout 280 bin/sombra.sh --rodar cob_diff.py cob_antes > logs/cobertura/cob_antes.out 2>&1; echo rc=$?; tail -4 logs/cobertura/cob_antes.out \| cut -c1-200` |
-| 22:47:45 | Bash | Launch COBERTURA full suite detached; note in RELATO | `cd /home/ronald/saas-hasner && nohup bash -c 'bin/suite.sh --dir /home/ronald/wt-cobertura-2710-1810 --espera 7200 > logs/cobertura/suite_inteira_3735.log 2>&1; echo "rc=$?" >> logs/cobertura/suite_inteira_3735.log' >/dev/null 2>&1 & echo lancado; python3 - <<'E' p='/home/ronald/saas-hasner/app/docs/RELATO.md';s=open(p).read() a='- Madrugada: cron de 1 disparo 05:00' assert s.count(a)==1 s=s.repla ...` |
-| 22:47:36 | Bash | Update COBERTURA state and handoff | `cd /home/ronald/saas-hasner && python3 - <<'E' p='/home/ronald/saas-hasner/app/docs/BACKLOG.md';L=open(p).read().split('\n') k=[i for i,l in enumerate(L) if l.startswith('\| COBERTURA-PARCIAL-UM-JUIZ \|')][0]; c=L[k].split('\|') c[3]=' construindo -- WIP 3735aff9 em wt-cobertura-2710-1810 (diagrama regerado + teste da view editar_periodo_ausencia); falta suite inteira, DIFF de dinheiro (sonda logs ...` |
-| 22:45:38 | Bash | Wait for COBERTURA commit | `W=/home/ronald/wt-cobertura-2710-1810; h0=$(git -C $W rev-parse HEAD); for i in $(seq 55); do [ "$(git -C $W rev-parse HEAD)" != "$h0" ] && break; /usr/bin/sleep 10; done; git -C $W log --oneline -1 \| cut -c1-110; git -C $W status --porcelain \| grep -vc '^??'; date +%H:%M` |
-| 22:45:37 | SendMessage |  | `-` |
-| 22:45:28 | Bash | Smoke item, FIO waiting, marker to A, handoff | `cd /home/ronald/saas-hasner && python3 - <<'E' import json,io d='/home/ronald/saas-hasner/app/docs/' p=d+'PENDENTES_RONALD.json'; it=json.load(io.open(p,encoding='utf-8')) if not any(i.get('id')=='SMOKE-FIO-LE-O-JUIZ-MODAL' for i in it): it.append({"id":"SMOKE-FIO-LE-O-JUIZ-MODAL","tipo":"smoke","quando":"27/10 22:4x","estado":"aberto","desde":"2026-10-27T22:45","trava_fila1":False, "o_que":"**FIO ...` |
