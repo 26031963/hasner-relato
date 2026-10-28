@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/10/2026 13:08:07.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (23.5 MB). Acoes na janela: **331**.
+**Medido em 28/10/2026 13:13:37.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (23.5 MB). Acoes na janela: **327**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -337,7 +337,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 01:21:00 | Bash | Write PV-MUDA pouso docs | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read() a='# RELATO — esteira saas-hasner\n\n' l='''> **JUIZ-PERGUNTA-VIVA-MUDA-SEM-FATO NO AR 28/10 01:2x** (pouso L-107, sem push: o push leva a FIO, que espera o smoke). Causa provada: num request so, `validar_pergunta` gravava `validada_em` fora de transacao; o sinal do beco (`chamados/signals.py::_becos_post_sav ...` |
 | 01:20:39 | Bash | Merge PV-MUDA into main and compare | `cd /home/ronald/saas-hasner && git rev-parse --short HEAD && bin/janela_auth.sh 2>&1 \| tail -1 && git merge --no-ff --no-commit 2db04de4 2>&1 \| tail -2; git rev-parse -q --verify MERGE_HEAD >/dev/null && echo MERGE_HEAD-ok; for f in $(git diff --cached --name-only); do cmp -s "$f" "/home/ronald/wt-pvmuda-2710-2310/$f" \|\| echo "DIFERE $f"; done; git diff --cached --name-only` |
 | 01:16:00 | Bash | Wait more for verifier | `/usr/bin/sleep 270; date +%H:%M` |
-| 01:11:57 | Bash | Wait for verifier | `/usr/bin/sleep 240; date +%H:%M` |
-| 01:11:42 | Bash | Census of closed disputes with live questions | `cat > /home/ronald/saas-hasner/logs/pvmuda/censo_passivo.py <<'EOF' # Censo do passivo da PV-MUDA: disputas FECHADAS desde 26/10 04:02 (nascimento do sinal do beco, c45f9990) # com pergunta VIVA dentro, pelo juiz real. SO LEITURA, prod. import datetime, collections from django.utils import timezone from chamados.models import DisputaSupervisao, PerguntaDisputa from chamados.juizes import pergunta_ ...` |
-| 01:11:32 | Agent | Verificar PV-MUDA 2db04de4 | `Obra JUIZ-PERGUNTA-VIVA-MUDA-SEM-FATO (#6984/#44764, col94), 1a leitura. Copia /home/ronald/wt-pvmuda-2710-2310: merge do main 7c9e4c27 (1b5df847), RED 32a4b918, cura 2db04de4. Diff da obra: `git -C /home/ronald/wt-pvmuda-2710-2310 diff 1b5df847..2db04de4`. Leia o corpo de 2db04de4 (cadeia do caso e a cura). Cura: `chamados/services/validacao.py::validar_pergunta` -- carimbo + recalcular_por_event ...` |
-| 01:09:20 | Bash | Read PV-MUDA commit message | `/usr/bin/sleep 120; git -C /home/ronald/wt-pvmuda-2710-2310 log -1 --format='%h %s%n%b' \| head -40 \| cut -c1-250` |
