@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/10/2026 02:03:07.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (17.5 MB). Acoes na janela: **448**.
+**Medido em 28/10/2026 02:08:37.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (17.5 MB). Acoes na janela: **445**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -455,6 +455,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 14:14:30 | Bash | Commit merge with marco docs | `cd /home/ronald/saas-hasner && git add app/docs/BACKLOG.md app/docs/CORTES.json app/docs/CORTES.md app/docs/LEIS.md app/docs/PROMPTS.md app/docs/RELATO.md app/docs/HANDOFF-SESSAO.md app/docs/GLOSSARIO.md app/docs/PLANO-PADROES.md && git commit -q -F - <<'E'; echo "commit_rc=$?"; git log --oneline -1 IA-PERGUNTAR-SEM-RBAC pousa (produto, ato 1 de 2): a porta da IA pela uniao do MAPA ferramenta->aca ...` |
 | 14:14:19 | Bash | Merge pouso branch no-ff no-commit and cmp | `cd /home/ronald/saas-hasner && git merge --no-ff --no-commit iarbac-pouso-2710 2>&1 \| tail -2; echo "MERGE_HEAD=$(git rev-parse -q --verify MERGE_HEAD \| cut -c1-8)"; W=/home/ronald/wt-iarbac-pouso-2710-1400; n=0; for f in $(git -C $W diff --name-only main..HEAD); do cmp -s $W/$f $f \|\| { echo "DIFERE $f"; n=$((n+1)); }; done; echo "cmp_diferem=$n de $(git -C $W diff --name-only main..HEAD \| wc ...` |
 | 14:14:11 | Bash | Register IA-DOMINIO aval; show dirty tree | `cd /home/ronald/saas-hasner && python3 - <<'E' import json d='app/docs/' p=d+'BACKLOG.md';s=open(p).read() a='\| registrada -- depois do pouso da parte (1) \| aval 27/10 11:1x (c) \|' assert s.count(a)==1 s=s.replace(a,'\| registrada -- FILA 2, DEPOIS do 20/20 (aval 27/10 14:1x); o IA-RBAC encerra no escopo da parte (1) \| aval 27/10 11:1x (c) + 14:1x \|',1); open(p,'w').write(s) p=d+'PROMPTS.md'; ...` |
-| 14:08:16 | Bash | Wait for IA-RBAC pouso suite verdict | `cd /home/ronald/saas-hasner/logs/ia_rbac; for i in $(seq 58); do grep -q '^rc=' pouso_suite.log 2>/dev/null && break; /usr/bin/sleep 10; done; grep -E '^(OK\|FAILED)($\| \()' pouso_suite.log \| tail -1; grep '^Ran ' pouso_suite.log \| tail -1; tail -1 pouso_suite.log \| cut -c1-60; grep -E '^(FAIL\|ERROR):' pouso_suite.log \| head; date +%H:%M` |
-| 14:08:10 | SendMessage |  | `-` |
-| 14:07:52 | Bash | Read vinculo_cobre_a_data signature | `git grep -n "^def vinculo_cobre_a_data" -- '*.py'; sed -n "$(git grep -n '^def vinculo_cobre_a_data' -- escala/alimentacao.py \| cut -d: -f2),+12p" escala/alimentacao.py` |
