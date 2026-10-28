@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/10/2026 20:36:07.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (3.1 MB). Acoes na janela: **131**.
+**Medido em 28/10/2026 20:41:10.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (3.1 MB). Acoes na janela: **134**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 20:36:20 | Bash | Wait for money ensaio | `cd /home/ronald/saas-hasner && for i in $(seq 1 19); do grep -q '^rc=' logs/juizpar/ensaio_2.out 2>/dev/null && break; /usr/bin/sleep 30; done; grep -E '^(COLABS\|MOTOR\| MOTOR\|celulas\|ERROS\|rc=\|Traceback)\|Error' logs/juizpar/ensaio_2.out \| tail -30 \| cut -c1-400 \|\| echo AINDA` |
+| 20:36:14 | Bash | Run ensaio with money DIFF | `cd /home/ronald/saas-hasner && SOMBRA_ARVORE=/home/ronald/wt-juizpar-2810-1850/app bin/sombra.sh --rodar juizpar_ensaio_relavra.py juizpar_ensaio > logs/juizpar/ensaio_2.out 2>&1; echo rc=$? >> logs/juizpar/ensaio_2.out` |
+| 20:36:08 | Bash | Extend ensaio with motor money DIFF | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='logs/sombra/juizpar_ensaio_relavra.py'; s=open(p).read() o="print('ERROS=0')\nprint('FIM-DA-SONDA')\n" n='''# == DINHEIRO: o motor LE a ata gravada (juiz_batida.periodos_do_dia) -- A x B so nos colabs com ata movida from ponto.services.fechamento import recalcular_fechamento_mes # noqa: E402 mudos = sorted({k[0] for k, va in celA.items() if k[1]  ...` |
 | 20:35:52 | Bash | Read recalcular_fechamento_mes return contract | `sed -n 436,470p ponto/services/fechamento.py` |
 | 20:35:47 | Bash | Find motor calculation entrypoints | `/bin/grep -n "^def recalcular_fechamento_mes\\|^def espelho_do_colab\\|^def autoridade_do_periodo" -A6 ponto/services/fechamento.py ponto/services/espelho.py 2>/dev/null \| head -30` |
 | 20:35:36 | Bash | Record O-OUTBOX state in docs | `cd /home/ronald/saas-hasner && grep -E '^Ran \|^(OK\|FAILED)( \|$)\|^rc=' logs/juizpar/suite_2.out \| tail -3; cd app && date +%H:%M && python3 - <<'EOF' p='docs/RELATO.md'; s=open(p).read() anc="> **JUIZ-DO-PAR-DUAS-ENTRADAS (P7.1) -- construida 28/10 20:2x" assert s.count(anc)==1 sec='''> **O-OUTBOX (+ O-OUTBOX-CENSO-DO-CHAT) -- construida em agente proprio na copia wt-outbox-2810-1915 (db58d8cd ...` |
