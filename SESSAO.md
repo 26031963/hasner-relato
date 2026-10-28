@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/10/2026 09:35:52.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (22.1 MB). Acoes na janela: **406**.
+**Medido em 28/10/2026 09:40:51.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (22.1 MB). Acoes na janela: **409**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 09:37:29 | Bash | Wait for verifier | `/usr/bin/sleep 285; date +%H:%M` |
+| 09:37:25 | Agent | Verificar SILENCIO-VENCIDO-VOLTA | `Obra SILENCIO-VENCIDO-VOLTA (inclui o sitio 1 da PENDENCIA-SEM-JUIZ-3), 1a leitura. Copia /home/ronald/wt-silencio-2810-0915, commit 5d9fa87e sobre main 3cbd78a8: `git -C /home/ronald/wt-silencio-2810-0915 show 5d9fa87e` (corpo + diff). Aval literal (28/10 07:4x, em /home/ronald/saas-hasner/app/docs/CORTES.md, grep SILENCIO-VENCIDO): "vencido o silencio o chamado VOLTA para a fila -- silenciar exi ...` |
+| 09:36:12 | Bash | Read SILENCIO commit | `/usr/bin/sleep 60; git -C /home/ronald/wt-silencio-2810-0915 log -1 --format=%b \| head -30 \| cut -c1-230; git -C /home/ronald/wt-silencio-2810-0915 show --stat HEAD \| tail -8` |
 | 09:33:58 | Bash | Keep waiting SILENCIO suite | `L=/home/ronald/saas-hasner/logs/silencio/suite_1.out; for i in $(seq 58); do grep -aq '^rc=' $L 2>/dev/null && break; /usr/bin/sleep 10; done; tr -d '\0' < $L \| grep -aE '^(OK\|FAILED)($\| \()\|^Ran \|^rc=\|^(FAIL\|ERROR):' \| tail -4; date +%H:%M` |
 | 09:24:13 | Bash | Wait SILENCIO suite | `L=/home/ronald/saas-hasner/logs/silencio/suite_1.out; for i in $(seq 58); do grep -aq '^rc=' $L 2>/dev/null && break; /usr/bin/sleep 10; done; head -1 $L 2>/dev/null; tr -d '\0' < $L 2>/dev/null \| grep -aE '^(OK\|FAILED)($\| \()\|^Ran \|^rc=\|^(FAIL\|ERROR):' \| tail -4; date +%H:%M` |
 | 09:20:38 | Bash | Keep waiting SILENCIO | `for i in $(seq 58); do [ -f /home/ronald/saas-hasner/logs/silencio/suite_1.out ] && break; /usr/bin/sleep 10; done; git -C /home/ronald/wt-silencio-2810-0915 log --oneline -2; date +%H:%M` |
