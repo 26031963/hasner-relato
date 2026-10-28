@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/10/2026 18:29:41.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (24.0 MB). Acoes na janela: **192**.
+**Medido em 28/10/2026 18:35:13.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (24.0 MB). Acoes na janela: **191**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -201,4 +201,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 06:38:35 | Bash | Add comp 9 numbers to the ! question | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read() a='-- cara de dono CADASTRO (L-099). 79 dias-colab saem' assert s.count(a)==1 s=s.replace(a,'-- cara de dono CADASTRO (L-099). **COMP 9 (EXPORTADA) MEDIDA 06:3x** (`logs/justificativa/diff_frota_c9.out`, sonda `logs/sombra/justif_diff_c9.py`, erros 0/0; os rotulos "comp10" do comparador sao da janela 21/08-20 ...` |
 | 06:38:24 | Bash | Compare comp 9 results | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/bea8f2b7-21d4-4d42-afd2-993c9f814f8f/scratchpad; sed -e 's#justif_antes.json#justif_c9_antes.json#; s#justif_depois.json#justif_c9_depois.json#' $S/comparar.py > $S/comparar_c9.py; cd /home/ronald/saas-hasner && python3 $S/comparar_c9.py > logs/justificativa/diff_frota_c9.out 2>&1; echo rc=$?; grep -vE '^\s+pk=' logs/justificativa/diff_frota_c9.out \ ...` |
 | 06:38:19 | Bash | Inspect comparador inputs | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/bea8f2b7-21d4-4d42-afd2-993c9f814f8f/scratchpad; head -30 $S/comparar.py \| grep -nE 'argv\|open\(\|json' \| head` |
-| 06:33:33 | Bash | Wait for comp 9 depois run | `cd /home/ronald/saas-hasner && for i in $(seq 58); do [ -f logs/justificativa/run_c9.done ] && break; /usr/bin/sleep 10; done; grep -aE 'ERROS\|FIM-DA-SONDA\|ARVORE' logs/justificativa/run_c9_depois.log \| head -4; ls logs/sombra/justif_c9_* 2>/dev/null; date +%H:%M` |
