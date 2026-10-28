@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/10/2026 09:45:52.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (22.3 MB). Acoes na janela: **412**.
+**Medido em 28/10/2026 09:51:09.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (22.3 MB). Acoes na janela: **413**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 09:48:38 | Bash | Wait SILENCIO suite 2 | `L=/home/ronald/saas-hasner/logs/silencio/suite_2.out; for i in $(seq 58); do grep -aq '^rc=' $L 2>/dev/null && break; /usr/bin/sleep 10; done; head -1 $L; tr -d '\0' < $L \| grep -aE '^(OK\|FAILED)($\| \()\|^Ran \|^rc=\|^(FAIL\|ERROR):' \| tail -4; date +%H:%M` |
 | 09:42:52 | Bash | Wait SILENCIO rework | `for i in $(seq 58); do [ -f /home/ronald/saas-hasner/logs/silencio/suite_2.out ] && break; /usr/bin/sleep 10; done; git -C /home/ronald/wt-silencio-2810-0915 log --oneline -2; date +%H:%M` |
 | 09:42:47 | Bash | Write ISENTO lei question; update state | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read() a='# RELATO — esteira saas-hasner\n\n' l='''> **lei: ISENTO-VENCIDO-VOLTA** (pergunta, nao para a fila; segura SO a trava de re-silencio dos isentos dentro da SILENCIO-VENCIDO-VOLTA) -- dos 12 chamados com silencio VENCIDO que voltam a fila pelo aval (a) de 07:4x, **8 sao de colaborador `isento_ponto=True`**: ...` |
 | 09:42:40 | SendMessage |  | `-` |
