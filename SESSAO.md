@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/10/2026 06:20:37.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (19.8 MB). Acoes na janela: **366**.
+**Medido em 28/10/2026 06:26:07.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (19.8 MB). Acoes na janela: **368**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 06:23:48 | Bash | Wait comp 9 measurement | `cd /home/ronald/saas-hasner && for i in $(seq 58); do [ -f logs/justificativa/run_c9.done ] && break; /usr/bin/sleep 10; done; for f in run_c9_antes run_c9_depois; do echo "== $f"; grep -aE 'ERROS\|FIM-DA-SONDA\|ARVORE' logs/justificativa/$f.log \| head -4; done; date +%H:%M` |
+| 06:23:47 | SendMessage |  | `-` |
 | 06:18:51 | Bash | Wait for verifier / comp9 | `/usr/bin/sleep 280; date +%H:%M; ls /home/ronald/saas-hasner/logs/justificativa/` |
 | 06:18:46 | Bash | Launch comp 9 measurement both trees | `cd /home/ronald/saas-hasner/logs/sombra && python3 - <<'EOF' s=open('justif_diff.py').read() for a,b in (("COMPS = ((10, 2026), (11, 2026))","COMPS = ((9, 2026),)"), ("janela_fechamento(10, 2026, emp)","janela_fechamento(9, 2026, emp)"), ("_coletar_dados_espelho_mes(c, 10, 2026)","_coletar_dados_espelho_mes(c, 9, 2026)"), ("'/sombra/justif_%s.json' % ROT","'/sombra/justif_c9_%s.json' % ROT")): ass ...` |
 | 06:18:38 | Bash | Find comp-10 hardcodes in sonda | `cd /home/ronald/saas-hasner && grep -n "10, 2026\\|(10\\|comp 10\\|mes == 10\\|MES_MOTOR\\|janela_fechamento(" logs/sombra/justif_diff.py \| head` |
