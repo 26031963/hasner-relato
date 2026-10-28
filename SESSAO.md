@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/10/2026 10:17:50.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (22.5 MB). Acoes na janela: **423**.
+**Medido em 28/10/2026 10:22:52.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (22.5 MB). Acoes na janela: **420**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -430,6 +430,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 22:29:39 | Bash | Commit D pouso merge with docs | `cd /home/ronald/saas-hasner && bin/handoff_sessao.sh >/dev/null 2>&1; git add app/docs/RELATO.md app/docs/BACKLOG.md app/docs/CORTES.json app/docs/CORTES.md app/docs/LEIS.md app/docs/PROMPTS.md app/docs/HANDOFF-SESSAO.md app/docs/PENDENTES_RONALD.json app/docs/AVAIS.md app/docs/PLANO-PADROES.md 2>/dev/null; git commit -q -F - <<'E'; echo commit_rc=$?; git log --oneline -1 REGISTRADO-NAO-E-VIVO pou ...` |
 | 22:29:24 | Bash | Write pouso section and register aval | `cd /home/ronald/saas-hasner && python3 - <<'E' import json d='app/docs/' p=d+'RELATO.md';s=open(p).read();L=s.split('\n') for i,l in enumerate(L[:40]): if l.startswith('> **lei: REGISTRADO-CARD-3524**'): L[i]='> **RESPONDIDA 27/10 22:2x: REGISTRADO-CARD-3524** -- aceito 4165 -> 3524 (saem 641: 478 registrados + 163 silenciados); o numero e o que o juiz `qs_na_fila` produz (C8); a (D) pousa pela re ...` |
 | 22:29:06 | Bash | Merge (D) into main and cmp | `cd /home/ronald/saas-hasner && git log --oneline -1 \| cut -c1-40 && git merge --no-ff --no-commit registrado-2710 2>&1 \| tail -1; echo "MERGE_HEAD=$(git rev-parse -q --verify MERGE_HEAD \| cut -c1-8)"; W=/home/ronald/wt-registrado-2710-2035; n=0; for f in $(git -C $W diff --name-only 0baf575f HEAD); do cmp -s $W/$f $f \|\| { echo "DIFERE $f"; n=$((n+1)); }; done; echo "cmp_diferem=$n de $(git -C ...` |
-| 22:19:16 | Bash | Wait for FIO suite verdict | `cd /home/ronald/saas-hasner/logs; for i in $(seq 58); do grep -q '^rc=' fio_suite_1fcc.log 2>/dev/null && break; /usr/bin/sleep 10; done; grep -E '^(OK\|FAILED)($\| \()' fio_suite_1fcc.log \| tail -1; grep '^Ran ' fio_suite_1fcc.log \| tail -1; tail -1 fio_suite_1fcc.log \| cut -c1-20; grep -E '^(FAIL\|ERROR):' fio_suite_1fcc.log \| head -4; date +%H:%M` |
-| 22:19:07 | Agent | Verify FIO 3a leitura | `FIO-LE-O-JUIZ (BO-[nome] (C)), 3a leitura antes do pouso (o pouso so sai depois do smoke do Ronald no modal: FRONT SEM SMOKE). Copia /home/ronald/wt-fio-2710-1835 (branch fio-le-o-juiz-2710) sobre main 0baf575f; HEAD 1fcc61e0. Diff total: `git -C /home/ronald/wt-fio-2710-1835 diff 0baf575f..HEAD`; delta desde a sua 2a leitura: `git -C /home/ronald/wt-fio-2710-1835 diff 52ba48d8..HEAD`. Suite int ...` |
-| 22:18:59 | Bash | Full suite on FIO 1fcc61e0 | `cd /home/ronald/saas-hasner && L=logs/fio_suite_1fcc.log; bin/suite.sh --dir /home/ronald/wt-fio-2710-1835 --espera 3600 > $L 2>&1; echo "rc=$?" >> $L` |
