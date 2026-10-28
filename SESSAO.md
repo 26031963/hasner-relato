@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/10/2026 08:03:09.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (21.1 MB). Acoes na janela: **394**.
+**Medido em 28/10/2026 08:08:38.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (21.1 MB). Acoes na janela: **393**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -403,4 +403,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 20:09:04 | Bash | Wait for FIO commit | `W=/home/ronald/wt-fio-2710-1835; h0=$(git -C $W rev-parse HEAD); for i in $(seq 58); do [ "$(git -C $W rev-parse HEAD)" != "$h0" ] && break; /usr/bin/sleep 10; done; git -C $W log --oneline -1 \| cut -c1-110; date +%H:%M` |
 | 20:08:59 | Bash | Convert FIO PAREI to non-blocking lei question | `cd /home/ronald/saas-hasner && python3 - <<'E' p='app/docs/RELATO.md';s=open(p).read() a='PAREI: ! FIO-LE-O-JUIZ-OS-19 (so o pouso da FIO-LE-O-JUIZ) \| espera Ronald -- ' assert s.count(a)==1 s=s.replace(a,'> **lei: FIO-LE-O-JUIZ-OS-19** (pergunta, nao para a fila: segura SO o pouso da FIO-LE-O-JUIZ; o construtor segue nos itens que nao dependem dela, PAZ-DO-ADMIN um por vez) -- ',1) open(p,'w').w ...` |
 | 20:08:44 | SendMessage |  | `-` |
-| 20:08:36 | Bash | Add PAREI for FIO 19/33 at RELATO top | `cd /home/ronald/saas-hasner && python3 - <<'E' p='app/docs/RELATO.md';s=open(p).read() a='> **lei: FIO-LE-O-JUIZ-OS-19-E-O-VOLUME** (pergunta, nao para a fila;' assert s.count(a)==1 s=s.replace(a,'PAREI: ! FIO-LE-O-JUIZ-OS-19 (so o pouso da FIO-LE-O-JUIZ) \| espera Ronald -- o seu aval EFEITOS (19:3x) manda os 33 dias agrupados sob ADESAO/LIMBO como dono CADASTRO na lista do admin; a cura cobre ** ...` |
