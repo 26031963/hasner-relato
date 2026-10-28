@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/10/2026 19:16:08.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (1.4 MB). Acoes na janela: **45**.
+**Medido em 28/10/2026 19:21:38.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (1.5 MB). Acoes na janela: **47**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 19:16:41 | Bash | Rerun tests and neighbors | `cd /home/ronald/saas-hasner && timeout 1500 bash bin/suite.sh --dir /home/ronald/wt-juizpar-2810-1850 --only "ponto.tests.test_pareador_cluster_marco ponto.tests.test_bateria_lavratura escala.tests.test_s155_par_quebrado ponto.tests.test_o118_orfa_que_acendeu escala.tests.test_saida_valida_vira_orfa escala.tests.test_saida_valida_cross_meia_noite escala.tests.test_juiz_do_par_ata_casa_pelo_turno"  ...` |
+| 19:16:35 | Bash | Make entrada seating read the motor's volta judge | `cd /home/ronald/wt-juizpar-2810-1850/app && python3 - <<'EOF' p='escala/utils.py'; s=open(p).read() def rep(o,n): global s assert s.count(o)==1,o[:80]; s=s.replace(o,n) rep(""" # O PAPEL DE CADA MARCO: pontas pelas bordas do turno, pausas pelos pares, NA ORDEM. _ass = {0: _ent, len(_seq) - 1: _sai} _prox = 0 """,""" # O PAPEL DE CADA MARCO: pontas pelas bordas do turno, pausas pelos pares, NA ORDE ...` |
 | 19:15:14 | Bash | Read the regua_defesa reader | `cd /home/ronald/wt-juizpar-2810-1850/app && sed -n 455,520p escala/regua_defesa.py; git grep -n "entrada_no_marco_de_volta\\|def .*regua_defesa" -- '*.py' \| head -5` |
 | 19:15:10 | Bash | Census callers of marco_ocupado_pela_batida | `cd /home/ronald/wt-juizpar-2810-1850/app && git grep -n "marco_ocupado_pela_batida" -- '*.py' \| /bin/grep -v "/tests/"` |
 | 19:15:05 | Bash | Fix import and docstring in convergence test | `cd /home/ronald/wt-juizpar-2810-1850/app && python3 - <<'EOF' p='escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py'; s=open(p).read() for o,n in [("from ponto.management.commands.gerar_celulas import gerar_celulas_periodo","from ponto.portas.celula import gerar_celulas_periodo"), (""" mudasse a resposta dele, a lavra seguinte sentaria outra coisa. MORDE: com a ata da DP (11:30 no S12, 14:00 no  ...` |
