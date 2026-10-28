@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/10/2026 11:53:07.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (23.3 MB). Acoes na janela: **383**.
+**Medido em 28/10/2026 11:58:38.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (23.3 MB). Acoes na janela: **386**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 11:57:48 | Bash | Keep waiting | `/usr/bin/sleep 280; date +%H:%M; git -C /home/ronald/wt-fechar3inst-2810-0325 log --oneline -2` |
+| 11:53:14 | Bash | Wait for verifier/constructor | `/usr/bin/sleep 270; date +%H:%M` |
+| 11:53:13 | SendMessage |  | `-` |
 | 11:53:00 | Agent | Verificar QUARENTENA + SILENCIO 5ad8a057 | `Obras QUARENTENA-DO-COLAB + SILENCIO-VENCIDO-VOLTA (pousam juntas), leitura. Copia /home/ronald/wt-silencio-2810-0915: SILENCIO 5d9fa87e, be70b8cb, 98c8a3d5 (Parte 1 da sua 2a leitura: templates `_lista_chamados.html`/`_meus_arquivados.html`, `materializacao.py::_ressuscitar_por_resposta`, 7a trava em signals, relogio unico); QUARENTENA c7008ae5, e8f2b0b3, 5ad8a057. Diff geral: `git -C /home/ronal ...` |
 | 11:52:46 | Bash | Write quarentena lei questions | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read() a='# RELATO — esteira saas-hasner\n\n' l='''> **lei: QUARENTENA-ISENTO-DESDE-QUANDO** (pergunta, nao para a fila; segura SO a causa `isento_ponto` da QUARENTENA-DO-COLAB -- o modo manual por periodo esta pronto) -- o aval POR-PERIODO (5) diz "isento_ponto = quarentena aberta desde a data da flag". Medido em p ...` |
 | 11:50:01 | Bash | Wait constructor report | `/usr/bin/sleep 150; ls -t /home/ronald/saas-hasner/logs/quarentena/ \| head -8; date +%H:%M` |
