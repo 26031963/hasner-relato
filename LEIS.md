@@ -354,6 +354,11 @@ Estavam no indice como vigentes e alguma clausula nao tem efeito. Gerada do ESTA
 - `QUARENTENA-DO-COLAB-POR-PERIODO`
 - `QUARENTENA-E-A-O44`
 - `PUSH-AGORA-SEM-O-CLIQUE`
+- `O-OUTBOX-CONTRATO-DE-ENTRADA`
+- `QUARENTENA-ISENTO-DESDE-QUANDO`
+- `JUSTIFICATIVA-B-NAO-FECHA`
+- `LAUDOS-[nome]-2810`
+- `RITMO-DA-SEMANA-2810`
 
 ## CORTES que viraram lei
 
