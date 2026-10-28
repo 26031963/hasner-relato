@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/10/2026 07:30:56.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (20.4 MB). Acoes na janela: **373**.
+**Medido em 28/10/2026 07:36:09.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (20.4 MB). Acoes na janela: **375**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 07:33:10 | Bash | Wait pend3 suite; read impact | `L=/home/ronald/saas-hasner/logs/pend3/suite_1.out; for i in $(seq 58); do grep -aq '^rc=' $L 2>/dev/null && break; /usr/bin/sleep 10; done; head -1 $L 2>/dev/null; tr -d '\0' < $L 2>/dev/null \| grep -aE '^(OK\|FAILED)($\| \()\|^Ran \|^rc=\|^(FAIL\|ERROR):' \| tail -4; date +%H:%M; tail -20 /home/ronald/saas-hasner/logs/pend3/sonda_impacto_1.out \| cut -c1-200` |
+| 07:30:55 | Bash | Keep waiting pend3 | `for i in $(seq 58); do [ -f /home/ronald/saas-hasner/logs/pend3/suite_1.out ] && break; /usr/bin/sleep 10; done; git -C /home/ronald/wt-pend3-2810-0725 log --oneline -3; date +%H:%M` |
 | 07:21:11 | Bash | Wait pend3 constructor | `for i in $(seq 58); do [ -f /home/ronald/saas-hasner/logs/pend3/suite_1.out ] && break; /usr/bin/sleep 10; done; git -C /home/ronald/wt-pend3-2810-0725 log --oneline -2; ls /home/ronald/saas-hasner/logs/pend3/ 2>/dev/null; date +%H:%M` |
 | 07:21:05 | Bash | Write expired-silence lei question | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read() a='# RELATO — esteira saas-hasner\n\n' l='''> **lei: SILENCIO-VENCIDO-VOLTA-OU-NAO** (pergunta, nao para a fila; achado do censo do REGISTRADO-INSTRUMENTO) -- dois juizes respondem o contrario sobre o mesmo chamado: `chamados/services/painel.py::qs_na_fila` (:169-170, o juiz da FILA) diz que `silenciado_ate`  ...` |
 | 07:20:55 | Bash | Rerun sonda with correct call | `cd /home/ronald/saas-hasner && sed -i 's/fila = qs_na_fila(ChamadoColaborador.objects.all())/fila = qs_na_fila()/' logs/regtrip/sonda_silencio.py && bin/sonda_leitura.sh logs/regtrip/sonda_silencio.py > logs/regtrip/sonda_silencio.out 2>&1; echo rc=$?; tail -5 logs/regtrip/sonda_silencio.out` |
