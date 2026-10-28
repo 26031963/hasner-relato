@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/10/2026 06:42:38.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (19.9 MB). Acoes na janela: **365**.
+**Medido em 28/10/2026 06:48:07.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (20.0 MB). Acoes na janela: **367**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 06:45:51 | Bash | Wait for verifier | `/usr/bin/sleep 285; date +%H:%M` |
+| 06:45:47 | Agent | Verificar CONTRATO-20 E2 57d265b9 (2a) | `Obra CONTRATO-20-DOIS-EVENTOS parte E2, 2a leitura. Copia /home/ronald/wt-c20e2-2810-0600; voce reprovou 1498dad8; cura 57d265b9: `git -C /home/ronald/wt-c20e2-2810-0600 show 57d265b9` (corpo + diff). Seus itens: (5) vai-e-volta -- medido em /home/ronald/saas-hasner/logs/c20e2/m2_vai_e_volta.out: 149 fechamentos em 31 chamados (30 d), reabridor = o proprio cron via encerrar -> _cartorio_post_save_ ...` |
+| 06:44:05 | Bash | Read E2 cure 2 commit body | `/usr/bin/sleep 90; git -C /home/ronald/wt-c20e2-2810-0600 log -1 --format=%b 57d265b9 \| head -40 \| cut -c1-230` |
 | 06:38:51 | Bash | Check existing flap items; wait suite 2 | `cd /home/ronald/saas-hasner && grep -n '^\| BUG-LASTRO-VAI-E-VOLTA\\|^\| ADMIN-RESOLVE-FLAP' app/docs/BACKLOG.md \| cut -c1-500; L=logs/c20e2/suite_2.out; for i in $(seq 58); do grep -aq '^rc=' $L 2>/dev/null && break; /usr/bin/sleep 10; done; tr -d '\0' < $L \| grep -aE '^(OK\|FAILED)($\| \()\|^Ran \|^rc=\|^(FAIL\|ERROR):' \| tail -4; date +%H:%M` |
 | 06:38:43 | Bash | Read vai-e-volta measure | `cd /home/ronald/saas-hasner/logs/c20e2 && tail -30 m2_vai_e_volta.out \| cut -c1-220; git -C /home/ronald/wt-c20e2-2810-0600 log --oneline -2` |
 | 06:38:40 | Bash | Wait for E2 rework measures | `for i in $(seq 58); do [ -f /home/ronald/saas-hasner/logs/c20e2/suite_2.out ] && break; ls -t /home/ronald/saas-hasner/logs/c20e2/ \| head -1 \| grep -q vai && break; /usr/bin/sleep 10; done; ls -t /home/ronald/saas-hasner/logs/c20e2/ \| head -5; date +%H:%M` |
@@ -374,4 +377,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 18:55:04 | Bash | Wait for FIO progress | `for i in $(seq 57); do a=$(git -C /home/ronald/wt-fio-2710-1835 rev-parse --short HEAD); [ "$a" != "b8f5560d" ] && break; /usr/bin/sleep 10; done; git -C /home/ronald/wt-fio-2710-1835 log --oneline -1 \| cut -c1-110; git -C /home/ronald/wt-cobertura-2710-1810 log --oneline -1 \| cut -c1-90; date +%H:%M` |
 | 18:54:50 | SendMessage |  | `-` |
 | 18:54:41 | Bash | Register both avals, corte, BACKLOG states | `cd /home/ronald/saas-hasner && python3 - <<'E' import json d='app/docs/' p=d+'RELATO.md';L=open(p).read().split('\n') n=0 for i,l in enumerate(L[:20]): if l.startswith('PAREI: ! JUIZ-DO-PAR-DUAS-ENTRADAS'): L[i]='> **RESPONDIDA 27/10 18:5x: JUIZ-DO-PAR-DUAS-ENTRADAS-DECISOES** -- (1) col457 07/09 = mudanca de dono BATIDA; o juiz unico 383adb81 FICA; a 09 exportada nao se regera (L-092), o dia vai  ...` |
-| 18:44:36 | Bash | Wait for next FIO commit | `W=/home/ronald/wt-fio-2710-1835; h0=$(git -C $W rev-parse HEAD); for i in $(seq 57); do [ "$(git -C $W rev-parse HEAD)" != "$h0" ] && break; /usr/bin/sleep 10; done; git -C $W log --oneline -2 \| cut -c1-110; date +%H:%M` |
