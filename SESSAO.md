@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/10/2026 19:38:09.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (1.6 MB). Acoes na janela: **55**.
+**Medido em 28/10/2026 19:43:38.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (1.7 MB). Acoes na janela: **58**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 19:39:45 | Bash | Wait for neighbor run to finish | `cd /home/ronald/saas-hasner && until grep -qE '^Ran [0-9]+ tests' logs/juizpar/vizinhos_3.out 2>/dev/null \|\| grep -q 'rc 75\\|Traceback' logs/juizpar/vizinhos_3.out; do /usr/bin/sleep 20; done; grep -E '^(FAIL\|ERROR):\|^Ran \|^(OK\|FAILED)' logs/juizpar/vizinhos_3.out \| tail; bin/trava_teste.sh --quem` |
+| 19:39:39 | Bash | Register both avais in PROMPTS and RELATO | `python3 - <<'EOF' p='docs/PROMPTS.md'; s=open(p).read() anc="construtor lancado em copia propria. \|" assert s.count(anc)==1 s=s.replace(anc,anc+""" \| 28/10 19:3x \| **aval: COL129-2510-TETO-DO-DIA = (b)** (turno que fura o teto do dia nao vira zero: vai a CADASTRO x REALIDADE com o horario real, horas contam, excedente pela L-097; nenhum N inventado; ! para UMA mudanca na lista do motor_calculo_ ...` |
+| 19:39:26 | Bash | Read first slice result | `cd /home/ronald/saas-hasner && grep -E '^(FAIL\|ERROR):\|^Ran \|^(OK\|FAILED)\|^rc=' logs/juizpar/recorte_1.out \| tail -20` |
 | 19:29:15 | Bash | Add regression cases and rerun neighbors | `cd /home/ronald/wt-juizpar-2810-1850/app && cat >> escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py <<'EOF' class CasoD_SaidaDoIntervaloSemVolta(_Base): """col32 22/10 (achado do DIFF de frota): a S 12:26 nao tem volta, o juiz nao lhe da par -- e mesmo assim e a saida para o intervalo. Sem papel do juiz, ela senta pelo TIPO GRAVADO, como a DP ja fazia; a 1a versao desta cura a jogava as orfas  ...` |
 | 19:28:59 | Bash | Rewrite seating as typed monotone DP over juiz roles | `cd /home/ronald/wt-juizpar-2810-1850/app && python3 - <<'EOF' p='escala/utils.py'; s=open(p).read() i=s.index("def _sentar_pelo_papel(") j=s.index("def montar_grade_prevista_periodo_por_turno(") new='''def _sentar_pelo_papel(turnos, dias_out, idx_por_data, seq_dna_por_data, slot_por_data, corte_cadastro_min): """A ATA SENTA CADA BATIDA NO MARCO DO PAPEL QUE O JUIZ DO PAR LHE DEU (JUIZ-DO-PAR-DUAS- ...` |
 | 19:28:23 | Bash | Find overlay that sets cells None | `cd /home/ronald/wt-juizpar-2810-1850/app && sed -n '/^def _marcar_ausencias/,/^def /p' escala/utils.py \| /bin/grep -n "None\] \*\\|\] = None\\|cobertura_parcial\\|celulas'\] =" \| head` |
