@@ -4,6 +4,7 @@
 >
 > **livre** = pode virar fatia agora, sem humano. **corte/aval/smoke/dinheiro-ate-export** = tem dono humano e espera.
 
+<!-- ESTRUTURAL-DEDICADO-28-18H (aval 28/10 08:2x): a partir de 28/10 18:00 a ORDEM da fila 1 e (1) O-OUTBOX no reconciliar_chamados (2.1); (2) CONTRATO-20-E2-REBAIXA (medida 29/10 07:05); (3) fechar_cobranca_com_lastro e reconciliar_perguntas_orfas pela REGRA-DE-PRAZO ou evento; (4) disparar_perguntas_competencia pela C11; (5) PENDENCIA-SEM-JUIZ-3 e SILENCIO-VENCIDO-VOLTA terminam; (6) JUSTIFICATIVA-PAGA-O-PERIODO (b). Raia ao lado so sem arquivo em comum: fila 2 de UI (RECUSA-DO-ADMIN-DIZ-O-QUE-FAZER primeiro). PAZ-DO-ADMIN encerra; volta RAIA-NAO-FICA-PARADA. -->
 <!-- ORDEM-VIVA-TOPO: PENDENCIA-SEM-JUIZ-3 -->
 <!-- ANDOU 28/10 07:2x, de `REGISTRADO-INSTRUMENTO` (POUSADO a8730557) para `PENDENCIA-SEM-JUIZ-3` (os 3 leitores que o censo achou). -->
 <!-- ANDOU 28/10 06:5x, de `CONTRATO-20-DOIS-EVENTOS` (E2 NO AR 38f9fd00; VIGIA so depois de remedir a_fechar) para `REGISTRADO-INSTRUMENTO` (instrumento da (D), pouso proprio). -->

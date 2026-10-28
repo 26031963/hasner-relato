@@ -343,6 +343,7 @@ Estavam no indice como vigentes e alguma clausula nao tem efeito. Gerada do ESTA
 - `SMOKE-FIO-3227-P50169`
 - `RECUSA-DO-ADMIN-DIZ-O-QUE-FAZER`
 - `CONTRATO-20-E2-REBAIXA`
+- `ESTRUTURAL-DEDICADO-28-18H`
 
 ## CORTES que viraram lei
 
