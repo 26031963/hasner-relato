@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/10/2026 20:20:51.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (2.6 MB). Acoes na janela: **119**.
+**Medido em 28/10/2026 20:25:52.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (2.8 MB). Acoes na janela: **124**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 20:25:21 | Bash | Wait for juizpar suite_2 | `cd /home/ronald/saas-hasner && for i in $(seq 1 19); do grep -q '^rc=' logs/juizpar/suite_2.out 2>/dev/null && break; /usr/bin/sleep 30; done; grep -E '^(FAIL\|ERROR):\|^Ran \|^(OK\|FAILED)( \|$)\|^rc=' logs/juizpar/suite_2.out \| tail -6; date +%H:%M` |
+| 20:25:17 | Bash | Full suite on outbox copy, queued | `cd /home/ronald/saas-hasner && bash bin/suite.sh --dir /home/ronald/wt-outbox-2810-1915 --espera 3600 > logs/outbox/suite_inteira_2.out 2>&1; echo rc=$? >> logs/outbox/suite_inteira_2.out` |
+| 20:25:09 | Agent | Adversarial verify O-OUTBOX | `Obra: O-OUTBOX (repo /home/ronald/saas-hasner; leia CLAUDE.md secoes 0, 4, 4a e 6). Copia: /home/ronald/wt-outbox-2810-1915, commits db58d8cd e 57109046 sobre a base 1974dbc0 (`git -C /home/ronald/wt-outbox-2810-1915 diff 1974dbc0..57109046`). Contrato aprovado pelo dono, literal: "INSERT do EventoCelula NA PORTA no mesmo atomic do save do veredito; trigger recusado; consumidor a cada 1 min, idemp ...` |
+| 20:24:56 | Bash | Fix the time label to the measured clock | `sed -i 's/REPROVADA pelo verificador 20:4x/REPROVADA pelo verificador 20:2x/; s/REPROVADA 28\/10 20:4x/REPROVADA 28\/10 20:2x/' docs/RELATO.md docs/BACKLOG.md && /bin/grep -c "20:2x" docs/BACKLOG.md` |
+| 20:24:51 | Bash | Put cure-at-source question atop RELATO | `date '+%H:%M' && python3 - <<'EOF' p='docs/RELATO.md'; s=open(p).read() q='''> **lei/! : JUIZ-DO-PAR-CURA-NA-FONTE** (pergunta, nao para a fila; segura SO o pouso da JUIZ-DO-PAR-DUAS-ENTRADAS) -- a cura construida (34b0d5a5, copia wt-juizpar-2810-1850) senta a ata pelo papel do juiz do par, mas o verificador a REPROVOU com prova: (1) o motor LE a ata gravada (`ponto/juiz_batida.py::periodos_do_dia ...` |
 | 20:14:42 | Bash | Wait for suite (10 min window) | `cd /home/ronald/saas-hasner && for i in $(seq 1 19); do grep -q '^rc=' logs/juizpar/suite_2.out 2>/dev/null && break; /usr/bin/sleep 30; done; grep -E '^(FAIL\|ERROR):\|^Ran \|^(OK\|FAILED)( \|$)\|^rc=' logs/juizpar/suite_2.out \| tail -6 \|\| echo AINDA` |
 | 20:14:37 | Bash | Full suite on committed copy | `cd /home/ronald/saas-hasner && bash bin/suite.sh --dir /home/ronald/wt-juizpar-2810-1850 --espera 3600 > logs/juizpar/suite_2.out 2>&1; echo rc=$? >> logs/juizpar/suite_2.out` |
 | 20:14:30 | Bash | Write RELATO section and BACKLOG state | `python3 - <<'EOF' p='docs/RELATO.md'; s=open(p).read() anc="> **RESPONDIDA 28/10 19:3x: COL129-2510-TETO-DO-DIA = (b)**" assert s.count(anc)==1 sec='''> **JUIZ-DO-PAR-DUAS-ENTRADAS (P7.1) -- construida 28/10 20:2x na copia wt-juizpar-2810-1850 (34b0d5a5), verificador em curso, NAO pousada.** > LEI-AKITA: origem=escala/utils.py::_sentar_pelo_papel (+ `_alinhar_papeis`), testemunha=ponto/turnos.py:: ...` |
