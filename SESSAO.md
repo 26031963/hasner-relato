@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/10/2026 11:47:38.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (23.2 MB). Acoes na janela: **396**.
+**Medido em 28/10/2026 11:53:07.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (23.3 MB). Acoes na janela: **383**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 11:53:00 | Agent | Verificar QUARENTENA + SILENCIO 5ad8a057 | `Obras QUARENTENA-DO-COLAB + SILENCIO-VENCIDO-VOLTA (pousam juntas), leitura. Copia /home/ronald/wt-silencio-2810-0915: SILENCIO 5d9fa87e, be70b8cb, 98c8a3d5 (Parte 1 da sua 2a leitura: templates `_lista_chamados.html`/`_meus_arquivados.html`, `materializacao.py::_ressuscitar_por_resposta`, 7a trava em signals, relogio unico); QUARENTENA c7008ae5, e8f2b0b3, 5ad8a057. Diff geral: `git -C /home/ronal ...` |
+| 11:52:46 | Bash | Write quarentena lei questions | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read() a='# RELATO — esteira saas-hasner\n\n' l='''> **lei: QUARENTENA-ISENTO-DESDE-QUANDO** (pergunta, nao para a fila; segura SO a causa `isento_ponto` da QUARENTENA-DO-COLAB -- o modo manual por periodo esta pronto) -- o aval POR-PERIODO (5) diz "isento_ponto = quarentena aberta desde a data da flag". Medido em p ...` |
+| 11:50:01 | Bash | Wait constructor report | `/usr/bin/sleep 150; ls -t /home/ronald/saas-hasner/logs/quarentena/ \| head -8; date +%H:%M` |
 | 11:41:45 | Bash | Wait quarentena suite 3 | `L=/home/ronald/saas-hasner/logs/quarentena/suite_3.out; for i in $(seq 58); do grep -aq '^rc=' $L 2>/dev/null && break; /usr/bin/sleep 10; done; head -1 $L; tr -d '\0' < $L \| grep -aE '^(OK\|FAILED)($\| \()\|^Ran \|^rc=\|^(FAIL\|ERROR):' \| tail -4; date +%H:%M` |
 | 11:36:56 | Bash | Wait for constructor fix | `/usr/bin/sleep 280; git -C /home/ronald/wt-silencio-2810-0915 log --oneline -2; ls -t /home/ronald/saas-hasner/logs/quarentena/ \| head -3; date +%H:%M` |
 | 11:35:49 | Bash | Keep waiting quarentena suite 2 | `L=/home/ronald/saas-hasner/logs/quarentena/suite_2.out; for i in $(seq 58); do grep -aq '^rc=' $L 2>/dev/null && break; /usr/bin/sleep 10; done; tr -d '\0' < $L \| grep -aE '^(OK\|FAILED)($\| \()\|^Ran \|^rc=\|^(FAIL\|ERROR):' \| tail -5; date +%H:%M` |
@@ -390,19 +393,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 00:01:08 | Bash | Read sonda_leitura usage | `cd /home/ronald/saas-hasner && sed -n 1,40p bin/sonda_leitura.sh` |
 | 00:01:03 | Bash | Locate smoke pending item and prompts tail | `cd /home/ronald/saas-hasner && date +%H:%M && grep -n 'SMOKE-FIO-LE-O-JUIZ-MODAL' app/docs/CORTES.md app/docs/PROMPTS.md app/docs/PENDENTES_RONALD.json \| head -5 \| cut -c1-200; tail -3 app/docs/PROMPTS.md \| cut -c1-200` |
 | 00:01:02 | SendMessage |  | `-` |
-| 23:51:07 | Bash | Wait for cobertura full suite verdict | `L=/home/ronald/saas-hasner/logs/cobertura/suite_ausencia2.out; for i in $(seq 58); do ps -p 1067824 >/dev/null \|\| break; /usr/bin/sleep 10; done; tr -d '\0' < $L \| grep -aE '^(OK\|FAILED)($\| \()\|^Ran \|^rc=\|^(FAIL\|ERROR):' \| tail -8; date +%H:%M` |
-| 23:51:03 | Bash | Confirm only agent suite remains | `ps -eo pid,args \| grep -E 'trava_teste.sh' \| grep -v grep \| cut -c1-90; ls -la /home/ronald/saas-hasner/logs/cobertura/suite_ausencia2.out` |
-| 23:51:00 | TaskStop |  | `-` |
-| 23:50:58 | ToolSearch |  | `-` |
-| 23:50:54 | Bash | Check for duplicate suite runs | `ps -eo pid,lstart,args \| grep -E 'suite.sh\|manage.py test' \| grep -v grep \| cut -c1-200; /home/ronald/saas-hasner/bin/trava_teste.sh --quem 2>&1 \| tail -2` |
-| 23:50:49 | Agent | Verificar COBERTURA-AUSENCIA 578f03c9 | `Obra COBERTURA-PARCIAL-UM-JUIZ / COBERTURA-AUSENCIA-PARCIAL (BO-[nome] A), 2a leitura. Copia: /home/ronald/wt-cobertura-aus-2710, commits f807ca81 (1a versao, voce reprovou com 5 itens) e 578f03c9 (cura). Diff: `git -C /home/ronald/wt-cobertura-aus-2710 diff 05fb3365..578f03c9` (ou contra o merge-base com main). Avais que mandam (leia em /home/ronald/saas-hasner/app/docs/CORTES.md, procure por C ...` |
-| 23:50:40 | Bash | Full suite on cobertura copy | `cd /home/ronald/saas-hasner && L=logs/cobertura/suite_ausencia2.out; bin/suite.sh --dir /home/ronald/wt-cobertura-aus-2710 --espera 3600 > $L 2>&1; echo "rc=$?" >> $L` |
-| 23:50:36 | Bash | Read green_aus3 verdict and copy state | `cd /home/ronald/saas-hasner/logs/cobertura; for i in $(seq 50); do grep -q '^rc=' green_aus3.out 2>/dev/null && break; /usr/bin/sleep 10; done; grep -E '^(OK\|FAILED)($\| \()\|^Ran \|^rc=\|^(FAIL\|ERROR):' green_aus3.out \| tail -6; cd /home/ronald/wt-cobertura-aus-2710; git log --oneline -1; git status --short \| grep -v '^??' \| head; git log -1 --format=%b \| grep LEI-AKITA \| cut -c1-400` |
-| 23:48:21 | Bash | Wait for constructor commit in cobertura copy | `cd /home/ronald/wt-cobertura-aus-2710 && for i in $(seq 57); do h=$(git rev-parse --short HEAD); [ "$h" != f807ca81 ] && break; /usr/bin/sleep 10; done; git log --oneline -2; git status --short \| head -12; ps -eo args \| grep -c 'manage.py test'` |
-| 23:48:16 | Bash | Read trabalho em curso logic | `cd /home/ronald/saas-hasner && sed -n 373,400p bin/hook_stop_fila1.py; sed -n 555,585p bin/hook_stop_fila1.py` |
-| 23:48:13 | Bash | Inspect hook stop rules | `cd /home/ronald/saas-hasner && grep -nE "aguardando\|em_curso\|agente\|NAO_ANDA\|def .*anda" bin/hook_stop_fila1.py \| head -30` |
-| 23:48:04 | Bash | Re-run proof check on RELATO | `cd /home/ronald/saas-hasner && python3 bin/relato_afirma_com_prova.py app/docs/RELATO.md 2>&1 \| tail -2; echo rc=${PIPESTATUS[0]}` |
-| 23:48:01 | Bash | Add PROVA line and re-run check | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md' s=open(p).read() a='Se falhar: `git revert -m 1 7c9e4c27` + `bin/deploy.sh --sem-migrate`, com trilha aqui.\n' assert s.count(a)==1 s=s.replace(a,a+'> **PROVA:** `git rev-parse HEAD` = 7c9e4c27412376d63a5ece4d668da63902b1ab22; `logs/fio_pouso_suite.log` = `Ran 12412 tests` / `OK (skipped=42, expected failures=15)` / `rc=0`; `l ...` |
-| 23:47:55 | Bash | Check PROVA line format | `cd /home/ronald/saas-hasner && grep -n 'PROVA:' app/docs/RELATO.md \| head -3 \| cut -c1-200; git rev-parse HEAD; docker exec saas_ui sh -c 'cat /proc/1/cmdline' >/dev/null 2>&1; grep -n 'PROVA' bin/relato_afirma_com_prova* 2>/dev/null \| head -5` |
-| 23:47:42 | Bash | Generate session handoff | `cd /home/ronald/saas-hasner && bin/handoff_sessao.sh >/dev/null 2>&1; echo rc=$?; git status --short \| head` |
-| 23:47:38 | SendMessage |  | `-` |
