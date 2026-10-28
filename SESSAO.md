@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/10/2026 00:06:06.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (16.1 MB). Acoes na janela: **517**.
+**Medido em 28/10/2026 00:11:37.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (16.1 MB). Acoes na janela: **519**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 00:08:55 | Bash | Wait for full suite on 64e39f83 | `L=/home/ronald/saas-hasner/logs/cobertura/suite_ausencia3.out; for i in $(seq 57); do grep -aq '^rc=' $L && break; /usr/bin/sleep 10; done; tr -d '\0' < $L \| grep -aE '^(OK\|FAILED)($\| \()\|^Ran \|^rc=\|^(FAIL\|ERROR):' \| tail -6; date +%H:%M` |
+| 00:08:52 | Agent | Verificar COBERTURA 64e39f83 (3a) | `Obra COBERTURA-PARCIAL-UM-JUIZ / COBERTURA-AUSENCIA-PARCIAL (BO-[nome] A), 3a leitura. Copia /home/ronald/wt-cobertura-aus-2710, commit novo 64e39f83 (sobre 578f03c9, que voce reprovou). Seus 5 itens de antes: (1) RED falso -> refeito: logs/cobertura/red_ausencia3.out (tree 34ac200b de f807ca81 com os testes novos por cima; 35 testes, 11F+2E) -- confira que o log e de f807 de verdade; (2) emissa ...` |
 | 00:05:52 | Bash | Wait for constructor to start the full suite | `cd /home/ronald/wt-cobertura-aus-2710 && for i in $(seq 57); do [ -f /home/ronald/saas-hasner/logs/cobertura/suite_ausencia3.out ] && break; /usr/bin/sleep 10; done; git log --oneline -1; git status --short \| grep -v '^??' \| head -5; ls -la /home/ronald/saas-hasner/logs/cobertura/ \| tail -4` |
 | 00:05:40 | SendMessage |  | `-` |
 | 00:05:34 | Bash | Wait for and read real RED log | `L=/home/ronald/saas-hasner/logs/cobertura/red_ausencia3.out; for i in $(seq 55); do grep -q '^rc=' $L 2>/dev/null && break; /usr/bin/sleep 10; done; head -3 $L \| cut -c1-200; grep -aE '^(OK\|FAILED)($\| \()\|^Ran \|^rc=' $L \| tail -3; grep -aE '^(FAIL\|ERROR):' $L \| sed 's/ (.*//' \| sort \| uniq -c \| head -30` |
