@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/10/2026 13:02:37.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (23.5 MB). Acoes na janela: **332**.
+**Medido em 28/10/2026 13:08:07.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (23.5 MB). Acoes na janela: **331**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -341,4 +341,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 01:11:42 | Bash | Census of closed disputes with live questions | `cat > /home/ronald/saas-hasner/logs/pvmuda/censo_passivo.py <<'EOF' # Censo do passivo da PV-MUDA: disputas FECHADAS desde 26/10 04:02 (nascimento do sinal do beco, c45f9990) # com pergunta VIVA dentro, pelo juiz real. SO LEITURA, prod. import datetime, collections from django.utils import timezone from chamados.models import DisputaSupervisao, PerguntaDisputa from chamados.juizes import pergunta_ ...` |
 | 01:11:32 | Agent | Verificar PV-MUDA 2db04de4 | `Obra JUIZ-PERGUNTA-VIVA-MUDA-SEM-FATO (#6984/#44764, col94), 1a leitura. Copia /home/ronald/wt-pvmuda-2710-2310: merge do main 7c9e4c27 (1b5df847), RED 32a4b918, cura 2db04de4. Diff da obra: `git -C /home/ronald/wt-pvmuda-2710-2310 diff 1b5df847..2db04de4`. Leia o corpo de 2db04de4 (cadeia do caso e a cura). Cura: `chamados/services/validacao.py::validar_pergunta` -- carimbo + recalcular_por_event ...` |
 | 01:09:20 | Bash | Read PV-MUDA commit message | `/usr/bin/sleep 120; git -C /home/ronald/wt-pvmuda-2710-2310 log -1 --format='%h %s%n%b' \| head -40 \| cut -c1-250` |
-| 01:07:36 | Bash | Keep waiting PV-MUDA suite | `L=/home/ronald/saas-hasner/logs/pvmuda/suite_1.out; for i in $(seq 57); do grep -aq '^rc=' $L && break; /usr/bin/sleep 10; done; tr -d '\0' < $L \| grep -aE '^(OK\|FAILED)($\| \()\|^Ran \|^rc=\|^(FAIL\|ERROR):' \| tail -6; date +%H:%M` |
