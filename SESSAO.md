@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/10/2026 18:24:39.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (23.8 MB). Acoes na janela: **189**.
+**Medido em 28/10/2026 18:29:41.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (24.0 MB). Acoes na janela: **192**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 18:29:18 | Bash | Wait quarentena suite 5 | `for i in $(seq 58); do ls /home/ronald/saas-hasner/logs/quarentena/suite_5.out >/dev/null 2>&1 && break; /usr/bin/sleep 10; done; L=/home/ronald/saas-hasner/logs/quarentena/suite_5.out; for i in $(seq 50); do grep -aq '^rc=' $L 2>/dev/null && break; /usr/bin/sleep 10; done; head -1 $L 2>/dev/null; tr -d '\0' < $L 2>/dev/null \| grep -aE '^(OK\|FAILED)($\| \()\|^Ran \|^rc=\|^(FAIL\|ERROR):' \| tail ...` |
+| 18:29:13 | Bash | Register batida stack finding | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='/home/ronald/saas-hasner/app/docs/BACKLOG.md'; L=open(p).read().split('\n') k=[i for i,r in enumerate(L) if r.startswith('\| O-OUTBOX \|')][0] L.insert(k+1,'\| PILHA-DA-BATIDA-RECALCULO-INLINE \| **Achado da medida do O-OUTBOX (28/10 18:2x, `logs/outbox/q4_sonda_callbacks.log`)**: a pilha de `ponto/registro_batida.py::registrar_batida` ja paga ** ...` |
+| 18:27:03 | Bash | List failures; wait for constructor reaction | `tr -d '\0' < /home/ronald/saas-hasner/logs/quarentena/suite_4.out \| grep -aE '^(FAIL\|ERROR):' ; /usr/bin/sleep 120; git -C /home/ronald/wt-silencio-2810-0915 log --oneline -2` |
 | 18:22:08 | Bash | Wait quarentena suite 4 | `L=/home/ronald/saas-hasner/logs/quarentena/suite_4.out; for i in $(seq 58); do grep -aq '^rc=' $L 2>/dev/null && break; /usr/bin/sleep 10; done; head -1 $L; tr -d '\0' < $L \| grep -aE '^(OK\|FAILED)($\| \()\|^Ran \|^rc=\|^(FAIL\|ERROR):' \| tail -4; date +%H:%M` |
 | 18:22:02 | Agent | Construir CONTRATO-20 lastro e orfas | `Voce e o CONSTRUTOR da obra CONTRATO-20-LASTRO-E-ORFAS (fila 1 item (3) do aval ESTRUTURAL-DEDICADO-28-18H) no repo /home/ronald/saas-hasner (SaaS de ponto CLT, Django). Leia /home/ronald/saas-hasner/CLAUDE.md inteiro antes -- em especial secao 4a (CRON DE VARREDURA = VIGIA, nunca juiz), 4b (contratos estruturais, teto 20/20), 7b REGRA-DE-PRAZO (literal: "(1) se um juiz de JUIZES_DO_PRAZO (config/ ...` |
 | 18:21:43 | Bash | Register item (3) and create worktree | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='/home/ronald/saas-hasner/app/docs/BACKLOG.md'; s=open(p).read() L=s.split('\n'); k=[i for i,r in enumerate(L) if r.startswith('\| O-OUTBOX \|')][0] L.insert(k+1,'\| CONTRATO-20-LASTRO-E-ORFAS \| **Fila 1 item (3) do ESTRUTURAL-DEDICADO-28-18H**: `fechar_cobranca_com_lastro` e `reconciliar_perguntas_orfas` (2 dos 5 de `config.crons.juizes_por_varr ...` |
