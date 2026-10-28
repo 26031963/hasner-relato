@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/10/2026 08:57:37.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (21.8 MB). Acoes na janela: **412**.
+**Medido em 28/10/2026 09:03:07.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (21.8 MB). Acoes na janela: **409**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -419,6 +419,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 21:21:34 | Bash | Full suite on (D) copy | `cd /home/ronald/saas-hasner && L=logs/registrado_suite.log; bin/suite.sh --dir /home/ronald/wt-registrado-2710-2035 --espera 3600 > $L 2>&1; echo "rc=$?" >> $L` |
 | 21:11:47 | Bash | Wait for D next commit | `W=/home/ronald/wt-registrado-2710-2035; h0=$(git -C $W rev-parse HEAD); for i in $(seq 58); do [ "$(git -C $W rev-parse HEAD)" != "$h0" ] && break; /usr/bin/sleep 10; done; git -C $W log --oneline -2 \| cut -c1-110; date +%H:%M` |
 | 21:11:34 | Bash | Post FIO vs O44 conflict question | `cd /home/ronald/saas-hasner && python3 - <<'E' p='app/docs/RELATO.md';s=open(p).read() a='# RELATO — esteira saas-hasner\n\n' q=("> **lei: FIO-EXPORTADA-X-O44** (pergunta, nao para a fila; segura SO o pouso da FIO-LE-O-JUIZ) -- a sua regra de 20:5x (\"pergunta de competencia EXPORTADA nunca vai ao app, so leitura no fio\") contradiz o aval de 25/09 (\"dia exportado segue EDITAVEL\") que o `ponto/t ...` |
-| 21:01:34 | Bash | Long wait for D and FIO constructors | `/usr/bin/sleep 590; for w in wt-registrado-2710-2035 wt-fio-2710-1835; do echo "$w $(git -C /home/ronald/$w log --oneline -1 \| cut -c1-90) sujos=$(git -C /home/ronald/$w status --porcelain \| grep -vc '^??')"; done; date +%H:%M` |
-| 21:01:15 | Bash | Update D question with verifier finding | `cd /home/ronald/saas-hasner && python3 - <<'E' p='app/docs/RELATO.md';s=open(p).read() a='> **lei: REGISTRADO-NAO-E-VIVO-DESVIO** (pergunta de escopo, LEI-AKITA 9; segura SO o pouso da (D)) -- ' assert s.count(a)==1 s=s.replace(a,a+'**ATUALIZADO 21:0x pelo verificador:** a fila ja tem juiz unico, `chamados/services/painel.py:158::qs_na_fila` (\"a UNICA definicao de fila\": vivos - silenciado - reg ...` |
-| 21:01:11 | SendMessage |  | `-` |
