@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/10/2026 16:26:07.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (23.5 MB). Acoes na janela: **247**.
+**Medido em 28/10/2026 16:31:37.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (23.5 MB). Acoes na janela: **245**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -255,5 +255,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 04:33:29 | Bash | Docs for termometro pouso | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read() a='# RELATO — esteira saas-hasner\n\n' l='''> **TERMOMETRO-GRAVA-SEM-TRILHA NO AR 28/10 04:3x** (pouso L-107; sem push: o push leva a FIO, que espera o smoke). A unica escrita do escore da regua, `colaboradores/services/vinculo.py::gravar_regua` (4 chamadas em `escala/regua_defesa.py`), grava `editar` com ant ...` |
 | 04:33:13 | Bash | Merge termometro; check sombra | `cd /home/ronald/saas-hasner && git rev-parse --short HEAD && bin/janela_auth.sh 2>&1 \| tail -1 && git merge --no-ff --no-commit 96c5225c 2>&1 \| tail -1; git rev-parse -q --verify MERGE_HEAD >/dev/null && echo MERGE_HEAD-ok; for f in $(git diff --cached --name-only); do cmp -s "$f" "/home/ronald/wt-termometro-2810-0340/$f" \|\| echo "DIFERE $f"; done; git diff --cached --name-only; bin/sombra.sh  ...` |
 | 04:33:05 | Bash | Check current sonda output | `ls -la --time-style=+%H:%M:%S /home/ronald/saas-hasner/logs/termometro/sonda_linhas*; grep -anE 'ERROS\|linhas de trilha\|vinculos\|updates\|carimbo\|AVISO\|FIM' /home/ronald/saas-hasner/logs/termometro/sonda_linhas.out \| head -12 \| cut -c1-200` |
-| 04:28:30 | Bash | Wait for verifier | `/usr/bin/sleep 270; date +%H:%M` |
-| 04:28:27 | Agent | Verificar TERMOMETRO 96c5225c (2a) | `Obra TERMOMETRO-GRAVA-SEM-TRILHA, 2a leitura. Copia /home/ronald/wt-termometro-2810-0340; voce reprovou 706468af (tree = a de 98853070); cura 96c5225c: `git -C /home/ronald/wt-termometro-2810-0340 show 96c5225c`. Seus itens: (1) IP perdido -- o construtor diz REFUTADO por medicao: `core/observ.py::evento` (108-112) le ip/ator da request da vez pelo ContextVar `REQUISICAO_DA_TRILHA` quando o chamad ...` |
