@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/10/2026 12:04:09.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (23.4 MB). Acoes na janela: **362**.
+**Medido em 28/10/2026 12:09:37.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (23.5 MB). Acoes na janela: **360**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 12:09:00 | Bash | Wait for FECHAR3 verifier | `/usr/bin/sleep 240; date +%H:%M` |
+| 12:08:53 | SendMessage |  | `-` |
+| 12:08:36 | Agent | Verificar SELO-FECHAR3 368067ac (2a) | `Obra SELO-FECHAR3-INSTAVEL, 2a leitura. Copia /home/ronald/wt-fechar3inst-2810-0325; voce reprovou 14a13910 por (1) dedup do gate (`chamados/models.py:~498`) fechar sem trilha nomeada -- o aval diz "os outros fecham como dedup com trilha"; (2) `_rec` (`ponto/services/cartorio.py:~1185`, 2 turno_aberto em folga ainda furada fecha so por dedup e dependia da ordem). Cura 368067ac: `git -C /home/ronal ...` |
 | 12:03:06 | Bash | Record findings; wait FECHAR3 suite 2 | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='/home/ronald/saas-hasner/app/docs/BACKLOG.md'; L=open(p).read().split('\n') k=[i for i,r in enumerate(L) if r.startswith('\| QUARENTENA-DO-COLAB \|')][0]; c=L[k].split('\|') c[3]=' 5ad8a057 REPROVADA (proximo turno): app do colab (`pergunta_no_app.perguntas_do_app`) nao le o juiz; vigias `pergunta_no_app.py:80` e `vigia_fio.py:286` sem causa quar ...` |
 | 11:57:48 | Bash | Keep waiting | `/usr/bin/sleep 280; date +%H:%M; git -C /home/ronald/wt-fechar3inst-2810-0325 log --oneline -2` |
 | 11:53:14 | Bash | Wait for verifier/constructor | `/usr/bin/sleep 270; date +%H:%M` |
@@ -367,8 +370,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 00:20:03 | Bash | Locate ESMERIL-V2 and PV-MUDA rows | `cd /home/ronald/saas-hasner && grep -n '^\| ESMERIL-V2 \\|ESMERIL-V2' app/docs/BACKLOG.md \| head -3 \| cut -c1-300; grep -n '^\| JUIZ-PERGUNTA-VIVA-MUDA-SEM-FATO' app/docs/BACKLOG.md \| cut -c1-80; tail -1 app/docs/PROMPTS.md \| cut -c1-80` |
 | 00:20:02 | SendMessage |  | `-` |
 | 00:18:32 | Bash | Wait suite verdict; read juiz declaration | `L=/home/ronald/saas-hasner/logs/cobertura/suite_ausencia3.out; for i in $(seq 57); do grep -aq '^rc=' $L && break; /usr/bin/sleep 10; done; tr -d '\0' < $L \| grep -aE '^(OK\|FAILED)($\| \()\|^Ran \|^rc=\|^(FAIL\|ERROR):' \| tail -6; date +%H:%M; sed -n 205,215p /home/ronald/wt-cobertura-aus-2710/app/core/juizes.py` |
-| 00:08:55 | Bash | Wait for full suite on 64e39f83 | `L=/home/ronald/saas-hasner/logs/cobertura/suite_ausencia3.out; for i in $(seq 57); do grep -aq '^rc=' $L && break; /usr/bin/sleep 10; done; tr -d '\0' < $L \| grep -aE '^(OK\|FAILED)($\| \()\|^Ran \|^rc=\|^(FAIL\|ERROR):' \| tail -6; date +%H:%M` |
-| 00:08:52 | Agent | Verificar COBERTURA 64e39f83 (3a) | `Obra COBERTURA-PARCIAL-UM-JUIZ / COBERTURA-AUSENCIA-PARCIAL (BO-[nome] A), 3a leitura. Copia /home/ronald/wt-cobertura-aus-2710, commit novo 64e39f83 (sobre 578f03c9, que voce reprovou). Seus 5 itens de antes: (1) RED falso -> refeito: logs/cobertura/red_ausencia3.out (tree 34ac200b de f807ca81 com os testes novos por cima; 35 testes, 11F+2E) -- confira que o log e de f807 de verdade; (2) emissa ...` |
-| 00:05:52 | Bash | Wait for constructor to start the full suite | `cd /home/ronald/wt-cobertura-aus-2710 && for i in $(seq 57); do [ -f /home/ronald/saas-hasner/logs/cobertura/suite_ausencia3.out ] && break; /usr/bin/sleep 10; done; git log --oneline -1; git status --short \| grep -v '^??' \| head -5; ls -la /home/ronald/saas-hasner/logs/cobertura/ \| tail -4` |
-| 00:05:40 | SendMessage |  | `-` |
-| 00:05:34 | Bash | Wait for and read real RED log | `L=/home/ronald/saas-hasner/logs/cobertura/red_ausencia3.out; for i in $(seq 55); do grep -q '^rc=' $L 2>/dev/null && break; /usr/bin/sleep 10; done; head -3 $L \| cut -c1-200; grep -aE '^(OK\|FAILED)($\| \()\|^Ran \|^rc=' $L \| tail -3; grep -aE '^(FAIL\|ERROR):' $L \| sed 's/ (.*//' \| sort \| uniq -c \| head -30` |
