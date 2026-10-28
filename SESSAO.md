@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/10/2026 12:30:50.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (23.5 MB). Acoes na janela: **352**.
+**Medido em 28/10/2026 12:35:51.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (23.5 MB). Acoes na janela: **351**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -361,4 +361,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 00:36:14 | Bash | Snapshot cells for reversal before landing | `grep -n "def cobre_parte_do_dia\\|def ausencia_cobre" ponto/turnos.py \| head; cat > /home/ronald/saas-hasner/logs/cobertura/reversao_snap.py <<'EOF' # REVERSAO antes do pouso da COBERTURA-AUSENCIA (DINHEIRO-EM-COMPETENCIA-ABERTA cond. 1): snapshot das celulas # veredito=fato_em_ausencia (o universo que o rejulgamento pode mover para indefinida). SO LEITURA, prod. import json from escala.models im ...` |
 | 00:36:05 | Bash | Read sombra probe for parciais | `cd /home/ronald/saas-hasner && sed -n 1,60p logs/sombra/cob_parciais.py` |
 | 00:35:55 | Agent | Verificar COBERTURA e2dbc4d8 (4a) | `Obra COBERTURA-AUSENCIA-PARCIAL (BO-[nome] A), 4a leitura. Copia /home/ronald/wt-cobertura-aus-2710, commit e2dbc4d8 sobre 64e39f83 (que voce reprovou por 2 itens: (1) o RED do dia de HOJE nao passava pelo caminho real -- julgar_colab sem teto_de_hoje, `_limbo_de_hoje` cartorio.py:1325 inalcancavel; (2) core/juizes.py:211-212 com 3 respostas e o juiz com 'nao_sei'). Confira: `git diff 64e39f83.. ...` |
-| 00:34:06 | Bash | Keep waiting for suite verdict | `L=/home/ronald/saas-hasner/logs/cobertura/suite_ausencia4.out; for i in $(seq 40); do grep -aq '^rc=' $L && break; /usr/bin/sleep 10; done; tr -d '\0' < $L \| grep -aE '^(OK\|FAILED)($\| \()\|^Ran \|^rc=\|^(FAIL\|ERROR):' \| tail -6; date +%H:%M; cd /home/ronald/wt-cobertura-aus-2710 && git log --oneline -1` |
