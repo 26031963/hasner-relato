@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/10/2026 08:52:07.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (21.8 MB). Acoes na janela: **413**.
+**Medido em 28/10/2026 08:57:37.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (21.8 MB). Acoes na janela: **412**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 08:55:36 | Bash | Wait and read comp 9 DIFF of (b) | `for i in $(seq 58); do ls /home/ronald/saas-hasner/logs/justificativa/diff_frota_b_c9.out >/dev/null 2>&1 && break; /usr/bin/sleep 10; done; grep -vE '^\s+pk=' /home/ronald/saas-hasner/logs/justificativa/diff_frota_b_c9.out 2>/dev/null \| sed -n '/## (2)/,/top 15 por \|delta horas_falta/p' \| cut -c1-180; date +%H:%M` |
+| 08:55:29 | Bash | Read the (b) fleet DIFF | `cd /home/ronald/saas-hasner/logs/justificativa && grep -vE '^\s+pk=' diff_frota_b.out \| sed -n 1,75p \| cut -c1-200` |
 | 08:51:15 | Bash | Keep waiting JUSTIFICATIVA (b) | `for i in $(seq 58); do ls /home/ronald/saas-hasner/logs/justificativa/diff_frota_b.out >/dev/null 2>&1 && break; /usr/bin/sleep 10; done; git -C /home/ronald/wt-justifb-2810-0830 log --oneline -2; ls -t /home/ronald/saas-hasner/logs/justificativa/ \| head -4; date +%H:%M` |
 | 08:51:08 | Bash | Register SMOKE-FIO-VISUAL-OK | `cd /home/ronald/saas-hasner && python3 - <<'EOF' import json F="aval Ronald SMOKE-FIO-VISUAL-OK: smoke visual do modal do fio APROVADO pelo [nome] 28/10 08:4x -- #31873 (col94) itens a-d SIM; #3227 (col129) p#50169 \"ENTRADA 25/10\" resposta 17:30 com Validar, vivas de 20/09 e 29/09 aguardando resposta com \"Cobrar resposta\", sem \"Regularizar disputa e fechar\"; print SMOKE_BOC_3227_CARTAO_202 ...` |
 | 08:41:14 | Bash | Wait for JUSTIFICATIVA (b) progress | `for i in $(seq 58); do ls /home/ronald/saas-hasner/logs/justificativa/diff_frota_b.out >/dev/null 2>&1 && break; /usr/bin/sleep 10; done; git -C /home/ronald/wt-justifb-2810-0830 log --oneline -3; ls -t /home/ronald/saas-hasner/logs/justificativa/ \| head -5; date +%H:%M` |
@@ -420,6 +422,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 21:01:34 | Bash | Long wait for D and FIO constructors | `/usr/bin/sleep 590; for w in wt-registrado-2710-2035 wt-fio-2710-1835; do echo "$w $(git -C /home/ronald/$w log --oneline -1 \| cut -c1-90) sujos=$(git -C /home/ronald/$w status --porcelain \| grep -vc '^??')"; done; date +%H:%M` |
 | 21:01:15 | Bash | Update D question with verifier finding | `cd /home/ronald/saas-hasner && python3 - <<'E' p='app/docs/RELATO.md';s=open(p).read() a='> **lei: REGISTRADO-NAO-E-VIVO-DESVIO** (pergunta de escopo, LEI-AKITA 9; segura SO o pouso da (D)) -- ' assert s.count(a)==1 s=s.replace(a,a+'**ATUALIZADO 21:0x pelo verificador:** a fila ja tem juiz unico, `chamados/services/painel.py:158::qs_na_fila` (\"a UNICA definicao de fila\": vivos - silenciado - reg ...` |
 | 21:01:11 | SendMessage |  | `-` |
-| 20:56:16 | Bash | Register FIO answer, D deviation question, new item | `cd /home/ronald/saas-hasner && python3 - <<'E' import json d='app/docs/' p=d+'RELATO.md';s=open(p).read();L=s.split('\n') for i,l in enumerate(L[:30]): if l.startswith('> **lei: FIO-LE-O-JUIZ-OS-19**'): L[i]='> **RESPONDIDA 27/10 20:5x: FIO-LE-O-JUIZ-OS-19 e OS-19-E-O-VOLUME** -- (1) o \"dia agrupado sob ADESAO/LIMBO\" esta RETIRADO (agrupamento nao e dono; `agrupado_sob_pai_vivo` nao vira juiz):  ...` |
-| 20:55:56 | SendMessage |  | `-` |
-| 20:55:48 | Agent | Verify REGISTRADO-NAO-E-VIVO | `REGISTRADO-NAO-E-VIVO (BO-[nome] (D)), leitura antes do pouso. Copia /home/ronald/wt-registrado-2710-2035 (branch registrado-2710) sobre main 0baf575f; commit bdb253cf. Diff: `git -C /home/ronald/wt-registrado-2710-2035 diff 0baf575f..HEAD`. Aval (literal): "(D) REGISTRADO-NAO-E-VIVO = item 7 (col130 #28883, 535 na frota): registrado sai de VIVOS e de todo badge, padrao=maquina de estado com jui ...` |
