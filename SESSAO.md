@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/10/2026 09:40:51.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (22.1 MB). Acoes na janela: **409**.
+**Medido em 28/10/2026 09:45:52.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (22.3 MB). Acoes na janela: **412**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 09:42:52 | Bash | Wait SILENCIO rework | `for i in $(seq 58); do [ -f /home/ronald/saas-hasner/logs/silencio/suite_2.out ] && break; /usr/bin/sleep 10; done; git -C /home/ronald/wt-silencio-2810-0915 log --oneline -2; date +%H:%M` |
+| 09:42:47 | Bash | Write ISENTO lei question; update state | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read() a='# RELATO — esteira saas-hasner\n\n' l='''> **lei: ISENTO-VENCIDO-VOLTA** (pergunta, nao para a fila; segura SO a trava de re-silencio dos isentos dentro da SILENCIO-VENCIDO-VOLTA) -- dos 12 chamados com silencio VENCIDO que voltam a fila pelo aval (a) de 07:4x, **8 sao de colaborador `isento_ponto=True`**: ...` |
+| 09:42:40 | SendMessage |  | `-` |
 | 09:37:29 | Bash | Wait for verifier | `/usr/bin/sleep 285; date +%H:%M` |
 | 09:37:25 | Agent | Verificar SILENCIO-VENCIDO-VOLTA | `Obra SILENCIO-VENCIDO-VOLTA (inclui o sitio 1 da PENDENCIA-SEM-JUIZ-3), 1a leitura. Copia /home/ronald/wt-silencio-2810-0915, commit 5d9fa87e sobre main 3cbd78a8: `git -C /home/ronald/wt-silencio-2810-0915 show 5d9fa87e` (corpo + diff). Aval literal (28/10 07:4x, em /home/ronald/saas-hasner/app/docs/CORTES.md, grep SILENCIO-VENCIDO): "vencido o silencio o chamado VOLTA para a fila -- silenciar exi ...` |
 | 09:36:12 | Bash | Read SILENCIO commit | `/usr/bin/sleep 60; git -C /home/ronald/wt-silencio-2810-0915 log -1 --format=%b \| head -30 \| cut -c1-230; git -C /home/ronald/wt-silencio-2810-0915 show --stat HEAD \| tail -8` |
