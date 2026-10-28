@@ -1,5 +1,8 @@
 # RELATO — esteira saas-hasner
 
+> **SELO PADRAO-NA-CURA VERMELHO NO MAIN, curado 06:2x** (achado pelo construtor do CONTRATO-20 E2): o commit de pouso da FIO 7c9e4c27 levou `padrao=fonte unica`, termo do PROPRIO corte (SMOKE-FIO-NO-AR-ANTES 23:3x e a lei da FIO 17:3x), mas que nao estava escrito no GLOSSARIO -- `bin/tests/test_lei_akita.sh` dava FALHA e o pre-push recusaria. Cura sem reescrever historico: `fonte unica` entra no GLOSSARIO como ALIAS da casa da linha ja existente "Single Source of Truth" (o mesmo padrao, citado os dois cortes) -- nao e padrao novo; se o alias nao vale, diga e o commit de pouso se reescreve antes do push.
+> PROVA: `bash bin/tests/test_lei_akita.sh` antes = `FALHA: PADRAO-NA-CURA 7c9e4c27 padrao='fonte unica' nao existe`, depois = `lei_akita: OK`.
+
 ## BO-[nome] C: IMPLEMENTADO -- FIO-LE-O-JUIZ no ar (27/10 23:45, commit 7c9e4c27; push espera o SMOKE-FIO-PARCIAL)
 LEI-AKITA: origem=chamados/services/fio.py::montar_chamados_fio + processar_post_fio, testemunha=chamados/juizes.py::pergunta_viva + C6, RED=chamados/tests (raia wt-fio-2710-1835), quem-mais-le=vigia_fio, modal_fio.html, badge, juizes novos=0, padrao=fonte unica
 PROVA: suite da copia de pouso `logs/fio_pouso_suite.log` Ran 12412 OK rc=0; deploy `logs/deploy_fio_2710.log` OK; leitura de prod `logs/smoke_fio_parcial/sonda.out` (28/10 00:02).
