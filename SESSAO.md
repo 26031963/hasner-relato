@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/10/2026 04:39:07.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (18.6 MB). Acoes na janela: **375**.
+**Medido em 28/10/2026 04:44:09.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (18.7 MB). Acoes na janela: **376**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 04:43:57 | Bash | Peek deploy log | `tail -5 /home/ronald/saas-hasner/logs/deploy_term_2810.log` |
 | 04:33:50 | Bash | Deploy termometro | `cd /home/ronald/saas-hasner && DEPLOY_SEM_SOMBRA="ensaio de hoje (20261028) em curso: refeito diverge=0, bloco da manha rodando; fatia so trilha do escore (vinculo.py::gravar_regua + regua_defesa), sem migration" bin/deploy.sh --sem-migrate > logs/deploy_term_2810.log 2>&1; echo rc=$?; tail -2 logs/deploy_term_2810.log; /usr/bin/sleep 60; docker logs --since 1m saas_ui 2>&1 \| grep -cE ' 500 \|Tra ...` |
 | 04:33:45 | Bash | Commit termometro pouso | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/BACKLOG.md'; s=open(p).read() a='<!-- ORDEM-VIVA-TOPO: TERMOMETRO-GRAVA-SEM-TRILHA -->' assert s.count(a)==1 s=s.replace(a,'<!-- ORDEM-VIVA-TOPO: SOMBRA-NAO-CABE-ANTES-DO-VIZINHO -->\n<!-- ANDOU 28/10 04:3x, de `TERMOMETRO-GRAVA-SEM-TRILHA` (NO AR, 96c5225c) para `SOMBRA-NAO-CABE-ANTES-DO-VIZINHO` (decisao tecnica de horario, medida da d ...` |
 | 04:33:29 | Bash | Docs for termometro pouso | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read() a='# RELATO — esteira saas-hasner\n\n' l='''> **TERMOMETRO-GRAVA-SEM-TRILHA NO AR 28/10 04:3x** (pouso L-107; sem push: o push leva a FIO, que espera o smoke). A unica escrita do escore da regua, `colaboradores/services/vinculo.py::gravar_regua` (4 chamadas em `escala/regua_defesa.py`), grava `editar` com ant ...` |
