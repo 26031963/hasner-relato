@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/10/2026 01:47:07.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (17.2 MB). Acoes na janela: **454**.
+**Medido em 28/10/2026 01:52:14.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (17.2 MB). Acoes na janela: **455**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 01:47:52 | Bash | Keep waiting (E) suite | `L=/home/ronald/saas-hasner/logs/vinculo/suite_1.out; for i in $(seq 58); do grep -aq '^rc=' $L 2>/dev/null && break; /usr/bin/sleep 10; done; tr -d '\0' < $L \| grep -aE '^(OK\|FAILED)($\| \()\|^Ran \|^rc=\|^(FAIL\|ERROR):' \| tail -6; date +%H:%M` |
 | 01:38:08 | Bash | Wait for (E) suite verdict | `L=/home/ronald/saas-hasner/logs/vinculo/suite_1.out; for i in $(seq 58); do grep -aq '^rc=' $L 2>/dev/null && break; /usr/bin/sleep 10; done; head -1 $L; tr -d '\0' < $L \| grep -aE '^(OK\|FAILED)($\| \()\|^Ran \|^rc=\|^(FAIL\|ERROR):' \| tail -6; date +%H:%M` |
 | 01:28:25 | Bash | Wait for (E) constructor progress | `for i in $(seq 58); do [ -f /home/ronald/saas-hasner/logs/vinculo/suite_1.out ] && break; /usr/bin/sleep 10; done; git -C /home/ronald/wt-vinculo-2810-0135 log --oneline -3; date +%H:%M` |
 | 01:28:21 | Agent | Construir TRILHA-DO-VINCULO-MENTE | `Voce e o CONSTRUTOR unico (PAZ-DO-ADMIN) da obra TRILHA-DO-VINCULO-MENTE (BO-[nome] (E)) do repo /home/ronald/saas-hasner (SaaS de ponto CLT, Django multi-tenant). Leia /home/ronald/saas-hasner/CLAUDE.md inteiro antes de qualquer acao (LEI-AKITA, RED primeiro, `padrao=` obrigatorio na linha LEI-AKITA, nunca editar a arvore viva, suite so por bin/suite.sh). Linha da obra: `\| TRILHA-DO-VINCULO-ME ...` |
