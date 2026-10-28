@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/10/2026 01:41:38.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (17.2 MB). Acoes na janela: **460**.
+**Medido em 28/10/2026 01:47:07.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (17.2 MB). Acoes na janela: **454**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -464,9 +464,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 13:55:06 | Bash | Mark three top questions answered | `cd /home/ronald/saas-hasner && python3 - <<'E' p='app/docs/RELATO.md';s=open(p).read() lines=s.split('\n') resp={'IA-RBAC-INCLUDE-DO-COPILOTO':'(a) -- o include fica; so a IA dentro dele exige a acao; pouso em dois atos + suite na copia de pouso com cmp + smoke dele', 'REJULGAR-COMP10-RESTO-DA-FROTA':'(a) pela 7b/L-113, por grupo (1 = 15 de ata movida, 2 = 10 que pioram/emitem), DIFF publicado ant ...` |
 | 13:54:57 | Bash | Register four avals in CORTES, PROMPTS, BACKLOG | `cd /home/ronald/saas-hasner && python3 - <<'E' import json d='app/docs/' P=open('/dev/stdin') if False else None avais={ 'O148-EDITAR':"aval Ronald: O148-EDITAR (complemento da obra de UI do CALENDARIO DE FOLGAS = O148 + O152 + CALENDARIO-DE-FOLGAS-ARQUIVA-NAO-APAGA; so registrar, nao constroi agora, nao muda a ordem da fila). (1) O admin EDITA calendario de folgas: calendario sem uso edita no lug ...` |
 | 13:54:35 | Bash | Find related BACKLOG rows | `cd /home/ronald/saas-hasner/app/docs && grep -n "^\| O148 \\|^\| O152 \\|^\| CALENDARIO-DE-FOLGAS-ARQUIVA" BACKLOG.md \| cut -c1-120; grep -n "CONTRATO-20-TERMOMETRO\\|REJULGAR-COMP10" BACKLOG.md \| cut -c1-120 \| head` |
-| 13:44:50 | Bash | Wait for fechar3 progress | `W=/home/ronald/wt-fechar3-2710-1320; h0=$(git -C $W rev-parse HEAD); for i in $(seq 57); do [ "$(git -C $W rev-parse HEAD)" != "$h0" ] && break; /usr/bin/sleep 10; done; git -C $W log --oneline -3 \| cut -c1-140; git -C $W status --porcelain \| grep -v '^??' \| head -5; date +%H:%M` |
-| 13:44:41 | Bash | Put IA-RBAC scope question at RELATO top | `cd /home/ronald/saas-hasner && python3 - <<'E' p='app/docs/RELATO.md';s=open(p).read() a='# RELATO — esteira saas-hasner\n\n' assert s.startswith(a) q=("> **lei: IA-RBAC-INCLUDE-DO-COPILOTO** (pergunta de escopo do aval, LEI-AKITA 9; nao para a fila, segura SO o pouso do IA-RBAC) -- o aval (c) de 11:1x diz \"ia_perguntar **e o include do copiloto** exigem qualquer acao do MAPA\". A cura condiciona ...` |
-| 13:44:26 | Bash | Register O98 aval and IA-DOMINIO row | `cd /home/ronald/saas-hasner && python3 - <<'E' import json d='app/docs/' # O98 row: append note in 'nota' col (5th) -> safer: prefix estado text p=d+'BACKLOG.md';s=open(p).read() a='\| **INSUMO CONFERIDO 20/20** (10/10 23:0x, grep no HEAD 1ceed412):' assert s.count(a)==1 s=s.replace(a,'\| **ARQUIVO EXISTE desde 27/10 13:4x** (`app/docs/GLOSSARIO.md`, secao "Termo tecnico <- alias da casa", 17 linh ...` |
-| 13:44:07 | Bash | Read O98 insumo file | `cd /home/ronald/saas-hasner/app/docs && wc -l O98-MAPA-ANTIGO-ENTRADA.md; head -60 O98-MAPA-ANTIGO-ENTRADA.md \| cut -c1-260` |
-| 13:44:04 | Bash | Locate O98 insumo | `cd /home/ronald/saas-hasner && git grep -ln "A9.*middleware\\|INSUMO CONFERIDO\\|insumo da O98\\|O98.*insumo" -- app/docs \| head; ls logs \| grep -i "o98\\|gloss" \| head` |
-| 13:44:00 | Bash | Read full O98 row | `cd /home/ronald/saas-hasner && sed -n "$(grep -n '^\| O98 ' app/docs/BACKLOG.md \| cut -d: -f1)p" app/docs/BACKLOG.md \| fold -w 400 \| head -40` |
