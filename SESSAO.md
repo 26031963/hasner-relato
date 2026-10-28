@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/10/2026 14:34:06.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (23.5 MB). Acoes na janela: **287**.
+**Medido em 28/10/2026 14:39:37.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (23.5 MB). Acoes na janela: **286**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -296,4 +296,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 02:42:23 | Bash | Rerun flaky module 3 times in isolation | `cd /home/ronald/saas-hasner && for n in 1 2 3; do bin/suite.sh --dir /home/ronald/wt-o245cob-2810-0200 --only "chamados.tests.test_fechar3_retorno_do_gate" --espera 900 > logs/o245cob/fechar3_iso_$n.out 2>&1; echo "run$n rc=$? $(grep -aE '^(OK\|FAILED)($\| \()' logs/o245cob/fechar3_iso_$n.out \| tail -1)"; done` |
 | 02:42:15 | Bash | Read flaky test | `grep -n "def test_MORDE_cobertura_com_irmao_vivo" -B3 -A30 chamados/tests/test_fechar3_retorno_do_gate.py \| head -60; grep -n "freeze_time\\|^class\\|setUp" chamados/tests/test_fechar3_retorno_do_gate.py \| head` |
 | 02:42:12 | Bash | Read fechar3 failure detail | `grep -a -A30 '^FAIL: test_MORDE_cobertura_com_irmao_vivo' /home/ronald/saas-hasner/logs/o245cob/suite_2.out \| grep -avE '^\s+\^' \| tail -14` |
-| 02:38:18 | Bash | Keep waiting O245 suite 2 | `L=/home/ronald/saas-hasner/logs/o245cob/suite_2.out; for i in $(seq 58); do grep -aq '^rc=' $L 2>/dev/null && break; /usr/bin/sleep 10; done; tr -d '\0' < $L \| grep -aE '^(OK\|FAILED)($\| \()\|^Ran \|^rc=\|^(FAIL\|ERROR):' \| tail -6; date +%H:%M` |
