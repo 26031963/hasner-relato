@@ -335,6 +335,7 @@ Estavam no indice como vigentes e alguma clausula nao tem efeito. Gerada do ESTA
 - `REGISTRADO-CARD-3524`
 - `COBERTURA-ABONO-DO-PERIODO`
 - `SMOKE-FIO-NO-AR-ANTES`
+- `SMOKE-FIO-PARCIAL`
 
 ## CORTES que viraram lei
 
