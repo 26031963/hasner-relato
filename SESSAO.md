@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/10/2026 04:00:50.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (18.2 MB). Acoes na janela: **401**.
+**Medido em 28/10/2026 04:06:06.** Transcript: `bea8f2b7-21d4-4d42-afd2-993c9f814f8f.jsonl` (18.3 MB). Acoes na janela: **399**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 04:04:24 | Bash | Record IP regression; wait rework | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read() a='> INCOMPLETO: (1) 3 dos 7 RED caem pela assinatura nova (`autor`), nao pelo defeito;' assert s.count(a)==1 s=s.replace(a,'> INCOMPLETO: (0) **REGRESSAO no ar, achada 04:0x pelo verificador do TERMOMETRO:** as views passam `autor=request.user` e `_ReqDoAutor` tem `META={}` -> a trilha do vinculo editado pel ...` |
+| 04:04:16 | SendMessage |  | `-` |
 | 03:59:19 | Bash | Wait for verifier | `/usr/bin/sleep 280; date +%H:%M` |
 | 03:59:16 | Agent | Verificar TERMOMETRO 98853070 | `Obra TERMOMETRO-GRAVA-SEM-TRILHA, 1a leitura. Copia /home/ronald/wt-termometro-2810-0340, commit 98853070 sobre main 0bfbb7f6: `git -C /home/ronald/wt-termometro-2810-0340 show 98853070` (corpo + diff). Defeito: `termometro_regua --lavrar` gravava o escore do vinculo por `.update()` sem `registrar_log` (LEI-AKITA 7), chamado de `escala/regua_defesa.py::gravar_regua`. Escopo aprovado: SO a trilha ( ...` |
 | 03:56:58 | Bash | Keep waiting termometro suite | `L=/home/ronald/saas-hasner/logs/termometro/suite_1.out; for i in $(seq 58); do grep -aq '^rc=' $L 2>/dev/null && break; /usr/bin/sleep 10; done; tr -d '\0' < $L \| grep -aE '^(OK\|FAILED)($\| \()\|^Ran \|^rc=\|^(FAIL\|ERROR):\|porcelain' \| tail -5; date +%H:%M` |
@@ -407,7 +409,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 16:06:30 | Bash | Read-only query of tranca for comp 10 emp of col94 | `cd /home/ronald/saas-hasner && cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/bea8f2b7-21d4-4d42-afd2-993c9f814f8f/scratchpad/tranca.py <<'E' from django.utils import timezone as tz from ponto.models import PeriodoFechado from core.models import LogAuditoria from colaboradores.models import Colaborador c=Colaborador.objects.get(pk=94); print('emp',c.empresa_id) for p in PeriodoFechado.objects ...` |
 | 16:06:20 | Bash | Read dia_da_pergunta_trancado | `n=$(git grep -n "^def dia_da_pergunta_trancado" -- chamados/juizes.py \| cut -d: -f2); sed -n "${n},$((n+25))p" chamados/juizes.py` |
 | 16:06:13 | Bash | Read respostas_sem_veredito | `n=$(grep -n "def respostas_sem_veredito" chamados/models.py \| cut -d: -f1); sed -n "${n},$((n+30))p" chamados/models.py` |
-| 16:06:02 | Bash | Read DisputaSupervisao.fechar | `sed -n 1240,1292p chamados/models.py` |
-| 16:05:58 | Bash | Find disputa fechar and perguntas_vivas computation | `git grep -n "perguntas_vivas" -- chamados/models.py \| head; git grep -n "porta veredito\\|fechar(.*veredito\\|motivo_fechamento='veredito'\\|'veredito')" -- '*.py' ':!*/tests/*' \| head -8` |
-| 16:01:52 | Bash | Wait briefly for agent reports | `/usr/bin/sleep 240; ls -t /home/ronald/saas-hasner/logs \| head -5; date +%H:%M` |
-| 16:01:44 | Bash | Read trilha_6984 conclusion | `tail -40 /home/ronald/saas-hasner/logs/laudo_fernando_col94/trilha_6984.out \| cut -c1-220` |
