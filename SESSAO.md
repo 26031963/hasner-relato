@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/10/2026 20:05:11.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (2.4 MB). Acoes na janela: **105**.
+**Medido em 28/10/2026 20:10:39.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (2.4 MB). Acoes na janela: **106**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 20:07:24 | Bash | Wait more for ensaio | `cd /home/ronald/saas-hasner && for i in $(seq 1 19); do grep -q '^rc=' logs/juizpar/ensaio_1.out 2>/dev/null && break; /usr/bin/sleep 30; done; grep -E '^(piso\|UNIVERSO\|passada\|celulas\|VEREDITO\| \|FORA\|RETENCAO\|FECHAMENTO\|DIAPAGO\|CHAMADOS\| +A=\| +B=\|ERROS\|FIM\|rc=\|Traceback)' logs/juizpar/ensaio_1.out \| tail -40 \| cut -c1-300; date +%H:%M` |
 | 19:57:48 | Bash | Wait up to ~10 min for ensaio | `cd /home/ronald/saas-hasner && for i in $(seq 1 19); do grep -q '^rc=' logs/juizpar/ensaio_1.out 2>/dev/null && break; /usr/bin/sleep 30; done; grep -q '^rc=' logs/juizpar/ensaio_1.out && grep -vE '^\s+File\|^\s+\^' logs/juizpar/ensaio_1.out \| tail -40 \| cut -c1-300 \|\| { echo AINDA; tail -c 300 logs/juizpar/ensaio_1.out; }` |
 | 19:57:39 | Bash | Wait for ensaio and read results | `cd /home/ronald/saas-hasner && until grep -q '^rc=' logs/juizpar/ensaio_1.out 2>/dev/null; do /usr/bin/sleep 30; done; grep -vE '^\s+File\|^\s+\^' logs/juizpar/ensaio_1.out \| tail -40 \| cut -c1-300` |
 | 19:57:34 | Bash | Confirm pattern term exists | `/bin/grep -n -i "juiz unico" docs/GLOSSARIO.md docs/PLANO-PADROES.md \| head -5` |
