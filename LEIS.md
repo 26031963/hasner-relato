@@ -333,6 +333,7 @@ Estavam no indice como vigentes e alguma clausula nao tem efeito. Gerada do ESTA
 - `FIO-EXPORTADA-X-O44`
 - `REGISTRADO-NAO-E-VIVO-DESVIO`
 - `REGISTRADO-CARD-3524`
+- `COBERTURA-ABONO-DO-PERIODO`
 
 ## CORTES que viraram lei
 
