@@ -1,7 +1,30 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **29/10/2026 15:09** · publicado em **29/10/2026 15:10** (UTC-3)
+> Ultima resposta processada: **29/10/2026 15:25** · publicado em **29/10/2026 15:26** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 29/10 15:25 · sessao 23341f1d3b2f
+
+*Numeração de `anexo_log.txt`: `# ponto.log de hoje...` é a linha 1; linhas vazias contam.*
+
+- **Sim, o POST de atestado do app chegou em 29/10, do user 903**: recebido às **11:49:44,630** (`origem=api_app`); após parse, às **11:49:44,754**, registrou `tipo=atestado arquivo=True`. O acesso confirma `POST /api/ausencias/ → 200` às **11:49:44**. (`anexo_log.txt:2–3,25`)
+- **PWA, user 1006**: uploads de atestado às **15:21:15,054** e **15:21:17,447**, `origem=pwa`; os POSTs em `/ponto/ausencias/submeter/` retornaram **302** às **15:21:15** e **15:21:17**. (`anexo_log.txt:4–5,39–40`)
+- Na `api_ausencias`, **antes do parse**, `post_recebido` registra origem, user, tamanho declarado, content-type (até 60 caracteres) e teto dos campos; o primeiro acesso a `request.data` vem depois. ([app/api/views.py:1767](/home/ronald/codex_ws/7596ef5e8351bf7473acecafc8348bca7d2cf9d7/app/api/views.py:1767), [1772](/home/ronald/codex_ws/7596ef5e8351bf7473acecafc8348bca7d2cf9d7/app/api/views.py:1772))
+- **Após parse**, `upload_ausencia` registra origem, user, tipo, presença do arquivo, tamanho, content-type e plataforma. ([app/api/views.py:1832](/home/ronald/codex_ws/7596ef5e8351bf7473acecafc8348bca7d2cf9d7/app/api/views.py:1832)) Correspondência dos users com `colNN`: **[não verificado]**.
+
+## 29/10 15:22 · sessao 95904850ee23
+
+stdout [nao verificado]:
+```text
+rc=1
+```
+
+stderr [nao verificado]:
+```text
+/home/ronald/wt-codexpro-2910-1525/bin/sonda_leitura.sh: line 132: /home/ronald/wt-codexpro-2910-1525/logs/.env_leitor.novo: Read-only file system
+```
+
+Código de saída do comando solicitado: `1`. [nao verificado]
 
 ## 29/10 15:09 · sessao 1068ea4b2151
 
@@ -1644,259 +1667,4 @@ Texto preparado para seção nova do RELATO, abaixo do teto de 25 linhas:
 
 Ressalva para o registro do O-OUTBOX: a leitura anterior encontrou consultas na sequência Disputa → Colaborador, mas em ramos exclusivos; aquisição conjunta dessas duas travas e ausência geral de deadlock: **nao provado**.
 
-## 29/10 14:38 · sessao c03300972490
-
-**Instalado: `codex-cli 0.165.0`.** Conferi `codex --version`, `codex --help`, `codex exec --help`, `codex features list` e `codex login status`. Login atual: **ChatGPT**. Não li código do Hasner.
-
-### 1. Subagentes nativos
-
-**Sim.** A instalação informa `multi_agent stable true`. A documentação descreve agentes paralelos com contextos separados, resultados devolvidos ao principal e consolidação na resposta final. Os filhos herdam sandbox e aprovação do principal. [Documentação de subagentes](https://learn.chatgpt.com/docs/agent-configuration/subagents).
-
-Acionamento por instrução ao agente, por exemplo:
-
-```bash
-codex --enable multi_agent \
-  --sandbox read-only --ask-for-approval never \
-  -C "$HOME/codex_ws" \
-  'Divida a investigação em tarefas independentes. Use até três subagentes explorer em paralelo, espere os resultados e consolide.'
-```
-
-Para configurar explicitamente o teto:
-
-```bash
-codex --enable multi_agent \
-  -c agents.max_threads=3 \
-  --sandbox read-only --ask-for-approval never \
-  -C "$HOME/codex_ws"
-```
-
-`agents.max_threads` é documentado como alias de `agents.max_concurrent_threads_per_session`, excluindo o principal. **Padrão efetivo e aplicação desse teto na 0.165.0: [nao verificado]**; não consegui inicializar uma sessão de teste. [Referência de configuração](https://learn.chatgpt.com/docs/config-file/config-reference). [nao verificado]
-
-`codex agents` abre o navegador de sessões; não é um comando shell para criar um filho — confirmado pelo help.
-
-### 2. `exec`: pergunta de arquivo, resposta em arquivo
-
-Sintaxe conferida no help instalado:
-
-```bash
-codex --ask-for-approval never exec \
-  --sandbox read-only \
-  --skip-git-repo-check \
-  -C "$HOME/codex_ws" \
-  --output-last-message /tmp/codex-resposta.txt \
-  - < /tmp/codex-pergunta.txt
-```
-
-**A posição importa nesta versão:** `codex exec -a never` foi rejeitado. A opção funciona no parser global, **antes de `exec`**.
-
-Flags confirmadas:
-
-| Flag | Efeito indicado pelo help |
-|---|---|
-| `-` | Lê o prompt de stdin. |
-| `-C` | Define diretório de trabalho. |
-| `--skip-git-repo-check` | Permite diretório sem `.git`, como cópia por archive. |
-| `-o`, `--output-last-message` | Grava a última mensagem. |
-| `--json` | Emite **eventos JSONL em stdout**. |
-| `--output-schema` | Define JSON Schema da resposta final. |
-| `--ephemeral` | Evita persistir arquivos da sessão. |
-
-Eventos JSONL separados da resposta final:
-
-```bash
-codex --ask-for-approval never exec \
-  --sandbox read-only --skip-git-repo-check \
-  -C "$HOME/codex_ws" \
-  --json \
-  -o /tmp/codex-final.txt \
-  - < /tmp/codex-pergunta.txt \
-  > /tmp/codex-eventos.jsonl
-```
-
-Para **resposta final JSON**, acrescente:
-
-```bash
---output-schema /tmp/schema.json -o /tmp/codex-final.json
-```
-
-`--json` sozinho não transforma a resposta final em JSON estruturado. Origem: help instalado e [documentação não interativa](https://learn.chatgpt.com/docs/non-interactive-mode). Execução completa com arquivos: **[nao verificado]**.
-
-### 3. Vários `codex exec` simultâneos
-
-Exemplo shell, com saídas distintas:
-
-```bash
-codex --ask-for-approval never exec \
-  -s read-only --skip-git-repo-check -C "$HOME/codex_ws" \
-  -o /tmp/resposta-a.txt - < /tmp/pergunta-a.txt &
-pid_a=$!
-
-codex --ask-for-approval never exec \
-  -s read-only --skip-git-repo-check -C "$HOME/codex_ws" \
-  -o /tmp/resposta-b.txt - < /tmp/pergunta-b.txt &
-pid_b=$!
-
-wait "$pid_a"; rc_a=$?
-wait "$pid_b"; rc_b=$?
-printf 'a=%s b=%s\n' "$rc_a" "$rc_b"
-```
-
-**Este teste paralelo não foi executado.** [nao verificado]
-
-- Conflito de sessões/cache na 0.165.0: **[nao verificado]**.
-- Limite de processos concorrentes: **[nao verificado]**; não aparece nos helps consultados. Não confundir com teto de subagentes.
-- Limites de uso/taxa desta conta ChatGPT e comportamento sob concorrência: **[nao verificado]**.
-- O help oferece `--no-daemon`, antes de `exec`, para não usar o servidor compartilhado. Isso não comprova isolamento de todos os caches.
-
-### 4. Outro processo pode chamar e esperar?
-
-**Sim, esse é o uso documentado de `codex exec`: scripts/CI, sem TUI.** O comando em primeiro plano só devolve o controle ao terminar. [Origem: documentação oficial](https://learn.chatgpt.com/docs/non-interactive-mode).
-
-```bash
-codex --ask-for-approval never exec \
-  --sandbox read-only --skip-git-repo-check \
-  -C "$HOME/codex_ws" \
-  -o /tmp/resposta.txt - < /tmp/pergunta.txt
-rc=$?
-
-if [ "$rc" -eq 0 ]; then
-  cat /tmp/resposta.txt
-else
-  printf 'codex falhou: %s\n' "$rc" >&2
-fi
-```
-
-- **TTY:** não exigido pelo modo documentado.
-- **Login:** `codex login status` confirmou autenticação nesta sessão. Disponibilidade para outro usuário/ambiente: **[nao verificado]**.
-- **Confirmações de execução:** `never` manda devolver falhas ao agente, sem pedir aprovação — help instalado.
-- Outros bloqueios de inicialização/configuração: não estão eliminados por `never`.
-
-**Teste realmente rodado**, sem TTY e sem ler arquivos: [nao verificado]
-
-```bash
-codex --ask-for-approval never --no-daemon exec \
-  --ephemeral --skip-git-repo-check \
-  --sandbox read-only -C /tmp \
-  -o /dev/null \
-  'Nao use ferramentas, nao leia arquivos. Responda apenas CLI_OK.'
-```
-
-Resultado:
-
-```text
-Error: failed to initialize in-process app-server client:
-Read-only file system (os error 30)
-```
-
-Portanto, confirmei sintaxe e tentativa de inicialização; **não confirmei uma resposta completa do modelo**. O sandbox `read-only` do agente não dispensa armazenamento gravável para o runtime do CLI e para o arquivo de saída.
-
-## 29/10 14:38 · sessao c03300972490
-
-HEAD lido: `5a7ea7a6afda8d4d0accfc2dae9b2973df6e2dad`, por `git show`. Sem escrita, testes ou banco. Os dados dos IDs são os fornecidos no laudo; seus registros e trilhas: **nao li**.
-
-## T16 — Data da pergunta × data da célula
-
-### (a) Onde nasce `data_evento`
-
-| Caminho | Origem da data |
-|---|---|
-| Fábrica por célula | Passa **`cel.data`** e coloca esse dia no contexto do motivo (`app/chamados/services/fabrica_da_celula.py:123`, `:108`). |
-| Gerador de perguntas | Usa a data do contexto e entrega ao gate como `data_evento` (`app/chamados/services/disputa_emissao.py:343`, `:347`, `:396`). |
-| Contexto sem data | `_data_furo_da_grade` toma `entrada_sem_saida`/`ultima_batida`, converte para **dia civil local** e verifica a célula desse dia; não pergunta `Turno.data_turno` (`app/chamados/services/disputa_emissao.py:57`, `:61`, `:66`, `:68`). |
-| Último fallback de anomalia | Usa o dia civil local de `ultima_batida` (`app/chamados/services/disputa_emissao.py:350`, `:364`). |
-| Marcos nomeados do chamado | Usa o dia declarado no contexto e consulta a ata desse dia (`app/chamados/services/disputa_emissao.py:973`, `:978`). |
-| Agrupamento por batida-origem | Começa pelo dia civil da entrada; depois resolve a data do evento pelo motivo (`app/chamados/services/disputa_emissao.py:1002`, `:1003`, `:1006`). |
-| Motivo `orfao_14h` | Usa a **data da saída esperada**, que pode ser D+1 num noturno (`app/escala/servico_jornada.py:482`, `:487`, `:490`). |
-| Sem batida-origem | Usa a data do contexto do chamado (`app/chamados/services/disputa_emissao.py:1031`). |
-| Conversa sem data | O gate atribui **hoje** (`app/chamados/models.py:2054`, `:2057`). |
-| Associação da pergunta à célula | Busca a célula pela **própria `data_evento`**, não copia a célula do chamado (`app/chamados/models.py:2060`). |
-
-A costura só preenche data quando ela está vazia; não corrige data já existente (`app/chamados/services/fio.py:788`, `:790`). O juiz admite D/D+1 quando reconhece turno noturno **ou quando não consegue determinar se cruza a meia-noite** (`app/chamados/juizes.py:1712`, `:1721`, `:1730`, `:1732`).
-
-**Limite para o caso:** com entrada de28/10 e DNA realmente diurno06–18, `resolver_data_evento` não produz29/10 sozinho: o fim encadeado permanece em28/10 (`app/escala/utils.py:925`, `:927`, `:930`). Para explicar a pergunta de29/10 é necessário outro contexto/ramo ou outro DNA lido naquele ato. Isso é **hipótese**; não está demonstrado apenas pelo casamento de18:01 com S18.
-
-### (b) Qual vínculo/DNA casa18:01
-
-| Etapa | Regra encontrada |
-|---|---|
-| Escolha do vínculo | A grade carrega vínculos/células e chama `vinculo_do_dia` (`app/escala/utils.py:1240`, `:1252`, `:1254`). |
-| Geradora declarada | Vale apenas dentro da vigência. Se estiver fora, retorna `None`, sem trocar silenciosamente por outro vínculo (`app/escala/alimentacao.py:237`, `:247`, `:250`). Sem geradora, escolhe vínculo que cobre o dia (`:253`, `:254`). |
-| Marcos usados | Primeiro DNA da célula do dia; na ausência, template (`app/escala/utils.py:104`, `:1547`). |
-| Matcher | Recebe marcos prontos; não escolhe vínculo nem data (`app/escala/utils.py:551`). |
-| Uso do papel do turno | Exige exatamente um turno fechado; neste chamador, também intervalo declarado (`app/escala/utils.py:1533`, `:1534`, `:1641`, `:1642`). |
-| Caminho restante | DP por distância, sem exigir que tipo gravado coincida com tipo do marco (`app/escala/utils.py:595`, `:599`); conserva `tipo_real` separadamente (`:627`). |
-
-Assim, **uma entrada isolada18:01 pode ocupar S18** diante de marcos06/18: o turno aberto não fornece papel, e a DP escolhe o marco próximo (`app/escala/utils.py:1534`, `:595`, `:599`). Isso demonstra atribuição posicional, não demonstra erro de data civil.
-
-Pelas vigências informadas, #1482 encerrado em13/10 não cobre28/10; se a célula ainda o nomeia como geradora, o juiz retorna `None` (`app/escala/alimentacao.py:250`). Geradora e DNA efetivos da célula28/10: **nao li**.
-
-Há uma alimentação diferente no datador da saída: ele busca vínculo **ativo e sem fim**, em vez da composição histórica do builder, e depois lê os marcos do dia (`app/escala/utils.py:920`, `:922`, `:927`). Que essa diferença tenha causado p#51310: **hipótese**.
-
-### (c) Resolução sem resposta humana
-
-| Via / escritor | Testemunha consultada |
-|---|---|
-| `sem_turno_aberto` (`app/chamados/reconciliador.py:402`, `:406`) | Exige ausência de resposta, ausência de turno aberto e pergunta já não viva (`:365`, `:372`, `:398`). Não basta faltar turno aberto. |
-| `celula_absolveu` (`app/chamados/reconciliador.py:548`, `:550`) | Célula não acusadora, sem pendências de teto, pergunta não viva (`:525`, `:529`, `:538`, `:544`). |
-| `fantasma` (`app/chamados/models.py:2170`, `:2171`) | Sem resposta, lâmpada do próprio marco acesa e dia encerrado; consumidor grava pela porta (`app/chamados/reconciliador.py:878`, `:880`, `:884`, `:886`, `:940`). |
-| `juiz_aprovou` (`app/chamados/services/materializacao.py:1337`, `:1341`) | Usa `_pergunta_materializada_de_fato`; corpo integral desse juiz neste HEAD: **nao li**. |
-| `completude_turno` | `via_pelo_fato` consulta `TurnoMaterializado.saida` pela `data_evento` (`app/chamados/juizes.py:1203`, `:1207`, `:1209`). |
-| `ausencia_dia` | O mesmo juiz usa ausência aprovada no dia da pergunta (`app/chamados/juizes.py:1199`, `:1201`). |
-
-Quando consulta a lâmpada, o juiz lê **`p.celula`**, seu DNA e ATA — não necessariamente a célula do chamado (`app/chamados/juizes.py:842`, `:845`, `:849`, `:866`). Via concreta de p#51310: **nao li**.
-
-**Não são uma única classe comprovada de “dia pelo dia civil”.** Há mistura de semânticas de data em(a), escolha de vínculo/DNA e atribuição posicional em(b), e resolução por testemunha em(c). A cadeia causal específica entre as três continua **hipótese**, pelas diferenças demonstradas acima.
-
-## T17 — Chamado em cobrança sem pergunta viva
-
-**`COBRANCA` depende somente de `status_local` ser `aberto` ou `em_analise`; não exige fio vivo** (`app/chamados/catalogo/motor.py:29`). Fio morto não provoca transição automática: alguém precisa chamar uma porta aceita pelo motor e pela premissa (`app/chamados/models.py:440`, `:467`, `:470`).
-
-| Caminho | O que pode impedir fechamento/reparo |
-|---|---|
-| `reconciliar()` | Para furo, exige premissa regularizada, agrupamento ou cobrança irmã sobrevivente (`app/chamados/models.py:495`, `:498`). **Hipótese:** célula ainda furada, sem essas exceções, conserva cobrança mesmo sem fio (`:522`, `:525`). |
-| Reconciliador geral | Só retrata quando encontra premissa conhecida e morta (`app/chamados/reconciliador.py:1203`, `:1208`, `:1209`). `_retratar` ainda pode recusar por irmã respondida sem consumo ou pelo gate final (`:435`, `:456`). |
-| `consumir_eventos_celula` | Executa retratação de absolvidos e encerramento de órfãs pela lâmpada (`app/chamados/reconciliador.py:1145`, `:1148`). Sem falha/adiamento, marca processado mesmo sem alteração (`:1165`). **Processado não significa fio reparado.** |
-| Retratar absolvidos | Exige célula com veredito **não acusador** e sem pendência de teto (`app/chamados/reconciliador.py:819`, `:823`, `:825`). Célula acusadora fica fora. |
-| Encerrar órfãs pela lâmpada | Seleciona perguntas não materializadas/não validadas, em disputa aberta (`app/chamados/reconciliador.py:836`, `:844`); exige pergunta **viva**, sem texto e marco aceso (`:878`, `:880`, `:882`). Não ressuscita pergunta morta. |
-| `ressuscitar_perguntas` | Só alcança resolvedoras associadas, materializadas, sem texto, cujo marco não esteja comprovadamente aceso (`app/chamados/models.py:1112`, `:1119`). Pergunta ausente, validada sem materialização, com texto ou ligada a outro chamado fica fora. Limpeza em `:1162`. |
-| Pedido de ressuscitação pelo cartório | Pula chamado sem perguntas, com fio vivo ou com qualquer resposta textual (`app/ponto/services/cartorio.py:1261`, `:1263`). Duplicatas tentam fechamento; demais seguem para ressuscitação (`:1265`, `:1271`). Impressão igual impede executar esse corpo (`:1092`). |
-| `reabrir()` | Só há transição de resolvido/fechado; não é reparo para chamado já aberto (`app/chamados/catalogo/motor.py:113`). Quando consegue reabrir, pede ressuscitação (`app/chamados/models.py:1098`). |
-| Fábrica | Exige célula elegível e motivo vencido (`app/chamados/services/fabrica_da_celula.py:73`, `:80`, `:81`). Dedup considera pergunta morta não duplicata como existente (`:93`, `:95`); o gate reutiliza o fato sem limpar carimbos (`app/chamados/models.py:2061`, `:2084`). |
-| Gatilho da fábrica | Só alcança células efetivamente julgadas, não a mera ausência de fio (`app/ponto/services/cartorio.py:769`, `:770`). |
-| Evento de beco | Exige pai já resolvido; pai aberto não entra (`app/chamados/services/becos.py:31`). |
-
-Nascimento e mudança de veredito/ata geram eventos, mas somente eventos pendentes alimentam o consumidor (`app/chamados/models.py:736`, `:739`; `app/ponto/portas/celula.py:623`, `:642`; `app/chamados/reconciliador.py:1128`). Isso não comprova reparo do estoque anterior nem superação das guardas acima.
-
-**O261 conta #22914? “Aberto sem pergunta viva” não basta:**
-
-- Precisa módulo de furo e célula associada (`app/chamados/services/vigia_fio.py:184`, `:199`).
-- A célula precisa ser acusadora (`:227`).
-- O vigia reúne perguntas da **mesma célula**, não só resolvedoras daquele chamado. Outra pergunta viva da célula pode excluí-lo (`:242`, `:244`, `:258`).
-- Exclui hoje/futuro, decisão oferecida ao admin, ausência aberta e aceite de folga validado (`:261`, `:266`, `:273`, `:279`).
-- Passando tudo, soma uma célula em `fio_morto` e, com cobrança, em `fio_morto_cobrando` (`:286`, `:288`).
-
-**Por que nenhum caminho alcançou especificamente #22914: não provado.** Módulo, célula, data, veredito, carimbos das perguntas e estado dos eventos desse ID: **nao li**. Escolher uma das condições acima como causa seria **hipótese**.
-
-## T18 — Retrato × `o_que_segura`
-
-| Fonte | O que efetivamente lê |
-|---|---|
-| Ficha/drawer | Busca `RetratoFolha` da empresa/competência e localiza a linha do colaborador (`app/colaboradores/views.py:980`, `:982`). O localizador lê **`RetratoFolha.linhas`** (`app/folha/retrato_folha.py:110`, `:935`). |
-| Pendências exibidas | Template mostra `retrato_fazer` e **`retrato_linha.datas`**, já gravadas (`app/templates/folha/_retrato_o_que_fazer.html:33`, `:44`, `:46`). |
-| Produção da foto | `montar_linhas` chama `fora_da_folha(..., com_itens=True)` (`app/folha/retrato_folha.py:1157`), que usa `classificar_export` e `motivos_retencao_celula` (`app/folha/fora_da_folha.py:120`, `:93`, `:139`). Grava status, motivo, dias e datas (`app/folha/retrato_folha.py:1180`, `:1183`). |
-| `o_que_segura` | Consulta **agora** `classificar_export` e a mesma autoridade de dias retidos; devolve o status em `entra` (`app/folha/fora_da_folha.py:191`, `:193`, `:212`). |
-
-**Não encontrei duas regras de retenção nesse caminho.** As duas leituras descendem das mesmas autoridades; a ficha lê a resposta gravada e `o_que_segura` pede resposta atual (`app/folha/retrato_folha.py:1157`; `app/folha/fora_da_folha.py:191`, `:193`).
-
-Há duas distinções relevantes:
-
-1. **“Folga” pode ser rótulo de causa**, não classificação atual de cada data. `tipo='folga'` pode vir de causas como `escala_sem_folga_definida` ou `dias_trocados`, lidas de `FechamentoMensal.causa_espelho` (`app/folha/retrato_folha.py:233`, `:238`, `:374`, `:1115`).
-2. O juiz atual de retenção usa veredito/protestos da célula; não possui nesse ramo veto independente por `trabalha=False`. Portanto uma folga ainda acusadora pode reter; uma célula absolvida deixa de reter por esse critério (`app/folha/export.py:1188`, `:1215`, `:1227`, `:1235`).
-
-**O frescor pode não perceber mudança da célula:** compara somente `Max(FechamentoMensal.atualizado_em)` com `RetratoFolha.lavrado_em` (`app/folha/retrato_folha.py:1298`, `:1306`). Veredito/ata são gravados pela porta de célula separadamente (`app/ponto/portas/celula.py:691`, `:697`).
-
-**Hipótese de defasagem:** célula deixa de reter depois da lavra, retrato não é relavrado e nenhum fechamento recebe timestamp posterior. A ficha conserva `linhas.datas`; `o_que_segura` responde `entra`; o indicador ainda pode dizer atualizado (`app/folha/retrato_folha.py:1183`, `:1303`; `app/folha/fora_da_folha.py:212`).
-
-**Conclusão:** o código sustenta **projeção velha como hipótese**, não uma derivação paralela de folga na ficha. Para confirmar o ocorrido, a linha gravada, `lavrado_em`, timestamps dos fechamentos e histórico das células: **nao li**.
-
-_95 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_97 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._

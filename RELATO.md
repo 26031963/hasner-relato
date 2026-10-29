@@ -1,5 +1,7 @@
 # RELATO — esteira saas-hasner
 
+> **MOTIVO (CODEX-PADRAO-PRO item 1): a prova do BO07 na SOMBRA vai a agente sonnet** -- o Codex nao alcanca a sombra (nao tem banco) e a CODEX-SONDA-LEITURA ainda nao pousou; e escrita dentro de atomic+raise pela porta real, que so o envelope da sombra faz.
+
 > **CODE-CHAMA-CODEX COMPLEMENTO LIMITE -- NO AR 29/10 15:2x (instrumento, pouso proprio L-105).**
 > LEI-AKITA: origem=bin/codex_pergunta.sh (rc LIMITE=75) + bin/codex_limite_estado.py, testemunha=logs/codex/limite.log + ESTADO (secao "Codex (limite)" em bin/gerar_estado.py), RED=bin/tests/test_codex_limite.sh (7 falhas no wrapper antigo: rc 1 onde se espera 75, 0 linha no limite.log, ESTADO nao conta), quem-mais-le=bin/gerar_estado.py, juizes novos=0, padrao=n/a (instrumento)
 > - PROVA: `test_codex_limite` rc 0 na arvore viva (codex falso: stderr de limite e evento `error`/`turn.failed` -> rc 75 e 2 linhas com a obra; falha generica -> rc 1 sem linha), `test_codex_pergunta`, `test_codex_estado`, `test_codex_estado_evento` rc 0. Sem exemplo REAL de limite nos JSONL (`rate_limit_reached_type:null` 618x; erros so `turn_aborted` 20x): o padrao e por evento/rc do CLI, declarado. Regra no cabecalho do wrapper: rc LIMITE -> o agente segue pelo sonnet, sem esperar nem repetir.
