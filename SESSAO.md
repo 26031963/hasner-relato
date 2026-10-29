@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/10/2026 04:11:44.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (9.4 MB). Acoes na janela: **428**.
+**Medido em 29/10/2026 04:17:09.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (9.4 MB). Acoes na janela: **429**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 04:15:53 | Bash | Wait for ORFAS full suite 2 | `cd /home/ronald/saas-hasner && for i in $(seq 1 19); do grep -qE '^Ran [0-9]\|^rc=' logs/orfas/suite_inteira_2.log 2>/dev/null && break; /usr/bin/sleep 30; done; cat logs/orfas/arvore_hash_2.out; grep -E '^(FAIL\|ERROR):\|^Ran \|^(OK\|FAILED)( \|$)\|^rc=' logs/orfas/suite_inteira_2.log \| tail -5; date +%H:%M` |
 | 04:10:57 | Bash | Wait for ORFAS report | `/usr/bin/sleep 290; ls -t /home/ronald/saas-hasner/logs/orfas \| head -4; date +%H:%M` |
 | 04:06:51 | Bash | Record COL129 rejection and wait | `python3 - <<'EOF' p='docs/RELATO.md'; s=open(p).read() o="Pergunta: (a) o contador da lista e 36 (09=20, 10=13, 11=3)" n="VERIFICADOR 04:0x: a medida (36; 09=20, 10=13, 11=3) CONFERE; REPROVADA por cura (leitor com literal 26 h proprio, R6 sem caminho provado -- DNA congelado e botao no vinculo de hoje --, contador da TELA nao medido, recorte nao refeito, RED de import); de volta ao construtor. Pe ...` |
 | 04:06:44 | SendMessage |  | `-` |
