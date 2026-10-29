@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/10/2026 18:55:44.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (23.5 MB). Acoes na janela: **437**.
+**Medido em 29/10/2026 19:00:59.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (23.6 MB). Acoes na janela: **438**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 18:58:26 | Bash | Wait in-turn for grupo1 full suite and sombra | `cd /home/ronald/saas-hasner/logs && end=$((SECONDS+580)); while [ $SECONDS -lt $end ]; do grep -q '^rc=' grupo1p1/suite_inteira.log 2>/dev/null && [ -f grupo1p1/sombra_prova.fim ] && break; /usr/bin/sleep 20; done; date +%H:%M; grep -E '^(OK\|FAILED)($\| \()\|^Ran\|^rc=\|arvore_hash' grupo1p1/suite_inteira.log 2>/dev/null \| tail -5; ls -la --time-style=+%H:%M grupo1p1/ata_p1.out grupo1p1/sombra_p ...` |
 | 18:54:49 | Bash | Wait in-turn for grupo1 recorte verdict | `cd /home/ronald/saas-hasner/logs && end=$((SECONDS+580)); while [ $SECONDS -lt $end ]; do grep -q '^rc=' grupo1p1/recorte.log 2>/dev/null && break; /usr/bin/sleep 15; done; date +%H:%M; grep -E '^(OK\|FAILED)($\| \()\|^Ran\|^rc=\|^(FAIL\|ERROR):' grupo1p1/recorte.log \| tail -6; ls -la --time-style=+%H:%M grupo1p1/ata_p1.out grupo1p1/ata_main.out 2>&1 \| awk '{print $6,$7,$5}'` |
 | 18:54:43 | Bash | Confirm kill and record state in RELATO | `cd /home/ronald/saas-hasner && ps -eo pid,args \| grep 'wt-justif-rfa' \| grep -v grep \| cut -c1-150; python3 - <<'PY' p='app/docs/RELATO.md'; s=open(p,encoding='utf-8').read(); i=s.index('\n> ') s=s[:i]+'\n> **19:0x:** GRUPO-1 pouso 1: RED do selo refeito contra o main = FAILED (failures=2, errors=2), rc=1 -- o MORDE agora passa no main (era o falso); recorte e suite de 56905504 com a trava. JUS ...` |
 | 18:54:35 | SendMessage |  | `-` |

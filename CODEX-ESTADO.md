@@ -1,7 +1,109 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **29/10/2026 18:54** · publicado em **29/10/2026 18:55** (UTC-3)
+> Ultima resposta processada: **29/10/2026 19:00** · publicado em **29/10/2026 19:00** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 29/10 19:00 · sessao c57a7aa93193 · - · - · origem=Ronald (tmux)
+
+Encontrei três defeitos na prova PID, reproduzidos sem escrever arquivos:
+
+1. **Opção aceita como produtor.** [bin/hook_stop_fila1.py:487](/home/ronald/codex_ws/512e6c938dbf0fbf0c39e7c7caff081f12f237f0/bin/hook_stop_fila1.py:487) aceita `argv[1]` sem verificar se é opção. Entrada: `ESPERANDO: -c | pid=N`, sendo N um `python3 -c 'import time; time.sleep(30)'`. `_prova_pid('-c', N)` retornou `''`; o parser retornou `(True, '', linha)`. Assim, um interpretador genérico parado passa como produtor `-c` e libera pelo ramo de [bin/hook_stop_fila1.py:775](/home/ronald/codex_ws/512e6c938dbf0fbf0c39e7c7caff081f12f237f0/bin/hook_stop_fila1.py:775).
+
+2. **Caminho contorna rejeição de produtor genérico.** [bin/hook_stop_fila1.py:498](/home/ronald/codex_ws/512e6c938dbf0fbf0c39e7c7caff081f12f237f0/bin/hook_stop_fila1.py:498) verifica o basename lexical; [bin/hook_stop_fila1.py:492](/home/ronald/codex_ws/512e6c938dbf0fbf0c39e7c7caff081f12f237f0/bin/hook_stop_fila1.py:492) compara caminhos resolvidos. Para um `/usr/bin/sleep 30` vivo, `/usr/bin/sleep` bloqueou como genérico, mas `/usr/bin/sleep/`, `/usr/bin/sleep/.` e `/proc/N/exe` retornaram prova `''`. Entrada: `ESPERANDO: /usr/bin/sleep/ | pid=N`. Libera usando somente o temporizador que a própria regra pretende rejeitar.
+
+3. **`cwd` atual atribui script ao caminho errado.** [bin/hook_stop_fila1.py:489](/home/ronald/codex_ws/512e6c938dbf0fbf0c39e7c7caff081f12f237f0/bin/hook_stop_fila1.py:489) resolve script relativo contra o diretório atual do processo, que pode ter mudado após abrir o script. Entrada convencional: iniciar `python3 produtor.py` em `/a`, o script mudar para `/b`; declarar `/b/produtor.py` aceita o produtor errado, enquanto `/a/produtor.py` pode bloquear. Reproduzi com `/bin/bash dev/stdin`, iniciado em `/`, recebendo pelo pipe `cd /tmp; while :; do /usr/bin/sleep 30; done`: `/tmp/dev/stdin` não existia, mas `_prova_pid('/tmp/dev/stdin', N)` retornou `''`.
+
+Ancestrais e rejeição de PID morto/reciclado: **nada adicional**, pelos ramos de [bin/hook_stop_fila1.py:502](/home/ronald/codex_ws/512e6c938dbf0fbf0c39e7c7caff081f12f237f0/bin/hook_stop_fila1.py:502), [bin/hook_stop_fila1.py:517](/home/ronald/codex_ws/512e6c938dbf0fbf0c39e7c7caff081f12f237f0/bin/hook_stop_fila1.py:517) e [bin/hook_stop_fila1.py:519](/home/ronald/codex_ws/512e6c938dbf0fbf0c39e7c7caff081f12f237f0/bin/hook_stop_fila1.py:519).
+
+## 29/10 19:00 · sessao fe8a22260b54 · - · - · origem=Ronald (tmux)
+
+Achei um contraexemplo novo na identidade do sinal: a memória usa apenas `st_dev:st_ino`, sem geração do arquivo nem descarte de entradas antigas (`bin/hook_stop_fila1.py:565`, `bin/hook_stop_fila1.py:585`, `bin/hook_stop_fila1.py:588`).
+
+Entrada concreta: `ESPERANDO: agente-x | arquivo=/tmp/sinal`; a memória contém `{"1:123":10}` referente a um arquivo removido. Outro arquivo estático nasce com o inode reciclado `1:123` e `mtime_ns=20`, e seu criador termina antes da avaliação. A primeira observação desse novo arquivo retorna prova porque `20 > 10`; não há produtor vivo, mas o Stop libera (`bin/hook_stop_fila1.py:605`, `bin/hook_stop_fila1.py:607`, `bin/hook_stop_fila1.py:775`). Reproduzi o retorno `''` executando a função real com E/S simulada em memória; reciclagem efetiva neste host: [nao verificado]. É identidade entre arquivos diferentes, não o residual de avanço antigo do mesmo arquivo (`bin/hook_stop_fila1.py:565`).
+
+Para ordem de trava/regressão da memória: nada novo; observação anterior ao lock que tenha sido ultrapassada acaba bloqueada pelo `max` e pela comparação final (`bin/hook_stop_fila1.py:551`, `bin/hook_stop_fila1.py:572`, `bin/hook_stop_fila1.py:588`, `bin/hook_stop_fila1.py:605`).
+
+Para symlink/FIFO da memória e trava, temporário, permissões capturadas e falhas de gravação: nada adicional encontrado no fluxo analisado (`bin/hook_stop_fila1.py:526`, `bin/hook_stop_fila1.py:571`, `bin/hook_stop_fila1.py:578`, `bin/hook_stop_fila1.py:589`, `bin/hook_stop_fila1.py:600`).
+
+## 29/10 19:00 · sessao e9b065734b1c · - · - · origem=Ronald (tmux)
+
+Achado concreto no selo:
+
+- **Falso vermelho quando PID 1 é interpretador/embrulho.** Em `bin/tests/test_hook_esperando_com_prova.sh:158`, `/proc/1/exe=/usr/bin/python3.12` produz a entrada `ESPERANDO: python3.12 | pid=1`, mas o teste exige `ancestral`. `_prova_pid` retorna antes `produtor generico (python3.12)` em `bin/hook_stop_fila1.py:498`; a verificação ancestral está em `bin/hook_stop_fila1.py:505`. O bloqueio correto reprova o selo, abortando a régua em `bin/regua.sh:140`. Confirmado chamando a função em memória, sem escrita; a mesma incompatibilidade ocorre com `bash` e `node` pelas listas em `bin/hook_stop_fila1.py:439`.
+
+Demais verificações:
+
+- **Contagem falsa:** nada; contei 33 chamadas de bloqueio e quatro de liberação, compatíveis com `bin/tests/test_hook_esperando_com_prova.sh:185`.
+- **Selo sem mordida por liberação alternativa:** nada; exige saída vazia e trilha `ALLOW ESPERANDO com prova` em `bin/tests/test_hook_esperando_com_prova.sh:71` e `bin/tests/test_hook_esperando_com_prova.sh:74`; negativos exigem `siga: ITEM-VIVO` e motivo em `bin/tests/test_hook_esperando_com_prova.sh:84` e `bin/tests/test_hook_esperando_com_prova.sh:87`.
+- **Prova do RELATO pulada:** nada no fluxo estático; executa antes das portas em `bin/hook_stop_fila1.py:763`, com caso adversarial em `bin/tests/test_hook_esperando_com_prova.sh:175`.
+- **Regressão PAREI, teto, fila vazia:** nada identificado na integração: PAREI conserva precedência em `bin/hook_stop_fila1.py:769`, fila vazia em `bin/hook_stop_fila1.py:788`, teto em `bin/hook_stop_fila1.py:815`.
+- **Segundo juiz, segundo escritor, relógio fora da borda, derivação paralela ou pouso antes do pré-requisito:** nada identificado neste recorte; topo compartilhado em `bin/hook_stop_fila1.py:400`, prova antes da liberação em `bin/hook_stop_fila1.py:763`.
+
+Observação para consolidação: o caso `pid-ok-arq-parado` ocorre depois da remoção da memória em `bin/tests/test_hook_esperando_com_prova.sh:140`; portanto verifica primeira observação do arquivo em `bin/tests/test_hook_esperando_com_prova.sh:142`, não comparação contra baseline conhecido. Ainda exercita a conjunção, e não classifico isoladamente como defeito.
+
+Não executei o selo, pois cria e remove arquivos em `bin/tests/test_hook_esperando_com_prova.sh:28` e `bin/tests/test_hook_esperando_com_prova.sh:30`.
+
+## 29/10 18:58 · sessao 9cc8a6935f0d · justif · verificador · origem=Code
+
+**(a) Não demonstrei defeito introduzido pelo delta.** A unidade reutiliza a retenção existente e mantém as portas de escrita: retenção → registro da retenção ou `encerrar()` → ocorrência. Não há novo juiz nem escritor direto de estado nesse trecho. [app/chamados/reconciliador.py:494](/home/ronald/codex_ws/2a22cc22ba9813b787d7473cf1819ae5785d4fbd/app/chamados/reconciliador.py:494)
+
+O contraexemplo condicional é `retencao=None` e `encerrar()=False`: antes a cascata escrevia nota e somava 1; agora não escreve nem soma. **Classificação: mudança de contrato, sem regressão alcançável demonstrada.** O comportamento anterior está no anexo (`app/ponto/services/justificativa.py:397`, `:401@be0f54c3`); o atual está em `app/chamados/reconciliador.py:498` e `app/ponto/services/justificativa.py:389`.
+
+A ressalva é decisiva: `NAO_FECHADOS` contém exatamente os quatro estados aceitos por `ENCERRAR`, e `encerrar()` devolve `False` somente quando essa decisão recusa. Portanto, selecionar um chamado normalmente pela cascata não fornece esse contraexemplo. Alcançabilidade por outro mecanismo: **[nao verificado]**. (`app/ponto/services/justificativa.py:57`; `app/chamados/catalogo/motor.py:24`, `:32`, `:114`; `app/chamados/models.py:1197`)
+
+**(b) Cascata e bloqueio:**
+
+- **Contagem/nota:** a cascata mudou condicionalmente como descrito acima. A origem continua sendo contabilizada separadamente quando seu fecho retorna verdadeiro; auditoria e resposta usam o total resultante. (`app/ponto/services/justificativa.py:385`, `:393`, `:400`, `:403`)
+- **Ordem dos efeitos:** permanece retenção → fecho → nota; cascata por `pk` → origem → auditoria. Há uma antecipação: o texto da nota agora é avaliado antes da retenção, como argumento do helper. `hora_local` apenas localiza/formata o datetime; defeito concreto dessa antecipação: **[nao verificado]**. (`app/chamados/reconciliador.py:494`; `app/ponto/services/justificativa.py:379`, `:385`, `:393`, `:397`; `app/core/fmt.py:10`)
+- **Travas/atomicidade:** os dois chamadores continuam travando chamados por `pk` antes da justificativa, dentro do `atomic`; a extração não acrescenta trava. (`app/ponto/services/justificativa.py:114`, `:125`, `:327`; `app/chamados/reconciliador.py:494`)
+- **Bloqueio:** o anexo já tinha a guarda sobre `encerrar()=False`; seleção, retenção, fecho e retorno permanecem equivalentes. Continua escolhendo o bloqueio mais recente, sem filtro de dia, excluindo a origem. A mudança é o argumento `tipo`. (`app/ponto/services/justificativa.py:70`, `:79`; anexo, `app/ponto/services/justificativa.py:84@be0f54c3`)
+
+**(c) Quem lê esses tipos?**
+
+**Não existe campo `tipo` em `FollowupChamado`.** A porta exige argumento preenchido, mas não o inclui nos campos persistidos. (`app/chamados/models.py:1236`; `app/chamados/services/nota.py:85`, `:88`)
+
+O consumidor funcional do argumento é a deduplicação: `sha256(chamado|tipo|objeto_ref|autor)`, somente quando há `objeto_ref` e as demais condições da porta são satisfeitas. (`app/chamados/services/nota.py:62`, `:95`)
+
+Nestes fechos, o helper **não passa `objeto_ref`**; a retratação canônica também não passa. Logo, nesses caminhos, `retratado`, `turno_fechado_retroativo` e `bloqueio_liberado_por_justificativa` não são persistidos nem participam de chave. **Renomear o tipo do bloqueio não altera dedup, dados salvos ou identificação posterior do ato.** (`app/chamados/reconciliador.py:501`, `:540`; `app/chamados/services/nota.py:102`)
+
+Histórico e API leem conteúdo/autor/data; a visibilidade da nota de sistema na API depende da palavra `justificativa` no conteúdo. Não leem esses tipos de evento. (`app/chamados/services/historico.py:80`; `app/api/views.py:62`, `:1128`)
+
+Incidência em produção, RED/suite executados e pré-requisitos de pouso: **[nao verificado]**. [nao verificado]
+
+## 29/10 18:57 · sessao a948fcf9db10 · - · - · origem=Ronald (tmux)
+
+Não confirmei defeito introduzido nos fechos: o helper conserva retenção → registro da retenção → `encerrar()` → ocorrência; a guarda impede ocorrência quando `encerrar()` recusa (`app/chamados/reconciliador.py:494–502`).
+
+- **Cascata: mudança condicional de contrato.** Agora só incrementa `n_fechados` e escreve ocorrência se `encerrar()` retorna verdadeiro (`app/ponto/services/justificativa.py:385–389`; `app/chamados/reconciliador.py:498–502`). O anexo mostra que antes ignorava o retorno de `encerrar()`. Contraexemplo lógico: retorno `False` sem retenção; antes nota/+1, agora nenhuma nota/+0. Entretanto, a seleção usa `NAO_FECHADOS` (`app/ponto/services/justificativa.py:57`), definido como aberto/em_analise/registrado/resolvido (`app/chamados/catalogo/motor.py:24`, `:32`), exatamente os quatro estados aceitos por `ENCERRAR` (`app/chamados/catalogo/motor.py:114–115`). Alcançabilidade desse retorno falso na cascata real: `[nao verificado]`.
+- **Bloqueio: sem mudança de decisão/estado comprovada.** A seleção, trava e delegação continuam em `app/ponto/services/justificativa.py:70–80`; o diff fornecido já continha a guarda sobre retorno falso de `encerrar()`. O tipo novo é o argumento de `app/ponto/services/justificativa.py:80`.
+- **Atomicidade e travas dos chamadores preservadas.** A materialização abre atomic, trava chamados e depois justificativa (`app/ponto/services/justificativa.py:327–329`, `:114`); aprovação faz o mesmo (`:125–129`) e fecha origem/bloqueio ainda dentro dele (`:202–203`). O helper não abre atomic próprio (`app/chamados/reconciliador.py:494–502`), mas esses dois usos já estão protegidos.
+- **Ordem persistente preservada; avaliação antecipada do texto.** A cascata percorre `pk`, depois fecha origem (`app/ponto/services/justificativa.py:379`, `:393`); o helper registra retenção antes de tentar encerrar e anexa depois (`app/chamados/reconciliador.py:494–502`). O texto agora é avaliado como argumento antes da retenção (`app/ponto/services/justificativa.py:385–388`), inclusive para item retido; `hora_local` apenas localiza/formata o datetime (`app/core/fmt.py:10–15`). Defeito concreto causado por essa antecipação: `[nao verificado]`.
+
+## 29/10 18:57 · sessao 4fb3b0a265b8 · - · - · origem=Ronald (tmux)
+
+Leitores específicos desses tipos: **nenhum leitor persistente na cópia**. `FollowupChamado` não possui campo `tipo`; possui `autor_tipo`, `conteudo`, carimbos, anexos e `evento_chave` (`app/chamados/models.py:1236`, `app/chamados/models.py:1243`, `app/chamados/models.py:1263`). A porta exige `tipo` preenchido, mas não o inclui em `campos` persistidos (`app/chamados/services/nota.py:85`, `app/chamados/services/nota.py:88`).
+
+O único consumidor operacional do argumento `tipo` é a chave de dedup: SHA256 de `chamado_id|tipo|objeto_ref|autor` (`app/chamados/services/nota.py:62`). Esse cálculo só acontece quando `objeto_ref is not None` e o autor é sistema ou há `texto_fixo`/`identico` (`app/chamados/services/nota.py:95`). Sem chave, a porta sempre cria uma linha (`app/chamados/services/nota.py:102`).
+
+**Impacto do delta:** `encerrar_com_retencao` não transmite `objeto_ref`; logo os tipos `retratado`, `bloqueio_liberado_por_justificativa` e `turno_fechado_retroativo`, nesses caminhos, não geram chave nem são persistidos (`app/chamados/reconciliador.py:502`, `app/chamados/services/nota.py:75`, `app/chamados/services/nota.py:95`). A mudança de tipo do bloqueio, isoladamente, não altera dedup ou dados salvos (`app/ponto/services/justificativa.py:79`, `app/chamados/services/nota.py:88`). Existe teste explícito com duas chamadas `tipo='retratado'` sem referência que espera duas linhas, mas execução desse teste: `[nao verificado]` (`app/chamados/tests/test_porta_nota_do_fio.py:179`).
+
+Produtores dos literais na cópia:
+
+- Retratação canônica: `tipo='retratado'` (`app/chamados/reconciliador.py:542`).
+- Bloqueio aprovado: `tipo='bloqueio_liberado_por_justificativa'` (`app/ponto/services/justificativa.py:80`).
+- Cascata retroativa: `tipo='turno_fechado_retroativo'` (`app/ponto/services/justificativa.py:388`).
+- O `retratado` de `bin/censo_folha.py:30` é filtro de **status_local**, não tipo de FollowupChamado (`bin/censo_folha.py:30`).
+
+Consumidores genéricos relevantes leem as notas por conteúdo, autor ou data:
+
+- Histórico consulta todas as notas dos chamados e emite eventos com `conteudo` e autor (`app/chamados/services/historico.py:80`, `app/chamados/services/historico.py:84`).
+- API percorre notas e aplica visibilidade por `autor_tipo`/`conteudo`; nota de sistema só aparece ao colaborador se o conteúdo contiver `justificativa` (`app/api/views.py:62`, `app/api/views.py:1128`, `app/api/views.py:1134`).
+- Modal e fio HTML mostram notas com estilo por `autor_tipo`, texto e data (`app/templates/chamados/partials/modal_fio.html:454`, `app/templates/chamados/partials/modal_fio.html:466`, `app/templates/chamados/fio_colaborador.html:235`, `app/templates/chamados/fio_colaborador.html:247`).
+- Painel calcula quantidade e última nota sem distinguir tipo de evento (`app/chamados/services/painel.py:360`, `app/chamados/services/painel.py:395`).
+- SLA usa última nota `autor_tipo='dp_rh'` e busca aviso por substring `SLA`; não lê tipo de evento (`app/chamados/services/sla.py:17`, `app/chamados/services/sla.py:42`).
+- PDF percorre todas as notas e imprime data, usuário e conteúdo (`app/relatorios/pdf_chamados.py:135`).
+
+Portanto, a supressão da nota quando `encerrar()` retorna `False` pode reduzir contagem e histórico de notas visíveis; a simples troca do argumento `tipo` do bloqueio não altera esses leitores (`app/chamados/reconciliador.py:499`, `app/chamados/services/painel.py:395`, `app/chamados/services/historico.py:84`). Efeito observado em produção: `[nao verificado]`.
 
 ## 29/10 18:54 · sessao d40eb65cffec · espera · verificador · origem=Code
 
@@ -252,156 +354,4 @@ Nenhum achado verificável nas quatro áreas delegadas.
 
 O `agora` recebido pelo builder ainda não seleciona o papel do turno: implementação em `app/escala/utils.py:1531`–`:1539` só consulta existência, unicidade e fechamento do turno. A passagem por `grade_espelho_janela` fornece `ref=fim` e `hoje` explícitos (`app/escala/utils.py:2277`; `app/ponto/services/espelho.py:503`–`:504`), preservando as datas das janelas destes casos.
 
-## 29/10 18:35 · sessao 01bb042eda0b · espera · verificador · origem=Code
-
-**Reprova. Há caminhos que liberam sem produtor vivo e falhas de leitura que acabam em liberação.** O selo também aceita como positivo um arquivo tocado sem agente correspondente. — `bin/hook_stop_fila1.py:488`, `bin/hook_stop_fila1.py:476`, `bin/hook_stop_fila1.py:670`, `bin/tests/test_hook_esperando_com_prova.sh:105`.
-
-Os achados abaixo vêm do arquivo da cópia e do diff fornecido. A identidade do commit e a comparação direta com o pai não puderam ser conferidas por Git nesta cópia. [nao verificado] [nao verificado]
-
-1. **Mtime avançado não prova produtor vivo.** Entrada: `ESPERANDO: agente-x | arquivo=/tmp/agente.out`; memória guarda mtime `100`; alguém toca o arquivo para `200` e encerra antes do Stop. O hook aceita `200 > 100`, sem consultar processo, agente, contador ou conteúdo. Também aceita um avanço antigo ocorrido entre avaliações distantes. **Efeito:** libera com `agente-x` inexistente ou morto. — `bin/hook_stop_fila1.py:488`, `bin/hook_stop_fila1.py:505`, `bin/hook_stop_fila1.py:538`.
-
-2. **O próprio hook pode fabricar a prova por diretório.** Entrada: `ESPERANDO: agente-x | arquivo=logs`, com os arquivos de estado ainda ausentes. A primeira avaliação mede o diretório e depois cria `hook_stop_espera.json`, a trilha e o contador dentro dele; essas criações alteram seu mtime. A próxima avaliação reconhece esse avanço como prova. Não existe verificação de arquivo regular nem exclusão dos diretórios que contêm os arquivos protegidos. **Efeito:** o hook prova a própria atividade e libera sem produtor. — `bin/hook_stop_fila1.py:485`, `bin/hook_stop_fila1.py:488`, `bin/hook_stop_fila1.py:499`, `bin/hook_stop_fila1.py:48`, `bin/hook_stop_fila1.py:716`.
-
-3. **Hardlink contorna a exclusão da trilha.** Entrada: `/tmp/sinal` é hardlink de `logs/hook_stop_fila1.log`; topo declara `arquivo=/tmp/sinal`. `realpath` mantém caminhos distintos para hardlinks, portanto a comparação de nomes não identifica o mesmo inode. Após a primeira observação, o próprio `NOPROVA`/`BLOCK` modifica esse inode; a avaliação seguinte aceita o avanço. **Efeito:** outra prova produzida pelo hook, sem agente externo. — `bin/hook_stop_fila1.py:484`, `bin/hook_stop_fila1.py:485`, `bin/hook_stop_fila1.py:672`, `bin/hook_stop_fila1.py:48`.
-
-4. **Um argumento inerte identifica falsamente o produtor.** Entrada: processo vivo `python3 -c 'import time; time.sleep(300)' /tmp/produtor.sh`; topo `ESPERANDO: produtor.sh | pid=<PID desse Python>`. O arquivo nem precisa existir: qualquer argumento com esse basename basta. Além disso, declarar `/obra-A/produtor.sh` aceita um processo de `/obra-B/produtor.sh`. **Efeito:** um processo alheio libera o Stop como se fosse o produtor esperado. — `bin/hook_stop_fila1.py:469`, `bin/hook_stop_fila1.py:476`.
-
-5. **Falha ao ler ancestrais vira prova aceitável.** `_ancestrais()` adiciona o PID antes da leitura; se `/proc/<hook>/stat` der `PermissionError`, devolve um conjunto parcial contendo o próprio hook. Assim, `if not anc` não detecta a falha. Entrada: cadeia de pais ilegível, mas `/proc/<produtor>/stat` e `cmdline` legíveis e compatíveis. **Efeito:** aceita a prova sem conseguir excluir ancestrais, contrariando “falha de leitura bloqueia”. O limite de profundidade também devolve uma cadeia truncada sem indicar incompletude. — `bin/hook_stop_fila1.py:443`, `bin/hook_stop_fila1.py:444`, `bin/hook_stop_fila1.py:448`, `bin/hook_stop_fila1.py:461`.
-
-6. **Provas declaradas inválidas são silenciosamente descartadas.** Entradas:
-   - `ESPERANDO: produtor.sh | pid=<vivo> | arquivo=/tmp/sinal com espaco`
-   - `ESPERANDO: agente-x | pid=invalido | arquivo=/tmp/sinal`
-
-   No primeiro caso, só o PID é exigido; no segundo, só o arquivo. Campos desconhecidos ou malformados não geram erro. **Efeito:** libera sem validar as duas provas declaradas, apesar da condição expressa no código. — `bin/hook_stop_fila1.py:432`, `bin/hook_stop_fila1.py:525`, `bin/hook_stop_fila1.py:529`, `bin/hook_stop_fila1.py:535`.
-
-7. **Campos repetidos sobrescrevem provas anteriores.** Entrada: `ESPERANDO: produtor.sh | pid=<morto> | pid=<vivo compatível>`. Só o último PID é consultado; vale o mesmo para `arquivo=<ausente> | arquivo=<que avançou>`. **Efeito:** uma declaração que contém prova inválida libera conforme a ordem dos campos. — `bin/hook_stop_fila1.py:528`, `bin/hook_stop_fila1.py:531`.
-
-8. **A releitura final pode falhar e ainda liberar.** Entrada: prova aceita; antes da chamada em `main`, o painel é removido ou perde permissão. `_linha_do_topo()` retorna `None`, mas esse resultado vira apenas o argumento de auditoria de `_libera()`. Se a releitura lançar erro de decodificação, a exceção externa também libera por “hook falhou aberto”. Se o topo mudar para uma linha sem ESPERANDO, ela igualmente não é revalidada. **Efeito:** falha de leitura ou retirada da declaração não impede a liberação. — `bin/hook_stop_fila1.py:414`, `bin/hook_stop_fila1.py:670`, `bin/hook_stop_fila1.py:733`.
-
-9. **A prova por PID não permanece vinculada à liberação.** Corrida concreta: lê `stat` e `cmdline` de N vivo; N encerra; o hook relê o painel e libera. A identidade também não é vinculada ao início do processo, permitindo misturar observações se houver reutilização do PID entre as leituras. **Efeito:** pode registrar “com prova” quando o produtor já morreu. — `bin/hook_stop_fila1.py:466`, `bin/hook_stop_fila1.py:468`, `bin/hook_stop_fila1.py:478`, `bin/hook_stop_fila1.py:670`.
-
-10. **A memória pode regredir por concorrência e fabricar outro avanço.** Intercalação:
-    - B mede mtime `95` e pausa.
-    - O arquivo avança para `100`; A mede e grava `100`.
-    - B retoma, lê `100`, sobrescreve a memória com `95` e bloqueia.
-    - C vê o arquivo ainda em `100` e libera, sem nova escrita no sinal.
-
-    A leitura, comparação e gravação não têm exclusão nem atualização monotônica. Escritas concorrentes também podem perder observações de outros arquivos. **Efeito:** falsa prova de movimento ou bloqueios por perda de histórico. — `bin/hook_stop_fila1.py:488`, `bin/hook_stop_fila1.py:495`, `bin/hook_stop_fila1.py:497`, `bin/hook_stop_fila1.py:499`.
-
-11. **Memória com `NaN` aceita arquivo parado.** Entrada em `hook_stop_espera.json`: `{"/tmp/sinal": NaN}`; sinal com mtime normal e sem alteração. O carregamento aceita o valor; ele passa por `isinstance(..., float)` e `mt <= anterior` resulta falso. **Efeito:** memória semanticamente inválida produz liberação, em vez de bloquear. — `bin/hook_stop_fila1.py:495`, `bin/hook_stop_fila1.py:505`.
-
-12. **A memória pode impedir chegar à fila vazia ou ao TETO.** Entrada: `logs/hook_stop_espera.json` é uma FIFO sem escritor; topo declara `ESPERANDO: agente-x | arquivo=/tmp/sinal`, sendo o sinal existente. A abertura/leitura da memória espera indefinidamente, sem verificar tipo nem impor limite. **Efeito:** o hook não alcança a liberação por fila vazia nem a válvula do TETO, caminhos que antes não dependiam desse arquivo novo. — `bin/hook_stop_fila1.py:494`, `bin/hook_stop_fila1.py:495`, `bin/hook_stop_fila1.py:683`, `bin/hook_stop_fila1.py:721`.
-
-13. **Há falsos bloqueios para nomes válidos e produtores reais.** Entrada: script vivo `/tmp/agente atual.sh`, declarado pelo mesmo caminho; o nome vira apenas `/tmp/agente`. Um sinal `/tmp/sinal atual.out` também não pode ser representado pelo regex. Separadamente, um agente `claude` filho ou um `git push` real é rejeitado pela lista de nomes genéricos, mesmo com PID vivo. **Efeito:** provas legítimas ficam sem representação ou são rejeitadas por restrições adicionais ao aval. — `bin/hook_stop_fila1.py:521`, `bin/hook_stop_fila1.py:529`, `bin/hook_stop_fila1.py:436`, `bin/hook_stop_fila1.py:458`.
-
-14. **A comparação perde movimentos menores que a precisão do float.** Entrada: num filesystem com nanossegundos, mtime muda de `1793296800000000100 ns` para `1793296800000000101 ns`; ambos têm a mesma representação em segundos como float. **Efeito:** o avanço existe, mas `st_mtime` o apaga e o hook responde “arquivo nao andou”. — `bin/hook_stop_fila1.py:488`, `bin/hook_stop_fila1.py:505`.
-
-15. **Relógio lido dentro da prova e margem arbitrária.** Entrada: memória anterior menor e mtime `agora + 30 segundos`; o arquivo futuro é aceito. Um ajuste do relógio para trás pode, inversamente, rejeitar um produtor legítimo. A decisão chama `time.time()` dentro do auxiliar e fixa margem de `60`, sem medição apresentada no diff. **Efeito:** a prova depende do relógio ambiente e tolera timestamps futuros. — `bin/hook_stop_fila1.py:503`; regra de medição: `CLAUDE.md:35`.
-
-16. **O positivo de arquivo do selo certifica o contraexemplo proibido.** O selo cria arquivo vazio, muda sua data com `touch` e exige liberação para `agente-x`; nenhum `agente-x` é iniciado nem existe contador sendo produzido por ele. **Efeito:** uma implementação que libera sem produtor correspondente passa no caso positivo. Falta o par “arquivo avançou, produtor morreu/ausente → bloqueia”. — `bin/tests/test_hook_esperando_com_prova.sh:102`, `bin/tests/test_hook_esperando_com_prova.sh:105`, `bin/tests/test_hook_esperando_com_prova.sh:106`.
-
-17. **O verificador positivo aceita motivo de falha aberta.** Contraexemplo de mutação: no ramo positivo, liberar com motivo `hook falhou aberto: ESPERANDO`. A saída continua vazia e `ALLOW.*ESPERANDO` casa, embora a liberação não tenha ocorrido pelo motivo exigido. **Efeito:** o selo não distingue o sucesso correto de uma falha aberta contendo essa palavra. — `bin/tests/test_hook_esperando_com_prova.sh:66`, `bin/tests/test_hook_esperando_com_prova.sh:69`, `bin/hook_stop_fila1.py:734`.
-
-18. **O cleanup mantém PID já encerrado e recolhido.** Entrada: depois do `kill`/`wait` do produtor, seu PID é reutilizado antes do `trap EXIT`. Ele continua em `_pids`, e `_fim()` envia novo `kill` ao número. **Efeito:** o selo pode sinalizar processo alheio. — `bin/tests/test_hook_esperando_com_prova.sh:28`, `bin/tests/test_hook_esperando_com_prova.sh:52`, `bin/tests/test_hook_esperando_com_prova.sh:117`.
-
-Quanto às classes solicitadas:
-
-- **Segundo juiz duplicando juiz registrado: nada.** As novas perguntas não demonstram duplicação do juiz de fila; PAREI e ESPERANDO compartilham o leitor do topo. — `bin/hook_stop_fila1.py:400`, `bin/hook_stop_fila1.py:517`, `bin/hook_stop_fila1.py:572`.
-- **Segundo escritor fora da porta: nada identificado.** A escrita nova está na memória própria de espera; os problemas encontrados nela são concorrência e identificação de arquivos. — `bin/hook_stop_fila1.py:434`, `bin/hook_stop_fila1.py:499`.
-- **Relógio fora da borda:** achado 15. — `bin/hook_stop_fila1.py:503`.
-- **Derivação paralela de fonte única: nada identificado.** O topo continua sendo interpretado a partir do auxiliar compartilhado. — `bin/hook_stop_fila1.py:517`, `bin/hook_stop_fila1.py:572`.
-- **Selo sem mordida:** achados 16 e 17. — `bin/tests/test_hook_esperando_com_prova.sh:106`, `bin/tests/test_hook_esperando_com_prova.sh:69`.
-- **Ordem de trava:** a checagem inicial de PROVA permanece antes de PAREI e ESPERANDO; o defeito está na liberação após releitura inválida e na espera que pode impedir alcançar o TETO. — `bin/hook_stop_fila1.py:657`, `bin/hook_stop_fila1.py:670`, `bin/hook_stop_fila1.py:494`.
-- **Pouso antes do pré-requisito: nada demonstrável no diff.** O pouso efetivo não foi verificado. [nao verificado] [nao verificado]
-
-**PAREI: nada de regressão identificado na extração. TETO e fila vazia: decisões preservadas quando o fluxo chega até elas**, com a ressalva de travamento do achado 12. **PROVA do RELATO: nada de desvio sequencial da checagem inicial**; a corrida de releitura permanece no achado 8. — `bin/hook_stop_fila1.py:572`, `bin/hook_stop_fila1.py:657`, `bin/hook_stop_fila1.py:683`, `bin/hook_stop_fila1.py:721`.
-
-## 29/10 18:33 · sessao 53bc2144c427 · grupo1p1 · verificador · origem=Code
-
-- **Classe 3 — cartão/tela:** `app/core/tests/test_espelho_tela_le_a_folha.py:69` e `:70` leem `timezone.now()` separadamente. Os casos chamam esse helper em `:81` e `:126`; o segundo ainda faz outra leitura em `:133`.
-
-- **Classe 3 — edição da ausência:** `app/escala/tests/test_cobertura_parcial_periodo.py:175` e `:178` consultam o relógio novamente antes e depois da edição, dentro do mesmo caso.
-
-- **Classe 3 — app/espelho:** `app/api/tests/test_o21_app_diz_o_que_foi_decidido.py:167` lê `localdate()` sem instante; `:169` faz outra leitura com `now()`.
-
-- **Classe 3 — piso:** `app/ponto/tests/test_piso_nao_sobe_por_batida.py:122` lê `localdate()` sem instante; `:123` consulta `now()` novamente.
-
-- **Classe 3 — comparações dos produtores R3:** `app/relatorios/tests/test_r3_em_aberto_alcanca_turno_aberto.py:251` combina helpers que leem o relógio em `:187` e `:191`. Os casos em `:377`–`:378` e `:390`–`:391` também combinam a leitura de `:187` com outro `now()`.
-
-- **Classe 3 — premissa e julgamento R3:** `app/relatorios/tests/test_r3_em_aberto_alcanca_turno_aberto.py:428` e `:443` chamam `turno_aberto_de` sem instante, acionando `app/ponto/turnos.py:2255`; depois, `:431` e `:445` chamam o helper que relê o relógio em `:421`.
-
-- **Classe 3 — ficha/espelho:** `app/colaboradores/tests/test_ficha_fonte_dos_totais.py:111` lê `now()`; `:112` chama `_horas()` (`:48`–`:50`), cuja execução lê novamente em `app/colaboradores/services/ficha.py:117`.
-
-- **Classe 3 — motor/card:** `app/api/tests/test_espelho_app_fonte_e_geometria.py:317` chama o helper que lê `now()` em `:294`; `:324` consulta o payload pelos helpers de `:281`–`:282` e `:73`–`:77`, acionando outra leitura em `app/api/views.py:1350`.
-
-- **Classe 8 — geometria:** `app/api/tests/test_espelho_app_fonte_e_geometria.py:294` substitui o instante fixo posterior às fixtures por relógio real; a classe de `:278` e sua base de `:47` não congelam o tempo. A garantia retirada está em `app/escala/tests/instante.py:6`–`:12`.
-
-- **Classe 8 — realizado:** `app/ponto/tests/test_bordas_realizado.py:61` passa relógio real para a fixture fixa de `:60`, sem congelamento na classe de `:15`; deixa de fixar o julgamento posterior garantido por `app/escala/tests/instante.py:6`–`:12`.
-
-- **Classe 8 — cobertura parcial:** `app/escala/tests/test_cobertura_parcial_periodo.py:111`, `:175`, `:178` e `:323` passam relógio real, sem congelamento nas classes de `:85`, `:147` e `:294`; retiram o instante posterior fixo definido em `app/escala/tests/instante.py:6`–`:12`.
-
-- **Classe 8 — R3:** `app/relatorios/tests/test_r3_em_aberto_alcanca_turno_aberto.py:187` e `:362` passam relógio real na classe sem congelamento de `:76`, embora o cenário declare `HOJE` em `:54`; retiram o instante posterior fixo definido em `app/escala/tests/instante.py:6`–`:12`.
-
-Total por classe, contando os achados agrupados acima: **3 = 8; 5 = 0; 7 = 0; 8 = 4.**
-
-## 29/10 18:31 · sessao 1a66099671f2 · - · - · origem=Ronald (tmux)
-
-Classe 3, leituras verificáveis:
-
-- `app/core/tests/test_espelho_tela_le_a_folha.py:69` e `:70`: `_dois_resumos()` lê `timezone.now()` duas vezes; chamado pelos testes em `:81` e `:126`. O segundo ainda lê novamente em `:133` — três leituras nesse caso.
-- `app/escala/tests/test_cobertura_parcial_periodo.py:175` e `:178`: duas leituras no mesmo teste de edição.
-- `app/api/tests/test_o21_app_diz_o_que_foi_decidido.py:167` e `:169`: `_tz.localdate()` seguido de `timezone.now()`.
-- `app/ponto/tests/test_piso_nao_sobe_por_batida.py:122` e `:123`: `timezone.localdate()` seguido de `timezone.now()`.
-- `app/relatorios/tests/test_r3_em_aberto_alcanca_turno_aberto.py:251`: chama `_tela()` e `_cartao()`, que leem separadamente em `:187` e `:191`.
-- `app/relatorios/tests/test_r3_em_aberto_alcanca_turno_aberto.py:377` e `:378`: `_tela()` lê em `:187`; o cartão lê novamente em `:378`.
-- `app/relatorios/tests/test_r3_em_aberto_alcanca_turno_aberto.py:390` e `:391`: mesmo problema no teste seguinte.
-- `app/colaboradores/tests/test_ficha_fonte_dos_totais.py:111` e `:112`: leitura direta seguida de `_horas()` (`:48–50`), que chama `ficha_do_colab()`, cujo relógio é lido em `app/colaboradores/services/ficha.py:117`.
-- `app/api/tests/test_espelho_app_fonte_e_geometria.py:317` e `:324`: primeiro chama `_o_que_o_motor_diria()`, cujo relógio é lido em `:294`; depois `_dia()` (`:281–282`) chama `_payload()` (`:73–77`), executando a nova leitura em `app/api/views.py:1350`.
-
-São nove grupos acima, correspondendo a dez definições de testes, pois o helper do primeiro grupo é usado por dois casos. A subclasse R3 herda os testes da classe base (`app/relatorios/tests/test_r3_em_aberto_alcanca_turno_aberto.py:401`).
-
-Não encontrei chamada efetivamente sem migração entre os alvos do selo: a única chamada sem `agora=` explícito encontrada por AST passa `**kw` em `app/escala/tests/test_sobra_na_borda_nao_vira_intervalo.py:53`, após inserir `agora` em `:52`; portanto não constitui classe 7.
-
-A mudança `return sorted(out)` conserva mordida no próprio teste: `app/escala/tests/test_selo_grade_pede_o_instante.py:178–190` espera chamadas ordenadas, incluindo uma chamada no nível do módulo (`:186–187`) e outras dentro da função (`:182–185`). Não identifiquei defeito classe 5 concreto nessa alteração.
-
-## 29/10 18:31 · sessao f7413f11c7e3 · - · - · origem=Ronald (tmux)
-
-Classe 8, considerando a retirada do instante fixo posterior às fixtures como mudança do cenário de entrada:
-
-- `app/ponto/tests/test_bordas_realizado.py:61`: consulta agora depende do relógio real; fixture fixa em `:60`, classe sem congelamento em `:15`.
-- `app/escala/tests/test_cobertura_parcial_periodo.py:111`, `:175`, `:178`: relógio real substitui o instante posterior fixo; cenário declara `D=14/10/2026` e `HOJE=27/10/2026` em `:25–26`, classes sem congelamento em `:85` e `:147`.
-- `app/escala/tests/test_cobertura_parcial_periodo.py:323`: mesmo problema para a fixture noturna de outubro, definida em `:311`; classe sem congelamento em `:294`.
-- `app/relatorios/tests/test_r3_em_aberto_alcanca_turno_aberto.py:187`, `:362`: relógio real substitui o instante fixo, embora o cenário declare `HOJE=31/07/2026` em `:54`; classe base sem congelamento em `:76`.
-
-A garantia removida é expressa em `app/escala/tests/instante.py:6–7`; a constante vale janeiro de 2100 em `:12`. Não há prova de mudança atual das asserções apenas por essas substituições: o seletor ainda não lê `agora` (`app/escala/utils.py:1528–1539`).
-
-Nenhum achado adicional comprovado de classe 5 nos três arquivos priorizados.
-
-## 29/10 18:30 · sessao 90893cc08fbf · - · - · origem=Ronald (tmux)
-
-Possível achado de **classe 8**: `app/api/tests/test_espelho_app_fonte_e_geometria.py:294` troca o instante fixo de 2100 (`app/escala/tests/instante.py:12`) por relógio real. `TurnoAbertoPelaGeometriaTest` não tem `freeze_time` (`app/api/tests/test_espelho_app_fonte_e_geometria.py:278`), nem sua base (`app/api/tests/test_espelho_app_fonte_e_geometria.py:47`); portanto perde o cenário temporal fixo posterior às fixtures (`app/api/tests/test_espelho_app_fonte_e_geometria.py:314`).
-
-Não provei perda de mordida atual nesse caso: o seletor da grade ainda não usa `agora` (`app/escala/utils.py:1528`). Nos demais arquivos atribuídos, não identifiquei achados verificáveis de classes 5/8.
-
-## 29/10 18:22 · sessao 0e25a18be1e0 · justif · sonda · origem=Code
-
-Números conforme o dado raspado; confirmação independente em produção: [nao verificado].
-
-- **Classe:** 98 justificativas aprovadas com origem viva. **Alvo em competência aberta:** 45, esperado 45; fora do aval: 0. [nao verificado]
-- **Exportadas / Pauta DP:** empresa 2 × 09/2026: **46**; empresa 3 × 09/2026: **6**; empresa 4 × 09/2026: **1**. Total: **53**; as duas apresentações da pauta coincidem. [nao verificado]
-- **Guarda `irma_orfa`: 5 dos 45 itens**, com **7 perguntas pendentes**, distribuídas assim: [nao verificado]
-  - 2449 → 34824. [nao verificado]
-  - 2748 → 39729. [nao verificado]
-  - 3201 → 48775, 48776, 48777. [nao verificado]
-  - 3273 → 50091. [nao verificado]
-  - 3301 → 50392. [nao verificado]
-
-No código, essa guarda consulta perguntas respondidas, não validadas, não materializadas e com resposta não vazia; havendo pendências, impede a retratação. [app/chamados/juizes.py:1471](/home/ronald/codex_ws/cbedeb91b8bf7eeb460546b8cb69b408a01d3bb3/app/chamados/juizes.py:1471), [app/chamados/reconciliador.py:435](/home/ronald/codex_ws/cbedeb91b8bf7eeb460546b8cb69b408a01d3bb3/app/chamados/reconciliador.py:435), [app/chamados/reconciliador.py:454](/home/ronald/codex_ws/cbedeb91b8bf7eeb460546b8cb69b408a01d3bb3/app/chamados/reconciliador.py:454).
-
-As conferências internas fecham: **45 + 53 = 98**; a lista de perguntas-destino contém **45 itens**, somando **10 respondidas e 3 validadas**, diferença **7**, igual à quantidade de perguntas retidas. O dry informa **45 `True`**; a prova de origem viva informa **45**; os vereditos somam **44 + 1 = 45**, todos com antes igual ao depois. **Nenhuma incoerência aritmética aparente.** [nao verificado]
-
-Também constam: M1 já encerrado **92**, em **2026-10-26**; exportadas vigentes intactas **`True (7)`**; **`ERROS=0`** e presença de **`FIM-DA-SONDA`**. O universo do `(7)` não está explicitado, portanto não cabe equipará-lo aos 53 itens exportados. [nao verificado]
-
-A retenção por **`justificativa_alheia` não foi quantificada no anexo**: há somente referência à medição em sombra. Seu resultado permanece [nao verificado].
-
-_224 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_230 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
