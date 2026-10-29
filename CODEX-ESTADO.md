@@ -1,7 +1,75 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **29/10/2026 16:19** · publicado em **29/10/2026 16:20** (UTC-3)
+> Ultima resposta processada: **29/10/2026 16:24** · publicado em **29/10/2026 16:25** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 29/10 16:24 · sessao 6010c1d1cba5 · grupo1 · verificador · origem=Code
+
+- **Classe 3 — `app/ponto/services/dias_em_aberto.py:112`:** `passivo_da_competencia` lê `_tz_ato.now()` por colaborador, dentro do serviço, sem receber o instante do chamador (`:78`).
+- **Classe 3 — `app/ponto/services/he_pendente_lavrado.py:93`:** `apurar` consulta o relógio a cada colaborador; sua assinatura não recebe o instante do ato (`:71`).
+- **Classe 3 — `app/ponto/services/veredito_celula.py:217`:** `_grade` lê `timezone.now()` a cada simulação. Baseline (`:219`) e candidatos (`:273`, `:281`) recebem instantes independentes.
+- **Classe 3 — `app/ponto/management/commands/e6_oraculo.py:141`:** o leitor compartilhado `InsumosDoDono.cxr` captura o relógio internamente; o construtor não recebe instante (`:118`). Também é consumido pelo serviço `app/ponto/services/teto_na_lista.py:71`.
+
+Total por classe: 1=0; 2=0; 3=4; 4=0; 5=0; 6=0; 7=0.
+
+## 29/10 16:23 · sessao 913e999675d7 · - · - · origem=Ronald (tmux)
+
+Não confirmei achados independentes das classes 5 ou 7.
+
+O retorno à DP é discriminado pelo caso comportamental em `app/chamados/tests/test_detector_pergunta_ao_juiz_do_par.py:257` e pelo selo em `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:454`.
+
+O selo do instante verifica explicitamente argumento ausente, `None` literal e assinatura obrigatória; não promete fiscalizar a origem de todo relógio (`app/escala/tests/test_selo_grade_pede_o_instante.py:24`, `:38`, `:71`). Aceitar `agora=timezone.now()` isoladamente não demonstra classe 5, pois bordas também capturam o instante.
+
+O corte exige RED de 24x48 (`app/docs/CORTES.md:356`), mas pouso efetivo antes desse requisito permanece [nao verificado].
+
+## 29/10 16:23 · sessao 104676660d1d · - · - · origem=Ronald (tmux)
+
+Não confirmei achados novos das classes 1, 2, 4 ou 6.
+
+- O seletor consulta o corpo puro do juiz registrado, sem reproduzir o predicado de encerramento: `app/escala/utils.py:566-570`; `app/ponto/turnos.py:2083-2105`. Os filtros de turno único e fechado já constavam na closure substituída, conforme o diff fornecido.
+- O retratador continua escrevendo pela porta `retratar_batida`: `app/ponto/management/commands/detectar_par_relampago.py:217-226`. As alterações do diff nesse fluxo propagam `agora`: `app/ponto/management/commands/detectar_par_relampago.py:235-239`, `267-272`, `289`, `309`.
+- Há diferenças preexistentes entre a alimentação do detector e da grade: detector lê quatro marcos pela função `marcos_turno` (`app/chamados/detector_anomalias.py:197`; `app/escala/servico_jornada.py:68-77`), enquanto a grade monta todas as pausas (`app/escala/utils.py:1577-1581`). Não atribuí esse problema ao diff.
+
+## 29/10 16:23 · sessao ffccd173bc3f · - · - · origem=Ronald (tmux)
+
+Achados de classe 3:
+
+- `app/ponto/services/dias_em_aberto.py:112`: `passivo_da_competencia` lê `_tz_ato.now()` dentro do laço de colaboradores (`:106`); sua assinatura (`:78`) não recebe instante.
+- `app/ponto/services/he_pendente_lavrado.py:93`: `apurar` lê `_tz_ato.now()` por colaborador (`:91`), em vez de receber o instante do ato; assinatura em `:71`.
+- `app/ponto/services/veredito_celula.py:217`: `_grade` lê `timezone.now()` em cada simulação; baseline (`:219`) e alternativas (`:273`, `:281`) podem ser julgados em instantes distintos.
+- `app/ponto/management/commands/e6_oraculo.py:141`: `InsumosDoDono.cxr` lê relógio dentro do carregador compartilhado; seu construtor (`:118`) não recebe instante. Há consumidores externos ao command em `app/ponto/services/teto_na_lista.py:71` e `app/ponto/management/commands/pautas_discordantes.py:82`.
+
+Candidato adicional, menos inequívoco: `app/folha/porta_export.py:318`, leitor `medir` com relógio próprio e assinatura sem instante (`:313`); além disso, `hoje = _hoje()` (`:338`) consulta outro relógio (`:23`). Depende de considerar `medir` serviço interno ou borda do ato.
+
+## 29/10 16:21 · sessao 094a77c4a3e8 · grupo1 · verificador · origem=Code
+
+- **Classe 3 — `app/ponto/services/veredito_celula.py:217`:** `_grade` lê `timezone.now()` a cada simulação; baseline e candidatos recebem instantes diferentes nas chamadas de `:219`, `:273` e `:281`.
+
+- **Classe 3 — `app/ponto/services/he_pendente_lavrado.py:93`:** `apurar` lê o relógio dentro do laço de colaboradores (`:91`), em vez de receber o instante da execução.
+
+- **Classe 3 — `app/ponto/services/dias_em_aberto.py:112`:** `passivo_da_competencia` captura outro instante por colaborador dentro do laço (`:106`).
+
+- **Classe 3 — `app/ponto/management/commands/e6_oraculo.py:141`:** o carregador compartilhado `InsumosDoDono.cxr` lê o relógio internamente; seu construtor não recebe `agora` (`:118`).
+
+- **Classe 3 — `app/folha/porta_export.py:318`:** o leitor `medir` captura seu próprio instante; o comando chama esse leitor por empresa, sem transmitir um instante comum (`app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:86`, `:88`).
+
+- **Classe 3 — `app/relatorios/pdf_espelho.py:1040`:** o gerador informacional captura o instante internamente; a geração em lote o chama por colaborador (`app/relatorios/services.py:250`).
+
+- **Classe 3 — `app/relatorios/pdf_espelho.py:1086`:** o gerador auditável também captura outro instante internamente; o lote chega a ele por `app/relatorios/services.py:237` e `:70`.
+
+- **Classe 3 — `app/relatorios/pdf_espelho.py:593`:** passa a data de `agora` como `data_fim` de `ate_ontem`, mas omite `hoje=`; o helper lê `timezone.localdate()` (`app/relatorios/cartao_pela_celula.py:40`). A chamada em `app/relatorios/pdf_espelho.py:287` também omite esse parâmetro, misturando o instante recebido com o relógio da execução.
+
+Total por classe: 1=0; 2=0; 3=8; 4=0; 5=0; 6=0; 7=0.
+
+## 29/10 16:20 · sessao 46356997b8f3 · - · - · origem=Ronald (tmux)
+
+Não confirmei defeitos novos das classes 1, 4, 6 ou 7.
+
+O seletor reutiliza o julgamento existente: `app/escala/utils.py:566` e `app/escala/utils.py:569` chamam `_dia_encerrado_puro`, cujo corpo delega ao mesmo predicado de encerramento em `app/ponto/turnos.py:2085`.
+
+A condição de quatro marcos do detector (`app/chamados/detector_anomalias.py:218`) corresponde ao contrato atual de `marcos_turno`, que monta entrada, primeira pausa e saída (`app/escala/servico_jornada.py:69`, `app/escala/servico_jornada.py:75`, `app/escala/servico_jornada.py:77`). A ausência da segunda pausa nesse serviço é anterior ao diff fornecido.
+
+Não há evidência verificável de pouso ou violação de pré-requisito nos trechos alterados examinados. [não verificado] [nao verificado]
 
 ## 29/10 16:19 · sessao 8622147100f1 · - · - · origem=Ronald (tmux)
 
@@ -468,47 +536,4 @@ ok.
 
 ok. Pergunta de FULANO.
 
-## 29/10 15:32 · sessao e21096e78255 · - · - · origem=Ronald (tmux)
-
-1. Tentativa no workspace — resposta literal [nao verificado]:
-```text
-/bin/bash: line 1: /home/ronald/codex_ws/7596ef5e8351bf7473acecafc8348bca7d2cf9d7/INTRUSO_COPIA.txt: Read-only file system
-```
-
-2. Tentativa em `saas-hasner` — resposta literal [nao verificado]:
-```text
-/bin/bash: line 1: /home/ronald/saas-hasner/INTRUSO_VIVA.txt: Read-only file system
-```
-
-3. Tentativa em `/tmp` — resposta literal [nao verificado]:
-```text
-/bin/bash: line 1: /tmp/INTRUSO_TMP.txt: Read-only file system
-```
-
-Os três comandos terminaram com código `1`; nenhuma criação foi bem-sucedida. [nao verificado]
-
-## 29/10 15:31 · sessao 9a5c280f2d2c · - · - · origem=Ronald (tmux)
-
-ok.
-
-## 29/10 15:28 · sessao 7e4719651533 · - · - · origem=Ronald (tmux)
-
-ok.
-bin/achado_por.py:1, bin/alarme_sem_fatia.sh:1, bin/alarme_sessao_ociosa.py:1
-
-## 29/10 15:28 · sessao 1319444918a3 · - · - · origem=Ronald (tmux)
-
-ok.
-bin/achado_por.py:1, bin/alarme_sem_fatia.sh:1, bin/alarme_sessao_ociosa.py:1
-
-## 29/10 15:28 · sessao 1258252f08e3 · - · - · origem=Ronald (tmux)
-
-ok.
-bin/achado_por.py:1, bin/alarme_sem_fatia.sh:1, bin/alarme_sessao_ociosa.py:1
-
-## 29/10 15:28 · sessao cdb1b9f8e444 · - · - · origem=Ronald (tmux)
-
-ok.
-bin/achado_por.py:1, bin/alarme_sem_fatia.sh:1, bin/alarme_sessao_ociosa.py:1
-
-_119 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_125 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
