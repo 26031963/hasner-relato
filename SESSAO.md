@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/10/2026 23:11:38.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (5.6 MB). Acoes na janela: **250**.
+**Medido em 28/10/2026 23:17:07.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (5.7 MB). Acoes na janela: **252**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 23:17:00 | Bash | Read motor's L-084 predicate | `cd /home/ronald/wt-juizpar2-2810-2140/app && sed -n 1865,1900p ponto/motor_calculo_v2.py` |
+| 23:16:34 | Bash | Register Codex read-only rule | `cd /home/ronald/saas-hasner && /bin/grep -c "^AGENTE-NAO-ESPERA\\|^AGENTE-NO-MODELO-CERTO" CLAUDE.md && python3 - <<'EOF' p='CLAUDE.md'; s=open(p).read() anc="PLACAR-DA-S3-CONTA-EXERCICIO (corte Ronald 29/09 ~15:1x" assert s.count(anc)==1 rule='''GPT6-CODEX-SO-LEITURA (regra de PISTA, Ronald 28/10 ~23:1x; sem numero de lei). Desde 28/10 o GPT-6/Codex (Codex CLI 0.165.0, tmux `codex-hasner` na VM)  ...` |
 | 23:06:48 | Bash | Wait for full suite | `cd /home/ronald/saas-hasner && for i in $(seq 1 19); do grep -q '^rc=' logs/juizpar2/suite_inteira_1.out 2>/dev/null && break; /usr/bin/sleep 30; done; grep -E '^ARVORE\|^(FAIL\|ERROR):\|^Ran \|^(OK\|FAILED)( \|$)\|^rc=' logs/juizpar2/suite_inteira_1.out \| tail -8; date +%H:%M` |
 | 23:06:43 | Agent | O-OUTBOX lock and status seals | `Repo /home/ronald/saas-hasner (SaaS de ponto, Django). Leia /home/ronald/saas-hasner/CLAUDE.md secoes 0, 3 e 6 antes. Trabalhe SO na copia /home/ronald/wt-outbox-2810-1915 (HEAD a302504c, obra O-OUTBOX). NUNCA edite /home/ronald/saas-hasner (arvore viva). Sem merge, deploy, push; commit WIP so na copia (`git add` por path, mensagem por heredoc). Nao toque escala/utils.py nem ponto/services/cartori ...` |
 | 23:06:20 | Agent | Adversarial verify JUIZ-DO-PAR source | `Obra: JUIZ-DO-PAR-CURA-NA-FONTE (repo /home/ronald/saas-hasner; CLAUDE.md secoes 0, 4, 7b). Aval do dono, literal: "A cura vai na FONTE: o papel do juiz do par entra em escala/utils.py::_match_marcos, que a ata, marco_ocupado_pela_batida e a Zona 5 do motor leem; curar so a ata deixa DUAS respostas para 'qual marco a batida cumpriu' (L-099, juiz unico, LEI-AKITA 1). O arquivo motor_calculo_v2.py n ...` |
