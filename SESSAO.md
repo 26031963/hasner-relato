@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/10/2026 15:31:16.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (18.2 MB). Acoes na janela: **370**.
+**Medido em 29/10/2026 15:36:46.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (18.2 MB). Acoes na janela: **369**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 15:32:08 | Bash | Register complement, wait for push | `cd /home/ronald/saas-hasner && python3 - <<'PY' for p,l in (('app/docs/PROMPTS.md','\| 29/10 15:3x \| **aval: CODEX-PADRAO-PRO COMPLEMENTO PROCEDENCIA + ESTADO-PAINEL-DO-CODE** (obra e papel obrigatorios no wrapper, chamadas.log, origem Code/Ronald no CODEX-ESTADO, ultimas 5 chamadas no ESTADO; bug: o painel do ESTADO capturou o tmux do Codex). Estado: anexado ao construtor do CODEX-PRO. BO07 (b)  ...` |
+| 15:31:59 | SendMessage |  | `-` |
 | 15:21:45 | Bash | Wait for push result | `cd /home/ronald/saas-hasner && until grep -q '^rc=' logs/codex/push4.out; do /usr/bin/sleep 20; done; tail -3 logs/codex/push4.out \| cut -c1-140` |
 | 15:21:37 | Agent | Build Codex sonda and Pro tuning | `CONSTRUIR (instrumento de host): CODEX-SONDA-LEITURA + CODEX-PADRAO-PRO, os dois juntos porque mexem no mesmo wrapper. - Copia: /home/ronald/wt-codexpro-2910-1525 (branch raia-codexpro-2910, do main). Repo vivo: /home/ronald/saas-hasner. - Avais: em /home/ronald/saas-hasner/app/docs/CORTES.md, as linhas `\| **CODEX-SONDA-LEITURA** \|` e `\| **CODEX-PADRAO-PRO** \|`, e a regra CODEX-PADRAO-PRO no C ...` |
 | 15:21:18 | Agent | Prove BO07 exit in sombra | `PROVA na SOMBRA, sem codigo de negocio, nada em prod. Aval BO07-TURNO-AUTORIZADO-SEM-SAIDA = (b) com prova antes; a linha esta em /home/ronald/saas-hasner/app/docs/CORTES.md. Repo /home/ronald/saas-hasner; leia o CLAUDE.md secoes 4 e 6 (ZONA INVIOLAVEL: smoke de porta so no banco lateral, dentro de atomic com raise, com contagem antes e depois). Contexto em /home/ronald/saas-hasner/logs/bo2910/bo0 ...` |
@@ -377,6 +379,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 03:50:51 | Bash | Keep waiting for constructors | `/usr/bin/sleep 295; for c in wt-orfas-2901-0215 wt-col129-2901-0330; do echo "$c: $(git -C /home/ronald/$c log --oneline -1 \| cut -c1-90)"; done; date +%H:%M` |
 | 03:45:50 | Bash | Keep waiting for constructors | `/usr/bin/sleep 295; for c in wt-orfas-2901-0215 wt-col129-2901-0330; do echo "$c: $(git -C /home/ronald/$c log --oneline -1 \| cut -c1-90)"; done; date +%H:%M` |
 | 03:40:50 | Bash | Keep waiting for constructors | `/usr/bin/sleep 295; for c in wt-orfas-2901-0215 wt-col129-2901-0330; do echo "$c: $(git -C /home/ronald/$c log --oneline -1 \| cut -c1-90)"; done; date +%H:%M` |
-| 03:35:55 | Bash | Wait for constructors | `/usr/bin/sleep 290; for c in wt-orfas-2901-0215 wt-col129-2901-0330; do echo "$c: $(git -C /home/ronald/$c log --oneline -1 \| cut -c1-90)"; done; date +%H:%M` |
-| 03:35:50 | Bash | Record ORFAS rejection | `date +%H:%M && python3 - <<'EOF' p='docs/RELATO.md'; s=open(p).read() o="Em curso: semeadura do estoque para o vigia nao nascer vermelho (287 hoje), pai encerrado no dry, suite inteira; depois verificador. Pousa depois do O-OUTBOX." n="#2 f4ab468a: semeadura cobre o estoque (364 eventos; o consumo encerraria os 287), pai encerrado volta pela porta dele, suite inteira verde. **REPROVADA 03:3x** (11 ...` |
-| 03:35:41 | SendMessage |  | `-` |
