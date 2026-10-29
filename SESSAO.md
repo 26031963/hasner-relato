@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/10/2026 21:24:08.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (4.0 MB). Acoes na janela: **175**.
+**Medido em 28/10/2026 21:29:38.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (4.1 MB). Acoes na janela: **179**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 21:29:16 | Bash | Read Zona 5 and its grade dependency | `sed -n 2975,3010p ponto/motor_calculo_v2.py; /bin/grep -n "_match_marcos\\|marco_ocupado_pela_batida\\|cumpriu_a_volta_do_intervalo\\|montar_grade" ponto/motor_calculo_v2.py ponto/juiz_batida.py \| head -20` |
+| 21:29:05 | Bash | Register CODEX complement 2 | `python3 - <<'EOF' p='docs/BACKLOG.md'; s=open(p).read() o="sanitizacao so pelo `bin/raspar_publico.py`. \|" n="sanitizacao so pelo `bin/raspar_publico.py`. **Complemento 2 (21:3x):** o leitor e o Claude do chat lendo o hasner-relato, sem colagem; resposta acima do teto NUNCA sai cortada em silencio (rotulo `truncado em N de M` no ponto do corte) e o teto se MEDE contra o tamanho real das respostas ...` |
+| 21:28:57 | Bash | Register three avais and CLAUDE.md rule | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='CLAUDE.md'; s=open(p).read() anc="PLACAR-DA-S3-CONTA-EXERCICIO (corte Ronald 29/09 ~15:1x" assert s.count(anc)==1 rule='''AGENTE-NAO-ESPERA (regra de PISTA, Ronald 28/10 ~21:3x; sem numero de lei). Agente (general-purpose ou verificador) nasce para CONSTRUIR ou VERIFICAR e termina quando entrega -- **nunca e usado para ESPERAR**. Polling de log,  ...` |
+| 21:28:38 | ListAgents |  | `-` |
 | 21:19:00 | Bash | Wait for lastro2 suite | `cd /home/ronald/saas-hasner && for i in $(seq 1 19); do grep -q '^rc=' logs/lastro2/suite_inteira_1.out 2>/dev/null && break; /usr/bin/sleep 30; done; grep -E '^(FAIL\|ERROR):\|^Ran \|^(OK\|FAILED)( \|$)\|^rc=' logs/lastro2/suite_inteira_1.out \| tail -6; date +%H:%M` |
 | 21:18:55 | Bash | Update LASTRO-DEGRAU-2 state | `python3 - <<'EOF' p='docs/BACKLOG.md'; s=open(p).read() o="\| livre: LEI dele 25/10 11:2x. Antes: medir na frota quantos chamados mudam de lado (equivalencia nos dois sentidos, molde `test_perto_do_marco_e_o_mesmo_no_motor.py`), sobretudo na virada da meia-noite. Sem dinheiro. \|" n="\| construida 28/10 21:2x (copia wt-lastro2-2810-2115): degrau 2 pergunta a `perto_do_marco`; RED da S 00:32 do not ...` |
 | 21:18:48 | Agent | Adversarial verify LASTRO-DEGRAU-2 | `Obra: LASTRO-DEGRAU-2 (repo /home/ronald/saas-hasner; CLAUDE.md secoes 0 e 6). Lei literal (BACKLOG): "o casamento batida x marco SEM lampada (`ponto/services/lastro.py` degrau 2) pergunta a `escala/regua_defesa.py::perto_do_marco` (raio da casa, circular, 90 min, L-115); a conta linear propria e a constante `TOLERANCIA_MIN` saem. Antes: medir na frota quantos chamados mudam de lado (equivalencia  ...` |
