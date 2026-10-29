@@ -6,10 +6,16 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/10/2026 06:43:37.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (11.3 MB). Acoes na janela: **467**.
+**Medido em 29/10/2026 06:49:07.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (11.4 MB). Acoes na janela: **473**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 06:44:11 | Bash | Wait for E2 measurement result | `until [ -f /home/ronald/saas-hasner/logs/c20e2_24h/run.done ]; do /usr/bin/sleep 30; done; date +%H:%M; cat /home/ronald/saas-hasner/logs/c20e2_24h/run.log; grep -nE "a_fechar\|==\|ERROS\|FIM\|Traceback" /home/ronald/saas-hasner/logs/c20e2_24h/m3_a_fechar_24h.out \| head -40` |
+| 06:44:06 | Bash | Read E2 measurement script and expectation | `cd /home/ronald/saas-hasner/logs/c20e2_24h; cat run.sh; sed -n 1,40p m3_a_fechar_24h.py; grep -rn "E2-REBAIXA" /home/ronald/saas-hasner/app/docs/BACKLOG.md \| cut -c1-700 \| head -3` |
+| 06:44:02 | Bash | Read E2 cron and expected value | `cat /etc/cron.d/hasner-c20e2-24h; ls -la /home/ronald/saas-hasner/logs/c20e2_24h/ 2>/dev/null; grep -n "CONTRATO-20-E2-REBAIXA \|" /home/ronald/saas-hasner/app/docs/BACKLOG.md \| cut -c1-900` |
+| 06:43:57 | Bash | Locate E2 07:05 measurement | `cd /home/ronald/saas-hasner && grep -n "07:05" app/docs/BACKLOG.md app/docs/RELATO.md \| cut -c1-400 \| head -8; crontab -l \| grep -n "07:05\\|^5 7\\|E2\\|reavaliar" \| head; ls /etc/cron.d/ \| head -20` |
+| 06:43:51 | Bash | Record ORFAS ready and file achado | `python3 - <<'PY' p='BACKLOG.md'; s=open(p,encoding='utf-8').read() anc=[l for l in s.split('\n') if l.startswith('\| DISPARAR-PERGUNTAS-NO-CONTRATO-20 \|')] assert len(anc)==1 row=('\| EXPIRACAO-DA-ABERTA-COPIA-ANTIGA \| **`ponto/selecao_periodo.py:281-290` (`turnos_em_turno_stored`) aplica sozinha "fim + 4 h" (e entrada + jornada + margem)** sobre turnos gravados -- segunda copia, anterior a ORFA ...` |
+| 06:43:41 | Bash | Find BACKLOG row format | `grep -n "DISPARAR-PERGUNTAS-NO-CONTRATO-20" BACKLOG.md \| head -3` |
 | 06:33:45 | Bash | Wait for ORFAS suite 5 | `/usr/bin/sleep 590; grep -E '^(OK\|FAILED)($\| \()\|^Ran \|^rc=' /home/ronald/saas-hasner/logs/orfas/suite_inteira_5.log \| tail -3 \| tr '\n' ' '; date +%H:%M` |
 | 06:33:41 | Agent | Verify ORFAS fifth reading | `5a leitura da ORFAS, obra CONTRATO-20-LASTRO-E-ORFAS (metade ORFAS), aval ORFAS-ENTERRA-FURO-REAL=(b). O carimbo fantasma nasce no EVENTO do cartorio e `reconciliar_perguntas_orfas` vira VIGIA. Copia: /home/ronald/wt-orfas-2901-0215 @ 42d59e46, sobre 8f4eca4b. - Diff da rodada: `git -C /home/ronald/wt-orfas-2901-0215 diff 8f4eca4b 42d59e46`. - Diff da obra inteira: `git diff d375511b 42d59e46` (d3 ...` |
 | 06:23:35 | Bash | Wait for ORFAS #6 | `/usr/bin/sleep 595; git -C /home/ronald/wt-orfas-2901-0215 log --oneline -1\|cut -c1-60; date +%H:%M` |
