@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/10/2026 06:21:38.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (11.1 MB). Acoes na janela: **463**.
+**Medido em 29/10/2026 06:27:08.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (11.2 MB). Acoes na janela: **465**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 06:23:35 | Bash | Wait for ORFAS #6 | `/usr/bin/sleep 595; git -C /home/ronald/wt-orfas-2901-0215 log --oneline -1\|cut -c1-60; date +%H:%M` |
+| 06:23:29 | Bash | Record COL129 ready | `cd /home/ronald/saas-hasner/app/docs && python3 - <<'PY' p='RELATO.md'; s=open(p,encoding='utf-8').read() old='falta so trocar 3 rotulos ("teria fechado" -> "cabia no envelope"), em curso (#4).' assert s.count(old)==1 s=s.replace(old,'#4 7b9353f2 (so os 3 rotulos): suite inteira VERDE (Ran 12631, rc 0, porcelain vazio antes e depois). PRONTA; empilhada sobre f4ab468a, entao no pouso se rebaseia so ...` |
 | 06:13:33 | Bash | Wait for COL129 suite | `/usr/bin/sleep 590; cd /home/ronald/saas-hasner/logs; grep -E '^(OK\|FAILED)($\| \()\|^Ran \|^rc=' col129/suite_inteira_c9_4.log \| tail -3 \| tr '\n' ' '; cat col129/arvore_hash_depois_4.out 2>/dev/null; git -C /home/ronald/wt-orfas-2901-0215 log --oneline -1\|cut -c1-60; date +%H:%M` |
 | 06:13:28 | Bash | Record ORFAS #5 reprove | `cd /home/ronald/saas-hasner/app/docs && python3 - <<'PY' p='RELATO.md'; s=open(p,encoding='utf-8').read() old='De volta ao construtor (#5).' assert s.count(old)==1 s=s.replace(old,old+' #5 8f4eca4b: aberta com escala = TETO (`turno_aberto_relogio`), sem escala/sem previsto = None com a pergunta viva e vigia mudo; prod 0 em todo motivo. **REPROVADA 06:1x**: o ramo reescreve a expiracao que `turno_a ...` |
 | 06:13:22 | SendMessage |  | `-` |
