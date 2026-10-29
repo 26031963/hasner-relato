@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/10/2026 16:09:15.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (18.7 MB). Acoes na janela: **369**.
+**Medido em 29/10/2026 16:14:33.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (18.7 MB). Acoes na janela: **368**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -378,4 +378,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 04:26:08 | SendMessage |  | `-` |
 | 04:25:28 | Bash | Keep waiting for ORFAS suite | `cd /home/ronald/saas-hasner && for i in $(seq 1 19); do grep -qE '^Ran [0-9]\|^rc=' logs/orfas/suite_inteira_2.log 2>/dev/null && break; /usr/bin/sleep 30; done; grep -E '^(FAIL\|ERROR):\|^Ran \|^(OK\|FAILED)( \|$)\|^rc=' logs/orfas/suite_inteira_2.log \| tail -5; date +%H:%M` |
 | 04:15:53 | Bash | Wait for ORFAS full suite 2 | `cd /home/ronald/saas-hasner && for i in $(seq 1 19); do grep -qE '^Ran [0-9]\|^rc=' logs/orfas/suite_inteira_2.log 2>/dev/null && break; /usr/bin/sleep 30; done; cat logs/orfas/arvore_hash_2.out; grep -E '^(FAIL\|ERROR):\|^Ran \|^(OK\|FAILED)( \|$)\|^rc=' logs/orfas/suite_inteira_2.log \| tail -5; date +%H:%M` |
-| 04:10:57 | Bash | Wait for ORFAS report | `/usr/bin/sleep 290; ls -t /home/ronald/saas-hasner/logs/orfas \| head -4; date +%H:%M` |
