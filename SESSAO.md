@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/10/2026 12:45:58.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (15.9 MB). Acoes na janela: **377**.
+**Medido em 29/10/2026 12:50:58.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (16.0 MB). Acoes na janela: **377**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 12:49:22 | Bash | Fix marker and wait for progress | `cd /home/ronald/saas-hasner/app/docs && python3 - <<'PY' p='BACKLOG.md'; L=open(p,encoding='utf-8').read().split('\n') for k,l in enumerate(L): if l=='<!-- ORDEM-VIVA-TOPO: LASTRO-DEGRAU-2 -->': L[k]='<!-- ORDEM-VIVA-TOPO: JUIZ-DO-PAR-GRUPO-1 -->' L.insert(k+1,'<!-- ANDOU 29/10 12:5x, de `LASTRO-DEGRAU-2` para `JUIZ-DO-PAR-GRUPO-1` (ordem RESPOSTAS-2910-1230 item 4: grupo (1) sitio 1 com a cura do ...` |
 | 12:44:02 | Bash | Check constructors and push | `/usr/bin/sleep 300; cd /home/ronald/saas-hasner && for w in wt-grupo1-2910-1100 wt-lastro3-2910-1000; do git -C /home/ronald/$w log --oneline -1 \| cut -c1-90; done; bin/trava_teste.sh --quem; tail -2 logs/relcpu_push.out \| cut -c1-120; date +%H:%M` |
 | 12:43:56 | Bash | Push instrument marco | `cd /home/ronald/saas-hasner && git worktree remove --force /home/ronald/wt-relcpu-2910-1240; (bin/push.sh > logs/relcpu_push.out 2>&1; echo "rc=$?" >> logs/relcpu_push.out) & echo lancado` |
 | 12:43:49 | Bash | Fix PROVA line and recommit | `cd /home/ronald/saas-hasner && python3 - <<'PY' p='app/docs/RELATO.md'; s=open(p,encoding='utf-8').read() old='> **ORFAS -- `reabrir_orfas_enterradas --apply` APLICADO 29/10 12:36 (aval RESPOSTAS-2910-1230 item 3 = (a)).**' s=s.replace(old,old+'\n> - PROVA: `[APPLY] ... reabertas=81 disputas_reabertas=1 pais_reabertos=19 pai_falhou=[] pautas_escritas=2`, rc 0 (`logs/orfas/pouso_reabrir_apply.out`) ...` |
@@ -386,4 +387,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 00:54:04 | Bash | Paste measured Codex schema into RELATO | `python3 - <<'EOF' p='docs/RELATO.md'; s=open(p).read() anc="> **PISTA 29/10 00:4x (RAIA-NAO-FICA-PARADA" assert s.count(anc)==1 sec='''> **CODEX-ESTADO-NO-RELATO, requisito (1) -- SCHEMA REAL MEDIDO 29/10 00:5x** (encaixe por dependencia de codigo: tudo antes na ordem esta preso; `logs/codex/schema_real.out`, so chaves e tipos, nenhum conteudo lido): JSONL na VM em `~/.codex/sessions/AAAA/MM/DD/ro ...` |
 | 00:53:50 | Bash | Measure real Codex JSONL schema (keys only) | `mkdir -p /home/ronald/saas-hasner/logs/codex && python3 - <<'EOF' > /home/ronald/saas-hasner/logs/codex/schema_real.out 2>&1 import json, glob, collections, os arqs = sorted(glob.glob(os.path.expanduser('~/.codex/sessions/**/*.jsonl'), recursive=True)) print('ARQUIVOS', len(arqs), [os.path.basename(a)[:40] for a in arqs]) top = collections.Counter(); ptype = collections.Counter(); keys = collectio ...` |
 | 00:53:37 | Bash | Locate Codex JSONL files on the VM | `ls -la ~/.codex 2>/dev/null \| head; find ~/.codex -name "*.jsonl" 2>/dev/null \| head -5; find ~/.codex -name "*.jsonl" 2>/dev/null \| wc -l; ls ~/codex_prototipo ~/codex_ws 2>/dev/null \| head` |
-| 00:48:37 | Bash | Keep waiting for constructor | `/usr/bin/sleep 290; git -C /home/ronald/wt-outbox-2810-1915 log --oneline -2; date +%H:%M` |
