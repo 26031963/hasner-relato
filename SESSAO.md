@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/10/2026 11:09:23.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (15.2 MB). Acoes na janela: **435**.
+**Medido em 29/10/2026 11:14:49.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (15.2 MB). Acoes na janela: **437**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 11:12:59 | Bash | Wait for LASTRO rework commit | `cd /home/ronald/saas-hasner && until [ "$(git -C /home/ronald/wt-lastro3-2910-1000 rev-parse --short HEAD)" != "5c8b7ead" ]; do /usr/bin/sleep 30; done; git -C /home/ronald/wt-lastro3-2910-1000 log --oneline -1 \| cut -c1-90; date +%H:%M` |
+| 11:11:24 | Bash | Wait for constructor commits | `cd /home/ronald/saas-hasner && until [ "$(git -C /home/ronald/wt-lastro3-2910-1000 rev-parse --short HEAD)" != "5c8b7ead" ] \|\| [ "$(git -C /home/ronald/wt-grupo1-2910-1100 rev-parse --short HEAD)" != "bbb47632" ]; do /usr/bin/sleep 30; done; for w in wt-lastro3-2910-1000 wt-grupo1-2910-1100; do git -C /home/ronald/$w log --oneline -1 \| cut -c1-90; done; date +%H:%M` |
 | 11:05:19 | Bash | Wait for COL129 push result | `cd /home/ronald/saas-hasner && until grep -q '^rc=' logs/col129/push.out 2>/dev/null; do /usr/bin/sleep 30; done; tail -3 logs/col129/push.out \| cut -c1-160; git -C /home/ronald/wt-lastro3-2910-1000 log --oneline -1 \| cut -c1-80` |
 | 10:55:02 | Bash | Wait for COL129 push | `cd /home/ronald/saas-hasner && until grep -q '^rc=' logs/col129/push.out 2>/dev/null; do /usr/bin/sleep 30; done; tail -3 logs/col129/push.out \| cut -c1-160` |
 | 10:54:58 | Agent | Build grupo 1: detector_anomalias | `CONSTRUIR (cura de negocio): grupo (1) do CENSO-DE-LEITORES, PRIMEIRO sitio: `chamados/detector_anomalias.py:~206`. Copia: /home/ronald/wt-grupo1-2910-1100 (branch raia-grupo1-2910, nascida do main bbb47632). Antes de qualquer codigo, leia /home/ronald/saas-hasner/CLAUDE.md inteiro, em especial a secao 0 (LEI-AKITA, SELO DE CONDUTA, PADRAO-NA-CURA) e a 6. A obra esta em /home/ronald/saas-hasner/ap ...` |
