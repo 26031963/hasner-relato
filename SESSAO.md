@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/10/2026 12:24:38.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (15.6 MB). Acoes na janela: **384**.
+**Medido em 29/10/2026 12:30:10.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (15.7 MB). Acoes na janela: **385**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 12:26:04 | Bash | Wait and check constructors | `/usr/bin/sleep 590; cd /home/ronald/saas-hasner && for w in wt-grupo1-2910-1100 wt-lastro3-2910-1000; do git -C /home/ronald/$w log --oneline -1 \| cut -c1-90; done; bin/trava_teste.sh --quem; ls -t logs/grupo1 \| head -3; date +%H:%M` |
 | 12:16:15 | Bash | Wait and check constructors | `/usr/bin/sleep 580; cd /home/ronald/saas-hasner && for w in wt-grupo1-2910-1100 wt-lastro3-2910-1000; do git -C /home/ronald/$w log --oneline -1 \| cut -c1-90; done; bin/trava_teste.sh --quem; date +%H:%M` |
 | 12:06:08 | Bash | Wait for grupo 1 rework commit | `cd /home/ronald/saas-hasner && a=$(git -C /home/ronald/wt-grupo1-2910-1100 rev-parse --short HEAD); until [ "$(git -C /home/ronald/wt-grupo1-2910-1100 rev-parse --short HEAD)" != "$a" ]; do /usr/bin/sleep 30; done; git -C /home/ronald/wt-grupo1-2910-1100 log --oneline -1 \| cut -c1-90; date +%H:%M` |
 | 12:05:59 | Bash | Record LASTRO reprove and serialization | `cd /home/ronald/saas-hasner && python3 - <<'PY' p='app/docs/RELATO.md'; s=open(p,encoding='utf-8').read(); i=s.index('\n> ') s=s[:i]+'\n> **LASTRO-DEGRAU-2 #3 (26dc989f): suite inteira VERDE (Ran 12658, `logs/lastro3/suite_inteira_2.out`), REPROVADA 12:1x** pela LEI-AKITA 6: o recuo le o construtor da grade, que responde diferente para o mesmo dia conforme a JANELA (col879 08/10; 3 aceso/apagado + ...` |
