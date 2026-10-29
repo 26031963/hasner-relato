@@ -1,5 +1,23 @@
 # RELATO — esteira saas-hasner
 
+> **AGENTE-NO-MODELO-CERTO-CONFERE (aval 29/10 08:4x): agentes abertos desde 00:00, papel e modelo (do transcrito da sessao; hora UTC-3).**
+> - 00:07 general-purpose | sonda/censo/medida | sonnet | Measure who opens turno chamado (O-OUTBOX-SOB-ATA-ESTAVEL)
+> - 00:18 general-purpose | construir | sessao (opus) | O-OUTBOX: abrir pergunta a celula
+> - 00:24 verificador | verificar | sessao (opus) | QUARENTENA isento
+> - 00:59 verificador | verificar | sessao (opus) | O-OUTBOX (c)
+> - 01:09 general-purpose | construir | sessao (opus) | O-OUTBOX: 5a reprovacao
+> - 02:13 general-purpose | construir | sessao (opus) | ORFAS (b) (retomado #3-#6 por mensagem)
+> - 03:24 verificador | verificar | sessao (opus) | ORFAS (b) 2a leitura
+> - 03:25 general-purpose | construir | sessao (opus) | COL129 (c) (retomado #2-#4 por mensagem)
+> - 03:56 verificador | verificar | sessao (opus) | COL129 (c)
+> - 05:11 verificador | verificar | sessao (opus) | COL129 2a leitura
+> - 05:22 verificador | verificar | sessao (opus) | ORFAS 3a leitura
+> - 05:42 verificador | verificar | sessao (opus) | COL129 3a leitura
+> - 06:02 verificador | verificar | sessao (opus) | ORFAS 4a leitura
+> - 06:33 verificador | verificar | sessao (opus) | ORFAS 5a leitura
+> - 06:53 verificador | verificar | sessao (opus) | JUIZ-DO-PAR 6a leitura
+> - LEITURA: os 15 seguiram a regra pelo papel (1 sonda em sonnet; 4 construtores e 10 verificadores no modelo da sessao). O desvio esta FORA dos agentes: as sondas, DIFFs de frota e contadores da noite (reversao, h09, prova de frota, drift velho x novo, sete_depois_04, residuo, E2) rodei INLINE na sessao principal (opus), sem delegar -- e por isso o sonnet ficou parado. Daqui em diante, sonda/censo/medida que nao seja so ler um numero que ja sai pronto vai a agente `model: sonnet` (`haiku` se for so contar), pela regra do CLAUDE.md 7b; sem mudanca de settings.
+
 > **JUIZ-DO-PAR-CURA-NA-FONTE -- NO AR 29/10 07:11 (b3bf529e, deploy OK, 3 rotas provadas).**
 > - PROVA: `bin/deploy.sh --sem-migrate` rc 0 as 07:11:25 -- saas_core /health/ 200, saas_ui /colaboradores/ 302, mensageria /health/ 200; HEAD = b3bf529e.
 > LEI-AKITA: origem=escala/utils.py::_match_marcos (papel do turno), testemunha=ponto/turnos.py::turnos_do_colab + Zona 5 e cumpriu_a_volta lendo o mesmo _match_marcos, RED=escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py, quem-mais-le=ata do cartorio, Zona 5, cumpriu_a_volta, detector_anomalias (derivar=False), juizes novos=0, padrao=juiz unico
