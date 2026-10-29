@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/10/2026 15:26:13.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (18.1 MB). Acoes na janela: **371**.
+**Medido em 29/10/2026 15:31:16.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (18.2 MB). Acoes na janela: **370**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -380,4 +380,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 03:35:55 | Bash | Wait for constructors | `/usr/bin/sleep 290; for c in wt-orfas-2901-0215 wt-col129-2901-0330; do echo "$c: $(git -C /home/ronald/$c log --oneline -1 \| cut -c1-90)"; done; date +%H:%M` |
 | 03:35:50 | Bash | Record ORFAS rejection | `date +%H:%M && python3 - <<'EOF' p='docs/RELATO.md'; s=open(p).read() o="Em curso: semeadura do estoque para o vigia nao nascer vermelho (287 hoje), pai encerrado no dry, suite inteira; depois verificador. Pousa depois do O-OUTBOX." n="#2 f4ab468a: semeadura cobre o estoque (364 eventos; o consumo encerraria os 287), pai encerrado volta pela porta dele, suite inteira verde. **REPROVADA 03:3x** (11 ...` |
 | 03:35:41 | SendMessage |  | `-` |
-| 03:30:26 | Bash | Keep waiting | `/usr/bin/sleep 290; git -C /home/ronald/wt-col129-2901-0330 log --oneline -1; date +%H:%M` |
