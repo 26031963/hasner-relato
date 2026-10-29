@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/10/2026 22:12:37.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (4.9 MB). Acoes na janela: **213**.
+**Medido em 28/10/2026 22:18:08.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (4.9 MB). Acoes na janela: **216**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 22:12:59 | Bash | Wait for money DIFF after-run | `cd /home/ronald/saas-hasner && for i in $(seq 1 19); do grep -q '^rc=' logs/juizpar2/dinheiro_depois.out 2>/dev/null && break; /usr/bin/sleep 30; done; grep -E '^(H09\|ERROS\|rc=)\|Traceback' logs/juizpar2/dinheiro_depois.out; grep -E '^(FAIL\|ERROR):\|^Ran \|^(OK\|FAILED)( \|$)\|^rc=' logs/juizpar2/recorte_1.out \| tail -12; date +%H:%M` |
+| 22:12:52 | Bash | Register census complement and lock obra | `python3 - <<'EOF' p='docs/BACKLOG.md'; L=open(p).read().split('\n') i=next(k for k,l in enumerate(L) if l.startswith('\| JUIZ-DO-PAR-DUAS-ENTRADAS \|')) L[i]=L[i].replace("\| P7.1, 34b0d5a5 na copia REPROVADA 28/10 20:2x: o motor le a ata (dinheiro nao medido) e marco_ocupado/Zona 5 seguem na DP; pergunta JUIZ-DO-PAR-CURA-NA-FONTE no topo do RELATO \|", "\| P7.1, CURA-NA-FONTE = (a) 21:3x: copia w ...` |
+| 22:12:43 | SendMessage |  | `-` |
 | 22:03:03 | Bash | Wait for recorte and money DIFF | `cd /home/ronald/saas-hasner && for i in $(seq 1 19); do grep -q '^rc=' logs/juizpar2/recorte_1.out 2>/dev/null && grep -q '^rc=' logs/juizpar2/dinheiro_depois.out 2>/dev/null && break; /usr/bin/sleep 30; done; grep -E '^(FAIL\|ERROR):\|^Ran \|^(OK\|FAILED)( \|$)\|^rc=' logs/juizpar2/recorte_1.out \| tail -12; grep -E '^(H09\|ERROS\|rc=)\|Traceback' logs/juizpar2/dinheiro_antes.out logs/juizpar2/di ...` |
 | 22:02:56 | Bash | Update memory index line | `cd /home/ronald/.claude/projects/-home-ronald-saas-hasner/memory && sed -i 's/^- \[Modelo por papel\](modelo-so-haiku-sonnet.md) — .*/- [Modelo por papel](modelo-so-haiku-sonnet.md) — sonda\/censo em sonnet (haiku p\/ contar); construcao de cura e verificador no modelo da sessao/' MEMORY.md && /bin/grep -n "Modelo por papel" MEMORY.md` |
 | 22:02:55 | Write |  | `/home/ronald/.claude/projects/-home-ronald-saas-hasner/memory/modelo-so-haiku-sonnet.md` |
