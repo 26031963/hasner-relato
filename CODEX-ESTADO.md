@@ -1,7 +1,143 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **29/10/2026 07:46** · publicado em **29/10/2026 07:46** (UTC-3)
+> Ultima resposta processada: **29/10/2026 07:47** · publicado em **29/10/2026 07:52** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 29/10 07:47 · sessao 1ee182181f58
+
+Fonte: commit `b3bf529ef8097638c70b6913649912a68021e2c9`, lido por `git show`. `_h2910` não estava disponível; os caminhos abaixo pertencem ao commit pedido. Sem escrita, testes ou banco.
+
+## T9 — Quem produz a classe do cron do feriado
+
+**Premissa exata:**
+
+1. Chamado `batida_ausente` em `VIVOS`, opcionalmente da empresa selecionada (`app/chamados/services/feriado_reavaliar.py:17`).
+2. `dia_do_fato(ch)` retorna uma data (`:30`).
+3. `fatos_do_dia` retorna previsão conhecida: `era_dia_previsto is not None` (`:33`, `:34`).
+4. A faixa vencedora é `feriado` ou `folga`, e o catálogo considera morta a premissa com `FATO_FALTA_DESCOBERTA=False` (`:36`, `:38`).
+5. **Para fechar efetivamente**, `ch.reconciliar()` precisa aceitar (`:47`): motor permite a transição e o gate aceita premissa regularizada, agrupamento ou cobrança irmã sobrevivente (`app/chamados/models.py:467`, `:470`, `:495`, `:498`). Selecionar como espúrio não prova fechamento.
+
+As entradas do seletor são Ausências não rejeitadas, FolgaDia, feriados aplicáveis, vínculo/geradora, `CelulaDia.trabalha` e `trabalha_em_feriado` (`app/ponto/precedencia.py:211`, `:220`, `:229`, `:291`, `:300`, `:314`). O lugar vem de **`Colaborador.posto.municipio`**, não de `Praca.cidade/estado` (`app/core/feriados.py:46`, `:113`).
+
+Na tabela, **direto** significa chamar `feriado_reavaliar`; evento do cartório está identificado separadamente.
+
+| Ato / porta de escrita | Reavaliação já disparada? |
+|---|---|
+| Criar/editar Feriado: `app/core/views_config.py:81`, `:68`; importar: `:141` | **Sim, direto:** `post_save` agenda `reavaliar_dia` em `on_commit` (`app/chamados/signals.py:259`, `:269`, `:270`). Mudança de data agenda somente a **nova** (`:263`). |
+| Excluir Feriado: `app/core/views_config.py:198` | **Não.** Ausência de `post_delete` é deliberada: esse consumidor fecha, não reabre (`app/chamados/signals.py:255`, `:256`). |
+| Alterar município do posto: `app/colaboradores/services/estrutura.py:50`; backfill: `:70` | **Não, direto.** O evento de Posto encontrado trata geofence (`app/ponto/signals.py:291`, `:306`); o backfill usa `update`, sem `save`. |
+| Alterar Município.nome/UF: `app/colaboradores/management/commands/seed_municipios.py:38` | **Não nessa porta.** Esses campos determinam alcance estadual/municipal (`app/core/feriados.py:52`, `:53`, `:63`, `:66`). |
+| Mover/desvincular colaborador de posto: portas `app/colaboradores/services/colaborador.py:53`, `:61`, `:68`, `:75`; chamadas em `app/colaboradores/views.py:329`, `:645`, `:670` | **Não, direto.** Muda o lugar usado pelo juiz (`app/core/feriados.py:113`). |
+| Criar/editar calendário e tamanhos: `app/escala/folgas.py:479`, `:483`, `:490`, `:504`, `:508` | **Não nessa gravação.** A view salva e redireciona sem materializar fotos (`app/escala/views.py:362`, `:364`). |
+| Materializar calendário; lançar, alterar/remover ou aplicar lote de folgas: `app/escala/folgas.py:172`, `:173`, `:259`, `:280`, `:284`, `:289`, `:334` | **Sim, condicional:** esses fluxos relavram células (`:192`, `:261`, `:303`, `:340`); o evento exige `recalculo=True` e dias efetivamente tocados (`app/ponto/portas/celula.py:420`, `:431`, `:432`). |
+| Reparentar FolgaDia: `app/escala/folgas.py:436` | **Condicional:** relavra da competência corrente em diante (`:441`, `:442`), depois vale o gate anterior. |
+| Trocar calendário do vínculo: `app/colaboradores/services/vinculo.py:445` | **Não sozinho:** o contrato exige materialização pelo chamador (`:434`). As telas lidas materializam (`app/colaboradores/views.py:245`; `app/escala/views.py:414`). |
+| Criar/editar vínculo pelo wizard: `app/colaboradores/services/vinculo.py:274`, `:278` | **Condicional:** chama regeneração em `:320`, alcançando o evento se houver dias tocados. |
+| Alterar vigência/encerrar vínculo: `app/colaboradores/services/vinculo.py:799`; alterar âncora: `:845` | **Condicional:** signals comparam vigência/âncora e regeneram (`app/escala/signals.py:56`, `:71`, `:104`, `:117`); depois vale o gate E2. |
+| Alterar `trabalha_em_feriado`: `app/colaboradores/services/vinculo.py:825` | **Não por essa alteração isolada:** os signals citados comparam vigência ou âncora, não essa flag (`app/escala/signals.py:57`, `:107`). |
+| Updates de vigência, absorção, restauração ou desfazimento: `app/colaboradores/services/vinculo.py:615`, `:691`, `:753`, `:864`, `:874`, `:940`, `:941` | **Sem evento próprio nessas portas.** Regeneração posterior depende do chamador; o wizard a faz em `:320`. |
+| Editar TipoEscala: `app/escala/services/cadastro_tipo.py:306` | Regenera frota com **`recalculo=False`** (`:348`, `:350`), portanto não dispara E2 (`app/ponto/portas/celula.py:420`). |
+| Regenerar células: `app/ponto/portas/celula.py:232`, `:246`, `:263` | **Sim**, somente para datas adicionadas a `_tocadas` (`:234`, `:249`, `:267`) e com `recalculo` (`:420`). |
+| Reverter regeneração: `app/ponto/portas/celula.py:537`; geração ordinária: `:592`, `:604`, `:614` | **Não chamam o reavaliador nessas funções**; terminam em `:551` e `:616`. |
+| Criar/editar/decidir Ausência: `app/ponto/services/ausencia.py:418`, `:508`, `:819`, `:911`; apagar espelhos/intervalos de férias: `:1174`, `:1197`, `:1254` | **Não, direto; têm eventos:** `save/delete` julgam cartório (`app/ponto/signals.py:143`, `:147`, `:150`, `:152`), além do consumidor de silêncio/fechamento (`:263`, `:269`). |
+| Rejeitar Ausências de férias em massa: `app/ponto/services/ausencia.py:1267` | O `update` não emite signal. Porém o cancelamento completo salva o agendamento depois (`app/ferias/services.py:356`, `:362`), cuja sincronização remove/espelha Ausências (`app/ferias/models.py:384`; `ausencia.py:1174`). |
+| Aprovar/rejeitar/materializar Justificativa: `app/ponto/services/justificativa.py:88`, `:170`, `:265`; lote: `app/ponto/views.py:1790`, `:1862` | **Não, direto; sim cartório por `post_save`** (`app/ponto/signals.py:161`, `:165`). Justificativa não entra no seletor de precedência; entra no gate final de fechamento (`app/ponto/precedencia.py:211`; `app/chamados/models.py:875`). |
+| Registrar/retratar/apagar Batida: `app/ponto/registro_batida.py:94`, `:267`, `:285` | Dependência indireta do gate (`app/chamados/models.py:920`, `:921`); **há eventos de cartório**, não do reavaliador específico (`app/ponto/signals.py:131`, `:138`). |
+| Ata/veredito, associação do chamado e estado: `app/ponto/portas/celula.py:650`, `:671`; `app/chamados/services/vinculos.py:88`, `:99`; `app/chamados/models.py:231` | Não chamam diretamente o reavaliador. O evento de chamado rejulga em criação/mudança de status, não na simples associação (`app/chamados/signals.py:163`, `:174`). |
+
+**Ficam sem o evento específico:** exclusão/data anterior de Feriado; mudança de localização; calendário não materializado; mudança isolada de `trabalha_em_feriado`; updates/restauros de vínculo sem regeneração posterior; regeneração de frota com `recalculo=False`; reversão, geração ordinária e mudança sem `_tocadas`. O próprio código declara os casos célula inalterada/frota/reversão/acervo (`app/chamados/signals.py:254`, `:255`).
+
+Ausência, Justificativa e Batida **têm outros eventos**; equivalência integral desses consumidores com a classe do cron não está provada pelas chamadas acima. Outros chamadores das portas de restauração e operações de admin Django: **nao li**.
+
+## T10 — Célula × justificativa aprovada × turno aberto
+
+### (a) Onde a justificativa entra
+
+**Já existe leitura neste HEAD, pela grade:**
+
+- O cartório monta a grade (`app/ponto/services/cartorio.py:874`); o builder aplica `_marcar_ausencias` (`app/escala/utils.py:1785`).
+- `_marcar_ausencias` consulta Justificativa `aprovada` pelo dia (`app/escala/utils.py:1157`), troca colunas `missing` por `None`, limpa órfãs e marca `justificado=True` (`:1200`, `:1202`, `:1203`).
+- `dispensar_por_ausencia` lê esse flag (`app/ponto/services/cartorio.py:602`), acende marcos, deixa `luz=None`, grava `dispensada='justificativa'` e recalcula faltantes (`:608`, `:609`, `:610`, `:612`). É aplicada antes da ata final (`:1407`).
+
+Portanto, o ponto pedido por ATA-NAO-DISPENSA-JUSTIFICADA **já é `dispensar_por_ausencia`**; a leitura direta de Justificativa em `cartorio.py:279` serve a `houve_fato_novo`, não à fabricação das lâmpadas.
+
+**Há uma condição para o efeito chegar à ata:** o signal da Justificativa chama julgamento (`app/ponto/signals.py:161`, `:165`), mas justificativa/`justificado` não compõem explicitamente a impressão (`app/ponto/services/cartorio.py:314`, `:323`). Se todos os componentes da impressão permanecerem iguais, o julgamento pula (`:1092`). Ocorrência concreta desse caso: não verificada.
+
+### (b) Como uma entrada sem saída pode resultar em `concorde`
+
+**Uma entrada sem saída, sozinha, não implica `concorde` neste HEAD.**
+
+| Etapa | Caminho |
+|---|---|
+| Batida e encerramento | O cartório conta a entrada casada e passa o encerramento decidido pelo juiz (`app/ponto/services/cartorio.py:1101`, `:1117`). |
+| Sem par fechado | Realizado zero não satisfaz `REALIZADO_ZERO_COM_TURNO` com uma única célula OK: o mínimo é dois (`app/ponto/supra_juiz.py:48`, `:256`). Sem realizado nem órfã, `_tem_fato_dia=False` (`:348`). |
+| **Caso normal sem justificativa** | O ramo específico exige batida, realizado zero, encerramento, trabalho previsto, saída `missing`, sem cobertura aprovada e sem defeito de âncora; produz **`FURO_PARCIAL`** (`app/ponto/supra_juiz.py:394`, `:399`). |
+| **Com justificativa aprovada** | A grade remove os `missing` (`app/escala/utils.py:1200`); `_n_missing` fica zero e esse ramo não entra (`app/ponto/supra_juiz.py:347`, `:395`). |
+| Decisão final | Sem outros protestos e sem fio vivo, códigos vazios derivam **`concorde`** (`app/ponto/services/cartorio.py:1121`, `:1141`; `app/escala/models.py:1595`). Com fio vivo, o cartório força `cobrado` (`cartorio.py:1141`, `:1142`). |
+
+`marcos_pendentes` **não lista saídas faltantes**: lê somente `lampada['pendente']` (`app/ponto/services/lastro.py:138`, `:148`). Esse carimbo significa marco ainda não vencido, escrito pelo teto do cartório (`app/ponto/services/cartorio.py:703`, `:704`). Pode estar vazio num dia vencido cuja saída continua `missing`; nesse caso, a acusação vem do ramo `FURO_PARCIAL` (`supra_juiz.py:394`).
+
+### (c) Qual classe o O261 conta
+
+| Filtro | Evidência |
+|---|---|
+| Chamado vivo com célula associada | `app/chamados/services/vigia_fio.py:184` |
+| Módulo pertencente a `FURO_MODULES` | `vigia_fio.py:199`; vocabulário em `app/chamados/catalogo/furo_modulos.py:15` |
+| **Célula com veredito acusador** | `vigia_fio.py:226`, `:227`; `concorde` não pertence a `VEREDITOS_ACUSAM` (`app/escala/models.py:1735`) |
+| Sem pergunta viva | `vigia_fio.py:258` |
+| Data anterior a hoje | `vigia_fio.py:261` |
+| Sem decisão do dia oferecida ao admin, ausência aberta ou aceite de folga validado | `vigia_fio.py:266`, `:273`, `:279` |
+| Restante conta uma célula em `fio_morto` | `vigia_fio.py:286` |
+| Também conta em `fio_morto_cobrando` se houver chamado correspondente em `COBRANCA` | `vigia_fio.py:200`, `:288`; estados em `app/chamados/catalogo/motor.py:29` |
+
+**Não é a classe `concorde` de (b): ela fica fora antes de examinar o fio** (`app/chamados/services/vigia_fio.py:227`). A mesma geometria poderá entrar se resultar em `furo` e satisfizer os demais filtros (`app/ponto/supra_juiz.py:399`).
+
+## T11 — Plano do grupo (1) do censo de leitores
+
+O grupo declarado está em `app/docs/BACKLOG.md:756`; o juiz registrado é `escala/utils.py::_match_marcos` (`app/core/juizes.py:166`).
+
+A chamada existente é `_match_marcos(abs_marcos, locs, consumed, tol_min, turno=turno_do_juiz)`: recebe turno, deriva seus papéis e devolve células/órfãs (`app/escala/utils.py:551`, `:562`, `:590`). **Mudar a chamada não prova equivalência de saída.**
+
+| Sítio | Pergunta atual | Consulta ao juiz que substitui a atribuição | Muda saída? |
+|---|---|---|---|
+| `app/ponto/services/lastro.py:274` | Sem lâmpada, há batida do **tipo gravado** perto do marco? Escolhe a mais próxima (`:282`, `:287`). | Matcher com marcos encadeados e turno completo; ler ocupação do marco cobrado. Preservar o degrau da lâmpada, que já é autoridade (`:265`). | **Não sei**: tipo/proximidade não equivale a papel/exclusividade (`:283`; `app/escala/utils.py:579`). |
+| `app/ponto/propositor.py:112` | Atribuição global com teto, custo, furos, sobras e ambiguidade (`:133`, `:165`). | Matcher sobre instantes/turno; projetar ocupação, faltantes e órfãs. | **Não sei**: `custo`, `desloc` e `ambiguo` fazem parte do contrato antigo (`:166`) e não da saída do matcher (`utils.py:590`). |
+| `app/ponto/propositor.py:87` | Como encadear slots/marcas noturnos antes da atribuição (`:99`, `:107`)? | `encadear_marcos` (`app/escala/utils.py:330`) e matcher. | **Não sei**: wrapper avança com `<`; cadeia canônica com `<=` (`propositor.py:99`; `utils.py:346`). |
+| `app/ponto/services/flip_auto.py:233` | Qual tipo a batida deveria ter pelo slot recebido (`:235`, `:240`)? | Ler papel/tipo do marco ocupado pelo matcher, mantendo elegibilidade (`:226`, `:228`). | **Não sei**: altera o insumo que produz flips (`:241`). |
+| `app/chamados/services/materializacao.py:165` → `app/ponto/propositor.py:249`, `:250` | Plantio ocupa furo sem deslocar existentes e sem ambiguidade (`propositor.py:251`, `:254`, `:258`)? | Matcher antes/depois da candidata; comparar ocupações das mesmas batidas. | **Não sei**: a paridade autoriza plantio (`materializacao.py:436`, `:816`). |
+| `app/ponto/propositor.py:315` | Qual o primeiro furo posicional (`:320`)? | Primeiro marco `missing` do matcher sobre o turno completo. | **Não sei**: há inferência própria de pausa e recusa de noturno antes da atribuição (`:276`, `:295`, `:311`). |
+| `app/ponto/propositor.py:351` | O dia está completo posicionalmente? | Projetar ausência de furos do mesmo resultado canônico. Hoje coleta por dia civil (`:337`, `:345`). | **Não sei**. Chamadores: `app/chamados/reconciliador.py:112`; primeiro-furo também em `app/escala/servico_jornada.py:442`. |
+| `app/ponto/management/commands/propor_reorganizacao.py:107` | Qual reorganização, custo, sobras e furos? | Consumir atribuição canônica; hoje remonta slots/marcas (`:98`, `:101`). | **Não sei**: imprime também métricas do contrato antigo (`:111`). |
+| `app/ponto/services/cartorio.py:485` | Marco do DNA ausente da régua pode acender com hora livre a≤30min? | Matcher com todos os marcos/batidas; ler ocupação exclusiva. | **Não sei**: hoje acende diretamente `acesa/luz`, sem tipo real (`:486`, `:491`). |
+| `app/chamados/services/desvio_escala.py:74` | Qual batida pertence a cada marco para calcular medianas? Dia cheio usa posição; incompleto, proximidade (`:78`, `:83`, `:86`). | Matcher por dia/turno, seguido da agregação dos deltas ocupados. | **Não sei**: altera potencialmente amostras e classificação `deslocado` (`:89`, `:90`). |
+| `app/chamados/services/declaracao_texto.py:131` | Hora declarada corresponde a único marco faltante≤240min, sem quase empate (`:134`, `:137`)? | Matcher incluindo candidata e concorrentes; localizar a candidata no resultado. | **Não sei**: escolha determina motivo/tipo (`:292`, `:296`, `:297`); outro chamador em `:573`. |
+| `app/chamados/services/materializacao.py:274` | Qual tipo do marco mais próximo da hora respondida (`:277`, `:280`)? | Matcher com candidata/turno; projetar tipo ocupado. | **Não sei**: hoje marco explicitamente cobrado prevalece (`:257`, `:291`). |
+| `app/chamados/detector_anomalias.py:210` | Qual marco/categoria de desvio recebe a batida? | Já chama matcher, mas com `derivar=False`; passar o turno disponível no coletor (`:202`). | **Não sei**: afeta classificação de desvio (`:214`, `:223`, `:226`). Segunda resposta declarada em `:206`. |
+
+**Transcritores e consumidores que já delegam:**
+
+- `app/escala/utils.py::marco_ocupado_pela_batida:353` chama o matcher (`:393`) e transcreve rótulo/delta (`:399`). Trocar a transcrição: **não**; alimentar turno completo exige ampliar a alimentação atual (`:353`).
+- `app/escala/regua_defesa.py:492` usa esse transcritor, porém passa só as pontas de **um período** (`:491`). Efeito de fornecer o turno completo: **não sei**; resíduo registrado em `app/docs/BACKLOG.md:757`.
+- `app/ponto/calculador/regras.py:251` delega a pergunta da volta; a saída de intervalo ainda usa proximidade em `:259`. Substituição desse último critério pelo papel ocupado: **não sei**.
+
+**Demais sítios encontrados:**
+
+| Sítio | Pergunta / substituição | Muda saída? |
+|---|---|---|
+| `app/ponto/turnos.py:2248` | Tipo oposto perto de marco autoriza flip (`:2261`, `:2267`)? Matcher responde ocupação; política de flip continua sendo outra pergunta. Chamadores em `app/ponto/services/flip_auto.py:300`, `app/ponto/services/veredito_celula.py:242`, `app/chamados/management/commands/auditar_disputas.py:119`. | **Não sei**. |
+| `app/ponto/turnos.py:2275` | Tipo retroativo pela proximidade de exatamente um tipo de marco (`:2289`, `:2294`). Consultar papel ocupado do matcher. | **Não sei**. Chamadores: **nao li**. |
+| `app/ponto/services/veredito_celula.py:266` | Vizinha≤3h permite fabricar candidata de intervalo (`:263`, `:267`)? É geração de proposta, depois simulada na grade (`:273`), não apenas atribuição. | **Não sei**. |
+| `app/ponto/turnos.py:2339` | Qual próximo tipo **ainda não batido**, pelo marco próximo (`:2330`, `:2341`)? Não é ocupação de batida existente. | Substituição direta: **não sei**. |
+
+**Motor — somente lista:**
+
+- **!** `app/ponto/motor_calculo_v2.py:2016`
+- **!** `app/ponto/motor_calculo_v2.py:2028`
+- **!** `app/ponto/motor_calculo_v2.py:2055`
+- **!** `app/ponto/motor_calculo_v2.py:2113`
+- **!** `app/ponto/motor_calculo_v2.py:3000`
+
+Fora dos sítios nomeados, delegações e buscas descritas, não li integralmente todos os módulos de `app/`; completude absoluta do censo: não provada.
 
 ## 29/10 07:46 · sessao f89af232ead9
 
@@ -972,24 +1108,4 @@ Texto preparado para seção nova do RELATO, abaixo do teto de 25 linhas:
 
 Ressalva para o registro do O-OUTBOX: a leitura anterior encontrou consultas na sequência Disputa → Colaborador, mas em ramos exclusivos; aquisição conjunta dessas duas travas e ausência geral de deadlock: **nao provado**.
 
-## 29/10 00:11 · sessao 38fc51a73cb6
-
-**Não gravado:** o sandbox desta sessão é somente leitura, sem possibilidade de aprovação. O registro precisa ser aplicado pelo Claude escritor. [nao verificado]
-
-Texto preparado para `CLAUDE.md`, seção 7b, sem número de lei:
-
-> **REGISTRAR-GPT6-CODEX (aval Ronald, 28/10).** Desde 28/10, GPT-6/Codex (Codex CLI 0.165.0, tmux `codex-hasner` na VM) é auxiliar de LEITURA do Claude do chat: nunca escreve. Opera em `~/codex_ws`, cópia do HEAD por `git archive`, com `--sandbox read-only --ask-for-approval never`. Recebe tarefas somente por delegação do Claude: censo pela regra, contra-exemplo para o verificador e triagem de laudo. A resposta é lida por `~/codex_prototipo/gerar_codex_estado.py` e conferida por amostra no clone antes de virar aval.
-
-Texto preparado para seção nova do RELATO, abaixo do teto de 25 linhas:
-
-> **REGISTRAR-GPT6-CODEX — 28/10**
-> LEI-AKITA: origem=CLAUDE.md::7b, testemunha=clone do HEAD, RED=n/a (registro), quem-mais-le=Claude do chat, juizes novos=0, padrao=n/a (instrumento).
-> Aval Ronald: Codex auxiliar de leitura, somente por delegação do Claude; condições operacionais na seção 7b.
-> Primeiras entregas, conforme este aval: CENSO-DE-LEITORES da JUIZ-DO-PAR (~20 sítios fora de `_match_marcos`) e CENSO-DO-HEAD do O-OUTBOX; ambos informados como registrados no BACKLOG.
-> Conferência desta cópia: os nomes AGENTE-NAO-ESPERA e AGENTE-NO-MODELO-CERTO não aparecem no CLAUDE.md.
-> INCOMPLETO: gravação pelo escritor; texto original dos dois avais de agente não localizado, conteúdo **nao provado**.
-> Commit: não realizado. [nao verificado]
-
-Ressalva para o registro do O-OUTBOX: a leitura anterior encontrou consultas na sequência Disputa → Colaborador, mas em ramos exclusivos; aquisição conjunta dessas duas travas e ausência geral de deadlock: **nao provado**.
-
-_16 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_17 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
