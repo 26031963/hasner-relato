@@ -1,5 +1,7 @@
 # RELATO — esteira saas-hasner
 
+> **LASTRO-DEGRAU-2 #3 (26dc989f): suite inteira VERDE (Ran 12658, `logs/lastro3/suite_inteira_2.out`), REPROVADA 12:1x** pela LEI-AKITA 6: o recuo le o construtor da grade, que responde diferente para o mesmo dia conforme a JANELA (col879 08/10; 3 aceso/apagado + 326 null x apagado em 4727). A cura no construtor vem ANTES do pouso -- `escala/utils.py` esta com o grupo (1) #2, entao serializa: a LASTRO mede a causa agora (sem editar o construtor) e cura depois do pouso do grupo (1). Mais: RED de comportamento da troca de leitor do #3, caso I contra 01a1f65a, MORDE pelo resultado.
+
 > **JUIZ-DO-PAR-GRUPO-1 sitio 1 (`detector_anomalias`) -- PAROU NO DIFF 11:5x, decidido pela lei existente:** ao vivo a migracao cria 204 `grave` em 30 d, **166 falsas** (`logs/grupo1/classe_ao_vivo.out`): o pareador ao vivo da o turno por FECHADO numa S sem batida depois (col231: 18:50 E, 00:00 S -> grave de 419,7 min contra 07:00), e o papel senta essa S no ultimo marco. Pela conduta TETO TEMPORAL (CLAUDE.md 6: so INSTANTE ou FATO ENCERRADO) o papel so vale para turno com fato encerrado -- cura no JUIZ (`escala/utils.py`), e e BUG NO CAMINHO (LEI-AKITA 6): o mesmo juiz escreve a ata do cartorio do dia corrente desde b3bf529e; medida da ata em prod antes. Toque em `escala/utils.py` (closure -> `turno_do_juiz_no_dia`, mesmo predicado) autorizado como fonte unica. De volta ao construtor (#2).
 
 > **COL129 (c) -- NO AR 29/10 10:53 (98dea532; deploy rc 0, 3 rotas provadas; `crons.sh install` 105 linhas = codigo).**
