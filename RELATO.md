@@ -1,5 +1,11 @@
 # RELATO — esteira saas-hasner
 
+> **CRON-NAO-CABE-SOMBRA-72-MIN -- o `bin/crons.sh install` travado desde 27/10 volta (decisao tecnica, PAREI-SO-LEI; aval SOMBRA-INSTALL-JA-RESPONDIDA 29/10 08:5x).**
+> LEI-AKITA: origem=app/config/crons.py (`pre_fechamento` 05:15 -> 05:25, `VIZINHO_SOMBRA` igual), testemunha=config.crons.render (o mesmo do `crons.sh`) + placar (sombra 2.245 s em 20/10 -> 3.399 s em 29/10; p95 x 1,5 = 4.298 s), RED=o render levantava CRON QUE NAO CABE (HEAD + json local: 14 errors em `-k cron`), quem-mais-le=crontab do host, test_contract_crons, test_cron_longo_sai_da_medida, juizes novos=0, padrao=n/a (instrumento)
+> - PROVA na copia wt-crons-2910-0840: `-k cron` com o json commitado Ran 85 OK (`logs/crons_sombra72_c.out`); render com o json LOCAL rc 0; nenhum cron declara `depende=` do `pre_fechamento` nem espera o arquivo dele; corredor 05:26-05:30 sem cron.
+> - O install leva o que o codigo ja dizia e nao entrava: consumidor `consumir_eventos_celula` (O-OUTBOX, * * * * *), sombra 04:08 -> 04:11 (derivada), `noturno.py` 02:26 -> 02:48 (derivado), e `detectar_vinculo_divergente --apply` -> `--lavrar` (CASA-CHAMADO-C2, 25d1f927, 27/10 05:42 -- o crontab ainda abria chamado as segundas).
+> - Encurtar o bloco NAO e pergunta: ja respondida SOMBRA-NAO-CABE-ENCURTAR-O-BLOCO=(c) (28/10 08:3x); candidato primeiro na medida (c)(1): `lavrar_he_pendente --apply` (769 s de 2.865).
+
 > **AGENTE-NO-MODELO-CERTO-CONFERE (aval 29/10 08:4x): agentes abertos desde 00:00, papel e modelo (do transcrito da sessao; hora UTC-3).**
 > - 00:07 general-purpose | sonda/censo/medida | sonnet | Measure who opens turno chamado (O-OUTBOX-SOB-ATA-ESTAVEL)
 > - 00:18 general-purpose | construir | sessao (opus) | O-OUTBOX: abrir pergunta a celula
