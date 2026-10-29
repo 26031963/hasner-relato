@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/10/2026 07:35:52.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (12.1 MB). Acoes na janela: **459**.
+**Medido em 29/10/2026 07:41:07.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (12.1 MB). Acoes na janela: **456**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -466,6 +466,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 19:46:09 | Bash | Read the failing seals' intent | `cd /home/ronald/wt-juizpar-2810-1850/app && sed -n 20,80p ponto/tests/test_veredito_celula.py; sed -n 360,375p /home/ronald/saas-hasner/logs/juizpar/os14_v2.out \| /bin/grep -v '^\s*\^\\|File'; git grep -n "class EntradaComMarcoProximoLIVRE" -A40 escala/tests/test_ata_x_turno_entrada.py \| head -50` |
 | 19:46:05 | Bash | Read failure details | `cd /home/ronald/wt-juizpar-2810-1850/app && grep -n -A25 'FAIL: test_trabalhou_flipa_batida_em_cima_do_marco_oposto (ponto.tests.test_veredito_celula.VereditoCelulaTest' /home/ronald/saas-hasner/logs/juizpar/os14_v2.out \| tail -12; grep -n -A20 'FAIL: test_sem_pareamento_inline' /home/ronald/saas-hasner/logs/juizpar/os14_v2.out \| tail -10; grep -n -A20 'FAIL: test_o_marco_de_entrada_nao_e_tomado ...` |
 | 19:45:32 | Bash | Rerun the 14 failing seals on v2 | `cd /home/ronald/saas-hasner && timeout 590 bash bin/suite.sh --dir /home/ronald/wt-juizpar-2810-1850 --only "escala.tests.test_ata_x_turno_entrada ponto.tests.test_b5_registro_julga ponto.tests.test_veredito_celula ponto.tests.test_cartorio_nb_readesao ponto.tests.test_furo_parcial_emite ponto.tests.test_furo_parcial_sem_cobranca ponto.tests.test_contract_no_inline_turno_pairing" > logs/juizpar/os ...` |
-| 19:39:45 | Bash | Wait for neighbor run to finish | `cd /home/ronald/saas-hasner && until grep -qE '^Ran [0-9]+ tests' logs/juizpar/vizinhos_3.out 2>/dev/null \|\| grep -q 'rc 75\\|Traceback' logs/juizpar/vizinhos_3.out; do /usr/bin/sleep 20; done; grep -E '^(FAIL\|ERROR):\|^Ran \|^(OK\|FAILED)' logs/juizpar/vizinhos_3.out \| tail; bin/trava_teste.sh --quem` |
-| 19:39:39 | Bash | Register both avais in PROMPTS and RELATO | `python3 - <<'EOF' p='docs/PROMPTS.md'; s=open(p).read() anc="construtor lancado em copia propria. \|" assert s.count(anc)==1 s=s.replace(anc,anc+""" \| 28/10 19:3x \| **aval: COL129-2510-TETO-DO-DIA = (b)** (turno que fura o teto do dia nao vira zero: vai a CADASTRO x REALIDADE com o horario real, horas contam, excedente pela L-097; nenhum N inventado; ! para UMA mudanca na lista do motor_calculo_ ...` |
-| 19:39:26 | Bash | Read first slice result | `cd /home/ronald/saas-hasner && grep -E '^(FAIL\|ERROR):\|^Ran \|^(OK\|FAILED)\|^rc=' logs/juizpar/recorte_1.out \| tail -20` |
