@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/10/2026 03:08:38.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (8.9 MB). Acoes na janela: **405**.
+**Medido em 29/10/2026 03:14:08.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (8.9 MB). Acoes na janela: **407**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 03:12:21 | Bash | Wait for ORFAS full suite | `cd /home/ronald/saas-hasner && for i in $(seq 1 19); do F=$(ls -t logs/orfas/suite_inteira*.out 2>/dev/null \| head -1); [ -n "$F" ] && grep -q '^rc=\\|^Ran [0-9]' "$F" && break; /usr/bin/sleep 30; done; F=$(ls -t logs/orfas/suite_inteira*.out 2>/dev/null \| head -1); echo $F; [ -n "$F" ] && grep -E '^ARVORE\|^(FAIL\|ERROR):\|^Ran \|^(OK\|FAILED)( \|$)\|^rc=' "$F" \| tail -5; date +%H:%M` |
+| 03:09:15 | Bash | Keep waiting for ORFAS | `cd /home/ronald/saas-hasner && for i in $(seq 1 19); do git -C /home/ronald/wt-orfas-2901-0215 log --oneline -1 \| /bin/grep -qv 253e09a5 && break; /usr/bin/sleep 30; done; git -C /home/ronald/wt-orfas-2901-0215 log --oneline -1; date +%H:%M` |
 | 02:59:40 | Bash | Wait for ORFAS follow-up commit | `cd /home/ronald/saas-hasner && for i in $(seq 1 19); do git -C /home/ronald/wt-orfas-2901-0215 log --oneline -1 \| /bin/grep -qv 253e09a5 && break; /usr/bin/sleep 30; done; git -C /home/ronald/wt-orfas-2901-0215 log --oneline -1; date +%H:%M` |
 | 02:59:33 | Bash | Record ORFAS state in RELATO | `date +%H:%M && python3 - <<'EOF' p='docs/RELATO.md'; s=open(p).read() anc="> **O-OUTBOX -- PRONTA EM COPIA 29/10 02:1x" assert s.count(anc)==1 sec='''> **ORFAS (b) -- construida 29/10 02:5x na copia wt-orfas-2901-0215 (253e09a5, sobre a branch do O-OUTBOX), NAO pousada.** LEI-AKITA: origem=chamados/reconciliador.py::encerrar_orfas_pela_lampada (no consumidor do EventoCelula), testemunha=chamados/j ...` |
 | 02:59:22 | SendMessage |  | `-` |
