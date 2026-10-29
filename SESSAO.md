@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/10/2026 18:33:38.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (22.9 MB). Acoes na janela: **443**.
+**Medido em 29/10/2026 18:39:15.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (23.0 MB). Acoes na janela: **443**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 18:38:58 | Agent | Opus final read grupo1 56905504 | `Obra: JUIZ-DO-PAR-GRUPO-1, pouso 1. Esta e a 2a leitura FINAL antes do pouso. A 1a, no hash 184252cb, REPROVOU por tres motivos: (1) `escala/tests/test_selo_grade_pede_o_instante.py::chamadas_sem_instante` devolvia a lista na ordem do `ast.walk`, e o caso MORDE ficava vermelho no proprio hash; (2) 18 chamadas `agora=DEPOIS_DE_TUDO` em testes com freeze_time que medem o dia corrente (por exemplo `c ...` |
+| 18:38:50 | Bash | Wait in background for grupo1 pouso1 new verdicts | `cd /home/ronald/saas-hasner/logs/grupo1p1 && until grep -q '^rc=' suite_inteira.log 2>/dev/null && [ -f sombra_prova.fim ] && [ suite_inteira.log -nt red_selo_main.log -o suite_inteira.log -nt testes_prova.out ]; do /usr/bin/sleep 30; done; echo "== red"; grep -E '^(OK\|FAILED)($\| \()\|^Ran\|^rc=\|^FAIL:\|^ERROR:' red_selo_main.log \| tail -8; echo "== recorte"; grep -E '^(OK\|FAILED)($\| \()\|^R ...` |
 | 18:32:38 | SendMessage |  | `-` |
 | 18:32:36 | Bash | Free the lock from obsolete green5 and list red_bcd results | `kill 2342630 1485317 2>/dev/null; for c in $(docker ps -q); do docker inspect -f '{{range .Mounts}}{{.Source}} {{end}}' $c \| grep -q 'wt-justif-final4-2910/app ' && docker kill $c; done; /usr/bin/sleep 2; bash /home/ronald/saas-hasner/bin/trava_teste.sh --quem; grep -E '^(FAIL\|ERROR):\|^ok$\|\.\.\. ok' /home/ronald/saas-hasner/logs/justif/red_bcd.log \| head` |
 | 18:32:31 | Bash | Check red_bcd verdict and what final4 runs | `cd /home/ronald/saas-hasner/logs/justif && grep -E '^(OK\|FAILED)($\| \()\|^Ran\|^rc=' red_bcd.log red_a.log \| tail -6; grep -n 'final4\\|green5' rodar_rodada3.sh \| head` |
@@ -451,5 +453,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 06:43:57 | Bash | Locate E2 07:05 measurement | `cd /home/ronald/saas-hasner && grep -n "07:05" app/docs/BACKLOG.md app/docs/RELATO.md \| cut -c1-400 \| head -8; crontab -l \| grep -n "07:05\\|^5 7\\|E2\\|reavaliar" \| head; ls /etc/cron.d/ \| head -20` |
 | 06:43:51 | Bash | Record ORFAS ready and file achado | `python3 - <<'PY' p='BACKLOG.md'; s=open(p,encoding='utf-8').read() anc=[l for l in s.split('\n') if l.startswith('\| DISPARAR-PERGUNTAS-NO-CONTRATO-20 \|')] assert len(anc)==1 row=('\| EXPIRACAO-DA-ABERTA-COPIA-ANTIGA \| **`ponto/selecao_periodo.py:281-290` (`turnos_em_turno_stored`) aplica sozinha "fim + 4 h" (e entrada + jornada + margem)** sobre turnos gravados -- segunda copia, anterior a ORFA ...` |
 | 06:43:41 | Bash | Find BACKLOG row format | `grep -n "DISPARAR-PERGUNTAS-NO-CONTRATO-20" BACKLOG.md \| head -3` |
-| 06:33:45 | Bash | Wait for ORFAS suite 5 | `/usr/bin/sleep 590; grep -E '^(OK\|FAILED)($\| \()\|^Ran \|^rc=' /home/ronald/saas-hasner/logs/orfas/suite_inteira_5.log \| tail -3 \| tr '\n' ' '; date +%H:%M` |
-| 06:33:41 | Agent | Verify ORFAS fifth reading | `5a leitura da ORFAS, obra CONTRATO-20-LASTRO-E-ORFAS (metade ORFAS), aval ORFAS-ENTERRA-FURO-REAL=(b). O carimbo fantasma nasce no EVENTO do cartorio e `reconciliar_perguntas_orfas` vira VIGIA. Copia: /home/ronald/wt-orfas-2901-0215 @ 42d59e46, sobre 8f4eca4b. - Diff da rodada: `git -C /home/ronald/wt-orfas-2901-0215 diff 8f4eca4b 42d59e46`. - Diff da obra inteira: `git diff d375511b 42d59e46` (d3 ...` |
