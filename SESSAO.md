@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/10/2026 01:58:07.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (8.5 MB). Acoes na janela: **386**.
+**Medido em 29/10/2026 02:03:38.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (8.6 MB). Acoes na janela: **389**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 02:00:11 | Bash | Wait for outbox full suite v8 | `cd /home/ronald/saas-hasner && for i in $(seq 1 19); do grep -q '^rc=' logs/outbox/suite_inteira_v8.out 2>/dev/null && break; /usr/bin/sleep 30; done; grep -E '^ARVORE\|^(FAIL\|ERROR):\|^Ran \|^(OK\|FAILED)( \|$)\|^rc=' logs/outbox/suite_inteira_v8.out \| tail -6; date +%H:%M` |
+| 02:00:06 | SendMessage |  | `-` |
+| 02:00:00 | Bash | Two-judges question atop RELATO, start suite | `date +%H:%M && python3 - <<'EOF' p='docs/RELATO.md'; s=open(p).read() q='''> **lei: O-OUTBOX-DOIS-JUIZES-NO-ABRIR** (pergunta, nao para a fila; segura SO o pouso do O-OUTBOX, copia @ d375511b, recorte verde) -- no mesmo `ChamadoColaborador.abrir` o [nome] pergunta `chamados/reconciliador.py::_absolvido_pela_celula` (o juiz da retratacao) e o RENASCIMENTO (`_renascer_por_premissa_viva` -> `reab ...` |
 | 01:57:14 | Bash | Brief wait for constructor handback | `/usr/bin/sleep 150; date +%H:%M` |
 | 01:50:09 | Bash | Wait for constructor's recorte | `cd /home/ronald/saas-hasner && for i in $(seq 1 19); do grep -qE '^rc=\|^Ran [0-9]+' logs/outbox/v8_recorte2.log 2>/dev/null && break; /usr/bin/sleep 30; done; grep -E '^ARVORE\|^(FAIL\|ERROR):\|^Ran \|^(OK\|FAILED)( \|$)\|^rc=' logs/outbox/v8_recorte2.log \| tail -6; date +%H:%M` |
 | 01:49:59 | Bash | Get summary of two-judges divergence | `cd /home/ronald/saas-hasner/logs/outbox && grep -E "^(UNIVERSO\|DIVERG\|TOTAL\|universo\|diverg\|resumo\|RESUMO\|nasc\|N )" v8_dois_juizes_prod.out \| head; grep -ciE "nasc=True renasc=True\|nasc=False renasc=False" v8_dois_juizes_prod.out; grep -c "^ ch" v8_dois_juizes_prod.out; tail -3 v8_recorte2.log \| cut -c1-160` |
