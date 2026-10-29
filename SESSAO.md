@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/10/2026 05:32:08.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (10.7 MB). Acoes na janela: **448**.
+**Medido em 29/10/2026 05:37:37.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (10.8 MB). Acoes na janela: **451**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 05:32:46 | Bash | Wait for COL129 suites | `/usr/bin/sleep 580; cd /home/ronald/saas-hasner/logs/col129; for f in recorte_c9_3.log suite_inteira_c9_3.log; do echo "$f: $(grep -E '^(OK\|FAILED)($\| \()\|^Ran \|^rc=' $f 2>/dev/null \| tail -3 \| tr '\n' ' ')"; done; date +%H:%M` |
+| 05:32:41 | Bash | Record ORFAS #4 reprove and COL129 #3 numbers | `python3 - <<'PY' p='RELATO.md'; s=open(p,encoding='utf-8').read() old='suite inteira em curso, verificador 3a leitura em curso.' assert s.count(old)==1 s=s.replace(old,'suite inteira VERDE (Ran 12621, rc 0, `suite_inteira_3.log`); **REPROVADA 05:3x**: turno aberto com `tipo_escala` expira por relogio (fim+4 h) e foi dado por processado -> alarme permanente do vigia; fixture do RED era escala rigid ...` |
+| 05:32:32 | SendMessage |  | `-` |
 | 05:22:27 | Bash | Wait for ORFAS full suite | `/usr/bin/sleep 590; grep -E '^(OK\|FAILED)($\| \()\|^Ran \|^rc=' /home/ronald/saas-hasner/logs/orfas/suite_inteira_3.log \| tail -3; date +%H:%M` |
 | 05:22:22 | Bash | Record ORFAS #4 and COL129 reprove | `python3 - <<'PY' p='RELATO.md'; s=open(p,encoding='utf-8').read() old='De volta ao construtor (#4).' assert s.count(old)==1 s=s.replace(old,old+' #4 7d330e9a: TETO so por relogio (`dia_encerrado_motivo`), RED pelo motivo contra 488ddf45/f4ab468a, custo medido 67,9 colabs/dia (max 86); suite inteira em curso, verificador 3a leitura em curso.') old2='Verificador 2a leitura em curso. ' assert s.count ...` |
 | 05:22:16 | Agent | Verify ORFAS third reading | `3a leitura da ORFAS, obra CONTRATO-20-LASTRO-E-ORFAS (metade ORFAS), aval ORFAS-ENTERRA-FURO-REAL=(b). O carimbo fantasma passa a nascer no EVENTO do cartorio (consumidor `consumir_eventos_celula`), e `reconciliar_perguntas_orfas` vira VIGIA. Onde: copia /home/ronald/wt-orfas-2901-0215 @ 7d330e9a (branch raia-orfas-2901), em cima de 488ddf45. Diff da rodada: `git -C /home/ronald/wt-orfas-2901-0215 ...` |
