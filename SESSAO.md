@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/10/2026 22:29:07.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (5.2 MB). Acoes na janela: **231**.
+**Medido em 28/10/2026 22:34:38.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (5.2 MB). Acoes na janela: **232**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 22:34:24 | Bash | Verify lock-order claim in HEAD | `git show HEAD:app/ponto/management/commands/detectar_ausencias.py \| sed -n 780,800p; git show HEAD:app/chamados/services/disputa_emissao.py \| /bin/grep -n "def criar_disputa_a_partir_de_chamados_orfaos\\|select_for_update" \| head; git show HEAD:app/chamados/models.py \| sed -n 640,672p \| /bin/grep -n "select_for_update\\|Disputa\\|trava\\|def abrir"` |
 | 22:24:41 | Bash | Wait for money DIFF v2 | `cd /home/ronald/saas-hasner && for i in $(seq 1 19); do grep -q '^rc=' logs/juizpar2/dinheiro_depois_2.out 2>/dev/null && [ -s logs/juizpar2/dinheiro_diff_2.out ] && break; /usr/bin/sleep 30; done; cat logs/juizpar2/dinheiro_diff_2.out \| cut -c1-300; date +%H:%M` |
 | 22:24:37 | Bash | Write per-day dono input script | `cat > /home/ronald/saas-hasner/logs/juizpar2/dias_por_dono.py <<'EOF' """Dias cuja ata mudou, para os colabs com dinheiro diferente e para os vereditos que pioram (entrada da leitura por dono).""" import json, sys def le(p): for l in open(p): if l.startswith('JSON '): return json.loads(l[5:]) A, B = le(sys.argv[1]), le(sys.argv[2]) ka, kb = A['atas'], B['atas'] alvo = set(sys.argv[3].split(',')) i ...` |
 | 22:24:25 | Bash | Commit, run recorte and money DIFF v2 | `cd /home/ronald/wt-juizpar2-2810-2140 && git add app/escala/utils.py app/ponto/tests/test_selo_chokepoint_escrita.py && git commit -q -m "WIP JUIZ-DO-PAR-CURA-NA-FONTE: [nome] no caminho por papel; tetos do chokepoint +4 por montagem com justificativa" && git log --oneline -1 && cd /home/ronald/saas-hasner && (echo "ARVORE_HASH=$(git -C /home/ronald/wt-juizpar2-2810-2140 rev-parse HEAD) porcelain ...` |
