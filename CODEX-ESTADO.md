@@ -1,9 +1,19 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **29/10/2026 15:36** · publicado em **29/10/2026 15:36** (UTC-3)
+> Ultima resposta processada: **29/10/2026 15:47** · publicado em **29/10/2026 15:47** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
 
-## 29/10 15:36 · sessao 5f0695ecea1e
+## 29/10 15:47 · sessao 0e812661bb23 · - · - · origem=Ronald (tmux)
+
+Classe 5 — `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:445` e `:451`: os selos verificam somente a existência de `turno=` e de alguma chamada ao seletor, sem conferir que o resultado chega ao matcher. Trocar `turno=_turno_papel` por `turno=None` em `app/chamados/detector_anomalias.py:219` mantém ambos verdes e restaura a DP sem papel (`app/escala/utils.py:585`, `:614`).
+
+A mesma regressão não é distinguida pelos testes comportamentais novos: o RED cobra `ok` antes do encerramento (`app/chamados/tests/test_detector_pergunta_ao_juiz_do_par.py:190`), e o MORDE verifica o seletor separadamente e uma saída regular que a DP também casa (`:209`, `:218`). Os demais cenários também cobram respostas da DP (`:98`, `:116`, `:134`, `:158`).
+
+Verificação realizada somente em memória: os dois selos executados sobre a mutação passaram; os 16 julgamentos do detector foram reproduzidos com `parear_turnos` e `_match_marcos` extraídos do código, sempre `turno=None`, e coincidiram com as expectativas. Não executei Django nem banco; a execução integral da suíte fica [nao verificado]. [nao verificado]
+
+Recomendo contar como **um achado classe 5**, pois todos deixam sobreviver a mesma regressão.
+
+## 29/10 15:36 · sessao 5f0695ecea1e · - · - · origem=Ronald (tmux)
 
 Respostas literais às três tentativas com `touch` (cada comando retornou código 1). [nao verificado]
 
@@ -22,15 +32,15 @@ touch: cannot touch '/home/ronald/saas-hasner/INTRUSO_VIVA.txt': Read-only file 
 touch: cannot touch '/tmp/INTRUSO_TMP.txt': Read-only file system
 ```
 
-## 29/10 15:36 · sessao 017a99c90c50
+## 29/10 15:36 · sessao 017a99c90c50 · - · - · origem=Ronald (tmux)
 
 ok.
 
-## 29/10 15:35 · sessao c53af7fdf9ed
+## 29/10 15:35 · sessao c53af7fdf9ed · - · - · origem=Ronald (tmux)
 
 ok. Pergunta de FULANO.
 
-## 29/10 15:32 · sessao e21096e78255
+## 29/10 15:32 · sessao e21096e78255 · - · - · origem=Ronald (tmux)
 
 1. Tentativa no workspace — resposta literal [nao verificado]:
 ```text
@@ -49,41 +59,41 @@ ok. Pergunta de FULANO.
 
 Os três comandos terminaram com código `1`; nenhuma criação foi bem-sucedida. [nao verificado]
 
-## 29/10 15:31 · sessao 9a5c280f2d2c
+## 29/10 15:31 · sessao 9a5c280f2d2c · - · - · origem=Ronald (tmux)
 
 ok.
 
-## 29/10 15:28 · sessao 7e4719651533
-
-ok.
-bin/achado_por.py:1, bin/alarme_sem_fatia.sh:1, bin/alarme_sessao_ociosa.py:1
-
-## 29/10 15:28 · sessao 1319444918a3
+## 29/10 15:28 · sessao 7e4719651533 · - · - · origem=Ronald (tmux)
 
 ok.
 bin/achado_por.py:1, bin/alarme_sem_fatia.sh:1, bin/alarme_sessao_ociosa.py:1
 
-## 29/10 15:28 · sessao 1258252f08e3
+## 29/10 15:28 · sessao 1319444918a3 · - · - · origem=Ronald (tmux)
 
 ok.
 bin/achado_por.py:1, bin/alarme_sem_fatia.sh:1, bin/alarme_sessao_ociosa.py:1
 
-## 29/10 15:28 · sessao cdb1b9f8e444
+## 29/10 15:28 · sessao 1258252f08e3 · - · - · origem=Ronald (tmux)
 
 ok.
 bin/achado_por.py:1, bin/alarme_sem_fatia.sh:1, bin/alarme_sessao_ociosa.py:1
 
-## 29/10 15:28 · sessao 126426b53b16
+## 29/10 15:28 · sessao cdb1b9f8e444 · - · - · origem=Ronald (tmux)
+
+ok.
+bin/achado_por.py:1, bin/alarme_sem_fatia.sh:1, bin/alarme_sessao_ociosa.py:1
+
+## 29/10 15:28 · sessao 126426b53b16 · - · - · origem=Ronald (tmux)
 
 ok
 bin/achado_por.py:1, bin/alarme_sem_fatia.sh:1, bin/alarme_sessao_ociosa.py:1
 
-## 29/10 15:28 · sessao 3ccabb649915
+## 29/10 15:28 · sessao 3ccabb649915 · - · - · origem=Ronald (tmux)
 
 ok.
 bin/achado_por.py:1, bin/alarme_sem_fatia.sh:1, bin/alarme_sessao_ociosa.py:1
 
-## 29/10 15:25 · sessao 23341f1d3b2f
+## 29/10 15:25 · sessao 23341f1d3b2f · - · - · origem=Ronald (tmux)
 
 *Numeração de `anexo_log.txt`: `# ponto.log de hoje...` é a linha 1; linhas vazias contam.*
 
@@ -92,7 +102,7 @@ bin/achado_por.py:1, bin/alarme_sem_fatia.sh:1, bin/alarme_sessao_ociosa.py:1
 - Na `api_ausencias`, **antes do parse**, `post_recebido` registra origem, user, tamanho declarado, content-type (até 60 caracteres) e teto dos campos; o primeiro acesso a `request.data` vem depois. ([app/api/views.py:1767](/home/ronald/codex_ws/7596ef5e8351bf7473acecafc8348bca7d2cf9d7/app/api/views.py:1767), [1772](/home/ronald/codex_ws/7596ef5e8351bf7473acecafc8348bca7d2cf9d7/app/api/views.py:1772))
 - **Após parse**, `upload_ausencia` registra origem, user, tipo, presença do arquivo, tamanho, content-type e plataforma. ([app/api/views.py:1832](/home/ronald/codex_ws/7596ef5e8351bf7473acecafc8348bca7d2cf9d7/app/api/views.py:1832)) Correspondência dos users com `colNN`: **[não verificado]**.
 
-## 29/10 15:22 · sessao 95904850ee23
+## 29/10 15:22 · sessao 95904850ee23 · - · - · origem=Ronald (tmux)
 
 stdout [nao verificado]:
 ```text
@@ -106,15 +116,15 @@ stderr [nao verificado]:
 
 Código de saída do comando solicitado: `1`. [nao verificado]
 
-## 29/10 15:09 · sessao 1068ea4b2151
+## 29/10 15:09 · sessao 1068ea4b2151 · - · - · origem=Ronald (tmux)
 
 CLI_OK
 
-## 29/10 15:05 · sessao 13f1f90d816f
+## 29/10 15:05 · sessao 13f1f90d816f · - · - · origem=Ronald (tmux)
 
 CLI_OK
 
-## 29/10 14:52 · sessao efe6b065e388
+## 29/10 14:52 · sessao efe6b065e388 · - · - · origem=Ronald (tmux)
 
 O risco de o futuro vencer pressupõe que ele satisfaça os filtros da consulta, especialmente `ativa=True`. A ordenação padrão é `-data_inicio`: `.first()` favorece o futuro; mapas que sobrescrevem por colaborador nessa ordem conservam o mais antigo. (`app/escala/models.py:877`; `app/escala/models.py:1003`)
 
@@ -286,7 +296,7 @@ C23 tem proteção temporal incompleta: compara `data_inicio <= d <= teto`, sem 
 
 [truncado em 20000 de 20928 caracteres]
 
-## 29/10 14:45 · sessao 14cc3d7a87dc
+## 29/10 14:45 · sessao 14cc3d7a87dc · - · - · origem=Ronald (tmux)
 
 Auditoria somente leitura do escopo fora `ponto`, `escala`, `colaboradores`, `core`; nenhum arquivo criado/editado/apagado. [não verificado — declaração operacional]
 
@@ -371,7 +381,7 @@ Templates adicionais que apenas exibem esses metadados e não selecionam víncul
 - `app/relatorios/management/commands/vinculo_do_dia_divergentes.py:116`: algoritmo antigo de comparação já filtra a vigência do dia; não atende ao padrão pedido.
 - `smoke_chamados.py`: teste/smoke excluído. [nao verificado]
 
-## 29/10 14:45 · sessao ffa1088b5e99
+## 29/10 14:45 · sessao ffa1088b5e99 · - · - · origem=Ronald (tmux)
 
 Auditoria estática de `app/ponto`: **52 sítios fortes + 1 limítrofe**, contando a seleção do vínculo e a leitura independente de `Colaborador.posto` separadamente; usos repetidos da mesma fonte na função foram agrupados. A ordenação padrão é `-data_inicio`, portanto `.first()` sem ordem explícita favorece o vínculo futuro ativo; dicionários sobrescritos nessa ordem acabam com o vínculo mais antigo. `app/escala/models.py:1003`.
 
@@ -451,7 +461,7 @@ Auditoria estática de `app/ponto`: **52 sítios fortes + 1 limítrofe**, contan
 
 **Contagem de app/ponto: 52 fortes; 53 incluindo o limítrofe.**
 
-## 29/10 14:45 · sessao fb6d6264daf3
+## 29/10 14:45 · sessao fb6d6264daf3 · - · - · origem=Ronald (tmux)
 
 Operacionais: **21 seletores de vínculo**. As linhas abaixo identificam a seleção e o consumidor; futuras escalas podem responder por dias anteriores quando não houver célula, e guardas podem vetar todo período mesmo quando o leitor posterior é datado.
 
@@ -512,165 +522,4 @@ Dois vínculos ativos fazem parte da semântica explicitamente documentada no mo
 
 **Total deste recorte: 38 leituras — 21 seletores operacionais + 8 postos sobre fatos/períodos + 9 seletores de tela/metadados/edição.**
 
-## 29/10 14:44 · sessao 1ee182181f58
-
-HEAD auditado: `8ea0a691d3177b7d69e5f591250d0c4d0c8d1f68`.
-
-O código usa **mais de um critério**: vigência em D, vínculo gerador da célula, vínculo ativo mais recente, vínculo recebido por parâmetro e FK atual de posto. A ordenação padrão de `EscalaColaborador` é `-data_inicio`: portanto, `.filter(ativa=True).first()` escolhe o ativo de início mais recente, mesmo futuro (`app/escala/models.py:1003`).
-
-Censo estático consolidado abaixo. Testes e migrations: não li. Templates: li os campos da porta de vínculo/fase citados ao final; demais templates, não li. Completude de acessos dinâmicos ou indiretos fora dos padrões pesquisados: **[nao verificado]**. Não executei aplicação, testes ou banco. [nao verificado]
-
-**1. Juiz de vínculo, fase e horários**
-
-| Arquivo:linha — função | Critério de escolha; origem de D |
-|---|---|
-| `app/escala/alimentacao.py:196` — `vinculo_do_dia` | Se a célula nomeia geradora, usa essa FK **somente dentro da vigência**; ausente/fora da vigência retorna `None`. Sem geradora, candidatos cobrindo D, desempate por `(ativa,data_inicio)` (`:237–254`). D é argumento. |
-| `app/escala/alimentacao.py:73` — `escalas_do_periodo_por_colab`; `:131` — singular | Carregadores: início≤fim da janela, fim≥início ou nulo, ativo ou encerrado com fim declarado; ordenam por ativa/início decrescentes (`:116–121`). Não escolhem sozinhos o dono de D. |
-| `app/escala/alimentacao.py:173` — `vinculo_cobre_a_data`; `:187` — predicado SQL | Início≤D, fim nulo ou ≥D, com vigência declarada; D recebido. |
-| `app/escala/alimentacao.py:257` — `vinculo_do_dia_carregado`; `:288` — plural | Carregam vínculos/células e delegam ao juiz; D recebido. |
-| `app/escala/servico_jornada.py:15` — `escala_vigente` | Carrega vínculo/célula e delega ao juiz (`:47–58`); D recebido. |
-| `app/escala/models.py:1048` — `eh_dia_trabalho` | EC recebido; lê `CelulaDia(colaborador,D).trabalha`, senão cálculo do próprio EC (`:1066–1073`). |
-| `app/escala/models.py:1075` — `marcos_do_dia` | EC recebido; lê `dna.marcos` da célula por colaborador+D, **sem conferir geradora**; sem marcos, template do EC (`:1094–1108`). |
-| `app/escala/models.py:1110` — `intervalo_do_dia`; `:1141` — `pausas_do_dia` | EC recebido; primeira pausa/pausas do DNA por colaborador+D; só sem célula usa template (`:1138–1139`, `:1157–1181`). |
-| `app/escala/models.py:1183` — `extra_declarada_do_dia` | EC recebido; extra do DNA ou zero; só sem célula usa template (`:1200–1210`). |
-| `app/escala/models.py:1213` — `defeito_folga_nao_definida` | Tipo do EC recebido, configuração 6x1 e foto de `FolgaDia` no mês de D (`:1217–1221`). |
-| `app/escala/models.py:1223` — `eh_dia_trabalho_calculado` | Fase do próprio EC: âncora, módulo 2/3 para 12x36/24x48, salvo foto mensal (`:1242–1267`). Foto pode usar paridade da folga mais próxima; sem foto, ciclo do template (`:1280–1342`). Feriado usa **posto atual do colaborador**, via `lugar_do_colab` (`:1357–1363`). |
-| `app/escala/models.py:326` — `TipoEscala.marcos_do_dia`; `:816` — `eh_dia_trabalho` | Template recebido; horários/ciclo conforme D/weekday. Não escolhem vínculo. |
-| `app/escala/servico_jornada.py:61` — `marcos_turno`; `:92` — `fim_turno` | EC recebido fornece marcos de D; sem EC, template recebido (`:61–95`). |
-| `app/ponto/selecao_periodo.py:43` — `janela_turno_de` | EC recebido: `ec.marcos_do_dia(data_ref)`; senão template (`:138–160`). |
-| `app/ponto/selecao_periodo.py:185` — `previsto_agora_por_hora` | Template recebido; weekday e hora recebidos (`:223–234`). |
-
-**2. Grade, casamento, turnos e cálculo**
-
-| Arquivo:linha — função | Critério; origem de D/instante |
-|---|---|
-| `app/escala/utils.py:953` — grade legacy; `:1221` — grade por turno | Todos os vínculos+células → `vinculo_do_dia` por D=`ref−i`; ref recebido ou hoje (`:964–971`, `:1240–1255`). |
-| `app/escala/utils.py:2021` — `montar_grade_prevista_periodo` | Flag escolhe um dos builders anteriores; ambos usam juiz por D (`:2021–2025`). |
-| `app/escala/utils.py:634` — `montar_grade_prevista` | EC recebido; trabalho por método do EC; horários do mapa recebido ou template. D=`ref−i` (`:648`, `:725–741`). |
-| `app/escala/utils.py:1538` — montagem dos marcos da grade por turno | Vínculo escolhido para D; horários do DNA ou template; pausas do DNA ou template; encadeamento em D (`:1538–1559`). |
-| `app/escala/utils.py:551` — `_match_marcos` | **Não escolhe vínculo**: recebe marcos absolutos, batidas e eventualmente turno; usa papel do turno/alternância e alinhamento (`:562–599`). |
-| `app/escala/utils.py:353` — `marco_ocupado_pela_batida` | Recebe dia e horários; encadeia e chama matcher (`:393`). Outros chamadores locais: grade recebida (`:741`), probe (`:1590`) e grade principal (`:1641–1643`). |
-| `app/escala/utils.py:257` — `_marcos_def_publico` | União de horários/pausas/overrides do template recebido; não resolve vigência (`:257–296`). A grade limita a ECs que venceram algum D (`:1297–1315`). |
-| `app/escala/utils.py:27` — `pausas_dna_periodo`; `:84` — `marcos_dna_periodo` | Células por colaborador e janela; devolvem mapa por data, sem escolher EC (`:43–61`, `:93–107`). |
-| `app/escala/utils.py:173` — `_eh_abertura` | EC recebido; D civil de `dt_local`; campos crus do template e depois marcos do EC/template (`:174–204`). Chamador: **[nao verificado]**. |
-| `app/escala/utils.py:912` — `data_saida_esperada` | **Ativa + fim nulo + maior início**, sem início≤D; D civil local de `ts_entrada` (`:920–927`). |
-| `app/escala/servico_jornada.py:199` — outra `data_saida_esperada` | `escala_vigente(D)`; D civil local de `ts_entrada`; calcula fim com **template, sem EC** (`:199–207`). |
-| `app/escala/servico_jornada.py:220` — `_turno_noturno_completo`; `:278` — `classificar_falta`; `:503` — `procedencia_fina` | `escala_vigente(data_evento)`; data recebida. Primeiro aceita EC já fornecido (`:233`, `:353`, `:534`). |
-| `app/escala/utils.py:2077` — `_esc_vigente_do_dia` | Juiz com vínculos/célula/geradora carregados; D recebido (`:2115–2129`). |
-| `app/escala/utils.py:2132` — `intervalo_declarado_do_dia`; `:2165` — `minutos_previstos_do_dia` | Helper anterior, depois métodos do EC no mesmo D (`:2153`, `:2204`). |
-| `app/ponto/turnos.py:772` — `realizado_do_dia` | `escala_vigente(data)`; D recebido (`:786`). |
-| `app/ponto/turnos.py:1848` — `turnos_do_colab` | Juiz por cada D da janela ini/fim; agrupa dias contíguos com mesmo dono (`:1928–1939`). |
-| `app/ponto/turnos.py:2073` — `dia_encerrado_motivo`; `:2108` — `dias_encerrados` | Juiz em D recebido/iterado na janela (`:2080`, `:2124–2131`). |
-| `app/ponto/turnos.py:2259` — `turnos_abertos_de` | Juiz para hoje derivado de `agora`; EC fornecido ao cálculo puro (`:2323–2327`). |
-| `app/ponto/turnos.py:1536` — `_escalas_da_ata` | **Todos** os EC, ordenados por colaborador/ativa/início; última linha vence. Nenhum D participa (`:1556–1559`). |
-| `app/ponto/turnos.py:1563` — `papel_por_minuto_da_ata` | Usa mapa anterior: uma escala para a ata inteira ini/fim (`:1590–1592`). |
-| `app/ponto/turnos.py:2414` — `proximo_tipo_de` | Ativa `.first()` → início mais recente; horários crus de fim de intervalo/turno comparados com agora (`:2447–2455`; ordenação em `app/escala/models.py:1003`). |
-| `app/ponto/selecao_periodo.py:256` — `turnos_em_turno_stored` | Ativas ordenadas por início **crescente**, `setdefault`: vence a **mais antiga**. D não seleciona EC; duração limita entrada.timestamp+jornada+margem (`:278–290`). |
-| `app/ponto/nucleo.py:7` — `escalas_no_periodo` / `te_vigente_em` | Carrega janela, ordena `(ativa,início)` e guarda último que cobre D; não consulta geradora (`:7–27`). |
-| `app/ponto/nucleo.py:30` — `dt_fim_previsto_de`; `:39` — `recompute_turnos` | TE anterior, D=`t.data_turno`; janela calculada sem EC/DNA (`:30–57`). |
-| `app/ponto/calculador/alimentacao.py:151` — `marcos_por_dia` | Juiz por D de `resultado.dia_da_jornada`; marcos do EC (`:179–189`). |
-| `app/ponto/calculador/alimentacao.py:341` — `rubricas_por_dia` | Vínculos da janela+células → juiz por D (`:408–420`, `:479`). |
-| `app/ponto/motor_calculo_v2.py:812` — `_turnos_do_juiz` | TE recebida ou `self.escala`; DNA carregado em ini−2/fim+1 (`:812–827`). |
-| `app/ponto/motor_calculo_v2.py:2203` — `calcular_mes` | EC/TE recebidos; fase vem de `EC.data_ancora_colaborador`; métodos EC/TE fornecem horários (`:2209`, `:2228–2255`). |
-| `app/ponto/motor_calculo_v2.py:1986` — cálculo por período; `:2386`, `:2624`, `:2949` — folga/múltiplos períodos/Zona 5 | EC/TE recebidos; métodos por dia da jornada, com fallback em campos crus (`:1986–2002`, `:2624–2639`, `:2949–2964`). |
-| `app/escala/regua_defesa.py:16`, `:118`, `:503` — degeneração/diagnóstico/entradas | TE/EC recebidos; D ou ref recebidos (`:26`, `:139`, `:524`, `:539`). |
-| `app/escala/services/previsto_cego.py:78`, `:114` | Vínculos carregados → helper canônico/minutos previstos por D da janela (`:90`, `:162–174`). |
-
-**3. Cartório, chamados, reconciliação e registro**
-
-Na tabela, **juiz(D)** significa `escala_vigente`, `vinculo_do_dia` ou seu carregador; a regra está em `app/escala/alimentacao.py:237–254`.
-
-| Arquivo:linha — função | Critério; origem de D |
-|---|---|
-| `app/ponto/services/cartorio.py:675` — `marcos_vencidos` | Juiz(D), célula explicitamente alimentada; D recebido (`:679`). |
-| `app/ponto/services/cartorio.py:839` — `_cadastro` do julgamento | Todos os EC+células da janela → cadastro de cada `data_` (`:845`). |
-| `app/ponto/services/cartorio.py:1347` — `_julgar_colab_corpo` | Juiz para a data em julgamento (`:1349`). |
-| `app/ponto/services/cartorio.py:1446` — `_marcos_do_furo_parcial` | Juiz(D), D recebido (`:1450`). |
-| `app/ponto/services/cartorio.py:1554` — `julgar_celula` | Juiz no dia da célula; fim do turno usado para hoje (`:1556`). |
-| `app/ponto/supra_juiz.py:136` — cadastro carregado; `:147` — `cadastro_do_dia_carregado` | Juiz em D do classificador/argumento. |
-| `app/ponto/precedencia.py:259` — `fatos_do_periodo` | ECs da janela+geradoras → juiz por D; calendário de folga do EC escolhido (`:291`, `:297–299`). |
-| `app/ponto/precedencia.py:469` — `veto_de_lancamento` | Juiz no D examinado (`:470`). |
-| `app/chamados/detector_anomalias.py:137` — `detectar_batida_fora_escala` | Seleciona EC pelo **dia civil da batida** (`:144`); depois deriva dia do turno e conserva o EC já escolhido (`:157–164`). |
-| `app/chamados/juizes.py:301` — `_ajustar_saida_overnight` | Juiz em `data_evento` recebido (`:303`). |
-| `app/chamados/juizes.py:443` — `_celula_furada` | Juiz no D avaliado. |
-| `app/chamados/juizes.py:1247` — `_marco_esperado_da_grade` | **Ativo mais recente**, sem vigência; D=`perg.data_evento`; lê marcos do **template** (`:1251–1256`). |
-| `app/chamados/juizes.py:1378` — `folha_julga_pontualidade` | Se não recebeu template, juiz em `_data`; recebido, conserva o parâmetro (`:1384`). |
-| `app/chamados/juizes.py:1575` — `_turno_cruza_meia_noite` | Juiz no dia recebido (`:1578`). |
-| `app/chamados/services/disputa_emissao.py:752` — `_tem_base`; `:839` — `_ata_do_dia` | Juiz em `data` / `data_evento` da pergunta/ata (`:753`, `:840`). |
-| `app/chamados/services/limbo_folgas.py:189` — `filhos_no_defeito` | Qualquer EC cobrindo dia do filho e com defeito de folga; não escolhe geradora (`:199`). |
-| `app/chamados/services/limbo_folgas.py:252` — `agrupar_furos_sob_limbo` | Juiz no D do furo. |
-| `app/chamados/services/desvio_escala.py:42` — `medir_desvio` | Ativo mais recente; aplica marcos à janela passada e compara batidas de 84 dias (`:54`, `:60–64`). |
-| `app/chamados/views.py:440` — `detalhe_chamado_local` | Ativo do tipo gravado no contexto, maior início; não usa dia do chamado (`:442`). |
-| `app/chamados/reconciliador.py:232` — `_ancora_ausente` | Existência de qualquer EC ativo sem âncora; sem D (`:235`). |
-| `app/chamados/detector_anomalias.py:56` — colisão; `:99` — posto | Mais de um ativo sem fim; posto é FK atual do colaborador (`:64`, `:103`). |
-| `app/chamados/services/disputa_emissao.py:312` — `gerar_perguntas_disputa` | Opções: todos os ativos sem fim; sem D (`:314`). |
-| `app/chamados/models.py:2336` — `resposta_display` | EC pela PK gravada na resposta, não por vigência (`:2338`). |
-| `app/ponto/registro_batida.py:28` — `_janela_oposto` | Juiz no dia local do timestamp (`:30`). |
-| `app/ponto/registro_batida.py:40` — `_casa_marco_proprio` | Juiz no dia local e véspera; fornece EC aos marcos (`:47`). |
-| `app/ponto/propositor.py:334` — `dia_posicional_completo` | Juiz no dia recebido; slots do template escolhido (`:337`). |
-| `app/ponto/services/triagem_batida.py:149` — `triagem_bater_ponto` | Juiz no dia local de agora; EC para marcos (`:159`). |
-| `app/ponto/services/triagem_batida.py:402` — `_bloqueio_horario_clt` | Juiz no dia local de `agora_local` (`:409`). |
-| `app/ponto/services/triagem_batida.py:332` — `ramo_solicitar_anuencia` | Ativo mais recente para rótulo; instante da tentativa no contexto (`:335`, `:347`). |
-| `app/ponto/services/triagem_batida.py:92` | Existência de qualquer EC ativo habilita registro; sem D. |
-| `app/ponto/services/veredito_celula.py:40` — `_marcos_do_dia` | Juiz(D); fallback template após célula (`:43`). |
-| `app/ponto/services/vigia_de_hora.py:46` — `_ontem_em_janela`; `:70` — `_acesas_de_sobra` | Juiz em `cel.data` / hoje, com célula alimentada (`:47`, `:71`). |
-| `app/ponto/services/flip_auto.py:66` — `classificar_pares` | Juiz no dia dos pares (`:72`). |
-| `app/ponto/services/furos_vetados.py:16` — `vinculo_do_emissor` | Juiz no D recebido; template julga degeneração (`:28`). |
-| `app/ponto/services/declarar_dia.py:58`, `:90`, `:105`, `:176` | `_ec_do_dia`, teste de folga, recusa e escrita: juiz no dia declarado/recebido. |
-| `app/ponto/services/cobertura.py:276` — `declarar_cobertura_passada` | Juiz no dia declarado; template histórico do titular (`:290`). |
-| `app/ponto/services/faltas_de_hoje.py:28` — `faltas_de_hoje_sem_cobranca` | **Ativo mais recente**, sem vigência; D=hoje. Ciclo/fase pelo EC; horário da célula ou template (`:45`). |
-| `app/ponto/services/abriu_nao_bateu.py:194` — `_hora_de_bater_passou` | Ativo mais recente; template aplicado ao dia recebido (`:203`). |
-| `app/ponto/services/bordas_realizado.py:62` — `bordas_do_realizado` | Itera ECs ativos, aplica modo de intervalo e pausa desse EC a cada D da grade (`:78`). |
-| `app/ponto/services/piso_intervalo.py:28` — `pares_abaixo_do_piso` | Itera ativos com intervalo por duração; horários do template para batidas da janela, sem EC por D (`:43`). |
-| `app/ponto/services/diagnostico_escala.py:49` — `_vigente` | Primeiro EC carregado que cobre D; sem geradora (`:55`). Janela padrão hoje−83…hoje (`:128–150`). |
-| `app/ponto/services/diagnostico_escala.py:182` — diagnóstico agregado | `vinculos[0]` como atual; referência=fim da janela, sem seleção por esse D (`:189`). |
-| `app/ponto/worklist.py:49` — `coletar_gaps_dp` | Posto do ativo mais recente; dia do chamado não participa (`:51`). |
-| `app/ponto/services/cluster_espurio.py:75` | Existência de ativo sem fim; sem D. |
-
-**4. Fechamento, espelho, folha e relatórios**
-
-| Arquivo:linha — função | Critério; origem de D |
-|---|---|
-| `app/ponto/services/fechamento.py:125` — `vinculo_de_referencia` | Percorre fim→início, devolve primeira resposta do juiz. |
-| `app/ponto/services/fechamento.py:191` — `apurar_por_fatia` | Juiz para geradoras; fatias limitadas por início/fim de cada EC (`:205–206`). |
-| `app/ponto/services/fechamento.py:923` — `recalcular_fechamento_mes` | Juiz em cada dia `_d_f` da janela para feriados. |
-| `app/ponto/services/espelho.py:1058` — `autoridade_do_periodo` | Carrega janela+geradoras; juiz no **fim** fornece EC/template de referência (`:1070`); cálculo por fatias (`:1104–1116`). |
-| `app/ponto/services/espelho.py:297` — `_realizado_do_dia_tela` | Juiz por D com vínculos/células do período (`:298`). |
-| `app/ponto/services/espelho.py:42` — `piso_visual` | Ativo mais recente define piso; início futuro é limitado a hoje (`:47`). |
-| `app/ponto/services/espelho.py:212` — `resumo_escala` | Ativo mais recente; posto do EC ou FK atual; horários do template; semana de hoje (`:218–235`). |
-| `app/ponto/services/esmeril_espelho.py:93` — `assinaturas_do_colab` | Juiz no **fim da janela**; template recebido pelo motor para a janela (`:154–166`). |
-| `app/ponto/services/fechamento_lista.py:52` — `montar_resumos` | Carrega lista completa; mapa de rótulos sobrescrito pelos ativos, sem D (`:56–61`). |
-| `app/ponto/services/teto_na_lista.py:68` — `medir` | Juiz no `data_turno` do par (`:76`). |
-| `app/folha/export.py:330` — `_ciclo_do_colab` | Juiz no fim da janela da competência (`:346–349`). |
-| `app/folha/export.py:746` — `classificar_export` | Todos os EC alimentam minutos previstos por cada D da competência (`:910–916`); guarda de âncora considera **qualquer ativo 12x36 sem âncora**, sem vigência (`:787–793`). |
-| `app/folha/export.py:1150` — `motivos_retencao_celula` | Existência de algum EC cobrindo cada D da janela (`:1193–1209`). |
-| `app/folha/previa.py:28` — `montar_previa` | Vínculos do período/cobertura; D=`cel.data`, exclui D≥hoje (`:61–82`). |
-| `app/core/regua_cct.py:297` — `regua_para` | Juiz em `competencia` recebido; praça do EC escolhido (`:328–330`). |
-| `app/folha/views_retrato.py:89` — `_cadastro` | Ativos ordenados início crescente, sobrescrita: mais recente; posto EC ou FK atual; enriquece retrato sem D (`:107–122`). |
-| `app/folha/services/ranking_he.py:94` — `ranking` | Mapa de ativos para ciclo da competência, sem vigência (`:130–135`). |
-| `app/holerite/views.py:250` — `_pessoas_da_celula` | Ativo mais recente por ordenação/sobrescrita; posto EC ou atual; lista da competência ano/mês (`:280–312`). |
-| `app/relatorios/dia_da_frota.py:25` — `dia_da_frota` | Juiz no dia recebido, com célula; posto EC ou FK atual (`:42–56`). |
-| `app/relatorios/pdf_espelho.py:187` — `_coletar_dados_espelho` | Juiz no fim da janela para referência (`:303–304`); carrega vínculos+geradoras para cálculo (`:319–360`). |
-| `app/relatorios/pdf_espelho.py:383` — `_montar_motor` | EC recebido da fatia; CCT em `fatia_ini` (`:390–391`). |
-| `app/relatorios/pdf_espelho.py:561` — `_realizado` | Juiz por D impresso, com células/vínculos carregados (`:566–568`). |
-| `app/relatorios/views.py:437` — `extrato_parcial` | Mapa de ativos fornece geometria às batidas da janela; cálculo financeiro separado (`:487–511`). |
-| `app/relatorios/views.py:1317` — `_acc_escala` | Primeiro ativo em `c.escalas.all()`, sem D (`:1321`). |
-| `app/relatorios/pendencias.py:65` — `com_direcao` | Mapa de ativos; diagnóstico hoje/próximos 30 dias (`:74–80`). |
-| `app/relatorios/furos.py:78` — `escalas_em_limbo` | Todos os ativos sem fim, aplicados a hoje/amanhã, sem início≤D (`:85–95`). |
-| `app/inteligencia/calculadores.py:295` — `_calc_escalas_desvio` | Ativo mais recente aplicado à grade de 30 dias até ontem (`:312–324`). |
-
-**5. Telas, APIs, painéis e serviços de escala**
-
-| Arquivo:linha — função | Critério; origem de D |
-|---|---|
-| `app/colaboradores/services/ficha.py:98` — `ficha_do_colab` | Todos os EC → juiz em hoje, **sem células**; hoje recebido ou local (`:117–128`). |
-| `app/colaboradores/queries.py:50` — `colaboradores_em_operacao`; `app/colaboradores/views.py:2553` — `painel_situacional` | Existência de vínculo cobrindo hoje (`:62–65`, `:2605–2608`). |
-| `app/colaboradores/services/calendario.py:246` — `contexto_calendario` | Ativo mais recente no cabeçalho (`:341`); seleção separada pelo juiz em cada dia da grade para extra (`:428–430`, `:473–475`). |
-| `app/colaboradores/views.py:17` — `vincular_colaboradores` | Primeiro ativo do prefetch; cadastro atual, sem D (`:48`, `:71`). |
-| `app/colaboradores/views.py:212` — `vincular_folga` | Ativo mais recente para alterar calendário; sem D (`:226–236`). |
-| `app/colaboradores/views.py:262` — `painel_vinculo` | Ativo mais recente; aplica EC aos próximos 14 dias (`:268–294`). |
-| `app/colaboradores/views.py:311` — `vincular_posto`; `:373` — `vincular_escala` | Ativo mais recente ao renderizar resultado (`:
-
-[truncado em 20000 de 41454 caracteres]
-
-_108 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_109 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
