@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/10/2026 13:54:39.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (16.7 MB). Acoes na janela: **352**.
+**Medido em 29/10/2026 13:59:59.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (16.8 MB). Acoes na janela: **354**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 13:55:50 | Bash | Wait for BO 01/03 triage | `cd /home/ronald/saas-hasner && until [ -s logs/bo2910/bo01_03.out ]; do /usr/bin/sleep 30; done; ls -la logs/bo2910/bo01_03.out; bin/trava_teste.sh --quem; date +%H:%M` |
+| 13:55:44 | Agent | Build PUBLICA-NO-EVENTO part 1 | `CONSTRUIR (instrumento de host, NAO codigo de negocio): PUBLICA-NO-EVENTO parte 1. Copia: /home/ronald/wt-pubev-2910-1400 (branch raia-pubev-2910, do main). Repo vivo: /home/ronald/saas-hasner. Leia o CLAUDE.md do repo (secoes 0, 2 e 7b) e o aval inteiro, que esta em /home/ronald/saas-hasner/app/docs/CORTES.md na linha `\| **PUBLICA-NO-EVENTO** \|`, com o detalhe no BACKLOG, linha `\| PUBLICA-NO-E ...` |
+| 13:55:26 | Bash | Record BO triage, register aval, create copy | `cd /home/ronald/saas-hasner && python3 - <<'PY' p='app/docs/RELATO.md'; s=open(p,encoding='utf-8').read(); i=s.index('\n> ') sec=''' > **BO-ADMIN-2910 -- triagem (agentes sonnet, prod so leitura; `logs/bo2910/bo_02_04_05_06_08.out` e `bo07.out`, ERROS=0). Uma linha por BO; 01 e 03 em curso.** > - **02** (col28; o nome cadastrado e [nome]): o unico em cobranca e #20094, texto l ...` |
 | 13:44:56 | Bash | Wait for remaining BO triage files | `cd /home/ronald/saas-hasner && until [ -s logs/bo2910/bo01_03.out ] && [ -s logs/bo2910/bo_02_04_05_06_08.out ]; do /usr/bin/sleep 30; done; ls -la logs/bo2910/; date +%H:%M` |
 | 13:44:50 | Bash | Write BO07 question and trava row | `cd /home/ronald/saas-hasner && python3 - <<'PY' p='app/docs/RELATO.md'; s=open(p,encoding='utf-8').read(); i=s.index('\n> ') sec=''' > **lei: BO07-TURNO-AUTORIZADO-SEM-SAIDA** (pergunta de ORDEM, aval BO-ADMIN-2910 item 07 complemento; nao constroi; a fila SEGUE) -- medido 29/10 13:4x (agente sonnet, so leitura, `logs/bo2910/bo07.out`, ERROS=0): col204 (unica [nome]; J.A, posto Viscardi Duque de Cax ...` |
 | 13:44:34 | Bash | Check linked BACKLOG rows exist | `cd /home/ronald/saas-hasner/app/docs && grep -n "^\| PORTA-CELULA-EDITADA\\|^\| JORNADA-EXCEPCIONAL-POR-DATA\\|^\| PORTAO-DE-FATURAMENTO" BACKLOG.md \| cut -c1-200` |
@@ -361,4 +364,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 02:00:11 | Bash | Wait for outbox full suite v8 | `cd /home/ronald/saas-hasner && for i in $(seq 1 19); do grep -q '^rc=' logs/outbox/suite_inteira_v8.out 2>/dev/null && break; /usr/bin/sleep 30; done; grep -E '^ARVORE\|^(FAIL\|ERROR):\|^Ran \|^(OK\|FAILED)( \|$)\|^rc=' logs/outbox/suite_inteira_v8.out \| tail -6; date +%H:%M` |
 | 02:00:06 | SendMessage |  | `-` |
 | 02:00:00 | Bash | Two-judges question atop RELATO, start suite | `date +%H:%M && python3 - <<'EOF' p='docs/RELATO.md'; s=open(p).read() q='''> **lei: O-OUTBOX-DOIS-JUIZES-NO-ABRIR** (pergunta, nao para a fila; segura SO o pouso do O-OUTBOX, copia @ d375511b, recorte verde) -- no mesmo `ChamadoColaborador.abrir` o [nome] pergunta `chamados/reconciliador.py::_absolvido_pela_celula` (o juiz da retratacao) e o RENASCIMENTO (`_renascer_por_premissa_viva` -> `reab ...` |
-| 01:57:14 | Bash | Brief wait for constructor handback | `/usr/bin/sleep 150; date +%H:%M` |
