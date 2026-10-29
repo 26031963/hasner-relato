@@ -1,7 +1,59 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **29/10/2026 18:46** · publicado em **29/10/2026 18:50** (UTC-3)
+> Ultima resposta processada: **29/10/2026 18:54** · publicado em **29/10/2026 18:55** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 29/10 18:54 · sessao d40eb65cffec · espera · verificador · origem=Code
+
+**Reprovo esta volta:** a memória ainda pode regredir, e há provas de PID que aceitam processos que não são o produtor declarado. [bin/hook_stop_fila1.py:543](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/hook_stop_fila1.py:543), [bin/hook_stop_fila1.py:478](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/hook_stop_fila1.py:478)
+
+No hook:
+
+1. **A cura da regressão da memória não fecha a concorrência.** Cenário sintético: memória=100; A lê mtime=200 e memória=100; B observa avanço para 300 e grava 300; A termina depois e grava 200. O escritor morre. C observa arquivo parado em 300 e memória=200: libera novamente. O `max` protege apenas o retrato local; falta serialização. Confirmei executando a função com filesystem simulado em memória. [bin/hook_stop_fila1.py:543](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/hook_stop_fila1.py:543), [bin/hook_stop_fila1.py:551](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/hook_stop_fila1.py:551)
+
+2. **Argumento inerte ainda passa quando é valor de opção.** Processo real: `python3 -X produtor_espera.sh -c 'import time; time.sleep(300)'`. Topo: `ESPERANDO: produtor_espera.sh | pid=<PID>`. O primeiro argumento que não começa com `-` é o valor de `-X`; o hook aceita como script e libera, embora o script não esteja executando. Também ocorre com `-W`. Confirmei ambos. [bin/hook_stop_fila1.py:479](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/hook_stop_fila1.py:479)
+
+3. **Temporizador também vira “script”.** Processo `/usr/bin/sleep 300`; topo `ESPERANDO: 300 | pid=<PID>`. A função devolve prova: interpreta a duração como produtor. Confirmei com processo real. A classificação de todo embrulho pelo mesmo algoritmo também permite confundir arquivo consumido por `tail` com programa produtor. [bin/hook_stop_fila1.py:478](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/hook_stop_fila1.py:478)
+
+4. **PID 1 fica fora dos ancestrais.** A função retorna quando encontra pai=1, antes de adicioná-lo. Num host cujo argv inicial seja `/sbin/init`, `ESPERANDO: init | pid=1` passa pelo filtro de ancestral. Confirmei a omissão e a aceitação do programa correspondente ao PID 1 neste ambiente. [bin/hook_stop_fila1.py:455](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/hook_stop_fila1.py:455), [bin/hook_stop_fila1.py:492](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/hook_stop_fila1.py:492)
+
+5. **`argv[0]` forjado é aceito como identidade.** Processo real: `bash -c 'exec -a produtor_espera.sh /usr/bin/sleep 300'`. Topo: `ESPERANDO: produtor_espera.sh | pid=<PID>`. Libera, embora o executável seja `sleep`. Confirmei: o código consulta cmdline, mas não confronta o executável. [bin/hook_stop_fila1.py:477](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/hook_stop_fila1.py:477), [bin/hook_stop_fila1.py:497](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/hook_stop_fila1.py:497)
+
+6. **Caminho absoluto errado passa por sufixo.** Declarar `/tmp/produtor.sh` aceita argv de `/outra/tmp/produtor.sh`. Declarar `../produtor.sh` aceita `/outra/produtor.sh`, porque `lstrip('./')` apaga a referência ao pai. Confirmei ambos diretamente na função. Efeito: prova de outro caminho libera o Stop. [bin/hook_stop_fila1.py:481](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/hook_stop_fila1.py:481)
+
+7. **Lista de interpretadores falha nos dois sentidos.** `python3.12 -c 'import time; time.sleep(300)'` com produtor declarado `python3.12` passa, contornando a exclusão de genéricos. Já `python3.12 /obra/produtor.py`, declarado como `produtor.py`, não casa: o interpretador versionado não é reconhecido. [bin/hook_stop_fila1.py:437](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/hook_stop_fila1.py:437), [bin/hook_stop_fila1.py:487](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/hook_stop_fila1.py:487)
+
+8. **Opções legítimas bloqueiam produtores reais.** `python3 -W ignore /obra/produtor.py` compara `ignore` com `produtor.py`; `bash -O extglob /obra/produtor.sh` compara `extglob`; `timeout 300 /obra/produtor.sh` compara `300`. Mesmo com produtor funcionando, segue o bloqueio. [bin/hook_stop_fila1.py:479](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/hook_stop_fila1.py:479)
+
+9. **Temporário previsível permite escrever no painel fora da porta.** Entrada: `logs/hook_stop_espera.json.<PID-do-hook>.tmp` previamente ligado por symlink ou hardlink ao RELATO ou BACKLOG. O `open(..., 'w')` trunca esse alvo e grava JSON. Isso ocorre depois da prova inicial do RELATO. É um caminho de segundo escritor; dedução estática, sem reprodução em disco. [bin/hook_stop_fila1.py:553](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/hook_stop_fila1.py:553), [bin/hook_stop_fila1.py:717](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/hook_stop_fila1.py:717)
+
+10. **A cura de FIFO tem uma corrida solucionável.** ESPERA é regular no `lstat`; outro processo troca o caminho por FIFO antes do `open`. A abertura pode esperar escritor indefinidamente: não chega à decisão de fila vazia nem ao TETO. Troca por symlink também contorna a verificação anterior. Dedução estática. [bin/hook_stop_fila1.py:540](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/hook_stop_fila1.py:540)
+
+11. **Falha ao consultar arquivo proibido é ignorada.** Entrada: sinal é hardlink da TRILHA; seu `stat` funciona, mas `stat(TRILHA)` lança `EIO`; memória contém mtime anterior e a própria trilha avançou. O erro é descartado, permitindo prova de escrita do hook. Confirmei a aceitação com erro injetado e I/O simulado. Contraria “falha de leitura bloqueia”. [bin/hook_stop_fila1.py:529](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/hook_stop_fila1.py:529)
+
+12. **Falha herdada: UTF-8 inválido libera por exceção.** RELATO com `ESPERANDO: inexistente | pid=999999999` e byte `0xff`, sem afirmação consumada. O checador lê com substituição; o leitor do topo lança `UnicodeDecodeError`, que não é `OSError`. Como PAREI é consultado antes de ESPERANDO, a exceção chega ao `except` externo e libera. Confirmei o fluxo com streams em memória. Pelo diff fornecido, isso já existia no leitor anterior de PAREI. [bin/relato_afirma_com_prova.py:88](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/relato_afirma_com_prova.py:88), [bin/hook_stop_fila1.py:414](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/hook_stop_fila1.py:414), [bin/hook_stop_fila1.py:793](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/hook_stop_fila1.py:793)
+
+No selo:
+
+13. **Conjunção sem mordida nos demais sentidos.** Só há `PID bom + arquivo sem avanço → bloqueia`, logo depois de apagar a memória. Faltam `PID morto + arquivo andando → bloqueia` e `ambos bons → libera`. Uma implementação que ignorasse o PID quando existe arquivo, ou sempre rejeitasse provas duplas, escaparia. [bin/tests/test_hook_esperando_com_prova.sh:140](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/tests/test_hook_esperando_com_prova.sh:140), [bin/tests/test_hook_esperando_com_prova.sh:142](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/tests/test_hook_esperando_com_prova.sh:142)
+
+14. **Falta morder a precedência da prova do RELATO.** Entrada ausente: ESPERANDO com PID válido, junto de `NO AR` sem PROVA. Mover a liberação para antes do checador escaparia do selo novo e do antigo, que não declara ESPERANDO. O código atual mantém a ordem correta. [bin/tests/test_hook_esperando_com_prova.sh:94](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/tests/test_hook_esperando_com_prova.sh:94), [bin/tests/test_relato_prova_no_stop.sh:20](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/tests/test_relato_prova_no_stop.sh:20)
+
+15. **A cura de kill reciclado cobre `_mata`, mas não toda a limpeza.** `P_OUTRO` e `P_INERTE` terminam naturalmente após 300 segundos e continuam em `_pids`. Se o selo demorar mais e houver reutilização, `_fim` manda `kill` ao novo ocupante. É uma intercalação possível pelo código; ocorrência real: [não verificado]. [bin/tests/test_hook_esperando_com_prova.sh:30](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/tests/test_hook_esperando_com_prova.sh:30), [bin/tests/test_hook_esperando_com_prova.sh:56](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/tests/test_hook_esperando_com_prova.sh:56)
+
+| Classe pedida | Resultado |
+|---|---|
+| Segundo juiz que duplica registrado | **nada** encontrado no diff; leitura do topo foi centralizada. [hook:400](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/hook_stop_fila1.py:400) |
+| Segundo escritor fora da porta | Temporário ligado ao painel, achado 9. [hook:554](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/hook_stop_fila1.py:554) |
+| Relógio lido fora da borda | **nada** novo; a prova usa metadata do arquivo. [hook:537](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/hook_stop_fila1.py:537) |
+| Derivação paralela de fonte única | **nada** encontrado na extração do topo. [hook:632](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/hook_stop_fila1.py:632) |
+| Selo/RED sem mordida | Lacunas 13 e 14; a mordida básica existe. [selo:68](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/tests/test_hook_esperando_com_prova.sh:68) |
+| Ordem de trava | Leitura/julgamento/gravação sem exclusão, achado 1. [hook:543](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/hook_stop_fila1.py:543) |
+| Pouso antes do pré-requisito | **nada** no fluxo atual: checador precede ESPERANDO; falta selo combinado. [hook:717](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/hook_stop_fila1.py:717) |
+
+**PAREI, TETO e fila vazia: nada de regressão no fluxo normal examinado**, além dos caminhos excepcionais descritos acima. As chamadas dirigidas com I/O simulado preservaram essas decisões. [hook:632](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/hook_stop_fila1.py:632), [hook:743](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/hook_stop_fila1.py:743), [hook:781](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/hook_stop_fila1.py:781)
+
+Selo completo executado: **[não verificado]**. Identidade Git do snapshot/diff acumulado: **[não verificado]**. O CORTES disponível termina em 384; o registro citado em 389 não está nesta cópia. [app/docs/CORTES.md:384](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/app/docs/CORTES.md:384)
 
 ## 29/10 18:46 · sessao c1bbffce8fcb · - · - · origem=Ronald (tmux)
 
@@ -352,72 +404,4 @@ Também constam: M1 já encerrado **92**, em **2026-10-26**; exportadas vigentes
 
 A retenção por **`justificativa_alheia` não foi quantificada no anexo**: há somente referência à medição em sombra. Seu resultado permanece [nao verificado].
 
-## 29/10 18:20 · sessao 311e93877dc2 · justif · verificador · origem=Code
-
-**Não aprovaria esta versão:** a retenção pode ser contornada, há ciclos de trava e a materialização pode gerar duas transições para o mesmo ato. (`app/ponto/services/cartorio.py:1163`; `app/ponto/services/justificativa.py:69`; `app/ponto/services/justificativa.py:379`)
-
-As conclusões são por leitura da cópia e análise AST em memória. Reprodução funcional, concorrência em banco e REDs citados nos comentários: **[nao verificado]**.
-
-**1. Defeitos e contraexemplos**
-
-- **Retenção não alcança todo fechamento do ato — outra: guarda contornada.** A regra nova é consultada por `_retratar` e pela cascata, mas o cartório chama `reconciliar()` diretamente; o gate do modelo não consulta essa retenção. (`app/chamados/reconciliador.py:474`; `app/ponto/services/justificativa.py:377`; `app/ponto/services/cartorio.py:1163`; `app/chamados/models.py:474`)
-
-  **Entrada → erro:** C vivo aponta J2 pendente, tem célula/escala e cobra o marco S19; aprovar J1 registra S19. O signal da batida chama o cartório, a lâmpada acesa permite `reconciliar()` e C termina resolvido, embora a regra nova determine preservar C durante esse ato. J2 pode continuar pendente: este desvio não passa pela auto-rejeição de `_retratar`. O save da própria justificativa também aciona o cartório. (`app/ponto/signals.py:135`; `app/ponto/services/cartorio.py:1163`; `app/chamados/models.py:959`; `app/chamados/reconciliador.py:445`; `app/chamados/reconciliador.py:514`; `app/ponto/signals.py:165`)
-
-- **Conjunto antecipado de travas é incompleto — ordem de trava.** `travar_origem_antes` cobre VIVOS + origem; `_encerrar_bloqueio_de_entrada` busca NAO_FECHADOS, que inclui `resolvido`. Portanto, pode adquirir depois uma trava ausente do conjunto antecipado. (`app/ponto/services/justificativa.py:101`; `app/ponto/services/justificativa.py:69`; `app/chamados/catalogo/motor.py:32`)
-
-  **Entrada → erro:** mesmo colaborador sem chamados vivos; C1 e C2 são bloqueios de entrada resolvidos; J1/J2 pendentes apontam respectivamente C1/C2 e não têm saída informada. T1 trava C1/J1; T2 trava C2/J2. O helper da origem retorna sem fechar; o helper do bloqueio exclui a própria origem, fazendo T1 esperar C2 e T2 esperar C1. Há deadlock entre as próprias aprovações, sem nascimento concorrente de chamado. (`app/ponto/services/justificativa.py:106`; `app/ponto/services/justificativa.py:119`; `app/ponto/services/justificativa.py:39`; `app/ponto/services/justificativa.py:72`; `app/ponto/services/justificativa.py:195`)
-
-- **A nova ordem cruza com a regularização — ordem de trava.** A aprovação faz C → J; a regularização atualiza J dentro de `atomic` e depois analisa C, fazendo J → C. (`app/ponto/services/justificativa.py:106`; `app/ponto/services/justificativa.py:119`; `app/ponto/services/regularizacao.py:89`; `app/ponto/services/regularizacao.py:106`; `app/ponto/services/regularizacao.py:137`)
-
-  **Entrada → erro:** C aberto, J pendente com entrada e sem saída informada. A regularização grava J; a aprovação trava C e espera J; a regularização tenta analisar C e espera C. Uma operação precisa abortar. O caminho externo é evidência da interação; o ponto introduzido nesta obra é a nova ordem da aprovação. (`app/ponto/services/regularizacao.py:102`; `app/chamados/models.py:572`; `app/ponto/services/justificativa.py:118`)
-
-- **Materialização pode fechar duas vezes — outra: duas transições para um fato.** A cascata continua incluindo `resolvido`, e `encerrar()` permite `resolvido → fechado`. É comportamento preexistente conservado no trecho tocado. (`app/ponto/services/justificativa.py:371`; `app/ponto/services/justificativa.py:379`; `app/chamados/catalogo/motor.py:32`; `app/chamados/catalogo/motor.py:114`)
-
-  **Entrada → erro:** origem C de `turno_aberto`, ligada à própria J, entrada 07h e saída materializada 19h, sem retenção. A batida dispara o reconciliador e resolve C; depois a cascata transforma C em fechado. Cada passagem grava `estado_chamado`: duas linhas no mesmo ato. O helper posterior da origem ser no-op não elimina a segunda transição anterior. (`app/ponto/services/justificativa.py:338`; `app/ponto/signals.py:215`; `app/chamados/reconciliador.py:1266`; `app/chamados/models.py:444`; `app/ponto/services/justificativa.py:379`; `app/chamados/models.py:1201`; `app/chamados/models.py:227`)
-
-- **“Batida não nula” não garante saída válida — pouso antes do pré-requisito.** Os guards novos recusam `None`, mas `registrar_batida` também pode devolver uma batida de tipo oposto ou retratada quando encontra a mesma chave colaborador/instante. A aceitação já existia; permanece nos trechos tocados e agora pode acompanhar o fechamento novo da origem. (`app/ponto/services/justificativa.py:172`; `app/ponto/services/justificativa.py:347`; `app/ponto/views.py:1822`; `app/ponto/registro_batida.py:120`)
-
-  **Entrada → erro:** J tem entrada às 07h e solicita saída às 19h; já existe uma **E** às 19h, sem vínculo com outra justificativa. A porta devolve essa E; os guards passam; J fica aprovada com `batida_gerada` apontando uma entrada, e a aprovação pode resolver sua origem pela premissa da própria justificativa aprovada. (`app/ponto/registro_batida.py:122`; `app/ponto/services/justificativa.py:174`; `app/ponto/services/justificativa.py:181`; `app/ponto/services/justificativa.py:194`; `app/chamados/models.py:937`)
-
-**2. Escritores não alcançados e segundo fechador**
-
-Há escritor de aprovação não alcançado: **Django admin — FORA-DO-ESCOPO, preexistente**. `JustificativaAdmin` é editável, não delega às portas da aprovação e o campo `status` não é somente leitura. O selo novo declara excluir esse caminho. (`app/ponto/admin.py:18`; `app/ponto/models.py:159`; `app/ponto/tests/test_selo_aprovacao_encerra_origem.py:13`)
-
-As três atribuições explícitas de produção encontradas estão costuradas: aprovação individual, materialização e lote. (`app/ponto/services/justificativa.py:182`; `app/ponto/services/justificativa.py:194`; `app/ponto/services/justificativa.py:360`; `app/ponto/services/justificativa.py:387`; `app/ponto/views.py:1796`; `app/ponto/views.py:1837`)
-
-O censo AST da cópia não encontrou escrita de `status_local` fora das portas reconhecidas; isso conserva os limites de resolução declarados pelo próprio selo, não constitui garantia contra qualquer escrita dinâmica. (`app/chamados/tests/test_selo_status_so_pelas_portas.py:317`; `app/chamados/tests/test_selo_status_so_pelas_portas.py:337`; `app/chamados/tests/test_selo_status_so_pelas_portas.py:17`)
-
-Na aprovação individual, não sobrou o antigo fecho forçado externo: origem e bloqueio delegam a `retratar`, e o seletor do bloqueio exclui a origem. O fechamento forçado permanece na cascata da materialização, responsável pelo caso de dupla transição acima. (`app/ponto/services/justificativa.py:42`; `app/ponto/services/justificativa.py:72`; `app/ponto/services/justificativa.py:75`; `app/ponto/services/justificativa.py:379`)
-
-**3. Mordida dos testes** [nao verificado]
-
-O selo estrutural **morde a retirada das três costuras**: removendo as chamadas em memória, acusa os três escritores. Entretanto, seu critério verifica ancestral `atomic`, receptor e posição textual; aceita chamada sob `if False`, falha engolida por `except` e fechamento colocado antes da saída. A limitação do ramo morto está declarada. (`app/ponto/tests/test_selo_aprovacao_encerra_origem.py:94`; `app/ponto/tests/test_selo_aprovacao_encerra_origem.py:102`; `app/ponto/tests/test_selo_aprovacao_encerra_origem.py:8`)
-
-Há estes pontos de **selo/RED sem mordida suficiente**:
-
-- `test_J2_nao_e_rejeitada_pela_BATIDA_do_proprio_ato` exige uma batida vinculada, mas não exige que o receiver/reconciliador tenha executado. Sem esse receiver, a costura explícita ainda retém C, permitindo sucesso por ausência do caminho anunciado. (`app/ponto/tests/test_justificativa_encerra_origem.py:413`; `app/ponto/tests/test_justificativa_encerra_origem.py:422`; `app/ponto/services/justificativa.py:194`)
-- Esse teste e o da cascata usam fixture sem célula/escala; o cartório retorna antes de julgar. Portanto, não cobrem o desvio do primeiro defeito. (`app/ponto/tests/test_justificativa_encerra_origem.py:392`; `app/ponto/tests/test_justificativa_encerra_origem.py:426`; `app/ponto/services/cartorio.py:1547`)
-- O teste positivo da materialização escolhe origem `justificativa_colab` e não conta trilhas; não acusa a dupla transição da origem de turno. (`app/ponto/tests/test_justificativa_encerra_origem.py:203`; `app/ponto/tests/test_justificativa_encerra_origem.py:213`; `app/ponto/tests/test_justificativa_encerra_origem.py:229`)
-- `test_erro_de_banco_repetido_nas_perguntas_derruba_a_aprovacao_INTEIRA` pode passar sem o savepoint S143, porque a segunda chamada ao resolver já propaga a falha. O teste específico do savepoint é `test_erro_de_banco_engolido_no_receiver_S143_nao_mente_o_fechamento`. (`app/ponto/tests/test_justificativa_encerra_origem.py:256`; `app/chamados/reconciliador.py:521`; `app/ponto/tests/test_justificativa_encerra_origem.py:231`)
-- Os tetos aceitam contagens menores; retirar o savepoint reduz queries e continua passando. Isso é adequado para um teto, mas não certifica a existência da cura. (`app/ponto/tests/test_selo_chokepoint_escrita.py:213`)
-
-Há sentinelas úteis contra ausência de sinal: chamada obrigatória da porta no teste de rollback, chamada obrigatória de `registrar_batida` e trilha obrigatória da recusa. Execução desses funcionais contra árvores sem cada cura: **[nao verificado]**. (`app/ponto/tests/test_justificativa_encerra_origem.py:170`; `app/ponto/tests/test_justificativa_encerra_origem.py:197`; `app/ponto/tests/test_justificativa_encerra_origem.py:159`)
-
-**4. Ordem de trava e duração do contexto**
-
-O caminho comum deixou de começar pela trava de J: as portas antecipam chamados por PK antes de travar a justificativa. Isso acompanha a ordem efetiva de `_retratar`, que escreve C e depois pode atualizar J pendente. Não elimina os dois ciclos concretos descritos acima. (`app/ponto/services/justificativa.py:106`; `app/ponto/services/justificativa.py:119`; `app/chamados/reconciliador.py:508`; `app/chamados/reconciliador.py:520`)
-
-O `ContextVar` tem limpeza por `finally`, mas `with atomic(), no_ato_de_aprovar(...)` remove a marca **antes** da saída do `atomic` e dos callbacks de commit. Assim, cobre a cadeia síncrona que efetivamente consulta a regra, porém não permanece nos callbacks registrados por perguntas/retomada. Dano adicional concreto desses callbacks ou de troca de thread: **[nao verificado]**. (`app/chamados/reconciliador.py:430`; `app/ponto/services/justificativa.py:117`; `app/ponto/services/justificativa.py:319`; `app/ponto/views.py:1792`; `app/chamados/signals.py:121`; `app/chamados/signals.py:202`)
-
-**5. Efeitos colaterais dentro da aprovação**
-
-**Sim, uma falha persistente na resolução das perguntas pode desfazer a aprovação inteira.** S143 agora captura a falha dentro de savepoint, mas `_retratar` chama o resolver novamente sem captura. Essa segunda falha atravessa o `atomic` da aprovação: rollback integral, compatível com a proibição de meio-estado. (`app/chamados/signals.py:88`; `app/chamados/reconciliador.py:507`; `app/chamados/reconciliador.py:521`; `app/ponto/services/justificativa.py:196`)
-
-O receiver de rebaixamento não captura exceções; uma exceção propagaria. No caminho normal, porém, o núcleo já rebaixou a urgência antes do save, e o receiver retorna sem escrever. (`app/chamados/signals.py:72`; `app/chamados/models.py:210`; `app/chamados/models.py:278`; `app/chamados/models.py:424`)
-
-O cartório é protegido por `engolir`, que captura exceções sem criar savepoint. Não confirmei um novo caso adicional de sucesso silencioso com rollback nesse percurso; isolamento completo de toda falha de banco: **[nao verificado]**. O erro concreto demonstrável é ele fechar C sem consultar a retenção, conforme o primeiro achado. (`app/chamados/signals.py:172`; `app/core/observ.py:85`; `app/ponto/services/cartorio.py:1163`)
-
-Em `invalidar_fechamento`, leitura e updates ficaram em savepoints próprios, com captura externa; não identifiquei defeito novo seguro nessa alteração. Gravação incorreta causada apenas por ler os próprios dados ainda não commitados, além do desvio de retenção descrito: **[nao verificado]**. (`app/ponto/services/fechamento.py:1616`; `app/ponto/services/fechamento.py:1619`; `app/ponto/services/fechamento.py:1629`)
-
-_223 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_224 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
