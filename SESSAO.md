@@ -6,10 +6,16 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/10/2026 21:02:37.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (3.4 MB). Acoes na janela: **149**.
+**Medido em 28/10/2026 21:08:08.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (3.6 MB). Acoes na janela: **155**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 21:04:44 | Bash | Wait for C20 suite | `cd /home/ronald/saas-hasner && for i in $(seq 1 19); do grep -q '^rc=' logs/c20lastro/suite_inteira_1.out 2>/dev/null && break; /usr/bin/sleep 30; done; grep -E '^(FAIL\|ERROR):\|^Ran \|^(OK\|FAILED)( \|$)\|^rc=' logs/c20lastro/suite_inteira_1.out \| tail -8; date +%H:%M` |
+| 21:04:39 | Agent | Adversarial verify C20-LASTRO | `Obra: CONTRATO-20-LASTRO-E-ORFAS, metade LASTRO (repo /home/ronald/saas-hasner; leia CLAUDE.md secoes 0, 4a, 4b e 7). Copia /home/ronald/wt-c20lastro-2810-1825, commit e53c73c1 sobre ae0a4a2f (`git -C /home/ronald/wt-c20lastro-2810-1825 show e53c73c1`). Arquivos: app/config/crons.py, app/ponto/management/commands/fechar_cobranca_com_lastro.py e testes (test_varredura_lastro_evento, test_varredura_ ...` |
+| 21:04:30 | Bash | Full suite on C20-LASTRO copy | `cd /home/ronald/saas-hasner && git -C /home/ronald/wt-c20lastro-2810-1825 status --porcelain \| head -3; mkdir -p logs/c20lastro; bash bin/suite.sh --dir /home/ronald/wt-c20lastro-2810-1825 --espera 3600 > logs/c20lastro/suite_inteira_1.out 2>&1; echo rc=$? >> logs/c20lastro/suite_inteira_1.out` |
+| 21:04:22 | Bash | Check C20-LASTRO overlap with outbox | `cd /home/ronald/saas-hasner && A=$(git -C /home/ronald/wt-c20lastro-2810-1825 diff --name-only 1974dbc0...HEAD \| sort); B=$(git -C /home/ronald/wt-outbox-2810-1915 diff --name-only 1974dbc0 HEAD \| sort); echo "$A"; echo "--- comuns:"; comm -12 <(echo "$A") <(echo "$B"); git -C /home/ronald/wt-c20lastro-2810-1825 log --oneline -2` |
+| 21:04:13 | Bash | Record second rejection in docs | `python3 - <<'EOF' p='docs/RELATO.md'; s=open(p).read() o="REPROVADA pelo verificador 20:3x, de volta ao construtor.**" n="REPROVADA pelo verificador 20:3x e de novo em 38c5ef82 as 21:0x (ordem de trava invertida Colaborador x Disputa, `atomic` novo em `criar` muda 12 chamadores, renascimento fora da porta `reabrir`, RED do nascimento sem mordida, selo AST estreito, advisory lock de chave fixa), de ...` |
+| 21:04:09 | SendMessage |  | `-` |
 | 20:59:42 | Bash | Short wait for verifier | `/usr/bin/sleep 240; date +%H:%M` |
 | 20:59:30 | Bash | Put COL129 vs portao question atop RELATO | `python3 - <<'EOF' p='docs/RELATO.md'; s=open(p).read() q='''> **lei: COL129-TETO-x-PORTAO-26H** (pergunta, nao para a fila; segura SO a construcao do COL129-2510-TETO-DO-DIA = (b)) -- o (b) diz "turno que fura o teto do dia nao vira zero, horas contam, nenhum N inventado", e o teto do dia (`ponto/turnos.py`, aval `!` 26/10 R1-H-PORTAO-DE-26H) existe para a S alem de previsto + 4 h NAO fechar o par ...` |
 | 20:58:41 | Bash | Measure pairs split by day ceiling | `cd /home/ronald/saas-hasner && mkdir -p logs/col129 && timeout 590 bin/sombra.sh --rodar col129_teto_frota.py col129_teto > logs/col129/frota_1.out 2>&1; grep -E '^(UNIVERSO\|PARES\|por \|ERROS\|FIM)' logs/col129/frota_1.out; grep '^ col' logs/col129/frota_1.out \| head -60` |
