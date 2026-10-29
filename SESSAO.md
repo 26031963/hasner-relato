@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/10/2026 11:25:30.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (15.2 MB). Acoes na janela: **427**.
+**Medido em 29/10/2026 11:30:59.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (15.3 MB). Acoes na janela: **428**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 11:27:16 | Bash | Wait and check suites | `/usr/bin/sleep 590; cd /home/ronald/saas-hasner && bin/trava_teste.sh --quem; ls -t logs/lastro3/ \| head -3; ls -t logs/grupo1/ \| head -3; date +%H:%M` |
 | 11:23:11 | Bash | Wait for LASTRO rework commit | `cd /home/ronald/saas-hasner && until [ "$(git -C /home/ronald/wt-lastro3-2910-1000 rev-parse --short HEAD)" != "5c8b7ead" ]; do /usr/bin/sleep 30; done; git -C /home/ronald/wt-lastro3-2910-1000 log --oneline -1 \| cut -c1-90; bin/trava_teste.sh --quem; date +%H:%M` |
 | 11:12:59 | Bash | Wait for LASTRO rework commit | `cd /home/ronald/saas-hasner && until [ "$(git -C /home/ronald/wt-lastro3-2910-1000 rev-parse --short HEAD)" != "5c8b7ead" ]; do /usr/bin/sleep 30; done; git -C /home/ronald/wt-lastro3-2910-1000 log --oneline -1 \| cut -c1-90; date +%H:%M` |
 | 11:11:24 | Bash | Wait for constructor commits | `cd /home/ronald/saas-hasner && until [ "$(git -C /home/ronald/wt-lastro3-2910-1000 rev-parse --short HEAD)" != "5c8b7ead" ] \|\| [ "$(git -C /home/ronald/wt-grupo1-2910-1100 rev-parse --short HEAD)" != "bbb47632" ]; do /usr/bin/sleep 30; done; for w in wt-lastro3-2910-1000 wt-grupo1-2910-1100; do git -C /home/ronald/$w log --oneline -1 \| cut -c1-90; done; date +%H:%M` |
