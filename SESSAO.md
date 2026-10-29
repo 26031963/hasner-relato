@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/10/2026 19:38:01.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (23.9 MB). Acoes na janela: **424**.
+**Medido em 29/10/2026 19:43:14.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (23.9 MB). Acoes na janela: **425**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 19:38:34 | Bash | Wait in-turn again for ata sombra | `cd /home/ronald/saas-hasner && end=$((SECONDS+580)); while [ $SECONDS -lt $end ]; do [ -f logs/grupo1p1/sombra_prova.fim ] && break; /usr/bin/sleep 15; done; date +%H:%M; [ -f logs/grupo1p1/sombra_prova.fim ] && { tail -2 logs/grupo1p1/ata_p1.run \| cut -c1-120; grep -E 'ERROS=\|FIM-DA' logs/grupo1p1/ata_main.run logs/grupo1p1/ata_p1.run; python3 logs/grupo1p1/compara_p1.py logs/grupo1p1/ata_main. ...` |
 | 19:28:42 | Bash | Wait in-turn for ata sombra end and compare | `cd /home/ronald/saas-hasner && end=$((SECONDS+580)); while [ $SECONDS -lt $end ]; do [ -f logs/grupo1p1/sombra_prova.fim ] && break; /usr/bin/sleep 15; done; date +%H:%M; [ -f logs/grupo1p1/sombra_prova.fim ] && { tail -2 logs/grupo1p1/ata_p1.run \| cut -c1-120; grep -E 'ERROS=\|FIM-DA' logs/grupo1p1/ata_main.run logs/grupo1p1/ata_p1.run; python3 logs/grupo1p1/compara_p1.py logs/grupo1p1/ata_main. ...` |
 | 19:28:36 | Bash | Register CONTRATO-DE-INSTRUMENTO and seed case | `cd /home/ronald/saas-hasner && python3 - <<'PY' p='app/docs/RELATO.md'; s=open(p,encoding='utf-8').read(); i=s.index('\n> ') add=''' > **CONTRATO-DE-INSTRUMENTO (aval 19:2x) -- caso-semente (4), retroativo e so por escrito:** > `bin/codex_pergunta.sh` -- QUEM CHAMA: agente ou sessao, com CODEX_OBRA/PAPEL. QUEM ESPERA: o chamador, em PRIMEIRO plano, ate o `-o` (o wrapper bloqueia, nao devolve sinal ...` |
 | 19:18:29 | Bash | Wait in-turn for ata sombra and compare | `cd /home/ronald/saas-hasner && end=$((SECONDS+580)); while [ $SECONDS -lt $end ]; do [ -f logs/grupo1p1/sombra_prova.fim ] && break; /usr/bin/sleep 15; done; date +%H:%M; tail -3 logs/grupo1p1/ata_p1.run \| cut -c1-200; [ -f logs/grupo1p1/sombra_prova.fim ] && python3 logs/grupo1p1/compara_p1.py logs/grupo1p1/ata_main.out logs/grupo1p1/ata_p1.out 2>&1 \| tail -20` |
