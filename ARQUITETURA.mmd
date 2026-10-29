@@ -8,7 +8,7 @@ flowchart TD
     fr_chamados["chamados"]
     fr_catalogo["chamados.catalogo<br/>INERTE: 3 modulos"]
     fr_ponto -->|topo PERMITIDO| fr_catalogo
-    fr_ponto -.->|topo: 8 na allowlist ETAPA 6, espera B5| fr_chamados
+    fr_ponto -.->|topo: 7 na allowlist ETAPA 6, espera B5| fr_chamados
     fr_chamados -.->|topo PROIBIDO, allowlist VAZIA| fr_ponto
   end
 
@@ -199,9 +199,9 @@ flowchart TD
     t_celula["CELULA / ATA por marco<br/>o que aconteceu (lampada)"]
     t_evento["EVENTO<br/>batida, ausencia, chamado -> cartorio julga na hora (signals B5.2)"]
     t_consumidor["CONSUMIDORES<br/>chamado, pergunta, tela, folha: leem a lampada, nunca re-julgam"]
-    t_vigia["CRON = VIGIA<br/>36 vigias; contador esperado 0, so alarma"]
+    t_vigia["CRON = VIGIA<br/>37 vigias; contador esperado 0, so alarma"]
     t_prazo["CRON = PRAZO (L-101)<br/>12 cron(s): a falta nao emite evento, o relogio e o unico sinal dela;<br/>julgam pela funcao do juiz da casa, sem regra propria (PRAZO_DELEGA_A)"]
-    t_juiz["JUIZ POR VARREDURA (divida)<br/>5 crons ainda julgam: esperado 0"]
+    t_juiz["JUIZ POR VARREDURA (divida)<br/>4 crons ainda julgam: esperado 0"]
     t_escala --> t_celula
     t_evento --> t_celula
     t_celula --> t_consumidor
@@ -213,7 +213,6 @@ flowchart TD
   j_fechar_cobranca_com_lastro["fechar_cobranca_com_lastro"] -.-> t_juiz
   j_reavaliar_ausencias_feriado["reavaliar_ausencias_feriado"] -.-> t_juiz
   j_reconciliar_chamados["reconciliar_chamados"] -.-> t_juiz
-  j_reconciliar_perguntas_orfas["reconciliar_perguntas_orfas"] -.-> t_juiz
   pz_apurar_furos_diarios["apurar_furos_diarios<br/>escala.services.furos_diarios::apurar"] -.-> t_prazo
   pz_detectar_ausencias["detectar_ausencias<br/>ponto.services.cartorio::marcos_vencidos"] -.-> t_prazo
   pz_detectar_par_relampago["detectar_par_relampago<br/>ponto.turnos::par_completo"] -.-> t_prazo
