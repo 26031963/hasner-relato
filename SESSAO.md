@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/10/2026 08:55:52.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (13.5 MB). Acoes na janela: **469**.
+**Medido em 29/10/2026 09:00:52.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (13.5 MB). Acoes na janela: **458**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -468,14 +468,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 21:04:22 | Bash | Check C20-LASTRO overlap with outbox | `cd /home/ronald/saas-hasner && A=$(git -C /home/ronald/wt-c20lastro-2810-1825 diff --name-only 1974dbc0...HEAD \| sort); B=$(git -C /home/ronald/wt-outbox-2810-1915 diff --name-only 1974dbc0 HEAD \| sort); echo "$A"; echo "--- comuns:"; comm -12 <(echo "$A") <(echo "$B"); git -C /home/ronald/wt-c20lastro-2810-1825 log --oneline -2` |
 | 21:04:13 | Bash | Record second rejection in docs | `python3 - <<'EOF' p='docs/RELATO.md'; s=open(p).read() o="REPROVADA pelo verificador 20:3x, de volta ao construtor.**" n="REPROVADA pelo verificador 20:3x e de novo em 38c5ef82 as 21:0x (ordem de trava invertida Colaborador x Disputa, `atomic` novo em `criar` muda 12 chamadores, renascimento fora da porta `reabrir`, RED do nascimento sem mordida, selo AST estreito, advisory lock de chave fixa), de ...` |
 | 21:04:09 | SendMessage |  | `-` |
-| 20:59:42 | Bash | Short wait for verifier | `/usr/bin/sleep 240; date +%H:%M` |
-| 20:59:30 | Bash | Put COL129 vs portao question atop RELATO | `python3 - <<'EOF' p='docs/RELATO.md'; s=open(p).read() q='''> **lei: COL129-TETO-x-PORTAO-26H** (pergunta, nao para a fila; segura SO a construcao do COL129-2510-TETO-DO-DIA = (b)) -- o (b) diz "turno que fura o teto do dia nao vira zero, horas contam, nenhum N inventado", e o teto do dia (`ponto/turnos.py`, aval `!` 26/10 R1-H-PORTAO-DE-26H) existe para a S alem de previsto + 4 h NAO fechar o par ...` |
-| 20:58:41 | Bash | Measure pairs split by day ceiling | `cd /home/ronald/saas-hasner && mkdir -p logs/col129 && timeout 590 bin/sombra.sh --rodar col129_teto_frota.py col129_teto > logs/col129/frota_1.out 2>&1; grep -E '^(UNIVERSO\|PARES\|por \|ERROS\|FIM)' logs/col129/frota_1.out; grep '^ col' logs/col129/frota_1.out \| head -60` |
-| 20:58:35 | Write |  | `/home/ronald/saas-hasner/logs/sombra/col129_teto_frota.py` |
-| 20:58:11 | Bash | Read the day ceiling in pareador | `sed -n 1335,1400p ponto/turnos.py` |
-| 20:58:06 | SendMessage |  | `-` |
-| 20:57:56 | Bash | Locate day ceiling and CXR list in motor | `/bin/grep -n "R1-H-PORTAO-DE-26H\\|PORTAO-DE-26H\\|teto do dia\\|TETO_DO_DIA" -r --include=*.py ponto escala \| /bin/grep -v tests \| head -10; /bin/grep -n "_cadastro_x_realidade\b\\|def dias_cadastro_x_realidade\\|_cadastro_x_realidade.append\\|_cadastro_x_realidade = " ponto/motor_calculo_v2.py \| head -15` |
-| 20:57:47 | Bash | Find files shared by QUARENTENA and OUTBOX | `cd /home/ronald/saas-hasner && A=$(git -C /home/ronald/wt-silencio-2810-0915 diff --name-only 1974dbc0...HEAD \| sort); B=$(git -C /home/ronald/wt-outbox-2810-1915 diff --name-only 1974dbc0 HEAD \| sort); comm -12 <(echo "$A") <(echo "$B"); echo "---"; echo "$A" \| /bin/grep -c .; git -C /home/ronald/wt-silencio-2810-0915 merge-base HEAD 1974dbc0 \| cut -c1-8` |
-| 20:57:43 | Bash | Inspect QUARENTENA WIP files | `cd /home/ronald/saas-hasner && git -C /home/ronald/wt-silencio-2810-0915 log --oneline -3; git -C /home/ronald/wt-silencio-2810-0915 diff --stat 1974dbc0... 2>/dev/null \| tail -20 \|\| git -C /home/ronald/wt-silencio-2810-0915 show --stat HEAD \| tail -20` |
-| 20:57:32 | Bash | Add money numbers to the top question | `python3 - <<'EOF' p='docs/RELATO.md'; s=open(p).read() o="Pergunta: (a) `!` para a cura na fonte, com DIFF de DINHEIRO da frota" n="MEDIDO 20:5x (sombra, `logs/juizpar/ensaio_2.out`, motor em modo leitura A x B nos 96 colabs com ata movida): a ata nova JA move o motor em **4 colabs da 10** (0 na 11): col89 trabalhadas 167,26 -> 169,89; col252 trabalhadas 121,42 -> 119,63 e intra indenizada 10,94 - ...` |
-| 20:55:53 | Bash | Wait for motor DIFF result | `cd /home/ronald/saas-hasner && for i in $(seq 1 19); do grep -q '^rc=' logs/juizpar/ensaio_2.out 2>/dev/null && break; /usr/bin/sleep 30; done; grep -E '^(COLABS\|MOTOR\| MOTOR\|ERROS\|rc=\|Traceback)\|Error' logs/juizpar/ensaio_2.out \| tail -30 \| cut -c1-500; date +%H:%M` |
