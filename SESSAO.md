@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/10/2026 00:43:38.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (7.5 MB). Acoes na janela: **338**.
+**Medido em 29/10/2026 00:49:08.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (7.5 MB). Acoes na janela: **340**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 00:48:37 | Bash | Keep waiting for constructor | `/usr/bin/sleep 290; git -C /home/ronald/wt-outbox-2810-1915 log --oneline -2; date +%H:%M` |
+| 00:43:53 | Bash | Wait for outbox constructor report | `/usr/bin/sleep 280; date +%H:%M` |
 | 00:43:17 | Bash | Wait for outbox copy to get a new commit | `cd /home/ronald/saas-hasner && for i in $(seq 1 18); do /usr/bin/sleep 30; git -C /home/ronald/wt-outbox-2810-1915 log --oneline -1 \| /bin/grep -qv 950f5acc && break; done; git -C /home/ronald/wt-outbox-2810-1915 log --oneline -2; date +%H:%M` |
 | 00:43:11 | Bash | Fix time label in RELATO | `sed -i 's/> \*\*PISTA 29\/10 00:5x (RAIA-NAO-FICA-PARADA/> **PISTA 29\/10 00:4x (RAIA-NAO-FICA-PARADA/' docs/RELATO.md && /bin/grep -c "PISTA 29/10 00:4x" docs/RELATO.md` |
 | 00:43:04 | Bash | Record pista and generate handoff | `date +%H:%M && python3 - <<'EOF' p='docs/RELATO.md'; s=open(p).read() anc="> **lei: JUIZ-DO-PAR-RESIDUO-CORRIGIDO**" assert s.count(anc)==1 lin='''> **PISTA 29/10 00:5x (RAIA-NAO-FICA-PARADA, uma linha por obra):** JUIZ-DO-PAR pronta @ 7d028f1c (suite inteira verde) -- espera a reconfirmacao JUIZ-DO-PAR-RESIDUO-CORRIGIDO e a janela das 04:xx (sombra do dia), passos em `logs/juizpar2/POUSO_PASSOS.m ...` |
