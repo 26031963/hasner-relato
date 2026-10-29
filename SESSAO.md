@@ -6,10 +6,17 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/10/2026 00:32:39.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (7.1 MB). Acoes na janela: **316**.
+**Medido em 29/10/2026 00:38:07.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (7.2 MB). Acoes na janela: **323**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 00:36:38 | Bash | Wait for full suite v4 | `cd /home/ronald/saas-hasner && for i in $(seq 1 19); do grep -q '^rc=' logs/juizpar2/suite_inteira_4.out 2>/dev/null && break; /usr/bin/sleep 30; done; grep -E '^ARVORE\|^(FAIL\|ERROR):\|^Ran \|^(OK\|FAILED)( \|$)\|^rc=' logs/juizpar2/suite_inteira_4.out \| tail -6; date +%H:%M` |
+| 00:34:57 | Bash | Wait for money DIFF v5 and residue | `cd /home/ronald/saas-hasner && for i in $(seq 1 19); do [ -s logs/juizpar2/dinheiro_diff_5.out ] && grep -q FIM-DA-SONDA logs/juizpar2/residuo_volta_3.out 2>/dev/null && break; /usr/bin/sleep 30; done; cut -c1-300 logs/juizpar2/dinheiro_diff_5.out; grep -E "^(UNIVERSO\|desses\|ERROS)" logs/juizpar2/residuo_volta_3.out; date +%H:%M` |
+| 00:34:56 | Bash | Record QUARENTENA rejection | `python3 - <<'EOF' p='docs/RELATO.md'; s=open(p).read() o="Falta: recorte (em curso), ruff, suite inteira, verificador, pouso (cruza so o selo de tetos do chokepoint com as outras duas raias -- concilia no pouso)." n="**REPROVADA pelo verificador 00:3x** (7e864870): desligar a flag LEVANTA a janela (o aval diz abre/FECHA: fechar = `fim` no desligamento, o passado segue isolado); o vigia `silencio_i ...` |
+| 00:34:38 | Bash | Stop queued QUARENTENA suite waiter | `kill 93315 93303 2>/dev/null; /usr/bin/sleep 2; ps -p 93315,93303 >/dev/null && echo vivo \|\| echo encerrado; /home/ronald/saas-hasner/bin/trava_teste.sh --quem` |
+| 00:34:32 | Bash | Identify which trava waiter is QUARENTENA | `for p in 92437 93315; do echo "$p: $(tr '\0' ' ' < /proc/$p/cmdline \| /bin/grep -oE 'wt-[a-z0-9-]+' \| head -1)"; done` |
+| 00:34:28 | Bash | Inspect suite processes | `ps -eo pid,etime,args \| /bin/grep -E "suite\.sh\|trava_teste" \| /bin/grep -v "/bin/grep" \| cut -c1-200 \| head; head -3 /home/ronald/saas-hasner/logs/quarentena/suite_6.out` |
+| 00:34:22 | Bash | Find queued QUARENTENA suite process | `ps -eo pid,args \| /bin/grep "suite.sh --dir /home/ronald/wt-silencio-2810-0915" \| /bin/grep -v grep \| head;` |
 | 00:24:32 | Bash | Wait for money DIFF v5 and residue v3 | `cd /home/ronald/saas-hasner && for i in $(seq 1 19); do [ -s logs/juizpar2/dinheiro_diff_5.out ] && grep -q FIM-DA-SONDA logs/juizpar2/residuo_volta_3.out 2>/dev/null && break; /usr/bin/sleep 30; done; cut -c1-300 logs/juizpar2/dinheiro_diff_5.out; grep -E "^(UNIVERSO\|desses\|ERROS)" logs/juizpar2/residuo_volta_3.out; date +%H:%M` |
 | 00:24:27 | Agent | Adversarial verify QUARENTENA isento | `Obra: QUARENTENA-DO-COLAB, metade "causa isento_ponto" (repo /home/ronald/saas-hasner; CLAUDE.md secoes 0, 4a, 6). Avais literais no BACKLOG (linha QUARENTENA-DO-COLAB, /home/ronald/saas-hasner/app/docs/BACKLOG.md) e no RELATO (/home/ronald/saas-hasner/app/docs/RELATO.md: "RESPONDIDA 28/10 18:4x: QUARENTENA-ISENTO-DESDE-QUANDO = (a) com rotulo" -- sem trilha da flag = desde a ADMISSAO com rotulo " ...` |
 | 00:24:17 | Bash | Queue QUARENTENA full suite | `cd /home/ronald/saas-hasner && C=/home/ronald/wt-silencio-2810-0915; (echo "ARVORE_HASH=$(git -C $C rev-parse HEAD) porcelain=$(git -C $C status --porcelain \| wc -l)"; bash bin/suite.sh --dir $C --espera 3600; echo rc=$?) > logs/quarentena/suite_6.out 2>&1 & echo enfileirada` |
