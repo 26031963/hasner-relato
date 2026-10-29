@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/10/2026 11:30:59.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (15.3 MB). Acoes na janela: **428**.
+**Medido em 29/10/2026 11:36:08.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (15.3 MB). Acoes na janela: **427**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -437,4 +437,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 23:43:52 | Bash | Probe col297, col841, col277 in motor | `cd /home/ronald/saas-hasner && sed -i "s/^CASOS = .*/CASOS = [(297, D(2026, 10, 6)), (297, D(2026, 10, 13)), (841, D(2026, 10, 11)), (841, D(2026, 10, 10)), (277, D(2026, 10, 3))]/" logs/sombra/juizpar2_dias_motor.py && timeout 290 bin/sombra.sh --rodar juizpar2_dias_motor.py jp2_dias_a2 > logs/juizpar2/dias_motor_antes_2.out 2>&1; SOMBRA_ARVORE=/home/ronald/wt-juizpar2-2810-2140/app timeout 290 b ...` |
 | 23:43:37 | Bash | List col297 changed days, prep motor probe | `cd /home/ronald/saas-hasner && python3 logs/juizpar2/dias_por_dono.py logs/juizpar2/dinheiro_antes_4.out logs/juizpar2/dinheiro_depois_4.out 297 \| grep -A2 "^col297" \| cut -c1-240; python3 - <<'EOF' p='/home/ronald/saas-hasner/logs/sombra/juizpar2_dias_motor.py'; s=open(p).read() import re i=s.index('CASOS = ['); j=s.index(']\n',i) s=s[:i]+"CASOS = [(297, D(2026, 10, 1)), (841, D(2026, 10, 11)), ...` |
 | 23:41:20 | Bash | Check progress and wait again | `cd /home/ronald/saas-hasner && tail -c 300 logs/juizpar2/dinheiro_antes_4.out; echo; tail -c 200 logs/juizpar2/dinheiro_depois_4.out 2>/dev/null; echo; for i in $(seq 1 19); do [ -s logs/juizpar2/dinheiro_diff_4.out ] && break; /usr/bin/sleep 30; done; cut -c1-300 logs/juizpar2/dinheiro_diff_4.out; grep -A2 PIORA logs/juizpar2/dias_piora_4.out 2>/dev/null \| cut -c1-220 \| head -20; date +%H:%M` |
-| 23:31:44 | Bash | Fix time label and keep waiting | `sed -i 's/> \*\*O-OUTBOX -- estado 23:4x (copia/> **O-OUTBOX -- estado 23:3x (copia/' docs/RELATO.md && /bin/grep -c "O-OUTBOX -- estado 23:3x" docs/RELATO.md; cd /home/ronald/saas-hasner && for i in $(seq 1 19); do [ -s logs/juizpar2/dinheiro_diff_4.out ] && break; /usr/bin/sleep 30; done; cut -c1-300 logs/juizpar2/dinheiro_diff_4.out; echo ---; grep -c PIORA logs/juizpar2/dias_piora_4.out 2>/dev ...` |
