@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/10/2026 10:32:08.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (14.7 MB). Acoes na janela: **437**.
+**Medido em 29/10/2026 10:37:09.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (14.7 MB). Acoes na janela: **435**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 10:32:52 | Bash | Check suites started by constructors | `/usr/bin/sleep 300; cd /home/ronald/saas-hasner && bin/trava_teste.sh --quem; ls -t logs/col129/ \| head -3; ls -t logs/lastro3/ \| head -3; date +%H:%M` |
 | 10:24:18 | Bash | Wait for COL129 rework commit | `cd /home/ronald/saas-hasner && until [ "$(git -C /home/ronald/wt-col129-2901-0330 rev-parse --short HEAD)" != "47c37d59" ]; do /usr/bin/sleep 30; done; git -C /home/ronald/wt-col129-2901-0330 log --oneline -1 \| cut -c1-90; date +%H:%M` |
 | 10:24:13 | Bash | Wait for a constructor commit | `cd /home/ronald/saas-hasner && until [ "$(git -C /home/ronald/wt-col129-2901-0330 rev-parse --short HEAD)" != "47c37d59" ] \|\| [ "$(git -C /home/ronald/wt-lastro3-2910-1000 rev-parse --short HEAD)" != "01a1f65a" ]; do /usr/bin/sleep 30; done; for w in wt-col129-2901-0330 wt-lastro3-2910-1000; do git -C /home/ronald/$w log --oneline -1 \| cut -c1-90; done; date +%H:%M` |
 | 10:24:08 | Bash | Write E2 measured question at RELATO top | `cd /home/ronald/saas-hasner && python3 - <<'PY' p='app/docs/RELATO.md'; s=open(p,encoding='utf-8').read(); i=s.index('\n> ') sec=''' > **lei: CONTRATO-20-E2-QUAL-ATO-MEDIDO** (pergunta; segura SO o rebaixamento de `reavaliar_ausencias_feriado`; a fila SEGUE) -- medida pela funcao real (agente sonnet, reconferida pela sessao por amostra: #20822 e #34015; `logs/c20e2_qual_ato.out`, ERROS=0) dos 22 ` ...` |
@@ -444,6 +445,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 22:39:39 | Bash | Inspect motor result structure | `sed -n 927,945p ponto/services/espelho.py; /bin/grep -n "class ResultadoMes\\|class ResultadoDia\\|dias: List\\|periodos: List\\|datas_falta\\|saida_antecipada" ponto/motor_calculo_v2.py \| head -15` |
 | 22:39:34 | Bash | Check autoridade_do_periodo result shape | `sed -n 982,1000p ponto/services/espelho.py \| head -5; /bin/grep -n "class Autoridade\\|def dias\b\\|resultado\b.*=\\|por_dia" ponto/services/espelho.py \| head -15` |
 | 22:39:06 | Bash | List changed days for dono assignment | `cd /home/ronald/saas-hasner && python3 logs/juizpar2/dias_por_dono.py logs/juizpar2/dinheiro_antes.out logs/juizpar2/dinheiro_depois_2.out 89,746,820,911,788 > logs/juizpar2/dias_por_dono_2.out; wc -l logs/juizpar2/dias_por_dono_2.out; grep -c PIORA logs/juizpar2/dias_por_dono_2.out; cut -c1-260 logs/juizpar2/dias_por_dono_2.out \| head -90` |
-| 22:34:57 | Bash | Register and wait for money DIFF v2 | `python3 - <<'EOF' p='docs/BACKLOG.md'; s=open(p).read() o="Anterior ao outbox (a varredura */15 ja chamava `_retratar` assim). \| registrada -- reproduzir antes de curar \|" n="HIPOTESE de composicao: so inverte se `abrir` e `criar_disputa_a_partir_de_chamados_orfaos` correm dentro de UM atomic externo (o de `_retratar`); cada funcao sozinha trava Disputa -> Colaborador (censo do HEAD 1974dbc0, av ...` |
-| 22:34:51 | SendMessage |  | `-` |
-| 22:34:24 | Bash | Verify lock-order claim in HEAD | `git show HEAD:app/ponto/management/commands/detectar_ausencias.py \| sed -n 780,800p; git show HEAD:app/chamados/services/disputa_emissao.py \| /bin/grep -n "def criar_disputa_a_partir_de_chamados_orfaos\\|select_for_update" \| head; git show HEAD:app/chamados/models.py \| sed -n 640,672p \| /bin/grep -n "select_for_update\\|Disputa\\|trava\\|def abrir"` |
