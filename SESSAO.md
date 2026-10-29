@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/10/2026 08:02:58.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (12.5 MB). Acoes na janela: **433**.
+**Medido em 29/10/2026 08:08:08.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (12.5 MB). Acoes na janela: **432**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -442,4 +442,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 20:12:27 | Write |  | `/home/ronald/saas-hasner/logs/juizpar/reversao_v2.py` |
 | 20:12:10 | Bash | Read recent reversao molde | `cd /home/ronald/saas-hasner && cat logs/o323/reversao_relavra10.py \| head -70; ls -la logs/o323/ \| /bin/grep -i revers` |
 | 20:12:05 | Bash | Read read-only probe launcher usage | `cd /home/ronald/saas-hasner && cat bin/sonda_leitura.sh \| sed -n 1,30p \| /bin/grep "^#" \| head -20; ls -t logs/*/reversao*.py logs/*snapshot*.py 2>/dev/null \| head -3` |
-| 20:07:24 | Bash | Wait more for ensaio | `cd /home/ronald/saas-hasner && for i in $(seq 1 19); do grep -q '^rc=' logs/juizpar/ensaio_1.out 2>/dev/null && break; /usr/bin/sleep 30; done; grep -E '^(piso\|UNIVERSO\|passada\|celulas\|VEREDITO\| \|FORA\|RETENCAO\|FECHAMENTO\|DIAPAGO\|CHAMADOS\| +A=\| +B=\|ERROS\|FIM\|rc=\|Traceback)' logs/juizpar/ensaio_1.out \| tail -40 \| cut -c1-300; date +%H:%M` |
