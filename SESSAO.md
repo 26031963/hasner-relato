@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/10/2026 01:47:25.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (8.4 MB). Acoes na janela: **382**.
+**Medido em 29/10/2026 01:52:48.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (8.4 MB). Acoes na janela: **385**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 01:50:09 | Bash | Wait for constructor's recorte | `cd /home/ronald/saas-hasner && for i in $(seq 1 19); do grep -qE '^rc=\|^Ran [0-9]+' logs/outbox/v8_recorte2.log 2>/dev/null && break; /usr/bin/sleep 30; done; grep -E '^ARVORE\|^(FAIL\|ERROR):\|^Ran \|^(OK\|FAILED)( \|$)\|^rc=' logs/outbox/v8_recorte2.log \| tail -6; date +%H:%M` |
+| 01:49:59 | Bash | Get summary of two-judges divergence | `cd /home/ronald/saas-hasner/logs/outbox && grep -E "^(UNIVERSO\|DIVERG\|TOTAL\|universo\|diverg\|resumo\|RESUMO\|nasc\|N )" v8_dois_juizes_prod.out \| head; grep -ciE "nasc=True renasc=True\|nasc=False renasc=False" v8_dois_juizes_prod.out; grep -c "^ ch" v8_dois_juizes_prod.out; tail -3 v8_recorte2.log \| cut -c1-160` |
+| 01:49:53 | Bash | Read two-judges measure and recorte | `cd /home/ronald/saas-hasner/logs/outbox && grep -vE "WARNING\|^\s*$" v8_dois_juizes_prod.out \| tail -15 \| cut -c1-220; echo ===; grep -E '^ARVORE\|^(FAIL\|ERROR):\|^Ran \|^(OK\|FAILED)( \|$)\|^rc=' v8_recorte2.log \| tail -5` |
 | 01:45:48 | Bash | Wait for constructor report | `/usr/bin/sleep 240; git -C /home/ronald/wt-outbox-2810-1915 log --oneline -1; ls -t /home/ronald/saas-hasner/logs/outbox/ \| head -6; date +%H:%M` |
 | 01:44:42 | Bash | Keep waiting for outbox commit | `cd /home/ronald/saas-hasner && for i in $(seq 1 19); do git -C /home/ronald/wt-outbox-2810-1915 log --oneline -1 \| /bin/grep -qv 4f5ec850 && break; /usr/bin/sleep 30; done; git -C /home/ronald/wt-outbox-2810-1915 log --oneline -2; git -C /home/ronald/wt-outbox-2810-1915 status --porcelain \| head; date +%H:%M` |
 | 01:35:06 | Bash | Wait for outbox constructor's commit | `cd /home/ronald/saas-hasner && for i in $(seq 1 19); do git -C /home/ronald/wt-outbox-2810-1915 log --oneline -1 \| /bin/grep -qv 4f5ec850 && break; /usr/bin/sleep 30; done; git -C /home/ronald/wt-outbox-2810-1915 log --oneline -3; bin/trava_teste.sh --quem; date +%H:%M` |
