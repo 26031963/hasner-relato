@@ -6,10 +6,16 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/10/2026 23:44:07.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (6.0 MB). Acoes na janela: **265**.
+**Medido em 28/10/2026 23:49:37.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (6.1 MB). Acoes na janela: **271**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 23:45:42 | Bash | Short wait for verifier | `/usr/bin/sleep 200; date +%H:%M` |
+| 23:45:41 | Write |  | `/home/ronald/saas-hasner/logs/juizpar2/POUSO_PASSOS.md` |
+| 23:45:20 | Bash | Re-route LASTRO-DEGRAU-2 to the juiz | `python3 - <<'EOF' p='docs/BACKLOG.md'; s=open(p).read() o="\| construida 28/10 21:2x (copia wt-lastro2-2810-2115): degrau 2 pergunta a `perto_do_marco`; RED da S 00:32 do noturno; sombra: 0 de 2154 mudam de lado; suite e verificador em curso \|" n="\| REPROVADA 21:2x e SUPERADA 23:5x: pelo CENSO-DE-LEITORES (22:1x) `lastro.py:274` e do grupo (1) -- o degrau 2 pergunta ao JUIZ (`_match_marcos`/`mar ...` |
+| 23:44:46 | Bash | Update RELATO with v4 owners | `python3 - <<'EOF' p='docs/RELATO.md'; s=open(p).read() o="> **JUIZ-DO-PAR-CURA-NA-FONTE (P7.1, aval (a) 21:3x) -- em construcao na copia wt-juizpar2-2810-2140 (adfb0fb5), NAO pousada.**" n="> **JUIZ-DO-PAR-CURA-NA-FONTE (P7.1, aval (a) 21:3x) -- copia wt-juizpar2-2810-2140 @ ec07edf1, suite inteira VERDE (`logs/juizpar2/suite_inteira_2.out`, Ran 12535, OK), 3a leitura do verificador em curso, NAO  ...` |
+| 23:44:42 | SendMessage |  | `-` |
+| 23:44:27 | Bash | Wait for full suite v2 | `cd /home/ronald/saas-hasner && for i in $(seq 1 19); do grep -q '^rc=' logs/juizpar2/suite_inteira_2.out 2>/dev/null && break; /usr/bin/sleep 30; done; grep -E '^ARVORE\|^(FAIL\|ERROR):\|^Ran \|^(OK\|FAILED)( \|$)\|^rc=' logs/juizpar2/suite_inteira_2.out \| tail -8; date +%H:%M` |
 | 23:43:52 | Bash | Probe col297, col841, col277 in motor | `cd /home/ronald/saas-hasner && sed -i "s/^CASOS = .*/CASOS = [(297, D(2026, 10, 6)), (297, D(2026, 10, 13)), (841, D(2026, 10, 11)), (841, D(2026, 10, 10)), (277, D(2026, 10, 3))]/" logs/sombra/juizpar2_dias_motor.py && timeout 290 bin/sombra.sh --rodar juizpar2_dias_motor.py jp2_dias_a2 > logs/juizpar2/dias_motor_antes_2.out 2>&1; SOMBRA_ARVORE=/home/ronald/wt-juizpar2-2810-2140/app timeout 290 b ...` |
 | 23:43:37 | Bash | List col297 changed days, prep motor probe | `cd /home/ronald/saas-hasner && python3 logs/juizpar2/dias_por_dono.py logs/juizpar2/dinheiro_antes_4.out logs/juizpar2/dinheiro_depois_4.out 297 \| grep -A2 "^col297" \| cut -c1-240; python3 - <<'EOF' p='/home/ronald/saas-hasner/logs/sombra/juizpar2_dias_motor.py'; s=open(p).read() import re i=s.index('CASOS = ['); j=s.index(']\n',i) s=s[:i]+"CASOS = [(297, D(2026, 10, 1)), (841, D(2026, 10, 11)), ...` |
 | 23:41:20 | Bash | Check progress and wait again | `cd /home/ronald/saas-hasner && tail -c 300 logs/juizpar2/dinheiro_antes_4.out; echo; tail -c 200 logs/juizpar2/dinheiro_depois_4.out 2>/dev/null; echo; for i in $(seq 1 19); do [ -s logs/juizpar2/dinheiro_diff_4.out ] && break; /usr/bin/sleep 30; done; cut -c1-300 logs/juizpar2/dinheiro_diff_4.out; grep -A2 PIORA logs/juizpar2/dias_piora_4.out 2>/dev/null \| cut -c1-220 \| head -20; date +%H:%M` |
