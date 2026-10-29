@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/10/2026 22:39:51.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (5.3 MB). Acoes na janela: **237**.
+**Medido em 28/10/2026 22:45:09.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (5.4 MB). Acoes na janela: **239**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 22:41:52 | Bash | Add L-084 guard to role path and rerun | `cd /home/ronald/wt-juizpar2-2810-2140/app && python3 - <<'EOF' p='escala/utils.py'; s=open(p).read() o=""" if _papeis is not None: _ass = _alinhar_por_papel(abs_marcos, locs, _papeis)""" n=""" if _papeis is not None: # L-084: o dia cujo cadastro NAO descreve o turno (as DUAS pontas a mais de 3 h dos marcos) fica com o # alinhamento de sempre -- e da classe CADASTRO, vai ao Cadastro x Realidade, e  ...` |
+| 22:40:02 | Bash | Probe money days in motor on both trees | `cat > /home/ronald/saas-hasner/logs/sombra/juizpar2_dias_motor.py <<'EOF' # JUIZ-DO-PAR-CURA-NA-FONTE: os dias que movem dinheiro, no MOTOR (periodos do ResultadoMes), sombra, rollback. import datetime from django.db import connection, transaction from django.utils import timezone as _tz assert connection.settings_dict['NAME'] == 'sombra' from colaboradores.models import Colaborador from escala.mo ...` |
 | 22:39:39 | Bash | Inspect motor result structure | `sed -n 927,945p ponto/services/espelho.py; /bin/grep -n "class ResultadoMes\\|class ResultadoDia\\|dias: List\\|periodos: List\\|datas_falta\\|saida_antecipada" ponto/motor_calculo_v2.py \| head -15` |
 | 22:39:34 | Bash | Check autoridade_do_periodo result shape | `sed -n 982,1000p ponto/services/espelho.py \| head -5; /bin/grep -n "class Autoridade\\|def dias\b\\|resultado\b.*=\\|por_dia" ponto/services/espelho.py \| head -15` |
 | 22:39:06 | Bash | List changed days for dono assignment | `cd /home/ronald/saas-hasner && python3 logs/juizpar2/dias_por_dono.py logs/juizpar2/dinheiro_antes.out logs/juizpar2/dinheiro_depois_2.out 89,746,820,911,788 > logs/juizpar2/dias_por_dono_2.out; wc -l logs/juizpar2/dias_por_dono_2.out; grep -c PIORA logs/juizpar2/dias_por_dono_2.out; cut -c1-260 logs/juizpar2/dias_por_dono_2.out \| head -90` |
