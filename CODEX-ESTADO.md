@@ -1,7 +1,73 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **29/10/2026 15:51** · publicado em **29/10/2026 15:53** (UTC-3)
+> Ultima resposta processada: **29/10/2026 15:56** · publicado em **29/10/2026 15:58** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 29/10 15:56 · sessao e4097e916b79 · o261 · censo · origem=Code
+
+Escritores de `respondida_em`:
+
+| Função | Arquivo:linha | Pode carimbar com `resposta_colab` vazia? |
+|---|---|---|
+| `responder_pergunta_disputa_core` | `app/chamados/services/disputa_emissao.py:1248` | Não; rejeita vazia em `:1220`. |
+| `responder_automaticamente` | `app/chamados/services/disputa_emissao.py:1393` | **Sim**, não valida `texto`; o chamador atual fornece constante preenchida — `app/api/foto_recebida.py:25`, `:48`. |
+| `carimbar_resposta_pela_trilha` | `app/chamados/services/disputa_emissao.py:1409` | Não; guarda em `:1407`. |
+| `resolver_perguntas_por_chamado_resolvido` | `app/chamados/services/disputa_emissao.py:1572` e `:1649` | Primeiro exige texto; **segundo permite vazio**, sem guarda em `:1648`. |
+| `_materializar_ausencia_de_resposta` | `app/chamados/services/materializacao.py:513` | Só atribui carimbo com texto (`:511`); porém salva o campo mesmo sem texto, preservando eventual carimbo anterior (`:528`). |
+| `_materializar_uma` | `app/chamados/services/materializacao.py:1192` | Não cria carimbo sem texto; guarda em `:1190`. |
+
+Também escrevem **`None`**: `ChamadoColaborador.ressuscitar_perguntas` — `app/chamados/models.py:1163`; `reabrir_para_correcao` — `app/chamados/services/disputa_emissao.py:1358`, persistência em `:1377`. Esta última também esvazia a resposta (`:1358`).
+
+Portas de reabertura/desarquivamento:
+
+| Porta | Efeito sobre o véu |
+|---|---|
+| `ChamadoColaborador.reabrir` — `app/chamados/models.py:1023` | **Não chama `levantar`**: muda estado (`:1089`) e ressuscita perguntas (`:1098`), preservando `silenciado_ate`; campos persistidos em `app/chamados/models.py:193`. |
+| `transicionar` — `app/chamados/models.py:183`, `:260` | **Não levanta**; permite reabertura humana conforme `app/chamados/catalogo/motor.py:102`, `:150`. |
+| `desarquivar_chamado` — `app/chamados/views_arquivar.py:52` | **Chama `levantar`**, com `resgatado=True` (`:75`). Chama `reabrir` somente para encerramento por competência trancada (`:64`, `:68`). |
+| `_ressuscitar_por_resposta` | **Chama `levantar`**, com `resgatado=True` — `app/chamados/services/materializacao.py:663`. |
+| `reconciliar_por_ausencia._levantar` | **Chama `levantar`**, com `resgatado=False` — `app/chamados/services/silencio_ausencia.py:72`. |
+
+Reabertura administrativa e reabertura de competência passam por `reabrir`, **sem levantar o véu**: `app/chamados/services/acoes_disputa.py:266`; `app/chamados/services/competencia_trancada.py:258`. Quem efetivamente limpa `silenciado_ate` é `arquivo.levantar` — `app/chamados/services/arquivo.py:201`, persistência em `:208`.
+
+## 29/10 15:56 · sessao 4b77cd4c0b0c · - · - · origem=Ronald (tmux)
+
+- **Levanta véu:** `desarquivar_chamado` chama `arquivo.levantar(...resgatado=True)` em `app/chamados/views_arquivar.py:75`; antes, chama `ch.reabrir()` somente quando `via_encerramento == competencia_trancada`, em `app/chamados/views_arquivar.py:64` / `:68`.
+- **Reabre sem levantar:** `ChamadoColaborador.reabrir`, `app/chamados/models.py:1023`, grava estado em `:1089` e ressuscita perguntas em `:1098`; `_gravar_estado` persiste campos sem véu (`app/chamados/models.py:193`, `:231`).
+- **Outra porta sem levantar:** `transicionar`, `app/chamados/models.py:122` / `:183` / `:260`; permite `resolvido→em_analise` e admin sair de fechado (`app/chamados/catalogo/motor.py:102`, `:150`). Entradas: `acao_resposta_livre`, `app/chamados/services/acoes_chamado.py:315`; `processar_post_fio`, `app/chamados/services/fio.py:715`.
+- **Outros levantadores:** `_ressuscitar_por_resposta`, `app/chamados/services/materializacao.py:663`, com `resgatado=True`; `reconciliar_por_ausencia._levantar`, `app/chamados/services/silencio_ausencia.py:72`, com `resgatado=False`.
+- `arquivo.levantar` limpa `silenciado_ate`, autor e motivo em `app/chamados/services/arquivo.py:201` e salva em `:208`.
+
+Chamadores de `reabrir()` que não chamam `levantar`:
+
+| Função/caminho | Chamada |
+|---|---|
+| `_renascer_por_premissa_viva` | `app/chamados/models.py:770` |
+| `acao_reabrir_disputa_admin` | `app/chamados/services/acoes_disputa.py:266` |
+| `competencia_trancada.reabrir` | `app/chamados/services/competencia_trancada.py:258` |
+| `sincronizar_adesao` | `app/chamados/services/adesao.py:92` |
+| `resolver_perguntas_por_chamado_resolvido` | `app/chamados/services/disputa_emissao.py:1606` |
+| `reabrir_orfas_enterradas.Command.handle` | `app/chamados/management/commands/reabrir_orfas_enterradas.py:161` |
+| `reabrir_chamados_ausencia_aberta.Command.handle` | `app/ponto/management/commands/reabrir_chamados_ausencia_aberta.py:49` |
+| `reconciliar_grade.Command._emitir_furo` | `app/ponto/management/commands/reconciliar_grade.py:519` |
+| `detectar_ausencias.Command.handle` | `app/ponto/management/commands/detectar_ausencias.py:301` |
+
+`analisar` e `reconciliar` não reabrem encerrados: `app/chamados/catalogo/motor.py:112` e `:111`.
+
+## 29/10 15:55 · sessao cb10afb99300 · - · - · origem=Ronald (tmux)
+
+Escritores diretos de produção:
+
+| Função | Escrita | `resposta_colab` vazia com carimbo? |
+|---|---|---|
+| `responder_pergunta_disputa_core` | `app/chamados/services/disputa_emissao.py:1248` | Não: rejeita vazia em `:1219–1221`. |
+| `responder_automaticamente` | `app/chamados/services/disputa_emissao.py:1393` | Função permite `texto=''`; caller atual fornece constante não vazia (`app/api/foto_recebida.py:25`, `:48`). |
+| `carimbar_resposta_pela_trilha` | `app/chamados/services/disputa_emissao.py:1409` | Não: guarda em `:1407`. |
+| `resolver_perguntas_por_chamado_resolvido` | `app/chamados/services/disputa_emissao.py:1572`, `:1649` | Primeiro exige texto (`:1570–1571`); **segundo não exige texto** (`:1648–1651`). |
+| `_materializar_ausencia_de_resposta` | `app/chamados/services/materializacao.py:513` | Nova atribuição exige texto (`:511–512`); save inclui campo mesmo sem texto, preservando eventual legado (`:528–530`). |
+| `_materializar_uma` | `app/chamados/services/materializacao.py:1192` | Não: exige texto (`:1190–1191`). |
+
+Zeradores: `ChamadoColaborador.ressuscitar_perguntas` grava `None` em `app/chamados/models.py:1163` (universo sem resposta: `:1115`); `reabrir_para_correcao` zera carimbo e texto em `app/chamados/services/disputa_emissao.py:1358`, persistido em `:1377`.
 
 ## 29/10 15:51 · sessao 1ee182181f58 · - · - · origem=Ronald (tmux)
 
@@ -439,32 +505,4 @@ bin/achado_por.py:1, bin/alarme_sem_fatia.sh:1, bin/alarme_sessao_ociosa.py:1
 ok
 bin/achado_por.py:1, bin/alarme_sem_fatia.sh:1, bin/alarme_sessao_ociosa.py:1
 
-## 29/10 15:28 · sessao 3ccabb649915 · - · - · origem=Ronald (tmux)
-
-ok.
-bin/achado_por.py:1, bin/alarme_sem_fatia.sh:1, bin/alarme_sessao_ociosa.py:1
-
-## 29/10 15:25 · sessao 23341f1d3b2f · - · - · origem=Ronald (tmux)
-
-*Numeração de `anexo_log.txt`: `# ponto.log de hoje...` é a linha 1; linhas vazias contam.*
-
-- **Sim, o POST de atestado do app chegou em 29/10, do user 903**: recebido às **11:49:44,630** (`origem=api_app`); após parse, às **11:49:44,754**, registrou `tipo=atestado arquivo=True`. O acesso confirma `POST /api/ausencias/ → 200` às **11:49:44**. (`anexo_log.txt:2–3,25`)
-- **PWA, user 1006**: uploads de atestado às **15:21:15,054** e **15:21:17,447**, `origem=pwa`; os POSTs em `/ponto/ausencias/submeter/` retornaram **302** às **15:21:15** e **15:21:17**. (`anexo_log.txt:4–5,39–40`)
-- Na `api_ausencias`, **antes do parse**, `post_recebido` registra origem, user, tamanho declarado, content-type (até 60 caracteres) e teto dos campos; o primeiro acesso a `request.data` vem depois. ([app/api/views.py:1767](/home/ronald/codex_ws/7596ef5e8351bf7473acecafc8348bca7d2cf9d7/app/api/views.py:1767), [1772](/home/ronald/codex_ws/7596ef5e8351bf7473acecafc8348bca7d2cf9d7/app/api/views.py:1772))
-- **Após parse**, `upload_ausencia` registra origem, user, tipo, presença do arquivo, tamanho, content-type e plataforma. ([app/api/views.py:1832](/home/ronald/codex_ws/7596ef5e8351bf7473acecafc8348bca7d2cf9d7/app/api/views.py:1832)) Correspondência dos users com `colNN`: **[não verificado]**.
-
-## 29/10 15:22 · sessao 95904850ee23 · - · - · origem=Ronald (tmux)
-
-stdout [nao verificado]:
-```text
-rc=1
-```
-
-stderr [nao verificado]:
-```text
-/home/ronald/wt-codexpro-2910-1525/bin/sonda_leitura.sh: line 132: /home/ronald/wt-codexpro-2910-1525/logs/.env_leitor.novo: Read-only file system
-```
-
-Código de saída do comando solicitado: `1`. [nao verificado]
-
-_115 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_118 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._

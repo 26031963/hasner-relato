@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/10/2026 15:53:10.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (18.5 MB). Acoes na janela: **370**.
+**Medido em 29/10/2026 15:58:24.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (18.6 MB). Acoes na janela: **370**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 15:54:35 | Bash | Wait for push before commit | `cd /home/ronald/saas-hasner && until grep -q '^rc=' logs/codex/push4.out; do /usr/bin/sleep 20; done; tail -3 logs/codex/push4.out \| cut -c1-140` |
+| 15:54:29 | Agent | Measure O261 dead-thread by retrato | `MEDIDA so leitura (prod), sem codigo de negocio. Aval O261-FIO-MORTO-PELO-RETRATO: a linha `\| **O261-FIO-MORTO-PELO-RETRATO** \|` em /home/ronald/saas-hasner/app/docs/CORTES.md e a `\| O261-FIO-MORTO-PELO-RETRATO \|` no BACKLOG.md. Leia as duas inteiras. Repo /home/ronald/saas-hasner; leia o CLAUDE.md secoes 4, 6 e 7b (CODE-CHAMA-CODEX e CODEX-PADRAO-PRO). - Prod so pela porta `bin/sonda_leitura. ...` |
+| 15:54:18 | Bash | Register O261 complement | `cd /home/ronald/saas-hasner && python3 - <<'PY' p='app/docs/BACKLOG.md'; s=open(p,encoding='utf-8').read() anc=[l for l in s.split('\n') if l.startswith('\| DISPARAR-PERGUNTAS-NO-CONTRATO-20 \|')][0] s=s.replace(anc,anc+'\n\| O261-FIO-MORTO-PELO-RETRATO \| **complemento do O261** (laudo [nome] 29/10, col446 + #11582; aval 29/10 15:5x): padrao = fitness function com universo errado + estado ilega ...` |
 | 15:44:02 | Bash | Wait for push before committing | `cd /home/ronald/saas-hasner && until grep -q '^rc=' logs/codex/push4.out; do /usr/bin/sleep 20; done; tail -3 logs/codex/push4.out \| cut -c1-140` |
 | 15:43:58 | SendMessage |  | `-` |
 | 15:43:45 | Bash | Write pre-verifier rule and BO07 result | `cd /home/ronald/saas-hasner && python3 - <<'PY' p='CLAUDE.md'; s=open(p,encoding='utf-8').read() a='PLACAR-DA-S3-CONTA-EXERCICIO' rule='''CODEX-PRE-VERIFICADOR (regra de PISTA, Ronald 29/10 ~15:4x; substitui so a ORDEM do item (1) da CODEX-PADRAO-PRO). (1) O construtor, ANTES de declarar pronto, chama o Codex pelo wrapper com `CODEX_PAPEL=verificador`, passando o diff do hash da copia + as LEIS do ...` |
@@ -377,6 +380,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 04:06:51 | Bash | Record COL129 rejection and wait | `python3 - <<'EOF' p='docs/RELATO.md'; s=open(p).read() o="Pergunta: (a) o contador da lista e 36 (09=20, 10=13, 11=3)" n="VERIFICADOR 04:0x: a medida (36; 09=20, 10=13, 11=3) CONFERE; REPROVADA por cura (leitor com literal 26 h proprio, R6 sem caminho provado -- DNA congelado e botao no vinculo de hoje --, contador da TELA nao medido, recorte nao refeito, RED de import); de volta ao construtor. Pe ...` |
 | 04:06:44 | SendMessage |  | `-` |
 | 04:01:31 | Bash | Keep waiting | `/usr/bin/sleep 295; for c in wt-orfas-2901-0215 wt-col129-2901-0330; do echo "$c: $(git -C /home/ronald/$c log --oneline -1 \| cut -c1-90)"; done; date +%H:%M` |
-| 03:56:31 | Bash | Wait for ORFAS rework and COL129 verifier | `/usr/bin/sleep 290; for c in wt-orfas-2901-0215 wt-col129-2901-0330; do echo "$c: $(git -C /home/ronald/$c log --oneline -1 \| cut -c1-90)"; done; date +%H:%M` |
-| 03:56:26 | Agent | Adversarial verify COL129 (c) | `Obra: COL129-TETO-x-PORTAO-26H = (c) (repo /home/ronald/saas-hasner; CLAUDE.md secoes 0, 4, 4a, 6). Copia /home/ronald/wt-col129-2901-0330, branch raia-col129-2901; a obra e o commit 1ade7085 sobre f4ab468a (`git -C /home/ronald/wt-col129-2901-0330 show 1ade7085`; o que esta abaixo de f4ab468a e de outras obras -- nao julgue). Aval literal: "COL129-TETO-x-PORTAO-26H = (c) ... O teto do dia de 26/1 ...` |
-| 03:56:09 | Bash | Put COL129 universe/dono question atop RELATO | `date +%H:%M && python3 - <<'EOF' p='docs/RELATO.md'; s=open(p).read() q='''> **lei: COL129-C9-UNIVERSO-E-DONO** (pergunta, nao para a fila; segura SO o pouso do COL129 (c), copia wt-col129-2901-0330 @ 1ade7085, empilhada sobre ORFAS) -- construida a C9 da lista Cadastro x Realidade pela lei existente: o PAREADOR declara o par que ele mesmo separou (`ponto/turnos.py::_declara_separado_pelo_teto`, z ...` |
