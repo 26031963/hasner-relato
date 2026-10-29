@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/10/2026 22:01:38.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (4.7 MB). Acoes na janela: **209**.
+**Medido em 28/10/2026 22:07:08.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (4.8 MB). Acoes na janela: **213**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 22:03:03 | Bash | Wait for recorte and money DIFF | `cd /home/ronald/saas-hasner && for i in $(seq 1 19); do grep -q '^rc=' logs/juizpar2/recorte_1.out 2>/dev/null && grep -q '^rc=' logs/juizpar2/dinheiro_depois.out 2>/dev/null && break; /usr/bin/sleep 30; done; grep -E '^(FAIL\|ERROR):\|^Ran \|^(OK\|FAILED)( \|$)\|^rc=' logs/juizpar2/recorte_1.out \| tail -12; grep -E '^(H09\|ERROS\|rc=)\|Traceback' logs/juizpar2/dinheiro_antes.out logs/juizpar2/di ...` |
+| 22:02:56 | Bash | Update memory index line | `cd /home/ronald/.claude/projects/-home-ronald-saas-hasner/memory && sed -i 's/^- \[Modelo por papel\](modelo-so-haiku-sonnet.md) — .*/- [Modelo por papel](modelo-so-haiku-sonnet.md) — sonda\/censo em sonnet (haiku p\/ contar); construcao de cura e verificador no modelo da sessao/' MEMORY.md && /bin/grep -n "Modelo por papel" MEMORY.md` |
+| 22:02:55 | Write |  | `/home/ronald/.claude/projects/-home-ronald-saas-hasner/memory/modelo-so-haiku-sonnet.md` |
+| 22:02:46 | Bash | Register model rule and read old memory | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='CLAUDE.md'; s=open(p).read() anc="PLACAR-DA-S3-CONTA-EXERCICIO (corte Ronald 29/09 ~15:1x" assert s.count(anc)==1 rule='''AGENTE-NO-MODELO-CERTO (regra de PISTA, Ronald 28/10 ~22:0x; sem numero de lei). O modelo se escolhe no ATO de abrir o agente, pelo papel -- nenhuma mudanca de settings ou env: sonda, censo, medida de frota e leitura de log =  ...` |
 | 21:53:06 | Bash | Wait for recorte | `cd /home/ronald/saas-hasner && for i in $(seq 1 19); do grep -q '^rc=' logs/juizpar2/recorte_1.out 2>/dev/null && break; /usr/bin/sleep 30; done; head -1 logs/juizpar2/recorte_1.out; grep -E '^(FAIL\|ERROR):\|^Ran \|^(OK\|FAILED)( \|$)\|^rc=' logs/juizpar2/recorte_1.out \| tail -12; date +%H:%M` |
 | 21:53:00 | Write |  | `/home/ronald/saas-hasner/logs/juizpar2/comparar_dinheiro.py` |
 | 21:52:47 | Bash | Run money DIFF on both trees in sombra | `cd /home/ronald/saas-hasner && bin/sombra.sh --rodar juizpar2_dinheiro.py jp2_antes > logs/juizpar2/dinheiro_antes.out 2>&1; echo rc=$? >> logs/juizpar2/dinheiro_antes.out; SOMBRA_ARVORE=/home/ronald/wt-juizpar2-2810-2140/app bin/sombra.sh --rodar juizpar2_dinheiro.py jp2_depois > logs/juizpar2/dinheiro_depois.out 2>&1; echo rc=$? >> logs/juizpar2/dinheiro_depois.out` |
