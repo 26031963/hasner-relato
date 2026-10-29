@@ -1,7 +1,49 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **29/10/2026 18:40** · publicado em **29/10/2026 18:44** (UTC-3)
+> Ultima resposta processada: **29/10/2026 18:46** · publicado em **29/10/2026 18:50** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 29/10 18:46 · sessao c1bbffce8fcb · - · - · origem=Ronald (tmux)
+
+Achados na parte de arquivo:
+
+1. **A memória ainda pode regredir por concorrência.** `bin/hook_stop_fila1.py:543-556` faz leitura, `max` local e `replace` sem trava. Entrada concreta: memória `{inode:100}`; A lê mtime=200 e memória=100; B lê mtime=300 e grava 300; A grava 200 depois; o escritor morre; C observa arquivo parado em 300 e memória=200, devolvendo prova. A decisão libera em `bin/hook_stop_fila1.py:559-561`. Confirmei executando a função original com filesystem virtual em memória, sem escrever arquivos: memória após B=300, após A=200, resultado de C=`''`. Portanto a cura declarada na docstring não fecha a regressão concorrente (`bin/hook_stop_fila1.py:517-518`).
+
+2. **Temporário previsível permite escrita fora da porta.** Entrada: antes da avaliação, `logs/hook_stop_espera.json.<PID-do-hook>.tmp` é symlink ou hardlink para `app/docs/RELATO.md`. `open(...,'w')` segue o link e trunca o RELATO, gravando o JSON da memória; depois o `replace` altera ESPERA (`bin/hook_stop_fila1.py:553-556`). O mesmo vale para BACKLOG ou outro arquivo gravável pelo hook. É segundo escritor fora da porta, e pode alterar o RELATO depois da prova inicial em `bin/hook_stop_fila1.py:717-718`. Reprodução em filesystem real: [não verificado].
+
+3. **A cura de FIFO tem corrida entre verificação e abertura.** Entrada: ESPERA é regular durante `lstat`; outro processo troca esse caminho por FIFO antes do `open`. A abertura pode ficar esperando escritor indefinidamente, impedindo decisão e TETO; a função não possui limite de leitura (`bin/hook_stop_fila1.py:540-544`). A mesma troca por symlink permite ler outro arquivo, apesar da verificação anterior. Reprodução temporal: [não verificado].
+
+Ponto adicional: falhas `PermissionError`/`EIO` ao consultar arquivos proibidos são descartadas como se o arquivo não existisse (`bin/hook_stop_fila1.py:529-533`), contrariando a regra declarada de falha de leitura bloquear (`bin/hook_stop_fila1.py:432-433`). Contraexemplo completo que resulte em liberação indevida além dos anteriores: [não verificado].
+
+## 29/10 18:46 · sessao c0998dd8d4dd · - · - · origem=Ronald (tmux)
+
+Achados no selo:
+
+- **Conjunção sem cobertura suficiente:** único caso com duas provas usa PID válido e arquivo sem avanço; a memória foi apagada imediatamente antes. Faltam `PID morto + arquivo andando → bloqueia` e `PID válido + arquivo andando → libera`. Uma implementação que ignora o PID quando há arquivo, ou que sempre rejeita provas duplas, escaparia dos casos atuais. [bin/tests/test_hook_esperando_com_prova.sh:140](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/tests/test_hook_esperando_com_prova.sh:140), [bin/tests/test_hook_esperando_com_prova.sh:142](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/tests/test_hook_esperando_com_prova.sh:142).
+
+- **Pré-requisito da PROVA sem caso combinado:** falta `ESPERANDO com prova válida` no topo junto de afirmação `NO AR` sem PROVA. Mover a liberação de ESPERANDO para antes do checador escaparia tanto do selo novo quanto do antigo, cujo cenário não declara ESPERANDO. A ordem atual está correta. [bin/hook_stop_fila1.py:717](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/hook_stop_fila1.py:717), [bin/hook_stop_fila1.py:728](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/hook_stop_fila1.py:728), [bin/tests/test_relato_prova_no_stop.sh:20](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/tests/test_relato_prova_no_stop.sh:20).
+
+Regressões estáticas em PAREI, teto e fila vazia: **nada encontrado** nas alterações examinadas. [bin/hook_stop_fila1.py:632](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/hook_stop_fila1.py:632), [bin/hook_stop_fila1.py:769](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/hook_stop_fila1.py:769), [bin/hook_stop_fila1.py:736](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/hook_stop_fila1.py:736).
+
+O selo possui mordida básica: exige silêncio e ALLOW identificado nos positivos; decisão block, siga e motivo nos negativos. Está integrado pelo glob da régua. [bin/tests/test_hook_esperando_com_prova.sh:68](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/tests/test_hook_esperando_com_prova.sh:68), [bin/tests/test_hook_esperando_com_prova.sh:80](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/tests/test_hook_esperando_com_prova.sh:80), [bin/regua.sh:138](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/regua.sh:138).
+
+## 29/10 18:46 · sessao bb2be2e8efa2 · - · - · origem=Ronald (tmux)
+
+Achados confirmados por chamadas em memória, sem criar arquivos:
+
+1. **Ancestral PID 1 passa como produtor.** `_ancestrais()` retorna antes de adicionar o pai quando ele é 1. Entrada no host: `ESPERANDO: init | pid=1`, com `/proc/1/cmdline` começando por `/sbin/init`. O init é ancestral, mas passa por produtor. Neste ambiente confirmei `_prova_pid('codex-linux-sandbox', 1) == ''`. Fonte: `bin/hook_stop_fila1.py:455`, `bin/hook_stop_fila1.py:492`.
+
+2. **Valor de opção é confundido com script.** Inicie `python3 -W produtor_espera.sh -c 'import time; time.sleep(300)'` ou com `-X produtor_espera.sh`. Topo: `ESPERANDO: produtor_espera.sh | pid=<PID>`. Ambos produzem prova vazia, embora nenhum execute o script declarado: o nome é somente argumento de opção. Fonte: `bin/hook_stop_fila1.py:478`, `bin/hook_stop_fila1.py:479`, `bin/hook_stop_fila1.py:507`.
+
+3. **`argv[0]` forjado passa sem verificar executável.** Inicie `bash -c 'exec -a produtor_espera.sh /usr/bin/sleep 300'`. O topo do item anterior libera, embora `/proc/<PID>/exe` seja `/usr/bin/sleep` e não exista produtor do script. Confirmei `_prova_pid(...) == ''`. Fonte: `bin/hook_stop_fila1.py:477`, `bin/hook_stop_fila1.py:497`, `bin/hook_stop_fila1.py:507`.
+
+4. **Caminho absoluto errado aceita correspondência por sufixo.** `_argv_casa('/tmp/produtor.sh', ['bash', '/outra/tmp/produtor.sh']) == True`. Topo `ESPERANDO: /tmp/produtor.sh | pid=<PID do outro script>` libera para outro caminho. Também `../produtor.sh` aceita `/outra/produtor.sh`, pois `lstrip('./')` apaga a referência ao diretório pai. Fonte: `bin/hook_stop_fila1.py:480`, `bin/hook_stop_fila1.py:481`.
+
+5. **Interpretador versionado contorna a proibição de produtor genérico.** Inicie `/usr/bin/python3.12 -c 'import time; time.sleep(300)'`; topo `ESPERANDO: python3.12 | pid=<PID>`. Confirmei prova vazia: a lista veta `python3`, mas aceita `python3.12` como produtor. Fonte: `bin/hook_stop_fila1.py:437`, `bin/hook_stop_fila1.py:487`.
+
+6. **A mesma heurística bloqueia scripts legítimos com opções que recebem argumento.** `_argv_casa('produtor.py', ['python3', '-W', 'ignore', '/obra/produtor.py']) == False`; equivalente com `bash -O extglob /obra/produtor.sh`. O processo pode estar produzindo normalmente, mas o hook compara `ignore` ou `extglob` com o nome declarado e segue bloqueando. Também `timeout 300 /obra/produtor.sh` compara `300`. Fonte: `bin/hook_stop_fila1.py:478`, `bin/hook_stop_fila1.py:479`.
+
+O selo cobre argumento inerte **depois** do código de `python3 -c`, mas não operandos de opções, `argv[0]` forjado, PID 1, interpretador versionado ou caminho absoluto coincidente por sufixo. Seus casos atuais não mordem esses contraexemplos. Fonte: `bin/tests/test_hook_esperando_com_prova.sh:59`, `bin/tests/test_hook_esperando_com_prova.sh:104`, `bin/tests/test_hook_esperando_com_prova.sh:148`, `bin/tests/test_hook_esperando_com_prova.sh:149`.
 
 ## 29/10 18:40 · sessao d1f54ed5856a · - · - · origem=Ronald (tmux)
 
@@ -378,124 +420,4 @@ O cartório é protegido por `engolir`, que captura exceções sem criar savepoi
 
 Em `invalidar_fechamento`, leitura e updates ficaram em savepoints próprios, com captura externa; não identifiquei defeito novo seguro nessa alteração. Gravação incorreta causada apenas por ler os próprios dados ainda não commitados, além do desvio de retenção descrito: **[nao verificado]**. (`app/ponto/services/fechamento.py:1616`; `app/ponto/services/fechamento.py:1619`; `app/ponto/services/fechamento.py:1629`)
 
-## 29/10 18:19 · sessao f208ba29631a · justif · leitura · origem=Code
-
-**O chamado `entrada_bloqueada_turno_aberto` VIVO, por si só, não impede a batida.** No web, ele é reutilizado para atualizar o contexto e sinalizar revisão; o fluxo continua até o registro. Na API, a anomalia é coletada, a batida passa pelo chokepoint e depois pode alimentar uma disputa. **Isso não significa criação incondicional:** existem recusas, confirmação e retornos de batida existente. (`app/ponto/views.py:274–314`, `345–353`; `app/api/views_core.py:432–458`, `679–718`, `769–781`.)
-
-`VIVOS` inclui `aberto`, `em_analise` e `registrado`. (`app/chamados/catalogo/motor.py:24`.)
-
-**Caminho do app/PWA pela API**
-
-| Passo | Código e resultado |
-|---|---|
-| Entrada HTTP | O proxy declarado encaminha `/api/ponto/*` ao core; `/api/ponto/bater/` chega a `views_core.api_bater_ponto`. (`Caddyfile:8–9`; `app/config/urls_core.py:6`; `app/api/urls_core.py:5`, `14`.) |
-| Autenticação/colaborador | Endpoint POST autenticado; colaborador inexistente retorna **404**, antes do registro. (`app/api/views_core.py:385–391`.) |
-| Situação cadastral | Situação fora de `ativo`/`afastado` retorna **403**, incluindo os ramos `desligado` e `ferias`. (`app/api/views_core.py:402–410`.) |
-| Tipo | Tipo diferente de `E`/`S` retorna **400**. (`app/api/views_core.py:419–426`.) |
-| Turno órfão | O detector consulta entradas sem saída; havendo bloqueio e nenhuma regularização pendente, acrescenta `orfao_14h`. Esse teste consulta a geometria/justificativas, não a existência do chamado desse módulo. (`app/api/views_core.py:432–433`; `app/chamados/detector_anomalias.py:29–53`; `app/ponto/utils_turno_orfao.py:28–58`.) |
-| GPS | Latitude ou longitude ausente retorna **403 `gps_obrigatorio`**, sem chegar ao chokepoint. (`app/api/views_core.py:440–458`.) |
-| Foto/assinatura | Foto ausente e assinatura inválida acrescentam anomalias; esses blocos continuam o processamento. (`app/api/views_core.py:459–500`.) |
-| Instante | `hora_do_aparelho` fornece `ts_efetivo` e o timestamp recebido do aparelho. (`app/api/views_core.py:528–531`.) |
-| Deduplicação | Mesmo tipo em **±5 minutos** retorna **`ja_registrada`**, com ID existente e `sucesso=True`; não cria outra batida. (`app/api/views_core.py:549–568`.) |
-| Escolha E/S | Ao vivo, `proximo_tipo_de` pode corrigir o tipo enviado; no retroativo, os marcos podem corrigi-lo. (`app/api/views_core.py:592–623`.) |
-| Entrada/saída anômala | Saída sem entrada ou nova entrada sobre turno aberto acrescentam motivo/contexto; esses blocos não retornam recusa. (`app/api/views_core.py:632–672`.) |
-| Escrita | Chama `registrar_batida(..., origem='app', autoridade_humana=False, canal=...)`. (`app/api/views_core.py:679–694`.) |
-| Chokepoint recusou | `batida is None` retorna **`ignorada_intervalo`**, com `sucesso=True` e referência à oposta existente; não cria nova batida. (`app/api/views_core.py:695–718`.) |
-| Depois do registro | Havendo anomalias, abre/atualiza disputa e marca `em_disputa=True`; a resposta normal contém `status='ok'` e ID da batida. Portanto, **disputa não substitui a criação já realizada**. (`app/api/views_core.py:769–781`, `823–834`.) |
-
-A outra casca também expõe `/api/ponto/bater/`, por `api.views.api_bater_ponto`, com os mesmos ramos relevantes: situação/tipo, GPS, deduplicação, chokepoint e disputa. (`app/config/urls.py:37`; `app/api/urls.py:67`; `app/api/views.py:398–466`, `557–576`, `683–721`, `769–781`.)
-
-**Caminho do formulário web/PWA**
-
-1. `/ponto/bater/` e `/ponto/bater-v2/` chegam a `bater_ponto`; onboarding incompleto redireciona antes do processamento. A triagem reconstrói entradas sem saída e calcula `tem_bloqueio_turno` por **14 ≤ horas < 96**. (`app/ponto/urls.py:11–12`; `app/ponto/views.py:240–259`; `app/ponto/services/triagem_batida.py:17–30`, `175–206`.)
-
-2. Regularização pendente significa justificativa `pendente`, vinculada à entrada, com `saida_informada`; **não significa simplesmente chamado aberto**. (`app/ponto/services/triagem_batida.py:208–223`.)
-
-3. No POST `E`, com bloqueio e sem regularização pendente, procura o chamado desse módulo em `VIVOS`. Encontrando, renova seu contexto; não encontrando, cria. Depois define `_sinal_acesso` e continua. **Não há `return` de recusa nesse ramo.** (`app/ponto/views.py:274–314`.)
-
-4. Existe um desvio sem gravar: o `elif` de entrada com `turno_aberto` e sem `confirmar` salva GPS/foto na sessão e **retorna a tela de confirmação**. A confirmação reenvia `E` com `confirmar=sim`. (`app/ponto/views.py:315–329`; `app/templates/ponto/triagem/turno_confirmar.html:8–17`.)
-
-5. Para `E`/`S`, chama `ramo_registrar_es`. Mesmo tipo nos cinco minutos anteriores retorna `ja_registrada`, sem criação. Fora disso, o sinal de acesso torna a batida **`aprovada=False`**, com justificativa de revisão, e chama `registrar_batida`. (`app/ponto/views.py:345–353`; `app/ponto/services/triagem_batida.py:669–720`.)
-
-6. Se o chokepoint devolver `None`, retorna `ignorada_intervalo`; se devolver batida, prepara o contexto de sucesso. (`app/ponto/services/triagem_batida.py:721–753`.)
-
-A UI v2 envia pelo endpoint da API e tem barreiras próprias: sem selfie ou GPS, aborta o envio. Também mostra sucesso para qualquer HTTP OK, sem interpretar o corpo — incluindo respostas `ja_registrada`/`ignorada_intervalo`. (`app/templates/ponto/bater_ponto_v2.html:285–300`, `325–340`.)
-
-No PWA offline, guardar na IndexedDB é registro **local**; a criação no servidor depende da sincronização posterior pelo mesmo `/api/ponto/bater/`. (`app/static/pwa.js:107–157`.)
-
-**O que decide definitivamente em `ponto/registro_batida.py`**
-
-| Condição | Resultado |
-|---|---|
-| Mesmo tipo não retratado em ±60 segundos | Retorna a existente; **não cria**. (`app/ponto/registro_batida.py:106–115`.) |
-| Mesma chave colaborador/timestamp | Retorna a existente; **não cria**. (`app/ponto/registro_batida.py:120–122`.) |
-| `fato_de_chao=False` e competência fechada | Retorna `None, erro`; **não cria**. App/web passam `autoridade_humana=False` e omitem `fato_de_chao`, portanto este deriva para `True` nesses caminhos. (`app/ponto/registro_batida.py:130–137`; `app/api/views_core.py:680–694`; `app/ponto/services/triagem_batida.py:708–720`.) |
-| Batida oposta na janela, sem casar marco do próprio tipo, e sem autoridade humana | Retorna `None, conflito`; **não cria**. A janela é 300 segundos com escala/marcos, senão 60 segundos. (`app/ponto/registro_batida.py:21–50`, `138–151`.) |
-| Passou pelas condições anteriores | Executa **`Batida.objects.create`**, chama fechamento por evento e retorna a batida. (`app/ponto/registro_batida.py:157–161`.) |
-
-**Portanto, há ramos reais que recusam ou não gravam.** O chamado vivo não é a condição dessas recusas; os pontos decisivos são os retornos dos endpoints e as guardas acima. (`app/ponto/views.py:274–329`; `app/api/views_core.py:402–458`, `549–568`, `695–718`; `app/ponto/registro_batida.py:106–161`.)
-
-Quanto ao **“relógio”**, o código denomina `origem='app'` como `DO_RELOGIO`, e tanto API quanto formulário web gravam essa origem; `device_id` distingue os canais APK/PWA. Um fluxo separado de aparelho físico até esse chokepoint é **[não verificado]**. A rota AEJ existente devolve HTTP 410. (`app/ponto/services/procedencia_batida.py:30`; `app/ponto/registro_batida.py:53–61`; `app/api/views_core.py:680–684`; `app/ponto/services/triagem_batida.py:708–712`; `app/ponto/urls.py:9`; `app/ponto/views.py:56–71`.)
-
-**Quem fecha o chamado**
-
-As portas convergem principalmente para:
-
-- **`encerrar()` → `fechado`**, sem guarda de premissa. (`app/chamados/models.py:1192–1202`.)
-- **`reconciliar()` → `resolvido`**, condicionado ao motor e ao gate da premissa. (`app/chamados/models.py:434–472`; `app/chamados/catalogo/motor.py:111`.)
-- **`transicionar()`**, decisão humana com guardas de perfil, justificativa, disputa e regularização. (`app/chamados/models.py:122–183`.)
-
-| Porta/função | Quem chama e condição de fechamento |
-|---|---|
-| **Aprovação DP — `aprovar_justificativa_dp`** | `ponto.views.aprovar_justificativa` chama o serviço. Ele seleciona **somente o chamado mais recente** desse módulo, do colaborador, em `NAO_FECHADOS`, **sem filtro de data**, e chama `encerrar()`. O fechamento é best-effort depois da aprovação. (`app/ponto/views.py:1894–1899`; `app/ponto/services/justificativa.py:121–142`.) |
-| **Evento de batida — `reconciliar_chamados_colab`** | Receiver `_reconciliador_post_save_batida` e comando `reconciliar_chamados`. Varre VIVOS; premissa morta chama `_retratar` → `reconciliar()`. Esse módulo usa `FATO_TURNO_ABERTO`; com dia, consulta o turno do chamado; sem dia, consulta globalmente. (`app/ponto/signals.py:206–218`; `app/chamados/management/commands/reconciliar_chamados.py:51–52`; `app/chamados/reconciliador.py:264–289`, `1203–1214`; `app/chamados/catalogo/premissa.py:48`.) |
-| **`processar_alertas_turno._resolver_chamado_do_turno`** | `handle`, quando o turno materializado está fechado. Busca explicitamente `turno_aberto`/`entrada_bloqueada_turno_aberto`, por dia ou fallback legado; consulta outros turnos abertos e chama `retratar()`. (`app/ponto/management/commands/processar_alertas_turno.py:88–89`, `153–184`, `203–218`.) |
-| **`reconciliar_fantasmas.handle`** | Com `--apply`, deriva datas do chamado, inclusive de `pendentes`; exige nenhuma delas aberta no núcleo e premissa morta; chama `retratar()`. O cron declarado usa **`--alarme`**, não aplicação. (`app/ponto/management/commands/reconciliar_fantasmas.py:147–158`, `178–184`, `247–279`; `app/config/crons.py:373`.) |
-| **`reconciliar_grade.handle`** | Inclui o módulo por `FURO_MODULES`; quando todas as datas passam às condições de retratação e o catálogo concorda, com aplicação chama `retratar()`. (`app/chamados/catalogo/furo_modulos.py:15–16`; `app/ponto/management/commands/reconciliar_grade.py:206–208`, `281–300`.) |
-| **`retratar_chamados_lei_cala.handle`** | Com `--modulo entrada_bloqueada_turno_aberto --apply`, seleciona VIVOS com dia passado em que `classificar_falta` não aponta falta; chama `retratar()`. (`app/chamados/management/commands/retratar_chamados_lei_cala.py:20–24`, `33–59`.) |
-| **Absolvição pela célula — `retratar_chamados_absolvidos_por_celula`** | Consumidor do outbox chama a função; o módulo está em `MODULOS_DE_TURNO`. Exige célula com veredito que não acusa e sem marcos pendentes; chama `_retratar()`. (`app/chamados/reconciliador.py:336–337`, `792–827`, `1145`; `app/config/crons.py:375`.) |
-| **Cartório — `_julgar_colab_corpo`** | Entradas `julgar_colab`/`julgar_celula`, acionadas por signals e `processar_cartorio`. Reconcilia por marcos acesos, marcos inexistentes, cobrança sem furo/dia sem trabalho ou perguntas todas duplicatas. O universo inclui esse módulo por `FURO_MODULES`. (`app/ponto/services/cartorio.py:70–94`, `709–744`, `1163`, `1175`, `1188–1196`, `1257–1266`, `1531–1560`; `app/ponto/signals.py:88–93`; `app/chamados/signals.py:166–174`; `app/ponto/management/commands/processar_cartorio.py:65`.) |
-| **Decisão do dia — `fechar_o_fio_do_dia`** | Chamado por `veredito_celula` e `declarar_dia`. Seleciona VIVOS pela data ou célula e chama `reconciliar()`. (`app/ponto/services/veredito_celula.py:148–186`, `324`; `app/ponto/services/declarar_dia.py:197–198`.) |
-| **Cobertura — `designar_cobertura` / `declarar_cobertura_passada`** | A view chama `designar_cobertura`; o serviço considera `chamado_origem_id`. A declaração passada considera VIVOS do dia. Ambos passam pelo catálogo e por `reconciliar()`, que pode recusar. (`app/ponto/views.py:3013–3020`; `app/ponto/services/cobertura.py:95`, `114–122`, `218–230`, `246`, `310–319`.) |
-| **Competência trancada** | `trancar_periodo` chama `disparar_no_ato`; execução direta ou comando `encerrar_por_competencia_trancada` chama a porta homônima do model. Seleciona VIVOS pela competência e grava fechamento com via própria. (`app/ponto/services/fechamento.py:1395–1396`; `app/chamados/services/competencia_trancada.py:88–103`, `174–177`, `269–285`; `app/chamados/management/commands/encerrar_por_competencia_trancada.py:19–29`; `app/chamados/models.py:1204–1215`.) |
-| **Desligamento — `executar_desligamento`** | View de desligamento ou comando de desligamentos agendados; encerra **todos** os chamados do colaborador em `NAO_FECHADOS`. (`app/colaboradores/views.py:1430–1434`; `app/colaboradores/management/commands/efetivar_desligamentos_agendados.py:35`, `57`; `app/colaboradores/services/desligamento.py:132–139`.) |
-| **Transição humana genérica** | Detalhe → `acao_resposta_livre`; fio → `processar_post_fio`; ambos chamam `transicionar(novo_status, user)` sem filtro desse módulo, sujeitos às guardas. Outras ações do roteador também convergem para `transicionar('resolvido')`. (`app/chamados/views.py:546–547`, `669–674`; `app/chamados/services/acoes_chamado.py:70`, `222`, `277`, `313–321`; `app/chamados/services/fio.py:703–717`; `app/chamados/models.py:122–183`.) |
-| **Materialização de pergunta — destino e clones** | Materializador, chamado por ações de disputa, fio e validação, reconcilia destino/clones por PK, sem filtro de módulo. Retém enquanto houver irmãs respondidas sem consumo. Resposta de ausência já decidida também reconcilia o destino; ausência aberta não o faz. (`app/chamados/services/materializacao.py:537–539`, `679–721`, `919`, `1004`, `1024`, `1255`; `app/chamados/services/acoes_disputa.py:139`; `app/chamados/services/fio.py:664`; `app/chamados/services/validacao.py:423`.) |
-| **Fechamento da disputa vinculada — `disputa_fechada_fecha_chamado_pai`** | Signal de `DisputaSupervisao` fechada; considera o chamado-pai por FK, sem filtro de módulo, e chama `reconciliar()`. (`app/chamados/signals.py:18–45`.) |
-
-**Fechar automaticamente não é garantido.** `_retratar` retém o chamado quando há irmãs respondidas sem consumo. `reconciliar()` pode recusar quando o dia segue furado para a folha, sem regularização, agrupamento ou outra cobrança viva que permita deduplicação. Sem dia apurável, o gate permite fechamento e registra essa ausência. O chamado emitido pelo web tem categoria `turno_aberto`, que o inclui na guarda de furo. (`app/chamados/reconciliador.py:435–457`; `app/chamados/models.py:484–525`, `915–921`, `2472`; `app/ponto/views.py:296–298`.)
-
-**Enviar a regularização não fecha esse chamado:** no formulário, cria/atualiza justificativas e eleva a urgência; no serviço de regularização, passa para análise. A lista do fechamento explícito por saída retroativa também não contém esse módulo. (`app/ponto/services/triagem_batida.py:258–293`; `app/ponto/services/regularizacao.py:126–141`; `app/ponto/services/justificativa.py:274–285`.)
-
-## 29/10 18:18 · sessao 1c944a938d1d · - · - · origem=Ronald (tmux)
-
-Achados confirmados por leitura:
-
-1. **Retenção de J2 não cobre cartório — outra / costura incompleta.** A regra só é consultada por `_retratar` e pela cascata (`app/chamados/reconciliador.py:474`; `app/ponto/services/justificativa.py:377`). O cartório chama `reconciliar()` diretamente (`app/ponto/services/cartorio.py:1163`, `:1175`, `:1196`, `:1266`), e o gate não consulta a retenção (`app/chamados/models.py:474`).
-
-   Contraexemplo: C vivo aponta J2 pendente, cobra S19 em `marcos_faltantes`, existe célula/escala do dia, e aprovação de J1 registra S19. O signal julga a célula (`app/ponto/signals.py:131`); a lâmpada acesa satisfaz `marcos_acesos` (`app/ponto/services/lastro.py:170`), e o cartório fecha C diretamente (`app/ponto/services/cartorio.py:1163`), autorizado pela premissa por marco (`app/chamados/models.py:957`). Resultado: J2 pendente com C resolvido, contrariando a retenção declarada (`app/chamados/reconciliador.py:445`). O próprio save da justificativa também entra nesse desvio (`app/ponto/signals.py:161`).
-
-2. **Deadlock entre duas aprovações — ordem de trava.** A pré-trava cobre VIVOS e a origem (`app/ponto/services/justificativa.py:100`), mas `_encerrar_bloqueio_de_entrada` seleciona NAO_FECHADOS (`app/ponto/services/justificativa.py:69`), conjunto que também contém `resolvido` (`app/chamados/catalogo/motor.py:32`).
-
-   Contraexemplo: mesmo colaborador sem chamados VIVOS; C1 e C2 `entrada_bloqueada_turno_aberto`, ambos resolvidos; J1/J2 pendentes, respectivas origens C1/C2, sem saída informada. T1 pré-trava C1 e J1; T2 pré-trava C2 e J2 (`app/ponto/services/justificativa.py:106`, `:119`). O helper da origem retorna sem fechar (`:39`). O helper do bloqueio exclui a própria origem (`:72`): T1 tenta C2, T2 tenta C1. Uma aprovação precisa abortar; a prometida serialização entre aprovações não cobre esse conjunto (`:83`).
-
-3. **Outra inversão real com regularização.** A regularização abre atomic, atualiza J existente sem saída e depois analisa chamados: J → C (`app/ponto/services/regularizacao.py:89`, `:106`, `:137`). A aprovação nova faz C → J (`app/ponto/services/justificativa.py:106`, `:119`). Com C aberto e J pendente sem saída, as duas transações podem esperar uma pela outra; `analisar()` chega ao escritor de estado (`app/chamados/models.py:566`). Trata-se de limite remanescente no sistema, já admitido genericamente na documentação da nova pré-trava (`app/ponto/services/justificativa.py:89`).
-
-Sobre testes e contexto: [nao verificado]
-
-- Os testes de J2 pela batida e pela cascata usam fixture sem célula nem escala (`app/ponto/tests/test_justificativa_encerra_origem.py:380`, `:404`, `:419`). O cartório retorna antes de julgar quando a célula não existe (`app/ponto/services/cartorio.py:1547`). Portanto, não demonstram cobertura do desvio do item 1.
-- A marca é restaurada por `finally`, inclusive em exceções (`app/chamados/reconciliador.py:430`). Com `with atomic(), no_ato_de_aprovar(...)`, ela é removida antes da saída do atomic e dos callbacks de commit (`app/ponto/services/justificativa.py:117`, `:319`; `app/ponto/views.py:1792`). Existem callbacks de perguntas e retomada (`app/chamados/signals.py:121`, `:202`); dano adicional específico desses callbacks: [nao verificado]. Nenhuma troca de thread foi identificada nesses corpos; comportamento em threads externas: [nao verificado].
-
-Sobre efeitos colaterais:
-
-- O receiver de rebaixamento não captura exceções (`app/chamados/signals.py:68`), mas o núcleo já rebaixa a urgência antes do save, tornando a execução normal do receiver um no-op (`app/chamados/models.py:210`, `:278`).
-- S143 agora tem savepoint e captura a falha (`app/chamados/signals.py:88`). `_retratar` chama o resolver novamente, sem captura; falha persistente desfaz a aprovação inteira (`app/chamados/reconciliador.py:507`, `:521`; `app/ponto/services/justificativa.py:196`).
-- O cartório é chamado dentro de `engolir`, que não cria savepoint (`app/chamados/signals.py:171`; `app/core/observ.py:85`). Entretanto, as escritas centrais examinadas têm seus atomics (`app/ponto/portas/celula.py:639`; `app/chamados/models.py:226`); não confirmei contraexemplo adicional de sucesso silencioso com rollback causado pelo cartório. A leitura dos próprios dados ainda não commitados, isoladamente, não demonstrou gravação incorreta; o desvio concreto é o fechamento sem consultar a retenção, item 1.
-
-## 29/10 18:18 · sessao bf4283445a42 · - · - · origem=Ronald (tmux)
-
-Inventário enviado: 12 portas específicas/por dia, mais transição humana, materialização de destino/clones e fechamento do pai por disputa. As três genéricas não filtram módulo; dependem do vínculo e das guardas da porta (`app/chamados/services/acoes_chamado.py:313`, `app/chamados/services/fio.py:703`, `app/chamados/services/materializacao.py:702`, `app/chamados/signals.py:28`).
-
-Exclusões confirmadas: EB não integra `CALADOS_POR_ISENCAO`, a lista da varredura LIMBO nem o universo de `lastro.fechar` (`app/chamados/catalogo/modulos.py:235`, `app/chamados/services/limbo_folgas.py:117`, `app/ponto/services/lastro.py:216`).
-
-_220 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_223 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
