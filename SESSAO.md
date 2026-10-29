@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/10/2026 04:01:08.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (9.3 MB). Acoes na janela: **424**.
+**Medido em 29/10/2026 04:06:38.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (9.3 MB). Acoes na janela: **425**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 04:01:31 | Bash | Keep waiting | `/usr/bin/sleep 295; for c in wt-orfas-2901-0215 wt-col129-2901-0330; do echo "$c: $(git -C /home/ronald/$c log --oneline -1 \| cut -c1-90)"; done; date +%H:%M` |
 | 03:56:31 | Bash | Wait for ORFAS rework and COL129 verifier | `/usr/bin/sleep 290; for c in wt-orfas-2901-0215 wt-col129-2901-0330; do echo "$c: $(git -C /home/ronald/$c log --oneline -1 \| cut -c1-90)"; done; date +%H:%M` |
 | 03:56:26 | Agent | Adversarial verify COL129 (c) | `Obra: COL129-TETO-x-PORTAO-26H = (c) (repo /home/ronald/saas-hasner; CLAUDE.md secoes 0, 4, 4a, 6). Copia /home/ronald/wt-col129-2901-0330, branch raia-col129-2901; a obra e o commit 1ade7085 sobre f4ab468a (`git -C /home/ronald/wt-col129-2901-0330 show 1ade7085`; o que esta abaixo de f4ab468a e de outras obras -- nao julgue). Aval literal: "COL129-TETO-x-PORTAO-26H = (c) ... O teto do dia de 26/1 ...` |
 | 03:56:09 | Bash | Put COL129 universe/dono question atop RELATO | `date +%H:%M && python3 - <<'EOF' p='docs/RELATO.md'; s=open(p).read() q='''> **lei: COL129-C9-UNIVERSO-E-DONO** (pergunta, nao para a fila; segura SO o pouso do COL129 (c), copia wt-col129-2901-0330 @ 1ade7085, empilhada sobre ORFAS) -- construida a C9 da lista Cadastro x Realidade pela lei existente: o PAREADOR declara o par que ele mesmo separou (`ponto/turnos.py::_declara_separado_pelo_teto`, z ...` |
