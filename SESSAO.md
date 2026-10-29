@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/10/2026 19:16:14.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (23.7 MB). Acoes na janela: **433**.
+**Medido em 29/10/2026 19:21:45.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (23.8 MB). Acoes na janela: **436**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 19:18:29 | Bash | Wait in-turn for ata sombra and compare | `cd /home/ronald/saas-hasner && end=$((SECONDS+580)); while [ $SECONDS -lt $end ]; do [ -f logs/grupo1p1/sombra_prova.fim ] && break; /usr/bin/sleep 15; done; date +%H:%M; tail -3 logs/grupo1p1/ata_p1.run \| cut -c1-200; [ -f logs/grupo1p1/sombra_prova.fim ] && python3 logs/grupo1p1/compara_p1.py logs/grupo1p1/ata_main.out logs/grupo1p1/ata_p1.out 2>&1 \| tail -20` |
+| 19:18:22 | Bash | Check ata_p1 sombra run state | `cd /home/ronald/saas-hasner/logs && tail -3 grupo1p1/ata_p1.run 2>/dev/null; ls -la --time-style=+%H:%M grupo1p1/ata_p1.out \| awk '{print $6,$5}'; date +%H:%M; ps -eo args \| grep -c 'grupo1p1_ata_impacto'` |
+| 19:18:20 | SendMessage |  | `-` |
 | 19:08:31 | Bash | Wait in-turn for grupo1 full suite | `cd /home/ronald/saas-hasner/logs && end=$((SECONDS+570)); while [ $SECONDS -lt $end ]; do grep -q '^rc=' grupo1p1/suite_inteira.log 2>/dev/null && break; /usr/bin/sleep 20; done; date +%H:%M; grep -E '^(OK\|FAILED)($\| \()\|^Ran\|^rc=\|arvore_hash' grupo1p1/suite_inteira.log \| tail -5; ls grupo1p1/ata_p1.out grupo1p1/sombra_prova.fim 2>&1 \| tail -2` |
 | 19:08:27 | Agent | Opus final read ESPERA 512e6c93 | `Obra ESPERA-SEM-TURNO, item (1) e selo; leitura FINAL. O Codex verificador fez 3 voltas e todas reprovaram; a regra 4 da CODEX-PRE-VERIFICADOR no CLAUDE.md 7b manda subir ao opus. Copia: /home/ronald/wt-espera-2910-182248, HEAD 512e6c93, base 8f51db52 (`git diff 8f51db52 512e6c93`). Sitio: `bin/hook_stop_fila1.py`; selo novo: `bin/tests/test_hook_esperando_com_prova.sh`. O aval, literal: "o Stop e ...` |
 | 19:08:14 | Bash | Read ESPERA Codex volta 3 result | `cd /home/ronald/saas-hasner/logs/espera && cat codex_r3.run; head -c 2500 codex_r3.txt` |
