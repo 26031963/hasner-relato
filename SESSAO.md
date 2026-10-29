@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/10/2026 23:28:08.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (5.9 MB). Acoes na janela: **261**.
+**Medido em 28/10/2026 23:33:38.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (5.9 MB). Acoes na janela: **262**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 23:31:44 | Bash | Fix time label and keep waiting | `sed -i 's/> \*\*O-OUTBOX -- estado 23:4x (copia/> **O-OUTBOX -- estado 23:3x (copia/' docs/RELATO.md && /bin/grep -c "O-OUTBOX -- estado 23:3x" docs/RELATO.md; cd /home/ronald/saas-hasner && for i in $(seq 1 19); do [ -s logs/juizpar2/dinheiro_diff_4.out ] && break; /usr/bin/sleep 30; done; cut -c1-300 logs/juizpar2/dinheiro_diff_4.out; echo ---; grep -c PIORA logs/juizpar2/dias_piora_4.out 2>/dev ...` |
 | 23:22:06 | Bash | Wait for money DIFF v4 | `cd /home/ronald/saas-hasner && for i in $(seq 1 19); do [ -s logs/juizpar2/dinheiro_diff_4.out ] && break; /usr/bin/sleep 30; done; cut -c1-300 logs/juizpar2/dinheiro_diff_4.out; echo ---; grep -c PIORA logs/juizpar2/dias_piora_4.out 2>/dev/null; grep -A2 PIORA logs/juizpar2/dias_piora_4.out \| cut -c1-220 \| head -20; date +%H:%M` |
 | 23:22:00 | Bash | Record outbox item 4 state | `python3 - <<'EOF' p='docs/RELATO.md'; s=open(p).read() anc="> **O-OUTBOX (+ O-OUTBOX-CENSO-DO-CHAT)" assert s.count(anc)==1 sec='''> **O-OUTBOX -- estado 23:4x (copia wt-outbox-2810-1915 @ 950f5acc), NAO pousada, parada na pergunta O-OUTBOX-[nome]-SOB-ATA-ESTAVEL.** Com o CENSO-DO-HEAD: evento so no atomic da porta da celula, `chamados/models.py` = HEAD; consumidor sem trava propria de Colabor ...` |
 | 23:21:49 | Bash | Full suite and fixed-clock money DIFF v4 | `cd /home/ronald/saas-hasner && (echo "ARVORE_HASH=$(git -C /home/ronald/wt-juizpar2-2810-2140 rev-parse HEAD) porcelain=$(git -C /home/ronald/wt-juizpar2-2810-2140 status --porcelain \| wc -l)"; bash bin/suite.sh --dir /home/ronald/wt-juizpar2-2810-2140 --espera 3600; echo rc=$?) > logs/juizpar2/suite_inteira_2.out 2>&1 & cd /home/ronald/saas-hasner && bin/sombra.sh --rodar juizpar2_dinheiro.py jp ...` |
