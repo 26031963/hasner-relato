@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/10/2026 05:21:38.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (10.6 MB). Acoes na janela: **444**.
+**Medido em 29/10/2026 05:27:03.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (10.7 MB). Acoes na janela: **448**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 05:22:27 | Bash | Wait for ORFAS full suite | `/usr/bin/sleep 590; grep -E '^(OK\|FAILED)($\| \()\|^Ran \|^rc=' /home/ronald/saas-hasner/logs/orfas/suite_inteira_3.log \| tail -3; date +%H:%M` |
+| 05:22:22 | Bash | Record ORFAS #4 and COL129 reprove | `python3 - <<'PY' p='RELATO.md'; s=open(p,encoding='utf-8').read() old='De volta ao construtor (#4).' assert s.count(old)==1 s=s.replace(old,old+' #4 7d330e9a: TETO so por relogio (`dia_encerrado_motivo`), RED pelo motivo contra 488ddf45/f4ab468a, custo medido 67,9 colabs/dia (max 86); suite inteira em curso, verificador 3a leitura em curso.') old2='Verificador 2a leitura em curso. ' assert s.count ...` |
+| 05:22:16 | Agent | Verify ORFAS third reading | `3a leitura da ORFAS, obra CONTRATO-20-LASTRO-E-ORFAS (metade ORFAS), aval ORFAS-ENTERRA-FURO-REAL=(b). O carimbo fantasma passa a nascer no EVENTO do cartorio (consumidor `consumir_eventos_celula`), e `reconciliar_perguntas_orfas` vira VIGIA. Onde: copia /home/ronald/wt-orfas-2901-0215 @ 7d330e9a (branch raia-orfas-2901), em cima de 488ddf45. Diff da rodada: `git -C /home/ronald/wt-orfas-2901-0215 ...` |
+| 05:22:03 | SendMessage |  | `-` |
 | 05:11:57 | Bash | Wait for ORFAS rework and verifier | `/usr/bin/sleep 590; git -C /home/ronald/wt-orfas-2901-0215 log --oneline -1 \| cut -c1-80; ls -t /home/ronald/saas-hasner/logs/orfas \| head -4; date +%H:%M` |
 | 05:11:53 | Bash | Update COL129 question at RELATO top | `cd /home/ronald/saas-hasner/app/docs && python3 - <<'PY' p='RELATO.md'; s=open(p,encoding='utf-8').read() old='de volta ao construtor. Pergunta: (a) o contador da lista e 36' assert s.count(old)==1 new=('de volta ao construtor. **#2 e2767845 05:1x** (suite inteira verde, Ran 12631; recorte Ran 9571): o leitor deixou de remedir o vao (sem literal 26 h, quem diz o teto e o ramo do pareador) e o nume ...` |
 | 05:11:46 | Agent | Verify COL129 C9 second reading | `Obra COL129-TETO-x-PORTAO-26H (c), aval Ronald 28/10: o par que o teto do pareador separa vira linha C9 da lista Cadastro x Realidade (`escala/services/cadastro_realidade.py`). Juizes novos 0. Linhas de decisao do pareador inalteradas. Copia: /home/ronald/wt-col129-2901-0330 @ e2767845 (branch raia-col129-2901), em cima de 1ade7085, empilhada sobre a branch da ORFAS (f4ab468a). O diff a ler e `git ...` |
