@@ -6,10 +6,17 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/10/2026 21:29:38.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (4.1 MB). Acoes na janela: **179**.
+**Medido em 28/10/2026 21:35:12.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (4.3 MB). Acoes na janela: **186**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 21:35:07 | Bash | Read detector_anomalias caller | `cd /home/ronald/wt-juizpar2-2810-2140/app && sed -n 180,215p chamados/detector_anomalias.py` |
+| 21:35:03 | Bash | Census of _match_marcos callers | `cd /home/ronald/wt-juizpar2-2810-2140/app && git grep -n "_match_marcos(" -- '*.py' \| /bin/grep -v "/tests/\\|def _match_marcos\\|^\S*:\s*#"` |
+| 21:34:26 | Bash | Read col60 O271 seal | `cd /home/ronald/wt-juizpar2-2810-2140/app && sed -n 135,200p ponto/tests/test_o271_pontualidade_no_comercial.py` |
+| 21:34:22 | Bash | Locate col60 tests | `cd /home/ronald/wt-juizpar2-2810-2140/app && git grep -n "col60" -- '*/tests/*.py' \| head -10` |
+| 21:34:19 | Bash | Find col60 seal inputs | `cd /home/ronald/wt-juizpar2-2810-2140/app && /bin/grep -n "col60\\|12, 0\\|(12,0)\\|'12:00'" ponto/tests/test_calculador_portoes_de_marco.py \| head -20` |
+| 21:33:05 | Bash | Rerun diagnostic serially | `cd /home/ronald/wt-juizpar2-2810-2140/app && sed -i "s/ D.__name__ = 'Diag' + base.__name__/ D.__name__ = D.__qualname__ = 'Diag' + base.__name__/" escala/tests/test_zz_diag_zona5.py && cd /home/ronald/saas-hasner && timeout 590 bash bin/suite.sh --dir /home/ronald/wt-juizpar2-2810-2140 --espera 500 --only "escala.tests.test_zz_diag_zona5" -- --parallel 1 > logs/juizpar2/diag_1.out 2>&1; grep -E " ...` |
+| 21:32:29 | Bash | Diagnose HEAD answers for fixtures in Zona-5 shape | `cd /home/ronald/saas-hasner && git worktree add -q --detach /home/ronald/wt-juizpar2-2810-2140 HEAD && cd /home/ronald/wt-juizpar2-2810-2140/app && cp /home/ronald/wt-juizpar-2810-1850/app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py escala/tests/ && cat > escala/tests/test_zz_diag_zona5.py <<'EOF' """DIAGNOSTICO (nao commitar): o que o _match_marcos responde HOJE na forma da Zona 5, por f ...` |
 | 21:29:16 | Bash | Read Zona 5 and its grade dependency | `sed -n 2975,3010p ponto/motor_calculo_v2.py; /bin/grep -n "_match_marcos\\|marco_ocupado_pela_batida\\|cumpriu_a_volta_do_intervalo\\|montar_grade" ponto/motor_calculo_v2.py ponto/juiz_batida.py \| head -20` |
 | 21:29:05 | Bash | Register CODEX complement 2 | `python3 - <<'EOF' p='docs/BACKLOG.md'; s=open(p).read() o="sanitizacao so pelo `bin/raspar_publico.py`. \|" n="sanitizacao so pelo `bin/raspar_publico.py`. **Complemento 2 (21:3x):** o leitor e o Claude do chat lendo o hasner-relato, sem colagem; resposta acima do teto NUNCA sai cortada em silencio (rotulo `truncado em N de M` no ponto do corte) e o teto se MEDE contra o tamanho real das respostas ...` |
 | 21:28:57 | Bash | Register three avais and CLAUDE.md rule | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='CLAUDE.md'; s=open(p).read() anc="PLACAR-DA-S3-CONTA-EXERCICIO (corte Ronald 29/09 ~15:1x" assert s.count(anc)==1 rule='''AGENTE-NAO-ESPERA (regra de PISTA, Ronald 28/10 ~21:3x; sem numero de lei). Agente (general-purpose ou verificador) nasce para CONSTRUIR ou VERIFICAR e termina quando entrega -- **nunca e usado para ESPERAR**. Polling de log,  ...` |
