@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/10/2026 06:32:38.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (11.2 MB). Acoes na janela: **465**.
+**Medido em 29/10/2026 06:38:07.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (11.2 MB). Acoes na janela: **467**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 06:33:45 | Bash | Wait for ORFAS suite 5 | `/usr/bin/sleep 590; grep -E '^(OK\|FAILED)($\| \()\|^Ran \|^rc=' /home/ronald/saas-hasner/logs/orfas/suite_inteira_5.log \| tail -3 \| tr '\n' ' '; date +%H:%M` |
+| 06:33:41 | Agent | Verify ORFAS fifth reading | `5a leitura da ORFAS, obra CONTRATO-20-LASTRO-E-ORFAS (metade ORFAS), aval ORFAS-ENTERRA-FURO-REAL=(b). O carimbo fantasma nasce no EVENTO do cartorio e `reconciliar_perguntas_orfas` vira VIGIA. Copia: /home/ronald/wt-orfas-2901-0215 @ 42d59e46, sobre 8f4eca4b. - Diff da rodada: `git -C /home/ronald/wt-orfas-2901-0215 diff 8f4eca4b 42d59e46`. - Diff da obra inteira: `git diff d375511b 42d59e46` (d3 ...` |
 | 06:23:35 | Bash | Wait for ORFAS #6 | `/usr/bin/sleep 595; git -C /home/ronald/wt-orfas-2901-0215 log --oneline -1\|cut -c1-60; date +%H:%M` |
 | 06:23:29 | Bash | Record COL129 ready | `cd /home/ronald/saas-hasner/app/docs && python3 - <<'PY' p='RELATO.md'; s=open(p,encoding='utf-8').read() old='falta so trocar 3 rotulos ("teria fechado" -> "cabia no envelope"), em curso (#4).' assert s.count(old)==1 s=s.replace(old,'#4 7b9353f2 (so os 3 rotulos): suite inteira VERDE (Ran 12631, rc 0, porcelain vazio antes e depois). PRONTA; empilhada sobre f4ab468a, entao no pouso se rebaseia so ...` |
 | 06:13:33 | Bash | Wait for COL129 suite | `/usr/bin/sleep 590; cd /home/ronald/saas-hasner/logs; grep -E '^(OK\|FAILED)($\| \()\|^Ran \|^rc=' col129/suite_inteira_c9_4.log \| tail -3 \| tr '\n' ' '; cat col129/arvore_hash_depois_4.out 2>/dev/null; git -C /home/ronald/wt-orfas-2901-0215 log --oneline -1\|cut -c1-60; date +%H:%M` |
