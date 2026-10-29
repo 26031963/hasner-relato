@@ -1,7 +1,32 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **29/10/2026 17:21** · publicado em **29/10/2026 17:24** (UTC-3)
+> Ultima resposta processada: **29/10/2026 17:25** · publicado em **29/10/2026 17:29** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 29/10 17:25 · sessao 76db267e245a · grupo1 · leitura · origem=Code
+
+1) **Na cópia, `turno_do_juiz_no_dia(...)` devolve `None`.** O turno fechado passa pela primeira guarda, mas o encerramento temporal ainda é falso. [app/escala/utils.py:571–578]
+
+O caminho, aplicando as entradas fornecidas:
+
+| Etapa | Valor / ramo tomado | Fonte |
+|---|---|---|
+| `len(turnos_do_dia) != 1 or turnos_do_dia[0].aberto` | `False`; continua. | `app/escala/utils.py:571–572` |
+| `_hii, _hfi` | `01:00, 02:00`; `not (_hii and _hfi)` é falso; continua. | `app/escala/utils.py:573–575` |
+| `turno_aberto_vivo(...)` | `abertos = []`; retorna `None`. A expiração por margem **não é consultada**. | `app/ponto/turnos.py:1987–1991` |
+| `_aberta is not None` | `False`; não retorna nem `'turno_aberto_relogio'` nem `'turno_aberto'`. | `app/ponto/turnos.py:2097–2101` |
+| `marcos_turno(..., ec=ec)` | Lê o DNA e encadeia: `09-28 19:00 → 09-29 01:00 → 09-29 02:00 → 09-29 07:00`. | `app/escala/servico_jornada.py:68–85` |
+| `fim_turno(...)` | Retorna o último marco: **2026-09-29 07:00 −03:00**. | `app/escala/servico_jornada.py:89–92` |
+| `fim is None` | `False`; não retorna `'sem_previsto'`. | `app/ponto/turnos.py:2102–2104` |
+| `agora >= fim` | `00:02:34 >= 07:00` é `False`; `_dia_encerrado_motivo_puro` retorna **`'relogio'`**. | `app/ponto/turnos.py:2105`; valor da constante em `app/ponto/turnos.py:2066` |
+| `_dia_encerrado_puro(...)` | `'relogio' is None` → **`False`**. | `app/ponto/turnos.py:2083–2085` |
+| `not _dia_encerrado_puro(...)` | `True`; retorna **`None`**, sem alcançar `return turnos_do_dia[0]`. | `app/escala/utils.py:576–578` |
+
+2) **Na cópia, `_match_marcos` recebe `turno=None` e `derivar=False`; portanto usa o alinhamento DP.** A closure repassa a decisão acima; sem turno, `_papeis=None`, e `derivar=False` também impede derivar papéis por alternância. O caminho chega a `_alinhar(M, B)`. [app/escala/utils.py:1565; app/escala/utils.py:1670–1672; app/escala/utils.py:592–595; app/escala/utils.py:621–629]
+
+3) **No `main`, a closure devolve o próprio turno `[18:05:15, 23:01:04]`.** Ela verifica somente quantidade e `aberto`: a condição é falsa e executa `return _ts[0]`; não consulta `agora`, `fim_turno` ou `dia_encerrado`. Como há `hii` e `hfi`, esse objeto é passado em `turno=`, habilitando a leitura do papel do juiz. [main:app/escala/utils.py:1528–1536; main:app/escala/utils.py:1641–1643; main:app/escala/utils.py:562]
+
+4) **Para esse instante, a cópia respeita o teto temporal; o `main` libera o papel prematuramente.** Às `00:02:34`, o fim previsto das `07:00` ainda não passou; a cópia bloqueia por `'relogio'`, enquanto o `main` aceita o fechamento do par isolado como suficiente. A seção 6 exige proteção por instante ou fato encerrado, e a documentação do juiz explicita que ausência de turno aberto, sozinha, pode antecipar o encerramento da jornada. [CLAUDE.md:330–334; app/ponto/turnos.py:2033–2037; app/ponto/turnos.py:2105; main:app/escala/utils.py:1533–1536]
 
 ## 29/10 17:21 · sessao f3ab77b5af6d · grupo1 · verificador · origem=Code
 
@@ -615,64 +640,4 @@ T22 item 3 — fonte `2cc71cc8ac027b864963daf221d770a4a2a2f191`. Caso: pergunta 
 - `/disputa/perguntas/` e `/chamados/v2/` **não têm o mesmo universo**: o primeiro seleciona por pergunta viva; o segundo exige que um card de chamado passe pelo recorte e indexa perguntas somente de disputas abertas (`pergunta_no_app.py:42-44`; `api/views.py:1016,1028-1048,1122,1177`).
 - Como o APK renderiza campos `chamado_id=NULL` por pergunta e pai terminal no topo: **não li / [não verificado]**. O código servidor prova a resposta servida, não o comportamento final do cliente (`api/views.py:2626,2642-2644`).
 
-## 29/10 16:57 · sessao 41a4d35fbf65 · - · - · origem=Ronald (tmux)
-
-T22 itens 2/4 — fonte `2cc71cc8ac027b864963daf221d770a4a2a2f191/app`, somente leitura.
-
-**Nascimento em disputa existente**
-
-| emissor / linha | como preenche destino; pai terminal |
-|---|---|
-| `chamados/services/disputa_emissao.py:280,389-396` `gerar_perguntas_disputa` | Destino derivado por `_derivar_chamado_destino` (`:379-383`), ou None. Derivador procura **outro chamado VIVO do colaborador**, motivo atendido, dia compatível (`:181-218`); não usa automaticamente `disputa.chamado`. Assim disputa existente com pai terminal pode receber pergunta nova destinada a chamado vivo ou sem destino; não há guarda do pai no nascimento lido. |
-| `chamados/services/disputa_emissao.py:756-779` `_criar_pergunta_se_couber` | Recebe destino argumento; só barra ausência e pergunta já existente (`:763-766`); não verifica status do pai da disputa nem do destino nessa função. |
-| `chamados/services/disputa_emissao.py:783-815` `_complementar_marcos_faltantes` | Para cada marco faltante do mesmo dia, delega à anterior com destino recebido (`:806-813`). |
-| `chamados/services/disputa_emissao.py:847-1051` agrupador de órfãos | Pode complementar disputa de pergunta existente (`:864-881`), ou reutilizar disputa aberta; destino é chamado do grupo/canônico/sem_origem (`:956,:978,:1012-1018,:1043-1049`). Não presume pai=destino. Status terminal do pai reutilizado não é conferido nos ramos lidos. |
-| `chamados/services/disputa_emissao.py:1093,1121-1124,1154-1167` `criar_disputa_ancora_de_chamado` | Reutiliza disputa aberta e cria pergunta com destino=`chamado_limbo`. Barra **limbo** em ENCERRADOS (`:1107-1110`), mas não verifica pai da disputa existente. |
-| `chamados/services/declaracao_texto.py:257,307-323` `declarar_hora_colab` | Reutiliza disputa via `disputa_para_declaracao`; nova pergunta recebe destino=`ch`, dia casado. Pergunta reutilizada sem destino reaponta em `:311-317`. Pai da disputa existente pode permanecer terminal: carregador só filtra `fechada_em is null` (`disputa_emissao.py:467-469`). |
-| `chamados/services/declaracao_texto.py:589,605-612` `aplicar_declaracao` | Mesmo carregador; nova pergunta recebe `ch`, dia da proposta. Sem guarda de status do pai no trecho de criação. |
-| `chamados/services/acoes_disputa.py:252-266` reabertura administrativa | Reabre disputa fechada do próprio chamado e cria pergunta **sem destino e sem data explícita** (`:259-264`); depois tenta reabrir chamado se ENCERRADOS (`:265-266`). Se reabrir retorna False, retorno é ignorado nesse trecho. |
-
-O carregador comum reutiliza disputa por colaborador+`fechada_em is null`, sem filtrar `disputa.chamado.status_local`, em `chamados/services/disputa_emissao.py:466-502`; só ramo sem disputa abre/obtém pai (`:504`).
-
-A porta `PerguntaDisputa.abrir` não exige disputa nova, pai vivo, destino vivo ou pergunta viva (`chamados/models.py:2028-2086`). Com data, deduplica fato `(colab,motivo,data)` e pode devolver existente em outra disputa (`:2061-2084`); sem data, trata conversa, coloca hoje e nasce sempre (`:2052-2057`). Confere compatibilidade dia/turno do destino explícito (`:2043-2051`), não vitalidade.
-
-Chamadores da geração vistos na busca:
-
-- `perguntar_entradas_pendentes` → `gerar_perguntas_disputa`, `disputa_emissao.py:240,274`.
-- `criar_ou_atualizar_disputa` → geração em dois ramos, `disputa_emissao.py:570,606,618`.
-- fábrica `perguntar` → criar/atualizar e gerar, `fabrica_da_celula.py:98,108-110`.
-- comando de smoke também gera, `management/commands/smoke_chamados.py:102`; corpo não li.
-- Complementador → helper, `disputa_emissao.py:813`; agrupador chama helper/complementador em `:881,:956,:978,:1012,:1017,:1043,:1048`.
-
-**Portas de reapontamento e TODOS os callers encontrados pela busca textual**
-
-1. `chamados/models.py:2028,2064-2083` `PerguntaDisputa.abrir` também reaponta pergunta existente quando destino explícito muda; atualiza célula e relavra. **Não exige destino vivo nem pergunta viva.**
-2. `chamados/services/fio.py:740,785-801` `reapontar_resolvedora`:
-   - se data atual ausente, recebe data antes do juiz;
-   - `resolvedora_valida` confere turno;
-   - grava FK destino e relavra no mesmo save;
-   - **não exige pergunta viva nem chamado vivo**.
-3. `chamados/services/fio.py:854,882-900` `migrar_resolvedoras_vivas` filtra origem por `pergunta_viva`; deduplica conflito por motivo+data, escolhe canônica; chama reapontador. Só caller encontrado: `chamados/models.py:1068-1072`, recusa de reabertura porque irmão vivo cobre turno.
-
-Callers diretos do reapontador:
-
-| arquivo:linha | situação |
-|---|---|
-| `chamados/services/fio.py:896` | Migração acima; novo vem do caller. |
-| `chamados/services/declaracao_texto.py:311-317` | Pergunta reutilizada sem destino recebe chamado da declaração. Não há filtro `pergunta_viva` nesse trecho. |
-| `chamados/reconciliador.py:750` | `reemitir_chamado_do_dia`; depois de abrir/deduplicar, **exige chamado resultante em VIVOS** em `:733-737`. |
-| `chamados/reconciliador.py:1364` | Ramo histórico de `reatar_pergunta_orfa`: explicitamente destino ENCERRADO (`:1316-1319`); depois chama resolvedor das perguntas por chamado resolvido (`:1368-1370`). Não é reapontamento a vivo. |
-| `chamados/reconciliador.py:1376` | Ramo candidato vivo derivado de `_derivar_chamado_destino`, `:1300-1301`. |
-
-Callers dos caminhos de reatamento:
-
-- `reemitir_chamado_do_dia` só chamado em `reconciliador.py:1344`.
-- `reatar_pergunta_orfa` chamado no laço `reconciliador.py:1271` e no nascimento `disputa_emissao.py:409`.
-- `reconciliar_perguntas_orfas_colab` chamado por `reconciliar_chamados_colab`, `reconciliador.py:1196`.
-- Universo do laço: destino NULL, disputa aberta, materializada_em NULL e motivo elegível, `reconciliador.py:1248-1254`. **Não alcança pergunta já apontada para pai/destino terminal.**
-
-Compatibilidade não é estritamente “mesmo dia civil”: `chamados/juizes.py:1721-1736` aceita dia igual ou diferença de um dia se turno cruza meia-noite; ausência de informação também pode permitir (`:1703-1716,1732-1735`). Nenhuma dessas portas, isoladamente, garante conjuntamente **pergunta viva + destino vivo + mesmo dia civil**.
-
-Busca feita no app Python inteiro, excluindo testes/migrations, por `PerguntaDisputa.abrir`, `objects.create/get_or_create/update_or_create/bulk_create`, atribuições `chamado_destino`, `reapontar_resolvedora`, `migrar_resolvedoras_vivas`. Criação via aliases dinâmicos/managers não textuais `[nao verificado]`; testes/migrations/templates não li. [nao verificado]
-
-_169 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_170 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
