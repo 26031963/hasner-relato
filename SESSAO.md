@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/10/2026 17:45:39.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (20.5 MB). Acoes na janela: **393**.
+**Medido em 29/10/2026 17:50:57.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (20.5 MB). Acoes na janela: **394**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 17:49:50 | Bash | Wait for next constructor commit | `cd /home/ronald/saas-hasner && a=$(git -C /home/ronald/wt-justif-2910-1645 rev-parse --short HEAD); b=$(git -C /home/ronald/wt-grupo1p1-2910-1745 rev-parse --short HEAD); until [ "$(git -C /home/ronald/wt-justif-2910-1645 rev-parse --short HEAD)" != "$a" ] \|\| [ "$(git -C /home/ronald/wt-grupo1p1-2910-1745 rev-parse --short HEAD)" != "$b" ]; do /usr/bin/sleep 20; done; for w in wt-justif-2910-164 ...` |
 | 17:43:59 | Bash | Wait for docs push result | `cd /home/ronald/saas-hasner && until grep -q '^rc=' logs/codex/push6.out; do /usr/bin/sleep 20; done; tail -3 logs/codex/push6.out \| cut -c1-140` |
 | 17:42:13 | Bash | Wait for justif commit or push | `cd /home/ronald/saas-hasner && a=$(git -C /home/ronald/wt-justif-2910-1645 rev-parse --short HEAD); until [ "$(git -C /home/ronald/wt-justif-2910-1645 rev-parse --short HEAD)" != "$a" ] \|\| grep -q '^rc=' logs/codex/push6.out; do /usr/bin/sleep 20; done; git -C /home/ronald/wt-justif-2910-1645 log --oneline -1 \| cut -c1-90; tail -1 logs/codex/push6.out \| cut -c1-90` |
 | 17:42:01 | Bash | Background wait for docs push | `cd /home/ronald/saas-hasner && until grep -q '^rc=' logs/codex/push6.out; do /usr/bin/sleep 20; done; tail -3 logs/codex/push6.out \| cut -c1-140` |
