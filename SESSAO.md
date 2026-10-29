@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/10/2026 23:00:52.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (5.5 MB). Acoes na janela: **244**.
+**Medido em 28/10/2026 23:06:07.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (5.5 MB). Acoes na janela: **246**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 23:05:55 | Bash | Read clean recorte result | `cd /home/ronald/saas-hasner && grep -E '^ARVORE\|^(FAIL\|ERROR):\|^Ran \|^(OK\|FAILED)( \|$)\|^rc=' logs/juizpar2/recorte_3.out \| tail -8` |
+| 23:01:10 | Bash | Keep waiting for money DIFF v3 | `cd /home/ronald/saas-hasner && for i in $(seq 1 19); do [ -s logs/juizpar2/dinheiro_diff_3.out ] && break; /usr/bin/sleep 30; done; cut -c1-300 logs/juizpar2/dinheiro_diff_3.out; tail -2 logs/juizpar2/dinheiro_depois_3.out \| cut -c1-200; date +%H:%M` |
 | 22:51:35 | Bash | Wait for money DIFF v3 | `cd /home/ronald/saas-hasner && for i in $(seq 1 19); do [ -s logs/juizpar2/dinheiro_diff_3.out ] && break; /usr/bin/sleep 30; done; cut -c1-300 logs/juizpar2/dinheiro_diff_3.out; date +%H:%M` |
 | 22:51:30 | Bash | Write JUIZ-DO-PAR source-cure state to RELATO | `date '+%H:%M' && python3 - <<'EOF' p='docs/RELATO.md'; s=open(p).read() anc="> **LASTRO-DEGRAU-2 (copia wt-lastro2-2810-2115) -- REPROVADA 21:2x:**" assert s.count(anc)==1 sec='''> **JUIZ-DO-PAR-CURA-NA-FONTE (P7.1, aval (a) 21:3x) -- em construcao na copia wt-juizpar2-2810-2140 (adfb0fb5), NAO pousada.** > LEI-AKITA: origem=escala/utils.py::_match_marcos (+ `_alinhar_por_papel`, `_papeis_do_turno ...` |
 | 22:51:11 | Bash | Clean recorte and money DIFF v3 | `cd /home/ronald/saas-hasner && (echo "ARVORE_HASH=$(git -C /home/ronald/wt-juizpar2-2810-2140 rev-parse HEAD) porcelain=$(git -C /home/ronald/wt-juizpar2-2810-2140 status --porcelain \| wc -l)"; bash bin/suite.sh --dir /home/ronald/wt-juizpar2-2810-2140 --espera 3600 --only "escala ponto chamados core"; echo rc=$?) > logs/juizpar2/recorte_3.out 2>&1 & cd /home/ronald/saas-hasner && SOMBRA_ARVORE=/ ...` |
