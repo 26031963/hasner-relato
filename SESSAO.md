@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/10/2026 07:20:51.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (11.9 MB). Acoes na janela: **453**.
+**Medido em 29/10/2026 07:25:52.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (11.9 MB). Acoes na janela: **456**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 07:23:06 | Bash | Recalculate fechamento 10 and 11 in prod | `cd /home/ronald/saas-hasner && for m in 10 11; do echo "== mes $m $(date +%H:%M:%S)"; docker exec saas_core python manage.py tenant_command recalcular_fechamento --schema=juliani --mes $m --ano 2026 --apply > logs/juizpar2/l121_fechamento_$m.out 2>&1; echo "rc=$? $(date +%H:%M:%S)"; tail -5 logs/juizpar2/l121_fechamento_$m.out \| cut -c1-300; done` |
+| 07:22:01 | Bash | Wait for cartorio emp3 and emp4 | `until [ "$(grep -c '^rc=' /tmp/claude-1001/-home-ronald-saas-hasner-app/be3a61c0-011d-458c-a5a0-e2f78476d660/tasks/brdru7j03.output)" = 3 ]; do /usr/bin/sleep 15; done; cat /tmp/claude-1001/-home-ronald-saas-hasner-app/be3a61c0-011d-458c-a5a0-e2f78476d660/tasks/brdru7j03.output \| grep -v FURO; for e in 3 4; do tail -1 /home/ronald/saas-hasner/logs/juizpar2/l121_cartorio_emp$e.out; done` |
+| 07:21:54 | Bash | Read reversao script structure | `cd /home/ronald/saas-hasner && sed -n 1,200p logs/juizpar/reversao_v2.py \| head -80` |
+| 07:21:49 | Bash | Check cartorio progress | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/be3a61c0-011d-458c-a5a0-e2f78476d660/tasks/brdru7j03.output; date +%H:%M; ls -la /home/ronald/saas-hasner/logs/juizpar2/l121_*; tail -c 400 /home/ronald/saas-hasner/logs/juizpar2/l121_cartorio_emp*.out` |
 | 07:11:44 | Bash | Wait for cartorio rejudging to finish | `cd /home/ronald/saas-hasner && until grep -q "== emp 4" /tmp/claude-1001/-home-ronald-saas-hasner-app/be3a61c0-011d-458c-a5a0-e2f78476d660/tasks/brdru7j03.output && [ "$(grep -c '^rc=' /tmp/claude-1001/-home-ronald-saas-hasner-app/be3a61c0-011d-458c-a5a0-e2f78476d660/tasks/brdru7j03.output)" = 3 ]; do /usr/bin/sleep 15; done; cat /tmp/claude-1001/-home-ronald-saas-hasner-app/be3a61c0-011d-458c-a5a ...` |
 | 07:11:32 | Bash | Rejudge cartorio per company in prod | `cd /home/ronald/saas-hasner && for e in 2 3 4; do echo "== emp $e $(date +%H:%M:%S)"; docker exec saas_core python manage.py tenant_command processar_cartorio --schema=juliani --empresa $e --apply > logs/juizpar2/l121_cartorio_emp$e.out 2>&1; echo "rc=$? $(date +%H:%M:%S)"; tail -4 logs/juizpar2/l121_cartorio_emp$e.out; done` |
 | 07:11:04 | Bash | Deploy JUIZ-DO-PAR to production | `cd /home/ronald/saas-hasner && bin/deploy.sh --sem-migrate 2>&1 \| tail -25; echo "deploy rc=${PIPESTATUS[0]}"; date +%H:%M:%S` |
@@ -462,4 +466,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 19:27:22 | Bash | Read probe summary and error types | `cd /home/ronald/saas-hasner && grep -E '^(UNIVERSO\|DIAS_\|CT\|CONV)' logs/juizpar/frota_1.out; grep -E 'Error\|Exception' logs/juizpar/frota_1.out \| sort \| uniq -c \| head` |
 | 19:26:18 | Bash | Run fleet DIFF probe on sombra | `cd /home/ronald/saas-hasner && bin/sombra.sh --conferir 2>&1 \| tail -4; SOMBRA_ARVORE=/home/ronald/wt-juizpar-2810-1850/app timeout 590 bin/sombra.sh --rodar juizpar_frota_sentar.py juizpar_frota > logs/juizpar/frota_1.out 2>&1; tail -5 logs/juizpar/frota_1.out` |
 | 19:26:12 | Write |  | `/home/ronald/saas-hasner/logs/sombra/juizpar_frota_sentar.py` |
-| 19:25:41 | Bash | Run escala/ponto/chamados test slice | `cd /home/ronald/saas-hasner && bash bin/suite.sh --dir /home/ronald/wt-juizpar-2810-1850 --only "escala ponto chamados" > logs/juizpar/recorte_1.out 2>&1; echo rc=$? >> logs/juizpar/recorte_1.out` |
