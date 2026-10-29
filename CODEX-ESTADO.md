@@ -1,7 +1,21 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **29/10/2026 18:38** · publicado em **29/10/2026 18:39** (UTC-3)
+> Ultima resposta processada: **29/10/2026 18:40** · publicado em **29/10/2026 18:44** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 29/10 18:40 · sessao d1f54ed5856a · - · - · origem=Ronald (tmux)
+
+Achados do selo, por leitura estática:
+
+1. **Conjunção testada só num sentido.** O único caso com `pid` e `arquivo` usa PID válido e arquivo sem avanço; falta PID morto com arquivo andando. Mutante `if pid is not None and arq is None:` no hook ignora o PID quando há arquivo e passa todos os casos atuais. Entrada descoberta: `ESPERANDO: produtor_espera.sh | pid=<morto> | arquivo=<sinal que andou>`; esse mutante libera sem o produtor declarado vivo. Falta também positivo com ambas válidas: bloquear toda declaração dupla passa pelo selo. Referências: `bin/tests/test_hook_esperando_com_prova.sh:142`, `bin/tests/test_hook_esperando_com_prova.sh:94`, `bin/tests/test_hook_esperando_com_prova.sh:111`, `bin/tests/test_hook_esperando_com_prova.sh:150`, `bin/hook_stop_fila1.py:595`.
+
+2. **Saída inválida passa como bloqueio.** `_espera_bloqueia` procura substrings, sem interpretar JSON. Entrada concreta de stdout: `lixo "decision": "block" siga: ITEM-VIVO`, acompanhada da trilha esperada; o caso passa embora não cumpra o schema declarado pelo hook. Referências: `bin/tests/test_hook_esperando_com_prova.sh:84`, `bin/tests/test_hook_esperando_com_prova.sh:87`, `bin/hook_stop_fila1.py:791`.
+
+3. **Código de saída não é verificado.** Mutante que mantém stdout/trilha e troca as saídas por `exit 1` continua verde: os retornos das substituições de comando são ignorados e o script usa apenas `set -u`. Efeito concreto sobre a interpretação do Stop pelo cliente: [nao verificado]. Referências: `bin/tests/test_hook_esperando_com_prova.sh:23`, `bin/tests/test_hook_esperando_com_prova.sh:65`, `bin/tests/test_hook_esperando_com_prova.sh:70`, `bin/tests/test_hook_esperando_com_prova.sh:83`.
+
+Ressalva sobre o caso `pid-ok-arq-parado`: a memória é apagada imediatamente antes, portanto ele reprova por primeira observação; ainda morde a mutação OR entre as provas. O caso `arq-parado` anterior efetivamente conserva histórico, então não considero o caso duplo inútil. Referências: `bin/tests/test_hook_esperando_com_prova.sh:140`, `bin/tests/test_hook_esperando_com_prova.sh:142`, `bin/tests/test_hook_esperando_com_prova.sh:113`, `bin/tests/test_hook_esperando_com_prova.sh:114`, `bin/hook_stop_fila1.py:559`.
+
+Log antigo nos positivos: **nada demonstrado**; os positivos posteriores são precedidos por negativos que zeram a trilha e deixam bloqueio como última decisão. Referências: `bin/tests/test_hook_esperando_com_prova.sh:82`, `bin/tests/test_hook_esperando_com_prova.sh:109`, `bin/tests/test_hook_esperando_com_prova.sh:111`, `bin/tests/test_hook_esperando_com_prova.sh:149`, `bin/tests/test_hook_esperando_com_prova.sh:150`.
 
 ## 29/10 18:38 · sessao d7b0b2d362e8 · justif · verificador · origem=Code
 
@@ -484,20 +498,4 @@ Inventário enviado: 12 portas específicas/por dia, mais transição humana, ma
 
 Exclusões confirmadas: EB não integra `CALADOS_POR_ISENCAO`, a lista da varredura LIMBO nem o universo de `lastro.fechar` (`app/chamados/catalogo/modulos.py:235`, `app/chamados/services/limbo_folgas.py:117`, `app/ponto/services/lastro.py:216`).
 
-## 29/10 18:18 · sessao d3f044fc1ef0 · - · - · origem=Ronald (tmux)
-
-Achados e censo:
-
-- **Ordem de trava — deadlock entre duas aprovações, sem chamado novo.** `travar_origem_antes` trava VIVOS + origem, por PK, mas `_encerrar_bloqueio_de_entrada` seleciona NAO_FECHADOS, que inclui `resolvido`; resolvido não-origem fica fora da trava antecipada. Contraexemplo: mesmo colaborador; C1/pk1 `resolvido`, módulo `entrada_bloqueada_turno_aberto`; C100/pk100 vivo. J1 aponta C100, J2 aponta C1. T1 aprovar J1 trava C100; T2 aprovar J2 trava C1 e espera C100; T1 tenta `_encerrar_bloqueio_de_entrada` e espera C1. Ciclo C100→C1/C1→C100. Sítios: `app/ponto/services/justificativa.py:101`, `:106`, `:117`, `:119`, `:194`, `:195`, `:69`; universo em `app/chamados/catalogo/motor.py:32`. A declaração “duas aprovações ... se serializam” em `app/ponto/services/justificativa.py:85` não cobre esse caso.
-
-- **Outra — duas transições/trilhas na materialização da origem de turno.** Entrada 07h + saída materializada 19h, C de `turno_aberto` vivo apontando a própria J: criar Batida dispara reconciliador, que retrata C para `resolvido`; cascata posterior inclui `resolvido` e o passa a `fechado`. São duas linhas `estado_chamado` para o ato. Caminho: `app/ponto/services/justificativa.py:338`; `app/ponto/registro_batida.py:157`; `app/ponto/signals.py:206`; `:215`; `app/chamados/reconciliador.py:286`, `:1255`, `:1266`, `:508`; `app/chamados/models.py:444`; depois `app/ponto/services/justificativa.py:371`, `:379`; `app/chamados/catalogo/motor.py:32`, `:114`; `app/chamados/models.py:1201`, `:227`. A cascata já existia, mas é sítio tocado e continua contrariando o contrato de uma trilha. O teste novo de materialização escolhe `justificativa_colab` e não mede trilhas: `app/ponto/tests/test_justificativa_encerra_origem.py:203`, `:213`, `:229`.
-
-- **Escritor de aprovada não alcançado: Django admin, preexistente — FORA-DO-ESCOPO.** `JustificativaAdmin` herda diretamente `ModelAdmin`, sem restrição de edição ou delegação; `status` é campo editável. Admin está exposto nas URLs. `app/ponto/admin.py:18`, `:19`, `:20`; `app/ponto/models.py:159`; `app/config/urls.py:24`. O selo novo exclui expressamente esse escritor: `app/ponto/tests/test_selo_aprovacao_encerra_origem.py:13`. As três atribuições explícitas são alcançadas: `app/ponto/services/justificativa.py:182`, `:194`, `:360`, `:387`; `app/ponto/views.py:1796`, `:1837`.
-
-- **status_local fora das portas:** censo AST executado em memória, sem Django/DB/escrita, percorreu 739 arquivos e retornou zero violações. Usou as funções em `app/chamados/tests/test_selo_status_so_pelas_portas.py:317`, `:322`; allowlist em `:37`. Escritores detectados: `_gravar_estado`, `abrir`, `criar` (e as três portas de DisputaSupervisao para o outro campo). Limites de resolução declarados pelo selo em `app/chamados/tests/test_selo_status_so_pelas_portas.py:17`. Nenhuma escrita direta nova do diff fora da porta: origem e bloqueio delegam `retratar`, cascata usa `encerrar`: `app/ponto/services/justificativa.py:42`, `:75`, `:379`.
-
-- **Segundo fechador em aprovar DP:** o fecho antigo externo foi substituído pela chamada interna `_encerrar_bloqueio_de_entrada`; origem é excluída desse seletor e ambos passam pela unidade `retratar`: `app/ponto/services/justificativa.py:72`, `:75`, `:194`, `:195`. Não encontrei segundo fecho forçado remanescente nessa função; o forçado permanece na cascata da materialização: `app/ponto/services/justificativa.py:379`.
-
-- **invalidar_fechamento:** as operações suscetíveis a erro estão em savepoints próprios, com captura fora deles: leitura `app/ponto/services/fechamento.py:1616`, UPDATE `:1619`, captura `:1629`. Não identifiquei defeito novo seguro nessa alteração; prova de execução transacional contra banco não realizada [nao verificado].
-
-_219 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_220 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
