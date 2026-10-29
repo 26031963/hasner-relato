@@ -5,7 +5,8 @@
 > **livre** = pode virar fatia agora, sem humano. **corte/aval/smoke/dinheiro-ate-export** = tem dono humano e espera.
 
 <!-- ESTRUTURAL-DEDICADO-28-18H (aval 28/10 08:2x): a partir de 28/10 18:00 a ORDEM da fila 1 e (1) O-OUTBOX no reconciliar_chamados (2.1); (2) CONTRATO-20-E2-REBAIXA (medida 29/10 07:05); (3) fechar_cobranca_com_lastro e reconciliar_perguntas_orfas pela REGRA-DE-PRAZO ou evento; (4) disparar_perguntas_competencia pela C11; (5) PENDENCIA-SEM-JUIZ-3 e SILENCIO-VENCIDO-VOLTA terminam; (6) JUSTIFICATIVA-PAGA-O-PERIODO (b). Raia ao lado so sem arquivo em comum: fila 2 de UI (RECUSA-DO-ADMIN-DIZ-O-QUE-FAZER primeiro). PAZ-DO-ADMIN encerra; volta RAIA-NAO-FICA-PARADA. -->
-<!-- ORDEM-VIVA-TOPO: CONTRATO-20-LASTRO-E-ORFAS -->
+<!-- ORDEM-VIVA-TOPO: COL129-DONO-PELO-JUIZ -->
+<!-- ANDOU 29/10 09:3x, de `CONTRATO-20-LASTRO-E-ORFAS` (metade ORFAS NO AR ac721607; vigia 332 -> 0; `--apply` do reabrir em pergunta ORFAS-REABRIR-FORA-DO-CONJUNTO; metade LASTRO segue na ordem depois do COL129) para `COL129-DONO-PELO-JUIZ` (COL129 (c) @ 6e43f5cd). -->
 <!-- ANDOU 29/10 08:4x, de `O-OUTBOX` (NO AR e0bb9cf8 + consumidor no crontab 2cd634cb) para `CONTRATO-20-LASTRO-E-ORFAS` (metade ORFAS pronta @ 42d59e46; ordem RESPOSTAS-2910-MANHA). -->
 <!-- ANDOU 29/10 08:3x, de `JUIZ-DO-PAR-DUAS-ENTRADAS` (NO AR b3bf529e 07:11, prova de frota 77c6193c) para `O-OUTBOX` (ordem RESPOSTAS-2910-MANHA: JUIZ-DO-PAR -> O-OUTBOX -> ORFAS -> COL129 -> IMPRESSAO-SEM-JUSTIFICATIVA -> LASTRO + grupo (1) -> MOTOR-PASSA-O-TURNO-A-VOLTA -> disparar_perguntas). -->
 <!-- ANDOU 28/10 18:4x: a JUIZ-DO-PAR-DUAS-ENTRADAS sobe para P7.1 (LAUDOS-[nome]-2810), antes do O-OUTBOX; CONTRATO-20-LASTRO-E-ORFAS pausada. -->
