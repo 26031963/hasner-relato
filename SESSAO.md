@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/10/2026 19:00:59.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (23.6 MB). Acoes na janela: **438**.
+**Medido em 29/10/2026 19:05:59.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (23.6 MB). Acoes na janela: **436**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -446,5 +446,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 07:10:01 | Bash | Merge JUIZ-DO-PAR branch no-ff no-commit | `cd /home/ronald/saas-hasner && for i in $(seq 1 15); do [ -z "$(ls logs/crons_em_curso/)" ] && break; /usr/bin/sleep 10; done; ls logs/crons_em_curso/; date +%H:%M:%S; git branch -f raia-juizpar2 7d028f1c && git merge --no-ff --no-commit raia-juizpar2; echo "merge rc=$?"; echo "MERGE_HEAD=$(git rev-parse -q --verify MERGE_HEAD)"; git status --short \| grep -v '^??' \| head -20` |
 | 07:09:56 | Bash | Write E2 PAREI line at RELATO top | `cd /home/ronald/saas-hasner/app/docs && python3 - <<'PY' p='RELATO.md'; s=open(p,encoding='utf-8').read() i=s.index('\n> ') line=('\n> **lei: CONTRATO-20-E2-FORA-DO-ESPERADO** (PAREI so do rebaixamento, MADRUGADA-2910 item 3; a fila SEGUE) -- medida de 24 h em PROD, so leitura, pela funcao real (`logs/c20e2_24h/m3_a_fechar_24h.out`, 29/10 07:05): ' '(1) `reavaliar_ausencias_feriado` a_fechar HOJE  ...` |
 | 07:09:38 | Bash | Confirm crons idle before pouso | `cd /home/ronald/saas-hasner && cat /tmp/claude-1001/-home-ronald-saas-hasner-app/be3a61c0-011d-458c-a5a0-e2f78476d660/tasks/b3go64j4z.output; ls logs/crons_em_curso/; bin/trava_teste.sh --quem; git status --short app \| head` |
-| 07:05:28 | Bash | Check E2 measurement output | `/usr/bin/sleep 240; date +%H:%M:%S; ls /home/ronald/saas-hasner/logs/c20e2_24h/; cat /home/ronald/saas-hasner/logs/c20e2_24h/m3_a_fechar_24h.out \| head -60` |
-| 07:05:22 | Bash | Check why E2 measurement not done | `date +%H:%M:%S; ls -la /home/ronald/saas-hasner/logs/c20e2_24h/; cat /etc/cron.d/hasner-c20e2-24h; grep -i c20e2 /var/log/syslog 2>/dev/null \| tail -3` |

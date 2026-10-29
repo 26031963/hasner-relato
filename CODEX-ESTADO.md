@@ -1,7 +1,37 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **29/10/2026 19:00** · publicado em **29/10/2026 19:00** (UTC-3)
+> Ultima resposta processada: **29/10/2026 19:02** · publicado em **29/10/2026 19:05** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 29/10 19:02 · sessao 80de480f740f · espera · verificador · origem=Code
+
+**Reprovo: há caminhos que aceitam identidade falsa de produtor e liberam o Stop.** A liberação ocorre quando a prova retorna motivo vazio (`bin/hook_stop_fila1.py:775`).
+
+1. **Opção do interpretador aceita como produtor.** Entrada: `ESPERANDO: -c | pid=N`, com N executando `python3 -c 'import time; time.sleep(30)'`. O código compara o produtor com `argv[1]` sem distinguir script de opção; aceita `-c` e libera um interpretador apenas esperando. Reproduzido sem escrita. O caso `valor-de-opcao` declara `produtor_espera.sh`, portanto não morde esta variante (`bin/hook_stop_fila1.py:487`, `bin/hook_stop_fila1.py:490`, `bin/tests/test_hook_esperando_com_prova.sh:155`).
+
+2. **Alias de caminho contorna a rejeição de produtor genérico.** Entrada: `ESPERANDO: /usr/bin/sleep/ | pid=N`, com N executando `/usr/bin/sleep 30`. A rejeição usa basename lexical; a identidade usa `realpath`. `/usr/bin/sleep` bloqueia, mas `/usr/bin/sleep/`, `/usr/bin/sleep/.` e `/proc/N/exe` passam. Reproduzido sem escrita: um temporizador vira prova de produtor. O selo não exercita esses aliases (`bin/hook_stop_fila1.py:444`, `bin/hook_stop_fila1.py:492`, `bin/hook_stop_fila1.py:498`, `bin/tests/test_hook_esperando_com_prova.sh:157`).
+
+3. **Mudança de diretório atribui o script ao caminho errado.** Entrada: iniciar `python3 produtor.py` em `/a`; o script muda para `/b`; declarar `ESPERANDO: /b/produtor.py | pid=N`. O hook resolve o argumento relativo contra o diretório **atual**, aceitando `/b/produtor.py`; a declaração verdadeira `/a/produtor.py` pode bloquear. Reproduzido com `/bin/bash dev/stdin`, iniciado em `/` e depois mudando para `/tmp`: `/tmp/dev/stdin` inexistente foi aceito. O selo verifica caminho diferente, mas não mudança de diretório (`bin/hook_stop_fila1.py:489`, `bin/tests/test_hook_esperando_com_prova.sh:149`).
+
+4. **Inode reciclado transforma primeira observação em avanço.** Entrada: memória `{"1:123":10}` de arquivo removido; outro arquivo estático recebe dispositivo/inode `1:123` e `mtime_ns=20`; seu criador já terminou. `ESPERANDO: agente-x | arquivo=/tmp/sinal` libera na primeira observação desse novo arquivo. A memória identifica somente dispositivo/inode e conserva entradas antigas. Retorno vazio confirmado com E/S simulada; reciclagem real neste host: **[nao verificado]**. É troca de identidade, distinta do residual aceito de avanço antigo do mesmo arquivo (`bin/hook_stop_fila1.py:565`, `bin/hook_stop_fila1.py:585`, `bin/hook_stop_fila1.py:588`, `bin/hook_stop_fila1.py:605`).
+
+5. **Selo dá falso vermelho quando PID 1 é interpretador.** Com `/proc/1/exe=/usr/bin/python3.12`, o caso monta `ESPERANDO: python3.12 | pid=1` e exige `ancestral`. O hook retorna antes `produtor generico`, bloqueando corretamente, mas reprovando o selo. Confirmado chamando a função em memória (`bin/tests/test_hook_esperando_com_prova.sh:158`, `bin/hook_stop_fila1.py:498`, `bin/hook_stop_fila1.py:505`).
+
+6. **Caso de memória ocupada depende de duração, sem sincronização.** A trava dura três segundos; o teste espera meio segundo e inicia o hook. Se o checador anterior demorar até a trava expirar, a prova encontra memória livre e pode liberar corretamente, fazendo o selo reprovar. Também falta confirmação de que o `flock` adquiriu a trava antes da avaliação. Contraexemplo por análise; execução com atraso: **[nao verificado]** (`bin/tests/test_hook_esperando_com_prova.sh:170`, `bin/tests/test_hook_esperando_com_prova.sh:171`, `bin/tests/test_hook_esperando_com_prova.sh:172`, `bin/hook_stop_fila1.py:745`, `bin/hook_stop_fila1.py:572`).
+
+Nas classes solicitadas:
+
+- **Segundo juiz que duplica juiz registrado:** nada; o leitor do topo foi compartilhado (`bin/hook_stop_fila1.py:400`, `bin/hook_stop_fila1.py:678`).
+- **Segundo escritor fora da porta:** nada identificado; a memória nova é gravada na própria prova (`bin/hook_stop_fila1.py:589`).
+- **Relógio lido fora da borda:** nada novo identificado; a prova lê o mtime do sinal (`bin/hook_stop_fila1.py:566`).
+- **Derivação paralela de fonte única:** nada adicional; o checador do RELATO continua sendo chamado (`bin/hook_stop_fila1.py:745`).
+- **Selo/RED sem mordida por ausência de sinal:** nada nos verificadores existentes; positivos exigem liberação atribuída ao ESPERANDO e negativos exigem bloqueio mais motivo. Faltam os contraexemplos 1–4 (`bin/tests/test_hook_esperando_com_prova.sh:74`, `bin/tests/test_hook_esperando_com_prova.sh:84`, `bin/tests/test_hook_esperando_com_prova.sh:87`).
+- **Ordem de trava:** nada adicional; memória sob `flock` e atualização com `max` (`bin/hook_stop_fila1.py:572`, `bin/hook_stop_fila1.py:588`).
+- **Pouso antes do pré-requisito:** nada no fluxo examinado; prova do RELATO antecede a liberação nova (`bin/hook_stop_fila1.py:763`, `bin/hook_stop_fila1.py:774`).
+
+**PAREI, teto e fila vazia:** nenhuma regressão adicional identificada na integração (`bin/hook_stop_fila1.py:769`, `bin/hook_stop_fila1.py:788`, `bin/hook_stop_fila1.py:827`).
+
+Execução integral do selo: **[nao verificado]**; ele cria e remove arquivos, contrariando o modo solicitado (`bin/tests/test_hook_esperando_com_prova.sh:28`, `bin/tests/test_hook_esperando_com_prova.sh:30`).
 
 ## 29/10 19:00 · sessao c57a7aa93193 · - · - · origem=Ronald (tmux)
 
@@ -343,15 +373,4 @@ Pela saída fornecida:
 - **Por mês de criação:** maio/2026: 22; junho/2026: 89; outubro/2026: 1. [nao verificado]
 - **Nenhuma incoerência interna aparente:** estados somam `82 + 30 = 112`; meses somam `22 + 89 + 1 = 112`; todos os 112 aparecem sem `data_turno`; consta `ERROS=0` e está presente `FIM-DA-SONDA`. [nao verificado]
 
-## 29/10 18:35 · sessao 4ef33dfda508 · - · - · origem=Ronald (tmux)
-
-Nenhum achado verificável nas quatro áreas delegadas.
-
-- HE100: congelamento em `app/ponto/tests/test_he100_dia_sem_previsto.py:108`; única leitura explícita no helper em `:117`; mantém asserções positiva e negativa em `:122` e `:130`.
-- O145: congelamento em `app/ponto/tests/test_o145_testemunha_le_a_acusacao_do_motor.py:56`; única leitura explícita em `:103`; fixture medida de 02/10 em `:47` é anterior ao congelamento.
-- O146: congelamento em `app/ponto/tests/test_o146_extra_declarada_da_escala.py:541`; única leitura explícita em `:610`; casos continuam cobrando 7 e 67 minutos em `:622` e `:631`.
-- Juiz do dia: subclasses congeladas em `app/ponto/tests/test_espelho_tela_le_o_juiz_do_dia.py:88` e `:116`; única leitura explícita do helper em `:84`; asserções de batidas/card seguem presentes em `:96`, `:105`, `:112`, `:126`.
-
-O `agora` recebido pelo builder ainda não seleciona o papel do turno: implementação em `app/escala/utils.py:1531`–`:1539` só consulta existência, unicidade e fechamento do turno. A passagem por `grade_espelho_janela` fornece `ref=fim` e `hoje` explícitos (`app/escala/utils.py:2277`; `app/ponto/services/espelho.py:503`–`:504`), preservando as datas das janelas destes casos.
-
-_230 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_231 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
