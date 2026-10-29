@@ -1,7 +1,398 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **29/10/2026 16:41** · publicado em **29/10/2026 16:41** (UTC-3)
+> Ultima resposta processada: **29/10/2026 16:44** · publicado em **29/10/2026 16:46** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 29/10 16:44 · sessao c8da773fe4fd · o261 · censo · origem=Code
+
+**O código usa critérios diferentes para “respondida”.** `respondida` e o desempate de `estado` usam apenas o carimbo; o juiz `pergunta_viva` exige **carimbo e texto** para dar precedência à resposta; `respostas_sem_veredito` aceita **carimbo ou texto**. Portanto, resposta vazia carimbada pode aparecer como respondida e impedir fechamento. (`app/chamados/models.py:2318`, `app/chamados/models.py:2112`, `app/chamados/models.py:2115`, `app/chamados/juizes.py:1020`, `app/chamados/models.py:1428`)
+
+Nas tabelas, **NÃO** identifica explicitamente leitores cujo **teste local** não distingue `resposta_colab == ''` de resposta preenchida. Quando existe seleção anterior por vivacidade, ela está indicada separadamente; o juiz de vivacidade consulta o texto. (`app/chamados/juizes.py:1020`)
+
+**Modelo, juízes e classificadores centrais**
+
+| Leitor | O que decide | Vazia ≠ preenchida? |
+|---|---|---|
+| `PerguntaDisputa.respondida` — `app/chamados/models.py:2318` | Retorna se recebeu resposta, exclusivamente por `respondida_em is not None`. | **NÃO.** Vazia carimbada retorna verdadeiro. |
+| `PerguntaDisputa.estado` — `app/chamados/models.py:2108` | Prioriza validação/materialização; nos ramos pendente/respondida, decide exclusivamente pela presença do carimbo. (`app/chamados/models.py:2112`, `app/chamados/models.py:2115`) | **NÃO no desempate pendente/respondida.** |
+| `pergunta_viva` / `_pergunta_viva_calc` — `app/chamados/juizes.py:1005` | Carimbo **e** texto após `strip()` ativam a precedência da fala; a pergunta continua para decisão do admin, salvo as exceções de validação, tranca, decisão administrativa e concordância com a luz. (`app/chamados/juizes.py:1006`, `app/chamados/juizes.py:1010`, `app/chamados/juizes.py:1020`, `app/chamados/juizes.py:1028`, `app/chamados/juizes.py:1032`) | **SIM.** Vazia carimbada não entra no ramo da fala. (`app/chamados/juizes.py:1020`) |
+| Property `viva` — `app/chamados/models.py:2273` | Delega a `pergunta_viva`. | **SIM, por delegação.** (`app/chamados/juizes.py:1020`) |
+| `q_vivas` — `app/chamados/models.py:2246` | No pré-filtro SQL, `_resposta_viva` exige carimbo, texto diferente de `''` e não nulo; esse ramo participa da seleção de potencialmente vivas. (`app/chamados/models.py:2247`, `app/chamados/models.py:2257`) | **SIM para `''`.** Esse teste SQL não aplica `strip()`. (`app/chamados/models.py:2246`) |
+| `pendentes_do_colaborador` — `app/chamados/models.py:1381` | Seleciona disputas abertas com pergunta viva **sem carimbo**, para pendência/badge do colaborador. (`app/chamados/models.py:1383`, `app/chamados/models.py:1384`) | **NÃO no corte de pendência.** Texto preenchido sem carimbo continua candidato; vazia carimbada é excluída. (`app/chamados/models.py:1383`) |
+| `respostas_sem_veredito` — `app/chamados/models.py:1428` | Considera resposta ainda sem validação/materialização quando existe **carimbo OU texto**; normalmente exclui dia trancado. (`app/chamados/models.py:1429`, `app/chamados/models.py:1430`, `app/chamados/models.py:1431`, `app/chamados/models.py:1432`) | **NÃO quando há carimbo:** vazia e preenchida entram. **SIM quando o carimbo é nulo:** texto preenchido ainda entra. |
+| `pode_fechar` — `app/chamados/models.py:1439` | Só libera fechamento sem respostas sem veredito e sem fio vivo. | **Com carimbo, NÃO:** resposta vazia sem validação/materialização também bloqueia pela lista anterior. (`app/chamados/models.py:1430`) |
+| `DisputaSupervisao.fechar` — `app/chamados/models.py:1472` | Consulta respostas sem veredito e recusa fechamento quando existem. (`app/chamados/models.py:1473`) | Mesmo **OU**: **NÃO com carimbo; SIM pelo texto quando carimbo nulo.** (`app/chamados/models.py:1430`, `app/chamados/models.py:1431`) |
+| `perguntas_corrigiveis` — `app/chamados/juizes.py:1116` | Seleciona respostas que podem ser corrigidas/reabertas: carimbo presente e pergunta sem lastro ou viva. (`app/chamados/juizes.py:1117`, `app/chamados/juizes.py:1094`) | **NÃO no requisito “respondida”.** Há filtro adicional de lastro/vivacidade. |
+| `perguntas_respondidas_a_validar` — `app/chamados/juizes.py:1123` | Monta fila global de validação: carimbo presente, texto diferente de `''`, potencialmente viva e viva pelo juiz; ordena pelo carimbo. (`app/chamados/juizes.py:1124`, `app/chamados/juizes.py:1126`, `app/chamados/juizes.py:1127`) | **SIM.** Exclui `''` explicitamente. |
+| `irmas_respondidas_sem_consumo` — `app/chamados/juizes.py:1471` | Encontra respostas creditadas ao chamado, sem validação/materialização, para preservar o fio administrativo. (`app/chamados/juizes.py:1473`, `app/chamados/juizes.py:1474`) | **SIM.** Exige carimbo e texto após `strip()`. (`app/chamados/juizes.py:1477`) |
+| Relatório `classificar` — `app/chamados/relatorios_disputa.py:17` | Entre as vivas: alguma sem carimbo → `AGUARDA_COLAB`; todas carimbadas → `AGUARDA_SUPERVISAO`; nenhuma viva → `PRONTA_FECHAR`. (`app/chamados/relatorios_disputa.py:18`, `app/chamados/relatorios_disputa.py:20`, `app/chamados/relatorios_disputa.py:22`) | **NÃO no corte colaborador/supervisão.** A seleção anterior por vivacidade é distinta. |
+
+**Cobrança, contadores, painel e decisões de fluxo**
+
+| Leitor | O que decide | Vazia ≠ preenchida? |
+|---|---|---|
+| Preparação do fio — `app/chamados/services/fio.py:336` | Calcula `todas_respondidas` com `all(p.respondida_em)`; libera solicitar correção se todas respondidas, disputa aberta e limite disponível. (`app/chamados/services/fio.py:338`) | **NÃO.** |
+| Regularização pelo fio — `app/chamados/services/fio.py:654` | Bloqueia regularização manual se alguma pergunta **viva** não tem carimbo. (`app/chamados/services/fio.py:655`) | **NÃO nesse gate.** |
+| `acao_regularizar_disputa` — `app/chamados/services/acoes_disputa.py:130` | Gate equivalente: pergunta viva sem carimbo impede prosseguir para regularização/materialização. (`app/chamados/services/acoes_disputa.py:131`, `app/chamados/services/acoes_disputa.py:139`) | **NÃO nesse gate.** |
+| `acao_reabrir_disputa` — `app/chamados/services/acoes_disputa.py:95` | Conta pendentes por carimbo nulo; combina com corrigíveis para decidir entre já pendente, nenhuma resposta corrigível e reabrir. (`app/chamados/services/acoes_disputa.py:97`, `app/chamados/services/acoes_disputa.py:98`, `app/chamados/services/acoes_disputa.py:103`) | **NÃO na contagem nem no requisito de resposta das corrigíveis.** (`app/chamados/juizes.py:1116`) |
+| `reabrir_por_colab` — `app/chamados/models.py:1780` | Sem corrigíveis, retorna `sem_resposta_para_corrigir`; com corrigíveis, reabre e incrementa contador. (`app/chamados/models.py:1781`, `app/chamados/models.py:1784`) | **NÃO no requisito de resposta**, herdado de corrigíveis. (`app/chamados/juizes.py:1116`) |
+| Filtro `respostas_que_o_reabrir_apaga` — `app/chamados/templatetags/chamados_tags.py:188` | Conta corrigíveis para informar quantas respostas a reabertura devolverá ao colaborador. | **NÃO no requisito de resposta**, pelo mesmo juiz. (`app/chamados/juizes.py:1116`) |
+| `perguntas_pendentes_do_colab` — `app/chamados/services/aviso_pendencia.py:13` | Retorna perguntas vivas sem carimbo; alimenta aviso de que texto livre não respondeu ao questionário. (`app/chamados/services/aviso_pendencia.py:17`, `app/chamados/services/aviso_pendencia.py:21`) | **NÃO no teste de pendência.** |
+| `_pendentes` / `checar_cobranca` — `app/chamados/services/cobranca.py:47` | Reutiliza a lista anterior; decide se pode cobrar, conta perguntas/disputas e impede nova cobrança durante prazo vigente. (`app/chamados/services/cobranca.py:48`, `app/chamados/services/cobranca.py:82`, `app/chamados/services/cobranca.py:88`, `app/chamados/services/cobranca.py:89`) | **NÃO no teste de resposta**, herdado de `aviso_pendencia`. (`app/chamados/services/aviso_pendencia.py:13`) |
+| `_calados` — `app/chamados/services/cobranca.py:229` | Carimbo nulo, `q_vivas` e disputa aberta formam universo de pessoas caladas; conta vencidos e sem canal. (`app/chamados/services/cobranca.py:230`, `app/chamados/services/cobranca.py:243`, `app/chamados/services/cobranca.py:246`, `app/chamados/services/cobranca.py:248`) | **NÃO no corte “calado”.** Não exige texto vazio. |
+| `recobrar_questionario` — `app/chamados/services/disputa_emissao.py:1445` | Conta pendentes por carimbo nulo para resultado/trilha da recobrança. (`app/chamados/services/disputa_emissao.py:1450`, `app/chamados/services/disputa_emissao.py:1453`) | **NÃO.** |
+| `becos.classificar` — `app/chamados/services/becos.py:29` | Pergunta sem carimbo e destino não resolvido conta como visível ao colaborador; sem essas perguntas e com pai resolvido, classifica beco, sujeito a `pode_fechar`. (`app/chamados/services/becos.py:30`, `app/chamados/services/becos.py:33`) | **NÃO no corte de visibilidade.** O fechamento consulta outra autoridade. |
+| Censo `furo_sem_canal` — `app/chamados/services/furo_sem_canal.py:80` | Pergunta com carimbo nulo conta como canal aberto da célula; conta células acusatórias sem esse canal nem chamado vivo. (`app/chamados/services/furo_sem_canal.py:81`, `app/chamados/services/furo_sem_canal.py:85`, `app/chamados/services/furo_sem_canal.py:95`) | **NÃO.** |
+| `creditos_perguntas` — `app/chamados/services/raiox.py:136` | Divide perguntas selecionadas em respondidas e não respondidas por `p[3]`, que é `respondida_em`; credita cada conjunto ao destino vivo ou ao pai. (`app/chamados/services/raiox.py:137`, `app/chamados/services/raiox.py:138`, `app/chamados/services/raiox.py:144`, `app/chamados/services/raiox.py:149`) | **NÃO nessa divisão.** Há pré-filtro por `q_vivas` e exclusão de materializada de fato. (`app/chamados/services/raiox.py:72`, `app/chamados/services/raiox.py:133`) |
+| `particionar_verbos` — `app/chamados/services/verbos.py:31` | Usa os créditos para atribuir verbo e contar chamados; o catálogo dá precedência a resposta para `admin_validar`, depois pergunta para `colab`. (`app/chamados/services/verbos.py:44`, `app/chamados/services/verbos.py:53`, `app/chamados/catalogo/natureza.py:48`, `app/chamados/catalogo/natureza.py:50`) | **NÃO acrescenta distinção textual** à divisão dos créditos. (`app/chamados/services/raiox.py:137`) |
+| `placar_aceite` — `app/chamados/services/verbos.py:306` | Conta colaboradores que responderam depois da cobrança mais recente, hoje e em sete dias. (`app/chamados/services/verbos.py:308`, `app/chamados/services/verbos.py:315`, `app/chamados/services/verbos.py:317`, `app/chamados/services/verbos.py:319`) | **NÃO.** A consulta traz colaborador e carimbo, sem texto. (`app/chamados/services/verbos.py:309`) |
+| Histórico — `app/chamados/services/historico.py:99` | Carimbo gera evento “colaborador respondeu”; vazio troca apenas o conteúdo exibido para `sem resposta`. (`app/chamados/services/historico.py:105`, `app/chamados/services/historico.py:109`, `app/chamados/services/historico.py:113`) | **NÃO para gerar evento de resposta; SIM apenas na legenda.** |
+| `explicar_pergunta` — `app/chamados/services/explicador.py:72` | `.estado` pendente → colaborador/cobrar; respondida → admin/validar ou recusar. (`app/chamados/services/explicador.py:73`, `app/chamados/services/explicador.py:77`, `app/chamados/services/explicador.py:79`) | **NÃO no desempate**, herdado de `.estado`. (`app/chamados/models.py:2112`) |
+| `_gaveta_de` — `app/chamados/services/fila_por_causa.py:215` | Disputa aberta com resposta sem veredito vai para `respondido_a_decidir`. (`app/chamados/services/fila_por_causa.py:216`) | **NÃO com carimbo; SIM para texto sem carimbo**, pelo **OU** do modelo. (`app/chamados/models.py:1430`, `app/chamados/models.py:1431`) |
+| Competência trancada — `app/chamados/services/competencia_trancada.py:113` | Consulta respostas sem veredito ignorando tranca; conta e encaminha para decisão do DP. (`app/chamados/services/competencia_trancada.py:126`, `app/chamados/services/competencia_trancada.py:128`) | Mesmo **OU**: **vazia carimbada entra**. (`app/chamados/models.py:1430`) |
+| `fila_validar_classificada` — `app/chamados/services/validacao.py:867` | Classifica e conta a fila global de respondidas; calcula idade pelo carimbo. (`app/chamados/services/validacao.py:868`, `app/chamados/services/validacao.py:870`, `app/chamados/services/validacao.py:875`) | **SIM no fluxo padrão**, que exclui `''`; um `qs` fornecido substitui a seleção padrão. (`app/chamados/juizes.py:1124`, `app/chamados/services/validacao.py:867`) |
+
+Os consumidores seguintes propagam essas decisões, sem criar outro teste textual: [nao verificado]
+
+| Consumidor | Efeito e distinção herdada |
+|---|---|
+| Dashboard e APIs de início — `app/core/views.py:253`, `app/api/views.py:325`, `app/api/views_core.py:314` | Contam `pendentes_do_colaborador`; APIs exibem badge `Responder DP`. **NÃO distinguem texto no corte de pendência herdado.** (`app/api/views.py:327`, `app/api/views_core.py:316`, `app/chamados/models.py:1383`) |
+| Painel — `app/chamados/services/painel.py:228`; lente — `app/chamados/services/verbos.py:168`; fila — `app/chamados/services/fila.py:55` | Exibem/filtram/contam pelos verbos derivados dos créditos. **NÃO acrescentam distinção textual.** (`app/chamados/services/painel.py:229`, `app/chamados/services/verbos.py:180`, `app/chamados/services/fila.py:60`, `app/chamados/services/raiox.py:137`) |
+| Cobrança em massa — `app/chamados/views_cobrar.py:77` | Seleciona apenas verbo `cobrar`. **NÃO acrescenta distinção textual.** (`app/chamados/views_cobrar.py:78`, `app/chamados/services/raiox.py:138`) |
+| Arquivamento — `app/chamados/views_arquivar.py:115`, `app/chamados/management/commands/arquivar_prescritos.py:50` | Usa verbos para selecionar alvos e contar por categoria. **NÃO acrescenta distinção textual.** (`app/chamados/views_arquivar.py:117`, `app/chamados/management/commands/arquivar_prescritos.py:60`) |
+| Navbar — `app/core/management/commands/lavrar_badge_navbar.py:39`, `app/core/context_processors.py:90` | Deriva badge administrativo de Validar + Decidir; **NÃO acrescenta distinção textual**. (`app/core/management/commands/lavrar_badge_navbar.py:73`, `app/chamados/services/verbos.py:24`) |
+| `na_fila` — `app/chamados/services/na_fila.py:19` | Conta por colaborador/empresa os chamados com verbo de fila. **NÃO acrescenta distinção textual.** (`app/chamados/services/na_fila.py:23`) |
+| Mensageria — `app/api/views_mensageria.py:395`, `app/api/views_mensageria.py:453`, `app/api/views_mensageria.py:1142` | Consome a mesma partição por verbo. **NÃO acrescenta distinção textual** à classificação herdada. (`app/chamados/services/verbos.py:31`, `app/chamados/services/raiox.py:137`) |
+| Tela de pendências — `app/colaboradores/views.py:2997`; exportação do relatório — `app/chamados/management/commands/relatorio_pendencias_disputa.py:15` | Apresentam categorias para validar/cobrar; o command exporta JSON. **NÃO distinguem vazio no desempate herdado colaborador/supervisão.** (`app/colaboradores/views.py:2999`, `app/colaboradores/views.py:3001`, `app/chamados/management/commands/relatorio_pendencias_disputa.py:18`, `app/chamados/relatorios_disputa.py:20`) |
+
+**Views, templates e API do colaborador**
+
+| Leitor | O que decide | Vazia ≠ preenchida? |
+|---|---|---|
+| POST HTML — `app/chamados/views.py:1280` | Calcula `ja_respondida` e passa ao core; muda indicação de correção na auditoria e no fio. (`app/chamados/views.py:1283`, `app/chamados/services/disputa_emissao.py:1286`, `app/chamados/services/disputa_emissao.py:1312`) | **NÃO sobre a resposta persistida.** |
+| Recobrança HTML — `app/chamados/views.py:1416` | Busca sem carimbo, retém vivas e decide recobrar ou informar que não há pergunta viva para cobrar. (`app/chamados/views.py:1417`, `app/chamados/views.py:1421`, `app/chamados/views.py:1431`) | **NÃO no filtro de resposta.** Vivacidade é outro filtro. |
+| Validação inline — `app/chamados/views_cobrar.py:169` | Entre as vivas, carimbo presente seleciona perguntas para validar. (`app/chamados/views_cobrar.py:208`) | **NÃO no corte de respondida.** |
+| Fallback da validação inline — `app/chamados/views_cobrar.py:175` | Sem itens para validar, busca carimbo nulo e informa que aguarda o colaborador; pode apontar resposta existente no chat. (`app/chamados/views_cobrar.py:176`, `app/chamados/views_cobrar.py:180`, `app/chamados/views_cobrar.py:192`) | **NÃO no filtro.** |
+| API de chamados — `app/api/views.py:1187` | `all(p.respondida_em)` participa de `pode_solicitar_correcao`, junto do limite de reaberturas. (`app/api/views.py:1184`) | **NÃO.** |
+| API de perguntas — `app/api/views.py:2621` | Usa `.estado` para separar `respondidas` de `perguntas` e publicar `aguarda_admin`. (`app/api/views.py:2622`, `app/api/views.py:2624`) | **NÃO no desempate de estado.** A lista anterior vem de `perguntas_do_app`. (`app/chamados/models.py:2112`, `app/api/views.py:2604`) |
+| Destino da API — `app/api/views.py:2643` | Escolhe pergunta que não esteja `RESPONDIDA` para ancorar o chamado de destino. | **NÃO no desempate herdado de estado.** (`app/chamados/models.py:2112`) |
+| POST API — `app/api/views.py:2688` | Calcula `ja_respondida` e passa ao mesmo core. (`app/api/views.py:2695`) | **NÃO sobre o texto persistido.** Recusar a **nova entrada** vazia é outra guarda. (`app/api/views.py:2690`) |
+| `_pergunta_card` — `app/templates/chamados/partials/_pergunta_card.html:24` | Alterna aguardando validação/aguardando colaborador, depois de priorizar validada. (`app/templates/chamados/partials/_pergunta_card.html:23`, `app/templates/chamados/partials/_pergunta_card.html:25`) | **NÃO.** |
+| `_pergunta_card` — `app/templates/chamados/partials/_pergunta_card.html:29` | Carimbo habilita apresentação da resposta e fluxo de Validar/Rejeitar quando ainda não validada. (`app/templates/chamados/partials/_pergunta_card.html:31`, `app/templates/chamados/partials/_pergunta_card.html:43`) | **NÃO.** |
+| `modal_fio` — `app/templates/chamados/partials/modal_fio.html:182` | Mostra fluxo da pergunta cega somente quando não carimbada. | **NÃO.** |
+| `modal_fio` — `app/templates/chamados/partials/modal_fio.html:210` | Alterna resposta/validação/correção versus aguardando resposta do colaborador. (`app/templates/chamados/partials/modal_fio.html:212`, `app/templates/chamados/partials/modal_fio.html:311`) | **NÃO.** |
+| `modal_fio` — `app/templates/chamados/partials/modal_fio.html:327` | `todas_respondidas` alterna Cobrar versus Regularizar disputa e fechar. (`app/templates/chamados/partials/modal_fio.html:342`, `app/templates/chamados/partials/modal_fio.html:345`) | **NÃO**, herdado de `all(carimbo)`. (`app/chamados/services/fio.py:336`) |
+| `modal_fio`, explicação — `app/templates/chamados/partials/modal_fio.html:433` | Mostra aguardando colaborador ou ação do admin conforme estado projetado pelo explicador. (`app/templates/chamados/partials/modal_fio.html:434`) | **NÃO no desempate herdado de `.estado`.** (`app/chamados/services/explicador.py:72`, `app/chamados/models.py:2112`) |
+| Card do colaborador — `app/templates/chamados/partials/_card_atendimento.html:94` | Na pergunta viva, mostra resposta enviada e aguardando supervisão. (`app/templates/chamados/partials/_card_atendimento.html:99`, `app/templates/chamados/partials/_card_atendimento.html:101`) | **NÃO nesse recibo.** |
+| Card do colaborador — `app/templates/chamados/partials/_card_atendimento.html:155` | Alterna Enviar/Reenviar resposta. | **NÃO.** |
+| Card do colaborador — `app/templates/chamados/partials/_card_atendimento.html:384` | Pergunta de hora carimbada recebe selo Enviado com resposta/data. (`app/templates/chamados/partials/_card_atendimento.html:385`) | **NÃO.** |
+| Card do colaborador — `app/templates/chamados/partials/_card_atendimento.html:135` | Texto existente mostra “Você respondeu… escolha de novo para corrigir”; carimbo apenas acrescenta data. (`app/templates/chamados/partials/_card_atendimento.html:137`) | **SIM, só pelo texto.** |
+| Card do colaborador — `app/templates/chamados/partials/_card_atendimento.html:176` | Na pergunta não viva, texto existente mostra “Sua resposta”. (`app/t
+
+[truncado em 20000 de 40904 caracteres]
+
+## 29/10 16:43 · sessao 6b7e1b35c615 · justif · leitura · origem=Code
+
+**1. Sítios que gravam `Justificativa.status='aprovada'`**
+
+O censo encontrou **três escritores explícitos**, todos por atribuição seguida de `save()`. Não encontrei aprovação explícita por `update()`, `create()` ou `get_or_create(defaults=...)`. (`app/ponto/services/justificativa.py:85`, `app/ponto/services/justificativa.py:262`, `app/ponto/views.py:1787`)
+
+| Função / gravação | Dentro de `transaction.atomic`? | Efeito direto sobre chamados |
+|---|---|---|
+| `aprovar_justificativa_dp()` — atribuição em `app/ponto/services/justificativa.py:85`, `save()` em `:88` | **Sim**, bloco em `app/ponto/services/justificativa.py:23`, com `select_for_update()` em `:24`. | Não altera os ponteiros. Chama followup que lê `chamado_origem` e apenas anexa ocorrência. Depois procura o chamado mais recente do colaborador de módulo **`entrada_bloqueada_turno_aberto`** e chama `encerrar()`, sem filtrar pelo vínculo com a justificativa. (`app/ponto/services/justificativa.py:112`, `app/chamados/utils.py:7`, `app/chamados/utils.py:21`, `app/ponto/services/justificativa.py:121`, `app/ponto/services/justificativa.py:127`) |
+| `materializar_saida_dp()` — atribuição em `app/ponto/services/justificativa.py:262`, `save()` em `:265` | **Sim**, bloco em `app/ponto/services/justificativa.py:224`, com `select_for_update()` em `:225`. | Não altera os ponteiros. Encerra chamados do mesmo colaborador/dia, nos módulos `turno_aberto`, `turno_aberto_24h`, `batida_ausente`, `saida_sem_entrada`, em `NAO_FECHADOS`. Usa `contexto_json.data_turno`, com fallback para data de criação quando essa chave está nula; não seleciona por `chamado_origem` ou `justificativa_relacionada`. (`app/ponto/services/justificativa.py:274`, `app/ponto/services/justificativa.py:276`, `app/ponto/services/justificativa.py:285`) |
+| `aprovar_lote_justificativas()` — atribuição em `app/ponto/views.py:1787`, `save()` em `:1790` | **Não no corpo/decorador da função**; o decorador é `login_required`. As configurações de banco de produção não habilitam `ATOMIC_REQUESTS`. (`app/ponto/views.py:1762`, `app/ponto/views.py:1784`, `app/config/settings/prod.py:9`, `app/config/settings/saas.py:83`) | Não manipula diretamente chamados ou seus vínculos. Invalida o fechamento e pode registrar uma saída, produzindo os efeitos indiretos da batida. (`app/ponto/views.py:1795`, `app/ponto/views.py:1799`, `app/ponto/views.py:1806`) |
+
+Nos três casos, o `save()` também aciona `_cartorio_post_save_justificativa()`, que rejulga `data_turno` por `_julgar_dias()` → `cartorio.julgar_celula()`. Esse receiver não chama diretamente o reconciliador de chamados. (`app/ponto/signals.py:161`, `app/ponto/signals.py:165`, `app/ponto/signals.py:85`, `app/ponto/signals.py:93`)
+
+Há ainda uma **porta genérica pelo Django admin**: `JustificativaAdmin` herda de `admin.ModelAdmin`, sem restrição local de edição; `status` admite `aprovada`. A implementação herdada da gravação e sua atomicidade não estão na árvore `app/` examinada **[não verificado]**. (`app/ponto/admin.py:18`, `app/ponto/admin.py:19`, `app/ponto/models.py:132`, `app/ponto/models.py:159`)
+
+**2. Métodos do próprio `ChamadoColaborador` e seus gates**
+
+O catálogo define `ENCERRADOS = ('resolvido', 'fechado')`; `cancelado` e `superado` são terminais adicionais. (`app/chamados/catalogo/motor.py:30`, `app/chamados/catalogo/motor.py:31`)
+
+| Método | Destino a partir de `aberto`/`em_analise` | O que pergunta antes de escrever |
+|---|---|---|
+| `transicionar()` | `resolvido` ou `fechado` | Motor/perfil; justificativa pendente **somente para `fechado`**; disputa viva para ambos; para `resolvido` de furo, `premissa_regularizada()` — padrão `para='cobranca'`, com fallback legado sem dia. (`app/chamados/models.py:125`, `app/chamados/models.py:130`, `app/chamados/models.py:142`, `app/chamados/models.py:165`) |
+| `fechar()` | Por padrão `fechado`, aceita outro destino | Delega a `transicionar()`, herdando os gates acima. (`app/chamados/models.py:262`, `app/chamados/models.py:264`) |
+| `reconciliar()` | `resolvido` | Reconfere o estado no banco, consulta o motor `RECONCILIAR` e o gate da premissa. O argumento `novo_status` não determina o destino: a escrita usa o resultado do motor. (`app/chamados/models.py:434`, `app/chamados/models.py:440`, `app/chamados/models.py:444`, `app/chamados/models.py:463`, `app/chamados/catalogo/motor.py:111`) |
+| `encerrar()` | `fechado` | Somente motor `ENCERRAR`; não pergunta justificativa, disputa ou regularização. (`app/chamados/models.py:1196`, `app/chamados/models.py:1201`, `app/chamados/catalogo/motor.py:114`) |
+| `encerrar_por_competencia_trancada()` | `fechado` | Exige estado em `VIVOS` e motor `ENCERRAR`; o próprio método não consulta a tranca da competência. (`app/chamados/models.py:1208`, `app/chamados/models.py:1211`, `app/chamados/models.py:1214`) |
+
+O gate de `reconciliar()` permite encerrar se não for furo; se não houver dia identificável, com trilha; se `premissa_regularizada(para='folha')` ou agrupamento sob pai vivo responder verdadeiro; ou se existir outra cobrança viva de furo para o mesmo colaborador/dia, como deduplicação. Fora disso, recusa. (`app/chamados/models.py:484`, `app/chamados/models.py:488`, `app/chamados/models.py:495`, `app/chamados/models.py:498`, `app/chamados/models.py:525`)
+
+**Se `justificativa_relacionada.status == 'aprovada'`, `premissa_regularizada(para='folha')` retorna `True` imediatamente**, antes de consultar dia, célula ou turno; esse primeiro ramo independe de `para`. (`app/chamados/models.py:923`, `app/chamados/models.py:937`, `app/chamados/models.py:938`)
+
+Para completar os terminais: `cancelar()` consulta o motor e escreve `cancelado`; `superar()` consulta o motor e exige sucessor existente, diferente de si e não terminal, gravando vínculo e estado em `atomic`. (`app/chamados/models.py:527`, `app/chamados/models.py:532`, `app/chamados/models.py:543`, `app/chamados/models.py:547`, `app/chamados/models.py:557`)
+
+Os escritores internos são `_aplicar()` → `_gravar_estado()`. Não têm gate próprio de regularização; o núcleo exige via válida para terminal e salva estado/trilha dentro de `atomic`. (`app/chamados/models.py:257`, `app/chamados/models.py:260`, `app/chamados/models.py:204`, `app/chamados/models.py:226`, `app/chamados/models.py:231`)
+
+**3. Origem de `vivos`, `_com_fio` e do `cobrado` sem protesto**
+
+`_julgar_colab_corpo()` carrega `chs = chamados_que_falam_de_batida(c)`. Essa função consulta os chamados do colaborador cujo módulo pertence a `FURO_MODULES`, faz prefetch de `perguntas_que_resolvem` e agrupa pela data declarada pelo catálogo do módulo. (`app/ponto/services/cartorio.py:1004`, `app/ponto/services/cartorio.py:85`, `app/ponto/services/cartorio.py:94`, `app/ponto/services/cartorio.py:96`)
+
+Para cada célula:
+
+- `lista = chs.get(data.isoformat(), [])`. (`app/ponto/services/cartorio.py:1040`)
+- `vivos` filtra `lista` por `status_local in VIVOS`; aqui `VIVOS` inclui **`aberto`, `em_analise` e `registrado`**. (`app/ponto/services/cartorio.py:1069`, `app/chamados/catalogo/motor.py:24`)
+- `_com_fio` filtra `vivos` por `fio_vivo(x.perguntas_que_resolvem.all())`. `fio_vivo()` significa existir pelo menos uma pergunta para a qual `pergunta_viva()` responde verdadeiro. (`app/ponto/services/cartorio.py:1074`, `app/chamados/juizes.py:1102`, `app/chamados/juizes.py:1111`)
+
+Portanto, naquele bloco, **`cods` vazio e pelo menos um chamado vivo com fio vivo** fazem `_vd = 'cobrado'`. Apenas o status vivo do chamado não basta. (`app/ponto/services/cartorio.py:1122`, `app/ponto/services/cartorio.py:1141`, `app/ponto/services/cartorio.py:1142`)
+
+**4. Quem encerra o `turno_aberto` após a aprovação**
+
+**Não há encerramento dedicado de `j.chamado_origem` simplesmente porque a justificativa foi aprovada.** No fluxo comum, esse ponteiro serve para anexar uma ocorrência; o encerramento explícito procura `entrada_bloqueada_turno_aberto`. Existem, porém, os caminhos condicionais abaixo. (`app/chamados/utils.py:7`, `app/chamados/utils.py:21`, `app/ponto/services/justificativa.py:121`, `app/ponto/services/justificativa.py:127`)
+
+| Caminho existente | Condição e encerrador |
+|---|---|
+| **Materialização retroativa** | Aprova e chama `encerrar()` nos chamados do colaborador/dia, incluindo `turno_aberto`; independe do ponteiro `chamado_origem`. (`app/ponto/services/justificativa.py:262`, `app/ponto/services/justificativa.py:274`, `app/ponto/services/justificativa.py:285`) |
+| **Batida de saída registrada na aprovação** | O signal de Batida chama `reconciliar_chamados_colab()`. Para turno aberto, a coleta precisa concluir que o turno correspondente deixou de estar aberto; então `_retratar()` chama `reconciliar()`, podendo reter por perguntas respondidas aguardando consumo. Na aprovação individual, a batida pode ocorrer antes da gravação de `aprovada`. (`app/ponto/services/justificativa.py:69`, `app/ponto/services/justificativa.py:85`, `app/ponto/views.py:1806`, `app/ponto/signals.py:214`, `app/chamados/reconciliador.py:287`, `app/chamados/reconciliador.py:1208`, `app/chamados/reconciliador.py:435`, `app/chamados/reconciliador.py:456`) |
+| **Cartório acionado pelo save da justificativa** | Chama `reconciliar()` por marcos cobrados acesos, marcos inexistentes, protestos `COBRANCA_EM_DIA_SEM_TRABALHO`/`COBRANCA_SEM_FURO`, ou fio integralmente duplicado sem respostas. A aprovação permitir o gate não substitui esses critérios do chamador. (`app/ponto/signals.py:165`, `app/ponto/services/cartorio.py:1163`, `app/ponto/services/cartorio.py:1175`, `app/ponto/services/cartorio.py:1188`, `app/ponto/services/cartorio.py:1196`, `app/ponto/services/cartorio.py:1261`, `app/ponto/services/cartorio.py:1266`) |
+| **Consumidor de eventos da célula** | A escrita da célula emite evento; o consumidor retrata chamados de turno somente se a célula tiver veredito que não acusa e nenhum marco pendente, passando por `_retratar()` → `reconciliar()`. (`app/ponto/portas/celula.py:638`, `app/ponto/portas/celula.py:642`, `app/chamados/reconciliador.py:1145`, `app/chamados/reconciliador.py:800`, `app/chamados/reconciliador.py:823`, `app/chamados/reconciliador.py:825`, `app/chamados/reconciliador.py:456`) |
+| **Disputa vinculada encerrada** | O signal da disputa tenta `ch.reconciliar()`; o evento necessário é o fechamento da disputa. (`app/chamados/signals.py:28`, `app/chamados/signals.py:32`, `app/chamados/signals.py:42`) |
+| **Ação humana** | Pode chamar `transicionar()`; a aprovação satisfaz o coletor da guarda de resolução, mas não executa a ação humana. (`app/chamados/services/acoes_chamado.py:315`, `app/chamados/models.py:167`, `app/chamados/models.py:937`) |
+
+O reconciliador periódico também chama a coleta que exige a morte da premissa física do turno; não seleciona o chamado simplesmente pela aprovação da justificativa. (`app/chamados/management/commands/reconciliar_chamados.py:52`, `app/chamados/reconciliador.py:287`, `app/chamados/reconciliador.py:1208`)
+
+O caso automático expõe a lacuna: o cron cria `turno_aberto` com contexto contendo data, entrada e posto, **sem `marcos_faltantes`**; cria a justificativa `esqueci_saida` com `chamado_origem` e aponta o vínculo inverso quando ela nasce. Sem marcos nomeados, os testes de marcos acesos/inexistentes não o encerram. (`app/ponto/management/commands/processar_alertas_turno.py:348`, `app/ponto/management/commands/processar_alertas_turno.py:396`, `app/ponto/management/commands/processar_alertas_turno.py:399`, `app/ponto/management/commands/processar_alertas_turno.py:423`, `app/ponto/services/lastro.py:171`, `app/ponto/services/lastro.py:111`)
+
+Assim, **aprovação sem saída materializada pode deixá-lo vivo**: se não há protestos e o fio permanece vivo, o dia vira `cobrado`; esse veredito acusa e impede a absolvição pelo consumidor da célula. O `True` de `premissa_regularizada()` autoriza uma tentativa efetiva de encerramento, mas não a dispara. (`app/ponto/services/cartorio.py:1122`, `app/ponto/services/cartorio.py:1142`, `app/escala/models.py:1735`, `app/chamados/reconciliador.py:823`, `app/chamados/models.py:440`, `app/chamados/models.py:495`, `app/chamados/models.py:937`)
+
+A rotina `fechar_cobranca_com_lastro` não cobre esse módulo: sua consulta filtra exclusivamente `batida_ausente`. (`app/ponto/services/lastro.py:216`, `app/ponto/services/lastro.py:217`)
+
+## 29/10 16:43 · sessao ff3f10a49a1a · o261 · censo · origem=Code
+
+**Há vários caminhos que fecham sem consultar a pergunta dependente. A proteção não está centralizada em `reconciliar()` nem em `encerrar()`; ela existe em dois executores específicos.** A transição humana também consulta outra relação: a disputa cujo **pai** é o chamado, não todas as perguntas cujo `chamado_destino` é ele. (`app/chamados/models.py:434`, `app/chamados/models.py:453`, `app/chamados/models.py:1192`, `app/chamados/juizes.py:1817`)
+
+Os terminais considerados são **`resolvido`, `fechado`, `cancelado`, `superado`**. (`app/chamados/catalogo/motor.py:30`, `app/chamados/catalogo/motor.py:31`)
+
+Abaixo, “sítio” identifica a chamada que executa a transição; entradas que delegam para esses executores aparecem separadamente. A eficácia em execução/banco não foi verificada. [não verificado]
+
+**Como interpretar a consulta e a auditoria**
+
+- **Sim\***: chama `irmas_respondidas_sem_consumo()`. Ela consulta `chamado_destino=ch`, `respondida_em IS NOT NULL`, `validada_em IS NULL`, **mas também exige `materializada_em IS NULL` e texto não vazio**; inclui ainda perguntas creditadas ao pai quando o destino não está vivo. Portanto, não cobre integralmente o predicado mais amplo do pedido. (`app/chamados/juizes.py:1471`, `app/chamados/juizes.py:1474`, `app/chamados/juizes.py:1477`)
+- **Não**: não há essa consulta antes da transição no caminho indicado. A consulta do núcleo a perguntas dependentes ocorre **depois** do `save()`, para relavrar o veredito; não impede o fechamento. (`app/chamados/models.py:231`, `app/chamados/models.py:246`)
+- Todas as transições pelo núcleo tentam gravar **`LogAuditoria.acao='estado_chamado'`**, com `valor_depois.status_local` e `valor_depois.via`. As ações adicionais estão indicadas nas tabelas. (`app/chamados/models.py:227`, `app/chamados/models.py:229`, `app/core/observ.py:134`)
+- `motivo` passado a `cancelar()`/`superar()` vira conteúdo de nota; não é acrescentado ao registro `estado_chamado`. (`app/chamados/models.py:538`, `app/chamados/models.py:561`, `app/chamados/models.py:229`)
+
+| Porta / escritor | Estado e `via` literal | Consulta dependente antes? |
+|---|---|---|
+| `_gravar_estado()` — `app/chamados/models.py:185`; atribuição em `:192`, persistência em `:231` | Estado e via recebidos; exige via válida para terminal (`:197`, `:204`) | **Não**; consulta posterior em `:246` |
+| `_aplicar()` — `app/chamados/models.py:257` | Destino recebido; `via='admin'` (`:260`; `app/chamados/catalogo/motor.py:95`) | **Não**; o próprio método exige que o chamador rode as guardas (`:258`) |
+| `transicionar()` / `fechar()` — `app/chamados/models.py:122`, `:262` | `resolvido`/`fechado`; `via='admin'` (`:183`, `:260`; `app/chamados/catalogo/motor.py:145`) | **Não pelo destino**; guarda por disputa-pai (`app/chamados/models.py:147`; `app/chamados/juizes.py:1817`) |
+| `reconciliar()` — `app/chamados/models.py:434` | `resolvido`; `via='sistema'` (`:444`; `app/chamados/catalogo/motor.py:95`, `:111`) | **Não**; passa pelo motor e pela premissa do dia (`app/chamados/models.py:467`, `:470`) |
+| `encerrar()` — `app/chamados/models.py:1192` | `fechado`; `via='cascade'` (`:1201`; `app/chamados/catalogo/motor.py:95`, `:114`) | **Não** (`app/chamados/models.py:1196`) |
+| `encerrar_por_competencia_trancada()` — `app/chamados/models.py:1204` | `fechado`; `via='competencia_trancada'` (`:1211`, `:1214`; `app/chamados/catalogo/motor.py:92`) | **Não** (`app/chamados/models.py:1208`) |
+| `cancelar()` — `app/chamados/models.py:527` | `cancelado`; `via='cancelado'`; `motivo=''` por padrão (`:527`, `:537`; `app/chamados/catalogo/motor.py:95`, `:116`) | **Não** (`app/chamados/models.py:531`) |
+| `superar()` — `app/chamados/models.py:543` | `superado`; `via='superado'`; `motivo=''` por padrão (`:543`, `:560`; `app/chamados/catalogo/motor.py:95`, `:117`) | **Não**; verifica o chamado sobrevivente e o motor (`app/chamados/models.py:547`, `:549`) |
+
+O fechamento por `reconciliar()` pode acrescentar `acao='fechamento_sem_dia_do_fato'`; ou `acao='fechamento_por_dedup'` com **`motivo='cobranca_viva_do_dia'`**. Quando recusa, usa `acao='fechamento_recusado'` com **`motivo='dia_furado_para_a_folha'`**. Essas regras não são a consulta de dependentes. (`app/chamados/models.py:491`, `:505`, `:508`, `:516`, `:522`)
+
+**Executores com consulta de dependentes**
+
+Todos os sítios seguintes usam `resolvido / sistema / estado_chamado` pela porta comum. (`app/chamados/models.py:444`, `:227`; `app/chamados/catalogo/motor.py:95`, `:111`)
+
+| Função / sítio | Consulta antes? | Ação adicional literal |
+|---|---|---|
+| `reconciliador._retratar()` — `app/chamados/reconciliador.py:456` | **Sim\***, chamada em `:435`; retorna antes do fechamento em `:454` | Na retenção: **`retratacao_retida_irma_orfa`** (`:449`) |
+| `materializacao._reconciliar_destino_e_clones()._fecha()` — `app/chamados/services/materializacao.py:711` | **Sim\*** em `:702`; aplicada ao destino em `:714` e a cada clone em `:721` | Na retenção: **`destino_retido_irma_orfa`** (`:704`) |
+
+Entradas que herdam essa proteção por delegação:
+
+| Entrada | Delegação / ação adicional |
+|---|---|
+| `retratar()` | `_retratar()` — `app/chamados/reconciliador.py:479` |
+| `retratar_chamados_absolvidos_por_celula()` | `_retratar()` — `app/chamados/reconciliador.py:800` |
+| `reconciliar_chamados_colab()` | `_retratar()` — `app/chamados/reconciliador.py:1214` |
+| `consumir_eventos_celula()` | `retratar_chamados_absolvidos_por_celula()` — `app/chamados/reconciliador.py:1145` |
+| Command `reconciliar_chamados` | Reconciliação por colaborador e consumo de eventos — `app/chamados/management/commands/reconciliar_chamados.py:52`, `:62` |
+| Command `consumir_eventos_celula` | Consumidor — `app/chamados/management/commands/consumir_eventos_celula.py:31` |
+| Command `retratar_chamados_lei_cala` | `retratar()` — `app/chamados/management/commands/retratar_chamados_lei_cala.py:59` |
+| `reavaliar_chamados_geofence()` | `retratar()` em `app/ponto/services/geofence.py:419`; ação adicional **`reconciliar_geofence`** em `:422` |
+| Command `reconciliar_vinculo` | `retratar()` em `app/ponto/management/commands/reconciliar_vinculo.py:68`; ação **`reconciliar_vinculo`** em `:74` |
+| Command `processar_alertas_turno` | `retratar()` — `app/ponto/management/commands/processar_alertas_turno.py:216` |
+| Command `reconciliar_grade` | `retratar()` — `app/ponto/management/commands/reconciliar_grade.py:300` |
+| Command `reconciliar_fantasmas` | `retratar()` em `app/ponto/management/commands/reconciliar_fantasmas.py:279`; ação **`reconciliar_fantasma`** em `:289` |
+| Command `supra_juiz` | Alias `_retr()` em `app/ponto/management/commands/supra_juiz.py:248`, condicionado pelo ramo em `:243` |
+| Signal `_reconciliador_post_save_batida` | `reconciliar_chamados_colab()` — `app/ponto/signals.py:215` |
+
+**Fechamentos por `reconciliar()` SEM a consulta dependente**
+
+**Todas as linhas desta tabela são “não”**, salvo a última, que tem proteção alternativa. Usam `resolvido / sistema / estado_chamado`; a guarda comum é a premissa do dia, não a pergunta dependente. (`app/chamados/models.py:440`, `:444`, `:470`, `:474`)
+
+| Função / sítio — evidência do caminho sem a consulta | Ação adicional do fechamento |
+|---|---|
+| Signal `disputa_fechada_fecha_chamado_pai()` — `app/chamados/signals.py:28`, `:42` | Trilha comum; nota `fechado_pela_disputa` em `:45` |
+| `_materializar_ausencia_de_resposta()` — `app/chamados/services/materializacao.py:539` | Consulta e carimba perguntas **da disputa/data**, não todas as dependentes (`:507`, `:528`) |
+| `sincronizar_adesao()`, filhos agrupados — `app/chamados/services/adesao.py:102`, `:115` | Trilha comum; nota `agrupado_adesao` em `:118` |
+| `sincronizar_adesao()`, pai com batida — `app/chamados/services/adesao.py:142`, `:150` | Trilha comum; nota `adesao_fechada_por_batida` em `:152` |
+| `limbo_folgas.aceitar_sugestao()` — `app/chamados/services/limbo_folgas.py:98`, `:101` | **`editar`** no `TipoEscala` em `:94`; CH usa trilha comum |
+| `limbo_folgas.agrupar_furo()` — `app/chamados/services/limbo_folgas.py:216`, `:221` | Contexto `defeito_cadastro='folga_nao_definida'` em `:220`; CH usa trilha comum |
+| `feriado_reavaliar.encerrar()` — `app/chamados/services/feriado_reavaliar.py:43`, `:47` | **`reconciliar_feriado`** em `:53` |
+| `silencio_ausencia.reconciliar_por_ausencia()` — `app/chamados/services/silencio_ausencia.py:93`, `:101` | **`reconciliar_ausencia_lancada`** em `:108`; pode levantar silêncio em `:107` |
+| Command `auditar_chamados_orfaos` — `app/chamados/management/commands/auditar_chamados_orfaos.py:38`, `:67` | Trilha comum; testa ausência de disputa aberta ligada ao pai (`:38`) |
+| `fechar_adesao_com_batida()` — `app/colaboradores/services/pos_vinculo.py:42` | Trilha comum; nota em `:45` |
+| `resolver_cobranca_da_entrada()` — `app/ponto/services/entrada_sincronizada.py:31` | Trilha comum; nota em `:36` |
+| `_autoresolve_f2_f4()` — `app/ponto/services/triagem_batida.py:597` | Trilha comum; nota em `:602` |
+| `designar_cobertura()` — `app/ponto/services/cobertura.py:114`, `:122` | Trilha comum; nota em `:132` |
+| `declarar_cobertura_passada()` — `app/ponto/services/cobertura.py:310`, `:318` | Trilha comum; notas em `:324`, `:327` |
+| `cartorio._julgar_colab_corpo()`, marcos acesos — `app/ponto/services/cartorio.py:1162`, `:1163` | Trilha comum |
+| Mesma função, marcos inexistentes — `app/ponto/services/cartorio.py:1173`, `:1175` | Trilha comum; nota `marco_inexistente` em `:1182` |
+| Mesma função, dia sem trabalho/sem furo — `app/ponto/services/cartorio.py:1188`, `:1196` | Trilha comum |
+| `lastro.fechar()` — `app/ponto/services/lastro.py:306`, `:317` | Trilha comum; nota `lastro_encontrado` em `:322` |
+| `cluster_espurio.reconciliar_colab()` — `app/ponto/services/cluster_espurio.py:79`, `:80` | Trilha comum |
+| `fechar_chamado_da_ausencia()` — `app/ponto/services/ausencia.py:676`, `:678` | Trilha comum; nota `ausencia_decidida` em `:684` |
+| `veredito_celula.fechar_o_fio_do_dia()` — `app/ponto/services/veredito_celula.py:174`, `:183` | Antes fecha perguntas por colaborador/data como admin (`:177`); chamador registra **`veredito_celula`** em `:333` |
+| Command `detectar_ausencias.handle()`, limbo corrigido — `app/ponto/management/commands/detectar_ausencias.py:155`, `:158` | Trilha comum |
+| Mesmo command, `_fechar_por_afastamento()` — `app/ponto/management/commands/detectar_ausencias.py:811` | Trilha comum; nota em `:816` |
+| Mesmo command, `_fechar_por_cobertura()` — `app/ponto/management/commands/detectar_ausencias.py:821` | Trilha comum; nota em `:826` |
+| Mesmo command, `_fechar_chamado()` — `app/ponto/management/commands/detectar_ausencias.py:832` | Trilha comum; nota em `:836` |
+| Command `detectar_intervalo_ausente.handle()` — `app/ponto/management/commands/detectar_intervalo_ausente.py:134` | Trilha comum quando não está em dry-run (`:134`) |
+| Command `curar_residuo_bug115._ata_sem_furo()` — `app/ponto/management/commands/curar_residuo_bug115.py:150`, `:151` | Trilha comum; nota em `:157` |
+| Command `marcar_feriado_do_posto._marcar()` — `app/colaboradores/management/commands/marcar_feriado_do_posto.py:126` | Trilha comum; ação contextual **`marcar_feriado_do_posto`** no posto em `:118` |
+| `cartorio._julgar_colab_corpo()`, fio duplicata — `app/ponto/services/cartorio.py:1266` | **Olha dependentes, mas não pelo predicado solicitado**: lê `perguntas_que_resolvem` em `:1260`, recusa qualquer texto em `:1263`, exige todas duplicatas em `:1265` |
+
+No último ramo, `respondida_em` preenchida com texto vazio não é barrada pelo teste de texto. Além disso, os três fechamentos anteriores do cartório acontecem **antes** dessa proteção alternativa. (`app/ponto/services/cartorio.py:1163`, `:1175`, `:1196`, `:1263`)
+
+Entradas adicionais para esses executores incluem: `fechar_cobranca_com_lastro → lastro.fechar()`; `detectar_cluster_espurio → reconciliar_colab()`; `apurar_furos_diarios → sincronizar_adesao(fechar=True)`; e `reavaliar_ausencias_feriado → feriado_reavaliar.encerrar()`. (`app/ponto/management/commands/fechar_cobranca_com_lastro.py:53`, `app/ponto/management/commands/detectar_cluster_espurio.py:46`, `app/escala/management/commands/apurar_furos_diarios.py:17`, `app/ponto/management/commands/reavaliar_ausencias_feriado.py:32`)
+
+`fechar_o_fio_do_dia()` também é usado pela declaração do dia; fechar chamados de ausência decidida delega ao executor da tabela. Nenhum desses atalhos acrescenta a consulta pelo destino. (`app/ponto/services/declarar_dia.py:198`, `app/ponto/services/veredito_celula.py:183`, `app/ponto/services/ausencia.py:713`)
+
+**Transições humanas SEM consulta pelo destino**
+
+Todas passam por `transicionar()` e recebem `via='admin'`, ação comum `estado_chamado`. A guarda de disputa é por `DisputaSupervisao.chamado=ch`, com perguntas dessa disputa. (`app/chamados/models.py:147`, `:183`, `:260`; `app/chamados/juizes.py:1817`, `:1820`)
+
+| Função / sítio | Estado terminal | Ação adicional literal |
+|---|---|---|
+| `acao_aprovar_excecao()` — `app/chamados/services/acoes_chamado.py:70` | `resolvido` | **`aprovar_excecao`** em `:76` |
+| `acao_responder_agenda()` — `app/chamados/services/acoes_chamado.py:108` | `resolvido` | `acao` em `:120`: **`aceitar_agenda` / `recusar_agenda`** (`app/chamados/views.py:460`) |
+| `acao_responder_escala()` — `app/chamados/services/acoes_chamado.py:149` | `resolvido` | `acao` em `:161`: **`aceitar_escala` / `recusar_escala`** (`app/chamados/views.py:463`) |
+| `acao_autorizar_geofence()` — `app/chamados/services/acoes_chamado.py:222` | `resolvido` | **`autoriz_geo`** em `:223` |
+| `acao_recusar_geofence()` — `app/chamados/services/acoes_chamado.py:277` | `resolvido` | **`recusar_geo`** em `:278`; na batida, **`recusar_batida_fora_do_posto`** em `:269`; motivo livre obrigatório em `:254` |
+| `acao_resposta_livre()` — `app/chamados/services/acoes_chamado.py:315` | Destino do POST (`:287`) | **`status`** em `:318`; havendo conteúdo, **`responder`** em `:295` |
+| `processar_post_fio()` — `app/chamados/services/fio.py:715` | Destino informado, validado pelas choices (`:713`) | Trilha comum; nota `mensagem_dp` em `:712` |
+| `avaliar_solicitacao_beneficio()` — `app/colaboradores/views.py:2068` | `resolvido` se aprovar; senão `fechado` | Trilha comum; motivo/resposta livres em `:2057`, `:2069` |
+| Command `fechar_chamados_meio_periodo` — `app/ponto/management/commands/fechar_chamados_meio_periodo.py:109` | `fechado`, default da porta (`app/chamados/models.py:262`) | Resolução com **`MOTIVO='meio periodo declarado'`** (`app/ponto/management/commands/fechar_chamados_meio_periodo.py:31`, `:110`) |
+| Command `smoke_chamados._bloco_b_transicoes()` — `app/chamados/management/commands/smoke_chamados.py:134` | Destinos da matriz (`:130`) | Trilha comum |
+
+As entradas HTTP dessas ações estão em `detalhe_chamado_local`, `fio_colaborador` e `modal_fio_colaborador`; elas delegam aos executores acima. (`app/chamados/views.py:427`, `:433`, `:461`, `:464`, `:541`, `:544`, `:547`, `:674`, `:954`)
+
+**Cascatas, tranca e cancelamentos SEM consulta dependente**
+
+| Função / sítio | Estado / via / ação | Motivo |
+|---|---|---|
+| `executar_desligamento()` — `app/colaboradores/services/desligamento.py:132`, `:137` | `fechado / cascade / estado_chamado`, pela porta em `app/chamados/models.py:1201` | Nota **`Colab desligado em {data_demissao} - fechamento automatico.`** (`app/colaboradores/services/desligamento.py:131`, `:139`) |
+| `vinculo._executar_aceite()` — `app/colaboradores/services/vinculo.py:384`, `:387` | `fechado / cascade / estado_chamado` (`app/chamados/models.py:1201`) | Sem motivo passado no laço (`app/colaboradores/services/vinculo.py:387`) |
+| `aprovar_justificativa_dp()` — `app/ponto/services/justificativa.py:121`, `:127` | `fechado / cascade / estado_chamado`; ação **`aprovar`** na Justificativa (`:108`) | Sem motivo passado a `encerrar()` (`:127`) |
+| `materializar_saida_dp()` — `app/ponto/services/justificativa.py:274`, `:285` | `fechado / cascade / estado_chamado`; ação **`mat_saida_retro`** na Justificativa (`:293`) | Motivo recebido, incorporado à nota (`:287`, `:288`) |
+| `competencia_trancada.encerrar()` — `app/chamados/services/competencia_trancada.py:174`, `:177` | `fechado / competencia_trancada / estado_chamado`; adicional **`encerrar_por_competencia_trancada`** (`:41`, `:47`, `:183`) | Competência e empresa na auditoria (`:186`, `:187`) |
+| Command `fechar_chamados_vinculo_na_lista` — `app/ponto/management/commands/fechar_chamados_vinculo_na_lista.py:57` | `cancelado / cancelado / estado_chamado` (`app/chamados/models.py:537`; `app/chamados/catalogo/motor.py:116`) | Literal formatado abaixo (`app/ponto/management/commands/fechar_chamados_vinculo_na_lista.py:57`) |
+| Command `fechar_avisos_regua_na_lista` — `app/escala/management/commands/fechar_avisos_regua_na_lista.py:47` | `cancelado / cancelado / estado_chamado` (`app/chamados/models.py:537`; `app/chamados/catalogo/motor.py:116`) | Literal formatado abaixo (`app/escala/management/commands/fechar_avisos_regua_na_lista.py:47`) |
+
+Os dois motivos de cancelamento são:
+
+- `'A revisao de vinculo virou linha da lista Cadastro x Realidade (C8: %s). O detector nao abre mais chamado; a correcao e no cadastro, pela lista.'` (`app/ponto/management/commands/fechar_chamados_vinculo_na_lista.py:57`)
+- `'O aviso de cadastro do termometro virou linha da lista Cadastro x Realidade (C7: %s). O termometro nao abre mais chamado; a correcao e no cadastro, pela lista.'` (`app/escala/management/commands/fechar_avisos_regua_na_lista.py:47`)
+
+O command da tranca delega ao serviço acima; o serviço também pode ser disparado pelo ato de trancar a competência. (`app/chamados/management/commands/encerrar_por_competencia_trancada.py:29`, `app/chamados/services/competencia_trancada.py:33`, `:292`)
+
+**Fechamentos indiretos pela disputa**
+
+`DisputaSupervisao.fechar()` consulta respostas sem veredito e perguntas **da própria disputa**, salva o fechamento e dispara o signal que pode resolver o chamado-pai. Não consulta todas as perguntas externas que apontam para esse chamado. O CH recebe `resolvido / sistema / estado_chamado`; a disputa registra **`acao='disputa_fechada'`**. (`app/chamados/models.py:1428`, `:1472`, `:1481`, `:1494`, `:1495`; `app/chamados/signals.py:42`)
+
+| Sítio indireto | `motivo_fechamento` |
+|---|---|
+| `lavrar_sem_turno_aberto()` — `app/chamados/reconciliador.py:414` | Escolhido pela porta |
+| `retratar_perguntas_absolvidas_por_celula()` — `app/chamados/reconciliador.py:567` | Escolhido pela porta |
+| `encerrar_orfas_pela_lampada()` — `app/chamados/reconciliador.py:964`; consumidor em `:1148` | Escolhido pela porta |
+| `criar_disputa_a_partir_de_chamados_orfaos()` — `app/chamados/services/disputa_emissao.py:1083` | Escolhido pela porta |
+| `resolver_perguntas_por_chamado_resolvido()` — `app/chamados/services/disputa_emissao.py:1662` | Escolhido pela porta |
+| `_materializar_ausencia_de_resposta()` — `app/chamados/services/materializacao.py:543` | Escolhido pela porta |
+| `_fechar_disputa_se_quitada()` — `app/chamados/services/materializacao.py:1250` | Escolhido pela porta |
+| `becos.fechar_beco()` — `app/chamados/services/becos.py:52` | Escolhido pela porta |
+| Command `encerrar_perguntas_com_fato` — `app/chamados/management/commands/encerrar_perguntas_com_fato.py:88` | Escolhido pela porta |
+| `entrada_sincronizada.resolver_cobranca_da_entrada()` — `app/ponto/services/entrada_sincronizada.py:59` | Escolhido pela porta |
+| `resolver_disputas_de_foto()` — `app/api/foto_recebida.py:80` | Escolhido pela porta |
+| `competencia_trancada.encerrar()` — `app/chamados/services/competencia_trancada.py:197` | **`competencia_trancada`** (`app/chamados/models.py:1359`) |
+| `executar_desligamento()` — `app/colaboradores/services/desligamento.py:150` | **`desligamento`** (`app/chamados/models.py:1357`); os CH já são encerrados antes, em `app/colaboradores/services/desligamento.py:137` |
+| Porta `DisputaSupervisao.admin_encerra()` — `app/
+
+[truncado em 20000 de 23393 caracteres]
+
+## 29/10 16:42 · sessao 0a8223573f6c · - · - · origem=Ronald (tmux)
+
+Não existe encerramento direto de `j.chamado_origem` no fluxo comum de aprovação: ele só recebe uma ocorrência por `criar_followup_sistema_justificativa`; o encerramento explícito nesse fluxo procura outro chamado, pelo módulo `entrada_bloqueada_turno_aberto`. (`app/ponto/services/justificativa.py:111`, `app/ponto/services/justificativa.py:121`, `app/ponto/services/justificativa.py:127`, `app/chamados/utils.py:7`, `app/chamados/utils.py:21`)
+
+Os caminhos existentes que podem encerrar `turno_aberto` são condicionais:
+
+- **Materialização retroativa da saída:** `materializar_saida_dp` aprova a justificativa e percorre chamados do colaborador/data, incluindo `turno_aberto`, chamando `encerrar()`; não usa `chamado_origem` para localizar o alvo. (`app/ponto/services/justificativa.py:262`, `app/ponto/services/justificativa.py:272`, `app/ponto/services/justificativa.py:276`, `app/ponto/services/justificativa.py:285`)
+- **Batida materializada durante aprovação:** aprovação individual pode registrar saída antes de aprovar a justificativa; aprovação em lote pode registrar saída depois; o `post_save` de Batida chama `reconciliar_chamados_colab`. Esse reconciliador só chega a `_retratar` se sua própria coleta disser que a premissa morreu; para turno aberto consulta a existência do turno correspondente, não a aprovação da justificativa. (`app/ponto/services/justificativa.py:34`, `app/ponto/services/justificativa.py:69`, `app/ponto/services/justificativa.py:85`, `app/ponto/views.py:1787`, `app/ponto/views.py:1799`, `app/ponto/views.py:1806`, `app/ponto/signals.py:206`, `app/ponto/signals.py:214`, `app/chamados/reconciliador.py:264`, `app/chamados/reconciliador.py:286`, `app/chamados/reconciliador.py:1208`, `app/chamados/reconciliador.py:1214`)
+- **Cartório disparado pelo save da justificativa:** `post_save(Justificativa)` rejulga o dia; no julgamento, pode chamar `reconciliar()` por marcos cobrados todos acesos, marcos inexistentes, protestos `COBRANCA_EM_DIA_SEM_TRABALHO`/`COBRANCA_SEM_FURO`, ou fio composto exclusivamente de perguntas duplicatas. Esses critérios do chamador são necessários além do gate do modelo. (`app/ponto/signals.py:161`, `app/ponto/signals.py:165`, `app/ponto/signals.py:89`, `app/ponto/signals.py:93`, `app/ponto/services/cartorio.py:1163`, `app/ponto/services/cartorio.py:1174`, `app/ponto/services/cartorio.py:1175`, `app/ponto/services/cartorio.py:1188`, `app/ponto/services/cartorio.py:1196`, `app/ponto/services/cartorio.py:1260`, `app/ponto/services/cartorio.py:1265`, `app/ponto/services/cartorio.py:1266`)
+- **Consumidor de eventos da célula:** a lavra de veredito/ata enfileira evento; o consumidor chama `retratar_chamados_absolvidos_por_celula`, incluindo `turno_aberto`, somente se o veredito não acusa e não há marcos pendentes; `_retratar` ainda pode reter por respostas de irmãs aguardando consumo. O comando está configurado a cada minuto, com dreno adicional no reconciliador de quinze minutos. (`app/ponto/portas/celula.py:630`, `app/ponto/portas/celula.py:638`, `app/ponto/portas/celula.py:642`, `app/ponto/portas/celula.py:695`, `app/ponto/portas/celula.py:697`, `app/chamados/reconciliador.py:336`, `app/chamados/reconciliador.py:792`, `app/chamados/reconciliador.py:800`, `app/chamados/reconciliador.py:823`, `app/chamados/reconciliador.py:825`, `app/chamados/reconciliador.py:435`, `app/chamados/reconciliador.py:454`, `app/chamados/reconciliador.py:1145`, `app/config/crons.py:375`, `app/config/crons.py:376`, `app/chamados/management/commands/reconciliar_chamados.py:60`, `app/chamados/management/commands/reconciliar_chamados.py:62`)
+- **Fechamento da disputa vinculada:** signal da disputa fechada tenta `ch.reconciliar()`; a aprovação torna verdadeiro o coletor quando existe `justificativa_relacionada`, mas o evento necessário aqui continua sendo o fechamento da disputa. (`app/chamados/signals.py:28`, `app/chamados/signals.py:32`, `app/chamados/signals.py:41`, `app/chamados/signals.py:42`, `app/chamados/models.py:495`, `app/chamados/models.py:937`, `app/chamados/models.py:938`)
+- **Transição humana:** a resposta livre pode chamar `transicionar(novo_status, user)`; a aprovação satisfaz o coletor usado pela guarda de resolução, sem executar essa transição por si. (`app/chamados/services/acoes_chamado.py:315`, `app/chamados/models.py:165`, `app/chamados/models.py:167`, `app/chamados/models.py:183`, `app/chamados/models.py:937`)
+
+Para o chamado automático concreto, o contexto inicial contém apenas `data_turno`, `entrada_timestamp` e `posto`; a justificativa criada recebe `tipo='esqueci_saida'`, `status='pendente'` e `chamado_origem`, e o chamado recebe o ponteiro inverso. Portanto, inicialmente faltam os `marcos_faltantes` necessários para o encerramento por `marcos_acesos`. (`app/ponto/management/commands/processar_alertas_turno.py:335`, `app/ponto/management/commands/processar_alertas_turno.py:348`, `app/ponto/management/commands/processar_alertas_turno.py:391`, `app/ponto/management/commands/processar_alertas_turno.py:396`, `app/ponto/management/commands/processar_alertas_turno.py:398`, `app/ponto/management/commands/processar_alertas_turno.py:399`, `app/ponto/management/commands/processar_alertas_turno.py:423`, `app/ponto/services/lastro.py:75`, `app/ponto/services/lastro.py:170`, `app/ponto/services/lastro.py:171`)
+
+Se a aprovação não produzir saída e o chamado continuar com fio vivo, pode permanecer aberto: sem protestos e com `_com_fio`, o cartório escreve `cobrado`; esse veredito não permite o caminho de absolvição da célula. O retorno `True` de `premissa_regularizada(para='folha')` só autoriza um chamador que efetivamente tente encerrar. (`app/ponto/services/justificativa.py:34`, `app/ponto/services/justificativa.py:85`, `app/ponto/services/cartorio.py:1122`, `app/ponto/services/cartorio.py:1141`, `app/ponto/services/cartorio.py:1142`, `app/chamados/reconciliador.py:823`, `app/chamados/models.py:434`, `app/chamados/models.py:440`, `app/chamados/models.py:444`, `app/chamados/models.py:495`, `app/chamados/models.py:937`, `app/chamados/models.py:938`)
+
+A rede `fechar_cobranca_com_lastro` não é encerrador desse módulo: sua consulta filtra exclusivamente `batida_ausente`. (`app/ponto/services/lastro.py:216`, `app/ponto/services/lastro.py:217`)
+
+## 29/10 16:42 · sessao 54ff1da61f71 · - · - · origem=Ronald (tmux)
+
+Métodos do próprio `ChamadoColaborador`:
+
+| Método | Mudança | Gate antes da escrita |
+|---|---|---|
+| `transicionar()` | Vivo → `resolvido`/`fechado` | Consulta motor/perfil; para `fechado`, barra justificativa pendente; para ambos, barra disputa viva; para `resolvido` de furo, exige `premissa_regularizada()` com parâmetro padrão `cobranca` (há fallback legado sem dia). `app/chamados/models.py:122`, `app/chamados/models.py:130`, `app/chamados/models.py:142`, `app/chamados/models.py:165`. |
+| `fechar()` | Mesmo comportamento | Delega diretamente a `transicionar()`. `app/chamados/models.py:262`. |
+| `reconciliar()` | Vivo → `resolvido` | Recarrega estado se divergir do banco; consulta motor `RECONCILIAR`; pergunta `_gate_premissa_do_fechamento()`. O argumento `novo_status` não é usado; o destino vem do motor. `app/chamados/models.py:434`, `app/chamados/models.py:453`, `app/chamados/catalogo/motor.py:111`. |
+| `encerrar()` | Vivo → `fechado` | Apenas motor `ENCERRAR`; não pergunta justificativa, disputa ou regularização da premissa. `app/chamados/models.py:1192`, `app/chamados/catalogo/motor.py:114`. |
+| `encerrar_por_competencia_trancada()` | Vivo → `fechado` | Exige estado em `VIVOS` e motor `ENCERRAR`; o método não verifica se a competência está trancada. `app/chamados/models.py:1204`. |
+| `_aplicar()` / `_gravar_estado()` | Escritores internos | `_aplicar()` delega ao núcleo; `_gravar_estado()` não pergunta regularização, exige via válida para terminal e salva com trilha em `atomic`. `app/chamados/models.py:185`, `app/chamados/models.py:204`, `app/chamados/models.py:226`, `app/chamados/models.py:257`. |
+
+`cancelar()` e `superar()` também retiram vivos de circulação, para `cancelado` e `superado`; tecnicamente esses estados estão em `TERMINAIS`, não em `ENCERRADOS`, que contém apenas `resolvido`/`fechado`. `cancelar()` consulta somente o motor; `superar()` também exige sucessor existente, diferente do próprio chamado e não terminal, gravando o vínculo e o estado em `atomic`. `app/chamados/models.py:527`, `app/chamados/models.py:543`, `app/chamados/catalogo/motor.py:30`.
+
+O gate de `reconciliar()` permite fechar quando:
+
+- Não é chamado de furo. `app/chamados/models.py:484`.
+- Não consegue determinar o dia: permite, registrando `fechamento_sem_dia_do_fato`. `app/chamados/models.py:488`.
+- `premissa_regularizada(para='folha')` é verdadeira ou está agrupado sob pai vivo. `app/chamados/models.py:495`.
+- Existe outra cobrança viva de furo do mesmo colaborador/dia: permite como deduplicação com trilha. `app/chamados/models.py:498`.
+- Fora dessas condições, recusa e registra `fechamento_recusado`. `app/chamados/models.py:511`.
+
+`premissa_regularizada(para='folha')` responde **`True` imediatamente** quando `justificativa_relacionada.status == 'aprovada'`, antes de consultar dia, célula, turno ou parâmetro `para`. `app/chamados/models.py:937`.
+
+Sobre o fechamento após aprovação:
+
+- A aprovação DP comum não encerra `j.chamado_origem`; apenas cria nota nesse chamado. O helper lê o ponteiro e anexa ocorrência, sem transição de estado. `app/ponto/services/justificativa.py:111`, `app/chamados/utils.py:7`, `app/chamados/utils.py:21`.
+- O fechamento explícito da aprovação DP comum procura outro módulo: `entrada_bloqueada_turno_aberto`, por colaborador, e chama `encerrar()`. Portanto não alcança `modulo_origem='turno_aberto'`. `app/ponto/services/justificativa.py:121`.
+- **Existe caminho explícito na materialização retroativa:** `materializar_saida_dp()` aprova a justificativa e encerra chamados de módulos incluindo `turno_aberto`, por colaborador e data do contexto, com fallback para criação quando contexto sem data; não usa `chamado_origem`. `app/ponto/services/justificativa.py:259`, `app/ponto/services/justificativa.py:274`, `app/ponto/services/justificativa.py:276`, `app/ponto/services/justificativa.py:285`.
+- **Existe caminho indireto pela batida gerada:** aprovação DP, quando tem saída informada e entrada, chama `registrar_batida`; o signal da batida chama `reconciliar_chamados_colab()`, que pode retratar o chamado se seu turno físico deixou de estar aberto; `_retratar()` chama `reconciliar()` em `atomic`, salvo retenção por perguntas respondidas sem consumo. Esse evento pode ocorrer antes da gravação de `j.status='aprovada'`. `app/ponto/services/justificativa.py:34`, `app/ponto/services/justificativa.py:69`, `app/ponto/services/justificativa.py:85`, `app/ponto/signals.py:206`, `app/ponto/signals.py:214`, `app/chamados/reconciliador.py:264`, `app/chamados/reconciliador.py:1208`, `app/chamados/reconciliador.py:435`, `app/chamados/reconciliador.py:455`.
+- O signal de `Justificativa` somente rejulga o dia; não chama diretamente o reconciliador de chamados. `app/ponto/signals.py:161`.
+- O cartório pode fechar chamados com todos os marcos nomeados acesos, ou marcos tornados inexistentes, ou protestos `COBRANCA_EM_DIA_SEM_TRABALHO`/`COBRANCA_SEM_FURO`, ou fio inteiramente duplicado, sempre via `reconciliar()`. `app/ponto/services/cartorio.py:1163`, `app/ponto/services/cartorio.py:1174`, `app/ponto/services/cartorio.py:1188`, `app/ponto/services/cartorio.py:1265`.
+- Contudo, o `turno_aberto` automático do cron nasce com `data_turno`, `entrada_timestamp` e `posto`, sem `marcos_faltantes`; por isso não entra no fechamento por marcos acesos ou inexistentes. `app/ponto/management/commands/processar_alertas_turno.py:335`, `app/ponto/management/commands/processar_alertas_turno.py:348`, `app/ponto/services/lastro.py:170`, `app/ponto/services/lastro.py:110`.
+- A justificativa automática nasce `esqueci_saida`, `pendente`, com `chamado_origem`, e o cron aponta `chamado.justificativa_relacionada` somente quando a justificativa foi criada; a porta preserva ponteiro previamente existente. `app/ponto/management/commands/processar_alertas_turno.py:389`, `app/ponto/management/commands/processar_alertas_turno.py:402`, `app/ponto/management/commands/processar_alertas_turno.py:423`, `app/chamados/services/vinculos.py:81`.
+- A aprovação dispensa lâmpadas na ata, mas um chamado vivo com fio pode manter o dia `cobrado`; o consumidor de eventos só retrata chamado quando o veredito da célula não acusa e não tem marcos pendentes. Portanto ele não garante fechamento desse cenário. `app/ponto/services/cartorio.py:600`, `app/ponto/services/cartorio.py:1122`, `app/ponto/services/cartorio.py:1141`, `app/chamados/reconciliador.py:814`, `app/chamados/reconciliador.py:823`.
+- O reconciliador periódico também exige a morte da premissa física antes de chamar `_retratar()`, não usa a aprovação da justificativa como seletor; aprovação sem saída materializada pode deixar o turno aberto e não alcançar essa chamada, apesar de o gate individual já permitir o fechamento. `app/chamados/reconciliador.py:264`, `app/chamados/reconciliador.py:287`, `app/chamados/reconciliador.py:1208`, `app/chamados/models.py:937`.
+
+A conclusão precisa é: **não há fechamento dedicado, pelo vínculo `chamado_origem`, disparado simplesmente pela aprovação; há caminhos condicionais pela batida/cartório/célula e o fechamento explícito da ferramenta de saída retroativa.** `app/chamados/utils.py:7`, `app/ponto/signals.py:161`, `app/ponto/services/justificativa.py:121`, `app/ponto/services/justificativa.py:274`.
+
+## 29/10 16:42 · sessao 89489b6f5983 · - · - · origem=Ronald (tmux)
+
+Foram encontrados **3 sítios explícitos de aprovação** de `ponto.models.Justificativa` em produção: `app/ponto/services/justificativa.py:85`, `app/ponto/services/justificativa.py:262` e `app/ponto/views.py:1787`.
+
+| Função e gravação | `transaction.atomic` | Efeito sobre chamados |
+|---|---|---|
+| `aprovar_justificativa_dp`, definida em `app/ponto/services/justificativa.py:16`; atribui em `:85` e salva em `:88`. | Sim, bloco iniciado em `app/ponto/services/justificativa.py:23`; `select_for_update` em `:24`. | Não altera `chamado_origem` nem `justificativa_relacionada`. Depois do bloco, chama o followup em `app/ponto/services/justificativa.py:112`: o helper lê `justificativa.chamado_origem` e anexa somente uma ocorrência (`app/chamados/utils.py:7`, `:21`). Tenta encerrar o chamado mais recente do colaborador com módulo **`entrada_bloqueada_turno_aberto`**, via `.encerrar()`, sem condição de vínculo com a justificativa (`app/ponto/services/justificativa.py:121`, `:123`, `:127`). |
+| `materializar_saida_dp`, definida em `app/ponto/services/justificativa.py:214`; atribui em `:262` e salva em `:265`. | Sim, bloco iniciado em `app/ponto/services/justificativa.py:224`; `select_for_update` em `:225`. | Não altera os vínculos. Seleciona chamados do mesmo colaborador, mesmo `contexto_json.data_turno` ou fallback de `criado_em`, módulos `turno_aberto`, `turno_aberto_24h`, `batida_ausente`, `saida_sem_entrada`, estados `NAO_FECHADOS`, e chama `.encerrar()` em cada um; não depende de `chamado_origem` nem de `justificativa_relacionada` (`app/ponto/services/justificativa.py:274`, `:276`, `:277`, `:279`, `:281`, `:284`, `:285`). |
+| `aprovar_lote_justificativas`, definida em `app/ponto/views.py:1763`; atribui em `:1787` e salva em `:1790`. | Não há bloco ou decorador `atomic` nessa função; o decorador é `login_required` (`app/ponto/views.py:1762`, `:1763`, `:1784`, `:1790`, `:1839`). Os bancos de produção e SaaS também não habilitam `ATOMIC_REQUESTS` (`app/config/settings/prod.py:9`, `app/config/settings/saas.py:83`). | O corpo não consulta, altera ou encerra chamados; invalida fechamento e pode materializar a batida de saída (`app/ponto/views.py:1795`, `:1798`, `:1806`, `:1815`, `:1839`). |
+
+**Efeito comum indireto:** os três `save()` disparam o receiver `_cartorio_post_save_justificativa`, que chama `_julgar_dias` para `instance.data_turno`; `_julgar_dias` chama `cartorio.julgar_celula` (`app/ponto/signals.py:161`, `:162`, `:165`, `:85`, `:93`). Esse receiver não chama diretamente o reconciliador de chamados; a chamada `reconciliar_chamados_colab` pertence ao receiver de **Batida** (`app/ponto/signals.py:206`, `:207`, `:214`, `:215`).
+
+As outras construções de justificativa examinadas criam/regravam `pendente`: `create` na view (`app/ponto/views.py:1635`, `:1642`), `create` na API (`app/api/views.py:2059`, `:2064`), `get_or_create` da regularização (`app/ponto/services/regularizacao.py:91`, `:99`), `get_or_create` do cron (`app/ponto/management/commands/processar_alertas_turno.py:391`, `:398`) e `update_or_create` da triagem (`app/ponto/services/triagem_batida.py:258`, `:266`). Não encontrei `update`, `create` ou `get_or_create/defaults` explícito que escreva `aprovada`; os únicos literais de atribuição encontrados são os três acima (`app/ponto/services/justificativa.py:85`, `:262`, `app/ponto/views.py:1787`).
+
+**Ressalva do Django admin:** `JustificativaAdmin` herda diretamente de `admin.ModelAdmin`, sem restrição local de edição ou `readonly_fields` (`app/ponto/admin.py:18`, `:19`, `:20`, `:22`); o campo `status` oferece `aprovada` e é editável no modelo (`app/ponto/models.py:130`, `:132`, `:159`). Portanto há uma porta genérica de edição/criação pelo admin, além dos três escritores explícitos; o método herdado de Django e seu bloco transacional não estão no código `app/` inspecionado **[não verificado]**.
 
 ## 29/10 16:41 · sessao 03a4f5633c08 · - · - · origem=Ronald (tmux)
 
@@ -384,276 +775,4 @@ Portas de reabertura/desarquivamento:
 
 Reabertura administrativa e reabertura de competência passam por `reabrir`, **sem levantar o véu**: `app/chamados/services/acoes_disputa.py:266`; `app/chamados/services/competencia_trancada.py:258`. Quem efetivamente limpa `silenciado_ate` é `arquivo.levantar` — `app/chamados/services/arquivo.py:201`, persistência em `:208`.
 
-## 29/10 15:56 · sessao 4b77cd4c0b0c · - · - · origem=Ronald (tmux)
-
-- **Levanta véu:** `desarquivar_chamado` chama `arquivo.levantar(...resgatado=True)` em `app/chamados/views_arquivar.py:75`; antes, chama `ch.reabrir()` somente quando `via_encerramento == competencia_trancada`, em `app/chamados/views_arquivar.py:64` / `:68`.
-- **Reabre sem levantar:** `ChamadoColaborador.reabrir`, `app/chamados/models.py:1023`, grava estado em `:1089` e ressuscita perguntas em `:1098`; `_gravar_estado` persiste campos sem véu (`app/chamados/models.py:193`, `:231`).
-- **Outra porta sem levantar:** `transicionar`, `app/chamados/models.py:122` / `:183` / `:260`; permite `resolvido→em_analise` e admin sair de fechado (`app/chamados/catalogo/motor.py:102`, `:150`). Entradas: `acao_resposta_livre`, `app/chamados/services/acoes_chamado.py:315`; `processar_post_fio`, `app/chamados/services/fio.py:715`.
-- **Outros levantadores:** `_ressuscitar_por_resposta`, `app/chamados/services/materializacao.py:663`, com `resgatado=True`; `reconciliar_por_ausencia._levantar`, `app/chamados/services/silencio_ausencia.py:72`, com `resgatado=False`.
-- `arquivo.levantar` limpa `silenciado_ate`, autor e motivo em `app/chamados/services/arquivo.py:201` e salva em `:208`.
-
-Chamadores de `reabrir()` que não chamam `levantar`:
-
-| Função/caminho | Chamada |
-|---|---|
-| `_renascer_por_premissa_viva` | `app/chamados/models.py:770` |
-| `acao_reabrir_disputa_admin` | `app/chamados/services/acoes_disputa.py:266` |
-| `competencia_trancada.reabrir` | `app/chamados/services/competencia_trancada.py:258` |
-| `sincronizar_adesao` | `app/chamados/services/adesao.py:92` |
-| `resolver_perguntas_por_chamado_resolvido` | `app/chamados/services/disputa_emissao.py:1606` |
-| `reabrir_orfas_enterradas.Command.handle` | `app/chamados/management/commands/reabrir_orfas_enterradas.py:161` |
-| `reabrir_chamados_ausencia_aberta.Command.handle` | `app/ponto/management/commands/reabrir_chamados_ausencia_aberta.py:49` |
-| `reconciliar_grade.Command._emitir_furo` | `app/ponto/management/commands/reconciliar_grade.py:519` |
-| `detectar_ausencias.Command.handle` | `app/ponto/management/commands/detectar_ausencias.py:301` |
-
-`analisar` e `reconciliar` não reabrem encerrados: `app/chamados/catalogo/motor.py:112` e `:111`.
-
-## 29/10 15:55 · sessao cb10afb99300 · - · - · origem=Ronald (tmux)
-
-Escritores diretos de produção:
-
-| Função | Escrita | `resposta_colab` vazia com carimbo? |
-|---|---|---|
-| `responder_pergunta_disputa_core` | `app/chamados/services/disputa_emissao.py:1248` | Não: rejeita vazia em `:1219–1221`. |
-| `responder_automaticamente` | `app/chamados/services/disputa_emissao.py:1393` | Função permite `texto=''`; caller atual fornece constante não vazia (`app/api/foto_recebida.py:25`, `:48`). |
-| `carimbar_resposta_pela_trilha` | `app/chamados/services/disputa_emissao.py:1409` | Não: guarda em `:1407`. |
-| `resolver_perguntas_por_chamado_resolvido` | `app/chamados/services/disputa_emissao.py:1572`, `:1649` | Primeiro exige texto (`:1570–1571`); **segundo não exige texto** (`:1648–1651`). |
-| `_materializar_ausencia_de_resposta` | `app/chamados/services/materializacao.py:513` | Nova atribuição exige texto (`:511–512`); save inclui campo mesmo sem texto, preservando eventual legado (`:528–530`). |
-| `_materializar_uma` | `app/chamados/services/materializacao.py:1192` | Não: exige texto (`:1190–1191`). |
-
-Zeradores: `ChamadoColaborador.ressuscitar_perguntas` grava `None` em `app/chamados/models.py:1163` (universo sem resposta: `:1115`); `reabrir_para_correcao` zera carimbo e texto em `app/chamados/services/disputa_emissao.py:1358`, persistido em `:1377`.
-
-## 29/10 15:51 · sessao 1ee182181f58 · - · - · origem=Ronald (tmux)
-
-HEAD lido: `7596ef5e8351bf7473acecafc8348bca7d2cf9d7`. Somente leitura estática; ocorrências reais no banco: **[nao verificado]**.
-
-**(1) Escritores de `respondida_em`**
-
-| Escritor | Grava `resposta_colab` na mesma operação? | Condição |
-|---|---|---|
-| `responder_pergunta_disputa_core` — `app/chamados/services/disputa_emissao.py:1247–1266` | **Sim.** | Rejeita resposta vazia antes da escrita (`:1219–1221`). |
-| `responder_automaticamente` — `app/chamados/services/disputa_emissao.py:1381–1394` | **Sim.** | Recebe texto e instante; não verifica se o texto recebido é vazio. O chamador encontrado fornece texto constante de foto recebida (`app/api/foto_recebida.py:26`, `:42–51`). |
-| `carimbar_resposta_pela_trilha` — `app/chamados/services/disputa_emissao.py:1398–1410` | **Não.** | Exige texto já preenchido e carimbo nulo (`:1407`). |
-| `_materializar_ausencia_de_resposta` — `app/chamados/services/materializacao.py:506–530` | **Não.** | Só atribui instante quando existe texto não vazio (`:511–513`); o `save` inclui o campo mesmo quando permanece nulo (`:528–530`). |
-| `_materializar_uma` — `app/chamados/services/materializacao.py:1190–1198` | **Não.** | Só preenche carimbo nulo quando existe texto não vazio (`:1190–1193`). |
-| `resolver_perguntas_por_chamado_resolvido`, ramo de destino — `app/chamados/services/disputa_emissao.py:1570–1583` | **Não.** | Exige texto existente para preencher o carimbo (`:1570–1573`). |
-| Mesma função, ramo **sem credor vivo** — `app/chamados/services/disputa_emissao.py:1640–1651` | **Não; tampouco exige texto.** | Se o juiz considera a pergunta morta, materializa e preenche `respondida_em` quando nulo (`:1640–1651`). |
-| `reabrir_para_correcao` — `app/chamados/services/disputa_emissao.py:1358–1376` | **Apaga ambos.** | Guarda histórico e faz `update(respondida_em=None, resposta_colab='', …)` no mesmo bloco transacional (`:1358`, `:1365–1375`). |
-| `ChamadoColaborador.ressuscitar_perguntas` — `app/chamados/models.py:1160–1163` | **Não altera o texto.** | Universo exige texto vazio/nulo e materialização existente; exclui marco já aceso (`:1112–1120`). Limpa `respondida_em` junto dos outros carimbos (`:1162–1163`). |
-
-**Existe caminho automático com carimbo e resposta vazia:** o ramo sem credor vivo não testa nem escreve texto; `resposta_colab` tem default `''` (`app/chamados/services/disputa_emissao.py:1640–1651`; `app/chamados/models.py:1865–1866`). Esse ramo procura disputas abertas do colaborador, exige pai e destinos fora de `VIVOS` e perguntas sem validação/materialização; o filtro efetivo não limita `tipo_resposta` (`app/chamados/services/disputa_emissao.py:1621–1642`).
-
-Os acessos operacionais encontrados às portas incluem:
-
-| Caminho | Evidência |
-|---|---|
-| Resposta web/API/ação/texto | Chamam o core em `app/chamados/views.py:1283`, `app/api/views.py:2695`, `app/chamados/services/acoes_disputa.py:367`, `app/chamados/services/declaracao_texto.py:365`, `:638`. |
-| Manutenção de perguntas em limbo | `curar_perguntas_em_limbo` chama carimbo pela trilha ou reabertura; escrita condicionada a `--apply` (`app/chamados/management/commands/curar_perguntas_em_limbo.py:63–69`). Esse carimbador exige texto (`app/chamados/services/disputa_emissao.py:1407`). |
-| Fechamento automático de chamado | `post_save` de chamado encerrado chama o resolvedor (`app/chamados/signals.py:75–86`). |
-| Reconciliador/manutenção | Chamam o resolvedor em `app/chamados/reconciliador.py:469`, `:1370`, `app/chamados/services/becos.py:49`, `app/ponto/management/commands/reconciliar_fantasmas.py:280`. |
-| Consumidor de eventos | Chama retratação e encerramento de órfãs (`app/chamados/reconciliador.py:1145–1149`). A retratação chega ao resolvedor por `_retratar` (`:800`, `:456–469`); o encerramento fantasma grava apenas via/materialização/autor (`app/chamados/models.py:2170–2173`). |
-
-**Competência trancada não escreve `respondida_em`:** a porta grava somente via, materialização e autor; conserva resposta e carimbo anteriores (`app/chamados/models.py:2143–2148`). O resolvedor retorna imediatamente para chamado encerrado por essa via (`app/chamados/services/disputa_emissao.py:1531–1532`).
-
-Também não escrevem esse campo `fechar_por_admin`, `encerrar_fantasma`, `encerrar_por_fato_no_espelho` e a lavra de “sem turno aberto” (`app/chamados/models.py:2131–2134`, `:2156–2159`, `:2170–2173`; `app/chamados/reconciliador.py:402–408`).
-
-Escritas dinâmicas sem o nome do campo, SQL externo e escritores em testes/migrations: **[nao verificado]**; testes/migrations não li integralmente. [nao verificado]
-
-**(2) `o_que_segura`: motivo, objeto e tela**
-
-A função separa a classificação geral do colaborador dos dias retidos: `classificar_export` fornece `entra/motivo`; `motivos_retencao_celula` fornece `dias` (`app/folha/fora_da_folha.py:188–194`). Portanto, lista de dias vazia não basta para afirmar que entra (`:211–213`).
-
-Os motivos **por dia** são:
-
-| Motivo | Predicado que retém | Objeto/estado cuja mudança é necessária; acesso encontrado |
-|---|---|---|
-| `sem_celula`, célula inexistente | D passado, vínculo cobrindo D e D diferente da demissão (`app/folha/export.py:1195–1214`). | É necessário produzir/julgar a `CelulaDia`; fechar chamado não consta desse predicado (`:1212–1214`). Tela que garanta criar a célula ausente: **[nao verificado]**. |
-| `sem_celula`, célula existente | `veredito is None`, `trabalha is not None`, D passado e não demissão (`app/folha/export.py:1237–1238`). | O objeto lido é a célula, cujo veredito precisa deixar de satisfazer o predicado. Existe decisão de dia no calendário, mas criação/julgamento completo desse caso por essa tela: **[nao verificado]** (`app/ponto/services/veredito_celula.py:323–335`). |
-| `espelho_<veredito>` | Célula acusadora, sem isenção integral por protestos não cobráveis e sem isenção por pausa (`app/folha/export.py:1215–1236`). | O predicado lê **veredito/protestos/ata da célula**, não status do chamado. A saída depende de novo estado da célula ou de uma das exceções (`:1227–1236`). |
-
-Os sufixos acusadores declarados são `furo`, `discordante`, `indefinida`, `cobranca_indevida`, `cobrado`, `nunca_bateu` e `fato_em_ausencia` (`app/escala/models.py:1735–1736`). A retenção aplica o mesmo ramo a todos; não contém uma associação individual “veredito → objeto/tela” (`app/folha/export.py:1215–1236`).
-
-A ação nomeada é escolhida pelo **fio**, separadamente:
-
-| Fio | Objeto/ato nomeado | Tela/view comprovada |
-|---|---|---|
-| `colab` | Pergunta viva pendente: colaborador responde; depois admin valida (`app/folha/fora_da_folha.py:66–68`, `:40`). | `responder_pergunta_disputa`, por ID da pergunta, exige colaborador dono e pergunta viva (`app/chamados/urls.py:17`; `app/chamados/views.py:1228–1246`). |
-| `admin` | Pergunta viva respondida: validar ou recusar (`app/folha/fora_da_folha.py:69–70`, `:39`). | Formulários no fio levam `pergunta_id/chamado_id`; views delegam às ações de validar/recusar (`app/templates/chamados/partials/modal_fio.html:272–288`; `app/chamados/views.py:483–518`). |
-| `chamado` | Resolver os chamados vivos ligados à célula; a ferramenta inclui suas PKs (`app/folha/fora_da_folha.py:198–210`). | Retrato oferece modal do fio por **colaborador** (`app/folha/retrato_folha.py:977`, `:1020`). O botão de validação não prova solução universal: exige disputa e perguntas respondidas; sem disputa retorna erro (`app/chamados/views_cobrar.py:160–169`). |
-| `nada` | O código declara “SEM FIO”, sem ato específico (`app/folha/fora_da_folha.py:42`, `:73`). | Não há porta pelo fio no mapa do retrato (`app/folha/retrato_folha.py:978`). |
-
-Portas concretas para os fatos/cadastro do dia:
-
-- **Resolver dia no calendário:** formulário recebe colaborador/data e oferece `trabalhou`, `faltou`, `justificado` (`app/templates/colaboradores/partials/_calendario_grade.html:125–126`; `app/templates/ponto/partials/_veredito_dia.html:17–25`). A view exige POST e `regularizar_batida` (`app/ponto/views.py:3284–3313`).
-- `trabalhou` pode corrigir tipos e gravar batidas manuais; `faltou/justificado` criam `Ausencia` aprovada; depois fecha fio e lavra veredito administrativo na célula existente (`app/ponto/services/veredito_celula.py:290–329`). A view reconcilia o trecho em seguida (`app/ponto/views.py:3321–3323`).
-- **Escala/folga/sem escala:** o retrato aponta para `painel_vinculo`; cadastro aponta para `painel_colaborador` (`app/folha/retrato_folha.py:987–992`).
-- **Ausência já ligada a chamado:** `ir_para_ausencia` exige módulo `ausencia_colab`, lê `ausencia_id` e redireciona ao registro (`app/chamados/views.py:1494–1519`). O mapa do retrato não tem ponte por colaborador para essa porta (`app/folha/retrato_folha.py:982–985`).
-
-Além dos dias, o **motivo geral** pode ser:
-
-| Motivo geral | Objeto/acesso comprovado |
-|---|---|
-| `rescisao_modulo_proprio` | Determinado por demissão; o código remete ao módulo próprio de rescisão (`app/folha/export.py:834–845`). |
-| `sem_codigo_dominio` | `Colaborador.codigo_dominio`; edição recebe `codigo_folha` e atribui esse campo (`app/folha/export.py:846–849`; `app/colaboradores/views.py:1331–1334`). |
-| `ferias_com_batida` | Conflito entre férias e batidas; porta específica que solta cada caso: **[nao verificado]** (`app/folha/export.py:850–858`). Retrato não oferece porta por tipo férias (`app/folha/retrato_folha.py:993`). |
-| `cadastro_zero` | O texto do classificador indica vínculo/escala e recálculo (`app/folha/export.py:933–940`); painel vínculo está no mapa (`app/folha/retrato_folha.py:987–989`). |
-| `furo_espelho` | Motivos por célula não vazios; casos detalhados acima (`app/folha/export.py:942–947`). |
-| `nao_homologado` | Códigos de eventos fora do catálogo homologado (`app/folha/export.py:948–986`). Tela de rubricas vincula eventos/códigos (`app/folha/views.py:27–48`); porta de manutenção do conjunto homologado: não li. |
-
-Fechar pergunta ou chamado, isoladamente, não consta dos predicados de retenção por dia; eles leem célula, vínculo e exceções (`app/folha/export.py:1193–1238`).
-
-**(3) Universo do `vigia_fio.censo`**
-
-A consulta inicial parte de **`ChamadoColaborador` em `VIVOS`, com `celula_id`**, opcionalmente por empresa; não parte dos dias retidos da folha nem de `qs_na_fila` (`app/chamados/services/vigia_fio.py:183–187`).
-
-Depois separa módulos de furo, carrega células acusadoras e todas as perguntas dessas células (`app/chamados/services/vigia_fio.py:199–203`, `:226–227`, `:242–244`).
-
-- **Chamado vivo silenciado/arquivado:** entra na consulta inicial, pois ela não filtra `silenciado_ate` (`app/chamados/services/vigia_fio.py:184–187`). Já `qs_na_fila` exclui silêncio futuro (`app/chamados/services/painel.py:186–188`).
-- Pode contar como `fio_morto_cobrando` mesmo silenciado: o indicador de cobrança usa apenas status `COBRANCA`; o incremento não relê silêncio (`app/chamados/services/vigia_fio.py:199–200`, `:286–289`).
-- **Pergunta respondida e destino fechado:** isso sozinho não determina entrada. Se não houver **outro chamado vivo ligado à célula**, o dia fica fora desde a consulta inicial (`app/chamados/services/vigia_fio.py:184–187`).
-- Se outro chamado vivo trouxer a célula, a pergunta respondida pode contar como fio vivo: texto não vazio com carimbo, sem validação/tranca e sem decisão administrativa pode permanecer vivo independentemente do destino fechado (`app/chamados/juizes.py:1006–1032`). O censo considera todas as perguntas da célula (`app/chamados/services/vigia_fio.py:242–259`).
-
-Entrar no universo não significa contar como morto: outro vocabulário, pergunta viva, hoje/futuro, decisão de dia oferecida, ausência aberta cobrindo ou folga contestada validada têm saídas próprias (`app/chamados/services/vigia_fio.py:253–285`). O censo também não percorre os dias `sem_celula` da folha: exige chamado com célula e depois célula acusadora (`:184`, `:226–227`; retenção sem célula em `app/folha/export.py:1212–1214`).
-
-**(4) Reabertura e `silenciado_ate`**
-
-| Porta | Muda para vivo? | Limpa silêncio? |
-|---|---|---|
-| `ChamadoColaborador.reabrir` | `resolvido/fechado → em_analise`, passando pelas guardas; depois ressuscita perguntas (`app/chamados/models.py:1050–1098`; `app/chamados/catalogo/motor.py:113`). | **Não.** O núcleo grava status/carimbos/urgência, sem campos de silêncio (`app/chamados/models.py:193–217`). |
-| `transicionar → _aplicar` | A matriz humana permite retorno de resolvido para análise; há autorização ampliada de admin TI (`app/chamados/catalogo/motor.py:99–105`, `:139–156`; `app/chamados/models.py:257–260`). | **Não**, usa o mesmo núcleo (`app/chamados/models.py:193–217`). |
-| `_renascer_por_premissa_viva` | Delega a `reabrir`, após guardas de situação, cascade e competência (`app/chamados/models.py:763–770`). `abrir` pode acionar esse renascimento no dedup (`:635`, `:686`). | **Não**, herda a porta anterior. |
-| `arquivo.levantar` | **Não altera status.** Grava somente campos de silêncio/resgate/atualização (`app/chamados/services/arquivo.py:199–208`). | **Sim** (`:201–203`). |
-| `desarquivar_chamado` | Só chama `reabrir` no ramo de competência trancada; depois levanta o silêncio (`app/chamados/views_arquivar.py:64–77`). | **Sim**, quando chega ao levantamento (`:75–77`). |
-| Resgate por resposta | Escolhe destino ou pai e chama `arquivo.levantar` (`app/chamados/services/materializacao.py:655–667`). | **Sim**; esse trecho não muda status. |
-| Reconciliação do silêncio de ausência | Levanta conforme estado da ausência/premissa (`app/chamados/services/silencio_ausencia.py:68–75`, `:93–114`). | **Sim**, sem carimbar resgate humano. |
-
-Chamadores de `reabrir` encontrados sem levantamento de silêncio no ato: adesão, ação administrativa da disputa, reabertura de competência, resolvedor de respostas, resposta tardia e comandos de reabertura/reconciliação (`app/chamados/services/adesao.py:92`; `app/chamados/services/acoes_disputa.py:259–266`; `app/chamados/services/competencia_trancada.py:252–265`; `app/chamados/services/disputa_emissao.py:1606`; `app/chamados/services/resposta_tardia.py:35–47`; `app/chamados/management/commands/reabrir_orfas_enterradas.py:161`; `app/ponto/management/commands/reabrir_chamados_ausencia_aberta.py:48–53`; `app/ponto/management/commands/reconciliar_grade.py:518–519`; `app/ponto/management/commands/detectar_ausencias.py:300–301`).
-
-**Existe caminho para vivo + silêncio futuro sem exigir quarentena do colaborador:** a própria tela de arquivar chama `arquivo.silenciar`, preservando status e alterando somente campos do chamado; não condiciona o ato à quarentena (`app/chamados/views_arquivar.py:24–42`; `app/chamados/services/arquivo.py:156–171`). Também uma reabertura aceita conserva silêncio anterior, pois `_gravar_estado` não o limpa (`app/chamados/models.py:1087–1089`, `:193–217`). Ocorrência real desse estado: **[nao verificado]**.
-
-**(5) Link desde o retrato até o dia/pergunta/chamado**
-
-**Há navegação indireta por colaborador; não há link específico em cada data bloqueada no trecho lido.** As datas são `span`s; as portas recebem apenas ID do colaborador (`app/templates/folha/_retrato_o_que_fazer.html:43–46`; `app/folha/retrato_folha.py:1010–1024`).
-
-| Etapa | View/template e informação transportada |
-|---|---|
-| Retrato | Rota → `views_retrato.retrato_folha` (`app/folha/urls.py:23`). |
-| Clique no nome | Abre `painel_colaborador` com colaborador, mês e ano (`app/templates/folha/_retrato_lista.html:60–62`; `app/colaboradores/urls.py:48`). |
-| Bloco “o que fazer” | View lê a linha **gravada** de `RetratoFolha`; monta textos e portas dessa linha (`app/colaboradores/views.py:975–985`). Partial incluído no painel (`app/templates/colaboradores/partials/painel_colaborador.html:26`). |
-| Datas bloqueadas | Exibidas sem links individuais (`app/templates/folha/_retrato_o_que_fazer.html:43–46`). A linha gravada não contém IDs de pergunta/chamado/célula (`app/folha/retrato_folha.py:1177–1188`). |
-| Botões do retrato | Fio colab/chamado → modal do fio; escala/folga/sem escala → painel vínculo; cadastro → painel colaborador. Outros tipos podem não ter porta (`app/folha/retrato_folha.py:974–995`). Todos usam somente ID do colaborador (`:1020`). |
-| Modal do fio | `modal_fio_colaborador`, por colaborador, sem dia/competência na URL gerada (`app/chamados/urls.py:39`; `app/chamados/views.py:869–889`; `app/folha/retrato_folha.py:1020`). |
-| Pergunta/chamado dentro do fio | Forms de validar/recusar levam IDs de pergunta e chamado; cobrança leva chamado (`app/templates/chamados/partials/modal_fio.html:272–288`, `:343`). |
-
-O texto do retrato pode conservar literalmente “chamado N”: é lookup de `DESTRAVA`; a substituição pelos números concretos existe em `o_que_segura`, mas não nesse lookup (`app/folha/retrato_folha.py:1068–1069`; `app/folha/fora_da_folha.py:207–210`).
-
-Há outra navegação: **painel → aba Espelho → calendário → Resolver dia** (`app/templates/colaboradores/partials/painel_colaborador.html:33`, `:180–182`; `app/templates/colaboradores/partials/_calendario_grade.html:125–126`). Porém o carregamento inicial da aba pede `/colaboradores/<id>/calendario/` **sem mês/ano do retrato**; o calendário permite navegar o período depois (`app/templates/core/_drawer_generico.html:132–142`; `app/templates/colaboradores/calendario_partial.html:37–55`).
-
-## 29/10 15:50 · sessao df5ef1ecfe7e · - · - · origem=Ronald (tmux)
-
-Complemento T21 itens 2/5:
-
-- **Existe porta direta “Resolver dia”** no calendário: `templates/colaboradores/partials/_calendario_grade.html:125-126` inclui `ponto/partials/_veredito_dia.html` passando colaborador e dia. O formulário usa `colab`, `data`, `volta`, oferece `trabalhou/faltou/justificado` e tipo de ausência (`templates/ponto/partials/_veredito_dia.html:17-23`). “Cobrar este dia” reutiliza esses campos em outra porta (`:25`).
-- URL de decisão: `ponto/urls.py:58`→`veredito_celula_view`; exige POST e permissão `regularizar_batida`, lê `colab`, `datas` ou `data`, valida ISO e opção de veredito, chama serviço por dia (`ponto/views.py:3284-3313`). Em sucesso reconcilia o trecho (`:3321-3323`).
-- Essa porta **não significa um único tipo de conserto para cada veredito acusador**. Despacha por fato declarado: `trabalhou` pode inverter tipos via escritor canônico (`ponto/services/veredito_celula.py:290-297`), grava batidas `manual`, com autoridade humana e aprovador (`:298-304`), depois `recompute_turnos(D-1,D+1)` (`:307`). `faltou`/`justificado` criam `Ausencia` de um dia já aprovada (`:309-316`).
-- Ao final fecha fio do dia e, se célula existente, chama `cel.lavrar_veredito(via='admin',veredito=...,ator=autor)` (`veredito_celula.py:323-329`). `fechar_o_fio_do_dia` fecha perguntas vivas por colaborador+data e reconcilia chamados vivos (`:174-187`). Caso sem célula: serviço guarda log com objeto_id zero (`:328-335`); criação posterior da célula nesse fluxo: [não verificado].
-- **Tela necessária é alcançável desde a ficha**, porém há quebra de contexto temporal: ficha tem aba “Espelho” (`templates/colaboradores/partials/painel_colaborador.html:33,180-182`); JS `trocarAbaColab` carrega `/colaboradores/<cid>/calendario/` **sem mes/ano**, mesmo que o nome do retrato tenha aberto ficha com competência (`templates/core/_drawer_generico.html:132-142`). Assim o carregamento inicial não leva os parâmetros do retrato. Calendário permite navegar mês/ano/modo depois (`templates/colaboradores/calendario_partial.html:37-55`).
-- View do calendário exige `ver_cadastro`, carrega colaborador e passa GET para `contexto_calendario`; habilita decisão apenas com `regularizar_batida`, oferecendo tipos vigentes de ausência (`colaboradores/views.py:1935-1962`); rota `colaboradores/urls.py:24`.
-- Há também portas por **batida existente** no mesmo calendário: inverter tipo e retratar com motivo/observação (`templates/colaboradores/partials/_calendario_grade.html:121`); estas ações usam a PK da batida, diferente de “Resolver dia”. Cadeia completa dessas duas escritas até rejulgamento: não li.
-- **Declaração de folga/falta por lote** também existe como serviço: `ponto/services/declarar_dia.py:147-162` revalida e despacha por dia. Folga chama `lancar_folga` dentro de transação e fecha fio (`:172-201`); falta reutiliza `veredito_celula(...,'faltou')` (`:205-211`). Chat serve preview/aplicação dessa declaração (`core/views_ia.py:703,717,748,756`); execução completa do intake até o serviço: não li.
-- **Rubricas**: tela `/rubricas/` (`folha/urls.py:8`) exige `editar_folha`, aceita evento/código e escopo empresa/global e chama `vincular_evento` (`folha/views.py:27-48`). Autoridade cria/atualiza `RubricaDominio` com código, ativo e catálogo (`folha/rubricas.py:17-31`). Catálogo FK só é escolhido quando descrição é inequívoca (`:11-14`); isso é diferente do gate de export, que compara `codigo_fopag.zfill(4)` ao conjunto de códigos homologados (`folha/export.py:968-986`). Porta de importar/manter o conjunto homologado: não li.
-- **Vínculo/cadastro**: links do retrato para painel vínculo e cadastro já comprovados (`folha/retrato_folha.py:987-992`). Cadeia de gravação de vínculo, pós-vínculo e rejulgamento será consolidada pelo root; não reli nesta tarefa.
-
-## 29/10 15:48 · sessao df5ef1ecfe7e · - · - · origem=Ronald (tmux)
-
-T21 itens 2 e 5, fonte `7596ef5e8351bf7473acecafc8348bca7d2cf9d7`. Somente leitura; não executei testes/banco/escrita.
-
-**O que `o_que_segura` realmente entrega**
-
-- `folha/fora_da_folha.py:188-193`: consulta janela da competência, obtém classificação geral de `classificar_export` e, separadamente, os dias de `motivos_retencao_celula`. Portanto `motivo` geral e lista `dias` respondem perguntas diferentes; lista vazia não prova `entra`.
-- `folha/fora_da_folha.py:198-210`: lista por dia contém `data`, `veredito`, `motivo`, `fio`, texto `destrava` e **PKs dos chamados vivos**. Não inclui PK de pergunta nem célula no retorno.
-- `folha/fora_da_folha.py:51-55,66-73`: perguntas são carregadas por `celula_id`; primeiro vence pergunta viva pendente (`colab`); outra pergunta viva→`admin`; sem pergunta viva mas chamado VIVO→`chamado`; restante→`nada`. Associação do chamado é pela célula, não necessariamente pergunta.disputa.chamado.
-
-**Cada condição que coloca um dia em `dias`**
-
-| Motivo | Critério exato | Objeto/estado que precisa mudar para deixar de satisfazer o critério |
-|---|---|---|
-| `sem_celula`, célula inexistente | D passado, com vínculo cobrindo D, D diferente da demissão; `export.py:1195-1214`. | Produzir `CelulaDia` do dia com julgamento que não retenha; o simples fechamento de chamado não aparece no predicado. Porta/tela específica de julgamento forçado desse dia: [não verificado]. |
-| `sem_celula`, célula existente | `veredito is None`, `trabalha is not None`, D passado e não demissão; `export.py:1237-1238`. | Julgar/lavrar veredito da célula. Não basta trocar status de pergunta/chamado: esses objetos não são lidos nesse ramo (`export.py:1237-1238`). |
-| `espelho_<veredito>` | Célula acusadora e não inteiramente isenta por protestos não cobráveis e não isenta pela pausa; `export.py:1215,1227-1236`. | Corrigir o fato/cadastro/ata que sustenta a acusação e obter novo julgamento; critério de saída é deixar `VEREDITOS_ACUSAM` ou satisfazer uma das duas exceções1235. |
-| Valores possíveis do sufixo | `furo`, `discordante`, `indefinida`, `cobranca_indevida`, `cobrado`, `nunca_bateu`, `fato_em_ausencia`; `escala/models.py:1735-1736`. | Não existe associação individual “um veredito→uma tela” nessa função; escolha depende do fato e fio. |
-| Exceção pausa | `protestos == {'FURO_PARCIAL'}` e só pausas apagadas; `export.py:1147`. Exige leitura de papéis sem desalinhamento, ponta aberta ou “não sei”; `1122-1129`. | Não exige preencher pausa para sair da retenção se já cumpre essa exceção. |
-| Exclusões gerais | Isento Art.62 sai antes1174-1178; recorta admissão/demissão1180-1187; sem célula **e** sem vínculo não entra1209-1210. | Essas exclusões são parte do universo, não ações sugeridas ao operador. |
-
-Não há restrição `d<hoje` no ramo de veredito acusador (`export.py:1215-1236`); ela existe nos dois ramos `sem_celula` (`1213,1237`).
-
-**Fio→ato e porta existente**
-
-| Fio | O que o código nomeia | Porta comprovada e critérios |
-|---|---|---|
-| `colab` | Colaborador responde; depois admin valida (`fora_da_folha.py:38-40`). | `chamados:responder_pergunta_disputa`, URL por pergunta (`chamados/urls.py:17`); POST, colaborador autenticado dono da disputa e pergunta viva (`chamados/views.py:1228-1246`). Cobrar é outra ação, não resposta: botão no fio `templates/chamados/partials/modal_fio.html:343`; URL `chamados/urls.py:25`. |
-| `admin` | Validar ou recusar resposta (`fora_da_folha.py:39`). | Form por `pergunta_id` e `chamado_id` no fio (`modal_fio.html:272-277`); rejeição `283-288`. Backend delega a `acao_validar_pergunta` (`chamados/views.py:483-501`) ou `acao_recusar_pergunta` (`505-518`). `acoes_disputa.py:19-27` delega ao serviço e recusa sem resposta; erro de gravação é explícito32-41. |
-| `chamado` | Resolver os chamados vivos, com números substituídos somente na ferramenta (`fora_da_folha.py:207-210`). | Retrato oferece “Validar no fio” por **colaborador**, não operação de resolver por PK (`retrato_folha.py:977,1020`). `validar_inline` exige disputa aberta vinculada e perguntas vivas respondidas (`views_cobrar.py:160-169`); sem disputa retorna erro167. Portanto esse botão não prova solução para todo fio `chamado` sem pergunta viva. |
-| `nada` | “SEM FIO… este dia precisa de alguém para olhar” (`fora_da_folha.py:42`). | Retrato não oferece porta pelo fio (`retrato_folha.py:978`). Uma porta de correção específica por dia nesse caso: [não verificado]. |
-
-“Regularizar disputa” também não é fechamento livre: exige resolução textual e bloqueia qualquer pergunta viva sem resposta; depois materializa validadas (`chamados/services/acoes_disputa.py:118-139`). Fechar o continente por si só não altera o critério de retenção da célula (`folha/export.py:1215-1238`).
-
-**Motivo geral que pode aparecer em `o_que_segura['motivo']` sem ser um dia da lista**
-
-Ordem do classificador:
-
-| Motivo geral / condição | Objeto e porta comprovada |
-|---|---|
-| `rescisao_modulo_proprio`: `data_demissao != None` (`export.py:840-845`). | Não é pendência a “soltar” pelo chamado; código declara módulo próprio Dominio/TRCT (`834-839`). |
-| `sem_codigo_dominio`: código vazio (`846-849`). | `Colaborador.codigo_dominio`; edição cadastral possui tradução `codigo_folha→codigo_dominio` (`colaboradores/views.py:1237,1260`) e atribuição1334. Tela do retrato pode oferecer “Cadastro do colaborador” conforme tipo (`retrato_folha.py:992`). |
-| `ferias_com_batida`: mapa de dias com batida dentro de férias (`export.py:850-858`). | Conferir fatos de férias/batida; porta do retrato por tipo `ferias` é explicitamente `None` (`retrato_folha.py:993`). Porta concreta que resolveria cada inconsistência: [não verificado]. |
-| `cadastro_zero`: zero horas, batidas apuráveis suficientes e nenhum dia previsto; escreve motivo (`export.py:876-888,910-919,933-940`). | Próprio texto manda cadastrar vínculo/escala e recalcular (`937-938`); retrato tipos escala/folga/sem_escala vão ao painel vínculo (`retrato_folha.py:987-989`). |
-| `furo_espelho`: motivos de retenção por célula não vazios (`export.py:942-947`). | Célula/fatos por dia, nos quadros anteriores. |
-| `nao_homologado`: códigos não homologados (`948-953`). | Rubricas/catálogo: mapa empresa sobre global (`958-965`); só eventos não zero fora do catálogo, catálogo vazio desliga gate (`968-986`); inclui falta_diurna quando houver datas de falta987-992. Tela listagem rubricas `folha/urls.py:8`; porta concreta de homologação/edição: não li. |
-
-Recalcular fechamento é POST administrativo separado: `ponto/views.py:1226-1252` chama `recalcular_fechamento_mes`. Se isso força rejulgamento da célula em todos esses casos: [não verificado].
-
-**Caminho concreto desde o retrato até pergunta/chamado**
-
-1. URL do retrato é `folha/urls.py:23`; nome da pessoa abre drawer `colaboradores:painel_colaborador` com `mes` e `ano` (`templates/folha/_retrato_lista.html:60-62`); rota do painel em `colaboradores/urls.py:48`.
-2. Painel lê **linha já gravada** de `RetratoFolha`, não executa `o_que_segura` (`colaboradores/views.py:973-985`). Só existe bloco com competência válida, empresa e permissão `ver_folha`975.
-3. Partial entra no cabeçalho do painel (`templates/colaboradores/partials/painel_colaborador.html:26`). “Datas (ISO)” são `span`s, **sem links por dia** (`templates/folha/_retrato_o_que_fazer.html:43-46`).
-4. Linha gravada tem `colab,codigo,status,motivo,dias,datas,dono,tipo,saldo`; não guarda IDs célula/pergunta/chamado (`folha/retrato_folha.py:1177-1188`).
-5. Texto “O que destrava” é lookup de `DESTRAVA`, **literal incluindo “chamado N”** (`retrato_folha.py:1051-1055,1068-1069`). A substituição pelos PKs reais ocorre na ferramenta `o_que_segura` (`fora_da_folha.py:207-210`), não nesse drawer.
-6. Botões são gerados por `portas_da_linha`: fio colab→“Cobrar no fio”, fio chamado→“Validar no fio”; admin e ninguém não têm porta pelo fio (`retrato_folha.py:974-979`). Tipos escala/folga/sem_escala→painel vínculo; cadastro→painel colaborador; falta/não bate/férias/sem causa→nenhuma (`986-995`).
-7. Todos esses endereços usam **apenas ID do colaborador**, sem competência/dia/pergunta/chamado (`retrato_folha.py:1010-1024`), e abrem outro drawer (`_retrato_o_que_fazer.html:60-62`).
-8. Modal fio é `chamados/urls.py:39`→`modal_fio_colaborador`; requer gestor e monta chamados do colaborador (`chamados/views.py:869-889`). Não recebe dia nem competência da origem. Contador de mensagens usa competência **atual** (`894-907`).
-9. Dentro do fio há cards com formularios por pergunta e chamado (`modal_fio.html:272-287`) e cobrar por chamado343. Assim há caminho indireto até o objeto, mas não link do retrato ao dia/pergunta/chamado específico que o segurou.
-10. Ausência tem uma porta por chamado, `chamados:ir_para_ausencia` (`urls.py:44`): exige `modulo_origem='ausencia_colab'`, lê `contexto_json['ausencia_id']`, marca análise e redireciona `/ponto/ausencias/?registro=<id>` (`views.py:1494-1519`). O próprio mapa do retrato declara faltar ponte por colaborador para essa porta (`retrato_folha.py:982-985`).
-
-Escopo não lido: serviço interno de `validar_pergunta`/materialização completa, regras e gravações da tela de ausências/férias, telas internas do catálogo homologado, mecanismo de recalcular→rejulgar. Portanto não afirmo que qualquer clique acima solta automaticamente a folha; o critério final é o novo resultado do classificador/célula (`fora_da_folha.py:191-213`, `export.py:942-953`).
-
-## 29/10 15:48 · sessao 758e5831a301 · grupo1 · verificador · origem=Code
-
-- **Classe 3 — `app/ponto/services/veredito_celula.py:217`:** `_grade` lê `timezone.now()` a cada simulação. Baseline e candidatos podem receber instantes distintos dentro da mesma decisão (`app/ponto/services/veredito_celula.py:219`, `app/ponto/services/veredito_celula.py:273`, `app/ponto/services/veredito_celula.py:281`).
-
-- **Classe 3 — `app/ponto/services/dias_em_aberto.py:112`:** o serviço lê o relógio dentro do laço de colaboradores, em vez de receber um instante comum à apuração (`app/ponto/services/dias_em_aberto.py:78`, `app/ponto/services/dias_em_aberto.py:106`).
-
-- **Classe 3 — `app/ponto/services/he_pendente_lavrado.py:93`:** `apurar` produz um novo instante por colaborador; sua assinatura não recebe o instante do chamador (`app/ponto/services/he_pendente_lavrado.py:71`, `app/ponto/services/he_pendente_lavrado.py:91`).
-
-- **Classe 3 — `app/ponto/management/commands/e6_oraculo.py:141`:** o leitor `InsumosDoDono.cxr` lê seu próprio relógio quando precisa carregar o espelho, sem receber o instante pela construção do objeto (`app/ponto/management/commands/e6_oraculo.py:118`).
-
-- **Classe 3 — `app/folha/porta_export.py:318`:** `medir` captura o relógio dentro do serviço leitor; sua assinatura impede que a borda forneça o instante (`app/folha/porta_export.py:313`).
-
-- **Classe 3 — `app/relatorios/pdf_espelho.py:1040`:** o gerador informacional captura o instante internamente. Quando chamado pelo laço do lote, cada documento recebe um instante próprio (`app/relatorios/services.py:222`, `app/relatorios/services.py:250`).
-
-- **Classe 3 — `app/relatorios/pdf_espelho.py:1086`:** o gerador auditável também captura o instante internamente, inclusive no caminho chamado pelo lote (`app/relatorios/services.py:70`, `app/relatorios/services.py:237`).
-
-- **Classe 3 — `app/escala/utils.py:2289`:** mesmo recebendo `agora`, o contrato lê `localdate()` sem argumento quando `hoje` é omitido. O alinhamento usa o instante recebido, mas o corte visual usa outro relógio (`app/escala/utils.py:2294`, `app/escala/utils.py:2295`).
-
-- **Classe 3 — `app/escala/utils.py:1257`:** o builder agora exige `agora`, mas continua obtendo `ref` do relógio real quando omitida, independentemente do instante recebido (`app/escala/utils.py:1244`).
-
-- **Classe 3 — `app/relatorios/pdf_espelho.py:593`:** o coletor recebe `agora`, mas calcula a data passada ao espelho com `datetime.date.today()`, mantendo uma segunda leitura temporal dentro do leitor (`app/relatorios/pdf_espelho.py:187`).
-
-- **Classe 3 — `app/ponto/management/commands/detectar_par_relampago.py:289`:** `varrer_pares_embutidos` recebe `agora`, mas não o repassa ao carregador de `par_completo`; o caminho termina lendo `timezone.now()` no juiz (`app/ponto/turnos.py:2143`, `app/ponto/turnos.py:2119`). A montagem das janelas no comando também omite o instante já capturado (`app/ponto/management/commands/detectar_par_relampago.py:328`, `app/ponto/management/commands/detectar_par_relampago.py:349`).
-
-- **Classe 5 — `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:445`, `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:451`:** os selos verificam apenas presença de `turno=` e existência de uma chamada ao seletor. Trocar o argumento por `turno=None` no detector preserva ambas as verificações e restaura a DP sem papel (`app/chamados/detector_anomalias.py:219`, `app/escala/utils.py:585`, `app/escala/utils.py:622`). O RED anterior ao encerramento e o MORDE com saída regular também não distinguem essa regressão (`app/chamados/tests/test_detector_pergunta_ao_juiz_do_par.py:192`, `app/chamados/tests/test_detector_pergunta_ao_juiz_do_par.py:218`).
-
-Total por classe: 1=0; 2=0; 3=11; 4=0; 5=1; 6=0; 7=0.
-
-_131 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_137 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
