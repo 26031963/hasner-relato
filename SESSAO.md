@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/10/2026 17:56:16.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (20.6 MB). Acoes na janela: **394**.
+**Medido em 29/10/2026 18:01:44.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (20.7 MB). Acoes na janela: **397**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 18:00:17 | Bash | Wait for JUSTIFICATIVA suite 3 | `cd /home/ronald/saas-hasner && until grep -q '^rc=' logs/justif/suite3.log 2>/dev/null; do /usr/bin/sleep 20; done; grep -E '^(OK\|FAILED)($\| \()\|^Ran \|^rc=' logs/justif/suite3.log \| tail -3; grep -E '^(FAIL\|ERROR):' logs/justif/suite3.log \| head -5` |
+| 18:00:04 | Bash | Write JUSTIF questions and status | `cd /home/ronald/saas-hasner && python3 - <<'PY' p='app/docs/RELATO.md'; s=open(p,encoding='utf-8').read(); i=s.index('\n> ') sec=''' > **lei: JUSTIF-PASSIVO-FORA-DO-AVAL** (pergunta; segura SO o apply dos extras da JUSTIFICATIVA-ENCERRA-ORIGEM; os 34 do aval seguem) -- medido em prod so leitura 29/10 17:5x (`logs/justif/sonda_passivo_medir.out`): o aval cobre os 34 do M1 (alvo real 33: ch35123 ja  ...` |
+| 17:59:54 | Agent | Final verify JUSTIFICATIVA round 2 | `2a leitura final da JUSTIFICATIVA-ENCERRA-ORIGEM. Copia /home/ronald/wt-justif-2910-1645 @ cbedeb91, sobre 85d3dc98, que voce reprovou. Diffs: `git -C /home/ronald/wt-justif-2910-1645 diff 85d3dc98 cbedeb91` (a rodada) e `diff 2cc71cc8 cbedeb91` (a obra). O Codex fez 5 voltas de verificador nesta rodada; as respostas estao em /home/ronald/saas-hasner/logs/justif/r5*, r6* e codex*.out. O construtor ...` |
 | 17:54:59 | Bash | Wait for next constructor commit | `cd /home/ronald/saas-hasner && a=$(git -C /home/ronald/wt-justif-2910-1645 rev-parse --short HEAD); b=$(git -C /home/ronald/wt-grupo1p1-2910-1745 rev-parse --short HEAD); until [ "$(git -C /home/ronald/wt-justif-2910-1645 rev-parse --short HEAD)" != "$a" ] \|\| [ "$(git -C /home/ronald/wt-grupo1p1-2910-1745 rev-parse --short HEAD)" != "$b" ]; do /usr/bin/sleep 20; done; for w in wt-justif-2910-164 ...` |
 | 17:54:48 | SendMessage |  | `-` |
 | 17:54:19 | Bash | Wait for next constructor commit | `cd /home/ronald/saas-hasner && a=$(git -C /home/ronald/wt-justif-2910-1645 rev-parse --short HEAD); b=$(git -C /home/ronald/wt-grupo1p1-2910-1745 rev-parse --short HEAD); until [ "$(git -C /home/ronald/wt-justif-2910-1645 rev-parse --short HEAD)" != "$a" ] \|\| [ "$(git -C /home/ronald/wt-grupo1p1-2910-1745 rev-parse --short HEAD)" != "$b" ]; do /usr/bin/sleep 20; done; for w in wt-justif-2910-164 ...` |
