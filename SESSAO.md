@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/10/2026 11:57:48.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (15.5 MB). Acoes na janela: **400**.
+**Medido em 29/10/2026 12:03:08.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (15.5 MB). Acoes na janela: **403**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 11:58:03 | Bash | Wait for LASTRO suite verdict | `cd /home/ronald/saas-hasner && until grep -q '^rc=' logs/lastro3/suite_inteira_2.out 2>/dev/null; do /usr/bin/sleep 30; done; grep -E '^(OK\|FAILED)($\| \()\|^Ran \|^rc=\|ARVORE_HASH' logs/lastro3/suite_inteira_2.out \| tail -5; grep -E '^(FAIL\|ERROR):' logs/lastro3/suite_inteira_2.out \| head -5` |
+| 11:57:58 | Bash | File window-dependence finding | `cd /home/ronald/saas-hasner/app/docs && python3 - <<'PY' p='BACKLOG.md'; s=open(p,encoding='utf-8').read() anc=[l for l in s.split('\n') if l.startswith('\| DISPARAR-PERGUNTAS-NO-CONTRATO-20 \|')][0] s=s.replace(anc,anc+'\n\| GRADE-DEPENDE-DA-JANELA \| **achado da LASTRO-DEGRAU-2 #3 (29/10 11:5x), dono ESTRUTURA**: o construtor da grade (`escala/utils.py::montar_grade_prevista_periodo`) responde d ...` |
+| 11:57:54 | Agent | Verify LASTRO-DEGRAU-2 second reading | `2a leitura da LASTRO-DEGRAU-2. Copia /home/ronald/wt-lastro3-2910-1000 @ 26dc989f, sobre 5c8b7ead. Diff da rodada: `git -C /home/ronald/wt-lastro3-2910-1000 diff 5c8b7ead 26dc989f`; da obra: `diff 01a1f65a 26dc989f`. A sua 1a leitura reprovou por: 1. derivador paralelo da chamada do cartorio; 2. "mesma janela do cartorio" falso no cron; 3. os 178 sem medida; 4. falta o contra-exemplo "tipo casa";  ...` |
 | 11:47:48 | Bash | Wait for LASTRO suite progress | `/usr/bin/sleep 590; cd /home/ronald/saas-hasner && bin/trava_teste.sh --quem; ls -t logs/lastro3/ \| head -3; git -C /home/ronald/wt-lastro3-2910-1000 log --oneline -1 \| cut -c1-70; date +%H:%M` |
 | 11:47:44 | Bash | Record grupo 1 decision and filed findings | `cd /home/ronald/saas-hasner && python3 - <<'PY' p='app/docs/RELATO.md'; s=open(p,encoding='utf-8').read(); i=s.index('\n> ') s=s[:i]+'\n> **JUIZ-DO-PAR-GRUPO-1 sitio 1 (`detector_anomalias`) -- PAROU NO DIFF 11:5x, decidido pela lei existente:** ao vivo a migracao cria 204 `grave` em 30 d, **166 falsas** (`logs/grupo1/classe_ao_vivo.out`): o pareador ao vivo da o turno por FECHADO numa S sem batid ...` |
 | 11:47:33 | SendMessage |  | `-` |
