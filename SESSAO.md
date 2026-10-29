@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/10/2026 15:36:46.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (18.2 MB). Acoes na janela: **369**.
+**Medido em 29/10/2026 15:42:18.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (18.4 MB). Acoes na janela: **368**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -378,4 +378,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 03:56:09 | Bash | Put COL129 universe/dono question atop RELATO | `date +%H:%M && python3 - <<'EOF' p='docs/RELATO.md'; s=open(p).read() q='''> **lei: COL129-C9-UNIVERSO-E-DONO** (pergunta, nao para a fila; segura SO o pouso do COL129 (c), copia wt-col129-2901-0330 @ 1ade7085, empilhada sobre ORFAS) -- construida a C9 da lista Cadastro x Realidade pela lei existente: o PAREADOR declara o par que ele mesmo separou (`ponto/turnos.py::_declara_separado_pelo_teto`, z ...` |
 | 03:50:51 | Bash | Keep waiting for constructors | `/usr/bin/sleep 295; for c in wt-orfas-2901-0215 wt-col129-2901-0330; do echo "$c: $(git -C /home/ronald/$c log --oneline -1 \| cut -c1-90)"; done; date +%H:%M` |
 | 03:45:50 | Bash | Keep waiting for constructors | `/usr/bin/sleep 295; for c in wt-orfas-2901-0215 wt-col129-2901-0330; do echo "$c: $(git -C /home/ronald/$c log --oneline -1 \| cut -c1-90)"; done; date +%H:%M` |
-| 03:40:50 | Bash | Keep waiting for constructors | `/usr/bin/sleep 295; for c in wt-orfas-2901-0215 wt-col129-2901-0330; do echo "$c: $(git -C /home/ronald/$c log --oneline -1 \| cut -c1-90)"; done; date +%H:%M` |
