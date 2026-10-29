@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/10/2026 18:01:44.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (20.7 MB). Acoes na janela: **397**.
+**Medido em 29/10/2026 18:07:14.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (20.7 MB). Acoes na janela: **395**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -405,5 +405,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 06:13:22 | SendMessage |  | `-` |
 | 06:12:59 | Bash | Cancel queued obsolete ORFAS suite | `cd /home/ronald/saas-hasner && pkill -P 982714; kill 982714 2>/dev/null; /usr/bin/sleep 2; pgrep -af "wt-orfas" \| cut -c1-120; docker ps --format '{{.Names}} {{.Command}}' \| grep -i orfas \| head` |
 | 06:12:54 | Bash | Check suite trava holders | `cd /home/ronald/saas-hasner && bin/trava_teste.sh --quem; ls -la logs/orfas/suite_inteira_4.log logs/col129/suite_inteira_c9_4.log; pgrep -af "suite.sh --dir" \| cut -c1-150` |
-| 06:02:59 | Bash | Wait for both suites | `/usr/bin/sleep 590; cd /home/ronald/saas-hasner/logs; for f in orfas/suite_inteira_4.log col129/suite_inteira_c9_4.log; do echo "$f: $(grep -E '^(OK\|FAILED)($\| \()\|^Ran \|^rc=' $f 2>/dev/null \| tail -3 \| tr '\n' ' ')"; done; date +%H:%M` |
-| 06:02:53 | Agent | Verify ORFAS fourth reading | `4a leitura da ORFAS, obra CONTRATO-20-LASTRO-E-ORFAS (metade ORFAS), aval ORFAS-ENTERRA-FURO-REAL=(b). O carimbo fantasma passa a nascer no EVENTO do cartorio e `reconciliar_perguntas_orfas` vira VIGIA. Onde: copia /home/ronald/wt-orfas-2901-0215 @ 8f4eca4b, em cima de 7d330e9a. Diff da rodada: `git -C /home/ronald/wt-orfas-2901-0215 diff 7d330e9a 8f4eca4b`. A 3a leitura reprovou porque a aberta C ...` |
