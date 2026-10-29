@@ -1,7 +1,179 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **29/10/2026 14:45** · publicado em **29/10/2026 14:48** (UTC-3)
+> Ultima resposta processada: **29/10/2026 14:52** · publicado em **29/10/2026 14:54** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 29/10 14:52 · sessao efe6b065e388
+
+O risco de o futuro vencer pressupõe que ele satisfaça os filtros da consulta, especialmente `ativa=True`. A ordenação padrão é `-data_inicio`: `.first()` favorece o futuro; mapas que sobrescrevem por colaborador nessa ordem conservam o mais antigo. (`app/escala/models.py:877`; `app/escala/models.py:1003`)
+
+Contei pontos lógicos de leitura, separando seleção de vínculo de leitura independente de posto. Chamadas ao mesmo helper não foram recontadas. Impacto efetivo nos dados de **bo09**: [não verificado].
+
+**Risco alto — vínculo futuro pode fornecer escala, marco, veto ou alvo de alteração antes da sua vigência.**
+
+| # | Arquivo:linha | Função | O que alimenta |
+|---|---|---|---|
+| A01 | `app/escala/utils.py:920` | `data_saida_esperada` | Saída esperada da entrada; escolhe ativa, sem fim, mais recente. |
+| A02 | `app/colaboradores/services/calendario.py:341` | `contexto_calendario` | Grade mensal; primeiro ativo. A guarda pode ocultar dias sem célula cobertos pelo vínculo anterior. |
+| A03 | `app/colaboradores/views.py:268` | `painel_vinculo` | Agenda de 14 dias pelo primeiro ativo. |
+| A04 | `app/colaboradores/views.py:2202` | `agenda_modal_view` | Semana navegável pelo primeiro ativo. |
+| A05 | `app/colaboradores/views.py:2860` | `disponibilidade` | Retorno de folga; ativos com `setdefault` conservam o futuro. |
+| A06 | `app/colaboradores/views_fase.py:45` | `fase_12x36` | Tela de fase, âncora e comparação de calendários pelo ativo mais recente. |
+| A07 | `app/colaboradores/services/drawer.py:22` | `contexto_drawer` | Escala escolhida controla também se a grade será montada. |
+| A08 | `app/escala/views.py:17` | `minha_escala` | Previsão de 14 dias com um único primeiro ativo. |
+| A09 | `app/escala/services/furos_diarios.py:29` | `apurar_colab` | Ativo futuro pode vetar a apuração inteira antes da leitura da grade. |
+| A10 | `app/escala/services/furos_diarios.py:291` | `universo_empresa` | Classificação LIMBO/suspeita e previsão da janela pelo ativo mais recente. |
+| A11 | `app/escala/services/impacto_troca.py:34` | `impacto_da_troca` | Âncora, furos anteriores e aviso de troca retroativa. |
+| A12 | `app/escala/services/escala_auto.py:172` | `dry_da_frota` | Mais recente ativo sem fim alimenta propostas baseadas no histórico. |
+| A13 | `app/ponto/services/espelho.py:42` | `piso_visual` | Início futuro eleva o piso do espelho/calendário, limitado a hoje. |
+| A14 | `app/ponto/turnos.py:2428` | `proximo_tipo_de` | Tipo futuro decide o ramo intermitente da sugestão E/S. |
+| A15 | `app/ponto/turnos.py:2447` | `proximo_tipo_de` | Horários futuros desempatam retorno do intervalo versus saída. |
+| A16 | `app/ponto/services/faltas_de_hoje.py:35` | `faltas_de_hoje_sem_cobranca` | Cron/contador: LIMBO, trabalho e marco de hoje. |
+| A17 | `app/ponto/services/abriu_nao_bateu.py:194` | `_hora_de_bater_passou` | Cron/contador julga o dia pelo marco do primeiro ativo. |
+| A18 | `app/ponto/management/commands/censo_fase_12x36.py:295` | `Command._curar` | Tipo do ativo mais recente entra na cura com virada histórica. |
+| A19 | `app/ponto/management/commands/reconciliar_fantasmas.py:172` | `Command.handle` | Diagnóstico de completude de dias antigos pelo tipo escolhido hoje. |
+| A20 | `app/api/views.py:312` | `api_me` | Escala de hoje apresentada no app pelo primeiro ativo. |
+| A21 | `app/api/views_core.py:301` | `api_me` | Implementação do kernel: mesma escolha para a escala de hoje. |
+| A22 | `app/api/views.py:918` | `api_escala_v2` | Previsão de 14 dias com um único primeiro ativo. |
+| A23 | `app/chamados/juizes.py:1251` | `_marco_esperado_da_grade` | Defesa/classificação: marco esperado do fato pelo ativo mais recente. |
+| A24 | `app/chamados/services/desvio_escala.py:44` | `medir_desvio` | Diagnóstico de batidas de 14/84 dias contra a escala escolhida hoje. |
+| A25 | `app/inteligencia/calculadores.py:319` | `_calc_escalas_desvio` | Tipo atual decide exclusão de intermitente e comparação com 30 dias. |
+| A26 | `app/ferias/management/commands/alertar_retornos.py:28` | `Command.handle` | Cron/push de hoje e amanhã; `setdefault` conserva o futuro. |
+| A27 | `app/folha/export.py:787` | `classificar_export` | Qualquer ativo 12x36 sem âncora pode bloquear aprovação da competência. |
+| A28 | `app/core/views.py:401` | `dashboard_supervisor` | Lista de ausentes de hoje pelo primeiro ativo. |
+| A29 | `app/chamados/views.py:442` | `detalhe_chamado_local` | Corroborar régua pode atingir o vínculo futuro do template do chamado. |
+| A30 | `app/colaboradores/views.py:226` | `vincular_folga` | Primeiro ativo recebe calendário e materialização do mês atual/próximo. |
+| A31 | `app/colaboradores/services/vinculo.py:388` | `_executar_aceite` | Ativo mais recente vira `ec_nova` do aceite com `data_inicio` específica. |
+
+A célula existente pode preservar trabalho e marcos do dia, reduzindo parte desses efeitos; isso não corrige automaticamente a seleção nem os vetos anteriores à leitura da célula. (`app/escala/models.py:1066`; `app/escala/models.py:1094`; `app/escala/services/furos_diarios.py:29`)
+
+**Risco alto condicionado à mudança de posto — posto cadastral atual decide fatos de outra data.**
+
+| # | Arquivo:linha | Função | O que alimenta |
+|---|---|---|---|
+| B01 | `app/core/feriados.py:113` | `lugar_do_colab` | Município atual para feriados usados por espelho, PDF, fechamento e célula. |
+| B02 | `app/ponto/models.py:100` | `Batida.posto_para_calculo` | Fallback central: sem `posto_efetivo`, a batida assume o posto cadastral atual. |
+| B03 | `app/ponto/management/commands/detectar_ausencias.py:623` | `Command._abrir_chamado` | Posto atual decide veto de feriado para `data_ref`. |
+| B04 | `app/ponto/services/geofence.py:48` | `vinculo_contagem` | Últimas batidas GPS comparadas ao posto atual. |
+| B05 | `app/ponto/services/vinculo_na_lista.py:65` | `achar` | Posto/colegas atuais julgam amostra histórica de GPS. |
+| B06 | `app/colaboradores/services/feriado_do_posto.py:99` | `presenca_em_feriado` | Município atual classifica células dos últimos 120 dias. |
+| B07 | `app/colaboradores/management/commands/marcar_feriado_do_posto.py:95` | `Command._marcar` | Posto atual seleciona chamados cuja data do fato será julgada. |
+| B08 | `app/colaboradores/services/situacional.py:179` | `montar_situacional` | Tela compara GPS da batida ao posto cadastral atual. |
+| B09 | `app/colaboradores/painel_cell.py:40` | `montar_linha_colab` | Atualização da célula compara GPS ao posto cadastral atual. |
+| B10 | `app/chamados/services/fila_por_causa.py:164` | `particionar` | Município atual classifica feriados de chamados históricos. |
+
+B01 propaga-se, sem nova escolha datada de posto, para `feriados_do_colab`, fechamento, PDF e `feriado_vira_folga`. (`app/ponto/services/espelho.py:147`; `app/ponto/services/fechamento.py:622`; `app/relatorios/pdf_espelho.py:294`; `app/escala/models.py:1363`)
+
+**Risco médio/alto — conserva um vínculo para toda a janela, percorre ambos ou usa existência de ativo como condição.**
+
+| # | Arquivo:linha | Função | O que alimenta |
+|---|---|---|---|
+| C01 | `app/escala/views_plano_folgas.py:55` | `_grid_ctx` | Grade mensal cria uma linha por ativo; atual e futuro coexistem. |
+| C02 | `app/escala/services/furos_diarios.py:148` | `ranking` | Histórico agregado pelos templates ativos; pode entrar nos dois. |
+| C03 | `app/escala/services/fase_12x36.py:106` | `fora_de_fase` | Mapa de ativos conserva o mais antigo para a janela de fase. |
+| C04 | `app/escala/services/meio_periodo.py:152` | `observado_meio_periodo` | Mapa aplica um template aos turnos históricos. |
+| C05 | `app/escala/services/propositor.py:414` | `propostas` | Todos ativos são comparados ao período; futuro também gera proposta. |
+| C06 | `app/escala/services/cadastro_realidade.py:190` | `_jornada_que_mente` | Mapa de tipos ativos alimenta cálculo/diagnóstico das células. |
+| C07 | `app/escala/management/commands/celulas_contra_o_template.py:28` | `contra_o_template` | Mapa ativo compara o template conservado ao acervo de células. |
+| C08 | `app/escala/services/fase_conflitante.py:71` | `medir` | Diagnóstico de foto/âncora de todos ativos sobre a janela inteira. |
+| C09 | `app/escala/management/commands/termometro_regua.py:35` | `Command.handle` | Cron avalia ativos, inclusive futuro, contra histórico de batidas. |
+| C10 | `app/ponto/selecao_periodo.py:278` | `turnos_em_turno_stored` | Ordem ascendente com `setdefault` conserva o antigo para presença/tela. |
+| C11 | `app/ponto/services/piso_intervalo.py:28` | `pares_abaixo_do_piso` | Todos ativos podem repetir colaborador e aplicar marcos distintos à janela. |
+| C12 | `app/ponto/services/bordas_realizado.py:62` | `bordas_do_realizado` | Todos ativos reaplicam regime/intervalo à mesma janela. |
+| C13 | `app/ponto/services/triagem_batida.py:92` | `triagem_bater_ponto` | Qualquer ativo, inclusive futuro, satisfaz a condição de possuir escala. |
+| C14 | `app/ponto/services/cluster_espurio.py:75` | `reconciliar_colab` | Ativo sem fim decide entrada na reconciliação histórica. |
+| C15 | `app/ponto/management/commands/detectar_par_relampago.py:335` | `Command.handle` | Todos ativos sem fim podem repetir processamento de pares. |
+| C16 | `app/ponto/management/commands/detectar_cluster_espurio.py:36` | `Command.handle` | Todos ativos sem fim podem repetir reconciliação de clusters. |
+| C17 | `app/ponto/management/commands/tripwire_celulas.py:17` | `medir_stale` | Mapa conserva um ativo para comparar DNA de células futuras. |
+| C18 | `app/ponto/management/commands/propor_reorganizacao.py:42` | `Command._run` | Qualquer ativo intermitente exclui a pessoa da janela histórica. |
+| C19 | `app/ponto/management/commands/fechar_chamados_meio_periodo.py:59` | `Command.handle` | Mapa ativo fornece template a chamados de até 90 dias. |
+| C20 | `app/ponto/management/commands/detectar_intervalo_ausente.py:110` | `Command.handle` | Existência de ativo decide reconciliação de chamados antigos. |
+| C21 | `app/ponto/management/commands/diff_espelho_alimentacao.py:94` | `Command.handle` | Sonda: ramo A do motor recebe um ativo para toda competência. |
+| C22 | `app/ponto/management/commands/detectar_ausencias.py:184` | `Command.handle` | Contagem de LIMBO pelos ativos do template, sem recorte de vigência em `data_ref`. |
+| C23 | `app/ponto/management/commands/tripwire_celulas.py:57` | `medir_ausentes` | Parcial: verifica início, mas ignora fim/dono; pode duplicar ausências. |
+| C24 | `app/folha/services/ranking_he.py:132` | `ranking` | Mapa de ciclos ativos conserva um ciclo para filtrar a competência. |
+| C25 | `app/relatorios/views.py:492` | `extrato_parcial` | Mapa ativo alimenta pareamento/turnos abertos de todo período. |
+| C26 | `app/relatorios/pendencias.py:74` | `com_direcao` | Mapa ativo alimenta diagnóstico e recomendação sobre 30 dias. |
+| C27 | `app/relatorios/furos.py:86` | `escalas_em_limbo` | Ativos sem fim testados hoje/amanhã; futuro pode ser acusado. |
+| C28 | `app/relatorios/management/commands/diff_extrato_parcial.py:107` | `Command.handle` | Sonda: motor antigo recebe mapa de ativos para o período. |
+| C29 | `app/chamados/detector_anomalias.py:56` | `detectar_anomalias` | Atual e futuro sem fim podem ser acusados como colisão. |
+| C30 | `app/chamados/services/disputa_emissao.py:312` | `gerar_perguntas_disputa` | Dropdown do fato oferece ativos sem fim, inclusive futuro. |
+| C31 | `app/chamados/reconciliador.py:232` | `_ancora_ausente` | Futuro sem âncora pode manter a premissa do chamado. |
+| C32 | `app/chamados/services/desvio_escala.py:106` | `texto_desvio` | Colegas ativos, inclusive futuros, alimentam recomendação sobre histórico. |
+| C33 | `app/core/views.py:789` | `painel_tv` | Mapa ativo conserva um vínculo para fim de turno e cobertura. |
+| C34 | `app/core/services/painel_op.py:76` | `montar_painel_operacional` | Mapa ativo conserva um vínculo para previsão, fim e cobertura. |
+
+C23 tem proteção temporal incompleta: compara `data_inicio <= d <= teto`, sem considerar `data_fim` nem resolver o vínculo daquele dia. (`app/ponto/management/commands/tripwire_celulas.py:67`)
+
+**Risco indireto — atribuição, recorte, encaminhamento e apresentação de fatos datados pelo cadastro atual.**
+
+| # | Arquivo:linha | Função | O que alimenta |
+|---|---|---|---|
+| D01 | `app/escala/services/furos_diarios.py:125` | `ranking` | Posto/praça/supervisor atuais agrupam furos do período. |
+| D02 | `app/escala/services/furos_diarios.py:170` | `ranking_colabs` | Posto/praça atuais filtram e rotulam histórico. |
+| D03 | `app/escala/services/furos_diarios.py:269` | `universo_empresa` | Posto/praça cadastrais atribuídos à janela consultada. |
+| D04 | `app/colaboradores/services/drawer.py:32` | `contexto_drawer` | Posto do vínculo mais recente ou cadastro rotula batidas de sete dias. |
+| D05 | `app/ponto/services/espelho.py:212` | `resumo_escala` | Cabeçalho: tipo, horários e posto do ativo mais recente. |
+| D06 | `app/ponto/worklist.py:49` | `coletar_gaps_dp` | Posto do primeiro ativo agrupa chamados de dias antigos. |
+| D07 | `app/ponto/services/fechamento_lista.py:56` | `montar_resumos` | Mapa ativo conserva rótulo de escala sem considerar competência. |
+| D08 | `app/ponto/views.py:2044` | `_escala_rotulo_do_colab` | Drawer da ausência exibe rótulo do primeiro ativo. |
+| D09 | `app/ponto/services/triagem_batida.py:332` | `ramo_solicitar_anuencia` | Chamado fora de horário recebe rótulo do primeiro ativo. |
+| D10 | `app/ponto/services/geofence.py:201` | `posto_do_colab_agora` | Fallback cadastral na geometria da API/aparelho. |
+| D11 | `app/ponto/services/geofence.py:400` | `reavaliar_chamados_geofence` | Reavalia chamados pelo posto atual, explicitamente intencional. |
+| D12 | `app/ponto/models.py:265` | `AlertaGeofence.ainda_vale` | Caducidade do alerta pelo posto atual, intencionalmente. |
+| D13 | `app/ponto/management/commands/reconciliar_alertas_geofence.py:40` | `Command.handle` | Cron marca alertas caducos pela lotação atual. |
+| D14 | `app/ponto/signals.py:304` | `_geofence_post_save_posto._reavaliar` | Evento seleciona chamados pelo posto atual para reavaliação. |
+| D15 | `app/ponto/utils.py:25` | `bloquear_se_sem_posto` | Cadastro atual decide bloqueio/chamado da batida. |
+| D16 | `app/ponto/services/triagem_batida.py:80` | `triagem_bater_ponto` | Posto cadastral decide sinal “sem posto” e contexto do chamado. |
+| D17 | `app/ponto/services/espelho.py:218` | `resumo_escala` | Fallback independente ao posto cadastral no cabeçalho. |
+| D18 | `app/ponto/views.py:3068` | `cobertura_disponiveis` | Tela de cobertura atribui `posto_origem` cadastral. |
+| D19 | `app/ponto/realtime.py:28` | `publicar_batida` | Canal do evento da batida usa posto cadastral atual. |
+| D20 | `app/ponto/services/pautas_do_esmeril.py:31` | `alvo_da_lavra` | Pautas/cron encaminham lavra ao posto atual. |
+| D21 | `app/ponto/services/dias_em_aberto.py:126` | `passivo_da_competencia` | Relatório da competência exibe posto atual. |
+| D22 | `app/ponto/services/dia_do_colab.py:77` | `dia_do_colab` | Tela/IA de dia específico exibe posto atual. |
+| D23 | `app/ponto/services/vigia_entrada.py:136` | `do_dia` | Cron/relatório do dia exibe posto atual. |
+| D24 | `app/ponto/services/abriu_nao_bateu.py:143` | `com_nomes` | Lista de mudos exibe posto atual. |
+| D25 | `app/ponto/services/vinculo_na_lista.py:105` | `item` | Item do diagnóstico exibe posto atual. |
+| D26 | `app/ponto/services/vinculo_na_lista.py:152` | `colabs_em_revisao` | Revisão compara posto atual ao posto da lavra. |
+| D27 | `app/ponto/services/diagnostico_escala.py:196` | `diagnostico_escala` | Link do plano do mês julgado recebe posto atual. |
+| D28 | `app/ponto/services/gestao_he.py:264` | `enriquecer` | Tela HE usa posto/praça atuais nos filtros e rótulos do período. |
+| D29 | `app/ponto/services/deslogados.py:206` | `com_nomes` | Lista/cron de deslogados exibe posto atual. |
+| D30 | `app/ponto/management/commands/processar_alertas_turno.py:329` | `Command._abrir_chamado_critico` | Chamado de `data_turno` recebe posto atual. |
+| D31 | `app/ponto/management/commands/detectar_vinculo_divergente.py:40` | `Command.handle` | Diagnóstico do cron exibe posto atual. |
+| D32 | `app/inteligencia/calculadores.py:73` | `preenchimento_espelho` | Métrica de dias do período agregada por posto atual. |
+| D33 | `app/relatorios/dia_da_frota.py:56` | `dia_da_frota` | Vínculo datado; fallback de posto retorna cadastro atual. |
+| D34 | `app/folha/views_retrato.py:107` | `_cadastro` | Ativos ascendentes sobrescritos: futuro rotula retrato da competência. |
+| D35 | `app/holerite/views.py:282` | `_pessoas_da_celula` | Mesmo algoritmo: futuro rotula grade de entrega da competência. |
+| D36 | `app/relatorios/views.py:830` | `filtro_search_ajax` | Pessoas do caderno de espelhos selecionadas pelos vínculos ativos. |
+| D37 | `app/relatorios/views.py:856` | `filtro_search_ajax` | Associações/contadores do caderno usam pares ativos, incluindo futuros. |
+| D38 | `app/folha/services/ranking_he.py:122` | `ranking` | Posto atual filtra e rotula ranking de HE da competência. |
+| D39 | `app/folha/services/ranking_he.py:221` | `apuracao_colab` | Apuração histórica exibe posto atual. |
+| D40 | `app/relatorios/views.py:78` | `horas_mes` | Praça/posto atuais recortam e rotulam relatório da competência. |
+| D41 | `app/relatorios/views.py:150` | `inconsistencias` | Praça/posto atuais recortam e rotulam fechamentos históricos. |
+| D42 | `app/relatorios/views.py:202` | `absenteismo` | Praça/posto atuais recortam e rotulam ausências do período. |
+| D43 | `app/relatorios/views.py:288` | `atestados_acumulados` | Praça/posto atuais recortam e rotulam atestados do período. |
+| D44 | `app/relatorios/views.py:461` | `extrato_parcial` | Praça/posto atuais recortam e rotulam extrato histórico. |
+| D45 | `app/relatorios/views.py:623` | `beneficios_consolidado` | Praça/posto atuais recortam e rotulam benefícios da competência. |
+| D46 | `app/relatorios/pdf_espelho.py:724` | `_build_story` | Cabeçalho do espelho PDF exibe posto atual. |
+| D47 | `app/relatorios/pdf_chamados.py:63` | `_build_story` | Cabeçalho do histórico forense exibe posto atual. |
+| D48 | `app/relatorios/furos_pdf.py:35` | `_card_flow` | Cartão PDF de furos do período exibe posto atual. |
+| D49 | `app/templates/relatorios/furos.html:41` | Template de furos | Cartão HTML de furos do período exibe posto atual. |
+| D50 | `app/chamados/services/adesao.py:14` | `_texto` | Texto do chamado sobre `ini/fim` recebe posto atual. |
+| D51 | `app/chamados/services/painel.py:130` | `montar_qs_filtrado` | Praça do posto atual recorta chamados históricos. |
+| D52 | `app/chamados/services/painel.py:264` | `montar_contexto_painel` | Praça atual recorta métricas históricas de validação. |
+| D53 | `app/folha/views_retrato.py:115` | `_cadastro` | Fallback independente ao posto cadastral para o retrato. |
+| D54 | `app/holerite/views.py:310` | `_pessoas_da_celula` | Fallback independente ao posto cadastral na grade. |
+| D55 | `app/core/views.py:352` | `dashboard_supervisor` | Posto cadastral seleciona visibilidade/atribuição dos fatos do painel. |
+| D56 | `app/core/views.py:831` | `painel_tv` | Posto cadastral agrupa turnos/cobertura da TV. |
+| D57 | `app/core/services/painel_op.py:231` | `montar_painel_operacional` | Posto cadastral agrupa linhas/cobertura operacional. |
+| D58 | `app/core/views.py:1012` | `batida_detalhe_json` | Drawer da batida exibe posto cadastral atual. |
+| D59 | `app/templates/core/_d2_feed.html:11` | `dashboard` / `dashboard_dados` | Feed de batidas exibe posto cadastral atual. |
+| D60 | `app/templates/core/_d2_alertas.html:12` | `dashboard` / `dashboard_dados` | Lista de chamados exibe posto cadastral atual. |
+| D61 | `app/colaboradores/views.py:927` | `painel_colaborador` | Primeiro ativo rotula painel com batidas do mês. |
+| D62 | `app/colaboradores/services/detalhe.py:73` | `contexto_detalhe` | Primeiro ativo rotula detalhe com histórico/mapa de batidas. |
+| D63 | `app/colaboradores/services/troca_pelo_chat.py:
+
+[truncado em 20000 de 20928 caracteres]
 
 ## 29/10 14:45 · sessao 14cc3d7a87dc
 
@@ -1982,102 +2154,4 @@ A chamada existente é `_match_marcos(abs_marcos, locs, consumed, tol_min, turno
 
 Fora dos sítios nomeados, delegações e buscas descritas, não li integralmente todos os módulos de `app/`; completude absoluta do censo: não provada.
 
-## 29/10 14:38 · sessao c03300972490
-
-## T6 — Quem abre ou reabre chamado de turno
-
-Referências desta seção: árvore `app/`, HEAD informado `1974dbc0`. **Consultar a célula não significa exigir veredito acusador:** `celula_veta_cobranca` lê o veredito, mas sua lista de vetos não contém `concorde` (`app/ponto/marcos.py:119`, `:155`).
-
-| Arquivo:linha | Gatilho / quem chama | Premissa testada | Consulta veredito/ata antes de abrir? |
-|---|---|---|---|
-| `app/ponto/management/commands/processar_alertas_turno.py:318` | Cron (`app/config/crons.py:338`); chamada em `:144` | Turno materializado aberto, entrada existente, ausência não cobrindo, alerta `pos_20`, HE não permitida (`:88`, `:92`, `:97`, `:135`, `:143`). | **Não** como condição de absolvição; usa turno/fim previsto (`:100`, `:118`). Abre `turno_aberto` (`:320`). |
-| `app/ponto/management/commands/processar_alertas_avancados.py:121` | Cron (`app/config/crons.py:339`) | Recomputação, horas sem saída, nível N5, nenhum chamado reutilizável, ausência não cobrindo (`:57`, `:63`, `:94`, `:114`). | **Não** ao veredito/ata como veto; abre `turno_aberto_24h` (`:123`). |
-| `app/ponto/management/commands/emitir_turno_aberto_retroativo.py:138` | Comando manual | Turno aberto, idade mínima, vínculo, ausência não cobrindo, nenhum irmão (`:92`, `:101`, `:104`, `:108`, `:118`). | **Sim, indiretamente:** alimenta `turnos_do_colab` com células (`:88`); não exige veredito acusador. |
-| `app/ponto/management/commands/detectar_ausencias.py:688` | Cron (`app/config/crons.py:340`), `handle:439`, cartório e comando retroativo | Ausência de entrada/chamado (`:423`, `:424`); vetos de régua, feriado, célula e existência de célula (`:600`, `:604`, `:616`, `:623`, `:626`, `:655`). | **Sim, veto parcial:** `:626` → `app/ponto/marcos.py:155`. **`concorde` passa pelo veto** (`marcos.py:119`). |
-| `app/ponto/services/cartorio.py:1351`, `:1387` | Serviço: signals (`app/ponto/signals.py:93`, `app/chamados/signals.py:174`) e cron (`app/config/crons.py:583`) | Protestos cobradores, horizonte, ausência de chamado vivo; ou furo parcial (`:1312`, `:1320`, `:1332`, `:1374`, `:1386`). | **Sim:** ata deste julgamento (`:1141`), marcos parciais (`:1380`); delega ao funil de `detectar_ausencias`. |
-| `app/ponto/management/commands/emitir_furo_retroativo.py:142` | Comando manual | Alvos selecionados como furos; só executa com `apply_` (`:139`, `:141`). | **Sim pelo funil delegado**, em `detectar_ausencias.py:626`; mesma lacuna para `concorde`. |
-| `app/ponto/management/commands/reconciliar_grade.py:498` | Comando, chamado em `:253`; cron configurado **sem `--apply`** (`app/config/crons.py:436`) | Marcos faltantes da grade, veto de régua e de célula (`:490`, `:493`). | **Sim, veto parcial** de `app/ponto/marcos.py:119`. Se encontra encerrado, também chama `reabrir` (`:519`). |
-| `app/chamados/reconciliador.py:710` | `reemitir_chamado_do_dia`, chamado em `:984` | Motivo C1, ativo, horizonte, isenção, ausência, protestos cobradores e veto da célula (`:643`, `:654`, `:674`, `:684`, `:686`, `:699`, `:703`). | **Sim:** protestos e veredito; exige protesto cobrador para nascer/renascer (`:701`). |
-| `app/ponto/views.py:290` | View `bater_ponto` | POST de entrada, bloqueio por turno, nenhuma regularização pendente, nenhum chamado vivo (`:274`, `:280`). | **Não** como veto de absolvição; contexto deriva do pareamento/idade em `app/ponto/services/triagem_batida.py:178`, `:181`, `:206`. |
-| `app/ponto/services/cluster_espurio.py:84` | Evento do cartório (`app/ponto/services/cartorio.py:760`) e comando detector | Assinatura de cluster: ≥2 órfãs próximas e ≥1 lâmpada apagada (`:26`, `:27`, `:28`, `:30`). | **Sim, ata:** leitura em `:22`, `:23`. |
-| `app/ponto/management/commands/detectar_par_relampago.py:367` | Cron (`app/config/crons.py:572`) | Par relâmpago completo, não retratado, execução não limitada a retratar (`:351`, `:352`, `:361`, `:365`). | **Não como veto de absolvição**; a premissa é o par. |
-| `app/ponto/services/triagem_batida.py:336` | View de solicitação de anuência (`app/ponto/views.py:341`) | Motivo informado e nenhum chamado vivo (`:323`, `:325`). | **Não**; abre `batida_fora_horario` (`:344`). |
-| `app/ponto/services/triagem_batida.py:459` | Serviço de batida, chamado em `:663` | Fora da janela prevista e dedup de 14h (`:421`, `:428`, `:433`, `:452`). | **Não como veto de absolvição**; janela prevista não é veredito. |
-| `app/api/views.py:746`; `app/api/views_core.py:746` | API de batida | Detector retorna desvio leve (`:730`, `:734`). | **Não como veto de absolvição**; cria auditoria `batida_fora_escala_leve` (`:754`). |
-| `app/api/views.py:2033` | API de justificativas | Dados obrigatórios e nenhum chamado de turno vivo (`:2011`, `:2022`, `:2032`). | **Não**; cria wrapper `justificativa_colab` (`:2036`). |
-| `app/ponto/services/justificativa.py:174` | Rejeição pelo DP, chamada em `app/ponto/views.py:1911` | Justificativa pendente encontrada e rejeitada (`:160`, `:166`). | **Não**; chamado de rejeição, módulo `justificativa` (`:182`). |
-| `app/chamados/services/regularizacao_ext.py:246` | View (`app/colaboradores/views.py:2983`) e serviço (`regularizacao_ext.py:318`) | Pedido de regularização com itens (`:236`, `:240`). | **Não**; cria container de confirmação (`:250`). |
-| `app/chamados/services/disputa_emissao.py:504` | `_abrir_ou_agregar_disputa`; wrappers em `:563`, `:598` | Nenhuma disputa aberta encontrada (`:467`, `:502`). | **Não no nascimento do pai**; recebe a premissa do chamador. O caminho da fábrica consulta veredito/ata antes (`app/chamados/services/fabrica_da_celula.py:81`, `:95`). |
-| `app/chamados/services/disputa_emissao.py:908` | Serviço de chamados órfãos; chamado, entre outros, pelo cron em `app/ponto/management/commands/processar_alertas_turno.py:367` | Chamados regularizáveis e nenhuma disputa existente (`:891`, `:907`). | **Sim no filtro de marcos:** `_ata_do_dia` em `:880`; não exige veredito acusador do pai. |
-| `app/chamados/services/disputa_emissao.py:1128` | Confirmação de âncora, chamada em `app/chamados/services/acoes_disputa.py:189` | `ancora_limbo` não encerrado, sem pergunta correspondente e sem disputa (`:1109`, `:1111`, `:1114`, `:1127`). | **Não no nascimento do pai**. |
-
-**Portas e reaberturas:**
-
-| Arquivo:linha | Caminho / premissa | Consulta antes? |
-|---|---|---|
-| `app/chamados/models.py:723`, `:813` | Nascimento por `abrir`/`criar`; `_celula_de` apenas resolve a associação (`:833`). | **Não há guarda geral de absolvição no nascimento**; associar célula em `:804` não testa seu veredito. |
-| `app/chamados/models.py:685` → `:756` | Dedup encontra encerrado; `_renascer_por_premissa_viva` exige ativo, não cascade e ausência de tranca (`:750`, `:752`, `:754`). | **Sim**, delegando a `reabrir`. |
-| `app/chamados/models.py:962` | `reabrir` recusa furo cuja premissa está regularizada. | **Sim:** célula atual, decisão administrativa, marcos acesos/inexistentes e furo da ata (`:889`, `:891`, `:897`, `:906`, `:908`). |
-| `app/chamados/views_arquivar.py:68`; `app/chamados/services/competencia_trancada.py:258` | Desarquivamento/reabertura de competência (`views_arquivar.py:64`; `competencia_trancada.py:252`, `:255`). | **Sim pela mesma guarda de `reabrir`**. |
-| `app/chamados/services/acoes_disputa.py:266`; `app/chamados/services/disputa_emissao.py:1606` | Reabertura administrativa da disputa; ou resposta aguardando consumo (`acoes_disputa.py:256`, `:265`; `disputa_emissao.py:1604`). | **Sim pela mesma guarda de `reabrir`**. |
-| **`app/chamados/services/acoes_chamado.py:315`** | View chama resposta livre (`app/chamados/views.py:547`); gestor envia `novo_status` válido (`acoes_chamado.py:313`). | **Não para renascimento:** chama `transicionar`, não `reabrir`. O motor permite `resolvido → em_analise` e saída de `fechado` para [nome] (`app/chamados/catalogo/motor.py:102`, `:150`, `:153`). A guarda de premissa em `transicionar` só roda para destino `resolvido` (`app/chamados/models.py:165`). |
-| `app/ponto/management/commands/detectar_ausencias.py:301`; `app/chamados/services/adesao.py:92`; `app/ponto/management/commands/reabrir_chamados_ausencia_aberta.py:49` | Reabrem, respectivamente, âncora, adesão e ausência ainda aberta (`detectar_ausencias.py:273`; `adesao.py:74`; `reabrir_chamados_ausencia_aberta.py:29`, `:36`). | Delegam a `reabrir`; são caminhos de cadastro/ausência, não detectores de marco faltante. |
-
-Formulários genéricos também chegam a `criar` (`app/chamados/services/abertura.py:47`, `:172`), chamados pelas views em `app/chamados/views.py:197`, `:136`. A API genérica grava módulo `app_colaborador` (`app/api/views.py:2237`, `:2246`). Permissões completas do classificador para produzir categorias de turno: **nao li**.
-
-`intervalo_pendente` não tem emissor ativo naquele comando: o fluxo termina em `continue` (`app/ponto/management/commands/detectar_intervalo_ausente.py:145`, `:152`). O emissor `sem_batidas_mes` está removido do fechamento (`app/ponto/services/fechamento.py:1075`).
-
-**Sobre célula absolvida:** há nascimento sem consulta e nascimento com veto que deixa passar `concorde`; isso está demonstrado acima. Já uma ata lavrada, sem lâmpada apagada nem órfã, bloqueia a reabertura canônica de furo (`app/chamados/juizes.py:433`, `:436`, `:438`, `:446`; `app/chamados/models.py:962`). **A transição humana é uma via adicional que não passa nessa guarda** (`acoes_chamado.py:315`).
-
-**Caso de referência:** o chamado pode nascer antes da consulta do cartório; o `post_save` chama `julgar_celula` (`app/chamados/models.py:723`; `app/chamados/signals.py:158`, `:174`). Chamados entram na impressão (`app/ponto/services/cartorio.py:1076`), e o julgamento pode lavrar/carimbar novamente (`:1402`, `:1417`). Que um caso concreto termine **somente** com impressão alterada, mantendo chamado e ata: **não provado sem execução**.
-
-## T7 — `disparar_perguntas_competencia`
-
-Comando: `app/chamados/management/commands/disparar_perguntas_competencia.py:33`. Na tabela, **CMD** refere-se a esse arquivo; **FAB** a `app/chamados/services/fabrica_da_celula.py`.
-
-| Decisão | Pergunta respondida | Juiz existente / diferença de universo |
-|---|---|---|
-| CMD`:155` | Quais chamados vivos pertencem à janela? | `VIVOS`, registrado em `app/core/juizes.py:227`. Seleciona pela data da célula, sem exigir módulo, trabalho ou veredito acusador. FAB`:73` exige trabalho. |
-| CMD`:156` | Pertence ao colaborador solicitado? | Recorte do operador; também aplicado ao primeiro universo em CMD`:77`. | [nao verificado]
-| CMD`:163` | Há alguma resolvedora viva? | Repete a redução de `fio_vivo` (`app/chamados/juizes.py:1111`, registro `app/core/juizes.py:241`), chamando o juiz individual `pergunta_viva` (`juizes.py:778`). |
-| CMD`:165` | Qual é o dia do fato? | Usa `ch.celula.data`; `dia_do_fato` já prioriza célula (`app/chamados/juizes.py:60`). |
-| CMD`:167` | Há motivo vencido da ata ainda não selecionado? | Já chama FAB`::motivos_pela_ata:34` e `vencidos_no_instante:15`. FAB`::motivos_a_perguntar:68` compõe essas perguntas com trabalho, ativo, futuro, veredito e dedup. |
-| CMD`:168`, `:172` | Esse fato já entrou nesta rodada? | `_vistos` é memória da seleção, inicialmente formada pelo primeiro universo (CMD`:154`). O filtro de `:168` já exclui a chave testada em `:172`. |
-| CMD`:178` | Pode perguntar ao colaborador? | Exige ativo, assim como FAB`:73` e `_ja_perguntou` (`app/chamados/services/disputa_emissao.py:1206`). Juiz registrado específico para esse predicado: não localizado. |
-| CMD`:181` | Já há pergunta viva desse motivo/dia? | `_ja_perguntou` consulta perguntas da **primeira disputa obtida** (`disputa_emissao.py:1202`) e delega a `fio_vivo` (`:1209`). |
-| CMD`:220` | Já existe pergunta do mesmo fato? | Identidade já expressa por `PerguntaDisputa.do_fato` (`app/chamados/models.py:1916`, `:1927`), usada pelo gate em `:1966`. O `exists()` inclui qualquer estado e duplicatas. |
-| CMD`:225`, `:226` | O alvo entra no lote? | Acrescenta o primeiro motivo ainda não visto por chamado (CMD`:167`). FAB`:95` devolve todos os motivos ainda não perguntados da célula. |
-
-**A existência em CMD`:220` não prova decisão humana:** mesmo assim a saída rotula esse conjunto como “FIO DECIDIDO” (CMD`:232`). A consulta não testa validação, resposta ou via de resolução (CMD`:220`).
-
-**Universos temporais:**
-
-- **Não existe exclusão geral `data >= hoje` neste ramo.** Ambos usam vencimento por instante; hoje pode perguntar marco vencido. Sem marcos, só passado estrito recebe `None`; hoje/futuro recebe conjunto vazio (FAB`:28`, `:30`, `:45`; CMD`:167`).
-- O evento exclui explicitamente futuro (FAB`:75`); o comando usa os mesmos vencidos (CMD`:111`, `:167`). Isso não equivale a `dia_encerrado`, registrado em `app/core/juizes.py:189`: a fábrica admite emissão parcial antes do fim (FAB`:15`).
-- Competência é janela de seleção do comando (CMD`:61`, `:76`, `:155`); não é fronteira da fábrica. A guarda de competência exportada está retirada dos dois caminhos (CMD`:115`; FAB`:83`).
-
-**O que impede afirmar que o evento substitui o cron:**
-
-1. **Fio mudo sem novo julgamento:** evento só percorre células efetivamente julgadas (`app/ponto/services/cartorio.py:752`, `:762`); impressão igual pula julgamento (`:1085`). CMD`:155` varre chamados independentemente disso.
-2. **Predicados diferentes:** evento exige trabalho e aceita somente veredito compatível (FAB`:73`, `:81`); fio mudo não aplica esses dois filtros (CMD`:155`, `:167`).
-3. **Dedup diferente:** evento exclui duplicatas da identidade existente (FAB`:93`); fio mudo combina viva na primeira disputa com existência global incluindo duplicatas (CMD`:181`, `:220`).
-4. **Escritor já é compartilhado:** comando e evento chegam a FAB`::perguntar:98` (CMD`:288`; FAB`:123`). O impedimento demonstrado está na seleção e no gatilho.
-5. **Configuração ainda emissora:** o encadeamento usa `--comp-corrente --apply` (`app/config/crons.py:1435`). O modo somente alarme existe, mas não é o configurado (CMD`:261`).
-6. Equivalência e quantidade de casos na frota: **não provado**; logs e banco, **nao li**.
-
-## T8 — Contra-exemplos da JUIZ-DO-PAR
-
-Referências abaixo em `_juizpar/app/`; o patch altera o matcher em `_juizpar/DIFF_JUIZPAR.patch:421`. Resultados deduzidos por leitura, sem testes ou banco.
-
-| Caso / entradas | Ata nova | Outro leitor | Resultado |
-|---|---|---|---|
-| **Avulsa após fechamento.** Marcos `08/12/13/18`; batidas `E08 S12 E13 S17 S18`; ata anterior muda. | O pré-juiz produz turno `08→17` e uma saída órfã. Dois turnos desativam o papel (`escala/utils.py:1535`). A DP escolhe `S18` para `hf18` e deixa `S17` órfã (`:230`, `:596`). | O pareador absorve intervalo12/13, fecha em17 e produz órfã18 (`ponto/turnos.py:1291`, `:1417`, `:1422`). Na releitura da ata nova,17 fica longe das luzes para cluster e a4h da luz de intervalo13; o mapa de papel abstém-se (`:1668`, `:1689`, `:1693`; teto3h em `:317`). | **Divergência estável por leitura:** `S18` é saída na ata e órfã no juiz. A reconciliação não troca `hf` já ocupado (`escala/utils.py:1937`). |
-| **Dois turnos.** Marcos `08/12/13/18`; `E08 S10 E16 S18`. | Dois turnos mantêm DP (`escala/utils.py:1535`, `:1642`). O cluster retira16 de `hfi13`, pois18 já ocupa o marco mais próximo (`:611`). | S10 está120min longe do intervalo12 e não é absorvida; juiz fecha `08→10` e `16→18` (`ponto/turnos.py:1293`, `:1417`). | **Divergência de papel:** ata trata16 como órfã; geometria como entrada do segundo turno. Reconciliação cobre bordas do dia, não essa volta (`escala/utils.py:1913`). A Zona5 também pode eliminá-la pelo cluster (`escala/utils.py:545`). |
-| **24x48, início=fim08.** `E D08`, pausa12–16, `S D+1 07:30`. | Encadeamento coloca `hf08` emD+1; delta da saída é−30min (`escala/utils.py:346`). | A referência da Zona5 só avança hora **menor** que início; `hf==hi` fica emD08 (`ponto/motor_calculo_v2.py:2981`). | Diferença de referência de1440min **se alcançar Zona5**. Plantão normal herda `MotorBase`, não o motor da Zona5 (`motor_calculo_v2.py:3425`, `:3511`, `:3606`). Cadastro24x48 que alcance essa rota: **não provado**. |
-| **Noturno regular.** Marcos19/01/02/07; `E D19:02 S D+1 01:01 E02:00 S07:03`. | Cadeia avança os marcos; único turno fechado fornece papéis (`escala/utils.py:346`, `:1535`, `:1642`, `:525`). | Zona5 também avança01/02/07 por serem menores que19 (`ponto/motor_calculo_v2.py:2981`). | **Sem divergência identificada neste caso.** Caso correspondente lido, não executado (`escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:360`). |
-| **Tipo gravado trocado.** Marcos11/14/15/19:30; `E11 E13:02 S15:39 S16:49`. | Papéis vêm dos pares do juiz, não dos botões (`escala/utils.py:421`); cenário no teste em `escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:316`. | Pareador aceita papel da ata e pares com tipos trocados (`ponto/turnos.py:1317`, `:815`). | **Contra-exemplo novo não provado.** O teste lido compara segunda e terceira lavra (`test_juiz_do_par_ata_casa_pelo_turno.py:338`). |
-| **Intervalo livre.** Bordas08/18; `E08 S12 E13 S18`. | Sem `hii/hfi`, não recebe o turno no matcher; usa caminho de pausas livres (`escala/utils.py:1581`, `:1586`, `:1643`). | Zona5 exige quatro marcos e não participa (`ponto/motor_calculo_v2.py:2972`). | Divergência com Zona5 não demonstrada. Caminho completo de inferência das pausas livres: **nao li integralmente**. |
-
-Os dois primeiros são divergências que **persistem no código novo**, não regressões atribuídas ao patch: nesses casos o builder conserva a DP ao desativar o papel (`_juizpar/app/escala/utils.py:1535`, `:1642`).
-
-_92 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_93 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._

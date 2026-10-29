@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/10/2026 14:48:46.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (17.4 MB). Acoes na janela: **362**.
+**Medido em 29/10/2026 14:54:15.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (17.4 MB). Acoes na janela: **364**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 14:49:17 | Bash | Wait for BO03 or push result | `cd /home/ronald/saas-hasner && until grep -q "BO03" logs/bo2910/bo01_03.out \|\| grep -q '^rc=' logs/codex/push2.out; do /usr/bin/sleep 30; done; tail -2 logs/codex/push2.out \| cut -c1-120; grep -c BO03 logs/bo2910/bo01_03.out; date +%H:%M` |
+| 14:49:09 | Bash | Read BO 01/03 sombra outputs | `cd /home/ronald/saas-hasner && cat logs/bo2910/bo01_sombra.out \| tail -25 \| cut -c1-250; echo ======; cat logs/bo2910/bo03_sombra.out \| tail -25 \| cut -c1-250` |
+| 14:49:05 | Bash | Read BO 01/03 triage output | `cd /home/ronald/saas-hasner && head -c 6000 logs/bo2910/bo01_03.out` |
 | 14:42:01 | Bash | Wait for BO 01/03 or push | `cd /home/ronald/saas-hasner && until [ -s logs/bo2910/bo01_03.out ] \|\| grep -q '^rc=' logs/codex/push2.out; do /usr/bin/sleep 30; done; ls logs/bo2910/; tail -2 logs/codex/push2.out \| cut -c1-120; date +%H:%M` |
 | 14:41:56 | Bash | Recheck from repo root | `cd /home/ronald/saas-hasner; pwd; ls bin/trava_teste.sh; bin/trava_teste.sh --quem; ls logs/bo2910/` |
 | 14:41:39 | Bash | Push and check pending work | `cd /home/ronald/saas-hasner && (bin/push.sh > logs/codex/push2.out 2>&1; echo "rc=$?" >> logs/codex/push2.out) & sleep 1; bin/trava_teste.sh --quem; ls -la logs/bo2910/ \| tail -4; git -C /home/ronald/wt-grupo1-2910-1100 log --oneline -1 \| cut -c1-80` |
@@ -371,4 +374,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 02:59:33 | Bash | Record ORFAS state in RELATO | `date +%H:%M && python3 - <<'EOF' p='docs/RELATO.md'; s=open(p).read() anc="> **O-OUTBOX -- PRONTA EM COPIA 29/10 02:1x" assert s.count(anc)==1 sec='''> **ORFAS (b) -- construida 29/10 02:5x na copia wt-orfas-2901-0215 (253e09a5, sobre a branch do O-OUTBOX), NAO pousada.** LEI-AKITA: origem=chamados/reconciliador.py::encerrar_orfas_pela_lampada (no consumidor do EventoCelula), testemunha=chamados/j ...` |
 | 02:59:22 | SendMessage |  | `-` |
 | 02:55:05 | Bash | Wait for ORFAS report | `/usr/bin/sleep 240; tail -3 /home/ronald/saas-hasner/logs/orfas/recorte_1_refaz.log 2>/dev/null \| cut -c1-150; date +%H:%M` |
-| 02:52:00 | Bash | Keep waiting for ORFAS | `cd /home/ronald/saas-hasner && for i in $(seq 1 19); do git -C /home/ronald/wt-orfas-2901-0215 log --oneline -1 \| /bin/grep -qv d375511b && break; /usr/bin/sleep 30; done; git -C /home/ronald/wt-orfas-2901-0215 log --oneline -1; ls -t logs/orfas 2>/dev/null \| head -5; date +%H:%M` |
