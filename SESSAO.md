@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/10/2026 09:54:39.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (14.3 MB). Acoes na janela: **445**.
+**Medido em 29/10/2026 09:59:51.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (14.4 MB). Acoes na janela: **447**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 09:59:40 | Bash | Update IMPRESSAO question with motive numbers | `cd /home/ronald/saas-hasner && python3 - <<'PY' p='app/docs/RELATO.md'; s=open(p,encoding='utf-8').read() old='Pergunta: (a) medir, para os 39, o que a justificativa aprovada cobre (tipo, marco, periodo) contra o que `_marcar_ausencias -> dispensar_por_ausencia` dispensa, e a obra vira a que esse numero mostrar; (b) outra? A fila SEGUE.' assert s.count(old)==1 new=('MEDIDO o porque dos 39 (agente  ...` |
+| 09:59:25 | Bash | Spot-check one M1 case | `cd /home/ronald/saas-hasner/logs && grep -E "^(M1\|M2\|M3\|M4\|RESUMO\|TOTAL)" impjust_39_motivo.out \| head -8; grep -m2 "56.*2026-10-07\\|cid=56 .*10-07" impjust_39_motivo.out \| cut -c1-300; grep -m2 "56.*2026-10-07" impjust_39_chamado.raw \| cut -c1-300` |
 | 09:54:18 | Bash | Wait for ORFAS push result | `cd /home/ronald/saas-hasner && until grep -q '^rc=' logs/orfas/push.out 2>/dev/null; do /usr/bin/sleep 30; done; tail -3 logs/orfas/push.out \| cut -c1-160; git -C /home/ronald/wt-col129-2901-0330 log --oneline -1 \| cut -c1-80` |
 | 09:54:07 | Agent | Measure what approved justifications cover | `MEDIDA so leitura em PROD, sem codigo de negocio. Repo /home/ronald/saas-hasner; leia antes o CLAUDE.md secoes 4 e 6. A porta de leitura e `bin/sonda_leitura.sh <script.py>`: role leitor, saida pelo STDOUT, sem logs/ do host dentro do container. O script imprime `ERROS=N` e `FIM-DA-SONDA`, e uma excecao conta erro e nunca vira zero. Contexto: 39 celulas, que hoje (29/10, julgadas 07:11-08:22) segu ...` |
 | 09:53:51 | Bash | Write IMPRESSAO premise question at RELATO top | `cd /home/ronald/saas-hasner && python3 - <<'PY' p='app/docs/RELATO.md'; s=open(p,encoding='utf-8').read(); i=s.index('\n> ') sec=''' > **lei: IMPRESSAO-SEM-JUSTIFICATIVA-PREMISSA** (pergunta; segura SO a cura da obra IMPRESSAO-SEM-JUSTIFICATIVA; a fila SEGUE) -- a medida pedida antes do codigo (CORRECAO-2910-0800 item 1) CONTRADIZ a premissa. (1) SOMBRA, dump 04:00, `julgar_colab` real (agente son ...` |
