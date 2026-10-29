@@ -1,7 +1,74 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **29/10/2026 18:22** · publicado em **29/10/2026 18:23** (UTC-3)
+> Ultima resposta processada: **29/10/2026 18:33** · publicado em **29/10/2026 18:33** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 29/10 18:33 · sessao 53bc2144c427 · grupo1p1 · verificador · origem=Code
+
+- **Classe 3 — cartão/tela:** `app/core/tests/test_espelho_tela_le_a_folha.py:69` e `:70` leem `timezone.now()` separadamente. Os casos chamam esse helper em `:81` e `:126`; o segundo ainda faz outra leitura em `:133`.
+
+- **Classe 3 — edição da ausência:** `app/escala/tests/test_cobertura_parcial_periodo.py:175` e `:178` consultam o relógio novamente antes e depois da edição, dentro do mesmo caso.
+
+- **Classe 3 — app/espelho:** `app/api/tests/test_o21_app_diz_o_que_foi_decidido.py:167` lê `localdate()` sem instante; `:169` faz outra leitura com `now()`.
+
+- **Classe 3 — piso:** `app/ponto/tests/test_piso_nao_sobe_por_batida.py:122` lê `localdate()` sem instante; `:123` consulta `now()` novamente.
+
+- **Classe 3 — comparações dos produtores R3:** `app/relatorios/tests/test_r3_em_aberto_alcanca_turno_aberto.py:251` combina helpers que leem o relógio em `:187` e `:191`. Os casos em `:377`–`:378` e `:390`–`:391` também combinam a leitura de `:187` com outro `now()`.
+
+- **Classe 3 — premissa e julgamento R3:** `app/relatorios/tests/test_r3_em_aberto_alcanca_turno_aberto.py:428` e `:443` chamam `turno_aberto_de` sem instante, acionando `app/ponto/turnos.py:2255`; depois, `:431` e `:445` chamam o helper que relê o relógio em `:421`.
+
+- **Classe 3 — ficha/espelho:** `app/colaboradores/tests/test_ficha_fonte_dos_totais.py:111` lê `now()`; `:112` chama `_horas()` (`:48`–`:50`), cuja execução lê novamente em `app/colaboradores/services/ficha.py:117`.
+
+- **Classe 3 — motor/card:** `app/api/tests/test_espelho_app_fonte_e_geometria.py:317` chama o helper que lê `now()` em `:294`; `:324` consulta o payload pelos helpers de `:281`–`:282` e `:73`–`:77`, acionando outra leitura em `app/api/views.py:1350`.
+
+- **Classe 8 — geometria:** `app/api/tests/test_espelho_app_fonte_e_geometria.py:294` substitui o instante fixo posterior às fixtures por relógio real; a classe de `:278` e sua base de `:47` não congelam o tempo. A garantia retirada está em `app/escala/tests/instante.py:6`–`:12`.
+
+- **Classe 8 — realizado:** `app/ponto/tests/test_bordas_realizado.py:61` passa relógio real para a fixture fixa de `:60`, sem congelamento na classe de `:15`; deixa de fixar o julgamento posterior garantido por `app/escala/tests/instante.py:6`–`:12`.
+
+- **Classe 8 — cobertura parcial:** `app/escala/tests/test_cobertura_parcial_periodo.py:111`, `:175`, `:178` e `:323` passam relógio real, sem congelamento nas classes de `:85`, `:147` e `:294`; retiram o instante posterior fixo definido em `app/escala/tests/instante.py:6`–`:12`.
+
+- **Classe 8 — R3:** `app/relatorios/tests/test_r3_em_aberto_alcanca_turno_aberto.py:187` e `:362` passam relógio real na classe sem congelamento de `:76`, embora o cenário declare `HOJE` em `:54`; retiram o instante posterior fixo definido em `app/escala/tests/instante.py:6`–`:12`.
+
+Total por classe, contando os achados agrupados acima: **3 = 8; 5 = 0; 7 = 0; 8 = 4.**
+
+## 29/10 18:31 · sessao 1a66099671f2 · - · - · origem=Ronald (tmux)
+
+Classe 3, leituras verificáveis:
+
+- `app/core/tests/test_espelho_tela_le_a_folha.py:69` e `:70`: `_dois_resumos()` lê `timezone.now()` duas vezes; chamado pelos testes em `:81` e `:126`. O segundo ainda lê novamente em `:133` — três leituras nesse caso.
+- `app/escala/tests/test_cobertura_parcial_periodo.py:175` e `:178`: duas leituras no mesmo teste de edição.
+- `app/api/tests/test_o21_app_diz_o_que_foi_decidido.py:167` e `:169`: `_tz.localdate()` seguido de `timezone.now()`.
+- `app/ponto/tests/test_piso_nao_sobe_por_batida.py:122` e `:123`: `timezone.localdate()` seguido de `timezone.now()`.
+- `app/relatorios/tests/test_r3_em_aberto_alcanca_turno_aberto.py:251`: chama `_tela()` e `_cartao()`, que leem separadamente em `:187` e `:191`.
+- `app/relatorios/tests/test_r3_em_aberto_alcanca_turno_aberto.py:377` e `:378`: `_tela()` lê em `:187`; o cartão lê novamente em `:378`.
+- `app/relatorios/tests/test_r3_em_aberto_alcanca_turno_aberto.py:390` e `:391`: mesmo problema no teste seguinte.
+- `app/colaboradores/tests/test_ficha_fonte_dos_totais.py:111` e `:112`: leitura direta seguida de `_horas()` (`:48–50`), que chama `ficha_do_colab()`, cujo relógio é lido em `app/colaboradores/services/ficha.py:117`.
+- `app/api/tests/test_espelho_app_fonte_e_geometria.py:317` e `:324`: primeiro chama `_o_que_o_motor_diria()`, cujo relógio é lido em `:294`; depois `_dia()` (`:281–282`) chama `_payload()` (`:73–77`), executando a nova leitura em `app/api/views.py:1350`.
+
+São nove grupos acima, correspondendo a dez definições de testes, pois o helper do primeiro grupo é usado por dois casos. A subclasse R3 herda os testes da classe base (`app/relatorios/tests/test_r3_em_aberto_alcanca_turno_aberto.py:401`).
+
+Não encontrei chamada efetivamente sem migração entre os alvos do selo: a única chamada sem `agora=` explícito encontrada por AST passa `**kw` em `app/escala/tests/test_sobra_na_borda_nao_vira_intervalo.py:53`, após inserir `agora` em `:52`; portanto não constitui classe 7.
+
+A mudança `return sorted(out)` conserva mordida no próprio teste: `app/escala/tests/test_selo_grade_pede_o_instante.py:178–190` espera chamadas ordenadas, incluindo uma chamada no nível do módulo (`:186–187`) e outras dentro da função (`:182–185`). Não identifiquei defeito classe 5 concreto nessa alteração.
+
+## 29/10 18:31 · sessao f7413f11c7e3 · - · - · origem=Ronald (tmux)
+
+Classe 8, considerando a retirada do instante fixo posterior às fixtures como mudança do cenário de entrada:
+
+- `app/ponto/tests/test_bordas_realizado.py:61`: consulta agora depende do relógio real; fixture fixa em `:60`, classe sem congelamento em `:15`.
+- `app/escala/tests/test_cobertura_parcial_periodo.py:111`, `:175`, `:178`: relógio real substitui o instante posterior fixo; cenário declara `D=14/10/2026` e `HOJE=27/10/2026` em `:25–26`, classes sem congelamento em `:85` e `:147`.
+- `app/escala/tests/test_cobertura_parcial_periodo.py:323`: mesmo problema para a fixture noturna de outubro, definida em `:311`; classe sem congelamento em `:294`.
+- `app/relatorios/tests/test_r3_em_aberto_alcanca_turno_aberto.py:187`, `:362`: relógio real substitui o instante fixo, embora o cenário declare `HOJE=31/07/2026` em `:54`; classe base sem congelamento em `:76`.
+
+A garantia removida é expressa em `app/escala/tests/instante.py:6–7`; a constante vale janeiro de 2100 em `:12`. Não há prova de mudança atual das asserções apenas por essas substituições: o seletor ainda não lê `agora` (`app/escala/utils.py:1528–1539`).
+
+Nenhum achado adicional comprovado de classe 5 nos três arquivos priorizados.
+
+## 29/10 18:30 · sessao 90893cc08fbf · - · - · origem=Ronald (tmux)
+
+Possível achado de **classe 8**: `app/api/tests/test_espelho_app_fonte_e_geometria.py:294` troca o instante fixo de 2100 (`app/escala/tests/instante.py:12`) por relógio real. `TurnoAbertoPelaGeometriaTest` não tem `freeze_time` (`app/api/tests/test_espelho_app_fonte_e_geometria.py:278`), nem sua base (`app/api/tests/test_espelho_app_fonte_e_geometria.py:47`); portanto perde o cenário temporal fixo posterior às fixtures (`app/api/tests/test_espelho_app_fonte_e_geometria.py:314`).
+
+Não provei perda de mordida atual nesse caso: o seletor da grade ainda não usa `agora` (`app/escala/utils.py:1528`). Nos demais arquivos atribuídos, não identifiquei achados verificáveis de classes 5/8.
 
 ## 29/10 18:22 · sessao 0e25a18be1e0 · justif · sonda · origem=Code
 
@@ -480,82 +547,4 @@ Existe risco estrutural residual de banco engolido no cartório: o receiver usa 
 
 Não identifiquei segundo juiz autônomo na guarda J2: ela impede decidir outra justificativa (`app/ponto/services/justificativa.py:40`–`:45`), enquanto S128 usa “pendente” para executar auto-rejeição (`app/chamados/reconciliador.py:462`–`:468`). Não há no dado contrato exigindo trilha para esse veto [nao verificado].
 
-## 29/10 17:47 · sessao 1e7f75cfae7d · grupo1p1 · verificador · origem=Code
-
-- **Classe 3 — espelho perde o instante na fonte dos totais.** `app/ponto/services/espelho.py:1288` chama `folha_manda` sem repassar `agora`. Ela consulta turno vivo e véspera com novos relógios em `app/relatorios/cartao_pela_celula.py:398` e `app/relatorios/cartao_pela_celula.py:412`, acionando `app/ponto/turnos.py:2255` e `app/relatorios/cartao_pela_celula.py:40`.
-
-- **Classe 3 — fila e simulação usam relógios diferentes.** `app/ponto/services/flip_auto.py:263` captura `agora`, mas a fila chamada em `app/ponto/services/flip_auto.py:268` lê novamente em `app/ponto/services/flip_auto.py:34` e `app/ponto/services/flip_auto.py:126`.
-
-- **Classe 3 — ficha ainda lê novamente para classificar pendências.** Após capturar o instante em `app/colaboradores/services/ficha.py:117`, chama `particionar_verbos` em `app/colaboradores/services/ficha.py:155`; essa função lê outro instante em `app/chamados/services/verbos.py:32`, usado para silêncio e idade em `app/chamados/services/verbos.py:48` e `app/chamados/services/verbos.py:54`.
-
-- **Classe 3 — PDF auditável mantém segundo relógio.** O instante capturado em `app/relatorios/pdf_espelho.py:1088` não acompanha a chamada em `app/relatorios/pdf_espelho.py:1099`. O pipeline captura outro em `app/relatorios/pdf_base.py:133`, usado no rodapé em `app/relatorios/pdf_base.py:139`.
-
-- **Classe 3 — reconciliação relê no ramo de aplicação.** O comando captura o instante em `app/ponto/management/commands/reconciliar_grade.py:75`, mas chama `_relavrar_orfa` em `app/ponto/management/commands/reconciliar_grade.py:228`, que lê novamente para `relavrada_em` em `app/ponto/management/commands/reconciliar_grade.py:458`.
-
-- **Classe 5 — selo aceita restaurar leitura interna.** O detector em `app/escala/tests/test_selo_grade_pede_o_instante.py:57` apenas exige `agora=` diferente de literal `None`. Trocar a propagação em `app/escala/utils.py:2277` por `agora=timezone.now()` mantém essa verificação aprovada; a asserção em `app/escala/tests/test_selo_grade_pede_o_instante.py:78` não distingue os dois casos.
-
-- **Classe 8 — migração muda os cenários temporais dos testes.** `app/escala/tests/test_f1c_contrato.py:36` injeta 2100 numa janela construída em torno do hoje real em `app/escala/tests/test_f1c_contrato.py:34`; o contrato usa 2100 como hoje em `app/escala/utils.py:2272`, retirando o cenário futuro que a asserção pretende verificar. Também `app/relatorios/tests/test_o197_futuro_nao_e_em_aberto.py:206` injeta 2100 no cenário congelado em julho/2026 de `app/relatorios/tests/test_o197_futuro_nao_e_em_aberto.py:328`: o teto do coletor em `app/relatorios/pdf_espelho.py:287` passa a admitir a competência inteira, embora `app/relatorios/tests/test_o197_futuro_nao_e_em_aberto.py:330` exija excluir o dia corrente.
-
-Total por classe: 1=0; 2=0; 3=5; 4=0; 5=1; 6=0; 7=0; 8=1.
-
-## 29/10 17:47 · sessao b48a37d3b9a3 · - · - · origem=Ronald (tmux)
-
-Achados estáticos para consolidar; execução concorrente em banco `[nao verificado]`.
-
-1. **F3 permanece — ordem de trava C → TurnoMaterializado contra TurnoMaterializado → C.** A aprovação trava chamados em `app/ponto/services/justificativa.py:89`, trava J em `:101`, e registra saída em `:147`; o signal recomputa turnos em `app/ponto/signals.py:34`, com DELETE/INSERT de `TurnoMaterializado` em `app/ponto/nucleo.py:57`. O concorrente `veredito_celula` mantém atomic em `app/ponto/services/veredito_celula.py:203`, registra batidas em `:300`, recomputa em `:307`, e depois fecha chamados em `:324`, via `:182`. Escalonamento: B segura TM; A segura C; A espera TM; B espera C. A pretrava nova não abrange TM (`app/ponto/services/justificativa.py:84`).
-
-2. **F5 permanece no ramo que registra saída — guarda J2 chega depois do efeito.** Entrada concreta: C `turno_aberto` do dia D, sem CelulaDia, aponta J2 pendente de D+1; J1 de D aponta C e informa entrada/saída. A saída registrada em `app/ponto/services/justificativa.py:147` recomputa TM e dispara reconciliador (`app/ponto/signals.py:214`); sem célula, cartório retorna em `app/ponto/services/cartorio.py:1547`; o reconciliador verifica turno fechado em `app/chamados/reconciliador.py:264`, gate aceita pelo fallback dos turnos em `app/chamados/models.py:978`, e `_retratar` rejeita J2 em `app/chamados/reconciliador.py:462`. A guarda nova só aparece depois, em `app/ponto/services/justificativa.py:44`, mas C já encerrado retorna antes em `:38`. Resultado: aprovar J1 rejeita J2. O teste novo usa wrapper sem batida e não cobre esse ramo (`app/ponto/tests/test_justificativa_encerra_origem.py:277`, `:284`).
-
-3. **A pretrava não elimina novos chamados ou novo ponteiro depois da consulta.** O ponteiro é lido sem trava em `app/ponto/services/justificativa.py:80`; o conjunto é travado em `:89`. Produção pode preencher origem nula depois: `app/ponto/views.py:1631` ou `app/api/views.py:2055`; a API pode criar wrapper em `app/api/views.py:2032` e apontar reverso em `:2067`. Escalonamento possível: A conclui pretrava; B cria C e liga J; A trava J; R retrata C e espera J (`app/chamados/reconciliador.py:455`, `:468`); A espera C (`app/ponto/services/justificativa.py:37`). O comentário que promete cobrir nascimento concorrente não corresponde ao conjunto fixado pela consulta (`app/ponto/services/justificativa.py:74`). Reprodução `[nao verificado]`.
-
-4. **Possível bypass adicional das irmãs, para confirmação no consolidado.** O `save()` de J precede helper (`app/ponto/services/justificativa.py:167`, `:353`), dispara cartório (`app/ponto/signals.py:161`) e esse chama `reconciliar()` diretamente em `app/ponto/services/cartorio.py:1163`, `:1175`, `:1196`, sem unidade S128. Os testes novos de irmãs não criam CelulaDia (`app/ponto/tests/test_justificativa_encerra_origem.py:299`, `:340`); portanto não medem esse fechamento anterior. Contraexemplo completo com os protestos calculados `[nao verificado]`.
-
-`rejeitar_lote_justificativas` não usa atomic próprio (`app/ponto/views.py:1868`), então não afirmo inversão persistente J → C ali em autocommit. `JustificativaAdmin` continua ModelAdmin editável (`app/ponto/admin.py:18`); atomic interno do framework não está na cópia consultada `[nao verificado]`.
-
-## 29/10 17:47 · sessao 1842696154ae · - · - · origem=Ronald (tmux)
-
-- **Escritor não alcançado: Django admin, FORA-DO-ESCOPO.** `JustificativaAdmin` é um `admin.ModelAdmin` genérico, sem bloqueio/override do save; `status` é editável e aceita `aprovada`. Entrada concreta: admin altera J pendente para aprovada → save genérico sem `encerrar_chamado_de_origem`. O selo admite expressamente essa lacuna. (`app/ponto/admin.py:18`, `app/ponto/models.py:130`, `app/ponto/models.py:159`, `app/ponto/tests/test_selo_aprovacao_encerra_origem.py:13`)
-
-- **Censo de atribuições de aprovação:** os escritores de Justificativa encontrados são um a um, materialização e lote; os três chamam o fechamento dentro do atomic. A atribuição de férias é outro modelo. (`app/ponto/services/justificativa.py:164`, `app/ponto/services/justificativa.py:176`, `app/ponto/services/justificativa.py:350`, `app/ponto/services/justificativa.py:377`, `app/ponto/views.py:1795`, `app/ponto/views.py:1838`, `app/ferias/services.py:419`)
-
-- **`status_local`:** executei em memória o censo AST do selo, que percorreu 739 arquivos e encontrou zero violações; isso cobre as formas declaradas pelo próprio selo, com os limites de tipagem/dinamismo registrados nele. As portas permitidas estão na allowlist. (`app/chamados/tests/test_selo_status_so_pelas_portas.py:10`, `app/chamados/tests/test_selo_status_so_pelas_portas.py:17`, `app/chamados/tests/test_selo_status_so_pelas_portas.py:37`, `app/chamados/tests/test_selo_status_so_pelas_portas.py:322`)
-
-- **Ausência de sinal no teste de J1/J2:** `test_aprovar_J1_nao_rejeita_a_J2_pendente_que_o_chamado_aponta` passaria retirando a chamada do fechamento da aprovação: ele só exige J1 aprovada, J2 pendente e chamado aberto, precisamente o resultado de nunca tentar fechar. Como teste específico da guarda, morde removendo a guarda e mantendo a chamada; como teste da costura, não morde. Classe: **selo/RED sem mordida**, limitada a esse cenário. (`app/ponto/tests/test_justificativa_encerra_origem.py:272`, `app/ponto/tests/test_justificativa_encerra_origem.py:286`, `app/ponto/tests/test_justificativa_encerra_origem.py:289`)
-
-- **Irmãs:** o teste da aprovação exige a trilha `retratacao_retida_irma_orfa`, portanto não passa simplesmente por ausência do fechamento. O teste da cascata exige aprovação efetiva e chamado vivo; removendo só a guarda da cascata, o `encerrar()` passa a fechar e contraria a asserção. Ele ainda passaria removendo todo o fechamento da cascata e da origem. (`app/ponto/tests/test_justificativa_encerra_origem.py:313`, `app/ponto/tests/test_justificativa_encerra_origem.py:315`, `app/ponto/tests/test_justificativa_encerra_origem.py:349`, `app/ponto/tests/test_justificativa_encerra_origem.py:352`, `app/ponto/services/justificativa.py:367`, `app/ponto/services/justificativa.py:369`)
-
-- **Erro de banco S143:** o teste direto exige que o mock seja chamado, retorno verdadeiro, chamado encerrado e uma trilha; está desenhado para distinguir o rollback silencioso. O teste da falha repetida exige chamada e rollback integral, mas, isoladamente, também passaria sem o savepoint S143, pois esse resultado continuaria sendo rollback integral. (`app/ponto/tests/test_justificativa_encerra_origem.py:241`, `app/ponto/tests/test_justificativa_encerra_origem.py:250`, `app/ponto/tests/test_justificativa_encerra_origem.py:254`, `app/ponto/tests/test_justificativa_encerra_origem.py:261`, `app/ponto/tests/test_justificativa_encerra_origem.py:267`)
-
-- **Teste UPDATE do carimbo:** injeta uma data inválida, não uma falha emitida pelo servidor; só exige que `timezone.now` seja chamado e o ato sobreviva. Ausência de `FechamentoMensal` não basta para declarar vacuidade, pois o UPDATE precisa preparar os valores mesmo sem linhas correspondentes. Se a preparação ocorre dentro de `mark_for_rollback_on_error` na versão instalada, o teste morde sem savepoint; essa implementação Django e a execução com banco ficaram **[nao verificado]**. (`app/ponto/tests/test_justificativa_encerra_origem.py:379`, `app/ponto/tests/test_justificativa_encerra_origem.py:382`, `app/ponto/tests/test_justificativa_encerra_origem.py:385`)
-
-- **Tetos:** o custo acrescentado é por execução do receiver em `post_save` de chamado terminal, pois ele não verifica transição nem `update_fields`; portanto “por chamado que fecha” é uma descrição incompleta. O próprio comentário prevê dois disparos no cenário de um chamado. A alteração é compatível com SAVEPOINT+RELEASE por execução; os números medidos permanecem **[nao verificado]** sem banco. Os tetos usam `<=`, portanto remover o savepoint não os reprovaria; a garantia funcional depende do RED separado. (`app/chamados/signals.py:75`, `app/chamados/signals.py:81`, `app/chamados/signals.py:91`, `app/ponto/tests/test_selo_chokepoint_escrita.py:148`, `app/ponto/tests/test_selo_chokepoint_escrita.py:150`, `app/ponto/tests/test_selo_chokepoint_escrita.py:210`)
-
-- **F7 corrigido:** o selo agora compara o receptor da atribuição, do save e do primeiro argumento do fechamento; há mutação explícita para outro objeto. Executei os dois selos em memória, substituindo somente `SimpleTestCase` por `unittest.TestCase`: 22 testes passaram, sem Django nem banco; execução Django funcional **[nao verificado]**. (`app/ponto/tests/test_selo_aprovacao_encerra_origem.py:81`, `app/ponto/tests/test_selo_aprovacao_encerra_origem.py:102`, `app/ponto/tests/test_selo_aprovacao_encerra_origem.py:103`, `app/ponto/tests/test_selo_aprovacao_encerra_origem.py:207`)
-
-## 29/10 17:46 · sessao edaf1101b86e · - · - · origem=Ronald (tmux)
-
-Achados confirmados por leitura:
-
-1. **Guarda das irmãs pode chegar tarde.** `j.save()` ocorre antes de `encerrar_chamado_de_origem` (`app/ponto/services/justificativa.py:167`, `:176`; lote `app/ponto/views.py:1798`, `:1833`). O signal da justificativa julga a célula imediatamente (`app/ponto/signals.py:161`–`:165`, `:88`–`:93`). A grade reconhece a justificativa aprovada e marca o dia justificado (`app/escala/utils.py:1157`–`:1159`, `:1198`–`:1203`); o cartório dispensa as lâmpadas (`app/ponto/services/cartorio.py:602`–`:610`) e fecha chamados diretamente por `reconciliar`, sem a guarda S128 (`:1163`, `:1175`, `:1196`).
-
-   Contraexemplo: célula de trabalho com saída S19 apagada; chamado vivo com `marcos_faltantes=[{'hora':'19:00','tipo':'S'}]`; justificativa própria pendente; pergunta respondida “19:00”, não validada/materializada. Aprovar a justificativa acende a lâmpada por dispensa; `marcos_acesos` retorna verdadeiro (`app/ponto/services/lastro.py:170`–`:181`), o gate aceita a justificativa própria aprovada (`app/chamados/models.py:937`–`:938`) e fecha antes da guarda. O helper encontra chamado terminal e retorna (`app/ponto/services/justificativa.py:37`–`:39`). O resolver preserva a resposta ainda não consumida (`app/chamados/services/disputa_emissao.py:1558`–`:1560`). **Classe: pouso antes do pré-requisito / guarda contornada.**
-
-2. **Guarda J2 pendente também pode chegar tarde.** As portas unitária e materialização registram a saída antes de chamar o helper (`app/ponto/services/justificativa.py:147`–`:153`, `:328`–`:335`, `:176`, `:377`). O signal da batida chama o reconciliador (`app/ponto/signals.py:206`–`:215`); ele encontra a premissa de turno morta e chama `_retratar` (`app/chamados/reconciliador.py:264`–`:289`, `:1203`–`:1214`), que auto-rejeita a justificativa relacionada pendente (`:462`–`:468`).
-
-   Contraexemplo: J1 aprovada com saída que fecha o turno; origem C aponta J2 pendente; sem irmãs. A batida resolve C e rejeita J2 antes da guarda `app/ponto/services/justificativa.py:44`. Depois o helper retorna porque C já está encerrado (`:38`). **Classe: pouso antes do pré-requisito / outra: decisão colateral de J2.**
-
-3. **A cascata antecede a guarda J2.** Ela chama `encerrar()` em cada alvo (`app/ponto/services/justificativa.py:361`–`:369`), antes do helper (`:377`). `encerrar` força fechamento sem gate da premissa (`app/chamados/models.py:1192`–`:1202`). Se a origem pertence à cascata e aponta outra justificativa pendente, termina fechada antes da guarda de `:44`; a cascata não auto-rejeita J2, mas contorna o resultado prometido pela guarda. **Classe: pouso antes do pré-requisito.**
-
-4. **Residual de duas trilhas na materialização:** `NAO_FECHADOS` contém `resolvido` (`app/chamados/catalogo/motor.py:32`). A saída pode fazer o signal resolver C antes da cascata; `_cascata_do_turno` volta a selecionar esse C (`app/ponto/services/justificativa.py:61`, `:361`) e `encerrar()` faz `resolvido → fechado` (`app/chamados/catalogo/motor.py:114`–`:115`). São duas transições e duas linhas `estado_chamado` (`app/chamados/models.py:227`–`:231`). Esse mecanismo da cascata já existia no trecho fornecido; apontar como residual preexistente, não atribuir sua introdução ao v6.  
-
-Sobre os efeitos:
-
-- Rebaixamento não captura exceções (`app/chamados/signals.py:68`–`:72`). No caminho normal `_gravar_estado` já normaliza a urgência antes do save (`app/chamados/models.py:210`), de modo que `_rebaixar_sem_post_save` retorna sem update (`:424`–`:426`). Uma exceção propagada nessa execução atravessa o atomic da aprovação (`app/ponto/services/justificativa.py:99`–`:181`).
-- S143 agora tem savepoint próprio e captura fora dele (`app/chamados/signals.py:88`–`:94`), portanto o erro direto do resolver fica isolado. S128 chama o resolver novamente sem captura (`app/chamados/reconciliador.py:455`–`:473`); erro repetido desfaz a aprovação inteira.
-- O cartório usa `engolir` (`app/chamados/signals.py:171`–`:180`), cujo corpo somente captura, sem savepoint próprio (`app/core/observ.py:85`–`:91`). Suas portas de persistência da célula têm atomic próprio (`app/ponto/portas/celula.py:634`–`:642`). Uma garantia geral de isolamento de todo erro de banco no cartório não foi demonstrada [nao verificado].
-- O risco concreto demonstrável pela leitura é **ordem de efeitos síncronos** antes das guardas, acima; ler as próprias alterações ainda não commitadas é necessário para que o gate veja a justificativa aprovada (`app/chamados/models.py:937`–`:938`), não constitui sozinho erro.
-- `invalidar_fechamento` protege a coleta da competência e cada update com atomic separado (`app/ponto/services/fechamento.py:1616`–`:1624`), capturando fora (`:1629`–`:1633`). Se falhar na segunda competência, a primeira permanece invalidada e a função devolve zero; é o comportamento documentado no novo comentário (`:1614`–`:1615`), não evidência de aprovação parcialmente gravada.
-
-Não executei banco nem testes; ocorrências reais desses contraexemplos em produção estão [nao verificado]. [nao verificado]
-
-_205 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_209 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._

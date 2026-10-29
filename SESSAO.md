@@ -6,10 +6,18 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/10/2026 18:28:13.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (22.6 MB). Acoes na janela: **435**.
+**Medido em 29/10/2026 18:33:38.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (22.9 MB). Acoes na janela: **443**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 18:32:38 | SendMessage |  | `-` |
+| 18:32:36 | Bash | Free the lock from obsolete green5 and list red_bcd results | `kill 2342630 1485317 2>/dev/null; for c in $(docker ps -q); do docker inspect -f '{{range .Mounts}}{{.Source}} {{end}}' $c \| grep -q 'wt-justif-final4-2910/app ' && docker kill $c; done; /usr/bin/sleep 2; bash /home/ronald/saas-hasner/bin/trava_teste.sh --quem; grep -E '^(FAIL\|ERROR):\|^ok$\|\.\.\. ok' /home/ronald/saas-hasner/logs/justif/red_bcd.log \| head` |
+| 18:32:31 | Bash | Check red_bcd verdict and what final4 runs | `cd /home/ronald/saas-hasner/logs/justif && grep -E '^(OK\|FAILED)($\| \()\|^Ran\|^rc=' red_bcd.log red_a.log \| tail -6; grep -n 'final4\\|green5' rodar_rodada3.sh \| head` |
+| 18:32:24 | Bash | Check lock holder and record JUSTIF reprove | `ps -o pid,args -p 2342630 \| cut -c150-330; cd /home/ronald/saas-hasner && pgrep -f rodar_final5 ; python3 - <<'PY' p='app/docs/RELATO.md'; s=open(p,encoding='utf-8').read(); i=s.index('\n> ') s=s[:i]+'\n> **JUSTIFICATIVA-ENCERRA-ORIGEM 176cfd55 -- 3a leitura opus REPROVADA 18:3x:** `_encerrar_bloqueio_de_entrada` troca `encerrar()` por `retratar()`, e `entrada_bloqueada_turno_aberto` em `resolvid ...` |
+| 18:32:14 | SendMessage |  | `-` |
+| 18:32:04 | Bash | Kill reproved-hash suite holding lock | `kill 2323257; for c in $(docker ps -q); do docker inspect -f '{{range .Mounts}}{{.Source}} {{end}}' $c \| grep -q 'wt-justif-final5-2910/app ' && docker kill $c; done; /usr/bin/sleep 2; bash /home/ronald/saas-hasner/bin/trava_teste.sh --quem` |
+| 18:32:01 | Bash | Identify current test lock holder | `ps -o pid,etime,args -p 2323257 \| cut -c1-400` |
+| 18:31:53 | Bash | Stop suite of reproved JUSTIF hash, keep RED chain | `cd /home/ronald/saas-hasner && ps -eo pid,args \| grep -E 'rodar_final5' \| grep -v grep \| awk '{print $1}' \| xargs -r kill; for c in $(docker ps -q); do docker inspect -f '{{.Id}} {{range .Mounts}}{{.Source}} {{end}}' $c \| grep -q 'wt-justif-2910-1645/app ' && echo kill $c && docker kill $c; done; /usr/bin/sleep 2; bash bin/trava_teste.sh --quem; ps -eo pid,args \| grep rodar_ \| grep -v grep  ...` |
 | 18:28:11 | Bash | Record grupo1 opus reprove in RELATO | `cd /home/ronald/saas-hasner && python3 - <<'PY' p='app/docs/RELATO.md'; s=open(p,encoding='utf-8').read(); i=s.index('\n> ') s=s[:i]+'\n> **GRUPO-1 pouso 1 (184252cb) -- leitura final opus REPROVADA 18:5x:** (1) o selo fica VERMELHO no proprio hash -- `chamadas_sem_instante` devolve na ordem do `ast.walk` ([9,4,5,7] contra [4,5,7,9], `test_selo_grade_pede_o_instante.py:188`), entao 1 dos 5 vermelh ...` |
 | 18:28:03 | SendMessage |  | `-` |
 | 18:27:53 | TaskStop |  | `-` |
