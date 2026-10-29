@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/10/2026 13:44:03.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (16.5 MB). Acoes na janela: **354**.
+**Medido em 29/10/2026 13:49:15.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (16.7 MB). Acoes na janela: **355**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 13:44:56 | Bash | Wait for remaining BO triage files | `cd /home/ronald/saas-hasner && until [ -s logs/bo2910/bo01_03.out ] && [ -s logs/bo2910/bo_02_04_05_06_08.out ]; do /usr/bin/sleep 30; done; ls -la logs/bo2910/; date +%H:%M` |
+| 13:44:50 | Bash | Write BO07 question and trava row | `cd /home/ronald/saas-hasner && python3 - <<'PY' p='app/docs/RELATO.md'; s=open(p,encoding='utf-8').read(); i=s.index('\n> ') sec=''' > **lei: BO07-TURNO-AUTORIZADO-SEM-SAIDA** (pergunta de ORDEM, aval BO-ADMIN-2910 item 07 complemento; nao constroi; a fila SEGUE) -- medido 29/10 13:4x (agente sonnet, so leitura, `logs/bo2910/bo07.out`, ERROS=0): col204 (unica [nome]; J.A, posto Viscardi Duque de Cax ...` |
+| 13:44:34 | Bash | Check linked BACKLOG rows exist | `cd /home/ronald/saas-hasner/app/docs && grep -n "^\| PORTA-CELULA-EDITADA\\|^\| JORNADA-EXCEPCIONAL-POR-DATA\\|^\| PORTAO-DE-FATURAMENTO" BACKLOG.md \| cut -c1-200` |
 | 13:37:22 | Bash | Wait for BO triage outputs | `/usr/bin/sleep 420; ls -la /home/ronald/saas-hasner/logs/bo2910/ 2>/dev/null; cd /home/ronald/saas-hasner && bin/trava_teste.sh --quem; date +%H:%M` |
 | 13:36:46 | Bash | Wait for grupo 1 commit | `cd /home/ronald/saas-hasner && until [ "$(git -C /home/ronald/wt-grupo1-2910-1100 rev-parse --short HEAD)" != "b9c09ca2" ]; do /usr/bin/sleep 30; done; git -C /home/ronald/wt-grupo1-2910-1100 log --oneline -1 \| cut -c1-90; date +%H:%M` |
 | 13:36:40 | Agent | BO 02 04 05 06 08 triage | `TRIAGEM so leitura de 5 BOs do admin (aval BO-ADMIN-2910, 29/10 13:2x). Repo /home/ronald/saas-hasner; leia o CLAUDE.md secoes 4 e 6 e a L-099 (dono: ESTRUTURA / CADASTRO / BATIDA / decisao do admin; juiz `e6_oraculo.dono_da_divergencia`). - Porta: `bin/sonda_leitura.sh <script.py>` (role leitor). - Imprima `ERROS=N` e `FIM-DA-SONDA`. - Horas por `timezone.localtime`. - No arquivo de saida, so col ...` |
@@ -362,5 +365,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 01:50:09 | Bash | Wait for constructor's recorte | `cd /home/ronald/saas-hasner && for i in $(seq 1 19); do grep -qE '^rc=\|^Ran [0-9]+' logs/outbox/v8_recorte2.log 2>/dev/null && break; /usr/bin/sleep 30; done; grep -E '^ARVORE\|^(FAIL\|ERROR):\|^Ran \|^(OK\|FAILED)( \|$)\|^rc=' logs/outbox/v8_recorte2.log \| tail -6; date +%H:%M` |
 | 01:49:59 | Bash | Get summary of two-judges divergence | `cd /home/ronald/saas-hasner/logs/outbox && grep -E "^(UNIVERSO\|DIVERG\|TOTAL\|universo\|diverg\|resumo\|RESUMO\|nasc\|N )" v8_dois_juizes_prod.out \| head; grep -ciE "nasc=True renasc=True\|nasc=False renasc=False" v8_dois_juizes_prod.out; grep -c "^ ch" v8_dois_juizes_prod.out; tail -3 v8_recorte2.log \| cut -c1-160` |
 | 01:49:53 | Bash | Read two-judges measure and recorte | `cd /home/ronald/saas-hasner/logs/outbox && grep -vE "WARNING\|^\s*$" v8_dois_juizes_prod.out \| tail -15 \| cut -c1-220; echo ===; grep -E '^ARVORE\|^(FAIL\|ERROR):\|^Ran \|^(OK\|FAILED)( \|$)\|^rc=' v8_recorte2.log \| tail -5` |
-| 01:45:48 | Bash | Wait for constructor report | `/usr/bin/sleep 240; git -C /home/ronald/wt-outbox-2810-1915 log --oneline -1; ls -t /home/ronald/saas-hasner/logs/outbox/ \| head -6; date +%H:%M` |
-| 01:44:42 | Bash | Keep waiting for outbox commit | `cd /home/ronald/saas-hasner && for i in $(seq 1 19); do git -C /home/ronald/wt-outbox-2810-1915 log --oneline -1 \| /bin/grep -qv 4f5ec850 && break; /usr/bin/sleep 30; done; git -C /home/ronald/wt-outbox-2810-1915 log --oneline -2; git -C /home/ronald/wt-outbox-2810-1915 status --porcelain \| head; date +%H:%M` |
