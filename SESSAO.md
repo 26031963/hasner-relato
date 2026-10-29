@@ -6,10 +6,16 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/10/2026 01:15:54.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (8.2 MB). Acoes na janela: **371**.
+**Medido em 29/10/2026 01:20:51.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (8.3 MB). Acoes na janela: **377**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 01:20:44 | Bash | Wait for push to finish | `cd /home/ronald/saas-hasner && for i in $(seq 1 19); do grep -q '^rc=' logs/codex/push_marco_2.out && break; /usr/bin/sleep 30; done; tail -4 logs/codex/push_marco_2.out \| cut -c1-200; git fetch -q origin && git log origin/main --oneline -1; date +%H:%M` |
+| 01:19:39 | Bash | Check second push attempt | `/usr/bin/sleep 60; tail -6 /home/ronald/saas-hasner/logs/codex/push_marco_2.out \| cut -c1-200` |
+| 01:19:32 | Bash | Rewrite TICKETS placar, commit, push again | `cd /home/ronald/saas-hasner && bash bin/tickets_placar.sh --escrever 2>&1 \| tail -2; git status --porcelain app/docs/TICKETS.md; git add -- app/docs/TICKETS.md && git commit -q -F - <<'EOF' O topo do TICKETS fechado no ato do push (O112) Placar derivado reescrito por bin/tickets_placar.sh --escrever: a virada do dia envelheceu as idades do topo. LEI-AKITA: origem=n/a (derivado), testemunha=bin/ti ...` |
+| 01:19:02 | Bash | Check push launcher output | `/usr/bin/sleep 20; cd /home/ronald/saas-hasner && ls bin/push.sh; tail -5 logs/codex/push_marco.out` |
+| 01:18:54 | Bash | Record proof and push marco in background | `python3 - <<'EOF' p='docs/RELATO.md'; s=open(p).read() o="> - INCOMPLETO: caminho publicado e URL saem na proxima rodada do `bin/relato.sh` (timer); push do marco pela regua." n="> - PUBLICADO (PRONTO): o timer do relato rodou 01:17 com o codigo do marco -> hasner-relato `d5ccf1f7` (main = origin/main), arquivo `CODEX-ESTADO.md`, URL https://github.com/26031963/hasner-relato/blob/main/CODEX-ESTADO ...` |
+| 01:17:46 | Bash | Confirm push and run leak seal on published | `cd /home/ronald/hasner-relato && git fetch -q origin && git status -sb \| head -1; git log origin/HEAD --oneline -1 2>/dev/null \|\| git log origin/main --oneline -1; head -4 CODEX-ESTADO.md; cd /home/ronald/saas-hasner && timeout 300 bash bin/tests/test_publicacao_sem_nome.sh 2>&1 \| tail -2` |
 | 01:15:35 | Bash | Publish relato and confirm CODEX-ESTADO | `cd /home/ronald/saas-hasner && timeout 300 bash bin/relato.sh 2>&1 \| tail -20; git -C /home/ronald/hasner-relato remote get-url origin \| sed 's#https://[^@]*@#https://#'; git -C /home/ronald/hasner-relato log --oneline -1; git -C /home/ronald/hasner-relato ls-files \| /bin/grep -c CODEX` |
 | 01:15:26 | Bash | Commit the marco in main | `cd /home/ronald/saas-hasner && git add -- CLAUDE.md app/docs/BACKLOG.md app/docs/HANDOFF-SESSAO.md app/docs/PROMPTS.md app/docs/RELATO.md && git commit -q -F - <<'EOF' ; echo rc=$?; git log --oneline -2 Marco CODEX-ESTADO-NO-RELATO (29/10 01:1x): as respostas finais do Codex no hasner-relato, isoladas e raspadas Pouso proprio de INSTRUMENTO (L-105), pela forma da L-107 (merge --no-ff --no-commit + ...` |
 | 01:15:07 | Bash | Merge CODEX branch without commit | `cd /home/ronald/saas-hasner && git merge --no-ff --no-commit codex-estado-2901 2>&1 \| tail -2; git rev-parse -q --verify MERGE_HEAD && echo "MERGE_HEAD presente"; git diff --cached --stat \| tail -4` |
