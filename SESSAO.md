@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/10/2026 22:34:38.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (5.2 MB). Acoes na janela: **232**.
+**Medido em 28/10/2026 22:39:51.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (5.3 MB). Acoes na janela: **237**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 22:39:39 | Bash | Inspect motor result structure | `sed -n 927,945p ponto/services/espelho.py; /bin/grep -n "class ResultadoMes\\|class ResultadoDia\\|dias: List\\|periodos: List\\|datas_falta\\|saida_antecipada" ponto/motor_calculo_v2.py \| head -15` |
+| 22:39:34 | Bash | Check autoridade_do_periodo result shape | `sed -n 982,1000p ponto/services/espelho.py \| head -5; /bin/grep -n "class Autoridade\\|def dias\b\\|resultado\b.*=\\|por_dia" ponto/services/espelho.py \| head -15` |
+| 22:39:06 | Bash | List changed days for dono assignment | `cd /home/ronald/saas-hasner && python3 logs/juizpar2/dias_por_dono.py logs/juizpar2/dinheiro_antes.out logs/juizpar2/dinheiro_depois_2.out 89,746,820,911,788 > logs/juizpar2/dias_por_dono_2.out; wc -l logs/juizpar2/dias_por_dono_2.out; grep -c PIORA logs/juizpar2/dias_por_dono_2.out; cut -c1-260 logs/juizpar2/dias_por_dono_2.out \| head -90` |
+| 22:34:57 | Bash | Register and wait for money DIFF v2 | `python3 - <<'EOF' p='docs/BACKLOG.md'; s=open(p).read() o="Anterior ao outbox (a varredura */15 ja chamava `_retratar` assim). \| registrada -- reproduzir antes de curar \|" n="HIPOTESE de composicao: so inverte se `abrir` e `criar_disputa_a_partir_de_chamados_orfaos` correm dentro de UM atomic externo (o de `_retratar`); cada funcao sozinha trava Disputa -> Colaborador (censo do HEAD 1974dbc0, av ...` |
+| 22:34:51 | SendMessage |  | `-` |
 | 22:34:24 | Bash | Verify lock-order claim in HEAD | `git show HEAD:app/ponto/management/commands/detectar_ausencias.py \| sed -n 780,800p; git show HEAD:app/chamados/services/disputa_emissao.py \| /bin/grep -n "def criar_disputa_a_partir_de_chamados_orfaos\\|select_for_update" \| head; git show HEAD:app/chamados/models.py \| sed -n 640,672p \| /bin/grep -n "select_for_update\\|Disputa\\|trava\\|def abrir"` |
 | 22:24:41 | Bash | Wait for money DIFF v2 | `cd /home/ronald/saas-hasner && for i in $(seq 1 19); do grep -q '^rc=' logs/juizpar2/dinheiro_depois_2.out 2>/dev/null && [ -s logs/juizpar2/dinheiro_diff_2.out ] && break; /usr/bin/sleep 30; done; cat logs/juizpar2/dinheiro_diff_2.out \| cut -c1-300; date +%H:%M` |
 | 22:24:37 | Bash | Write per-day dono input script | `cat > /home/ronald/saas-hasner/logs/juizpar2/dias_por_dono.py <<'EOF' """Dias cuja ata mudou, para os colabs com dinheiro diferente e para os vereditos que pioram (entrada da leitura por dono).""" import json, sys def le(p): for l in open(p): if l.startswith('JSON '): return json.loads(l[5:]) A, B = le(sys.argv[1]), le(sys.argv[2]) ka, kb = A['atas'], B['atas'] alvo = set(sys.argv[3].split(',')) i ...` |
