@@ -1,7 +1,121 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **29/10/2026 17:50** · publicado em **29/10/2026 17:50** (UTC-3)
+> Ultima resposta processada: **29/10/2026 17:53** · publicado em **29/10/2026 17:56** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 29/10 17:53 · sessao 0710e4f763be · grupo1p1 · verificador · origem=Code
+
+1. **Classe 3 — espelho/PDF perdem o instante antes de `folha_manda`.** As chamadas em `app/ponto/services/espelho.py:1288` e `app/relatorios/pdf_espelho.py:624` não repassam `agora`. `folha_manda` chama `ate_ontem` sem referência temporal (`app/relatorios/cartao_pela_celula.py:412`), provocando outra leitura em `app/relatorios/cartao_pela_celula.py:40`. Havendo turno aberto, também consulta o juiz sem instante (`app/relatorios/cartao_pela_celula.py:398`), acionando `timezone.now()` em `app/ponto/turnos.py:2255`.
+
+2. **Classe 3 — ficha lê vários relógios no mesmo ato.** Captura `agora` em `app/colaboradores/services/ficha.py:117`, mas chama `particionar_verbos` em `app/colaboradores/services/ficha.py:155`, que relê o relógio em `app/chamados/services/verbos.py:32`. Com propostas habilitadas, a chamada de `app/colaboradores/services/ficha.py:176` chega a outra leitura em `app/escala/services/propositor.py:622`, via `app/escala/services/propositor.py:538`.
+
+3. **Classe 3 — fila e simulações usam instantes distintos.** `avaliar_fila` captura `agora` em `app/ponto/services/flip_auto.py:263`, mas chama `fila_flip` em `app/ponto/services/flip_auto.py:268`. Esta consulta duas fontes (`app/ponto/services/flip_auto.py:146`, `app/ponto/services/flip_auto.py:148`) que releem o relógio em `app/ponto/services/flip_auto.py:34` e `app/ponto/services/flip_auto.py:126`.
+
+4. **Classe 3 — classificação do universo relê o dia.** `medir` captura o instante em `app/folha/porta_export.py:318`, mas chama `classificar_export` sem transmiti-lo em `app/folha/porta_export.py:469`. A cadeia `app/folha/export.py:942` → `app/folha/export.py:1249` chega a `localdate()` em `app/folha/export.py:1179`. A mesma falha alcança os chamadores tocados em `app/ponto/services/dias_em_aberto.py:104`, `app/ponto/management/commands/e6_oraculo.py:269`, `app/relatorios/management/commands/cartao_x_txt_divergentes.py:53` e `app/relatorios/management/commands/pdf_x_espelho_divergentes.py:58`.
+
+5. **Classe 3 — PDF auditável ganha outro instante.** O instante capturado em `app/relatorios/pdf_espelho.py:1088` alimenta os dados e o texto de geração, mas não segue na chamada de `app/relatorios/pdf_espelho.py:1099`. O pipeline relê o relógio em `app/relatorios/pdf_base.py:133` e usa esse segundo valor no rodapé em `app/relatorios/pdf_base.py:139`.
+
+6. **Classe 5 — selo deixa voltar a segunda leitura da API.** O verificador ignora funções sem parâmetro `agora` (`app/escala/tests/test_selo_grade_pede_o_instante.py:73`) e examina apenas chamadas aos alvos enumerados (`app/escala/tests/test_selo_grade_pede_o_instante.py:80`). Restaurar `timezone.now() < _fim_hj` em `app/api/views.py:1635`, após a captura de `app/api/views.py:1350`, continua produzindo listas vazias nos dois verificadores usados pelo selo (`app/escala/tests/test_selo_grade_pede_o_instante.py:102`, `app/escala/tests/test_selo_grade_pede_o_instante.py:108`).
+
+Total por classe, agrupado por causa: **1=0; 2=0; 3=5; 4=0; 5=1; 6=0; 7=0; 8=0.**
+
+## 29/10 17:52 · sessao 6c4ab6f050bb · - · - · origem=Ronald (tmux)
+
+Achados verificáveis da classe 3, agrupados por causa:
+
+- `app/ponto/services/espelho.py:1288` e `app/relatorios/pdf_espelho.py:624`: ambos recebem `agora`, mas chamam `folha_manda` sem propagá-lo. Ela chama `ate_ontem` sem `hoje` (`app/relatorios/cartao_pela_celula.py:412`), que lê `timezone.localdate()` (`:40`). Havendo turno aberto, também chama `turno_aberto_de` sem instante (`:398`), acionando `timezone.now()` em `app/ponto/turnos.py:2255`. Havendo fechamento, chama `totais_da_folha` (`:323`), depois `fechamento_lido` (`:73`), que chama o recalculador (`app/ponto/services/fechamento.py:1718`), cujo instante é novamente lido em `:595`. Portanto, o instante injetado não governa integralmente a mesma leitura.
+
+- `app/colaboradores/services/ficha.py:117`: captura `agora`, mas `:155` chama `particionar_verbos`, que relê em `app/chamados/services/verbos.py:32`. Com propostas habilitadas, `ficha.py:176` chama `propostas`; esta chama `_recusadas_recentes` em `app/escala/services/propositor.py:538`, que relê em `:622`. A ficha pode usar três instantes no mesmo ato.
+
+- `app/ponto/services/flip_auto.py:263`: captura `agora`, mas `:268` chama `fila_flip`. Esta chama `pares_mesmo_tipo` em `:146`, que lê outro instante em `:34`, e `fila_flip_recusas` em `:148`, que lê novamente em `:126`. São três leituras no ato que fornece `agora` às simulações tocadas em `:303` e `:304`.
+
+- `app/folha/porta_export.py:469`: depois de capturar o instante em `:318`, chama `classificar_export` sem referência temporal. Este chama `motivos_retencao_espelho` em `app/folha/export.py:942`, que delega a `motivos_retencao_celula` em `:1249`; ela lê `localdate()` em `:1179`. A mesma causa aparece nos sítios tocados `app/ponto/services/dias_em_aberto.py:104`, `app/ponto/management/commands/e6_oraculo.py:269`, `app/relatorios/management/commands/cartao_x_txt_divergentes.py:53` e `app/relatorios/management/commands/pdf_x_espelho_divergentes.py:58`.
+
+- `app/relatorios/pdf_espelho.py:1099`: após capturar o instante em `:1088` e usá-lo para dados e texto de geração (`:1089`, `:1090`), chama `gerar_pdf_auditavel` sem esse instante. O pipeline relê o relógio em `app/relatorios/pdf_base.py:133` e usa o segundo valor no rodapé (`:139`).
+
+Adicional, se o escopo incluir o chamador intocado da função tocada: `app/colaboradores/services/ficha.py:275` chama `ficha_do_colab`, que captura `agora` em `:117`; depois `ficha_para_o_copiloto` relê `localdate()` em `:280` quando `hoje` não é informado.
+
+Não incluiria como achado de leitor a releitura de `app/ponto/management/commands/reconciliar_grade.py:458`: é o carimbo de uma escrita, chamado em `:228`, e não o instante empregado para julgar a grade.
+
+## 29/10 17:51 · sessao 054f4626c827 · justif · verificador · origem=Code
+
+**Não aprovaria o v6.** Há guardas alcançadas depois do fechamento e um ciclo de travas ainda possível. (`app/ponto/services/justificativa.py:176`, `app/ponto/services/cartorio.py:1163`, `app/ponto/services/veredito_celula.py:307`)
+
+Os contraexemplos abaixo são inferências da árvore. Ocorrência em produção, reprodução concorrente, testes funcionais e números citados nos comentários: **[nao verificado]**. [nao verificado]
+
+**1. Defeitos encontrados**
+
+- **F1 — A guarda das irmãs pode chegar depois do fechamento. Classe: pouso antes do pré-requisito.** A aprovação salva J antes do helper; esse `save()` dispara o cartório, que pode chamar `reconciliar()` diretamente, sem passar pela guarda S128. Depois, o helper encontra C encerrado e retorna. (`app/ponto/services/justificativa.py:167`, `app/ponto/services/justificativa.py:176`, `app/ponto/signals.py:165`, `app/ponto/services/cartorio.py:1163`, `app/ponto/services/justificativa.py:38`)
+
+  **Entrada → erro:** escala E07/S19, E07 real, C vivo cobrando S19, J própria pendente, pergunta S19 respondida e ainda não consumida; célula de trabalho com `julgada_em=None` antes da aprovação. J aprovada faz a grade marcar o dia justificado e a ata dispensar S19; `marcos_acesos` permite o fechamento direto. Resultado: C terminal com resposta aguardando consumo. A célula não é pulada porque ainda não foi julgada. (`app/escala/utils.py:1198`, `app/ponto/services/cartorio.py:608`, `app/ponto/services/lastro.py:170`, `app/ponto/services/cartorio.py:1092`, `app/chamados/services/disputa_emissao.py:1558`)
+
+- **F2 — A guarda contra decidir J2 também chega tarde. Classe: pouso antes do pré-requisito.** Na aprovação individual e na materialização, registrar a saída antecede o helper. O signal da batida chama o reconciliador, cuja unidade auto-rejeita a justificativa relacionada pendente. (`app/ponto/services/justificativa.py:147`, `app/ponto/services/justificativa.py:328`, `app/ponto/signals.py:214`, `app/chamados/reconciliador.py:1214`, `app/chamados/reconciliador.py:468`)
+
+  **Entrada → erro:** C `turno_aberto` de D aponta J2 pendente de D+1; J1 pendente de D aponta C e informa E/S que fecham o turno; sem célula e sem irmãs. A batida fecha C pelo fallback dos turnos e auto-rejeita J2. Depois J1 é aprovada, e o helper retorna pelo estado terminal antes de consultar a guarda nova. Resultado: aprovar J1 decidiu J2. (`app/chamados/reconciliador.py:264`, `app/chamados/models.py:978`, `app/chamados/reconciliador.py:462`, `app/ponto/services/justificativa.py:38`, `app/ponto/services/justificativa.py:44`)
+
+  A cascata também contorna essa guarda: se C é alvo da cascata e aponta outra pendente, `encerrar()` força seu fechamento antes do helper. Nesse ramo J2 pode continuar pendente sob C fechado. (`app/ponto/services/justificativa.py:369`, `app/ponto/services/justificativa.py:377`, `app/chamados/models.py:1192`)
+
+- **F3 — Permanece o ciclo chamado ↔ `TurnoMaterializado`. Classe: ordem de trava.** A aprovação segura C e J, depois registra batida e tenta reconstruir TM. `veredito_celula` pode segurar TM na sua transação e depois tentar fechar C. Escalonamento: B segura TM; A segura C; A espera TM; B espera C. (`app/ponto/services/justificativa.py:89`, `app/ponto/services/justificativa.py:101`, `app/ponto/services/justificativa.py:147`, `app/ponto/signals.py:36`, `app/ponto/nucleo.py:59`, `app/ponto/services/veredito_celula.py:203`, `app/ponto/services/veredito_celula.py:307`, `app/ponto/services/veredito_celula.py:324`)
+
+- **F4 — A pré-trava não garante o conjunto após nascimento ou vinculação concorrente. Classe: ordem de trava.** Ela lê o ponteiro sem travar J e depois trava os chamados encontrados naquela consulta. A API pode criar C e preencher a origem anteriormente nula entre essa consulta e a trava de J. Assim, a promessa de cobrir nascimento concorrente não é garantida. (`app/ponto/services/justificativa.py:74`, `app/ponto/services/justificativa.py:80`, `app/ponto/services/justificativa.py:89`, `app/api/views.py:2033`, `app/api/views.py:2055`)
+
+  **Interleaving → erro:** A termina a pré-trava; B cria C, liga J nos dois sentidos e conclui; A trava J; R começa a retratar C, lê J ainda pendente e espera sua escrita; A espera C no helper. Existe entrada pública de retratação por módulo, além da unidade que escreve C antes de J. Esse ciclo específico não foi reproduzido em banco **[nao verificado]**. (`app/api/views.py:2069`, `app/ponto/services/justificativa.py:101`, `app/chamados/reconciliador.py:455`, `app/chamados/reconciliador.py:468`, `app/ponto/services/justificativa.py:37`, `app/chamados/management/commands/retratar_chamados_lei_cala.py:24`, `app/chamados/management/commands/retratar_chamados_lei_cala.py:59`)
+
+- **F5 — O lote ainda aprova quando a batida pertence a outra justificativa. Classe: outra, inconsistência do ato. Remanescente no trecho tocado.** `_outra is not None` apenas evita vincular a batida; o lote continua, fecha a origem e conta aprovação. (`app/ponto/views.py:1825`, `app/ponto/views.py:1833`, `app/ponto/views.py:1834`)
+
+  **Entrada → erro:** J1 pendente com saída informada; a porta deduplica para S já vinculada a J2 aprovada. Resultado: J1 aprovada, origem encerrada, `batida_gerada` de J1 nula e resposta de sucesso. A porta individual recusa precisamente essa situação. (`app/ponto/registro_batida.py:113`, `app/ponto/views.py:1826`, `app/ponto/services/justificativa.py:157`)
+
+- **F6 — A materialização pode produzir duas transições de estado. Classe: outra, violação da trilha única. Remanescente anterior ao v6.** A saída pode resolver C pelo signal; a cascata o seleciona novamente porque `NAO_FECHADOS` inclui `resolvido`, e força `resolvido → fechado`. Cada passagem grava `estado_chamado`. (`app/ponto/signals.py:214`, `app/chamados/catalogo/motor.py:32`, `app/ponto/services/justificativa.py:61`, `app/ponto/services/justificativa.py:369`, `app/chamados/catalogo/motor.py:115`, `app/chamados/models.py:227`)
+
+  **Entrada → erro:** origem `turno_aberto`, J própria, E existente, S materializada, sem irmãs. Resultado: duas linhas de estado no primeiro ato; o helper posterior ser idempotente não elimina essas duas linhas. (`app/ponto/services/justificativa.py:328`, `app/chamados/reconciliador.py:456`, `app/ponto/services/justificativa.py:377`)
+
+- **F7 — O fecho legado continua aplicando uma regra própria a outro chamado. Classe: outra, leitor com regra própria de fechar. Remanescente no sítio tocado.** O `exclude` protege a origem, mas a busca continua sem filtro de dia e fecha outro `entrada_bloqueada_turno_aberto`, fora da transação da aprovação e sem guarda das irmãs. (`app/ponto/services/justificativa.py:203`, `app/ponto/services/justificativa.py:207`, `app/ponto/services/justificativa.py:209`)
+
+  **Entrada → erro:** aprovar J de D1 enquanto o chamado mais recente desse módulo pertence a D2, ainda irregular ou com irmã respondida. Resultado: C de D2 é forçado a fechado pelo ato sobre D1. (`app/ponto/services/justificativa.py:204`, `app/ponto/services/justificativa.py:209`, `app/chamados/models.py:1193`)
+
+**2. Escritores não alcançados**
+
+Sim: **FORA-DO-ESCOPO**, o Django admin continua editável para Justificativa, incluindo `status='aprovada'`, sem costura explícita de fechamento. O próprio selo declara essa lacuna. (`app/ponto/admin.py:18`, `app/ponto/models.py:159`, `app/ponto/tests/test_selo_aprovacao_encerra_origem.py:13`)
+
+As três atribuições explícitas encontradas estão alcançadas: individual, materialização e lote. (`app/ponto/services/justificativa.py:164`, `app/ponto/services/justificativa.py:350`, `app/ponto/views.py:1795`)
+
+Não encontrei escritor explícito de `status_local` fora das portas nas formas cobertas pelo censo AST; isso não prova ausência de escrita dinâmica ou genérica. As portas autorizadas e o universo da varredura estão no selo. (`app/chamados/tests/test_selo_status_so_pelas_portas.py:17`, `app/chamados/tests/test_selo_status_so_pelas_portas.py:37`, `app/chamados/tests/test_selo_status_so_pelas_portas.py:322`)
+
+**3. Mordida dos testes e tetos** [nao verificado]
+
+- Os positivos de individual, lote e materialização verificam aprovação e fechamento; o de falha do fechamento exige que a porta tenha sido chamada antes de conferir rollback. Portanto há cobertura da costura nesses cenários. (`app/ponto/tests/test_justificativa_encerra_origem.py:73`, `app/ponto/tests/test_justificativa_encerra_origem.py:85`, `app/ponto/tests/test_justificativa_encerra_origem.py:171`, `app/ponto/tests/test_justificativa_encerra_origem.py:226`)
+
+- **Ausência de sinal:** `test_aprovar_J1_nao_rejeita_a_J2_pendente_que_o_chamado_aponta` passaria sem chamar o fechamento: J1 aprovada, J2 pendente e C aberto são também o resultado de nunca tentar fechar. Ele cobre a guarda mantendo a costura, mas não demonstra sua execução nesse cenário. **Classe: selo/RED sem mordida da costura.** (`app/ponto/tests/test_justificativa_encerra_origem.py:272`, `app/ponto/tests/test_justificativa_encerra_origem.py:289`)
+
+- O teste da irmã na aprovação exige a trilha de retenção, portanto não passa apenas porque ninguém tentou fechar. Porém, os novos casos de irmãs não criam célula e deixam de exercitar F1. O teste da cascata também passaria retirando todo o fechamento; retirando somente sua guarda, deve falhar. (`app/ponto/tests/test_justificativa_encerra_origem.py:352`, `app/ponto/tests/test_justificativa_encerra_origem.py:299`, `app/ponto/tests/test_justificativa_encerra_origem.py:340`, `app/ponto/services/cartorio.py:1548`, `app/ponto/tests/test_justificativa_encerra_origem.py:315`)
+
+- O RED direto do S143 verifica chamada, retorno verdadeiro, estado persistido e uma trilha: está desenhado para detectar o rollback silencioso sem seu savepoint. Já o teste de erro repetido continuaria passando sem esse savepoint, pois exige rollback integral. (`app/ponto/tests/test_justificativa_encerra_origem.py:250`, `app/ponto/tests/test_justificativa_encerra_origem.py:254`, `app/ponto/tests/test_justificativa_encerra_origem.py:256`, `app/ponto/tests/test_justificativa_encerra_origem.py:270`)
+
+- Os testes de erro de banco por `tipo='x'*40` dependem de o backend rejeitar esse valor. O teste do UPDATE injeta uma data inválida; não demonstra uma falha emitida pelo servidor nem verifica explicitamente o estado de rollback. A mordida real desses testes no backend instalado ficou **[nao verificado]**. (`app/ponto/tests/test_justificativa_encerra_origem.py:242`, `app/ponto/tests/test_justificativa_encerra_origem.py:362`, `app/ponto/tests/test_justificativa_encerra_origem.py:380`, `app/ponto/tests/test_justificativa_encerra_origem.py:382`)
+
+- **Tetos:** o custo acrescentado é por execução do receiver em `post_save` terminal, inclusive saves que não mudam estado; “por chamado que fecha” é impreciso. A aritmética declarada é compatível com dois comandos por execução, mas as contagens medidas permanecem **[nao verificado]**. Como os testes cobram `<= teto`, retirar o savepoint não os reprova; essa responsabilidade é do RED funcional. (`app/chamados/signals.py:81`, `app/chamados/signals.py:91`, `app/ponto/tests/test_selo_chokepoint_escrita.py:150`, `app/ponto/tests/test_selo_chokepoint_escrita.py:210`)
+
+- **F7 anterior corrigido:** o selo compara o receptor da atribuição, do `save()` e do argumento do fechamento; existe teste explícito com outro objeto. A limitação de não provar execução do ramo continua declarada. (`app/ponto/tests/test_selo_aprovacao_encerra_origem.py:102`, `app/ponto/tests/test_selo_aprovacao_encerra_origem.py:103`, `app/ponto/tests/test_selo_aprovacao_encerra_origem.py:207`, `app/ponto/tests/test_selo_aprovacao_encerra_origem.py:9`)
+
+**4. Ordem das travas**
+
+No conjunto já existente, individual, rejeição individual, materialização e lote agora pretravam chamados antes de J. Isso corrige a inversão direta apontada na rejeição individual. (`app/ponto/services/justificativa.py:100`, `app/ponto/services/justificativa.py:244`, `app/ponto/services/justificativa.py:310`, `app/ponto/views.py:1792`)
+
+O reconciliador percorre os vivos por PK, mas não os trava antecipadamente: a escrita de C ocorre em `reconciliar()`, seguida da possível escrita de J pendente. Portanto a ordem C→J continua existindo do outro lado; F3 e F4 impedem concluir que todos os ciclos foram eliminados. (`app/chamados/reconciliador.py:1203`, `app/chamados/reconciliador.py:456`, `app/chamados/reconciliador.py:468`)
+
+**5. Efeitos dentro da transação**
+
+**Sim, podem desfazer a aprovação.** S143 agora captura a falha após sair de seu savepoint, incluindo a obtenção do usuário sistema. Entretanto, S128 chama o resolver novamente sem captura; uma falha persistente, ou falha da nota subsequente, atravessa a transação da aprovação. Nesse caminho, desfazer tudo atende à exigência de atomicidade. (`app/chamados/signals.py:91`, `app/chamados/signals.py:93`, `app/chamados/reconciliador.py:469`, `app/chamados/reconciliador.py:471`, `app/ponto/services/justificativa.py:99`, `app/ponto/services/justificativa.py:177`)
+
+O rebaixamento também não captura exceções. Normalmente o núcleo já normalizou a urgência antes do signal, tornando o segundo rebaixamento um no-op. (`app/chamados/signals.py:72`, `app/chamados/models.py:210`, `app/chamados/models.py:424`)
+
+O cartório captura exceções com `engolir`, que não cria savepoint por si. Logo não há garantia geral demonstrada de isolamento de todo erro de banco desse receiver; um sucesso falso por esse caminho específico ficou **[nao verificado]**. (`app/chamados/signals.py:172`, `app/core/observ.py:85`)
+
+Ler a própria J aprovada ainda não commitada é necessário para o gate. O erro concreto encontrado é a **ordem dos efeitos antes das guardas**, descrita em F1/F2. Os novos savepoints de `invalidar_fechamento` envolvem corretamente a coleta e cada UPDATE, com captura externa; não identifiquei ali um novo meio-estado da aprovação. (`app/chamados/models.py:937`, `app/ponto/services/fechamento.py:1616`, `app/ponto/services/fechamento.py:1619`, `app/ponto/services/fechamento.py:1629`)
+
+## 29/10 17:51 · sessao 643d6293abcc · - · - · origem=Ronald (tmux)
+
+- **Classe 5 — selo não detecta a volta da segunda leitura de relógio.** Em `app/escala/tests/test_selo_grade_pede_o_instante.py:73`, o verificador ignora funções sem parâmetro `agora`; em `:80`, examina somente chamadas aos `ALVOS`. Restaurar em `app/api/views.py:1635` o trecho anterior `timezone.now() < _fim_hj`, após a leitura de `:1350`, produz `[]` nos dois verificadores do selo (`test_selo_grade_pede_o_instante.py:102` e `:108`). Confirmei essa mutação em memória, executando os auxiliares AST, sem gravar arquivos. A assinatura permanece igual, portanto as verificações de assinatura em `:139` e `:145` também não detectam a regressão.
 
 ## 29/10 17:50 · sessao 5ecb2ed6553f · - · - · origem=Ronald (tmux)
 
@@ -265,81 +379,4 @@ Achados dos testes e tetos, somente por leitura: [nao verificado]
 
 Não executei testes Django: o ambiente não possui o pacote instalado `[nao verificado]`. A execução das funções AST ocorreu com `python3 -B`, sem importar Django nem escrever arquivos `[nao verificado]`. [nao verificado]
 
-## 29/10 17:37 · sessao cc184a0d6af7 · - · - · origem=Ronald (tmux)
-
-Achados consolidados, somente leitura:
-
-1. **Teste novo contradiz a implementação atual.** `test_erro_de_banco_engolido_nas_perguntas_nao_desfaz_o_fechamento` injeta falha em **todas** as chamadas ao resolver e exige aprovação persistida (`app/ponto/tests/test_justificativa_encerra_origem.py:237`, `:241`, `:247`). O receiver S143 isola e engole a primeira falha (`app/chamados/signals.py:88`), mas `_retratar` chama novamente o mesmo resolver, diretamente, sem captura (`app/chamados/reconciliador.py:424`, `:469`). Essa segunda falha atravessa o atomic e desfaz a aprovação (`app/chamados/reconciliador.py:455`; `app/ponto/services/justificativa.py:169`). Logo esse teste deve falhar **mesmo com a cura**; execução real [nao verificado]. Classe: **outra — teste incompatível com a costura**.
-
-2. **Existe escritor de aprovação não alcançado: Django admin — FORA-DO-ESCOPO, pré-existente.** `JustificativaAdmin` herda diretamente de `ModelAdmin`, sem tranca dos campos (`app/ponto/admin.py:18`). `status` admite `aprovada` (`app/ponto/models.py:130`, `:159`); a própria casa documenta que esse admin torna campos editáveis (`app/core/admin.py:7`). Contraexemplo: alterar J pendente para aprovada no admin, com origem viva e sem célula; o signal da justificativa chama julgamento (`app/ponto/signals.py:161`), que retorna sem célula (`app/ponto/services/cartorio.py:1547`), deixando a origem viva. Não há costura com `encerrar_chamado_de_origem` nesse admin (`app/ponto/admin.py:18`).
-
-3. **Não encontrei escritor de `status_local` fora das portas dentro do universo do selo.** Executei exclusivamente sua análise AST em memória: 739 arquivos, zero violações; o universo e a comparação ficam em `app/chamados/tests/test_selo_status_so_pelas_portas.py:317`, `:322`, `:337`. As portas admitidas estão em `:37`; os limites de resolução genérica estão declarados em `:17`. Não equivale a provar inexistência de escrita dinâmica além desses limites (`:17`).
-
-4. **Efeitos dentro da transação:**
-
-   - S143 novo protege sua própria invocação com savepoint e captura a exceção (`app/chamados/signals.py:88`); **não protege a segunda chamada direta** de `_retratar` (`app/chamados/reconciliador.py:469`).
-   - Cartório captura exceções via `engolir` (`app/chamados/signals.py:171`; `app/core/observ.py:85`); célula e evento são persistidos juntos em atomic (`app/ponto/portas/celula.py:634`).
-   - Rebaixa não captura exceções (`app/chamados/signals.py:68`), mas o fechamento normal já normaliza a urgência antes do signal (`app/chamados/models.py:210`); nessa situação o receiver retorna sem SQL (`app/chamados/models.py:278`, `:424`).
-   - Não identifiquei erro causado simplesmente por ler a aprovação ainda sem commit: a gravação precede a costura no mesmo fluxo (`app/ponto/services/justificativa.py:156`, `:168`); manifestação concreta desse tipo [nao verificado].
-
-5. **Outro best-effort anterior sem savepoint — FORA-DO-ESCOPO:** `_gravar_estado` engole erros da relavra S2 (`app/chamados/models.py:244`), cujo escritor executa `p.save()` diretamente (`app/chamados/veredito_lavrado.py:230`). Pode contaminar a transação em falha de banco; ocorrência em produção [nao verificado]. Não o classificaria como defeito introduzido pelo diff.
-
-## 29/10 17:37 · sessao ee305bd1e0c2 · grupo1p1 · verificador · origem=Code
-
-- **Classe 7 — chamador não migrado:** `bin/r3_turno_aberto_alcanca.py:46` chama `espelho_do_colab` sem `agora`, obrigatório em `app/ponto/services/espelho.py:1198`. A chamada levanta `TypeError` e o colaborador é pulado pelo tratamento em `bin/r3_turno_aberto_alcanca.py:48`.
-
-- **Classe 5 — selo deixa a incompatibilidade passar:** os alvos e as raízes de busca excluem `espelho_do_colab` e `bin`, deixando o chamador acima invisível. Remover `agora` da chamada migrada da API também passa pelo detector. (`app/escala/tests/test_selo_grade_pede_o_instante.py:20`, `app/escala/tests/test_selo_grade_pede_o_instante.py:21`, `app/escala/tests/test_selo_grade_pede_o_instante.py:36`; `app/api/views.py:1369`)
-
-- **Classe 3 — referência temporal interna no builder:** mesmo recebendo `agora`, o builder consulta `localdate()` quando `ref` é omitido. O desvio legacy também mantém essa leitura. (`app/escala/utils.py:1234`, `app/escala/utils.py:2028`, `app/escala/utils.py:962`)
-
-- **Classe 3 — relógio interno no contrato:** `grade_espelho_janela` consulta `localdate()` quando `hoje` é omitido; as chamadas do PDF e da simulação efetivamente omitem esse argumento. (`app/escala/utils.py:2270`; `app/relatorios/pdf_espelho.py:472`, `app/relatorios/pdf_espelho.py:539`; `app/ponto/services/simular_dia.py:7`)
-
-- **Classe 3 — ficha com múltiplos instantes:** calcula `hoje` com `localdate()`, captura outro instante para o espelho e lê novamente para `lido_em`. (`app/colaboradores/services/ficha.py:117`, `app/colaboradores/services/ficha.py:155`, `app/colaboradores/services/ficha.py:199`, `app/colaboradores/services/ficha.py:249`)
-
-- **Classe 3 — portão de exportação:** captura `now()` e depois obtém `hoje` por outra leitura, dentro de `_hoje()`. (`app/folha/porta_export.py:318`, `app/folha/porta_export.py:338`, `app/folha/porta_export.py:23`)
-
-- **Classe 3 — detector de pares:** captura `now()` e depois lê `localdate()` para `ref`. (`app/ponto/management/commands/detectar_par_relampago.py:328`, `app/ponto/management/commands/detectar_par_relampago.py:335`)
-
-- **Classe 3 — oráculo:** captura `now()` e, sem `--hoje`, lê novamente por `localdate()`. (`app/ponto/management/commands/e6_oraculo.py:245`, `app/ponto/management/commands/e6_oraculo.py:257`)
-
-- **Classe 3 — mapa de divergência:** captura `now()` e obtém `hoje` por outra leitura. (`app/ponto/management/commands/mapa_divergencia.py:36`, `app/ponto/management/commands/mapa_divergencia.py:45`)
-
-- **Classe 3 — pautas discordantes:** sem `--hoje`, o comando lê `localdate()` e chama `apurar`, que captura outro instante quando há dias para apurar. (`app/ponto/management/commands/pautas_discordantes.py:111`, `app/ponto/management/commands/pautas_discordantes.py:112`, `app/ponto/management/commands/pautas_discordantes.py:71`)
-
-- **Classe 3 — reconciliação:** além do instante capturado, mantém leituras independentes para `ref`, `hoje` e `_agora_local`. (`app/ponto/management/commands/reconciliar_grade.py:75`, `app/ponto/management/commands/reconciliar_grade.py:78`, `app/ponto/management/commands/reconciliar_grade.py:80`, `app/ponto/management/commands/reconciliar_grade.py:81`)
-
-- **Classe 3 — teto na lista:** sem `hoje` explícito, lê `localdate()` e depois `now()`. (`app/ponto/services/teto_na_lista.py:49`, `app/ponto/services/teto_na_lista.py:50`)
-
-- **Classe 3 — comparação PDF/espelho:** captura o instante, mas consulta `date.today()` novamente dentro do laço de colaboradores. (`app/relatorios/management/commands/diff_pdf_x_espelho.py:51`, `app/relatorios/management/commands/diff_pdf_x_espelho.py:76`)
-
-- **Classe 3 — coletor PDF:** recebe `agora`, mas consulta `date.today()` e chama `ate_ontem` sem fornecer `hoje`; esse helper também lê o relógio. (`app/relatorios/pdf_espelho.py:187`, `app/relatorios/pdf_espelho.py:287`, `app/relatorios/pdf_espelho.py:593`; `app/relatorios/cartao_pela_celula.py:40`)
-
-- **Classe 3 — tela do espelho:** captura o instante e depois chama `now()` novamente para semanas, resumo da escala e contexto. (`app/ponto/views.py:97`, `app/ponto/views.py:182`)
-
-- **Classe 3 — API do espelho:** captura `agora`, mas o ramo do turno previsto de hoje consulta outro `now()`. (`app/api/views.py:1350`, `app/api/views.py:1635`)
-
-- **Classe 3 — avaliação de flips:** captura um instante, mas chama a montagem da fila sem propagá-lo; as duas fontes da fila consultam seus próprios relógios. (`app/ponto/services/flip_auto.py:263`, `app/ponto/services/flip_auto.py:268`, `app/ponto/services/flip_auto.py:146`, `app/ponto/services/flip_auto.py:148`, `app/ponto/services/flip_auto.py:34`, `app/ponto/services/flip_auto.py:126`)
-
-- **Classe 3 — instante não chega à fonte dos totais:** espelho e PDF chamam `folha_manda` sem transmitir o instante recebido. Ela consulta `ate_ontem` com relógio próprio e, havendo candidato aberto, consulta `turno_aberto_de` sem instante. (`app/ponto/services/espelho.py:1288`; `app/relatorios/pdf_espelho.py:623`; `app/relatorios/cartao_pela_celula.py:412`, `app/relatorios/cartao_pela_celula.py:398`, `app/relatorios/cartao_pela_celula.py:40`; `app/ponto/turnos.py:2255`)
-
-- **Classe 3 — emissão auditável do PDF:** captura o instante para os dados, mas chama o gerador auditável, que captura outro para o documento. (`app/relatorios/pdf_espelho.py:1087`, `app/relatorios/pdf_espelho.py:1098`; `app/relatorios/pdf_base.py:133`)
-
-Total por classe: 1=0; 2=0; 3=17; 4=0; 5=1; 6=0; 7=1; 8=0.
-
-## 29/10 17:36 · sessao 6d4a6d58dba3 · - · - · origem=Ronald (tmux)
-
-- **Classe 7:** `bin/r3_turno_aberto_alcanca.py:46` continua chamando `espelho_do_colab(col, HOJE, ini, fim)` sem `agora`, obrigatório em `app/ponto/services/espelho.py:1198`. A chamada levanta `TypeError`; o `except` registra o erro e pula o colaborador (`bin/r3_turno_aberto_alcanca.py:47-48`). Entra no escopo pela assinatura alterada e pela inclusão explícita de chamadores não migrados.
-
-- **Classe 5, candidato para consolidar:** o selo limita `ALVOS` aos três builders (`app/escala/tests/test_selo_grade_pede_o_instante.py:20`) e aceita qualquer expressão diferente de `None` para `agora` (`app/escala/tests/test_selo_grade_pede_o_instante.py:38-40`). Executando só seu detector, sem Django, `grade_espelho_janela(..., agora=timezone.now())` retorna `[]`: a leitura de relógio no miolo passa pelo selo. Também retorna `[]` para `espelho_do_colab(...)` sem `agora`, pois esse contrato alterado não está em `ALVOS` (`app/escala/tests/test_selo_grade_pede_o_instante.py:20`).
-
-Censo adicional: não apareceram outros chamadores Python sem migração; `app/escala/tests/test_sobra_na_borda_nao_vira_intervalo.py:53` recebe o argumento por `**kw`, preenchido na linha 52.
-
-## 29/10 17:36 · sessao d89ef60a26da · - · - · origem=Ronald (tmux)
-
-- **Classe 5 — cobertura incompleta do selo.** `app/escala/tests/test_selo_grade_pede_o_instante.py:20` limita os alvos aos três builders; `:36` ignora qualquer outra função. Retirar `agora=agora` de `app/api/views.py:1369` restaura um chamador incompatível com a assinatura obrigatória de `app/ponto/services/espelho.py:1198`, mas `chamadas_sem_instante` continua devolvendo `[]`; a asserção de `app/escala/tests/test_selo_grade_pede_o_instante.py:59` permanece verde. Prova feita em memória, sem alterar arquivo.
-
-- **Classe 3 — relógio interno sobrevivente.** `app/escala/utils.py:2270` consulta `localdate()` quando `hoje` não vem; isso ocorre nas chamadas tocadas de `app/relatorios/pdf_espelho.py:472`, `app/relatorios/pdf_espelho.py:539` e `app/ponto/services/simular_dia.py:7`, mesmo recebendo `agora`. O builder também consulta `localdate()` com `ref=None` em `app/escala/utils.py:1234`.
-
-- **Classe 3 — segunda leitura na view.** `app/ponto/views.py:97` captura o instante, mas `app/ponto/views.py:182` chama `timezone.now()` novamente para semanas, resumo da escala e contexto.
-
-_191 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_195 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
