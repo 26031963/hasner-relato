@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/10/2026 00:49:08.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (7.5 MB). Acoes na janela: **340**.
+**Medido em 29/10/2026 00:54:38.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (7.6 MB). Acoes na janela: **344**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 00:54:09 | Bash | Wait for outbox constructor | `/usr/bin/sleep 290; git -C /home/ronald/wt-outbox-2810-1915 log --oneline -1; /home/ronald/saas-hasner/bin/trava_teste.sh --quem; date +%H:%M` |
+| 00:54:04 | Bash | Paste measured Codex schema into RELATO | `python3 - <<'EOF' p='docs/RELATO.md'; s=open(p).read() anc="> **PISTA 29/10 00:4x (RAIA-NAO-FICA-PARADA" assert s.count(anc)==1 sec='''> **CODEX-ESTADO-NO-RELATO, requisito (1) -- SCHEMA REAL MEDIDO 29/10 00:5x** (encaixe por dependencia de codigo: tudo antes na ordem esta preso; `logs/codex/schema_real.out`, so chaves e tipos, nenhum conteudo lido): JSONL na VM em `~/.codex/sessions/AAAA/MM/DD/ro ...` |
+| 00:53:50 | Bash | Measure real Codex JSONL schema (keys only) | `mkdir -p /home/ronald/saas-hasner/logs/codex && python3 - <<'EOF' > /home/ronald/saas-hasner/logs/codex/schema_real.out 2>&1 import json, glob, collections, os arqs = sorted(glob.glob(os.path.expanduser('~/.codex/sessions/**/*.jsonl'), recursive=True)) print('ARQUIVOS', len(arqs), [os.path.basename(a)[:40] for a in arqs]) top = collections.Counter(); ptype = collections.Counter(); keys = collectio ...` |
+| 00:53:37 | Bash | Locate Codex JSONL files on the VM | `ls -la ~/.codex 2>/dev/null \| head; find ~/.codex -name "*.jsonl" 2>/dev/null \| head -5; find ~/.codex -name "*.jsonl" 2>/dev/null \| wc -l; ls ~/codex_prototipo ~/codex_ws 2>/dev/null \| head` |
 | 00:48:37 | Bash | Keep waiting for constructor | `/usr/bin/sleep 290; git -C /home/ronald/wt-outbox-2810-1915 log --oneline -2; date +%H:%M` |
 | 00:43:53 | Bash | Wait for outbox constructor report | `/usr/bin/sleep 280; date +%H:%M` |
 | 00:43:17 | Bash | Wait for outbox copy to get a new commit | `cd /home/ronald/saas-hasner && for i in $(seq 1 18); do /usr/bin/sleep 30; git -C /home/ronald/wt-outbox-2810-1915 log --oneline -1 \| /bin/grep -qv 950f5acc && break; done; git -C /home/ronald/wt-outbox-2810-1915 log --oneline -2; date +%H:%M` |
