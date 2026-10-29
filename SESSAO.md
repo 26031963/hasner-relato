@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/10/2026 23:06:07.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (5.5 MB). Acoes na janela: **246**.
+**Medido em 28/10/2026 23:11:38.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (5.6 MB). Acoes na janela: **250**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 23:06:48 | Bash | Wait for full suite | `cd /home/ronald/saas-hasner && for i in $(seq 1 19); do grep -q '^rc=' logs/juizpar2/suite_inteira_1.out 2>/dev/null && break; /usr/bin/sleep 30; done; grep -E '^ARVORE\|^(FAIL\|ERROR):\|^Ran \|^(OK\|FAILED)( \|$)\|^rc=' logs/juizpar2/suite_inteira_1.out \| tail -8; date +%H:%M` |
+| 23:06:43 | Agent | O-OUTBOX lock and status seals | `Repo /home/ronald/saas-hasner (SaaS de ponto, Django). Leia /home/ronald/saas-hasner/CLAUDE.md secoes 0, 3 e 6 antes. Trabalhe SO na copia /home/ronald/wt-outbox-2810-1915 (HEAD a302504c, obra O-OUTBOX). NUNCA edite /home/ronald/saas-hasner (arvore viva). Sem merge, deploy, push; commit WIP so na copia (`git add` por path, mensagem por heredoc). Nao toque escala/utils.py nem ponto/services/cartori ...` |
+| 23:06:20 | Agent | Adversarial verify JUIZ-DO-PAR source | `Obra: JUIZ-DO-PAR-CURA-NA-FONTE (repo /home/ronald/saas-hasner; CLAUDE.md secoes 0, 4, 7b). Aval do dono, literal: "A cura vai na FONTE: o papel do juiz do par entra em escala/utils.py::_match_marcos, que a ata, marco_ocupado_pela_batida e a Zona 5 do motor leem; curar so a ata deixa DUAS respostas para 'qual marco a batida cumpriu' (L-099, juiz unico, LEI-AKITA 1). O arquivo motor_calculo_v2.py n ...` |
+| 23:06:08 | Bash | Question atop RELATO and start full suite | `python3 - <<'EOF' p='docs/RELATO.md'; s=open(p).read() q='''> **lei: O-OUTBOX-[nome]-SOB-ATA-ESTAVEL** (pergunta, nao para a fila; segura SO o pouso do O-OUTBOX) -- com o complemento CENSO-DO-HEAD (evento SO no atomic da porta da celula, nada novo em `criar`/`abrir`/`reabrir`; `chamados/models.py` byte a byte = HEAD), o construtor MEDIU um caso descoberto (copia wt-outbox-2810-1915 @ a302504c, ...` |
 | 23:05:55 | Bash | Read clean recorte result | `cd /home/ronald/saas-hasner && grep -E '^ARVORE\|^(FAIL\|ERROR):\|^Ran \|^(OK\|FAILED)( \|$)\|^rc=' logs/juizpar2/recorte_3.out \| tail -8` |
 | 23:01:10 | Bash | Keep waiting for money DIFF v3 | `cd /home/ronald/saas-hasner && for i in $(seq 1 19); do [ -s logs/juizpar2/dinheiro_diff_3.out ] && break; /usr/bin/sleep 30; done; cut -c1-300 logs/juizpar2/dinheiro_diff_3.out; tail -2 logs/juizpar2/dinheiro_depois_3.out \| cut -c1-200; date +%H:%M` |
 | 22:51:35 | Bash | Wait for money DIFF v3 | `cd /home/ronald/saas-hasner && for i in $(seq 1 19); do [ -s logs/juizpar2/dinheiro_diff_3.out ] && break; /usr/bin/sleep 30; done; cut -c1-300 logs/juizpar2/dinheiro_diff_3.out; date +%H:%M` |
