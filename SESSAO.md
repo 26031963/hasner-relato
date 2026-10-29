@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/10/2026 02:47:08.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (8.8 MB). Acoes na janela: **400**.
+**Medido em 29/10/2026 02:52:13.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (8.8 MB). Acoes na janela: **401**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 02:52:00 | Bash | Keep waiting for ORFAS | `cd /home/ronald/saas-hasner && for i in $(seq 1 19); do git -C /home/ronald/wt-orfas-2901-0215 log --oneline -1 \| /bin/grep -qv d375511b && break; /usr/bin/sleep 30; done; git -C /home/ronald/wt-orfas-2901-0215 log --oneline -1; ls -t logs/orfas 2>/dev/null \| head -5; date +%H:%M` |
 | 02:42:24 | Bash | Wait for ORFAS commit | `cd /home/ronald/saas-hasner && for i in $(seq 1 19); do git -C /home/ronald/wt-orfas-2901-0215 log --oneline -1 \| /bin/grep -qv d375511b && break; /usr/bin/sleep 30; done; git -C /home/ronald/wt-orfas-2901-0215 log --oneline -1; date +%H:%M` |
 | 02:32:49 | Bash | Keep waiting for ORFAS | `cd /home/ronald/saas-hasner && for i in $(seq 1 19); do git -C /home/ronald/wt-orfas-2901-0215 log --oneline -1 \| /bin/grep -qv d375511b && break; /usr/bin/sleep 30; done; git -C /home/ronald/wt-orfas-2901-0215 log --oneline -1; git -C /home/ronald/wt-orfas-2901-0215 status --porcelain \| head -5; date +%H:%M` |
 | 02:23:13 | Bash | Keep waiting for ORFAS commit | `cd /home/ronald/saas-hasner && for i in $(seq 1 19); do git -C /home/ronald/wt-orfas-2901-0215 log --oneline -1 \| /bin/grep -qv d375511b && break; /usr/bin/sleep 30; done; git -C /home/ronald/wt-orfas-2901-0215 log --oneline -1; date +%H:%M` |
