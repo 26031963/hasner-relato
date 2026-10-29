@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/10/2026 05:37:37.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (10.8 MB). Acoes na janela: **451**.
+**Medido em 29/10/2026 05:43:08.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (10.9 MB). Acoes na janela: **453**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 05:42:42 | Bash | Wait for COL129 suite and ORFAS | `/usr/bin/sleep 590; cd /home/ronald/saas-hasner/logs; grep -E '^(OK\|FAILED)($\| \()\|^Ran \|^rc=' col129/suite_inteira_c9_3.log 2>/dev/null \| tail -3 \| tr '\n' ' '; echo; git -C /home/ronald/wt-orfas-2901-0215 log --oneline -1 \| cut -c1-70; date +%H:%M` |
+| 05:42:37 | Agent | Verify COL129 third reading | `3a leitura da COL129-TETO-x-PORTAO-26H (c), aval Ronald 28/10. Escopo do aval: o par que o TETO DO DIA separa e que o envelope de 26 h NAO separaria vira linha C9 da lista Cadastro x Realidade. Juizes novos 0. Onde: copia /home/ronald/wt-col129-2901-0330 @ 2e06297c, em cima de e2767845. Diff da rodada: `git -C /home/ronald/wt-col129-2901-0330 diff e2767845 2e06297c`; diff completo da obra: `diff f ...` |
 | 05:32:46 | Bash | Wait for COL129 suites | `/usr/bin/sleep 580; cd /home/ronald/saas-hasner/logs/col129; for f in recorte_c9_3.log suite_inteira_c9_3.log; do echo "$f: $(grep -E '^(OK\|FAILED)($\| \()\|^Ran \|^rc=' $f 2>/dev/null \| tail -3 \| tr '\n' ' ')"; done; date +%H:%M` |
 | 05:32:41 | Bash | Record ORFAS #4 reprove and COL129 #3 numbers | `python3 - <<'PY' p='RELATO.md'; s=open(p,encoding='utf-8').read() old='suite inteira em curso, verificador 3a leitura em curso.' assert s.count(old)==1 s=s.replace(old,'suite inteira VERDE (Ran 12621, rc 0, `suite_inteira_3.log`); **REPROVADA 05:3x**: turno aberto com `tipo_escala` expira por relogio (fim+4 h) e foi dado por processado -> alarme permanente do vigia; fixture do RED era escala rigid ...` |
 | 05:32:32 | SendMessage |  | `-` |
