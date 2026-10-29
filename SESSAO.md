@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/10/2026 15:58:24.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (18.6 MB). Acoes na janela: **370**.
+**Medido em 29/10/2026 16:03:57.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (18.6 MB). Acoes na janela: **369**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -379,4 +379,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 04:10:57 | Bash | Wait for ORFAS report | `/usr/bin/sleep 290; ls -t /home/ronald/saas-hasner/logs/orfas \| head -4; date +%H:%M` |
 | 04:06:51 | Bash | Record COL129 rejection and wait | `python3 - <<'EOF' p='docs/RELATO.md'; s=open(p).read() o="Pergunta: (a) o contador da lista e 36 (09=20, 10=13, 11=3)" n="VERIFICADOR 04:0x: a medida (36; 09=20, 10=13, 11=3) CONFERE; REPROVADA por cura (leitor com literal 26 h proprio, R6 sem caminho provado -- DNA congelado e botao no vinculo de hoje --, contador da TELA nao medido, recorte nao refeito, RED de import); de volta ao construtor. Pe ...` |
 | 04:06:44 | SendMessage |  | `-` |
-| 04:01:31 | Bash | Keep waiting | `/usr/bin/sleep 295; for c in wt-orfas-2901-0215 wt-col129-2901-0330; do echo "$c: $(git -C /home/ronald/$c log --oneline -1 \| cut -c1-90)"; done; date +%H:%M` |
