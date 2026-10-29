@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/10/2026 00:59:40.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (7.7 MB). Acoes na janela: **346**.
+**Medido em 29/10/2026 01:05:13.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (7.7 MB). Acoes na janela: **347**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 00:59:38 | Bash | Wait for outbox full suite | `cd /home/ronald/saas-hasner && for i in $(seq 1 19); do grep -q '^rc=' logs/outbox/suite_inteira_v7.out 2>/dev/null && break; /usr/bin/sleep 30; done; grep -E '^ARVORE\|^(FAIL\|ERROR):\|^Ran \|^(OK\|FAILED)( \|$)\|^rc=' logs/outbox/suite_inteira_v7.out \| tail -8; date +%H:%M` |
 | 00:59:32 | Agent | Adversarial verify O-OUTBOX (c) | `Obra: O-OUTBOX (repo /home/ronald/saas-hasner; CLAUDE.md secoes 0, 4a, 6). Copia /home/ronald/wt-outbox-2810-1915, HEAD 4f5ec850 sobre 1974dbc0 (`git -C /home/ronald/wt-outbox-2810-1915 diff 1974dbc0 4f5ec850`; os commits desde 950f5acc sao desta rodada: `git -C ... diff 950f5acc 4f5ec850`). Avais literais, na ordem em que valem: - contrato (A): "INSERT do EventoCelula NA PORTA no mesmo atomic do  ...` |
 | 00:59:20 | Bash | Start outbox suite and put concorde question atop | `cd /home/ronald/saas-hasner && (echo "ARVORE_HASH=$(git -C /home/ronald/wt-outbox-2810-1915 rev-parse HEAD) porcelain=$(git -C /home/ronald/wt-outbox-2810-1915 status --porcelain \| wc -l)"; bash bin/suite.sh --dir /home/ronald/wt-outbox-2810-1915 --espera 3600; echo rc=$?) > logs/outbox/suite_inteira_v7.out 2>&1 & cd /home/ronald/saas-hasner/app && python3 - <<'EOF' p='docs/RELATO.md'; s=open(p). ...` |
 | 00:54:09 | Bash | Wait for outbox constructor | `/usr/bin/sleep 290; git -C /home/ronald/wt-outbox-2810-1915 log --oneline -1; /home/ronald/saas-hasner/bin/trava_teste.sh --quem; date +%H:%M` |
