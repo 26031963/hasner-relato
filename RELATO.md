@@ -1,5 +1,8 @@
 # RELATO — esteira saas-hasner
 
+> **CODEX-SONDA-LEITURA + CODEX-PADRAO-PRO + PROCEDENCIA -- NO AR 29/10 17:08 (2cc71cc8 empurrado; instrumento, pouso proprio L-105).**
+> - PROVA: o CODEX-ESTADO publicado (hasner-relato, `relato 29/10 17:04`) traz `## 29/10 17:01 · sessao 9a870d76713d · justif · verificador · origem=Code` e mais 2 (o261 censo); o ESTADO publicado tem a secao `## Codex (limite)` com as chamadas em 24 h. Sandbox do Codex nao alcanca o envelope (rc 1, Read-only) -> modo `--sonda` (b), o Code roda e entrega raspado; teto 6 medido (/health/ mediana 0,035 s na rajada). Selos de host verdes na arvore viva (test_codex_sonda, test_codex_papel_estado, test_painel_e_do_code e vizinhos).
+
 > **DESPACHO O261-COMPLEMENTO-[nome] (retroativo, a regra nasceu 17:0x):** (A) alcancabilidade -> sonnet (dado de prod) + Codex (`chamado_que_lista`, endpoint do app) | (B) escritor de materializada sem resposta -> Codex (sessao `01a1893a-c6a2-7332-ba8b-96e4ba45118a`) + sonnet (frota) | (C) nascimento -> Codex (`01a1893a-c559-7de2-85d1-469a447b7f74`) + sonnet (frota) | (D) caso -> sonnet | cura -> opus, atras da fatia em curso.
 > **DESPACHO O261 (B)(C) aprovado (retroativo):** escritor da classe (c) e leitores de `respondida_em` -> Codex (`01a1892b-38d9-...`, `01a1892b-3979-...`) | frota -> sonnet | cura -> opus.
 > **DESPACHO DESPACHO-POR-PAPEL:** regra no CLAUDE.md 7b -> opus (texto) | contador no ESTADO -> instrumento (sonnet constroi, Codex pre-verifica) -- registrado, constroi junto do proximo instrumento do ESTADO.
