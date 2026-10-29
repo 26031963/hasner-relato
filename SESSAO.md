@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/10/2026 21:40:39.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (4.3 MB). Acoes na janela: **187**.
+**Medido em 28/10/2026 21:45:51.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (4.3 MB). Acoes na janela: **189**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 21:44:17 | Bash | Wait for lock and run RED | `cd /home/ronald/saas-hasner && timeout 590 bash bin/suite.sh --dir /home/ronald/wt-juizpar2-2810-2140 --espera 580 --only "escala.tests.test_juiz_do_par_ata_casa_pelo_turno" > logs/juizpar2/red_1.out 2>&1; grep -E '^(FAIL\|ERROR):\|^Ran \|^(OK\|FAILED)\|AssertionError\|Error:\|vez nao chegou' logs/juizpar2/red_1.out \| cut -c1-260 \| tail -30` |
+| 21:44:11 | Bash | Inspect RED run output | `cd /home/ronald/saas-hasner && tail -30 logs/juizpar2/red_1.out \| cut -c1-250` |
 | 21:35:48 | Bash | Write RED v2 tests and run against HEAD | `cd /home/ronald/wt-juizpar2-2810-2140/app && rm escala/tests/test_zz_diag_zona5.py && python3 - <<'EOF' p='escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py'; s=open(p).read() s=s.replace('''class CasoC_SaidaCedo(_Base):''','''class CasoF_EntradaEmCimaDaSaidaDoIntervalo(_Base): """Achado do verificador (28/10): E 11:50 e S 19:00, sem par. A DP sentava a ENTRADA no marco S 12:00. Pela lei do col ...` |
 | 21:35:07 | Bash | Read detector_anomalias caller | `cd /home/ronald/wt-juizpar2-2810-2140/app && sed -n 180,215p chamados/detector_anomalias.py` |
 | 21:35:03 | Bash | Census of _match_marcos callers | `cd /home/ronald/wt-juizpar2-2810-2140/app && git grep -n "_match_marcos(" -- '*.py' \| /bin/grep -v "/tests/\\|def _match_marcos\\|^\S*:\s*#"` |
