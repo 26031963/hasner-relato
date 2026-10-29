@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/10/2026 16:57:42.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (19.4 MB). Acoes na janela: **377**.
+**Medido em 29/10/2026 17:02:57.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (19.4 MB). Acoes na janela: **376**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -386,4 +386,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 05:11:57 | Bash | Wait for ORFAS rework and verifier | `/usr/bin/sleep 590; git -C /home/ronald/wt-orfas-2901-0215 log --oneline -1 \| cut -c1-80; ls -t /home/ronald/saas-hasner/logs/orfas \| head -4; date +%H:%M` |
 | 05:11:53 | Bash | Update COL129 question at RELATO top | `cd /home/ronald/saas-hasner/app/docs && python3 - <<'PY' p='RELATO.md'; s=open(p,encoding='utf-8').read() old='de volta ao construtor. Pergunta: (a) o contador da lista e 36' assert s.count(old)==1 new=('de volta ao construtor. **#2 e2767845 05:1x** (suite inteira verde, Ran 12631; recorte Ran 9571): o leitor deixou de remedir o vao (sem literal 26 h, quem diz o teto e o ramo do pareador) e o nume ...` |
 | 05:11:46 | Agent | Verify COL129 C9 second reading | `Obra COL129-TETO-x-PORTAO-26H (c), aval Ronald 28/10: o par que o teto do pareador separa vira linha C9 da lista Cadastro x Realidade (`escala/services/cadastro_realidade.py`). Juizes novos 0. Linhas de decisao do pareador inalteradas. Copia: /home/ronald/wt-col129-2901-0330 @ e2767845 (branch raia-col129-2901), em cima de 1ade7085, empilhada sobre a branch da ORFAS (f4ab468a). O diff a ler e `git ...` |
-| 05:01:42 | Bash | Check COL129 suite and ORFAS progress | `/usr/bin/sleep 590; cd /home/ronald/saas-hasner/logs; tail -3 col129/suite_inteira_c9.log \| cut -c1-200; git -C /home/ronald/wt-orfas-2901-0215 log --oneline -1 \| cut -c1-80; date +%H:%M` |
