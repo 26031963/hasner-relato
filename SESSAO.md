@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/10/2026 14:10:27.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (17.1 MB). Acoes na janela: **355**.
+**Medido em 29/10/2026 14:15:49.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (17.1 MB). Acoes na janela: **351**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -361,7 +361,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 02:42:24 | Bash | Wait for ORFAS commit | `cd /home/ronald/saas-hasner && for i in $(seq 1 19); do git -C /home/ronald/wt-orfas-2901-0215 log --oneline -1 \| /bin/grep -qv d375511b && break; /usr/bin/sleep 30; done; git -C /home/ronald/wt-orfas-2901-0215 log --oneline -1; date +%H:%M` |
 | 02:32:49 | Bash | Keep waiting for ORFAS | `cd /home/ronald/saas-hasner && for i in $(seq 1 19); do git -C /home/ronald/wt-orfas-2901-0215 log --oneline -1 \| /bin/grep -qv d375511b && break; /usr/bin/sleep 30; done; git -C /home/ronald/wt-orfas-2901-0215 log --oneline -1; git -C /home/ronald/wt-orfas-2901-0215 status --porcelain \| head -5; date +%H:%M` |
 | 02:23:13 | Bash | Keep waiting for ORFAS commit | `cd /home/ronald/saas-hasner && for i in $(seq 1 19); do git -C /home/ronald/wt-orfas-2901-0215 log --oneline -1 \| /bin/grep -qv d375511b && break; /usr/bin/sleep 30; done; git -C /home/ronald/wt-orfas-2901-0215 log --oneline -1; date +%H:%M` |
-| 02:13:36 | Bash | Update pista line and wait for ORFAS commit | `python3 - <<'EOF' p='docs/RELATO.md'; s=open(p).read() i=s.index("> **PISTA 29/10 00:4x (RAIA-NAO-FICA-PARADA"); j=s.index("\n\n",i) s=s[:i]+"> **PISTA 29/10 02:1x (RAIA-NAO-FICA-PARADA, uma linha por obra):** JUIZ-DO-PAR pronta @ 7d028f1c (suite verde) -- espera JUIZ-DO-PAR-RESIDUO-CORRIGIDO + janela 04:xx; O-OUTBOX pronta @ d375511b (APROVADA, suite verde) -- espera DOIS-JUIZES-NO-ABRIR e CONCOR ...` |
-| 02:13:22 | Agent | Build ORFAS (b) on outbox branch | `Repo /home/ronald/saas-hasner (SaaS de ponto Django). Leia /home/ronald/saas-hasner/CLAUDE.md secoes 0, 3, 4a, 6 e 7b antes de tudo. Trabalhe SO na copia /home/ronald/wt-orfas-2901-0215 (branch raia-orfas-2901, nascida da branch raia-outbox @ d375511b, que e a obra O-OUTBOX pronta e nao pousada: ela traz `EventoCelula`, `ponto/portas/celula.py::salvar_e_emitir`/`emitir_evento_celula` e o consumido ...` |
-| 02:12:56 | Bash | Record outbox ready; create ORFAS copy on outbox branch | `python3 - <<'EOF' p='docs/RELATO.md'; s=open(p).read() anc="> **O-OUTBOX -- (c) construida em 4f5ec850" assert s.count(anc)==1 s=s.replace(anc,"> **O-OUTBOX -- PRONTA EM COPIA 29/10 02:1x: verificador APROVADO (6a leitura) e suite inteira VERDE no mesmo hash d375511b** (`logs/outbox/suite_inteira_v8.out`: ARVORE_HASH d375511b, Ran 12588, OK, rc=0). v8: o nascimento LEGITIMO de chamado de turno emi ...` |
-| 02:10:35 | Bash | Wait for outbox suite v8 verdict | `cd /home/ronald/saas-hasner && for i in $(seq 1 19); do grep -q '^rc=' logs/outbox/suite_inteira_v8.out 2>/dev/null && break; /usr/bin/sleep 30; done; grep -E '^ARVORE\|^(FAIL\|ERROR):\|^Ran \|^(OK\|FAILED)( \|$)\|^rc=' logs/outbox/suite_inteira_v8.out \| tail -6; date +%H:%M` |
