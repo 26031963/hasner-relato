@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/10/2026 09:43:41.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (14.2 MB). Acoes na janela: **462**.
+**Medido em 29/10/2026 09:49:08.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (14.2 MB). Acoes na janela: **454**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -464,11 +464,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 21:49:58 | Bash | Read [nome]-entry fixture marcos | `cd /home/ronald/wt-juizpar2-2810-2140/app && sed -n 1,105p escala/tests/test_ata_x_turno_entrada.py \| /bin/grep -v "^\s*$" \| sed -n 1,200p \| /bin/grep -n "time(\\|hora_\\|def \\|class \\|_bate\\|\"\"\"" \| head -40` |
 | 21:49:46 | Bash | Read failure details of source cure | `cd /home/ronald/saas-hasner && grep -A12 "ERROR: test_detector_anomalias" logs/juizpar2/vizinhos_1.out \| tail -4; grep -A3 "Items in the first set" logs/juizpar2/vizinhos_1.out \| head -4 \| cut -c1-300; grep -B2 -A14 "FAIL: test_C10_a_IDA" logs/juizpar2/vizinhos_1.out \| /bin/grep -E "Error\|subTest\|caso\|!=" \| head -6 \| cut -c1-300; grep -A20 "FAIL: test_o_marco_de_entrada_nao_e_tomado" logs ...` |
 | 21:49:40 | SendMessage |  | `-` |
-| 21:48:33 | Bash | Run fixtures plus all known neighbor seals | `cd /home/ronald/wt-juizpar2-2810-2140/app && python3 - <<'EOF' p='escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py'; s=open(p).read() o=""" self.assertEqual({h: r for h, r in mo.items() if r in ('hi', 'hfi')}, {h: r for h, r in z5_ents.items()}, 'marco_ocupado x Zona 5 (%s)' % nome)""" n=""" # `marco_ocupado_pela_batida` responde pelo PAR DE UM PERIODO (e assim que o motor pergunta a # `cumpri ...` |
-| 21:47:42 | Bash | Run the RED file against the source cure | `cd /home/ronald/wt-juizpar2-2810-2140/app && python3 - <<'EOF' p='escala/utils.py'; s=open(p).read() o=" turno=_turno_do_juiz_no_dia(d, abs_marcos), derivar=False)" n=" turno=_turno_do_juiz_no_dia(d, abs_marcos) if (_hii and _hfi) else None,\n derivar=False)" assert s.count(o)==1; s=s.replace(o,n); open(p,'w').write(s) EOF python3 -m py_compile escala/utils.py && cd /home/ronald/saas-hasner && tim ...` |
-| 21:47:28 | Bash | Implement role-aware _match_marcos at the source | `cd /home/ronald/wt-juizpar2-2810-2140/app && python3 - <<'EOF' p='escala/utils.py'; s=open(p).read() def rep(o,n,c=1): global s assert s.count(o)==c,(o[:70],s.count(o)); s=s.replace(o,n) helper='''def _papeis_do_turno(turno, locs, consumed): """Os PAPEIS que o juiz do par deu as batidas do turno, sobre os indices de `locs`. -> [(k, papel)] \| None `papel` e 'ent' \| 'sai' \| ('par', n, 'S'\|'E') \ ...` |
-| 21:46:42 | Bash | Locate builder variables | `cd /home/ronald/wt-juizpar2-2810-2140/app && /bin/grep -n "_ini_al\b\\|_ini_al =\\|_cels_gr =\\|_folgas_gr =\\|dias_entrada =\\| for d in dias_entrada:\\|consumed = \[False\]" escala/utils.py \| sed -n 1,20p` |
-| 21:46:20 | SendMessage |  | `-` |
-| 21:46:11 | Bash | Confirm _match_marcos head in fresh copy | `cd /home/ronald/wt-juizpar2-2810-2140/app && sed -n 400,410p escala/utils.py` |
-| 21:44:17 | Bash | Wait for lock and run RED | `cd /home/ronald/saas-hasner && timeout 590 bash bin/suite.sh --dir /home/ronald/wt-juizpar2-2810-2140 --espera 580 --only "escala.tests.test_juiz_do_par_ata_casa_pelo_turno" > logs/juizpar2/red_1.out 2>&1; grep -E '^(FAIL\|ERROR):\|^Ran \|^(OK\|FAILED)\|AssertionError\|Error:\|vez nao chegou' logs/juizpar2/red_1.out \| cut -c1-260 \| tail -30` |
-| 21:44:11 | Bash | Inspect RED run output | `cd /home/ronald/saas-hasner && tail -30 logs/juizpar2/red_1.out \| cut -c1-250` |
