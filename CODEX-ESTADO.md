@@ -1,7 +1,101 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **29/10/2026 17:58** · publicado em **29/10/2026 18:01** (UTC-3)
+> Ultima resposta processada: **29/10/2026 18:17** · publicado em **29/10/2026 18:17** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 29/10 18:17 · sessao 6bc00e83b369 · - · - · origem=Ronald (tmux)
+
+**Resultado:** chamado `entrada_bloqueada_turno_aberto` vivo não é uma guarda de recusa na API: `api_bater_ponto` coleta anomalias, chama `registrar_batida`, depois abre/atualiza disputa. No formulário web, o chamado vivo é procurado para renovar seu contexto; o fluxo continua para registrar. (`app/api/views_core.py:432-433`, `app/api/views_core.py:679-694`, `app/api/views_core.py:769-781`; `app/ponto/views.py:274-314`, `app/ponto/views.py:345-353`.)
+
+**Rotas e canais**
+
+- Proxy declarado: `/api/ponto/*` → `core:8000` (`Caddyfile:8-9`); URLconf core inclui `api.urls_core` (`app/config/urls_core.py:6`), que importa `views_core` e liga `ponto/bater/` a `api_bater_ponto` (`app/api/urls_core.py:5`, `app/api/urls_core.py:14`). A outra casca inclui `api.urls` (`app/config/urls.py:37`), cuja rota aponta `api.views.api_bater_ponto` (`app/api/urls.py:2`, `app/api/urls.py:67`).
+- `/ponto/bater/` e `/ponto/bater-v2/` → `ponto.views.bater_ponto` (`app/config/urls.py:29`; `app/ponto/urls.py:11-12`). V2 renderiza `bater_ponto_v2.html` (`app/ponto/views.py:355-357`), cujo JS faz POST `/api/ponto/bater/` (`app/templates/ponto/bater_ponto_v2.html:328-338`).
+- PWA offline grava IndexedDB local, sem criar `Batida` no servidor (`app/static/pwa.js:107-122`); sincroniza por POST `/api/ponto/bater/` (`app/static/pwa.js:126-157`). HTTP OK remove o item local (`app/static/pwa.js:158-165`); HTTP400 também remove, como erro definitivo (`app/static/pwa.js:166-175`).
+- Formulário web antigo faz POST à própria URL (`app/templates/ponto/triagem/apto.html:86-91`, `app/templates/ponto/triagem/apto.html:210-235`), passando por `ponto.views.bater_ponto` (`app/ponto/views.py:267-272`).
+- O próprio código chama `origem='app'` de relógio: `DO_RELOGIO = 'app'` (`app/ponto/services/procedencia_batida.py:30`). App e web passam essa origem ao chokepoint (`app/api/views_core.py:680-682`; `app/ponto/services/triagem_batida.py:708-710`). `canal_da_batida(device_id)` distingue APK/PWA (`app/ponto/registro_batida.py:53-61`). Integração atual de um relógio físico separado: **[não verificado]**. A porta AEJ cadastrada (`app/ponto/urls.py:9`) apenas retorna HTTP410 (`app/ponto/views.py:56-71`).
+
+**Passos API até chokepoint**
+
+1. POST autenticado, obtém colaborador; sem colaborador →404 (`app/api/views_core.py:385-391`).
+2. Situação diferente de ativo/afastado →403; inclui desligado e ferias (`app/api/views_core.py:402-410`).
+3. Tipo fora E/S →400 (`app/api/views_core.py:419-426`).
+4. Detector consulta geometria de turno órfão, acrescentando `orfao_14h` quando há bloqueio e não há regularização pendente (`app/api/views_core.py:432-433`; `app/chamados/detector_anomalias.py:29-51`). Não consulta EB vivo para recusar (`app/chamados/detector_anomalias.py:19-121`).
+5. GPS ausente →403 `gps_obrigatorio`, sem chamar chokepoint (`app/api/views_core.py:440-458`).
+6. Sem foto usa juiz de selfie para adicionar anomalia, sem recusa (`app/api/views_core.py:459-483`; `app/ponto/registro_batida.py:80-91`).
+7. Timestamp vem de `hora_do_aparelho` (`app/api/views_core.py:536-539` — **confirmar faixa: nesta casca o bloco começa antes; referência exata desta chamada não preservada no output**).
+8. Mesmo tipo em ±5min → HTTP200 `ja_registrada`, devolve existente, sem criar (`app/api/views_core.py:549-568`).
+9. Tipo ao vivo pode ser corrigido pelo `proximo_tipo_de`; retroativo pode ser corrigido por marcos (`app/api/views_core.py:592-623`).
+10. Saída sem entrada ou entrada sobre turno aberto adicionam motivo/contexto; não retornam erro (`app/api/views_core.py:632-672`).
+11. `registrar_batida(colab, ts_efetivo, tipo, 'app', autoridade_humana=False, canal=...)` (`app/api/views_core.py:679-694`).
+12. Retorno `batida is None` →HTTP200 `ignorada_intervalo`, devolvendo oposta existente e `sucesso=True`, sem criar nova (`app/api/views_core.py:695-721`).
+13. Após gravação, anomalias alimentam `criar_ou_atualizar_disputa`, `em_disputa=True` (`app/api/views_core.py:769-781`); resposta normal `status='ok'`, ID e sucesso (`app/api/views_core.py:823-834`).
+
+Clone UI possui decisões equivalentes em `app/api/views.py:398-439`, `app/api/views.py:449-466`, `app/api/views.py:557-576`, `app/api/views.py:600-631`, `app/api/views.py:683-721`, `app/api/views.py:769-781`, `app/api/views.py:823-834`.
+
+**Formulário web e EB**
+
+- Triagem reconstrói entradas sem saída por `batidas_apuraveis`/`parear_turnos` (`app/ponto/services/triagem_batida.py:137`, `app/ponto/services/triagem_batida.py:175-192`); `tem_bloqueio_turno` usa `14 <= horas < 96` (`app/ponto/services/triagem_batida.py:17-30`, `app/ponto/services/triagem_batida.py:206`).
+- Regularização pendente depende de justificativa pendente com saída informada, não de chamado EB aberto (`app/ponto/services/triagem_batida.py:208-223`).
+- POST E + bloqueio + sem regularização: procura EB vivo (`app/ponto/views.py:274-284`); se existe renova contexto (`app/ponto/views.py:285-288`), senão cria (`app/ponto/views.py:290-302`); apenas produz sinal e continua (`app/ponto/views.py:311-314`).
+- **Ramo que desvia sem gravar:** POST E + `context['turno_aberto']` + sem confirmar: salva confirmação e retorna tela (`app/ponto/views.py:315-329`). O formulário dessa tela reenvia E com `confirmar=sim` (`app/templates/ponto/triagem/turno_confirmar.html:8-17`). Este `elif` também pode ser alcançado quando existe regularização pendente, pois o primeiro `if` exige ausência dela (`app/ponto/views.py:274`, `app/ponto/views.py:315`).
+- POST E/S → `ramo_registrar_es` (`app/ponto/views.py:345-353`); duplica mesmo tipo nos 5min anteriores →`ja_registrada`, sem criar (`app/ponto/services/triagem_batida.py:669-677`).
+- Sinal de acesso/bloqueio torna `aprovada=False` e escreve justificativa de revisão (`app/ponto/services/triagem_batida.py:692-705`); chama chokepoint (`app/ponto/services/triagem_batida.py:707-720`).
+- Chokepoint retorna None →JSON `ignorada_intervalo`, sem nova batida (`app/ponto/services/triagem_batida.py:721-732`). Se retorna batida, define sucesso no contexto (`app/ponto/services/triagem_batida.py:745-753`).
+- Fora de horário cria sinal e continua, sem impedir gravação (`app/ponto/services/triagem_batida.py:478-496`).
+
+**Chokepoint: criação não é incondicional**
+
+- Mesmo tipo não retratado em ±60s → devolve existente (`app/ponto/registro_batida.py:106-115`).
+- Mesma chave colaborador/timestamp → devolve existente (`app/ponto/registro_batida.py:120-122`).
+- Competência fechada recusa somente quando `fato_de_chao=False`; chamadas app/web acima omitem a flag e passam autoridade humana false, então deriva `fato_de_chao=True` (`app/ponto/registro_batida.py:130-137`).
+- Oposta não retratada na janela e sem casar marco do próprio tipo, com autoridade humana false →`None, conflito`, sem criar (`app/ponto/registro_batida.py:138-151`). A janela é 300s com escala e marcos, senão60s (`app/ponto/registro_batida.py:21-32`); exceção de marco próprio está em `app/ponto/registro_batida.py:35-50`.
+- Fora dessas saídas, cria `Batida` em `objects.create` (`app/ponto/registro_batida.py:157-159`), chama fechamento por evento e retorna (`app/ponto/registro_batida.py:160-161`); exceção do agendamento de fechamento é capturada (`app/ponto/registro_batida.py:175-183`).
+
+**Desvios reais da UI v2 antes de POST**
+
+- `bloqueio_horario` ou `aguardando_confirmacao` substitui formulário por aviso/link para tela antiga (`app/templates/ponto/bater_ponto_v2.html:64-75`).
+- Sem selfie, `garantirRequisitos` retorna false (`app/templates/ponto/bater_ponto_v2.html:285-290`); sem GPS também (`app/templates/ponto/bater_ponto_v2.html:292-300`); confirmação aborta envio (`app/templates/ponto/bater_ponto_v2.html:325`).
+- Qualquer HTTP OK é mostrado como sucesso sem ler o corpo; isso inclui `ja_registrada` e `ignorada_intervalo` (`app/templates/ponto/bater_ponto_v2.html:335-340`; `app/api/views_core.py:555-568`, `app/api/views_core.py:695-721`).
+- Onboarding incompleto desvia antes da batida web (`app/ponto/views.py:240-243`); comunicado desvia somente GET (`app/ponto/views.py:249-254`).
+
+## 29/10 18:17 · sessao 86a7408a2cd1 · - · - · origem=Ronald (tmux)
+
+Achados dos testes, por leitura e AST em memória, sem banco: [nao verificado]
+
+- **Selo tem mordida estrutural limitada.** Removendo em memória as chamadas reais, ele acusa `aprovar_justificativa_dp`, `materializar_saida_dp` e `aprovar_lote_justificativas`; o reconhecimento e a checagem ficam em `app/ponto/tests/test_selo_aprovacao_encerra_origem.py:47` e `:94`. Baseline dos dois arquivos: nenhuma violação. Execução funcional das mutações: [nao verificado].
+- **Selo aceita fechamento sem efeito ou falha engolida.** Provei com fontes sintéticos: `if False: encerrar_chamado_de_origem(j)`, `try: encerrar... except Exception: pass` e fechamento antes de `registrar_batida(j)` retornam `[]`; `_chama` apenas compara posição textual, receptor e ancestral `atomic`, em `app/ponto/tests/test_selo_aprovacao_encerra_origem.py:99`. O ramo morto é limitação declarada em `:8`; captura da falha e pré-requisito não são verificados em `:102`.
+- **Ausência de sinal não reprova o teste da batida.** `test_J2_nao_e_rejeitada_pela_BATIDA_do_proprio_ato` exige `batida_gerada_id`, J2 pendente e chamado vivo, mas não exige invocação do receiver/reconciliador, em `app/ponto/tests/test_justificativa_encerra_origem.py:413`. Sem `_reconciliador_post_save_batida`, a chamada explícita ainda retém o chamado, em `app/ponto/services/justificativa.py:194` e `app/chamados/reconciliador.py:453`. Portanto esse teste pode passar com o caminho anunciado ausente; comparação executada contra tal mutante: [nao verificado].
+- **O caso de falha repetida das perguntas não prova o savepoint S143.** Ele exige rollback completo em `app/ponto/tests/test_justificativa_encerra_origem.py:256`; o resolver sem captura da unidade S128 já produz esse rollback em `app/chamados/reconciliador.py:521`. O teste específico que mira a cura do savepoint é `test_erro_de_banco_engolido_no_receiver_S143_nao_mente_o_fechamento`, em `app/ponto/tests/test_justificativa_encerra_origem.py:231`.
+- **Tetos não provam a existência do savepoint.** `_cobrar` aceita qualquer contagem menor ou igual, em `app/ponto/tests/test_selo_chokepoint_escrita.py:213`; retirar o savepoint diminui queries e permanece dentro dos novos tetos de `:114` e `:157`. É comportamento adequado de teto, mas não é prova funcional da cura. As medições alegadas em `:150` dependem de logs não fornecidos: [nao verificado].
+- **Sem ensaio novo de concorrência ou pós-commit.** Os novos funcionais usam `TestCase`, em `app/ponto/tests/test_justificativa_encerra_origem.py:19` e `:38`; não há teste de threads, `TransactionTestCase` ou execução explícita de callbacks no módulo. Segurança da ordem de locks e propagação do contexto em callbacks, por teste: [nao verificado].
+- **Há sentinelas úteis contra vacuidade.** Rollback do fechamento exige `m.assert_called_once()` em `app/ponto/tests/test_justificativa_encerra_origem.py:170`; falha da saída idem em `:197`; recusa do coletor exige trilha em `:159`; retenção por irmã exige trilha em `:356`; o caso J2 direto exige chamada do helper em `:290`.
+- **O positivo da materialização com wrapper é bem escolhido contra fechamento prévio pelo reconciliador da batida.** A fixture usa `justificativa_colab`, em `app/ponto/tests/test_justificativa_encerra_origem.py:213`; esse módulo não aparece no catálogo de premissas, em `app/chamados/catalogo/premissa.py:45`, e o reconciliador retorna `None` para classe fora do catálogo, em `app/chamados/reconciliador.py:257`. Assim o caminho comum da batida não substitui ali a nova chamada da origem.
+- **O selo não cobre todos os escritores possíveis.** Ele reconhece somente `ast.Assign` com literal `'aprovada'`, em `app/ponto/tests/test_selo_aprovacao_encerra_origem.py:47`; `update`, `create` e admin são exclusões declaradas em `:13`. Não usá-lo como prova de inexistência desses escritores.
+
+## 29/10 18:17 · sessao 439554232df8 · - · - · origem=Ronald (tmux)
+
+- `VIVOS = ('aberto', 'em_analise', 'registrado')`; `ENCERRADOS = ('resolvido', 'fechado')`. Fonte: `app/chamados/catalogo/motor.py:24`, `:30`.
+
+- `Batida.objects.create` dispara o receiver `_nucleo_post_save_batida`, que recompõe os turnos; `_recompute_around` captura exceções. Fonte: `app/ponto/signals.py:19`, `:29`, `:34`.
+
+- Em seguida `_cartorio_post_save_batida` chama `_julgar_dias` para véspera e dia da batida; este chama `cartorio.julgar_celula` dentro de `engolir`, que captura exceções. Fonte: `app/ponto/signals.py:85`, `:88`, `:93`, `:108`, `:131`; captura em `app/core/observ.py:85`.
+
+- `_reconciliador_post_save_batida` chama `reconciliar_chamados_colab(instance.colaborador)` e captura exceções; esse reconciliador percorre todos os chamados VIVOS do colaborador. Fonte: `app/ponto/signals.py:206`, `:213`; `app/chamados/reconciliador.py:1203`.
+
+- O módulo `entrada_bloqueada_turno_aberto` pertence à premissa `FATO_TURNO_ABERTO`. `_veredito_premissa` coleta o turno específico do chamado quando há dia; sem dia, consulta globalmente `TurnoMaterializado` com entrada e sem saída. Premissa viva segue no laço; morta chama `_retratar`. Fontes: `app/chamados/catalogo/premissa.py:48`; `app/chamados/reconciliador.py:264`, `:286`, `:139`, `:170`, `:1208`.
+
+- `_retratar` pode **recusar o fechamento do chamado** se houver irmãs respondidas sem consumo; senão abre `transaction.atomic`, chama `ch.reconciliar()`, rejeita justificativa vinculada ainda pendente, resolve perguntas e anexa ocorrência. Isso é fechamento de chamado após o evento da Batida, não uma consulta prévia que barre a criação da Batida. Fontes: `app/chamados/reconciliador.py:435`, `:446`, `:455`, `:462`, `:469`, `:471`; chamada pelo receiver em `app/ponto/signals.py:215`.
+
+- `ChamadoColaborador.reconciliar()` consulta `_decisao_do_fechamento`; o motor transforma VIVOS em `resolvido`, e `_gravar_estado` grava com via `sistema`. Fontes: `app/chamados/models.py:434`, `:440`, `:444`; `app/chamados/catalogo/motor.py:95`, `:111`; escritor em `app/chamados/models.py:185`, `:226`.
+
+- O gate de premissa do fechamento pode recusar: se é chamado de furo com dia e o dia segue furado para folha, sem pai agrupador ou sobrevivente vivo, devolve `False` e registra `fechamento_recusado`. Sem dia, permite e registra `fechamento_sem_dia_do_fato`; também permite premissa regularizada ou dedup com outra cobrança viva do dia. Fonte: `app/chamados/models.py:484`, `:488`, `:495`, `:498`, `:522`, `:525`.
+
+- Outra porta automática é `retratar_chamados_absolvidos_por_celula`: inclui EB em `MODULOS_DE_TURNO`, exige célula com veredito que não acusa e sem marcos pendentes, e chama a mesma `_retratar`. Não roda inline no signal: consumidor do outbox chama essa função em `app/chamados/reconciliador.py:1145`. Fontes: `app/chamados/reconciliador.py:336`, `:757`, `:792`, `:800`, `:814`, `:823`, `:825`.
+
+- `reconciliar_chamados_colab` também é chamado pelo comando `reconciliar_chamados`, em `app/chamados/management/commands/reconciliar_chamados.py:52`.
+
+- Não generalizar que todos os receivers são incapazes de propagar erro: `batida_marca_onboarding` não envolve a chamada de gravação em `try/except`; ele chama a porta do colaborador, que executa `colab.save`. Não há consulta ao chamado EB nesse receiver. Fontes: `app/colaboradores/signals.py:86`, `:94`, `:101`; `app/colaboradores/services/colaborador.py:47`, `:53`. Ocorrência concreta de exceção/rollback: **[não verificado]**.
 
 ## 29/10 17:58 · sessao 23e552545147 · grupo1p1 · verificador · origem=Code
 
@@ -314,73 +408,4 @@ Um carimbo adicional:
 
 - `app/ponto/management/commands/reconciliar_grade.py:75,228` captura instante e chama `_relavrar_orfa`, que relê relógio em `:458`. É carimbo de escrita; a relevância para o teto do julgamento é [não verificado].
 
-## 29/10 17:41 · sessao 9abcd1c52e8b · - · - · origem=Ronald (tmux)
-
-Classe 7 — `app/ponto/management/commands/pautas_discordantes.py:56` exige `agora` keyword obrigatório, mas `app/ponto/tests/test_o320_pauta_dos_discordantes.py:188` chama `Command().apurar(...)` sem esse argumento. Os quatro testes que passam por `_apurar` (`:197`, `:204`, `:210`, `:216`) recebem `TypeError` antes das respectivas verificações.
-
-Censo por AST de todos os arquivos `.py`, resolvendo aliases de `ImportFrom`, não revelou outro chamador não migrado das assinaturas indicadas. O `**kw` de `app/escala/tests/test_sobra_na_borda_nao_vira_intervalo.py:53` recebe `agora` em `:52`.
-
-## 29/10 17:41 · sessao afda6525cce7 · justif · verificador · origem=Code
-
-**Reprovo a v5:** a costura mantém inversões de trava e o teste novo de erro nas perguntas contradiz o caminho executado. (`app/ponto/services/justificativa.py:94`; `app/chamados/reconciliador.py:469`; `app/ponto/tests/test_justificativa_encerra_origem.py:247`)
-
-Análise estática da cópia e do patch fornecido. Execução dos testes Django, reprodução dos deadlocks, identidade commit/base e ocorrência dos contraexemplos em produção: **[nao verificado]**. [nao verificado]
-
-Para a pergunta **1**, encontrei estes defeitos:
-
-- **F1 — O resolvedor protegido é chamado novamente sem proteção. Classe: outra.** Entrada: aprovação cuja resolução de perguntas sofre erro de banco repetível. O receiver S143 isola e engole a primeira falha, mas `retratar()` chama o mesmo resolvedor novamente, sem captura. Essa segunda falha desfaz a aprovação: J permanece pendente e C vivo, contrariando o comportamento exigido pelo teste novo de best-effort. (`app/chamados/signals.py:88`; `app/chamados/signals.py:91`; `app/chamados/reconciliador.py:455`; `app/chamados/reconciliador.py:469`; `app/ponto/services/justificativa.py:169`; `app/ponto/tests/test_justificativa_encerra_origem.py:247`)
-
-- **F2 — Aprovação × rejeição ainda forma C → J / J → C. Classe: ordem de trava.** Contraexemplo: A inicia aprovação e trava C; B inicia rejeição e trava J; o `j.save()` de B dispara o cartório, que tenta reconciliar C quando o dia/marco está regularizado; A tenta obter J. Resultado: A espera B e B espera A. A pré-trava nova não alcança a rejeição. (`app/ponto/services/justificativa.py:83`; `app/ponto/services/justificativa.py:94`; `app/ponto/services/justificativa.py:95`; `app/ponto/services/justificativa.py:231`; `app/ponto/services/justificativa.py:242`; `app/ponto/signals.py:165`; `app/ponto/services/cartorio.py:1163`; `app/chamados/models.py:231`)
-
-- **F3 — Aprovação × materialização de batida forma C → TurnoMaterializado / TurnoMaterializado → C. Classe: ordem de trava.** Contraexemplo: B executa `veredito_celula('trabalhou')`, registra uma saída e mantém a trava do turno T pelo atomic externo; A trava C e registra outra saída do mesmo dia, esperando o DELETE de T; B continua pelos signals e tenta fechar C, esperando A. Escolhendo timestamps separados por mais de 60 segundos, o dedup não elimina essa execução. (`app/ponto/services/veredito_celula.py:203`; `app/ponto/services/veredito_celula.py:300`; `app/ponto/signals.py:34`; `app/ponto/nucleo.py:57`; `app/ponto/nucleo.py:59`; `app/ponto/services/justificativa.py:94`; `app/ponto/services/justificativa.py:141`; `app/ponto/signals.py:135`; `app/ponto/services/cartorio.py:1163`; `app/ponto/registro_batida.py:106`)
-
-- **F4 — A materialização fecha antes de consultar a guarda das irmãs. Classe: pouso antes do pré-requisito.** Entrada: origem `turno_aberto` com pergunta respondida, não validada e não materializada. A cascata chama `encerrar()`, que força fechamento sem essa guarda; depois, o helper encontra C terminal e retorna `False`. Resultado: aprovação com chamado fechado sobre a irmã pendente. O fechamento forçado é herdado, mas permanece no sítio de cascata explicitamente tocado pelo diff. (`app/ponto/services/justificativa.py:346`; `app/ponto/services/justificativa.py:349`; `app/ponto/services/justificativa.py:357`; `app/ponto/services/justificativa.py:38`; `app/chamados/models.py:1192`; `app/chamados/juizes.py:1471`)
-
-- **F5 — Aprovar J1 pode rejeitar outra J2. Classe: outra.** Contraexemplo permitido pelo modelo: C vivo, módulo `justificativa_colab`, categoria `justificativa`, subcategoria `esqueci_saida`; C aponta J2 pendente no dia D2; J1 pendente no dia D1≠D2 aponta C como origem, sem saída informada. O gate desse chamado não exige regularização de furo; a nova costura fecha C e auto-rejeita J2, acrescentando uma descrição de retratação pelo reconciliador. A aprovação de J1 passa, portanto, a decidir outra justificativa. Dias diferentes respeitam a unicidade das pendentes; a porta de vínculo não valida correspondência de dia. (`app/ponto/models.py:173`; `app/ponto/models.py:189`; `app/chamados/services/vinculos.py:81`; `app/chamados/models.py:915`; `app/chamados/models.py:484`; `app/ponto/services/justificativa.py:40`; `app/chamados/reconciliador.py:462`; `app/chamados/reconciliador.py:468`)
-
-- **F6 — O atomic do lote não trata recusa retornada como `None`. Classe: outra, meio-estado.** Entrada: J com saída informada, competência aprovada/exportada, origem viva e outra justificativa sem batida gerada. `registrar_batida()` retorna `(None, mensagem)`; a consulta `_outra`, feita com `batida_gerada=None`, encontra essa outra justificativa e pula o bloco de vinculação/conflito. O lote prossegue, fecha a origem e conta aprovação, sem saída criada. A ausência de tratamento é herdada no bloco movido; o fechamento da origem é o efeito novo. (`app/ponto/janelas.py:87`; `app/ponto/registro_batida.py:130`; `app/ponto/registro_batida.py:137`; `app/ponto/views.py:1814`; `app/ponto/views.py:1821`; `app/ponto/views.py:1829`; `app/ponto/views.py:1830`)
-
-- **F7 — O selo aceita a costura com outro objeto. Classe: selo sem mordida.** Contraexemplo: dentro do atomic, `j.status='aprovada'; j.save(); encerrar_chamado_de_origem(k)`, sendo `k` sem origem. O selo aceita porque confere o receptor do `save()`, mas reconhece a chamada de fechamento apenas pelo nome e pela posição da linha. Resultado: selo verde com J aprovada e sua origem viva. (`app/ponto/tests/test_selo_aprovacao_encerra_origem.py:61`; `app/ponto/tests/test_selo_aprovacao_encerra_origem.py:79`; `app/ponto/tests/test_selo_aprovacao_encerra_origem.py:102`)
-
-Quanto à pergunta **2**, **há escritor de aprovação não alcançado: o Django admin — FORA-DO-ESCOPO, preexistente**. `JustificativaAdmin` continua editável, e `status` aceita `aprovada`. Alterar J pelo admin, com origem viva e sem célula, salva a aprovação; o signal retorna sem julgar célula inexistente e não executa a costura nova. (`app/ponto/admin.py:18`; `app/ponto/models.py:130`; `app/ponto/models.py:159`; `app/core/admin.py:7`; `app/ponto/signals.py:165`; `app/ponto/services/cartorio.py:1547`)
-
-**Não encontrei escritor de `status_local` fora das portas no universo coberto pelo selo existente.** A costura termina em `reconciliar()` → `_gravar_estado()`, e a cascata também usa uma porta do modelo. Essa conclusão fica limitada às formas que a análise AST resolve; o próprio selo declara limites para escrita dinâmica/genérica. (`app/chamados/tests/test_selo_status_so_pelas_portas.py:17`; `app/chamados/tests/test_selo_status_so_pelas_portas.py:37`; `app/chamados/tests/test_selo_status_so_pelas_portas.py:337`; `app/chamados/models.py:444`; `app/chamados/models.py:1201`)
-
-Para a pergunta **3**, os testes têm resultados contrafactuais diferentes: [nao verificado]
-
-- **Os casos positivos das três portas detectam a retirada da costura**, pelas asserções de aprovação e fechamento; o de idempotência também exige uma única trilha. (`app/ponto/tests/test_justificativa_encerra_origem.py:78`; `app/ponto/tests/test_justificativa_encerra_origem.py:91`; `app/ponto/tests/test_justificativa_encerra_origem.py:127`; `app/ponto/tests/test_justificativa_encerra_origem.py:227`)
-- **O teste das irmãs tem mordida:** além de manter C vivo, exige J aprovada e trilha de retenção. Remover toda a costura não satisfaz essa trilha. Entretanto, ele cobre aprovação individual de `turno_aberto`, não a cascata do F4. (`app/ponto/tests/test_justificativa_encerra_origem.py:47`; `app/ponto/tests/test_justificativa_encerra_origem.py:262`; `app/ponto/tests/test_justificativa_encerra_origem.py:266`; `app/ponto/tests/test_justificativa_encerra_origem.py:269`)
-- **Os testes de rollback evitam passar por retorno antecipado:** exigem chamada efetiva aos mocks. (`app/ponto/tests/test_justificativa_encerra_origem.py:170`; `app/ponto/tests/test_justificativa_encerra_origem.py:197`)
-- **O teste de erro nas perguntas deveria falhar inclusive nesta versão**, pelo F1: o mock quebra em todas as chamadas e a segunda não é protegida. (`app/ponto/tests/test_justificativa_encerra_origem.py:237`; `app/ponto/tests/test_justificativa_encerra_origem.py:241`; `app/chamados/reconciliador.py:469`)
-- **Os testes de leitura da competência e UPDATE do carimbo exigem aprovação e fechamento**, mas a efetiva mordida contra a retirada de cada savepoint não foi executada: **[nao verificado]**. (`app/ponto/tests/test_justificativa_encerra_origem.py:278`; `app/ponto/tests/test_justificativa_encerra_origem.py:287`; `app/ponto/tests/test_justificativa_encerra_origem.py:296`; `app/ponto/tests/test_justificativa_encerra_origem.py:302`)
-- **Rejeição e aprovação sem origem passam sem a cura por serem controles.** O selo também admite explicitamente `if False`, além do falso verde do F7. (`app/ponto/tests/test_justificativa_encerra_origem.py:129`; `app/ponto/tests/test_justificativa_encerra_origem.py:176`; `app/ponto/tests/test_selo_aprovacao_encerra_origem.py:8`)
-
-Nos **tetos**, a unidade precisa é **por execução de save terminal**, inclusive save sem mudança de status e sem perguntas: S143 filtra apenas `raw` e estado. Dentro de transação, o acréscimo é SAVEPOINT + RELEASE por execução. Os aumentos 49→51, 187→191 e 233→241 pressupõem respectivamente 1, 2 e 4 execuções; o comentário reconhece a repetição, mas “por chamado que fecha” não descreve toda a incidência. Contagens efetivas: **[nao verificado]**. Retirar o savepoint reduz queries e continua passando no teto `<=`; esse selo não prova a proteção funcional. (`app/chamados/signals.py:81`; `app/chamados/signals.py:91`; `app/ponto/tests/test_selo_chokepoint_escrita.py:114`; `app/ponto/tests/test_selo_chokepoint_escrita.py:148`; `app/ponto/tests/test_selo_chokepoint_escrita.py:154`; `app/ponto/tests/test_selo_chokepoint_escrita.py:210`)
-
-Para a pergunta **4**, **as aprovações agora antecipam as travas de chamados**, antes de travar J. No reconciliador citado, a trava de C é adquirida pelo UPDATE, não por `select_for_update`; depois vem o eventual save da justificativa pendente. A ordenação por PK melhora esse par, mas não elimina os ciclos F2/F3. (`app/ponto/services/justificativa.py:83`; `app/ponto/services/justificativa.py:95`; `app/ponto/services/justificativa.py:298`; `app/ponto/views.py:1792`; `app/chamados/reconciliador.py:1203`; `app/chamados/reconciliador.py:1214`; `app/chamados/reconciliador.py:468`)
-
-Existe ainda caminho que **escreve J antes de C**: `regularizar_turno_orfao()` atualiza a justificativa dentro do atomic e depois percorre chamados, chamando `analisar()`. Logo, ordenar somente os três aprovadores não estabelece uma ordem global. (`app/ponto/services/regularizacao.py:89`; `app/ponto/services/regularizacao.py:106`; `app/ponto/services/regularizacao.py:137`; `app/chamados/models.py:572`)
-
-Para a pergunta **5**, **há efeito capaz de desfazer a aprovação**: a segunda resolução de perguntas do F1 e a gravação obrigatória da nota de retratação propagam falhas pelo atomic. O savepoint novo de S143 protege apenas sua própria chamada. (`app/chamados/reconciliador.py:455`; `app/chamados/reconciliador.py:469`; `app/chamados/reconciliador.py:471`; `app/chamados/signals.py:91`; `app/ponto/services/justificativa.py:169`)
-
-O receiver de **rebaixa** não captura exceções; no fechamento normal, porém, o núcleo já normalizou a urgência e ele retorna sem UPDATE adicional. O **cartório** captura exceções por `engolir`, que não cria savepoint próprio. Portanto, captura de exceção não basta para afirmar isolamento de toda falha de banco; ocorrência concreta desse problema nesta obra: **[nao verificado]**. (`app/chamados/signals.py:72`; `app/chamados/models.py:210`; `app/chamados/models.py:278`; `app/chamados/models.py:424`; `app/chamados/signals.py:172`; `app/core/observ.py:85`)
-
-**Não identifiquei erro causado apenas por ler a aprovação ainda sem commit:** o save de J precede o fechamento no mesmo fluxo, e célula/evento são gravados juntos. Já `invalidar_fechamento()` agora delimita a leitura e cada competência com atomics próprios, mantendo a captura fora deles. Isso não protege o resolvedor direto de `_retratar`. (`app/ponto/services/justificativa.py:159`; `app/ponto/services/justificativa.py:168`; `app/ponto/portas/celula.py:639`; `app/ponto/services/fechamento.py:1616`; `app/ponto/services/fechamento.py:1619`; `app/ponto/services/fechamento.py:1629`; `app/chamados/reconciliador.py:469`)
-
-**FORA-DO-ESCOPO, legado:** após o atomic da aprovação individual, o bloco de `entrada_bloqueada_turno_aberto` ainda pode forçar o fechamento da própria origem que o helper reteve por irmã pendente. Esse bloco também impede estender a garantia nova a todo o comportamento posterior da porta. (`app/ponto/services/justificativa.py:188`; `app/ponto/services/justificativa.py:193`; `app/ponto/services/justificativa.py:199`; `app/chamados/models.py:1192`)
-
-## 29/10 17:38 · sessao edec12c9aee3 · - · - · origem=Ronald (tmux)
-
-Achados por leitura estática; não executei testes nem operações de banco. [nao verificado] [nao verificado]
-
-1. **Ordem de trava: aprovação × rejeição ainda inverte C/J.** A aprovação trava C antes de J (`app/ponto/services/justificativa.py:83`, `:94`, `:95`); a rejeição trava J e salva dentro do atomic (`:231`, `:232`, `:242`). Esse save chama o cartório sincronamente (`app/ponto/signals.py:161`, `:165`, `:93`), que pode reconciliar C quando seu marco acendeu (`app/ponto/services/cartorio.py:1163`) ou quando o dia ficou regular (`:1188`, `:1196`). O UPDATE do chamado acontece em `app/chamados/models.py:444`, `:231`. Escalonamento: A trava C; B trava J e tenta C pelo signal; A tenta J → ciclo. A pré-trava nova não alcança a rejeição (`app/ponto/services/justificativa.py:220`, `:232`).
-
-2. **Ordem de trava: aprovação × materialização de batida mantém ciclo C/TurnoMaterializado.** `veredito_celula` abre atomic e registra batidas dentro dele (`app/ponto/services/veredito_celula.py:203`, `:298`, `:300`). O primeiro receiver recomputa o núcleo (`app/ponto/signals.py:19`, `:26`, `:34`), cujo DELETE mantém a trava de T até o atomic externo terminar (`app/ponto/nucleo.py:57`, `:59`). Escalonamento concreto: B materializa uma saída e trava T; A pré-trava C e tenta registrar outra saída do mesmo dia, bloqueando no DELETE de T; B continua ao cartório/reconciliador e tenta atualizar C, bloqueando em A (`app/ponto/services/justificativa.py:94`, `:141`; `app/ponto/signals.py:131`, `:135`, `:206`, `:215`; `app/ponto/services/cartorio.py:1163`; `app/chamados/models.py:231`). Use duas saídas com timestamps separados por mais de 60 segundos para evitar o dedup (`app/ponto/registro_batida.py:106`, `:113`). Uma chamada isolada em autocommit não demonstra esse ciclo; o atomic externo de `veredito_celula` demonstra (`app/ponto/services/veredito_celula.py:203`).
-
-3. **Outra: o resolver “best-effort” roda novamente sem proteção na unidade escolhida.** O helper chama `retratar` (`app/ponto/services/justificativa.py:40`); `_retratar` chama o resolver novamente, sem catch, depois do fechamento (`app/chamados/reconciliador.py:455`, `:456`, `:469`). O savepoint novo protege somente a chamada do receiver (`app/chamados/signals.py:88`, `:91`, `:94`). Com o mock do teste `test_erro_de_banco_engolido_nas_perguntas_nao_desfaz_o_fechamento`, a primeira falha é engolida, mas a segunda chamada propaga e desfaz a aprovação pelo atomic externo (`app/ponto/services/justificativa.py:93`, `:169`, `:173`). Logo esse teste não deveria ficar verde com um erro real repetível no resolver; execução não realizada. [nao verificado]
-
-4. **Outra: aprovação de J1 pode rejeitar outra J2.** Entrada permitida pelo schema: C vivo `justificativa_colab`, categoria `justificativa`, subcategoria `esqueci_saida`; C aponta J2 pendente no dia D2; J1 pendente no dia D1≠D2 aponta C como origem, sem saída informada (`app/chamados/catalogo/modulos.py:190`; `app/ponto/models.py:173`, `:189`). A porta de vínculo não verifica correspondência do dia (`app/chamados/services/vinculos.py:81`, `:88`). Esse C não pertence ao universo de furo pelos campos indicados, portanto seu gate aceita (`app/chamados/models.py:915`, `:920`, `:2466`, `:2478`, `:484`). Aprovar J1 fecha C e `_retratar` rejeita J2, acrescentando a mensagem de auto-rejeição (`app/ponto/services/justificativa.py:156`, `:168`, `:40`; `app/chamados/reconciliador.py:462`, `:465`, `:467`, `:468`). A existência desse formato em produção é `[nao verificado]`; o efeito novo está alcançável pela costura, sem precisar registrar batida antes (`app/ponto/services/justificativa.py:105`, `:156`, `:168`).
-
-No par estrito aprovação/reconciliador, o reconciliador não usa `select_for_update` de chamado: percorre vivos por PK e adquire trava no UPDATE, antes de salvar a justificativa pendente (`app/chamados/reconciliador.py:1203`, `:1205`, `:1214`, `:456`, `:468`; `app/chamados/models.py:231`). A pré-trava melhora essa ordem, mas os ciclos acima impedem afirmar que ela encerrou todas as inversões (`app/ponto/services/justificativa.py:83`; `app/ponto/services/justificativa.py:232`; `app/ponto/nucleo.py:59`).
-
-_196 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_199 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
