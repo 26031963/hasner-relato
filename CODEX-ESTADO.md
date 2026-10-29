@@ -1,7 +1,37 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **29/10/2026 16:44** · publicado em **29/10/2026 16:46** (UTC-3)
+> Ultima resposta processada: **29/10/2026 16:52** · publicado em **29/10/2026 16:52** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 29/10 16:52 · sessao ee28eb3e527e · - · - · origem=Ronald (tmux)
+
+- **Inversão de travas confirmada no código — classe “ordem de trava”.** Aprovação individual segura J no `select_for_update` e depois pede C; lote faz a mesma sequência (`app/ponto/services/justificativa.py:45`, `:46`, `:32`; `app/ponto/views.py:1790`, `:1791`, `:1804`). O reconciliador abre transação, grava C por `reconciliar()` e depois grava J rejeitada (`app/chamados/reconciliador.py:455`, `:456`, `:462`, `:468`; escrita de C em `app/chamados/models.py:226`, `:231`). Contraexemplo: turno regularizado por batida, J ainda pendente; T1 segura J e espera C, T2 segura C e espera J. O segundo caminho adquire a trava pela escrita, mesmo sem `select_for_update`; ocorrência real e vítima escolhida pelo banco: **[nao verificado]**.
+
+- **Risco de meio-estado por falha engolida no signal.** O fechamento chama `reconciliar → _gravar_estado → atomic interno → C.save`, que dispara o receiver de perguntas (`app/ponto/services/justificativa.py:35`; `app/chamados/models.py:444`, `:226`, `:231`; `app/chamados/signals.py:75`, `:83`, `:86`). Havendo pergunta elegível, o resolvedor executa `p.save()` sem savepoint próprio, e o receiver captura `Exception` (`app/chamados/services/disputa_emissao.py:1536`, `:1547`, `:1551`, `:1558`, `:1583`; `app/chamados/signals.py:87`). Se essa escrita marcar `needs_rollback`, o atomic interno pode desfazer C/trilha silenciosamente e `reconciliar()` ainda retornar `True`, permitindo que o atomic externo confirme J aprovada (`app/chamados/models.py:226`, `:231`, `:444`, `:445`; `app/ponto/services/justificativa.py:107`, `:119`). O mecanismo está documentado e coberto por teste anterior da casa (`app/core/observ.py:124`; `app/core/tests/test_bug120_trilha_nao_derruba_escrita.py:12`, `:43`). Reprodução desta costura: **[nao verificado]**. Um mock que apenas levanta exceção pode não marcar a conexão; portanto, não demonstra sozinho esse contraexemplo.
+
+- **Exceção propagada desfaz a aprovação; exceção capturada exige essa distinção.** O `except` da aprovação individual fica depois do atomic, de modo que uma exceção que atravesse o fechamento desfaz J (`app/ponto/services/justificativa.py:45`, `:119`, `:120`). O novo teste injeta justamente essa modalidade em `ChamadoColaborador.reconciliar`, não uma falha engolida pelo receiver (`app/ponto/tests/test_justificativa_encerra_origem.py:155`, `:159`, `:164`).
+
+- **Rebaixa normalmente não escreve novamente nesse caminho.** `_gravar_estado` já reduz a urgência; o receiver chama `_rebaixar_sem_post_save`, que retorna antes do UPDATE quando a urgência está normal (`app/chamados/models.py:210`, `:278`, `:282`, `:424`, `:425`; `app/chamados/signals.py:72`). O receiver não tem `try/except`; uma exceção que escape dele atravessa o fechamento (`app/chamados/signals.py:68`, `:72`).
+
+- **Julgar célula e resolver perguntas são síncronos e protegidos por captura.** O cartório roda sob `engolir`, e perguntas sob `try/except` (`app/chamados/signals.py:83`, `:87`, `:166`, `:174`; `app/core/observ.py:86`). A célula e seu evento são escritos juntos em savepoint próprio (`app/ponto/portas/celula.py:634`, `:639`, `:640`, `:642`). Não identifiquei nesses trechos uma leitura externa antecipada que torne o resultado errado apenas porque J/C ainda não foram commitados; J é salva antes do fechamento e os receivers consultam dentro dessa chamada (`app/ponto/services/justificativa.py:110`, `:119`; `app/chamados/models.py:231`). Defeito concreto causado exclusivamente pela ausência de commit: **[nao verificado]**.
+
+Não executei banco nem testes; Django não está instalado no interpretador acessível, enquanto a cópia declara `Django==5.2.14` (`app/requirements.txt:13`); execução dos contraexemplos: **[nao verificado]**.
+
+## 29/10 16:51 · sessao 9245c6aae20c · - · - · origem=Ronald (tmux)
+
+1. **Selo sem mordida sobre a transação/execução.** `_chama` aceita qualquer chamada descendente da função; não verifica fluxo, argumento nem `atomic`. Executei o analisador puro: chamada em `if False`, chamada depois do `atomic` e escritor externo pulado porque contém escritor interno retornam `[]`. Contraexemplo: aprovação persiste → chamada inalcançável → origem permanece vivo → selo verde. Classe: **selo/RED sem mordida**. (`app/ponto/tests/test_selo_aprovacao_encerra_origem.py:38`, `app/ponto/tests/test_selo_aprovacao_encerra_origem.py:51`)
+
+2. **Lote encerra antes de materializar a saída.** O novo `atomic` termina depois de fechar a origem, enquanto `registrar_batida` e o vínculo `batida_gerada` ficam depois. Contraexemplo: justificativa pendente com origem vivo, `saida_informada` preenchida e sem batida → aprovação e fechamento commitam → `registrar_batida` levanta → resposta de erro, justificativa aprovada, chamado encerrado e saída ausente. Classe: **pouso antes do pré-requisito / atomic mal posicionado**; a materialização fora da transação era preexistente, mas o fechamento novo passa a participar desse meio-estado. (`app/ponto/views.py:1790`, `app/ponto/views.py:1804`, `app/ponto/views.py:1805`, `app/ponto/views.py:1813`, `app/ponto/views.py:1829`)
+
+3. **Escritor fora do alcance: admin genérico.** `JustificativaAdmin` é `ModelAdmin` comum, sem bloqueio de edição; `status` oferece `'aprovada'`. Contraexemplo: salvar pelo admin justificativa pendente vinculada a origem vivo, em dia sem célula → signal não encontra célula e retorna → aprovação fica sem fechamento. Caminho preexistente, **FORA-DO-ESCOPO como alteração**, mas responde “sim” à pergunta 2 e impede alegar cobertura universal. (`app/ponto/admin.py:18`, `app/ponto/models.py:130`, `app/ponto/models.py:159`, `app/ponto/signals.py:161`, `app/ponto/services/cartorio.py:1547`)
+
+4. **Não encontrei escrita de `status_local` fora das portas no universo do selo.** Executei somente as funções AST puras, sem Django/DB: 739 arquivos, zero violações; o selo cobre formas declaradas, com limites explícitos para escrita genérica/dinâmica. As escritas concretas ficam em `_gravar_estado`, `abrir` e `criar`; rebaixa escreve urgência. (`app/chamados/tests/test_selo_status_so_pelas_portas.py:17`, `app/chamados/tests/test_selo_status_so_pelas_portas.py:37`, `app/chamados/tests/test_selo_status_so_pelas_portas.py:317`, `app/chamados/tests/test_selo_status_so_pelas_portas.py:337`, `app/chamados/models.py:192`, `app/chamados/models.py:702`, `app/chamados/models.py:730`, `app/chamados/models.py:834`, `app/chamados/models.py:429`)
+
+5. **Testes que passam sem a costura:** `test_MORDE_ponteiro_de_OUTRA_justificativa_nao_e_regularizado_por_esta` só verifica que o chamado continua vivo; remover inteiramente o fechamento satisfaz a asserção. Também não verifica que a justificativa foi efetivamente aprovada, permitindo verde se a requisição falhar. `test_MORDE_rejeitar_NAO_encerra` igualmente só verifica ausência de fechamento, sem provar rejeição. (`app/ponto/tests/test_justificativa_encerra_origem.py:129`, `app/ponto/tests/test_justificativa_encerra_origem.py:137`, `app/ponto/tests/test_justificativa_encerra_origem.py:152`)
+
+6. **Testes positivos e rollback têm asserção pertinente à cura:** os casos um a um, lote, aberto e idempotência exigem fechamento/trilha; o teste de falha exige retorno a pendente quando `reconciliar` levanta. Resultado efetivo da execução **[nao verificado]**; não executei suite Django. O teste de rollback cobre somente aprovação individual, e o arquivo funcional novo não exercita materialização retroativa nem falha no lote. (`app/ponto/tests/test_justificativa_encerra_origem.py:72`, `app/ponto/tests/test_justificativa_encerra_origem.py:84`, `app/ponto/tests/test_justificativa_encerra_origem.py:110`, `app/ponto/tests/test_justificativa_encerra_origem.py:117`, `app/ponto/tests/test_justificativa_encerra_origem.py:157`)
+
+7. **Anti-vacuidade do selo não prova a cura:** o teste das três portas só reconhece as atribuições já existentes; passa ao retirar as chamadas novas. Os dois testes `MORDE` finais exercitam strings artificiais, portanto continuam verdes se a implementação real da ponte virar `return False`. (`app/ponto/tests/test_selo_aprovacao_encerra_origem.py:85`, `app/ponto/tests/test_selo_aprovacao_encerra_origem.py:96`, `app/ponto/tests/test_selo_aprovacao_encerra_origem.py:102`)
 
 ## 29/10 16:44 · sessao c8da773fe4fd · o261 · censo · origem=Code
 
@@ -737,42 +767,4 @@ A condição de quatro marcos do detector (`app/chamados/detector_anomalias.py:2
 
 Não há evidência verificável de pouso ou violação de pré-requisito nos trechos alterados examinados. [não verificado] [nao verificado]
 
-## 29/10 16:19 · sessao 8622147100f1 · - · - · origem=Ronald (tmux)
-
-Nenhum achado confirmado de classe 5: a regressão `turno=None` no detector é distinguida pelo caso comportamental C923, que exige `('grave', '07:30', 119.0)` (app/chamados/tests/test_detector_pergunta_ao_juiz_do_par.py:251–257).
-
-Duas limitações verificáveis dos selos, sem concluir defeito do conjunto:
-
-- O selo do instante aceita `agora=timezone.now()`: verifica somente presença do argumento e `None` literal (app/escala/tests/test_selo_grade_pede_o_instante.py:37–39). Pode sustentar classe 5 se a promessa cobrada for impedir relógio fora da borda; a promessa AST específica, porém, é apenas ausência de `agora=` (mesmo arquivo:9–11).
-- O tripwire aceita nome posteriormente sobrescrito ou seletor em ramo morto: `_nomes_do_seletor` reúne nomes de qualquer atribuição contendo a chamada, sem analisar fluxo (app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:473–476). O teste comportamental C923 ainda pega a volta integral à DP (app/chamados/tests/test_detector_pergunta_ao_juiz_do_par.py:251–257).
-
-Não encontrei omissões de `agora=` nas chamadas de produção aos novos contratos obrigatórios por varredura AST em memória; isso é evidência da inspeção, sem linha única no commit. [nao verificado]
-
-## 29/10 15:56 · sessao e4097e916b79 · o261 · censo · origem=Code
-
-Escritores de `respondida_em`:
-
-| Função | Arquivo:linha | Pode carimbar com `resposta_colab` vazia? |
-|---|---|---|
-| `responder_pergunta_disputa_core` | `app/chamados/services/disputa_emissao.py:1248` | Não; rejeita vazia em `:1220`. |
-| `responder_automaticamente` | `app/chamados/services/disputa_emissao.py:1393` | **Sim**, não valida `texto`; o chamador atual fornece constante preenchida — `app/api/foto_recebida.py:25`, `:48`. |
-| `carimbar_resposta_pela_trilha` | `app/chamados/services/disputa_emissao.py:1409` | Não; guarda em `:1407`. |
-| `resolver_perguntas_por_chamado_resolvido` | `app/chamados/services/disputa_emissao.py:1572` e `:1649` | Primeiro exige texto; **segundo permite vazio**, sem guarda em `:1648`. |
-| `_materializar_ausencia_de_resposta` | `app/chamados/services/materializacao.py:513` | Só atribui carimbo com texto (`:511`); porém salva o campo mesmo sem texto, preservando eventual carimbo anterior (`:528`). |
-| `_materializar_uma` | `app/chamados/services/materializacao.py:1192` | Não cria carimbo sem texto; guarda em `:1190`. |
-
-Também escrevem **`None`**: `ChamadoColaborador.ressuscitar_perguntas` — `app/chamados/models.py:1163`; `reabrir_para_correcao` — `app/chamados/services/disputa_emissao.py:1358`, persistência em `:1377`. Esta última também esvazia a resposta (`:1358`).
-
-Portas de reabertura/desarquivamento:
-
-| Porta | Efeito sobre o véu |
-|---|---|
-| `ChamadoColaborador.reabrir` — `app/chamados/models.py:1023` | **Não chama `levantar`**: muda estado (`:1089`) e ressuscita perguntas (`:1098`), preservando `silenciado_ate`; campos persistidos em `app/chamados/models.py:193`. |
-| `transicionar` — `app/chamados/models.py:183`, `:260` | **Não levanta**; permite reabertura humana conforme `app/chamados/catalogo/motor.py:102`, `:150`. |
-| `desarquivar_chamado` — `app/chamados/views_arquivar.py:52` | **Chama `levantar`**, com `resgatado=True` (`:75`). Chama `reabrir` somente para encerramento por competência trancada (`:64`, `:68`). |
-| `_ressuscitar_por_resposta` | **Chama `levantar`**, com `resgatado=True` — `app/chamados/services/materializacao.py:663`. |
-| `reconciliar_por_ausencia._levantar` | **Chama `levantar`**, com `resgatado=False` — `app/chamados/services/silencio_ausencia.py:72`. |
-
-Reabertura administrativa e reabertura de competência passam por `reabrir`, **sem levantar o véu**: `app/chamados/services/acoes_disputa.py:266`; `app/chamados/services/competencia_trancada.py:258`. Quem efetivamente limpa `silenciado_ate` é `arquivo.levantar` — `app/chamados/services/arquivo.py:201`, persistência em `:208`.
-
-_137 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_139 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
