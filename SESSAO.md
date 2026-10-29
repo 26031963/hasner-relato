@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/10/2026 19:48:45.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (23.9 MB). Acoes na janela: **421**.
+**Medido em 29/10/2026 19:54:13.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (24.0 MB). Acoes na janela: **422**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 19:48:45 | Bash | Wait in-turn for grupo1 ata end and compare | `cd /home/ronald/saas-hasner && end=$((SECONDS+580)); while [ $SECONDS -lt $end ]; do [ -f logs/grupo1p1/sombra_prova.fim ] && break; /usr/bin/sleep 15; done; date +%H:%M; [ -f logs/grupo1p1/sombra_prova.fim ] && { grep -E 'ERROS=\|FIM-DA\|^rc=' logs/grupo1p1/ata_main.run logs/grupo1p1/ata_p1.run; python3 logs/grupo1p1/compara_p1.py logs/grupo1p1/ata_main.out logs/grupo1p1/ata_p1.out 2>&1 \| tail - ...` |
 | 19:48:37 | Agent | Opus final read JUSTIF 0b81eb43 | `Obra JUSTIFICATIVA-ENCERRA-ORIGEM, 5a leitura FINAL antes do pouso. - Copia: /home/ronald/wt-justif-2910-1645, HEAD 0b81eb43 (arvore 6ada34cc), base 2cc71cc8. - O delta desde a 4a leitura reprovada: `git diff be0f54c3 0b81eb43`. O diff inteiro: `git diff 2cc71cc8 0b81eb43`. A 4a reprovou por cinco motivos: 1. `red_final_a` truncado e `red_final_d` inexistente; 2. `test_CASCATA_retida_grava_a_trilh ...` |
 | 19:48:24 | Bash | Check grupo1 ata_p1 progress | `cd /home/ronald/saas-hasner && ls -la --time-style=+%H:%M logs/grupo1p1/ata_p1.* \| awk '{print $6,$7,$5}'; tail -c 300 logs/grupo1p1/ata_p1.run; ps -eo pid,etime,args \| grep 'grupo1p1_ata_impacto' \| grep -v grep \| cut -c1-100; date +%H:%M` |
 | 19:38:34 | Bash | Wait in-turn again for ata sombra | `cd /home/ronald/saas-hasner && end=$((SECONDS+580)); while [ $SECONDS -lt $end ]; do [ -f logs/grupo1p1/sombra_prova.fim ] && break; /usr/bin/sleep 15; done; date +%H:%M; [ -f logs/grupo1p1/sombra_prova.fim ] && { tail -2 logs/grupo1p1/ata_p1.run \| cut -c1-120; grep -E 'ERROS=\|FIM-DA' logs/grupo1p1/ata_main.run logs/grupo1p1/ata_p1.run; python3 logs/grupo1p1/compara_p1.py logs/grupo1p1/ata_main. ...` |
