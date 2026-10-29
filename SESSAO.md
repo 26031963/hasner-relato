@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/10/2026 02:57:37.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (8.8 MB). Acoes na janela: **402**.
+**Medido em 29/10/2026 03:03:08.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (8.9 MB). Acoes na janela: **405**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 02:59:40 | Bash | Wait for ORFAS follow-up commit | `cd /home/ronald/saas-hasner && for i in $(seq 1 19); do git -C /home/ronald/wt-orfas-2901-0215 log --oneline -1 \| /bin/grep -qv 253e09a5 && break; /usr/bin/sleep 30; done; git -C /home/ronald/wt-orfas-2901-0215 log --oneline -1; date +%H:%M` |
+| 02:59:33 | Bash | Record ORFAS state in RELATO | `date +%H:%M && python3 - <<'EOF' p='docs/RELATO.md'; s=open(p).read() anc="> **O-OUTBOX -- PRONTA EM COPIA 29/10 02:1x" assert s.count(anc)==1 sec='''> **ORFAS (b) -- construida 29/10 02:5x na copia wt-orfas-2901-0215 (253e09a5, sobre a branch do O-OUTBOX), NAO pousada.** LEI-AKITA: origem=chamados/reconciliador.py::encerrar_orfas_pela_lampada (no consumidor do EventoCelula), testemunha=chamados/j ...` |
+| 02:59:22 | SendMessage |  | `-` |
 | 02:55:05 | Bash | Wait for ORFAS report | `/usr/bin/sleep 240; tail -3 /home/ronald/saas-hasner/logs/orfas/recorte_1_refaz.log 2>/dev/null \| cut -c1-150; date +%H:%M` |
 | 02:52:00 | Bash | Keep waiting for ORFAS | `cd /home/ronald/saas-hasner && for i in $(seq 1 19); do git -C /home/ronald/wt-orfas-2901-0215 log --oneline -1 \| /bin/grep -qv d375511b && break; /usr/bin/sleep 30; done; git -C /home/ronald/wt-orfas-2901-0215 log --oneline -1; ls -t logs/orfas 2>/dev/null \| head -5; date +%H:%M` |
 | 02:42:24 | Bash | Wait for ORFAS commit | `cd /home/ronald/saas-hasner && for i in $(seq 1 19); do git -C /home/ronald/wt-orfas-2901-0215 log --oneline -1 \| /bin/grep -qv d375511b && break; /usr/bin/sleep 30; done; git -C /home/ronald/wt-orfas-2901-0215 log --oneline -1; date +%H:%M` |
