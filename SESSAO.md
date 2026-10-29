@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/10/2026 03:19:39.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (8.9 MB). Acoes na janela: **407**.
+**Medido em 29/10/2026 03:25:08.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (9.0 MB). Acoes na janela: **411**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 03:24:58 | Bash | Read lavra-based CxR signatures | `sed -n 265,300p escala/services/cadastro_realidade.py` |
+| 03:24:49 | Agent | Adversarial verify ORFAS (b) | `Obra: CONTRATO-20-LASTRO-E-ORFAS, metade ORFAS (repo /home/ronald/saas-hasner; CLAUDE.md secoes 0, 4a, 4b, 6, 7b). Copia /home/ronald/wt-orfas-2901-0215, branch raia-orfas-2901; a obra sao os commits sobre d375511b (que e a O-OUTBOX, ja aprovada): `git -C /home/ronald/wt-orfas-2901-0215 diff d375511b HEAD`. Aval literal: "ORFAS-ENTERRA-FURO-REAL = (b): o carimbo 'fantasma' desce para o EVENTO do c ...` |
+| 03:24:32 | Bash | Read suite hash and seeding measure | `cd /home/ronald/saas-hasner && head -1 logs/orfas/suite_inteira_1.log; grep -vE "WARNING\|^\s*$" logs/orfas/sonda_semear_e_pai.out \| tail -12 \| cut -c1-200` |
+| 03:21:58 | Bash | Locate and wait for ORFAS suite log | `cd /home/ronald/saas-hasner && ls -t logs/orfas/ \| head -6; bin/trava_teste.sh --quem; for i in $(seq 1 17); do F=$(ls -t logs/orfas/*suite* 2>/dev/null \| head -1); [ -n "$F" ] && grep -qE '^Ran [0-9]\|^rc=' "$F" && break; /usr/bin/sleep 30; done; F=$(ls -t logs/orfas/*suite* 2>/dev/null \| head -1); echo "F=$F"; [ -n "$F" ] && grep -E '^ARVORE\|^(FAIL\|ERROR):\|^Ran \|^(OK\|FAILED)( \|$)\|^rc=' ...` |
 | 03:12:21 | Bash | Wait for ORFAS full suite | `cd /home/ronald/saas-hasner && for i in $(seq 1 19); do F=$(ls -t logs/orfas/suite_inteira*.out 2>/dev/null \| head -1); [ -n "$F" ] && grep -q '^rc=\\|^Ran [0-9]' "$F" && break; /usr/bin/sleep 30; done; F=$(ls -t logs/orfas/suite_inteira*.out 2>/dev/null \| head -1); echo $F; [ -n "$F" ] && grep -E '^ARVORE\|^(FAIL\|ERROR):\|^Ran \|^(OK\|FAILED)( \|$)\|^rc=' "$F" \| tail -5; date +%H:%M` |
 | 03:09:15 | Bash | Keep waiting for ORFAS | `cd /home/ronald/saas-hasner && for i in $(seq 1 19); do git -C /home/ronald/wt-orfas-2901-0215 log --oneline -1 \| /bin/grep -qv 253e09a5 && break; /usr/bin/sleep 30; done; git -C /home/ronald/wt-orfas-2901-0215 log --oneline -1; date +%H:%M` |
 | 02:59:40 | Bash | Wait for ORFAS follow-up commit | `cd /home/ronald/saas-hasner && for i in $(seq 1 19); do git -C /home/ronald/wt-orfas-2901-0215 log --oneline -1 \| /bin/grep -qv 253e09a5 && break; /usr/bin/sleep 30; done; git -C /home/ronald/wt-orfas-2901-0215 log --oneline -1; date +%H:%M` |
