@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/10/2026 13:59:59.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (16.8 MB). Acoes na janela: **354**.
+**Medido em 29/10/2026 14:05:09.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (16.8 MB). Acoes na janela: **351**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -361,6 +361,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 02:10:01 | Bash | Add justificativa status column and rerun | `cd /home/ronald/saas-hasner/logs/outbox && python3 - <<'EOF' s=open('v8_dois_juizes_prod.py').read() s=s.replace("ch.justificativa_relacionada_id))","ch.justificativa_relacionada_id,\n getattr(getattr(ch, 'justificativa_relacionada', None), 'status', None)))",1) s=s.replace("mp=%s just=%s' % r)","mp=%s just=%s just_status=%s' % r)",1) s+=""" _c = collections.Counter((r[5], r[6], r[7], r[12]) for r ...` |
 | 02:09:54 | Bash | Read probe body around justificativa | `cd /home/ronald/saas-hasner/logs/outbox && sed -n 20,50p v8_dois_juizes_prod.py` |
 | 02:09:50 | Bash | Find justificativa column in probe | `cd /home/ronald/saas-hasner/logs/outbox && /bin/grep -n "just=" v8_dois_juizes_prod.py \| head -3; /bin/grep -n "^from\\|^import\\|Justificativa" v8_dois_juizes_prod.py \| head` |
-| 02:00:11 | Bash | Wait for outbox full suite v8 | `cd /home/ronald/saas-hasner && for i in $(seq 1 19); do grep -q '^rc=' logs/outbox/suite_inteira_v8.out 2>/dev/null && break; /usr/bin/sleep 30; done; grep -E '^ARVORE\|^(FAIL\|ERROR):\|^Ran \|^(OK\|FAILED)( \|$)\|^rc=' logs/outbox/suite_inteira_v8.out \| tail -6; date +%H:%M` |
-| 02:00:06 | SendMessage |  | `-` |
-| 02:00:00 | Bash | Two-judges question atop RELATO, start suite | `date +%H:%M && python3 - <<'EOF' p='docs/RELATO.md'; s=open(p).read() q='''> **lei: O-OUTBOX-DOIS-JUIZES-NO-ABRIR** (pergunta, nao para a fila; segura SO o pouso do O-OUTBOX, copia @ d375511b, recorte verde) -- no mesmo `ChamadoColaborador.abrir` o [nome] pergunta `chamados/reconciliador.py::_absolvido_pela_celula` (o juiz da retratacao) e o RENASCIMENTO (`_renascer_por_premissa_viva` -> `reab ...` |
