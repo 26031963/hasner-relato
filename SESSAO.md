@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/10/2026 12:30:10.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (15.7 MB). Acoes na janela: **385**.
+**Medido em 29/10/2026 12:35:38.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (15.7 MB). Acoes na janela: **379**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -389,9 +389,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 00:39:58 | Bash | Find projection-rebuild porta | `ls ponto/management/commands \| /bin/grep -iE "recalc\|fechament\|projec\|dia_pago"; /bin/grep -n "L-121" docs/LEIS.md \| cut -c1-400 \| head -3; /bin/grep -n "PLANO-PADROES.md#l-121\\|^## L-121\\|l-121" docs/PLANO-PADROES.md \| head -3` |
 | 00:39:49 | SendMessage |  | `-` |
 | 00:36:38 | Bash | Wait for full suite v4 | `cd /home/ronald/saas-hasner && for i in $(seq 1 19); do grep -q '^rc=' logs/juizpar2/suite_inteira_4.out 2>/dev/null && break; /usr/bin/sleep 30; done; grep -E '^ARVORE\|^(FAIL\|ERROR):\|^Ran \|^(OK\|FAILED)( \|$)\|^rc=' logs/juizpar2/suite_inteira_4.out \| tail -6; date +%H:%M` |
-| 00:34:57 | Bash | Wait for money DIFF v5 and residue | `cd /home/ronald/saas-hasner && for i in $(seq 1 19); do [ -s logs/juizpar2/dinheiro_diff_5.out ] && grep -q FIM-DA-SONDA logs/juizpar2/residuo_volta_3.out 2>/dev/null && break; /usr/bin/sleep 30; done; cut -c1-300 logs/juizpar2/dinheiro_diff_5.out; grep -E "^(UNIVERSO\|desses\|ERROS)" logs/juizpar2/residuo_volta_3.out; date +%H:%M` |
-| 00:34:56 | Bash | Record QUARENTENA rejection | `python3 - <<'EOF' p='docs/RELATO.md'; s=open(p).read() o="Falta: recorte (em curso), ruff, suite inteira, verificador, pouso (cruza so o selo de tetos do chokepoint com as outras duas raias -- concilia no pouso)." n="**REPROVADA pelo verificador 00:3x** (7e864870): desligar a flag LEVANTA a janela (o aval diz abre/FECHA: fechar = `fim` no desligamento, o passado segue isolado); o vigia `silencio_i ...` |
-| 00:34:38 | Bash | Stop queued QUARENTENA suite waiter | `kill 93315 93303 2>/dev/null; /usr/bin/sleep 2; ps -p 93315,93303 >/dev/null && echo vivo \|\| echo encerrado; /home/ronald/saas-hasner/bin/trava_teste.sh --quem` |
-| 00:34:32 | Bash | Identify which trava waiter is QUARENTENA | `for p in 92437 93315; do echo "$p: $(tr '\0' ' ' < /proc/$p/cmdline \| /bin/grep -oE 'wt-[a-z0-9-]+' \| head -1)"; done` |
-| 00:34:28 | Bash | Inspect suite processes | `ps -eo pid,etime,args \| /bin/grep -E "suite\.sh\|trava_teste" \| /bin/grep -v "/bin/grep" \| cut -c1-200 \| head; head -3 /home/ronald/saas-hasner/logs/quarentena/suite_6.out` |
-| 00:34:22 | Bash | Find queued QUARENTENA suite process | `ps -eo pid,args \| /bin/grep "suite.sh --dir /home/ronald/wt-silencio-2810-0915" \| /bin/grep -v grep \| head;` |
