@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/10/2026 03:30:21.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (9.1 MB). Acoes na janela: **414**.
+**Medido em 29/10/2026 03:35:37.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (9.1 MB). Acoes na janela: **415**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 03:30:26 | Bash | Keep waiting | `/usr/bin/sleep 290; git -C /home/ronald/wt-col129-2901-0330 log --oneline -1; date +%H:%M` |
 | 03:25:36 | Bash | Wait for verifier and constructor | `/usr/bin/sleep 285; date +%H:%M` |
 | 03:25:31 | Agent | Build COL129 (c) CxR signature | `Repo /home/ronald/saas-hasner (SaaS de ponto Django). Leia /home/ronald/saas-hasner/CLAUDE.md secoes 0, 3, 4, 4a, 6 e 7b. Trabalhe SO na copia /home/ronald/wt-col129-2901-0330 (branch raia-col129-2901, empilhada sobre raia-orfas-2901 @ f4ab468a -- O-OUTBOX + ORFAS prontas e nao pousadas; NAO mexa no que elas fizeram). NUNCA edite /home/ronald/saas-hasner. Sem merge/deploy/push; commit WIP so na co ...` |
 | 03:25:09 | Bash | Create COL129 copy stacked on ORFAS branch | `cd /home/ronald/saas-hasner && git worktree add -q -b raia-col129-2901 /home/ronald/wt-col129-2901-0330 raia-orfas-2901 && git -C /home/ronald/wt-col129-2901-0330 log --oneline -1; /bin/grep -n "COL129-TETO-x-PORTAO-26H = (c)" app/docs/RELATO.md \| head -1 \| cut -c1-60` |
