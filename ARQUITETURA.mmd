@@ -12,7 +12,7 @@ flowchart TD
     fr_chamados -.->|topo PROIBIDO, allowlist VAZIA| fr_ponto
   end
 
-  %% (b) PIPELINE DIARIO — fonte: config/crons.py (66 nos diarios)
+  %% (b) PIPELINE DIARIO — fonte: config/crons.py (67 nos diarios)
   subgraph e_infra["infra"]
     c_rotacionar_access_log["rotacionar_access_log<br/>00:12"]
   end
@@ -65,6 +65,7 @@ flowchart TD
     c_lavrar_jornada_lixo["lavrar_jornada_lixo<br/>07:31"]
     c_lavrar_previsto_cego["lavrar_previsto_cego<br/>07:33"]
     c_lavrar_retrato_folha["lavrar_retrato_folha<br/>apos vigiar_txt_dominio"]
+    c_lavrar_teto_do_dia["lavrar_teto_do_dia<br/>07:42"]
     c_lavrar_vigencia_impossivel["lavrar_vigencia_impossivel<br/>07:17"]
     c_lavrar_vigencia_sem_trilha["lavrar_vigencia_sem_trilha<br/>07:16"]
     c_marcar_foto_ausente_retro["marcar_foto_ausente_retro<br/>07:26"]
@@ -114,6 +115,7 @@ flowchart TD
   c_reconciliar_vinculo --> c_lavrar_previsto_cego
   c_vigiar_txt_dominio --> c_lavrar_retrato_folha
   c_processar_cartorio --> c_lavrar_retrato_folha
+  c_supra_juiz --> c_lavrar_teto_do_dia
   c_reconciliar_vinculo --> c_lavrar_vigencia_impossivel
   c_reconciliar_vinculo --> c_lavrar_vigencia_sem_trilha
   c_apurar_furos_diarios --> c_mapa_divergencia
@@ -148,7 +150,7 @@ flowchart TD
   c_lavrar_retrato_folha --> c_vigiar_retido_calado
   c_recusar_ponta_pequena --> c_vigiar_txt_dominio
   c_processar_cartorio --> c_vigiar_txt_dominio
-  %% arestas `depende` declaradas: 55
+  %% arestas `depende` declaradas: 56
 
   %% (c) PORTAS CANONICAS — fonte: AST sobre app/ (nome usado, nunca string)
   subgraph PORTAS["escritores unicos / portas canonicas"]
