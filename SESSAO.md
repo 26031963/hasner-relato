@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/10/2026 09:33:08.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (14.0 MB). Acoes na janela: **462**.
+**Medido em 29/10/2026 09:38:39.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (14.0 MB). Acoes na janela: **456**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -466,9 +466,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 21:46:11 | Bash | Confirm _match_marcos head in fresh copy | `cd /home/ronald/wt-juizpar2-2810-2140/app && sed -n 400,410p escala/utils.py` |
 | 21:44:17 | Bash | Wait for lock and run RED | `cd /home/ronald/saas-hasner && timeout 590 bash bin/suite.sh --dir /home/ronald/wt-juizpar2-2810-2140 --espera 580 --only "escala.tests.test_juiz_do_par_ata_casa_pelo_turno" > logs/juizpar2/red_1.out 2>&1; grep -E '^(FAIL\|ERROR):\|^Ran \|^(OK\|FAILED)\|AssertionError\|Error:\|vez nao chegou' logs/juizpar2/red_1.out \| cut -c1-260 \| tail -30` |
 | 21:44:11 | Bash | Inspect RED run output | `cd /home/ronald/saas-hasner && tail -30 logs/juizpar2/red_1.out \| cut -c1-250` |
-| 21:35:48 | Bash | Write RED v2 tests and run against HEAD | `cd /home/ronald/wt-juizpar2-2810-2140/app && rm escala/tests/test_zz_diag_zona5.py && python3 - <<'EOF' p='escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py'; s=open(p).read() s=s.replace('''class CasoC_SaidaCedo(_Base):''','''class CasoF_EntradaEmCimaDaSaidaDoIntervalo(_Base): """Achado do verificador (28/10): E 11:50 e S 19:00, sem par. A DP sentava a ENTRADA no marco S 12:00. Pela lei do col ...` |
-| 21:35:07 | Bash | Read detector_anomalias caller | `cd /home/ronald/wt-juizpar2-2810-2140/app && sed -n 180,215p chamados/detector_anomalias.py` |
-| 21:35:03 | Bash | Census of _match_marcos callers | `cd /home/ronald/wt-juizpar2-2810-2140/app && git grep -n "_match_marcos(" -- '*.py' \| /bin/grep -v "/tests/\\|def _match_marcos\\|^\S*:\s*#"` |
-| 21:34:26 | Bash | Read col60 O271 seal | `cd /home/ronald/wt-juizpar2-2810-2140/app && sed -n 135,200p ponto/tests/test_o271_pontualidade_no_comercial.py` |
-| 21:34:22 | Bash | Locate col60 tests | `cd /home/ronald/wt-juizpar2-2810-2140/app && git grep -n "col60" -- '*/tests/*.py' \| head -10` |
-| 21:34:19 | Bash | Find col60 seal inputs | `cd /home/ronald/wt-juizpar2-2810-2140/app && /bin/grep -n "col60\\|12, 0\\|(12,0)\\|'12:00'" ponto/tests/test_calculador_portoes_de_marco.py \| head -20` |
