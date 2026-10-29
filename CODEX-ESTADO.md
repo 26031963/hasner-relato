@@ -1,7 +1,18 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **29/10/2026 15:56** · publicado em **29/10/2026 15:58** (UTC-3)
+> Ultima resposta processada: **29/10/2026 16:19** · publicado em **29/10/2026 16:20** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 29/10 16:19 · sessao 8622147100f1 · - · - · origem=Ronald (tmux)
+
+Nenhum achado confirmado de classe 5: a regressão `turno=None` no detector é distinguida pelo caso comportamental C923, que exige `('grave', '07:30', 119.0)` (app/chamados/tests/test_detector_pergunta_ao_juiz_do_par.py:251–257).
+
+Duas limitações verificáveis dos selos, sem concluir defeito do conjunto:
+
+- O selo do instante aceita `agora=timezone.now()`: verifica somente presença do argumento e `None` literal (app/escala/tests/test_selo_grade_pede_o_instante.py:37–39). Pode sustentar classe 5 se a promessa cobrada for impedir relógio fora da borda; a promessa AST específica, porém, é apenas ausência de `agora=` (mesmo arquivo:9–11).
+- O tripwire aceita nome posteriormente sobrescrito ou seletor em ramo morto: `_nomes_do_seletor` reúne nomes de qualquer atribuição contendo a chamada, sem analisar fluxo (app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:473–476). O teste comportamental C923 ainda pega a volta integral à DP (app/chamados/tests/test_detector_pergunta_ao_juiz_do_par.py:251–257).
+
+Não encontrei omissões de `agora=` nas chamadas de produção aos novos contratos obrigatórios por varredura AST em memória; isso é evidência da inspeção, sem linha única no commit. [nao verificado]
 
 ## 29/10 15:56 · sessao e4097e916b79 · o261 · censo · origem=Code
 
@@ -500,9 +511,4 @@ bin/achado_por.py:1, bin/alarme_sem_fatia.sh:1, bin/alarme_sessao_ociosa.py:1
 ok.
 bin/achado_por.py:1, bin/alarme_sem_fatia.sh:1, bin/alarme_sessao_ociosa.py:1
 
-## 29/10 15:28 · sessao 126426b53b16 · - · - · origem=Ronald (tmux)
-
-ok
-bin/achado_por.py:1, bin/alarme_sem_fatia.sh:1, bin/alarme_sessao_ociosa.py:1
-
-_118 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_119 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
