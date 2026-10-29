@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/10/2026 07:15:51.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (11.9 MB). Acoes na janela: **455**.
+**Medido em 29/10/2026 07:20:51.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (11.9 MB). Acoes na janela: **453**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -463,5 +463,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 19:26:18 | Bash | Run fleet DIFF probe on sombra | `cd /home/ronald/saas-hasner && bin/sombra.sh --conferir 2>&1 \| tail -4; SOMBRA_ARVORE=/home/ronald/wt-juizpar-2810-1850/app timeout 590 bin/sombra.sh --rodar juizpar_frota_sentar.py juizpar_frota > logs/juizpar/frota_1.out 2>&1; tail -5 logs/juizpar/frota_1.out` |
 | 19:26:12 | Write |  | `/home/ronald/saas-hasner/logs/sombra/juizpar_frota_sentar.py` |
 | 19:25:41 | Bash | Run escala/ponto/chamados test slice | `cd /home/ronald/saas-hasner && bash bin/suite.sh --dir /home/ronald/wt-juizpar-2810-1850 --only "escala ponto chamados" > logs/juizpar/recorte_1.out 2>&1; echo rc=$? >> logs/juizpar/recorte_1.out` |
-| 19:16:41 | Bash | Rerun tests and neighbors | `cd /home/ronald/saas-hasner && timeout 1500 bash bin/suite.sh --dir /home/ronald/wt-juizpar-2810-1850 --only "ponto.tests.test_pareador_cluster_marco ponto.tests.test_bateria_lavratura escala.tests.test_s155_par_quebrado ponto.tests.test_o118_orfa_que_acendeu escala.tests.test_saida_valida_vira_orfa escala.tests.test_saida_valida_cross_meia_noite escala.tests.test_juiz_do_par_ata_casa_pelo_turno"  ...` |
-| 19:16:35 | Bash | Make entrada seating read the motor's volta judge | `cd /home/ronald/wt-juizpar-2810-1850/app && python3 - <<'EOF' p='escala/utils.py'; s=open(p).read() def rep(o,n): global s assert s.count(o)==1,o[:80]; s=s.replace(o,n) rep(""" # O PAPEL DE CADA MARCO: pontas pelas bordas do turno, pausas pelos pares, NA ORDEM. _ass = {0: _ent, len(_seq) - 1: _sai} _prox = 0 """,""" # O PAPEL DE CADA MARCO: pontas pelas bordas do turno, pausas pelos pares, NA ORDE ...` |
