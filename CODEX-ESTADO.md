@@ -1,7 +1,235 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **29/10/2026 19:02** · publicado em **29/10/2026 19:05** (UTC-3)
+> Ultima resposta processada: **29/10/2026 20:57** · publicado em **29/10/2026 20:58** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 29/10 20:57 · sessao 0d415d34eeb7 · o261 · leitura · origem=Code
+
+O **segundo ramo** de `resolver_perguntas_por_chamado_resolvido` pode preencher `respondida_em` sem resposta e salva sem chamar `lavrar`; o primeiro condiciona esse carimbo ao texto após `strip()` e grava a lavra junto (`chamados/services/disputa_emissao.py:1570`, `chamados/services/disputa_emissao.py:1580`, `chamados/services/disputa_emissao.py:1648`).
+
+Referências abaixo relativas a `app/`, exceto `bin/...`.
+
+**Pergunta 1 — escritores de `respondida_em`**
+
+No esquema declarado, `resposta_colab` aceita vazio, mas não SQL `NULL`: é `TextField(blank=True, default='')`, sem `null=True`. Portanto, os “sim” abaixo já se sustentam com `''` ou espaços; a condição do banco instalado é [nao verificado] (`chamados/models.py:1865`, `chamados/migrations/0014_perguntadisputa.py:24`).
+
+| Função/sítio | Escrita e persistência | Pode gravar carimbo não nulo com texto vazio/espaços? |
+|---|---|---|
+| `ChamadoColaborador.ressuscitar_perguntas` | `update(respondida_em=None, ...)` (`chamados/models.py:1162`). | **Não:** escreve `None` (`chamados/models.py:1163`). |
+| `responder_pergunta_disputa_core` | Atribui `now()` e salva o campo (`chamados/services/disputa_emissao.py:1248`, `chamados/services/disputa_emissao.py:1266`). | **Não:** normaliza a resposta com `strip()` e rejeita vazio antes de escrever texto e carimbo (`chamados/services/disputa_emissao.py:1219`, `chamados/services/disputa_emissao.py:1247`). |
+| `reabrir_para_correcao` | Monta `campos` e executa `qs.update(**campos)` (`chamados/services/disputa_emissao.py:1358`, `chamados/services/disputa_emissao.py:1377`). | **Não:** grava `respondida_em=None` e `resposta_colab=''` (`chamados/services/disputa_emissao.py:1358`). |
+| `responder_automaticamente` | Atribui os argumentos `texto` e `instante`; salva ambos (`chamados/services/disputa_emissao.py:1392`). | **Sim na função:** verifica apenas o texto **anterior**, sem validar o novo `texto`. O caller da foto passa uma constante não vazia e `now()` (`chamados/services/disputa_emissao.py:1390`, `api/foto_recebida.py:25`, `api/foto_recebida.py:42`, `api/foto_recebida.py:48`). |
+| `carimbar_resposta_pela_trilha` | Atribui `instante` e salva `respondida_em` (`chamados/services/disputa_emissao.py:1409`). | **Não:** retorna sem escrever quando o texto não passa em `strip()` ou o carimbo já existe (`chamados/services/disputa_emissao.py:1407`). |
+| `resolver_perguntas_por_chamado_resolvido`, primeiro ramo | Atribui `agora`, inclui o campo e salva (`chamados/services/disputa_emissao.py:1572`, `chamados/services/disputa_emissao.py:1583`). | **Não:** tanto a atribuição quanto a inclusão em `update_fields` exigem `_tem_resp`, calculado por `strip()` (`chamados/services/disputa_emissao.py:1570`). |
+| Mesma função, segundo ramo | Atribui `_agora`, inclui o campo e salva (`chamados/services/disputa_emissao.py:1648`). | **Sim, caminho concreto:** exige somente carimbo nulo nesse teste; não exige conteúdo da resposta. O universo tem validação/materialização nulas e passa por `pergunta_viva(q) == False` (`chamados/services/disputa_emissao.py:1634`, `chamados/services/disputa_emissao.py:1641`, `chamados/services/disputa_emissao.py:1648`). |
+| `_materializar_ausencia_de_resposta` | Atribui `agora` sob condição; o `save` inclui `respondida_em` **incondicionalmente** (`chamados/services/materializacao.py:511`, `chamados/services/materializacao.py:528`). | **Não cria** carimbo sem texto, mas **pode regravar um carimbo não nulo preexistente** numa irmã vazia/espaços, pois o campo sempre integra `update_fields` (`chamados/services/materializacao.py:512`, `chamados/services/materializacao.py:529`). |
+| `_materializar_uma` | Atribui `agora`, acrescenta o campo e salva (`chamados/services/materializacao.py:1192`, `chamados/services/materializacao.py:1198`). | **Não:** atribuição e inclusão do campo exigem texto após `strip()` (`chamados/services/materializacao.py:1190`). |
+
+Há também a **criação genérica**: `PerguntaDisputa.abrir(..., **campos)` repassa os campos diretamente a `objects.create`. Assim, a função admite `respondida_em=<datetime>` com resposta omitida, cujo padrão é `''` (`chamados/models.py:2028`, `chamados/models.py:2085`, `chamados/models.py:1865`). Os seis callers atuais não fornecem esse carimbo (`chamados/services/acoes_disputa.py:259`, `chamados/services/disputa_emissao.py:389`, `chamados/services/disputa_emissao.py:770`, `chamados/services/disputa_emissao.py:1160`, `chamados/services/declaracao_texto.py:322`, `chamados/services/declaracao_texto.py:611`).
+
+Nos management commands, `curar_perguntas_em_limbo.Command.handle` escreve **por delegação**: com `--apply`, chama `carimbar_resposta_pela_trilha` usando `nota.criado_em` e chama `reabrir_para_correcao` para limpar as demais. A primeira conserva a guarda de texto descrita acima (`chamados/management/commands/curar_perguntas_em_limbo.py:64`, `chamados/management/commands/curar_perguntas_em_limbo.py:67`, `chamados/management/commands/curar_perguntas_em_limbo.py:69`, `chamados/services/disputa_emissao.py:1407`).
+
+Nas migrations de `chamados`, `0014` cria o esquema; as migrations de dados inspecionadas operam sobre `ChamadoColaborador`, não sobre esse par de campos (`chamados/migrations/0014_perguntadisputa.py:16`, `chamados/migrations/0023_rebaixar_urgencia_resolvidos.py:4`, `chamados/migrations/0024_rebaixar_urgencia_resolvidos_regressao.py:5`, `chamados/migrations/0038_a3_registrado_backfill.py:9`, `chamados/migrations/0039_a3_via_backfill.py:12`).
+
+O `bulk_update` de perguntas em `gravar_lavras_em_lote` grava somente `veredito_lavrado`, `julgado_em` e `janela_expira_em`, sem `respondida_em` (`chamados/veredito_lavrado.py:194`, `chamados/veredito_lavrado.py:207`). Outras escritas por `F()`, SQL ou `bulk_update` desse campo não apareceram na busca estática [nao verificado].
+
+**Pergunta 2 — leitores que decidem sem exigir conteúdo da resposta**
+
+Aqui, “sem olhar `resposta_colab`” significa **sem exigir texto na decisão local indicada**. Alguns sítios também consultam vitalidade ou delegam a etapas posteriores; por exemplo, selecionar pelos carimbos não prova que o plantio aceitará uma resposta vazia (`chamados/services/materializacao.py:1286`, `chamados/services/materializacao.py:763`).
+
+| Função | Decisão e referência |
+|---|---|
+| `PerguntaDisputa.estado` | Após as precedências de validação/materialização, distingue `PENDENTE` de `RESPONDIDA` pela nulidade do carimbo (`chamados/models.py:2108`, `chamados/models.py:2112`, `chamados/models.py:2115`). |
+| `PerguntaDisputa.respondida` | Retorna exclusivamente `respondida_em is not None` (`chamados/models.py:2317`). |
+| `DisputaSupervisao.pendentes_do_colaborador` | Seleciona perguntas sem carimbo para compor o badge, além de consultar vitalidade (`chamados/models.py:1381`). |
+| `perguntas_corrigiveis` | Só carimbadas entram nas candidatas à correção; depois consulta lastro/vitalidade (`chamados/juizes.py:1116`). |
+| `relatorios_disputa.classificar` | Entre as vivas, algum carimbo nulo significa `AGUARDA_COLAB`; caso contrário, `AGUARDA_SUPERVISAO` (`chamados/relatorios_disputa.py:17`). |
+| `responder_pergunta_disputa` | Define `ja_respondida` pelo carimbo e passa ao core (`chamados/views.py:1280`). |
+| `api_disputa_responder` | Mesma decisão sobre `ja_respondida`; a nova entrada é validada separadamente (`api/views.py:2688`). |
+| `declarar_hora_colab` | Passa `bool(perg.respondida_em)` como `ja_respondida`; o teste anterior de idempotência também olha o texto (`chamados/services/declaracao_texto.py:363`, `chamados/services/declaracao_texto.py:365`). |
+| `api_chamados_v2` | Libera `pode_solicitar_correcao` quando todas têm carimbo, além das demais condições (`api/views.py:1184`). |
+| `api_disputa_perguntas` | Usa `.estado == RESPONDIDA` para separar listas e definir `aguarda_admin`; também usa o estado para escolher `chamado_id`. O texto é apenas serializado nessa decisão (`api/views.py:2621`, `api/views.py:2632`, `api/views.py:2642`). |
+| `explicar_pergunta` | `.estado` determina dono colaborador/admin e ação cobrar/validar; o texto apenas compõe a frase depois (`chamados/services/explicador.py:72`). |
+| `folha._fio_do_dia` | Entre vivas, estado `PENDENTE` atribui o dia ao colaborador; as demais atribuem ao admin (`folha/fora_da_folha.py:66`). |
+| `reabrir_disputa_supervisao` | Forma `_sem_resp` pelo carimbo nulo; decide recobrança ou aviso considerando também vitalidade (`chamados/views.py:1416`, `chamados/views.py:1421`, `chamados/views.py:1431`). |
+| `validar_inline` | Carimbadas vivas vão para validação; as sem carimbo compõem “aguardando colaborador” (`chamados/views_cobrar.py:169`, `chamados/views_cobrar.py:175`, `chamados/views_cobrar.py:192`). |
+| `validar_pergunta` | Gate inicial retorna `sem_resposta` quando falta carimbo (`chamados/services/validacao.py:356`). |
+| `recusar_pergunta` | Sem carimbo retorna `ja_pendente`; com carimbo prossegue para recusa/reabertura (`chamados/services/validacao.py:530`, `chamados/services/validacao.py:540`). |
+| `materializar_perguntas_validadas_da_disputa` | Seleciona candidatas pelos carimbos respondida/validada/materializada, sem filtro de conteúdo nessa seleção (`chamados/services/materializacao.py:1286`). |
+| `aplicar_declaracao` | Decide chamar o core de resposta somente quando falta carimbo; depois chama validação (`chamados/services/declaracao_texto.py:632`, `chamados/services/declaracao_texto.py:641`). |
+| `resolver_perguntas_por_chamado_resolvido`, segundo ramo | Decide preencher o carimbo ausente sem verificar texto (`chamados/services/disputa_emissao.py:1648`). |
+| `acao_reabrir_disputa` | Conta carimbos nulos para responder que o questionário já aguarda resposta (`chamados/services/acoes_disputa.py:95`). |
+| `acao_regularizar_disputa` | Bloqueia regularização se alguma viva não tem carimbo (`chamados/services/acoes_disputa.py:130`). |
+| `processar_post_fio` | Repete esse bloqueio de regularização (`chamados/services/fio.py:654`). |
+| `montar_chamados_fio` | Calcula `todas_respondidas` e disponibilidade de solicitar correção por `all(p.respondida_em ...)` (`chamados/services/fio.py:336`). |
+| `perguntas_pendentes_do_colab` | Seleciona vivas sem carimbo, cuja presença dispara o aviso de questionário pendente (`chamados/services/aviso_pendencia.py:13`, `chamados/services/aviso_pendencia.py:17`). |
+| `becos.classificar` | Carimbo nulo, combinado com destino não resolvido, determina pergunta visível e participa da classificação de beco (`chamados/services/becos.py:29`). |
+| `cobranca._calados` | Recorta perguntas sem carimbo para contar pessoas vencidas/sem canal (`chamados/services/cobranca.py:229`, `chamados/services/cobranca.py:237`). |
+| `furo_sem_canal.medir` | Trata carimbo nulo como pergunta aberta na cobertura da célula (`chamados/services/furo_sem_canal.py:80`, `chamados/services/furo_sem_canal.py:85`). |
+| `creditos_perguntas` | Separa respondidas/não respondidas pelo carimbo e atribui créditos aos chamados (`chamados/services/raiox.py:133`, `chamados/services/raiox.py:137`, `chamados/services/raiox.py:149`). |
+| `pode_executar_csf` | Qualquer pergunta carimbada na disputa ou nas resolvedoras impede execução automática (`ponto/supra_juiz.py:483`, `ponto/supra_juiz.py:487`). |
+| `reconciliar_grade.Command._relavrar_orfa` | Pergunta carimbada e viva bloqueia a relavra com `ORFA_FIO_PRESO` (`ponto/management/commands/reconciliar_grade.py:452`). |
+| `auditar_invariantes_chamados.Command.handle` | Carimbo presente e disputa aberta formam o piso I2, excluído da violação; carimbo nulo integra a seleção C2 (`chamados/management/commands/auditar_invariantes_chamados.py:590`, `chamados/management/commands/auditar_invariantes_chamados.py:1597`). |
+| `_contraprova_i21a` | Ausência do carimbo pode gerar alarme; neste caller, a entrada já excluiu texto vazio (`chamados/management/commands/auditar_invariantes_chamados.py:177`, `chamados/management/commands/auditar_invariantes_chamados.py:1571`). |
+| `curar_perguntas_em_limbo.Command.handle` | Na limpeza, seleciona por PK e carimbo nulo antes de delegar à reabertura; a medição inicial do comando também examina texto (`chamados/management/commands/curar_perguntas_em_limbo.py:46`, `chamados/management/commands/curar_perguntas_em_limbo.py:69`). |
+
+Também existem decisões de métricas, histórico e cache:
+
+| Função | Uso do carimbo sem exigir texto |
+|---|---|
+| `recobrar_questionario` | Conta pendentes pelo carimbo nulo e usa a contagem na trilha/retorno (`chamados/services/disputa_emissao.py:1444`, `chamados/services/disputa_emissao.py:1453`, `chamados/services/disputa_emissao.py:1470`). |
+| `placar_aceite` | Conta respostas posteriores à cobrança e respostas de hoje pela data do carimbo (`chamados/services/verbos.py:306`, `chamados/services/verbos.py:315`). |
+| `marcador_do_placar` | `Max('respondida_em')` integra o marcador usado no ETag (`chamados/services/painel.py:66`, `chamados/services/painel.py:91`). |
+| `marcos_do_lote` / `esta_stale` | O maior carimbo por colaborador integra o marco comparado com `julgado_em` (`chamados/veredito_lavrado.py:166`, `chamados/veredito_lavrado.py:187`). |
+| `_eventos_dos_chamados` | Presença/data do carimbo decide emitir evento `pergunta_respondida`; o texto só compõe a legenda, inclusive “sem resposta” (`chamados/services/historico.py:99`, `chamados/services/historico.py:105`, `chamados/services/historico.py:109`). |
+| `fila_validar_classificada` | Calcula idade e estatísticas pelo carimbo; a seleção padrão vem de outra função (`chamados/services/validacao.py:867`, `chamados/services/validacao.py:870`, `chamados/services/validacao.py:873`). |
+| `_item_validar` | Calcula `dias_esperando` diretamente pelo carimbo (`api/views_mensageria.py:570`). |
+| Script operacional `bin/censo_folha.py` | Conta nulas como `PERG_VIVAS` e carimbadas não validadas como `AGUARDA_ADMIN` (`bin/censo_folha.py:28`, `bin/censo_folha.py:37`). |
+
+Nos templates:
+
+| Template | Decisão sem guarda de conteúdo |
+|---|---|
+| `templates/chamados/partials/modal_fio.html` | Ausência do carimbo permite corrigir/apagar pergunta cega; presença abre o bloco de resposta e ações de validação; `todas_respondidas` decide cobrar versus regularizar (`templates/chamados/partials/modal_fio.html:182`, `templates/chamados/partials/modal_fio.html:210`, `templates/chamados/partials/modal_fio.html:272`, `templates/chamados/partials/modal_fio.html:327`). |
+| `templates/chamados/partials/_pergunta_card.html` | Carimbo define “aguardando validação” e habilita o bloco de resposta/ações, com guardas adicionais de validação/permissão (`templates/chamados/partials/_pergunta_card.html:24`, `templates/chamados/partials/_pergunta_card.html:29`, `templates/chamados/partials/_pergunta_card.html:42`). |
+| `templates/chamados/partials/_card_atendimento.html` | Carimbo mostra “Resposta enviada”, escolhe “Reenviar”/“Enviar” e mostra selo “Enviado” nas perguntas de hora (`templates/chamados/partials/_card_atendimento.html:94`, `templates/chamados/partials/_card_atendimento.html:155`, `templates/chamados/partials/_card_atendimento.html:384`). |
+
+Outros consumidores de `.estado`, incluídos pelo escopo literal da pergunta, consultam somente estados finais: `processar_post_fio` usa `VALIDADA/RESOLVIDA` para registrar trilha, e o card usa `RESOLVIDA` para o rótulo “Encerrado”. Essas saídas vêm dos marcos finais e da vitalidade, sem usar a distinção `PENDENTE/RESPONDIDA` (`chamados/services/fio.py:608`, `templates/chamados/partials/_card_atendimento.html:183`, `chamados/models.py:2108`).
+
+Não entram como leitores sem conteúdo: `_pergunta_viva_calc` exige `strip()`; `q_vivas` examina texto vazio/nulo; `perguntas_respondidas_a_validar` exclui `''`; `irmas_respondidas_sem_consumo` exige `strip()` no resultado. Os testes SQL de `''` não equivalem a rejeitar espaços (`chamados/juizes.py:1020`, `chamados/models.py:2246`, `chamados/juizes.py:1123`, `chamados/juizes.py:1477`). `respostas_sem_veredito` também olha o texto, embora aceite **carimbo OU texto** (`chamados/models.py:1430`).
+
+**Pergunta 3 — diferença entre os dois ramos e dependência da lavra**
+
+| Campo/ato | Primeiro ramo: perguntas apontadas ao chamado | Segundo ramo: disputa sem credor vivo |
+|---|---|---|
+| Seleção | Destino igual ao chamado, materialização nula e disputa aberta; pula pergunta viva e dia trancado (`chamados/services/disputa_emissao.py:1536`, `chamados/services/disputa_emissao.py:1547`, `chamados/services/disputa_emissao.py:1551`). | Pai e destinos sem credor vivo; escolhe materialização/validação nulas e pula pergunta viva (`chamados/services/disputa_emissao.py:1627`, `chamados/services/disputa_emissao.py:1634`, `chamados/services/disputa_emissao.py:1641`). |
+| `materializada_em`, `materializada_por`, `via_resolucao` | Grava os três (`chamados/services/disputa_emissao.py:1561`). | Grava os três (`chamados/services/disputa_emissao.py:1643`). |
+| `respondida_em` | Preenche se há texto após `strip()` **e** o campo está nulo (`chamados/services/disputa_emissao.py:1570`). | Preenche se está nulo, **independentemente do texto** (`chamados/services/disputa_emissao.py:1648`). |
+| `validada_em`, `validada_por` | Preenche se há texto após `strip()` e validação nula (`chamados/services/disputa_emissao.py:1574`). | Não os inclui na escrita local; as candidatas têm `validada_em=None` (`chamados/services/disputa_emissao.py:1635`, `chamados/services/disputa_emissao.py:1647`). |
+| Lavra | Chama `lavrar(p, salvar=False)` e salva os três campos da lavra junto (`chamados/services/disputa_emissao.py:1580`). | Salva apenas os campos listados nesse ramo, sem chamar `lavrar` (`chamados/services/disputa_emissao.py:1647`). |
+| `resposta_colab` | Não integra os campos gravados (`chamados/services/disputa_emissao.py:1565`, `chamados/services/disputa_emissao.py:1582`). | Não integra os campos gravados (`chamados/services/disputa_emissao.py:1647`). |
+
+Os três campos da lavra **não exigem `respondida_em` preenchido**:
+
+- `veredito_lavrado` recebe `SIM/NÃO` conforme `_pergunta_materializada_de_fato`; numa exceção, recebe `INDETERMINADO` (`chamados/veredito_lavrado.py:219`, `chamados/veredito_lavrado.py:226`). Esse juiz consulta materialização, via, tipo, fatos externos e, conforme o caminho, o texto/slot; não usa o carimbo de resposta como requisito (`chamados/juizes.py:603`, `chamados/juizes.py:628`, `chamados/juizes.py:674`, `chamados/juizes.py:733`).
+- `julgado_em` recebe `timezone.now()` na lavratura (`chamados/veredito_lavrado.py:228`).
+- `janela_expira_em` recebe `expira_em(p.data_evento)`, calculado pela data do evento, relógio e janelas de competência (`chamados/veredito_lavrado.py:229`, `chamados/veredito_lavrado.py:109`).
+
+Existe uma dependência **de atualização do cache**: `respondida_em` participa do máximo por colaborador em `marcos_do_lote`; quando esse marco supera `julgado_em`, `esta_stale` considera a lavra desatualizada. Isso é diferente de exigir resposta carimbada para calcular ou gravar os três campos (`chamados/veredito_lavrado.py:166`, `chamados/veredito_lavrado.py:187`).
+
+## 29/10 20:54 · sessao 470cff31a54a · - · - · origem=Ronald (tmux)
+
+Inventário Python de leitores. “Sem olhar texto” abaixo significa que **a decisão local** usa carimbo/estado sem exigir `resposta_colab` preenchida; onde há juiz posterior, isso não prova que a operação inteira aceita resposta vazia.
+
+| Arquivo:linha | Função | Decisão local |
+|---|---|---|
+| `app/chamados/models.py:2112`, `:2115` | `PerguntaDisputa.estado` | Distingue `PENDENTE`/`RESPONDIDA` pela nulidade do carimbo; prioridade de validação/materialização está em `:2108-2115`. |
+| `app/chamados/models.py:2317-2318` | `PerguntaDisputa.respondida` | Booleano exclusivamente `respondida_em is not None`. |
+| `app/chamados/models.py:1381-1385` | `DisputaSupervisao.pendentes_do_colaborador` | Seleciona disputas para badge usando carimbo nulo, prefilter e `pergunta_viva`. |
+| `app/chamados/juizes.py:1114-1118` | `perguntas_corrigiveis` | Só carimbadas entram no conjunto corrigível; depois verifica lastro/vitalidade. |
+| `app/chamados/relatorios_disputa.py:17-22` | `classificar` | Entre vivas, alguma sem carimbo → `AGUARDA_COLAB`; demais → `AGUARDA_SUPERVISAO`. |
+| `app/chamados/views.py:1280-1283` | `responder_pergunta_disputa` | Define `ja_respondida` só pelo carimbo e passa ao core. |
+| `app/chamados/views.py:1416-1433` | `reabrir_disputa_supervisao` | Carimbo nulo forma `_sem_resp`; vivas geram recobrança, não vivas geram aviso. |
+| `app/api/views.py:1184-1188` | `api_chamados_v2` | Libera `pode_solicitar_correcao` quando todas as perguntas têm carimbo, além das demais guardas. |
+| `app/api/views.py:2621-2624`, `:2642-2644` | `api_disputa_perguntas` | `.estado == RESPONDIDA` separa listas, marca `aguarda_admin` e influencia chamado escolhido. |
+| `app/api/views.py:2688-2695` | `api_disputa_responder` | Define `ja_respondida` só pelo carimbo; valida a **nova entrada** separadamente. |
+| `app/chamados/views_cobrar.py:169-176`, `:192-199` | `validar_inline` | Carimbadas vivas vão à validação; carimbo nulo conta como aguardando colaborador. |
+| `app/chamados/services/validacao.py:356-358` | `validar_pergunta` | Gate inicial devolve `sem_resposta` se não há carimbo; validação/materialização posterior pode examinar texto (`:367`, `:375`). |
+| `app/chamados/services/validacao.py:530-540` | `recusar_pergunta` | Sem carimbo → `ja_pendente`; com carimbo executa recusa/reabertura, sem guarda de conteúdo. |
+| `app/chamados/services/materializacao.py:1286-1293` | `materializar_perguntas_validadas_da_disputa` | Seleciona candidatas pelos carimbos respondida/validada/materializada; delega unidade depois. |
+| `app/chamados/services/declaracao_texto.py:365` | `declarar_hora_colab` | Passa `bool(perg.respondida_em)` como `ja_respondida` ao core; o gate de idempotência imediatamente anterior **olha texto** (`:363`). |
+| `app/chamados/services/declaracao_texto.py:632-641` | `aplicar_declaracao` | Só chama resposta do core se carimbo ainda não existe; depois chama validação. |
+| `app/chamados/services/disputa_emissao.py:1648-1650` | `resolver_perguntas_por_chamado_resolvido` | No segundo ramo, decide preencher carimbo ausente sem guarda de texto. |
+| `app/chamados/services/acoes_disputa.py:95-101` | `acao_reabrir_disputa` | Conta nulas para devolver “aguardando resposta” quando não há corrigíveis. |
+| `app/chamados/services/acoes_disputa.py:130-131` | `acao_regularizar_disputa` | Bloqueia regularização quando alguma viva tem carimbo nulo. |
+| `app/chamados/services/fio.py:336-338` | `montar_chamados_fio` | Define todas respondidas e disponibilidade de solicitar correção só pelos carimbos. |
+| `app/chamados/services/fio.py:608-611` | `processar_post_fio` | `.estado` VALIDADA/RESOLVIDA autoriza registro de trilha após validação. Esse ramo não depende especificamente de `respondida_em`; deriva dos carimbos finais (`models.py:2108-2109`). |
+| `app/chamados/services/fio.py:654-655` | `processar_post_fio` | Bloqueia regularização quando alguma viva não tem carimbo. |
+| `app/chamados/services/aviso_pendencia.py:7-13` | `perguntas_pendentes_do_colab` | Seleciona vivas sem carimbo; presença dispara aviso em `:16-24`. |
+| `app/chamados/services/becos.py:29-33` | `classificar` | Carimbo nulo e destino não resolvido determinam pergunta visível; isso participa da classificação de beco. |
+| `app/chamados/services/cobranca.py:229-248` | `_calados` | Recorta carimbo nulo e conta pessoas vencidas/sem canal. |
+| `app/chamados/services/furo_sem_canal.py:80-86` | `medir` | Carimbo nulo significa pergunta aberta; células sem essa cobertura e sem chamado vivo são “sem canal”. |
+| `app/chamados/services/raiox.py:133-149` | `creditos_perguntas` | Divide vivas em respondidas/não respondidas pelo índice contendo carimbo e retorna créditos de chamados distintos. |
+| `app/chamados/services/verbos.py:306-319` | `placar_aceite` | Conta respostas depois da cobrança e no dia usando só datas do carimbo. |
+| `app/chamados/services/painel.py:64-68` | `marcador_do_placar` | `Max(respondida_em)` integra marcador de mudança/ETag. |
+| `app/chamados/veredito_lavrado.py:166-169` | `marcos_do_lote` | `Max(respondida_em)` por colaborador integra marcos; marco maior que `julgado_em` torna lavra stale em `:187-190`. |
+| `app/chamados/services/historico.py:99-114` | `_eventos_dos_chamados` | Presença/data do carimbo decide emitir evento “pergunta_respondida”; texto só compõe legenda e pode virar “sem resposta”. |
+| `app/ponto/supra_juiz.py:479-490` | `pode_executar_csf` | Qualquer pergunta carimbada no pai ou nas resolvedoras impede execução automática. |
+| `app/ponto/management/commands/reconciliar_grade.py:452-454` | `Command._relavrar_orfa` | Pergunta carimbada e viva impede relavra → `ORFA_FIO_PRESO`. |
+| `app/chamados/management/commands/auditar_invariantes_chamados.py:176-181` | `_contraprova_i21a` | Falta de carimbo ou de ausência aprovada gera alarme. O conjunto de entrada I21 **já excluiu texto vazio** em `:1568-1574`. |
+| `app/chamados/management/commands/auditar_invariantes_chamados.py:590-598` | `Command.handle` | Carimbo presente + disputa aberta define piso I2 e exclui da violação I2. |
+| `app/chamados/management/commands/auditar_invariantes_chamados.py:1597-1601` | `Command.handle` | C2 exige carimbo nulo para contar passivo invisível morto pela célula. |
+| `app/folha/fora_da_folha.py:59-73` | `_fio_do_dia` | `.estado == PENDENTE` atribui dono `colab`; demais vivas atribuem `admin`. |
+| `bin/censo_folha.py:28-29`, `:37-38` | módulo operacional | Conta nulas como `PERG_VIVAS` e carimbadas não validadas como `AGUARDA_ADMIN`. |
+
+Fronteiras importantes:
+
+- `app/api/views.py:1007-1010` apenas atribui queryset lazy `_pend`; nenhum uso de `_pend` existe no arquivo [não verificado para caminhos de execução externos]. Não incluir como decisão efetiva.
+- `_pergunta_viva_calc` exige carimbo **e texto strip** (`app/chamados/juizes.py:1020`); `q_vivas` exige carimbo e texto não vazio/nulo (`app/chamados/models.py:2246-2247`); `perguntas_respondidas_a_validar` exclui `resposta_colab=''` (`app/chamados/juizes.py:1123-1127`); `irmas_respondidas_sem_consumo` exige strip no resultado (`:1471-1477`).
+- `respostas_sem_veredito` verifica **carimbo OU texto strip**, portanto não é leitor exclusivamente de carimbo (`app/chamados/models.py:1428-1432`).
+- `_chave_memo_pv` usa carimbo **e texto** (`app/chamados/juizes.py:768-769`).
+- `explicar_pergunta` decide `sem_resposta`/`aguarda_validacao` por `.estado`; usa texto apenas na frase, sem guarda de conteúdo (`app/chamados/services/explicador.py:72-81`). Acrescentar ao inventário acima.
+- `vigia_fio.py:279` compara `.estado == VALIDADA`, mas `_e_aceite_de_folga` examina resposta; excluir do recorte estrito de decisões sem olhar texto.
+- `_item_validar` apenas serializa carimbo e calcula idade (`app/api/views_mensageria.py:569-570`), e `fila_validar_classificada` apenas calcula idade/estatísticas pelo carimbo (`app/chamados/services/validacao.py:870-874`); podem ser listados separadamente como apresentação/métrica, sem gate de negócio.
+
+## 29/10 20:54 · sessao 97455eae5552 · - · - · origem=Ronald (tmux)
+
+Inventário consolidado dos indiretos/templates:
+
+| Arquivo:linha | Decisão sem validar `resposta_colab` |
+|---|---|
+| `app/chamados/models.py:2108-2115` — `PerguntaDisputa.estado` | Após precedência de validação/materialização, distingue `PENDENTE`/`RESPONDIDA` apenas pela nulidade de `respondida_em`. |
+| `app/chamados/models.py:2317-2318` — `respondida` | Retorna apenas `respondida_em is not None`. Consumidores desta propriedade não identificados [não verificado]. |
+| `app/api/views.py:2621-2624` — `api_disputa_perguntas` | Separa listas pendentes/respondidas e define `aguarda_admin` por `.estado == RESPONDIDA`; texto é somente serializado em `:2632`. |
+| `app/api/views.py:2642-2644` — mesma função | Escolhe `chamado_id` priorizando pergunta cujo estado difere de `RESPONDIDA`. |
+| `app/chamados/services/explicador.py:72-81` — `explicar_pergunta` | Decide dono colaborador/admin por `PENDENTE`/`RESPONDIDA`; texto apenas compõe a mensagem depois da decisão em `:79-80`. |
+| `app/folha/fora_da_folha.py:66-70` — `_fio_do_dia` | Pergunta viva com `.estado == PENDENTE` atribui dia ao colaborador; demais vivas atribuem ao admin. |
+| `app/templates/chamados/partials/modal_fio.html:182` | `pergunta_cega` sem timestamp oferece corrigir/apagar (`:185-197`). |
+| `app/templates/chamados/partials/modal_fio.html:210` | Timestamp permite bloco de resposta/status e ações; ausência mostra “aguardando resposta” (`:311-312`). Botões de validar/rejeitar/corrigir ficam dentro desse ramo (`:272-305`). |
+| `app/templates/chamados/partials/modal_fio.html:327` | Derivado `chamado.todas_respondidas` decide cobrar versus regularizar (`:333-352`); origem é `all(p.respondida_em ...)` em `app/chamados/services/fio.py:336-338`. |
+| `app/templates/chamados/partials/_pergunta_card.html:24` | Define “aguardando validação” versus “aguardando colaborador”. |
+| `app/templates/chamados/partials/_pergunta_card.html:29` | Timestamp habilita bloco resposta e, adicionalmente a `not validada_em and pode_agir` em `:42`, botões validar/rejeitar (`:92-117`). |
+| `app/templates/chamados/partials/_card_atendimento.html:94` | Mostra confirmação “Resposta enviada” (`:99-101`). |
+| `app/templates/chamados/partials/_card_atendimento.html:155` | Escolhe “Reenviar resposta” versus “Enviar resposta”. |
+| `app/templates/chamados/partials/_card_atendimento.html:384` | Pergunta de hora com timestamp mostra selo “Enviado” (`:385`). |
+| `bin/censo_folha.py:28-29` | Conta perguntas pendentes/respondidas sem texto; usa as contagens para rotular `PERG_VIVAS`/`AGUARDA_ADMIN` em `:37-38`. Incluir se “produção” abranger scripts fora de `app/`. |
+
+Leitores de `.estado` cujo resultado consultado não depende de `respondida_em`:
+
+- `app/chamados/services/fio.py:608-611`, `processar_post_fio`: registra log quando estado é `VALIDADA`/`RESOLVIDA`; estas saídas derivam dos marcos de validação/materialização em `app/chamados/models.py:2108-2114`.
+- `app/templates/chamados/partials/_card_atendimento.html:183`: estado `resolvida` escolhe rótulo “Encerrado”, pelos mesmos marcos (`app/chamados/models.py:2108-2114`).
+
+Exclusões relevantes:
+
+- `_card_atendimento.html:137` já está sob guarda de conteúdo `if p.resposta_colab` em `:135`.
+- `app/chamados/services/vigia_fio.py:279` combina `.estado == VALIDADA` com `_e_aceite_de_folga`; esse helper testa `resposta_colab.strip()` em `app/chamados/services/validacao.py:216-218`.
+- Nenhum consumidor JS local de `estado='respondida'`, `aguarda_admin` ou lista `respondidas` foi identificado [não verificado].
+
+## 29/10 20:54 · sessao 0a5bcdeadbf5 · - · - · origem=Ronald (tmux)
+
+P1 — inventário dos **9 sítios explícitos** de escrita, mais criação genérica:
+
+| Função | Escrita e persistência | Carimbo não nulo com texto vazio/espaços? |
+|---|---|---|
+| `ChamadoColaborador.ressuscitar_perguntas` | `alvo.update(... respondida_em=None, ...)`: `app/chamados/models.py:1162–1163`; função em `:1122` | **Não:** grava `None`, sem criar carimbo (`app/chamados/models.py:1163`). |
+| `responder_pergunta_disputa_core` | Atribuição `p.respondida_em = _tz.now()` em `app/chamados/services/disputa_emissao.py:1248`; texto em `:1247`, `save(update_fields=...)` em `:1266` | **Não:** normaliza `(resposta or '').strip()` e recusa vazio antes da escrita (`app/chamados/services/disputa_emissao.py:1219–1221`). |
+| `reabrir_para_correcao` | Dicionário `respondida_em=None` em `app/chamados/services/disputa_emissao.py:1358`, usado por `qs.update(**campos)` em `:1377`; função em `:1327` | **Não:** zera carimbo e texto juntos (`app/chamados/services/disputa_emissao.py:1358`). |
+| `responder_automaticamente` | Texto e instante recebidos são atribuídos em `app/chamados/services/disputa_emissao.py:1392–1393`, salvos em `:1394`; função em `:1381` | **Sim como API da função:** só verifica texto **anterior**, em `:1390`; não valida `texto` novo (`:1392`). **Único caller encontrado passa texto constante não vazio**, `_TEXTO` em `app/api/foto_recebida.py:25`, chamada em `:48`, instante `now()` em `:42`. |
+| `carimbar_resposta_pela_trilha` | Atribui instante em `app/chamados/services/disputa_emissao.py:1409`, salva em `:1410`; função em `:1398` | **Não:** retorna se carimbo já existe **ou** texto não passa `.strip()` (`app/chamados/services/disputa_emissao.py:1407–1408`). |
+| `resolver_perguntas_por_chamado_resolvido`, primeiro ramo | `p.respondida_em = agora` em `app/chamados/services/disputa_emissao.py:1572`, campo incluído em `:1573`, salva em `:1583`; função em `:1514` | **Não cria carimbo sem texto:** `_tem_resp = bool((p.resposta_colab or '').strip())` em `:1570`, condição em `:1571`. |
+| Mesma função, segundo ramo | `q.respondida_em = _agora` em `app/chamados/services/disputa_emissao.py:1649`, campo em `:1650`, salva em `:1651` | **Sim, caminho concreto:** exige apenas `respondida_em is None`, **não** consulta `resposta_colab` (`app/chamados/services/disputa_emissao.py:1648–1651`). Seleção exige materialização e validação nulas (`:1634–1635`), sem credor vivo (`:1627–1633`) e `pergunta_viva(q)` falso (`:1641–1642`). |
+| `_materializar_ausencia_de_resposta` | Atribui `q.respondida_em = agora` em `app/chamados/services/materializacao.py:513`, salva em `:528–530`; função em `:478` | **Não cria** carimbo se texto vazio/espaços: teste `.strip()` e condição em `:511–512`. **Pode regravar carimbo não nulo preexistente com texto vazio**, porque `'respondida_em'` entra **incondicionalmente** em `update_fields` (`app/chamados/services/materializacao.py:528–530`). |
+| `_materializar_uma` | Atribui `p.respondida_em = agora` em `app/chamados/services/materializacao.py:1192`, inclui campo em `:1193`, salva em `:1198`; função em `:1063` | **Não:** inclusão depende do texto com `.strip()` e carimbo nulo (`app/chamados/services/materializacao.py:1190–1193`). |
+
+Criação genérica: `PerguntaDisputa.abrir(..., **campos)` (`app/chamados/models.py:2028`) repassa `**campos` diretamente a `objects.create` (`app/chamados/models.py:2085–2086`). Logo, **a API admite** `respondida_em=<datetime>` com `resposta_colab` omitido/padrão `''` (`app/chamados/models.py:1865`); não há validação desse par na função (`app/chamados/models.py:2036–2086`). Nos seis callers atuais não se passa timestamp: `app/chamados/services/acoes_disputa.py:259–264`; `app/chamados/services/disputa_emissao.py:389–397`, `:770–778`, `:1160–1167`; `app/chamados/services/declaracao_texto.py:322–323`, `:611–612`. O único `**kw` desses callers contém somente `chamados_relacionados_ids` (`app/chamados/services/disputa_emissao.py:767–769`).
+
+Management command: `curar_perguntas_em_limbo.Command.handle` delega a `carimbar_resposta_pela_trilha`, passando `nota.criado_em` (`app/chamados/management/commands/curar_perguntas_em_limbo.py:67–68`); delega limpeza a `reabrir_para_correcao` (`:69`); só executa com `--apply` (`:64–66`). Não é escritor independente, e a guarda de `.strip()` permanece na porta (`app/chamados/services/disputa_emissao.py:1407`).
+
+Migration: `0014_perguntadisputa` declara campo nullable, **não** executa escrita de dados (`app/chamados/migrations/0014_perguntadisputa.py:16–25`). As quatro migrations de dados da pasta operam sobre `ChamadoColaborador`, não `PerguntaDisputa`: `app/chamados/migrations/0023_rebaixar_urgencia_resolvidos.py:4–10`, `:13–17`; `0024_rebaixar_urgencia_resolvidos_regressao.py:5–11`, `:15–19`; `0038_a3_registrado_backfill.py:9–15`; `0039_a3_via_backfill.py:12–28`, `:32–34`.
+
+O `bulk_update` de perguntas encontrado grava apenas `CAMPOS_DA_LAVRA = ['veredito_lavrado', 'julgado_em', 'janela_expira_em']`, portanto **não** escreve `respondida_em` (`app/chamados/veredito_lavrado.py:194`, `:207`). Nenhum `F()` ou outro `bulk_update` de `respondida_em` apareceu na varredura [não verificado por execução; auditoria estática].
+
+`resposta_colab` não admite SQL NULL no esquema declarado: `TextField(blank=True, default='')`, sem `null=True` (`app/chamados/models.py:1865`, migration `app/chamados/migrations/0014_perguntadisputa.py:24`). Assim, os riscos concretos descritos acima se sustentam com `''` ou espaços; persistência efetiva de `None` depende do banco real [não verificado].
 
 ## 29/10 19:02 · sessao 80de480f740f · espera · verificador · origem=Code
 
@@ -330,47 +558,4 @@ Leitura estática; execução dos testes `[nao verificado]`. [nao verificado]
 
 Os testes novos não exercitam deduplicação repetida nem retenção por `justificativa_alheia`: as novas verificações de trilha usam apenas `irma_orfa` e `.exists()`, sem contagem ou segunda tentativa. `app/ponto/tests/test_justificativa_encerra_origem.py:516`, `:551`; a dedup reside em `app/chamados/reconciliador.py:473`, `:479`, `:482`.
 
-## 29/10 18:36 · sessao 761d79942cbe · - · - · origem=Ronald (tmux)
-
-Para os retornos efetivamente produzidos por `retencao_da_retratacao`, `_retratar` preservou comportamento: `None` segue para `reconciliar`; retenção registra quando necessário e devolve `False`, antes de entrar no `atomic`. O produtor só emite `irma_orfa` com lista não vazia ou `justificativa_alheia`. (`app/chamados/reconciliador.py:449`, `app/chamados/reconciliador.py:453`, `app/chamados/reconciliador.py:503`, `app/chamados/reconciliador.py:507`)
-
-A deduplicação mantém exatamente as chaves anteriores: primeiros oito IDs em `irma_orfa`; ID da justificativa em `justificativa_alheia`, sem considerar `em_aprovacao`; busca do último registro por ação, modelo e chamado, ordenado por `-id`. Isso preserva inclusive limitações antigas: mudança após o oitavo ID não aparece e outra aprovação retida pela mesma justificativa não cria linha. (`app/chamados/reconciliador.py:473`, `app/chamados/reconciliador.py:479`, `app/chamados/reconciliador.py:480`)
-
-Há um defeito novo, de contrato do auxiliar, com impacto baixo nos consumidores atuais: `registrar_retencao` promete “gravou agora”, mas retorna `True` incondicionalmente após `evento`. Entrada: retenção inédita e falha na criação do log → `evento` engole a falha e devolve `None` → nenhuma trilha gravada, auxiliar informa `True`. Os três consumidores ignoram esse retorno, portanto isso não altera `_retratar`. Confirmei a contraprova em execução isolada em memória do corpo da função, com `evento` devolvendo `None`. (`app/chamados/reconciliador.py:461`, `app/chamados/reconciliador.py:484`, `app/core/observ.py:105`, `app/core/observ.py:133`, `app/core/observ.py:139`, `app/chamados/reconciliador.py:505`, `app/ponto/services/justificativa.py:81`, `app/ponto/services/justificativa.py:390`)
-
-A distinção sintática `('irma_orfa', [])` passaria antes e reteria depois, mas esse valor não sai do produtor real; não constitui regressão alcançável demonstrada. (`app/chamados/reconciliador.py:449`, `app/chamados/reconciliador.py:450`, `app/chamados/reconciliador.py:504`)
-
-Os testes novos não exercitam deduplicação nem retorno do auxiliar: o de bloqueio verifica existência da trilha; o de cascata verifica uma chamada genérica e existência. Os testes antigos de deduplicação cobrem duas passadas e uma nova pendência, mas não foram introduzidos neste delta. (`app/ponto/tests/test_justificativa_encerra_origem.py:516`, `app/ponto/tests/test_justificativa_encerra_origem.py:550`, `app/ponto/tests/test_justificativa_encerra_origem.py:551`, `app/chamados/tests/test_laco_hx_x_bug31.py:138`, `app/chamados/tests/test_laco_hx_x_bug31.py:151`)
-
-## 29/10 18:36 · sessao 34927c8ab64c · - · - · origem=Ronald (tmux)
-
-- **Classe 3 — app/api/tests/test_o21_app_diz_o_que_foi_decidido.py:169:** acrescenta `timezone.now()` ao caso que já lê o relógio em `:167` (`_tz.localdate()`). O congelamento está em `:39`; são duas leituras do mesmo instante.
-- **Classe 3 — app/ponto/tests/test_piso_nao_sobe_por_batida.py:123:** acrescenta `timezone.now()` depois de `timezone.localdate()` em `:122`. O congelamento está em `:37`; são duas leituras do mesmo instante.
-
-Nos sítios revisados, nenhum achado novo das classes 5, 7 ou 8. O `sorted(out)` em app/escala/tests/test_selo_grade_pede_o_instante.py:60 corrige a ordem exigida pela asserção `:188-190`; a execução em memória confirmou que retirar a ordenação faz essa asserção divergir.
-
-Total dos sítios revisados: classe 3 = 2; classe 5 = 0; classe 7 = 0; classe 8 = 0.
-
-## 29/10 18:36 · sessao 541cd319928f · - · - · origem=Ronald (tmux)
-
-Classe 3, verificável sem depender de `freeze_time`:
-
-- `app/relatorios/tests/test_r3_em_aberto_alcanca_turno_aberto.py:251`: `test_05` chama `_tela()` e `_cartao()`; cada helper lê `timezone.now()` separadamente, nas linhas 187 e 191.
-- `app/relatorios/tests/test_r3_em_aberto_alcanca_turno_aberto.py:378`: `test_11` combina `_tela()` (leitura na linha 187) com outra leitura explícita de `timezone.now()`.
-- `app/relatorios/tests/test_r3_em_aberto_alcanca_turno_aberto.py:391`: `test_12` lê por `_tela()` na linha 390/187 e novamente para o cartão na linha 391.
-
-A classe base e esses três métodos não possuem congelamento (`app/relatorios/tests/test_r3_em_aberto_alcanca_turno_aberto.py:76`, `:240`, `:370`, `:385`); são leituras do relógio real.
-
-Não demonstrei achado adicional nas classes 5, 7 ou 8. A alteração de `_resumo` sob congelamento não remove a mordida dos casos 13/14: continuam exigindo presença do fato e retirada da palavra enquanto vivo, e retorno da palavra depois (`app/relatorios/tests/test_r3_em_aberto_alcanca_turno_aberto.py:426`, `:433`, `:436`, `:441`, `:446`).
-
-## 29/10 18:35 · sessao 3bb17ba4bb04 · justif · sonda · origem=Code
-
-Pela saída fornecida:
-
-- **Total: 112 chamados.** [nao verificado]
-- **Vivos: 0; encerrados: 112**, sendo 82 `fechado` e 30 `resolvido`. [nao verificado] Esses dois estados são classificados como encerrados em [motor.py:30](/home/ronald/codex_ws/02c3297c2af5f7c6be04f5dc4cf4f704f6e09de4/app/chamados/catalogo/motor.py:30).
-- **Com `data_turno` no contexto: 0; sem `data_turno`: 112.** [nao verificado]
-- **Por mês de criação:** maio/2026: 22; junho/2026: 89; outubro/2026: 1. [nao verificado]
-- **Nenhuma incoerência interna aparente:** estados somam `82 + 30 = 112`; meses somam `22 + 89 + 1 = 112`; todos os 112 aparecem sem `data_turno`; consta `ERROS=0` e está presente `FIM-DA-SONDA`. [nao verificado]
-
-_231 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_235 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._

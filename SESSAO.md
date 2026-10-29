@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/10/2026 20:52:57.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (24.6 MB). Acoes na janela: **377**.
+**Medido em 29/10/2026 20:58:08.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (24.6 MB). Acoes na janela: **372**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -382,8 +382,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 09:06:28 | Bash | Regenerate diagram in live tree | `cd /home/ronald/saas-hasner && git status --short app \| grep -v docs/; docker exec saas_core python manage.py gerar_diagrama 2>&1 \| tail -1 \| cut -c1-120; git diff --stat -- app/docs/ARQUITETURA.mmd; git diff -- app/docs/ARQUITETURA.mmd \| grep '^[-+][^-+]' ; diff <(git -C /home/ronald/wt-orfas-2901-0215 show HEAD:app/docs/ARQUITETURA.mmd) app/docs/ARQUITETURA.mmd && echo "igual ao da ORFAS"` |
 | 09:06:16 | Bash | Read push suite failures | `cd /home/ronald/saas-hasner && grep -E '^(FAIL\|ERROR):' logs/outbox/push_2.out; grep -n -B5 "nao voltou ao estado original" logs/outbox/push_2.out \| head -30 \| cut -c1-250` |
 | 09:04:33 | Bash | Wait for push result | `cd /home/ronald/saas-hasner && until grep -q '^rc=' logs/outbox/push_2.out 2>/dev/null; do /usr/bin/sleep 20; done; tail -5 logs/outbox/push_2.out \| cut -c1-200` |
-| 08:54:27 | Bash | Commit regenerated diagram and rerun seal | `cd /home/ronald/wt-orfas-2901-0215 && git add app/docs/ARQUITETURA.mmd && git commit -q -F - <<'EOF' ARQUITETURA.mmd regerado na arvore mergeada da ORFAS (uma aresta), pelo gerar_diagrama num container montado na copia Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com> EOF git log --oneline -1; cd /home/ronald/saas-hasner && bash bin/suite.sh --dir /home/ronald/wt-orfas-2901-0215 --only core  ...` |
-| 08:53:46 | Bash | Regenerate diagram in the ORFAS copy | `cd /home/ronald/saas-hasner && W=/home/ronald/wt-orfas-2901-0215; docker run --rm --cpuset-cpus 4-7 --cpus 4 --memory 2g --env-file .env -e PYTHONDONTWRITEBYTECODE=1 -v $W/app:/app $(bin/arvore_do_push.sh --montagem $W) saas-hasner-core:latest python manage.py gerar_diagrama --settings=config.settings.ci 2>&1 \| tail -3; git -C $W status --short; git -C $W diff --stat \| tail -2` |
-| 08:53:39 | Bash | Read suite docker run line | `cd /home/ronald/saas-hasner && sed -n 90,110p bin/suite.sh` |
-| 08:53:35 | Bash | Get test docker args from recursos | `cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; W=/home/ronald/wt-orfas-2901-0215; teste_envfile >/dev/null 2>&1; echo "TESTE_DOCKER=$TESTE_DOCKER"; grep -n "docker run" bin/suite.sh \| head -3` |
-| 08:53:30 | Bash | Read diagram regeneration memory | `cat /home/ronald/.claude/projects/-home-ronald-saas-hasner/memory/gerar-diagrama-escreve-na-arvore-viva.md \| sed -n 5,30p` |
