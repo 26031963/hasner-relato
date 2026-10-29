@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/10/2026 08:19:08.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (12.6 MB). Acoes na janela: **423**.
+**Medido em 29/10/2026 08:24:37.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (12.6 MB). Acoes na janela: **425**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 08:20:02 | Bash | Wait for push result | `until grep -q '^rc=' /home/ronald/saas-hasner/logs/juizpar2/push.out 2>/dev/null; do /usr/bin/sleep 20; done; tail -6 /home/ronald/saas-hasner/logs/juizpar2/push.out \| cut -c1-200; cd /home/ronald/saas-hasner && git fetch -q && git log --oneline -1 origin/main` |
+| 08:19:57 | Bash | Register E2-EMISSORES complement | `python3 - <<'PY' p='BACKLOG.md'; L=open(p,encoding='utf-8').read().split('\n') for i,l in enumerate(L): if l.startswith('\| CONTRATO-20-E2-QUAL-ATO \|'): c=l.split('\|'); c[2]=c[2].rstrip()+' COMPLEMENTO E2-EMISSORES (29/10 08:3x, Codex T15): os tres emissores de batida_ausente (`detectar_ausencias._abrir_chamado`, `reconciliar_grade._emitir_furo`, `chamados/reconciliador.py::reemitir_chamado_do_d ...` |
 | 08:09:46 | Bash | Wait for push result | `until grep -q '^rc=' /home/ronald/saas-hasner/logs/juizpar2/push.out 2>/dev/null; do /usr/bin/sleep 20; done; tail -6 /home/ronald/saas-hasner/logs/juizpar2/push.out \| cut -c1-200; cd /home/ronald/saas-hasner && git fetch -q && git log --oneline -1 origin/main` |
 | 08:09:38 | Bash | Move ORDEM-VIVA marker to O-OUTBOX | `python3 - <<'PY' p='BACKLOG.md'; L=open(p,encoding='utf-8').read().split('\n') assert L[7]=='<!-- ORDEM-VIVA-TOPO: JUIZ-DO-PAR-DUAS-ENTRADAS -->' L[7]='<!-- ORDEM-VIVA-TOPO: O-OUTBOX -->' L.insert(8,'<!-- ANDOU 29/10 08:3x, de `JUIZ-DO-PAR-DUAS-ENTRADAS` (NO AR b3bf529e 07:11, prova de frota 77c6193c) para `O-OUTBOX` (ordem RESPOSTAS-2910-MANHA: JUIZ-DO-PAR -> O-OUTBOX -> ORFAS -> COL129 -> IMPRES ...` |
 | 08:09:29 | Bash | Find O-OUTBOX row and current state cell | `grep -n "^\| O-OUTBOX" BACKLOG.md \| cut -c1-120; sed -n 738p BACKLOG.md \| awk -F'\|' '{print NF; print $4}' \| cut -c1-400` |
