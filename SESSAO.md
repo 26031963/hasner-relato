@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/10/2026 16:30:45.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (18.8 MB). Acoes na janela: **370**.
+**Medido em 29/10/2026 16:35:59.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (18.8 MB). Acoes na janela: **364**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -374,9 +374,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 05:01:42 | Bash | Check COL129 suite and ORFAS progress | `/usr/bin/sleep 590; cd /home/ronald/saas-hasner/logs; tail -3 col129/suite_inteira_c9.log \| cut -c1-200; git -C /home/ronald/wt-orfas-2901-0215 log --oneline -1 \| cut -c1-80; date +%H:%M` |
 | 04:51:46 | Bash | Keep waiting for constructors | `/usr/bin/sleep 590; for c in wt-orfas-2901-0215 wt-col129-2901-0330; do echo "$c: $(git -C /home/ronald/$c log --oneline -1 \| cut -c1-80)"; done; ls -t /home/ronald/saas-hasner/logs/col129/ \| head -4; date +%H:%M` |
 | 04:41:59 | Bash | Keep waiting for constructors | `/usr/bin/sleep 580; for c in wt-orfas-2901-0215 wt-col129-2901-0330; do echo "$c: $(git -C /home/ronald/$c log --oneline -1 \| cut -c1-80)"; done; date +%H:%M` |
-| 04:32:55 | Bash | Wait for the two constructor agents | `/usr/bin/sleep 540; for c in wt-orfas-2901-0215 wt-col129-2901-0330; do echo "$c: $(git -C /home/ronald/$c log --oneline -1 \| cut -c1-80)"; done; tail -c 600 /tmp/claude-1001/-home-ronald-saas-hasner-app/be3a61c0-011d-458c-a5a0-e2f78476d660/tasks/a104d7e4e79626282.output 2>/dev/null \| tr -d '\0' \| tail -3 \| cut -c1-300; date +%H:%M` |
-| 04:32:46 | Bash | Read RELATO top and hook rules | `sed -n 1,10p RELATO.md \| cut -c1-400; grep -n "_SO_BANG\\|def .*parei\\|PAREI" /home/ronald/saas-hasner/bin/hook_stop_fila1.py \| head -20` |
-| 04:32:32 | Bash | Record ORFAS reprove in RELATO | `python3 - <<'PY' p='RELATO.md'; s=open(p,encoding='utf-8').read() old='De volta ao construtor. Pousa depois do O-OUTBOX.' assert s.count(old)==1 new=old+' #3 488ddf45 (suite inteira verde, Ran 12617): os 11 curados; **REPROVADA 04:3x** (3): TETO adia sem tentativa tambem quando `dia_encerrado` e False por dia sem previsto ou turno aberto (pendente eterno que cega dois vigias); 4 RED sem falha pelo ...` |
-| 04:32:26 | Bash | Find ORFAS lines in RELATO | `cd /home/ronald/saas-hasner/app/docs && grep -n "ORFAS" RELATO.md \| head -8; date +%H:%M` |
-| 04:32:23 | SendMessage |  | `-` |
-| 04:32:08 | ToolSearch |  | `-` |
