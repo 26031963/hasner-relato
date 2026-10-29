@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/10/2026 01:42:07.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (8.4 MB). Acoes na janela: **380**.
+**Medido em 29/10/2026 01:47:25.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (8.4 MB). Acoes na janela: **382**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 01:45:48 | Bash | Wait for constructor report | `/usr/bin/sleep 240; git -C /home/ronald/wt-outbox-2810-1915 log --oneline -1; ls -t /home/ronald/saas-hasner/logs/outbox/ \| head -6; date +%H:%M` |
+| 01:44:42 | Bash | Keep waiting for outbox commit | `cd /home/ronald/saas-hasner && for i in $(seq 1 19); do git -C /home/ronald/wt-outbox-2810-1915 log --oneline -1 \| /bin/grep -qv 4f5ec850 && break; /usr/bin/sleep 30; done; git -C /home/ronald/wt-outbox-2810-1915 log --oneline -2; git -C /home/ronald/wt-outbox-2810-1915 status --porcelain \| head; date +%H:%M` |
 | 01:35:06 | Bash | Wait for outbox constructor's commit | `cd /home/ronald/saas-hasner && for i in $(seq 1 19); do git -C /home/ronald/wt-outbox-2810-1915 log --oneline -1 \| /bin/grep -qv 4f5ec850 && break; /usr/bin/sleep 30; done; git -C /home/ronald/wt-outbox-2810-1915 log --oneline -3; bin/trava_teste.sh --quem; date +%H:%M` |
 | 01:34:33 | Bash | Generate session handoff | `cd /home/ronald/saas-hasner && bash bin/handoff_sessao.sh >/dev/null 2>&1; echo rc=$?; sed -n 1,40p app/docs/HANDOFF-SESSAO.md \| cut -c1-200` |
 | 01:30:20 | Bash | Keep waiting for push | `cd /home/ronald/saas-hasner && for i in $(seq 1 19); do grep -q '^rc=' logs/codex/push_marco_2.out && break; /usr/bin/sleep 30; done; tail -5 logs/codex/push_marco_2.out \| cut -c1-200; git fetch -q origin && git log origin/main --oneline -1; date +%H:%M` |
