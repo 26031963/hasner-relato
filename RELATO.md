@@ -1,5 +1,7 @@
 # RELATO — esteira saas-hasner
 
+> **JUIZ-DO-PAR-GRUPO-1 sitio 1 #3 (b9c09ca2): `turno_do_juiz_no_dia` exige FATO ENCERRADO** -- (b) batida apuravel depois da ultima do turno (`ultima_batida_apuravel`, O142) ou (a) `agora >= fim_previsto`. DIFF do detector na sombra: somem as 167 falsas ao vivo, ficam 37. PAROU por escopo: a ata (`cartorio.py:874`) nao passa o instante, e so a (b) tira o papel de turno encerrado sem batida depois (3 celulas do passado na sombra; col373 e col949 de 28/10 em prod). Decidido pela lei (TETO TEMPORAL, defesa (a)): `agora` OBRIGATORIO no montador da grade, e os 3 chamadores (cartorio, tela `grade_espelho_janela`, `reconciliar_grade`) passam o instante proprio; `cartorio.py` autorizado nessa linha, e a LASTRO rebaseia depois. De volta ao construtor (#4).
+
 > **ORFAS -- `reabrir_orfas_enterradas --apply` APLICADO 29/10 12:36 (aval RESPOSTAS-2910-1230 item 3 = (a)).**
 > - PROVA: `[APPLY] ... reabertas=81 disputas_reabertas=1 pais_reabertos=19 pai_falhou=[] pautas_escritas=2`, rc 0 (`logs/orfas/pouso_reabrir_apply.out`).
 > - Dry de 12:3x (`logs/orfas/pouso_reabrir_dry2.out`): **81** para reabrir, todos dentro dos 84 do aval (3 sairam pelo criterio desde 09h: perg#41974, #50179, #50883; 0 entrou); Pauta DP 7 = a mesma. Mesma causa, so a contagem -- segue pelo aval.

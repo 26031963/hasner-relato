@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/10/2026 13:01:30.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (16.0 MB). Acoes na janela: **371**.
+**Medido em 29/10/2026 13:07:04.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (16.1 MB). Acoes na janela: **375**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 13:04:43 | Bash | Wait for grupo 1 commit | `cd /home/ronald/saas-hasner && until [ "$(git -C /home/ronald/wt-grupo1-2910-1100 rev-parse --short HEAD)" != "b9c09ca2" ]; do /usr/bin/sleep 30; done; git -C /home/ronald/wt-grupo1-2910-1100 log --oneline -1 \| cut -c1-90; date +%H:%M` |
+| 13:04:39 | Bash | Wait for constructor commits | `cd /home/ronald/saas-hasner && until [ "$(git -C /home/ronald/wt-grupo1-2910-1100 rev-parse --short HEAD)" != "b9c09ca2" ] \|\| [ "$(git -C /home/ronald/wt-lastro3-2910-1000 rev-parse --short HEAD)" != "26dc989f" ]; do /usr/bin/sleep 30; done; for w in wt-grupo1-2910-1100 wt-lastro3-2910-1000; do git -C /home/ronald/$w log --oneline -1 \| cut -c1-90; done; date +%H:%M` |
+| 13:04:33 | Bash | Record grupo 1 decision in RELATO | `cd /home/ronald/saas-hasner && python3 - <<'PY' p='app/docs/RELATO.md'; s=open(p,encoding='utf-8').read(); i=s.index('\n> ') s=s[:i]+'\n> **JUIZ-DO-PAR-GRUPO-1 sitio 1 #3 (b9c09ca2): `turno_do_juiz_no_dia` exige FATO ENCERRADO** -- (b) batida apuravel depois da ultima do turno (`ultima_batida_apuravel`, O142) ou (a) `agora >= fim_previsto`. DIFF do detector na sombra: somem as 167 falsas ao vivo,  ...` |
+| 13:04:23 | SendMessage |  | `-` |
 | 12:59:32 | Bash | Wait for grupo 1 commit or push | `cd /home/ronald/saas-hasner && until [ "$(git -C /home/ronald/wt-grupo1-2910-1100 rev-parse --short HEAD)" != "b9c09ca2" ] \|\| grep -q '^rc=' logs/relcpu_push.out; do /usr/bin/sleep 30; done; git -C /home/ronald/wt-grupo1-2910-1100 log --oneline -1 \| cut -c1-90; tail -2 logs/relcpu_push.out \| cut -c1-120; date +%H:%M` |
 | 12:49:22 | Bash | Fix marker and wait for progress | `cd /home/ronald/saas-hasner/app/docs && python3 - <<'PY' p='BACKLOG.md'; L=open(p,encoding='utf-8').read().split('\n') for k,l in enumerate(L): if l=='<!-- ORDEM-VIVA-TOPO: LASTRO-DEGRAU-2 -->': L[k]='<!-- ORDEM-VIVA-TOPO: JUIZ-DO-PAR-GRUPO-1 -->' L.insert(k+1,'<!-- ANDOU 29/10 12:5x, de `LASTRO-DEGRAU-2` para `JUIZ-DO-PAR-GRUPO-1` (ordem RESPOSTAS-2910-1230 item 4: grupo (1) sitio 1 com a cura do ...` |
 | 12:44:02 | Bash | Check constructors and push | `/usr/bin/sleep 300; cd /home/ronald/saas-hasner && for w in wt-grupo1-2910-1100 wt-lastro3-2910-1000; do git -C /home/ronald/$w log --oneline -1 \| cut -c1-90; done; bin/trava_teste.sh --quem; tail -2 logs/relcpu_push.out \| cut -c1-120; date +%H:%M` |
