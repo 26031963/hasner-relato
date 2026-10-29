@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/10/2026 06:10:38.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (11.1 MB). Acoes na janela: **458**.
+**Medido em 29/10/2026 06:16:08.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (11.1 MB). Acoes na janela: **463**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 06:13:33 | Bash | Wait for COL129 suite | `/usr/bin/sleep 590; cd /home/ronald/saas-hasner/logs; grep -E '^(OK\|FAILED)($\| \()\|^Ran \|^rc=' col129/suite_inteira_c9_4.log \| tail -3 \| tr '\n' ' '; cat col129/arvore_hash_depois_4.out 2>/dev/null; git -C /home/ronald/wt-orfas-2901-0215 log --oneline -1\|cut -c1-60; date +%H:%M` |
+| 06:13:28 | Bash | Record ORFAS #5 reprove | `cd /home/ronald/saas-hasner/app/docs && python3 - <<'PY' p='RELATO.md'; s=open(p,encoding='utf-8').read() old='De volta ao construtor (#5).' assert s.count(old)==1 s=s.replace(old,old+' #5 8f4eca4b: aberta com escala = TETO (`turno_aberto_relogio`), sem escala/sem previsto = None com a pergunta viva e vigia mudo; prod 0 em todo motivo. **REPROVADA 06:1x**: o ramo reescreve a expiracao que `turno_a ...` |
+| 06:13:22 | SendMessage |  | `-` |
+| 06:12:59 | Bash | Cancel queued obsolete ORFAS suite | `cd /home/ronald/saas-hasner && pkill -P 982714; kill 982714 2>/dev/null; /usr/bin/sleep 2; pgrep -af "wt-orfas" \| cut -c1-120; docker ps --format '{{.Names}} {{.Command}}' \| grep -i orfas \| head` |
+| 06:12:54 | Bash | Check suite trava holders | `cd /home/ronald/saas-hasner && bin/trava_teste.sh --quem; ls -la logs/orfas/suite_inteira_4.log logs/col129/suite_inteira_c9_4.log; pgrep -af "suite.sh --dir" \| cut -c1-150` |
 | 06:02:59 | Bash | Wait for both suites | `/usr/bin/sleep 590; cd /home/ronald/saas-hasner/logs; for f in orfas/suite_inteira_4.log col129/suite_inteira_c9_4.log; do echo "$f: $(grep -E '^(OK\|FAILED)($\| \()\|^Ran \|^rc=' $f 2>/dev/null \| tail -3 \| tr '\n' ' ')"; done; date +%H:%M` |
 | 06:02:53 | Agent | Verify ORFAS fourth reading | `4a leitura da ORFAS, obra CONTRATO-20-LASTRO-E-ORFAS (metade ORFAS), aval ORFAS-ENTERRA-FURO-REAL=(b). O carimbo fantasma passa a nascer no EVENTO do cartorio e `reconciliar_perguntas_orfas` vira VIGIA. Onde: copia /home/ronald/wt-orfas-2901-0215 @ 8f4eca4b, em cima de 7d330e9a. Diff da rodada: `git -C /home/ronald/wt-orfas-2901-0215 diff 7d330e9a 8f4eca4b`. A 3a leitura reprovou porque a aberta C ...` |
 | 05:52:49 | Bash | Wait for constructors | `/usr/bin/sleep 590; git -C /home/ronald/wt-orfas-2901-0215 log --oneline -1 \| cut -c1-70; git -C /home/ronald/wt-col129-2901-0330 log --oneline -1 \| cut -c1-70; date +%H:%M` |
