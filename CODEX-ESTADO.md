@@ -1,7 +1,51 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **30/10/2026 08:51** · publicado em **30/10/2026 08:51** (UTC-3)
+> Ultima resposta processada: **30/10/2026 08:57** · publicado em **30/10/2026 08:57** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 30/10 08:57 · sessao aed133b16f47 · O261-NOTURNO · verificador · origem=Code
+
+- **P2 — Ainda pode mostrar dia diferente do texto.** Reproduzi em memória: identidade 21/10, instante 22/10 e pergunta `Confirme o horário da saída no dia 22/10/2026.` → `dia_mostrado` retorna **21/10**. O ponto final quebra a igualdade com o produtor e aciona o fallback; texto ISO com hora em 22/10 também retorna 21/10. A desigualdade não prova que o texto nomeia a identidade. Esse resultado chega ao cabeçalho e à API. (`app/chamados/models.py:2178`; `app/templates/chamados/partials/_card_atendimento.html:90`; `app/api/views.py:1169`). Ocorrência em produção: [não verificado].
+
+- **P2 — O detector ganhou falso negativo em `.format(**dict)`.** Reproduzi `_copias("t.format(**{**ctx})") == []` e `_copias("t.format(**{key: value})") == []`, inclusive quando `ctx` contém `data` ou `key == 'data'`. O filtro considera seguro qualquer `ast.Dict` sem chave constante `'data'`, embora desempacotamentos e chaves dinâmicas possam fornecê-la. (`app/chamados/tests/test_noturno_le_o_dia_do_instante.py:168`).
+
+Executei o detector original em memória sobre a cópia: **zero ocorrências em 787 arquivos**, com os exemplos positivos/negativos passando. O perímetro é `app/`, excluindo testes, migrações e caches; os dois donos são dispensados, e a isenção nominal do espelho fica em `chamados/models.py`. (`app/chamados/tests/test_noturno_le_o_dia_do_instante.py:142`, `:156`, `:186`, `:195`).
+
+O `select_related('celula')` cobre a relação lida pela propriedade; não encontrei defeito adicional nessa alteração nem no uso de `cached_property`. (`app/api/views.py:1045`; `app/chamados/models.py:2163`, `:2173`).
+
+Correspondência Git ao hash e conteúdo da resposta da volta 3: [não verificado].
+
+## 30/10 08:53 · sessao e05761e8c23b · O261-NOTURNO · verificador · origem=Code
+
+1. **`dia_mostrado` ainda pode contradizer o texto gravado.** Reprodução em memória: `orfao_14h`, célula de 21/10 com saída em 22/10, contexto `data='2026-10-21T19:00:00'`. O produtor grava “saída no dia 2026-10-21T19:00:00”, pois devolve a data bruta quando o parse falha; a propriedade reconstrói “21/10/2026”, a igualdade falha e retorna **22/10**. Esse texto pode ser persistido com `data_evento=21/10`, porque a emissão extrai os primeiros dez caracteres para a identidade. Ocorrência em produção: [nao verificado]. Referências: [query.py:99](/home/ronald/codex_ws/31b8cec02ab0de6ec4e3ab040d19f884adf4d8a9/app/chamados/catalogo/query.py:99), [models.py:2176](/home/ronald/codex_ws/31b8cec02ab0de6ec4e3ab040d19f884adf4d8a9/app/chamados/models.py:2176), [disputa_emissao.py:347](/home/ronald/codex_ws/31b8cec02ab0de6ec4e3ab040d19f884adf4d8a9/app/chamados/services/disputa_emissao.py:347), [disputa_emissao.py:389](/home/ronald/codex_ws/31b8cec02ab0de6ec4e3ab040d19f884adf4d8a9/app/chamados/services/disputa_emissao.py:389).
+
+   **`padrao` e motivo desconhecido não demonstraram esse mesmo erro:** motivo catalogado ignora `padrao`; os quatro motivos com marco estão no catálogo; motivo sem marco retorna a própria `data_evento` antes da comparação. Referências: [query.py:87](/home/ronald/codex_ws/31b8cec02ab0de6ec4e3ab040d19f884adf4d8a9/app/chamados/catalogo/query.py:87), [query.py:64](/home/ronald/codex_ws/31b8cec02ab0de6ec4e3ab040d19f884adf4d8a9/app/chamados/catalogo/query.py:64), [juizes.py:823](/home/ronald/codex_ws/31b8cec02ab0de6ec4e3ab040d19f884adf4d8a9/app/chamados/juizes.py:823), [perguntas.py:34](/home/ronald/codex_ws/31b8cec02ab0de6ec4e3ab040d19f884adf4d8a9/app/chamados/catalogo/perguntas.py:34).
+
+2. **Há N+1 de célula na API.** O queryset carrega `chamado_destino__celula`, mas a propriedade acessa outra relação, `p.celula`: até um SELECT adicional por pergunta datada com essa FK. Referências: [views.py:1043](/home/ronald/codex_ws/31b8cec02ab0de6ec4e3ab040d19f884adf4d8a9/app/api/views.py:1043), [views.py:1169](/home/ronald/codex_ws/31b8cec02ab0de6ec4e3ab040d19f884adf4d8a9/app/api/views.py:1169), [models.py:2172](/home/ronald/codex_ws/31b8cec02ab0de6ec4e3ab040d19f884adf4d8a9/app/chamados/models.py:2172).
+
+   Em cobrança/aviso, esse carregamento por pergunta **já acontece no juiz**, antes da propriedade: o helper seleciona apenas `disputa`, e `pergunta_viva` acessa `celula` na chave do memo. A segunda chamada da propriedade é condicional e omite `colaborador`, portanto não executa a query do produtor. Referências: [aviso_pendencia.py:9](/home/ronald/codex_ws/31b8cec02ab0de6ec4e3ab040d19f884adf4d8a9/app/chamados/services/aviso_pendencia.py:9), [juizes.py:757](/home/ronald/codex_ws/31b8cec02ab0de6ec4e3ab040d19f884adf4d8a9/app/chamados/juizes.py:757), [juizes.py:791](/home/ronald/codex_ws/31b8cec02ab0de6ec4e3ab040d19f884adf4d8a9/app/chamados/juizes.py:791), [models.py:2176](/home/ronald/codex_ws/31b8cec02ab0de6ec4e3ab040d19f884adf4d8a9/app/chamados/models.py:2176), [query.py:102](/home/ronald/codex_ws/31b8cec02ab0de6ec4e3ab040d19f884adf4d8a9/app/chamados/catalogo/query.py:102).
+
+3. **O card repete o cálculo:** `dia_mostrado` é propriedade sem cache, acessada no cabeçalho e novamente para cada opção. Nesse caminho a célula já vem carregada; repete processamento, sem acrescentar SELECT da FK. Referências: [models.py:2162](/home/ronald/codex_ws/31b8cec02ab0de6ec4e3ab040d19f884adf4d8a9/app/chamados/models.py:2162), [_card_atendimento.html:90](/home/ronald/codex_ws/31b8cec02ab0de6ec4e3ab040d19f884adf4d8a9/app/templates/chamados/partials/_card_atendimento.html:90), [_card_atendimento.html:164](/home/ronald/codex_ws/31b8cec02ab0de6ec4e3ab040d19f884adf4d8a9/app/templates/chamados/partials/_card_atendimento.html:164), [fio.py:222](/home/ronald/codex_ws/31b8cec02ab0de6ec4e3ab040d19f884adf4d8a9/app/chamados/services/fio.py:222).
+
+4. **A API ainda entrega o dia cru junto do rótulo corrigido.** `data_evento` continua D e `data_evento_label` pode ser D+1; exibição do campo cru pelo cliente nativo: [nao verificado]. O atendimento com `base_app` inclui o mesmo card corrigido; cobrança usa `dia_mostrado`; o PDF lê dias do espelho e marcações, o que não comprova outro leitor da data textual da pergunta. Referências: [views.py:1168](/home/ronald/codex_ws/31b8cec02ab0de6ec4e3ab040d19f884adf4d8a9/app/api/views.py:1168), [meu_atendimento.html:127](/home/ronald/codex_ws/31b8cec02ab0de6ec4e3ab040d19f884adf4d8a9/app/templates/chamados/meu_atendimento.html:127), [context_processors.py:210](/home/ronald/codex_ws/31b8cec02ab0de6ec4e3ab040d19f884adf4d8a9/app/core/context_processors.py:210), [cobranca.py:83](/home/ronald/codex_ws/31b8cec02ab0de6ec4e3ab040d19f884adf4d8a9/app/chamados/services/cobranca.py:83), [pdf_espelho.py:598](/home/ronald/codex_ws/31b8cec02ab0de6ec4e3ab040d19f884adf4d8a9/app/relatorios/pdf_espelho.py:598), [pdf_espelho.py:872](/home/ronald/codex_ws/31b8cec02ab0de6ec4e3ab040d19f884adf4d8a9/app/relatorios/pdf_espelho.py:872).
+
+5. **O selo AST mantém falsos negativos.** Reproduções retornam `[]`: `t='dia {data}'; k='{data}'; y=t.replace(k,x)` e `f(pergunta='dia {data}')`. O detector só considera certos pais imediatos do literal e não acompanha variáveis. Além disso, exclui `models.py` inteiro e só percorre `chamados`, deixando substituições fora desse perímetro sem fiscalização. Referências: [test_noturno_le_o_dia_do_instante.py:155](/home/ronald/codex_ws/31b8cec02ab0de6ec4e3ab040d19f884adf4d8a9/app/chamados/tests/test_noturno_le_o_dia_do_instante.py:155), [test_noturno_le_o_dia_do_instante.py:137](/home/ronald/codex_ws/31b8cec02ab0de6ec4e3ab040d19f884adf4d8a9/app/chamados/tests/test_noturno_le_o_dia_do_instante.py:137), [test_noturno_le_o_dia_do_instante.py:181](/home/ronald/codex_ws/31b8cec02ab0de6ec4e3ab040d19f884adf4d8a9/app/chamados/tests/test_noturno_le_o_dia_do_instante.py:181).
+
+6. **O selo AST mantém falsos positivos.** `t.format(**{'nome': x})` e `'Olá {nome}'.format_map(c)` são marcados sem substituir `data`; `raise E('placeholder {data} residual' + detalhe)` também é marcado, porque qualquer `BinOp` com esse literal conta como template. Referências: [test_noturno_le_o_dia_do_instante.py:150](/home/ronald/codex_ws/31b8cec02ab0de6ec4e3ab040d19f884adf4d8a9/app/chamados/tests/test_noturno_le_o_dia_do_instante.py:150), [test_noturno_le_o_dia_do_instante.py:158](/home/ronald/codex_ws/31b8cec02ab0de6ec4e3ab040d19f884adf4d8a9/app/chamados/tests/test_noturno_le_o_dia_do_instante.py:158).
+
+## 30/10 08:51 · sessao f438f9b87014 · - · - · origem=Ronald (tmux)
+
+- **API ainda expõe duas datas diferentes**: `data_evento` permanece o dia de identidade; `data_evento_label` usa `dia_mostrado` (`app/api/views.py:1168-1169`). O endpoint atende o colaborador autenticado (`app/api/views.py:973-979`). Se o cliente nativo usa o campo cru para exibição: **[nao verificado]**.
+
+- **Não confirmei outro leitor público direto por `data_evento`**: o card mostra `dia_mostrado` no cabeçalho e na confirmação (`app/templates/chamados/partials/_card_atendimento.html:90`, `app/templates/chamados/partials/_card_atendimento.html:164`). O mesmo card é incluído no atendimento (`app/templates/chamados/meu_atendimento.html:126-127`), cuja casca pode ser `base_app.html` (`app/templates/chamados/meu_atendimento.html:1`, `app/core/context_processors.py:210`).
+
+- **Push de cobrança acompanha a propriedade**: os dias vêm de `p.dia_mostrado` (`app/chamados/services/cobranca.py:83`), entram no corpo (`app/chamados/services/cobranca.py:122-136`) e são enviados pelos canais FCM/webpush (`app/chamados/services/cobranca.py:105-113`, `app/chamados/services/cobranca.py:186-187`). O push de abertura da disputa só informa o motivo, sem dia (`app/chamados/services/disputa_emissao.py:1491-1498`).
+
+- **PDF do espelho não oferece prova de outro leitor da data da pergunta**: recebe os dias do espelho, recorta por `d['data']` e ordena por essa chave (`app/relatorios/pdf_espelho.py:592-599`); desenha as marcações pelas batidas (`app/relatorios/pdf_espelho.py:872-878`). Equiparar esse dia de turno ao dia textual da pergunta seria **[nao verificado]**.
+
+- **Ocorrências que não devem virar falso achado de audiência**: o modal mostra `data_evento` via `data_do_fato` (`app/templates/chamados/partials/modal_fio.html:159-180`, `app/chamados/services/fio.py:87-88`), mas exige gestor (`app/chamados/views.py:872-874`); a outra serialização crua é a fila de validação do copiloto (`app/api/views_mensageria.py:523-537`, `app/api/views_mensageria.py:568`).
+
+- **Resíduo de template, sem comprovar leitor válido de pergunta**: `meu_atendimento.html:19` usa `p.data_evento`, mas está dentro do laço `reg` (`app/templates/chamados/meu_atendimento.html:10-19`), e a view não entrega `p` no contexto (`app/chamados/views.py:633-652`).
 
 ## 30/10 08:51 · sessao 4195d57157cb · - · - · origem=Ronald (tmux)
 
@@ -268,63 +312,4 @@ Rastreio adicional:
 
 - Caso de duas pausas merece ressalva: ambos os pares usam os mesmos motivos, e o juiz de fato lê todos os pares; o novo helper toma somente `hii`/`hfi`. Se os pares estiverem em dias distintos, escolhe o dia do primeiro par. Existência desse caso no dado fornecido [não verificado]. `app/ponto/marcos.py:19-28`, `:35-40`; `app/chamados/juizes.py:823-827`, `:850-869`; `app/chamados/catalogo/query.py:60-67`.
 
-## 30/10 08:35 · sessao 97e8068ed3f7 · - · - · origem=Ronald (tmux)
-
-- **Dia contraditório na tela do colaborador.** O cartão exibe “Estamos falando do dia” usando `p.data_evento`, imediatamente antes do texto gravado; logo uma pergunta noturna nova poderá mostrar cabeçalho D e texto D+1. O cartão é incluído no atendimento do colaborador. (`app/templates/chamados/partials/_card_atendimento.html:87-93`; `app/templates/chamados/meu_atendimento.html:127`, `:144`; `app/chamados/catalogo/query.py:98-101`)
-
-- **Outro leitor do dia mostrado permanece no modal.** O modal imprime `perg.pergunta`, depois “Refere-se ao dia” pelo filtro `data_do_fato`; esse filtro lê `fio.data_do_fato_de`, que devolve `p.data_evento`, sem consultar o instante do marco. Se D coincide com o dia do chamado, o aviso de divergência também não aparece, embora o texto nomeie D+1. (`app/templates/chamados/partials/modal_fio.html:157-180`; `app/chamados/templatetags/chamados_extras.py:29-31`; `app/chamados/services/fio.py:84-88`)
-
-- **O custo no disparo pode ser duas queries novas por alvo, inclusive tentativa deduplicada.** Cada interpolação com colaborador e data válida faz `CelulaDia.objects.filter(...).first()`. O lote chama `perguntar` por alvo; `perguntar` chama `criar_ou_atualizar_disputa`, que já gera perguntas, e chama `gerar_perguntas_disputa` novamente. Para os quatro motivos datados, a formatação ocorre antes do dedup. Portanto, nos caminhos normais dessas duas chamadas, a segunda ainda paga o SELECT antes de descobrir a pergunta existente. (`app/chamados/catalogo/query.py:87-100`; `app/chamados/management/commands/disparar_perguntas_competencia.py:279-289`; `app/chamados/services/fabrica_da_celula.py:118-124`; `app/chamados/services/disputa_emissao.py:605-606`, `:618`, `:317`, `:369-387`) Volume e latência efetivos em produção: **[não verificado]**.
-
-- **O objeto célula já disponível no lote não evita a releitura.** O disparador percorre as células com colaborador carregado, mas guarda somente `(colaborador, data, motivo)`; o helper depois consulta novamente a célula e não possui cache. O caminho do julgamento também recebe `_cel` e termina na mesma fábrica. (`app/chamados/management/commands/disparar_perguntas_competencia.py:104-123`; `app/chamados/catalogo/query.py:98-100`; `app/ponto/services/cartorio.py:768-770`; `app/chamados/services/fabrica_da_celula.py:144-149`)
-
-- **INV4 não verifica correspondência do dia textual.** Usa o helper sem colaborador somente para decidir se uma pergunta deveria existir. O detector de pergunta cega verifica apenas presença de alguma sequência `dd/mm/aaaa`; não compara texto, identidade e instante. Portanto não detectará as contradições acima. (`app/chamados/management/commands/auditar_disputas.py:49-52`, `:69-82`, `:188-195`)
-
-- **`corrigir_pergunta_cega` não tem teste da rota nem do noturno.** O teste chama o helper sem colaborador, comenta “simula aplicar” e grava diretamente `pergunta`; assim não comprova que a ação real passará colaborador ou corrigirá para D+1. O formulário existente envia `confirmar_correcao_pergunta`; a implementação do handler não foi localizada na cópia **[não verificado]**. (`app/chamados/tests/test_corrigir_pergunta_cega.py:54-63`; `app/templates/chamados/partials/modal_fio.html:182-190`)
-
-- **Outros consumidores do texto gravado:** API retorna `p.pergunta` diretamente; o explicador apresenta a identidade `data_evento` como dia separado e o texto gravado; a cura de limbo procura a pergunta textual exata dentro do followup. Alterar texto já gravado poderia afetar esse último casamento; o diff apresentado não faz migração de textos existentes. (`app/api/views.py:2620-2634`; `app/chamados/services/explicador.py:68-71`; `app/chamados/management/commands/curar_perguntas_em_limbo.py:26-34`; `app/chamados/services/disputa_emissao.py:389`)
-
-- **Não atribuir automaticamente esse N+1 ao reconciliador.** O caminho rastreado reata perguntas existentes e reemite chamados; `reemitir_chamado_do_dia` usa `ChamadoColaborador.abrir` e `reapontar_resolvedora`, sem formatar a pergunta. O consumidor de eventos chama retratação e encerramento de órfãs. Uma query nova por pergunta de toda passagem do reconciliador não está demonstrada nesses caminhos. (`app/chamados/reconciliador.py:862-874`, `:896-905`, `:1293-1303`, `:1347-1348`)
-
-## 30/10 08:35 · sessao ff61757ac193 · - · - · origem=Ronald (tmux)
-
-Achados no caminho do lote/plantio, por inspeção estática:
-
-- **Custo adicional real por pergunta classificada.** `fila_validar_classificada` percorre perguntas e chama `classe_do_lote` individualmente; agora cada candidata com `data_evento` deriva o plantio antes de consultar conflito. Em diurno, os dois instantes podem ser iguais e o código executa dois `exists()` iguais quando o primeiro retorna falso, pois não elimina repetição. (`app/chamados/services/validacao.py:817`, `:830`, `:831`, `:834`, `:880`.)
-
-- **A derivação faz mais que aritmética.** Para resposta `07:00`/`00:00`, consulta `grade_da_celula` no crivo do relógio; depois `_tipo_pelo_marco` consulta novamente a grade, e o ajuste overnight carrega vínculo/célula e os marcos. Essas leituras não recebem dados previamente carregados. (`app/chamados/services/materializacao.py:354`, `:355`, `:370`, `:263`, `:266`, `:404`; `app/chamados/juizes.py:300`; `app/escala/servico_jornada.py:41`, `:47`, `:58`, `:69`; `app/escala/models.py:1097`.)
-  A grade consulta `CelulaDia`, e célula sem `ata.minutos_previstos` pode ainda chamar `minutos_previstos_do_dia`, que carrega célula/vínculo. O custo preciso em produção é [não verificado]. (`app/escala/services/leitor_celula.py:325`, `:346`, `:353`; `app/escala/utils.py:2198`.)
-
-- **Sem chamado-destino e contexto vazio não quebram por si.** Havendo `data_evento`, o contexto pode ser `{}`/`None`; `entrada_de_marco(None)` e `_marco_faltante(None)` devolvem `None`. O teste novo cria precisamente pergunta sem chamado-destino e disputa com contexto `{}`. (`app/chamados/services/materializacao.py:323`, `:327`, `:328`; `app/chamados/juizes.py:461`, `:475`; `app/chamados/tests/test_noturno_le_o_dia_do_instante.py:87`.)
-
-- **Não encontrei escrita de banco no derivador.** `_ts_tipo_do_plantio` só preenche listas de retorno; a persistência de `pendencia_admin` fica no materializador, que passa uma lista própria e chama `save()` depois. O lote passa `[]` para erros e omite `pendencia`, portanto não entra nessa escrita. Há efeito de observabilidade: exceções engolidas/divergência incrementam contador de processo e registram log. (`app/chamados/services/materializacao.py:379`, `:404`, `:786`, `:787`, `:790`, `:791`; `app/chamados/services/validacao.py:830`; `app/core/observ.py:73`.)
-
-- **Não é função universalmente protegida contra exceções.** O parse da hora está protegido, mas o ajuste overnight fica fora do `try`; este chama `ec.marcos_do_dia`, cujo parse de `dna.marcos` faz `split(':')`/`int()` sem proteção. DNA com hora inválida pode agora derrubar a classificação da fila; ocorrência no dado fornecido é [não verificado]. Falta de chamado/contexto, especificamente, não demonstra esse problema. (`app/chamados/services/materializacao.py:396`, `:404`; `app/chamados/juizes.py:301`, `:303`; `app/escala/servico_jornada.py:69`; `app/escala/models.py:1101`, `:1104`, `:1105`; `app/chamados/services/validacao.py:881`.)
-
-- **Outro juiz já existente continua divergente da célula.** O envelope do lote vem de `delta_da_resposta`; sem marco no chamado, `_marco_esperado_da_grade` escolhe vínculo `ativa=True`, lê `tipo_escala.marcos_do_dia(d)` e ignora o DNA congelado. O plantio agora consultado usa `escala_vigente` e `ec.marcos_do_dia`, que lê DNA. É divergência preexistente, não criada pelo diff, mas o lote continua dependendo dos dois caminhos. (`app/chamados/services/validacao.py:812`, `:815`; `app/chamados/juizes.py:1303`, `:1305`, `:1251`, `:1256`; `app/chamados/juizes.py:301`, `:303`; `app/escala/models.py:1099`.)
-
-- **`data_hora` não ganha a checagem efetiva do plantio própria desse tipo.** A classe aceita `data_hora`, mas chama diretamente `_ts_tipo_do_plantio`, que espera a resposta inteira em `HH:MM`; resposta `2026-10-22T07:00` cai no erro capturado e retorna timestamp `None`. O juiz existente `_slot_esperado` tem ramo específico que interpreta data e hora. Logo o novo segundo instante não cobre esse tipo; impacto em perguntas reais é [não verificado]. (`app/chamados/services/validacao.py:810`, `:830`, `:832`; `app/chamados/services/materializacao.py:391`, `:397`, `:399`; `app/chamados/juizes.py:331`.)
-
-Não executei testes nem consultei banco/log; execução verde/RED permanece [não verificado]. [nao verificado]
-
-## 30/10 08:35 · sessao 8afa26187ff4 · O261-VETO-NA-PORTA · sonda · origem=Code
-
-Transcrição do dado fornecido, sem validação independente. [nao verificado]
-
-| Módulo | sem_dia | ec_none | veto=None | veto=VETO_* | Total das linhas | Fonte |
-|---|---:|---:|---:|---:|---:|---|
-| batida_ausente | — | — | 2180 | — | 2180 | [nao verificado] |
-| turno_aberto_24h | 3 | 2 | 9 | — | 14 | [nao verificado] |
-| turno_aberto | — | — | 88 | — | 88 | [nao verificado] |
-| **Total** | **3** | **2** | **2277** | **—** | **2282** | [nao verificado] |
-
-“—” significa nenhuma linha correspondente no dado fornecido; não certifica zero. **ERROS=0**, conforme o anexo. [nao verificado]
-
-Pela leitura do código:
-
-- `dia_do_fato(chamado, fortes=False)` recebe o objeto chamado e retorna uma data ou `None`; `dia_do_fato(ch)` usa o padrão `fortes=False`. [app/chamados/juizes.py:78](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/juizes.py:78)
-- `vinculo_do_emissor(colab, data)` recebe colaborador e data, nessa ordem, e delega a `escala_vigente(colab, data)`. O consumidor no mesmo arquivo passa `cel.colaborador, cel.data`. [app/ponto/services/furos_vetados.py:10](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/ponto/services/furos_vetados.py:10) [app/ponto/services/furos_vetados.py:52](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/ponto/services/furos_vetados.py:52)
-
-**Não é possível confirmar as chamadas da sonda:** o anexo contém sua saída, sem imports ou chamadas, e não localizei `sonda_veto_ec_none.py` na cópia. Funções efetivamente chamadas e argumentos efetivamente passados: **[nao verificado]**.
-
-_409 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_412 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
