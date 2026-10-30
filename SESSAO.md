@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 30/10/2026 03:31:06.** Transcript: `e3f79949-a90b-4c64-a5c2-afd178149c30.jsonl` (6.8 MB). Acoes na janela: **286**.
+**Medido em 30/10/2026 03:36:28.** Transcript: `e3f79949-a90b-4c64-a5c2-afd178149c30.jsonl` (6.9 MB). Acoes na janela: **288**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 03:32:25 | Bash | Record opus rejection and medida | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md' L=open(p).read().split('\n') i=next(k for k,l in enumerate(L) if l.startswith('> (C) REMEDIDA COM A CURA')) L.insert(i+1,'> (C) OPUS FINAL REPROVOU df863705 (6 achados, todos procedentes): (1) LEI-AKITA fora dos commits; (2) Pauta DP das 461 exportadas sem codigo nem INCOMPLETO -> INCOMPLETO: sai por script de passivo depois d ...` |
+| 03:32:17 | SendMessage |  | `-` |
 | 03:29:41 | Bash | Record post-cure remeasure in RELATO | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md' L=open(p).read().split('\n') i=next(k for k,l in enumerate(L) if l.startswith('> (C) CONSTRUIDA')) L.insert(i+1,'> (C) REMEDIDA COM A CURA (sombra, `SOMBRA_ARVORE`=copia df863705, sonnet, conferida na saida `logs/o261/sonda_c_saidas_cura.out`; ROLLBACK True, ERROS=0): chamados CRIADOS 0 e RENASCIDOS 0 nas duas competencias; vi ...` |
 | 03:29:30 | Bash | Reconfer post-cure remeasure output | `cd /home/ronald/saas-hasner && grep -E "ROLLBACK\|ERROS\|TOTAL\|ABERTA:\|EXPORTADA:\|criad\|renasc\|destino" logs/o261/sonda_c_saidas_cura.out \| head -14 \| cut -c1-200` |
 | 03:26:08 | Bash | Record (C) build state and new fila line | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md' L=open(p).read().split('\n') if L[2].startswith('ESPERANDO:'): del L[2] i=next(k for k,l in enumerate(L) if l.startswith('> ESPERADO POR VETO')) L[i+1:i+1]=[ '> (C) CONSTRUIDA em copia wt-o261c3-3010-0232 @ df863705 (so `chamados/reconciliador.py` + teste novo): RED `app/logs/o261/red_c_9ec8cb28.log` FAILED 6/10 rc1 + `red_c_2 ...` |
