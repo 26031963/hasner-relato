@@ -6,10 +6,16 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 30/10/2026 00:18:38.** Transcript: `e3f79949-a90b-4c64-a5c2-afd178149c30.jsonl` (3.4 MB). Acoes na janela: **144**.
+**Medido em 30/10/2026 00:24:13.** Transcript: `e3f79949-a90b-4c64-a5c2-afd178149c30.jsonl` (3.5 MB). Acoes na janela: **150**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 00:21:40 | Bash | Record passivo measure; wait and read Codex v4 | `python3 - <<'EOF' p='docs/RELATO.md'; L=open(p).read().split('\n') L[3]='> EM CURSO: [nome] (B) volta 5 d9b7da1a -- opus final REPROVOU d74aad32 (relogio solto em teste novo; selo de vitalidade DRIBLADO por variavel local; predicado triplicado), curado: `relavra_via.q_carimbo_desfazivel` e a definicao UNICA lida pela porta, pelo julgamento (anotada na query do `ja`) e pelo vigia; recorte 356 OK com ...` |
+| 00:21:28 | Bash | Read measurement breakdown lines | `grep -E '^(ABERTA\|EXPORTADA\|PROVA)' /tmp/claude-1001/-home-ronald-saas-hasner-app/e3f79949-a90b-4c64-a5c2-afd178149c30/scratchpad/mB_medir_diag.out \| cut -c1-300` |
+| 00:19:02 | Bash | Diagnose envelope failure (errors only) | `cd /home/ronald/saas-hasner && SONDA_ARVORE=/home/ronald/wt-o261c2b-2910-2317/app timeout 900 bin/sonda_leitura.sh logs/o261/passivo_carimbo_sem_lastro.py > /tmp/claude-1001/-home-ronald-saas-hasner-app/e3f79949-a90b-4c64-a5c2-afd178149c30/scratchpad/mB_medir_diag.out 2>&1; echo rc=$?; grep -E 'Error\|Traceback\|ERRO\|ERROS=\|MODO' /tmp/claude-1001/-home-ronald-saas-hasner-app/e3f79949-a90b-4c64-a ...` |
+| 00:18:49 | Bash | Read envelope argument guard | `cd /home/ronald/saas-hasner && sed -n 60,100p bin/sonda_leitura.sh` |
+| 00:18:46 | Bash | Find envelope rejection rules | `cd /home/ronald/saas-hasner && grep -nE 'exit 4\|rc 4\|recus\|proib\|ESCRITA\|grep -q' bin/sonda_leitura.sh \| head -15` |
+| 00:18:39 | Bash | Read rc=4 reason | `cd /home/ronald/saas-hasner && cat logs/o261/codex_mB_passivo_medir.run \| tail -15` |
 | 00:18:35 | Bash | Read prod passivo measurement | `cd /home/ronald/saas-hasner && P=$(pgrep -f '^bash /tmp/.*/mB_suite.sh' \| head -1); sed -i "3s#pid=[0-9]*#pid=$P#" app/docs/RELATO.md; tail -n1 logs/o261/codex_mB_passivo_medir.run; cat logs/o261/codex_mB_passivo_medir.txt` |
 | 00:18:30 | Bash | Run full suite on volta 5 | `/tmp/claude-1001/-home-ronald-saas-hasner-app/e3f79949-a90b-4c64-a5c2-afd178149c30/scratchpad/mB_suite.sh` |
 | 00:18:29 | Bash | Commit volta 5, launch Codex v4 | `cd /home/ronald/wt-o261c2b-2910-2317 && git add app/chamados/services/fabrica_da_celula.py app/chamados/services/relavra_via.py app/chamados/services/vigia_fio.py app/chamados/tests/test_contract_leitores_vitalidade.py app/chamados/tests/test_o261_julgamento_desfaz_carimbo.py && git commit -q -F - <<'EOF' O261-COMPLEMENTO-[nome] (B) volta 5: elegibilidade da porta como definicao unica; testes sem r ...` |
