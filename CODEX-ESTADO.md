@@ -1,7 +1,107 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **29/10/2026 21:55** · publicado em **29/10/2026 21:55** (UTC-3)
+> Ultima resposta processada: **29/10/2026 21:57** · publicado em **29/10/2026 22:00** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 29/10 21:57 · sessao e114400beabb · o261c2 · leitura · origem=Code
+
+**Sim: uma pergunta pode nascer ligada a chamado pai terminal.** O caso mais explícito é a reabertura administrativa: cria a pergunta e só depois tenta reabrir o chamado (`app/chamados/services/acoes_disputa.py:259`, `app/chamados/services/acoes_disputa.py:265`).
+
+Antes do inventário, há dois vínculos diferentes: `PerguntaDisputa.disputa` → `DisputaSupervisao.chamado`, e `PerguntaDisputa.chamado_destino`. Não existe campo direto `PerguntaDisputa.chamado` nessas declarações (`app/chamados/models.py:1849`, `app/chamados/models.py:1324`, `app/chamados/models.py:2283`).
+
+Os conjuntos oficiais são `VIVOS=('aberto','em_analise','registrado')`, `ENCERRADOS=('resolvido','fechado')` e `TERMINAIS=ENCERRADOS+('cancelado','superado')`. Portanto, excluir apenas `ENCERRADOS` deixa passar dois estados terminais (`app/chamados/catalogo/motor.py:24`, `app/chamados/catalogo/motor.py:30`, `app/chamados/catalogo/motor.py:31`).
+
+**1–2) Sítios de criação e possibilidade de pai terminal**
+
+O inventário encontrado contém **seis chamadas de produção a `PerguntaDisputa.abrir`**, discriminadas abaixo, convergindo na inserção física `cls.objects.create(...)` (`app/chamados/models.py:2085`). A classe homônima conceitual `Pergunta`, do catálogo, é uma `dataclass`, não um modelo Django (`app/chamados/catalogo/perguntas.py:14`, `app/chamados/catalogo/perguntas.py:17`).
+
+Três sítios compartilham a escolha de pai por `_abrir_ou_agregar_disputa`: geração comum e as duas declarações. A query é:
+
+```python
+DisputaSupervisao.objects.select_for_update().filter(
+    colaborador=colaborador, fechada_em__isnull=True,
+).first()
+```
+
+Ela filtra **disputa aberta**, sem filtrar status do chamado pai e sem recorte de data. O ramo existente devolve essa disputa preservando seu pai; a ordenação padrão da disputa é `-aberta_em` (`app/chamados/services/disputa_emissao.py:467`, `app/chamados/services/disputa_emissao.py:502`, `app/chamados/models.py:1390`).
+
+Sem disputa aberta, o mesmo núcleo obtém o pai por:
+
+```python
+ChamadoColaborador.abrir(
+    colaborador=colaborador,
+    categoria='disputa_supervisao',
+    modulo_origem='disputa_supervisao',
+    status_local__in=VIVOS,
+    defaults=...,
+)
+```
+
+Depois cria a disputa com `chamado=chamado`. `subcategoria` fica nos `defaults`, não participa desse lookup (`app/chamados/services/disputa_emissao.py:504`, `app/chamados/services/disputa_emissao.py:514`, `app/chamados/services/disputa_emissao.py:523`).
+
+| Sítio / função | Escolha dos vínculos e status terminal no nascimento |
+|---|---|
+| **`gerar_perguntas_disputa`**, chamada em `app/chamados/services/disputa_emissao.py:389`; definição em `:280` | Recebe a disputa. O fluxo comum vem de `criar_ou_atualizar_disputa`, usando o núcleo acima: **pai terminal é permitido no reuso de disputa aberta**, pois o status dele não é conferido (`app/chamados/services/disputa_emissao.py:598`, `:606`, `:618`, `:467`). O destino é derivado pela query `ChamadoColaborador.objects.filter(colaborador=disputa.colaborador, status_local__in=VIVOS).exclude(categoria='disputa_supervisao')`: **terminais são excluídos na seleção do destino** (`app/chamados/services/disputa_emissao.py:181`). Há filtros adicionais de motivo atendido, ausência de pergunta não materializada do mesmo motivo, dia compatível e candidato único após desempate por turno (`:194`, `:209`, `:214`, `:219`, `:221`). Pode nascer sem destino; o reatamento ocorre depois da criação (`:404`, `:409`). |
+| **`_criar_pergunta_se_couber`**, chamada em `app/chamados/services/disputa_emissao.py:770`; definição em `:756` | Recebe disputa e destino. O agrupador tem **dois caminhos de seleção da disputa**. No repasse, busca `PerguntaDisputa.objects.filter(chamado_destino=ch, materializada_em__isnull=True).select_related('disputa').first()` e usa `_pv.disputa`, **sem exigir disputa aberta nem pai vivo**; chama a complementação, que chega a este sítio (`app/chamados/services/disputa_emissao.py:874`, `:877`, `:885`, `:813`). No caminho geral, usa `DisputaSupervisao.objects.filter(colaborador=colaborador, fechada_em__isnull=True).first()`, também sem status do pai (`:900`). Sem disputa, chama `ChamadoColaborador.abrir` com categoria `disputa_supervisao`, módulo `disputa_supervisao_manual`, subcategoria `orfao_14h`, `status_local__in=VIVOS`, e associa o retorno como pai (`:908`, `:931`). **Pai terminal: sim; disputa já fechada: também possível no repasse.** |
+| **`criar_disputa_ancora_de_chamado`**, chamada em `app/chamados/services/disputa_emissao.py:1160`; definição em `:1093` | Escolhe `DisputaSupervisao.objects.select_for_update().filter(colaborador=colaborador, fechada_em__isnull=True).first()`, **sem status do pai** (`app/chamados/services/disputa_emissao.py:1121`). Sem disputa, obtém pai por `ChamadoColaborador.abrir` com categoria `disputa_supervisao`, módulo `disputa_supervisao_manual`, subcategoria `ancora_ausente`, `status_local__in=VIVOS`; associa em `chamado=chamado_pai` (`:1128`, `:1151`). Destino é o argumento `chamado_limbo`, exigindo categoria `ancora_limbo` e recusando apenas `ENCERRADOS`: **pai terminal permitido no reuso; destino cancelado/superado não é barrado pelo teste de status**, enquanto resolvido/fechado é barrado (`:1107`, `:1109`, `:1166`). |
+| **`declarar_hora_colab`**, chamada em `app/chamados/services/declaracao_texto.py:322`; definição em `:257` | Obtém disputa por `disputa_para_declaracao`, que delega ao núcleo comum acima: **pai terminal permitido no reuso de disputa aberta** (`app/chamados/services/declaracao_texto.py:307`, `app/chamados/services/disputa_emissao.py:563`, `:467`). Destino é diretamente o argumento `ch`, sem query nem teste de status nesta função; exige módulo de furo e hora correspondente a marco faltante (`app/chamados/services/declaracao_texto.py:271`, `:281`, `:292`, `:323`). **Pelo contrato da função, destino terminal é permitido.** No chamador HTTP atual, porém, `resposta_tardia.receber` antecede a declaração: chamado não vivo precisa renascer ou a resposta retorna como tardia antes de chegar à criação (`app/chamados/views.py:1053`, `:1054`, `:1090`, `app/chamados/services/resposta_tardia.py:35`, `:45`, `:67`). |
+| **`aplicar_declaracao`**, chamada em `app/chamados/services/declaracao_texto.py:611`; definição em `:589` | Também obtém disputa por `disputa_para_declaracao` e pelo núcleo comum: **pai terminal permitido no reuso** (`app/chamados/services/declaracao_texto.py:605`, `app/chamados/services/disputa_emissao.py:563`, `:467`). Destino é diretamente `ch`; as propostas verificam módulo, dia e marcos faltantes, **sem filtro de status** (`app/chamados/services/declaracao_texto.py:551`, `:554`, `:563`, `:612`). **Pai e destino podem ser terminais.** O detalhe administrativo busca o chamado por PK e `ticket_id_glpi__isnull=True`, sem status, e chama esta função (`app/chamados/views.py:363`, `:480`). |
+| **`acao_reabrir_disputa_admin`**, chamada em `app/chamados/services/acoes_disputa.py:259`; definição em `:232` | Escolhe explicitamente a disputa fechada mais recentemente: `DisputaSupervisao.objects.filter(chamado=ch, fechada_em__isnull=False).order_by('-fechada_em').first()` (`app/chamados/services/acoes_disputa.py:252`). Reabre **a disputa** antes da pergunta; esse método limpa os campos de fechamento da disputa (`:256`, `app/chamados/models.py:1701`, `:1713`). Não passa destino, portanto ele é `None` (`app/chamados/services/acoes_disputa.py:259`, `app/chamados/models.py:2028`). **O chamado pai pode estar resolvido/fechado exatamente no nascimento:** a pergunta nasce em `:259`; `ch.reabrir()` só vem em `:265–266`. |
+
+No sítio `_criar_pergunta_se_couber`, o **destino** depende do ramo do agrupador: chamado de intervalo `_chi`; chamado `ch` no caminho por ata; primeiro chamado do grupo por batida, `chamados_grupo[0]`, na ordem herdada do chamador; ou `ch` no caminho sem batida de origem (`app/chamados/services/disputa_emissao.py:956`, `:978`, `:1000`, `:1012`, `:1043`). Esses chamados passam por `chamado_orfao_e_regularizavel`, cuja regra exclui apenas `ENCERRADOS`: **resolvido/fechado são recusados; cancelado/superado podem passar se satisfizerem as demais guardas** (`app/chamados/services/disputa_emissao.py:870`, `:892`, `:729`, `:691`, `:718`).
+
+**O filtro `status_local__in=VIVOS` passado a `ChamadoColaborador.abrir` não garante retorno vivo em todos os ramos.** Após o lookup inicial, o gate remove os filtros `status_local`, procura chamados com `contexto_json.agrupado_em` e pode devolver o próprio filho terminal quando o outro chamado indicado em `agrupado_em` está vivo. O juiz confere o status desse outro pai, não o do filho devolvido (`app/chamados/models.py:670`, `:689`, `:691`, `:693`, `:695`, `:581`, `:588`, `:596`).
+
+Na **inserção física**, `PerguntaDisputa.abrir` recebe ambos os vínculos e não exige disputa aberta nem chamado vivo. A validação de `chamado_destino` trata da compatibilidade de data/turno, sem conferir status (`app/chamados/models.py:2028`, `:2043`, `:2085`, `app/chamados/juizes.py:1702`). Assim, “excluído por `VIVOS`” acima descreve a seleção; não há revalidação de status no INSERT (`app/chamados/models.py:2085`).
+
+Há ainda uma distinção entre **nascimento e reaproveitamento**: o dedup procura a última pergunta por colaborador, motivo e data, em qualquer disputa. Pode reapontar destino/célula, mas preserva a disputa original e retorna sem criar outra pergunta (`app/chamados/models.py:2022`, `:2061`, `:2064`, `:2071`, `:2084`).
+
+**3) Funções existentes para “chamado vivo do dia” e terminalidade**
+
+**Existe `cobranca_viva_do_dia(colaborador, modulo_origem, dia, excluir=None)`**. Além de colaborador/data, ela exige módulo ou conjunto de módulos (`app/chamados/juizes.py:1610`, `:1620`). Sua seleção é:
+
+```python
+ChamadoColaborador.objects.filter(
+    colaborador=colaborador,
+    modulo_origem__in=_mods,
+    status_local__in=VIVOS,
+).filter(
+    Q(contexto_json__data_turno=dia.isoformat()) | Q(celula__data=dia)
+).select_related('celula').order_by('-criado_em', '-pk')
+```
+
+Exclui opcionalmente o próprio chamado e retorna o primeiro cujo `dia_do_fato(c, fortes=True)` confirma o dia (`app/chamados/juizes.py:1621`, `:1624`, `:1626`).
+
+Seus chamadores diretos de produção são:
+
+- `_gate_premissa_do_fechamento` — `app/chamados/models.py:498`.
+- `sobrevivente_por_ultimo` — `app/chamados/juizes.py:1644`.
+- `_autoresolve_f2_f4` — `app/ponto/services/triagem_batida.py:589`.
+- `resolver_cobranca_da_entrada` — `app/ponto/services/entrada_sincronizada.py:28`.
+
+Há também seletores plurais: `chamados_vivos_do_dia`, consumido por `fechar_o_fio_do_dia`, e `_chamados_vivos_do_dia`, consumido pelo serviço de cobertura (`app/ponto/services/veredito_celula.py:136`, `:182`, `app/ponto/services/cobertura.py:218`, `:310`).
+
+**Existe teste explícito de terminalidade:** `_resolv(ch)` verifica `status_local in RESOLVIDO`, sendo `RESOLVIDO = TERMINAIS`. É usado para o pai e os destinos por `classificar` e `fechar_beco` (`app/chamados/services/becos.py:13`, `:21`, `:30`, `:31`, `:43`, `:46`). Essas funções são chamadas pelo wrapper do evento e pelo comando de becos; o wrapper é acionado após commit pelo `post_save` da pergunta (`app/chamados/services/becos.py:69`, `:73`, `app/chamados/management/commands/fechar_becos_disputa.py:39`, `:57`, `app/chamados/signals.py:191`, `:200`, `:202`).
+
+`core/juizes.py` registra C1, “o chamado está vivo?”, apontando a autoridade para `catalogo/motor.py::VIVOS`; a pergunta sobre fio vivo é registrada separadamente em C15 (`app/core/juizes.py:107`, `:227`, `:123`, `:241`).
+
+**4) Leitores dependentes desses vínculos**
+
+| Leitor | Regra efetiva |
+|---|---|
+| **Fila administrativa `qs_na_fila`** | Não busca perguntas: parte de chamados em `VIVOS`, restringe a `COBRANCA` e exclui os silenciados no futuro. **Uma pergunta viva não faz seu pai terminal entrar nessa fila** (`app/chamados/services/painel.py:155`, `:186`, `:187`). |
+| **Crédito de perguntas / partição por verbos** | `particionar_verbos` chama `creditos_perguntas`. Este busca perguntas cujo destino **ou** pai está no universo de chamados vivos fornecido; credita ao destino se ele pertence a esse universo, senão ao pai. Se ambos são terminais, a pergunta fica fora dessa seleção (`app/chamados/services/verbos.py:31`, `app/chamados/services/raiox.py:54`, `:144`, `:146`). |
+| **`fio.chamado_que_lista`** | Retorna `p.chamado_destino_id or d.chamado_id`, **sem consultar status** (`app/chamados/services/fio.py:116`, `:117`). |
+| **Montagem do fio administrativo** | Carrega todos os chamados do colaborador, sem status; inclui perguntas de disputas abertas e perguntas vivas de disputas fechadas. Agrupa por `chamado_que_lista` e anexa ao card. Portanto, pai/destino terminal não é excluído apenas pelo status (`app/chamados/services/fio.py:174`, `:213`, `:218`, `:234`, `:236`, `:249`). |
+| **PWA do colaborador** | Usa `montar_chamados_fio(..., so_janela=True)`: restringe chamados à janela e não inclui perguntas de disputas fechadas. Os formulários consultam `p.viva` (`app/chamados/views.py:569`, `app/chamados/services/fio.py:169`, `:213`, `app/templates/chamados/partials/_card_atendimento.html:77`). |
+| **Janela do colaborador** | Amplia a janela com **destinos** de perguntas `q_vivas`, não com seus pais. Filtra colaborador, janela ou destino, `silenciado_ate IS NULL` e módulos internos; **não filtra status** (`app/chamados/services/janela_colab.py:61`, `:67`, `:70`). |
+| **API nativa `api_chamados_v2`** | Usa essa janela e somente disputas abertas. O destino vence **apenas se estiver em `VIVOS`**; caso contrário, ancora no pai da disputa. Só serializa perguntas nos cards presentes; `pode_responder` é falso para `ENCERRADOS` (`app/api/views.py:1015`, `:1028`, `:1047`, `:1155`, `:1177`). |
+| **Questionário separado `api_disputa_perguntas`** | Usa `perguntas_do_app`, selecionando por colaborador, `q_vivas` e `pergunta_viva`, **sem exigir disputa aberta ou pai vivo**. Cada item informa o destino; o envelope usa o primeiro destino pendente não nulo ou o pai da primeira disputa, sem teste de status nessa escolha (`app/api/views.py:2603`, `app/chamados/services/pergunta_no_app.py:42`, `app/api/views.py:2626`, `:2642`). |
+| **Lote de validação / mensageria** | `chamado_da_pergunta` retorna destino ou pai, sem status. É consumido na montagem do lote e pela API de mensageria (`app/chamados/services/validacao.py:786`, `:788`, `:869`, `app/api/views_mensageria.py:542`, `:546`). |
+
+Portanto, os leitores **não compartilham uma única regra de âncora**: fio/lote preferem qualquer destino não nulo; crédito administrativo prefere destino pertencente ao universo vivo; API nativa prefere destino cujo status está em `VIVOS` (`app/chamados/services/fio.py:117`, `app/chamados/services/validacao.py:788`, `app/chamados/services/raiox.py:144`, `app/api/views.py:1047`).
+
+Ocorrências concretas no banco de produção e eventual criação por código externo ao recorte: **[nao verificado]**.
 
 ## 29/10 21:55 · sessao c6476a4dda70 · - · - · origem=Ronald (tmux)
 
@@ -577,22 +677,4 @@ Linhas do diff abaixo são pós-aplicação; demais referências são da cópia.
 
 - **Relógio:** não há leitura nova de `now()` neste ramo; os dois `_tz.now()` já existem no resolver. A regra registrada de injeção nomeia juiz/grade/cartório/reconciliador/fábrica e bordas, então não afirmo automaticamente que este service de escrita viola aquele complemento. Referências: `app/chamados/services/disputa_emissao.py:1561`, `app/chamados/services/disputa_emissao.py:1638`, `app/docs/CORTES.md:369`.
 
-## 29/10 21:01 · sessao 32c02b5a9280 · - · - · origem=Ronald (tmux)
-
-Achados:
-
-- **P2 — recorte `--empresa` contaminado pela frota.** O comando entrega `empresas` ao censo e ao contador irmão, mas a nova chamada `respondida_sem_resposta()` não recebe recorte; a nova função consulta todas as perguntas. Assim uma empresa sem infração pode imprimir contagem de outra e sair com código 2. Referências: `app/chamados/management/commands/vigiar_fio_morto.py:142-160`; `diff_v1.patch`, nova linha 166 do comando e novas linhas 372-382 do serviço. A ocorrência concreta em produção é [nao verificado].
-
-- **P2/P3 — contador novo incompleto no contrato do carimbo/ESTADO.** Ele é guardado no topo do JSON, mas permanece fora de `censo`, `ESPERADO`, `ALARMA_SEMPRE` e `ALARMA_EM_0`. O leitor calcula `fora_do_esperado` exclusivamente de `censo` × `esperado` e não extrai a chave nova: `bin/fio_estado.py:69-92`. O ESTADO mostrará o nome em “a rodada ALARMOU” via `gritou`, mas não o valor medido nem seu esperado: `bin/fio_estado.py:101-119`; `bin/gerar_estado.py:260-261`. Portanto não alegar que o alarme fica totalmente oculto.
-
-- **P3 — ação nova ausente no filtro enumerado da auditoria.** `fecho_sem_credor` não consta em `LogAuditoria.ACOES`: `app/core/models.py:286-296`. O dropdown usa essa lista: `app/core/views.py:738`; `app/templates/core/log_auditoria.html:23-27`. A linha continua na listagem geral, e GET manual com `acao=fecho_sem_credor` funciona pelo filtro livre: `app/core/views.py:705-710`. Não há falha de gravação por `choices`: o campo suporta verbos livres de até 64 caracteres, conforme o próprio comentário em `app/core/models.py:296`, e o escritor chama `objects.create` sem `full_clean`: `app/core/observ.py:133-138`.
-
-Sem achado:
-
-- **Código de saída e consumidor do pipeline:** o diff mantém carimbo antes do `SystemExit(2)` (`app/chamados/management/commands/vigiar_fio_morto.py:174-197`, linhas-base), e o placar já trata exit 2 como ALARME: `app/core/management/commands/pipeline_placar.py:75-79,98-99`.
-- **Outros leitores por ações específicas:** histórico consulta apenas transições de Chamado, portanto a ação de PerguntaDisputa não entra por engano: `app/chamados/services/historico.py:44,86-88`; vigia de loop filtra `estado_chamado`: `app/chamados/services/vigia_loop.py:28-32`.
-- **Segundo escritor de LogAuditoria:** a chamada nova usa a casa única `evento`, que efetivamente grava em `app/core/observ.py:94-105,133-138`.
-
-Cobertura insuficiente: os testes existentes verificam os grupos declarados e esperado antigos, não a nova integração (`app/chamados/tests/test_o261_vigia_fio.py:643-657,703-707`); o teste novo do anexo chama só a função contadora, nunca o comando (`app/chamados/tests/test_o261_resposta_vazia.py:106-119`, arquivo novo do diff). Remover do comando a impressão, o carimbo e o alarme novos não é detectado por esse teste novo. Execução dos testes e consumidores externos à cópia: [nao verificado].
-
-_255 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_256 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
