@@ -1,7 +1,111 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **30/10/2026 14:10** · publicado em **30/10/2026 14:10** (UTC-3)
+> Ultima resposta processada: **30/10/2026 14:12** · publicado em **30/10/2026 14:16** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 30/10 14:12 · sessao ef4ba8f661a1 · CODEX-ASTRA-AB · verificador · origem=Code
+
+**Veredito da cópia: REPROVADO.** Há reabertura automática que contorna o veto, e o selo não detecta esse caminho; a garantia de abrir cadastro para ativo sem vínculo também não está cumprida (`app/chamados/services/disputa_emissao.py:1606`; `app/chamados/tests/test_o261_veto_na_porta.py:212`; `app/ponto/management/commands/detectar_ausencias.py:139`).
+
+Identidade do commit, comparação Git com `d2c37edd`, suíte Django, ocorrência dos contraexemplos em produção e execução da relavratura: **[nao verificado]**. A análise abaixo é da cópia disponível e dos anexos.
+
+**1. Quem escreve, quem lê e efeito de `ec=None`**
+
+O registro vivo nomeia `motivo_do_veto` como juiz; o corte contém a autorização exigida. O próprio `JUIZES.md` determina que o registro vivo prevalece (`app/core/juizes.py:248`; `app/docs/CORTES.md:401`; `app/docs/JUIZES.md:10`).
+
+Os leitores de produção encontrados para o resultado de `motivo_do_veto` são:
+
+| Leitor | Efeito quando `ec=None` passa a retornar `VETO_DEGENERADA` |
+|---|---|
+| Porta `_veto_da_regua` | Recusa nascimento por `abrir`/`criar` e renascimento por `_renascer_por_premissa_viva`, havendo dia forte. Sem dia, continua permitindo (`app/chamados/models.py:731`, `:778`, `:838`, `:891`, `:896`). |
+| Cartório `_veto_do_dia` | Acrescenta o veto à impressão; pode desfazer a igualdade que dispensava rejulgamento. O resultado não é passado diretamente como veredito ao classificador (`app/ponto/services/cartorio.py:1013`, `:1083`, `:1092`, `:1108`). |
+| `furos_sem_cobranca.medir` | Classifica o item como `porta='veto'`, retirando-o do total cobrável, mas mantendo-o em `itens`/`por_porta`. As exclusões anteriores — chamado vivo, tranca e afastamento — continuam prevalecendo (`app/ponto/services/furos_sem_cobranca.py:30`, `:83`, `:96`, `:109`). |
+| C2 `reemitir_chamado_do_dia` | Recusa emissão/renascimento. Quando já há chamado vivo, deliberadamente não consulta esse veto e pode costurar nele (`app/chamados/reconciliador.py:807`, `:852`, `:854`, `:855`). |
+| `furos_vetados_por_regua` | Inclui furo sem vínculo, com `vinculo=None` e `corroborada_em=None`; continua excluindo desligado (`app/ponto/services/furos_vetados.py:61`, `:65`, `:69`). |
+| `chamados_vivos_em_dia_vetado` | Conta chamado vivo do universo com dia forte e vínculo ausente; não fecha nem modifica o chamado. Sem dia vai para contador separado (`app/ponto/services/furos_vetados.py:95`, `:101`, `:106`, `:110`). |
+
+As cadeias de produção e consumo dos demais valores afetados são:
+
+| Campo/valor | Quem fornece/escreve → quem lê |
+|---|---|
+| `VETO_DEGENERADA`, `VETO_REGUA`, `None` | `motivo_do_veto` compõe `regua_degenerada` e o veto de suspeita; não grava banco → leitores da tabela anterior (`app/ponto/services/furos_vetados.py:33`). |
+| Universo de módulos | `FURO_MODULES` e `MODULOS_DE_TURNO` → união em `modulos_do_veto` → porta, vigia e teste dos cinco módulos (`app/chamados/catalogo/furo_modulos.py:15`; `app/chamados/reconciliador.py:336`; `app/ponto/services/furos_vetados.py:79`; `app/chamados/models.py:889`; `app/chamados/tests/test_o261_veto_na_porta.py:383`). |
+| Dia, `contexto_json`, `celula` | Emissores fornecem contexto; porta resolve a célula; `dia_do_fato(fortes=True)` prioriza célula e chaves do catálogo/contexto → porta e vigia (`app/chamados/models.py:718`, `:725`, `:830`; `app/chamados/juizes.py:89`, `:104`; `app/ponto/services/furos_vetados.py:101`). |
+| Vínculo do dia, `escala_geradora`, vigência | Porta de célula grava geradora; carregador busca célula/vínculos e delega a `alimentacao.vinculo_do_dia` → `vinculo_do_emissor` → juiz. Não encontrei nova escolha paralela de vínculo nessa cadeia (`app/ponto/portas/celula.py:248`, `:260`; `app/escala/servico_jornada.py:46`, `:57`; `app/escala/alimentacao.py:196`; `app/ponto/services/furos_vetados.py:23`). |
+| Template e avaliação da régua | `TipoEscala.marcos_do_dia` alimenta a degeneração; avaliação/corrobor ação gravam estado da régua → veto de suspeita lê avaliação, faixa e avaliações consecutivas (`app/escala/models.py:326`; `app/escala/regua_defesa.py:23`, `:26`, `:560`, `:644`, `:666`, `:765`; `app/colaboradores/services/vinculo.py:889`). |
+| `status_local`, retorno de nascimento | Nascimentos continuam nos dois gates; transições continuam em `_gravar_estado` → dedup, emissores, C2 e vigia leem estado/retorno (`app/chamados/models.py:192`, `:670`, `:735`, `:817`; `app/chamados/reconciliador.py:885`, `:888`; `app/ponto/services/furos_vetados.py:95`). |
+| Trilha: ação, modelo, objeto, `modulo_origem`, `dia`, `veto`, `via`, colaborador | `_trilha_do_veto` monta e consulta a chave; `core.observ.evento` escreve `LogAuditoria` → deduplicação e teste leem a trilha (`app/chamados/models.py:915`, `:921`, `:927`; `app/core/observ.py:134`; `app/chamados/tests/test_o261_veto_na_porta.py:359`). |
+| Impressão, ata e veredito | `impressao_insumos` incorpora veto; cartório classifica e pede lavra; porta de célula grava → próxima passagem compara impressão (`app/ponto/services/cartorio.py:329`, `:1092`, `:1409`, `:1424`; `app/ponto/portas/celula.py:647`, `:708`). |
+| Achados e contadores de veto | Serviços produzem dicionários → comando imprime; leitor de desfazer corroboração filtra pelo vínculo específico, descartando naturalmente `None` (`app/ponto/services/furos_vetados.py:69`, `:108`; `app/ponto/management/commands/furos_vetados_por_regua.py:29`, `:34`, `:44`; `app/escala/management/commands/desfazer_corroboracao_regua.py:38`). |
+| `VETO_NA_PORTA` | Detector/grade devolvem texto → detector conta por chave, grade conta no plano e cartório conta veto, sem anunciar emissão (`app/ponto/management/commands/detectar_ausencias.py:733`, `:440`; `app/ponto/management/commands/reconciliar_grade.py:520`, `:254`; `app/ponto/services/cartorio.py:1497`). |
+| `recusado_veto` | Retroativo consulta `veto_no_nascimento` no dry; no apply distingue retorno recusado; imprime total local (`app/ponto/management/commands/emitir_turno_aberto_retroativo.py:138`, `:174`, `:186`). |
+| Fixtures: tipo, posto e vínculo | `dar_vinculo` cria/reutiliza template e posto e cria `EscalaColaborador` ativa desde 2020 → resolução normal de vínculo e juiz (`app/chamados/tests/_vinculo_do_dia.py:13`, `:19`, `:23`; `app/escala/servico_jornada.py:58`). |
+
+Detector e grade ainda consultam os predicados anteriores antes da porta; C2 ainda consulta o novo juiz por fora. Isso está explicitamente permitido pela allowlist do pouso A, portanto **não classifico essas três permanências, isoladamente, como achado contra esse pouso** (`app/chamados/tests/test_o261_veto_na_porta.py:46`).
+
+Há três achados nessa cadeia:
+
+- **Impressão incompleta no ramo “nunca bateu”.** Esse ramo chama `impressao_insumos` sem `veto`, compara o hash e retorna antes do leitor do juiz. **Contraexemplo:** ativo sem adesão, célula carimbada, `ec=None` e demais insumos iguais: continua sendo pulado; o novo veto não entra em sua impressão. Esse ramo não emite cobrança por desenho; a falha é de cobertura da impressão, não prova de cobrança indevida (`app/ponto/services/cartorio.py:903`, `:907`, `:941`, `:943`, `:1003`, `:1013`).
+
+- **Ato humano passa sem registrar o veto dispensado.** Desarquivar registra resgate, mas não consulta nem registra `VETO_DEGENERADA`; a trilha nova registra recusas. **Contraexemplo:** desarquivar chamado encerrado pela competência, com dia conhecido sem vínculo: há trilha de resgate, mas falta a informação de que o humano atravessou um veto. O próprio vigia documenta essa pendência (`app/chamados/views_arquivar.py:68`, `:75`, `:79`; `app/chamados/models.py:915`; `app/ponto/services/furos_vetados.py:90`).
+
+- **Deduplicação da trilha não distingue a operação prometida.** A documentação promete uma linha por operação e grava `via`, mas o filtro não consulta `via`. **Contraexemplo:** `abrir` recusado e depois `criar` recusado para o mesmo colaborador/célula, módulo, dia e veto: a segunda operação fica sem linha própria (`app/chamados/models.py:908`, `:921`, `:927`).
+
+**2. Fixtures migradas**
+
+**Intenção “sem vínculo/sem escala” mascarada pelo helper: sem achado.** O caso explicitamente sem escala permanece sem ela: não chama o helper de chamado agrupado que passou a conceder vínculo. “Tranca sem cadastro” trata avisos de cadastro fora da tranca, não colaborador sem vínculo (`app/chamados/tests/test_selo_f4_fatia4.py:45`, `:69`, `:131`; `app/chamados/tests/test_tranca_sem_cadastro.py:9`).
+
+Há vacuidades em testes tocados, **já presentes no corpo anterior mostrado pelo diff**, sem evidência de que tenham sido introduzidas pelo helper: [nao verificado]
+
+| Teste | O que não prova e contraexemplo | [nao verificado]
+|---|---|
+| `test_MORDE_desligado_segue_o_gate_do_c2` | O desligado recebe vínculo, mas não recebe a célula criada para o outro colaborador. Remover o gate de situação ainda permite que a ausência de protesto impeça emissão; as asserções continuam satisfeitas (`app/chamados/tests/test_emissao_reata_orfa.py:31`, `:67`, `:71`, `:73`; `app/chamados/reconciliador.py:789`, `:834`, `:836`). |
+| `test_sem_celula_o_chamado_ainda_nasce` | Só chama `_ctx_c2` e examina o dicionário. Uma porta que recusasse todos os nascimentos não seria observada pelo teste (`app/chamados/tests/test_emissor_nomeia_o_marco.py:88`, `:92`; `app/chamados/reconciliador.py:862`). |
+| `test_sem_ata_possivel_o_chamado_nasce_sem_marco_e_nao_deixa_de_nascer` | Também só verifica o contexto. Recusar a abertura depois da montagem desse contexto preservaria suas asserções (`app/chamados/tests/test_bug125_cobranca_cega.py:176`, `:182`; `app/chamados/reconciliador.py:862`). |
+
+O teste novo sem vínculo efetivamente pede abertura, espera `(None, False)` e compara com nascimento com vínculo; os testes de deduplicação também exigem chamado efetivo. Nesses controles: **sem achado** (`app/chamados/tests/test_o261_veto_na_porta.py:395`, `:404`, `:406`; `app/chamados/tests/test_3c_abrir_ausencia.py:52`; `app/chamados/tests/test_f3_dedup_atraso.py:57`).
+
+Estado verde da suíte: **[nao verificado]**. [nao verificado]
+
+**3. Quem abre `regua_degenerada` para ativo sem vínculo**
+
+O escritor existe: `vetar_cobranca_se_degenerada` transforma `ec=None` em template ausente e abre `regua_degenerada`, com código `SEM_ESCALA`. Os chamadores são detector e grade (`app/escala/regua_defesa.py:23`, `:45`, `:50`, `:51`; `app/ponto/management/commands/detectar_ausencias.py:599`; `app/ponto/management/commands/reconciliar_grade.py:486`).
+
+**Achado: existir o escritor não garante que o ativo sem vínculo o alcance.**
+
+- Detector pula vínculo ausente antes do emissor (`app/ponto/management/commands/detectar_ausencias.py:139`).
+- Cartório integral exige vínculo; parcial retorna sem ele (`app/ponto/services/cartorio.py:1347`, `:1446`).
+- Retroativo de furo pula vínculo ausente (`app/ponto/management/commands/emitir_furo_retroativo.py:118`).
+- Grade exclui template ausente da fila de emissão (`app/ponto/management/commands/reconciliar_grade.py:157`; `app/ponto/marcos.py:107`).
+- Emissores de turno também saem sem vínculo (`app/ponto/management/commands/processar_alertas_avancados.py:37`; `app/ponto/management/commands/emitir_turno_aberto_retroativo.py:104`).
+- Juiz e nova porta somente recusam; não produzem o cadastro (`app/ponto/services/furos_vetados.py:40`; `app/chamados/models.py:896`).
+
+**Contraexemplo:** ativo em operação, sem qualquer vínculo nem geradora de célula, sem aviso de cadastro anterior. Os fluxos acima saltam a emissão; chamar a nova porta com dia conhecido apenas veta. Não nasce `regua_degenerada` por esses caminhos. A garantia do aval não está cumprida na cópia; não atribuo a origem dessa lacuna ao diff (`app/ponto/management/commands/detectar_ausencias.py:139`; `app/ponto/services/cartorio.py:1348`; `app/chamados/models.py:896`).
+
+**4. Há nascimento/reabertura automática que escapa?**
+
+**Sim: duas rotas de reabertura.**
+
+**A. Resposta pendente reabre diretamente.** O resolver chama `_pai.reabrir()` ao encontrar resposta aguardando validação. Ele é acionado automaticamente pelo signal e pelo reconciliador; não passa por `_renascer_por_premissa_viva` (`app/chamados/services/disputa_emissao.py:1598`, `:1604`, `:1606`; `app/chamados/signals.py:92`; `app/chamados/reconciliador.py:538`).
+
+**Contraexemplo:** pai histórico `entrada_bloqueada_turno_aberto`, resolvido, dia conhecido sem vínculo, sem agrupamento/irmão vivo/encerramento administrativo, categoria sem classificação de furo; disputa aberta com resposta não validada nem materializada creditada ao pai. O juiz de respostas aceita o caso; `reabrir` grava estado vivo sem perguntar o veto. O módulo pertence ao universo, embora possa ficar fora da guarda específica de premissa de furo (`app/chamados/juizes.py:1471`; `app/chamados/catalogo/furo_modulos.py:15`; `app/chamados/models.py:984`, `:1078`, `:1158`).
+
+**B. A grade pode desfazer a recusa da porta.** `abrir` devolve o existente encerrado mesmo quando `_renascer_por_premissa_viva` recusa. A grade só trata `None`; recebendo encerrado, chama `reabrir()` diretamente (`app/chamados/models.py:686`, `:688`; `app/ponto/management/commands/reconciliar_grade.py:519`, `:521`, `:522`).
+
+**Contraexemplo:** `batida_ausente` resolvido com marco ainda faltante; template pré-carregado era 08–17 e muda para 08–08 antes da abertura. O veto externo lê o objeto antigo; a porta recarrega o vínculo e veta; a grade recebe o encerrado e o reabre sem veto. A trava de `abrir` é no colaborador, não no template (`app/ponto/management/commands/reconciliar_grade.py:189`, `:196`, `:487`; `app/chamados/models.py:669`, `:778`, `:896`).
+
+**O selo fica verde apesar dessas fugas.** A varredura pura em memória encontrou exatamente as duas escritas e três cópias permitidas, mas a função real do caminho A não apareceu. O selo reconhece operações de gerente/construtor; não acompanha a reabertura pelo receptor `_pai`. Portanto a prova atual não sustenta “toda reabertura automática passa pelo veto” (`app/chamados/tests/test_o261_veto_na_porta.py:40`, `:46`, `:207`, `:212`, `:216`; `app/chamados/services/disputa_emissao.py:1606`).
+
+Nos demais critérios solicitados:
+
+| Classe | Resultado |
+|---|---|
+| Segundo juiz novo / derivação paralela nova de vínculo ou universo | **Sem achado** na composição nova; usa autoridades existentes e união declarada (`app/ponto/services/furos_vetados.py:23`, `:33`, `:79`). |
+| Segundo escritor novo de estado | **Sem achado**; as fugas usam o escritor existente por uma entrada que contorna a guarda (`app/chamados/models.py:192`, `:1158`). |
+| Ordem de trava | **Sem achado de inversão introduzida**; permanece a trava de colaborador antes da leitura/dedup. Ensaio concorrente: **[nao verificado]** (`app/chamados/models.py:666`, `:669`). |
+| Relógio novo fora da borda | **Sem achado no novo juiz/gate**: recebem ou derivam o dia do fato, sem consultar “agora” (`app/ponto/services/furos_vetados.py:27`; `app/chamados/models.py:891`). |
+| Custo de frota no request | **Sem achado dessa classe**; há leitura adicional por dia na porta, pelo carregador de vínculo. Custo medido/latência: **[nao verificado]** (`app/chamados/models.py:896`; `app/escala/servico_jornada.py:46`, `:58`). |
+| Pouso antes dos pré-requisitos financeiros | O novo hash pode provocar relavra, e o cron seleciona células passadas sem recorte de competência nessa seleção. Reversão anterior, DIFF financeiro, preservação de exportadas por hash e encaminhamento à Pauta DP: **[nao verificado]** (`app/ponto/services/cartorio.py:1083`, `:1092`, `:1409`; `app/ponto/management/commands/processar_cartorio.py:49`, `:61`). |
 
 ## 30/10 14:10 · sessao efaf950742da · - · - · origem=Ronald (tmux)
 
@@ -675,66 +779,4 @@ Censo de leitores, somente leitura. A chave `'futuro'` de `calendario.py:785` é
 
 O command do vigia imprime linhas do censo, carimba todos os contadores e só alarma de acordo com constantes; `decisao_do_dia_pendente` é informativo, enquanto `dias_futuros_no_universo` alarma sempre e fio morto só com flag de passivo. Agendamento real em crontab não foi verificado neste snapshot. — `app/chamados/management/commands/vigiar_fio_morto.py:80`, `app/chamados/management/commands/vigiar_fio_morto.py:81`, `app/chamados/management/commands/vigiar_fio_morto.py:160`, `app/chamados/management/commands/vigiar_fio_morto.py:165`, `app/chamados/management/commands/vigiar_fio_morto.py:205`; crontab [nao verificado].
 
-## 30/10 13:21 · sessao abaa92c92829 · COL309-SETEMBRO · sonda · origem=Code
-
-Não houve nova execução: o lançador escreve arquivos ([bin/sonda_leitura.sh:132](bin/sonda_leitura.sh:132), [bin/sonda_leitura.sh:217](bin/sonda_leitura.sh:217)). Abaixo, a saída fornecida integralmente; execução e dados de produção [nao verificado].
-
-```text
-sonda_leitura: sonda_classe.py [1401c8b1fb95d59a] no cpuset 4-7, lendo saas_hasner como leitor (LEITURA)
-
-TRILHA_LINHAS_DESDE_28_09=610 COM_BARRADOS=29 DIAS_BARRADOS=563 VINCULOS=25
-BARR log=595390 ec=1327 dias=1 lavra=exportacao (TXT do Dominio), competencia 09/2026 janela=2026-09-20..2026-10-20 apesar=False
-BARR log=595957 ec=1328 dias=31 lavra=exportacao (TXT do Dominio), competencia 09/2026 janela=2026-08-21..2026-10-20 apesar=False
-BARR log=596310 ec=1330 dias=4 lavra=exportacao (TXT do Dominio), competencia 09/2026 janela=2026-09-17..2026-10-20 apesar=False
-BARR log=597279 ec=1331 dias=19 lavra=exportacao (TXT do Dominio), competencia 09/2026 janela=2026-09-02..2026-10-20 apesar=False
-BARR log=597355 ec=1333 dias=30 lavra=exportacao (TXT do Dominio), competencia 09/2026 janela=2026-08-22..2026-10-20 apesar=False
-BARR log=597406 ec=1334 dias=30 lavra=exportacao (TXT do Dominio), competencia 09/2026 janela=2026-08-22..2026-10-20 apesar=False
-BARR log=597429 ec=1335 dias=8 lavra=exportacao (TXT do Dominio), competencia 09/2026 janela=2026-09-13..2026-10-20 apesar=False
-BARR log=597451 ec=1336 dias=14 lavra=exportacao (TXT do Dominio), competencia 09/2026 janela=2026-09-07..2026-10-20 apesar=False
-BARR log=597484 ec=1337 dias=10 lavra=exportacao (TXT do Dominio), competencia 09/2026 janela=2026-09-11..2026-10-20 apesar=False
-BARR log=597680 ec=1333 dias=30 lavra=exportacao (TXT do Dominio), competencia 09/2026 janela=2026-08-22..2026-10-20 apesar=False
-BARR log=597757 ec=1339 dias=22 lavra=exportacao (TXT do Dominio), competencia 09/2026 janela=2026-08-30..2026-10-20 apesar=False
-BARR log=601349 ec=1255 dias=10 lavra=exportacao (TXT do Dominio), competencia 09/2026 janela=2026-09-11..2026-10-20 apesar=False
-BARR log=602270 ec=1340 dias=5 lavra=exportacao (TXT do Dominio), competencia 09/2026 janela=2026-09-16..2026-10-20 apesar=False
-BARR log=602379 ec=1341 dias=20 lavra=exportacao (TXT do Dominio), competencia 09/2026 janela=2026-09-01..2026-10-20 apesar=False
-BARR log=603110 ec=1220 dias=19 lavra=exportacao (TXT do Dominio), competencia 09/2026 janela=2026-09-02..2026-10-20 apesar=False
-BARR log=613403 ec=1328 dias=31 lavra=exportacao (TXT do Dominio), competencia 09/2026 janela=2026-08-21..2026-10-20 apesar=False
-BARR log=640685 ec=1365 dias=1 lavra=exportacao (TXT do Dominio), competencia 09/2026 janela=2026-09-20..2026-10-20 apesar=False
-BARR log=653981 ec=1380 dias=31 lavra=exportacao (TXT do Dominio), competencia 09/2026 janela=2026-08-21..2026-10-20 apesar=False
-BARR log=660581 ec=1397 dias=31 lavra=exportacao (TXT do Dominio) e holerite PUBLICADO deste colaborador, competencia 09/2026 janela=2026-08-21..2026-10-20 apesar=False [nao verificado]
-BARR log=660739 ec=1263 dias=1 lavra=exportacao (TXT do Dominio) e holerite PUBLICADO deste colaborador, competencia 09/2026 janela=2026-09-20..2026-10-20 apesar=False [nao verificado]
-BARR log=662019 ec=1405 dias=31 lavra=exportacao (TXT do Dominio) e holerite PUBLICADO deste colaborador, competencia 09/2026 janela=2026-08-21..2026-10-20 apesar=False [nao verificado]
-BARR log=668800 ec=1407 dias=4 lavra=exportacao (TXT do Dominio) e holerite PUBLICADO deste colaborador, competencia 09/2026 janela=2026-09-17..2026-10-20 apesar=False [nao verificado]
-BARR log=668822 ec=1408 dias=5 lavra=exportacao (TXT do Dominio) e holerite PUBLICADO deste colaborador, competencia 09/2026 janela=2026-09-16..2026-10-20 apesar=False [nao verificado]
-BARR log=668849 ec=1409 dias=31 lavra=exportacao (TXT do Dominio) e holerite PUBLICADO deste colaborador, competencia 09/2026 janela=2026-08-21..2026-10-20 apesar=False [nao verificado]
-BARR log=692598 ec=1416 dias=20 lavra=exportacao (TXT do Dominio) e holerite PUBLICADO deste colaborador, competencia 09/2026 janela=2026-09-01..2026-10-20 apesar=False [nao verificado]
-BARR log=698178 ec=1420 dias=31 lavra=exportacao (TXT do Dominio) e holerite PUBLICADO deste colaborador, competencia 09/2026 janela=2026-08-21..2026-10-20 apesar=False [nao verificado]
-BARR log=699261 ec=1420 dias=31 lavra=exportacao (TXT do Dominio) e holerite PUBLICADO deste colaborador, competencia 09/2026 janela=2026-08-21..2026-10-20 apesar=False [nao verificado]
-BARR log=724164 ec=1437 dias=31 lavra=exportacao (TXT do Dominio) e holerite PUBLICADO deste colaborador, competencia 09/2026 janela=2026-08-21..2026-10-20 apesar=False [nao verificado]
-BARR log=724205 ec=1437 dias=31 lavra=exportacao (TXT do Dominio) e holerite PUBLICADO deste colaborador, competencia 09/2026 janela=2026-08-21..2026-10-20 apesar=False [nao verificado]
-FORA_DA_VIGENCIA|emp=1|comp=2026-10|aberta celulas=21 colabs=1
-FORA_DA_VIGENCIA|emp=2|comp=2026-08|EXPORTADA celulas=643 colabs=52
-FORA_DA_VIGENCIA|emp=2|comp=2026-09|EXPORTADA celulas=1036 colabs=53
-FORA_DA_VIGENCIA|emp=2|comp=2026-10|aberta celulas=1272 colabs=56
-FORA_DA_VIGENCIA|emp=2|comp=2026-11|aberta celulas=894 colabs=31
-FORA_DA_VIGENCIA|emp=2|comp=2026-12|aberta celulas=110 colabs=6
-FORA_DA_VIGENCIA|emp=2|comp=2027-01|aberta celulas=33 colabs=3
-FORA_DA_VIGENCIA|emp=3|comp=2026-08|aberta celulas=161 colabs=11
-FORA_DA_VIGENCIA|emp=3|comp=2026-09|EXPORTADA celulas=216 colabs=12
-FORA_DA_VIGENCIA|emp=3|comp=2026-10|aberta celulas=206 colabs=10
-FORA_DA_VIGENCIA|emp=3|comp=2026-11|aberta celulas=475 colabs=18
-FORA_DA_VIGENCIA|emp=3|comp=2026-12|aberta celulas=110 colabs=4
-FORA_DA_VIGENCIA|emp=3|comp=2027-01|aberta celulas=44 colabs=4
-FORA_DA_VIGENCIA|emp=4|comp=2026-08|aberta celulas=11 colabs=2
-FORA_DA_VIGENCIA_TOTAL=5232 COLABS=173
-COL309_FORA=27
-ERROS=0
-FIM-DA-SONDA
-```
-
-Trilha: 563 dias em 29 registros, abrangendo 25 vínculos, conforme dado fornecido [nao verificado].  
-Fora da vigência da geradora: 5.232 células = 1.895 em competências exportadas + 3.337 em abertas, somadas do dado fornecido [nao verificado].  
-COL309_FORA=27, conforme dado fornecido [nao verificado].  
-ERROS=0, conforme dado fornecido [nao verificado].
-
-_491 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_492 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
