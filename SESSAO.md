@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 30/10/2026 02:21:43.** Transcript: `e3f79949-a90b-4c64-a5c2-afd178149c30.jsonl` (5.8 MB). Acoes na janela: **244**.
+**Medido em 30/10/2026 02:27:11.** Transcript: `e3f79949-a90b-4c64-a5c2-afd178149c30.jsonl` (5.9 MB). Acoes na janela: **249**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 02:25:35 | Agent | Measure porta exits per record | `Medida na SOMBRA, projeto /home/ronald/saas-hasner. Você só mede: não edita `app/`, não commita, não toca prod. BASE. A sonda `logs/o261/sonda_reatar_807_posB.py` (cópia rodável em `logs/sombra/`, rodada por `bin/sombra.sh --rodar sonda_reatar_807_posB.py`; o rc do `--rodar` é o do echo, o veredito se lê na saída) monta, dentro de um `transaction.atomic()` que termina em raise, o universo U de per ...` |
+| 02:25:21 | Bash | Write named motivo list and decision in RELATO | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md' L=open(p).read().split('\n') i=next(k for k,l in enumerate(L) if l.startswith('> DESPACHO O261-(C)-LISTA')) L[i+1:i+1]=[ '> **(C) LISTA NOMEADA DOS MOTIVOS (antes do codigo; Codex `logs/o261/codex_c_lista_motivos.txt`, conferido `reconciliador.py:1380-1450,712`, `juizes.py:1589-1600`, `models.py:2466-2503`):**', '> - GRUPO DIA ...` |
+| 02:25:07 | Bash | Check push progress | `cd /home/ronald/saas-hasner && tail -3 logs/o261/push_mariaB2.log; ps -p 1684221 -o etime=` |
+| 02:24:50 | Bash | Verify Codex-cited lines by sample | `sed -n 1380,1450p chamados/reconciliador.py; echo ----; sed -n 708,716p chamados/reconciliador.py; echo ----; sed -n 1589,1602p chamados/juizes.py; echo ----; sed -n 2462,2506p chamados/models.py` |
+| 02:24:38 | Bash | Read Codex answer on motivos map | `cd /home/ronald/saas-hasner && tail -2 logs/o261/codex_c_lista_motivos.run; wc -c logs/o261/codex_c_lista_motivos.txt; cat logs/o261/codex_c_lista_motivos.txt \| head -120` |
 | 02:19:44 | Bash | Record remeasure and dispatch in RELATO | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md' L=open(p).read().split('\n') assert L[3].startswith('EM CURSO: O261 (C)'), L[3] L[3]=('EM CURSO: O261 (C) VIVA-SEM-CHAMADO-DO-DIA -- remedida OK (325 <= 343, sem classe nova); lista nomeada dos motivos por ramo da porta ' 'antes do codigo (Codex `logs/o261/codex_c_lista_motivos.txt`). [nome] (B) NO AR b09b2dab + passivo APLICAD ...` |
 | 02:19:33 | Bash | Ask Codex to map 7 motivos to porta branches | `cd /home/ronald/saas-hasner && cat > logs/o261/codex_c_lista_motivos.q <<'EOF' Leitura de codigo, sem hipotese. Arquivo principal: app/chamados/reconciliador.py (funcoes reatar_pergunta_orfa, perguntas_orfas_reatavies, reemitir_chamado_do_dia, o conjunto _MOTIVOS_REATAVEIS e MOTIVOS_C1), mais app/core/juizes.py e/ou app/chamados/juizes.py (juiz motivos_atendidos) e o catalogo de motivos de Pergunt ...` |
 | 02:19:20 | Bash | Read Codex wrapper usage | `cd /home/ronald/saas-hasner && sed -n 1,30p bin/codex_pergunta.sh \| grep -E "^#" \| head -25; ls ~/codex_ws \| tail -3` |
