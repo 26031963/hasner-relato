@@ -1,6 +1,6 @@
 # RELATO — esteira saas-hasner
 
-PAREI: ! CLEAR (trava O261-FIO-MORTO-PELO-RETRATO e a fila 1 inteira ate o /clear) -- Ronald digita /clear e depois 'retomar pelo HANDOFF-SESSAO'
+EM CURSO: O261-FIO-MORTO-PELO-RETRATO cura (2) PAI-TERMINAL -- retomada 29/10 23:0x pelo HANDOFF (o ! CLEAR foi cumprido); recorte+suite da copia wt-o261c2-2910-2204b @ 1ae59d8c pela trava
 > **MARCO FECHADO 22:1x (aval CLEAR-NO-PROXIMO-MARCO):** no ar e empurrado hoje: grupo (1) pouso 1 `9ed75130`, JUSTIFICATIVA-ENCERRA-ORIGEM `77eb28ce` + passivo `4471cc3b`, ESPERA-SEM-TURNO `bdcad619`, O261 cura (1) `e6fee823` + passivo `e84a9463` (origin = e84a9463 + TICKETS 41b49070). Nada em voo: 0 suite, 0 sombra, 0 Codex, 0 apply pela metade.
 > **OBRAS EM COPIA (commitadas, sem pouso):**
 > - O261 cura (2) PAI-TERMINAL: `/home/ronald/wt-o261c2-2910-2204b` @ `1ae59d8c` (WIP: gate do nascimento pede pai vivo; falta suite verde, Codex verificador, opus final, medida do passivo). A copia `/home/ronald/wt-o261c2-2910-2152` e uma 1a tentativa so com o teste staged -- descartavel.
