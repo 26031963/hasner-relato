@@ -1,7 +1,52 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **30/10/2026 03:44** · publicado em **30/10/2026 03:47** (UTC-3)
+> Ultima resposta processada: **30/10/2026 04:11** · publicado em **30/10/2026 04:14** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 30/10 04:11 · sessao 438094092922 · O261-C · verificador · origem=Code
+
+**Achei uma brecha estrutural em (b): a dispensa do veto não acompanha a decisão de renascer.** `_costura_no_vivo` é calculado antes da trava e faz o novo veto ser pulado; depois, `abrir` trava, relê o chamado e pode encontrar um encerrado, renascendo-o sem consultar a régua. (app/chamados/reconciliador.py:798–799,843–848; app/chamados/models.py:666–687,764–770,989–1021)
+
+O encerramento intermediário pode passar pelas portas atuais: um chamado cujo marco cobrado acendeu pode fechar, enquanto o renascimento recebe outro marco apagado do mesmo dia. Portanto, as guardas de premissa não eliminam essa brecha. (app/chamados/models.py:495–496,959–960,687; app/chamados/reconciliador.py:673–677; app/ponto/services/lastro.py:174–180) Reprodução concorrente em banco: **[não verificado]**.
+
+- **(a) Segundo juiz/vínculo/dia: nada novo.** A impressão usa exatamente a mesma composição de leitores; o emissor consulta os mesmos predicados para vínculo presente. Existe assimetria preexistente com `ec=None`, mas os caminhos normais do emissor pulam sem vínculo. (app/ponto/services/cartorio.py:1007–1014,1347–1348,1446–1448; app/ponto/services/furos_vetados.py:25–31; app/ponto/management/commands/detectar_ausencias.py:599–605)
+
+- **(b) Encerrado já na primeira leitura: nada.** Não satisfaz `_costura_no_vivo`; recebe o veto antes de chegar a `abrir`. A brecha acima exige mudança entre as leituras. (app/chamados/reconciliador.py:798–799,843–853)
+
+- **(c) C1: muda, sim.** O veto alcança `orfao_14h` e `saida_sem_entrada`, inclusive fora da cerca do alcance novo. Isso bloqueia cobranças C1 antes possíveis; coincide com a regra geral contra cobrança por régua suspeita e com o alcance declarado dos quatro motivos. Nada adicional identificado como regressão funcional. (app/chamados/reconciliador.py:332,770,840–851; app/escala/regua_defesa.py:5–8)
+
+- **Selo sem mordida: nada identificado.** R2b exige veto real e ausência de emissão; R2 fornece o controle positivo. RED executado: **[não verificado]**. (app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:174–198)
+
+- **Relógio fora da borda: nada. Escrita fora da porta: nada. Inversão de travas: nada novo.** O acréscimo consulta dia e estado gravado, sem escrita ou aquisição de trava; permanece a brecha de decisão anterior à trava descrita acima. (app/ponto/services/furos_vetados.py:19–32; app/escala/regua_defesa.py:554–562,641–644; app/escala/servico_jornada.py:38–58; app/chamados/models.py:666–670)
+
+## 30/10 04:10 · sessao 5604ba6bee6c · - · - · origem=Ronald (tmux)
+
+(b) Há janela de corrida: o c2 guarda `_costura_no_vivo` antes da trava e usa esse booleano para pular o veto; `abrir` só adquire a trava depois, relê o chamado e pode renascê-lo já encerrado. O renascimento não consulta o veto da régua. Referências: `app/chamados/reconciliador.py:798`, `app/chamados/reconciliador.py:843`, `app/chamados/models.py:666`, `app/chamados/models.py:685`, `app/chamados/models.py:764`, `app/chamados/models.py:989`.
+
+O encerramento concorrente pode ser válido: um chamado com seus marcos antigos acesos fecha por `reconciliar`, enquanto o c2 pede outro marco apagado do mesmo dia. O fechamento usa os marcos próprios; o renascimento recebe os marcos novos de `_ctx_c2`. Assim, a mesma autoridade pode permitir fechar o antigo e renascer pelo novo, com o veto omitido pelo booleano anterior. Referências: `app/chamados/models.py:495`, `app/chamados/models.py:959`, `app/chamados/models.py:687`, `app/chamados/reconciliador.py:673`, `app/ponto/services/lastro.py:174`, `app/chamados/juizes.py:435`. Não reproduzi a concorrência em banco. [não verificado]
+
+(b), execução sequencial: nada. Encerrado desde a primeira leitura não satisfaz `_costura_no_vivo` e passa pelo veto antes de `abrir`. Referências: `app/chamados/reconciliador.py:799`, `app/chamados/reconciliador.py:843`, `app/chamados/reconciliador.py:853`.
+
+(c): o veto alcança C1, inclusive fora do alcance novo, pois a limitação pela cerca só vale para motivos fora de `MOTIVOS_C1`. Isso impede emissões C1 vetadas anteriormente possíveis, mas é coerente com a regra existente contra cobrança por régua suspeita e com o comentário novo que declara os quatro motivos; não identifiquei regressão funcional adicional. Referências: `app/chamados/reconciliador.py:332`, `app/chamados/reconciliador.py:770`, `app/chamados/reconciliador.py:840`, `app/chamados/reconciliador.py:851`, `app/escala/regua_defesa.py:5`.
+
+## 30/10 04:09 · sessao b9b06cd6af78 · - · - · origem=Ronald (tmux)
+
+- **Selo sem mordida: nada identificado.** R2b chama o leitor real, exige `VETO_REGUA`, verifica retorno `False` e ausência de chamado; R2 fornece controle positivo do mesmo cenário sem veto (`app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:174–198`). RED executado: **[não verificado]**.
+- **Relógio fora da borda: nada no acréscimo.** O dia é recebido como `_d_hz`; os predicados consultados usam template e escore gravado, sem consultar hora atual (`app/chamados/reconciliador.py:845`; `app/ponto/services/furos_vetados.py:25–32`; `app/escala/regua_defesa.py:16–33`, `:554–562`, `:641–644`).
+- **Escrita fora da porta: nada no acréscimo.** O carregador consulta célula/vínculo e os predicados devolvem valores; a emissão continua em `ChamadoColaborador.abrir` (`app/escala/servico_jornada.py:38–58`; `app/ponto/services/furos_vetados.py:19–32`; `app/chamados/reconciliador.py:853`).
+- **Inversão da ordem de travas: nada introduzido pelo leitor.** Ele usa SELECT comum, sem adquirir trava; `abrir` mantém `atomic` e trava do colaborador (`app/escala/servico_jornada.py:46–58`; `app/chamados/models.py:666–670`).
+
+**Atenção para consolidar com (b):** a dispensa por `_costura_no_vivo` é decidida antes da trava (`app/chamados/reconciliador.py:798–799`, `:843`). Dentro da trava, `abrir` reconsulta e pode renascer um encerrado (`app/chamados/models.py:669–687`). Uma mudança concorrente de vivo para encerrado entre essas leituras escaparia do novo veto; reprodução desse intercalamento: **[não verificado]**.
+
+## 30/10 04:09 · sessao 612a84432b06 · - · - · origem=Ronald (tmux)
+
+(a) **Nada no diff** quanto a segundo juiz, vínculo ou dia: c2 e impressão chamam a mesma composição `motivo_do_veto(c, vinculo_do_emissor(c, dia), dia)` (`app/chamados/reconciliador.py:844-845`; `app/ponto/services/cartorio.py:1007-1014,1083`). O vínculo delega a `escala_vigente` (`app/ponto/services/furos_vetados.py:10-16`), também usado pelo detector e pelos dois ramos de emissão do cartório (`app/ponto/management/commands/detectar_ausencias.py:139`; `app/ponto/services/cartorio.py:35,1347,1446`).
+
+Os predicados coincidem para vínculo presente: degeneração e suspeita são consultadas pelos mesmos leitores (`app/ponto/services/furos_vetados.py:25-31`; `app/ponto/management/commands/detectar_ausencias.py:599-605`; `app/escala/regua_defesa.py:45-46`).
+
+Há diferença contratual preexistente em `ec=None`: `motivo_do_veto` retorna `None`, enquanto `vetar_cobranca_se_degenerada` considera ausência de template degeneração (`app/ponto/services/furos_vetados.py:26-27`; `app/escala/regua_defesa.py:23-24,45-46`). Os caminhos normais do emissor pulam antes do funil quando falta vínculo (`app/ponto/management/commands/detectar_ausencias.py:140-141`; `app/ponto/services/cartorio.py:1348,1447-1448`).
+
+Não encontrei reprodução estática desse caso como falha nova: julgamento atual sem vínculo produz `PREVISTO_COM_DIA_INDEFINIDO`, fora dos protestos que permitem nascer no c2 (`app/ponto/supra_juiz.py:304-305,382-383,396-397`; `app/ponto/services/furos_sem_cobranca.py:35`; `app/chamados/reconciliador.py:825-828`).
 
 ## 30/10 03:44 · sessao a081963814b3 · O261-C · verificador · origem=Code
 
@@ -311,120 +356,4 @@ Ocorrência atual na frota: **[não verificado]**. A documentação local só re
 
 RED/GREEN executado desta revisão: **[não verificado]**; não executei banco nem comandos de escrita. **[não verificado]** [nao verificado]
 
-## 30/10 02:58 · sessao fe2132c9a81c · - · - · origem=Ronald (tmux)
-
-Achei um defeito demonstrável no memo: ele sobrevive à pergunta e não invalida quando K6 muda. A chave é somente `dia`; a segunda consulta na mesma instância retorna o bool anterior sem consultar `competencia_entregue` novamente (`app/chamados/reconciliador.py:702-708`).
-
-- **Cron:** cada colaborador chega pelo `iterator()`, porém a mesma instância percorre todas as suas perguntas; portanto o memo dura a passagem do colaborador, não uma pergunta (`app/chamados/management/commands/reconciliar_chamados.py:51-56`; `app/chamados/reconciliador.py:1380-1383`).
-- **Evento:** o laço percorre motivos e passa sempre `disputa.colaborador` para reatar; o `atomic` local delimita savepoint, sem reler/invalidar o memo (`app/chamados/services/disputa_emissao.py:292`; `app/chamados/services/disputa_emissao.py:404-410`).
-- **Mudança da fonte:** registrar cria `ExportacaoDominio`; invalidar altera `invalidada_em`; K6 consulta essas linhas e depende da vigência atual (`app/folha/models.py:154-188`; `app/folha/export.py:569-575`).
-- **Não há serialização comum com o export:** o lock do nascimento é sobre `Colaborador`, enquanto `ExportacaoDominio.registrar` apenas consulta e cria ED; a view chega diretamente a essa porta (`app/chamados/models.py:666-669`; `app/folha/models.py:174-188`; `app/folha/views.py:295-300`).
-- **Consequência:** depois de cachear aberta, um export concluído entre duas consultas do mesmo dia não impede a segunda pergunta de entrar no alcance novo. O c2 não possui outra guarda de export; isso é deliberado para o comportamento anterior, mas deixa a cerca nova dependente do memo velho (`app/chamados/reconciliador.py:703-708`; `app/chamados/reconciliador.py:754-755`; `app/chamados/reconciliador.py:788-795`). O inverso, invalidar o TXT depois de cachear entregue, mantém o alcance novo indevidamente fechado (`app/folha/models.py:154-162`; `app/folha/export.py:572`; `app/chamados/reconciliador.py:703-708`).
-
-Executei somente o corpo real da função extraído por AST, em memória, com `python3 -B` e fonte K6 falsa: resultado `primeira=False; K6 atualizado=True; segunda=False; chamadas_K6=1`. Não houve escrita de arquivo nem acesso ao banco nesse ensaio; ele confirma a retenção descrita nas linhas 702–708. Ocorrência em produção ou ensaio concorrente com banco: **[não verificado]**. [nao verificado]
-
-Os testes R4 fixam o estado exportado antes da primeira consulta; a idempotência repete a mesma pergunta sem alterar o export. Não cobrem a mudança K6 entre perguntas na mesma instância (`app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:197-209`; `app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:225-247`).
-
-Não encontrei export serial chamado pelo próprio laço; o caminho comprovado é a mudança externa/concorrente do registro enquanto a instância continua em uso (`app/chamados/reconciliador.py:1380-1386`; `app/chamados/services/disputa_emissao.py:389-416`; `app/folha/views.py:295-300`).
-
-## 30/10 02:58 · sessao e0fd15b18b59 · - · - · origem=Ronald (tmux)
-
-- **Segundo juiz: nada encontrado.** O alcance consulta `janela_atual` e `competencia_entregue`; vitalidade/tranca e correspondência histórica usam os juízes existentes. (`app/chamados/reconciliador.py:704-718`, `:1451-1464`; `app/chamados/juizes.py:1589-1600`)
-- **Segundo escritor fora da porta: nada encontrado.** O c2 conserva `ChamadoColaborador.abrir` e `reapontar_resolvedora`; o HIST conserva `reapontar_resolvedora` e S128. (`app/chamados/reconciliador.py:822`, `:862`, `:1500-1506`)
-- **Relógio fora da borda: nada novo encontrado.** O diff usa o dia recebido; data, juiz e lavra continuam na ordem da porta. (`app/chamados/reconciliador.py:698-707`, `:1431-1435`; `app/chamados/services/fio.py:788-800`)
-- **Derivação paralela de fonte única: nada novo encontrado.** O HIST novo lê `motivos_atendidos`, e o c2 alargado lê a constante canônica do grupo DIA. Os dois chamadores de produção restringem o universo a esse grupo. (`app/chamados/reconciliador.py:748-755`, `:1342`, `:1360-1365`, `:1463`; `app/chamados/services/disputa_emissao.py:404-409`)
-- **Ordem de trava: nenhuma inversão nova identificada.** O diff não introduz aquisição de trava; o nascimento continua pela porta que trava o colaborador. (`app/chamados/reconciliador.py:822`; `app/chamados/models.py:669`)
-- **Pouso antes do pré-requisito: [não verificado].** O corte exige B antes de C, remedida pela mesma sonda, lista nomeada antes do código e parada se superar 343 ou surgir classe nova. O RELATO ainda descreve a obra como em curso e remete às sondas; esses logs não estão disponíveis nesta cópia. (`app/docs/CORTES.md:399`; `app/docs/RELATO.md:3`, `:18`, `:41`; [não verificado] quanto às provas externas)
-
-## 30/10 02:53 · sessao b57be1a9a722 · ORCAMENTO · verificador · origem=Code
-
-Eu reprovaria o diff: a expiração ainda pode liberar pelo PAREI genérico, e uma medida antiga pode disparar CLEAR quando o último turno não tem `usage`. — `bin/hook_stop_fila1.py:761`, `bin/hook_stop_fila1.py:941`, `bin/orcamento_contexto.py:82`.
-
-As cláusulas abaixo estão no contrato reproduzido em `app/docs/RELATO.md:22`, `app/docs/RELATO.md:24`, `app/docs/RELATO.md:25` e `app/docs/RELATO.md:27`. Os cenários são contraexemplos do código; ocorrência deles em produção é [nao verificado].
-
-1. **CLEAR expirado volta a liberar pelo PAREI genérico.**  
-   Estado: `disparo.desfecho="seguiu"`, apenas `ITEM-VIVO` andável, topo `PAREI: ! CLEAR -- ITEM-VIVO encerrado | espera Ronald`. O orçamento retorna `None`; o juiz genérico encontra o ID e libera. Também acontece sem disparo ou depois de um clear novo. A transição própria apenas deixa de liberar pela sua porta; não impede a reinterpretação posterior. Quebra item 3 e v2(a)/(b). — `bin/hook_stop_fila1.py:757`, `bin/hook_stop_fila1.py:761`, `bin/hook_stop_fila1.py:884`, `bin/hook_stop_fila1.py:941`.
-
-2. **Último assistente sem `usage` herda medida anterior.**  
-   Entrada: penúltimo assistente com 600.000 tokens; último assistente sem `usage`; marco recente, zero deploys. O leitor pula o último e retorna os 60% anteriores, disparando sozinho por (a). `usage={}` também é pulado. Deveria responder “nao sei”. Quebra itens 1(a)/3; o selo de ilegibilidade não contém essa sequência. — `bin/orcamento_contexto.py:82`, `bin/orcamento_contexto.py:87`, `bin/orcamento_contexto.py:93`, `bin/tests/test_orcamento_contexto.sh:137`.
-
-3. **PENDENTE desaparece antes do primeiro Stop sem produtor.**  
-   Primeiro Stop: ESPERANDO comprovado, contexto 600.000/1M; registra PENDENTE. Segundo Stop, mesmo marco: produtor terminou, contexto 599.999/1M. O ramo `not gatilho` apaga a pendência antes de verificar a espera; PREPARA-CLEAR não entra. Quebra v2(d): a pendência registrada deveria entrar no primeiro Stop sem produtor. — `bin/hook_stop_fila1.py:766`, `bin/hook_stop_fila1.py:767`, `bin/hook_stop_fila1.py:773`, `bin/hook_stop_fila1.py:778`.
-
-4. **Trabalho em voo reconhecível pelo caminho antigo não impede PREPARA-CLEAR.**  
-   Estado: topo neutro, contexto no limiar, `manage.py test` ou `git push` rodando. O orçamento verifica somente o ESPERANDO declarado e dispara; `_tem_trabalho_em_curso()` seria consultado muito depois. Assim, a proteção cobre o ESPERANDO formal, mas não todo trabalho que o próprio hook já identifica. Contraria “nada em voo é precondição, não efeito”, v2(d). — `bin/hook_stop_fila1.py:392`, `bin/hook_stop_fila1.py:395`, `bin/hook_stop_fila1.py:773`, `bin/hook_stop_fila1.py:781`, `bin/hook_stop_fila1.py:987`.
-
-5. **Sem trava, dois Stops podem registrar dois DISPARO no mesmo ciclo.**  
-   Interleaving: A e B leem o mesmo estado sem `disparo`; ambos medem gatilho; ambos apendam DISPARO e salvam. `os.replace` protege cada substituição, mas não a operação completa de ler, decidir, registrar e gravar. Quebra “sem redisparo” e a trilha de um disparo por ciclo. Stops concorrentes no host são [nao verificado]. — `bin/hook_stop_fila1.py:708`, `bin/hook_stop_fila1.py:698`, `bin/hook_stop_fila1.py:781`, `bin/hook_stop_fila1.py:783`.
-
-6. **Clear tardio recebe ATENDIDO.**  
-   Cenário: CLEAR liberado em T0; nenhum Stop intermediário; `/clear` em T0+40min. No próximo Stop, a mudança do marco registra ATENDIDO sem comparar sua hora com `clear_parei_desde`. A regra de expiração no próximo Stop não torna esse clear “dentro dos 30 minutos”. Quebra a definição do contador no item 4. — `bin/hook_stop_fila1.py:725`, `bin/hook_stop_fila1.py:728`, `bin/hook_stop_fila1.py:729`, `bin/hook_stop_fila1.py:747`.
-
-7. **A forma literal é reconhecida por prefixo.**  
-   Com disparo ativo, `PAREI: ! CLEARANCE | espera Ronald` libera como CLEAR. O mesmo vale para `CLEAR-QUALQUER`, porque o reconhecimento é `startswith`. Quebra a forma literal exigida por v2(a). — `bin/hook_stop_fila1.py:677`, `bin/hook_stop_fila1.py:738`, `bin/hook_stop_fila1.py:746`.
-
-8. **ESTADO perde os números quando falta o marco.**  
-   Cenário: sem `ultimo_clear.json`, transcript iniciado há sete horas, três deploys posteriores. O avaliador calcula horas/marcos pelo transcript, mas o hook persiste somente contexto. O leitor do ESTADO retorna `None` para horas/marcos e imprime apenas a explicação do fallback. Quebra o formato mensurável `Xh, M marcos` do item 4. — `bin/orcamento_contexto.py:160`, `bin/orcamento_contexto.py:162`, `bin/hook_stop_fila1.py:735`, `bin/orcamento_contexto.py:203`, `bin/orcamento_contexto.py:219`.
-
-9. **Precisões incompatíveis subcontam deploy posterior ao clear.**   [nao verificado]
-   Cenário: marco às `12:00:00.100`; append de deploy provado às `12:00:00.900`; mais dois deploys posteriores. O marco preserva fração; o histórico trunca para segundos; o primeiro deploy é comparado como `12:00:00.000` e descartado. Conta dois em vez de três. Quebra item 1(c)/v2(g); o selo separa marco e deploys por minutos. — `bin/marco_de_clear.py:34`, `bin/deploy.sh:347`, `bin/orcamento_contexto.py:141`, `bin/orcamento_contexto.py:144`, `bin/tests/test_orcamento_contexto.sh:130`.
-
-10. **Os selos novos têm aceitação por texto sem provar o comportamento.**
-   
-    - **Deploy:** inverter apenas `SEM_PROVA_DE_CASCA != 1` para `= 1` mantém a aprovação de `_julga_deploy`: ele exige os nomes das variáveis, não a condição correta. Passaria a contar casca pulada e excluir deploy provado. O mutante oficial elimina a guarda inteira, portanto não morde essa inversão. Quebra a prova exigida em v2(g). — `bin/deploy.sh:345`, `bin/tests/test_orcamento_contexto.sh:252`, `bin/tests/test_orcamento_contexto.sh:253`, `bin/tests/test_orcamento_contexto.sh:257`.
-    - **Matchers:** comandos `echo HANDOFF-SESSAO.md`, `echo marco_de_clear.py compact` e `echo marco_de_clear.py clear`, nos respectivos matchers, satisfazem as condições novas sem carregar handoff nem escrever marco. Logo, o selo aceita uma instalação inoperante; não prova v2(h). A configuração efetivamente instalada é [nao verificado]. — `bin/tests/test_handoff_sessao.sh:60`, `bin/tests/test_handoff_sessao.sh:64`, `bin/tests/test_handoff_sessao.sh:67`.
-
-Nas demais áreas examinadas:
-
-- **Prova do RELATO:** não achei passagem nova que a pule; vem antes do orçamento. — `bin/hook_stop_fila1.py:924`, `bin/hook_stop_fila1.py:932`.
-- **PAREI comum e ESPERANDO comprovado:** não achei regressão adicional nos casos estáveis; reutilizam os juízes existentes, e a memória compartilhada evita consumir duas vezes o avanço do arquivo. Permanecem os defeitos 1, 3 e 4 acima. — `bin/hook_stop_fila1.py:660`, `bin/hook_stop_fila1.py:774`, `bin/hook_stop_fila1.py:946`.
-- **TETO:** na primeira expiração reconhecida, o `siga` explícito precede o TETO e pede seu zeramento; o defeito está na liberação genérica posterior. — `bin/hook_stop_fila1.py:754`, `bin/hook_stop_fila1.py:935`, `bin/hook_stop_fila1.py:937`.
-- **Fila vazia e falha aberta:** sem gatilho, a fila vazia conserva sua saída; exceção do orçamento é contida e devolve ao fluxo antigo. — `bin/hook_stop_fila1.py:766`, `bin/hook_stop_fila1.py:789`, `bin/hook_stop_fila1.py:960`, `bin/hook_stop_fila1.py:1014`.
-- **Segundo juiz, segundo escritor e fonte paralela:** não achei duplicação adicional nesses papéis: PAREI/ESPERANDO são consultados; ESTADO só lê; marco tem o escritor declarado; a contagem usa o histórico escolhido. A perda do fallback está no achado 8. — `bin/hook_stop_fila1.py:774`, `bin/gerar_estado.py:271`, `bin/marco_de_clear.py:40`, `bin/orcamento_contexto.py:130`.
-- **Relógio e ordem de trava:** no Stop, o instante é capturado e passado ao avaliador. Não achei inversão nova de travas; achei ausência de serialização no estado novo, descrita no achado 5. — `bin/hook_stop_fila1.py:706`, `bin/hook_stop_fila1.py:734`, `bin/hook_stop_fila1.py:572`, `bin/hook_stop_fila1.py:602`.
-- **Append atual e entrada na régua:** não achei falha adicional no posicionamento do append: fica depois das provas e exclui casca pulada/higiene; o selo novo entra no laço existente. — `bin/deploy.sh:218`, `bin/deploy.sh:324`, `bin/deploy.sh:331`, `bin/deploy.sh:345`, `bin/regua.sh:138`.
-
-## 30/10 02:52 · sessao b89a5b99fff0 · O261-C · verificador · origem=Code
-
-Encontrei **duas falhas de comportamento no HIST ampliado**, além de lacunas nos selos e custo novo no evento. Ambas decorrem de alcançar ramos preexistentes do S128 que não preservam as guardas do primeiro ramo (`app/chamados/reconciliador.py:1450,1493`; `app/chamados/services/disputa_emissao.py:1551,1558,1634`).
-
-1. **Ordem de trava: o HIST novo escreve em pergunta silenciada pela tranca.**  
-   Caso: intervalo órfão, competência **não entregue, mas trancada**, histórico `batida_ausente` resolvido por outra via, disputa sem pai. O C6 responde MORTA pela tranca; isso permite entrar no HIST ampliado. A costura escreve antes de consultar a proteção específica da tranca (`app/chamados/juizes.py:1010`; `app/chamados/reconciliador.py:1438,1450,1487`).
-
-   O primeiro ramo do S128 respeita a tranca, mas o ramo posterior inclui todas as disputas abertas do colaborador, aceita pai ausente e carimba essa mesma pergunta como `chamado_encerrado`, sem consultar a tranca. Portanto, a guarda anterior é ultrapassada. Essa via também não é desfeita por `reabrir_por_competencia`, que aceita apenas `competencia_trancada` (`app/chamados/services/disputa_emissao.py:1551,1622,1628,1634,1644,1647`; `app/chamados/models.py:2213`).
-
-   Antes, intervalo não casava com o mapa e era recusado pelo c1/c2; a entrada nova é o casamento por `motivos_atendidos`. Contraria o silêncio por leitura documentado pelo próprio juiz: “nada se escreve” (`app/chamados/models.py:2466,2478`; `app/chamados/reconciliador.py:363,748,1450`; `app/chamados/juizes.py:879`).
-
-2. **MORTA com resposta: o HIST novo pode alcançar um carimbo que enterra a declaração.**  
-   Caso: intervalo MORTO por decisão da célula, resposta preenchida e `respondida_em` presente, `validada_em` nulo, sem batida que prove a declaração, disputa sem pai. O primeiro ramo do S128 preserva essa resposta; o ramo sem credor a encontra novamente e grava `materializada_em`, sem repetir a proteção (`app/chamados/services/disputa_emissao.py:1558,1602,1634,1644,1659`).
-
-   O HIST ampliado passa a levar esse intervalo ao S128. O efeito desarma o materializador que deveria consumir a resposta — exatamente o risco documentado na guarda existente (`app/chamados/reconciliador.py:1450,1493`; `app/chamados/services/disputa_emissao.py:1553`).
-
-   **Limite do achado:** na chamada direta de reatar/reconciliar órfãs há essa mudança; no cron completo, uma célula absolvente pode já ter provocado o carimbo no retratador anterior. Não atribuo esse efeito inteiro ao diff no caminho completo (`app/chamados/reconciliador.py:584,617,1301,1302`).
-
-3. **Selo/RED sem mordida: competência por janela não está distinguida de mês civil.**  
-   Os testes usam somente 06/10 e 10/09, com empresa sem corte personalizado. Nessas datas, trocar a competência da janela por `dia.month/dia.year` não distingue os cenários, embora produza resposta errada depois do corte. A implementação atual está correta; o selo não protege essa exigência (`app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:43,44,52,85`; `app/ponto/janelas.py:27`; `app/chamados/reconciliador.py:702`).
-
-   A idempotência também verifica apenas três campos e contagens. Ela aceita nova lavra/save que altere `julgado_em`; portanto, não demonstra literalmente “mesmo estado” nem ausência de UPDATE (`app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:200,205,207`; `app/chamados/services/fio.py:798`; `app/chamados/veredito_lavrado.py:228`).
-
-   Os casos MORTOS novos nascem por `validada_em`; não exercitam tranca nem resposta do colaborador. O único HIST morto testado é `intervalo_volta` (`app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:90,92,159`).
-
-4. **Custo novo no evento: consulta de exportação duplicada por intervalo vivo.**  
-   Reatar consulta a entrega em `:1436`; chegando ao c2, o intervalo consulta novamente a mesma competência por `:749 → :709 → :703`. Cada chamada de `competencia_entregue` executa um SELECT; o memo de `pergunta_viva` não cobre essa consulta (`app/chamados/reconciliador.py:703,709,749,1436`; `app/folha/export.py:570`; `app/chamados/juizes.py:791`).
-
-   Esse custo entra na emissão síncrona e na reconciliação acionada pela batida. Estouro efetivo dos tetos: **[nao verificado]** (`app/chamados/services/disputa_emissao.py:404,409`; `app/ponto/signals.py:206`; `app/chamados/reconciliador.py:1302`).
-
-Nas demais classes:
-
-- **2º juiz que duplica juiz registrado: nada.** Os trechos novos consultam as autoridades existentes (`app/chamados/reconciliador.py:700,701,711,1402,1450`).
-- **2º escritor fora da porta: nada.** Emissão por `abrir`; costuras por `reapontar_resolvedora` (`app/chamados/reconciliador.py:816,856,1487,1499`).
-- **Relógio novo fora da borda: nada.** Os helpers recebem o dia e consultam sua competência (`app/chamados/reconciliador.py:685,698,702,1427`).
-- **Derivação paralela de fonte única: nada na implementação.** A lacuna está no selo da janela, descrita acima (`app/chamados/reconciliador.py:700,702,703`).
-- **Ordem de locks SQL: nada demonstrado.** A falha encontrada é a precedência da guarda de tranca sobre a escrita (`app/chamados/reconciliador.py:1487,1493`; `app/chamados/services/disputa_emissao.py:1551`).
-- **Pouso antes do pré-requisito: [nao verificado].** O RELATO declara B no ar e passivo aplicado, mas não validei os artefatos nem a ancestralidade dos commits (`app/docs/RELATO.md:3,4,7`). A exigência de B antes e remedida posterior consta do corte (`app/docs/CORTES.md:399`).
-
-Os chamadores de produção encontrados foram o laço de órfãs e a emissão de pergunta recém-criada; c2 é chamado pela própria porta de reatar. O cron permanece em `*/15`, usando o universo de `perguntas_orfas_reatavies` (`app/chamados/reconciliador.py:1374,1377,1467`; `app/chamados/services/disputa_emissao.py:404`; `app/chamados/management/commands/reconciliar_chamados.py:36`; `app/config/crons.py:376`).
-
-Exercitei os dois desvios do S128 com seu corpo extraído em memória e dependências simuladas: ambos alcançaram o carimbo posterior. Integração Django, suíte e mutantes completos: **[nao verificado]**. Nenhum arquivo foi criado, editado ou apagado **[nao verificado por auditoria externa]**. [nao verificado]
-
-_342 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_346 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
