@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 30/10/2026 08:41:07.** Transcript: `c07bd622-c518-4ee0-9641-ce667785cb73.jsonl` (3.4 MB). Acoes na janela: **137**.
+**Medido em 30/10/2026 08:46:19.** Transcript: `c07bd622-c518-4ee0-9641-ce667785cb73.jsonl` (3.4 MB). Acoes na janela: **140**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 08:42:53 | Bash | Refine AST detector to template roles and rerun | `W=/home/ronald/wt-noturno-3010-0822/app; cd $W && python3 - <<'EOF' p='chamados/tests/test_noturno_le_o_dia_do_instante.py'; s=open(p).read() pares=[(''' def _copias(self, src): arv = ast.parse(src) livres = set() for n in ast.walk(arv): if isinstance(n, ast.Compare): livres \|= {id(c) for c in ast.walk(n) if isinstance(c, ast.Constant)} if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef, ast ...` |
+| 08:42:33 | Bash | Read flagged smoke_chamados line | `sed -n 105,109p /home/ronald/wt-noturno-3010-0822/app/chamados/management/commands/smoke_chamados.py` |
+| 08:42:28 | Bash | Show fitness test failure detail | `cd /home/ronald/saas-hasner && grep -A3 "AssertionError" logs/o261n/verde_noturno_v2.log \| head -6 \| cut -c1-600` |
 | 08:40:25 | Bash | Read recorte verdict and rerun new tests | `cd /home/ronald/saas-hasner && grep -E "^(OK\|FAILED)($\| \()\|^Ran " logs/o261n/recorte_chamados_469d61ba.log \| tail -2; timeout 1500 bash bin/suite.sh --dir /home/ronald/wt-noturno-3010-0822 --only "chamados.tests.test_noturno_le_o_dia_do_instante" > logs/o261n/verde_noturno_v2.log 2>&1; echo rc=$?; grep -E "^(OK\|FAILED)($\| \()\|^Ran \|^(FAIL\|ERROR):" logs/o261n/verde_noturno_v2.log \| tail  ...` |
 | 08:40:19 | Bash | Add accessor test, ruff, check recorte progress | `W=/home/ronald/wt-noturno-3010-0822/app; cd $W && python3 - <<'EOF' p='chamados/tests/test_noturno_le_o_dia_do_instante.py'; s=open(p).read() a=" # (9)\n def _pergunta(self):" assert s.count(a)==1 s=s.replace(a,''' def test_MORDE_tela_e_app_mostram_o_dia_do_texto(self): cel = self._celula(_dna(datetime.time(19, 0), datetime.time(7, 0))) d = DisputaSupervisao.objects.create(colaborador=self.colab,  ...` |
 | 08:40:08 | Bash | Strengthen AST fitness test with biting cases | `W=/home/ronald/wt-noturno-3010-0822/app; cd $W && python3 - <<'EOF' p='chamados/tests/test_noturno_le_o_dia_do_instante.py'; s=open(p).read() a=s[s.index('class TextoDePerguntaTemUmProdutor(SimpleTestCase):'):] new='''class TextoDePerguntaTemUmProdutor(SimpleTestCase): """Fitness (AST, nunca texto): o TEMPLATE de pergunta de dia (o literal `{data}`) so mora no catalogo, no espelho do catalogo e no ...` |

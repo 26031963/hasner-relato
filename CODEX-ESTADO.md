@@ -1,7 +1,65 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **30/10/2026 08:40** · publicado em **30/10/2026 08:41** (UTC-3)
+> Ultima resposta processada: **30/10/2026 08:43** · publicado em **30/10/2026 08:46** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 30/10 08:43 · sessao 03024d698e5a · O261-V-FASE · verificador · origem=Code
+
+Não encontrei falha procedente adicional no diff apresentado, pela inspeção do código atual. A C10 consome o leitor existente e só formata sua resposta. (`app/escala/services/cadastro_realidade.py:336`)
+
+As duas triagens procedem:
+
+- **Rótulo 24x48: tratado.** A C10 nomeia os dois ciclos, e o teste percorre `CICLOS` da autoridade. (`app/escala/services/cadastro_realidade.py:113`; `app/escala/tests/test_o261v_fase_na_lista.py:116`)
+- **Dívida da ata: permanece, fora deste complemento.** O pareamento continua no leitor; o inventário aponta `turnos_do_colab`. A alteração apresentada apenas acrescenta campos à resposta, preservando quem é acusado. (`app/escala/services/fase_12x36.py:175`; `app/core/juizes.py:905`; `app/escala/services/fase_12x36.py:187`)
+
+Conferi também:
+
+- **Regras e contagens:** as datas vêm das mesmas listas já contadas; o piso e `n=len(achados)` permanecem no leitor. (`app/escala/services/fase_12x36.py:187`; `app/escala/services/fase_12x36.py:202`; `app/escala/services/fase_12x36.py:207`; `app/escala/services/fase_12x36.py:216`)
+- **Mesma guarda dos vizinhos:** C10 repete o `try/except` de C9. O filtro de empresas antecede a inclusão nas linhas e contadores. (`app/escala/services/cadastro_realidade.py:595`; `app/escala/services/cadastro_realidade.py:602`; `app/escala/services/cadastro_realidade.py:629`)
+- **Juiz, escritor e relógio:** o complemento chama `fora_de_fase(hoje)`, sem cálculo próprio de fase, gravação ou nova leitura de relógio; a ação aponta à tela existente de vínculo. (`app/escala/services/cadastro_realidade.py:331`; `app/escala/services/cadastro_realidade.py:491`)
+- **L-040 e mordida:** tela e PDF exibem o mesmo detalhe; os testes verificam datas no conteúdo e usam respostas com um/zero achados para detectar abandono do leitor. (`app/templates/escala/cadastro_x_realidade.html:28`; `app/escala/services/cadastro_realidade.py:733`; `app/escala/tests/test_o261v_fase_na_lista.py:134`; `app/escala/tests/test_o261v_fase_na_lista.py:180`; `app/escala/tests/test_o261v_fase_na_lista.py:192`)
+
+Execução da suíte, RED histórico e resultado real do col451: **[não verificado]**. Comparação Git independente `f0d319ba..HEAD`: **[não verificado]**, pois a cópia disponibilizada não contém repositório Git.
+
+## 30/10 08:43 · sessao d705f3594a03 · - · - · origem=Ronald (tmux)
+
+Não encontrei falha nova procedente nos testes e no recorte de leis examinado. [nao verificado]
+
+- Triagem do rótulo procede e está tratada: C10 nomeia 12x36 e 24x48; o teste consulta `CICLOS` da autoridade, evitando validar só uma frase fixa. `app/escala/services/cadastro_realidade.py:113`; `app/escala/tests/test_o261v_fase_na_lista.py:116`.
+- Há mordida contra abandonar o leitor: os mocks com um achado e nenhum achado determinam exatamente quem aparece na C10. `app/escala/tests/test_o261v_fase_na_lista.py:180`; `app/escala/tests/test_o261v_fase_na_lista.py:192`.
+- Os casos conferem datas esperadas pela regra, identificação do vínculo, contagens das datas, filtro por empresa e sobrevivência das demais assinaturas quando o leitor falha. `app/escala/tests/test_o261v_fase_na_lista.py:106`; `app/escala/tests/test_o261v_fase_na_lista.py:127`; `app/escala/tests/test_o261v_fase_na_lista.py:157`; `app/escala/tests/test_o261v_fase_na_lista.py:161`.
+- A guarda da C10 repete a dos vizinhos; não proponho reprovação por ausência de sinal explícito de erro, pois isso contrariaria a instrução literal recebida. `app/escala/services/cadastro_realidade.py:595`; `app/escala/services/cadastro_realidade.py:602`.
+- Tela/PDF têm verificação de C10 e datas no conteúdo extraído, além do cabeçalho `%PDF`. `app/escala/tests/test_o261v_fase_na_lista.py:134`.
+
+Execução real e evidência histórica de RED/GREEN: [não verificado].
+
+## 30/10 08:43 · sessao 2eb8ca1ab920 · - · - · origem=Ronald (tmux)
+
+Não encontrei falha nova procedente no leitor e nos consumidores examinados; o enxerto expõe o mesmo resultado já julgado. (`app/escala/services/fase_12x36.py:187`, `app/escala/services/fase_12x36.py:207`, `app/escala/services/cadastro_realidade.py:338`)
+
+- `ec_id` lê `ec.pk`; as duas listas de datas serializam diretamente `trabalho_mudo` e `folga_trabalhada`, as mesmas listas das contagens. Piso, seleção dos achados e `n=len(achados)` continuam no leitor. (`app/escala/services/fase_12x36.py:187`, `app/escala/services/fase_12x36.py:192`, `app/escala/services/fase_12x36.py:202`, `app/escala/services/fase_12x36.py:207`, `app/escala/services/fase_12x36.py:216`)
+- `_fase_deslocada` apenas chama o leitor com `hoje` e formata seus campos; não introduz leitura de relógio, pareamento, cálculo de fase nem gravação de estado. (`app/escala/services/cadastro_realidade.py:331`)
+- Os consumidores anteriores continuam lendo o mesmo leitor: pauta, propositor, fila por causa e API da mensageria. A mensageria recebe os vínculos crus, portanto as datas ISO e o identificador inteiro cabem na serialização existente. (`app/escala/services/fase_12x36.py:223`, `app/escala/services/propositor.py:455`, `app/chamados/services/fila_por_causa.py:173`, `app/api/views_mensageria.py:1669`, `app/api/views_mensageria.py:1675`)
+- A triagem do rótulo procede e está tratada: C10 nomeia `12x36` e `24x48`; o teste percorre `CICLOS` para exigir ambos. (`app/escala/services/cadastro_realidade.py:113`, `app/escala/services/fase_12x36.py:29`, `app/escala/tests/test_o261v_fase_na_lista.py:117`)
+- A dívida do pareador está efetivamente inventariada com destino `turnos_do_colab`; as chamadas atuais a `parear_turnos` permanecem na função. Ela é dívida preexistente, não regra criada pelo enxerto aditivo apresentado. (`app/core/juizes.py:905`, `app/core/juizes.py:906`, `app/escala/services/fase_12x36.py:146`, `app/escala/services/fase_12x36.py:175`)
+
+Verificação estática; não executei testes. [não verificado] [nao verificado]
+
+## 30/10 08:41 · sessao 1ef69f84e37d · O261-V-FASE · verificador · origem=Code
+
+Encontrei um defeito novo e uma triagem de escopo que não procede:
+
+1. **[P2] C10 apresenta achados de 24x48 como “12x36”.** O leitor admite ambos os ciclos, mas o adaptador transporta todos os achados para uma assinatura com texto fixo “12x36”. Uma 24x48 deslocada pode satisfazer os dois pisos do detector. Isso viola “rótulo diz o que a conta faz”; basta corrigir a apresentação, preservando o leitor existente. (app/escala/services/fase_12x36.py:29,106,187; app/escala/models.py:1264; app/escala/services/cadastro_realidade.py:112,337; CLAUDE.md:35)
+
+2. **A dívida da ata é anterior, mas “sítio não tocado” não procede.** O inventário está em `core/juizes.py`, porém o mecanismo está em `fora_de_fase`, função alterada neste diff. Ela continua chamando o pareador sem alimentar o papel da ata; nesse caminho o papel sai do `tipo`, enquanto o caminho canônico consulta a ata. O escopo escrito inclui o sítio tocado, e a 4a exige leitura da lâmpada. Portanto, essa exclusão precisa ser corrigida na triagem; não estou classificando o mecanismo como juiz criado agora. (app/core/juizes.py:905; app/escala/services/fase_12x36.py:146,175,192,207; app/ponto/turnos.py:1212,1911,1973; CLAUDE.md:276,600)
+
+As demais triagens:
+
+- **Vínculo acusado: procede como correção de apresentação.** `ec_id` chega ao item e ao detalhe, exibido na tela e no PDF. (app/escala/services/fase_12x36.py:192; app/escala/services/cadastro_realidade.py:340,344,732; app/templates/escala/cadastro_x_realidade.html:28)
+- **Falha do leitor: permanece sem aviso na lista.** A guarda realmente repete os vizinhos; isso confirma o comportamento declarado, sem comprovar a atribuição “o aval pede a mesma guarda”. (app/escala/services/cadastro_realidade.py:550–614) Essa exigência atribuída ao aval: **[não verificado]**.
+- **Datas, PDF e MORDE-zero: procedem por inspeção.** Há datas esperadas literais, extração textual do PDF e presença real exigida antes do mock vazio. (app/escala/tests/test_o261v_fase_na_lista.py:29,106,144,190)
+
+Execução da suíte, RED histórico e comparação Git com `f0d319ba`: **[não verificado]**.
 
 ## 30/10 08:40 · sessao e3bb5ee2fac5 · - · - · origem=Ronald (tmux)
 
@@ -458,176 +516,4 @@ Contadores:
 
 Nenhum dos contadores examinados responde exatamente “chamado de turno vivo em dia vetado”. As exclusões e predicados acima demonstram os limites desses candidatos; ausência de qualquer outro contador na árvore inteira permanece [nao verificado].
 
-## 30/10 08:18 · sessao 9bf5c72ae18e · O261-V · sonda · origem=Code
-
-Pela sonda fornecida, sem verificação independente:
-
-- **451 aparece em `fora_de_fase`**: template `179`; âncora `2026-10-29`, origem `declarada`; `trabalho_sem_batida=6`, `folga_com_turno=6`. **Sem âncora sugerida**: `{'ancora': None, 'motivo': 'ganho de 0 pp e ruido (minimo 40)', 'batidas': 27, 'casa_hoje': 52}`. [nao verificado]
-- **Contador da frota**: `{'fonte': 'fase_12x36', 'n': 11, 'janela_dias': 14, 'piso': 3, 'universo': 341}`, com `n_vinculos=11`. [nao verificado]
-- **451 consta em Cadastro x Realidade**: `CXR_COL451_paths=['/postos[116][1][1]/colab_id']`. A assinatura e o motivo dessa inclusão não aparecem no dado fornecido. [nao verificado]
-
-Chamadores diretos de `fora_de_fase` no código de produção da cópia:
-
-| Chamador | Local da chamada |
-|---|---|
-| `api_mensageria_fase_12x36` | `app/api/views_mensageria.py:1670` |
-| `particionar` | `app/chamados/services/fila_por_causa.py:173` |
-| `propostas` | `app/escala/services/propositor.py:456` |
-| `linhas_para_a_pauta` | `app/escala/services/fase_12x36.py:215` |
-| `Command.handle` de `vigiar_familia_escala` | `app/ponto/management/commands/vigiar_familia_escala.py:23` |
-
-**Nenhum desses fornece a saída de `fora_de_fase` como entrada de Cadastro x Realidade.** `lista` reúne as entradas de cadastro em `cad`, lê a lavra do esmeril e monta os IDs pela união de `por_colab` com `cad` (`app/escala/services/cadastro_realidade.py:513`, `:518`, `:527`, `:535`, `:542`, `:549`, `:556`, `:563`, `:570`, `:575`, `:579`).
-
-O destino sugerido dessa lista vem de `d['destino']` da lavra (`app/escala/services/cadastro_realidade.py:581`, `:590`), produzido por **`escala.detector_proposta.propor_escala`** (`app/ponto/services/esmeril_espelho.py:213`, `:223`); o chamador de `fora_de_fase` é **`escala.services.propositor.propostas`** (`app/escala/services/propositor.py:456`).
-
-## 30/10 08:16 · sessao 9dc80579edf4 · O261-NOTURNO · sonda · origem=Code
-
-Transcrição de `NOT|`, por motivo; “—” indica linha ausente no dado, sem assumir zero. [nao verificado]
-
-| Motivo | instante_outro_dia | mesmo_dia | sem_instante | Soma das parcelas exibidas | Fonte |
-|---|---:|---:|---:|---|---|
-| intervalo_saida | 776 | 3443 | 3514 | 776 + 3443 + 3514 = **7733** | [nao verificado] |
-| intervalo_volta | 1460 | 3261 | 3623 | 1460 + 3261 + 3623 = **8344** | [nao verificado] |
-| orfao_14h | 2516 | 4653 | 6668 | 2516 + 4653 + 6668 = **13837** | [nao verificado] |
-| saida_sem_entrada | — | 4983 | 4785 | 4983 + 4785 = **9768** | [nao verificado] |
-
-Demais linhas `NOT|`, todas subordinadas a `instante_outro_dia`: [nao verificado]
-
-| Campo | intervalo_saida | intervalo_volta | orfao_14h | Fonte |
-|---|---:|---:|---:|---|
-| data_evento==celula=True | 776 | 1460 | 2516 | [nao verificado] |
-| plantio_no_dia_celula | 9 | 4 | 13 | [nao verificado] |
-| plantio_no_dia_instante | 40 | 78 | 153 | [nao verificado] |
-| texto_mostra_dia_da_celula=True | 776 | 1460 | 2516 | [nao verificado] |
-| viva | 343 | 413 | 472 | [nao verificado] |
-
-| Linha | Valores | Fonte |
-|---|---|---|
-| NOT\|plantios_amostrados | 271; com_batida_real_na_hora_no_dia_da_celula=39; colabs=7 | [nao verificado] |
-| ERROS | 0 | [nao verificado] |
-
-As somas calculadas estão acima. O dado não apresenta um total independente de cada motivo para confirmar se as parcelas fecham esse total. [nao verificado]
-
-## 30/10 08:13 · sessao 7bacb9cf86c7 · O261-NOTURNO · sonda · origem=Code
-
-**1. Nas quatro ATAs anexadas, E 19:00 está apagada.** Não há batida associada a esse marco: `luz=None`, `tipo_real=None`. O anexo não fornece instante de uma batida acendedora de E 19:00. [nao verificado]
-
-| Célula | Dia | E 19:00 | Batida associada na ATA |
-|---|---|---|---|
-| 129745 | 21/10/2026 | Apagada | Nenhuma (`luz=None`) [nao verificado] |
-| 129747 | 23/10/2026 | Apagada | Nenhuma (`luz=None`) [nao verificado] |
-| 129749 | 25/10/2026 | Apagada | Nenhuma (`luz=None`) [nao verificado] |
-| 129751 | 27/10/2026 | Apagada | Nenhuma (`luz=None`) [nao verificado] |
-
-Isso concorda com a cobrança descrita de **“E 19:00 faltante”** e discorda de considerar esse mesmo marco cumprido para encerrar `saida_sem_entrada` como `fantasma`. Os registros desses chamados e perguntas, seus vínculos e horários de encerramento não estão na sonda; essa associação histórica individual permanece [nao verificado].
-
-Na cópia, as leituras são estas:
-
-- **Cobrança do furo:** `marcos_apagados` lê as lâmpadas apagadas da ATA; o cartório usa esse resultado para formar os marcos faltantes. (`app/ponto/services/lastro.py:118`; `app/ponto/services/cartorio.py:1429`)
-- **Juiz atual da pergunta:** `saida_sem_entrada` cobra `('E', 'hi')`; procura a hora no DNA e lê `acesa` na ATA por `(hora, tipo)`. (`app/chamados/juizes.py:823`; `app/chamados/juizes.py:848`; `app/chamados/juizes.py:866`)
-- **Chamador atual do encerramento:** exige que esse juiz devolva exatamente `True`; depois, só chama `encerrar_fantasma` quando o veredito é `ENCERRA`. Assim, uma lâmpada E19 apagada não passa por essa condição. (`app/chamados/reconciliador.py:1032`; `app/chamados/reconciliador.py:1079`; `app/chamados/reconciliador.py:1092`)
-- **Escritor:** `encerrar_fantasma` grava via, instante do carimbo e autor. Seu corpo não consulta ATA nem batidas; `materializada_em=now()` é o instante do encerramento, não uma batida que acendeu o marco. (`app/chamados/models.py:2167`)
-
-Portanto, **não é demonstrável que o chamador atual tenha produzido os encerramentos históricos mencionados**: faltam os respectivos registros e a ATA existente no instante de cada encerramento. [nao verificado]
-
-**2. O predicado antigo preservado na lápide era morfológico:** turno recomputado completo **e** última saída a até 180 minutos do fim previsto, com `TOL_MORFOLOGIA_MIN=180`; aparecem os nomes removidos `_eh_fantasma`, `_bem_formado` e `_turnos_na_janela`. (`app/ponto/management/commands/reconciliar_perguntas_orfas.py:10`)
-
-O comentário do reconciliador distingue expressamente os dois critérios: a regra posterior encerra pela lâmpada do próprio marco; a antiga julgava pela morfologia do turno. (`app/chamados/reconciliador.py:982`)
-
-O universo identificado como “mesmo SQL do cron que carimbava” contém perguntas sem materialização, sem validação, em disputa aberta, dos motivos `orfao_14h`/`saida_sem_entrada`, com `data_evento` preenchida. (`app/chamados/reconciliador.py:992`)
-
-**A lápide não preserva como o algoritmo antigo escolhia o dia da batida.** Não permite afirmar D, D+1 ou outro recorte. Tampouco a sonda contém as execuções de aproximadamente 06:35 em 22–28/10; atribuir-lhes o algoritmo completo ou uma batida específica seria [nao verificado].
-
-**3. P26: o ramo efetivamente executado é [nao verificado] para cada uma das 26 linhas.** O carregamento de `_marcos` depende do vínculo e do tipo encontrados naquele dia; esses resultados não constam no anexo. (`app/chamados/juizes.py:298`)
-
-Além disso, existem **dois retornos distintos que podem conservar `ts`**: `_marcos` preenchido, mas hora fora do envelope (`return ts`, linha 312), e caminho sem marcos, cujo retorno final está na linha 321. Logo, plantio em D não prova `_marcos` vazio. (`app/chamados/juizes.py:304`; `app/chamados/juizes.py:312`; `app/chamados/juizes.py:313`; `app/chamados/juizes.py:321`)
-
-A aplicação matemática às **horas respondidas e marcos informados** está abaixo. O código encadeia os marcos atravessando a meia-noite, amplia o primeiro/último em 90 minutos e testa D antes de D+1. (`app/escala/servico_jornada.py:74`; `app/chamados/juizes.py:305`)
-
-Os valores de produção transcritos e o ramo histórico de cada linha permanecem [nao verificado].
-
-| P# | Resposta | Envelope calculado pelos marcos informados | Resultado pela hora respondida |
-|---|---|---|---|
-| 22818 | 07:00 | D 17:30 → D+1 08:30 | Envelope: D+1 |
-| 22970 | 23:45 | D 17:30 → D+1 08:30 | Envelope: D |
-| 22993 | 03:41 | D 22:00 → D+1 09:00 | Envelope: D+1 |
-| 25281 | 03:01 | D 17:30 → D+1 08:30 | Envelope: D+1 |
-| 25282 | 07:01 | D 17:30 → D+1 08:30 | Envelope: D+1 |
-| 26108 | 23:30 | D 22:00 → D+1 09:00 | Envelope: D |
-| 27227 | 18:55 | D 17:30 → D+1 08:30 | Envelope: D |
-| 27290 | 12:00 | D 16:30 → D+1 07:30 | Fora: `return ts` |
-| 27670 | 23:16 | D 22:00 → D+1 09:00 | Envelope: D |
-| 27739 | 03:00 | D 17:30 → D+1 08:30 | Envelope: D+1 |
-| 32357 | 01:00 | D 16:30 → D+1 07:30 | Envelope: D+1 |
-| 33283 | 06:00 | D 20:30 → D+1 07:30 | Envelope: D+1 |
-| 33629 | 23:14 | D 22:00 → D+1 09:00 | Envelope: D |
-| 34397 | 09:15 | D 22:00 → D+1 09:00 | Fora: `return ts` |
-| 35366 | 23:11 | D 22:00 → D+1 09:00 | Envelope: D |
-| 37847 | 18:57 | D 17:30 → D+1 08:30 | Envelope: D |
-| 38265 | 04:00 | D 17:30 → D+1 08:30 | Envelope: D+1 |
-| 39186 | 23:57 | D 17:30 → D+1 08:30 | Envelope: D |
-| 39761 | 23:59 | D 14:30 → D+1 01:30 | Envelope: D |
-| 40675 | 23:56 | D 17:30 → D+1 08:30 | Envelope: D |
-| 41549 | 23:50 | D 17:30 → D+1 08:30 | Envelope: D |
-| 41707 | 19:00 | D 17:30 → D+1 08:30 | Envelope: D |
-| 42368 | 22:41 | D 17:30 → D+1 08:30 | Envelope: D |
-| 43845 | 11:59 | D 17:30 → D+1 08:30 | Fora: `return ts` |
-| 46364 | 11:00 | D 17:30 → D+1 08:30 | Fora: `return ts` |
-| 49873 | 10:11 | D 17:30 → D+1 08:30 | Fora: `return ts` |
-
-Essa tabela não identifica o ramo histórico: nas perguntas de intervalo, o materializador pode substituir a resposta pela hora do marco faltante **antes** de montar `ts` e chamar o ajuste. O anexo não informa essa `_hora_fonte` efetiva. (`app/chamados/services/materializacao.py:388`; `app/chamados/services/materializacao.py:396`; `app/chamados/services/materializacao.py:404`)
-
-Também não cabe deduzir ausência de marcos pela ausência de intervalo: havendo `hi` e `hf`, `marcos_turno` produz ao menos E inicial e S final. (`app/escala/servico_jornada.py:72`)
-
-**4. O texto `pergunta` é formatado na emissão e gravado na criação.** O formatador substitui `{data}` por `contexto_disputa[motivo]['data']`, com `%d/%m/%Y`; a emissão passa `pergunta=texto` para `abrir`. (`app/chamados/catalogo/query.py:58`; `app/chamados/catalogo/query.py:64`; `app/chamados/services/disputa_emissao.py:316`; `app/chamados/services/disputa_emissao.py:389`)
-
-`pergunta` é um `TextField`; `abrir` persiste os campos recebidos em `objects.create(..., **campos)`. Quando encontra pergunta existente, reaponta destino/célula e retorna sem reformatar seu texto. (`app/chamados/models.py:1855`; `app/chamados/models.py:2061`; `app/chamados/models.py:2085`)
-
-As exibições citadas leem `p.pergunta`/`perg.pergunta`. Portanto, a data escrita na pergunta não comprova o dia da batida plantada. (`app/templates/chamados/partials/_card_atendimento.html:93`; `app/templates/chamados/partials/modal_fio.html:157`; `app/chamados/catalogo/query.py:64`)
-
-## 30/10 08:12 · sessao d27e633afa7f · - · - · origem=Ronald (tmux)
-
-Q3: **o ramo efetivamente executado é [não verificado] em todas as 26 linhas**. A sonda fornece DNA, resposta e plantio; não fornece `_ec`, `tipo_escala`, `_marcos`, `tipo`, `hora_tentativa` nem `_hora_fonte` efetivos. O carregamento de `_marcos` depende desses primeiros campos (`app/chamados/juizes.py:298-303`). A geradora pode ser rejeitada por vigência, devolvendo `None`, apesar de existir célula com DNA (`app/escala/alimentacao.py:237-251`).
-
-Além disso, a dicotomia proposta é incompleta: existe `_marcos` **presente**, mas nenhuma data candidata dentro do envelope, seguido de `return ts` (`app/chamados/juizes.py:304-312`). Portanto “plantou em D” não demonstra `_marcos` vazio (`app/chamados/juizes.py:312,321`).
-
-Os marcos são encadeados E-hi / S-hii / E-hfi / S-hf, avançando o dia quando o instante seguinte não é posterior ao anterior (`app/escala/servico_jornada.py:74-85`). O envelope vai do primeiro marco menos 90 min ao último mais 90 min; testa D antes de D+1 (`app/chamados/juizes.py:305-311`).
-
-Cálculo **condicional**, usando os marcos DNA e a **hora da resposta** como entrada do ajuste; isto não identifica o ramo histórico real (`app/chamados/juizes.py:304-312`):
-
-| P# | Resposta | Envelope pelo DNA | Resultado do cálculo |
-|---|---|---|---|
-|22818|07:00|D 17:30–D+1 08:30|D+1|
-|22970|23:45|D 17:30–D+1 08:30|D|
-|22993|03:41|D 22:00–D+1 09:00|D+1|
-|25281|03:01|D 17:30–D+1 08:30|D+1|
-|25282|07:01|D 17:30–D+1 08:30|D+1|
-|26108|23:30|D 22:00–D+1 09:00|D|
-|27227|18:55|D 17:30–D+1 08:30|D|
-|27290|12:00|D 16:30–D+1 07:30|Fora; `return ts`|
-|27670|23:16|D 22:00–D+1 09:00|D|
-|27739|03:00|D 17:30–D+1 08:30|D+1|
-|32357|01:00|D 16:30–D+1 07:30|D+1|
-|33283|06:00|D 20:30–D+1 07:30|D+1|
-|33629|23:14|D 22:00–D+1 09:00|D|
-|34397|09:15|D 22:00–D+1 09:00|Fora; `return ts`|
-|35366|23:11|D 22:00–D+1 09:00|D|
-|37847|18:57|D 17:30–D+1 08:30|D|
-|38265|04:00|D 17:30–D+1 08:30|D+1|
-|39186|23:57|D 17:30–D+1 08:30|D|
-|39761|23:59|D 14:30–D+1 01:30|D|
-|40675|23:56|D 17:30–D+1 08:30|D|
-|41549|23:50|D 17:30–D+1 08:30|D|
-|41707|19:00|D 17:30–D+1 08:30|D|
-|42368|22:41|D 17:30–D+1 08:30|D|
-|43845|11:59|D 17:30–D+1 08:30|Fora; `return ts`|
-|46364|11:00|D 17:30–D+1 08:30|Fora; `return ts`|
-|49873|10:11|D 17:30–D+1 08:30|Fora; `return ts`|
-
-**Atenção à hora de entrada:** `_ts_tipo_do_plantio` começa com a resposta, mas para `intervalo_saida`/`intervalo_volta` substitui-a pelo marco faltante, quando encontrado (`app/chamados/services/materializacao.py:388-395`); monta `ts` em `data_evento` e só depois chama o ajuste (`app/chamados/services/materializacao.py:396-404`). Logo não se pode transformar esta tabela condicional em atribuição histórica de ramo.
-
-Usando **a hora do plantio** no mesmo cálculo, mudariam: P25281 19:00→D; P27739 19:00→D; P32357 19:00→D; P38265 19:00→D; P27670 03:00→D+1. O ajuste preserva a hora e decide apenas data (`app/chamados/juizes.py:307-311,318`).
-
-A fonte do vínculo lê célula e geradora (`app/escala/servico_jornada.py:46-58`). Com vínculo e tipo existentes, `marcos_turno` usa `ec.marcos_do_dia` (`app/escala/servico_jornada.py:68-73`), que prefere DNA preenchido (`app/escala/models.py:1094-1108`). A ausência de `hii/hfi` não esvazia `_marcos` quando `hi/hf` existem; ainda há E-hi e S-hf (`app/escala/servico_jornada.py:72-77`).
-
-_399 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_403 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
