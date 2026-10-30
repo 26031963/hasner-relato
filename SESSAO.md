@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 30/10/2026 09:39:45.** Transcript: `c07bd622-c518-4ee0-9641-ce667785cb73.jsonl` (4.4 MB). Acoes na janela: **191**.
+**Medido em 30/10/2026 09:45:11.** Transcript: `c07bd622-c518-4ee0-9641-ce667785cb73.jsonl` (4.4 MB). Acoes na janela: **192**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 09:42:58 | Bash | Keep waiting for suite verdict | `cd /home/ronald/saas-hasner && for i in $(seq 1 38); do grep -q "^rc=" logs/o261n/suite_44e6a8a1.log && break; /usr/bin/sleep 15; done; grep -E "^(OK\|FAILED)($\| \()\|^Ran \|^rc=" logs/o261n/suite_44e6a8a1.log \| tail -3; grep -E "^(FAIL\|ERROR):" logs/o261n/suite_44e6a8a1.log \| head -5` |
 | 09:33:22 | Bash | Wait for suite verdict | `cd /home/ronald/saas-hasner && for i in $(seq 1 38); do grep -q "^rc=" logs/o261n/suite_44e6a8a1.log && break; /usr/bin/sleep 15; done; grep -E "^(OK\|FAILED)($\| \()\|^Ran \|^rc=" logs/o261n/suite_44e6a8a1.log \| tail -3` |
 | 09:33:16 | Bash | Update NOTURNO status in RELATO | `python3 - <<'EOF' p='docs/RELATO.md'; s=open(p).read() a="> **O261 NOTURNO-LE-O-DIA-DA-CELULA EM CONSTRUCAO** (copia `/home/ronald/wt-noturno-3010-0822` @ 31b8cec0)" assert s.count(a)==1 s=s.replace(a,"> [ATUALIZADO 10:1x: copia @ 44e6a8a1; Codex 6 voltas (subiu ao opus pela regra (4)); recorte chamados+api 691508dd 3.433 OK; suite inteira de 80df1b44 FAILED 3 (mypy + 2 tetos do chokepoint: o +2 d ...` |
 | 09:33:08 | Bash | Commit suite fixes and relaunch full suite | `cd /home/ronald/wt-noturno-3010-0822 && git add PLANO_PISCADA.md app/chamados/catalogo/query.py app/ponto/tests/test_selo_chokepoint_escrita.py && git commit -q -F - <<'EOF' O261 NOTURNO: suite inteira pegou 3 -- mypy na origem e teto do chokepoint DECLARADO (+2 medido) A suite de 80df1b44 deu FAILED (failures=3): `core.tests.test_contract_mypy` (texto Optional pelo tipo de `padrao`, curado na ori ...` |
