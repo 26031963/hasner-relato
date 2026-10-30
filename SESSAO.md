@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 30/10/2026 19:58:39.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (5.6 MB). Acoes na janela: **224**.
+**Medido em 30/10/2026 20:04:10.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (5.6 MB). Acoes na janela: **225**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 19:58:38 | SendMessage |  | `-` |
 | 19:58:26 | Bash |  | `cd /home/ronald/saas-hasner && sed -i 's/\[RETIRADO 20:1x -- a lei escrita/[RETIRADO 19:5x -- a lei escrita/' app/docs/RELATO.md && grep -c "RETIRADO 19:5x" app/docs/RELATO.md` |
 | 19:58:23 | Bash |  | `cd /home/ronald/saas-hasner && date +%H:%M && python3 - <<'EOF' p='app/docs/RELATO.md' L=open(p).read().split('\n') i=next(k for k,l in enumerate(L) if l.startswith('> DECIDIDO PELA LEI 4a (lampada')) L[i]="> [RETIRADO 20:1x -- a lei escrita NAO respondia: o construtor provou que a ordem sozinha nao quebra o ciclo; ver a pergunta abaixo] ~~"+L[i][2:]+"~~" L.insert(i,"> lei: O261-E-F1-LAMPADA-COBRA ...` |
 | 19:58:12 | Bash |  | `cd /home/ronald/wt-o261e-f1-1844b/app && sed -n 1072,1076p ponto/services/cartorio.py; sed -n 1138,1144p ponto/services/cartorio.py; sed -n 594,600p chamados/reconciliador.py` |
