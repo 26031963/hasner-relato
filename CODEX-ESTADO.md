@@ -1,7 +1,98 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **30/10/2026 19:23** · publicado em **30/10/2026 19:26** (UTC-3)
+> Ultima resposta processada: **30/10/2026 19:28** · publicado em **30/10/2026 19:31** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 30/10 19:28 · sessao eb56abb9e8b6 · O261-V-FASE · verificador · origem=Code
+
+A cura impede A→B no fio e no chat quando o vínculo original acompanha a decisão. Restam lacunas nos testes e caminhos sem identidade do preview na CLI e entre abas do chat. (`app/escala/services/propositor.py:682`, `app/chamados/services/fio.py:511`, `app/core/views_ia.py:650`, `app/escala/management/commands/propostas_de_escala.py:26`, `app/core/views_ia.py:871`)
+
+Comparação literal de `ed31456f..23c0d9dc`: [não verificado], pois a cópia disponibilizada não contém `.git`. A atribuição dos residuais abaixo ao delta, em vez de comportamento anterior, fica [não verificado].
+
+**1. Quem escreve e quem lê**
+
+| Caminho | Escrita/origem e leitura do vínculo |
+|---|---|
+| Fio: produção e template | `proposta_do_fio` escolhe `p` e extrai dela assinatura e vínculo; os formulários de aplicar e recusar escrevem ambos em hidden. (`app/chamados/services/proposta_no_fio.py:66`, `app/chamados/services/proposta_no_fio.py:75`, `app/chamados/services/proposta_no_fio.py:79`, `app/templates/chamados/partials/modal_fio.html:51`, `app/templates/chamados/partials/modal_fio.html:58`) |
+| Fio: POST e serviços | `fio.py` lê `vinculo_proposta`, usa `''` quando ausente e repassa aos dois verbos; ambos chegam a `_recalcular`, que passa o vínculo a `da_assinatura`. (`app/chamados/services/fio.py:509`, `app/chamados/services/fio.py:511`, `app/chamados/services/fio.py:513`, `app/chamados/services/proposta_no_fio.py:134`, `app/chamados/services/proposta_no_fio.py:169`, `app/chamados/services/proposta_no_fio.py:109`) |
+| Chat: preview e sessão | O preview guarda assinatura e `p.get('vinculo_id')` na sessão e monta o texto com essa mesma `p`. O “sim” lê a proposta da sessão; `_aplicar_escala` repassa seu vínculo para `_proposta_de_escala`, que chama `da_assinatura`. (`app/core/views_ia.py:620`, `app/core/views_ia.py:623`, `app/core/views_ia.py:871`, `app/core/views_ia.py:650`, `app/core/views_ia.py:578`) |
+| Auxiliar | `da_assinatura` filtra por pessoa, assinatura e vínculo; `None` desliga o filtro de vínculo. (`app/escala/services/propositor.py:682`) |
+| Escrita final | Aplicar entrega `p['vinculo_id']` à porta; aceite e recusa gravam o vínculo em `DecisaoProposta`. (`app/escala/services/propositor.py:766`, `app/escala/services/propositor.py:774`, `app/escala/services/propositor.py:718`) |
+| CLI | Não recebe assinatura nem vínculo da listagem: recalcula, filtra pelo colaborador, recusa multiplicidade e decide sobre a proposta única atual. (`app/escala/management/commands/propostas_de_escala.py:11`, `app/escala/management/commands/propostas_de_escala.py:26`, `app/escala/management/commands/propostas_de_escala.py:30`, `app/escala/management/commands/propostas_de_escala.py:52`) |
+
+**2. Falhas, contraexemplos e descartes**
+
+- **Residual procedente — sessão compartilhada entre abas.** Aba 1 mostra A; aba 2 gera preview B e sobrescreve `proposta_ia`; o usuário volta à aba 1 e envia “sim”. O POST não identifica o preview: envia pergunta/histórico/CSRF. A view consome B da sessão, valida B e aplica B. Portanto, o vínculo pode diferir daquele do preview ainda visível na aba que confirmou. (`app/core/views_ia.py:88`, `app/core/views_ia.py:620`, `app/templates/core/_copiloto.html:172`, `app/core/views_ia.py:106`, `app/core/views_ia.py:871`, `app/core/views_ia.py:650`, `app/core/views_ia.py:660`) Ocorrência em produção: [não verificado].
+
+- **Residual procedente — CLI sem vínculo da leitura anterior.** Contraexemplo: a listagem mostrou A; A desaparece e sobra B única; `--aplicar COLAB` aplica B, ou `--recusar COLAB` recusa B. A guarda cobre propostas simultâneas, mas não liga a decisão à listagem anterior. (`app/escala/management/commands/propostas_de_escala.py:26`, `app/escala/management/commands/propostas_de_escala.py:31`, `app/escala/management/commands/propostas_de_escala.py:38`, `app/escala/management/commands/propostas_de_escala.py:53`, `app/escala/management/commands/propostas_de_escala.py:58`)
+
+- **`str` × `int`: descartado.** `'1'` do formulário casa com `1` da proposta porque os dois lados passam por `str`. Tela antiga sem campo e sessão antiga sem chave viram `''`, que não casa com IDs normais. (`app/escala/services/propositor.py:685`, `app/chamados/services/fio.py:509`, `app/core/views_ia.py:651`)
+
+- **`None` permanece uma abertura no auxiliar.** Contraexemplo: A some, sobra B com a mesma assinatura e o chamador omite o vínculo; `None` desliga o filtro e B é selecionada. Os chamadores HTTP atuais usam `''` para campo/chave ausente, evitando esse caso. (`app/escala/services/propositor.py:668`, `app/escala/services/propositor.py:685`, `app/chamados/services/fio.py:509`, `app/core/views_ia.py:651`)
+
+- **Proposta sem `vinculo_id`: fragilidade condicional, sem origem normal demonstrada.** O gerador sempre acrescenta `ec.pk`. Se chegasse uma proposta incompleta ao preview do chat, ele guardaria `None`, posteriormente desativando o filtro; o texto `'None'` também casa com um ID ausente no auxiliar. Isso não demonstra falha produtiva, pois contradiz a saída normal do gerador. (`app/escala/services/propositor.py:539`, `app/core/views_ia.py:622`, `app/core/views_ia.py:651`, `app/escala/services/propositor.py:685`) Ocorrência desse payload: [não verificado].
+
+- **Recusa/L-042: vínculo gravado, silêncio preservado por conteúdo.** Contraexemplo: A e B da mesma pessoa têm a mesma assinatura; recusar A também cala B por 30 dias. A consulta e o filtro usam apenas `(colaborador, assinatura)`. O comentário declara expressamente a preservação dessa chave; não classifico isso como omissão acidental do transporte. (`app/escala/services/propositor.py:718`, `app/escala/services/propositor.py:663`, `app/escala/services/propositor.py:671`, `app/escala/services/propositor.py:700`, `app/escala/services/propositor.py:581`) No chat, texto diferente de “sim” remove a pendência, sem executar a recusa formal de escala. (`app/core/views_ia.py:882`)
+
+**3. Os testes mordem os chamadores?** [nao verificado]
+
+**Para o vínculo deste delta, não.** O novo “A some/B fica” chama diretamente `_recalcular`, com `'1'` e `''`; não atravessa formulário, `fio.py`, aplicar/recusar ou sessão do chat. Remover o repasse em `fio.py` não seria detectado por esse teste. (`app/escala/tests/test_o261_v_fase_na_lista.py:408`, `app/escala/tests/test_o261_v_fase_na_lista.py:418`, `app/escala/tests/test_o261_v_fase_na_lista.py:422`, `app/chamados/services/fio.py:511`, `app/chamados/services/fio.py:514`)
+
+O selo também carece de controle positivo com vínculo informado: uma implementação que recusasse **todo vínculo não nulo** satisfaria os dois casos negativos; o teste anterior chama sem vínculo. (`app/escala/tests/test_o261_v_fase_na_lista.py:404`, `app/escala/tests/test_o261_v_fase_na_lista.py:418`, `app/escala/tests/test_o261_v_fase_na_lista.py:422`)
+
+Há testes HTTP anteriores do chat, mas cobrem proposta única, conteúdo alterado e desaparecimento. O selo novo do chat verifica apenas estreitamento por colaborador; o de renderização do fio verifica assinatura, sem afirmar o hidden de vínculo. (`app/core/tests/test_ia_escala_com_sim.py:49`, `app/core/tests/test_ia_escala_com_sim.py:86`, `app/core/tests/test_ia_escala_com_sim.py:98`, `app/core/tests/test_ia_escala_com_sim.py:111`, `app/escala/tests/test_o261_v_fase_na_lista.py:429`, `app/chamados/tests/test_proposta_faixa_na_tela.py:85`)
+
+Execução da suíte Django e resultados em produção: [não verificado]. [nao verificado]
+
+## 30/10 19:27 · sessao f0119dee472e · - · - · origem=Ronald (tmux)
+
+- **Tipos:** `da_assinatura` compara `str(p.get('vinculo_id')) == str(vinculo_id)`, portanto POST `'1'` casa com ID inteiro `1`; reproduzi em memória, sem Django/BD. `None` desliga o filtro; `''` recusa IDs válidos. (`app/escala/services/propositor.py:682-690`)
+
+- **CLI continua sem vínculo do que foi lido:** argumentos aceitam apenas colaborador; a execução recalcula e pega a proposta única atual. Contraexemplo: listou A, A desaparece, sobra B única; `--aplicar COLAB` aplica B; `--recusar COLAB` recusa B. A guarda só cobre duas propostas simultâneas, para ambas as ações. Isso é caminho residual no código atual; inclusão no delta é [não verificado]. (`app/escala/management/commands/propostas_de_escala.py:14-22,26-38,52-58`)
+
+- **Recusa e silêncio:** a decisão grava o vínculo, mas a chave do silêncio continua `(colaborador_id, assinatura)` por 30 dias; assinatura exclui vínculo. Contraexemplo: A e B, mesma pessoa e conteúdo; recusar A cala B também. O próprio comentário declara essa preservação; não classificaria como regressão acidental do delta. (`app/escala/services/propositor.py:653-665,671-678,700-702,717-720,581-583`)
+
+- **Proposta sem ID:** o gerador sempre acrescenta `vinculo_id=ec.pk`; não há evidência de saída real sem ID. No auxiliar, `vinculo_id=None` aceita proposta sem chave; `''` a recusa. `recusar` tolera FK nula; `aplicar` exige `p['vinculo_id']`. (`app/escala/services/propositor.py:539-543,685,718,766`)
+
+- **Selo sem controle positivo:** o teste novo chama somente `_recalcular`, em dois casos negativos: A sumiu e tela antiga `''`. Uma mutação que recuse todo `vinculo_da_tela` não nulo passaria esses casos; o teste anterior chama sem vínculo. Não prova `fio.py`, formulário, nem sessão do chat. (`app/escala/tests/test_o261_v_fase_na_lista.py:395-423`)
+
+- **Chat:** o teste ali somente verifica estreitamento por colaborador. Existem testes HTTP anteriores de confirmação, conteúdo diferente e desaparecimento, mas aqueles casos não exercitam troca A→B com mesma assinatura. (`app/escala/tests/test_o261_v_fase_na_lista.py:429-434`; `app/core/tests/test_ia_escala_com_sim.py:86-118`)
+
+- **Testes de silêncio:** exercitam recusa, expiração e assinatura diferente com um EC; não cobrem A/B com mesma assinatura. (`app/escala/tests/test_porta_da_proposta.py:77-80,104-128`)
+
+## 30/10 19:27 · sessao 77fbbcca86ad · - · - · origem=Ronald (tmux)
+
+O chat transporta o vínculo da mesma proposta usada no preview: seleção em `app/core/views_ia.py:580`, gravação na sessão em `app/core/views_ia.py:620`, texto formado dessa proposta em `app/core/views_ia.py:623`, leitura no “sim” em `app/core/views_ia.py:650` e filtro em `app/escala/services/propositor.py:685`.
+
+Há residual com duas abas: a sessão usa uma única chave (`app/core/views_ia.py:88`), sobrescrita a cada preview (`app/core/views_ia.py:620`). Contraexemplo: aba 1 mostra A; aba 2 produz B; “sim” digitado na aba 1 envia apenas pergunta/histórico/CSRF (`app/templates/core/_copiloto.html:172`), e a view consulta a proposta B da sessão (`app/core/views_ia.py:106`, `app/core/views_ia.py:871`), valida B (`app/core/views_ia.py:650`) e aplica B (`app/core/views_ia.py:660`). O vínculo recebido pode, portanto, diferir do preview ainda visível na aba que confirmou; origem no delta versus comportamento herdado e ocorrência produtiva: [não verificado].
+
+Sessão antiga sem a chave `vinculo` recebe `''` (`app/core/views_ia.py:651`), que não casa IDs normais (`app/escala/services/propositor.py:685`). Sessão contendo explicitamente `None` desliga o filtro nesse mesmo ponto; o produtor normal injeta `ec.pk` (`app/escala/services/propositor.py:539`), portanto ocorrência desse payload incompleto: [não verificado].
+
+Os testes existentes mordem a rota de chat, mas com uma proposta de vínculo 7 (`app/core/tests/test_ia_escala_com_sim.py:49`, `app/core/tests/test_ia_escala_com_sim.py:86`), conteúdo alterado (`app/core/tests/test_ia_escala_com_sim.py:98`) ou lista vazia (`app/core/tests/test_ia_escala_com_sim.py:111`). O teste novo de A sumir/B conservar assinatura chama apenas `_recalcular`, sem passar pelo chat ou pela sessão (`app/escala/tests/test_o261_v_fase_na_lista.py:408`). O selo do chat verifica apenas o estreitamento por colaborador (`app/escala/tests/test_o261_v_fase_na_lista.py:429`).
+
+Texto diferente de “sim” apaga a proposta pendente (`app/core/views_ia.py:882`); esse caminho não registra recusa de escala em `DecisaoProposta`, cuja escrita está em `app/escala/services/propositor.py:705`.
+
+## 30/10 19:27 · sessao 83aa580b3dfe · - · - · origem=Ronald (tmux)
+
+Fluxo do fio conferido:
+
+- `proposta_do_fio` obtém propostas da pessoa, seleciona `[0]` e produz tanto assinatura quanto vínculo desse mesmo objeto (`app/chamados/services/proposta_no_fio.py:63-79`).
+- O template grava assinatura e vínculo nos dois formulários, aplicar e recusar (`app/templates/chamados/partials/modal_fio.html:48-59`).
+- `processar_post_fio` lê o vínculo do POST como string, usa `''` quando ausente e repassa aos dois serviços (`app/chamados/services/fio.py:505-514`).
+- Aplicar e recusar chamam `_recalcular` com o vínculo recebido; este passa o argumento a `da_assinatura` (`app/chamados/services/proposta_no_fio.py:109-110`, `:134`, `:169`).
+- `da_assinatura` compara os vínculos convertidos para `str`; portanto `'1'` do POST casa com `1` da proposta. O vínculo ausente do POST fica `''` e não casa com IDs reais (`app/escala/services/propositor.py:682-690`).
+
+Não achei desvio natural no transporte do vínculo pelo fio: os formulários e os dois verbos usam o vínculo da proposta apresentada (`app/templates/chamados/partials/modal_fio.html:51-59`, `app/chamados/services/fio.py:507-514`, `app/chamados/services/proposta_no_fio.py:75-79`).
+
+Limites relevantes:
+
+1. **O filtro continua opcional no auxiliar.** `vinculo_id=None` desliga a restrição. Contraexemplo: `_recalcular(colab, assinatura_de_A)` com apenas B restante, mesma assinatura, devolve B. Os chamadores HTTP atuais passam `''` quando o campo falta, evitando esse caso; o teste anterior ainda exercita a API sem vínculo (`app/escala/services/propositor.py:685`, `app/chamados/services/fio.py:509`, `app/escala/tests/test_o261_v_fase_na_lista.py:403-406`).
+
+2. **Proposta sem vínculo não recebe validação própria.** Um vínculo textual `'None'` casa com `p.get('vinculo_id') is None`; `None` como argumento desliga o filtro. Porém o produtor real preenche `vinculo_id=ec.pk` em toda proposta antes de retorná-la. Uma proposta real sem vínculo não foi demonstrada pelo código ou anexo (`app/escala/services/propositor.py:539-543`, `:685`) [não verificado].
+
+3. **A recusa continua silenciando por conteúdo, atravessando vínculos.** Recusar A persiste a FK de A, mas a consulta e o filtro de silêncio usam somente `(colaborador, assinatura)`. Contraexemplo: A/B da mesma pessoa, mesmo conteúdo; recusar A também cala B por trinta dias. Isso está explicitamente preservado no comentário do delta, que mantém a chave de L-042; não é omissão acidental do transporte (`app/escala/services/propositor.py:581-583`, `:663-678`, `:693-702`, `:717-720`).
+
+**Os testes não mordem o chamador do fio para este delta.** O novo RED chama `_recalcular` diretamente com `'1'` e `''`; não atravessa template, POST, `aplicar_do_fio` ou `recusar_do_fio`. Remover `vinculo_da_tela=_vinc` de `fio.py` não seria detectado por esse RED (`app/escala/tests/test_o261_v_fase_na_lista.py:408-423`, `app/chamados/services/fio.py:511-514`). O teste de render existente afirma apenas que a assinatura aparece duas vezes, sem verificar os campos de vínculo (`app/chamados/tests/test_proposta_faixa_na_tela.py:85-89`). Os testes antigos dos serviços também chamam aplicar/recusar sem vínculo, utilizando o comportamento opcional (`app/chamados/tests/test_proposta_no_fio.py:118`, `:175`).
 
 ## 30/10 19:23 · sessao 7163f16a20d4 · O261-V-FASE · verificador · origem=Code
 
@@ -432,142 +523,4 @@ A leitura não torna o fechamento atômico perante concorrência: consulta, guar
        assert False
    ```
 
-## 30/10 18:57 · sessao 481142c712d0 · O261-E-CELULA-20 · verificador · origem=Code
-
-**VERMELHO para F1:** a guarda pode ser pulada por instância desatualizada; há outro reaponte de pergunta existente que não recebe a proteção; o contrato antigo e o novo teste anti-vacuidade falham. (`app/chamados/models.py:206`, `app/chamados/models.py:356`, `app/chamados/models.py:2300`, `app/chamados/tests/test_contract_status_nucleo.py:28`, `app/chamados/tests/test_o261e_f1_selo_encerramento.py:161`)
-
-Executei somente o código puro dos selos em memória. Execução da suíte Django, contagens reais de queries, incidência em produção e integridade dos dados exportados: **[nao verificado]**. [nao verificado]
-
-**(1) Escritores, leitores e valores**
-
-O censo abaixo agrupa portas e consumidores por função. Nascimento e acervo têm caminhos próprios; o selo novo exclui testes e migrações. (`app/chamados/models.py:854`, `app/chamados/models.py:970`, `app/chamados/tests/test_o261e_f1_selo_encerramento.py:92`)
-
-| Campo/valor | Quem escreve | Quem lê |
-|---|---|---|
-| `ChamadoColaborador.status_local` | Persistência pelo núcleo `_gravar_estado`; nascimento por `abrir`/`criar`. A novidade também troca e restaura o campo **em memória**. (`app/chamados/models.py:211`, `app/chamados/models.py:250`, `app/chamados/models.py:854`, `app/chamados/models.py:970`, `app/chamados/models.py:302`, `app/chamados/models.py:312`) | Motor das portas; C6; C8; receivers; fila/painel; fio; API e relatórios. (`app/chamados/models.py:118`, `app/chamados/models.py:596`, `app/chamados/juizes.py:700`, `app/chamados/juizes.py:1621`, `app/chamados/signals.py:33`, `app/chamados/signals.py:81`, `app/chamados/services/painel.py:155`, `app/chamados/services/fio.py:385`, `app/api/views.py:1047`, `app/relatorios/pdf_chamados.py:116`) |
-| `resolvido_em` | O núcleo carimba ao terminar e limpa ao voltar a vivo; preserva o carimbo numa passagem entre encerrados. (`app/chamados/models.py:226`, `app/chamados/models.py:227`, `app/chamados/models.py:231`) | Guarda de reabertura, indicadores, arquivo, detalhe e vigia de terminal sem carimbo. (`app/chamados/models.py:1214`, `app/chamados/services/painel.py:243`, `app/chamados/views_arquivar.py:157`, `app/templates/chamados/detalhe_local.html:88`, `app/chamados/management/commands/auditar_invariantes_chamados.py:571`) |
-| `via_encerramento` | O núcleo grava a via da porta ou limpa no vivo. As correspondências são `RECONCILIAR→sistema`, `ENCERRAR→cascade`, `CANCELAR→cancelado`, humana→`admin`; tranca passa sua via própria. (`app/chamados/models.py:228`, `app/chamados/models.py:232`, `app/chamados/catalogo/motor.py:95`, `app/chamados/models.py:1439`) | Renascimento recusa `cascade`; tranca usa a via para reabrir; S128 não age sobre `competencia_trancada`; arquivo e auditoria também leem. (`app/chamados/models.py:890`, `app/chamados/services/competencia_trancada.py:252`, `app/chamados/services/disputa_emissao.py:1531`, `app/chamados/views_arquivar.py:64`, `app/chamados/management/commands/auditar_invariantes_chamados.py:1067`) |
-| `urgencia` | Ritual `_rebaixar_urgencia_em_memoria` escreve `normal`, preservando a original; núcleo restaura; `rebaixar`, normalizador do receiver e `escalar_urgencia` persistem pelos respectivos caminhos. (`app/chamados/models.py:234`, `app/chamados/models.py:406`, `app/chamados/models.py:408`, `app/chamados/models.py:420`, `app/chamados/models.py:555`, `app/chamados/models.py:472`) | SLA, ordenação/contadores, verbos, API e apresentação. (`app/chamados/services/sla.py:30`, `app/chamados/services/painel.py:102`, `app/chamados/services/painel.py:223`, `app/chamados/services/verbos.py:194`, `app/api/views.py:1150`, `app/templates/chamados/partials/_lista_chamados.html:68`) |
-| `PerguntaDisputa.chamado_destino` | **Dois caminhos persistentes:** `fio.reapontar_resolvedora` e o dedup de `PerguntaDisputa.abrir`; este último também cria perguntas. Os helpers novos fazem substituições temporárias para julgamento. (`app/chamados/services/fio.py:828`, `app/chamados/services/fio.py:830`, `app/chamados/models.py:2300`, `app/chamados/models.py:2314`, `app/chamados/models.py:2316`, `app/chamados/models.py:308`, `app/chamados/services/fio.py:758`) | Âncora do fio; crédito da mesa/app; C6; irmãs respondidas; busca de disputa; tranca e materialização. (`app/chamados/services/fio.py:116`, `app/chamados/services/raiox.py:60`, `app/api/views.py:1046`, `app/chamados/juizes.py:699`, `app/chamados/juizes.py:1474`, `app/chamados/services/fio.py:135`, `app/chamados/services/competencia_trancada.py:136`, `app/chamados/services/disputa_emissao.py:1537`) |
-| `PerguntaDisputa.materializada_em` | Portas do model carimbam/desfazem admin, tranca, fantasma e reaberturas; ressuscitação também limpa. Há escritores no materializador, reconciliador, emissão, dedup e relavra. (`app/chamados/models.py:2363`, `app/chamados/models.py:2377`, `app/chamados/models.py:2402`, `app/chamados/models.py:2417`, `app/chamados/models.py:2437`, `app/chamados/models.py:2447`, `app/chamados/models.py:1377`, `app/chamados/services/materializacao.py:509`, `app/chamados/services/materializacao.py:1043`, `app/chamados/reconciliador.py:402`, `app/chamados/reconciliador.py:617`, `app/chamados/services/disputa_emissao.py:1562`, `app/chamados/services/fio.py:876`, `app/chamados/services/relavra_via.py:231`) | C6/materializada de fato, estado da pergunta, respostas sem veredito, fila de materialização, raio-X e invalidação da lavra. (`app/chamados/juizes.py:603`, `app/chamados/juizes.py:1076`, `app/chamados/models.py:2341`, `app/chamados/models.py:1654`, `app/chamados/services/materializacao.py:1289`, `app/chamados/services/raiox.py:133`, `app/chamados/veredito_lavrado.py:163`) |
-| `PerguntaDisputa.via_resolucao` | Acompanha os carimbos acima: admin grava `admin_decidiu`; tranca, fantasma, declaração/ausência, sem-turno, célula absolveu e duplicata têm seus escritores. Relavra pode trocar a via; reaberturas limpam. (`app/chamados/models.py:2362`, `app/chamados/models.py:2376`, `app/chamados/models.py:2401`, `app/chamados/services/materializacao.py:526`, `app/chamados/reconciliador.py:406`, `app/chamados/reconciliador.py:619`, `app/chamados/services/fio.py:875`, `app/chamados/services/relavra_via.py:123`, `app/chamados/models.py:2446`) | C6 lê precedência de tranca/identidade; materializada de fato lê vias sem testemunha; relavra seleciona vias derivadas; UI apresenta a via. (`app/chamados/juizes.py:1015`, `app/chamados/juizes.py:1044`, `app/chamados/juizes.py:603`, `app/chamados/services/relavra_via.py:116`, `app/templates/chamados/partials/_card_atendimento.html:186`) |
-| `DisputaSupervisao.fechada_em` | `fechar` carimba; `reabrir_admin` e `reabrir_sistema` limpam. (`app/chamados/models.py:1730`, `app/chamados/models.py:1734`, `app/chamados/models.py:1932`, `app/chamados/models.py:1956`) | Receivers do pai/regularização/materialização; API/fio; validação; reconciliador; cascata; tranca e crons. (`app/chamados/signals.py:28`, `app/chamados/signals.py:106`, `app/chamados/signals.py:130`, `app/api/views.py:1030`, `app/chamados/services/fio.py:594`, `app/chamados/services/validacao.py:199`, `app/chamados/reconciliador.py:635`, `app/colaboradores/services/desligamento.py:139`, `app/chamados/services/competencia_trancada.py:145`, `app/ponto/management/commands/alertar_disputas_pendentes.py:34`) |
-| Log `fechamento_recusado` | `_registrar_recusa`, através de `evento`; payload distingue pergunta viva de premissa do dia. (`app/chamados/models.py:347`, `app/chamados/models.py:364`, `app/chamados/models.py:654`) | O próprio dedup lê a última recusa e procura mudança posterior de estado; auditoria genérica permite consulta. (`app/chamados/models.py:342`, `app/chamados/models.py:345`, `app/core/views.py:705`, `app/core/views.py:710`) |
-| Log `pergunta_reatada` | `_gate_pergunta_viva`, depois de cada reaponte. (`app/chamados/models.py:374`, `app/chamados/models.py:377`) | Consulta genérica de auditoria; o histórico do chamado não inclui essa ação, pois filtra apenas `estado_chamado`. (`app/core/views.py:705`, `app/chamados/services/historico.py:44`, `app/chamados/services/historico.py:86`) |
-| Log `estado_chamado` | `_gravar_estado`, antes do save e no mesmo atomic da escrita. (`app/chamados/models.py:245`, `app/chamados/models.py:246`, `app/chamados/models.py:250`) | Dedup da recusa, histórico, vigia de loops e vigia trilha×banco. (`app/chamados/models.py:345`, `app/chamados/services/historico.py:86`, `app/chamados/services/vigia_loop.py:29`, `app/chamados/services/vigia_loop.py:114`) |
-
-Há escrita histórica de status/via na migration 0039; ela fica fora do selo novo. Aplicação dessa migration nos ambientes: **[nao verificado]**. (`app/chamados/migrations/0039_a3_via_backfill.py:24`, `app/chamados/migrations/0039_a3_via_backfill.py:33`, `app/chamados/tests/test_o261e_f1_selo_encerramento.py:92`)
-
-**(2) Onde falha contra a árvore**
-
-1. **Bypass da guarda por instância desatualizada, sem precisar de concorrência simultânea.** Guarde uma instância `resolvido`; reabra o mesmo registro por outra instância; acrescente uma pergunta viva; chame `encerrar()` na primeira. O motor recebe o status antigo, `_gate_pergunta_viva` retorna cedo e o tripwire também não roda. Só `reconciliar()` relê o status persistido. (`app/chamados/catalogo/motor.py:102`, `app/chamados/models.py:1412`, `app/chamados/models.py:356`, `app/chamados/models.py:206`, `app/chamados/models.py:592`)
-
-   Reproduzi esse desvio com os métodos extraídos e persistência simulada em memória: `encerrar()` devolve `True` sem consultar `_vivas_ancoradas`. Reprodução com ORM/banco: **[nao verificado]**. O teste novo exige que terminal→terminal passe com pergunta ancorada, portanto não cobre o caso em que apenas a instância está terminal. (`app/chamados/models.py:356`, `app/chamados/models.py:206`, `app/chamados/tests/test_o261e_f1_porta_encerramento.py:205`)
-
-2. **A nova costura protege apenas um dos escritores existentes.** `PerguntaDisputa.abrir()` encontra `ex`, verifica E4-c, troca `ex.chamado_destino`, relavra e salva. Esse ramo pode reapontar uma pergunta existente para terminal sem `_costura_nao_mata_o_fio`; não cabe na exceção documentada como “nascimento para F2”. (`app/chamados/models.py:2292`, `app/chamados/models.py:2297`, `app/chamados/models.py:2300`, `app/chamados/models.py:2314`, `app/chamados/services/fio.py:748`, `app/chamados/services/fio.py:823`)
-
-3. **Âncora e crédito não significam a mesma coisa na árvore.** O filtro novo cai no pai somente se o destino for `NULL`, reproduzindo `chamado_que_lista`. Porém mesa e app creditam ao pai também quando o destino está morto; o juiz das respostas pendentes lê esse mesmo crédito. (`app/chamados/models.py:297`, `app/chamados/services/fio.py:117`, `app/chamados/services/raiox.py:61`, `app/chamados/services/raiox.py:64`, `app/api/views.py:1047`, `app/chamados/juizes.py:1474`)
-
-   Consequência estática: pai vivo de `disputa_supervisao`, destino terminal e pergunta muda sem materialização podem perder o último chamado visível quando o pai reconcilia: a guarda não coleta essa pergunta, e C6 continua dando-a por viva. É uma divergência preexistente de consumidores que F1 não cobre; ocorrência no dado de produção: **[nao verificado]**. (`app/chamados/models.py:297`, `app/chamados/models.py:601`, `app/chamados/models.py:621`, `app/chamados/juizes.py:1076`, `app/api/views.py:1047`)
-
-4. **Há chamadores que presumem sucesso de `encerrar()`.** A troca de vínculo ignora a recusa e cria outro aceite; regularização externa já grava materialização/nota, ignora a recusa e retorna `materializada=True`. Isso permite concluir o ato mantendo o chamado anterior vivo; não prova erro na materialização em si. (`app/colaboradores/services/vinculo.py:387`, `app/colaboradores/services/vinculo.py:393`, `app/chamados/services/regularizacao_ext.py:197`, `app/chamados/services/regularizacao_ext.py:205`, `app/chamados/services/regularizacao_ext.py:207`)
-
-5. **A nova exceção humana alcança ações com efeitos anteriores.** Geofence cria advertência e nota antes de `transicionar`; a recusa por viva ancorada deixa esses efeitos anteriores à transição, e a guarda de repetição só impede chamado já encerrado. Agenda e escala têm atomic local, mas deixam o `ValueError` propagar pela casca. (`app/chamados/services/acoes_chamado.py:176`, `app/chamados/services/acoes_chamado.py:193`, `app/chamados/services/acoes_chamado.py:218`, `app/chamados/services/acoes_chamado.py:222`, `app/chamados/models.py:159`, `app/chamados/services/acoes_chamado.py:102`, `app/chamados/services/acoes_chamado.py:149`, `app/chamados/views.py:461`, `app/chamados/views.py:464`)
-
-   Já a resposta rápida do fio captura `ValueError`; os receivers principais tratam recusa ou isolam a falha. (`app/chamados/services/fio.py:716`, `app/chamados/signals.py:42`, `app/chamados/signals.py:46`, `app/chamados/signals.py:91`)
-
-6. **Reaponte e status têm atomic comum, mas não exclusão concorrente.** As quatro portas de sistema envolvem plano/reaponte/estado no atomic; a seleção de perguntas e sobrevivente é feita sem trava. Portanto há rollback conjunto para exceção propagada, mas a estabilidade do plano até o save não está assegurada pelo código. Concorrência efetiva: **[nao verificado]**. (`app/chamados/models.py:569`, `app/chamados/models.py:670`, `app/chamados/models.py:1417`, `app/chamados/models.py:1434`, `app/chamados/models.py:296`, `app/chamados/juizes.py:1621`)
-
-7. **A mudança de ordem de `Disputa.fechar` tem efeito útil e limite transacional.** As perguntas agora recebem `admin_decidiu` antes do save da disputa, permitindo ao receiver ler as mudas já encerradas. Mas o comentário “falha leva os dois” não vale para falha do pai capturada pelo receiver: pergunta e disputa podem confirmar com pai ainda vivo. (`app/chamados/models.py:1720`, `app/chamados/models.py:1724`, `app/chamados/models.py:1734`, `app/chamados/signals.py:41`, `app/chamados/signals.py:46`)
-
-   A ordem passa a incluir pergunta→disputa→chamado; existe caminho chamado→pergunta nos receivers do chamado. Atomic não resolve essa inversão de aquisição de locks; deadlock observado: **[nao verificado]**. (`app/chamados/models.py:1724`, `app/chamados/models.py:1734`, `app/chamados/signals.py:42`, `app/chamados/models.py:250`, `app/chamados/signals.py:92`, `app/chamados/services/disputa_emissao.py:1583`)
-
-8. **Desligamento muda a trilha e mantém uma frase falsa nos casos recusados.** O pai pode primeiro virar `resolvido/sistema` pelo signal e depois `fechado/cascade` no laço; `resolvido` pertence a `NAO_FECHADOS`, o carimbo é preservado e a via é regravada. São duas transições distintas. (`app/colaboradores/services/desligamento.py:142`, `app/colaboradores/services/desligamento.py:150`, `app/chamados/catalogo/motor.py:32`, `app/chamados/models.py:226`, `app/chamados/models.py:228`, `app/chamados/models.py:246`)
-
-   O laço pula a nota quando `encerrar()` recusa, mas o chamado de auditoria ainda afirma genericamente que a cascata fechou chamados/disputas abertas. (`app/colaboradores/services/desligamento.py:155`, `app/colaboradores/services/desligamento.py:170`)
-
-9. **O antes da reata pode mentir.** Para pergunta ancorada pelo container, `chamado_destino` era `NULL`; a trilha grava `antes={'chamado_destino': self.pk}`. O payload deveria descrever o campo real ou nomear explicitamente a âncora. (`app/chamados/models.py:297`, `app/chamados/models.py:380`)
-
-   As três ações usam `evento`, que é best-effort: falha da auditoria pode ser engolida. Assim, atomic não garante que toda recusa/reata tenha uma linha de trilha. (`app/chamados/models.py:347`, `app/chamados/models.py:377`, `app/chamados/models.py:246`, `app/core/observ.py:105`, `app/core/observ.py:133`, `app/core/observ.py:139`)
-
-O **pós-estado** delega a vitalidade ao C6 registrado, mas permite que o próprio encerramento seja parte da prova: pergunta carimbada sem slot pode morrer porque o destino passa a `ENCERRADOS`. O teste novo exige esse comportamento. `cancelado/superado` não pertencem a `ENCERRADOS`, portanto não produzem necessariamente a mesma absolvição. Não é equivalente a “toda viva no pré-estado reata ou recusa”. (`app/core/juizes.py:238`, `app/chamados/models.py:302`, `app/chamados/juizes.py:699`, `app/chamados/juizes.py:715`, `app/chamados/tests/test_o261e_f1_porta_encerramento.py:166`, `app/chamados/catalogo/motor.py:30`)
-
-No caminho quente, a batida julga a célula e também chama o reconciliador; o cartório chama `reconciliar()` nos chamados resolvidos pela lâmpada. O diff acrescenta atomic, uma coleta no plano e outra no tripwire quando fecha; cada coleta cria novos objetos/memo, e o plano consulta C8 por pergunta viva. Mesmo sem perguntas, as duas buscas de âncoras continuam presentes no fechamento permitido. (`app/ponto/signals.py:135`, `app/ponto/signals.py:215`, `app/ponto/services/cartorio.py:1163`, `app/chamados/models.py:569`, `app/chamados/models.py:601`, `app/chamados/models.py:207`, `app/chamados/models.py:296`, `app/chamados/models.py:300`, `app/chamados/models.py:329`)
-
-Os tetos existentes continuam fixados, inclusive nos cenários de batida que fecham chamados. **Delta real, latência e quais tetos estouram: [nao verificado]**. (`app/ponto/tests/test_selo_chokepoint_escrita.py:112`, `app/ponto/tests/test_selo_chokepoint_escrita.py:114`, `app/ponto/tests/test_selo_chokepoint_escrita.py:157`, `app/ponto/tests/test_selo_chokepoint_escrita.py:218`)
-
-Nos laços examinados, cartório, retratação, tranca e auditoria de órfãos conferem o retorno; os descartes de `reconciliar()` em detecção de ausências/materialização já são declarados como operações sem nota ou contador posterior. (`app/ponto/services/cartorio.py:1175`, `app/chamados/reconciliador.py:525`, `app/chamados/services/competencia_trancada.py:177`, `app/chamados/management/commands/auditar_chamados_orfaos.py:67`, `app/chamados/tests/test_selo_reconciliar_le_o_retorno.py:22`)
-
-**O selo AST não cumpre toda a promessa literal.**
-
-- O teste anti-vacuidade **falha antes de testar o mutante**: espera uma ocorrência textual, mas há duas, no núcleo e no plano. (`app/chamados/tests/test_o261e_f1_selo_encerramento.py:161`, `app/chamados/models.py:207`, `app/chamados/models.py:322`)
-- O verificador do tripwire aceita `if False` e substituição do `raise` por `print`: só compara números de linha. Confirmei esses mutantes em memória. (`app/chamados/tests/test_o261e_f1_selo_encerramento.py:106`, `app/chamados/tests/test_o261e_f1_selo_encerramento.py:110`)
-- O detector não acompanha dicionários/nomes indiretos: `qs.update(**dados)` e `update_or_create(defaults=dados)` escapam; construtor com **PK existente** seguido de save também escapa da premissa de “nascimento”. (`app/chamados/tests/test_o261e_f1_selo_encerramento.py:69`, `app/chamados/tests/test_o261e_f1_selo_encerramento.py:71`, `app/chamados/tests/test_o261e_f1_selo_encerramento.py:140`)
-- A exceção libera `_vivas_ancoradas` inteira pelo nome, sem verificar ausência de save nem restauração no `finally`; `__dict__` e SQL direto também não são formas reconhecidas. Isso descreve furos do selo, não evidência de uso atual desses mutantes em produção. (`app/chamados/tests/test_o261e_f1_selo_encerramento.py:27`, `app/chamados/tests/test_o261e_f1_selo_encerramento.py:55`, `app/chamados/tests/test_o261e_f1_selo_encerramento.py:86`)
-
-Há também um **teste existente que pode passar sem andar seu caminho**: `test_gravar_estado_cruzando_a_fronteira` cria perguntas respondidas, chama `reconciliar()` sem conferir retorno e verifica apenas teto. Com a nova recusa, pode ficar barato justamente porque não cruzou a fronteira. (`app/ponto/tests/test_selo_chokepoint_escrita.py:240`, `app/ponto/tests/test_selo_chokepoint_escrita.py:292`, `app/chamados/models.py:602`)
-
-O teste de exportada apenas simula `competencia_entregue=True` e verifica o status final; não demonstra que os registros exportados permaneceram intocados. (`app/chamados/tests/test_o261e_f1_porta_encerramento.py:113`)
-
-**(3) Testes vermelhos** [nao verificado]
-
-| Teste |
-
-[truncado em 20000 de 22863 caracteres]
-
-## 30/10 18:57 · sessao 5ee53deaea38 · E1-BATERIA · verificador · origem=Code
-
-A escrita de RED em cópia própria já está autorizada; exige contrato anterior ao uso e revisão de cada teste pelo Code (`CLAUDE.md:626`). Os pontos de falha são: [nao verificado]
-
-1. **O predicado permite alterar e apagar testes existentes.** O item 3 só recusa alterações cujo caminho **não** case `app/<app>/tests/test_*.py`. Portanto, modificar ou apagar um teste existente nesse caminho passa pelo predicado, enquanto o item 4 exige rc 5 para modificação. Consequência: implementar literalmente a regra viola o próprio selo. É preciso exigir que todos os arquivos anteriores permaneçam intactos e aceitar somente acréscimos permitidos. Implementação: [nao verificado] — anexo, itens 3–4. [nao verificado]
-
-2. **Manifesto SHA256 não define toda a barreira prometida.** Faltam regras explícitas para tipos de entrada, links simbólicos, permissões, normalização de caminhos e localização protegida do manifesto. Comparação final também não detecta escrita seguida de restauração. A prova atual usa `find . -type f`, que deixa links simbólicos fora do inventário (`bin/tests/prova_codex_pergunta_real.sh:11`). Consequência: copiar essa técnica não demonstra “nenhuma escrita fora do permitido”; demonstra apenas parte das diferenças finais. Barreira futura: [nao verificado].
-
-3. **A saída atual do CLI não serve diretamente como publicação do patch.** O wrapper passa `-o "$RESPOSTA"` ao Codex antes de conhecer o resultado (`bin/codex_pergunta.sh:157`, `bin/codex_pergunta.sh:159`). Consequência: copiar esse fluxo para `<saida.patch>` permite produzir saída antes das verificações e antes de decidir por rc 5/6/7/75/124. O contrato precisa definir geração privada, validação, publicação final e tratamento de destino preexistente. Implementação: [nao verificado].
-
-4. **Falta definir como arquivos novos viram patch.** A cópia atual é extraída por `git archive | tar`, sem inicialização de repositório (`bin/codex_pergunta.sh:95`). O contrato não especifica a geração do diff. Consequência: presumir um checkout com índice ou usar uma estratégia que omita arquivos novos pode entregar patch vazio ou incompleto. Método futuro: [nao verificado] — anexo, itens 2–3.
-
-5. **“Mesmo gate” só soma as portas se elas usarem exatamente os mesmos locks e teto.** Hoje `LOGD` depende do diretório do script e aceita override; `CODEX_TETO` também aceita override sem validação (`bin/codex_pergunta.sh:47`, `bin/codex_pergunta.sh:51`). Os locks são abertos nesse diretório (`bin/codex_pergunta.sh:138`, `bin/codex_pergunta.sh:144`). Consequência: diretórios diferentes criam filas independentes; teto maior permite ultrapassar seis. Além disso, a medição descrita foi de seis chamadas curtas de leitura, não de escrita com compilação (`bin/codex_pergunta.sh:8`). Capacidade dessa nova carga: [nao verificado].
-
-6. **O timeout atual não inclui a espera por vaga.** Há `flock` bloqueante no gate e laço de espera pelos slots; `timeout` só começa depois (`bin/codex_pergunta.sh:140`, `bin/codex_pergunta.sh:142`, `bin/codex_pergunta.sh:157`). Consequência: se o desenho copiar esse mecanismo, uma chamada poderá ultrapassar 1800 segundos sem retornar 124. O contrato precisa distinguir prazo do Codex e prazo total da chamada. Implementação futura: [nao verificado].
-
-7. **A regra sobre agente esperando ficou condicional indevidamente.** A seção 7b atribui à sessão principal o acompanhamento de log, rc ou sinal; o agente entrega comando e caminho e termina (`CLAUDE.md:556`). O contrato admite agente construtor como chamador, mas só manda entregar e sair quando ele “não pode esperar”. Consequência: deixa aberta a espera do agente que a regra proíbe. Implementação: [nao verificado] — anexo, itens 1–2.
-
-8. **Compilar e contar arquivos não prova RED.** A suíte executa `manage.py test` com labels determinadas (`bin/suite.sh:59`, `bin/suite.sh:102`; lista em `bin/regua.sh:23`). Um arquivo sintaticamente válido pode não conter teste descobrível, pertencer a app fora dessas labels ou já passar no código atual. Consequência: o rc 0 descrito não comprova reprodução do defeito. Descoberta e vermelho pelo motivo esperado continuam [nao verificado] — anexo, item 3.
-
-9. **Falta explicitar o caminho de execução após aplicar o patch.** A suíte usa a cópia somente com `--dir`; sem isso, usa a árvore viva (`bin/suite.sh:72`, `bin/suite.sh:80`). Para cópias, consulta a porta de montagem, que fornece caches/logs/media e verifica staticfiles (`bin/suite.sh:77`; `bin/arvore_do_push.sh:50`, `bin/arvore_do_push.sh:80`). Consequência: execução improvisada pode testar a árvore errada ou produzir vermelho de infraestrutura. Procedimento futuro: [nao verificado].
-
-10. **O ESTADO continuará dizendo “nunca escreve” para uma resposta RED.** O cabeçalho é fixo (`bin/gerar_codex_estado.py:141`). O leitor seleciona respostas finais sem condicioná-las à aprovação do patch ou à revisão; a associação de procedência também descarta rc e duração (`bin/gerar_codex_estado.py:97`, `bin/gerar_codex_estado.py:153`; `bin/codex_limite_estado.py:96`). Consequência: uma final RED pode aparecer sob descrição falsa e sem indicar que o wrapper recusou seu artefato.
-
-11. **Codex falso não prova as garantias reais do sandbox e do limite.** Os testes atuais separam estrutura de prova real (`bin/tests/test_codex_pergunta.sh:2`); a prova real tenta escrever na cópia, na viva e em `/tmp` (`bin/tests/prova_codex_pergunta_real.sh:17`). O selo de limite declara não ter exemplo real do erro (`bin/tests/test_codex_limite.sh:4`). Consequência: os casos falsos propostos podem validar o recusador de alterações, mas isolamento efetivo de `/tmp`/`$TMPDIR`, rede e classificação de indisponibilidade permanecem [nao verificado].
-
-Dois pontos estão coerentes: `red` realmente será contado como `outro`, preservando o papel literal nas últimas chamadas e na procedência (`bin/codex_limite_estado.py:78`, `bin/codex_limite_estado.py:88`, `bin/codex_limite_estado.py:96`); o novo selo, com o nome proposto, será descoberto automaticamente pela régua (`bin/regua.sh:138`).
-
-## 30/10 18:56 · sessao 4e7a231d3a51 · - · - · origem=Ronald (tmux)
-
-- **Regra de autorização contraditória.** No anexo, item 3, alteração/apagamento só é recusado quando o caminho **não** casa `app/<app>/tests/test_*.py`; modificar ou apagar teste existente fica permitido. O item 4 exige rc 5 para modificar existente. Consequência: implementar literalmente o item 3 viola o próprio selo. Implementação futura [nao verificado]. [nao verificado]
-
-- **Manifesto de conteúdo não basta para a garantia declarada.** O contrato não define inventário de tipos, links, modos nem normalização dos caminhos; comparação final tampouco identifica escrita seguida de restauração. A prova atual usa `find . -type f`, portanto também deixa links simbólicos fora do inventário (`bin/tests/prova_codex_pergunta_real.sh:11`). Consequência: copiar essa técnica não demonstra “nenhuma escrita fora do permitido”; proteção efetiva futura [nao verificado].
-
-- **Archive exige uma estratégia explícita para produzir o patch.** O wrapper materializa arquivos por `git archive | tar`, sem criar repositório na cópia (`bin/codex_pergunta.sh:95`). O contrato não diz como transforma arquivos novos em patch. Consequência: usar um `git diff` comum nessa cópia não é uma solução definida, e arquivos novos precisam ser incluídos deliberadamente; método futuro [nao verificado].
-
-- **Saída do Codex não pode ser publicada diretamente como patch.** O wrapper atual passa o destino ao CLI antes de conhecer o rc (`bin/codex_pergunta.sh:157`, `bin/codex_pergunta.sh:158`, `bin/codex_pergunta.sh:159`). Consequência: copiar esse fluxo para `<saida.patch>` permite saída antes das validações; o contrato exige publicar apenas depois de rc 0. Estágio privado, tratamento de destino preexistente e publicação final [nao verificado].
-
-- **Selo falso prova o validador, não o isolamento real.** Os testes atuais distinguem estrutura da chamada real (`bin/tests/test_codex_pergunta.sh:2`, `bin/tests/test_codex_pergunta.sh:3`); a prova real tenta escrever na cópia, na viva e em `/tmp` (`bin/tests/prova_codex_pergunta_real.sh:17`, `bin/tests/prova_codex_pergunta_real.sh:26`). Consequência: os casos falsos propostos não demonstram funcionamento das exclusões de `/tmp`/`$TMPDIR` nem isolamento do host; essas garantias permanecem [nao verificado].
-
-## 30/10 18:55 · sessao 10615df8b65a · - · - · origem=Ronald (tmux)
-
-- **Espera de agente ficou condicional indevidamente.** A regra veda usar agente para esperar e atribui polling de `rc`, log ou sinal à sessão principal; agente entrega comando+caminho e termina (`CLAUDE.md:556-559`). O contrato permite que “o chamador”, inclusive agente construtor, leia o resultado quando terminar e só entregue comando se “não pode esperar” (anexo, item 2; implementação [nao verificado]). Consequência: deixa autorizada uma espera que a regra proíbe.
-
-- **Compilar e contar arquivos não estabelece RED nem descoberta pela suíte.** A suíte executa `manage.py test` com as labels selecionadas (`bin/suite.sh:59`, `bin/suite.sh:102-103`), cuja fonte contém lista determinada de apps (`bin/regua.sh:23`). Arquivo permitido com sintaxe válida pode não conter teste descobrível, pode pertencer a app fora das labels ou pode passar contra o código atual; o contrato não exige execução/vermelho anterior (anexo, item 3; comportamento futuro [nao verificado]). Consequência: `rc 0` pode entregar um “teste novo” que nunca roda ou não demonstra o defeito.
-
-- **Cópia por archive não basta para rodar a suíte corretamente.** O caminho existente é `suite.sh --dir <copia>`, que obtém montagem por `arvore_do_push.sh` (`bin/suite.sh:72-79`); sem `--dir` a suíte usa a árvore viva (`bin/suite.sh:80-82`). A porta fornece tmpfs de caches/logs/media (`bin/arvore_do_push.sh:80-81`) e recusa staticfiles vazio (`bin/arvore_do_push.sh:50-53`). O contrato não descreve validação RED por esse caminho (anexo, itens 3–4; implementação [nao verificado]). Consequência: execução improvisada pode testar árvore errada ou produzir vermelho de infraestrutura.
-
-- **Selo falso não prova a barreira real de escrita.** Os selos existentes distinguem estrutura de prova real (`bin/tests/test_codex_pergunta.sh:2-3`); a prova real tenta escrever em cópia, viva e `/tmp`, comparando estado antes/depois (`bin/tests/prova_codex_pergunta_real.sh:15-27`). O contrato prevê apenas Codex falso (anexo, item 4; proteção efetiva do sandbox [nao verificado]). Consequência: os casos de manifesto podem passar sem demonstrar isolamento real de `/tmp`, `$TMPDIR` e host.
-
-Dois pontos que **não** constituem conflito por si:
-
-- O corte novo autoriza expressamente escrita de RED em cópia própria e revisão por teste; as proibições anteriores devem ser lidas com essa exceção (`CLAUDE.md:626-628`). [nao verificado]
-- O novo selo `bin/tests/test_codex_escreve_red.sh` será descoberto automaticamente pela régua, se criado nesse nome; não exige lista adicional (`bin/regua.sh:138-145`). A execução futura permanece [nao verificado].
-
-_726 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_730 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
