@@ -1,7 +1,20 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **30/10/2026 10:36** · publicado em **30/10/2026 10:42** (UTC-3)
+> Ultima resposta processada: **30/10/2026 10:52** · publicado em **30/10/2026 10:53** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 30/10 10:52 · sessao 4c6fa3869075 · O261-V-FASE · censo · origem=Code
+
+Referências aos anexos contam linhas desde o primeiro conteúdo após `== anexo: ... ==`.
+
+| Achado do Opus | Classe | Trecho da PERGUNTA | Trecho da RESPOSTA |
+|---|---|---|---|
+| **1. Custo da frota no request** (`opus_achados.txt:2`) | **(b)** Apontado; custo aceito na triagem (`opus_achados.txt:8`). | “o custo de chamar fora_de_fase no request da tela e nos commands que chamam lista()” (`codex_pergunta_v1.q:11`). | “Cada HTML/PDF e os commands C7/C8 passam a pagar a leitura de toda a frota”. Apontou o custo global, embora sem confrontar expressamente a lápide da C3 (`codex_resposta_v1.txt:17`). |
+| **2. Dois juízes de âncora sugerida** (`opus_achados.txt:3`) | **(a)** Tema perguntado; duplicidade não apontada. Os dois mecanismos estão na cópia (`app/escala/services/fase_12x36.py:45`; `app/escala/services/fase_na_tela.py:50`). | “2o juiz que duplica juiz registrado”; “Onde este diff falha contra o codigo atual” (`codex_pergunta_v1.q:9,11`). | **nenhum** sobre a duplicidade. A v3 afirma que o complemento chama o leitor “sem cálculo próprio de fase”, sem confrontar as duas sugestões (`codex_resposta_v3.txt:12`). |
+| **3. Dias do col451, ação no vínculo vigente e regeneração do passado** (`opus_achados.txt:4`) | **(b-parcial)** Apontou a divergência de vínculo e da ação; não apontou todo o achado composto (`codex_resposta_v1.txt:4`; `codex_resposta_v3.txt:15`). | “os 4 dias vao a lista Cadastro x Realidade”; verificação contra “o codigo atual” (`codex_pergunta_v1.q:3,11`). EC1484/EC1485 e regeneração não aparecem nesse enunciado (`codex_pergunta_v1.q:3`). | “cabeçalho do vínculo novo e ação sem identificar qual corrigir” (`codex_resposta_v1.txt:4`). Depois: “Vínculo acusado: procede como correção de apresentação” (`codex_resposta_v2.txt:9`). O resultado real do col451 permaneceu “[não verificado]” (`codex_resposta_v3.txt:15`). |
+| **4. RED restrito à primeira versão dos testes** (`opus_achados.txt:5`) | **(c)** RED histórico não verificado; inspeção de mordida não comprova execuções históricas (`codex_resposta_v2.txt:11,13`). | “selo/RED sem mordida”; “se os testes novos mordem de fato” (`codex_pergunta_v1.q:9,11`). | **nenhum** sobre os hashes e suas rodadas vermelhas. “Execução da suíte, RED histórico [...] **[não verificado]**” (`codex_resposta_v2.txt:13`; também `codex_resposta_v3.txt:15`). | [nao verificado]
+| **5. LEI-AKITA sem os leitores de `lista()`** (`opus_achados.txt:6`) | **(a)** O censo de leitores foi perguntado; a omissão na LEI-AKITA não foi apontada. A resposta menciona os dois commands, mas isso não constitui denúncia da omissão (`codex_pergunta_v1.q:11`; `codex_resposta_v1.txt:19`). | “quem mais le [...] as chaves/estrutura de lista()”; “commands que chamam lista()” (`codex_pergunta_v1.q:11`). | **nenhum** sobre a LEI-AKITA incompleta. Há apenas: “Os commands continuam exigindo especificamente C7/C8 para fechar”, com referências aos dois commands; não inclui o placar nesse trecho (`codex_resposta_v1.txt:19`). |
+| **6. Suíte sem imprimir hash/`--dir` certificado** (`opus_achados.txt:7`) | **(e) NÃO PERGUNTADO** O tema específico da identificação impressa do certificado não consta das perguntas; o escopo declarado é o diff em `app/escala` (`codex_pergunta_v1.q:5,11`; `codex_pergunta_v2.q:14`; `codex_pergunta_v3.q:13`). | **Nenhum trecho específico** sobre impressão de hash/`--dir`. O script da cópia admite `--dir`, mas não integra o diff apresentado (`bin/suite.sh:46,72`; `codex_pergunta_v3.q:13`). | **nenhum** sobre essa impressão. A ressalva “Execução da suíte [...] [não verificado]” não aponta o defeito do certificado (`codex_resposta_v3.txt:15`). |
 
 ## 30/10 10:36 · sessao cfcfcbf1c961 · FIO-MORTO-DONO-NA-LISTA · verificador · origem=Code
 
@@ -627,31 +640,4 @@ As verificações sustentadas pelo código são:
 - Competência “aberta”, para o flip, significa que o fechamento da competência de cada batida, calculada pela data local e corte da empresa, não esteja `aprovado` nem `exportado`. (`app/ponto/janelas.py:75–89`)
 - **PAR aceita / ÍMPAR recusa e alternância cronológica ainda não são regras desse ramo.** Hoje a folga é recusada antes de flip e lavra; ter quantidade par e competência aberta não basta para esse dia passar. (`app/ponto/services/veredito_celula.py:220–245`, `271–308`; `app/ponto/services/simular_dia.py:11–13`)
 
-## 30/10 09:58 · sessao 0c23c8bc638a · - · - · origem=Ronald (tmux)
-
-Censo dos caminhos fora do núcleo:
-
-| Caminho | Escrita de `contexto[motivo]['data']` / dia usado |
-|---|---|
-| `api/views.py` | `contexto_anomalia['saida_sem_entrada']['data'] = agora_local.date().isoformat()`; `agora_local` vem do relógio atual. É **dia civil local da tentativa/recepção**, sem usar `data_turno` nem `data_saida_esperada`. O motivo adicionado à lista é `orfao_14h`, mas a chave escrita é `saida_sem_entrada`. (`app/api/views.py:527-528`, `:652-658`). |
-| `api/views_core.py` | Mesma escrita e semântica, com a mesma diferença entre motivo `orfao_14h` e chave `saida_sem_entrada`. (`app/api/views_core.py:519-520`, `:649-655`). |
-| Persistência dessas APIs | Ambas passam o contexto montado a `criar_ou_atualizar_disputa`. (`app/api/views.py:777-779`; `app/api/views_core.py:777-779`). |
-| PWA `triagem_batida.ramo_registrar_es` | Motivo e chave são `saida_sem_entrada`; grava `agora_local.date()`, calculado de `timezone.now()`: **dia civil local da tentativa**, não uma data extraída da célula/turno. (`app/ponto/services/triagem_batida.py:625-626`, `:648-660`). |
-| `disparar_perguntas_competencia` | Delega a `fabrica_da_celula.perguntar`; alvos normais usam `c.data` de `CelulaDia`, e fio mudo usa `ch.celula.data`: **dia da célula**. (`app/chamados/management/commands/disparar_perguntas_competencia.py:76`, `:104-123`, `:155-167`, `:277-289`). |
-
-`declaracao_texto.py` **não escreve esse campo**: os dois caminhos usam `disputa_para_declaracao`, cujo nascimento leva somente `{'origem': origem}` e cujo `merge_contexto=None`; passam o dia diretamente a `PerguntaDisputa.abrir(data_evento=...)`. (`app/chamados/services/declaracao_texto.py:307-323`, `:605-612`; `app/chamados/services/disputa_emissao.py:563-566`).
-
-O dia da declaração é **o dia da célula lida**, inclusive quando a candidata é a célula da véspera: `_marcos_faltantes` percorre `(d, vespera)`, aceita somente posição `fim` da véspera e devolve `data_dia`; o casamento retorna essa tupla e o escritor usa seu `dia`. Não incrementa o dia para o marco final noturno. (`app/chamados/services/declaracao_texto.py:80-89`, `:104-123`, `:131-139`, `:292-323`). No caminho de texto aplicado, a proposta preserva o mesmo dia do casamento e o passa à abertura. (`app/chamados/services/declaracao_texto.py:563-583`, `:600-612`).
-
-Caminhos citados que **não montam `motivo.data`**:
-
-- API `entrada_sem_saida` monta somente `entrada_aberta_em` e `hora_tentativa`; API `foto_ausente` monta somente `tipo_batida`. (`app/api/views.py:483`, `:672-675`; `app/api/views_core.py:475`, `:669-672`).
-- `marcar_foto_ausente_retro` monta `foto_ausente` com `tipo_batida`, `batida_id`, `batida_em` e `_por`, sem `data`. (`app/ponto/management/commands/marcar_foto_ausente_retro.py:96-104`).
-- `reconciliar_grade._disputa` nasce com `{'origem': 'grade'}`; não passa `merge_contexto`. (`app/ponto/management/commands/reconciliar_grade.py:415-419`).
-- `perguntar_chamados_sem_pergunta` delega ao serviço `pergunta_no_app.perguntar`, que chama `criar_disputa_a_partir_de_chamados_orfaos`; não monta datas próprias. (`app/chamados/management/commands/perguntar_chamados_sem_pergunta.py:20-29`; `app/chamados/services/pergunta_no_app.py:148-159`).
-- Os comandos `detectar_ausencias`, `processar_alertas_turno` e `processar_alertas_avancados` também delegam à fábrica de órfãos. (`app/ponto/management/commands/detectar_ausencias.py:782-791`; `app/ponto/management/commands/processar_alertas_turno.py:375-384`; `app/ponto/management/commands/processar_alertas_avancados.py:149-158`).
-- Chamadores de `DisputaSupervisao.anotar_contexto/renovar_contexto` escrevem `supervisao_omissa_escalado`, `incidente_operacional` e `ultimo_alerta_diario`, não `motivo.data`. (`app/chamados/views.py:1343-1344`; `app/ponto/management/commands/escalonar_chamados_supervisao.py:159-162`; `app/ponto/management/commands/alertar_disputas_pendentes.py:48`).
-
-O command `smoke_chamados` tem uma montagem adicional, mas é **fixture de smoke**: fixa `DATA_OK = "2026-05-15"` e envia `{motivo: {"data": DATA_OK}}` quando o texto contém `{data}`, usando colaborador `_Smoke` e origem `smoke`. Não representa dia calculado de turno real. (`app/chamados/management/commands/smoke_chamados.py:77-79`, `:90-101`).
-
-_449 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_450 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
