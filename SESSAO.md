@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 30/10/2026 04:03:10.** Transcript: `e3f79949-a90b-4c64-a5c2-afd178149c30.jsonl` (7.1 MB). Acoes na janela: **300**.
+**Medido em 30/10/2026 04:08:44.** Transcript: `e3f79949-a90b-4c64-a5c2-afd178149c30.jsonl` (7.2 MB). Acoes na janela: **305**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 04:04:24 | Bash | Record suite red in RELATO | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md' L=open(p).read().split('\n') if L[2].startswith('ESPERANDO:'): del L[2] i=next(k for k,l in enumerate(L) if l.startswith('> (C) VOLTA POS-OPUS 7a8e4604')) L.insert(i+1,'> (C) SUITE INTEIRA 7a8e4604 VERMELHA: FAILED (failures=5), Ran 12751, rc 1 (`app/logs/o261/suite_c_7a8e4604.log` na copia). Regressao da cura MEDIDA: os 3 mod ...` |
+| 04:04:21 | SendMessage |  | `-` |
+| 04:03:26 | Bash | Rerun 3 modules on HEAD and copy via --only | `cd /home/ronald/saas-hasner && M="ponto.tests.test_cartorio_veto_nao_e_emitido ponto.tests.test_furo_parcial_sem_cobranca ponto.tests.test_veto_que_cai_rejulga"; D=/home/ronald/wt-o261c3-3010-0232/app/logs/o261; bash bin/suite.sh --only "$M" > $D/veto3_head.log 2>&1; echo "rc=$?" >> $D/veto3_head.log; bash bin/suite.sh --dir /home/ronald/wt-o261c3-3010-0232 --only "$M" > $D/veto3_copia.log 2>&1; e ...` |
+| 04:03:19 | Bash | See how EXTRA and labels are composed | `cd /home/ronald/saas-hasner && sed -n 95,130p bin/suite.sh \| grep -n "EXTRA\\|LABELS\\|manage.py"` |
+| 04:03:16 | Bash | Check suite.sh argument handling | `cd /home/ronald/saas-hasner && grep -n '\-\-only\\|"\$@"\\|RESTO\\|resto' bin/suite.sh \| head -15` |
 | 04:03:09 | Bash | See why runs returned rc 2 | `tail -5 /home/ronald/wt-o261c3-3010-0232/app/logs/o261/veto3_head.log` |
 | 04:03:03 | Bash | Run 3 failing modules on HEAD and copy | `cd /home/ronald/saas-hasner && M="ponto.tests.test_cartorio_veto_nao_e_emitido ponto.tests.test_furo_parcial_sem_cobranca ponto.tests.test_veto_que_cai_rejulga"; D=/home/ronald/wt-o261c3-3010-0232/app/logs/o261; bash bin/suite.sh --only "ponto" -- $M > $D/veto3_head.log 2>&1; echo "rc=$?" >> $D/veto3_head.log; bash bin/suite.sh --dir /home/ronald/wt-o261c3-3010-0232 --only "ponto" -- $M > $D/veto3 ...` |
 | 04:02:54 | Bash | Extract failure assertions from suite log | `L=/home/ronald/wt-o261c3-3010-0232/app/logs/o261/suite_c_7a8e4604.log; awk '/^FAIL: /{f=1} f{print} /^-{20,}$/ && f{c++} c>=10{exit}' $L \| grep -E "^FAIL\|Error\|assert\|File \".*/(chamados\|ponto)/" \| head -40` |
