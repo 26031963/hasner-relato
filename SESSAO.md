@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 30/10/2026 03:47:06.** Transcript: `e3f79949-a90b-4c64-a5c2-afd178149c30.jsonl` (7.0 MB). Acoes na janela: **291**.
+**Medido em 30/10/2026 03:52:44.** Transcript: `e3f79949-a90b-4c64-a5c2-afd178149c30.jsonl` (7.1 MB). Acoes na janela: **296**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 03:48:43 | Bash | Mark ESPERANDO on suite trava pid | `cd /home/ronald/saas-hasner && sed -i '3i ESPERANDO: /home/ronald/saas-hasner/bin/trava_teste.sh \| pid=3011983' app/docs/RELATO.md && sed -n 3p app/docs/RELATO.md; tail -3 /home/ronald/wt-o261c3-3010-0232/app/logs/o261/suite_c_7a8e4604.log \| cut -c1-150` |
+| 03:48:38 | Bash | Locate suite and trava processes | `pgrep -af "suite.sh" \| grep -v "bash -c\\|pgrep" \| cut -c1-150; pgrep -af "trava_teste.sh" \| grep -v "bash -c\\|pgrep" \| cut -c1-120` |
+| 03:48:34 | Bash | Find suite.sh child pid | `for p in $(pgrep -P 3020857); do echo "$p $(tr '\0' ' ' </proc/$p/cmdline \| cut -c1-100)"; done` |
+| 03:48:31 | Bash | Find suite pid and record approval | `cd /home/ronald/saas-hasner && for p in $(pgrep -f "bin/suite.sh --dir /home/ronald/wt-o261c3"); do c=$(tr '\0' ' ' </proc/$p/cmdline); case "$c" in "bash -c"*) ;; *) echo "$p ${c:0:100}";; esac; done; python3 - <<'EOF' p='app/docs/RELATO.md' L=open(p).read().split('\n') i=next(k for k,l in enumerate(L) if l.startswith('> (C) OPUS FINAL REPROVOU')) L.insert(i+1,'> (C) VOLTA POS-OPUS 7a8e4604 (22c0 ...` |
+| 03:48:22 | Bash | Run full suite on certified copy tree | `cd /home/ronald/saas-hasner && W=/home/ronald/wt-o261c3-3010-0232; L=$W/app/logs/o261/suite_c_7a8e4604.log; bash bin/suite.sh --dir $W > $L 2>&1; echo "rc=$?" >> $L` |
 | 03:46:14 | Bash | Inspect construtor background command | `for p in 2880662; do tr '\0' ' ' </proc/$p/cmdline \| grep -o "eval '.*" \| cut -c1-400; done; pstree -p 2880662 2>/dev/null \| head -5` |
 | 03:46:11 | Bash | Check copy is clean and idle | `git -C /home/ronald/wt-o261c3-3010-0232 status --porcelain \| head; git -C /home/ronald/wt-o261c3-3010-0232 log --oneline -1; for p in $(pgrep -f "wt-o261c3"); do c=$(tr '\0' ' ' </proc/$p/cmdline); echo "$p ${c:0:160}"; done \| grep -v "pgrep" \| head -5` |
 | 03:46:05 | Agent | Opus re-verify O261 (C) v5 | `Obra O261 (C) VIVA-SEM-CHAMADO-DO-DIA, 2ª leitura FINAL antes do pouso. A 1ª leitura opus REPROVOU o df863705 com 6 achados; o construtor curou e o Codex releu. Cópia: /home/ronald/wt-o261c3-3010-0232. Diff da obra inteira: `git -C /home/ronald/wt-o261c3-3010-0232 diff 270f75b7 7a8e4604`. Arquivos: app/chamados/reconciliador.py, app/chamados/services/vigia_fio.py, app/chamados/tests/test_o261_c_vi ...` |
