@@ -1,7 +1,33 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **30/10/2026 12:55** · publicado em **30/10/2026 12:55** (UTC-3)
+> Ultima resposta processada: **30/10/2026 12:57** · publicado em **30/10/2026 13:01** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 30/10 12:57 · sessao 8ab81fa72246 · O261-VETO-A2 · verificador · origem=Code
+
+1. **Não há garantia absoluta: resta um escape concorrente por `analisar()`.** O detector carrega chamados vivos e os entrega à fábrica; esta pode chamar `ch.analisar()` usando a instância antiga. Se outro escritor encerrar o chamado nesse intervalo, `analisar()` decide pelo estado em memória e grava `em_analise` sem consultar veto nem reler o banco. É um caminho automático que permanece fora de `reabrir()`; ocorrência em produção **[não verificado]**. (`app/ponto/management/commands/detectar_ausencias.py:790–796`; `app/chamados/services/disputa_emissao.py:971–981`; `app/chamados/models.py:566–572`, `:192`, `:231`)
+
+   O escape obrigatório do callback está coberto: o receiver usa usuário de sistema, chama o resolver, e este executa `_pai.reabrir()` com o padrão `humano=False`; o veto retorna antes da escrita de estado e da ressurreição de perguntas. (`app/chamados/signals.py:89–92`; `app/chamados/services/disputa_emissao.py:1601–1608`; `app/chamados/models.py:1090–1093`, `:1143–1146`, `:1185–1194`)
+
+   No percurso sequencial com estado atual, os demais eventos automáticos do motor não fazem encerrado → vivo; essa transição pertence a `REABRIR`. (`app/chamados/catalogo/motor.py:110–117`)
+
+2. **sem achado nas três cadeias humanas atuais.** Desarquivar exige login, POST, permissão e acesso à área; reabrir disputa exige autorização sobre o chamado, staff/admin_ti, motivo e justificativa; reabrir competência exige login, POST, `reabrir_periodo` e motivo, repassando `request.user` até o serviço. (`app/chamados/views_arquivar.py:51–68`; `app/chamados/services/fio.py:552–577`; `app/chamados/services/acoes_disputa.py:242–266`; `app/ponto/views.py:1520–1544`; `app/ponto/services/fechamento.py:1415–1416`; `app/chamados/services/competencia_trancada.py:258`)
+
+   Há uma fragilidade local, sem chamador automático demonstrado: o serviço de competência aceita `autor=None`, substitui por usuário de sistema e mesmo assim passa `humano=True`; portanto a classificação humana depende da cadeia acima. Uso automático externo **[não verificado]**. (`app/chamados/services/competencia_trancada.py:228`, `:239`, `:258`)
+
+3. **sem achado nos leitores.** `reabrir()` trata `veto_do_dia` antes de qualquer uso do segundo elemento como chamado. `reabrir_orfas_enterradas` desempacota `_irmao`, mas não o utiliza: qualquer motivo provoca recusa e `continue`. (`app/chamados/models.py:1143–1146`, `:1164–1178`; `app/chamados/management/commands/reabrir_orfas_enterradas.py:105–111`)
+
+4. **Há contraexemplos na deduplicação, inferidos do código; ocorrência em produção [não verificado].**
+
+   **Duplicação concorrente:** duas chamadas diretas podem consultar antes de qualquer uma inserir e ambas registrar a mesma recusa. O helper não serializa consulta/inserção, e o modelo não declara unicidade dessa chave. (`app/chamados/models.py:925–937`; `app/core/observ.py:133–138`; `app/core/models.py:309–316`)
+
+   **Linha extra sem passagem daquele dia:** no nascimento, basta nascer chamado de outro dia do mesmo colaborador/módulo; faltam filtros de dia/célula em `_passou`. Na reabertura, basta renovar o SLA mantendo o chamado encerrado: isso altera `atualizado_em` e habilita outra linha. (`app/chamados/models.py:931–934`, `:378–385`)
+
+   **Ciclo calado por concorrência:** uma recusa consulta a trilha e fica suspensa; ocorre nascimento permitido; a recusa antiga grava sua linha depois. Quando o veto volta, o nascimento fica anterior à última linha e não provoca novo registro. A comparação usa o horário da inserção tardia, sem serialização com o nascimento. (`app/chamados/models.py:925–937`; `app/core/models.py:307`)
+
+   **Custo do helper:** um `SELECT`; existindo linha anterior, mais um `EXISTS`; havendo registro, mais um `INSERT`, além do controle transacional de `evento()`. Os índices declarados não cobrem a chave JSON com a ordenação utilizada; plano e latência reais **[não verificado]**. (`app/chamados/models.py:925–937`; `app/core/observ.py:133–138`; `app/core/models.py:313–316`)
+
+5. **sem achado quanto a novo chamado, nota ou pergunta proibidos.** O novo ramo de veto escreve auditoria e retorna `False` antes dos efeitos de reabertura. O juiz consultado retorna apenas o motivo; a pergunta e as notas administrativas aparecem como contexto preexistente no diff fornecido. (`app/chamados/models.py:1143–1146`, `:937–941`, `:1185–1194`; `app/ponto/services/furos_vetados.py:27–44`; `app/chamados/services/acoes_disputa.py:259–270`; `app/chamados/services/competencia_trancada.py:258–260`)
 
 ## 30/10 12:55 · sessao 9ed2fa415911 · - · - · origem=Ronald (tmux)
 
@@ -533,33 +559,4 @@ Premissas e escritores/leitores:
 
 Selos relevantes para sua consolidação: teste integração lavra → lista verifica C9 e detalhes (`app/ponto/tests/test_col129_teto_vira_lista.py:70`–`:79`), dono CADASTRO (`:88`–`:95`) e turnos da competência ±1 dia (`:97`–`:114`). Os novos testes do vigia substituem a lista por mock, portanto não exercitam o custo, relógios secundários ou falha interna real da C9 (`app/chamados/tests/test_o261_vigia_fio.py:541`–`:551`).
 
-## 30/10 10:53 · sessao 79bdeac63475 · - · - · origem=Ronald (tmux)
-
-Mapa dos contadores do censo:
-
-| Campos | Escritor | Leitores |
-|---|---|---|
-| `chamados_vivos_com_celula`, `celulas_apontadas`, `celulas_so_de_outro_vocabulario` | Inicialização/cálculo em `app/chamados/services/vigia_fio.py:207` | `linhas()` lê os dois primeiros em `app/chamados/services/vigia_fio.py:489`; consumidores genéricos abaixo |
-| `lampadas_acesas`, `cego` | `app/chamados/services/vigia_fio.py:231`, `:225`, `:363` | Log em `:489`; alarmes do comando em `app/chamados/management/commands/vigiar_fio_morto.py:80`, `:162`; ESTADO em `bin/fio_estado.py:90`, `:109` |
-| `dias_futuros_no_universo`, `fio_morto_de_hoje_pra_frente` | `app/chamados/services/vigia_fio.py:279`, `:292` | Log `:496`; futuro alarma pelo comando `:80`, `:162`; ESTADO em `bin/fio_estado.py:88`, `:89`, `:101` |
-| `fora_do_vocabulario_do_cartorio`, `fora_do_vocabulario_sem_fio_vivo`, `fio_vivo` | `app/chamados/services/vigia_fio.py:282`, `:284`, `:287` | Log `:491`, `:517`; `fio_vivo` também ESTADO `bin/fio_estado.py:91`, `:111` |
-| `decisao_do_dia_pendente`, `aguarda_decisao_de_ausencia`, `escala_nao_descreve_o_dia`, `celulas_escala_nao_descreve_o_dia` | `app/chamados/services/vigia_fio.py:298`, `:305`, `:310`, `:312` | Log em `:506`, `:509`, `:511`; consumidores genéricos abaixo |
-| `fio_do_admin`, `celulas_fio_do_admin`, `fio_do_admin_sem_resposta` | Inicialização em `app/chamados/services/vigia_fio.py:216`; incrementos em `:320`, `:322`, `:264` | Log dos três em `:514`; consumidores genéricos abaixo |
-| `fio_morto`, `pergunta_morreu`/`sem_pergunta_nenhuma`, `fio_morto_cobrando`, `celulas_do_fio_morto` | `app/chamados/services/vigia_fio.py:324`, `:325`, `:327`, `:330` | Log em `:494`; células no comando `app/chamados/management/commands/vigiar_fio_morto.py:181`; morto/cobrando nos alarmes `:81`, `:162` e ESTADO `bin/fio_estado.py:86`, `:87`, `:101` |
-| `porta_universo_nos_dias_mortos`, `porta_<classe>`, `fio_morto_sem_pergunta_na_porta`, `fio_morto_com_alvo`, `fio_morto_sem_alvo`, `classes_do_fio_morto` | Inicialização dinâmica `app/chamados/services/vigia_fio.py:222`; cálculo em `:339`, `:340`, `:345`, `:347`, `:349`, `:355` | Log dos contadores em `:499`, `:503`; `com_alvo` também alarme `app/chamados/management/commands/vigiar_fio_morto.py:81` e comparação genérica do ESTADO `bin/fio_estado.py:72` |
-| `decisao_do_dia_pendente_com_alvo` | `app/chamados/services/vigia_fio.py:362` | Log `:506`; consumidores genéricos abaixo |
-
-Consumidores genéricos que impedem um censo limitado ao diff:
-
-- O comando recebe o dicionário em `app/chamados/management/commands/vigiar_fio_morto.py:160`, imprime `linhas(d)` em `:164` e preserva **todos os campos**, inclusive as listas e os três novos, no carimbo em `:205`; a escrita física é `json.dump`/`os.replace` em `:127` e `:129`.
-- `materializar_passivo_validado._juizes` chama o censo em `app/chamados/management/commands/materializar_passivo_validado.py:203` e lê automaticamente **todos os valores int/bool** em `:208`; as listas não entram nessa seleção. Mede antes em `:97`, depois dentro do atomic em `:105`, guarda o resultado em `:115` e imprime diferenças em `:230`. Não há gate pelo valor: o placar apenas compara e imprime em `:232`–`:234`.
-- O ESTADO abre o carimbo em `bin/fio_estado.py:64`, lê `censo`/`esperado` em `:69`, compara genericamente os esperados em `:72` e seleciona campos para publicação em `:82`. `bin/gerar_estado.py:260` importa esse leitor/compositor; `:261` produz a frase, interpolada no documento em `:336`.
-- `fio_do_admin`, sua lista e `sem_resposta` **não aparecem na seleção do ESTADO**, nem nos esperados/alarmes: `bin/fio_estado.py:82`; `app/chamados/management/commands/vigiar_fio_morto.py:80`, `:86`, `:91`. A transferência sai no stdout e no JSON, mas o painel continua mostrando somente morto/futuro em `bin/fio_estado.py:101`. Isso é uma lacuna de visibilidade verificável; requisito de mostrar o novo contador no ESTADO é [nao verificado].
-- O cron efetivo declara `--alarme --alarme-passivo` em `app/config/crons.py:1654`. O comando sai com 2 em `app/chamados/management/commands/vigiar_fio_morto.py:214`. O envelope grava **exit, não contadores**, no placar em `bin/cron_run.sh:13`; também considera 2 término apto a carimbar fim em `:22`. As pautas de cron quebrado só são acionadas para exit diferente de 0 e 2 em `:32`; `app/core/services/crons_quebrados.py:46` aplica essa mesma exclusão e `:71` escreve a pauta TI. Logo `fio_morto>0` não gera por esse caminho uma pauta de cron quebrado.
-- `medido_em`: escrito com `agora` capturado em `app/chamados/management/commands/vigiar_fio_morto.py:158`, convertido em `:196`, persistido em `:127`; lido para idade em `bin/fio_estado.py:74`–`:79` e publicado em `:112`. `hoje` sai do mesmo instante em `:159`, entra no censo `:160`, no JSON `:197`, e no ESTADO `bin/fio_estado.py:82`, `:115`.
-
-Não encontrei outro gate de produção sobre `sem_pergunta_nenhuma`, `pergunta_morreu`, `porta_*` ou `decisao_do_dia_pendente_com_alvo`: os escritores/leitores localizados estão em `app/chamados/services/vigia_fio.py:325`, `:339`, `:362`, `:494`, `:503`, `:506`, além dos consumidores genéricos acima.
-
-O selo de carimbo compara o JSON com novo censo em `app/chamados/tests/test_o261_vigia_fio.py:779`; portanto cobre a preservação de campos de forma genérica. Já seu teste de relógio só verifica formato/offset e igualdade dos prefixos das datas em `:793`–`:796`: não força travessia da meia-noite. Execução ou RED por mutação nesta cópia: [nao verificado].
-
-_470 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_471 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
