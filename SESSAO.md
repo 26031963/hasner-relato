@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 30/10/2026 03:20:43.** Transcript: `e3f79949-a90b-4c64-a5c2-afd178149c30.jsonl` (6.6 MB). Acoes na janela: **280**.
+**Medido em 30/10/2026 03:25:50.** Transcript: `e3f79949-a90b-4c64-a5c2-afd178149c30.jsonl` (6.7 MB). Acoes na janela: **281**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 03:25:30 | Bash | Check sombra tree override and copy state | `cd /home/ronald/saas-hasner && grep -n "SONDA_ARVORE\\|ARVORE" bin/sombra.sh \| head -8; git -C /home/ronald/wt-o261c3-3010-0232 log --oneline -6; git -C /home/ronald/wt-o261c3-3010-0232 status --porcelain \| head` |
 | 03:20:06 | Bash | Point ESPERANDO at running trava pid | `cd /home/ronald/saas-hasner && sed -i '3s#^ESPERANDO: .*#ESPERANDO: /home/ronald/saas-hasner/bin/trava_teste.sh \| pid=1258025#' app/docs/RELATO.md && sed -n 3p app/docs/RELATO.md` |
 | 03:20:01 | Bash | Inspect children of construtor shell | `pgrep -a -P 1258020 \| cut -c1-200; for c in $(pgrep -P 1258020); do pgrep -a -P $c \| cut -c1-200; done` |
 | 03:19:57 | Bash | Check ESPERANDO pid and live producers | `ps -p 3532079 -o pid= \|\| echo morto; for p in $(pgrep -f "bin/codex_pergunta.sh\|bin/suite.sh"); do c=$(tr '\0' ' ' </proc/$p/cmdline); case "$c" in "bash -c"*\|"timeout"*) ;; *) echo "$p\|${c:0:150}\|$(readlink /proc/$p/cwd)";; esac; done` |
