@@ -1,7 +1,91 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **30/10/2026 03:09** · publicado em **30/10/2026 03:10** (UTC-3)
+> Ultima resposta processada: **30/10/2026 03:13** · publicado em **30/10/2026 03:15** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 30/10 03:13 · sessao 96c72512bd21 · ORCAMENTO · verificador · origem=Code
+
+Encontrei os seguintes defeitos e lacunas. Os cenários descrevem comportamento do código; ocorrência em produção: [não verificado].
+
+1. **A expiração ainda pode ser engolida pelo TETO quando a gravação falha.**  
+   Entrada: prova do RELATO aprovada, `PAREI: ! CLEAR` há 31 minutos, contador com cinco bloqueios no mesmo HEAD; estado do orçamento legível, mas diretório sem permissão para criar o temporário. `_orc_salva` falha antes de devolver a expiração; `_orcamento_contido` retorna `None`; o caminho antigo incrementa para seis e libera pelo TETO. Quebra **v2(b)**: faltam o `siga` explícito e o contador zerado. Reproduzido em memória.  
+   Fontes: `bin/hook_stop_fila1.py:821`, `bin/hook_stop_fila1.py:867`, `bin/hook_stop_fila1.py:1071`, `bin/hook_stop_fila1.py:1078`.
+
+2. **Marco ilegível é tratado como marco novo e permite redisparo.**  
+   Estado: ciclo já terminou com `disparo.desfecho="seguiu"` e `marco_ref` conhecido. Sem nenhum clear/compact, a leitura de `ultimo_clear.json` passa a falhar; contexto continua em 60%. `ler_marco` devolve `None`; a diferença de referência apaga o disparo anterior e permite outro `DISPARO`. Quebra **§3: sem redisparo até clear ou compact**. Reproduzido em memória.  
+   Fontes: `bin/orcamento_contexto.py:136`, `bin/hook_stop_fila1.py:783`, `bin/hook_stop_fila1.py:800`, `bin/hook_stop_fila1.py:855`.
+
+3. **O desligamento depende de conseguir a trava primeiro.**  
+   Entrada: `ORCAMENTO_CONTEXTO=0`, topo CLEAR e trava do orçamento ocupada por mais de cinco segundos. O hook devolve `siga: orçamento ocupado`, embora o instrumento esteja desligado; nem chega à consulta da variável ou ao registro de desligamento. Quebra **§5** e expõe uma precedência errada entre corte e trava. Reproduzido em memória.  
+   Fontes: `bin/hook_stop_fila1.py:739`, `bin/hook_stop_fila1.py:748`, `bin/hook_stop_fila1.py:772`.
+
+4. **Fila vazia passa a bloquear quando existe gatilho.**  
+   Entrada: todos os itens fechados, topo neutro, nenhum produtor e contexto em 60%. O orçamento devolve PREPARA-CLEAR antes de alcançar a liberação por fila vazia. É regressão objetiva do **caminho antigo de fila vazia**; o contrato não declara expressamente uma exceção ao gatilho para esse caso. O selo cobre fila vazia somente com medida ilegível, sem gatilho. Reproduzido em memória.  
+   Fontes: `bin/hook_stop_fila1.py:855`, `bin/hook_stop_fila1.py:1014`, `bin/hook_stop_fila1.py:1039`; `bin/tests/test_orcamento_contexto.sh:145`.
+
+5. **Estado confirmado com append falho perde definitivamente o evento.**  
+   Estado: JSON gravável, mas `orcamento.log` sem permissão. `_orc_salva` substitui o estado; `_orc_trilha` engole a falha; a lista de eventos é descartada. Num ATENDIDO/SEGUIU, o próximo Stop já encontra o desfecho consumido e não repõe a linha: o ESTADO subconta permanentemente. Quebra **§4: trilha por disparo/desfecho e contadores pelo log**. O selo verifica apenas a direção inversa, quando o estado não grava.  
+   Fontes: `bin/hook_stop_fila1.py:694`, `bin/hook_stop_fila1.py:715`, `bin/hook_stop_fila1.py:723`, `bin/hook_stop_fila1.py:725`; `bin/orcamento_contexto.py:223`; `bin/tests/test_orcamento_contexto.sh:395`.
+
+6. **Um segundo clear apaga a prova do primeiro atendimento.**  
+   Sequência: PAREI em t=0; `/clear` em +10 minutos; outro `/clear` em +40; nenhum Stop entre eles. O escritor conserva apenas +40 e o hook registra `SEGUIU`, apesar do atendimento em +10. Quebra a definição de **ATENDIDO do §4**. Classificação reproduzida em memória.  
+   Fontes: `bin/marco_de_clear.py:38`, `bin/marco_de_clear.py:47`; `bin/hook_stop_fila1.py:789`, `bin/hook_stop_fila1.py:792`.
+
+7. **A atualização do marco não serializa clear e compact concorrentes.**  
+   Intercalação: compact lê o marco antigo; clear publica o novo; compact publica depois com o `clear_hora` antigo. O `replace` atômico não protege a sequência leitura–atualização, e o atendimento pode desaparecer. Quebra **§4** e a conservação prometida pelo escritor. Intercalação reproduzida em memória; existência dessa concorrência no harness: [não verificado].  
+   Fontes: `bin/marco_de_clear.py:36`, `bin/marco_de_clear.py:41`, `bin/marco_de_clear.py:43`, `bin/marco_de_clear.py:52`.
+
+8. **Falha ao ler HEAD produz testemunha inválida sem aviso — e o selo aceita.**  
+   Entrada: provas do deploy passaram, mas o `git rev-parse HEAD` do append falha. `printf` ainda grava `data hora  0` com sucesso; o aviso não executa. O leitor descarta os três campos restantes: três deploys assim contam zero. Quebra **v2(g), testemunha `hora head rc`**. A regex do selo aceita HEAD vazio por usar `[0-9a-f]*`.   [nao verificado]
+   Fontes: `bin/deploy.sh:347`, `bin/deploy.sh:348`; `bin/orcamento_contexto.py:149`; `bin/tests/test_orcamento_contexto.sh:278`, `bin/tests/test_orcamento_contexto.sh:280`.
+
+9. **O RED não prova que reprovação da casca interrompe o deploy.**   [nao verificado]
+   Mutação concreta: substituir `falhou` por `echo` na linha 219 do deploy. O teste continua encontrando o `if ! bash`, a guarda e o append esperados; porém o deploy passa a recarregar depois da reprovação. `_julga_deploy` executa fragmentos isolados e verifica a porta por texto, sem provar sua consequência. Lacuna de **v2(g), classe “RED sem mordida”**. A porta do deploy atual funciona; o defeito aqui é sua proteção pelo selo.   [nao verificado]
+   Fontes: `bin/deploy.sh:70`, `bin/deploy.sh:219`; `bin/tests/test_orcamento_contexto.sh:265`, `bin/tests/test_orcamento_contexto.sh:284`, `bin/tests/test_orcamento_contexto.sh:289`.
+
+Nas demais áreas solicitadas:
+
+- **Prova do RELATO:** não encontrei bypass introduzido; continua antes da consulta ao orçamento. `bin/hook_stop_fila1.py:1003`, `bin/hook_stop_fila1.py:1011`.
+- **PAREI comum e ESPERANDO provado:** não encontrei segundo juiz; reutiliza `_relato_parou` e memoriza uma única avaliação da espera, preservando a prova por avanço de arquivo. `bin/hook_stop_fila1.py:653`, `bin/hook_stop_fila1.py:845`, `bin/hook_stop_fila1.py:847`, `bin/hook_stop_fila1.py:1025`.
+- **Falha aberta antiga:** permanece no `except` principal; as exceções próprias do orçamento ficam contidas. A interação defeituosa dessa contenção com a expiração está no achado 1. `bin/hook_stop_fila1.py:863`, `bin/hook_stop_fila1.py:1093`.
+- **Relógio, derivação paralela e segundo escritor:** não encontrei defeito adicional: avaliador recebe `agora`, gerador usa `ler`/`linha`, e o orçamento chama os juízes existentes. `bin/orcamento_contexto.py:174`, `bin/orcamento_contexto.py:207`; `bin/gerar_estado.py:274`; `bin/hook_stop_fila1.py:848`.
+- **Ordem das travas existentes:** não encontrei aquisição inversa à sequência orçamento → memória da espera; a trava da espera é liberada ao terminar sua avaliação. A ausência de serialização do marco é o achado 7. `bin/hook_stop_fila1.py:743`, `bin/hook_stop_fila1.py:845`, `bin/hook_stop_fila1.py:572`, `bin/hook_stop_fila1.py:602`.
+- **Matchers e medição:** o selo vincula os comandos a `compact` e `clear`; o avaliador declara janela/fonte e contém falhas de leitura do transcript. Instalação efetiva no host e correção da fonte externa: [não verificado]. `bin/tests/test_handoff_sessao.sh:60`, `bin/tests/test_handoff_sessao.sh:78`; `bin/orcamento_contexto.py:32`, `bin/orcamento_contexto.py:85`, `bin/orcamento_contexto.py:105`.
+
+## 30/10 03:12 · sessao 229461fbb71f · - · - · origem=Ronald (tmux)
+
+Achados confirmados:
+
+1. **Marco ilegível rearma ciclo já encerrado.** Com `disparo.desfecho="seguiu"` e `marco_ref` existente, uma falha ao ler `ultimo_clear.json` vira `None`; o hook interpreta isso como mudança de marco, apaga o disparo e pode emitir outro `DISPARO` pelos mesmos 60%. Reproduzi em memória. Quebra §3, “não redispara até próximo marco de clear ou compact”. (`bin/orcamento_contexto.py:125-137`; `bin/hook_stop_fila1.py:781-800`, `855-858`.)
+
+2. **Dois clears entre Stops classificam atendimento correto como expiração.** PAREI em t=0; `/clear` em +10 min; outro `/clear` em +40 min; próximo Stop depois disso. O escritor conserva somente +40; o hook registra `SEGUIU`, embora o clear de +10 tenha atendido dentro da janela. Reproduzi a classificação pela função real com mocks em memória. Quebra §4, definição de ATENDIDO. (`bin/marco_de_clear.py:38-47`; `bin/hook_stop_fila1.py:789-796`.)
+
+3. **Concorrência clear/compact pode perder o clear atendido.** Compact lê o marco antigo; clear publica o novo; compact publica depois, trazendo `clear_hora` antigo. `os.replace` protege a substituição, mas não serializa a leitura e atualização. Reproduzi esse interleaving com as duas chamadas reais e armazenamento em memória. Quebra §4 e a conservação declarada pelo próprio escritor. Concorrência real em produção: [não verificado]. (`bin/marco_de_clear.py:33-52`.)
+
+4. **Falha no append perde definitivamente eventos dos contadores.** Estado gravável e `orcamento.log` sem permissão: `_orc_salva` persiste DISPARO/desfecho, `_orc_trilha` engole o erro, e os eventos são descartados. O próximo Stop lê o evento como consumido, enquanto o ESTADO continua contando somente o log. Quebra §4; o selo cobre apenas o sentido contrário, estado que falha antes da trilha. (`bin/hook_stop_fila1.py:687-695`, `708-725`; `bin/orcamento_contexto.py:217-234`; `bin/tests/test_orcamento_contexto.sh:395-399`.)
+
+Áreas lidas sem defeito adicional identificado:
+
+- Relógio da medição recebido por argumento; leituras de relógio nas bordas Stop, CLI e gerador. (`bin/orcamento_contexto.py:174-178`, `207`, `257`; `bin/hook_stop_fila1.py:763`; `bin/gerar_estado.py:276`.)
+- Último assistente fora de sidechain, soma dos três campos, ausência de usage/modelo desconhecido e contenção das falhas de leitura. (`bin/orcamento_contexto.py:62-106`.)
+- Gerador usa `ler`/`linha` do avaliador; não introduz segundo juiz nem segundo escritor do orçamento. (`bin/gerar_estado.py:271-276`; `bin/orcamento_contexto.py:207-250`.)
+- Janela tem número e fonte declarados; correção da fonte externa e autenticidade histórica da fixture: [não verificado]. (`bin/orcamento_contexto.py:32-43`; `bin/tests/fixtures/orcamento_transcript.jsonl:1-8`.)
+
+Observação de menor força: `contar_marcos` conta também linhas `rc=1` ou `rc=erro`; confirmei em memória que duas dessas linhas mais uma `rc=0` resultam em três marcos. Entretanto, o escritor fornecido publica literalmente `0`; a presença dessas linhas na testemunha de produção é [não verificado]. (`bin/orcamento_contexto.py:149-165`; `bin/deploy.sh:347`.)
+
+## 30/10 03:11 · sessao 86cb32d779ac · - · - · origem=Ronald (tmux)
+
+Achados nas áreas delegadas:
+
+1. **O selo do deploy não prova que reprovação da casca interrompe o deploy.** `_julga_deploy` executa somente o bloco de append e a guarda isolados; para a porta da casca, exige apenas a presença textual do `if ! bash ...`. Mutação concreta: trocar `falhou` por `echo` em `bin/deploy.sh:219` mantém esses checks, embora passe a recarregar e registrar marco após reprovação. Quebra a prova exigida por v2(g), classe “RED sem mordida”. No deploy atual, a porta funciona: `falhou` termina com `exit 1`. (`bin/tests/test_orcamento_contexto.sh:265`, `bin/tests/test_orcamento_contexto.sh:280`, `bin/tests/test_orcamento_contexto.sh:284`, `bin/tests/test_orcamento_contexto.sh:289`; `bin/deploy.sh:70`, `bin/deploy.sh:218`.)
+
+2. **Falha na leitura do HEAD produz testemunha inválida e subcontagem silenciosa.** Se o `git rev-parse HEAD` do append falhar, `printf` ainda escreve `data hora  0` e retorna sucesso; o aviso não aparece. O leitor descarta essa linha porque possui somente três campos. Três deploys provados nessas condições contam como zero e não disparam (c), contrariando a testemunha `hora head rc` de v2(g). O selo aceita o defeito: sua regex permite HEAD vazio (`[0-9a-f]*`) e executa o fragmento numa raiz temporária sem repositório. Ocorrência no host: [não verificado]. (`bin/deploy.sh:347`; `bin/orcamento_contexto.py:149`; `bin/tests/test_orcamento_contexto.sh:278`, `bin/tests/test_orcamento_contexto.sh:280`.)
+
+3. **O marco tem corrida de atualização.** Compact lê o marco anterior; clear grava marco novo; compact substitui o arquivo com o `clear_hora` antigo que havia lido. Isso perde a conservação do clear e pode perder o ATENDIDO exigido pelo contrato 4. A escrita é atômica, mas a sequência leitura–modificação–substituição não tem trava. Concorrência efetiva de SessionStart no host: [não verificado]. (`bin/marco_de_clear.py:39`, `bin/marco_de_clear.py:43`, `bin/marco_de_clear.py:52`.)
+
+Sem defeito encontrado na guarda atual do append: distingue normal/cópia de agendado, exclui casca pulada e fica depois das provas de casca e rotas. (`bin/deploy.sh:218`, `bin/deploy.sh:321`, `bin/deploy.sh:324`, `bin/deploy.sh:345`.)
+
+O selo vincula os comandos exatos aos matchers `compact` e `clear`; instalação efetiva no host permanece [não verificado], pois depende de `.claude/settings.json`, deliberadamente externo ao versionamento. (`bin/tests/test_handoff_sessao.sh:15`, `bin/tests/test_handoff_sessao.sh:60`, `bin/tests/test_handoff_sessao.sh:70`, `bin/tests/test_handoff_sessao.sh:75`, `bin/tests/test_handoff_sessao.sh:78`; `.gitignore:66`.)
 
 ## 30/10 03:09 · sessao 183f01bf09fa · O261-C · verificador · origem=Code
 
@@ -354,103 +438,4 @@ Limitações dos selos, sem defeito adicional do comportamento demonstrado:
 - **Ordem de trava:** nenhum novo `flock` ou aquisição de trava nos trechos adicionados de deploy e handoff: `bin/deploy.sh:345`–`:349`; `bin/tests/test_handoff_sessao.sh:60`–`:69`.
 - **Segundo juiz registrado / segundo escritor de negócio:** não encontrei nos trechos examinados; o novo `_julga_deploy` é verificador estrutural de teste: `bin/tests/test_orcamento_contexto.sh:243`–`:254`.
 
-## 30/10 02:49 · sessao 310bf378c8f9 · - · - · origem=Ronald (tmux)
-
-Leitura estática; execução de testes/mutantes [nao verificado]. [nao verificado]
-
-- **Selo de competência não distingue competência de mês civil.** As únicas datas são 06/10 e 10/09 e a empresa usa corte padrão 21. Substituir `janela_atual` por `dia.month/dia.year` manteria esses cenários indistinguíveis, embora falhe após o corte. A implementação atual usa corretamente a fonte única; falta mordida nesse ponto. `app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:43`, `:44`, `:52`, `:85`; `app/colaboradores/models.py:46`; `app/ponto/janelas.py:27`; `app/chamados/reconciliador.py:702`.
-
-- **Idempotência verifica só parte do estado.** O teste compara três campos e contagens, mas a segunda chamada com destino vivo entra em `reapontar_resolvedora`, que lavra e salva novamente, alterando `julgado_em`. O selo aceita essa escrita adicional; o comportamento da porta é preexistente. `app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:199`, `:205`, `:207`; `app/chamados/reconciliador.py:1499`; `app/chamados/services/fio.py:798`; `app/chamados/veredito_lavrado.py:228`.
-
-- **MORTA respondida e MORTA C1 desviada para HIST não têm cenário.** Toda pergunta morta do fixture nasce apenas com `validada_em`; nenhuma recebe resposta do colaborador. O único HIST morto testado é `intervalo_volta`. A proteção da resposta existe no S128, porém não é exercitada por esta obra. `app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:90`, `:159`; `app/chamados/services/disputa_emissao.py:1558`; `app/chamados/reconciliador.py:1450`, `:1465`.
-
-- **R1 parece morder o desvio da VIVA para o c2.** A célula trabalha, foi julgada pelo cartório e tem lâmpadas apagadas; a ausência de escala não leva ao fallback de premissa, porque `_celula_furada` já responde verdadeiro. Portanto não identifiquei a recusa `premissa_regularizada` que tornaria a alternativa do teste vazia. `app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:65`, `:67`, `:118`; `app/chamados/models.py:953`, `:970`; `app/chamados/juizes.py:435`. Execução dessa conclusão [nao verificado].
-
-Classes examinadas sem falha na implementação atual:
-
-- **Segundo juiz:** nada; lê `pergunta_viva` e `motivos_atendidos`. `app/chamados/reconciliador.py:1402`, `:1438`, `:1450`.
-- **Segundo escritor:** nada; as costuras continuam pela porta existente. `app/chamados/reconciliador.py:856`, `:1487`, `:1499`; `app/chamados/services/fio.py:740`.
-- **Derivação paralela de fonte única:** nada na implementação; competência e entrega vêm das autoridades pedidas. A lacuna do selo consta acima. `app/chamados/reconciliador.py:700`.
-- **Relógio novo fora da borda:** nada nos quatro trechos alterados; recebem e transformam o dia fornecido. `app/chamados/reconciliador.py:698`, `:702`, `:1427`.
-
-## 30/10 02:49 · sessao f0f74196fbf4 · - · - · origem=Ronald (tmux)
-
-Achados para consolidação:
-
-- **Tranca pode ser ultrapassada pelo HIST novo.** Intervalo MORTO por competência trancada, ainda não entregue, com histórico encerrado e disputa sem pai passa a casar em `app/chamados/reconciliador.py:1438-1451` e chega ao S128 em `app/chamados/reconciliador.py:1493`. O C6 considera a tranca MORTA (`app/chamados/juizes.py:1010`), mas o S128 só preserva essa tranca no primeiro ramo (`app/chamados/services/disputa_emissao.py:1551`). O ramo posterior inclui todas as disputas abertas do colaborador (`app/chamados/services/disputa_emissao.py:1622`), admite pai ausente (`app/chamados/services/disputa_emissao.py:1628`) e carimba a pergunta sem consultar a tranca (`app/chamados/services/disputa_emissao.py:1634-1659`). A própria documentação do primeiro ramo explica que esse carimbo impediria a volta da pergunta ao destrancar (`app/chamados/services/disputa_emissao.py:1549-1550`). Antes, intervalo sem casamento no mapa não entrava no c1 nem no c2; agora alcança esse defeito preexistente pela ampliação do HIST (`app/chamados/reconciliador.py:363`, `app/chamados/reconciliador.py:1450`).
-
-- **Resposta MORTA também pode alcançar carimbo que o primeiro ramo recusou.** A guarda que preserva resposta sem batida real está em `app/chamados/services/disputa_emissao.py:1558-1560`, mas o ramo sem credor posterior carimba essas perguntas sem repetir a proteção (`app/chamados/services/disputa_emissao.py:1634-1659`). Para pai ausente, não existe reabertura protetora do pai (`app/chamados/services/disputa_emissao.py:1602`). O HIST ampliado fornece nova entrada a esse ramo (`app/chamados/reconciliador.py:1450`, `app/chamados/reconciliador.py:1493`). **Ressalva:** no cron completo, morta por célula absolvente já é carimbada antes pelo retratador; esse caso exige distinguir chamada direta de `reatar_pergunta_orfa`/`reconciliar_perguntas_orfas_colab` do cron completo (`app/chamados/reconciliador.py:1301-1302`, `app/chamados/reconciliador.py:584-621`).
-
-- **Custo novo por pergunta na pilha síncrona; consulta repetida.** O teste de competência executa um SELECT (`app/folha/export.py:570-571`). Toda pergunta sem destino derivável consulta-o em `app/chamados/reconciliador.py:1436`; intervalo VIVO que chega ao c2 consulta a mesma competência novamente por `app/chamados/reconciliador.py:749` → `app/chamados/reconciliador.py:709` → `app/chamados/reconciliador.py:703`. O memo do C6 cobre somente `pergunta_viva`, não esses SELECTs (`app/chamados/juizes.py:791-804`). O caminho ocorre no evento de emissão (`app/chamados/services/disputa_emissao.py:404-409`) e também na batida → reconciliador (`app/ponto/signals.py:206-215`, `app/chamados/reconciliador.py:1302`). O C6 ainda foi antecipado para antes dos gates baratos do c1 (`app/chamados/reconciliador.py:1438`, `app/chamados/reconciliador.py:363-399`). Estouro efetivo dos tetos: **[nao verificado]**.
-
-Chamadores:
-
-- Produção chama `reatar_pergunta_orfa` pelo laço de reconciliação (`app/chamados/reconciliador.py:1374-1377`) e pela emissão somente para pergunta recém-criada, órfã e do grupo DIA (`app/chamados/services/disputa_emissao.py:404-409`).
-- O cron mantém o universo declarado pela mesma fonte: `perguntas_orfas_reatavies` (`app/chamados/management/commands/reconciliar_chamados.py:36-52`, `app/chamados/reconciliador.py:1354-1359`).
-- O chamador de produção encontrado para c2 é a própria porta de reatar (`app/chamados/reconciliador.py:1467`).
-
-Classes sem achado neste recorte:
-
-- **Segundo escritor:** nada; emissão permanece em `ChamadoColaborador.abrir` e costura em `reapontar_resolvedora` (`app/chamados/reconciliador.py:816`, `app/chamados/reconciliador.py:856`, `app/chamados/reconciliador.py:1487`).
-- **Segundo juiz / derivação paralela:** nada nos helpers novos; delegam competência e vitalidade aos juízes existentes (`app/chamados/reconciliador.py:700-712`).
-- **Relógio fora da borda:** nada nas inserções examinadas (`app/chamados/reconciliador.py:685-712`, `app/chamados/reconciliador.py:1425-1456`).
-- **Nova ordem de locks SQL:** nada demonstrado; as inserções fazem leituras, e a emissão continua com seu savepoint (`app/chamados/reconciliador.py:700-712`, `app/chamados/services/disputa_emissao.py:408`).
-- **Pouso antes do pré-requisito:** **[nao verificado]**; a cópia não possui histórico Git acessível na raiz. [nao verificado]
-
-## 30/10 02:35 · sessao 310d432bb8f6 · O261-C · leitura · origem=Code
-
-1. **Com exatamente um histórico, o ramo reaponta a pergunta e chama o S128; não chama o c2.** A seleção exige colaborador, estado em `ENCERRADOS`, `data_turno` correspondente, categoria diferente de `disputa_supervisao` e motivo correspondente pelos mapas. `ENCERRADOS = ('resolvido', 'fechado')`. (`app/chamados/reconciliador.py:1385-1394`; `app/chamados/catalogo/motor.py:30`.)
-
-O percurso é:
-
-- `_derivar_chamado_destino` é chamado primeiro; o histórico só é consultado quando ele devolve `ch is None`. A data usada é `p.data_evento`, com fallback para `disputa.contexto[p.motivo]['data']`; sem data, retorna `False`. (`app/chamados/reconciliador.py:1369-1383`.)
-- Com `len(hist) == 1`, não executa `lavrar_sem_turno_aberto` nem `reemitir_chamado_do_dia`: ambas estão dentro de `len(hist) == 0`. Converte a data para `date`, ou usa `None` se ocorrer `ValueError`, e chama `reapontar_resolvedora(p, hist[0], data_evento=_d_h)`. (`app/chamados/reconciliador.py:1395-1433`.)
-- Em `reapontar_resolvedora`, acrescenta `data_evento` **somente se recebeu uma data e a pergunta ainda não tem uma**. Consulta `resolvedora_valida`; se recusado, desfaz essa atribuição em memória e retorna sem `save`. O reconciliador então retorna `False`. (`app/chamados/services/fio.py:787-796`; `app/chamados/reconciliador.py:1434-1436`.)
-- `resolvedora_valida` confere a compatibilidade do dia/turno; não veta por o chamado estar encerrado. Datas iguais permitem; diferença de um dia permite quando o cruzamento de meia-noite não é comprovadamente falso; divergência restante recusa. (`app/chamados/juizes.py:1702-1738`.)
-- Permitido o reapontamento, atribui `p.chamado_destino = hist[0]`, chama `lavrar(p, salvar=False)` e faz **um `save`** com `chamado_destino`, eventualmente `data_evento`, mais `veredito_lavrado`, `julgado_em` e `janela_expira_em`. (`app/chamados/services/fio.py:787-800`.)
-- A lavra calcula `veredito_lavrado` por `_pergunta_materializada_de_fato`: `sim`, `nao` ou `indeterminado` em caso de exceção; atribui `julgado_em = timezone.now()` e `janela_expira_em = expira_em(p.data_evento)`. Isso não atribui `materializada_em`. (`app/chamados/veredito_lavrado.py:217-231`; `app/chamados/models.py:1970`.)
-- Essa porta não chama diretamente `evento(...)`. Seu `save` dispara o receiver de `PerguntaDisputa`, que agenda `fechar_beco_da_disputa` com `transaction.on_commit`; essa função só prossegue se a disputa for classificada como fechável. (`app/chamados/services/fio.py:785-801`; `app/chamados/signals.py:191-202`; `app/chamados/services/becos.py:61-73`.)
-
-Depois, o reconciliador chama `resolver_perguntas_por_chamado_resolvido(hist[0], get_user_sistema())` e retorna `True`, sem examinar o resultado do resolvedor. A função é reexportada por `models.py`, mas sua implementação está em `disputa_emissao.py`. (`app/chamados/reconciliador.py:1437-1440`; `app/chamados/models.py:2776-2778`.)
-
-No S128:
-
-- Se `via_encerramento == VIA_COMPETENCIA_TRANCADA`, retorna imediatamente, sem resolver perguntas. Caso contrário, seleciona perguntas daquele destino com `materializada_em IS NULL` e disputa aberta. (`app/chamados/services/disputa_emissao.py:1531-1540`.)
-- **Reavalia `pergunta_viva(p)` e, sendo `True`, executa `continue`.** Portanto, para essa pergunta, não chega às atribuições de materialização ou validação. (`app/chamados/services/disputa_emissao.py:1541-1548`.)
-
-| Campo da pergunta viva | Resultado no S128 |
-|---|---|
-| `materializada_em`, `materializada_por` | Preservados; as atribuições estão depois do `continue`. (`app/chamados/services/disputa_emissao.py:1547-1548`, `1562-1563`.) |
-| `via_resolucao` | Preservada; não executa `via_pelo_fato(...)`. (`app/chamados/services/disputa_emissao.py:1547-1548`, `1564`.) |
-| `respondida_em` | Preservado; não alcança o carimbo condicional. (`app/chamados/services/disputa_emissao.py:1547-1548`, `1571-1573`.) |
-| `validada_em`, `validada_por` | Preservados; não alcança a validação condicional. `pergunta_viva=True` implica `validada_em=None`, pois o juiz rejeita primeiro qualquer pergunta validada. (`app/chamados/services/disputa_emissao.py:1547-1548`, `1574-1577`; `app/chamados/juizes.py:1006-1007`.) |
-
-A segunda varredura do S128 também pula perguntas vivas, antes de materializá-las ou emitir `fecho_sem_credor`. A disputa com essa pergunta viva não satisfaz `pode_fechar()`. (`app/chamados/services/disputa_emissao.py:1641-1668`, `1678-1679`; `app/chamados/models.py:1434-1439`; `app/chamados/juizes.py:1111`.)
-
-**Estado resultante dessa trilha:** pergunta apontada ao histórico, com lavra atualizada e carimbos de resposta/materialização/validação preservados; sua propriedade `estado` será `pendente` se `respondida_em` for nulo, ou `respondida` caso contrário, enquanto continuar viva. O reapontamento não escreve o estado do chamado histórico. (`app/chamados/services/fio.py:797-800`; `app/chamados/models.py:2108-2115`.)
-
-Há uma condição adicional no próprio S128: ele pode chamar **`_pai.reabrir()`** quando a disputa está aberta, o pai está fora de `VIVOS` e existem respostas sem consumo creditadas a ele. Esse juiz exige materialização e validação nulas, `respondida_em` preenchido e texto. Portanto, afirmar que o histórico necessariamente permanece encerrado exige distinguir `hist[0]` do pai e verificar esse bloco. (`app/chamados/services/disputa_emissao.py:1598-1608`; `app/chamados/juizes.py:1471-1477`.)
-
-A checagem decisiva de vitalidade ocorre **depois do reapontamento**, sobre a pergunta consultada pelo S128; a função não utiliza um resultado anterior de `pergunta_viva`. (`app/chamados/services/fio.py:789-800`; `app/chamados/services/disputa_emissao.py:1536-1548`.) A obtenção do usuário também usa `get_or_create(username='sistema')`, podendo inserir esse usuário se ausente. (`app/core/utils.py:18`.)
-
-2. **`abrir` reutiliza a mesma linha e tenta fazê-la renascer.** O c2 usa a chave colaborador + `modulo_origem='batida_ausente'` + `contexto_json__data_turno`, sem restringir estado. Ao encontrar um existente encerrado, `abrir` chama `_renascer_por_premissa_viva(...)` e retorna **`existente, False`**, independentemente do booleano dessa tentativa; não cria outra linha nesse ramo. (`app/chamados/reconciliador.py:738-742`, `779-791`; `app/chamados/models.py:670-688`.)
-
-Antes de chegar a `abrir`, o c2 pode retornar `False` por motivo não elegível, data ausente/inválida, colaborador não ativo, horizonte de emissão, isenção, ausência cobrindo o dia, protestos insuficientes, veto da célula ou recusa do motor para `EMITIR`. Horizonte e protestos têm dispensa quando a operação é costura em chamado já vivo. (`app/chamados/reconciliador.py:712-778`.)
-
-Os vetos ao **renascimento** são:
-
-- Colaborador não ativo; encerramento por `VIA_CASCADE`; competência trancada; ou recusa de `reabrir`. A verificação de tranca dispensa módulos abrangidos por `fica_fora_da_tranca`. (`app/chamados/models.py:763-771`, `789-795`.)
-- Dentro de `reabrir`, após conferir o estado atual no banco, `recusa_da_reabertura` veta, nesta ordem: encerramento por admin com data de resolução e dia identificado sem fato novo; chamado de furo encerrado com `premissa_regularizada(para='folha', marcos=marcos)`; agrupamento sob pai vivo; irmão vivo do turno; transição `REABRIR` recusada pelo motor. (`app/chamados/models.py:1032-1036`, `1050`; `app/chamados/models.py:1003-1020`.)
-- As recusas por admin e premissa emitem `reabertura_recusada`. A recusa por irmão vivo migra resolvedoras vivas, anexa ocorrência e emite `reabertura_redirecionada`; retorna `False`. Agrupamento e transição também retornam `False`. (`app/chamados/models.py:1051-1085`.)
-
-No sucesso, o motor determina `resolvido/fechado → em_analise`; `reabrir` grava o estado, ressuscita perguntas elegíveis e retorna `True`. A gravação limpa `resolvido_em` e `via_encerramento`, restaura a urgência original quando presente, atualiza `atualizado_em` e emite `estado_chamado`. O renascimento ainda anexa ocorrência `renascido`. (`app/chamados/catalogo/motor.py:113`; `app/chamados/models.py:1086-1099`, `191-193`, `212-231`, `772-775`.)
-
-O `False` da linha 806 depende exatamente de **`ch_novo.status_local not in VIVOS` depois de `abrir`**. `VIVOS` contém `aberto`, `em_analise` e `registrado`; `_cr=False` não dispara esse retorno. Assim, encontrar inicialmente um encerrado não basta: a tentativa anterior de renascimento pode colocá-lo em `em_analise`. (`app/chamados/reconciliador.py:779-806`; `app/chamados/catalogo/motor.py:24`; `app/chamados/models.py:685-688`.)
-
-3. **Há caminhos condicionais de reabertura, mas o ramo `hist == 1` não pede a reabertura do destino por sua pergunta estar viva.** Nesse ramo, as chamadas são reapontamento e S128; o c2 está restrito a `hist == 0`. (`app/chamados/reconciliador.py:1395-1416`, `1433-1440`.)
-
-O caminho do **mesmo chamado do dia** é `reemitir_chamado_do_dia → ChamadoColaborador.abrir → _renascer_por_premissa_viva → reabrir`, sujeito aos vetos acima. Quando alcançado pelo reatamento, vem depois de `lavrar_sem_turno_aberto`, que recusa carimbar pergunta viva. (`app/chamados/reconciliador.py:1411-1414`, `399-400`, `738-780`; `app/chamados/models.py:685-688`, `770`, `1089`.)
-
-Existe também um caminho que consulta explicitamente `pergunta_viva`: `reabrir_orfas_enterradas.py::Command.handle`. Exige pergunta via `fantasma`, materializada, não validada, com data, próprio marco apagado, C6 vivo, carimbo na janela delimitada, competência não exportada e aprovação das guardas do pai; em `--apply`, chama `pai.reabrir()` se ele estiver encerrado. **O alvo é o pai da disputa; esse comando não compara o dia do pai com o da pergunta.** (`app/chamados/management/commands/reabrir_orfas_enterradas.py:67-111`, `121`, `146-161`.)
-
-_336 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_339 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
