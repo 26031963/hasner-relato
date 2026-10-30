@@ -1,7 +1,62 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **30/10/2026 17:18** · publicado em **30/10/2026 17:19** (UTC-3)
+> Ultima resposta processada: **30/10/2026 17:23** · publicado em **30/10/2026 17:24** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 30/10 17:23 · sessao 2efba2349862 · - · - · origem=Ronald (tmux)
+
+Inventário de escritores/leitores:
+
+- **Escreve `status`:** `_classificar` é o único juiz; `contexto_calendario` recebe seu resultado e grava o campo (`app/colaboradores/services/calendario.py:109`, `:814`, `:898`).
+- **Escreve `status_rotulo`:** exclusivamente o ternário que escolhe motivo da folha, rótulo de dia em curso ou tabela de rótulos (`app/colaboradores/services/calendario.py:899`).
+- **Lê `status`:** `status_do_dia` (`:228`), `contar_por_status` (`:239`), `resolver_dia_oferecido` (`:204`), resumo (`:949`), cores/ícones da grade (`app/templates/colaboradores/partials/_calendario_grade.html:69`, `:99`) e PDF por `relatorios/views.py:1550` → `relatorios/furos.py:194` → `relatorios/furos_pdf.py:53`.
+- **Lê `status_rotulo`:** grade, nos ramos de ícone e fallback (`app/templates/colaboradores/partials/_calendario_grade.html:99`, `:107`). Essa grade aparece no perfil, drawer e relatório HTML (`app/templates/colaboradores/calendario_partial.html:62`, `app/templates/colaboradores/partials/_drawer_diagnostico.html:35`, `app/templates/relatorios/furos.html:42`).
+- **Outro uso da tabela:** `escala/views.py` produz seus próprios dias com rótulos `folga`, `escala_suspeita` e `ok`; não consome os dias de `contexto_calendario` (`app/escala/views.py:36`, `:49`, `:55`; render em `app/templates/escala/minha_escala.html:75`, `:84`).
+
+Não encontrei leitor adicional aos nomeados nos corpos dos commits; o PDF está declarado e continua usando cores por status, sem consumir `status_rotulo` (`app/relatorios/furos_pdf.py:11`, `:53`).
+
+**Nuance sobre “não muda”:** o botão da tela pode mudar para um dia passado ainda em curso: se esse dia pertence à competência anterior e satisfaz as demais condições, antes era `falta`, agora é `previsto`, saindo do conjunto que oferece “Resolver dia” (`app/colaboradores/services/calendario.py:196`, `:204`, `:715`, `:822`, `:914`). O **vigia**, porém, só chama essa porta para células com veredito acusatório e datas anteriores a hoje; os novos casos sem veredito não entram em seu universo (`app/chamados/services/vigia_fio.py:182`, `:229`, `:289`, `:294`).
+
+## 30/10 17:23 · sessao a19c1f518743 · - · - · origem=Ronald (tmux)
+
+Q2 — Com as duas cargas concluídas, **não existe combinação dos dados de ausência/cobertura/folga/feriado que alcance `retido_folha` com `cobertura=True`**. A cobertura usada pelo calendário vem de `para='cobranca'`, que exclui somente `rejeitada`; a A2 também exclui somente `rejeitada`. Ambas aceitam dia inicial, intervalo fechado e intervalo aberto somente para `Ausencia.TIPOS_EM_ABERTO`. ([calendario.py:597](/home/ronald/codex_ws/41abcd1f6c2d22f3ee9d437bac5a2b772f8d034b/app/colaboradores/services/calendario.py:597), [turnos.py:2489](/home/ronald/codex_ws/41abcd1f6c2d22f3ee9d437bac5a2b772f8d034b/app/ponto/turnos.py:2489), [turnos.py:2734](/home/ronald/codex_ws/41abcd1f6c2d22f3ee9d437bac5a2b772f8d034b/app/ponto/turnos.py:2734), [precedencia.py:211](/home/ronald/codex_ws/41abcd1f6c2d22f3ee9d437bac5a2b772f8d034b/app/ponto/precedencia.py:211), [precedencia.py:278](/home/ronald/codex_ws/41abcd1f6c2d22f3ee9d437bac5a2b772f8d034b/app/ponto/precedencia.py:278))
+
+Todos os tipos de ausência recebem faixa: três faixas de ausência ou folga; tipos desconhecidos caem em `atestado`. Ausências vencem trabalho na ordenação; as três faixas retornam imediatamente antes da retenção. Os dois tipos de folga tornam `folga_humana=True` e retiram o dia do ramo de trabalho. Feriado sem batida retorna folga; feriado somente de pagamento mantém trabalho, mas não elimina a precedência de eventual ausência. ([precedencia.py:52](/home/ronald/codex_ws/41abcd1f6c2d22f3ee9d437bac5a2b772f8d034b/app/ponto/precedencia.py:52), [precedencia.py:79](/home/ronald/codex_ws/41abcd1f6c2d22f3ee9d437bac5a2b772f8d034b/app/ponto/precedencia.py:79), [precedencia.py:314](/home/ronald/codex_ws/41abcd1f6c2d22f3ee9d437bac5a2b772f8d034b/app/ponto/precedencia.py:314), [precedencia.py:316](/home/ronald/codex_ws/41abcd1f6c2d22f3ee9d437bac5a2b772f8d034b/app/ponto/precedencia.py:316), [calendario.py:124](/home/ronald/codex_ws/41abcd1f6c2d22f3ee9d437bac5a2b772f8d034b/app/colaboradores/services/calendario.py:124), [calendario.py:816](/home/ronald/codex_ws/41abcd1f6c2d22f3ee9d437bac5a2b772f8d034b/app/colaboradores/services/calendario.py:816))
+
+A ressalva existente no código é operacional: a exceção na carga A2 é engolida, deixando `_fatos={}`, independentemente de a cobertura ter sido carregada. Nesse caminho degradado, `cobertura=True` pode alcançar retenção; ocorrência real não demonstrada no dado, **[não verificado]**. ([calendario.py:593](/home/ronald/codex_ws/41abcd1f6c2d22f3ee9d437bac5a2b772f8d034b/app/colaboradores/services/calendario.py:593), [calendario.py:611](/home/ronald/codex_ws/41abcd1f6c2d22f3ee9d437bac5a2b772f8d034b/app/colaboradores/services/calendario.py:611), [calendario.py:624](/home/ronald/codex_ws/41abcd1f6c2d22f3ee9d437bac5a2b772f8d034b/app/colaboradores/services/calendario.py:624))
+
+Q3 — Alcance estático dos testes: [nao verificado]
+
+- **Cobertura pendente:** pega mutação que faça a A2 ler só aprovadas. **Deixa passar** `_pelo_efeito(cobranca)` mudar para só aprovadas: a A2 independente continuará classificando o atestado pendente como ausência antes da retenção. Portanto, o teste não sela a igualdade dos universos que seu comentário promete. ([test_calendario_hoje_nao_e_falta.py:133](/home/ronald/codex_ws/41abcd1f6c2d22f3ee9d437bac5a2b772f8d034b/app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:133), [calendario.py:124](/home/ronald/codex_ws/41abcd1f6c2d22f3ee9d437bac5a2b772f8d034b/app/colaboradores/services/calendario.py:124))
+- **Propriedade alimentada C1:** pega uso indevido do template em lugar do DNA, graças ao instante das 15h, quando DNA 10h–14h já terminou e template 19h–07h ainda não. **Deixa passar a retirada do novo encaminhamento `celulas=celulas` da porta singular:** o teste grava o DNA no banco, carrega dali o dict e compara também com a chamada sem alimentação; ignorar o dict continua encontrando o mesmo DNA no banco. ([test_c1_dias_encerrados.py:53](/home/ronald/codex_ws/41abcd1f6c2d22f3ee9d437bac5a2b772f8d034b/app/ponto/tests/test_c1_dias_encerrados.py:53), [turnos.py:2079](/home/ronald/codex_ws/41abcd1f6c2d22f3ee9d437bac5a2b772f8d034b/app/ponto/turnos.py:2079))
+- **Sentinela de render:** pega `title` literal contendo a frase verdadeira da fixture, porque substitui `status_rotulo` por uma sentinela nos três layouts e exige que o HTML a leia. ([test_calendario_hoje_nao_e_falta.py:104](/home/ronald/codex_ws/41abcd1f6c2d22f3ee9d437bac5a2b772f8d034b/app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:104))
+- **Teto de custo:** a igualdade de custo entre um e oito dias pega crescimento por dia, mas deixa passar overhead fixo; a nova asserção `um <= 1` pega overhead fixo incremental acima de uma consulta. ([test_calendario_hoje_nao_e_falta.py:176](/home/ronald/codex_ws/41abcd1f6c2d22f3ee9d437bac5a2b772f8d034b/app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:176))
+
+Execução real e resultados de mutações: **[não verificado]**.
+
+## 30/10 17:23 · sessao a6c8f10a753b · - · - · origem=Ronald (tmux)
+
+Chamadores com `celulas=` alimentado:
+
+| Chamador | Mapa e cobertura |
+|---|---|
+| Calendário | `_cels_mes` carrega todas as células existentes em `[data_ini,data_fim]`, exatamente o intervalo perguntado; reutiliza os turnos da mesma janela. Chaves `(colab,data)`, adequadas ao DNA. `app/colaboradores/services/calendario.py:316,410,712-713` |
+| Cartório `_turno_encerrado` → `dias_encerrados` | Mapa `(colab,data)` contendo `cels`; intervalo `cels[0].data..cels[-1].data`. Carga normal traz todas as células passadas, mas segunda passada recebe subconjunto `out['rejulgar']`, podendo omitir célula existente entre extremos. Não há preenchimento do pad. `app/ponto/services/cartorio.py:745-746,829-853`; `app/ponto/management/commands/processar_cartorio.py:61-65` |
+| Fechamento `_furos_encerrados` → `dia_encerrado` → `dia_encerrado_motivo` | Recorta cada pergunta em `d-2..d+1`, preservando todas as células existentes no pad, **com chave `data`**. Isso satisfaz `turnos_do_colab`, mas viola a alimentação de `marcos_do_dia` após o novo repasse singular. `app/ponto/services/fechamento.py:334-361`; `app/ponto/turnos.py:1845,1852,2058,2079-2080` |
+| Vigia `_ontem_em_janela` → `dia_encerrado` → motivo | Mapa `(colab,cel.data)` de uma célula, suficiente para o DNA do dia perguntado; incompleto para o pad do pareador. `app/ponto/services/vigia_de_hora.py:46-57`; `app/ponto/turnos.py:1845,1857` |
+| Teste novo de propriedade | Carrega mapa completo da janela, com chaves `(colab,data)`, e alimenta janela e singular. Não exercita mapa por `data` usado pelo fechamento. `app/ponto/tests/test_c1_dias_encerrados.py:60-72` |
+
+**Achado procedente do último repasse singular:** `dia_encerrado_motivo` agora leva `celulas` até `fim_turno` (`app/ponto/turnos.py:2079-2080,2102`), que chega a `ec.marcos_do_dia` (`app/escala/servico_jornada.py:69,89-93`). Esse método procura `(self.colaborador_id,data)`; quando recebe o mapa por `data` do fechamento, não encontra a célula e usa o template (`app/escala/models.py:1094-1108`). Antes do repasse, a ausência de alimentação permitia consulta da célula nesse método (`app/escala/models.py:1096-1098`).
+
+Exemplo dedutível: sem turno aberto, DNA `10:00–14:00`, template `19:00–07:00`, instante 15h. O DNA encerra o dia, o template ainda não; esse é inclusive o desenho da fixture nova, porém com mapa por tupla (`app/ponto/tests/test_c1_dias_encerrados.py:55-72`). Com mapa real do fechamento, o resultado passa de encerrado a não encerrado; a combinação inversa pode antecipar o encerramento (`app/ponto/turnos.py:2102-2105`; `app/escala/models.py:1094-1108`).
+
+O resultado controla `_furos_afirmaveis`, `coletar_furos` e `furos_do_motor` nas versões motor e oráculo do `DiaPago`; portanto a regressão ultrapassa a apresentação do calendário (`app/ponto/services/fechamento.py:361-362,1083-1095,1194,1261`).
+
+Problema preexistente distinto: `dias_encerrados` aceita mapa por tupla, mas o entrega diretamente a `turnos_do_colab`, que espera mapa por `data` e o reindexa, produzindo chaves aninhadas. Isso atinge o cartório; está registrado na própria cópia (`app/ponto/turnos.py:1852,1928,2132`; `app/docs/BACKLOG.md:790`).
+
+## 30/10 17:20 · sessao 38632752db4a · CODEX-CONTEXTO-DA-CASA · leitura · origem=Code
+
+SENHA-DE-PROVA-SIBLING: TUCANO-FORA-DO-C
 
 ## 30/10 17:18 · sessao 027086c1e405 · CODEX-CONTEXTO-DA-CASA · verificador · origem=Code
 
@@ -446,77 +501,4 @@ Também há testes lendo arquivo sem AST, como templates e requirements, e teste
 
 9. **PRONTO 5 não é reproduzível só com os três nomes de módulos.** Os arquivos existem e usam datas relativas ao relógio (`app/ponto/tests/test_cartorio_veto_nao_e_emitido.py:33`, `app/ponto/tests/test_furo_parcial_sem_cobranca.py:48`, `app/ponto/tests/test_veto_que_cai_rejulga.py:41`). Alterar contrato: fixar árvore anterior, árvore defeituosa, base do mapa, momento da geração, data/configuração de reprodução e os cinco IDs exatos esperados; provar que a seleção executou esses IDs e reproduziu os cinco FAIL. O conteúdo dos commits históricos e os cinco FAIL alegados não foram fornecidos nem puderam ser verificados nesta cópia [não verificado].
 
-## 30/10 17:04 · sessao e42d35092652 · - · - · origem=Ronald (tmux)
-
-[resposta retida: caminho_de_segredo -- nao se publica credencial nem caminho de segredo]
-
-## 30/10 16:58 · sessao 0c34feaa35e2 · CALENDARIO-HOJE · verificador · origem=Code
-
-**REPROVADO: procede a ressalva A5 sobre falta de teto absoluto para o caminho cego.** O selo citado pela triagem usa escala com fim declarado; o teste novo compara somente o custo de um e oito dias cegos. Nenhum deles limita o acréscimo constante exclusivo desse caminho. (`app/core/tests/test_selo_performance.py:283–300`, `:401–405`; `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:150–159`)
-
-1. **O que o fallback mostra**
-
-O ramo final agora mostra **`—` com `status_rotulo` no atributo `title`**. O motivo aparece no tooltip, sem virar texto visível permanente. Antes dele, ausência e palavra do dia podem interceptar a renderização, independentemente do status. (`app/templates/colaboradores/partials/_calendario_grade.html:97–107`)
-
-| Status candidato ao fallback | Quem escreve o rótulo e qual texto chega |
-|---|---|
-| `sem_certidao`, presente em `_cego_folha` | `contexto_calendario`: **“Dia sem julgamento do cartorio -- a folha retem (sem_celula)”**. O mapa aceita exclusivamente o motivo `sem_celula` devolvido pela folha. (`app/colaboradores/services/calendario.py:64`, `:722–727`, `:899`) |
-| `sem_certidao`, fora desse mapa | O mesmo produtor consulta `ROTULO_STATUS`: **“Sem certidao do dia”**. Esse status também nasce no caminho com batida sem classificação suficiente da grade. (`app/colaboradores/services/calendario.py:58`, `:159–169`, `:899–901`) |
-| `sem_dados` | O mesmo produtor consulta `ROTULO_STATUS`: **“Sem dados”**. (`app/colaboradores/services/calendario.py:59`, `:158`, `:901`) |
-| `ausencia` | Também não tem ramo próprio por status. Se não houver dicionário de ausência nem palavra que intercepte, chega **“Ausencia registrada — o dia tem abono proprio”**. Normalmente o dicionário produzido de `_a` ganha antes. (`app/templates/colaboradores/partials/_calendario_grade.html:97–107`; `app/colaboradores/services/calendario.py:57`, `:838–848`, `:901`) |
-
-Esses rótulos não são vazios no produtor. A frase específica do cego está condicionada à resposta da folha, portanto não é aplicada indiscriminadamente a todo `sem_certidao`. (`app/colaboradores/services/calendario.py:57–64`, `:727`, `:899–901`)
-
-Há uma ressalva semântica em `ausencia`: “tem abono próprio” não descreve todo efeito possível, pois `_classificar` aceita ausência que não desconta, incluindo tipos `SUPRIME`. Para esse texto aparecer no fallback, ainda precisam faltar ausência e palavra; ocorrência concreta no dado: **[não verificado]**. (`app/colaboradores/services/calendario.py:124–125`; `app/ponto/catalogo/ausencias.py:89–94`; `app/templates/colaboradores/partials/_calendario_grade.html:97–107`)
-
-2. **Quem consome e o que muda**
-
-- **Perfil do colaborador, no gestor:** a rota renderiza `calendario_partial.html`, que força `layout='mes'`: sete colunas, offsets e células de 132px. Recebe o novo tooltip. (`app/colaboradores/views.py:1945–1962`; `app/templates/colaboradores/calendario_partial.html:62`; `app/templates/colaboradores/partials/_calendario_grade.html:64–68`, `:107`)
-- **Drawer do painel:** inclui com `layout='fita'`: faixa horizontal, células de 78px e marcações de mês/segunda. Recebe o mesmo tooltip. (`app/templates/colaboradores/partials/_drawer_diagnostico.html:35`; `app/templates/colaboradores/partials/_calendario_grade.html:63–68`, `:107`)
-- **Cartão HTML da auditoria de espelhos:** inclui somente `dias/resumo`, sem layout; usa o grid automático de mínimo 62px. Também recebe o tooltip. O produtor declara `datas_em_aberto=NAO_PERGUNTADO`. (`app/templates/relatorios/furos.html:42`; `app/templates/colaboradores/partials/_calendario_grade.html:65`, `:107`; `app/relatorios/furos.py:184–188`)
-- **PDF de furos:** não renderiza esse partial. Extrai apenas data/status e desenha via ReportLab; não recebe `status_rotulo`. `sem_certidao` cai nas cores padrão branco/cinza. O último ajuste do template não chega ao PDF. (`app/relatorios/views.py:1548–1562`; `app/relatorios/furos_pdf.py:11–21`, `:53–57`)
-
-3. **O teste novo morde, com alcance limitado** [nao verificado]
-
-Por inspeção, pega a regressão literal de devolver o fallback a `—` sem rótulo: exige `a folha retem (sem_celula)` no HTML dos três layouts. (`app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:103–105`; `app/templates/colaboradores/partials/_calendario_grade.html:107`)
-
-Deixa passar esta mutação:
-
-```html
-<span title="a folha retem (sem_celula)">—</span>
-```
-
-Ela abandona a leitura de `dia.status_rotulo`, mas preserva a substring exigida. Também passaria com essa frase em comentário HTML ou conteúdo oculto; a asserção não verifica atributo, elemento ou visibilidade. Os outros status do fallback não são exercitados pelo acréscimo. (`app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:99–105`)
-
-Execução dos testes e resultados RED/GREEN alegados: **[não verificado]**. [nao verificado]
-
-4. **Conferência da triagem5**
-
-- **Item 2:** a justificativa corresponde ao código: ausência, feriado, folga humana e escala suspeita precedem `retido_folha`; o ramo cego da folha não consulta essas precedências. (`app/colaboradores/services/calendario.py:124–144`; `app/folha/export.py:1237–1238`)
-- **Item 3:** a divergência contratual existe como possibilidade: a folha recorta admissão/demissão e excepciona a demissão no ramo cego; o calendário ainda pode alcançar `falta`. A atribuição histórica ao main: **[não verificado]**. (`app/folha/export.py:1180–1187`, `:1211–1214`, `:1237`; `app/colaboradores/services/calendario.py:133–148`)
-- **Item 4 — justificativa incorreta:** existe teto 55, mas a fixture não prepara o dia sem fim previsto que aciona a consulta condicional à folha. A igualdade entre um e oito dias permite custo fixo arbitrariamente alto nesse ramo. Isso prova uma lacuna de cobertura, não um estouro efetivo em produção. (`app/core/tests/test_selo_performance.py:249`, `:283–300`, `:401–405`; `app/colaboradores/services/calendario.py:722–727`; `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:158–159`)
-- **Item 5:** a limitação atual do PDF está confirmada; sua anterioridade é **[não verificado]**. A explicação de `resumo.faltas` corresponde ao cálculo: só conta `falta`, embora a interface chame esse número de “Sem registro”. (`app/relatorios/furos_pdf.py:11–21`; `app/colaboradores/services/calendario.py:950`; `app/templates/colaboradores/partials/_calendario_grade.html:145–147`)
-
-## 30/10 16:57 · sessao 27e0f3394207 · - · - · origem=Ronald (tmux)
-
-No caminho normal, o fallback recebe `sem_certidao` e `sem_dados`; os rótulos são preenchidos pelo produtor e não são vazios (`app/colaboradores/services/calendario.py:58-59`, `app/colaboradores/services/calendario.py:899-901`). Não achei consumidor de produção que monte esses dias sem passar pelo produtor (`app/colaboradores/views.py:1945-1962`; `app/colaboradores/services/drawer.py:120-121`; `app/relatorios/furos.py:184-188`).
-
-`ausencia` também é candidato sintático ao fallback: não há ramo específico para esse status (`app/templates/colaboradores/partials/_calendario_grade.html:97-107`). Normalmente o dicionário `ausencia` intercepta antes, pois nasce de `_a` (`app/colaboradores/services/calendario.py:805`, `app/colaboradores/services/calendario.py:838-848`). Um caminho excepcional pode chegar ao fallback: falha na carga `_aus_map`, A2 disponível retornando `ausencia`, ausência de palavra ou veredito `em_aberto` (`app/colaboradores/services/calendario.py:593-600`, `app/colaboradores/services/calendario.py:124-125`, `app/templates/colaboradores/partials/_calendario_grade.html:97-98`). O rótulo seria “Ausencia registrada — o dia tem abono proprio”, potencialmente falso para pedido pendente ou efeito supressor; ocorrência concreta no dado: [não verificado].
-
-Sobre o resumo, `faltas` conta somente status `falta`, e a interface o chama “Sem registro” (`app/colaboradores/services/calendario.py:950`; `app/templates/colaboradores/partials/_calendario_grade.html:145-147`). A justificativa da triagem5(b) corresponde ao cálculo; a nomenclatura é mais ampla que o conjunto contado, mas não demonstra regressão nova por si só (`app/colaboradores/services/calendario.py:135-158`, `app/colaboradores/services/calendario.py:950`).
-
-A suspeita sobre triagem4 é procedente: o selo geral usa escala com fim declarado e não exercita o DNA sem `hf`; o teste novo compara apenas custo de um versus oito dias cegos. Uma despesa fixa arbitrariamente alta exclusivamente nesse ramo passa pelos dois testes (`app/core/tests/test_selo_performance.py:283-300`, `app/core/tests/test_selo_performance.py:401-405`; `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:150-159`).
-
-## 30/10 16:56 · sessao 2f7bd9efcc83 · - · - · origem=Ronald (tmux)
-
-Achados para consolidação:
-
-- **Triagem 4 tem uma justificativa incorreta:** há teto absoluto de 55 queries na rota, mas a fixture usa escala com início/fim completos e não prepara dia sem fim previsto; esse selo não cobre o custo absoluto da chamada condicional à folha. O teste novo compara somente custos de 1 e 8 dias e aceita qualquer acréscimo constante comum aos dois casos. (`app/core/tests/test_selo_performance.py:283`, `:297`, `:401`; `app/colaboradores/services/calendario.py:722`; `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:158`)
-- O teste de render **detecta a regressão literal** de restaurar o fallback `—` sem o rótulo nos três layouts, porque exige a substring no HTML. **Deixa passar** um título fixo com `a folha retem (sem_celula)`, sem ler `dia.status_rotulo`; também aceita o texto em comentário ou elemento oculto e não exercita os outros status do fallback. (`app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:99`, `:103`, `:105`; `app/templates/colaboradores/partials/_calendario_grade.html:107`)
-- Triagem 2 é compatível com o código: ausência/feriado/folga humana e escala suspeita têm precedência sobre `retido_folha`; a retenção cega da folha não faz essas consultas. (`app/colaboradores/services/calendario.py:124`, `:131`, `:139`, `:141`; `app/folha/export.py:1237`)
-- Triagem 3 descreve uma divergência possível: a folha recorta admissão/demissão e exclui demissão do ramo cego, enquanto a classificação do calendário pode chegar a falta. A afirmação histórica sobre o main não foi comprovada por histórico local; o diff fornecido mostra o ramo de falta preexistente à inserção. (`app/folha/export.py:1180`, `:1211`, `:1237`; `app/colaboradores/services/calendario.py:133`, `:148`; histórico: [não verificado])
-- Triagem 5b é coerente: `resumo.faltas` conta exclusivamente status `falta`, portanto o dia classificado como `sem_certidao` sai dessa contagem. (`app/colaboradores/services/calendario.py:948`, `:950`)
-
-Os resultados alegados de green7/green8 e custos efetivos não foram verificados. [não verificado]
-
-_632 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_636 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
