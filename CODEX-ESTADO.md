@@ -1,7 +1,54 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **30/10/2026 16:57** · publicado em **30/10/2026 16:57** (UTC-3)
+> Ultima resposta processada: **30/10/2026 16:58** · publicado em **30/10/2026 17:03** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 30/10 16:58 · sessao 0c34feaa35e2 · CALENDARIO-HOJE · verificador · origem=Code
+
+**REPROVADO: procede a ressalva A5 sobre falta de teto absoluto para o caminho cego.** O selo citado pela triagem usa escala com fim declarado; o teste novo compara somente o custo de um e oito dias cegos. Nenhum deles limita o acréscimo constante exclusivo desse caminho. (`app/core/tests/test_selo_performance.py:283–300`, `:401–405`; `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:150–159`)
+
+1. **O que o fallback mostra**
+
+O ramo final agora mostra **`—` com `status_rotulo` no atributo `title`**. O motivo aparece no tooltip, sem virar texto visível permanente. Antes dele, ausência e palavra do dia podem interceptar a renderização, independentemente do status. (`app/templates/colaboradores/partials/_calendario_grade.html:97–107`)
+
+| Status candidato ao fallback | Quem escreve o rótulo e qual texto chega |
+|---|---|
+| `sem_certidao`, presente em `_cego_folha` | `contexto_calendario`: **“Dia sem julgamento do cartorio -- a folha retem (sem_celula)”**. O mapa aceita exclusivamente o motivo `sem_celula` devolvido pela folha. (`app/colaboradores/services/calendario.py:64`, `:722–727`, `:899`) |
+| `sem_certidao`, fora desse mapa | O mesmo produtor consulta `ROTULO_STATUS`: **“Sem certidao do dia”**. Esse status também nasce no caminho com batida sem classificação suficiente da grade. (`app/colaboradores/services/calendario.py:58`, `:159–169`, `:899–901`) |
+| `sem_dados` | O mesmo produtor consulta `ROTULO_STATUS`: **“Sem dados”**. (`app/colaboradores/services/calendario.py:59`, `:158`, `:901`) |
+| `ausencia` | Também não tem ramo próprio por status. Se não houver dicionário de ausência nem palavra que intercepte, chega **“Ausencia registrada — o dia tem abono proprio”**. Normalmente o dicionário produzido de `_a` ganha antes. (`app/templates/colaboradores/partials/_calendario_grade.html:97–107`; `app/colaboradores/services/calendario.py:57`, `:838–848`, `:901`) |
+
+Esses rótulos não são vazios no produtor. A frase específica do cego está condicionada à resposta da folha, portanto não é aplicada indiscriminadamente a todo `sem_certidao`. (`app/colaboradores/services/calendario.py:57–64`, `:727`, `:899–901`)
+
+Há uma ressalva semântica em `ausencia`: “tem abono próprio” não descreve todo efeito possível, pois `_classificar` aceita ausência que não desconta, incluindo tipos `SUPRIME`. Para esse texto aparecer no fallback, ainda precisam faltar ausência e palavra; ocorrência concreta no dado: **[não verificado]**. (`app/colaboradores/services/calendario.py:124–125`; `app/ponto/catalogo/ausencias.py:89–94`; `app/templates/colaboradores/partials/_calendario_grade.html:97–107`)
+
+2. **Quem consome e o que muda**
+
+- **Perfil do colaborador, no gestor:** a rota renderiza `calendario_partial.html`, que força `layout='mes'`: sete colunas, offsets e células de 132px. Recebe o novo tooltip. (`app/colaboradores/views.py:1945–1962`; `app/templates/colaboradores/calendario_partial.html:62`; `app/templates/colaboradores/partials/_calendario_grade.html:64–68`, `:107`)
+- **Drawer do painel:** inclui com `layout='fita'`: faixa horizontal, células de 78px e marcações de mês/segunda. Recebe o mesmo tooltip. (`app/templates/colaboradores/partials/_drawer_diagnostico.html:35`; `app/templates/colaboradores/partials/_calendario_grade.html:63–68`, `:107`)
+- **Cartão HTML da auditoria de espelhos:** inclui somente `dias/resumo`, sem layout; usa o grid automático de mínimo 62px. Também recebe o tooltip. O produtor declara `datas_em_aberto=NAO_PERGUNTADO`. (`app/templates/relatorios/furos.html:42`; `app/templates/colaboradores/partials/_calendario_grade.html:65`, `:107`; `app/relatorios/furos.py:184–188`)
+- **PDF de furos:** não renderiza esse partial. Extrai apenas data/status e desenha via ReportLab; não recebe `status_rotulo`. `sem_certidao` cai nas cores padrão branco/cinza. O último ajuste do template não chega ao PDF. (`app/relatorios/views.py:1548–1562`; `app/relatorios/furos_pdf.py:11–21`, `:53–57`)
+
+3. **O teste novo morde, com alcance limitado** [nao verificado]
+
+Por inspeção, pega a regressão literal de devolver o fallback a `—` sem rótulo: exige `a folha retem (sem_celula)` no HTML dos três layouts. (`app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:103–105`; `app/templates/colaboradores/partials/_calendario_grade.html:107`)
+
+Deixa passar esta mutação:
+
+```html
+<span title="a folha retem (sem_celula)">—</span>
+```
+
+Ela abandona a leitura de `dia.status_rotulo`, mas preserva a substring exigida. Também passaria com essa frase em comentário HTML ou conteúdo oculto; a asserção não verifica atributo, elemento ou visibilidade. Os outros status do fallback não são exercitados pelo acréscimo. (`app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:99–105`)
+
+Execução dos testes e resultados RED/GREEN alegados: **[não verificado]**. [nao verificado]
+
+4. **Conferência da triagem5**
+
+- **Item 2:** a justificativa corresponde ao código: ausência, feriado, folga humana e escala suspeita precedem `retido_folha`; o ramo cego da folha não consulta essas precedências. (`app/colaboradores/services/calendario.py:124–144`; `app/folha/export.py:1237–1238`)
+- **Item 3:** a divergência contratual existe como possibilidade: a folha recorta admissão/demissão e excepciona a demissão no ramo cego; o calendário ainda pode alcançar `falta`. A atribuição histórica ao main: **[não verificado]**. (`app/folha/export.py:1180–1187`, `:1211–1214`, `:1237`; `app/colaboradores/services/calendario.py:133–148`)
+- **Item 4 — justificativa incorreta:** existe teto 55, mas a fixture não prepara o dia sem fim previsto que aciona a consulta condicional à folha. A igualdade entre um e oito dias permite custo fixo arbitrariamente alto nesse ramo. Isso prova uma lacuna de cobertura, não um estouro efetivo em produção. (`app/core/tests/test_selo_performance.py:249`, `:283–300`, `:401–405`; `app/colaboradores/services/calendario.py:722–727`; `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:158–159`)
+- **Item 5:** a limitação atual do PDF está confirmada; sua anterioridade é **[não verificado]**. A explicação de `resumo.faltas` corresponde ao cálculo: só conta `falta`, embora a interface chame esse número de “Sem registro”. (`app/relatorios/furos_pdf.py:11–21`; `app/colaboradores/services/calendario.py:950`; `app/templates/colaboradores/partials/_calendario_grade.html:145–147`)
 
 ## 30/10 16:57 · sessao 27e0f3394207 · - · - · origem=Ronald (tmux)
 
@@ -880,37 +927,4 @@ Ambiguidade importante do item 8:
 
 A cronologia consolidada está em `app/docs/RELATO.md:81`–`:87`; ela confirma o achado no df863705, mas não demonstra retrospectivamente que a guarda morta existia nas três primeiras árvores.
 
-## 30/10 15:01 · sessao be60c8cf67a9 · CALENDARIO-HOJE · verificador · origem=Code
-
-**Parecer: reprova; cura parcial.** O delta resolve o caso específico de `nunca_bateu` até hoje, mas ainda permite divergências entre calendário e retenção. ([calendario.py:802](/home/ronald/codex_ws/cfa186cea5de736feb8874c928dfd675945c9601/app/colaboradores/services/calendario.py:802), [calendario.py:170](/home/ronald/codex_ws/cfa186cea5de736feb8874c928dfd675945c9601/app/colaboradores/services/calendario.py:170), [export.py:1237](/home/ronald/codex_ws/cfa186cea5de736feb8874c928dfd675945c9601/app/folha/export.py:1237))
-
-**1. Divergência curada?**
-
-Para trabalho sem batida, sem cobertura abonadora, data até hoje e `nunca_bateu` lavrado: **sem achado**. `_vv` impede `previsto`; o veredito resulta em `falta`, compatível com a retenção `espelho_nunca_bateu`. ([calendario.py:69](/home/ronald/codex_ws/cfa186cea5de736feb8874c928dfd675945c9601/app/colaboradores/services/calendario.py:69), [calendario.py:177](/home/ronald/codex_ws/cfa186cea5de736feb8874c928dfd675945c9601/app/colaboradores/services/calendario.py:177), [calendario.py:802](/home/ronald/codex_ws/cfa186cea5de736feb8874c928dfd675945c9601/app/colaboradores/services/calendario.py:802), [export.py:1235](/home/ronald/codex_ws/cfa186cea5de736feb8874c928dfd675945c9601/app/folha/export.py:1235))
-
-Persistem estes contraexemplos condicionais:
-
-| Estado | Calendário × folha |
-|---|---|
-| Juíza não encerrou; `concorde` lavrado; trabalho sem batida, sem cobertura, não isento | `_vv` desliga `previsto`, mas a tradução para `ok` é descartada: fica **`falta`**. Esse veredito **não retém** pelo leitor de células. O teste antigo exige expressamente essa `falta`. ([calendario.py:170](/home/ronald/codex_ws/cfa186cea5de736feb8874c928dfd675945c9601/app/colaboradores/services/calendario.py:170), [test_calendario_ata_decide.py:38](/home/ronald/codex_ws/cfa186cea5de736feb8874c928dfd675945c9601/app/colaboradores/tests/test_calendario_ata_decide.py:38), [export.py:1215](/home/ronald/codex_ws/cfa186cea5de736feb8874c928dfd675945c9601/app/folha/export.py:1215)) |
-| Mesmo estado, com `trabalhou` pela via humana | Também fica **`falta`**, pois sofre o mesmo veto ao `ok`; esse veredito não integra os acusadores que retêm. A via humana real chama-se **`admin`**. ([calendario.py:71](/home/ronald/codex_ws/cfa186cea5de736feb8874c928dfd675945c9601/app/colaboradores/services/calendario.py:71), [calendario.py:170](/home/ronald/codex_ws/cfa186cea5de736feb8874c928dfd675945c9601/app/colaboradores/services/calendario.py:170), [models.py:1735](/home/ronald/codex_ws/cfa186cea5de736feb8874c928dfd675945c9601/app/escala/models.py:1735), [veredito_celula.py:76](/home/ronald/codex_ws/cfa186cea5de736feb8874c928dfd675945c9601/app/ponto/services/veredito_celula.py:76)) |
-| Dia passado, trabalho, juíza não encerrou, `veredito=None`, mesmo com ata | Continua **`previsto`**, mas a folha retém **`sem_celula`**, sem consultar a ata nesse ramo. Ata sem veredito é permitida: `carimbar_precedencia` grava somente `ata`. ([calendario.py:521](/home/ronald/codex_ws/cfa186cea5de736feb8874c928dfd675945c9601/app/colaboradores/services/calendario.py:521), [calendario.py:802](/home/ronald/codex_ws/cfa186cea5de736feb8874c928dfd675945c9601/app/colaboradores/services/calendario.py:802), [export.py:1237](/home/ronald/codex_ws/cfa186cea5de736feb8874c928dfd675945c9601/app/folha/export.py:1237), [celula.py:732](/home/ronald/codex_ws/cfa186cea5de736feb8874c928dfd675945c9601/app/ponto/portas/celula.py:732)) |
-| Data futura com `nunca_bateu` lavrado | Continua **`previsto`** por `data > hoje`; o veredito não vence esse status. A retenção acusadora não possui guarda temporal e pode reter o dia. ([calendario.py:802](/home/ronald/codex_ws/cfa186cea5de736feb8874c928dfd675945c9601/app/colaboradores/services/calendario.py:802), [calendario.py:177](/home/ronald/codex_ws/cfa186cea5de736feb8874c928dfd675945c9601/app/colaboradores/services/calendario.py:177), [export.py:1215](/home/ronald/codex_ws/cfa186cea5de736feb8874c928dfd675945c9601/app/folha/export.py:1215)) |
-
-No caso com ata positiva e nenhum turno, a palavra pode ser “Sem turno pareado”; isso não corrige o `status` usado na cor e nos contadores. ([dia_decidido.py:375](/home/ronald/codex_ws/cfa186cea5de736feb8874c928dfd675945c9601/app/ponto/services/dia_decidido.py:375), [_calendario_grade.html:75](/home/ronald/codex_ws/cfa186cea5de736feb8874c928dfd675945c9601/app/templates/colaboradores/partials/_calendario_grade.html:75), [calendario.py:943](/home/ronald/codex_ws/cfa186cea5de736feb8874c928dfd675945c9601/app/colaboradores/services/calendario.py:943))
-
-**2. Aval e MORDE**
-
-**Sem achado nas premissas dos testes:** hoje antes do turno, sem veredito, segue `previsto`; depois do fim, sem batida, segue `falta`. A juíza compara o instante com o fim previsto, e o calendário preserva esses dois ramos. ([turnos.py:2102](/home/ronald/codex_ws/cfa186cea5de736feb8874c928dfd675945c9601/app/ponto/turnos.py:2102), [calendario.py:132](/home/ronald/codex_ws/cfa186cea5de736feb8874c928dfd675945c9601/app/colaboradores/services/calendario.py:132), [test_calendario_hoje_nao_e_falta.py:42](/home/ronald/codex_ws/cfa186cea5de736feb8874c928dfd675945c9601/app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:42), [test_calendario_hoje_nao_e_falta.py:61](/home/ronald/codex_ws/cfa186cea5de736feb8874c928dfd675945c9601/app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:61))
-
-**3. Demais pendências**
-
-**Chaves incompatíveis: persiste.** O cartório entrega `(pk,data)`; o lote repassa ao carregador, que recompõe `(pk,(pk,data))`. A busca da geradora espera `(pk,data)`. ([cartorio.py:853](/home/ronald/codex_ws/cfa186cea5de736feb8874c928dfd675945c9601/app/ponto/services/cartorio.py:853), [turnos.py:2131](/home/ronald/codex_ws/cfa186cea5de736feb8874c928dfd675945c9601/app/ponto/turnos.py:2131), [turnos.py:1928](/home/ronald/codex_ws/cfa186cea5de736feb8874c928dfd675945c9601/app/ponto/turnos.py:1928), [alimentacao.py:237](/home/ronald/codex_ws/cfa186cea5de736feb8874c928dfd675945c9601/app/escala/alimentacao.py:237))
-
-**Dependência da janela: persiste.** DNA vazio vira `None`; DNA não vazio sem a véspera impede o retorno dos marcos do template nesse ramo. ([turnos.py:1949](/home/ronald/codex_ws/cfa186cea5de736feb8874c928dfd675945c9601/app/ponto/turnos.py:1949), [turnos.py:1297](/home/ronald/codex_ws/cfa186cea5de736feb8874c928dfd675945c9601/app/ponto/turnos.py:1297))
-
-**Tooltip: persiste.** “Turno em curso” continua aplicado antes do início e em `sem_previsto`; a nova guarda `data <= hoje` repete uma condição já presente em `_em_curso`. ([calendario.py:62](/home/ronald/codex_ws/cfa186cea5de736feb8874c928dfd675945c9601/app/colaboradores/services/calendario.py:62), [calendario.py:707](/home/ronald/codex_ws/cfa186cea5de736feb8874c928dfd675945c9601/app/colaboradores/services/calendario.py:707), [calendario.py:878](/home/ronald/codex_ws/cfa186cea5de736feb8874c928dfd675945c9601/app/colaboradores/services/calendario.py:878))
-
-Execução integrada Django, ocorrência e quantidade dos estados em produção, pagamento ou desconto efetivo: **[nao verificado]**.
-
-_614 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_615 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
