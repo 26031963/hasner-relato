@@ -1,7 +1,71 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **29/10/2026 21:08** · publicado em **29/10/2026 21:08** (UTC-3)
+> Ultima resposta processada: **29/10/2026 21:13** · publicado em **29/10/2026 21:14** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 29/10 21:13 · sessao 2e2b8e5f00e7 · - · - · origem=Ronald (tmux)
+
+- **Contrato do carimbo — sem achado remanescente.** O v3 atualiza a igualdade integral de `censo` e o conjunto de `esperado` para conter `respondida_sem_resposta`, corrigindo as duas incompatibilidades apontadas na v2. (`app/chamados/tests/test_o261_vigia_fio.py:701,706-709`, diff pós-aplicação.)
+
+- **Leitor do painel — sem achado.** A comparação percorre genericamente todas as chaves de `esperado`; a chave nova divergente aparecerá em `FORA DO ESPERADO`, mesmo sem constar de `gritou`. (`bin/fio_estado.py:69-73,105-108,118-119`.) O ESTADO usa esse leitor e compositor. (`bin/gerar_estado.py:256-260`.)
+
+- **Outros testes do carimbo — sem achado.** O selo shell usa carimbos sintéticos e não exige um conjunto fechado de chaves do comando real; as verificações existentes de caminho, recorte e alarme permanecem compatíveis. (`bin/tests/test_fio_estado.sh:40-47,93-102`; `app/chamados/tests/test_o261_vigia_fio.py:717-750`, cópia.)
+
+- **Saída `VFM|` — sem achado.** A nova linha é adicional; a linha `VFM|ESPERADO|` continua renderizando o mesmo `ESPERADO`, e os grupos de alarme não mudam. (`app/chamados/management/commands/vigiar_fio_morto.py:79-89,168-183`, diff pós-aplicação.)
+
+- **Novo teste do comando — sem achado de isolamento sob settings CI.** Embora use o caminho padrão do comando, CI já redireciona o carimbo para um diretório temporário. (`app/chamados/tests/test_o261_resposta_vazia.py:154-160`, diff; `app/config/settings/ci.py:30-33`; `app/chamados/management/commands/vigiar_fio_morto.py:100-101`, cópia.)
+
+Execução dos testes: **[nao verificado]**. [nao verificado]
+
+## 29/10 21:09 · sessao c7d5d7152cde · o261 · verificador · origem=Code
+
+**Ainda não aprovaria a v2: ela quebra um teste existente do carimbo em duas asserções.** (`app/chamados/tests/test_o261_vigia_fio.py:699,704`.)
+
+“Diff” abaixo indica numeração pós-aplicação; demais referências são da cópia. Execução dos testes e efeitos em produção: **[nao verificado]**. [nao verificado]
+
+1. **Cumprimento do aval**
+
+   **Sem achado no escritor:** a guarda usa texto com `strip()`, conserva materialização, autor e via, e mantém a consulta ao C6. A trilha agora captura o estado anterior e descreve a presença de resposta independentemente de acrescentar um carimbo nesta chamada. (`app/docs/CORTES.md:383`; `app/chamados/services/disputa_emissao.py:1641,1643,1649,1655,1661`, diff.)
+
+   O contador passa a aplicar o mesmo teste Python e recebe o recorte de empresas. **Sem achado nesses ajustes.** A reparação das 263, com reversão/prova e encaminhamento do exportado, permanece **[nao verificado]**. (`app/chamados/services/vigia_fio.py:372,381,383,384`, diff; `app/chamados/management/commands/vigiar_fio_morto.py:172`, diff; `app/docs/CORTES.md:383`.)
+
+2. **Classes de reprovação**
+
+   - **Segundo juiz / derivação paralela — sem achado.** O contador verifica a inconsistência dos campos, usando o mesmo `strip()`; não decide vitalidade, via ou destino da pergunta. (`app/chamados/services/vigia_fio.py:372,384`, diff; `app/chamados/juizes.py:1020`.)
+   - **Segundo escritor fora da porta — sem achado.** A alteração permanece no ato já declarado; a trilha usa `core.observ.evento`. (`app/chamados/tests/test_porta_resposta_pergunta.py:66,68,95`; `app/chamados/services/disputa_emissao.py:1659,1661`, diff; `app/core/observ.py:94`.)
+   - **Relógio fora da borda — sem achado novo.** O `_tz.now()` deste ramo já existia; o contador acrescenta uma constante temporal, sem nova leitura do relógio. (`app/chamados/services/disputa_emissao.py:1638`, cópia; `app/chamados/services/vigia_fio.py:369`, diff; `app/docs/CORTES.md:369`.)
+   - **Ordem de trava — sem achado novo.** O diff não acrescenta trava de negócio; o evento usa o `atomic` da porta de auditoria. (`app/chamados/services/disputa_emissao.py:1659,1661`, diff; `app/core/observ.py:133`.)
+   - **Idempotência sequencial — sem achado.** A segunda chamada encontra a pergunta materializada, fora de `_abertas`; o teste novo também exige estado igual e uma única linha de trilha. (`app/chamados/services/disputa_emissao.py:1634`, cópia; `app/chamados/tests/test_o261_resposta_vazia.py:106`, diff.)
+   - **Selo sem mordida — sem achado nos casos novos por inspeção.** Há asserções para vazio, espaços, texto, conteúdo da trilha e impressão/carimbo do comando. Isso não resolve a incompatibilidade com o selo existente, descrita abaixo. RED e execução efetivos: **[nao verificado]**. (`app/chamados/tests/test_o261_resposta_vazia.py:77,89,97,106,124,145`, diff; `app/chamados/tests/test_o261_vigia_fio.py:699,704`.)
+
+3. **Leitores, contratos e testes existentes** [nao verificado]
+
+   - **Média — contrato do carimbo quebrado.** O comando acrescenta `respondida_sem_resposta` a `reg['censo']`, mas `censo()` continua sem essa chave. Portanto, a igualdade integral exigida pelo teste existente falhará **mesmo quando o contador for zero**. A segunda incompatibilidade é `esperado`: o teste exige exatamente as quatro chaves antigas. É necessário atualizar o contrato e sua prova para a composição nova, preservando a conferência dos contadores. (`app/chamados/management/commands/vigiar_fio_morto.py:193,198`, diff; `app/chamados/services/vigia_fio.py:205,326`, cópia; `app/chamados/tests/test_o261_vigia_fio.py:699,704`.)
+
+   - **Baixa — permanece a ausência da ação no seletor da auditoria.** `fecho_sem_credor` não está em `ACOES`, que alimenta o dropdown. A linha continua acessível pela listagem geral e pelo filtro GET explícito; a gravação admite o verbo livre. (`app/core/models.py:286,296`; `app/core/views.py:705,709,738`; `app/templates/core/log_auditoria.html:23`.)
+
+   - **`bin/fio_estado.py` — sem achado.** O leitor compara genericamente `esperado` com `censo` e publica a divergência com valor medido e esperado. Estar fora de `gritou` não impede a exibição. (`bin/fio_estado.py:69,72,105,118`.)
+
+   - **Leitores da pergunta — sem achado.** O badge exige disputa aberta e pergunta viva; `.estado` conserva `RESOLVIDA` para a pergunta morta materializada; `_fio_do_dia` considera somente perguntas vivas. (`app/chamados/models.py:1381,2111,2113`; `app/folha/fora_da_folha.py:66`.)
+
+4. **Triagem dos descartados**
+
+   - **Marco 17:20 — descarte como bloqueio procede.** É o início conservador da janela `17:2x`: pode contar ocorrências anteriores ao instante efetivo, sem excluir as posteriores. Não demonstra o instante exato do aval; esse instante e a existência de ocorrências nesse intervalo são **[nao verificado]**. (`app/chamados/services/vigia_fio.py:369,381`, diff; `app/docs/CORTES.md:383`.)
+   - **Concorrência — descarte procede no contrato sequencial informado.** A leitura sem bloqueio e o `save` já existiam. A trilha nova também pode duplicar sob concorrência, mas isso não demonstra quebra das duas chamadas sequenciais exigidas. (`app/chamados/services/disputa_emissao.py:1630,1634,1651`, cópia; `:1661`, diff; `app/chamados/tests/test_fio_disputa_resolvido.py:82`.)
+
+## 29/10 21:08 · sessao 1fff0cdcd0a0 · - · - · origem=Ronald (tmux)
+
+- **Baixa — permanece a limitação do filtro da auditoria:** `fecho_sem_credor` não aparece no seletor de ações, pois `ACOES` enumera somente sete verbos e a tela usa essa lista. A gravação aceita o verbo livre; listagem geral e filtro GET continuam alcançando o evento. (`app/core/models.py:286-296`; `app/core/views.py:705,709,738`; `app/templates/core/log_auditoria.html:23-27`.)
+
+- **Trilha v2 — sem achado:** `_antes` captura via e carimbo anteriores; `materializada_em=None` corresponde ao filtro de entrada. A descrição passa a distinguir presença de texto, independentemente de acrescentar carimbo nesta chamada. (`app/chamados/services/disputa_emissao.py:1634-1635`, cópia; `:1643,1649-1656,1661-1668`, diff.)
+
+- **Segundo escritor / juiz / trava / relógio — sem achado novo:** permanecem os dois saves declarados do ato, a consulta a C6 e o relógio já existente; a auditoria usa a porta canônica `evento`, que abre seu próprio `atomic`. (`app/chamados/tests/test_porta_resposta_pergunta.py:66-68,95-103`; `app/chamados/services/disputa_emissao.py:1641,1638`, cópia; `app/core/observ.py:94,133-138`.)
+
+- **Idempotência — descarte da concorrência procede no contrato informado:** leitura sem bloqueio e save já existiam; os testes e a definição da casa exigem duas chamadas sequenciais. A auditoria duplicada sob concorrência é possível, mas sua ocorrência e exigência contratual são **[nao verificado]**. (`app/chamados/services/disputa_emissao.py:1630-1651`, cópia; `app/chamados/tests/test_fio_disputa_resolvido.py:82-89`; `app/chamados/models.py:2124-2128`.)
+
+- **Leitores da pergunta — sem regressão identificada:** o badge exige disputa aberta e C6 vivo; `.estado` continua retornando resolvida para pergunta morta materializada mesmo com `respondida_em=None`. (`app/chamados/models.py:1381-1385,2111-2114`.)
+
+- **Selos do escritor — sem achado por leitura:** os testes novos cobrem vazio, espaços, controle com texto, estado e trilha sequenciais. Execução e RED efetivo: **[nao verificado]**. (`app/chamados/tests/test_o261_resposta_vazia.py:77-130`, diff.)
 
 ## 29/10 21:08 · sessao b7b7ed5f0e24 · - · - · origem=Ronald (tmux)
 
@@ -525,46 +589,4 @@ No selo:
 
 Selo completo executado: **[não verificado]**. Identidade Git do snapshot/diff acumulado: **[não verificado]**. O CORTES disponível termina em 384; o registro citado em 389 não está nesta cópia. [app/docs/CORTES.md:384](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/app/docs/CORTES.md:384)
 
-## 29/10 18:46 · sessao c1bbffce8fcb · - · - · origem=Ronald (tmux)
-
-Achados na parte de arquivo:
-
-1. **A memória ainda pode regredir por concorrência.** `bin/hook_stop_fila1.py:543-556` faz leitura, `max` local e `replace` sem trava. Entrada concreta: memória `{inode:100}`; A lê mtime=200 e memória=100; B lê mtime=300 e grava 300; A grava 200 depois; o escritor morre; C observa arquivo parado em 300 e memória=200, devolvendo prova. A decisão libera em `bin/hook_stop_fila1.py:559-561`. Confirmei executando a função original com filesystem virtual em memória, sem escrever arquivos: memória após B=300, após A=200, resultado de C=`''`. Portanto a cura declarada na docstring não fecha a regressão concorrente (`bin/hook_stop_fila1.py:517-518`).
-
-2. **Temporário previsível permite escrita fora da porta.** Entrada: antes da avaliação, `logs/hook_stop_espera.json.<PID-do-hook>.tmp` é symlink ou hardlink para `app/docs/RELATO.md`. `open(...,'w')` segue o link e trunca o RELATO, gravando o JSON da memória; depois o `replace` altera ESPERA (`bin/hook_stop_fila1.py:553-556`). O mesmo vale para BACKLOG ou outro arquivo gravável pelo hook. É segundo escritor fora da porta, e pode alterar o RELATO depois da prova inicial em `bin/hook_stop_fila1.py:717-718`. Reprodução em filesystem real: [não verificado].
-
-3. **A cura de FIFO tem corrida entre verificação e abertura.** Entrada: ESPERA é regular durante `lstat`; outro processo troca esse caminho por FIFO antes do `open`. A abertura pode ficar esperando escritor indefinidamente, impedindo decisão e TETO; a função não possui limite de leitura (`bin/hook_stop_fila1.py:540-544`). A mesma troca por symlink permite ler outro arquivo, apesar da verificação anterior. Reprodução temporal: [não verificado].
-
-Ponto adicional: falhas `PermissionError`/`EIO` ao consultar arquivos proibidos são descartadas como se o arquivo não existisse (`bin/hook_stop_fila1.py:529-533`), contrariando a regra declarada de falha de leitura bloquear (`bin/hook_stop_fila1.py:432-433`). Contraexemplo completo que resulte em liberação indevida além dos anteriores: [não verificado].
-
-## 29/10 18:46 · sessao c0998dd8d4dd · - · - · origem=Ronald (tmux)
-
-Achados no selo:
-
-- **Conjunção sem cobertura suficiente:** único caso com duas provas usa PID válido e arquivo sem avanço; a memória foi apagada imediatamente antes. Faltam `PID morto + arquivo andando → bloqueia` e `PID válido + arquivo andando → libera`. Uma implementação que ignora o PID quando há arquivo, ou que sempre rejeita provas duplas, escaparia dos casos atuais. [bin/tests/test_hook_esperando_com_prova.sh:140](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/tests/test_hook_esperando_com_prova.sh:140), [bin/tests/test_hook_esperando_com_prova.sh:142](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/tests/test_hook_esperando_com_prova.sh:142).
-
-- **Pré-requisito da PROVA sem caso combinado:** falta `ESPERANDO com prova válida` no topo junto de afirmação `NO AR` sem PROVA. Mover a liberação de ESPERANDO para antes do checador escaparia tanto do selo novo quanto do antigo, cujo cenário não declara ESPERANDO. A ordem atual está correta. [bin/hook_stop_fila1.py:717](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/hook_stop_fila1.py:717), [bin/hook_stop_fila1.py:728](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/hook_stop_fila1.py:728), [bin/tests/test_relato_prova_no_stop.sh:20](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/tests/test_relato_prova_no_stop.sh:20).
-
-Regressões estáticas em PAREI, teto e fila vazia: **nada encontrado** nas alterações examinadas. [bin/hook_stop_fila1.py:632](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/hook_stop_fila1.py:632), [bin/hook_stop_fila1.py:769](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/hook_stop_fila1.py:769), [bin/hook_stop_fila1.py:736](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/hook_stop_fila1.py:736).
-
-O selo possui mordida básica: exige silêncio e ALLOW identificado nos positivos; decisão block, siga e motivo nos negativos. Está integrado pelo glob da régua. [bin/tests/test_hook_esperando_com_prova.sh:68](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/tests/test_hook_esperando_com_prova.sh:68), [bin/tests/test_hook_esperando_com_prova.sh:80](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/tests/test_hook_esperando_com_prova.sh:80), [bin/regua.sh:138](/home/ronald/codex_ws/4ede0031ed9e6f6a8d0fa2e3d5527b1b023523a0/bin/regua.sh:138).
-
-## 29/10 18:46 · sessao bb2be2e8efa2 · - · - · origem=Ronald (tmux)
-
-Achados confirmados por chamadas em memória, sem criar arquivos:
-
-1. **Ancestral PID 1 passa como produtor.** `_ancestrais()` retorna antes de adicionar o pai quando ele é 1. Entrada no host: `ESPERANDO: init | pid=1`, com `/proc/1/cmdline` começando por `/sbin/init`. O init é ancestral, mas passa por produtor. Neste ambiente confirmei `_prova_pid('codex-linux-sandbox', 1) == ''`. Fonte: `bin/hook_stop_fila1.py:455`, `bin/hook_stop_fila1.py:492`.
-
-2. **Valor de opção é confundido com script.** Inicie `python3 -W produtor_espera.sh -c 'import time; time.sleep(300)'` ou com `-X produtor_espera.sh`. Topo: `ESPERANDO: produtor_espera.sh | pid=<PID>`. Ambos produzem prova vazia, embora nenhum execute o script declarado: o nome é somente argumento de opção. Fonte: `bin/hook_stop_fila1.py:478`, `bin/hook_stop_fila1.py:479`, `bin/hook_stop_fila1.py:507`.
-
-3. **`argv[0]` forjado passa sem verificar executável.** Inicie `bash -c 'exec -a produtor_espera.sh /usr/bin/sleep 300'`. O topo do item anterior libera, embora `/proc/<PID>/exe` seja `/usr/bin/sleep` e não exista produtor do script. Confirmei `_prova_pid(...) == ''`. Fonte: `bin/hook_stop_fila1.py:477`, `bin/hook_stop_fila1.py:497`, `bin/hook_stop_fila1.py:507`.
-
-4. **Caminho absoluto errado aceita correspondência por sufixo.** `_argv_casa('/tmp/produtor.sh', ['bash', '/outra/tmp/produtor.sh']) == True`. Topo `ESPERANDO: /tmp/produtor.sh | pid=<PID do outro script>` libera para outro caminho. Também `../produtor.sh` aceita `/outra/produtor.sh`, pois `lstrip('./')` apaga a referência ao diretório pai. Fonte: `bin/hook_stop_fila1.py:480`, `bin/hook_stop_fila1.py:481`.
-
-5. **Interpretador versionado contorna a proibição de produtor genérico.** Inicie `/usr/bin/python3.12 -c 'import time; time.sleep(300)'`; topo `ESPERANDO: python3.12 | pid=<PID>`. Confirmei prova vazia: a lista veta `python3`, mas aceita `python3.12` como produtor. Fonte: `bin/hook_stop_fila1.py:437`, `bin/hook_stop_fila1.py:487`.
-
-6. **A mesma heurística bloqueia scripts legítimos com opções que recebem argumento.** `_argv_casa('produtor.py', ['python3', '-W', 'ignore', '/obra/produtor.py']) == False`; equivalente com `bash -O extglob /obra/produtor.sh`. O processo pode estar produzindo normalmente, mas o hook compara `ignore` ou `extglob` com o nome declarado e segue bloqueando. Também `timeout 300 /obra/produtor.sh` compara `300`. Fonte: `bin/hook_stop_fila1.py:478`, `bin/hook_stop_fila1.py:479`.
-
-O selo cobre argumento inerte **depois** do código de `python3 -c`, mas não operandos de opções, `argv[0]` forjado, PID 1, interpretador versionado ou caminho absoluto coincidente por sufixo. Seus casos atuais não mordem esses contraexemplos. Fonte: `bin/tests/test_hook_esperando_com_prova.sh:59`, `bin/tests/test_hook_esperando_com_prova.sh:104`, `bin/tests/test_hook_esperando_com_prova.sh:148`, `bin/tests/test_hook_esperando_com_prova.sh:149`.
-
-_240 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_243 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._

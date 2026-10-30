@@ -5,8 +5,8 @@
 > **livre** = pode virar fatia agora, sem humano. **corte/aval/smoke/dinheiro-ate-export** = tem dono humano e espera.
 
 <!-- ESTRUTURAL-DEDICADO-28-18H (aval 28/10 08:2x): a partir de 28/10 18:00 a ORDEM da fila 1 e (1) O-OUTBOX no reconciliar_chamados (2.1); (2) CONTRATO-20-E2-REBAIXA (medida 29/10 07:05); (3) fechar_cobranca_com_lastro e reconciliar_perguntas_orfas pela REGRA-DE-PRAZO ou evento; (4) disparar_perguntas_competencia pela C11; (5) PENDENCIA-SEM-JUIZ-3 e SILENCIO-VENCIDO-VOLTA terminam; (6) JUSTIFICATIVA-PAGA-O-PERIODO (b). Raia ao lado so sem arquivo em comum: fila 2 de UI (RECUSA-DO-ADMIN-DIZ-O-QUE-FAZER primeiro). PAZ-DO-ADMIN encerra; volta RAIA-NAO-FICA-PARADA. -->
-<!-- ORDEM-VIVA-TOPO: O261 -->
-<!-- ANDOU 29/10 20:5x, de `JUSTIFICATIVA-ENCERRA-ORIGEM` (NO AR 77eb28ce, passivo aplicado) para `O261` (curas da O261 pela ordem da MORATORIA-DE-INSTRUMENTO: RESPOSTA-VAZIA (a), nascimento com pai terminal, materializada sem resposta, alcancabilidade). -->
+<!-- ORDEM-VIVA-TOPO: O261-FIO-MORTO-PELO-RETRATO -->
+<!-- ANDOU 29/10 20:5x, de `JUSTIFICATIVA-ENCERRA-ORIGEM` (NO AR 77eb28ce, passivo aplicado) para `O261-FIO-MORTO-PELO-RETRATO` (a linha `O261` esta FECHADA desde 24/10; as curas da O261 pela ordem da MORATORIA-DE-INSTRUMENTO: RESPOSTA-VAZIA (a), nascimento com pai terminal, materializada sem resposta, alcancabilidade). -->
 <!-- ANDOU 29/10 17:3x, de `JUIZ-DO-PAR-GRUPO-1` (sitio 1 aguardando a explicacao das 9 lavras, Codex + sonnet; particao em 2 pousos, aval GRUPO-1-EM-POUSOS-MENORES) para `JUSTIFICATIVA-ENCERRA-ORIGEM` (copia @ 85d3dc98, verificacao final opus e suite inteira em curso). -->
 <!-- ANDOU 29/10 12:5x, de `LASTRO-DEGRAU-2` para `JUIZ-DO-PAR-GRUPO-1` (ordem RESPOSTAS-2910-1230 item 4: grupo (1) sitio 1 com a cura do juiz no turno sem fato encerrado -> JUSTIFICATIVA-ENCERRA-ORIGEM -> LASTRO serializada no construtor da grade). -->
 <!-- ANDOU 29/10 11:0x, de `COL129-DONO-PELO-JUIZ` (NO AR 98dea532, tela C9 33 = 21 BATIDA + 12 CADASTRO) para `LASTRO-DEGRAU-2` (metade LASTRO; IMPRESSAO-SEM-JUSTIFICATIVA espera a pergunta de premissa no topo). -->
