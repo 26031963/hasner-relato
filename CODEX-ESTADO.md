@@ -1,9 +1,9 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **30/10/2026 10:36** · publicado em **30/10/2026 10:36** (UTC-3)
+> Ultima resposta processada: **30/10/2026 10:36** · publicado em **30/10/2026 10:42** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
 
-## 30/10 10:36 · sessao cfcfcbf1c961 · - · - · origem=Ronald (tmux)
+## 30/10 10:36 · sessao cfcfcbf1c961 · FIO-MORTO-DONO-NA-LISTA · verificador · origem=Code
 
 **Não aprovo o fechamento: o diff viola um selo existente de relógio.** A função real do selo, aplicada em memória ao código da cópia, retorna `('chamados/services/vigia_fio.py', 'censo', [181, 182])`; o teste exige resultado vazio. (`app/escala/tests/test_selo_grade_pede_o_instante.py:93`, `:114–119`, `:154–158`; `app/chamados/services/vigia_fio.py:181–182`.)
 
