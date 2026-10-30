@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 30/10/2026 02:10:50.** Transcript: `e3f79949-a90b-4c64-a5c2-afd178149c30.jsonl` (5.3 MB). Acoes na janela: **217**.
+**Medido em 30/10/2026 02:16:06.** Transcript: `e3f79949-a90b-4c64-a5c2-afd178149c30.jsonl` (5.4 MB). Acoes na janela: **219**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 02:14:42 | Bash | Second read-only pass and Pauta check | `cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command shell --schema=juliani --command "exec(open('/tmp/o261b_passivo.py').read())" > logs/o261/passivo_medir_2a.out 2>&1; echo rc=$?; grep -E "^(MODO\|PROVA universo\|PROVA exportadas\|ERROS)" logs/o261/passivo_medir_2a.out \| cut -c1-250; docker exec saas_core python manage.py tenant_command shell --schema=juliani --c ...` |
+| 02:11:33 | Bash | Apply passivo in prod with reversal first | `cd /home/ronald/saas-hasner && docker exec -e O261B_APLICAR=1 -e O261B_ALVO=3036 saas_core python manage.py tenant_command shell --schema=juliani --command "exec(open('/tmp/o261b_passivo.py').read())" > logs/o261/passivo_aplicar.out 2>&1; echo rc=$?; grep -E "^(MODO\|REVERSAO\|DESFEITOS\|PAUTAS\|PROVA\|ERRO\|PAROU\|NADA)" logs/o261/passivo_aplicar.out \| cut -c1-400` |
 | 02:09:52 | Bash | Smoke prod with read-only passivo MEDIR | `cd /home/ronald/saas-hasner && docker cp logs/o261/passivo_carimbo_sem_lastro.py saas_core:/tmp/o261b_passivo.py && docker exec saas_core python manage.py tenant_command shell --schema=juliani --command "exec(open('/tmp/o261b_passivo.py').read())" > logs/o261/passivo_medir_pos_pouso.out 2>&1; echo rc=$?; grep -v "^ABERTA por competencia" logs/o261/passivo_medir_pos_pouso.out \| cut -c1-300` |
 | 02:09:28 | Bash | Deploy the landed commit | `cd /home/ronald/saas-hasner && bin/deploy.sh --sem-migrate > logs/o261/deploy_mariaB.log 2>&1; echo "deploy_rc=$?"; tail -15 logs/o261/deploy_mariaB.log` |
 | 02:09:24 | Bash | Merge raia no-ff, verify cmp, commit | `cd /home/ronald/saas-hasner && set -o pipefail; W=/home/ronald/wt-o261c2b-2910-2317 git merge --no-ff --no-commit raia-o261c2b-29102317 \|\| { echo MERGE_FALHOU; exit 1; } git rev-parse -q --verify MERGE_HEAD \|\| { echo "FF! pouso ja comecou"; } ok=0; for f in $(git -C $W diff --name-only fb51ec3b..8b5e159f); do cmp "$f" "$W/$f" && ok=$((ok+1)) \|\| echo "DIFERE $f"; done; echo "cmp_ok=$ok/7" [ " ...` |
