@@ -1,7 +1,57 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **30/10/2026 08:13** · publicado em **30/10/2026 08:14** (UTC-3)
+> Ultima resposta processada: **30/10/2026 08:18** · publicado em **30/10/2026 08:19** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 30/10 08:18 · sessao 9bf5c72ae18e · O261-V · sonda · origem=Code
+
+Pela sonda fornecida, sem verificação independente:
+
+- **451 aparece em `fora_de_fase`**: template `179`; âncora `2026-10-29`, origem `declarada`; `trabalho_sem_batida=6`, `folga_com_turno=6`. **Sem âncora sugerida**: `{'ancora': None, 'motivo': 'ganho de 0 pp e ruido (minimo 40)', 'batidas': 27, 'casa_hoje': 52}`. [nao verificado]
+- **Contador da frota**: `{'fonte': 'fase_12x36', 'n': 11, 'janela_dias': 14, 'piso': 3, 'universo': 341}`, com `n_vinculos=11`. [nao verificado]
+- **451 consta em Cadastro x Realidade**: `CXR_COL451_paths=['/postos[116][1][1]/colab_id']`. A assinatura e o motivo dessa inclusão não aparecem no dado fornecido. [nao verificado]
+
+Chamadores diretos de `fora_de_fase` no código de produção da cópia:
+
+| Chamador | Local da chamada |
+|---|---|
+| `api_mensageria_fase_12x36` | `app/api/views_mensageria.py:1670` |
+| `particionar` | `app/chamados/services/fila_por_causa.py:173` |
+| `propostas` | `app/escala/services/propositor.py:456` |
+| `linhas_para_a_pauta` | `app/escala/services/fase_12x36.py:215` |
+| `Command.handle` de `vigiar_familia_escala` | `app/ponto/management/commands/vigiar_familia_escala.py:23` |
+
+**Nenhum desses fornece a saída de `fora_de_fase` como entrada de Cadastro x Realidade.** `lista` reúne as entradas de cadastro em `cad`, lê a lavra do esmeril e monta os IDs pela união de `por_colab` com `cad` (`app/escala/services/cadastro_realidade.py:513`, `:518`, `:527`, `:535`, `:542`, `:549`, `:556`, `:563`, `:570`, `:575`, `:579`).
+
+O destino sugerido dessa lista vem de `d['destino']` da lavra (`app/escala/services/cadastro_realidade.py:581`, `:590`), produzido por **`escala.detector_proposta.propor_escala`** (`app/ponto/services/esmeril_espelho.py:213`, `:223`); o chamador de `fora_de_fase` é **`escala.services.propositor.propostas`** (`app/escala/services/propositor.py:456`).
+
+## 30/10 08:16 · sessao 9dc80579edf4 · O261-NOTURNO · sonda · origem=Code
+
+Transcrição de `NOT|`, por motivo; “—” indica linha ausente no dado, sem assumir zero. [nao verificado]
+
+| Motivo | instante_outro_dia | mesmo_dia | sem_instante | Soma das parcelas exibidas | Fonte |
+|---|---:|---:|---:|---|---|
+| intervalo_saida | 776 | 3443 | 3514 | 776 + 3443 + 3514 = **7733** | [nao verificado] |
+| intervalo_volta | 1460 | 3261 | 3623 | 1460 + 3261 + 3623 = **8344** | [nao verificado] |
+| orfao_14h | 2516 | 4653 | 6668 | 2516 + 4653 + 6668 = **13837** | [nao verificado] |
+| saida_sem_entrada | — | 4983 | 4785 | 4983 + 4785 = **9768** | [nao verificado] |
+
+Demais linhas `NOT|`, todas subordinadas a `instante_outro_dia`: [nao verificado]
+
+| Campo | intervalo_saida | intervalo_volta | orfao_14h | Fonte |
+|---|---:|---:|---:|---|
+| data_evento==celula=True | 776 | 1460 | 2516 | [nao verificado] |
+| plantio_no_dia_celula | 9 | 4 | 13 | [nao verificado] |
+| plantio_no_dia_instante | 40 | 78 | 153 | [nao verificado] |
+| texto_mostra_dia_da_celula=True | 776 | 1460 | 2516 | [nao verificado] |
+| viva | 343 | 413 | 472 | [nao verificado] |
+
+| Linha | Valores | Fonte |
+|---|---|---|
+| NOT\|plantios_amostrados | 271; com_batida_real_na_hora_no_dia_da_celula=39; colabs=7 | [nao verificado] |
+| ERROS | 0 | [nao verificado] |
+
+As somas calculadas estão acima. O dado não apresenta um total independente de cada motivo para confirmar se as parcelas fecham esse total. [nao verificado]
 
 ## 30/10 08:13 · sessao 7bacb9cf86c7 · O261-NOTURNO · sonda · origem=Code
 
@@ -687,103 +737,4 @@ Semântica escrita e divergência:
 - Portanto, **se o texto mostrado contém D, “07:00” responde saída D07, enquanto o ajuste pode plantar D+1 07**; a mudança ocorre em `app/chamados/juizes.py:308-311`. O texto e a data efetivamente armazenados nas P dos anexos são **[não verificado]**.
 - A regra alternativa escrita em `resolver_data_evento` declara que `orfao_14h` usa a data da saída esperada a partir da entrada-origem: `app/escala/servico_jornada.py:482-490`. Esse helper não é chamado pelo caminho direto `fabrica_da_celula.perguntar` mostrado em `app/chamados/services/fabrica_da_celula.py:112-125`.
 
-## 30/10 07:39 · sessao af28e22338ae · O261-N · sonda · origem=Code
-
-**1. Autoria e horários**
-
-- **Quem criou P#51789–51792 e quando: [nao verificado].** A sonda informa abertura da **disputa** em 28/10 06:34:43 e julgamento das perguntas em 30/10 06:35:14; não informa emissor nem nascimento das perguntas [nao verificado]. `aberta_em` pertence à disputa (`app/chamados/models.py:1331`), uma disputa existente pode receber perguntas novas (`app/chamados/services/disputa_emissao.py:618`) e `julgado_em` recebe o instante da lavra do veredito (`app/chamados/veredito_lavrado.py:228`).
-- O escritor de nascimento é `PerguntaDisputa.abrir`, chamado por `gerar_perguntas_disputa`; a criação efetiva ocorre em `app/chamados/models.py:2085`, acionada em `app/chamados/services/disputa_emissao.py:389`. Isso identifica a porta do código, **não o emissor efetivo dessas quatro perguntas [nao verificado]**.
-- **#35679:** a transcrição registra criação em **29/10 09:00:12**, resolução em **30/10 06:35:14**, via **`sistema`**, `respondido_por=None` e `superado_por=None` [nao verificado — dados da transcrição, sem arquivo numerado]. No código, `reconciliar()` passa `EVENTO_VIA['RECONCILIAR']` ao núcleo (`app/chamados/models.py:444`), cujo valor é `sistema` (`app/chamados/catalogo/motor.py:95`). **O escritor de `via_encerramento` é `app/chamados/models.py:209`**, persistido em `:231`; `resolvido_em` é carimbado em `:208`.
-- **Qual serviço/cron chamou esse encerramento e por qual motivo concreto: [nao verificado].** A via identifica o caminho de reconciliação, mas a transcrição não contém a chamada nem sua trilha. O censo seleciona chamados vivos (`app/chamados/services/vigia_fio.py:186`); atribuir a saída da célula a uma rotina específica continua [nao verificado].
-
-**2. Emissão para `nunca_bateu`**
-
-**O emissor efetivo e até o `modulo_origem` de #35679 não aparecem na sonda [nao verificado].** Para o módulo `batida_ausente`, o código contém estes caminhos:
-
-| Caminho | Escritor/delegação e passagem pelo veto |
-|---|---|
-| `detectar_ausencias::_abrir_chamado` | Abre em `app/ponto/management/commands/detectar_ausencias.py:688`; consulta o veto em `:626` e retorna em `:628`. |
-| Cartório | Delega ao funil acima em `app/ponto/services/cartorio.py:1358` e `:1394`; sem adesão, retorna antes, em `:1003`. |
-| `emitir_furo_retroativo` | Delega ao mesmo funil em `app/ponto/management/commands/emitir_furo_retroativo.py:142`; passa pelo veto desse funil. |
-| `vigia_de_hora` | Delega ao cartório por `julgar_celula`, em `app/ponto/services/vigia_de_hora.py:130`. |
-| `reconciliar_grade::_emitir_furo` | Abre em `app/ponto/management/commands/reconciliar_grade.py:499`; consulta o veto em `:494` e retorna em `:496`. |
-| Reconciliador c2, `reemitir_chamado_do_dia` | Abre em `app/chamados/reconciliador.py:862`; consulta o veto em `:838` e retorna em `:842`. |
-| Abertura por formulário/request | Aceita módulo catalogado em `app/chamados/views.py:170`, `:174`; delega em `:197`; cria com o módulo recebido em `app/chamados/services/abertura.py:47`, `:56`. **Não passa pelos dois vetos citados** (`app/chamados/services/abertura.py:19`; `app/chamados/models.py:805`). |
-
-`nunca_bateu` está literalmente em `VEREDITOS_QUE_VETAM` (`app/ponto/marcos.py:119`), aplicado pela leitura da célula em `:155` e pelo retorno em `:161`. Portanto, **os caminhos automáticos acima não podem emitir se essa consulta encontra `nunca_bateu`**; o cartório também interrompe seu corpo quando `adesao is None` (`app/ponto/services/cartorio.py:907`, `:1003`).
-
-A request passa por outro gate de absolvição (`app/chamados/models.py:821`, `:839`), que não equivale àquele veto: ele não absolve vereditos pertencentes a `VEREDITOS_ACUSAM` (`app/chamados/reconciliador.py:975`), conjunto que inclui `nunca_bateu` (`app/escala/models.py:1735`). Isso não prova emissão da request para a célula 143031 [nao verificado].
-
-**3. Efeito real de faltar `out['cods']`**
-
-O ramo sem adesão lavra/carimba e retorna sem registrar a data (`app/ponto/services/cartorio.py:981`, `:999`, `:1003`). A gravação do ramo normal usa **somente a data** como chave, inclusive quando `cods` é lista vazia (`:1120`); a fábrica é chamada pelo teste `_cel.data in _julgadas` (`:759`, `:769`, `:770`).
-
-| Chamador | Consequência |
-|---|---|
-| Lote `processar_cartorio` | **Não impede sempre.** Cria um único `out` antes do laço e o reutiliza entre colaboradores (`app/ponto/management/commands/processar_cartorio.py:43`, `:59`, `:65`). Se outro colaborador anterior já registrou a data, a célula sem adesão alcança `perguntar_pela_celula`; sem essa entrada, não alcança (`app/ponto/services/cartorio.py:769`, `:1120`). |
-| `julgar_celula` | Cria `out` novo para uma célula (`app/ponto/services/cartorio.py:1559`, `:1560`). Nesse ramo, não surge entrada em `cods`, e a fábrica não é chamada (`:1003`, `:759`, `:769`). |
-| `rejulgar_furos_do_vinculo` | Cria `out` novo por invocação; se alcançar o ramo sem adesão, ocorre o mesmo bloqueio (`app/escala/regua_defesa.py:691`, `:692`; `app/ponto/services/cartorio.py:1003`, `:769`). |
-| `celula_veredito_velho` | Passa `contadores()` novo por colaborador; mesmo bloqueio nesse ramo (`app/ponto/management/commands/celula_veredito_velho.py:139`, `:144`, `:145`). |
-| Script `rejulgar_o118_col221` | Usa `out` novo para um colaborador; mesmo efeito se alcançar esse ramo com aplicação habilitada (`bin/rejulgar_o118_col221.py:20`, `:23`, `:25`). |
-
-Alcançar a fábrica não garante pergunta nova: ela ainda verifica trabalho previsto, situação, data, vencimentos e deduplicação (`app/chamados/services/fabrica_da_celula.py:78`, `:80`, `:85`, `:106`, `:109`). **Não é possível atribuir as perguntas existentes da célula 143031 à colisão de datas do lote [nao verificado].**
-
-Os outros usos são:
-
-- **Cluster:** o wrapper testa apenas se `_julgadas` está não vazio e chama `_cluster(c, hoje)`; não entrega os códigos ao serviço (`app/ponto/services/cartorio.py:763`, `:767`). Assim, entradas de colaborador anterior também satisfazem essa condição; o cluster lê a ATA do colaborador atual (`app/ponto/services/cluster_espurio.py:22`, `:23`).
-- **Releitura:** o gatilho é o aumento de `emitidos`, não `cods` (`app/ponto/services/cartorio.py:743`, `:798`). Cria acumulador novo, executa o corpo e mescla seus códigos ao acumulado (`:810`, `:811`, `:812`), sem nova fábrica depois (`:823`). O ramo sem adesão retorna antes das emissões (`:1003`, `:1358`, `:1394`).
-
-**4. FROTA**
-
-- **Células `nunca_bateu` sem pergunta nenhuma: 0**, conforme `nb_sem_pergunta_nenhuma=0` [nao verificado — transcrição fornecida].
-- **Chamados vivos em células `nunca_bateu`: 12**, nos módulos `ausencia_colab`, `batida_ausente`, `disputa_supervisao` e `sem_previsao_escala` [nao verificado — transcrição fornecida].
-- **Quantidade de células distintas com chamado vivo: [nao verificado].** O campo fornecido conta chamados; não informa a contagem distinta de células [nao verificado].
-
-## 30/10 07:39 · sessao 74c8c0ee326f · O261-V · sonda · origem=Code
-
-**1. Célula 129745**
-
-- **P46703, resposta 19:00:** materialização anterior por 666 e validação posterior por 657 são a assinatura compatível com `_carimbar_validacao`, que altera somente `validada_em/por`. Os outros escritores positivos também gravam materialização no ato. A execução histórica exclusiva permanece **[não verificado]**. (`app/chamados/services/validacao.py:127-133`; `app/chamados/services/materializacao.py:506-530`, `1148-1198`; `app/chamados/services/disputa_emissao.py:1561-1577`)
-- **Lastro de P46703:** a lista fornecida não mostra batida em **21/10 19:00**; `materializada_em` sozinho não demonstra plantio. Ausência absoluta de lastro: **[não verificado]**, pois faltam os vínculos das batidas com a pergunta, usados pelo juiz. (`app/chamados/juizes.py:674-681`, `730-732`)
-- **P46704, resposta 07:00:** existe correspondência horária em **B140649, 22/10 07:00, não retratada**, segundo a sonda **[não verificado — sem confirmação independente]**. Escritor exclusivo da validação: **[não verificado]**; validação seguida de materialização e carimbo de simetria produzem estados compatíveis. (`app/chamados/services/validacao.py:389`, `415-417`; `app/chamados/services/materializacao.py:506-530`, `1194-1198`)
-- **CH33286 cobra E19:00:** o lastro horário de S07:00 não satisfaz essa cobrança; o fechador exige os marcos cobrados acesos. Dono da contradição **fio morto: ESTRUTURA**; dono específico do furo: **[não verificado]**. (`app/ponto/services/lastro.py:170-181`; `app/chamados/services/vigia_fio.py:9-14`; `app/ponto/management/commands/e6_oraculo.py:90-100`; marco cobrado: **[não verificado — sonda]**)
-
-**2. Célula 129747**
-
-- **P49422, resposta 19:00:** mesma assinatura de validação posterior à materialização, compatível com `_carimbar_validacao`; execução histórica exclusiva **[não verificado]**. (`app/chamados/services/validacao.py:127-133`)
-- **Lastro de P49422:** nenhuma batida em **23/10 19:00** aparece na lista fornecida. Plantio vinculado ou ausência absoluta de lastro: **[não verificado]**. (`app/chamados/juizes.py:674-681`, `730-732`; conteúdo da lista: **[não verificado — sonda]**)
-- **P49423, resposta 07:00:** correspondência horária em **B140652, 24/10 07:00, não retratada** **[não verificado — sonda]**. Escritor exclusivo da validação **[não verificado]**, pelos mesmos caminhos concorrentes de validação e simetria. (`app/chamados/services/validacao.py:389`, `415-417`; `app/chamados/services/materializacao.py:506-530`, `1194-1198`)
-- **CH34254 cobra E19:00:** S07:00 não comprova atendimento desse marco. Dono do fio morto: **ESTRUTURA**; dono específico do furo: **[não verificado]**. (`app/ponto/services/lastro.py:170-181`; `app/chamados/services/vigia_fio.py:9-14`; marco cobrado: **[não verificado — sonda]**)
-
-**3. Célula 129749**
-
-- **P50179, resposta 19:00:** assinatura compatível com `_carimbar_validacao` sobre materialização anterior; execução histórica exclusiva **[não verificado]**. (`app/chamados/services/validacao.py:127-133`)
-- **Lastro de P50179:** nenhuma batida em **25/10 19:00** aparece na lista fornecida. Plantio vinculado ou ausência absoluta de lastro: **[não verificado]**. (`app/chamados/juizes.py:674-681`, `730-732`; conteúdo da lista: **[não verificado — sonda]**)
-- **P50180, resposta 07:00:** correspondência horária em **B140653, 26/10 07:00, não retratada** **[não verificado — sonda]**. Escritor exclusivo da validação **[não verificado]**: a igualdade mostrada até segundos não distingue validação seguida de materialização dos carimbos de simetria. (`app/chamados/services/validacao.py:389`, `415-417`; `app/chamados/services/materializacao.py:506-530`, `1194-1198`)
-- **CH34850 cobra E19:00:** S07:00 não comprova atendimento desse marco. Dono do fio morto: **ESTRUTURA**; dono específico do furo: **[não verificado]**. (`app/ponto/services/lastro.py:170-181`; `app/chamados/services/vigia_fio.py:9-14`; marco cobrado: **[não verificado — sonda]**)
-
-**4. Célula 129751**
-
-- **P50883, resposta 19:00:** assinatura compatível com `_carimbar_validacao` sobre materialização anterior; execução histórica exclusiva **[não verificado]**. (`app/chamados/services/validacao.py:127-133`)
-- **Lastro de P50883:** nenhuma batida em **27/10 19:00** aparece na lista fornecida. Plantio vinculado ou ausência absoluta de lastro: **[não verificado]**. (`app/chamados/juizes.py:674-681`, `730-732`; conteúdo da lista: **[não verificado — sonda]**)
-- **P51025, resposta 07:00:** correspondência horária em **B140654, 28/10 07:00, não retratada** **[não verificado — sonda]**. Escritor exclusivo da validação **[não verificado]**, pelos caminhos distintos já identificados. (`app/chamados/services/validacao.py:389`, `415-417`; `app/chamados/services/materializacao.py:506-530`, `1194-1198`)
-- **CH35331 cobra E19:00:** S07:00 não comprova atendimento desse marco. Dono do fio morto: **ESTRUTURA**; dono específico do furo: **[não verificado]**. (`app/ponto/services/lastro.py:170-181`; `app/chamados/services/vigia_fio.py:9-14`; marco cobrado: **[não verificado — sonda]**)
-
-**5. Célula 140114**
-
-- **P50169, resposta 17:30:** assinatura compatível com `_carimbar_validacao` sobre materialização anterior; execução histórica exclusiva **[não verificado]**. (`app/chamados/services/validacao.py:127-133`)
-- **Tem lastro horário no dado:** **B137026, 25/10 17:30:12, não retratada** **[não verificado — sonda]**. Isso não comprova atendimento de **E21:30**, cobrada por CH35101, nem o vínculo com a pergunta, ausente na sonda. A cobrança é julgada pelo próprio marco. (`app/ponto/services/lastro.py:170-181`; `app/chamados/juizes.py:674-681`; marco cobrado: **[não verificado — sonda]**)
-- **P50170:** não há validação gravada no estado apresentado **[não verificado — sonda]**. A cláusula exata que produziu `viva=False` é **[não verificado]**: `fantasma` não pertence às vias que encerram por identidade. Antes do retorno obrigatório de pergunta viva para célula acusando, os encerramentos compatíveis com os campos mostrados são **tranca por leitura**, em `1010-1011`, ou **marco próprio aceso na ATA**, em `1050-1052`. (`app/chamados/juizes.py:1005-1057`)
-- Para `orfao_14h`, o marco próprio é **S/hf**; sua prova lê `cel.ata.lampadas[].acesa`. A sonda apresenta `dna.lampadas`, sem essa ATA e sem a tranca: não permite escolher a cláusula. Dono do fio morto: **ESTRUTURA**; dono específico do furo: **[não verificado]**. (`app/chamados/juizes.py:823-828`, `866-872`; `app/chamados/services/vigia_fio.py:9-14`)
-
-**Classes e pontos de decisão**
-
-**Validação sobre materialização anterior.** O caminho concreto da cópia carimba a validação em `validacao.py:389`, mas só chama a unidade de materialização se `materializada_em` estiver nulo, em `415-417`. O lote posterior também exige materialização nula, e a devolução da validação não atua quando já existe materialização. Esse caminho permite conservar validação sem reapurar a unidade; identificar sua execução histórica em cada pergunta é **[não verificado]**. (`app/chamados/services/validacao.py:182-183`, `389`, `415-417`; `app/chamados/services/materializacao.py:1286-1290`)
-
-**Pergunta morta não equivale a cobrança satisfeita.** `pergunta_viva` retorna `False` imediatamente com `validada_em` preenchido. Já `lastro` mantém `furo_real` quando a lâmpada cobrada está apagada e só encaminha `com_lastro` ao `reconciliar()`. Portanto, as respostas 07:00/17:30 com correspondência horária não demonstram falha do fechador das entradas 19:00/21:30. (`app/chamados/juizes.py:1006-1007`; `app/ponto/services/lastro.py:265-272`, `306-317`)
-
-**Rejulgamento e fechamento.** O evento de batida aciona o cartório; o cartório monta a ATA atual e tenta reconciliar quando todos os marcos da cobrança acenderam. O reconciliador por absolvição da célula retorna sem fechar quando ela ainda acusa. Qual desses caminhos efetivamente rodou, recusou ou falhou nos atos apresentados — a solicitada “linha em que não fez” — é **[não verificado]**. (`app/ponto/signals.py:108-135`; `app/ponto/services/cartorio.py:1148-1163`; `app/chamados/reconciliador.py:975-976`)
-
-**Dono L-099.** O fio morto é declarado contradição estrutural; isso não autoriza classificar automaticamente a causa do furo. O juiz exige flags de cadastro, batida fora de turno, paridade das batidas **atribuídas ao dia** e pertencimento à lista `dias_cadastro_x_realidade`. Esses resultados não constam da sonda; contar as cinco/seis batidas da janela vizinha não reproduz esse julgamento. Assim, atribuir definitivamente os furos a CADASTRO ou BATIDA seria **[não verificado]**. (`CLAUDE.md:306-316`; `app/ponto/management/commands/e6_oraculo.py:90-100`; `app/chamados/services/vigia_fio.py:99-101`)
-
-_381 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_383 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
