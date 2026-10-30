@@ -1,7 +1,51 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **30/10/2026 16:58** · publicado em **30/10/2026 17:03** (UTC-3)
+> Ultima resposta processada: **30/10/2026 17:06** · publicado em **30/10/2026 17:08** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 30/10 17:06 · sessao 79968c2291fd · SUITE-POR-IMPACTO · verificador · origem=Code
+
+[resposta retida: caminho_de_segredo -- nao se publica credencial nem caminho de segredo]
+
+## 30/10 17:04 · sessao 02042694a309 · - · - · origem=Ronald (tmux)
+
+1. **“Inteira” precisa significar inventário efetivamente executado.** O CI usa `RunnerComQuarentena`, que poda testes e conserva o paralelismo; pode congelar o relógio. O mapa deve registrar testes descobertos/executados, skips, quarentena, labels, settings e parâmetros, recusando seleção quando a geração estiver incompleta ou incompatível. Fontes: `app/config/settings/ci.py:40`; `app/core/runner_quarentena.py:75`; `app/core/runner_quarentena.py:86`; `app/core/runner_quarentena.py:93`. A lista lê `ate` mas não filtra prazo em `ler_quarentena`; não presumir reinclusão automática só porque passou tempo: `app/core/quarentena_lista.py:20`; `app/core/quarentena_lista.py:25`.
+
+2. **Import-time não equivale a arquivo sem contexto.** Há registro de signals durante `ready()` e decorators; há tuplas derivadas no import. Se outra função do mesmo arquivo executar em testes, o fallback “arquivo que NENHUM contexto tocou” não protege os leitores das partes importadas. Alterar contrato: dependências de import/configuração/registro precisam virar dependências conservadoras ou gatilho de inteira; contexto vazio não pode ser descartado como irrelevante. Fontes: `app/ponto/apps.py:7`; `app/ponto/signals.py:131`; `app/core/configuracao_efeito.py:278`; `app/core/configuracao_efeito.py:294`. O funcionamento interno de atribuição do contexto pela versão instalada de coverage não está na cópia: [não verificado].
+
+3. **O scanner estático proposto perde contratos existentes.** Um teste chama o varredor por helper, ficando `os.walk` e `open` fora de sua fonte; outro inspeciona linhas das funções e o dispatch vivo sem `ast.parse`/`ast.walk`/`glob`. Alterar: inventário explícito dos consumidores de fonte, introspecção e helpers transitivos, obrigatório em toda seleção; descoberta incerta ⇒ inteira. Fontes: `app/core/tests/test_selo_sem_data_cravada.py:23`; `app/core/tests/test_selo_sem_data_cravada.py:28`; `app/core/datas_cravadas.py:80`; `app/core/datas_cravadas.py:96`; `app/ponto/tests/test_c3_ordem_dos_receivers_da_batida.py:56`; `app/ponto/tests/test_c3_ordem_dos_receivers_da_batida.py:72`; `app/ponto/tests/test_c3_ordem_dos_receivers_da_batida.py:93`.
+
+4. **Cache e estado compartilhado tornam cobertura observada dependente da ordem.** O catálogo tem cache de módulo por 60 segundos; a IA evita executar o produtor quando encontra cache; a cifra usa `lru_cache`. Testes já limpam cache e registram cleanup, e há comentário documentando vazamento entre testes. Alterar: reconhecer que executar uma vez não identifica todos os consumidores; registrar políticas conservadoras para arquivos com caches/estado global e validar isolamento/ordem, com inteira quando não houver garantia. Fontes: `app/ponto/catalogo/ausencias.py:257`; `app/ponto/catalogo/ausencias.py:267`; `app/core/context_processors_ia.py:22`; `app/core/crypto_fields.py:10`; `app/ponto/tests/test_o124_medico_sai_do_cadastro.py:60`; `app/colaboradores/tests/test_porta_cadastro.py:109`.
+
+5. **Prefixos de métodos não provam cobertura de todo o ciclo do teste.** A cópia usa `setUpTestData` herdado e cleanups; o contrato precisa provar atribuição correta de classe/módulo, setup de classe, corpo, teardown, fixtures e cleanup, inclusive em workers. O uso de `type(self)/cls.__module__` é compatível com a herança local; não há evidência para acusá-lo isoladamente de erro. Fontes: `app/ponto/tests/test_furo_parcial_sem_cobranca.py:34`; `app/ponto/tests/test_furo_parcial_sem_cobranca.py:87`; `app/ponto/tests/test_o124_medico_sai_do_cadastro.py:71`. Não encontrei fonte das bibliotecas na cópia que permita provar `start_dynamic_context`, propagação multiprocessing ou fechamento dos contextos: [não verificado]. Exigir prova pequena com diferentes módulos/workers e fases, confirmação de arquivos de dados por processo, ausência de contaminação entre contextos, caminho canônico `/app`→`app/`, isolamento entre gerações e rejeição de combine parcial. [não verificado]
+
+6. **A configuração atual de coverage não serve como default silencioso.** Ela declara `source=apps` e omite config, `__init__.py`, migrations e testes; o container trabalha em `/app`. Alterar: rcfile novo integral e explícito, escopo real dos pacotes, política de exclusões e validação da presença de contextos de cada módulo esperado. Fontes: `app/.coveragerc:2`; `app/.coveragerc:4`; `app/.coveragerc:6`; `app/.coveragerc:8`; `app/Dockerfile:8`. Coverage 7.15.0, Django 5.2.14 e tblib 3.2.2 estão declarados, mas sua presença na imagem em execução segue [não verificado]: `app/requirements.txt:12`; `app/requirements.txt:13`; `app/requirements.txt:50`; o Dockerfile instala requirements em `app/Dockerfile:37`.
+
+Também há testes lendo arquivo sem AST, como templates e requirements, e testes que pulam quando `bin/` não está montado. O contrato deve tratar isso como limite efetivo de observação, não como ausência de dependência. Fontes: `app/core/tests/test_r16_link_de_senha.py:35`; `app/core/tests/test_contract_tblib_no_paralelo.py:35`; `app/core/tests/test_apertos_esteira.py:26`; `app/core/tests/test_apertos_esteira.py:47`.
+
+## 30/10 17:04 · sessao 20e314369dd1 · - · - · origem=Ronald (tmux)
+
+1. **O diff prometido não é o diff descrito.** `git diff --name-only <base>` não inclui arquivos não rastreados; a porta atual já precisa consultar separadamente `git ls-files -o --exclude-standard` (`bin/arvore_do_push.sh:89-90`). Alterar contrato: unir diff tracked + untracked, usar caminhos terminados em NUL, contemplar exclusão/renomeação e erro de Git/base inexistente; qualquer erro ⇒ INTEIRA. O hash existente pretende cobrir tracked+untracked por índice descartável (`bin/arvore_hash.sh:4`, `bin/arvore_hash.sh:13-16`, `bin/arvore_hash.sh:27-28`).
+
+2. **24 h é validade temporal, não validade causal.** O precedente de reutilização exige hash exato da árvore, impressão digital e status OK (`bin/pre-push.sh:61-64`); a régua recusa carimbo se o conteúdo muda durante o run (`bin/regua.sh:191-194`). Alterar contrato: armazenar hash de árvore do mapa, commit/base, versão de instrumento/plugin/configuração/labels/imagem; comparar mapa→cópia além do diff base→cópia e rejeitar geração se árvore mudou durante execução. Se base escolhida posterior ao mapa omite mudanças intermediárias, o mapa pode parecer jovem e servir uma dependência velha [não verificado: consequência lógica do contrato]. Data futura ou ilegível também deve invalidar mapa [não verificado: alteração proposta].
+
+3. **A trava não pode envolver outra vez `suite.sh`.** A porta já executa a trava (`bin/suite.sh:96`); o risco de autoespera por aninhamento está explícito (`bin/suite.sh:17-19`). A trava global é `/tmp/juliani_db_test.lock`, espera 3600 s por default e retorna 75 sem executar comando quando não consegue a vez (`bin/trava_teste.sh:21-22`, `bin/trava_teste.sh:35-42`). Alterar contrato: uma única aquisição pela porta; propagar `--espera`; 75 ⇒ “não rodou”, sem publicar mapa ou classificar teste vermelho. `--quem` só lê um arquivo auxiliar (`bin/trava_teste.sh:28`), portanto não usá-lo como aquisição/precondição.
+
+4. **`exec` final impede registrar medida depois.** `suite.sh` substitui seu processo pela trava/comando (`bin/suite.sh:96-103`). Alterar contrato: wrapper chama a porta como subprocesso, salva rc imediatamente e finaliza medida; não faz `exec suite.sh` se a mesma chamada precisa registrar duração/rc ao terminar. Usar arquivo de resultado por run e conclusão explícita; a semântica exata de `run_in_background` da sessão não está no código [não verificado].
+
+5. **Veredito textual não substitui rc nem distingue cobertura de suite.** O pre-push guarda o rc real, filtra só para apresentação, trata 75 e mostra saída crua quando não há `Ran` (`bin/pre-push.sh:137-153`); a régua reconhece o erro de serialização `cannot pickle 'traceback' object` e ausência de `Ran` (`bin/regua.sh:172-179`). Alterar contrato: exigir rc da suite + `Ran` + último veredito compatíveis; separar `rc_suite`, `rc_coverage`, `rc_combine`, `rc_selos`. Coverage ausente, coleta parcial, morte de worker/OOM e suite interrompida não podem produzir mapa utilizável só porque existe JSON [não verificado: regras propostas]. Mapa vermelho pode ser preservado como diagnóstico, mas habilitar seleção com ele exige prova de completude [não verificado].
+
+6. **A medida proposta não mede a meta global.** As suites existentes da régua e do pre-push continuam fora do novo wrapper (`bin/regua.sh:165-169`, `bin/pre-push.sh:182-184`); há ainda control-plane `tenants` com outro settings (`bin/pre-push.sh:194-195`). Alterar contrato: definir o que conta como suite inteira e instrumentar todas as portas que entram no numerador, incluindo geração, repetições e abortos que consumiram execução; acrescentar `run_id`, obra/cópia, árvore, labels e identificação do pouso. Separar espera, selos, execução Django e pós-processamento [não verificado: esquema proposto].
+
+7. **“Log de pousos” precisa de definição.** O código registra lote e seus diretórios no integrador (`bin/integrador.sh:24-29`), enquanto o histórico append disponível é de deploy provado, condicionado por flags (`bin/deploy.sh:342-348`); o integrador acaba chamando o executor do lote (`bin/integrador.sh:51-52`). Alterar contrato: escolher fonte e definição de pouso, janela e regra de associação/deduplicação. Os valores “22 suites, 324 min, ~3,7/pouso” e a possibilidade de calcular ≤1,5 com os logs existentes não são verificáveis com o dado fornecido [não verificado].
+
+8. **`ESCAPOU` precisa de observador, identidade e persistência.** O pre-push testa o app do commit exportado, separadamente da árvore de trabalho (`bin/pre-push.sh:27-38`), e a reutilização depende de igualdade comprovada (`bin/pre-push.sh:61-68`). Alterar contrato: correlação por hash da árvore completa e ambiente, lista de testes selecionados/executados e IDs das falhas; registrar suspensão persistente e consultá-la antes de toda seleção. “Desligar = não chamar” não força os demais construtores a obedecer [não verificado: lacuna do contrato]. Não há implementação atual de `ESCAPOU` verificada [não verificado].
+
+9. **PRONTO 5 não é reproduzível só com os três nomes de módulos.** Os arquivos existem e usam datas relativas ao relógio (`app/ponto/tests/test_cartorio_veto_nao_e_emitido.py:33`, `app/ponto/tests/test_furo_parcial_sem_cobranca.py:48`, `app/ponto/tests/test_veto_que_cai_rejulga.py:41`). Alterar contrato: fixar árvore anterior, árvore defeituosa, base do mapa, momento da geração, data/configuração de reprodução e os cinco IDs exatos esperados; provar que a seleção executou esses IDs e reproduziu os cinco FAIL. O conteúdo dos commits históricos e os cinco FAIL alegados não foram fornecidos nem puderam ser verificados nesta cópia [não verificado].
+
+## 30/10 17:04 · sessao e42d35092652 · - · - · origem=Ronald (tmux)
+
+[resposta retida: caminho_de_segredo -- nao se publica credencial nem caminho de segredo]
 
 ## 30/10 16:58 · sessao 0c34feaa35e2 · CALENDARIO-HOJE · verificador · origem=Code
 
@@ -862,69 +906,4 @@ A tabela é julgamento sobre as respostas anexadas; as justificativas positivas 
 
 O N+1 de `p.celula` apontado em 31b8cec0 é achado novo, distinto do custo de `_ts_tipo_do_plantio` no item 4. Não o usaria para dar crédito nesse item. (`app/api/views.py:1043`; `app/api/views.py:1045`; `app/chamados/models.py:2172`, referências das respostas A/B.)
 
-## 30/10 15:01 · sessao c148d26f9db9 · - · - · origem=Ronald (tmux)
-
-Sugestão de notas enviada ao pai; os pontos que exigem cautela são:
-
-- Item 4: `d6adf8c0=n/a`; `519fa2c2` e `af2cf55f=existia`, por inferência da ampliação dos testes entre versões. A cronologia efetiva do RED está **[nao verificado]**.
-- Item 2: checagens negativas específicas como “não encontrei segundo juiz” sustentam **EM_PARTE** pela definição literal; mera menção a reutilizar leitor não identifica a divergência entre sugestões. (`app/escala/services/cadastro_realidade.py:336`; `app/escala/services/fase_na_tela.py:50`)
-- Item 3: A/d6 aponta a ação sem identidade do vínculo e registra ausência de confirmação do caso real: **VIU**. B/d6 identifica somente a ausência de prova dos dias: **EM_PARTE**. (`app/escala/services/cadastro_realidade.py:488`; `app/escala/tests/test_o261v_fase_na_lista.py:23`)
-- Item 5: A e B/d6 inventariam leitores de `lista()`, mas não denunciam a omissão na LEI-AKITA: **EM_PARTE**. (`app/escala/management/commands/fechar_avisos_regua_na_lista.py:32`; `app/ponto/management/commands/fechar_chamados_vinculo_na_lista.py:40`)
-
-## 30/10 15:01 · sessao ee86488cf02c · - · - · origem=Ronald (tmux)
-
-A cópia local contém o registro final dos seis itens em `app/docs/RELATO.md:13`; o mesmo registro situa o achado final em `44e6a8a1`. A cronologia resumida relaciona `469d61ba`, `31b8cec0`, `691508dd` e `44e6a8a1`, mas não conserva as seis árvores para comparação direta (`app/docs/RELATO.md:24`).
-
-Temporalidade recomendada, por inferência dos anexos:
-
-| Item | 469d61ba | Demais voltas |
-|---|---|---|
-| 1 — contexto usa dia do marco | existia | existia |
-| 2 — DNA versus escala/envelope | existia | existia |
-| 3 — RED parcial | existia | existia |
-| 4 — custo do plantio na UI | existia | existia |
-| 5 — intervalo diurno muda de classe | existia | existia |
-| 6 — regeneração descasa cabeçalho/texto | n/a | existia |
-
-A primeira volta já descreve produtor lendo o DNA, plantio dentro da classificação e ausência de cobertura/RED; a segunda já descreve `dia_mostrado` consultando DNA atual enquanto o texto permanece gravado. São evidências dos próprios anexos; a introdução exata de cada implementação por commit não foi verificada. [não verificado] [nao verificado]
-
-Há duas ressalvas para a consolidação:
-
-- Item 6 em `469d61ba`: o cabeçalho ainda usa `data_evento`, portanto a contradição D/D+1 apontada naquela volta é outro defeito, anterior à propriedade que passa a acompanhar a célula. Isso sustenta `n/a` para o mecanismo específico de regeneração. [não verificado]
-- Item 3: as respostas da primeira volta mencionam RED histórico não verificado e lacunas de cobertura, sem identificar o TypeError; a classificação entre `VIU` e `EM_PARTE` depende de tratar “RED parcial” como achado composto ou exigir o mecanismo específico. `app/docs/RELATO.md:13` registra que a triagem posterior considerou o item 3 visto.
-
-O registro posterior atribui item 2 e item 3 a “viu e a triagem descartou”, item 4 a parcial e item 6 a parcial, mas isso é relato de classificação anterior, não substitui a leitura cega de A e B (`app/docs/RELATO.md:13`).
-
-O código local confirma as premissas anteriores à cura: fábrica grava o dia recebido (`app/chamados/services/fabrica_da_celula.py:122`); detector grava a saída esperada (`app/chamados/detector_anomalias.py:45`, `app/chamados/detector_anomalias.py:49`); emissão deriva identidade do contexto (`app/chamados/services/disputa_emissao.py:347`); plantio usa escala vigente e envelope (`app/chamados/juizes.py:300`, `app/chamados/juizes.py:305`, `app/chamados/juizes.py:308`). A cópia não contém a implementação NOTURNO descrita nos anexos: produtor tem assinatura antiga (`app/chamados/catalogo/query.py:45`) e lote ainda verifica somente o instante construído de `data_evento` (`app/chamados/services/validacao.py:817`).
-
-## 30/10 15:01 · sessao c7e3163faa7a · - · - · origem=Ronald (tmux)
-
-Evidências temporais disponíveis:
-
-- Os seis achados de `df863705` estão registrados em `app/docs/RELATO.md:83`; `22c08b8e` é identificado como a “cura dos 6” em `app/docs/RELATO.md:84`. Para esses seis defeitos, as três primeiras voltas são anteriores à cura; nas duas últimas, o registro informa correção. Ancestralidade exata dos hashes antigos: [nao verificado].
-- O veto ausente no c2 precedia a suíte: o relato identifica expressamente um “bug no caminho escondido enquanto o c2 recusava intervalo”, corrigido em `13963efb`. Portanto, sua descoberta posterior não justifica automaticamente `n/a` nas primeiras voltas. (`app/docs/RELATO.md:85`, `app/docs/RELATO.md:86`)
-- A reprovação da ordem da docstring aconteceu sobre `3ab94852`; `e281d2f1` corrigiu apenas a lista, mantendo o código executável. O registro não informa em qual hash a ordem ficou errada; existência desse defeito específico nas voltas anteriores: [nao verificado]. (`app/docs/RELATO.md:87`)
-- O relato distingue a alteração do comentário da cerca em `3ab94852` da correção posterior da docstring; não permite concluir que o erro da docstring nasceu em `3ab94852`. (`app/docs/RELATO.md:87`)
-
-Item 6, composição duplicada:
-
-- Nenhuma resposta anterior ao opus nomeia a duplicação **entre vigia e reconciliador**, acompanhada da divergência sem data; atribuir `VIU` a elas não encontra suporte no texto fornecido. [nao verificado por arquivo da resposta]
-- As observações sobre janela nos testes, K6 consultado duas vezes e memo envelhecido tratam problemas próximos; são candidatos a `EM_PARTE` pela definição literal “toca o tema sem o defeito”. [nao verificado por arquivo da resposta] [nao verificado]
-- A composição atual documenta expressamente que antes existiam duas versões e que o `None` cabe a cada consumidor. (`app/chamados/services/vigia_fio.py:458`, `app/chamados/services/vigia_fio.py:464`)
-- A cerca atual delega à composição única. (`app/chamados/reconciliador.py:711`)
-
-Ambiguidade importante do item 8:
-
-- Se o item significa estritamente **“c2 não consulta veto”**, ele está corrigido em `13963efb`; nesse recorte, a última volta recebe `n/a`. (`app/docs/RELATO.md:86`, `app/chamados/reconciliador.py:852`)
-- Se significa **“a porta de nascimento/renascimento não garante o veto”**, permanece após essa cura: o censo identifica ausência na porta e no renascimento. Nesse recorte, a corrida descrita por A em `13963efb` demonstra precisamente a brecha estrutural. (`app/docs/RELATO.md:48`, `app/docs/RELATO.md:49`, `app/chamados/models.py:666`, `app/chamados/models.py:685`)
-- O defeito de B em `13963efb`, vínculo ausente liberado, possui causa própria: `motivo_do_veto` retorna `None` quando `ec is None`. Pode ser listado como novo; sua ocorrência real não foi demonstrada. (`app/ponto/services/furos_vetados.py:26`; ocorrência [nao verificado])
-
-## 30/10 15:01 · sessao f018b9d0bbb4 · - · - · origem=Ronald (tmux)
-
-- **Custo (item 3):** 4da A=EM_PARTE: “consulta de exportação duplicada por intervalo vivo” (`app/chamados/reconciliador.py:703,709,749,1436`, referências da resposta); B=VIU: “C6 também passou a anteceder as recusas do c1” e “esse cenário não mede o custo novo” (`app/chamados/reconciliador.py:394`; `app/ponto/tests/test_selo_chokepoint_escrita.py:239`, referências da resposta). Nas voltas 68 e 0ed, A/B=NAO_VIU. Em 22 e 139, n/a: cerca reordenada e selo acrescentado, conforme `app/docs/RELATO.md:84`; fonte atual confirma cerca depois dos vetos em `app/chamados/reconciliador.py:858`.
-- **Guarda morta (item 4):** nenhuma resposta das primeiras três aponta o defeito. Contudo, **não há prova de que a guarda existisse nesses hashes**: 68 A e 0ed A/B descrevem relavratura incondicional ao reapontar ao mesmo destino, sugerindo que a guarda foi introduzida depois para curar a idempotência; hash de introdução [nao verificado]. Recomendo n/a nas primeiras três, explicitando a inferência e a limitação. Em 22/139, n/a: guarda apagada, `app/docs/RELATO.md:84`.
-- **R1 sem mordida (item 5):** primeiras três A/B=NAO_VIU. A única aproximação literal é 4da B: “R1/R2/R3 [...] possuem asserções da mudança”; isso afirma cobertura, sem revelar a lacuna do renascimento. Se “toca o tema” incluir afirmação favorável, B=EM_PARTE nesse único caso; recomendo NAO_VIU. Em 22/139, n/a: cura registrada em `app/docs/RELATO.md:84`; asserções atuais exigem chamado renascido e recusa nomeada em `app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:151` e `:163`.
-
-A cronologia consolidada está em `app/docs/RELATO.md:81`–`:87`; ela confirma o achado no df863705, mas não demonstra retrospectivamente que a guarda morta existia nas três primeiras árvores.
-
-_615 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_619 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
