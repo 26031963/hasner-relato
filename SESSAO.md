@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 30/10/2026 17:50:59.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (2.8 MB). Acoes na janela: **101**.
+**Medido em 30/10/2026 17:55:58.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (2.8 MB). Acoes na janela: **103**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 17:54:34 | Bash |  | `cd /home/ronald/saas-hasner/logs/calendario_hoje && until grep -q '^rc=' green15.log 2>/dev/null; do /usr/bin/sleep 30; done; for f in suite_pouso5 mutante15 green15; do echo == $f; grep -E "^(FAIL\|ERROR):\|^Ran \|^(OK\|FAILED)($\| \()\|^rc=" $f.log \| tail -4; done` |
+| 17:54:30 | Bash |  | `cd /home/ronald/saas-hasner && date +%H:%M && python3 - <<'EOF' p='app/docs/RELATO.md' L=open(p).read().split('\n') novo=[ "> lei: CODEX-CONTEXTO-DA-CASA PRONTO 5 (PERGUNTA, nao trava a fila): o A/B deu EMPATE e nao cumpre nem o 'fica' nem o 'volta magro' -- hash 61ae629c, mesma .q, Sol nas 4 rodadas, n=2 por braco, so o AGENTS.md variando (o brief novo NAO medido): VIU 4 x 4; EM PARTE 4 (com) x 6 ...` |
 | 17:44:14 | Bash |  | `cd /home/ronald/wt-cal-hoje-3010-1353/app && python3 - <<'EOF' p='ponto/tests/test_c1_dias_encerrados.py' s=open(p).read() a=''' self.assertEqual(janela[d], dia_encerrado_motivo(self.noturno, d, agora=agora)) ''' b=''' self.assertEqual(janela[d], dia_encerrado_motivo(self.noturno, d, agora=agora)) # a forma do FECHAMENTO ({data: CelulaDia}, `fechamento.py:354-361`) na singular: mesmo valor. MORDE  ...` |
 | 17:40:37 | Bash |  | `cd /home/ronald/saas-hasner/logs/calendario_hoje && until grep -q '^rc=' verif8.run 2>/dev/null; do /usr/bin/sleep 20; done; tail -1 verif8.run; head -c 5000 verif8.txt` |
 | 17:40:35 | Bash |  | `cd /home/ronald/saas-hasner && L=logs/calendario_hoje W=/home/ronald/wt-cal-pouso-3010-1638; git -C $W diff 6c37ad84 HEAD --stat > $L/arquivos8.txt; git -C $W log --format='%h %s' 6c37ad84..HEAD >> $L/arquivos8.txt; cat > $L/verif8.q <<'EOF' Obra CALENDARIO-HOJE-NAO-E-FALTA, volta delta. Arvore: o hash informado; base main 6c37ad84 (`git diff 6c37ad84 HEAD`); o delta e o ultimo commit (`git show H ...` |
