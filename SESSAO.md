@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 30/10/2026 03:41:56.** Transcript: `e3f79949-a90b-4c64-a5c2-afd178149c30.jsonl` (6.9 MB). Acoes na janela: **288**.
+**Medido em 30/10/2026 03:47:06.** Transcript: `e3f79949-a90b-4c64-a5c2-afd178149c30.jsonl` (7.0 MB). Acoes na janela: **291**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 03:46:14 | Bash | Inspect construtor background command | `for p in 2880662; do tr '\0' ' ' </proc/$p/cmdline \| grep -o "eval '.*" \| cut -c1-400; done; pstree -p 2880662 2>/dev/null \| head -5` |
+| 03:46:11 | Bash | Check copy is clean and idle | `git -C /home/ronald/wt-o261c3-3010-0232 status --porcelain \| head; git -C /home/ronald/wt-o261c3-3010-0232 log --oneline -1; for p in $(pgrep -f "wt-o261c3"); do c=$(tr '\0' ' ' </proc/$p/cmdline); echo "$p ${c:0:160}"; done \| grep -v "pgrep" \| head -5` |
+| 03:46:05 | Agent | Opus re-verify O261 (C) v5 | `Obra O261 (C) VIVA-SEM-CHAMADO-DO-DIA, 2ª leitura FINAL antes do pouso. A 1ª leitura opus REPROVOU o df863705 com 6 achados; o construtor curou e o Codex releu. Cópia: /home/ronald/wt-o261c3-3010-0232. Diff da obra inteira: `git -C /home/ronald/wt-o261c3-3010-0232 diff 270f75b7 7a8e4604`. Arquivos: app/chamados/reconciliador.py, app/chamados/services/vigia_fio.py, app/chamados/tests/test_o261_c_vi ...` |
 | 03:32:25 | Bash | Record opus rejection and medida | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md' L=open(p).read().split('\n') i=next(k for k,l in enumerate(L) if l.startswith('> (C) REMEDIDA COM A CURA')) L.insert(i+1,'> (C) OPUS FINAL REPROVOU df863705 (6 achados, todos procedentes): (1) LEI-AKITA fora dos commits; (2) Pauta DP das 461 exportadas sem codigo nem INCOMPLETO -> INCOMPLETO: sai por script de passivo depois d ...` |
 | 03:32:17 | SendMessage |  | `-` |
 | 03:29:41 | Bash | Record post-cure remeasure in RELATO | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md' L=open(p).read().split('\n') i=next(k for k,l in enumerate(L) if l.startswith('> (C) CONSTRUIDA')) L.insert(i+1,'> (C) REMEDIDA COM A CURA (sombra, `SOMBRA_ARVORE`=copia df863705, sonnet, conferida na saida `logs/o261/sonda_c_saidas_cura.out`; ROLLBACK True, ERROS=0): chamados CRIADOS 0 e RENASCIDOS 0 nas duas competencias; vi ...` |

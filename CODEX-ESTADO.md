@@ -1,7 +1,42 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **30/10/2026 03:41** · publicado em **30/10/2026 03:41** (UTC-3)
+> Ultima resposta processada: **30/10/2026 03:44** · publicado em **30/10/2026 03:47** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 30/10 03:44 · sessao a081963814b3 · O261-C · verificador · origem=Code
+
+**Não encontrei mudança de retorno ou de escrita de domínio causada pelo reordenamento do c2. Há uma ressalva concreta na justificativa: o veto de célula chama `_log.info` antes da cerca; portanto, “conjunções sem efeito colateral” é uma afirmação excessiva.** O caminho continua retornando `False`, mas agora pode alcançar essa chamada de log antes de consultar a cerca. (app/chamados/reconciliador.py:765; app/chamados/reconciliador.py:828–836)
+
+A configuração SaaS versionada filtra esse `INFO` pela raiz em `WARNING`; emissão efetiva em produção: [não verificado]. (app/config/settings/saas.py:169–183)
+
+Nos seis pontos anteriores:
+
+1. **LEI-AKITA no corpo de `22c08b8e`: [não verificado].** Esta cópia não disponibiliza o histórico Git nem o corpo do commit. [não verificado]
+2. **Pauta DP:** a prosa agora atribui expressamente sua geração ao script de passivo depois do pouso. Esse trecho não cria Pauta. Corpo do commit: [não verificado]. (app/chamados/reconciliador.py:688–694)
+3. **Custo:** a cerca está depois dos gates existentes; `CustoDaCercaTest` exige zero chamadas às duas funções da cerca no veto por protesto, e o novo caso mede a batida com teto 31. Permanece a ressalva do log acima. Valores medidos e execução dos testes: [não verificado]. (app/chamados/reconciliador.py:797–836; app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:315–337; app/ponto/tests/test_selo_chokepoint_escrita.py:169; app/ponto/tests/test_selo_chokepoint_escrita.py:273–283)
+4. **Guarda removida:** não está no c2 atual. Os dois chamadores de produção restringem a entrada a pergunta sem destino; o teste do cron exige sucesso na primeira passagem e compara pergunta, chamados e auditoria depois da segunda. (app/chamados/reconciliador.py:860–877; app/chamados/reconciliador.py:1375–1398; app/chamados/services/disputa_emissao.py:404–409; app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:296–308)
+5. **R1/R1b:** agora têm mordida no código do teste: R1 exige ausência de recusa e o mesmo chamado renascido em estado vivo; R1b exige `admin_sem_fato_novo`, retorno falso e pergunta sem destino. (app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:149–169)
+6. **Composição única:** os dois consumidores leem `competencia_do_dia_entregue`; a cerca exclui dia ausente antes da chamada, enquanto o vigia classifica `None` como `aberta`. (app/chamados/reconciliador.py:705–716; app/chamados/services/vigia_fio.py:413–441)
+
+**Vigia:** não encontrei mudança de comportamento pela extração. Permanecem o universo, o filtro C6, a janela da empresa, o memo por empresa/mês/ano e a classificação sem data como `aberta`; o `bool` acrescentado preserva o retorno booleano de K6. (app/chamados/services/vigia_fio.py:404–441; app/ponto/janelas.py:60–63; app/folha/export.py:569–575)
+
+Por classe, nos sítios do diff:
+
+- **Segundo juiz:** nada; os novos caminhos consultam C6, C7, K6 e `motivos_atendidos`. (app/chamados/reconciliador.py:711–727; app/chamados/reconciliador.py:1465–1477)
+- **Segundo escritor fora da porta:** nada; emissão e costura continuam por `abrir` e `reapontar_resolvedora`. (app/chamados/reconciliador.py:837; app/chamados/reconciliador.py:877; app/chamados/reconciliador.py:1513)
+- **Relógio fora da borda:** nada nas funções novas nem nos trechos alterados. (app/chamados/reconciliador.py:685–727; app/chamados/reconciliador.py:1443–1478; app/chamados/services/vigia_fio.py:419–441)
+- **Derivação paralela:** nada novo; a composição foi centralizada. (app/chamados/services/vigia_fio.py:419–441; app/chamados/reconciliador.py:711–713)
+- **Selo/RED sem mordida:** nada concreto nas asserções examinadas; RED executado e suíte verde: [não verificado]. (app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:149–169; app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:296–337)
+- **Ordem de trava:** nada; os gates antecipados fazem leituras/comparações, e `abrir`, que trava o colaborador, permanece depois da cerca. (app/ponto/turnos.py:2516–2523; app/ponto/marcos.py:154–163; app/chamados/reconciliador.py:824–837; app/chamados/models.py:666–669)
+- **Pouso antes do pré-requisito:** nada demonstrado pelo diff; o RELATO registra B pousado e passivo aplicado. Comprovação operacional e remedida exigida: [não verificado]. (app/docs/RELATO.md:3–18)
+
+## 30/10 03:42 · sessao 4da357248cbf · - · - · origem=Ronald (tmux)
+
+c2: nenhum gate anterior à cerca escreve no banco ou adquire trava. Piso, isenção, ausência, protesto, célula e motor apenas leem/comparam; não dependem de algo que a cerca inicializava. O retorno e o estado persistido permanecem iguais, considerando os mesmos dados durante a execução. Referências: `app/ponto/services/cartorio.py:244`, `app/core/constants.py:18`, `app/chamados/catalogo/modulos.py:277`, `app/ponto/turnos.py:2518`, `app/chamados/reconciliador.py:824`, `app/ponto/marcos.py:154`, `app/chamados/catalogo/motor.py:130`.
+
+Existe, porém, uma diferença observável no fluxo: o veto de célula chama `_log.info(...)` antes da cerca (`app/chamados/reconciliador.py:828-835`). Um intervalo que sairia pela cerca antecipada agora pode chegar ao log do veto. Portanto, a afirmação “conjunções sem efeito colateral” é inexata (`app/chamados/reconciliador.py:765`); isso não demonstra mudança de retorno nem escrita de domínio. Emissão efetiva do INFO na configuração ativa: [não verificado].
+
+Ordem de trava: nada introduzido pelo reordenamento; `abrir` e `reapontar_resolvedora` continuam depois da cerca (`app/chamados/reconciliador.py:835-837`, `app/chamados/reconciliador.py:877`).
 
 ## 30/10 03:41 · sessao c7555ec23ce1 · - · - · origem=Ronald (tmux)
 
@@ -392,45 +427,4 @@ Os chamadores de produção encontrados foram o laço de órfãs e a emissão de
 
 Exercitei os dois desvios do S128 com seu corpo extraído em memória e dependências simuladas: ambos alcançaram o carimbo posterior. Integração Django, suíte e mutantes completos: **[nao verificado]**. Nenhum arquivo foi criado, editado ou apagado **[nao verificado por auditoria externa]**. [nao verificado]
 
-## 30/10 02:52 · sessao ba59fdf4e883 · - · - · origem=Ronald (tmux)
-
-Achados confirmados por leitura e chamadas com `open`, gravações e trilha substituídos por objetos em memória:
-
-1. **CLEAR volta a liberar pela porta genérica após expirar.** Estado `disparo.desfecho="seguiu"`, único item andável `ITEM-VIVO`, topo `PAREI: ! CLEAR -- ITEM-VIVO encerrado | espera Ronald`: `_orcamento` retorna `None`; `_relato_parou()` aceita a mesma linha pelo id e o `main` libera. Também ocorre sem disparo ou após um clear novo. Quebra v2(a)/(b) e item 3: a transição própria não impede que sua forma seja reinterpretada como PAREI comum. Referências: `bin/hook_stop_fila1.py:757`, `bin/hook_stop_fila1.py:761`, `bin/hook_stop_fila1.py:818`, `bin/hook_stop_fila1.py:884`, `bin/hook_stop_fila1.py:941`.
-
-2. **Clear tardio conta como ATENDIDO.** Disparo e CLEAR já reconhecidos; passam 65 minutos sem Stop; chega `/clear`; próximo Stop vê marco novo. O código registra ATENDIDO sem comparar a hora do marco com `clear_parei_desde`. Quebra item 4, que exige clear dentro de 30 minutos. Referências: `bin/hook_stop_fila1.py:725`, `bin/hook_stop_fila1.py:728`, `bin/hook_stop_fila1.py:729`.
-
-3. **Gatilho pendente é perdido.** Primeiro Stop: produtor comprovado e contexto 600000/1M, registrando PENDENTE. Próximo Stop, mesmo marco: produtor terminou e contexto 599999/1M. O ramo `not gatilho` apaga a pendência antes de verificar o produtor e não entra PREPARA-CLEAR. Quebra v2(d), primeiro Stop sem produtor. Referências: `bin/hook_stop_fila1.py:766`, `bin/hook_stop_fila1.py:767`, `bin/hook_stop_fila1.py:773`, `bin/hook_stop_fila1.py:778`.
-
-4. **Forma aceita por prefixo.** Com disparo ativo, `PAREI: ! CLEARANCE | espera Ronald` recebe `('libera', ...)`, pois o reconhecimento usa `startswith`. Quebra forma literal v2(a). Referências: `bin/hook_stop_fila1.py:677`, `bin/hook_stop_fila1.py:738`, `bin/hook_stop_fila1.py:746`.
-
-5. **Estado não serializado permite dois disparos no mesmo ciclo.** Dois Stops leem o mesmo estado sem `disparo`, antes de qualquer gravação. Ambos medem gatilho, apendam DISPARO e salvam. Reproduzido com duas threads sincronizadas após a leitura: dois resultados PREPARA-CLEAR, dois eventos DISPARO, dois estados salvos. `os.replace` torna cada escrita atômica, mas não protege ler–decidir–registrar–gravar. Quebra “sem redisparo” e trilha de um disparo por ciclo; ocorrência real de Stops concorrentes em produção [nao verificado]. Referências: `bin/hook_stop_fila1.py:699`, `bin/hook_stop_fila1.py:706`, `bin/hook_stop_fila1.py:781`, `bin/hook_stop_fila1.py:783`, `bin/hook_stop_fila1.py:784`.
-
-6. **Trabalho vivo já detectável pelo caminho antigo não impede a entrada PREPARA-CLEAR.** Topo neutro, contexto no limiar, suite ou push em curso: `_esperando_uma_vez` não encontra declaração ESPERANDO e o código dispara; `_tem_trabalho_em_curso` só seria consultado depois. Reproduzido com essa função respondendo `True`: PREPARA-CLEAR imediato. Confronta “nada em voo é precondição, não efeito” de v2(d); o caso formal `ESPERANDO` comprovado é tratado. Referências: `bin/hook_stop_fila1.py:373`, `bin/hook_stop_fila1.py:773`, `bin/hook_stop_fila1.py:781`, `bin/hook_stop_fila1.py:785`, `bin/hook_stop_fila1.py:987`.
-
-Áreas lidas sem defeito adicional encontrado:
-
-- **Prova do RELATO:** permanece antes da consulta ao orçamento e de qualquer nova liberação. `bin/hook_stop_fila1.py:924`, `bin/hook_stop_fila1.py:932`.
-- **ESPERANDO formal comprovado:** a consulta compartilhada evita duplicar a leitura que consome avanço do arquivo; sem disparo ativo, orçamento registra pendência e devolve ao caminho antigo. `bin/hook_stop_fila1.py:653`, `bin/hook_stop_fila1.py:773`, `bin/hook_stop_fila1.py:946`.
-- **Expiração isolada versus TETO:** naquele Stop, a resposta explícita ocorre antes do TETO e solicita zerá-lo. O defeito é a liberação genérica no Stop seguinte, descrita acima. `bin/hook_stop_fila1.py:750`, `bin/hook_stop_fila1.py:935`, `bin/hook_stop_fila1.py:937`.
-- **Falha aberta:** exceção do orçamento é contida e devolve ao fluxo antigo; o handler externo permanece. `bin/hook_stop_fila1.py:789`, `bin/hook_stop_fila1.py:1014`.
-- **Juiz/porta:** o código novo consulta os juízes existentes de PAREI e ESPERANDO; não encontrei um segundo predicado paralelo para esses dois vereditos. `bin/hook_stop_fila1.py:774`, `bin/hook_stop_fila1.py:660`.
-- **Ordem de travas:** não encontrei inversão nova; o problema concreto é ausência de serialização do estado do orçamento. A trava preexistente de ESPERANDO é não bloqueante e encerra antes da gravação do orçamento. `bin/hook_stop_fila1.py:572`, `bin/hook_stop_fila1.py:602`, `bin/hook_stop_fila1.py:779`.
-
-## 30/10 02:51 · sessao e49c9886afaa · - · - · origem=Ronald (tmux)
-
-Achados confirmados:
-
-1. **Último turno sem `usage` reutiliza medida velha.** `bin/orcamento_contexto.py:82` e `bin/orcamento_contexto.py:87` continuam a busca ao encontrar o último assistente sem `usage` ou com soma zero. Cenário: penúltimo assistente com 600000 tokens; último sem `usage`; marco recente e zero deploys. Retorna 60% e dispara pelo turno anterior. Confirmei com `BytesIO` e mocks, sem escrita. Viola último turno e “sem usage → nao sei” (`app/docs/RELATO.md:22`, `app/docs/RELATO.md:24`). Os casos ilegíveis não incluem essa sequência (`bin/tests/test_orcamento_contexto.sh:137`).
-
-2. **ESTADO sem marco não publica horas e marcos medidos pelo fallback.** O avaliador calcula ambos desde o início do transcript (`bin/orcamento_contexto.py:160`, `bin/orcamento_contexto.py:162`), mas o hook guarda somente contexto (`bin/hook_stop_fila1.py:735`). O leitor do ESTADO devolve horas/marcos `None` sem marco (`bin/orcamento_contexto.py:203`), e imprime apenas uma explicação (`bin/orcamento_contexto.py:219`). Cenário: marco ausente, transcript iniciado há sete horas, três deploys posteriores. O gatilho funciona, mas a linha não oferece os números exigidos pelo item 4 (`app/docs/RELATO.md:25`).
-
-3. **Deploy posterior ao clear pode ser descartado pela precisão incompatível.** Marco guarda epoch fracionário (`bin/marco_de_clear.py:33`); histórico guarda segundos inteiros (`bin/deploy.sh:347`); contagem compara o segundo reconstruído diretamente com a base fracionária (`bin/orcamento_contexto.py:141`, `bin/orcamento_contexto.py:144`). Cenário: clear `12:00:00.100`, append de deploy provado `12:00:00.900`, depois mais dois deploys. Conta dois, embora três sejam posteriores ao marco; quebra item 1(c)/v2(g) (`app/docs/RELATO.md:22`, `app/docs/RELATO.md:27`). O selo usa separação de minutos e não cobre a fronteira (`bin/tests/test_orcamento_contexto.sh:130`).
-
-4. **ATENDIDO aceita clear tardio.** Mudança de marco registra ATENDIDO sem comparar sua hora com o prazo (`bin/hook_stop_fila1.py:725`, `bin/hook_stop_fila1.py:729`), antes da checagem de expiração (`bin/hook_stop_fila1.py:747`). Cenário: CLEAR liberado em T0; nenhum Stop intermediário; clear em T0+40min; próximo Stop registra ATENDIDO. Viola “atendido = marco novo dentro dos 30min” (`app/docs/RELATO.md:25`).
-
-Possível falha adicional do selo: exige impressão do HANDOFF somente para `compact` (`bin/tests/test_handoff_sessao.sh:64`), enquanto para `clear` exige apenas o escritor do marco (`bin/tests/test_handoff_sessao.sh:66`). Portanto uma configuração `clear` que não carrega HANDOFF passa nessa inspeção, apesar do texto de v2(h) mencionar ambos os matchers (`app/docs/RELATO.md:27`). Configuração efetivamente instalada: [nao verificado].
-
-A janela tem número e fonte textual declarados (`bin/orcamento_contexto.py:32`); a fonte externa mencionada e a correção dos tamanhos são [nao verificado]. O escritor do marco é único nos arquivos examinados e usa substituição atômica (`bin/marco_de_clear.py:37`, `bin/marco_de_clear.py:40`); não achei segundo escritor nessa área.
-
-_340 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_342 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
