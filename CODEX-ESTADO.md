@@ -1,7 +1,231 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **30/10/2026 07:33** · publicado em **30/10/2026 07:36** (UTC-3)
+> Ultima resposta processada: **30/10/2026 07:39** · publicado em **30/10/2026 07:41** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 30/10 07:39 · sessao af28e22338ae · O261-N · sonda · origem=Code
+
+**1. Autoria e horários**
+
+- **Quem criou P#51789–51792 e quando: [nao verificado].** A sonda informa abertura da **disputa** em 28/10 06:34:43 e julgamento das perguntas em 30/10 06:35:14; não informa emissor nem nascimento das perguntas [nao verificado]. `aberta_em` pertence à disputa (`app/chamados/models.py:1331`), uma disputa existente pode receber perguntas novas (`app/chamados/services/disputa_emissao.py:618`) e `julgado_em` recebe o instante da lavra do veredito (`app/chamados/veredito_lavrado.py:228`).
+- O escritor de nascimento é `PerguntaDisputa.abrir`, chamado por `gerar_perguntas_disputa`; a criação efetiva ocorre em `app/chamados/models.py:2085`, acionada em `app/chamados/services/disputa_emissao.py:389`. Isso identifica a porta do código, **não o emissor efetivo dessas quatro perguntas [nao verificado]**.
+- **#35679:** a transcrição registra criação em **29/10 09:00:12**, resolução em **30/10 06:35:14**, via **`sistema`**, `respondido_por=None` e `superado_por=None` [nao verificado — dados da transcrição, sem arquivo numerado]. No código, `reconciliar()` passa `EVENTO_VIA['RECONCILIAR']` ao núcleo (`app/chamados/models.py:444`), cujo valor é `sistema` (`app/chamados/catalogo/motor.py:95`). **O escritor de `via_encerramento` é `app/chamados/models.py:209`**, persistido em `:231`; `resolvido_em` é carimbado em `:208`.
+- **Qual serviço/cron chamou esse encerramento e por qual motivo concreto: [nao verificado].** A via identifica o caminho de reconciliação, mas a transcrição não contém a chamada nem sua trilha. O censo seleciona chamados vivos (`app/chamados/services/vigia_fio.py:186`); atribuir a saída da célula a uma rotina específica continua [nao verificado].
+
+**2. Emissão para `nunca_bateu`**
+
+**O emissor efetivo e até o `modulo_origem` de #35679 não aparecem na sonda [nao verificado].** Para o módulo `batida_ausente`, o código contém estes caminhos:
+
+| Caminho | Escritor/delegação e passagem pelo veto |
+|---|---|
+| `detectar_ausencias::_abrir_chamado` | Abre em `app/ponto/management/commands/detectar_ausencias.py:688`; consulta o veto em `:626` e retorna em `:628`. |
+| Cartório | Delega ao funil acima em `app/ponto/services/cartorio.py:1358` e `:1394`; sem adesão, retorna antes, em `:1003`. |
+| `emitir_furo_retroativo` | Delega ao mesmo funil em `app/ponto/management/commands/emitir_furo_retroativo.py:142`; passa pelo veto desse funil. |
+| `vigia_de_hora` | Delega ao cartório por `julgar_celula`, em `app/ponto/services/vigia_de_hora.py:130`. |
+| `reconciliar_grade::_emitir_furo` | Abre em `app/ponto/management/commands/reconciliar_grade.py:499`; consulta o veto em `:494` e retorna em `:496`. |
+| Reconciliador c2, `reemitir_chamado_do_dia` | Abre em `app/chamados/reconciliador.py:862`; consulta o veto em `:838` e retorna em `:842`. |
+| Abertura por formulário/request | Aceita módulo catalogado em `app/chamados/views.py:170`, `:174`; delega em `:197`; cria com o módulo recebido em `app/chamados/services/abertura.py:47`, `:56`. **Não passa pelos dois vetos citados** (`app/chamados/services/abertura.py:19`; `app/chamados/models.py:805`). |
+
+`nunca_bateu` está literalmente em `VEREDITOS_QUE_VETAM` (`app/ponto/marcos.py:119`), aplicado pela leitura da célula em `:155` e pelo retorno em `:161`. Portanto, **os caminhos automáticos acima não podem emitir se essa consulta encontra `nunca_bateu`**; o cartório também interrompe seu corpo quando `adesao is None` (`app/ponto/services/cartorio.py:907`, `:1003`).
+
+A request passa por outro gate de absolvição (`app/chamados/models.py:821`, `:839`), que não equivale àquele veto: ele não absolve vereditos pertencentes a `VEREDITOS_ACUSAM` (`app/chamados/reconciliador.py:975`), conjunto que inclui `nunca_bateu` (`app/escala/models.py:1735`). Isso não prova emissão da request para a célula 143031 [nao verificado].
+
+**3. Efeito real de faltar `out['cods']`**
+
+O ramo sem adesão lavra/carimba e retorna sem registrar a data (`app/ponto/services/cartorio.py:981`, `:999`, `:1003`). A gravação do ramo normal usa **somente a data** como chave, inclusive quando `cods` é lista vazia (`:1120`); a fábrica é chamada pelo teste `_cel.data in _julgadas` (`:759`, `:769`, `:770`).
+
+| Chamador | Consequência |
+|---|---|
+| Lote `processar_cartorio` | **Não impede sempre.** Cria um único `out` antes do laço e o reutiliza entre colaboradores (`app/ponto/management/commands/processar_cartorio.py:43`, `:59`, `:65`). Se outro colaborador anterior já registrou a data, a célula sem adesão alcança `perguntar_pela_celula`; sem essa entrada, não alcança (`app/ponto/services/cartorio.py:769`, `:1120`). |
+| `julgar_celula` | Cria `out` novo para uma célula (`app/ponto/services/cartorio.py:1559`, `:1560`). Nesse ramo, não surge entrada em `cods`, e a fábrica não é chamada (`:1003`, `:759`, `:769`). |
+| `rejulgar_furos_do_vinculo` | Cria `out` novo por invocação; se alcançar o ramo sem adesão, ocorre o mesmo bloqueio (`app/escala/regua_defesa.py:691`, `:692`; `app/ponto/services/cartorio.py:1003`, `:769`). |
+| `celula_veredito_velho` | Passa `contadores()` novo por colaborador; mesmo bloqueio nesse ramo (`app/ponto/management/commands/celula_veredito_velho.py:139`, `:144`, `:145`). |
+| Script `rejulgar_o118_col221` | Usa `out` novo para um colaborador; mesmo efeito se alcançar esse ramo com aplicação habilitada (`bin/rejulgar_o118_col221.py:20`, `:23`, `:25`). |
+
+Alcançar a fábrica não garante pergunta nova: ela ainda verifica trabalho previsto, situação, data, vencimentos e deduplicação (`app/chamados/services/fabrica_da_celula.py:78`, `:80`, `:85`, `:106`, `:109`). **Não é possível atribuir as perguntas existentes da célula 143031 à colisão de datas do lote [nao verificado].**
+
+Os outros usos são:
+
+- **Cluster:** o wrapper testa apenas se `_julgadas` está não vazio e chama `_cluster(c, hoje)`; não entrega os códigos ao serviço (`app/ponto/services/cartorio.py:763`, `:767`). Assim, entradas de colaborador anterior também satisfazem essa condição; o cluster lê a ATA do colaborador atual (`app/ponto/services/cluster_espurio.py:22`, `:23`).
+- **Releitura:** o gatilho é o aumento de `emitidos`, não `cods` (`app/ponto/services/cartorio.py:743`, `:798`). Cria acumulador novo, executa o corpo e mescla seus códigos ao acumulado (`:810`, `:811`, `:812`), sem nova fábrica depois (`:823`). O ramo sem adesão retorna antes das emissões (`:1003`, `:1358`, `:1394`).
+
+**4. FROTA**
+
+- **Células `nunca_bateu` sem pergunta nenhuma: 0**, conforme `nb_sem_pergunta_nenhuma=0` [nao verificado — transcrição fornecida].
+- **Chamados vivos em células `nunca_bateu`: 12**, nos módulos `ausencia_colab`, `batida_ausente`, `disputa_supervisao` e `sem_previsao_escala` [nao verificado — transcrição fornecida].
+- **Quantidade de células distintas com chamado vivo: [nao verificado].** O campo fornecido conta chamados; não informa a contagem distinta de células [nao verificado].
+
+## 30/10 07:39 · sessao 74c8c0ee326f · O261-V · sonda · origem=Code
+
+**1. Célula 129745**
+
+- **P46703, resposta 19:00:** materialização anterior por 666 e validação posterior por 657 são a assinatura compatível com `_carimbar_validacao`, que altera somente `validada_em/por`. Os outros escritores positivos também gravam materialização no ato. A execução histórica exclusiva permanece **[não verificado]**. (`app/chamados/services/validacao.py:127-133`; `app/chamados/services/materializacao.py:506-530`, `1148-1198`; `app/chamados/services/disputa_emissao.py:1561-1577`)
+- **Lastro de P46703:** a lista fornecida não mostra batida em **21/10 19:00**; `materializada_em` sozinho não demonstra plantio. Ausência absoluta de lastro: **[não verificado]**, pois faltam os vínculos das batidas com a pergunta, usados pelo juiz. (`app/chamados/juizes.py:674-681`, `730-732`)
+- **P46704, resposta 07:00:** existe correspondência horária em **B140649, 22/10 07:00, não retratada**, segundo a sonda **[não verificado — sem confirmação independente]**. Escritor exclusivo da validação: **[não verificado]**; validação seguida de materialização e carimbo de simetria produzem estados compatíveis. (`app/chamados/services/validacao.py:389`, `415-417`; `app/chamados/services/materializacao.py:506-530`, `1194-1198`)
+- **CH33286 cobra E19:00:** o lastro horário de S07:00 não satisfaz essa cobrança; o fechador exige os marcos cobrados acesos. Dono da contradição **fio morto: ESTRUTURA**; dono específico do furo: **[não verificado]**. (`app/ponto/services/lastro.py:170-181`; `app/chamados/services/vigia_fio.py:9-14`; `app/ponto/management/commands/e6_oraculo.py:90-100`; marco cobrado: **[não verificado — sonda]**)
+
+**2. Célula 129747**
+
+- **P49422, resposta 19:00:** mesma assinatura de validação posterior à materialização, compatível com `_carimbar_validacao`; execução histórica exclusiva **[não verificado]**. (`app/chamados/services/validacao.py:127-133`)
+- **Lastro de P49422:** nenhuma batida em **23/10 19:00** aparece na lista fornecida. Plantio vinculado ou ausência absoluta de lastro: **[não verificado]**. (`app/chamados/juizes.py:674-681`, `730-732`; conteúdo da lista: **[não verificado — sonda]**)
+- **P49423, resposta 07:00:** correspondência horária em **B140652, 24/10 07:00, não retratada** **[não verificado — sonda]**. Escritor exclusivo da validação **[não verificado]**, pelos mesmos caminhos concorrentes de validação e simetria. (`app/chamados/services/validacao.py:389`, `415-417`; `app/chamados/services/materializacao.py:506-530`, `1194-1198`)
+- **CH34254 cobra E19:00:** S07:00 não comprova atendimento desse marco. Dono do fio morto: **ESTRUTURA**; dono específico do furo: **[não verificado]**. (`app/ponto/services/lastro.py:170-181`; `app/chamados/services/vigia_fio.py:9-14`; marco cobrado: **[não verificado — sonda]**)
+
+**3. Célula 129749**
+
+- **P50179, resposta 19:00:** assinatura compatível com `_carimbar_validacao` sobre materialização anterior; execução histórica exclusiva **[não verificado]**. (`app/chamados/services/validacao.py:127-133`)
+- **Lastro de P50179:** nenhuma batida em **25/10 19:00** aparece na lista fornecida. Plantio vinculado ou ausência absoluta de lastro: **[não verificado]**. (`app/chamados/juizes.py:674-681`, `730-732`; conteúdo da lista: **[não verificado — sonda]**)
+- **P50180, resposta 07:00:** correspondência horária em **B140653, 26/10 07:00, não retratada** **[não verificado — sonda]**. Escritor exclusivo da validação **[não verificado]**: a igualdade mostrada até segundos não distingue validação seguida de materialização dos carimbos de simetria. (`app/chamados/services/validacao.py:389`, `415-417`; `app/chamados/services/materializacao.py:506-530`, `1194-1198`)
+- **CH34850 cobra E19:00:** S07:00 não comprova atendimento desse marco. Dono do fio morto: **ESTRUTURA**; dono específico do furo: **[não verificado]**. (`app/ponto/services/lastro.py:170-181`; `app/chamados/services/vigia_fio.py:9-14`; marco cobrado: **[não verificado — sonda]**)
+
+**4. Célula 129751**
+
+- **P50883, resposta 19:00:** assinatura compatível com `_carimbar_validacao` sobre materialização anterior; execução histórica exclusiva **[não verificado]**. (`app/chamados/services/validacao.py:127-133`)
+- **Lastro de P50883:** nenhuma batida em **27/10 19:00** aparece na lista fornecida. Plantio vinculado ou ausência absoluta de lastro: **[não verificado]**. (`app/chamados/juizes.py:674-681`, `730-732`; conteúdo da lista: **[não verificado — sonda]**)
+- **P51025, resposta 07:00:** correspondência horária em **B140654, 28/10 07:00, não retratada** **[não verificado — sonda]**. Escritor exclusivo da validação **[não verificado]**, pelos caminhos distintos já identificados. (`app/chamados/services/validacao.py:389`, `415-417`; `app/chamados/services/materializacao.py:506-530`, `1194-1198`)
+- **CH35331 cobra E19:00:** S07:00 não comprova atendimento desse marco. Dono do fio morto: **ESTRUTURA**; dono específico do furo: **[não verificado]**. (`app/ponto/services/lastro.py:170-181`; `app/chamados/services/vigia_fio.py:9-14`; marco cobrado: **[não verificado — sonda]**)
+
+**5. Célula 140114**
+
+- **P50169, resposta 17:30:** assinatura compatível com `_carimbar_validacao` sobre materialização anterior; execução histórica exclusiva **[não verificado]**. (`app/chamados/services/validacao.py:127-133`)
+- **Tem lastro horário no dado:** **B137026, 25/10 17:30:12, não retratada** **[não verificado — sonda]**. Isso não comprova atendimento de **E21:30**, cobrada por CH35101, nem o vínculo com a pergunta, ausente na sonda. A cobrança é julgada pelo próprio marco. (`app/ponto/services/lastro.py:170-181`; `app/chamados/juizes.py:674-681`; marco cobrado: **[não verificado — sonda]**)
+- **P50170:** não há validação gravada no estado apresentado **[não verificado — sonda]**. A cláusula exata que produziu `viva=False` é **[não verificado]**: `fantasma` não pertence às vias que encerram por identidade. Antes do retorno obrigatório de pergunta viva para célula acusando, os encerramentos compatíveis com os campos mostrados são **tranca por leitura**, em `1010-1011`, ou **marco próprio aceso na ATA**, em `1050-1052`. (`app/chamados/juizes.py:1005-1057`)
+- Para `orfao_14h`, o marco próprio é **S/hf**; sua prova lê `cel.ata.lampadas[].acesa`. A sonda apresenta `dna.lampadas`, sem essa ATA e sem a tranca: não permite escolher a cláusula. Dono do fio morto: **ESTRUTURA**; dono específico do furo: **[não verificado]**. (`app/chamados/juizes.py:823-828`, `866-872`; `app/chamados/services/vigia_fio.py:9-14`)
+
+**Classes e pontos de decisão**
+
+**Validação sobre materialização anterior.** O caminho concreto da cópia carimba a validação em `validacao.py:389`, mas só chama a unidade de materialização se `materializada_em` estiver nulo, em `415-417`. O lote posterior também exige materialização nula, e a devolução da validação não atua quando já existe materialização. Esse caminho permite conservar validação sem reapurar a unidade; identificar sua execução histórica em cada pergunta é **[não verificado]**. (`app/chamados/services/validacao.py:182-183`, `389`, `415-417`; `app/chamados/services/materializacao.py:1286-1290`)
+
+**Pergunta morta não equivale a cobrança satisfeita.** `pergunta_viva` retorna `False` imediatamente com `validada_em` preenchido. Já `lastro` mantém `furo_real` quando a lâmpada cobrada está apagada e só encaminha `com_lastro` ao `reconciliar()`. Portanto, as respostas 07:00/17:30 com correspondência horária não demonstram falha do fechador das entradas 19:00/21:30. (`app/chamados/juizes.py:1006-1007`; `app/ponto/services/lastro.py:265-272`, `306-317`)
+
+**Rejulgamento e fechamento.** O evento de batida aciona o cartório; o cartório monta a ATA atual e tenta reconciliar quando todos os marcos da cobrança acenderam. O reconciliador por absolvição da célula retorna sem fechar quando ela ainda acusa. Qual desses caminhos efetivamente rodou, recusou ou falhou nos atos apresentados — a solicitada “linha em que não fez” — é **[não verificado]**. (`app/ponto/signals.py:108-135`; `app/ponto/services/cartorio.py:1148-1163`; `app/chamados/reconciliador.py:975-976`)
+
+**Dono L-099.** O fio morto é declarado contradição estrutural; isso não autoriza classificar automaticamente a causa do furo. O juiz exige flags de cadastro, batida fora de turno, paridade das batidas **atribuídas ao dia** e pertencimento à lista `dias_cadastro_x_realidade`. Esses resultados não constam da sonda; contar as cinco/seis batidas da janela vizinha não reproduz esse julgamento. Assim, atribuir definitivamente os furos a CADASTRO ou BATIDA seria **[não verificado]**. (`CLAUDE.md:306-316`; `app/ponto/management/commands/e6_oraculo.py:90-100`; `app/chamados/services/vigia_fio.py:99-101`)
+
+## 30/10 07:39 · sessao 56120f37885d · - · - · origem=Ronald (tmux)
+
+Inventário de emissores de `batida_ausente`:
+
+| Caminho | Escritor | Veto `nunca_bateu` |
+|---|---|---|
+| `detectar_ausencias::_abrir_chamado` | `app/ponto/management/commands/detectar_ausencias.py:688` (módulo definido em `:29`) | Chama `celula_veta_cobranca` e retorna em `:625-628`. |
+| Cartório | Delega ao escritor acima em `app/ponto/services/cartorio.py:1358` e `:1394`. | Além do veto do escritor, `adesao is None` retorna em `:1003`, antes dessas emissões; consulta de adesão em `:899-907`. |
+| `emitir_furo_retroativo` | Delega ao escritor acima em `app/ponto/management/commands/emitir_furo_retroativo.py:142`. | Passa pelo mesmo veto; também pula colaborador sem batidas na janela em `:52-55`. |
+| `reconciliar_grade::_emitir_furo` | `app/ponto/management/commands/reconciliar_grade.py:499` (CANON em `:54`) | Chama o veto e retorna em `:494-496`. |
+| Reconciliador c2 `reemitir_chamado_do_dia` | `app/chamados/reconciliador.py:862` (chave do módulo em `:804`) | Chama o veto e retorna em `:838-842`. |
+| Abertura pela request | `app/chamados/views.py:170-175` aceita o módulo do catálogo; delega em `:196-207`; escritor `app/chamados/services/abertura.py:47-65`. | Não passa pelo veto `celula_veta_cobranca` nem pelo ramo de adesão; segue `ChamadoColaborador.criar`, em `app/chamados/models.py:805-834`. |
+
+`vigia_de_hora` chega ao cartório por `julgar_celula` em `app/ponto/services/vigia_de_hora.py:130`.
+
+O veto compartilhado contém literalmente `nunca_bateu` em `app/ponto/marcos.py:119` e o aplica em `:155-162`.
+
+A abertura pela request passa por outro gate, `_celula_que_absolve` (`app/chamados/models.py:821-825`, implementação em `:839-851`). Esse gate não equivale a `VEREDITOS_QUE_VETAM`: `_absolvido_pela_celula` retorna `None` quando o veredito pertence a `VEREDITOS_ACUSAM` (`app/chamados/reconciliador.py:975`).
+
+As chaves de contexto de #35679 coincidem com o formato produzido pelo funil `detectar_ausencias`: base em `app/ponto/management/commands/detectar_ausencias.py:700-706`; `folga_nao_declarada` e `nao_calado_porque` em `:753-756`; `agrupado_em` possui escritor em `app/chamados/services/limbo_folgas.py:219`. Porém a sonda não traz `modulo_origem`, autor, trilha nem emissor: atribuir exatamente #35679 a uma execução desse funil continua **[nao verificado]**.
+
+## 30/10 07:38 · sessao ae6aaf07e1c7 · - · - · origem=Ronald (tmux)
+
+Leitura somente; nenhum arquivo alterado. [não verificado]
+
+- **Lastro da resposta não equivale a lastro da cobrança.** Os quatro chamados de col451 cobram **E 19:00**; as batidas retro **07:00 do dia seguinte** sustentam temporalmente as respostas P46704/P49423/P50180/P51025, mas não demonstram atendimento da entrada cobrada. A autoridade do fechamento exige todos os marcos nomeados acesos, por hora **e tipo**; lâmpada apagada mantém `furo_real`. (`app/ponto/services/lastro.py:170`, `app/ponto/services/lastro.py:175`, `app/ponto/services/lastro.py:179`, `app/ponto/services/lastro.py:265`, `app/ponto/services/lastro.py:271`; correspondência às batidas da sonda: [não verificado])
+
+- **140114:** B137026, de 25/10 17:30:12 e não retratada, sustenta temporalmente a resposta `17:30` de P50169; o chamado CH35101 cobra **E 21:30**, portanto aquela presença não prova regularização do marco cobrado. (`app/ponto/services/lastro.py:175`, `app/ponto/services/lastro.py:179`; presença e estado da batida, extraídos da sonda sem arquivo:linha: [não verificado])
+
+- **Limite da prova técnica de materialização:** a sonda não informa `tipo_resposta`, `data_evento`, `tipo` das batidas, `pergunta_origem` nem `ata`. O juiz usa esses campos: para hora/data_hora procura plantio vinculado e vivo; aceita plantio em data_evento −1/0/+1 com hora dentro de ±20 minutos; na prova externa exige tipo e instante do slot. Logo não é rigoroso afirmar ausência absoluta de lastro dos P19 apenas porque inexiste B19 no próprio dia — há B19 vizinhas, mas o vínculo necessário não foi mostrado. (`app/chamados/juizes.py:225`, `app/chamados/juizes.py:234`, `app/chamados/juizes.py:257`, `app/chamados/juizes.py:263`, `app/chamados/juizes.py:266`, `app/chamados/juizes.py:674`, `app/chamados/juizes.py:676`, `app/chamados/juizes.py:680`, `app/chamados/juizes.py:730`)
+
+- **Quem rejulga/fecha:** `post_save(Batida)` chama cartório para dia civil da marca e véspera; cartório monta a ata atual e só tenta reconciliar a cobrança por marco quando `_acesos(...) is True`. A rede `lastro.fechar` só chama `reconciliar()` para `com_lastro`. A materialização tenta fechar destino/clones, mas passa pelo mesmo `reconciliar()` e pelo bloqueio de irmã sem consumo. (`app/ponto/signals.py:108`, `app/ponto/signals.py:112`, `app/ponto/signals.py:132`, `app/ponto/signals.py:135`, `app/ponto/signals.py:93`, `app/ponto/services/cartorio.py:1148`, `app/ponto/services/cartorio.py:1163`, `app/ponto/services/lastro.py:306`, `app/ponto/services/lastro.py:317`, `app/chamados/services/materializacao.py:702`, `app/chamados/services/materializacao.py:711`, `app/chamados/services/materializacao.py:919`)
+
+- **Por que a cópia permite chamado vivo com perguntas validadas:** fechar a pergunta não é a condição de fechamento do chamado. `reconciliar()` consulta a premissa; o gate recusa furo ainda vivo para a folha, salvo regularização/agrupamento ou deduplicação sob outra cobrança viva. A regularização pode decorrer do marco cobrado aceso; não decorre simplesmente de `validada_em`. (`app/chamados/models.py:440`, `app/chamados/models.py:470`, `app/chamados/models.py:495`, `app/chamados/models.py:498`, `app/chamados/models.py:525`, `app/chamados/models.py:957`, `app/chamados/models.py:959`)
+
+- **Reconciliador não absolve estas células pelo veredito fornecido:** `_absolvido_pela_celula` retorna `None` quando o veredito pertence a `VEREDITOS_ACUSAM`. Ele não transforma uma validação individual em absolvição do dia. (`app/chamados/reconciliador.py:948`, `app/chamados/reconciliador.py:975`, `app/chamados/reconciliador.py:976`)
+
+- **“Em que linha não fez” como execução histórica:** [não verificado]. Sem log, a sonda não mostra se houve signal, tentativa, exceção, decisão anterior ou recusa. É possível apontar as condições acima; não é possível afirmar qual linha foi efetivamente percorrida e recusou em cada ato. A própria porta do signal contém retorno por julgamento em curso e tratamento de exceção. (`app/ponto/signals.py:88`, `app/ponto/signals.py:90`, `app/ponto/signals.py:91`)
+
+- **Dono formal L-099:** não pode ser determinado exatamente por esta sonda. O juiz recebe flags de cadastro, batida fora do turno, horas atribuídas pelo oráculo e pertencimento à lista `dias_cadastro_x_realidade`; faltam esses insumos. O código dá precedência: cadastro incompleto/sem vínculo → CADASTRO; batida fora do turno → BATIDA; horas em contagem ímpar → BATIDA; depois lista CxR → CADASTRO; resíduo → ESTRUTURA. DNA e protesto sozinhos não substituem esses insumos. (`CLAUDE.md:311`, `CLAUDE.md:313`, `app/ponto/management/commands/e6_oraculo.py:90`, `app/ponto/management/commands/e6_oraculo.py:96`, `app/ponto/management/commands/e6_oraculo.py:98`, `app/ponto/management/commands/e6_oraculo.py:100`, `app/ponto/management/commands/e6_oraculo.py:126`, `app/ponto/management/commands/e6_oraculo.py:142`, `app/ponto/management/commands/e6_oraculo.py:149`, `app/ponto/management/commands/e6_oraculo.py:155`)
+
+- **Não converter classe de fio morto em dono:** o próprio vigia declara que essa classificação pertence ao juiz L-099, e não a um mapa de classes da porta. (`app/chamados/services/vigia_fio.py:99`, `app/chamados/services/vigia_fio.py:100`, `app/chamados/services/vigia_fio.py:101`)
+
+## 30/10 07:38 · sessao 376360c5b485 · - · - · origem=Ronald (tmux)
+
+Atribuição estrita:
+
+- **Emissor e instante de criação das P#51789–51792: [nao verificado].** A sonda mostra abertura da disputa, não nascimento das perguntas: `DisputaSupervisao.aberta_em` é `auto_now_add` em `app/chamados/models.py:1331`. Uma disputa existente recebe novas perguntas em `app/chamados/services/disputa_emissao.py:618`. `julgado_em` é escrito como instante da lavra do cache em `app/chamados/veredito_lavrado.py:228`; portanto 30/10 06:35:14 não prova criação.
+- **Escritor genérico de perguntas:** `gerar_perguntas_disputa` chama `PerguntaDisputa.abrir` em `app/chamados/services/disputa_emissao.py:389`; a criação efetiva ocorre em `app/chamados/models.py:2085`, e seu log `pergunta_emitida` em `app/chamados/models.py:2092`. O gate também reaponta perguntas já existentes e retorna sem criá-las em `app/chamados/models.py:2058` e `app/chamados/models.py:2084`; logo a disputa atualmente apresentada não identifica emissor original.
+- **#35679:** a sonda declara criado 29/10 09:00:12 e resolvido 30/10 06:35:14, via `sistema`, sem respondente e sem superador — dados fornecidos sem arquivo:linha, portanto **[nao verificado] documentalmente**. O caminho correspondente no código é `ChamadoColaborador.reconciliar`, que chama `_gravar_estado(..., via=EVENTO_VIA['RECONCILIAR'])` em `app/chamados/models.py:444`; `RECONCILIAR → sistema` está em `app/chamados/catalogo/motor.py:95`. O escritor de `via_encerramento` é `app/chamados/models.py:209`, com persistência em `app/chamados/models.py:231`; `resolvido_em` é carimbado em `app/chamados/models.py:208`.
+- **Qual serviço/cron chamou esse encerramento e sua causa concreta: [nao verificado].** Existem múltiplos chamadores, por exemplo `app/chamados/reconciliador.py:525` e `app/ponto/services/cartorio.py:1163`, `:1175`, `:1196`, `:1266`; horário e via não distinguem esses chamadores.
+- O fechamento pode relavrar perguntas apontadas para o chamado: `app/chamados/models.py:243`–`:249`. Isso explica a existência de um caminho de código entre encerramento e `julgado_em`, mas não prova que tenha sido esse o caminho das quatro perguntas da sonda **[nao verificado]**.
+- `contexto_keys` sozinho não prova módulo nem emissor de #35679 **[nao verificado]**. Não atribuir ao detector apenas porque contém `horario_previsto`, `atraso_min`, `marcos_faltantes` ou ressalvas de folga.
+
+## 30/10 07:38 · sessao c98b4e89e71a · - · - · origem=Ronald (tmux)
+
+Levantamento somente leitura dos escritores:
+
+| Perguntas da sonda | Atribuição sustentada pela assinatura |
+|---|---|
+| P46703, P49422, P50179, P50883, P50169 | `_carimbar_validacao` é o escritor positivo que grava somente `validada_em/por`, preservando materialização anterior: `app/chamados/services/validacao.py:127-133`. Os outros três escritores positivos gravam também materialização com o mesmo instante/autor da validação, incompatível com a assinatura atual `mat` anterior/666 e validação posterior/657 em uma única dessas escritas: `materializacao.py:506-530`, `materializacao.py:1148-1198`, `disputa_emissao.py:1561-1583`. Execução histórica exclusiva, sem trilha: [não verificado]. |
+| P46704, P49423, P50180, P51025 | Compatíveis com validação seguida de materialização: `validacao.py:389`, `validacao.py:415-417`, `materializacao.py:1148-1198`. A sonda mostra segundos, portanto igualdade dos microssegundos [não verificado]. Também não exclui só pelo estado o carimbo de simetria de `_materializar_ausencia_de_resposta`, que permite `via=declaracao` quando a irmã declarou hora: `materializacao.py:506-530`. Autor histórico exclusivo de `validada_em`: [não verificado]. |
+| P50170 | `validada_em/por` são nulos na sonda: ninguém identificado como escritor de validação; eventual validação passada posteriormente apagada [não verificado]. |
+
+O caminho concreto que permite validar uma pergunta já materializada sem reapurar o lastro é:
+
+- A validação carimba antes da tentativa de materializar: `app/chamados/services/validacao.py:388-389`.
+- A unidade só roda se `materializada_em is None`: `app/chamados/services/validacao.py:415-417`.
+- A devolução recusa atuar se materialização já existe: `app/chamados/services/validacao.py:180-185`.
+- O lote posterior também só seleciona materialização nula: `app/chamados/services/materializacao.py:1286-1290`.
+
+Portanto, o carimbo antigo `fantasma` explica pelo código a preservação da validação sem nova verificação da unidade; afirmar que isso foi precisamente o caminho histórico de cada registro exige trilha ausente: [não verificado].
+
+A materialização automática por chamado resolvido não é uma atribuição equivalente para os cinco fantasmas: ela seleciona materialização nula e, quando carimba validação, também substitui materialização/autor pelo mesmo `agora/user`: `app/chamados/services/disputa_emissao.py:1536-1539`, `app/chamados/services/disputa_emissao.py:1561-1577`.
+
+Cuidados para a consolidação:
+
+- P50169 tem lastro horário visível na sonda: B137026, 25/10 17:30:12, não retratada, para resposta 17:30; tipo, aprovação e vínculo com a pergunta [não verificado].
+- O juiz `_pergunta_materializada_de_fato` avalia `via` sem testemunha antes do ramo de slot e pode reprovar `fantasma` pela lei do dia: `app/chamados/juizes.py:603-623`; logo reprovação desse juiz não prova ausência física da batida respondida.
+- As quatro respostas 07:00 têm batidas retroativas visíveis no horário do encerramento noturno na sonda; vínculo `pergunta_origem` [não verificado]. O ramo que cria `origem='disputa_s84_retro'` está em `app/chamados/services/materializacao.py:871-879`.
+- A regra L-099 determina ESTRUTURA quando o sistema se contradiz dado o cadastro, CADASTRO quando DNA não descreve batidas, BATIDA quando falta/sobra batida: `CLAUDE.md:306-316`.
+
+## 30/10 07:38 · sessao a46ba23aaa09 · - · - · origem=Ronald (tmux)
+
+O ramo `adesao is None` não registra `out['cods']`: incrementa `nunca_bateu`, lavra/carimba e retorna antes da única gravação `out.setdefault('cods', {})[data] = list(cods)` do ramo normal. (`app/ponto/services/cartorio.py:907`, `:946`, `:981`, `:999`, `:1003`, `:1120`)
+
+O efeito depende do chamador:
+
+| Chamador | Efeito da ausência de `cods` |
+|---|---|
+| `processar_cartorio` | **Não impede sempre**. Um único `out` nasce antes do laço e é reutilizado entre colaboradores; a chave é somente `data`. Se colaborador anterior registrou aquela data, a célula `nunca_bateu` passa pelo teste e chama `perguntar_pela_celula`. Se a data ainda não existe no acumulado, não chama. (`app/ponto/management/commands/processar_cartorio.py:43`, `:59`, `:65`; `app/ponto/services/cartorio.py:759`, `:768`, `:769`, `:770`, `:1120`) |
+| `julgar_celula` | Cria `out` novo e passa uma única célula: no ramo sem adesão, `_julgadas` permanece vazio e a fábrica não é chamada. (`app/ponto/services/cartorio.py:1559`, `:1560`, `:759`, `:769`) |
+| `rejulgar_furos_do_vinculo` | Cria `out` novo por invocação: mesma obstrução, caso entre no ramo sem adesão. (`app/escala/regua_defesa.py:691`, `:692`; `app/ponto/services/cartorio.py:1003`, `:759`, `:769`) |
+| `celula_veredito_velho` | Passa `contadores()` novo para cada colaborador: mesma obstrução. (`app/ponto/management/commands/celula_veredito_velho.py:139`, `:144`, `:145`) |
+| `bin/rejulgar_o118_col221.py` | Usa `out` novo e apenas um colaborador: mesma obstrução se esse ramo for alcançado com `APLICAR=True`. (`bin/rejulgar_o118_col221.py:20`, `:23`, `:24`, `:25`) |
+
+`contadores()` não inicializa `cods`; ela nasce sob demanda no ramo normal. (`app/ponto/services/cartorio.py:1477`, `:1478`, `:1490`, `:1120`)
+
+`cluster_espurio` **não recebe nem interpreta os valores dos códigos**: o wrapper usa apenas a existência de qualquer entrada em `_julgadas` para chamar `_cluster(c, hoje)`. Assim, um acumulado anterior também permite essa chamada para colaborador que não registrou códigos próprios. O serviço lê células/ATA do colaborador atual. (`app/ponto/services/cartorio.py:759`, `:763`, `:765`, `:767`; `app/ponto/services/cluster_espurio.py:22`, `:23`, `:26`, `:27`, `:77`)
+
+A releitura pós-emissão **não usa `cods` como gatilho**: dispara pelo aumento de `emitidos` na chamada corrente, cria `_conv` novo, executa novamente o corpo e mescla os códigos encontrados em `out['cods']`. Não há nova chamada à fábrica após essa releitura. No ramo sem adesão, não ocorre emissão no corpo e esse delta não nasce. (`app/ponto/services/cartorio.py:743`, `:798`, `:810`, `:811`, `:812`, `:823`, `:1003`)
+
+Passar pelo teste de data apenas **alcança a fábrica**; não garante pergunta nova. A fábrica ainda verifica `trabalha`, situação ativa, futuro, vencimentos, veredito e deduplicação por motivo. `nunca_bateu` pertence a `VEREDITOS_ACUSAM`, portanto esse veredito, isoladamente, não a veta. (`app/chamados/services/fabrica_da_celula.py:78`, `:80`, `:85`, `:86`, `:101`, `:106`, `:109`; `app/escala/models.py:1735`, `:1736`)
+
+## 30/10 07:38 · sessao e3bb63ac3aef · - · - · origem=Ronald (tmux)
+
+Referências e limites para consolidação:
+
+- **L-099:** ESTRUTURA significa contradição/cálculo errado dado o cadastro; CADASTRO significa DNA que não descreve batidas; BATIDA significa falta/sobra de batida (`CLAUDE.md:306-316`).
+- O juiz efetivo é `app/ponto/management/commands/e6_oraculo.py:53`. A decisão prioriza cadastro sem folga/vínculo (`:90-91`), batida solta declarada pelo realizado (`:96-97`), paridade do conjunto atribuído ao dia (`:98-99`) e presença na lista do MOTOR `dias_cadastro_x_realidade` (`:100`). Os insumos são montados em `:118-155`; batida solta real é conferida em `:158-172`.
+- **A sonda não fornece os insumos completos desse juiz:** sua lista de batidas inclui dias vizinhos, sem atribuição do oráculo ao dia; também faltam `dias_cadastro_x_realidade`, resultado do realizado e flags de cadastro. Portanto dono E6 conclusivo por célula é **[não verificado]**.
+- Observação permitida pelo dado: nas quatro células de col451, DNA cobra entrada às 19h em dias ímpares e a janela mostra entradas próximas de 19h nos dias pares; na 140114, a resposta/batida 17:30 difere do marco 21:30 e as saídas mostradas próximas de 06:30 diferem do marco05:42. Atribuir isso definitivamente a CADASTRO, excluindo BATIDA, não está provado **[não verificado]**.
+- **Dono da contradição “fio morto” é ESTRUTURA**, expressamente documentado em `app/chamados/services/vigia_fio.py:9-14`; isso não identifica automaticamente o dono do furo ou do descompasso de horário. O próprio vigia declara que não deriva o dono L-099 em `:99-101`.
+
+**P50170: cláusula exata não demonstrável.**
+
+`pergunta_viva` delega ao cálculo em `app/chamados/juizes.py:795`. Para P50170, sem validação, sem resposta, via fantasma, materializada e célula `furo`, os únicos retornos `False` anteriores ao ramo de célula acusando compatíveis com os campos fornecidos são:
+
+1. Competência trancada por leitura, `app/chamados/juizes.py:1010-1011`, cujo julgamento exige tranca e ausência de toque humano posterior (`:875-907`).
+2. Marco próprio comprovado aceso na **ATA**, apesar de outro marco acusar, `app/chamados/juizes.py:1050-1052`. `orfao_14h` cobra `S/hf` (`:823-828`), e a prova lê `cel.ata['lampadas'][...]['acesa']` (`:866-872`).
+
+A sonda não inclui tranca/toques nem ATA/`acesa`; o bloco `dna.lampadas` é previsão e não satisfaz essa leitura (`app/chamados/juizes.py:849`, `:866-872`). Assim, escolher entre essas cláusulas é **[não verificado]**.
+
+`fantasma` não pertence a `_ENCERRA_POR_IDENTIDADE` (`app/chamados/juizes.py:1039-1045`). Se nenhum dos dois degraus acima a encerrou, célula `furo` produz `True` imediatamente (`:1054-1057`); sequer chega ao teste final de materialização (`:1082-1083`). A disputa fechada não é consultada como causa de morte nesse corpo (`:1005-1087`).
 
 ## 30/10 07:33 · sessao b270d6c7c46f · O261-N · sonda · origem=Code
 
@@ -229,159 +453,4 @@ O encerramento concorrente pode ser válido: um chamado com seus marcos antigos 
 
 **Atenção para consolidar com (b):** a dispensa por `_costura_no_vivo` é decidida antes da trava (`app/chamados/reconciliador.py:798–799`, `:843`). Dentro da trava, `abrir` reconsulta e pode renascer um encerrado (`app/chamados/models.py:669–687`). Uma mudança concorrente de vivo para encerrado entre essas leituras escaparia do novo veto; reprodução desse intercalamento: **[não verificado]**.
 
-## 30/10 04:09 · sessao 612a84432b06 · - · - · origem=Ronald (tmux)
-
-(a) **Nada no diff** quanto a segundo juiz, vínculo ou dia: c2 e impressão chamam a mesma composição `motivo_do_veto(c, vinculo_do_emissor(c, dia), dia)` (`app/chamados/reconciliador.py:844-845`; `app/ponto/services/cartorio.py:1007-1014,1083`). O vínculo delega a `escala_vigente` (`app/ponto/services/furos_vetados.py:10-16`), também usado pelo detector e pelos dois ramos de emissão do cartório (`app/ponto/management/commands/detectar_ausencias.py:139`; `app/ponto/services/cartorio.py:35,1347,1446`).
-
-Os predicados coincidem para vínculo presente: degeneração e suspeita são consultadas pelos mesmos leitores (`app/ponto/services/furos_vetados.py:25-31`; `app/ponto/management/commands/detectar_ausencias.py:599-605`; `app/escala/regua_defesa.py:45-46`).
-
-Há diferença contratual preexistente em `ec=None`: `motivo_do_veto` retorna `None`, enquanto `vetar_cobranca_se_degenerada` considera ausência de template degeneração (`app/ponto/services/furos_vetados.py:26-27`; `app/escala/regua_defesa.py:23-24,45-46`). Os caminhos normais do emissor pulam antes do funil quando falta vínculo (`app/ponto/management/commands/detectar_ausencias.py:140-141`; `app/ponto/services/cartorio.py:1348,1447-1448`).
-
-Não encontrei reprodução estática desse caso como falha nova: julgamento atual sem vínculo produz `PREVISTO_COM_DIA_INDEFINIDO`, fora dos protestos que permitem nascer no c2 (`app/ponto/supra_juiz.py:304-305,382-383,396-397`; `app/ponto/services/furos_sem_cobranca.py:35`; `app/chamados/reconciliador.py:825-828`).
-
-## 30/10 03:44 · sessao a081963814b3 · O261-C · verificador · origem=Code
-
-**Não encontrei mudança de retorno ou de escrita de domínio causada pelo reordenamento do c2. Há uma ressalva concreta na justificativa: o veto de célula chama `_log.info` antes da cerca; portanto, “conjunções sem efeito colateral” é uma afirmação excessiva.** O caminho continua retornando `False`, mas agora pode alcançar essa chamada de log antes de consultar a cerca. (app/chamados/reconciliador.py:765; app/chamados/reconciliador.py:828–836)
-
-A configuração SaaS versionada filtra esse `INFO` pela raiz em `WARNING`; emissão efetiva em produção: [não verificado]. (app/config/settings/saas.py:169–183)
-
-Nos seis pontos anteriores:
-
-1. **LEI-AKITA no corpo de `22c08b8e`: [não verificado].** Esta cópia não disponibiliza o histórico Git nem o corpo do commit. [não verificado]
-2. **Pauta DP:** a prosa agora atribui expressamente sua geração ao script de passivo depois do pouso. Esse trecho não cria Pauta. Corpo do commit: [não verificado]. (app/chamados/reconciliador.py:688–694)
-3. **Custo:** a cerca está depois dos gates existentes; `CustoDaCercaTest` exige zero chamadas às duas funções da cerca no veto por protesto, e o novo caso mede a batida com teto 31. Permanece a ressalva do log acima. Valores medidos e execução dos testes: [não verificado]. (app/chamados/reconciliador.py:797–836; app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:315–337; app/ponto/tests/test_selo_chokepoint_escrita.py:169; app/ponto/tests/test_selo_chokepoint_escrita.py:273–283)
-4. **Guarda removida:** não está no c2 atual. Os dois chamadores de produção restringem a entrada a pergunta sem destino; o teste do cron exige sucesso na primeira passagem e compara pergunta, chamados e auditoria depois da segunda. (app/chamados/reconciliador.py:860–877; app/chamados/reconciliador.py:1375–1398; app/chamados/services/disputa_emissao.py:404–409; app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:296–308)
-5. **R1/R1b:** agora têm mordida no código do teste: R1 exige ausência de recusa e o mesmo chamado renascido em estado vivo; R1b exige `admin_sem_fato_novo`, retorno falso e pergunta sem destino. (app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:149–169)
-6. **Composição única:** os dois consumidores leem `competencia_do_dia_entregue`; a cerca exclui dia ausente antes da chamada, enquanto o vigia classifica `None` como `aberta`. (app/chamados/reconciliador.py:705–716; app/chamados/services/vigia_fio.py:413–441)
-
-**Vigia:** não encontrei mudança de comportamento pela extração. Permanecem o universo, o filtro C6, a janela da empresa, o memo por empresa/mês/ano e a classificação sem data como `aberta`; o `bool` acrescentado preserva o retorno booleano de K6. (app/chamados/services/vigia_fio.py:404–441; app/ponto/janelas.py:60–63; app/folha/export.py:569–575)
-
-Por classe, nos sítios do diff:
-
-- **Segundo juiz:** nada; os novos caminhos consultam C6, C7, K6 e `motivos_atendidos`. (app/chamados/reconciliador.py:711–727; app/chamados/reconciliador.py:1465–1477)
-- **Segundo escritor fora da porta:** nada; emissão e costura continuam por `abrir` e `reapontar_resolvedora`. (app/chamados/reconciliador.py:837; app/chamados/reconciliador.py:877; app/chamados/reconciliador.py:1513)
-- **Relógio fora da borda:** nada nas funções novas nem nos trechos alterados. (app/chamados/reconciliador.py:685–727; app/chamados/reconciliador.py:1443–1478; app/chamados/services/vigia_fio.py:419–441)
-- **Derivação paralela:** nada novo; a composição foi centralizada. (app/chamados/services/vigia_fio.py:419–441; app/chamados/reconciliador.py:711–713)
-- **Selo/RED sem mordida:** nada concreto nas asserções examinadas; RED executado e suíte verde: [não verificado]. (app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:149–169; app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:296–337)
-- **Ordem de trava:** nada; os gates antecipados fazem leituras/comparações, e `abrir`, que trava o colaborador, permanece depois da cerca. (app/ponto/turnos.py:2516–2523; app/ponto/marcos.py:154–163; app/chamados/reconciliador.py:824–837; app/chamados/models.py:666–669)
-- **Pouso antes do pré-requisito:** nada demonstrado pelo diff; o RELATO registra B pousado e passivo aplicado. Comprovação operacional e remedida exigida: [não verificado]. (app/docs/RELATO.md:3–18)
-
-## 30/10 03:42 · sessao 4da357248cbf · - · - · origem=Ronald (tmux)
-
-c2: nenhum gate anterior à cerca escreve no banco ou adquire trava. Piso, isenção, ausência, protesto, célula e motor apenas leem/comparam; não dependem de algo que a cerca inicializava. O retorno e o estado persistido permanecem iguais, considerando os mesmos dados durante a execução. Referências: `app/ponto/services/cartorio.py:244`, `app/core/constants.py:18`, `app/chamados/catalogo/modulos.py:277`, `app/ponto/turnos.py:2518`, `app/chamados/reconciliador.py:824`, `app/ponto/marcos.py:154`, `app/chamados/catalogo/motor.py:130`.
-
-Existe, porém, uma diferença observável no fluxo: o veto de célula chama `_log.info(...)` antes da cerca (`app/chamados/reconciliador.py:828-835`). Um intervalo que sairia pela cerca antecipada agora pode chegar ao log do veto. Portanto, a afirmação “conjunções sem efeito colateral” é inexata (`app/chamados/reconciliador.py:765`); isso não demonstra mudança de retorno nem escrita de domínio. Emissão efetiva do INFO na configuração ativa: [não verificado].
-
-Ordem de trava: nada introduzido pelo reordenamento; `abrir` e `reapontar_resolvedora` continuam depois da cerca (`app/chamados/reconciliador.py:835-837`, `app/chamados/reconciliador.py:877`).
-
-## 30/10 03:41 · sessao c7555ec23ce1 · - · - · origem=Ronald (tmux)
-
-Não encontrei mudança de resultado no vigia pela extração: mantém universo, filtro pelo C6, memo local por empresa/competência e classificação sem data como `aberta`; a janela continua sendo `janela_atual`, e K6 retorna booleano (`app/chamados/services/vigia_fio.py:404-441`; `app/ponto/janelas.py:60-63`; `app/folha/export.py:569-575`).
-
-Os testes novos têm verificações materiais: [nao verificado]
-
-- R1 exige pergunta viva, nenhuma recusa de reabertura, mesmo chamado renascido e destino vivo (`app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:149-158`).
-- R1b exige recusa `admin_sem_fato_novo`, retorno falso, pergunta sem destino e chamado resolvido (`app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:162-169`).
-- Idempotência exige primeira passagem com destino vivo antes de comparar pergunta, chamados e trilha após a segunda passagem (`app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:296-308`).
-- Custo verifica ausência de chamadas às cercas e teto de seis queries; o novo chokepoint mede `registrar_batida` com órfã sem célula sob teto 31 (`app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:315-337`; `app/ponto/tests/test_selo_chokepoint_escrita.py:169`; `app/ponto/tests/test_selo_chokepoint_escrita.py:273-283`).
-
-Não identifiquei selo vazio concreto nesses trechos; execução dos testes e medições/RED alegados: [não verificado]. [nao verificado]
-
-## 30/10 03:13 · sessao 96c72512bd21 · ORCAMENTO · verificador · origem=Code
-
-Encontrei os seguintes defeitos e lacunas. Os cenários descrevem comportamento do código; ocorrência em produção: [não verificado].
-
-1. **A expiração ainda pode ser engolida pelo TETO quando a gravação falha.**  
-   Entrada: prova do RELATO aprovada, `PAREI: ! CLEAR` há 31 minutos, contador com cinco bloqueios no mesmo HEAD; estado do orçamento legível, mas diretório sem permissão para criar o temporário. `_orc_salva` falha antes de devolver a expiração; `_orcamento_contido` retorna `None`; o caminho antigo incrementa para seis e libera pelo TETO. Quebra **v2(b)**: faltam o `siga` explícito e o contador zerado. Reproduzido em memória.  
-   Fontes: `bin/hook_stop_fila1.py:821`, `bin/hook_stop_fila1.py:867`, `bin/hook_stop_fila1.py:1071`, `bin/hook_stop_fila1.py:1078`.
-
-2. **Marco ilegível é tratado como marco novo e permite redisparo.**  
-   Estado: ciclo já terminou com `disparo.desfecho="seguiu"` e `marco_ref` conhecido. Sem nenhum clear/compact, a leitura de `ultimo_clear.json` passa a falhar; contexto continua em 60%. `ler_marco` devolve `None`; a diferença de referência apaga o disparo anterior e permite outro `DISPARO`. Quebra **§3: sem redisparo até clear ou compact**. Reproduzido em memória.  
-   Fontes: `bin/orcamento_contexto.py:136`, `bin/hook_stop_fila1.py:783`, `bin/hook_stop_fila1.py:800`, `bin/hook_stop_fila1.py:855`.
-
-3. **O desligamento depende de conseguir a trava primeiro.**  
-   Entrada: `ORCAMENTO_CONTEXTO=0`, topo CLEAR e trava do orçamento ocupada por mais de cinco segundos. O hook devolve `siga: orçamento ocupado`, embora o instrumento esteja desligado; nem chega à consulta da variável ou ao registro de desligamento. Quebra **§5** e expõe uma precedência errada entre corte e trava. Reproduzido em memória.  
-   Fontes: `bin/hook_stop_fila1.py:739`, `bin/hook_stop_fila1.py:748`, `bin/hook_stop_fila1.py:772`.
-
-4. **Fila vazia passa a bloquear quando existe gatilho.**  
-   Entrada: todos os itens fechados, topo neutro, nenhum produtor e contexto em 60%. O orçamento devolve PREPARA-CLEAR antes de alcançar a liberação por fila vazia. É regressão objetiva do **caminho antigo de fila vazia**; o contrato não declara expressamente uma exceção ao gatilho para esse caso. O selo cobre fila vazia somente com medida ilegível, sem gatilho. Reproduzido em memória.  
-   Fontes: `bin/hook_stop_fila1.py:855`, `bin/hook_stop_fila1.py:1014`, `bin/hook_stop_fila1.py:1039`; `bin/tests/test_orcamento_contexto.sh:145`.
-
-5. **Estado confirmado com append falho perde definitivamente o evento.**  
-   Estado: JSON gravável, mas `orcamento.log` sem permissão. `_orc_salva` substitui o estado; `_orc_trilha` engole a falha; a lista de eventos é descartada. Num ATENDIDO/SEGUIU, o próximo Stop já encontra o desfecho consumido e não repõe a linha: o ESTADO subconta permanentemente. Quebra **§4: trilha por disparo/desfecho e contadores pelo log**. O selo verifica apenas a direção inversa, quando o estado não grava.  
-   Fontes: `bin/hook_stop_fila1.py:694`, `bin/hook_stop_fila1.py:715`, `bin/hook_stop_fila1.py:723`, `bin/hook_stop_fila1.py:725`; `bin/orcamento_contexto.py:223`; `bin/tests/test_orcamento_contexto.sh:395`.
-
-6. **Um segundo clear apaga a prova do primeiro atendimento.**  
-   Sequência: PAREI em t=0; `/clear` em +10 minutos; outro `/clear` em +40; nenhum Stop entre eles. O escritor conserva apenas +40 e o hook registra `SEGUIU`, apesar do atendimento em +10. Quebra a definição de **ATENDIDO do §4**. Classificação reproduzida em memória.  
-   Fontes: `bin/marco_de_clear.py:38`, `bin/marco_de_clear.py:47`; `bin/hook_stop_fila1.py:789`, `bin/hook_stop_fila1.py:792`.
-
-7. **A atualização do marco não serializa clear e compact concorrentes.**  
-   Intercalação: compact lê o marco antigo; clear publica o novo; compact publica depois com o `clear_hora` antigo. O `replace` atômico não protege a sequência leitura–atualização, e o atendimento pode desaparecer. Quebra **§4** e a conservação prometida pelo escritor. Intercalação reproduzida em memória; existência dessa concorrência no harness: [não verificado].  
-   Fontes: `bin/marco_de_clear.py:36`, `bin/marco_de_clear.py:41`, `bin/marco_de_clear.py:43`, `bin/marco_de_clear.py:52`.
-
-8. **Falha ao ler HEAD produz testemunha inválida sem aviso — e o selo aceita.**  
-   Entrada: provas do deploy passaram, mas o `git rev-parse HEAD` do append falha. `printf` ainda grava `data hora  0` com sucesso; o aviso não executa. O leitor descarta os três campos restantes: três deploys assim contam zero. Quebra **v2(g), testemunha `hora head rc`**. A regex do selo aceita HEAD vazio por usar `[0-9a-f]*`.   [nao verificado]
-   Fontes: `bin/deploy.sh:347`, `bin/deploy.sh:348`; `bin/orcamento_contexto.py:149`; `bin/tests/test_orcamento_contexto.sh:278`, `bin/tests/test_orcamento_contexto.sh:280`.
-
-9. **O RED não prova que reprovação da casca interrompe o deploy.**   [nao verificado]
-   Mutação concreta: substituir `falhou` por `echo` na linha 219 do deploy. O teste continua encontrando o `if ! bash`, a guarda e o append esperados; porém o deploy passa a recarregar depois da reprovação. `_julga_deploy` executa fragmentos isolados e verifica a porta por texto, sem provar sua consequência. Lacuna de **v2(g), classe “RED sem mordida”**. A porta do deploy atual funciona; o defeito aqui é sua proteção pelo selo.   [nao verificado]
-   Fontes: `bin/deploy.sh:70`, `bin/deploy.sh:219`; `bin/tests/test_orcamento_contexto.sh:265`, `bin/tests/test_orcamento_contexto.sh:284`, `bin/tests/test_orcamento_contexto.sh:289`.
-
-Nas demais áreas solicitadas:
-
-- **Prova do RELATO:** não encontrei bypass introduzido; continua antes da consulta ao orçamento. `bin/hook_stop_fila1.py:1003`, `bin/hook_stop_fila1.py:1011`.
-- **PAREI comum e ESPERANDO provado:** não encontrei segundo juiz; reutiliza `_relato_parou` e memoriza uma única avaliação da espera, preservando a prova por avanço de arquivo. `bin/hook_stop_fila1.py:653`, `bin/hook_stop_fila1.py:845`, `bin/hook_stop_fila1.py:847`, `bin/hook_stop_fila1.py:1025`.
-- **Falha aberta antiga:** permanece no `except` principal; as exceções próprias do orçamento ficam contidas. A interação defeituosa dessa contenção com a expiração está no achado 1. `bin/hook_stop_fila1.py:863`, `bin/hook_stop_fila1.py:1093`.
-- **Relógio, derivação paralela e segundo escritor:** não encontrei defeito adicional: avaliador recebe `agora`, gerador usa `ler`/`linha`, e o orçamento chama os juízes existentes. `bin/orcamento_contexto.py:174`, `bin/orcamento_contexto.py:207`; `bin/gerar_estado.py:274`; `bin/hook_stop_fila1.py:848`.
-- **Ordem das travas existentes:** não encontrei aquisição inversa à sequência orçamento → memória da espera; a trava da espera é liberada ao terminar sua avaliação. A ausência de serialização do marco é o achado 7. `bin/hook_stop_fila1.py:743`, `bin/hook_stop_fila1.py:845`, `bin/hook_stop_fila1.py:572`, `bin/hook_stop_fila1.py:602`.
-- **Matchers e medição:** o selo vincula os comandos a `compact` e `clear`; o avaliador declara janela/fonte e contém falhas de leitura do transcript. Instalação efetiva no host e correção da fonte externa: [não verificado]. `bin/tests/test_handoff_sessao.sh:60`, `bin/tests/test_handoff_sessao.sh:78`; `bin/orcamento_contexto.py:32`, `bin/orcamento_contexto.py:85`, `bin/orcamento_contexto.py:105`.
-
-## 30/10 03:12 · sessao 229461fbb71f · - · - · origem=Ronald (tmux)
-
-Achados confirmados:
-
-1. **Marco ilegível rearma ciclo já encerrado.** Com `disparo.desfecho="seguiu"` e `marco_ref` existente, uma falha ao ler `ultimo_clear.json` vira `None`; o hook interpreta isso como mudança de marco, apaga o disparo e pode emitir outro `DISPARO` pelos mesmos 60%. Reproduzi em memória. Quebra §3, “não redispara até próximo marco de clear ou compact”. (`bin/orcamento_contexto.py:125-137`; `bin/hook_stop_fila1.py:781-800`, `855-858`.)
-
-2. **Dois clears entre Stops classificam atendimento correto como expiração.** PAREI em t=0; `/clear` em +10 min; outro `/clear` em +40 min; próximo Stop depois disso. O escritor conserva somente +40; o hook registra `SEGUIU`, embora o clear de +10 tenha atendido dentro da janela. Reproduzi a classificação pela função real com mocks em memória. Quebra §4, definição de ATENDIDO. (`bin/marco_de_clear.py:38-47`; `bin/hook_stop_fila1.py:789-796`.)
-
-3. **Concorrência clear/compact pode perder o clear atendido.** Compact lê o marco antigo; clear publica o novo; compact publica depois, trazendo `clear_hora` antigo. `os.replace` protege a substituição, mas não serializa a leitura e atualização. Reproduzi esse interleaving com as duas chamadas reais e armazenamento em memória. Quebra §4 e a conservação declarada pelo próprio escritor. Concorrência real em produção: [não verificado]. (`bin/marco_de_clear.py:33-52`.)
-
-4. **Falha no append perde definitivamente eventos dos contadores.** Estado gravável e `orcamento.log` sem permissão: `_orc_salva` persiste DISPARO/desfecho, `_orc_trilha` engole o erro, e os eventos são descartados. O próximo Stop lê o evento como consumido, enquanto o ESTADO continua contando somente o log. Quebra §4; o selo cobre apenas o sentido contrário, estado que falha antes da trilha. (`bin/hook_stop_fila1.py:687-695`, `708-725`; `bin/orcamento_contexto.py:217-234`; `bin/tests/test_orcamento_contexto.sh:395-399`.)
-
-Áreas lidas sem defeito adicional identificado:
-
-- Relógio da medição recebido por argumento; leituras de relógio nas bordas Stop, CLI e gerador. (`bin/orcamento_contexto.py:174-178`, `207`, `257`; `bin/hook_stop_fila1.py:763`; `bin/gerar_estado.py:276`.)
-- Último assistente fora de sidechain, soma dos três campos, ausência de usage/modelo desconhecido e contenção das falhas de leitura. (`bin/orcamento_contexto.py:62-106`.)
-- Gerador usa `ler`/`linha` do avaliador; não introduz segundo juiz nem segundo escritor do orçamento. (`bin/gerar_estado.py:271-276`; `bin/orcamento_contexto.py:207-250`.)
-- Janela tem número e fonte declarados; correção da fonte externa e autenticidade histórica da fixture: [não verificado]. (`bin/orcamento_contexto.py:32-43`; `bin/tests/fixtures/orcamento_transcript.jsonl:1-8`.)
-
-Observação de menor força: `contar_marcos` conta também linhas `rc=1` ou `rc=erro`; confirmei em memória que duas dessas linhas mais uma `rc=0` resultam em três marcos. Entretanto, o escritor fornecido publica literalmente `0`; a presença dessas linhas na testemunha de produção é [não verificado]. (`bin/orcamento_contexto.py:149-165`; `bin/deploy.sh:347`.)
-
-## 30/10 03:11 · sessao 86cb32d779ac · - · - · origem=Ronald (tmux)
-
-Achados nas áreas delegadas:
-
-1. **O selo do deploy não prova que reprovação da casca interrompe o deploy.** `_julga_deploy` executa somente o bloco de append e a guarda isolados; para a porta da casca, exige apenas a presença textual do `if ! bash ...`. Mutação concreta: trocar `falhou` por `echo` em `bin/deploy.sh:219` mantém esses checks, embora passe a recarregar e registrar marco após reprovação. Quebra a prova exigida por v2(g), classe “RED sem mordida”. No deploy atual, a porta funciona: `falhou` termina com `exit 1`. (`bin/tests/test_orcamento_contexto.sh:265`, `bin/tests/test_orcamento_contexto.sh:280`, `bin/tests/test_orcamento_contexto.sh:284`, `bin/tests/test_orcamento_contexto.sh:289`; `bin/deploy.sh:70`, `bin/deploy.sh:218`.)
-
-2. **Falha na leitura do HEAD produz testemunha inválida e subcontagem silenciosa.** Se o `git rev-parse HEAD` do append falhar, `printf` ainda escreve `data hora  0` e retorna sucesso; o aviso não aparece. O leitor descarta essa linha porque possui somente três campos. Três deploys provados nessas condições contam como zero e não disparam (c), contrariando a testemunha `hora head rc` de v2(g). O selo aceita o defeito: sua regex permite HEAD vazio (`[0-9a-f]*`) e executa o fragmento numa raiz temporária sem repositório. Ocorrência no host: [não verificado]. (`bin/deploy.sh:347`; `bin/orcamento_contexto.py:149`; `bin/tests/test_orcamento_contexto.sh:278`, `bin/tests/test_orcamento_contexto.sh:280`.)
-
-3. **O marco tem corrida de atualização.** Compact lê o marco anterior; clear grava marco novo; compact substitui o arquivo com o `clear_hora` antigo que havia lido. Isso perde a conservação do clear e pode perder o ATENDIDO exigido pelo contrato 4. A escrita é atômica, mas a sequência leitura–modificação–substituição não tem trava. Concorrência efetiva de SessionStart no host: [não verificado]. (`bin/marco_de_clear.py:39`, `bin/marco_de_clear.py:43`, `bin/marco_de_clear.py:52`.)
-
-Sem defeito encontrado na guarda atual do append: distingue normal/cópia de agendado, exclui casca pulada e fica depois das provas de casca e rotas. (`bin/deploy.sh:218`, `bin/deploy.sh:321`, `bin/deploy.sh:324`, `bin/deploy.sh:345`.)
-
-O selo vincula os comandos exatos aos matchers `compact` e `clear`; instalação efetiva no host permanece [não verificado], pois depende de `.claude/settings.json`, deliberadamente externo ao versionamento. (`bin/tests/test_handoff_sessao.sh:15`, `bin/tests/test_handoff_sessao.sh:60`, `bin/tests/test_handoff_sessao.sh:70`, `bin/tests/test_handoff_sessao.sh:75`, `bin/tests/test_handoff_sessao.sh:78`; `.gitignore:66`.)
-
-## 30/10 03:09 · sessao 183f01bf09fa · O261-C · verificador · origem=Code
-
-1. **2º juiz / derivação paralela de fonte única:** o HIST tocado ainda decide o dia exclusivamente por `contexto_json__data_turno`, enquanto `dia_do_fato` prioriza `celula.data`. Um encerrado com célula do dia e JSON sem essa chave é descartado antes de `motivos_atendidos`. Para pergunta morta de intervalo, c1 e c2 recusam, deixando-a órfã. O filtro é anterior, mas está no sítio tocado. (`app/chamados/reconciliador.py:1452`, `app/chamados/reconciliador.py:1454`, `app/chamados/juizes.py:88`, `app/chamados/reconciliador.py:363`, `app/chamados/reconciliador.py:764`, `app/chamados/reconciliador.py:727`)
-
-2. **Selo/RED:** há uma incoerência no teste novo de idempotência. A segunda chamada direta exige igualdade de todos os campos, mas percorre novamente o c2 e `reapontar_resolvedora`, que sempre relavra e renova `julgado_em`. Sem congelamento externo, a asserção deve falhar nesse campo; não demonstra o contrato anunciado. (`app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:263`, `app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:264`, `app/chamados/services/disputa_emissao.py:209`, `app/chamados/reconciliador.py:1487`, `app/chamados/services/fio.py:798`, `app/chamados/veredito_lavrado.py:228`)
-
-- **2º escritor fora da porta: nada.** A costura permanece em `reapontar_resolvedora`. (`app/chamados/reconciliador.py:871`, `app/chamados/reconciliador.py:1507`)
-- **Relógio fora da borda: nada nos trechos novos.** (`app/chamados/reconciliador.py:703`, `app/chamados/reconciliador.py:721`)
-- **Ordem de trava: nada.** A emissão continua pelo `abrir`, com trava de Colaborador antes do dedup. (`app/chamados/reconciliador.py:831`, `app/chamados/models.py:666`, `app/chamados/models.py:669`)
-- **Pouso antes do pré-requisito: nada demonstrável.** O RELATO declara B no ar e passivo aplicado; a confirmação externa desses registros está [não verificado]. (`app/docs/CORTES.md:399`, `app/docs/RELATO.md:4`, `app/docs/RELATO.md:7`)
-
-Resultado efetivo da suíte: [não verificado]; os achados acima são de leitura estática. [nao verificado]
-
-_355 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_363 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
