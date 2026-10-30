@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 30/10/2026 11:42:12.** Transcript: `c07bd622-c518-4ee0-9641-ce667785cb73.jsonl` (6.7 MB). Acoes na janela: **291**.
+**Medido em 30/10/2026 11:47:18.** Transcript: `c07bd622-c518-4ee0-9641-ce667785cb73.jsonl` (6.7 MB). Acoes na janela: **293**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 11:42:27 | Bash | Wait for push to end and check remote | `cd /home/ronald/saas-hasner && for i in $(seq 1 58); do [ "$(ps aux \| grep -c '[b]in/push.sh')" = 0 ] && break; /usr/bin/sleep 10; done; git fetch -q; git log --oneline origin/main -1; git status --short \| grep -v "^??"` |
+| 11:42:17 | Bash | Check whether the second push is running | `cd /home/ronald/saas-hasner && ps aux \| grep -c "[b]in/push.sh"; ls -la logs/fioadmin/ \| tail -4; git fetch -q; git log --oneline origin/main -1` |
 | 11:32:25 | Bash | Push marco commit and wait | `cd /home/ronald/saas-hasner && (bash bin/push.sh > logs/fioadmin/push2.log 2>&1; echo rc=$? >> logs/fioadmin/push2.log) > /dev/null 2>&1 & for i in $(seq 1 58); do grep -q "^rc=" logs/fioadmin/push2.log 2>/dev/null && break; /usr/bin/sleep 10; done; tail -n 3 logs/fioadmin/push2.log` |
 | 11:32:17 | Bash | Add PROVA marker and commit marco | `python3 - <<'EOF' p='docs/RELATO.md'; s=open(p).read() a="+ deploy 11:1x `--sem-migrate` (`logs/fioadmin/deploy.log` deploy_rc=0, 3 rotas OK, importerror_500=0). SMOKE em prod" assert s.count(a)==1 s=s.replace(a,"+ deploy 11:1x `--sem-migrate` PROVA: `logs/fioadmin/deploy.log` deploy_rc=0, 3 rotas OK, importerror_500=0. SMOKE em prod") open(p,'w').write(s) EOF cd /home/ronald/saas-hasner && git st ...` |
 | 11:24:15 | Bash | Keep waiting for push | `cd /home/ronald/saas-hasner && for i in $(seq 1 58); do grep -q "^rc=" logs/fioadmin/push.log && break; /usr/bin/sleep 10; done; tail -n 5 logs/fioadmin/push.log` |
