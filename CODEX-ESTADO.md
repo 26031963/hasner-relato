@@ -1,7 +1,38 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **30/10/2026 05:35** · publicado em **30/10/2026 05:40** (UTC-3)
+> Ultima resposta processada: **30/10/2026 05:47** · publicado em **30/10/2026 05:50** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 30/10 05:47 · sessao fa471d9a91b1 · O261-FIO6 · sonda · origem=Code
+
+**As seis são ESTRUTURA quanto à contradição do fio:** essa classificação é explícita no próprio vigia e corresponde à L-099. Isso não determina o dono de eventual divergência entre DNA e batidas. (`app/chamados/services/vigia_fio.py:9`; `CLAUDE.md:306`)
+
+**A sonda permite identificar a morte por validação em quatro células, mas não permite atribuir um escritor causal específico às seis.** Faltam ata, DNA, contexto dos chamados e trilha dos carimbos. [nao verificado]
+
+Os IDs e estados de produção abaixo vêm exclusivamente do anexo, sem arquivo local para citação. [nao verificado]
+
+| Célula / dia / chamado | Por que não há fio vivo; qual pergunta deveria viver | Dono L-099 | Chamado deveria continuar vivo? |
+|---|---|---|---|
+| **143031 / col1005 / 29-10 / #35679** [nao verificado] | Nenhuma pergunta apresentada. Motivo que deveria ser emitido e bloqueio efetivamente percorrido: **[nao verificado]**. Há uma lacuna demonstrável no caminho `nunca_bateu`: o corpo lavra a célula e retorna sem registrar a data em `out['cods']`; a fábrica é chamada somente para datas presentes nesse mapa. (`app/ponto/services/cartorio.py:981`, `:1003`, `:759`, `:768`; publicação no ramo normal em `:1120`) | **ESTRUTURA do fio**. Atribuição deste caso à lacuna acima: **[nao verificado]**. | O reconciliador preserva `batida_ausente` pela regra **R** abaixo. Porém, uma nova emissão com `nunca_bateu` seria vetada: esse veredito integra `VEREDITOS_QUE_VETAM`, consumido pelo emissor. (`app/ponto/marcos.py:119`, `:161`; `app/ponto/management/commands/detectar_ausencias.py:625`) Motivo concreto de o estoque não ter sido encerrado/agrupado: **[nao verificado]**. |
+| **129745 / col451 / 21-10 / #33286** [nao verificado] | **P46703 `saida_sem_entrada` e P46704 `orfao_14h` morrem por `validada_em` preenchido**, antes de consultar a célula. (`app/chamados/juizes.py:1005`) Pela regra atual, nenhuma delas deve continuar viva apenas porque o dia acusa. O emissor também retira motivos que já possuem pergunta. (`app/chamados/services/fabrica_da_celula.py:101`, `:109`) Ambas estão em `com_registro` no anexo. [nao verificado] | **ESTRUTURA do fio**, classe **V**, compartilhada por quatro células. Não há prova de erro no DNA ou falta/sobra de batida. [nao verificado] | **R** conserva o chamado. Premissa material regularizada e motivo concreto de não fechamento pelo lastro: **[nao verificado]**, conforme **L** abaixo. |
+| **129747 / col451 / 23-10 / #34254** [nao verificado] | **P49422 `saida_sem_entrada` e P49423 `orfao_14h` morrem pela mesma validação prioritária.** (`app/chamados/juizes.py:1005`) **P49422 apresenta adicionalmente `sem_plantio_nenhum`**, enquanto P49423 apresenta `com_registro`. [nao verificado] A primeira classe significa que o juiz de materialização não confirmou lastro, o slot é derivável e não há plantio vivo vinculado. (`app/chamados/services/vigia_carimbo.py:106`, `:110`, `:113`) | **ESTRUTURA do fio**, classe **V**; também classe **P**, presente em uma célula. Escritor que produziu o carimbo sem lastro: **[nao verificado]**. | **R** conserva o chamado. `sem_plantio_nenhum` de P49422 não demonstra, sozinho, quais marcos #34254 cobra nem o resultado do fechador: **[nao verificado]**. |
+| **129749 / col451 / 25-10 / #34850** [nao verificado] | **P50179 `saida_sem_entrada` e P50180 `orfao_14h` morrem por validação**, no primeiro teste do juiz. (`app/chamados/juizes.py:1005`) Ambas apresentam `com_registro`. [nao verificado] A existência delas impede nova emissão dos mesmos motivos pela fábrica. (`app/chamados/services/fabrica_da_celula.py:101`, `:109`) | **ESTRUTURA do fio**, classe **V**. Dono de eventual divergência DNA/batidas: **[nao verificado]**. | **R** conserva o chamado; premissa material e motivo concreto de não fechamento por **L**: **[nao verificado]**. |
+| **129751 / col451 / 27-10 / #35331** [nao verificado] | **P50883 `saida_sem_entrada` e P51025 `orfao_14h` morrem por validação**, antes do veredito acusador. (`app/chamados/juizes.py:1005`) Ambas apresentam `com_registro`. [nao verificado] A fábrica exclui os motivos já existentes. (`app/chamados/services/fabrica_da_celula.py:101`, `:109`) | **ESTRUTURA do fio**, classe **V**. Dono de eventual divergência DNA/batidas: **[nao verificado]**. | **R** conserva o chamado; premissa material e motivo concreto de não fechamento por **L**: **[nao verificado]**. |
+| **140114 / col129 / 25-10 / #35101** [nao verificado] | **P50169 `saida_sem_entrada` morre por validação.** (`app/chamados/juizes.py:1005`) Para **P50170 `orfao_14h`**, sem validação nem resposta no anexo, a cláusula exata que devolveu `False` é **[nao verificado]**: faltam a leitura da tranca e a lâmpada do marco, consultadas antes do veredito acusador. (`app/chamados/juizes.py:1010`, `:1050`, `:1054`) `via=fantasma` não integra as vias de identidade que encerram incondicionalmente. (`app/chamados/juizes.py:1039`) | **ESTRUTURA do fio**, classe **M**, uma célula. Não há prova de que P50170 deveria estar viva. [nao verificado] | O chamado vivo **#35101** é conservado por **R**. O fechamento de #35056 e o destino #3227 de P50169 não demonstram a regularização dos marcos de #35101. [nao verificado] Resultado concreto de **L**: **[nao verificado]**. |
+
+As classes demonstráveis e seus escritores são:
+
+- **V — perguntas encerradas por validação: quatro das seis células integralmente nessa classe**, as quatro de col451; P50169 também morre pelo mesmo predicado. [nao verificado] O C6 encerra imediatamente por `validada_em`; o emissor chama o fato existente de **“fio decidido”**, sem pedir nova pergunta. (`app/chamados/juizes.py:1005`; `app/chamados/management/commands/disparar_perguntas_competencia.py:210`) **Não há um escritor único demonstrado para esses registros**: existem atribuições positivas em validação, materialização e resolução por chamado. (`app/chamados/services/validacao.py:127`; `app/chamados/services/materializacao.py:514`, `:1194`; `app/chamados/services/disputa_emissao.py:1574`) Qual delas escreveu cada pergunta: **[nao verificado]**.
+
+- **P — validada sem lastro confirmado e sem plantio vivo vinculado: uma das seis**, P49422 da célula 129747. [nao verificado] A classificação é produzida pelo leitor `vigia_carimbo.classificar`, não identifica o escritor histórico. (`app/chamados/services/vigia_carimbo.py:97`, `:106`, `:116`) A devolução da validação recusada exige `materializada_em` nulo; uma pergunta já carimbada fica fora desse mecanismo. (`app/chamados/services/validacao.py:180`) Isso explica a exclusão pelo código atual, mas não prova a sequência histórica desse caso. [nao verificado]
+
+- **N — ausência de pergunta: uma das seis**, célula 143031. [nao verificado] O caminho `nunca_bateu` escreve veredito/ata e retorna sem alimentar o mapa exigido para chamar `perguntar_pela_celula`; esse mapa é alimentado no ramo normal. (`app/ponto/services/cartorio.py:950`, `:981`, `:1003`, `:1120`, `:768`) **A lacuna é comprovada no código; a execução responsável pela ausência nesta célula é [nao verificado]**. O motivo devido depende dos marcos faltantes e vencidos, ausentes do anexo. (`app/chamados/services/fabrica_da_celula.py:49`, `:59`)
+
+- **M — uma pergunta validada e outra fantasma sem validação: uma das seis**, célula 140114. [nao verificado] A porta que grava `fantasma` é `PerguntaDisputa.encerrar_fantasma`; o consumidor atual exige a lâmpada do próprio marco acesa antes de chamá-la. (`app/chamados/models.py:2162`; `app/chamados/reconciliador.py:1032`, `:1092`) **Não se pode atribuir o carimbo de P50170 a esse consumidor atual** sem sua trilha histórica. [nao verificado]
+
+**R — por que o reconciliador conserva os seis `batida_ausente`.** O catálogo associa esse módulo a `FATO_FALTA_DESCOBERTA`, mas `_veredito_premissa` não coleta esse fato; o catálogo devolve `viva=True` quando o fato não foi coletado, e o laço pula a retratação. Portanto, aqui “premissa viva” é **preservação conservadora**, não comprovação de furo material. (`app/chamados/catalogo/premissa.py:58`, `:128`; `app/chamados/reconciliador.py:262`, `:301`, `:1360`) A retratação pela célula também não age enquanto seu veredito acusa. (`app/chamados/reconciliador.py:975`)
+
+**L — quem encerraria por lastro e por que não é possível provar a recusa individual.** `fechar_cobranca_com_lastro` delega a `lastro.fechar`; este só tenta reconciliar os chamados classificados em `com_lastro`. (`app/ponto/management/commands/fechar_cobranca_com_lastro.py:52`; `app/ponto/services/lastro.py:306`) A classificação depende dos **marcos cobrados no contexto do chamado**, de suas lâmpadas e, no recuo, das batidas; depois ainda passa pelo gate da premissa. (`app/ponto/services/lastro.py:250`, `:264`, `:291`, `:317`; `app/chamados/models.py:470`) Esses insumos e a execução do fechador não constam da sonda: dizer que cada chamado deveria fechar, ou nomear por que concretamente não fechou, é **[nao verificado]**.
 
 ## 30/10 05:35 · sessao fb2eb8b68907 · ORCAMENTO · verificador · origem=Code
 
@@ -341,32 +372,4 @@ Achados no hook, com prova em memória onde indicado:
 - Não achei inversão entre ORC lock e ESPERA lock: orçamento toma ORC antes de consultar ESPERANDO em `bin/hook_stop_fila1.py:719`; ESPERA usa aquisição não bloqueante em `bin/hook_stop_fila1.py:572` e fecha antes de retornar em `bin/hook_stop_fila1.py:603`.
 - Fila vazia libera pelo caminho antigo em `bin/hook_stop_fila1.py:1008` quando não há resposta própria do orçamento; com gatilho, há um bloqueio PREPARA antes disso em `bin/hook_stop_fila1.py:983`, mas o contrato 2 manda disparar e não fornece exceção para fila vazia. Não considero isso, isoladamente, defeito contratual. `bin/hook_stop_fila1.py:828`.
 
-## 30/10 03:00 · sessao 7a97d71c3c87 · O261-C · verificador · origem=Code
-
-Restam **dois defeitos de código**: a tranca ainda tem uma brecha com data nula, e o memo pode devolver K6 velho. Ocorrência atual na frota: **[não verificado]**. (`app/chamados/reconciliador.py:1451`, `app/chamados/reconciliador.py:702`)
-
-1. **Tranca consultada antes do pré-requisito da data.** A porta aceita `data_evento=NULL` e obtém o dia pelo contexto, mas consulta `dia_da_pergunta_trancado(p)` antes de colocar esse dia na pergunta. C7 retorna `False` quando a data está nula. (`app/chamados/models.py:1856`, `app/chamados/reconciliador.py:1424`, `app/chamados/reconciliador.py:1451`, `app/chamados/juizes.py:887`)
-
-   Para intervalo **morto por `validada_em`**, com único `batida_ausente` encerrado desse dia, o HIST novo casa pelo juiz e chega à costura; ela só então data e salva a pergunta, inclusive no dia trancado. Antes, a igualdade não casava esse intervalo. É uma regressão latente da proteção da tranca, sem contestar o R8 já corrigido para perguntas datadas. (`app/chamados/juizes.py:1006`, `app/chamados/reconciliador.py:1463`, `app/chamados/reconciliador.py:1466`, `app/chamados/reconciliador.py:1500`, `app/chamados/services/fio.py:788`, `app/chamados/services/fio.py:799`)
-
-   **R8 não cobre isso:** o cenário sempre grava `data_evento=dia`. (`app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:96`, `app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:183`)
-
-2. **Sim, `_o261c_entregue` pode ficar velho entre perguntas na mesma instância.** No cron, a instância recebida pelo `iterator()` atravessa todo o laço de perguntas daquele colaborador; no evento, cada motivo passa novamente `disputa.colaborador`. O memo dura esse processamento, não apenas uma pergunta. (`app/chamados/management/commands/reconciliar_chamados.py:51`, `app/chamados/reconciliador.py:1380`, `app/chamados/services/disputa_emissao.py:292`, `app/chamados/services/disputa_emissao.py:409`)
-
-   A chave contém somente o dia, sem invalidação. Registrar ou invalidar um export altera a fonte consultada por K6; uma consulta posterior do mesmo dia continua devolvendo o bool guardado. O lock de `abrir` sobre `Colaborador` não é compartilhado por `ExportacaoDominio.registrar`. (`app/chamados/reconciliador.py:702`, `app/folha/models.py:162`, `app/folha/models.py:182`, `app/folha/export.py:570`, `app/chamados/models.py:669`)
-
-   Assim, um export concluído entre duas perguntas pode deixar a segunda entrar no alcance novo com o `False` anterior; o c2 não revalida a entrega adiante. O inverso também conserva indevidamente o alcance fechado após invalidação. Intercalação real em produção: **[não verificado]**. (`app/chamados/reconciliador.py:703`, `app/chamados/reconciliador.py:755`, `app/chamados/reconciliador.py:788`, `app/folha/export.py:572`)
-
-Por classe:
-
-| Classe | Resultado |
-|---|---|
-| Segundo juiz registrado | **Nada novo**; consulta os juízes existentes. `app/chamados/reconciliador.py:704`, `:717`, `:1452`, `:1463`. |
-| Segundo escritor fora da porta | **Nada**; conserva `abrir` e `reapontar_resolvedora`. `app/chamados/reconciliador.py:822`, `:862`, `:1500`. |
-| Relógio fora da borda | **Nada novo** no diff. `app/chamados/reconciliador.py:697`, `:1431`. |
-| Derivação paralela de fonte única | **Nenhuma fórmula nova**; permanece o defeito de atualização do memo descrito no achado 2. `app/chamados/reconciliador.py:706`. |
-| Selo/RED sem mordida | Faltam data nula no R8 e mudança de K6 entre consultas. `app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:96`, `:197`, `:225`. RED/GREEN: **[não verificado]**. |
-| Ordem de trava | **Achado 1**; nenhuma inversão nova de aquisição de lock identificada. `app/chamados/reconciliador.py:1451`, `app/chamados/models.py:666`. |
-| Pouso antes do pré-requisito | **Nada comprovado**. O RELATO registra B no ar; a remedida exigida para C permanece **[não verificado]**. `app/docs/RELATO.md:3`, `app/docs/CORTES.md:399`. |
-
-_347 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_348 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
