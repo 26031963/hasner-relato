@@ -6,10 +6,18 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 30/10/2026 18:06:46.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (3.0 MB). Acoes na janela: **116**.
+**Medido em 30/10/2026 18:12:07.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (3.3 MB). Acoes na janela: **124**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 18:12:03 | Bash |  | `cd /home/ronald/saas-hasner && git commit -q -F - <<'EOF' CALENDARIO-HOJE-NAO-E-FALTA POUSA: o dia ainda nao encerrado e 'previsto' pela juiza, e o dia passado sem fim previsto le o juiz da folha Avais Ronald 30/10 13:3x (BO fila 2, bug provado) e 15:3x (juiz unico/SSOT). O calendario decidia 'futuro' pela DATA (`data > hoje`): hoje sem batida virava 'falta' antes do turno (col566 30/10 13:23, tur ...` |
+| 18:11:51 | Bash |  | `cd /home/ronald/saas-hasner && git merge --no-ff --no-commit 38fe9889 2>&1 \| tail -2; git rev-parse -q --verify MERGE_HEAD >/dev/null && echo "MERGE_HEAD presente" \|\| echo "FF!!"; W=/home/ronald/wt-cal-pouso-3010-1638; for f in $(git diff --cached --name-only); do cmp -s $f $W/$f && echo "igual $f" \|\| echo "DIFERE $f"; done` |
+| 18:11:46 | Bash |  | `cd /home/ronald/saas-hasner && git rev-parse --short HEAD && git status --porcelain \| grep -v "^??" ; bin/sombra.sh --conferir 2>&1 \| tail -3; ls logs/crons_em_curso/ 2>/dev/null \| head; pgrep -fa "bin/push.sh\|pos_push" \| grep -v pgrep \| head -2` |
+| 18:10:08 | Bash |  | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md' L=open(p).read().split('\n') L.insert(3,"> lei: CALENDARIO-DIA-PASSADO-COM-FIM-SEM-VEREDITO (PERGUNTA, nao trava a fila; opus final do CALENDARIO-HOJE 30/10 18:0x, item 2): dia PASSADO de trabalho, COM fim previsto, SEM veredito e sem batida -- a tela diz 'falta' (grade pinta o dia sem ata, CALENDARIO-ATA-DECIDE-O-DIA) e a fol ...` |
+| 18:09:59 | Agent | Construir O261-V-FASE-NA-LISTA | `Voce CONSTROI a cura de negocio O261-V-FASE-NA-LISTA no repo /home/ronald/saas-hasner (Django, ponto eletronico CLT). Leia ANTES /home/ronald/saas-hasner/CLAUDE.md inteiro (secao 0 LEI-AKITA e selo de conduta; 4 celula-dia; 4a; 4b L-099; 6; 7b CODEX-PRE-VERIFICADOR, CODEX-TRIAGEM-INDEPENDENTE, AGENTE-NAO-ESPERA). DESENHO JA APROVADO + LEI RESPONDIDA (nao reabra): - Leitura de desenho do opus: /hom ...` |
+| 18:09:34 | SendMessage |  | `-` |
+| 18:09:23 | SendMessage |  | `-` |
+| 18:09:13 | Bash |  | `cd /home/ronald/saas-hasner && date +%H:%M && python3 - <<'EOF' p='app/docs/PROMPTS.md' s=open(p).read().rstrip('\n')+'\n' s+="\| 30/10 18:1x \| **avais (3): (1) O261-V-FASE-QUAL-PREDICADO-LAVRA = (a): juiz unico da fase deslocada = `censo_fase_12x36 --lavrar` (diario, le vinculo_do_dia, universo inclui EC encerrado); o detalhe ganha dia + ec_do_dia + dono_do_dia por dia, sem cron nem juiz novo; ` ...` |
 | 17:58:54 | Bash |  | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md' s=open(p).read() a="`test_import_tardio_contra_o_ar`, `test_lei_akita`" assert s.count(a)==1 s=s.replace(a,"`test_import_tardio_contra_o_ar` (MEDIDO 18:0x: o ar esta ALINHADO -- `acusados=0` com o ar em cdc7d8e2; vermelha e so a metade MORDE do selo, cujo sitio historico `previstas_do_periodo` mudou: selo apodrecido, fila), `t ...` |
 | 17:58:46 | Bash |  | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/scratchpad/test_import_tardio_contra_o_ar.out \| cut -c1-250 \| head -30` |
 | 17:58:42 | Bash |  | `cd /home/ronald/saas-hasner && sed -n 40,70p bin/import_tardio_contra_o_ar.py; ls -la app/logs/deploy.stamp logs/deploy.stamp 2>&1` |
