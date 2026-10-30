@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 30/10/2026 00:03:12.** Transcript: `e3f79949-a90b-4c64-a5c2-afd178149c30.jsonl` (3.1 MB). Acoes na janela: **127**.
+**Medido em 30/10/2026 00:08:14.** Transcript: `e3f79949-a90b-4c64-a5c2-afd178149c30.jsonl` (3.1 MB). Acoes na janela: **129**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 00:07:47 | Bash | Kill suite, fix comment, add cost seal, run | `P=$(pgrep -f '^bash /tmp/.*/mB_suite.sh' \| head -1); [ -n "$P" ] && kill $P; for id in $(docker ps -q); do n=$(docker inspect $id --format '{{.Name}} {{range .Mounts}}{{.Source}} {{end}}'); case "$n" in *wt-o261c2b*) docker kill $id >/dev/null; echo killed;; esac; done; sleep 1; /home/ronald/saas-hasner/bin/trava_teste.sh --quem cd /home/ronald/wt-o261c2b-2910-2317/app && python3 - <<'EOF' def re ...` |
+| 00:07:25 | Bash | Read Codex volta 3 | `cd /home/ronald/saas-hasner/logs/o261 && tail -n1 codex_mB_verif_v3.run; cat codex_mB_verif_v3.txt \| head -80` |
 | 00:03:01 | Bash | Wait for Codex volta 3 | `until grep -q '^rc=' /home/ronald/saas-hasner/logs/o261/codex_mB_verif_v3.run 2>/dev/null; do /usr/bin/sleep 20; done; tail -n1 /home/ronald/saas-hasner/logs/o261/codex_mB_verif_v3.run` |
 | 00:02:56 | Bash | Record porta-False finding in RELATO | `python3 - <<'EOF' p='docs/RELATO.md'; L=open(p).read().split('\n') i=[k for k,l in enumerate(L) if l.startswith('> **RESPONDIDA 23:5x -- O261-VIVA-SEM-CHAMADO-DO-DIA')][0] L.insert(i+1,'> (C) porta-False (Codex `logs/o261/codex_c_porta_false.txt`, conferido `reconciliador.py:332,363,712,1389-1416`): DEFEITO DA PORTA, cura nela (aval: "nao um ramo novo"): (i) o ramo HIST casa o motivo pelo MAPA 1:1 ...` |
 | 00:02:40 | Bash | Update pid; read porta-False analysis | `cd /home/ronald/saas-hasner && P=$(pgrep -f '^bash /tmp/.*/mB_suite.sh' \| head -1); sed -i "3s#pid=[0-9]*#pid=$P#" app/docs/RELATO.md; tail -n1 logs/o261/codex_c_porta_false.run; cat logs/o261/codex_c_porta_false.txt` |
