@@ -1,7 +1,27 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **30/10/2026 00:24** · publicado em **30/10/2026 00:24** (UTC-3)
+> Ultima resposta processada: **30/10/2026 02:20** · publicado em **30/10/2026 02:21** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 30/10 02:20 · sessao 27807bab5270 · - · - · origem=Ronald (tmux)
+
+| Motivo | Catálogo | `motivos_atendidos` × ramo HIST |
+|---|---|---|
+| `batida_fora_escala_grave` | Resposta `escolha`: `app/chamados/catalogo/perguntas.py:82-85`; espelho `app/chamados/models.py:2395-2399`. | Ausente do conjunto devolvido pelo juiz (`app/chamados/models.py:2502-2503`) e dos valores dos mapas HIST (`app/chamados/models.py:2466-2483`): concordam em não reconhecê-lo como motivo atendido pelo chamado do dia. |
+| `sem_posto` | Resposta `posto_dropdown`: `app/chamados/catalogo/perguntas.py:36-39`; espelho `app/chamados/models.py:2356-2360`. | Ausente do conjunto devolvido pelo juiz (`app/chamados/models.py:2502-2503`) e dos valores dos mapas HIST (`app/chamados/models.py:2466-2483`): mesma exclusão. |
+| `foto_ausente` | Resposta `escolha`: `app/chamados/catalogo/perguntas.py:94-97`; espelho `app/chamados/models.py:2405-2409`. | Ausente do conjunto devolvido pelo juiz (`app/chamados/models.py:2502-2503`) e dos valores dos mapas HIST (`app/chamados/models.py:2466-2483`): mesma exclusão. |
+| `saida_sem_entrada` | Resposta `hora`: `app/chamados/catalogo/perguntas.py:56-58`; espelho `app/chamados/models.py:2373-2378`. | Juiz aceita qualquer categoria/subcategoria presente nos mapas e devolve os quatro motivos (`app/chamados/juizes.py:1597-1599`). HIST só aceita quando o motivo principal resultante é exatamente `saida_sem_entrada` (`app/chamados/reconciliador.py:1391-1394`), cujo único mapeamento é a categoria homônima (`app/chamados/models.py:2468`). Portanto divergem para chamados mapeados como `orfao_14h`. |
+| `orfao_14h` | Resposta `hora`: `app/chamados/catalogo/perguntas.py:48-50`; espelho `app/chamados/models.py:2366-2371`. | Juiz também aceita chamado da categoria `saida_sem_entrada` (`app/chamados/juizes.py:1597-1599`; `app/chamados/models.py:2502`). HIST exige resultado principal `orfao_14h` (`app/chamados/reconciliador.py:1391-1394`), encontrado nas demais categorias e em todas as subcategorias dos mapas (`app/chamados/models.py:2469-2482`). Divergem para categoria `saida_sem_entrada` sem subcategoria que prevaleça. |
+| `intervalo_volta` | Resposta `hora`: `app/chamados/catalogo/perguntas.py:132-134`; espelho `app/chamados/models.py:2437-2442`. | Juiz inclui explicitamente (`app/chamados/models.py:2503`; `app/chamados/juizes.py:1599`); nenhum mapa tem esse valor (`app/chamados/models.py:2466-2483`). HIST nunca o acrescenta pela igualdade exata (`app/chamados/reconciliador.py:1393-1394`): divergem. |
+| `intervalo_saida` | Resposta `hora`: `app/chamados/catalogo/perguntas.py:124-126`; espelho `app/chamados/models.py:2430-2435`. | Juiz inclui explicitamente (`app/chamados/models.py:2503`; `app/chamados/juizes.py:1599`); nenhum mapa tem esse valor (`app/chamados/models.py:2466-2483`). HIST nunca o acrescenta (`app/chamados/reconciliador.py:1393-1394`): divergem. |
+
+Linhas adicionais para consolidação:
+
+- Implementação do juiz: `app/chamados/juizes.py:1589-1600`; normalização das entradas em `:1595-1596`; nenhum teste de status, competência ou data nessa função.
+- Declaração de autoridade dos mapas: `app/chamados/models.py:2504-2505`. A tabela `'chamado'` do registro central está em `app/core/juizes.py:226-242` e não contém `motivos_atendidos`; contém `pergunta_viva` em `:232`, competência em `:240` e fio em `:241`.
+- Derivação viva efetivamente consulta o juiz: `app/chamados/services/disputa_emissao.py:194-196`. Seus candidatos exigem colaborador da disputa, status em `VIVOS` e categoria diferente de `disputa_supervisao` (`:181-184`); pergunta do mesmo motivo ainda não materializada exclui candidato (`:209-212`); datas conhecidas divergentes excluem candidato (`:214-217`); quantidade final diferente de um retorna `(None,None)` (`:219-227`).
+- Na criação, intervalo pode nascer costurado pelo derivador (`app/chamados/services/disputa_emissao.py:379-380`); os motivos do conjunto que exige destino também derivam (`:381-383`); pergunta recém-criada sem destino nos quatro motivos do dia chama `reatar_pergunta_orfa` (`:404-409`).
+- `resolvedora_valida` veta divergência comprovada de turno/data em `app/chamados/juizes.py:1737-1738`; permite mesma data (`:1721-1722`) e diferença de um dia quando o turno atravessa meia-noite ou a travessia é desconhecida (`:1730-1736`). Sem data da pergunta, sem chamado, módulo fora de escopo DIA ou dia do chamado desconhecido/inválido, permite (`:1702-1720`).
 
 ## 30/10 00:24 · sessao 47c16c4ae35b · mariaB · verificador · origem=Code
 
@@ -623,24 +643,4 @@ Achados do hook, em leitura:
 
 Sonda complementar executada apenas em memória, carregando o fonte com `compile/exec` e substituindo leitores por lambdas: reproduziu os quatro resultados de CLEAR descritos nos itens 1–2; nenhum teste shell foi executado nem arquivo escrito. A fundamentação reproduzível desses resultados está nos predicados citados acima. [nao verificado]
 
-## 29/10 23:36 · sessao ab10169c2598 · - · - · origem=Ronald (tmux)
-
-Achados dos selos, sem execução:
-
-1. **O contrato introduz uma exceção global que os selos atuais de `PAREI` não cobrem.** `test_hook_parei_trava_o_item_em_curso.sh:52` exige que `PAREI` de outro item não libere; `:64` exige que o item em curso libere quando o restante está travado. `test_hook_parei_com_andavel.sh:38` usa `PAREI: ! O261`; `:45` exige bloqueio com outro item andável, e `:55` exige liberação somente com o restante travado. Cenário: implementar CLEAR apenas ampliando `_parei_do_em_curso` continua sujeito à trava dos outros itens, porque `_relato_parou` retorna `not _andaveis_fora_do_em_curso(...)` (`bin/hook_stop_fila1.py:661`). Consequência: CLEAR pode continuar bloqueado; se a cura relaxar genericamente esse predicado, quebra a proteção comprovada pelos dois selos.
-
-2. **Silêncio sozinho é prova insuficiente de que CLEAR liberou pela regra correta.** O selo de ESPERANDO remove `hook_stop_fila1.json` em cada caso para impedir uma falsa liberação pelo TETO (`bin/tests/test_hook_esperando_com_prova.sh:63` e `:65`) e exige o motivo `ALLOW ESPERANDO com prova` na trilha (`:74`). Cenário: testar `PAREI ! CLEAR` depois de seis Stops com o mesmo HEAD, verificando somente stdout vazio. Consequência: teste pode passar pelo TETO (`bin/hook_stop_fila1.py:827` e `:836`) ou por falha aberta (`:839`), sem provar reconhecimento de CLEAR.
-
-3. **Os selos existentes não alimentam o novo caminho de medida.** ESPERANDO e TETO enviam `{}` (`bin/tests/test_hook_esperando_com_prova.sh:65`; `bin/tests/test_hook_teto_nao_conta_espera.sh:58`); o selo de saída usa stdin vazio (`bin/tests/test_hook_stop_saida_valida.sh:26` e `:52`). Cenário: avaliador ignora indevidamente `transcript_path`, soma o turno errado ou nunca encontra `usage`. Consequência: esses selos continuam verdes; não provam transporte do payload nem os limiares de (a).
-
-4. **A precedência de ESPERANDO precisa de decisão explícita e selo cruzado.** O selo exige liberação para produtor vivo com fila aberta (`bin/tests/test_hook_esperando_com_prova.sh:40`, `:46`, `:94`) e exige que a prova do RELATO venha antes (`:186`–`:189`). No código, ESPERANDO libera antes de selecionar item e antes de calcular TETO (`bin/hook_stop_fila1.py:774`, `:776`, `:779`, `:815`). Cenário: orçamento estoura com ESPERANDO válido no topo. Consequência: consulta adicionada depois dessa porta não roda; adicionada antes e devolvendo `siga` incondicionalmente, muda a espera sem turno já selada.
-
-5. **O teste de TETO exige que ele continue liberando; CLEAR expirado precisa escapar dessa liberação genérica.** O selo injeta contador 99 e exige silêncio sem trabalho em curso (`bin/tests/test_hook_teto_nao_conta_espera.sh:75`–`:98`). Com suite em curso, exige bloqueio repetido (`:57`–`:65`). Cenário: após 30 minutos o ramo CLEAR expirado cai no fluxo normal com contador acima de cinco. Consequência: `_libera` do TETO vence o `siga` prometido (`bin/hook_stop_fila1.py:827` e `:836`); com suite em curso ocorre o contrário, bloqueia sem prazo por `_esperando` (`:815`–`:827`).
-
-6. **O selo de handoff não prova recuperação por `/clear`.** Ele exige `PreCompact` manual e auto (`bin/tests/test_handoff_sessao.sh:51`–`:56`), mas exige `SessionStart` somente `compact` (`:57`–`:61`); a presença do nome do handoff é procurada em qualquer entrada, sem vincular matcher e comando (`:60`). Cenário: acrescentar matcher clear vazio ou com comando errado. Consequência: selo atual passa e não prova nem escrita do marco nem entrega do handoff à sessão limpa.
-
-7. **Preservar a autoria do topo já é requisito selado.** `test_hook_nao_escreve_parei.sh:13` rejeita escrita direta no RELATO; `:18` rejeita montagem de `PAREI: hook`. Cenário: fazer hook corrigir automaticamente o topo CLEAR expirado ou escrever “clear nao dado, seguiu” nele. Consequência: viola a responsabilidade já testada; o contrato atribui essa escrita ao Code e precisa provar a transição via resposta do Stop, sem torná-la escrita do hook (`bin/tests/test_hook_nao_escreve_parei.sh:4`–`:9`).
-
-Não executar os selos foi necessário para cumprir só leitura: eles criam temporários, processos e arquivos (`bin/tests/test_hook_esperando_com_prova.sh:28`, `:55`, `:62`), e o selo de handoff executa o script contra a raiz viva e exige que tenha gravado `HANDOFF-SESSAO.md` (`bin/tests/test_handoff_sessao.sh:69`–`:72`).
-
-_308 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_309 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
