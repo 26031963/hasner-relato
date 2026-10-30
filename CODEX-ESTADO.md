@@ -1,7 +1,116 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **30/10/2026 20:51** · publicado em **30/10/2026 20:51** (UTC-3)
+> Ultima resposta processada: **30/10/2026 20:53** · publicado em **30/10/2026 20:56** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 30/10 20:53 · sessao 49a3dd0c868b · O261-E-CELULA-20 · leitura · origem=Code
+
+A medida pedida **não coincide com o `fio_morto` atual**: a folha parte dos colaboradores classificados como `furo_espelho`; o censo parte de chamados vivos com célula, sem filtrar competência entregue. Além disso, “pergunta viva”, “chamado na fila” e “porta de validação no fio” têm seleções diferentes. (`app/folha/fora_da_folha.py:120`, `app/folha/fora_da_folha.py:129`, `app/chamados/services/vigia_fio.py:185`, `app/chamados/services/painel.py:186`, `app/chamados/services/fio.py:594`)
+
+Os custos abaixo são inferidos do código. Quantidades observadas de queries, estado do banco e implantação em produção: **[nao verificado]**.
+
+**1) Assinaturas, retornos, custos e chamadores**
+
+Para as fórmulas: `C` é o custo de `classificar_export(empresa, mes, ano)`; `R(c)` é o custo de `motivos_retencao_celula(c, ..., com_dias=True)`; `J` é o custo adicional dos juízes de vitalidade. Esses caminhos são chamados pelas ferramentas da folha. (`app/folha/fora_da_folha.py:93`, `app/folha/fora_da_folha.py:120`, `app/folha/fora_da_folha.py:66`)
+
+| Função | Retorno | Custo por chamada |
+|---|---|---|
+| `fora_da_folha(empresa, mes, ano, com_itens=False)` | Dict com `competencia, empresa, total, entram, fora_por_motivo, furo_espelho, grupos, dias_por_fio, colabs`; opcionalmente `itens`. `colabs` contém somente classificados por `furo_espelho`. | `C + carga dos colaboradores + Σ R(c) + duas cargas de fio + J`. Depois da classificação, relê os dias de cada colaborador retido por furo. (`app/folha/fora_da_folha.py:97`, `app/folha/fora_da_folha.py:129`, `app/folha/fora_da_folha.py:132`, `app/folha/fora_da_folha.py:139`, `app/folha/fora_da_folha.py:142`, `app/folha/fora_da_folha.py:170`) |
+| `o_que_segura(colab, mes, ano)` | Dict com `competencia, colab, nome, entra, motivo, grupo, motivos_retencao, dias`; cada dia traz `data, veredito, motivo, fio, destrava, chamado`. | `C da empresa inteira + R(colab) + duas cargas de fio + outra carga de chamados + J`; pode carregar `colab.empresa`. Chamá-la para N colaboradores repete N vezes a classificação inteira da empresa. (`app/folha/fora_da_folha.py:179`, `app/folha/fora_da_folha.py:188`, `app/folha/fora_da_folha.py:191`, `app/folha/fora_da_folha.py:198`, `app/folha/fora_da_folha.py:209`) |
+| `chamado_que_lista(p, disputa=None)` | ID do destino; na ausência, ID do chamado da disputa; na ausência de ambos, `None`. | Zero queries com disputa fornecida/carregada ou sem `disputa_id`; uma para carregar `p.disputa` caso necessário. Carrega a disputa **antes** de retornar o destino, mesmo quando ele existe. (`app/chamados/services/fio.py:97`, `app/chamados/services/fio.py:116`) |
+| `qs_na_fila(f_urgencia='', f_q='', f_colab='', f_empresa='', f_praca='', _base=None)` | `QuerySet` lazy: `VIVOS ∩ COBRANCA`, excluindo silêncio futuro. | Zero ao construir; `.count()` normalmente uma query; materialização padrão não vazia normalmente duas: principal e prefetch de `followups`. `_base` e projeções `values/values_list` alteram esse custo. Não há laço interno por colaborador. (`app/chamados/services/painel.py:98`, `app/chamados/services/painel.py:153`, `app/chamados/services/painel.py:158`, `app/chamados/services/painel.py:186`) |
+| `perguntas_do_app(colab)` | Lista de `PerguntaDisputa`, ordenada por `id`, após `q_vivas()` e juiz Python. | Uma query inicial **mais custo variável por pergunta**; só `disputa` vem por `select_related`. Célula, colaborador, empresa, tranca e outros fatos podem gerar consultas adicionais. (`app/chamados/services/pergunta_no_app.py:39`, `app/chamados/juizes.py:757`, `app/chamados/juizes.py:888`, `app/chamados/juizes.py:1066`) |
+
+`R(c)` normalmente tem duas consultas: células e vínculos do período; as saídas por isenção ou janela colapsada antecedem essas consultas. (`app/folha/export.py:1174`, `app/folha/export.py:1184`, `app/folha/export.py:1188`, `app/folha/export.py:1194`, `app/escala/alimentacao.py:131`, `app/escala/alimentacao.py:153`)
+
+`C` não é constante: percorre os fechamentos da empresa e pode consultar batidas, escala, previsto, retenção e homologação por colaborador. O cruzamento de férias também pode carregar `periodo_aquisitivo` por agendamento e consultar batidas por colaborador com férias. (`app/folha/export.py:766`, `app/folha/export.py:787`, `app/folha/export.py:888`, `app/folha/export.py:912`, `app/folha/export.py:942`, `app/folha/export.py:948`, `app/folha/export.py:480`, `app/folha/export.py:488`, `app/ferias/services.py:51`)
+
+As duas cargas de `_alimentar` **não tornam o custo total igual a duas queries**: `_fio_do_dia` chama `p.viva` e `p.estado`; o juiz acessa relações e pode consultar tranca e outros juízes. Há memo por instância de pergunta; a tranca usa memo por request, ou por instância do colaborador fora de request. (`app/folha/fora_da_folha.py:51`, `app/folha/fora_da_folha.py:66`, `app/chamados/juizes.py:791`, `app/chamados/juizes.py:893`, `app/chamados/juizes.py:919`)
+
+Chamadores diretos localizados fora dos testes — execução efetiva em produção: **[nao verificado]**: [nao verificado]
+
+- `fora_da_folha`: `montar_linhas`, com `com_itens=True`; o command `lavrar_retrato_folha` chama esse montador. (`app/folha/retrato_folha.py:1120`, `app/folha/retrato_folha.py:1157`, `app/folha/management/commands/lavrar_retrato_folha.py:65`)
+- `o_que_segura`: nenhum chamador direto de produção encontrado por busca estática; chamadas dinâmicas e ausência absoluta: **[nao verificado]**.
+- `chamado_que_lista`: `data_do_fato_de`, montagem do fio, validar/recusar/corrigir no fio/modal e no detalhe. (`app/chamados/services/fio.py:77`, `app/chamados/services/fio.py:236`, `app/chamados/services/fio.py:592`, `app/chamados/services/fio.py:629`, `app/chamados/views.py:499`, `app/chamados/views.py:516`, `app/chamados/views.py:534`)
+- `perguntas_do_app`: API do colaborador, `medir` — uma vez por colaborador — e `do_dia`. (`app/api/views.py:2604`, `app/chamados/services/pergunta_no_app.py:113`, `app/chamados/services/pergunta_no_app.py:115`, `app/chamados/services/pergunta_no_app.py:138`)
+- `qs_na_fila`, telas/contadores: painel, contador do fio, três caminhos da navbar, dashboard e painel operacional. (`app/chamados/services/painel.py:210`, `app/chamados/views.py:901`, `app/core/context_processors.py:93`, `app/core/context_processors.py:150`, `app/core/context_processors.py:187`, `app/core/views.py:211`, `app/core/views.py:1193`, `app/core/services/painel_op.py:86`)
+- `qs_na_fila`, serviços: fila/gestão, fila por causa, SLA, lastro, furos diários e propositor. (`app/chamados/services/fila.py:92`, `app/chamados/services/fila.py:150`, `app/chamados/services/fila_por_causa.py:158`, `app/chamados/services/sla.py:62`, `app/ponto/services/lastro.py:216`, `app/escala/services/furos_diarios.py:202`, `app/escala/services/propositor.py:579`)
+- `qs_na_fila`, commands: alerta SLA, feriado do posto, nomeação de marco e cura de resíduo. (`app/chamados/management/commands/alertar_chamados_sla.py:30`, `app/colaboradores/management/commands/marcar_feriado_do_posto.py:95`, `app/chamados/management/commands/nomear_marco_por_lampada.py:47`, `app/ponto/management/commands/curar_residuo_bug115.py:72`)
+
+**2) Mesmos dias, ausência de célula e unicidade**
+
+São a **mesma fonte e regra**, mas listas reconstruídas em chamadas distintas: ambas usam `_dias_que_retem → motivos_retencao_celula(com_dias=True)`. `datas` projeta as datas dessa lista; `o_que_segura['dias']` acrescenta fio, ação e chamados. (`app/folha/fora_da_folha.py:90`, `app/folha/fora_da_folha.py:139`, `app/folha/fora_da_folha.py:168`, `app/folha/fora_da_folha.py:193`, `app/folha/fora_da_folha.py:203`)
+
+A igualdade depende de mesmo colaborador, janela e estado dos dados/relógio. Há também diferença de universo: `fora_da_folha['colabs']` só inclui `furo_espelho`; `o_que_segura` calcula os dias mesmo quando a classificação do colaborador aponta outro motivo. (`app/folha/export.py:1179`, `app/folha/fora_da_folha.py:129`, `app/folha/fora_da_folha.py:191`, `app/folha/fora_da_folha.py:193`)
+
+**Sim, existe dia retido sem `celula_id`**: dia passado sem célula, com vínculo cobrindo a data e diferente do dia de demissão, entra como `sem_celula`, com ID/veredito `None`. Sem célula e sem vínculo, o dia é ignorado. Nas duas ferramentas, ausência de ID recebe fio `nada`. (`app/folha/export.py:1203`, `app/folha/export.py:1209`, `app/folha/export.py:1211`, `app/folha/export.py:1214`, `app/folha/fora_da_folha.py:154`, `app/folha/fora_da_folha.py:204`)
+
+`CelulaDia` declara unicidade por `(colaborador, data)` no modelo e na migração. Constraint efetivamente aplicada no banco de produção: **[nao verificado]**. (`app/escala/models.py:1788`, `app/escala/migrations/0030_celuladia.py:35`)
+
+**3) Competências “abertas”, entendidas como não entregues**
+
+O predicado correspondente é **`not competencia_entregue(empresa_id, mes, ano)`**: K6 exige exportação vigente e não invalidada. Default retorna bool; `registro=True` retorna o registro ou `None`. Custa uma query sem registros de exportação e duas quando existem, por causa de `anotar_vigencia`. (`app/folha/export.py:545`, `app/folha/export.py:570`, `app/folha/export.py:572`, `app/folha/export.py:573`, `app/folha/models.py:207`, `app/folha/models.py:211`)
+
+| Função real | O que responde |
+|---|---|
+| `periodo_apuracao`, `periodo_apuracao_atual`, `corte_da_empresa`, `janela_fechamento`, `janela_atual`, `janela_anterior` | Geometria da competência pelo corte da empresa, clampado em 2–28; não decidem entrega. (`app/ponto/janelas.py:10`, `app/ponto/janelas.py:24`, `app/ponto/janelas.py:36`, `app/ponto/janelas.py:54`, `app/ponto/janelas.py:60`, `app/ponto/janelas.py:66`) |
+| `folha.export.janela_competencia` | Delega a `janela_fechamento`. (`app/folha/export.py:47`) |
+| `passivo_s84.competencia_de(dia, empresa)` | Mês/ano do fim da janela que contém o dia. (`app/ponto/services/passivo_s84.py:38`, `app/ponto/services/passivo_s84.py:45`) |
+| `vigia_fio.competencia_do_dia_entregue(dia, empresa, memo=None)` | Compõe `janela_atual` com K6; retorna `None` sem dia; memo opcional por empresa/mês/ano. (`app/chamados/services/vigia_fio.py:455`, `app/chamados/services/vigia_fio.py:467`, `app/chamados/services/vigia_fio.py:471`, `app/chamados/services/vigia_fio.py:475`) |
+| `esmeril_espelho.janela(colab, hoje=None)` | Retrocede da atual enquanto a anterior não foi entregue e existe célula do colaborador até seu fim; para na primeira entregue ou ausência de histórico; retorna intervalo até ontem. (`app/ponto/services/esmeril_espelho.py:38`, `app/ponto/services/esmeril_espelho.py:55`, `app/ponto/services/esmeril_espelho.py:58`, `app/ponto/services/esmeril_espelho.py:60`, `app/ponto/services/esmeril_espelho.py:63`) |
+| `he_pendente_lavrado.competencias_a_lavrar` | Enumeração parcial: atual incondicionalmente, anterior somente se não entregue; não retrocede além dela. (`app/ponto/services/he_pendente_lavrado.py:209`, `app/ponto/services/he_pendente_lavrado.py:220`, `app/ponto/services/he_pendente_lavrado.py:223`) |
+| `vigia_pausa._competencias` | Anterior e atual, sem filtrar entrega. (`app/folha/services/vigia_pausa.py:77`, `app/folha/services/vigia_pausa.py:94`) |
+| `dia_pago.competencias_do_intervalo`; `fechamento.competencias_do_fato` | Enumeram janelas tocadas por intervalo; a segunda adapta os dados e delega; não filtram K6. (`app/ponto/services/dia_pago.py:700`, `app/ponto/services/dia_pago.py:712`, `app/ponto/services/fechamento.py:1541`, `app/ponto/services/fechamento.py:1567`) |
+
+Não identifiquei enumerador geral de **todas e somente** as competências não entregues da empresa; ausência absoluta: **[nao verificado]**.
+
+Os outros sentidos de “fechada/aberta” não são equivalentes a K6:
+
+- `janelas.competencia_fechada` lê `FechamentoMensal` individual aprovado/exportado. (`app/ponto/janelas.py:75`, `app/ponto/janelas.py:85`, `app/ponto/janelas.py:87`)
+- `periodo_trancado`/`competencia_trancada` leem tranca viva; `marcos_da_competencia` reúne aprovada, exportada, trancada e paga. (`app/ponto/services/fechamento.py:1432`, `app/ponto/services/fechamento.py:1441`, `app/ponto/services/fechamento.py:1486`)
+- K9, `competencia_fechada_para_celula`, significa **K6 ou holerite publicado da pessoa**; `_competencias_exportadas` usa essa regra para regeneração. (`app/folha/export.py:578`, `app/folha/export.py:599`, `app/folha/export.py:603`, `app/ponto/management/commands/gerar_celulas.py:126`, `app/ponto/management/commands/gerar_celulas.py:179`)
+
+**4) Pergunta visível/acionável, leitores e escritores**
+
+Há três seleções distintas:
+
+- **Fila administrativa:** `qs_na_fila` cobra abertos/em análise sem silêncio futuro. O crédito de pergunta para “Validar” usa `q_vivas`, exclui materializada com `VL_SIM` e separa respondidas pelo carimbo. Destino pertencente ao universo vivo ganha; senão, o crédito cai no chamado pai da disputa. (`app/chamados/services/painel.py:186`, `app/chamados/services/raiox.py:54`, `app/chamados/services/raiox.py:133`, `app/chamados/services/raiox.py:144`)
+- **Fio/modal administrativo:** começa com todos os chamados do colaborador; carrega perguntas de disputas abertas e perguntas vivas de fechadas; agrupa pelo destino preenchido, ou pelo pai quando não há destino. Sem âncora, descarta a pergunta da montagem. (`app/chamados/services/fio.py:174`, `app/chamados/services/fio.py:213`, `app/chamados/services/fio.py:222`, `app/chamados/services/fio.py:236`)
+- **API do colaborador:** seleciona perguntas vivas sem exigir disputa aberta, destino vivo ou ausência de silêncio. Estado `RESPONDIDA` vai a `respondidas`, com `aguarda_admin=True`; os demais vão a `perguntas`. O endereço de cada item é o destino cru; apenas o envelope tem fallback ao pai. (`app/chamados/services/pergunta_no_app.py:42`, `app/api/views.py:2622`, `app/api/views.py:2624`, `app/api/views.py:2626`, `app/api/views.py:2642`)
+
+No modal, apresentação de validação depende da disputa, permissão e condições da pergunta. No POST, exige permissão, mesma âncora e mesmo colaborador; disputa fechada exige pergunta viva e permite validar sem reabri-la. O detalhe ainda exige disputa aberta. (`app/templates/chamados/partials/modal_fio.html:120`, `app/templates/chamados/partials/modal_fio.html:210`, `app/templates/chamados/partials/modal_fio.html:221`, `app/chamados/services/fio.py:560`, `app/chamados/services/fio.py:592`, `app/chamados/services/fio.py:594`, `app/chamados/views.py:493`)
+
+A validação exige `respondida_em` preenchido e `validada_em` vazio; pode exigir confirmação de implausibilidade. **O guard inicial não exige texto não vazio**. Já a API de resposta rejeita texto vazio. (`app/chamados/services/validacao.py:356`, `app/chamados/services/validacao.py:359`, `app/chamados/services/validacao.py:367`, `app/api/views.py:2688`)
+
+A vitalidade é decidida por `pergunta_viva`, não apenas pelos carimbos: validação e tranca vêm primeiro; resposta carimbada **com texto após `strip()`** pode continuar viva para o admin; depois entram decisão humana, identidade, marco no espelho, veredito, falta e materialização. `.viva` delega a esse juiz; `q_vivas` é prefiltro generoso. (`app/chamados/juizes.py:1005`, `app/chamados/juizes.py:1020`, `app/chamados/juizes.py:1039`, `app/chamados/juizes.py:1050`, `app/chamados/juizes.py:1066`, `app/chamados/models.py:2328`, `app/chamados/models.py:2359`)
+
+| Campo | Quem escreve | Quem lê |
+|---|---|---|
+| `respondida_em`, `resposta_colab` | Resposta canônica; automática; recuperação pela trilha; reabertura limpa ambos e guarda versão anterior. Materialização/ausência/fecho também têm escritas condicionadas a texto. (`app/chamados/services/disputa_emissao.py:1247`, `app/chamados/services/disputa_emissao.py:1358`, `app/chamados/services/disputa_emissao.py:1370`, `app/chamados/services/disputa_emissao.py:1392`, `app/chamados/services/disputa_emissao.py:1407`, `app/chamados/services/materializacao.py:511`, `app/chamados/services/materializacao.py:1190`, `app/chamados/services/disputa_emissao.py:1570`, `app/chamados/services/disputa_emissao.py:1655`) | Vitalidade, estado, crédito administrativo, modal e API. A fila global de validação exige carimbo e texto. (`app/chamados/juizes.py:1020`, `app/chamados/models.py:2207`, `app/chamados/services/raiox.py:135`, `app/templates/chamados/partials/modal_fio.html:210`, `app/api/views.py:2632`, `app/chamados/juizes.py:1121`) |
+| `validada_em` | Carimbo canônico; devolução recusada limpa; nova resposta e reabertura limpam; simetrias de materialização também carimbam. (`app/chamados/services/validacao.py:127`, `app/chamados/services/validacao.py:187`, `app/chamados/services/disputa_emissao.py:1251`, `app/chamados/services/disputa_emissao.py:1358`, `app/chamados/services/materializacao.py:515`, `app/chamados/services/materializacao.py:1195`, `app/chamados/services/disputa_emissao.py:1575`) | Vitalidade, estado, prefiltro, template, validação e marcador do placar. (`app/chamados/juizes.py:1006`, `app/chamados/models.py:2204`, `app/chamados/models.py:2353`, `app/templates/chamados/partials/modal_fio.html:221`, `app/chamados/services/validacao.py:359`, `app/chamados/services/painel.py:66`) |
+| `chamado_destino` | `PerguntaDisputa.abrir`, no nascimento/reapontamento; `reapontar_resolvedora`, com validação e relavra. (`app/chamados/models.py:2124`, `app/chamados/models.py:2165`, `app/chamados/models.py:2182`, `app/chamados/services/fio.py:792`, `app/chamados/services/fio.py:797`) | Âncora do fio, crédito administrativo, API e materialização. (`app/chamados/services/fio.py:116`, `app/chamados/services/raiox.py:144`, `app/api/views.py:2626`, `app/chamados/services/materializacao.py:502`) |
+| `ChamadoColaborador.status_local` | Núcleo `_gravar_estado`; nascimento por `abrir/criar`; portas de transição, reconciliação, reabertura e encerramento. (`app/chamados/models.py:185`, `app/chamados/models.py:599`, `app/chamados/models.py:818`, `app/chamados/models.py:851`, `app/chamados/models.py:1115`, `app/chamados/models.py:1288`) | Fila, universo de crédito, desenlace e julgamento da materialização pelo destino. (`app/chamados/services/painel.py:155`, `app/chamados/services/painel.py:187`, `app/chamados/services/raiox.py:54`, `app/chamados/services/desenlace.py:48`, `app/chamados/juizes.py:699`) |
+| `silenciado_ate` | `arquivo.silenciar` grava; `arquivo.levantar` limpa. (`app/chamados/services/arquivo.py:141`, `app/chamados/services/arquivo.py:166`, `app/chamados/services/arquivo.py:176`, `app/chamados/services/arquivo.py:201`) | Fila, partição por verbo e `esta_silenciado`; a seleção do app não o consulta. (`app/chamados/services/painel.py:188`, `app/chamados/services/verbos.py:43`, `app/chamados/models.py:304`, `app/chamados/services/pergunta_no_app.py:39`) |
+
+Conjuntos do catálogo:
+
+```text
+VIVOS       = aberto, em_analise, registrado
+COBRANCA    = aberto, em_analise
+ENCERRADOS  = resolvido, fechado
+TERMINAIS   = resolvido, fechado, cancelado, superado
+NAO_FECHADOS = VIVOS + resolvido
+```
+
+Fonte: `app/chamados/catalogo/motor.py:24`, `app/chamados/catalogo/motor.py:29`, `app/chamados/catalogo/motor.py:30`, `app/chamados/catalogo/motor.py:31`, `app/chamados/catalogo/motor.py:32`.
+
+Para as causas propostas:
+
+- **(a) Vivo com véu:** silêncio futuro tira da fila; qualquer silêncio preenchido sobrepõe o verbo para arquivado/futuro ou histórico/passado. Isso não elimina automaticamente a pergunta da API nem o chamado do fio administrativo. (`app/chamados/services/painel.py:188`, `app/chamados/services/verbos.py:45`, `app/chamados/services/pergunta_no_app.py:42`, `app/chamados/services/fio.py:174`)
+- **(b) Carimbo com resposta vazia:** pode continuar viva, mas `.estado` a chama de `RESPONDIDA`; o app a coloca em espera pelo admin. O contador específico só mede carimbos desde o marco de 29/10/2026 20:20 UTC. (`app/chamados/juizes.py:1020`, `app/chamados/models.py:2208`, `app/api/views.py:2622`, `app/chamados/services/vigia_fio.py:405`, `app/chamados/services/vigia_fio.py:417`)
+- **(c) Respondida não validada com destino fechado:** isso sozinho não pro
+
+[truncado em 20000 de 32915 caracteres]
 
 ## 30/10 20:51 · sessao c48c20b624b7 · - · - · origem=Ronald (tmux)
 
@@ -768,26 +877,4 @@ Os testes existentes mordem a rota de chat, mas com uma proposta de vínculo 7 (
 
 Texto diferente de “sim” apaga a proposta pendente (`app/core/views_ia.py:882`); esse caminho não registra recusa de escala em `DecisaoProposta`, cuja escrita está em `app/escala/services/propositor.py:705`.
 
-## 30/10 19:27 · sessao 83aa580b3dfe · - · - · origem=Ronald (tmux)
-
-Fluxo do fio conferido:
-
-- `proposta_do_fio` obtém propostas da pessoa, seleciona `[0]` e produz tanto assinatura quanto vínculo desse mesmo objeto (`app/chamados/services/proposta_no_fio.py:63-79`).
-- O template grava assinatura e vínculo nos dois formulários, aplicar e recusar (`app/templates/chamados/partials/modal_fio.html:48-59`).
-- `processar_post_fio` lê o vínculo do POST como string, usa `''` quando ausente e repassa aos dois serviços (`app/chamados/services/fio.py:505-514`).
-- Aplicar e recusar chamam `_recalcular` com o vínculo recebido; este passa o argumento a `da_assinatura` (`app/chamados/services/proposta_no_fio.py:109-110`, `:134`, `:169`).
-- `da_assinatura` compara os vínculos convertidos para `str`; portanto `'1'` do POST casa com `1` da proposta. O vínculo ausente do POST fica `''` e não casa com IDs reais (`app/escala/services/propositor.py:682-690`).
-
-Não achei desvio natural no transporte do vínculo pelo fio: os formulários e os dois verbos usam o vínculo da proposta apresentada (`app/templates/chamados/partials/modal_fio.html:51-59`, `app/chamados/services/fio.py:507-514`, `app/chamados/services/proposta_no_fio.py:75-79`).
-
-Limites relevantes:
-
-1. **O filtro continua opcional no auxiliar.** `vinculo_id=None` desliga a restrição. Contraexemplo: `_recalcular(colab, assinatura_de_A)` com apenas B restante, mesma assinatura, devolve B. Os chamadores HTTP atuais passam `''` quando o campo falta, evitando esse caso; o teste anterior ainda exercita a API sem vínculo (`app/escala/services/propositor.py:685`, `app/chamados/services/fio.py:509`, `app/escala/tests/test_o261_v_fase_na_lista.py:403-406`).
-
-2. **Proposta sem vínculo não recebe validação própria.** Um vínculo textual `'None'` casa com `p.get('vinculo_id') is None`; `None` como argumento desliga o filtro. Porém o produtor real preenche `vinculo_id=ec.pk` em toda proposta antes de retorná-la. Uma proposta real sem vínculo não foi demonstrada pelo código ou anexo (`app/escala/services/propositor.py:539-543`, `:685`) [não verificado].
-
-3. **A recusa continua silenciando por conteúdo, atravessando vínculos.** Recusar A persiste a FK de A, mas a consulta e o filtro de silêncio usam somente `(colaborador, assinatura)`. Contraexemplo: A/B da mesma pessoa, mesmo conteúdo; recusar A também cala B por trinta dias. Isso está explicitamente preservado no comentário do delta, que mantém a chave de L-042; não é omissão acidental do transporte (`app/escala/services/propositor.py:581-583`, `:663-678`, `:693-702`, `:717-720`).
-
-**Os testes não mordem o chamador do fio para este delta.** O novo RED chama `_recalcular` diretamente com `'1'` e `''`; não atravessa template, POST, `aplicar_do_fio` ou `recusar_do_fio`. Remover `vinculo_da_tela=_vinc` de `fio.py` não seria detectado por esse RED (`app/escala/tests/test_o261_v_fase_na_lista.py:408-423`, `app/chamados/services/fio.py:511-514`). O teste de render existente afirma apenas que a assinatura aparece duas vezes, sem verificar os campos de vínculo (`app/chamados/tests/test_proposta_faixa_na_tela.py:85-89`). Os testes antigos dos serviços também chamam aplicar/recusar sem vínculo, utilizando o comportamento opcional (`app/chamados/tests/test_proposta_no_fio.py:118`, `:175`).
-
-_746 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_747 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
