@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 30/10/2026 04:14:07.** Transcript: `e3f79949-a90b-4c64-a5c2-afd178149c30.jsonl` (7.2 MB). Acoes na janela: **305**.
+**Medido em 30/10/2026 04:19:36.** Transcript: `e3f79949-a90b-4c64-a5c2-afd178149c30.jsonl` (7.3 MB). Acoes na janela: **308**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 04:15:23 | Bash | Confirm copy is stable at 13963efb | `git -C /home/ronald/wt-o261c3-3010-0232 log --oneline -1; git -C /home/ronald/wt-o261c3-3010-0232 status --porcelain \| head -3` |
+| 04:15:18 | Agent | Sombra remeasure (C) v6 tree | `Medida na SOMBRA, projeto /home/ronald/saas-hasner. Você só mede: não edita `app/` de nenhuma árvore, não commita e não toca prod. Rode de novo a sonda `logs/sombra/sonda_c_saidas_cura.py` (já existe; saída anterior em `logs/o261/sonda_c_saidas_cura.out`, contra o commit df863705) contra a árvore nova da cópia, commit 13963efb: `cd /home/ronald/saas-hasner && SOMBRA_ARVORE=/home/ronald/wt-o261c3-3 ...` |
+| 04:15:09 | Agent | Opus reread O261 (C) v6 diff | `Obra O261 (C) VIVA-SEM-CHAMADO-DO-DIA, 3ª leitura. O 7a8e4604 já tinha sido APROVADO pelo opus, mas a suite inteira deu VERMELHO: 5 falhas de "veto da régua" em ponto.tests.test_cartorio_veto_nao_e_emitido, test_furo_parcial_sem_cobranca e test_veto_que_cai_rejulga. Elas passam no HEAD e falham na cópia: com veto da régua, o c2 passou a cobrar intervalo. Cópia: /home/ronald/wt-o261c3-3010-0232. Le ...` |
 | 04:04:24 | Bash | Record suite red in RELATO | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md' L=open(p).read().split('\n') if L[2].startswith('ESPERANDO:'): del L[2] i=next(k for k,l in enumerate(L) if l.startswith('> (C) VOLTA POS-OPUS 7a8e4604')) L.insert(i+1,'> (C) SUITE INTEIRA 7a8e4604 VERMELHA: FAILED (failures=5), Ran 12751, rc 1 (`app/logs/o261/suite_c_7a8e4604.log` na copia). Regressao da cura MEDIDA: os 3 mod ...` |
 | 04:04:21 | SendMessage |  | `-` |
 | 04:03:26 | Bash | Rerun 3 modules on HEAD and copy via --only | `cd /home/ronald/saas-hasner && M="ponto.tests.test_cartorio_veto_nao_e_emitido ponto.tests.test_furo_parcial_sem_cobranca ponto.tests.test_veto_que_cai_rejulga"; D=/home/ronald/wt-o261c3-3010-0232/app/logs/o261; bash bin/suite.sh --only "$M" > $D/veto3_head.log 2>&1; echo "rc=$?" >> $D/veto3_head.log; bash bin/suite.sh --dir /home/ronald/wt-o261c3-3010-0232 --only "$M" > $D/veto3_copia.log 2>&1; e ...` |
