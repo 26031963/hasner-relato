@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 30/10/2026 15:15:58.** Transcript: `1a51e6b0-927f-4c8c-a61e-896443577f6a.jsonl` (6.5 MB). Acoes na janela: **346**.
+**Medido em 30/10/2026 15:20:56.** Transcript: `1a51e6b0-927f-4c8c-a61e-896443577f6a.jsonl` (6.6 MB). Acoes na janela: **349**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 15:16:12 | Bash | Wait for comboio5 suite by file | `until /bin/grep -q '^rc=' /home/ronald/saas-hasner/logs/o261/veto_a2/suite_comboio5.log 2>/dev/null; do /usr/bin/sleep 30; done; tail -n1 /home/ronald/saas-hasner/logs/o261/veto_a2/suite_comboio5.log` |
+| 15:16:11 | Bash | Update calendario opus brief | `cd /home/ronald/saas-hasner/logs/calendario_hoje && python3 - <<'EOF' p='brief_opus.txt' s=open(p).read() s=s.replace("Copia /home/ronald/wt-cal-hoje-3010-1353 (HEAD c992400b, base main d2c37edd). Diff: git -C /home/ronald/wt-cal-hoje-3010-1353 diff d2c37edd c992400b.", "Copia /home/ronald/wt-cal-hoje-3010-1353 (HEAD 2a65315d, base main d2c37edd; 5 commits: c992400b, d08af7f9, 3aa479f0, cfa186ce,  ...` |
+| 15:15:59 | Bash | Write bench result table to RELATO and BACKLOG | `python3 - <<'EOF' p='docs/RELATO.md' s=open(p).read() i=s.index('> **A/B CODEX-ASTRA-NA-VOLTA-FINAL**') tab = """> **BENCH-SOL-X-ASTRA -- RESULTADO** (aval 14:3x; `logs/bench_astra/`). 23 voltas de verificador de 5 obras re-rodadas no Astra com o PROMPT EXATO do Sol (extraido de `~/.codex/sessions`), mesmo hash, wrapper intacto (shim via PATH). Modelo efetivo conferido na sessao: Sol `gpt-6.1-sol` ...` |
 | 15:15:38 | Bash | Check ASTRA1 and ASTRA2 at NOTURNO hash | `cd ~/codex_ws/469d61bae0e62adcc12dcdfaa5c6298fd02668f2/app && echo "== ASTRA1 materializacao:392-412"; sed -n 392,412p chamados/services/materializacao.py; echo "== ASTRA2 catalogo/query.py:90-106"; sed -n 90,106p chamados/catalogo/query.py` |
 | 15:15:30 | Bash | Check SOL3 and SOL4 at their hashes | `cd ~/codex_ws && ls -d 8110a931* 4da2943d* 469d61ba* 2>/dev/null; echo "== SOL3 vigia_fio:181 @8110a931"; sed -n 172,190p 8110a931*/app/chamados/services/vigia_fio.py; echo "== SOL4 disputa_emissao:1650-1665 @4da2943d"; sed -n 1648,1668p 4da2943d*/app/chamados/services/disputa_emissao.py` |
 | 15:15:16 | Bash | Draw random sample of new findings per model | `cd /home/ronald/saas-hasner/logs/bench_astra && python3 - <<'EOF' > amostra_novos.txt import json, random, glob chave = json.load(open('chave.json')); random.seed(3010) nov = {'sol': [], 'astra': []} for f in sorted(glob.glob('nota_*.txt')): for l in open(f): l = l.strip().strip('`') if l.startswith('NOVO\|'): p = l.split('\|') if len(p) >= 5 and p[1].strip() in chave: nov[chave[p[1].strip()][p[2] ...` |
