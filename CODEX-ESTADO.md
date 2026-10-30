@@ -1,7 +1,91 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **30/10/2026 14:21** · publicado em **30/10/2026 14:21** (UTC-3)
+> Ultima resposta processada: **30/10/2026 14:23** · publicado em **30/10/2026 14:27** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 30/10 14:23 · sessao 3943ba67c44f · CALENDARIO-HOJE · verificador · origem=Code
+
+**Parecer: reprova.** O teto HOJE/ONTEM foi removido, mas permanecem divergências por `sem_previsto`, incompatibilidade de chaves no cartório e reutilização de turnos de outra janela. O custo novo caiu para **+1 query por calendário elegível**, sem zerar. (`app/colaboradores/services/calendario.py:707-712`; `app/ponto/turnos.py:1852,1928,2130-2139`)
+
+1. **Teto de data**
+
+   **Antigo corte HOJE/ONTEM: sem achado.** Agora a pergunta cobre `data_ini` até `min(data_fim, hoje)`, incluindo datas anteriores a ontem. (`app/colaboradores/services/calendario.py:707-710`)
+
+   **Ainda há “não encerrado” que o calendário desconsidera:** `sem_previsto` produz `False` na juíza, mas fica fora de `_em_curso`. Em trabalho sem batida, isso permite `falta`. Há também a divergência de janela descrita abaixo. (`app/ponto/turnos.py:2102-2105,2140`; `app/colaboradores/services/calendario.py:711-712,132-142,805`)
+
+2. **Equivalência da alimentação: não vale universalmente**
+
+   | Chamador | Alimentação efetiva |
+   |---|---|
+   | Cartório | Passa `celulas={(colaborador_id, data): célula}`; não fornece `turnos` nem `escalas`. (`app/ponto/services/cartorio.py:853`) |
+   | `supra_juiz` | Não fornece alimentação; o lote carrega. (`app/ponto/management/commands/supra_juiz.py:108`) |
+   | Emissor retroativo | Fornece apenas `agora`; o lote carrega. (`app/ponto/management/commands/emitir_furo_retroativo.py:62`) |
+   | `par_completo_da_janela` | Não fornece alimentação e depois carrega turnos novamente. (`app/ponto/turnos.py:2151-2153`) |
+   | Calendário | Fornece células com chave composta e turnos previamente carregados; omite `escalas`. (`app/escala/alimentacao.py:41-46`; `app/colaboradores/services/calendario.py:709-710`) |
+
+   **Chaves incompatíveis no cartório — achado herdado.** O lote espera chave `(colaborador_id, data)`, mas repassa o mesmo argumento a `turnos_do_colab`, cujo contrato é `{data: célula}`. Este recompõe a chave como `(colaborador_id, chave_recebida)`, produzindo `(colaborador_id, (colaborador_id, data))`; `vinculo_do_dia` procura `(colaborador_id, data)` e perde a geradora. A passagem sem adaptação já constava da versão anterior mostrada no anexo. (`app/ponto/turnos.py:2114,2133,1852,1928`; `app/escala/alimentacao.py:237-254`; anexo `diff2.txt`, hunk de `dias_encerrados`)
+
+   **Células com `dna=NULL`, vazio ou sem marcos: sem achado nessa regra.** Com mapa ou consultando sozinho, `marcos_do_dia` recorre ao template. O carregador normal traz o campo `dna`; campo diferido é outra situação, advertida pelo próprio contrato como possível N+1. (`app/escala/models.py:1089-1108`; `app/escala/alimentacao.py:41-46`)
+
+   **Turnos de janela diferente — achado no reaproveitamento novo.** O calendário forma turnos para `[data_ini, data_fim]`, mas os entrega ao lote perguntado somente até hoje, contrariando a exigência documentada de “MESMA janela”. O lote aceita a lista sem reconstruí-la. (`app/colaboradores/services/calendario.py:310-311,707-710`; `app/ponto/turnos.py:2113-2114,2133`)
+
+   Contraexemplo derivado do código: vínculo único 21h–05h, sem intervalos; única entrada em D às 01h; nenhuma célula em D−1/D; único DNA com marcos em D+2; agora D às 06h; calendário `[D−1,D+3]`. Na carga curta, o mapa DNA fica vazio e vira `None`: a entrada ancora em D−1, cuja aberta vive até D às 09h. Na carga larga, o DNA de D+2 torna o mapa não vazio; a falta de D−1 nesse mapa elimina as bordas da véspera, e a entrada ancora em D. Assim, D−1 fica sem aberta e passa a encerrado às 06h. **A resposta muda com a janela.** (`app/escala/utils.py:100-107`; `app/ponto/turnos.py:1845,1949,1297-1300,283-306,1495-1496,1992,2008-2011,2102-2105`)
+
+   Portanto, nem os chamadores sem alimentação têm equivalência universal com a consulta unitária: o pareamento conserva essa dependência da janela. Execução do contraexemplo e ocorrência em produção: **[nao verificado]**. (`app/ponto/turnos.py:2079-2080,2133`; traço acima)
+
+3. **Os três motivos e `sem_previsto`**
+
+   **É regra própria do leitor.** A autoridade distingue quatro motivos de não encerramento; para ela, `sem_previsto` continua sendo não encerrado. O calendário seleciona três e deixa o quarto seguir pelo caminho dos encerrados. Isso não equivale a ler a resposta booleana da juíza e conflita com a LEI-AKITA 2. (`app/ponto/turnos.py:2073-2075,2102-2105,2140`; `app/colaboradores/services/calendario.py:704-712`; `CLAUDE.md:20-22`)
+
+   A exceção está declarada no comentário local, mas o teste ainda promete genericamente “turno NAO encerrou → previsto”. Declaração local não modifica o julgamento da autoridade. (`app/colaboradores/services/calendario.py:702-703`; `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:1-5`)
+
+4. **Custo adicional**
+
+   **Conta estática da cadeia nova: +1 query por calendário/card** quando `data_ini <= min(data_fim, hoje)`; **zero** para janela inteiramente futura. Células e turnos são reaproveitados, mas `escalas=` não é passado: o lote consulta todos os vínculos com `select_related('tipo_escala')`. Não há consulta adicional por dia para ler o DNA nesse caminho. (`app/colaboradores/services/calendario.py:707-710`; `app/ponto/turnos.py:2129-2139`; `app/escala/models.py:1094-1108`)
+
+   No mapa HTML, são **+N queries para N cards efetivamente montados**, nessa condição. No PDF, são os mesmos **+N**, pagos antes da bifurcação de renderização; a geração reutiliza os cards. (`app/relatorios/furos.py:164-188`; `app/relatorios/views.py:1541,1548-1551,1560-1566`)
+
+   Esse é o incremento estático atribuível à obra identificável na cópia. Medição efetiva e comparação integral com a árvore de `d2c37edd`: **[nao verificado]**.
+
+5. **Leitores e efeitos além de “falta → previsto”**
+
+   A declaração local concentra-se em “previsto, não falta”, mas o classificador também permite `ok → previsto`, `escala_suspeita → previsto`, `escala_suspeita → sem_dados` no limbo e bloqueio da sobreposição de veredito. Para HOJE/ONTEM com `sem_previsto`, a exclusão nova permite os sentidos inversos em relação à volta anterior. (`app/colaboradores/services/calendario.py:132-152,177-178,697-703,805`; anexo `diff2.txt`, hunk de `_em_curso`)
+
+   | Leitor | Efeito |
+   |---|---|
+   | Perfil e gaveta | Herdam status, ícone e tooltip. **Tooltip corrigido: sem achado.** (`app/colaboradores/views.py:1946`; `app/colaboradores/services/drawer.py:121`; `app/colaboradores/services/calendario.py:881-882`; `app/templates/colaboradores/partials/_calendario_grade.html:99-105`) |
+   | Furos HTML/PDF | Pintura muda; seleção, `nfuro`, marcos faltantes e ordenação seguem a cadeia independente da grade. (`app/relatorios/furos.py:141-190`; `app/relatorios/views.py:1549-1551`; `app/relatorios/furos_pdf.py:56-69`) |
+   | `resolver_dia_oferecido` | `previsto` não pede decisão: datas passadas podem perder a ação, conforme os demais filtros. (`app/colaboradores/services/calendario.py:190,198-199,895-896,925-926`) |
+   | `vigia_fio` | Pode trocar `decisao_do_dia_pendente` por um dos ramos seguintes, inclusive `fio_morto`. Ocorrência real: **[nao verificado]**. (`app/chamados/services/vigia_fio.py:294-324`) |
+   | Rodapé | Totais acompanham o status; `previstos` são contados, mas não exibidos. (`app/colaboradores/services/calendario.py:930-946`; `app/templates/colaboradores/partials/_calendario_grade.html:137-173`) |
+   | `status_do_dia` e contagem | Herdam a alteração ao remontarem o calendário; a diferença de janela acima também impede garantir igualdade entre consulta unitária e grade larga. (`app/colaboradores/services/calendario.py:213-233`; `app/ponto/turnos.py:1297-1300`) |
+
+Execução dos testes Django, contagem medida de queries e ocorrência desses cenários em produção: **[nao verificado]**. [nao verificado]
+
+## 30/10 14:22 · sessao d3f052a57a8b · - · - · origem=Ronald (tmux)
+
+**P2: não há equivalência universal.** O calendário reaproveita turnos de janela maior; o cartório continua passando chaves incompatíveis ao pareador. (`app/colaboradores/services/calendario.py:310,707-710`; `app/ponto/services/cartorio.py:853`; `app/ponto/turnos.py:1852,1928,2133`)
+
+| Chamador | Alimentação e resultado da inspeção |
+|---|---|
+| Cartório | Passa `{(cid,data): célula}`; `dias_encerrados` repassa sem conversão a `turnos_do_colab`, que espera `{data:célula}` e transforma as chaves em `(cid,(cid,data))`; a geradora deixa de ser encontrada pelo pareador. É defeito herdado: o anexo mantém essa chamada antiga. (`app/ponto/services/cartorio.py:853`; `app/ponto/turnos.py:1852,1928-1932,2133`; `app/escala/alimentacao.py:237-247`) |
+| Supra_juiz | Não fornece alimentação: lote carrega mapa composto para vínculo/fim e `turnos_do_colab` carrega separadamente seu mapa por data. Sem achado novo nesse contrato. (`app/ponto/management/commands/supra_juiz.py:108`; `app/ponto/turnos.py:2129-2139,1880-1882`) |
+| Emissor retroativo | Mesmo caminho sem alimentação; sem achado novo nesse contrato. (`app/ponto/management/commands/emitir_furo_retroativo.py:62`; `app/ponto/turnos.py:2129-2139`) |
+| `par_completo_da_janela` | Mesmo caminho sem alimentação; depois carrega turnos novamente. Sem achado novo nas chaves. (`app/ponto/turnos.py:2151-2154`) |
+| Calendário | Mapa composto correto para fim/vínculo; evita repassar esse mapa ao pareador porque fornece `turnos=`. Porém os turnos vêm de `[data_ini,data_fim]`, enquanto o julgamento é solicitado até `min(data_fim,hoje)`. (`app/colaboradores/services/calendario.py:310,404,707-710`) |
+
+**Contraexemplo lógico da janela diferente:** EC único noturno 21–05, sem intervalos; única batida E em D às 01h; agora D às 06h; nenhuma célula em D−1/D; uma célula com DNA em D+2; calendário `[D−1,D+3]`. São entradas hipotéticas, ocorrência em produção **[nao verificado]**.
+
+- Carga curta `[D−1,D]`: seu pad termina D+1; não encontra DNA, então o mapa vira `None`. `_vespera` usa o template e ancora E01 em D−1. A aberta permanece viva até D09; juiz responde não encerrado. (`app/ponto/turnos.py:1845,1949,1297-1300,297-306,1992,2008-2011,2097-2100`)
+- Carga larga do calendário: encontra DNA D+2, deixando o mapa não vazio; como D−1 não consta, `_vespera` devolve `None`, e E01 fica em D. D−1 fica sem aberta; às D06, seu fim D05 passou, e o lote alimentado responde encerrado. (`app/escala/utils.py:100-107`; `app/ponto/turnos.py:1297-1299,283-286,1495-1496,1973-1976,2102-2105`)
+
+Isso demonstra logicamente que turnos carregados em outra janela podem alterar o encerramento do dia; execução do contraexemplo **[nao verificado]**. (`app/ponto/turnos.py:1297-1300,1949`)
+
+**Célula sem DNA: sem achado.** Tanto alimentação quanto carga individual chegam à mesma queda para `TipoEscala.marcos_do_dia`; `None`, `{}` ou ausência de `marcos` não inventam fim. (`app/escala/models.py:1094-1108`) A carga comum traz todos os campos, evitando DNA diferido. (`app/escala/alimentacao.py:41-46`)
+
+**`escalas=`: sem achado nos chamadores atuais**, que não o fornecem; o lote carrega todos os vínculos com tipo relacionado. O contrato exige lista completa, pois geradora ausente devolve `None`. (`app/ponto/turnos.py:2114,2130-2131`; `app/escala/alimentacao.py:232-250`; chamadas citadas acima)
+
+O teste de propriedade atual só compara lote sem alimentação com consulta individual; não cobre `turnos=`, `escalas=`, `motivos=True`, chaves do cartório nem o contraexemplo de janela. (`app/ponto/tests/test_c1_dias_encerrados.py:26-51`)
 
 ## 30/10 14:21 · sessao 9e672f61d1e5 · - · - · origem=Ronald (tmux)
 
@@ -586,155 +670,4 @@ ITENS=62
 FIM-DA-SONDA
 ```
 
-## 30/10 13:30 · sessao 3a14b0861375 · CALENDARIO-HOJE · censo · origem=Code
-
-Analisei a árvore disponível em modo de leitura. A correspondência exata dela com o commit `d2c37edd16a8b0ca3aa26c2eab9f60de661fc675` ficou **[nao verificado]**, pois o snapshot não oferece os metadados Git necessários à conferência.
-
-**1. Classificador e resultado para HOJE**
-
-A função é `_classificar(f)`: recebe os fatos já carregados e devolve uma string de status. O calendário passa `'futuro': data > hoje`; portanto, **HOJE recebe `False`**. (`app/colaboradores/services/calendario.py:104`, `app/colaboradores/services/calendario.py:779`, `app/colaboradores/services/calendario.py:785`)
-
-Para trabalho sem batida, sem isenção, escala suspeita, cobertura ou veredito que altere o resultado:
-
-| Valor de `futuro` | Resultado |
-|---|---|
-| `True` | `previsto`. (`app/colaboradores/services/calendario.py:130`, `app/colaboradores/services/calendario.py:131`) |
-| `False` | `falta`. É o caminho comum de HOJE na implementação atual. (`app/colaboradores/services/calendario.py:133`, `app/colaboradores/services/calendario.py:140`, `app/colaboradores/services/calendario.py:785`) |
-
-Essas três premissas — hoje, trabalho e nenhuma batida — não bastam para garantir `falta`: com `futuro=False`, isento recebe `ok`, escala suspeita recebe `escala_suspeita`, cobertura sem desconto recebe `ausencia`; o veredito também pode substituir o status. Ausências e feriado têm precedência anterior; cobertura sem desconto pode transformar até `previsto` em `ausencia`. (`app/colaboradores/services/calendario.py:120`, `app/colaboradores/services/calendario.py:123`, `app/colaboradores/services/calendario.py:133`, `app/colaboradores/services/calendario.py:135`, `app/colaboradores/services/calendario.py:164`, `app/colaboradores/services/calendario.py:175`, `app/colaboradores/services/calendario.py:179`)
-
-Os status existentes são **`ok`, `irregular`, `folga_trabalhada`, `falta`, `escala_suspeita`, `aberto`, `previsto`, `folga`, `ausencia`, `sem_certidao`, `sem_dados`**. Hora extra é selo separado, não status. (`app/colaboradores/services/calendario.py:44`, `app/colaboradores/services/calendario.py:60`, `app/colaboradores/services/calendario.py:116`)
-
-**2. Quem lê este calendário**
-
-A chave **`futuro` é interna ao classificador**: não integra o dicionário exportado de cada dia. Os leitores recebem `status`, `status_rotulo`, `eh_trabalho`, `resolver_dia_oferecido` e os demais campos; outras grades têm suas próprias chaves chamadas `futuro`. (`app/colaboradores/services/calendario.py:785`, `app/colaboradores/services/calendario.py:855`, `app/colaboradores/services/calendario.py:889`, `app/colaboradores/services/calendario.py:904`)
-
-| Leitor | O que mostra ou decide | Regra própria de hoje/futuro |
-|---|---|---|
-| **Perfil do colaborador no admin** | A view monta o calendário e renderiza o partial; a grade usa status para fundo/borda e ícone: falta vermelha, previsto azul, ok verde, irregular amarelo etc. Ausência e palavra do dia podem ocupar o lugar do ícone. (`app/colaboradores/views.py:1945`, `app/colaboradores/views.py:1962`, `app/templates/colaboradores/partials/_calendario_grade.html:69`, `app/templates/colaboradores/partials/_calendario_grade.html:97`) | A view acrescenta outro `hoje=localdate()` quando há permissão de regularização; a grade lê o carimbo `resolver_dia_oferecido`, sem refazer a comparação temporal para oferecer os botões. (`app/colaboradores/views.py:1957`, `app/colaboradores/views.py:1960`, `app/templates/colaboradores/partials/_calendario_grade.html:125`) |
-| **Gaveta de diagnóstico/painel** | Monta calendário customizado e reutiliza a mesma grade em fita, com os mesmos status e totais. (`app/colaboradores/services/drawer.py:120`, `app/templates/colaboradores/partials/_drawer_diagnostico.html:33`, `app/templates/colaboradores/partials/_drawer_diagnostico.html:35`) | Usa `localdate()` para escolher competência atual e anterior e aplicar piso visual; não reclassifica o status recebido. (`app/colaboradores/services/drawer.py:111`, `app/colaboradores/services/drawer.py:113`, `app/colaboradores/services/drawer.py:118`) |
-| **Mapa de furos HTML** | Cada card inclui este calendário. Entretanto, seleção dos cards, lista de marcos faltantes, `nfuro` e ordenação vêm de `grade_da_celula → estado_do_dia`, independentemente do status deste calendário. (`app/relatorios/furos.py:141`, `app/relatorios/furos.py:160`, `app/relatorios/furos.py:164`, `app/relatorios/furos.py:184`, `app/relatorios/furos.py:190`, `app/templates/relatorios/furos.html:42`) | A view usa `localdate()`; o período padrão termina hoje, enquanto o período explícito não recebe ali um teto em hoje. (`app/relatorios/views.py:1518`, `app/relatorios/views.py:1531`, `app/relatorios/views.py:1537`, `app/relatorios/views.py:1541`) |
-| **PDF do mapa de furos** | Extrai `data → status` dos dias do calendário e pinta o minicalendário conforme esse status. Status sem entrada nos mapas de cores recebem fundo branco/texto cinza. O número de furos continua vindo da outra contagem. (`app/relatorios/views.py:1548`, `app/relatorios/views.py:1551`, `app/relatorios/furos_pdf.py:11`, `app/relatorios/furos_pdf.py:21`, `app/relatorios/furos_pdf.py:56`, `app/relatorios/furos_pdf.py:66`) | O gerador recebe o período da view e percorre as semanas prontas; não compara com o relógio nesse render. (`app/relatorios/views.py:1562`, `app/relatorios/furos_pdf.py:25`, `app/relatorios/furos_pdf.py:47`) |
-| **Resolver dia / Pauta DP** | O serviço deriva `resolver_dia_oferecido` para status `falta`, `irregular`, `aberto`, `sem_certidao`, exigindo último recurso e trabalho. O template acrescenta a permissão e oferece seleção em lote, Resolver dia e DP. (`app/colaboradores/services/calendario.py:188`, `app/colaboradores/services/calendario.py:196`, `app/templates/colaboradores/partials/_calendario_grade.html:125`) | Exige **passado estrito: `data < hoje`**. Assim, falta de HOJE não oferece essa ação por este predicado. (`app/colaboradores/services/calendario.py:196`) |
-| **Vigia do fio morto** | Chama a porta de um dia `resolver_dia_oferecido_na_data`; resultado verdadeiro entra em `decisao_do_dia_pendente` e deixa de seguir como fio morto. (`app/colaboradores/services/calendario.py:205`, `app/colaboradores/services/calendario.py:208`, `app/chamados/services/vigia_fio.py:294`, `app/chamados/services/vigia_fio.py:298`) | Tem `hoje` próprio: conta `data > hoje` no tripwire de futuro e separa `data >= hoje` antes de perguntar ao calendário. O calendário chamado captura outro relógio. (`app/chamados/services/vigia_fio.py:181`, `app/chamados/services/vigia_fio.py:278`, `app/chamados/services/vigia_fio.py:289`, `app/colaboradores/services/calendario.py:249`) |
-| **Contadores internos / rodapé** | `resumo` conta literalmente os status; HE conta o selo. O rodapé mostra `faltas` como **“Sem registro”**, além de Ok, HE, trabalho em folga, irregulares, escala suspeita, folgas e abertos; `ausencias` e `previstos` são calculados, mas não têm bloco nesse rodapé. (`app/colaboradores/services/calendario.py:908`, `app/colaboradores/services/calendario.py:923`, `app/colaboradores/services/calendario.py:925`, `app/templates/colaboradores/partials/_calendario_grade.html:141`, `app/templates/colaboradores/partials/_calendario_grade.html:145`, `app/templates/colaboradores/partials/_calendario_grade.html:173`) | A contagem percorre os status já produzidos, sem corte temporal adicional. (`app/colaboradores/services/calendario.py:908`) |
-| **Portas `status_do_dia` / `contar_por_status`** | Montam respectivamente um dia ou um período; devolvem o status ou `Counter(status)`. (`app/colaboradores/services/calendario.py:211`, `app/colaboradores/services/calendario.py:220`, `app/colaboradores/services/calendario.py:223`, `app/colaboradores/services/calendario.py:231`) | Herdam o relógio de `contexto_calendario`. Não localizei chamadores de produção dessas duas portas; ausência de chamadas dinâmicas **[nao verificado]**. (`app/colaboradores/services/calendario.py:217`, `app/colaboradores/services/calendario.py:228`, `app/colaboradores/services/calendario.py:249`) |
-
-O comando `vigiar_fio_morto` está declarado na corrente automática, com `--alarme --alarme-passivo`; execução efetiva dessa configuração no ambiente de produção **[nao verificado]**. (`app/config/crons.py:1654`)
-
-**App/API e cartão de ponto seguem outra cadeia:**
-
-| Superfície | Fonte e comportamento |
-|---|---|
-| **API do app `/api/espelho/v2/`** | Lê `espelho_do_colab`, não este calendário. Para dia sem batidas, calcula `_futuro = data > hoje`; em HOJE de trabalho, mantém “futuro” se não houver fim previsto ou `agora < fim_turno`. Nesse caminho entrega `previsto`; depois do fim pode entregar `falta`, observadas isenção/cobertura. (`app/api/urls.py:81`, `app/api/views.py:1363`, `app/api/views.py:1369`, `app/api/views.py:1629`, `app/api/views.py:1632`, `app/api/views.py:1635`, `app/api/views.py:1650`, `app/api/views.py:1653`) |
-| **API, dias com batidas** | Usa vocabulário próprio: `aberto`, `alerta` ou `ok`; publica `status` no JSON. A apresentação efetiva no cliente móvel externo **[nao verificado]**. (`app/api/views.py:1570`, `app/api/views.py:1591`, `app/api/views.py:1700`) |
-| **Cartão/PDF de ponto** | Lê os dias de `espelho_do_colab`. Aplica `max(data_ini, ate_ontem(data_fim, hoje=localtime(agora).date()))`; `ate_ontem` retorna `min(data_fim, hoje-1)`. O `max` exige ressalva para janela integralmente futura: o corte isoladamente não garante excluir todo hoje/futuro nesse caso. (`app/relatorios/pdf_espelho.py:287`, `app/relatorios/pdf_espelho.py:592`, `app/relatorios/pdf_espelho.py:598`, `app/relatorios/cartao_pela_celula.py:37`) |
-| **Palavra/contador “Em aberto” compartilhado** | Vem de `folha_manda → datas_em_aberto_de`, usando teto `ate_ontem` para furos e retirando o turno em curso; não deriva de `status == 'falta'` deste calendário. (`app/relatorios/cartao_pela_celula.py:395`, `app/relatorios/cartao_pela_celula.py:412`, `app/relatorios/cartao_pela_celula.py:418`, `app/ponto/services/dia_decidido.py:311`) |
-
-Outra chave homônima é a de `clipar_grade_janela`, que neutraliza células futuras da grade do espelho; outra ainda pertence ao calendário de fase, cujo template lê `c.futuro` e `c.hoje`. Não são o fato interno passado a `_classificar`. (`app/escala/utils.py:934`, `app/escala/utils.py:942`, `app/ponto/services/espelho.py:688`, `app/templates/colaboradores/partials/_calendario_fase.html:12`, `app/templates/colaboradores/partials/_calendario_fase.html:14`)
-
-**3. Outros sítios que usam DATA para decidir falta/furo ou se ainda cabe cobrança**
-
-| Sítio | Comparação e efeito |
-|---|---|
-| **API do app** | `data > hoje`; HOJE recebe também teste por instante contra `fim_turno`, conforme descrito acima. (`app/api/views.py:1629`, `app/api/views.py:1632`) |
-| **Espelho `_status_dia`** | Após as precedências de ausência, inconsistência, batidas, isenção e folga, previsto com `data < hoje` recebe `sem_registro`; HOJE sem esses fatos cai em `vazio`. (`app/ponto/services/espelho.py:152`, `app/ponto/services/espelho.py:169`) |
-| **Grade `clipar_grade_janela`** | `dia > hoje` marca futuro, troca células por `None` e limpa órfãs, retirando indicação de marco faltante. HOJE passa por esse corte. (`app/escala/utils.py:942`) |
-| **Cartório `julgar_celula`** | Recusa `data > hoje`. Para HOJE de trabalho, sem `teto_de_hoje`, espera fim do turno; folga pula essa espera. Essa guarda usa `localdate()`/`now()` próprios, inclusive quando há argumento `agora`. (`app/ponto/services/cartorio.py:1536`, `app/ponto/services/cartorio.py:1545`, `app/ponto/services/cartorio.py:1553`, `app/ponto/services/cartorio.py:1557`) |
-| **Cartório `julgar_colab`** | Distingue hoje/ontem para marcos vencidos; passado cujo turno não encerrou é marcado em curso por `data < hoje and not _turno_encerrado(data)`. (`app/ponto/services/cartorio.py:1048`, `app/ponto/services/cartorio.py:1053`, `app/ponto/services/cartorio.py:1082`) |
-| **Fábrica da célula** | `cel.data > hoje` não gera motivos. Sem marcos, passado recebe `None` para seguir o caminho da lei das batidas; hoje/futuro recebe conjunto vazio e espera. (`app/chamados/services/fabrica_da_celula.py:28`, `app/chamados/services/fabrica_da_celula.py:30`, `app/chamados/services/fabrica_da_celula.py:80`, `app/chamados/services/fabrica_da_celula.py:85`) |
-| **Cobrança manual `cobrar_dia`** | Recusa `data >= localdate()`, afirmando que o turno ainda não terminou. (`app/chamados/services/cobrar_dia.py:16`, `app/chamados/services/cobrar_dia.py:26`) |
-| **Retenção de pergunta no app** | Chamado de furo sem pergunta com `dia >= hoje` não recebe causa de retenção: ainda não é hora. (`app/chamados/services/pergunta_no_app.py:56`, `app/chamados/services/pergunta_no_app.py:64`) |
-| **Reconciliador de órfãs** | `data_evento >= localtime(agora).date()` retorna `TETO` antes de consultar `dia_encerrado_motivo`. (`app/chamados/reconciliador.py:1036`, `app/chamados/reconciliador.py:1038`) |
-| **Suprajuiz** | Furos usam o resultado de encerramento; sobrevive comparação civil na acusação de cadastro de trabalho sem vínculo/previsto: `not (hoje and data and data >= hoje)`. (`app/ponto/supra_juiz.py:253`, `app/ponto/supra_juiz.py:254`, `app/ponto/supra_juiz.py:405`) |
-| **Apuração `furos_diarios`** | Corta em `min(fim, hoje-1)`; HOJE inteiro fica fora da apuração/contagem. A borda reaparece na manutenção e no universo. (`app/escala/services/furos_diarios.py:24`, `app/escala/services/furos_diarios.py:26`, `app/escala/services/furos_diarios.py:99`, `app/escala/services/furos_diarios.py:282`) |
-| **Cartão e “Em aberto”** | `ate_ontem` corta em hoje−1; `datas_em_aberto_de` limita furos apurados a `d <= ate`, enquanto turnos abertos e saídas órfãs entram sem esse teto civil. (`app/relatorios/cartao_pela_celula.py:37`, `app/ponto/services/dia_decidido.py:311`, `app/ponto/services/dia_decidido.py:316`) |
-| **Validação de cartão/PDF** | Recusa fim posterior a ontem; tem mensagens distintas para HOJE e futuro. O default de hoje usa `date.today()`. (`app/relatorios/services.py:35`, `app/relatorios/services.py:38`, `app/relatorios/services.py:41`, `app/relatorios/services.py:45`) |
-| **Prévia da folha** | Exclui `d >= hoje` antes de propor preenchimento dos marcos apagados. (`app/folha/previa.py:77`, `app/folha/previa.py:79`, `app/folha/previa.py:84`) |
-| **Retenção no export da folha** | Célula ausente/sem veredito gera retenção `sem_celula` apenas com `d < hoje`, ressalvado o dia da demissão; célula já acusando segue outro ramo. (`app/folha/export.py:1211`, `app/folha/export.py:1215`, `app/folha/export.py:1237`) |
-| **Regularização de retorno** | Interrompe a criação de faltas intermediárias em `dia >= hoje`. (`app/ponto/services/regularizacao.py:108`, `app/ponto/services/regularizacao.py:113`, `app/ponto/services/regularizacao.py:118`) |
-| **Abandono provisório** | Cria faltas até ontem; para em `dia >= hoje`, pois ele ainda pode aparecer hoje. (`app/ponto/management/commands/marcar_abandono_provisorio.py:69`, `app/ponto/management/commands/marcar_abandono_provisorio.py:72`, `app/ponto/management/commands/marcar_abandono_provisorio.py:76`) |
-| **Declaração manual/chat** | Recusa falta apenas com `data > hoje`; essa guarda permite HOJE. (`app/ponto/services/declarar_dia.py:94`, `app/ponto/services/declarar_dia.py:100`) |
-
-Também há cortes civis nos comandos e contadores:
-
-| Sítio | Corte |
-|---|---|
-| `reconciliar_grade` | Pula `dt >= hoje`; depois verifica vencimento por instante dos marcos restantes. (`app/ponto/management/commands/reconciliar_grade.py:134`, `app/ponto/management/commands/reconciliar_grade.py:169`) |
-| `processar_cartorio` | Lê `localdate()` e `now()` separadamente e varre somente `data__lt=hoje`. (`app/ponto/management/commands/processar_cartorio.py:38`, `app/ponto/management/commands/processar_cartorio.py:39`, `app/ponto/management/commands/processar_cartorio.py:50`) |
-| `furos_sem_cobranca` | Considera furos até ontem. (`app/ponto/services/furos_sem_cobranca.py:53`, `app/ponto/services/furos_sem_cobranca.py:61`) |
-| `vigia_entrada` | Considera células de trabalho anteriores a hoje. (`app/ponto/services/vigia_entrada.py:73`, `app/ponto/services/vigia_entrada.py:79`) |
-| `folha.services.sem_furo` | Consulta até `min(fim, ontem)`. (`app/folha/services/sem_furo.py:39`, `app/folha/services/sem_furo.py:51`) |
-| `emitir_turno_aberto_retroativo` | Se o fim pedido for `>= hoje`, recua para ontem. (`app/ponto/management/commands/emitir_turno_aberto_retroativo.py:72`) |
-| `retratar_chamados_lei_cala` | Usa `date.today()` e pula `D >= hoje` antes de classificar a falta. (`app/chamados/management/commands/retratar_chamados_lei_cala.py:32`, `app/chamados/management/commands/retratar_chamados_lei_cala.py:43`, `app/chamados/management/commands/retratar_chamados_lei_cala.py:59`) |
-| `mapa_divergencia` | Separa `data > hoje` e limita a análise de divergências ao restante; HOJE entra no grupo passado. (`app/ponto/management/commands/mapa_divergencia.py:162`, `app/ponto/management/commands/mapa_divergencia.py:164`) |
-
-Para “ainda pode bater”, há ainda decisões por **instante**: `faltas_de_hoje_sem_cobranca` só conta após vencer a entrada prevista mais sua tolerância; `vigia_de_hora` julga marcos de hoje/ontem e consulta encerramento com `agora - 2*teto`. O antigo corte civil de `flip_auto` foi substituído pela chamada a `dia_encerrado`. (`app/ponto/services/faltas_de_hoje.py:28`, `app/ponto/services/faltas_de_hoje.py:48`, `app/ponto/services/faltas_de_hoje.py:68`, `app/ponto/services/vigia_de_hora.py:46`, `app/ponto/services/vigia_de_hora.py:57`, `app/ponto/services/vigia_de_hora.py:130`, `app/ponto/services/flip_auto.py:285`)
-
-**4. `dia_encerrado` e `dia_encerrado_motivo`**
-
-Ambas recebem `(colaborador, data, agora=None, celulas=None)`. `agora` deve ser datetime aware e, omitido, nasce de `timezone.now()`. `dia_encerrado` devolve exatamente `dia_encerrado_motivo(...) is None`. O mapa de células é repassado a `turnos_do_colab`, cujo contrato é `{data: CelulaDia}`. (`app/ponto/turnos.py:2014`, `app/ponto/turnos.py:2052`, `app/ponto/turnos.py:2058`, `app/ponto/turnos.py:2073`, `app/ponto/turnos.py:2077`, `app/ponto/turnos.py:1852`)
-
-A ordem efetiva é:
-
-| Condição | `dia_encerrado_motivo` | `dia_encerrado` |
-|---|---|---|
-| Há aberta viva com expiração prevista | `turno_aberto_relogio` | `False`. (`app/ponto/turnos.py:2097`, `app/ponto/turnos.py:2099`) |
-| Há aberta viva sem expiração prevista | `turno_aberto` | `False`. (`app/ponto/turnos.py:2101`) |
-| Sem aberta viva, mas sem fim previsto | `sem_previsto` | `False`. (`app/ponto/turnos.py:2102`, `app/ponto/turnos.py:2103`) |
-| Sem aberta viva, `agora < fim` | `relogio` | `False`. (`app/ponto/turnos.py:2105`) |
-| Sem aberta viva, `agora >= fim` | `None` | `True`. (`app/ponto/turnos.py:2105`, `app/ponto/turnos.py:2058`) |
-
-A aberta expira pelo **fim do template + 4 horas**, somente quando `agora > expiração`: no instante exato ainda está viva. Já o fim previsto usado no segundo teste lê o vínculo e seu DNA de célula. (`app/ponto/turnos.py:1981`, `app/ponto/turnos.py:1992`, `app/ponto/turnos.py:2007`, `app/ponto/turnos.py:2011`, `app/ponto/turnos.py:2102`, `app/escala/servico_jornada.py:69`, `app/escala/models.py:1099`)
-
-Na virada da meia-noite, os marcos são encadeados: cada horário que não for posterior ao anterior avança um dia. Portanto, turno de D pode continuar vivo em D+1; fechar o primeiro bloco de um turno partido também não basta antes do fim previsto do conjunto. (`app/escala/servico_jornada.py:74`, `app/escala/servico_jornada.py:81`, `app/escala/servico_jornada.py:89`, `app/ponto/turnos.py:2033`)
-
-**Sem célula não implica `False`; folga também não tem retorno especial.** O julgamento não consulta `trabalha`: sem DNA de marcos, `EC.marcos_do_dia` recorre ao template. Se não houver vínculo/tipo/fim, retorna `sem_previsto`, salvo a precedência de uma aberta viva. (`app/ponto/turnos.py:2095`, `app/ponto/turnos.py:2102`, `app/escala/models.py:1097`
-
-[truncado em 20000 de 26230 caracteres]
-
-## 30/10 13:27 · sessao 62633b9a6473 · - · - · origem=Ronald (tmux)
-
-**Entradas e retorno.** `dia_encerrado(colaborador, data, agora=None, celulas=None)` retorna booleano pela expressão `dia_encerrado_motivo(...) is None`; ambos compartilham assinatura e carregamento, com `agora` omitido resolvido por `timezone.now()`. O contrato documentado pede datetime aware; `celulas` segue para `turnos_do_colab`, cujo formato é `{date: CelulaDia}`. (`app/ponto/turnos.py:2014`, `app/ponto/turnos.py:2052`, `app/ponto/turnos.py:2058`, `app/ponto/turnos.py:2073`, `app/ponto/turnos.py:2077`, `app/ponto/turnos.py:1852`.)
-
-**Motivos e precedência.** O julgamento primeiro pergunta por aberta viva: havendo aberta com expiração prevista, retorna `'turno_aberto_relogio'`; aberta que não expira retorna `'turno_aberto'`. Sem aberta viva, ausência de fim previsto retorna `'sem_previsto'`; fim previsto ainda não alcançado retorna `'relogio'`; `agora >= fim` retorna `None`, portanto `dia_encerrado=True`. (`app/ponto/turnos.py:2066`, `app/ponto/turnos.py:2070`, `app/ponto/turnos.py:2095`.)
-
-**Bordas temporais.** A aberta expira somente quando `agora > fim_previsto + 4h`, portanto continua viva no instante exato da expiração; o outro teste usa `agora >= fim`. Expiração da aberta consulta o template; o fim do dia consulta `ec.marcos_do_dia`, isto é, DNA da célula quando disponível. (`app/ponto/turnos.py:1981`, `app/ponto/turnos.py:1991`, `app/ponto/turnos.py:1997`, `app/ponto/turnos.py:2007`, `app/ponto/turnos.py:2102`, `app/escala/servico_jornada.py:68`, `app/escala/models.py:1099`.)
-
-**Meia-noite e partido.** `fim_turno` toma o último marco de `marcos_turno`; a sequência avança um dia sempre que o próximo horário não é posterior ao anterior. Assim, noite de D pode continuar aberta em D+1; um primeiro bloco fechado não basta para encerrar um dia partido. Há testes explícitos para noturno aberto às 06h de D+1 e partido ainda aberto às 23h. (`app/escala/servico_jornada.py:74`, `app/escala/servico_jornada.py:81`, `app/escala/servico_jornada.py:89`, `app/ponto/tests/test_juiz_dia_encerrado.py:103`, `app/ponto/tests/test_juiz_dia_encerrado.py:120`.)
-
-**Sem célula, folga ou sem escala.** Não há consulta a `trabalha` ou `eh_dia_trabalho` no julgamento: ele decide por aberta e marcos. Sem célula, `EC.marcos_do_dia` recorre ao template; portanto “sem célula” não significa automaticamente “não encerrado”. O template explicitamente não decide trabalho/folga. Se não houver vínculo/tipo/fim, o motivo será `'sem_previsto'`, salvo aberta viva, que tem precedência. Célula de folga também é julgada pelos marcos efetivamente presentes no DNA/template, sem tratamento específico de folga nesta função. (`app/ponto/turnos.py:2095`, `app/escala/models.py:1097`, `app/escala/models.py:1108`, `app/escala/models.py:326`.)
-
-**Chamadores atuais em código de produção.**
-
-| Leitor | Uso |
-|---|---|
-| `detectar_ausencias::_hora_de_cobrar` | Só cobra entrada se houver marco vencido e o dia **não** estiver encerrado. (`app/ponto/management/commands/detectar_ausencias.py:460`, `app/ponto/management/commands/detectar_ausencias.py:470`.) |
-| `flip_auto::avaliar_fila` | Pula a batida e conta `dia_em_curso` quando o juiz retorna falso. (`app/ponto/services/flip_auto.py:285`.) |
-| Fechamento, filtro de faltas afirmáveis | Acrescenta a data à lista somente quando encerrada; passa células recortadas pelo pad. (`app/ponto/services/fechamento.py:349`, `app/ponto/services/fechamento.py:353`, `app/ponto/services/fechamento.py:361`.) |
-| `vigia_de_hora::_ontem_em_janela` | Mantém ontem na janela enquanto não estava encerrado em `agora - 2*TETO_MARCO_MIN`; contém atalho anterior ao fim + dois tetos. (`app/ponto/services/vigia_de_hora.py:26`, `app/ponto/services/vigia_de_hora.py:50`.) |
-| `reconciliador::veredito_orfa` | Único chamador externo direto do motivo encontrado: após teto próprio `data_evento >= localtime(agora).date()`, encerra com motivo `None`, adia com `'relogio'`/`'turno_aberto_relogio'`, e deixa sem encerramento nos demais motivos. (`app/chamados/reconciliador.py:1008`, `app/chamados/reconciliador.py:1036`, `app/chamados/reconciliador.py:1041`.) |
-
-**Versão de período.** Existe `dias_encerrados(colaborador, ini, fim, agora=None, celulas=None) -> {date: bool}`: lê `agora` uma vez, carrega turnos uma vez e percorre o intervalo inclusivo usando o mesmo julgamento. É por colaborador, não um carregador de frota. (`app/ponto/turnos.py:2108`, `app/ponto/turnos.py:2118`, `app/ponto/turnos.py:2124`, `app/ponto/turnos.py:2126`, `app/ponto/turnos.py:2129`.)
-
-Seus leitores são cartório, comando `supra_juiz`, emissor retroativo e `par_completo_da_janela`; os três primeiros fornecem o resultado como `turno_encerrado` a `classificar_dia`, e o último exclui dias não encerrados do mapa de pares completos. (`app/ponto/services/cartorio.py:850`, `app/ponto/services/cartorio.py:969`, `app/ponto/services/cartorio.py:1117`, `app/ponto/management/commands/supra_juiz.py:108`, `app/ponto/management/commands/supra_juiz.py:215`, `app/ponto/management/commands/emitir_furo_retroativo.py:62`, `app/ponto/management/commands/emitir_furo_retroativo.py:108`, `app/ponto/turnos.py:2143`.)
-
-**Queries: contagem estática, não medição de execução [nao verificado].**
-
-Defina `T = 3 + C + E + M + U` para `turnos_do_colab`, contando:
-
-- Base 3: batidas, vínculos candidatos e vínculo usado pela ata. (`app/ponto/turnos.py:1858`, `app/ponto/turnos.py:1883`, `app/ponto/turnos.py:1892`, `app/ponto/turnos.py:1911`, `app/ponto/turnos.py:1591`, `app/ponto/turnos.py:1556`.)
-- `C=1` sem células fornecidas; zero com alimentação. (`app/ponto/turnos.py:1880`.)
-- `E=1` se geradoras faltantes exigirem a segunda busca dos vínculos. (`app/escala/alimentacao.py:123`.)
-- `M=1` se algum segmento usar o mapa de DNA, buscado e memoizado para a janela; segmentos cujo tipo tem segundo intervalo completo pulam esse mapa. (`app/ponto/turnos.py:1944`, `app/ponto/turnos.py:1966`, `app/escala/utils.py:100`.)
-- `U=1` se o pareador invocar o callback de última batida; ele é memoizado por chamada. (`app/ponto/turnos.py:1903`, `app/ponto/turnos.py:1973`.)
-
-Para uma chamada unitária: `Q = T + V + F`. `V=1` para `escala_vigente` com célula e geradora, ou `2` quando precisa buscar vínculos; `F=1` se alcançar `fim_turno` com tipo, porque `EC.marcos_do_dia` volta a consultar a célula; caso contrário `F=0`. O mapa recebido por `dia_encerrado` **não** é repassado nem a `escala_vigente` nem a `fim_turno`. (`app/ponto/turnos.py:2079`, `app/escala/servico_jornada.py:46`, `app/escala/servico_jornada.py:55`, `app/ponto/turnos.py:2102`, `app/escala/servico_jornada.py:69`, `app/escala/models.py:1097`.)
-
-Exemplos estáticos: com célula geradora, sem alimentação, sem segunda busca/callback, usando mapa DNA e alcançando fim previsto: **7 queries**; com aberta viva: **6**; sem célula, mas com vínculo/tipo e alcançando fim: **8**. Alimentar corretamente o mapa reduz somente `C`, uma query. (Derivação das buscas citadas acima; execução não medida [nao verificado].)
-
-No período, `Q = T + L + 1 + K`: `L=1` se não recebeu células; `1` para todos os vínculos; `K` é o número de dias que chegam a `fim_turno` com tipo. O lote evita recarregar turnos/vínculos por dia, mas ainda pode pagar **uma consulta de célula por dia** no julgamento. Sem alimentação, o caso comum é `7 + K`; há duas cargas de célula porque a linha 2123 cria `cels`, enquanto 2126 passa o argumento original `celulas`, possivelmente `None`, ao carregador de turnos. (`app/ponto/turnos.py:2123`, `app/ponto/turnos.py:2124`, `app/ponto/turnos.py:2126`, `app/ponto/turnos.py:2131`, `app/ponto/turnos.py:2102`, `app/escala/models.py:1097`.)
-
-**Ressalva estrutural de alimentação.** `turnos_do_colab` espera chaves `date` e monta `{(cid, d): cel}`; o lote e os chamadores cartório/vigia usam mapas com chave `(cid, date)`. Isso produz chaves aninhadas quando repassado e pode impedir o reconhecimento da geradora na geometria; efeito em dados reais não medido [nao verificado]. (`app/ponto/turnos.py:1852`, `app/ponto/turnos.py:1928`, `app/ponto/turnos.py:2123`, `app/ponto/turnos.py:2126`, `app/ponto/services/cartorio.py:853`, `app/ponto/services/vigia_de_hora.py:57`.)
-
-_494 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_496 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._

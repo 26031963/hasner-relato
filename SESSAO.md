@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 30/10/2026 14:21:45.** Transcript: `1a51e6b0-927f-4c8c-a61e-896443577f6a.jsonl` (5.5 MB). Acoes na janela: **292**.
+**Medido em 30/10/2026 14:27:16.** Transcript: `1a51e6b0-927f-4c8c-a61e-896443577f6a.jsonl` (5.5 MB). Acoes na janela: **293**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 14:25:21 | Bash | Register COL309 recalc aval; update BACKLOG and RELATO | `python3 - <<'EOF' p='docs/PROMPTS.md' L=open(p).read().split('\n') i=max(k for k,l in enumerate(L) if l.startswith('\| 30/10 ')) L.insert(i+1,"\| 30/10 14:2x \| **aval: COL309-09-RECALCULO (`! col309 competencia 09 exportada`): col309 FORA do TXT 09 (DIFF por rubrica vazio) -> o TXT NAO se refaz. O FechamentoMensal 09 gravado NAO se recalcula agora: o recalculo de hoje registraria semanas_dsr_perd ...` |
 | 14:19:41 | Bash | Wait for comboio2 suite and Codex volta 2 | `cd /home/ronald/saas-hasner/logs; until /bin/grep -q '^rc=' o261/veto_a2/suite_comboio2.log 2>/dev/null && /bin/grep -q '^rc=' calendario_hoje/verif2.run 2>/dev/null; do /usr/bin/sleep 30; done; tail -n1 o261/veto_a2/suite_comboio2.log calendario_hoje/verif2.run` |
 | 14:19:36 | Bash | Update RELATO and ESPERANDO for comboio 2 | `sed -i "3s/^ESPERANDO: .*$/ESPERANDO: trava_teste.sh \| pid=3311026/" docs/RELATO.md && python3 - <<'EOF' p='docs/RELATO.md' s=open(p).read() i=s.index('> **A/B CODEX-ASTRA-NA-VOLTA-FINAL**') s=s[:i]+("> **COMBOIO 1 (wt-comboio-3010-1359): suite FAILED 1** -- `core.tests.test_selo_performance.test_calendario` 59 queries > teto 55 (o CALENDARIO custava a mais por card); e o Codex verificador do CAL ...` |
 | 14:19:15 | Bash | Rebuild convoy, launch suite and Codex volta 2 | `cd /home/ronald/saas-hasner && C=/home/ronald/wt-comboio2-$(date +%d%m-%H%M) && git worktree add --detach "$C" main 2>&1 \| tail -1 && cd $C && git cherry-pick de8c75e8^..4d4b5c0d >/dev/null 2>&1 && git cherry-pick c992400b d08af7f9 >/dev/null 2>&1; git log --oneline d2c37edd..HEAD \| wc -l; git status --short \| head -2; mkdir -p app/logs app/media for W in /home/ronald/wt-veto-a2-3010-1154 /home ...` |
