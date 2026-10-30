@@ -1,7 +1,24 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **30/10/2026 09:16** · publicado em **30/10/2026 09:18** (UTC-3)
+> Ultima resposta processada: **30/10/2026 09:53** · publicado em **30/10/2026 09:55** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 30/10 09:53 · sessao 3c1b129f7b2c · O261-FIO-MORTO · sonda · origem=Code
+
+Sim: `2026-10-25` aparece com código `C9`, dono `BATIDA`, dono_do_dia `BATIDA` e ação `Regularizar a saida do dia`, no dado fornecido. [nao verificado]
+
+```text
+CXR129 codigo=C2 data=None dono=cadastro (lido agora) dono_do_dia=None acao=Revisar a jornada e os marcos do template [nao verificado]
+CXR129 codigo=C9 data=2026-08-23 dono=BATIDA dono_do_dia=BATIDA acao=Regularizar a saida do dia [nao verificado]
+CXR129 codigo=C9 data=2026-09-06 dono=BATIDA dono_do_dia=BATIDA acao=Regularizar a saida do dia [nao verificado]
+CXR129 codigo=C9 data=2026-09-07 dono=BATIDA dono_do_dia=BATIDA acao=Regularizar a saida do dia [nao verificado]
+CXR129 codigo=C9 data=2026-09-20 dono=BATIDA dono_do_dia=BATIDA acao=Regularizar a saida do dia [nao verificado]
+CXR129 codigo=C9 data=2026-10-11 dono=BATIDA dono_do_dia=BATIDA acao=Regularizar a saida do dia [nao verificado]
+CXR129 codigo=C9 data=2026-10-25 dono=BATIDA dono_do_dia=BATIDA acao=Regularizar a saida do dia [nao verificado]
+CXR129 codigo=A5 data=None dono=cadastro dono_do_dia=None acao=Revisar os horarios do template [nao verificado]
+CXR129 codigo=A7 data=None dono=cadastro dono_do_dia=None acao=Revisar os horarios do template [nao verificado]
+CXR129_total=9 [nao verificado]
+```
 
 ## 30/10 09:16 · sessao 9c7726ff84d8 · O261-VETO-NA-PORTA · censo · origem=Code
 
@@ -377,22 +394,4 @@ A chamada em `app/chamados/services/validacao.py:834` corresponde à assinatura 
 
 Quando `_ts_tipo_do_plantio` levanta, a classificação retorna `LOTE_B` com `sem_instante_do_plantio=True` (`app/chamados/services/validacao.py:830-835`). A fila preserva o item nessa classe e continua a iteração (`app/chamados/services/validacao.py:885-888`); suas contagens incluem B, enquanto `refs_lote` contém apenas A (`app/chamados/services/validacao.py:895-898`). A validação em massa reclassifica cada pergunta e recusa qualquer classe diferente de A (`app/chamados/services/validacao.py:681-683`).
 
-## 30/10 08:43 · sessao 03024d698e5a · O261-V-FASE · verificador · origem=Code
-
-Não encontrei falha procedente adicional no diff apresentado, pela inspeção do código atual. A C10 consome o leitor existente e só formata sua resposta. (`app/escala/services/cadastro_realidade.py:336`)
-
-As duas triagens procedem:
-
-- **Rótulo 24x48: tratado.** A C10 nomeia os dois ciclos, e o teste percorre `CICLOS` da autoridade. (`app/escala/services/cadastro_realidade.py:113`; `app/escala/tests/test_o261v_fase_na_lista.py:116`)
-- **Dívida da ata: permanece, fora deste complemento.** O pareamento continua no leitor; o inventário aponta `turnos_do_colab`. A alteração apresentada apenas acrescenta campos à resposta, preservando quem é acusado. (`app/escala/services/fase_12x36.py:175`; `app/core/juizes.py:905`; `app/escala/services/fase_12x36.py:187`)
-
-Conferi também:
-
-- **Regras e contagens:** as datas vêm das mesmas listas já contadas; o piso e `n=len(achados)` permanecem no leitor. (`app/escala/services/fase_12x36.py:187`; `app/escala/services/fase_12x36.py:202`; `app/escala/services/fase_12x36.py:207`; `app/escala/services/fase_12x36.py:216`)
-- **Mesma guarda dos vizinhos:** C10 repete o `try/except` de C9. O filtro de empresas antecede a inclusão nas linhas e contadores. (`app/escala/services/cadastro_realidade.py:595`; `app/escala/services/cadastro_realidade.py:602`; `app/escala/services/cadastro_realidade.py:629`)
-- **Juiz, escritor e relógio:** o complemento chama `fora_de_fase(hoje)`, sem cálculo próprio de fase, gravação ou nova leitura de relógio; a ação aponta à tela existente de vínculo. (`app/escala/services/cadastro_realidade.py:331`; `app/escala/services/cadastro_realidade.py:491`)
-- **L-040 e mordida:** tela e PDF exibem o mesmo detalhe; os testes verificam datas no conteúdo e usam respostas com um/zero achados para detectar abandono do leitor. (`app/templates/escala/cadastro_x_realidade.html:28`; `app/escala/services/cadastro_realidade.py:733`; `app/escala/tests/test_o261v_fase_na_lista.py:134`; `app/escala/tests/test_o261v_fase_na_lista.py:180`; `app/escala/tests/test_o261v_fase_na_lista.py:192`)
-
-Execução da suíte, RED histórico e resultado real do col451: **[não verificado]**. Comparação Git independente `f0d319ba..HEAD`: **[não verificado]**, pois a cópia disponibilizada não contém repositório Git.
-
-_422 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_423 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
