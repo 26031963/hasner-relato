@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 30/10/2026 12:50:58.** Transcript: `1a51e6b0-927f-4c8c-a61e-896443577f6a.jsonl` (2.8 MB). Acoes na janela: **135**.
+**Medido em 30/10/2026 12:55:58.** Transcript: `1a51e6b0-927f-4c8c-a61e-896443577f6a.jsonl` (2.9 MB). Acoes na janela: **139**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 12:53:51 | Bash | Check reabrir_orfas_enterradas use of recusa | `cd /home/ronald/wt-veto-a2-3010-1154/app && sed -n 98,125p chamados/management/commands/reabrir_orfas_enterradas.py` |
+| 12:53:46 | Bash | Record decision and launch Codex delta 2 | `python3 - <<'EOF' p='docs/RELATO.md' s=open(p).read() i=s.index('> **VETO-A-ESCOPO-CADASTRO aplicado') s=s[:i]+("> DECIDIDO PELA LEI L-092 (o gravado da exportada e `FechamentoMensal`/TXT por hash; a relavratura do cartorio nao o escreve): as celulas de competencia EXPORTADA que o cron `processar_cartorio` rejulga depois do deploy so ganham carimbo novo (impressao), com o MESMO veredito -- nao e ' ...` |
+| 12:53:19 | Bash | Independently recount OLD vs NEW verdict diffs | `cd /home/ronald/saas-hasner/logs/o261/veto_a2 && python3 - <<'EOF' import json,collections L=lambda f:{(r:=json.loads(l))['pk']:r for l in open(f)} O=L('sombra_rejulga_OLD.jsonl'); N=L('sombra_rejulga_NEW.jsonl') c=collections.Counter() for pk,n in N.items(): o=O[pk] if n['v1']!=o['v1']: c[('v1_difere', n['exportada'])]+=1 if n['imp_muda'] and not o['imp_muda']: c[('imp_so_new', n['exportada'])]+= ...` |
+| 12:53:12 | Bash | Inspect jsonl structure | `cd /home/ronald/saas-hasner/logs/o261/veto_a2 && head -c 400 sombra_rejulga_NEW.jsonl; echo; python3 - <<'EOF' import json,collections def load(f): d={} for l in open(f): r=json.loads(l); d[r.get('pk') or r.get('cel') or r.get('id')]=r return d O=load('sombra_rejulga_OLD.jsonl'); N=load('sombra_rejulga_NEW.jsonl') print('n',len(O),len(N), set(O)==set(N)) k=list(N.values())[0].keys(); print(sorted( ...` |
 | 12:45:29 | Bash | Wait for suite3 by file | `until /bin/grep -q '^rc=' /home/ronald/saas-hasner/logs/o261/veto_a2/suite3.log; do /usr/bin/sleep 30; done; tail -n 1 /home/ronald/saas-hasner/logs/o261/veto_a2/suite3.log` |
 | 12:45:25 | Bash | Fix pid in ESPERANDO | `sed -i '3s/^ESPERANDO: .*$/ESPERANDO: trava_teste.sh \| pid=1796867/' docs/RELATO.md && cd .. && python3 -c " import sys; sys.path.insert(0,'bin'); import hook_stop_fila1 as h; print(h._esperando_com_prova())"` |
 | 12:45:15 | Bash | Check suite3 is alive | `sleep 5; cd /home/ronald/saas-hasner && tail -n 3 logs/o261/veto_a2/suite3.log; pgrep -af "trava_teste.sh" \| cut -c1-100 \| head -3; bin/trava_teste.sh --quem` |
