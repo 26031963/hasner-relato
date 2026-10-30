@@ -1,7 +1,82 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **30/10/2026 14:04** · publicado em **30/10/2026 14:05** (UTC-3)
+> Ultima resposta processada: **30/10/2026 14:10** · publicado em **30/10/2026 14:10** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 30/10 14:10 · sessao efaf950742da · - · - · origem=Ronald (tmux)
+
+Varredura completa do selo executada em memória, sem Django, banco ou escrita. Foram usados o AST real de `varrer` e o valor real de `VIVOS` (`app/chamados/tests/test_o261_veto_na_porta.py:225`; `app/chamados/catalogo/motor.py:24`).
+
+Resultado:
+
+- Escritas: `0038_a3_registrado_backfill.py::desfazer` e `::registrar`.
+- Cópias: `reemitir_chamado_do_dia`, `detectar_ausencias.Command._abrir_chamado`, `reconciliar_grade.Command._emitir_furo`.
+- Ambas as listas coincidem exatamente com suas allowlists; catraca `5 <= 5`; as duas portas foram encontradas (`app/chamados/tests/test_o261_veto_na_porta.py:40`, `:46`, `:54`, `:244`).
+
+Isso confirma que o selo passa suas comparações atuais, embora não detecte a reabertura automática por `_pai.reabrir()` do HX: o corpo real do resolver e o mutante mínimo retornaram `([], [])`, coerentemente com o descarte do receptor não reconhecido (`app/chamados/tests/test_o261_veto_na_porta.py:207`, `:212`; `app/chamados/services/disputa_emissao.py:1606`).
+
+Não foi executada a suíte Django; comportamento de integração e ocorrências em produção: [nao verificado]. [nao verificado]
+
+## 30/10 14:09 · sessao efaf950742da · - · - · origem=Ronald (tmux)
+
+Achados confirmados por leitura:
+
+1. **Reabertura automática foge do veto pelo HX.** `resolver_perguntas_por_chamado_resolvido` chama `_pai.reabrir()` diretamente quando há resposta aguardando validação, sem consultar `_renascer_por_premissa_viva` nem `motivo_do_veto` (`app/chamados/services/disputa_emissao.py:1598`, `:1604`, `:1606`). O caminho é automático: receiver de `post_save` chama o resolver (`app/chamados/signals.py:75`, `:89`, `:92`); o reconciliador também o chama (`app/chamados/reconciliador.py:538`).
+
+   Contraexemplo concreto construído por leitura: pai histórico `entrada_bloqueada_turno_aberto`, `resolvido`, categoria/subcategoria sem classificação de furo, dia conhecido sem vínculo, sem agrupamento/irmão vivo/encerramento admin; disputa aberta com resposta não validada e não materializada creditada ao pai. O juiz das irmãs só exige carimbos/resposta/crédito (`app/chamados/juizes.py:1471`). Esse módulo está no universo do veto (`app/chamados/catalogo/furo_modulos.py:15`), mas fora de `CALADOS_POR_ISENCAO` (`app/chamados/catalogo/modulos.py:235`), permitindo evitar a guarda de premissa (`app/chamados/models.py:984`, `:1078`). `reabrir` grava estado vivo (`app/chamados/models.py:1158`) sem perguntar vínculo/veto. Ocorrência concreta em produção e execução de integração: [nao verificado].
+
+2. **Grade pode desfazer a recusa da própria porta.** O vínculo/template é pré-carregado (`app/ponto/management/commands/reconciliar_grade.py:189`, `:196`), e o veto externo usa esse objeto (`:487`, `:491`). `abrir` chama `_renascer_por_premissa_viva`, mas devolve o existente mesmo quando renascer recusou (`app/chamados/models.py:686`, `:688`). A guarda nova só trata `ch is None`; se veio encerrado, a grade chama `ch.reabrir()` diretamente (`app/ponto/management/commands/reconciliar_grade.py:519`, `:521`, `:522`).
+
+   Contraexemplo: chamado `batida_ausente` resolvido, célula ainda acusa marco faltante; template carregado 08–17 muda para 08–08 antes do pedido à porta. A cópia externa aprova o objeto antigo, a porta consulta vínculo/template atual e veta (`app/chamados/models.py:778`, `:896`), mas o fallback reabre sem veto. A trava de `abrir` é no colaborador (`app/chamados/models.py:669`), não no template. Ocorrência em produção/ensaio concorrente: [nao verificado].
+
+3. **O selo AST não cobre a fuga real de reabertura por instância.** Só reconhece pedido de porta quando o receptor cita o modelo (`app/chamados/tests/test_o261_veto_na_porta.py:207`); descarta receptores como `_pai` (`:212`); as escritas reconhecidas são construtor/save ou operações create/update de gerente (`:209`, `:216`, `:218`). Executei extração das funções AST em memória com `python3 -B`, sem Django/imports locais/DB/escrita: tanto `def automatica(pai): pai.reabrir()` quanto o corpo real de `resolver_perguntas_por_chamado_resolvido` retornaram `([], [])`. Evidência de execução só nesta sessão, sem artefato: [nao verificado]. A limitação é verificável nas linhas acima.
+
+4. **Ato humano tem trilha genérica, mas não mostra/registra o veto dispensado.** Desarquivar chama `reabrir` e grava resgate (`app/chamados/views_arquivar.py:68`, `:75`, `:79`); reabertura administrativa grava motivo/justificativa humana (`app/chamados/services/acoes_disputa.py:266`, `:270`); reabrir competência grava competência/status (`app/chamados/services/competencia_trancada.py:258`, `:261`). Nenhum desses caminhos pergunta o veto. A trilha nova só registra **recusas** (`app/chamados/models.py:915`, `:924`); o próprio contador admite que ato humano ainda não deixa trilha própria (`app/ponto/services/furos_vetados.py:89`). Contraexemplo: desarquivar chamado de competência trancada com dia sem vínculo; registra resgate, sem `VETO_DEGENERADA` ou dispensa humana desse veto.
+
+Hipótese descartada:
+
+- **Abertura manual via `abrir_chamado_para_colaborador` produzir `None.pk` para módulo do universo: sem achado no catálogo atual.** O serviço rejeita módulo fora de `tipos_para_colaborador` (`app/chamados/services/abertura.py:149`), que só inclui `abrivel_por_humano` (`app/chamados/catalogo/modulos.py:281`, `:306`). Os módulos do universo não declaram essa abertura (`:105`, `:107`, `:109`, `:111`, `:182`); não alcançarão `criar` por essa interface.
+
+## 30/10 14:07 · sessao ab87115a333a · - · - · origem=Ronald (tmux)
+
+Achado confirmado: o efeito “ativo sem vínculo segue abrindo `regua_degenerada`” não tem caminho alcançável para o caso sem vínculo em todo o período.
+
+- O escritor existe: `vetar_cobranca_se_degenerada` transforma `ec=None` em template `None`, considera degenerada e chama `ChamadoColaborador.abrir(modulo_origem='regua_degenerada')`, com `tipo_escala_id=None` e código `SEM_ESCALA` (`app/escala/regua_defesa.py:23`, `:45`, `:51`, `:73`).
+- Seus dois chamadores são `_abrir_chamado` do detector (`app/ponto/management/commands/detectar_ausencias.py:599`) e `_emitir_furo` da grade (`app/ponto/management/commands/reconciliar_grade.py:486`).
+- O detector exclui `ec=None` antes de chegar ali (`app/ponto/management/commands/detectar_ausencias.py:139`).
+- O cartório integral exige vínculo não nulo (`app/ponto/services/cartorio.py:1347`); seu ramo parcial retorna sem vínculo (`app/ponto/services/cartorio.py:1446`).
+- O emissor retroativo de furo pula vínculo ausente (`app/ponto/management/commands/emitir_furo_retroativo.py:118`).
+- A grade não coloca o dia na fila de emissão quando o template é ausente: `escala_ok(None)==False` (`app/ponto/management/commands/reconciliar_grade.py:157`, `app/ponto/marcos.py:107`).
+- Os emissores de turno tampouco abrem cadastro: saem sem vínculo (`app/ponto/management/commands/processar_alertas_avancados.py:37`, `app/ponto/management/commands/emitir_turno_aberto_retroativo.py:104`).
+- O novo juiz é somente leitura e só retorna `VETO_DEGENERADA`; a porta também não chama o escritor de cadastro (`app/ponto/services/furos_vetados.py:40`, `app/chamados/models.py:896`).
+
+Contraexemplo concreto por fluxo: colaborador ativo, em operação, sem qualquer `EscalaColaborador` nem geradora de célula, sem chamado prévio de cadastro; detector e retroativos saltam o dia, cartório não chama emissor, grade não enfileira emissão, porta veta o chamado de turno sem abrir `regua_degenerada`. Chamado de cadastro não nasce pelos caminhos acima; ocorrência real em produção [nao verificado]. A lacuna já pode anteceder o diff; o que fica reprovado é a garantia do aval nesta cópia.
+
+Achado adicional de impressão: existe um ramo do cartório que não incorpora o novo veto.
+
+- `adesao is None` entra no ramo “nunca bateu” (`app/ponto/services/cartorio.py:907`).
+- Esse ramo chama `impressao_insumos` sem argumento `veto` (`app/ponto/services/cartorio.py:941`), compara o hash e pula a célula se igual (`:943`), encerrando antes do leitor de `motivo_do_veto` (`:1003`, `:1007`).
+- O ramo normal consulta o juiz em `:1013`, passa seu resultado em `:1083`; `impressao_insumos` acrescenta `veto:VETO_DEGENERADA` ao hash em `:329`.
+
+Contraexemplo: ativo sem adesão, célula já carimbada, `ec=None`, demais insumos iguais. O novo resultado do juiz não muda `imp0`; `:943` continua pulando. Se “ec=None também para impressão” abrange toda célula, o censo deixou esse leitor indireto de fora. Não há cobrança de furo nesse ramo por desenho (`app/ponto/services/cartorio.py:903`); portanto não alegar cobrança indevida como efeito.
+
+Relavratura/dinheiro/exportada: há caminho de rejulgamento automático que percorre todas as células passadas sem recorte de competência (`app/ponto/management/commands/processar_cartorio.py:49`, `:61`, `:65`), e o hash novo do ramo normal pode provocar lavra (`app/ponto/services/cartorio.py:1083`, `:1092`, `:1409`, `:1424`). Escritores efetivos são `lavrar_veredito` (`app/ponto/portas/celula.py:689`) e `carimbar` (`:721`). Reversão prévia, aplicação financeira autorizada, hashes preservados de exportação e Pauta DP da mudança específica: [nao verificado]. Não confundir rejulgamento de célula com alteração comprovada do TXT exportado.
+
+## 30/10 14:07 · sessao 95faa6137e78 · - · - · origem=Ronald (tmux)
+
+**Migração “sem vínculo/sem escala”: sem achado.** O caso explicitamente “sem escala” preserva a condição: `_colab(..., com_escala=False)` só cria vínculo quando solicitado; `test_MORDE_procedencia_ignora_batida_retratada` não chama o helper `_chamado_agrupado` que ganhou `dar_vinculo` (`app/chamados/tests/test_selo_f4_fatia4.py:45`, `:50`, `:69`, `:131`, `:136`, `:139`). `TrancaSemCadastro` testa a exclusão de **avisos de cadastro** da tranca, e não ausência de vínculo (`app/chamados/tests/test_tranca_sem_cadastro.py:9`, `:39`, `:50`).
+
+**Vacuidades encontradas em testes tocados, mas não demonstradas como introduzidas pela migração:** [nao verificado]
+
+1. `test_MORDE_desligado_segue_o_gate_do_c2` ganha vínculo, mas continua sem célula para o desligado; a célula da fixture pertence ao outro colaborador (`app/chamados/tests/test_emissao_reata_orfa.py:30`, `:31`, `:67`, `:71`). As asserções exigem apenas destino ausente/zero chamados (`:73`, `:74`). **Contraexemplo:** remover o gate `situacao != 'ativo'` ainda deixa o caso barrado pela ausência de protesto da célula (`app/chamados/reconciliador.py:789`, `:834`, `:836`). O teste não prova o gate que nomeia.
+
+2. `test_sem_celula_o_chamado_ainda_nasce` somente chama `_ctx_c2` e inspeciona o dicionário; não tenta abrir chamado (`app/chamados/tests/test_emissor_nomeia_o_marco.py:88`, `:92`, `:93`). **Contraexemplo:** impedir todo nascimento na porta não é observado por essas asserções; a porta é chamada separadamente pelo c2 (`app/chamados/reconciliador.py:862`).
+
+3. A mesma limitação ocorre em `test_sem_ata_possivel_o_chamado_nasce_sem_marco_e_nao_deixa_de_nascer`: somente `_ctx_c2` e três campos do resultado são exercitados (`app/chamados/tests/test_bug125_cobranca_cega.py:176`, `:182`, `:183`). **Contraexemplo:** recusar o nascimento depois de construir contexto não altera o resultado que esse teste verifica (`app/chamados/reconciliador.py:862`, `:872`).
+
+**Controles úteis preservados:** os testes de deduplicação exigem um chamado efetivo, evitando verde por veto total (`app/chamados/tests/test_3c_abrir_ausencia.py:52`, `app/chamados/tests/test_f3_dedup_atraso.py:57`, `:64`); o teste novo sem vínculo espera `(None, False)` e compara com nascimento com vínculo (`app/chamados/tests/test_o261_veto_na_porta.py:395`, `:404`, `:406`).
+
+Execução da suíte e estado verde efetivo: **[nao verificado]**. [nao verificado]
 
 ## 30/10 14:04 · sessao 4573a6843b71 · CALENDARIO-HOJE · verificador · origem=Code
 
@@ -662,63 +737,4 @@ Fora da vigência da geradora: 5.232 células = 1.895 em competências exportada
 COL309_FORA=27, conforme dado fornecido [nao verificado].  
 ERROS=0, conforme dado fornecido [nao verificado].
 
-## 30/10 12:57 · sessao 8ab81fa72246 · O261-VETO-A2 · verificador · origem=Code
-
-1. **Não há garantia absoluta: resta um escape concorrente por `analisar()`.** O detector carrega chamados vivos e os entrega à fábrica; esta pode chamar `ch.analisar()` usando a instância antiga. Se outro escritor encerrar o chamado nesse intervalo, `analisar()` decide pelo estado em memória e grava `em_analise` sem consultar veto nem reler o banco. É um caminho automático que permanece fora de `reabrir()`; ocorrência em produção **[não verificado]**. (`app/ponto/management/commands/detectar_ausencias.py:790–796`; `app/chamados/services/disputa_emissao.py:971–981`; `app/chamados/models.py:566–572`, `:192`, `:231`)
-
-   O escape obrigatório do callback está coberto: o receiver usa usuário de sistema, chama o resolver, e este executa `_pai.reabrir()` com o padrão `humano=False`; o veto retorna antes da escrita de estado e da ressurreição de perguntas. (`app/chamados/signals.py:89–92`; `app/chamados/services/disputa_emissao.py:1601–1608`; `app/chamados/models.py:1090–1093`, `:1143–1146`, `:1185–1194`)
-
-   No percurso sequencial com estado atual, os demais eventos automáticos do motor não fazem encerrado → vivo; essa transição pertence a `REABRIR`. (`app/chamados/catalogo/motor.py:110–117`)
-
-2. **sem achado nas três cadeias humanas atuais.** Desarquivar exige login, POST, permissão e acesso à área; reabrir disputa exige autorização sobre o chamado, staff/admin_ti, motivo e justificativa; reabrir competência exige login, POST, `reabrir_periodo` e motivo, repassando `request.user` até o serviço. (`app/chamados/views_arquivar.py:51–68`; `app/chamados/services/fio.py:552–577`; `app/chamados/services/acoes_disputa.py:242–266`; `app/ponto/views.py:1520–1544`; `app/ponto/services/fechamento.py:1415–1416`; `app/chamados/services/competencia_trancada.py:258`)
-
-   Há uma fragilidade local, sem chamador automático demonstrado: o serviço de competência aceita `autor=None`, substitui por usuário de sistema e mesmo assim passa `humano=True`; portanto a classificação humana depende da cadeia acima. Uso automático externo **[não verificado]**. (`app/chamados/services/competencia_trancada.py:228`, `:239`, `:258`)
-
-3. **sem achado nos leitores.** `reabrir()` trata `veto_do_dia` antes de qualquer uso do segundo elemento como chamado. `reabrir_orfas_enterradas` desempacota `_irmao`, mas não o utiliza: qualquer motivo provoca recusa e `continue`. (`app/chamados/models.py:1143–1146`, `:1164–1178`; `app/chamados/management/commands/reabrir_orfas_enterradas.py:105–111`)
-
-4. **Há contraexemplos na deduplicação, inferidos do código; ocorrência em produção [não verificado].**
-
-   **Duplicação concorrente:** duas chamadas diretas podem consultar antes de qualquer uma inserir e ambas registrar a mesma recusa. O helper não serializa consulta/inserção, e o modelo não declara unicidade dessa chave. (`app/chamados/models.py:925–937`; `app/core/observ.py:133–138`; `app/core/models.py:309–316`)
-
-   **Linha extra sem passagem daquele dia:** no nascimento, basta nascer chamado de outro dia do mesmo colaborador/módulo; faltam filtros de dia/célula em `_passou`. Na reabertura, basta renovar o SLA mantendo o chamado encerrado: isso altera `atualizado_em` e habilita outra linha. (`app/chamados/models.py:931–934`, `:378–385`)
-
-   **Ciclo calado por concorrência:** uma recusa consulta a trilha e fica suspensa; ocorre nascimento permitido; a recusa antiga grava sua linha depois. Quando o veto volta, o nascimento fica anterior à última linha e não provoca novo registro. A comparação usa o horário da inserção tardia, sem serialização com o nascimento. (`app/chamados/models.py:925–937`; `app/core/models.py:307`)
-
-   **Custo do helper:** um `SELECT`; existindo linha anterior, mais um `EXISTS`; havendo registro, mais um `INSERT`, além do controle transacional de `evento()`. Os índices declarados não cobrem a chave JSON com a ordenação utilizada; plano e latência reais **[não verificado]**. (`app/chamados/models.py:925–937`; `app/core/observ.py:133–138`; `app/core/models.py:313–316`)
-
-5. **sem achado quanto a novo chamado, nota ou pergunta proibidos.** O novo ramo de veto escreve auditoria e retorna `False` antes dos efeitos de reabertura. O juiz consultado retorna apenas o motivo; a pergunta e as notas administrativas aparecem como contexto preexistente no diff fornecido. (`app/chamados/models.py:1143–1146`, `:937–941`, `:1185–1194`; `app/ponto/services/furos_vetados.py:27–44`; `app/chamados/services/acoes_disputa.py:259–270`; `app/chamados/services/competencia_trancada.py:258–260`)
-
-## 30/10 12:55 · sessao 9ed2fa415911 · - · - · origem=Ronald (tmux)
-
-3. **Sem achado.** `reabrir()` trata `veto_do_dia` antes dos ramos que usam `_irmao` como chamado; portanto a tupla do veto não chega a `_irmao.pk` (`app/chamados/models.py:1143`, `app/chamados/models.py:1144`, `app/chamados/models.py:1164`). `reabrir_orfas_enterradas` desempacota o segundo elemento mas não o usa: qualquer `motivo` provoca `PAI_RECUSA` e `continue` (`app/chamados/management/commands/reabrir_orfas_enterradas.py:105`, `app/chamados/management/commands/reabrir_orfas_enterradas.py:107`, `app/chamados/management/commands/reabrir_orfas_enterradas.py:111`).
-
-4. **Há contraexemplos de duplicação e de recusa calada, inferidos do código; ocorrência em produção [não verificado].**
-
-- **Duplicação concorrente:** duas chamadas diretas a `criar()` ou `reabrir()` podem ler a mesma última linha antes de qualquer delas inserir; o helper não serializa consulta e inserção, e `LogAuditoria` não possui unicidade dessa chave (`app/chamados/models.py:925`, `app/chamados/models.py:937`, `app/core/observ.py:133`, `app/core/models.py:313`). O bloqueio do colaborador existe em `abrir()`, mas não cobre esses dois caminhos diretos (`app/chamados/models.py:666`, `app/chamados/models.py:669`, `app/chamados/models.py:818`, `app/chamados/models.py:1115`).
-- **Duplicação sem passagem pela porta:** após uma recusa de reabertura, basta renovar o prazo do chamado, mantendo-o encerrado; `definir_prazo_sla()` muda `atualizado_em`, e a próxima recusa considera isso `_passou=True` (`app/chamados/models.py:378`, `app/chamados/models.py:385`, `app/chamados/models.py:931`). Existe chamada a essa renovação em `recobrar_questionario()` sem guarda do estado do chamado naquele ponto (`app/chamados/services/disputa_emissao.py:1448`, `app/chamados/services/disputa_emissao.py:1450`).
-- **Nascimento de outro dia:** a prova de passagem filtra somente colaborador, módulo e criação posterior; um chamado de outro dia/célula torna a próxima recusa da chave original uma linha nova, sem provar mudança daquele dia vetado (`app/chamados/models.py:925`, `app/chamados/models.py:933`).
-- **Recusa calada por interleaving:** uma recusa pode consultar a trilha, ficar suspensa, ocorrer nascimento permitido e só depois gravar sua linha; a próxima recusa compara o nascimento com o horário dessa linha tardia e o ignora por não ser posterior (`app/chamados/models.py:925`, `app/chamados/models.py:934`, `app/chamados/models.py:937`, `app/core/models.py:307`). É contraexemplo possível; reprodução/ocorrência [não verificado].
-- **Custo do helper:** uma consulta da última linha; quando encontrada, mais um `EXISTS`; quando emite, mais um `INSERT`, com controle transacional de `evento()` e possível acesso ao usuário lazy (`app/chamados/models.py:925`, `app/chamados/models.py:929`, `app/chamados/models.py:937`, `app/core/observ.py:106`, `app/core/observ.py:133`). Os índices declarados de auditoria não cobrem a chave JSON nem sua ordenação; plano e latência reais [não verificado] (`app/core/models.py:313`).
-
-## 30/10 12:55 · sessao 1f14b6ff2d74 · - · - · origem=Ronald (tmux)
-
-Q1: o escape nomeado do callback está barrado: o receiver automático chama o resolver com usuário sistema (`app/chamados/signals.py:81-92`); o resolver chama `_pai.reabrir()` sem `humano=True` (`app/chamados/services/disputa_emissao.py:1601-1608`); o veto é primeira guarda e retorna `False` antes da escrita/ressuscitação (`app/chamados/models.py:1090-1093,1143-1146,1185-1194`).
-
-Há ressalva à afirmação **“toda reabertura automática”**: `analisar()` consulta apenas o estado da instância e escreve `em_analise`, sem reler banco nem perguntar veto (`app/chamados/models.py:566-572`; `app/chamados/catalogo/motor.py:112`). Contraexemplo por concorrência: detector carrega `batida_ausente` vivo e o entrega à fábrica (`app/ponto/management/commands/detectar_ausencias.py:790-796`); outro escritor encerra; fábrica mantém a instância antiga e chama `ch.analisar()` (`app/chamados/services/disputa_emissao.py:971-981`), que grava vivo diretamente (`app/chamados/models.py:192,231`). `batida_ausente` pertence ao universo (`app/chamados/catalogo/furo_modulos.py:15`; `app/ponto/services/furos_vetados.py:74-81`). Essa possibilidade é anterior ao diff; ocorrência em produção [não verificado].
-
-No percurso sequencial, os outros gates automáticos que chamam `_gravar_estado` não reabrem encerrado: `RECONCILIAR`, `ANALISAR`, `CANCELAR`, `SUPERAR` e `ENCERRAR` têm mapas sem transição de encerrado para vivo; só `REABRIR` tem essa transição (`app/chamados/catalogo/motor.py:110-117`). `transicionar()` pode reabrir, mas os usos encontrados com destino vivo vêm de requisição/ação humana (`app/chamados/services/acoes_chamado.py:313-315`; `app/chamados/services/fio.py:702-715`); não encontrei um escritor automático sequencial de estado encerrado para vivo por `update` fora do gate (`app/chamados/models.py:185-231,429-430`).
-
-## 30/10 12:55 · sessao 0d8cfe19a610 · - · - · origem=Ronald (tmux)
-
-2. **sem achado nas cadeias atuais da cópia.**
-
-- Desarquivar: `login_required`, POST, `gerir_chamados` e recusa por área precedem `reabrir(humano=True)`; o usuário segue para a trilha e a nota (`app/chamados/views_arquivar.py:51`, `:54`, `:56`, `:60`, `:68`, `:75`, `:79`).
-- Reabrir disputa: as duas entradas exigem login e gestor; o POST delega ao fio, que verifica `pode_agir_chamado`; o serviço exige `is_staff`/grupo `admin_ti`, motivo válido e justificativa, e passa `request.user` à reabertura administrativa (`app/chamados/views.py:658`, `:662`, `:667`, `:674`, `:868`, `:872`, `:951`; `app/chamados/services/fio.py:560`, `:575`; `app/chamados/services/acoes_disputa.py:242`, `:248`, `:250`, `:256`, `:266`).
-- Competência: login, POST, permissão `reabrir_periodo` e motivo obrigatório precedem a chamada com `por=request.user`; o serviço de fechamento repassa esse usuário como `autor` ao serviço que usa `humano=True` (`app/ponto/views.py:1520`, `:1523`, `:1525`, `:1537`, `:1544`; `app/ponto/services/fechamento.py:1415`; `app/chamados/services/competencia_trancada.py:258`).
-- Não localizei chamada automática nessas cadeias; uso dinâmico externo é **[não verificado]**. A função de competência isoladamente não exige humano: aceita `autor=None` e adota usuário de sistema; isso constitui possibilidade de uso futuro, não um chamador automático demonstrado (`app/chamados/services/competencia_trancada.py:228`, `:239`).
-
-5. **sem achado no diff fornecido quanto a novo chamado, nota ou pergunta.** O ramo novo de recusa chama somente a trilha e retorna `False`; a trilha escreve `LogAuditoria` (`app/chamados/models.py:1143`, `:1145`, `:1146`, `:937`; `app/core/observ.py:133`). A pergunta e a nota da reabertura administrativa, assim como a nota da competência e a nota do resgate, já aparecem como contexto anterior no diff fornecido; anterioridade histórica além desse anexo é **[não verificado]** (`app/chamados/services/acoes_disputa.py:259`, `:270`; `app/chamados/services/competencia_trancada.py:259`; `app/chamados/views_arquivar.py:79`).
-
-Detalhe adicional de trilha: `via='reabrir'` produz ação `reabertura_recusada`, mas descrição “nascimento recusado (reabrir)”, porque o texto distingue somente `renascer` dos demais valores (`app/chamados/models.py:919`, `:938`).
-
-_487 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_491 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._

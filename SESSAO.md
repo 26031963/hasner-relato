@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 30/10/2026 14:05:14.** Transcript: `1a51e6b0-927f-4c8c-a61e-896443577f6a.jsonl` (5.0 MB). Acoes na janela: **265**.
+**Medido em 30/10/2026 14:10:45.** Transcript: `1a51e6b0-927f-4c8c-a61e-896443577f6a.jsonl` (5.1 MB). Acoes na janela: **269**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 14:06:12 | Bash | Wait for Astra A/B by file | `until /bin/grep -q '^rc=' /home/ronald/saas-hasner/logs/codex_astra_ab/astra_final.run; do /usr/bin/sleep 20; done; tail -n 2 /home/ronald/saas-hasner/logs/codex_astra_ab/astra_final.run` |
+| 14:06:00 | Bash | Check Astra run started | `sleep 5; ls -la /home/ronald/saas-hasner/logs/codex_astra_ab/; ps -eo pid,args \| /bin/grep -c "[c]odex_pergunta.sh"` |
+| 14:05:34 | Bash | Register aval and launch Astra A/B run | `python3 - <<'EOF' p='docs/PROMPTS.md' L=open(p).read().split('\n') i=max(k for k,l in enumerate(L) if l.startswith('\| 30/10 ')) L.insert(i+1,"\| 30/10 14:0x \| **aval: CODEX-ASTRA-NA-VOLTA-FINAL (instrumento, pouso proprio L-105, depois do pouso do VETO A; nenhuma lei de negocio). CONTRATO: (1) wrapper passa `-m gpt-6-astra` SO com CODEX_MODELO=astra -- volta FINAL de verificador em obra de negoc ...` |
+| 14:05:18 | Bash | Inspect Astra shim and wrapper codex invocation | `ls -la ~/ab_astra/bin/ 2>&1; cat ~/ab_astra/bin/codex 2>/dev/null \| head -20; /bin/grep -n "command -v codex\\|codex exec\\|CODEX_BIN\\|\bcodex\b.*exec" /home/ronald/saas-hasner/bin/codex_pergunta.sh \| head -5` |
 | 14:03:27 | Bash | Prepare opus briefs for both works | `cd /home/ronald/saas-hasner/logs && python3 - <<'EOF' p='o261/veto_a2/brief_opus.txt' s=open(p).read() s=s.replace("Copia: /home/ronald/wt-veto-a2-3010-1154 (HEAD bfbc2aba, base main d2c37edd). Diff: git -C /home/ronald/wt-veto-a2-3010-1154 diff d2c37edd bfbc2aba.", "Copia: /home/ronald/wt-veto-a2-3010-1154 (HEAD 4d4b5c0d, base main d2c37edd). Diff: git -C /home/ronald/wt-veto-a2-3010-1154 diff d2 ...` |
 | 14:00:39 | Bash | Wait for convoy suite and calendario verifier | `cd /home/ronald/saas-hasner/logs; until /bin/grep -q '^rc=' o261/veto_a2/suite_comboio.log 2>/dev/null && /bin/grep -q '^rc=' calendario_hoje/verif.run 2>/dev/null; do /usr/bin/sleep 30; done; tail -n1 o261/veto_a2/suite_comboio.log calendario_hoje/verif.run` |
 | 14:00:33 | Bash | Fix ESPERANDO and record comboio in RELATO | `sed -i "3s/^ESPERANDO: .*$/ESPERANDO: trava_teste.sh \| pid=2148016/" docs/RELATO.md && python3 - <<'EOF' p='docs/RELATO.md' s=open(p).read() i=s.index('PERGUNTA ! COL309-09') s=s[:i]+("> **POUSO-EM-COMBOIO** (13:5x): VETO A (`wt-veto-a2` @ 4d4b5c0d, Codex delta 3 sem bloqueador, 3 mutantes de teste fechados) + CALENDARIO-HOJE-NAO-E-FALTA (`wt-cal-hoje-3010-1353` @ c992400b; RED `logs/calendario_h ...` |
