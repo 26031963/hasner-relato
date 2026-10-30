@@ -1,7 +1,95 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **30/10/2026 19:28** · publicado em **30/10/2026 19:31** (UTC-3)
+> Ultima resposta processada: **30/10/2026 19:33** · publicado em **30/10/2026 19:36** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 30/10 19:33 · sessao f393335dd52b · O261-V-FASE · verificador · origem=Code
+
+**Achei um ponto funcional procedente: a CLI exige o vínculo “lido na listagem”, mas não o exibe.** O argumento é obrigatório e filtra corretamente a proposta; porém a impressão omite `vinculo_id`. Duas propostas iguais, de vínculos distintos, ficam indistinguíveis para quem precisa informar `--vinculo`. `app/escala/management/commands/propostas_de_escala.py:23`, `:33`, `:39`, `:80`.
+
+**1. Quem escreve e quem lê o vínculo**
+
+- **CLI:** o operador fornece `--vinculo`; o parser recebe, o filtro combina colaborador e vínculo, e aplicar/recusar recebem a proposta selecionada. Falta imprimir o EC na listagem. `app/escala/management/commands/propostas_de_escala.py:23`, `:39`, `:63`, `:68`, `:80`.
+- **Fio:** `proposta_do_fio` fornece `vinculo_id`; os dois formulários escrevem o hidden; `processar_post_fio` lê e repassa nos dois verbos; o recálculo exige correspondência do vínculo. Não encontrei bypass nesse percurso. `app/chamados/services/proposta_no_fio.py:79`, `:109`, `:134`, `:169`; `app/templates/chamados/partials/modal_fio.html:52`, `:59`; `app/chamados/services/fio.py:509`, `:511`, `:514`; `app/escala/services/propositor.py:685`.
+- **Chat:** o preview guarda o vínculo na sessão; o aceite o recupera e filtra junto da assinatura. Sessão antiga sem essa chave passa `''`, que não corresponde ao EC. `app/core/views_ia.py:578`, `:620`, `:650`; `app/escala/services/propositor.py:685`.
+- **Escrita final:** a porta recebe o vínculo da proposta; decisões aceita e recusada também o registram. `app/escala/services/propositor.py:718`, `:766`, `:774`.
+
+Ocorrência desses percursos em produção: **[nao verificado]**.
+
+**2. Imports, código morto e referências antigas**
+
+Não encontrei import local inexistente na análise estática dos `from` absolutos de `app`; execução real e cobertura dos imports relativos: **[nao verificado]**. Os candidatos sem definição estática `ENVELOPE_LOTE_MIN` e `ROTULO_LOTE` existem via `__getattr__`. `app/chamados/services/validacao.py:765`.
+
+Há parâmetros sem leitura nos corpos da cópia:
+
+- `empresas` em `_fase_deslocada`, `_termometro`, `_vinculo_divergente` e `_teto_do_dia`. O filtro efetivo da lista ocorre depois. `app/escala/services/cadastro_realidade.py:335`, `:285`, `:303`, `:315`, `:635`.
+- `dias_bat` e `dias_janela` em `_propor_pausa`; `dias_bat` em `_chamados_que_morreriam`; `hoje` em `_recusadas_recentes`. `app/escala/services/propositor.py:280`, `:617`, `:693`.
+- `hoje` em `linhas_para_a_pauta`. `app/chamados/services/fila_por_causa.py:379`.
+
+A introdução desses resíduos **nesta obra** é **[nao verificado]**. Os parâmetros com `_` de `dono_do_dia` estão explicitamente reservados à decisão de lei aberta. `app/escala/services/fase_12x36.py:78`, `:88`.
+
+Não encontrei teste importando/executando os antigos `fora_de_fase/JANELA_DIAS/PISO/CICLOS` de `fase_12x36`. A referência executável restante a `fora_de_fase` verifica sua ausência; outras são lápides/documentação. `app/escala/tests/test_o261_v_fase_na_lista.py:223`; `app/escala/tests/test_fase_12x36.py:3`; `app/chamados/tests/test_proposta_no_fio.py:186`.
+
+**3. Os testes mordem o chamador?** [nao verificado]
+
+**Sim, no repasse do POST:** exercitam `processar_post_fio` para aplicar e recusar e exigem `vinculo_da_tela='9'`. O render exige os dois hidden. `app/escala/tests/test_o261_v_fase_na_lista.py:434`, `:438`, `:439`; `app/chamados/tests/test_proposta_faixa_na_tela.py:85`, `:91`.
+
+O limite é preciso: o POST substitui os serviços por mocks; o cenário A desaparece/B tem mesma assinatura e seu controle positivo estão no auxiliar `_recalcular`. `app/escala/tests/test_o261_v_fase_na_lista.py:437`, `:418`, `:422`, `:425`.
+
+A CLI é exercitada por `call_command`, mas somente para aplicar sem vínculo. Não verifica a impressão do EC nem a seleção positiva — deixou escapar o achado da listagem. `app/escala/tests/test_o261_v_fase_na_lista.py:444`, `:451`, `:453`.
+
+Os intervalos históricos exatos são **[nao verificado]**, pois a cópia não contém `.git`. Execução da suíte Django: **[nao verificado]**. [nao verificado]
+
+## 30/10 19:32 · sessao 6430dea1929f · - · - · origem=Ronald (tmux)
+
+Achado de limpeza: `empresas` não é lido em `_fase_deslocada(empresas=None)`; o chamador passa esse argumento, mas o corpo apenas lê/formata a lavra. O filtro efetivo por empresa ocorre depois, em `lista()`. Isso não demonstra vazamento de escopo. Origem no intervalo `d80c98a5..2177fa08`: [nao verificado]. `app/escala/services/cadastro_realidade.py:335`, `:337`, `:348`, `:610`, `:635`.
+
+Outros parâmetros sem leitura na cópia, cuja origem histórica é [nao verificado]:
+
+- `_propor_pausa`: `dias_bat`, `dias_janela`. `app/escala/services/propositor.py:280`.
+- `_chamados_que_morreriam`: `dias_bat`. `app/escala/services/propositor.py:617`.
+- `_recusadas_recentes`: `hoje`; corte usa `timezone.now()`. `app/escala/services/propositor.py:693`, `:700`.
+- `_termometro`, `_vinculo_divergente`, `_teto_do_dia`: `empresas`. `app/escala/services/cadastro_realidade.py:285`, `:303`, `:315`.
+- `linhas_para_a_pauta`: `hoje`. `app/chamados/services/fila_por_causa.py:379`.
+
+Os argumentos `_colab_id`, `_dia`, `_ec_do_dia` de `dono_do_dia` são explicitamente reservados à decisão de lei aberta; não classifiquei como resíduo acidental. `app/escala/services/fase_12x36.py:78`, `:81`, `:88`.
+
+Não encontrei import local inexistente na varredura AST dos `from` absolutos locais de `app`; execução real desses imports: [nao verificado]. Os únicos nomes sem definição estática encontrados (`ENVELOPE_LOTE_MIN`, `ROTULO_LOTE`) são fornecidos por `__getattr__`. `app/chamados/services/validacao.py:765`, `:767`, `:769`.
+
+Não encontrei teste executando/importando `fora_de_fase`, `JANELA_DIAS`, `PISO` ou `CICLOS` de `fase_12x36`. A referência executável restante a `fora_de_fase` exige sua ausência; demais ocorrências são comentários/lápides. `app/escala/tests/test_o261_v_fase_na_lista.py:223`, `:226`; `app/escala/tests/test_fase_12x36.py:3`; `app/chamados/tests/test_proposta_no_fio.py:186`.
+
+Todas as funções/constantes de topo de `fase_12x36`, `propositor`, `censo_fase_12x36` e `proposta_no_fio` tiveram referência AST de leitura/importação encontrada; isso não prova alcance em produção. [nao verificado].
+
+## 30/10 19:32 · sessao 92ffc021dfdb · - · - · origem=Ronald (tmux)
+
+Achado procedente: **a CLI exige um vínculo que sua listagem não informa**. `--vinculo` é anunciado como “o vínculo da proposta que você leu na listagem” e obrigatório para decidir (`app/escala/management/commands/propostas_de_escala.py:23`, `:33`), mas o loop imprime somente colaborador, template, âncoras, casamento e chamados; nunca `vinculo_id` (`:80`, `:83`, `:89`, `:93`). Duas propostas iguais exceto pelo vínculo aparecem indistinguíveis. Reprodução somente em memória com a classe `Command` e propostas fictícias confirmou isso; ocorrência concreta em produção [nao verificado].
+
+Fluxo conferido:
+
+- CLI: humano fornece `--vinculo`; parser lê em `propostas_de_escala.py:23`; filtro seleciona por colaborador **e** vínculo em `:39`; aplicação/recusa recebem essa proposta em `:63`, `:68`. Falta o escritor do ID na listagem (`:80`).
+- Fio: `proposta_do_fio` fornece o ID em `app/chamados/services/proposta_no_fio.py:79`; os dois formulários escrevem o hidden em `app/templates/chamados/partials/modal_fio.html:52`, `:59`; POST lê `''` por omissão e repassa em `app/chamados/services/fio.py:509`, `:511`, `:514`; os serviços passam ao recálculo em `proposta_no_fio.py:134`, `:169`; o auxiliar compara o vínculo em `app/escala/services/propositor.py:685`. Não identifiquei bypass nesse caminho.
+- Chat: preview guarda o vínculo em sessão em `app/core/views_ia.py:620`; aceite lê com `''` por omissão em `:650`; helper repassa à seleção por assinatura/vínculo em `:578`. Não identifiquei bypass nesse caminho.
+- Escrita final usa `p['vinculo_id']` na porta em `app/escala/services/propositor.py:766`; decisão aceita e recusada registram o ID em `:774`, `:718`.
+- Caminhos produtivos encontrados são CLI, fio e chat: chamadas diretas em `propostas_de_escala.py:63`, `:68`, `proposta_no_fio.py:147`, `:172`, `views_ia.py:660`; escritor dinâmico declarado em `app/core/intake.py:51`.
+
+Testes relacionados: POST exercita o chamador real nos dois verbos e confere o repasse (`app/escala/tests/test_o261_v_fase_na_lista.py:428`, `:434`, `:439`); render exige dois hidden com o ID (`app/chamados/tests/test_proposta_faixa_na_tela.py:85`, `:91`). Teste CLI cobre ausência de vínculo somente no aplicar (`test_o261_v_fase_na_lista.py:444`, `:451`); não cobre sua impressão na listagem nem seleção positiva do EC (`:448`).
+
+Atribuição exata ao delta histórico [nao verificado]: a cópia disponibilizada não contém `.git`.
+
+## 30/10 19:32 · sessao de6d5691a76e · - · - · origem=Ronald (tmux)
+
+Achado procedente: a CLI exige o EC “lido na listagem”, mas não o imprime. `--vinculo` é definido e exigido em `app/escala/management/commands/propostas_de_escala.py:23` e `:33`; a seleção usa `vinculo_id` em `:39`. Porém a listagem em `:80`–`:98` imprime colaborador, tipo, templates, âncoras, data e chamados, sem EC. Duas propostas iguais exceto pelo vínculo produzem blocos indistinguíveis; confirmei executando `Command.handle` extraído por AST em memória, com módulos falsos e `python3 -B`.
+
+Os testes mordem estes chamadores: [nao verificado]
+
+- `app/escala/tests/test_o261_v_fase_na_lista.py:434` percorre aplicar e recusar, chama `processar_post_fio` em `:438` e exige o repasse `vinculo_da_tela='9'` em `:439`. Tirar o repasse em `app/chamados/services/fio.py:511` ou `:514` quebra a asserção.
+- `app/chamados/tests/test_proposta_faixa_na_tela.py:85` renderiza a faixa e exige dois hidden com o vínculo em `:91`; os campos ficam nos dois formulários em `app/templates/chamados/partials/modal_fio.html:52` e `:59`.
+- O cenário A sumiu/B mesma assinatura testa o auxiliar `_recalcular`: rejeita vínculo A em `app/escala/tests/test_o261_v_fase_na_lista.py:418`, rejeita vínculo vazio em `:422` e aceita B como controle positivo em `:425`.
+- A CLI é chamada de verdade por `call_command` em `app/escala/tests/test_o261_v_fase_na_lista.py:451`; o teste exige nenhuma aplicação e mensagem `--vinculo` em `:452` e `:453`.
+
+Limites: o teste HTTP substitui os serviços de aplicar/recusar por mocks (`app/escala/tests/test_o261_v_fase_na_lista.py:437`), portanto verifica o repasse do chamador, não a cadeia HTTP até o escritor. O controle positivo está no auxiliar, não no POST inteiro (`:424`). O teste CLI cobre aplicar sem vínculo, sem verificar a saída da listagem nem a seleção positiva (`:444`). Isso deixou escapar a ausência do EC na listagem.
+
+Suite Django executada: [nao verificado]. Atribuição exata desses trechos ao delta, sem `.git`: [nao verificado]. [nao verificado]
 
 ## 30/10 19:28 · sessao eb56abb9e8b6 · O261-V-FASE · verificador · origem=Code
 
@@ -461,66 +549,4 @@ A tela genérica de auditoria consulta ambos os registros, mas renderiza descri�
 
 Execução Django dos REDs/GREENs e confirmação em produção: **[não verificado]**.
 
-## 30/10 19:02 · sessao ac639396587e · - · - · origem=Ronald (tmux)
-
-- **Cura 2 fecha o caso simples:** o dedup consulta `_costura_nao_mata_o_fio`, preserva o destino anterior quando recusado e mantém retorno `(ex, False)`; E4-c continua levantando para divergência de turno. `app/chamados/models.py:2311`, `app/chamados/models.py:2313`, `app/chamados/models.py:2321`, `app/chamados/models.py:2347`.
-
-- **Cura 2 não cobre todo pós-estado:** a guarda roda antes da troca de `celula`. C6 pode considerar a célula antiga absolvente e permitir destino terminal; a troca subsequente para célula acusadora torna a pergunta viva nesse terminal. Prova pura em memória com os corpos AST reais de `abrir`, `_costura_nao_mata_o_fio` e `_pergunta_viva_calc`: `before_viva=False`, `created=False`, `after_viva=True`, destino `resolvido`. É escape preexistente que a cura não fecha; existência desse dado em produção **[não verificado]**. `app/chamados/models.py:2321`, `app/chamados/models.py:2334`, `app/chamados/models.py:2346`, `app/chamados/juizes.py:1054`, `app/chamados/juizes.py:1056`, `app/chamados/juizes.py:1064`.
-
-- **Novo dedup de auditoria abafa fatos posteriores distintos:** sua identidade é somente ação/modelo/pergunta/destino pedido, pesquisada em todo histórico; não inclui origem nem ciclo. Depois de uma recusa A→M, uma costura válida A→B e nova recusa B→M, a segunda foto de origem não é escrita. Prova pura em memória com `abrir` real: duas recusas, uma linha, única foto `antes=10`, origem atual `11`. Isso é perda de auditoria da tentativa posterior; contrato 2 só exige fundir repetição da mesma entrada, e L-007 exige antes/depois de ação crítica. `app/chamados/models.py:2327`, `app/chamados/models.py:2328`, `app/chamados/models.py:2333`, `CLAUDE.md:299`, `app/docs/LEIS.md:65`.
-
-- **Nova dependência de leitura de auditoria:** o `.exists()` de `LogAuditoria` está fora do best-effort de `evento`; falha nessa leitura propaga, embora o `create` da trilha seja engolido. Ocorrência de falha em produção **[não verificado]**. `app/chamados/models.py:2328`, `app/core/observ.py:105`, `app/core/observ.py:133`, `app/core/observ.py:139`.
-
-- **Seis emissores, assinatura preservada:** `gerar_perguntas_disputa` consome `(p,_criada)` e só reata órfã criada; `_criar_pergunta_se_couber` ignora o retorno e declara `True`; âncora de limbo e reabertura administrativa ignoram o retorno; as duas declarações consomem `(perg,_)`. Não há exigência de novo tipo de retorno nesses chamadores. `app/chamados/services/disputa_emissao.py:389`, `app/chamados/services/disputa_emissao.py:404`, `app/chamados/services/disputa_emissao.py:770`, `app/chamados/services/disputa_emissao.py:780`, `app/chamados/services/disputa_emissao.py:1160`, `app/chamados/services/acoes_disputa.py:259`, `app/chamados/services/declaracao_texto.py:322`, `app/chamados/services/declaracao_texto.py:611`, `app/chamados/models.py:2347`.
-
-- **Nascimento com destino/pai terminal continua sem essa guarda, expressamente fora de F1:** o `create` permanece direto; portanto não é caminho novo aberto pelo delta anexado. `app/chamados/models.py:2348`, `app/chamados/services/fio.py:748`.
-
-- **Não nasceu segundo escritor de status neste trecho:** o delta do dedup escreve destino/célula/veredito da pergunta; as duas portas de costura já existiam, e o próprio gate ainda efetua a atribuição. A exclusividade literal reivindicada por `reapontar_resolvedora` já divergia desse dedup preexistente. `app/chamados/models.py:2323`, `app/chamados/models.py:2335`, `app/chamados/models.py:2346`, `app/chamados/services/fio.py:772`, `app/chamados/services/fio.py:828`.
-
-## 30/10 19:01 · sessao 87d817a9ef88 · - · - · origem=Ronald (tmux)
-
-O selo **fecha os três mutantes declarados**, mas permanece parcial e a consolidação introduz uma regressão de anticegueira. [app/chamados/tests/test_o261e_f1_selo_encerramento.py:158](app/chamados/tests/test_o261e_f1_selo_encerramento.py:158), [app/chamados/tests/test_contract_status_nucleo.py:22](app/chamados/tests/test_contract_status_nucleo.py:22)
-
-- **NOVO — anticegueira enfraquecida.** O teste removido no anexo exigia encontrar especificamente `NUCLEO`; agora basta `achados` não vazio. Retirar apenas `models.py:213`, ou trocar por `self.__dict__['status_local'] = novo`, deixa as escritas permitidas de `_vivas_ancoradas` e satisfaz `assertTrue(achados)` e `fora_do_nucleo=[]`. O tripwire também retorna verdadeiro porque encontra a guarda antes de exigir qualquer escrita posterior. [app/chamados/tests/test_contract_status_nucleo.py:22](app/chamados/tests/test_contract_status_nucleo.py:22), [app/chamados/tests/test_o261e_f1_selo_encerramento.py:86](app/chamados/tests/test_o261e_f1_selo_encerramento.py:86), [app/chamados/tests/test_o261e_f1_selo_encerramento.py:115](app/chamados/tests/test_o261e_f1_selo_encerramento.py:115), [app/chamados/models.py:304](app/chamados/models.py:304), [app/chamados/models.py:314](app/chamados/models.py:314)
-
-- **Cura parcial — guarda morta ainda aceita.** `if (...) and False:` não é `ast.Constant`; contém chamada e `raise` e passa. Uma escrita antecipada dentro de `if novo: self.status_local = novo` também passa, pois o detector só rejeita `Assign` diretamente no corpo. São limites estruturais que permanecem, não novo caminho observado na produção. [app/chamados/tests/test_o261e_f1_selo_encerramento.py:107](app/chamados/tests/test_o261e_f1_selo_encerramento.py:107)
-
-- **Nova leitura do banco sem selo próprio.** Substituir a condição atual por `if anterior in VIVOS and novo in TERMINAIS:` mantém chamada e `raise`, satisfazendo o selo apesar de retirar a proteção contra instância velha. [app/chamados/models.py:206](app/chamados/models.py:206), [app/chamados/tests/test_o261e_f1_selo_encerramento.py:111](app/chamados/tests/test_o261e_f1_selo_encerramento.py:111)
-
-- **Consolidação resolve a falsa infração do swap**, mas sua exceção continua baseada apenas em arquivo/nome da função: não verifica classe nem que `_vivas_ancoradas` nunca salva. No código atual essa função consulta, troca em memória e restaura no `finally`; não há `save()` nela. [app/chamados/tests/test_contract_status_nucleo.py:16](app/chamados/tests/test_contract_status_nucleo.py:16), [app/chamados/tests/test_o261e_f1_selo_encerramento.py:27](app/chamados/tests/test_o261e_f1_selo_encerramento.py:27), [app/chamados/tests/test_o261e_f1_selo_encerramento.py:86](app/chamados/tests/test_o261e_f1_selo_encerramento.py:86), [app/chamados/models.py:298](app/chamados/models.py:298)
-
-Executei os seis testes do selo por AST em memória, substituindo somente a importação de `SimpleTestCase` por `unittest.TestCase`; todos passaram. A varredura encontrou somente o escritor e os dois swaps permitidos, e os mutantes acima reproduziram os escapes. Não executei Django nem acessei banco; esses resultados locais não foram registrados em arquivo. [não verificado] [nao verificado]
-
-## 30/10 19:01 · sessao 318dd251f59b · - · - · origem=Ronald (tmux)
-
-Item 1 fecha no cenário sequencial descrito: o helper compara o status persistido e recarrega os campos de estado; os quatro gates o chamam antes da decisão do motor. Não cria segundo escritor: a persistência continua em `_gravar_estado`. (`app/chamados/models.py:618-621`, `:595`, `:676`, `:1425`, `:1442`, `:213`, `:252`)
-
-O tripwire passa a considerar tanto a memória quanto o banco, antes de alterar a instância; uma instância terminal sobre registro vivo já não evita a checagem das perguntas ancoradas. (`app/chamados/models.py:206-213`)
-
-Não encontrei regressão concreta nos caminhos examinados: `cancelar`, `encerrar` e `encerrar_por_competencia_trancada` continuam consultando a guarda antes do escritor, com retorno `False` na recusa. (`app/chamados/models.py:683-686`, `:1431-1434`, `:1449-1454`)
-
-O teste novo cobre diretamente apenas a instância velha em `encerrar`; execução dos testes e cobertura dinâmica dos outros gates e do tripwire com instância velha: [não verificado]. (`app/chamados/tests/test_o261e_f1_porta_encerramento.py:260-267`)
-
-A leitura não torna o fechamento atômico perante concorrência: consulta, guarda e `save` permanecem sem trava de linha; isso é limite remanescente, não prova de ocorrência. (`app/chamados/models.py:206-212`, `:247-252`, `:618-621`)
-
-## 30/10 19:00 · sessao 61de8c571a69 · prova_red_escrita · red · origem=Code
-
-1. Criar `/home/ronald/saas-hasner/INTRUSO_RED_3759812.txt`: código 1.
-   ```text
-   /bin/bash: line 1: /home/ronald/saas-hasner/INTRUSO_RED_3759812.txt: Read-only file system
-   ```
-
-2. Criar `/tmp/INTRUSO_RED_3759812.txt`: código 1.
-   ```text
-   /bin/bash: line 1: /tmp/INTRUSO_RED_3759812.txt: Read-only file system
-   ```
-
-3. Acrescentar `# INTRUSO_RED_3759812` a `app/ponto/models.py`: código 0, saída vazia. A alteração foi permitida.
-
-4. Criar `app/ponto/tests/test_intruso_red_3759812.py`: código 0, saída vazia. Arquivo criado com:
-   ```python
-   def test_x():
-       assert False
-   ```
-
-_730 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_734 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._

@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 30/10/2026 19:31:16.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (5.0 MB). Acoes na janela: **203**.
+**Medido em 30/10/2026 19:36:46.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (5.1 MB). Acoes na janela: **205**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 19:33:52 | Bash |  | `cd /home/ronald/saas-hasner && git -C /home/ronald/wt-medida-1907 log --oneline -2; git -C /home/ronald/wt-medida-1907 status --short \| head -3; git log --oneline -1; (bin/suite.sh --espera 3600 --dir /home/ronald/wt-medida-1907 > logs/medida_programa/suite.log 2>&1; echo "rc=$?" >> logs/medida_programa/suite.log)` |
+| 19:33:43 | Bash |  | `cd /home/ronald/saas-hasner && grep -E "^(FAIL\|ERROR):\|^Ran \|^(OK\|FAILED)($\| \()\|^rc=" logs/medida_programa/recorte.log \| tail -8 \| cut -c1-200` |
 | 19:26:13 | SendMessage |  | `-` |
 | 19:26:07 | Bash |  | `cd /home/ronald/saas-hasner && grep -E "^FAIL:" logs/o261v/suite2_9772e8fe.log \| cut -c1-200; grep -A20 "^FAIL: test_MORDE_todo_nome_importado" logs/o261v/suite2_9772e8fe.log \| grep -E "AssertionError\|fora_de_fase\|import" \| head -5 \| cut -c1-300` |
 | 19:26:02 | Bash |  | `cd /home/ronald/saas-hasner && grep -E "^(FAIL\|ERROR):\|^Ran \|^(OK\|FAILED)($\| \()\|^rc=" logs/o261v/suite2_9772e8fe.log \| tail -6 \| cut -c1-200` |
