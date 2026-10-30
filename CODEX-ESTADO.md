@@ -1,7 +1,23 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **30/10/2026 13:30** · publicado em **30/10/2026 13:33** (UTC-3)
+> Ultima resposta processada: **30/10/2026 13:36** · publicado em **30/10/2026 13:38** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 30/10 13:36 · sessao ff42a8bee5de · O261-VETO-A2 · sonda · origem=Code
+
+`sonda_fsc.py` não foi localizado na cópia; não houve nova execução. Segue integralmente a saída fornecida. [nao verificado]
+
+```text
+sonda_leitura: sonda_fsc.py [fe36a5107d6c7951] no cpuset 4-7, lendo saas_hasner como leitor (LEITURA)
+
+TOTAL=61
+POR_PORTA|pergunta_ao_colab=45
+POR_PORTA|supervisao_sem_push=16
+POR_PORTA|veto_celula=1
+POR_EMPRESA|2=61
+ITENS=62
+FIM-DA-SONDA
+```
 
 ## 30/10 13:30 · sessao 3a14b0861375 · CALENDARIO-HOJE · censo · origem=Code
 
@@ -666,30 +682,4 @@ Migração das fixtures: **sem achado de intenção “sem vínculo/sem escala�
 
 Contraexemplo concreto para ambos: `_ctx_c2` continua produzindo aquele contexto e o emissor/porta passa a recusar todo nascimento; as asserções permanecem satisfeitas. Não é regressão de vacuidade introduzida pela inserção de `dar_vinculo`, conforme o diff anexo [nao verificado quanto ao histórico além do anexo].
 
-## 30/10 12:03 · sessao b5596fdd5cf4 · - · - · origem=Ronald (tmux)
-
-**A relavratura alcança células de competência exportada ou trancada:** o lote seleciona apenas `empresa` e `data < hoje`, percorre todas as células passadas do colaborador e chama `julgar_colab`; não consulta `ExportacaoDominio` nem tranca nesse recorte. (`app/ponto/management/commands/processar_cartorio.py:49-65`)
-
-O julgamento normal incorpora `motivo_do_veto` na impressão e só pula por impressão igual, carimbo/veredito existentes e ausência de `forcar`; em seguida grava pelas portas `lavrar_veredito` e `carimbar`. Não há guarda por competência nesses trechos. (`app/ponto/services/cartorio.py:1006-1014`, `:1083-1097`, `:1406-1425`)
-
-A guarda concreta do escritor é a decisão administrativa: `veredito_via == 'admin'` preserva o veredito, mas permite atualizar a ata. `lavrar_veredito` e `carimbar` não consultam exportação ou tranca. (`app/ponto/portas/celula.py:647-729`)
-
-**Não confundir com regeneração do DNA:** `regenerar_celulas_vinculo` consulta `_competencias_exportadas`, salvo motivo explícito `apesar_da_lavra`; essa guarda pertence à regeneração, não à relavratura descrita acima. (`app/ponto/portas/celula.py:191-202`; `app/ponto/services/cartorio.py:719-728`)
-
-Há piso para **emissão automática de chamados**, não para gravar o julgamento: `PISO_EMISSAO = '2026-09'`; `_fora_do_piso` considera esse horizonte e `toque`, sem consultar tranca/exportação. (`app/ponto/services/cartorio.py:190`, `:232-246`, `:1319-1327`)
-
-**Cron configurado:** `processar_cartorio --apply`, diariamente às 06:27/06:29/06:31 para empresas 2/3/4, pela expansão de `por_empresa=True` e passo padrão 2. A janela é todo o passado com células existentes, sem piso. Instalação/execução efetiva em produção: [nao verificado]. (`app/config/crons.py:17-18`, `:29-33`, `:597`, `:1785-1794`; `app/ponto/management/commands/processar_cartorio.py:49-65`)
-
-Há também `vigia_de_hora --apply` a cada dez minutos, por empresa, cobrindo candidatas de hoje e certos turnos noturnos de ontem; usa o mesmo `julgar_celula` com teto dos marcos. (`app/config/crons.py:348-349`; `app/ponto/services/vigia_de_hora.py:108-130`)
-
-**Comando de relavratura por competência:** `celula_veredito_velho --mes M --ano A [--empresa N]`. Outros argumentos: `--json`, `--sem-recalculo`, `--aplicar`, `--antes`, `--so-recalculo`; recorta `janela_fechamento` até no máximo ontem. (`app/ponto/management/commands/celula_veredito_velho.py:37-54`, `:75-80`)
-
-Sem `--aplicar`, faz ensaio em transação, incluindo recálculo por padrão, e provoca rollback; `--sem-recalculo` evita esse recálculo. Com `--aplicar`, exige `--antes`, desliga obrigatoriamente o recálculo e chama `julgar_colab(..., apply_=True, forcar=True)`. Não há guarda de exportação/tranca antes dessa relavratura. (`app/ponto/management/commands/celula_veredito_velho.py:90-114`, `:133-159`)
-
-O snapshot `--antes` guarda `pk`, colaborador/data, `veredito`, `veredito_via`, `veredito_em`, `protestos`, `ata`, `julgada_em`, `impressao`; **não inclui** os demais campos que `carimbar` escreve (`ausencia`, `tem_entrada`, `tem_saida`, `insumos_em`), portanto é reversão parcial do estado da célula. (`app/ponto/management/commands/celula_veredito_velho.py:100-114`; `app/ponto/portas/celula.py:721-728`)
-
-**Exceção importante à premissa do impacto:** o ramo `adesao is None` (`nunca_bateu`) monta impressão **sem veto**, portanto a alteração isolada de `motivo_do_veto` não muda necessariamente a impressão de toda célula sem vínculo. A conclusão automática vale para o ramo normal que passa `veto=_veto_do_dia(data)`. (`app/ponto/services/cartorio.py:907`, `:941-943`, `:1083-1088`)
-
-O docstring de `calado()` ainda fala em célula trancada “imutável”, mas seu corpo somente liga o sinal de antirrecursão; não constitui guarda do sweep do cartório. (`app/ponto/services/cartorio.py:58-68`; `app/ponto/management/commands/processar_cartorio.py:49-65`)
-
-_476 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_477 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
