@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 30/10/2026 07:20:51.** Transcript: `e3f79949-a90b-4c64-a5c2-afd178149c30.jsonl` (8.6 MB). Acoes na janela: **376**.
+**Medido em 30/10/2026 07:25:50.** Transcript: `e3f79949-a90b-4c64-a5c2-afd178149c30.jsonl` (9.2 MB). Acoes na janela: **378**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 07:25:47 | Bash | Diff stat of ORC branch and settings content | `cd /home/ronald/saas-hasner && git diff --stat 5822bc98...df334c29 && git merge-base main df334c29 && git ls-files .claude/settings.json && cat .claude/settings.json && grep -n "ORCAMENTO" app/docs/PROMPTS.md \| tail -3` |
+| 07:25:41 | Bash | Orient: time, git, settings SessionStart, ORC copy | `cd /home/ronald/saas-hasner && date '+%H:%M' && git log --oneline -3 && git status --short \| head && ls -la .claude/ && python3 -c "import json;d=json.load(open('.claude/settings.json'));print(json.dumps(d.get('hooks',{}).get('SessionStart'),indent=1))" && git -C /home/ronald/wt-orc-3010-0245 log --oneline -3 && git -C /home/ronald/wt-orc-3010-0245 status --short \| head` |
 | 05:48:44 | Bash | Check hook TETO counter state | `tail -3 /home/ronald/saas-hasner/logs/hook_stop*.log \| cut -c1-120; cat /home/ronald/saas-hasner/logs/hook_stop_fila1.json 2>/dev/null \| head -c 300` |
 | 05:48:31 | Bash | Check time and hook trail | `date '+%H:%M'; tail -4 /home/ronald/saas-hasner/logs/hook_stop*.log \| cut -c1-110` |
 | 05:48:08 | Bash | Commit clear-preparation docs | `cd /home/ronald/saas-hasner && git add app/docs/RELATO.md app/docs/BACKLOG.md app/docs/HANDOFF-SESSAO.md && git commit -q -F - <<'EOF' MARCO FECHADO para o CLEAR (aval ORCAMENTO-DE-CONTEXTO, gatilho 6 h): handoff, proximo passo da O261 e ORCAMENTO aprovado esperando o settings Gatilho de 6 h desde o clear vencido e 2 marcos fechados ([nome] (B) b09b2dab, O261 (C) ea36197f): MODO PREPARA-CLEAR, topo ...` |
