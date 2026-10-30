@@ -1,7 +1,158 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **30/10/2026 08:06** · publicado em **30/10/2026 08:09** (UTC-3)
+> Ultima resposta processada: **30/10/2026 08:13** · publicado em **30/10/2026 08:14** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 30/10 08:13 · sessao 7bacb9cf86c7 · O261-NOTURNO · sonda · origem=Code
+
+**1. Nas quatro ATAs anexadas, E 19:00 está apagada.** Não há batida associada a esse marco: `luz=None`, `tipo_real=None`. O anexo não fornece instante de uma batida acendedora de E 19:00. [nao verificado]
+
+| Célula | Dia | E 19:00 | Batida associada na ATA |
+|---|---|---|---|
+| 129745 | 21/10/2026 | Apagada | Nenhuma (`luz=None`) [nao verificado] |
+| 129747 | 23/10/2026 | Apagada | Nenhuma (`luz=None`) [nao verificado] |
+| 129749 | 25/10/2026 | Apagada | Nenhuma (`luz=None`) [nao verificado] |
+| 129751 | 27/10/2026 | Apagada | Nenhuma (`luz=None`) [nao verificado] |
+
+Isso concorda com a cobrança descrita de **“E 19:00 faltante”** e discorda de considerar esse mesmo marco cumprido para encerrar `saida_sem_entrada` como `fantasma`. Os registros desses chamados e perguntas, seus vínculos e horários de encerramento não estão na sonda; essa associação histórica individual permanece [nao verificado].
+
+Na cópia, as leituras são estas:
+
+- **Cobrança do furo:** `marcos_apagados` lê as lâmpadas apagadas da ATA; o cartório usa esse resultado para formar os marcos faltantes. (`app/ponto/services/lastro.py:118`; `app/ponto/services/cartorio.py:1429`)
+- **Juiz atual da pergunta:** `saida_sem_entrada` cobra `('E', 'hi')`; procura a hora no DNA e lê `acesa` na ATA por `(hora, tipo)`. (`app/chamados/juizes.py:823`; `app/chamados/juizes.py:848`; `app/chamados/juizes.py:866`)
+- **Chamador atual do encerramento:** exige que esse juiz devolva exatamente `True`; depois, só chama `encerrar_fantasma` quando o veredito é `ENCERRA`. Assim, uma lâmpada E19 apagada não passa por essa condição. (`app/chamados/reconciliador.py:1032`; `app/chamados/reconciliador.py:1079`; `app/chamados/reconciliador.py:1092`)
+- **Escritor:** `encerrar_fantasma` grava via, instante do carimbo e autor. Seu corpo não consulta ATA nem batidas; `materializada_em=now()` é o instante do encerramento, não uma batida que acendeu o marco. (`app/chamados/models.py:2167`)
+
+Portanto, **não é demonstrável que o chamador atual tenha produzido os encerramentos históricos mencionados**: faltam os respectivos registros e a ATA existente no instante de cada encerramento. [nao verificado]
+
+**2. O predicado antigo preservado na lápide era morfológico:** turno recomputado completo **e** última saída a até 180 minutos do fim previsto, com `TOL_MORFOLOGIA_MIN=180`; aparecem os nomes removidos `_eh_fantasma`, `_bem_formado` e `_turnos_na_janela`. (`app/ponto/management/commands/reconciliar_perguntas_orfas.py:10`)
+
+O comentário do reconciliador distingue expressamente os dois critérios: a regra posterior encerra pela lâmpada do próprio marco; a antiga julgava pela morfologia do turno. (`app/chamados/reconciliador.py:982`)
+
+O universo identificado como “mesmo SQL do cron que carimbava” contém perguntas sem materialização, sem validação, em disputa aberta, dos motivos `orfao_14h`/`saida_sem_entrada`, com `data_evento` preenchida. (`app/chamados/reconciliador.py:992`)
+
+**A lápide não preserva como o algoritmo antigo escolhia o dia da batida.** Não permite afirmar D, D+1 ou outro recorte. Tampouco a sonda contém as execuções de aproximadamente 06:35 em 22–28/10; atribuir-lhes o algoritmo completo ou uma batida específica seria [nao verificado].
+
+**3. P26: o ramo efetivamente executado é [nao verificado] para cada uma das 26 linhas.** O carregamento de `_marcos` depende do vínculo e do tipo encontrados naquele dia; esses resultados não constam no anexo. (`app/chamados/juizes.py:298`)
+
+Além disso, existem **dois retornos distintos que podem conservar `ts`**: `_marcos` preenchido, mas hora fora do envelope (`return ts`, linha 312), e caminho sem marcos, cujo retorno final está na linha 321. Logo, plantio em D não prova `_marcos` vazio. (`app/chamados/juizes.py:304`; `app/chamados/juizes.py:312`; `app/chamados/juizes.py:313`; `app/chamados/juizes.py:321`)
+
+A aplicação matemática às **horas respondidas e marcos informados** está abaixo. O código encadeia os marcos atravessando a meia-noite, amplia o primeiro/último em 90 minutos e testa D antes de D+1. (`app/escala/servico_jornada.py:74`; `app/chamados/juizes.py:305`)
+
+Os valores de produção transcritos e o ramo histórico de cada linha permanecem [nao verificado].
+
+| P# | Resposta | Envelope calculado pelos marcos informados | Resultado pela hora respondida |
+|---|---|---|---|
+| 22818 | 07:00 | D 17:30 → D+1 08:30 | Envelope: D+1 |
+| 22970 | 23:45 | D 17:30 → D+1 08:30 | Envelope: D |
+| 22993 | 03:41 | D 22:00 → D+1 09:00 | Envelope: D+1 |
+| 25281 | 03:01 | D 17:30 → D+1 08:30 | Envelope: D+1 |
+| 25282 | 07:01 | D 17:30 → D+1 08:30 | Envelope: D+1 |
+| 26108 | 23:30 | D 22:00 → D+1 09:00 | Envelope: D |
+| 27227 | 18:55 | D 17:30 → D+1 08:30 | Envelope: D |
+| 27290 | 12:00 | D 16:30 → D+1 07:30 | Fora: `return ts` |
+| 27670 | 23:16 | D 22:00 → D+1 09:00 | Envelope: D |
+| 27739 | 03:00 | D 17:30 → D+1 08:30 | Envelope: D+1 |
+| 32357 | 01:00 | D 16:30 → D+1 07:30 | Envelope: D+1 |
+| 33283 | 06:00 | D 20:30 → D+1 07:30 | Envelope: D+1 |
+| 33629 | 23:14 | D 22:00 → D+1 09:00 | Envelope: D |
+| 34397 | 09:15 | D 22:00 → D+1 09:00 | Fora: `return ts` |
+| 35366 | 23:11 | D 22:00 → D+1 09:00 | Envelope: D |
+| 37847 | 18:57 | D 17:30 → D+1 08:30 | Envelope: D |
+| 38265 | 04:00 | D 17:30 → D+1 08:30 | Envelope: D+1 |
+| 39186 | 23:57 | D 17:30 → D+1 08:30 | Envelope: D |
+| 39761 | 23:59 | D 14:30 → D+1 01:30 | Envelope: D |
+| 40675 | 23:56 | D 17:30 → D+1 08:30 | Envelope: D |
+| 41549 | 23:50 | D 17:30 → D+1 08:30 | Envelope: D |
+| 41707 | 19:00 | D 17:30 → D+1 08:30 | Envelope: D |
+| 42368 | 22:41 | D 17:30 → D+1 08:30 | Envelope: D |
+| 43845 | 11:59 | D 17:30 → D+1 08:30 | Fora: `return ts` |
+| 46364 | 11:00 | D 17:30 → D+1 08:30 | Fora: `return ts` |
+| 49873 | 10:11 | D 17:30 → D+1 08:30 | Fora: `return ts` |
+
+Essa tabela não identifica o ramo histórico: nas perguntas de intervalo, o materializador pode substituir a resposta pela hora do marco faltante **antes** de montar `ts` e chamar o ajuste. O anexo não informa essa `_hora_fonte` efetiva. (`app/chamados/services/materializacao.py:388`; `app/chamados/services/materializacao.py:396`; `app/chamados/services/materializacao.py:404`)
+
+Também não cabe deduzir ausência de marcos pela ausência de intervalo: havendo `hi` e `hf`, `marcos_turno` produz ao menos E inicial e S final. (`app/escala/servico_jornada.py:72`)
+
+**4. O texto `pergunta` é formatado na emissão e gravado na criação.** O formatador substitui `{data}` por `contexto_disputa[motivo]['data']`, com `%d/%m/%Y`; a emissão passa `pergunta=texto` para `abrir`. (`app/chamados/catalogo/query.py:58`; `app/chamados/catalogo/query.py:64`; `app/chamados/services/disputa_emissao.py:316`; `app/chamados/services/disputa_emissao.py:389`)
+
+`pergunta` é um `TextField`; `abrir` persiste os campos recebidos em `objects.create(..., **campos)`. Quando encontra pergunta existente, reaponta destino/célula e retorna sem reformatar seu texto. (`app/chamados/models.py:1855`; `app/chamados/models.py:2061`; `app/chamados/models.py:2085`)
+
+As exibições citadas leem `p.pergunta`/`perg.pergunta`. Portanto, a data escrita na pergunta não comprova o dia da batida plantada. (`app/templates/chamados/partials/_card_atendimento.html:93`; `app/templates/chamados/partials/modal_fio.html:157`; `app/chamados/catalogo/query.py:64`)
+
+## 30/10 08:12 · sessao d27e633afa7f · - · - · origem=Ronald (tmux)
+
+Q3: **o ramo efetivamente executado é [não verificado] em todas as 26 linhas**. A sonda fornece DNA, resposta e plantio; não fornece `_ec`, `tipo_escala`, `_marcos`, `tipo`, `hora_tentativa` nem `_hora_fonte` efetivos. O carregamento de `_marcos` depende desses primeiros campos (`app/chamados/juizes.py:298-303`). A geradora pode ser rejeitada por vigência, devolvendo `None`, apesar de existir célula com DNA (`app/escala/alimentacao.py:237-251`).
+
+Além disso, a dicotomia proposta é incompleta: existe `_marcos` **presente**, mas nenhuma data candidata dentro do envelope, seguido de `return ts` (`app/chamados/juizes.py:304-312`). Portanto “plantou em D” não demonstra `_marcos` vazio (`app/chamados/juizes.py:312,321`).
+
+Os marcos são encadeados E-hi / S-hii / E-hfi / S-hf, avançando o dia quando o instante seguinte não é posterior ao anterior (`app/escala/servico_jornada.py:74-85`). O envelope vai do primeiro marco menos 90 min ao último mais 90 min; testa D antes de D+1 (`app/chamados/juizes.py:305-311`).
+
+Cálculo **condicional**, usando os marcos DNA e a **hora da resposta** como entrada do ajuste; isto não identifica o ramo histórico real (`app/chamados/juizes.py:304-312`):
+
+| P# | Resposta | Envelope pelo DNA | Resultado do cálculo |
+|---|---|---|---|
+|22818|07:00|D 17:30–D+1 08:30|D+1|
+|22970|23:45|D 17:30–D+1 08:30|D|
+|22993|03:41|D 22:00–D+1 09:00|D+1|
+|25281|03:01|D 17:30–D+1 08:30|D+1|
+|25282|07:01|D 17:30–D+1 08:30|D+1|
+|26108|23:30|D 22:00–D+1 09:00|D|
+|27227|18:55|D 17:30–D+1 08:30|D|
+|27290|12:00|D 16:30–D+1 07:30|Fora; `return ts`|
+|27670|23:16|D 22:00–D+1 09:00|D|
+|27739|03:00|D 17:30–D+1 08:30|D+1|
+|32357|01:00|D 16:30–D+1 07:30|D+1|
+|33283|06:00|D 20:30–D+1 07:30|D+1|
+|33629|23:14|D 22:00–D+1 09:00|D|
+|34397|09:15|D 22:00–D+1 09:00|Fora; `return ts`|
+|35366|23:11|D 22:00–D+1 09:00|D|
+|37847|18:57|D 17:30–D+1 08:30|D|
+|38265|04:00|D 17:30–D+1 08:30|D+1|
+|39186|23:57|D 17:30–D+1 08:30|D|
+|39761|23:59|D 14:30–D+1 01:30|D|
+|40675|23:56|D 17:30–D+1 08:30|D|
+|41549|23:50|D 17:30–D+1 08:30|D|
+|41707|19:00|D 17:30–D+1 08:30|D|
+|42368|22:41|D 17:30–D+1 08:30|D|
+|43845|11:59|D 17:30–D+1 08:30|Fora; `return ts`|
+|46364|11:00|D 17:30–D+1 08:30|Fora; `return ts`|
+|49873|10:11|D 17:30–D+1 08:30|Fora; `return ts`|
+
+**Atenção à hora de entrada:** `_ts_tipo_do_plantio` começa com a resposta, mas para `intervalo_saida`/`intervalo_volta` substitui-a pelo marco faltante, quando encontrado (`app/chamados/services/materializacao.py:388-395`); monta `ts` em `data_evento` e só depois chama o ajuste (`app/chamados/services/materializacao.py:396-404`). Logo não se pode transformar esta tabela condicional em atribuição histórica de ramo.
+
+Usando **a hora do plantio** no mesmo cálculo, mudariam: P25281 19:00→D; P27739 19:00→D; P32357 19:00→D; P38265 19:00→D; P27670 03:00→D+1. O ajuste preserva a hora e decide apenas data (`app/chamados/juizes.py:307-311,318`).
+
+A fonte do vínculo lê célula e geradora (`app/escala/servico_jornada.py:46-58`). Com vínculo e tipo existentes, `marcos_turno` usa `ec.marcos_do_dia` (`app/escala/servico_jornada.py:68-73`), que prefere DNA preenchido (`app/escala/models.py:1094-1108`). A ausência de `hii/hfi` não esvazia `_marcos` quando `hi/hf` existem; ainda há E-hi e S-hf (`app/escala/servico_jornada.py:72-77`).
+
+## 30/10 08:11 · sessao 496a8624e08a · - · - · origem=Ronald (tmux)
+
+O texto `pergunta` é formatado na emissão e persistido na criação:
+
+- `app/chamados/catalogo/query.py:45-66`: busca o template e substitui `{data}` pelo valor de `contexto_disputa[motivo]['data']`, formatado em `%d/%m/%Y` na linha 64.
+- `app/chamados/services/disputa_emissao.py:316-326`: chama esse formatador durante a geração.
+- `app/chamados/services/disputa_emissao.py:389-397`: entrega `pergunta=texto` a `PerguntaDisputa.abrir`.
+- `app/chamados/models.py:1855`: `pergunta` é `TextField`; `:2085-2086` persiste `**campos` por `objects.create`.
+- Se a pergunta já existe, `abrir` reaponta destino/célula e retorna, sem reformatação do texto (`app/chamados/models.py:2061-2084`).
+- A exibição citada lê o texto guardado: `{{ p.pergunta }}` em `app/templates/chamados/partials/_card_atendimento.html:93` e `{{ perg.pergunta }}` em `app/templates/chamados/partials/modal_fio.html:157`.
+
+Assim, o texto datado não demonstra o instante nem o dia da batida plantada: sua data foi interpolada do contexto na emissão (`app/chamados/catalogo/query.py:58-64`; `app/chamados/services/disputa_emissao.py:316-326`).
+
+Sobre o chamado vivo, a cópia atual extrai marcos apagados de `cel.ata['lampadas']` (`app/ponto/services/lastro.py:118-135`), nomeia-os em `_marcos_do_furo_parcial` (`app/ponto/services/cartorio.py:1429-1474`) e abre/atualiza o chamado usando esses marcos (`app/ponto/services/cartorio.py:1386-1405`). O espelhamento atualiza `contexto_json.marcos_faltantes` com `_marco_por='lampada_da_celula'` (`app/ponto/management/commands/detectar_ausencias.py:543-559`); a descrição criada diz “marco HH:MM (…) sem batida” (`:670-679`) e guarda a lista de marcos no contexto (`:700-706`).
+
+O dado anexado não contém registros dos chamados vivos, das perguntas `saida_sem_entrada`, seus carimbos ou instantes de fechamento; associar uma execução histórica específica a essas linhas permanece [não verificado].
+
+## 30/10 08:11 · sessao c1ac187e5ae1 · - · - · origem=Ronald (tmux)
+
+- Nas quatro ATAs fornecidas, `E 19:00` está apagada (`acesa=False`, `luz=None`, `tipo_real=None`); nenhuma batida acendedora desse marco consta nelas. Como o dado está apenas no prompt, sem arquivo:linha: **[não verificado]**.
+- O dado fornecido não traz registros dos chamados vivos, perguntas `saida_sem_entrada`, carimbos, datas de encerramento ou batidas brutas. A atribuição de cada encerramento histórico a um chamador e o instante que ele considerou ficam **[não verificado]**.
+- `saida_sem_entrada` corresponde a `('E', 'hi')`; o juiz localiza a hora no DNA e lê `acesa` na ATA pela chave `(hora,tipo)`: `app/chamados/juizes.py:823-827`, `:848-872`. Sob essas ATAs e `hi=19:00`, a resposta desse juiz é `False`; o predicado atual interrompe imediatamente, sem produzir `fantasma`: `app/chamados/reconciliador.py:1032-1033`.
+- O chamador atual consulta `veredito_orfa`, só escreve quando recebe `ENCERRA`, e chama a porta `encerrar_fantasma`: `app/chamados/reconciliador.py:1079-1093`. A porta apenas grava `via_resolucao`, `materializada_em` e autor; não lê ATA ou batidas: `app/chamados/models.py:2167-2174`.
+- Portanto, a cobrança alegada de “E 19:00 faltante” é compatível com as ATAs; o alegado encerramento desse mesmo marco como `fantasma` diverge do estado da ATA. A existência e cronologia concretas desses registros não estão demonstradas pela sonda: **[não verificado]**.
+- A lápide histórica documenta `_eh_fantasma`/`_bem_formado`/`_turnos_na_janela`, turno recomputado completo e última saída a até 180 minutos do fim previsto (`TOL_MORFOLOGIA_MIN=180`): `app/ponto/management/commands/reconciliar_perguntas_orfas.py:10-15`. O comentário atual distingue explicitamente essa morfologia da leitura da lâmpada: `app/chamados/reconciliador.py:982-987`.
+- O universo preservado pelo comentário “mesmo SQL do cron que carimbava” é: pergunta sem materialização, sem validação, disputa aberta, motivo `orfao_14h`/`saida_sem_entrada` e `data_evento` presente: `app/chamados/reconciliador.py:992-999`. A guarda de resposta é descrita como herdada do cron em `app/ponto/tests/test_vassoura_orfas_resposta.py:8-10`.
+- O algoritmo histórico de escolha do **dia** da batida não foi preservado nessa lápide/comentário. Ela não demonstra se a satisfação usava D, D+1 ou outro dia; atribuir um desses mecanismos ao cron de 22–28/10 fica **[não verificado]**. O horário de ~06:35 de cada execução também não consta na sonda: **[não verificado]**.
+- Informação documental adicional: o registro de 27/10 15h diz que a proposta de tolerância pelas duas pontas foi retirada, permanecendo somente a saída: `app/docs/RELATO.md:518`. Não usei isso como prova de execução de produção.
 
 ## 30/10 08:06 · sessao 329ed3bd6ff8 · O261-NOTURNO · sonda · origem=Code
 
@@ -635,86 +786,4 @@ Os outros usos são:
 
 **Dono L-099.** O fio morto é declarado contradição estrutural; isso não autoriza classificar automaticamente a causa do furo. O juiz exige flags de cadastro, batida fora de turno, paridade das batidas **atribuídas ao dia** e pertencimento à lista `dias_cadastro_x_realidade`. Esses resultados não constam da sonda; contar as cinco/seis batidas da janela vizinha não reproduz esse julgamento. Assim, atribuir definitivamente os furos a CADASTRO ou BATIDA seria **[não verificado]**. (`CLAUDE.md:306-316`; `app/ponto/management/commands/e6_oraculo.py:90-100`; `app/chamados/services/vigia_fio.py:99-101`)
 
-## 30/10 07:39 · sessao 56120f37885d · - · - · origem=Ronald (tmux)
-
-Inventário de emissores de `batida_ausente`:
-
-| Caminho | Escritor | Veto `nunca_bateu` |
-|---|---|---|
-| `detectar_ausencias::_abrir_chamado` | `app/ponto/management/commands/detectar_ausencias.py:688` (módulo definido em `:29`) | Chama `celula_veta_cobranca` e retorna em `:625-628`. |
-| Cartório | Delega ao escritor acima em `app/ponto/services/cartorio.py:1358` e `:1394`. | Além do veto do escritor, `adesao is None` retorna em `:1003`, antes dessas emissões; consulta de adesão em `:899-907`. |
-| `emitir_furo_retroativo` | Delega ao escritor acima em `app/ponto/management/commands/emitir_furo_retroativo.py:142`. | Passa pelo mesmo veto; também pula colaborador sem batidas na janela em `:52-55`. |
-| `reconciliar_grade::_emitir_furo` | `app/ponto/management/commands/reconciliar_grade.py:499` (CANON em `:54`) | Chama o veto e retorna em `:494-496`. |
-| Reconciliador c2 `reemitir_chamado_do_dia` | `app/chamados/reconciliador.py:862` (chave do módulo em `:804`) | Chama o veto e retorna em `:838-842`. |
-| Abertura pela request | `app/chamados/views.py:170-175` aceita o módulo do catálogo; delega em `:196-207`; escritor `app/chamados/services/abertura.py:47-65`. | Não passa pelo veto `celula_veta_cobranca` nem pelo ramo de adesão; segue `ChamadoColaborador.criar`, em `app/chamados/models.py:805-834`. |
-
-`vigia_de_hora` chega ao cartório por `julgar_celula` em `app/ponto/services/vigia_de_hora.py:130`.
-
-O veto compartilhado contém literalmente `nunca_bateu` em `app/ponto/marcos.py:119` e o aplica em `:155-162`.
-
-A abertura pela request passa por outro gate, `_celula_que_absolve` (`app/chamados/models.py:821-825`, implementação em `:839-851`). Esse gate não equivale a `VEREDITOS_QUE_VETAM`: `_absolvido_pela_celula` retorna `None` quando o veredito pertence a `VEREDITOS_ACUSAM` (`app/chamados/reconciliador.py:975`).
-
-As chaves de contexto de #35679 coincidem com o formato produzido pelo funil `detectar_ausencias`: base em `app/ponto/management/commands/detectar_ausencias.py:700-706`; `folga_nao_declarada` e `nao_calado_porque` em `:753-756`; `agrupado_em` possui escritor em `app/chamados/services/limbo_folgas.py:219`. Porém a sonda não traz `modulo_origem`, autor, trilha nem emissor: atribuir exatamente #35679 a uma execução desse funil continua **[nao verificado]**.
-
-## 30/10 07:38 · sessao ae6aaf07e1c7 · - · - · origem=Ronald (tmux)
-
-Leitura somente; nenhum arquivo alterado. [não verificado]
-
-- **Lastro da resposta não equivale a lastro da cobrança.** Os quatro chamados de col451 cobram **E 19:00**; as batidas retro **07:00 do dia seguinte** sustentam temporalmente as respostas P46704/P49423/P50180/P51025, mas não demonstram atendimento da entrada cobrada. A autoridade do fechamento exige todos os marcos nomeados acesos, por hora **e tipo**; lâmpada apagada mantém `furo_real`. (`app/ponto/services/lastro.py:170`, `app/ponto/services/lastro.py:175`, `app/ponto/services/lastro.py:179`, `app/ponto/services/lastro.py:265`, `app/ponto/services/lastro.py:271`; correspondência às batidas da sonda: [não verificado])
-
-- **140114:** B137026, de 25/10 17:30:12 e não retratada, sustenta temporalmente a resposta `17:30` de P50169; o chamado CH35101 cobra **E 21:30**, portanto aquela presença não prova regularização do marco cobrado. (`app/ponto/services/lastro.py:175`, `app/ponto/services/lastro.py:179`; presença e estado da batida, extraídos da sonda sem arquivo:linha: [não verificado])
-
-- **Limite da prova técnica de materialização:** a sonda não informa `tipo_resposta`, `data_evento`, `tipo` das batidas, `pergunta_origem` nem `ata`. O juiz usa esses campos: para hora/data_hora procura plantio vinculado e vivo; aceita plantio em data_evento −1/0/+1 com hora dentro de ±20 minutos; na prova externa exige tipo e instante do slot. Logo não é rigoroso afirmar ausência absoluta de lastro dos P19 apenas porque inexiste B19 no próprio dia — há B19 vizinhas, mas o vínculo necessário não foi mostrado. (`app/chamados/juizes.py:225`, `app/chamados/juizes.py:234`, `app/chamados/juizes.py:257`, `app/chamados/juizes.py:263`, `app/chamados/juizes.py:266`, `app/chamados/juizes.py:674`, `app/chamados/juizes.py:676`, `app/chamados/juizes.py:680`, `app/chamados/juizes.py:730`)
-
-- **Quem rejulga/fecha:** `post_save(Batida)` chama cartório para dia civil da marca e véspera; cartório monta a ata atual e só tenta reconciliar a cobrança por marco quando `_acesos(...) is True`. A rede `lastro.fechar` só chama `reconciliar()` para `com_lastro`. A materialização tenta fechar destino/clones, mas passa pelo mesmo `reconciliar()` e pelo bloqueio de irmã sem consumo. (`app/ponto/signals.py:108`, `app/ponto/signals.py:112`, `app/ponto/signals.py:132`, `app/ponto/signals.py:135`, `app/ponto/signals.py:93`, `app/ponto/services/cartorio.py:1148`, `app/ponto/services/cartorio.py:1163`, `app/ponto/services/lastro.py:306`, `app/ponto/services/lastro.py:317`, `app/chamados/services/materializacao.py:702`, `app/chamados/services/materializacao.py:711`, `app/chamados/services/materializacao.py:919`)
-
-- **Por que a cópia permite chamado vivo com perguntas validadas:** fechar a pergunta não é a condição de fechamento do chamado. `reconciliar()` consulta a premissa; o gate recusa furo ainda vivo para a folha, salvo regularização/agrupamento ou deduplicação sob outra cobrança viva. A regularização pode decorrer do marco cobrado aceso; não decorre simplesmente de `validada_em`. (`app/chamados/models.py:440`, `app/chamados/models.py:470`, `app/chamados/models.py:495`, `app/chamados/models.py:498`, `app/chamados/models.py:525`, `app/chamados/models.py:957`, `app/chamados/models.py:959`)
-
-- **Reconciliador não absolve estas células pelo veredito fornecido:** `_absolvido_pela_celula` retorna `None` quando o veredito pertence a `VEREDITOS_ACUSAM`. Ele não transforma uma validação individual em absolvição do dia. (`app/chamados/reconciliador.py:948`, `app/chamados/reconciliador.py:975`, `app/chamados/reconciliador.py:976`)
-
-- **“Em que linha não fez” como execução histórica:** [não verificado]. Sem log, a sonda não mostra se houve signal, tentativa, exceção, decisão anterior ou recusa. É possível apontar as condições acima; não é possível afirmar qual linha foi efetivamente percorrida e recusou em cada ato. A própria porta do signal contém retorno por julgamento em curso e tratamento de exceção. (`app/ponto/signals.py:88`, `app/ponto/signals.py:90`, `app/ponto/signals.py:91`)
-
-- **Dono formal L-099:** não pode ser determinado exatamente por esta sonda. O juiz recebe flags de cadastro, batida fora do turno, horas atribuídas pelo oráculo e pertencimento à lista `dias_cadastro_x_realidade`; faltam esses insumos. O código dá precedência: cadastro incompleto/sem vínculo → CADASTRO; batida fora do turno → BATIDA; horas em contagem ímpar → BATIDA; depois lista CxR → CADASTRO; resíduo → ESTRUTURA. DNA e protesto sozinhos não substituem esses insumos. (`CLAUDE.md:311`, `CLAUDE.md:313`, `app/ponto/management/commands/e6_oraculo.py:90`, `app/ponto/management/commands/e6_oraculo.py:96`, `app/ponto/management/commands/e6_oraculo.py:98`, `app/ponto/management/commands/e6_oraculo.py:100`, `app/ponto/management/commands/e6_oraculo.py:126`, `app/ponto/management/commands/e6_oraculo.py:142`, `app/ponto/management/commands/e6_oraculo.py:149`, `app/ponto/management/commands/e6_oraculo.py:155`)
-
-- **Não converter classe de fio morto em dono:** o próprio vigia declara que essa classificação pertence ao juiz L-099, e não a um mapa de classes da porta. (`app/chamados/services/vigia_fio.py:99`, `app/chamados/services/vigia_fio.py:100`, `app/chamados/services/vigia_fio.py:101`)
-
-## 30/10 07:38 · sessao 376360c5b485 · - · - · origem=Ronald (tmux)
-
-Atribuição estrita:
-
-- **Emissor e instante de criação das P#51789–51792: [nao verificado].** A sonda mostra abertura da disputa, não nascimento das perguntas: `DisputaSupervisao.aberta_em` é `auto_now_add` em `app/chamados/models.py:1331`. Uma disputa existente recebe novas perguntas em `app/chamados/services/disputa_emissao.py:618`. `julgado_em` é escrito como instante da lavra do cache em `app/chamados/veredito_lavrado.py:228`; portanto 30/10 06:35:14 não prova criação.
-- **Escritor genérico de perguntas:** `gerar_perguntas_disputa` chama `PerguntaDisputa.abrir` em `app/chamados/services/disputa_emissao.py:389`; a criação efetiva ocorre em `app/chamados/models.py:2085`, e seu log `pergunta_emitida` em `app/chamados/models.py:2092`. O gate também reaponta perguntas já existentes e retorna sem criá-las em `app/chamados/models.py:2058` e `app/chamados/models.py:2084`; logo a disputa atualmente apresentada não identifica emissor original.
-- **#35679:** a sonda declara criado 29/10 09:00:12 e resolvido 30/10 06:35:14, via `sistema`, sem respondente e sem superador — dados fornecidos sem arquivo:linha, portanto **[nao verificado] documentalmente**. O caminho correspondente no código é `ChamadoColaborador.reconciliar`, que chama `_gravar_estado(..., via=EVENTO_VIA['RECONCILIAR'])` em `app/chamados/models.py:444`; `RECONCILIAR → sistema` está em `app/chamados/catalogo/motor.py:95`. O escritor de `via_encerramento` é `app/chamados/models.py:209`, com persistência em `app/chamados/models.py:231`; `resolvido_em` é carimbado em `app/chamados/models.py:208`.
-- **Qual serviço/cron chamou esse encerramento e sua causa concreta: [nao verificado].** Existem múltiplos chamadores, por exemplo `app/chamados/reconciliador.py:525` e `app/ponto/services/cartorio.py:1163`, `:1175`, `:1196`, `:1266`; horário e via não distinguem esses chamadores.
-- O fechamento pode relavrar perguntas apontadas para o chamado: `app/chamados/models.py:243`–`:249`. Isso explica a existência de um caminho de código entre encerramento e `julgado_em`, mas não prova que tenha sido esse o caminho das quatro perguntas da sonda **[nao verificado]**.
-- `contexto_keys` sozinho não prova módulo nem emissor de #35679 **[nao verificado]**. Não atribuir ao detector apenas porque contém `horario_previsto`, `atraso_min`, `marcos_faltantes` ou ressalvas de folga.
-
-## 30/10 07:38 · sessao c98b4e89e71a · - · - · origem=Ronald (tmux)
-
-Levantamento somente leitura dos escritores:
-
-| Perguntas da sonda | Atribuição sustentada pela assinatura |
-|---|---|
-| P46703, P49422, P50179, P50883, P50169 | `_carimbar_validacao` é o escritor positivo que grava somente `validada_em/por`, preservando materialização anterior: `app/chamados/services/validacao.py:127-133`. Os outros três escritores positivos gravam também materialização com o mesmo instante/autor da validação, incompatível com a assinatura atual `mat` anterior/666 e validação posterior/657 em uma única dessas escritas: `materializacao.py:506-530`, `materializacao.py:1148-1198`, `disputa_emissao.py:1561-1583`. Execução histórica exclusiva, sem trilha: [não verificado]. |
-| P46704, P49423, P50180, P51025 | Compatíveis com validação seguida de materialização: `validacao.py:389`, `validacao.py:415-417`, `materializacao.py:1148-1198`. A sonda mostra segundos, portanto igualdade dos microssegundos [não verificado]. Também não exclui só pelo estado o carimbo de simetria de `_materializar_ausencia_de_resposta`, que permite `via=declaracao` quando a irmã declarou hora: `materializacao.py:506-530`. Autor histórico exclusivo de `validada_em`: [não verificado]. |
-| P50170 | `validada_em/por` são nulos na sonda: ninguém identificado como escritor de validação; eventual validação passada posteriormente apagada [não verificado]. |
-
-O caminho concreto que permite validar uma pergunta já materializada sem reapurar o lastro é:
-
-- A validação carimba antes da tentativa de materializar: `app/chamados/services/validacao.py:388-389`.
-- A unidade só roda se `materializada_em is None`: `app/chamados/services/validacao.py:415-417`.
-- A devolução recusa atuar se materialização já existe: `app/chamados/services/validacao.py:180-185`.
-- O lote posterior também só seleciona materialização nula: `app/chamados/services/materializacao.py:1286-1290`.
-
-Portanto, o carimbo antigo `fantasma` explica pelo código a preservação da validação sem nova verificação da unidade; afirmar que isso foi precisamente o caminho histórico de cada registro exige trilha ausente: [não verificado].
-
-A materialização automática por chamado resolvido não é uma atribuição equivalente para os cinco fantasmas: ela seleciona materialização nula e, quando carimba validação, também substitui materialização/autor pelo mesmo `agora/user`: `app/chamados/services/disputa_emissao.py:1536-1539`, `app/chamados/services/disputa_emissao.py:1561-1577`.
-
-Cuidados para a consolidação:
-
-- P50169 tem lastro horário visível na sonda: B137026, 25/10 17:30:12, não retratada, para resposta 17:30; tipo, aprovação e vínculo com a pergunta [não verificado].
-- O juiz `_pergunta_materializada_de_fato` avalia `via` sem testemunha antes do ramo de slot e pode reprovar `fantasma` pela lei do dia: `app/chamados/juizes.py:603-623`; logo reprovação desse juiz não prova ausência física da batida respondida.
-- As quatro respostas 07:00 têm batidas retroativas visíveis no horário do encerramento noturno na sonda; vínculo `pergunta_origem` [não verificado]. O ramo que cria `origem='disputa_s84_retro'` está em `app/chamados/services/materializacao.py:871-879`.
-- A regra L-099 determina ESTRUTURA quando o sistema se contradiz dado o cadastro, CADASTRO quando DNA não descreve batidas, BATIDA quando falta/sobra batida: `CLAUDE.md:306-316`.
-
-_377 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_381 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
