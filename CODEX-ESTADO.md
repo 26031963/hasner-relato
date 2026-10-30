@@ -1,7 +1,270 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **29/10/2026 21:34** · publicado em **29/10/2026 21:35** (UTC-3)
+> Ultima resposta processada: **29/10/2026 21:48** · publicado em **29/10/2026 21:50** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 29/10 21:48 · sessao 613a61b3159d · piloto-desligamento · leitura · origem=Code
+
+A leitura mostra dois limites importantes: **o resumo do espelho pode usar a competência inteira, mesmo quando os dias foram limitados por uma data**, e **o saldo cadastrado de férias não calcula proporcionais até essa data**. São comportamentos distintos no código, detalhados abaixo. (`app/ponto/services/espelho.py:1231`, `app/ponto/services/espelho.py:1288`; `app/ferias/models.py:216`.)
+
+A competência contendo a DATA é obtida por `app/ponto/janelas.py::janela_atual(data, empresa=None)`. O corte vem de `Empresa.dia_inicio_competencia`, com padrão 21 e limite efetivo entre 2 e 28; `janela_fechamento(mes, ano, empresa=None)` identifica a competência pelo mês/ano do **fim**. Com corte 21, retorna dia 21 do mês anterior até dia 20 do mês informado. ([janelas.py:10](/home/ronald/codex_ws/2b13d209d948b4af36015ad7b7ed815c024ccaee/app/ponto/janelas.py:10), `app/ponto/janelas.py:36`, `app/ponto/janelas.py:54`, `app/ponto/janelas.py:60`.)
+
+**B1 — Espelho apurado: há uma fachada atual, mas ela não garante o resumo parcial até a DATA.** (`app/ponto/services/espelho.py:1198`, `app/ponto/services/espelho.py:1288`.)
+
+- **FONTE:** `app/ponto/services/espelho.py::espelho_do_colab(colaborador, hoje, apur_ini, apur_fim, *, ano=None, modo_gestor=False, agora)`. Retorna, entre outras chaves, `dias`, `resumo` e `resultado`. É exatamente a função chamada pela tela atual, que publica `dias` e `resumo_mes`. ([espelho.py:1198](/home/ronald/codex_ws/2b13d209d948b4af36015ad7b7ed815c024ccaee/app/ponto/services/espelho.py:1198), `app/ponto/services/espelho.py:1298`, `app/ponto/views.py:154`, `app/ponto/views.py:158`.)
+- **UNIDADE:** trabalhadas, extras, atrasos e `horas_falta` são **horas decimais**; `dias_falta` é contagem de dias e `datas_falta` é lista de datas. A tela formata as horas com uma casa decimal seguida de `h`, não em h:min. (`app/relatorios/cartao_pela_celula.py:93`, `app/relatorios/cartao_pela_celula.py:102`, `app/relatorios/cartao_pela_celula.py:104`, `app/relatorios/cartao_pela_celula.py:111`; `app/templates/ponto/espelho.html:38`, `app/templates/ponto/espelho.html:62`.)
+- **UNIVERSO:** um colaborador explícito. Os dias visuais vão de `min(piso_visual(colaborador, hoje), apur_ini)` até `hoje`; portanto podem começar **antes da competência**. O resumo inicial restringe as rubricas aos períodos cuja entrada local pertence a `[apur_ini, apur_fim]`. Depois, se essas pontas forem uma competência completa, `folha_manda` aplica os totais dessa competência. (`app/ponto/services/espelho.py:1229`, `app/ponto/services/espelho.py:1266`, `app/ponto/services/espelho.py:83`, `app/ponto/services/espelho.py:450`; `app/relatorios/cartao_pela_celula.py:321`.)
+- **EXCLUSÕES:** a apuração exclui batidas retratadas; pendentes do DP continuam entrando. Na fonte final folha/lavratura, `total_trabalhadas` usa horas normais, enquanto folga trabalhada fica separada em `trab_folga`. Furo apurado sem decisão não se torna automaticamente falta decidida. (`app/ponto/turnos.py:2818`, `app/ponto/turnos.py:2838`; `app/relatorios/cartao_pela_celula.py:111`, `app/relatorios/cartao_pela_celula.py:116`, `app/relatorios/cartao_pela_celula.py:174`, `app/relatorios/cartao_pela_celula.py:373`.)
+
+A fonte diária e a fonte do resumo são diferentes:
+
+| Parte | Fonte efetiva e limite |
+|---|---|
+| Registros por dia | `app/ponto/services/dia_pago.py::linhas_do_periodo(colab, ini, fim, *, versao='motor')`: mapa `{date: DiaPago}`, somente linhas `tipo=dia`, com datas inclusivas. (`app/ponto/services/dia_pago.py:831`, `app/ponto/services/dia_pago.py:852`.) |
+| Rubricas que o HTML imprime por dia | `app/ponto/services/dia_pago.py::rubricas_do_dia(linha)`: trabalhadas, extras 50/100, atraso, antecipada, noturnas e intra, em horas. **Não retorna `horas_falta`**. Sem linha, sinaliza `lavrada=False`; o template informa ausência de apuração. (`app/ponto/services/dia_pago.py:899`, `app/ponto/services/dia_pago.py:908`, `app/ponto/services/dia_pago.py:914`; `app/templates/ponto/espelho.html:263`.) |
+| Outra medida diária disponível | `app/ponto/services/dia_pago.py::pago_do_dia(linha)`: trabalhadas + folga trabalhada + folga-feriado; pode retornar `None`. Alimenta `dia.pago_h`, enquanto a linha de rubricas do HTML imprime `rubricas.trabalhadas`. (`app/ponto/services/dia_pago.py:865`, `app/ponto/services/dia_pago.py:888`, `app/ponto/services/dia_pago.py:895`; `app/ponto/services/espelho.py:822`; `app/templates/ponto/espelho.html:268`.) |
+| Resumo final | `app/relatorios/cartao_pela_celula.py::folha_manda(colaborador, data_ini, data_fim_pedido, resumo)`: tenta folha, depois lavratura; sem ambas, conserva o resumo do motor com `fonte_dos_totais='sem apuracao ainda'`. (`app/relatorios/cartao_pela_celula.py:296`, `app/relatorios/cartao_pela_celula.py:321`, `app/relatorios/cartao_pela_celula.py:340`.) |
+
+**Corte e relógio:** a fachada recebe `hoje` e `agora`, mas não os transmite a toda a cadeia. `folha_manda` recebe as pontas da competência, sem `hoje`; `fechamento_lido` recebe apenas mês/ano e o recalculador captura seu próprio `timezone.now()`. A construção dos dias em aberto também chama `ate_ontem` e `turno_aberto_de` sem injetar o relógio da fachada. Portanto, passar a DATA em `hoje` **não garante** totais e estados inteiramente avaliados nesse corte. (`app/ponto/services/espelho.py:1288`; `app/ponto/services/fechamento.py:1703`, `app/ponto/services/fechamento.py:1727`, `app/ponto/services/fechamento.py:595`; `app/relatorios/cartao_pela_celula.py:37`, `app/relatorios/cartao_pela_celula.py:398`, `app/relatorios/cartao_pela_celula.py:412`.)
+
+Há outras candidatas, com contratos diferentes:
+
+| Candidata e assinatura | O que responde |
+|---|---|
+| `app/ponto/services/dia_pago.py::soma_do_periodo(colaboradores, ini, fim, *, versao='motor')` | **Totais lavrados até um corte explícito**, por colaborador, incluindo trabalhadas, extras, atraso e `horas_falta`. Retorna também `sem_lavratura` e `sem_apuracao`. Exclui ajustes de competência, DSR e banco; não consulta relógio no corpo. É a soma por intervalo, mas não reproduz a seleção de fontes do resumo atual. (`app/ponto/services/dia_pago.py:34`, `app/ponto/services/dia_pago.py:750`, `app/ponto/services/dia_pago.py:782`, `app/ponto/services/dia_pago.py:828`.) |
+| `app/ponto/services/espelho.py::autoridade_do_periodo(colaborador, ini, fim)` | Resultado do motor para intervalo explícito, utilizado pela fachada; sozinho não é o resumo final da tela. (`app/ponto/services/espelho.py:982`, `app/ponto/services/espelho.py:1195`, `app/ponto/services/espelho.py:1231`.) |
+| `app/ponto/services/espelho.py::somar_periodos(periodos, periodos_ft, dentro=None)` | Soma rubricas do motor, em horas; aceita filtro de intervalo, não soma faltas e não escolhe folha/lavratura. (`app/ponto/services/espelho.py:51`, `app/ponto/services/espelho.py:77`, `app/ponto/services/espelho.py:117`.) |
+| `app/ponto/services/fechamento.py::fechamento_lido(colaborador, mes, ano)` | Totais online da competência inteira; pode devolver `None`, sem parâmetro de corte. (`app/ponto/services/fechamento.py:1703`, `app/ponto/services/fechamento.py:1727`.) |
+| `app/relatorios/cartao_pela_celula.py::totais_da_folha(colab, mes, ano)` | Mapeia o fechamento online para o vocabulário do resumo; exige existir fechamento cadastrado. Sem corte livre. (`app/relatorios/cartao_pela_celula.py:44`, `app/relatorios/cartao_pela_celula.py:69`.) |
+| `app/relatorios/cartao_pela_celula.py::_totais_da_lavratura(colab, mes, ano)` | Alternativa da competência inteira quando não há totais da folha. Usa `soma_da_competencia`, não a soma parcial. (`app/relatorios/cartao_pela_celula.py:126`, `app/relatorios/cartao_pela_celula.py:141`.) |
+| `app/relatorios/pdf_espelho.py::_coletar_dados_espelho(colaborador, data_ini, data_fim, _turnos_juiz=None, *, agora)` | Coletor do PDF: limita dias a ontem, lê a fachada e reaplica `folha_manda`; não é a função escolhida pela tela HTML. (`app/relatorios/pdf_espelho.py:187`, `app/relatorios/pdf_espelho.py:286`, `app/relatorios/pdf_espelho.py:592`, `app/relatorios/pdf_espelho.py:624`.) |
+
+A própria seleção da janela difere entre consumidores: a web usa `janela_fechamento` para mês/ano do GET, com padrão no mês civil atual; a API usa `janela_atual` quando mês/ano coincidem com o mês civil atual. Ambas chamam `espelho_do_colab`. (`app/ponto/views.py:97`, `app/ponto/views.py:101`, `app/ponto/views.py:154`; `app/api/views.py:1362`, `app/api/views.py:1369`.)
+
+**B2 — Faltas e ausências justificadas: não há uma saída única nas fontes identificadas que reúna os dois conjuntos com tipo.** Há lista de faltas decididas, cobertura por dia e lista de registros. (`app/folha/export.py:158`; `app/ponto/turnos.py:2487`, `app/ponto/turnos.py:2707`.)
+
+- **FONTE das faltas:** `app/folha/export.py::datas_falta_janela(colaborador, ini, fim)`. **UNIDADE:** lista de datas; a função não retorna horas nem o tipo junto de cada data. **UNIVERSO:** um colaborador, intervalo inclusivo informado, sem competência obrigatória. **EXCLUSÕES:** só entram ausências aprovadas de tipos que o catálogo vigente declara `DESCONTA`; ficam fora pendentes, rejeitadas, tipos abonados/suprimidos e furo sem decisão. Recebe as pontas e não consulta relógio no corpo. ([export.py:158](/home/ronald/codex_ws/2b13d209d948b4af36015ad7b7ed815c024ccaee/app/folha/export.py:158), `app/folha/export.py:75`, `app/folha/export.py:135`, `app/folha/export.py:168`.)
+- **FONTE por dia, com tipo:** `app/ponto/turnos.py::cobertura_ausencia_periodo(colab, ini, fim, *, para)`. **UNIDADE:** mapa `{date: Ausencia}`, com `tipo`, status e minutos no registro. **UNIVERSO:** um colaborador e dias inclusivos do intervalo, expandindo dias únicos, intervalos fechados e abertos permitidos. **EXCLUSÕES:** `para='folha'` aceita só aprovadas; `'cobranca'` exclui apenas rejeitadas. Em sobreposição, conserva somente a ausência de maior `(data, pk)`. Não restringe automaticamente a “justificadas”; também pode devolver falta ou ausência que suprime o dia. Recebe as pontas, sem relógio no corpo. ([turnos.py:2707](/home/ronald/codex_ws/2b13d209d948b4af36015ad7b7ed815c024ccaee/app/ponto/turnos.py:2707), `app/ponto/turnos.py:2475`, `app/ponto/turnos.py:2727`, `app/ponto/turnos.py:2743`; `app/ponto/models.py:749`.)
+- **FONTE de todos os registros com tipo:** `app/ponto/turnos.py::ausencias_do_periodo(colab, ini, fim, *, para)`. Retorna queryset dos registros que intersectam o intervalo, com o mesmo filtro folha/cobrança, **sem eliminar sobreposições**. Não retorna uma contagem pronta de dias nem filtra apenas justificadas; recebe datas, sem relógio no corpo. (`app/ponto/turnos.py:2487`.)
+
+As candidatas próximas e suas diferenças são:
+
+| Candidata e assinatura | Diferença |
+|---|---|
+| `app/folha/export.py::datas_falta(colaborador, empresa, mes, ano)` | Mesma pergunta das faltas, pela competência inteira da empresa; delega a `datas_falta_janela`. Não recebe corte parcial. (`app/folha/export.py:173`.) |
+| `app/folha/export.py::ausencias_na_janela(colaborador, tipos, ini, fim)` | Registros aprovados dos tipos pedidos, preservando tipo; aceita corte explícito. É utilizada pela expansão das faltas. (`app/folha/export.py:60`, `app/folha/export.py:149`.) |
+| `app/folha/export.py::datas_abonadas(colaborador, empresa, mes, ano)` | Datas da rubrica 8932, **sem tipo no retorno**. Exclui férias, declaração e licença maternidade; portanto não é lista geral de justificadas. Só recebe competência. (`app/folha/export.py:182`, `app/folha/export.py:190`; `app/ponto/catalogo/ausencias.py:290`.) |
+| `app/ponto/services/efeito_ausencia.py::efeitos_da_ausencia(colaborador, data_ini, data_fim)` | Conjuntos de justificadas/suprimidas/dia inteiro e minutos parciais. Inclui `Justificativa` aprovada, além de ausências; não devolve tipo. (`app/ponto/services/efeito_ausencia.py:28`, `app/ponto/services/efeito_ausencia.py:36`, `app/ponto/services/efeito_ausencia.py:59`.) |
+| `app/ponto/services/dia_decidido.py::decididos_do_periodo(colaborador, data_ini, data_fim, *, ausencias=None)` | Histórico por dia com tipo/status/minutos, **incluindo rejeitadas**. Sobreposições têm desempate; registro sem fim expande só o dia inicial nesse corpo. (`app/ponto/services/dia_decidido.py:504`, `app/ponto/services/dia_decidido.py:521`, `app/ponto/services/dia_decidido.py:542`.) |
+| `app/ponto/turnos.py::ausencias_vigentes(de, ate, colaborador=None)` e `::ausencias_do_dp(de, ate, colaborador=None)` | A primeira não filtra status/tipo; a segunda exclui férias e rejeitadas. Omitir colaborador permite universo coletivo. Não equivalem a justificadas aprovadas. (`app/ponto/turnos.py:2921`, `app/ponto/turnos.py:2944`, `app/ponto/turnos.py:2948`.) |
+
+**O espelho atual usa várias delas:** cobertura `'cobranca'` para o ícone, cobertura `'folha'` para o rótulo, `decididos_do_periodo` para decisões e `efeitos_da_ausencia` na alimentação do motor. As faltas decididas do resumo passam por `folha_manda → datas_falta_janela`. (`app/ponto/services/espelho.py:590`, `app/ponto/services/espelho.py:599`, `app/ponto/services/espelho.py:658`, `app/ponto/services/espelho.py:1072`; `app/relatorios/cartao_pela_celula.py:373`.)
+
+**B3 — Férias vencidas e proporcionais: as fontes localizadas não atendem o bloco completo.** Há saldo cadastrado, status por data e avisos; cálculo de proporcionais/avos até o corte não foi localizado. A inexistência absoluta de outra implementação permanece **[não verificado]**.
+
+- **FONTE do saldo por aquisitivo:** `app/ferias/models.py::PeriodoAquisitivo.dias_saldo(self)`, uma **property**. **UNIDADE:** dias. **UNIVERSO:** aquele período aquisitivo cadastrado, sem competência mensal. **EXCLUSÕES:** subtrai concedidos e vendidos. Não recebe data, não calcula proporcionalidade nem reconstrói saldo histórico: retorna `dias_direito - dias_concedidos - dias_vendidos`. ([models.py:216](/home/ronald/codex_ws/2b13d209d948b4af36015ad7b7ed815c024ccaee/app/ferias/models.py:216), `app/ferias/models.py:119`, `app/ferias/models.py:124`.)
+- **FONTE da classificação na DATA:** `app/ferias/models.py::status_de_periodo(pa, hoje=None)`. **UNIDADE:** categoria textual. Saldo não positivo resulta em `concedido`; fim do aquisitivo maior ou igual à referência resulta em `em_curso`; depois, limite de concessão menor que a referência resulta em `vencido`; o restante é `adquirido`. Recebe data; se omitida, usa `date.today()`. Avalia os contadores atuais de saldo antes das datas. ([models.py:65](/home/ronald/codex_ws/2b13d209d948b4af36015ad7b7ed815c024ccaee/app/ferias/models.py:65), `app/ferias/models.py:94`.)
+- **FONTE agregada:** `app/ferias/situacao.py::situacao_de_ferias(colab, hoje=None)`. Retorna `saldo_total` em dias, períodos, agendamentos e avisos. Busca todos os aquisitivos do colaborador, sem recorte de competência ou de início até a DATA; recebe referência ou usa `date.today()`. O aviso de vencido exige limite de concessão `< hoje` e saldo positivo. ([situacao.py:138](/home/ronald/codex_ws/2b13d209d948b4af36015ad7b7ed815c024ccaee/app/ferias/situacao.py:138), `app/ferias/situacao.py:155`, `app/ferias/situacao.py:162`, `app/ferias/situacao.py:192`.)
+
+Há uma diferença entre a descrição e o corpo de `situacao_de_ferias`: embora a docstring fale em períodos já adquiridos, `saldo_total` soma **todos os períodos com saldo positivo**, sem excluir em curso ou futuros cadastrados. O retorno também não separa um total numérico exclusivo de vencidas; o aviso textual mostra no máximo três períodos. (`app/ferias/situacao.py:146`, `app/ferias/situacao.py:200`, `app/ferias/situacao.py:296`.)
+
+As outras candidatas não calculam proporcionais:
+
+- `app/ferias/models.py::vencendo(pa, dias=DIAS_VENCENDO, hoje=None)` retorna booleano para adquirido próximo do limite; exclui vencidos por exigir `adquirido`. `app/ferias/services.py::periodos_vencendo(hoje=None, dias=JANELA_VENCIMENTO_DIAS, colaborador=None, empresa=None)` retorna queryset por **status armazenado**, com universo coletivo quando colaborador é omitido. (`app/ferias/models.py:252`; `app/ferias/services.py:111`.)
+- `app/ferias/models.py::dias_direito_por_faltas(faltas)` aplica faixas de direito; `PeriodoAquisitivo.faltas_periodo(self)` conta registros aprovados do tipo literal `falta`, pela data inicial dentro do aquisitivo. Não expande intervalos nem calcula avos. (`app/ferias/models.py:52`, `app/ferias/models.py:140`.)
+- `app/ferias/views.py::saldo_ferias(request, cid)` lê o relógio e sincroniza os períodos, em cadeia que pode salvar alterações; não é um leitor puro. O espelho de ponto usa a cobertura diária de férias, sem agregar saldo por aquisitivo nesse fluxo. (`app/ferias/views.py:98`, `app/ferias/views.py:108`, `app/ferias/views.py:113`; `app/ferias/services.py:238`; `app/ponto/services/espelho.py:590`.)
+
+**B4 — O que segura a folha: existe a função individual; motivos e portas não vêm numa fonte única completa.** (`app/folha/fora_da_folha.py:179`; `app/folha/retrato_folha.py:974`.)
+
+- **FONTE:** `app/folha/fora_da_folha.py::o_que_segura(colab, mes, ano)`. Retorna `entra`, `motivo`, `grupo`, `motivos_retencao` e lista de dias com data/veredito/motivo/fio/ação/IDs de chamados. **Não retorna URLs**, nem as travas de aprovação. ([fora_da_folha.py:179](/home/ronald/codex_ws/2b13d209d948b4af36015ad7b7ed815c024ccaee/app/folha/fora_da_folha.py:179), `app/folha/fora_da_folha.py:209`, `app/folha/fora_da_folha.py:211`.)
+- **UNIDADE:** categorias, datas ISO e IDs; `dias` é uma lista, não horas ou dinheiro. `entra` contém o status textual da classificação, podendo ser `None` quando não existe item para o colaborador. (`app/folha/fora_da_folha.py:191`, `app/folha/fora_da_folha.py:209`, `app/folha/fora_da_folha.py:212`.)
+- **UNIVERSO:** um colaborador, competência inteira da empresa. A classificação geral vem dos fechamentos cadastrados para empresa/mês/ano; os dias são consultados separadamente, mesmo quando o motivo geral não é `furo_espelho`. (`app/folha/fora_da_folha.py:188`, `app/folha/fora_da_folha.py:193`; `app/folha/export.py:764`.)
+- **CORTE/RELÓGIO:** não recebe a DATA. A autoridade diária é `app/folha/export.py::motivos_retencao_celula(colab, ini, fim, hoje=None, com_dias=False)`, mas a fachada não injeta `hoje`, levando ao uso de `timezone.localdate()`. Nessa autoridade, `hoje` distingue passado para ausência de célula/veredito; **não limita todos os motivos**, pois vereditos acusadores não passam pelo teste `d < hoje`. (`app/folha/fora_da_folha.py:90`; `app/folha/export.py:1150`, `app/folha/export.py:1179`, `app/folha/export.py:1213`, `app/folha/export.py:1215`.)
+- **EXCLUSÕES diárias:** isentos; dias anteriores à admissão/posteriores à demissão; dias sem célula e sem vínculo; ausência de célula/veredito em hoje/futuro ou no dia da demissão; protestos integralmente não cobráveis; furo exclusivamente da pausa nas condições específicas da função. Uma célula acusadora no dia da demissão ainda pode reter. (`app/folha/export.py:1174`, `app/folha/export.py:1180`, `app/folha/export.py:1209`, `app/folha/export.py:1211`, `app/folha/export.py:1235`, `app/folha/export.py:1237`.)
+
+Os **motivos gerais do TXT**, em ordem de precedência, são estes. A classificação para no primeiro aplicável; portanto não enumera todos os problemas gerais simultâneos. (`app/folha/export.py:746`, `app/folha/export.py:840`, `app/folha/export.py:948`.)
+
+| Motivo | Porta existente comprovada |
+|---|---|
+| `rescisao_modulo_proprio` | O ramo orienta ao módulo de rescisão do Domínio, fora do TXT mensal; não fornece URL Django. (`app/folha/export.py:840`.) |
+| `sem_codigo_dominio` | `/colaboradores/<cid>/editar/` → `colaboradores.views::editar_colaborador`; a gravação atribui `codigo_dominio`. (`app/folha/export.py:846`; `app/colaboradores/urls.py:50`; `app/colaboradores/views.py:1334`.) |
+| `ferias_com_batida` | Não há escolha única codificada. Existem `/ferias/agendamento/<ag_id>/editar-datas-admin/` → `ferias.views::editar_datas_admin`, cancelamento do agendamento e `/ponto/batida/<batida_id>/retratar/` → `ponto.views::retratar_
+
+[truncado em 20000 de 25389 caracteres]
+
+## 29/10 21:46 · sessao e24e3f8ecbfa · - · - · origem=Ronald (tmux)
+
+B4 tem fonte pronta para “o que segura”, mas a resposta e as portas de resolução estão em funções distintas; o mapa de portas é explicitamente parcial. `o_que_segura` devolve textos de ação e IDs de chamados, sem URLs. (`app/folha/fora_da_folha.py:179-213`; `app/folha/retrato_folha.py:974-1025`)
+
+**FONTE e assinatura**
+
+- `app/folha/fora_da_folha.py::o_que_segura(colab, mes, ano)`: retorna competência, colaborador/nome, `entra` (valor textual do `status`, não booleano), `motivo`, `grupo`, `motivos_retencao` e lista `dias`; cada dia tem `data`, `veredito`, `motivo`, `fio`, `destrava`, `chamado`. (`app/folha/fora_da_folha.py:179-213`)
+- A classificação de entrada vem de `app/folha/export.py::classificar_export(empresa, mes, ano, fechamentos=None)`, buscando o item daquele colaborador entre os fechamentos da empresa; quando o colaborador não aparece, `entra`/`motivo` ficam `None`. (`app/folha/fora_da_folha.py:188-193`, `app/folha/fora_da_folha.py:211-213`; `app/folha/export.py:746-769`)
+- Os dias vêm da autoridade `app/folha/export.py::motivos_retencao_celula(colab, ini, fim, hoje=None, com_dias=False)`, chamada com `com_dias=True`. (`app/folha/fora_da_folha.py:90-94`; `app/folha/export.py:1150`, `app/folha/export.py:1200-1240`)
+
+**UNIDADE**
+
+É uma resposta categórica com **lista de dias ISO**, motivos e IDs, sem valor monetário ou total de horas; a função não traz contador `dias`, mas uma lista. (`app/folha/fora_da_folha.py:209-213`)
+
+**UNIVERSO, corte e relógio**
+
+- Um colaborador na competência `mes/ano`, com janela completa da empresa obtida por `janela_fechamento`; não recebe data de último dia trabalhado. (`app/folha/fora_da_folha.py:179`, `app/folha/fora_da_folha.py:188-193`)
+- A janela usa `Empresa.dia_inicio_competencia` por `corte_da_empresa`, default 21 e clamp 2–28. (`app/ponto/janelas.py:36-57`)
+- A retenção diária recorta início pela admissão e fim pela demissão; janela colapsada retorna vazia. (`app/folha/export.py:1180-1188`)
+- `o_que_segura` não injeta `hoje`, portanto a retenção lê `timezone.localdate()` internamente. O núcleo diário permite receber `ini`, `fim` e `hoje`, mas `hoje` serve para decidir se um dia sem célula/veredito é passado: **não é teto geral de corte**, porque o ramo de vereditos acusadores não testa `d < hoje`. (`app/folha/fora_da_folha.py:90-94`; `app/folha/export.py:1179`, `app/folha/export.py:1206-1238`)
+- Mesmo que o motivo geral do TXT seja cadastro, férias ou rescisão, `o_que_segura` também busca os dias por célula; não condiciona a lista diária a `motivo == furo_espelho`. (`app/folha/fora_da_folha.py:191-194`)
+
+**EXCLUSÕES diárias**
+
+- Isento de ponto: nenhum motivo/dia. (`app/folha/export.py:1173-1178`)
+- Dias fora de admissão/demissão; sem célula **e** sem vínculo cobrindo o dia; ausências de célula/veredito no próprio dia da demissão; ausência de célula/veredito em hoje ou futuro. (`app/folha/export.py:1180-1187`, `app/folha/export.py:1209-1214`, `app/folha/export.py:1237-1238`)
+- Dia acusador com protestos todos em `NAO_COBRAVEIS_DO_COLABORADOR`; hoje esse conjunto contém apenas `FURO_PRE_ADOCAO`. (`app/folha/export.py:1227-1236`; `app/ponto/supra_juiz.py:34-36`)
+- Furo exclusivamente de pausa com protestos exatamente `{'FURO_PARCIAL'}` e confirmação do juiz de marcos; entrada/saída abertas, desalinhamento ou desconhecimento não recebem essa isenção. (`app/folha/export.py:1122-1129`, `app/folha/export.py:1132-1147`, `app/folha/export.py:1235-1236`)
+
+**Todos os motivos gerais do TXT e portas encontradas**
+
+| Motivo | Condição e porta existente comprovada |
+|---|---|
+| `rescisao_modulo_proprio` | Qualquer `data_demissao` preenchida exclui do TXT mensal; o detalhe manda para módulo de RESCISÃO do Domínio. Não há URL Django fornecida nesse ramo. (`app/folha/export.py:840-845`) |
+| `sem_codigo_dominio` | Código vazio; cadastro pode ser editado em `/colaboradores/<cid>/editar/` → `colaboradores.views::editar_colaborador`, cujo formulário contém `codigo_folha` e cuja gravação atribui `codigo_dominio`. (`app/folha/export.py:846-849`; `app/colaboradores/urls.py:50`; `app/templates/colaboradores/editar.html:62`; `app/colaboradores/views.py:1237`, `app/colaboradores/views.py:1334`) |
+| `ferias_com_batida` | Datas de batida dentro de férias não canceladas; exclui batidas retratadas. Não há porta única no mapa: tipo `ferias` é `None`. Existem portas específicas de editar datas/cancelar agendamento, exigindo `ag_id`, e retratar batida, exigindo `batida_id`. Escolher qual ato resolve cada caso não está codificado em `o_que_segura`. (`app/folha/export.py:453-494`, `app/folha/export.py:850-858`; `app/folha/retrato_folha.py:993`; `app/ferias/urls.py:18-22`; `app/ponto/urls.py:61`) |
+| `cadastro_zero` | Fechamento zero, ≥2 batidas apuráveis e nenhum previsto na janela; o detalhe manda cadastrar vínculo/escala e recalcular. Vínculo: `/colaboradores/vincular/<cid>/painel/` → `painel_vinculo`; gravação `/colaboradores/<cid>/vincular/escala/` → `vincular_escala`; recálculo POST `/ponto/fechamento/recalcular/` → `recalcular_fechamento`. (`app/folha/export.py:876-940`; `app/colaboradores/urls.py:12-13`; `app/ponto/urls.py:31`; `app/ponto/views.py:1227-1254`) |
+| `furo_espelho` | Algum motivo diário da autoridade de célula; encaminhamento depende do fio/causa, não apenas deste rótulo. O raio-X atual aponta `/chamados/painel/?colab_id=<cid>`; há também a porta de decidir fato do dia POST `/ponto/celula/veredito/` → `veredito_celula_view`, com `colab`, `datas`/`data`, `veredito` e opcional `tipo_ausencia`. (`app/folha/export.py:942-947`; `app/folha/views.py:602`, `app/folha/views.py:667`; `app/ponto/urls.py:58`; `app/ponto/views.py:3302-3331`) |
+| `nao_homologado` | Códigos de eventos fora do catálogo Domínio; porta de rubricas `/folha/rubricas/` → `folha.views::lista_rubricas`, com vincular/desvincular evento/código por empresa. O mapa do retrato classifica como cadastro e abre cadastro do colaborador, não fornece um link específico de rubricas por este motivo. (`app/folha/export.py:948-953`; `app/folha/urls.py:8`; `app/folha/views.py:27-55`; `app/folha/retrato_folha.py:211-213`, `app/folha/retrato_folha.py:992`) |
+
+As URLs acima recebem os prefixos do projeto em `app/config/urls.py:26-34`.
+
+A ordem de precedência do motivo geral é a da tabela: a função sai no primeiro ramo aplicável; portanto não é inventário completo de todos os motivos gerais simultâneos. (`app/folha/export.py:840-858`, `app/folha/export.py:933-953`)
+
+**Todos os motivos diários e portas por fio**
+
+Os motivos possíveis são `sem_celula` e `espelho_` concatenado aos sete `VEREDITOS_ACUSAM`: `espelho_furo`, `espelho_discordante`, `espelho_indefinida`, `espelho_cobranca_indevida`, `espelho_cobrado`, `espelho_nunca_bateu`, `espelho_fato_em_ausencia`. Não existe nesse código um mapa “cada um desses oito motivos → uma URL”; o retorno aplica o fio do dia. (`app/folha/export.py:1212-1238`; `app/escala/models.py:1735-1736`; `app/folha/fora_da_folha.py:203-213`)
+
+| Fio | Texto/porta comprovada |
+|---|---|
+| `admin` | Validar ou recusar resposta; ações POST no detalhe local `/chamados/local/<chamado_id>/`, `acao=validar_pergunta` ou `recusar_pergunta`; alternativa POST `/chamados/validar-inline/<cid>/` → `views_cobrar::validar_inline`. O mapa de portas do retrato dá `None` ao fio admin e delega ao tipo. (`app/folha/fora_da_folha.py:38-42`; `app/chamados/urls.py:14`, `app/chamados/urls.py:33`; `app/chamados/views.py:483-518`; `app/chamados/views_cobrar.py:145-154`; `app/folha/retrato_folha.py:975`) |
+| `colab` | Colaborador responde e depois admin valida; `/chamados/disputa/responder/<pergunta_id>/` → `responder_pergunta_disputa`; mapa do retrato abre `/chamados/modal/<colaborador_id>/` → `modal_fio_colaborador` com rótulo “Cobrar no fio”. `o_que_segura` não fornece `pergunta_id`. (`app/folha/fora_da_folha.py:40`, `app/folha/fora_da_folha.py:209-213`; `app/chamados/urls.py:17`, `app/chamados/urls.py:39`; `app/folha/retrato_folha.py:976`) |
+| `chamado` | Resolver chamados vivos cujos IDs saem em `chamado`; detalhe `/chamados/local/<chamado_id>/`; mapa do retrato abre modal do fio com “Validar no fio”. (`app/folha/fora_da_folha.py:198-210`; `app/chamados/urls.py:14`, `app/chamados/urls.py:39`; `app/folha/retrato_folha.py:977`) |
+| `nada` | Texto “SEM FIO… este dia precisa de alguém para olhar”; nenhum URL fornecido. No retrato esse estado gravado aparece como `ninguem`, com `None` explícito no mapa. (`app/folha/fora_da_folha.py:42`, `app/folha/fora_da_folha.py:59-73`; `app/folha/retrato_folha.py:978`) |
+
+O mapa por **tipo** abre vínculo para `escala`, `folga`, `sem_escala`, e cadastro para `cadastro`; dá `None` para `nao_bate`, `falta`, `ferias` e sem causa. O próprio comentário registra que a porta de ausência/justificativa exige chamado, não colaborador; `/chamados/local/<chamado_id>/ir-para-ausencia/` redireciona para `/ponto/ausencias/?registro=<aid>`. (`app/folha/retrato_folha.py:980-995`; `app/chamados/urls.py:44`; `app/chamados/views.py:1494-1519`)
+
+**Pergunta distinta: travas de aprovação**
+
+`classificar_export` também devolve `travas_aprovacao`, separada do motivo de entrada no TXT: `conta_vazia` se horas trabalhadas zero, `turno_aberto` se contador >0, `sem_ancora_12x36` para escala ativa 12x36 sem âncora de colaborador ativo. (`app/folha/export.py:751-754`, `app/folha/export.py:786-814`, `app/folha/export.py:826`)
+
+- `conta_vazia`: modo selecionado explicitamente ignora a trava; aprovação individual `/ponto/fechamento/aprovar-colaborador/` e lote `/ponto/fechamento/aprovar/`. Não representa necessariamente um dado a corrigir. (`app/ponto/views.py:25-33`, `app/ponto/views.py:1506-1517`; `app/ponto/urls.py:32-33`)
+- `turno_aberto`: porta de decidir dia `/ponto/celula/veredito/`, e fio do chamado quando houver; a lista `/ponto/turnos-abertos/` é apenas leitura e limita-se a ativos/turnos recentes de 26h, portanto não cobre universalmente esta trava mensal. (`app/ponto/urls.py:15`, `app/ponto/urls.py:58`; `app/ponto/views.py:362-409`, `app/ponto/views.py:3302-3331`)
+- `sem_ancora_12x36`: painel de vínculo e formulário de fase; campo `data_ancora` no painel, gravação pela porta já existente de vincular escala. (`app/colaboradores/urls.py:12-15`; `app/templates/colaboradores/partials/painel_vinculo.html:156-159`; `app/colaboradores/views_fase.py:1-9`)
+
+**Candidatas e tela atual**
+
+- `motivos_retencao_espelho(turnos_abertos, inconsistencias, grade, fech=None, hoje=None)` é compatibilidade, ignora os três primeiros parâmetros e delega à autoridade de célula na competência do fechamento; não é outro cálculo. (`app/folha/export.py:1243-1249`)
+- `fora_da_folha(empresa, mes, ano, com_itens=False)` responde pelo conjunto da empresa e só detalha por dia/fio os classificados como `furo_espelho`; não substitui a resposta individual geral. (`app/folha/fora_da_folha.py:97-105`, `app/folha/fora_da_folha.py:119-139`)
+- `portas_da_linha(linha)` e `o_que_fazer(linha, hoje=None)` leem linha de retrato gravado e fornecem links/rótulos; não substituem a investigação viva por dia de `o_que_segura`. (`app/folha/retrato_folha.py:915-938`, `app/folha/retrato_folha.py:998-1035`)
+- A view atual de espelho usa `espelho_do_colab` para dias/resumo; não chama `o_que_segura` nesse fluxo. Os marcos faltantes do template apontam ao painel de chamados se `c.chamado_id` existe e ficam sem link caso contrário. (`app/ponto/views.py:153-165`, `app/ponto/views.py:193-213`; `app/templates/ponto/espelho.html:228-230`)
+
+## 29/10 21:46 · sessao d3d6975b1ed8 · - · - · origem=Ronald (tmux)
+
+B2 não tem uma função única que devolva simultaneamente “faltas + ausências justificadas, com tipo”; existem fontes distintas para dias decididos, cobertura e histórico. Isso aparece nas saídas de `datas_falta_janela` (lista de datas), `cobertura_ausencia_periodo` (mapa data→Ausencia) e `decididos_do_periodo` (mapa data→cartão com tipo/status). (`app/folha/export.py:158`, `app/ponto/turnos.py:2707`, `app/ponto/services/dia_decidido.py:504`, `app/ponto/services/dia_decidido.py:521`)
+
+**B2 — fontes e limites**
+
+- **Faltas decididas:** `app/folha/export.py::datas_falta_janela(colaborador, ini, fim)` retorna `[date]`; `datas_falta(colaborador, empresa, mes, ano)` é a candidata equivalente por competência, delegando à mesma função após `janela_competencia`. (`app/folha/export.py:158`, `app/folha/export.py:173`)
+- **Universo/exclusões:** um colaborador, intervalo inclusivo informado; somente `Ausencia.status='aprovada'` de tipos cujo catálogo vigente declara `DESCONTA`, expandindo intervalos e recortando pelas pontas. Portanto não é restrito ao código literal `'falta'`; não inclui furo sem decisão, ausência pendente/rejeitada nem tipos abonados/suprimidos. (`app/folha/export.py:60`, `app/folha/export.py:75`, `app/folha/export.py:135`, `app/folha/export.py:168`, `app/ponto/catalogo/ausencias.py:331`)
+- **Corte/relógio:** as duas funções recebem datas ou mes/ano; os corpos não consultam relógio. O wrapper utiliza `janela_competencia(empresa, mes, ano)`, que delega a `ponto.janelas.janela_fechamento`. (`app/folha/export.py:47`, `app/folha/export.py:158`, `app/folha/export.py:173`)
+- **Detalhe com tipo, por dia:** `app/ponto/turnos.py::cobertura_ausencia_periodo(colab, ini, fim, *, para)` retorna `{date: Ausencia}`; `Ausencia` traz `tipo`, `status`, `minutos`, `data`, `data_fim`. Unidade: dias identificados por data, acompanhados do registro, não um total de horas. (`app/ponto/turnos.py:2707`, `app/ponto/turnos.py:2732`, `app/ponto/models.py:749`, `app/ponto/models.py:755`)
+- **Universo/exclusões da cobertura:** um colaborador; datas dentro de `[ini,fim]`; range fechado, dia único e range sem fim somente para `TIPOS_EM_ABERTO`. Com `para='folha'` entram só aprovadas; com `'cobranca'` entram todas exceto rejeitadas. Em sobreposição fica uma ausência por dia: maior `(data, pk)`. Não há filtro automático apenas de “justificadas”; o tipo e o efeito do registro distinguem abonadas, descontadas e suprimidas. (`app/ponto/turnos.py:2475`, `app/ponto/turnos.py:2727`, `app/ponto/turnos.py:2734`, `app/ponto/turnos.py:2743`, `app/ponto/services/dia_decidido.py:453`)
+- **Todas as ausências, sem desempate:** `app/ponto/turnos.py::ausencias_do_periodo(colab, ini, fim, *, para)` retorna queryset de todos os registros que tocam o período com o mesmo filtro por efeito folha/cobrança. Pode preservar múltiplos lançamentos sobre o mesmo dia. (`app/ponto/turnos.py:2487`)
+- **Histórico com decisões rejeitadas:** `app/ponto/services/dia_decidido.py::decididos_do_periodo(colaborador, data_ini, data_fim, *, ausencias=None)` retorna mapa por dia; inclui rejeitadas, maior `(data,pk)` vence; o cartão contém `tipo`, `status`, `minutos`, `ausencia_id`, autor e instante da decisão. Não filtra só aprovadas e, no corpo, `data_fim=None` expande apenas o dia inicial, diferindo da cobertura aberta. (`app/ponto/services/dia_decidido.py:504`, `app/ponto/services/dia_decidido.py:521`, `app/ponto/services/dia_decidido.py:542`, `app/ponto/services/dia_decidido.py:550`)
+- **Espelho atual:** `montar_dias` consulta cobertura `'cobranca'` para ícone, `'folha'` para rótulo e também `decididos_do_periodo`; não escolhe uma única dessas respostas. O resumo consulta faltas decididas por `folha_manda → datas_falta_janela`. (`app/ponto/services/espelho.py:590`, `app/ponto/services/espelho.py:599`, `app/ponto/services/espelho.py:658`, `app/ponto/services/espelho.py:1287`, `app/relatorios/cartao_pela_celula.py:373`)
+
+Outras candidatas que respondem perguntas mais estreitas:
+
+- `app/folha/export.py::datas_abonadas(colaborador, empresa, mes, ano)` devolve datas da rubrica 8932, aprovadas, pelos tipos abonados vigentes **excluindo férias, declaração e licença maternidade**. Perde o tipo no retorno; não é lista geral de justificadas e só aceita competência, não corte livre. (`app/folha/export.py:182`, `app/folha/export.py:190`, `app/ponto/catalogo/ausencias.py:288`)
+- `app/ponto/services/efeito_ausencia.py::efeitos_da_ausencia(colaborador, data_ini, data_fim)` retorna sets `justificadas`, `suprimidas`, `dia_inteiro` e `min_parcial_pagos`. Soma `Justificativa` aprovada por `data_turno` às ausências aprovadas que abonam; parcial por minutos não abona o dia inteiro. Não devolve tipo. É usado na alimentação do motor do espelho. (`app/ponto/services/efeito_ausencia.py:28`, `app/ponto/services/efeito_ausencia.py:36`, `app/ponto/services/efeito_ausencia.py:49`, `app/ponto/services/efeito_ausencia.py:59`, `app/ponto/services/espelho.py:1072`)
+- `app/ponto/turnos.py::ausencias_vigentes(de, ate, colaborador=None)` é a fonte da lista administrativa: não filtra status nem tipo, e permite todos os colaboradores se o argumento for omitido. A view usa mês civil por padrão, com `de/ate` opcionais; não deriva competência. (`app/ponto/turnos.py:2948`, `app/ponto/turnos.py:2964`, `app/ponto/views.py:2177`, `app/ponto/views.py:2179`)
+- `app/ponto/turnos.py::ausencias_do_dp(de, ate, colaborador=None)` delega a vigentes, exclui férias e rejeitadas; não é equivalente à lista de justificadas aprovadas. (`app/ponto/turnos.py:2921`, `app/ponto/turnos.py:2944`)
+
+**B3 — existe saldo/status, não uma resposta completa de proporcionais até o corte**
+
+A inexistência absoluta de outra função de férias proporcionais em toda a árvore permanece **[não verificado]**. Nos corpos efetivamente identificados, não há cálculo de avos ou proporcional: existem o saldo aritmético cadastrado e a classificação por datas, abaixo. (`app/ferias/models.py:94`, `app/ferias/models.py:215`, `app/ferias/situacao.py:296`)
+
+- **FONTE por período:** `app/ferias/models.py::PeriodoAquisitivo.dias_saldo(self)` é uma **property**, sem data, retornando `dias_direito - dias_concedidos - dias_vendidos`, em **dias**. Universo: o PA desse objeto, com datas de início/fim e limite de concessão cadastrados. Exclui dias concedidos e vendidos; não rateia um PA em curso, não reconstrói saldo histórico na data de corte e não transforma dias em dinheiro. (`app/ferias/models.py:119`, `app/ferias/models.py:124`, `app/ferias/models.py:215`)
+- **Status na data:** `app/ferias/models.py::status_de_periodo(pa, hoje=None)` devolve uma palavra, não dias. Usa a data fornecida; se omitida, `date.today()`. Saldo não positivo → `'concedido'`; `data_fim is None` ou `data_fim >= hoje` → `'em_curso'`; limite de concessão `< hoje` → `'vencido'`; restante → `'adquirido'`. O saldo atual é avaliado antes das datas. (`app/ferias/models.py:65`, `app/ferias/models.py:94`)
+- **Leitor agregado:** `app/ferias/situacao.py::situacao_de_ferias(colab, hoje=None)` aceita a referência; se omitida lê `datetime.date.today()`. Busca **todos** os PAs daquele colaborador ordenados por início, sem competência e sem filtro de início/fim até o corte. Retorna `saldo_total`, `periodos`, agendamentos e avisos. (`app/ferias/situacao.py:138`, `app/ferias/situacao.py:155`, `app/ferias/situacao.py:162`)
+- **Vencidas nesse leitor:** aviso `pa_vencido` para PAs com limite `< hoje` e saldo positivo; o texto lista no máximo três períodos e a âncora aponta ao primeiro. O retorno `periodos` preserva todos os PAs com saldo positivo, mas não traz lista numérica separada de vencidos. (`app/ferias/situacao.py:192`, `app/ferias/situacao.py:200`, `app/ferias/situacao.py:296`)
+- **Cuidado documentado pelo corpo:** embora a docstring diga “saldo somando períodos já adquiridos”, a execução soma **todos os PAs com saldo positivo**, inclusive em curso/futuros se cadastrados; não há filtro por aquisição completa. (`app/ferias/situacao.py:146`, `app/ferias/situacao.py:162`, `app/ferias/situacao.py:296`)
+- **Corte não vira histórico:** `dias_concedidos` é incrementado ao agendar, antes do gozo; portanto passar uma data antiga a `situacao_de_ferias` ou `status_de_periodo` muda comparação de datas, mas as funções continuam lendo saldo cadastrado atual, já afetado pelo agendamento. (`app/ferias/services.py:306`, `app/ferias/services.py:321`, `app/ferias/models.py:95`, `app/ferias/situacao.py:68`)
+
+Candidatas próximas, mas não equivalentes ao bloco:
+
+- `app/ferias/models.py::vencendo(pa, dias=DIAS_VENCENDO, hoje=None)` retorna booleano; usa `status_de_periodo == 'adquirido'` e limite até `hoje+dias`. Exclui vencidos porque exige adquirido. (`app/ferias/models.py:252`)
+- `app/ferias/services.py::periodos_vencendo(hoje=None, dias=JANELA_VENCIMENTO_DIAS, colaborador=None, empresa=None)` retorna queryset filtrando **status armazenado `'adquirido'`**, sem limite inferior, sem filtro explícito por saldo. Pode consultar todos os colaboradores quando omitido; não é o mesmo predicado de `vencendo`. (`app/ferias/services.py:111`)
+- `app/ferias/models.py::PeriodoAquisitivo.faltas_periodo(self)` conta registros com tipo literal `'falta'`, aprovados e **data inicial** entre início/fim do PA; não expande ranges nem recorta por desligamento. `dias_direito_por_faltas(faltas)` aplica faixas 30/24/18/12/0. Isso é redução cadastral por faltas, não férias proporcionais. (`app/ferias/models.py:52`, `app/ferias/models.py:140`)
+- `app/ferias/views.py::saldo_ferias(request, cid)` lê `date.today()` e chama `p.sincronizar_status(hoje)`; essa cadeia pode salvar PA e recalcular art.130. Não é função de leitura apropriada para executar neste trabalho. (`app/ferias/views.py:98`, `app/ferias/views.py:108`, `app/ferias/views.py:113`, `app/ferias/services.py:215`, `app/ferias/services.py:238`)
+- O espelho de ponto chama `espelho_do_colab`, que não agrega saldos por PA; ele consulta as **ausências de férias que cobrem dias**, via cobertura. Não há chamada a `situacao_de_ferias`/saldo de PA nesse caminho identificado. (`app/ponto/views.py:157`, `app/ponto/services/espelho.py:590`, `app/ponto/services/espelho.py:1198`)
+
+## 29/10 21:46 · sessao 93e33cd7acec · - · - · origem=Ronald (tmux)
+
+B1 tem uma fachada usada pelo espelho atual, mas **não há nela garantia de devolver todos os totais até uma DATA arbitrária**: `hoje` limita o motor e os dias; ao final, os totais podem ser substituídos pelos da competência inteira. Isso está no encadeamento de `espelho_do_colab` e `folha_manda` (`app/ponto/services/espelho.py:1229`, `app/ponto/services/espelho.py:1266`, `app/ponto/services/espelho.py:1287`, `app/relatorios/cartao_pela_celula.py:321`).
+
+- **FONTE da tela:** `app/ponto/services/espelho.py::espelho_do_colab(colaborador, hoje, apur_ini, apur_fim, *, ano=None, modo_gestor=False, agora)`. Devolve `dias`, `resumo`, `resultado`, batidas e escala (`app/ponto/services/espelho.py:1198`, `app/ponto/services/espelho.py:1298`). A view atual chama exatamente essa função e publica `dias`/`resumo_mes` (`app/ponto/views.py:157`).  
+- **UNIDADE:** totais trabalhados, extras, atrasos, saída antecipada, faltas e abonos em **horas decimais**; `dias_falta` é contagem de dias e `datas_falta` lista de datas (`app/relatorios/cartao_pela_celula.py:93`, `app/relatorios/cartao_pela_celula.py:102`, `app/relatorios/cartao_pela_celula.py:104`, `app/relatorios/cartao_pela_celula.py:111`). O template imprime uma casa decimal seguida de `h`, inclusive extras e atrasos (`app/templates/ponto/espelho.html:38`, `app/templates/ponto/espelho.html:51`, `app/templates/ponto/espelho.html:62`, `app/templates/ponto/espelho.html:269`).
+- **UNIVERSO:** um colaborador passado explicitamente; dias visuais desde `min(piso_visual(colaborador, hoje), apur_ini)` até `hoje`, portanto os dias podem começar antes da competência. O motor usa essa mesma janela visual (`app/ponto/services/espelho.py:1229`, `app/ponto/services/espelho.py:1231`, `app/ponto/services/espelho.py:1266`). O resumo inicial restringe rubricas aos períodos cuja entrada local cai em `[apur_ini, apur_fim]` (`app/ponto/services/espelho.py:83`, `app/ponto/services/espelho.py:450`). Depois `folha_manda` identifica se essas duas pontas correspondem a uma competência inteira, e então tenta fontes da competência inteira (`app/relatorios/cartao_pela_celula.py:27`, `app/relatorios/cartao_pela_celula.py:321`).
+- **EXCLUSÕES:** batidas retratadas ficam fora da apuração; batidas pendentes do DP continuam contando (`app/ponto/turnos.py:2818`, `app/ponto/turnos.py:2838`). No resumo inicial, períodos fora das pontas da competência não entram (`app/ponto/services/espelho.py:83`). Folga trabalhada não entra no atraso, saída antecipada nem HE 50/100 dessa soma; entra em trabalhadas, noturno, intra e em `trab_folga`/`total_extras` por tratamento próprio (`app/ponto/services/espelho.py:95`, `app/ponto/services/espelho.py:105`). Na fonte final folha/lavratura, `total_trabalhadas` usa somente `horas_trabalhadas`, e folga vai separadamente para `trab_folga` (`app/relatorios/cartao_pela_celula.py:111`, `app/relatorios/cartao_pela_celula.py:116`, `app/relatorios/cartao_pela_celula.py:174`).
+
+**Fontes reais por dia:** a fachada carrega `DiaPago` com `app/ponto/services/dia_pago.py::linhas_do_periodo(colab, ini, fim, *, versao='motor')`; são somente linhas `tipo=dia`, versão pedida e datas inclusivas, devolvidas como `{date: DiaPago}` (`app/ponto/services/dia_pago.py:831`, `app/ponto/services/dia_pago.py:852`). Cada dia recebe `dia_pago`, `pago_h` e `rubricas` (`app/ponto/services/espelho.py:816`).
+
+- A linha monetária da **tela HTML** lê `rubricas_do_dia(linha)`, que devolve horas trabalhadas, extras 50/100, atraso, antecipada, noturno, intra e `lavrada`; não devolve `horas_falta`. Linha ausente devolve zeros com `lavrada=False`, e o template mostra “sem apuração ainda” (`app/ponto/services/dia_pago.py:899`, `app/ponto/services/dia_pago.py:908`, `app/ponto/services/dia_pago.py:914`, `app/templates/ponto/espelho.html:263`).
+- `pago_do_dia(linha)` é outra medida: soma trabalhadas + folga trabalhada + folga-feriado; devolve `None` para linha ausente ou sem rubricas monetárias. Essa medida está em `dia['pago_h']`, mas a linha HTML acima imprime `rubricas.trabalhadas` (`app/ponto/services/dia_pago.py:865`, `app/ponto/services/dia_pago.py:888`, `app/ponto/services/dia_pago.py:895`, `app/ponto/services/espelho.py:822`, `app/templates/ponto/espelho.html:268`).
+- Faltas também aparecem como ausência/tipo e palavra do dia, não como campo `horas_falta` em `rubricas_do_dia` (`app/templates/ponto/espelho.html:186`, `app/ponto/services/espelho.py:856`, `app/ponto/services/espelho.py:1295`, `app/ponto/services/dia_pago.py:914`).
+
+**Hierarquia dos totais finais:**
+
+1. `app/relatorios/cartao_pela_celula.py::totais_da_folha(colab, mes, ano)` exige existência de `FechamentoMensal`, mas lê os números online por `fechamento_lido`; se qualquer um faltar, devolve `None` (`app/relatorios/cartao_pela_celula.py:44`, `app/relatorios/cartao_pela_celula.py:69`).
+2. Sem totais da folha, `::_totais_da_lavratura(colab, mes, ano)` usa `soma_da_competencia` e datas de falta de `folha.export.datas_falta`; soma a competência, incluindo ajustes, e devolve faltas decididas em dias/horas (`app/relatorios/cartao_pela_celula.py:126`, `app/relatorios/cartao_pela_celula.py:141`, `app/relatorios/cartao_pela_celula.py:166`, `app/relatorios/cartao_pela_celula.py:183`, `app/ponto/services/dia_pago.py:548`, `app/ponto/services/dia_pago.py:753`).
+3. Sem ambas, conserva o resumo do motor, carimbando `fonte_dos_totais='sem apuracao ainda'`; com lavratura usa `'lavratura'`; com folha, `'folha'` (`app/relatorios/cartao_pela_celula.py:340`). No resumo inicial de `espelho_do_colab`, não há inicialização de `dias_falta`/`horas_falta`; sua lista do motor é explicitamente `datas_furo_apurado`, enquanto as faltas decididas vêm das fontes finais (`app/ponto/services/espelho.py:1234`, `app/ponto/services/espelho.py:1253`, `app/relatorios/cartao_pela_celula.py:104`, `app/relatorios/cartao_pela_celula.py:183`).
+
+**DATA/relógio:** a fachada recebe `hoje` e `agora`, mas a cadeia não fica presa a eles. `folha_manda` não recebe nenhum desses parâmetros, chama `ate_ontem(data_fim_pedido)` sem `hoje`, que usa `timezone.localdate()`, e consulta `turno_aberto_de(colaborador)` sem `agora`, que usa `timezone.now()` (`app/relatorios/cartao_pela_celula.py:296`, `app/relatorios/cartao_pela_celula.py:398`, `app/relatorios/cartao_pela_celula.py:412`, `app/relatorios/cartao_pela_celula.py:37`, `app/ponto/turnos.py:2247`). `fechamento_lido(colaborador, mes, ano)` só recebe competência e chama o recalculador em leitura; esse recalculador captura seu próprio `timezone.now()` e usa a janela inteira da empresa (`app/ponto/services/fechamento.py:1703`, `app/ponto/services/fechamento.py:1727`, `app/ponto/services/fechamento.py:595`, `app/ponto/services/fechamento.py:600`).
+
+**Outras candidatas existentes, com perguntas diferentes:**
+
+| Candidata e assinatura | O que já devolve / limite |
+|---|---|
+| `app/ponto/services/espelho.py::autoridade_do_periodo(colaborador, ini, fim)` | Motor apurado para intervalo explícito; devolve `Autoridade(resultado, batidas, esc, tipo_escala, feriados, motor, regua_por_fatia)`. É chamada pela fachada, mas não é sozinha o resumo final da tela (`app/ponto/services/espelho.py:982`, `app/ponto/services/espelho.py:1195`, `app/ponto/services/espelho.py:1231`, `app/ponto/services/espelho.py:1287`). |
+| `app/ponto/services/espelho.py::somar_periodos(periodos, periodos_ft, dentro=None)` | Soma rubricas do motor em horas, com filtro opcional de intervalo; não soma faltas e não aplica a seleção folha/lavratura (`app/ponto/services/espelho.py:51`, `app/ponto/services/espelho.py:77`, `app/ponto/services/espelho.py:117`). |
+| `app/ponto/services/dia_pago.py::soma_do_periodo(colaboradores, ini, fim, *, versao='motor')` | Soma todas as rubricas diárias, incluindo `horas_falta`, por colaborador, entre datas inclusivas; retorna também `sem_lavratura`/`sem_apuracao`. Exclui linhas de ajuste, DSR e banco. Não lê relógio no corpo (`app/ponto/services/dia_pago.py:34`, `app/ponto/services/dia_pago.py:750`, `app/ponto/services/dia_pago.py:754`, `app/ponto/services/dia_pago.py:782`, `app/ponto/services/dia_pago.py:828`). |
+| `app/ponto/services/fechamento.py::fechamento_lido(colaborador, mes, ano)` | Totais online da competência inteira; sem corte parametrizado. Pode devolver `None`; universo inclui não desligados ou desligados com demissão a partir do início da competência da empresa (`app/ponto/services/fechamento.py:1703`, `app/ponto/services/fechamento.py:1727`, `app/ponto/services/fechamento.py:415`, `app/ponto/services/fechamento.py:423`). |
+| `app/relatorios/pdf_espelho.py::_coletar_dados_espelho(colaborador, data_ini, data_fim, _turnos_juiz=None, *, agora)` | Coletor do PDF, também retorna resumo/dias; limita seu fim a ontem em relação ao `agora`, lê os dias de `espelho_do_colab`, filtra-os para o intervalo e reaplica `folha_manda` com as pontas originais (`app/relatorios/pdf_espelho.py:187`, `app/relatorios/pdf_espelho.py:286`, `app/relatorios/pdf_espelho.py:592`, `app/relatorios/pdf_espelho.py:624`). |
+
+**A competência contendo DATA** já vem de `app/ponto/janelas.py::janela_atual(data, empresa=None)`; usa o corte da empresa e devolve o intervalo que contém a data, inclusive depois do dia 21. `janela_fechamento(mes, ano, empresa=None)` identifica a competência pelo mês/ano do seu fim, do corte do mês anterior ao corte−1 do mês informado; corte é limitado a `[2,28]`, padrão 21 (`app/ponto/janelas.py:10`, `app/ponto/janelas.py:24`, `app/ponto/janelas.py:36`, `app/ponto/janelas.py:54`, `app/ponto/janelas.py:60`).
+
+**Consumidores não têm exatamente o mesmo recorte:** a web usa sempre `janela_fechamento(mes, ano)` escolhido no GET; por padrão usa mês/ano civis do relógio. A API usa `janela_atual(agora.date())` quando o pedido é o mês/ano civil atual, e `janela_fechamento` nos demais. Ambos chamam `espelho_do_colab` (`app/ponto/views.py:97`, `app/ponto/views.py:101`, `app/ponto/views.py:154`, `app/api/views.py:1350`, `app/api/views.py:1365`). A ficha também chama a mesma fachada, mas recorta sua resposta pública para trabalhadas, extras, turnos e fonte (`app/colaboradores/services/ficha.py:196`).
+
+## 29/10 21:45 · sessao 567a32481603 · piloto-desligamento · verificador · origem=Code
+
+O desenho precisa resolver estes pontos antes de virar código:
+
+1. **A exceção de escrita conflita com a regra vigente.** A seção 7b proíbe sandbox diferente de `read-only` e repete “Codex escrevendo” entre os proibidos. O corte precisa delimitar a exceção do piloto nessas regras. (`CLAUDE.md:565–579,588–599`)
+
+2. **Adicionar `construtor` à lista não basta.** Hoje ele recebe rc 2; o destino continua sendo a cópia por hash, criada sem permissão de escrita; o cabeçalho proíbe criar, editar e apagar; a execução usa `read-only`. São quatro pontos distintos a separar por papel. O selo atual também rejeita qualquer ocorrência de `workspace-write` no código do wrapper. (`bin/codex_pergunta.sh:48,87–100,123,157–158`; `bin/tests/test_codex_pergunta.sh:11–18`)
+
+3. **`ESPERANDO: <wrapper> | pid=N` exige identidade exata.** Use `codex_pergunta.sh` ou seu caminho absoluto; `bin/codex_pergunta.sh` é recusado por ser relativo com `/`. O PID precisa ser do processo que corresponde ao wrapper, não de um shell externo ou de `timeout`. A declaração deve ser a primeira linha útil, começando literalmente por `ESPERANDO:`. (`bin/hook_stop_fila1.py:400–413,474–522,620–639`)
+
+4. **Shell de fundo com rc em arquivo não substitui a prova de espera.** O hook só reconhece os campos declarados em `ESPERANDO:`. Arquivo recém-observado não prova avanço; declarar PID e arquivo exige que ambos passem. O wrapper atual retorna rc ao chamador, mas não cria o arquivo de rc: falta fixar quem o escreve e seu caminho. (`bin/hook_stop_fila1.py:605–645`; `bin/codex_pergunta.sh:157–177`; `app/docs/RELATO.md:13`)
+
+5. **O timeout não limita a chamada inteira.** `flock 9` bloqueia sem prazo; o laço dos slots continua até conseguir um. `CODEX_TIMEOUT` só envolve `codex exec`, depois dessas esperas. Portanto, rc 124 não cobre a espera por capacidade. (`bin/codex_pergunta.sh:137–158`)
+
+6. **“Teto 6 herdado” é apenas o padrão configurável.** `CODEX_TETO` pode substituir 6; `CODEX_LOGD` muda os arquivos usados como locks. Além disso, os slots limitam quantidade, sem exclusão por worktree: não impedem dois construtores no mesmo destino. O contrato deixa essa exclusão sem regra. (`bin/codex_pergunta.sh:47,51,138–153`)
+
+7. **Falhas e voltas ainda têm regras conflitantes ou incompletas.** O wrapper manda seguir pelo sonnet no rc 75; também possui saídas 2, 3 e 4 que o contrato não trata. A seção 7b exige opus final e determina subida ao opus após mais de três voltas; “3 voltas e o Code decide” precisa preservar ou alterar explicitamente essa obrigação. (`bin/codex_pergunta.sh:23–24,39–50,99,105–114,169`; `CLAUDE.md:583–585,594–599`)
+
+8. **`git checkout .` não cumpre “descarta o diff inteiro”.** Sem commit indicado, checkout restaura a árvore a partir do índice: alterações já staged continuam sendo a fonte, e arquivos novos fora do índice não são abrangidos por essa restauração. Falta definir a base e quais estados entram no descarte. (`/usr/share/man/man1/git-checkout.1.gz:142–149`, linhas do texto descomprimido) [nao verificado]
+
+9. **O log atual não mede o resultado prometido.** Ele registra obra, papel, hash fornecido, PID, sessão, rc e duração; não registra hash da worktree, volta, escopo, selos, retrabalho ou deploy validado. O contador existente classifica `construtor` como `outro`. Faltam fonte e vínculo das medidas por entrega. (`bin/codex_pergunta.sh:42,53–60,88–89`; `bin/codex_limite_estado.py:23,49–78`)
+
+10. **Remover o papel “no mesmo marco” do pouso conflita com o pouso separado de instrumentos.** A regra vigente exige pouso próprio para `bin/`, depois do produto. O desligamento precisa indicar essa sequência ou declarar a exceção. (`CLAUDE.md:733–738`) [nao verificado]
 
 ## 29/10 21:34 · sessao 45d6d74dee1e · o261 · sonda · origem=Code
 
@@ -460,100 +723,4 @@ Exclusões relevantes:
 - `app/chamados/services/vigia_fio.py:279` combina `.estado == VALIDADA` com `_e_aceite_de_folga`; esse helper testa `resposta_colab.strip()` em `app/chamados/services/validacao.py:216-218`.
 - Nenhum consumidor JS local de `estado='respondida'`, `aguarda_admin` ou lista `respondidas` foi identificado [não verificado].
 
-## 29/10 20:54 · sessao 0a5bcdeadbf5 · - · - · origem=Ronald (tmux)
-
-P1 — inventário dos **9 sítios explícitos** de escrita, mais criação genérica:
-
-| Função | Escrita e persistência | Carimbo não nulo com texto vazio/espaços? |
-|---|---|---|
-| `ChamadoColaborador.ressuscitar_perguntas` | `alvo.update(... respondida_em=None, ...)`: `app/chamados/models.py:1162–1163`; função em `:1122` | **Não:** grava `None`, sem criar carimbo (`app/chamados/models.py:1163`). |
-| `responder_pergunta_disputa_core` | Atribuição `p.respondida_em = _tz.now()` em `app/chamados/services/disputa_emissao.py:1248`; texto em `:1247`, `save(update_fields=...)` em `:1266` | **Não:** normaliza `(resposta or '').strip()` e recusa vazio antes da escrita (`app/chamados/services/disputa_emissao.py:1219–1221`). |
-| `reabrir_para_correcao` | Dicionário `respondida_em=None` em `app/chamados/services/disputa_emissao.py:1358`, usado por `qs.update(**campos)` em `:1377`; função em `:1327` | **Não:** zera carimbo e texto juntos (`app/chamados/services/disputa_emissao.py:1358`). |
-| `responder_automaticamente` | Texto e instante recebidos são atribuídos em `app/chamados/services/disputa_emissao.py:1392–1393`, salvos em `:1394`; função em `:1381` | **Sim como API da função:** só verifica texto **anterior**, em `:1390`; não valida `texto` novo (`:1392`). **Único caller encontrado passa texto constante não vazio**, `_TEXTO` em `app/api/foto_recebida.py:25`, chamada em `:48`, instante `now()` em `:42`. |
-| `carimbar_resposta_pela_trilha` | Atribui instante em `app/chamados/services/disputa_emissao.py:1409`, salva em `:1410`; função em `:1398` | **Não:** retorna se carimbo já existe **ou** texto não passa `.strip()` (`app/chamados/services/disputa_emissao.py:1407–1408`). |
-| `resolver_perguntas_por_chamado_resolvido`, primeiro ramo | `p.respondida_em = agora` em `app/chamados/services/disputa_emissao.py:1572`, campo incluído em `:1573`, salva em `:1583`; função em `:1514` | **Não cria carimbo sem texto:** `_tem_resp = bool((p.resposta_colab or '').strip())` em `:1570`, condição em `:1571`. |
-| Mesma função, segundo ramo | `q.respondida_em = _agora` em `app/chamados/services/disputa_emissao.py:1649`, campo em `:1650`, salva em `:1651` | **Sim, caminho concreto:** exige apenas `respondida_em is None`, **não** consulta `resposta_colab` (`app/chamados/services/disputa_emissao.py:1648–1651`). Seleção exige materialização e validação nulas (`:1634–1635`), sem credor vivo (`:1627–1633`) e `pergunta_viva(q)` falso (`:1641–1642`). |
-| `_materializar_ausencia_de_resposta` | Atribui `q.respondida_em = agora` em `app/chamados/services/materializacao.py:513`, salva em `:528–530`; função em `:478` | **Não cria** carimbo se texto vazio/espaços: teste `.strip()` e condição em `:511–512`. **Pode regravar carimbo não nulo preexistente com texto vazio**, porque `'respondida_em'` entra **incondicionalmente** em `update_fields` (`app/chamados/services/materializacao.py:528–530`). |
-| `_materializar_uma` | Atribui `p.respondida_em = agora` em `app/chamados/services/materializacao.py:1192`, inclui campo em `:1193`, salva em `:1198`; função em `:1063` | **Não:** inclusão depende do texto com `.strip()` e carimbo nulo (`app/chamados/services/materializacao.py:1190–1193`). |
-
-Criação genérica: `PerguntaDisputa.abrir(..., **campos)` (`app/chamados/models.py:2028`) repassa `**campos` diretamente a `objects.create` (`app/chamados/models.py:2085–2086`). Logo, **a API admite** `respondida_em=<datetime>` com `resposta_colab` omitido/padrão `''` (`app/chamados/models.py:1865`); não há validação desse par na função (`app/chamados/models.py:2036–2086`). Nos seis callers atuais não se passa timestamp: `app/chamados/services/acoes_disputa.py:259–264`; `app/chamados/services/disputa_emissao.py:389–397`, `:770–778`, `:1160–1167`; `app/chamados/services/declaracao_texto.py:322–323`, `:611–612`. O único `**kw` desses callers contém somente `chamados_relacionados_ids` (`app/chamados/services/disputa_emissao.py:767–769`).
-
-Management command: `curar_perguntas_em_limbo.Command.handle` delega a `carimbar_resposta_pela_trilha`, passando `nota.criado_em` (`app/chamados/management/commands/curar_perguntas_em_limbo.py:67–68`); delega limpeza a `reabrir_para_correcao` (`:69`); só executa com `--apply` (`:64–66`). Não é escritor independente, e a guarda de `.strip()` permanece na porta (`app/chamados/services/disputa_emissao.py:1407`).
-
-Migration: `0014_perguntadisputa` declara campo nullable, **não** executa escrita de dados (`app/chamados/migrations/0014_perguntadisputa.py:16–25`). As quatro migrations de dados da pasta operam sobre `ChamadoColaborador`, não `PerguntaDisputa`: `app/chamados/migrations/0023_rebaixar_urgencia_resolvidos.py:4–10`, `:13–17`; `0024_rebaixar_urgencia_resolvidos_regressao.py:5–11`, `:15–19`; `0038_a3_registrado_backfill.py:9–15`; `0039_a3_via_backfill.py:12–28`, `:32–34`.
-
-O `bulk_update` de perguntas encontrado grava apenas `CAMPOS_DA_LAVRA = ['veredito_lavrado', 'julgado_em', 'janela_expira_em']`, portanto **não** escreve `respondida_em` (`app/chamados/veredito_lavrado.py:194`, `:207`). Nenhum `F()` ou outro `bulk_update` de `respondida_em` apareceu na varredura [não verificado por execução; auditoria estática].
-
-`resposta_colab` não admite SQL NULL no esquema declarado: `TextField(blank=True, default='')`, sem `null=True` (`app/chamados/models.py:1865`, migration `app/chamados/migrations/0014_perguntadisputa.py:24`). Assim, os riscos concretos descritos acima se sustentam com `''` ou espaços; persistência efetiva de `None` depende do banco real [não verificado].
-
-## 29/10 19:02 · sessao 80de480f740f · espera · verificador · origem=Code
-
-**Reprovo: há caminhos que aceitam identidade falsa de produtor e liberam o Stop.** A liberação ocorre quando a prova retorna motivo vazio (`bin/hook_stop_fila1.py:775`).
-
-1. **Opção do interpretador aceita como produtor.** Entrada: `ESPERANDO: -c | pid=N`, com N executando `python3 -c 'import time; time.sleep(30)'`. O código compara o produtor com `argv[1]` sem distinguir script de opção; aceita `-c` e libera um interpretador apenas esperando. Reproduzido sem escrita. O caso `valor-de-opcao` declara `produtor_espera.sh`, portanto não morde esta variante (`bin/hook_stop_fila1.py:487`, `bin/hook_stop_fila1.py:490`, `bin/tests/test_hook_esperando_com_prova.sh:155`).
-
-2. **Alias de caminho contorna a rejeição de produtor genérico.** Entrada: `ESPERANDO: /usr/bin/sleep/ | pid=N`, com N executando `/usr/bin/sleep 30`. A rejeição usa basename lexical; a identidade usa `realpath`. `/usr/bin/sleep` bloqueia, mas `/usr/bin/sleep/`, `/usr/bin/sleep/.` e `/proc/N/exe` passam. Reproduzido sem escrita: um temporizador vira prova de produtor. O selo não exercita esses aliases (`bin/hook_stop_fila1.py:444`, `bin/hook_stop_fila1.py:492`, `bin/hook_stop_fila1.py:498`, `bin/tests/test_hook_esperando_com_prova.sh:157`).
-
-3. **Mudança de diretório atribui o script ao caminho errado.** Entrada: iniciar `python3 produtor.py` em `/a`; o script muda para `/b`; declarar `ESPERANDO: /b/produtor.py | pid=N`. O hook resolve o argumento relativo contra o diretório **atual**, aceitando `/b/produtor.py`; a declaração verdadeira `/a/produtor.py` pode bloquear. Reproduzido com `/bin/bash dev/stdin`, iniciado em `/` e depois mudando para `/tmp`: `/tmp/dev/stdin` inexistente foi aceito. O selo verifica caminho diferente, mas não mudança de diretório (`bin/hook_stop_fila1.py:489`, `bin/tests/test_hook_esperando_com_prova.sh:149`).
-
-4. **Inode reciclado transforma primeira observação em avanço.** Entrada: memória `{"1:123":10}` de arquivo removido; outro arquivo estático recebe dispositivo/inode `1:123` e `mtime_ns=20`; seu criador já terminou. `ESPERANDO: agente-x | arquivo=/tmp/sinal` libera na primeira observação desse novo arquivo. A memória identifica somente dispositivo/inode e conserva entradas antigas. Retorno vazio confirmado com E/S simulada; reciclagem real neste host: **[nao verificado]**. É troca de identidade, distinta do residual aceito de avanço antigo do mesmo arquivo (`bin/hook_stop_fila1.py:565`, `bin/hook_stop_fila1.py:585`, `bin/hook_stop_fila1.py:588`, `bin/hook_stop_fila1.py:605`).
-
-5. **Selo dá falso vermelho quando PID 1 é interpretador.** Com `/proc/1/exe=/usr/bin/python3.12`, o caso monta `ESPERANDO: python3.12 | pid=1` e exige `ancestral`. O hook retorna antes `produtor generico`, bloqueando corretamente, mas reprovando o selo. Confirmado chamando a função em memória (`bin/tests/test_hook_esperando_com_prova.sh:158`, `bin/hook_stop_fila1.py:498`, `bin/hook_stop_fila1.py:505`).
-
-6. **Caso de memória ocupada depende de duração, sem sincronização.** A trava dura três segundos; o teste espera meio segundo e inicia o hook. Se o checador anterior demorar até a trava expirar, a prova encontra memória livre e pode liberar corretamente, fazendo o selo reprovar. Também falta confirmação de que o `flock` adquiriu a trava antes da avaliação. Contraexemplo por análise; execução com atraso: **[nao verificado]** (`bin/tests/test_hook_esperando_com_prova.sh:170`, `bin/tests/test_hook_esperando_com_prova.sh:171`, `bin/tests/test_hook_esperando_com_prova.sh:172`, `bin/hook_stop_fila1.py:745`, `bin/hook_stop_fila1.py:572`).
-
-Nas classes solicitadas:
-
-- **Segundo juiz que duplica juiz registrado:** nada; o leitor do topo foi compartilhado (`bin/hook_stop_fila1.py:400`, `bin/hook_stop_fila1.py:678`).
-- **Segundo escritor fora da porta:** nada identificado; a memória nova é gravada na própria prova (`bin/hook_stop_fila1.py:589`).
-- **Relógio lido fora da borda:** nada novo identificado; a prova lê o mtime do sinal (`bin/hook_stop_fila1.py:566`).
-- **Derivação paralela de fonte única:** nada adicional; o checador do RELATO continua sendo chamado (`bin/hook_stop_fila1.py:745`).
-- **Selo/RED sem mordida por ausência de sinal:** nada nos verificadores existentes; positivos exigem liberação atribuída ao ESPERANDO e negativos exigem bloqueio mais motivo. Faltam os contraexemplos 1–4 (`bin/tests/test_hook_esperando_com_prova.sh:74`, `bin/tests/test_hook_esperando_com_prova.sh:84`, `bin/tests/test_hook_esperando_com_prova.sh:87`).
-- **Ordem de trava:** nada adicional; memória sob `flock` e atualização com `max` (`bin/hook_stop_fila1.py:572`, `bin/hook_stop_fila1.py:588`).
-- **Pouso antes do pré-requisito:** nada no fluxo examinado; prova do RELATO antecede a liberação nova (`bin/hook_stop_fila1.py:763`, `bin/hook_stop_fila1.py:774`).
-
-**PAREI, teto e fila vazia:** nenhuma regressão adicional identificada na integração (`bin/hook_stop_fila1.py:769`, `bin/hook_stop_fila1.py:788`, `bin/hook_stop_fila1.py:827`).
-
-Execução integral do selo: **[nao verificado]**; ele cria e remove arquivos, contrariando o modo solicitado (`bin/tests/test_hook_esperando_com_prova.sh:28`, `bin/tests/test_hook_esperando_com_prova.sh:30`).
-
-## 29/10 19:00 · sessao c57a7aa93193 · - · - · origem=Ronald (tmux)
-
-Encontrei três defeitos na prova PID, reproduzidos sem escrever arquivos:
-
-1. **Opção aceita como produtor.** [bin/hook_stop_fila1.py:487](/home/ronald/codex_ws/512e6c938dbf0fbf0c39e7c7caff081f12f237f0/bin/hook_stop_fila1.py:487) aceita `argv[1]` sem verificar se é opção. Entrada: `ESPERANDO: -c | pid=N`, sendo N um `python3 -c 'import time; time.sleep(30)'`. `_prova_pid('-c', N)` retornou `''`; o parser retornou `(True, '', linha)`. Assim, um interpretador genérico parado passa como produtor `-c` e libera pelo ramo de [bin/hook_stop_fila1.py:775](/home/ronald/codex_ws/512e6c938dbf0fbf0c39e7c7caff081f12f237f0/bin/hook_stop_fila1.py:775).
-
-2. **Caminho contorna rejeição de produtor genérico.** [bin/hook_stop_fila1.py:498](/home/ronald/codex_ws/512e6c938dbf0fbf0c39e7c7caff081f12f237f0/bin/hook_stop_fila1.py:498) verifica o basename lexical; [bin/hook_stop_fila1.py:492](/home/ronald/codex_ws/512e6c938dbf0fbf0c39e7c7caff081f12f237f0/bin/hook_stop_fila1.py:492) compara caminhos resolvidos. Para um `/usr/bin/sleep 30` vivo, `/usr/bin/sleep` bloqueou como genérico, mas `/usr/bin/sleep/`, `/usr/bin/sleep/.` e `/proc/N/exe` retornaram prova `''`. Entrada: `ESPERANDO: /usr/bin/sleep/ | pid=N`. Libera usando somente o temporizador que a própria regra pretende rejeitar.
-
-3. **`cwd` atual atribui script ao caminho errado.** [bin/hook_stop_fila1.py:489](/home/ronald/codex_ws/512e6c938dbf0fbf0c39e7c7caff081f12f237f0/bin/hook_stop_fila1.py:489) resolve script relativo contra o diretório atual do processo, que pode ter mudado após abrir o script. Entrada convencional: iniciar `python3 produtor.py` em `/a`, o script mudar para `/b`; declarar `/b/produtor.py` aceita o produtor errado, enquanto `/a/produtor.py` pode bloquear. Reproduzi com `/bin/bash dev/stdin`, iniciado em `/`, recebendo pelo pipe `cd /tmp; while :; do /usr/bin/sleep 30; done`: `/tmp/dev/stdin` não existia, mas `_prova_pid('/tmp/dev/stdin', N)` retornou `''`.
-
-Ancestrais e rejeição de PID morto/reciclado: **nada adicional**, pelos ramos de [bin/hook_stop_fila1.py:502](/home/ronald/codex_ws/512e6c938dbf0fbf0c39e7c7caff081f12f237f0/bin/hook_stop_fila1.py:502), [bin/hook_stop_fila1.py:517](/home/ronald/codex_ws/512e6c938dbf0fbf0c39e7c7caff081f12f237f0/bin/hook_stop_fila1.py:517) e [bin/hook_stop_fila1.py:519](/home/ronald/codex_ws/512e6c938dbf0fbf0c39e7c7caff081f12f237f0/bin/hook_stop_fila1.py:519).
-
-## 29/10 19:00 · sessao fe8a22260b54 · - · - · origem=Ronald (tmux)
-
-Achei um contraexemplo novo na identidade do sinal: a memória usa apenas `st_dev:st_ino`, sem geração do arquivo nem descarte de entradas antigas (`bin/hook_stop_fila1.py:565`, `bin/hook_stop_fila1.py:585`, `bin/hook_stop_fila1.py:588`).
-
-Entrada concreta: `ESPERANDO: agente-x | arquivo=/tmp/sinal`; a memória contém `{"1:123":10}` referente a um arquivo removido. Outro arquivo estático nasce com o inode reciclado `1:123` e `mtime_ns=20`, e seu criador termina antes da avaliação. A primeira observação desse novo arquivo retorna prova porque `20 > 10`; não há produtor vivo, mas o Stop libera (`bin/hook_stop_fila1.py:605`, `bin/hook_stop_fila1.py:607`, `bin/hook_stop_fila1.py:775`). Reproduzi o retorno `''` executando a função real com E/S simulada em memória; reciclagem efetiva neste host: [nao verificado]. É identidade entre arquivos diferentes, não o residual de avanço antigo do mesmo arquivo (`bin/hook_stop_fila1.py:565`).
-
-Para ordem de trava/regressão da memória: nada novo; observação anterior ao lock que tenha sido ultrapassada acaba bloqueada pelo `max` e pela comparação final (`bin/hook_stop_fila1.py:551`, `bin/hook_stop_fila1.py:572`, `bin/hook_stop_fila1.py:588`, `bin/hook_stop_fila1.py:605`).
-
-Para symlink/FIFO da memória e trava, temporário, permissões capturadas e falhas de gravação: nada adicional encontrado no fluxo analisado (`bin/hook_stop_fila1.py:526`, `bin/hook_stop_fila1.py:571`, `bin/hook_stop_fila1.py:578`, `bin/hook_stop_fila1.py:589`, `bin/hook_stop_fila1.py:600`).
-
-## 29/10 19:00 · sessao e9b065734b1c · - · - · origem=Ronald (tmux)
-
-Achado concreto no selo:
-
-- **Falso vermelho quando PID 1 é interpretador/embrulho.** Em `bin/tests/test_hook_esperando_com_prova.sh:158`, `/proc/1/exe=/usr/bin/python3.12` produz a entrada `ESPERANDO: python3.12 | pid=1`, mas o teste exige `ancestral`. `_prova_pid` retorna antes `produtor generico (python3.12)` em `bin/hook_stop_fila1.py:498`; a verificação ancestral está em `bin/hook_stop_fila1.py:505`. O bloqueio correto reprova o selo, abortando a régua em `bin/regua.sh:140`. Confirmado chamando a função em memória, sem escrita; a mesma incompatibilidade ocorre com `bash` e `node` pelas listas em `bin/hook_stop_fila1.py:439`.
-
-Demais verificações:
-
-- **Contagem falsa:** nada; contei 33 chamadas de bloqueio e quatro de liberação, compatíveis com `bin/tests/test_hook_esperando_com_prova.sh:185`.
-- **Selo sem mordida por liberação alternativa:** nada; exige saída vazia e trilha `ALLOW ESPERANDO com prova` em `bin/tests/test_hook_esperando_com_prova.sh:71` e `bin/tests/test_hook_esperando_com_prova.sh:74`; negativos exigem `siga: ITEM-VIVO` e motivo em `bin/tests/test_hook_esperando_com_prova.sh:84` e `bin/tests/test_hook_esperando_com_prova.sh:87`.
-- **Prova do RELATO pulada:** nada no fluxo estático; executa antes das portas em `bin/hook_stop_fila1.py:763`, com caso adversarial em `bin/tests/test_hook_esperando_com_prova.sh:175`.
-- **Regressão PAREI, teto, fila vazia:** nada identificado na integração: PAREI conserva precedência em `bin/hook_stop_fila1.py:769`, fila vazia em `bin/hook_stop_fila1.py:788`, teto em `bin/hook_stop_fila1.py:815`.
-- **Segundo juiz, segundo escritor, relógio fora da borda, derivação paralela ou pouso antes do pré-requisito:** nada identificado neste recorte; topo compartilhado em `bin/hook_stop_fila1.py:400`, prova antes da liberação em `bin/hook_stop_fila1.py:763`.
-
-Observação para consolidação: o caso `pid-ok-arq-parado` ocorre depois da remoção da memória em `bin/tests/test_hook_esperando_com_prova.sh:140`; portanto verifica primeira observação do arquivo em `bin/tests/test_hook_esperando_com_prova.sh:142`, não comparação contra baseline conhecido. Ainda exercita a conjunção, e não classifico isoladamente como defeito.
-
-Não executei o selo, pois cria e remove arquivos em `bin/tests/test_hook_esperando_com_prova.sh:28` e `bin/tests/test_hook_esperando_com_prova.sh:30`.
-
-_247 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_252 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
