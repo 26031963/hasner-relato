@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 30/10/2026 07:52:36.** Transcript: `c07bd622-c518-4ee0-9641-ce667785cb73.jsonl` (1.7 MB). Acoes na janela: **56**.
+**Medido em 30/10/2026 07:58:06.** Transcript: `c07bd622-c518-4ee0-9641-ce667785cb73.jsonl` (1.8 MB). Acoes na janela: **57**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 07:54:08 | Bash | Write V lei question and NOTURNO class to RELATO | `python3 - <<'EOF' p='docs/RELATO.md'; s=open(p).read() i=s.index('\n> ') top=''' > PERGUNTA DE LEI (O261 V, nao trava a fila): dia do CADASTRO sem batida porque o turno real caiu 24 h antes (12x36 deslocado). col451: reais 20->21, 22->23, 24->25, 26->27 (18:5x->06:5x); cadastro 21->22, 23->24, 25->26, 27->28. Remedida SEM os plantios (sombra atomic+raise, ROLLBACK 326/326, ERROS=0, `logs/o261_dono ...` |
 | 07:51:45 | Bash | Wait for and read Codex V3 answer | `cd /home/ronald/saas-hasner && for i in $(seq 1 90); do grep -q "^rc=" logs/o261/codex_classe_v3.run && break; /usr/bin/sleep 10; done; tail -n 1 logs/o261/codex_classe_v3.run; cat logs/o261/codex_classe_v3.txt` |
 | 07:51:40 | Bash | Write VETO census table to RELATO | `python3 - <<'EOF' p='docs/RELATO.md'; s=open(p).read() a='> VETO-NA-PORTA (aval 07:4x) registrado no OBRAS; censo (1) no Codex. SUITE-ANTES-DO-OPUS escrita na 7b do CLAUDE.md.' assert s.count(a)==1 t='''> **VETO-NA-PORTA (1) CENSO** (Codex `logs/o261/codex_veto_na_porta.txt` @4f8f7e5a; amostra conferida `furos_vetados.py:26-31`, `detectar_ausencias.py:598-605`, `reconciliar_grade.py:485-496`, `mod ...` |
 | 07:51:25 | Bash | Read Codex V3 answer | `cd /home/ronald/saas-hasner && tail -n 1 logs/o261/codex_classe_v3.run; cat logs/o261/codex_classe_v3.txt 2>/dev/null \| head -120` |
