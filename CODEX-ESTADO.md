@@ -1,7 +1,20 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **30/10/2026 03:13** · publicado em **30/10/2026 03:15** (UTC-3)
+> Ultima resposta processada: **30/10/2026 03:41** · publicado em **30/10/2026 03:41** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 30/10 03:41 · sessao c7555ec23ce1 · - · - · origem=Ronald (tmux)
+
+Não encontrei mudança de resultado no vigia pela extração: mantém universo, filtro pelo C6, memo local por empresa/competência e classificação sem data como `aberta`; a janela continua sendo `janela_atual`, e K6 retorna booleano (`app/chamados/services/vigia_fio.py:404-441`; `app/ponto/janelas.py:60-63`; `app/folha/export.py:569-575`).
+
+Os testes novos têm verificações materiais: [nao verificado]
+
+- R1 exige pergunta viva, nenhuma recusa de reabertura, mesmo chamado renascido e destino vivo (`app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:149-158`).
+- R1b exige recusa `admin_sem_fato_novo`, retorno falso, pergunta sem destino e chamado resolvido (`app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:162-169`).
+- Idempotência exige primeira passagem com destino vivo antes de comparar pergunta, chamados e trilha após a segunda passagem (`app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:296-308`).
+- Custo verifica ausência de chamadas às cercas e teto de seis queries; o novo chokepoint mede `registrar_batida` com órfã sem célula sob teto 31 (`app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:315-337`; `app/ponto/tests/test_selo_chokepoint_escrita.py:169`; `app/ponto/tests/test_selo_chokepoint_escrita.py:273-283`).
+
+Não identifiquei selo vazio concreto nesses trechos; execução dos testes e medições/RED alegados: [não verificado]. [nao verificado]
 
 ## 30/10 03:13 · sessao 96c72512bd21 · ORCAMENTO · verificador · origem=Code
 
@@ -420,22 +433,4 @@ Possível falha adicional do selo: exige impressão do HANDOFF somente para `com
 
 A janela tem número e fonte textual declarados (`bin/orcamento_contexto.py:32`); a fonte externa mencionada e a correção dos tamanhos são [nao verificado]. O escritor do marco é único nos arquivos examinados e usa substituição atômica (`bin/marco_de_clear.py:37`, `bin/marco_de_clear.py:40`); não achei segundo escritor nessa área.
 
-## 30/10 02:51 · sessao bb69126141b3 · - · - · origem=Ronald (tmux)
-
-Achado confirmado, só leitura:
-
-- **Selo de deploy aceita a guarda invertida.** Em `bin/tests/test_orcamento_contexto.sh:247`, o juiz identifica o append; em `:252`–`:253`, aceita a guarda pela presença textual de `SEM_PROVA_DE_CASCA`, `AGENDADO` e `COPIA`. Cenário: trocar em `bin/deploy.sh:345` somente `SEM_PROVA_DE_CASCA != 1` por `SEM_PROVA_DE_CASCA = 1`. O selo continua aceitando, embora o histórico passe a registrar casca pulada e deixe de registrar deploy provado. Reproduzi o julgamento em memória, com Python `-B`, sem criar arquivo. Quebra v2(g), “o selo prova que conta”, e a classe **selo sem mordida**. O mutante oficial de `bin/tests/test_orcamento_contexto.sh:257` elimina os nomes da guarda inteira e não cobre essa inversão.
-
-Limitações dos selos, sem defeito adicional do comportamento demonstrado:
-
-- O limiar temporal é exercitado com 5h58 e 6h+5s, não exatamente 6h: `bin/tests/test_orcamento_contexto.sh:124` e `:126`. A janela CLEAR usa Stop imediato e depois estado adulterado para 31min, sem verificar a borda exata dos 30min: `bin/tests/test_orcamento_contexto.sh:167` e `:170`.
-- Instalação real dos matchers no host: **[nao verificado]**. O selo consulta `.claude/settings.json` e declara que essa configuração vive fora do versionamento: `bin/tests/test_handoff_sessao.sh:15`–`:19`.
-
-Áreas lidas sem defeito encontrado:
-
-- **Append atual de deploy:** ocorre depois da casca (`bin/deploy.sh:218`), das rotas (`:321`–`:324`) e do selo de reciclagem (`:331`); a guarda adicionada exclui casca pulada e reload de higiene (`:345`).
-- **Selo órfão:** os novos testes entram no laço já existente de selos `test_*.sh`: `bin/regua.sh:138`–`:145`.
-- **Ordem de trava:** nenhum novo `flock` ou aquisição de trava nos trechos adicionados de deploy e handoff: `bin/deploy.sh:345`–`:349`; `bin/tests/test_handoff_sessao.sh:60`–`:69`.
-- **Segundo juiz registrado / segundo escritor de negócio:** não encontrei nos trechos examinados; o novo `_julga_deploy` é verificador estrutural de teste: `bin/tests/test_orcamento_contexto.sh:243`–`:254`.
-
-_339 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_340 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
