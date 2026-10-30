@@ -1,7 +1,56 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **30/10/2026 13:36** · publicado em **30/10/2026 13:38** (UTC-3)
+> Ultima resposta processada: **30/10/2026 13:40** · publicado em **30/10/2026 13:44** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 30/10 13:40 · sessao bdc58fb8ddda · O261-VETO-A2 · censo · origem=Code
+
+As referências aos anexos contam a primeira linha após cada cabeçalho `== anexo: ... ==` como linha 1.
+
+1. **RED contra a base — classe (c), fora do alcance.**  
+   **Pergunta:** incluía “selo/RED sem mordida”. (`pergunta_final.q:8`)  
+   **Resposta:** delimitou “Execução da bateria Django [...] [nao verificado]”. Não há trecho que identifique o RED executado na cópia intermediária. (`codex_final.txt:3`)  
+   O achado depende da execução histórica e da base efetivamente usada, informadas somente no relato do Opus; sua reprodução independente é **[nao verificado]**. (`opus_achados.txt:2`)
+
+2. **Linha LEI-AKITA desatualizada — classe (a), não apontado com o tema presente.**  
+   **Pergunta:** exigia “censo quem-mais-le incompleto” e “QUEM ESCREVE e QUEM LE cada campo/valor”. (`pergunta_final.q:8`; `pergunta_final.q:11`)  
+   **Resposta:** identificou expressamente o leitor: “desfazer corroboracão filtra pelo vínculo”, citando `desfazer_corroboracao_regua.py:38`; também examinou a reabertura direta. Portanto, viu esses caminhos, mas não apontou sua ausência na declaração LEI-AKITA. (`codex_final.txt:21`; `codex_final.txt:50`)  
+   A omissão documental específica não consta da triagem fornecida; não há sustentação para classificá-la como descarte pela triagem. (`triagem_final.txt:2–16`)
+
+3. **Impressão com `ec=None` sem teste próprio — classe (a), não apontado com o tema presente.**   [nao verificado]
+   **Pergunta:** nomeava explicitamente “ec=None vale TAMBEM para a impressao”, os leitores de cartório/impressão e a classe “selo/RED sem mordida”. (`pergunta_final.q:6`; `pergunta_final.q:8`; `pergunta_final.q:11`)  
+   **Resposta:** descreveu que o cartório “Acrescenta `veto:VETO_DEGENERADA` à impressão do ramo normal”, mas não denunciou a falta de teste desse contrato nem o mutante indicado pelo Opus. (`codex_final.txt:28`; `opus_achados.txt:4`)   [nao verificado]
+   O achado colocado em FILA foi outro: impressão do ramo `nunca_bateu` sem veto. Isso não demonstra descarte do achado sobre cobertura de `ec=None` no ramo normal. (`codex_final.txt:58`; `triagem_final.txt:8`)
+
+4. **Helper com folga no fim de semana — classe (a), não apontado com o tema presente.**  
+   **Pergunta:** nomeava o helper e perguntava se algum teste “ficou verde pelo motivo errado” ou “ficou vacuo”. (`pergunta_final.q:12`)   [nao verificado]
+   **Resposta:** declarou “sem achado de intenção ‘sem vínculo/sem escala’ mascarada pela migração” e apontou dois testes que não provavam nascimento; não apontou a dependência do calendário descrita pelo Opus. (`codex_final.txt:36`; `codex_final.txt:38`; `opus_achados.txt:5`)   [nao verificado]
+   Classifico a configuração do helper como inspecionável pelo código. A contagem histórica de 27 módulos e o resultado efetivo da suíte permanecem **[nao verificado]**. A cópia atual já usa sete dias de trabalho e atribui essa alteração ao Opus final. (`app/chamados/tests/_vinculo_do_dia.py:5–6`; `app/chamados/tests/_vinculo_do_dia.py:18`)
+
+5. **`recusado_veto` contado por eliminação — classe (a), não apontado com o tema presente.**  
+   **Pergunta:** exigia examinar quem determina e lê cada campo/valor, incluindo os “emissores”, além de procurar derivações paralelas de fonte única. (`pergunta_final.q:8`; `pergunta_final.q:11`)  
+   **Resposta:** examinou nominalmente o retroativo: “lê indiretamente o juiz pelo dry `veto_no_nascimento`”. Não apontou a classificação da recusa no caminho de aplicação. (`codex_final.txt:34`)  
+   A cópia atual contém uma consulta explícita ao juiz antes de incrementar `recusado_veto`, com comentário atribuindo a correção ao Opus; o defeito anterior é o registrado no anexo. (`app/ponto/management/commands/emitir_turno_aberto_retroativo.py:179–187`; `opus_achados.txt:6`)
+
+6. **Condições operacionais do pouso e medidas — classe (c), fora do alcance, com risco já visto.**   [nao verificado]
+   **Pergunta:** exigia “reversao antes, exportada intacta por hash” e procurar “pouso antes do pre-requisito”; também nomeava `furos_sem_cobranca`. (`pergunta_final.q:6`; `pergunta_final.q:8`; `pergunta_final.q:11`)   [nao verificado]
+   **Resposta:** registrou “Reversão anterior, preservação por hash e diferença à Pauta DP: [nao verificado]”. Na DELTA, reiterou: “Item 9 continua pendente de pouso, embora esteja como MEDINDO”. (`codex_final.txt:64`; `codex_delta.txt:45`)   [nao verificado]
+   A triagem manteve a medida “antes de qualquer pouso”; portanto, há evidência de reconhecimento da pendência, sem evidência de descarte. A execução das condições, a divergência “63 × 1.576” e os resultados antes/depois não são demonstrados pelo material fornecido: **[nao verificado]**. (`triagem_final.txt:15–16`; `opus_achados.txt:7`) [nao verificado]
+
+7. **Ato humano sem mostrar/gravar o veto ultrapassado — classe (a), não apontado com o tema presente.**  
+   **Pergunta:** trazia literalmente “ato humano passa com trilha”; a DELTA 2 voltou a pedir conferência das três cadeias `humano=True`. (`pergunta_final.q:5`; `pergunta_delta2.q:4`)  
+   **Resposta:** declarou “sem achado nas três cadeias humanas atuais”, verificando permissões e origem humana, mas não apontou a ausência do veto ultrapassado na apresentação/auditoria. (`codex_delta2.txt:7–9`)  
+   Na cópia, `humano=True` dispensa a consulta ao veto nessa guarda; as notas e auditorias examinadas registram o ato administrativo sem nomear esse veto. Isso sustenta a distinção entre registrar a ação humana e registrar qual veto ela ultrapassou. (`app/chamados/models.py:1090–1093`; `app/chamados/services/acoes_disputa.py:266–270`; `app/chamados/services/competencia_trancada.py:258–264`)
+
+| Achado | Classe | Referência principal |
+|---|---|---|
+| 1. RED contra a base | **(c)** | `codex_final.txt:3`; `opus_achados.txt:2` |
+| 2. LEI-AKITA desatualizada | **(a)** | `pergunta_final.q:8`; `codex_final.txt:21` |
+| 3. Teste da impressão com `ec=None` | **(a)** | `pergunta_final.q:6`; `codex_final.txt:28` | [nao verificado]
+| 4. Helper dependente do calendário | **(a)** | `pergunta_final.q:12`; `codex_final.txt:36–38` |
+| 5. Contador por eliminação | **(a)** | `pergunta_final.q:11`; `codex_final.txt:34` |
+| 6. Condições e medidas do pouso | **(c)**, com pendência reconhecida | `codex_delta.txt:45`; `triagem_final.txt:15–16` | [nao verificado]
+| 7. Trilha do veto ultrapassado pelo humano | **(a)** | `pergunta_final.q:5`; `codex_delta2.txt:7–9` |
 
 ## 30/10 13:36 · sessao ff42a8bee5de · O261-VETO-A2 · sonda · origem=Code
 
@@ -666,20 +715,4 @@ Achei dois problemas de alcance; a ausência de vínculo continua sem chamado de
 
 Quanto à relavratura, o próximo `processar_cartorio --apply` percorre todas as células passadas, sem piso de competência; no ramo normal, a nova palavra do veto altera a impressão e ultrapassa o pulo, chegando à lavra/carimbo. Isso prova alteração possível da própria célula exportada, mas **não prova alteração de `FechamentoMensal`, `DiaPago` ou TXT**. Reversão prévia, hash das exportadas e diferença enviada à Pauta DP: [nao verificado]. (`app/ponto/management/commands/processar_cartorio.py:49`; `app/ponto/management/commands/processar_cartorio.py:61`; `app/ponto/services/cartorio.py:1083`; `app/ponto/services/cartorio.py:1092`; `app/ponto/services/cartorio.py:1409`; `app/ponto/services/cartorio.py:1424`; `app/ponto/portas/celula.py:721`)
 
-## 30/10 12:03 · sessao 77cd2fb619a1 · - · - · origem=Ronald (tmux)
-
-Migração das fixtures: **sem achado de intenção “sem vínculo/sem escala” mascarada** no censo dos usos de `dar_vinculo`; execução da bateria [nao verificado].
-
-- F4 preservou o caso explícito “sem escala”: `test_MORDE_procedencia_ignora_batida_retratada` cria colaborador sem escala e chama diretamente `procedencia_fina`; não passa pelo helper que adiciona vínculo. `app/chamados/tests/test_selo_f4_fatia4.py:131-139`, `:67-70`.
-- `TrancaSemCadastro` testa a natureza dos avisos de cadastro, não ausência de vínculo; o vínculo novo não elimina o cenário da tranca. `app/chamados/tests/test_tranca_sem_cadastro.py:3-12`, `:39-57`.
-- Os comentários “sem vínculo no fixture” ficaram desatualizados em `app/chamados/tests/test_reabrir_pergunta_a_premissa.py:57` e `app/chamados/tests/test_resposta_tardia.py:66`; os testes continuam explicitamente montando/verificando a premissa/lâmpada, em `:46-65` e `:63-77`, respectivamente.
-- O caso novo sem vínculo usa outro colaborador, não chama `dar_vinculo` e espera `(None, False)` da porta. `app/chamados/tests/test_o261_veto_na_porta.py:395-405`.
-
-**Lacuna de prova nos sítios migrados, preexistente ao diff fornecido:** dois testes prometem nascimento no nome, mas só exercitam construção de contexto: [nao verificado]
-
-1. `app/chamados/tests/test_emissor_nomeia_o_marco.py:88-94`: chama `_ctx_c2`, verifica data e ausência de marcos; não abre chamado.
-2. `app/chamados/tests/test_bug125_cobranca_cega.py:176-185`: simula falha da lavra e verifica o dicionário; não abre chamado.
-
-Contraexemplo concreto para ambos: `_ctx_c2` continua produzindo aquele contexto e o emissor/porta passa a recusar todo nascimento; as asserções permanecem satisfeitas. Não é regressão de vacuidade introduzida pela inserção de `dar_vinculo`, conforme o diff anexo [nao verificado quanto ao histórico além do anexo].
-
-_477 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_478 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
