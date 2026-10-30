@@ -1,7 +1,69 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **30/10/2026 12:57** · publicado em **30/10/2026 13:01** (UTC-3)
+> Ultima resposta processada: **30/10/2026 13:21** · publicado em **30/10/2026 13:22** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 30/10 13:21 · sessao abaa92c92829 · COL309-SETEMBRO · sonda · origem=Code
+
+Não houve nova execução: o lançador escreve arquivos ([bin/sonda_leitura.sh:132](bin/sonda_leitura.sh:132), [bin/sonda_leitura.sh:217](bin/sonda_leitura.sh:217)). Abaixo, a saída fornecida integralmente; execução e dados de produção [nao verificado].
+
+```text
+sonda_leitura: sonda_classe.py [1401c8b1fb95d59a] no cpuset 4-7, lendo saas_hasner como leitor (LEITURA)
+
+TRILHA_LINHAS_DESDE_28_09=610 COM_BARRADOS=29 DIAS_BARRADOS=563 VINCULOS=25
+BARR log=595390 ec=1327 dias=1 lavra=exportacao (TXT do Dominio), competencia 09/2026 janela=2026-09-20..2026-10-20 apesar=False
+BARR log=595957 ec=1328 dias=31 lavra=exportacao (TXT do Dominio), competencia 09/2026 janela=2026-08-21..2026-10-20 apesar=False
+BARR log=596310 ec=1330 dias=4 lavra=exportacao (TXT do Dominio), competencia 09/2026 janela=2026-09-17..2026-10-20 apesar=False
+BARR log=597279 ec=1331 dias=19 lavra=exportacao (TXT do Dominio), competencia 09/2026 janela=2026-09-02..2026-10-20 apesar=False
+BARR log=597355 ec=1333 dias=30 lavra=exportacao (TXT do Dominio), competencia 09/2026 janela=2026-08-22..2026-10-20 apesar=False
+BARR log=597406 ec=1334 dias=30 lavra=exportacao (TXT do Dominio), competencia 09/2026 janela=2026-08-22..2026-10-20 apesar=False
+BARR log=597429 ec=1335 dias=8 lavra=exportacao (TXT do Dominio), competencia 09/2026 janela=2026-09-13..2026-10-20 apesar=False
+BARR log=597451 ec=1336 dias=14 lavra=exportacao (TXT do Dominio), competencia 09/2026 janela=2026-09-07..2026-10-20 apesar=False
+BARR log=597484 ec=1337 dias=10 lavra=exportacao (TXT do Dominio), competencia 09/2026 janela=2026-09-11..2026-10-20 apesar=False
+BARR log=597680 ec=1333 dias=30 lavra=exportacao (TXT do Dominio), competencia 09/2026 janela=2026-08-22..2026-10-20 apesar=False
+BARR log=597757 ec=1339 dias=22 lavra=exportacao (TXT do Dominio), competencia 09/2026 janela=2026-08-30..2026-10-20 apesar=False
+BARR log=601349 ec=1255 dias=10 lavra=exportacao (TXT do Dominio), competencia 09/2026 janela=2026-09-11..2026-10-20 apesar=False
+BARR log=602270 ec=1340 dias=5 lavra=exportacao (TXT do Dominio), competencia 09/2026 janela=2026-09-16..2026-10-20 apesar=False
+BARR log=602379 ec=1341 dias=20 lavra=exportacao (TXT do Dominio), competencia 09/2026 janela=2026-09-01..2026-10-20 apesar=False
+BARR log=603110 ec=1220 dias=19 lavra=exportacao (TXT do Dominio), competencia 09/2026 janela=2026-09-02..2026-10-20 apesar=False
+BARR log=613403 ec=1328 dias=31 lavra=exportacao (TXT do Dominio), competencia 09/2026 janela=2026-08-21..2026-10-20 apesar=False
+BARR log=640685 ec=1365 dias=1 lavra=exportacao (TXT do Dominio), competencia 09/2026 janela=2026-09-20..2026-10-20 apesar=False
+BARR log=653981 ec=1380 dias=31 lavra=exportacao (TXT do Dominio), competencia 09/2026 janela=2026-08-21..2026-10-20 apesar=False
+BARR log=660581 ec=1397 dias=31 lavra=exportacao (TXT do Dominio) e holerite PUBLICADO deste colaborador, competencia 09/2026 janela=2026-08-21..2026-10-20 apesar=False [nao verificado]
+BARR log=660739 ec=1263 dias=1 lavra=exportacao (TXT do Dominio) e holerite PUBLICADO deste colaborador, competencia 09/2026 janela=2026-09-20..2026-10-20 apesar=False [nao verificado]
+BARR log=662019 ec=1405 dias=31 lavra=exportacao (TXT do Dominio) e holerite PUBLICADO deste colaborador, competencia 09/2026 janela=2026-08-21..2026-10-20 apesar=False [nao verificado]
+BARR log=668800 ec=1407 dias=4 lavra=exportacao (TXT do Dominio) e holerite PUBLICADO deste colaborador, competencia 09/2026 janela=2026-09-17..2026-10-20 apesar=False [nao verificado]
+BARR log=668822 ec=1408 dias=5 lavra=exportacao (TXT do Dominio) e holerite PUBLICADO deste colaborador, competencia 09/2026 janela=2026-09-16..2026-10-20 apesar=False [nao verificado]
+BARR log=668849 ec=1409 dias=31 lavra=exportacao (TXT do Dominio) e holerite PUBLICADO deste colaborador, competencia 09/2026 janela=2026-08-21..2026-10-20 apesar=False [nao verificado]
+BARR log=692598 ec=1416 dias=20 lavra=exportacao (TXT do Dominio) e holerite PUBLICADO deste colaborador, competencia 09/2026 janela=2026-09-01..2026-10-20 apesar=False [nao verificado]
+BARR log=698178 ec=1420 dias=31 lavra=exportacao (TXT do Dominio) e holerite PUBLICADO deste colaborador, competencia 09/2026 janela=2026-08-21..2026-10-20 apesar=False [nao verificado]
+BARR log=699261 ec=1420 dias=31 lavra=exportacao (TXT do Dominio) e holerite PUBLICADO deste colaborador, competencia 09/2026 janela=2026-08-21..2026-10-20 apesar=False [nao verificado]
+BARR log=724164 ec=1437 dias=31 lavra=exportacao (TXT do Dominio) e holerite PUBLICADO deste colaborador, competencia 09/2026 janela=2026-08-21..2026-10-20 apesar=False [nao verificado]
+BARR log=724205 ec=1437 dias=31 lavra=exportacao (TXT do Dominio) e holerite PUBLICADO deste colaborador, competencia 09/2026 janela=2026-08-21..2026-10-20 apesar=False [nao verificado]
+FORA_DA_VIGENCIA|emp=1|comp=2026-10|aberta celulas=21 colabs=1
+FORA_DA_VIGENCIA|emp=2|comp=2026-08|EXPORTADA celulas=643 colabs=52
+FORA_DA_VIGENCIA|emp=2|comp=2026-09|EXPORTADA celulas=1036 colabs=53
+FORA_DA_VIGENCIA|emp=2|comp=2026-10|aberta celulas=1272 colabs=56
+FORA_DA_VIGENCIA|emp=2|comp=2026-11|aberta celulas=894 colabs=31
+FORA_DA_VIGENCIA|emp=2|comp=2026-12|aberta celulas=110 colabs=6
+FORA_DA_VIGENCIA|emp=2|comp=2027-01|aberta celulas=33 colabs=3
+FORA_DA_VIGENCIA|emp=3|comp=2026-08|aberta celulas=161 colabs=11
+FORA_DA_VIGENCIA|emp=3|comp=2026-09|EXPORTADA celulas=216 colabs=12
+FORA_DA_VIGENCIA|emp=3|comp=2026-10|aberta celulas=206 colabs=10
+FORA_DA_VIGENCIA|emp=3|comp=2026-11|aberta celulas=475 colabs=18
+FORA_DA_VIGENCIA|emp=3|comp=2026-12|aberta celulas=110 colabs=4
+FORA_DA_VIGENCIA|emp=3|comp=2027-01|aberta celulas=44 colabs=4
+FORA_DA_VIGENCIA|emp=4|comp=2026-08|aberta celulas=11 colabs=2
+FORA_DA_VIGENCIA_TOTAL=5232 COLABS=173
+COL309_FORA=27
+ERROS=0
+FIM-DA-SONDA
+```
+
+Trilha: 563 dias em 29 registros, abrangendo 25 vínculos, conforme dado fornecido [nao verificado].  
+Fora da vigência da geradora: 5.232 células = 1.895 em competências exportadas + 3.337 em abertas, somadas do dado fornecido [nao verificado].  
+COL309_FORA=27, conforme dado fornecido [nao verificado].  
+ERROS=0, conforme dado fornecido [nao verificado].
 
 ## 30/10 12:57 · sessao 8ab81fa72246 · O261-VETO-A2 · verificador · origem=Code
 
@@ -529,34 +591,4 @@ Achados para consolidação:
 
 Não identifiquei novo cálculo do dono no vigia: ele compara o valor do mapa com BATIDA/CADASTRO (`app/chamados/services/vigia_fio.py:266`); o mapa lê `dono_do_dia` da assinatura (`app/escala/services/cadastro_realidade.py:669-670`), escrito pela adaptação C9 da lavra (`:310-313`). O cálculo permanece em `InsumosDoDono.dono()` → `dono_da_divergencia()` (`app/ponto/management/commands/e6_oraculo.py:146-155`), chamado pelo produtor da lavra (`app/ponto/services/teto_na_lista.py:72`, `:86`).
 
-## 30/10 10:53 · sessao 0546f019a554 · - · - · origem=Ronald (tmux)
-
-Achados no caminho de lista/dono:
-
-1. **Relógio fora da borda persiste no caminho novo.** O vigia injeta `hoje` em `lista` (`app/chamados/services/vigia_fio.py:259`), mas a lista chama `_jornada_que_mente(empresas)` sem a data (`app/escala/services/cadastro_realidade.py:518`), e essa função lê `_dt.date.today()` (`app/escala/services/cadastro_realidade.py:186`). C4 também chama `afastados_hoje(colaboradores=qs)` sem `dia` (`app/escala/services/cadastro_realidade.py:350`), cujo fallback lê `timezone.localdate()` (`app/colaboradores/services/situacao_exibida.py:45`). Não muda diretamente o dono C9, mas invalida afirmar que toda a lista deriva do relógio capturado pelo comando.
-
-2. **Custo ampliado para toda a lista, por rodada com candidato morto.** A chamada é memoizada uma vez (`app/chamados/services/vigia_fio.py:250`), porém executa todas as classes C1–C9 e a lavra A (`app/escala/services/cadastro_realidade.py:513`, `:518`, `:527`, `:535`, `:542`, `:549`, `:556`, `:563`, `:570`, `:575`). C2 consulta todas as células de trabalho da competência no universo de vínculos ativos e chama `periodos_do_dia` por célula (`app/escala/services/cadastro_realidade.py:190`, `:195`, `:200`). Não se restringe aos dias mortos que dispararam a consulta. Duração real: [nao verificado].
-
-3. **`fio_do_admin_sem_resposta` não vê falha interna de C9.** `lista` captura erro em `_teto_do_dia`, escreve log e segue (`app/escala/services/cadastro_realidade.py:561`–`:567`); o vigia só marca falha se sua chamada inteira levantar (`app/chamados/services/vigia_fio.py:260`–`:265`). Assim, C9 pode falhar e o contador continuar zero. Os dias permanecem no alarme, pois não haverá dono elegível no mapa (`app/chamados/services/vigia_fio.py:266`).
-
-4. **Pergunta de competência tem uma cópia antiga alcançada pelo novo fluxo.** C2 fixa `periodo_apuracao(hoje.month, hoje.year, 21)` (`app/escala/services/cadastro_realidade.py:187`), embora o registro indique `janela_atual/corte_da_empresa`, expressamente “nunca 21 cravado” (`app/docs/JUIZES.md:55`–`:62`). É pré-existente, não duplicação nova do juiz do dono.
-
-Premissas e escritores/leitores:
-
-- **O dono da divergência tem um decisor neste fluxo:** `dono_da_divergencia`, com precedência CADASTRO por ausência de vínculo/folga, BATIDA por aberto/paridade, depois CADASTRO/ESTRUTURA (`app/ponto/management/commands/e6_oraculo.py:90`–`:100`). `InsumosDoDono.dono` monta insumos e chama esse decisor (`app/ponto/management/commands/e6_oraculo.py:146`–`:155`).
-- **Leitores de `InsumosDoDono.dono`:** e6 (`app/ponto/management/commands/e6_oraculo.py:338`); pautas (`app/ponto/management/commands/pautas_discordantes.py:104`); medição C9 (`app/ponto/services/teto_na_lista.py:86`). Os construtores correspondentes estão em e6 `:288`, pautas `:82` e teto `:72`.
-- **Pautas ainda tem pré-filtro separado**, chamando diretamente o mesmo juiz com `False` antes de `_ins.dono` (`app/ponto/management/commands/pautas_discordantes.py:93`–`:104`). Não é outro juiz, mas outra montagem parcial da pergunta.
-- **Escrita persistente do dono C9:** `medir` põe o retorno em `itens[*]['dono']` (`app/ponto/services/teto_na_lista.py:78`–`:86`); `lavrar` grava o dict em `MetricaSnapshot.detalhe` (`app/ponto/services/teto_na_lista.py:110`–`:116`); comando chama ambos (`app/ponto/management/commands/lavrar_teto_do_dia.py:27`–`:34`).
-- **Leitura persistente:** `ultimo_lavrado` busca o snapshot mais recente (`app/ponto/services/teto_na_lista.py:123`–`:129`); `_teto_do_dia` transforma `dono` em `dono_do_dia` e copia a `data` (`app/escala/services/cadastro_realidade.py:310`–`:313`); `lista` usa esse dono para rótulo e ação (`app/escala/services/cadastro_realidade.py:595`–`:607`).
-- **O vigia não recalcula o dono:** `dias_na_lista` copia `dono_do_dia` das assinaturas com data (`app/escala/services/cadastro_realidade.py:666`–`:670`); `_fio_do_admin` só verifica a chave e os valores BATIDA/CADASTRO (`app/chamados/services/vigia_fio.py:266`).
-- **Fonte de lista compartilhada, origens múltiplas:** a tela usa `lista(empresas={visíveis})` (`app/escala/views.py:490`); vigia usa a mesma função e cruza com seu recorte (`app/chamados/services/vigia_fio.py:254`–`:259`). `lista` combina cadastro atual, lavras C e lavra A (`app/escala/services/cadastro_realidade.py:513`–`:575`), e só inclui linhas das empresas selecionadas (`app/escala/services/cadastro_realidade.py:588`–`:589`).
-- **Não confundir essa lista com `dias_cadastro_x_realidade` do motor:** o motor escreve relatos por dia (`app/ponto/motor_calculo_v2.py:1593`–`:1610`) e publica o atributo (`app/ponto/motor_calculo_v2.py:2657`); `InsumosDoDono.cxr` lê esse atributo do espelho (`app/ponto/management/commands/e6_oraculo.py:136`–`:143`). A lista do admin se compõe por outro pipeline (`app/escala/services/cadastro_realidade.py:502`–`:575`).
-- **Única assinatura com `data` estruturada atualmente é C9:** escritor em `app/escala/services/cadastro_realidade.py:312`. C4 põe dias somente em texto (`app/escala/services/cadastro_realidade.py:372`–`:376`); C5 também (`app/escala/services/cadastro_realidade.py:142`–`:143`); assinaturas A são agregados sem `data` (`app/escala/services/cadastro_realidade.py:617`–`:618`). Logo “dia na lista” operacionalizado pelo helper alcança C9, não todos os dias mencionados em detalhes.
-- **Leitor direto de `data` estruturada:** `dias_na_lista` (`app/escala/services/cadastro_realidade.py:669`–`:670`). HTML mostra a data incorporada em `detalhe` e o dono de apresentação (`app/templates/escala/cadastro_x_realidade.html:28`); PDF também (`app/escala/services/cadastro_realidade.py:711`–`:714`).
-- **Outros leitores de `lista`, fora do diff:** tela/PDF (`app/escala/views.py:490`–`:495`); fechamento de avisos C7 (`app/escala/management/commands/fechar_avisos_regua_na_lista.py:26`–`:33`); fechamento de chamados C8 (`app/ponto/management/commands/fechar_chamados_vinculo_na_lista.py:30`–`:41`).
-- **Relógio independente anterior no produtor C9:** comando captura `timezone.localdate()` (`app/ponto/management/commands/lavrar_teto_do_dia.py:27`), depois `medir` captura outro `timezone.now()` (`app/ponto/services/teto_na_lista.py:49`–`:50`). Isso está fora do diff.
-- **Snapshot C9 é o último disponível, sem filtro de idade:** `app/ponto/services/teto_na_lista.py:123`–`:129`. A lista não entrega metadados C9 de frescor ao helper (`app/escala/services/cadastro_realidade.py:310`–`:318`); não é possível concluir frescor de produção: [nao verificado].
-
-Selos relevantes para sua consolidação: teste integração lavra → lista verifica C9 e detalhes (`app/ponto/tests/test_col129_teto_vira_lista.py:70`–`:79`), dono CADASTRO (`:88`–`:95`) e turnos da competência ±1 dia (`:97`–`:114`). Os novos testes do vigia substituem a lista por mock, portanto não exercitam o custo, relógios secundários ou falha interna real da C9 (`app/chamados/tests/test_o261_vigia_fio.py:541`–`:551`).
-
-_471 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_472 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
