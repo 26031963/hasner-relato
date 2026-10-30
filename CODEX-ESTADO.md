@@ -1,7 +1,134 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **30/10/2026 20:14** · publicado em **30/10/2026 20:14** (UTC-3)
+> Ultima resposta processada: **30/10/2026 20:17** · publicado em **30/10/2026 20:20** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 30/10 20:17 · sessao a717d30b276f · O261-E-D3 · censo · origem=Code
+
+O outbox encontrado é **depois da lavra da célula**: registra alterações de `veredito`/`ata` e alimenta a reconciliação de chamados e perguntas. O rejulgamento reativo do cartório ocorre por chamadas síncronas, principalmente nos signals de insumos. (`app/ponto/portas/celula.py:622`, `app/chamados/reconciliador.py:1300`, `app/chamados/reconciliador.py:1303`, `app/ponto/signals.py:85`)
+
+**1. Definição, chamadas e composição de `impressao_insumos`**
+
+A definição está em `app/ponto/services/cartorio.py:314`. Há duas chamadas de produção, ambas em `_julgar_colab_corpo`: ramo sem adesão, em `app/ponto/services/cartorio.py:941`, e ramo normal, em `app/ponto/services/cartorio.py:1083`. `julgar_colab` chama esse corpo e pode repeti-lo para reconciliação/releitura. (`app/ponto/services/cartorio.py:744`, `app/ponto/services/cartorio.py:746`, `app/ponto/services/cartorio.py:811`)
+
+O comando `processar_cartorio` **reexporta** a função, mas chama `julgar_colab`: busca colaboradores com células passadas, carrega suas células ordenadas por data e entrega a lista ao serviço. A porta unitária `julgar_celula` busca uma célula e chama o mesmo serviço com `[cel]`. (`app/ponto/management/commands/processar_cartorio.py:20`, `app/ponto/management/commands/processar_cartorio.py:49`, `app/ponto/management/commands/processar_cartorio.py:61`, `app/ponto/management/commands/processar_cartorio.py:65`, `app/ponto/services/cartorio.py:1547`, `app/ponto/services/cartorio.py:1560`)
+
+O resultado é `sha256('|'.join(partes).encode()).hexdigest()[:64]`; as partes são construídas na ordem abaixo. (`app/ponto/services/cartorio.py:323`, `app/ponto/services/cartorio.py:380`)
+
+| Argumento | O que efetivamente entra no hash | Origem no chamador normal |
+|---|---|---|
+| `bs_janela` | Para cada batida: **`pk`, `tipo`, `timestamp.isoformat()`**, separados por `:`; batidas separadas por vírgula. (`app/ponto/services/cartorio.py:324`) | `bj`, recorte por data local da lista `bs`, carregada por `batidas_apuraveis`. (`app/ponto/services/cartorio.py:871`, `app/ponto/services/cartorio.py:1042`) |
+| `cob_status` | Apenas `str(cob_status)`, inclusive `"None"` quando não há cobertura. (`app/ponto/services/cartorio.py:325`) | `getattr(cob, 'status', None)`, com `cob = ausencia_cobre(c, data, para='cobranca')`. (`app/ponto/services/cartorio.py:1041`, `app/ponto/services/cartorio.py:1083`) |
+| `chamados` | Para cada chamado: **`pk`, `status_local`**; nenhum outro campo diretamente. (`app/ponto/services/cartorio.py:326`) | `lista = chs.get(data.isoformat(), [])`; `chs` vem de `chamados_que_falam_de_batida(c)`. (`app/ponto/services/cartorio.py:1004`, `app/ponto/services/cartorio.py:1040`) |
+| `dna` | Somente **`str(dna_versao) + str(marcos)`**. Não é o JSON inteiro. (`app/ponto/services/cartorio.py:327`) | `cel.dna`, da célula recebida pelo serviço. (`app/ponto/services/cartorio.py:1083`) |
+| `veto` | `veto:<valor>`, somente quando o valor é verdadeiro. (`app/ponto/services/cartorio.py:329`) | `_veto_do_dia(data)` → `motivo_do_veto(c, vinculo_do_emissor(c,data),data)`. (`app/ponto/services/cartorio.py:1011`, `app/ponto/services/cartorio.py:1013`) |
+| `teto` | `teto:<valor>`, quando diferente de `None`. (`app/ponto/services/cartorio.py:334`) | Quantidade de marcos vencidos retornados por `marcos_vencidos`, nos caminhos de `teto_de_hoje`; normalmente `None`. (`app/ponto/services/cartorio.py:1048`, `app/ponto/services/cartorio.py:1053`, `app/ponto/services/cartorio.py:1067`, `app/ponto/services/cartorio.py:1085`) |
+| `regra` | `regra:<valor>`, quando diferente de `None`. (`app/ponto/services/cartorio.py:342`) | `_regra_do_dia(data)` → `versao_para(data,c.empresa)`. A versão vem de `REGRA_VERSOES`, escolhida pela competência de `janela_atual`. (`app/ponto/services/cartorio.py:100`, `app/ponto/services/cartorio.py:183`, `app/ponto/services/cartorio.py:888`) |
+| `fio` | `fio:<valor>`, quando diferente de `None`; **zero entra**. (`app/ponto/services/cartorio.py:367`) | Número de chamados vivos da lista que possuem pergunta viva: `_com_fio`. Sem chamados vivos, recebe `None`. (`app/ponto/services/cartorio.py:1069`, `app/ponto/services/cartorio.py:1074`, `app/ponto/services/cartorio.py:1087`) |
+| `cob_parcial` | Quando verdadeiro: `cobparcial:1`; sendo string, acrescenta `:<estado>`. (`app/ponto/services/cartorio.py:375`) | `dia['periodo_parcial']` ou o booleano `dia['cobertura_parcial']`, lidos da grade. (`app/ponto/services/cartorio.py:1079`, `app/ponto/services/cartorio.py:1088`) |
+| `enc` | `enc:<valor>`, quando diferente de `None`. (`app/ponto/services/cartorio.py:352`) | `0` para dia passado cujo turno permanece em curso e não está sendo julgado até um teto; caso contrário, `None`. (`app/ponto/services/cartorio.py:1082`, `app/ponto/services/cartorio.py:1084`) |
+
+Detalhes da alimentação desses argumentos:
+
+- `chamados_que_falam_de_batida` consulta `ChamadoColaborador` do colaborador, filtra `modulo_origem__in=FURO_MODULES`, faz prefetch de `perguntas_que_resolvem` e agrupa pela data obtida por `data_do_chamado`. Os módulos são `batida_ausente`, `turno_aberto`, `intervalo_pendente` e `entrada_bloqueada_turno_aberto`. (`app/ponto/services/cartorio.py:85`, `app/ponto/services/cartorio.py:93`, `app/ponto/services/cartorio.py:96`, `app/chamados/catalogo/furo_modulos.py:15`)
+- `ausencia_cobre` consulta `Ausencia`, exclui rejeitadas para cobrança, considera dia único/range fechado/range aberto permitido e escolhe a vencedora por `-data,-pk`. (`app/ponto/turnos.py:2489`, `app/ponto/turnos.py:2525`, `app/ponto/turnos.py:2530`)
+- A grade escreve `cobertura_parcial` usando `cobre_parte_do_dia` e escreve `periodo_parcial` usando `periodo_da_parcial_no_dia`. A parcialidade depende de tipo habilitado para horas, dia único e `0 < minutos < 480`; o estado do período pode ser `sem_periodo`, `dentro`, `fora` ou `nao_sei`. (`app/escala/utils.py:1147`, `app/escala/utils.py:1190`, `app/escala/utils.py:1194`, `app/ponto/turnos.py:2571`, `app/ponto/turnos.py:2587`)
+- `fio_vivo` reduz as perguntas recebidas a `any(pergunta_viva(p) ...)`. (`app/chamados/juizes.py:1102`, `app/chamados/juizes.py:1111`)
+- `marcos_vencidos` obtém o vínculo por `escala_vigente`, lê `marcos_turno` e compara cada instante com `agora`, acrescentando a margem de 30 minutos. (`app/ponto/services/cartorio.py:662`, `app/ponto/services/cartorio.py:675`, `app/ponto/services/cartorio.py:679`)
+- `_turno_encerrado` vem de `dias_encerrados(c,d0,d1,agora=...,celulas=...)`. (`app/ponto/services/cartorio.py:850`)
+
+No DNA produzido hoje, `marcos` contém `hi`, `hf`, `hii`, `hfi` e, quando houver segunda pausa, `hii2`, `hfi2`; as horas são convertidas para `HH:MM`. Como entra `str(marcos)`, entra a representação do dicionário inteiro nessa parcela. **Ficam fora dessa parcela** `vinculo_id`, `tipo_escala_id`, `tipo_ciclo`, `minutos_jornada`, `intervalo_livre`, `lampadas` e `extra_declarada`. (`app/ponto/management/commands/gerar_celulas.py:32`, `app/ponto/management/commands/gerar_celulas.py:83`, `app/ponto/management/commands/gerar_celulas.py:92`, `app/ponto/management/commands/gerar_celulas.py:95`, `app/ponto/management/commands/gerar_celulas.py:121`, `app/ponto/services/cartorio.py:327`)
+
+No ramo **`adesao is None`**, a chamada passa `bs_janela=[]`, `chamados=[]`, a cobertura obtida por `ausencia_cobre`, `cel.dna`, `regra` e a parcialidade da grade. `veto`, `teto`, `fio` e `enc` permanecem nos defaults `None`. A adesão é obtida pela primeira batida não retratada da vida do colaborador. (`app/ponto/services/cartorio.py:899`, `app/ponto/services/cartorio.py:907`, `app/ponto/services/cartorio.py:924`, `app/ponto/services/cartorio.py:933`, `app/ponto/services/cartorio.py:941`)
+
+**Janela de batidas:** para a célula de **D**, o hash normal recebe batidas de **D−1, D e D+1**, pela data local — intervalo equivalente a `[D−1 00:00, D+2 00:00)`. A carga geral do lote é maior: `[d0−1 00:00, d1+3 00:00)`, depois recortada por célula. São excluídas batidas retratadas, e a ordenação é por `timestamp`. (`app/ponto/services/cartorio.py:855`, `app/ponto/services/cartorio.py:856`, `app/ponto/services/cartorio.py:871`, `app/ponto/services/cartorio.py:1042`, `app/ponto/turnos.py:2845`, `app/ponto/turnos.py:2852`)
+
+Também há chamadas diretas em testes: [nao verificado]
+
+| Arquivo | Linhas das chamadas |
+|---|---|
+| `app/ponto/tests/test_cartorio.py` | 16, 17, 22, 23, 29, 30, 34, 35 |
+| `app/ponto/tests/test_veto_que_cai_rejulga.py` | 136, 137, 138, 141 |
+| `app/ponto/tests/test_vigia_de_hora.py` | 144, 145 |
+| `app/ponto/tests/test_o219_versao_da_regra.py` | 97, 102, 110, 111, 112, 118, 119, 146 |
+| `app/ponto/tests/test_selo_b5u_nunca_bateu_ve_ausencia.py` | 40, 41, 47, 48, 129 |
+| `app/ponto/tests/test_o146_extra_declarada_da_escala.py` | 423, 424 |
+| `app/ponto/tests/test_o261_cobrado_le_o_fio.py` | 209, 210, 211, 212 |
+| `app/ponto/tests/test_celula_concorde_meio_turno.py` | 56, 57, 86, 87, 88 |
+| `app/escala/tests/test_cobertura_parcial_periodo.py` | 203, 204, 205, 206, 207 |
+
+**2. Os nove insumos: hash, portas e disparos**
+
+Primeiro, o mecanismo comum:
+
+- `EventoCelula` é o outbox encontrado; contém identificadores, data, criação, processamento, tentativas e erro. `celula_id` é inteiro, **sem FK**. (`app/escala/models.py:1800`, `app/escala/models.py:1808`)
+- `salvar_e_emitir` salva a célula e insere evento no mesmo `atomic` quando os campos lavrados incluem `veredito` ou `ata`. Alterar apenas DNA ou campos de insumos não satisfaz esse critério. (`app/ponto/portas/celula.py:623`, `app/ponto/portas/celula.py:634`, `app/ponto/portas/celula.py:638`)
+- O consumidor lê o evento e chama `retratar_chamados_absolvidos_por_celula` e `encerrar_orfas_pela_lampada`. Uma alteração de status de chamado feita nessa reconciliação pode, por sua vez, chamar o cartório pelo signal do chamado. (`app/chamados/reconciliador.py:1300`, `app/chamados/reconciliador.py:1303`, `app/chamados/signals.py:164`, `app/chamados/signals.py:180`)
+- O consumidor está configurado a cada minuto; o cartório periódico roda com `--apply`, sem `--forcar`. A “fila” deste último é o queryset de células passadas, e o hash igual permite pular o julgamento. (`app/config/crons.py:375`, `app/config/crons.py:597`, `app/ponto/management/commands/processar_cartorio.py:49`, `app/ponto/services/cartorio.py:1092`)
+- `out['rejulgar']` é uma lista em memória para segunda passada, com descarte contado das sobras; não é outbox persistente. (`app/ponto/services/cartorio.py:745`, `app/ponto/services/cartorio.py:751`)
+- Não localizei outra tabela/função de fila persistente para rejulgar `CelulaDia`, pesquisando `Outbox`, `Pendencia`, `Fila`, `enfileirar`, `agendar`, `rejulgar`, `julgar_celula` e `julgar_colab` nos modelos, signals, services e comandos de `app/`. Infraestrutura externa ao código disponível: [nao verificado].
+
+**(i) Batidas do dia**
+
+**Hash:** entram diretamente por `bs_janela`, apenas `pk/tipo/timestamp`. `retratada_em` atua indiretamente, retirando ou recolocando a batida no universo apurável; `aprovada` isoladamente não é filtro desse universo. (`app/ponto/services/cartorio.py:324`, `app/ponto/turnos.py:2845`)
+
+**Portas:** criação por `registrar_batida`; alteração por `anotar`; retratação por `retratar_batida`; exclusão por `apagar`. `flip_tipo` usa `anotar`; retratação/restauração humana usa `retratar_humano.retratar/desfazer`. (`app/ponto/registro_batida.py:94`, `app/ponto/registro_batida.py:152`, `app/ponto/registro_batida.py:157`, `app/ponto/registro_batida.py:235`, `app/ponto/registro_batida.py:267`, `app/ponto/registro_batida.py:285`, `app/ponto/services/flip_batida.py:30`, `app/ponto/services/retratar_humano.py:179`, `app/ponto/services/retratar_humano.py:207`)
+
+Entradas que chegam à criação incluem API/PWA, materialização de justificativa, resposta de pergunta, regularização externa e decisão do dia. (`app/api/views.py:683`, `app/api/views_core.py:680`, `app/ponto/services/triagem_batida.py:708`, `app/ponto/services/justificativa.py:173`, `app/ponto/services/justificativa.py:346`, `app/chamados/services/materializacao.py:872`, `app/chamados/services/materializacao.py:952`, `app/chamados/services/regularizacao_ext.py:77`, `app/ponto/services/veredito_celula.py:301`)
+
+**Disparo:** save/delete chama sincronicamente `julgar_celula` para a data local da batida e sua véspera. Não enfileira julgamento em outbox; a lavra resultante pode produzir o evento posterior. (`app/ponto/signals.py:108`, `app/ponto/signals.py:131`, `app/ponto/signals.py:138`, `app/ponto/signals.py:93`, `app/ponto/portas/celula.py:638`)
+
+A interface de importação AEJ retorna HTTP 410. O bulk de `semear` exige banco de ensaio e recusa o banco de produção indicado no código. (`app/ponto/views.py:57`, `app/ponto/views.py:70`, `app/ponto/registro_batida.py:326`, `app/ponto/registro_batida.py:331`)
+
+**(ii) Batidas do dia seguinte**
+
+**Hash e portas:** são as mesmas batidas/portas do item anterior; D+1 faz parte expressamente do recorte do hash de D. (`app/ponto/services/cartorio.py:1042`, `app/ponto/registro_batida.py:94`, `app/ponto/registro_batida.py:235`)
+
+**Disparo:** uma batida de D+1 aciona D pelo signal que julga a véspera. Há uma assimetria: uma batida de D−1 também pertence ao hash de D, mas seu signal julga D−2/D−1, **não D**. (`app/ponto/signals.py:108`, `app/ponto/signals.py:112`, `app/ponto/services/cartorio.py:1042`)
+
+**(iii) `CelulaDia.dna`**
+
+**Hash:** diretamente, mas **parcialmente**: somente `dna_versao` e `marcos`; modificar outra chave isoladamente não muda essa parcela. (`app/ponto/services/cartorio.py:327`)
+
+**Portas e disparos:**
+
+| Porta | Escrita e julgamento |
+|---|---|
+| `gerar_celulas_periodo` | Cria, completa DNA nulo passado e atualiza células presentes/futuras; termina sem chamada ao cartório/outbox. (`app/ponto/portas/celula.py:593`, `app/ponto/portas/celula.py:603`, `app/ponto/portas/celula.py:610`, `app/ponto/portas/celula.py:617`) |
+| `regenerar_celulas_vinculo` | Reescreve DNA; com `recalculo=True`, força julgamento dos dias tocados até hoje, excetuando vereditos humanos. (`app/ponto/portas/celula.py:260`, `app/ponto/portas/celula.py:360`, `app/ponto/portas/celula.py:365`, `app/ponto/portas/celula.py:372`) |
+| `regenerar_celulas_dia` | Delega ao regenerador de vínculo com `[dia,dia]` e sem extensão do horizonte. (`app/ponto/portas/celula.py:474`) |
+| `reverter_regeneracao_dia` | Repõe `dna_anterior`, salva e registra trilha; termina sem julgamento/outbox. (`app/ponto/portas/celula.py:530`, `app/ponto/portas/celula.py:538`, `app/ponto/portas/celula.py:552`) |
+
+Não há emissão direta do outbox apenas pela escrita de DNA: o critério é `veredito/ata`. Não localizei receiver de `CelulaDia` nos signals de `app/`; a ausência de signal nessa cadeia também está declarada no código. (`app/ponto/portas/celula.py:623`, `app/ponto/portas/celula.py:332`; busca negativa: [nao verificado])
+
+**(iv) Vínculo vigente / escala**
+
+**Hash:** o vínculo não é serializado. Pode entrar indiretamente pelos marcos do DNA regenerado, pelo `veto` e pelos valores derivados `teto/enc`. O julgamento ainda recebe cadastro vivo do vínculo, carregado separadamente, sem serializá-lo integralmente no hash. (`app/ponto/services/cartorio.py:327`, `app/ponto/services/cartorio.py:839`, `app/ponto/services/cartorio.py:1013`, `app/ponto/services/cartorio.py:1083`, `app/ponto/services/cartorio.py:1118`)
+
+O escritor declarado de `EscalaColaborador` é `colaboradores/services/vinculo.py`. (`app/core/portas.py:465`)
+
+| Portas/caminho | Disparo efetivo |
+|---|---|
+| `executar_vinculo` | Cria/atualiza vínculo, regenera células e chama `reconciliar_apos_vinculo`, que força julgamento, com exclusões de dias humanos/já julgados. (`app/colaboradores/services/vinculo.py:265`, `app/colaboradores/services/vinculo.py:278`, `app/colaboradores/services/vinculo.py:320`, `app/colaboradores/services/vinculo.py:328`, `app/colaboradores/services/pos_vinculo.py:50`, `app/colaboradores/services/pos_vinculo.py:72`) |
+| `encerrar_vinculo`, `corrigir_vinculo_retroativo` | Usam save; mudanças de vigência/âncora acionam regeneração pelos signals correspondentes. (`app/colaboradores/services/vinculo.py:799`, `app/colaboradores/services/vinculo.py:845`, `app/escala/signals.py:71`, `app/escala/signals.py:117`) |
+| `fechar_vigencia`, `reabrir_vigencia_impossivel`, `absorver_vigencias_posteriores`, `invalidar_ancoras_incoerentes`, `reverter_para_snapshot` | Fazem `update()` sem o signal de save; esses corpos não chamam cartório/outbox. O chamador pode complementar o ato. (`app/colaboradores/services/vinculo.py:615`, `app/colaboradores/services/vinculo.py:691`, `app/colaboradores/services/vinculo.py:753`, `app/colaboradores/services/vinculo.py:857`, `app/colaboradores/services/vinculo.py:874`) |
+| `trocar_calendario_de_folga`, `marcar_trabalha_em_feriado` | Salvam essas chaves, que não são vigência/âncora; não há rejulgamento direto nesses corpos. (`app/colaboradores/services/vinculo.py:445`, `app/colaboradores/services/vinculo.py:825`, `app/escala/signals.py:57`, `app/escala/signals.py:107`) |
+| `criar_trecho_retroativo`, `ajustar_vinculo_pelo_sistema`, `desfazer_ajuste_do_sistema` | Criam/fecham/restauram vínculos; os receivers de regeneração pulam `created`, e há atualizações sem signal nesses caminhos. (`app/colaboradores/services/vinculo.py:832`, `app/colaboradores/services/vinculo.py:928`, `app/colaboradores/services/vinculo.py:940`, `app/escala/signals.py:54`, `app/escala/signals.py:104`) |
+| `salvar_tipo` → `_propagar_regeneracao_template` | Regenera com **`recalculo=False`**; portanto não executa o julgamento da regeneração. Também invalida o fechamento. (`app/escala/services/cadastro_tipo.py:320`, `app/escala/services/cadastro_tipo.py:348`, `app/escala/services/cadastro_tipo.py:350`, `app/escala/services/cadastro_tipo.py:357`, `app/ponto/portas/celula.py:360`) |
+
+Folgas também alteram esse desenho: `lancar_folga`, `alterar_folga`, `aplicar_folgas_em_lote` e `gerar_foto_folgas` chamam `relavrar_celulas_da_foto`, que regenera com o default de julgamento ligado. Salvar o calendário isoladamente apenas grava o cadastro. (`app/escala/folgas.py:192`, `app/escala/folgas.py:220`, `app/escala/folgas.py:261`, `app/escala/folgas.py:303`, `app/escala/folgas.py:340`, `app/escala/folgas.py:468`)
+
+A régua **de defesa do vínculo**, distinta da CCT, é gravada por `gravar_regua` com update sem signal. `desfazer_corroboracao` possui chamada explícita a `rejulgar_furos_do_vinculo`, que usa `julgar_colab`. (`app/colaboradores/services/vinculo.py:889`, `app/colaboradores/services/vinculo.py:911`, `app/escala/regua_defesa.py:719`, `app/escala/regua_defesa.py:725`, `app/escala/regua_defesa.py:692`)
+
+Nenhum desses caminhos é enqueue de julgamento em outbox; os que julgam chamam o cartório diretamente, e a eventual lavra pode emitir `EventoCelula`. (`app/ponto/portas/celula.py:372`, `app/ponto/portas/celula.py:638`)
+
+**(v) Ausências/coberturas: férias, atestado, afastamento, abono**
+
+**Hash:** entra o **status da ausência vencedora** por `cob_status`, mais a classificação de parcialidade/período por `cob_parcial`. Não entram integralmente `pk`, tipo, datas, minutos ou horários da ausência. Datas e tipo influenciam a seleção da cobertura; tipo/minutos/horários podem influenciar a classificação parcial. Duas ausências diferentes podem produzir os mesmos componentes de hash. (`app/ponto/services/cartorio.py:325`, `app/ponto/services/cartorio.py:375`, `app/ponto/services/cartorio.py:1088`, `app/ponto/turnos.py:2525`, `app/ponto/turnos.py:2571`, `app/ponto/turnos.py:2605`)
+
+**Portas:** `criar_ausencia`/`garantir_ausencia`; `editar_ausencia_registro`; `mudar_estado`/`decidir`; `anexar_documento`; `reverter_rejeicao`/`_reabrir`; `rederivar_fim`. A declaração/edição do período parcial passa por `decidir` → `_aplicar_periodo`. (`app/ponto/services/ausencia.py:130`, `app/ponto/services/ausencia.py:453`, `app/ponto/services/ausencia.py:465`, `app/ponto/services/ausencia.py:792`, `app/ponto/services/aus
+
+[truncado em 20000 de 39882 caracteres]
 
 ## 30/10 20:14 · sessao ab5275193aec · - · - · origem=Ronald (tmux)
 
@@ -641,16 +768,4 @@ Achados para consolidação (só leitura; sem banco/log; ensaio executou corpos 
 
 Referência das leis: `L-041` (`app/docs/LEIS.md:89`), `L-042` (`:90`), `L-099` (`:122`); separação consumidor/lâmpada/cron (`CLAUDE.md:273`, `:275`, `:276`). `JUIZES.md` distingue geometria de turno (`app/docs/JUIZES.md:20`), dia de trabalho (`:66`), vínculo do dia (`:75`) e cobertura da data (`:77`), e explicita que é lookup, com registro vivo em `core/juizes.py` (`:7`, `:10`).
 
-## 30/10 19:22 · sessao 4ab3ce862214 · - · - · origem=Ronald (tmux)
-
-Sem falha funcional nova demonstrada na lavra/lista; o juiz do dono permanece pré-requisito aberto, explicitado no próprio código. `app/escala/services/fase_12x36.py:81-89`
-
-- **Escritor e leitores:** censo chama `dono_do_dia` por item e entrega a `lavrar`; esta persiste um snapshot diário. C10 copia o dono, a lista o exibe e `dias_na_lista` o agrega; único consumidor produtivo encontrado deste retorno é `vigia_fio`. `app/ponto/management/commands/censo_fase_12x36.py:250-265`; `app/escala/services/fase_12x36.py:92-101`; `app/escala/services/cadastro_realidade.py:335-347`, `:647-658`, `:722-742`; `app/chamados/services/vigia_fio.py:255-266`, `:314-323`.
-- **Prioridade C9:** não recalcula insumos; seleciona a lavra proveniente do juiz existente. C9 recebe `InsumosDoDono.dono`, que chama `dono_da_divergencia`; prioridade não depende da ordem. UI continua exibindo donos por assinatura, não um dono agregado. `app/escala/services/cadastro_realidade.py:706-719`; `app/ponto/services/teto_na_lista.py:72-86`; `app/ponto/management/commands/e6_oraculo.py:146-155`; `app/templates/escala/cadastro_x_realidade.html:28`.
-- **Pré-requisito:** sem flags e sem cadastro divergente, contagem par — inclusive zero — devolve ESTRUTURA no e6; C10 isolada devolve CADASTRO e pode retirar o dia do alarme. É a própria pergunta aberta; ocorrência concreta em produção `[nao verificado]`. `app/ponto/management/commands/e6_oraculo.py:90-100`; `app/escala/services/fase_12x36.py:81-89`; `app/chamados/services/vigia_fio.py:266`, `:314-323`. Lei do juiz único: `CLAUDE.md:311-316`; lookup não substitui registro: `app/docs/JUIZES.md:7-12`.
-- **Testes:** o teste do dono morde o chamador censo: substituir a chamada pelo literal CADASTRO quebra a exigência do sentinel persistido. `app/escala/tests/test_o261_v_fase_na_lista.py:337-345`.
-- **Limite de cobertura:** testes de ordem chamam `dias_na_lista`, usando BATIDA/CADASTRO; ambos entram no mesmo ramo do vigia. Os testes existentes do vigia oferecem somente uma assinatura C9 por dia. Falta caso integrado de célula morta com **C9 ESTRUTURA + C10 CADASTRO**, nas duas ordens, permanecendo em `fio_morto`. `app/escala/tests/test_o261_v_fase_na_lista.py:319-331`; `app/chamados/tests/test_o261_vigia_fio.py:541-571`; `app/chamados/services/vigia_fio.py:266`.
-
-Execução isolada das funções puras por AST, sem Django/banco, confirmou ESTRUTURA, BATIDA e None preservados independentemente da ordem; não constitui execução da suíte. `[nao verificado]` [nao verificado]
-
-_742 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_743 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
