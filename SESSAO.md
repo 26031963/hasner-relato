@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 30/10/2026 05:12:43.** Transcript: `e3f79949-a90b-4c64-a5c2-afd178149c30.jsonl` (7.6 MB). Acoes na janela: **324**.
+**Medido em 30/10/2026 05:18:06.** Transcript: `e3f79949-a90b-4c64-a5c2-afd178149c30.jsonl` (7.6 MB). Acoes na janela: **325**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 05:18:05 | Bash | Read final suite verdict | `L=/home/ronald/wt-o261c3-3010-0232/app/logs/o261/suite_c_e281d2f1.log; grep -E '^(OK\|FAILED)($\| \()' $L \| tail -1; grep '^Ran ' $L \| tail -1; tail -1 $L; grep -E '^(FAIL\|ERROR):' $L \| head; grep -iE "arvore\|porcelain" $L \| tail -3; git -C /home/ronald/wt-o261c3-3010-0232 status --porcelain \| head -3; git -C /home/ronald/wt-o261c3-3010-0232 log --oneline -1` |
 | 05:02:15 | Bash | Mark ESPERANDO on suite trava pid | `cd /home/ronald/saas-hasner && sed -i '3i ESPERANDO: /home/ronald/saas-hasner/bin/trava_teste.sh \| pid=3304415' app/docs/RELATO.md && sed -n 3p app/docs/RELATO.md` |
 | 05:02:05 | Bash | Record volta 8 and find trava pid | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md' L=open(p).read().split('\n') i=next(k for k,l in enumerate(L) if l.startswith('> (C) VOLTA 6 13963efb')) L.insert(i+1,'> (C) VOLTA 7 3ab94852 (prosa do comentario da cerca + R2c orfao_14h com veto da regua, mutante m13 2 FAIL, recorte 3767 OK) -> opus 4a leitura REPROVOU so a ORDEM da lista de gates na docstring; VOLTA 8 e281d ...` |
 | 05:02:02 | Bash | Run full suite on final certified tree | `cd /home/ronald/saas-hasner && W=/home/ronald/wt-o261c3-3010-0232; L=$W/app/logs/o261/suite_c_e281d2f1.log; bash bin/suite.sh --dir $W > $L 2>&1; echo "rc=$?" >> $L` |
