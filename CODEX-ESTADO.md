@@ -1,7 +1,44 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **30/10/2026 03:03** · publicado em **30/10/2026 03:04** (UTC-3)
+> Ultima resposta processada: **30/10/2026 03:09** · publicado em **30/10/2026 03:10** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 30/10 03:09 · sessao 183f01bf09fa · O261-C · verificador · origem=Code
+
+1. **2º juiz / derivação paralela de fonte única:** o HIST tocado ainda decide o dia exclusivamente por `contexto_json__data_turno`, enquanto `dia_do_fato` prioriza `celula.data`. Um encerrado com célula do dia e JSON sem essa chave é descartado antes de `motivos_atendidos`. Para pergunta morta de intervalo, c1 e c2 recusam, deixando-a órfã. O filtro é anterior, mas está no sítio tocado. (`app/chamados/reconciliador.py:1452`, `app/chamados/reconciliador.py:1454`, `app/chamados/juizes.py:88`, `app/chamados/reconciliador.py:363`, `app/chamados/reconciliador.py:764`, `app/chamados/reconciliador.py:727`)
+
+2. **Selo/RED:** há uma incoerência no teste novo de idempotência. A segunda chamada direta exige igualdade de todos os campos, mas percorre novamente o c2 e `reapontar_resolvedora`, que sempre relavra e renova `julgado_em`. Sem congelamento externo, a asserção deve falhar nesse campo; não demonstra o contrato anunciado. (`app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:263`, `app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:264`, `app/chamados/services/disputa_emissao.py:209`, `app/chamados/reconciliador.py:1487`, `app/chamados/services/fio.py:798`, `app/chamados/veredito_lavrado.py:228`)
+
+- **2º escritor fora da porta: nada.** A costura permanece em `reapontar_resolvedora`. (`app/chamados/reconciliador.py:871`, `app/chamados/reconciliador.py:1507`)
+- **Relógio fora da borda: nada nos trechos novos.** (`app/chamados/reconciliador.py:703`, `app/chamados/reconciliador.py:721`)
+- **Ordem de trava: nada.** A emissão continua pelo `abrir`, com trava de Colaborador antes do dedup. (`app/chamados/reconciliador.py:831`, `app/chamados/models.py:666`, `app/chamados/models.py:669`)
+- **Pouso antes do pré-requisito: nada demonstrável.** O RELATO declara B no ar e passivo aplicado; a confirmação externa desses registros está [não verificado]. (`app/docs/CORTES.md:399`, `app/docs/RELATO.md:4`, `app/docs/RELATO.md:7`)
+
+Resultado efetivo da suíte: [não verificado]; os achados acima são de leitura estática. [nao verificado]
+
+## 30/10 03:08 · sessao aaca92fde8a5 · - · - · origem=Ronald (tmux)
+
+- **Relógio fora da borda: nada novo.** Os helpers novos consultam janela, K6, C7 e C6 sem ler `now()`/`today()` diretamente (`app/chamados/reconciliador.py:703`, `app/chamados/reconciliador.py:710`, `app/chamados/reconciliador.py:724`).
+
+- **Selo/RED: problema concreto no teste novo de idempotência.** `test_reatar_duas_vezes_e_idempotente` chama a porta diretamente pela segunda vez e exige igualdade de **todos** os campos da pergunta (`app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:263`, `app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:264`). A segunda passagem exclui o próprio chamado em `_derivar_chamado_destino`, pois ele já tem pergunta não materializada (`app/chamados/services/disputa_emissao.py:209`); segue por HIST vazio ao c2 (`app/chamados/reconciliador.py:1477`, `app/chamados/reconciliador.py:1487`), reutiliza o chamado vivo (`app/chamados/reconciliador.py:793`, `app/chamados/models.py:670`) e reaponta pela porta (`app/chamados/reconciliador.py:871`). Essa porta sempre relavra e salva (`app/chamados/services/fio.py:797`), renovando `julgado_em` (`app/chamados/veredito_lavrado.py:228`). Portanto, o teste novo exige uma idempotência que o caminho atual não oferece; a igualdade da linha falha por esse timestamp. A escrita redundante de produção é anterior e não constitui achado independente no diff; o sítio novo problemático é a asserção do teste (`app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:264`).
+
+Execução da suíte e resultado efetivo: [não verificado]. [nao verificado]
+
+## 30/10 03:07 · sessao fe94d09b3594 · - · - · origem=Ronald (tmux)
+
+Achado na classe **2º juiz / derivação paralela do dia**: o HIST tocado ainda seleciona encerrados exclusivamente por `contexto_json__data_turno`, descartando chamado cujo dia está na célula, embora `dia_do_fato` priorize justamente `celula.data`. O ramo vivo já consulta esse juiz. (`app/chamados/reconciliador.py:1452`, `app/chamados/reconciliador.py:1454`, `app/chamados/juizes.py:88`, `app/chamados/services/disputa_emissao.py:213`)
+
+Contraexemplo: pergunta morta de intervalo, competência aberta, encerrado com célula do dia e contexto sem `data_turno`. O HIST não encontra o candidato; c1 recusa intervalo; c2 recusa pergunta morta, mantendo-a órfã. Ausência dessa chave em chamados históricos é reconhecida no próprio código. (`app/chamados/reconciliador.py:1454`, `app/chamados/reconciliador.py:363`, `app/chamados/reconciliador.py:764`, `app/chamados/reconciliador.py:727`, `app/chamados/juizes.py:1713`, `app/chamados/catalogo/modulos.py:19`)
+
+O filtro já existia, mas está em sítio tocado pelo diff fornecido; o escopo registrado inclui sítios tocados. (`app/docs/CORTES.md:385`; diff fornecido [não verificado por Git])
+
+Nas chamadas novas a `motivos_atendidos`, `pergunta_viva`, `competencia_entregue` e `dia_da_pergunta_trancado`: **nada adicional** de juiz duplicado; elas delegam às autoridades existentes. (`app/chamados/reconciliador.py:713`, `app/chamados/reconciliador.py:716`, `app/chamados/reconciliador.py:727`, `app/chamados/reconciliador.py:1470`)
+
+## 30/10 03:07 · sessao d5f4610bd274 · - · - · origem=Ronald (tmux)
+
+- **2º escritor fora da porta: nada.** O diff encaminha os novos casos ao c2 e ao HIST; ambos continuam usando `reapontar_resolvedora`, cuja escrita ocorre na porta. (`app/chamados/reconciliador.py:764`, `app/chamados/reconciliador.py:1470`, `app/chamados/reconciliador.py:871`, `app/chamados/reconciliador.py:1507`, `app/chamados/services/fio.py:792`).
+- **Ordem de trava: nada.** A emissão continua por `ChamadoColaborador.abrir`, que toma a trava de Colaborador antes do dedup; nenhum novo bloco de trava foi introduzido nos trechos examinados. (`app/chamados/reconciliador.py:831`, `app/chamados/models.py:666`, `app/chamados/models.py:669`, `app/chamados/reconciliador.py:685`, `app/chamados/reconciliador.py:1459`).
+- **Pouso antes do pré-requisito: nada demonstrável.** O corte exige B antes de C; o RELATO declara B no ar, passivo aplicado e C remedido após B. Os logs citados não estão comprovados nesta leitura. (`app/docs/CORTES.md:399`, `app/docs/RELATO.md:3`, `app/docs/RELATO.md:4`, `app/docs/RELATO.md:7`; execução externa: [não verificado]).
 
 ## 30/10 03:03 · sessao c6d879dd914a · ORCAMENTO · verificador · origem=Code
 
@@ -416,74 +453,4 @@ O caminho do **mesmo chamado do dia** é `reemitir_chamado_do_dia → ChamadoCol
 
 Existe também um caminho que consulta explicitamente `pergunta_viva`: `reabrir_orfas_enterradas.py::Command.handle`. Exige pergunta via `fantasma`, materializada, não validada, com data, próprio marco apagado, C6 vivo, carimbo na janela delimitada, competência não exportada e aprovação das guardas do pai; em `--apply`, chama `pai.reabrir()` se ele estiver encerrado. **O alvo é o pai da disputa; esse comando não compara o dia do pai com o da pergunta.** (`app/chamados/management/commands/reabrir_orfas_enterradas.py:67-111`, `121`, `146-161`.)
 
-## 30/10 02:33 · sessao 6ea15844ac00 · O261-C · leitura · origem=Code
-
-1. **`_hz_c2`: o piso é literal no código: `PISO_EMISSAO = '2026-09'`.** O comentário cita **O44, aval Ronald 11/10 19:5x**, e declara que o piso não acompanha o fechamento nem depende de cadastro. Não há identificador `L-NNN` nesse bloco. [app/ponto/services/cartorio.py:190–224](/home/ronald/codex_ws/7d66257c790fe8f736130a5502e5582d849cb05b/app/ponto/services/cartorio.py:190)
-
-   `_hz_c2` é o alias de `emissao_no_horizonte`. Essa função calcula `janela_atual(data, empresa)` e compara o **ano/mês do fim da competência** com `'2026-09'`; portanto, o piso não significa simplesmente “data civil ≥ 01/09/2026”. [app/chamados/reconciliador.py:731](/home/ronald/codex_ws/7d66257c790fe8f736130a5502e5582d849cb05b/app/chamados/reconciliador.py:731); [app/ponto/services/cartorio.py:240–246](/home/ronald/codex_ws/7d66257c790fe8f736130a5502e5582d849cb05b/app/ponto/services/cartorio.py:240)
-
-   Há um cadastro distinto que participa desse cálculo: **`Empresa.dia_inicio_competencia`**, default `21`, determina a competência à qual o dia pertence. Esse corte é editável na UI pelo campo “Dia de inicio da apuracao (corte da folha)”; a view exige `editar_cadastro`, limita o valor a `2..28` e encaminha a atualização. **O piso `'2026-09'` não é esse campo.** [app/colaboradores/models.py:46](/home/ronald/codex_ws/7d66257c790fe8f736130a5502e5582d849cb05b/app/colaboradores/models.py:46); [app/ponto/janelas.py:36–63](/home/ronald/codex_ws/7d66257c790fe8f736130a5502e5582d849cb05b/app/ponto/janelas.py:36); [app/templates/colaboradores/empresa_form.html:53–55](/home/ronald/codex_ws/7d66257c790fe8f736130a5502e5582d849cb05b/app/templates/colaboradores/empresa_form.html:53); [app/colaboradores/views.py:485–523](/home/ronald/codex_ws/7d66257c790fe8f736130a5502e5582d849cb05b/app/colaboradores/views.py:485)
-
-   `PISO_EMISSAO`/`emissao_no_horizonte` não têm entrada própria em `JUIZES` nem em `JUIZES_DO_PRAZO`; o leitor declara expressamente que não ganha chave nova. A autoridade registrada para determinar a competência é `janela_atual`, em `_F5`. [app/ponto/services/cartorio.py:235–238](/home/ronald/codex_ws/7d66257c790fe8f736130a5502e5582d849cb05b/app/ponto/services/cartorio.py:235); [app/core/juizes.py:146–287](/home/ronald/codex_ws/7d66257c790fe8f736130a5502e5582d849cb05b/app/core/juizes.py:146); [app/config/crons.py:1929–1945](/home/ronald/codex_ws/7d66257c790fe8f736130a5502e5582d849cb05b/app/config/crons.py:1929)
-
-2. **`PROTESTOS_QUE_COBRAM` não está vazio no código.** É a tupla literal `('FURO_PARCIAL', 'FURO_SEM_COBRANCA', 'FURO_COM_COBRANCA_MORTA')`, com comentário “a morta: corte 16/09”. [app/ponto/services/furos_sem_cobranca.py:35](/home/ronald/codex_ws/7d66257c790fe8f736130a5502e5582d849cb05b/app/ponto/services/furos_sem_cobranca.py:35)
-
-   `_prot_c2` vem de **`CelulaDia.protestos`**, consultado por colaborador e data. É um `JSONField` que guarda os “códigos crus de `classificar_dia` no último julgamento”. O cartório extrai esses códigos de `supra_juiz.classificar_dia` e os entrega à lavratura; a porta grava a lista no campo. [app/chamados/reconciliador.py:766–769](/home/ronald/codex_ws/7d66257c790fe8f736130a5502e5582d849cb05b/app/chamados/reconciliador.py:766); [app/escala/models.py:1718–1741](/home/ronald/codex_ws/7d66257c790fe8f736130a5502e5582d849cb05b/app/escala/models.py:1718); [app/ponto/services/cartorio.py:1108–1118](/home/ronald/codex_ws/7d66257c790fe8f736130a5502e5582d849cb05b/app/ponto/services/cartorio.py:1108); [app/ponto/portas/celula.py:678–697](/home/ronald/codex_ws/7d66257c790fe8f736130a5502e5582d849cb05b/app/ponto/portas/celula.py:678)
-
-   Os códigos distinguem furo com marcos faltantes (`FURO_PARCIAL`), sem cobrança (`FURO_SEM_COBRANCA`) e com cobrança encerrada sem lastro (`FURO_COM_COBRANCA_MORTA`). Se não houver célula, o campo for `None`/`[]`, ou não contiver nenhum dos três códigos, a interseção será vazia e o c2 retorna `False`, **salvo quando está costurando em chamado já vivo**. [app/ponto/supra_juiz.py:327–337](/home/ronald/codex_ws/7d66257c790fe8f736130a5502e5582d849cb05b/app/ponto/supra_juiz.py:327); [app/ponto/supra_juiz.py:377–400](/home/ronald/codex_ws/7d66257c790fe8f736130a5502e5582d849cb05b/app/ponto/supra_juiz.py:377); [app/chamados/reconciliador.py:770–771](/home/ronald/codex_ws/7d66257c790fe8f736130a5502e5582d849cb05b/app/chamados/reconciliador.py:770)
-
-   O comentário do c2 cita **VARREDURA 1b-iii-b, 23/10**, a **lei de 31/08 / `NAO_COBRAVEIS_DO_COLABORADOR`** e o **corte 10/09**, que exige célula para nascer `batida_ausente`. O módulo da tupla cita **FURO-PARCIAL-SEM-COBRANCA, P7.1, corte Ronald 16/09**. [app/chamados/reconciliador.py:758–765](/home/ronald/codex_ws/7d66257c790fe8f736130a5502e5582d849cb05b/app/chamados/reconciliador.py:758); [app/ponto/services/furos_sem_cobranca.py:1–4](/home/ronald/codex_ws/7d66257c790fe8f736130a5502e5582d849cb05b/app/ponto/services/furos_sem_cobranca.py:1)
-
-3. **A condição do piso depende da competência calculada pela data e pelo corte da empresa; não consulta se a folha está aberta, exportada, trancada ou paga.** Os gates de piso e protesto são dispensados para costura em chamado já vivo. [app/ponto/services/cartorio.py:232–246](/home/ronald/codex_ws/7d66257c790fe8f736130a5502e5582d849cb05b/app/ponto/services/cartorio.py:232); [app/chamados/reconciliador.py:738–743](/home/ronald/codex_ws/7d66257c790fe8f736130a5502e5582d849cb05b/app/chamados/reconciliador.py:738); [app/chamados/reconciliador.py:770](/home/ronald/codex_ws/7d66257c790fe8f736130a5502e5582d849cb05b/app/chamados/reconciliador.py:770)
-
-   **Não há no c2 predicado que barre emissão por competência EXPORTADA**, nem chamada a `competencia_entregue`. O comentário registra explicitamente a retirada do antigo C7 por **O44 SEM FRONTEIRA, aval 25/09 10:3x**, permitindo novamente reemissão automática em dia exportado. [app/chamados/reconciliador.py:745–791](/home/ronald/codex_ws/7d66257c790fe8f736130a5502e5582d849cb05b/app/chamados/reconciliador.py:745)
-
-   Há uma distinção posterior: se `abrir` encontra chamado **encerrado**, tenta renascê-lo, e esse caminho ainda barra **competência trancada**, via `_dia_em_competencia_trancada` → `competencia_trancada` → `PeriodoFechado` sem reabertura. Essa guarda é de tranca, não de exportação. [app/chamados/models.py:685–687](/home/ronald/codex_ws/7d66257c790fe8f736130a5502e5582d849cb05b/app/chamados/models.py:685); [app/chamados/models.py:768–795](/home/ronald/codex_ws/7d66257c790fe8f736130a5502e5582d849cb05b/app/chamados/models.py:768); [app/ponto/services/fechamento.py:1441–1448](/home/ronald/codex_ws/7d66257c790fe8f736130a5502e5582d849cb05b/app/ponto/services/fechamento.py:1441)
-
-## 30/10 02:33 · sessao 9f4913aa39a9 · - · - · origem=Ronald (tmux)
-
-No caso `hist == 1`, `reatar_pergunta_orfa` não pede reabertura: chama `reapontar_resolvedora` e depois S128; o c2 fica exclusivamente dentro de `len(hist) == 0`. (`app/chamados/reconciliador.py:1395`, `app/chamados/reconciliador.py:1413`, `app/chamados/reconciliador.py:1433`, `app/chamados/reconciliador.py:1439`.)
-
-Há outros caminhos pertinentes, portanto não cabe afirmar inexistência global:
-
-- **Renascimento no c2:** `reemitir_chamado_do_dia` chama `ChamadoColaborador.abrir`; encontrando existente em `ENCERRADOS`, `abrir` chama `_renascer_por_premissa_viva`, que chama `reabrir`. A escrita do novo estado ocorre em `_gravar_estado`, seguida de `ressuscitar_perguntas`. (`app/chamados/reconciliador.py:779`, `app/chamados/models.py:685`, `app/chamados/models.py:686`, `app/chamados/models.py:770`, `app/chamados/models.py:1089`, `app/chamados/models.py:1098`.) Esse caminho tem os vetos próprios do c2 e da reabertura; não corresponde a uma regra incondicional baseada em `pergunta_viva`. (`app/chamados/reconciliador.py:712`, `app/chamados/reconciliador.py:743`, `app/chamados/reconciliador.py:753`, `app/chamados/reconciliador.py:756`, `app/chamados/reconciliador.py:770`, `app/chamados/reconciliador.py:773`, `app/chamados/reconciliador.py:777`, `app/chamados/models.py:764`, `app/chamados/models.py:1050`.)
-
-- **S128 reabre o chamado-pai por resposta aguardando validação:** `resolver_perguntas_por_chamado_resolvido` chama `_pai.reabrir()` se a disputa estiver aberta, o pai estiver fora de `VIVOS` e `irmas_respondidas_sem_consumo(_pai)` retornar perguntas. (`app/chamados/services/disputa_emissao.py:1598`, `app/chamados/services/disputa_emissao.py:1599`, `app/chamados/services/disputa_emissao.py:1602`, `app/chamados/services/disputa_emissao.py:1604`, `app/chamados/services/disputa_emissao.py:1606`.) O juiz exige `materializada_em=None`, `validada_em=None`, `respondida_em != None` e texto; não compara datas nem consulta `pergunta_viva`. (`app/chamados/juizes.py:1471`, `app/chamados/juizes.py:1473`, `app/chamados/juizes.py:1474`, `app/chamados/juizes.py:1477`.)
-
-- **Comando com consulta explícita a `pergunta_viva`:** `reabrir_orfas_enterradas.py::Command.handle` seleciona perguntas com via `fantasma`, materializadas, não validadas e com data; exige o próprio marco apagado e `pergunta_viva(p) == True`. (`app/chamados/management/commands/reabrir_orfas_enterradas.py:53`, `app/chamados/management/commands/reabrir_orfas_enterradas.py:67`, `app/chamados/management/commands/reabrir_orfas_enterradas.py:68`, `app/chamados/management/commands/reabrir_orfas_enterradas.py:77`, `app/chamados/management/commands/reabrir_orfas_enterradas.py:82`.) Exige também carimbo dentro da janela fixa, competência não exportada e, para pai encerrado, ausência de recusa ou irmãs que ressuscitariam junto. (`app/chamados/management/commands/reabrir_orfas_enterradas.py:36`, `app/chamados/management/commands/reabrir_orfas_enterradas.py:37`, `app/chamados/management/commands/reabrir_orfas_enterradas.py:87`, `app/chamados/management/commands/reabrir_orfas_enterradas.py:98`, `app/chamados/management/commands/reabrir_orfas_enterradas.py:104`, `app/chamados/management/commands/reabrir_orfas_enterradas.py:107`.) No `--apply`, reabre a pergunta, eventualmente a disputa, e chama `pai.reabrir()` se esse pai estiver em `ENCERRADOS`; o alvo é o **pai da disputa**, sem comparação explícita entre dia do pai e dia da pergunta. (`app/chamados/management/commands/reabrir_orfas_enterradas.py:121`, `app/chamados/management/commands/reabrir_orfas_enterradas.py:146`, `app/chamados/management/commands/reabrir_orfas_enterradas.py:154`, `app/chamados/management/commands/reabrir_orfas_enterradas.py:157`, `app/chamados/management/commands/reabrir_orfas_enterradas.py:160`, `app/chamados/management/commands/reabrir_orfas_enterradas.py:161`.)
-
-## 30/10 02:32 · sessao 5005d6a06206 · - · - · origem=Ronald (tmux)
-
-- `PROTESTOS_QUE_COBRAM` **não está vazio no código**: é a tupla literal `('FURO_PARCIAL', 'FURO_SEM_COBRANCA', 'FURO_COM_COBRANCA_MORTA')`, com comentário `a morta: corte 16/09`. `app/ponto/services/furos_sem_cobranca.py:35`.
-
-- `_prot_c2` é o conteúdo de `CelulaDia.protestos`, consultado pelo colaborador e data; o gate retorna `False` quando não há costura em chamado vivo e a interseção com aquela tupla é vazia. Ausência de célula, campo `None` ou lista vazia entram como `[]` por `_prot_c2 or []`. `app/chamados/reconciliador.py:768–771`.
-
-- O campo é um `JSONField(null=True, blank=True)` e seu comentário define “protestos = códigos crus de `classificar_dia` no último julgamento”. `app/escala/models.py:1718`, `app/escala/models.py:1741`.
-
-- A origem calculada é `ponto.supra_juiz.classificar_dia`, que devolve pares `(codigo, detalhe)` de contradições; lista vazia significa que as representações concordam. O cartório extrai os códigos dessa função e os passa à lavratura. `app/ponto/supra_juiz.py:179–186`, `app/ponto/services/cartorio.py:1108–1118`, `app/ponto/services/cartorio.py:1409`.
-
-- O escritor da porta, `lavrar_veredito`, declara ser o escritor único de `protestos`; na via cartório faz `protestos = list(codigos or [])`, atribui ao objeto e salva; a via admin preserva os protestos anteriores. `app/ponto/portas/celula.py:647–649`, `app/ponto/portas/celula.py:671–697`.
-
-- Os três códigos significam: `FURO_SEM_COBRANCA`, previsto sem batida e sem chamado, admitindo ausência que cobre só parte do dia; `FURO_COM_COBRANCA_MORTA`, previsto sem batida com cobrança encerrada sem lastro; `FURO_PARCIAL`, marcos sem batida com realizado positivo ou batida no dia sem par fechado. `app/ponto/supra_juiz.py:327–337`, `app/ponto/supra_juiz.py:377–400`.
-
-- O comentário específico do c2 cita **23/10, VARREDURA 1b-iii-b**, a lei de **31/08**, `supra_juiz.NAO_COBRAVEIS_DO_COLABORADOR`, e o **corte 10/09** para não nascer `batida_ausente` sem célula. `app/chamados/reconciliador.py:758–765`.
-
-- A lei de 31/08 aparece como **T4.2-RETENCAO-LE-O-PROTESTO (31/08, corte Ronald)**: `FURO_PRE_ADOCAO` acusa o dia, mas declara que não há o que cobrar do colaborador; ele é o único elemento de `NAO_COBRAVEIS_DO_COLABORADOR`. `app/ponto/supra_juiz.py:16–36`.
-
-- O módulo que define a tupla cita **FURO-PARCIAL-SEM-COBRANCA (P7.1, corte Ronald 16/09)** e identifica sua fonte como a lavra do cartório. `app/ponto/services/furos_sem_cobranca.py:1–4`.
-
-- Há também **L-099** comentada na classificação de `FURO_PARCIAL`, junto de **BUG-CONCORDE-SEM-ENTRADA (23/10, P7.1)**. `app/ponto/supra_juiz.py:388–393`.
-
-- O corte 10/09 é explicado no gate compartilhado: a exigência de célula pertence ao emissor `batida_ausente`; `celula_veta_cobranca` deliberadamente retorna `None` quando não existe célula. `app/ponto/marcos.py:129–135`, `app/ponto/marcos.py:154–157`.
-
-## 30/10 02:32 · sessao 95c0bf774990 · - · - · origem=Ronald (tmux)
-
-- O piso é **constante literal**: `PISO_EMISSAO = '2026-09'`. A docstring identifica O44 e o aval Ronald de 11/10 19:5x; explica que substitui a tranca e “não depende de cadastro nenhum”. Não há `L-NNN` específico citado nesse bloco. Referências: `app/ponto/services/cartorio.py:190`, `app/ponto/services/cartorio.py:193`, `app/ponto/services/cartorio.py:209`, `app/ponto/services/cartorio.py:214`.
-- `_hz_c2` importa `emissao_no_horizonte`; o leitor deriva a competência por `janela_atual(data, empresa)` e compara o `AAAA-MM` do fim da janela com o literal. Portanto, o piso não é o primeiro dia civil de setembro. Referências: `app/chamados/reconciliador.py:731`, `app/ponto/services/cartorio.py:240`, `app/ponto/services/cartorio.py:244`.
-- O cadastro influencia **qual competência contém o dia**, pelo campo `Empresa.dia_inicio_competencia`, default 21. O leitor limita o corte a 2–28; `janela_atual` usa esse corte. Referências: `app/colaboradores/models.py:46`, `app/ponto/janelas.py:50`, `app/ponto/janelas.py:60`.
-- Esse **corte**, distinto do piso, é editável pela UI: campo “Dia de inicio da apuracao (corte da folha)”; a view exige `editar_cadastro`, recebe o POST, limita o valor a 2–28 e o passa à atualização da empresa. Referências: `app/templates/colaboradores/empresa_form.html:53`, `app/colaboradores/views.py:485`, `app/colaboradores/views.py:496`, `app/colaboradores/views.py:519`.
-- `emissao_no_horizonte` e `PISO_EMISSAO` não constam em `JUIZES` nem em `JUIZES_DO_PRAZO`; o próprio leitor declara que não ganha chave no registro. A autoridade da competência, `janela_atual`, está registrada em `_F5`. Referências: `app/core/juizes.py:146`, `app/core/juizes.py:246`, `app/config/crons.py:1929`, `app/ponto/services/cartorio.py:235`.
-- O leitor do piso não consulta estado aberto/exportado/trancado/pago; compara a competência calculada com a constante. A docstring declara essa ausência de consulta. Referências: `app/ponto/services/cartorio.py:235`, `app/ponto/services/cartorio.py:244`.
-- O gate do piso só atua quando não há chamado do dia já vivo: `_costura_no_vivo` vem da consulta por colaborador, módulo `batida_ausente`, `data_turno` e status em `VIVOS`. Referências: `app/chamados/reconciliador.py:738`, `app/chamados/reconciliador.py:741`, `app/chamados/reconciliador.py:743`.
-
-_332 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_336 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
