@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 30/10/2026 14:59:44.** Transcript: `1a51e6b0-927f-4c8c-a61e-896443577f6a.jsonl` (6.3 MB). Acoes na janela: **335**.
+**Medido em 30/10/2026 15:05:12.** Transcript: `1a51e6b0-927f-4c8c-a61e-896443577f6a.jsonl` (6.4 MB). Acoes na janela: **337**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 14:59:49 | Bash | Wait for grading, comboio4 suite and Codex volta 4 | `cd /home/ronald/saas-hasner/logs; until [ "$(/bin/grep -l '^rc=' bench_astra/nota_*.run 2>/dev/null \| wc -l)" -ge 6 ] && /bin/grep -q '^rc=' o261/veto_a2/suite_comboio4.log 2>/dev/null && /bin/grep -q '^rc=' calendario_hoje/verif4.run 2>/dev/null; do /usr/bin/sleep 30; done; tail -q -n1 bench_astra/nota_*.run o261/veto_a2/suite_comboio4.log calendario_hoje/verif4.run` |
+| 14:59:47 | Bash | Archive invalid grading and relaunch blind grading | `cd /home/ronald/saas-hasner/logs/bench_astra && mkdir -p old_invalida && mv nota_*.txt nota_*.run tabela.out amostra_novos.txt old_invalida/ && echo "INVALIDA (30/10 15:0x): o cego_*.txt foi montado com a 'ultima mensagem do assistente' da SESSAO, que nao e a resposta (-o do wrapper): Astra 1c565c8f entrou com 1.103 chars de 15.835. Refeito com o ultimo agent_message do jsonl do wrapper." > old_in ...` |
 | 14:59:36 | Bash | Rebuild blind file from wrapper answers; check lengths | `cd /home/ronald/saas-hasner/logs/bench_astra && python3 - <<'EOF' import json, glob, os, random L = '/home/ronald/saas-hasner/logs/codex' cham = [l.rstrip('\n').split('\t') for l in open(L + '/chamadas.log')] def jsonl_de(sid): for c in cham: if len(c) > 6 and c[5] == 'fim' and c[6] == sid: obra, pid = c[1], c[4] fs = glob.glob('%s/%s_*_%s.jsonl' % (L, obra, pid)) return fs[0] if fs else None def  ...` |
 | 14:59:20 | Bash | Find how wrapper writes the answer file | `cd /home/ronald/saas-hasner && /bin/grep -n "RESPOSTA\b\\|\$RESPOSTA\\|output-last\\|-o \"" bin/codex_pergunta.sh \| head -10` |
 | 14:59:09 | Bash | Check answer lengths fed to the blind grader | `cd /home/ronald/saas-hasner/logs/bench_astra && python3 - <<'EOF' import re s=open('cego_O261-VETO-A2.txt').read() for bloco in s.split('######## VOLTA ')[1:]: nome=bloco.split(' ')[0] a=bloco.split('==== RESPOSTA A ====')[1].split('==== RESPOSTA B ====')[0] b=bloco.split('==== RESPOSTA B ====')[1] print(nome,'A',len(a),'B',len(b),'ato humano em A:', 'Ato humano' in a, 'em B:', 'Ato humano' in b)  ...` |
