@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 30/10/2026 19:20:58.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (5.0 MB). Acoes na janela: **200**.
+**Medido em 30/10/2026 19:26:08.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (5.0 MB). Acoes na janela: **202**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 19:26:07 | Bash |  | `cd /home/ronald/saas-hasner && grep -E "^FAIL:" logs/o261v/suite2_9772e8fe.log \| cut -c1-200; grep -A20 "^FAIL: test_MORDE_todo_nome_importado" logs/o261v/suite2_9772e8fe.log \| grep -E "AssertionError\|fora_de_fase\|import" \| head -5 \| cut -c1-300` |
+| 19:26:02 | Bash |  | `cd /home/ronald/saas-hasner && grep -E "^(FAIL\|ERROR):\|^Ran \|^(OK\|FAILED)($\| \()\|^rc=" logs/o261v/suite2_9772e8fe.log \| tail -6 \| cut -c1-200` |
 | 19:18:51 | Bash |  | `F=$(readlink -f /tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/tasks/a90ba96d50e2457da.output); date +%T; stat -c '%y' "$F"; a=$(stat -c %Y "$F"); for i in $(seq 1 30); do /usr/bin/sleep 15; b=$(stat -c %Y "$F"); [ "$b" != "$a" ] && break; done; date +%T; stat -c '%y' "$F"; tail -c 600 "$F" \| tr -d '\\' \| cut -c1-600` |
 | 19:18:37 | Bash |  | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md' L=open(p).read().split('\n') i=next(k for k,l in enumerate(L) if l.startswith('> **O261-V-FASE-NA-LISTA 2a construcao ENTREGUE**')) L.insert(i,"> **MEDIDA DO PROGRAMA (item 5) CONSTRUIDA** (`wt-medida-1907` @ 06baf552, instrumento, pouso proprio L-105 depois do produto): leitores com derivacao propria do STATUS do dia = **7**  ...` |
 | 19:16:40 | Bash |  | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md' L=open(p).read().split('\n') i=next(k for k,l in enumerate(L) if l.startswith('> lei: O261-V-FASE-DONO-DO-DIA-DE-FASE')) L.insert(i+1,"> **V-FASE 9772e8fe: opus final REPROVOU** (19:1x) -- bloqueiam (1) dono fixo = 2o juiz (pergunta acima) e (2) custo de `propostas()` da frota no request NAO medido (propositor.py:429 x views_i ...` |
