@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 30/10/2026 20:30:32.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (5.9 MB). Acoes na janela: **237**.
+**Medido em 30/10/2026 20:36:02.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (6.0 MB). Acoes na janela: **241**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 20:31:09 | Bash |  | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='/home/ronald/saas-hasner/app/docs/RELATO.md' L=open(p).read().split('\n') assert L[2].startswith('ESPERANDO:') L[2]="ESPERANDO: /home/ronald/saas-hasner/bin/trava_teste.sh \| pid=950949" open(p,'w').write('\n'.join(L)) EOF grep -n "def _processo_casa" -A12 bin/hook_stop_fila1.py \| head -14` |
+| 20:31:04 | Bash |  | `cd /home/ronald/saas-hasner && sed -n 519,535p bin/hook_stop_fila1.py; bin/trava_teste.sh --quem; ps -o pid,cmd -p $(bin/trava_teste.sh --quem \| grep -o 'suite:[0-9]*' \| cut -d: -f2) \| cut -c1-150` |
+| 20:31:02 | Bash |  | `cd /home/ronald/saas-hasner && grep -n "def _prova_pid" -A22 bin/hook_stop_fila1.py \| head -30` |
+| 20:30:35 | Bash |  | `F=/home/ronald/saas-hasner/logs/o261e/suite_d3.log; a=$(stat -c %Y "$F"); for i in $(seq 1 30); do /usr/bin/sleep 15; b=$(stat -c %Y "$F"); [ "$b" != "$a" ] && break; done; date +%T; stat -c '%y %s' "$F"` |
 | 20:30:26 | Bash |  | `cd /home/ronald/saas-hasner && /usr/bin/sleep 5; ls -la logs/o261e/suite_d3.log \| cut -c1-80; python3 - <<'EOF' p='/home/ronald/saas-hasner/app/docs/RELATO.md' L=open(p).read().split('\n') assert L[2].startswith('ESPERANDO:') L[2]="ESPERANDO: suite-E2-D3 \| arquivo=/home/ronald/saas-hasner/logs/o261e/suite_d3.log" open(p,'w').write('\n'.join(L)) EOF sed -n 3p app/docs/RELATO.md` |
 | 20:30:21 | Bash |  | `cd /home/ronald/saas-hasner && date +%H:%M && python3 - <<'EOF' p='app/docs/BACKLOG.md' L=open(p).read().split('\n') i=next(k for k,l in enumerate(L) if l.startswith('\| O261-E-CELULA-20-UM-DONO \|')) novas=[ ("E2-D3-TRABALHA-FORA-DA-IMPRESSAO","`CelulaDia.trabalha` fora da `impressao_insumos` (so dna_versao+marcos, `cartorio.py:327`); e o DNA so rejulga por `regenerar_celulas_vinculo`, nao por `g ...` |
 | 20:27:39 | Bash |  | `cd /home/ronald/saas-hasner && tail -5 logs/medida_programa/push.log \| cut -c1-200; git fetch -q origin; git log origin/main --oneline -1` |
