@@ -1,7 +1,443 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **30/10/2026 18:17** · publicado em **30/10/2026 18:17** (UTC-3)
+> Ultima resposta processada: **30/10/2026 18:22** · publicado em **30/10/2026 18:23** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 30/10 18:22 · sessao d7e74ac23a0e · CODEX-CONTEXTO-DA-CASA-AB2-CORRECAO · censo · origem=Code
+
+A classificação considera a cópia atual. C1, C4, C14, C17 e C19 estão corrigidos: o template lê o rótulo, o teste limita o delta cego, a renderização usa sentinela, a singular não repassa o mapa aos marcos e o teste agora chama a singular alimentada. (`app/templates/colaboradores/partials/_calendario_grade.html:107`; `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:183`, `:110`; `app/ponto/turnos.py:2080`; `app/ponto/tests/test_c1_dias_encerrados.py:74`)
+
+O1 recebe `n/a` quanto ao ponto indicado do código: a expressão apontada não está na linha 720. A mensagem do commit 5cc57c18 permanece `[não verificado]`. (`app/colaboradores/services/calendario.py:720`)
+
+C10 descreve o teste isolado: o teste seguinte rejeita a mutação global “ontem sempre previsto”. C11 permanece pela ausência de cenário de feriado; já existe cenário de ausência. C26 confirma a alimentação parcial e o julgamento do intervalo; consequência incorreta em produção é `[não verificado]`. (`app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:57`, `:63`, `:133`; `app/ponto/services/cartorio.py:746`, `:853`; `app/ponto/turnos.py:2136`)
+
+Os trechos abaixo sustentam as notas positivas ou parciais. Listar um cenário de teste, sem identificar sua lacuna, foi considerado `EM_PARTE`. [nao verificado]
+
+| Volta/resposta | Itens | Trecho da resposta e referência |
+|---|---|---|
+| par1/A | O2, C2 | “A régua suspeita também esconde o motivo recebido”; descreve o cruzamento sem fim, não O2 com fim previsto. (`app/colaboradores/services/calendario.py:139`, `:141`, `:722`) |
+| par1/A | O3 | “A folha mantém seu próprio critério de dia passado”; toca a separação temporal sem apontar a duplicação como defeito. (`app/colaboradores/services/calendario.py:723`; `app/folha/export.py:1237`) |
+| par1/A | O4 | “uma consulta adicional incondicional”; “subtrai uma base que já contém a consulta adicional fixa”. (`app/ponto/turnos.py:2130`; `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:177`) |
+| par1/A | O5 | “esse instante segue à juíza e essa data segue ao retentor”; não identifica `_agora_retr`. (`app/colaboradores/services/calendario.py:258`, `:712`, `:726`) |
+| par1/A | C3 | “a exceção do dia da demissão”; não aponta a divergência contratual da tela. (`app/folha/export.py:1211`, `:1237`) |
+| par1/A | C5 | “O RED cego verifica a premissa na juíza e na folha”; não identifica a fabricação local que passaria. (`app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:97`) |
+| par1/A | C6, C22 | “A propriedade C1 com células alimentadas não contém batidas para provar o pareamento com essa alimentação”; não discute alimentação divergente do banco. (`app/ponto/tests/test_c1_dias_encerrados.py:62`, `:66`) |
+| par1/A | C7–C13 | “meia-noite, turno encadeado anterior a ontem, falta depois do fim, veredito lavrado, folga, ausência e isenção”; enumera os temas, sem apontar essas lacunas. (`app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:47`, `:57`, `:61`, `:65`, `:113`, `:124`, `:147`) |
+| par1/A | C20 | “encaminha células com chave `(colaborador_id, data)` a `turnos_do_colab`, que exige chave `data` e a embrulha novamente”. (`app/ponto/turnos.py:2132`, `:1928`) |
+| par1/A | C23 | “o template é renderizado com sentinela em `status_rotulo`”; não questiona comentário ou conteúdo oculto. (`app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:108`, `:110`) |
+| par1/A | C24 | “a mudança repercute além da cor da tela”; identifica os leitores, sem apontar o desaparecimento do botão. (`app/colaboradores/services/calendario.py:204`; `app/templates/colaboradores/partials/_calendario_grade.html:125`) |
+| par1/B | O2 | “a resposta da folha ainda pode desaparecer na classificação”; o caso descrito é sem fim e sem vínculo ativo. (`app/colaboradores/services/calendario.py:134`, `:158`, `:722`) |
+| par1/B | O3 | “não classificaria essa distinção, isoladamente, como juiz novo ou teto indevido por data”. (`app/colaboradores/services/calendario.py:714`, `:723`) |
+| par1/B | O4 | “sempre um SELECT de vínculos”; “esse custo se repete por calendário montado”. (`app/ponto/turnos.py:2130`; `app/relatorios/furos.py:184`) |
+| par1/B | O5 | “o prazo de desfazer captura outro `now()`”. (`app/colaboradores/services/calendario.py:343`) |
+| par1/B | C2 | “A correção precisa preservar A2”; não identifica a régua suspeita substituindo o motivo. (`app/colaboradores/services/calendario.py:124`, `:139`, `:141`) |
+| par1/B | C5 | “A sentinela prova que o template lê o campo; não prova que o rótulo veio da autoridade da folha”; aponta outra limitação da dependência. (`app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:108`) |
+| par1/B | C6, C22 | “C1 possui batidas, mas suas chamadas não exercitam esse argumento”; não distingue a fixture alimentada, sem batidas, nem o conteúdo persistido. (`app/ponto/tests/test_c1_dias_encerrados.py:28`, `:62`, `:66`) |
+| par1/B | C7–C13 | “antes do turno, meia-noite, turno encadeado além de ontem, depois do fim, veredito lavrado”; também enumera “folga, ausência e isenção”, sem essas lacunas. (`app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:47`, `:57`, `:61`, `:65`, `:113`, `:124`, `:147`) |
+| par1/B | C18 | “O teste de cobertura também admite que A2 decide antes da cobertura que ele aparenta verificar”. (`app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:134`, `:138`) |
+| par1/B | C23 | “A sentinela prova que o template lê o campo”; não verifica a localização no HTML. (`app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:110`) |
+| par1/B | C24 | “o vigia que consulta ‘Resolver dia’”; identifica o alcance, sem apontar a retirada da oferta. (`app/chamados/services/vigia_fio.py:294`; `app/colaboradores/services/calendario.py:204`) |
+| par2/A | O2, C2 | “se houver régua suspeita, `_classificar` retorna `escala_suspeita` antes de ler `retido_folha`”; trata o caso sem fim. (`app/colaboradores/services/calendario.py:139`, `:141`, `:722`) |
+| par2/A | O3 | “Calendário monta `_em_curso` e `_sem_fim`”; rastreia o filtro, sem identificar sua duplicação na folha. (`app/colaboradores/services/calendario.py:714`, `:722`; `app/folha/export.py:1237`) |
+| par2/A | O4 | “Acréscimo estrutural comum: uma consulta de vínculos por montagem”; “o custo comum cancela na subtração”. (`app/ponto/turnos.py:2130`; `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:177`) |
+| par2/A | O5 | “desfazer retratação captura outro instante”. (`app/colaboradores/services/calendario.py:343`) |
+| par2/A | C6, C22 | “o C1 alimentado testa DNA, sem geradora concorrente”; identifica a lacuna da geradora, não a alimentação igual ao banco. (`app/ponto/tests/test_c1_dias_encerrados.py:62`, `:64`) |
+| par2/A | C8 | “O teste novo preserva apenas `nunca_bateu`; falta o adversarial `concorde`”. (`app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:65`, `:74`) |
+| par2/A | C7, C9–C13 | “meia-noite, turno até dois dias depois, falta após encerramento”; também cita testes de veredito, folga, ausência e isenção, sem apontar essas lacunas. (`app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:47`, `:57`, `:61`, `:113`, `:124`, `:133`, `:147`) |
+| par2/A | C20 | “A chave fica aninhada; a busca da geradora deixa de encontrar a célula”. (`app/ponto/turnos.py:2132`, `:1928`; `app/escala/alimentacao.py:237`) |
+| par2/A | C23 | “O render usa sentinela para exigir leitura efetiva de `status_rotulo`”; não aponta a aceitação de conteúdo oculto. (`app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:108`, `:110`) |
+| par2/A | C24 | “Resolver dia”; “Template e vigia do fio”; rastreia o leitor sem apontar o desaparecimento da oferta. (`app/colaboradores/services/calendario.py:204`; `app/templates/colaboradores/partials/_calendario_grade.html:125`) |
+| par2/B | O2, O3, C2 | “O passado `sem_previsto` sai de `_em_curso`”; “preservando a precedência humana e o veredito”; não aponta O2 com fim nem a duplicação temporal como defeito. (`app/colaboradores/services/calendario.py:714`, `:723`, `:124`, `:141`) |
+| par2/B | O4 | “esconde a consulta adicional incondicional de vínculos”. (`app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:177`; `app/ponto/turnos.py:2130`) |
+| par2/B | O5 | “O segundo `now()` do calendário serve ao prazo de desfazer retratação”. (`app/colaboradores/services/calendario.py:343`) |
+| par2/B | C5 | “substituir a consulta por `_cego_folha = {d: 'sem_celula' for d in _sem_fim}` preservaria as expectativas”. (`app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:97`, `:177`; `app/colaboradores/services/calendario.py:722`) |
+| par2/B | C6, C22 | “Não cobrem [...] o caminho `turnos=` com batidas nessa nova prova C1”; toca a prova alimentada, sem identificar alimentação igual ao banco ou perda da geradora. (`app/ponto/tests/test_c1_dias_encerrados.py:62`, `:66`) |
+| par2/B | C7–C13 | “antes do turno, madrugada, depois do fim, turno encadeado além de ontem, decisão lavrada”; também cita “folga, ausência e isenção”, sem essas lacunas. (`app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:47`, `:57`, `:61`, `:65`, `:113`, `:124`, `:147`) |
+| par2/B | C18 | “os casos de veredito, folga, ausência e isenção escapam por outros ramos”; não identifica especificamente a prova do universo da cobrança. (`app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:133`, `:138`) |
+| par2/B | C20 | “criando chaves aninhadas no adaptador”; “o cartório o utiliza”. (`app/ponto/turnos.py:2132`, `:1928`; `app/ponto/services/cartorio.py:853`) |
+| par2/B | C23 | “consumo do campo pelo template mediante sentinela”; não aponta a localização não verificada. (`app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:110`) |
+| par2/B | C24 | “a mudança de status também alcança a oferta de ação e sua contagem”; não identifica o desaparecimento em competência anterior. (`app/colaboradores/services/calendario.py:204`, `:914`) |
+
+ITEM|C1|app/templates/colaboradores/partials/_calendario_grade.html:107|Grade não apresenta o rótulo do dia cego produzido pelo calendário.
+ITEM|C2|app/colaboradores/services/calendario.py:124|Precedências de ausência, folga, feriado ou régua suspeita podem substituir sem_celula retornado pela folha.
+ITEM|C3|app/folha/export.py:1180|Calendário e folha divergem no recorte de admissão/demissão, inclusive no próprio dia da demissão.
+ITEM|C4|app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:177|Prova relativa de custo não limita o acréscimo constante exclusivo do caminho cego.
+ITEM|C5|app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:97|Teste aceita fabricar sem_certidao/sem_celula localmente sem depender da resposta da folha. [nao verificado]
+ITEM|C6|app/ponto/tests/test_c1_dias_encerrados.py:53|Propriedade C1 não prova equivalência quando a alimentação diverge do conteúdo persistido.
+ITEM|C7|app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:61|Teste depois do fim não cobre a igualdade agora == fim. [nao verificado]
+ITEM|C8|app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:65|Proteção de veredito testa somente nunca_bateu e deixa outros vereditos sem cobertura.
+ITEM|C9|app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:47|Teste encadeado não impede manter previsto depois do encerramento desse DNA. [nao verificado]
+ITEM|C10|app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:57|Teste de meia-noite isolado aceita previsto incondicionalmente para ontem. [nao verificado]
+ITEM|C11|app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:124|Teste da folga não sela as precedências de ausência e feriado no caminho cego. [nao verificado]
+ITEM|C12|app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:147|Teste do isento não sela a isenção na folha nem o rótulo apresentado. [nao verificado]
+ITEM|C13|app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:113|Teste com veredito deixa passar consulta desnecessária à folha preservando o resultado. [nao verificado]
+ITEM|C14|app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:104|Teste de renderização aceita frase literal em lugar da leitura de status_rotulo. [nao verificado]
+ITEM|C15|app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:104|Teste de renderização não exercita os demais status do ramo residual. [nao verificado]
+ITEM|C16|app/colaboradores/services/calendario.py:57|Rótulo de ausencia promete abono próprio mesmo para ausência de efeito SUPRIME.
+ITEM|C17|app/ponto/turnos.py:2079|Repasse singular do mapa por data do fechamento aos marcos por tupla perde o DNA e usa o template.
+ITEM|C18|app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:133|Teste da ausência pendente não sela o universo da cobrança porque A2 decide antes. [nao verificado]
+ITEM|C19|app/ponto/tests/test_c1_dias_encerrados.py:70|Teste C1 não exercita a singular alimentada com mapa por data para proteger a correção do fechamento. [nao verificado]
+ITEM|C20|app/ponto/turnos.py:2132|Plural repassa mapa por tupla ao pareador por data, produzindo chave aninhada e perdendo a geradora.
+ITEM|C21|app/ponto/services/vigia_de_hora.py:57|Vigia entrega mapa por tupla à singular que o repassa ao pareador por data.
+ITEM|C22|app/ponto/tests/test_c1_dias_encerrados.py:62|Fixture C1 alimentada não tem geradora nem batidas para detectar perda da geradora no pareamento.
+ITEM|C23|app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:110|Asserção textual de renderização não verifica se o atributo está em elemento apresentado, permitindo comentário ou conteúdo oculto.
+ITEM|C24|app/colaboradores/services/calendario.py:204|Mudança de falta para previsto pode retirar Resolver dia de passado ainda em curso da competência anterior.
+ITEM|C25|app/colaboradores/services/calendario.py:624|Falha capturada na carga A2 deixa cobertura independente alcançar retenção sem a precedência correspondente.
+ITEM|C26|app/ponto/services/cartorio.py:853|Segunda passada alimenta somente células reconciliadas, embora dias_encerrados julgue todo o intervalo entre extremos.
+NOTA|CALENDARIO-HOJE_38fe9889_par1|O1|n/a|A=n/a|B=n/a
+NOTA|CALENDARIO-HOJE_38fe9889_par1|O2|existia|A=EM_PARTE|B=EM_PARTE
+NOTA|CALENDARIO-HOJE_38fe9889_par1|O3|existia|A=EM_PARTE|B=EM_PARTE
+NOTA|CALENDARIO-HOJE_38fe9889_par1|O4|existia|A=VIU|B=VIU
+NOTA|CALENDARIO-HOJE_38fe9889_par1|O5|existia|A=EM_PARTE|B=VIU
+NOTA|CALENDARIO-HOJE_38fe9889_par1|O6|existia|A=NAO_VIU|B=NAO_VIU
+NOTA|CALENDARIO-HOJE_38fe9889_par1|O7|existia|A=NAO_VIU|B=NAO_VIU
+NOTA|CALENDARIO-HOJE_38fe9889_par1|C1|n/a|A=n/a|B=n/a
+NOTA|CALENDARIO-HOJE_38fe9889_par1|C2|existia|A=VIU|B=EM_PARTE
+NOTA|CALENDARIO-HOJE_38fe9889_par1|C3|existia|A=EM_PARTE|B=NAO_VIU
+NOTA|CALENDARIO-HOJE_38fe9889_par1|C4|n/a|A=n/a|B=n/a
+NOTA|CALENDARIO-HOJE_38fe9889_par1|C5|existia|A=EM_PARTE|B=EM_PARTE
+NOTA|CALENDARIO-HOJE_38fe9889_par1|C6|existia|A=EM_PARTE|B=EM_PARTE
+NOTA|CALENDARIO-HOJE_38fe9889_par1|C7|existia|A=EM_PARTE|B=EM_PARTE
+NOTA|CALENDARIO-HOJE_38fe9889_par1|C8|existia|A=EM_PARTE|B=EM_PARTE
+NOTA|CALENDARIO-HOJE_38fe9889_par1|C9|existia|A=EM_PARTE|B=EM_PARTE
+NOTA|CALENDARIO-HOJE_38fe9889_par1|C10|existia|A=EM_PARTE|B=EM_PARTE
+NOTA|CALENDARIO-HOJE_38fe9889_par1|C11|existia|A=EM_PARTE|B=EM_PARTE
+NOTA|CALENDARIO-HOJE_38fe9889_par1|C12|existia|A=EM_PARTE|B=EM_PARTE
+NOTA|CALENDARIO-HOJE_38fe9889_par1|C13|existia|A=EM_PARTE|B=EM_PARTE
+NOTA|CALENDARIO-HOJE_38fe9889_par1|C14|n/a|A=n/a|B=n/a
+NOTA|CALENDARIO-HOJE_38fe9889_par1|C15|existia|A=NAO_VIU|B=NAO_VIU
+NOTA|CALENDARIO-HOJE_38fe9889_par1|C16|existia|A=NAO_VIU|B=NAO_VIU
+NOTA|CALENDARIO-HOJE_38fe9889_par1|C17|n/a|A=n/a|B=n/a
+NOTA|CALENDARIO-HOJE_38fe9889_par1|C18|existia|A=NAO_VIU|B=VIU
+NOTA|CALENDARIO-HOJE_38fe9889_par1|C19|n/a|A=n/a|B=n/a
+NOTA|CALENDARIO-HOJE_38fe9889_par1|C20|existia|A=VIU|B=NAO_VIU
+NOTA|CALENDARIO-HOJE_38fe9889_par1|C21|existia|A=NAO_VIU|B=NAO_VIU
+NOTA|CALENDARIO-HOJE_38fe9889_par1|C22|existia|A=VIU|B=EM_PARTE
+NOTA|CALENDARIO-HOJE_38fe9889_par1|C23|existia|A=EM_PARTE|B=EM_PARTE
+NOTA|CALENDARIO-HOJE_38fe9889_par1|C24|existia|A=EM_PARTE|B=EM_PARTE
+NOTA|CALENDARIO-HOJE_38fe9889_par1|C25|existia|A=NAO_VIU|B=NAO_VIU
+NOTA|CALENDARIO-HOJE_38fe9889_par1|C26|existia|A=NAO_VIU|B=NAO_VIU
+NOTA|CALENDARIO-HOJE_38fe9889_par2|O1|n/a|A=n/a|B=n/a
+NOTA|CALENDARIO-HOJE_38fe9889_par2|O2|existia|A=EM_PARTE|B=EM_PARTE
+NOTA|CALENDARIO-HOJE_38fe9889_par2|O3|existia|A=EM_PARTE|B=EM_PARTE
+NOTA|CALENDARIO-HOJE_38fe9889_par2|O4|existia|A=VIU|B=VIU
+NOTA|CALENDARIO-HOJE_38fe9889_par2|O5|existia|A=VIU|B=VIU
+NOTA|CALENDARIO-HOJE_38fe9889_par2|O6|existia|A=NAO_VIU|B=NAO_VIU
+NOTA|CALENDARIO-HOJE_38fe9889_par2|O7|existia|A=NAO_VIU|B=NAO_VIU
+NOTA|CALENDARIO-HOJE_38fe9889_par2|C1|n/a|A=n/a|B=n/a
+NOTA|CALENDARIO-HOJE_38fe9889_par2|C2|existia|A=VIU|B=EM_PARTE
+NOTA|CALENDARIO-HOJE_38fe9889_par2|C3|existia|A=NAO_VIU|B=NAO_VIU
+NOTA|CALENDARIO-HOJE_38fe9889_par2|C4|n/a|A=n/a|B=n/a
+NOTA|CALENDARIO-HOJE_38fe9889_par2|C5|existia|A=NAO_VIU|B=VIU
+NOTA|CALENDARIO-HOJE_38fe9889_par2|C6|existia|A=EM_PARTE|B=EM_PARTE
+NOTA|CALENDARIO-HOJE_38fe9889_par2|C7|existia|A=EM_PARTE|B=EM_PARTE
+NOTA|CALENDARIO-HOJE_38fe9889_par2|C8|existia|A=VIU|B=EM_PARTE
+NOTA|CALENDARIO-HOJE_38fe9889_par2|C9|existia|A=EM_PARTE|B=EM_PARTE
+NOTA|CALENDARIO-HOJE_38fe9889_par2|C10|existia|A=EM_PARTE|B=EM_PARTE
+NOTA|CALENDARIO-HOJE_38fe9889_par2|C11|existia|A=EM_PARTE|B=EM_PARTE
+NOTA|CALENDARIO-HOJE_38fe9889_par2|C12|existia|A=EM_PARTE|B=EM_PARTE
+NOTA|CALENDARIO-HOJE_38fe9889_par2|C13|existia|A=EM_PARTE|B=EM_PARTE
+NOTA|CALENDARIO-HOJE_38fe9889_par2|C14|n/a|A=n/a|B=n/a
+NOTA|CALENDARIO-HOJE_38fe9889_par2|C15|existia|A=NAO_VIU|B=NAO_VIU
+NOTA|CALENDARIO-HOJE_38fe9889_par2|C16|existia|A=NAO_VIU|B=NAO_VIU
+NOTA|CALENDARIO-HOJE_38fe9889_par2|C17|n/a|A=n/a|B=n/a
+NOTA|CALENDARIO-HOJE_38fe9889_par2|C18|existia|A=NAO_VIU|B=EM_PARTE
+NOTA|CALENDARIO-HOJE_38fe9889_par2|C19|n/a|A=n/a|B=n/a
+NOTA|CALENDARIO-HOJE_38fe9889_par2|C20|existia|A=VIU|B=VIU
+NOTA|CALENDARIO-HOJE_38fe9889_par2|C21|existia|A=NAO_VIU|B=NAO_VIU
+NOTA|CALENDARIO-HOJE_38fe9889_par2|C22|existia|A=VIU|B=EM_PARTE
+NOTA|CALENDARIO-HOJE_38fe9889_par2|C23|existia|A=EM_PARTE|B=EM_PARTE
+NOTA|CALENDARIO-HOJE_38fe9889_par2|C24|existia|A=EM_PARTE|B=EM_PARTE
+NOTA|CALENDARIO-HOJE_38fe9889_par2|C25|existia|A=NAO_VIU|B=NAO_VIU
+NOTA|CALENDARIO-HOJE_38fe9889_par2|C26|existia|A=NAO_VIU|B=NAO_VIU
+NOVO|CALENDARIO-HOJE_38fe9889_par1|A|app/colaboradores/services/calendario.py:351|Sem vínculo ativo, vínculo histórico válido e célula de trabalho não impedem descartar sem_celula e publicar sem_dados.
+NOVO|CALENDARIO-HOJE_38fe9889_par1|A|app/colaboradores/legenda_calendario.py:18|Legenda do copiloto ainda define previsto exclusivamente como dia futuro; teste verifica nomes, não explicações. [nao verificado]
+NOVO|CALENDARIO-HOJE_38fe9889_par1|A|app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:19|Novos testes não exercitam a alimentação turnos= com lista não vazia. [nao verificado]
+NOVO|CALENDARIO-HOJE_38fe9889_par1|B|app/colaboradores/services/calendario.py:351|Sem vínculo ativo, calendário perde a retenção de dia coberto por vínculo histórico e publica sem_dados.
+NOVO|CALENDARIO-HOJE_38fe9889_par1|B|app/colaboradores/services/calendario.py:64|Calendário escreve localmente a frase do dia cego, em vez de consumir rótulo produzido pela autoridade da folha.
+NOVO|CALENDARIO-HOJE_38fe9889_par1|B|app/colaboradores/legenda_calendario.py:18|Explicação de previsto entregue ao copiloto ficou restrita ao futuro e seu teste não verifica a descrição. [nao verificado]
+NOVO|CALENDARIO-HOJE_38fe9889_par1|B|app/colaboradores/services/calendario.py:727|Filtro de retenções consulta lista de candidatos por registro e pode acrescentar custo quadrático de CPU.
+NOVO|CALENDARIO-HOJE_38fe9889_par1|B|app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:20|Fixture sem batidas não cobre a nova entrada turnos= com conteúdo.
+NOVO|CALENDARIO-HOJE_38fe9889_par2|A|app/colaboradores/services/calendario.py:822|Veredito concorde sem batida desliga a proteção temporal e pode produzir falta enquanto a juíza responde relogio.
+NOVO|CALENDARIO-HOJ
+
+[truncado em 20000 de 20889 caracteres]
+
+## 30/10 18:20 · sessao 856fa586821d · - · - · origem=Ronald (tmux)
+
+Somente inspeção; nenhuma escrita ou execução de suíte. [nao verificado]
+
+| Item | Estado atual | Evidência |
+|---|---|---|
+| C1 | n/a | Grade publica `title="{{ dia.status_rotulo }}"` no ramo residual: `app/templates/colaboradores/partials/_calendario_grade.html:107`. |
+| C4 | n/a | Além da igualdade entre 1/8 cegos, há teto `self.assertLessEqual(um, 2)`: `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:177`, `:179`, `:183`. A limitação relativa ao custo comum continua, mas é outro defeito. |
+| C5 | existia | Teste consulta folha separadamente e confere resultado final; não intercepta nem diferencia a dependência interna da montagem: `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:95`, `:97`, `:99`. Uma fabricação local do mesmo código não é distinguida pelas asserções. |
+| C7 | existia | Depois do fim está às 11h locais, sendo o fim às 06h; não testa igualdade: `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:61`. |
+| C8 | existia | Caso de veredito usa somente `nunca_bateu`: `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:74`; o caso sem fim julgado também: `:117`. |
+| C9 | existia | DNA encadeado é testado somente às 02h, quatro horas antes do encerramento; única asserção exige `previsto`: `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:47`, `:54`, `:55`. |
+| C10 | existia, como limitação do teste isolado | Teste meia-noite só exige `previsto` às 02h: `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:57`, `:59`. A mutação global “ontem sempre previsto” seria detectada pelo teste seguinte, que exige falta às 11h: `:61`, `:63`. |
+| C11 | existia parcialmente | Folga testa apenas `FolgaDia`: `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:128`. Agora há teste específico de ausência pendente em `:133-144`; não há cenário de feriado nesse módulo. |
+| C12 | existia | Isento altera flag e exige somente status `ok`; não consulta folha nem verifica rótulo: `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:150`, `:153`. |
+| C13 | existia | Teste julgado verifica retenção independente/status/rótulo, mas não quantidade ou ausência de chamadas internas à folha: `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:117-121`. |
+| C14 | n/a | Render exige valor normal em atributo e repete com sentinela diferente: `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:106`, `:108`, `:110`. A frase literal antiga não satisfaz a sentinela. |
+| C15 | existia | Renderização dos três layouts ocorre somente no teste cujo status é `sem_certidao`: `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:99`, `:104-110`; os demais status residuais não aparecem nessa prova. |
+| C18 | existia | O próprio comentário registra que cobrança restrita a aprovadas passa porque A2 decide antes: `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:137-138`; execução só exige `ausencia`: `:144`. |
+| C23 | existia | `assertIn('title="SENTINELA-DO-ROTULO"', html)` não analisa DOM, comentário ou visibilidade: `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:110`; idem valor normal em `:106`. |
+
+## 30/10 18:20 · sessao 196d4b4dc3d6 · - · - · origem=Ronald (tmux)
+
+- **O1: não confirmado no sítio indicado.** `app/colaboradores/services/calendario.py:720` contém “UMA pergunta por montagem… (custo 0 no caso comum)”, sem “fallback” nem equivalente claro. Há “band-aid” em `app/colaboradores/services/calendario.py:85`, mas descreve outro mecanismo já removido. Mensagem do commit `5cc57c18`: **[não verificado]**; a cópia não possui `.git`. Não transplantaria O1 para `:85`.
+
+- **O2: existia.** A consulta à folha seleciona apenas `MOTIVO_SEM_PREVISTO` (`app/colaboradores/services/calendario.py:722–727`). Passado com fim previsto já encerrado fica fora dessa consulta (`app/ponto/turnos.py:2102–2105`); sem batida, sem cobertura e sem outra precedência, vira `falta` (`app/colaboradores/services/calendario.py:148`). A folha retém célula sem veredito, com `trabalha != None`, passada e fora do dia da demissão, independentemente do fim previsto (`app/folha/export.py:1237–1238`).
+
+- **O3: existia.** O calendário aplica `d < hoje` em `app/colaboradores/services/calendario.py:723`; a folha repete esse predicado em `app/folha/export.py:1213` e `:1237`.
+
+- **O4: existia estruturalmente.** Há carregamento incondicional dos vínculos em `app/ponto/turnos.py:2130`, mesmo recebendo células e turnos. O mapa chama o contexto por cartão em `app/relatorios/furos.py:184`; o comentário informa frota de aproximadamente 750 colaboradores em `:176`. Portanto, uma consulta extra por montagem; aproximadamente 750 extras somente se houver esse número de cartões. Contagem efetiva e tempo em produção: **[não verificado]**.
+
+- **O5: existia.** Captura `_agora = timezone.now()` em `app/colaboradores/services/calendario.py:258` e captura novamente `_agora_retr = timezone.now()` em `:343`.
+
+- **O6: existia como lacuna estática.** O ramo inclui hoje com qualquer motivo não nulo, inclusive `sem_previsto` (`app/colaboradores/services/calendario.py:714–715`), resultando em `previsto` nas premissas correspondentes (`:822`, `:135–136`). Os testes de hoje usam jornada com fim (`app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:42–45`); os testes sem fim usam passado (`:91–100`, `:112–153`). Busca nos testes do calendário não encontrou combinação hoje + sem fim. Execução: **[não verificado]**.
+
+- **O7: existia, nos dois componentes.** `resumo['faltas']` conta exclusivamente `falta` e o resumo não possui contador de `sem_certidao` (`app/colaboradores/services/calendario.py:948–965`). Os mapas de cores do PDF não incluem `sem_certidao` (`app/relatorios/furos_pdf.py:11–20`); o estado recebe cores padrão (`:21`, `:56–57`).
+
+## 30/10 18:20 · sessao c1cb0a2b1b40 · - · - · origem=Ronald (tmux)
+
+- **C6: existia.** A fixture persiste o DNA em `app/ponto/tests/test_c1_dias_encerrados.py:62`, carrega esse mesmo registro em `:64` e compara as portas em `:66`, `:70` e `:74`; não há alimentação divergente do banco. A leitura sem alimentação busca o DNA persistido em `app/escala/models.py:1097`.
+- **C17: n/a.** A singular passa `celulas` somente ao pareador; a chamada ao puro não recebe esse argumento em `app/ponto/turnos.py:2079` e `:2080`. O mapa por data do fechamento continua corretamente dirigido à singular em `app/ponto/services/fechamento.py:359` e `:361`.
+- **C19: n/a — correção adicional presente nesta cópia.** O teste converte o mapa composto para `por_data` em `app/ponto/tests/test_c1_dias_encerrados.py:73` e chama expressamente a singular alimentada em `:74`. Portanto, não repetir a conclusão do anexo verif8 sobre essa lacuna.
+- **C20: existia.** Contrato composto da plural em `app/ponto/turnos.py:2113`; repasse direto ao pareador em `:2132`; contrato por data do pareador em `:1852`; embrulho adicional em `:1928`; busca da geradora por chave composta em `app/escala/alimentacao.py:237`. O cartório fornece o mapa composto sem `turnos=` em `app/ponto/services/cartorio.py:853`. A dívida também está registrada em `app/docs/BACKLOG.md:790`.
+- **C21: existia.** Vigia fornece mapa composto em `app/ponto/services/vigia_de_hora.py:57`; singular repassa esse mapa ao pareador em `app/ponto/turnos.py:2079`; o pareador espera data em `:1852` e embrulha as chaves em `:1928`. Incidência e efeito concreto em produção: **[não verificado]**.
+- **C22: existia.** Fixture alimentada cria célula sem `escala_geradora` e sem batidas em `app/ponto/tests/test_c1_dias_encerrados.py:62`; sua execução apenas carrega células e consulta as portas em `:64`, `:66`, `:70` e `:74`. O `setUpTestData` reutilizado cria colaboradores/vínculos, sem batidas, em `app/ponto/tests/test_juiz_dia_encerrado.py:44` e `:69`.
+- **C26: existia como estrutura descrita.** Segunda passada recebe somente `out.pop('rejulgar')` em `app/ponto/services/cartorio.py:745` e `:746`; extremos vêm das células recebidas em `:830`; mapa alimentado contém somente essas células em `:853`; plural julga todo o intervalo em `app/ponto/turnos.py:2136` a `:2140`. Que isso produza resultado incorreto para alguma resposta efetivamente consumida pelo cartório: **[não verificado]**.
+
+## 30/10 18:18 · sessao 3bb24a8e863c · - · - · origem=Ronald (tmux)
+
+Censo dos leitores na árvore entregue, sem executar Django/banco e sem escrever arquivos. Método: parti das definições dos campos/conjuntos, percorri referências Python por AST (`Attribute/Load`, `Compare`, argumentos ORM/Q, strings de `getattr`, agregações e `values_list`), li os corpos e distingui comparação terminal direta, exclusão por `VIVOS`, leitura de carimbo, propriedade/juiz e mera apresentação. Os campos/conjuntos de partida estão em `app/chamados/models.py:46`, `app/chamados/models.py:2387`, `app/chamados/models.py:2766`, `app/chamados/catalogo/motor.py:24`, `app/chamados/catalogo/motor.py:30`. A execução efetiva, chamadas dinâmicas/reflexivas não literais, SQL externo, shell de produção, views/triggers de banco e código fora desta árvore ficam `[nao verificado]`.
+
+**Achado que importa para o desenho:** `chamado_que_lista` não lê status terminal nem `materializada_em`: retorna `p.chamado_destino_id` ou, faltando, `disputa.chamado_id`; portanto não é a regra do crédito da fila, que prefere destino **vivo** e cai no pai quando destino está morto. `app/chamados/services/fio.py:97`, `app/chamados/services/fio.py:116`, `app/chamados/services/raiox.py:54`, `app/chamados/services/raiox.py:60`, `app/chamados/services/raiox.py:133`, `app/chamados/services/raiox.py:140`.
+
+### Leitores estruturais, fila, cartório e folha
+
+| Leitor | O que decide |
+|---|---|
+| `fio.montar_chamados_fio` | Em disputa fechada usa `q_vivas` e confirma `pergunta_viva`; ancora por `chamado_que_lista`; `tem_pergunta_viva` exige `p.viva` **e** ação possível; passa só `VIVOS` ao crédito; entrega estado ao desenlace; vivos viram contador de ativos. `app/chamados/services/fio.py:220`, `:234`, `:236`, `:279`, `:385`, `:399`, `:428`. |
+| `raiox.creditos_perguntas` | Busca perguntas apontando a destino ou pai vivos, usa `q_vivas`, exclui carimbadas com lavra `VL_SIM`, separa respondida/não respondida e credita destino vivo, senão pai. `app/chamados/services/raiox.py:54`, `:72`, `:133`, `:137`, `:140`. |
+| `raiox.pergunta_sem_acao_possivel` | Sem carimbo → há ação; com carimbo lê `veredito_lavrado`, ou juiz de materialização de fato quando lavra vazia; exceção mantém na mesa. `app/chamados/services/raiox.py:173`, `:182`, `:184`, `:186`. |
+| `painel.qs_vivos` / fila | Só `VIVOS`; a cobrança usa `COBRANCA`; histórico usa `ENCERRADOS`; conta resolvidos, fechados, cancelados; filtros histórico/cancelados/status selecionam conjunto exibido. `app/chamados/services/painel.py:155`, `:187`, `:202`, `:215`, `:216`, `:222`, `:243`, `:301`, `:303`, `:305`, `:314`. |
+| `painel.marcador_do_placar` | `Max(materializada_em)` participa do marcador/ETag de alteração, não prova de plantio. `app/chamados/services/painel.py:62`, `:67`, `:68`. |
+| `desenlace` | Fora de `VIVOS` devolve `None`, sem ação a fazer; vivos recebem verbo/dono/ação. `app/chamados/services/desenlace.py:44`, `:48`. |
+| `verbos.rotulo_de_linha` / `rotulo_para_pessoa` | Traduz estado para “Registro”/tooltip do admin ou “Encerrado” do colaborador (todos quatro terminais); `placar_equipe` conta encerrados com data recente. `app/chamados/services/verbos.py:97`, `:111`, `:122`, `:135`, `:227`; filtro de template em `app/chamados/templatetags/chamados_tags.py:54`. |
+| `cartorio.impressao_insumos` | Hash inclui `pk:status_local`; mudança de estado altera insumo do julgamento. `app/ponto/services/cartorio.py:314`, `:326`. |
+| `cartorio._julgar_colab_corpo` | Separa chamados vivos (`status in VIVOS`) dos que têm `fio_vivo` nas perguntas resolvedoras: vivo é insumo de emissão, fio é insumo da cobrança. Relê estado da instância antes de ressuscitar perguntas; todos duplicata → tenta reconciliar. `app/ponto/services/cartorio.py:1069`, `:1074`, `:1258`, `:1261`, `:1265`. |
+| `furos_sem_cobranca.medir` | Dia com qualquer chamado vivo fica coberto; superador vivo → `coberto_por_quem_superou`; superador fechado por admin → `decidido_pelo_admin`; demais passam a vetos/canal/cobrança. Usa data JSON do chamado nesta leitura. `app/ponto/services/furos_sem_cobranca.py:67`, `:69`, `:74`, `:76`, `:78`, `:83`, `:96`, `:100`, `:103`, `:107`. |
+| `furos_sem_cobranca.cobrar` | Após rejulgar cartório, verifica se existe chamado vivo no dia; conta cobrado/sem cobrança depois. `app/ponto/services/furos_sem_cobranca.py:128`, `:129`, `:131`. |
+| `vigia_fio.censo` | Nasce de chamados `VIVOS` com célula; restringe vocabulário a `FURO_MODULES`; distingue os que cobram (`COBRANCA`); lê lâmpada e perguntas por célula via `fio_vivo`; depois reconhece decisão de dia, ausência ou ação do admin para tirar do fio morto. `app/chamados/services/vigia_fio.py:186`, `:189`, `:201`, `:202`, `:229`, `:270`, `:286`, `:294`. |
+| `vigia_fio.fio_do_dia` | Delega redução a `juizes.fio_vivo`; não lê carimbo diretamente. `app/chamados/services/vigia_fio.py:155`, `:164`. |
+| `folha.fora_da_folha._alimentar` / `_fio_do_dia` | Carrega chamados só `VIVOS`; lê `p.viva` e `p.estado`: pendente → colab; outra viva → admin; sem viva e com chamado → chamado; sem ambos → nada. Classifica grupo A/B/C/D, não decide entrada no TXT, que vem de `classificar_export`. `app/folha/fora_da_folha.py:54`, `:66`, `:67`, `:69`, `:71`, `:76`, `:120`. |
+| `folha.o_que_segura` | Lista IDs de chamados vivos para instrução “destrava”; associa fio a cada dia retido. `app/folha/fora_da_folha.py:198`, `:200`, `:204`, `:207`, `:209`. |
+| `folha.previa` | Consome `fio_vivo` para material da prévia. `app/folha/previa.py:141`, `:144`. |
+| `vigia_loop.trocas_de_estado_em_loop` | Lê estados antigos/novos do log; identifica fechar→reabrir sem fato novo. `app/chamados/services/vigia_loop.py:34`, `:45`, `:50`. |
+| `vigia_loop.trilha_x_banco` | Compara último status lavrado no log com `status_local` atual do banco. `app/chamados/services/vigia_loop.py:105`, `:117`, `:120`. |
+
+### Leitores diretos de estado terminal em fluxo operacional
+
+Além do núcleo do modelo/juiz que o agente de escritores já cobre:
+
+- `becos._resolv`: alias `RESOLVIDO=TERMINAIS`, via `getattr(status_local)`; `classificar` só chama beco quando pai é terminal e não restam perguntas sem resposta com destino não terminal; `d.pode_fechar` decide fechável/barrada. `app/chamados/services/becos.py:13`, `:21`, `:25`, `:29`, `:31`, `:33`.
+- `acoes_chamado`: os gates de aprovar exceção, responder agenda/escala, autorizar/recusar geofence recusam chamado `ENCERRADOS`. `app/chamados/services/acoes_chamado.py:25`, `:90`, `:132`, `:176`, `:252`.
+- `acoes_disputa.acao_reabrir_disputa_admin`: pai encerrado provoca reabertura. `app/chamados/services/acoes_disputa.py:265`.
+- `disputa_emissao.motivo_fora_da_fabrica`: `ENCERRADOS` → `chamado_ja_encerrado`; pergunta carimbada só tira da fábrica quando célula ausente ou não acusadora. `app/chamados/services/disputa_emissao.py:691`, `:695`, `:703`, `:705`.
+- `criar_disputa_ancora_de_chamado`: limbo encerrado → não cria; pergunta de âncora sem carimbo existente → não duplica. `app/chamados/services/disputa_emissao.py:1109`, `:1114`.
+- `resolver_perguntas_por_chamado_resolvido`: pai/destinos vivos protegem crédito; sem carimbo+sem validação delimita perguntas a arrastar. `app/chamados/services/disputa_emissao.py:1602`, `:1628`, `:1631`, `:1635`.
+- `_reconciliar_destino_e_clones`: só tenta reconciliar destino/clones fora de `ENCERRADOS`, com retenção das irmãs respondidas sem consumo. `app/chamados/services/materializacao.py:702`, `:713`, `:719`.
+- `adesao.sincronizar_adesao`: pai `ENCERRADOS` pode reabrir, exceto via cascade; filhos `TERMINAIS` ficam fora do agrupamento. `app/chamados/services/adesao.py:89`, `:90`, `:102`.
+- `resposta_tardia`: vivo segue fluxo normal; fora de vivos tenta renascer por célula acusando, senão grava resposta tardia/pauta e apresenta estado encerrado. `app/chamados/services/resposta_tardia.py:35`, `:45`, `:52`, `:65`.
+- `signals`: disputa fechada não resolve pai já encerrado; baixa urgência e resolve perguntas só em `ENCERRADOS`; cartório reage a mudança real do status, não save neutro. `app/chamados/signals.py:33`, `:70`, `:81`, `:161`, `:169`.
+- Emissores reabrem encerrado: `reconciliar_grade._emitir_furo` (`app/ponto/management/commands/reconciliar_grade.py:521`), `detectar_ausencias` âncora (`app/ponto/management/commands/detectar_ausencias.py:300`), emissão da ausência/furo (`app/ponto/management/commands/detectar_ausencias.py:734`, `:739`).
+- `lastro.fechar` relê estado do banco e pula quem saiu de `VIVOS` antes de escrever/registrar nota. `app/ponto/services/lastro.py:310`, `:311`.
+- `faltas_de_hoje_sem_cobranca` exclui **somente cancelado**, portanto outros terminais ainda contam como “tem chamado do dia”. `app/ponto/services/faltas_de_hoje.py:63`, `:64`.
+
+### Todos os leitores diretos de `materializada_em`, agrupados por regra
+
+As leituras dentro dos próprios escritores abaixo são guardas/idempotência/elegibilidade; não devem desaparecer do censo por também serem escritores.
+
+| Arquivo/função | Decisão do carimbo |
+|---|---|
+| `models.PerguntaDisputa.estado` | Validada+carimbada → RESOLVIDA; viva → PENDENTE/RESPONDIDA; morta+carimbada → RESOLVIDA. `app/chamados/models.py:2204`, `:2206`, `:2207`, `:2209`. |
+| `models.q_vivas` | Carimbo+via identidade/tranca são termos do pré-filtro generoso SQL. Exatidão continua no juiz. `app/chamados/models.py:2330`, `:2344`, `:2346`. |
+| `models._universo_da_ressuscitacao` | Só carimbadas sem resposta; marco aceso é separado dos que voltariam. `app/chamados/models.py:1209`, `:1211`, `:1215`. |
+| `models.DisputaSupervisao.respostas_sem_veredito` | Só considera resposta sem validação **e sem carimbo**, excluindo dia trancado, para bloquear fechamento da disputa. `app/chamados/models.py:1524`, `:1525`, `:1528`. |
+| `models.fechar_por_admin`, `encerrar_fantasma`, `reabrir_fantasma`, `reabrir_por_resposta` | Guardas de idempotência/via/elegibilidade antes de escrever ou limpar. `app/chamados/models.py:2219`, `:2264`, `:2279`, `:2299`. |
+| `juizes._retratada_com_trilha` | Sem carimbo não aceita retratação; com ele exige LogAuditoria externo. `app/chamados/juizes.py:275`, `:278`. |
+| `juizes._pergunta_materializada_de_fato`, `_pergunta_viva_calc` | Carimbo combinado a via, fato, célula e testemunha, jamais coluna isolada como prova geral. `app/chamados/juizes.py:603`, `:629`, `:1015`, `:1044`, `:1050`, `:1076`, `:1083`. |
+| `juizes._chave_memo_pv` | Carimbo integra chave que invalida memo do juiz. `app/chamados/juizes.py:770`. |
+| `juizes.pergunta_sem_lastro_ou_viva` | Sem carimbo OU viva pelo juiz → não há lastro protegido. `app/chamados/juizes.py:1094`. |
+| `juizes.irmas_respondidas_sem_consumo` | Sem carimbo+sem validação+respondida, creditada ao destino ou pai conforme status vivo, bloqueia reconciliar. `app/chamados/juizes.py:1472`, `:1474`, `:1476`. |
+| `views.responder_pergunta_disputa` | Carimbo só protege resposta se juiz disser morta; antes já filtra pela pergunta viva. `app/chamados/views.py:1242`, `:1257`. |
+| `disputa_emissao._derivar_chamado_destino` | Pergunta **sem carimbo** do mesmo motivo já apontando ao candidato impede usar esse destino para outra; comentário admite régua de carimbo, não juiz. `app/chamados/services/disputa_emissao.py:206`, `:209`, `:211`. |
+| `disputa_emissao.criar_disputa_a_partir_de_chamados_orfaos` | Sem carimbo acha disputa existente para complementar irmãs; depois exclui chamados com pergunta sem carimbo do caminho de nova disputa (exceto caminho de ata). `app/chamados/services/disputa_emissao.py:874`, `:890`, `:894`. |
+| `disputa_emissao.motivo_fora_da_fabrica` / âncora | Carimbada existente + célula não acusando → fora; sem carimbo na âncora → dedup. `app/chamados/services/disputa_emissao.py:695`, `:705`, `:1117`. |
+| `disputa_emissao.resolver_perguntas_por_chamado_resolvido` | Sem carimbo delimita arrastamento; segundo ramo exige também sem validação. `app/chamados/services/disputa_emissao.py:1538`, `:1635`. |
+| `materializacao.estado_aplicacao_pergunta` | Carimbada → “aplicada”, exceto via paridade recusada → “recusada_paridade”. É badge de UI. `app/chamados/services/materializacao.py:417`, `:421`, `:425`. |
+| `_materializar_ausencia_de_resposta` | Só absorve perguntas hora do dia ainda sem carimbo. `app/chamados/services/materializacao.py:508`. |
+| `perguntas_absorvidas_por` | Agrupa perguntas pelo **mesmo timestamp** de materialização junto de disputa/data, recuperando irmãs absorvidas por ausência; exclui quem tem batida plantada viva. `app/chamados/services/materializacao.py:575`, `:577`, `:579`, `:584`, `:586`. |
+| `_carimbar_recusa` | Só carimba recusa COLISAO quando ainda sem carimbo. `app/chamados/services/materializacao.py:1035`, `:1042`. |
+| `materializar_perguntas_validadas_da_disputa`, `materializar_pendentes_aprovadas` | Fila da materialização é **sem carimbo** (com demais condições da respectiva porta). `app/chamados/services/materializacao.py:1289`, `:1336`. |
+| `validacao.devolver_validacao_recusada` | Carimbada não devolve validação; `validar_pergunta` só roda unidade para hora sem carimbo e decide retorno de erro considerando ausência do carimbo. `app/chamados/services/validacao.py:180`, `:182`, `:415`, `:426`, `:444`. |
+| `reconciliador.lavrar_sem_turno_aberto` | Já carimbada → não mexe. `app/chamados/reconciliador.py:367`. |
+| `retratar_perguntas_absolvidas_por_celula` | Sem carimbo é elegibilidade do lote. `app/chamados/reconciliador.py:586`. |
+| `_orfas_abertas` | Universo: sem carimbo, sem validação, disputa aberta, motivos de órfã e data existente. `app/chamados/reconciliador.py:995`, `:1000`. |
+| `perguntas_orfas_reatavies` | Sem carimbo é elegibilidade da reatadura, **não vitalidade**; juiz decide viva/morta depois. `app/chamados/reconciliador.py:1397`, `:1407`. |
+| `relavra_via.q_carimbo_desfazivel` | Carimbada, via fora de identidade, opcional disputa aberta → elegível; juiz decide desfazer. `app/chamados/services/relavra_via.py:171`, `:176`, `:179`. |
+| `fabrica_da_celula.perguntar` | Seleciona carimbadas do dia/motivo para passar à porta de desfazer antes de perguntar. `app/chamados/services/fabrica_da_celula.py:119`, `:121`. |
+| `fio.retratar_duplicata` | Só preenche carimbo se nulo. `app/chamados/services/fio.py:845`. |
+| `regularizacao_ext.retomar_regularizacoes_confirmadas` | **Outro modelo**, RegularizacaoExterna: confirmada+sem carimbo é fila de retentativa. `app/chamados/services/regularizacao_ext.py:218`, `:219`. |
+| `veredito_lavrado.marcos_do_lote` | Max do carimbo por colaborador invalida lavra velha do juiz. `app/chamados/veredito_lavrado.py:162`, `:164`. |
+| `painel.marcador_do_placar` | Max do carimbo como marcador de alteração. `app/chamados/services/painel.py:67`. |
+| `historico._eventos_dos_chamados` | `getattr` dinâmico em tupla literal: carimbo vira evento “o fato foi registrado”. `app/chamados/services/historico.py:103`, `:105`, `:110`. |
+| `procedencia_batida.procedencia` | Data da validação ou, faltando, materialização informa quando/quem da procedência. `app/ponto/services/procedencia_batida.py:72`, `:74`. |
+
+Leituras de `materializada_em` exclusivamente para foto “antes/depois”, serialização de prova ou reversão: `app/chamados/reconciliador.py:1092`, `:1102`; `app/chamados/services/materializacao.py:623`; `app/chamados/services/relavra_via.py:229`; `app/chamados/services/passivo_validado.py:64`; `app/chamados/management/commands/reabrir_orfas_enterradas.py:87`, `:90`, `:128`, `:141`.
+
+### Auditores/comandos leitores
+
+- `auditar_invariantes_chamados`: I1 terminal sem resolvido_em (`:572`); I2 terminal com pergunta sem carimbo, descontando respondida em disputa aberta (`:587`, `:588`, `:590`); I6 carimbo ausente ou juiz reprova fato (`:537`), universo exporta carimbo (`:469`); I8b/I8c carimbada ainda viva e resolvedora cruzada (`:893`, `:904`); I9 carimbo sem via (`:954`); I16 terminal sem via (`:1067`); I17 superado sem ponte (`:1069`); I18 validação humana sem carimbo e sem motivo de recusa (`:1072`); amostra S6 de 300 carimbadas compara lavra/juiz (`:1153`, `:1156`, `:1162`); I21 respondida sem carimbo/validação com destino e pai fora de vivos, descontando ausência aprovada (`:1568`, `:1570`, `:1572`, `:1573`, `:1575`); C2 pergunta sem carimbo/validação/resposta em célula não acusadora (`:1598`); C3 cobrança viva em concorde (`:1603`); F2 viva sem carimbo em disputa fechada (`:1761`, `:1763`, `:1765`); reabríveis calculados a partir de terminais e motor (`:1331`, `:1335`). Todos em `app/chamados/management/commands/auditar_invariantes_chamados.py`.
+- `auditar_disputas`: sem carimbo+disputa aberta delimita pergunta cega (sem data no texto) e pergunta sem destino; `app/chamados/management/commands/auditar_disputas.py:69`, `:71`, `:74`, `:148`, `:150`.
+- `auditar_chamados_orfaos`: exclui `ENCERRADOS` do censo de órfãos; `app/chamados/management/commands/auditar_chamados_orfaos.py:36`.
+- `encerrar_perguntas_com_fato`: carimbada sem validação e sem via fato materializado; só via sem história e marco aceso vira alvo; `app/chamados/management/commands/encerrar_perguntas_com_fato.py:32`, `:40`, `:41`.
+- `reabrir_orfas_enterradas`: via fantasma carimbada em janela temporal; testa pai encerrado e recusa de reabertura; confirma após aplicar; `app/chamados/management/commands/reabrir_orfas_enterradas.py:67`, `:87`, `:97`, `:104`, `:160`, `:163`.
+- `reabrir_chamados_ausencia_aberta`: só encerrados com nota do bug e ausência ainda aberta são alvo de reabertura; `app/ponto/management/commands/reabrir_chamados_ausencia_aberta.py:28`, `:31`, `:36`, `:49`.
+- `reconciliar_fantasmas`: pergunta sem carimbo+disputa aberta é diagnóstico de ligações, não juiz de completude; `app/ponto/management/commands/reconciliar_fantasmas.py:209`, `:212`, `:216`.
+- `bin/censo_folha.py`: tem régua própria, exclui `['resolvido','fechado','retratado','cancelado']` para contar “chv”; não inclui superado e inclui estado inexistente retratado. É script diagnóstico, não regra do catálogo. `bin/censo_folha.py:30`.
+- `smoke_chamados` lê e compara status com destino para assertiva de fechamento/reabertura; é comando de smoke, não leitor de negócio. `app/chamados/management/commands/smoke_chamados.py:136`, `:149`.
+
+### API, telas e GLPI
+
+- API local serializa status e rótulo e autoriza `pode_responder` quando fora de `ENCERRADOS`. `app/api/views.py:1145`, `:1146`, `:1155`. Mensageria devolve estado em dados/fila. `app/api/views_mensageria.py:417`, `:1075`.
+- Relatórios filtram por qualquer status solicitado e PDF imprime estado. `app/relatorios/views.py:745`, `:920`; `app/relatorios/pdf_chamados.py:116`.
+- Ficha/calendário/drawer usam somente vivos para associação e leitura de cobrança. `app/colaboradores/services/calendario.py:553`, `:557`, `:558`, `:560`; `app/colaboradores/services/ficha.py:163`; `app/colaboradores/services/drawer.py:89`.
+- Fio colaborador: terminais resolvido/fechado mudam cor; estado passa por filtro espera; não fechado e sem GLPI mostra resposta. `app/templates/chamados/fio_colaborador.html:167`, `:188`, `:254`.
+- Detalhe local: espera/rótulo; resolução só fora de resolvido/fechado; outros botões/form por não fechado. `app/templates/chamados/detalhe_local.html:68`, `:279`, `:343`, `:375`.
+- Detalhe GLPI: rótulo local e form não fechado. `app/templates/chamados/detalhe.html:36`, `:117`.
+- Painel do turno: rótulo e form não fechado. `app/templates/chamados/partials/painel_chamado_turno.html:18`, `:65`.
+- Modal: cores pelo status; espera; bloco de ação fora de `encerrados_juiz`; form não fechado; badges de aplicação vêm de `estado_aplicacao_pergunta`. `app/templates/chamados/partials/modal_fio.html:73`, `:99`, `:223`, `:493`, `:644`.
+- Card atendimento: cor/rótulo do status; `p.viva` permite formulário da pergunta; `p.estado` apresenta encerrado/validado; form de chamado só aberto/em_análise e sem pergunta viva. `app/templates/chamados/partials/_card_atendimento.html:13`, `:23`, `:77`, `:183`, `:203`, `:205`.
+- Lista admin entrega `data-status`, fallback visual do estado; JavaScript **inline** filtra igualdade do status solicitado no dataset. `app/templates/
+
+[truncado em 20000 de 24619 caracteres]
+
+## 30/10 18:18 · sessao b9c3ae2eb982 · CODEX-CONTEXTO-DA-CASA-AB2 · verificador · origem=Code
+
+**Veredito: REPROVA.** Ainda há duas contraprovas contra os avais: turno não encerrado pode continuar aparecendo como `falta`, e o motivo `sem_celula` da folha pode ser descartado pela tela. Fontes: `app/colaboradores/services/calendario.py:822`, `:139`, `:899`; avais em `app/docs/PROMPTS.md:1676` e `:1681`.
+
+1. **`concorde` sem batida derruba a proteção temporal.**
+
+   Qualquer `_vv` preenchido desliga `futuro`, mesmo quando `dias_encerrados` respondeu que o turno continua aberto. Depois, `_classificar` escolhe `falta` e descarta a tradução `concorde → ok` porque não houve batida. Resultado: **juíza diz não encerrado; calendário acusa falta**. Fontes: `app/colaboradores/services/calendario.py:822`, `:148`, `:173`, `:176`.
+
+   Contraprova: jornada de 14/10, 18h–06h, consultada às 02h de 15/10, sem batidas, com `veredito='concorde'`. A função real de encerramento responde `relogio`; o classificador real termina em `falta`. Confirmei essa composição executando as funções extraídas por AST em memória. Fontes dos corpos executados: `app/escala/servico_jornada.py:61`, `app/ponto/turnos.py:2088`, `app/colaboradores/services/calendario.py:108`.
+
+   Esse veredito pode nascer do próprio escritor: o suprajuiz não acusa ausência enquanto `turno_encerrado=False`; códigos vazios viram `concorde`; o cartório passa esse insumo e lavra o resultado. Portanto, **veredito preenchido não prova encerramento integral do turno**. Fontes: `app/ponto/supra_juiz.py:279`, `app/escala/models.py:1592`, `app/ponto/services/cartorio.py:1117`, `:1409`.
+
+   O teste novo preserva apenas `nunca_bateu`; falta o adversarial `concorde` com turno não encerrado. Fonte: `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:65`.
+
+2. **Passado sem fim previsto e sem veredito ainda pode perder o rótulo da folha.**
+
+   O calendário consulta corretamente a retenção e recebe `sem_celula`. Porém, se houver régua suspeita, `_classificar` retorna `escala_suspeita` antes de ler `retido_folha`. O rótulo da folha só é publicado quando o status final é `sem_certidao`. Fontes: `app/colaboradores/services/calendario.py:726`, `:727`, `:139`, `:141`, `:899`.
+
+   A combinação é alcançável: a suspeita vem dos campos gravados do vínculo, enquanto a folha retém célula passada sem veredito independentemente dessa suspeita. A tela então imprime seu texto de escala suspeita, sem o motivo retornado pela folha. Isso deixa incompleta a ordem das 15:3x de ler o rótulo daquele juiz. Fontes: `app/escala/regua_defesa.py:620`, `app/folha/export.py:1237`, `app/templates/colaboradores/partials/_calendario_grade.html:103`, `app/docs/PROMPTS.md:1681`.
+
+3. **Permanece um defeito herdado no contrato de alimentação do cartório.**
+
+   `dias_encerrados` recebe células por `(colaborador_id, data)` e as repassa diretamente a `turnos_do_colab`, que espera `{data: célula}` e acrescenta novamente o identificador. A chave fica aninhada; a busca da geradora deixa de encontrar a célula. O cartório usa exatamente essa alimentação. Fontes: `app/ponto/turnos.py:2113`, `:2132`, `:1852`, `:1928`; `app/escala/alimentacao.py:237`; `app/ponto/services/cartorio.py:853`.
+
+   É dívida anterior registrada, não regressão atribuível a este diff. O calendário novo evita esse repasse porque fornece os turnos já carregados. O teste novo usa célula sem geradora, portanto não discrimina a perda dela. Fontes: `app/docs/BACKLOG.md:790`; `app/colaboradores/services/calendario.py:712`; `app/ponto/tests/test_c1_dias_encerrados.py:62`.
+
+**Escritores e leitores dos campos envolvidos:**
+
+| Campo ou insumo | Quem escreve/produz | Quem lê |
+|---|---|---|
+| `CelulaDia.trabalha`, `dna.marcos`, `escala_geradora` | Porta da célula: geração, regeneração e restauração — `app/ponto/portas/celula.py:593`, `:260`, `:530` | Vínculo do dia, marcos e trabalho previsto — `app/escala/alimentacao.py:237`; `app/escala/models.py:1094`; `app/colaboradores/services/calendario.py:785` |
+| `veredito`, `veredito_via`, `protestos` | `lavrar_veredito` — `app/ponto/portas/celula.py:647`, `:691`; cartório chama em `app/ponto/services/cartorio.py:1409`, decisão humana em `app/ponto/services/veredito_celula.py:330` | Calendário monta `_ver_map`, exclui candidatos cegos e condiciona `futuro`; folha decide retenção — `app/colaboradores/services/calendario.py:525`, `:723`, `:822`; `app/folha/export.py:1215` |
+| `Turno.data_turno`, `aberto`, `batidas` | Pareador, via `_mk` — `app/ponto/turnos.py:310` | Calendário agrupa e alimenta a juíza; `turno_aberto_vivo` decide expiração — `app/colaboradores/services/calendario.py:316`, `:713`; `app/ponto/turnos.py:1987` |
+| Motivo de não encerramento / booleano | `_dia_encerrado_motivo_puro`; lote publica motivo ou `m is None` — `app/ponto/turnos.py:2088`, `:2137` | Calendário monta `_em_curso` e `_sem_fim` — `app/colaboradores/services/calendario.py:714`, `:722`; cartório, suprajuiz, emissor retroativo e carregador de par — `app/ponto/services/cartorio.py:853`; `app/ponto/management/commands/supra_juiz.py:108`; `app/ponto/management/commands/emitir_furo_retroativo.py:62`; `app/ponto/turnos.py:2150` |
+| Retenção `{data, motivo}` / `retido_folha` | `motivos_retencao_celula` produz; calendário filtra `sem_celula` — `app/folha/export.py:1200`; `app/colaboradores/services/calendario.py:727` | `_classificar` e montagem do rótulo — `app/colaboradores/services/calendario.py:141`, `:834`, `:899` |
+| `futuro` | Montagem dos fatos — `app/colaboradores/services/calendario.py:822` | Apenas `_classificar`, inclusive suas precedências — `app/colaboradores/services/calendario.py:135`, `:155` |
+| `status` | `_classificar`, chamada única — `app/colaboradores/services/calendario.py:108`, `:814` | Grade, resumo, portas de consulta e oferta de resolver — `app/templates/colaboradores/partials/_calendario_grade.html:69`; `app/colaboradores/services/calendario.py:949`, `:219`, `:231`, `:204` |
+| `status_rotulo` | Montagem do calendário — `app/colaboradores/services/calendario.py:899` | Grade, incluindo o novo título do ramo residual — `app/templates/colaboradores/partials/_calendario_grade.html:99`, `:107` |
+| `resolver_dia_oferecido` | Juiz existente, publicado após os status — `app/colaboradores/services/calendario.py:199`, `:945` | Template e vigia do fio — `app/templates/colaboradores/partials/_calendario_grade.html:125`; `app/chamados/services/vigia_fio.py:294` |
+
+A suspeita usada na segunda contraprova é gravada pela porta `gravar_regua`, traduzida por `rotulo_regua_para_espelho` e passada ao classificador pelo calendário. Fontes: `app/colaboradores/services/vinculo.py:889`; `app/escala/regua_defesa.py:620`; `app/colaboradores/services/calendario.py:387`, `:824`.
+
+**Relógios e custo por montagem:**
+
+- O trecho novo compartilha `_agora`: dele sai `hoje`, o instante entregue à juíza e a data entregue à retenção. O fim previsto vem do DNA; aberta viva expira pela janela do template mais quatro horas, distinção herdada. Fontes: `app/colaboradores/services/calendario.py:258`, `:712`, `:726`; `app/ponto/turnos.py:2102`, `:1997`.
+- O calendário inteiro ainda não usa um único relógio: desfazer retratação captura outro instante; `folha_manda` consulta seu teto civil; a view captura outro `hoje`. Fuso configurado: São Paulo, `USE_TZ=True`. Fontes: `app/colaboradores/services/calendario.py:343`, `:689`; `app/relatorios/cartao_pela_celula.py:412`, `:40`; `app/colaboradores/views.py:1960`; `app/config/settings/base.py:93`.
+- **Acréscimo estrutural comum: uma consulta de vínculos por montagem.** Turnos e células fornecidos evitam recarga, mas a consulta de escalas continua incondicional. Havendo `_sem_fim`, ocorre uma chamada adicional à folha, normalmente com duas consultas: células e vínculos; isento ou janela colapsada retornam antes. Fontes: `app/ponto/turnos.py:2129`, `:2130`, `:2132`; `app/colaboradores/services/calendario.py:726`; `app/folha/export.py:1174`, `:1188`, `:1194`.
+- Esse custo se repete no perfil, drawer, montagem por colaborador no painel de furos e consulta do vigia. Fontes: `app/colaboradores/views.py:1946`; `app/colaboradores/services/drawer.py:121`; `app/relatorios/furos.py:184`; `app/chamados/services/vigia_fio.py:294`. Tempo e custo efetivo total deste hash: **[não verificado]**.
+
+**Os testes mordem parte importante da cura, não o fechamento inteiro.** [nao verificado]
+
+- Há asserções discriminantes para antes do turno, meia-noite, turno até dois dias depois, falta após encerramento e passado sem `hf` com vínculo. O render usa sentinela para exigir leitura efetiva de `status_rotulo`. Fontes: `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:42`, `:47`, `:57`, `:61`, `:82`, `:108`.
+- Faltam os dois adversariais acima: `concorde` durante turno não encerrado e régua suspeita junto de `sem_celula`. O teste de veredito usa `nunca_bateu`; o teste cego não combina suspeita. Fontes: `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:65`, `:92`.
+- O teste de custo limita **o delta do ramo cego** a duas consultas; o custo comum cancela na subtração. Existe teto global de 55 consultas, mas seu resultado nesta árvore está **[não verificado]**. Fontes: `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:177`; `app/core/tests/test_selo_performance.py:249`, `:401`.
+- A nova alimentação `turnos=` não tem cenário novo com batidas; o C1 alimentado testa DNA, sem geradora concorrente. Fontes: `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:19`; `app/ponto/tests/test_c1_dias_encerrados.py:53`.
+
+Execução da suíte Django, RED contra a base e certificação integral do hash: **[não verificado]**. As sondas desta revisão foram puras, em memória, sobre os corpos citados. [nao verificado]
+
+## 30/10 18:17 · sessao 85839565fbf5 · - · - · origem=Ronald (tmux)
+
+Censo de `materializada_em`: **20 sítios explícitos de escrita em 19 funções e 7 arquivos de produção: 14 carimbos (13 `PerguntaDisputa` + 1 `RegularizacaoExterna`) e 6 resets de `PerguntaDisputa`**. A enumeração abaixo é a prova de contagem; `resolver_perguntas_por_chamado_resolvido` contém dois sítios. O campo pertence a `PerguntaDisputa`, cuja FK `chamado_destino` aponta para `ChamadoColaborador`, e também existe, separadamente, em `RegularizacaoExterna`; não é um campo de `PerguntaColaborador`. `app/chamados/models.py:1935`, `:2379`, `:2387`, `:2744`, `:2766`.
+
+**14 sítios de carimbo**
+
+| Escritor concreto | Condição/efeito e porta usada | Chamador |
+|---|---|---|
+| `PerguntaDisputa.fechar_por_admin` | `via=admin_decidiu`, `now`, autor; idempotência somente se já nessa via e carimbada. Não consulta C6 dentro do método. `app/chamados/models.py:2213`, `:2218`, `:2228`, `:2230`. | `DisputaSupervisao.fechar` primeiro calcula vivas pelo C6, depois chama para desligamento/admin encerra; decisão explícita pode encerrar viva. `app/chamados/models.py:1556`, `:1578`, `:1595`, `:1598`. Também `fechar_o_fio_do_dia` seleciona pelo **pré-filtro** `q_vivas`, não por C6 exato, e chama. `app/ponto/services/veredito_celula.py:160`, `:174`, `:177`. Aceite de folga na validação chama depois de validar. `app/chamados/services/validacao.py:261`, `:264`, `:283`, `:292`. |
+| `PerguntaDisputa.fechar_por_competencia_trancada` | Não validada e ainda fora dessa via → `competencia_trancada`, `now`, autor; não consulta C6. `app/chamados/models.py:2233`, `:2239`, `:2242`, `:2244`. | **Nenhum caller de produção encontrado** por referência direta [nao verificado]. O serviço atual declara expressamente que **nenhuma pergunta se carimba**, porque C6 lê a tranca; só encerra chamados e disputas. `app/chamados/services/competencia_trancada.py:171`. |
+| `PerguntaDisputa.encerrar_fantasma` | `fantasma`, `now`, autor; método só executa e testa idempotência. `app/chamados/models.py:2258`, `:2264`, `:2267`, `:2269`. | Evento/outbox: `encerrar_orfas_pela_lampada` chama `veredito_orfa` e só executa se `ENCERRA`. `app/chamados/reconciliador.py:1082`, `:1083`, `:1087`, `:1095`. A decisão exige **pergunta C6 viva**, sem resposta, marco aceso e dia encerrado. `app/chamados/reconciliador.py:1033`, `:1035`, `:1037`, `:1039`, `:1041`. O consumidor é chamado também pelo cron `reconciliar_chamados`. `app/chamados/reconciliador.py:1303`; `app/chamados/management/commands/reconciliar_chamados.py:62`. |
+| `lavrar_sem_turno_aberto` | Motivo C1, sem texto, sem carimbo, sem turno aberto **e C6 morta** → `sem_turno_aberto`, `now`, sistema. `app/chamados/reconciliador.py:363`, `:365`, `:367`, `:372`, `:399`, `:402`, `:406`, `:407`. | `reatar_pergunta_orfa`, ramo c1; chamado pelo reconciliador por colaborador, cron e evento de batida. `app/chamados/reconciliador.py:1519`, `:1351`; o próprio corpo adverte que o reatador segue ligado ao cron, não à emissão. `:1436`. |
+| `retratar_perguntas_absolvidas_por_celula` | Não carimbada/não validada, célula julgada sem acusação; pula marcos pendentes e **C6 viva**; grava `celula_absolveu`, `now`, sistema. `app/chamados/reconciliador.py:584`, `:607`, `:613`, `:617`, `:619`, `:620`. | `reconciliar_chamados_colab`; evento da batida + cron */15. `app/chamados/reconciliador.py:1348`, `:1350`; `app/chamados/management/commands/reconciliar_chamados.py:52`. |
+| `_materializar_ausencia_de_resposta` | Resposta escape cria Ausência e absorve perguntas-hora irmãs do dia ainda sem carimbo; marca via `declaracao` somente se `declarou_hora`, senão `ausencia_dia`; não usa C6 como guarda prévia do carimbo. `app/chamados/services/materializacao.py:478`, `:499`, `:507`, `:509`, `:525`, `:528`. | Responder pergunta web/API: núcleo roteia `FALTA_DIA`/`ATESTADO` pela tabela de escapes. `app/chamados/services/disputa_emissao.py:1212`, `:1216`, `:1292`, `:1295`; tabela `app/chamados/services/materializacao.py:549`. |
+| `_materializar_resposta_hora`, recusa de paridade | Vizinha do mesmo tipo e plantio não preenche furo; só carimba `paridade_recusada` se **`fato_do_marco_no_espelho(p) is True`**, outra porta de fato, não C6. `app/chamados/services/materializacao.py:815`, `:816`, `:840`, `:841`, `:858`, `:868`. | `_materializar_uma` no fluxo validação/materialização e lote do passivo. `app/chamados/services/materializacao.py:1125`; `app/chamados/services/validacao.py:417`; `app/chamados/services/passivo_validado.py:516`. |
+| `_carimbar_recusa` | Só carimba se ainda sem carimbo e `traduzir_recusa` classifica **COLISAO** → `fato_ocupado`; nenhuma guarda C6. `app/chamados/services/materializacao.py:1028`, `:1037`, `:1042`, `:1043`, `:1053`. | Chamado pelas recusas da unidade materializadora, inclusive no `finally`; lote do passivo importa a mesma função. `app/chamados/services/materializacao.py:1214`; `app/chamados/services/passivo_validado.py:506`. |
+| `_materializar_uma`, sucesso | Só após geração/reuso de fato e aprovação de `_pergunta_materializada_de_fato` para hora/data_hora; grava `now`, autor, via declaração ou `via_pelo_fato`; **juiz de lastro, não C6**. Reprovação levanta dentro do atomic. `app/chamados/services/materializacao.py:1133`, `:1136`, `:1138`, `:1143`, `:1149`, `:1177`, `:1198`. | Admin: `materializar_perguntas_validadas_da_disputa` seleciona respondida+validada+não materializada. `app/chamados/services/materializacao.py:1286`, `:1293`. Chamadores telas `fio.py:664`, `acoes_disputa.py:139`, validação `validacao.py:417`, `:423`; lote passivo `passivo_validado.py:516`. Todos sob `app/chamados/services/`. |
+| `materializar_pendentes_aprovadas` | Perguntas sem carimbo cuja `_pergunta_materializada_de_fato` aprova → `juiz_aprovou`, `now`, autor; não fabrica batida nem chama C6 diretamente. `app/chamados/services/materializacao.py:1335`, `:1337`, `:1339`, `:1341`, `:1342`. | Signal post_save de disputa fechada (criada/raw excluídas). O signal apenas delega. `app/chamados/signals.py:124`, `:130`, `:139`, `:140`. |
+| `resolver_perguntas_por_chamado_resolvido`, S128 destino | Sem carimbo, disputa aberta, destino chamado recebido; pula tranca, **C6 viva** e resposta com texto sem lastro; grava `now` e `via_pelo_fato`. `app/chamados/services/disputa_emissao.py:1531`, `:1536`, `:1547`, `:1551`, `:1558`, `:1562`, `:1583`. | Signal de todo save de chamado em `ENCERRADOS`; `.update` não emite o signal. `app/chamados/signals.py:75`, `:81`, `:92`. Também `_retratar` explicitamente, e reatador HIST: `app/chamados/reconciliador.py:538`, `:1547`; serviço becos `app/chamados/services/becos.py:49`. |
+| Mesma função, órfãs sem credor | Disputas abertas do colaborador sem pai/destino vivo, perguntas sem carimbo/validação; **pula C6 viva** e carimba as mortas; via do fato ou `chamado_encerrado` sem pai. `app/chamados/services/disputa_emissao.py:1622`, `:1628`, `:1631`, `:1634`, `:1641`, `:1644`, `:1646`, `:1659`. | Mesmos chamadores S128 acima. `app/chamados/signals.py:92`; `app/chamados/reconciliador.py:538`. |
+| `retratar_duplicata` | Fora de `duplicata` → grava via/recusa e `now` **somente se carimbo nulo**; método não consulta C6. `app/chamados/services/fio.py:830`, `:834`, `:845`, `:846`, `:848`. | Dedup manual/lote passa excedentes pela identidade do fato, sem C6. `app/chamados/management/commands/dedup_perguntas_fato.py:67`, `:72`, `:88`. Migração de resolvedoras consulta C6 antes, depois chama nas duplicatas do conflito. `app/chamados/services/fio.py:882`, `:884`, `:892`. |
+| `materializar_regularizacao_externa` | **Outro modelo**, `RegularizacaoExterna`: exige confirmada e nenhuma disputa aberta; processa itens; salvo recusa total sem operações, grava `status=materializada`, `now`, autor; não pergunta C6. `app/chamados/services/regularizacao_ext.py:51`, `:58`, `:61`, `:191`, `:197`, `:198`, `:200`. | Confirmação web/API via `confirmar_e_materializar`: `app/chamados/services/regularizacao_ext.py:347`, `:356`; tela `app/chamados/views_regularizacao.py:217`, APIs `app/api/views.py:3063`, `app/api/views_core.py:1329`. Retomada após fechamento de disputa por signal on_commit: `app/chamados/signals.py:97`, `:114`, `:121`; retomada chama materializador em `app/chamados/services/regularizacao_ext.py:224`. |
+
+**6 resets**
+
+| Escritor | Regra / quem chama / C6 |
+|---|---|
+| `ChamadoColaborador.ressuscitar_perguntas` | `update(materializada_em=None,...)`; universo materializadas sem resposta, **poupa marco comprovadamente aceso** via `fato_do_marco_no_espelho`, não C6 diretamente. `app/chamados/models.py:1208`, `:1215`, `:1258`. Chamado por `reabrir` `:1194` e cartório `app/ponto/services/cartorio.py:1271`. |
+| `PerguntaDisputa.reabrir_fantasma` | Só `fantasma` carimbada → limpa; método não julga. `app/chamados/models.py:2279`, `:2282`, `:2284`. Command de acervo executa: `app/chamados/management/commands/reabrir_orfas_enterradas.py:146`; condição de chamador documentada com marco apagado em `app/chamados/models.py:1245`. |
+| `PerguntaDisputa.reabrir_por_resposta` | Só carimbo em `VIAS_SEM_LASTRO` → limpa em memória, devolve campos; caller faz save. Sem chamada C6. `app/chamados/models.py:2299`, `:2302`, `:2304`; resposta core `app/chamados/services/disputa_emissao.py:1265`, `:1266`. |
+| `PerguntaDisputa.reabrir_por_competencia` | Só via `competencia_trancada` → limpa e salva; sem C6 no método. `app/chamados/models.py:2309`, `:2312`, `:2314`. Evento reabertura de competência: `app/chamados/services/competencia_trancada.py:244`, `:247`. |
+| `reabrir_para_correcao` | Quando `desfazer_absorcao=True`, adiciona materialização nula ao dicionário e executa `qs.update(**campos)`. Não consulta C6; seleção pertence ao caller. `app/chamados/services/disputa_emissao.py:1358`, `:1360`, `:1377`. Rejeição da Ausência, sem outra cobrindo, usa `perguntas_absorvidas_por` e chama: `app/chamados/services/materializacao.py:608`, `:615`, `:617`, `:628`; evento da ausência `app/ponto/signals.py:261`. |
+| `desfazer_carimbo_sem_lastro` | Relê travado, filtra vias desfazíveis, só limpa se **C6 viva**, preserva resposta/validação; reabre disputa fechada conforme universo de entrada. `app/chamados/services/relavra_via.py:221`, `:223`, `:227`, `:231`, `:234`, `:248`. Chamadores fábrica de lote e evento julgamento: `app/chamados/services/fabrica_da_celula.py:119`, `:146`. |
+
+**Quatro crons**
+
+- `reconciliar_chamados`: */15, sem dry-run; chama reconciliador por colaborador, rejunta célula, drena outbox. Pode retratar/encerrar/reabrir/renascer chamados, carimbar perguntas via `celula_absolveu`, `sem_turno_aberto`, S128 e `fantasma`, e reapontar perguntas/células; reaberturas podem limpar carimbo por ressuscitação. `app/config/crons.py:376`; `app/chamados/management/commands/reconciliar_chamados.py:52`, `:56`, `:62`; `app/chamados/reconciliador.py:1350`, `:1351`, `:1369`, `:1519`, `:1521`, `:1541`, `:1547`, `:1303`.
+
+- `fechar_cobranca_com_lastro`: hora `:40`, `--apply`; comando delega `lastro.fechar`, que calcula quadro uma vez, relê status antes de agir, chama `ch.reconciliar` e só então anexa nota. **Não escreve materializada_em diretamente**, mas o encerramento por save dispara S128 (duas escritas e possíveis reaberturas acima). Não é emissor de pergunta nova diretamente. `app/config/crons.py:705`; `app/ponto/management/commands/fechar_cobranca_com_lastro.py:52`, `:53`; `app/ponto/services/lastro.py:302`, `:310`, `:317`; `app/chamados/signals.py:92`.
+
+- `reavaliar_ausencias_feriado`: 07:02, por empresa, `--apply`, depende cartório. Seleciona `batida_ausente` vivos; `fatos_do_dia` precisa dizer fase conhecida e feriado/folga com premissa morta; chama `ch.reconciliar`, nota e trilha. Não carimba/cria pergunta diretamente; **S128 é efeito indireto**, como acima. `app/config/crons.py:589`; `app/ponto/management/commands/reavaliar_ausencias_feriado.py:23`, `:24`, `:32`; `app/chamados/services/feriado_reavaliar.py:17`, `:33`, `:34`, `:36`, `:38`, `:47`; `app/chamados/signals.py:92`.
+
+- `disparar_perguntas_competencia`: encadeado depois de `apurar_furos_diarios`, `--comp-corrente --apply`, depende também cartório. Universos célula acusadora/ativo/marcos vencidos e chamado vivo sem pergunta viva; fábrica desfaz carimbo sem lastro via C6, abre/atualiza disputa/chamado e gera pergunta. Não carimba materializada com `now` diretamente; **pode limpar** via `desfazer_carimbo_sem_lastro`. `app/config/crons.py:1456`; `app/chamados/management/commands/disparar_perguntas_competencia.py:76`, `:105`, `:111`, `:120`, `:155`, `:163`, `:276`, `:288`; `app/chamados/services/fabrica_da_celula.py:119`, `:122`, `:124`.
+
+Os quatro estão em **`JUIZES_POR_VARREDURA`**, respectivamente `app/config/crons.py:1976`, `:1964`, `:1975`, `:1959`. **Nenhum está em `PENDENTES_CHAMADO`: tupla vazia** `app/core/juizes.py:421`, alias `:1303`. “Onde morar” hoje é registro do papel cron `juiz`; são dívidas diferentes de clone de juiz. O contador inclui encadeados, e documentação explicita que mudar agenda não apaga a dívida. `app/config/crons.py:2242`, `:2245`, `:2251`.
+
+**Método/limites para consolidar**
+
+- Fiz parsing AST em todos `.py` da árvore, procurando atribuições do atributo e keyword do campo; li corpo completo, save/update e os chamadores. Isso diferencia o `Q(materializada_em=...)` de leitura e o `dict.update` que alimenta uma escrita posterior; em particular incluiu `update(**campos)` que um regex simples perde. Prova de operação indireta `app/chamados/services/disputa_emissao.py:1360`, `:1377`.
+- Varri `bulk_update`, `setattr`, kwargs, SQL e scripts para conferir alvos/campos; o `bulk_update` de `PerguntaDisputa` em produção escreve somente campos da lavra, não materialização. `app/chamados/veredito_lavrado.py:207`.
+- Nas migrações encontradas só há declaração do campo, não migração de valor: `app/chamados/migrations/0016_s84_pergunta_chamado_destino.py:23`, `app/chamados/migrations/0021_regularizacaoexterna_regularizacaoitembatida_and_more.py:26`. Scripts não mostraram mutação desses campos [nao verificado quanto a geração dinâmica de nomes].
+- **20 não inclui nascimento NULL por default nem escrita genérica potencial**: `PerguntaDisputa.abrir` aceita `**campos` e repassa a `objects.create`, portanto pode receber materializada em entrada; nenhum caller de produção encontrado fornece o campo [nao verificado quanto a kwargs externos]. `app/chamados/models.py:2124`, `:2181`. O campo tem `null=True` e não tem default `now`. `:2387`.
+- Não rodei Django, banco ou testes; não verifico execução real, cron instalado, triggers SQL externos, chamadas por shell fora da árvore, monkeypatches, dados ou versão do commit [nao verificado]. [nao verificado]
+- O P13 existente **não é este censo por entidade/operação**: regex `.campo =` ou `update(...campo=)`, seis apps, exclui testes/migrations, enumera **7 arquivos** para o campo e combina os dois modelos. `app/core/tests/test_contract_escritores_estado.py:12`, `:13`, `:83`, `:118`, `:227`, `:234`, `:239`. Testes têm semeaduras diretas deliberadas, por exemplo `app/chamados/tests/test_contract_pergunta_viva.py:51`, `app/chamados/tests/test_reabrir_orfas_enterradas.py:76`; ficaram separados do censo de caminhos de produção.
 
 ## 30/10 18:17 · sessao 412d5bddd613 · - · - · origem=Ronald (tmux)
 
@@ -422,172 +858,4 @@ Custo adicional estático por montagem: uma consulta obrigatória de vínculos (
 
 A API singular continua buscando vínculo/DNA no banco mesmo quando recebe células alimentadas (`app/ponto/turnos.py:2079-2080`). O teste novo compara alimentação com o mesmo dado persistido, sem enfrentar divergência entre alimentação e banco (`app/ponto/tests/test_c1_dias_encerrados.py:62-74`). Execução da suíte: [não verificado]; não rodei fixtures que escrevem banco, respeitando somente leitura.
 
-## 30/10 18:12 · sessao d4daaabd58b0 · - · - · origem=Ronald (tmux)
-
-Auditoria estática dos testes, sem executar Django nem escrever arquivos. Resultado de execução/RED contra base/mutação real: [não verificado]. [nao verificado]
-
-- **Os casos centrais têm asserções discriminantes:** hoje antes do turno, virada da meia-noite, turno encadeado até dois dias depois e falta após fim previsto; há também veredito já lavrado contra o “previsto”. Referências: `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:42`, `:47`, `:57`, `:61`, `:65`.
-- **O complemento das 15:3x tem caso correto com vínculo e célula trabalhando sem `hf`.** Ele verifica simultaneamente folha=`sem_celula`, tela=`sem_certidao`, motivo no rótulo e renderização nas três disposições. A sentinela verifica leitura efetiva de `status_rotulo`, evitando texto literal coincidente. Referências: `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:82`, `:91`, `:97`, `:104`, `:108`.
-- **Precedências estão cobertas parcialmente:** veredito lavrado, folga humana, ausência pendente e isento. O teste da ausência declara corretamente que não distingue cobrança por todas as ausências de cobrança só pelas aprovadas: a A2 decide antes. Referências: `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:112`, `:123`, `:132`, `:146`.
-- **O teste de custo não certifica custo total por montagem.** Subtrai uma montagem igualmente afetada pela mudança: overhead comum desaparece. A query de escalas sempre executada por `dias_encerrados` fica fora desse teto; mede-se apenas acréscimo do ramo cego, com tolerância de duas queries. Referências: `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:169`, `:177`, `:183`; `app/ponto/turnos.py:2130`.
-- **Não há mordida demonstrada da nova alimentação `turnos=` com lista não vazia.** A fixture nova de calendário não cria batidas; o novo cenário C1 alimenta células, sem criar batidas. As propriedades C1 anteriores carregam turnos internamente, sem passar `turnos=`. Assim, esta bateria nova não certifica reaproveitamento de turnos nem impede recarga indevida nesse caminho. Referências: `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:19`, `:42`; `app/ponto/tests/test_c1_dias_encerrados.py:26`, `:53`; `app/ponto/turnos.py:2132`.
-- **O novo teste C1 certifica DNA diferente do template e os dois formatos de alimentação para a porta singular**, com um instante adversarial 15h entre fim do DNA às 14h e turno do template 19–07h. Referências: `app/ponto/tests/test_c1_dias_encerrados.py:61`, `:66`, `:73`, `:77`.
-- **Limites de interface:** render sentinela só exercita o ramo sem palavra/ausência. O template prioriza ausência e `palavra_dia` antes do ramo de `status_rotulo`. Também não há caso novo sem `hf` com régua suspeita, que precede a retenção no classificador. Isso é lacuna de cobertura; violação desses ramos ao aval depende da interpretação literal que o pai está auditando. Referências: `app/templates/colaboradores/partials/_calendario_grade.html:97`, `:98`, `:107`; `app/colaboradores/services/calendario.py:139`, `:141`; `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:91`.
-
-Não afirmaria “testes não mordem” em bloco: as asserções dos casos principais são fortes, mas **custo total, alimentação de turnos e certificação de execução permanecem sem prova nesta leitura**. Referências: `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:43`, `:92`, `:177`; execução: [não verificado].
-
-## 30/10 18:12 · sessao f9c2b7bc127d · - · - · origem=Ronald (tmux)
-
-Os testes novos cobrem os casos centrais sem mocks: vínculo real, antes do turno, meia-noite, turno encadeado de dois dias, depois do fim, veredito já lavrado, dia sem fim previsto e comparação com a folha. A fixture antiga sem vínculo foi corrigida. `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:29`, `:42`, `:47`, `:57`, `:61`, `:65`, `:82`, `:92`.
-
-Mordem também a ligação do rótulo ao template: os três layouts recebem uma sentinela em `status_rotulo`, impedindo um `title` literal de passar. `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:104`.
-
-Lacunas concretas:
-
-- **Alimentação de turnos não vazios sem prova direta.** A fixture nova e seus casos não criam batidas; C1 cria batidas, mas suas chamadas nunca passam `turnos=`. Portanto não testam diretamente a nova entrada de turnos não vazios usada pelo calendário. `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:20`; `app/ponto/tests/test_c1_dias_encerrados.py:28`, `:35`, `:51`, `:66`, `:77`; `app/colaboradores/services/calendario.py:712`.
-- **Teste de cobertura não discrimina a cobertura da cobrança.** A própria documentação admite que A2 decide antes e deixa passar o mutante “cobrança só considera aprovadas”. `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:134`.
-- **Custo comum não preso pelo teste novo.** Ele compara apenas o acréscimo de um e oito dias cegos contra uma base; trabalho extra igual nos três cenários passa. O teto geral continua em 55 queries, medindo o segundo acesso aquecido. `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:177`; `app/core/tests/test_selo_performance.py:249`, `:332`, `:401`.
-
-Custo estrutural acrescentado por montagem:
-
-- Sempre **+1 SELECT de vínculos**; turnos e células já carregados são reaproveitados. `app/ponto/turnos.py:2129`, `:2130`, `:2132`.
-- Havendo passado `sem_previsto` sem veredito, uma chamada adicional ao juiz da folha, com SELECT de células e carga de vínculos; não ocorre por dia. `app/colaboradores/services/calendario.py:722`; `app/folha/export.py:1188`, `:1194`.
-- CPU cresce com dias × vínculos, além dos turnos: o juiz percorre os dias e filtra candidatos por dia. `app/ponto/turnos.py:2132`; `app/escala/alimentacao.py:253`.
-
-A suspeita inicial de divergência pela ordenação dos vínculos **não procede**: `vinculo_do_dia` escolhe por `max(ativa, data_inicio)`. `app/escala/alimentacao.py:254`.
-
-Execução e resultado verde dos testes nesta auditoria: **[não verificado]**; realizei somente leitura. [nao verificado]
-
-## 30/10 18:12 · sessao 54a8d86a7323 · - · - · origem=Ronald (tmux)
-
-Os testes cobrem os casos funcionais principais: hoje antes do turno, madrugada seguinte, fim já vencido, turno encadeado além de ontem e veredito lavrado (`app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:42-76`). O caso cego confirma vínculo/trabalho, motivo real `sem_celula`, status `sem_certidao` e leitura de `status_rotulo` nos três layouts, inclusive por sentinela (`app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:92-110`).
-
-Há três limitações concretas:
-
-- **O teste não morde a dependência do juiz da folha.** As asserções esperam sempre o motivo fixo `sem_celula`, enquanto a sentinela verifica apenas que o template lê o campo (`app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:97-110`). Por inspeção, substituir a chamada à folha por `_cego_folha = {d: 'sem_celula' for d in _sem_fim}` preservaria esses resultados; o custo cairia a zero e também satisfaria `<=2`. Trata-se de conclusão estática, mutante não executado (`app/colaboradores/services/calendario.py:722-727`; `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:177-183`).
-
-- **“Custo 0 no caso comum” vale apenas para a retenção adicional, não para o diff completo.** O calendário sempre chama `dias_encerrados`, que sempre consulta todos os vínculos, mesmo recebendo turnos e células previamente carregados (`app/colaboradores/services/calendario.py:712-713`; `app/ponto/turnos.py:2129-2132`). O teste desconta sua própria base e, portanto, não captura esse custo incondicional de uma consulta por montagem; mede somente o acréscimo do ramo cego (`app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:169-183`). A retenção acrescenta uma consulta de células e uma carga de vínculos (`app/folha/export.py:1188-1194`).
-
-- **O rótulo não vem integralmente do juiz da folha.** A folha devolve `data`, código `motivo`, `celula_id` e `veredito`; a frase é inventada localmente em `ROTULO_CEGO_FOLHA` e montada por `contexto_calendario` (`app/folha/export.py:1200-1204`; `app/colaboradores/services/calendario.py:64`; `app/colaboradores/services/calendario.py:899-901`). O template lê corretamente esse campo no ramo residual (`app/templates/colaboradores/partials/_calendario_grade.html:107`). A exigência literal do aval é “a tela lê o rótulo do mesmo juiz da folha” (`app/docs/PROMPTS.md:1681`).
-
-A cobertura pendente é explicitamente um selo de precedência da A2, não um RED do novo ramo de retenção; o próprio teste documenta essa limitação (`app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:133-144`).
-
-Não executei testes porque usam `TestCase`, criam registros e atualizam células, incompatível com a instrução somente leitura (`app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:17-30`; `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:165-173`).
-
-## 30/10 18:12 · sessao b602562ce5c4 · - · - · origem=Ronald (tmux)
-
-Avais literais: `app/docs/PROMPTS.md:1676` (13:3x) e `:1681` (15:3x). O histórico de reprovação A1–A5 está em `app/docs/RELATO.md:8`; ele descreve árvore anterior, portanto não prova defeito remanescente no hash atual.
-
-Os testes novos mordem os principais casos solicitados: [nao verificado]
-
-- Antes do turno: `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:42`; meia-noite: `:57`; turno estendido além de ontem: `:47`; falta após fim: `:61`.
-- Passado sem fim/veredito: vínculo real criado em `:29`, premissa `sem_previsto` verificada em `:85`, retenção real da folha verificada em `:97`, status e motivo em `:99`.
-- Veredito lavrado vence em `:112`; folga lançada em `:123`; ausência pendente em `:132`; isento passado em `:146`.
-- O template é efetivamente renderizado nos três layouts e recebe sentinela no campo `status_rotulo`: `:104–110`. Isso impede teste verde por frase literal independente do campo. [nao verificado]
-- Custo compara 0/1/8 dias cegos, exige quantidade real de `sem_certidao`, igualdade do acréscimo e teto de duas queries: `:169–183`. **Não mede custo total da montagem nem custo temporal**; captura apenas a diferença em consultas causada pelo ramo cego.
-- O teste de ausência admite corretamente sua limitação: A2 decide antes da cobertura, logo não certifica o universo de cobrança: `:134–138`. [nao verificado]
-
-Há lacunas de cobertura, sem constituírem isoladamente bug comprovado:
-
-- A nova alimentação `turnos=` não é exercitada pelos testes C1: `app/ponto/tests/test_c1_dias_encerrados.py:28`, `:66`, `:77`; a implementação aceita esse caminho em `app/ponto/turnos.py:2132`. Não há prova nova para divergência de pareamento entre janelas.
-- A propriedade janela/singular compartilha o mesmo núcleo, `app/ponto/turnos.py:2079`, `:2137`. A bateria independente da regra permanece em `app/ponto/tests/test_juiz_dia_encerrado.py:78–158`; não confundir equivalência entre carregadores com certificação da regra.
-- O dia da demissão, explicitamente citado na reprovação anterior (`app/docs/RELATO.md:8`), não tem caso novo; o retentor o excepciona em `app/folha/export.py:1211`, `:1237`.
-- Não há assert novo para efeito sobre `resolver_dia_oferecido`; esse juiz lê o status em `app/colaboradores/services/calendario.py:204`. Os novos testes verificam status, rótulo, precedência e custo, `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:42–183`.
-
-Não executei testes, respeitando somente leitura. Resultado verde/vermelho desta árvore: **[nao verificado]**. [nao verificado]
-
-## 30/10 17:43 · sessao f9f2f71f3459 · CALENDARIO-HOJE · verificador · origem=Code
-
-**REPROVADO para certificar a volta 7:** o teste de alimentação não cobre a correção singular que descreve: chama a singular sem `celulas`. Há também incompatibilidades de dict na cópia, mas atribuí-las ao último commit seria indevido. (`app/ponto/tests/test_c1_dias_encerrados.py:56`, `app/ponto/tests/test_c1_dias_encerrados.py:70`; introdução no delta: [não verificado])
-
-A cópia não contém histórico Git utilizável; não consegui executar `git diff 6c37ad84 HEAD` nem `git show HEAD`. Portanto, igualdade de resultados com o main e identificação exata dos testes alterados no último commit são **[não verificado]**.
-
-1. **Chamadores e diferenças de resultado**
-
-Para **cada linha abaixo**, a comparação histórica com `6c37ad84` permanece **[não verificado]**. Estes são os caminhos presentes na cópia:
-
-| Chamador | Entrada atual |
-|---|---|
-| Fechamento → `dia_encerrado` | Dict `{data: célula}`, recortado pelo pad. (`app/ponto/services/fechamento.py:354`, `app/ponto/services/fechamento.py:361`) |
-| Vigia de hora → `dia_encerrado` | Dict `{(colab,data): célula}`. (`app/ponto/services/vigia_de_hora.py:57`) |
-| Flip automático → `dia_encerrado` | Sem `celulas`. (`app/ponto/services/flip_auto.py:285`) |
-| Detector de ausências → `dia_encerrado` | Sem `celulas`. (`app/ponto/management/commands/detectar_ausencias.py:473`) |
-| Reconciliador → `dia_encerrado_motivo` | Sem `celulas`. (`app/chamados/reconciliador.py:1041`) |
-| Cartório → `dias_encerrados` | Dict `{(colab,data): célula}`, sem `turnos`. (`app/ponto/services/cartorio.py:853`) |
-| Comando supra juiz → `dias_encerrados` | Sem alimentação. (`app/ponto/management/commands/supra_juiz.py:108`) |
-| Emissor retroativo → `dias_encerrados` | Sem alimentação. (`app/ponto/management/commands/emitir_furo_retroativo.py:62`) |
-| Calendário → `dias_encerrados` | Dict `{(colab,data): célula}` **e** turnos previamente carregados. (`app/colaboradores/services/calendario.py:712`, `app/colaboradores/services/calendario.py:713`) |
-| `par_completo_da_janela` → `dias_encerrados` | Sem alimentação; o retorno filtra os dias admitidos pelo juiz de par completo. (`app/ponto/turnos.py:2150`, `app/ponto/turnos.py:2153`) |
-
-A entrada que discrimina a correção singular é: **DNA 10–14, template 19–07, sem batidas, consulta às 15h**. A singular atual consulta os marcos separadamente e encerra; reintroduzir o repasse do seu dict `{data}` à parte pura faz a busca por `(colab,data)` falhar e usar o template, retornando `relogio`/`False`. Isso demonstra o efeito da mutação, não uma diferença comprovada contra o main. (`app/ponto/turnos.py:2079`, `app/ponto/turnos.py:2102`, `app/escala/models.py:1095`, `app/escala/models.py:1097`, `app/escala/models.py:1108`; comparação histórica: [não verificado])
-
-2. **Contratos de `celulas`**
-
-| Função | Forma exigida e encaminhamento |
-|---|---|
-| `dias_encerrados` | `{(colab,data): célula}`; correto para vínculo e julgamento, **errado no repasse ao pareador quando falta `turnos=`**. (`app/ponto/turnos.py:2113`, `app/ponto/turnos.py:2132`, `app/ponto/turnos.py:2137`) |
-| `_dia_encerrado_motivo_puro` | `{(colab,data): célula}`; encaminha ao cálculo do fim. (`app/ponto/turnos.py:2094`, `app/ponto/turnos.py:2102`) |
-| `fim_turno` | Mesmo contrato de `marcos_turno`; encaminhamento correto. (`app/escala/servico_jornada.py:90`, `app/escala/servico_jornada.py:92`) |
-| `marcos_turno` | Mesmo contrato de `ec.marcos_do_dia`: `{(colab,data): célula}`. (`app/escala/servico_jornada.py:67`, `app/escala/servico_jornada.py:69`, `app/escala/models.py:1083`) |
-| `turnos_do_colab` | `{data: célula}`; converte internamente para chave composta. (`app/ponto/turnos.py:1852`, `app/ponto/turnos.py:1928`) |
-| `vinculo_do_dia` | `{(colab,data): célula}`; procura exatamente essa chave. (`app/escala/alimentacao.py:209`, `app/escala/alimentacao.py:237`) |
-
-**Achado procedente:** a plural passa o mapa composto diretamente a `turnos_do_colab`. A conversão interna produz `(colab,(colab,data))`; o resolvedor perde a geradora da célula e pode escolher outro vínculo pelo fallback. A chamada do cartório e o teste C1 alimentado percorrem esse caminho; o calendário o evita fornecendo `turnos=`. (`app/ponto/turnos.py:2132`, `app/ponto/turnos.py:1928`, `app/escala/alimentacao.py:237`, `app/escala/alimentacao.py:254`, `app/ponto/services/cartorio.py:853`, `app/ponto/tests/test_c1_dias_encerrados.py:66`, `app/colaboradores/services/calendario.py:713`)
-
-Esse defeito do cartório está explicitamente registrado como **preexistente**; não o considero regressão comprovada desta volta. (`app/docs/BACKLOG.md:790`; comprovação pelo histórico Git: [não verificado])
-
-Há ainda forma incompatível na vigia: ela entrega chave composta à singular, que a repassa ao pareador de chave simples. Ocorrência e efeito em produção: **[não verificado]**. (`app/ponto/services/vigia_de_hora.py:57`, `app/ponto/turnos.py:2079`, `app/ponto/turnos.py:1852`)
-
-3. **Os testes mordem?** [nao verificado]
-
-O alcance abaixo decorre da leitura e de sondas em memória das funções; execução da suíte e dos mutantes completos: **[não verificado]**. [nao verificado]
-
-| Teste | Mutação que pega | Mutação que deixa passar | [nao verificado]
-|---|---|---|
-| C1 alimentado | Forçar template em lugar do DNA: às 15h exige encerramento pelo DNA 10–14. | **Reintroduzir o repasse singular indevido**, pois a singular é chamada sem alimentação. (`app/ponto/tests/test_c1_dias_encerrados.py:63`, `app/ponto/tests/test_c1_dias_encerrados.py:70`, `app/ponto/tests/test_c1_dias_encerrados.py:73`) |
-| Mesmo C1 | Passar `{}` aos marcos, causando ausência da chave e fallback ao template. | **Remover o encaminhamento de `celulas`**: com `None`, o método consulta a célula persistida e encontra o mesmo DNA. (`app/escala/models.py:1094`, `app/escala/models.py:1097`, `app/escala/models.py:1108`, `app/ponto/tests/test_c1_dias_encerrados.py:62`) |
-| Mesmo C1 | Verifica o resultado temporal do DNA. | Perder a geradora durante o pareamento: a fixture não declara geradora nem cria batidas. (`app/ponto/tests/test_c1_dias_encerrados.py:62`, `app/ponto/tests/test_c1_dias_encerrados.py:66`) |
-| Ausência pendente | A2 deixar de reconhecer a pendente abonadora. | Restringir a cobertura de cobrança a aprovadas: A2 já retorna `ausencia` antes da cobertura. (`app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:133`, `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:138`, `app/colaboradores/services/calendario.py:124`) |
-| Custo | Crescimento entre um e oito dias cegos; incremento superior a duas queries. | Consultas adicionais comuns aos cenários normal e cego, pois a base é subtraída. (`app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:177`, `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:179`, `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:183`) |
-| Render com sentinela | `title` ausente ou substituído por frase fixa. | Só exige a substring no HTML; não verifica sua localização. (`app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:105`, `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:108`, `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:110`) |
-
-Para selar especificamente a volta 7, falta exercer a **singular alimentada com `{data: célula}`**, com DNA diferente do template, e exigir encerramento às 15h. O teste atual descreve essa proteção, mas chama outra entrada. (`app/ponto/tests/test_c1_dias_encerrados.py:56`, `app/ponto/tests/test_c1_dias_encerrados.py:63`, `app/ponto/tests/test_c1_dias_encerrados.py:70`)
-
-## 30/10 17:42 · sessao 659bb6fb3747 · - · - · origem=Ronald (tmux)
-
-Correção confirmada: o teste C1 **não detecta a remoção do repasse de `celulas`** em `turnos.py:2138`, `turnos.py:2102`, `servico_jornada.py:92` ou `servico_jornada.py:69`. Sem alimentação, `marcos_do_dia` consulta a célula persistida e encontra o mesmo DNA criado pelo teste. (`app/escala/models.py:1094`, `app/escala/models.py:1097`, `app/escala/models.py:1099`; `app/ponto/tests/test_c1_dias_encerrados.py:62`)
-
-Ele detecta **forçar a leitura do template** — por exemplo, omitir `ec` ou passar `{}` como alimentação dos marcos — porque às 15h DNA 10–14 encerrou e template 19–07 não. (`app/escala/servico_jornada.py:68`, `app/escala/servico_jornada.py:71`; `app/escala/models.py:1095`, `app/escala/models.py:1108`; `app/ponto/tests/test_c1_dias_encerrados.py:73`)
-
-Também **não detecta reintroduzir o repasse singular indevido**: a comparação chama singular sem `celulas`. (`app/ponto/tests/test_c1_dias_encerrados.py:70`)
-
-O teste de custo limita somente o **incremento do ramo cego** a duas consultas e compara um versus oito dias; consultas adicionais comuns à base escapam pela subtração. (`app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:177`, `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:179`, `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:183`)
-
-Mutantes e suíte não foram executados; o alcance acima foi estabelecido por leitura do código. [não verificado quanto à execução] [nao verificado]
-
-## 30/10 17:42 · sessao e49045cf3803 · - · - · origem=Ronald (tmux)
-
-Achado procedente de contrato na porta **plural**: `dias_encerrados` recebe `{(cid,data): CelulaDia}`, mas, sem `turnos=`, repassa esse mapa diretamente a `turnos_do_colab`, que exige `{data: CelulaDia}`. — `app/ponto/turnos.py:2113`, `app/ponto/turnos.py:2132`, `app/ponto/turnos.py:1852`.
-
-| Função | Forma exigida e caminho atual |
-|---|---|
-| `dias_encerrados` | `{(cid,data): cel}`; preserva corretamente para vínculo e julgamento, mas repassa erradamente ao carregador de turnos. — `app/ponto/turnos.py:2129`, `app/ponto/turnos.py:2132`, `app/ponto/turnos.py:2137` |
-| `_dia_encerrado_motivo_puro` | `{(cid,data): cel}`, repassado a `fim_turno`. — `app/ponto/turnos.py:2094`, `app/ponto/turnos.py:2102` |
-| `fim_turno` | Mesmo contrato de `marcos_turno`; encaminhamento correto. — `app/escala/servico_jornada.py:89`, `app/escala/servico_jornada.py:92` |
-| `marcos_turno` | Mesmo contrato de `ec.marcos_do_dia`: `{(cid,data): cel}`. — `app/escala/servico_jornada.py:67`, `app/escala/servico_jornada.py:69`, `app/escala/models.py:1083`, `app/escala/models.py:1095` |
-| `turnos_do_colab` | `{data: cel}`; transforma em `{(cid,data): cel}` para resolver o vínculo. — `app/ponto/turnos.py:1852`, `app/ponto/turnos.py:1928` |
-| `vinculo_do_dia` | `{(cid,data): cel}`; procura exatamente essa chave. — `app/escala/alimentacao.py:209`, `app/escala/alimentacao.py:237` |
-
-A forma errada produz `{(cid,(cid,data)): cel}` após a transformação de `turnos_do_colab`; a geradora desaparece para o resolvedor, que passa a escolher o vínculo por vigência, atividade e início. — `app/ponto/turnos.py:1928`, `app/escala/alimentacao.py:237`, `app/escala/alimentacao.py:253`.
-
-Chamadas concretas atingidas: cartório fornece o mapa plural sem `turnos=`, assim como o novo teste de propriedade alimentada. O calendário fornece `turnos=` e evita esse ramo. — `app/ponto/services/cartorio.py:853`, `app/ponto/tests/test_c1_dias_encerrados.py:66`, `app/ponto/tests/test_c1_dias_encerrados.py:73`, `app/colaboradores/services/calendario.py:712`.
-
-A singular está coerente: seu mapa `{data: cel}` vai somente a `turnos_do_colab`; vínculo e marcos são carregados separadamente. — `app/ponto/turnos.py:2052`, `app/ponto/turnos.py:2079`.
-
-O novo teste alimentado não detecta o erro plural: cria célula **sem `escala_geradora`**, não cria batidas e compara o encerramento ditado pelo DNA; portanto, não distingue perder a geradora durante o pareamento. Ele detecta deixar de fornecer o DNA ao julgamento plural, pois às 15h exige encerramento pelo DNA 10–14, enquanto o template é 19–07. — `app/ponto/tests/test_c1_dias_encerrados.py:58`, `app/ponto/tests/test_c1_dias_encerrados.py:62`, `app/ponto/tests/test_c1_dias_encerrados.py:73`, `app/ponto/tests/test_juiz_dia_encerrado.py:49`.
-
-Verificação somente em memória: extraí por AST as funções reais de escolha de vínculo e confirmei que, com célula nomeando A e outro vínculo B ativo mais recente, o mapa correto escolhe A e o mapa duplicado escolhe B. O teste de integração desse cenário não foi executado. — `app/escala/alimentacao.py:237`, `app/escala/alimentacao.py:247`, `app/escala/alimentacao.py:254`; execução de integração [não verificado].
-
-A introdução desse defeito especificamente no último commit ou em relação ao main não pode ser comprovada pela cópia sem histórico Git. [não verificado] [nao verificado]
-
-_679 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_686 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
