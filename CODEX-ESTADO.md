@@ -1,7 +1,126 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **30/10/2026 15:04** · publicado em **30/10/2026 15:05** (UTC-3)
+> Ultima resposta processada: **30/10/2026 15:05** · publicado em **30/10/2026 15:10** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 30/10 15:05 · sessao be63b35eee76 · BENCH-CORRECAO · censo · origem=Code
+
+A aplicabilidade de alguns itens não pode ser determinada: os anexos não trazem as declarações LEI-AKITA de cada hash nem informam quando s1 e s2 foram corrigidos. Nesses casos, usei `[nao verificado]`; usar `n/a` afirmaria uma ausência não demonstrada. As referências abaixo são as citadas pelos revisores; sua correspondência com os hashes históricos é [nao verificado].
+
+Considerei `n/a` para s3 antes da guarda de reabertura e, em `a3bbef39`, para os defeitos corrigidos pelos deltas descritos: 3, 4, 5 e s3. (`app/chamados/models.py:1143`; `app/ponto/tests/test_veto_que_cai_rejulga.py:124`; `app/chamados/tests/_vinculo_do_dia.py:18`; `app/ponto/management/commands/emitir_turno_aberto_retroativo.py:184`; referências históricas: [nao verificado])
+
+Estes trechos sustentam os reconhecimentos integrais ou parciais; as demais classificações indicam ausência de identificação do defeito nas respostas fornecidas [nao verificado].
+
+| Volta / item | A | B |
+|---|---|---|
+| 1c565c8f / 2 | **EM PARTE:** identifica o leitor omitido: “leitor de desfazer corroboração filtra pelo vínculo específico”, mas não denuncia a declaração desatualizada. (`app/escala/management/commands/desfazer_corroboracao_regua.py:38`) | **EM PARTE:** “desfazer corroboração filtra pelo vínculo”, sem apontar o defeito da declaração. (`app/escala/management/commands/desfazer_corroboracao_regua.py:38`) |
+| 1c565c8f / 3 | **EM PARTE:** “Acrescenta o veto à impressão”, tratando o efeito de `ec=None`, sem apontar a falta do teste próprio. (`app/ponto/services/cartorio.py:1013`, `:1083`) | **EM PARTE:** “Acrescenta `veto:VETO_DEGENERADA` à impressão do ramo normal”, sem identificar a lacuna de teste. (`app/ponto/services/cartorio.py:1013`, `:1083`) |
+| 1c565c8f / 5 | **EM PARTE:** “no apply distingue retorno recusado”, sem denunciar a classificação por eliminação. (`app/ponto/management/commands/emitir_turno_aberto_retroativo.py:174`) | **NÃO VIU:** não identifica o contador por eliminação [nao verificado]. |
+| 1c565c8f / 6 | **EM PARTE:** “Reversão anterior, DIFF financeiro, preservação de exportadas por hash [...] [nao verificado]”; não identifica “63 × 1.576” nem exige expressamente `medir` antes/depois. (`app/ponto/services/cartorio.py:1083`; `app/ponto/management/commands/processar_cartorio.py:49`) | **EM PARTE:** “Reversão anterior, preservação por hash e diferença à Pauta DP: [nao verificado]”; faltam os outros componentes do item. (`app/ponto/management/commands/processar_cartorio.py:49`; `app/ponto/portas/regen_exportada.py:62`) |
+| 1c565c8f / 7 | **VIU:** “Ato humano passa sem registrar o veto dispensado”; “falta a informação de que o humano atravessou um veto”. (`app/chamados/views_arquivar.py:68`, `:75`, `:79`; `app/ponto/services/furos_vetados.py:90`) | **NÃO VIU:** não aponta a ausência de registro do veto atravessado [nao verificado]. |
+| 673ecaf7 / 6 | **EM PARTE:** “Item 9 continua pendente de pouso”; “Quantidade afetada e resultado da medida anunciada: [nao verificado]”. (`app/config/crons.py:597`; `app/ponto/management/commands/processar_cartorio.py:49`; `app/ponto/services/cartorio.py:1083`) | **EM PARTE:** “continua sem resultado da medição exigida no anexo”, sem cobrir todas as condições do gabarito. (`app/ponto/management/commands/processar_cartorio.py:49`; `app/ponto/services/cartorio.py:1083`) |
+| a3bbef39 / 1 | **VIU:** “RED do nascimento contra a base — Cura não demonstrada”; existência dos testes não comprova o RED histórico. (`app/chamados/tests/test_o261_veto_na_porta.py:418`, `:522`; histórico: [nao verificado]) | **VIU:** “RED contra a base — Cura não comprovada”; “sua existência não prova aquela execução”. (`app/chamados/tests/test_o261_veto_na_porta.py:418`, `:522`; histórico: [nao verificado]) |
+| a3bbef39 / 2 | **VIU:** nomeia a declaração desatualizada, as origens e o consumidor omitido; “A linha corrigida de commit não foi fornecida”. (`app/chamados/models.py:1090`, `:1143`; `app/escala/management/commands/desfazer_corroboracao_regua.py:38`; declaração: [nao verificado]) | **VIU:** “declaração LEI-AKITA — Cura não comprovada”, identificando `recusa_da_reabertura`, `reabrir` e o consumidor. (`app/chamados/models.py:1071`, `:1143`; `app/escala/management/commands/desfazer_corroboracao_regua.py:38`; declaração: [nao verificado]) |
+
+Para s1 e s2, o gabarito comprova a ocorrência em `1c565c8f`, mas a persistência nas outras voltas é [nao verificado]. A análise de calendário de `a3bbef39` não identifica as cinco fixtures omitidas de s1 nem o F841 de s2. (`app/api/tests/test_chamados_v2_destino.py:37`; `app/ponto/tests/test_bug115_lampada_do_marco.py:54`; demais fixtures e linha do F841: [nao verificado])
+
+Os registros NOVO abaixo inventariam os achados alegados nas respostas, incluindo lacunas de teste e contraexemplos; não certificam ocorrência em produção nem sobrevivência executada dos mutantes [nao verificado]. [nao verificado]
+
+NOTA|O261-VETO-A2_1c565c8f|1|existia|A=NAO_VIU|B=NAO_VIU
+NOTA|O261-VETO-A2_1c565c8f|2|[nao verificado]|A=EM_PARTE|B=EM_PARTE
+NOTA|O261-VETO-A2_1c565c8f|3|existia|A=EM_PARTE|B=EM_PARTE
+NOTA|O261-VETO-A2_1c565c8f|4|existia|A=NAO_VIU|B=NAO_VIU
+NOTA|O261-VETO-A2_1c565c8f|5|existia|A=EM_PARTE|B=NAO_VIU
+NOTA|O261-VETO-A2_1c565c8f|6|existia|A=EM_PARTE|B=EM_PARTE
+NOTA|O261-VETO-A2_1c565c8f|7|existia|A=VIU|B=NAO_VIU
+NOTA|O261-VETO-A2_1c565c8f|s1|existia|A=NAO_VIU|B=NAO_VIU
+NOTA|O261-VETO-A2_1c565c8f|s2|existia|A=NAO_VIU|B=NAO_VIU
+NOTA|O261-VETO-A2_1c565c8f|s3|n/a|A=n/a|B=n/a
+NOTA|O261-VETO-A2_673ecaf7|1|existia|A=NAO_VIU|B=NAO_VIU
+NOTA|O261-VETO-A2_673ecaf7|2|[nao verificado]|A=NAO_VIU|B=NAO_VIU
+NOTA|O261-VETO-A2_673ecaf7|3|existia|A=NAO_VIU|B=NAO_VIU
+NOTA|O261-VETO-A2_673ecaf7|4|existia|A=NAO_VIU|B=NAO_VIU
+NOTA|O261-VETO-A2_673ecaf7|5|existia|A=NAO_VIU|B=NAO_VIU
+NOTA|O261-VETO-A2_673ecaf7|6|existia|A=EM_PARTE|B=EM_PARTE
+NOTA|O261-VETO-A2_673ecaf7|7|existia|A=NAO_VIU|B=NAO_VIU
+NOTA|O261-VETO-A2_673ecaf7|s1|[nao verificado]|A=NAO_VIU|B=NAO_VIU
+NOTA|O261-VETO-A2_673ecaf7|s2|[nao verificado]|A=NAO_VIU|B=NAO_VIU
+NOTA|O261-VETO-A2_673ecaf7|s3|n/a|A=n/a|B=n/a
+NOTA|O261-VETO-A2_3b68a95b|1|existia|A=NAO_VIU|B=NAO_VIU
+NOTA|O261-VETO-A2_3b68a95b|2|[nao verificado]|A=NAO_VIU|B=NAO_VIU
+NOTA|O261-VETO-A2_3b68a95b|3|existia|A=NAO_VIU|B=NAO_VIU
+NOTA|O261-VETO-A2_3b68a95b|4|existia|A=NAO_VIU|B=NAO_VIU
+NOTA|O261-VETO-A2_3b68a95b|5|existia|A=NAO_VIU|B=NAO_VIU
+NOTA|O261-VETO-A2_3b68a95b|6|existia|A=NAO_VIU|B=NAO_VIU
+NOTA|O261-VETO-A2_3b68a95b|7|existia|A=NAO_VIU|B=NAO_VIU
+NOTA|O261-VETO-A2_3b68a95b|s1|[nao verificado]|A=NAO_VIU|B=NAO_VIU
+NOTA|O261-VETO-A2_3b68a95b|s2|[nao verificado]|A=NAO_VIU|B=NAO_VIU
+NOTA|O261-VETO-A2_3b68a95b|s3|existia|A=NAO_VIU|B=NAO_VIU
+NOTA|O261-VETO-A2_a3bbef39|1|existia|A=VIU|B=VIU
+NOTA|O261-VETO-A2_a3bbef39|2|[nao verificado]|A=VIU|B=VIU
+NOTA|O261-VETO-A2_a3bbef39|3|n/a|A=n/a|B=n/a
+NOTA|O261-VETO-A2_a3bbef39|4|n/a|A=n/a|B=n/a
+NOTA|O261-VETO-A2_a3bbef39|5|n/a|A=n/a|B=n/a
+NOTA|O261-VETO-A2_a3bbef39|6|existia|A=NAO_VIU|B=NAO_VIU
+NOTA|O261-VETO-A2_a3bbef39|7|existia|A=NAO_VIU|B=NAO_VIU
+NOTA|O261-VETO-A2_a3bbef39|s1|[nao verificado]|A=NAO_VIU|B=NAO_VIU
+NOTA|O261-VETO-A2_a3bbef39|s2|[nao verificado]|A=NAO_VIU|B=NAO_VIU
+NOTA|O261-VETO-A2_a3bbef39|s3|n/a|A=n/a|B=n/a
+NOVO|O261-VETO-A2_1c565c8f|A|app/ponto/services/cartorio.py:907|Ramo nunca_bateu calcula impressão sem veto e pode manter célula sem vínculo pulada.
+NOVO|O261-VETO-A2_1c565c8f|A|app/chamados/models.py:921|Deduplicação omite via e suprime a trilha própria de uma segunda operação.
+NOVO|O261-VETO-A2_1c565c8f|A|app/chamados/tests/test_emissao_reata_orfa.py:67|Teste do desligado pode passar sem o gate de situação porque falta a célula necessária à emissão. [nao verificado]
+NOVO|O261-VETO-A2_1c565c8f|A|app/chamados/tests/test_emissor_nomeia_o_marco.py:88|Teste promete nascimento, mas verifica somente o contexto produzido por _ctx_c2. [nao verificado]
+NOVO|O261-VETO-A2_1c565c8f|A|app/chamados/tests/test_bug125_cobranca_cega.py:176|Teste promete nascimento sem marco, mas verifica somente o contexto. [nao verificado]
+NOVO|O261-VETO-A2_1c565c8f|A|app/ponto/management/commands/detectar_ausencias.py:139|Ativo sem vínculo pode ser descartado pelos fluxos antes de alcançar o escritor do aviso de cadastro.
+NOVO|O261-VETO-A2_1c565c8f|A|app/chamados/services/disputa_emissao.py:1606|Resolver automático reabre o pai diretamente sem consultar o veto novo.
+NOVO|O261-VETO-A2_1c565c8f|A|app/ponto/management/commands/reconciliar_grade.py:522|Grade pode reabrir o encerrado devolvido após a porta recusar seu renascimento.
+NOVO|O261-VETO-A2_1c565c8f|A|app/chamados/tests/test_o261_veto_na_porta.py:212|Selo não reconhece a reabertura pelo receptor _pai e permanece verde com o escape. [nao verificado]
+NOVO|O261-VETO-A2_1c565c8f|B|app/ponto/services/cartorio.py:907|Impressão do ramo nunca_bateu não incorpora o novo veto antes do retorno antecipado.
+NOVO|O261-VETO-A2_1c565c8f|B|app/chamados/models.py:921|Deduplicação omite via e consulta toda a história, suprimindo outra operação e o retorno do veto após correção.
+NOVO|O261-VETO-A2_1c565c8f|B|app/chamados/tests/test_emissor_nomeia_o_marco.py:88|Teste de nascimento observa apenas o dicionário de contexto. [nao verificado]
+NOVO|O261-VETO-A2_1c565c8f|B|app/chamados/tests/test_bug125_cobranca_cega.py:176|Teste de nascimento sem marco não executa a abertura. [nao verificado]
+NOVO|O261-VETO-A2_1c565c8f|B|app/ponto/management/commands/detectar_ausencias.py:140|Ativo sem vínculo não alcança automaticamente o escritor de regua_degenerada nos fluxos examinados.
+NOVO|O261-VETO-A2_1c565c8f|B|app/chamados/services/disputa_emissao.py:1606|Callback automático reabre o pai sem passar pelo veto do renascer.
+NOVO|O261-VETO-A2_1c565c8f|B|app/ponto/management/commands/reconciliar_grade.py:522|Grade trata somente retorno None e pode desfazer a recusa de renascimento reabrindo o encerrado.
+NOVO|O261-VETO-A2_1c565c8f|B|app/chamados/tests/test_o261_veto_na_porta.py:207|Varredor não classifica pai.reabrir() como escrita de vitalidade.
+NOVO|O261-VETO-A2_1c565c8f|B|bin/placar_code.sh:209|Placar captura somente o contador antigo e não mostra chamados vivos em dia vetado.
+NOVO|O261-VETO-A2_673ecaf7|A|app/chamados/tests/test_o261_veto_na_porta.py:256|Inventário AST perde chamadas por alias ou getattr e novas chamadas dentro de função já classificada.
+NOVO|O261-VETO-A2_673ecaf7|A|app/chamados/services/acoes_chamado.py:315|Resposta livre pode reabrir por transicionar sem passar por reabrir nem aparecer no censo.
+NOVO|O261-VETO-A2_673ecaf7|A|app/chamados/services/acoes_disputa.py:265|Ação administrativa ignora a recusa de reabrir e anuncia sucesso após abrir disputa e pergunta.
+NOVO|O261-VETO-A2_673ecaf7|A|app/chamados/models.py:923|Recusa histórica suprime nova trilha quando o mesmo veto retorna após passagem permitida.
+NOVO|O261-VETO-A2_673ecaf7|A|bin/placar_code.sh:209|Placar pode mostrar zero enquanto o vigia novo encontra chamado vivo vetado sem célula furo.
+NOVO|O261-VETO-A2_673ecaf7|B|app/chamados/tests/test_o261_veto_na_porta.py:256|Selo perde chamadas indiretas e registra funções sem detectar outra chamada dentro de função já enumerada.
+NOVO|O261-VETO-A2_673ecaf7|B|app/chamados/services/acoes_chamado.py:315|Reabertura humana por transicionar fica fora do inventário de reabrir.
+NOVO|O261-VETO-A2_673ecaf7|B|app/chamados/tests/test_contract_status_nucleo.py:23|Contrato complementar permite chamada externa a _gravar_estado para vivificar sem reconhecer essa escrita.
+NOVO|O261-VETO-A2_673ecaf7|B|app/chamados/services/acoes_disputa.py:266|Ação administrativa ignora retorno de reabrir e pode deixar disputa aberta com pai encerrado.
+NOVO|O261-VETO-A2_673ecaf7|B|app/chamados/models.py:923|Busca histórica cala a recusa de um novo ciclo após correção, renascimento e retorno do veto.
+NOVO|O261-VETO-A2_673ecaf7|B|bin/placar_code.sh:209|Placar extrai apenas o contador antigo e pode ocultar o achado do vigia novo.
+NOVO|O261-VETO-A2_673ecaf7|B|app/ponto/management/commands/reconciliar_grade.py:480|Triagem generaliza indevidamente o descarte de ec=None; _emitir_furo aceita None e chama a defesa de cadastro.
+NOVO|O261-VETO-A2_673ecaf7|B|app/chamados/tests/test_emissor_nomeia_o_marco.py:88|Teste verifica contexto e não sustenta prova de nascimento. [nao verificado]
+NOVO|O261-VETO-A2_673ecaf7|B|app/chamados/tests/test_bug125_cobranca_cega.py:176|Teste verifica contexto e não sustenta prova de nascimento. [nao verificado]
+NOVO|O261-VETO-A2_3b68a95b|A|app/chamados/models.py:569|analisar() pode usar instância desatualizada e vivificar chamado encerrado concorrentemente sem consultar veto.
+NOVO|O261-VETO-A2_3b68a95b|A|app/chamados/services/competencia_trancada.py:239|Serviço aceita autor=None e usuário sistema; a garantia humana depende dos chamadores encontrados.
+NOVO|O261-VETO-A2_3b68a95b|A|app/chamados/models.py:925|Consulta seguida de inserção sem serialização ou unicidade permite duplicar a mesma recusa concorrentemente.
+NOVO|O261-VETO-A2_3b68a95b|A|app/chamados/models.py:933|Nascimento permitido em outro dia pode liberar nova trilha para recusa antiga porque _passou não filtra dia ou célula.
+NOVO|O261-VETO-A2_3b68a95b|A|app/chamados/models.py:935|Sequência de motivos A→B→A sem passagem permitida pode calar a volta de A.
+NOVO|O261-VETO-A2_3b68a95b|A|app/core/models.py:313|Índices declarados não cobrem a chave JSON e a ordenação da consulta de deduplicação; custo real não medido.
+NOVO|O261-VETO-A2_3b68a95b|B|app/chamados/models.py:566|analisar() pode reabrir por estado antigo em memória após encerramento concorrente, sem reler banco ou veto.
+NOVO|O261-VETO-A2_3b68a95b|B|app/chamados/services/competencia_trancada.py:258|Serviço passa humano=True mesmo quando autor=None foi substituído por usuário sistema.
+NOVO|O261-VETO-A2_3b68a95b|B|app/chamados/models.py:925|Duas chamadas podem consultar antes de qualquer inserção e gravar recusas duplicadas.
+NOVO|O261-VETO-A2_3b68a95b|B|app/chamados/models.py:931|Nascimento em outro dia satisfaz _passou e permite linha extra sem passagem daquele dia.
+NOVO|O261-VETO-A2_3b68a95b|B|app/chamados/models.py:378|Renovar SLA de chamado ainda encerrado altera atualizado_em e permite outra linha de recusa.
+NOVO|O261-VETO-A2_3b68a95b|B|app/chamados/models.py:937|Inserção tardia de recusa pode ficar posterior ao nascimento permitido e calar o ciclo seguinte.
+NOVO|O261-VETO-A2_3b68a95b|B|app/core/models.py:313|Índices não cobrem a chave JSON com a ordenação da deduplicação; plano e latência não foram verificados.
+NOVO|O261-VETO-A2_a3bbef39|A|app/ponto/tests/test_veto_que_cai_rejulga.py:126|Spy observa argumento, mas não detecta hash que ignore especificamente VETO_DEGENERADA.
+NOVO|O261-VETO-A2_a3bbef39|A|app/chamados/tests/_vinculo_do_dia.py:18|Não há teste direto dos sete weekdays; omissão de domingo dependeria dos dias exercitados pela suíte. [nao verificado]
+NOVO|O261-VETO-A2_a3bbef39|A|app/ponto/tests/test_passe_turno_aberto_retroativo.py:142|MORDE verifica contadores, mas não exige a mensagem RECUSADO sem juiz.
+NOVO|O261-VETO-A2_a3bbef39|A|app/ponto/tests/test_passe_turno_aberto_retroativo.py:124|Falta cenário com célula e veto recusando simultaneamente para distinguir a prioridade dos juízes.
+NOVO|O261-VETO-A2_a3bbef39|A|app/ponto/tests/test_passe_turno_aberto_retroativo.py:140|MORDE substitui abrir e não exercita seu corpo real nem reproduz a mudança concorrente narrada.
+NOVO|O261-VETO-A2_a3bbef39|B|app/ponto/tests/test_veto_que_cai_rejulga.py:126|Teste pode passar se o hash ignorar VETO_DEGENERADA, pois observa somente kwargs do spy. [nao verificado]
+NOVO|O261-VETO-A2_a3bbef39|B|app/chamados/tests/_vinculo_do_dia.py:18|Ausência de teste próprio dos sete dias deixa detecção de domingo omitido dependente dos dias exercitados. [nao verificado]
+NOVO|O261-VETO-A2_a3bbef39|B|app/ponto/tests/test_passe_turno_aberto_retroativo.py:113|Testes de motivos isolados não distinguem prioridade invertida quando célula e veto recusam juntos. [nao verificado]
+NOVO|O261-VETO-A2_a3bbef39|B|app/ponto/tests/test_passe_turno_aberto_retroativo.py:142|Retirar a mensagem RECUSADO sem juiz preservando os contadores não é detectado pelo MORDE.
+NOVO|O261-VETO-A2_a3bbef39|B|app/ponto/tests/test_passe_turno_aberto_retroativo.py:140|MORDE alcança o fallback por mock de abrir e não demonstra a concorrência descrita na docstring.
 
 ## 30/10 15:04 · sessao 91323e3d3246 · BENCH-CORRECAO · censo · origem=Code
 
@@ -981,41 +1100,4 @@ Concordo: item 4 deve ser `n/a` nas três primeiras voltas, por inferência temp
 
 Grau: forte em `68a38548` e `0ed50cc2`; indireto em `4da2943d`. O commit exato de introdução da guarda permanece [nao verificado].
 
-## 30/10 14:54 · sessao 293994c424b3 · - · - · origem=Ronald (tmux)
-
-Matriz sugerida, com avaliação conservadora de “toca o tema”:
-
-| Volta | Item | Aplicabilidade | A | B |
-|---|---:|---|---|---|
-| d6adf8c0 | 1 | existia | VIU | VIU |
-| d6adf8c0 | 2 | existia | NAO_VIU | NAO_VIU |
-| d6adf8c0 | 3 | existia | NAO_VIU | EM_PARTE |
-| d6adf8c0 | 4 | n/a, por inferência temporal | n/a | n/a |
-| d6adf8c0 | 5 | existia, por inferência | EM_PARTE | EM_PARTE |
-| 519fa2c2 | 1 | existia | NAO_VIU | NAO_VIU |
-| 519fa2c2 | 2 | existia | NAO_VIU | EM_PARTE |
-| 519fa2c2 | 3 | existia | NAO_VIU | EM_PARTE |
-| 519fa2c2 | 4 | existia, por inferência temporal | EM_PARTE | EM_PARTE |
-| 519fa2c2 | 5 | existia, por inferência | NAO_VIU | NAO_VIU |
-| af2cf55f | 1 | existia | NAO_VIU | NAO_VIU |
-| af2cf55f | 2 | existia | EM_PARTE | NAO_VIU |
-| af2cf55f | 3 | existia | EM_PARTE | NAO_VIU |
-| af2cf55f | 4 | existia | EM_PARTE | NAO_VIU |
-| af2cf55f | 5 | existia | NAO_VIU | EM_PARTE |
-
-As classificações das respostas usam os anexos transcritos; a tabela não tem referência própria arquivo:linha. [não verificado]
-
-Fundamentos relevantes:
-
-- **Item 1/d6, A e B VIU:** A diz “cada chamada da tela/PDF e dos dois comandos agora executa o detector global”; B diz “cada HTML/PDF e os commands C7/C8 passam a pagar a leitura de toda a frota”. Ambos descrevem inequivocamente o defeito, mesmo sem concluir reprovação. As citações dadas são `app/escala/services/cadastro_realidade.py:336` e os comandos. A proibição já está na cópia em `app/escala/services/cadastro_realidade.py:48-51`.
-- **Item 2/519 B EM_PARTE:** “não identifiquei segundo juiz”; **af A EM_PARTE:** “Juiz, escritor e relógio [...] sem cálculo próprio de fase”. Tocam a unicidade sem comparar `ancora_sugerida` com `fase_sugerida`. As autoridades distintas existem na cópia em `app/escala/services/fase_12x36.py:45` e `app/escala/services/fase_na_tela.py:50`.
-- **Item 3/d6 B EM_PARTE:** “C10 pode acusar um vínculo sob o cabeçalho de outro” e “ação sem identificar qual corrigir”. Trata seleção divergente de vínculos ativos; não identifica o vínculo histórico dos dias passados nem a necessidade de regenerar suas células. A medição específica está em `app/docs/RELATO.md:18`.
-- **Item 3/519 B e af A EM_PARTE:** ambos registram explicitamente que os quatro dias reais do col451 não foram verificados. Isso toca a prova faltante, sem diagnosticar a ação sobre o passado. O resultado da medição é `app/docs/RELATO.md:18`.
-- **Item 4:** nas duas respostas de 519 e em af A, “RED histórico [...] não verificado” merece EM_PARTE, não VIU. Af B só diz “Execução dos testes: [não verificado]”, sem RED histórico. O gabarito limita o RED à primeira versão em `app/docs/RELATO.md:19`.
-- **Temporalidade do item 4:** a inadequação “RED apenas da primeira versão” surge quando há versões ampliadas. Em d6, B ainda pede reforço de datas/PDF; em 519, ambos descrevem esses reforços. Assim, recomendo n/a em d6 e existia nas seguintes. A falta de novo RED nessas versões intermediárias é inferência; a cronologia exata não está demonstrada por Git ou logs disponíveis. [não verificado]
-- **Item 5/d6 EM_PARTE:** ambos leem comandos consumidores de `lista()`, mas não apontam a ausência deles no censo LEI-AKITA. Os leitores estão em `app/ponto/management/commands/fechar_chamados_vinculo_na_lista.py:35` e `app/escala/management/commands/fechar_avisos_regua_na_lista.py:27`; a declaração incompleta está em `app/docs/RELATO.md:23`.
-- **Item 5/af B EM_PARTE é a decisão mais discutível:** enumera pauta/fila/propositor/mensageria, isto é, consumidores de `fora_de_fase`, e fala de “consumidores existentes”; não procura os leitores de `lista()`. Se a rubrica exigir menção à função correta, usar NAO_VIU. A distinção está em `app/docs/RELATO.md:23`, comparada aos comandos acima e `app/core/placar_estrutural.py:149`.
-
-A existência dos itens 1–3 nas voltas anteriores é sustentada pelas chamadas e comportamentos descritos nas respostas, junto às autoridades anteriores da cópia; o momento exato em que a declaração incompleta do item 5 foi escrita nas versões intermediárias não está demonstrado. [não verificado]
-
-_605 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_606 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
