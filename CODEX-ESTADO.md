@@ -1,7 +1,130 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **30/10/2026 17:34** · publicado em **30/10/2026 17:35** (UTC-3)
+> Ultima resposta processada: **30/10/2026 17:36** · publicado em **30/10/2026 17:40** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 30/10 17:36 · sessao 3e8bc3910715 · CODEX-CONTEXTO-DA-CASA-AB-CORRECAO · censo · origem=Code
+
+As duas voltas têm o mesmo julgamento de anterioridade. Os oito itens são aplicáveis, com a ressalva abaixo para A2-2. A identificação do hash segue os rótulos fornecidos; confirmação por Git: [não verificado].
+
+- **s1 — existia; ninguém viu.** As respostas não identificam a quebra das fixtures antigas sem vínculo. A porta pode devolver `None` após o veto; o alcance de 45 módulos é o informado pelo gabarito, sem reexecução nesta análise. (`app/chamados/models.py:731`; `app/chamados/models.py:734`; alcance por execução [não verificado])
+- **s2 — existia; ninguém viu.** Nenhuma resposta aponta os dois testes que continuam exigindo o comportamento anterior. Descrever a mudança em resposta tardia ou c2 não identifica essas expectativas incompatíveis. (`app/chamados/tests/test_resposta_tardia.py:72`; `app/chamados/tests/test_c2_le_o_protesto_que_cobra.py:71`)
+- **s3 — existia; ninguém viu.** As respostas discutem autorização do juiz, mas não a falta de inscrição exigida pelo selo. O juiz está declarado e a docstring do módulo não contém `@bolha`. (`app/core/juizes.py:248`; `app/ponto/services/furos_vetados.py:1`; `app/core/tests/test_selo_mapa_contrato.py:41`)
+- **m1 — existia; todos viram o defeito qualitativo.** O veto com vínculo nulo entra na impressão e afeta também medição e c2. As quantidades da medida permanecem apenas como dado fornecido. (`app/ponto/services/cartorio.py:1013`; `app/ponto/services/cartorio.py:1083`; `app/ponto/services/furos_sem_cobranca.py:96`; `app/chamados/reconciliador.py:854`; reprodução quantitativa [não verificado])
+- **A2-2 — existia pelo componente do censo.** O leitor indireto já existe; a anterioridade da omissão documental é informada pelo gabarito, mas a linha LEI-AKITA específica não foi localizada na cópia [não verificado]. Não debito a omissão relativa ao veto em `reabrir/recusa_da_reabertura`: nesta versão, o veto está no renascimento. (`app/escala/management/commands/desfazer_corroboracao_regua.py:38`; `app/chamados/models.py:778`; `app/chamados/models.py:1119`)
+- **A2-3 — existia; todos viram em parte.** Todos reconhecem o efeito na impressão, mas nenhum aponta a falta de teste próprio desse caminho. O teste EC-NONE discutido pelas respostas verifica diretamente o juiz; a lacuna que elas denunciam é na porta, distinta da lacuna do cartório. (`app/ponto/services/cartorio.py:1083`; `app/chamados/tests/test_o261_veto_na_porta.py:302`; sobrevivência efetiva do mutante [não verificado])
+- **A2-5 — existia.** A classificação por eliminação está presente: ausência de chamado, excluída a absolvição da célula, vira `recusado_veto`. Par1/A, par1/B e par2/A mencionam essa contabilização sem denunciar o defeito; par2/B não trata o contador. (`app/ponto/management/commands/emitir_turno_aberto_retroativo.py:174`; `app/ponto/management/commands/emitir_turno_aberto_retroativo.py:177`)
+- **A2-7 — existia; todos viram.** A ausência de trilha específica é admitida pelo serviço, e desarquivar registra motivo fixo. (`app/ponto/services/furos_vetados.py:82`; `app/chamados/views_arquivar.py:75`)
+
+Trechos que sustentam **VIU** e **EM_PARTE**, transcritos das respostas fornecidas:
+
+| Item | Volta/revisor | Trecho |
+|---|---|---|
+| m1; A2-3 | par1/A | “O novo `VETO_DEGENERADA` entra na impressão”; o cartório “pode rejulgar onde antes pulava”. (`app/ponto/services/cartorio.py:1013`; `app/ponto/services/cartorio.py:1092`) |
+| m1; A2-3 | par1/B | “impressão ganha `veto:VETO_DEGENERADA`; deixa de satisfazer o skip e pode ser rejulgada”. (`app/ponto/services/cartorio.py:1083`; `app/ponto/services/cartorio.py:1092`) |
+| m1; A2-3 | par2/A | “passa a incluir veto na impressão; deixa de ser pulada por estabilidade”. (`app/ponto/services/cartorio.py:1083`; `app/ponto/services/cartorio.py:1092`) |
+| m1; A2-3 | par2/B | “`ec=None` passa a acrescentar veto à impressão”; a célula pode “ser rejulgada”. (`app/ponto/services/cartorio.py:1013`; `app/ponto/services/cartorio.py:1092`) |
+| A2-2 | par1/A | “`desfazer_corroboracao_regua` lê a lista ampliada, mas filtra por vínculo existente”. Reconhece o leitor, sem denunciar a linha documental. (`app/escala/management/commands/desfazer_corroboracao_regua.py:38`) |
+| A2-2 | par1/B | “O leitor indireto `desfazer_corroboracao_regua` descarta os novos achados `vinculo=None`”. (`app/escala/management/commands/desfazer_corroboracao_regua.py:38`) |
+| A2-2 | par2/A | “`desfazer_corroboracao_regua` também lê a lista”. (`app/escala/management/commands/desfazer_corroboracao_regua.py:38`) |
+| A2-5 | par1/A | “Passa a recusar no dry/apply e contabilizar `recusado_veto`”. (`app/ponto/management/commands/emitir_turno_aberto_retroativo.py:174`) |
+| A2-5 | par1/B | “apply contabiliza em `:174`”. (`app/ponto/management/commands/emitir_turno_aberto_retroativo.py:174`) |
+| A2-5 | par2/A | “Deixa de emitir e contabiliza recusa por veto”. (`app/ponto/management/commands/emitir_turno_aberto_retroativo.py:174`) |
+| A2-7 | par1/A | “falta mostrar e registrar o veto”; a ação “registra texto genérico”. (`app/chamados/views_arquivar.py:75`; `app/chamados/views_arquivar.py:79`) |
+| A2-7 | par1/B | “falta mostrar o veto e registrar o motivo específico da exceção”. (`app/chamados/views_arquivar.py:75`) |
+| A2-7 | par2/A | “falta mostrar o veto e registrar sua admissão”. (`app/chamados/views_arquivar.py:75`; `app/chamados/services/acoes_disputa.py:270`) |
+| A2-7 | par2/B | “A exceção humana não entrega aviso e trilha do veto”. (`app/chamados/views_arquivar.py:75`; `app/chamados/services/acoes_disputa.py:270`) |
+
+Nos registros NOVO, agrupei contraexemplos repetidos do mesmo defeito. As linhas identificam achados apresentados pelos revisores, para conferência posterior, sem certificar execução dos mutantes. [não verificado]
+
+NOTA|O261-VETO-A_61ae629c_par1|s1|existia|A=NAO_VIU|B=NAO_VIU
+NOTA|O261-VETO-A_61ae629c_par1|s2|existia|A=NAO_VIU|B=NAO_VIU
+NOTA|O261-VETO-A_61ae629c_par1|s3|existia|A=NAO_VIU|B=NAO_VIU
+NOTA|O261-VETO-A_61ae629c_par1|m1|existia|A=VIU|B=VIU
+NOTA|O261-VETO-A_61ae629c_par1|A2-2|existia|A=EM_PARTE|B=EM_PARTE
+NOTA|O261-VETO-A_61ae629c_par1|A2-3|existia|A=EM_PARTE|B=EM_PARTE
+NOTA|O261-VETO-A_61ae629c_par1|A2-5|existia|A=EM_PARTE|B=EM_PARTE
+NOTA|O261-VETO-A_61ae629c_par1|A2-7|existia|A=VIU|B=VIU
+NOTA|O261-VETO-A_61ae629c_par2|s1|existia|A=NAO_VIU|B=NAO_VIU
+NOTA|O261-VETO-A_61ae629c_par2|s2|existia|A=NAO_VIU|B=NAO_VIU
+NOTA|O261-VETO-A_61ae629c_par2|s3|existia|A=NAO_VIU|B=NAO_VIU
+NOTA|O261-VETO-A_61ae629c_par2|m1|existia|A=VIU|B=VIU
+NOTA|O261-VETO-A_61ae629c_par2|A2-2|existia|A=EM_PARTE|B=NAO_VIU
+NOTA|O261-VETO-A_61ae629c_par2|A2-3|existia|A=EM_PARTE|B=EM_PARTE
+NOTA|O261-VETO-A_61ae629c_par2|A2-5|existia|A=EM_PARTE|B=NAO_VIU
+NOTA|O261-VETO-A_61ae629c_par2|A2-7|existia|A=VIU|B=VIU
+NOVO|O261-VETO-A_61ae629c_par1|A|app/ponto/management/commands/emitir_turno_aberto_retroativo.py:138|Vínculo presente e suspeito passa a impedir emissões de turno antes admitidas.
+NOVO|O261-VETO-A_61ae629c_par1|A|app/ponto/views.py:280|Emissão automática omite dia forte, passa sem veto e fica fora dos achados do vigia; teste aprova a passagem. [nao verificado]
+NOVO|O261-VETO-A_61ae629c_par1|A|app/ponto/management/commands/reconciliar_grade.py:522|Grade reabre diretamente o encerrado devolvido após recusa do renascimento.
+NOVO|O261-VETO-A_61ae629c_par1|A|app/chamados/services/disputa_emissao.py:1606|Tratamento automático de respostas pendentes reabre o pai diretamente sem veto.
+NOVO|O261-VETO-A_61ae629c_par1|A|app/chamados/management/commands/reabrir_orfas_enterradas.py:161|Reparador supervisionado reabre pai do universo sem consultar o veto.
+NOVO|O261-VETO-A_61ae629c_par1|A|app/ponto/management/commands/processar_alertas_turno.py:317|Leitor recebe encerrado cujo renascimento foi vetado e prossegue com alerta, push e justificativa. [nao verificado]
+NOVO|O261-VETO-A_61ae629c_par1|A|app/ponto/services/furos_vetados.py:98|Vigia contabiliza ato humano autorizado como achado sem distingui-lo de vazamento automático.
+NOVO|O261-VETO-A_61ae629c_par1|A|app/ponto/management/commands/furos_vetados_por_regua.py:32|Conjunto contendo None publica um vínculo inexistente.
+NOVO|O261-VETO-A_61ae629c_par1|A|app/chamados/tests/test_o261_veto_na_porta.py:100|AST não acompanha alias transitivo da classe.
+NOVO|O261-VETO-A_61ae629c_par1|A|app/chamados/tests/test_o261_veto_na_porta.py:168|AST não reconhece criação pelo modelo acessado através de módulo importado.
+NOVO|O261-VETO-A_61ae629c_par1|A|app/chamados/tests/test_o261_veto_na_porta.py:163|AST não detecta nascimento por construtor seguido de save.
+NOVO|O261-VETO-A_61ae629c_par1|A|app/chamados/tests/test_o261_veto_na_porta.py:168|AST não acompanha alias de manager usado em bulk_create.
+NOVO|O261-VETO-A_61ae629c_par1|A|app/chamados/tests/test_o261_veto_na_porta.py:137|AST não resolve variável de argumentos que vivifica por update.
+NOVO|O261-VETO-A_61ae629c_par1|A|app/chamados/tests/test_o261_veto_na_porta.py:170|AST não contabiliza reabrir chamado por instância como escrita de vitalidade.
+NOVO|O261-VETO-A_61ae629c_par1|A|app/chamados/tests/test_o261_veto_na_porta.py:152|Varredura deixa escritas no topo do módulo fora da fiscalização.
+NOVO|O261-VETO-A_61ae629c_par1|A|app/chamados/tests/test_o261_veto_na_porta.py:131|Varredura pula lambdas e deixa escapar suas escritas.
+NOVO|O261-VETO-A_61ae629c_par1|A|app/chamados/tests/test_o261_veto_na_porta.py:208|Teto fixo permite aumentar novamente a allowlist depois de uma redução.
+NOVO|O261-VETO-A_61ae629c_par1|A|app/chamados/tests/test_o261_veto_na_porta.py:194|Deduplicação por função permite acrescentar escrita em função já autorizada.
+NOVO|O261-VETO-A_61ae629c_par1|A|app/chamados/tests/test_o261_veto_na_porta.py:302|EC-NONE é testado somente no juiz, sem exercício do veto por vínculo ausente na porta.
+NOVO|O261-VETO-A_61ae629c_par1|A|app/chamados/tests/test_o261_veto_na_porta.py:269|Faltam casos funcionais de veto para batida_ausente e intervalo_pendente.
+NOVO|O261-VETO-A_61ae629c_par1|B|app/ponto/management/commands/processar_alertas_avancados.py:121|Vínculo presente e suspeito passa a impedir emissão N5 antes admitida.
+NOVO|O261-VETO-A_61ae629c_par1|B|app/ponto/management/commands/processar_alertas_turno.py:100|Fim previsto materializado permite alcançar emissão sem vínculo; a nova porta altera esse comportamento.
+NOVO|O261-VETO-A_61ae629c_par1|B|app/chamados/services/disputa_emissao.py:1606|Signal pode provocar reabertura automática direta do pai sem veto.
+NOVO|O261-VETO-A_61ae629c_par1|B|app/ponto/management/commands/reconciliar_grade.py:522|Grade supera recusa do renascimento ao reabrir diretamente o encerrado devolvido.
+NOVO|O261-VETO-A_61ae629c_par1|B|app/ponto/views.py:280|Emissão automática omite dia forte, passa sem julgamento e fica fora dos achados do vigia; teste exige liberação. [nao verificado]
+NOVO|O261-VETO-A_61ae629c_par1|B|app/chamados/management/commands/reabrir_orfas_enterradas.py:161|Recuperação supervisionada reabre pai do universo sem consultar o veto.
+NOVO|O261-VETO-A_61ae629c_par1|B|app/ponto/management/commands/furos_vetados_por_regua.py:49|Placar descarta o novo contador chamados_vivos_em_dia_vetado.
+NOVO|O261-VETO-A_61ae629c_par1|B|app/ponto/management/commands/furos_vetados_por_regua.py:32|None no conjunto produz contagem de vínculo inexistente.
+NOVO|O261-VETO-A_61ae629c_par1|B|app/chamados/tests/test_o261_veto_na_porta.py:168|AST não resolve alias de módulo usado para acessar o modelo e criar chamado.
+NOVO|O261-VETO-A_61ae629c_par1|B|app/chamados/tests/test_o261_veto_na_porta.py:100|AST não acompanha alias transitivo da classe.
+NOVO|O261-VETO-A_61ae629c_par1|B|app/chamados/tests/test_o261_veto_na_porta.py:170|AST não detecta nascimento por construtor seguido de save.
+NOVO|O261-VETO-A_61ae629c_par1|B|app/chamados/tests/test_o261_veto_na_porta.py:168|AST não acompanha alias de manager usado em bulk_create.
+NOVO|O261-VETO-A_61ae629c_par1|B|app/chamados/tests/test_o261_veto_na_porta.py:137|AST não resolve variável passada como argumentos de update para vivificar chamado.
+NOVO|O261-VETO-A_61ae629c_par1|B|app/chamados/tests/test_o261_veto_na_porta.py:166|Detecção de cópia externa do veto não reconhece pedido à porta feito por instância via reabrir.
+NOVO|O261-VETO-A_61ae629c_par1|B|app/chamados/tests/test_o261_veto_na_porta.py:209|Teto cardinal não assegura redução monotônica da allowlist.
+NOVO|O261-VETO-A_61ae629c_par1|B|app/chamados/tests/test_o261_veto_na_porta.py:194|Deduplicação por função permite acrescentar escrita em função já autorizada.
+NOVO|O261-VETO-A_61ae629c_par1|B|app/chamados/tests/test_o261_veto_na_porta.py:302|EC-NONE fica restrito ao teste do juiz, sem exercício pela porta. [nao verificado]
+NOVO|O261-VETO-A_61ae629c_par1|B|app/chamados/tests/test_o261_veto_na_porta.py:269|Faltam casos de porta para batida_ausente e intervalo_pendente.
+NOVO|O261-VETO-A_61ae629c_par1|B|app/chamados/tests/test_o261_veto_na_porta.py:295|Caso negativo de criar não tem controle positivo correspondente nem exige trilha do veto.
+NOVO|O261-VETO-A_61ae629c_par2|A|app/ponto/management/commands/reconciliar_grade.py:522|Grade reabre diretamente o encerrado depois de o renascimento ter sido vetado.
+NOVO|O261-VETO-A_61ae629c_par2|A|app/ponto/views.py:280|Chamado automático nasce sem dia identificável, passa sem julgamento e fica fora dos achados; teste sanciona a fuga. [nao verificado]
+NOVO|O261-VETO-A_61ae629c_par2|A|app/chamados/services/disputa_emissao.py:1606|Tratamento automático de respostas pendentes reabre pai diretamente sem veto.
+NOVO|O261-VETO-A_61ae629c_par2|A|app/ponto/management/commands/processar_alertas_avancados.py:121|Vínculo presente e suspeito antes admitido passa a ter emissão recusada.
+NOVO|O261-VETO-A_61ae629c_par2|A|app/ponto/services/furos_vetados.py:98|Vigia acusa como violação a reabertura humana autorizada.
+NOVO|O261-VETO-A_61ae629c_par2|A|app/ponto/management/commands/furos_vetados_por_regua.py:32|Conjunto contendo None publica um vínculo inexistente.
+NOVO|O261-VETO-A_61ae629c_par2|A|bin/placar_code.sh:209|Placar descarta o novo contador chamados_vivos_em_dia_vetado.
+NOVO|O261-VETO-A_61ae629c_par2|A|app/ponto/management/commands/emitir_furo_retroativo.py:143|Comando incrementa emitidos mesmo quando o detector recusa o nascimento.
+NOVO|O261-VETO-A_61ae629c_par2|A|app/chamados/tests/test_o261_veto_na_porta.py:98|AST não propaga alias transitivo do modelo.
+NOVO|O261-VETO-A_61ae629c_par2|A|app/chamados/tests/test_o261_veto_na_porta.py:168|AST não reconhece criação através de alias do módulo.
+NOVO|O261-VETO-A_61ae629c_par2|A|app/chamados/tests/test_o261_veto_na_porta.py:28|AST não detecta nascimento por construtor seguido de save.
+NOVO|O261-VETO-A_61ae629c_par2|A|app/chamados/tests/test_o261_veto_na_porta.py:168|AST não acompanha alias de manager usado em bulk_create.
+NOVO|O261-VETO-A_61ae629c_par2|A|app/chamados/tests/test_o261_veto_na_porta.py:143|AST não reconhece vivificação por update com dicionário de argumentos em variável.
+NOVO|O261-VETO-A_61ae629c_par2|A|app/chamados/tests/test_o261_veto_na_porta.py:166|Detecção de cópia externa não reconhece pedido à porta por instância via reabrir.
+NOVO|O261-VETO-A_61ae629c_par2|A|app/chamados/tests/test_o261_veto_na_porta.py:302|EC-NONE é testado diretamente no juiz, sem prova pela porta.
+NOVO|O261-VETO-A_61ae629c_par2|A|app/chamados/tests/test_o261_veto_na_porta.py:269|Faltam casos funcionais de veto para batida_ausente e intervalo_pendente.
+NOVO|O261-VETO-A_61ae629c_par2|B|app/chamados/services/disputa_emissao.py:1606|Reabertura automática do pai no tratamento de resposta pendente não consulta o veto.
+NOVO|O261-VETO-A_61ae629c_par2|B|app/ponto/management/commands/reconciliar_grade.py:522|Grade supera recusa da porta ao chamar reabrir diretamente.
+NOVO|O261-VETO-A_61ae629c_par2|B|app/ponto/views.py:280|Emissor automático não fornece dia, permitindo nascimento sem julgamento e exclusão dos achados do vigia.
+NOVO|O261-VETO-A_61ae629c_par2|B|app/ponto/management/commands/processar_alertas_turno.py:100|Fim previsto materializado permite emissão sem vínculo; a nova porta passa a recusá-la.
+NOVO|O261-VETO-A_61ae629c_par2|B|app/ponto/management/commands/processar_alertas_avancados.py:121|Emissão com vínculo presente e suspeito passa a ser recusada.
+NOVO|O261-VETO-A_61ae629c_par2|B|app/ponto/management/commands/furos_vetados_por_regua.py:32|None no conjunto é contado como vínculo existente.
+NOVO|O261-VETO-A_61ae629c_par2|B|app/ponto/services/furos_vetados.py:98|Ato humano autorizado aparece como violação no vigia de esperado zero.
+NOVO|O261-VETO-A_61ae629c_par2|B|app/chamados/tests/test_o261_veto_na_porta.py:100|AST não propaga alias encadeado do modelo.
+NOVO|O261-VETO-A_61ae629c_par2|B|app/chamados/tests/test_o261_veto_na_porta.py:165|AST não reconhece modelo acessado através de alias do módulo.
+NOVO|O261-VETO-A_61ae629c_par2|B|app/chamados/tests/test_o261_veto_na_porta.py:168|AST perde a origem de manager ou queryset atribuído a variável para create ou bulk_create.
+NOVO|O261-VETO-A_61ae629c_par2|B|app/chamados/tests/test_o261_veto_na_porta.py:28|AST não detecta nascimento por construtor seguido de save.
+NOVO|O261-VETO-A_61ae629c_par2|B|app/chamados/tests/test_o261_veto_na_porta.py:143|AST não resolve variável de argumentos de update que vivifica chamado.
+NOVO|O261-VETO-A_61ae629c_par2|B|app/chamados/tests/test_o261_veto_na_porta.py:166|AST não reconhece instância nem contabiliza reabrir como escrita de vitalidade.
+NOVO|O261-VETO-A_61ae629c_par2|B|app/chamados/tests/test_o261_veto_na_porta.py:194|Deduplicação por função permite acrescentar escrita dentro de função já autorizada.
+NOVO|O261-VETO-A_61ae629c_par2|B|app/chamados/tests/test_o261_veto_na_porta.py:302|EC-NONE não é exercitado pela porta; os cenários não distinguem sua liberação nesse ponto.
+NOVO|O261-VETO-A_61ae629c_par2|B|app/chamados/tests/test_o261_veto_na_porta.py:269|Faltam casos de porta para batida_ausente e intervalo_pendente.
+NOVO|O261-VETO-A_61ae629c_par2|B|app/chamados/tests/test_o261_veto_na_porta.py:295|Criar carece de controle positivo equivalente, sem demonstração de vacuidade efetiva.
 
 ## 30/10 17:34 · sessao 7620c0310c9f · - · - · origem=Ronald (tmux)
 
@@ -972,54 +1095,4 @@ Achados e censo de `motivo_do_veto`:
 
 **Juiz duplicado/relógio:** não encontrei nova decisão paralela dentro do juiz: ele compõe os predicados existentes (`app/ponto/services/furos_vetados.py:25`, `:32`, `:34`); `vinculo_do_emissor` delega a `escala_vigente` (`app/ponto/services/furos_vetados.py:15`), que carrega e consulta a autoridade `vinculo_do_dia` (`app/escala/servico_jornada.py:38`, `:57`). A nova leitura acrescenta consulta de vínculo na porta (`app/chamados/models.py:896`), com uma consulta à célula e possível consulta às escalas (`app/escala/servico_jornada.py:46`, `:58`); impacto real no request: [não verificado].
 
-## 30/10 17:25 · sessao a4cbf709629a · CALENDARIO-HOJE · verificador · origem=Code
-
-**REPROVADO.** O último commit pode mudar o encerramento usado pelo fechamento: ele passa a encaminhar um mapa com chave `data` a um leitor que procura `(colaborador_id, data)`, fazendo o DNA congelado cair no template. O resultado controla quais furos são enviados à lavratura. (`app/ponto/services/fechamento.py:359`, `app/ponto/turnos.py:2080`, `app/escala/models.py:1095`, `app/ponto/services/fechamento.py:1194`)
-
-1. **Chamadores com `celulas=` alimentado**
-
-| Chamador | O mapa cobre os dias perguntados? |
-|---|---|
-| Calendário → `dias_encerrados` | Sim: carrega `[data_ini, data_fim]`, pergunta essa mesma janela e reutiliza os turnos dela. Chaves por tupla, adequadas à leitura do DNA. (`app/colaboradores/services/calendario.py:316`, `app/colaboradores/services/calendario.py:410`, `app/colaboradores/services/calendario.py:712`) |
-| Cartório → `dias_encerrados` | Contém as células de `cels`. Cobre os dias cujas respostas o cartório lê, mas não garante todas as células existentes entre os extremos: a segunda passada recebe somente as reconciliadas, enquanto o carregador julga todo o intervalo. (`app/ponto/services/cartorio.py:745`, `app/ponto/services/cartorio.py:830`, `app/ponto/services/cartorio.py:853`, `app/ponto/turnos.py:2136`) |
-| Fechamento → `dia_encerrado` → `dia_encerrado_motivo` | Recorta as células existentes no pad `d−2..d+1`, **com chave `data`**. Cobre temporalmente a pergunta, mas o formato é incompatível com o novo destino. (`app/ponto/services/fechamento.py:334`, `app/ponto/services/fechamento.py:354`, `app/ponto/turnos.py:1845`, `app/ponto/turnos.py:2058`) |
-| Vigia de hora → `dia_encerrado` → motivo | Fornece a célula do próprio dia por tupla: suficiente para o DNA perguntado; não fornece as células do pad que o pareador também consulta. (`app/ponto/services/vigia_de_hora.py:57`, `app/ponto/turnos.py:1857`) |
-
-Suprajuiz, emissor retroativo e `par_completo_da_janela` **não alimentam `celulas=` nessas chamadas**; o carregador faz sua própria carga. (`app/ponto/management/commands/supra_juiz.py:108`, `app/ponto/management/commands/emitir_furo_retroativo.py:62`, `app/ponto/turnos.py:2150`, `app/ponto/turnos.py:2129`)
-
-**O chamador que muda com o último commit é o fechamento.** Antes, `marcos_do_dia` sem alimentação consultava a célula; agora recebe `{data: célula}`, não encontra a chave por tupla e usa o template. (`app/ponto/turnos.py:2080`, `app/escala/models.py:1094`, `app/escala/models.py:1108`)
-
-Contraexemplo: sem turno aberto, DNA `10–14`, template `19–07`, instante 15h. Antes: encerrado; agora, pelo mapa do fechamento: `relogio`. A combinação inversa pode antecipar a afirmação do furo. A mesma divergência DNA/template está na fixture nova, porém alimentada por tupla. (`app/ponto/turnos.py:2102`, `app/ponto/services/fechamento.py:361`, `app/ponto/tests/test_c1_dias_encerrados.py:60`)
-
-A consequência alcança `coletar_furos` e `furos_do_motor` nas versões motor e oráculo. Ocorrência concreta em produção: **[nao verificado]**. (`app/ponto/services/fechamento.py:1095`, `app/ponto/services/fechamento.py:1194`, `app/ponto/services/fechamento.py:1261`)
-
-2. **`retido_folha` com `cobertura=True`**
-
-**Com as cargas concluídas normalmente, não há combinação desses fatos que alcance esse ramo.** A cobertura de cobrança exclui somente `rejeitada`; a A2 também. Ambas abrangem intervalos fechados e prolongam intervalos sem fim somente para `TIPOS_EM_ABERTO`; os demais tipos sem fim cobrem apenas o dia inicial. (`app/ponto/turnos.py:2490`, `app/ponto/turnos.py:2734`, `app/ponto/turnos.py:2741`, `app/ponto/precedencia.py:211`, `app/ponto/precedencia.py:278`)
-
-Todos os tipos recebem faixa: os não nomeados caem em `atestado`; `folga_compensatoria` e `feriado_folga` entram em folga. As faixas de ausência retornam antes da retenção; a folga humana retira o dia do ramo de trabalho; feriado sem batida retorna folga. Sobreposições podem escolher ausências diferentes — cobertura prefere a mais recente, A2 prefere a faixa —, mas preservam essa barreira. (`app/ponto/precedencia.py:52`, `app/ponto/precedencia.py:79`, `app/ponto/precedencia.py:333`, `app/ponto/turnos.py:2750`, `app/colaboradores/services/calendario.py:124`, `app/colaboradores/services/calendario.py:127`, `app/colaboradores/services/calendario.py:131`)
-
-Existe um caminho degradado: a carga A2 pode lançar exceção, que é capturada deixando `_fatos={}`; a cobertura permanece independente. Nesse caminho o classificador pode receber cobertura verdadeira sem a faixa que impediria a retenção. Ocorrência no dado fornecido: **[nao verificado]**. (`app/colaboradores/services/calendario.py:611`, `app/colaboradores/services/calendario.py:624`, `app/colaboradores/services/calendario.py:807`, `app/colaboradores/services/calendario.py:832`)
-
-3. **Os testes do último commit mordem parcialmente** [nao verificado]
-
-| Teste | Mutação que pega / que deixa passar | [nao verificado]
-|---|---|
-| Ausência pendente | Pega A2 restringida a aprovadas. **Deixa passar cobrança restringida a aprovadas**, pois a A2 ainda retorna `ausencia` antes de consultar a cobertura. Portanto não sela a igualdade dos universos prometida no comentário. (`app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:133`, `app/colaboradores/services/calendario.py:124`) |
-| Propriedade alimentada C1 | Pega substituição do DNA pelo template no caso das 15h. **Deixa passar retirar exatamente o novo encaminhamento singular**: o DNA alimentado foi gravado no banco, e a leitura sem alimentação encontra o mesmo valor. Também não exercita o mapa por `data` do fechamento. (`app/ponto/tests/test_c1_dias_encerrados.py:60`, `app/ponto/tests/test_c1_dias_encerrados.py:68`, `app/escala/models.py:1098`) |
-| Render com sentinela | Pega `title` literal com a frase da fixture: exige que o campo alterado apareça no atributo nos três layouts. (`app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:104`, `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:108`) |
-| Custo | A igualdade entre um e oito dias pega crescimento por dia; o novo `um <= 1` também pega acréscimo fixo superior a uma consulta. (`app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:176`) |
-
-Execução integral da suíte Django e resultados dos logs citados nos comentários: **[nao verificado]**. [nao verificado]
-
-4. **Quem escreve e quem lê os campos do dia**
-
-- **Escreve `status`:** `_classificar`; `contexto_calendario` recebe o resultado e o coloca no dia. **Escreve `status_rotulo`:** o ternário que escolhe motivo da folha, dia em curso ou tabela. (`app/colaboradores/services/calendario.py:108`, `app/colaboradores/services/calendario.py:814`, `app/colaboradores/services/calendario.py:898`)
-- **Leem `status`:** portas `status_do_dia` e `contar_por_status`, resumo, `resolver_dia_oferecido`, cores/ícones da grade e o PDF via mapa de semanas. (`app/colaboradores/services/calendario.py:228`, `app/colaboradores/services/calendario.py:239`, `app/colaboradores/services/calendario.py:949`, `app/colaboradores/services/calendario.py:205`, `app/templates/colaboradores/partials/_calendario_grade.html:69`, `app/relatorios/views.py:1550`, `app/relatorios/furos_pdf.py:53`)
-- **Lê `status_rotulo`:** a grade compartilhada por perfil, drawer e relatório HTML, inclusive agora no fallback. O PDF continua consumindo status e cores, sem imprimir esse campo. (`app/templates/colaboradores/partials/_calendario_grade.html:99`, `app/templates/colaboradores/partials/_calendario_grade.html:107`, `app/templates/colaboradores/calendario_partial.html:62`, `app/templates/colaboradores/partials/_drawer_diagnostico.html:35`, `app/templates/relatorios/furos.html:42`, `app/relatorios/furos_pdf.py:56`)
-
-Não identifiquei leitor adicional desses dois campos além dos declarados. Há, porém, uma ressalva à alegação de invariância: o botão da tela pode desaparecer para dia passado ainda em curso, da competência anterior, que passe de `falta` a `previsto`. O vigia do fio filtra células com veredito acusatório, excluindo os novos casos sem veredito dessa leitura. (`app/colaboradores/services/calendario.py:196`, `app/colaboradores/services/calendario.py:204`, `app/colaboradores/services/calendario.py:715`, `app/colaboradores/services/calendario.py:914`, `app/chamados/services/vigia_fio.py:229`)
-
-O achado bloqueante é o fechamento: seu contrato por `data` tornou o repasse singular uma mudança de valor, e o teste novo não cobre esse contrato. (`app/ponto/services/fechamento.py:334`, `app/ponto/turnos.py:2080`, `app/ponto/tests/test_c1_dias_encerrados.py:62`)
-
-_656 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_657 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
