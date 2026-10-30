@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 30/10/2026 16:25:37.** Transcript: `1a51e6b0-927f-4c8c-a61e-896443577f6a.jsonl` (7.5 MB). Acoes na janela: **396**.
+**Medido em 30/10/2026 16:30:51.** Transcript: `1a51e6b0-927f-4c8c-a61e-896443577f6a.jsonl` (7.5 MB). Acoes na janela: **399**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 16:29:21 | ListAgents |  | `-` |
+| 16:29:21 | Bash | Confirm no suite shells or build agents alive | `ps -eo pid,etime,args \| /bin/grep -E "[t]rava_teste\|[m]anage.py test\|[c]odex_pergunta\|[s]uite.sh\|[p]ush.sh" \| cut -c1-120; echo "shells_desta_sessao: $(ps -eo args \| /bin/grep -c '[s]napshot-bash')"; docker ps --format '{{.Command}}' \| /bin/grep -c "manage.py test"; /home/ronald/saas-hasner/bin/trava_teste.sh --quem` |
+| 16:29:12 | Bash | Read push result and verify remote | `cd /home/ronald/saas-hasner && tail -n 8 logs/o261/veto_a2/push2.log \| cut -c1-200; git fetch -q origin; git log --oneline -1 origin/main; git log --oneline origin/main..main \| wc -l` |
 | 16:12:04 | Bash | Wait for second push by file | `until /bin/grep -q '^rc=' /home/ronald/saas-hasner/logs/o261/veto_a2/push2.log 2>/dev/null; do /usr/bin/sleep 30; done; tail -n 8 /home/ronald/saas-hasner/logs/o261/veto_a2/push2.log` |
 | 16:12:03 | Bash | Move main to rebuilt commit and relaunch push | `cd /home/ronald/saas-hasner && git update-ref refs/heads/main 0c617ad31997ab2d3d147ece8f511ba997f814b2 f5b7b3c6 && git log --oneline -3 && git status --short \| head -3 && git diff --stat HEAD \| tail -1; (bin/push.sh > logs/o261/veto_a2/push2.log 2>&1; echo "rc=$?" >> logs/o261/veto_a2/push2.log) </dev/null >/dev/null 2>&1 & echo push2-lancado` |
 | 16:11:56 | Bash | Rescan with GNU grep, with control | `cd /home/ronald/saas-hasner && R='(^\|[^A-Za-z0-9_])\[[A-Z][A-Za-z0-9]+([ _-]?[A-Za-z0-9]+)*\]'; echo "controle (velho):"; git log --format=%B origin/main..f5b7b3c6 \| /bin/grep -oE "$R" \| /bin/grep -oE '\[[A-Z].*\]' \| sort \| uniq -c; echo "novo:"; git log --format=%B origin/main..0c617ad31997ab2d3d147ece8f511ba997f814b2 \| /bin/grep -oE "$R" \| /bin/grep -oE '\[[A-Z].*\]' \| sort \| uniq -c; e ...` |
