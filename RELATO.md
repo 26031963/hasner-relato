@@ -1,6 +1,6 @@
 # RELATO — esteira saas-hasner
 
-ESPERANDO: trava_teste.sh | pid=241897
+ESPERANDO: trava_teste.sh | pid=1433503
 
 > **VETO A @ a3bbef39: SUITE INTEIRA VERDE** (Ran 12.784, OK, rc 0 -- `logs/o261/veto_a2/suite5.log`). `furos_sem_cobranca.medir` ANTES do deploy (prod, codigo velho, Codex --sonda `fsc/antes.txt`): total 61, itens 62 (pergunta_ao_colab 45, supervisao_sem_push 16, veto_celula 1). MEDIDA CODEX-PRE-VERIFICADOR (classificacao pelo Codex censo, `codex_classificacao.txt`): o opus final reprovou DEPOIS do Codex aprovar; dos 7 achados, **(a) nao viu com o tema presente = 5** (2 LEI-AKITA, 3 teste da impressao, 4 helper do calendario, 5 contador por eliminacao, 7 trilha do ato humano), **(c) fora do alcance = 2** (1 RED contra a base, 6 condicoes do pouso); (b) 0, (e) 0. MODO-COMUM: nao (o opus pegou). Volta Codex do delta bfbc2aba..a3bbef39 em curso; depois o opus final de novo.
 > **COMBOIO 2 VERDE** (wt-comboio2-3010-1419: Ran 12.789, OK, rc 0 -- `logs/o261/veto_a2/suite_comboio2.log`) -> opus final do VETO A, 2a leitura, em curso. CALENDARIO: Codex volta 2 REPROVOU (`verif2.txt`): `sem_previsto` escolhido pelo leitor (LEI-AKITA 2) e turnos de janela diferente; cura 3aa479f0 (booleano da juiza na MESMA janela; feeds sem chamador saem, L-111; +1 query por montagem, selo verde; chave do cartorio = herdado, fila DIAS-ENCERRADOS-CHAVE-DO-CARTORIO). Recorte 1041 OK. **COMBOIO 3** `wt-comboio3-3010-1437` (12 commits, cmp OK): suite em curso + Codex volta 3 do CALENDARIO.
