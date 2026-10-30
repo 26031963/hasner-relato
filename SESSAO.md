@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 30/10/2026 03:58:13.** Transcript: `e3f79949-a90b-4c64-a5c2-afd178149c30.jsonl` (7.1 MB). Acoes na janela: **296**.
+**Medido em 30/10/2026 04:03:10.** Transcript: `e3f79949-a90b-4c64-a5c2-afd178149c30.jsonl` (7.1 MB). Acoes na janela: **300**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 04:03:09 | Bash | See why runs returned rc 2 | `tail -5 /home/ronald/wt-o261c3-3010-0232/app/logs/o261/veto3_head.log` |
+| 04:03:03 | Bash | Run 3 failing modules on HEAD and copy | `cd /home/ronald/saas-hasner && M="ponto.tests.test_cartorio_veto_nao_e_emitido ponto.tests.test_furo_parcial_sem_cobranca ponto.tests.test_veto_que_cai_rejulga"; D=/home/ronald/wt-o261c3-3010-0232/app/logs/o261; bash bin/suite.sh --only "ponto" -- $M > $D/veto3_head.log 2>&1; echo "rc=$?" >> $D/veto3_head.log; bash bin/suite.sh --dir /home/ronald/wt-o261c3-3010-0232 --only "ponto" -- $M > $D/veto3 ...` |
+| 04:02:54 | Bash | Extract failure assertions from suite log | `L=/home/ronald/wt-o261c3-3010-0232/app/logs/o261/suite_c_7a8e4604.log; awk '/^FAIL: /{f=1} f{print} /^-{20,}$/ && f{c++} c>=10{exit}' $L \| grep -E "^FAIL\|Error\|assert\|File \".*/(chamados\|ponto)/" \| head -40` |
+| 04:02:47 | Bash | Read full-suite verdict | `L=/home/ronald/wt-o261c3-3010-0232/app/logs/o261/suite_c_7a8e4604.log; grep -E '^(OK\|FAILED)($\| \()' $L \| tail -1; grep '^Ran ' $L \| tail -1; grep -E 'arvore_(antes\|depois)\|porcelain' $L \| tail -3; tail -1 $L; grep -E '^(FAIL\|ERROR):' $L \| head; git -C /home/ronald/wt-o261c3-3010-0232 status --porcelain \| head -3` |
 | 03:48:43 | Bash | Mark ESPERANDO on suite trava pid | `cd /home/ronald/saas-hasner && sed -i '3i ESPERANDO: /home/ronald/saas-hasner/bin/trava_teste.sh \| pid=3011983' app/docs/RELATO.md && sed -n 3p app/docs/RELATO.md; tail -3 /home/ronald/wt-o261c3-3010-0232/app/logs/o261/suite_c_7a8e4604.log \| cut -c1-150` |
 | 03:48:38 | Bash | Locate suite and trava processes | `pgrep -af "suite.sh" \| grep -v "bash -c\\|pgrep" \| cut -c1-150; pgrep -af "trava_teste.sh" \| grep -v "bash -c\\|pgrep" \| cut -c1-120` |
 | 03:48:34 | Bash | Find suite.sh child pid | `for p in $(pgrep -P 3020857); do echo "$p $(tr '\0' ' ' </proc/$p/cmdline \| cut -c1-100)"; done` |
