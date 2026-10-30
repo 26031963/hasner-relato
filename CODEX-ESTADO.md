@@ -1,7 +1,209 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **30/10/2026 19:54** · publicado em **30/10/2026 19:58** (UTC-3)
+> Ultima resposta processada: **30/10/2026 20:14** · publicado em **30/10/2026 20:14** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 30/10 20:14 · sessao ab5275193aec · - · - · origem=Ronald (tmux)
+
+- **`ferias.Afastamento` é outra entidade:** cadastro de estado com início/retorno, editável pelo `AfastamentoAdmin`; não possui sync para Ausencia no modelo. O julgamento operacional consulta **`ponto.Ausencia`, tipo `afastamento_inss`**, por `afastamentos_no_dia`, não `ferias.Afastamento`. Não achei receiver de Afastamento nos `app/*/signals.py`, nem chamada cartório/outbox nesse admin/modelo. (`app/ferias/models.py:488`, `app/ferias/models.py:499`, `app/ferias/admin.py:4`, `app/ferias/admin.py:10`, `app/ponto/turnos.py:2683`, `app/ponto/turnos.py:2693`, `app/ponto/turnos.py:2694`; busca negativa nos arquivos citados).
+
+- **Cobertura por substituição não é `cob_status`:** `designar_cobertura` cria `OrdemSubstituicao`; `declarar_cobertura_passada` cria ordem concluída, quando há substituto. Não escrevem DNA/agenda/Ausencia e a ordem não é serializada no hash. Podem mudar hash **via status dos chamados**, pois tentam `ch.reconciliar()`; mudança de status dispara o cartório por signal. O gate pode recusar o fechamento porque a célula/ata não lê essa cobertura. Não há signal de OrdemSubstituicao nos `app/*/signals.py`, nem enqueue direto de rejulgamento/outbox nessas portas. (`app/ponto/services/cobertura.py:22`, `app/ponto/services/cobertura.py:100`, `app/ponto/services/cobertura.py:122`, `app/ponto/services/cobertura.py:246`, `app/ponto/services/cobertura.py:289`, `app/ponto/services/cobertura.py:315`, `app/ponto/services/cobertura.py:318`, `app/ponto/services/cartorio.py:325`, `app/ponto/services/cartorio.py:326`, `app/chamados/signals.py:164`, `app/chamados/signals.py:180`; busca negativa nos signals).
+
+- **Folgas têm gatilho efetivo de regeneração/julgamento:** `lancar_folga`, `alterar_folga`, `aplicar_folgas_em_lote` e `gerar_foto_folgas` chamam `relavrar_celulas_da_foto`, que chama `regenerar_celulas_vinculo` com o default `recalculo=True`; esta força `julgar_celula` dos dias tocados até hoje, exceto humanos. Entram indiretamente no hash pelos marcos do DNA que a regeneração altera, sem enqueue direto. (`app/escala/folgas.py:192`, `app/escala/folgas.py:198`, `app/escala/folgas.py:220`, `app/escala/folgas.py:228`, `app/escala/folgas.py:261`, `app/escala/folgas.py:293`, `app/escala/folgas.py:303`, `app/escala/folgas.py:308`, `app/escala/folgas.py:340`, `app/ponto/portas/celula.py:102`, `app/ponto/portas/celula.py:360`, `app/ponto/portas/celula.py:372`, `app/ponto/services/cartorio.py:327`).
+
+- **Salvar calendário isoladamente não relavra:** `salvar_calendario_de_folga` apenas grava calendário/tamanhos. Já as portas que o **aplicam ao vínculo** chamam `gerar_foto_folgas` e chegam à cadeia acima: `vincular_folga` e aplicação em lote do tipo. (`app/escala/folgas.py:468`, `app/escala/folgas.py:479`, `app/escala/folgas.py:490`, `app/colaboradores/views.py:212`, `app/colaboradores/views.py:239`, `app/colaboradores/views.py:245`, `app/escala/views.py:412`, `app/escala/views.py:414`, `app/escala/views.py:419`).
+
+## 30/10 20:13 · sessao ab5275193aec · - · - · origem=Ronald (tmux)
+
+Consolidação dos insumos sob minha exploração, somente leitura:
+
+**Mecanismo de rejulgamento e outbox**
+
+- Os receivers de Batida e Ausencia chamam diretamente `cartorio.julgar_celula`, pelo helper `_julgar_dias`; não enfileiram julgamento. O helper evita reentrada quando `cartorio.em_julgamento()` é verdadeiro. (`app/ponto/signals.py:85`, `app/ponto/signals.py:90`, `app/ponto/signals.py:93`, `app/ponto/signals.py:131`, `app/ponto/signals.py:143`).
+- O outbox encontrado é **posterior à lavra**: `EventoCelula` registra alterações de veredito/ata; `salvar_e_emitir` salva e cria o evento no mesmo `atomic`. (`app/escala/models.py:1800`, `app/ponto/portas/celula.py:623`, `app/ponto/portas/celula.py:626`, `app/ponto/portas/celula.py:634`).
+- Seu consumidor chama `retratar_chamados_absolvidos_por_celula` e `encerrar_orfas_pela_lampada`, sem chamar o cartório. Portanto, esse outbox não é uma fila de rejulgamento de `CelulaDia`. (`app/chamados/reconciliador.py:1257`, `app/chamados/reconciliador.py:1300`, `app/chamados/reconciliador.py:1303`).
+- A “fila” do comando `processar_cartorio` é uma consulta a colaboradores com células passadas; o comando carrega todas as células passadas e chama `julgar_colab`. (`app/ponto/management/commands/processar_cartorio.py:49`, `app/ponto/management/commands/processar_cartorio.py:61`, `app/ponto/management/commands/processar_cartorio.py:65`).
+- Busca negativa: procurei `outbox|Outbox|Fila|Pendencia|enfileirar|agendar|rejulgar` nos modelos, signals e services de `app/`; não encontrei tabela/função que enfileire rejulgamento da célula. O outbox encontrado tem o comportamento acima; o comando tem a consulta acima. [não verificado quanto a infraestrutura externa ao repositório].
+
+**(i) Batidas do dia e (ii) do seguinte**
+
+- Entram diretamente por `bs_janela`: para cada batida, `pk`, `tipo`, `timestamp.isoformat()`, unidos por vírgulas. Não entram diretamente `aprovada`, `origem`, foto, justificativa, GPS ou `retratada_em`. (`app/ponto/services/cartorio.py:324`).
+- O ramo normal seleciona batidas com data local **D−1, D e D+1**, inclusivamente; a carga é ordenada por timestamp e exclui retratadas. (`app/ponto/services/cartorio.py:1042`, `app/ponto/services/cartorio.py:871`, `app/ponto/turnos.py:2845`, `app/ponto/turnos.py:2852`).
+- `retratada_em` entra indiretamente pela inclusão/exclusão da batida nessa lista. `aprovada=False` isoladamente não exclui a batida, pois o filtro de apuração é `retratada_em__isnull=True`. (`app/ponto/turnos.py:2845`).
+- Portas centrais: `registrar_batida` cria; `anotar` muda campos existentes; `retratar_batida` chama `anotar` com `aprovada=False` e `retratada_em=now`; `apagar` faz delete. (`app/ponto/registro_batida.py:94`, `app/ponto/registro_batida.py:152`, `app/ponto/registro_batida.py:157`, `app/ponto/registro_batida.py:235`, `app/ponto/registro_batida.py:254`, `app/ponto/registro_batida.py:267`, `app/ponto/registro_batida.py:274`, `app/ponto/registro_batida.py:285`, `app/ponto/registro_batida.py:291`).
+- A porta de anotação permite `tipo`, aprovação/autoria/data, origem, retratação, foto, justificativa e pergunta de origem; não permite alterar timestamp. (`app/ponto/registro_batida.py:203`, `app/ponto/registro_batida.py:241`).
+- `flip_tipo` altera E↔S usando `anotar`; `retratar_humano.retratar` usa `retratar_batida`; `retratar_humano.desfazer` restaura `aprovada=True,retratada_em=None` usando `anotar`. (`app/ponto/services/flip_batida.py:10`, `app/ponto/services/flip_batida.py:30`, `app/ponto/services/retratar_humano.py:150`, `app/ponto/services/retratar_humano.py:179`, `app/ponto/services/retratar_humano.py:190`, `app/ponto/services/retratar_humano.py:207`).
+- As views de retratar/desfazer são `retratar_batida_view` e `desfazer_retratacao_view`; ambas chamam esses services. (`app/ponto/views.py:3264`, `app/ponto/views.py:3270`, `app/ponto/views.py:3276`, `app/ponto/views.py:3282`).
+- Criadores de produção via `registrar_batida`: API `api_bater_ponto`; PWA `ramo_registrar_es`; aprovação/materialização de justificativa; materialização de resposta hora e data/hora; regularização externa; Resolver dia; ações de chamado; lote de justificativas. (`app/api/views.py:400`, `app/api/views.py:683`, `app/api/views_core.py:387`, `app/api/views_core.py:680`, `app/ponto/services/triagem_batida.py:616`, `app/ponto/services/triagem_batida.py:708`, `app/ponto/services/justificativa.py:117`, `app/ponto/services/justificativa.py:173`, `app/ponto/services/justificativa.py:316`, `app/ponto/services/justificativa.py:346`, `app/chamados/services/materializacao.py:724`, `app/chamados/services/materializacao.py:872`, `app/chamados/services/materializacao.py:923`, `app/chamados/services/materializacao.py:952`, `app/chamados/services/regularizacao_ext.py:36`, `app/chamados/services/regularizacao_ext.py:77`, `app/ponto/services/veredito_celula.py:301`, `app/chamados/services/acoes_chamado.py:44`, `app/ponto/views.py:1764`, `app/ponto/views.py:1816`).
+- Save/delete de batida julga **a véspera da data da batida e a própria data**. Assim, batida de D+1 dispara julgamento de D; batida de D−1, embora esteja no hash de D, não dispara D por esse receiver. (`app/ponto/signals.py:108`, `app/ponto/signals.py:112`, `app/ponto/signals.py:131`, `app/ponto/signals.py:135`, `app/ponto/signals.py:138`, `app/ponto/signals.py:140`).
+- Essas portas não inserem diretamente no outbox; o julgamento disparado pode emitir `EventoCelula` se alterar veredito/ata. (`app/ponto/signals.py:93`, `app/ponto/portas/celula.py:638`, `app/ponto/portas/celula.py:642`).
+- Importação AEJ via interface está desativada: `importar_aej` devolve HTTP 410; a URL ainda aponta para essa view; código legado está em `.disabled`. (`app/ponto/views.py:57`, `app/ponto/views.py:65`, `app/ponto/views.py:70`, `app/ponto/urls.py:9`, `app/ponto/legacy/aej_importer.py.disabled:9`).
+- Único `bulk_create` de Batida encontrado nos `.py` de `app/` fora testes/migrations: `semear`, restrito a banco de ensaio e recusado sem `BANCO_DE_ENSAIO` ou se o banco se chama `saas_hasner`; não é importação de produção. (`app/ponto/registro_batida.py:316`, `app/ponto/registro_batida.py:326`, `app/ponto/registro_batida.py:331`, `app/ponto/registro_batida.py:335`). Existência de sincronização SQL externa: [não verificado]; o comentário da view apenas a menciona (`app/ponto/views.py:61`).
+
+**(iv) Vínculo vigente/escala**
+
+- O objeto vínculo não é serializado no hash. Do DNA entram somente `dna_versao` e `marcos`; `vinculo_id`, `tipo_escala_id`, `tipo_ciclo`, `minutos_jornada`, `intervalo_livre` e `lampadas` ficam fora dessa parcela. (`app/ponto/services/cartorio.py:327`, `app/ponto/management/commands/gerar_celulas.py:95`).
+- Influência indireta: regeneração transforma o vínculo/template em DNA; alteração de marcos muda o hash. O veto também entra: `_veto_do_dia` resolve vínculo do emissor e `motivo_do_veto`; este testa régua degenerada/suspeita. (`app/ponto/portas/celula.py:243`, `app/ponto/portas/celula.py:260`, `app/ponto/services/cartorio.py:1011`, `app/ponto/services/cartorio.py:1013`, `app/ponto/services/furos_vetados.py:18`, `app/ponto/services/furos_vetados.py:27`, `app/ponto/services/furos_vetados.py:40`, `app/ponto/services/furos_vetados.py:42`).
+- O julgamento ainda lê dados vivos do vínculo via `cadastro_do_dia`, alimentado por todos os vínculos do colaborador e pelas células em julgamento; essa informação não é serializada integralmente no hash. (`app/ponto/services/cartorio.py:839`, `app/ponto/services/cartorio.py:842`, `app/ponto/services/cartorio.py:1118`).
+- Módulo de escrita declarado para EscalaColaborador: `colaboradores/services/vinculo.py`. (`app/core/portas.py:465`).
+- `executar_vinculo` cria/atualiza o vínculo, regenera células e chama `reconciliar_apos_vinculo`; esta força `julgar_celula` para os dias até hoje, excetuando vereditos humanos e dias já julgados pela regeneração. (`app/colaboradores/services/vinculo.py:167`, `app/colaboradores/services/vinculo.py:265`, `app/colaboradores/services/vinculo.py:274`, `app/colaboradores/services/vinculo.py:278`, `app/colaboradores/services/vinculo.py:320`, `app/colaboradores/services/vinculo.py:328`, `app/colaboradores/services/pos_vinculo.py:50`, `app/colaboradores/services/pos_vinculo.py:61`, `app/colaboradores/services/pos_vinculo.py:72`).
+- `encerrar_vinculo` e `corrigir_vinculo_retroativo` usam save; receivers de alteração de vigência e âncora chamam regeneração. (`app/colaboradores/services/vinculo.py:780`, `app/colaboradores/services/vinculo.py:799`, `app/colaboradores/services/vinculo.py:839`, `app/colaboradores/services/vinculo.py:845`, `app/escala/signals.py:34`, `app/escala/signals.py:71`, `app/escala/signals.py:79`, `app/escala/signals.py:117`).
+- A regeneração força julgamento dos dias efetivamente tocados até hoje, sem vereditos humanos, **apenas quando `recalculo=True`**. (`app/ponto/portas/celula.py:360`, `app/ponto/portas/celula.py:365`, `app/ponto/portas/celula.py:369`, `app/ponto/portas/celula.py:372`).
+- Alteração de template: `salvar_tipo` → `_propagar_regeneracao_template` → regeneração com `recalculo=False`; essa porta não força o rejulgamento anterior e não emite outbox só por mudar DNA. (`app/escala/services/cadastro_tipo.py:140`, `app/escala/services/cadastro_tipo.py:306`, `app/escala/services/cadastro_tipo.py:320`, `app/escala/services/cadastro_tipo.py:327`, `app/escala/services/cadastro_tipo.py:348`, `app/escala/services/cadastro_tipo.py:350`, `app/ponto/portas/celula.py:360`, `app/ponto/portas/celula.py:623`).
+- Portas que fazem `update()` sem signal e não chamam cartório/outbox dentro de seus corpos: `fechar_vigencia`; `reabrir_vigencia_impossivel`; `absorver_vigencias_posteriores`; `invalidar_ancoras_incoerentes`; `reverter_para_snapshot`. Chamadores podem executar ações posteriores, como faz `executar_vinculo`. (`app/colaboradores/services/vinculo.py:561`, `app/colaboradores/services/vinculo.py:615`, `app/colaboradores/services/vinculo.py:635`, `app/colaboradores/services/vinculo.py:691`, `app/colaboradores/services/vinculo.py:710`, `app/colaboradores/services/vinculo.py:753`, `app/colaboradores/services/vinculo.py:849`, `app/colaboradores/services/vinculo.py:857`, `app/colaboradores/services/vinculo.py:860`, `app/colaboradores/services/vinculo.py:874`).
+- Outras portas: `trocar_calendario_de_folga`, `marcar_trabalha_em_feriado`, `criar_trecho_retroativo`, `ajustar_vinculo_pelo_sistema`, `desfazer_ajuste_do_sistema`. As duas primeiras salvam chaves que não são vigência/âncora; os receivers de regeneração só detectam as mudanças que seus nomes indicam e pulam `created`. (`app/colaboradores/services/vinculo.py:433`, `app/colaboradores/services/vinculo.py:445`, `app/colaboradores/services/vinculo.py:822`, `app/colaboradores/services/vinculo.py:825`, `app/colaboradores/services/vinculo.py:829`, `app/colaboradores/services/vinculo.py:832`, `app/colaboradores/services/vinculo.py:925`, `app/colaboradores/services/vinculo.py:930`, `app/colaboradores/services/vinculo.py:936`, `app/colaboradores/services/vinculo.py:940`, `app/escala/signals.py:54`, `app/escala/signals.py:58`, `app/escala/signals.py:104`, `app/escala/signals.py:108`).
+- O escore/corroborração da régua é escrito por `gravar_regua`, com update sem signal, e pode mudar o `veto` do hash. (`app/colaboradores/services/vinculo.py:889`, `app/colaboradores/services/vinculo.py:911`, `app/ponto/services/furos_vetados.py:42`).
+
+**(v) Ausências/coberturas, inclusive férias**
+
+- Entram pelo **status da ausência vencedora**, argumento `cob_status`; não entram diretamente pk, tipo, minutos ou datas. A vencedora vem de `ausencia_cobre(c,D,para='cobranca')`, que exclui rejeitadas, seleciona cobertura de dia/range aberto/fechado e desempata por `-data,-pk`. (`app/ponto/services/cartorio.py:325`, `app/ponto/services/cartorio.py:1041`, `app/ponto/services/cartorio.py:1083`, `app/ponto/turnos.py:2487`, `app/ponto/turnos.py:2490`, `app/ponto/turnos.py:2525`, `app/ponto/turnos.py:2530`).
+- Datas/range entram indiretamente por determinar se há cobertura e qual vence; tipos/minutos/horários parciais podem alterar `cob_parcial`/`periodo_parcial`, lidos da grade e adicionados como `cobparcial:1[:estado]`. Isso não serializa os horários/minutos integralmente. (`app/ponto/services/cartorio.py:1079`, `app/ponto/services/cartorio.py:1088`, `app/ponto/services/cartorio.py:375`, `app/ponto/services/cartorio.py:379`).
+- Portas principais: `criar_ausencia` cria com colaborador/tipo/datas/minutos/status; `editar_ausencia_registro` altera tipo/range/minutos; `mudar_estado` altera status e salva; `decidir` passa por `mudar_estado` e pode escrever `hora_ini/hora_fim`. (`app/ponto/services/ausencia.py:130`, `app/ponto/services/ausencia.py:341`, `app/ponto/services/ausencia.py:418`, `app/ponto/services/ausencia.py:465`, `app/ponto/services/ausencia.py:497`, `app/ponto/services/ausencia.py:508`, `app/ponto/services/ausencia.py:792`, `app/ponto/services/ausencia.py:819`, `app/ponto/services/ausencia.py:875`, `app/ponto/services/ausencia.py:881`, `app/ponto/services/ausencia.py:895`, `app/ponto/services/ausencia.py:908`, `app/ponto/services/ausencia.py:911`).
+- Essas escritas por save/delete disparam cartório diretamente pelo receiver; dias vêm de `_dias_ausencia`, usando as datas **atuais** da instância, aberto até ontem e limitado a hoje, filtrando células existentes quando o range tem mais de três dias. Não há captura do range anterior nesse receiver/helper. (`app/ponto/signals.py:115`, `app/ponto/signals.py:123`, `app/ponto/signals.py:124`, `app/ponto/signals.py:127`, `app/ponto/signals.py:143`, `app/ponto/signals.py:147`, `app/ponto/signals.py:150`, `app/ponto/signals.py:152`).
+- Views usuárias dessas portas incluem lançar/submeter, aprovar/rejeitar/cancelar individual e lote, editar registro e editar período parcial. (`app/ponto/views.py:2260`, `app/ponto/views.py:2280`, `app/ponto/views.py:2294`, `app/ponto/views.py:2309`, `app/ponto/views.py:2323`, `app/ponto/views.py:2341`, `app/ponto/views.py:2358`, `app/ponto/views.py:2405`, `app/ponto/views.py:2457`, `app/ponto/views.py:2526`, `app/ponto/views.py:2589`, `app/ponto/views.py:2652`, `app/ponto/views.py:2663`, `app/ponto/views.py:2670`, `app/ponto/views.py:2710`, `app/ponto/views.py:2741`, `app/ponto/views.py:2784`, `app/api/views.py:1738`, `app/api/views.py:1872`).
+- Férias: `AgendamentoFerias.save()` chama `_sync_ausencia` → `espelhar_ferias`; este cria uma Ausencia aprovada por dia via `criar_ausencia` e apaga as que deixam de valer; o delete do agendamento também apaga ausências. São essas criações/deleções que acionam o cartório. (`app/ferias/models.py:384`, `app/ferias/models.py:434`, `app/ferias/models.py:437`, `app/ferias/models.py:439`, `app/ponto/services/ausencia.py:1144`, `app/ponto/services/ausencia.py:1172`, `app/ponto/services/ausencia.py:1186`, `app/ponto/services/ausencia.py:1195`, `app/ponto/services/ausencia.py:1246`, `app/ponto/services/ausencia.py:1254`).
+- Cancelamento DP salva status cancelado; cancelamento admin primeiro rejeita ausências por update sem signal, depois salva o agendamento cancelado, cujo sync apaga as ausências e dispara post_delete. Correção de datas apaga o range antigo e salva/sincroniza o novo. (`app/ferias/services.py:330`, `app/ferias/services.py:337`, `app/ferias/services.py:341`, `app/ferias/services.py:356`, `app/ferias/services.py:362`, `app/ponto/services/ausencia.py:1257`, `app/ponto/services/ausencia.py:1267`, `app/ferias/services.py:366`, `app/ferias/services.py:385`, `app/ferias/services.py:387`).
+- Nenhuma dessas portas enfileira rejulgamento em outbox; os saves/deletes chamam diretamente cartório e a eventual lavra emite o outbox posterior descrito acima. (`app/ponto/signals.py:93`, `app/ponto/signals.py:147`, `app/ponto/signals.py:152`, `app/ponto/portas/celula.py:638`).
+
+**(vi) Feriados da praça**
+
+- Não há argumento/chave de feriado no hash. Pode entrar indiretamente **se uma geração/regeneração atualizar os marcos**: `eh_dia_trabalho_calculado` aplica `feriado_vira_folga`, que consulta o feriado pelo município do posto; DNA só monta marcos quando `trabalha is True`. (`app/ponto/services/cartorio.py:314`, `app/ponto/services/cartorio.py:323`, `app/escala/models.py:1338`, `app/escala/models.py:1340`, `app/escala/models.py:1344`, `app/escala/models.py:1362`, `app/escala/models.py:1363`, `app/ponto/management/commands/gerar_celulas.py:79`, `app/ponto/management/commands/gerar_celulas.py:100`, `app/ponto/portas/celula.py:243`, `app/ponto/portas/celula.py:260`).
+- O alcance é nacional/UF/município; o lugar do colaborador vem de `colaborador.posto.municipio`. (`app/core/feriados.py:57`, `app/core/feriados.py:60`, `app/core/feriados.py:62`, `app/core/feriados.py:64`, `app/core/feriados.py:106`, `app/core/feriados.py:113`).
+- Portas de calendário: `form_feriado` cria/edita; `_importar_do_payload`, chamado por `importar_feriados_nacionais`, faz get_or_create; `excluir_feriado` apaga. (`app/core/views_config.py:39`, `app/core/views_config.py:62`, `app/core/views_config.py:68`, `app/core/views_config.py:81`, `app/core/views_config.py:124`, `app/core/views_config.py:141`, `app/core/views_config.py:153`, `app/core/views_config.py:164`, `app/core/views_config.py:182`, `app/core/views_config.py:198`).
+- Alteração do lugar também muda a aplicabilidade: portas `atualizar_posto`/`definir_municipio_posto`; a segunda usa update sem signal. (`app/colaboradores/services/estrutura.py:47`, `app/colaboradores/services/estrutura.py:50`, `app/colaboradores/services/estrutura.py:67`, `app/colaboradores/services/estrutura.py:70`).
+- O signal de Feriado roda `reavaliar_dia(data)` em on_commit; não regenera células nem enfileira julgamento. Ele busca chamados `batida_ausente` vivos, consulta `fatos_do_dia` e reconcilia os espúrios. A reconciliação pode provocar rejulgamento **indireto** pela mudança de status do chamado. (`app/chamados/signals.py:265`, `app/chamados/signals.py:274`, `app/chamados/signals.py:276`, `app/chamados/services/feriado_reavaliar.py:14`, `app/chamados/services/feriado_reavaliar.py:33`, `app/chamados/services/feriado_reavaliar.py:43`, `app/chamados/services/feriado_reavaliar.py:47`, `app/chamados/services/feriado_reavaliar.py:59`, `app/chamados/signals.py:164`, `app/chamados/signals.py:180`).
+- Não há post_delete de Feriado: o código declara isso expressamente, porque essa reavaliação só fecha chamados e não reabre retratados quando o feriado é removido. (`app/chamados/signals.py:261`, `app/chamados/signals.py:262`).
+- O eventual efeito sobre chamados muda a parcela `pk:status_local` do hash; o feriado em si continua ausente. (`app/ponto/services/cartorio.py:326`).
+
+**(ix) Isenção art. 62**
+
+- Flag real: `Colaborador.isento_ponto`. A flag não entra diretamente no hash, nem no DNA produzido por `montar_dna`; contudo é entregue diretamente ao juiz como `isento_ponto=bool(c.isento_ponto)`. (`app/colaboradores/models.py:294`, `app/ponto/services/cartorio.py:323`, `app/ponto/services/cartorio.py:327`, `app/ponto/management/commands/gerar_celulas.py:95`, `app/ponto/services/cartorio.py:1113`).
+- Não encontrei caminho que codifique a flag indiretamente no hash: o signal da isenção silencia chamados, conservando seu status, e o hash lê status, não `silenciado_ate`. (`app/chamados/signals.py:213`, `app/chamados/signals.py:222`, `app/chamados/services/silencio_isentos.py:34`, `app/chamados/services/silencio_isentos.py:43`, `app/chamados/services/silencio_isentos.py:46`, `app/ponto/services/cartorio.py:326`).
+- Porta humana `passe_livre` chama `colaboradores.services.colaborador.gravar(colab,'cadastro',{'isento_ponto':novo_valor})`; `gravar` atribui e salva. (`app/colaboradores/views.py:145`, `app/colaboradores/views.py:173`, `app/colaboradores/views.py:176`, `app/colaboradores/services/colaborador.py:34`, `app/colaboradores/services/colaborador.py:47`, `app/colaboradores/services/colaborador.py:53`).
+- Essa porta não chama cartório nem emite outbox. O recei
+
+[truncado em 20000 de 20717 caracteres]
+
+## 30/10 20:13 · sessao 82751e7ef508 · - · - · origem=Ronald (tmux)
+
+Censo concluído, somente leitura. Não carreguei Django nem executei testes; usei leitura estática, `rg` e o varredor AST puro com `PYTHONDONTWRITEBYTECODE=1`. Resultado de execução vivo de `_meta` permanece [não verificado]. [nao verificado]
+
+**Inventário: 24 campos concretos + 2 relações reversas = 26 entradas de `get_fields()` pela leitura estática.** A classe herda diretamente `models.Model` (`app/escala/models.py:1603`); são 23 declarações de campos (`app/escala/models.py:1649` até `:1773`) e `id` implícito BigAutoField, registrado na migration (`app/escala/migrations/0030_celuladia.py:20`; configuração `app/escala/apps.py:5`).
+
+Nas referências abaixo, **P = `app/ponto/portas/celula.py`**. O save comum de lavratura/carimbo é `salvar_e_emitir`, P:634–642.
+
+| Campo | Definição | Escritores de produção |
+|---|---|---|
+| `id` | migration 0030:20 | Automático nos creates de `regenerar_celulas_vinculo` P:247 e `gerar_celulas_periodo` P:593. |
+| `colaborador` | models:1649 | Creates P:247 e P:594. |
+| `data` | models:1653 | Creates P:247 e P:594. |
+| `trabalha` | models:1654 | Creates P:247/P:595; regenerar vínculo P:231/P:260, saves P:233/P:264; gerar período P:612/P:615; reverter P:532/P:538. |
+| `origem` | models:1659 | Somente `'gerada'` nos creates P:248/P:595. Nenhum escritor de produção de `'editada'` localizado. |
+| `escala_geradora` | models:1660 | Creates P:248/P:595; regenerar P:260/P:264; gerar P:613/P:615; reverter P:535/P:538. `SET_NULL` declarado em models:1661. |
+| `dna` | models:1665 | Creates P:248/P:596; regenerar P:232–233/P:260–265; gerar P:604–605/P:614–615; reverter P:530/P:538. |
+| `gerada_em` | models:1670 | `auto_now_add` nos creates P:247/P:593. |
+| `regenerada_em` | models:1686 | Regenerar P:262/P:264; reverter P:536/P:538. |
+| `regeneracoes` | models:1691 | Default 0; regenerar P:263/P:264; reverter P:537/P:538. |
+| `dna_anterior` | models:1694 | Regenerar P:261/P:264; reverter limpa P:531/P:538. |
+| `editada_em` | models:1700 | Nenhum escritor de produção localizado. |
+| `editada_por` | models:1701 | Nenhum escritor de produção localizado; `SET_NULL` declarado em models:1702. |
+| `julgada_em` | models:1713 | `carimbar`, P:721/P:726. |
+| `impressao` | models:1714 | `carimbar`, P:722/P:726. |
+| `veredito` | models:1738 | `lavrar_veredito`, P:692/P:695. |
+| `veredito_via` | models:1739 | `lavrar_veredito`, P:693/P:695. |
+| `veredito_em` | models:1740 | `lavrar_veredito`, P:694/P:695. |
+| `protestos` | models:1741 | `lavrar_veredito`, P:691/P:695. |
+| `ata` | models:1746 | `lavrar_veredito`, P:674/P:690/P:697; `carimbar_precedencia`, P:739–743. |
+| `ausencia` | models:1764 | `carimbar`, P:723/P:726; `carimbar_insumos_em_lote`, P:759/P:764. `SET_NULL` models:1765. |
+| `tem_entrada` | models:1769 | `carimbar`, P:724/P:726; lote P:760/P:764. |
+| `tem_saida` | models:1770 | `carimbar`, P:724/P:726; lote P:760/P:764. |
+| `insumos_em` | models:1773 | `carimbar`, P:725/P:727; lote P:761/P:764. |
+| `chamados` reverso | `app/chamados/models.py:44–45` | Não é coluna da célula: nasce pela FK no create de chamado, `models.py:876`/`:905`; associação posterior por `services/vinculos.py:92–99`. |
+| `perguntas` reverso | `app/chamados/models.py:1943–1944` | Não é coluna da célula: `PerguntaDisputa.abrir` reaponta FK em `models.py:2167–2179` ou cria em `:2181–2182`. |
+
+`regenerar_celulas_dia` apenas delega ao regenerador de vínculo com `[dia,dia]`, sem extensão (`P:474–477`). O wrapper de modelo `CelulaDia.lavrar_veredito` delega para a porta (`app/escala/models.py:1775–1783`).
+
+**Não existe relação reversa `eventos_consumo` localizada.** `EventoCelula.celula_id` é `IntegerField`, explicitamente sem FK (`app/escala/models.py:1806–1809`).
+
+**Selos encontrados:**
+
+- Escritor único por módulo, allowlist vazia: `app/ponto/tests/test_chokepoint_celula_gate.py:20–22`, teste da árvore `:49–53`, entidades `:58–60`, operações declaradas e cobertura AST `:62–84`, contraprovas `:86–96`.
+- Cadastro da família/porta: `app/core/portas.py:44`, `:111`.
+- Varredor AST: `app/core/censo_escritas.py:6–45`; as classes de inferência estão documentadas ali, inclusive balde não atribuível.
+- Contraprovas do censo envolvendo CelulaDia: `app/core/tests/test_censo_escritas.py:15–16`, `:72–90`; gerente reverso `:143–157`; produção exclui testes e inclui management `:230–261`.
+- Idempotência das operações: `app/ponto/tests/test_porta_celula.py:36–60`, lavrar `:63–76`, carimbar `:79–92`, precedência/ata `:94–139`, lote `:142–150`.
+- Veredito verifica conjunto dos **quatro campos retornados pela lavratura**, não conjunto de fields do modelo: `app/escala/tests/test_b5_veredito.py:37–42`.
+- **Nenhum teste do conjunto completo de fields de CelulaDia localizado** ao buscar `CelulaDia._meta`, `_meta`, `get_fields`, `escritor unico`, `escritor_unico`, `escritores` em `app/*/tests`. Os selos acima são de módulo/operacão ou comportamento, não um mapa completo campo→escritores. [nao verificado]
+
+**(iii) DNA:**
+
+- Hash só usa `dna_versao` e `str(marcos)`, não o JSON inteiro (`app/ponto/services/cartorio.py:327`). Logo alterar outra chave isoladamente não muda diretamente hash.
+- Portas que realmente gravam: gerar período, regenerar vínculo/dia e reverter, nos sítios da tabela.
+- Regenerar vínculo, com `recalculo=True`, julga diretamente os dias tocados não futuros e sem veredito humano, com `forcar=True` (`P:360–379`). O wrapper por dia usa esse default (`P:474–477`).
+- Gerar período termina sem chamada ao cartório/outbox (`P:590–617`). Reverter termina após save/trilha, sem julgamento/outbox (`P:529–552`).
+- Não encontrei receiver de `CelulaDia` em `app/`; comentário declara ausência intencional do signal (`P:332–334`).
+- Regeneração não insere diretamente `EventoCelula`; uma lavra posterior pode inserir se mudar `veredito` ou `ata` (`P:622–642`).
+
+**(viii) Decisões humanas:**
+
+1. **Justificativa**: `status`, aprovação, tipo etc. não entram diretamente na função hash; não há parâmetro/chave de justificativa (`cartorio.py:314–380`). Pode mudar hash por batida criada, por status dos chamados fechados e por `fio`; a justificativa sem esses efeitos pode manter impressão idêntica, apesar de signal chamar julgamento (`cartorio.py:324–327`, `:367–368`; sinais abaixo).
+   - Individual: `aprovar_justificativa_dp` (`app/ponto/services/justificativa.py:117`, grava `:190–193`), `rejeitar_justificativa_dp` (`:247`, `:268–272`), `materializar_saida_dp` (`:316`, `:368–371`).
+   - Lote: `aprovar_lote_justificativas` (`app/ponto/views.py:1764`, grava `:1797–1800`), rejeitar lote (`:1860`, grava `:1876–1880`).
+   - Admin genérico editável: `JustificativaAdmin(admin.ModelAdmin)` (`app/ponto/admin.py:18–22`); dívida reconhecida pelo selo em `app/ponto/tests/test_selo_aprovacao_encerra_origem.py:12–15`.
+   - Todo save aciona julgamento **síncrono**, não fila de rejulgamento: `app/ponto/signals.py:161–165` → `:85–93`.
+   - Aprovação pode criar batida (`services/justificativa.py:172–179`) e fecha origem (`:202`); lote cria batida (`views.py:1816–1822`) e fecha origem (`:1838`).
+
+2. **Edição de célula `origem='editada'`**: **nenhuma porta de produção localizada**, embora modelo reconheça a origem (`app/escala/models.py:1658–1659`) e gerador a preserve (`P:598–599`). `editada_em/editada_por` sem escritores, como acima. Não afirmar que uma porta humana de edição existe só por comentários do modelo (`models.py:1608–1611`).
+
+3. **Veredito humano diretamente no dia**: view `app/ponto/views.py:3302–3304` → serviço `veredito_celula` (`app/ponto/services/veredito_celula.py:191`).
+   - `trabalhou` pode flipar/gravar batidas (`:291–305`); `faltou/justificado` cria Ausencia (`:310–317`); fecha fio (`:324–328`); escreve veredito admin (`:329–330`).
+   - `veredito_via`, veredito e autor não entram diretamente hash (`cartorio.py:323–380`). Seus fatos materiais entram pelas batidas/cobertura/chamados/fio.
+   - A lavra admin chama `salvar_e_emitir` (`P:682–697`) e **gera EventoCelula se houver mudança**, pelo mesmo atomic (`P:634–642`). Esse outbox reconcilia chamados, não enfileira rejulgamento do próprio cartório (`app/escala/models.py:1803–1807`).
+
+4. **Decisão em chamado**: `ChamadoColaborador.fechar` → `transicionar` → `_gravar_estado` (`app/chamados/models.py:260–264`), save em `:231`.
+   - Entra no hash por `pk:status_local` (`cartorio.py:326`).
+   - Criar/mudar status aciona cartório síncrono: pre/post-save `app/chamados/signals.py:155–180`, sem outbox de rejulgar.
+
+5. **Decisão em pergunta**:
+   - `validar_pergunta` (`app/chamados/services/validacao.py:336`) carimba (`:389`, escritor `:127–133`) e materializa (`:415–423`).
+   - `recusar_pergunta` (`:487`) salva recusa e chama reabertura (`:538–540`).
+   - Fecho admin explícito `PerguntaDisputa.fechar_por_admin` (`app/chamados/models.py:2213–2230`).
+   - Pergunta muda hash **indiretamente via contagem de chamados com fio vivo** (`cartorio.py:1074`, `:1087`).
+   - Receiver direto da pergunta só fecha beco da disputa, `on_commit`, **sem chamada a julgar_celula e sem inserir outbox** (`app/chamados/signals.py:191–202`).
+   - Validação pode disparar julgamento pelos fatos materializados (Batida/Ausencia/Justificativa); o `recalcular_por_evento` da validação (`validacao.py:399–401`) é do fechamento financeiro, não fila do cartório.
+
+## 30/10 20:12 · sessao b72efd86392b · - · - · origem=Ronald (tmux)
+
+CCT / item 2(vii)
+
+- **Não entra no hash diretamente nem indiretamente pelo DNA**: `impressao_insumos` só concatena batidas, status da cobertura, chamados, `dna_versao`, `marcos`, veto, teto, versão da regra, encerramento, fio e parcialidade; nenhum campo da CCT aparece (`app/ponto/services/cartorio.py:314-380`). O produtor do DNA não lê CCT: usa `EscalaColaborador`, `TipoEscala`, marcos, jornada, intervalos e extras declaradas (`app/ponto/management/commands/gerar_celulas.py:73-123`).
+- **O argumento `regra` não é a régua CCT**: vem de `versao_para`/`REGRA_VERSOES`, declaração de versão do código do cartório (`app/ponto/services/cartorio.py:100`, `app/ponto/services/cartorio.py:168-187`, `app/ponto/services/cartorio.py:888-891`). Alterar `Empresa.regime_trabalhista`, Sindicato ou AplicacaoConvencao não altera essa versão (`app/ponto/services/cartorio.py:168-187`).
+- A régua efetiva é decidida por `regua_para`: vínculo do dia → praça e ciclo (`app/core/regua_cct.py:328-339`); `Empresa.regime_trabalhista` decide CLT/CCT (`app/core/regua_cct.py:352-366`); `_aplicacao_vigente` busca aplicações ativas da empresa, praça ou empresa inteira, confere vigência do Sindicato, prioriza praça e recusa empate (`app/core/regua_cct.py:253-275`); os valores são extraídos do Sindicato (`app/core/regua_cct.py:374-380`).
+- `get_motor_cct` lê o switch global `ParametroSistema.regua_cct_ativa` e injeta a régua no motor de cálculo; trata-se do caminho do motor/folha (`app/core/regua_cct.py:428-470`). A régua expõe sete campos declarados sem efeito no cálculo e quatro que chegam ao motor (`app/core/regua_cct.py:72-89`).
+
+**Portas que mudam CCT/regime e seus disparos**
+
+| Estado | Porta de produção | Rejulgamento / outbox |
+|---|---|---|
+| Campos/vigência de Sindicato | `form_sindicato`: coleta régua (`app/core/views_config.py:258`, `app/core/views_config.py:268-297`), atualiza e salva (`app/core/views_config.py:303-321`) ou cria (`app/core/views_config.py:323-336`). | Não chama juiz nem emite evento: termina em trilha, atualização de `VinculoSindicatoPraca` e resposta (`app/core/views_config.py:320-343`). |
+| AplicacaoConvencao | `form_aplicacao` chama `cadastrar` ou `desativar` (`app/core/views_config.py:387`, `app/core/views_config.py:402-417`). `semear_aplicacao_convencao.handle` chama as mesmas portas (`app/core/management/commands/semear_aplicacao_convencao.py:105-111`). Escritor: criação/reativação/desativação em `cadastrar` (`app/core/services/aplicacao_convencao.py:101-134`) e desativação em `desativar` (`app/core/services/aplicacao_convencao.py:138-157`). | Não chama juiz nem outbox: salva e registra auditoria, depois retorna (`app/core/services/aplicacao_convencao.py:120-134`, `app/core/services/aplicacao_convencao.py:149-157`). |
+| Empresa.regime_trabalhista | `form_empresa` valida o valor recebido (`app/colaboradores/views.py:485`, `app/colaboradores/views.py:512-515`) e passa às portas `atualizar_empresa` ou `criar_empresa` (`app/colaboradores/views.py:519-540`); escritores genéricos em `app/colaboradores/services/estrutura.py:12-20`. | Não chama juiz nem outbox: as portas só fazem create/setattr/save (`app/colaboradores/services/estrutura.py:12-21`). |
+
+- O admin não é porta alternativa para esses dois estados: regime é readonly (`app/colaboradores/admin.py:19`); AplicacaoConvencao usa `SoLeitura` (`app/core/admin.py:99-102`), que proíbe adicionar, mudar e apagar (`app/core/admin.py:59-66`).
+- Não encontrei receivers de `Empresa`, `Sindicato` ou `AplicacaoConvencao` buscando `sender` em todos os `.py` de `app/`; os signals inspecionados não contêm esses ganchos (`app/core/signals.py:1-48`, `app/colaboradores/signals.py:1-119`, `app/ponto/signals.py:85-165`, `app/chamados/signals.py:155-202`).
+- Não encontrei escritor de produção do switch `regua_cct_ativa` pesquisando o nome e `ParametroSistema` em `app/core/views_config.py`, `app/core/services/` e `app/core/management/commands/`; a tela de parâmetros é somente leitura e recusa POST (`app/core/views_config.py:480-492`). [não verificado fora desse escopo]
+
+**Mecanismo de outbox — distinção essencial**
+
+- O outbox real é `escala.models.EventoCelula`, com `celula_id`, `colaborador_id`, data, criação, processamento, tentativas e erro (`app/escala/models.py:1800-1815`).
+- Ele **não é uma fila de rejulgamento do cartório**: registra a lavra da célula e acorda o consumidor de chamados (`app/escala/models.py:1801-1807`). O consumidor chama `retratar_chamados_absolvidos_por_celula` e `encerrar_orfas_pela_lampada`, não o juiz do cartório (`app/chamados/reconciliador.py:1257-1268`, `app/chamados/reconciliador.py:1295-1306`).
+- A emissão é centralizada em `emitir_evento_celula` (`app/ponto/portas/celula.py:626-631`). `salvar_e_emitir` grava célula e evento no mesmo atomic, somente se os campos lavrados incluem `veredito` ou `ata` (`app/ponto/portas/celula.py:622-642`). A mera gravação de DNA ou dos insumos do carimbo não aciona esse critério (`app/ponto/portas/celula.py:623`, `app/ponto/portas/celula.py:708-728`).
+- O nascimento de chamado de turno ligado à célula também emite esse evento (`app/chamados/models.py:735-744`); há semeadura pela mesma porta (`app/chamados/reconciliador.py:1223-1253`).
+- O consumidor roda a cada minuto (`app/config/crons.py:375`), seleciona pendentes com menos de cinco tentativas (`app/chamados/reconciliador.py:1154`, `app/chamados/reconciliador.py:1191-1200`), mantém pendências por falha/adiamento ou marca processamento (`app/chamados/reconciliador.py:1311-1320`).
+- O rejulgamento reativo dos insumos é **chamada síncrona direta**: `_julgar_dias` chama `cartorio.julgar_celula`, com guarda antirrecursão (`app/ponto/signals.py:85-93`); os receivers de Batida, Ausencia e Justificativa chamam esse helper (`app/ponto/signals.py:131-165`). Mudança/criação de chamado chama diretamente o mesmo juiz (`app/chamados/signals.py:155-180`).
+- A “fila” do comando `processar_cartorio` é um queryset de colaboradores com células passadas, não tabela de pendências (`app/ponto/management/commands/processar_cartorio.py:45-65`); o cron o chama com `--apply`, sem `--forcar` (`app/config/crons.py:597`). O pulo usa igualdade da impressão (`app/ponto/services/cartorio.py:1092-1094`).
+- `out['rejulgar']` também não é outbox: é lista em memória consumida na segunda passada; sobras são descartadas e contadas (`app/ponto/services/cartorio.py:745-753`).
+- Não encontrei modelo próprio `*Outbox*`, `*Pendencia*` ou `*Fila*` de rejulgamento do cartório no censo de classes/modelos e ocorrências `outbox|Outbox|enfileirar|julgar_celula|julgar_colab` em `app/**/*.py`, excluindo migrations e testes; o mecanismo concreto encontrado é o acima (`app/ponto/management/commands/processar_cartorio.py:49-65`, `app/ponto/signals.py:85-93`, `app/escala/models.py:1800-1815`, `app/chamados/reconciliador.py:1295-1306`).
 
 ## 30/10 19:54 · sessao 138b78f0be18 · O261-E-CELULA-20 · censo · origem=Code
 
@@ -451,122 +653,4 @@ Sem falha funcional nova demonstrada na lavra/lista; o juiz do dono permanece pr
 
 Execução isolada das funções puras por AST, sem Django/banco, confirmou ESTRUTURA, BATIDA e None preservados independentemente da ordem; não constitui execução da suíte. `[nao verificado]` [nao verificado]
 
-## 30/10 19:18 · sessao 143cd6819825 · O261-V-FASE · sonda · origem=Code
-
-- Vínculos ativos: `12x36 = 337`; `24x48` não consta na saída. [nao verificado]
-- Detector `fora_de_fase`: `n=10`, `universo=337`. [nao verificado]
-- Achados por ciclo: `{'12x36': 10}`. [nao verificado]
-- Achados `24x48`: **0**; `colab_ids []`. [nao verificado]
-- Todos os `colab_ids`: `[300, 366, 451, 696, 788, 978, 979, 982, 986, 998]`. [nao verificado]
-- A saída fornecida não exibe mensagem de erro. [nao verificado]
-
-## 30/10 19:15 · sessao 507013464189 · E1-BATERIA · red · origem=Code
-
-Criado somente [test_e1_lote2_status_do_dia.py](/home/ronald/codex_ws/red_e54eae6ed8c4_20261030_190743_37155/app/ponto/tests/test_e1_lote2_status_do_dia.py): **20 casos, sendo 15 executáveis e 5 skips de lei**. Sintaxe validada em memória, sem criar bytecode. Suite Django não executada; RED ainda não evidenciado. [nao verificado]
-
-| ID | Status esperado | Retenção esperada | Regra citada |
-|---|---|---|---|
-| S01 | `ok` | Não retém | CLT arts. 58 e 74 §2 |
-| S02 | SKIP — pendente | Pendente | L-039, L-110 |
-| S03 | `previsto` | Não retém | ADR D4; CLAUDE §6 |
-| S04 | `aberto` | Não retém | ADR D4; CLAUDE §6 |
-| S05 | `folga` | Não retém | CLT art. 67; L-024 |
-| S06 | `folga_trabalhada` | Não retém | CLT art. 71 §1; L-024 |
-| S07 | `ausencia` | Não retém | Lei 605/49 art. 6 §§1–2; L-089 |
-| S08 | `falta` | Não retém | L-039; Lei 605/49 art. 6 |
-| S09 | `folga` | Não retém | Lei 605/49 art. 8 |
-| S10 | `folga_trabalhada` | Não retém | Lei 605/49 art. 9 |
-| S11 | `irregular` | Não retém | L-033, L-032; Portaria 671 |
-| S12 | SKIP — pendente | Pendente | ADR D4; L-033 |
-| S13 | `irregular`, acoplamento em SKIP | Pendente | L-084; CLT art. 58 §1 |
-| S14 | SKIP — premissa divergente | Pendente | L-084 |
-| S15 | `ok` | Não retém | CLT art. 59-A; ADR D3 |
-| S16 | `folga` | Não retém | CLT art. 59-A; ADR D3 |
-| S17 | `folga` | Não retém | CLT art. 59-A; L-024 |
-| S18 | SKIP — mapeamento pendente | Não retém o abono; caso suspenso | ADR: decisão humana prevalece; L-039 |
-| S19 | `ok` | Não retém | CLT art. 62; ADR D3 |
-| S20 | `sem_dados` | Não retém | L-112; ADR D3; CLT art. 4 |
-
-Perguntas registradas nos skips:
-
-- **S02:** sem decisão humana, usar `irregular`, `escala_suspeita` ou autorizar exceção à L-039 para `falta`? Qual motivo de retenção?
-- **S12:** após encerrar, entrada única continua `aberto` ou vira `irregular`? Retém por qual motivo?
-- **S13:** atraso registrado gera `irregular` sem retenção, com retenção ou `ok` com desconto apenas na rubrica?
-- **S14:** as pontas diferem **exatamente 180 minutos**. Manter os horários, corrigir o cenário para superar 180 ou alterar expressamente o limite?
-- **S18:** admin resolve como `justificado` com abono: prevalece `ausencia`, `folga` ou uma exceção explícita para `ok`?
-
-## 30/10 19:12 · sessao 1c0187623ab2 · MEDIDA-PROGRAMA · verificador · origem=Code
-
-**O desenho permite chegar a zero sem eliminar todas as derivações do dia:** já há um classificador de produção que escapa do vocabulário proposto, e VALOR continua restrito aos sete arquivos previamente enumerados. (`app/relatorios/furos.py:55`, `app/relatorios/furos.py:69`, `app/ponto/tests/test_s3_placar_exercicio.py:34`, `app/ponto/tests/test_s3_placar_exercicio.py:305`)
-
-**1. Onde a definição verificável falha**
-
-- **Falso negativo concreto: `relatorios/furos.py::classificar_dia`.** Calcula o estado pela presença e quantidade de marcos `missing`, retornando `sem_marcos`, `furo`, `parcial` ou `ok`. Só `ok` pertence ao vocabulário contratado; portanto não alcança duas palavras. A resposta alimenta os dias apresentados e a contagem de furos. O censo anterior já o identifica como “classificar_dia próprio”, classe C. (`app/relatorios/furos.py:63`, `app/relatorios/furos.py:69`, `app/relatorios/furos.py:70`, `app/relatorios/furos.py:72`, `app/relatorios/furos.py:74`, `app/relatorios/furos.py:75`, `app/relatorios/furos.py:160`, `app/relatorios/furos.py:164`, `app/docs/CENSO_NARNIA.md:66`)
-
-- **A indireção não fica necessariamente coberta pela tabela ou função chamada.** `estado_do_dia` escolhe entre `_VER_ESTADO` e o classificador acima, sem produzir os literais procurados. A tabela fica no módulo; o classificador também escapa. Assim, neste caso existente, nenhum elo garante a detecção prometida. (`app/relatorios/furos.py:24`, `app/relatorios/furos.py:45`, `app/relatorios/furos.py:46`, `app/relatorios/furos.py:47`, `app/relatorios/furos.py:52`)
-
-- **Há outros vocabulários paralelos já existentes.** O painel operacional escolhe `geofence/normal/turno_aberto/encerrado/ausente/folga`, publica o status e monta contadores; só `folga` entra no vocabulário contratado. O registro já reconhece esses contadores como derivação própria. (`app/core/services/painel_op.py:155`, `app/core/services/painel_op.py:160`, `app/core/services/painel_op.py:166`, `app/core/services/painel_op.py:169`, `app/core/services/painel_op.py:172`, `app/core/services/painel_op.py:175`, `app/core/services/painel_op.py:190`, `app/core/services/painel_op.py:200`, `app/core/juizes.py:705`)
-
-- **A catraca por função não detecta necessariamente um sítio novo dentro de função declarada.** `api_espelho_v2` já contém decisões separadas para certidão da grade, dia com batidas e dia sem batidas. Todas viram uma identidade `arquivo::funcao`; acrescentar outra decisão ali pode preservar o mesmo conjunto de identidades. (`app/api/views.py:1514`, `app/api/views.py:1570`, `app/api/views.py:1644`, `app/api/views.py:1650`, `app/api/views.py:1653`)
-
-- **Falso positivo do predicado bruto:** `campos_da_frase` produz `folga/falta` sob escolha, mas preenche o **tipo da intenção**, não o status do dia. Deve ser exclusão por homônimo. Sem o `NAO_E_LEITOR` concreto, afirmar que sobreviveria ao filtro final é [nao verificado]. (`app/core/intake.py:219`, `app/core/intake.py:228`, `app/core/intake.py:232`)
-
-- **VALOR mede uma lista fechada, não descobre leitores novos.** Tanto o teste principal quanto o teste “MONTADOR é UM SÓ” percorrem `LEITORES`. Um arquivo novo fora dessa lista não entra automaticamente. (`app/ponto/tests/test_s3_placar_exercicio.py:305`, `app/ponto/tests/test_s3_placar_exercicio.py:346`, `app/ponto/tests/test_s3_placar_exercicio.py:350`)
-
-- **O detector reutilizado tem uma cegueira sintática real:** não atravessa `BoolOp` no caminho de `getattr`; a forma `(getattr(p, 'minutos_extra_50', 0) or 0) / 60` existe na cópia. Isso demonstra uma limitação do detector, embora esteja no montador autorizado e não prove leitor indevido. (`app/ponto/tests/test_s3_placar_exercicio.py:205`, `app/ponto/services/espelho.py:113`, `app/ponto/services/espelho.py:114`, `app/ponto/tests/test_s3_placar_exercicio.py:58`)
-
-**2. O que já responde à mesma pergunta**
-
-Para **derivação própria de dinheiro**, já existem o detector, o universo e a cobrança de zero da S3. O contrato acerta ao propor transferi-los e manter uma implementação compartilhada; criar outro detector duplicaria essa pergunta. (`app/ponto/tests/test_s3_placar_exercicio.py:14`, `app/ponto/tests/test_s3_placar_exercicio.py:183`, `app/ponto/tests/test_s3_placar_exercicio.py:303`)
-
-Para **sítios de tela que respondem por conta própria**, já existem `PENDENTES['tela']`, `fora_de_autoridade('tela')` e sua publicação como `leitores_narnia`. Esse inventário deve ser reutilizado como registro da dívida; ele não equivale ao novo censo AST, pois conta declarações e verifica impressões textuais. (`app/core/juizes.py:656`, `app/core/juizes.py:690`, `app/core/juizes.py:1415`, `bin/placar_code.sh:484`, `bin/placar_code.sh:490`, `app/core/tests/test_contract_juiz_tela.py:34`)
-
-Há ainda uma imprecisão no cruzamento proposto: `_TT6` pergunta **“o colaborador entra na folha (e por que não)?”**, com autoridade `classificar_export`; “status e contagem” é o motivo de uma entrada específica do calendário. Não é o significado geral de `_TT6`. (`app/core/juizes.py:665`, `app/core/juizes.py:678`, `app/core/juizes.py:809`)
-
-**3. Quem define e quem consome os nomes**
-
-| Nome | Definição/escrita atual | Leituras atuais |
-|---|---|---|
-| `ROTULO_STATUS` | Dicionário em `app/colaboradores/services/calendario.py:44`. | Calendário: `app/colaboradores/services/calendario.py:901`; minha escala: `app/escala/views.py:36`, `app/escala/views.py:55`; selos: `app/ponto/tests/test_contract_espelho_sem_emoji.py:220`, `app/colaboradores/tests/test_calendario_um_juiz.py:70`. |
-| `deriva_dinheiro` | Função em `app/ponto/tests/test_s3_placar_exercicio.py:183`. | Critério b: `app/ponto/tests/test_s3_placar_exercicio.py:306`; casos sintéticos: `app/ponto/tests/test_s3_placar_exercicio.py:312`; montador: `app/ponto/tests/test_s3_placar_exercicio.py:346`, `app/ponto/tests/test_s3_placar_exercicio.py:350`. |
-| `LEITORES` | Tupla em `app/ponto/tests/test_s3_placar_exercicio.py:34`. | Critério a: `app/ponto/tests/test_s3_placar_exercicio.py:247`; critério b: `app/ponto/tests/test_s3_placar_exercicio.py:305`; segundo montador: `app/ponto/tests/test_s3_placar_exercicio.py:350`. |
-| `DINHEIRO` / `NAO_E_MOTOR` | `app/ponto/tests/test_s3_placar_exercicio.py:163` e `app/ponto/tests/test_s3_placar_exercicio.py:171`. | Via `getattr`: `app/ponto/tests/test_s3_placar_exercicio.py:203`; via atributo, somente `DINHEIRO`: `app/ponto/tests/test_s3_placar_exercicio.py:213`. |
-| `gerar_estado.py` / ESTADO | `gerar` incorpora os placares e escreve o destino em `bin/gerar_estado.py:346`, `bin/gerar_estado.py:349`. | Entrada CLI: `bin/gerar_estado.py:355`; chamada pelo relato: `bin/relato.sh:38`; ESTADO entra na publicação: `bin/relato.sh:102`, `bin/relato.sh:115`. |
-
-Mover `LEITORES` exige preservar também seus consumidores do critério **a** e do montador; a dependência não está restrita ao critério **b**. (`app/ponto/tests/test_s3_placar_exercicio.py:247`, `app/ponto/tests/test_s3_placar_exercicio.py:350`)
-
-**4. Carga no host e falhas no ESTADO**
-
-- **Importar os módulos atuais diretamente exige Django.** O selo importa `SimpleTestCase`; o calendário importa Django e modelos. A extração AST do vocabulário e a transferência completa do detector evitam essas dependências; o funcionamento da implementação futura é [nao verificado]. (`app/ponto/tests/test_s3_placar_exercicio.py:30`, `app/colaboradores/services/calendario.py:22`, `app/colaboradores/services/calendario.py:28`)
-
-- **Carregar por `spec_from_file_location` não resolve imports do projeto.** O gerador acrescenta `raiz/bin` ao caminho e carrega o placar por arquivo. O próprio placar registra o precedente de `ModuleNotFoundError` ao importar `core` nesse contexto. (`bin/gerar_estado.py:75`, `bin/gerar_estado.py:77`, `bin/gerar_estado.py:198`, `app/core/placar_estrutural.py:457`, `app/core/placar_estrutural.py:462`)
-
-- **Copiar o molde não garante “ESTADO nunca cai”.** `_placar_estrutural` protege carga e chamadas, mas acessa campos obrigatórios durante a formatação fora do `try`. Outros leitores também são importados e chamados sem proteção. O novo bloco precisa abranger importação, leitura e composição; se a geração falhar, o relato aborta o ciclo. (`bin/gerar_estado.py:74`, `bin/gerar_estado.py:86`, `bin/gerar_estado.py:101`, `bin/gerar_estado.py:215`, `bin/gerar_estado.py:260`, `bin/relato.sh:38`)
-
-- **A publicação existente depende de banco e rede.** Antes de gerar o ESTADO, `relato.sh` exige a extração de nomes, que consulta `Colaborador.objects` via Django/container; depois publica com `git push`. “Sem banco/rede” pode descrever o censo isolado, não essa cadeia. (`bin/relato.sh:32`, `bin/relato.sh:38`, `bin/relato_nomes.sh:11`, `bin/relato_nomes.sh:18`, `bin/relato_nomes.sh:22`, `bin/relato.sh:126`)
-
-O timer declara cinco minutos e o serviço aponta a árvore operacional; timer ativo, execução nessa árvore e duração inferior a dois segundos são [nao verificado]. (`bin/hasner-relato.timer:6`, `bin/hasner-relato.service:14`, `bin/hasner-relato.service:15`)
-
-## 30/10 19:10 · sessao a64a4e6e6de1 · - · - · origem=Ronald (tmux)
-
-Achados principais de STATUS:
-
-- **Falso negativo de status do dia já existente:** `relatorios/furos.py::classificar_dia` calcula `sem_marcos/furo/parcial/ok` por quantidade de `missing`; apenas `ok` pertence ao vocabulário contratado, portanto não atinge duas palavras e escapa. A função é consumida por `estado_do_dia`, cuja resposta chega aos dias e à contagem de furos. Evidência: `app/relatorios/furos.py:55`, `:63`, `:69`, `:70`, `:72`, `:74`, `:75`, `:45`, `:160`, `:164`. O próprio censo anterior chama esse trecho de “classificar_dia próprio”, classe C: `app/docs/CENSO_NARNIA.md:66`.
-
-- **A promessa “a tabela/função chamada é que tem de cair” não fecha:** `_VER_ESTADO` é tabela de módulo, expressamente fora do contador; `estado_do_dia` escolhe entre a tabela e `classificar_dia` sem produzir os literais buscados; e `classificar_dia` escapa pelo vocabulário acima. Evidência: `app/relatorios/furos.py:24`, `:45`, `:46`, `:47`, `:52`, `:55`.
-
-- **Outros vocabulários paralelos já presentes:** `montar_painel_operacional` produz `geofence/normal/turno_aberto/encerrado/ausente/folga`, publica o status e faz seis contadores; somente `folga` pertence ao vocabulário do contrato, portanto escapa. Evidência: `app/core/services/painel_op.py:155`, `:160`, `:166`, `:169`, `:172`, `:175`, `:190`, `:200`. O registro já reconhece os seis contadores como classe C: `app/core/juizes.py:705`. `painel_tv` produz `fora/normal/geofence/aberto`, novamente com somente uma palavra reconhecida: `app/core/views.py:807`, `:816`, `:818`, `:828`, `:835`.
-
-- **Falso positivo bruto, resolvível pela exclusão prometida:** `campos_da_frase` produz `folga/falta` com escolha, mas está preenchendo o tipo de uma intenção de escrita, não o status do dia. Deve entrar como homônimo no `NAO_E_LEITOR`; sem a lista concreta não se pode afirmar que sobreviverá ao filtro final. Evidência: `app/core/intake.py:219`, `:228`, `:232`, `:236`.
-
-- **Derivações reais que a regra encontra:** `_classificar`, agregação `celstat_map` de `contexto_calendario`, `minha_escala`, `api_espelho_v2` e `_status_dia`; não encontrei motivo para chamar esses achados de falso positivo. Evidência: `app/colaboradores/services/calendario.py:125`, `:136`, `:509`, `:511`; `app/escala/views.py:49`, `:55`; `app/api/views.py:1514`, `:1570`, `:1644`, `:1650`; `app/ponto/services/espelho.py:152`, `:158`, `:171`.
-
-- **Granularidade:** `api_espelho_v2` contém derivação de certidão da grade, status de dias com batidas e status de dias sem batidas, mas contará uma função. Assim, uma nova derivação dentro dessa função já declarada pode preservar o mesmo conjunto de identidades. Evidência: `app/api/views.py:1512`, `:1514`, `:1570`, `:1636`, `:1644`, `:1650`, `:1653`, `:1656`.
-
-- **PDF:** a palavra é lida em `app/relatorios/pdf_espelho.py:919`; os dias vêm do espelho em `:592`, `:598`; o compositor comum é reaplicado em `:632`. Isso não prova ausência de toda decisão de estado no PDF: há seleção local de datas de turno aberto em `:613` e supressão da etiqueta `turno aberto` por orfandade em `:956`, `:960`, `:966`. São formas que escapam do contador de literais, mas não justificam afirmar um novo status codificado sem definir melhor a pergunta.
-
-- **Reuso:** o contador existente `fora_de_autoridade('tela')` mede os sítios declarados que ainda respondem por conta própria, e seu nome publicado é `leitores_narnia`: `app/core/juizes.py:655`, `:658`, `:1415`, `:1417`. Não é medição AST dos literais. O tripwire AST específico do PDF resolve aliases, congela dívida e cobra crescimento/entrada podre, mas mede chamadas de cálculo, outra pergunta: `app/relatorios/tests/test_pdf_nao_calcula.py:33`, `:47`, `:62`, `:95`, `:107`.
-
-A execução ad hoc estrita do critério encontrou oito candidatos brutos; nenhum teste `test*.py` fora de `tests/` satisfaz hoje o critério completo [não verificado por arquivo:linha — resultado de execução somente leitura]. [nao verificado]
-
-_738 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_742 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
