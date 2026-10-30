@@ -1,7 +1,144 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **30/10/2026 08:35** · publicado em **30/10/2026 08:35** (UTC-3)
+> Ultima resposta processada: **30/10/2026 08:40** · publicado em **30/10/2026 08:41** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 30/10 08:40 · sessao e3bb5ee2fac5 · - · - · origem=Ronald (tmux)
+
+A triagem “sítio não tocado” não procede: o registro da dívida permanece em `core/juizes.py`, mas o mecanismo executável está em `fora_de_fase`, justamente a função alterada para expor `ec_id` e datas. O escopo exige examinar todo sítio tocado, não apenas as linhas acrescentadas. `CLAUDE.md:600`; `app/core/juizes.py:905`; `app/escala/services/fase_12x36.py:192`, `:207`.
+
+A dívida é anterior, portanto não deve ser descrita como “segundo juiz criado neste diff”; contudo, segue dentro de função tocada e passa a alimentar a C10: batidas cruas entram no pareador, enquanto o registro aponta `turnos_do_colab` como autoridade. `app/escala/services/fase_12x36.py:128`, `:146`, `:175`; `app/core/juizes.py:667`, `:905`; `app/escala/services/cadastro_realidade.py:335`.
+
+O aval de reutilizar o leitor é compatível com corrigir esse leitor existente pela autoridade da casa; não autoriza preservar a dívida [não verificado: interpretação do aval]. Uma discordância concreta entre pareamento cru e ata ainda precisa ser demonstrada para fundamentar o impacto funcional; o registro comprova a dívida declarada, não uma reprodução executada. `app/core/juizes.py:905`; [não verificado: reprodução dinâmica].
+
+## 30/10 08:40 · sessao a11bf3d62b06 · - · - · origem=Ronald (tmux)
+
+Achei uma falha nova de rótulo: **C10 chama qualquer achado de “12x36”, mas o leitor inclui também 24x48**. O universo admite os dois ciclos (`app/escala/services/fase_12x36.py:29`, `:106`); uma 24x48 deslocada um dia pode atingir os dois pisos, pois sua regra é `% 3` (`app/escala/models.py:1264`) e o detector exige três dias de cada lado (`app/escala/services/fase_12x36.py:187`). `_fase_deslocada` transporta todos os achados (`app/escala/services/cadastro_realidade.py:337`), mas a assinatura os descreve obrigatoriamente como “12x36” (`:112`). A correção pode ser apenas de apresentação, sem outro juiz.
+
+As triagens conferidas:
+
+- **Identidade do vínculo tratado:** leitor expõe `ec_id` (`app/escala/services/fase_12x36.py:192`); adaptador guarda `ec` e inclui esse identificador no detalhe (`app/escala/services/cadastro_realidade.py:340`, `:344`); tela e PDF apresentam o detalhe (`app/templates/escala/cadastro_x_realidade.html:28`; `app/escala/services/cadastro_realidade.py:732`).
+- **Falha da leitura continua sem aviso visual:** C10 registra exceção e segue (`app/escala/services/cadastro_realidade.py:601`). Isso realmente repete C2 (`:550`), C4 (`:567`), C6 (`:574`), C7 (`:581`), C8 (`:588`), C9 (`:595`) e C5 (`:609`). O teste confirma ausência de C10 preservando A4 (`app/escala/tests/test_o261v_fase_na_lista.py:158`).
+- **Datas, PDF e MORDE-zero ganharam mordida no código do teste:** datas literais comparadas com saída real (`app/escala/tests/test_o261v_fase_na_lista.py:106`, `:121`); PDF extraído com `pypdf` e conteúdo exigido (`:144`); MORDE-zero exige primeiro o positivo real (`:190`). Execução dos testes: **[não verificado]**.
+- **Filtro de empresa permanece efetivo:** é aplicado ao construir a linha, depois da coleta C10 (`app/escala/services/cadastro_realidade.py:626`).
+- **Uma lista para tela/PDF:** a view chama `lista` e passa os mesmos dados a `pdf_bytes` (`app/escala/views.py:490`); PDF percorre `dados['postos']` e assinaturas (`app/escala/services/cadastro_realidade.py:725`).
+- **Porta existente preservada:** C10 retorna apenas o link de cadastro (`app/escala/services/cadastro_realidade.py:490`); nenhuma escrita foi acrescentada nesse ramo (`:492`).
+- **Dívida de batida crua permanece anterior:** o leitor chama `parear_turnos` diretamente (`app/escala/services/fase_12x36.py:146`, `:175`), e o registro aponta que a API deveria ler `turnos_do_colab` (`app/core/juizes.py:905`).
+
+## 30/10 08:39 · sessao cdebc79f1e64 · - · - · origem=Ronald (tmux)
+
+Achei um candidato novo de rótulo/universo: C10 diz “12x36”, mas importa todos os achados de `fora_de_fase`, inclusive `24x48`. Isso não exige juiz novo para corrigir, mas pede alinhar o rótulo ao universo do leitor. Fontes: `app/escala/services/cadastro_realidade.py:112`, `app/escala/services/cadastro_realidade.py:337`, `app/escala/services/fase_12x36.py:29`, `app/escala/services/fase_12x36.py:106`; lei: `CLAUDE.md:35-36`.
+
+O caso é possível pelo código: o ciclo `24x48` trabalha quando `delta % 3 == 0`; se os turnos vierem um dia deslocados, haverá pelo menos três dias de trabalho sem turno e três folgas com turno dentro de 14 dias, satisfazendo o leitor. Fontes: `app/escala/models.py:1264-1266`, `app/escala/services/fase_12x36.py:179-187`. Não executei reprodução no banco. [não verificado]
+
+As triagens dos testes procedem por inspeção: [nao verificado]
+
+- Datas agora têm expectativas literais independentes e comparação tanto do leitor quanto da C10; todas as datas precisam estar no detalhe. `app/escala/tests/test_o261v_fase_na_lista.py:29-30`, `:106-112`, `:121-129`.
+- PDF agora é extraído com `pypdf` e precisa conter C10 e datas dos dois lados. `app/escala/tests/test_o261v_fase_na_lista.py:144-148`. A dependência já existe. `app/requirements.txt:23`.
+- MORDE-zero exige positivo real antes do mock vazio; MORDE-um substitui o achado real por colaborador em fase. `app/escala/tests/test_o261v_fase_na_lista.py:177-193`.
+- Isso comprova mordida potencial por leitura; execução verde e RED histórico não foram verificados. [não verificado] [nao verificado]
+
+A dívida da ata permanece: o leitor chama `parear_turnos` diretamente sem `papel_por_minuto`, tanto na janela ampla quanto na detecção. `app/escala/services/fase_12x36.py:146`, `:175`. O pareador documenta que sem alimentação o papel sai do `tipo`; o caminho canônico carrega o papel da ata e o repassa. `app/ponto/turnos.py:1212-1213`, `:1911`, `:1973-1975`. Ela está registrada em `app/core/juizes.py:905-906`; o diff apresentado só expõe ID e datas já contadas nesse leitor. `app/escala/services/fase_12x36.py:192`, `:207-208`.
+
+A cópia não disponibilizou metadados Git; comparação real com `f0d319ba` e ordem temporal de teste/código ficaram não verificadas. [não verificado]
+
+## 30/10 08:39 · sessao e3bb5ee2fac5 · - · - · origem=Ronald (tmux)
+
+Achei uma falha nova de rótulo: C10 declara sempre “12x36”, mas consome integralmente um leitor cujo universo inclui `24x48`; a regra desse ciclo pode alcançar os dois pisos da detecção, portanto um achado `24x48` será apresentado como `12x36` na lista e no PDF. Isso contraria “rótulo diz o que a conta faz”; não exige juiz novo para corrigir a apresentação. Evidências: `app/escala/services/cadastro_realidade.py:112`, `:337`, `:643`, `:732`; `app/escala/services/fase_12x36.py:29`, `:106`, `:179`, `:187`; `app/escala/models.py:1264`; `CLAUDE.md:35`.
+
+As triagens:
+
+- Identificação do vínculo: procede como correção de apresentação; o leitor entrega `ec_id` e a C10 o preserva em `ec` e no detalhe. `app/escala/services/fase_12x36.py:192`; `app/escala/services/cadastro_realidade.py:340`, `:344`.
+- Falha do leitor: permanece silenciosa para o consumidor da lista; a igualdade com o comportamento dos vizinhos é factual. O aval literal fornecido não contém exigência explícita de “mesma guarda” [não verificado]. Não encontrei esse complemento nos documentos pesquisados [não verificado]. `app/escala/services/cadastro_realidade.py:550`, `:567`, `:574`, `:581`, `:588`, `:595`, `:602`, `:609`.
+- Selos: as datas esperadas são literais; há extração textual do PDF; MORDE-zero exige antes a presença sem mock. Não executei testes nesta inspeção [não verificado]. `app/escala/tests/test_o261v_fase_na_lista.py:29`, `:106`, `:145`, `:189`.
+- Pareamento cru: a dívida está documentada e o leitor continua chamando `parear_turnos`; esse mecanismo não foi introduzido pelo diff apresentado. `app/core/juizes.py:905`; `app/escala/services/fase_12x36.py:146`, `:175`.
+
+Não identifiquei novo escritor, novo relógio ou derivação de fase no adaptador: ele somente projeta a resposta do leitor existente. `app/escala/services/cadastro_realidade.py:330`.
+
+## 30/10 08:38 · sessao 302bc57ad3d7 · O261-NOTURNO · verificador · origem=Code
+
+**O achado principal é a contradição entre o novo texto e o dia destacado nas telas.** Há também custo adicional antes da deduplicação e lacunas no selo. (`app/templates/chamados/partials/_card_atendimento.html:90`; `app/chamados/catalogo/query.py:100`; `app/chamados/tests/test_noturno_le_o_dia_do_instante.py:128`)
+
+1. **A tela pode continuar induzindo a resposta pelo dia D.** O card destaca “Estamos falando do dia” usando `data_evento`, imediatamente antes de imprimir a pergunta. Para a saída noturna, passa a apresentar cabeçalho **21/10** e texto **22/10**. O modal também imprime “Refere-se ao dia” pela identidade; seu aviso de divergência compara identidade com dia do chamado, sem comparar o dia textual com o instante do marco. (`app/templates/chamados/partials/_card_atendimento.html:87`; `app/templates/chamados/partials/_card_atendimento.html:93`; `app/templates/chamados/partials/modal_fio.html:157`; `app/templates/chamados/partials/modal_fio.html:180`; `app/chamados/services/fio.py:85`)
+
+   A API igualmente entrega `data_evento_label` junto do texto gravado, preservando essa combinação D/D+1; como o cliente nativo a apresenta é **[não verificado]**. (`app/api/views.py:1168`; `app/api/views.py:1170`)
+
+2. **Há mudança adicional no tratamento de data com hora.** O helper agora corta qualquer entrada nos primeiros dez caracteres: `2026-10-21T19:00:00` vira `21/10/2026`, inclusive sem colaborador. Isso amplia a normalização além da escolha do dia da lâmpada e altera a preservação do valor bruto descrita no diff anterior. (`app/chamados/catalogo/query.py:95`; `app/chamados/catalogo/query.py:97`)
+
+   **Não encontrei divergência textual entre os dois catálogos:** a comparação estática dos 16 motivos deu textos iguais. Motivos sem `{data}` retornam o texto diretamente; motivo desconhecido sem `padrao` retorna `None`; `padrao=''` permanece vazio; um `padrao` fornecido não substitui motivo conhecido. Portanto, a troca de catálogo nos seis sítios não demonstra outra mudança de redação. (`app/chamados/models.py:2355`; `app/chamados/catalogo/perguntas.py:34`; `app/chamados/catalogo/query.py:83`)
+
+3. **O disparo pode pagar duas consultas novas por alvo, inclusive na tentativa deduplicada.** Cada formatação com colaborador e data válida executa um `SELECT CelulaDia`. A fábrica chama `criar_ou_atualizar_disputa`, que já gera perguntas, e depois chama o gerador novamente. Para motivos datados, a formatação acontece antes do dedup; a segunda tentativa ainda consulta a célula. (`app/chamados/catalogo/query.py:98`; `app/chamados/services/fabrica_da_celula.py:122`; `app/chamados/services/fabrica_da_celula.py:124`; `app/chamados/services/disputa_emissao.py:606`; `app/chamados/services/disputa_emissao.py:618`; `app/chamados/services/disputa_emissao.py:317`; `app/chamados/services/disputa_emissao.py:370`; `app/chamados/services/disputa_emissao.py:386`)
+
+   Isso está dentro do laço de frota, embora a célula já tenha sido carregada na seleção dos alvos. Volume e latência efetivos são **[não verificado]**. Não demonstrei essa mesma multiplicação em toda passagem do reconciliador: os caminhos rastreados reatam perguntas existentes e reemitem chamados. (`app/chamados/management/commands/disparar_perguntas_competencia.py:104`; `app/chamados/management/commands/disparar_perguntas_competencia.py:123`; `app/chamados/management/commands/disparar_perguntas_competencia.py:279`; `app/chamados/reconciliador.py:862`; `app/chamados/reconciliador.py:902`; `app/chamados/reconciliador.py:1347`)
+
+4. **O plantio em leitura não introduz escrita de banco no derivador rastreado, mas acrescenta consultas.** A persistência da pendência está no materializador, depois da derivação; o lote passa apenas uma lista descartável de erros. Exceções engolidas e divergências podem, contudo, incrementar contadores e emitir log. (`app/chamados/services/validacao.py:830`; `app/chamados/services/materializacao.py:379`; `app/chamados/services/materializacao.py:786`; `app/chamados/services/materializacao.py:790`; `app/core/observ.py:73`)
+
+   Para `07:00`/`00:00`, a derivação pode consultar a grade no crivo e novamente na escolha do tipo, além de carregar vínculo e marcos no ajuste overnight. Em diurno, quando os dois instantes são iguais e não há conflito, ainda executa dois `exists()` iguais. (`app/chamados/services/materializacao.py:355`; `app/chamados/services/materializacao.py:266`; `app/chamados/services/materializacao.py:404`; `app/chamados/juizes.py:301`; `app/chamados/services/validacao.py:831`; `app/chamados/services/validacao.py:834`)
+
+5. **Ausência de destino/contexto não quebra por si; existem outros limites de exceção.** Havendo `data_evento`, contexto vazio é aceito, e os leitores de marco toleram chamado `None`. O teste novo monta precisamente essa situação. (`app/chamados/services/materializacao.py:323`; `app/chamados/services/materializacao.py:327`; `app/chamados/juizes.py:461`; `app/chamados/juizes.py:475`; `app/chamados/tests/test_noturno_le_o_dia_do_instante.py:86`)
+
+   Entretanto, o ajuste overnight fica fora do `try` da hora e alcança o parse desprotegido de `dna.marcos`; uma hora inválida nesse DNA pode propagar exceção até a classificação da fila. Ocorrência desse dado em produção é **[não verificado]**. (`app/chamados/services/materializacao.py:396`; `app/chamados/services/materializacao.py:404`; `app/chamados/juizes.py:303`; `app/escala/models.py:1104`; `app/chamados/services/validacao.py:881`)
+
+6. **O selo morde as duas formas antigas, mas não garante “um produtor”.** Ele procura somente `.format(data=...)` e `.replace('{data}', ...)`, em arquivos Python sob `chamados/`. Executei o detector extraído em memória: f-string, `%`, formato posicional, `str.format(t, data)` e `format_map` escapam; as formas cobertas tiveram zero ocorrências atuais. (`app/chamados/tests/test_noturno_le_o_dia_do_instante.py:120`; `app/chamados/tests/test_noturno_le_o_dia_do_instante.py:123`; `app/chamados/tests/test_noturno_le_o_dia_do_instante.py:140`)
+
+   Existe produtor administrativo com `%`, ignorado pelo selo, embora não formate data. Outro interpolador atual de `{data}` fora de `chamados/` não foi localizado; inexistência absoluta é **[não verificado]**. (`app/chamados/services/acoes_disputa.py:259`)
+
+   Os testes comportamentais têm controles úteis — conflito em D+1, conflito em D e ausência de conflito —, mas não exercitam os seis emissores, a identidade persistida, os intervalos, `padrao` ou data com hora. O DNA de teste deixa os intervalos vazios. Suíte Django e RED histórico são **[não verificado]**. (`app/chamados/tests/test_noturno_le_o_dia_do_instante.py:36`; `app/chamados/tests/test_noturno_le_o_dia_do_instante.py:60`; `app/chamados/tests/test_noturno_le_o_dia_do_instante.py:96`; `app/chamados/tests/test_noturno_le_o_dia_do_instante.py:110`)
+
+7. **Não vejo um segundo juiz novo nesses trechos; há fontes paralelas preexistentes.** O novo leitor usa o mapa `MARCO_DA_PERGUNTA` e lê o instante gravado; o lote chama o derivador existente. Porém, seu envelope continua dependendo de um fallback que escolhe escala ativa e lê o template, enquanto o plantio usa vínculo do dia e DNA congelado. Essa divergência permanece possível. Nos trechos novos, não há leitura de “agora”. (`app/chamados/catalogo/query.py:59`; `app/chamados/catalogo/query.py:67`; `app/chamados/services/validacao.py:812`; `app/chamados/services/validacao.py:830`; `app/chamados/juizes.py:1251`; `app/chamados/juizes.py:1256`; `app/chamados/juizes.py:301`; `app/escala/models.py:1099`)
+
+8. **Os consumidores existentes não fiscalizam o novo contrato textual.** INV4 só pergunta se o helper retorna algo, sem colaborador; a auditoria de cegas aceita qualquer ocorrência `dd/mm/aaaa`. Nenhum desses controles confere o dia do DNA. O teste de correção cega também chama sem colaborador e simula a aplicação com atribuição/save direto; não prova a ação real nem o noturno. O handler funcional dessa ação não foi localizado: **[não verificado]**. (`app/chamados/management/commands/auditar_disputas.py:52`; `app/chamados/management/commands/auditar_disputas.py:74`; `app/chamados/management/commands/auditar_disputas.py:191`; `app/chamados/tests/test_corrigir_pergunta_cega.py:54`; `app/templates/chamados/partials/modal_fio.html:187`)
+
+   Há dependência do texto integral: a cura de limbo procura a pergunta inteira no followup, e a nota de resposta inclui esse texto no hash de deduplicação. Uma correção retrospectiva pode afetar esse casamento. (`app/chamados/management/commands/curar_perguntas_em_limbo.py:31`; `app/chamados/services/disputa_emissao.py:1314`)
+
+As contagens de produção presentes na docstring não foram confirmadas por registros fornecidos; alcance real, comparação histórica dos commits e execução RED/VERDE permanecem **[não verificado]**. (`app/chamados/catalogo/query.py:51`)
+
+## 30/10 08:36 · sessao 2ca5c49cf01b · O261-V-FASE · verificador · origem=Code
+
+Encontrei uma incompatibilidade de vínculo e duas falhas de proteção nos testes. A integração reutiliza o leitor existente, mas isso não garante que a linha mostre o vínculo acusado. (`app/escala/services/cadastro_realidade.py:336`, `:338`; `app/escala/services/fase_12x36.py:114`.)
+
+1. **C10 pode acusar um vínculo sob o cabeçalho de outro. Classe: derivação paralela de fonte única.**  
+   O detector colapsa os vínculos por colaborador; com a ordenação `-data_inicio`, o último sobrescreve os anteriores, conservando o mais antigo. A lista escolhe separadamente o vínculo vigente pela juíza. O adaptador C10 não transporta a identidade do vínculo acusado. Resultado possível: template/âncora antigos no detalhe, cabeçalho do vínculo novo e ação sem identificar qual corrigir. Reproduzi as duas seleções com objetos sintéticos em memória: detector escolheu vínculo 1; juíza, vínculo 2. O estado com dois ativos é admitido pelo modelo atual. (`app/escala/services/fase_12x36.py:114`; `app/escala/models.py:1003`, `:1019`; `app/escala/services/cadastro_realidade.py:338`, `:488`, `:521`; `app/escala/alimentacao.py:254`.) Isso compromete o agrupamento **posto → vínculo → assinatura → ação** exigido pela L-040. (`app/docs/LEIS.md:88`.)
+
+2. **Falha do leitor desaparece como ausência de C10. Classe: ausência de sinal lida como sinal bom; selo que protege essa omissão.**  
+   A exceção apenas gera log; o retorno não informa que a fase ficou sem leitura. Assim, para tela/PDF, “leitor falhou” e “nenhum achado de fase” ficam indistinguíveis. C3 já oferece o precedente correto: `sem_medida` explícito, apresentado na tela. O teste novo exige justamente C10 vazia após a exceção, sem exigir aviso de leitura incompleta. (`app/escala/services/cadastro_realidade.py:599`, `:684`; `:556`; `app/templates/escala/cadastro_x_realidade.html:17`; `app/escala/tests/test_o261v_fase_na_lista.py:139`.) A própria lista identifica essa classe de erro como “ausência de sinal lida como sinal bom”. (`app/escala/services/cadastro_realidade.py:540`.)
+
+3. **Os selos não protegem integralmente os dias nem a igualdade do PDF. Classe: selo/RED sem mordida.**
+   - As datas da lista são comparadas ao próprio leitor; a verificação do leitor exige apenas comprimento, strings e ISO. Executei esse método isoladamente com datas repetidas de `1900-01-01`: passou. Portanto, uma alteração que preserve comprimentos pode publicar dias errados sem essa proteção detectar. (`app/escala/tests/test_o261v_fase_na_lista.py:94`, `:100`, `:111`.)
+   - O teste do PDF exige somente o prefixo `%PDF`; um PDF que omitisse C10 e suas datas satisfaria essa asserção, contrariando o contrato protegido pela L-040. O código atual imprime `detalhe`, mas o teste não prende esse conteúdo. (`app/escala/tests/test_o261v_fase_na_lista.py:128`; `app/escala/services/cadastro_realidade.py:727`; `app/docs/LEIS.md:88`.)
+
+Também conferi os pontos pedidos:
+
+- **Remover a integração quebra testes positivos.** O caso real exige C10 e o mock positivo exige exclusivamente o colaborador devolvido pelo leitor. Já o mock vazio continuaria verde sem a integração; a frase “os dois ficam vermelhos” está exagerada. (`app/escala/tests/test_o261v_fase_na_lista.py:97`, `:158`, `:170`, `:12`.)
+- **`empresas` filtra corretamente linhas e contadores C10**, porém só depois da varredura global. Cada HTML/PDF e os commands C7/C8 passam a pagar a leitura de toda a frota, incluindo duas janelas de batidas e dois pareamentos por colaborador com batidas. Não reproduzi a medição de “1,0 s”; latência atual **[não verificado]**. (`app/escala/services/cadastro_realidade.py:336`, `:601`, `:626`, `:647`; `app/escala/services/fase_12x36.py:128`, `:140`, `:146`, `:175`; `app/escala/views.py:490`; `app/escala/management/commands/fechar_avisos_regua_na_lista.py:27`; `app/ponto/management/commands/fechar_chamados_vinculo_na_lista.py:35`.)
+- **As chaves novas são aditivas para os consumidores encontrados:** API encaminha os vínculos; fila e propositor extraem IDs; pauta usa campos nomeados. Os commands continuam exigindo especificamente C7/C8 para fechar. (`app/api/views_mensageria.py:1675`; `app/chamados/services/fila_por_causa.py:173`; `app/escala/services/propositor.py:455`; `app/escala/services/fase_12x36.py:225`; `app/escala/management/commands/fechar_avisos_regua_na_lista.py:32`; `app/ponto/management/commands/fechar_chamados_vinculo_na_lista.py:40`.)
+- **Há dívida anterior no leitor reutilizado:** ele pareia batidas cruas sem o papel da ata; esse caminho já está registrado como classe C, devendo ler `turnos_do_colab`. C10 amplia o consumo dessa dívida, embora não introduza regra própria de fase. (`app/escala/services/fase_12x36.py:146`, `:175`; `app/ponto/turnos.py:1199`, `:1212`, `:1911`; `app/core/juizes.py:905`.)
+
+Não identifiquei no trecho novo segundo escritor, nova leitura de relógio ou alteração da ordem de travas. (`app/escala/services/cadastro_realidade.py:330`, `:488`, `:599`; `app/escala/services/fase_12x36.py:204`.) Suíte Django completa, presença nominal dos quatro dias do col451 e identidade Git da cópia: **[não verificado]**.
+
+## 30/10 08:35 · sessao 5216099b546d · - · - · origem=Ronald (tmux)
+
+Achados concretos:
+
+- **Dia contraditório na tela:** o texto novo pode nomear D+1, mas o modal continua mostrando “Refere-se ao dia D”; a badge deriva de `data_evento`, e o aviso de divergência compara somente `data_evento` com o dia do chamado. O conflito novo entre texto/DNA e badge passa sem aviso. `app/templates/chamados/partials/modal_fio.html:157`, `:159`, `:180`; `app/chamados/services/fio.py:85-88`. O preview do lote e o explicador também mostram identidade junto do texto: `app/templates/chamados/partials/_lote_preview.html:24`; `app/chamados/services/explicador.py:70-71`.
+
+- **Mesmo par divergente exposto pela API:** `data_evento_label` preserva D ao lado do texto D+1; a fila de mensageria expõe a mesma combinação. Impacto na renderização do cliente nativo [não verificado]. `app/api/views.py:1168-1170`; `app/api/views_mensageria.py:564-568`.
+
+- **Selo tem alcance menor que a promessa:** a raiz é só `chamados/`, exclui templates e só lê `.py`; reconhece exclusivamente chamadas atributo `.format(data=...)` e `.replace('{data}', ...)`. F-string, `%`, formato posicional, `str.format(t, data)` e `format_map` passam. `app/chamados/tests/test_noturno_le_o_dia_do_instante.py:120-131`, `:140-149`. Extraí e executei somente `_copias` em memória: confirmou as duas formas reconhecidas e todas essas fugas; o scanner atual devolveu zero ocorrências nas formas cobertas. A cobertura limitada é demonstrável pelo corpo citado; suíte Django/RED histórico [não verificado].
+
+- **Teste não cobre contratos importantes:** chama diretamente o helper, não os seis emissores, e `_dna` deixa os intervalos vazios; não comprova manutenção de `data_evento`, texto integral, motivos externos aos quatro, `padrao`, hora no contexto, DNA ausente/corrompido ou turno 24h com horas coincidentes. `app/chamados/tests/test_noturno_le_o_dia_do_instante.py:36-38`, `:60-82`, `:85-113`.
+
+- **INV4 não verifica o dia mostrado:** chama helper sem colaborador e só compara retorno com `None`; a auditoria de cegas procura qualquer data por regex. Portanto o dia errado no texto permanece fora dessas detecções. `app/chamados/management/commands/auditar_disputas.py:69-81`, `:188-194`.
+
+- **Correção cega sem prova de integração:** o teste simula a aplicação atribuindo/salvando `pergunta`; não exercita handler da ação que o template envia. `app/chamados/tests/test_corrigir_pergunta_cega.py:54-63`; `app/templates/chamados/partials/modal_fio.html:185-190`. Handler funcional da ação nesta árvore [não verificado].
+
+- **Leitor depende do texto exato gravado:** `nota_da_resposta` localiza followup contendo a pergunta inteira; as notas de resposta gravam o texto da pergunta e o incluem no hash de deduplicação. Alterar retrospectivamente esse texto pode afetar a localização; alteração retrospectiva pelo diff [não verificado]. `app/chamados/management/commands/curar_perguntas_em_limbo.py:26-34`; `app/chamados/services/disputa_emissao.py:1314-1321`.
+
+Rastreio adicional:
+
+- Há outro produtor de pergunta com `%`, ignorado pelo selo, na reabertura administrativa; ele não interpola data e é preexistente ao diff fornecido. `app/chamados/services/acoes_disputa.py:259-263`. Outro interpolador atual de `{data}` fora de `chamados/` não foi localizado; inexistência absoluta [não verificado].
+
+- Caso de duas pausas merece ressalva: ambos os pares usam os mesmos motivos, e o juiz de fato lê todos os pares; o novo helper toma somente `hii`/`hfi`. Se os pares estiverem em dias distintos, escolhe o dia do primeiro par. Existência desse caso no dado fornecido [não verificado]. `app/ponto/marcos.py:19-28`, `:35-40`; `app/chamados/juizes.py:823-827`, `:850-869`; `app/chamados/catalogo/query.py:60-67`.
 
 ## 30/10 08:35 · sessao 97e8068ed3f7 · - · - · origem=Ronald (tmux)
 
@@ -493,227 +630,4 @@ Usando **a hora do plantio** no mesmo cálculo, mudariam: P25281 19:00→D; P277
 
 A fonte do vínculo lê célula e geradora (`app/escala/servico_jornada.py:46-58`). Com vínculo e tipo existentes, `marcos_turno` usa `ec.marcos_do_dia` (`app/escala/servico_jornada.py:68-73`), que prefere DNA preenchido (`app/escala/models.py:1094-1108`). A ausência de `hii/hfi` não esvazia `_marcos` quando `hi/hf` existem; ainda há E-hi e S-hf (`app/escala/servico_jornada.py:72-77`).
 
-## 30/10 08:11 · sessao 496a8624e08a · - · - · origem=Ronald (tmux)
-
-O texto `pergunta` é formatado na emissão e persistido na criação:
-
-- `app/chamados/catalogo/query.py:45-66`: busca o template e substitui `{data}` pelo valor de `contexto_disputa[motivo]['data']`, formatado em `%d/%m/%Y` na linha 64.
-- `app/chamados/services/disputa_emissao.py:316-326`: chama esse formatador durante a geração.
-- `app/chamados/services/disputa_emissao.py:389-397`: entrega `pergunta=texto` a `PerguntaDisputa.abrir`.
-- `app/chamados/models.py:1855`: `pergunta` é `TextField`; `:2085-2086` persiste `**campos` por `objects.create`.
-- Se a pergunta já existe, `abrir` reaponta destino/célula e retorna, sem reformatação do texto (`app/chamados/models.py:2061-2084`).
-- A exibição citada lê o texto guardado: `{{ p.pergunta }}` em `app/templates/chamados/partials/_card_atendimento.html:93` e `{{ perg.pergunta }}` em `app/templates/chamados/partials/modal_fio.html:157`.
-
-Assim, o texto datado não demonstra o instante nem o dia da batida plantada: sua data foi interpolada do contexto na emissão (`app/chamados/catalogo/query.py:58-64`; `app/chamados/services/disputa_emissao.py:316-326`).
-
-Sobre o chamado vivo, a cópia atual extrai marcos apagados de `cel.ata['lampadas']` (`app/ponto/services/lastro.py:118-135`), nomeia-os em `_marcos_do_furo_parcial` (`app/ponto/services/cartorio.py:1429-1474`) e abre/atualiza o chamado usando esses marcos (`app/ponto/services/cartorio.py:1386-1405`). O espelhamento atualiza `contexto_json.marcos_faltantes` com `_marco_por='lampada_da_celula'` (`app/ponto/management/commands/detectar_ausencias.py:543-559`); a descrição criada diz “marco HH:MM (…) sem batida” (`:670-679`) e guarda a lista de marcos no contexto (`:700-706`).
-
-O dado anexado não contém registros dos chamados vivos, das perguntas `saida_sem_entrada`, seus carimbos ou instantes de fechamento; associar uma execução histórica específica a essas linhas permanece [não verificado].
-
-## 30/10 08:11 · sessao c1ac187e5ae1 · - · - · origem=Ronald (tmux)
-
-- Nas quatro ATAs fornecidas, `E 19:00` está apagada (`acesa=False`, `luz=None`, `tipo_real=None`); nenhuma batida acendedora desse marco consta nelas. Como o dado está apenas no prompt, sem arquivo:linha: **[não verificado]**.
-- O dado fornecido não traz registros dos chamados vivos, perguntas `saida_sem_entrada`, carimbos, datas de encerramento ou batidas brutas. A atribuição de cada encerramento histórico a um chamador e o instante que ele considerou ficam **[não verificado]**.
-- `saida_sem_entrada` corresponde a `('E', 'hi')`; o juiz localiza a hora no DNA e lê `acesa` na ATA pela chave `(hora,tipo)`: `app/chamados/juizes.py:823-827`, `:848-872`. Sob essas ATAs e `hi=19:00`, a resposta desse juiz é `False`; o predicado atual interrompe imediatamente, sem produzir `fantasma`: `app/chamados/reconciliador.py:1032-1033`.
-- O chamador atual consulta `veredito_orfa`, só escreve quando recebe `ENCERRA`, e chama a porta `encerrar_fantasma`: `app/chamados/reconciliador.py:1079-1093`. A porta apenas grava `via_resolucao`, `materializada_em` e autor; não lê ATA ou batidas: `app/chamados/models.py:2167-2174`.
-- Portanto, a cobrança alegada de “E 19:00 faltante” é compatível com as ATAs; o alegado encerramento desse mesmo marco como `fantasma` diverge do estado da ATA. A existência e cronologia concretas desses registros não estão demonstradas pela sonda: **[não verificado]**.
-- A lápide histórica documenta `_eh_fantasma`/`_bem_formado`/`_turnos_na_janela`, turno recomputado completo e última saída a até 180 minutos do fim previsto (`TOL_MORFOLOGIA_MIN=180`): `app/ponto/management/commands/reconciliar_perguntas_orfas.py:10-15`. O comentário atual distingue explicitamente essa morfologia da leitura da lâmpada: `app/chamados/reconciliador.py:982-987`.
-- O universo preservado pelo comentário “mesmo SQL do cron que carimbava” é: pergunta sem materialização, sem validação, disputa aberta, motivo `orfao_14h`/`saida_sem_entrada` e `data_evento` presente: `app/chamados/reconciliador.py:992-999`. A guarda de resposta é descrita como herdada do cron em `app/ponto/tests/test_vassoura_orfas_resposta.py:8-10`.
-- O algoritmo histórico de escolha do **dia** da batida não foi preservado nessa lápide/comentário. Ela não demonstra se a satisfação usava D, D+1 ou outro dia; atribuir um desses mecanismos ao cron de 22–28/10 fica **[não verificado]**. O horário de ~06:35 de cada execução também não consta na sonda: **[não verificado]**.
-- Informação documental adicional: o registro de 27/10 15h diz que a proposta de tolerância pelas duas pontas foi retirada, permanecendo somente a saída: `app/docs/RELATO.md:518`. Não usei isso como prova de execução de produção.
-
-## 30/10 08:06 · sessao 329ed3bd6ff8 · O261-NOTURNO · sonda · origem=Code
-
-1. A sonda é **aritmeticamente compatível nos números apresentados**, mas não fornece um total independente por motivo para conferir a cobertura. As somas abaixo são derivadas das categorias informadas. `[nao verificado]`
-
-| Motivo | Instante em outro dia | Mesmo dia | Sem instante | Soma informada | Evidência |
-|---|---:|---:|---:|---:|---|
-| `intervalo_saida` | 903 | 3316 | 3514 | **7733** | [nao verificado] |
-| `intervalo_volta` | 1378 | 3343 | 3623 | **8344** | [nao verificado] |
-| `orfao_14h` | 2516 | 4653 | 6668 | **13837** | [nao verificado] |
-| `saida_sem_entrada` | — | 4983 | 4785 | **9768** | [nao verificado] |
-| Soma das categorias informadas | **4797** | **16295** | **18590** | **39682** | [nao verificado] |
-
-“—” significa que a linha não foi fornecida; zero explícito para `saida_sem_entrada|instante_outro_dia` é `[nao verificado]`.
-
-| Motivo, somente com instante em outro dia | Perguntas | `data_evento==célula=True` | Texto mostra dia da célula=True | Plantio no dia da célula | Plantio no dia do instante | Evidência |
-|---|---:|---:|---:|---:|---:|---|
-| `intervalo_saida` | 903 | 903 | 903 | 9 | 40 | [nao verificado] |
-| `intervalo_volta` | 1378 | 1378 | 1378 | 4 | 77 | [nao verificado] |
-| `orfao_14h` | 2516 | 2516 | 2516 | 13 | 153 | [nao verificado] |
-| Soma | **4797** | **4797** | **4797** | **26** | **270** | [nao verificado] |
-
-| Indicador final | Valor | Evidência |
-|---|---:|---|
-| Plantios amostrados | 270 | [nao verificado] |
-| Com batida real, origem app, a ≤15 min da mesma hora no dia da célula | 39 | [nao verificado] |
-| Colaboradores | 7 | [nao verificado] |
-| `ERROS` | **0** | [nao verificado] |
-
-Os plantios no dia do instante somam `40+77+153=270`, numericamente igual à amostra final. As duas categorias de plantio somam 296; o destino das demais perguntas com instante em outro dia é `[nao verificado]`. A execução e a correção interna da sonda também são `[nao verificado]`.
-
-2. Nos **4797 casos informados**, o texto gravado nomeia **o dia da célula**, e `data_evento` também é esse dia. `[nao verificado]`
-
-| Motivo | Texto do catálogo |
-|---|---|
-| `orfao_14h` | “Confirme o horário da saída no dia {data}” — [perguntas.py:49](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/catalogo/perguntas.py:49) |
-| `intervalo_saida` | “Confirme o horário da saída do intervalo no dia {data}” — [perguntas.py:125](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/catalogo/perguntas.py:125) |
-| `intervalo_volta` | “Confirme o horário da volta do intervalo no dia {data}” — [perguntas.py:133](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/catalogo/perguntas.py:133) |
-
-O código sustenta a diferença entre essas datas pelos seguintes caminhos:
-
-- **DNA:** `montar_lampadas()` grava `instante` em `data+1` quando o turno cruza meia-noite e a hora do marco é menor que `hi`; nos demais casos usa `data`. [gerar_celulas.py:67](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/ponto/management/commands/gerar_celulas.py:67)
-- **Texto pela grade:** o leitor entrega marcos contendo somente `tipo` e `hora`; `_marcos_faltantes()` devolve o dia da grade em `(data_dia, pos, tipo, hora)`. A emissão formata esse `dia` no texto e o passa como `data_evento`. [leitor_celula.py:120](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/escala/services/leitor_celula.py:120), [declaracao_texto.py:120](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/services/declaracao_texto.py:120), [disputa_emissao.py:812](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/services/disputa_emissao.py:812), [disputa_emissao.py:777](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/services/disputa_emissao.py:777)
-- **Declaração direta:** usa o mesmo `dia` no texto e em `data_evento`. [declaracao_texto.py:321](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/services/declaracao_texto.py:321)
-- **Outros caminhos de emissão:** o genérico substitui `{data}` por `contexto[motivo]['data']`; o dedicado de intervalo formata a data de `marcos_faltantes`. [disputa_emissao.py:317](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/services/disputa_emissao.py:317), [query.py:58](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/catalogo/query.py:58), [disputa_emissao.py:952](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/services/disputa_emissao.py:952)
-
-**O plantio parte de `data_evento` e deriva o dia pelo ajuste overnight.** `_ts_tipo_do_plantio()` escolhe `p.data_evento`, com fallback para a data do contexto; combina essa data com a hora respondida e chama `_ajustar_saida_overnight()`. Nos intervalos, a hora pode ser substituída pela hora do marco faltante. [materializacao.py:328](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/services/materializacao.py:328), [materializacao.py:391](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/services/materializacao.py:391), [materializacao.py:398](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/services/materializacao.py:398), [materializacao.py:404](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/services/materializacao.py:404)
-
-O ajuste consulta os marcos do turno e testa, nessa ordem, **D e D+1**, retornando o primeiro candidato dentro do envelope entre primeiro marco−90 minutos e último marco+90 minutos. Fora desse envelope conserva o instante recebido. Sem marcos, para entrada com `hora_tentativa`, pode recuar para **D−1**. Portanto, não há regra “todo instante em outro dia planta em D+1”. [juizes.py:301](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/juizes.py:301), [juizes.py:305](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/juizes.py:305), [juizes.py:313](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/juizes.py:313)
-
-O registro recebe esse `ts`; o vínculo `pergunta_origem` é anotado tanto para batida nova quanto reutilizada. [materializacao.py:872](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/services/materializacao.py:872), [materializacao.py:891](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/services/materializacao.py:891)
-
-3. O consumidor que **recompõe diretamente `data_evento + hora respondida`, sem ajuste overnight**, é `classe_do_lote()`: combina `perg.data_evento` com `d['resp']`, procura batidas apuráveis em **±60 minutos** e retorna B com conflito ou A. [validacao.py:747](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/services/validacao.py:747), [validacao.py:812](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/services/validacao.py:812), [validacao.py:817](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/services/validacao.py:817)
-
-Essa classificação alimenta a seleção de validação em lote, a fila classificada e a classe devolvida pela API. [validacao.py:681](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/services/validacao.py:681), [validacao.py:868](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/services/validacao.py:868), [views_mensageria.py:545](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/api/views_mensageria.py:545)
-
-Também há leitores que usam `data_evento` para escolher o marco e comparam **somente HH:MM**, sem construir o instante ajustado:
-
-- `delta_da_resposta()`: usa o marco do chamado ou o fallback da grade, que consulta `marcos_do_dia(data_evento)`, e calcula a distância entre horários. [juizes.py:1247](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/juizes.py:1247), [juizes.py:1256](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/juizes.py:1256), [juizes.py:1299](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/juizes.py:1299), [juizes.py:1316](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/juizes.py:1316)
-- `motivo_implausivel_validacao()`: faz essa seleção de marco e compara a hora; é chamado antes da validação. [juizes.py:1425](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/juizes.py:1425), [validacao.py:367](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/services/validacao.py:367)
-- `classificar_resposta_validacao()` consome `delta_da_resposta()`; o comando `validar_classe_a` usa essa classificação. [juizes.py:1409](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/juizes.py:1409), [validar_classe_a.py:63](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/management/commands/validar_classe_a.py:63)
-
-Para respostas `hora`, `_slot_esperado()` já delega ao derivador do plantio e recebe o ajuste. [juizes.py:343](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/juizes.py:343)
-
-## 30/10 08:04 · sessao fea8f0a62a04 · - · - · origem=Ronald (tmux)
-
-Leitor que efetivamente recompõe **data_evento + hora respondida sem ajuste**:
-
-- `classe_do_lote()` lê `delta_da_resposta()` em `app/chamados/services/validacao.py:812`; combina `perg.data_evento` com `d['resp']` em `:817-819`; procura batidas apuráveis no intervalo de ±60 minutos (`:747`, `:820-821`); retorna lote B com conflito (`:822`) ou lote A (`:823`). Esse trecho não chama `_ajustar_saida_overnight`.
-- Esse resultado alimenta a fila classificada em `app/chamados/services/validacao.py:868`, a seleção de validação em lote em `:681` e a classe devolvida pela API em `app/api/views_mensageria.py:542-546`.
-
-Leitores de **data_evento para escolher o marco e hora respondida para comparar**, sem construir instante ajustado:
-
-- `_marco_esperado_da_grade()` lê `perg.data_evento` e consulta `marcos_do_dia(d)` (`app/chamados/juizes.py:1247`, `:1256`), selecionando `hii`/`hfi` para intervalo (`:1261-1264`).
-- `delta_da_resposta()` lê a resposta e reduz `data_hora` a HH:MM (`app/chamados/juizes.py:1299-1302`), usa o marco do chamado ou aquele fallback (`:1303-1305`) e compara minutos pela distância circular (`:1316-1337`).
-- `motivo_implausivel_validacao()` segue a mesma seleção de marco e comparação de HH:MM (`app/chamados/juizes.py:1425-1436`); é chamado antes da validação em `app/chamados/services/validacao.py:367-370`.
-- `classificar_resposta_validacao()` usa `delta_da_resposta()` (`app/chamados/juizes.py:1409-1413`); o comando `validar_classe_a` usa essa classificação (`app/chamados/management/commands/validar_classe_a.py:63-67`).
-
-**Não incluir como leitor sem ajuste:** `_slot_esperado()` para resposta do tipo `hora` delega ao próprio `_ts_tipo_do_plantio()` (`app/chamados/juizes.py:343-345`). Para `data_hora`, ele usa a data explicitamente respondida (`:331-338`), não `data_evento`.
-
-## 30/10 08:04 · sessao be7d2a5d50f0 · - · - · origem=Ronald (tmux)
-
-O texto usa o **dia da célula/data_evento**, e o DNA pode registrar o marco em **D+1**: `montar_lampadas` aplica `data + 1 dia` quando o turno cruza meia-noite e a hora do marco é menor que `hi`, gravando esse dia em `instante` (`app/ponto/management/commands/gerar_celulas.py:55`, `:67-69`). `montar_dna` incorpora essas lâmpadas (`app/ponto/management/commands/gerar_celulas.py:94`, `:103`).
-
-| Motivo | Texto canônico |
-|---|---|
-| `orfao_14h` | “Confirme o horário da saída no dia {data}” — `app/chamados/catalogo/perguntas.py:48-50` |
-| `intervalo_saida` | “Confirme o horário da saída do intervalo no dia {data}” — `app/chamados/catalogo/perguntas.py:124-126` |
-| `intervalo_volta` | “Confirme o horário da volta do intervalo no dia {data}” — `app/chamados/catalogo/perguntas.py:132-134` |
-| `saida_sem_entrada` | “Confirme o horário da entrada no dia {data}” — `app/chamados/catalogo/perguntas.py:56-58` |
-
-Cadeia que comprova o dia da célula na formatação:
-
-- O leitor indexa `CelulaDia` por `c.data`, põe esse dia no resultado `data` e entrega os marcos da ata (`app/escala/services/leitor_celula.py:325`, `:337`, `:354-359`). Os marcos carregam apenas `tipo` e `hora`, sem `instante` (`app/escala/services/leitor_celula.py:120`).
-- `_marcos_faltantes` lê esses dias da grade, extrai `tipo/hora` e devolve `(data_dia, pos, tipo, hora)` (`app/chamados/services/declaracao_texto.py:82-89`, `:109`, `:120`).
-- Na complementação da emissão, cada tupla fornece `dia`; esse `dia` é formatado como `%d/%m/%Y` e passado à abertura (`app/chamados/services/disputa_emissao.py:806-813`). A abertura grava esse argumento em `data_evento` (`app/chamados/services/disputa_emissao.py:770-777`).
-- Na declaração direta, o marco casado fornece `dia`; a criação usa esse mesmo dia no texto e em `data_evento` (`app/chamados/services/declaracao_texto.py:296-297`, `:321-323`).
-- Na declaração por proposta, `dia` vem do marco casado e entra na proposta; a criação repete esse dia no texto e em `data_evento` (`app/chamados/services/declaracao_texto.py:576-583`, `:610-612`).
-
-Outros caminhos de formatação na emissão:
-
-- Caminho genérico usa `texto_pergunta_com_data(motivo, disputa.contexto)` (`app/chamados/services/disputa_emissao.py:316-317`); o helper substitui `{data}` por `contexto[motivo]['data']` (`app/chamados/catalogo/query.py:58-64`).
-- Caminho dedicado de intervalo usa `_m['data']`, tanto no texto como no argumento `data_evento` (`app/chamados/services/disputa_emissao.py:950-957`).
-- Agrupamento por episódio formata com o `data_evento` resolvido e passa esse mesmo valor à abertura (`app/chamados/services/disputa_emissao.py:1006-1013`).
-
-A afirmação sobre **quais registros de produção exibiram o dia da célula** depende exclusivamente da sonda fornecida, portanto precisa receber `[nao verificado]`; o código comprova os caminhos de formação acima, sem comprovar a execução histórica de cada registro.
-
-## 30/10 07:53 · sessao e13c20d27801 · O261-V · sonda · origem=Code
-
-**1. Batida → pergunta de origem → texto gravado.**
-
-As linhas abaixo transcrevem a sonda fornecida, sem arquivo:linha disponível nem consulta independente a produção: **[não verificado]**. O código grava o vínculo em `pergunta_origem` em [materializacao.py:891](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/services/materializacao.py:891).
-
-| Batida | Timestamp mostrado | `pergunta_origem` | Campo `pergunta` e dia mostrado |
-|---|---|---|---|
-| B140648 | 20/10 07:00 | P46023 | Texto e dia da pergunta ausentes da sonda. **[não verificado]** |
-| B140649 | 22/10 07:00 | P46704 | “Confirme o horário da saída no dia **21/10/2026**”. **[não verificado]** |
-| B140650 | 29/10 11:33:16 | `None` | Origem `app`; não é `disputa_s84_retro`. **[não verificado]** |
-| B140651 | 20/09 19:00 | P34113 | Texto e dia da pergunta ausentes da sonda. **[não verificado]** |
-| B140652 | 24/10 07:00 | P49423 | “Confirme o horário da saída no dia **23/10/2026**”. **[não verificado]** |
-| B140653 | 26/10 07:00 | P50180 | “Confirme o horário da saída no dia **25/10/2026**”. **[não verificado]** |
-| B140654 | 28/10 07:00 | P51025 | “Confirme o horário da saída no dia **27/10/2026**”. **[não verificado]** |
-
-Não é possível preencher os textos de P46023/P34113 pelo timestamp da batida ou pelo template: o valor efetivamente gravado nessas perguntas não foi fornecido. **[não verificado]**
-
-**2. Escritor de `fantasma`, predicado e batidas que teriam casado.**
-
-O escritor da cópia é `PerguntaDisputa.encerrar_fantasma(autor)`: atribui `via_resolucao=VIA_FANTASMA`, `materializada_em=now()` e `materializada_por=autor`; salva somente esses três campos, sem exigir nem escrever resposta. [models.py:2162](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/models.py:2162), [models.py:2170](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/models.py:2170).
-
-O chamador atual é `encerrar_orfas_pela_lampada`, que obtém o usuário de sistema e chama essa porta. O helper busca `username='sistema'`; sua correspondência com o ID 666 é **[não verificado]**. [reconciliador.py:1086](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/reconciliador.py:1086), [core/utils.py:18](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/core/utils.py:18).
-
-O predicado atual funciona assim:
-
-- `saida_sem_entrada` cobra `('E', 'hi')`; `orfao_14h` cobra `('S', 'hf')`. [juizes.py:823](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/juizes.py:823).
-- Lê a hora em `p.celula.dna['marcos']` e procura a lâmpada da ATA pela chave **`(hora, tipo)`**, verificando `acesa`. Esse trecho não consulta uma `Batida`, não retorna seu ID e não lê `dna['lampadas'][].instante`. [juizes.py:845](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/juizes.py:845), [juizes.py:863](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/juizes.py:863).
-- Exige resposta vazia, marco comprovadamente aceso e pergunta viva. Depois exige dia anterior a hoje e encerramento desse dia. **A linha que escolhe o dia para consultar o encerramento é `dia_encerrado_motivo(..., p.data_evento, ...)`.** [reconciliador.py:1030](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/reconciliador.py:1030), [reconciliador.py:1038](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/reconciliador.py:1038).
-
-Portanto, **a associação local usa hora+tipo dentro da célula vinculada**; o dia participa pela escolha dessa célula e pelo encerramento em `p.data_evento`. Não existe nesse predicado uma comparação direta de timestamp de batida por “dia+hora” ou “só hora”. A porta de abertura escolhe a célula por `data=data_evento`. [models.py:2060](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/models.py:2060), [juizes.py:866](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/juizes.py:866).
-
-Há uma limitação temporal: o comando atual `reconciliar_perguntas_orfas` é vigia. Seu comentário registra a remoção da regra antiga `_eh_fantasma`/`_bem_formado`/`_turnos_na_janela`, que julgava turno completo e última saída até 180 minutos do fim previsto. Esse comentário não fornece o corpo antigo nem prova a execução que produziu cada carimbo de 22–28/10. **Predicado histórico exato desses carimbos: [não verificado].** [reconciliar_perguntas_orfas.py:1](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/ponto/management/commands/reconciliar_perguntas_orfas.py:1), [reconciliar_perguntas_orfas.py:10](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/ponto/management/commands/reconciliar_perguntas_orfas.py:10).
-
-Aplicação ao material fornecido:
-
-| Pergunta | Marco indicado no pedido | Batida que casou |
-|---|---|---|
-| P46703 | E 21/10 19:00 | ID não demonstrado. **[não verificado]** |
-| P49422 | E 23/10 19:00 | ID não demonstrado. **[não verificado]** |
-| P50179 | E 25/10 19:00 | ID não demonstrado. **[não verificado]** |
-| P50883 | E 27/10 19:00 | ID não demonstrado. **[não verificado]** |
-| P50169 | E 25/10 21:30 | ID não demonstrado. **[não verificado]** |
-
-A sonda não fornece DNA/ATA dessas células nem as batidas que acenderam suas lâmpadas. Entre B140648–140654, a única entrada mostrada é B140651, de **20/09 19:00**, criada em **29/10**; as demais são saídas. Nenhuma identifica a entrada responsável pelos carimbos apresentados. **[não verificado]**
-
-O trecho também não exibe `respondida_em`; a desigualdade `materializada_em < respondida_em` declarada no pedido não pode ser conferida nele. **[não verificado]**
-
-**3. Leitores/escritores que usam o dia da célula e tratamento do instante noturno.**
-
-O produtor do DNA grava o instante próprio do marco: escolhe **D+1 quando o turno cruza a meia-noite e `hora < hi`**, e escreve esse dia em `instante`. [gerar_celulas.py:67](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/ponto/management/commands/gerar_celulas.py:67).
-
-| Caminho | Uso do dia / instante |
-|---|---|
-| **Grade consumida pelas perguntas** | Indexa por `c.data`, devolve esse dia e projeta os marcos somente como `tipo/hora`, sem `instante`. [leitor_celula.py:325](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/escala/services/leitor_celula.py:325), [linha 337](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/escala/services/leitor_celula.py:337), [linha 120](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/escala/services/leitor_celula.py:120). |
-| **Marcos faltantes** | Retorna `(data_dia, posição, tipo, hora)` usando o dia da grade, inclusive para a saída da véspera; não transporta o instante próprio. [declaracao_texto.py:88](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/services/declaracao_texto.py:88), [linha 116](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/services/declaracao_texto.py:116). |
-| **Texto da pergunta complementar** | Formata `{data}` com o `dia` retornado acima e usa esse mesmo dia na criação da pergunta. [disputa_emissao.py:806](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/services/disputa_emissao.py:806). |
-| **Texto nas portas de declaração** | Colaborador e aplicação pelo admin usam o dia do marco selecionado tanto no texto quanto em `data_evento`. [declaracao_texto.py:321](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/services/declaracao_texto.py:321), [linha 610](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/services/declaracao_texto.py:610). |
-| **Carimbo fantasma atual** | Consulta a célula vinculada e sua lâmpada por `hora/tipo`; usa `data_evento` para o encerramento do dia. Não consulta o instante do DNA. [juizes.py:845](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/juizes.py:845), [linha 866](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/juizes.py:866), [reconciliador.py:1038](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/reconciliador.py:1038). |
-| **Plantio de resposta `hora`** | Começa com `data_evento + hora`, mas chama o ajuste overnight antes de devolver o timestamp. O ajuste procura D ou D+1 dentro do envelope da cadeia de marcos, com margem de 90 minutos. **Não permanece obrigatoriamente no dia da célula.** [materializacao.py:398](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/services/materializacao.py:398), [linha 404](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/services/materializacao.py:404), [juizes.py:301](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/juizes.py:301). |
-| **Classificação da validação em lote** | Na busca de conflito, combina diretamente `perg.data_evento + hora respondida`; esse trecho não passa pelo ajuste overnight. [validacao.py:817](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/services/validacao.py:817). |
-| **Âncora de cobrança de furo parcial** | Projeta marcos em `tipo/hora/motivo`, ordena por hora e combina a primeira com `data`; essa âncora é enviada à abertura do chamado. [cartorio.py:1467](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/ponto/services/cartorio.py:1467), [linha 1470](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/ponto/services/cartorio.py:1470), [linha 1395](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/ponto/services/cartorio.py:1395). |
-| **Reemissão C2** | Busca a célula pelo dia e grava seus marcos apagados no contexto. A projeção contém somente `hora/tipo/motivo`, sem instante. [reconciliador.py:661](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/reconciliador.py:661), [linha 674](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/chamados/reconciliador.py:674), [lastro.py:128](/home/ronald/codex_ws/f0d319ba07066648413b6d346d794e846e613cf4/app/ponto/services/lastro.py:128). |
-
-## 30/10 07:52 · sessao 03ab7c3f332f · - · - · origem=Ronald (tmux)
-
-Na cópia, os caminhos relevantes são:
-
-| Caminho | Dia utilizado / tratamento |
-|---|---|
-| DNA | `montar_lampadas` escolhe D+1 quando o turno cruza e a hora é anterior a `hi`; grava esse dia em `instante`. `app/ponto/management/commands/gerar_celulas.py:67-69`. |
-| Grade consumida pelas perguntas | `grade_da_celula` indexa células por `c.data` e devolve esse dia em `base['data']`; `_celulas_da_ata` projeta marcos contendo somente `tipo` e `hora`, sem `instante`. `app/escala/services/leitor_celula.py:120`, `:325`, `:337`, `:354-365`. |
-| Marcos faltantes | `_marcos_faltantes` percorre o dia da grade (`data_dia`), extrai somente `tipo/hora` e retorna `(data_dia, pos, tipo, hora)`. `app/chamados/services/declaracao_texto.py:88`, `:109`, `:120`. |
-| Texto da pergunta complementar | A fábrica usa o `dia` retornado acima no texto e em `data_evento`; não lê `lampadas[].instante`. `app/chamados/services/disputa_emissao.py:806-813`. |
-| Texto nas portas de declaração | A declaração do colaborador usa o `dia` casado ao marco para texto e `data_evento`; a aplicação pelo admin faz o mesmo com `p['dia']`. `app/chamados/services/declaracao_texto.py:296`, `:321-323`, `:576`, `:610-612`. |
-| Vínculo pergunta → célula | `PerguntaDisputa.abrir` busca a célula em `data=data_evento`; reaponta a existente ou grava a nova pergunta com essa célula. `app/chamados/models.py:2058-2060`, `:2071-2073`, `:2085-2086`. |
-| Carimbo fantasma atual | `fato_do_marco_no_espelho` lê `p.celula`, escolhe a hora em `dna.marcos` e consulta `ata.lampadas` por `(hora,tipo)`, retornando `acesa`. Não casa uma `Batida` e não lê `lampadas[].instante`. `app/chamados/juizes.py:845-849`, `:863-872`. O escritor exige resposta vazia, consulta esse fato e usa `p.data_evento` no teto/encerramento antes de chamar `encerrar_fantasma`. `app/chamados/reconciliador.py:1030-1038`, `:1092`. |
-| Plantio de resposta `hora` | Começa com `data_evento + hora`, porém chama ajuste overnight antes de devolver o timestamp. O ajuste reconstrói os marcos, procura D ou D+1 dentro do envelope de 90 minutos e devolve o candidato. Portanto não cabe descrevê-lo como “sempre planta no dia da célula”. `app/chamados/services/materializacao.py:328-329`, `:398`, `:404`; `app/chamados/juizes.py:301-312`. A cadeia reconstrói datas crescentes em `app/escala/servico_jornada.py:81-84`. |
-| Classificação de validação em lote | Para procurar conflito, combina diretamente `perg.data_evento + hora respondida` e consulta ±60 minutos, sem passar pelo ajuste overnight nesse trecho. `app/chamados/services/validacao.py:747`, `:817-822`. |
-| Âncora de cobrança de furo parcial | Projeta os apagados somente em `tipo/hora/motivo`, ordena por hora, escolhe a primeira e combina essa hora com `data`. Essa âncora é usada na abertura do chamado. `app/ponto/services/cartorio.py:1463-1474`, `:1394-1396`. |
-| Reemissão C2 / nomeação de marcos | C2 busca a célula pelo dia e grava `marcos_apagados(cel)` no contexto. Esse leitor projeta somente `hora/tipo/motivo`. `app/chamados/reconciliador.py:661`, `:674-677`; `app/ponto/services/lastro.py:128-135`. O comando `nomear_marco_por_lampada` também usa essa projeção e a grava no contexto. `app/chamados/management/commands/nomear_marco_por_lampada.py:59-61`, `:109`. |
-
-Distinções adicionais para evitar generalização:
-
-- O detector dedicado de intervalo recompõe a cadeia desde `cel.data`, mas grava em cada marco a **data do datetime encadeado**, permitindo D+1. `app/ponto/management/commands/detectar_intervalo_ausente.py:73-80`.
-- O veredito humano de dia também recompõe a cadeia e avança o dia quando o marco seguinte não é posterior ao anterior. `app/ponto/services/veredito_celula.py:63-70`, `:229`.
-- `juiz_batida` chama o produtor `montar_lampadas(celula.data, ...)` e depois lê o `instante` reconstruído; não mantém todos os marcos em D. `app/ponto/juiz_batida.py:174-176`, `:236`.
-
-_392 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_399 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
