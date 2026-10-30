@@ -1,7 +1,43 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **30/10/2026 16:43** · publicado em **30/10/2026 16:46** (UTC-3)
+> Ultima resposta processada: **30/10/2026 16:57** · publicado em **30/10/2026 16:57** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 30/10 16:57 · sessao 27e0f3394207 · - · - · origem=Ronald (tmux)
+
+No caminho normal, o fallback recebe `sem_certidao` e `sem_dados`; os rótulos são preenchidos pelo produtor e não são vazios (`app/colaboradores/services/calendario.py:58-59`, `app/colaboradores/services/calendario.py:899-901`). Não achei consumidor de produção que monte esses dias sem passar pelo produtor (`app/colaboradores/views.py:1945-1962`; `app/colaboradores/services/drawer.py:120-121`; `app/relatorios/furos.py:184-188`).
+
+`ausencia` também é candidato sintático ao fallback: não há ramo específico para esse status (`app/templates/colaboradores/partials/_calendario_grade.html:97-107`). Normalmente o dicionário `ausencia` intercepta antes, pois nasce de `_a` (`app/colaboradores/services/calendario.py:805`, `app/colaboradores/services/calendario.py:838-848`). Um caminho excepcional pode chegar ao fallback: falha na carga `_aus_map`, A2 disponível retornando `ausencia`, ausência de palavra ou veredito `em_aberto` (`app/colaboradores/services/calendario.py:593-600`, `app/colaboradores/services/calendario.py:124-125`, `app/templates/colaboradores/partials/_calendario_grade.html:97-98`). O rótulo seria “Ausencia registrada — o dia tem abono proprio”, potencialmente falso para pedido pendente ou efeito supressor; ocorrência concreta no dado: [não verificado].
+
+Sobre o resumo, `faltas` conta somente status `falta`, e a interface o chama “Sem registro” (`app/colaboradores/services/calendario.py:950`; `app/templates/colaboradores/partials/_calendario_grade.html:145-147`). A justificativa da triagem5(b) corresponde ao cálculo; a nomenclatura é mais ampla que o conjunto contado, mas não demonstra regressão nova por si só (`app/colaboradores/services/calendario.py:135-158`, `app/colaboradores/services/calendario.py:950`).
+
+A suspeita sobre triagem4 é procedente: o selo geral usa escala com fim declarado e não exercita o DNA sem `hf`; o teste novo compara apenas custo de um versus oito dias cegos. Uma despesa fixa arbitrariamente alta exclusivamente nesse ramo passa pelos dois testes (`app/core/tests/test_selo_performance.py:283-300`, `app/core/tests/test_selo_performance.py:401-405`; `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:150-159`).
+
+## 30/10 16:56 · sessao 2f7bd9efcc83 · - · - · origem=Ronald (tmux)
+
+Achados para consolidação:
+
+- **Triagem 4 tem uma justificativa incorreta:** há teto absoluto de 55 queries na rota, mas a fixture usa escala com início/fim completos e não prepara dia sem fim previsto; esse selo não cobre o custo absoluto da chamada condicional à folha. O teste novo compara somente custos de 1 e 8 dias e aceita qualquer acréscimo constante comum aos dois casos. (`app/core/tests/test_selo_performance.py:283`, `:297`, `:401`; `app/colaboradores/services/calendario.py:722`; `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:158`)
+- O teste de render **detecta a regressão literal** de restaurar o fallback `—` sem o rótulo nos três layouts, porque exige a substring no HTML. **Deixa passar** um título fixo com `a folha retem (sem_celula)`, sem ler `dia.status_rotulo`; também aceita o texto em comentário ou elemento oculto e não exercita os outros status do fallback. (`app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:99`, `:103`, `:105`; `app/templates/colaboradores/partials/_calendario_grade.html:107`)
+- Triagem 2 é compatível com o código: ausência/feriado/folga humana e escala suspeita têm precedência sobre `retido_folha`; a retenção cega da folha não faz essas consultas. (`app/colaboradores/services/calendario.py:124`, `:131`, `:139`, `:141`; `app/folha/export.py:1237`)
+- Triagem 3 descreve uma divergência possível: a folha recorta admissão/demissão e exclui demissão do ramo cego, enquanto a classificação do calendário pode chegar a falta. A afirmação histórica sobre o main não foi comprovada por histórico local; o diff fornecido mostra o ramo de falta preexistente à inserção. (`app/folha/export.py:1180`, `:1211`, `:1237`; `app/colaboradores/services/calendario.py:133`, `:148`; histórico: [não verificado])
+- Triagem 5b é coerente: `resumo.faltas` conta exclusivamente status `falta`, portanto o dia classificado como `sem_certidao` sai dessa contagem. (`app/colaboradores/services/calendario.py:948`, `:950`)
+
+Os resultados alegados de green7/green8 e custos efetivos não foram verificados. [não verificado]
+
+## 30/10 16:56 · sessao 27e0f3394207 · - · - · origem=Ronald (tmux)
+
+- **Perfil do colaborador / gestor:** `detalhe.html:215` busca a rota `calendario_ponto`; ela chama `contexto_calendario` e renderiza `calendario_partial.html` (`app/colaboradores/views.py:1945-1962`). Esse template inclui a grade com `layout='mes'`, inclusive quando a janela selecionada é semana, quinzena ou competência (`app/templates/colaboradores/calendario_partial.html:45-62`). O layout tem sete colunas, offsets e células de 132px com overflow oculto (`app/templates/colaboradores/partials/_calendario_grade.html:64-68`).
+
+- **Drawer do painel:** a view renderiza `_drawer_diagnostico.html` com `contexto_drawer` (`app/colaboradores/views.py:2938-2943`). O calendário só é montado quando há escala posicionável; consulta a competência anterior e a atual, respeitando o piso visual (`app/colaboradores/services/drawer.py:104-121`). Inclui a grade com `layout='fita'` (`app/templates/colaboradores/partials/_drawer_diagnostico.html:35`): flex horizontal, células de 78px e marcas de mês/segunda (`app/templates/colaboradores/partials/_calendario_grade.html:63-68`).
+
+- **Cartão HTML da auditoria de espelhos:** inclui a grade com `only`, passando apenas `dias` e `resumo`, sem layout (`app/templates/relatorios/furos.html:42`). Usa o grid automático de largura mínima 62px (`app/templates/colaboradores/partials/_calendario_grade.html:65`). O produtor recebe `datas_em_aberto=NAO_PERGUNTADO` (`app/relatorios/furos.py:184-188`). Os controles dependentes de permissões não recebem essas flags pelo include (`app/templates/relatorios/furos.html:42`; `app/templates/colaboradores/partials/_calendario_grade.html:128-131`).
+
+- **Impacto do último commit:** os três consumidores acima passam pelo mesmo bloco de ícone, cujo fallback agora imprime `—` com `title="{{ dia.status_rotulo }}"`; não há variante de ícone por layout (`app/templates/colaboradores/partials/_calendario_grade.html:95-107`).
+
+- **PDF:** não inclui nem renderiza esse partial. A view extrai exclusivamente `data/status` do calendário para montar `card['semanas']`, depois chama o gerador ReportLab (`app/relatorios/views.py:1548-1562`). O PDF imprime apenas o número do dia e aplica cores pelo status (`app/relatorios/furos_pdf.py:53-57`). `sem_certidao` não consta nos mapas, portanto recebe fundo branco e texto cinza do fallback; não recebe `status_rotulo` nem o motivo da retenção (`app/relatorios/furos_pdf.py:11-21`, `app/relatorios/furos_pdf.py:56-57`). Logo, a alteração do template não corrige a apresentação do PDF (`app/relatorios/views.py:1548-1562`; `app/relatorios/furos_pdf.py:53-57`).
+
+- **Resumo:** o indicador chamado visualmente “Sem registro” usa `resumo.faltas` (`app/templates/colaboradores/partials/_calendario_grade.html:145-147`). Isso deve ser distinguido da alegação da triagem de que se trata apenas de uma contagem denominada “faltas”: o rótulo apresentado ao usuário é mais abrangente (`app/templates/colaboradores/partials/_calendario_grade.html:145-147`).
 
 ## 30/10 16:43 · sessao 01c938693ab5 · CALENDARIO-HOJE · verificador · origem=Code
 
@@ -877,109 +913,4 @@ No caso com ata positiva e nenhum turno, a palavra pode ser “Sem turno pareado
 
 Execução integrada Django, ocorrência e quantidade dos estados em produção, pagamento ou desconto efetivo: **[nao verificado]**.
 
-## 30/10 15:00 · sessao c7f1e7d087f8 · - · - · origem=Ronald (tmux)
-
-**A cura é parcial.** Para trabalho sem batida, sem cobertura abonadora e data até hoje, `nunca_bateu` lavrado retira a condição `futuro`, produz `falta` e continua retendo como `espelho_nunca_bateu`. (`app/colaboradores/services/calendario.py:69,132-142,177-178,802`; `app/folha/export.py:1215-1236`)
-
-Persistem estes contraexemplos de código:
-
-| Estado condicionado | Calendário | Retenção da folha | Referências |
-|---|---|---|---|
-| Juíza não encerrou; `concorde` lavrado; trabalho sem batida; não isento; sem cobertura | `falta`: `_vv` desliga `futuro`, mas a tradução `ok` é descartada | Esse dia não retém | `calendario.py:132-142,170-171,802`; `models.py:1735-1736`; `export.py:1215-1238` |
-| Mesmo estado com `trabalhou`, via humana | Mesma falsa `falta` | Esse dia não retém | `calendario.py:70-71,170-171,802,810-811`; `export.py:1215-1238` |
-| Dia passado, `trabalha=True`, juíza não encerrou, `veredito=None`, mesmo possuindo ata | `previsto` | Retém `sem_celula` | `calendario.py:521-524,707,802`; `export.py:1237-1238` |
-| Data futura com veredito acusador lavrado | Continua `previsto` | Pode reter, porque o ramo acusador não tem guarda temporal | `calendario.py:133-134,177,802`; `export.py:1215-1236` |
-
-O primeiro contraexemplo já está explicitamente esperado pelo teste antigo: `concorde` sem batida produz `falta`; o teste da folha exige que `concorde` não retenha. (`app/colaboradores/tests/test_calendario_ata_decide.py:38-41`; `app/folha/tests/test_borda_celula.py:40-42`)
-
-A via humana real chama-se **`admin`**. O classificador recebe `veredito_via`, mas não usa esse campo; a porta aceita `trabalhou` sem verificar existência de batida. O despachante normalmente materializa batidas, portanto o contraexemplo deve ser apresentado como estado condicionado, sem afirmar que ocorre em produção. (`app/ponto/services/veredito_celula.py:75-76,299-308`; `app/colaboradores/services/calendario.py:106-183,811`; `app/ponto/portas/celula.py:682-697`)
-
-A ata sem veredito é um estado permitido pelo código: `carimbar_precedencia` pode gravar somente `ata`, sem lavrar veredito. (`app/ponto/portas/celula.py:732-744`)
-
-Para o exemplo `concorde`, sem cobertura e sem ata positiva, o template não esconde o problema: a palavra do dia fica vazia e o status pinta fundo vermelho/ícone de falta. (`app/ponto/services/dia_decidido.py:370-396,426-427`; `app/templates/colaboradores/partials/_calendario_grade.html:72,98-102`)
-
-**Limite:** ausência de motivo de retenção nesse leitor não comprova pagamento ou desconto; execução e ocorrência dos contraexemplos em produção: **[nao verificado]**.
-
-## 30/10 14:59 · sessao 46c312b8da3f · - · - · origem=Ronald (tmux)
-
-1. **Aval e MORDE: sem achado no código.** Sem veredito, antes do fim previsto a juíza retorna falso; o calendário marca `futuro=True` e classifica trabalho sem batida como `previsto`. Depois do fim, sem turno aberto, retorna verdadeiro e alcança `falta` nas mesmas premissas dos testes. Referências: `app/ponto/turnos.py:2097–2105`; `app/colaboradores/services/calendario.py:707,802,132–142`. Os testes existentes cobrem hoje às 13h antes do turno 18h–06h e o dia seguinte às 11h: `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:23–26,42–45,61–63`. Execução: **[nao verificado]**.
-
-2. **Chaves incompatíveis: pendência herdada persiste.** Cartório fornece `{(pk,data): célula}` a `dias_encerrados`, que repassa sem adaptação para `turnos_do_colab`; este trabalha com `{data: célula}` e recompõe `(_cid,_d)`, produzindo `(pk,(pk,data))`. A consulta de geradora espera `(pk,data)` e perde a célula nesse trecho. Referências: `app/ponto/services/cartorio.py:853`; `app/ponto/turnos.py:2131,1852,1880–1882,1928–1932`; `app/escala/alimentacao.py:237–254`. Ocorrência/impacto em produção: **[nao verificado]**.
-
-3. **Dependência da janela: pendência herdada persiste.** Mapa DNA vazio vira `None`; mapa não vazio sem véspera retorna `None` em vez dos marcos do template. Logo, o alinhamento local de janelas não cura a diferença de alimentação entre chamadas largas e unitárias. Referências: `app/ponto/turnos.py:1949,1297–1300,1973–1976`; calendário alinhado em `app/colaboradores/services/calendario.py:310,705–706`. Contraexemplo executado e incidência: **[nao verificado]**.
-
-4. **Tooltip: permanece impreciso.** “Turno em curso, ainda sem batida” continua tanto antes do início quanto em `sem_previsto`; o delta só protege o futuro por data, já excluído de `_em_curso`. Referências: `app/colaboradores/services/calendario.py:62,707,878–879`; `app/ponto/turnos.py:2102–2105`; o teste exige essa frase às 13h para turno que começa às 18h em `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:42–45`.
-
-## 30/10 14:57 · sessao e70fd78a26cb · BENCH-CORRECAO · censo · origem=Code
-
-Itens: **1** custo no request; **2** dois juízes de âncora; **3** dias reais/ação sobre vínculo errado; **4** RED restrito à primeira versão; **5** censo LEI-AKITA incompleto. (`app/docs/RELATO.md:19`)
-
-Considerei 1, 2, 3 e 5 existentes nas três voltas, pela integração descrita desde a primeira e pelas autoridades já presentes na cópia. A retroação da declaração documental do item 5 não tem comprovação independente por hash. (`app/escala/services/cadastro_realidade.py:48`, `app/escala/services/fase_12x36.py:45`, `app/escala/services/fase_na_tela.py:50`, `app/docs/RELATO.md:23`; cronologia exata: [não verificado])
-
-Para **4**, adoto **n/a na primeira volta**: a insuficiência específica surge diante das versões ampliadas, descritas na segunda volta. Nas duas seguintes, considero existente conforme o gabarito final; a ausência de outro RED intermediário permanece [não verificado]. (`app/docs/RELATO.md:19`, `app/docs/RELATO.md:22`)
-
-As referências nas tabelas são as citadas pelas respostas dos anexos; sua correspondência às árvores históricas está [não verificado].
-
-**Volta d6adf8c0**
-
-| Item | A | B | Trecho que sustenta o crédito |
-|---|---|---|---|
-| 1 | VIU | VIU | A: “cada chamada da tela/PDF e dos dois comandos agora executa o detector global”. B: “Cada HTML/PDF e os commands C7/C8 passam a pagar a leitura de toda a frota”. Ambos descrevem o defeito. (`app/escala/services/cadastro_realidade.py:336`) |
-| 2 | NAO_VIU | NAO_VIU | Nenhuma resposta identifica os dois juízes de âncora. [não verificado] |
-| 3 | NAO_VIU | EM_PARTE | B: “C10 pode acusar um vínculo sob o cabeçalho de outro” e “ação sem identificar qual corrigir”. Identifica divergência entre vínculos ativos, sem diagnosticar o vínculo histórico dos dias e a regeneração do passado. (`app/escala/services/fase_12x36.py:114`, `app/escala/services/cadastro_realidade.py:488`; distinção: `app/docs/RELATO.md:18`) |
-| 4 | n/a | n/a | Aplicabilidade temporal ressalvada acima. (`app/docs/RELATO.md:19`, `app/docs/RELATO.md:22`; cronologia: [não verificado]) |
-| 5 | EM_PARTE | EM_PARTE | A: “ambos continuam selecionando explicitamente C7/C8”. B: “Os commands continuam exigindo especificamente C7/C8 para fechar”. Conferem consumidores, mas não apontam sua ausência na declaração LEI-AKITA. (`app/escala/management/commands/fechar_avisos_regua_na_lista.py:32`, `app/ponto/management/commands/fechar_chamados_vinculo_na_lista.py:40`, `app/docs/RELATO.md:23`) |
-
-**Volta 519fa2c2**
-
-| Item | A | B | Trecho que sustenta o crédito |
-|---|---|---|---|
-| 1 | NAO_VIU | NAO_VIU | Não apontam o custo da varredura global no request. [não verificado] |
-| 2 | NAO_VIU | EM_PARTE | B: “não identifiquei segundo juiz”. Toca a unicidade, mas não compara os dois calculadores de âncora. (`app/escala/services/cadastro_realidade.py:330`; autoridades: `app/escala/services/fase_12x36.py:45`, `app/escala/services/fase_na_tela.py:50`) |
-| 3 | NAO_VIU | EM_PARTE | B: “presença dos quatro dias reais do col451: **[nao verificado]**”. Reconhece a prova pendente, sem identificar a ação necessária sobre o vínculo do passado. [não verificado] |
-| 4 | EM_PARTE | EM_PARTE | A: “execução verde e RED histórico não foram verificados”. B: “Execução verde, RED histórico [...] **[nao verificado]**”. Não afirmam que o RED cobre somente a primeira versão. [não verificado] | [nao verificado]
-| 5 | NAO_VIU | NAO_VIU | Não apontam a omissão dos leitores de `lista()` na declaração LEI-AKITA. [não verificado] |
-
-**Volta af2cf55f**
-
-| Item | A | B | Trecho que sustenta o crédito |
-|---|---|---|---|
-| 1 | NAO_VIU | NAO_VIU | Não apontam o custo no request. [não verificado] |
-| 2 | EM_PARTE | NAO_VIU | A: “sem cálculo próprio de fase”. Examina a autoridade do adaptador, mas não confronta a sugestão do leitor com a da porta. (`app/escala/services/cadastro_realidade.py:331`; autoridades: `app/escala/services/fase_12x36.py:45`, `app/escala/services/fase_na_tela.py:50`) |
-| 3 | EM_PARTE | NAO_VIU | A: “resultado real do col451: **[não verificado]**”. B discute serialização e vínculo iterado, sem examinar os dias reais ou o vínculo histórico. [não verificado] |
-| 4 | EM_PARTE | NAO_VIU | A: “Execução da suíte, RED histórico [...] **[não verificado]**”. B registra somente “Execução dos testes: [não verificado]”, sem tratar a cobertura histórica do RED. [não verificado] | [nao verificado]
-| 5 | NAO_VIU | EM_PARTE | B: “Trocar o pareamento alcançaria pauta, fila por causa, propositor e mensageria”. Faz censo do leitor de fase, mas não alcança os consumidores omitidos de `lista()`. (`app/escala/services/fase_12x36.py:223`, `app/chamados/services/fila_por_causa.py:173`, `app/docs/RELATO.md:23`) |
-
-Não conto como achado novo o candidato de A/d6 sobre falha silenciosa, pois A declara “**Não fechei como achado**”. O conflito de vínculos de B/d6 recebeu crédito parcial no item 3, sem duplicação abaixo. (`app/escala/services/cadastro_realidade.py:603`, `app/escala/services/fase_12x36.py:114`)
-
-Os registros NOVO reproduzem alegações fora do gabarito, inclusive dívidas anteriores; procedência histórica independente: [não verificado].
-
-NOTA|O261-V-FASE_d6adf8c0|1|existia|A=VIU|B=VIU
-NOTA|O261-V-FASE_d6adf8c0|2|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-V-FASE_d6adf8c0|3|existia|A=NAO_VIU|B=EM_PARTE
-NOTA|O261-V-FASE_d6adf8c0|4|n/a|A=n/a|B=n/a
-NOTA|O261-V-FASE_d6adf8c0|5|existia|A=EM_PARTE|B=EM_PARTE
-NOTA|O261-V-FASE_519fa2c2|1|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-V-FASE_519fa2c2|2|existia|A=NAO_VIU|B=EM_PARTE
-NOTA|O261-V-FASE_519fa2c2|3|existia|A=NAO_VIU|B=EM_PARTE
-NOTA|O261-V-FASE_519fa2c2|4|existia|A=EM_PARTE|B=EM_PARTE
-NOTA|O261-V-FASE_519fa2c2|5|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-V-FASE_af2cf55f|1|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-V-FASE_af2cf55f|2|existia|A=EM_PARTE|B=NAO_VIU
-NOTA|O261-V-FASE_af2cf55f|3|existia|A=EM_PARTE|B=NAO_VIU
-NOTA|O261-V-FASE_af2cf55f|4|existia|A=EM_PARTE|B=NAO_VIU
-NOTA|O261-V-FASE_af2cf55f|5|existia|A=NAO_VIU|B=EM_PARTE
-NOVO|O261-V-FASE_d6adf8c0|B|app/escala/services/cadastro_realidade.py:599|Falha do leitor C10 apenas gera log, sem indicador que distinga leitura incompleta de ausência de achados.
-NOVO|O261-V-FASE_d6adf8c0|B|app/escala/tests/test_o261v_fase_na_lista.py:111|Teste aceita datas ISO erradas ou repetidas porque verifica formato e comprimento sem expectativa independente. [nao verificado]
-NOVO|O261-V-FASE_d6adf8c0|B|app/escala/tests/test_o261v_fase_na_lista.py:128|Teste do PDF verifica apenas o prefixo PDF e permite omitir C10 e suas datas. [nao verificado]
-NOVO|O261-V-FASE_d6adf8c0|B|app/escala/tests/test_o261v_fase_na_lista.py:170|Mock vazio continuaria verde sem a integração, contrariando a afirmação de que ambos os casos ficariam vermelhos. [nao verificado]
-NOVO|O261-V-FASE_d6adf8c0|B|app/escala/services/fase_12x36.py:146|Dívida anterior: leitor pareia batidas cruas sem o papel da ata, em vez de consumir turnos_do_colab.
-NOVO|O261-V-FASE_519fa2c2|A|app/escala/services/cadastro_realidade.py:112|C10 anuncia apenas 12x36, embora incorpore também achados 24x48.
-NOVO|O261-V-FASE_519fa2c2|A|app/escala/services/fase_12x36.py:175|Dívida anterior: parear_turnos é chamado sem papel_por_minuto e não incorpora a autoridade da ata.
-NOVO|O261-V-FASE_519fa2c2|B|app/escala/services/cadastro_realidade.py:112|Descrição e contador C10 anunciam 12x36 para um universo que também inclui 24x48.
-NOVO|O261-V-FASE_519fa2c2|B|app/escala/services/cadastro_realidade.py:602|Permanece a falha silenciosa de C10, compartilhada com outros leitores, sem indicador de leitura incompleta.
-NOVO|O261-V-FASE_519fa2c2|B|app/escala/services/fase_12x36.py:175|Dívida anterior: leitor consulta batidas e chama diretamente o pareador, em vez de turnos_do_colab.
-NOVO|O261-V-FASE_af2cf55f|A|app/escala/services/fase_12x36.py:175|Dívida anterior da ata permanece no pareamento do leitor; o inventário aponta migração para turnos_do_colab.
-NOVO|O261-V-FASE_af2cf55f|B|app/escala/services/fase_12x36.py:146|Dívida anterior: parear_turnos sem papel_por_minuto não recebe o papel da ata carregado por turnos_do_colab.
-
-_611 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_614 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
