@@ -1,8 +1,11 @@
 # RELATO — esteira saas-hasner
 
-PAREI: ! CLEAR | espera Ronald -- o hook pede o clear por um DISPARO VELHO (64%, ciclo anterior): o /clear das 11:5x NAO gravou marco (`logs/sessao/ultimo_clear.json` ainda e o de 07:26 'instalacao'); medida viva 17,6%. NAO /clear agora: suite inteira da copia wt-veto-a2 @ 1c565c8f e duas leituras do Codex RODANDO -- o aviso delas retoma o pouso A. Linha de fila (instrumento): CLEAR-SEM-MARCO.
+ESPERANDO: trava_teste.sh | pid=167524
+> (o ESPERANDO acima e a suite inteira da copia wt-veto-a2-3010-1154 @ 673ecaf7; em paralelo, agente sonnet mede no sombra o processar_cartorio velho x novo -- celulas de competencia EXPORTADA que mudam de veredito)
 
-ESPERANDO: suite inteira da copia wt-veto-a2-3010-1154 @ 1c565c8f | pid=3330139 | arquivo=/home/ronald/saas-hasner/logs/o261/veto_a2/suite1.log
+> clear nao dado, seguiu (30/10 12:3x): o /clear ja tinha vindo 11:5x; o disparo era do ciclo anterior (linha CLEAR-SEM-MARCO).
+
+> (suite1 @1c565c8f: FAILED 10F+5E -- 5 modulos de fixture fora do recorte de 201 labels + 2 artefatos da minha edicao com a suite montada: inspect.getsource com offset velho e F841 do selo)
 
 PAREI-RESOLVIDO: ! CLEAR (o /clear veio 11:5x) -- MODO PREPARA-CLEAR (contexto 64% >= 60%). Marco fechado: FIO-MORTO-DONO-NA-LISTA NO AR (2f503709). Nada em voo. Retomar pelo HANDOFF-SESSAO: proximo = VETO-NA-PORTA pouso A na copia wt-veto-a-3010-1003 com o aval VETO-EC-NONE-IMPRESSAO (11:0x); COL309-SETEMBRO (`!` 11:3x, competencia 09 exportada) e O121-A1 logo depois; depois DIA-DA-PERGUNTA-E-O-TURNO.
 
