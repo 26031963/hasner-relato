@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 30/10/2026 05:23:43.** Transcript: `e3f79949-a90b-4c64-a5c2-afd178149c30.jsonl` (7.8 MB). Acoes na janela: **343**.
+**Medido em 30/10/2026 05:29:13.** Transcript: `e3f79949-a90b-4c64-a5c2-afd178149c30.jsonl` (7.9 MB). Acoes na janela: **345**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 05:24:22 | Bash | Record ORCAMENTO rejection in RELATO | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md' L=open(p).read().split('\n') i=next(k for k,l in enumerate(L) if l.startswith('> ORCAMENTO-DE-CONTEXTO CONSTRUIDO')) L.insert(i+1,'> ORCAMENTO opus final REPROVOU 90b3b83d: com `PAREI: ! CLEAR` no topo, excecao persistente do orcamento (estado como diretorio, lock FIFO, import quebrado) bloqueia antes do TETO e sem contar = se ...` |
+| 05:24:19 | SendMessage |  | `-` |
 | 05:22:10 | Bash | Mark ESPERANDO on push pid | `cd /home/ronald/saas-hasner && sed -i '3i ESPERANDO: /home/ronald/saas-hasner/bin/push.sh \| pid=358329' app/docs/RELATO.md && sed -n 3p app/docs/RELATO.md` |
 | 05:22:03 | Bash | Find push pid for wait proof | `/usr/bin/sleep 3; pgrep -af "bin/push.sh" \| grep -v "bash -c\\|pgrep" \| cut -c1-60` |
 | 05:21:55 | Bash | Retry push after message fix | `cd /home/ronald/saas-hasner && bin/push.sh > logs/o261/push_c2.log 2>&1; echo "rc=$?" >> logs/o261/push_c2.log` |
