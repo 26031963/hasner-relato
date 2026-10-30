@@ -1,7 +1,7 @@
 # RELATO — esteira saas-hasner
 
-ESPERANDO: trava_teste.sh | pid=167524
-> (o ESPERANDO acima e a suite inteira da copia wt-veto-a2-3010-1154 @ 673ecaf7; em paralelo, agente sonnet mede no sombra o processar_cartorio velho x novo -- celulas de competencia EXPORTADA que mudam de veredito)
+ESPERANDO: codex_pergunta.sh | pid=1374756
+> (suite inteira da copia @ 673ecaf7: Ran 12.779, OK, rc 0 -- `logs/o261/veto_a2/suite2.log`. O ESPERANDO acima e a volta DELTA do Codex; em paralelo, agente sonnet mede no sombra o processar_cartorio velho x novo -- celulas de competencia EXPORTADA que mudam de veredito)
 
 > clear nao dado, seguiu (30/10 12:3x): o /clear ja tinha vindo 11:5x; o disparo era do ciclo anterior (linha CLEAR-SEM-MARCO).
 

@@ -1,7 +1,61 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **30/10/2026 12:07** · publicado em **30/10/2026 12:09** (UTC-3)
+> Ultima resposta processada: **30/10/2026 12:39** · publicado em **30/10/2026 12:40** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 30/10 12:39 · sessao 7a382b3d18df · - · - · origem=Ronald (tmux)
+
+Classificações:
+
+| Sítio | Veredito |
+|---|---|
+| `_renascer_por_premissa_viva` | **sem achado**: consulta veto antes de `reabrir`. `app/chamados/models.py:780-784`. |
+| `desarquivar_chamado` | **sem achado**: POST autenticado, permissão e área; reabre encerramento por tranca e trata recusa. `app/chamados/views_arquivar.py:51-70`. |
+| `competencia_trancada.reabrir` | **Humano na cadeia atual**, pois POST+RBAC+motivo da view chama `fechamento.reabrir_periodo`, que chama esse serviço. `app/ponto/views.py:1520-1544`; `app/ponto/services/fechamento.py:1415-1416`; `app/chamados/services/competencia_trancada.py:258`. **Não é garantia da função**: `autor=None` vira usuário sistema. `app/chamados/services/competencia_trancada.py:228,239`. |
+| `acao_reabrir_disputa_admin` | **Humano procede**: exige staff/admin_ti, motivo e justificativa; fio delega à ação. `app/chamados/services/acoes_disputa.py:242-256`; `app/chamados/services/fio.py:575-577`. |
+| `ponto.views.reabrir_colaborador` | **sem achado**: `_fech.reabrir(f)` recebe `FechamentoMensal`; a função do serviço só altera esse fechamento. `app/ponto/views.py:1439-1453`; `app/ponto/services/fechamento.py:1317-1323`. |
+| `sincronizar_adesao` | Automatismo sem consulta ao veto, mas reabre **`sem_previsao_escala`**, fora do universo dos cinco. `app/chamados/services/adesao.py:74-92`; universo: `app/ponto/services/furos_vetados.py:74-81`, `app/chamados/catalogo/furo_modulos.py:15-16`, `app/chamados/reconciliador.py:336-337`. |
+| `resolver_perguntas_por_chamado_resolvido` | **sem achado na classe**: resposta esperando consumo provoca reabertura direta do pai. `app/chamados/services/disputa_emissao.py:1598-1608`. |
+| `detectar_ausencias.handle` | Automatismo sem consulta ao veto, mas esse sítio reabre **`ancora_limbo`**, fora dos cinco módulos. `app/ponto/management/commands/detectar_ausencias.py:271-301`; universo acima. |
+| `reconciliar_grade._emitir_furo` | **sem achado na classe**: depois de `abrir`, se recebeu encerrado, chama `reabrir` diretamente; apenas `None` encerra o caminho. `app/ponto/management/commands/reconciliar_grade.py:499-522`. |
+| `reabrir_orfas_enterradas.handle` | **Rótulo “automático” impreciso**: comando de uma vez, dry por padrão e `--apply`; reabre pai por critério do lote. `app/chamados/management/commands/reabrir_orfas_enterradas.py:1,48-49,157-166`; registrado fora de pipeline em `app/config/crons.py:743-750`. |
+| `reabrir_chamados_ausencia_aberta.handle` | **Rótulo “automático” impreciso**: dry por padrão, `--apply` explícito, registrado como ato único; ainda reabre somente **`ausencia_colab`**, fora dos cinco. `app/ponto/management/commands/reabrir_chamados_ausencia_aberta.py:19-20,28-49`; `app/config/crons.py:1394-1395`; universo acima. |
+
+**Falha adicional concreta em `acao_reabrir_disputa_admin`:** classificação humana não garante reabertura efetiva do pai. A ação abre a disputa e cria pergunta **antes** de chamar `ch.reabrir()`, ignora o retorno e anuncia sucesso. `app/chamados/services/acoes_disputa.py:256-266,293-295`; gravação da disputa: `app/chamados/models.py:1773-1785`.
+
+Contraexemplo estático: pai encerrado por admin, com data resolvida e sem fato novo; `recusa_da_reabertura` retorna `admin_sem_fato_novo` e `reabrir()` retorna `False`. A disputa já ficou aberta e a pergunta nova existe, mas o pai permanece encerrado. `app/chamados/models.py:1075-1080,1123-1128`; `app/chamados/services/acoes_disputa.py:256-266`. Ocorrência em produção: `[nao verificado]`.
+
+## 30/10 12:39 · sessao 0414381eb7ad · - · - · origem=Ronald (tmux)
+
+Q1 — **não acha toda reabertura; acha funções contendo a sintaxe `.reabrir(...)`**, sem resolver alvo, aliases ou fluxo entre funções. Também elimina multiplicidade por função (`any`) e pelo `set`; nova chamada dentro de função já classificada passa sem mudar o resultado. [app/chamados/tests/test_o261_veto_na_porta.py:251](app/chamados/tests/test_o261_veto_na_porta.py:251), [app/chamados/tests/test_o261_veto_na_porta.py:275](app/chamados/tests/test_o261_veto_na_porta.py:275).
+
+**Contraexemplo existente:** `acoes_chamado` lê `novo_status` do POST e chama `chamado.transicionar(novo_status, request.user)` quando gestor; o motor permite `resolvido → em_analise`. Essa reabertura passa por `_aplicar → _gravar_estado`, sem `.reabrir` e sem classificação nesse selo. [app/chamados/services/acoes_chamado.py:287](app/chamados/services/acoes_chamado.py:287), [app/chamados/services/acoes_chamado.py:313](app/chamados/services/acoes_chamado.py:313), [app/chamados/catalogo/motor.py:102](app/chamados/catalogo/motor.py:102), [app/chamados/models.py:183](app/chamados/models.py:183), [app/chamados/models.py:260](app/chamados/models.py:260). Existe caminho equivalente no fio. [app/chamados/services/fio.py:713](app/chamados/services/fio.py:713).
+
+**Mutante plausível que escapa:**
+
+```python
+def automatico(ch):
+    ressuscitar = ch.reabrir
+    ressuscitar()
+```
+
+O detector exige `ast.Call.func` do tipo `ast.Attribute` com `attr == 'reabrir'`; a chamada acima tem `ast.Name`. `getattr(ch, 'reabrir')()` e `ch._gravar_estado('em_analise')` também escapam pela mesma condição. [app/chamados/tests/test_o261_veto_na_porta.py:256](app/chamados/tests/test_o261_veto_na_porta.py:256). O núcleo aceita o estado recebido e o persiste; não consulta veto. [app/chamados/models.py:192](app/chamados/models.py:192), [app/chamados/models.py:231](app/chamados/models.py:231).
+
+Uma lambda imediata contendo `ch.reabrir()` também escapa: `_corpo_proprio` exclui `Lambda`, enquanto `_funcoes` só registra `FunctionDef`/`AsyncFunctionDef`. [app/chamados/tests/test_o261_veto_na_porta.py:168](app/chamados/tests/test_o261_veto_na_porta.py:168), [app/chamados/tests/test_o261_veto_na_porta.py:182](app/chamados/tests/test_o261_veto_na_porta.py:182).
+
+Há alias real de outra função que reabre internamente: `competencia_trancada.reabrir as _reabrir_fila` em fechamento; o chamador não aparece no censo, embora o destino apareça. [app/ponto/services/fechamento.py:1415](app/ponto/services/fechamento.py:1415), [app/chamados/services/competencia_trancada.py:258](app/chamados/services/competencia_trancada.py:258).
+
+Executei apenas o AST extraído em memória com `python3 -B`: direto detectado; alias, `getattr`, lambda, núcleo e `transicionar` retornaram lista vazia. Resultado de execução sem arquivo persistido: `[nao verificado]`; as condições que determinam esses resultados estão nas linhas citadas acima. [nao verificado]
+
+## 30/10 12:39 · sessao 0865afc7bf13 · - · - · origem=Ronald (tmux)
+
+3. **sem achado de quebra de leitor/teste existente por `valor_depois__via`.** A deduplicação passa a distinguir `abrir` de `criar`; o JSON gravado continua incluindo `via` e os demais campos (`app/chamados/models.py:923-931`). O teste que exige uma linha repete somente `abrir`, portanto a chave nova mantém sua expectativa (`app/chamados/tests/test_o261_veto_na_porta.py:430-439`).
+
+- **Mudança real de cardinalidade:** para o mesmo objeto/módulo/dia/veto, `abrir` seguido de `criar` agora registra duas linhas, pois as entradas passam respectivamente `via='abrir'` e `via='criar'` (`app/chamados/models.py:733`, `app/chamados/models.py:842`, `app/chamados/models.py:923-931`). Não há teste misto exigindo uma linha nas referências localizadas; resultado da execução da suíte: `[nao verificado]`.
+- Os testes antigos que contam `nascimento_recusado` sobre célula absolvida exercitam `_trilha_da_recusa`, cuja chave continua módulo/veredito e não recebeu a mudança (`app/ponto/tests/test_o_outbox_celula.py:348-353`, `app/ponto/tests/test_o_outbox_celula.py:544-552`, `app/chamados/models.py:934-949`).
+- O histórico do chamado consulta apenas `estado_chamado`, excluindo essas recusas (`app/chamados/services/historico.py:44`, `app/chamados/services/historico.py:86-95`). A tela geral de auditoria conta linhas reais e não pressupõe uma linha por veto; mostrará as duas operações separadas (`app/core/views.py:705-727`).
+
+**FILA VETO-TRILHA-CICLO continua procedente.** Contraexemplo: veto por `VETO_REGUA` em `abrir` → correção permite nascimento → veto idêntico retorna e outro `abrir` é recusado. A nova recusa encontra a primeira linha histórica e retorna sem registro, pois o `exists()` não considera correção, intervalo ou último evento (`app/chamados/models.py:923-926`). Isso contraria a promessa “enquanto nada muda” do próprio método; não demonstra falha do bloqueio do nascimento, que continua retornando antes da criação (`app/chamados/models.py:910`, `app/chamados/models.py:730-735`).
 
 ## 30/10 12:07 · sessao 227f3905545f · O261-VETO-A2 · verificador · origem=Code
 
@@ -558,136 +612,4 @@ Relógios fora da borda, preexistentes mas alcançados pela rodada:
 
 Custo: a lista completa roda uma vez, mas percorre C2 mesmo quando somente uma célula morta chegou ao ramo; C2 consulta vínculos ativos e itera células da competência (`app/chamados/services/vigia_fio.py:250`, `:259`; `app/escala/services/cadastro_realidade.py:518`, `:190`, `:195`). O cache novo limita o carregador a colaborador/competência, mas cada `dono(data)` ainda chama cadastro por dia; o carregador de cadastro consulta vínculo e, sem vínculo, mais célula/demissão (`app/chamados/services/vigia_fio.py:272`; `app/ponto/management/commands/e6_oraculo.py:149`; `app/ponto/supra_juiz.py:147`, `:151`, `:152`). Tempo, quantidade total de queries e impacto real em produção: [não verificado].
 
-## 30/10 10:34 · sessao edd119d4f4b9 · - · - · origem=Ronald (tmux)
-
-Mapa confirmado em leitura:
-
-- **Escritor dos contadores:** `censo()` inicializa em `app/chamados/services/vigia_fio.py:208`; incrementa universo em `:231`, futuro em `:291`, fora do vocabulário em `:294`, fio vivo em `:299`, hoje/futuro em `:302`, decisão pendente em `:307`, ausência em `:314`, escala em `:320`, admin em `:327`, mortos em `:337`, abertura por classe em `:349` e pendentes com alvo em `:371`.
-- **`fio_do_admin`:** inicialização `app/chamados/services/vigia_fio.py:217`, incremento `:333`; **`celulas_fio_do_admin`:** inicialização `:217`, append truncado por `limite` em `:334`; **`fio_do_admin_sem_resposta`:** chave nasce apenas ao falhar lista (`:264`) ou juiz (`:278`). Leitura explícita dos três no texto em `:527`.
-- **Carimbo:** command lê `d` para alarmar em `app/chamados/management/commands/vigiar_fio_morto.py:161`, renderiza em `:164` e grava **todo** `d` em `:205`, via `_carimbar()` (`:110`, escrita JSON em `:127`, replace em `:129`). Logo os três campos novos chegam ao JSON; a chave de falha pode faltar quando não houve falha (`app/chamados/services/vigia_fio.py:217`, `:264`, `:278`).
-- **ESTADO:** `bin/fio_estado.py:64` lê JSON, compara genericamente cada `esperado` em `:72`, mas só transporta subconjunto de contadores em `:82`; os três novos não são transportados nem renderizados por `linha()` (`:95`). `bin/gerar_estado.py:260` chama esse leitor/compositor. `medido_em` é lido em `bin/fio_estado.py:74`, convertido em idade em `:76`, renderizado em `:112`.
-- **Alarme:** universo fixado em `app/chamados/management/commands/vigiar_fio_morto.py:80`, passivo em `:81`, composição em `:161`, `SystemExit(2)` em `:214`; os três novos não integram essas constantes (`:80`). Cron efetivo usa `--alarme --alarme-passivo` em `app/config/crons.py:1654`.
-- **Consumidor fora do diff que não deve faltar no quem-mais-lê:** `app/chamados/management/commands/materializar_passivo_validado.py:201` importa `censo`; `:203` chama sem `hoje/agora`; `:208` coleta dinamicamente todos os inteiros/bools, portanto inclui `fio_do_admin` e, quando existe, `fio_do_admin_sem_resposta`. Antes/depois são medidos em `:97` e `:105`, persistidos no resultado em `:114`, e suas diferenças impressas por `_placar_dos_juizes()` em `:224`. A lista de células não passa pelo filtro de inteiros/bools (`:208`).
-- **Placar do cron:** recebe saída/exit pelo wrapper em `bin/encadeado.sh:93`; escritor de `placar.jsonl` é `bin/cron_run.sh:13`, gravando nome/empresa/início/fim/duração/exit. Não grava os contadores (`:13`). Consumidor `app/core/management/commands/pipeline_placar.py:60` lê registros e interpreta exit/duração em `:73`.
-- **Pautas:** o caminho do wrapper cria/recupera pauta de cron quebrado por exit diferente de 0/2 em `bin/cron_run.sh:27`; não usa os contadores (`:32`). As pautas do reparo seguem a classificação própria em `app/chamados/services/passivo_validado.py:324`, chamando a produção de pauta após regen em `:443`; elas não são alimentadas pelo `fio_do_admin` nesse caminho (`:324`, `:443`). O outro contador exportado do command tem só rótulo DP e segue no carimbo em `app/chamados/management/commands/vigiar_fio_morto.py:179`, `:206`.
-
-Achados de cobertura:
-
-1. **A soma ganhou termo sem fixture positiva desse termo.** `test_as_PARTES_SOMAM...` fabrica cenários em `app/chamados/tests/test_o261_vigia_fio.py:657`, usa somente `_oferece` em `:667`, exige positivos de decisão/escala/ausência em `:669`, e acrescenta `fio_do_admin` à soma em `:674`. Não exige `fio_do_admin>0`; assim esse teste não protege especificamente a inclusão da nova parte (`:674`).
-2. **Teste positivo do admin substitui as duas autoridades reais.** `_admin` faz patch de `lista` e de `InsumosDoDono` em `app/chamados/tests/test_o261_vigia_fio.py:560`; teste em `:564` prova a combinação de resultados simulados, com contador positivo exigido em `:577`. Não prova integração com o dono/lista reais (`:560`).
-3. **O selo do carimbo não prova o instante único.** Recalcula com `censo(hoje=hoje)` sem `agora` em `app/chamados/tests/test_o261_vigia_fio.py:787`; carimbo só recebe checagens de formato e data em `:801`. O helper `_censo` injeta somente `hoje` em `:111`, deixando o novo fallback `timezone.now()` de `app/chamados/services/vigia_fio.py:182` ativo.
-4. **Falha do juiz tem código mas não caso correspondente no bloco novo.** Tratamento em `app/chamados/services/vigia_fio.py:276`; testes novos de falha simulam somente `lista` em `app/chamados/tests/test_o261_vigia_fio.py:582` e `:590`.
-5. **`registrar_engolido` escreve observabilidade, não entidade de negócio:** chamadas novas em `app/chamados/services/vigia_fio.py:261` e `:277`; implementação altera `_ENGOLIDOS` e escreve logger em `app/core/observ.py:73`. Não constitui segundo escritor do estado do fio nesse trecho (`app/core/observ.py:75`).
-
-RED executado, resultados de testes, custo observado e estado de produção: **[não verificado]**. [nao verificado]
-
-## 30/10 10:33 · sessao 131e76f18e18 · O261-V-FASE · censo · origem=Code
-
-Referências aos anexos transcritos: numeração iniciada no conteúdo de cada arquivo, preservando linhas em branco.
-
-| Achado do Opus | Classe | Arquivo da resposta e item onde apontou |
-|---|---|---|
-| **1. Custo da varredura da frota no request** (`opus_achados.txt:2`). | **(b)** Apontado; custo aceito na triagem (`opus_achados.txt:8`). | `codex_resposta_v1.txt:16`, item **“empresas filtra corretamente…”**: identifica a varredura global paga por HTML/PDF e commands. |
-| **2. Dois juízes de âncora sugerida** (`opus_achados.txt:3`). | **(a)** Nenhuma resposta aponta a divergência entre as duas funções. | **Nenhum.** A conferência de “Juiz, escritor e relógio” não identifica esse par (`codex_resposta_v3.txt:12`). |
-| **3. Dias do col451, ação no vínculo vigente e regeneração das células passadas** (`opus_achados.txt:4`). | **(b-parcial)** Apontou o desencontro de vínculos e a proteção insuficiente das datas; a situação concreta de produção ficou **(c)** (`codex_resposta_v1.txt:20`; `codex_resposta_v3.txt:15`). | `codex_resposta_v1.txt:3`, **item 1**, vínculo acusado versus cabeçalho/ação; `codex_resposta_v1.txt:9`, **item 3**, testes insuficientes das datas. Não apontou especificamente EC1485 versus EC1484 nem a necessidade de regeneração. | [nao verificado]
-| **4. RED histórico cobre somente a primeira versão** (`opus_achados.txt:5`). | **(c)** Histórico declarado não verificado. | **Nenhum apontamento específico.** Ressalvas em `codex_resposta_v2.txt:13` e `codex_resposta_v3.txt:15`. |
-| **5. LEI-AKITA sem os leitores de lista()** (`opus_achados.txt:6`). | **(a)** Não apontou a omissão no censo LEI-AKITA. | **Nenhum.** V1 menciona os dois commands como consumidores, mas não denuncia essa omissão nem inclui o placar nesse apontamento (`codex_resposta_v1.txt:17`). |
-| **6. Suíte sem imprimir hash/--dir certificado** (`opus_achados.txt:7`). | **(c)** Certificação da suíte; execução e comparação Git declaradas não verificadas. | **Nenhum apontamento específico.** Ressalvas em `codex_resposta_v2.txt:13` e `codex_resposta_v3.txt:15`. | [nao verificado]
-
-## 30/10 10:28 · sessao f53634859433 · O261-VETO-A · verificador · origem=Code
-
-**Reprova:** há reaberturas automáticas que contornam o veto, nascimento do universo que passa sem consultar o juiz e contraexemplo à promessa de DIFF zero (`app/ponto/management/commands/reconciliar_grade.py:522`; `app/chamados/services/disputa_emissao.py:1606`; `app/chamados/models.py:893`; `app/ponto/management/commands/processar_alertas_turno.py:100`).
-
-Impacto numérico na frota, execução da suíte Django e RED anterior ao código: **[nao verificado]**. [nao verificado]
-
-**(b) Caminhos automáticos que escapam e falhas de integração**
-
-1. **A grade desfaz a recusa da própria porta.** `abrir()` descarta o booleano de `_renascer_por_premissa_viva()` e devolve o chamado encerrado; a grade recebe esse objeto e chama `reabrir()` diretamente. A guarda nova contra `None` não alcança esse caso (`app/chamados/models.py:685`; `app/chamados/models.py:688`; `app/ponto/management/commands/reconciliar_grade.py:519`; `app/ponto/management/commands/reconciliar_grade.py:522`).
-
-   **Contraexemplo:** chamado `batida_ausente` resolvido, JSON `data_turno=d`, ligado a célula de `d2`; vínculo saudável em `d`, mas `d2` furado e com régua suspeita. O veto externo da grade passa para `d`; o dedup encontra o chamado; o juiz prioriza a célula e `_renascer` veta `d2`; a grade recebe o encerrado e o reabre sem consultar o veto. As guardas comuns devem permitir a reabertura, por exemplo encerramento pelo sistema, premissa viva e nenhum irmão vivo (`app/ponto/management/commands/reconciliar_grade.py:487`; `app/ponto/management/commands/reconciliar_grade.py:499`; `app/chamados/juizes.py:89`; `app/chamados/models.py:778`; `app/chamados/models.py:1072`).
-
-2. **O callback de resolução também reabre automaticamente por fora.** `resolver_perguntas_por_chamado_resolvido()` pode executar `_pai.reabrir()` sem filtro de módulo e sem passar por `_renascer_por_premissa_viva()`. Há acionamento por receiver de fechamento e pelo reconciliador (`app/chamados/services/disputa_emissao.py:1598`; `app/chamados/services/disputa_emissao.py:1606`; `app/chamados/signals.py:92`; `app/chamados/reconciliador.py:538`).
-
-   **Contraexemplo:** disputa aberta, pai `turno_aberto` resolvido em dia vetado, resposta aguardando consumo reconhecida por `irmas_respondidas_sem_consumo` e guardas comuns permitindo reabrir. Resolver um destino da disputa → callback reabre o pai → chamado vivo em dia vetado. O veto novo não participa desse percurso (`app/chamados/services/disputa_emissao.py:1601`; `app/chamados/services/disputa_emissao.py:1604`; `app/chamados/models.py:1119`).
-
-3. **`entrada_bloqueada_turno_aberto` continua nascendo automaticamente sem veto.** `bater_ponto()` reduz as entradas pendentes a texto e passa apenas `pendentes` e `total`; `_veto_da_regua()` retorna permissivamente quando não encontra dia (`app/ponto/views.py:278`; `app/ponto/views.py:280`; `app/ponto/views.py:291`; `app/chamados/models.py:892`).
-
-   **Contraexemplo:** POST de entrada, turno anterior ≥14h, nenhuma regularização pendente e régua suspeita → contexto sem dia → juiz do veto não é chamado → nasce `entrada_bloqueada_turno_aberto`. O percurso passa fisicamente por `criar`, mas escapa da invariante; o teste novo consagra esse comportamento (`app/ponto/views.py:275`; `app/ponto/views.py:299`; `app/chamados/models.py:893`; `app/chamados/tests/test_o261_veto_na_porta.py:313`).
-
-4. **A premissa usada para garantir DIFF zero é falsa no processador de turno.** O vínculo só é obrigatório quando `tm.dt_fim_previsto` está ausente. Com fim previsto persistido, `ec=None` não interrompia o caminho de emissão (`app/ponto/management/commands/processar_alertas_turno.py:100`; `app/ponto/management/commands/processar_alertas_turno.py:134`).
-
-   **Contraexemplo:** turno materializado aberto, entrada presente, fim previsto preenchido, janela `pos_20`, sem ausência e sem vínculo vigente → antes alcançava o nascimento; depois a porta retorna `(None, False)` por `VETO_DEGENERADA`, interrompendo também alerta e justificativa. Portanto DIFF zero não decorre da construção alegada em CORTES; existência desse estado na frota é **[nao verificado]** (`app/ponto/management/commands/processar_alertas_turno.py:138`; `app/ponto/management/commands/processar_alertas_turno.py:317`; `app/ponto/management/commands/processar_alertas_turno.py:335`; `app/ponto/services/furos_vetados.py:32`; `app/docs/CORTES.md:401`).
-
-   Também muda o nascimento N5 com vínculo existente e suspeito: o avançado chegava a `criar` sem perguntar esse veto e agora recebe `None` (`app/ponto/management/commands/processar_alertas_avancados.py:37`; `app/ponto/management/commands/processar_alertas_avancados.py:121`; `app/ponto/management/commands/processar_alertas_avancados.py:141`).
-
-5. **Recusa do renascimento ainda pode produzir cobrança no marco crítico.** `_abrir_chamado_critico()` devolve o objeto encerrado retornado pelo dedup; `_marco_critico()` interrompe apenas para `None` (`app/chamados/models.py:688`; `app/ponto/management/commands/processar_alertas_turno.py:387`; `app/ponto/management/commands/processar_alertas_turno.py:317`).
-
-   **Contraexemplo:** `turno_aberto` resolvido, premissa viva, dia agora vetado, sem alerta `pos_20` nem justificativa existentes → `_renascer` recusa → dedup devolve o resolvido → marco envia alerta e, se enviado, cria justificativa apontando para o chamado encerrado. O leitor não distingue a nova recusa automática (`app/chamados/models.py:778`; `app/ponto/management/commands/processar_alertas_turno.py:314`; `app/ponto/management/commands/processar_alertas_turno.py:319`; `app/ponto/management/commands/processar_alertas_turno.py:391`).
-
-6. **A exceção humana fica incompleta, e o vigia conta essa exceção como violação.** Desarquivar e reabrir administrativamente passam sem consultar/apresentar o motivo do veto; suas trilhas registram resgate ou justificativa administrativa, sem registrar a autorização sobre aquele veto. O contador admite expressamente adiar a trilha própria ao B (`app/chamados/views_arquivar.py:63`; `app/chamados/views_arquivar.py:75`; `app/chamados/services/acoes_disputa.py:245`; `app/chamados/services/acoes_disputa.py:270`; `app/ponto/services/furos_vetados.py:82`).
-
-   **Contraexemplo:** admin desarquiva chamado encerrado pela tranca, em dia `VETO_REGUA`, com guardas comuns permitindo reabrir → chamado volta à fila sem apresentação/trilha específica do veto → vigia retorna um achado, embora o ato seja permitido pelo aval. O contador filtra todos os vivos, sem distinguir a exceção humana (`app/chamados/views_arquivar.py:68`; `app/chamados/views_arquivar.py:80`; `app/ponto/services/furos_vetados.py:87`; `app/ponto/services/furos_vetados.py:98`; `app/docs/CORTES.md:401`).
-
-**(a) Censo dos leitores cujo comportamento muda**
-
-Leitores diretos de produção de `motivo_do_veto`:
-
-| Leitor | Mudança e contraexemplo |
-|---|---|
-| `_veto_da_regua` — `app/chamados/models.py:896` | Novo veto dentro das três operações; universo com dia e vínculo suspeito → nascimento/renascimento recusado. |
-| `reemitir_chamado_do_dia` — `app/chamados/reconciliador.py:854` | Sem vínculo → agora retorna `False` antes de emitir/costurar; anteriormente `motivo_do_veto(..., None, ...)` não vetava. |
-| `furos_vetados_por_regua` — `app/ponto/services/furos_vetados.py:57` | Célula `furo` sem vínculo → passa a entrar nos achados com `vinculo=None` (`app/ponto/services/furos_vetados.py:61`). |
-| `julgar_colab._veto_do_dia` — `app/ponto/services/cartorio.py:1013` | Mesmo dia sem vínculo e mesmos demais insumos → impressão passa a conter `veto:VETO_DEGENERADA`, deixa de coincidir e provoca rejulgamento (`app/ponto/services/cartorio.py:329`; `app/ponto/services/cartorio.py:1083`; `app/ponto/services/cartorio.py:1092`). |
-| `furos_sem_cobranca.medir` — `app/ponto/services/furos_sem_cobranca.py:96` | Furo elegível, sem chamado vivo e sem vínculo → passa de canal de cobrança para `veto`; sai do total e `cobrar()` o pula (`app/ponto/services/furos_sem_cobranca.py:107`; `app/ponto/services/furos_sem_cobranca.py:109`; `app/ponto/services/furos_sem_cobranca.py:125`). |
-| `chamados_vivos_em_dia_vetado` — `app/ponto/services/furos_vetados.py:98` | Leitor novo; inclui também os atos humanos permitidos, conforme achado 6. |
-
-O cartório e o passivo são impactos comportamentais fora das três cópias de emissão nomeadas na allowlist; alterar o juiz compartilhado os alcança já no pouso A (`app/chamados/tests/test_o261_veto_na_porta.py:46`; `app/ponto/services/cartorio.py:1013`; `app/ponto/services/furos_sem_cobranca.py:96`).
-
-Há ainda **erro novo no contador de vínculos**: dois furos sem vínculo → dois achados com `None` → `vinculos={None}` → publica **1 vínculo**, embora existam zero. O leitor foi tornado compatível com nulos na lista, mas não nessa agregação (`app/ponto/services/furos_vetados.py:61`; `app/ponto/management/commands/furos_vetados_por_regua.py:32`; `app/ponto/management/commands/furos_vetados_por_regua.py:33`).
-
-Os comandos de medir e cobrar passivo herdam a mudança; `desfazer_corroboracao_regua` filtra por PK de vínculo existente, portanto os novos achados `None` não alteram esse filtro (`app/ponto/management/commands/furos_sem_cobranca_viva.py:14`; `app/ponto/management/commands/cobrar_furos_sem_cobranca.py:19`; `app/ponto/management/commands/cobrar_furos_sem_cobranca.py:30`; `app/escala/management/commands/desfazer_corroboracao_regua.py:38`).
-
-Leitores de produção das três operações da porta alcançados pela mudança:
-
-| Operação e leitor | Comportamento alterado |
-|---|---|
-| `abrir`: `app/ponto/management/commands/detectar_ausencias.py:688` | Nova recusa quando o vínculo efetivamente consultado pela porta diverge do recebido pelo emissor; retorna `VETO_NA_PORTA` (`app/ponto/management/commands/detectar_ausencias.py:732`). |
-| `abrir`: `app/ponto/management/commands/reconciliar_grade.py:499` | Nascimento pode retornar `None`; renascimento recusado pode ser desfeito, conforme achado 1. |
-| `abrir`: `app/chamados/reconciliador.py:862` | Pode deixar de emitir e costurar; trata `None` e chamado ainda encerrado (`app/chamados/reconciliador.py:885`; `app/chamados/reconciliador.py:888`). |
-| `abrir`: `app/ponto/management/commands/processar_alertas_turno.py:335` | Muda emissão e efeitos do marco crítico; achados 4 e 5. |
-| `abrir`: `app/ponto/management/commands/emitir_turno_aberto_retroativo.py:151` | Pode deixar de nascer/reabrir; dry também passa a recusar e apply contabiliza `recusado_veto` (`app/ponto/management/commands/emitir_turno_aberto_retroativo.py:138`; `app/ponto/management/commands/emitir_turno_aberto_retroativo.py:174`). |
-| `criar`: `app/ponto/management/commands/processar_alertas_avancados.py:121` | Veto interrompe nascimento N5, push e criação do fio (`app/ponto/management/commands/processar_alertas_avancados.py:141`). |
-| `_renascer`: `app/chamados/models.py:686` | Dedup pode preservar o encerramento, mas continua devolvendo o objeto e `False` (`app/chamados/models.py:688`). |
-| `_renascer`: `app/chamados/services/resposta_tardia.py:45` | Resposta que reabria pode virar nota tardia; texto livre também gera Pauta DP (`app/chamados/services/resposta_tardia.py:52`; `app/chamados/services/resposta_tardia.py:58`). |
-
-`bater_ponto()` também usa `criar` no universo, mas continua passando por falta de dia, conforme achado 3. Os dois serviços de abertura com módulo variável não oferecem esses cinco módulos pelo catálogo humano atual; **sem achado de quebra concreta dessa UI de abertura manual** (`app/ponto/views.py:291`; `app/chamados/services/abertura.py:47`; `app/chamados/services/abertura.py:172`; `app/chamados/catalogo/modulos.py:105`; `app/chamados/catalogo/modulos.py:182`; `app/chamados/catalogo/modulos.py:283`).
-
-**(c) Selo AST: deixa passar mutantes plausíveis**
-
-Os seguintes corpos passam sem registrar a escrita correspondente; a resolução de aliases é superficial, `save` não é examinado e `status_local` é procurado somente dentro da chamada (`app/chamados/tests/test_o261_veto_na_porta.py:98`; `app/chamados/tests/test_o261_veto_na_porta.py:137`; `app/chamados/tests/test_o261_veto_na_porta.py:165`; `app/chamados/tests/test_o261_veto_na_porta.py:170`).
-
-| Mutante | Entrada → resultado |
-|---|---|
-| Alias transitivo | `from chamados.models import ChamadoColaborador as Ch; CC = Ch` e, numa função, `CC.objects.create(...)` → nascimento fora da porta não encontrado (`app/chamados/tests/test_o261_veto_na_porta.py:100`). |
-| Import relativo de módulo | `from . import models as m` e `m.ChamadoColaborador.objects.create(...)` → raiz `m` desconhecida; escrita não encontrada (`app/chamados/tests/test_o261_veto_na_porta.py:92`; `app/chamados/tests/test_o261_veto_na_porta.py:168`). |
-| Construtor + `save` | `ch = ChamadoColaborador(modulo_origem="turno_aberto", status_local="aberto", colaborador=c); ch.save()` → nascimento sem veto não encontrado (`app/chamados/tests/test_o261_veto_na_porta.py:28`; `app/chamados/tests/test_o261_veto_na_porta.py:170`). |
-| `bulk_create` por manager | `manager = ChamadoColaborador.objects; manager.bulk_create([...])` → raiz desconhecida; escrita não encontrada (`app/chamados/tests/test_o261_veto_na_porta.py:168`). |
-| `update(**kwargs)` | `valores = {"status_local": "aberto"}; ChamadoColaborador.objects.filter(pk=pk).update(**valores)` → reabertura não encontrada, pois o literal está fora da chamada (`app/chamados/tests/test_o261_veto_na_porta.py:143`). |
-
-O selo complementar de status também não cobre construtor seguido de `save` nem esse `update(**valores)`; suas expressões procuram atribuição por atributo ou `update` com argumento literal (`app/chamados/tests/test_contract_status_nucleo.py:7`; `app/chamados/tests/test_contract_status_nucleo.py:8`).
-
-A cópia externa do veto também pode esconder o pedido à porta: `abrir = ChamadoColaborador.abrir; if not motivo_do_veto(...): abrir(...)` não preenche `pede_porta`, porque a chamada é por nome. E os reabridores automáticos existentes por instância não são reconhecidos como escritores pelo selo (`app/chamados/tests/test_o261_veto_na_porta.py:163`; `app/chamados/tests/test_o261_veto_na_porta.py:166`; `app/chamados/tests/test_o261_veto_na_porta.py:170`).
-
-**Sem achado** para import relativo direto `from .models import ChamadoColaborador as Ch`, alias simples de importação e `ChamadoColaborador.objects.bulk_create(...)` direto: esses formatos são reconhecidos (`app/chamados/tests/test_o261_veto_na_porta.py:92`; `app/chamados/tests/test_o261_veto_na_porta.py:170`).
-
-**(d) Vacuidade dos testes da porta** [nao verificado]
-
-**Sem achado de vacuidade por guarda anterior** nos casos negativos apresentados. `abrir` e renascimento têm controles positivos; no caso `criar`, a fixture não cria célula, e a guarda de absolvição retorna `None` sem célula — ela não explica sozinha o nascimento recusado (`app/chamados/tests/test_o261_veto_na_porta.py:255`; `app/chamados/tests/test_o261_veto_na_porta.py:279`; `app/chamados/tests/test_o261_veto_na_porta.py:295`; `app/chamados/tests/test_o261_veto_na_porta.py:338`; `app/chamados/models.py:865`).
-
-Há, contudo, **lacuna de integração de `ec=None`**: o teste chama apenas `motivo_do_veto`; os demais casos mantêm vínculo. Mutante da porta que retornasse permissivamente quando `vinculo_do_emissor()` devolvesse `None` continuaria passando nesses casos, violando VETO-EC-NONE (`app/chamados/tests/test_o261_veto_na_porta.py:266`; `app/chamados/tests/test_o261_veto_na_porta.py:302`; `app/chamados/models.py:896`).
-
-Também falta prova dos cinco módulos: os pedidos positivos do universo exercitam `turno_aberto`, `turno_aberto_24h` e `entrada_bloqueada_turno_aberto`; excluir `batida_ausente` e `intervalo_pendente` do universo não é distinguido por esses casos (`app/chamados/tests/test_o261_veto_na_porta.py:269`; `app/chamados/tests/test_o261_veto_na_porta.py:298`; `app/chamados/tests/test_o261_veto_na_porta.py:324`; `app/ponto/services/furos_vetados.py:71`).
-
-Nas demais classes solicitadas: **sem achado de segundo juiz registrado**, relógio novo fora da borda ou inversão demonstrada de trava; as três cópias externas estão expressamente permitidas para B. Há consulta adicional de vínculo por tentativa com universo e dia, mas violação de teto de request/latência é **[nao verificado]** (`app/core/juizes.py:248`; `app/chamados/tests/test_o261_veto_na_porta.py:46`; `app/chamados/models.py:669`; `app/chamados/models.py:896`; `app/escala/servico_jornada.py:46`; `app/escala/servico_jornada.py:58`).
-
-_463 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_466 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
