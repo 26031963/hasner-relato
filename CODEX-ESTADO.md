@@ -1,7 +1,139 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **29/10/2026 23:40** · publicado em **29/10/2026 23:41** (UTC-3)
+> Ultima resposta processada: **29/10/2026 23:44** · publicado em **29/10/2026 23:47** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 29/10 23:44 · sessao 1b05e128f7e5 · o261c · leitura · origem=Code
+
+**Sim: há recusas que decorrem de filtros divergentes da regra de costura.** O caso mais direto é o histórico: ele conserva o mapa de **motivo principal**, enquanto o juiz de motivos atendidos permite que o chamado do dia responda pelos quatro motivos. Já o `False` de c1 diante de pergunta VIVA é deliberado e correto. (`app/chamados/reconciliador.py:1391–1394`; `app/chamados/juizes.py:1589–1600`; `app/chamados/reconciliador.py:398–400`)
+
+Não é possível distribuir os ~140 casos entre essas causas apenas pela árvore; a incidência de cada ramo nessa amostra permanece **[não verificado]**.
+
+**1. Fluxo externo e retornos finais**
+
+`reatar_pergunta_orfa` tem quatro pontos explícitos de `return False`:
+
+| Caminho | Condição | Retorno final |
+|---|---|---|
+| Derivador não encontrou destino; falta data | Nem `p.data_evento` nem `contexto[p.motivo]['data']` fornecem data | `app/chamados/reconciliador.py:1382–1383` |
+| Derivador não encontrou destino; cardinalidade do histórico | `hist >= 2`; ou `hist == 0` e **ambos** c1/c2 recusaram | `app/chamados/reconciliador.py:1395–1416` |
+| Histórico único; costura recusada | `reapontar_resolvedora(...hist[0]...)` devolveu `_ok=False` | `app/chamados/reconciliador.py:1433–1436` |
+| Candidato vivo; costura recusada | `reapontar_resolvedora(...ch...)` devolveu `_ok=False` | `app/chamados/reconciliador.py:1445–1448` |
+
+Portanto, `None` do derivador **não encerra a tentativa**. Mas histórico ambíguo encerra sem tentar c1/c2; candidato vivo recusado pelo juiz também encerra sem tentar os demais caminhos. (`app/chamados/reconciliador.py:1371–1416`, `:1445–1449`)
+
+Exceções não são convertidas em `False` por essa função: o laço externo as captura e registra separadamente. (`app/chamados/reconciliador.py:1338–1343`)
+
+**2. `_derivar_chamado_destino`: quando retorna `(None, None)`**
+
+A implementação está em `services/disputa_emissao.py`, reexportada por `models.py`. O reatamento passa a data da própria pergunta; o contexto da disputa é fallback. (`app/chamados/models.py:2778`; `app/chamados/reconciliador.py:1369–1370`; `app/chamados/services/disputa_emissao.py:174–179`)
+
+| Filtro | Como elimina o candidato |
+|---|---|
+| Colaborador e estado | Busca somente chamados do colaborador da disputa com `status_local in VIVOS`; exclui categoria exatamente `disputa_supervisao`. `VIVOS = aberto, em_analise, registrado`. (`app/chamados/services/disputa_emissao.py:181–184`; `app/chamados/catalogo/motor.py:24`) |
+| Categoria/subcategoria | Normaliza ambos e exige `motivo in motivos_atendidos(cat, sub)`. Se nenhum rótulo pertence aos mapas, descarta. **Não há filtro direto por `modulo_origem`**, nem consulta à lâmpada nessa classificação. (`app/chamados/services/disputa_emissao.py:186–196`; `app/chamados/juizes.py:1595–1600`) |
+| Candidato ocupado | Descarta se existe pergunta apontando para aquele chamado, do **mesmo motivo**, com `materializada_em IS NULL`. Não exige disputa aberta, mesma data ou `pergunta_viva=True`. (`app/chamados/services/disputa_emissao.py:209–212`) |
+| Dia diferente | Obtém `dia_do_fato(ch)`; quando as duas datas existem, qualquer diferença textual elimina o candidato. Se alguma data falta, esse filtro não elimina. (`app/chamados/services/disputa_emissao.py:214–218`) |
+| Nenhum candidato ou ambiguidade residual | Depois do desempate, exige exatamente um; caso contrário retorna `(None, None)` em **227**. (`app/chamados/services/disputa_emissao.py:219–227`) |
+
+`motivos_atendidos` devolve **os quatro motivos** — `orfao_14h`, `saida_sem_entrada`, `intervalo_saida`, `intervalo_volta` — quando categoria **ou** subcategoria está no mapa. Portanto, no derivador vivo, um chamado de turno pode atender intervalo; não se exige igualdade com seu motivo principal. (`app/chamados/juizes.py:1597–1600`; `app/chamados/models.py:2502–2503`)
+
+O desempate só roda com mais de um candidato. Sem data válida ou sem entradas de turnos abertos, mantém a lista original. Com entradas, seleciona os candidatos cujo `entrada_timestamp` casa com elas; um único vence; vários da mesma entrada e das categorias `turno_aberto`/`turno_aberto_24h` escolhem o estágio mais avançado; outras ambiguidades permanecem. (`app/chamados/services/disputa_emissao.py:110–146`, `:219–220`)
+
+A ocupação por carimbo é uma escolha expressa dessa função, inclusive preservada em testes; sua diferença para `pergunta_viva` **não basta, isoladamente, para declarar defeito**. (`app/chamados/services/disputa_emissao.py:206–212`; `app/chamados/tests/test_selo_mapa_motivos_do_dia.py:122–143`)
+
+**3. Histórico: seleção, bloqueios e diferença para o derivador**
+
+O histórico exige simultaneamente:
+
+- Mesmo colaborador; `status_local in ENCERRADOS`, que contém somente `resolvido` e `fechado`, excluindo `cancelado`/`superado`. (`app/chamados/reconciliador.py:1385–1386`; `app/chamados/catalogo/motor.py:30–31`)
+- `contexto_json__data_turno == str(data_ctx)`; exclui categoria exatamente `disputa_supervisao`. (`app/chamados/reconciliador.py:1387–1388`)
+- Motivo calculado por `MAPA_SUBCATEGORIA.get(sub) or MAPA_CATEGORIA.get(cat)` **igual** ao motivo da pergunta; a subcategoria tem precedência. (`app/chamados/reconciliador.py:1389–1394`)
+
+Os desfechos são:
+
+| Quantidade | Comportamento |
+|---|---|
+| Zero | Faz parse da data e tenta c1, depois c2. Se ambos recusarem, `False` em **1416**. (`app/chamados/reconciliador.py:1395–1416`) |
+| Dois ou mais | `False` em **1416**, sem c1/c2 e sem desempate pelo turno. (`app/chamados/reconciliador.py:1395`, `:1415–1416`) |
+| Um | Tenta costura; recusa dá `False` em **1436**. Costura aceita chama `resolver_perguntas_por_chamado_resolvido` e retorna `True`. (`app/chamados/reconciliador.py:1433–1440`) |
+
+**Intervalos nunca entram nesse histórico:** nenhum valor dos dois mapas é `intervalo_saida` ou `intervalo_volta`; seus valores são apenas `orfao_14h` e `saida_sem_entrada`. (`app/chamados/models.py:2466–2483`; `app/chamados/reconciliador.py:1391–1394`)
+
+**4. c1 — `lavrar_sem_turno_aberto`**
+
+| Guarda | `False` |
+|---|---|
+| Motivo fora de `MOTIVOS_C1 = ('orfao_14h', 'saida_sem_entrada')` | `app/chamados/reconciliador.py:363–364`; conjunto em `:332` |
+| Resposta do colaborador não vazia após `strip()` | `app/chamados/reconciliador.py:365–366` |
+| Já materializada | `app/chamados/reconciliador.py:367–368`; excluído pelas premissas apresentadas |
+| Existe turno aberto na janela do dia | `app/chamados/reconciliador.py:372–373` |
+| `pergunta_viva(p)` é verdadeira | `app/chamados/reconciliador.py:398–400` |
+
+Com dia, `_tem_turno_aberto` usa turnos com entrada e sem saída em `(dia−1, dia)`; há veto quando todos esses turnos têm seu próprio dia posicionalmente completo. Sem dia, usa consulta global de turnos abertos. (`app/chamados/reconciliador.py:96–114`, `:171–178`)
+
+**Para a pergunta VIVA da questão, c1 necessariamente recusa:** ou alguma guarda anterior dispara, ou chega ao `False` de **400**. Isso protege o furo real contra carimbo sem lastro; existe teste que combina ausência de turno aberto, pergunta VIVA, lâmpada apagada e recusa de c1. (`app/chamados/reconciliador.py:374–400`; `app/chamados/tests/test_o261_lavra_le_a_lampada.py:129–146`)
+
+Intervalos recusam na primeira guarda. A justificativa expressa é que ausência de turno aberto não resolve um marco no meio do turno. (`app/chamados/reconciliador.py:329–332`, `:363–364`)
+
+**5. c2 — `reemitir_chamado_do_dia`**
+
+C2 também aceita **somente `orfao_14h` e `saida_sem_entrada`**, porque reutiliza `MOTIVOS_C1`. `intervalo_saida` e `intervalo_volta` retornam `False` imediatamente em **713**, antes de examinar célula, protestos ou existência de chamado. (`app/chamados/reconciliador.py:332`, `:712–713`)
+
+Para os motivos aceitos, a ordem das recusas é:
+
+| Gate | Condição de recusa e linha |
+|---|---|
+| Data ausente | `not data_ctx` → `False` em **716**. (`app/chamados/reconciliador.py:714–716`) |
+| Situação | `colab.situacao != 'ativo'` → **724**. (`app/chamados/reconciliador.py:723–724`) |
+| Data inválida | `date.fromisoformat` levanta `ValueError` → **736**. (`app/chamados/reconciliador.py:732–736`) |
+| Piso de emissão | Sem chamado vivo encontrado pela chave de c2 e fora de `emissao_no_horizonte` → **744**. (`app/chamados/reconciliador.py:738–744`) |
+| Isenção | `cala_para_isento('batida_ausente') and isento_ponto(colab)` → **754**. O módulo pertence aos calados; isenção lê a flag do colaborador. (`app/chamados/reconciliador.py:753–754`; `app/chamados/catalogo/modulos.py:235–236`; `app/core/constants.py:13–18`) |
+| Ausência | `ausencia_cobre(..., para='cobranca') is not None` → **757**. Para cobrança, ausência não rejeitada suspende, inclusive pendente. (`app/chamados/reconciliador.py:755–757`; `app/ponto/turnos.py:2475–2483`, `:2518–2523`) |
+| Protesto | Sem costura em vivo e sem interseção dos protestos da célula com `PROTESTOS_QUE_COBRAM` → **771**. Célula ausente também cai aqui. (`app/chamados/reconciliador.py:766–771`) |
+| Veto da célula | `celula_veta_cobranca` retorna motivo → **776**. (`app/chamados/reconciliador.py:772–776`) |
+| Motor | `decidir(ESTADO_NASCENTE, 'EMITIR').permitido == False` → **778**. Na tabela atual essa chamada sempre permite. (`app/chamados/reconciliador.py:777–778`; `app/chamados/catalogo/motor.py:130–132`) |
+| Resultado de `abrir` | Chamado devolvido continua fora de `VIVOS` → **806**. (`app/chamados/reconciliador.py:802–806`) |
+| Costura | `reapontar_resolvedora` recusa → **822**. (`app/chamados/reconciliador.py:819–822`) |
+
+O piso é **competência `2026-09`**, calculada pela janela da empresa, não pelo mês civil do dia. Não é teto temporal. (`app/ponto/services/cartorio.py:190`, `:232–246`)
+
+Os protestos aceitos são exatamente `FURO_PARCIAL`, `FURO_SEM_COBRANCA`, `FURO_COM_COBRANCA_MORTA`. Estar em `VEREDITOS_ACUSAM` **não implica** ter um deles: a lista de vereditos também contém `indefinida`, `cobrado`, `nunca_bateu`, `cobranca_indevida` e outros. (`app/ponto/services/furos_sem_cobranca.py:35`; `app/escala/models.py:1735–1736`)
+
+O veto da célula recusa `trabalha is False` ou veredito em `nunca_bateu`, `trabalhou`, `justificado`, `coberta`, `cobranca_indevida`. Assim, até alguns vereditos que **acusam** podem legitimamente vetar essa emissão. (`app/ponto/marcos.py:119`, `:155–163`; `app/escala/models.py:1735–1736`)
+
+A exceção `_costura_no_vivo` dispensa **piso e protesto**; não dispensa situação, isenção, ausência, veto da célula ou costura final. Sua busca usa exclusivamente módulo `batida_ausente` e `contexto_json__data_turno`. (`app/chamados/reconciliador.py:738–777`)
+
+Quanto ao **teto temporal**, c2 não chama diretamente `dia_encerrado`: lê os protestos já gravados. O classificador que produz os protestos de furo exige turno encerrado nos respectivos ramos; portanto o teto chega por essa classificação, sem rechecagem explícita em c2. (`app/chamados/reconciliador.py:712–823`; `app/ponto/supra_juiz.py:245–253`, `:280–283`)
+
+Quanto a **“cala”**, o gate direto é `cala_para_isento`. O `_cala_emissao` do cartório é outro predicado — chamado vivo ou fora do piso — e não é chamado por c2; `cartorio.calado()` controla reentrada de julgamento, não devolve veto de c2. (`app/chamados/reconciliador.py:753–754`; `app/ponto/services/cartorio.py:1319–1327`, `:58–68`)
+
+**6. Gates transitivos de `abrir` que terminam no `False` de c2:806**
+
+`abrir` encontra o existente pela chave, tenta renascer apenas se estiver em `ENCERRADOS` e devolve o mesmo objeto, mesmo quando o renascimento recusa. Cancelado/superado não entram nessa tentativa. (`app/chamados/models.py:670–688`; `app/chamados/catalogo/motor.py:30–31`)
+
+O renascimento recusa por:
+
+- Colaborador não ativo, via `cascade`, competência trancada ou recusa de `reabrir`. (`app/chamados/models.py:764–771`)
+- Na reabertura: fechamento pelo admin sem fato novo; premissa regularizada; agrupamento sob pai vivo; irmão vivo do turno; transição não permitida. As recusas retornam em **1056, 1062, 1064, 1083 e 1085**. (`app/chamados/models.py:1003–1020`, `:1050–1085`)
+
+A premissa regularizada consulta justificativa aprovada, decisão do admin na célula, dia sem trabalho, lâmpadas dos marcos pedidos, marcos inexistentes e, depois, o coletor do furo. Portanto, **esse gate lê lâmpadas**, não apenas o status do chamado. (`app/chamados/models.py:937–985`)
+
+Competência **exportada** deixou de ser veto; competência **trancada** permanece no renascimento. O juiz da pergunta, por sua vez, permite exceção à tranca quando houve toque posterior do admin; assim, “pergunta VIVA” não elimina universalmente a possibilidade do gate transitivo de tranca. (`app/chamados/models.py:753–769`; `app/chamados/juizes.py:875–907`)
+
+**7. Recusa comum da costura**
+
+Nos três caminhos que chamam `reapontar_resolvedora` — vivo, histórico e c2 — a recusa vem de `resolvedora_valida`; a porta desfaz eventual data acrescentada e não grava o destino. (`app/chamados/services/fio.py:788–801`)
+
+Esse juiz permite ignorância de data/escopo; com datas conhecidas, permite igualdade e diferença de um dia quando o turno cruza meia-noite **ou quando isso é desconhecido**. Fora disso, retorna `(False, motivo)` em **1737**. (`app/chamados/juizes.py:1702–1738`)
+
+**Sobre o defeito pedido, a evidência permite distinguir:**
+
+- **Defeito demonstrável no histórico:** aplica o mapa principal 1:1 onde a regra de atendimento permite os quatro motivos. Pode ignorar chamado encerrado do mesmo dia que atende a pergunta; para intervalos, essa exclusão é absoluta. A ausência de candidato em `hist` não prova ausência legítima de chamado. (`app/chamados/reconciliador.py:1391–1394`; `app/chamados/models.py:2486–2503`; `app/chamados/juizes.py:1597–1599`)
+- **Lacuna demonstrável para intervalos:** após falhar o derivador vivo, o histórico nunca os seleciona e c1/c2 recusam pelo motivo. A justificativa escrita para excluir intervalo pertence à **lavra por ausência de turno**, enquanto o chamado do dia atende intervalos e o emissor do cartório trata `FURO_PARCIAL`. Isso impede concluir que esses `False` significam “não há cobrança cabível”. (`app/chamados/reconciliador.py:329–332`, `:712–713`, `:1391–1416`; `app/chamados/juizes.py:1597–1599`; `app/ponto/services/cartorio.py:1381–1396`)
+- **Pré-filtros divergentes do juiz:** o derivador elimina qualquer diferença de dia antes de alcançar o juiz que aceita certos casos adjacentes; o histórico busca apenas JSON `data_turno`, enquanto o juiz do dia prioriza célula e chave declarada no catálogo. Podem excluir candidatos admissíveis; ocorrência nesses ~140 **[não verificado]**. (`app/chamados/services/disputa_emissao.py:214–217`; `app/chamados/juizes.py:1730–1738`, `:89–112`; `app/chamados/reconciliador.py:1387`)
+- **c1 recusando VIVA é correto:** sua própria regra exige essa recusa para não enterrar furo real. (`app/chamados/reconciliador.py:374–400`)
+- **Não há veto pelo status terminal do pai da disputa nesses caminhos.** O derivador filtra o estado dos candidatos; c2 verifica o chamado devolvido por `abrir`. O gate transitivo que lê um pai é `agrupado_em`, e só bloqueia quando esse pai está **vivo** — pai terminal não satisfaz essa guarda. (`app/chamados/services/disputa_emissao.py:181–184`; `app/chamados/reconciliador.py:802–806`; `app/chamados/models.py:581–596`, `:1012–1013`)
 
 ## 29/10 23:40 · sessao 936da2887a4a · - · - · origem=Ronald (tmux)
 
@@ -457,86 +589,4 @@ Censo do modelo e chamadores, sem alteração de arquivos:
 
 `desfazer_carimbo_sem_lastro` usa exatamente `pergunta_viva` (`app/chamados/services/relavra_via.py:192`, `:200-201`); pula vias de identidade definidas em `:166-167` (`:198-199`) e limpa carimbo/autor/via com `save` (`:204-208`). Também reabre disputa fechada (`:220-222`).
 
-## 29/10 23:16 · sessao 0019299f2950 · o261c2 · leitura · origem=Code
-
-As referências abaixo usam a árvore-base `e84a9463…`, sob `app/`. A conclusão central é: **já existe costura de órfãs, mas ela não cobre toda pergunta viva; os retornos à vida também não passam por uma porta única de escolha de destino.** ([reconciliador.py:1317](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/reconciliador.py:1317), [models.py:2176](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/models.py:2176), [disputa_emissao.py:1358](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/services/disputa_emissao.py:1358).)
-
-**(1) Os seis emissores**
-
-| Emissor | Motivo e `data_evento` enviados a `abrir` | `chamado_destino` |
-|---|---|---|
-| `gerar_perguntas_disputa`, ~389 | Itera `motivos_novos` com template. Obtém data da grade quando o texto não consegue resolver a data; depois tenta contexto `[motivo]['data']` e `ultima_batida.timestamp` em data local. Envia a data do derivador quando disponível, senão esse fallback. ([disputa_emissao.py:292](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/services/disputa_emissao.py:292), [:316](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/services/disputa_emissao.py:316), [:343](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/services/disputa_emissao.py:343), [:389](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/services/disputa_emissao.py:389).) | Pode receber `_ch_dest`: deriva para motivos que exigem destino e para intervalos pertencentes a `MOTIVOS_DO_DIA_SEM_FECHAR`. Pode continuar `None`. ([disputa_emissao.py:367](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/services/disputa_emissao.py:367).) |
-| `_criar_pergunta_se_couber`, ~770 | Repassa os argumentos `motivo` e `data_evento`; verifica ausência e pergunta anterior. ([disputa_emissao.py:756](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/services/disputa_emissao.py:756).) | Repassa explicitamente o chamado escolhido pelo agrupador; admite chamados relacionados. ([disputa_emissao.py:767](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/services/disputa_emissao.py:767).) |
-| `criar_disputa_ancora_de_chamado`, ~1160 | `ancora_ausente`; omite data. `abrir` grava o dia local da abertura. ([disputa_emissao.py:1160](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/services/disputa_emissao.py:1160), [models.py:2054](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/models.py:2054).) | O próprio `chamado_limbo`, cuja categoria deve ser `ancora_limbo` e cujo estado não pode estar em `ENCERRADOS`. ([disputa_emissao.py:1107](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/services/disputa_emissao.py:1107), [:1166](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/services/disputa_emissao.py:1166).) |
-| `acao_reabrir_disputa_admin`, ~265 | Motivo do POST, validado em `MOTIVOS_CHOICES`; omite data, portanto recebe o dia local da reabertura. ([acoes_disputa.py:245](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/services/acoes_disputa.py:245), [:259](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/services/acoes_disputa.py:259), [models.py:2054](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/models.py:2054).) | Omite destino. Depois tenta reabrir o chamado da disputa se encerrado. ([acoes_disputa.py:259](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/services/acoes_disputa.py:259), [:265](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/services/acoes_disputa.py:265).) |
-| `declarar_hora_colab`, ~322 | Motivo e dia do marco faltante que casou com a hora declarada; parte de `dia_do_fato(ch)`. ([declaracao_texto.py:281](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/services/declaracao_texto.py:281), [:296](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/services/declaracao_texto.py:296).) | O próprio `ch` onde o colaborador declara. Também costura explicitamente uma candidata reutilizada sem destino. ([declaracao_texto.py:310](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/services/declaracao_texto.py:310).) |
-| `aplicar_declaracao`, ~611 | `p['motivo']` e `p['dia']` da proposta extraída do followup e casada com marco faltante. ([declaracao_texto.py:572](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/services/declaracao_texto.py:572), [:600](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/services/declaracao_texto.py:600).) | O próprio `ch` quando chama `abrir`. Se encontra candidata reutilizável, esse ramo não contém a costura explícita da porta anterior. ([declaracao_texto.py:608](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/services/declaracao_texto.py:608).) |
-
-Nos dois emissores de declaração, o mapa é início/E → `saida_sem_entrada`; fim/S → `orfao_14h`; ida/S → `intervalo_saida`; volta/E → `intervalo_volta`. ([declaracao_texto.py:42](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/services/declaracao_texto.py:42).)
-
-No agrupador que alimenta ~770, existem quatro escolhas concretas:
-
-- Intervalo dedicado: motivo pelo tipo E/S, dia de `marcos_faltantes[].data`, destino no próprio chamado de intervalo. ([disputa_emissao.py:939](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/services/disputa_emissao.py:939).)
-- Pela ata: dia pela chave declarada do módulo; perguntas dos marcos faltantes apontam para aquele chamado. ([disputa_emissao.py:966](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/services/disputa_emissao.py:966).)
-- Com batida de origem: motivo de `classificar_falta`, dia de `resolver_data_evento(...) or data_entrada`, destino no primeiro chamado do grupo. ([disputa_emissao.py:996](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/services/disputa_emissao.py:996).)
-- Sem origem: dia extraído do contexto, motivo de `classificar_falta`, destino no próprio chamado; exige base e ata. ([disputa_emissao.py:1030](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/services/disputa_emissao.py:1030).)
-
-**Qual chamado cobra esse colab-dia:** o código não permite deduzir um único módulo pelo motivo. Há emissão de `batida_ausente` com `contexto_json.data_turno`, emissão de `turno_aberto` nessa mesma chave e módulos declarados `turno_aberto_24h` e `intervalo_pendente`; a emissão específica de intervalo está aposentada, mantendo reconciliação do legado. ([detectar_ausencias.py:688](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/ponto/management/commands/detectar_ausencias.py:688), [processar_alertas_turno.py:335](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/ponto/management/commands/processar_alertas_turno.py:335), [catalogo/modulos.py:105](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/catalogo/modulos.py:105), [detectar_intervalo_ausente.py:145](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/ponto/management/commands/detectar_intervalo_ausente.py:145).)
-
-A célula do chamado é procurada no nascimento por `(colaborador, dia forte)`. Esse dia prefere `chamado.celula.data`, depois a chave declarada no catálogo e o fallback `data_turno`; a pergunta datada procura sua própria célula por `(colaborador, data_evento)`. Não se deve presumir igualdade dessas datas sem conferir o turno. ([models.py:716](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/models.py:716), [:895](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/models.py:895), [:2058](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/models.py:2058), [juizes.py:78](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/juizes.py:78), [:1730](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/juizes.py:1730).)
-
-**O mapa escrito é categoria/subcategoria → motivos atendidos**, em `MAPA_CATEGORIA_PARA_MOTIVO_DISPUTA`, `MAPA_SUBCATEGORIA_PARA_MOTIVO_DISPUTA` e `motivos_atendidos`. Para categorias/subcategorias reconhecidas, este último devolve os quatro motivos do dia sem fechar. Não é um mapa motivo → `modulo_origem`; o derivador sequer filtra módulo. ([models.py:2466](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/models.py:2466), [:2502](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/models.py:2502), [juizes.py:1589](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/juizes.py:1589), [disputa_emissao.py:181](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/services/disputa_emissao.py:181).)
-
-Os PKs, módulos, JSONs e células que efetivamente cobram cada pergunta hoje dependem dos registros do banco. **[nao verificado]**
-
-**(2) Quem escolhe destino, e por qual juiz**
-
-| Componente | Responsabilidade efetiva |
-|---|---|
-| `PerguntaDisputa.abrir` | Recebe destino do emissor; verifica `resolvedora_valida`. No dedup de fato, pode reapontar a pergunta existente ao destino recebido. Não busca cobrança viva. ([models.py:2028](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/models.py:2028), [:2064](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/models.py:2064).) |
-| `cobranca_viva_do_dia` | Recebe módulo(s), busca chamados `VIVOS` com JSON ou célula no dia, confirma `dia_do_fato(fortes=True)` e escolhe o mais novo por criação/PK. Não escreve destino nem infere módulo pelo motivo. ([juizes.py:1610](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/juizes.py:1610).) |
-| `resolvedora_valida` | Confere compatibilidade temporal; não escolhe candidato, não exige chamado vivo nem verifica motivo. Admite datas vizinhas para turno que cruza meia-noite ou condição desconhecida. ([juizes.py:1687](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/juizes.py:1687).) |
-| `_derivar_chamado_destino` | Busca vivos por categoria/subcategoria e dia; exclui chamado já ocupado por pergunta daquele motivo com materialização NULL; exige candidato único após desempate pelo turno. Não usa C8. ([disputa_emissao.py:174](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/services/disputa_emissao.py:174), [:209](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/services/disputa_emissao.py:209).) |
-| `reapontar_resolvedora` | Recebe o chamado escolhido, consulta `resolvedora_valida` e grava destino e lavra juntos. Não procura candidato. ([fio.py:785](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/services/fio.py:785).) |
-| `reemitir_chamado_do_dia` | Para `orfao_14h`/`saida_sem_entrada`, procura/abre a chave fixa `batida_ausente + data_turno`; aplica seus gates e só costura se o resultado estiver vivo. ([reconciliador.py:332](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/reconciliador.py:332), [:712](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/reconciliador.py:712), [:737](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/reconciliador.py:737), [:802](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/reconciliador.py:802).) |
-
-**Sim, já existe costura de pergunta sem destino:** `reatar_pergunta_orfa`. Primeiro deriva vivo; sem candidato, tenta histórico encerrado; sem histórico, tenta `lavrar_sem_turno_aberto` e depois c2. Histórico único pode levar a um destino encerrado e ao resolvedor correspondente; não é exclusivamente uma busca por cobrança viva. ([reconciliador.py:1369](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/reconciliador.py:1369), [:1384](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/reconciliador.py:1384), [:1411](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/reconciliador.py:1411), [:1433](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/reconciliador.py:1433).)
-
-Ela é chamada pelo emissor principal **somente para pergunta recém-criada**, sem destino e de um dos quatro motivos; também pelo reconciliador, cujo universo exige destino NULL, disputa aberta, materialização NULL e motivo reatável. O comentário “HOJE SO O CRON A CHAMA” está desatualizado diante da chamada no emissor. ([disputa_emissao.py:404](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/services/disputa_emissao.py:404), [reconciliador.py:1317](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/reconciliador.py:1317), [:1352](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/reconciliador.py:1352).)
-
-Isso deixa lacunas demonstráveis:
-
-- Pergunta existente devolvida por `abrir` tem `_criada=False`, portanto não passa pela costura pós-nascimento. ([models.py:2084](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/models.py:2084), [disputa_emissao.py:404](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/services/disputa_emissao.py:404).)
-- Pergunta viva pode ter materialização preenchida; disputa fechada ou motivo fora do conjunto também a excluem do reconciliador. ([juizes.py:1050](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/juizes.py:1050), [reconciliador.py:1317](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/reconciliador.py:1317).)
-- O derivador pode excluir o vivo por ocupação do mesmo motivo ou permanecer ambíguo; c2 cobre apenas dois motivos e um módulo. ([disputa_emissao.py:209](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/services/disputa_emissao.py:209), [reconciliador.py:712](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/reconciliador.py:712), [:738](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/reconciliador.py:738).)
-- Sem destino, `chamado_que_lista` continua escolhendo o pai, sem examinar seu status. ([fio.py:116](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/services/fio.py:116).)
-
-**Não está demonstrado qual dessas barreiras explica cada uma das 807**, nem se o reconciliador executou sobre elas: faltam os registros e a evidência de execução. **[nao verificado]**
-
-**(3) Pergunta existente que volta a viver**
-
-**Não convergem numa porta única de reabertura ou costura.** As portas efetivas são distintas: ([disputa_emissao.py:1358](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/services/disputa_emissao.py:1358), [models.py:2176](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/models.py:2176), [:2191](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/models.py:2191), [:2210](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/models.py:2210).)
-
-| Caminho | Porta |
-|---|---|
-| Correção do questionário / recusa de resposta | `reabrir_para_correcao`; zera texto, resposta e validação, preservando versão anterior. ([models.py:1780](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/models.py:1780), [validacao.py:540](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/services/validacao.py:540), [disputa_emissao.py:1358](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/services/disputa_emissao.py:1358).) |
-| Ausência rejeitada | `devolver_absorvidas_da_ausencia_rejeitada` → `reabrir_para_correcao(..., desfazer_absorcao=True)` e `reabrir_sistema` nas disputas. ([materializacao.py:628](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/services/materializacao.py:628).) |
-| Fantasma | `PerguntaDisputa.reabrir_fantasma`; desfaz via e materialização. ([models.py:2183](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/models.py:2183).) |
-| `reabrir_orfas_enterradas` | Chama `reabrir_fantasma`, depois reabre disputa e, quando necessário, o próprio pai. Não procura cobrança de outro chamado. ([reabrir_orfas_enterradas.py:146](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/management/commands/reabrir_orfas_enterradas.py:146), [:154](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/management/commands/reabrir_orfas_enterradas.py:154), [:161](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/management/commands/reabrir_orfas_enterradas.py:161).) |
-| Resposta nova | O core desfaz validação anterior e chama `reabrir_por_resposta`, que desfaz apenas carimbo das vias sem lastro. ([disputa_emissao.py:1260](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/services/disputa_emissao.py:1260), [models.py:2203](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/models.py:2203).) |
-| Competência reaberta | `competencia_trancada.reabrir` → `reabrir_por_competencia`; desfaz aquela via, conservando resposta. ([competencia_trancada.py:247](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/services/competencia_trancada.py:247), [models.py:2210](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/models.py:2210).) |
-| Ressurreição pelo chamado | `ressuscitar_perguntas`; atua nas perguntas que já apontam para aquele chamado, excluindo marco comprovadamente aceso. ([models.py:1112](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/models.py:1112), [:1153](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/models.py:1153).) |
-
-Nem a persistência converge: correção e ressurreição usam `QuerySet.update`; fantasma e competência usam `save`. O receiver de pergunta agenda fechamento de beco, sem escolher destino. ([disputa_emissao.py:1377](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/services/disputa_emissao.py:1377), [models.py:1162](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/models.py:1162), [:2188](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/models.py:2188), [signals.py:191](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/signals.py:191).)
-
-Há ainda vida que volta **por leitura**: removida a tranca, ou mudando a célula/classificação do dia, o juiz pode voltar a dar viva sem nenhuma dessas escritas. O denominador comum é `pergunta_viva`, uma autoridade de leitura; não uma porta que costura destino. ([juizes.py:1005](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/juizes.py:1005), [:1054](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/juizes.py:1054), [:1066](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/juizes.py:1066).)
-
-**(4) Conversa: qual “dia” e qual chamado lista**
-
-Ao receber `data_evento=None`, `abrir` grava `timezone.localdate()`: **o dia em que a conversa foi aberta**. Esse ramo pula dedup de fato e busca de célula; a verificação inicial do destino ocorre antes dessa normalização e exige data originalmente explícita. ([models.py:2043](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/models.py:2043), [:2052](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/models.py:2052).)
-
-- **Reabertura administrativa:** data da conversa, destino NULL, listagem no pai da disputa existente. A ação tenta reabrir esse pai; não consulta a cobrança do dia da conversa. ([acoes_disputa.py:259](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/services/acoes_disputa.py:259), [:265](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/services/acoes_disputa.py:265), [fio.py:117](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/services/fio.py:117).)
-- **`ancora_ausente` no emissor próprio:** data da conversa, destino explícito no `chamado_limbo`; é ele que lista. `ancora_limbo` declara escopo PERÍODO e chave `data_inicio`, não `data_turno`. ([disputa_emissao.py:1160](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/services/disputa_emissao.py:1160), [catalogo/modulos.py:131](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/catalogo/modulos.py:131), [fio.py:117](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/services/fio.py:117).)
-- **Dia real da primeira entrada:** vem da data/hora respondida pelo colaborador, que o materializador transforma no timestamp da batida E. O `data_evento` da conversa não demonstra esse dia. ([models.py:2461](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/models.py:2461), [materializacao.py:939](../e84a9463bfb582ed01e420ee31c3b3f1a97f1c61/app/chamados/services/materializacao.py:939).)
-
-_295 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_296 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
