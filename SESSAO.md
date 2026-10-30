@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 30/10/2026 19:05:08.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (4.7 MB). Acoes na janela: **191**.
+**Medido em 30/10/2026 19:10:45.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (4.8 MB). Acoes na janela: **195**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 19:07:48 | Agent | Opus final O261-V-FASE | `LEITURA FINAL (verificador opus) antes do POUSO da obra O261-V-FASE-NA-LISTA. Pela regra SUITE-POR-IMPACTO (2) a suite inteira desta MESMA arvore roda em paralelo agora (/home/ronald/saas-hasner/logs/o261v/suite2_9772e8fe.log); voce nao a espera. Arvore que pousa: /home/ronald/wt-vfase2-1811, HEAD 9772e8fe, base d80c98a5 (`git -C /home/ronald/wt-vfase2-1811 diff d80c98a5 HEAD`; corpos dos commits  ...` |
+| 19:07:35 | Bash |  | `cd /home/ronald/saas-hasner && W=/home/ronald/wt-vfase2-1811; git -C $W status --short \| head -3; (bin/suite.sh --espera 3600 --dir $W > logs/o261v/suite2_9772e8fe.log 2>&1; echo "rc=$?" >> logs/o261v/suite2_9772e8fe.log)` |
+| 19:07:29 | Bash |  | `cd /home/ronald/saas-hasner/logs/o261v && grep -A30 "^ERROR: test_MORDE_lavra_do_formato" red2_volta3_5b3292c2.log \| grep -E "Error\|line [0-9]+, in test" \| head -4; grep -A30 "^ERROR: test_MORDE_horario" red2_volta3_5b3292c2.log \| grep -E "Error\|line [0-9]+, in test" \| head -4` |
+| 19:07:21 | Bash |  | `cd /home/ronald/saas-hasner/logs/o261v && for f in red2_volta3_5b3292c2 verde2_9772e8fe; do echo == $f; grep -E "^(FAIL\|ERROR):\|^Ran \|^(OK\|FAILED)($\| \()\|^rc=" $f.log \| tail -6 \| cut -c1-200; done; cd /home/ronald/saas-hasner && tail -3 logs/suite_impacto/medida.log \| cut -c1-200` |
 | 19:04:30 | Bash |  | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md' L=open(p).read().split('\n') assert L[2].startswith('ESPERANDO:') L.insert(4,"> **O261-V-FASE-NA-LISTA 2a construcao ENTREGUE** (`wt-vfase2-1811` @ 9772e8fe sobre d80c98a5, 5 commits): censo_fase_12x36 = juiz unico com `detalhe.itens` por dia (data, ec_do_dia, dono CADASTRO, aplicavel), default de competencia cravado [9,10] CU ...` |
 | 19:04:20 | Bash |  | `cd /home/ronald/saas-hasner && L=logs/o261v; (bin/suite.sh --espera 3600 --dir /home/ronald/wt-vfase2r4-1849 --only "escala.tests.test_o261_v_fase_na_lista" > $L/red2_volta3_5b3292c2.log 2>&1; echo "rc=$?" >> $L/red2_volta3_5b3292c2.log; bin/suite.sh --espera 3600 --dir /home/ronald/wt-vfase2-1811 --only "escala.tests.test_o261_v_fase_na_lista $(cat $L/recorte2_labels.txt \| tr '\n' ' ')" > $L/ver ...` |
 | 19:04:16 | Bash |  | `cd /home/ronald/saas-hasner && grep -n "espera)" -A3 bin/suite.sh \| head -6; ls -d /home/ronald/wt-vfase2r4-1849 /home/ronald/wt-vfase2-1811 && git -C /home/ronald/wt-vfase2-1811 log --oneline -1` |

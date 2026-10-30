@@ -1,7 +1,116 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **30/10/2026 19:03** · publicado em **30/10/2026 19:05** (UTC-3)
+> Ultima resposta processada: **30/10/2026 19:10** · publicado em **30/10/2026 19:10** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 30/10 19:10 · sessao a64a4e6e6de1 · - · - · origem=Ronald (tmux)
+
+Achados principais de STATUS:
+
+- **Falso negativo de status do dia já existente:** `relatorios/furos.py::classificar_dia` calcula `sem_marcos/furo/parcial/ok` por quantidade de `missing`; apenas `ok` pertence ao vocabulário contratado, portanto não atinge duas palavras e escapa. A função é consumida por `estado_do_dia`, cuja resposta chega aos dias e à contagem de furos. Evidência: `app/relatorios/furos.py:55`, `:63`, `:69`, `:70`, `:72`, `:74`, `:75`, `:45`, `:160`, `:164`. O próprio censo anterior chama esse trecho de “classificar_dia próprio”, classe C: `app/docs/CENSO_NARNIA.md:66`.
+
+- **A promessa “a tabela/função chamada é que tem de cair” não fecha:** `_VER_ESTADO` é tabela de módulo, expressamente fora do contador; `estado_do_dia` escolhe entre a tabela e `classificar_dia` sem produzir os literais buscados; e `classificar_dia` escapa pelo vocabulário acima. Evidência: `app/relatorios/furos.py:24`, `:45`, `:46`, `:47`, `:52`, `:55`.
+
+- **Outros vocabulários paralelos já presentes:** `montar_painel_operacional` produz `geofence/normal/turno_aberto/encerrado/ausente/folga`, publica o status e faz seis contadores; somente `folga` pertence ao vocabulário do contrato, portanto escapa. Evidência: `app/core/services/painel_op.py:155`, `:160`, `:166`, `:169`, `:172`, `:175`, `:190`, `:200`. O registro já reconhece os seis contadores como classe C: `app/core/juizes.py:705`. `painel_tv` produz `fora/normal/geofence/aberto`, novamente com somente uma palavra reconhecida: `app/core/views.py:807`, `:816`, `:818`, `:828`, `:835`.
+
+- **Falso positivo bruto, resolvível pela exclusão prometida:** `campos_da_frase` produz `folga/falta` com escolha, mas está preenchendo o tipo de uma intenção de escrita, não o status do dia. Deve entrar como homônimo no `NAO_E_LEITOR`; sem a lista concreta não se pode afirmar que sobreviverá ao filtro final. Evidência: `app/core/intake.py:219`, `:228`, `:232`, `:236`.
+
+- **Derivações reais que a regra encontra:** `_classificar`, agregação `celstat_map` de `contexto_calendario`, `minha_escala`, `api_espelho_v2` e `_status_dia`; não encontrei motivo para chamar esses achados de falso positivo. Evidência: `app/colaboradores/services/calendario.py:125`, `:136`, `:509`, `:511`; `app/escala/views.py:49`, `:55`; `app/api/views.py:1514`, `:1570`, `:1644`, `:1650`; `app/ponto/services/espelho.py:152`, `:158`, `:171`.
+
+- **Granularidade:** `api_espelho_v2` contém derivação de certidão da grade, status de dias com batidas e status de dias sem batidas, mas contará uma função. Assim, uma nova derivação dentro dessa função já declarada pode preservar o mesmo conjunto de identidades. Evidência: `app/api/views.py:1512`, `:1514`, `:1570`, `:1636`, `:1644`, `:1650`, `:1653`, `:1656`.
+
+- **PDF:** a palavra é lida em `app/relatorios/pdf_espelho.py:919`; os dias vêm do espelho em `:592`, `:598`; o compositor comum é reaplicado em `:632`. Isso não prova ausência de toda decisão de estado no PDF: há seleção local de datas de turno aberto em `:613` e supressão da etiqueta `turno aberto` por orfandade em `:956`, `:960`, `:966`. São formas que escapam do contador de literais, mas não justificam afirmar um novo status codificado sem definir melhor a pergunta.
+
+- **Reuso:** o contador existente `fora_de_autoridade('tela')` mede os sítios declarados que ainda respondem por conta própria, e seu nome publicado é `leitores_narnia`: `app/core/juizes.py:655`, `:658`, `:1415`, `:1417`. Não é medição AST dos literais. O tripwire AST específico do PDF resolve aliases, congela dívida e cobra crescimento/entrada podre, mas mede chamadas de cálculo, outra pergunta: `app/relatorios/tests/test_pdf_nao_calcula.py:33`, `:47`, `:62`, `:95`, `:107`.
+
+A execução ad hoc estrita do critério encontrou oito candidatos brutos; nenhum teste `test*.py` fora de `tests/` satisfaz hoje o critério completo [não verificado por arquivo:linha — resultado de execução somente leitura]. [nao verificado]
+
+## 30/10 19:09 · sessao a9a0edaf0a67 · - · - · origem=Ronald (tmux)
+
+Achados de host/ESTADO, somente leitura:
+
+- **A publicação não é independente de banco/Django/rede.** `relato.sh` exige a lista de nomes antes de gerar o ESTADO e sai em erro se ela falhar (`bin/relato.sh:32`, `bin/relato.sh:38`). O extrator consulta `Colaborador.objects` pelo `manage.py` no container e recusa ausência de resultado (`bin/relato_nomes.sh:10`, `bin/relato_nomes.sh:18`, `bin/relato_nomes.sh:22`). Depois ainda publica via `git push` (`bin/relato.sh:126`). A independência prometida só pode ser do **censo isolado**, não dessa cadeia.
+
+- **`spec_from_file_location` não torna dependências importáveis nem remove Django.** O gerador só acrescenta `raiz/bin` ao `sys.path` (`bin/gerar_estado.py:198`) e carrega o módulo puro por caminho (`bin/gerar_estado.py:75`). Importar diretamente o selo S3 puxa Django (`app/ponto/tests/test_s3_placar_exercicio.py:30`); importar calendário puxa Django e modelos (`app/colaboradores/services/calendario.py:22`, `app/colaboradores/services/calendario.py:28`). A extração AST e transferência das funções puras resolve esse obstáculo se forem completas; a implementação futura é [não verificado]. O próprio placar registra o precedente de `ModuleNotFoundError` ao importar `core` nesse carregamento (`app/core/placar_estrutural.py:457`).
+
+- **O molde `_placar_estrutural` não garante sozinho “ESTADO nunca cai”.** A carga e as chamadas ficam no `try` (`bin/gerar_estado.py:74`), mas a renderização acessa campos obrigatórios fora dele (`bin/gerar_estado.py:101`, `bin/gerar_estado.py:115`). Leitores `ler/linha` do corpo de `gerar` também são importados e chamados sem proteção (`bin/gerar_estado.py:215`, `bin/gerar_estado.py:260`, `bin/gerar_estado.py:265`). O novo bloco precisa proteger **importação, leitura e composição**, não apenas a chamada a `censo`; a implementação futura é [não verificado]. Falha do gerador aborta o ciclo (`bin/relato.sh:38`).
+
+- **Fiagem é mais que criar o leitor:** o ESTADO usa uma string com `%s` e uma tupla posicional (`bin/gerar_estado.py:278`, `bin/gerar_estado.py:332`); incluir seção sem atualizar ambos quebra a geração. O arquivo final é gravado por `gerar` (`bin/gerar_estado.py:349`), chamado pelo CLI (`bin/gerar_estado.py:355`) e por `relato.sh` (`bin/relato.sh:38`). Hoje os placares são incorporados em `bin/gerar_estado.py:346`; a integração proposta é [não verificado].
+
+- **Cadência declarada versus execução:** o arquivo de timer programa cinco minutos (`bin/hasner-relato.timer:6`), e o serviço aponta `/home/ronald/saas-hasner/bin/relato.sh` (`bin/hasner-relato.service:15`). Timer instalado/ativo, árvore efetivamente lida, duração inferior a dois segundos e quantidade de arquivos no host são [não verificado].
+
+Precisão adicional dos nomes do contrato:
+
+- `_TT6` não se chama “status/contagem”; pergunta **“o colaborador entra na folha (e por que não)?”** (`app/core/juizes.py:665`) e aponta `folha/export.py::classificar_export` (`app/core/juizes.py:678`).
+- `_TT3` pergunta o julgamento do dia (`app/core/juizes.py:662`) e aponta `classificar_falta` (`app/core/juizes.py:675`).
+- O contador existente `fora_de_autoridade('tela')` é `len(PENDENTES)` (`app/core/juizes.py:1415`), cuja família cobre leitores de número/estado em sentido mais amplo (`app/core/juizes.py:656`). Seu selo verifica impressão textual presente e tamanho da lista (`app/core/tests/test_contract_juiz_tela.py:34`, `app/core/tests/test_contract_juiz_tela.py:56`); portanto não é o mesmo censo AST proposto.
+
+## 30/10 19:09 · sessao a5775eb684a5 · - · - · origem=Ronald (tmux)
+
+Reuso obrigatório e mapa dos nomes:
+
+- A pergunta VALOR já é o critério (b) do selo S3: “0 leitor com derivação própria de dinheiro”, definido como aritmética sobre atributos de período (`app/ponto/tests/test_s3_placar_exercicio.py:14`), implementado em `deriva_dinheiro` (`:183`) e cobrado em `test_b_nenhum_leitor_tem_derivacao_propria_de_dinheiro` (`:303`). O selo antigo declara expressamente que já não é o placar (`app/ponto/tests/test_s3_leitor_nao_chama_motor.py:4`). Reutilizar o detector e a lista é coerente; outro detector para essa mesma pergunta duplicaria o existente (`app/ponto/tests/test_s3_placar_exercicio.py:303`).
+
+- Escritor de `LEITORES`: atribuição com os sete arquivos em `app/ponto/tests/test_s3_placar_exercicio.py:34`. Leitores: critério (a), `:247`; critério (b), `:305`; fiscalização do segundo montador, `:350`.
+
+- Escritor de `DINHEIRO`: `app/ponto/tests/test_s3_placar_exercicio.py:163`. Leituras: reconhecimento de `getattr`, `:203`; reconhecimento de atributo, `:213`.
+
+- Escritor de `NAO_E_MOTOR`: `app/ponto/tests/test_s3_placar_exercicio.py:171`. Leitura: filtro de `getattr`, `:203`. Não há esse filtro na via `ast.Attribute`, `:213`; atualmente as duas listas têm nomes distintos (`:163`, `:171`).
+
+- Escritor de `deriva_dinheiro`: definição em `app/ponto/tests/test_s3_placar_exercicio.py:183`. Leitores: teste principal `:306`; casos sintéticos `:315`, `:317`, `:319`, `:325`, `:330`, `:358`, `:359`; teste do montador `:346` e `:350`.
+
+Limitações concretas:
+
+- A derivação do VALOR é medida só nos sete caminhos fixos; o teste não descobre novos leitores em `app/` (`app/ponto/tests/test_s3_placar_exercicio.py:305`). O teste chamado “o MONTADOR é UM SÓ” também só confronta o montador previamente nomeado com esses sete arquivos (`:346`, `:350`). Assim, acrescentar outro arquivo de produção não o inclui automaticamente no critério VALOR (`:34`, `:305`).
+
+- O detector reutilizado é cego à forma real `(getattr(p, 'minutos_extra_50', 0) or 0) / 60`: a subida não atravessa `ast.BoolOp` (`app/ponto/tests/test_s3_placar_exercicio.py:205`), e a forma existe em `app/ponto/services/espelho.py:113` e `:114`. O caso que “morde” usa `getattr` direto, sem `or 0` (`app/ponto/tests/test_s3_placar_exercicio.py:324`). Isso prova limitação do detector, embora esses sítios pertençam ao montador excluído, não demonstre sozinho leitor indevido (`app/ponto/tests/test_s3_placar_exercicio.py:58`).
+
+- Outro atributo real convertido em horas, `minutos_noturnos_relogio`, aparece em `app/ponto/services/espelho.py:103`, mas não pertence a `DINHEIRO` (`app/ponto/tests/test_s3_placar_exercicio.py:163`).
+
+- `horas_do_dia` faz derivação do dia sem lavratura (`periodo.minutos_trabalhados / 60`) em `app/ponto/services/espelho.py:136`; a API chama esse helper e publica seu número (`app/api/views.py:1569`, `:1584`). O contrato precisa explicitar a classe desse helper: o código o considera núcleo (`app/api/views.py:1562`), e o selo exclui o arquivo inteiro como montador (`app/ponto/tests/test_s3_placar_exercicio.py:58`). Seria incorreto afirmar sem essa distinção que a API ainda calcula diretamente (`app/api/views.py:1569`).
+
+Carga sem Django:
+
+- Importar o selo inteiro exige Django em nível de módulo (`app/ponto/tests/test_s3_placar_exercicio.py:30`). O detector propriamente dito utiliza AST (`:190`), portanto extrair sua implementação para módulo puro evita essa dependência; importar o arquivo atual diretamente no host sem Django falha nesse import (`:30`).
+
+- Se também transferirem `_raiz` sem adaptar sua semântica, ela sobe exatamente três diretórios a partir de `__file__`, posição própria do arquivo em `ponto/tests/` (`app/ponto/tests/test_s3_placar_exercicio.py:175`); `_fonte` usa esse resultado para resolver os sete caminhos (`:179`). O contrato lista somente detector e constantes para mudança, portanto esse erro é condicional à implementação futura [não verificado].
+
+Verificação local: extraindo apenas AST, constantes e a função, sem importar Django nem escrever arquivos, os sete arquivos retornaram lista vazia; esse resultado corresponde ao domínio fixo do teste, não prova ausência no restante de produção (`app/ponto/tests/test_s3_placar_exercicio.py:305`).
+
+## 30/10 19:07 · sessao 82d9cde7b5f5 · E1-BATERIA · red · origem=Code
+
+Criado apenas [test_e1_lote1_valor_do_dia.py](/home/ronald/codex_ws/red_e54eae6ed8c4_20261030_190156_3863743/app/ponto/tests/test_e1_lote1_valor_do_dia.py), com 20 casos, fixture próprio e porta CCT real.
+
+Sintaxe e estrutura validadas em memória, sem criar `.pyc`. Motor e suíte Django não executados; o RED ainda não foi evidenciado por execução. [nao verificado]
+
+Valores em minutos; **N** indica noturno relógio/legal.
+
+| Caso | Esperados | Regra citada | Origem |
+|---|---|---|---|
+| C01 | trab 660; N 360/360; extra 0; feriado 0 | CCT 38-d/10; CLT 73 §2 e 59-A | wt-v3 CCT-1 |
+| C02 | trab 660; N 480/548,57; extra 0 | Aval 25/09/O211; CLT 73; Súmula 60 II | wt-v3 CCT-2 |
+| C03 | trab 660; N 480/548,57; extra 0 | Adendo 05/10; piso de lacuna; CLT 73 | wt-v3 CCT-3, primeira metade |
+| C04 | trab 660; N 480/548,57; extra 0 | Adendo 05/10; empate específico não herda | wt-v3 CCT-3, segunda metade |
+| C05 | trab 420; N 360/411,43; extra 0; régua `legais` | CLT 73; Súmula 60 II; parecer 29/07 | wt-v3 CCT-4 |
+| C06 | **SKIP:** N 360/411,43 ou 240/274,29 | CLT 73 §5; Súmula 60 II | wt-v3 CCT-4b |
+| C07 | trab 660; HE feriado 660 | CLT 59-A; parecer 08/09; BUG 91 | wt-v3 CCT-5, primeira ponta |
+| C08 | trab 660; HE feriado 0; extra 0 | CLT 59-A; parecer 08/09; BUG 91 | wt-v3 CCT-5, segunda ponta |
+| C09 | trab 660; N 360/411,43; intervalo descontado 60; extra 0 | CLT 59-A, 73, 71 §2 e 4 | Novo |
+| C10 | trab 660; N 360/411,43; intervalo descontado 60; extra e HE feriado 0 | CLT 59-A, 73 e 71 §2 | Novo |
+| C11 | trab 360; N 300/342,86; extra 0 | CLT 73 §1/§2; Súmula 60 | wt-v3 F2 |
+| C12 | trab 480; extra, HE100 e HE feriado 480; HE50 0 | Lei 605/49 art.9; Súmula 146 | wt-v3 F10 |
+| C13 | trab 540; extra e HE50 60; HE100 0 | CLT 58 caput e 59 §1 | Novo |
+| C14 | trab 450; atraso 30; antecipada e extra 0 | CLT 58 §1; Súmula 366 | Novo |
+| C15 | atraso, antecipada e extra 0 | CLT 58 §1: tolerância 5/10 | Novo |
+| C16 | **SKIP:** intervalo indenizado 30 ou 60 | CLT 71 §4; pergunta V3-BATERIA | Novo |
+| C17 | trab 540; intervalo descontado 0 e indenizado 60; extra e HE50 60; HE100 0 | CLT 71 e 59 §1; L-031 | Novo |
+| C18 | trab 690; extra e HE50 30; HE100 0 | CLT 59-A, 59 §1 e 71 §2 | Novo |
+| C19 | FT 1, com 660 min; HE feriado e extra 0 | Súmula 146; corte 19/09 | wt-v3 F3 |
+| C20 | trab 450; antecipada 30; atraso e extra 0 | CLT 58 §1; Súmula 366 | Novo |
+
+As fontes da régua também são afirmadas nos casos CCT executáveis e em C09.
+
+Dúvidas preservadas sem escolher resposta: **C06**, possibilidade de a CCT negar prorrogação noturna fora do 12x36; **C16**, indenização de 30 minutos suprimidos ou 60 integrais. A cl.10 tem lastro local descrito como interpretação; C01 segue o corte fornecido para o 12x36.
 
 ## 30/10 19:03 · sessao 0d8d2229d690 · O261-E-CELULA-20 · verificador · origem=Code
 
@@ -419,77 +528,4 @@ Mapa e achados enviados ao pai. Dois problemas reproduzidos com funções reais 
 
 O delta acrescenta a rejeição de `--lavrar --min-plantoes 100` e a chamada adversarial no teste que compara o detalhe anterior; estaticamente a asserção detecta a volta da sobrescrita (`app/ponto/management/commands/censo_fase_12x36.py:74`; `app/escala/tests/test_o261_v_fase_na_lista.py:148`). Execução Django desse teste [nao verificado].
 
-## 30/10 18:43 · sessao 856eb03ecb9f · - · - · origem=Ronald (tmux)
-
-Achado procedente: **custo de frota no request, em função tocada pela obra**. `_proposta_de_escala` chama `propositor.propostas()` sem `colaborador_id` (`app/core/views_ia.py:572`), tanto no preview (`:588`) quanto no aceite (`:646`). O propositor percorre todos os colaboradores e seus dias antes da seleção da pessoa (`app/escala/services/propositor.py:427`, `:436`, `:445`). Contraexemplo: pedir correção de X numa frota com N pessoas executa julgamento para N e só depois filtra X (`app/core/views_ia.py:578`). O próprio contrato exige estreitar o universo no POST (`app/escala/services/propositor.py:395`). É herdado, mas a função foi tocada; a regra inclui sítios tocados no escopo (`CLAUDE.md:603`). Tempo e consultas atuais: [nao verificado].
-
-Não encontrei quebra executável dos consumidores da API pela alteração do JSON: o cliente retorna o payload (`mensageria/nucleo/core_client.py:246`) e a ferramenta apenas acrescenta `cliente` (`mensageria/nucleo/ferramentas.py:1407`). Os comentários ainda descrevem o predicado antigo de dois lados, três vezes cada (`mensageria/nucleo/ferramentas.py:1399`; `app/api/views_mensageria.py:1660`), embora a resposta passe a publicar o critério lavrado (`app/api/views_mensageria.py:1676`). Efeito na resposta do modelo: [nao verificado].
-
-## 30/10 18:43 · sessao 5dd8e4bbf7a0 · - · - · origem=Ronald (tmux)
-
-Não encontrei novo achado procedente no censo/lavra; o predicado continua `paridade < 90` e `plantoes >= 6`, e a lavra usa esse mesmo universo (`app/ponto/management/commands/censo_fase_12x36.py:227`, `:251`).
-
-O delta 3 morde:
-
-- A guarda recusa `--lavrar --min-plantoes > 6` antes da medição e da escrita (`app/ponto/management/commands/censo_fase_12x36.py:74`).
-- O teste primeiro lavra o caso, guarda seu detalhe, executa `--min-plantoes 100 --lavrar` e exige detalhe idêntico (`app/escala/tests/test_o261_v_fase_na_lista.py:142`, `:148`, `:150`).
-- Sem a cláusula nova, o filtro elimina as linhas, `_desvio` fica vazio e a lavra substitui o detalhe anterior por vazio; portanto, a igualdade falha (`app/ponto/management/commands/censo_fase_12x36.py:156`, `:227`, `:251`; `app/escala/services/fase_12x36.py:84`).
-- Executei somente a expressão real da guarda extraída por AST, em memória, com Python3 `-B`: na base `f517…:72`, valores 1/6/7/100 não recusam; no atual `:74`, 7/100 recusam. Execução da suíte Django e RED/GREEN históricos: [nao verificado]. [nao verificado]
-
-Verificações adicionais:
-
-- `--min-plantoes <= 6` não remove elemento que satisfaz o predicado final `>= 6`; `--ano` sem `--mes` não altera as janelas usadas (`app/ponto/management/commands/censo_fase_12x36.py:80`, `:156`, `:227`).
-- O relógio é capturado na borda `handle`; esse mesmo dia alimenta janela, corte dos dias, piso e data da lavra (`app/ponto/management/commands/censo_fase_12x36.py:62`, `:83`, `:106`, `:166`, `:263`).
-- A escolha do censo como autoridade e a morte do detector paralelo têm autorização específica registrada; não constitui juiz novo sem corte (`app/docs/PROMPTS.md:1686`; `app/escala/services/fase_12x36.py:67`).
-- A escrita da chave está concentrada em `lavrar`, por `update_or_create` com chave/escopo/data; o teste exige uma linha após duas lavras (`app/escala/services/fase_12x36.py:78`; `app/escala/tests/test_o261_v_fase_na_lista.py:158`).
-
-## 30/10 18:39 · sessao 061c3d20e043 · O261-E-CELULA-20 · sonda · origem=Code
-
-**(1) Transcrição dos números.** Fonte: saída fornecida na mensagem; sem conferência independente em PROD. [nao verificado]
-
-```text
-(i-a) PASSIVO desligamento: vivas abertas sob ancora TERMINAL via=cascade de desligado=43 (chamados=25); qualquer via de desligado=49
-(i-a) via_encerramento das ancoras terminais com viva aberta: {'admin': 519, 'legado': 7, 'sistema': 1171, 'cascade': 46}
-(i-b) HIPOTETICO: vivas abertas sob ancora NAO_FECHADA de colab nao desligado=4735 (chamados=1816, colabs=326)
-(i-b) destas, seguiriam VIVAS depois da porta desligamento da disputa (disputa fechada antes OU pergunta com resposta sem veredito)=440 (chamados=292)
-(i-b) motivo: disputa ja fechada=87 | resposta sem veredito=353
-(ii) chamados VIVOS com viva aberta ancorada=1281
-(ii) destes, reconciliaria() fecharia HOJE=106
-(ii) por modulo: {'disputa_supervisao': 69, 'disputa_supervisao_manual': 7, 'chamados': 3, 'turno_aberto': 5, 'batida_ausente': 22}
-(ii) passariam a REATA (todas as vivas reapontaveis)=18 chamados / 31 perguntas | RECUSA=88 chamados / 554 perguntas
-ERROS={} total=0
-```
-
-A linha `ERROS` informa **zero erros contabilizados**; portanto, a saída não relata contaminação por erro. [nao verificado] Isso não comprova ausência de exceções internas: o cálculo de `pergunta_viva()` captura exceções e pode continuar ou retornar `False`; se ocorreu nesta execução, permanece [nao verificado]. Evidência dos tratamentos: [app/chamados/juizes.py:1073](/home/ronald/codex_ws/e54eae6ed8c46bc652434308bf918485dd3ac23e/app/chamados/juizes.py:1073), [app/chamados/juizes.py:1084](/home/ronald/codex_ws/e54eae6ed8c46bc652434308bf918485dd3ac23e/app/chamados/juizes.py:1084).
-
-**(2) A correspondência exata entre rótulos e filtros da sonda não pôde ser verificada:** `logs/o261e/f1_medida_p1.py` não foi encontrado nesta cópia; faltam suas linhas para auditar seleção, exclusões, deduplicação e tratamento de erros. [nao verificado] A regra que ignora `logs/` existe, mas não comprova a causa da ausência: [.gitignore:53](/home/ronald/codex_ws/e54eae6ed8c46bc652434308bf918485dd3ac23e/.gitignore:53).
-
-O código disponível permite delimitar estes pontos:
-
-- **(i-a): `cascade` não identifica exclusivamente desligamento.** `encerrar()` grava a via associada a `ENCERRAR`, que é `cascade`; a regularização externa também chama essa porta. Logo, selecionar colaborador desligado + via `cascade` não comprova que o encerramento ocorreu por desligamento. [app/chamados/models.py:1293](/home/ronald/codex_ws/e54eae6ed8c46bc652434308bf918485dd3ac23e/app/chamados/models.py:1293), [app/chamados/catalogo/motor.py:95](/home/ronald/codex_ws/e54eae6ed8c46bc652434308bf918485dd3ac23e/app/chamados/catalogo/motor.py:95), [app/chamados/services/regularizacao_ext.py:205](/home/ronald/codex_ws/e54eae6ed8c46bc652434308bf918485dd3ac23e/app/chamados/services/regularizacao_ext.py:205).
-
-- **(i-a)/(i-b): `TERMINAIS` e `NAO_FECHADOS` se sobrepõem.** `TERMINAIS` contém `resolvido`, `fechado`, `cancelado` e `superado`; `NAO_FECHADOS` contém `aberto`, `em_analise`, `registrado` e **`resolvido`**. Portanto, incluir resolvidos em (i-b) corresponde ao conjunto oficial; os dois universos não são complementares. [app/chamados/catalogo/motor.py:24](/home/ronald/codex_ws/e54eae6ed8c46bc652434308bf918485dd3ac23e/app/chamados/catalogo/motor.py:24), [app/chamados/catalogo/motor.py:30](/home/ronald/codex_ws/e54eae6ed8c46bc652434308bf918485dd3ac23e/app/chamados/catalogo/motor.py:30).
-
-- **(i-b): os motivos de sobrevivência anunciados correspondem qualitativamente à cascata.** Ela seleciona chamados em `NAO_FECHADOS`, encerra-os e depois percorre apenas disputas abertas, pulando aquelas com `respostas_sem_veredito()`. [app/colaboradores/services/desligamento.py:132](/home/ronald/codex_ws/e54eae6ed8c46bc652434308bf918485dd3ac23e/app/colaboradores/services/desligamento.py:132), [app/colaboradores/services/desligamento.py:147](/home/ronald/codex_ws/e54eae6ed8c46bc652434308bf918485dd3ac23e/app/colaboradores/services/desligamento.py:147). **A guarda examina toda a disputa**, exigindo validação e materialização nulas, resposta por timestamp **ou** texto e dia não trancado; não exige `pergunta_viva()`. Uma sonda que examinasse somente a pergunta contada aplicaria outro filtro; se fez isso, [nao verificado]. [app/chamados/models.py:1524](/home/ronald/codex_ws/e54eae6ed8c46bc652434308bf918485dd3ac23e/app/chamados/models.py:1524).
-
-- **(ii): `reconciliaria()` mede autorização da porta naquele instante.** Compartilha a decisão de `reconciliar()`, usando `registrar=False`; consulta o motor e a guarda da premissa. O método isolado não verifica o gatilho que levaria uma rotina a chamá-lo. [app/chamados/models.py:434](/home/ronald/codex_ws/e54eae6ed8c46bc652434308bf918485dd3ac23e/app/chamados/models.py:434), [app/chamados/models.py:447](/home/ronald/codex_ws/e54eae6ed8c46bc652434308bf918485dd3ac23e/app/chamados/models.py:447), [app/chamados/models.py:467](/home/ronald/codex_ws/e54eae6ed8c46bc652434308bf918485dd3ac23e/app/chamados/models.py:467). “Fecharia” significa aqui passar a **`resolvido`**, conforme o evento `RECONCILIAR`. [app/chamados/catalogo/motor.py:111](/home/ronald/codex_ws/e54eae6ed8c46bc652434308bf918485dd3ac23e/app/chamados/catalogo/motor.py:111).
-
-- **REATA/RECUSA:** a porta efetiva consulta `resolvedora_valida()` antes de escrever o destino. O alvo e o predicado usados pela sonda para produzir 18/88 não puderam ser conferidos. [app/chamados/services/fio.py:792](/home/ronald/codex_ws/e54eae6ed8c46bc652434308bf918485dd3ac23e/app/chamados/services/fio.py:792); [nao verificado].
-
-**Não é possível apontar como comprovado um filtro divergente da sonda sem seu conteúdo.** Também permanecem [nao verificado] o significado operacional de “vivas abertas”, a escolha da âncora e se o histograma conta perguntas ou âncoras distintas.
-
-## 30/10 18:38 · sessao a12c7f21f5be · - · - · origem=Ronald (tmux)
-
-Evidências relevantes aos itens (i-a)/(i-b), sem atribuir filtros à sonda ausente [não verificado]:
-
-- `VIVOS = ('aberto', 'em_analise', 'registrado')`; `TERMINAIS = ('resolvido', 'fechado', 'cancelado', 'superado')`; `NAO_FECHADOS = VIVOS + ('resolvido',)`. Logo, **resolvido pertence tanto a TERMINAIS quanto a NAO_FECHADOS**; esses universos não são complementares. `app/chamados/catalogo/motor.py:24`, `app/chamados/catalogo/motor.py:30`, `app/chamados/catalogo/motor.py:31`, `app/chamados/catalogo/motor.py:32`.
-- O desligamento encerra os chamados do colaborador em `NAO_FECHADOS`, depois percorre somente disputas com `fechada_em IS NULL`; pula qualquer disputa cuja lista `respostas_sem_veredito()` não seja vazia; fecha as demais pela porta `desligamento`. `app/colaboradores/services/desligamento.py:132`, `app/colaboradores/services/desligamento.py:137`, `app/colaboradores/services/desligamento.py:147`, `app/colaboradores/services/desligamento.py:148`, `app/colaboradores/services/desligamento.py:150`.
-- Isso sustenta qualitativamente os dois motivos de sobrevivência anunciados: disputa previamente fechada não entra na seleção; disputa aberta com resposta sem veredito é pulada. Os totais 440/87/353 e a fidelidade dos filtros da sonda seguem [não verificado].
-- `respostas_sem_veredito()` examina **todas as perguntas da disputa**, exigindo `validada_em is None`, `materializada_em is None`, resposta indicada por timestamp **OU** texto e dia não trancado. Não exige `pergunta_viva(q)`. `app/chamados/models.py:1524`, `app/chamados/models.py:1525`, `app/chamados/models.py:1526`, `app/chamados/models.py:1527`, `app/chamados/models.py:1528`.
-- A porta de desligamento fecha cada pergunta viva com `fechar_por_admin`, que escreve `via_resolucao='admin_decidiu'` e `materializada_em`. A vitalidade então reconhece essa via como encerramento por identidade. `app/chamados/models.py:1595`, `app/chamados/models.py:1598`, `app/chamados/models.py:2227`, `app/chamados/models.py:2228`, `app/chamados/juizes.py:1039`, `app/chamados/juizes.py:1044`.
-- **`via='cascade'` não prova causa histórica “desligamento”**: todo evento `ENCERRAR` recebe essa via; há chamadores em troca de escala, regularização externa e fechamento retroativo. `app/chamados/catalogo/motor.py:95`, `app/chamados/models.py:1297`, `app/colaboradores/services/vinculo.py:384`, `app/colaboradores/services/vinculo.py:387`, `app/chamados/services/regularizacao_ext.py:205`, `app/chamados/reconciliador.py:498`.
-- A função `pergunta_viva()` não testa status da âncora nem fechamento da disputa; decide por validação, tranca, resposta, identidade, marco, célula, janela e materialização. Portanto pergunta viva sob chamado terminal/disputa fechada é possível pelo predicado. `app/chamados/juizes.py:1005`, `app/chamados/juizes.py:1006`, `app/chamados/juizes.py:1010`, `app/chamados/juizes.py:1020`, `app/chamados/juizes.py:1044`, `app/chamados/juizes.py:1050`, `app/chamados/juizes.py:1054`, `app/chamados/juizes.py:1066`, `app/chamados/juizes.py:1076`, `app/chamados/juizes.py:1083`.
-- `ERROS={}` externo não estabelece ausência de toda exceção interna: `pergunta_viva` captura exceções, registra por `registrar_engolido` e segue ou retorna `False`. Ocorrência real em PROD é [não verificado]. `app/chamados/juizes.py:1073`, `app/chamados/juizes.py:1075`, `app/chamados/juizes.py:1084`, `app/chamados/juizes.py:1087`.
-- Para “competência aberta”, a função de medição existente `competencia_do_dia_entregue()` retorna `None` sem dia, usa a janela da empresa e consulta entrega vigente; a cerca do reconciliador exclui sem dia, entregue e trancado. Qual dessas composições a sonda utiliza é [não verificado]. `app/chamados/services/vigia_fio.py:467`, `app/chamados/services/vigia_fio.py:471`, `app/chamados/services/vigia_fio.py:474`, `app/chamados/reconciliador.py:705`, `app/chamados/reconciliador.py:713`, `app/chamados/reconciliador.py:716`.
-
-_715 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_719 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
