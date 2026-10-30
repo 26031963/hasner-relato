@@ -1,7 +1,26 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **29/10/2026 21:15** · publicado em **29/10/2026 21:19** (UTC-3)
+> Ultima resposta processada: **29/10/2026 21:34** · publicado em **29/10/2026 21:35** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 29/10 21:34 · sessao 45d6d74dee1e · o261 · sonda · origem=Code
+
+[nao verificado] — Transcrição do dado fornecido:
+
+```text
+MODO MEDIR | universo (respondida sem resposta, VIVA, nao validada) 263, esperado 263 | competencia ABERTA 115 | EXPORTADA -> Pauta DP 148 em 2 empresa x competencia | sem data_evento 0 | colabs 23
+ABERTA por competencia: {'2:10/2026': 88, '3:10/2026': 5, '2:11/2026': 22}
+EXPORTADA por competencia: {'2:09/2026': 147, '3:09/2026': 1}
+ABERTA por via_resolucao: {'chamado_encerrado': 113, 'ausencia_dia': 1, 'completude_turno': 1}
+ABERTA com disputa fechada (badge do colab nao alcanca: cura (4) alcancabilidade): 0
+porta reabrir_para_correcao alcanca (perguntas_corrigiveis): 115 de 115; fora: []
+VIGIA desde 17:20: respondida sem resposta 0 | com respondida==materializada (ramo sem credor) 0 | vias {}
+PROVA universo depois 263 (esperado = exportadas 148 se APLICAR, = 263 se MEDIR) | competencia ABERTA ainda no universo 115 (esperado 0 depois do APLICAR: 2a passada = 0)
+PROVA estado antes->depois das ABERTA: {('respondida', 'respondida'): 115} | vivas depois 115 de 115
+PROVA exportadas vigentes intactas: True (7)
+ERROS=0
+FIM-DA-SONDA
+```
 
 ## 29/10 21:15 · sessao c435b9a9bb3f · o261 · verificador · origem=Code
 
@@ -537,31 +556,4 @@ Observação para consolidação: o caso `pid-ok-arq-parado` ocorre depois da re
 
 Não executei o selo, pois cria e remove arquivos em `bin/tests/test_hook_esperando_com_prova.sh:28` e `bin/tests/test_hook_esperando_com_prova.sh:30`.
 
-## 29/10 18:58 · sessao 9cc8a6935f0d · justif · verificador · origem=Code
-
-**(a) Não demonstrei defeito introduzido pelo delta.** A unidade reutiliza a retenção existente e mantém as portas de escrita: retenção → registro da retenção ou `encerrar()` → ocorrência. Não há novo juiz nem escritor direto de estado nesse trecho. [app/chamados/reconciliador.py:494](/home/ronald/codex_ws/2a22cc22ba9813b787d7473cf1819ae5785d4fbd/app/chamados/reconciliador.py:494)
-
-O contraexemplo condicional é `retencao=None` e `encerrar()=False`: antes a cascata escrevia nota e somava 1; agora não escreve nem soma. **Classificação: mudança de contrato, sem regressão alcançável demonstrada.** O comportamento anterior está no anexo (`app/ponto/services/justificativa.py:397`, `:401@be0f54c3`); o atual está em `app/chamados/reconciliador.py:498` e `app/ponto/services/justificativa.py:389`.
-
-A ressalva é decisiva: `NAO_FECHADOS` contém exatamente os quatro estados aceitos por `ENCERRAR`, e `encerrar()` devolve `False` somente quando essa decisão recusa. Portanto, selecionar um chamado normalmente pela cascata não fornece esse contraexemplo. Alcançabilidade por outro mecanismo: **[nao verificado]**. (`app/ponto/services/justificativa.py:57`; `app/chamados/catalogo/motor.py:24`, `:32`, `:114`; `app/chamados/models.py:1197`)
-
-**(b) Cascata e bloqueio:**
-
-- **Contagem/nota:** a cascata mudou condicionalmente como descrito acima. A origem continua sendo contabilizada separadamente quando seu fecho retorna verdadeiro; auditoria e resposta usam o total resultante. (`app/ponto/services/justificativa.py:385`, `:393`, `:400`, `:403`)
-- **Ordem dos efeitos:** permanece retenção → fecho → nota; cascata por `pk` → origem → auditoria. Há uma antecipação: o texto da nota agora é avaliado antes da retenção, como argumento do helper. `hora_local` apenas localiza/formata o datetime; defeito concreto dessa antecipação: **[nao verificado]**. (`app/chamados/reconciliador.py:494`; `app/ponto/services/justificativa.py:379`, `:385`, `:393`, `:397`; `app/core/fmt.py:10`)
-- **Travas/atomicidade:** os dois chamadores continuam travando chamados por `pk` antes da justificativa, dentro do `atomic`; a extração não acrescenta trava. (`app/ponto/services/justificativa.py:114`, `:125`, `:327`; `app/chamados/reconciliador.py:494`)
-- **Bloqueio:** o anexo já tinha a guarda sobre `encerrar()=False`; seleção, retenção, fecho e retorno permanecem equivalentes. Continua escolhendo o bloqueio mais recente, sem filtro de dia, excluindo a origem. A mudança é o argumento `tipo`. (`app/ponto/services/justificativa.py:70`, `:79`; anexo, `app/ponto/services/justificativa.py:84@be0f54c3`)
-
-**(c) Quem lê esses tipos?**
-
-**Não existe campo `tipo` em `FollowupChamado`.** A porta exige argumento preenchido, mas não o inclui nos campos persistidos. (`app/chamados/models.py:1236`; `app/chamados/services/nota.py:85`, `:88`)
-
-O consumidor funcional do argumento é a deduplicação: `sha256(chamado|tipo|objeto_ref|autor)`, somente quando há `objeto_ref` e as demais condições da porta são satisfeitas. (`app/chamados/services/nota.py:62`, `:95`)
-
-Nestes fechos, o helper **não passa `objeto_ref`**; a retratação canônica também não passa. Logo, nesses caminhos, `retratado`, `turno_fechado_retroativo` e `bloqueio_liberado_por_justificativa` não são persistidos nem participam de chave. **Renomear o tipo do bloqueio não altera dedup, dados salvos ou identificação posterior do ato.** (`app/chamados/reconciliador.py:501`, `:540`; `app/chamados/services/nota.py:102`)
-
-Histórico e API leem conteúdo/autor/data; a visibilidade da nota de sistema na API depende da palavra `justificativa` no conteúdo. Não leem esses tipos de evento. (`app/chamados/services/historico.py:80`; `app/api/views.py:62`, `:1128`)
-
-Incidência em produção, RED/suite executados e pré-requisitos de pouso: **[nao verificado]**. [nao verificado]
-
-_246 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_247 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._

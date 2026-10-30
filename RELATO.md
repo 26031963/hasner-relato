@@ -1,5 +1,8 @@
 # RELATO — esteira saas-hasner
 
+ESPERANDO: /tmp/claude-1001/-home-ronald-saas-hasner-app/be3a61c0-011d-458c-a5a0-e2f78476d660/scratchpad/o261/cadeia.sh | pid=4060539
+> (suite inteira da O261 cura (1) a614e8b2, arvore bd0aef09, `logs/o261/suite_bd0aef09.log`; recorte 337 OK; opus final APROVADO; construtor fazendo o script do passivo das 263, sem aplicar)
+
 > **ESPERA-SEM-TURNO POUSA 21:1x (instrumento, pouso proprio L-105; copia 2d7e9ecd, cmp 2/2 iguais):** `bin/hook_stop_fila1.py` libera o Stop com `ESPERANDO: <produtor> | pid=N | arquivo=<c>` no topo do RELATO e o produtor vivo provado (/proc + starttime + argv; ou mtime que andou, memoria sob flock com chave caminho:dev:ino); sem prova, segue o `siga`; falha de leitura bloqueia; PAREI e TETO intocados. PROVAS: RED `logs/espera/espera_RED_2d7e9ecd.log` (rc 2), GREEN rc 0 (34 bloqueios + 4 liberacoes), 9 mutantes pegos, os 15 `test_hook_*.sh` verdes na arvore principal (o `nao_e_copia` incluso). Opus final APROVADO (parar o endurecimento contra forjamento); Codex 3 voltas. Leis: L-008 e L-081 e o CLAUDE.md 7b citam a 2a porta. **A ESPERA-ATE-O-HOOK cai com este pouso.** Item (3) (voltas de Stop sem trabalho no ESTADO) segue na fila, sob o CONTRATO-DE-INSTRUMENTO. Marcador da ORDEM-VIVA corrigido para `O261-FIO-MORTO-PELO-RETRATO` (a linha `O261` esta FECHADA; o selo `test_hook_nao_cobra_congelado` acusou).
 
 > **MORATORIA-DE-INSTRUMENTO CAIU 20:5x:** a 2a cura de produto esta no ar (grupo (1) pouso 1 9ed75130 + JUSTIFICATIVA-ENCERRA-ORIGEM 77eb28ce). Contador do DESPACHO (4) e placar do MAIS-CODEX (5) voltam a fila, sob o CONTRATO-DE-INSTRUMENTO.
