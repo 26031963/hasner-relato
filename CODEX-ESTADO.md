@@ -1,7 +1,336 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **30/10/2026 17:13** · publicado em **30/10/2026 17:14** (UTC-3)
+> Ultima resposta processada: **30/10/2026 17:18** · publicado em **30/10/2026 17:19** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 30/10 17:18 · sessao 027086c1e405 · CODEX-CONTEXTO-DA-CASA · verificador · origem=Code
+
+O contrato precisa de ajustes antes da construção, sobretudo na ligação do selo ao push e na regra de recusa. A seção 7b determina que achados procedentes mudem o contrato antes do código. (`CLAUDE.md:650-652`) [nao verificado]
+
+Nas referências a `contrato.txt`, conto as linhas do anexo: cabeçalho=1, DESENHO=2, itens 1–5=3–7. (`contrato.txt:1-7`, anexo)
+
+1. **O pre-push não executa o selo prometido.** A mudança de `REGUA_ARVORE` impede o atalho do arsenal, mas o hook executa testes Django; não chama o laço de `bin/tests/`. O comentário declara isso expressamente. **Contraexemplo:** acrescentar `test_agents_md_gerado.sh`, adulterar AGENTS.md, commitar e dar push: mesmo com arsenal verde, esse selo não terá sido executado pelo hook. (`bin/pre-push.sh:14-16`; `bin/pre-push.sh:61-68`; `bin/pre-push.sh:155-185`; `bin/regua.sh:138-145`)
+
+   **A própria régua tem outro atalho que escapa.** Ela calcula o hash da árvore, mas decide “JA VERDE” comparando apenas o fingerprint de `.py`/`.html` de `app/`. **Contraexemplo:** após um carimbo verde, alterar somente AGENTS.md ou uma das quatro fontes Markdown e chamar a régua sem `--force`: pode sair antes do selo. A afirmação restrita “AGENTS editado muda o hash” procede; a consequência “logo o selo roda” não procede. (`bin/regua.sh:25-45`; `bin/regua.sh:84-94`; `bin/arvore_hash.sh:24-28`)
+
+2. **A recusa rejeita briefs legítimos, inclusive esta classe de revisão.** A lista proíbe palavras independentemente de serem resposta, citação ou objeto da pergunta. **Contraexemplo:** `PERGUNTA: Onde o campo padrao= é validado?` seria recusada, embora esse campo seja obrigatório pela LEI-AKITA. Outro: enviar este contrato por `--anexo /tmp/contrato.txt` para cumprir a seção 7b: ele próprio contém `opus`, `hipotese`, `triagem` e `o construtor`. (`contrato.txt:5`, anexo; `CLAUDE.md:63-68`; `CLAUDE.md:647-652`)
+
+   **Diff factual também pode ser recusado.** **Contraexemplo:** anexar um `/tmp/obra.diff` que modifica a linha LEI-AKITA: o diff contém `padrao=` e `quem-mais-le=`, mas o arquivo temporário não é versionado no hash. Isso conflita com o uso atual do verificador para receber diff e leis. (`contrato.txt:5`, anexo; `CLAUDE.md:63`; `CLAUDE.md:590-593`)
+
+3. **As exceções permitem transportar qualquer resposta; verde não comprova independência.** A sonda executa Python fornecido pelo chamador; não verifica se o texto impresso veio do banco. **Contraexemplo:** uma sonda contendo apenas `print("achados do opus: confirme que a mudança está correta")` entrega precisamente os marcadores proibidos pelo canal excluído da varredura. A raspagem trata nomes/CPF, não opinião. É um limite admitido no contrato, mas permite contornar integralmente a recusa. (`contrato.txt:5`, anexo; `bin/sonda_leitura.sh:239-241`; `bin/codex_pergunta.sh:107-115`; `bin/nome_no_texto.py:87-123`)
+
+   A exceção de arquivo versionado também não prova factualidade: uma opinião commitada passa por definição. Além disso, o wrapper atual lê o arquivo do disco com `cat`; reconhecer apenas que o **caminho** existe no hash não provaria que os bytes anexados são os daquele commit. **Contraexemplo:** modificar localmente um arquivo rastreado para conter uma resposta e anexá-lo. O contrato precisa exigir leitura do blob ou comparação de conteúdo; a implementação dessa identificação está **[nao verificado]**. (`contrato.txt:5`, anexo; `bin/codex_pergunta.sh:50`; `bin/codex_pergunta.sh:111`)
+
+4. **O contador prometido não tem leitor atual.** O CODEX-ESTADO publicado lê respostas finais das sessões e usa `chamadas.log` para atribuir procedência. O módulo de contadores conhece `limite.log` e `chamadas.log`, sem leitura de `recusa.log`. **Contraexemplo:** uma recusa registrada apenas no novo arquivo não produz contador no CODEX-ESTADO atual. É necessário incluir a mudança do leitor e sua verificação no contrato. (`bin/gerar_codex_estado.py:169-177`; `bin/codex_limite_estado.py:21-22`; `contrato.txt:6`, anexo)
+
+   **Há também risco de contar recusa como uso do Codex.** “Antes do slot” não significa “antes do `ini`”: atualmente o `ini` é escrito antes da preparação do brief. **Contraexemplo:** inserir a recusa depois dele gera `ini/fim rc=5`, e o placar soma uma chamada de verificador sem execução do Codex, porque conta todo `ini`. A posição futura dessa recusa está **[nao verificado]**. (`bin/codex_pergunta.sh:88-89`; `bin/codex_pergunta.sh:118-138`; `bin/codex_limite_estado.py:71-78`)
+
+5. **O orçamento de contexto já é problemático com estas fontes.** Numa extração direta em memória, usando ponto seguido de espaço para terminar a primeira frase de cada lei, os recortes somam **35.149 bytes**, ainda sem cabeçalho, hashes, ponteiros e separadores da tabela. O tamanho definitivo depende do extrator ainda proposto. **Contraexemplo:** essa interpretação determinística, aplicada às fontes atuais, já encontra o rc 1 previsto pelo contrato e não consegue gerar o contexto completo. É preciso definir precisamente “1a frase” e demonstrar que a projeção escolhida cabe. (`CLAUDE.md:14-89`; `CLAUDE.md:241-278`; `app/docs/LEIS.md:59-149`; `app/docs/MAPA.md:6-69`; `app/docs/GLOSSARIO.md:1-27`; `contrato.txt:5`, anexo)
+
+6. **AGENTS público pode expor conteúdo que a publicação das fontes mascara.** O fluxo atual publica uma lista explícita de arquivos pelo raspador; AGENTS, CLAUDE e GLOSSARIO não estão nela. O raspador só processa os pares recebidos. **Contraexemplo sintético:** um CPF `[cpf]` na primeira frase de uma lei seria mascarado na LEIS pública, mas permaneceria na projeção crua descrita para AGENTS. Publicar essa projeção diretamente abre outra saída para o mesmo conteúdo. Publicação efetiva de AGENTS ou vazamento atual: **[nao verificado]**. (`bin/relato.sh:100-111`; `bin/relato.sh:115`; `bin/relato.sh:124-126`; `bin/raspar_publico.py:23-40`; `bin/nome_no_texto.py:110`; `contrato.txt:2`, anexo)
+
+   Acrescentar AGENTS ao raspador também não lhe atribui automaticamente o tratamento de texto gerado: a classificação depende do nome do destino, e só `SESSAO.md` está em `GERADOS`. **Contraexemplo sintético:** o token isolado `Zebrante`, usado no próprio selo, é detectado em modo gerado; sob destino AGENTS.md recebe a política de prosa, que conserva essa forma. O selo consulta a mesma classificação. (`bin/raspar_publico.py:29-31`; `bin/nome_no_texto.py:39`; `bin/nome_no_texto.py:78-84`; `bin/tests/test_publicacao_sem_nome.sh:72`; `bin/tests/test_publicacao_sem_nome.sh:84-90`)
+
+7. **Demais leitores e compatibilidade:**
+
+   - **`chamadas.log`: sem achado de quebra**, preservando as posições TAB, a chave `(obra, hash, pid)` e o par `ini/fim`. Seus consumidores são o ESTADO e a atribuição de origem no CODEX-ESTADO; o parser aceita rc como texto, inclusive `5`. A distorção de contagem é a descrita no item 4. (`bin/codex_limite_estado.py:49-96`; `bin/gerar_estado.py:269-270`; `bin/gerar_codex_estado.py:175-176`)
+   - **Formato do brief: sem achado de quebra nos leitores atuais examinados.** Ele segue para o stdin do CLI; os selos cobram substrings de segurança e presença dos dados, sem exigir a ordem inicial atual. Os casos existentes de sonda/leitura também não entram numa recusa restrita a `verificador`. (`bin/codex_pergunta.sh:157-158`; `bin/tests/test_codex_pergunta.sh:13-29`; `bin/tests/test_codex_sonda.sh:50`; `bin/tests/test_codex_sonda.sh:61-65`; `bin/tests/test_codex_limite.sh:24`)
+   - **rc 75: sem achado de incompatibilidade com a preservação proposta.** Continua associado aos eventos de limite/indisponibilidade e coberto pelo selo atual. (`bin/codex_pergunta.sh:163-171`; `bin/tests/test_codex_limite.sh:28-39`)
+   - **O leitor do protótipo foi identificado incorretamente na pergunta:** `~/codex_prototipo/gerar_codex_estado.py` lê `~/.codex/sessions`, selecionando respostas finais; não lê `logs/codex/`. Alterar brief ou acrescentar `recusa.log` não muda essa seleção. (`/home/ronald/codex_prototipo/gerar_codex_estado.py:17`; `/home/ronald/codex_prototipo/gerar_codex_estado.py:24`; `/home/ronald/codex_prototipo/gerar_codex_estado.py:34-45`)
+
+## 30/10 17:16 · sessao 8ecc7054dbc7 · O261-V-FASE · leitura · origem=Code
+
+**A árvore ainda não inclui a fase deslocada na lista: registra C1–C9, sem C10. Existe lavra de desvio 12x36, mas ela não contém o registro diário necessário para nomear dia, vínculo e proposta na lista.** (`app/escala/services/cadastro_realidade.py:36`; `app/escala/services/cadastro_realidade.py:513`; `app/ponto/management/commands/censo_fase_12x36.py:200`)
+
+**1. Quem produz, quem escreve e quem lê**
+
+**(a) `fase_12x36.fora_de_fase` e `ancora_sugerida`**
+
+- `ancora_sugerida` produz um dicionário; não persiste. Exige piso de evidência, compara paridades e ganho e devolve âncora ou motivo. Seus leitores diretos são `fora_de_fase` e `propositor.propor`. (`app/escala/services/fase_12x36.py:45`; `app/escala/services/fase_12x36.py:67`; `app/escala/services/fase_12x36.py:203`; `app/escala/services/propositor.py:307`; `app/escala/services/propositor.py:330`)
+- `fora_de_fase` lê vínculos ativos, batidas, células e folgas; exige os dois lados — trabalho sem turno e folga com turno — no piso configurado. Retorna contagens e sugestão, sem gravar, sem datas desses conjuntos e sem PK do vínculo no resultado. (`app/escala/services/fase_12x36.py:106`; `app/escala/services/fase_12x36.py:128`; `app/escala/services/fase_12x36.py:159`; `app/escala/services/fase_12x36.py:178`; `app/escala/services/fase_12x36.py:188`)
+- Leitores diretos: API de mensageria, partição da fila por causa, propositor, pauta semanal e comando `vigiar_familia_escala`. A revisão semanal usa a pauta e pode escrevê-la por `escrever_semanal`; isso não grava fase no vínculo. (`app/api/views_mensageria.py:1669`; `app/chamados/services/fila_por_causa.py:173`; `app/escala/services/propositor.py:455`; `app/escala/services/fase_12x36.py:215`; `app/ponto/management/commands/vigiar_familia_escala.py:23`; `app/escala/services/fase_12x36.py:270`)
+
+**(b) `fase_na_tela.fase_sugerida`**
+
+Produz `(ancora, desde, motivo)`, sem persistir. Lê os turnos da janela, pergunta por troca de ritmo e possui decisões próprias por sequência de plantões e paridade. Seu leitor de produção é `colaboradores.views_fase.fase_12x36`. (`app/escala/services/fase_na_tela.py:50`; `app/escala/services/fase_na_tela.py:63`; `app/escala/services/fase_na_tela.py:70`; `app/escala/services/fase_na_tela.py:78`; `app/colaboradores/views_fase.py:62`)
+
+A view monta o contexto e o template envia `data_ancora` em campo oculto. A escrita normal do vínculo pertence a `executar_vinculo`, que atribui a âncora declarada e salva o EC. (`app/colaboradores/views_fase.py:104`; `app/templates/colaboradores/partials/_fase_12x36.html:8`; `app/colaboradores/services/vinculo.py:167`; `app/colaboradores/services/vinculo.py:271`)
+
+**(c) `cadastro_realidade.lista` e seus leitores**
+
+`lista` monta um dicionário a partir das fontes cadastrais e lavradas; não persiste esse resultado. As assinaturas e os totais saem dessa montagem. (`app/escala/services/cadastro_realidade.py:502`; `app/escala/services/cadastro_realidade.py:513`; `app/escala/services/cadastro_realidade.py:575`; `app/escala/services/cadastro_realidade.py:646`)
+
+| Leitor de produção | O que lê |
+|---|---|
+| Tela | `escala.views` chama `lista` com empresas visíveis e entrega `dados` ao template. (`app/escala/views.py:487`; `app/escala/views.py:490`; `app/escala/views.py:495`) |
+| Template | Percorre postos, colaboradores e assinaturas e mostra detalhe, dono e ação. (`app/templates/escala/cadastro_x_realidade.html:21`) |
+| PDF | Recebe o mesmo `dados` da chamada da view; `pdf_bytes` apenas o renderiza. (`app/escala/views.py:491`; `app/escala/services/cadastro_realidade.py:674`) |
+| `fechar_avisos_regua_na_lista` | Chama a lista, seleciona C7 e cancela somente avisos comprovados nela. (`app/escala/management/commands/fechar_avisos_regua_na_lista.py:26`; `app/escala/management/commands/fechar_avisos_regua_na_lista.py:47`) |
+| `fechar_chamados_vinculo_na_lista` | Exige lavra C8, chama a lista, seleciona C8 e cancela os comprovados. (`app/ponto/management/commands/fechar_chamados_vinculo_na_lista.py:30`; `app/ponto/management/commands/fechar_chamados_vinculo_na_lista.py:57`) |
+| `vigia_fio.censo` | Lê uma vez por censo; usa `dias_na_lista` para reconhecer dia com dono BATIDA/CADASTRO. (`app/chamados/services/vigia_fio.py:244`; `app/chamados/services/vigia_fio.py:250`; `app/escala/services/cadastro_realidade.py:655`) |
+| Placar estrutural R2 | A função aparece como **fonte textual declarada**, sem chamada executável a `lista` nesse registro. (`app/core/placar_estrutural.py:140`) |
+
+O placar exibido pela própria lista usa `por_assinatura` e os conjuntos efetivamente incluídos na montagem. (`app/escala/services/cadastro_realidade.py:636`; `app/escala/services/cadastro_realidade.py:646`)
+
+**(d) `aplicar_proposta_escala`**
+
+É uma intenção cujo escritor registrado é `escala.services.propositor.aplicar`; seu juiz registrado é `propositor.propostas`. (`app/core/intake.py:49`)
+
+Os caminhos de produção encontrados são: comando `propostas_de_escala`, aplicação pelo intake e aplicação pelo fio. Intake e fio revalidam a proposta antes de chamar o escritor; o formulário do fio envia a ação `aplicar_proposta_escala`. (`app/escala/management/commands/propostas_de_escala.py:25`; `app/escala/management/commands/propostas_de_escala.py:50`; `app/core/views_ia.py:636`; `app/core/views_ia.py:645`; `app/core/views_ia.py:654`; `app/chamados/services/proposta_no_fio.py:114`; `app/chamados/services/fio.py:505`; `app/templates/chamados/partials/modal_fio.html:50`)
+
+O escritor chama a porta retroativa, grava `DecisaoProposta.ACEITA` e o evento `aplicar_proposta_escala`. (`app/escala/services/propositor.py:687`; `app/escala/services/propositor.py:695`; `app/escala/services/propositor.py:699`)
+
+**(e) `regenerar_celulas_vinculo`**
+
+O corpo escritor está em `ponto/portas/celula.py`; `gerar_celulas.py` o reexporta. (`app/ponto/portas/celula.py:100`; `app/ponto/management/commands/gerar_celulas.py:13`)
+
+Chamadores diretos de produção encontrados:
+
+| Caminho | Referência |
+|---|---|
+| Signals de vigência e âncora | `app/escala/signals.py:71`; `app/escala/signals.py:117` |
+| Executor do vínculo | `app/colaboradores/services/vinculo.py:320` |
+| Correção retroativa | `app/colaboradores/management/commands/corrigir_escala_retroativa.py:230` |
+| Alteração do tipo de escala | `app/escala/services/cadastro_tipo.py:348` |
+| Folgas | `app/escala/folgas.py:220` |
+| Executor automático de escala | `app/escala/services/escala_auto_executor.py:104`; `app/escala/services/escala_auto_executor.py:143` |
+| Porta de exportada | `app/ponto/portas/regen_exportada.py:174` |
+| Wrapper de regeneração de um dia | `app/ponto/portas/celula.py:474` |
+
+O rastro da regeneração é lido por `janelas_de_regeneracao`, a partir de `LogAuditoria`; a classificação de cobrança órfã usa preferencialmente o carimbo exato `regenerada_em` da célula. (`app/escala/services/regeneracao.py:36`; `app/escala/services/regeneracao.py:57`; `app/escala/services/regeneracao.py:71`)
+
+**(f) Escolha do vínculo do dia**
+
+`vinculo_do_dia` é função pura: lê a geradora da célula; se ela estiver ausente da alimentação ou fora de sua vigência, retorna `None`. Sem geradora, escolhe entre os vínculos que cobrem a data pelo máximo de `(ativa, data_inicio)`. (`app/escala/alimentacao.py:196`; `app/escala/alimentacao.py:237`; `app/escala/alimentacao.py:247`; `app/escala/alimentacao.py:253`)
+
+Os “afins” têm papéis distintos:
+
+| Função | Papel |
+|---|---|
+| `tem_vigencia_declarada`, `vinculo_cobre_a_data` e irmãos SQL | Candidatura e cobertura temporal. (`app/escala/alimentacao.py:157`; `app/escala/alimentacao.py:167`; `app/escala/alimentacao.py:173`; `app/escala/alimentacao.py:187`) |
+| `vinculo_do_dia_carregado` / plural | Carregam células, geradoras e vínculos e chamam a mesma juíza. (`app/escala/alimentacao.py:284`; `app/escala/alimentacao.py:297`) |
+| `servico_jornada.escala_vigente` | Carrega e delega à juíza. (`app/escala/servico_jornada.py:38`; `app/escala/servico_jornada.py:57`) |
+| `utils._esc_vigente_do_dia` | Carrega e delega à juíza. (`app/escala/utils.py:2114`; `app/escala/utils.py:2134`) |
+
+Entre os leitores estão calculador, espelho, PDF, exportação, fechamento e censo de fase. (`app/ponto/calculador/alimentacao.py:176`; `app/ponto/services/espelho.py:297`; `app/relatorios/pdf_espelho.py:567`; `app/folha/export.py:348`; `app/ponto/services/fechamento.py:125`; `app/ponto/management/commands/censo_fase_12x36.py:111`)
+
+Na lista, `_vinculos` pergunta por **hoje**, sem mapa de células; C9 conserva separadamente `ec_do_dia`, `template_do_dia` e `dono_do_dia`. O detector `fora_de_fase` usa o EC ativo em toda a janela. (`app/escala/services/cadastro_realidade.py:477`; `app/escala/services/cadastro_realidade.py:494`; `app/escala/services/cadastro_realidade.py:312`; `app/escala/services/fase_12x36.py:106`; `app/escala/services/fase_12x36.py:181`)
+
+**2. LAVRA de C3/C7/C8/C9 e de fase deslocada**
+
+As quatro fontes usam `MetricaSnapshot.detalhe`, um JSON do modelo de métricas. Os leitores procuram a lavra mais recente por data e cálculo. (`app/inteligencia/models.py:81`; `app/escala/services/previsto_cego.py:217`; `app/escala/services/regua_na_lista.py:57`; `app/ponto/services/vinculo_na_lista.py:125`; `app/ponto/services/teto_na_lista.py:120`)
+
+| Assinatura | Campo/chave lido | Escritor e agenda declarada |
+|---|---|---|
+| **C3** | Chave `previsto_cego`, escopo `frota`; a lista formata o snapshot. (`app/escala/services/previsto_cego.py:58`; `app/escala/services/previsto_cego.py:217`; `app/escala/services/cadastro_realidade.py:381`) | `lavrar_previsto_cego --apply`, diariamente **07:33**. (`app/escala/management/commands/lavrar_previsto_cego.py:30`; `app/config/crons.py:495`) |
+| **C7** | Chave `termometro_regua`, `detalhe.por_colab`: EC, classe, declarado, real, evidência e destino. (`app/escala/services/regua_na_lista.py:19`; `app/escala/services/regua_na_lista.py:31`; `app/escala/services/cadastro_realidade.py:276`) | `termometro_regua --avaliar --lavrar` → `regua_na_lista.lavrar`, diariamente **06:00**. (`app/escala/management/commands/termometro_regua.py:92`; `app/escala/services/regua_na_lista.py:42`; `app/config/crons.py:409`) |
+| **C8** | Chave `vinculo_divergente`, `detalhe.por_colab`; compara o posto lavrado com o cadastro atual. (`app/ponto/services/vinculo_na_lista.py:21`; `app/ponto/services/vinculo_na_lista.py:138`; `app/escala/services/cadastro_realidade.py:294`) | `detectar_vinculo_divergente --lavrar` → `vinculo_na_lista.lavrar`, **segunda-feira 06:52**. (`app/ponto/management/commands/detectar_vinculo_divergente.py:35`; `app/ponto/services/vinculo_na_lista.py:111`; `app/config/crons.py:578`) |
+| **C9** | Chave `par_separado_pelo_teto`, `detalhe.itens`, incluindo dia, EC/template e dono. (`app/ponto/services/teto_na_lista.py:25`; `app/ponto/services/teto_na_lista.py:75`; `app/escala/services/cadastro_realidade.py:306`) | `lavrar_teto_do_dia --apply` → `teto_na_lista.lavrar`, diariamente **07:42**. (`app/ponto/management/commands/lavrar_teto_do_dia.py:26`; `app/ponto/services/teto_na_lista.py:110`; `app/config/crons.py:502`) |
+
+Esses são horários configurados; execução efetiva e conteúdo atual do banco **[não verificado]**. O timezone Django declarado é `America/Sao_Paulo`. (`app/config/settings/base.py:93`)
+
+**Existe contrato de lavra de desvio 12x36:** `censo_fase_12x36 --lavrar` escreve a chave `desvio_de_cadastro_12x36`, escopo `tenant`, com contador e IDs dos colaboradores em desvio, automáticos e propostas. O cron está declarado diariamente às **07:38**, com `--min-plantoes 6 --lavrar`. (`app/ponto/management/commands/censo_fase_12x36.py:192`; `app/ponto/management/commands/censo_fase_12x36.py:200`; `app/config/crons.py:614`)
+
+Esse snapshot **não guarda os dias dos furos/folgas, o EC e a âncora proposta por linha**. O censo calcula esses conjuntos, monta linhas com EC, segmentos, contagens, virada e proposta, mas o arquivo JSON só é escrito com `--json`, ausente na agenda. É o escritor existente mais próximo em assunto e alimentação por vínculo do dia. (`app/ponto/management/commands/censo_fase_12x36.py:102`; `app/ponto/management/commands/censo_fase_12x36.py:129`; `app/ponto/management/commands/censo_fase_12x36.py:153`; `app/ponto/management/commands/censo_fase_12x36.py:172`; `app/ponto/management/commands/censo_fase_12x36.py:203`; `app/config/crons.py:614`)
+
+Há também lavra `fase_conflitante`, às **07:14**, mas ela compara **foto de folga × âncora**, não cadastro × turnos reais. Nenhuma dessas duas lavras entra na montagem atual de `lista`. (`app/escala/services/fase_conflitante.py:11`; `app/escala/services/fase_conflitante.py:86`; `app/config/crons.py:479`; `app/escala/services/cadastro_realidade.py:513`)
+
+**3. Quantos juízes de sugestão existem**
+
+**No conflito nomeado pelo aval, são dois:** `ancora_sugerida` e `fase_sugerida`. Não são cascas da mesma decisão: têm janelas, critérios e desempates diferentes. (`app/docs/PROMPTS.md:1669`; `app/escala/services/fase_12x36.py:32`; `app/escala/services/fase_12x36.py:67`; `app/escala/services/fase_na_tela.py:19`; `app/escala/services/fase_na_tela.py:70`; `app/escala/services/fase_na_tela.py:78`)
+
+Contando também outros lugares que escolhem autonomamente uma âncora, há **quatro sítios de decisão** identificados:
+
+| Sítio | Decisão e chamador |
+|---|---|
+| `fase_12x36.ancora_sugerida` | Melhor paridade com piso e ganho; chamado pelo detector e pelo propositor. (`app/escala/services/fase_12x36.py:75`; `app/escala/services/fase_12x36.py:203`; `app/escala/services/propositor.py:330`) |
+| `fase_na_tela.fase_sugerida` | Troca de ritmo, sequência recente e paridade; chamado pela view do assistente. (`app/escala/services/fase_na_tela.py:70`; `app/escala/services/fase_na_tela.py:78`; `app/colaboradores/views_fase.py:62`) |
+| `censo_fase_12x36.Command.handle` | Define `prop_anc` pelo último plantão real; executado pelo comando/cron. (`app/ponto/management/commands/censo_fase_12x36.py:143`; `app/config/crons.py:614`) |
+| `propositor` | Além de chamar `ancora_sugerida`, escolhe âncora diretamente no ramo forçado e na busca de candidatos de template/ritmo. (`app/escala/services/propositor.py:173`; `app/escala/services/propositor.py:310`; `app/escala/services/propositor.py:345`) |
+
+Nenhum desses está declarado como juiz de **“âncora/fase sugerida”** em `core/juizes.py`. A família escala declara somente “qual vínculo vale neste dia?” e “o vínculo cobre a data?”. (`app/core/juizes.py:1237`; `app/core/juizes.py:1245`)
+
+A L-112 permite declarar início e fase e trata a derivação como sugestão; não declara ali uma dessas funções como autoridade única. (`app/docs/LEIS.md:149`)
+
+**4. Aplicação no passado, EC encerrado e trilha**
+
+`aplicar` usa o `vinculo_id` da proposta, chama a correção com `novo_trecho=False` e `ate=None`. Sem `desde` explícito usa `p['aplicar_desde']`; o produtor preenche esse valor pelo início da competência corrente. (`app/escala/services/propositor.py:517`; `app/escala/services/propositor.py:549`; `app/escala/services/propositor.py:677`; `app/escala/services/propositor.py:687`)
+
+O EC é corrigido **no lugar**. Como `ate=None`, `novo_fim` preserva `ec.data_fim`; o escritor salva somente tipo, âncora e fim, sem reativar o vínculo nem mudar seu início. Portanto, EC encerrado com fim declarado continua encerrado. (`app/colaboradores/management/commands/corrigir_escala_retroativa.py:192`; `app/colaboradores/management/commands/corrigir_escala_retroativa.py:211`; `app/colaboradores/services/vinculo.py:839`)
+
+**A porta que reescreve o DNA passado é `regenerar_celulas_vinculo`, exceção formal à imutabilidade.** A geração ordinária preserva passado existente; a regeneração recalcula pelo cadastro corrigido e substitui células `origem='gerada'`, preservando as editadas. (`app/ponto/portas/celula.py:103`; `app/ponto/portas/celula.py:243`; `app/ponto/portas/celula.py:251`; `app/ponto/portas/celula.py:598`)
+
+O comando pede regeneração do piso até `min(data_fim ou hoje, hoje)`, mas a porta pode estender o pedido até o horizonte corrente. Fora da vigência, pode neutralizar células geradas daquele EC, sem outro vínculo cobrindo o dia. (`app/colaboradores/management/commands/corrigir_escala_retroativa.py:225`; `app/ponto/portas/celula.py:171`; `app/ponto/portas/celula.py:210`; `app/ponto/portas/celula.py:225`)
+
+As guardas distinguem:
+
+- EC desativado **sem fim**: recusa e evento `regenerar_recusado_sem_vigencia`; EC encerrado **com fim** tem vigência declarada. (`app/ponto/portas/celula.py:130`; `app/escala/alimentacao.py:157`)
+- Competência lavrada: datas são puladas normalmente; texto em `apesar_da_lavra` abre a guarda por ato explícito. A enumeração considera exportação e holerite publicado, delegando ao juiz da competência. (`app/ponto/portas/celula.py:196`; `app/ponto/portas/celula.py:238`; `app/ponto/management/commands/gerar_celulas.py:151`)
+
+A trilha tem quatro partes:
+
+| Registro | Conteúdo |
+|---|---|
+| EC | `LogAuditoria` de edição, com antes/depois da correção retroativa. (`app/colaboradores/management/commands/corrigir_escala_retroativa.py:206`) |
+| Célula reescrita dentro da vigência | `dna_anterior`, `regenerada_em`, incremento de `regeneracoes`. (`app/ponto/portas/celula.py:259`) |
+| Lote de regeneração | Evento `regenerar_celulas_vinculo`, quando houve alteração: janela, quantidade, barrados, autoridade da lavra, motivo de abertura e cobranças órfãs marcadas. (`app/ponto/portas/celula.py:297`) |
+| Aceitação humana | `DecisaoProposta.ACEITA` e evento `aplicar_proposta_escala`, com usuário, origem e assinatura. (`app/escala/services/propositor.py:695`) |
+
+Há uma diferença de trilha no ramo **fora da vigência**: ele salva somente `trabalha` e `dna`, sem atualizar aqueles três campos de histórico da célula. As cobranças dos dias reescritos são marcadas para rejulgamento; o comando também chama a reconciliação posterior. (`app/ponto/portas/celula.py:231`; `app/ponto/portas/celula.py:277`; `app/colaboradores/management/commands/corrigir_escala_retroativa.py:237`)
+
+**5. Padrões realizados e furados**
+
+| Padrão documentado | Situação encontrada |
+|---|---|
+| **Single source of truth / um juiz por pergunta** | A sugestão única exigida pelo aval corresponde ao norte do plano; as duas funções de sugestão atuais mantêm decisões diferentes, caracterizando derivação paralela. (`app/docs/PLANO-PADROES.md:46`; `app/docs/GLOSSARIO.md:23`; `app/escala/services/fase_12x36.py:67`; `app/escala/services/fase_na_tela.py:70`) |
+| **Single writer / célula soberana** | A aplicação delega à porta existente, e a regeneração é a exceção formal nomeada no glossário. (`app/docs/GLOSSARIO.md:11`; `app/docs/GLOSSARIO.md:12`; `app/escala/services/propositor.py:687`; `app/ponto/portas/celula.py:100`) |
+| **CQRS / projeção de leitura** | C3/C7/C8/C9 leem e formatam lavra pronta, coerente com separar cálculo e leitura; a própria lápide C3 proíbe a conta de frota no request. (`app/docs/GLOSSARIO.md:22`; `app/escala/services/cadastro_realidade.py:48`; `app/escala/services/cadastro_realidade.py:276`; `app/escala/services/cadastro_realidade.py:294`; `app/escala/services/cadastro_realidade.py:306`; `app/escala/services/cadastro_realidade.py:381`) |
+| **Bitemporal / vínculo do dia × vínculo de hoje** | A juíza e seus carregadores realizam a distinção. O detector atual usa EC ativo na janela passada; a apresentação geral da lista resolve hoje, enquanto C9 preserva os identificadores do dia separadamente. (`app/docs/GLOSSARIO.md:24`; `app/escala/alimentacao.py:237`; `app/escala/services/fase_12x36.py:106`; `app/escala/services/fase_12x36.py:181`; `app/escala/services/cadastro_realidade.py:312`; `app/escala/services/cadastro_realidade.py:494`) |
+| **Evento em vez de varredura / Transactional Outbox** | As lavras examinadas são alimentadas pelos crons declarados. Isso não constitui outbox: o glossário a declara “a construir” e o plano mantém seu contrato pendente. (`app/config/crons.py:409`; `app/config/crons.py:495`; `app/config/crons.py:502`; `app/conf
+
+[truncado em 20000 de 20138 caracteres]
+
+## 30/10 17:15 · sessao 5f7658c4d57d · - · - · origem=Ronald (tmux)
+
+Achado de desenho: publicar o AGENTS cru pode expor conteúdo que a publicação atual raspa. O publicador só entrega pares explícitos ao raspador e não inclui AGENTS/CLAUDE/GLOSSARIO (`bin/relato.sh:100-111`); commit e push também usam lista explícita (`bin/relato.sh:115`, `bin/relato.sh:124-126`). O raspador não descobre arquivos: só processa os pares recebidos (`bin/raspar_publico.py:23-40`).
+
+Contraexemplo concreto: colocar `CPF [cpf]` na primeira frase de uma lei. A LEIS pública seria mascarada pelo caminho atual (`bin/relato.sh:105`, `bin/nome_no_texto.py:41`, `bin/nome_no_texto.py:110`); a projeção determinística crua descrita no contrato conservaria esse CPF no AGENTS [nao verificado: gerador ainda ausente]. O contrato precisa declarar em qual repo esse arquivo vai ao ar e qual raspagem aplica; publicação efetiva ou vazamento atual do AGENTS: [nao verificado].
+
+Mesmo acrescentar AGENTS ao raspador não lhe dá o tratamento estrito de texto gerado: a decisão usa o basename do destino (`bin/raspar_publico.py:29-31`), e `GERADOS` contém apenas `SESSAO.md` (`bin/nome_no_texto.py:39`). Contraexemplo sintético já presente no selo: `Zebrante` isolado em Title Case é detectado com `gerado=True` (`bin/tests/test_publicacao_sem_nome.sh:84-90`); com destino AGENTS.md, a regra mantém token que não está em caixa alta (`bin/nome_no_texto.py:78-84`). O selo de publicação usa exatamente a mesma classificação, portanto também pode aceitar essa forma (`bin/tests/test_publicacao_sem_nome.sh:71-72`).
+
+Quanto a conteúdo pessoal efetivamente presente nos recortes propostos hoje: sem achado comprovado; não houve acesso à lista do banco [nao verificado]. Há ampliação de publicação: CLAUDE e GLOSSARIO não estão entre as fontes copiadas pelo publicador atual (`bin/relato.sh:100-111`), enquanto o desenho inclui seus textos no AGENTS [nao verificado: contrato anexado, sem arquivo local para citar].
+
+## 30/10 17:15 · sessao a6ee853ff509 · SUITE-POR-IMPACTO · verificador · origem=Code
+
+**Sim. O critério atual permite pular o arsenal sem provar que o push corresponde à árvore certificada:** ele compara o carimbo com a árvore **viva**, mas compara o push apenas com os `.py` e `.html` dela. Isso também deixa `bin/` fora da prova dos portões de host. ([bin/pre-push.sh:61](/home/ronald/codex_ws/6c37ad849616bb588f77ff3cc309c7a366cc3ad8/bin/pre-push.sh:61), [bin/arvore_do_push.sh:85](/home/ronald/codex_ws/6c37ad849616bb588f77ff3cc309c7a366cc3ad8/bin/arvore_do_push.sh:85))
+
+Os caminhos abaixo são deduções do código; ocorrência efetiva em produção: [nao verificado].
+
+1. **(C) “Mesmo hash da árvore do push” não é o critério implementado.** Considere certificado e árvore viva A, e push B com Python/HTML iguais, mas CSS, JS ou dados diferentes. O hash vivo casa com o carimbo; `--igual` não examina essas diferenças; `SKIP_ARSENAL=1` pode ser atribuído. Com diferença apenas em `bin/`, os portões executados sobre A também não certificam B. **Mudança no contrato:** substituir “o pre-push não muda de critério” por comparação explícita de `REGUA_ARVORE` com a árvore Git completa de `PUSH_SHA`; divergência ou erro impede o atalho. ([bin/pre-push.sh:62](/home/ronald/codex_ws/6c37ad849616bb588f77ff3cc309c7a366cc3ad8/bin/pre-push.sh:62), [bin/arvore_do_push.sh:89](/home/ronald/codex_ws/6c37ad849616bb588f77ff3cc309c7a366cc3ad8/bin/arvore_do_push.sh:89))
+
+2. **(C) O novo modo precisa escapar do `JA VERDE` antigo.** Hoje só `--only` recebe tratamento específico; qualquer outro primeiro argumento deixa disponível o atalho por FP, que termina antes de `hooks.sh`, da pasta de selos e de `node_check`. Uma implementação que apenas substitua o `docker run` pode retornar sem validar o certificado nem executar esses portões. **Mudança:** reconhecer `--carimbar-da-copia` antes do cache e obrigar esse ramo a validar o certificado e executar todos os portões, independentemente do carimbo anterior. ([bin/regua.sh:46](/home/ronald/codex_ws/6c37ad849616bb588f77ff3cc309c7a366cc3ad8/bin/regua.sh:46), [bin/regua.sh:84](/home/ronald/codex_ws/6c37ad849616bb588f77ff3cc309c7a366cc3ad8/bin/regua.sh:84), [bin/regua.sh:130](/home/ronald/codex_ws/6c37ad849616bb588f77ff3cc309c7a366cc3ad8/bin/regua.sh:130))
+
+3. **(C) “Mesmo rabo” não assegura estabilidade da árvore inteira.** A régua captura o hash completo no começo, mas no fim compara somente FP de Python/HTML. Alterações de `bin/`, JS ou dados durante os portões ficam fora dessa comparação. Além disso, o pre-push decide o atalho antes de adquirir sua trava, sem repetir a decisão depois da espera. **Mudança:** vincular portões e publicação do carimbo à mesma árvore identificada, conferir novamente o hash completo e revalidar o atalho sob a trava. ([bin/regua.sh:33](/home/ronald/codex_ws/6c37ad849616bb588f77ff3cc309c7a366cc3ad8/bin/regua.sh:33), [bin/regua.sh:45](/home/ronald/codex_ws/6c37ad849616bb588f77ff3cc309c7a366cc3ad8/bin/regua.sh:45), [bin/regua.sh:191](/home/ronald/codex_ws/6c37ad849616bb588f77ff3cc309c7a366cc3ad8/bin/regua.sh:191), [bin/pre-push.sh:76](/home/ronald/codex_ws/6c37ad849616bb588f77ff3cc309c7a366cc3ad8/bin/pre-push.sh:76))
+
+4. **(C e G) Hash inicial igual ao final não exclui A→B→A durante a execução.** A porta monta diretamente a cópia, de forma gravável; a trava serializa o comando de teste, sem impedir editores externos. Assim, os extremos iguais não provam quais bytes foram observados no meio. **Mudança:** exigir cópia privada materializada da identidade registrada, sem alterações externas durante coleta/suite/extração. Não basta impor `:ro`: há testes atuais que alteram e restauram arquivos da própria cópia; essas mutações internas precisam ser previstas. ([bin/suite.sh:74](/home/ronald/codex_ws/6c37ad849616bb588f77ff3cc309c7a366cc3ad8/bin/suite.sh:74), [bin/suite.sh:100](/home/ronald/codex_ws/6c37ad849616bb588f77ff3cc309c7a366cc3ad8/bin/suite.sh:100), [bin/trava_teste.sh:35](/home/ronald/codex_ws/6c37ad849616bb588f77ff3cc309c7a366cc3ad8/bin/trava_teste.sh:35), [test_selo_diagrama_do_codigo.py:49](/home/ronald/codex_ws/6c37ad849616bb588f77ff3cc309c7a366cc3ad8/app/core/tests/test_selo_diagrama_do_codigo.py:49))
+
+5. **(C) Chamar `node_check` não prova que ele examinou a árvore do push.** Ele lista JS na raiz local, mas executa o analisador dentro de `${CASCA:-saas_core}`. Não verifica a identidade entre esses arquivos locais e `/app` desse container. **Mudança:** executar o analisador sobre os bytes da árvore certificada ou provar essa identidade. O mount efetivo do container em produção é [nao verificado]. ([bin/node_check.sh:24](/home/ronald/codex_ws/6c37ad849616bb588f77ff3cc309c7a366cc3ad8/bin/node_check.sh:24), [bin/node_check.sh:33](/home/ronald/codex_ws/6c37ad849616bb588f77ff3cc309c7a366cc3ad8/bin/node_check.sh:33), [bin/node_check.sh:37](/home/ronald/codex_ws/6c37ad849616bb588f77ff3cc309c7a366cc3ad8/bin/node_check.sh:37))
+
+6. **(C) Hash Git de `app/` não identifica todo o ambiente observado.** A montagem sobrepõe `/app/staticfiles` com conteúdo da raiz do **script**, independentemente do `--dir`; esse diretório é ignorado pelo Git. A execução também usa a tag mutável `saas-hasner-core:latest`. **Mudança:** acrescentar ao certificado o ID efetivamente usado da imagem e a identidade das montagens relevantes, fixando-os durante a execução e conferindo-os na aceitação. Sem isso, limitar expressamente a promessa à subárvore Git; identidade de todo `/app` permanece [nao verificado]. ([bin/arvore_do_push.sh:19](/home/ronald/codex_ws/6c37ad849616bb588f77ff3cc309c7a366cc3ad8/bin/arvore_do_push.sh:19), [bin/arvore_do_push.sh:55](/home/ronald/codex_ws/6c37ad849616bb588f77ff3cc309c7a366cc3ad8/bin/arvore_do_push.sh:55), [.gitignore:13](/home/ronald/codex_ws/6c37ad849616bb588f77ff3cc309c7a366cc3ad8/.gitignore:13), [bin/suite.sh:101](/home/ronald/codex_ws/6c37ad849616bb588f77ff3cc309c7a366cc3ad8/bin/suite.sh:101))
+
+7. **(C) O auxiliar de hash não exige sucesso da coleta inteira.** Ele descarta o rc de `git add -A --ignore-errors` e depois executa `write-tree`; portanto, produzir um hash não comprova que a coleta anterior terminou sem erro. **Mudança:** qualquer erro de criação/população/escrita do índice invalida certificado e carimbo; hash parcial nunca autoriza o atalho. ([bin/arvore_hash.sh:27](/home/ronald/codex_ws/6c37ad849616bb588f77ff3cc309c7a366cc3ad8/bin/arvore_hash.sh:27))
+
+8. **Os selos “da cópia” podem ficar verdes lendo a principal.** Por exemplo, `test_lei_akita.sh` crava `/home/ronald/saas-hasner` e lê seu `CLAUDE.md`; `hooks.sh` também fixa essa raiz. Medir apenas quais selos ficam vermelhos numa cópia limpa não descobre esses verdes sobre outro alvo. **Mudança:** a classificação precisa verificar o alvo efetivamente lido, inclusive nos selos verdes; no pouso, esse alvo deve corresponder à árvore vinculada ao push. ([bin/tests/test_lei_akita.sh:17](/home/ronald/codex_ws/6c37ad849616bb588f77ff3cc309c7a366cc3ad8/bin/tests/test_lei_akita.sh:17), [bin/tests/test_lei_akita.sh:28](/home/ronald/codex_ws/6c37ad849616bb588f77ff3cc309c7a366cc3ad8/bin/tests/test_lei_akita.sh:28), [bin/hooks.sh:9](/home/ronald/codex_ws/6c37ad849616bb588f77ff3cc309c7a366cc3ad8/bin/hooks.sh:9))
+
+Quanto às outras novidades da v3:
+
+- **`.py` A/D/renomeado e base do mapa:** não encontrei nova falha demonstrável nessas regras sob uma árvore estável; implementação e reprodução histórica permanecem [nao verificado]. Eu explicitaria que inventário de status, comparação de AST e seleção usam **todos o mesmo hash do mapa**. A necessidade de estabilizar a cópia continua, pois a porta monta seu diretório diretamente. ([bin/suite.sh:74](/home/ronald/codex_ws/6c37ad849616bb588f77ff3cc309c7a366cc3ad8/bin/suite.sh:74), [bin/suite.sh:100](/home/ronald/codex_ws/6c37ad849616bb588f77ff3cc309c7a366cc3ad8/bin/suite.sh:100))
+
+- **Medida por obra:** o denominador precisa ter definição operacional. O código admite `tests.py`, e o runner CI poda casos em quarentena; contar arquivos por glob não equivale necessariamente ao universo executável. **Mudança:** registrar numerador, denominador e identidade do universo por chamada; definir OBRA ausente, inclusão de fallback INTEIRA como 100% e fórmula da média por obra. A implementação da agregação e o resultado esperado zero são [nao verificado]. ([bin/tests/test_labels_fonte_unica.sh:29](/home/ronald/codex_ws/6c37ad849616bb588f77ff3cc309c7a366cc3ad8/bin/tests/test_labels_fonte_unica.sh:29), [app/config/settings/ci.py:40](/home/ronald/codex_ws/6c37ad849616bb588f77ff3cc309c7a366cc3ad8/app/config/settings/ci.py:40), [app/core/runner_quarentena.py:75](/home/ronald/codex_ws/6c37ad849616bb588f77ff3cc309c7a366cc3ad8/app/core/runner_quarentena.py:75))
+
+## 30/10 17:15 · sessao 4558fd89c791 · - · - · origem=Ronald (tmux)
+
+- **Contador de recusa ausente:** o produtor atual só lê sessões e a associação de origem em `chamadas.log`; não lê `recusa.log` (`bin/gerar_codex_estado.py:169`, `bin/gerar_codex_estado.py:176`). O módulo de contadores conhece apenas `limite.log` e `chamadas.log` (`bin/codex_limite_estado.py:21`, `bin/codex_limite_estado.py:22`). Contraexemplo: gravar uma recusa sem chamar Codex não acrescenta contador ao CODEX-ESTADO atual. O contrato precisa explicitar mudança do leitor e selo.
+
+- **Leitor indicado incorretamente:** `~/codex_prototipo/gerar_codex_estado.py` lê `~/.codex/sessions` (`/home/ronald/codex_prototipo/gerar_codex_estado.py:17`, `:24`), filtra somente mensagens finais (`:34`, `:40`, `:45`) e escreve seus textos (`:59`); não lê `logs/codex/`. O leitor de produção é `bin/gerar_codex_estado.py`, que importa `codex_limite_estado` (`bin/gerar_codex_estado.py:41`).
+
+- **`chamadas.log`: sem quebra inevitável**, preservado o esquema atual. O wrapper escreve pares ini/fim TAB (`bin/codex_pergunta.sh:53`, `:59`, `:88`). O parser usa posições fixas e chave `(obra, hash, pid)` (`bin/codex_limite_estado.py:56`, `:63`, `:67`). Os consumidores são o ESTADO (`bin/gerar_estado.py:269`) e a procedência do CODEX-ESTADO (`bin/gerar_codex_estado.py:175`). O rc é texto livre: `5` funciona (`bin/codex_limite_estado.py:67`, `:88`).
+
+- **Armadilha de contagem, dependente da posição da nova recusa:** se inserida depois do ini atual (`bin/codex_pergunta.sh:88`), uma recusa sem Codex será contada como “chamada ao Codex”, pois o contador conta todo ini independentemente de rc (`bin/codex_limite_estado.py:71`, `:76`). Contraexemplo: um brief recusado gera ini/fim rc=5; o número de verificadores sobe embora o Codex não tenha sido chamado. A posição definitiva é **[nao verificado]**.
+
+- **Formato do brief: sem achado de quebra nos leitores atuais.** O brief vai ao stdin do CLI (`bin/codex_pergunta.sh:158`); não há parser estrutural local. O selo estrutural exige substrings de segurança e cabeçalho (`bin/tests/test_codex_pergunta.sh:13`, `:26`). O selo de sonda verifica presença dos dados e ausência de vazamentos, sem exigir ordem inicial do brief (`bin/tests/test_codex_sonda.sh:61`, `:65`). Os selos de rc exercitam sonda/leitura, portanto a regra restrita a verificador não os recusa (`bin/tests/test_codex_sonda.sh:50`, `bin/tests/test_codex_limite.sh:24`).
+
+## 30/10 17:15 · sessao e5ce1b72dc79 · - · - · origem=Ronald (tmux)
+
+A premissa “editar AGENTS muda REGUA_ARVORE, logo o pre-push roda o selo” falha em dois pontos independentes: [nao verificado]
+
+1. **O pre-push não chama a régua nem seu laço de selos.** O hash diferente apenas impede `SKIP_ARSENAL=1`; depois o hook roda testes Django do arsenal e do control-plane. O próprio comentário registra que o laço de `bin/tests/` não roda no pre-push. **Contraexemplo:** carimbo verde; editar manualmente AGENTS.md, commitar e dar push. O hash muda, o arsenal Django roda, mas `test_agents_md_gerado.sh`, mesmo acrescentado ao laço da régua, não é chamado. Referências: `bin/pre-push.sh:14-16`, `bin/pre-push.sh:61-68`, `bin/pre-push.sh:155-185`, `bin/pre-push.sh:194-195`; laço somente em `bin/regua.sh:138-145`.
+
+2. **A própria régua pode sair verde antes do selo.** Calcula `ARVORE_FP`, mas seu atalho compara apenas `FP` de arquivos `.py`/`.html` dentro de `app/`, ignorando o hash da árvore. **Contraexemplo:** carimbo OK; editar só AGENTS.md ou qualquer uma das quatro fontes `.md`; executar `bash bin/regua.sh`. Se as guardas anteriores passam, sai “JA VERDE” em vez de chegar ao selo, pois `FP` permanece igual. Referências: `bin/regua.sh:25-35`, `bin/regua.sh:45`, `bin/regua.sh:84-94`, `bin/regua.sh:138-145`.
+
+**A parte restrita sobre hashing procede:** um AGENTS.md normal, rastreado ou novo não ignorado, entra no índice descartável usado por `git add -A` e altera o `git write-tree`; não há filtro por extensão. Isso não estabelece que seu selo execute. Referência: `bin/arvore_hash.sh:24-28`.
+
+**O selo atual dessa infraestrutura não protege esses dois vínculos.** Exercita mudanças em `.py`/`.js`, verifica presença textual de `REGUA_ARVORE` no pre-push e contagem de atribuições no carimbo, sem verificar que a régua compara esse campo no atalho ou que o pre-push executa o laço. Referências: `bin/tests/test_suite_uma_vez_por_arvore.sh:38-64`, `bin/tests/test_suite_uma_vez_por_arvore.sh:77-83`.
+
+**Outro limite de escopo:** pre-push usa caminhos fixos em `~/saas-hasner` para carimbo, fingerprint e hashing. O helper `arvore_hash.sh` resolve a raiz pelo próprio script. Logo um push de outra worktree pode medir AGENTS.md da árvore principal, não o da worktree. Contraexemplo: editar AGENTS.md exclusivamente numa worktree; `ARVORE_AGORA` vem do script em `~/saas-hasner/bin/`, que mede a árvore principal. Referências: `bin/pre-push.sh:41`, `bin/pre-push.sh:46`, `bin/pre-push.sh:61`, `bin/arvore_hash.sh:21-24`.
+
+## 30/10 17:14 · sessao 0a9c17b37d82 · - · - · origem=Ronald (tmux)
+
+**`aplicar_proposta_escala`**
+
+- O escritor declarado é `escala.services.propositor.aplicar`; juiz declarado `propostas`, gate `editar_escalas`. `app/core/intake.py:49`.
+- Chamadores de produção: comando `propostas_de_escala --aplicar` (`app/escala/management/commands/propostas_de_escala.py:50`); chat/IA, após gate e revalidação da proposta (`app/core/views_ia.py:636`); fio, após gate e assinatura (`app/chamados/services/proposta_no_fio.py:114`, `app/chamados/services/proposta_no_fio.py:141`), acionado por `app/chamados/services/fio.py:505`; formulário em `app/templates/chamados/partials/modal_fio.html:50`.
+- `aplicar` chama `corrigir_escala_retroativa.Command._rodar`, passando vínculo explícito, `novo_trecho=False`, `ate=None`, `apply=True`; usa o tenant corrente. `app/escala/services/propositor.py:687`.
+- A porta corrige EC existente no lugar; preserva `data_fim` quando `ate=None`. Salva somente `tipo_escala`, `data_ancora_colaborador`, `data_fim`: portanto não reativa vínculo encerrado. `app/colaboradores/management/commands/corrigir_escala_retroativa.py:192`, `app/colaboradores/management/commands/corrigir_escala_retroativa.py:211`, `app/colaboradores/services/vinculo.py:839`.
+- O comando pede regeneração de `desde` até `min(data_fim ou hoje, hoje)` e depois reconcilia. A porta de regeneração estende o horizonte por padrão até o fim da competência atual. `app/colaboradores/management/commands/corrigir_escala_retroativa.py:225`, `app/ponto/portas/celula.py:171`.
+- Trilhas: log `editar` com antes/depois do EC (`app/colaboradores/management/commands/corrigir_escala_retroativa.py:206`); `DecisaoProposta.ACEITA` e evento `aplicar_proposta_escala` com autor, antes/depois, origem e assinatura (`app/escala/services/propositor.py:695`).
+
+**`regenerar_celulas_vinculo` / passado**
+
+- Corpo escritor em `app/ponto/portas/celula.py:100`; reexportado em `app/ponto/management/commands/gerar_celulas.py:13`.
+- Chamadores diretos de produção: sinais de vigência e âncora (`app/escala/signals.py:71`, `app/escala/signals.py:117`); executor de vínculo (`app/colaboradores/services/vinculo.py:320`); retificação exportada (`app/ponto/portas/regen_exportada.py:174`); cadastro do tipo (`app/escala/services/cadastro_tipo.py:348`); folgas (`app/escala/folgas.py:220`); escala automática aplicar/desfazer (`app/escala/services/escala_auto_executor.py:104`, `app/escala/services/escala_auto_executor.py:143`); correção retroativa (`app/colaboradores/management/commands/corrigir_escala_retroativa.py:230`); wrapper de um dia (`app/ponto/portas/celula.py:474`).
+- Geração ordinária preserva passado existente; só enriquece DNA nulo. `app/ponto/portas/celula.py:598`.
+- Regeneração é exceção formal: reescreve células `origem='gerada'`, inclusive passadas. Grava `dna_anterior`, `regenerada_em`, incrementa `regeneracoes`, muda `trabalha`, geradora e DNA. `app/ponto/portas/celula.py:103`, `app/ponto/portas/celula.py:251`.
+- **Ramo fora da vigência:** célula gerada pelo próprio EC, ainda trabalhando, sem lavra e sem outro vínculo cobrindo é zerada (`trabalha=False`, DNA sem marcos), mas esse ramo salva somente `trabalha/dna`, sem os três campos de denúncia. `app/ponto/portas/celula.py:225`.
+- EC desativado sem `data_fim` é recusado, mantendo células e registrando `regenerar_recusado_sem_vigencia`; EC encerrado com `data_fim` passa na guarda de vigência declarada. `app/ponto/portas/celula.py:130`, `app/escala/alimentacao.py:157`.
+- Guarda de lavra carrega competências e pula datas, salvo `apesar_da_lavra` preenchido. `app/ponto/portas/celula.py:196`, `app/ponto/portas/celula.py:238`. Enumeração reúne TXT e holerite com lote publicado, delegando a `competencia_fechada_para_celula`; status de `FechamentoMensal` não é a guarda. `app/ponto/management/commands/gerar_celulas.py:132`, `app/ponto/management/commands/gerar_celulas.py:151`, `app/folha/export.py:578`.
+- O bloco usa `transaction.atomic` e consulta simples das células; não contém `select_for_update`. `app/ponto/portas/celula.py:206`.
+- Veredito humano protege o **rejulgamento**, enquanto a proteção de reescrita do DNA é `origem`. `app/ponto/portas/celula.py:251`, `app/ponto/portas/celula.py:365`.
+- Log de regeneração só quando `n>0`, com janela, alteradas, barrados/fonte, motivo de abertura e cobranças órfãs; falha da trilha é logada sem abortar correção. `app/ponto/portas/celula.py:297`.
+- Leitor do rastro: `janelas_de_regeneracao` consulta `LogAuditoria`; prefere `regenerada_em` da própria célula, usando janela somente como fallback. `app/escala/services/regeneracao.py:57`, `app/escala/services/regeneracao.py:80`. Consumidores incluem supra-juiz (`app/ponto/management/commands/supra_juiz.py:147`, `app/ponto/management/commands/supra_juiz.py:239`), reconciliador (`app/ponto/management/commands/reconciliar_grade.py:29`) e auditor (`app/chamados/management/commands/auditar_invariantes_chamados.py:1133`).
+- A denúncia na cobrança grava `contexto_json.orfa_regeneracao`, incluindo instante e marcos da emissão, pela porta de contexto. `app/ponto/management/commands/gerar_celulas.py:255`.
+
+**Vínculo do dia / afins**
+
+- Juíza pura: `vinculo_do_dia`. Com geradora, escolhe o EC nomeado e verifica `data_inicio/data_fim`; geradora ausente da alimentação ou fora da vigência retorna `None`. Sem geradora, escolhe cobertura e desempata por `(ativa, data_inicio)`. `app/escala/alimentacao.py:196`, `app/escala/alimentacao.py:237`.
+- Cobertura única: `tem_vigencia_declarada`, `vinculo_cobre_a_data` e versões SQL. `app/escala/alimentacao.py:157`, `app/escala/alimentacao.py:167`, `app/escala/alimentacao.py:173`, `app/escala/alimentacao.py:187`.
+- Alimentação: plural de escalas filtra candidatura/janela e acrescenta geradoras via `mais`; singular é casca. `app/escala/alimentacao.py:116`, `app/escala/alimentacao.py:153`.
+- `vinculo_do_dia_carregado` é casca do plural; plural carrega células, geradoras, escalas e chama a mesma juíza. `app/escala/alimentacao.py:284`, `app/escala/alimentacao.py:297`.
+- `servico_jornada.escala_vigente` e `utils._esc_vigente_do_dia` são carregadores que delegam; wrapper do calculador também delega. `app/escala/servico_jornada.py:38`, `app/escala/utils.py:2114`, `app/ponto/calculador/alimentacao.py:411`.
+- Autoridade usada no espelho, PDF, folha, fechamento, turnos e supra-juiz: `app/ponto/services/espelho.py:297`, `app/ponto/services/espelho.py:1069`, `app/relatorios/pdf_espelho.py:303`, `app/relatorios/pdf_espelho.py:567`, `app/folha/export.py:348`, `app/ponto/services/fechamento.py:125`, `app/ponto/services/fechamento.py:191`, `app/ponto/turnos.py:1932`, `app/ponto/turnos.py:2131`, `app/ponto/turnos.py:2325`, `app/ponto/supra_juiz.py:136`.
+- A lista Cadastro x Realidade consulta a juíza para **hoje**, passando escalas sem mapa de células nesse ponto. `app/escala/services/cadastro_realidade.py:494`.
+
+## 30/10 17:14 · sessao 40fe771ed92e · - · - · origem=Ronald (tmux)
+
+- **A/D e base do mapa:** não encontrei contraexemplo à regra v3 sob árvore estável. `--no-renames` faz renomeação resultar em remoção/criação; o diff precisa manter **o hash do mapa** também na análise de status e na comparação do AST. A reprodução histórica 270f75b7 → 7a8e4604 permanece [nao verificado].
+
+- **O mapa pode ficar associado a uma árvore que não produziu suas medições.** A porta monta diretamente a cópia mutável (`bin/suite.sh:74`, `bin/suite.sh:100`); a trava protege o comando de teste, sem impedir edições nessa árvore (`bin/trava_teste.sh:35`, `bin/trava_teste.sh:42`). G exige limpeza inicial, sem assegurar estabilidade durante a coleta [nao verificado: contrato anexado sem arquivo numerado]. **Contrato:** gerar sobre cópia privada materializada do hash registrado; proibir alterações externas e conferir identidade ao finalizar, abortando promoção se houver divergência.
+
+- **Não recomendar montagem somente leitura como cura indiscriminada:** testes atuais editam e restauram arquivos da própria cópia (`app/core/tests/test_selo_diagrama_do_codigo.py:49`, `app/core/tests/test_selo_diagrama_do_codigo.py:59`, `app/core/tests/test_selo_diagrama_do_codigo.py:85`, `app/core/tests/test_selo_diagrama_do_codigo.py:95`). **Contrato:** separar mutações internas esperadas dos testes de edição concorrente externa; preservar a execução em cópia privada.
+
+- **O denominador da porcentagem precisa ser definido pelo runner real.** CI usa `RunnerComQuarentena` (`app/config/settings/ci.py:40`), que remove casos/classes em quarentena (`app/core/runner_quarentena.py:65`, `app/core/runner_quarentena.py:75`, `app/core/runner_quarentena.py:86`). Contar simplesmente arquivos `test*.py` pode incluir módulos sem casos efetivamente executados, reduzindo artificialmente a porcentagem [inferência desses arquivos]. **Contrato:** universo = módulos com casos descobertos e habilitados pelo mesmo runner/configuração da chamada; registrar numerador, denominador e identidade dessa descoberta por obra.
+
+## 30/10 17:14 · sessao 898b22993db6 · - · - · origem=Ronald (tmux)
+
+Achados para consolidação, todos por leitura estática:
+
+1. **O atalho não prova igualdade com a árvore completa do push.** O hash completo comparado ao carimbo é da árvore **viva**; depois `--igual` compara somente `app/*.py` e `app/*.html`. Assim, live/certificado A e push B com mesmos Python/HTML, mas JS/CSS/dados diferentes, permitem `SKIP_ARSENAL=1`. Diferenças em `bin/` também permitem que portões executados sobre A liberem B. Evidência: `bin/pre-push.sh:61–66`; `bin/arvore_do_push.sh:85–91`. **Contrato:** retirar “pre-push não muda de critério” e exigir identidade entre `REGUA_ARVORE` e a árvore Git completa do push.
+
+2. **“Mesmo rabo” mantém uma garantia insuficiente de estabilidade dos portões.** A régua captura o hash completo somente no início; no fim compara apenas fingerprint de `.py`/`.html`. Mudanças de JS/`bin/` durante os portões não são detectadas pelo rabo. Cenário condicional: árvore A no início, B durante um portão, A novamente antes do push; carimbo de A pode liberar árvore cujos portões observaram B. Evidência: `bin/regua.sh:33–35`, `bin/regua.sh:45`, `bin/regua.sh:191–198`. **Contrato:** executar portões sobre snapshot identificado e imutável; extremos iguais sozinhos não excluem A→B→A.
+
+3. **O certificado com hash app início=fim também admite A→B→A durante a suíte.** A porta atual monta o diretório candidato de forma gravável; não congela seu conteúdo. A ausência efetiva de edição concorrente é `[nao verificado]`. Evidência: `bin/suite.sh:73–79`, `bin/suite.sh:100`. **Contrato:** materializar e testar snapshot imutável; início=fim fica como defesa adicional.
+
+4. **Rodar `node_check` não prova que analisou a árvore pretendida.** Ele enumera JS na raiz do script, mas executa `node --check` dentro de `${CASCA:-saas_core}`, sem verificar identidade do `/app` desse container. O vínculo efetivo com a árvore viva/push é `[nao verificado]`. Evidência: `bin/node_check.sh:24–25`, `bin/node_check.sh:32–37`. **Contrato:** vincular explicitamente o analisador ao snapshot certificado.
+
+5. **Hash Git de app não identifica todo `/app` observado pela suíte.** `--montagem <dir>` usa `staticfiles` da raiz do script e o sobrepõe em `/app/staticfiles`; esse diretório é ignorado pelo Git. Evidência: `bin/arvore_do_push.sh:19`, `bin/arvore_do_push.sh:28–30`, `bin/arvore_do_push.sh:50–55`; `.gitignore:13`. **Contrato:** registrar identidade dos mounts e entradas relevantes ou declarar precisamente que a identidade cobre somente a subárvore Git, sem chamar isso de igualdade de todo app efetivo.
+
+6. **O modo novo precisa anteceder e desabilitar o cache da régua.** Atualmente a régua só interpreta `--only`; um argumento `--carimbar-da-copia` não impede a saída antecipada por fingerprint, anterior aos demais portões. Evidência: `bin/regua.sh:46–51`, `bin/regua.sh:84–94`, `bin/regua.sh:130`, `bin/regua.sh:138`, `bin/regua.sh:146`. **Contrato:** novo modo valida certificado e executa portões obrigatoriamente, sem passar pelo `JA VERDE`.
+
+7. **O hash auxiliar não falha de forma fechada em toda etapa.** O rc de `git add -A --ignore-errors` é descartado; um `write-tree` posterior pode devolver um hash mesmo após erro de coleta. Evidência: `bin/arvore_hash.sh:27–28`. **Contrato:** todos os comandos de captura devem ter sucesso; erro invalida certificado/carimbo.
+
+## 30/10 17:14 · sessao 7b71a8634ed9 · - · - · origem=Ronald (tmux)
+
+Achados para consolidar:
+
+1. **`node_check` pode conferir bytes de outra árvore.** Enumera os JS da raiz local, mas manda `node --check` ao container `${CASCA:-saas_core}`, sem montar a árvore candidata (`bin/node_check.sh:24-37`). A chamada obrigatória em C não prova identidade dos bytes. **Contrato:** conferir JS do snapshot certificado/push ou verificar explicitamente identidade do mount e conteúdo. Divergência real do container: [nao verificado].
+
+2. **Hash de `app/` não identifica tudo que a suite leu.** A montagem suplementar usa `RAIZ` do script e monta seu `app/staticfiles`, independentemente do `--dir` recebido (`bin/arvore_do_push.sh:19`, `bin/arvore_do_push.sh:50-55`); `staticfiles/` é ignorado (`.gitignore:13`). A porta monta a candidata mais esses argumentos (`bin/suite.sh:74-79`, `bin/suite.sh:100`). **Contrato:** delimitar “árvore exata” como árvore efetivamente visível no container; identificar/fixar também montagens externas relevantes ou declará-las limite. Identidade atual dessas entradas entre cópia e pouso: [nao verificado].
+
+3. **Certificado precisa identificar a execução, além de LABELS.** A porta usa imagem por tag mutável `latest`, env-files de sua própria raiz e banco opcional `REGUA_DB` (`bin/suite.sh:89`, `bin/suite.sh:98-103`). O runner muda a suite com `SO_QUARENTENA` e o relógio com `CONGELAR_EM` (`app/core/runner_quarentena.py:75-100`). **Contrato:** guardar imagem efetivamente usada e parâmetros que definem a execução; impedir certificado “inteira” produzido sob seleção informativa/argumentos filtrantes. Valores reais em produção: [nao verificado].
+
+4. **Rodar um selo localizado na cópia não garante que ele examine a cópia.** Há raízes absolutas em `bin/tests/test_lei_akita.sh:17`, `bin/tests/test_cortes_registrados.sh:11`, `bin/tests/test_cortes_registrados.sh:24` e `bin/tests/test_fabricante_seco.sh:13`, `bin/tests/test_fabricante_seco.sh:23`. `hooks.sh check` também usa destino absoluto (`bin/hooks.sh:9-11`). **Contrato:** a classificação de “só na principal” deve auditar o alvo lido, inclusive selos verdes; medir apenas quais falham numa cópia limpa deixa passar verdes da árvore errada.
+
+5. **Medida por obra exige definir o universo pelo runner.** O código admite módulos `tests.py`, além de `tests/test_*.py` (`bin/tests/test_labels_fonte_unica.sh:29-30`), e a suite real passa por poda de quarentena (`app/config/settings/ci.py:40`, `app/core/runner_quarentena.py:75-91`). **Contrato:** persistir numerador, denominador e identificação do universo por chamada; definir se o denominador é anterior ou posterior à quarentena, como tratar OBRA ausente e se INTEIRA por fallback entra como 100%. Implementação e agregação efetivas dessa medida: [nao verificado].
 
 ## 30/10 17:13 · sessao 786be39f25f8 · - · - · origem=Ronald (tmux)
 
@@ -190,617 +519,4 @@ Achados para consolidação:
 
 Os resultados alegados de green7/green8 e custos efetivos não foram verificados. [não verificado]
 
-## 30/10 16:56 · sessao 27e0f3394207 · - · - · origem=Ronald (tmux)
-
-- **Perfil do colaborador / gestor:** `detalhe.html:215` busca a rota `calendario_ponto`; ela chama `contexto_calendario` e renderiza `calendario_partial.html` (`app/colaboradores/views.py:1945-1962`). Esse template inclui a grade com `layout='mes'`, inclusive quando a janela selecionada é semana, quinzena ou competência (`app/templates/colaboradores/calendario_partial.html:45-62`). O layout tem sete colunas, offsets e células de 132px com overflow oculto (`app/templates/colaboradores/partials/_calendario_grade.html:64-68`).
-
-- **Drawer do painel:** a view renderiza `_drawer_diagnostico.html` com `contexto_drawer` (`app/colaboradores/views.py:2938-2943`). O calendário só é montado quando há escala posicionável; consulta a competência anterior e a atual, respeitando o piso visual (`app/colaboradores/services/drawer.py:104-121`). Inclui a grade com `layout='fita'` (`app/templates/colaboradores/partials/_drawer_diagnostico.html:35`): flex horizontal, células de 78px e marcas de mês/segunda (`app/templates/colaboradores/partials/_calendario_grade.html:63-68`).
-
-- **Cartão HTML da auditoria de espelhos:** inclui a grade com `only`, passando apenas `dias` e `resumo`, sem layout (`app/templates/relatorios/furos.html:42`). Usa o grid automático de largura mínima 62px (`app/templates/colaboradores/partials/_calendario_grade.html:65`). O produtor recebe `datas_em_aberto=NAO_PERGUNTADO` (`app/relatorios/furos.py:184-188`). Os controles dependentes de permissões não recebem essas flags pelo include (`app/templates/relatorios/furos.html:42`; `app/templates/colaboradores/partials/_calendario_grade.html:128-131`).
-
-- **Impacto do último commit:** os três consumidores acima passam pelo mesmo bloco de ícone, cujo fallback agora imprime `—` com `title="{{ dia.status_rotulo }}"`; não há variante de ícone por layout (`app/templates/colaboradores/partials/_calendario_grade.html:95-107`).
-
-- **PDF:** não inclui nem renderiza esse partial. A view extrai exclusivamente `data/status` do calendário para montar `card['semanas']`, depois chama o gerador ReportLab (`app/relatorios/views.py:1548-1562`). O PDF imprime apenas o número do dia e aplica cores pelo status (`app/relatorios/furos_pdf.py:53-57`). `sem_certidao` não consta nos mapas, portanto recebe fundo branco e texto cinza do fallback; não recebe `status_rotulo` nem o motivo da retenção (`app/relatorios/furos_pdf.py:11-21`, `app/relatorios/furos_pdf.py:56-57`). Logo, a alteração do template não corrige a apresentação do PDF (`app/relatorios/views.py:1548-1562`; `app/relatorios/furos_pdf.py:53-57`).
-
-- **Resumo:** o indicador chamado visualmente “Sem registro” usa `resumo.faltas` (`app/templates/colaboradores/partials/_calendario_grade.html:145-147`). Isso deve ser distinguido da alegação da triagem de que se trata apenas de uma contagem denominada “faltas”: o rótulo apresentado ao usuário é mais abrangente (`app/templates/colaboradores/partials/_calendario_grade.html:145-147`).
-
-## 30/10 16:43 · sessao 01c938693ab5 · CALENDARIO-HOJE · verificador · origem=Code
-
-**REPROVADO.** O caso cego recebe `sem_certidao` e um rótulo com `sem_celula`, mas esse rótulo não chega à tela: falta o ramo correspondente no template, que exibe `—`. O teste valida somente o dicionário. (`app/colaboradores/services/calendario.py:899`; `app/templates/colaboradores/partials/_calendario_grade.html:99`; `app/templates/colaboradores/partials/_calendario_grade.html:107`; `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:99`)
-
-Análise estática; execução dos testes, RED histórico, GREEN e contagens efetivas de queries: **[nao verificado]**. [nao verificado]
-
-**1. Dia passado, de trabalho, sem batida/veredito, com `sem_previsto`**
-
-Ele sai sempre de `_em_curso`; portanto, nessas premissas, `futuro=False`. A árvore abaixo cobre as combinações: vale a primeira condição aplicável. (`app/colaboradores/services/calendario.py:714`; `app/colaboradores/services/calendario.py:822`)
-
-| Primeira condição aplicável | Status produzido |
-|---|---|
-| Ausência na precedência A2 | `falta` se desconta; senão `ausencia`. (`app/colaboradores/services/calendario.py:124`) |
-| Feriado que suprimiu o trabalho | `folga`. (`app/colaboradores/services/calendario.py:127`) |
-| Folga lançada humana | `folga`. (`app/colaboradores/services/calendario.py:131`; `app/colaboradores/services/calendario.py:149`) |
-| Isento | `ok`. (`app/colaboradores/services/calendario.py:137`) |
-| Régua suspeita | `escala_suspeita`. (`app/colaboradores/services/calendario.py:139`) |
-| Folha respondeu `sem_celula` | `sem_certidao`. (`app/colaboradores/services/calendario.py:141`) |
-| Sem retenção; cobertura não descontante | `ausencia`. (`app/colaboradores/services/calendario.py:148`) |
-| Sem retenção; sem cobertura ou cobertura descontante | `falta`. (`app/colaboradores/services/calendario.py:148`) |
-
-Feriado não suprime trabalho quando a precedência reconhece `trabalha_em_feriado`; nesse caso, seguem os demais ramos. (`app/ponto/precedencia.py:314`; `app/ponto/precedencia.py:319`)
-
-**Sim, existem respostas diferentes:** a tela pode produzir `folga`, `ausencia` ou `escala_suspeita`, enquanto a folha retém `sem_celula`. A folha retém célula passada sem veredito e com `trabalha != None`, sem consultar essas precedências nesse ramo. Isso não demonstra reincidência de A1: o classificador agora preserva expressamente essas prioridades. (`app/folha/export.py:1237`; `app/colaboradores/services/calendario.py:124`; `app/colaboradores/services/calendario.py:139`; `app/colaboradores/services/calendario.py:141`)
-
-Quanto às exceções:
-
-- **Isento:** a folha retorna sem retenção; a tela produz `ok` se nenhuma condição anterior vencer. (`app/folha/export.py:1174`; `app/colaboradores/services/calendario.py:137`)
-- **Fora de admissão/demissão:** a folha recorta seu universo; a tela não aplica esse recorte contratual. Sua guarda é de vigência do vínculo e somente quando não há célula. Mantido `eh_trabalho=True`, pode produzir `falta` onde a folha não retém nada. (`app/folha/export.py:1180`; `app/folha/export.py:1182`; `app/colaboradores/services/calendario.py:782`; `app/colaboradores/services/calendario.py:148`)
-- **Próprio dia da demissão:** sem veredito, a folha não retém; a tela segue a árvore acima, podendo produzir `falta`. (`app/folha/export.py:1211`; `app/folha/export.py:1237`; `app/colaboradores/services/calendario.py:148`)
-- **Motivo diferente de `sem_celula`:** nas premissas consistentes de ausência de veredito, não ocorre no juiz atual. O outro motivo, `espelho_<veredito>`, exige veredito acusatório. O calendário aproveita somente `sem_celula`. (`app/folha/export.py:1215`; `app/folha/export.py:1236`; `app/colaboradores/services/calendario.py:727`)
-
-Cobertura não é uma prioridade independente acima de tudo: a ausência pode vencer já pela A2; no ramo residual, retenção vem antes da cobertura. (`app/ponto/precedencia.py:317`; `app/colaboradores/services/calendario.py:141`; `app/colaboradores/services/calendario.py:148`)
-
-**2. Quem escreve e quem lê**
-
-| Campo/valor | Escritor e leitores internos |
-|---|---|
-| `status` | `_classificar` decide; montagem chama e publica. (`app/colaboradores/services/calendario.py:189`; `app/colaboradores/services/calendario.py:814`; `app/colaboradores/services/calendario.py:898`) |
-| `status_rotulo` | Montagem escreve conforme status e conjuntos auxiliares. (`app/colaboradores/services/calendario.py:899`) |
-| `retido_folha` | Montagem alimenta; `_classificar` lê. (`app/colaboradores/services/calendario.py:834`; `app/colaboradores/services/calendario.py:141`) |
-| `_cego_folha` | Montagem preenche com a resposta filtrada da folha; alimenta classificação e rótulo. (`app/colaboradores/services/calendario.py:727`; `app/colaboradores/services/calendario.py:834`; `app/colaboradores/services/calendario.py:899`) |
-| `_em_curso` | Montagem deriva dos motivos da juíza; alimenta `futuro` e rótulo. (`app/colaboradores/services/calendario.py:714`; `app/colaboradores/services/calendario.py:822`; `app/colaboradores/services/calendario.py:900`) |
-| `futuro` | Montagem alimenta; classificador lê. (`app/colaboradores/services/calendario.py:822`; `app/colaboradores/services/calendario.py:135`; `app/colaboradores/services/calendario.py:155`) |
-
-Os quatro últimos são auxiliares locais, não campos publicados no item de `dias`. (`app/colaboradores/services/calendario.py:893`)
-
-As portas e os leitores relevantes são:
-
-| Porta/leitor | Consumo e efeito |
-|---|---|
-| `status_do_dia` | Retorna o status do contexto; não decide separadamente. (`app/colaboradores/services/calendario.py:225`; `app/colaboradores/services/calendario.py:228`) |
-| `contar_por_status` | Conta os status publicados pelo contexto. (`app/colaboradores/services/calendario.py:236`; `app/colaboradores/services/calendario.py:239`) |
-| `resolver_dia_oferecido` | Lê status; tanto `falta` quanto `sem_certidao` pedem decisão. A troca entre eles preserva essa condição. (`app/colaboradores/services/calendario.py:196`; `app/colaboradores/services/calendario.py:204`) |
-| `vigia_fio` | Consulta a porta curta e registra decisão pendente. Passado que muda de `falta` para `previsto` deixa de satisfazer essa condição. (`app/chamados/services/vigia_fio.py:294`; `app/colaboradores/services/calendario.py:196`) |
-| Grade compartilhada | Lê status para cor e ícone; lê rótulo nos ramos conhecidos, mas não possui ramo `sem_certidao`. (`app/templates/colaboradores/partials/_calendario_grade.html:69`; `app/templates/colaboradores/partials/_calendario_grade.html:99`; `app/templates/colaboradores/partials/_calendario_grade.html:107`) |
-| Mapa de furos | Monta o mesmo contexto por card. Seu `nfuro` continua vindo de `estado_do_dia`, não do status novo. (`app/relatorios/furos.py:160`; `app/relatorios/furos.py:164`; `app/relatorios/furos.py:184`) |
-| PDF do mapa | Extrai status do calendário e converte em cores; `sem_certidao` não tem entrada nos mapas e recebe branco/cinza pelo fallback. (`app/relatorios/views.py:1550`; `app/relatorios/furos_pdf.py:11`; `app/relatorios/furos_pdf.py:21`; `app/relatorios/furos_pdf.py:56`) |
-
-Chamadores de produção externos de `status_do_dia` e `contar_por_status`: não encontrados; exaustividade desse censo negativo **[nao verificado]**.
-
-Há efeitos adicionais à mudança de status: o dia que passa de `falta` para `sem_certidao` sai de `resumo.faltas`, e não existe contador de `sem_certidao` nesse resumo. (`app/colaboradores/services/calendario.py:950`; `app/colaboradores/services/calendario.py:948`)
-
-A perda do rótulo na grade, o fallback visual do PDF e essa saída do resumo não estão explicitados no corpo anexado do commit. **[nao verificado: comparação textual com anexo sem referência numerada]** [nao verificado]
-
-**3. Hoje e passado ainda em curso**
-
-**Hoje:** qualquer motivo não nulo da juíza entra em `_em_curso`, inclusive `sem_previsto`. Sem veredito, isso alimenta `futuro`; em dia de trabalho sem batida, o classificador produz `previsto`, ressalvadas ausência, feriado, folga humana e cobertura. Hoje já encerrado não recebe essa proteção. (`app/colaboradores/services/calendario.py:714`; `app/colaboradores/services/calendario.py:822`; `app/colaboradores/services/calendario.py:124`; `app/colaboradores/services/calendario.py:135`; `app/colaboradores/services/calendario.py:187`)
-
-**Passado:** entram `relogio`, `turno_aberto_relogio` e `turno_aberto`; `sem_previsto` fica excluído. Com o vocabulário atual, não há outro motivo pelo qual um passado não encerrado vire `previsto`. Veredito existente impede usar `_em_curso` como `futuro`. (`app/ponto/turnos.py:2066`; `app/ponto/turnos.py:2070`; `app/colaboradores/services/calendario.py:714`; `app/colaboradores/services/calendario.py:822`)
-
-Dia com batida não passa pelo ramo sem batida; turno aberto segue podendo produzir `aberto`. (`app/colaboradores/services/calendario.py:133`; `app/colaboradores/services/calendario.py:159`)
-
-**4. Os dez testes mordem, mas não fecham todas as costuras** [nao verificado]
-
-As avaliações abaixo são de alcance estático das asserções; execução dos mutantes **[nao verificado]**.
-
-| Teste, abreviado | Mutação que pega | Mutação que deixa passar | [nao verificado]
-|---|---|---|
-| Hoje antes do turno | Voltar a `futuro = data > hoje`; retirar rótulo especial. | Regra local que imite o caso sem consultar a juíza. (`app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:43`) |
-| Encadeado além de ontem | Restringir proteção a hoje/ontem; ignorar os marcos encadeados. | Manter esse DNA previsto também depois de encerrado. (`app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:48`) |
-| Cruza meia-noite | Voltar ao teto apenas por data. | Dar `previsto` incondicionalmente a ontem. (`app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:58`) |
-| Depois do fim | Proteger também o turno já encerrado. | Erro exatamente na igualdade `agora == fim`. (`app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:62`) |
-| Cartório já julgou | Remover `and not _vv` de `futuro`. | Erros nos demais vereditos: só exercita `nunca_bateu`. (`app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:66`) |
-| Sem fim, sem veredito | Remover retenção do classificador; recolocar passado `sem_previsto` em curso. | Fabricar localmente `sem_certidao/sem_celula`; continuar sem renderizar o rótulo. (`app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:92`) |
-| Sem fim, com veredito | Restaurar o comportamento antigo completo que sobrepunha cegueira ao veredito. | Consultar folha desnecessariamente para dias julgados, preservando resultado. (`app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:103`) |
-| Folga lançada | Antepor retenção à folga humana. | Quebrar precedência de ausência ou feriado. (`app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:114`) |
-| Isento | Manter passado `sem_previsto` como em curso. | Quebrar isenção na própria folha ou o rótulo apresentado. (`app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:123`) |
-| Custo | Acrescentar queries proporcionais aos dias cegos nessa janela. | Acrescentar custo constante, repetir consultas por montagem ou criar N+1 por todos os dias da janela fixa. (`app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:132`; `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:154`) |
-
-**A3 está corrigido na construção do caso:** agora há vínculo, célula de trabalho, DNA sem fim e asserção explícita de `sem_previsto`; o RED histórico alegado continua **[nao verificado]**. (`app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:29`; `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:82`; `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:96`)
-
-**A5 está parcialmente atendido:** `q8-base == q1-base` equivale a `q8 == q1`. O teste verifica crescimento pelo número de dias cegos, mas não fixa custo absoluto por card nem sela “uma chamada à folha”. A chamada atual está efetivamente fora do laço; a nova pergunta a `dias_encerrados` também carrega vínculos em toda montagem, inclusive sem dia cego. (`app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:153`; `app/colaboradores/services/calendario.py:726`; `app/colaboradores/services/calendario.py:729`; `app/ponto/turnos.py:2130`)
-
-**5. Checklist das classes**
-
-| Classe | Resultado |
-|---|---|
-| Segundo juiz duplicando autoridade | Não demonstrado: calendário consulta encerramento e retenção; o predicado temporal continua no puro compartilhado. (`app/colaboradores/services/calendario.py:712`; `app/colaboradores/services/calendario.py:726`; `app/ponto/turnos.py:2088`) |
-| Segundo escritor fora da porta | A1 removido: status sai diretamente de `_classificar`, sem ternário posterior. (`app/colaboradores/services/calendario.py:814`; `app/colaboradores/services/calendario.py:898`) |
-| Relógio fora da borda | A nova decisão usa o mesmo instante para hoje e encerramento. Ainda existe outra leitura herdada para desfazer retratação; não é leitura nova deste diff. (`app/colaboradores/services/calendario.py:258`; `app/colaboradores/services/calendario.py:343`; `app/colaboradores/services/calendario.py:712`) |
-| Derivação paralela | Não demonstrada no novo status; há, porém, costura assimétrica: batch repassa `celulas` ao puro, porta singular não repassa para escolha de vínculo/fim. Equivalência com alimentação divergente do banco não está demonstrada. (`app/ponto/turnos.py:2079`; `app/ponto/turnos.py:2137`; `app/ponto/tests/test_c1_dias_encerrados.py:28`) |
-| Selo/RED sem mordida | Os testes comportamentais mordem os casos indicados, mas deixam passar a falha real de apresentação e custos constantes adicionais. (`app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:99`; `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:154`) |
-| Ordem de trava | Alteração de ordem de locks/travas não demonstrada no diff fornecido; execução da esteira **[nao verificado]**. |
-
-**Achados procedentes:**
-
-- **Bloqueante: o rótulo soberano do dia cego não é apresentado.** O produtor o escreve; grade e PDF não o consomem nesse estado. O teste passa apesar disso. (`app/colaboradores/services/calendario.py:899`; `app/templates/colaboradores/partials/_calendario_grade.html:107`; `app/relatorios/furos_pdf.py:56`; `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:100`)
-- **A5 permanece incompleto como prova:** o selo relativo não demonstra custo absoluto por card nem protege a quantidade de chamadas constantes. Não há aqui prova de lentidão real; essa magnitude é **[nao verificado]**. (`app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:154`; `app/ponto/turnos.py:2130`)
-
-## 30/10 16:41 · sessao 27c1a6390ae4 · - · - · origem=Ronald (tmux)
-
-Leitura estática concluída; execução dos testes, RED histórico e GREEN de 764 testes ficam `[nao verificado]`. [nao verificado]
-
-Os dez testes têm as seguintes mordidas e lacunas: [nao verificado]
-
-| Teste, abreviado | Mutação que detecta | Mutação que deixa passar | [nao verificado]
-|---|---|---|
-| `hoje_antes_do_turno` | Retirar o “em curso” de `futuro`, voltando a `data > hoje`, ou retirar o rótulo especial: exige `previsto` e rótulo exato. | Derivação própria que imite esse caso, sem consultar `dias_encerrados`; comportamento de hoje depois do encerramento. Referências: `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:42`, `app/colaboradores/services/calendario.py:822`. |
-| `turno_encadeado_alem_de_ontem` | Limitar a pergunta a hoje/ontem ou ignorar os quatro marcos congelados: o dia 14 ainda deve sair previsto no dia 16. | Rotular arbitrariamente esse dia como previsto; não afirma o retorno da juíza nem o encerramento posterior desse mesmo DNA. Referências: `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:47`, `app/escala/servico_jornada.py:75`. |
-| `cruza_a_meia_noite` | Voltar ao futuro decidido apenas por data. | Dar previsto incondicionalmente a ontem; não verifica rótulo. Referência: `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:57`. |
-| `depois_do_fim` | Tornar previsto também o dia noturno já encerrado. | Classificar todo dia passado como falta sem consultar o relógio/juíza; não testa igualdade exata com o instante final. Referências: `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:61`, `app/ponto/turnos.py:2105`. |
-| `cartorio_ja_julgou` | Retirar `and not _vv` da alimentação de `futuro`: `nunca_bateu` deve vencer o turno ainda não encerrado. | Erros nos demais vereditos e nas precedências de ausência/feriado; verifica só `nunca_bateu`. Referências: `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:65`, `app/colaboradores/services/calendario.py:822`. |
-| `sem_fim_sem_veredito` | Retirar a retenção do classificador ou restaurar o passado `sem_previsto` em curso: exige trabalho verdadeiro, folha `sem_celula`, status `sem_certidao` e motivo no rótulo. | Substituir a consulta à folha por uma regra local “sem fim ⇒ sem_certidao/sem_celula”; a consulta direta à folha é uma asserção independente, sem prova de ligação entre autoridades. Referências: `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:91`, `app/colaboradores/services/calendario.py:726`. |
-| `sem_fim_com_veredito` | Restaurar o escritor ternário antigo com inclusão dos dias julgados: exige falta e proíbe rótulo `sem_celula`. | Consultar desnecessariamente a folha também para dias julgados, desde que filtre o motivo e preserve o resultado; não mede queries nesse caso. Referências: `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:102`, `app/colaboradores/services/calendario.py:723`. |
-| `folga_lancada` | Antepor retenção à folga humana, inclusive recolocar o ternário escritor. | Divergir da folha nesse cenário: o teste exige somente tela `folga`, sem consultar/assertar a retenção da folha. Referência: `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:113`. |
-| `isento` | Manter passado `sem_previsto` em `_em_curso`: daria previsto em vez de ok. | Erros na própria exclusão de isento pela folha ou rótulo incorreto: só afirma `status == ok`. Referência: `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:122`. |
-| `custo` | Query adicional por cada dia sem fim: compara oito contra um, na mesma janela, exigindo também as quantidades de `sem_certidao`. | N+1 pago em todos os oito dias da janela, duas ou mais consultas constantes por montagem, aumento fixo enorme ou custo crescente com comprimento da janela; não afirma teto absoluto nem quantidade de chamadas à folha. Referência: `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:131`. |
-
-A5 foi parcialmente tratada: `q8 - base == q1 - base` equivale a `q8 == q1`; mede dependência do número de dias cegos numa janela fixa, sem publicar contagem absoluta. A chamada à folha está fora do laço e ocorre uma vez no código atual; `dias_encerrados` ainda faz uma consulta incondicional de vínculos por montagem. Referências: `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:148`, `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:153`, `app/colaboradores/services/calendario.py:724`, `app/ponto/turnos.py:2130`.
-
-A3 tem agora fixture pertinente: vínculo criado, célula de trabalho e DNA com início sem fim; há asserção explícita `MOTIVO_SEM_PREVISTO` antes de conferir a tela. O RED histórico alegado continua `[nao verificado]`. Referências: `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:29`, `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:82`.
-
-Nenhum dos dez testes cobre ausência, feriado, cobertura, régua suspeita, admissão/demissão, motivos de retenção diferentes de `sem_celula`, turno aberto com batida, nem igualdade do relógio com o fim; a fixture contém apenas os cenários explicitados acima. Referências: `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:19`, `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:42`, `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:154`.
-
-Sobre os auxiliares de produção:
-
-- `fim_turno` apenas propaga a alimentação `celulas` a `marcos_turno`; a montagem crescente dos marcos e a exigência de início e fim permanecem no mesmo sítio. Referências: `app/escala/servico_jornada.py:69`, `app/escala/servico_jornada.py:72`, `app/escala/servico_jornada.py:80`, `app/escala/servico_jornada.py:89`.
-- O batch passou a propagar `celulas` até o fim previsto. A porta singular `dia_encerrado_motivo`, apesar de receber `celulas`, continua passando o argumento apenas a `turnos_do_colab`, deixando `escala_vigente` e o puro recarregarem do banco. Isso impede assegurar equivalência para alimentação em memória diferente do banco ou para `{}`; o contrato dos modelos atribui significado à chave ausente. Referências: `app/ponto/turnos.py:2079`, `app/ponto/turnos.py:2102`, `app/ponto/turnos.py:2137`, `app/escala/models.py:1082`.
-- O selo antigo de equivalência compara apenas chamadas sem alimentação e sem os novos parâmetros `turnos`/`motivos`; não protege essa nova costura. Referências: `app/ponto/tests/test_c1_dias_encerrados.py:26`, `app/ponto/tests/test_c1_dias_encerrados.py:32`.
-- `_dia_encerrado_puro` virou wrapper sem chamador: o batch agora chama diretamente `_dia_encerrado_motivo_puro`. Não duplica o predicado, mas deixou função morta cujo comentário ainda diz que o batch a lê. Referências: `app/ponto/turnos.py:2083`, `app/ponto/turnos.py:2137`. A regra de zero chamador está em `CLAUDE.md:341`.
-- A borda nova usa um único instante para `hoje` e encerramento, porém o contexto ainda possui outra leitura herdada do relógio em `_agora_retr`; a afirmação “borda é uma” não vale para todo o contexto. Referências: `app/colaboradores/services/calendario.py:258`, `app/colaboradores/services/calendario.py:343`, `app/colaboradores/services/calendario.py:712`.
-
-## 30/10 16:41 · sessao 4ff79538d4b8 · - · - · origem=Ronald (tmux)
-
-Q1 pode ser respondida por esta árvore de precedência, que cobre as combinações sem listar o produto cartesiano. Assuma dia passado, `eh_trabalho=True`, sem batidas e sem veredito; `sem_previsto` nunca entra em `_em_curso`, logo `futuro=False` nesse caso. (`app/colaboradores/services/calendario.py:714`, `app/colaboradores/services/calendario.py:822`)
-
-| Primeiro fato aplicável | Status da tela | Folha |
-|---|---|---|
-| Faixa de ausência | `falta` se efeito desconta; senão `ausencia` | Pode reter `sem_celula` |
-| Feriado que efetivamente suprimiu o trabalho | `folga` | Pode reter `sem_celula` |
-| Folga humana lançada | `folga` | Pode reter `sem_celula` |
-| Isento | `ok` | Não retém |
-| Régua suspeita | `escala_suspeita` | Pode reter `sem_celula` |
-| Folha respondeu `sem_celula` | `sem_certidao`, rótulo contendo `sem_celula` | Retém `sem_celula` |
-| Sem retenção; cobertura não descontante | `ausencia` | Não retém |
-| Sem retenção; sem cobertura ou cobertura descontante | `falta` | Não retém |
-
-Referências da árvore: ausência `calendario.py:124`; feriado `:127`; folga humana `:131`/`:149`; isento `:137`; régua `:139`; retenção `:141`; cobertura `:148`; rótulo `:899`. A folha isenta Art.62 em `app/folha/export.py:1174` e retém célula passada sem veredito e `trabalha != None` em `:1237`. A folha não consulta ausência, feriado, folga, cobertura ou régua nesse ramo. (`app/folha/export.py:1206`)
-
-Assim, **sim**, há tela `folga`/`ausencia`/`escala_suspeita` com folha `sem_celula`. As diferenças de A2 não constituem por si uma nova reprovação: o achado A1 fornecido exigiu preservar essa precedência; a ordem da régua antes da retenção também consta explicitamente do corpo do commit fornecido. (`app/colaboradores/services/calendario.py:124`, `:139`, `:141`; corpo de `diff5_delta.txt` fornecido, sem numeração `[nao verificado]`)
-
-A cobertura fica depois da retenção, mas normalmente uma ausência coberta já aparece na faixa A2: ambos consultam ausências não rejeitadas e expandem o período. Portanto não afirmaria, sem caso concreto, mudança adicional normal causada por essa ordem. (`app/ponto/precedencia.py:211`, `:317`; `app/ponto/turnos.py:2489`, `:2734`, `:2750`)
-
-**Admissão/demissão:** a folha recorta o universo e pode retornar vazio; no próprio dia da demissão, célula sem veredito não retém. A tela não faz esse recorte contratual: sua guarda verifica vigência do vínculo apenas quando não há célula. Mantido `eh_trabalho=True`, esses dias seguem os mesmos ramos — podendo resultar em `falta`, enquanto a folha nada retém. (`app/folha/export.py:1180`, `:1211`, `:1237`; `app/colaboradores/services/calendario.py:782`, `:785`, `:148`)
-
-**Motivo diferente de `sem_celula`:** sob as premissas consistentes de ausência de veredito, não existe esse caso no juiz atual. O outro motivo é `espelho_<veredito>`, que exige `VEREDITOS_ACUSAM`. O calendário filtra expressamente apenas `sem_celula`. (`app/folha/export.py:1215`, `:1236`; `app/colaboradores/services/calendario.py:727`)
-
-**Q3:** os únicos motivos atualmente possíveis são `relogio`, `turno_aberto_relogio`, `turno_aberto`, `sem_previsto` ou `None`. Hoje aceita qualquer motivo não nulo em `_em_curso`; passado aceita todos exceto `sem_previsto`. Portanto não há passado `previsto` por outro motivo atual além de relógio/turno aberto, e a existência de veredito impede usar `_em_curso` como `futuro`. (`app/ponto/turnos.py:2073`, `:2097`; `app/colaboradores/services/calendario.py:714`, `:822`)
-
-Não executei testes nem consultei banco/log; essas conclusões são estáticas. `[nao verificado]` [nao verificado]
-
-## 30/10 16:41 · sessao 4b8fe8905497 · - · - · origem=Ronald (tmux)
-
-- **Escritor de `status`:** `_classificar` retorna o valor em `app/colaboradores/services/calendario.py:189`; a montagem chama exclusivamente essa porta em `:814` e publica em `:898`. **Escritor de `status_rotulo`:** montagem em `:899-901`.
-- **`retido_folha`:** montagem alimenta em `calendario.py:834`; `_classificar` lê em `:141`. **`_cego_folha`:** inicialização `:721`, preenchimento `:727`, leituras `:834,:899`. **`_em_curso`:** preenchimento `:714-715`, leituras `:822,:900`. **`futuro`:** alimentação `:822`, leituras `:135,:155`. Esses quatro últimos fatos permanecem locais: o dict publicado de dia não os contém (`calendario.py:893-929`). [nao verificado]
-- **Portas curtas:** `status_do_dia` monta contexto e lê o primeiro status (`calendario.py:225-228`); `contar_por_status` monta contexto e conta status (`:236-239`). Não encontrei chamadores de produção fora do módulo; censo negativo não possui linha própria `[nao verificado]`. O registro de `status_do_dia` é `app/core/juizes.py:809`.
-- **Resolver/vigia:** `STATUS_QUE_PEDEM_DECISAO` inclui tanto `falta` quanto `sem_certidao` (`calendario.py:196`); o juiz lê status em `:204-205`, o contexto publica sua resposta em `:945`; a porta curta lê esse campo em `:216`; `vigia_fio` pergunta e classifica decisão pendente em `app/chamados/services/vigia_fio.py:294-300`. A troca específica `falta → sem_certidao` conserva elegibilidade; a troca `falta → previsto` para passado ainda em curso elimina elegibilidade (`calendario.py:196-205,:714-715,:822`).
-- **Templates compartilhados:** contexto chega pelo perfil (`app/colaboradores/views.py:1946,:1962`), drawer (`app/colaboradores/services/drawer.py:121`; `app/templates/colaboradores/partials/_drawer_diagnostico.html:35`) e mapa (`app/relatorios/furos.py:184-188`; `app/templates/relatorios/furos.html:42`). Cor lê `status` em `app/templates/colaboradores/partials/_calendario_grade.html:69-78`; ícone e títulos leem status/rótulo em `:99-106`; Resolver lê campo soberano em `:125`.
-
-**Achado procedente: o novo rótulo cego não chega à tela.** O produtor escreve `"Dia sem julgamento ... sem_celula"` (`calendario.py:899`), porém o template não possui ramo `sem_certidao`: cai no cinza (`_calendario_grade.html:78`) e no travessão sem título (`:107`). A precedência da palavra também ocorre antes dos ícones (`:97-98`). Assim o teste que procura `sem_celula` no dict (`app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:99-100`) não garante que a tela leia o rótulo.
-
-- **PDF:** `app/relatorios/views.py:1550-1551` extrai os status do calendário; `app/relatorios/furos.py:194-207` os embala nas semanas; `app/relatorios/furos_pdf.py:53-58` traduz estado em cor. `sem_certidao` não existe nos mapas (`furos_pdf.py:11-20`): aparece branco/cinza pelo fallback (`:21,:56-57`), sem rótulo ou motivo.
-- **Mapa de furos:** os cards e contagens continuam saindo de outro dado já existente: `grade_da_celula` (`furos.py:141`), `estado_do_dia` (`:160`), `nfuro` (`:164`) e ordenação (`:190`). O novo status altera o calendário dentro do card, não o universo nem `nfuro` (`:165-188`).
-- **Homônimo sem efeito desta montagem:** `app/templates/escala/minha_escala.html:75,:84` lê `status_rotulo`, mas seu produtor é `app/escala/views.py:49-55`, construído diretamente de `ROTULO_STATUS`.
-- **Rodapé:** a mudança de `falta` para `sem_certidao` retira o dia de `resumo.faltas` (`calendario.py:950`), sem contador `sem_certidao` no resumo (`:948-966`); o template imprime “Sem registro” de `resumo.faltas` (`_calendario_grade.html:145-147`). Efeito concreto omitido da descrição específica do delta fornecido `[nao verificado: corpo do commit só disponível no anexo]`. [nao verificado]
-- **Histórico:** esta cópia não possui repositório Git acessível; comparação base/head por objetos Git não foi possível `[nao verificado]`.
-
-## 30/10 15:47 · sessao 821fe87eef02 · O261-VETO-A2 · sonda · origem=Code
-
-Não executei a sonda: não localizei `sonda_fsc.py` na cópia. Segue a saída integral fornecida no enunciado. [nao verificado] [nao verificado]
-
-```text
-sonda_leitura: sonda_fsc.py [fe36a5107d6c7951] no cpuset 4-7, lendo saas_hasner como leitor (LEITURA)
-
-TOTAL=68
-POR_PORTA|pergunta_ao_colab=48
-POR_PORTA|supervisao_sem_push=20
-POR_PORTA|veto_celula=1
-POR_EMPRESA|2=68
-ITENS=69
-FIM-DA-SONDA
-```
-
-## 30/10 15:05 · sessao be63b35eee76 · BENCH-CORRECAO · censo · origem=Code
-
-A aplicabilidade de alguns itens não pode ser determinada: os anexos não trazem as declarações LEI-AKITA de cada hash nem informam quando s1 e s2 foram corrigidos. Nesses casos, usei `[nao verificado]`; usar `n/a` afirmaria uma ausência não demonstrada. As referências abaixo são as citadas pelos revisores; sua correspondência com os hashes históricos é [nao verificado].
-
-Considerei `n/a` para s3 antes da guarda de reabertura e, em `a3bbef39`, para os defeitos corrigidos pelos deltas descritos: 3, 4, 5 e s3. (`app/chamados/models.py:1143`; `app/ponto/tests/test_veto_que_cai_rejulga.py:124`; `app/chamados/tests/_vinculo_do_dia.py:18`; `app/ponto/management/commands/emitir_turno_aberto_retroativo.py:184`; referências históricas: [nao verificado])
-
-Estes trechos sustentam os reconhecimentos integrais ou parciais; as demais classificações indicam ausência de identificação do defeito nas respostas fornecidas [nao verificado].
-
-| Volta / item | A | B |
-|---|---|---|
-| 1c565c8f / 2 | **EM PARTE:** identifica o leitor omitido: “leitor de desfazer corroboração filtra pelo vínculo específico”, mas não denuncia a declaração desatualizada. (`app/escala/management/commands/desfazer_corroboracao_regua.py:38`) | **EM PARTE:** “desfazer corroboração filtra pelo vínculo”, sem apontar o defeito da declaração. (`app/escala/management/commands/desfazer_corroboracao_regua.py:38`) |
-| 1c565c8f / 3 | **EM PARTE:** “Acrescenta o veto à impressão”, tratando o efeito de `ec=None`, sem apontar a falta do teste próprio. (`app/ponto/services/cartorio.py:1013`, `:1083`) | **EM PARTE:** “Acrescenta `veto:VETO_DEGENERADA` à impressão do ramo normal”, sem identificar a lacuna de teste. (`app/ponto/services/cartorio.py:1013`, `:1083`) |
-| 1c565c8f / 5 | **EM PARTE:** “no apply distingue retorno recusado”, sem denunciar a classificação por eliminação. (`app/ponto/management/commands/emitir_turno_aberto_retroativo.py:174`) | **NÃO VIU:** não identifica o contador por eliminação [nao verificado]. |
-| 1c565c8f / 6 | **EM PARTE:** “Reversão anterior, DIFF financeiro, preservação de exportadas por hash [...] [nao verificado]”; não identifica “63 × 1.576” nem exige expressamente `medir` antes/depois. (`app/ponto/services/cartorio.py:1083`; `app/ponto/management/commands/processar_cartorio.py:49`) | **EM PARTE:** “Reversão anterior, preservação por hash e diferença à Pauta DP: [nao verificado]”; faltam os outros componentes do item. (`app/ponto/management/commands/processar_cartorio.py:49`; `app/ponto/portas/regen_exportada.py:62`) |
-| 1c565c8f / 7 | **VIU:** “Ato humano passa sem registrar o veto dispensado”; “falta a informação de que o humano atravessou um veto”. (`app/chamados/views_arquivar.py:68`, `:75`, `:79`; `app/ponto/services/furos_vetados.py:90`) | **NÃO VIU:** não aponta a ausência de registro do veto atravessado [nao verificado]. |
-| 673ecaf7 / 6 | **EM PARTE:** “Item 9 continua pendente de pouso”; “Quantidade afetada e resultado da medida anunciada: [nao verificado]”. (`app/config/crons.py:597`; `app/ponto/management/commands/processar_cartorio.py:49`; `app/ponto/services/cartorio.py:1083`) | **EM PARTE:** “continua sem resultado da medição exigida no anexo”, sem cobrir todas as condições do gabarito. (`app/ponto/management/commands/processar_cartorio.py:49`; `app/ponto/services/cartorio.py:1083`) |
-| a3bbef39 / 1 | **VIU:** “RED do nascimento contra a base — Cura não demonstrada”; existência dos testes não comprova o RED histórico. (`app/chamados/tests/test_o261_veto_na_porta.py:418`, `:522`; histórico: [nao verificado]) | **VIU:** “RED contra a base — Cura não comprovada”; “sua existência não prova aquela execução”. (`app/chamados/tests/test_o261_veto_na_porta.py:418`, `:522`; histórico: [nao verificado]) |
-| a3bbef39 / 2 | **VIU:** nomeia a declaração desatualizada, as origens e o consumidor omitido; “A linha corrigida de commit não foi fornecida”. (`app/chamados/models.py:1090`, `:1143`; `app/escala/management/commands/desfazer_corroboracao_regua.py:38`; declaração: [nao verificado]) | **VIU:** “declaração LEI-AKITA — Cura não comprovada”, identificando `recusa_da_reabertura`, `reabrir` e o consumidor. (`app/chamados/models.py:1071`, `:1143`; `app/escala/management/commands/desfazer_corroboracao_regua.py:38`; declaração: [nao verificado]) |
-
-Para s1 e s2, o gabarito comprova a ocorrência em `1c565c8f`, mas a persistência nas outras voltas é [nao verificado]. A análise de calendário de `a3bbef39` não identifica as cinco fixtures omitidas de s1 nem o F841 de s2. (`app/api/tests/test_chamados_v2_destino.py:37`; `app/ponto/tests/test_bug115_lampada_do_marco.py:54`; demais fixtures e linha do F841: [nao verificado])
-
-Os registros NOVO abaixo inventariam os achados alegados nas respostas, incluindo lacunas de teste e contraexemplos; não certificam ocorrência em produção nem sobrevivência executada dos mutantes [nao verificado]. [nao verificado]
-
-NOTA|O261-VETO-A2_1c565c8f|1|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-VETO-A2_1c565c8f|2|[nao verificado]|A=EM_PARTE|B=EM_PARTE
-NOTA|O261-VETO-A2_1c565c8f|3|existia|A=EM_PARTE|B=EM_PARTE
-NOTA|O261-VETO-A2_1c565c8f|4|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-VETO-A2_1c565c8f|5|existia|A=EM_PARTE|B=NAO_VIU
-NOTA|O261-VETO-A2_1c565c8f|6|existia|A=EM_PARTE|B=EM_PARTE
-NOTA|O261-VETO-A2_1c565c8f|7|existia|A=VIU|B=NAO_VIU
-NOTA|O261-VETO-A2_1c565c8f|s1|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-VETO-A2_1c565c8f|s2|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-VETO-A2_1c565c8f|s3|n/a|A=n/a|B=n/a
-NOTA|O261-VETO-A2_673ecaf7|1|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-VETO-A2_673ecaf7|2|[nao verificado]|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-VETO-A2_673ecaf7|3|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-VETO-A2_673ecaf7|4|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-VETO-A2_673ecaf7|5|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-VETO-A2_673ecaf7|6|existia|A=EM_PARTE|B=EM_PARTE
-NOTA|O261-VETO-A2_673ecaf7|7|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-VETO-A2_673ecaf7|s1|[nao verificado]|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-VETO-A2_673ecaf7|s2|[nao verificado]|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-VETO-A2_673ecaf7|s3|n/a|A=n/a|B=n/a
-NOTA|O261-VETO-A2_3b68a95b|1|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-VETO-A2_3b68a95b|2|[nao verificado]|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-VETO-A2_3b68a95b|3|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-VETO-A2_3b68a95b|4|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-VETO-A2_3b68a95b|5|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-VETO-A2_3b68a95b|6|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-VETO-A2_3b68a95b|7|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-VETO-A2_3b68a95b|s1|[nao verificado]|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-VETO-A2_3b68a95b|s2|[nao verificado]|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-VETO-A2_3b68a95b|s3|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-VETO-A2_a3bbef39|1|existia|A=VIU|B=VIU
-NOTA|O261-VETO-A2_a3bbef39|2|[nao verificado]|A=VIU|B=VIU
-NOTA|O261-VETO-A2_a3bbef39|3|n/a|A=n/a|B=n/a
-NOTA|O261-VETO-A2_a3bbef39|4|n/a|A=n/a|B=n/a
-NOTA|O261-VETO-A2_a3bbef39|5|n/a|A=n/a|B=n/a
-NOTA|O261-VETO-A2_a3bbef39|6|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-VETO-A2_a3bbef39|7|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-VETO-A2_a3bbef39|s1|[nao verificado]|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-VETO-A2_a3bbef39|s2|[nao verificado]|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-VETO-A2_a3bbef39|s3|n/a|A=n/a|B=n/a
-NOVO|O261-VETO-A2_1c565c8f|A|app/ponto/services/cartorio.py:907|Ramo nunca_bateu calcula impressão sem veto e pode manter célula sem vínculo pulada.
-NOVO|O261-VETO-A2_1c565c8f|A|app/chamados/models.py:921|Deduplicação omite via e suprime a trilha própria de uma segunda operação.
-NOVO|O261-VETO-A2_1c565c8f|A|app/chamados/tests/test_emissao_reata_orfa.py:67|Teste do desligado pode passar sem o gate de situação porque falta a célula necessária à emissão. [nao verificado]
-NOVO|O261-VETO-A2_1c565c8f|A|app/chamados/tests/test_emissor_nomeia_o_marco.py:88|Teste promete nascimento, mas verifica somente o contexto produzido por _ctx_c2. [nao verificado]
-NOVO|O261-VETO-A2_1c565c8f|A|app/chamados/tests/test_bug125_cobranca_cega.py:176|Teste promete nascimento sem marco, mas verifica somente o contexto. [nao verificado]
-NOVO|O261-VETO-A2_1c565c8f|A|app/ponto/management/commands/detectar_ausencias.py:139|Ativo sem vínculo pode ser descartado pelos fluxos antes de alcançar o escritor do aviso de cadastro.
-NOVO|O261-VETO-A2_1c565c8f|A|app/chamados/services/disputa_emissao.py:1606|Resolver automático reabre o pai diretamente sem consultar o veto novo.
-NOVO|O261-VETO-A2_1c565c8f|A|app/ponto/management/commands/reconciliar_grade.py:522|Grade pode reabrir o encerrado devolvido após a porta recusar seu renascimento.
-NOVO|O261-VETO-A2_1c565c8f|A|app/chamados/tests/test_o261_veto_na_porta.py:212|Selo não reconhece a reabertura pelo receptor _pai e permanece verde com o escape. [nao verificado]
-NOVO|O261-VETO-A2_1c565c8f|B|app/ponto/services/cartorio.py:907|Impressão do ramo nunca_bateu não incorpora o novo veto antes do retorno antecipado.
-NOVO|O261-VETO-A2_1c565c8f|B|app/chamados/models.py:921|Deduplicação omite via e consulta toda a história, suprimindo outra operação e o retorno do veto após correção.
-NOVO|O261-VETO-A2_1c565c8f|B|app/chamados/tests/test_emissor_nomeia_o_marco.py:88|Teste de nascimento observa apenas o dicionário de contexto. [nao verificado]
-NOVO|O261-VETO-A2_1c565c8f|B|app/chamados/tests/test_bug125_cobranca_cega.py:176|Teste de nascimento sem marco não executa a abertura. [nao verificado]
-NOVO|O261-VETO-A2_1c565c8f|B|app/ponto/management/commands/detectar_ausencias.py:140|Ativo sem vínculo não alcança automaticamente o escritor de regua_degenerada nos fluxos examinados.
-NOVO|O261-VETO-A2_1c565c8f|B|app/chamados/services/disputa_emissao.py:1606|Callback automático reabre o pai sem passar pelo veto do renascer.
-NOVO|O261-VETO-A2_1c565c8f|B|app/ponto/management/commands/reconciliar_grade.py:522|Grade trata somente retorno None e pode desfazer a recusa de renascimento reabrindo o encerrado.
-NOVO|O261-VETO-A2_1c565c8f|B|app/chamados/tests/test_o261_veto_na_porta.py:207|Varredor não classifica pai.reabrir() como escrita de vitalidade.
-NOVO|O261-VETO-A2_1c565c8f|B|bin/placar_code.sh:209|Placar captura somente o contador antigo e não mostra chamados vivos em dia vetado.
-NOVO|O261-VETO-A2_673ecaf7|A|app/chamados/tests/test_o261_veto_na_porta.py:256|Inventário AST perde chamadas por alias ou getattr e novas chamadas dentro de função já classificada.
-NOVO|O261-VETO-A2_673ecaf7|A|app/chamados/services/acoes_chamado.py:315|Resposta livre pode reabrir por transicionar sem passar por reabrir nem aparecer no censo.
-NOVO|O261-VETO-A2_673ecaf7|A|app/chamados/services/acoes_disputa.py:265|Ação administrativa ignora a recusa de reabrir e anuncia sucesso após abrir disputa e pergunta.
-NOVO|O261-VETO-A2_673ecaf7|A|app/chamados/models.py:923|Recusa histórica suprime nova trilha quando o mesmo veto retorna após passagem permitida.
-NOVO|O261-VETO-A2_673ecaf7|A|bin/placar_code.sh:209|Placar pode mostrar zero enquanto o vigia novo encontra chamado vivo vetado sem célula furo.
-NOVO|O261-VETO-A2_673ecaf7|B|app/chamados/tests/test_o261_veto_na_porta.py:256|Selo perde chamadas indiretas e registra funções sem detectar outra chamada dentro de função já enumerada.
-NOVO|O261-VETO-A2_673ecaf7|B|app/chamados/services/acoes_chamado.py:315|Reabertura humana por transicionar fica fora do inventário de reabrir.
-NOVO|O261-VETO-A2_673ecaf7|B|app/chamados/tests/test_contract_status_nucleo.py:23|Contrato complementar permite chamada externa a _gravar_estado para vivificar sem reconhecer essa escrita.
-NOVO|O261-VETO-A2_673ecaf7|B|app/chamados/services/acoes_disputa.py:266|Ação administrativa ignora retorno de reabrir e pode deixar disputa aberta com pai encerrado.
-NOVO|O261-VETO-A2_673ecaf7|B|app/chamados/models.py:923|Busca histórica cala a recusa de um novo ciclo após correção, renascimento e retorno do veto.
-NOVO|O261-VETO-A2_673ecaf7|B|bin/placar_code.sh:209|Placar extrai apenas o contador antigo e pode ocultar o achado do vigia novo.
-NOVO|O261-VETO-A2_673ecaf7|B|app/ponto/management/commands/reconciliar_grade.py:480|Triagem generaliza indevidamente o descarte de ec=None; _emitir_furo aceita None e chama a defesa de cadastro.
-NOVO|O261-VETO-A2_673ecaf7|B|app/chamados/tests/test_emissor_nomeia_o_marco.py:88|Teste verifica contexto e não sustenta prova de nascimento. [nao verificado]
-NOVO|O261-VETO-A2_673ecaf7|B|app/chamados/tests/test_bug125_cobranca_cega.py:176|Teste verifica contexto e não sustenta prova de nascimento. [nao verificado]
-NOVO|O261-VETO-A2_3b68a95b|A|app/chamados/models.py:569|analisar() pode usar instância desatualizada e vivificar chamado encerrado concorrentemente sem consultar veto.
-NOVO|O261-VETO-A2_3b68a95b|A|app/chamados/services/competencia_trancada.py:239|Serviço aceita autor=None e usuário sistema; a garantia humana depende dos chamadores encontrados.
-NOVO|O261-VETO-A2_3b68a95b|A|app/chamados/models.py:925|Consulta seguida de inserção sem serialização ou unicidade permite duplicar a mesma recusa concorrentemente.
-NOVO|O261-VETO-A2_3b68a95b|A|app/chamados/models.py:933|Nascimento permitido em outro dia pode liberar nova trilha para recusa antiga porque _passou não filtra dia ou célula.
-NOVO|O261-VETO-A2_3b68a95b|A|app/chamados/models.py:935|Sequência de motivos A→B→A sem passagem permitida pode calar a volta de A.
-NOVO|O261-VETO-A2_3b68a95b|A|app/core/models.py:313|Índices declarados não cobrem a chave JSON e a ordenação da consulta de deduplicação; custo real não medido.
-NOVO|O261-VETO-A2_3b68a95b|B|app/chamados/models.py:566|analisar() pode reabrir por estado antigo em memória após encerramento concorrente, sem reler banco ou veto.
-NOVO|O261-VETO-A2_3b68a95b|B|app/chamados/services/competencia_trancada.py:258|Serviço passa humano=True mesmo quando autor=None foi substituído por usuário sistema.
-NOVO|O261-VETO-A2_3b68a95b|B|app/chamados/models.py:925|Duas chamadas podem consultar antes de qualquer inserção e gravar recusas duplicadas.
-NOVO|O261-VETO-A2_3b68a95b|B|app/chamados/models.py:931|Nascimento em outro dia satisfaz _passou e permite linha extra sem passagem daquele dia.
-NOVO|O261-VETO-A2_3b68a95b|B|app/chamados/models.py:378|Renovar SLA de chamado ainda encerrado altera atualizado_em e permite outra linha de recusa.
-NOVO|O261-VETO-A2_3b68a95b|B|app/chamados/models.py:937|Inserção tardia de recusa pode ficar posterior ao nascimento permitido e calar o ciclo seguinte.
-NOVO|O261-VETO-A2_3b68a95b|B|app/core/models.py:313|Índices não cobrem a chave JSON com a ordenação da deduplicação; plano e latência não foram verificados.
-NOVO|O261-VETO-A2_a3bbef39|A|app/ponto/tests/test_veto_que_cai_rejulga.py:126|Spy observa argumento, mas não detecta hash que ignore especificamente VETO_DEGENERADA.
-NOVO|O261-VETO-A2_a3bbef39|A|app/chamados/tests/_vinculo_do_dia.py:18|Não há teste direto dos sete weekdays; omissão de domingo dependeria dos dias exercitados pela suíte. [nao verificado]
-NOVO|O261-VETO-A2_a3bbef39|A|app/ponto/tests/test_passe_turno_aberto_retroativo.py:142|MORDE verifica contadores, mas não exige a mensagem RECUSADO sem juiz.
-NOVO|O261-VETO-A2_a3bbef39|A|app/ponto/tests/test_passe_turno_aberto_retroativo.py:124|Falta cenário com célula e veto recusando simultaneamente para distinguir a prioridade dos juízes.
-NOVO|O261-VETO-A2_a3bbef39|A|app/ponto/tests/test_passe_turno_aberto_retroativo.py:140|MORDE substitui abrir e não exercita seu corpo real nem reproduz a mudança concorrente narrada.
-NOVO|O261-VETO-A2_a3bbef39|B|app/ponto/tests/test_veto_que_cai_rejulga.py:126|Teste pode passar se o hash ignorar VETO_DEGENERADA, pois observa somente kwargs do spy. [nao verificado]
-NOVO|O261-VETO-A2_a3bbef39|B|app/chamados/tests/_vinculo_do_dia.py:18|Ausência de teste próprio dos sete dias deixa detecção de domingo omitido dependente dos dias exercitados. [nao verificado]
-NOVO|O261-VETO-A2_a3bbef39|B|app/ponto/tests/test_passe_turno_aberto_retroativo.py:113|Testes de motivos isolados não distinguem prioridade invertida quando célula e veto recusam juntos. [nao verificado]
-NOVO|O261-VETO-A2_a3bbef39|B|app/ponto/tests/test_passe_turno_aberto_retroativo.py:142|Retirar a mensagem RECUSADO sem juiz preservando os contadores não é detectado pelo MORDE.
-NOVO|O261-VETO-A2_a3bbef39|B|app/ponto/tests/test_passe_turno_aberto_retroativo.py:140|MORDE alcança o fallback por mock de abrir e não demonstra a concorrência descrita na docstring.
-
-## 30/10 15:04 · sessao 91323e3d3246 · BENCH-CORRECAO · censo · origem=Code
-
-Usei estas definições do gabarito:
-
-- **E — FIO-DO-ADMIN-NO-ESTADO:** o painel omite os contadores do admin (`app/docs/BACKLOG.md:778`).
-- **L — FIO-DO-ADMIN-LAVRA-VELHA:** o vigia aceita o dono lavrado sem conferir a idade da lavra (`app/docs/BACKLOG.md:779`).
-- **S — SELO-CARIMBO-VIRADA:** o teste não provoca a travessia da meia-noite (`app/docs/BACKLOG.md:780`).
-
-Considerei **L n/a nas três primeiras voltas**: as respostas anteriores à final descrevem o vigia recalculando o dono; a leitura do dono lavrado aparece na final (`app/chamados/services/vigia_fio.py:275`, citado em `8110a931`; `app/chamados/services/vigia_fio.py:266`, citado em `c3b91265`). A continuidade dessa implementação na volta intermediária `3e49c1bc` é inferida; confirmação independente dessa árvore: **[nao verificado]**.
-
-Considerei **E e S existentes nas quatro voltas**. Para S nas duas primeiras, a existência é inferência de continuidade do teste do carimbo, presente na cópia; seu conteúdo exato nesses dois hashes é **[nao verificado]** (`app/chamados/tests/test_o261_vigia_fio.py:755`). As referências históricas abaixo preservam as linhas citadas pelos revisores.
-
-| Volta | Item | A | B |
-|---|---|---|---|
-| `d75bd454` | E | **VIU:** “O ESTADO não mostra o passivo transferido” (`bin/fio_estado.py:82`). | **VIU:** “o ESTADO perde a visibilidade da transferência” (`bin/fio_estado.py:82`). |
-| `d75bd454` | L | **n/a:** o ramo consulta o dono novamente (`app/chamados/services/vigia_fio.py:254`, citado na resposta). | **n/a:** o ramo consulta o dono novamente (`app/chamados/services/vigia_fio.py:254`, citado na resposta). |
-| `d75bd454` | S | **EM PARTE:** “Uma rodada atravessando meia-noite pode combinar referências temporais diferentes”; aponta o comportamento do comando, sem identificar a falta desse cenário no selo (`app/chamados/management/commands/vigiar_fio_morto.py:195`). | **EM PARTE:** “Uma execução atravessando meia-noite pode combinar datas diferentes”; aponta o comportamento do comando, sem identificar a lacuna do selo (`app/chamados/management/commands/vigiar_fio_morto.py:195`). |
-| `3e49c1bc` | E | **NÃO VIU:** a resposta trata exclusivamente do teste do recorte (`app/chamados/tests/test_o261_vigia_fio.py:600`). | **NÃO VIU:** a resposta trata exclusivamente do teste do recorte (`app/chamados/tests/test_o261_vigia_fio.py:611`). |
-| `3e49c1bc` | L | **n/a**, pela continuidade histórica inferida **[nao verificado]**. | **n/a**, pela continuidade histórica inferida **[nao verificado]**. |
-| `3e49c1bc` | S | **NÃO VIU:** a única crítica é à ausência de outra empresa visível no teste (`app/chamados/tests/test_o261_vigia_fio.py:600`). | **NÃO VIU:** a única crítica é à ausência de outra empresa visível no teste (`app/chamados/tests/test_o261_vigia_fio.py:611`). |
-| `8110a931` | E | **VIU:** “Não mostra os três campos novos” (`bin/fio_estado.py:82`). | **VIU:** “o destino `fio_do_admin` fica fora da projeção e da frase do painel” (`bin/fio_estado.py:82`). |
-| `8110a931` | L | **n/a:** “a lista publica dono lavrado e o vigia calcula dono atual” (`app/chamados/services/vigia_fio.py:275`). | **n/a:** “A lista usa `dono` lavrado; o vigia recalcula pelo carregador atual” (`app/chamados/services/vigia_fio.py:275`). |
-| `8110a931` | S | **EM PARTE:** “O teste do carimbo […] não prova propagação do instante”; identifica cobertura temporal insuficiente, sem apontar a ausência da virada (`app/chamados/tests/test_o261_vigia_fio.py:787`). | **VIU:** “O teste temporal […] não fabrica travessia da meia-noite” (`app/chamados/tests/test_o261_vigia_fio.py:801`). |
-| `c3b91265` | E | **VIU:** “o leitor do ESTADO descarta os três” (`bin/fio_estado.py:82`). | **VIU:** “o ESTADO não seleciona os três campos novos” (`bin/fio_estado.py:82`). |
-| `c3b91265` | L | **EM PARTE:** “a leitura do dono lavrado está implementada”; menciona a origem do dono, sem apontar falta de controle de idade ou permanência indefinida (`app/chamados/services/vigia_fio.py:266`). | **EM PARTE:** “a lista lê uma fotografia persistida”; distingue fotografia de cálculo atual, sem apontar a ausência de controle de idade (`app/ponto/services/teto_na_lista.py:123`). |
-| `c3b91265` | S | **VIU:** “O teste de carimbo também não força travessia de meia-noite” (`app/chamados/tests/test_o261_vigia_fio.py:795`). | **VIU:** “O selo temporal verifica formato/offset/data, sem provocar a virada” (`app/chamados/tests/test_o261_vigia_fio.py:793`). |
-
-Os registros NOVO abaixo reproduzem os defeitos e lacunas levantados pelos revisores fora desses três itens; sua procedência histórica independente permanece **[nao verificado]**.
-
-NOTA|FIO-MORTO-DONO-NA-LISTA_d75bd454|FIO-DO-ADMIN-NO-ESTADO|existia|A=VIU|B=VIU
-NOTA|FIO-MORTO-DONO-NA-LISTA_d75bd454|FIO-DO-ADMIN-LAVRA-VELHA|n/a|A=n/a|B=n/a
-NOTA|FIO-MORTO-DONO-NA-LISTA_d75bd454|SELO-CARIMBO-VIRADA|existia|A=EM_PARTE|B=EM_PARTE
-NOTA|FIO-MORTO-DONO-NA-LISTA_3e49c1bc|FIO-DO-ADMIN-NO-ESTADO|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|FIO-MORTO-DONO-NA-LISTA_3e49c1bc|FIO-DO-ADMIN-LAVRA-VELHA|n/a|A=n/a|B=n/a
-NOTA|FIO-MORTO-DONO-NA-LISTA_3e49c1bc|SELO-CARIMBO-VIRADA|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|FIO-MORTO-DONO-NA-LISTA_8110a931|FIO-DO-ADMIN-NO-ESTADO|existia|A=VIU|B=VIU
-NOTA|FIO-MORTO-DONO-NA-LISTA_8110a931|FIO-DO-ADMIN-LAVRA-VELHA|n/a|A=n/a|B=n/a
-NOTA|FIO-MORTO-DONO-NA-LISTA_8110a931|SELO-CARIMBO-VIRADA|existia|A=EM_PARTE|B=VIU
-NOTA|FIO-MORTO-DONO-NA-LISTA_c3b91265|FIO-DO-ADMIN-NO-ESTADO|existia|A=VIU|B=VIU
-NOTA|FIO-MORTO-DONO-NA-LISTA_c3b91265|FIO-DO-ADMIN-LAVRA-VELHA|existia|A=EM_PARTE|B=EM_PARTE
-NOTA|FIO-MORTO-DONO-NA-LISTA_c3b91265|SELO-CARIMBO-VIRADA|existia|A=VIU|B=VIU
-NOVO|FIO-MORTO-DONO-NA-LISTA_d75bd454|A|app/chamados/services/vigia_fio.py:253|Frota consulta todas as empresas e pode transferir ao admin um dia de empresa invisível na tela.
-NOVO|FIO-MORTO-DONO-NA-LISTA_d75bd454|A|app/escala/services/cadastro_realidade.py:588|Recorte --empresa entrega objetos Empresa onde lista compara IDs inteiros, descartando linhas.
-NOVO|FIO-MORTO-DONO-NA-LISTA_d75bd454|A|app/chamados/services/vigia_fio.py:251|Falha da lista não ocupa o cache e provoca nova execução integral por candidato.
-NOVO|FIO-MORTO-DONO-NA-LISTA_d75bd454|A|app/chamados/management/commands/vigiar_fio_morto.py:195|Comando, censo e carimbo capturam instantes distintos e podem discordar ao atravessar meia-noite.
-NOVO|FIO-MORTO-DONO-NA-LISTA_d75bd454|A|app/escala/services/cadastro_realidade.py:667|Helper aceita data estruturada sem garantir que a tela exiba esse dia; contraprova apresentada é sintética.
-NOVO|FIO-MORTO-DONO-NA-LISTA_d75bd454|A|app/escala/services/cadastro_realidade.py:667|Truncar str(data) não normaliza datas como 25/10/2026 para a chave ISO do vigia.
-NOVO|FIO-MORTO-DONO-NA-LISTA_d75bd454|A|app/escala/services/cadastro_realidade.py:373|Dias mostrados textualmente por C4/C5 ficam fora da projeção; elegibilidade de candidatos reais é [nao verificado].
-NOVO|FIO-MORTO-DONO-NA-LISTA_d75bd454|A|app/ponto/management/commands/e6_oraculo.py:136|Novo caminho inclui lista completa, carregamento de insumos e possível execução do motor; custo atual é [nao verificado].
-NOVO|FIO-MORTO-DONO-NA-LISTA_d75bd454|A|app/escala/services/cadastro_realidade.py:561|Falhas internas da lista retornam resultado parcial sem incrementar fio_do_admin_sem_resposta.
-NOVO|FIO-MORTO-DONO-NA-LISTA_d75bd454|A|app/chamados/tests/test_o261_vigia_fio.py:560|Mocks da lista e do carregador escondem contratos de universo, argumentos e falha parcial.
-NOVO|FIO-MORTO-DONO-NA-LISTA_d75bd454|A|app/chamados/tests/test_o261_vigia_fio.py:628|Teste da soma inclui fio_do_admin sem fabricar explicitamente uma parcela positiva nesse contador. [nao verificado]
-NOVO|FIO-MORTO-DONO-NA-LISTA_d75bd454|A|app/folha/fora_da_folha.py:41|Dia transferido conserva orientação genérica de resolver chamado, sem orientação específica para a lista do admin.
-NOVO|FIO-MORTO-DONO-NA-LISTA_d75bd454|B|app/chamados/services/vigia_fio.py:253|Frota consulta todas as empresas, permitindo transferência de dias que empresas_visiveis exclui da tela.
-NOVO|FIO-MORTO-DONO-NA-LISTA_d75bd454|B|app/escala/services/cadastro_realidade.py:588|Lista compara empresa_id inteiro com objetos Empresa recebidos pelo recorte e descarta as linhas.
-NOVO|FIO-MORTO-DONO-NA-LISTA_d75bd454|B|app/ponto/services/espelho.py:1229|Consulta nova pode executar cálculo amplo e sobreposto entre competências, contrariando a promessa de nenhum recálculo.
-NOVO|FIO-MORTO-DONO-NA-LISTA_d75bd454|B|app/chamados/services/vigia_fio.py:251|Exceção persistente provoca repetição da lista inteira por candidato porque somente sucesso fica em cache.
-NOVO|FIO-MORTO-DONO-NA-LISTA_d75bd454|B|app/escala/services/cadastro_realidade.py:565|Exceção interna de C9 vira lista parcial tratada como sucesso, deixando sem_resposta sem registrar a falha.
-NOVO|FIO-MORTO-DONO-NA-LISTA_d75bd454|B|app/chamados/management/commands/vigiar_fio_morto.py:195|Comando, censo e carimbo usam referências temporais independentes, com possível divergência na meia-noite.
-NOVO|FIO-MORTO-DONO-NA-LISTA_d75bd454|B|app/escala/services/cadastro_realidade.py:186|C2 ignora o hoje da lista e consulta date.today(), impedindo reprodução integral da rodada.
-NOVO|FIO-MORTO-DONO-NA-LISTA_d75bd454|B|app/chamados/tests/test_o261_vigia_fio.py:560|Testes substituem lista e carregador e não verificam os argumentos, deixando passar os erros de universo e recorte. [nao verificado]
-NOVO|FIO-MORTO-DONO-NA-LISTA_d75bd454|B|app/chamados/tests/test_o261_vigia_fio.py:645|Teste da soma não exige fio_do_admin positivo e pode passar sem exercitar a nova parcela. [nao verificado]
-NOVO|FIO-MORTO-DONO-NA-LISTA_d75bd454|B|app/escala/services/cadastro_realidade.py:667|Presença de data estruturada é aceita sem garantir que a data seja exibida pela tela.
-NOVO|FIO-MORTO-DONO-NA-LISTA_d75bd454|B|app/escala/services/cadastro_realidade.py:667|Truncamento da representação da data não valida nem normaliza seu formato.
-NOVO|FIO-MORTO-DONO-NA-LISTA_d75bd454|B|app/folha/fora_da_folha.py:83|Orientação permanece resolver o chamado, sem encaminhamento novo para Cadastro x Realidade.
-NOVO|FIO-MORTO-DONO-NA-LISTA_3e49c1bc|A|app/chamados/tests/test_o261_vigia_fio.py:600|Teste do universo não inclui outra empresa visível fora do recorte e passa mesmo removendo a interseção. [nao verificado]
-NOVO|FIO-MORTO-DONO-NA-LISTA_3e49c1bc|B|app/chamados/tests/test_o261_vigia_fio.py:611|Teste não distingue presença e ausência da interseção porque falta segunda empresa visível fora do recorte. [nao verificado]
-NOVO|FIO-MORTO-DONO-NA-LISTA_8110a931|A|app/chamados/services/vigia_fio.py:181|Fallbacks temporais do censo violam o selo existente de um relógio por ato.
-NOVO|FIO-MORTO-DONO-NA-LISTA_8110a931|A|app/chamados/services/vigia_fio.py:275|Vigia recalcula dono atual enquanto a lista apresenta dono lavrado, produzindo duas observações potencialmente distintas.
-NOVO|FIO-MORTO-DONO-NA-LISTA_8110a931|A|app/escala/services/cadastro_realidade.py:667|Projeção de presença omite dias que C4/C5 apresentam somente no detalhe.
-NOVO|FIO-MORTO-DONO-NA-LISTA_8110a931|A|app/escala/services/cadastro_realidade.py:187|C2 fixa corte de competência em 21, divergindo da autoridade registrada que considera o corte da empresa.
-NOVO|FIO-MORTO-DONO-NA-LISTA_8110a931|A|app/colaboradores/services/calendario.py:249|Calendário chamado pelo censo captura outro instante sem receber o instante da rodada.
-NOVO|FIO-MORTO-DONO-NA-LISTA_8110a931|A|app/escala/services/cadastro_realidade.py:186|C2 consulta date.today() em vez de usar a referência temporal recebida pela lista.
-NOVO|FIO-MORTO-DONO-NA-LISTA_8110a931|A|app/escala/services/cadastro_realidade.py:350|C4 chama afastados_hoje sem transmitir o dia e aciona outro relógio.
-NOVO|FIO-MORTO-DONO-NA-LISTA_8110a931|A|app/chamados/tests/test_o261_vigia_fio.py:560|Matriz positiva substitui lista e carregador, deixando seus contratos reais fora do teste. [nao verificado]
-NOVO|FIO-MORTO-DONO-NA-LISTA_8110a931|A|app/chamados/tests/test_o261_vigia_fio.py:675|Teste da soma acrescenta fio_do_admin sem construir uma parcela admin positiva. [nao verificado]
-NOVO|FIO-MORTO-DONO-NA-LISTA_8110a931|A|app/escala/services/cadastro_realidade.py:565|Falha interna de C9 é absorvida pela lista e não chega ao contador externo de falha.
-NOVO|FIO-MORTO-DONO-NA-LISTA_8110a931|A|app/chamados/services/vigia_fio.py:259|Uma candidata aciona cálculo da lista completa; o gatilho restrito não restringe todo o trabalho executado.
-NOVO|FIO-MORTO-DONO-NA-LISTA_8110a931|B|app/escala/services/cadastro_realidade.py:667|Predicado de presença não abrange dias que C4/C5 mostram textualmente sem data estruturada.
-NOVO|FIO-MORTO-DONO-NA-LISTA_8110a931|B|app/chamados/services/vigia_fio.py:275|Dono atual BATIDA/CADASTRO pode transferir dia cuja C9 lavrada não oferece porta humana por ter outro dono ou nenhum dono.
-NOVO|FIO-MORTO-DONO-NA-LISTA_8110a931|B|app/escala/services/cadastro_realidade.py:187|C2 escolhe competência com corte literal 21, contrariando janela_atual e o corte por empresa.
-NOVO|FIO-MORTO-DONO-NA-LISTA_8110a931|B|app/chamados/services/vigia_fio.py:181|Defaults independentes do censo impedem que o agora do comando congele toda a rodada.
-NOVO|FIO-MORTO-DONO-NA-LISTA_8110a931|B|app/escala/services/cadastro_realidade.py:186|C2 lê date.today() sem usar o dia transmitido pelo comando.
-NOVO|FIO-MORTO-DONO-NA-LISTA_8110a931|B|app/escala/services/cadastro_realidade.py:350|C4 omite dia ao chamar afastados_hoje, cujo default consulta outro relógio.
-NOVO|FIO-MORTO-DONO-NA-LISTA_8110a931|B|app/colaboradores/services/calendario.py:249|Calendário captura outro instante no caminho chamado pelo censo.
-NOVO|FIO-MORTO-DONO-NA-LISTA_8110a931|B|app/escala/services/cadastro_realidade.py:565|Falha interna de C9 ou ausência de snapshot pode deixar sem_resposta zerado apesar da indisponibilidade da fonte.
-NOVO|FIO-MORTO-DONO-NA-LISTA_8110a931|B|app/chamados/tests/test_o261_vigia_fio.py:674|Fixture da partição não produz fio_do_admin positivo, deixando a nova parcela sem exercício efetivo.
-NOVO|FIO-MORTO-DONO-NA-LISTA_8110a931|B|app/chamados/tests/test_o261_vigia_fio.py:576|Teste positivo usa mocks e não cobra a conservação da partição completa. [nao verificado]
-NOVO|FIO-MORTO-DONO-NA-LISTA_8110a931|B|app/ponto/services/espelho.py:1229|Lista completa e carregadores podem ampliar cálculo e repetir intervalos entre competências; duração real é [nao verificado].
-NOVO|FIO-MORTO-DONO-NA-LISTA_c3b91265|A|app/escala/services/cadastro_realidade.py:669|dias_na_lista omite datas que C4/C5 exibem somente no detalhe.
-NOVO|FIO-MORTO-DONO-NA-LISTA_c3b91265|A|app/escala/services/cadastro_realidade.py:187|C2 mantém corte literal 21 em vez do corte da empresa indicado pela autoridade registrada.
-NOVO|FIO-MORTO-DONO-NA-LISTA_c3b91265|A|app/escala/services/cadastro_realidade.py:186|C2 consulta date.today() e escapa do instante único capturado pelo comando.
-NOVO|FIO-MORTO-DONO-NA-LISTA_c3b91265|A|app/escala/services/cadastro_realidade.py:350|C4 chama afastados_hoje sem passar o dia e provoca nova leitura temporal.
-NOVO|FIO-MORTO-DONO-NA-LISTA_c3b91265|A|app/colaboradores/services/calendario.py:249|Calendário relê seu próprio relógio antes do ramo admin, impedindo congelamento transitivo da rodada.
-NOVO|FIO-MORTO-DONO-NA-LISTA_c3b91265|A|app/escala/services/cadastro_realidade.py:565|Exceção interna de C9 e ausência de medição podem desaparecer da lista sem sinal em fio_do_admin_sem_resposta.
-NOVO|FIO-MORTO-DONO-NA-LISTA_c3b91265|A|app/chamados/tests/test_o261_vigia_fio.py:666|Teste da partição inclui fio_do_admin, mas a mistura não cria parcela positiva nesse contador. [nao verificado]
-NOVO|FIO-MORTO-DONO-NA-LISTA_c3b91265|A|app/chamados/tests/test_o261_vigia_fio.py:565|Teste positivo separado dos dois dias admin não verifica a partição completa. [nao verificado]
-NOVO|FIO-MORTO-DONO-NA-LISTA_c3b91265|A|app/escala/services/cadastro_realidade.py:195|Lista acionada por uma candidata percorre células de todo o recorte e outras fontes, ampliando o custo além dos dias mortos.
-NOVO|FIO-MORTO-DONO-NA-LISTA_c3b91265|B|app/escala/services/cadastro_realidade.py:669|Helper considera somente data estruturada e ignora dias mencionados textualmente em C4/C5.
-NOVO|FIO-MORTO-DONO-NA-LISTA_c3b91265|B|app/escala/services/cadastro_realidade.py:187|C2 fixa corte de competência em 21, contrariando o corte por empresa registrado.
-NOVO|FIO-MORTO-DONO-NA-LISTA_c3b91265|B|app/colaboradores/services/calendario.py:249|Calendário chamado pelo censo relê timezone.now() apesar do instante único do comando.
-NOVO|FIO-MORTO-DONO-NA-LISTA_c3b91265|B|app/escala/services/cadastro_realidade.py:186|C2 consulta date.today() em vez de usar a referência temporal da rodada.
-NOVO|FIO-MORTO-DONO-NA-LISTA_c3b91265|B|app/escala/services/cadastro_realidade.py:350|C4 omite dia ao chamar afastados_hoje e aciona o default que relê localdate().
-NOVO|FIO-MORTO-DONO-NA-LISTA_c3b91265|B|app/ponto/management/commands/pautas_discordantes.py:93|Pautas mantém consulta parcial ao juiz antes de chamar novamente o carregador completo do dono.
-NOVO|FIO-MORTO-DONO-NA-LISTA_c3b91265|B|app/chamados/tests/test_o261_vigia_fio.py:666|Mistura da partição não cria C9 nem exige fio_do_admin positivo, deixando a nova parcela sem proteção efetiva.
-NOVO|FIO-MORTO-DONO-NA-LISTA_c3b91265|B|app/chamados/tests/test_o261_vigia_fio.py:553|Teste positivo separado não verifica a soma da partição. [nao verificado]
-NOVO|FIO-MORTO-DONO-NA-LISTA_c3b91265|B|app/escala/services/cadastro_realidade.py:195|Uma candidata dispara montagem de todas as assinaturas e passagem pelas células da competência de todo o recorte.
-NOVO|FIO-MORTO-DONO-NA-LISTA_c3b91265|B|app/escala/services/cadastro_realidade.py:561|Falha interna de C9 é absorvida pela lista e pode resultar em fio_do_admin_sem_resposta igual a zero.
-NOVO|FIO-MORTO-DONO-NA-LISTA_c3b91265|B|app/chamados/tests/test_o261_vigia_fio.py:573|Testes de falha substituem a lista inteira e não exercitam a falha interna da fonte C9. [nao verificado]
-
-## 30/10 15:04 · sessao 942d4847c398 · BENCH-CORRECAO · censo · origem=Code
-
-Usei os itens **1–5 na ordem do gabarito**, todos atribuídos ao opus final sobre `af2cf55f`. A suíte verde é contexto informado pelo anexo, sem comprovação independente nesta análise. (`gab_O261-V-FASE.txt:1`, `gab_O261-V-FASE.txt:3`; execução **[nao verificado]**.)
-
-A existência nas voltas anteriores é inferida dos caminhos descritos nas respostas. Para o item 4, considerei `d6adf8c0` a primeira versão mostrada e o defeito existente após o fortalecimento dos testes em `519fa2c2`; a correspondência com o RED histórico permanece **[nao verificado]**. As referências históricas abaixo são as citadas pelos revisores, sem confirmação independente das três árvores. **[nao verificado]**
-
-Apliquei **EM_PARTE** também às verificações negativas específicas: abordam o tema, mas não identificam o defeito, conforme a definição solicitada. **[nao verificado]** [nao verificado]
-
-| Volta | Item | Fundamentação de A | Fundamentação de B |
-|---|---|---|---|
-| `d6adf8c0` | 1 — custo | **VIU:** “Cada HTML/PDF e os commands C7/C8 passam a pagar a leitura de toda a frota”. (`app/escala/services/cadastro_realidade.py:601`) | **VIU:** “Varredura global no request, contrariando a restrição do próprio serviço”. (`app/escala/services/cadastro_realidade.py:330`, `app/escala/services/cadastro_realidade.py:48`) |
-| `d6adf8c0` | 2 — duas sugestões | **NAO_VIU:** o achado de seleção paralela trata da identidade do vínculo, sem comparar os dois produtores de sugestão de âncora. (`app/escala/services/fase_12x36.py:114`, `app/escala/services/cadastro_realidade.py:488`) | **EM_PARTE:** “Não encontrei segundo juiz no complemento”. Aborda a unicidade, sem confrontar as sugestões do detalhe e da porta. (`app/escala/services/cadastro_realidade.py:336`) |
-| `d6adf8c0` | 3 — dias e vínculo da ação | **VIU:** “cabeçalho do vínculo novo e ação sem identificar qual corrigir”; também registra os quatro dias reais como não verificados. (`app/escala/services/cadastro_realidade.py:488`, `app/escala/services/cadastro_realidade.py:521`; confirmação dos dias **[nao verificado]**) | **EM_PARTE:** “não demonstram a presença dos quatro dias reais de col451”; não aponta o vínculo errado da ação. (`app/escala/tests/test_o261v_fase_na_lista.py:23`, `app/escala/tests/test_o261v_fase_na_lista.py:40`) |
-| `d6adf8c0` | 4 — RED da primeira versão | **n/a**, pela ressalva temporal acima. **[nao verificado]** | **n/a**, pela mesma ressalva. **[nao verificado]** |
-| `d6adf8c0` | 5 — inventário dos leitores | **EM_PARTE:** “As chaves novas são aditivas para os consumidores encontrados”; enumera leitores, sem denunciar sua ausência na LEI-AKITA. (`app/escala/management/commands/fechar_avisos_regua_na_lista.py:32`, `app/ponto/management/commands/fechar_chamados_vinculo_na_lista.py:40`) | **EM_PARTE:** “Os commands também pagam esse custo, embora selecionem exclusivamente C7 e C8”; reconhece leitores, sem apontar a omissão documental. (`app/escala/management/commands/fechar_avisos_regua_na_lista.py:27`, `app/ponto/management/commands/fechar_chamados_vinculo_na_lista.py:35`) |
-| `519fa2c2` | 1 — custo | **NAO_VIU:** não há denúncia da varredura global nesta resposta. **[nao verificado]** | **NAO_VIU:** não há denúncia da varredura global nesta resposta. **[nao verificado]** |
-| `519fa2c2` | 2 — duas sugestões | **EM_PARTE:** “não identifiquei segundo juiz”; verifica o adaptador, sem comparar as duas sugestões. (`app/escala/services/cadastro_realidade.py:330`) | **NAO_VIU:** a discussão sobre juiz trata do pareamento sem ata, outro defeito. (`app/escala/services/fase_12x36.py:175`, `app/core/juizes.py:905`) |
-| `519fa2c2` | 3 — dias e vínculo da ação | **EM_PARTE:** “procede a correção de identificação”, com `ec_id` no detalhe; mantém os dias reais como não verificados, sem denunciar a ação restante. (`app/escala/services/cadastro_realidade.py:340`, `app/escala/services/cadastro_realidade.py:344`; dias **[nao verificado]**) | **EM_PARTE:** “procede como correção de apresentação”; aborda a identidade exibida, sem apontar o vínculo errado da ação. (`app/escala/services/cadastro_realidade.py:340`, `app/escala/services/cadastro_realidade.py:344`) |
-| `519fa2c2` | 4 — RED da primeira versão | **EM_PARTE:** “RED histórico [...] [nao verificado]”; não identifica que a prova cobre somente a primeira versão. **[nao verificado]** | **EM_PARTE:** “RED histórico [...] [não verificado]”; mesma limitação. **[nao verificado]** |
-| `519fa2c2` | 5 — inventário dos leitores | **NAO_VIU:** não aponta os leitores ausentes da LEI-AKITA. **[nao verificado]** | **NAO_VIU:** não aponta os leitores ausentes da LEI-AKITA. **[nao verificado]** |
-| `af2cf55f` | 1 — custo | **NAO_VIU:** não denuncia o custo da chamada global. **[nao verificado]** | **NAO_VIU:** não denuncia o custo da chamada global. **[nao verificado]** |
-| `af2cf55f` | 2 — duas sugestões | **NAO_VIU:** conferir a “reutilização do leitor” não identifica a duplicidade de sugestões. (`app/escala/services/cadastro_realidade.py:338`) | **EM_PARTE:** “sem cálculo próprio de fase”; aborda a autoridade do complemento, sem confrontá-la com a sugestão da porta. (`app/escala/services/cadastro_realidade.py:331`) |
-| `af2cf55f` | 3 — dias e vínculo da ação | **EM_PARTE:** “reprodução dos quatro dias do col451: [nao verificado]”; considera regular a ação pela tela existente. (`app/escala/services/cadastro_realidade.py:491`; reprodução **[nao verificado]**) | **EM_PARTE:** “resultado real do col451: [não verificado]”; também aceita o encaminhamento à tela existente. (`app/escala/services/cadastro_realidade.py:491`; resultado **[nao verificado]**) |
-| `af2cf55f` | 4 — RED da primeira versão | **EM_PARTE:** “histórico RED/verde [...] [nao verificado]”; não aponta a cobertura restrita à versão inicial. **[nao verificado]** | **EM_PARTE:** “RED histórico [...] [não verificado]”; mesma limitação. **[nao verificado]** |
-| `af2cf55f` | 5 — inventário dos leitores | **NAO_VIU:** não denuncia a omissão documental. **[nao verificado]** | **NAO_VIU:** não denuncia a omissão documental. **[nao verificado]** |
-
-Nos registros `NOVO`, incluí defeitos fora do gabarito explicitamente reconhecidos nas respostas, inclusive dívidas anteriores retomadas nas triagens; as referências são as fornecidas pelos revisores. A procedência histórica desses registros não foi revalidada. **[nao verificado]**
-
-NOTA|O261-V-FASE_d6adf8c0|1|existia|A=VIU|B=VIU
-NOTA|O261-V-FASE_d6adf8c0|2|existia|A=NAO_VIU|B=EM_PARTE
-NOTA|O261-V-FASE_d6adf8c0|3|existia|A=VIU|B=EM_PARTE
-NOTA|O261-V-FASE_d6adf8c0|4|n/a|A=n/a|B=n/a
-NOTA|O261-V-FASE_d6adf8c0|5|existia|A=EM_PARTE|B=EM_PARTE
-NOTA|O261-V-FASE_519fa2c2|1|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-V-FASE_519fa2c2|2|existia|A=EM_PARTE|B=NAO_VIU
-NOTA|O261-V-FASE_519fa2c2|3|existia|A=EM_PARTE|B=EM_PARTE
-NOTA|O261-V-FASE_519fa2c2|4|existia|A=EM_PARTE|B=EM_PARTE
-NOTA|O261-V-FASE_519fa2c2|5|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-V-FASE_af2cf55f|1|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-V-FASE_af2cf55f|2|existia|A=NAO_VIU|B=EM_PARTE
-NOTA|O261-V-FASE_af2cf55f|3|existia|A=EM_PARTE|B=EM_PARTE
-NOTA|O261-V-FASE_af2cf55f|4|existia|A=EM_PARTE|B=EM_PARTE
-NOTA|O261-V-FASE_af2cf55f|5|existia|A=NAO_VIU|B=NAO_VIU
-NOVO|O261-V-FASE_d6adf8c0|A|app/escala/services/cadastro_realidade.py:599|Falha do leitor de fase é registrada apenas em log e fica indistinguível de ausência de achados C10.
-NOVO|O261-V-FASE_d6adf8c0|A|app/escala/tests/test_o261v_fase_na_lista.py:111|Validação das datas aceita valores errados ou repetidos que preservem comprimento e formato ISO.
-NOVO|O261-V-FASE_d6adf8c0|A|app/escala/tests/test_o261v_fase_na_lista.py:128|Teste do PDF verifica somente o prefixo %PDF e não protege a presença de C10 e suas datas. [nao verificado]
-NOVO|O261-V-FASE_d6adf8c0|A|app/escala/tests/test_o261v_fase_na_lista.py:12|A afirmação de que os dois mocks ficam vermelhos sem a integração é exagerada: o mock vazio continuaria verde. [nao verificado]
-NOVO|O261-V-FASE_d6adf8c0|A|app/escala/services/fase_12x36.py:175|Leitor pareia batidas cruas sem alimentar o papel da ata, dívida anterior ampliada pelo consumo em C10.
-NOVO|O261-V-FASE_d6adf8c0|B|app/escala/tests/test_o261v_fase_na_lista.py:114|Teste das datas não detecta a troca entre categorias trabalho e folga quando as sequências têm o mesmo tamanho. [nao verificado]
-NOVO|O261-V-FASE_d6adf8c0|B|app/escala/tests/test_o261v_fase_na_lista.py:128|Teste do PDF permite omitir C10 e suas datas porque exige apenas o prefixo %PDF. [nao verificado]
-NOVO|O261-V-FASE_519fa2c2|A|app/escala/services/cadastro_realidade.py:112|C10 rotula como 12x36 um universo do leitor que também inclui achados de 24x48.
-NOVO|O261-V-FASE_519fa2c2|A|app/escala/services/cadastro_realidade.py:609|Falha do leitor de fase continua sem indicador de leitura incompleta na lista.
-NOVO|O261-V-FASE_519fa2c2|A|app/escala/services/fase_12x36.py:175|Pareamento direto sem alimentação da ata permanece como dívida do leitor existente.
-NOVO|O261-V-FASE_519fa2c2|B|app/escala/services/cadastro_realidade.py:112|C10 apresenta achados alcançáveis de 24x48 com texto fixo de 12x36.
-NOVO|O261-V-FASE_519fa2c2|B|app/escala/services/fase_12x36.py:175|A exclusão por sítio não tocado é incorreta: fora_de_fase foi alterada e mantém pareamento sem o papel da ata.
-NOVO|O261-V-FASE_519fa2c2|B|app/escala/services/cadastro_realidade.py:550|A guarda compartilhada com os vizinhos mantém falhas do leitor sem aviso na lista.
-NOVO|O261-V-FASE_af2cf55f|A|app/escala/services/cadastro_realidade.py:114|Rótulo promete falta onde o leitor identifica somente ausência de turno completo, inclusive em dia justificado.
-NOVO|O261-V-FASE_af2cf55f|A|app/escala/services/fase_12x36.py:175|Permanece o pareamento sem alimentação da ata, com migração para turnos_do_colab já inventariada.
-NOVO|O261-V-FASE_af2cf55f|B|app/escala/services/fase_12x36.py:175|Reconhece a dívida persistente do pareamento sem ata, embora a considere fora do complemento.
-
-## 30/10 15:03 · sessao 407c616a174f · BENCH-CORRECAO · censo · origem=Code
-
-A numeração 1–6 segue o gabarito reproduzido em `app/docs/RELATO.md:13`. As referências dos achados NOVO são as citadas pelos revisores; não representam confirmação independente nas árvores históricas. [não verificado]
-
-Para temporalidade, considerei os itens 1–5 existentes desde a primeira volta e o item 6 a partir de `24f1cd69`, quando aparece o cabeçalho calculado por `dia_mostrado`. Na primeira volta, o cabeçalho ainda usa diretamente `data_evento`: a divergência apontada ali não depende de regeneração. A correspondência histórica foi inferida dos anexos e do resumo em `app/docs/RELATO.md:24`; não foi confirmada por comparação entre snapshots. [não verificado]
-
-Os créditos VIU e EM_PARTE se apoiam nestes trechos das respostas:
-
-- **469d61ba, item 2 — ambos VIU.** A: “O texto lê `lampadas[].instante`; o plantio continua recompondo marcos [...] dentro de um envelope de 90 minutos”, com contraexemplo 08→07. B: “há fontes paralelas preexistentes”, descrevendo escala ativa/template versus vínculo/DNA congelado. (`app/chamados/catalogo/query.py:65`; `app/chamados/juizes.py:305`; `app/chamados/juizes.py:308`; referências de B: `app/chamados/juizes.py:1251`, `app/escala/models.py:1099`.)
-- **469d61ba, item 3 — ambos EM_PARTE.** A: “não exercitam [...] telas” e “RED contra o commit anterior: [não verificado]”. B: “Suíte Django e RED histórico são [não verificado]”. Abordam cobertura/RED, sem identificar o TypeError nem demonstrar a insuficiência histórica específica. (`app/chamados/tests/test_noturno_le_o_dia_do_instante.py:65`; `app/chamados/tests/test_noturno_le_o_dia_do_instante.py:110`.)
-- **469d61ba, item 4 — ambos EM_PARTE.** A: “`classe_do_lote` calcula o plantio” e “Esse trabalho acontece por pergunta da fila”. B: “acrescenta consultas”, detalhando leituras repetidas. Identificam o custo, sem fechar o percurso pelas views da UI. (`app/chamados/services/validacao.py:830`; `app/chamados/services/materializacao.py:266`; `app/chamados/services/materializacao.py:355`.)
-- **469d61ba, item 5 — ambos EM_PARTE.** A: “não exercitam intervalos”. B: “O DNA de teste deixa os intervalos vazios”. Nenhum aponta a mudança de classe do intervalo diurno. (`app/chamados/tests/test_noturno_le_o_dia_do_instante.py:36`; `app/chamados/tests/test_noturno_le_o_dia_do_instante.py:65`.)
-- **24f1cd69, item 6 — A EM_PARTE.** “A propriedade calcula o dia pelo DNA atual”; a pergunta existente retorna “sem atualizar `pergunta`”. O exemplo aborda texto antigo, sem identificar regeneração posterior da célula. (`app/chamados/models.py:2172`; `app/chamados/models.py:2062`; `app/chamados/models.py:2084`.)
-- **31b8cec0, item 6 — ambos EM_PARTE.** A: “a igualdade falha e retorna 22/10”. B: “a comparação reconstrói [...] não coincide e o cabeçalho retorna 22/10”. Apontam contradição entre cabeçalho e texto causada por data ISO com hora, sem apontar regeneração. (`app/chamados/catalogo/query.py:99`; `app/chamados/models.py:2176`.)
-- **691508dd, item 6 — ambos EM_PARTE.** A: “O ponto final quebra a igualdade com o produtor e aciona o fallback”. B: “acrescentar apenas `.` faz retornar 21/10”. Apontam outra causa de contradição entre cabeçalho e texto. (`app/chamados/models.py:2178`; `app/templates/chamados/partials/_card_atendimento.html:90`.)
-
-NOTA|O261-NOTURNO_469d61ba|1|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-NOTURNO_469d61ba|2|existia|A=VIU|B=VIU
-NOTA|O261-NOTURNO_469d61ba|3|existia|A=EM_PARTE|B=EM_PARTE
-NOTA|O261-NOTURNO_469d61ba|4|existia|A=EM_PARTE|B=EM_PARTE
-NOTA|O261-NOTURNO_469d61ba|5|existia|A=EM_PARTE|B=EM_PARTE
-NOTA|O261-NOTURNO_469d61ba|6|n/a|A=n/a|B=n/a
-NOTA|O261-NOTURNO_24f1cd69|1|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-NOTURNO_24f1cd69|2|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-NOTURNO_24f1cd69|3|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-NOTURNO_24f1cd69|4|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-NOTURNO_24f1cd69|5|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-NOTURNO_24f1cd69|6|existia|A=EM_PARTE|B=NAO_VIU
-NOTA|O261-NOTURNO_31b8cec0|1|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-NOTURNO_31b8cec0|2|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-NOTURNO_31b8cec0|3|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-NOTURNO_31b8cec0|4|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-NOTURNO_31b8cec0|5|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-NOTURNO_31b8cec0|6|existia|A=EM_PARTE|B=EM_PARTE
-NOTA|O261-NOTURNO_691508dd|1|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-NOTURNO_691508dd|2|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-NOTURNO_691508dd|3|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-NOTURNO_691508dd|4|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-NOTURNO_691508dd|5|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-NOTURNO_691508dd|6|existia|A=EM_PARTE|B=EM_PARTE
-NOTA|O261-NOTURNO_e8c314e0|1|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-NOTURNO_e8c314e0|2|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-NOTURNO_e8c314e0|3|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-NOTURNO_e8c314e0|4|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-NOTURNO_e8c314e0|5|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-NOTURNO_e8c314e0|6|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-NOTURNO_06d7ad06|1|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-NOTURNO_06d7ad06|2|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-NOTURNO_06d7ad06|3|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-NOTURNO_06d7ad06|4|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-NOTURNO_06d7ad06|5|existia|A=NAO_VIU|B=NAO_VIU
-NOTA|O261-NOTURNO_06d7ad06|6|existia|A=NAO_VIU|B=NAO_VIU
-NOVO|O261-NOTURNO_469d61ba|A|app/templates/chamados/partials/_card_atendimento.html:90|Cabeçalho e confirmação de escape anunciam D enquanto a pergunta noturna passa a nomear D+1.
-NOVO|O261-NOTURNO_469d61ba|A|app/templates/chamados/partials/modal_fio.html:180|Modal anuncia D junto do texto D+1; a verificação de divergência não compara o dia textual.
-NOVO|O261-NOTURNO_469d61ba|A|app/api/views.py:1168|API entrega data_evento_label D junto da pergunta D+1; apresentação pelo cliente não verificada.
-NOVO|O261-NOTURNO_469d61ba|A|app/chamados/catalogo/query.py:95|Truncar a entrada em dez caracteres altera o tratamento anterior de datas com hora ou sufixo.
-NOVO|O261-NOTURNO_469d61ba|A|app/chamados/catalogo/query.py:100|Consulta à célula ocorre antes do dedup; a dupla geração da fábrica pode cobrar duas consultas por alvo.
-NOVO|O261-NOTURNO_469d61ba|A|app/chamados/services/materializacao.py:404|Ajuste overnight fora do try alcança parse desprotegido de DNA e pode interromper a classificação.
-NOVO|O261-NOTURNO_469d61ba|A|app/chamados/tests/test_noturno_le_o_dia_do_instante.py:128|Selo deixa escapar f-string, porcentagem, format posicional e format_map; perímetro e exclusões limitam a fiscalização.
-NOVO|O261-NOTURNO_469d61ba|A|app/chamados/tests/test_noturno_le_o_dia_do_instante.py:65|Testes não cobrem os seis emissores, identidade persistida nem teto de consultas. [nao verificado]
-NOVO|O261-NOTURNO_469d61ba|A|app/chamados/management/commands/auditar_disputas.py:191|INV4 verifica existência de texto possível, sem conferir o dia do texto já gravado.
-NOVO|O261-NOTURNO_469d61ba|A|app/chamados/services/fio.py:736|Ação confirmar_correcao_pergunta enviada pelo botão não é tratada e cai em Nada a fazer.
-NOVO|O261-NOTURNO_469d61ba|B|app/templates/chamados/partials/_card_atendimento.html:90|Cabeçalho anuncia D imediatamente antes da pergunta noturna que nomeia D+1.
-NOVO|O261-NOTURNO_469d61ba|B|app/templates/chamados/partials/modal_fio.html:180|Modal anuncia D junto do texto D+1 e não verifica divergência com o dia textual.
-NOVO|O261-NOTURNO_469d61ba|B|app/api/views.py:1168|API preserva label D junto da pergunta D+1; apresentação pelo cliente não verificada.
-NOVO|O261-NOTURNO_469d61ba|B|app/chamados/catalogo/query.py:95|Corte nos dez primeiros caracteres muda a normalização de datas com hora mesmo sem colaborador.
-NOVO|O261-NOTURNO_469d61ba|B|app/chamados/services/fabrica_da_celula.py:124|Dupla geração e formatação anterior ao dedup podem acrescentar duas consultas à célula por alvo.
-NOVO|O261-NOTURNO_469d61ba|B|app/chamados/services/materializacao.py:404|Parse inválido de DNA no ajuste overnight pode propagar exceção até a classificação da fila.
-NOVO|O261-NOTURNO_469d61ba|B|app/chamados/tests/test_noturno_le_o_dia_do_instante.py:140|Selo deixa escapar f-string, porcentagem, format posicional, str.format indireto e format_map.
-NOVO|O261-NOTURNO_469d61ba|B|app/chamados/tests/test_noturno_le_o_dia_do_instante.py:60|Testes não exercitam os seis emissores, identidade persistida, padrao nem data com hora. [nao verificado]
-NOVO|O261-NOTURNO_469d61ba|B|app/chamados/management/commands/auditar_disputas.py:74|Auditorias existentes não conferem o dia do DNA no texto gravado.
-NOVO|O261-NOTURNO_469d61ba|B|app/chamados/tests/test_corrigir_pergunta_cega.py:54|Teste de correção simula atribuição e save, sem provar a ação real nem o cenário noturno. [nao verificado]
-NOVO|O261-NOTURNO_469d61ba|B|app/chamados/management/commands/curar_perguntas_em_limbo.py:31|Casamento pelo texto integral e hash da nota podem ser afetados por correção retrospectiva; impacto não verificado.
-NOVO|O261-NOTURNO_24f1cd69|A|app/templates/chamados/partials/_card_atendimento.html:164|Confirmação de escape usa data_evento D enquanto o cabeçalho usa dia_mostrado D+1.
-NOVO|O261-NOTURNO_24f1cd69|A|app/chamados/services/cobranca.py:83|Cobrança push continua reunindo dias por data_evento e pode anunciar D em vez de D+1. [nao verificado]
-NOVO|O261-NOTURNO_24f1cd69|A|app/chamados/services/aviso_pendencia.py:20|Aviso de questionário usa data_evento e conserva D nos retornos da API.
-NOVO|O261-NOTURNO_24f1cd69|A|app/chamados/models.py:2172|Pergunta antiga reutilizada sem atualizar o texto pode receber cabeçalho D+1 calculado pelo DNA atual.
-NOVO|O261-NOTURNO_24f1cd69|A|app/chamados/tests/test_noturno_le_o_dia_do_instante.py:154|Detector acusa placeholder em keyword de mensagem de exceção embora seja prosa.
-NOVO|O261-NOTURNO_24f1cd69|A|app/chamados/tests/test_noturno_le_o_dia_do_instante.py:147|Detector deixa escapar format com expansão de dicionário contendo data.
-NOVO|O261-NOTURNO_24f1cd69|A|app/chamados/tests/test_noturno_le_o_dia_do_instante.py:133|Varredura restrita a chamados não garante exclusividade global do produtor.
-NOVO|O261-NOTURNO_24f1cd69|B|app/templates/chamados/partials/_card_atendimento.html:164|Confirmação usa data_evento D e diverge do cabeçalho calculado por dia_mostrado.
-NOVO|O261-NOTURNO_24f1cd69|B|app/chamados/services/aviso_pendencia.py:20|Avisos de pendência continuam nomeando o questionário por data_evento D.
-NOVO|O261-NOTURNO_24f1cd69|B|app/chamados/tests/test_noturno_le_o_dia_do_instante.py:154|Detector acusa prosa em keyword de exceção e format_map sem campo data.
-NOVO|O261-NOTURNO_24f1cd69|B|app/chamados/tests/test_noturno_le_o_dia_do_instante.py:156|Literal com placeholder data dentro de f-string escapa porque o pai JoinedStr é ignorado.
-NOVO|O261-NOTURNO_24f1cd69|B|app/chamados/tests/test_noturno_le_o_dia_do_instante.py:134|Varredura restrita a chamados e isenção integral de models.py deixam código sem fiscalização.
-NOVO|O261-NOTURNO_31b8cec0|A|app/chamados/models.py:2176|Contexto ISO com hora produz texto bruto, mas dia_mostrado retorna D+1 e contradiz esse texto.
-NOVO|O261-NOTURNO_31b8cec0|A|app/api/views.py:1043|Queryset carrega chamado_destino__celula, mas dia_mostrado acessa p.celula e gera N+1 na API.
-NOVO|O261-NOTURNO_31b8cec0|A|app/chamados/services/aviso_pendencia.py:9|Cobrança e aviso carregam célula individualmente em pergunta_viva porque o queryset não seleciona a relação.
-NOVO|O261-NOTURNO_31b8cec0|A|app/chamados/models.py:2162|Propriedade sem cache repete o cálculo no cabeçalho e nas opções do card.
-NOVO|O261-NOTURNO_31b8cec0|A|app/chamados/tests/test_noturno_le_o_dia_do_instante.py:155|Selo deixa escapar replace por variável e template passado em pergunta; exclusões ampliam os falsos negativos.
-NOVO|O261-NOTURNO_31b8cec0|A|app/chamados/tests/test_noturno_le_o_dia_do_instante.py:150|Selo acusa format com dicionário sem data, format_map alheio e prosa concatenada em exceção.
-NOVO|O261-NOTURNO_31b8cec0|B|app/chamados/models.py:2176|Texto com data ISO e hora não coincide com a reconstrução canônica e recebe cabeçalho D+1 divergente.
-NOVO|O261-NOTURNO_31b8cec0|B|app/api/views.py:1045|API não carrega p.celula antecipadamente e acrescenta uma consulta por pergunta ao serializar o dia.
-NOVO|O261-NOTURNO_31b8cec0|B|app/chamados/services/aviso_pendencia.py:12|Cobrança e aviso também omitem celula do carregamento inicial e a buscam individualmente em pergunta_viva.
-NOVO|O261-NOTURNO_31b8cec0|B|app/chamados/tests/test_noturno_le_o_dia_do_instante.py:151|AST acusa format e format_map que substituem apenas nome e não formatam data.
-NOVO|O261-NOTURNO_31b8cec0|B|app/chamados/tests/test_noturno_le_o_dia_do_instante.py:150|AST deixa escapar replace por variável, alias de format e template em pergunta; models e código externo ficam dispensados.
-NOVO|O261-NOTURNO_691508dd|A|app/chamados/models.py:2178|Ponto final ou data ISO no texto quebra a igualdade canônica e faz o cabeçalho retornar D apesar do texto D+1.
-NOVO|O261-NOTURNO_691508dd|A|app/chamados/tests/test_noturno_le_o_dia_do_instante.py:168|Detector ignora format com dicionário expandido ou chave dinâmica que pode fornecer data.
-NOVO|O261-NOTURNO_691508dd|B|app/chamados/models.py:2178|Acrescentar ponto final ou usar texto ISO faz o cabeçalho voltar a D embora o texto continue nomeando D+1.
-NOVO|O261-NOTURNO_691508dd|B|app/chamados/tests/test_noturno_le_o_dia_do_instante.py:168|Expansão interna de dicionário pode fornecer data e escapar do detector.
-NOVO|O261-NOTURNO_691508dd|B|app/chamados/tests/test_noturno_le_o_dia_do_instante.py:178|Cópia do espelho em outro dicionário escapa porque literal com pai ast.Dict não é reconhecido.
-NOVO|O261-NOTURNO_e8c314e0|A|app/chamados/tests/test_noturno_le_o_dia_do_instante.py:172|Detector acusa format com expansão interna contendo apenas nome, embora não exista formatação de data.
-NOVO|O261-NOTURNO_e8c314e0|B|app/chamados/tests/test_noturno_le_o_dia_do_instante.py:170|Novo all rejeita expansão interna de dicionário mesmo quando receptor e argumentos usam somente nome.
-NOVO|O261-NOTURNO_06d7ad06|A|app/chamados/tests/test_noturno_le_o_dia_do_instante.py:166|Filtro por substring exata deixa escapar campos válidos data!s e data: na formatação.
-NOVO|O261-NOTURNO_06d7ad06|B|app/chamados/tests/test_noturno_le_o_dia_do_instante.py:166|Filtro deixa escapar data!s e data com especificador de formato, permitindo outro produtor de data.
-
-_622 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_632 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._

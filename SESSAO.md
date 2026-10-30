@@ -6,10 +6,16 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 30/10/2026 17:14:07.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (2.0 MB). Acoes na janela: **70**.
+**Medido em 30/10/2026 17:19:07.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (2.2 MB). Acoes na janela: **76**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 17:17:27 | Bash |  | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/7f745450-f1b3-4ceb-8723-ca0f6ca88a5f/scratchpad; W=/home/ronald/wt-cal-hoje-3010-1353; cd $W && for f in app/colaboradores/services/calendario.py app/ponto/turnos.py; do cp $f $S/$(basename $f).curado; git show HEAD:$f > $f; done; cd /home/ronald/saas-hasner && L=logs/calendario_hoje; T="colaboradores.tests.test_calendario_hoje_nao_e_falta ponto.test ...` |
+| 17:17:18 | Bash |  | `cd /home/ronald/wt-cal-hoje-3010-1353/app && sed -i 's/ from escala.services.celulas import celulas_do_periodo/ from escala.alimentacao import celulas_do_periodo/' ponto/tests/test_c1_dias_encerrados.py && cd /home/ronald/saas-hasner && bin/trava_teste.sh --quem` |
+| 17:17:14 | Bash |  | `cd /home/ronald/wt-cal-hoje-3010-1353/app && grep -n "STATUS\\|'pendente'" ponto/models.py \| grep -i -A0 "ausen\\|pendente" \| head -5; python3 - <<'EOF' p='colaboradores/tests/test_calendario_hoje_nao_e_falta.py' s=open(p).read() anc=" @freeze_time('2026-10-16 15:00:00')\n def test_RED_dia_passado_sem_fim_previsto_isento_nao_e_previsto" assert s.count(anc)==1 novo=''' @freeze_time('2026-10-16 15 ...` |
+| 17:16:56 | Bash |  | `cd /home/ronald/wt-cal-hoje-3010-1353/app && sed -n 33,40p colaboradores/tests/test_calendario_conta_ausencia.py` |
+| 17:16:53 | Bash |  | `cd /home/ronald/wt-cal-hoje-3010-1353/app && grep -n "objects.create\\|^from\\|^import" colaboradores/tests/test_calendario_conta_ausencia.py \| head -20; grep -n "noturno\s*=\\|def _colab\\|DATA =" ponto/tests/test_juiz_dia_encerrado.py \| head` |
+| 17:16:42 | Bash |  | `cd /home/ronald/wt-cal-hoje-3010-1353/app && sed -n 2068,2082p ponto/turnos.py; grep -rln "cobertura\\|AusenciaRegistro\\|Ausencia.objects.create" colaboradores/tests/ \| head -5; cat ponto/tests/test_c1_dias_encerrados.py \| head -60` |
 | 17:12:33 | Bash |  | `cd /home/ronald/saas-hasner/logs/o261v && until grep -q '^rc=' desenho_qml.run 2>/dev/null; do /usr/bin/sleep 20; done; tail -1 desenho_qml.run; wc -c desenho_qml.txt` |
 | 17:12:26 | Bash |  | `cd /home/ronald/saas-hasner && mkdir -p logs/o261v && cat > logs/o261v/desenho_qml.q <<'EOF' Obra O261-V-FASE-NA-LISTA (volta ao construtor). Arvore: o hash informado (main). Copia anterior REPROVADA (nao e esta arvore): /home/ronald/wt-vfase-3010-0821, so para consulta do que ja foi tentado. Contexto do aval (Ronald 30/10 08:1x e 10:0x): o dia de 12x36 com a fase deslocada (trabalho previsto sem  ...` |
 | 17:12:11 | Bash |  | `cd /home/ronald/saas-hasner && sed -n '68,69p' app/docs/RELATO.md; cd /home/ronald/wt-vfase-3010-0821 && git log --oneline -5 && git status --short \| head` |
