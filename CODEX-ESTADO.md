@@ -1,7 +1,46 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **30/10/2026 02:53** · publicado em **30/10/2026 02:54** (UTC-3)
+> Ultima resposta processada: **30/10/2026 02:59** · publicado em **30/10/2026 02:59** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 30/10 02:59 · sessao a88b4c09a206 · - · - · origem=Ronald (tmux)
+
+Achado: **regressão latente na ordem do pré-requisito da tranca**. A porta aceita `data_evento=NULL` e deriva o dia do contexto, mas consulta C7 antes de datar a pergunta; C7 retorna `False` quando `data_evento` é `None`. (`app/chamados/reconciliador.py:1424`, `app/chamados/reconciliador.py:1451`, `app/chamados/juizes.py:887`)
+
+Reprodução por fluxo estático: intervalo morto por `validada_em`, contexto apontando para dia trancado, competência não entregue, único `batida_ausente` encerrado do dia. C6 retorna morto; o novo HIST casa intervalo e chama a costura, que data e salva a pergunta. A costura só confere correspondência do dia; a lavra não veta tranca. (`app/chamados/juizes.py:1006`, `app/chamados/reconciliador.py:1463`, `app/chamados/reconciliador.py:1500`, `app/chamados/services/fio.py:788`, `app/chamados/juizes.py:1721`, `app/chamados/veredito_lavrado.py:211`)
+
+**Lacuna no R8:** o cenário comum sempre preenche `data_evento=dia`; assim, o teste cobre a pergunta já datada, sem alcançar o fallback do contexto. O modelo permite `NULL`, e testes antigos exercitam perguntas sem data com contexto datado. (`app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:94`, `app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:183`, `app/chamados/models.py:1856`, `app/chamados/tests/test_reconciliar_pergunta_orfa.py:35`, `app/chamados/tests/test_reconciliar_pergunta_orfa.py:94`)
+
+A lavra não impede a escrita: até exceção do juiz vira `indeterminado`, seguida de atribuição dos campos e retorno à costura que salva. (`app/chamados/veredito_lavrado.py:218`, `app/chamados/veredito_lavrado.py:227`, `app/chamados/services/fio.py:798`)
+
+Ocorrência atual na frota: **[não verificado]**. A documentação local só registra zero perguntas sem data em 03/10. (`app/chamados/services/fio.py:780`)
+
+RED/GREEN executado desta revisão: **[não verificado]**; não executei banco nem comandos de escrita. **[não verificado]** [nao verificado]
+
+## 30/10 02:58 · sessao fe2132c9a81c · - · - · origem=Ronald (tmux)
+
+Achei um defeito demonstrável no memo: ele sobrevive à pergunta e não invalida quando K6 muda. A chave é somente `dia`; a segunda consulta na mesma instância retorna o bool anterior sem consultar `competencia_entregue` novamente (`app/chamados/reconciliador.py:702-708`).
+
+- **Cron:** cada colaborador chega pelo `iterator()`, porém a mesma instância percorre todas as suas perguntas; portanto o memo dura a passagem do colaborador, não uma pergunta (`app/chamados/management/commands/reconciliar_chamados.py:51-56`; `app/chamados/reconciliador.py:1380-1383`).
+- **Evento:** o laço percorre motivos e passa sempre `disputa.colaborador` para reatar; o `atomic` local delimita savepoint, sem reler/invalidar o memo (`app/chamados/services/disputa_emissao.py:292`; `app/chamados/services/disputa_emissao.py:404-410`).
+- **Mudança da fonte:** registrar cria `ExportacaoDominio`; invalidar altera `invalidada_em`; K6 consulta essas linhas e depende da vigência atual (`app/folha/models.py:154-188`; `app/folha/export.py:569-575`).
+- **Não há serialização comum com o export:** o lock do nascimento é sobre `Colaborador`, enquanto `ExportacaoDominio.registrar` apenas consulta e cria ED; a view chega diretamente a essa porta (`app/chamados/models.py:666-669`; `app/folha/models.py:174-188`; `app/folha/views.py:295-300`).
+- **Consequência:** depois de cachear aberta, um export concluído entre duas consultas do mesmo dia não impede a segunda pergunta de entrar no alcance novo. O c2 não possui outra guarda de export; isso é deliberado para o comportamento anterior, mas deixa a cerca nova dependente do memo velho (`app/chamados/reconciliador.py:703-708`; `app/chamados/reconciliador.py:754-755`; `app/chamados/reconciliador.py:788-795`). O inverso, invalidar o TXT depois de cachear entregue, mantém o alcance novo indevidamente fechado (`app/folha/models.py:154-162`; `app/folha/export.py:572`; `app/chamados/reconciliador.py:703-708`).
+
+Executei somente o corpo real da função extraído por AST, em memória, com `python3 -B` e fonte K6 falsa: resultado `primeira=False; K6 atualizado=True; segunda=False; chamadas_K6=1`. Não houve escrita de arquivo nem acesso ao banco nesse ensaio; ele confirma a retenção descrita nas linhas 702–708. Ocorrência em produção ou ensaio concorrente com banco: **[não verificado]**. [nao verificado]
+
+Os testes R4 fixam o estado exportado antes da primeira consulta; a idempotência repete a mesma pergunta sem alterar o export. Não cobrem a mudança K6 entre perguntas na mesma instância (`app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:197-209`; `app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:225-247`).
+
+Não encontrei export serial chamado pelo próprio laço; o caminho comprovado é a mudança externa/concorrente do registro enquanto a instância continua em uso (`app/chamados/reconciliador.py:1380-1386`; `app/chamados/services/disputa_emissao.py:389-416`; `app/folha/views.py:295-300`).
+
+## 30/10 02:58 · sessao e0fd15b18b59 · - · - · origem=Ronald (tmux)
+
+- **Segundo juiz: nada encontrado.** O alcance consulta `janela_atual` e `competencia_entregue`; vitalidade/tranca e correspondência histórica usam os juízes existentes. (`app/chamados/reconciliador.py:704-718`, `:1451-1464`; `app/chamados/juizes.py:1589-1600`)
+- **Segundo escritor fora da porta: nada encontrado.** O c2 conserva `ChamadoColaborador.abrir` e `reapontar_resolvedora`; o HIST conserva `reapontar_resolvedora` e S128. (`app/chamados/reconciliador.py:822`, `:862`, `:1500-1506`)
+- **Relógio fora da borda: nada novo encontrado.** O diff usa o dia recebido; data, juiz e lavra continuam na ordem da porta. (`app/chamados/reconciliador.py:698-707`, `:1431-1435`; `app/chamados/services/fio.py:788-800`)
+- **Derivação paralela de fonte única: nada novo encontrado.** O HIST novo lê `motivos_atendidos`, e o c2 alargado lê a constante canônica do grupo DIA. Os dois chamadores de produção restringem o universo a esse grupo. (`app/chamados/reconciliador.py:748-755`, `:1342`, `:1360-1365`, `:1463`; `app/chamados/services/disputa_emissao.py:404-409`)
+- **Ordem de trava: nenhuma inversão nova identificada.** O diff não introduz aquisição de trava; o nascimento continua pela porta que trava o colaborador. (`app/chamados/reconciliador.py:822`; `app/chamados/models.py:669`)
+- **Pouso antes do pré-requisito: [não verificado].** O corte exige B antes de C, remedida pela mesma sonda, lista nomeada antes do código e parada se superar 343 ou surgir classe nova. O RELATO ainda descreve a obra como em curso e remete às sondas; esses logs não estão disponíveis nesta cópia. (`app/docs/CORTES.md:399`; `app/docs/RELATO.md:3`, `:18`, `:41`; [não verificado] quanto às provas externas)
 
 ## 30/10 02:53 · sessao b57be1a9a722 · ORCAMENTO · verificador · origem=Code
 
@@ -465,66 +504,4 @@ O teste existente do JSON passa a exigir a chave nova, mas não certifica os cam
 
 A varredura AST de vitalidade retornou zero ofensores fora da allowlist; a exceção nova é explícita e compatível com filtro de entrada seguido do juiz. Os testes agora injetam `HOJE/AGORA`; não sustento nova reprovação por relógio solto. Suite com banco, concorrência real e aplicação da frota: **[não verificado]**. (`app/chamados/tests/test_contract_leitores_vitalidade.py:33`, `app/chamados/tests/test_contract_leitores_vitalidade.py:300`, `app/chamados/tests/test_o261_julgamento_desfaz_carimbo.py:34`, `app/chamados/tests/test_o261_julgamento_desfaz_carimbo.py:83`)
 
-## 30/10 00:21 · sessao d8722e009888 · - · - · origem=Ronald (tmux)
-
-A centralização da elegibilidade satisfaz o padrão do selo de vitalidade: a allowlist é explícita, o filtro só seleciona candidatos e tanto a porta como o vigia consultam `pergunta_viva` antes de decidir. Não encontrei contorno por variável local nesta volta. (`app/chamados/tests/test_contract_leitores_vitalidade.py:16`, `app/chamados/tests/test_contract_leitores_vitalidade.py:33`, `app/chamados/services/relavra_via.py:170`, `app/chamados/services/relavra_via.py:221`, `app/chamados/services/vigia_fio.py:398`)
-
-O selo novo de custo é incompleto: mede a porta isolada com perguntas **validadas**, para as quais C6 retorna imediatamente; não mede julgamento por batida nem custo de C6 em candidatas vivas. O selo existente identifica precisamente o risco de voltar a julgar perguntas em cada batida. Classe: **selo sem mordida no caminho real**. (`app/chamados/tests/test_o261_julgamento_desfaz_carimbo.py:183`, `app/chamados/tests/test_o261_julgamento_desfaz_carimbo.py:191`, `app/chamados/juizes.py:1006`, `app/ponto/tests/test_selo_chokepoint_escrita.py:5`)
-
-Matriz estática dos testes novos; execução não verificada. [não verificado] [nao verificado]
-
-| Linha no arquivo novo | Sem mudança |
-|---|---|
-| 88 — julgamento limpa viva | RED funcional: carimbo permanece. (`app/chamados/tests/test_o261_julgamento_desfaz_carimbo.py:98`) |
-| 102 — morta conserva | VERDE: controle negativo. (`app/chamados/tests/test_o261_julgamento_desfaz_carimbo.py:111`) |
-| 113 — identidade conserva | VERDE: controle negativo. (`app/chamados/tests/test_o261_julgamento_desfaz_carimbo.py:119`) |
-| 122 — idempotência | RED funcional: primeira passada precisa curar. (`app/chamados/tests/test_o261_julgamento_desfaz_carimbo.py:128`) |
-| 135 — fechada conserva | VERDE: caminho anterior não chega à porta. (`app/chamados/tests/test_o261_julgamento_desfaz_carimbo.py:143`) |
-| 148 — decisão humana posterior | RED funcional: porta antiga escreve sobre instância velha. (`app/chamados/tests/test_o261_julgamento_desfaz_carimbo.py:154`) |
-| 161 — fecha após coleta | RED de interface: argumento novo; com assinatura preservada, morde a retirada do filtro de fechada. (`app/chamados/tests/test_o261_julgamento_desfaz_carimbo.py:170`) |
-| 175 — coleta identidade | RED de interface; sem integração, com helper novo mantido, continua verde. (`app/chamados/tests/test_o261_julgamento_desfaz_carimbo.py:180`) |
-| 183 — custo constante | RED de interface; cenário funcional do chokepoint ausente. (`app/chamados/tests/test_o261_julgamento_desfaz_carimbo.py:197`) |
-| 208 — vigia conta e zera | RED de import; mantendo o vigia e retirando integração, RED funcional na contagem final. (`app/chamados/tests/test_o261_julgamento_desfaz_carimbo.py:209`, `app/chamados/tests/test_o261_julgamento_desfaz_carimbo.py:213`) |
-| 215 — vigia exclui identidade/morta | RED de import; controle negativo com função existente. (`app/chamados/tests/test_o261_julgamento_desfaz_carimbo.py:216`) |
-
-O risco temporal existe na escrita: `venc` é calculado, mas a coleta encaminha todos os motivos; uma saída ainda pendente pode perder o carimbo se outro marco já tornou a célula `furo`, porque C6 retorna viva pelo veredito antes de examinar pendências. A fonte do defeito é anterior, em C6; este diff passa a escrever sua classificação. Não afirmaria nova cobrança: `estado` e `q_vivas` já expunham essa pergunta antes da queda. (`app/chamados/services/fabrica_da_celula.py:85`, `app/chamados/services/fabrica_da_celula.py:101`, `app/chamados/juizes.py:869`, `app/chamados/juizes.py:1054`, `app/chamados/models.py:2111`, `app/chamados/models.py:2256`)
-
-Os testes injetam datas no julgamento; a lavra da fixture ainda usa relógio real por omissão, mas não encontrei dependência do resultado nesse instante que sustente achado de relógio solto. (`app/chamados/tests/test_o261_julgamento_desfaz_carimbo.py:34`, `app/chamados/tests/test_o261_julgamento_desfaz_carimbo.py:65`, `app/chamados/tests/test_o261_julgamento_desfaz_carimbo.py:83`, `app/ponto/portas/celula.py:694`)
-
-## 30/10 00:21 · sessao 30f1e1df3cae · - · - · origem=Ronald (tmux)
-
-Efeitos da cura:
-
-- No novo caminho, disputa fechada fica excluída na coleta e na releitura travada; portanto não há reabertura por essa chamada. A porta limpa somente `materializada_em`, `materializada_por` e `via_resolucao`, preservando resposta/validação e gravando evento. `app/chamados/services/fabrica_da_celula.py:103`, `app/chamados/services/fabrica_da_celula.py:146`, `app/chamados/services/relavra_via.py:221`, `app/chamados/services/relavra_via.py:231`.
-- O `save()` agenda o examinador de beco; ele consulta `pode_fechar()` e não fecha a disputa com pergunta viva. Não identifiquei efeito indevido nesse callback. `app/chamados/signals.py:191`, `app/chamados/signals.py:202`, `app/chamados/services/becos.py:33`, `app/chamados/services/becos.py:69`.
-- Não existe push direto na porta. O alerta diário já selecionava todas as disputas abertas, independentemente do carimbo. A cobrança com prazo de 48h continua dependendo de `cobrar_colaborador`. `app/chamados/services/relavra_via.py:227`, `app/ponto/management/commands/alertar_disputas_pendentes.py:33`, `app/ponto/management/commands/alertar_disputas_pendentes.py:59`, `app/chamados/services/cobranca.py:140`, `app/chamados/services/cobranca.py:176`.
-- Há efeito indireto possível: a pergunta órfã passa a satisfazer a elegibilidade do reatador; no signal da batida o reconciliador roda depois do cartório, podendo costurar/criar chamado ainda no ato. O c2 aplica situação ativa, horizonte, isenção, ausência, protestos cobráveis e veto da célula; não encontrei emissão indevida causada pela limpeza. `app/chamados/reconciliador.py:1317`, `app/ponto/signals.py:207`, `app/ponto/signals.py:215`, `app/chamados/reconciliador.py:1265`, `app/chamados/reconciliador.py:1411`, `app/chamados/reconciliador.py:723`, `app/chamados/reconciliador.py:743`, `app/chamados/reconciliador.py:753`, `app/chamados/reconciliador.py:770`.
-
-Lacuna concreta de alcance/frota:
-
-**Célula já estável continua com carimbo sem lastro.** Estado: célula passada acusa, pergunta sem resposta está materializada e viva, disputa aberta, insumos iguais à impressão gravada. Saída: cartório pula a célula; o novo desfazedor nunca roda. O lote também não salva: seu conjunto `ja` elimina perguntas existentes, e o caminho do fio mudo pula a pergunta que C6 já reconhece viva. Classe: **cura prospectiva sem cobertura da frota / origem não alcançada**. É incompletude se esta entrega pretende fechar o literal “escritor e frota”; aplicação externa da frota permanece [não verificado]. `app/ponto/services/cartorio.py:1092`, `app/ponto/services/cartorio.py:754`, `app/ponto/services/cartorio.py:769`, `app/chamados/management/commands/disparar_perguntas_competencia.py:124`, `app/chamados/management/commands/disparar_perguntas_competencia.py:129`, `app/chamados/management/commands/disparar_perguntas_competencia.py:163`.
-
-Quem cobra o resíduo: o novo `materializada_viva` conta pelo Q compartilhado e C6; não aplica cura nem alarma. O esperado zero vai ao painel, que compara dinamicamente as chaves do carimbo. As órfãs também aparecem em I8; resolvedoras inválidas carimbadas podem aparecer em I8bc/I8bcx. `app/chamados/services/vigia_fio.py:395`, `app/chamados/services/vigia_fio.py:399`, `app/chamados/services/vigia_fio.py:404`, `bin/fio_estado.py:69`, `bin/fio_estado.py:105`, `app/chamados/management/commands/auditar_invariantes_chamados.py:854`, `app/chamados/management/commands/auditar_invariantes_chamados.py:904`, `app/chamados/management/commands/auditar_invariantes_chamados.py:940`.
-
-Outro motivo de mudança do juiz: C6 lê tranca dinamicamente, enquanto `reabrir_periodo` só desfaz carimbos da via `competencia_trancada`, dentro de `cartorio.calado()`. Um carimbo de outra via pode voltar a ser vivo ao destrancar sem passar pela nova cura; será medido pelo novo vigia e dependerá de julgamento futuro/aplicação pela porta. `app/chamados/juizes.py:1008`, `app/chamados/juizes.py:902`, `app/ponto/services/fechamento.py:1413`, `app/chamados/services/competencia_trancada.py:243`, `app/chamados/services/competencia_trancada.py:244`.
-
-## 30/10 00:20 · sessao bbae8a8379e4 · - · - · origem=Ronald (tmux)
-
-Achado procedente: **o custo novo ainda não está selado no caminho da batida**. A coleta reaproveita uma query, mas cada candidata executa `atomic`, releitura travada e C6; cada cura também grava pergunta e trilha (`app/chamados/services/fabrica_da_celula.py:101`, `app/chamados/services/fabrica_da_celula.py:145`, `app/chamados/services/relavra_via.py:217`, `app/chamados/services/relavra_via.py:225`, `app/chamados/services/relavra_via.py:234`).
-
-Cenário: dia rejulgado com N perguntas carimbadas elegíveis → a batida faz trabalho proporcional a N e, havendo cura, registra um callback adicional por pergunta. O `save` dispara `_becos_post_save_pergunta`, que registra `transaction.on_commit`; o selo existente cobra também a contagem exata desses registros (`app/chamados/signals.py:191`, `app/chamados/signals.py:202`, `app/ponto/tests/test_selo_chokepoint_escrita.py:169`, `app/ponto/tests/test_selo_chokepoint_escrita.py:207`). **Classe: selo sem mordida / custo no chokepoint.**
-
-O teste novo mede diretamente a porta, usando perguntas já validadas; C6 retorna imediatamente nesse estado. Ele exige `custo(3)==3*custo(1)`, portanto certifica crescimento linear, sem medir a batida, uma cura, sua trilha ou seus callbacks (`app/chamados/tests/test_o261_julgamento_desfaz_carimbo.py:183`, `app/chamados/tests/test_o261_julgamento_desfaz_carimbo.py:191`, `app/chamados/tests/test_o261_julgamento_desfaz_carimbo.py:197`, `app/chamados/tests/test_o261_julgamento_desfaz_carimbo.py:200`, `app/chamados/juizes.py:1006`). As três perguntas são montadas para colaboradores distintos, pois cada `_cenario` cria outro colaborador (`app/chamados/tests/test_o261_julgamento_desfaz_carimbo.py:55`, `app/chamados/tests/test_o261_julgamento_desfaz_carimbo.py:57`, `app/chamados/tests/test_o261_julgamento_desfaz_carimbo.py:192`).
-
-As fixtures do selo existente criam perguntas sem `materializada_em`, logo não exercitam a cura nova (`app/ponto/tests/test_selo_chokepoint_escrita.py:226`, `app/ponto/tests/test_selo_chokepoint_escrita.py:237`). A cerca declara expressamente que impede reintroduzir o juiz por pergunta na marcação; a própria cadeia de signals documenta uma tentativa anterior removida pelo custo nesse caminho (`app/ponto/tests/test_selo_chokepoint_escrita.py:5`, `app/ponto/signals.py:94`).
-
-Chamadores e alcance:
-
-- **Batida:** `registrar_batida` cria a batida; o signal síncrono julga véspera e data local, chegando à fábrica somente para datas julgadas na passada (`app/ponto/registro_batida.py:157`, `app/ponto/signals.py:108`, `app/ponto/signals.py:131`, `app/ponto/signals.py:92`, `app/ponto/services/cartorio.py:768`).
-- **Cron de hora:** roda a cada dez minutos e chama `julgar_celula(..., teto_de_hoje=True)`; este encaminha ao mesmo `julgar_colab` (`app/config/crons.py:348`, `app/ponto/services/vigia_de_hora.py:130`, `app/ponto/services/cartorio.py:1560`).
-- **Lote do cartório:** cron `processar_cartorio --apply` reúne células passadas por colaborador e chama `julgar_colab` (`app/config/crons.py:597`, `app/ponto/management/commands/processar_cartorio.py:59`, `app/ponto/management/commands/processar_cartorio.py:65`).
-- **Lote de perguntas:** `disparar_perguntas_competencia` tem caminho próprio; seu primeiro universo continua retirando todo fato com pergunta existente, portanto não resolve o passivo carimbado por esse universo (`app/chamados/management/commands/disparar_perguntas_competencia.py:124`, `app/chamados/management/commands/disparar_perguntas_competencia.py:129`).
-
-Não executei testes nem medi valores absolutos de queries, em respeito à restrição de somente leitura. [não verificado] [nao verificado]
-
-_324 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_327 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
