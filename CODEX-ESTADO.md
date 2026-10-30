@@ -1,529 +1,362 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **30/10/2026 14:32** · publicado em **30/10/2026 14:32** (UTC-3)
+> Ultima resposta processada: **30/10/2026 14:38** · publicado em **30/10/2026 14:38** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
 
-## 30/10 14:32 · sessao ae95044256e7 · - · - · origem=Ronald (tmux)
+## 30/10 14:38 · sessao e11b54d6c877 · - · - · origem=Ronald (tmux)
 
-Confirmado estaticamente: **o teste novo de idempotência falha com relógio correndo**, na comparação de todas as colunas em `app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:264`.
+Nenhum defeito encontrado na guarda do item (2), por inspeção:
 
-A segunda chamada percorre:
+- A chamada passa `logger_nome`, `operacao`, `exc` e `pergunta_id` como contexto, compatíveis com `registrar_engolido(logger_nome, operacao, exc, **contexto)`. O registrador incrementa o contador e emite log. (`app/chamados/services/validacao.py:834`; `app/core/observ.py:73`; `app/core/observ.py:75`; `app/core/observ.py:79`)
+- Exceção em `_ts_tipo_do_plantio` devolve `LOTE_B` com `sem_instante_do_plantio=True`; a fila armazena esse detalhe no grupo B, continua a iteração e inclui o item nas contagens. (`app/chamados/services/validacao.py:830`; `app/chamados/services/validacao.py:835`; `app/chamados/services/validacao.py:885`; `app/chamados/services/validacao.py:887`; `app/chamados/services/validacao.py:895`)
+- A pergunta fica fora de `refs_lote`, formado exclusivamente por A; a execução em lote também recusa classes diferentes de A. (`app/chamados/services/validacao.py:897`; `app/chamados/services/validacao.py:681`)
+- A guarda captura exceções, não o retorno contratual `(None, tipo)`; este continua pulado no laço. Isso corresponde ao comportamento explicitamente preservado no código, não demonstra regressão do delta. (`app/chamados/services/materializacao.py:320`; `app/chamados/services/validacao.py:825`; `app/chamados/services/validacao.py:837`)
 
-- O derivador exclui o chamado pela própria pergunta pendente (`app/chamados/services/disputa_emissao.py:209`).
-- c1 recusa intervalo (`app/chamados/reconciliador.py:363`); c2 encontra chamado vivo (`:793`) e reutiliza-o (`app/chamados/models.py:670`, `:688`).
-- c2 reaponta novamente (`app/chamados/reconciliador.py:871`).
-- A porta relavra e salva `julgado_em`, sem guarda de destino já igual (`app/chamados/services/fio.py:797`).
-- A lavra atribui `timezone.now()` incondicionalmente (`app/chamados/veredito_lavrado.py:228`), alterando o registro comparado pelo teste.
+Execução real de `fila_validar_classificada` e logs produzidos: [nao verificado].
 
-**Ressalva relevante:** o runner pode congelar o relógio quando `CONGELAR_EM` está definido; nesse modo a comparação pode passar apesar da reescrita (`app/core/runner_quarentena.py:93`). O arquivo novo não congela nem avança o relógio (`app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:249`).
+## 30/10 14:37 · sessao e14a9ebf73d4 · BENCH-O261-V-FASE · verificador · origem=Code
 
-Classificação sugerida: teste novo incompatível com o código atual / prova de idempotência vulnerável ao relógio congelado. Execução efetiva e histórico de RED/pouso: [não verificado]. [nao verificado]
+**Resta um achado procedente, P2: o rótulo C10 promete falta onde o leitor apenas identifica ausência de turno completo.** A frase “cada dia de trabalho sem batida vira falta” excede o resultado consumido e viola LEI-AKITA 8, “rótulo diz o que a conta faz”. (`app/escala/services/cadastro_realidade.py:114`; `app/escala/services/fase_12x36.py:175`; `CLAUDE.md:35`)
 
-## 30/10 14:32 · sessao 0baf4c5a67c5 · - · - · origem=Ronald (tmux)
+Contraexemplo por inspeção: num vínculo que alcance os dois pisos, um dia previsto sem batidas, mas justificado, pode integrar `trabalho_mudo`; o leitor consulta a programação e a presença de turno completo, enquanto o motor exclui datas justificadas das faltas. Portanto, a lista pode anunciar falta que o cálculo não atribui. A cura cabe no texto — descrever “dias de trabalho sem turno completo” — preservando regras e contagens. (`app/escala/services/fase_12x36.py:181`; `app/escala/services/fase_12x36.py:187`; `app/escala/models.py:1071`; `app/ponto/motor_calculo_v2.py:2538`)
 
-Leitura estática; testes e mutantes não executados. [não verificado] [nao verificado]
+As duas triagens procedem:
 
-**Achados na classe selo/RED:**
+- **24x48 apresentado como 12x36: tratado.** O rótulo agora nomeia ambos, e o teste exige os ciclos definidos pelo leitor. (`app/escala/services/cadastro_realidade.py:113`; `app/escala/services/fase_12x36.py:29`; `app/escala/tests/test_o261v_fase_na_lista.py:116`)
+- **Dívida da ata: real, separável desta alteração aditiva.** O pareamento continua sem alimentação da ata; o destino `turnos_do_colab` está inventariado. As novas chaves apenas expõem vínculo e datas já contadas. (`app/escala/services/fase_12x36.py:175`; `app/ponto/turnos.py:1199`; `app/core/juizes.py:905`; `app/escala/services/fase_12x36.py:192`; `app/escala/services/fase_12x36.py:202`)
 
-1. **A bateria não distingue o C6 de um segundo juiz por `validada_em`.** A fábrica define todas as vivas com `validada_em=None` e todas as mortas com o campo preenchido; os únicos casos mortos são R3 e R6. Portanto, substituir as novas consultas ao C6 por `p.validada_em is None` preserva os resultados previstos destes cenários, por inspeção. Isso deixa sem proteção mortes por tranca, vias ou célula, embora o C6 possua esses degraus. Fontes: `app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:92`, `:150`, `:159`; `app/chamados/reconciliador.py:712`, `:1438`; `app/chamados/juizes.py:1008`, `:1039`, `:1054`. Execução do mutante: [não verificado].
+No restante, conferi reutilização do leitor, mesma guarda dos vizinhos, filtro empresarial antes da contagem, ação pela tela existente e compartilhamento da lista entre HTML/PDF. Não identifiquei outra falha nesses caminhos. (`app/escala/services/cadastro_realidade.py:338`; `app/escala/services/cadastro_realidade.py:595`; `app/escala/services/cadastro_realidade.py:629`; `app/escala/services/cadastro_realidade.py:491`; `app/escala/views.py:490`)
 
-2. **A bateria não sela a localização da cura no c2.** O helper chama apenas `reatar_pergunta_orfa`; o outro ponto de entrada testado é o cron. Não existe chamada direta ao `reemitir_chamado_do_dia` no arquivo. Assim, uma implementação que preserve a antiga recusa na porta c2 e faça o alargamento apenas no wrapper pode satisfazer estes cenários sem cumprir o contrato da própria porta. Fontes: `app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:95`, `:209`; contrato da porta: `app/chamados/reconciliador.py:715`, `:719`. Execução desse mutante: [não verificado].
+Os testes contêm casos adversariais com leitor retornando um achado e nenhum achado. Execução da suíte, histórico RED/verde e reprodução dos quatro dias do col451: **[nao verificado]**. (`app/escala/tests/test_o261v_fase_na_lista.py:180`; `app/escala/tests/test_o261v_fase_na_lista.py:192`)
 
-3. **O cadastro dos intervalos usa chaves diferentes das consumidas pelo juiz.** A fixture grava `ii`/`fi`, enquanto o juiz do marco procura `hii`/`hfi`; sem essas horas, `fato_do_marco_no_espelho` devolve `None`. Os casos de intervalo provam o comportamento com veredito genérico `furo`, mas não o vínculo com a lâmpada específica do intervalo. Fontes: `app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:66`, `:67`; `app/chamados/juizes.py:823`, `:849`, `:863`, `:1054`.
+## 30/10 14:37 · sessao a6da4c562bd0 · BENCH-O261-V-FASE · verificador · origem=Code
 
-**Sobre RED com a cura removida:**
+**Encontrei um achado novo procedente: a C10 rotula como 12x36 um universo que também contém 24x48.** O leitor aceita ambos os ciclos, o adaptador incorpora todos os resultados e a descrição fixa afirma “12x36 com a fase deslocada”. Essa descrição também alimenta o contador. Viola LEI-AKITA 8: rótulo deve corresponder ao universo contado. (`app/escala/services/fase_12x36.py:29`, `app/escala/services/fase_12x36.py:106`, `app/escala/services/cadastro_realidade.py:337`, `app/escala/services/cadastro_realidade.py:112`, `app/escala/services/cadastro_realidade.py:677`, `CLAUDE.md:35`)
 
-- R4 exportada, R4b, R5 e R6 conservam o comportamento antigo e passam por inspeção mesmo sem a cura; isso é compatível com seu papel de controles negativos. R6 “MORDE” protege contra alargamento indevido às mortas, mas não demonstra RED contra o ancestral. Fontes: `app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:141`, `:148`, `:169`, `:182`. Comparação executada contra o ancestral: [não verificado].
-- R1 exige destino vivo ou recusa; R2 exige criação e costura; R3 exige costura e materialização; o controle R4 exige emissão sem exportação. Não identifiquei vacuidade equivalente nessas asserções contra a remoção integral da cura. Fontes: `app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:117`, `:133`, `:161`, `:178`.
+**[P2] Contraexemplo estático:** 24x48 com âncora em 01/09, janela 28/08–10/09 e plantões completos deslocados um dia pode produzir cinco trabalhos sem turno e quatro folgas com turno, ultrapassando o piso três dos dois lados. Portanto, o ramo é alcançável; não é apenas uma constante sobrando. A correção é alinhar a descrição ao universo do leitor, preservando a autoridade existente. O teste novo só cria 12x36. (`app/escala/models.py:1264`, `app/escala/services/fase_12x36.py:31`, `app/escala/services/fase_12x36.py:179`, `app/escala/services/fase_12x36.py:187`, `app/escala/tests/test_o261v_fase_na_lista.py:70`)
 
-**Limites do selo existente:**
+Quanto às triagens anteriores:
 
-- O selo do chokepoint mede queries e callbacks; seu cenário explícito de três perguntas já nasce com `chamado_destino=dest`, portanto esse cadastro não exercita a nova seleção HIST da órfã. Fontes: `app/ponto/tests/test_selo_chokepoint_escrita.py:207`, `:226`, `:239`, `:258`. Uma ultrapassagem efetiva de teto por O261-C não foi demonstrada. [não verificado]
-- A exclusividade da escrita tem selo estrutural próprio indicado pela porta; a bateria nova de resultado não substitui esse selo. A implementação atual continua chamando `reapontar_resolvedora` tanto no HIST quanto no c2. Fontes: `app/chamados/services/fio.py:743`, `:750`, `:785`; `app/chamados/reconciliador.py:856`, `:1487`.
+- **Vínculo sob cabeçalho de outro: procede a correção de identificação.** `ec_id` vem do vínculo examinado e chega ao payload e ao detalhe exibido. O teste cobra ambos, embora não reproduza dois vínculos diferentes para o mesmo colaborador. (`app/escala/services/fase_12x36.py:192`, `app/escala/services/cadastro_realidade.py:340`, `app/escala/services/cadastro_realidade.py:344`, `app/templates/escala/cadastro_x_realidade.html:28`, `app/escala/tests/test_o261v_fase_na_lista.py:109`)
+- **Falha do leitor: procede que permanece e é compartilhada.** C10 captura, registra e segue sem indicador de leitura incompleta; os vizinhos citados fazem o mesmo. Isso confirma a dívida transversal, não uma correção do silêncio. O próprio teste exige C10 ausente quando o leitor falha. A efetiva inscrição dessa dívida na fila está **[nao verificado]**. (`app/escala/services/cadastro_realidade.py:550`, `app/escala/services/cadastro_realidade.py:567`, `app/escala/services/cadastro_realidade.py:574`, `app/escala/services/cadastro_realidade.py:581`, `app/escala/services/cadastro_realidade.py:588`, `app/escala/services/cadastro_realidade.py:595`, `app/escala/services/cadastro_realidade.py:602`, `app/escala/services/cadastro_realidade.py:609`, `app/escala/tests/test_o261v_fase_na_lista.py:165`)
+- **Datas, PDF e MORDE-zero: procede estaticamente.** Há expectativas literais, extração efetiva do PDF e positivo sem mock antes do leitor vazio. (`app/escala/tests/test_o261v_fase_na_lista.py:29`, `app/escala/tests/test_o261v_fase_na_lista.py:106`, `app/escala/tests/test_o261v_fase_na_lista.py:145`, `app/escala/tests/test_o261v_fase_na_lista.py:190`)
+- **Pareamento cru: procede como dívida do leitor existente.** Ele consulta batidas e chama diretamente o pareador; o registro aponta que deveria ler `turnos_do_colab`. (`app/escala/services/fase_12x36.py:128`, `app/escala/services/fase_12x36.py:175`, `app/core/juizes.py:905`)
 
-**Na implementação examinada:** segundo juiz real: **nada** — os novos helpers chamam autoridades existentes; segundo escritor novo: **nada** — preservam as portas. Fontes: `app/chamados/reconciliador.py:700`, `:711`, `:816`, `:856`, `:1487`.
+No encaixe novo, não identifiquei segundo juiz, escritor ou leitura adicional do relógio: o adaptador formata o leitor e recebe `hoje` da lista; tela e PDF usam a mesma montagem. (`app/escala/services/cadastro_realidade.py:330`, `app/escala/services/cadastro_realidade.py:541`, `app/escala/services/cadastro_realidade.py:603`, `app/escala/views.py:490`)
 
-## 30/10 14:32 · sessao d41846d646d4 · - · - · origem=Ronald (tmux)
+Execução verde, RED histórico, identidade Git da cópia e presença dos quatro dias reais do col451: **[nao verificado]**. [nao verificado]
 
-- **2º escritor fora da porta: nada.** O novo alcance segue pelo emissor existente, que chama `ChamadoColaborador.abrir`, e pela costura `reapontar_resolvedora`; o HIST também usa essa costura e o S128. `app/chamados/reconciliador.py:764`, `:831`, `:871`, `:1507`, `:1513`; escrita centralizada em `app/chamados/services/fio.py:797`.
-- **Ordem de trava: nada atribuível ao diff.** A fábrica mantém Disputa antes de Colaborador, e o novo desvio HIST→c2 reutiliza `abrir`. `app/chamados/services/disputa_emissao.py:466`, `:467`; `app/chamados/models.py:666`, `:669`; `app/chamados/reconciliador.py:1460`, `:1487`.
-- **Pouso antes do pré-requisito: nada demonstrado pelo código.** O c2 conserva os gates anteriores ao nascimento; o renascimento conserva as recusas de tranca/premissa antes da escrita. `app/chamados/reconciliador.py:795`, `:805`, `:807`, `:822`, `:824`, `:829`; `app/chamados/models.py:768`, `:770`, `:1050`, `:1089`. A ordem histórica B→C exigida no corte não foi verificável nesta cópia sem Git. `app/docs/CORTES.md:399`; [não verificado].
+## 30/10 14:37 · sessao 3e52780cf0d6 · - · - · origem=Ronald (tmux)
 
-A suspeita de desviar motivos fora do grupo DIA não procede nos chamadores atuais: ambos restringem o universo ao grupo, e o mapa antigo também só casava `orfao_14h`/`saida_sem_entrada`. `app/chamados/reconciliador.py:1351`, `:1374`; `app/chamados/services/disputa_emissao.py:404`; `app/chamados/models.py:2466`, `:2478`.
+Achado procedente: **o novo rótulo C10 afirma “cada dia de trabalho sem batida vira falta”, mas o leitor só mede ausência de turno completo e não decide falta**. A frase está em `app/escala/services/cadastro_realidade.py:114`; a medição exclui turnos abertos e inclui como trabalho mudo todo dia de trabalho sem turno completo em `app/escala/services/fase_12x36.py:175-184`. Viola “rótulo diz o que a conta faz”, `CLAUDE.md:35-36`.
 
-## 30/10 14:32 · sessao 87185b895018 · - · - · origem=Ronald (tmux)
+Contraexemplo por leitura do código: atestado integral num dia originalmente de trabalho pode integrar os dias da C10, porque `eh_dia_trabalho` lê `cel.trabalha` (`app/escala/models.py:1071-1073`), enquanto a grade transforma ausência aprovada não-falta em `ausencia` (`app/escala/utils.py:1173-1180`) e o juiz impede cobrança de furo quando a cobertura é integral (`app/ponto/supra_juiz.py:279-283`). A falta da folha vem de ausências cujo catálogo determina desconto (`app/folha/export.py:158-170`). A correção necessária é no texto, preservando regras e contagens do leitor (`app/escala/services/cadastro_realidade.py:114`).
 
-Achado confirmado por leitura: **o selo novo de idempotência forte encontra uma alteração real na segunda chamada**.
+Demais verificações:
 
-- O teste recarrega a pergunta e chama diretamente `reatar_pergunta_orfa` novamente; depois compara a linha inteira. `app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:99`, `:234`, `:235`.
-- O derivador exclui o chamado que já possui a própria pergunta pendente, voltando ao c2. `app/chamados/services/disputa_emissao.py:209`.
-- c1 recusa intervalo; o c2 aceita o chamado vivo existente. `app/chamados/reconciliador.py:363`, `:784`; `app/chamados/models.py:671`, `:688`.
-- A costura permite o mesmo dia e sempre relavra/salva; a lavra atribui novo `julgado_em`. Portanto a comparação integral diverge nesse campo. `app/chamados/juizes.py:1721`; `app/chamados/services/fio.py:797`; `app/chamados/veredito_lavrado.py:228`.
-- O teste de cron tem outra semântica: passa pelo filtro de órfãs, podendo legitimamente retornar zero na segunda rodada. `app/chamados/reconciliador.py:1380`; `app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:245`.
+- C10 reutiliza `fora_de_fase`, apenas formata datas e identificação do vínculo; não cria regra de fase (`app/escala/services/cadastro_realidade.py:331-350`).
+- A guarda corresponde à dos vizinhos, incluindo registro da exceção (`app/escala/services/cadastro_realidade.py:595-608`).
+- O filtro empresarial precede inclusão e contagem das assinaturas (`app/escala/services/cadastro_realidade.py:629-652`).
+- A ação aponta à tela existente de vínculo; não acrescenta escritor (`app/escala/services/cadastro_realidade.py:491-493`).
+- Tela e PDF imprimem o detalhe produzido pela mesma lista (`app/templates/escala/cadastro_x_realidade.html:28`; `app/escala/services/cadastro_realidade.py:733-735`; `app/escala/views.py:490-495`).
+- A triagem dos ciclos procede e está tratada: o rótulo menciona ambos, e o teste consulta `CICLOS` (`app/escala/services/cadastro_realidade.py:113`; `app/escala/tests/test_o261v_fase_na_lista.py:116-118`).
+- Os testes têm mordida de integração por respostas contraditórias do leitor: um colaborador normalmente em fase passa a aparecer; leitor vazio elimina os normalmente acusados (`app/escala/tests/test_o261v_fase_na_lista.py:180-196`). Execução e resultado dos testes: [não verificado].
 
-Demais pontos:
+## 30/10 14:37 · sessao f0581bb55c3c · BENCH-O261-V-FASE · verificador · origem=Code
 
-- **Selo/RED sem mordida:** nada demonstrado; R7 diferencia janela de mês civil e o novo IDEM efetivamente expõe a alteração acima. `app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:173`, `:235`. Execução/histórico do RED: [não verificado].
-- **Custo:** teto continua 194; cenário FICAM cria chamados vivos, sem cobrir o ramo novo com encerrados. Limite de cobertura, sem nova regressão de custo demonstrada. `app/ponto/tests/test_selo_chokepoint_escrita.py:164`, `:364`.
-- **Relógio fora da borda:** nada novo identificado nos helpers; datas de cenário são explícitas. `app/chamados/reconciliador.py:685`; `app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:47`.
-- **Pouso antes do pré-requisito:** nada demonstrado; o RELATO registra B no ar e passivo aplicado antes do trabalho C. `app/docs/RELATO.md:3`, `:4`, `:7`; requisito em `app/docs/CORTES.md:399`. Execução histórica dos registros: [não verificado].
+Encontrei **um problema de integração e duas lacunas nos selos**. Não encontrei segundo juiz no complemento: ele chama o leitor existente e formata sua saída (`app/escala/services/cadastro_realidade.py:336`).
 
-## 30/10 14:31 · sessao 8c1cbeb265c1 · - · - · origem=Ronald (tmux)
+1. **Varredura global no request, contrariando a restrição do próprio serviço.**  
+   `_fase_deslocada` recebe `empresas`, mas chama o detector sem restringir colaboradores. O detector consulta duas janelas de batidas, pareia turnos e percorre os dias de todos os vínculos elegíveis. Isso acontece antes do filtro de visibilidade, em cada abertura da tela/PDF (`app/escala/services/cadastro_realidade.py:330`; `app/escala/services/fase_12x36.py:128`, `:140`, `:173`; `app/escala/views.py:490`).  
+   **Classe:** custo de varredura no caminho de leitura. A restrição está expressa em `app/escala/services/cadastro_realidade.py:48` e `:353`. Os commands também pagam esse custo, embora selecionem exclusivamente C7 e C8 (`app/escala/management/commands/fechar_avisos_regua_na_lista.py:27`, `:32`; `app/ponto/management/commands/fechar_chamados_vinculo_na_lista.py:35`, `:40`). O comentário declara “1,0 s”, mas latência e impacto real nesta cópia **[não verificado]** (`app/escala/services/cadastro_realidade.py:111`).
 
-Chamadores e alcance confirmados:
+2. **O selo das datas não detecta a troca entre trabalho e folga.**  
+   O fixture produz duas sequências alternadas de igual tamanho; a expectativa vem do próprio leitor, e a verificação adicional exige apenas comprimento e formato ISO. Trocar as listas nas duas chaves novas preservaria essas verificações; os testes com mocks substituem o leitor inteiro (`app/escala/tests/test_o261v_fase_na_lista.py:46`, `:100`, `:114`, `:165`).  
+   **Classe: selo/RED sem mordida**, especificamente na associação **data → categoria**. A implementação atual associa corretamente as listas; o defeito está na proteção contra regressão (`app/escala/services/fase_12x36.py:204`). Contrafactual analisado estaticamente; execução **[não verificado]**.
 
-- `reatar_pergunta_orfa` é chamado pelo laço de órfãs (`app/chamados/reconciliador.py:1377`) e pela emissão de disputa, dentro de savepoint (`app/chamados/services/disputa_emissao.py:404`, `:408`, `:409`).
-- O laço também roda no evento de batida: `app/ponto/signals.py:214` → `app/chamados/reconciliador.py:1302`; o cron é `*/15` (`app/config/crons.py:376`) e inclui colaboradores com órfãs pela definição compartilhada (`app/chamados/management/commands/reconciliar_chamados.py:36`).
-- `reemitir_chamado_do_dia` tem um chamador de produção encontrado: `app/chamados/reconciliador.py:1467`. A documentação da porta dizendo “HOJE SO O CRON A CHAMA” está desatualizada, mas é anterior ao diff (`app/chamados/reconciliador.py:1389`; evento real em `app/chamados/services/disputa_emissao.py:409`).
+3. **O selo do PDF não prova “PDF = mesma lista”.**  
+   O teste aceita qualquer conteúdo iniciado por `%PDF`. Omitir C10 ou seus dias somente no PDF não reprovaria essa asserção (`app/escala/tests/test_o261v_fase_na_lista.py:128`).  
+   **Classe: selo/RED sem mordida**, contra L-040; essa mesma insuficiência já está registrada em `app/docs/LEIS.md:163`. Não encontrei omissão atual: o PDF percorre as assinaturas e imprime `detalhe` (`app/escala/services/cadastro_realidade.py:727`, `:732`).
 
-**Achado concreto de custo:** o intervalo vivo que chega ao c2 consulta a mesma competência duas vezes: uma em `app/chamados/reconciliador.py:1436`, outra via `:749` → `:709`. Cada chamada executa a consulta e carrega os registros de exportação, sem memo, em `app/folha/export.py:570`. O memo do C6 (`app/chamados/juizes.py:791`) não elimina essas duas leituras do K6. Além disso, C6 agora é executado antes das recusas baratas do c1 (`app/chamados/reconciliador.py:1438`), embora o próprio c1 documente que deixava essa consulta por último para proteger o custo da batida (`app/chamados/reconciliador.py:394`). Estouro efetivo do teto: **[não verificado]**.
+Também conferi:
 
-**Lacuna de selo associada:** os testes novos chamam a porta diretamente, com célula carregada (`app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:98`); o cron carrega apenas disputa (`app/chamados/reconciliador.py:1374`). O cenário existente de chokepoint com três perguntas já lhes atribui destino (`app/ponto/tests/test_selo_chokepoint_escrita.py:239`), enquanto o seletor deste caminho exige destino nulo (`app/chamados/reconciliador.py:1355`). Portanto esse cenário não protege o custo novo de órfãs.
+- **Empresas e contadores:** o filtro final elimina colaboradores não visíveis antes da contagem C10; ignorar `empresas` na consulta amplia o processamento, mas não demonstra vazamento ou contador inflado (`app/escala/services/cadastro_realidade.py:626`, `:647`, `:674`).
+- **Compatibilidade:** as novas chaves são aditivas e contêm strings ISO. API, pauta, fila, propositor e command consultados continuam usando campos preservados (`app/escala/services/fase_12x36.py:204`, `:220`; `app/api/views_mensageria.py:1675`; `app/chamados/services/fila_por_causa.py:173`; `app/escala/services/propositor.py:455`; `app/ponto/management/commands/vigiar_familia_escala.py:26`).
+- **Juiz, escritor e relógio:** o complemento não recalcula fase nem grava cadastro; a ação encaminha à porta do vínculo. `hoje` é resolvido por `lista` e repassado ao detector (`app/escala/services/cadastro_realidade.py:336`, `:488`, `:539`, `:601`). O pré-requisito do command C8 continua antes de `lista`; não identifiquei nova inversão nessa ordem (`app/ponto/management/commands/fechar_chamados_vinculo_na_lista.py:32`).
+- **Remover a cura seria detectado:** o caso positivo exige C10, e o mock exige exclusivamente o colaborador indicado pelo leitor; portanto, não procede chamar toda a suíte de vazia (`app/escala/tests/test_o261v_fase_na_lista.py:97`, `:167`).
 
-**Ordem de trava: nada novo comprovado.** O nascimento continua pela porta `abrir` (`app/chamados/reconciliador.py:816`), que trava o colaborador antes do dedup (`app/chamados/models.py:666`).
+Os testes usam setembro e colaboradores sintéticos; não demonstram a presença dos quatro dias reais de col451, documentados como **21, 23, 25 e 27/10** (`app/escala/tests/test_o261v_fase_na_lista.py:23`, `:40`; `app/docs/RELATO.md:217`). Essa confirmação, a execução dos testes e a identidade Git do hash ficaram **[não verificado]**.
 
-**Pouso antes do pré-requisito: nada demonstrável contra a cópia.** O corte exige Maria B antes de C (`app/docs/CORTES.md:399`); o relato registra B no ar e remedição pós-B (`app/docs/RELATO.md:3`, `:4`). Autenticidade de implantação, logs e ancestralidade dos hashes: **[não verificado]**.
+## 30/10 14:37 · sessao 0cd989a7e12e · - · - · origem=Ronald (tmux)
 
-**MORTA respondida:** o HIST pode costurá-la, mas S128 preserva resposta sem testemunha, recusando carimbo (`app/chamados/services/disputa_emissao.py:1558`). Portanto não procede alegar automaticamente que a mudança enterra toda resposta; falta um caso concreto que ultrapasse essa guarda. O HIST novo e sua chamada ao S128 estão em `app/chamados/reconciliador.py:1450`, `:1487`, `:1493`.
+Achado novo: **C10 rotula como “12x36” resultados que também incluem 24x48**, contrariando “rótulo diz o que a conta faz” da LEI-AKITA 8. O texto novo é fixo; o leitor admite ambos os ciclos e o adaptador incorpora todos os achados. (`app/escala/services/cadastro_realidade.py:112`, `app/escala/services/cadastro_realidade.py:337`, `app/escala/services/fase_12x36.py:29`, `app/escala/services/fase_12x36.py:106`, `CLAUDE.md:35`)
 
-## 30/10 14:31 · sessao ad7179c46d50 · - · - · origem=Ronald (tmux)
+Contraexemplo estático: 24x48, âncora 01/09/2026, hoje 10/09, sem célula/foto e plantões deslocados +1 dia. O cadastro marca trabalho em 29/08, 01/09, 04/09, 07/09 e 10/09; plantões reais 07h→07h seguinte em 30/08, 02/09, 05/09 e 08/09 produzem **5 trabalhos sem turno e 4 folgas com turno**, superando o piso 3 nos dois lados. O cálculo canônico usa módulo 3; o leitor admite os resultados e o pareador fecha esses plantões de 24h pelo envelope de 26h. (`app/escala/models.py:1264`, `app/escala/services/fase_12x36.py:31`, `app/escala/services/fase_12x36.py:179`, `app/escala/services/fase_12x36.py:187`, `app/ponto/turnos.py:1428`, `app/ponto/turnos.py:1445`, `app/ponto/turnos.py:1490`)
 
-Não encontrei falha nova nas classes abaixo; revisão estática, sem execução de testes. [não verificado] [nao verificado]
+A correção pode ser apenas tornar o rótulo fiel ao universo do leitor, preservando a autoridade única. O teste novo não alcança esse caso: cria somente 12x36. (`app/escala/tests/test_o261v_fase_na_lista.py:70`)
 
-- **2º juiz:** nada. O alcance chama `janela_atual` + `competencia_entregue`; vitalidade chama C6; HIST chama `motivos_atendidos` e C7: `app/chamados/reconciliador.py:704`, `:717`, `:1451`, `:1463`. O juiz dos motivos devolve a constante compartilhada em `app/chamados/juizes.py:1592`.
-- **2º escritor fora da porta:** nada. c2 continua por `ChamadoColaborador.abrir` e `reapontar_resolvedora`; HIST continua por essa mesma costura e S128: `app/chamados/reconciliador.py:822`, `:862`, `:1500`, `:1506`. A costura valida antes de gravar e lavra no mesmo save: `app/chamados/services/fio.py:792`.
-- **Relógio fora da borda:** nada novo. O diff consulta janela do dia, sem introduzir leitura de hora atual: `app/chamados/reconciliador.py:706`; a data continua entrando na porta antes do juiz e da lavra: `app/chamados/services/fio.py:788`.
-- **Derivação paralela de fonte única:** nada além da questão do memo, delegada ao outro explorador. O HIST aberto migrou para o mesmo `motivos_atendidos` usado pelo derivador vivo: `app/chamados/reconciliador.py:1463`, `app/chamados/services/disputa_emissao.py:194`. O mapa antigo ficou restrito ao caminho conservado: `app/chamados/reconciliador.py:1466`.
-- **Ordem de trava:** nada novo. A chamada nova alcança a porta existente, cujo `atomic` trava Colaborador antes do dedup; o evento conserva seu savepoint: `app/chamados/models.py:666`, `app/chamados/services/disputa_emissao.py:408`. Não há trava adicionada no trecho novo: `app/chamados/reconciliador.py:685`, `:1443`.
-- **Pouso antes do pré-requisito:** nada demonstrado. O requisito está em `app/docs/CORTES.md:399`; `app/docs/RELATO.md:3` declara Maria B no ar (`b09b2dab`), passivo aplicado e remedição de C pós-B. Confirmação operacional dos deploys e sondas: [não verificado].
+Demais verificações:
 
-Não ressuscitar a acusação “morta com resposta”: o primeiro laço do S128 consulta C6, tranca e testemunha; o fecho sem credor é comportamento preexistente explicitamente descrito pela triagem do usuário: `app/chamados/services/disputa_emissao.py:1547`, `:1551`, `:1558`, `:1641`.
+- **Identidade do vínculo tratada:** `ec_id` provém do vínculo examinado e segue em `ec` e no detalhe, independentemente do cabeçalho vigente. (`app/escala/services/fase_12x36.py:173`, `app/escala/services/fase_12x36.py:192`, `app/escala/services/cadastro_realidade.py:340`, `app/escala/services/cadastro_realidade.py:344`)
+- **Datas sem derivação paralela:** a alteração serializa exatamente as listas usadas nas contagens anteriores. (`app/escala/services/fase_12x36.py:202`, `app/escala/services/fase_12x36.py:207`)
+- **Sem nova leitura de relógio nesse caminho:** `lista` fixa `hoje`, passa ao adaptador e ele repassa ao leitor; o fallback existente do leitor não é acionado com esse valor. (`app/escala/services/cadastro_realidade.py:541`, `app/escala/services/cadastro_realidade.py:603`, `app/escala/services/cadastro_realidade.py:337`, `app/escala/services/fase_12x36.py:103`)
+- **Dívida anterior confirmada:** o leitor chama `parear_turnos` com batidas cruas sem `papel_por_minuto`; o registro exige migrar para `turnos_do_colab`. Esses sítios não pertencem às linhas alteradas do diff fornecido. (`app/escala/services/fase_12x36.py:146`, `app/escala/services/fase_12x36.py:175`, `app/ponto/turnos.py:1199`, `app/core/juizes.py:905`)
+- Os consumidores anteriores continuam lendo o mesmo resultado: pauta, mensageria e propositor. As adições `ec_id` e datas não mudam as chaves que esses consumidores usam. (`app/escala/services/fase_12x36.py:223`, `app/api/views_mensageria.py:1670`, `app/api/views_mensageria.py:1675`, `app/escala/services/propositor.py:455`)
 
-## 30/10 14:31 · sessao 0a5d10e605c0 · - · - · origem=Ronald (tmux)
+## 30/10 14:36 · sessao 633de4db7000 · - · - · origem=Ronald (tmux)
 
-**Achado: o memo pode ficar velho entre perguntas do mesmo dia na mesma instância.** A chave é apenas `dia`; depois da primeira consulta, a função devolve o booleano guardado sem consultar K6 nem invalidar o valor. Isso amplia a vida da leitura além da “MESMA pergunta” descrita no comentário. (`app/chamados/reconciliador.py:700-708`)
+Revisão dos consumidores concluída, sem execução de testes ou escrita de arquivos. [não verificado] [nao verificado]
 
-- **Cron:** o comando carrega um `colab` por iteração e passa essa instância a `reconciliar_chamados_colab`; esta chama o reconciliador de órfãs, que percorre todas as perguntas usando o mesmo objeto. Portanto o memo dura todo o lote de perguntas daquele colaborador, não somente HIST+c2 de uma pergunta. (`app/chamados/management/commands/reconciliar_chamados.py:51-56`; `app/chamados/reconciliador.py:1307-1308`; `app/chamados/reconciliador.py:1380-1383`)
-- **Evento:** `gerar_perguntas_disputa` percorre os motivos e passa reiteradamente `disputa.colaborador` à porta; o `atomic` está dentro do laço, por tentativa. O mesmo objeto `disputa` também é reaproveitado nas chamadas consecutivas de geração e entradas pendentes. (`app/chamados/services/disputa_emissao.py:292`; `app/chamados/services/disputa_emissao.py:404-409`; `app/chamados/services/disputa_emissao.py:618-621`; `app/chamados/services/disputa_emissao.py:270-274`)
-- **Mudança da fonte:** exportar chama `ExportacaoDominio.registrar`, que cria o registro sem atualizar esse memo. Invalidar também altera o registro sem invalidar o memo. K6, ao contrário, consulta o banco e considera a invalidação do vigente. (`app/folha/views.py:297-300`; `app/folha/models.py:178-188`; `app/folha/models.py:158-162`; `app/folha/export.py:569-575`)
-- **Consequência comprovável pelo fluxo:** depois de guardar `False`, uma entrega concluída entre duas consultas ao mesmo dia não impede que a segunda pergunta continue no alcance novo: o HIST usa o valor em `:1451`, e os intervalos entram no c2 por `:755` → `:715`. O c2 pode alcançar `ChamadoColaborador.abrir` sem nova leitura de K6. Isso contraria a cerca de competência exportada registrada no aval. (`app/chamados/reconciliador.py:702-708`; `app/chamados/reconciliador.py:1451-1454`; `app/chamados/reconciliador.py:754-756`; `app/chamados/reconciliador.py:715-718`; `app/chamados/reconciliador.py:822`; `app/docs/CORTES.md:399`)
-- **Distinção:** não identifiquei uma exportação executada sequencialmente *pelo próprio* laço do cron ou de emissão; o caso de produção depende de exportação concorrente enquanto esse objeto vive. A existência de uma ocorrência real dessa intercalação não foi verificada. (`app/chamados/reconciliador.py:1380-1386`; `app/chamados/services/disputa_emissao.py:404-415`; ocorrência real: [não verificado])
-- **Selo não cobre essa transição:** R4 exportada e o controle sem exportação montam cenários separados; idempotência reutiliza `c`, mas não muda a entrega entre consultas. Não há teste de `False → export → nova consulta` nem `True → invalidação → nova consulta` na mesma instância. (`app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:198-209`; `app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:222-247`)
+- **Não há segundo juiz novo no wrapper.** `_fase_deslocada` chama a autoridade existente e apenas formata seus resultados; as datas novas vêm das listas que o próprio detector já contou. `app/escala/services/cadastro_realidade.py:336`, `app/escala/services/cadastro_realidade.py:338`, `app/escala/services/fase_12x36.py:199`, `app/escala/services/fase_12x36.py:204`. Acusar essa chamada de violar CLAUDE 4a contrariaria o aval literal de usar o leitor existente; pareamento e julgamento são anteriores ao diff. `app/escala/services/fase_12x36.py:175`, `app/escala/services/fase_12x36.py:181`.
 
-A correção mínima compatível com a justificativa do custo seria limitar o compartilhamento de K6 à execução de uma pergunta, preservando o reaproveitamento HIST+c2; afirmar que isso resolve também a corrida dentro da própria operação exigiria sincronização adicional, que o memo atual não fornece. (`app/chamados/reconciliador.py:700-708`; `app/chamados/reconciliador.py:1451`; `app/chamados/reconciliador.py:1480`)
+- **Custo adicional comprovável, sem número de latência medido:** cada chamada não vazia executa cinco leituras ORM em lote: vínculos, duas janelas de batidas, células e folgas; pareia as batidas duas vezes e percorre cada colaborador × 14 dias. `app/escala/services/fase_12x36.py:114`, `app/escala/services/fase_12x36.py:128`, `app/escala/services/fase_12x36.py:140`, `app/escala/services/fase_12x36.py:160`, `app/escala/services/fase_12x36.py:170`, `app/escala/alimentacao.py:66`, `app/escala/services/fase_12x36.py:145`, `app/escala/services/fase_12x36.py:175`, `app/escala/services/fase_12x36.py:179`. C10 chama sem estreitar por IDs ou empresas, embora a autoridade aceite esse estreitamento; o filtro de empresas ocorre depois de toda a leitura. `app/escala/services/cadastro_realidade.py:336`, `app/escala/services/fase_12x36.py:108`, `app/escala/services/cadastro_realidade.py:626`. A tela HTML/PDF e ambos os commands C7/C8 passam a pagar esse custo, mesmo sem usar C10. `app/escala/views.py:490`, `app/escala/management/commands/fechar_avisos_regua_na_lista.py:27`, `app/ponto/management/commands/fechar_chamados_vinculo_na_lista.py:35`. Há conflito com a lápide local que proíbe varrer frota no request; esta é a referência mais forte para um achado de custo, não “juiz duplicado”. `app/escala/services/cadastro_realidade.py:48`, `app/escala/services/cadastro_realidade.py:353`.
 
-## 30/10 14:31 · sessao ae95044256e7 · - · - · origem=Ronald (tmux)
+- **Não achei vazamento por `empresas` nem contador C10 inflado:** linhas externas são descartadas antes de computar `por_cod`, `colabs` e `ocorrencias`. `app/escala/services/cadastro_realidade.py:626`, `app/escala/services/cadastro_realidade.py:647`, `app/escala/services/cadastro_realidade.py:674`.
 
-**Selo/RED sem mordida: nada demonstrável.** Os testes chamam a porta real (`app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:103`), exigem emissão/costura em R2 (`:141`), costura/materialização em R3 (`:169`) e incluem controle positivo do dia exportado sem exportação (`:234`). R9 verifica exclusão da pergunta sem data (`:200`); R10 distingue perguntas do mesmo colaborador (`:211`).
+- **Novas chaves não quebram os consumidores localizados:** API serializa `vinculos` diretamente e recebe strings ISO; fila e propositor só extraem IDs; command e pauta selecionam campos existentes. `app/api/views_mensageria.py:1675`, `app/escala/services/fase_12x36.py:204`, `app/chamados/services/fila_por_causa.py:173`, `app/escala/services/propositor.py:455`, `app/ponto/management/commands/vigiar_familia_escala.py:26`, `app/escala/services/fase_12x36.py:220`.
 
-**Pouso antes do pré-requisito: nada demonstrável nessa leitura.** O corte exige B antes de C (`app/docs/CORTES.md:399`); o relato registra B no ar e C remedido após B (`app/docs/RELATO.md:3`). Histórico Git e execução histórica do RED: [não verificado].
+- **Não há nova leitura de relógio fora da borda nesse fluxo:** `lista` resolve `hoje` e transmite o mesmo valor até `fora_de_fase`. `app/escala/services/cadastro_realidade.py:539`, `app/escala/services/cadastro_realidade.py:601`, `app/escala/services/cadastro_realidade.py:336`, `app/escala/services/fase_12x36.py:103`.
 
-Observação sem classificação como achado: o novo gate exige `dia` do tipo `date` (`app/chamados/reconciliador.py:704`), embora o corpo de c2 aceite texto ISO (`:766`, `:786`). Depende de identificar chamador efetivo passando texto para intervalo; ocorrência [não verificado].
+- **O detector também cobre 24x48, mas o rótulo 12x36 já era herdado** na pauta e API; não usaria isso como achado central do diff. `app/escala/services/fase_12x36.py:29`, `app/escala/services/fase_12x36.py:228`, `app/api/views_mensageria.py:1657`.
 
-## 30/10 14:31 · sessao daa17d8619f8 · - · - · origem=Ronald (tmux)
+## 30/10 14:36 · sessao 1ba01fb3d609 · - · - · origem=Ronald (tmux)
 
-- **2º juiz que duplica juiz registrado: nada.** O alcance novo consulta K6, janela e C7; vitalidade consulta C6; correspondência histórica consulta `motivos_atendidos`. Fontes: `app/chamados/reconciliador.py:710`, `app/chamados/reconciliador.py:724`, `app/chamados/reconciliador.py:1460`, `app/chamados/reconciliador.py:1470`.
-- **Derivação paralela de fonte única: nada.** O c2 importa `MOTIVOS_DO_DIA_SEM_FECHAR`, mesma constante devolvida pelo juiz; competência usa `janela_atual`. Fontes: `app/chamados/reconciliador.py:757`, `app/chamados/juizes.py:1594`, `app/chamados/juizes.py:1599`, `app/chamados/reconciliador.py:712`.
-- **Relógio fora da borda: nada nos sítios novos examinados.** Os novos usos de `datetime` validam ou convertem o dia recebido; não consultam o instante corrente. Fontes: `app/chamados/reconciliador.py:703`, `app/chamados/reconciliador.py:1440`.
+Os testes **mordem a remoção da integração**, mas têm duas lacunas específicas de prova. Não executei testes, pois criariam banco/arquivos; a avaliação abaixo é estática. [não verificado: execução] [nao verificado]
 
-Ressalva investigada, **sem achado demonstrado**: `_o261c_fora` permanece na instância e poderia envelhecer se a mesma pergunta fosse reutilizada depois de exportar; não identifiquei essa trajetória nos chamadores atuais — cron carrega perguntas e evento chama uma vez por criação. Fontes: `app/chamados/reconciliador.py:707`, `app/chamados/reconciliador.py:1389`, `app/chamados/services/disputa_emissao.py:404`.
+- **Classe: selo/RED sem mordida — associação dos dias à categoria.** Trocar `trabalho_mudo` por `folga_trabalhada` nas duas novas chaves manteria os testes novos verdes: o fixture produz 14 dias alternados, com sete em cada lado; os testes comparam a lista com o próprio leitor e depois verificam apenas comprimento e ISO. Os mocks substituem integralmente o leitor, portanto não detectam essa troca. O código atual associa corretamente as listas; trata-se de lacuna do selo, não de erro comprovado na saída atual. Referências: `app/escala/services/fase_12x36.py:204`, `app/escala/services/fase_12x36.py:205`, `app/escala/tests/test_o261v_fase_na_lista.py:46`, `app/escala/tests/test_o261v_fase_na_lista.py:100`, `app/escala/tests/test_o261v_fase_na_lista.py:114`, `app/escala/tests/test_o261v_fase_na_lista.py:165`.
 
-## 30/10 14:23 · sessao 3943ba67c44f · CALENDARIO-HOJE · verificador · origem=Code
+- **Classe: selo/RED sem mordida — PDF igual à lista.** O teste novo aceita qualquer resposta começando por `%PDF`; retirar C10 ou seus dias somente do PDF não o reprovaria. Repete precisamente a dívida já registrada em L-040. O renderizador atual percorre todas as assinaturas e inclui `detalhe`, portanto não encontrei omissão efetiva atual. Referências: `app/escala/tests/test_o261v_fase_na_lista.py:128`, `app/escala/tests/test_o261v_fase_na_lista.py:129`, `app/docs/LEIS.md:163`, `app/escala/services/cadastro_realidade.py:727`, `app/escala/services/cadastro_realidade.py:732`.
 
-**Parecer: reprova.** O teto HOJE/ONTEM foi removido, mas permanecem divergências por `sem_previsto`, incompatibilidade de chaves no cartório e reutilização de turnos de outra janela. O custo novo caiu para **+1 query por calendário elegível**, sem zerar. (`app/colaboradores/services/calendario.py:707-712`; `app/ponto/turnos.py:1852,1928,2130-2139`)
+**O que funciona nos selos:** remover a leitura C10 reprovaria o caso positivo; recalcular independentemente ignorando o leitor reprovaria os mocks que fazem entrar exclusivamente o colaborador em fase e depois zeram o resultado. A exceção é provocada e exige que A4 sobreviva. O filtro testa exclusão e inclusão, e a contagem compara C10 com os dois achados reais. Referências: `app/escala/tests/test_o261v_fase_na_lista.py:93`, `app/escala/tests/test_o261v_fase_na_lista.py:135`, `app/escala/tests/test_o261v_fase_na_lista.py:139`, `app/escala/tests/test_o261v_fase_na_lista.py:150`, `app/escala/tests/test_o261v_fase_na_lista.py:158`, `app/escala/tests/test_o261v_fase_na_lista.py:170`.
 
-1. **Teto de data**
+O fixture novo não representa especificamente os quatro dias de col451: usa colaboradores sintéticos e HOJE=10/09/2026. Os quatro dias documentados de col451 são 21, 23, 25 e 27/10; não há prova, nesses testes, de sua presença na lista atual. Referências: `app/escala/tests/test_o261v_fase_na_lista.py:23`, `app/escala/tests/test_o261v_fase_na_lista.py:40`, `app/docs/RELATO.md:217`.
 
-   **Antigo corte HOJE/ONTEM: sem achado.** Agora a pergunta cobre `data_ini` até `min(data_fim, hoje)`, incluindo datas anteriores a ontem. (`app/colaboradores/services/calendario.py:707-710`)
+## 30/10 14:36 · sessao 23548e779ccc · - · - · origem=Ronald (tmux)
 
-   **Ainda há “não encerrado” que o calendário desconsidera:** `sem_previsto` produz `False` na juíza, mas fica fora de `_em_curso`. Em trabalho sem batida, isso permite `falta`. Há também a divergência de janela descrita abaixo. (`app/ponto/turnos.py:2102-2105,2140`; `app/colaboradores/services/calendario.py:711-712,132-142,805`)
+Não achei quebra procedente nos consumidores de `lista()` ou no filtro de empresas:
 
-2. **Equivalência da alimentação: não vale universalmente**
+- **Estrutura/compatibilidade:** C10 entra no mesmo `cad` e recebe os mesmos campos comuns de assinatura; as chaves externas do retorno permanecem intactas (`app/escala/services/cadastro_realidade.py:601`, `:640`, `:684`). A tela imprime `detalhe` e ação genericamente (`app/templates/escala/cadastro_x_realidade.html:28`); o PDF recebe os mesmos dados e imprime o mesmo detalhe (`app/escala/views.py:490`, `app/escala/services/cadastro_realidade.py:723`).
+- **Contador == universo visível:** o descarte por `empresas` acontece antes da montagem de assinaturas e da contagem; C10 recebe contadores derivados apenas das linhas incluídas (`app/escala/services/cadastro_realidade.py:626`, `:647`, `:674`). Portanto, ignorar `empresas` dentro de `_fase_deslocada()` não vaza linhas ou infla o contador C10; amplia somente o trabalho executado (`app/escala/services/cadastro_realidade.py:333`, `:336`).
+- **Commands:** ambos continuam selecionando explicitamente C7/C8; C10 não faz fechar chamados adicionais (`app/escala/management/commands/fechar_avisos_regua_na_lista.py:27`, `:32`; `app/ponto/management/commands/fechar_chamados_vinculo_na_lista.py:35`, `:40`). O pré-requisito da lavra C8 continua precedendo `lista()` (`app/ponto/management/commands/fechar_chamados_vinculo_na_lista.py:32`).
+- **Custo comprovável estaticamente:** cada chamada da tela/PDF e dos dois comandos agora executa o detector global, mesmo quando a tela tem empresas restritas ou o command usa somente C7/C8 (`app/escala/views.py:490`; `app/escala/services/cadastro_realidade.py:336`; comandos acima). O detector lê duas janelas de batidas e pareia turnos, além de carregar células/folgas e visitar cada dia por vínculo (`app/escala/services/fase_12x36.py:128`, `:140`, `:146`, `:160`, `:170`, `:173`). Tempo real e impacto impeditivo: **[não verificado]**. O comentário novo de 1 segundo/5 consultas não constitui medição reproduzida nesta revisão (`app/escala/services/cadastro_realidade.py:110`).
 
-   | Chamador | Alimentação efetiva |
-   |---|---|
-   | Cartório | Passa `celulas={(colaborador_id, data): célula}`; não fornece `turnos` nem `escalas`. (`app/ponto/services/cartorio.py:853`) |
-   | `supra_juiz` | Não fornece alimentação; o lote carrega. (`app/ponto/management/commands/supra_juiz.py:108`) |
-   | Emissor retroativo | Fornece apenas `agora`; o lote carrega. (`app/ponto/management/commands/emitir_furo_retroativo.py:62`) |
-   | `par_completo_da_janela` | Não fornece alimentação e depois carrega turnos novamente. (`app/ponto/turnos.py:2151-2153`) |
-   | Calendário | Fornece células com chave composta e turnos previamente carregados; omite `escalas`. (`app/escala/alimentacao.py:41-46`; `app/colaboradores/services/calendario.py:709-710`) |
+Ponto para avaliação do responsável pela consolidação: falha do leitor C10 produz apenas log, sem estado `sem_medida` no retorno, indistinguível visualmente de ausência de achados (`app/escala/services/cadastro_realidade.py:603`, `:684`). Isso contrasta com a explicitação da indisponibilidade de C3 (`app/escala/services/cadastro_realidade.py:556`; `app/templates/escala/cadastro_x_realidade.html:17`) e com o princípio escrito contra ausência de sinal tratada como sinal bom (`app/escala/services/cadastro_realidade.py:540`). **Não fechei como achado**, porque os demais leitores já seguem a mesma guarda e o teste novo exige continuidade da lista; seria necessário sustentar que o requisito desta obra exige expor indisponibilidade C10, além de preservar as outras assinaturas (`app/escala/services/cadastro_realidade.py:599`).
 
-   **Chaves incompatíveis no cartório — achado herdado.** O lote espera chave `(colaborador_id, data)`, mas repassa o mesmo argumento a `turnos_do_colab`, cujo contrato é `{data: célula}`. Este recompõe a chave como `(colaborador_id, chave_recebida)`, produzindo `(colaborador_id, (colaborador_id, data))`; `vinculo_do_dia` procura `(colaborador_id, data)` e perde a geradora. A passagem sem adaptação já constava da versão anterior mostrada no anexo. (`app/ponto/turnos.py:2114,2133,1852,1928`; `app/escala/alimentacao.py:237-254`; anexo `diff2.txt`, hunk de `dias_encerrados`)
+## 30/10 14:36 · sessao d21df08be375 · - · - · origem=Ronald (tmux)
 
-   **Células com `dna=NULL`, vazio ou sem marcos: sem achado nessa regra.** Com mapa ou consultando sozinho, `marcos_do_dia` recorre ao template. O carregador normal traz o campo `dna`; campo diferido é outra situação, advertida pelo próprio contrato como possível N+1. (`app/escala/models.py:1089-1108`; `app/escala/alimentacao.py:41-46`)
+Não achei regressão procedente nas chaves acrescentadas ao leitor: `ec_id` é o vínculo efetivamente iterado; as datas são serializações das mesmas listas usadas nas contagens, sem mudar predicado, piso ou `n`. `app/escala/services/fase_12x36.py:173`, `:187`, `:192`, `:202`, `:207`, `:216`.
 
-   **Turnos de janela diferente — achado no reaproveitamento novo.** O calendário forma turnos para `[data_ini, data_fim]`, mas os entrega ao lote perguntado somente até hoje, contrariando a exigência documentada de “MESMA janela”. O lote aceita a lista sem reconstruí-la. (`app/colaboradores/services/calendario.py:310-311,707-710`; `app/ponto/turnos.py:2113-2114,2133`)
+As duas triagens procedem:
 
-   Contraexemplo derivado do código: vínculo único 21h–05h, sem intervalos; única entrada em D às 01h; nenhuma célula em D−1/D; único DNA com marcos em D+2; agora D às 06h; calendário `[D−1,D+3]`. Na carga curta, o mapa DNA fica vazio e vira `None`: a entrada ancora em D−1, cuja aberta vive até D às 09h. Na carga larga, o DNA de D+2 torna o mapa não vazio; a falta de D−1 nesse mapa elimina as bordas da véspera, e a entrada ancora em D. Assim, D−1 fica sem aberta e passa a encerrado às 06h. **A resposta muda com a janela.** (`app/escala/utils.py:100-107`; `app/ponto/turnos.py:1845,1949,1297-1300,283-306,1495-1496,1992,2008-2011,2102-2105`)
+- O leitor cobre `12x36` e `24x48`; o teste novo consulta `CICLOS` e exige ambos no rótulo, cobrindo a correção declarada. `app/escala/services/fase_12x36.py:29`; `app/escala/tests/test_o261v_fase_na_lista.py:116`.
+- A dívida da ata existe: o leitor chama `parear_turnos` sem alimentar `papel_por_minuto`; esse parâmetro é justamente o que faz a ata prevalecer sobre `tipo`, e `turnos_do_colab` o carrega. O registro já aponta o destino `turnos_do_colab`. `app/escala/services/fase_12x36.py:146`, `:175`; `app/ponto/turnos.py:1199`, `:1212`, `:1909`; `app/core/juizes.py:905`.
+- Trocar o pareamento alcançaria pauta, fila por causa, propositor e mensageria; portanto preservar essa dívida nesta mudança aditiva é coerente com a instrução recebida de não alterar regra/contagem. `app/escala/services/fase_12x36.py:223`; `app/chamados/services/fila_por_causa.py:173`; `app/escala/services/propositor.py:456`; `app/api/views_mensageria.py:1670`.
 
-   Portanto, nem os chamadores sem alimentação têm equivalência universal com a consulta unitária: o pareamento conserva essa dependência da janela. Execução do contraexemplo e ocorrência em produção: **[nao verificado]**. (`app/ponto/turnos.py:2079-2080,2133`; traço acima)
+Os consumidores existentes selecionam chaves específicas ou serializam a lista como JSON; as novas chaves contêm inteiro, strings ISO e listas, sem incompatibilidade identificada nessa leitura. `app/escala/services/fase_12x36.py:192`, `:207`, `:228`; `app/api/views_mensageria.py:1671`.
 
-3. **Os três motivos e `sem_previsto`**
+Execução dos testes: [não verificado]. [nao verificado]
 
-   **É regra própria do leitor.** A autoridade distingue quatro motivos de não encerramento; para ela, `sem_previsto` continua sendo não encerrado. O calendário seleciona três e deixa o quarto seguir pelo caminho dos encerrados. Isso não equivale a ler a resposta booleana da juíza e conflita com a LEI-AKITA 2. (`app/ponto/turnos.py:2073-2075,2102-2105,2140`; `app/colaboradores/services/calendario.py:704-712`; `CLAUDE.md:20-22`)
+## 30/10 14:36 · sessao 3457bbe982c8 · - · - · origem=Ronald (tmux)
 
-   A exceção está declarada no comentário local, mas o teste ainda promete genericamente “turno NAO encerrou → previsto”. Declaração local não modifica o julgamento da autoridade. (`app/colaboradores/services/calendario.py:702-703`; `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:1-5`)
+Não encontrei falha nova procedente nos testes nem no caminho HTML/PDF revisado: a view chama `lista` uma vez e entrega os mesmos dados ao renderizador escolhido; ambos imprimem `detalhe`. (`app/escala/views.py:490`, `app/escala/views.py:492`, `app/escala/views.py:495`, `app/templates/escala/cadastro_x_realidade.html:28`, `app/escala/services/cadastro_realidade.py:732`)
 
-4. **Custo adicional**
+A triagem dos selos procede:
 
-   **Conta estática da cadeia nova: +1 query por calendário/card** quando `data_ini <= min(data_fim, hoje)`; **zero** para janela inteiramente futura. Células e turnos são reaproveitados, mas `escalas=` não é passado: o lote consulta todos os vínculos com `select_related('tipo_escala')`. Não há consulta adicional por dia para ler o DNA nesse caminho. (`app/colaboradores/services/calendario.py:707-710`; `app/ponto/turnos.py:2129-2139`; `app/escala/models.py:1094-1108`)
+- Datas esperadas estão escritas explicitamente pela regra e são cobradas tanto da C10 quanto do leitor. (`app/escala/tests/test_o261v_fase_na_lista.py:15`, `app/escala/tests/test_o261v_fase_na_lista.py:29`, `app/escala/tests/test_o261v_fase_na_lista.py:106`, `app/escala/tests/test_o261v_fase_na_lista.py:121`)
+- PDF é efetivamente extraído com `pypdf`, e o texto extraído precisa conter C10 e datas dos dois lados. (`app/escala/tests/test_o261v_fase_na_lista.py:145`, `app/escala/tests/test_o261v_fase_na_lista.py:146`)
+- MORDE-zero exige primeiro o invertido na lista sem mock; depois exige ausência de C10 com leitor vazio. MORDE-um exige precisamente o colaborador indicado pelo leitor falso. (`app/escala/tests/test_o261v_fase_na_lista.py:184`, `app/escala/tests/test_o261v_fase_na_lista.py:186`, `app/escala/tests/test_o261v_fase_na_lista.py:189`)
+- A identidade do vínculo é cobrada no payload e no detalhe, mas o fixture contém somente um vínculo por colaborador; não reproduz o caso adversarial de cabeçalho diferente. Isso é limitação de cobertura, não demonstração de defeito atual. (`app/escala/tests/test_o261v_fase_na_lista.py:46`, `app/escala/tests/test_o261v_fase_na_lista.py:109`, `app/escala/tests/test_o261v_fase_na_lista.py:123`)
 
-   No mapa HTML, são **+N queries para N cards efetivamente montados**, nessa condição. No PDF, são os mesmos **+N**, pagos antes da bifurcação de renderização; a geração reutiliza os cards. (`app/relatorios/furos.py:164-188`; `app/relatorios/views.py:1541,1548-1551,1560-1566`)
+Execução verde e evidência histórica de RED: [nao verificado]. [nao verificado]
 
-   Esse é o incremento estático atribuível à obra identificável na cópia. Medição efetiva e comparação integral com a árvore de `d2c37edd`: **[nao verificado]**.
+## 30/10 14:35 · sessao 9e28c6d21f16 · BENCH-O261-C · verificador · origem=Code
 
-5. **Leitores e efeitos além de “falta → previsto”**
+**Encontrei uma divergência no ponto 3: o reordenamento preserva o retorno no caminho identificado, mas acrescenta uma chamada ao logger.** A afirmação “sem efeito colateral” não corresponde ao código: `VETO_CELULA_*` é registrado antes da cerca. (`app/chamados/reconciliador.py:765`, `app/chamados/reconciliador.py:830`, `app/chamados/reconciliador.py:835`)
 
-   A declaração local concentra-se em “previsto, não falta”, mas o classificador também permite `ok → previsto`, `escala_suspeita → previsto`, `escala_suspeita → sem_dados` no limbo e bloqueio da sobreposição de veredito. Para HOJE/ONTEM com `sem_previsto`, a exclusão nova permite os sentidos inversos em relação à volta anterior. (`app/colaboradores/services/calendario.py:132-152,177-178,697-703,805`; anexo `diff2.txt`, hunk de `_em_curso`)
+O caminho é alcançável pelo código: um chamado vivo já ocupado por pergunta do mesmo motivo é excluído pelo derivador; o c2 reencontra esse chamado e dispensa piso/protesto; uma célula vetada então aciona o logger. Em competência exportada, a cerca antecipada encerraria antes dessa chamada. Ambos retornam `False`; não há escrita de domínio nesse ramo. (`app/chamados/services/disputa_emissao.py:209`; `app/chamados/reconciliador.py:797`, `app/chamados/reconciliador.py:826`; `app/ponto/marcos.py:159`; `app/chamados/reconciliador.py:713`, `app/chamados/reconciliador.py:830`)
 
-   | Leitor | Efeito |
-   |---|---|
-   | Perfil e gaveta | Herdam status, ícone e tooltip. **Tooltip corrigido: sem achado.** (`app/colaboradores/views.py:1946`; `app/colaboradores/services/drawer.py:121`; `app/colaboradores/services/calendario.py:881-882`; `app/templates/colaboradores/partials/_calendario_grade.html:99-105`) |
-   | Furos HTML/PDF | Pintura muda; seleção, `nfuro`, marcos faltantes e ordenação seguem a cadeia independente da grade. (`app/relatorios/furos.py:141-190`; `app/relatorios/views.py:1549-1551`; `app/relatorios/furos_pdf.py:56-69`) |
-   | `resolver_dia_oferecido` | `previsto` não pede decisão: datas passadas podem perder a ação, conforme os demais filtros. (`app/colaboradores/services/calendario.py:190,198-199,895-896,925-926`) |
-   | `vigia_fio` | Pode trocar `decisao_do_dia_pendente` por um dos ramos seguintes, inclusive `fio_morto`. Ocorrência real: **[nao verificado]**. (`app/chamados/services/vigia_fio.py:294-324`) |
-   | Rodapé | Totais acompanham o status; `previstos` são contados, mas não exibidos. (`app/colaboradores/services/calendario.py:930-946`; `app/templates/colaboradores/partials/_calendario_grade.html:137-173`) |
-   | `status_do_dia` e contagem | Herdam a alteração ao remontarem o calendário; a diferença de janela acima também impede garantir igualdade entre consulta unitária e grade larga. (`app/colaboradores/services/calendario.py:213-233`; `app/ponto/turnos.py:1297-1300`) |
+Ocorrência desse cenário em produção e persistência da mensagem pelos handlers: [nao verificado].
 
-Execução dos testes Django, contagem medida de queries e ocorrência desses cenários em produção: **[nao verificado]**. [nao verificado]
+Nos seis pontos:
 
-## 30/10 14:22 · sessao d3f052a57a8b · - · - · origem=Ronald (tmux)
+1. **LEI-AKITA no corpo de `22c08b8e`:** [nao verificado]. O corpo do commit não estava disponível para conferência.
 
-**P2: não há equivalência universal.** O calendário reaproveita turnos de janela maior; o cartório continua passando chaves incompatíveis ao pareador. (`app/colaboradores/services/calendario.py:310,707-710`; `app/ponto/services/cartorio.py:853`; `app/ponto/turnos.py:1852,1928,2133`)
+2. **Pauta DP:** a prosa do código agora declara explicitamente dono DP, geração pelo script de passivo depois do pouso e ausência dessa responsabilidade na porta. Prosa do commit: [nao verificado]. (`app/chamados/reconciliador.py:691`)
 
-| Chamador | Alimentação e resultado da inspeção |
-|---|---|
-| Cartório | Passa `{(cid,data): célula}`; `dias_encerrados` repassa sem conversão a `turnos_do_colab`, que espera `{data:célula}` e transforma as chaves em `(cid,(cid,data))`; a geradora deixa de ser encontrada pelo pareador. É defeito herdado: o anexo mantém essa chamada antiga. (`app/ponto/services/cartorio.py:853`; `app/ponto/turnos.py:1852,1928-1932,2133`; `app/escala/alimentacao.py:237-247`) |
-| Supra_juiz | Não fornece alimentação: lote carrega mapa composto para vínculo/fim e `turnos_do_colab` carrega separadamente seu mapa por data. Sem achado novo nesse contrato. (`app/ponto/management/commands/supra_juiz.py:108`; `app/ponto/turnos.py:2129-2139,1880-1882`) |
-| Emissor retroativo | Mesmo caminho sem alimentação; sem achado novo nesse contrato. (`app/ponto/management/commands/emitir_furo_retroativo.py:62`; `app/ponto/turnos.py:2129-2139`) |
-| `par_completo_da_janela` | Mesmo caminho sem alimentação; depois carrega turnos novamente. Sem achado novo nas chaves. (`app/ponto/turnos.py:2151-2154`) |
-| Calendário | Mapa composto correto para fim/vínculo; evita repassar esse mapa ao pareador porque fornece `turnos=`. Porém os turnos vêm de `[data_ini,data_fim]`, enquanto o julgamento é solicitado até `min(data_fim,hoje)`. (`app/colaboradores/services/calendario.py:310,404,707-710`) |
+3. **Custo e reordenamento:** a cerca está depois dos gates, imediatamente antes da emissão. Não encontrei dependência deles de algo garantido pela cerca; a ressalva é o logger acima. Os testes exigem zero consultas à cerca no veto por protesto e medem `registrar_batida` com teto 31. Contagens executadas: [nao verificado]. (`app/chamados/reconciliador.py:835`; `app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:318`; `app/ponto/tests/test_selo_chokepoint_escrita.py:169`, `app/ponto/tests/test_selo_chokepoint_escrita.py:281`)
 
-**Contraexemplo lógico da janela diferente:** EC único noturno 21–05, sem intervalos; única batida E em D às 01h; agora D às 06h; nenhuma célula em D−1/D; uma célula com DNA em D+2; calendário `[D−1,D+3]`. São entradas hipotéticas, ocorrência em produção **[nao verificado]**.
+4. **Guarda removida/idempotência:** confirmado. Os dois chamadores exigem destino nulo; o teste passa duas vezes pelo cron e exige primeira passagem efetiva, segunda sem alteração de pergunta, chamados ou quantidade de logs. (`app/chamados/reconciliador.py:860`, `app/chamados/reconciliador.py:877`, `app/chamados/reconciliador.py:1376`; `app/chamados/services/disputa_emissao.py:404`; `app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:297`)
 
-- Carga curta `[D−1,D]`: seu pad termina D+1; não encontra DNA, então o mapa vira `None`. `_vespera` usa o template e ancora E01 em D−1. A aberta permanece viva até D09; juiz responde não encerrado. (`app/ponto/turnos.py:1845,1949,1297-1300,297-306,1992,2008-2011,2097-2100`)
-- Carga larga do calendário: encontra DNA D+2, deixando o mapa não vazio; como D−1 não consta, `_vespera` devolve `None`, e E01 fica em D. D−1 fica sem aberta; às D06, seu fim D05 passou, e o lote alimentado responde encerrado. (`app/escala/utils.py:100-107`; `app/ponto/turnos.py:1297-1299,283-286,1495-1496,1973-1976,2102-2105`)
+5. **R1/R1b:** confirmado. R1 exige `(None, None)`, mesmo destino e chamado vivo; R1b exige `admin_sem_fato_novo`, retorno falso e nenhuma costura no morto. (`app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:150`, `app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:163`)
 
-Isso demonstra logicamente que turnos carregados em outra janela podem alterar o encerramento do dia; execução do contraexemplo **[nao verificado]**. (`app/ponto/turnos.py:1297-1300,1949`)
+6. **Composição única/vigia:** confirmado; não encontrei mudança de comportamento do vigia. Mantém janela, chave do memo e classificação; K6 já retorna booleano. Sem data, a função devolve `None`, o vigia escolhe `aberta` e a cerca exclui antes de chamá-la. (`app/chamados/services/vigia_fio.py:413`, `app/chamados/services/vigia_fio.py:431`, `app/chamados/services/vigia_fio.py:435`; `app/folha/export.py:575`; `app/chamados/reconciliador.py:705`)
 
-**Célula sem DNA: sem achado.** Tanto alimentação quanto carga individual chegam à mesma queda para `TipoEscala.marcos_do_dia`; `None`, `{}` ou ausência de `marcos` não inventam fim. (`app/escala/models.py:1094-1108`) A carga comum traz todos os campos, evitando DNA diferido. (`app/escala/alimentacao.py:41-46`)
-
-**`escalas=`: sem achado nos chamadores atuais**, que não o fornecem; o lote carrega todos os vínculos com tipo relacionado. O contrato exige lista completa, pois geradora ausente devolve `None`. (`app/ponto/turnos.py:2114,2130-2131`; `app/escala/alimentacao.py:232-250`; chamadas citadas acima)
-
-O teste de propriedade atual só compara lote sem alimentação com consulta individual; não cobre `turnos=`, `escalas=`, `motivos=True`, chaves do cartório nem o contraexemplo de janela. (`app/ponto/tests/test_c1_dias_encerrados.py:26-51`)
-
-## 30/10 14:21 · sessao 9e672f61d1e5 · - · - · origem=Ronald (tmux)
-
-1. **Sem achado no antigo teto HOJE/ONTEM:** consulta `data_ini..min(data_fim, hoje)`, incluindo D−2; o teste novo contempla encadeamento até D+2. Existe limite de 366 dias para a janela customizada, separado do julgamento de encerramento. (`app/colaboradores/services/calendario.py:296-298,707-712`; `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:47-55`)
-
-2. **Ainda há “não encerrado” ignorado:** `sem_previsto` significa que a juíza não afirma encerramento; `dias_encerrados` retorna `False` para esse motivo. O calendário exclui explicitamente esse motivo de `_em_curso`, podendo chegar a `falta` em trabalho sem batida. Não é equivalência com a resposta booleana da juíza. (`app/ponto/turnos.py:2047-2050,2102-2105,2140`; `app/colaboradores/services/calendario.py:702-712,132-142,805`)
-
-3. **A seleção dos três motivos é regra própria do leitor:** o ramo `sem_previsto` não virou encerrado na autoridade; o calendário lhe aplica o mesmo caminho aplicado a encerrados. Isso conflita com a exigência de leitor sem regra própria de classe e com a promessa do teste de que trabalho cujo turno “NAO encerrou” recebe `previsto`. A exceção está declarada no comentário local, mas declaração não altera a autoridade. (`CLAUDE.md:20-22`; `app/ponto/turnos.py:2102-2105`; `app/colaboradores/services/calendario.py:702-712`; `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:1-5`)
-
-4. **Efeitos nos leitores:**
-
-| Leitor | Efeito |
-|---|---|
-| Perfil/gaveta | Herdam mudança de status, ícone e tooltip; o tooltip em curso foi corrigido. (`app/colaboradores/views.py:1946`; `app/colaboradores/services/drawer.py:121`; `app/colaboradores/services/calendario.py:881-882`; `app/templates/colaboradores/partials/_calendario_grade.html:99-105`) |
-| Furos HTML/PDF | Calendário/pintura mudam; seleção dos cards, `nfuro`, lista de marcos faltantes e ordenação continuam independentes, lendo `grade_da_celula → estado_do_dia`. (`app/relatorios/furos.py:141-190`; `app/relatorios/views.py:1549-1551`; `app/relatorios/furos_pdf.py:56-69`) |
-| Resolver dia/DP | `previsto` não pede decisão. Datas passadas em curso podem perder ação; `sem_previsto` hoje/ontem pode percorrer o sentido inverso em relação ao delta anterior, se os demais filtros permitirem. (`app/colaboradores/services/calendario.py:190,198-199,895-896,925-926`; `app/templates/colaboradores/partials/_calendario_grade.html:125-126`) |
-| Vigia | Perder a ação faz deixar `decisao_do_dia_pendente`; pode terminar em `fio_morto` ou outro balde subsequente. Ocorrência real **[nao verificado]**. (`app/chamados/services/vigia_fio.py:294-324`) |
-| Rodapé | Totais `ok`, `faltas`, `escala_suspeita`, `previstos` acompanham status; previstos são contados, mas não aparecem no rodapé. (`app/colaboradores/services/calendario.py:930-946`; `app/templates/colaboradores/partials/_calendario_grade.html:137-173`) |
-| `status_do_dia` / `contar_por_status` | Herdam integralmente a alteração, pois remontam o calendário. (`app/colaboradores/services/calendario.py:213-233`) |
-
-5. **Alcance além de falta:** para datas antigas agora reconhecidas em curso, pode ocorrer `ok → previsto`, `escala_suspeita → previsto`, `escala_suspeita → sem_dados` no limbo, bloqueio de veredito e retirada do rótulo de escala suspeita. Para HOJE/ONTEM com `sem_previsto`, a exclusão nova permite os sentidos inversos em relação à volta anterior. A exclusão está declarada localmente; os demais efeitos não estão descritos na declaração da obra, que promete “previsto, nao falta”. (`app/colaboradores/services/calendario.py:132-152,177-178,697-703,805,894`; `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:1-5`)
-
-Execução dos testes e ocorrência dos cenários em produção: **[nao verificado]**. [nao verificado]
-
-## 30/10 14:20 · sessao 77b51e13bbae · - · - · origem=Ronald (tmux)
-
-Custo novo do julgamento no calendário, por inspeção estática:
-
-- **+1 query por calendário/card** quando `data_ini <= min(data_fim, hoje)`; **zero** quando a janela é inteiramente futura. A chamada passa `celulas` e `turnos`, mas omite `escalas`; `dias_encerrados` executa uma consulta com `select_related('tipo_escala')` para todos os vínculos. (`app/colaboradores/services/calendario.py:707-710`; `app/ponto/turnos.py:2129-2133`)
-- Esse `+1` poderia alimentar dados já obtidos no calendário: `_esc_cal` foi carregado por `escalas_do_periodo(..., mais=_ger_cal)`, mas não é encaminhado à nova chamada. O parâmetro novo exige todos os vínculos; equivalência de reutilizar a lista filtrada precisa avaliação própria. (`app/colaboradores/services/calendario.py:404-406,432-434,709-710`; `app/ponto/turnos.py:2113-2114`)
-- **Não há query por dia de `fim_turno` no caminho alimentado do calendário**, inclusive célula cujo `dna` é nulo: o carregador de células não usa `.only()`, o mapa fornece a instância completa e o método lê `cel.dna`; sem marcos, consulta o `tipo_escala` já trazido pelo `select_related`, em memória. (`app/escala/alimentacao.py:41-46`; `app/escala/models.py:1094-1108`; `app/ponto/turnos.py:2131,2138-2139`; `app/escala/servico_jornada.py:68-71,89-93`)
-- **HTML: +N queries para N cards efetivamente montados**, sob a condição de janela acima. O calendário é chamado somente depois de `nfuro or not so_com_furo`. (`app/relatorios/furos.py:164-188`; `app/colaboradores/services/calendario.py:707-710`; `app/ponto/turnos.py:2130-2131`)
-- **PDF: os mesmos +N no request, sem segunda cobrança do julgamento na geração do PDF**: os cards são montados antes da bifurcação HTML/PDF; o PDF recebe os cards e lê suas semanas. (`app/relatorios/views.py:1541,1548-1551,1560-1566`; `app/relatorios/furos_pdf.py:47-56,73-84`)
-- A conta anterior `6 + E + M + U + K` não descreve a chamada atual do calendário: seus dois carregamentos caros estão bypassados pelos argumentos fornecidos e o DNA chega até o predicado. (`app/colaboradores/services/calendario.py:709-710`; `app/ponto/turnos.py:2129-2139`)
-
-**Medição efetiva e comparação integral com a árvore de `d2c37edd`: [nao verificado].** O número `+1` descreve a nova cadeia identificável na cópia; a base completa não está acessível nesta árvore nem nos anexos fornecidos. **[nao verificado]**
-
-## 30/10 14:12 · sessao ef4ba8f661a1 · CODEX-ASTRA-AB · verificador · origem=Code
-
-**Veredito da cópia: REPROVADO.** Há reabertura automática que contorna o veto, e o selo não detecta esse caminho; a garantia de abrir cadastro para ativo sem vínculo também não está cumprida (`app/chamados/services/disputa_emissao.py:1606`; `app/chamados/tests/test_o261_veto_na_porta.py:212`; `app/ponto/management/commands/detectar_ausencias.py:139`).
-
-Identidade do commit, comparação Git com `d2c37edd`, suíte Django, ocorrência dos contraexemplos em produção e execução da relavratura: **[nao verificado]**. A análise abaixo é da cópia disponível e dos anexos.
-
-**1. Quem escreve, quem lê e efeito de `ec=None`**
-
-O registro vivo nomeia `motivo_do_veto` como juiz; o corte contém a autorização exigida. O próprio `JUIZES.md` determina que o registro vivo prevalece (`app/core/juizes.py:248`; `app/docs/CORTES.md:401`; `app/docs/JUIZES.md:10`).
-
-Os leitores de produção encontrados para o resultado de `motivo_do_veto` são:
-
-| Leitor | Efeito quando `ec=None` passa a retornar `VETO_DEGENERADA` |
-|---|---|
-| Porta `_veto_da_regua` | Recusa nascimento por `abrir`/`criar` e renascimento por `_renascer_por_premissa_viva`, havendo dia forte. Sem dia, continua permitindo (`app/chamados/models.py:731`, `:778`, `:838`, `:891`, `:896`). |
-| Cartório `_veto_do_dia` | Acrescenta o veto à impressão; pode desfazer a igualdade que dispensava rejulgamento. O resultado não é passado diretamente como veredito ao classificador (`app/ponto/services/cartorio.py:1013`, `:1083`, `:1092`, `:1108`). |
-| `furos_sem_cobranca.medir` | Classifica o item como `porta='veto'`, retirando-o do total cobrável, mas mantendo-o em `itens`/`por_porta`. As exclusões anteriores — chamado vivo, tranca e afastamento — continuam prevalecendo (`app/ponto/services/furos_sem_cobranca.py:30`, `:83`, `:96`, `:109`). |
-| C2 `reemitir_chamado_do_dia` | Recusa emissão/renascimento. Quando já há chamado vivo, deliberadamente não consulta esse veto e pode costurar nele (`app/chamados/reconciliador.py:807`, `:852`, `:854`, `:855`). |
-| `furos_vetados_por_regua` | Inclui furo sem vínculo, com `vinculo=None` e `corroborada_em=None`; continua excluindo desligado (`app/ponto/services/furos_vetados.py:61`, `:65`, `:69`). |
-| `chamados_vivos_em_dia_vetado` | Conta chamado vivo do universo com dia forte e vínculo ausente; não fecha nem modifica o chamado. Sem dia vai para contador separado (`app/ponto/services/furos_vetados.py:95`, `:101`, `:106`, `:110`). |
-
-As cadeias de produção e consumo dos demais valores afetados são:
-
-| Campo/valor | Quem fornece/escreve → quem lê |
-|---|---|
-| `VETO_DEGENERADA`, `VETO_REGUA`, `None` | `motivo_do_veto` compõe `regua_degenerada` e o veto de suspeita; não grava banco → leitores da tabela anterior (`app/ponto/services/furos_vetados.py:33`). |
-| Universo de módulos | `FURO_MODULES` e `MODULOS_DE_TURNO` → união em `modulos_do_veto` → porta, vigia e teste dos cinco módulos (`app/chamados/catalogo/furo_modulos.py:15`; `app/chamados/reconciliador.py:336`; `app/ponto/services/furos_vetados.py:79`; `app/chamados/models.py:889`; `app/chamados/tests/test_o261_veto_na_porta.py:383`). |
-| Dia, `contexto_json`, `celula` | Emissores fornecem contexto; porta resolve a célula; `dia_do_fato(fortes=True)` prioriza célula e chaves do catálogo/contexto → porta e vigia (`app/chamados/models.py:718`, `:725`, `:830`; `app/chamados/juizes.py:89`, `:104`; `app/ponto/services/furos_vetados.py:101`). |
-| Vínculo do dia, `escala_geradora`, vigência | Porta de célula grava geradora; carregador busca célula/vínculos e delega a `alimentacao.vinculo_do_dia` → `vinculo_do_emissor` → juiz. Não encontrei nova escolha paralela de vínculo nessa cadeia (`app/ponto/portas/celula.py:248`, `:260`; `app/escala/servico_jornada.py:46`, `:57`; `app/escala/alimentacao.py:196`; `app/ponto/services/furos_vetados.py:23`). |
-| Template e avaliação da régua | `TipoEscala.marcos_do_dia` alimenta a degeneração; avaliação/corrobor ação gravam estado da régua → veto de suspeita lê avaliação, faixa e avaliações consecutivas (`app/escala/models.py:326`; `app/escala/regua_defesa.py:23`, `:26`, `:560`, `:644`, `:666`, `:765`; `app/colaboradores/services/vinculo.py:889`). |
-| `status_local`, retorno de nascimento | Nascimentos continuam nos dois gates; transições continuam em `_gravar_estado` → dedup, emissores, C2 e vigia leem estado/retorno (`app/chamados/models.py:192`, `:670`, `:735`, `:817`; `app/chamados/reconciliador.py:885`, `:888`; `app/ponto/services/furos_vetados.py:95`). |
-| Trilha: ação, modelo, objeto, `modulo_origem`, `dia`, `veto`, `via`, colaborador | `_trilha_do_veto` monta e consulta a chave; `core.observ.evento` escreve `LogAuditoria` → deduplicação e teste leem a trilha (`app/chamados/models.py:915`, `:921`, `:927`; `app/core/observ.py:134`; `app/chamados/tests/test_o261_veto_na_porta.py:359`). |
-| Impressão, ata e veredito | `impressao_insumos` incorpora veto; cartório classifica e pede lavra; porta de célula grava → próxima passagem compara impressão (`app/ponto/services/cartorio.py:329`, `:1092`, `:1409`, `:1424`; `app/ponto/portas/celula.py:647`, `:708`). |
-| Achados e contadores de veto | Serviços produzem dicionários → comando imprime; leitor de desfazer corroboração filtra pelo vínculo específico, descartando naturalmente `None` (`app/ponto/services/furos_vetados.py:69`, `:108`; `app/ponto/management/commands/furos_vetados_por_regua.py:29`, `:34`, `:44`; `app/escala/management/commands/desfazer_corroboracao_regua.py:38`). |
-| `VETO_NA_PORTA` | Detector/grade devolvem texto → detector conta por chave, grade conta no plano e cartório conta veto, sem anunciar emissão (`app/ponto/management/commands/detectar_ausencias.py:733`, `:440`; `app/ponto/management/commands/reconciliar_grade.py:520`, `:254`; `app/ponto/services/cartorio.py:1497`). |
-| `recusado_veto` | Retroativo consulta `veto_no_nascimento` no dry; no apply distingue retorno recusado; imprime total local (`app/ponto/management/commands/emitir_turno_aberto_retroativo.py:138`, `:174`, `:186`). |
-| Fixtures: tipo, posto e vínculo | `dar_vinculo` cria/reutiliza template e posto e cria `EscalaColaborador` ativa desde 2020 → resolução normal de vínculo e juiz (`app/chamados/tests/_vinculo_do_dia.py:13`, `:19`, `:23`; `app/escala/servico_jornada.py:58`). |
-
-Detector e grade ainda consultam os predicados anteriores antes da porta; C2 ainda consulta o novo juiz por fora. Isso está explicitamente permitido pela allowlist do pouso A, portanto **não classifico essas três permanências, isoladamente, como achado contra esse pouso** (`app/chamados/tests/test_o261_veto_na_porta.py:46`).
-
-Há três achados nessa cadeia:
-
-- **Impressão incompleta no ramo “nunca bateu”.** Esse ramo chama `impressao_insumos` sem `veto`, compara o hash e retorna antes do leitor do juiz. **Contraexemplo:** ativo sem adesão, célula carimbada, `ec=None` e demais insumos iguais: continua sendo pulado; o novo veto não entra em sua impressão. Esse ramo não emite cobrança por desenho; a falha é de cobertura da impressão, não prova de cobrança indevida (`app/ponto/services/cartorio.py:903`, `:907`, `:941`, `:943`, `:1003`, `:1013`).
-
-- **Ato humano passa sem registrar o veto dispensado.** Desarquivar registra resgate, mas não consulta nem registra `VETO_DEGENERADA`; a trilha nova registra recusas. **Contraexemplo:** desarquivar chamado encerrado pela competência, com dia conhecido sem vínculo: há trilha de resgate, mas falta a informação de que o humano atravessou um veto. O próprio vigia documenta essa pendência (`app/chamados/views_arquivar.py:68`, `:75`, `:79`; `app/chamados/models.py:915`; `app/ponto/services/furos_vetados.py:90`).
-
-- **Deduplicação da trilha não distingue a operação prometida.** A documentação promete uma linha por operação e grava `via`, mas o filtro não consulta `via`. **Contraexemplo:** `abrir` recusado e depois `criar` recusado para o mesmo colaborador/célula, módulo, dia e veto: a segunda operação fica sem linha própria (`app/chamados/models.py:908`, `:921`, `:927`).
-
-**2. Fixtures migradas**
-
-**Intenção “sem vínculo/sem escala” mascarada pelo helper: sem achado.** O caso explicitamente sem escala permanece sem ela: não chama o helper de chamado agrupado que passou a conceder vínculo. “Tranca sem cadastro” trata avisos de cadastro fora da tranca, não colaborador sem vínculo (`app/chamados/tests/test_selo_f4_fatia4.py:45`, `:69`, `:131`; `app/chamados/tests/test_tranca_sem_cadastro.py:9`).
-
-Há vacuidades em testes tocados, **já presentes no corpo anterior mostrado pelo diff**, sem evidência de que tenham sido introduzidas pelo helper: [nao verificado]
-
-| Teste | O que não prova e contraexemplo | [nao verificado]
-|---|---|
-| `test_MORDE_desligado_segue_o_gate_do_c2` | O desligado recebe vínculo, mas não recebe a célula criada para o outro colaborador. Remover o gate de situação ainda permite que a ausência de protesto impeça emissão; as asserções continuam satisfeitas (`app/chamados/tests/test_emissao_reata_orfa.py:31`, `:67`, `:71`, `:73`; `app/chamados/reconciliador.py:789`, `:834`, `:836`). |
-| `test_sem_celula_o_chamado_ainda_nasce` | Só chama `_ctx_c2` e examina o dicionário. Uma porta que recusasse todos os nascimentos não seria observada pelo teste (`app/chamados/tests/test_emissor_nomeia_o_marco.py:88`, `:92`; `app/chamados/reconciliador.py:862`). |
-| `test_sem_ata_possivel_o_chamado_nasce_sem_marco_e_nao_deixa_de_nascer` | Também só verifica o contexto. Recusar a abertura depois da montagem desse contexto preservaria suas asserções (`app/chamados/tests/test_bug125_cobranca_cega.py:176`, `:182`; `app/chamados/reconciliador.py:862`). |
-
-O teste novo sem vínculo efetivamente pede abertura, espera `(None, False)` e compara com nascimento com vínculo; os testes de deduplicação também exigem chamado efetivo. Nesses controles: **sem achado** (`app/chamados/tests/test_o261_veto_na_porta.py:395`, `:404`, `:406`; `app/chamados/tests/test_3c_abrir_ausencia.py:52`; `app/chamados/tests/test_f3_dedup_atraso.py:57`).
-
-Estado verde da suíte: **[nao verificado]**. [nao verificado]
-
-**3. Quem abre `regua_degenerada` para ativo sem vínculo**
-
-O escritor existe: `vetar_cobranca_se_degenerada` transforma `ec=None` em template ausente e abre `regua_degenerada`, com código `SEM_ESCALA`. Os chamadores são detector e grade (`app/escala/regua_defesa.py:23`, `:45`, `:50`, `:51`; `app/ponto/management/commands/detectar_ausencias.py:599`; `app/ponto/management/commands/reconciliar_grade.py:486`).
-
-**Achado: existir o escritor não garante que o ativo sem vínculo o alcance.**
-
-- Detector pula vínculo ausente antes do emissor (`app/ponto/management/commands/detectar_ausencias.py:139`).
-- Cartório integral exige vínculo; parcial retorna sem ele (`app/ponto/services/cartorio.py:1347`, `:1446`).
-- Retroativo de furo pula vínculo ausente (`app/ponto/management/commands/emitir_furo_retroativo.py:118`).
-- Grade exclui template ausente da fila de emissão (`app/ponto/management/commands/reconciliar_grade.py:157`; `app/ponto/marcos.py:107`).
-- Emissores de turno também saem sem vínculo (`app/ponto/management/commands/processar_alertas_avancados.py:37`; `app/ponto/management/commands/emitir_turno_aberto_retroativo.py:104`).
-- Juiz e nova porta somente recusam; não produzem o cadastro (`app/ponto/services/furos_vetados.py:40`; `app/chamados/models.py:896`).
-
-**Contraexemplo:** ativo em operação, sem qualquer vínculo nem geradora de célula, sem aviso de cadastro anterior. Os fluxos acima saltam a emissão; chamar a nova porta com dia conhecido apenas veta. Não nasce `regua_degenerada` por esses caminhos. A garantia do aval não está cumprida na cópia; não atribuo a origem dessa lacuna ao diff (`app/ponto/management/commands/detectar_ausencias.py:139`; `app/ponto/services/cartorio.py:1348`; `app/chamados/models.py:896`).
-
-**4. Há nascimento/reabertura automática que escapa?**
-
-**Sim: duas rotas de reabertura.**
-
-**A. Resposta pendente reabre diretamente.** O resolver chama `_pai.reabrir()` ao encontrar resposta aguardando validação. Ele é acionado automaticamente pelo signal e pelo reconciliador; não passa por `_renascer_por_premissa_viva` (`app/chamados/services/disputa_emissao.py:1598`, `:1604`, `:1606`; `app/chamados/signals.py:92`; `app/chamados/reconciliador.py:538`).
-
-**Contraexemplo:** pai histórico `entrada_bloqueada_turno_aberto`, resolvido, dia conhecido sem vínculo, sem agrupamento/irmão vivo/encerramento administrativo, categoria sem classificação de furo; disputa aberta com resposta não validada nem materializada creditada ao pai. O juiz de respostas aceita o caso; `reabrir` grava estado vivo sem perguntar o veto. O módulo pertence ao universo, embora possa ficar fora da guarda específica de premissa de furo (`app/chamados/juizes.py:1471`; `app/chamados/catalogo/furo_modulos.py:15`; `app/chamados/models.py:984`, `:1078`, `:1158`).
-
-**B. A grade pode desfazer a recusa da porta.** `abrir` devolve o existente encerrado mesmo quando `_renascer_por_premissa_viva` recusa. A grade só trata `None`; recebendo encerrado, chama `reabrir()` diretamente (`app/chamados/models.py:686`, `:688`; `app/ponto/management/commands/reconciliar_grade.py:519`, `:521`, `:522`).
-
-**Contraexemplo:** `batida_ausente` resolvido com marco ainda faltante; template pré-carregado era 08–17 e muda para 08–08 antes da abertura. O veto externo lê o objeto antigo; a porta recarrega o vínculo e veta; a grade recebe o encerrado e o reabre sem veto. A trava de `abrir` é no colaborador, não no template (`app/ponto/management/commands/reconciliar_grade.py:189`, `:196`, `:487`; `app/chamados/models.py:669`, `:778`, `:896`).
-
-**O selo fica verde apesar dessas fugas.** A varredura pura em memória encontrou exatamente as duas escritas e três cópias permitidas, mas a função real do caminho A não apareceu. O selo reconhece operações de gerente/construtor; não acompanha a reabertura pelo receptor `_pai`. Portanto a prova atual não sustenta “toda reabertura automática passa pelo veto” (`app/chamados/tests/test_o261_veto_na_porta.py:40`, `:46`, `:207`, `:212`, `:216`; `app/chamados/services/disputa_emissao.py:1606`).
-
-Nos demais critérios solicitados:
+Por classe, limitado aos sítios criados ou tocados:
 
 | Classe | Resultado |
 |---|---|
-| Segundo juiz novo / derivação paralela nova de vínculo ou universo | **Sem achado** na composição nova; usa autoridades existentes e união declarada (`app/ponto/services/furos_vetados.py:23`, `:33`, `:79`). |
-| Segundo escritor novo de estado | **Sem achado**; as fugas usam o escritor existente por uma entrada que contorna a guarda (`app/chamados/models.py:192`, `:1158`). |
-| Ordem de trava | **Sem achado de inversão introduzida**; permanece a trava de colaborador antes da leitura/dedup. Ensaio concorrente: **[nao verificado]** (`app/chamados/models.py:666`, `:669`). |
-| Relógio novo fora da borda | **Sem achado no novo juiz/gate**: recebem ou derivam o dia do fato, sem consultar “agora” (`app/ponto/services/furos_vetados.py:27`; `app/chamados/models.py:891`). |
-| Custo de frota no request | **Sem achado dessa classe**; há leitura adicional por dia na porta, pelo carregador de vínculo. Custo medido/latência: **[nao verificado]** (`app/chamados/models.py:896`; `app/escala/servico_jornada.py:46`, `:58`). |
-| Pouso antes dos pré-requisitos financeiros | O novo hash pode provocar relavra, e o cron seleciona células passadas sem recorte de competência nessa seleção. Reversão anterior, DIFF financeiro, preservação de exportadas por hash e encaminhamento à Pauta DP: **[nao verificado]** (`app/ponto/services/cartorio.py:1083`, `:1092`, `:1409`; `app/ponto/management/commands/processar_cartorio.py:49`, `:61`). |
+| Segundo juiz duplicando registrado | **Nada**: delegação a K6, C7, C6 e `motivos_atendidos`. (`app/chamados/reconciliador.py:713`, `:716`, `:727`, `:1476`) |
+| Segundo escritor fora da porta | **Nada**: emissão e costura permanecem nas portas existentes. (`app/chamados/reconciliador.py:837`, `:877`, `:1513`) |
+| Relógio fora da borda | **Nada novo identificado** nos trechos acrescentados. (`app/chamados/reconciliador.py:704`; `app/chamados/services/vigia_fio.py:431`) |
+| Derivação paralela de fonte única | **Nada novo**: ambos leem a composição extraída. (`app/chamados/reconciliador.py:711`; `app/chamados/services/vigia_fio.py:413`) |
+| Selo/RED sem mordida | **Nada demonstrado nas asserções**; execução e RED histórico: [nao verificado]. (`app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:151`, `:324`) |
+| Ordem de trava | **Nada novo identificado**: os gates antecipados são leitores; `abrir` mantém sua trava. (`app/chamados/reconciliador.py:797`, `:824`, `:835`; `app/chamados/models.py:666`) |
+| Pouso antes do pré-requisito | **Nada demonstrado**: o RELATO declara B pousado antes de C; comprovação operacional e remedida: [nao verificado]. (`app/docs/RELATO.md:3`, `:18`) |
 
-## 30/10 14:10 · sessao efaf950742da · - · - · origem=Ronald (tmux)
+## 30/10 14:35 · sessao 2c6263d7ddd1 · BENCH-O261-C · verificador · origem=Code
 
-Varredura completa do selo executada em memória, sem Django, banco ou escrita. Foram usados o AST real de `varrer` e o valor real de `VIVOS` (`app/chamados/tests/test_o261_veto_na_porta.py:225`; `app/chamados/catalogo/motor.py:24`).
+**Há falhas no alcance do HIST novo: ele chama um S128 que modifica outras perguntas e cujo segundo laço não preserva as guardas do primeiro.** O defeito interno já existia; o diff acrescenta caminhos que chegam a ele. (`app/chamados/reconciliador.py:1450`, `app/chamados/reconciliador.py:1493`, `app/chamados/services/disputa_emissao.py:1621`)
 
-Resultado:
+Não autentiquei os commits e ancestrais: a cópia recebida não tem repositório Git acessível. A comparação histórica abaixo usa o diff fornecido. Não executei a suíte Django. [não verificado] [nao verificado]
 
-- Escritas: `0038_a3_registrado_backfill.py::desfazer` e `::registrar`.
-- Cópias: `reemitir_chamado_do_dia`, `detectar_ausencias.Command._abrir_chamado`, `reconciliar_grade.Command._emitir_furo`.
-- Ambas as listas coincidem exatamente com suas allowlists; catraca `5 <= 5`; as duas portas foram encontradas (`app/chamados/tests/test_o261_veto_na_porta.py:40`, `:46`, `:54`, `:244`).
+1. **[P1] A restrição à competência não entregue não contém os efeitos da operação.**  
+   Uma pergunta MORTA de intervalo, em competência não entregue, passa pelo HIST novo e chama S128. Esse serviço inclui **todas as disputas abertas do colaborador**, sem restringir dia ou competência. Uma segunda pergunta, de competência entregue, MORTA, não validada, não materializada e sem credor vivo recebe carimbo e via. Portanto, verificar somente a competência da pergunta de entrada não garante “na entregue, caminho anterior igual”. (`app/chamados/reconciliador.py:1436`, `app/chamados/reconciliador.py:1493`, `app/chamados/services/disputa_emissao.py:1622`, `app/chamados/services/disputa_emissao.py:1634`, `app/chamados/services/disputa_emissao.py:1644`)
 
-Isso confirma que o selo passa suas comparações atuais, embora não detecte a reabertura automática por `_pai.reabrir()` do HX: o corpo real do resolver e o mutante mínimo retornaram `([], [])`, coerentemente com o descarte do receptor não reconhecido (`app/chamados/tests/test_o261_veto_na_porta.py:207`, `:212`; `app/chamados/services/disputa_emissao.py:1606`).
+   Antes, o intervalo não casava com o mapa de `batida_ausente` nem entrava no c1; o alargamento do HIST passa a disparar essa cascata. Isso contraria o limite de alcance e o gravado intocado da exportada. (`app/chamados/models.py:2469`, `app/chamados/reconciliador.py:332`, `app/chamados/reconciliador.py:1450`, `app/docs/CORTES.md:399`)
 
-Não foi executada a suíte Django; comportamento de integração e ocorrências em produção: [nao verificado]. [nao verificado]
+2. **[P1] MORTA com resposta pode ganhar carimbo sem testemunha, apesar da proteção explícita.**  
+   Caso: intervalo respondido, `validada_em` e `materializada_em` nulos, sem batida testemunha, célula decidida pelo admin com veredito que não acusa, histórico encerrado único e disputa sem credor vivo. O C6 pode declarar essa pergunta MORTA pela decisão da célula. (`app/chamados/juizes.py:1018`, `app/chamados/juizes.py:1028`, `app/chamados/juizes.py:1054`)
 
-## 30/10 14:09 · sessao efaf950742da · - · - · origem=Ronald (tmux)
+   O HIST novo chama S128. O primeiro laço **pula** a resposta sem testemunha; o segundo seleciona novamente a mesma pergunta e carimba sem repetir a proteção. O materializador posteriormente exige `materializada_em IS NULL`, portanto perde essa resposta do seu universo. (`app/chamados/reconciliador.py:1493`, `app/chamados/services/disputa_emissao.py:1558`, `app/chamados/services/disputa_emissao.py:1634`, `app/chamados/services/disputa_emissao.py:1659`, `app/chamados/services/materializacao.py:1286`)
 
-Achados confirmados por leitura:
+3. **[P1] A guarda da tranca também é vencida pelo segundo laço.**  
+   Caso: competência não entregue, porém trancada; intervalo sem carimbo; histórico resolvido por via diferente de `competencia_trancada`; disputa sem credor vivo. Tranca e entrega consultam fatos distintos, e a porta de trancar não exige exportação. (`app/folha/export.py:570`, `app/ponto/services/fechamento.py:1376`, `app/ponto/services/fechamento.py:1432`)
 
-1. **Reabertura automática foge do veto pelo HX.** `resolver_perguntas_por_chamado_resolvido` chama `_pai.reabrir()` diretamente quando há resposta aguardando validação, sem consultar `_renascer_por_premissa_viva` nem `motivo_do_veto` (`app/chamados/services/disputa_emissao.py:1598`, `:1604`, `:1606`). O caminho é automático: receiver de `post_save` chama o resolver (`app/chamados/signals.py:75`, `:89`, `:92`); o reconciliador também o chama (`app/chamados/reconciliador.py:538`).
+   C6 declara MORTA pela tranca; o HIST costura antes de S128. O primeiro laço respeita a tranca, mas o segundo aceita o mesmo resultado MORTA e grava `materializada_em`. A reversão por competência só desfaz perguntas com a via específica `competencia_trancada`, não esse carimbo `chamado_encerrado`. É quebra da proteção de silêncio reversível, exposta agora aos intervalos pelo HIST alargado. (`app/chamados/juizes.py:1008`, `app/chamados/reconciliador.py:1487`, `app/chamados/services/disputa_emissao.py:1551`, `app/chamados/services/disputa_emissao.py:1641`, `app/chamados/services/disputa_emissao.py:1647`, `app/chamados/models.py:2213`)
 
-   Contraexemplo concreto construído por leitura: pai histórico `entrada_bloqueada_turno_aberto`, `resolvido`, categoria/subcategoria sem classificação de furo, dia conhecido sem vínculo, sem agrupamento/irmão vivo/encerramento admin; disputa aberta com resposta não validada e não materializada creditada ao pai. O juiz das irmãs só exige carimbos/resposta/crédito (`app/chamados/juizes.py:1471`). Esse módulo está no universo do veto (`app/chamados/catalogo/furo_modulos.py:15`), mas fora de `CALADOS_POR_ISENCAO` (`app/chamados/catalogo/modulos.py:235`), permitindo evitar a guarda de premissa (`app/chamados/models.py:984`, `:1078`). `reabrir` grava estado vivo (`app/chamados/models.py:1158`) sem perguntar vínculo/veto. Ocorrência concreta em produção e execução de integração: [nao verificado].
+4. **[P2] c1 está intacto no corpo, mas perde casos por mudança no despacho.**  
+   `saida_sem_entrada` MORTA/validada, sem resposta e sem turno aberto, com **dois históricos `batida_ausente`**: antes nenhum casava pelo mapa e c1 lavrava; agora ambos atendem pelo juiz, `len(hist)==2`, c1 não é chamado e a porta devolve `False`. O caso simétrico ocorre com `orfao_14h` diante de históricos `saida_sem_entrada`. (`app/chamados/models.py:2468`, `app/chamados/juizes.py:1597`, `app/chamados/reconciliador.py:363`, `app/chamados/reconciliador.py:399`, `app/chamados/reconciliador.py:1457`, `app/chamados/reconciliador.py:1469`)
 
-2. **Grade pode desfazer a recusa da própria porta.** O vínculo/template é pré-carregado (`app/ponto/management/commands/reconciliar_grade.py:189`, `:196`), e o veto externo usa esse objeto (`:487`, `:491`). `abrir` chama `_renascer_por_premissa_viva`, mas devolve o existente mesmo quando renascer recusou (`app/chamados/models.py:686`, `:688`). A guarda nova só trata `ch is None`; se veio encerrado, a grade chama `ch.reabrir()` diretamente (`app/ponto/management/commands/reconciliar_grade.py:519`, `:521`, `:522`).
+   Com histórico único, essas perguntas passam a HIST/S128, mudando destino e via. A troca pelo juiz foi solicitada; portanto essa mudança isolada não prova infração. A perda do caminho c1 quando surgem múltiplos candidatos precisa ser distinguida da afirmação “c1 intocado”. (`app/chamados/reconciliador.py:406`, `app/chamados/reconciliador.py:1487`, `app/chamados/reconciliador.py:1493`)
 
-   Contraexemplo: chamado `batida_ausente` resolvido, célula ainda acusa marco faltante; template carregado 08–17 muda para 08–08 antes do pedido à porta. A cópia externa aprova o objeto antigo, a porta consulta vínculo/template atual e veta (`app/chamados/models.py:778`, `:896`), mas o fallback reabre sem veto. A trava de `abrir` é no colaborador (`app/chamados/models.py:669`), não no template. Ocorrência em produção/ensaio concorrente: [nao verificado].
+5. **[P2] Há consulta duplicada de competência e custo novo sem cobertura do cenário afetado.**  
+   No intervalo vivo que chega ao c2, K6 é consultado em `reatar` e novamente pelo helper do c2. Cada chamada carrega os registros da competência; o memo de C6 não elimina essa duplicação. C6 também passou a anteceder as recusas do c1, cuja ordem anterior tinha justificativa explícita de custo na batida. (`app/chamados/reconciliador.py:1436`, `app/chamados/reconciliador.py:749`, `app/chamados/reconciliador.py:709`, `app/folha/export.py:570`, `app/chamados/reconciliador.py:394`)
 
-3. **O selo AST não cobre a fuga real de reabertura por instância.** Só reconhece pedido de porta quando o receptor cita o modelo (`app/chamados/tests/test_o261_veto_na_porta.py:207`); descarta receptores como `_pai` (`:212`); as escritas reconhecidas são construtor/save ou operações create/update de gerente (`:209`, `:216`, `:218`). Executei extração das funções AST em memória com `python3 -B`, sem Django/imports locais/DB/escrita: tanto `def automatica(pai): pai.reabrir()` quanto o corpo real de `resolver_perguntas_por_chamado_resolvido` retornaram `([], [])`. Evidência de execução só nesta sessão, sem artefato: [nao verificado]. A limitação é verificável nas linhas acima.
+   O selo existente com três perguntas já lhes atribui destino; o caminho alterado seleciona órfãs. Logo esse cenário não mede o custo novo. **Estouro efetivo do teto: [não verificado].** (`app/ponto/tests/test_selo_chokepoint_escrita.py:239`, `app/chamados/reconciliador.py:1355`)
 
-4. **Ato humano tem trilha genérica, mas não mostra/registra o veto dispensado.** Desarquivar chama `reabrir` e grava resgate (`app/chamados/views_arquivar.py:68`, `:75`, `:79`); reabertura administrativa grava motivo/justificativa humana (`app/chamados/services/acoes_disputa.py:266`, `:270`); reabrir competência grava competência/status (`app/chamados/services/competencia_trancada.py:258`, `:261`). Nenhum desses caminhos pergunta o veto. A trilha nova só registra **recusas** (`app/chamados/models.py:915`, `:924`); o próprio contador admite que ato humano ainda não deixa trilha própria (`app/ponto/services/furos_vetados.py:89`). Contraexemplo: desarquivar chamado de competência trancada com dia sem vínculo; registra resgate, sem `VETO_DEGENERADA` ou dispensa humana desse veto.
+6. **[P2] O selo novo não distingue algumas implementações proibidas.**
+   
+   - Todas as MORTAS da fixture são produzidas preenchendo `validada_em`. Por inspeção, trocar as novas consultas a C6 por `p.validada_em is None` preserva os resultados esperados dessa bateria, embora crie um segundo juiz. Mutante executado: **[não verificado]**. (`app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:92`, `app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:150`, `app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:159`)
+   - A bateria chama `reatar` e o cron, sem testar diretamente c2. Não sela que o alargamento esteja na porta exigida, em vez de num ramo alternativo do wrapper. (`app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:95`, `app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:209`)
+   - O DNA usa `ii`/`fi`; o juiz procura `hii`/`hfi`. Os intervalos testados dependem do veredito genérico `furo`, sem comprovar a leitura da lâmpada específica. (`app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:66`, `app/chamados/juizes.py:823`, `app/chamados/juizes.py:863`)
+   - R4 exportada, R4b, R5 e R6 preservam comportamento anterior e passam sem a cura por inspeção; são controles, não RED isolado contra o ancestral. R1/R2/R3 e o controle positivo R4 possuem asserções da mudança. (`app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:117`, `:133`, `:141`, `:148`, `:161`, `:169`, `:178`, `:182`)
 
-Hipótese descartada:
+Os efeitos dos itens 1–3 foram também reproduzidos executando **somente em memória** o corpo real do S128, com ORM e respostas dos juízes substituídos: o segundo laço carimbou a respondida, a trancada e a irmã de outro dia. Isso confirma o fluxo, não constitui teste integrado nem medição de produção. (`app/chamados/services/disputa_emissao.py:1514`, `app/chamados/services/disputa_emissao.py:1634`)
 
-- **Abertura manual via `abrir_chamado_para_colaborador` produzir `None.pk` para módulo do universo: sem achado no catálogo atual.** O serviço rejeita módulo fora de `tipos_para_colaborador` (`app/chamados/services/abertura.py:149`), que só inclui `abrivel_por_humano` (`app/chamados/catalogo/modulos.py:281`, `:306`). Os módulos do universo não declaram essa abertura (`:105`, `:107`, `:109`, `:111`, `:182`); não alcançarão `criar` por essa interface.
+Quanto às classes restantes:
 
-## 30/10 14:07 · sessao ab87115a333a · - · - · origem=Ronald (tmux)
+- **Segundo juiz efetivamente introduzido: nada.** Os helpers delegam a C6, K6 e `janela_atual`. (`app/chamados/reconciliador.py:700`, `app/chamados/reconciliador.py:711`)
+- **Segundo escritor fora da porta: nada.** Nascimento e costura continuam em `abrir` e `reapontar_resolvedora`. (`app/chamados/reconciliador.py:816`, `app/chamados/reconciliador.py:856`, `app/chamados/reconciliador.py:1487`)
+- **Relógio novo fora da borda: nada no diff.** Os helpers recebem o dia; o parse movido não consulta o relógio. (`app/chamados/reconciliador.py:697`, `app/chamados/reconciliador.py:1425`)
+- **Derivação paralela nova de fonte única: nada.** O HIST aberto passa a ler `motivos_atendidos`. (`app/chamados/reconciliador.py:1450`)
+- **Ordem de locks: nada novo identificado.** `abrir` conserva a trava do colaborador antes do dedup; a falha de guarda da tranca é o item 3. (`app/chamados/models.py:666`)
+- **Pouso antes do pré-requisito: nada comprovado.** O relato registra B pousado e C em remedição; comprovação externa dos logs e cumprimento do teto: **[não verificado]**. (`app/docs/RELATO.md:3`, `app/docs/RELATO.md:4`, `app/docs/CORTES.md:399`)
 
-Achado confirmado: o efeito “ativo sem vínculo segue abrindo `regua_degenerada`” não tem caminho alcançável para o caso sem vínculo em todo o período.
+O alcance operacional inclui cron `*/15`, emissão de disputa e signal da batida. Portanto, os efeitos acima não ficam restritos ao cron: o evento chama a mesma porta. (`app/config/crons.py:376`, `app/chamados/management/commands/reconciliar_chamados.py:36`, `app/chamados/services/disputa_emissao.py:409`, `app/ponto/signals.py:215`, `app/chamados/reconciliador.py:1302`)
 
-- O escritor existe: `vetar_cobranca_se_degenerada` transforma `ec=None` em template `None`, considera degenerada e chama `ChamadoColaborador.abrir(modulo_origem='regua_degenerada')`, com `tipo_escala_id=None` e código `SEM_ESCALA` (`app/escala/regua_defesa.py:23`, `:45`, `:51`, `:73`).
-- Seus dois chamadores são `_abrir_chamado` do detector (`app/ponto/management/commands/detectar_ausencias.py:599`) e `_emitir_furo` da grade (`app/ponto/management/commands/reconciliar_grade.py:486`).
-- O detector exclui `ec=None` antes de chegar ali (`app/ponto/management/commands/detectar_ausencias.py:139`).
-- O cartório integral exige vínculo não nulo (`app/ponto/services/cartorio.py:1347`); seu ramo parcial retorna sem vínculo (`app/ponto/services/cartorio.py:1446`).
-- O emissor retroativo de furo pula vínculo ausente (`app/ponto/management/commands/emitir_furo_retroativo.py:118`).
-- A grade não coloca o dia na fila de emissão quando o template é ausente: `escala_ok(None)==False` (`app/ponto/management/commands/reconciliar_grade.py:157`, `app/ponto/marcos.py:107`).
-- Os emissores de turno tampouco abrem cadastro: saem sem vínculo (`app/ponto/management/commands/processar_alertas_avancados.py:37`, `app/ponto/management/commands/emitir_turno_aberto_retroativo.py:104`).
-- O novo juiz é somente leitura e só retorna `VETO_DEGENERADA`; a porta também não chama o escritor de cadastro (`app/ponto/services/furos_vetados.py:40`, `app/chamados/models.py:896`).
+## 30/10 14:34 · sessao 5b5f385a7ac8 · - · - · origem=Ronald (tmux)
 
-Contraexemplo concreto por fluxo: colaborador ativo, em operação, sem qualquer `EscalaColaborador` nem geradora de célula, sem chamado prévio de cadastro; detector e retroativos saltam o dia, cartório não chama emissor, grade não enfileira emissão, porta veta o chamado de turno sem abrir `regua_degenerada`. Chamado de cadastro não nasce pelos caminhos acima; ocorrência real em produção [nao verificado]. A lacuna já pode anteceder o diff; o que fica reprovado é a garantia do aval nesta cópia.
+Achado no c2: a alegação “conjunções sem efeito colateral” é falsa; `_log.info('reconciliador_c2: VETO_CELULA_%s ...')` executa antes da cerca. O retorno permanece `False`, mas há chamada adicional ao logger quando a cerca antiga recusaria primeiro. Não identifiquei escrita de domínio adicional nesse caminho. (`app/chamados/reconciliador.py:765`, `:828`, `:830`, `:835`.)
 
-Achado adicional de impressão: existe um ramo do cartório que não incorpora o novo veto.
+Caminho alcançável pelo código, sem exigir protesto contraditório:
 
-- `adesao is None` entra no ramo “nunca bateu” (`app/ponto/services/cartorio.py:907`).
-- Esse ramo chama `impressao_insumos` sem argumento `veto` (`app/ponto/services/cartorio.py:941`), compara o hash e pula a célula se igual (`:943`), encerrando antes do leitor de `motivo_do_veto` (`:1003`, `:1007`).
-- O ramo normal consulta o juiz em `:1013`, passa seu resultado em `:1083`; `impressao_insumos` acrescenta `veto:VETO_DEGENERADA` ao hash em `:329`.
+- Pergunta órfã de intervalo entra pelo filtro real; c1 recusa intervalo. (`app/chamados/reconciliador.py:1375`, `:363`.)
+- Chamado vivo do mesmo dia já possui outra pergunta do mesmo motivo sem carimbo: o derivador o exclui; sem HIST, alcança c2. (`app/chamados/services/disputa_emissao.py:209`, `app/chamados/reconciliador.py:1483`, `:1493`.)
+- c2 encontra esse chamado vivo e dispensa piso/protesto; célula com `trabalha=False` ou `veredito='trabalhou'` chega ao veto. (`app/chamados/reconciliador.py:797`, `:799`, `:826`, `app/ponto/marcos.py:159`, `:161`.)
+- Se competência exportada, a cerca antecipada recusaria sem esse logger; a nova ordem chega ao logger e retorna `False`. (`app/chamados/reconciliador.py:713`, `:724`, `:830`.)
+- Existência desse cenário no banco real: [nao verificado]. Persistência da mensagem pelos handlers: [nao verificado].
 
-Contraexemplo: ativo sem adesão, célula já carimbada, `ec=None`, demais insumos iguais. O novo resultado do juiz não muda `imp0`; `:943` continua pulando. Se “ec=None também para impressão” abrange toda célula, o censo deixou esse leitor indireto de fora. Não há cobrança de furo nesse ramo por desenho (`app/ponto/services/cartorio.py:903`); portanto não alegar cobrança indevida como efeito.
+Verificação complementar somente em memória: AST da função atual, imports substituídos por fakes, comparação cerca antecipada/final; ambos retornaram `False`, respectivamente zero/uma chamadas ao logger. Isso verifica a ordem local, não integração Django. [nao verificado]
 
-Relavratura/dinheiro/exportada: há caminho de rejulgamento automático que percorre todas as células passadas sem recorte de competência (`app/ponto/management/commands/processar_cartorio.py:49`, `:61`, `:65`), e o hash novo do ramo normal pode provocar lavra (`app/ponto/services/cartorio.py:1083`, `:1092`, `:1409`, `:1424`). Escritores efetivos são `lavrar_veredito` (`app/ponto/portas/celula.py:689`) e `carimbar` (`:721`). Reversão prévia, aplicação financeira autorizada, hashes preservados de exportação e Pauta DP da mudança específica: [nao verificado]. Não confundir rejulgamento de célula com alteração comprovada do TXT exportado.
+Demais gates examinados são leitores: horizonte delega à janela; isenção lê flag/catálogo; ausência consulta queryset; célula consulta valores; motor retorna decisão. Não dependem de pré-condição estabelecida pela cerca. (`app/ponto/services/cartorio.py:244`, `app/core/constants.py:18`, `app/chamados/catalogo/modulos.py:277`, `app/ponto/turnos.py:2518`, `app/ponto/marcos.py:155`, `app/chamados/catalogo/motor.py:130`.)
 
-## 30/10 14:07 · sessao 95faa6137e78 · - · - · origem=Ronald (tmux)
+Por esse recorte: segundo escritor **nada**, nova ordem de travas **nada**, relógio novo fora da borda **nada**; o trecho novo consulta juízes e o escritor `abrir`, incluindo avaliação de `_ctx_c2`, permanece depois da cerca. (`app/chamados/reconciliador.py:705`, `:713`, `:716`, `:724`, `:727`, `:835`, `:837`, `:847`.)
 
-**Migração “sem vínculo/sem escala”: sem achado.** O caso explicitamente “sem escala” preserva a condição: `_colab(..., com_escala=False)` só cria vínculo quando solicitado; `test_MORDE_procedencia_ignora_batida_retratada` não chama o helper `_chamado_agrupado` que ganhou `dar_vinculo` (`app/chamados/tests/test_selo_f4_fatia4.py:45`, `:50`, `:69`, `:131`, `:136`, `:139`). `TrancaSemCadastro` testa a exclusão de **avisos de cadastro** da tranca, e não ausência de vínculo (`app/chamados/tests/test_tranca_sem_cadastro.py:9`, `:39`, `:50`).
+## 30/10 14:34 · sessao 797f487eabf6 · BENCH-O261-C · verificador · origem=Code
 
-**Vacuidades encontradas em testes tocados, mas não demonstradas como introduzidas pela migração:** [nao verificado]
+**Achei uma lacuna de paridade herdada pelo diff: vínculo ausente não é vetado pelo leitor escolhido.** (`app/ponto/services/furos_vetados.py:26`; `app/chamados/reconciliador.py:845`)
 
-1. `test_MORDE_desligado_segue_o_gate_do_c2` ganha vínculo, mas continua sem célula para o desligado; a célula da fixture pertence ao outro colaborador (`app/chamados/tests/test_emissao_reata_orfa.py:30`, `:31`, `:67`, `:71`). As asserções exigem apenas destino ausente/zero chamados (`:73`, `:74`). **Contraexemplo:** remover o gate `situacao != 'ativo'` ainda deixa o caso barrado pela ausência de protesto da célula (`app/chamados/reconciliador.py:789`, `:834`, `:836`). O teste não prova o gate que nomeia.
+- **(a) Predicado:** `motivo_do_veto(..., None, ...)` retorna `None`; `_abrir_chamado` considera esse mesmo caso `VETO_DEGENERADA`, pois template ausente é degenerado. O cartório também impede emissão sem vínculo. Portanto, compartilhar o leitor da impressão **não garante paridade integral com a emissão**. (`app/ponto/services/furos_vetados.py:26`; `app/ponto/management/commands/detectar_ausencias.py:599`; `app/escala/regua_defesa.py:23`; `app/escala/regua_defesa.py:45`; `app/ponto/services/cartorio.py:1348`)
 
-2. `test_sem_celula_o_chamado_ainda_nasce` somente chama `_ctx_c2` e inspeciona o dicionário; não tenta abrir chamado (`app/chamados/tests/test_emissor_nomeia_o_marco.py:88`, `:92`, `:93`). **Contraexemplo:** impedir todo nascimento na porta não é observado por essas asserções; a porta é chamada separadamente pelo c2 (`app/chamados/reconciliador.py:862`).
+  Esse `None` está previsto inclusive com célula existente: geradora fora da vigência retorna `None`. Os gates anteriores do c2 verificam protestos e `trabalha/veredito`, sem exigir vínculo válido; o bloco acrescentado deixa essa ausência passar. É lacuna residual, não regressão criada neste diff; ocorrência em dados reais **[não verificado]**. (`app/escala/alimentacao.py:250`; `app/chamados/reconciliador.py:825`; `app/ponto/marcos.py:155`; `app/chamados/reconciliador.py:845`)
 
-3. A mesma limitação ocorre em `test_sem_ata_possivel_o_chamado_nasce_sem_marco_e_nao_deixa_de_nascer`: somente `_ctx_c2` e três campos do resultado são exercitados (`app/chamados/tests/test_bug125_cobranca_cega.py:176`, `:182`, `:183`). **Contraexemplo:** recusar o nascimento depois de construir contexto não altera o resultado que esse teste verifica (`app/chamados/reconciliador.py:862`, `:872`).
+  **Segundo juiz, vínculo ou dia divergente: nada adicional.** Com vínculo presente, são os mesmos predicados; a impressão usa exatamente a mesma composição de leitores. (`app/ponto/services/furos_vetados.py:28`; `app/ponto/management/commands/detectar_ausencias.py:599`; `app/ponto/services/cartorio.py:1013`)
 
-**Controles úteis preservados:** os testes de deduplicação exigem um chamado efetivo, evitando verde por veto total (`app/chamados/tests/test_3c_abrir_ausencia.py:52`, `app/chamados/tests/test_f3_dedup_atraso.py:57`, `:64`); o teste novo sem vínculo espera `(None, False)` e compara com nascimento com vínculo (`app/chamados/tests/test_o261_veto_na_porta.py:395`, `:404`, `:406`).
+- **(b) Costura/renascer/abrir com encerrado: nada no fluxo sequencial.** Encerrado torna `_costura_no_vivo=False`, recebe o veto antes de `abrir` e, portanto, antes de `_renascer_por_premissa_viva`. Consulta e abertura usam a mesma chave. (`app/chamados/reconciliador.py:795`; `app/chamados/reconciliador.py:843`; `app/chamados/reconciliador.py:853`; `app/chamados/models.py:685`)
 
-Execução da suíte e estado verde efetivo: **[nao verificado]**. [nao verificado]
+- **(c) C1: muda, sim.** `orfao_14h` e `saida_sem_entrada` passam a sofrer o veto em NASCER/RENASCER, inclusive fora da competência aberta quando chegam ao c2: a condição `_so_no_alcance_novo` não limita o bloco novo. Isso amplia a alteração de comportamento além dos intervalos e tensiona a promessa anterior de preservar os caminhos fora do alcance novo. O comentário novo declara explicitamente os quatro motivos; autorização específica dessa ampliação **[não verificado]**. (`app/chamados/reconciliador.py:332`; `app/chamados/reconciliador.py:770`; `app/chamados/reconciliador.py:843`; `app/chamados/reconciliador.py:851`; `app/chamados/reconciliador.py:688`; `app/chamados/reconciliador.py:840`)
 
-## 30/10 14:04 · sessao 4573a6843b71 · CALENDARIO-HOJE · verificador · origem=Code
+- **(d) Selo sem mordida: nada demonstrado.** R2b estabelece veto real e exige retorno falso e ausência de chamado; R2 fornece o controle positivo sem veto. Entretanto, R2b cobre apenas régua suspeita, intervalo e nascimento sem chamado — não caracteriza C1, degenerada ou renascimento vetado. RED executado **[não verificado]**. (`app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:174`; `app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:186`)
 
-**Parecer: reprova pelo teto civil que dispensa o juiz para dias anteriores a ontem e pelo custo adicional por card no request.** (`app/colaboradores/services/calendario.py:702-704`; `app/relatorios/furos.py:184-188`). Execução dos testes, medição de queries e ocorrência dos contraexemplos em produção: **[nao verificado]**.
+- **Relógio fora da borda: nada. Escrita fora da porta: nada. Ordem de trava: nada introduzido.** O bloco usa o dia recebido, consulta leitores sem escrita/trava e retorna antes da porta existente. (`app/chamados/reconciliador.py:791`; `app/chamados/reconciliador.py:842`; `app/ponto/services/furos_vetados.py:19`; `app/escala/servico_jornada.py:38`; `app/chamados/models.py:666`)
 
-1. **Quem escreve e quem lê**
+Validação por execução da suíte: **[não verificado]**. [nao verificado]
 
-   `contexto_calendario` fornece `futuro`; `_classificar` o lê nos ramos de trabalho e de escala suspeita. O campo não é exportado: os consumidores recebem `status` e seus derivados. (`app/colaboradores/services/calendario.py:131,147,797,867-901`)
+## 30/10 14:34 · sessao 092cd5f1ccd9 · - · - · origem=Ronald (tmux)
 
-   | Leitor | Efeito da mudança |
-   |---|---|
-   | Perfil e gaveta | Mudam cor, ícone e apresentação pela mesma grade. (`app/colaboradores/views.py:1946`; `app/colaboradores/services/drawer.py:121`; `app/templates/colaboradores/partials/_calendario_grade.html:102-105`) |
-   | Furos HTML/PDF | O calendário muda; seleção, `nfuro`, marcos faltantes e ordenação continuam na cadeia independente `grade_da_celula → estado_do_dia`. O PDF recebe o novo status para pintar. (`app/relatorios/furos.py:141,160-190`; `app/relatorios/views.py:1550-1551`; `app/relatorios/furos_pdf.py:56,66`) |
-   | Resolver dia / DP | HOJE já era excluído. ONTEM em curso pode perder a ação, pois `previsto` não pede decisão, caso também satisfaça “último recurso”. (`app/colaboradores/services/calendario.py:188,196-197,886-887`) |
-   | Vigia | Nesse cenário condicionado de ONTEM, deixa de contar `decisao_do_dia_pendente` e pode alcançar `fio_morto`, dependendo dos demais filtros. Ocorrência real **[nao verificado]**. (`app/chamados/services/vigia_fio.py:289-324`) |
-   | Resumo/rodapé | Reduz `faltas` ou `ok` e aumenta `previstos`; previstos são contados, mas não exibidos no rodapé. (`app/colaboradores/services/calendario.py:921-937`; `app/templates/colaboradores/partials/_calendario_grade.html:141-173`) |
-   | `status_do_dia` / `contar_por_status` | Herdam a mudança integralmente por montarem o calendário. Chamadas dinâmicas externas: **[nao verificado]**. (`app/colaboradores/services/calendario.py:217-231`) |
+- **(b) Nada no caminho sequencial com chamado já encerrado:** `_costura_no_vivo` só é verdadeiro para `VIVOS`; encerrado passa pelo novo veto antes de `abrir`, que depois poderia renascê-lo. A chave do teste e da abertura é a mesma (`app/chamados/reconciliador.py:795-799`, `:843-848`, `:853-854`; `app/chamados/models.py:670-688`).
+- **Escrita fora da porta: nada introduzido.** O bloco acrescentado consulta vínculo/predicado e retorna; a busca do vínculo usa consultas de leitura, e o veto usa os predicados existentes (`app/chamados/reconciliador.py:842-848`; `app/ponto/services/furos_vetados.py:15-32`; `app/escala/servico_jornada.py:38-58`; `app/escala/regua_defesa.py:16-33`, `:554-562`).
+- **Relógio fora da borda: nada introduzido.** A data entregue ao leitor é `_d_hz`, já calculada do argumento `dia`; não há consulta ao relógio no novo bloco nem nos leitores percorridos (`app/chamados/reconciliador.py:789-791`, `:845`; `app/ponto/services/furos_vetados.py:19-32`; `app/escala/regua_defesa.py:554-562`).
+- **Ordem de trava: nada introduzido.** A leitura adicionada não adquire trava; a aquisição existente de `Colaborador` permanece dentro de `abrir` (`app/escala/servico_jornada.py:38-58`; `app/chamados/models.py:666-670`).
 
-   O alcance excede `falta → previsto`: inclui `ok` do isento, `escala_suspeita`, possível `escala_suspeita → sem_dados` no limbo e bloqueio da sobreposição de veredito. O rótulo de escala suspeita também desaparece quando o status muda. (`app/colaboradores/services/calendario.py:131-150,175,885`)
+Limite relevante: `_costura_no_vivo` é um snapshot anterior à porta; `_ctx_c2` pode executar cartório antes da abertura, e o cartório pode encerrar chamados pelos marcos. Isso já existia; fuga efetiva do veto por esse encadeamento não foi demonstrada e não deve ser apresentada como achado confirmado (`app/chamados/reconciliador.py:798-799`, `:669-672`, `:863`; `app/ponto/services/cartorio.py:1163`, `:1174-1175`; fuga efetiva: [não verificado]).
 
-   **Achado de apresentação:** HOJE/ONTEM em curso passam a receber o tooltip **“Dia futuro, ainda sem batida”**. (`app/colaboradores/services/calendario.py:55,873`; `app/templates/colaboradores/partials/_calendario_grade.html:105`)
+## 30/10 14:34 · sessao 35744f769b6c · - · - · origem=Ronald (tmux)
 
-2. **HOJE/ONTEM é teto por data: sim**
+- **(a) Divergência concreta: vínculo ausente.** `motivo_do_veto(..., ec=None, ...)` devolve `None`, enquanto `_abrir_chamado` chama `vetar_cobranca_se_degenerada`, que converte `ec=None` em template ausente e veta. A divergência já existe no leitor reutilizado; o bloco novo a herda. Referências: `app/ponto/services/furos_vetados.py:26`; `app/ponto/management/commands/detectar_ausencias.py:599`; `app/escala/regua_defesa.py:23`; `app/escala/regua_defesa.py:45`.
 
-   Para datas anteriores a ontem, o calendário não pergunta ao juiz e fornece `futuro=False`. A justificativa de que todo turno anterior já encerrou não é garantida pelo juiz. (`app/colaboradores/services/calendario.py:698-704,797`; `app/ponto/turnos.py:2102-2105`)
+- **É um retorno previsto pelo código atual, inclusive havendo célula:** a juíza devolve `None` quando a data está fora da vigência da geradora. O c2 exige protesto cobravel e o veto da célula, mas este último só lê `trabalha`/`veredito`; o novo veto deixa passar `ec=None`. O cartório, em ambos os caminhos de emissão, recusa o vínculo ausente antes de chamar o funil. Referências: `app/escala/alimentacao.py:238`; `app/escala/alimentacao.py:250`; `app/chamados/reconciliador.py:825`; `app/chamados/reconciliador.py:845`; `app/ponto/marcos.py:155`; `app/ponto/services/cartorio.py:1347`; `app/ponto/services/cartorio.py:1447`. Ocorrência em dados reais: **[não verificado]**.
 
-   Há três contraexemplos derivados do código:
+- **(a) Segundo juiz / vínculo / dia: nada adicional.** Para vínculo presente, o leitor chama os mesmos predicados do funil; a impressão usa exatamente `motivo_do_veto(c, vinculo_do_emissor(c,data),data)`. `vinculo_do_emissor` delega a `escala_vigente`, também usada nas duas emissões do cartório. Referências: `app/ponto/services/furos_vetados.py:15`; `app/ponto/services/furos_vetados.py:28`; `app/ponto/services/cartorio.py:35`; `app/ponto/services/cartorio.py:1013`; `app/ponto/services/cartorio.py:1347`; `app/ponto/services/cartorio.py:1446`.
 
-   - **24 horas com aberta:** início/fim às 23h representa jornada de 24h; sua aberta pode permanecer viva até D+2 às 03h, pelo fim+4h. Em D+2 às 02h, D é anterior a ontem e ainda não encerrou. Isso refuta a justificativa, embora, com batida, o status já siga `aberto` independentemente de `futuro`. (`app/escala/servico_jornada.py:95-102`; `app/ponto/turnos.py:1992,2007-2011`; `app/colaboradores/services/calendario.py:129,151`)
-   - **Turno longo sem batida:** o encadeamento `E18 → S06 → E18 → S06` alcança D+2 às 06h. Consultado às 02h de D+2, o juiz ainda responde não encerrado; o corte exclui D e permite `falta`. É contraexemplo do algoritmo; presença desse DNA/template em produção **[nao verificado]**. (`app/escala/servico_jornada.py:74-85,89-92`; `app/ponto/turnos.py:2105`; `app/colaboradores/services/calendario.py:702,797,140`)
-   - **Trabalho sem fim previsto:** o juiz devolve `sem_previsto`, sem prazo civil para virar encerrado. O calendário pode dar `previsto` hoje/ontem e `falta` antes disso apenas pela idade da data. Existência real **[nao verificado]**. (`app/ponto/turnos.py:2102-2105`; `app/escala/models.py:1099-1108`; `app/colaboradores/services/calendario.py:131-140,702,797`)
+- **(c) C1 muda efetivamente.** `orfao_14h` e `saida_sem_entrada` passam a ser vetados no nascimento/renascimento: `_so_no_alcance_novo` só controla a cerca posterior, não o bloco novo. Isso também alcança C1 fora da competência aberta quando chegar ao c2; não altera costura no chamado já vivo. Referências: `app/chamados/reconciliador.py:332`; `app/chamados/reconciliador.py:770`; `app/chamados/reconciliador.py:843`; `app/chamados/reconciliador.py:851`. O próprio comentário novo declara “vale para os 4 motivos”; concluir que esse alcance foi “não pedido” exige autorização externa **[não verificado]** (`app/chamados/reconciliador.py:840`).
 
-   Sem célula, o juiz pode recorrer ao template; ausência de célula não garante encerramento. Folga, feriado e ausência têm precedências próprias no classificador, portanto não viram necessariamente `previsto` por estarem no conjunto `_em_curso`. (`app/escala/models.py:1097-1108`; `app/colaboradores/services/calendario.py:120-128,141-146`)
+- **Limite da comprovação:** revisão estática; testes não executados **[não verificado]**. [nao verificado]
 
-3. **Relógios**
+## 30/10 14:34 · sessao a3c4ce7f8013 · - · - · origem=Ronald (tmux)
 
-   **Sem achado na cadeia adicionada:** `_agora` produz `hoje` e é passado a `dias_encerrados`; este só lê outro relógio se receber `None`, e o julgamento usa o argumento recebido. Também não nasce outro juiz: o lote chama o predicado puro existente. (`app/colaboradores/services/calendario.py:250-251,704`; `app/ponto/turnos.py:2083-2105,2118-2132`)
+Nenhum defeito adicional encontrado nos pontos 4/5 ou nos novos testes, por inspeção estática: [nao verificado]
 
-   **Há relógios independentes no restante da montagem:** `folha_manda` consulta `turno_aberto_de` sem `agora` e `ate_ontem` sem `hoje`. Eles podem decidir a palavra/lista “Em aberto” com instante diferente daquele usado pelo status. Divergência efetivamente observada **[nao verificado]**. (`app/colaboradores/services/calendario.py:681`; `app/relatorios/cartao_pela_celula.py:398,412,40`; `app/ponto/turnos.py:2254-2255`)
+- **4 — Guarda removida e idempotência:** não há guarda `p.chamado_destino_id == ch_novo.pk` entre o retorno de `abrir` e a costura; permanecem a exigência de chamado vivo e a porta `reapontar_resolvedora` (`app/chamados/reconciliador.py:860`, `app/chamados/reconciliador.py:877`). Os dois chamadores reais entregam pergunta sem destino: filtro do cron (`app/chamados/reconciliador.py:1376`, `app/chamados/reconciliador.py:1398`) e condição do emissor (`app/chamados/services/disputa_emissao.py:404`, `app/chamados/services/disputa_emissao.py:409`). O teste exige primeira passada efetiva, destino vivo, segunda passada zero e identidade do estado da pergunta, chamados e número de logs (`app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:297`, `app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:303`).
+- **5 — R1 agora morde:** afirma pergunta viva e recusa `(None, None)`, exige mesmo chamado como destino e estado vivo; não aceita mais recusa como alternativa de sucesso (`app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:150`, `app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:151`, `app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:156`). R1b monta fechamento administrativo posterior ao fato, exige `admin_sem_fato_novo`, retorno falso e ausência de costura/materialização (`app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:123`, `app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:163`).
+- **3 — Testes de custo:** o caso unitário observa as funções reais e exige zero chamadas à cerca e à guarda externa; mover a cerca antes do protesto viola essas asserções (`app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:318`, `app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:324`). Há teto de seis consultas para a porta e teto 31 no caminho real de `registrar_batida` (`app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:55`, `app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:336`, `app/ponto/tests/test_selo_chokepoint_escrita.py:169`, `app/ponto/tests/test_selo_chokepoint_escrita.py:281`).
+- **Selo/RED sem mordida:** nada demonstrado nos testes novos; execução, contagens empíricas e RED histórico não verificados. [nao verificado] [nao verificado]
+- **1 — Corpo do commit:** não foi possível verificar `LEI-AKITA` em `22c08b8e`; o snapshot não disponibiliza `.git` nem artefato encontrado com esse corpo. [nao verificado]
 
-   Há ainda relógio próprio de `pergunta_viva` para janela de competência e outro para `pode_desfazer`; são finalidades distintas do encerramento novo. (`app/colaboradores/services/calendario.py:335-339,580`; `app/chamados/juizes.py:795,1066,518`)
+Alerta já enviado ao agente c2: existe **log antes da cerca**, contrariando literalmente a afirmação de que todos os gates antecipados não têm efeito colateral: o veto de célula registra `_log.info` em `app/chamados/reconciliador.py:830`, enquanto a cerca só é consultada em `app/chamados/reconciliador.py:835`; a alegação está em `app/chamados/reconciliador.py:765`. A alteração de resultado persistido ainda depende da análise do agente c2. [nao verificado]
 
-4. **Custo adicional e request**
+## 30/10 14:34 · sessao eea387bf13fd · - · - · origem=Ronald (tmux)
 
-   Sem interseção com hoje/ontem: **zero consultas adicionais**. Com interseção, o calendário chama o lote sem alimentar células ou turnos já carregados. (`app/colaboradores/services/calendario.py:308,402,702-704`)
+Não encontrei falha na extração do vigia nem duplicação de juiz/fonte na cerca e no HIST examinados. (`app/chamados/services/vigia_fio.py:419`; `app/chamados/reconciliador.py:711`; `app/chamados/reconciliador.py:1476`)
 
-   A conta estática é **`6 + E + M + U + K`**: seis consultas base; `E` para geradoras extras, `M` para mapa DNA, `U` para última batida e `K` para os dias que consultam DNA por `fim_turno`, até dois. Medição efetiva **[nao verificado]**. (`app/ponto/turnos.py:1858,1880-1886,1903-1911,1556,1949,2102,2123-2126`; `app/escala/alimentacao.py:123-127`; `app/escala/models.py:1097`)
+- **Vigia, dia presente:** continua compondo `janela_atual(dia, empresa)` com K6 e memo pela chave `(empresa.pk, fim.month, fim.year)`; o `bool()` acrescentado não altera o valor, pois K6 já retorna `vig is not None`. (`app/chamados/services/vigia_fio.py:435`; `app/chamados/services/vigia_fio.py:436`; `app/chamados/services/vigia_fio.py:440`; `app/folha/export.py:575`)
+- **Vigia, dia ausente:** a função retorna `None`, que o chamador põe em `aberta`, como antes; não consulta janela/K6. (`app/chamados/services/vigia_fio.py:413`; `app/chamados/services/vigia_fio.py:431`)
+- Avaliar `p.disputa.colaborador.empresa` também no caso sem data não introduz falha no universo normal: essa relação está carregada por `select_related` e a FK empresa é obrigatória. (`app/chamados/services/vigia_fio.py:405`; `app/colaboradores/models.py:321`)
+- Universo, filtro por empresas, ordenação, teste de vitalidade e acumulação de PKs permanecem no chamador; a extração só decide o mesmo balde. (`app/chamados/services/vigia_fio.py:404`; `app/chamados/services/vigia_fio.py:406`; `app/chamados/services/vigia_fio.py:409`; `app/chamados/services/vigia_fio.py:415`)
+- **Cerca:** sem `data_evento`/dia válido fica fora antes da composição; com data consulta a composição única e C7, preservando as autoridades existentes. (`app/chamados/reconciliador.py:705`; `app/chamados/reconciliador.py:713`; `app/chamados/reconciliador.py:716`)
+- **HIST:** no alcance novo, pergunta viva elimina os candidatos encerrados; morta casa por `motivos_atendidos`; fora do alcance mantém o mapa anterior. (`app/chamados/reconciliador.py:1465`; `app/chamados/reconciliador.py:1466`; `app/chamados/reconciliador.py:1476`; `app/chamados/reconciliador.py:1479`)
+- O desvio da viva do HIST para c1/c2 não a deixa ser carimbada pelo c1: este consulta `pergunta_viva` e retorna `False` antes da escrita. (`app/chamados/reconciliador.py:1491`; `app/chamados/reconciliador.py:398`; `app/chamados/reconciliador.py:402`)
+- A prosa da cerca declara expressamente Pauta DP gerada pelo script de passivo **depois do pouso**, fora desta porta. (`app/chamados/reconciliador.py:692`; `app/chamados/reconciliador.py:693`)
 
-   No cenário `E=U=0`, `M=1`, com todos os dias alcançando o fim previsto: **+8 queries para um dia; +9 para dois; +9N para N cards nessa condição**. É derivação estática, não medição. (`app/ponto/turnos.py:2123-2132`; `app/escala/utils.py:100-102`; `app/escala/models.py:1097`)
+Comparação estática com o diff fornecido; execução de testes não realizada. [nao verificado] [nao verificado]
 
-   A duplicação inclui duas cargas de células: o lote cria `cels`, mas passa o argumento original `celulas=None` a `turnos_do_colab`. HTML e PDF pagam o acréscimo durante o request, antes da bifurcação de renderização; o PDF reutiliza os cards. (`app/ponto/turnos.py:2123-2126`; `app/relatorios/furos.py:184-188`; `app/relatorios/views.py:1541,1560-1566`)
+## 30/10 14:33 · sessao 0456e283eb91 · - · - · origem=Ronald (tmux)
 
-5. **Premissa do isento: sem achado funcional**
+Achados por leitura estática; cenários não executados. [não verificado]
 
-   Para HOJE às 10h, turno 08–17 sem batida, `ok → previsto` acompanha o aval: o turno não encerrou e `futuro` precede a isenção. O teste discriminante do Art. 62 continua cobrando dias encerrados separadamente. (`app/relatorios/tests/test_o197_futuro_nao_e_em_aberto.py:94,298-302,272-286`; `app/colaboradores/services/calendario.py:131-134`; `app/ponto/turnos.py:2102-2105`)
+1. **O HIST novo pode alterar perguntas de competência entregue por efeito lateral do S128.** Uma `intervalo_saida` MORTA em competência aberta, com histórico único `batida_ausente`, passa a chamar S128; anteriormente não casava o mapa e c1/c2 recusavam intervalo. O S128 acrescenta **todas** as disputas abertas do colaborador, sem limitar dia/competência, e carimba perguntas MORTAS sem credor vivo — inclusive outra pergunta em competência entregue. Isso viola o alcance solicitado embora a entrada tenha consultado corretamente a competência. Fontes: `app/chamados/reconciliador.py:1436`, `:1450`, `:1487`, `:1493`; `app/chamados/services/disputa_emissao.py:1621`, `:1623`, `:1634`, `:1641`, `:1644`, `:1659`.
 
-   Ficaram obsoletos o nome, a descrição e a mensagem que ainda prometem verificar o caso literal `status=ok`. (`app/relatorios/tests/test_o197_futuro_nao_e_em_aberto.py:288-304`)
+2. **MORTA respondida: a proteção do primeiro laço do S128 é desfeita pelo segundo.** Cenário: intervalo com texto/resposta carimbada, sem validação/materialização, sem testemunha de batida, célula decidida pelo admin com veredito que não acusa, disputa sem credor vivo e histórico encerrado único. O C6 devolve MORTA; o HIST novo chama S128. O primeiro laço pula pela proteção da resposta, mas o segundo seleciona a mesma pergunta e grava `materializada_em` sem repetir essa proteção. O próprio código documenta que esse carimbo impede o materializador real de consumir a resposta. Fontes: `app/chamados/juizes.py:1018`, `:1020`, `:1028`, `:1054`, `:1064`; `app/chamados/reconciliador.py:1450`, `:1493`; `app/chamados/services/disputa_emissao.py:1553`, `:1558`, `:1634`, `:1641`, `:1644`, `:1659`. **O defeito interno do S128 preexiste; a novidade é fazê-lo alcançar esse caso antes recusado.**
 
-6. **Mordida dos testes e adequação de `previsto`** [nao verificado]
+3. **A mesma cascata vence a proteção de competência trancada.** Com competência não entregue porém trancada, intervalo sem carimbo e histórico resolvido por via diferente de `competencia_trancada`, C6 devolve MORTA. HIST costura; S128 pula a pergunta no primeiro laço por tranca, mas o segundo carimba porque pergunta MORTA passa. Isso transforma silêncio reversível por leitura em carimbo persistido; além disso, a própria costura já ocorreu antes da guarda. Fontes: `app/chamados/juizes.py:879`, `:881`, `:1008`; `app/chamados/reconciliador.py:1487`, `:1493`; `app/chamados/services/fio.py:797`, `:799`; `app/chamados/services/disputa_emissao.py:1531`, `:1551`, `:1634`, `:1641`, `:1644`. Tranca e entrega usam fatos distintos: `app/ponto/services/fechamento.py:1432` e `app/folha/export.py:569`.
 
-   Os dois RED distinguem a expressão antiga; o MORDE impede manter ONTEM previsto depois do fim no cenário 18–06. **Execução Django: [nao verificado]**. (`app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:23-47`)
+4. **c1 muda de alcance apesar de corpo intocado.** `saida_sem_entrada` MORTA/validada, sem resposta e sem turno aberto, com dois históricos `batida_ausente` do mesmo dia: antes nenhum casava e c1 lavrava; agora ambos casam, `len(hist)==2` impede c1 e retorna `False`. Com um histórico, muda a via para HIST/S128. A troca pelo juiz foi solicitada; portanto esse efeito deve ser reportado como mudança efetiva/caso descoberto, não automaticamente como violação independente. Fontes: `app/chamados/models.py:2468`, `:2469`; `app/chamados/juizes.py:1597`, `:1599`; `app/chamados/reconciliador.py:363`, `:365`, `:372`, `:399`, `:406`, `:1450`, `:1457`, `:1469`.
 
-   **A cobertura é insuficiente:** o mutante `data >= hoje or data in _em_curso` satisfaz as três expectativas e continua errado para HOJE após o fim. Faltam também turno longo, limite exato, aberta viva e fatos de ausência/cobertura/veredito. (`app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:37-47`; `app/colaboradores/services/calendario.py:797`)
+**Classes sem achado independente nesta leitura:**
 
-   `previsto` é adequado para trabalho sem batida e sem fato prioritário, mas não é resposta universal:
+- Segundo juiz/derivação paralela: **nada**; helpers consultam autoridades existentes — `app/chamados/reconciliador.py:700`, `:702`, `:703`, `:711`, `:712`; registros em `app/core/juizes.py:232`, `:275`, `:277`.
+- Segundo escritor: **nada**; costuras continuam pela porta — `app/chamados/reconciliador.py:856`, `:1487`, `:1499`; exclusividade e escrita em `app/chamados/services/fio.py:743`, `:797`.
+- Relógio novo fora da borda: **nada** nos helpers/diff — `app/chamados/reconciliador.py:697`, `:702`, `:1425`.
+- Pouso antes do pré-requisito: **não comprovado**. B consta pousado; CORTES exige remedida e teto 343, mas o total 786 do teste inclui 461 exportadas e não permite sozinho concluir violação do teto. `app/docs/RELATO.md:3`, `:18`; `app/docs/CORTES.md:399`; `app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:7`.
 
-   | Fato presente | Resultado atual |
-   |---|---|
-   | Ausência na faixa humana | `falta` ou `ausencia`, antes de `futuro`. (`app/colaboradores/services/calendario.py:120-121`) |
-   | Cobertura abonadora | Substitui `previsto` por `ausencia`. (`app/colaboradores/services/calendario.py:179-180`) |
-   | Veredito isolado | `previsto` bloqueia sua sobreposição, inclusive `faltou`, `nunca_bateu` e `justificado`. (`app/colaboradores/services/calendario.py:65-69,175`) |
-
-   Esse último é um **risco não testado**, sem regressão de produção demonstrada: a porta normal de `faltou/justificado` cria ausência aprovada antes de lavrar o veredito, permitindo a precedência da ausência. Existência de ata isolada no dado fornecido **[nao verificado]**. (`app/ponto/services/veredito_celula.py:310-330`; `app/ponto/precedencia.py:211-217,318`; `app/colaboradores/services/calendario.py:120-121`)
-
-## 30/10 14:02 · sessao c6cb00e95f9a · - · - · origem=Ronald (tmux)
-
-**Pergunta 2 — há teto por data e a justificativa não é válida em geral.**
-
-- O calendário pergunta somente sobre `[max(início, hoje−1), min(fim, hoje)]`; dias anteriores não entram em `_em_curso`, e seu `futuro` será falso. Isso decide implicitamente encerramento por idade civil nesses dias. (`app/colaboradores/services/calendario.py:702`, `app/colaboradores/services/calendario.py:704`, `app/colaboradores/services/calendario.py:797`)
-- Contraexemplo do juiz: turno de 24 horas, `hi=hf=23:00`, iniciado em D, termina em D+1 às 23:00 e aberta expira em D+2 às 03:00; consultado em D+2 às 02:00, D é anterior a ontem e permanece não encerrado. Igualdade das bordas representa 24 horas; expiração é fim+4h, com comparação estrita `agora > expiração`. (`app/escala/servico_jornada.py:95`, `app/escala/servico_jornada.py:102`, `app/ponto/turnos.py:1992`, `app/ponto/turnos.py:2007`, `app/ponto/turnos.py:2011`, `app/ponto/turnos.py:2097`)
-- Esse contraexemplo com aberta refuta o comentário do corte, mas sozinho não prova status incorreto: com batida, o classificador segue `aberto`, independentemente de `futuro`. (`app/colaboradores/services/calendario.py:129`, `app/colaboradores/services/calendario.py:151`)
-- Há contraexemplo de status derivável: dia de trabalho sem batida e sem marcos/fim previsto pode continuar não encerrado indefinidamente; o juiz devolve `sem_previsto`, porém o calendário passa `futuro=False` quando anterior a ontem e pode produzir `falta`. Célula sem DNA de marcos recorre ao tipo, que pode fornecer horários ausentes. Existência desse caso nos dados de produção **[nao verificado]**. (`app/ponto/turnos.py:2102`, `app/ponto/turnos.py:2104`, `app/escala/models.py:1099`, `app/escala/models.py:1108`, `app/escala/servico_jornada.py:72`, `app/colaboradores/services/calendario.py:130`, `app/colaboradores/services/calendario.py:140`, `app/colaboradores/services/calendario.py:797`)
-- O encadeamento dos quatro marcos admite avançar mais de uma virada; portanto o corpo de `fim_turno` não impõe duração máxima de um dia. A presença de DNA/template assim em produção **[nao verificado]**. (`app/escala/servico_jornada.py:74`, `app/escala/servico_jornada.py:82`, `app/escala/servico_jornada.py:89`)
-
-**Pergunta 3 — juiz novo recebe o mesmo relógio; calendário inteiro ainda tem outros relógios.**
-
-- **Sem achado** na cadeia adicionada: calendário captura `_agora` e deriva `hoje` dele; repassa `_agora`; `dias_encerrados` só captura `timezone.now()` quando argumento ausente; julgamento usa o argumento recebido. (`app/colaboradores/services/calendario.py:250`, `app/colaboradores/services/calendario.py:251`, `app/colaboradores/services/calendario.py:704`, `app/ponto/turnos.py:2118`, `app/ponto/turnos.py:2097`, `app/ponto/turnos.py:2105`)
-- O calendário chama `folha_manda`, que consulta `turno_aberto_de` sem `agora` e `ate_ontem` sem `hoje`; ambos capturam relógio novamente. Isso afeta a palavra/lista “Em aberto”, enquanto `_em_curso` e status usam a borda anterior. (`app/colaboradores/services/calendario.py:681`, `app/relatorios/cartao_pela_celula.py:398`, `app/ponto/turnos.py:2254`, `app/relatorios/cartao_pela_celula.py:412`, `app/relatorios/cartao_pela_celula.py:40`)
-- Existe outro `timezone.now()` para `pode_desfazer`, de finalidade distinta. (`app/colaboradores/services/calendario.py:335`, `app/colaboradores/services/calendario.py:339`)
-- `_pv` também pode chegar a `date.today()`: calendário consulta pergunta viva; seu cálculo consulta janela viva, que usa data do sistema. Isso influencia `_perg_viva`, não o encerramento consultado no diff. (`app/colaboradores/services/calendario.py:580`, `app/chamados/juizes.py:795`, `app/chamados/juizes.py:1066`, `app/chamados/juizes.py:518`)
-- `grade_da_celula` não captura relógio no seu corpo principal. (`app/escala/services/leitor_celula.py:321`, `app/escala/services/leitor_celula.py:371`)
-
-**Pergunta 4 — custo adicional em request, por card.**
-
-- Sem interseção com hoje/ontem: **zero** consultas adicionadas. Havendo interseção: uma chamada de lote por montagem, sem alimentação das células/turnos já carregados. (`app/colaboradores/services/calendario.py:308`, `app/colaboradores/services/calendario.py:402`, `app/colaboradores/services/calendario.py:703`, `app/colaboradores/services/calendario.py:704`)
-- Contagem estática adicional: **`6 + E + M + U + K`**. Seis fixas: duas cargas de células, dois carregamentos de vínculos, batidas e vínculo da ata; `E`=0/1 geradoras extras, `M`=0/1 mapa DNA, `U`=0/1 última batida, `K`=0..2 consultas unitárias de DNA quando os dias alcançam `fim_turno`. Medição efetiva **[nao verificado]**. (`app/ponto/turnos.py:2123`, `app/ponto/turnos.py:2124`, `app/ponto/turnos.py:2126`, `app/ponto/turnos.py:1880`, `app/ponto/turnos.py:1883`, `app/ponto/turnos.py:1858`, `app/ponto/turnos.py:1591`, `app/ponto/turnos.py:1556`, `app/escala/alimentacao.py:123`, `app/ponto/turnos.py:1949`, `app/ponto/turnos.py:1906`, `app/ponto/turnos.py:2102`, `app/escala/models.py:1097`)
-- No caso comum `E=U=0`, `M=1`, todos os dias alcançando fim previsto: **+8 queries para um dia; +9 para dois dias**; para N cards com os dois dias, **+9N**. Derivação estática; execução **[nao verificado]**. (Mesmas consultas acima.)
-- A duplicação de células existe porque o lote cria `cels`, mas passa o argumento original `celulas=None` a `turnos_do_colab`; além disso, não passa células ao `fim_turno → EC.marcos_do_dia`. (`app/ponto/turnos.py:2123`, `app/ponto/turnos.py:2126`, `app/ponto/turnos.py:2102`, `app/escala/servico_jornada.py:69`, `app/escala/models.py:1097`)
-- HTML e PDF pagam isso no request: calendário é construído no laço de cards, dataset é chamado pela view antes da bifurcação HTML/PDF; o PDF reutiliza os cards, sem segunda montagem nessa bifurcação. (`app/relatorios/furos.py:139`, `app/relatorios/furos.py:184`, `app/relatorios/views.py:1541`, `app/relatorios/views.py:1560`, `app/relatorios/views.py:1566`)
-
-_505 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_527 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
