@@ -1,7 +1,47 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **30/10/2026 19:33** · publicado em **30/10/2026 19:36** (UTC-3)
+> Ultima resposta processada: **30/10/2026 19:53** · publicado em **30/10/2026 19:53** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 30/10 19:53 · sessao 956521c1388b · - · - · origem=Ronald (tmux)
+
+Q1/Q2, somente leitura:
+
+- O cartório escolhe `cobrado` quando `cods` está vazio, há chamados em `VIVOS` e pelo menos um desses chamados tem fio vivo; o fio usa `pergunta_viva`. (`app/ponto/services/cartorio.py:1069`, `:1074`, `:1122`, `:1141`, `:1142`; `app/chamados/juizes.py:1111`).
+- O valor chega à porta por `cel.lavrar_veredito(... save=False)`; a porta respeita decisão de admin, atribui `cel.veredito = v`, e `carimbar` persiste junto dos demais campos. (`app/ponto/services/cartorio.py:1409`, `:1424`; `app/ponto/portas/celula.py:672`, `:692`, `:728`).
+- `cobrado` pertence a `VEREDITOS_ACUSAM`; C6 retorna vivo por esse pertencimento. A exceção anterior de marco aceso exige pergunta já materializada. (`app/escala/models.py:1735`; `app/chamados/juizes.py:1050`, `:1056`).
+
+Base disponível em `/home/ronald/codex_ws/e54eae6ed8c46bc652434308bf918485dd3ac23e`; a cadeia abaixo usa os arquivos dessa base:
+
+1. `registrar_batida` cria a batida → receiver do cartório → `_julgar_dias` → `julgar_celula` → `julgar_colab` → `_julgar_colab_corpo`. (`app/ponto/registro_batida.py:157`; `app/ponto/signals.py:132`, `:135`, `:93`; `app/ponto/services/cartorio.py:1560`, `:744`).
+2. O corpo monta a ata nova, publica-a no contexto do julgamento e, com os marcos cobrados acesos, chama `x.reconciliar()`. (`app/ponto/services/cartorio.py:1148`, `:1152`, `:1163`).
+3. Na base, `reconciliar` pede a decisão; o gate da premissa aceita `premissa_regularizada`; `_gravar_estado` atribui o terminal e salva. (`base/app/chamados/models.py:440`, `:470`, `:495`, `:444`, `:192`, `:231`).
+4. **Após esse save e antes da segunda lavra, o chamado já está terminal e a pergunta sem carimbo continua viva pelo veredito anterior acusador.** C6 não possui veto geral por destino terminal antes desse ramo; o receiver do chamado evita julgamento recursivo enquanto o cartório está ativo. (`base/app/chamados/models.py:231`; `app/chamados/juizes.py:1050`, `:1054`, `:1056`; `app/chamados/signals.py:174`).
+5. O fechamento enfileira a célula para nova passada; a segunda passada relê os chamados, agora sem aquele vivo. Sem códigos e sem cobrança, `derivar_veredito([])` produz `concorde`. (`app/ponto/services/cartorio.py:1166`, `:745`, `:746`, `:1069`, `:1409`; `app/escala/models.py:1596`).
+6. O receiver posterior da batida chama `reconciliar_chamados_colab`, que começa por `retratar_perguntas_absolvidas_por_celula`; esse consumidor exclui células acusadoras, confirma C6 falso e grava `materializada_em`, usuário e `celula_absolveu`. (`app/ponto/signals.py:207`, `:215`; `app/chamados/reconciliador.py:1350`, `:598`, `:613`, `:617`, `:619`, `:620`).
+
+Leitores diretos de `cobrado` / `VEREDITOS_ACUSAM`, fora de testes e migrations: [nao verificado]
+
+- C6 e consultas de perguntas: `app/chamados/juizes.py:1002`, `:1056`; `app/chamados/models.py:2523`, `:2524`.
+- Fechamento, emissão e fio: `app/chamados/reconciliador.py:598`, `:978`; `app/chamados/services/fabrica_da_celula.py:86`; `app/chamados/services/silencio_ausencia.py:41`; `app/chamados/services/resposta_tardia.py:45`; `app/chamados/services/limbo_folgas.py:194`; `app/chamados/services/disputa_emissao.py:705`.
+- Folha e apresentação: `app/folha/export.py:1215`; `app/relatorios/dia_da_frota.py:13`, `:55`; `app/relatorios/furos.py:25`, `:46`; `app/colaboradores/services/calendario.py:70`, `:173`.
+- Vigias/comandos: `app/chamados/services/furo_sem_canal.py:35`, `:72`; `app/chamados/services/vigia_fio.py:182`, `:230`; `app/folha/services/vigia_pausa.py:155`, `:157`; `app/ponto/services/vigia_ausencia_veredito.py:41`, `:42`; `app/ponto/management/commands/ausencias_sem_efeito_na_celula.py:36`, `:62`; `app/chamados/management/commands/disparar_perguntas_competencia.py:86`, `:120`; `app/colaboradores/management/commands/corrigir_escala_retroativa.py:133`; `app/chamados/management/commands/auditar_invariantes_chamados.py:197`, `:342`, `:1387`, `:1601`, `:1643`.
+
+A chave de contador `cobrado` em `app/ponto/services/furos_sem_cobranca.py:131` não é leitura de `CelulaDia.veredito`.
+
+## 30/10 19:52 · sessao 941ba3963a4b · - · - · origem=Ronald (tmux)
+
+Q5 — o contador mede **perguntas carimbadas**, uma por retorno verdadeiro de `p.encerrar_fantasma(user)`; não mede chamados nem disputas fechados (`app/chamados/reconciliador.py:1094`, `app/chamados/reconciliador.py:1104`). A porta grava `via_resolucao='fantasma'`, `materializada_em` e autor; retorna `False` quando já estava fantasma e carimbada (`app/chamados/models.py:2435-2442`).
+
+O universo varrido é todo o colaborador: perguntas sem materialização, sem validação, em disputa aberta, com data e motivo `orfao_14h` ou `saida_sem_entrada` (`app/chamados/reconciliador.py:991`, `app/chamados/reconciliador.py:995-1005`, `app/chamados/reconciliador.py:1082`). Para entrar no contador exige `veredito_orfa == ENCERRA`: resposta vazia, luz do próprio marco acesa, C6 vivo, dia passado e encerrado pelo juiz (`app/chamados/reconciliador.py:1033-1043`, `app/chamados/reconciliador.py:1083-1096`).
+
+A `self.respondida` **não é a segunda pergunta**: a fixture lhe dá resposta `'06:55'`, e `veredito_orfa` retorna `None` antes de consultar C6 para resposta não vazia (`app/chamados/tests/test_orfas_nao_morre_na_guarda_da_porta.py:90-93`; `app/chamados/reconciliador.py:1033-1038`). A contagem também é anterior às guardas para fechar a disputa; resposta pendente pode barrar disputa sem desfazer o incremento (`app/chamados/reconciliador.py:1104-1119`).
+
+A mudança é no **estado que chega à varredura**, não na fórmula do contador: base `_decisao_do_fechamento` só consultava motor e premissa (`/home/ronald/codex_ws/e54eae6ed8c46bc652434308bf918485dd3ac23e/app/chamados/models.py:467-472`); cópia acrescenta plano/C6 e retorna `None` diante de viva sem reata (`app/chamados/models.py:601-604`), fazendo `reconciliar()` retornar `False` (`app/chamados/models.py:574-576`).
+
+Há caminho de geração automática **antes das duas perguntas explícitas**: fixture cria batidas E e S antes de `self.muda` e `self.respondida` (`app/chamados/tests/test_orfas_nao_morre_na_guarda_da_porta.py:70-93`); cada batida aciona cartório (`app/ponto/signals.py:131-135`), que chama a fábrica após julgar (`app/ponto/services/cartorio.py:754-772`); a fábrica gera disputa/perguntas (`app/chamados/services/fabrica_da_celula.py:118-124`, `app/chamados/services/fabrica_da_celula.py:143-149`).
+
+Assim, a explicação estática é: o novo gate conserva uma pergunta automática que a base podia eliminar durante o setup, aumentando as candidatas posteriormente carimbadas. A identidade/PK e o motivo exatos da segunda pergunta contada não constam dos anexos: **[nao verificado]**. Não atribuir o `2` à respondida nem a duas disputas fechadas (`app/chamados/reconciliador.py:1033-1034`, `app/chamados/reconciliador.py:1104-1119`).
 
 ## 30/10 19:33 · sessao f393335dd52b · O261-V-FASE · verificador · origem=Code
 
@@ -474,79 +514,4 @@ Carga sem Django:
 
 Verificação local: extraindo apenas AST, constantes e a função, sem importar Django nem escrever arquivos, os sete arquivos retornaram lista vazia; esse resultado corresponde ao domínio fixo do teste, não prova ausência no restante de produção (`app/ponto/tests/test_s3_placar_exercicio.py:305`).
 
-## 30/10 19:07 · sessao 82d9cde7b5f5 · E1-BATERIA · red · origem=Code
-
-Criado apenas [test_e1_lote1_valor_do_dia.py](/home/ronald/codex_ws/red_e54eae6ed8c4_20261030_190156_3863743/app/ponto/tests/test_e1_lote1_valor_do_dia.py), com 20 casos, fixture próprio e porta CCT real.
-
-Sintaxe e estrutura validadas em memória, sem criar `.pyc`. Motor e suíte Django não executados; o RED ainda não foi evidenciado por execução. [nao verificado]
-
-Valores em minutos; **N** indica noturno relógio/legal.
-
-| Caso | Esperados | Regra citada | Origem |
-|---|---|---|---|
-| C01 | trab 660; N 360/360; extra 0; feriado 0 | CCT 38-d/10; CLT 73 §2 e 59-A | wt-v3 CCT-1 |
-| C02 | trab 660; N 480/548,57; extra 0 | Aval 25/09/O211; CLT 73; Súmula 60 II | wt-v3 CCT-2 |
-| C03 | trab 660; N 480/548,57; extra 0 | Adendo 05/10; piso de lacuna; CLT 73 | wt-v3 CCT-3, primeira metade |
-| C04 | trab 660; N 480/548,57; extra 0 | Adendo 05/10; empate específico não herda | wt-v3 CCT-3, segunda metade |
-| C05 | trab 420; N 360/411,43; extra 0; régua `legais` | CLT 73; Súmula 60 II; parecer 29/07 | wt-v3 CCT-4 |
-| C06 | **SKIP:** N 360/411,43 ou 240/274,29 | CLT 73 §5; Súmula 60 II | wt-v3 CCT-4b |
-| C07 | trab 660; HE feriado 660 | CLT 59-A; parecer 08/09; BUG 91 | wt-v3 CCT-5, primeira ponta |
-| C08 | trab 660; HE feriado 0; extra 0 | CLT 59-A; parecer 08/09; BUG 91 | wt-v3 CCT-5, segunda ponta |
-| C09 | trab 660; N 360/411,43; intervalo descontado 60; extra 0 | CLT 59-A, 73, 71 §2 e 4 | Novo |
-| C10 | trab 660; N 360/411,43; intervalo descontado 60; extra e HE feriado 0 | CLT 59-A, 73 e 71 §2 | Novo |
-| C11 | trab 360; N 300/342,86; extra 0 | CLT 73 §1/§2; Súmula 60 | wt-v3 F2 |
-| C12 | trab 480; extra, HE100 e HE feriado 480; HE50 0 | Lei 605/49 art.9; Súmula 146 | wt-v3 F10 |
-| C13 | trab 540; extra e HE50 60; HE100 0 | CLT 58 caput e 59 §1 | Novo |
-| C14 | trab 450; atraso 30; antecipada e extra 0 | CLT 58 §1; Súmula 366 | Novo |
-| C15 | atraso, antecipada e extra 0 | CLT 58 §1: tolerância 5/10 | Novo |
-| C16 | **SKIP:** intervalo indenizado 30 ou 60 | CLT 71 §4; pergunta V3-BATERIA | Novo |
-| C17 | trab 540; intervalo descontado 0 e indenizado 60; extra e HE50 60; HE100 0 | CLT 71 e 59 §1; L-031 | Novo |
-| C18 | trab 690; extra e HE50 30; HE100 0 | CLT 59-A, 59 §1 e 71 §2 | Novo |
-| C19 | FT 1, com 660 min; HE feriado e extra 0 | Súmula 146; corte 19/09 | wt-v3 F3 |
-| C20 | trab 450; antecipada 30; atraso e extra 0 | CLT 58 §1; Súmula 366 | Novo |
-
-As fontes da régua também são afirmadas nos casos CCT executáveis e em C09.
-
-Dúvidas preservadas sem escolher resposta: **C06**, possibilidade de a CCT negar prorrogação noturna fora do 12x36; **C16**, indenização de 30 minutos suprimidos ou 60 integrais. A cl.10 tem lastro local descrito como interpretação; C01 segue o corte fornecido para o 12x36.
-
-## 30/10 19:03 · sessao 0d8d2229d690 · O261-E-CELULA-20 · verificador · origem=Code
-
-**Veredito: fechamento parcial.** A cura da instância velha fecha o caso descrito; permanecem falhas no selo e na nova deduplicação de auditoria. A guarda acrescentada a `abrir` também não cobre todo o pós-estado. ([models.py:206](app/chamados/models.py:206), [contrato:22](app/chamados/tests/test_contract_status_nucleo.py:22), [models.py:2327](app/chamados/models.py:2327), [models.py:2334](app/chamados/models.py:2334))
-
-1. **Cada cura fecha o item declarado?**
-
-| Item | Verificação |
-|---|---|
-| **1 — instância velha** | **Fecha o cenário sequencial.** Os quatro gates recarregam antes da decisão; o tripwire considera memória **ou banco** antes da mutação. ([models.py:595](app/chamados/models.py:595), [:618](app/chamados/models.py:618), [:676](app/chamados/models.py:676), [:1425](app/chamados/models.py:1425), [:1442](app/chamados/models.py:1442), [:206](app/chamados/models.py:206)) |
-| **2 — dedup costura em terminal** | **Fecha o caso simples do `test_m`:** consulta a guarda, preserva o destino recusado e retorna `(ex, False)`. **Parcial para a classe**, pelo escape de célula abaixo. ([models.py:2321](app/chamados/models.py:2321), [:2347](app/chamados/models.py:2347), [teste:269](app/chamados/tests/test_o261e_f1_porta_encerramento.py:269)) |
-| **7 — comentário de atomicidade** | **Fecha a correção textual:** agora distingue exceção propagada da falha do pai engolida pelo receiver. ([models.py:1735](app/chamados/models.py:1735), [signals.py:46](app/chamados/signals.py:46)) |
-| **8 — dois estados no desligamento** | Continua sendo efeito possível da ordem declarada: disputa fecha, receiver reconcilia o pai, depois a cascata chama `encerrar`. Não é uma cura comportamental deste delta. ([desligamento.py:142](app/colaboradores/services/desligamento.py:142), [signals.py:42](app/chamados/signals.py:42), [desligamento.py:155](app/colaboradores/services/desligamento.py:155)) |
-| **9 — `antes` da reata** | **Fecha:** captura o destino real antes da porta e acrescenta `ancora`; o teste confere `None` no caso pelo container. ([models.py:376](app/chamados/models.py:376), [:383](app/chamados/models.py:383), [teste:297](app/chamados/tests/test_o261e_f1_porta_encerramento.py:297)) |
-| **Selo** | Corrige a âncora textual única e contém os três mutantes declarados, mas a consolidação enfraquece a anticegueira. ([selo:158](app/chamados/tests/test_o261e_f1_selo_encerramento.py:158), [contrato:22](app/chamados/tests/test_contract_status_nucleo.py:22)) |
-
-2. **Caminhos, chamadores e mordida**
-
-- **PROCEDE — regressão nova da anticegueira.** O contrato exige somente `bool(achados)`. Remover a escrita do núcleo deixa os dois swaps permitidos suficientes para passar; o tripwire também aceita, pois retorna ao encontrar a guarda sem exigir uma escrita posterior. Assim, perdeu-se a exigência específica de encontrar `NUCLEO`, presente no teste removido do patch. ([contrato:22](app/chamados/tests/test_contract_status_nucleo.py:22), [selo:87](app/chamados/tests/test_o261e_f1_selo_encerramento.py:87), [:115](app/chamados/tests/test_o261e_f1_selo_encerramento.py:115), [models.py:304](app/chamados/models.py:304), [:314](app/chamados/models.py:314))
-
-- **PROCEDE — cura parcial do tripwire.** `if (...) and False:` passa porque não é `ast.Constant`; uma escrita antecipada dentro de outro `if` também passa porque só se rejeita `Assign` diretamente no corpo. Remover `or _anterior_no_banco in VIVOS` igualmente passa: a nova proteção do banco não está presa por esse selo. São limites do verificador, sem demonstração de ocorrência na produção. ([selo:107](app/chamados/tests/test_o261e_f1_selo_encerramento.py:107), [models.py:208](app/chamados/models.py:208))
-
-- **Escape preexistente que a cura 2 deixa aberto:** a guarda julga com a célula antiga; depois `abrir` pode substituí-la. Se a antiga absolve e a nova acusa, a costura em terminal pode ser admitida antes de a pergunta tornar-se viva. O C6 distingue exatamente esses dois vereditos. Existência desse estado em produção: **[não verificado]**. ([models.py:2321](app/chamados/models.py:2321), [:2334](app/chamados/models.py:2334), [juizes.py:1054](app/chamados/juizes.py:1054))
-
-- **PROCEDE — perda nova de auditoria:** recusa `A→M`, costura válida `A→B`, nova recusa `B→M`: a segunda recusa encontra a primeira no histórico e não registra o novo `antes=B`. A identidade pesquisada contém pergunta e destino pedido, sem origem ou ciclo. Repetir a mesma entrada deve deduplicar; isso não exige apagar a foto de um fato posterior distinto. ([models.py:2327](app/chamados/models.py:2327), [:2333](app/chamados/models.py:2333), [CLAUDE.md:299](CLAUDE.md:299), [CLAUDE.md:32](CLAUDE.md:32))
-
-- **Chamadores:** a assinatura e o retorno de `abrir` permanecem compatíveis com os seis emissores encontrados. Porém, a nova leitura `.exists()` da auditoria está fora do best-effort de `evento`: erro nessa consulta propaga pelo ramo de recusa. Ocorrência desse erro: **[não verificado]**. ([models.py:2275](app/chamados/models.py:2275), [:2347](app/chamados/models.py:2347), [disputa_emissao.py:389](app/chamados/services/disputa_emissao.py:389), [:770](app/chamados/services/disputa_emissao.py:770), [:1160](app/chamados/services/disputa_emissao.py:1160), [acoes_disputa.py:259](app/chamados/services/acoes_disputa.py:259), [declaracao_texto.py:322](app/chamados/services/declaracao_texto.py:322), [:611](app/chamados/services/declaracao_texto.py:611), [observ.py:105](app/core/observ.py:105))
-
-Não identifiquei segundo escritor novo nesses trechos: o helper recarrega e a persistência continua no núcleo; nascimento/identidade e reapontamento de destino já são portas declaradas. Nascimento com destino terminal continua fora da guarda, expressamente reservado à F2. A leitura do banco também não elimina a janela entre consulta e escrita. ([models.py:618](app/chamados/models.py:618), [:252](app/chamados/models.py:252), [contrato de escritores:60](app/core/tests/test_contract_escritores_estado.py:60), [fio.py:748](app/chamados/services/fio.py:748), [models.py:206](app/chamados/models.py:206))
-
-3. **Quem escreve e quem lê a auditoria**
-
-| Registro | Escritor | Leitores encontrados |
-|---|---|---|
-| `costura_recusada` | `PerguntaDisputa.abrir` monta ação, motivo e payload; `core.observ.evento` efetua o `create`. ([models.py:2332](app/chamados/models.py:2332), [observ.py:134](app/core/observ.py:134)) | O próprio `abrir` lê para deduplicar; `test_m` lê para contar uma linha. ([models.py:2328](app/chamados/models.py:2328), [teste:286](app/chamados/tests/test_o261e_f1_porta_encerramento.py:286)) |
-| `pergunta_reatada` | `_gate_pergunta_viva` monta o novo payload; `evento` persiste. ([models.py:380](app/chamados/models.py:380), [observ.py:136](app/core/observ.py:136)) | `test_n` lê e confere o novo `valor_antes` e a pergunta em `valor_depois`. ([teste:296](app/chamados/tests/test_o261e_f1_porta_encerramento.py:296)) |
-
-A tela genérica de auditoria consulta ambos os registros, mas renderiza descrição e metadados: **não exibe `valor_antes`/`valor_depois`**. Outro consumidor funcional do novo payload: **[não verificado]**. ([views.py:705](app/core/views.py:705), [log_auditoria.html:55](app/templates/core/log_auditoria.html:55))
-
-Execução Django dos REDs/GREENs e confirmação em produção: **[não verificado]**.
-
-_734 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_736 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
