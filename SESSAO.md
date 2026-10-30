@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 30/10/2026 11:20:43.** Transcript: `c07bd622-c518-4ee0-9641-ce667785cb73.jsonl` (6.6 MB). Acoes na janela: **288**.
+**Medido em 30/10/2026 11:25:59.** Transcript: `c07bd622-c518-4ee0-9641-ce667785cb73.jsonl` (6.6 MB). Acoes na janela: **289**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 11:24:15 | Bash | Keep waiting for push | `cd /home/ronald/saas-hasner && for i in $(seq 1 58); do grep -q "^rc=" logs/fioadmin/push.log && break; /usr/bin/sleep 10; done; tail -n 5 logs/fioadmin/push.log` |
 | 11:14:28 | Bash | Wait for push to finish | `cd /home/ronald/saas-hasner && for i in $(seq 1 58); do grep -q "^rc=" logs/fioadmin/push.log && break; /usr/bin/sleep 10; done; tail -n 5 logs/fioadmin/push.log` |
 | 11:14:10 | Bash | Commit marco docs and push via regua | `cd /home/ronald/saas-hasner && git add app/docs/RELATO.md app/docs/HANDOFF-SESSAO.md && git commit -q -F - <<'EOF' MARCO FECHADO para o CLEAR (PREPARA-CLEAR, contexto 64%): FIO-MORTO-DONO-NA-LISTA no ar com o smoke de prod, handoff e proximo passo Prova do pouso 2f503709: deploy_rc=0, 3 rotas, importerror_500=0; smoke `vigiar_fio_morto` em prod FIO_MORTO=3, FIO_DO_ADMIN=2 (129747, 140114), igual a ...` |
 | 11:13:58 | Bash | Write NO AR proof and PAREI CLEAR; run handoff | `python3 - <<'EOF' p='docs/RELATO.md'; s=open(p).read() s=s.replace('ESPERANDO: verificador \| arquivo=/tmp/claude-1001/-home-ronald-saas-hasner-app/be3a61c0-011d-458c-a5a0-e2f78476d660/tasks/a0a1790be185de92e.output\n','',1) s=s.replace('# RELATO — esteira saas-hasner\n','''# RELATO — esteira saas-hasner PAREI: ! CLEAR \| espera Ronald -- MODO PREPARA-CLEAR (contexto 64% >= 60%). Marco fechado: FI ...` |
