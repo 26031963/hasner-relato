@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/10/2026 22:32:56.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (25.9 MB). Acoes na janela: **378**.
+**Medido em 29/10/2026 22:38:06.** Transcript: `be3a61c0-011d-458c-a5a0-e2f78476d660.jsonl` (25.9 MB). Acoes na janela: **377**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -387,4 +387,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 10:48:30 | Bash | File esmeril finding in BACKLOG | `cd /home/ronald/saas-hasner/app/docs && python3 - <<'PY' p='BACKLOG.md'; s=open(p,encoding='utf-8').read() anc=[l for l in s.split('\n') if l.startswith('\| DISPARAR-PERGUNTAS-NO-CONTRATO-20 \|')][0] s=s.replace(anc,anc+'\n\| PAUTAS-PREFILTRO-REPETIDO \| **esmeril COL129 #6 (verificador 29/10 10:5x)**: `ponto/management/commands/pautas_discordantes.py:94` ainda faz o pre-filtro "o dia precisa do m ...` |
 | 10:48:26 | Agent | Verify LASTRO-DEGRAU-2 | `1a leitura da LASTRO-DEGRAU-2 (BACKLOG /home/ronald/saas-hasner/app/docs/BACKLOG.md, linhas `\| LASTRO-DEGRAU-2 \|` e `\| BUG-LASTRO-VAI-E-VOLTA \|`). A obra: o degrau 2 de `ponto/services/lastro.py` (casamento batida x marco quando a ata nao tem a lampada, ou nao ha celula) deixa a conta linear propria (`TOLERANCIA_MIN`) e PERGUNTA AO JUIZ DO PAR, no ar desde b3bf529e: `escala/utils.py::_match_ma ...` |
 | 10:38:10 | Bash | Wait for COL129 suite verdict | `cd /home/ronald/saas-hasner && until grep -q '^rc=' logs/col129/suite_inteira_c9_6.log 2>/dev/null; do /usr/bin/sleep 30; done; grep -E '^(OK\|FAILED)($\| \()\|^Ran \|^rc=' logs/col129/suite_inteira_c9_6.log \| tail -3; grep -E '^(FAIL\|ERROR):' logs/col129/suite_inteira_c9_6.log \| head -5; cat logs/col129/arvore_hash_depois_6.out 2>/dev/null \| head -3` |
-| 10:38:05 | Agent | Verify COL129 sixth round | `5a leitura da COL129-TETO-x-PORTAO-26H (c) com o item 4 do aval RESPOSTAS-2910-MANHA (CORTES.md, ultima linha RESPOSTAS-2910-MANHA): dono pelo juiz existente `e6_oraculo.dono_da_divergencia`, contador 33. Copia: /home/ronald/wt-col129-2901-0330 @ d3797ae4, em cima de 47c37d59 (merge do main com a ORFAS). Diff da rodada: `git -C /home/ronald/wt-col129-2901-0330 diff 47c37d59 d3797ae4`. A sua 4a lei ...` |
