@@ -82,7 +82,7 @@ core/tests/test_selo_diagrama_do_codigo.py regenera os dois e compara.
 | celula/precedencia | 8/0 | 0 | 0 | 0 | 0 | 3 | 2 |
 | turno/marcos | 15/0 | 0 | 0 | 0 | 0 | 3 | 1 |
 | ausencia/ferias | 15/0 | 0 | 0 | 0 | 0 | 6 | 4 |
-| chamado | 15/0 | 0 | 0 | 0 | 0 | 3 | 10 |
+| chamado | 16/0 | 0 | 0 | 0 | 0 | 3 | 10 |
 | feriado/prazo | 6/2 | 13 | 10 | 2 | 1 | 4 | 1 |
 | fechamento | 9/0 | 0 | 0 | 0 | 0 | 5 | 1 |
 | tela | 11/1 | 110 + sitio novo: nao sei (sem varredor) | 68 | 5 | 37 + sitio novo: nao sei (sem varredor) | 0 | 2 |
@@ -166,6 +166,7 @@ core/tests/test_selo_diagrama_do_codigo.py regenera os dois e compara.
   - por que o chamado vivo de furo nao tem pergunta no app? -> `chamados/services/pergunta_no_app.py::retencao` · registro 0
   - qual a competencia do chamado? -> `chamados/juizes.py::competencia_do_chamado` · registro 0
   - alguma pergunta desta colecao esta viva? -> `chamados/juizes.py::fio_vivo` · registro 0
+  - este dia veta o nascimento/reabertura automatica de chamado de turno? -> `ponto/services/furos_vetados.py::motivo_do_veto` · registro 0
 
 ### feriado/prazo -- fora_de_autoridade('feriado/prazo') = 13
 - pendentes: sem chamar 10 · chama e deriva 2 · nao sei 1 · [pergunta sem juiz declarado (nao ha quem chamar): 1]

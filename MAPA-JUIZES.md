@@ -72,6 +72,7 @@ esperam migrar -- a lista so encolhe).
 | a ausencia esta aberta ou decidida? | `ponto/services/ausencia.py::ABERTAS` |
 | a ausencia exige documento, e em que prazo? | `ponto/services/ausencia.py::estado_inicial` |
 | a ausencia paga, desconta ou suprime o dia? | `ponto/catalogo/ausencias.py::efeito_vigente` |
+| a batida do dia esta dentro do periodo que a ausencia parcial declara? | `ponto/turnos.py::periodo_da_parcial_no_dia` |
 | ha 3 ou mais lancamentos medicos na competencia? | `ponto/services/alertas_ausencia.py::resumo_atestados` |
 | o aviso de 30 dias foi dado (art.135)? | `ferias/situacao.py::DIAS_AVISO_PREVIO` |
 | o colaborador esta afastado hoje? | `ponto/turnos.py::afastado_hoje` |
@@ -95,6 +96,7 @@ esperam migrar -- a lista so encolhe).
 | a pergunta da disputa esta viva? | `chamados/juizes.py::pergunta_viva` |
 | a premissa do chamado morreu (pode fechar)? | `chamados/catalogo/premissa.py::premissa_morta` |
 | alguma pergunta desta colecao esta viva? | `chamados/juizes.py::fio_vivo` |
+| este dia veta o nascimento/reabertura automatica de chamado de turno? | `ponto/services/furos_vetados.py::motivo_do_veto` |
 | o chamado e duplicado (mesmo fato)? | `chamados/models.py::ChamadoColaborador.abrir` |
 | o chamado esta vivo? | `chamados/catalogo/motor.py::VIVOS` |
 | o prazo (SLA) do chamado estourou? | `chamados/catalogo/motor.py::prazo_estourou` |
@@ -174,10 +176,10 @@ esperam migrar -- a lista so encolhe).
 | `turno/marcos` | 15 | 0 | 0 |
 | `celula/precedencia` | 8 | 0 | 0 |
 | `escala` | 2 | 0 | 0 |
-| `ausencia/ferias` | 14 | 0 | 0 |
-| `chamado` | 15 | 0 | 0 |
+| `ausencia/ferias` | 15 | 0 | 0 |
+| `chamado` | 16 | 0 | 0 |
 | `fechamento` | 9 | 0 | 0 |
 | `feriado/prazo` | 6 | 2 | 13 |
 | `tela` | 11 | 1 | 110 |
 | `portas` | 1 | 0 | 124 |
-| **total** | **85** | **5** | **247** |
+| **total** | **87** | **5** | **247** |
