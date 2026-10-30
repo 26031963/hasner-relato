@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 30/10/2026 11:31:07.** Transcript: `c07bd622-c518-4ee0-9641-ce667785cb73.jsonl` (6.6 MB). Acoes na janela: **289**.
+**Medido em 30/10/2026 11:36:45.** Transcript: `c07bd622-c518-4ee0-9641-ce667785cb73.jsonl` (6.7 MB). Acoes na janela: **291**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 11:32:25 | Bash | Push marco commit and wait | `cd /home/ronald/saas-hasner && (bash bin/push.sh > logs/fioadmin/push2.log 2>&1; echo rc=$? >> logs/fioadmin/push2.log) > /dev/null 2>&1 & for i in $(seq 1 58); do grep -q "^rc=" logs/fioadmin/push2.log 2>/dev/null && break; /usr/bin/sleep 10; done; tail -n 3 logs/fioadmin/push2.log` |
+| 11:32:17 | Bash | Add PROVA marker and commit marco | `python3 - <<'EOF' p='docs/RELATO.md'; s=open(p).read() a="+ deploy 11:1x `--sem-migrate` (`logs/fioadmin/deploy.log` deploy_rc=0, 3 rotas OK, importerror_500=0). SMOKE em prod" assert s.count(a)==1 s=s.replace(a,"+ deploy 11:1x `--sem-migrate` PROVA: `logs/fioadmin/deploy.log` deploy_rc=0, 3 rotas OK, importerror_500=0. SMOKE em prod") open(p,'w').write(s) EOF cd /home/ronald/saas-hasner && git st ...` |
 | 11:24:15 | Bash | Keep waiting for push | `cd /home/ronald/saas-hasner && for i in $(seq 1 58); do grep -q "^rc=" logs/fioadmin/push.log && break; /usr/bin/sleep 10; done; tail -n 5 logs/fioadmin/push.log` |
 | 11:14:28 | Bash | Wait for push to finish | `cd /home/ronald/saas-hasner && for i in $(seq 1 58); do grep -q "^rc=" logs/fioadmin/push.log && break; /usr/bin/sleep 10; done; tail -n 5 logs/fioadmin/push.log` |
 | 11:14:10 | Bash | Commit marco docs and push via regua | `cd /home/ronald/saas-hasner && git add app/docs/RELATO.md app/docs/HANDOFF-SESSAO.md && git commit -q -F - <<'EOF' MARCO FECHADO para o CLEAR (PREPARA-CLEAR, contexto 64%): FIO-MORTO-DONO-NA-LISTA no ar com o smoke de prod, handoff e proximo passo Prova do pouso 2f503709: deploy_rc=0, 3 rotas, importerror_500=0; smoke `vigiar_fio_morto` em prod FIO_MORTO=3, FIO_DO_ADMIN=2 (129747, 140114), igual a ...` |
