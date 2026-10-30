@@ -1,7 +1,109 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **30/10/2026 18:57** · publicado em **30/10/2026 18:59** (UTC-3)
+> Ultima resposta processada: **30/10/2026 19:03** · publicado em **30/10/2026 19:05** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 30/10 19:03 · sessao 0d8d2229d690 · O261-E-CELULA-20 · verificador · origem=Code
+
+**Veredito: fechamento parcial.** A cura da instância velha fecha o caso descrito; permanecem falhas no selo e na nova deduplicação de auditoria. A guarda acrescentada a `abrir` também não cobre todo o pós-estado. ([models.py:206](app/chamados/models.py:206), [contrato:22](app/chamados/tests/test_contract_status_nucleo.py:22), [models.py:2327](app/chamados/models.py:2327), [models.py:2334](app/chamados/models.py:2334))
+
+1. **Cada cura fecha o item declarado?**
+
+| Item | Verificação |
+|---|---|
+| **1 — instância velha** | **Fecha o cenário sequencial.** Os quatro gates recarregam antes da decisão; o tripwire considera memória **ou banco** antes da mutação. ([models.py:595](app/chamados/models.py:595), [:618](app/chamados/models.py:618), [:676](app/chamados/models.py:676), [:1425](app/chamados/models.py:1425), [:1442](app/chamados/models.py:1442), [:206](app/chamados/models.py:206)) |
+| **2 — dedup costura em terminal** | **Fecha o caso simples do `test_m`:** consulta a guarda, preserva o destino recusado e retorna `(ex, False)`. **Parcial para a classe**, pelo escape de célula abaixo. ([models.py:2321](app/chamados/models.py:2321), [:2347](app/chamados/models.py:2347), [teste:269](app/chamados/tests/test_o261e_f1_porta_encerramento.py:269)) |
+| **7 — comentário de atomicidade** | **Fecha a correção textual:** agora distingue exceção propagada da falha do pai engolida pelo receiver. ([models.py:1735](app/chamados/models.py:1735), [signals.py:46](app/chamados/signals.py:46)) |
+| **8 — dois estados no desligamento** | Continua sendo efeito possível da ordem declarada: disputa fecha, receiver reconcilia o pai, depois a cascata chama `encerrar`. Não é uma cura comportamental deste delta. ([desligamento.py:142](app/colaboradores/services/desligamento.py:142), [signals.py:42](app/chamados/signals.py:42), [desligamento.py:155](app/colaboradores/services/desligamento.py:155)) |
+| **9 — `antes` da reata** | **Fecha:** captura o destino real antes da porta e acrescenta `ancora`; o teste confere `None` no caso pelo container. ([models.py:376](app/chamados/models.py:376), [:383](app/chamados/models.py:383), [teste:297](app/chamados/tests/test_o261e_f1_porta_encerramento.py:297)) |
+| **Selo** | Corrige a âncora textual única e contém os três mutantes declarados, mas a consolidação enfraquece a anticegueira. ([selo:158](app/chamados/tests/test_o261e_f1_selo_encerramento.py:158), [contrato:22](app/chamados/tests/test_contract_status_nucleo.py:22)) |
+
+2. **Caminhos, chamadores e mordida**
+
+- **PROCEDE — regressão nova da anticegueira.** O contrato exige somente `bool(achados)`. Remover a escrita do núcleo deixa os dois swaps permitidos suficientes para passar; o tripwire também aceita, pois retorna ao encontrar a guarda sem exigir uma escrita posterior. Assim, perdeu-se a exigência específica de encontrar `NUCLEO`, presente no teste removido do patch. ([contrato:22](app/chamados/tests/test_contract_status_nucleo.py:22), [selo:87](app/chamados/tests/test_o261e_f1_selo_encerramento.py:87), [:115](app/chamados/tests/test_o261e_f1_selo_encerramento.py:115), [models.py:304](app/chamados/models.py:304), [:314](app/chamados/models.py:314))
+
+- **PROCEDE — cura parcial do tripwire.** `if (...) and False:` passa porque não é `ast.Constant`; uma escrita antecipada dentro de outro `if` também passa porque só se rejeita `Assign` diretamente no corpo. Remover `or _anterior_no_banco in VIVOS` igualmente passa: a nova proteção do banco não está presa por esse selo. São limites do verificador, sem demonstração de ocorrência na produção. ([selo:107](app/chamados/tests/test_o261e_f1_selo_encerramento.py:107), [models.py:208](app/chamados/models.py:208))
+
+- **Escape preexistente que a cura 2 deixa aberto:** a guarda julga com a célula antiga; depois `abrir` pode substituí-la. Se a antiga absolve e a nova acusa, a costura em terminal pode ser admitida antes de a pergunta tornar-se viva. O C6 distingue exatamente esses dois vereditos. Existência desse estado em produção: **[não verificado]**. ([models.py:2321](app/chamados/models.py:2321), [:2334](app/chamados/models.py:2334), [juizes.py:1054](app/chamados/juizes.py:1054))
+
+- **PROCEDE — perda nova de auditoria:** recusa `A→M`, costura válida `A→B`, nova recusa `B→M`: a segunda recusa encontra a primeira no histórico e não registra o novo `antes=B`. A identidade pesquisada contém pergunta e destino pedido, sem origem ou ciclo. Repetir a mesma entrada deve deduplicar; isso não exige apagar a foto de um fato posterior distinto. ([models.py:2327](app/chamados/models.py:2327), [:2333](app/chamados/models.py:2333), [CLAUDE.md:299](CLAUDE.md:299), [CLAUDE.md:32](CLAUDE.md:32))
+
+- **Chamadores:** a assinatura e o retorno de `abrir` permanecem compatíveis com os seis emissores encontrados. Porém, a nova leitura `.exists()` da auditoria está fora do best-effort de `evento`: erro nessa consulta propaga pelo ramo de recusa. Ocorrência desse erro: **[não verificado]**. ([models.py:2275](app/chamados/models.py:2275), [:2347](app/chamados/models.py:2347), [disputa_emissao.py:389](app/chamados/services/disputa_emissao.py:389), [:770](app/chamados/services/disputa_emissao.py:770), [:1160](app/chamados/services/disputa_emissao.py:1160), [acoes_disputa.py:259](app/chamados/services/acoes_disputa.py:259), [declaracao_texto.py:322](app/chamados/services/declaracao_texto.py:322), [:611](app/chamados/services/declaracao_texto.py:611), [observ.py:105](app/core/observ.py:105))
+
+Não identifiquei segundo escritor novo nesses trechos: o helper recarrega e a persistência continua no núcleo; nascimento/identidade e reapontamento de destino já são portas declaradas. Nascimento com destino terminal continua fora da guarda, expressamente reservado à F2. A leitura do banco também não elimina a janela entre consulta e escrita. ([models.py:618](app/chamados/models.py:618), [:252](app/chamados/models.py:252), [contrato de escritores:60](app/core/tests/test_contract_escritores_estado.py:60), [fio.py:748](app/chamados/services/fio.py:748), [models.py:206](app/chamados/models.py:206))
+
+3. **Quem escreve e quem lê a auditoria**
+
+| Registro | Escritor | Leitores encontrados |
+|---|---|---|
+| `costura_recusada` | `PerguntaDisputa.abrir` monta ação, motivo e payload; `core.observ.evento` efetua o `create`. ([models.py:2332](app/chamados/models.py:2332), [observ.py:134](app/core/observ.py:134)) | O próprio `abrir` lê para deduplicar; `test_m` lê para contar uma linha. ([models.py:2328](app/chamados/models.py:2328), [teste:286](app/chamados/tests/test_o261e_f1_porta_encerramento.py:286)) |
+| `pergunta_reatada` | `_gate_pergunta_viva` monta o novo payload; `evento` persiste. ([models.py:380](app/chamados/models.py:380), [observ.py:136](app/core/observ.py:136)) | `test_n` lê e confere o novo `valor_antes` e a pergunta em `valor_depois`. ([teste:296](app/chamados/tests/test_o261e_f1_porta_encerramento.py:296)) |
+
+A tela genérica de auditoria consulta ambos os registros, mas renderiza descrição e metadados: **não exibe `valor_antes`/`valor_depois`**. Outro consumidor funcional do novo payload: **[não verificado]**. ([views.py:705](app/core/views.py:705), [log_auditoria.html:55](app/templates/core/log_auditoria.html:55))
+
+Execução Django dos REDs/GREENs e confirmação em produção: **[não verificado]**.
+
+## 30/10 19:02 · sessao ac639396587e · - · - · origem=Ronald (tmux)
+
+- **Cura 2 fecha o caso simples:** o dedup consulta `_costura_nao_mata_o_fio`, preserva o destino anterior quando recusado e mantém retorno `(ex, False)`; E4-c continua levantando para divergência de turno. `app/chamados/models.py:2311`, `app/chamados/models.py:2313`, `app/chamados/models.py:2321`, `app/chamados/models.py:2347`.
+
+- **Cura 2 não cobre todo pós-estado:** a guarda roda antes da troca de `celula`. C6 pode considerar a célula antiga absolvente e permitir destino terminal; a troca subsequente para célula acusadora torna a pergunta viva nesse terminal. Prova pura em memória com os corpos AST reais de `abrir`, `_costura_nao_mata_o_fio` e `_pergunta_viva_calc`: `before_viva=False`, `created=False`, `after_viva=True`, destino `resolvido`. É escape preexistente que a cura não fecha; existência desse dado em produção **[não verificado]**. `app/chamados/models.py:2321`, `app/chamados/models.py:2334`, `app/chamados/models.py:2346`, `app/chamados/juizes.py:1054`, `app/chamados/juizes.py:1056`, `app/chamados/juizes.py:1064`.
+
+- **Novo dedup de auditoria abafa fatos posteriores distintos:** sua identidade é somente ação/modelo/pergunta/destino pedido, pesquisada em todo histórico; não inclui origem nem ciclo. Depois de uma recusa A→M, uma costura válida A→B e nova recusa B→M, a segunda foto de origem não é escrita. Prova pura em memória com `abrir` real: duas recusas, uma linha, única foto `antes=10`, origem atual `11`. Isso é perda de auditoria da tentativa posterior; contrato 2 só exige fundir repetição da mesma entrada, e L-007 exige antes/depois de ação crítica. `app/chamados/models.py:2327`, `app/chamados/models.py:2328`, `app/chamados/models.py:2333`, `CLAUDE.md:299`, `app/docs/LEIS.md:65`.
+
+- **Nova dependência de leitura de auditoria:** o `.exists()` de `LogAuditoria` está fora do best-effort de `evento`; falha nessa leitura propaga, embora o `create` da trilha seja engolido. Ocorrência de falha em produção **[não verificado]**. `app/chamados/models.py:2328`, `app/core/observ.py:105`, `app/core/observ.py:133`, `app/core/observ.py:139`.
+
+- **Seis emissores, assinatura preservada:** `gerar_perguntas_disputa` consome `(p,_criada)` e só reata órfã criada; `_criar_pergunta_se_couber` ignora o retorno e declara `True`; âncora de limbo e reabertura administrativa ignoram o retorno; as duas declarações consomem `(perg,_)`. Não há exigência de novo tipo de retorno nesses chamadores. `app/chamados/services/disputa_emissao.py:389`, `app/chamados/services/disputa_emissao.py:404`, `app/chamados/services/disputa_emissao.py:770`, `app/chamados/services/disputa_emissao.py:780`, `app/chamados/services/disputa_emissao.py:1160`, `app/chamados/services/acoes_disputa.py:259`, `app/chamados/services/declaracao_texto.py:322`, `app/chamados/services/declaracao_texto.py:611`, `app/chamados/models.py:2347`.
+
+- **Nascimento com destino/pai terminal continua sem essa guarda, expressamente fora de F1:** o `create` permanece direto; portanto não é caminho novo aberto pelo delta anexado. `app/chamados/models.py:2348`, `app/chamados/services/fio.py:748`.
+
+- **Não nasceu segundo escritor de status neste trecho:** o delta do dedup escreve destino/célula/veredito da pergunta; as duas portas de costura já existiam, e o próprio gate ainda efetua a atribuição. A exclusividade literal reivindicada por `reapontar_resolvedora` já divergia desse dedup preexistente. `app/chamados/models.py:2323`, `app/chamados/models.py:2335`, `app/chamados/models.py:2346`, `app/chamados/services/fio.py:772`, `app/chamados/services/fio.py:828`.
+
+## 30/10 19:01 · sessao 87d817a9ef88 · - · - · origem=Ronald (tmux)
+
+O selo **fecha os três mutantes declarados**, mas permanece parcial e a consolidação introduz uma regressão de anticegueira. [app/chamados/tests/test_o261e_f1_selo_encerramento.py:158](app/chamados/tests/test_o261e_f1_selo_encerramento.py:158), [app/chamados/tests/test_contract_status_nucleo.py:22](app/chamados/tests/test_contract_status_nucleo.py:22)
+
+- **NOVO — anticegueira enfraquecida.** O teste removido no anexo exigia encontrar especificamente `NUCLEO`; agora basta `achados` não vazio. Retirar apenas `models.py:213`, ou trocar por `self.__dict__['status_local'] = novo`, deixa as escritas permitidas de `_vivas_ancoradas` e satisfaz `assertTrue(achados)` e `fora_do_nucleo=[]`. O tripwire também retorna verdadeiro porque encontra a guarda antes de exigir qualquer escrita posterior. [app/chamados/tests/test_contract_status_nucleo.py:22](app/chamados/tests/test_contract_status_nucleo.py:22), [app/chamados/tests/test_o261e_f1_selo_encerramento.py:86](app/chamados/tests/test_o261e_f1_selo_encerramento.py:86), [app/chamados/tests/test_o261e_f1_selo_encerramento.py:115](app/chamados/tests/test_o261e_f1_selo_encerramento.py:115), [app/chamados/models.py:304](app/chamados/models.py:304), [app/chamados/models.py:314](app/chamados/models.py:314)
+
+- **Cura parcial — guarda morta ainda aceita.** `if (...) and False:` não é `ast.Constant`; contém chamada e `raise` e passa. Uma escrita antecipada dentro de `if novo: self.status_local = novo` também passa, pois o detector só rejeita `Assign` diretamente no corpo. São limites estruturais que permanecem, não novo caminho observado na produção. [app/chamados/tests/test_o261e_f1_selo_encerramento.py:107](app/chamados/tests/test_o261e_f1_selo_encerramento.py:107)
+
+- **Nova leitura do banco sem selo próprio.** Substituir a condição atual por `if anterior in VIVOS and novo in TERMINAIS:` mantém chamada e `raise`, satisfazendo o selo apesar de retirar a proteção contra instância velha. [app/chamados/models.py:206](app/chamados/models.py:206), [app/chamados/tests/test_o261e_f1_selo_encerramento.py:111](app/chamados/tests/test_o261e_f1_selo_encerramento.py:111)
+
+- **Consolidação resolve a falsa infração do swap**, mas sua exceção continua baseada apenas em arquivo/nome da função: não verifica classe nem que `_vivas_ancoradas` nunca salva. No código atual essa função consulta, troca em memória e restaura no `finally`; não há `save()` nela. [app/chamados/tests/test_contract_status_nucleo.py:16](app/chamados/tests/test_contract_status_nucleo.py:16), [app/chamados/tests/test_o261e_f1_selo_encerramento.py:27](app/chamados/tests/test_o261e_f1_selo_encerramento.py:27), [app/chamados/tests/test_o261e_f1_selo_encerramento.py:86](app/chamados/tests/test_o261e_f1_selo_encerramento.py:86), [app/chamados/models.py:298](app/chamados/models.py:298)
+
+Executei os seis testes do selo por AST em memória, substituindo somente a importação de `SimpleTestCase` por `unittest.TestCase`; todos passaram. A varredura encontrou somente o escritor e os dois swaps permitidos, e os mutantes acima reproduziram os escapes. Não executei Django nem acessei banco; esses resultados locais não foram registrados em arquivo. [não verificado] [nao verificado]
+
+## 30/10 19:01 · sessao 318dd251f59b · - · - · origem=Ronald (tmux)
+
+Item 1 fecha no cenário sequencial descrito: o helper compara o status persistido e recarrega os campos de estado; os quatro gates o chamam antes da decisão do motor. Não cria segundo escritor: a persistência continua em `_gravar_estado`. (`app/chamados/models.py:618-621`, `:595`, `:676`, `:1425`, `:1442`, `:213`, `:252`)
+
+O tripwire passa a considerar tanto a memória quanto o banco, antes de alterar a instância; uma instância terminal sobre registro vivo já não evita a checagem das perguntas ancoradas. (`app/chamados/models.py:206-213`)
+
+Não encontrei regressão concreta nos caminhos examinados: `cancelar`, `encerrar` e `encerrar_por_competencia_trancada` continuam consultando a guarda antes do escritor, com retorno `False` na recusa. (`app/chamados/models.py:683-686`, `:1431-1434`, `:1449-1454`)
+
+O teste novo cobre diretamente apenas a instância velha em `encerrar`; execução dos testes e cobertura dinâmica dos outros gates e do tripwire com instância velha: [não verificado]. (`app/chamados/tests/test_o261e_f1_porta_encerramento.py:260-267`)
+
+A leitura não torna o fechamento atômico perante concorrência: consulta, guarda e `save` permanecem sem trava de linha; isso é limite remanescente, não prova de ocorrência. (`app/chamados/models.py:206-212`, `:247-252`, `:618-621`)
+
+## 30/10 19:00 · sessao 61de8c571a69 · prova_red_escrita · red · origem=Code
+
+1. Criar `/home/ronald/saas-hasner/INTRUSO_RED_3759812.txt`: código 1.
+   ```text
+   /bin/bash: line 1: /home/ronald/saas-hasner/INTRUSO_RED_3759812.txt: Read-only file system
+   ```
+
+2. Criar `/tmp/INTRUSO_RED_3759812.txt`: código 1.
+   ```text
+   /bin/bash: line 1: /tmp/INTRUSO_RED_3759812.txt: Read-only file system
+   ```
+
+3. Acrescentar `# INTRUSO_RED_3759812` a `app/ponto/models.py`: código 0, saída vazia. A alteração foi permitida.
+
+4. Criar `app/ponto/tests/test_intruso_red_3759812.py`: código 0, saída vazia. Arquivo criado com:
+   ```python
+   def test_x():
+       assert False
+   ```
 
 ## 30/10 18:57 · sessao 481142c712d0 · O261-E-CELULA-20 · verificador · origem=Code
 
@@ -390,201 +492,4 @@ Evidências relevantes aos itens (i-a)/(i-b), sem atribuir filtros à sonda ause
 - `ERROS={}` externo não estabelece ausência de toda exceção interna: `pergunta_viva` captura exceções, registra por `registrar_engolido` e segue ou retorna `False`. Ocorrência real em PROD é [não verificado]. `app/chamados/juizes.py:1073`, `app/chamados/juizes.py:1075`, `app/chamados/juizes.py:1084`, `app/chamados/juizes.py:1087`.
 - Para “competência aberta”, a função de medição existente `competencia_do_dia_entregue()` retorna `None` sem dia, usa a janela da empresa e consulta entrega vigente; a cerca do reconciliador exclui sem dia, entregue e trancado. Qual dessas composições a sonda utiliza é [não verificado]. `app/chamados/services/vigia_fio.py:467`, `app/chamados/services/vigia_fio.py:471`, `app/chamados/services/vigia_fio.py:474`, `app/chamados/reconciliador.py:705`, `app/chamados/reconciliador.py:713`, `app/chamados/reconciliador.py:716`.
 
-## 30/10 18:38 · sessao 8c8c833f4e55 · - · - · origem=Ronald (tmux)
-
-- `reconciliaria()` usa `_decisao_do_fechamento(registrar=False)`, a mesma decisão chamada por `reconciliar()`; assim, mede autorização dessa porta naquele instante. O método, isoladamente, não verifica qual gatilho levaria um cron a chamá-la. (`app/chamados/models.py:434-451`, `app/chamados/models.py:453-472`).
-- A decisão relê o status do banco, pede ao motor o evento `RECONCILIAR` e aplica a guarda da premissa. O motor admite `aberto`, `em_analise` e `registrado`, levando-os a **`resolvido`**, não ao status `fechado`. (`app/chamados/models.py:462-471`, `app/chamados/catalogo/motor.py:111`, `app/chamados/catalogo/motor.py:157-164`).
-- A guarda permite não-furo; para furo, permite sem dia apurável, premissa regularizada para folha, agrupamento sob pai vivo ou outra cobrança viva do mesmo colaborador/dia. Fora desses casos, o dry-run retorna falso. (`app/chamados/models.py:484-512`).
-- Os conjuntos oficiais são `VIVOS=('aberto','em_analise','registrado')`, `TERMINAIS=('resolvido','fechado','cancelado','superado')` e `NAO_FECHADOS=VIVOS+('resolvido',)`. Logo, `resolvido` pertence simultaneamente a `TERMINAIS` e `NAO_FECHADOS`; não se pode tratar os rótulos como conjuntos complementares. (`app/chamados/catalogo/motor.py:24-32`).
-- Caso a sonda use `resolvedora_valida` para REATA, esse juiz verifica compatibilidade entre dia/turno: permite ausência de dia, ausência de chamado, escopo diferente de DIA, ausência de data do chamado ou falha de parsing; permite dias adjacentes quando o cruzamento da meia-noite for verdadeiro **ou desconhecido**; recusa as demais divergências. A utilização desse juiz pela sonda e o candidato escolhido são [não verificado]. (`app/chamados/juizes.py:1702-1738`).
-- A porta efetiva `reapontar_resolvedora` aplica o dia recebido antes de consultar `resolvedora_valida`, desfaz a data em memória se recusado e, se permitido, escreve o destino e lavra o veredito. Não deve ser executada nesta auditoria somente leitura. (`app/chamados/services/fio.py:785-801`).
-- Não pude validar os filtros ou citar linhas de `logs/o261e/f1_medida_p1.py`: o arquivo não foi encontrado na cópia examinada. [não verificado]
-
-## 30/10 18:38 · sessao 5fc863b2c045 · O261-V-FASE · verificador · origem=Code
-
-Encontrei **duas lacunas residuais**: a troca temporal de vínculo ainda atravessa a assinatura, e `--min-plantoes` ainda permite lavrar um recorte. (`app/escala/services/propositor.py:674–680`; `app/ponto/management/commands/censo_fase_12x36.py:72–76,154–155`.)
-
-**1. Onde o delta ainda falha**
-
-- **Residual de A — selo sem mordida no tempo.** O admin lê a proposta do vínculo A; antes do aceite, A deixa de gerar proposta e sobra B com a mesma assinatura. `da_assinatura` encontra uma única correspondência e aceita B. A assinatura exclui `vinculo_id`; a sessão e os formulários transportam apenas pessoa/assinatura; o escritor usa o vínculo da proposta recalculada. A guarda nova resolve a colisão simultânea, mas não essa substituição temporal. (`app/escala/services/propositor.py:661–680,755–758`; `app/core/views_ia.py:617–619,646–655`; `app/templates/chamados/partials/modal_fio.html:50–57`; `app/chamados/services/proposta_no_fio.py:107–115`.)
-
-  Reproduzi em memória: preview no EC1, conjunto recalculado contendo somente EC2 com assinatura igual, e ambos os caminhos devolveram EC2. É um contraexemplo dos seletores; ocorrência em produção é **[não verificado]**. (`app/core/views_ia.py:573–579`; `app/chamados/services/proposta_no_fio.py:107–115`.)
-
-- **Residual de F1 — pré-requisito incompleto da lavra integral.** `--lavrar --min-plantoes 100` continua permitido. O filtro remove linhas antes do critério fixo `>= 6`; a lavra pode substituir a fotografia por zero desvios, ainda declarando esse critério. É recorte da entrada, sem mudar o predicado congelado de F3. (`app/ponto/management/commands/censo_fase_12x36.py:44–45,72–76,153–155,225,249–260`; `app/escala/services/fase_12x36.py:84–86`.)
-
-O rastreio dos valores ficou assim:
-
-| Valor | Quem produz/escreve | Quem lê |
-|---|---|---|
-| Retorno de `da_assinatura` | Produz `(p, erro)` em `app/escala/services/propositor.py:674–680` | Chat consome `p` e descarta o diagnóstico: `app/core/views_ia.py:575–576`. Fio consome apenas o erro e volta à primeira proposta: `app/chamados/services/proposta_no_fio.py:107–115`. |
-| Corte da lavra | `_hoje`/`_encerrado`: `app/ponto/management/commands/censo_fase_12x36.py:62–63` | Filtra `furos`/`folga_trab`: `:164–165`; alimenta contagens e dias: `:195–213`; payload: `:249–261`; persistência: `app/escala/services/fase_12x36.py:84–86`. |
-| Retorno de `_proposta_de_escala` | Produz `(p, assinatura)` ou `(None, None)`: `app/core/views_ia.py:573–580` | Preview: `:588–619`; aceite e chamada ao escritor: `:646–655`. |
-
-A lavra é relida centralmente por `ultimo_lavrado`; seus consumidores são C10, propositor, fila, pauta, API e vigia. (`app/escala/services/fase_12x36.py:90–105,116`; `app/escala/services/cadastro_realidade.py:339`; `app/escala/services/propositor.py:491–492`; `app/chamados/services/fila_por_causa.py:174`; `app/api/views_mensageria.py:1672`; `app/ponto/management/commands/vigiar_familia_escala.py:24`.)
-
-Nos caminhos rastreados, a aplicação continua apontando ao mesmo escritor, e o piso continua vindo da mesma função; não encontrei segundo escritor ou derivação paralela nesses pontos. (`app/core/intake.py:49–53`; `app/core/views_ia.py:655`; `app/chamados/services/proposta_no_fio.py:145`; `app/escala/services/propositor.py:590–610`; `app/ponto/management/commands/censo_fase_12x36.py:104`.)
-
-Quanto ao relógio, o cron declarado roda às 07:38 e o comando usa um único `_hoje`. Violação temporal adicional nesse caminho é **[não verificado]**. (`app/config/crons.py:614–615`; `app/ponto/management/commands/censo_fase_12x36.py:62–63,164–165`.)
-
-**2. Dependência do comportamento antigo**
-
-- **`assinatura_esperada=None`: preservado.** O preview continua recebendo a primeira proposta da pessoa e guardando sua assinatura. (`app/core/views_ia.py:577–579,588,617–619`; base `7753f9df…/app/core/views_ia.py:573–578`.)
-- **Chat com assinatura única: preservado.** Continua encontrando a correspondência mesmo quando ela não é a primeira. A diferença é recusar múltiplas correspondências. (`app/core/views_ia.py:573–576`; `app/escala/services/propositor.py:674–680`; base `7753f9df…/app/core/views_ia.py:573–579`.)
-- **Fio: preservada a exigência da primeira proposta.** `_p` é ignorado; uma assinatura única na segunda posição continua sendo recusada. A ordem permanece ausência → primeira/comparação, com ambiguidade inserida entre elas. (`app/chamados/services/proposta_no_fio.py:102–115`; base `7753f9df…/app/chamados/services/proposta_no_fio.py:102–111`.)
-- Gate continua antes do recálculo; motivo obrigatório continua antes dele na recusa; tratamento de grade por dia continua depois. Não identifiquei dependência quebrada nessa ordem. (`app/chamados/services/proposta_no_fio.py:130–145,162–170`.)
-
-**3. Os testes novos mordem?** [nao verificado]
-
-- **Assinatura: morde o helper.** Executei o método isolado em memória: passou; substituir a guarda por “aceitar a primeira” fez falhar. Porém ele não chama chat, fio ou escritor, nem cobre A→B; retirar a integração dos consumidores não afeta suas asserções. (`app/escala/tests/test_o261_v_fase_na_lista.py:252–265`.)
-- **Ontem: pela leitura, morde a regressão específica.** Exige excluir 05/11 preservando um dia antigo. A fixture é diurna 07–19; não demonstra um turno noturno efetivamente ainda vivo. (`app/escala/tests/test_o261_v_fase_na_lista.py:60–61,130–137`.)
-- **Recorte: pela leitura, morde empresa/mês.** Exige preservar a fotografia após ambas as tentativas, mas não cobre `--min-plantoes`. (`app/escala/tests/test_o261_v_fase_na_lista.py:139–149`.)
-
-Execução da suíte Django e validação com banco: **[não verificado]**. [nao verificado]
-
-## 30/10 18:36 · sessao c74e6237718f · - · - · origem=Ronald (tmux)
-
-Achado procedente: **selo sem mordida na troca temporal de vínculo A→B**. A assinatura exclui `vinculo_id`; `da_assinatura` recusa somente quando há mais de uma correspondência na corrida atual. Se A foi exibido e depois deixou de gerar proposta, B com o mesmo conteúdo passa a ser a única correspondência e é aceito sob o aceite de A. (`app/escala/services/propositor.py:661-680`.)
-
-O caminho completo existe:
-
-- O chat guarda apenas colaborador e assinatura e, no aceite, aplica a proposta encontrada por essa assinatura. (`app/core/views_ia.py:617-619`, `app/core/views_ia.py:646-655`.)
-- O fio envia somente a assinatura; `_recalcular` recusa duplicatas atuais, depois aceita a primeira proposta se a assinatura coincide. (`app/templates/chamados/partials/modal_fio.html:50-57`, `app/chamados/services/fio.py:505-512`, `app/chamados/services/proposta_no_fio.py:107-115`.)
-- A escrita usa o `vinculo_id` da proposta encontrada, sem receber o vínculo originalmente exibido. (`app/escala/services/propositor.py:755-765`.)
-
-Cenário possível por leitura: A e B com ritmo diário sob 12x36 podem receber o mesmo template diário, com âncora `None` e mesmo piso de aplicação; corrigir A por outra tela remove sua proposta enquanto B permanece. É inferência do algoritmo, não ocorrência em produção. (`app/escala/services/propositor.py:161-185`, `app/escala/services/propositor.py:327-329`, `app/escala/services/propositor.py:495-558`, `app/escala/services/propositor.py:590-592`.) Transportar o vínculo esperado separadamente preservaria a chave de silêncio da recusa. (`app/escala/services/propositor.py:691-710`.)
-
-Quanto à compatibilidade: `assinatura_esperada=None` continua escolhendo a primeira proposta da pessoa; o preview depende desse ramo. `_recalcular` preserva a checagem de ausência antes da comparação da primeira proposta, acrescentando a recusa de ambiguidade entre ambas. (`app/core/views_ia.py:573-588`, `app/chamados/services/proposta_no_fio.py:102-115`; base `7753f9df…/app/core/views_ia.py:573-578`, `7753f9df…/app/chamados/services/proposta_no_fio.py:102-111`.)
-
-O teste novo morde a duplicidade simultânea do helper, mas não chama fio, chat ou escritor e não testa a transição A→B; retirar as chamadas do helper dos consumidores não afeta suas asserções. (`app/escala/tests/test_o261_v_fase_na_lista.py:252-265`.) Os testes antigos verificam assinatura diferente, desaparecimento total, gate e motivo obrigatório; nenhum cobre outro vínculo sobrevivente com assinatura igual. (`app/chamados/tests/test_proposta_no_fio.py:94-175`.)
-
-## 30/10 18:36 · sessao 4b9d5d256dc1 · - · - · origem=Ronald (tmux)
-
-Achado procedente: **F1 residual — `--min-plantoes` ainda permite substituir a lavra por um recorte**. O argumento aceita qualquer inteiro, o filtro elimina linhas antes do critério fixo de desvio (`>= 6`), e a recusa nova só considera `--empresa`/`--mes`. Portanto `--lavrar --min-plantoes 100` pode gravar “zero desvios”, mantendo no payload a descrição `>= 6`; o escritor sobrescreve a fotografia do mesmo dia. Isso trata do universo da lavra, sem alterar o predicado congelado de F3. Evidências: `app/ponto/management/commands/censo_fase_12x36.py:44`, `:72`, `:153`, `:225`, `:249`, `:260`; `app/escala/services/fase_12x36.py:84`.
-
-Escritores/leitores rastreados:
-
-- Corte: `_hoje` e `_encerrado` são definidos no comando; `furos` e `folga_trab` usam o corte e alimentam contagens e itens por dia. `app/ponto/management/commands/censo_fase_12x36.py:62`, `:164`, `:195`, `:206`.
-- Lavra: o comando monta o payload e chama `fase_12x36.lavrar`; esta grava `MetricaSnapshot`. `app/ponto/management/commands/censo_fase_12x36.py:248`; `app/escala/services/fase_12x36.py:78`.
-- Leitura central: `ultimo_lavrado`, selecionando a mais recente até a data opcional. `app/escala/services/fase_12x36.py:90`.
-- Leitores: C10 (`itens`), propositor (`colab`, `ec_do_dia`), fila (`colabs_de_desvio`), pauta, API e vigia. `app/escala/services/cadastro_realidade.py:339`; `app/escala/services/propositor.py:491`; `app/chamados/services/fila_por_causa.py:174`; `app/escala/services/fase_12x36.py:116`; `app/api/views_mensageria.py:1672`; `app/ponto/management/commands/vigiar_familia_escala.py:24`.
-
-Os dois testes novos do censo mordem o comportamento específico alterado: o temporal exige retirar ontem preservando um dia antigo; o de recorte exige preservar a fotografia após `--empresa` e `--mes`. Entretanto, o primeiro usa template diurno 07–19 e não exercita um turno noturno ainda vivo; o segundo não cobre `--min-plantoes`. Evidências: `app/escala/tests/test_o261_v_fase_na_lista.py:60`, `:130`, `:139`.
-
-Sobre relógio: o cron declarado roda às 07:38, enquanto a execução manual não tem guarda horária. O envelope de 26 h pertence ao fechamento do par; a expiração da aberta usa fim previsto + 4 h. Não provei uma violação para um template 12x36 normal com o dado disponível; ocorrência em produção é [não verificado]. Evidências: `app/config/crons.py:614`; `app/ponto/management/commands/censo_fase_12x36.py:62`; `app/ponto/turnos.py:1431`, `:1997`.
-
-Comparação textual com a cópia-base confirmou que o delta do censo contém somente o novo corte e a recusa de recortes por empresa/mês; execução de testes não realizada. [não verificado] [nao verificado]
-
-## 30/10 18:32 · sessao 5d1a28e5c21b · O261-V-FASE · verificador · origem=Code
-
-**Parecer: reprovo esta construção.** A abertura para vários ECs da mesma pessoa não foi acompanhada pela identidade da proposta no aceite: o fio escolhe a primeira proposta, e a assinatura não inclui `vinculo_id`. Isso permite aceitar outro vínculo sob a assinatura apresentada anteriormente. `app/escala/services/propositor.py:452`, `app/escala/services/propositor.py:661`, `app/chamados/services/proposta_no_fio.py:106`.
-
-A análise abaixo distingue falhas da costura nova de problemas herdados. A suíte Django, os mutantes e o RED histórico permanecem **[não verificado]**. A colisão de assinatura e sua aceitação por `_recalcular` foram reproduzidas isoladamente em memória, usando as funções reais e substituindo apenas a fonte de propostas; integração com banco **[não verificado]**. `app/escala/services/propositor.py:654`, `app/chamados/services/proposta_no_fio.py:92`.
-
-**1. Quem escreve e quem lê**
-
-O comando calcula o detalhe; `fase_12x36.lavrar()` persiste a fotografia; `ultimo_lavrado()` lê o detalhe e acrescenta os metadados do snapshot. O cron existente já chama `censo_fase_12x36 --min-plantoes 6 --lavrar`. `app/ponto/management/commands/censo_fase_12x36.py:239`, `app/escala/services/fase_12x36.py:78`, `app/escala/services/fase_12x36.py:90`, `app/config/crons.py:614`.
-
-| Campo/valor | Escritor em produção | Leitor em produção |
-|---|---|---|
-| Chave `desvio_de_cadastro_12x36`, escopo `tenant/0`, `data_ref`, `data_ini` | `lavrar()` faz `update_or_create`. `app/escala/services/fase_12x36.py:84` | `ultimo_lavrado()` filtra pela chave/escopo e escolhe o último snapshot. `app/escala/services/fase_12x36.py:96` |
-| `valor` | `len(colabs_de_desvio)`. `app/escala/services/fase_12x36.py:86` | Não localizei leitor específico deste `valor`; os consumidores abaixo contam o detalhe. `app/escala/services/fase_12x36.py:102`, `app/api/views_mensageria.py:1675` |
-| `detalhe.colabs_de_desvio` | IDs distintos das linhas em desvio. `app/ponto/management/commands/censo_fase_12x36.py:242` | Pauta, fila por causa, API e comando semanal. `app/escala/services/fase_12x36.py:117`, `app/chamados/services/fila_por_causa.py:174`, `app/api/views_mensageria.py:1675`, `app/ponto/management/commands/vigiar_familia_escala.py:27` |
-| `detalhe.linhas` | Resumos por colaborador/competência: `colab`, `empresa`, `competencia`, `ec`, `template`, plantões, casados, paridade, furos e folga trabalhada. `app/ponto/management/commands/censo_fase_12x36.py:245` | API e impressão do comando semanal. `app/api/views_mensageria.py:1677`, `app/ponto/management/commands/vigiar_familia_escala.py:28` |
-| `detalhe.itens` | Dias das linhas em desvio, acrescidos de colaborador, empresa, competência e dono. `app/ponto/management/commands/censo_fase_12x36.py:248` | Formatador C10 e gatilho do propositor. `app/escala/services/cadastro_realidade.py:339`, `app/escala/services/propositor.py:491` |
-| `data`, `tipo`, `template_do_dia` | Produzidos a partir de furos/folgas trabalhadas e do vínculo escolhido para cada dia. `app/ponto/management/commands/censo_fase_12x36.py:197` | C10 conserva os campos pertinentes e monta o texto. `app/escala/services/cadastro_realidade.py:341` |
-| `ec_do_dia` | Resultado de `vinculo_do_dia`, levado ao item diário. `app/ponto/management/commands/censo_fase_12x36.py:131`, `app/ponto/management/commands/censo_fase_12x36.py:197` | C10 conserva/exibe o EC; propositor identifica o par `(colab, ec)`. `app/escala/services/cadastro_realidade.py:341`, `app/escala/services/propositor.py:491`, `app/escala/services/propositor.py:513` |
-| `dono_do_dia` | Literal `CADASTRO` na lavra. `app/ponto/management/commands/censo_fase_12x36.py:249` | C10, contagem por dono e índice diário usado pelo vigia do fio. `app/escala/services/cadastro_realidade.py:646`, `app/escala/services/cadastro_realidade.py:655`, `app/escala/services/cadastro_realidade.py:718`, `app/chamados/services/vigia_fio.py:266` |
-| `aplicavel` | Comparação `dia >= piso_de_aplicacao(empresa, hoje)`. `app/ponto/management/commands/censo_fase_12x36.py:98`, `app/ponto/management/commands/censo_fase_12x36.py:199` | C10 repassa o booleano para `acao()`, que habilita o link. `app/escala/services/cadastro_realidade.py:343`, `app/escala/services/cadastro_realidade.py:647`, `app/escala/services/cadastro_realidade.py:494` |
-| Demais contadores/metadados do detalhe | `linhas_de_desvio`, `linhas_medidas`, `automaticos`, `propostas`, `criterio`, `esperado`. `app/ponto/management/commands/censo_fase_12x36.py:240` | `linhas_medidas` e `criterio` chegam à API/comando; não localizei consumidor específico novo para os demais. `app/api/views_mensageria.py:1675`, `app/ponto/management/commands/vigiar_familia_escala.py:25` |
-
-Para **`cadastro_realidade.lista()`**, `_fase_deslocada()` produz as assinaturas C10; `lista()` acrescenta descrição, dono, ocorrência, ação e URL, agrega por colaborador/posto e produz os totais por assinatura. `app/escala/services/cadastro_realidade.py:335`, `app/escala/services/cadastro_realidade.py:644`, `app/escala/services/cadastro_realidade.py:684`, `app/escala/services/cadastro_realidade.py:694`.
-
-Os leitores são a tela e o PDF, ambos alimentados pela mesma chamada de `lista()`, além do vigia do fio, que consome `data` e `dono_do_dia` pelo índice `dias_na_lista()`. A coluna externa de posto/template continua sendo a do vínculo de hoje; o EC histórico aparece dentro do detalhe C10. `app/escala/views.py:490`, `app/templates/escala/cadastro_x_realidade.html:21`, `app/escala/services/cadastro_realidade.py:752`, `app/chamados/services/vigia_fio.py:259`, `app/escala/services/cadastro_realidade.py:514`, `app/escala/services/cadastro_realidade.py:345`.
-
-Para **`propositor.propostas()`**, o escritor do retorno é o próprio propositor, sem persistir a proposta. Cada proposta recebe identidade do colaborador/EC, cadastro atual, evidência, motivo de entrada, `aplicar_desde` e chamados que morreriam; o envelope contém `fonte`, `n`, `propostas`, `universo`, `janela_dias` e os contadores/listas de ritmo e pausa. `app/escala/services/propositor.py:537`, `app/escala/services/propositor.py:573`, `app/escala/services/propositor.py:583`.
-
-| Leitor de `propostas()` | Uso |
-|---|---|
-| Fio | Exibe a primeira proposta; recalcula antes de aceitar/recusar. `app/chamados/services/proposta_no_fio.py:63`, `app/chamados/services/proposta_no_fio.py:102` |
-| Painel | Badge de existência para os colaboradores da página. `app/chamados/services/painel.py:520` |
-| Ficha | Resume a primeira proposta e sua aplicabilidade. `app/colaboradores/services/ficha.py:176` |
-| Chat | Recalcula para preview/confirmação. `app/core/views_ia.py:572` |
-| API mensageria | Formata propostas para resposta. `app/api/views_mensageria.py:2019` |
-| Pauta e comandos | Consomem envelope, propostas e evidências. `app/escala/services/propositor.py:638`, `app/escala/management/commands/propostas_de_escala.py:26`, `app/escala/management/commands/ritmo_discordante.py:18` |
-
-A decisão, separadamente, é gravada por `recusar()`/`aplicar()` em `DecisaoProposta`. O aceite chama a porta existente de correção retroativa. `app/escala/services/propositor.py:690`, `app/escala/services/propositor.py:738`, `app/escala/services/propositor.py:746`.
-
-**`piso_de_aplicacao`** calcula o início da competência corrente por `janela_atual`; no tratamento de exceção devolve `hoje`. Seus leitores são o censo, o filtro de EC encerrado e a montagem de `aplicar_desde`, através do wrapper `_piso_de_aplicacao`. `app/escala/services/propositor.py:595`, `app/escala/services/propositor.py:609`, `app/ponto/management/commands/censo_fase_12x36.py:98`, `app/escala/services/propositor.py:459`, `app/escala/services/propositor.py:558`, `app/escala/services/propositor.py:592`.
-
-**2. Achados**
-
-**A. P1 — Aceite e recusa não distinguem os ECs agora admitidos. Classe: identidade incompleta na porta; consumidor não migrado.** A assinatura contém somente tipo/template/âncora/início. O fio recalcula, pega `[0]` e compara essa assinatura; a recusa também cala por colaborador e assinatura. `app/escala/services/propositor.py:661`, `app/chamados/services/proposta_no_fio.py:106`, `app/escala/services/propositor.py:580`, `app/escala/services/propositor.py:674`.
-
-Contraexemplo: hoje 16/11, corte 21; A é 12x36 de 19/10–01/11, B é 12x36 de 02–15/11, ambos 08–16; há batidas completas segunda–sexta nos dois trechos e template 5x2 08–16 disponível. Ambos podem propor o mesmo template, sem âncora, desde 21/10. Se outro admin corrige A entre preview e POST, sobra B com a mesma assinatura: `_recalcular` aceita B sob o aceite apresentado para A. Recusar A também pode calar B. O candidato por ritmo permite essa troca. `app/escala/services/propositor.py:161`, `app/escala/services/propositor.py:183`, `app/chamados/services/proposta_no_fio.py:107`. Caso completo com Django **[não verificado]**; colisão e aceite isolados reproduzidos nas funções citadas.
-
-**B. P1 — A ação C10 não seleciona o EC indicado pela linha. Classe: perda da identidade da fonte na passagem ao consumidor.** A assinatura conserva `ec_do_dia`, mas a URL transporta somente o colaborador. O fio escolhe a primeira proposta, cuja ordenação prioriza chamados resolvidos. Havendo A e B elegíveis, clicar na linha de A pode apresentar B, mesmo com assinaturas diferentes. `app/escala/services/cadastro_realidade.py:341`, `app/escala/services/cadastro_realidade.py:495`, `app/chamados/services/proposta_no_fio.py:66`, `app/escala/services/propositor.py:582`.
-
-**C. P2 — C10 oferece correção sem proposta disponível. Classe: ação antes do pré-requisito.** `aplicavel` significa apenas “depois do piso”; o censo exige seis plantões por competência, enquanto o propositor exige seis por EC. `app/ponto/management/commands/censo_fase_12x36.py:199`, `app/ponto/management/commands/censo_fase_12x36.py:216`, `app/escala/services/propositor.py:502`.
-
-Contraexemplo: hoje 05/11; A cobre 21–28/10, prevê ímpares e tem quatro pares completos em 22/24/26/28; B cobre desde 29/10 e tem três plantões corretos em 30/10, 01/11 e 03/11. A competência tem sete plantões, paridade 42,9% e C10 de A com ação habilitada; A tem quatro dias batidos e B três, portanto nenhum ganha proposta. `app/ponto/management/commands/censo_fase_12x36.py:150`, `app/escala/services/cadastro_realidade.py:494`, `app/escala/services/propositor.py:497`. Reprodução Django **[não verificado]**.
-
-**D. P2 — O novo teto é somente por data. Classe: teto temporal insuficiente.** `d < hoje` exclui hoje/futuro dos itens, mas não prova encerramento do turno de ontem; a lei explicitamente rejeita esse teto para cross-meia-noite. `app/ponto/management/commands/censo_fase_12x36.py:155`, `CLAUDE.md:330`.
-
-Contraexemplo: cron de 05/11 às 07:38; escala 22–10, âncora 21/10; plantões completos deslocados em 22/24/26/28/30 de outubro e 01/03 de novembro já colocam a competência em desvio. O previsto de 04/11, sem batida, vira `trabalho_sem_batida` antes de seu término às 10h de 05/11. `app/config/crons.py:614`, `app/ponto/management/commands/censo_fase_12x36.py:197`. Reprodução Django **[não verificado]**.
-
-**E. P2 — A fila continua julgando todos os dias pelo colaborador. Classe: redução indevida da fonte única.** A migração lê apenas `colabs_de_desvio`; depois qualquer chamado dessa pessoa cai em `grade_errada`, sem consultar o dia/EC lavrado. `app/chamados/services/fila_por_causa.py:174`, `app/chamados/services/fila_por_causa.py:220`.
-
-Contraexemplo: A errado até 28/10, B correto desde 29/10; uma falta real em 03/11 sob B recebe causa `grade_errada` porque A mantém o colaborador no censo. A simplificação é herdada, mas a nova fonte já fornece a granularidade que esse leitor descarta. `app/escala/tests/test_o261_v_fase_na_lista.py:13`, `app/ponto/management/commands/censo_fase_12x36.py:248`. Reprodução Django **[não verificado]**.
-
-**F. Riscos herdados que passam a afetar a autoridade única.**
-
-- **Lavra parcial substitui a global:** `--empresa`/`--mes` estreitam a medição, mas a escrita usa sempre tenant/0/data. Uma execução `--empresa A --lavrar` pode retirar B da fotografia lida por todos. Classe: universo truncado na fonte; LEI-AKITA 8. `app/ponto/management/commands/censo_fase_12x36.py:74`, `app/ponto/management/commands/censo_fase_12x36.py:90`, `app/escala/services/fase_12x36.py:84`, `CLAUDE.md:35`.
-- **`aplicavel` envelhece na virada:** em 21/11 antes da nova lavra, o snapshot de 20/11 ainda pode habilitar dias anteriores ao novo piso. O leitor aceita a última fotografia sem verificar essa compatibilidade temporal. Classe: pré-requisito temporal da fotografia. `app/escala/services/fase_12x36.py:99`, `app/escala/services/cadastro_realidade.py:343`, `app/escala/services/cadastro_realidade.py:494`.
-- **“Plantão real” não exige par fechado:** o censo inclui toda `data_turno` retornada, enquanto o wrapper não exclui abertos. Seis entradas soltas podem atingir o piso de desvio. Isso é herdado do juiz escolhido, portanto não atribuo ao diff uma alteração desse predicado. `app/ponto/management/commands/censo_fase_12x36.py:147`, `app/ponto/turnos.py:1973`, `app/ponto/management/commands/censo_fase_12x36.py:216`.
-
-**Conferência das outras classes pedidas:**
-
-| Classe | Resultado |
-|---|---|
-| Segundo juiz | Não encontrei sobrevivência executável de `fora_de_fase`; os consumidores passaram à lavra. Os quatro sítios de âncora permanecem declaradamente fora desta obra. `app/escala/services/fase_12x36.py:10`, `app/escala/services/fase_12x36.py:67` |
-| Segundo escritor fora da porta | Não encontrei introdução: intenção → propositor → porta retroativa → mutador do vínculo. `app/core/intake.py:49`, `app/chamados/services/proposta_no_fio.py:141`, `app/escala/services/propositor.py:738`, `app/colaboradores/management/commands/corrigir_escala_retroativa.py:211` |
-| Relógio fora da borda | Permanece herdado: `_recusadas_recentes(hoje)` ignora o dia recebido e chama `timezone.now()`. O piso público usa o argumento recebido. `app/escala/services/propositor.py:666`, `app/escala/services/propositor.py:673`, `app/escala/services/propositor.py:609` |
-| Ordem de trava / L-052 | Não encontrei nova aquisição que sustente acusação de inversão; a regeneração mantém `atomic`, guarda de exportadas e proteção de células humanas. `app/ponto/portas/celula.py:199`, `app/ponto/portas/celula.py:206`, `app/ponto/portas/celula.py:238`, `app/ponto/portas/celula.py:251` |
-| Custo de frota no request | C10 lê snapshot; permanecem chamadas de frota no chat/API de propostas, anteriores a esta costura. Tempo/custo atual **[não verificado]**. `app/escala/services/cadastro_realidade.py:339`, `app/core/views_ia.py:572`, `app/api/views_mensageria.py:2019` |
-| Pouso antes do pré-requisito | A base lavrava sem `itens`/`linhas`; os novos leitores aceitam ausência desses campos como listas vazias. É necessário conferir uma lavra no formato novo antes de declarar a migração efetiva; execução desse pré-requisito **[não verificado]**. `d80c98a5:app/ponto/management/commands/censo_fase_12x36.py:203`, `app/escala/services/cadastro_realidade.py:339`, `app/escala/services/propositor.py:492` |
-
-**3. Os testes mordem?** [nao verificado]
-
-A tabela descreve a consequência das asserções por leitura estática; execução dos testes e dos mutantes **[não verificado]**. [nao verificado]
-
-| Teste novo em `test_o261_v_fase_na_lista.py` | Mordida e limite | [nao verificado]
-|---|---|
-| Lavra corrente — `app/escala/tests/test_o261_v_fase_na_lista.py:94` | Retirar dias exigidos, EC histórico, dono ou aplicabilidade corrente quebra. Não exige conjunto exato nem unicidade. |
-| Não atribuir a B — `app/escala/tests/test_o261_v_fase_na_lista.py:108` | Atribuir qualquer item a B quebra; outro EC incorreto pode escapar. |
-| Hoje/futuro — `app/escala/tests/test_o261_v_fase_na_lista.py:114` | Retirar o corte dos itens quebra. Não cobre ontem ainda em curso nem influência de turno aberto no julgamento. |
-| Competência anterior — `app/escala/tests/test_o261_v_fase_na_lista.py:121` | Omitir os quatro dias examinados, trocar seu EC ou habilitá-los quebra. |
-| Lavra sem âncora — `app/escala/tests/test_o261_v_fase_na_lista.py:130` | Acrescentar chaves proibidas quebra; isoladamente passa com itens vazios. |
-| Idempotência — `app/escala/tests/test_o261_v_fase_na_lista.py:136` | Duplicar snapshot do mesmo dia ou variar o detalhe quebra; não prova preservação de outros dias. |
-| C10 diária/vigia — `app/escala/tests/test_o261_v_fase_na_lista.py:148` | Retirar C10, EC/dono/URL ou integração diária quebra. Duplicar cada item pode passar: o dicionário colapsa duplicatas e a contagem cresce junto. |
-| Dia antes do piso — `app/escala/tests/test_o261_v_fase_na_lista.py:161` | Habilitar URL em 17/10 ou retirar essa linha quebra. |
-| Sem âncora no texto — `app/escala/tests/test_o261_v_fase_na_lista.py:168` | Introduzir “ancora” no detalhe/ação quebra; exige C10 presente. |
-| Sem lavra — `app/escala/tests/test_o261_v_fase_na_lista.py:176` | Voltar a produzir C10 diretamente das batidas quebra; não exige indicação de ausência de medida. |
-| Custo — `app/escala/tests/test_o261_v_fase_na_lista.py:180` | Queries extras no formatador **sem lavra** quebram; não protege o request completo nem a leitura com lavra presente. |
-| Detector morreu — `app/escala/tests/test_o261_v_fase_na_lista.py:191` | Selo de forma: também reprova a alternativa autorizada de manter `fora_de_fase` apenas como leitor. |
-| Pauta lê lavra — `app/escala/tests/test_o261_v_fase_na_lista.py:196` | Boa mordida: apaga batidas depois de lavrar; voltar ao cálculo vivo quebra. |
-| API lê lavra — `app/escala/tests/test_o261_v_fase_na_lista.py:204` | Mesma mordida; não valida todo o formato do retorno. |
-| Proposta do encerrado — `app/escala/tests/test_o261_v_fase_na_lista.py:222` | Retirar A ou contaminar com B quebra. **Retirar a leitura da lavra pode passar:** o teste não lavra. |
-| Aplicação no EC histórico — `app/escala/tests/test_o261_v_fase_na_lista.py:231` | Morde alteração indevida de B e ausência de correção de A. Não passa pelo clique C10→fio nem verifica células/competência lavrada. |
-
-Os dois testes de proposta não criam células previstas nem chamam `_lavrar()`: o previsto fica vazio, `_score` abre a candidatura por razão infinita e o gatilho da lavra fica dispensável. Assim, eles não defendem a costura central `ultimo_lavrado → fase_invertida`. `app/escala/tests/test_o261_v_fase_na_lista.py:63`, `app/escala/tests/test_o261_v_fase_na_lista.py:224`, `app/escala/services/propositor.py:199`, `app/escala/services/propositor.py:483`, `app/escala/services/propositor.py:522`.
-
-Nos alterados:
-
-- **`test_fase_12x36.py`:** coerente, invertido, noturno e ausência de turno agora consultam a lavra real. O invertido é a testemunha positiva contra um detector sempre vazio; os negativos sozinhos não bastariam. `app/escala/tests/test_fase_12x36.py:87`, `app/escala/tests/test_fase_12x36.py:99`, `app/escala/tests/test_fase_12x36.py:112`, `app/escala/tests/test_fase_12x36.py:126`.
-- **Pauta zero/nascimento/teto/encerramento:** mordem esses comportamentos; o encerramento exige nova lavra depois da retirada das batidas. `app/escala/tests/test_fase_12x36.py:149`, `app/escala/tests/test_fase_12x36.py:157`, `app/escala/tests/test_fase_12x36.py:167`, `app/escala/tests/test_fase_12x36.py:175`.
-- **`test_ancora_sugerida.py`:** saiu o selo do formato do detector morto; permanecem os sete casos puros de sugestão, desempate, evidência curta, ganho, motivo, ausência de âncora e dia trabalhado. Não distinguem piso seis de oito. `app/escala/tests/test_ancora_sugerida.py:43`, `app/escala/tests/test_ancora_sugerida.py:52`, `app/escala/tests/test_ancora_sugerida.py:59`, `app/escala/tests/test_ancora_sugerida.py:67`, `app/escala/tests/test_ancora_sugerida.py:75`, `app/escala/tests/test_ancora_sugerida.py:83`, `app/escala/tests/test_ancora_sugerida.py:90`, `app/escala/tests/test_ancora_sugerida.py:98`.
-- **`test_semselo5...`:** o selo morde `ativa=True` detectável e exige uma chamada chamada `vinculo_do
-
-[truncado em 20000 de 22568 caracteres]
-
-_710 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_715 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
