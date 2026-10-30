@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 30/10/2026 17:24:44.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (2.3 MB). Acoes na janela: **85**.
+**Medido em 30/10/2026 17:30:05.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (2.4 MB). Acoes na janela: **89**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 17:26:10 | Bash |  | `cd /home/ronald/saas-hasner/logs/calendario_hoje && until grep -q '^rc=' suite_pouso4.log 2>/dev/null; do /usr/bin/sleep 30; done; grep -E "^(FAIL\|ERROR):\|^Ran \|^(OK\|FAILED)($\| \()\|^rc=" suite_pouso4.log \| tail -4; cd /home/ronald/saas-hasner && bin/suite.sh --dir /home/ronald/wt-cal-hoje-3010-1353 --only "colaboradores.tests ponto.tests.test_c1_dias_encerrados ponto.tests.test_juiz_dia_enc ...` |
+| 17:26:00 | Bash |  | `cd /home/ronald/wt-cal-hoje-3010-1353/app && python3 - <<'EOF' p='ponto/turnos.py' s=open(p).read() a="_escala_vigente(colaborador, data), data, agora, celulas=celulas)\n" assert s.count(a)==1 s=s.replace(a,"_escala_vigente(colaborador, data), data, agora)\n") open(p,'w').write(s) p='ponto/tests/test_c1_dias_encerrados.py' s=open(p).read() a=''' """Leitura de desenho do opus 30/10 17:2x (B): `dias ...` |
+| 17:25:41 | Bash |  | `cd /home/ronald/wt-cal-pouso-3010-1638/app && sed -n 848,856p ponto/services/cartorio.py; grep -n "^\s*cels = \\|cels\[" ponto/services/cartorio.py \| sed -n 1,8p; sed -n 2126,2134p ponto/turnos.py; grep -n "def vinculo_do_dia" -A25 escala/alimentacao.py \| grep -n "celulas" \| head -5` |
+| 17:25:33 | Bash |  | `cd /home/ronald/wt-cal-pouso-3010-1638/app && sed -n 350,362p ponto/services/fechamento.py; sed -n 1840,1860p ponto/turnos.py; grep -n "def turnos_do_colab" -A12 ponto/turnos.py \| grep -n "celulas"` |
 | 17:22:07 | Bash |  | `cd /home/ronald/saas-hasner/logs/calendario_hoje && until grep -q '^rc=' verif7.run 2>/dev/null; do /usr/bin/sleep 20; done; tail -1 verif7.run; head -c 6000 verif7.txt` |
 | 17:22:03 | Agent | Leitura de desenho V-FASE | `LEITURA CURTA DE DESENHO, antes de construir (aval Ronald SUITE-POR-IMPACTO item (3), 30/10: "toda obra de cura de negocio passa por uma leitura curta do opus sobre o DESENHO (quem escreve, quem le, qual invariante, qual lei), com o Codex respondendo quem-mais-le antes; reprovacao de desenho custa uma leitura, nao uma suite"). Nao ha codigo novo ainda. Obra O261-V-FASE-NA-LISTA (linha no /home/ron ...` |
 | 17:21:46 | Bash |  | `cd /home/ronald/saas-hasner && L=logs/calendario_hoje W=/home/ronald/wt-cal-pouso-3010-1638; git -C $W diff 6c37ad84 HEAD --stat > $L/arquivos7.txt; git -C $W log --format='%h %s' 6c37ad84..HEAD >> $L/arquivos7.txt; cat > $L/verif7.q <<'EOF' Obra CALENDARIO-HOJE-NAO-E-FALTA, volta delta. Arvore: o hash informado; base main 6c37ad84 (`git diff 6c37ad84 HEAD`). Lista dos arquivos e commits da obra:  ...` |
