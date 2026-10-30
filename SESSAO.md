@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 30/10/2026 18:44:16.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (4.1 MB). Acoes na janela: **163**.
+**Medido em 30/10/2026 18:49:21.** Transcript: `7f745450-f1b3-4ceb-8723-ca0f6ca88a5f.jsonl` (4.2 MB). Acoes na janela: **167**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 18:47:12 | Bash |  | `grep -n "PROGRAMA-CELULA-E-O-DIA" BACKLOG.md \| grep -o "aval 30/10 1[89]:[0-9]x" \| sort \| uniq -c` |
+| 18:47:09 | Bash |  | `cd /home/ronald/saas-hasner/app/docs && sed -i 's/aval 30\/10 19:0x/aval 30\/10 18:4x/g' BACKLOG.md && sed -i 's/^\| 30\/10 19:0x \| \*\*aval: REGISTRAR PROGRAMA/\| 30\/10 18:4x \| **aval: REGISTRAR PROGRAMA/' PROMPTS.md && grep -c "19:0x" BACKLOG.md; grep -c "18:4x \| \*\*aval: REGISTRAR" PROMPTS.md` |
+| 18:47:06 | Bash |  | `cd /home/ronald/saas-hasner && date +%H:%M && python3 - <<'EOF' p='app/docs/BACKLOG.md' L=open(p).read().split('\n') def idx(pref): return next(k for k,l in enumerate(L) if l.startswith(pref)) # (1) linha do programa, no topo da fila 1 logo antes da O261-E (nao reordena: estado diz E0 no chat) i=idx('\| O261-E-CELULA-20-UM-DONO \|') L.insert(i,"\| PROGRAMA-CELULA-E-O-DIA \| **programa** (aval 30/1 ...` |
+| 18:46:51 | Bash |  | `cd /home/ronald/saas-hasner && grep -n "^\| O280 \\|^\| O280-\\|^\| V3-BATERIA-DE-CASOS-PELA-REGRA\\|^\| O-PROJECOES" app/docs/BACKLOG.md \| cut -c1-90` |
 | 18:43:54 | Bash |  | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/BACKLOG.md' L=open(p).read().split('\n') i=next(k for k,l in enumerate(L) if l.startswith('\| SUITE-POR-IMPACTO \|')) L.insert(i+1,"\| SELOS-DE-HOST-VERMELHOS-NO-MAIN \| linha de fila (medido 30/10 18:0x, os 2 construtores de instrumento + sessao): `test_lei_akita` (ac721607, 2cd634cb ja empurrados), `test_cortes_registrados` (cortes env ...` |
 | 18:43:38 | Bash |  | `cd /home/ronald/wt-codex-ctx-1711 && git log --oneline 6c37ad84..HEAD; git diff --stat 6c37ad84 HEAD \| tail -12; git status --short \| head -5` |
 | 18:43:19 | Bash |  | `cd /home/ronald/saas-hasner && sed -n 95,150p bin/tests/test_lei_akita.sh` |
