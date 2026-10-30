@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 30/10/2026 02:27:11.** Transcript: `e3f79949-a90b-4c64-a5c2-afd178149c30.jsonl` (5.9 MB). Acoes na janela: **249**.
+**Medido em 30/10/2026 02:32:14.** Transcript: `e3f79949-a90b-4c64-a5c2-afd178149c30.jsonl` (6.0 MB). Acoes na janela: **252**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 02:31:40 | Bash | Two parallel Codex readings for (C) design | `cd /home/ronald/saas-hasner && cat > logs/o261/codex_c_hist_viva.q <<'EOF' Leitura de codigo, sem hipotese. app/chamados/reconciliador.py, app/chamados/services/fio.py, app/chamados/services/disputa_emissao.py, app/chamados/models.py, app/chamados/juizes.py. 1. Dada uma PerguntaDisputa para a qual chamados/juizes.py::pergunta_viva devolve True, trace linha a linha o que reatar_pergunta_orfa (recon ...` |
+| 02:27:56 | Bash | Record exits measurement in RELATO | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md' L=open(p).read().split('\n') i=next(k for k,l in enumerate(L) if l.startswith('> DESPACHO O261-(C)-SAIDAS')) L[i+1:i+1]=['> (C) SAIDAS MEDIDAS (sonnet sombra, funcoes reais interceptadas + settrace no c2; `logs/o261/sonda_c_saidas.out`, conferida; ROLLBACK True, ERROS=0): as 786 (325 aberta + 461 exportada) saem TODAS em HIST0 ...` |
+| 02:27:48 | Bash | Reconfer exits probe and push status | `cd /home/ronald/saas-hasner && grep -E "ROLLBACK\|ERROS\|TOTAL\|S_HIST0\|L713\|L744\|L771" logs/o261/sonda_c_saidas.out \| head -12 \| cut -c1-250; echo; tail -3 logs/o261/push_mariaB2.log` |
 | 02:25:35 | Agent | Measure porta exits per record | `Medida na SOMBRA, projeto /home/ronald/saas-hasner. Você só mede: não edita `app/`, não commita, não toca prod. BASE. A sonda `logs/o261/sonda_reatar_807_posB.py` (cópia rodável em `logs/sombra/`, rodada por `bin/sombra.sh --rodar sonda_reatar_807_posB.py`; o rc do `--rodar` é o do echo, o veredito se lê na saída) monta, dentro de um `transaction.atomic()` que termina em raise, o universo U de per ...` |
 | 02:25:21 | Bash | Write named motivo list and decision in RELATO | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md' L=open(p).read().split('\n') i=next(k for k,l in enumerate(L) if l.startswith('> DESPACHO O261-(C)-LISTA')) L[i+1:i+1]=[ '> **(C) LISTA NOMEADA DOS MOTIVOS (antes do codigo; Codex `logs/o261/codex_c_lista_motivos.txt`, conferido `reconciliador.py:1380-1450,712`, `juizes.py:1589-1600`, `models.py:2466-2503`):**', '> - GRUPO DIA ...` |
 | 02:25:07 | Bash | Check push progress | `cd /home/ronald/saas-hasner && tail -3 logs/o261/push_mariaB2.log; ps -p 1684221 -o etime=` |
