@@ -1,7 +1,16 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **30/10/2026 19:15** · publicado em **30/10/2026 19:15** (UTC-3)
+> Ultima resposta processada: **30/10/2026 19:18** · publicado em **30/10/2026 19:20** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 30/10 19:18 · sessao 143cd6819825 · O261-V-FASE · sonda · origem=Code
+
+- Vínculos ativos: `12x36 = 337`; `24x48` não consta na saída. [nao verificado]
+- Detector `fora_de_fase`: `n=10`, `universo=337`. [nao verificado]
+- Achados por ciclo: `{'12x36': 10}`. [nao verificado]
+- Achados `24x48`: **0**; `colab_ids []`. [nao verificado]
+- Todos os `colab_ids`: `[300, 366, 451, 696, 788, 978, 979, 982, 986, 998]`. [nao verificado]
+- A saída fornecida não exibe mensagem de erro. [nao verificado]
 
 ## 30/10 19:15 · sessao 507013464189 · E1-BATERIA · red · origem=Code
 
@@ -546,48 +555,4 @@ Regressões funcionais previstas por leitura:
 
 Coberturas ausentes nos testes novos: rollback após reapontar, falha na segunda pergunta de um plano, concorrência, `encerrar_por_competencia_trancada`, reata por `cancelar`/`encerrar` e estabilidade dos dados exportados; os casos presentes estão em `app/chamados/tests/test_o261e_f1_porta_encerramento.py:81-254`. O teste de competência entregue apenas simula o juiz de exportação e verifica o status final; não verifica integridade dos campos de pergunta/exportada. `app/chamados/tests/test_o261e_f1_porta_encerramento.py:113-118`.
 
-## 30/10 18:46 · sessao 06f71c2afe78 · O261-V-FASE · verificador · origem=Code
-
-**O delta 3 morde, mas restam falhas na obra inteira:** o horário ainda pode misturar vínculos, o chat calcula a frota no request e a leitura nova aceita uma lavra antiga incompleta (`app/escala/services/propositor.py:526`; `app/core/views_ia.py:572`; `app/escala/services/fase_12x36.py:99`).
-
-1. **Escritores, leitores e autoridades**
-
-| Campo/valor | Quem escreve ou produz | Quem lê |
-|---|---|---|
-| `MetricaSnapshot`: chave, escopo, datas, `valor`, `detalhe` | `fase_12x36.lavrar`: chave fixa, `tenant/0`, datas recebidas e `valor=len(colabs_de_desvio)` (`app/escala/services/fase_12x36.py:75`, `app/escala/services/fase_12x36.py:84`). Chamador: censo (`app/ponto/management/commands/censo_fase_12x36.py:250`). | `ultimo_lavrado` lê o **detalhe**, acrescentando `data_ref` e `medido_em`; os consumidores contam IDs, sem ler diretamente `valor` (`app/escala/services/fase_12x36.py:96`, `app/escala/services/fase_12x36.py:102`, `app/api/views_mensageria.py:1675`). |
-| Detalhe: `colabs_de_desvio`, `linhas_de_desvio`, `automaticos`, `propostas`, `linhas_medidas`, `linhas`, `criterio`, `esperado` | O censo separa desvio/automático/proposta e monta o JSON (`app/ponto/management/commands/censo_fase_12x36.py:227`, `app/ponto/management/commands/censo_fase_12x36.py:251`). `propostas` aqui contém **IDs**, não propostas aplicáveis (`app/ponto/management/commands/censo_fase_12x36.py:255`). | IDs: fila e pauta (`app/chamados/services/fila_por_causa.py:174`; `app/escala/services/fase_12x36.py:117`). Linhas/contadores/critério: API e comando vigia (`app/api/views_mensageria.py:1675`; `app/ponto/management/commands/vigiar_familia_escala.py:25`). |
-| Detalhe: `itens`, com data, EC/template do dia, tipo, `aplicavel`, colaborador, empresa, competência e dono | Dias e piso são montados no censo; a lavra acrescenta `dono_do_dia='CADASTRO'` (`app/ponto/management/commands/censo_fase_12x36.py:208`, `app/ponto/management/commands/censo_fase_12x36.py:259`). | C10 lê os itens; o propositor lê os pares `(colab, ec_do_dia)` para `fase_invertida` (`app/escala/services/cadastro_realidade.py:339`; `app/escala/services/propositor.py:491`). |
-| Assinatura **C10** da lista | `_fase_deslocada` formata o item; `lista` acrescenta ação, URL, dono e contagens (`app/escala/services/cadastro_realidade.py:335`, `app/escala/services/cadastro_realidade.py:647`). | Tela e PDF usam a mesma lista (`app/escala/views.py:490`; `app/templates/escala/cadastro_x_realidade.html:28`; `app/escala/services/cadastro_realidade.py:759`). `dias_na_lista` alimenta o vigia do fio (`app/escala/services/cadastro_realidade.py:717`; `app/chamados/services/vigia_fio.py:259`). |
-| Retorno de `propositor.propostas` | Produz uma proposta por vínculo, com `vinculo_id`, evidência, motivo, piso e chamados; retorna também contadores de universo/ritmo/pausa (`app/escala/services/propositor.py:537`, `app/escala/services/propositor.py:583`). | Fio (`app/chamados/services/proposta_no_fio.py:63`, `app/chamados/services/proposta_no_fio.py:102`); painel paginado (`app/chamados/services/painel.py:520`); ficha (`app/colaboradores/services/ficha.py:176`); chat (`app/core/views_ia.py:572`); API (`app/api/views_mensageria.py:2019`); pauta (`app/escala/services/propositor.py:638`); comandos (`app/escala/management/commands/propostas_de_escala.py:26`; `app/escala/management/commands/ritmo_discordante.py:18`). |
-| Retorno de `da_assinatura`: `(proposta ou None, erro)` | Filtra colaborador+assinatura e recusa multiplicidade (`app/escala/services/propositor.py:666`). | Fio verifica o erro e depois mantém sua escolha da primeira proposta; chat usa a proposta devolvida (`app/chamados/services/proposta_no_fio.py:107`; `app/core/views_ia.py:575`). |
-| `piso_de_aplicacao` | Lê `janela_atual`; `_piso_de_aplicacao` é sua casca (`app/escala/services/propositor.py:590`, `app/escala/services/propositor.py:607`). | Censo marca `aplicavel`; propositor exclui EC encerrado antes do piso e publica `aplicar_desde`; aplicação passa essa data à porta existente (`app/ponto/management/commands/censo_fase_12x36.py:106`, `app/ponto/management/commands/censo_fase_12x36.py:210`; `app/escala/services/propositor.py:459`, `app/escala/services/propositor.py:558`, `app/escala/services/propositor.py:745`). |
-
-A escolha do vínculo delega à autoridade indicada em **JUIZES**, assim como a janela; a escolha específica do censo como autoridade da fase está autorizada no aval (`app/docs/JUIZES.md:35`, `app/docs/JUIZES.md:61`, `app/docs/JUIZES.md:75`; `app/docs/PROMPTS.md:1686`).
-
-**Sim, ficou consumidor de escrita fora do diff sem adaptação:** a CLI seleciona apenas por colaborador e aplica a primeira proposta, sem passar pela guarda de ambiguidade (`app/escala/management/commands/propostas_de_escala.py:30`, `app/escala/management/commands/propostas_de_escala.py:50`). Contraexemplo: A encerrado e B ativo têm a mesma assinatura; `--aplicar COLAB` aplica A silenciosamente. A chamada da função real, extraída em memória com dependências simuladas, confirmou essa seleção; a guarda existente recusaria as duas (`app/escala/services/propositor.py:674`). Isso responde ao censo de consumidores externos; a delimitação de escopo dos sítios tocados está em `CLAUDE.md:603`.
-
-2. **Achados na obra inteira**
-
-- **P1 — Recorte por vínculo incompleto: horário de B contamina proposta de A.** Os dias pertencem ao EC pela geradora, mas a mediana recebe todas as batidas entre `min(_meus)` e `max(_meus)`; seu filtro considera somente esse intervalo (`app/escala/alimentacao.py:237`; `app/escala/services/propositor.py:526`; `app/escala/services/propositor.py:152`).  
-  **Contraexemplo:** A responde por 22–24/10 e 01–03/11, com seis turnos 08–16; B responde por 25–31/10, com sete turnos 16–00. A mediana real de A é `(480,960)`, mas a chamada atual retorna `(960,0)`. Essa mediana governa a escolha do template de ritmo, podendo sugerir 16h para A (`app/escala/services/propositor.py:170`, `app/escala/services/propositor.py:327`). Viola a coerência do recorte e L-041/L-099 (`app/docs/LEIS.md:89`; `CLAUDE.md:308`). A reprodução foi em memória; ocorrência em produção: **[nao verificado]**.
-
-- **P2 — Custo de frota no request do chat.** `_proposta_de_escala` chama `propostas()` sem `colaborador_id`, tanto no preview quanto no aceite (`app/core/views_ia.py:572`, `app/core/views_ia.py:588`, `app/core/views_ia.py:646`).  
-  **Contraexemplo:** uma solicitação para X carrega colaboradores, células e vínculos da frota e percorre seus dias; só depois seleciona X (`app/escala/services/propositor.py:427`, `app/escala/services/propositor.py:436`, `app/escala/services/propositor.py:445`; `app/core/views_ia.py:578`). O próprio contrato exige estreitamento no POST (`app/escala/services/propositor.py:395`). É herdado em função tocada, portanto alcançado pelo escopo declarado (`CLAUDE.md:603`). Tempo e consultas atuais: **[nao verificado]**.
-
-- **P2 — Pré-requisito de transição: lavra antiga aceita como completa.** A base gravava IDs, sem `itens`, `linhas`, `criterio` ou `linhas_medidas`; o leitor novo aceita esse detalhe sem verificar o formato (`../d80c98a5dba444e0bdab60764d90ee6a817ed828/app/ponto/management/commands/censo_fase_12x36.py:200`; `app/escala/services/fase_12x36.py:99`).  
-  **Contraexemplo:** snapshot antigo com um colaborador em desvio produz C10 vazia e gatilho `fase_invertida` vazio, enquanto fila/pauta mantêm o ID positivo; a API responde `n=1`, `sem_medida=False`, `vinculos=[]` (`app/escala/services/cadastro_realidade.py:339`; `app/escala/services/propositor.py:491`; `app/chamados/services/fila_por_causa.py:174`; `app/api/views_mensageria.py:1675`). As funções reais reproduziram essa incompatibilidade em memória. A execução periódica declarada é diária às 07:38; relavra anterior ao pouso: **[nao verificado]** (`app/config/crons.py:614`). A inconsistência contraria consumidor lendo uma mesma lâmpada e L-099 (`CLAUDE.md:276`, `CLAUDE.md:308`).
-
-- **P3 — Contador de colaboradores rotulado como vínculos.** A pauta conta `colabs_de_desvio`, mas anuncia “vínculo(s)” (`app/escala/services/fase_12x36.py:117`, `app/escala/services/fase_12x36.py:122`).  
-  **Contraexemplo:** dois EC em desvio da mesma pessoa geram `n=1` e “1 vínculo”. O censo deduplica explicitamente os colaboradores; o rótulo deixa de representar sua unidade (`app/ponto/management/commands/censo_fase_12x36.py:253`; `CLAUDE.md:35`).
-
-Nas demais classes, conferi escritor único da chave, morte do detector paralelo, relógio capturado na borda do comando, ausência de âncora na C10 e passagem da aplicação pela porta existente (`app/escala/services/fase_12x36.py:78`; `app/escala/tests/test_o261_v_fase_na_lista.py:213`; `app/ponto/management/commands/censo_fase_12x36.py:62`; `app/escala/tests/test_o261_v_fase_na_lista.py:152`; `app/escala/services/propositor.py:755`). A unificação das âncoras permanece expressamente destinada à obra própria (`app/docs/PROMPTS.md:1686`).
-
-3. **Delta da volta 3**
-
-**Sim, morde por inspeção e pela avaliação da expressão real da guarda:** `--lavrar` com `--min-plantoes > 6` retorna antes da medição/escrita (`app/ponto/management/commands/censo_fase_12x36.py:74`).
-
-O teste guarda uma lavra não vazia, executa `--min-plantoes 100 --lavrar` e exige detalhe idêntico. Sem a cláusula nova, o filtro elimina as linhas e a lavra substitui o detalhe por vazio: a igualdade falha (`app/escala/tests/test_o261_v_fase_na_lista.py:142`, `app/escala/tests/test_o261_v_fase_na_lista.py:148`, `app/escala/tests/test_o261_v_fase_na_lista.py:150`; `app/ponto/management/commands/censo_fase_12x36.py:156`, `app/ponto/management/commands/censo_fase_12x36.py:251`).
-
-Execução Django, RED/GREEN históricos, suíte completa e estado de produção: **[nao verificado]**. [nao verificado]
-
-_721 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_722 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
